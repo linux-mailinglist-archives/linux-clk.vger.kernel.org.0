@@ -2,117 +2,81 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56BF0FBF6
-	for <lists+linux-clk@lfdr.de>; Tue, 30 Apr 2019 16:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC66FBC3
+	for <lists+linux-clk@lfdr.de>; Tue, 30 Apr 2019 16:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727106AbfD3O5A (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 30 Apr 2019 10:57:00 -0400
-Received: from gateway22.websitewelcome.com ([192.185.46.152]:13955 "EHLO
-        gateway22.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726053AbfD3O5A (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 30 Apr 2019 10:57:00 -0400
-X-Greylist: delayed 1491 seconds by postgrey-1.27 at vger.kernel.org; Tue, 30 Apr 2019 10:57:00 EDT
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway22.websitewelcome.com (Postfix) with ESMTP id C40C6BB1
-        for <linux-clk@vger.kernel.org>; Tue, 30 Apr 2019 09:32:07 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id LTnjhgAV12PzOLTnjhAJot; Tue, 30 Apr 2019 09:32:07 -0500
-X-Authority-Reason: nr=8
-Received: from [189.250.119.203] (port=51452 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.91)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hLTni-001KJq-JX; Tue, 30 Apr 2019 09:32:06 -0500
-Date:   Tue, 30 Apr 2019 09:32:06 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] clk: imx: clk-pllv3: mark expected switch fall-throughs
-Message-ID: <20190430143206.GA4035@embeddedor>
+        id S1726196AbfD3OoS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 30 Apr 2019 10:44:18 -0400
+Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:60272 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726053AbfD3OoS (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 30 Apr 2019 10:44:18 -0400
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3UEYMpo014757;
+        Tue, 30 Apr 2019 09:44:14 -0500
+Authentication-Results: ppops.net;
+        spf=none smtp.mailfrom=ckeepax@opensource.cirrus.com
+Received: from mail3.cirrus.com ([87.246.76.56])
+        by mx0a-001ae601.pphosted.com with ESMTP id 2s4mg1mb9x-1;
+        Tue, 30 Apr 2019 09:44:14 -0500
+Received: from EDIEX01.ad.cirrus.com (ediex01.ad.cirrus.com [198.61.84.80])
+        by mail3.cirrus.com (Postfix) with ESMTP id 4CE3B611C8B1;
+        Tue, 30 Apr 2019 09:44:47 -0500 (CDT)
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Tue, 30 Apr
+ 2019 15:44:13 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.1591.10 via Frontend
+ Transport; Tue, 30 Apr 2019 15:44:13 +0100
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 015BB2A1;
+        Tue, 30 Apr 2019 15:44:13 +0100 (BST)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <sboyd@kernel.org>
+CC:     <mturquette@baylibre.com>, <linux-clk@vger.kernel.org>,
+        <patches@opensource.cirrus.com>
+Subject: [PATCH 1/2] clk: Ensure new parent is looked up when changing parents
+Date:   Tue, 30 Apr 2019 15:44:11 +0100
+Message-ID: <20190430144412.20950-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 189.250.119.203
-X-Source-L: No
-X-Exim-ID: 1hLTni-001KJq-JX
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [189.250.119.203]:51452
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 8
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+Content-Type: text/plain
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=602 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1904300092
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-In preparation to enabling -Wimplicit-fallthrough, mark switch
-cases where we are expecting to fall through.
+clk_core_fill_parent_index is called from clk_mux_determine_rate_flags
+and for the initial parent of the clock but seems to not get called on
+the path changing a clocks parent. This can cause a clock parent change
+to fail, fix this by adding a call in clk_fetch_parent_index.
 
-This patch fixes the following warnings:
-
-drivers/clk/imx/clk-pllv3.c: In function ‘imx_clk_pllv3’:
-drivers/clk/imx/clk-pllv3.c:446:18: warning: this statement may fall through [-Wimplicit-fallthrough=]
-   pll->div_shift = 1;
-   ~~~~~~~~~~~~~~~^~~
-drivers/clk/imx/clk-pllv3.c:447:2: note: here
-  case IMX_PLLV3_USB:
-  ^~~~
-drivers/clk/imx/clk-pllv3.c:453:21: warning: this statement may fall through [-Wimplicit-fallthrough=]
-   pll->denom_offset = PLL_IMX7_DENOM_OFFSET;
-                     ^
-drivers/clk/imx/clk-pllv3.c:454:2: note: here
-  case IMX_PLLV3_AV:
-  ^~~~
-
-Warning level 3 was used: -Wimplicit-fallthrough=3
-
-This patch is part of the ongoing efforts to enable
--Wimplicit-fallthrough.
-
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+Fixes: fc0c209c147f ("clk: Allow parents to be specified without string names")
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
- drivers/clk/imx/clk-pllv3.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/clk/clk.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/clk/imx/clk-pllv3.c b/drivers/clk/imx/clk-pllv3.c
-index e892b9a836e5..4110e713d259 100644
---- a/drivers/clk/imx/clk-pllv3.c
-+++ b/drivers/clk/imx/clk-pllv3.c
-@@ -444,6 +444,7 @@ struct clk *imx_clk_pllv3(enum imx_pllv3_type type, const char *name,
- 		break;
- 	case IMX_PLLV3_USB_VF610:
- 		pll->div_shift = 1;
-+		/* fall through */
- 	case IMX_PLLV3_USB:
- 		ops = &clk_pllv3_ops;
- 		pll->powerup_set = true;
-@@ -451,6 +452,7 @@ struct clk *imx_clk_pllv3(enum imx_pllv3_type type, const char *name,
- 	case IMX_PLLV3_AV_IMX7:
- 		pll->num_offset = PLL_IMX7_NUM_OFFSET;
- 		pll->denom_offset = PLL_IMX7_DENOM_OFFSET;
-+		/* fall through */
- 	case IMX_PLLV3_AV:
- 		ops = &clk_pllv3_av_ops;
- 		break;
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index ffd33b63c37eb..5aa180180ee95 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -1601,6 +1601,9 @@ static int clk_fetch_parent_index(struct clk_core *core,
+ 		return -EINVAL;
+ 
+ 	for (i = 0; i < core->num_parents; i++) {
++		if (!core->parents[i].core)
++			clk_core_fill_parent_index(core, i);
++
+ 		if (core->parents[i].core == parent)
+ 			return i;
+ 
 -- 
-2.21.0
+2.11.0
 
