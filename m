@@ -2,93 +2,86 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A259FF5F
-	for <lists+linux-clk@lfdr.de>; Tue, 30 Apr 2019 20:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE204FF9F
+	for <lists+linux-clk@lfdr.de>; Tue, 30 Apr 2019 20:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727105AbfD3SFv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 30 Apr 2019 14:05:51 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:60896 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727083AbfD3SFu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 30 Apr 2019 14:05:50 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: gportay)
-        with ESMTPSA id 67D3F282FE4
-From:   =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@collabora.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Sandy Huang <hjc@rock-chips.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@collabora.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Derek Basehore <dbasehore@chromium.org>,
-        Lin Huang <hl@rock-chips.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        kernel@collabora.com
-Subject: [RFC 4/4] arm64: dts: rockchip: Set the display-subsystem devfreq
-Date:   Tue, 30 Apr 2019 14:05:24 -0400
-Message-Id: <20190430180524.22710-5-gael.portay@collabora.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190430180524.22710-1-gael.portay@collabora.com>
-References: <20190430180524.22710-1-gael.portay@collabora.com>
+        id S1726073AbfD3SQu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 30 Apr 2019 14:16:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43198 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725950AbfD3SQt (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 30 Apr 2019 14:16:49 -0400
+Received: from localhost (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DAC4020854;
+        Tue, 30 Apr 2019 18:16:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1556648209;
+        bh=KUP9To48LBrL/wSVFz97QuNsX4v6nv2LPPjDnJTFTzs=;
+        h=In-Reply-To:References:From:Subject:To:Cc:Date:From;
+        b=RfQo/QhbXFzOkMCGW4mgeoJJ9DWbf6F9XwqhCTWMsjWOf8pNLcXWWgD4iJwX7UGsU
+         9zZ88Iiz+XS/r2ZYMvemxxajdMosAmc40YHvq6AEnpoCRpN3lxYzUgo1BfrT/c5u40
+         6Sz3plrXV89dJ/2NRKfMCWBbeuDZPORX7av8ZeEU=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1556589033-6080-1-git-send-email-Anson.Huang@nxp.com>
+References: <1556589033-6080-1-git-send-email-Anson.Huang@nxp.com>
+From:   Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH] clk: imx: pllv3: Fix fall through build warning
+To:     "festevam@gmail.com" <festevam@gmail.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Anson Huang <anson.huang@nxp.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     dl-linux-imx <linux-imx@nxp.com>
+Message-ID: <155664820799.168659.12393223246835475198@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.8
+Date:   Tue, 30 Apr 2019 11:16:47 -0700
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Use the Dynamic Memory Controller as the display-subsystem's devfreq
-device.
+Quoting Anson Huang (2019-04-29 18:55:18)
+> Fix below fall through build warning:
+>=20
+> drivers/clk/imx/clk-pllv3.c:453:21: warning:
+> this statement may fall through [-Wimplicit-fallthrough=3D]
+>=20
+>    pll->denom_offset =3D PLL_IMX7_DENOM_OFFSET;
+>                      ^
+> drivers/clk/imx/clk-pllv3.c:454:2: note: here
+>   case IMX_PLLV3_AV:
+>   ^~~~
+>=20
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> ---
 
-Signed-off-by: Gaël PORTAY <gael.portay@collabora.com>
----
- arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi | 4 ++++
- arch/arm64/boot/dts/rockchip/rk3399.dtsi     | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+Gustavo says there are two warnings. Please compile test with the right
+options, add Reported-by tags when you get bug reports from someone, and
+add a Fixes tag and then resend.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
-index 40e78186560b..a5cbbc08f7e1 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
-@@ -375,6 +375,10 @@
- 		<200000000>;
- };
- 
-+&display_subsystem {
-+	devfreq = <&dmc>;
-+};
-+
- &emmc_phy {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-index 87ee084fac89..253b476163fd 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-@@ -155,7 +155,7 @@
- 		};
- 	};
- 
--	display-subsystem {
-+	display_subsystem: display-subsystem {
- 		compatible = "rockchip,display-subsystem";
- 		ports = <&vopl_out>, <&vopb_out>;
- 	};
--- 
-2.21.0
-
+>  drivers/clk/imx/clk-pllv3.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/clk/imx/clk-pllv3.c b/drivers/clk/imx/clk-pllv3.c
+> index e892b9a..fbe4fe0 100644
+> --- a/drivers/clk/imx/clk-pllv3.c
+> +++ b/drivers/clk/imx/clk-pllv3.c
+> @@ -451,6 +451,7 @@ struct clk *imx_clk_pllv3(enum imx_pllv3_type type, c=
+onst char *name,
+>         case IMX_PLLV3_AV_IMX7:
+>                 pll->num_offset =3D PLL_IMX7_NUM_OFFSET;
+>                 pll->denom_offset =3D PLL_IMX7_DENOM_OFFSET;
+> +               /* fall through */
+>         case IMX_PLLV3_AV:
+>                 ops =3D &clk_pllv3_av_ops;
+>                 break;
