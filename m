@@ -2,35 +2,31 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2144B12390
-	for <lists+linux-clk@lfdr.de>; Thu,  2 May 2019 22:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B153212418
+	for <lists+linux-clk@lfdr.de>; Thu,  2 May 2019 23:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726022AbfEBUql (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 2 May 2019 16:46:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54650 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725962AbfEBUql (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 2 May 2019 16:46:41 -0400
-Received: from mail.kernel.org (unknown [104.132.0.70])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CB4102081C;
-        Thu,  2 May 2019 20:46:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556830000;
-        bh=+iqD5SnNrrJIdoo7MTK34t9LYNPBy0FRPLXiJ6oRojU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=f4IlykwBG55mpJCrj5NizV8957nyprp6IG1ARqmQm9I+/q0q+FgFsUMG+LzUnLsC+
-         ERBDsrTPwZNMdeE/4JRDAln9CevEk9EuoZ6IGydWhpalC7HzNXMzXxynvdK1NE8LFu
-         cRgbp2RmVX7Ero0bzGbnF5APxLXAVyWx2J+E3OIY=
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] clk fixes for v5.1-rc7
-Date:   Thu,  2 May 2019 13:46:40 -0700
-Message-Id: <20190502204640.26046-1-sboyd@kernel.org>
-X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
+        id S1726255AbfEBVZU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 2 May 2019 17:25:20 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:52898 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbfEBVZT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 2 May 2019 17:25:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1556832314; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=wplknZmLov6wC+mWLkV3AuUEvMpefSHU8GtOCBjTcIg=;
+        b=FZ06Vi01hFrMcldZW3/z1kxvQabQuBdwEOPBVEdXAgy608nqxUqRLdu5BpRtewYJYdj+2T
+        dnBdaDMP8C44qAhVGtfGuzEdu2nP3ZAaRgPWlkVKTR3Y/0ZMlflWFePT/SnzVngb01ivMi
+        W/HmvXMpCCFEmca5P3fEOpRK5ZuWgSY=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        od@zcrc.me, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 1/5] clk: ingenic: Add support for divider tables
+Date:   Thu,  2 May 2019 23:24:58 +0200
+Message-Id: <20190502212502.24330-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
@@ -38,40 +34,142 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The following changes since commit f89b9e1be7da8bb0aac667a0206a00975cefe6d3:
+Some clocks provided on Ingenic SoCs have dividers, whose hardware value
+as written in the register cannot be expressed as an affine function
+to the actual divider value.
 
-  clk: imx: Fix PLL_1416X not rounding rates (2019-04-12 14:21:43 -0700)
+For instance, for the CPU clock on the JZ4770, the dividers are coded as
+follows:
 
-are available in the Git repository at:
+    ------------------
+    | Bits     | Div |
+    ------------------
+    | 0  0  0  |  1  |
+    | 0  0  1  |  2  |
+    | 0  1  0  |  3  |
+    | 0  1  1  |  4  |
+    | 1  0  0  |  6  |
+    | 1  0  1  |  8  |
+    | 1  1  0  | 12  |
+    ------------------
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
+To support this setup, we introduce a new field in the
+ingenic_cgu_div_info structure that allows to specify the divider table.
 
-for you to fetch changes up to b88c9f4129dcec941e5a26508e991c08051ed1ac:
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ drivers/clk/ingenic/cgu.c | 41 +++++++++++++++++++++++++++++++++------
+ drivers/clk/ingenic/cgu.h |  3 +++
+ 2 files changed, 38 insertions(+), 6 deletions(-)
 
-  clk: Add missing stubs for a few functions (2019-04-25 08:19:15 -0700)
-
-----------------------------------------------------------------
-Two fixes for the NKMP clks on Allwinner SoCs, a locking fix for clkdev
-where we forgot to hold a lock while iterating a list that can change,
-and finally a build fix that adds some stubs for clk APIs that are used
-by devfreq drivers on platforms without the clk APIs.
-
-----------------------------------------------------------------
-Dmitry Osipenko (1):
-      clk: Add missing stubs for a few functions
-
-Jernej Skrabec (2):
-      clk: sunxi-ng: nkmp: Avoid GENMASK(-1, 0)
-      clk: sunxi-ng: nkmp: Explain why zero width check is needed
-
-Stephen Boyd (2):
-      clkdev: Hold clocks_mutex while iterating clocks list
-      Merge tag 'clk-fixes-for-5.1' of https://git.kernel.org/.../sunxi/linux into clk-fixes
-
- drivers/clk/clkdev.c            |  5 +++++
- drivers/clk/sunxi-ng/ccu_nkmp.c | 24 +++++++++++++++++++-----
- include/linux/clk.h             | 16 ++++++++++++++++
- 3 files changed, 40 insertions(+), 5 deletions(-)
-
+diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
+index 510b685212d3..6a8c4fb0f6d5 100644
+--- a/drivers/clk/ingenic/cgu.c
++++ b/drivers/clk/ingenic/cgu.c
+@@ -383,8 +383,11 @@ ingenic_clk_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+ 		div_reg = readl(cgu->base + clk_info->div.reg);
+ 		div = (div_reg >> clk_info->div.shift) &
+ 		      GENMASK(clk_info->div.bits - 1, 0);
+-		div += 1;
+-		div *= clk_info->div.div;
++
++		if (clk_info->div.div_table)
++			div = clk_info->div.div_table[div];
++		else
++			div = (div + 1) * clk_info->div.div;
+ 
+ 		rate /= div;
+ 	} else if (clk_info->type & CGU_CLK_FIXDIV) {
+@@ -394,16 +397,37 @@ ingenic_clk_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+ 	return rate;
+ }
+ 
++static unsigned int
++ingenic_clk_calc_hw_div(const struct ingenic_cgu_clk_info *clk_info,
++			unsigned int div)
++{
++	unsigned int i;
++
++	for (i = 0; i < (1 << clk_info->div.bits)
++				&& clk_info->div.div_table[i]; i++) {
++		if (clk_info->div.div_table[i] >= div)
++			return i;
++	}
++
++	return i - 1;
++}
++
+ static unsigned
+ ingenic_clk_calc_div(const struct ingenic_cgu_clk_info *clk_info,
+ 		     unsigned long parent_rate, unsigned long req_rate)
+ {
+-	unsigned div;
++	unsigned int div, hw_div;
+ 
+ 	/* calculate the divide */
+ 	div = DIV_ROUND_UP(parent_rate, req_rate);
+ 
+-	/* and impose hardware constraints */
++	if (clk_info->div.div_table) {
++		hw_div = ingenic_clk_calc_hw_div(clk_info, div);
++
++		return clk_info->div.div_table[hw_div];
++	}
++
++	/* Impose hardware constraints */
+ 	div = min_t(unsigned, div, 1 << clk_info->div.bits);
+ 	div = max_t(unsigned, div, 1);
+ 
+@@ -446,7 +470,7 @@ ingenic_clk_set_rate(struct clk_hw *hw, unsigned long req_rate,
+ 	const struct ingenic_cgu_clk_info *clk_info;
+ 	const unsigned timeout = 100;
+ 	unsigned long rate, flags;
+-	unsigned div, i;
++	unsigned int hw_div, div, i;
+ 	u32 reg, mask;
+ 	int ret = 0;
+ 
+@@ -459,13 +483,18 @@ ingenic_clk_set_rate(struct clk_hw *hw, unsigned long req_rate,
+ 		if (rate != req_rate)
+ 			return -EINVAL;
+ 
++		if (clk_info->div.div_table)
++			hw_div = ingenic_clk_calc_hw_div(clk_info, div);
++		else
++			hw_div = ((div / clk_info->div.div) - 1);
++
+ 		spin_lock_irqsave(&cgu->lock, flags);
+ 		reg = readl(cgu->base + clk_info->div.reg);
+ 
+ 		/* update the divide */
+ 		mask = GENMASK(clk_info->div.bits - 1, 0);
+ 		reg &= ~(mask << clk_info->div.shift);
+-		reg |= ((div / clk_info->div.div) - 1) << clk_info->div.shift;
++		reg |= hw_div << clk_info->div.shift;
+ 
+ 		/* clear the stop bit */
+ 		if (clk_info->div.stop_bit != -1)
+diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
+index e12716d8ce3c..8dcd83aeab84 100644
+--- a/drivers/clk/ingenic/cgu.h
++++ b/drivers/clk/ingenic/cgu.h
+@@ -88,6 +88,8 @@ struct ingenic_cgu_mux_info {
+  *          isn't one
+  * @busy_bit: the index of the busy bit within reg, or -1 if there isn't one
+  * @stop_bit: the index of the stop bit within reg, or -1 if there isn't one
++ * @div_table: optional table to map the value read from the register to the
++ *             actual divider value
+  */
+ struct ingenic_cgu_div_info {
+ 	unsigned reg;
+@@ -97,6 +99,7 @@ struct ingenic_cgu_div_info {
+ 	s8 ce_bit;
+ 	s8 busy_bit;
+ 	s8 stop_bit;
++	const u8 *div_table;
+ };
+ 
+ /**
 -- 
-Sent by a computer through tubes
+2.21.0.593.g511ec345e18
+
