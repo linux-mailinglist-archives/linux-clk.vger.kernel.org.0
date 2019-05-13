@@ -2,62 +2,58 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 682921B5F5
-	for <lists+linux-clk@lfdr.de>; Mon, 13 May 2019 14:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03FDC1B63D
+	for <lists+linux-clk@lfdr.de>; Mon, 13 May 2019 14:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729876AbfEMMbd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 13 May 2019 08:31:33 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:54454 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729871AbfEMMbc (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 May 2019 08:31:32 -0400
-Received: by mail-wm1-f68.google.com with SMTP id i3so7860470wml.4
-        for <linux-clk@vger.kernel.org>; Mon, 13 May 2019 05:31:31 -0700 (PDT)
+        id S1728968AbfEMMpm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 13 May 2019 08:45:42 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:46911 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728219AbfEMMpm (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 May 2019 08:45:42 -0400
+Received: by mail-wr1-f66.google.com with SMTP id r7so14476121wrr.13
+        for <linux-clk@vger.kernel.org>; Mon, 13 May 2019 05:45:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qDWoUB9bcp7o6UKFktF9ACZ04OzawQuwNyVSxDs2oGM=;
-        b=FTChcYwy/64XxJA+Qdoi5SQTOLGXNUXjv+nlh1tRXwcJ5wHIr4YXrKpPSAYujuyCzp
-         nijO6vpU+0BTOBu0M8rH69Fy/BcRNzMsb9+QsY4mgYef5o5Py4Er/BU6A4UPldUHIUwm
-         3N1VBhSmqFk12ex6lkH7nZ7A1wkbMpbp1wKpzXPxwEDHpUroEI1zCpg1SeMKQmrJ7goz
-         QVgAUjDQTPtot79cCw6omTqisZOw9lWoYiGfS0N3V6ax1/grApmnole0AFlAcoL9OJMk
-         k1xLXdk/GNS3KbD325KPkAfuHONMfgCR0ZXh4mu7cIH8/tJI20Q5P7EPet0TDqsWy1Jv
-         Dx4A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S2pz0rN5YxgIZ9+xKpj04TZfJLwVeh5ljwZlweZ4hEU=;
+        b=Wd86UOuDbF0LRCUA0cQW2+b/NtT84O02/WElU5v/n9SOjE7s3v5qeLFeA6JBNikdwO
+         oVlq4JKQjsGC0mwAYDc5cx1C8ZGfJw4yCxWkuF92n95LjcSPnAiD5ftTx1dgnCKl4ZhO
+         90EmirHh3vBH3gF23ScGRur/G9mC5IZ6Nx+iq5tuHlfMa8D66pYsYIKr2oIR1JXywamf
+         AZXGEB960rbq+9+aozNWZ+Ob7yVb5WszjUWteEiX1r3LWOtd61vnB8vDTspL0eGoN8zG
+         mHbF+suSjWN92YWGB8d6F6MP3zhD3HfE//bGQ0FFED8F6tW0B+w1X0PF62uwO+HrChtj
+         vyzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qDWoUB9bcp7o6UKFktF9ACZ04OzawQuwNyVSxDs2oGM=;
-        b=Q6wW6ZYkd5yJq62ZMtteVIjI8CibMSDgn5q2gb1cIgWYmjSxVLPWjGkuDP8rwajgTP
-         FeS3k5NN9gc4f90HxTqOzUDhRW/O6I4Hb7dGA+wJuD1FGF+VWq3diHvnNnJR8stCQHQK
-         sPpbV19AeC8flcQjBe2DBxlHDqgjBKOFlnJ0P2djj4+1pcaV8ycVYcnHqcg01UuIhB4m
-         qm2BObq9vnFyuXdCz4A7w7LoHSyTg0+7PUn+qePixctWuZB9fp/X9mIuiDp8yIQ+ktA0
-         vQhyOQFDUiPDhd+hXr5kUzeYj3Xvbc7l1tPrkcEbTQg4ihcYLx+rY78xlAkVUu6zPizJ
-         cxKg==
-X-Gm-Message-State: APjAAAUesfblOZz6L/r2KauL2PT4QypWMQJI/f6tHv5YDgm99fHKWYmz
-        o1m79xujjhO92DoTogIGZV66YA==
-X-Google-Smtp-Source: APXvYqzS/G2YjzdOEaicaTu5qFCKLfkduSgGOTIkrGT+2VPcKPiv3XEJKguO/PiftHRHyxFE9Kutnw==
-X-Received: by 2002:a1c:1d4:: with SMTP id 203mr16339134wmb.76.1557750690506;
-        Mon, 13 May 2019 05:31:30 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=S2pz0rN5YxgIZ9+xKpj04TZfJLwVeh5ljwZlweZ4hEU=;
+        b=iuwJM5Q/CHRmzNCerTV6bimaQhkWwG49QWmpMCBSB3jgRjVfBKwJq197AdJc4hKs+z
+         rCgUZeL2bUc7OJcw+dJJUewO5hQ+yPMmNtpCmItf3D4YaqNSY1p+4hk0hizhGPuCkQAC
+         LSrnNFsQ35AjjWyHNjZixsMyaJSQkE2BdbkSsmnOXzT1zcsgQBHJs5lR3Tepwdec5vf5
+         CJ2vgFXjWo3WRSMn2TkBAew5Alw9W3/XEmlNBxwpXKZzKf4EWGgZbYHd5WAHK7+dB/B0
+         sMUGmzeuSct5ndYyWuhav1buUgjYr/ggNdEWxOpzhCn09feBetbuyKd7ht3lsew4z/yJ
+         8ayw==
+X-Gm-Message-State: APjAAAV80Bv+XL9k8jyBCvLLbLxbI7yQ00q0c+1ubCPJyec4lC6QhRoZ
+        DKdE2lk13we91TxsbX9CVOxobw==
+X-Google-Smtp-Source: APXvYqzdX4sus63iRBi+SDvq625L49jIdL3h6QcF7yHl4UQ6kOi8/umoeVTXOejZ1WjKuIabxQdcYw==
+X-Received: by 2002:a5d:448e:: with SMTP id j14mr18189595wrq.158.1557751540348;
+        Mon, 13 May 2019 05:45:40 -0700 (PDT)
 Received: from boomer.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id t13sm16175584wra.81.2019.05.13.05.31.29
+        by smtp.googlemail.com with ESMTPSA id m13sm11576677wrs.87.2019.05.13.05.45.39
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 13 May 2019 05:31:30 -0700 (PDT)
+        Mon, 13 May 2019 05:45:39 -0700 (PDT)
 From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
+To:     Neil Armstrong <narmstrong@baylibre.com>
 Cc:     Jerome Brunet <jbrunet@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>,
         linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/7] clk: meson: g12a: add controller register init
-Date:   Mon, 13 May 2019 14:31:15 +0200
-Message-Id: <20190513123115.18145-8-jbrunet@baylibre.com>
+Subject: [PATCH v2] clk: meson: g12a: fix gp0 and hifi ranges
+Date:   Mon, 13 May 2019 14:45:31 +0200
+Message-Id: <20190513124531.20334-1-jbrunet@baylibre.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190513123115.18145-1-jbrunet@baylibre.com>
-References: <20190513123115.18145-1-jbrunet@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
@@ -65,35 +61,36 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the MPLL common register initial setting
+While some SoC samples are able to lock with a PLL factor of 55, others
+samples can't. ATM, a minimum of 60 appears to work on all the samples
+I have tried.
 
+Even with 60, it sometimes takes a long time for the PLL to eventually
+lock. The documentation says that the minimum rate of these PLLs DCO
+should be 3GHz, a factor of 125. Let's use that to be on the safe side.
+
+With factor range changed, the PLL seems to lock quickly (enough) so far.
+It is still unclear if the range was the only reason for the delay.
+
+Fixes: 085a4ea93d54 ("clk: meson: g12a: add peripheral clock controller")
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- drivers/clk/meson/g12a.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/clk/meson/g12a.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/clk/meson/g12a.c b/drivers/clk/meson/g12a.c
-index ef1d2e4c8fd2..d5aceb79a91a 100644
+index 206fafd299ea..d11606d5ddbd 100644
 --- a/drivers/clk/meson/g12a.c
 +++ b/drivers/clk/meson/g12a.c
-@@ -2992,10 +2992,16 @@ static struct clk_regmap *const g12a_clk_regmaps[] = {
- 	&g12a_vdec_hevcf,
+@@ -463,7 +463,7 @@ static struct clk_regmap g12a_cpu_clk_trace = {
  };
  
-+static const struct reg_sequence g12a_init_regs[] = {
-+	{ .reg = HHI_MPLL_CNTL0,	.def = 0x00000543 },
-+};
-+
- static const struct meson_eeclkc_data g12a_clkc_data = {
- 	.regmap_clks = g12a_clk_regmaps,
- 	.regmap_clk_num = ARRAY_SIZE(g12a_clk_regmaps),
--	.hw_onecell_data = &g12a_hw_onecell_data
-+	.hw_onecell_data = &g12a_hw_onecell_data,
-+	.init_regs = g12a_init_regs,
-+	.init_count = ARRAY_SIZE(g12a_init_regs),
+ static const struct pll_mult_range g12a_gp0_pll_mult_range = {
+-	.min = 55,
++	.min = 125,
+ 	.max = 255,
  };
  
- static const struct of_device_id clkc_match_table[] = {
 -- 
 2.20.1
 
