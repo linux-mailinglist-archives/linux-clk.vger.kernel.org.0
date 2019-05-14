@@ -2,86 +2,70 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B395E1CD97
-	for <lists+linux-clk@lfdr.de>; Tue, 14 May 2019 19:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D19F71CE70
+	for <lists+linux-clk@lfdr.de>; Tue, 14 May 2019 20:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726270AbfENRLD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 14 May 2019 13:11:03 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:35866 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726254AbfENRLC (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 May 2019 13:11:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=sQ2v9BWL2TF+yUu5MdDu2lBLdFrOBaMcfG/xJ/BdtC4=; b=B5A0vFSRlNpytQh/GOoWvYlaZ
-        TxO+q/vS8LUUggDpXA9TPUoM5Tm9MzRJzaGm18MdWW1waIF9TNtnr9vFRtdNJE2vD+d7STMOs8DSs
-        u/4ktlzVrewoYvRQj2WhaExlZabOZAH3Xkf4tlDf+MR7nNA0RnV1e3aKTpoyhtwc0aB8M=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=debutante.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpa (Exim 4.89)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1hQax2-0001KI-DD; Tue, 14 May 2019 17:10:52 +0000
-Received: by debutante.sirena.org.uk (Postfix, from userid 1000)
-        id 7E1451121EE8; Tue, 14 May 2019 18:10:48 +0100 (BST)
-Date:   Tue, 14 May 2019 18:10:48 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Tero Kristo <t-kristo@ti.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Crispin <john@phrozen.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: Re: [PATCH] clk: Remove io.h from clk-provider.h
-Message-ID: <20190514171048.GB1917@sirena.org.uk>
-References: <20190514170931.56312-1-sboyd@kernel.org>
+        id S1726211AbfENSB7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 14 May 2019 14:01:59 -0400
+Received: from mail-oi1-f171.google.com ([209.85.167.171]:39486 "EHLO
+        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726201AbfENSB6 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 May 2019 14:01:58 -0400
+Received: by mail-oi1-f171.google.com with SMTP id v2so9400290oie.6;
+        Tue, 14 May 2019 11:01:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t9mhk4DbZv4ezakU8Aj7ifnHOKTzwP5mktlWTqgqpME=;
+        b=P8zj6pNOReI3p9Y1u66cd2JONb2ayn5+sL7xWDTRUMD+My55LZGZY4xgzArhbyyve4
+         wdq9MlXNtk6AtJH8jUrAwPJvhwkcfgVAwlbEzoinun1bqUFqYwIoHglViZJbmobp6V/u
+         sn6MwQ0LeszA2Sw8dK7wZ0W9ElfdvEgyQk7DmsqmXqExuYP/hkM/MO4YvXftUvKDQPMz
+         gR4vJeq/lqaonsbtVny+WdFxey2ofjDDPfNwnzJYXLug9tLccj0bWhF3Q8DRQWBsbMIU
+         xrQhlKt0aqQ7glNk3i+sTZd+YCCOj6fkYFGUtKYoJwIEDU+39cHimyn9iNCi8yCNlzUF
+         ADmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t9mhk4DbZv4ezakU8Aj7ifnHOKTzwP5mktlWTqgqpME=;
+        b=eJLKNk8FbFelSAiWl/WDDiYc6XQ7uoIKQGp94eXRdxPDFoviAxHSbA5lhDnxpnNqqt
+         1318pQZiVYXBALRBzPxIjI3xJKSeDyo2hrW/gq9/hs01E0mo3vRX09n4H54R6PkL2L1F
+         5ozaij8A16eUm1tUmKhHJyt7PCcws6cDOe1GwiEPHVcII/Kf2G1MFATBZMtrGqX/1J28
+         qZ+Sr8kNFV382HaqxB/gCIexMaw7sxyXAYo8dQRXig+INXRpXb0gzbSa5sy2JXIa1rZy
+         Eh1/lht4p8mpUyPd+p0pqoRCE+iaJrWEUZkf/ZG61JxE6HHg+eLxXxiiJ7xS6J6noFWi
+         8V/Q==
+X-Gm-Message-State: APjAAAU8MNw+IgZoKnYr+tuUlb2qMjCaJr1/HRrjwG5ozeUScSNVMYJW
+        wxr/ODHImMvIlinJylRkNfxh89lV7dp902r15Y8=
+X-Google-Smtp-Source: APXvYqwT+H6aWmpM1niIbNpH7TQ0ttX3JE4gN+UGqT0K5hC+dhiYfl1xJg3MXJCBq3QpDVkuiDXGJS4ORmWi6/9Z6H4=
+X-Received: by 2002:aca:5b06:: with SMTP id p6mr3959825oib.129.1557856917885;
+ Tue, 14 May 2019 11:01:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3lcZGd9BuhuYXNfi"
-Content-Disposition: inline
-In-Reply-To: <20190514170931.56312-1-sboyd@kernel.org>
-X-Cookie: There is a fly on your nose.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190512205743.24131-1-jbrunet@baylibre.com>
+In-Reply-To: <20190512205743.24131-1-jbrunet@baylibre.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Tue, 14 May 2019 20:01:47 +0200
+Message-ID: <CAFBinCAoj99eieXogc6OVyttAdZk+5y83B0Ltuv3iLNryOq0rw@mail.gmail.com>
+Subject: Re: [PATCH] clk: meson: fix MPLL 50M binding id typo
+To:     Jerome Brunet <jbrunet@baylibre.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On Sun, May 12, 2019 at 10:57 PM Jerome Brunet <jbrunet@baylibre.com> wrote:
+>
+> MPLL_5OM (the capital letter o) should indeed be MPLL_50M (the number)
+> Fix this before it gets used.
+>
+> Reported-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Fixes: 25db146aa726 ("dt-bindings: clk: meson: add g12a periph clock controller bindings")
+> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
---3lcZGd9BuhuYXNfi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Tue, May 14, 2019 at 10:09:31AM -0700, Stephen Boyd wrote:
-> Now that we've gotten rid of clk_readl() we can remove io.h from the
-> clk-provider header and push out the io.h include to any code that isn't
-> already including the io.h header but using things like readl/writel,
-> etc.
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---3lcZGd9BuhuYXNfi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAlza9pcACgkQJNaLcl1U
-h9DaRwf+K/Mfxb8gWGuzc1Th+U9YfqsFJrEyFQUxjLaiqbF6rZ8isFQGvrxN4+V0
-2xNugryG8w0M4OMurwyx+l4DvB9TjSbzQP6E9Yg1jjyUMrCePyFU6I7K9dS6uG9n
-zgNWqL4Jrg+0tzMvsy0a7NyodjJj4QUlx3+IZh0iSkDoGtOC88GTFtwux1i3nFBP
-uebyLjf5T9Fi1K0wODXYCTTCE/Ylbb/vjo577+PWz2qG5Cg5aANTGzDw5CUx8Y2L
-KNWZ6Brdcn8kNsT8xd18dK9cRBV/nvYilSitEarMYR3FvtOBylS7yl0NljUYxo+Z
-d2lujlL/XfSEbF8DIbQ7E3uRQoL10Q==
-=yApY
------END PGP SIGNATURE-----
-
---3lcZGd9BuhuYXNfi--
+thank you for taking care of this issue Jerome!
