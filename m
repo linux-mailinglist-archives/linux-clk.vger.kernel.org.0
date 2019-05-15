@@ -2,81 +2,160 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9111F0AB
-	for <lists+linux-clk@lfdr.de>; Wed, 15 May 2019 13:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709F31F458
+	for <lists+linux-clk@lfdr.de>; Wed, 15 May 2019 14:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731729AbfEOLqd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 May 2019 07:46:33 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:59972 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731686AbfEOLqc (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 May 2019 07:46:32 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x4FBk9X7066201;
-        Wed, 15 May 2019 06:46:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1557920769;
-        bh=ErZPSnkvpW1ltnGA1FPiw4W2WDwUubKfvtcFuldMMbo=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=JeFk7xcC5uF8iif4I2oxfzx5DC25I04BKsRowLeWGNJiOLKwhsC9BszWU9wc2hyhQ
-         tmocg2hT+SJRAtzTALA3XtvHx+8ofLS4OlrR5xYHTThVMrti7e6vOhmHWmdoQOVKP1
-         KGS+N7F+oBTZVQUNX7E3U2vBnMv5dM14Wt8DGKpM=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x4FBk9UR066924
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 15 May 2019 06:46:09 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 15
- May 2019 06:46:09 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Wed, 15 May 2019 06:46:09 -0500
-Received: from [172.24.190.172] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x4FBk4qH020658;
-        Wed, 15 May 2019 06:46:05 -0500
-Subject: Re: [PATCH] clk: Remove io.h from clk-provider.h
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Tero Kristo <t-kristo@ti.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Crispin <john@phrozen.org>,
-        Heiko Stuebner <heiko@sntech.de>
-References: <20190514170931.56312-1-sboyd@kernel.org>
-From:   Sekhar Nori <nsekhar@ti.com>
-Message-ID: <7d38658e-02f5-d6f4-ca66-5fdb57fb0352@ti.com>
-Date:   Wed, 15 May 2019 17:16:03 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20190514170931.56312-1-sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        id S1726607AbfEOM2S (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 May 2019 08:28:18 -0400
+Received: from mail-eopbgr150077.outbound.protection.outlook.com ([40.107.15.77]:45343
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726441AbfEOM2S (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 15 May 2019 08:28:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jZ10VM0E0QGH+rFqn+KCRa0x5MdVNWbZ2uV9Wh376JI=;
+ b=AqPqrT5HrrjsZ/E1b/BtEOa7Q9Oe7xML1e0jZ8xILy1nFWb5sPxqBkcZPiYjMY45w1CQ1o9C2xdVM0/Z71+Z6B2swAlmMt2fh/w4tnghDiWy+ngfVmTUINr9WhMVlUbzN2XIYMeAxKibO8f93j9oqV5X0or0EJH56xkRCnyt4/4=
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
+ DB3PR0402MB3946.eurprd04.prod.outlook.com (52.134.72.13) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1900.16; Wed, 15 May 2019 12:28:13 +0000
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::d035:3bd0:a56a:189d]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::d035:3bd0:a56a:189d%2]) with mapi id 15.20.1900.010; Wed, 15 May 2019
+ 12:28:13 +0000
+From:   Anson Huang <anson.huang@nxp.com>
+To:     "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "tiny.windzz@gmail.com" <tiny.windzz@gmail.com>,
+        "pp@emlix.com" <pp@emlix.com>,
+        "colin.didier@devialet.com" <colin.didier@devialet.com>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "hofrat@osadl.org" <hofrat@osadl.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        "stefan@agner.ch" <stefan@agner.ch>,
+        "michael@amarulasolutions.com" <michael@amarulasolutions.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     dl-linux-imx <linux-imx@nxp.com>
+Subject: [PATCH V2 1/2] clk: imx: Add common API for masking MMDC handshake
+Thread-Topic: [PATCH V2 1/2] clk: imx: Add common API for masking MMDC
+ handshake
+Thread-Index: AQHVCxmq80TspEKNo0uWdJG5ctX+bA==
+Date:   Wed, 15 May 2019 12:28:13 +0000
+Message-ID: <1557922984-20811-1-git-send-email-Anson.Huang@nxp.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.7.4
+x-clientproxiedby: HK0P153CA0031.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:203:17::19) To DB3PR0402MB3916.eurprd04.prod.outlook.com
+ (2603:10a6:8:10::18)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=anson.huang@nxp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: dcad10e4-0a7e-423a-ebf7-08d6d930cc51
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:DB3PR0402MB3946;
+x-ms-traffictypediagnostic: DB3PR0402MB3946:
+x-microsoft-antispam-prvs: <DB3PR0402MB39463515D1C6FBCA84E30F49F5090@DB3PR0402MB3946.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2089;
+x-forefront-prvs: 0038DE95A2
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(346002)(376002)(136003)(396003)(366004)(199004)(189003)(5660300002)(68736007)(99286004)(8676002)(36756003)(2501003)(50226002)(66066001)(256004)(14444005)(110136005)(14454004)(478600001)(81166006)(81156014)(8936002)(52116002)(66556008)(3846002)(73956011)(6116002)(6486002)(64756008)(66446008)(7416002)(2906002)(2201001)(66946007)(6506007)(102836004)(6436002)(7736002)(305945005)(6512007)(386003)(316002)(26005)(86362001)(486006)(71200400001)(71190400001)(4326008)(25786009)(476003)(2616005)(186003)(66476007)(53936002)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3946;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: k0N4P84mGLD6Scdfuxo96GiZVd3ggiZeJeFvP9RZdmVKGed4/dCQMOXra7w6kWDYPVXLg9fCrtlJIb1WjD6rI1fI8vrrKbWMdL15Ne9FQ6vSkIRdeo257OsCEYupqGde61CC7ap40/MlG1Ls6Ao3zREs8apw2DVZzQTiZ9+c0ggv+cdNZg4nAaO5REv4Z3lcIRzydGXvvA9zkhGN6spZwlJVQp+S603Rvz9Q7EtyIxkmN8wBqDtikepgQhumpmTegRUG2REphdW7aZ1FRsfSdB6AQNI6aneIj7V/fjZVQJcCgFT40NkeiJwsJlw4zi+tX7ljzEB0jPzcJ6wfjI1F5eBO223tNgHx1i7FxdcCa6VctRBkEel2waJl4eOy/NlkBokMsJj5fzs2q1MYsHeQxHkGiKe4viT4Vypl/olWWVA=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-ID: <02B300F23F96AE42A8237D96181AD782@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dcad10e4-0a7e-423a-ebf7-08d6d930cc51
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2019 12:28:13.3645
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3946
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 14/05/19 10:39 PM, Stephen Boyd wrote:
-> Now that we've gotten rid of clk_readl() we can remove io.h from the
-> clk-provider header and push out the io.h include to any code that isn't
-> already including the io.h header but using things like readl/writel,
-> etc.
+All i.MX6 SoCs need to mask unused MMDC channel's handshake
+for low power modes, this patch provides common API for masking
+the MMDC channel passed from caller.
 
-For mach-davinci and drivers/clk/davinci
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
+---
+Changes since V1:
+	- add necessary "io.h" head file to avoid build error based on latest linu=
+x-next.
+---
+ drivers/clk/imx/clk.c | 15 +++++++++++++++
+ drivers/clk/imx/clk.h |  1 +
+ 2 files changed, 16 insertions(+)
 
-Acked-by: Sekhar Nori <nsekhar@ti.com>
+diff --git a/drivers/clk/imx/clk.c b/drivers/clk/imx/clk.c
+index 1efed86..9cd7097 100644
+--- a/drivers/clk/imx/clk.c
++++ b/drivers/clk/imx/clk.c
+@@ -1,13 +1,28 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <linux/clk.h>
+ #include <linux/err.h>
++#include <linux/io.h>
+ #include <linux/of.h>
+ #include <linux/slab.h>
+ #include <linux/spinlock.h>
+ #include "clk.h"
+=20
++#define CCM_CCDR			0x4
++#define CCDR_MMDC_CH0_MASK		BIT(17)
++#define CCDR_MMDC_CH1_MASK		BIT(16)
++
+ DEFINE_SPINLOCK(imx_ccm_lock);
+=20
++void __init imx_mmdc_mask_handshake(void __iomem *ccm_base,
++				    unsigned int chn)
++{
++	unsigned int reg;
++
++	reg =3D readl_relaxed(ccm_base + CCM_CCDR);
++	reg |=3D chn =3D=3D 0 ? CCDR_MMDC_CH0_MASK : CCDR_MMDC_CH1_MASK;
++	writel_relaxed(reg, ccm_base + CCM_CCDR);
++}
++
+ void __init imx_check_clocks(struct clk *clks[], unsigned int count)
+ {
+ 	unsigned i;
+diff --git a/drivers/clk/imx/clk.h b/drivers/clk/imx/clk.h
+index 8639a8f..6dcdc91 100644
+--- a/drivers/clk/imx/clk.h
++++ b/drivers/clk/imx/clk.h
+@@ -10,6 +10,7 @@ extern spinlock_t imx_ccm_lock;
+ void imx_check_clocks(struct clk *clks[], unsigned int count);
+ void imx_check_clk_hws(struct clk_hw *clks[], unsigned int count);
+ void imx_register_uart_clocks(struct clk ** const clks[]);
++void imx_mmdc_mask_handshake(void __iomem *ccm_base, unsigned int chn);
+=20
+ extern void imx_cscmr1_fixup(u32 *val);
+=20
+--=20
+2.7.4
 
-Thanks,
-Sekhar
