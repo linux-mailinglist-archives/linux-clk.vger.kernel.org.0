@@ -2,79 +2,89 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C71AF1FA09
-	for <lists+linux-clk@lfdr.de>; Wed, 15 May 2019 20:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B62220047
+	for <lists+linux-clk@lfdr.de>; Thu, 16 May 2019 09:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726554AbfEOSd7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 May 2019 14:33:59 -0400
-Received: from mail-yb1-f193.google.com ([209.85.219.193]:36436 "EHLO
-        mail-yb1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726392AbfEOSd7 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 May 2019 14:33:59 -0400
-Received: by mail-yb1-f193.google.com with SMTP id m10so229841ybk.3;
-        Wed, 15 May 2019 11:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HnVd2S8VknS7EmG8FcfjRFAi+NkjPV+gxxEXD/c0pnc=;
-        b=U1gPCjG+D+4aIu+PcJQhSCyFUml1ZVD7xRzGJdpN4SepTMBxsIv8dRVFFOe/wL8Vgr
-         5Wx9ZjxkBVZaEKQjcbCJcMGrwgPcIgciC/BwNLPWuky2hu3Yq8tf606dj27rAEmmfqoK
-         NtIsBGmBp1MBrcLBVBR1Mv2A6CKirC9Xq0ciakxUn1B/9bfKR1YvdYkccFW7JYdlS8ed
-         A1HA77zqhEmom1IKc0udacwIeVs+GWbKQt/hXjK5tSQxQ0fQN5pBwcpJjx22NGqV7fzo
-         If3LKxKhOq8IVVLykcIxWxtRcfU1ypwg5MH4R3icqEk6jy3yNCofZCgini1ni/L7mAxq
-         RarA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HnVd2S8VknS7EmG8FcfjRFAi+NkjPV+gxxEXD/c0pnc=;
-        b=N23qMd3h3+BHzv7tSemtM1fNoEnzrwfr1UM8vewDGLSUZlr+FRkMFEI7MVjYDiyDtC
-         C5cGOBlKsO6CzrrwiNEPAhKcOEcRWmMyXLIohsofuUhfQIPjqRHPxVxsjOIvWBsh0h5W
-         Vgr73gKvBdzBj2iRN+1qSNZwNJL9CvyBPp9VIudwVKx+ta6aXuZutARHuyrO1XrHtHx+
-         1jjO97duEThdRu2m5MMgy2u7QDW2OhjHCB0+eZ0zK55GDN3TghVqLu+stBRTMoBo1wkJ
-         upQ3ue+WUWhA6Wf7Z2jbNQHzO2ThYpfawCDK/G8IAZLJHPG9UiofNK15IxJotLRSS+65
-         iXSA==
-X-Gm-Message-State: APjAAAUZj/5Iqj/dU4UXs83SP6WBwJrWy0hfaVhnAaSGluhRkmLU2jGQ
-        EA+C68oYtPUSy0LsLYdPcbJTMotSRX2XXXDxPy0=
-X-Google-Smtp-Source: APXvYqyIhd2iPzcP+rbRmFUBJ+m9T5N2f9m167KLV8oGalcuqt6Z8jWcA/wh/Y+HxmjzzMYCIMCeIuYYq0bnwOtP7tM=
-X-Received: by 2002:a25:4485:: with SMTP id r127mr19575805yba.386.1557945238502;
- Wed, 15 May 2019 11:33:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190514170931.56312-1-sboyd@kernel.org>
-In-Reply-To: <20190514170931.56312-1-sboyd@kernel.org>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Wed, 15 May 2019 11:33:46 -0700
-Message-ID: <CAMo8BfL+JSBtw_HmZ3y9AnBK0vhg+YCw+f1E3XOfOaFFFaFQqg@mail.gmail.com>
-Subject: Re: [PATCH] clk: Remove io.h from clk-provider.h
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-clk@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Tero Kristo <t-kristo@ti.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Chris Zankel <chris@zankel.net>,
-        John Crispin <john@phrozen.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726739AbfEPH3K (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 16 May 2019 03:29:10 -0400
+Received: from regular1.263xmail.com ([211.150.70.205]:59638 "EHLO
+        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726702AbfEPH3K (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 May 2019 03:29:10 -0400
+Received: from zhangqing?rock-chips.com (unknown [192.168.167.227])
+        by regular1.263xmail.com (Postfix) with ESMTP id A0EE847C;
+        Thu, 16 May 2019 15:28:58 +0800 (CST)
+X-263anti-spam: KSV:0;BIG:0;
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-KSVirus-check: 0
+X-ADDR-CHECKED4: 1
+X-ABS-CHECKED: 1
+X-SKE-CHECKED: 1
+X-ANTISPAM-LEVEL: 2
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P7747T139724561819392S1557991736066321_;
+        Thu, 16 May 2019 15:28:58 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <e97b00e870e3be5f6951bfbdbadcb8a3>
+X-RL-SENDER: zhangqing@rock-chips.com
+X-SENDER: zhangqing@rock-chips.com
+X-LOGIN-NAME: zhangqing@rock-chips.com
+X-FST-TO: heiko@sntech.de
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-DNS-TYPE: 0
+From:   Elaine Zhang <zhangqing@rock-chips.com>
+To:     heiko@sntech.de
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        xxx@rock-chips.com, xf@rock-chips.com, huangtao@rock-chips.com,
+        Elaine Zhang <zhangqing@rock-chips.com>
+Subject: [PATCH v2 0/6] clk: rockchip: Support for some new features
+Date:   Thu, 16 May 2019 15:28:50 +0800
+Message-Id: <1557991736-13580-1-git-send-email-zhangqing@rock-chips.com>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, May 14, 2019 at 10:09 AM Stephen Boyd <swboyd@chromium.org> wrote:
-> Now that we've gotten rid of clk_readl() we can remove io.h from the
-> clk-provider header and push out the io.h include to any code that isn't
-> already including the io.h header but using things like readl/writel,
-> etc.
+1. Support for some new features
+2. fix up some error
 
-For arch/xtensa/platforms/xtfpga/setup.c:
-Acked-by: Max Filippov <jcmvbkbc@gmail.com>
+Chang in V2:
+[PATCH v2 5/6] : fix up the Register error, and add delay.
+
+
+Elaine Zhang (4):
+  clk: rockchip: fix up the frac clk get rate error
+  clk: rockchip: add a clock-type for muxes based in the pmugrf
+  clk: rockchip: add pll up and down when change pll freq
+  clk: rockchip: support pll setting by auto
+
+Finley Xiao (2):
+  clk: rockchip: Add supprot to limit input rate for fractional divider
+  clk: rockchip: add a COMPOSITE_DIV_OFFSET clock-type
+
+ drivers/clk/rockchip/clk-pll.c    | 236 +++++++++++++++++++++++++++++++++++---
+ drivers/clk/rockchip/clk-px30.c   |  29 ++---
+ drivers/clk/rockchip/clk-rk3036.c |  13 ++-
+ drivers/clk/rockchip/clk-rk3128.c |  15 ++-
+ drivers/clk/rockchip/clk-rk3188.c |  24 ++--
+ drivers/clk/rockchip/clk-rk3228.c |  18 +--
+ drivers/clk/rockchip/clk-rk3288.c |  19 +--
+ drivers/clk/rockchip/clk-rk3328.c |  17 +--
+ drivers/clk/rockchip/clk-rk3368.c |  17 +--
+ drivers/clk/rockchip/clk-rk3399.c |  32 +++---
+ drivers/clk/rockchip/clk-rv1108.c |  14 ++-
+ drivers/clk/rockchip/clk.c        |  48 ++++++--
+ drivers/clk/rockchip/clk.h        |  50 +++++++-
+ include/linux/clk-provider.h      |   2 +
+ 14 files changed, 425 insertions(+), 109 deletions(-)
 
 -- 
-Thanks.
--- Max
+1.9.1
+
+
+
