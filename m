@@ -2,38 +2,38 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BED722DC8
-	for <lists+linux-clk@lfdr.de>; Mon, 20 May 2019 10:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D8922DC1
+	for <lists+linux-clk@lfdr.de>; Mon, 20 May 2019 10:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731155AbfETIGd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 20 May 2019 04:06:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36742 "EHLO mail.kernel.org"
+        id S1731095AbfETIGO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 20 May 2019 04:06:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36812 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730907AbfETIFj (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 20 May 2019 04:05:39 -0400
+        id S1730913AbfETIFk (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 20 May 2019 04:05:40 -0400
 Received: from wens.tw (mirror2.csie.ntu.edu.tw [140.112.30.76])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2352D2081C;
+        by mail.kernel.org (Postfix) with ESMTPSA id 4DBB7214C6;
         Mon, 20 May 2019 08:05:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1558339539;
-        bh=floqJEFt/0sKhoKAfaGA+qdG6Nfli1fbrU7TJiPTg9k=;
+        bh=DbuOYxJa4KoncL8EKskPYGmoh/4yegOV7Rx24aeQj+Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eQsN17i++35mtQsDQEp2V2rNfKeyXuu+84V7lV2kDammDq4fLdOxl2M1b4DqUndu1
-         vUS+CJg/dAmJ3uzOgqcMRfNzmB+kIZT9GOZLMBwTVndy287VwTQ6n9zRMcTkJ/IetT
-         /keBM6ZthO+mrHldBPTASOrEkmeZHwPK9nv0KHSU=
+        b=fq+UZroQ39zqbYgqes5v6iU3Uzn3dzVOiedhXiOEZX/NFPmjiCDG7+wB6ExVX+SGb
+         ViVZHqpUjn8sklpCw7eUI9VDZtNDnB/5U9ckNzvB0/HbOGDo2HbXx+mR9u3udvutCd
+         hiFUSiTnwJHX9KLud6hW2xCnj5qpr8zBvpPhFAOU=
 Received: by wens.tw (Postfix, from userid 1000)
-        id A02CC65825; Mon, 20 May 2019 16:05:32 +0800 (CST)
+        id AA95765828; Mon, 20 May 2019 16:05:32 +0800 (CST)
 From:   Chen-Yu Tsai <wens@kernel.org>
 To:     Maxime Ripard <maxime.ripard@bootlin.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>
 Cc:     Chen-Yu Tsai <wens@csie.org>, linux-arm-kernel@lists.infradead.org,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 15/25] clk: sunxi-ng: h3: Use local parent references for CLK_FIXED_FACTOR
-Date:   Mon, 20 May 2019 16:04:11 +0800
-Message-Id: <20190520080421.12575-16-wens@kernel.org>
+Subject: [PATCH 16/25] clk: sunxi-ng: r40: Use local parent references for CLK_FIXED_FACTOR
+Date:   Mon, 20 May 2019 16:04:12 +0800
+Message-Id: <20190520080421.12575-17-wens@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190520080421.12575-1-wens@kernel.org>
 References: <20190520080421.12575-1-wens@kernel.org>
@@ -56,24 +56,27 @@ external to the CCU.
 
 Signed-off-by: Chen-Yu Tsai <wens@csie.org>
 ---
- drivers/clk/sunxi-ng/ccu-sun8i-h3.c | 29 +++++++++++++++++++----------
- 1 file changed, 19 insertions(+), 10 deletions(-)
+ drivers/clk/sunxi-ng/ccu-sun8i-r40.c | 46 ++++++++++++++++++----------
+ 1 file changed, 29 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-h3.c b/drivers/clk/sunxi-ng/ccu-sun8i-h3.c
-index 0f3df565c6c1..d5b5cd558ecf 100644
---- a/drivers/clk/sunxi-ng/ccu-sun8i-h3.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun8i-h3.c
-@@ -725,17 +725,26 @@ static struct ccu_common *sun50i_h5_ccu_clks[] = {
- 	&gpu_clk.common,
+diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-r40.c b/drivers/clk/sunxi-ng/ccu-sun8i-r40.c
+index f9625f7b9ec2..5fef799740ac 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun8i-r40.c
++++ b/drivers/clk/sunxi-ng/ccu-sun8i-r40.c
+@@ -952,25 +952,37 @@ static struct ccu_common *sun8i_r40_ccu_clks[] = {
  };
  
+ /* Fixed Factor clocks */
+-static CLK_FIXED_FACTOR(osc12M_clk, "osc12M", "osc24M", 2, 1, 0);
++static CLK_FIXED_FACTOR_FW_NAME(osc12M_clk, "osc12M", "hosc", 2, 1, 0);
++
 +static const struct clk_hw *clk_parent_pll_audio[] = {
 +	&pll_audio_base_clk.common.hw
 +};
-+
- /* We hardcode the divider to 1 for now */
+ 
+ /* We hardcode the divider to 4 for now */
 -static CLK_FIXED_FACTOR(pll_audio_clk, "pll-audio",
--			"pll-audio-base", 1, 1, CLK_SET_RATE_PARENT);
+-			"pll-audio-base", 4, 1, CLK_SET_RATE_PARENT);
 -static CLK_FIXED_FACTOR(pll_audio_2x_clk, "pll-audio-2x",
 -			"pll-audio-base", 2, 1, CLK_SET_RATE_PARENT);
 -static CLK_FIXED_FACTOR(pll_audio_4x_clk, "pll-audio-4x",
@@ -82,9 +85,15 @@ index 0f3df565c6c1..d5b5cd558ecf 100644
 -			"pll-audio-base", 1, 2, CLK_SET_RATE_PARENT);
 -static CLK_FIXED_FACTOR(pll_periph0_2x_clk, "pll-periph0-2x",
 -			"pll-periph0", 1, 2, 0);
+-static CLK_FIXED_FACTOR(pll_periph1_2x_clk, "pll-periph1-2x",
+-			"pll-periph1", 1, 2, 0);
+-static CLK_FIXED_FACTOR(pll_video0_2x_clk, "pll-video0-2x",
+-			"pll-video0", 1, 2, 0);
+-static CLK_FIXED_FACTOR(pll_video1_2x_clk, "pll-video1-2x",
+-			"pll-video1", 1, 2, 0);
 +static CLK_FIXED_FACTOR_HWS(pll_audio_clk, "pll-audio",
 +			    clk_parent_pll_audio,
-+			    1, 1, CLK_SET_RATE_PARENT);
++			    4, 1, CLK_SET_RATE_PARENT);
 +static CLK_FIXED_FACTOR_HWS(pll_audio_2x_clk, "pll-audio-2x",
 +			    clk_parent_pll_audio,
 +			    2, 1, CLK_SET_RATE_PARENT);
@@ -97,8 +106,17 @@ index 0f3df565c6c1..d5b5cd558ecf 100644
 +static CLK_FIXED_FACTOR_HW(pll_periph0_2x_clk, "pll-periph0-2x",
 +			   &pll_periph0_clk.common.hw,
 +			   1, 2, 0);
++static CLK_FIXED_FACTOR_HW(pll_periph1_2x_clk, "pll-periph1-2x",
++			   &pll_periph1_clk.common.hw,
++			   1, 2, 0);
++static CLK_FIXED_FACTOR_HW(pll_video0_2x_clk, "pll-video0-2x",
++			   &pll_video0_clk.common.hw,
++			   1, 2, 0);
++static CLK_FIXED_FACTOR_HW(pll_video1_2x_clk, "pll-video1-2x",
++			   &pll_video1_clk.common.hw,
++			   1, 2, 0);
  
- static struct clk_hw_onecell_data sun8i_h3_hw_clks = {
+ static struct clk_hw_onecell_data sun8i_r40_hw_clks = {
  	.hws	= {
 -- 
 2.20.1
