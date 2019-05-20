@@ -2,114 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E499F22F9A
-	for <lists+linux-clk@lfdr.de>; Mon, 20 May 2019 11:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB29231AF
+	for <lists+linux-clk@lfdr.de>; Mon, 20 May 2019 12:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730243AbfETJDc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 20 May 2019 05:03:32 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:51373 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727301AbfETJDc (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 May 2019 05:03:32 -0400
-X-Originating-IP: 90.88.22.185
-Received: from localhost (aaubervilliers-681-1-80-185.w90-88.abo.wanadoo.fr [90.88.22.185])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 89B0960010;
-        Mon, 20 May 2019 09:03:27 +0000 (UTC)
-Date:   Mon, 20 May 2019 11:03:27 +0200
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Chen-Yu Tsai <wens@kernel.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        id S1731944AbfETKrh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 20 May 2019 06:47:37 -0400
+Received: from mx2.suse.de ([195.135.220.15]:55304 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728000AbfETKrh (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 20 May 2019 06:47:37 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 88D7AAFD1;
+        Mon, 20 May 2019 10:47:35 +0000 (UTC)
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     stefan.wahren@i2se.com, devicetree@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Cc:     mbrugger@suse.de, viresh.kumar@linaro.org, rjw@rjwysocki.net,
+        sboyd@kernel.org, eric@anholt.net, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, ptesarik@suse.com,
+        ssuloev@orpaltech.com, linux-clk@vger.kernel.org,
+        mturquette@baylibre.com,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/25] clk: sunxi-ng: clk parent rewrite part 1
-Message-ID: <20190520090327.iejd3q7c3iwomzlz@flea>
-References: <20190520080421.12575-1-wens@kernel.org>
+Subject: [RFC v2 0/5] cpufreq support for the Raspberry Pi
+Date:   Mon, 20 May 2019 12:47:02 +0200
+Message-Id: <20190520104708.11980-1-nsaenzjulienne@suse.de>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="2ypype76y25ofynl"
-Content-Disposition: inline
-In-Reply-To: <20190520080421.12575-1-wens@kernel.org>
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Hi all,
+as some of you may recall I've been spending some time looking into
+providing 'cpufreq' support for the Raspberry Pi platform[1]. I think
+I'm close to something workable, so I'd love for you to comment on it.
 
---2ypype76y25ofynl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+There has been some design changes since the last version. Namely the
+fact that I now make sure *only* the CPU frequency is updated. The
+firmware API we use has two modes, with or without turbo. Enabling turbo
+implies not only scaling the CPU clock but also the VPU and other
+peripheral related clocks.  This is problematic as some of them are not
+prepared for this kind frequency changes. I spent some time adapting the
+peripheral drivers, but the result was disappointing as they poorly
+support live frequency changes (which most other chips accept, think for
+instance I2C and clock stretching) but also turned out hard to integrate
+into the kernel. As we were planning to use 'clk_notifiers' which turns
+out not to be such a good idea as it's prone to deadlocks and not
+recommended by the clock maintainers[2]. It's also worth mentioning that
+the foundation kernel doesn't support VPU frequency scaling either.
 
-On Mon, May 20, 2019 at 04:03:56PM +0800, Chen-Yu Tsai wrote:
-> From: Chen-Yu Tsai <wens@csie.org>
->
-> Hi everyone,
->
-> This is series is the first part of a large series (I haven't done the
-> rest) of patches to rewrite the clk parent relationship handling within
-> the sunxi-ng clk driver. This is based on Stephen's recent work allowing
-> clk drivers to specify clk parents using struct clk_hw * or parsing DT
-> phandles in the clk node.
->
-> This series can be split into a few major parts:
->
-> 1) The first patch is a small fix for clk debugfs representation. This
->    was done before commit 1a079560b145 ("clk: Cache core in
->    clk_fetch_parent_index() without names") was posted, so it might or
->    might not be needed. Found this when checking my work using
->    clk_possible_parents.
->
-> 2) A bunch of CLK_HW_INIT_* helper macros are added. These cover the
->    situations I encountered, or assume I will encounter, such as single
->    internal (struct clk_hw *) parent, single DT (struct clk_parent_data
->    .fw_name), multiple internal parents, and multiple mixed (internal +
->    DT) parents. A special variant for just an internal single parent is
->    added, CLK_HW_INIT_HWS, which lets the driver share the singular
->    list, instead of having the compiler create a compound literal every
->    time. It might even make sense to only keep this variant.
->
-> 3) A bunch of CLK_FIXED_FACTOR_* helper macros are added. The rationale
->    is the same as the single parent CLK_HW_INIT_* helpers.
->
-> 4) Bulk conversion of CLK_FIXED_FACTOR to use local parent references,
->    either struct clk_hw * or DT .fw_name types, whichever the hardware
->    requires.
->
-> 5) The beginning of SUNXI_CCU_GATE conversion to local parent
->    references. This part is not done. They are included as justification
->    and examples for the shared list of clk parents case.
+With this in mind, and as suggested by clock maintainers[2], I've
+decided to integrate the firmware clock interface into the bcm2835 clock
+driver. This, in my opinion, provides the least friction with the
+firmware and lets us write very simple and portable higher level
+drivers. As I did with the 'cpufreq' driver which simply queries the max
+and min frequencies available, which are configurable in the firmware,
+to then trigger the generic 'cpufreq-dt'.
 
-That series is pretty neat. As far as sunxi is concerned, you can add my
-Acked-by: Maxime Ripard <maxime.ripard@bootlin.com>
+In the future we could further integrate other firmware dependent clocks
+into the main driver. For instance to be able to scale the VPU clock,
+which should be operated through a 'devfreq' driver.
 
-> I realize this is going to be many patches every time I convert a clock
-> type. Going forward would the people involved prefer I send out
-> individual patches like this series, or squash them all together?
+This was tested on a RPi3b+ and if the series is well received I'll test
+it further on all platforms I own.
 
-For bisection, I guess it would be good to keep the approach you've
-had in this series. If this is really too much, I guess we can always
-change oru mind later on.
+That's all,
+kind regards,
+Nicolas
 
-Thanks!
-Maxime
+[1] https://lists.infradead.org/pipermail/linux-rpi-kernel/2019-April/008634.html
+[2] https://www.spinics.net/lists/linux-clk/msg36937.html
 
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+---
 
---2ypype76y25ofynl
-Content-Type: application/pgp-signature; name="signature.asc"
+Changes since v1:
+  - Addressed Viresh's comments in cpufreq driver
+  - Resend with (hopefully) proper CCs
 
------BEGIN PGP SIGNATURE-----
+Nicolas Saenz Julienne (5):
+  clk: bcm2835: set CLK_GET_RATE_NOCACHE on CPU clocks
+  clk: bcm2835: set pllb_arm divisor as readonly
+  clk: bcm2835: use firmware interface to update pllb
+  dts: bcm2837: add per-cpu clock devices
+  cpufreq: add driver for Raspbery Pi
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXOJtXgAKCRDj7w1vZxhR
-xQfkAQDQX2OO7NWM6Uc/mv7S2HQgLu755CMRobYRqL6EDMn5twD/WlNMYOlQibvH
-Kk0T6Z3CVuTDEoh9v+fpo5OUWhc1qw4=
-=G/SF
------END PGP SIGNATURE-----
+ arch/arm/boot/dts/bcm2837.dtsi        |   8 +
+ drivers/clk/bcm/clk-bcm2835.c         | 284 ++++++++++++++++++++++++--
+ drivers/cpufreq/Kconfig.arm           |   8 +
+ drivers/cpufreq/Makefile              |   1 +
+ drivers/cpufreq/raspberrypi-cpufreq.c |  83 ++++++++
+ 5 files changed, 366 insertions(+), 18 deletions(-)
+ create mode 100644 drivers/cpufreq/raspberrypi-cpufreq.c
 
---2ypype76y25ofynl--
+-- 
+2.21.0
+
