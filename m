@@ -2,156 +2,149 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F90C22D70
-	for <lists+linux-clk@lfdr.de>; Mon, 20 May 2019 09:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B4E22DEB
+	for <lists+linux-clk@lfdr.de>; Mon, 20 May 2019 10:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730388AbfETHyz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 20 May 2019 03:54:55 -0400
-Received: from mail-eopbgr00061.outbound.protection.outlook.com ([40.107.0.61]:65409
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727319AbfETHyz (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 20 May 2019 03:54:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dTEq0Rlmj+O/Zw2wJCGP+ZfJO48khPwKv3dEP3RicaE=;
- b=pznIK3Uwa0DES3LJP2mHfxrPbsba7YqebWmQqJvoR01vnWnRrB3RtRc9IQFBrC87SWr3oHh9WOV7E11AWJd1hBVIj/yWQ6QLQceFDmZsbMv3D/itB6iH4/uhBBCgP39ei/frky/Dsi/MGRURNnEhdDcQlBT1x6qonhJaj4r+Ko0=
-Received: from VI1PR0402MB3519.eurprd04.prod.outlook.com (52.134.4.24) by
- VI1PR0402MB2797.eurprd04.prod.outlook.com (10.172.255.15) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1900.17; Mon, 20 May 2019 07:54:51 +0000
-Received: from VI1PR0402MB3519.eurprd04.prod.outlook.com
- ([fe80::2417:67da:c1aa:29f3]) by VI1PR0402MB3519.eurprd04.prod.outlook.com
- ([fe80::2417:67da:c1aa:29f3%7]) with mapi id 15.20.1900.020; Mon, 20 May 2019
- 07:54:51 +0000
-From:   Jacky Bai <ping.bai@nxp.com>
-To:     "sboyd@kernel.org" <sboyd@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>
-CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-Subject: [PATCH RESEND] clk: imx: keep the mmdc p1 ipg clock always on on
- 6sx/ul/ull/sll
-Thread-Topic: [PATCH RESEND] clk: imx: keep the mmdc p1 ipg clock always on on
- 6sx/ul/ull/sll
-Thread-Index: AQHVDuFNUl8CS/7zv0u0Ca3LZjy8mg==
-Date:   Mon, 20 May 2019 07:54:51 +0000
-Message-ID: <20190520075959.29069-1-ping.bai@nxp.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.21.0
-x-clientproxiedby: HK2PR04CA0087.apcprd04.prod.outlook.com
- (2603:1096:202:15::31) To VI1PR0402MB3519.eurprd04.prod.outlook.com
- (2603:10a6:803:8::24)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ping.bai@nxp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: de6a0fd0-68f8-4546-beef-08d6dcf87016
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:VI1PR0402MB2797;
-x-ms-traffictypediagnostic: VI1PR0402MB2797:
-x-microsoft-antispam-prvs: <VI1PR0402MB2797289A921337720C6D53B287060@VI1PR0402MB2797.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1201;
-x-forefront-prvs: 004395A01C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(376002)(366004)(396003)(136003)(39860400002)(189003)(199004)(6436002)(52116002)(54906003)(81166006)(8936002)(6486002)(53936002)(486006)(2616005)(476003)(66446008)(64756008)(66556008)(66476007)(8676002)(110136005)(478600001)(316002)(36756003)(186003)(81156014)(26005)(66946007)(73956011)(66066001)(25786009)(2501003)(6512007)(386003)(14454004)(102836004)(5660300002)(6506007)(2906002)(7736002)(3846002)(1076003)(86362001)(256004)(4326008)(50226002)(99286004)(68736007)(6116002)(305945005)(71190400001)(71200400001)(2201001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR0402MB2797;H:VI1PR0402MB3519.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: nj2qDNt+JdQblr12Yghv1cgAKIqgukshtQyIshiGeHqjDr2dW3qCpo446Clcwqb1X/RVG2swyeXvh7YrxhIgQ1fhQ6X7hH3BE9c2115jw9qAyTSppENVgEX2AZEDpVgjsJI2XEZJkCl5BA6Aer0RHPrqyxrD4qFcUrdFascdzAbUxJt04hczhW19tVv6U9qxQHX3d46CcGpGV4TPOznFC+q9d5SxU5vHL9zqCgHQbtxFNy2SkMuLKsBYURRy1Juaj6/k7IUdATWAu2JLIz/Cl3bIGQ8RR2Dmh+HESgbgfC8V5VdxLo7O2WBNtiAK1/7ODpnTwvfT3o3ZuYpZYg3gD88uUsmRv2ACRvvBFsux60KRkCui3Zt9OZJxwqwiEqJzo7CqBAmOYugKaAUjfrvI2vF4XeiTNHw65X9qgKx2pPU=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-ID: <ACB1D3881347614DBA794CCDA8587C6F@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1730222AbfETIHb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 20 May 2019 04:07:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36252 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730647AbfETIFf (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 20 May 2019 04:05:35 -0400
+Received: from wens.tw (mirror2.csie.ntu.edu.tw [140.112.30.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A19C12081C;
+        Mon, 20 May 2019 08:05:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558339534;
+        bh=xnei+IQeBrteeMu2IJuJYcNap1qcD8QFf+i0AMgPxKE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=R5xwEHoXcgt6AHWxLLDlnReqAu7XtRw5r/L0naoRuPEeCBEq+TfNcB6+H8o9brqq9
+         aR1zQCoWIQUXGhqhJX4Gn6WHnTYltLUhGG7XJITetHRjMTOsNqBpYtyIqmvQvqrp5L
+         4pmV+3E/MIHh0qBJiSNhrpmipkxUCHJbn+L6L2Lg=
+Received: by wens.tw (Postfix, from userid 1000)
+        id 1B4765FCE3; Mon, 20 May 2019 16:05:32 +0800 (CST)
+From:   Chen-Yu Tsai <wens@kernel.org>
+To:     Maxime Ripard <maxime.ripard@bootlin.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/25] clk: sunxi-ng: clk parent rewrite part 1
+Date:   Mon, 20 May 2019 16:03:56 +0800
+Message-Id: <20190520080421.12575-1-wens@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: de6a0fd0-68f8-4546-beef-08d6dcf87016
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 May 2019 07:54:51.2861
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB2797
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The MMDC_P1_IPG clock need to be on always on to make sure
-the MMDC register can be accessed successfully.
+From: Chen-Yu Tsai <wens@csie.org>
 
-Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
----
- drivers/clk/imx/clk-imx6sll.c | 2 +-
- drivers/clk/imx/clk-imx6sx.c  | 2 +-
- drivers/clk/imx/clk-imx6ul.c  | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Hi everyone,
 
-diff --git a/drivers/clk/imx/clk-imx6sll.c b/drivers/clk/imx/clk-imx6sll.c
-index 7eea448cb9a9..4d91e48e5918 100644
---- a/drivers/clk/imx/clk-imx6sll.c
-+++ b/drivers/clk/imx/clk-imx6sll.c
-@@ -307,7 +307,7 @@ static void __init imx6sll_clocks_init(struct device_no=
-de *ccm_node)
- 	clks[IMX6SLL_CLK_WDOG1]		=3D imx_clk_gate2("wdog1",	"ipg",		base + 0x74, =
-16);
- 	clks[IMX6SLL_CLK_MMDC_P0_FAST]	=3D imx_clk_gate_flags("mmdc_p0_fast", "mm=
-dc_podf",  base + 0x74,	20, CLK_IS_CRITICAL);
- 	clks[IMX6SLL_CLK_MMDC_P0_IPG]	=3D imx_clk_gate2_flags("mmdc_p0_ipg", "ipg=
-",	   base + 0x74,	24, CLK_IS_CRITICAL);
--	clks[IMX6SLL_CLK_MMDC_P1_IPG]	=3D imx_clk_gate2("mmdc_p1_ipg", "ipg",	   =
-base + 0x74,	26);
-+	clks[IMX6SLL_CLK_MMDC_P1_IPG]	=3D imx_clk_gate2_flags("mmdc_p1_ipg", "ipg=
-",	   base + 0x74,	26, CLK_IS_CRITICAL);
- 	clks[IMX6SLL_CLK_OCRAM]		=3D imx_clk_gate_flags("ocram","ahb",		   base +=
- 0x74,	28, CLK_IS_CRITICAL);
-=20
- 	/* CCGR4 */
-diff --git a/drivers/clk/imx/clk-imx6sx.c b/drivers/clk/imx/clk-imx6sx.c
-index 91558b09bf9e..86f3053c37f6 100644
---- a/drivers/clk/imx/clk-imx6sx.c
-+++ b/drivers/clk/imx/clk-imx6sx.c
-@@ -432,7 +432,7 @@ static void __init imx6sx_clocks_init(struct device_nod=
-e *ccm_node)
- 	clks[IMX6SX_CLK_MLB]          =3D imx_clk_gate2("mlb",           "ahb",  =
-             base + 0x74, 18);
- 	clks[IMX6SX_CLK_MMDC_P0_FAST] =3D imx_clk_gate2_flags("mmdc_p0_fast", "mm=
-dc_podf", base + 0x74, 20, CLK_IS_CRITICAL);
- 	clks[IMX6SX_CLK_MMDC_P0_IPG]  =3D imx_clk_gate2_flags("mmdc_p0_ipg", "ipg=
-", base + 0x74, 24, CLK_IS_CRITICAL);
--	clks[IMX6SX_CLK_MMDC_P1_IPG]  =3D imx_clk_gate2("mmdc_p1_ipg", "ipg", bas=
-e + 0x74, 26);
-+	clks[IMX6SX_CLK_MMDC_P1_IPG]  =3D imx_clk_gate2_flags("mmdc_p1_ipg", "ipg=
-", base + 0x74, 26, CLK_IS_CRITICAL);
- 	clks[IMX6SX_CLK_OCRAM]        =3D imx_clk_gate2_flags("ocram", "ocram_pod=
-f", base + 0x74, 28, CLK_IS_CRITICAL);
-=20
- 	/* CCGR4 */
-diff --git a/drivers/clk/imx/clk-imx6ul.c b/drivers/clk/imx/clk-imx6ul.c
-index fd60d1549f71..35377c6b50b8 100644
---- a/drivers/clk/imx/clk-imx6ul.c
-+++ b/drivers/clk/imx/clk-imx6ul.c
-@@ -408,7 +408,7 @@ static void __init imx6ul_clocks_init(struct device_nod=
-e *ccm_node)
- 	clks[IMX6UL_CLK_WDOG1]		=3D imx_clk_gate2("wdog1",	"ipg",		base + 0x74,	1=
-6);
- 	clks[IMX6UL_CLK_MMDC_P0_FAST]	=3D imx_clk_gate_flags("mmdc_p0_fast", "mmd=
-c_podf", base + 0x74,	20, CLK_IS_CRITICAL);
- 	clks[IMX6UL_CLK_MMDC_P0_IPG]	=3D imx_clk_gate2_flags("mmdc_p0_ipg",	"ipg"=
-,		base + 0x74,	24, CLK_IS_CRITICAL);
--	clks[IMX6UL_CLK_MMDC_P1_IPG]	=3D imx_clk_gate2("mmdc_p1_ipg",	"ipg",		bas=
-e + 0x74,	26);
-+	clks[IMX6UL_CLK_MMDC_P1_IPG]	=3D imx_clk_gate2_flags("mmdc_p1_ipg",	"ipg"=
-,		base + 0x74,	26, CLK_IS_CRITICAL);
- 	clks[IMX6UL_CLK_AXI]		=3D imx_clk_gate_flags("axi",	"axi_podf",	base + 0x=
-74,	28, CLK_IS_CRITICAL);
-=20
- 	/* CCGR4 */
---=20
-2.21.0
+This is series is the first part of a large series (I haven't done the
+rest) of patches to rewrite the clk parent relationship handling within
+the sunxi-ng clk driver. This is based on Stephen's recent work allowing
+clk drivers to specify clk parents using struct clk_hw * or parsing DT
+phandles in the clk node.
+
+This series can be split into a few major parts:
+
+1) The first patch is a small fix for clk debugfs representation. This
+   was done before commit 1a079560b145 ("clk: Cache core in 
+   clk_fetch_parent_index() without names") was posted, so it might or
+   might not be needed. Found this when checking my work using
+   clk_possible_parents.
+
+2) A bunch of CLK_HW_INIT_* helper macros are added. These cover the
+   situations I encountered, or assume I will encounter, such as single
+   internal (struct clk_hw *) parent, single DT (struct clk_parent_data
+   .fw_name), multiple internal parents, and multiple mixed (internal +
+   DT) parents. A special variant for just an internal single parent is
+   added, CLK_HW_INIT_HWS, which lets the driver share the singular
+   list, instead of having the compiler create a compound literal every
+   time. It might even make sense to only keep this variant.
+
+3) A bunch of CLK_FIXED_FACTOR_* helper macros are added. The rationale
+   is the same as the single parent CLK_HW_INIT_* helpers.
+
+4) Bulk conversion of CLK_FIXED_FACTOR to use local parent references,
+   either struct clk_hw * or DT .fw_name types, whichever the hardware
+   requires.
+
+5) The beginning of SUNXI_CCU_GATE conversion to local parent
+   references. This part is not done. They are included as justification
+   and examples for the shared list of clk parents case.
+
+I realize this is going to be many patches every time I convert a clock
+type. Going forward would the people involved prefer I send out
+individual patches like this series, or squash them all together?
+
+Stephen, would it make sense for you to pick up the first 7 patches that
+touch the clk core? And then we can base our clk branch on top of those?
+
+
+Thanks
+ChenYu
+
+
+Chen-Yu Tsai (25):
+  clk: Fix debugfs clk_possible_parents for clks without parent string
+    names
+  clk: Add CLK_HW_INIT_* macros using .parent_hws
+  clk: Add CLK_HW_INIT_FW_NAME macro using .fw_name in .parent_data
+  clk: Add CLK_HW_INIT_PARENT_DATA macro using .parent_data
+  clk: fixed-factor: Add CLK_FIXED_FACTOR_HW which takes clk_hw pointer
+    as parent
+  clk: fixed-factor: Add CLK_FIXED_FACTOR_HWS which takes list of struct
+    clk_hw *
+  clk: fixed-factor: Add CLK_FIXED_FACTOR_FW_NAME for DT clock-names
+    parent
+  clk: sunxi-ng: switch to of_clk_hw_register() for registering clks
+  clk: sunxi-ng: sun8i-r: Use local parent references for CLK_HW_INIT_*
+  clk: sunxi-ng: a10: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: sun5i: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: a31: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: a23: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: a33: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: h3: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: r40: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: v3s: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: sun8i-r: Use local parent references for
+    CLK_FIXED_FACTOR
+  clk: sunxi-ng: f1c100s: Use local parent references for
+    CLK_FIXED_FACTOR
+  clk: sunxi-ng: a64: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: h6: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: h6-r: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: gate: Add macros for referencing local clock parents
+  clk: sunxi-ng: a80-usb: Use local parent references for SUNXI_CCU_GATE
+  clk: sunxi-ng: sun8i-r: Use local parent references for SUNXI_CCU_GATE
+
+ drivers/clk/clk.c                        |  10 ++-
+ drivers/clk/sunxi-ng/ccu-sun4i-a10.c     |  39 ++++++---
+ drivers/clk/sunxi-ng/ccu-sun50i-a64.c    |  41 +++++----
+ drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c   |   2 +-
+ drivers/clk/sunxi-ng/ccu-sun50i-h6.c     |  69 +++++++++------
+ drivers/clk/sunxi-ng/ccu-sun5i.c         |  34 +++++---
+ drivers/clk/sunxi-ng/ccu-sun6i-a31.c     |  39 ++++++---
+ drivers/clk/sunxi-ng/ccu-sun8i-a23.c     |  34 +++++---
+ drivers/clk/sunxi-ng/ccu-sun8i-a33.c     |  34 +++++---
+ drivers/clk/sunxi-ng/ccu-sun8i-h3.c      |  29 ++++---
+ drivers/clk/sunxi-ng/ccu-sun8i-r.c       | 104 +++++++++++------------
+ drivers/clk/sunxi-ng/ccu-sun8i-r40.c     |  46 ++++++----
+ drivers/clk/sunxi-ng/ccu-sun8i-v3s.c     |  29 ++++---
+ drivers/clk/sunxi-ng/ccu-sun9i-a80-usb.c |  32 ++++---
+ drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c |  29 ++++---
+ drivers/clk/sunxi-ng/ccu_common.c        |   2 +-
+ drivers/clk/sunxi-ng/ccu_gate.h          |  53 ++++++++++++
+ include/linux/clk-provider.h             |  84 ++++++++++++++++++
+ 18 files changed, 487 insertions(+), 223 deletions(-)
+
+-- 
+2.20.1
 
