@@ -2,105 +2,62 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0C4229F1
-	for <lists+linux-clk@lfdr.de>; Mon, 20 May 2019 04:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7493C22C02
+	for <lists+linux-clk@lfdr.de>; Mon, 20 May 2019 08:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729687AbfETC0q (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 19 May 2019 22:26:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35972 "EHLO mail.kernel.org"
+        id S1730262AbfETGZ2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 20 May 2019 02:25:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32878 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729598AbfETC0q (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 19 May 2019 22:26:46 -0400
+        id S1730223AbfETGZ2 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 20 May 2019 02:25:28 -0400
 Received: from dragon (98.142.130.235.16clouds.com [98.142.130.235])
         (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BAB0020675;
-        Mon, 20 May 2019 02:26:43 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C6775206B6;
+        Mon, 20 May 2019 06:25:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558319205;
-        bh=XwqnL1mZZwuiBc9U8xE13zKAskvYjB8A4vADagVTdCc=;
+        s=default; t=1558333528;
+        bh=cHtPiNNVfcFAjX+nwUKdfSPkv8k0K9dC/wDPLIYqoC4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r2bRycjMq6QXFtO7wqpPr9eOdVPM7ircxhI1C5qBuFmzm4ouilyE6lzWYJ4o0GaiK
-         zzOVnddkrhWJFK7YTsoIkhH+D0GsLWQlsVNrjUOngkQvCO3ufF/ZfjT2bn2J1ew/tE
-         Csst5XemyJSIIKU3rKEYGkW9Qe2AItand8w0B4Oc=
-Date:   Mon, 20 May 2019 10:25:57 +0800
+        b=tO924fTYxBOLlVpLQTgBUHdUpSksa7C+1caY+Yic32c0eHlI4Wq10XAsaatQ2e/qG
+         UKtEJdEDTlrNOWHE3hddUghhe9uhPW1ziiDvWorEAmV0hELjBZoVPmGHAKhlmYe705
+         Gq02YDxXaW5SOWfLXnJptkL8IHdJgnEDiQ7CBCOQ=
+Date:   Mon, 20 May 2019 14:24:35 +0800
 From:   Shawn Guo <shawnguo@kernel.org>
-To:     Jacky Bai <ping.bai@nxp.com>
-Cc:     "sboyd@kernel.org" <sboyd@kernel.org>,
+To:     Anson Huang <anson.huang@nxp.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
         "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
         "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH] clk: imx: keep the mmdc p1 ipg clock always on on
- 6sx/ul/ull/sll
-Message-ID: <20190520022553.GH15856@dragon>
-References: <20190505052927.7313-1-ping.bai@nxp.com>
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH RESEND 1/3] dt-bindings: clock: imx8mm: Add GPIO clocks
+Message-ID: <20190520062433.GO15856@dragon>
+References: <1557655926-12915-1-git-send-email-Anson.Huang@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190505052927.7313-1-ping.bai@nxp.com>
+In-Reply-To: <1557655926-12915-1-git-send-email-Anson.Huang@nxp.com>
 User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sun, May 05, 2019 at 05:24:38AM +0000, Jacky Bai wrote:
-> The MMDC_P1_IPG clock need to be on always on to make sure
-> the MMDC register can be accessed successfully.
+On Sun, May 12, 2019 at 10:17:08AM +0000, Anson Huang wrote:
+> Add macro for the GPIO clocks of the i.MX8MM.
 > 
-> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
 
-Please resend with no use of base64 encoding.
-
-Shawn
-
-> ---
->  drivers/clk/imx/clk-imx6sll.c | 2 +-
->  drivers/clk/imx/clk-imx6sx.c  | 2 +-
->  drivers/clk/imx/clk-imx6ul.c  | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/clk/imx/clk-imx6sll.c b/drivers/clk/imx/clk-imx6sll.c
-> index 7eea448cb9a9..4d91e48e5918 100644
-> --- a/drivers/clk/imx/clk-imx6sll.c
-> +++ b/drivers/clk/imx/clk-imx6sll.c
-> @@ -307,7 +307,7 @@ static void __init imx6sll_clocks_init(struct device_node *ccm_node)
->  	clks[IMX6SLL_CLK_WDOG1]		= imx_clk_gate2("wdog1",	"ipg",		base + 0x74, 16);
->  	clks[IMX6SLL_CLK_MMDC_P0_FAST]	= imx_clk_gate_flags("mmdc_p0_fast", "mmdc_podf",  base + 0x74,	20, CLK_IS_CRITICAL);
->  	clks[IMX6SLL_CLK_MMDC_P0_IPG]	= imx_clk_gate2_flags("mmdc_p0_ipg", "ipg",	   base + 0x74,	24, CLK_IS_CRITICAL);
-> -	clks[IMX6SLL_CLK_MMDC_P1_IPG]	= imx_clk_gate2("mmdc_p1_ipg", "ipg",	   base + 0x74,	26);
-> +	clks[IMX6SLL_CLK_MMDC_P1_IPG]	= imx_clk_gate2_flags("mmdc_p1_ipg", "ipg",	   base + 0x74,	26, CLK_IS_CRITICAL);
->  	clks[IMX6SLL_CLK_OCRAM]		= imx_clk_gate_flags("ocram","ahb",		   base + 0x74,	28, CLK_IS_CRITICAL);
->  
->  	/* CCGR4 */
-> diff --git a/drivers/clk/imx/clk-imx6sx.c b/drivers/clk/imx/clk-imx6sx.c
-> index 91558b09bf9e..86f3053c37f6 100644
-> --- a/drivers/clk/imx/clk-imx6sx.c
-> +++ b/drivers/clk/imx/clk-imx6sx.c
-> @@ -432,7 +432,7 @@ static void __init imx6sx_clocks_init(struct device_node *ccm_node)
->  	clks[IMX6SX_CLK_MLB]          = imx_clk_gate2("mlb",           "ahb",               base + 0x74, 18);
->  	clks[IMX6SX_CLK_MMDC_P0_FAST] = imx_clk_gate2_flags("mmdc_p0_fast", "mmdc_podf", base + 0x74, 20, CLK_IS_CRITICAL);
->  	clks[IMX6SX_CLK_MMDC_P0_IPG]  = imx_clk_gate2_flags("mmdc_p0_ipg", "ipg", base + 0x74, 24, CLK_IS_CRITICAL);
-> -	clks[IMX6SX_CLK_MMDC_P1_IPG]  = imx_clk_gate2("mmdc_p1_ipg", "ipg", base + 0x74, 26);
-> +	clks[IMX6SX_CLK_MMDC_P1_IPG]  = imx_clk_gate2_flags("mmdc_p1_ipg", "ipg", base + 0x74, 26, CLK_IS_CRITICAL);
->  	clks[IMX6SX_CLK_OCRAM]        = imx_clk_gate2_flags("ocram", "ocram_podf", base + 0x74, 28, CLK_IS_CRITICAL);
->  
->  	/* CCGR4 */
-> diff --git a/drivers/clk/imx/clk-imx6ul.c b/drivers/clk/imx/clk-imx6ul.c
-> index fd60d1549f71..35377c6b50b8 100644
-> --- a/drivers/clk/imx/clk-imx6ul.c
-> +++ b/drivers/clk/imx/clk-imx6ul.c
-> @@ -408,7 +408,7 @@ static void __init imx6ul_clocks_init(struct device_node *ccm_node)
->  	clks[IMX6UL_CLK_WDOG1]		= imx_clk_gate2("wdog1",	"ipg",		base + 0x74,	16);
->  	clks[IMX6UL_CLK_MMDC_P0_FAST]	= imx_clk_gate_flags("mmdc_p0_fast", "mmdc_podf", base + 0x74,	20, CLK_IS_CRITICAL);
->  	clks[IMX6UL_CLK_MMDC_P0_IPG]	= imx_clk_gate2_flags("mmdc_p0_ipg",	"ipg",		base + 0x74,	24, CLK_IS_CRITICAL);
-> -	clks[IMX6UL_CLK_MMDC_P1_IPG]	= imx_clk_gate2("mmdc_p1_ipg",	"ipg",		base + 0x74,	26);
-> +	clks[IMX6UL_CLK_MMDC_P1_IPG]	= imx_clk_gate2_flags("mmdc_p1_ipg",	"ipg",		base + 0x74,	26, CLK_IS_CRITICAL);
->  	clks[IMX6UL_CLK_AXI]		= imx_clk_gate_flags("axi",	"axi_podf",	base + 0x74,	28, CLK_IS_CRITICAL);
->  
->  	/* CCGR4 */
-> -- 
-> 2.21.0
-> 
+Applied all, thanks.
