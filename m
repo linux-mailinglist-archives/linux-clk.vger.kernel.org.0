@@ -2,112 +2,98 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB3E23CF5
-	for <lists+linux-clk@lfdr.de>; Mon, 20 May 2019 18:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CFC241A5
+	for <lists+linux-clk@lfdr.de>; Mon, 20 May 2019 22:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388947AbfETQOD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 20 May 2019 12:14:03 -0400
-Received: from casper.infradead.org ([85.118.1.10]:58884 "EHLO
-        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387964AbfETQOC (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 May 2019 12:14:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=iKK9YhMh6ANbKPoYCjZ4LLgT9iYyIw5BQddMDFPQDH0=; b=jF+2/XoezBZrle4Eh5yah9/wnE
-        C4c8y+O3Fn97DP1KUcRH5ZP+qIxqnDqRM5Br5iOnaTWbelA38NTwrbHc4cmqKaj5QvxqS7Ko2D9cY
-        15Wp+kQaiyoZ7bMTEfhSPCKecDOWREcw/Js9QqsEQ3Z3IvhrABtZSYfrPk6UDcO1d05m9s6enuCcV
-        GJXQ2x26lZm1PxmDaeqYYkxExfZ3zod361KDqnRf78Ao27eOThZjnopUMeQdLw+1RugcQmi0F/I3M
-        yo2tZtfXOrctpaeXjO1TauKV2zkmGocTFasf2kw8fDu7rOtjn0oj3aB2z+XA7OJ5a/vrRLE1q/57m
-        iFz2dMnQ==;
-Received: from 179.176.119.151.dynamic.adsl.gvt.net.br ([179.176.119.151] helo=coco.lan)
-        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hSkvB-0000iC-61; Mon, 20 May 2019 16:13:53 +0000
-Date:   Mon, 20 May 2019 13:13:44 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        devicetree@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>
-Subject: Re: [PATCH 08/10] dt: fix refs that were renamed to json with the
- same file name
-Message-ID: <20190520131344.39635733@coco.lan>
-In-Reply-To: <CAL_JsqKGzNBjxhvY2Vq9v8SXiND+7sjmsOwKkeu+gEM=2Y-n_A@mail.gmail.com>
-References: <cover.1558362030.git.mchehab+samsung@kernel.org>
-        <66231286de0f11b45075292216a939858de8c3e5.1558362030.git.mchehab+samsung@kernel.org>
-        <CAL_JsqKGzNBjxhvY2Vq9v8SXiND+7sjmsOwKkeu+gEM=2Y-n_A@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1725983AbfETUDa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 20 May 2019 16:03:30 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:39408 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725601AbfETUDa (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 May 2019 16:03:30 -0400
+Received: by mail-wm1-f65.google.com with SMTP id n25so561307wmk.4;
+        Mon, 20 May 2019 13:03:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7xT9LsbSrOL4FALnwbx2ofAhC4bhcSjUh2MzuU+lqDs=;
+        b=uwN5cQla9irCx0v4W2hkNijVJtfeA9waG/LHN1YD0qXyMNu6GkrZbBIb6DJORVeUny
+         p4SwwAmj/s6Tj4HNjwS6mDcaXJG6tdz28eSMPFoF3WGcC79XmcN9yp1lNmjdMSEtvAym
+         JO8MK4Dy+DaLnsA2jipx5mYqBYM5Qc17fIikbMCnZHOUtRIP35+QZlkEKw7t6TFsUnNg
+         KPclioq3Lybqyw3QeeMhLRshNhTo3WWyH47bf6sxkT2Y2n7Qp3A2wY5FJFsm8W+eVv/7
+         xBkjhE1lg7ZGH+ff+DDuTdz5Kl3QEc/7Ca7ssZoKkcgyZ0zstqc98b7nUo0HOjglJ1H5
+         m0QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7xT9LsbSrOL4FALnwbx2ofAhC4bhcSjUh2MzuU+lqDs=;
+        b=L3yRVZz5atgmQYq/V6B9yRXlZnjjM0nGS2JvHvIZ9Xmmo6tP6s64DGBgcMFLTRN51Y
+         ZnxSckeXe0882wGAKFTRRePerqbynpamTpE2OEIyYBp4uJ1Z8J2/lFAi49DQUGShXmU6
+         nGXBDaOSVSSKCR6FkCQVemE8J6n+AZYdUlAvs6on78MnXnU/dOCepw7svPZgkD49y30x
+         6EeMsgZrAdyR47rFgXghMeg2bv/EAjjwK7h7UTY1/G1EQN1q3hMUkWNsdeYowhuMhrns
+         im9RtYY8O6n86o203ndfOslu+TE9p9xBU7jfLJxKxK1KhCeIbw19qK5+i7kNIke31Oe+
+         rdug==
+X-Gm-Message-State: APjAAAVHbyp47d/ldrxMRdF5BCaXs1fea9SEJ4/ysC0pO3Gjzw0G86eO
+        ecmbR0PPWAX3/EuTbYf4/SY=
+X-Google-Smtp-Source: APXvYqyIBv3ZBYENvn1vZbkmjXYL3k1GAmMzrTiWl9qygnfnwTHVClk1T7WYtr5kFVF0lErt4XfxyQ==
+X-Received: by 2002:a1c:c016:: with SMTP id q22mr600345wmf.6.1558382608612;
+        Mon, 20 May 2019 13:03:28 -0700 (PDT)
+Received: from blackbox.darklights.net (p200300F133EE71009C356FA1F0E19AF9.dip0.t-ipconnect.de. [2003:f1:33ee:7100:9c35:6fa1:f0e1:9af9])
+        by smtp.googlemail.com with ESMTPSA id t7sm23583379wrq.76.2019.05.20.13.03.27
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 20 May 2019 13:03:27 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     narmstrong@baylibre.com, jbrunet@baylibre.com,
+        linux-amlogic@lists.infradead.org
+Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH 0/4] 32-bit Meson: audio clock support
+Date:   Mon, 20 May 2019 22:03:15 +0200
+Message-Id: <20190520200319.9265-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Em Mon, 20 May 2019 10:57:47 -0500
-Rob Herring <robh+dt@kernel.org> escreveu:
+The audio clocks on the 32-bit Meson8, Meson8b and Meson8m2 are
+(probably) identical to the ones on GXBB, GXL and GXM.
 
-> On Mon, May 20, 2019 at 9:48 AM Mauro Carvalho Chehab
-> <mchehab+samsung@kernel.org> wrote:
-> >
-> > This file was converted to json, but the references weren't  
-> 
-> Technically, converted to json-schema (the language) or yaml (the format).
+The first piece of evidence is that Amlogic's vendor kernel is using
+the same basic driver (just slightly modified) for the 32-bit SoCs [0]
+and 64-bit SoCs [1].
 
-Ok. Do you want me to change it at the patch and resend?
+Then there's buildroot-openlinux-A113-201901 which ships
+kernel/aml-4.9/drivers/amlogic/clk/m8b/clk_misc.c. It contains the same
+registers and bits (just slightly different naming) than the mainline
+GXBB/GXL/GXM clock driver.
 
-> 
-> > renamed.
-> >
-> > Fixes: 66ed144f147a ("dt-bindings: interrupt-controller: Convert ARM GIC to json-schema")
-> > (and other similar commits)
-> >
-> > Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/arm/omap/crossbar.txt       | 2 +-
-> >  .../devicetree/bindings/clock/samsung,s5pv210-clock.txt       | 2 +-
-> >  .../bindings/interrupt-controller/marvell,odmi-controller.txt | 2 +-
-> >  Documentation/devicetree/bindings/leds/irled/spi-ir-led.txt   | 2 +-
-> >  MAINTAINERS                                                   | 4 ++--
-> >  5 files changed, 6 insertions(+), 6 deletions(-)  
-> 
-> FYI, I'm actively looking for this in conversions now as we've had a
-> few of these. For cases where we have a lot of references, I'm fixing
-> this by keeping the .txt file with a reference to the .yaml file.
+There is no working mainline ALSA driver for this yet so I am not 100%
+sure that everything is correct. However, due to the evidence listed
+above I'm sure that the basics are correct so this is a good starting
+point.
 
-If the file name remains with the same name, except for the .txt -> .yaml,
-you can just run the "scripts/documentation-file-ref-check --fix"
-after this patch:
 
-	Subject: [PATCH 04/10] scripts/documentation-file-ref-check: teach about .txt -> .yaml renames
+[0] https://github.com/endlessm/linux-meson/tree/d6e13c220931110fe676ede6da69fc61a7cb04b6/sound/soc/aml/m8
+[1] https://github.com/khadas/linux/tree/1bd6972cd0093725c0b1dc87f6546648bbb22452/sound/soc/aml/m8
 
-and it should detect and automatically fix all the references. As any
-auto-hint script, you need to double-check the results.
 
-> I'll pick up the DT patches in the series.
+Martin Blumenstingl (4):
+  dt-bindings: clock: meson8b: add the audio clocks
+  clk: meson: meson8b: add the cts_amclk clocks
+  clk: meson: meson8b: add the cts_mclk_i958 clocks
+  clk: meson: meson8b: add the cts_i958 clock
 
-OK. There are a few such fixes inside patch 10/10. Do you want me
-to split it or can it go through Jonathan's doc tree?
+ drivers/clk/meson/meson8b.c              | 154 +++++++++++++++++++++++
+ drivers/clk/meson/meson8b.h              |   8 +-
+ include/dt-bindings/clock/meson8b-clkc.h |   3 +
+ 3 files changed, 164 insertions(+), 1 deletion(-)
 
-Thanks,
-Mauro
+-- 
+2.21.0
+
