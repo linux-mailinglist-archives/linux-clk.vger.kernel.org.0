@@ -2,120 +2,79 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCDBB22DBA
-	for <lists+linux-clk@lfdr.de>; Mon, 20 May 2019 10:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1756522E20
+	for <lists+linux-clk@lfdr.de>; Mon, 20 May 2019 10:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731052AbfETIGG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 20 May 2019 04:06:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36900 "EHLO mail.kernel.org"
+        id S1730628AbfETIOn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 20 May 2019 04:14:43 -0400
+Received: from ns.iliad.fr ([212.27.33.1]:60906 "EHLO ns.iliad.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730931AbfETIFk (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 20 May 2019 04:05:40 -0400
-Received: from wens.tw (mirror2.csie.ntu.edu.tw [140.112.30.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 849C121743;
-        Mon, 20 May 2019 08:05:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558339539;
-        bh=raAt8ipYjBhGFbDlGMuzDJpgi0ln4BsxFF01Er+hiOc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jdYWZljd+XAmUtm4/Z1mZgnln1MY3TLs3bGN2c3jBzfPq+orINhXfSAKftcTlfG42
-         G2+RG50MhGqJnLEouQF/taYE5GkqfuaPqKJurtmjX5r8y3xw5u0RtkjwIXLmgBy8t9
-         0EKyN9ENR6AglhM0KnypGVLs62aHiDQoRQizQPXU=
-Received: by wens.tw (Postfix, from userid 1000)
-        id 07DF46586A; Mon, 20 May 2019 16:05:32 +0800 (CST)
-From:   Chen-Yu Tsai <wens@kernel.org>
-To:     Maxime Ripard <maxime.ripard@bootlin.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 25/25] clk: sunxi-ng: sun8i-r: Use local parent references for SUNXI_CCU_GATE
-Date:   Mon, 20 May 2019 16:04:21 +0800
-Message-Id: <20190520080421.12575-26-wens@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190520080421.12575-1-wens@kernel.org>
-References: <20190520080421.12575-1-wens@kernel.org>
+        id S1730549AbfETIOn (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 20 May 2019 04:14:43 -0400
+Received: from ns.iliad.fr (localhost [127.0.0.1])
+        by ns.iliad.fr (Postfix) with ESMTP id 4DCA520B5F;
+        Mon, 20 May 2019 10:14:41 +0200 (CEST)
+Received: from [192.168.108.49] (freebox.vlq16.iliad.fr [213.36.7.13])
+        by ns.iliad.fr (Postfix) with ESMTP id 3973020AC3;
+        Mon, 20 May 2019 10:14:41 +0200 (CEST)
+Subject: Re: [PATCH] clk: qcom: gdsc: WARN when failing to toggle
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     MSM <linux-arm-msm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20190504001736.8598-1-bjorn.andersson@linaro.org>
+From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
+Message-ID: <68b73077-9fff-9b4c-bf6a-8aca24a814d7@free.fr>
+Date:   Mon, 20 May 2019 10:14:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190504001736.8598-1-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Mon May 20 10:14:41 2019 +0200 (CEST)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Chen-Yu Tsai <wens@csie.org>
+On 04/05/2019 02:17, Bjorn Andersson wrote:
 
-With the new clk parenting code and SUNXI_CCU_GATE macros, we can
-reference parents locally via pointers to struct clk_hw or DT
-clock-names.
+> Failing to toggle a GDSC as the driver core is attaching the
+> power-domain to a device will cause a silent probe deferral. Provide an
+> explicit warning to the developer, in order to reduce the amount of time
+> it take to debug this.
 
-Convert existing SUNXI_CCU_GATE definitions to SUNXI_CCU_GATE_HWS
-as the parent clock is internal to this clock unit.
+"it takes"
 
-To avoid duplication of clock definitions, we fix up the parent
-reference for A83T in the A83T init function.
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  drivers/clk/qcom/gdsc.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+> index dd63aa36b092..6a8a4996dde3 100644
+> --- a/drivers/clk/qcom/gdsc.c
+> +++ b/drivers/clk/qcom/gdsc.c
+> @@ -149,7 +149,9 @@ static int gdsc_toggle_logic(struct gdsc *sc, enum gdsc_status status)
+>  		udelay(1);
+>  	}
+>  
+> -	return gdsc_poll_status(sc, status);
+> +	ret = gdsc_poll_status(sc, status);
+> +	WARN(ret, "%s status stuck at 'o%s'", sc->pd.name, status ? "ff" : "n");
+> +	return ret;
 
-Signed-off-by: Chen-Yu Tsai <wens@csie.org>
----
- drivers/clk/sunxi-ng/ccu-sun8i-r.c | 37 +++++++++++++++++++-----------
- 1 file changed, 23 insertions(+), 14 deletions(-)
+In my opinion, the minor obfuscation of "o%s", foo ? "ff" : "n"
+does not justify the tiny space savings.
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-r.c b/drivers/clk/sunxi-ng/ccu-sun8i-r.c
-index 4a111c28b8c3..a7a21feaf143 100644
---- a/drivers/clk/sunxi-ng/ccu-sun8i-r.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun8i-r.c
-@@ -73,20 +73,26 @@ static struct ccu_div apb0_clk = {
- 
- static SUNXI_CCU_M(a83t_apb0_clk, "apb0", "ahb0", 0x0c, 0, 2, 0);
- 
--static SUNXI_CCU_GATE(apb0_pio_clk,	"apb0-pio",	"apb0",
--		      0x28, BIT(0), 0);
--static SUNXI_CCU_GATE(apb0_ir_clk,	"apb0-ir",	"apb0",
--		      0x28, BIT(1), 0);
--static SUNXI_CCU_GATE(apb0_timer_clk,	"apb0-timer",	"apb0",
--		      0x28, BIT(2), 0);
--static SUNXI_CCU_GATE(apb0_rsb_clk,	"apb0-rsb",	"apb0",
--		      0x28, BIT(3), 0);
--static SUNXI_CCU_GATE(apb0_uart_clk,	"apb0-uart",	"apb0",
--		      0x28, BIT(4), 0);
--static SUNXI_CCU_GATE(apb0_i2c_clk,	"apb0-i2c",	"apb0",
--		      0x28, BIT(6), 0);
--static SUNXI_CCU_GATE(apb0_twd_clk,	"apb0-twd",	"apb0",
--		      0x28, BIT(7), 0);
-+/*
-+ * Define the parent as an array that can be reused to save space
-+ * instead of having compound literals for each gate. Also have it
-+ * non-const so we can change it on the A83T.
-+ */
-+static const struct clk_hw *apb0_gate_parent[] = { &apb0_clk.common.hw };
-+static SUNXI_CCU_GATE_HWS(apb0_pio_clk,		"apb0-pio",
-+			  apb0_gate_parent, 0x28, BIT(0), 0);
-+static SUNXI_CCU_GATE_HWS(apb0_ir_clk,		"apb0-ir",
-+			  apb0_gate_parent, 0x28, BIT(1), 0);
-+static SUNXI_CCU_GATE_HWS(apb0_timer_clk,	"apb0-timer",
-+			  apb0_gate_parent, 0x28, BIT(2), 0);
-+static SUNXI_CCU_GATE_HWS(apb0_rsb_clk,		"apb0-rsb",
-+			  apb0_gate_parent, 0x28, BIT(3), 0);
-+static SUNXI_CCU_GATE_HWS(apb0_uart_clk,	"apb0-uart",
-+			  apb0_gate_parent, 0x28, BIT(4), 0);
-+static SUNXI_CCU_GATE_HWS(apb0_i2c_clk,		"apb0-i2c",
-+			  apb0_gate_parent, 0x28, BIT(6), 0);
-+static SUNXI_CCU_GATE_HWS(apb0_twd_clk,		"apb0-twd",
-+			  apb0_gate_parent, 0x28, BIT(7), 0);
- 
- static const char * const r_mod0_default_parents[] = { "osc32k", "osc24M" };
- static SUNXI_CCU_MP_WITH_MUX_GATE(ir_clk, "ir",
-@@ -284,6 +290,9 @@ static void __init sunxi_r_ccu_init(struct device_node *node,
- 
- static void __init sun8i_a83t_r_ccu_setup(struct device_node *node)
- {
-+	/* Fix apb0 bus gate parents here */
-+	apb0_gate_parent[0] = &a83t_apb0_clk.common.hw;
-+
- 	sunxi_r_ccu_init(node, &sun8i_a83t_r_ccu_desc);
- }
- CLK_OF_DECLARE(sun8i_a83t_r_ccu, "allwinner,sun8i-a83t-r-ccu",
--- 
-2.20.1
+I'd spell it out: "%s", foo ? "off" : "on"
 
+In any event:
+
+Reviewed-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
+
+Regards.
