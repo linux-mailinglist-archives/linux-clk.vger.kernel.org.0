@@ -2,77 +2,98 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C5024F41
-	for <lists+linux-clk@lfdr.de>; Tue, 21 May 2019 14:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A244924F98
+	for <lists+linux-clk@lfdr.de>; Tue, 21 May 2019 15:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726692AbfEUMv1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 21 May 2019 08:51:27 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:54115 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728176AbfEUMv1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 21 May 2019 08:51:27 -0400
-X-Originating-IP: 90.88.22.185
+        id S1728155AbfEUNEO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 21 May 2019 09:04:14 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:50285 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726692AbfEUNEO (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 21 May 2019 09:04:14 -0400
 Received: from localhost.localdomain (aaubervilliers-681-1-80-185.w90-88.abo.wanadoo.fr [90.88.22.185])
         (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 2C2041C0019;
-        Tue, 21 May 2019 12:51:24 +0000 (UTC)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 86FB5100011;
+        Tue, 21 May 2019 13:03:59 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Antoine Tenart <antoine.tenart@bootlin.com>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
         Gregory Clement <gregory.clement@bootlin.com>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
         Nadav Haklai <nadavh@marvell.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v5 4/4] clk: mvebu: armada-37xx-xtal: fill the device entry when registering the clock
-Date:   Tue, 21 May 2019 14:51:13 +0200
-Message-Id: <20190521125114.20357-5-miquel.raynal@bootlin.com>
+Subject: [PATCH v2 0/4] Prepare Armada 3700 PCIe suspend to RAM support
+Date:   Tue, 21 May 2019 15:03:53 +0200
+Message-Id: <20190521130357.20803-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190521125114.20357-1-miquel.raynal@bootlin.com>
-References: <20190521125114.20357-1-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-So far the clk_hw_register_fixed_factor() call was not providing any
-device structure. While doing so is harmless for regular use, the
-missing device structure may be a problem for suspend to RAM support.
+Hello,
 
-Since, device links have been added to clocks, links created during
-probe will enforce the suspend/resume orders. When the device is
-missing during the registration, no link can be established, hence the
-order between parent and child clocks are not enforced.
+As part of an effort to bring suspend to RAM support to the Armada
+3700 SoC (main target: ESPRESSObin board), there are small things to
+do in the Armada 3700 peripherals clock driver:
 
-Adding the device structure here will create a link between the XTAL
-clock (this one) and the four TBG clocks that are derived from it.
+* On this SoC, the PCIe controller gets fed by a gated clock in the
+  south bridge. This clock is missing in the current driver, patch 1
+  adds it.
 
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Reviewed-by: Gregory CLEMENT <gregory.clement@bootlin.com>
----
- drivers/clk/mvebu/armada-37xx-xtal.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+* Because of a constraint in the PCI core, the resume function of a
+  PCIe controller driver must be run at an early stage
+  (->suspend/resume_noirq()), before the core tries to ->read/write()
+  in the PCIe registers to do more configuration. Hence, the PCIe
+  clock must be resumed before. This is enforced thanks to two
+  changes:
+  1/ Add device links to the clock framework. This enforce order in
+     the PM core: the clocks are resumed before the consumers. Series
+     has been posted, see [1].
+  2/ Even with the above feature, the clock's resume() callback is
+     called after the PCI controller's resume_noirq() callback. The
+     only way to fix this is to change the "priority" of the clock
+     suspend/resume callbacks. This is done in patch 2.
 
-diff --git a/drivers/clk/mvebu/armada-37xx-xtal.c b/drivers/clk/mvebu/armada-37xx-xtal.c
-index e9e306d4e9af..0e74bcd83d1a 100644
---- a/drivers/clk/mvebu/armada-37xx-xtal.c
-+++ b/drivers/clk/mvebu/armada-37xx-xtal.c
-@@ -57,7 +57,8 @@ static int armada_3700_xtal_clock_probe(struct platform_device *pdev)
- 		rate = 25000000;
- 
- 	of_property_read_string_index(np, "clock-output-names", 0, &xtal_name);
--	xtal_hw = clk_hw_register_fixed_rate(NULL, xtal_name, NULL, 0, rate);
-+	xtal_hw = clk_hw_register_fixed_rate(&pdev->dev, xtal_name, NULL, 0,
-+					     rate);
- 	if (IS_ERR(xtal_hw))
- 		return PTR_ERR(xtal_hw);
- 	ret = of_clk_add_hw_provider(np, of_clk_hw_simple_get, xtal_hw);
+* The bindings are updated with the PCI clock in patch 4 while patch 3
+  is just a typo correction in the same file.
+
+If there is anything unclear please feel free to ask.
+
+[1] http://lists.infradead.org/pipermail/linux-arm-kernel/2018-November/614527.html
+
+Thanks,
+Miquèl
+
+Changes in v2:
+==============
+* Rebased on top of v5.2-rc1.
+* Added Rob's R-by tags.
+* No change on the "change suspend/resume time" patch as, despite my
+  pings, I got no answer and IMHO the proposed approach is entirely
+  valid.
+
+
+Miquel Raynal (4):
+  clk: mvebu: armada-37xx-periph: add PCIe gated clock
+  clk: mvebu: armada-37xx-periph: change suspend/resume time
+  dt-bindings: clk: armada3700: fix typo in SoC name
+  dt-bindings: clk: armada3700: document the PCIe clock
+
+ .../devicetree/bindings/clock/armada3700-periph-clock.txt   | 5 +++--
+ drivers/clk/mvebu/armada-37xx-periph.c                      | 6 ++++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
 -- 
 2.19.1
 
