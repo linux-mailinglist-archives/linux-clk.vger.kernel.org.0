@@ -2,95 +2,98 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4911324834
-	for <lists+linux-clk@lfdr.de>; Tue, 21 May 2019 08:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 888DE24AF3
+	for <lists+linux-clk@lfdr.de>; Tue, 21 May 2019 10:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726494AbfEUGjL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 21 May 2019 02:39:11 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:36366 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725930AbfEUGjK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 21 May 2019 02:39:10 -0400
-Received: by mail-ot1-f66.google.com with SMTP id c3so15353575otr.3
-        for <linux-clk@vger.kernel.org>; Mon, 20 May 2019 23:39:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gBqYtocWWHik2IfGhWR+vlpOXtSgbuQgAgYwyKJnzz0=;
-        b=vH3s2Jen3NIt0L0ETP2uQPLNLW4pl5U3URMArHcl1sw9LHDXa96LfkKDYnL50Y3spO
-         GK0ipFX+TkHmCIZrFoVACa+wQy4W3zkavs5E6tF21EHtHkV72hubWTE77LmsxxqGotqQ
-         rngoy9AKSPSiUmJuVQ7OqqIwo//LpGCpDo5Jinbyb8z1FdQoC6GcnHoRfTF0NUexXkwO
-         u74Jr+am7cwtEqeD99VVZPR3r5Mmg6CQagWBfUo6kmbwoCTQ20oURWNwFMQOBnA4wXeV
-         tTFzyeCFbZwWcu76HmnqLaiGHH6WgiMGofkq9aBgc31iXC9u83ezx7dvogalrcpN49vS
-         f15w==
+        id S1726417AbfEUI5e (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 21 May 2019 04:57:34 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:39016 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726242AbfEUI5e (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 21 May 2019 04:57:34 -0400
+Received: by mail-vs1-f65.google.com with SMTP id m1so10657421vsr.6;
+        Tue, 21 May 2019 01:57:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gBqYtocWWHik2IfGhWR+vlpOXtSgbuQgAgYwyKJnzz0=;
-        b=TPxkYchPjc/4bJrPXPC+rnmYdQZ4KE0pykWOJhLt7kgbemJerAQPxi1GE4hyrPnnXJ
-         XKhRgH6RIuKzGJ/Rf/0X22rGbvw0BF6AFRk3mtvp+RR0ngMUMRr3wn9ds4vHdKNviZp/
-         Pcxd0LPqQu5qW7LkGzjfj0AUDCxQYpABYA1h3+bgrPNMvIzq6W0CIPTasQGEPOQQsfIh
-         NZ3KmiDDWg2h4B3TQBfuIZmjEqNEg/vmS1vJT11lXa1qeqGZcTbQveg+GUuwVzsPw8fu
-         7eFpY6aIa8nCEYc1AptMXjBlkgXsO3N/liEvXykqhVHWsOIA1p4+egZnWLViomjck22U
-         qV1w==
-X-Gm-Message-State: APjAAAU+JjWyyZTsqGiLOFMuo5ltYDPFW+xBCWUiqcTcYwYuI5OUdro5
-        0BsXO+PyCGvTyF+oYW4nM4mZM5DGLybJ1El+/e/gug==
-X-Google-Smtp-Source: APXvYqx1ioEUpaEmIvvjA84iUTXMIxECfj8YghcvKQaZHYdF/LFZHGwK805bblGLrNE4yJr+H8SGTyn/jjXqOMCfVZc=
-X-Received: by 2002:a05:6830:1597:: with SMTP id i23mr435453otr.281.1558420750146;
- Mon, 20 May 2019 23:39:10 -0700 (PDT)
+        bh=MWFrnsjcMZzOTmITsHfZDdO5f966+UMJICUhzqvq5h0=;
+        b=EHJYHbmfJ/Ce9Bofif58B++QmpKjWb1asJFeRpictQME4umq1MXbqwyOrPN2A8O0WU
+         dS1Q5yXnVeEpd17XFKVHJTVKtd7zFjqjxGVqHrfSS5vOjY29R3pe7bydOmCw9vuzp+ld
+         uTa/mrdHUcJJifa1DqLQVpoItWiy8Fac8ULwZ14XMgEKMs0rrXbD2I0lcSHB9ruM4BnE
+         ycTFdcRIZBj2pSO9I1RQl0fWUM6dXFfSbspL7bok0hvr/rjBLp7BVuXF49GsF/Y+rA9x
+         eCpu8u8YIGkq0iTLyfxD/roA80N1tK724nbuF8fqMX1SRkZn6ZY7VaZH07cKTFymN6XD
+         dtNQ==
+X-Gm-Message-State: APjAAAWJfjfkAZ+S4N0RSHizqUNWjah5QCJeuSTiGiK7bbYTaOzkVDdQ
+        /AQEZJS03x2aE80bONm1rY8EfteEk/kuLfZIQGg=
+X-Google-Smtp-Source: APXvYqyKZ9voK/cBbfTTXNvd4b2tLuD8JGb4aR0X6oA2nKaW2C6ZwK0EDtOV6rN+FFV/9oMnPctGM0nmJDs2gCaq+BU=
+X-Received: by 2002:a67:770f:: with SMTP id s15mr30405388vsc.11.1558429053082;
+ Tue, 21 May 2019 01:57:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190521060952.2949-1-zhang.chunyan@linaro.org> <20190521060952.2949-3-zhang.chunyan@linaro.org>
-In-Reply-To: <20190521060952.2949-3-zhang.chunyan@linaro.org>
-From:   Baolin Wang <baolin.wang@linaro.org>
-Date:   Tue, 21 May 2019 14:38:59 +0800
-Message-ID: <CAMz4ku+pJ8bR4Wt9k3sRFunmMCu9ujQOuN=YT+PEsBEhAZ8__w@mail.gmail.com>
-Subject: Re: [PATCH 2/2] clk: sprd: Add check for return value of sprd_clk_regmap_init()
-To:     Chunyan Zhang <zhang.chunyan@linaro.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>
+References: <20190514153341.22540-1-chris.paterson2@renesas.com>
+ <155786877257.14659.6751252865489860937@swboyd.mtv.corp.google.com>
+ <CAMuHMdWPSyrhYx5Z5mgmKrR68cHL6owcRT=B3+DD3GhhxuG4zw@mail.gmail.com> <20190516215406.75E5D2082E@mail.kernel.org>
+In-Reply-To: <20190516215406.75E5D2082E@mail.kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 21 May 2019 10:57:20 +0200
+Message-ID: <CAMuHMdVOKDRYjzmyRq-KXW8d+dYmAxnM+=y2yOh85YDcCEDMuw@mail.gmail.com>
+Subject: Re: [PATCH] scripts/spelling.txt: Add spelling fix for prohibited
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Chris Paterson <chris.paterson2@renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, 21 May 2019 at 14:15, Chunyan Zhang <zhang.chunyan@linaro.org> wrote:
->
-> sprd_clk_regmap_init() doesn't always return success, adding check
-> for its return value should make the code more strong.
->
-> Signed-off-by: Chunyan Zhang <zhang.chunyan@linaro.org>
+Hi Stephen, Andrew,
 
-Reviewed-by: Baolin Wang <baolin.wang@linaro.org>
+On Thu, May 16, 2019 at 11:54 PM Stephen Boyd <sboyd@kernel.org> wrote:
+> Quoting Geert Uytterhoeven (2019-05-15 00:32:46)
+> > On Tue, May 14, 2019 at 11:19 PM Stephen Boyd <sboyd@kernel.org> wrote:
+> > > Quoting Chris Paterson (2019-05-14 08:33:41)
+> > > > Misspelling 'prohibited' is quite common in the real world, although
+> > > > surprisingly not so much in the Linux Kernel. In addition to fixing the
+> > > > typo we may as well add it to the spelling checker.
+> > > >
+> > > > Also adding the present participle (prohibiting).
+> > > >
+> > > > Fixes: 5bf2fbbef50c ("clk: renesas: cpg-mssr: Add r8a77470 support")
+> > > >
+> > > > Signed-off-by: Chris Paterson <chris.paterson2@renesas.com>
+> >
+> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> >
+> > > Acked-by: Stephen Boyd <sboyd@kernel.org>
+> >
+> > Thanks!
+> >
+> > So I guess I'll queue this in clk-renesas-for-v5.3?
+> >
+>
+> Guess so! Or Andrew does it.
 
-> ---
->  drivers/clk/sprd/sc9860-clk.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/clk/sprd/sc9860-clk.c b/drivers/clk/sprd/sc9860-clk.c
-> index 9980ab55271b..1ed45b4f2fe8 100644
-> --- a/drivers/clk/sprd/sc9860-clk.c
-> +++ b/drivers/clk/sprd/sc9860-clk.c
-> @@ -2031,7 +2031,9 @@ static int sc9860_clk_probe(struct platform_device *pdev)
->         }
->
->         desc = match->data;
-> -       sprd_clk_regmap_init(pdev, desc);
-> +       ret = sprd_clk_regmap_init(pdev, desc);
-> +       if (ret)
-> +               return ret;
->
->         return sprd_clk_probe(&pdev->dev, desc->hw_clks);
->  }
-> --
-> 2.17.1
->
+Given the change to scripts/spelling.txt conflicts with b937856a5db2cb7a
+("scripts/spelling.txt: add more typos to spelling.txt and sort") in
+linux-next, and the risk of conflict with future changes to
+drivers/clk/renesas/r8a77470-cpg-mssr.c is slim, I'd like to defer this
+to Andrew.
 
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Baolin Wang
-Best Regards
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
