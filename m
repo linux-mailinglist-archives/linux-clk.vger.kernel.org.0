@@ -2,27 +2,27 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFDD26B61
-	for <lists+linux-clk@lfdr.de>; Wed, 22 May 2019 21:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30F926D7F
+	for <lists+linux-clk@lfdr.de>; Wed, 22 May 2019 21:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730516AbfEVT03 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 22 May 2019 15:26:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48008 "EHLO mail.kernel.org"
+        id S1732275AbfEVT2n (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 22 May 2019 15:28:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51444 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731989AbfEVT03 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 22 May 2019 15:26:29 -0400
+        id S1732224AbfEVT2m (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 22 May 2019 15:28:42 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6CBD720879;
-        Wed, 22 May 2019 19:26:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 35D8820879;
+        Wed, 22 May 2019 19:28:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558553188;
-        bh=MQ7GBJGYsRs7x477zz5+ZEI8vXsdtgdGw+AwAxkTOqQ=;
+        s=default; t=1558553321;
+        bh=oV5MnESwSqTdxHd32Kvszv6+H5fgv7apnZmsWkGPLuA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xjMs+iCVFAZJFQQ0mbgTW7us4mxG/ZYlw3x9y0nySj93/ZmRAhW/OvOYTsCWEamHk
-         JSoQX3qp6c/2Cj55+BbuGrrd6lrKVwSuFtZ7bk1ZyHS4nO80TMknozYtZKSiEHvjYm
-         NdenPxfU0JFn+xNQoLWrsU+f41UyzPU2Kp+lkWYA=
+        b=0X9Mipf67I2bxZnNb9FVyZ4W9XSORfXNGVt3hEl9AjFGo0qUjccsWiuxEVHGkAwaV
+         yVy263DoTgHyhYE7rvee83FAtTSEBTY1TQC/KHYdyCP9ArLTDsiWbR24mAjX26Oz5T
+         zAPa2dX6JbEhKy2u1EVY1rcPXPV/s62X2p0eCHhs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Douglas Anderson <dianders@chromium.org>,
@@ -30,12 +30,12 @@ Cc:     Douglas Anderson <dianders@chromium.org>,
         Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.0 103/317] clk: rockchip: undo several noc and special clocks as critical on rk3288
-Date:   Wed, 22 May 2019 15:20:04 -0400
-Message-Id: <20190522192338.23715-103-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 083/244] clk: rockchip: undo several noc and special clocks as critical on rk3288
+Date:   Wed, 22 May 2019 15:23:49 -0400
+Message-Id: <20190522192630.24917-83-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190522192338.23715-1-sashal@kernel.org>
-References: <20190522192338.23715-1-sashal@kernel.org>
+In-Reply-To: <20190522192630.24917-1-sashal@kernel.org>
+References: <20190522192630.24917-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -110,10 +110,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/clk/rockchip/clk-rk3288.c b/drivers/clk/rockchip/clk-rk3288.c
-index 5a67b7869960e..f3bbcdfa88ead 100644
+index 450de24a1b422..45cd2897e586b 100644
 --- a/drivers/clk/rockchip/clk-rk3288.c
 +++ b/drivers/clk/rockchip/clk-rk3288.c
-@@ -313,13 +313,13 @@ static struct rockchip_clk_branch rk3288_clk_branches[] __initdata = {
+@@ -292,13 +292,13 @@ static struct rockchip_clk_branch rk3288_clk_branches[] __initdata = {
  	COMPOSITE_NOMUX(0, "aclk_core_mp", "armclk", CLK_IGNORE_UNUSED,
  			RK3288_CLKSEL_CON(0), 4, 4, DFLAGS | CLK_DIVIDER_READ_ONLY,
  			RK3288_CLKGATE_CON(12), 6, GFLAGS),
@@ -129,7 +129,7 @@ index 5a67b7869960e..f3bbcdfa88ead 100644
  			RK3288_CLKGATE_CON(12), 9, GFLAGS),
  	GATE(0, "cs_dbg", "pclk_dbg_pre", CLK_IGNORE_UNUSED,
  			RK3288_CLKGATE_CON(12), 10, GFLAGS),
-@@ -647,7 +647,7 @@ static struct rockchip_clk_branch rk3288_clk_branches[] __initdata = {
+@@ -626,7 +626,7 @@ static struct rockchip_clk_branch rk3288_clk_branches[] __initdata = {
  	INVERTER(SCLK_HSADC, "sclk_hsadc", "sclk_hsadc_out",
  			RK3288_CLKSEL_CON(22), 7, IFLAGS),
  
@@ -138,7 +138,7 @@ index 5a67b7869960e..f3bbcdfa88ead 100644
  			RK3288_CLKGATE_CON(4), 14, GFLAGS),
  
  	COMPOSITE_NODIV(SCLK_USBPHY480M_SRC, "usbphy480m_src", mux_usbphy480m_p, 0,
-@@ -656,7 +656,7 @@ static struct rockchip_clk_branch rk3288_clk_branches[] __initdata = {
+@@ -635,7 +635,7 @@ static struct rockchip_clk_branch rk3288_clk_branches[] __initdata = {
  	COMPOSITE_NODIV(SCLK_HSICPHY480M, "sclk_hsicphy480m", mux_hsicphy480m_p, 0,
  			RK3288_CLKSEL_CON(29), 0, 2, MFLAGS,
  			RK3288_CLKGATE_CON(3), 6, GFLAGS),
@@ -147,7 +147,7 @@ index 5a67b7869960e..f3bbcdfa88ead 100644
  			RK3288_CLKGATE_CON(13), 9, GFLAGS),
  	DIV(0, "hsicphy12m_usbphy", "sclk_hsicphy480m", 0,
  			RK3288_CLKSEL_CON(11), 8, 6, DFLAGS),
-@@ -837,11 +837,6 @@ static const char *const rk3288_critical_clocks[] __initconst = {
+@@ -816,11 +816,6 @@ static const char *const rk3288_critical_clocks[] __initconst = {
  	"pclk_alive_niu",
  	"pclk_pd_pmu",
  	"pclk_pmu_niu",
