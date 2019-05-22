@@ -2,56 +2,56 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 838B325B93
-	for <lists+linux-clk@lfdr.de>; Wed, 22 May 2019 03:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D3725B95
+	for <lists+linux-clk@lfdr.de>; Wed, 22 May 2019 03:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728212AbfEVBPs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 21 May 2019 21:15:48 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:46537 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727930AbfEVBPs (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 21 May 2019 21:15:48 -0400
-Received: by mail-pf1-f196.google.com with SMTP id y11so360310pfm.13
-        for <linux-clk@vger.kernel.org>; Tue, 21 May 2019 18:15:47 -0700 (PDT)
+        id S1728269AbfEVBPv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 21 May 2019 21:15:51 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:38653 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728261AbfEVBPv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 21 May 2019 21:15:51 -0400
+Received: by mail-pg1-f193.google.com with SMTP id v11so404879pgl.5
+        for <linux-clk@vger.kernel.org>; Tue, 21 May 2019 18:15:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=6fbG5fDEzG6AzVFaygO2qy/CXt0Isxn5KLkAJO5SWss=;
-        b=jfN/IPbdiNMb5JRj2CnP/eCgdcf+GAIPN3VeuSPPh8A3Z/LLdTYhT+cSzxiZC5unq3
-         yZIl3VixybtlbHWsvdnbH922uzO1jUHnvWVjH4WoMf5Nk5C6X0YK8xbiwVkV4I3V2aJR
-         JDqFc4zZoFum0ETZzckdxYA4ywVQmSifOeoHSz9OicminnX2tLgKTK3LSTkClyKWvOJY
-         kAks3r64S0qPczI3NGUDqwbXSehZSaosHHmtgE+rbGmlMcdPfdX8IKr2kL2jGYjFFU+u
-         CHpc7PATBAtA8AMfyylhide8JfBbCzqDn+AnT+Wwgq5PiASu07b5d0gBpPzTiTdOUAOt
-         Pf6w==
+        bh=NTS1odQw+3K/o26m56A8dudsgiFBip3uvfuWtKKFHvU=;
+        b=B3XhrGinnvN8sKjWn4ooBhJDwiBZy++xwD3PIwifiEQmGkn9dXEIXn56iDzEoxfVvj
+         buXxk5oR6q/tDHs5OOaUOkRWM1sLkSX4JU0PyfPJCY/0ZHnvNjW+5t6L/klL89CpmkOU
+         RskDCpXRp8Nb0ntd+sjYiNmTwpWddBd2/vc+Qss6vnBNh0rx9yQ1VlRU+ynGuu5CgZL9
+         riuxQgdodNGLJ7JIcSjyTdkhtNXRSVa4DnyqinGH1zfrS2v3sYsMbbBF1l5tT5dXe7R0
+         umoIlSFNx9D9SlsIIXLF4fISmz0vBqrgIOvMii2WHcJXQ3fqvIMmHOW5xZARBO3AlqvT
+         jDmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=6fbG5fDEzG6AzVFaygO2qy/CXt0Isxn5KLkAJO5SWss=;
-        b=D+WaYpaF4URJnyICRrJ4p2rERMwqTK2jaXIZWCTxcLbnCEsaYRnhF90WaCFwyHgauJ
-         aGmFY7eA41qtJDiCyp1VyDRV23wUXrfKEtd/+5t3Ob1ZbUBurEfeSMPFdL2/3OIevllR
-         f0RieOEhE+KuIVS27oFf3TkK3KrgVE65u/ZH1msTG53Cx78mV4lOMJs+pIsi6P8Xrft7
-         YccTbJihMaUdEIB2dCdpEx3lATTYqxAZLU8cSd7InROGKqELmw5Y/jtHdyjef/zDVcsG
-         NxiaX9gcohfkrckS6mw1ri/mumzLzukNt06a3hqe0cRx//eSpJvHZXl+xNT6Wbz3SOy4
-         q99w==
-X-Gm-Message-State: APjAAAVAAkO22zVXogddaiI+NgVwGaktO92xA2i+RgeYBZM4uApB79rk
-        9mS61DYrMyOhdT2MXTkqKp0pvw==
-X-Google-Smtp-Source: APXvYqyfqXtwQYeS2jhPUWE9ejfCsvhPu+c6LXe+/1FDtisubfaiXyyTbN0HcDUqVWq5R5+SRf7ipw==
-X-Received: by 2002:a63:1f04:: with SMTP id f4mr87297936pgf.423.1558487747679;
-        Tue, 21 May 2019 18:15:47 -0700 (PDT)
+        bh=NTS1odQw+3K/o26m56A8dudsgiFBip3uvfuWtKKFHvU=;
+        b=UbRRellT90mKPBI46Qj9GFWJ/nxijG7ftblnE/oegTEsJnVhle4BK+MPRNZDSvRIog
+         MxiLMks/MIHrChlWq2vp8TKc/fTrP/Chiq2KLYUZ9mkX6zrBhKSRPOQ8kR7HrHjfW0yE
+         7ULxWY9vD/eZ/OxATRTISWsK1ZouElkng+rGnnl+tJr1PTwiPZJ/HfWpVJ6qpBdXc+CQ
+         c77yNuDnjL0Vzd74yvnxr5VqxdMi7QZEQWd0B6awhE4WWsqdkSw7oCDoRl3z6sWxBGfJ
+         xh9yRkiQkPentU3rKjMyCR9KCqoQsqMFUJAF4HbqsRDAhzTNQCw3VyVErvvLM+7z2ziY
+         tWKg==
+X-Gm-Message-State: APjAAAXQpKmI6ayNE/bcPTa4Y1nIYWEIR4rzzAKPdsc3hmjlezZCiZ8f
+        dzKFJTvmOQ5yI/3fdOnEI3lA6A==
+X-Google-Smtp-Source: APXvYqwCHdfP9ydZV/hnCl50oxwldTytQuZ5sT/dbQl5TBOLCFSD6z2kQzBhyOjfPNocbs5fbF6ZXw==
+X-Received: by 2002:a62:6585:: with SMTP id z127mr52504792pfb.179.1558487750638;
+        Tue, 21 May 2019 18:15:50 -0700 (PDT)
 Received: from ubt.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id e184sm31756061pfa.169.2019.05.21.18.15.43
+        by smtp.gmail.com with ESMTPSA id e184sm31756061pfa.169.2019.05.21.18.15.48
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 21 May 2019 18:15:47 -0700 (PDT)
+        Tue, 21 May 2019 18:15:49 -0700 (PDT)
 From:   Chunyan Zhang <zhang.chunyan@linaro.org>
 To:     Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
         Orson Zhai <orsonzhai@gmail.com>,
         Chunyan Zhang <zhang.lyra@gmail.com>,
         Baolin Wang <baolin.wang@linaro.org>
-Subject: [PATCH v2 2/3] clk: sprd: Check error only for devm_regmap_init_mmio()
-Date:   Wed, 22 May 2019 09:15:02 +0800
-Message-Id: <20190522011504.19342-3-zhang.chunyan@linaro.org>
+Subject: [PATCH v2 3/3] clk: sprd: Add check for return value of sprd_clk_regmap_init()
+Date:   Wed, 22 May 2019 09:15:03 +0800
+Message-Id: <20190522011504.19342-4-zhang.chunyan@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190522011504.19342-1-zhang.chunyan@linaro.org>
 References: <20190522011504.19342-1-zhang.chunyan@linaro.org>
@@ -60,27 +60,30 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The function devm_regmap_init_mmio() wouldn't return NULL pointer for
-now, so only need to ensure the return value is not an error code.
+sprd_clk_regmap_init() doesn't always return success, adding check
+for its return value should make the code more strong.
 
 Signed-off-by: Chunyan Zhang <zhang.chunyan@linaro.org>
+Reviewed-by: Baolin Wang <baolin.wang@linaro.org>
 ---
- drivers/clk/sprd/common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/sprd/sc9860-clk.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/sprd/common.c b/drivers/clk/sprd/common.c
-index 9ce690999eaa..a5bdca1de5d0 100644
---- a/drivers/clk/sprd/common.c
-+++ b/drivers/clk/sprd/common.c
-@@ -58,7 +58,7 @@ int sprd_clk_regmap_init(struct platform_device *pdev,
+diff --git a/drivers/clk/sprd/sc9860-clk.c b/drivers/clk/sprd/sc9860-clk.c
+index 9980ab55271b..1ed45b4f2fe8 100644
+--- a/drivers/clk/sprd/sc9860-clk.c
++++ b/drivers/clk/sprd/sc9860-clk.c
+@@ -2031,7 +2031,9 @@ static int sc9860_clk_probe(struct platform_device *pdev)
+ 	}
  
- 		regmap = devm_regmap_init_mmio(&pdev->dev, base,
- 					       &sprdclk_regmap_config);
--		if (IS_ERR_OR_NULL(regmap)) {
-+		if (IS_ERR(regmap)) {
- 			pr_err("failed to init regmap\n");
- 			return PTR_ERR(regmap);
- 		}
+ 	desc = match->data;
+-	sprd_clk_regmap_init(pdev, desc);
++	ret = sprd_clk_regmap_init(pdev, desc);
++	if (ret)
++		return ret;
+ 
+ 	return sprd_clk_probe(&pdev->dev, desc->hw_clks);
+ }
 -- 
 2.17.1
 
