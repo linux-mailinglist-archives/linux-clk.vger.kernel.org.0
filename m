@@ -2,100 +2,148 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 385A329CD1
-	for <lists+linux-clk@lfdr.de>; Fri, 24 May 2019 19:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBA229D68
+	for <lists+linux-clk@lfdr.de>; Fri, 24 May 2019 19:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391338AbfEXRYd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 24 May 2019 13:24:33 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:44308 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391273AbfEXRYc (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 24 May 2019 13:24:32 -0400
-Received: by mail-lj1-f194.google.com with SMTP id e13so9299704ljl.11;
-        Fri, 24 May 2019 10:24:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jX9jSPoknvc5J7MjiliCqU6YnL7woTcrtYt9debrJo8=;
-        b=HzICmywML7dNNYf526T4yXnbvvYwN9GHBu9iyq4xa9l7vdkyP0RJv2Eq81fKpVLHol
-         27LuMeQFKAh5hkr6xvKTrhHkCRuLs5cfPaF+gMacOKAsuGO3v0vI/HzXOoP1sH5maPAh
-         ny46aNSVMbrunTV5h83GBKs2K7yum/bp9Kd+PxiItKGsMuty8mawjRUST/CfjznIWf9x
-         NUN0MIM7m4SNB+wxD5jT49n9jf9Yl1wmH8AUwkrDnp8rC110WmmUyzxdZd1Q+Fhi636+
-         AqZYxE3LfjxjnVqmrYF2/Bpo0WVHbHFbjfmtn0fLZxHOHMvVt7qfqB8jcC9zlkrw1YFM
-         N77Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jX9jSPoknvc5J7MjiliCqU6YnL7woTcrtYt9debrJo8=;
-        b=KjJCXdXtbZd6YxYxLF+To7JUqSwUhfWh3ai+PnMHwQRK4DecgS6hObuJWTKJqXWUnr
-         QHX3LrSzw8OUvQbpL4I4N9PVlW4Dy5gA+3HzBZJLocuYk3gsfpBQmpMlkC7cOvuJnPdd
-         gDm5A56lSMRdoyCVtL45dyTvJc/RBtCaGxRBdreUmA2g5sxy9kKsysn/6yluVoXR4JVP
-         l1OosUGPds7+KllsjKR/aEtIz8dnwhRuP+iIpln6iOCxhTfWmTDTw+HvP/nAgVYomVA0
-         wDLJ9ysB7uyUGMlZmgKKJLSiSjWcGfJwA11C2E3H5Go41q0bWjgqek8+jzuYfLsB1tgg
-         9LRQ==
-X-Gm-Message-State: APjAAAXqPn+RNUR2ogeYxJ3cpXgsiHXqRsJk50QAFfvG7n+7A2XfjS+l
-        1FGIEzDP7SUq6azO34n5Nsg=
-X-Google-Smtp-Source: APXvYqxia7CZHs66fTPXo33YqXyuk4zXwUYBd32/y6nx3/106ieo0PzVMzR4eWC0y0rPU81iaN9s1A==
-X-Received: by 2002:a2e:548:: with SMTP id 69mr17090696ljf.176.1558718669710;
-        Fri, 24 May 2019 10:24:29 -0700 (PDT)
-Received: from localhost.localdomain ([94.29.35.141])
-        by smtp.gmail.com with ESMTPSA id d13sm196957lfm.27.2019.05.24.10.24.28
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 24 May 2019 10:24:28 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Joseph Lo <josephl@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 8/8] ARM: dts: tegra30: Add External Memory Controller node
-Date:   Fri, 24 May 2019 20:23:53 +0300
-Message-Id: <20190524172353.29087-9-digetx@gmail.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190524172353.29087-1-digetx@gmail.com>
-References: <20190524172353.29087-1-digetx@gmail.com>
+        id S2391012AbfEXRo4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 24 May 2019 13:44:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34418 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726139AbfEXRo4 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 24 May 2019 13:44:56 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8043420879;
+        Fri, 24 May 2019 17:44:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558719894;
+        bh=sCIfw30J0pAhw/lm4LEPayxbqHC+/EzITfD3eOsrjCY=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=BRC7nsmcKnJM8nbaZSMpC2u30M7sxPX/5eLN6EwUk/s9Qrls920l1sAzkLCY4JQhG
+         r1pJJqFUZ4yCf1I+mw91Itqqonih6onfNVqOLdc8tC7HQtbmyIu6LdYYFqSQ1yh90u
+         GeNX33jIiAbkWf55vdh0GHY6dxvqBTDr8YXv86MU=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <c89ecb6f328014ce22ae5d6c634e5337dbbf3ea2.camel@baylibre.com>
+References: <20190524072745.27398-1-amergnat@baylibre.com> <20190524143355.5586D2133D@mail.kernel.org> <c89ecb6f328014ce22ae5d6c634e5337dbbf3ea2.camel@baylibre.com>
+Subject: Re: [PATCH] clk: fix clock global name usage.
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        baylibre-upstreaming@groups.io
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>, mturquette@baylibre.com
+User-Agent: alot/0.8.1
+Date:   Fri, 24 May 2019 10:44:53 -0700
+Message-Id: <20190524174454.8043420879@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add External Memory Controller node to the device-tree.
+Quoting Jerome Brunet (2019-05-24 08:00:08)
+> On Fri, 2019-05-24 at 07:33 -0700, Stephen Boyd wrote:
+> > Do you set the index to 0 in this clk's parent_data? We purposefully set
+> > the index to -1 in clk_core_populate_parent_map() so that the fw_name
+> > can be NULL but the index can be something >=3D 0 and then we'll use th=
+at
+> > to lookup the clk from DT. We need to support that combination.
+> >=20
+> >         fw_name   |   index |  DT lookup?
+> >         ----------+---------+------------
+> >         NULL      |    >=3D 0 |     Y
+> >         NULL      |    -1   |     N
+> >         non-NULL  |    -1   |     ?
+> >         non-NULL  |    >=3D 0 |     Y
+> >=20
+> > Maybe we should support the ? case, because right now it will fail to do
+> > the DT lookup when the index is -1.
+>=20
+> Hi Stephen,
+>=20
+> We are trying to migrate all meson clocks to the new parent structure.
+> There is a little quirk which forces us to continue to use legacy names
+> for a couple of clocks.
+>=20
+> We heavily use static data which init everything to 0.
+> Here is an example:
+>=20
+> static struct clk_regmap g12a_aoclk_cts_rtc_oscin =3D {
+> [...]
+>         .hw.init =3D &(struct clk_init_data){
+>                 .name =3D "g12a_ao_cts_rtc_oscin",
+>                 .ops =3D &clk_regmap_mux_ops,
+> -               .parent_names =3D (const char *[]){ "g12a_ao_32k_by_oscin=
+",
+> -                                                 IN_PREFIX "ext_32k-0" },
+> +               .parent_data =3D (const struct clk_parent_data []) {
+> +                       { .name =3D "g12a_ao_32k_by_oscin" },
+> +                       { .fw_name =3D "ext-32k-0", },
+> +               },
+>                 .num_parents =3D 2,
+>                 .flags =3D CLK_SET_RATE_PARENT,
+>         },
+> };
+>=20
+> With this, instead of taking name =3D "g12a_ao_32k_by_oscin" for entry #0
+> it takes DT names at index 0 which is not what we intended.
+>=20
+> If I understand correctly we should put
+> +                       { .name =3D "g12a_ao_32k_by_oscin", index =3D -1,=
+ },
+>=20
+> And would be alright ?
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- arch/arm/boot/dts/tegra30.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+I don't understand why this wouldn't have a .fw_name or an .index >=3D 0,
+or both. Is there some reason why that isn't happening?
 
-diff --git a/arch/arm/boot/dts/tegra30.dtsi b/arch/arm/boot/dts/tegra30.dtsi
-index e074258d4518..92c4aeafab29 100644
---- a/arch/arm/boot/dts/tegra30.dtsi
-+++ b/arch/arm/boot/dts/tegra30.dtsi
-@@ -732,6 +732,17 @@
- 		#reset-cells = <1>;
- 	};
- 
-+	memory-controller@7000f400 {
-+		compatible = "nvidia,tegra30-emc";
-+		reg = <0x7000f400 0x400>;
-+		interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&tegra_car TEGRA30_CLK_EMC>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		nvidia,memory-controller = <&mc>;
-+	};
-+
- 	fuse@7000f800 {
- 		compatible = "nvidia,tegra30-efuse";
- 		reg = <0x7000f800 0x400>;
--- 
-2.21.0
+>=20
+> While I understand it, it is not very obvious or nice to look at.
+> Plus it is a bit weird that this -1 is required for .name and not .hw.
+
+Sure. It can be better documented. Sorry it's not super obvious. I added
+this later in the series. We could have:
+
+	#define CLK_SKIP_FW_LOOKUP .index =3D -1
+
+and then this would read as:
+
+        { .name =3D "g12a_ao_32k_by_oscin", CLK_SKIP_FW_LOOKUP },
+
+>=20
+> Do you think we could come up with a priority order which makes the first
+> example work ?
+
+Maybe? I'm open to suggestions.
+
+>=20
+> Something like:
+>=20
+> if (hw) {
+>         /* use pointer */
+> } else if (name) {
+>         /* use legacy global names */
+
+I don't imagine we can get rid of legacy name for a long time, so this
+can't be in this order. Otherwise we'll try to lookup the legacy name
+before trying the DT lookup and suffer performance hits doing a big
+global search while also skipping the DT lookup that we want drivers to
+use if they're more modern.
+
+> } else if (fw_name) {
+>         /* use DT names */
+> } else if (index >=3D 0)=20
+>         /* use DT index */
+> } else {
+>         return -EINVAL;
+> }
+>=20
+> The last 2 clause could be removed if we make index an unsigned.
+>=20
+
+So just assign -1 to .index? I still think my patch may be needed if
+somehow the index is assigned to something less than 0 and the .fw_name
+is specified. I guess that's possible if the struct is on the stack, so
+we'll probably have to allow this combination.
 
