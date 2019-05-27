@@ -2,33 +2,33 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0312B570
-	for <lists+linux-clk@lfdr.de>; Mon, 27 May 2019 14:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5332B572
+	for <lists+linux-clk@lfdr.de>; Mon, 27 May 2019 14:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726837AbfE0MeX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 27 May 2019 08:34:23 -0400
+        id S1726115AbfE0MfR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 27 May 2019 08:35:17 -0400
 Received: from michel.telenet-ops.be ([195.130.137.88]:37446 "EHLO
         michel.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727345AbfE0MeX (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 May 2019 08:34:23 -0400
+        with ESMTP id S1726071AbfE0MfR (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 May 2019 08:35:17 -0400
 Received: from ramsan ([84.194.111.163])
         by michel.telenet-ops.be with bizsmtp
-        id HQaM2000h3XaVaC06QaMut; Mon, 27 May 2019 14:34:22 +0200
+        id HQbF2000V3XaVaC06QbF75; Mon, 27 May 2019 14:35:15 +0200
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan with esmtp (Exim 4.90_1)
         (envelope-from <geert@linux-m68k.org>)
-        id 1hVEpZ-0001VV-Rp; Mon, 27 May 2019 14:34:21 +0200
+        id 1hVEqR-0001Vf-Gu; Mon, 27 May 2019 14:35:15 +0200
 Received: from geert by rox.of.borg with local (Exim 4.90_1)
         (envelope-from <geert@linux-m68k.org>)
-        id 1hVEpZ-0001qZ-QS; Mon, 27 May 2019 14:34:21 +0200
+        id 1hVEqR-0001sq-Ec; Mon, 27 May 2019 14:35:15 +0200
 From:   Geert Uytterhoeven <geert+renesas@glider.be>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] clk: renesas: cpg-mssr: Remove error messages on out-of-memory conditions
-Date:   Mon, 27 May 2019 14:34:20 +0200
-Message-Id: <20190527123420.7057-1-geert+renesas@glider.be>
+Subject: [PATCH] clk: renesas: mstp: Remove error messages on out-of-memory conditions
+Date:   Mon, 27 May 2019 14:35:14 +0200
+Message-Id: <20190527123514.7198-1-geert+renesas@glider.be>
 X-Mailer: git-send-email 2.17.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
@@ -43,14 +43,14 @@ Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
 To be queued in clk-renesas-for-v5.3.
 
- drivers/clk/renesas/renesas-cpg-mssr.c | 8 ++------
+ drivers/clk/renesas/clk-mstp.c | 8 ++------
  1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/clk/renesas/renesas-cpg-mssr.c b/drivers/clk/renesas/renesas-cpg-mssr.c
-index d1054204f3a75022..082d0bf12ea7f219 100644
---- a/drivers/clk/renesas/renesas-cpg-mssr.c
-+++ b/drivers/clk/renesas/renesas-cpg-mssr.c
-@@ -509,16 +509,12 @@ int cpg_mssr_attach_dev(struct generic_pm_domain *unused, struct device *dev)
+diff --git a/drivers/clk/renesas/clk-mstp.c b/drivers/clk/renesas/clk-mstp.c
+index ebd5cd74ca0733d8..a5e9f9edf04079c7 100644
+--- a/drivers/clk/renesas/clk-mstp.c
++++ b/drivers/clk/renesas/clk-mstp.c
+@@ -298,16 +298,12 @@ int cpg_mstp_attach_dev(struct generic_pm_domain *unused, struct device *dev)
  		return PTR_ERR(clk);
  
  	error = pm_clk_create(dev);
