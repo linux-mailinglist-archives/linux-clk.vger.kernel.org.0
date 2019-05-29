@@ -2,30 +2,30 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 180002D79E
-	for <lists+linux-clk@lfdr.de>; Wed, 29 May 2019 10:22:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F142D7A3
+	for <lists+linux-clk@lfdr.de>; Wed, 29 May 2019 10:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726538AbfE2IWL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 29 May 2019 04:22:11 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:1337 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726112AbfE2IWK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 29 May 2019 04:22:10 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cee41280000>; Wed, 29 May 2019 01:22:00 -0700
+        id S1726685AbfE2IWM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 29 May 2019 04:22:12 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:11412 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726112AbfE2IWM (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 29 May 2019 04:22:12 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5cee41330000>; Wed, 29 May 2019 01:22:11 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
   by hqpgpgate102.nvidia.com (PGP Universal service);
-  Wed, 29 May 2019 01:22:08 -0700
+  Wed, 29 May 2019 01:22:11 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Wed, 29 May 2019 01:22:08 -0700
-Received: from HQMAIL103.nvidia.com (172.20.187.11) by HQMAIL108.nvidia.com
- (172.18.146.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 29 May
- 2019 08:22:08 +0000
-Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL103.nvidia.com
- (172.20.187.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 29 May 2019 08:22:08 +0000
+        by hqpgpgate102.nvidia.com on Wed, 29 May 2019 01:22:11 -0700
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL106.nvidia.com
+ (172.18.146.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 29 May
+ 2019 08:22:11 +0000
+Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Wed, 29 May 2019 08:22:11 +0000
 Received: from josephl-linux.nvidia.com (Not Verified[10.19.108.132]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5cee412e0002>; Wed, 29 May 2019 01:22:08 -0700
+        id <B5cee41310002>; Wed, 29 May 2019 01:22:10 -0700
 From:   Joseph Lo <josephl@nvidia.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Peter De Schrijver <pdeschrijver@nvidia.com>,
@@ -35,9 +35,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <linux-tegra@vger.kernel.org>, <linux-clk@vger.kernel.org>,
         <devicetree@vger.kernel.org>, Joseph Lo <josephl@nvidia.com>
-Subject: [PATCH V4 7/8] clk: tegra: Remove the old emc_mux clock for Tegra210
-Date:   Wed, 29 May 2019 16:21:38 +0800
-Message-ID: <20190529082139.5581-8-josephl@nvidia.com>
+Subject: [PATCH V4 8/8] arm64: tegra: Add external memory controller node for Tegra210
+Date:   Wed, 29 May 2019 16:21:39 +0800
+Message-ID: <20190529082139.5581-9-josephl@nvidia.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190529082139.5581-1-josephl@nvidia.com>
 References: <20190529082139.5581-1-josephl@nvidia.com>
@@ -46,125 +46,86 @@ X-NVConfidentiality: public
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1559118120; bh=EY5mlT8ZlvKOnTYMN0loWZYtEz2EsBsQclJSzJbdsGM=;
+        t=1559118131; bh=Abu9+xNYNnzs1jtOHYXGFgLqFOQAdhULT1UYXsUjjjs=;
         h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
          In-Reply-To:References:MIME-Version:X-NVConfidentiality:
          Content-Transfer-Encoding:Content-Type;
-        b=Fi78obL0SREI5MJySSZlbMKTPqgfO7oInVOMlgCyEl4n+1rTMCPus94jnBCHwYsFi
-         l2zDkyxzPI3TTyHbybKLSsG0lWrjQUOCBzodntVZxb+lTGHEmuaDY28UbwpCt9ms3s
-         C+9gorkqKCM2Z/1zFMpdVaLHRbes7l9n0KZWaJotrfDrTHxtcBaQB2V7FwJYnYhZmB
-         aRtK1LmlM458gFpA56PyxUQIwhBZsS+WCP2zGTKz8idUd0cCwhE1WF66pYNLX7kn52
-         Gl/FH1NVGZheNWjUNECyuLARjpy+G1Oep3qxb89S5EiwMieJbf1JLXaYMUoFJMVlR2
-         h3IKBRNM0wXdg==
+        b=Xy2AqPWd8rCp5dCumRjNKedZ+IoAjLSAHLFfxxoI8Gynn+0HVM4EzurieQdBuYrrx
+         J9ED9t3J3y0lQ1vhm72aK99foTCzWg7CWRFM5y68BRSgl6XZYHg0hDK+hmBloi/bkJ
+         L4Q0onodSn/jp9xO2mrp0XtqZK/hokua9UDhuaVN0sWTTDuczMq3shDm6L0r1BAnDk
+         GSBzl5OAXcfbTbY5sTOwUm+nvhwCkhtMLOzeB1QA+y5vHiZcZx8l+vOV9ifoUXELcY
+         16EjzwXpB0bNrcIjLYQC0s/Vzv5zPpey5jPuf+di2nNPHWjqLrFbk9U61rNXn0U8Yk
+         BjZGYDgce0WGw==
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Remove the old emc_mux clock and don't use the common EMC clock
-definition. This will be replaced by a new clock defined in the
-EMC driver.
+Add external memory controller (EMC) node for Tegra210
 
 Signed-off-by: Joseph Lo <josephl@nvidia.com>
 ---
 v4:
-- make sure the behavior is compatible with case if the kernel still
-  uses the older DTB which doesn't have EMC node. And the MC and EMC
-  clock can still be registered successuflly.
+- no change.
 v3:
-- split to 3 patches from the previous version
+- apply memory-region for emc_table. And add reserved-memory node with
+  it.
 ---
- drivers/clk/tegra/clk-tegra210.c | 42 ++++++++++++++++++++------------
- 1 file changed, 27 insertions(+), 15 deletions(-)
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi | 33 ++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/drivers/clk/tegra/clk-tegra210.c b/drivers/clk/tegra/clk-tegra=
-210.c
-index 1d52354820ca..8b209e8b5eaf 100644
---- a/drivers/clk/tegra/clk-tegra210.c
-+++ b/drivers/clk/tegra/clk-tegra210.c
-@@ -28,6 +28,7 @@
- #include <dt-bindings/reset/tegra210-car.h>
- #include <linux/iopoll.h>
- #include <linux/sizes.h>
-+#include <soc/tegra/emc.h>
- #include <soc/tegra/pmc.h>
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210.dtsi b/arch/arm64/boot/dts=
+/nvidia/tegra210.dtsi
+index bc71ef8f9a09..b9ccfee39ed2 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
+@@ -872,6 +872,27 @@
+ 		#iommu-cells =3D <1>;
+ 	};
 =20
- #include "clk.h"
-@@ -324,12 +325,6 @@ static unsigned long tegra210_input_freq[] =3D {
- 	[8] =3D 12000000,
- };
-=20
--static const char *mux_pllmcp_clkm[] =3D {
--	"pll_m", "pll_c", "pll_p", "clk_m", "pll_m_ud", "pll_mb", "pll_mb",
--	"pll_p",
--};
--#define mux_pllmcp_clkm_idx NULL
--
- #define PLL_ENABLE			(1 << 30)
-=20
- #define PLLCX_MISC1_IDDQ		(1 << 27)
-@@ -2346,7 +2341,6 @@ static struct tegra_clk tegra210_clks[tegra_clk_max] =
-__initdata =3D {
- 	[tegra_clk_i2c2] =3D { .dt_id =3D TEGRA210_CLK_I2C2, .present =3D true },
- 	[tegra_clk_uartc_8] =3D { .dt_id =3D TEGRA210_CLK_UARTC, .present =3D tru=
-e },
- 	[tegra_clk_mipi_cal] =3D { .dt_id =3D TEGRA210_CLK_MIPI_CAL, .present =3D=
- true },
--	[tegra_clk_emc] =3D { .dt_id =3D TEGRA210_CLK_EMC, .present =3D true },
- 	[tegra_clk_usb2] =3D { .dt_id =3D TEGRA210_CLK_USB2, .present =3D true },
- 	[tegra_clk_bsev] =3D { .dt_id =3D TEGRA210_CLK_BSEV, .present =3D true },
- 	[tegra_clk_uartd_8] =3D { .dt_id =3D TEGRA210_CLK_UARTD, .present =3D tru=
-e },
-@@ -2957,6 +2951,27 @@ static int tegra210_init_pllu(void)
- 	return 0;
- }
-=20
-+static const struct clk_div_table mc_div_table_tegra210[] =3D {
-+	{ .val =3D 0, .div =3D 2 },
-+	{ .val =3D 1, .div =3D 4 },
-+	{ .val =3D 2, .div =3D 1 },
-+	{ .val =3D 3, .div =3D 2 },
-+	{ .val =3D 0, .div =3D 0 },
-+};
++	external-memory-controller@7001b000 {
++		compatible =3D "nvidia,tegra210-emc";
++		reg =3D <0x0 0x7001b000 0x0 0x1000>,
++		      <0x0 0x7001e000 0x0 0x1000>,
++		      <0x0 0x7001f000 0x0 0x1000>;
++		clocks =3D <&tegra_car TEGRA210_CLK_EMC>,
++			 <&tegra_car TEGRA210_CLK_PLL_M>,
++			 <&tegra_car TEGRA210_CLK_PLL_C>,
++			 <&tegra_car TEGRA210_CLK_PLL_P>,
++			 <&tegra_car TEGRA210_CLK_CLK_M>,
++			 <&tegra_car TEGRA210_CLK_PLL_M_UD>,
++			 <&tegra_car TEGRA210_CLK_PLL_MB_UD>,
++			 <&tegra_car TEGRA210_CLK_PLL_MB>,
++			 <&tegra_car TEGRA210_CLK_PLL_P_UD>;
++		clock-names =3D "emc", "pll_m", "pll_c", "pll_p", "clk_m",
++			      "pll_m_ud", "pll_mb_ud", "pll_mb", "pll_p_ud";
++		interrupts =3D <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
++		memory-region =3D <&emc_table>;
++		nvidia,memory-controller =3D <&mc>;
++	};
 +
-+static void tegra210_clk_register_mc(const char *name,
-+				     const char *parent_name)
-+{
-+	struct clk *clk;
+ 	sata@70020000 {
+ 		compatible =3D "nvidia,tegra210-ahci";
+ 		reg =3D <0x0 0x70027000 0x0 0x2000>, /* AHCI */
+@@ -1431,6 +1452,18 @@
+ 		};
+ 	};
+=20
++	reserved-memory {
++		#address-cells =3D <2>;
++		#size-cells =3D <2>;
++		ranges;
 +
-+	clk =3D clk_register_divider_table(NULL, name, parent_name,
-+					 CLK_IS_CRITICAL,
-+					 clk_base + CLK_SOURCE_EMC,
-+					 15, 2, CLK_DIVIDER_READ_ONLY,
-+					 mc_div_table_tegra210, &emc_lock);
-+	clks[TEGRA210_CLK_MC] =3D clk;
-+}
++		emc_table: emc-table@8be00000 {
++			compatible =3D "nvidia,tegra210-emc-table";
++			reg =3D <0x0 0x8be00000 0x0 0x10000>;
++			status =3D "disabled";
++		};
++	};
 +
- static const char * const sor1_out_parents[] =3D {
- 	/*
- 	 * Bit 0 of the mux selects sor1_pad_clkout, irrespective of bit 1, so
-@@ -3040,15 +3055,12 @@ static __init void tegra210_periph_clk_init(void __=
-iomem *clk_base,
- 			CLK_SOURCE_LA, 0);
- 	clks[TEGRA210_CLK_LA] =3D clk;
-=20
--	/* emc mux */
--	clk =3D clk_register_mux(NULL, "emc_mux", mux_pllmcp_clkm,
--			       ARRAY_SIZE(mux_pllmcp_clkm), 0,
--			       clk_base + CLK_SOURCE_EMC,
--			       29, 3, 0, &emc_lock);
-+	/* emc */
-+	clk =3D tegra210_clk_register_emc();
-+	clks[TEGRA210_CLK_EMC] =3D clk;
-=20
--	clk =3D tegra_clk_register_mc("mc", "emc_mux", clk_base + CLK_SOURCE_EMC,
--				    &emc_lock);
--	clks[TEGRA210_CLK_MC] =3D clk;
-+	/* mc */
-+	tegra210_clk_register_mc("mc", "emc");
-=20
- 	/* cml0 */
- 	clk =3D clk_register_gate(NULL, "cml0", "pll_e", 0, clk_base + PLLE_AUX,
+ 	timer {
+ 		compatible =3D "arm,armv8-timer";
+ 		interrupts =3D <GIC_PPI 13
 --=20
 2.21.0
 
