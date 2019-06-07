@@ -2,129 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE4038D21
-	for <lists+linux-clk@lfdr.de>; Fri,  7 Jun 2019 16:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AFF38EA3
+	for <lists+linux-clk@lfdr.de>; Fri,  7 Jun 2019 17:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729222AbfFGOfs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 7 Jun 2019 10:35:48 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:40430 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729582AbfFGOfj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 7 Jun 2019 10:35:39 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190607143537euoutp02f070585f24cbf611beeef6d1aa130aaf~l8UgY1VxP0257302573euoutp02V
-        for <linux-clk@vger.kernel.org>; Fri,  7 Jun 2019 14:35:37 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190607143537euoutp02f070585f24cbf611beeef6d1aa130aaf~l8UgY1VxP0257302573euoutp02V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1559918137;
-        bh=Rv+G7xRM5W0qIJMO/1XEZpXdtXED3pTULKiTBpTxK9M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kzfzx5/Kc6y0H0tBLJjCHxQ15qIYWq17ynlS5qUG4j7jTPFTtoI4U6H0sXIkKcKp8
-         gGAf2SQ84tkg27Kes/Kp6YOmONbEBphzN/vFTS0ix5zm8L8kPayXi/r6oKsoim1/Gv
-         qpdVi3WsMnM9lSNjjebE+bE0Q2ZE9u7zFiba2b6E=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190607143537eucas1p1d4078ed500ef168bce00f1b7bf4f12c4~l8UfulZtU1838418384eucas1p1H;
-        Fri,  7 Jun 2019 14:35:37 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 14.B3.04298.8367AFC5; Fri,  7
-        Jun 2019 15:35:36 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20190607143536eucas1p2192a9061b835502ada88262ef427ce8a~l8Ue33_As2698526985eucas1p2q;
-        Fri,  7 Jun 2019 14:35:36 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190607143536eusmtrp16f054f06c43cb13eaba0140ebba26a00~l8UeoNpxL1284512845eusmtrp1j;
-        Fri,  7 Jun 2019 14:35:36 +0000 (GMT)
-X-AuditID: cbfec7f2-f13ff700000010ca-99-5cfa76382cb8
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id A0.D0.04140.7367AFC5; Fri,  7
-        Jun 2019 15:35:35 +0100 (BST)
-Received: from AMDC3778.DIGITAL.local (unknown [106.120.51.20]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190607143535eusmtip18e3f7879766c3a862c64d0d0f3ba6c69~l8UdsELSJ2929529295eusmtip1E;
-        Fri,  7 Jun 2019 14:35:34 +0000 (GMT)
-From:   Lukasz Luba <l.luba@partner.samsung.com>
-To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     mturquette@baylibre.com, sboyd@kernel.org,
-        b.zolnierkie@samsung.com, krzk@kernel.org, kgene@kernel.org,
-        cw00.choi@samsung.com, kyungmin.park@samsung.com,
-        m.szyprowski@samsung.com, s.nawrocki@samsung.com,
-        myungjoo.ham@samsung.com, keescook@chromium.org, tony@atomide.com,
-        jroedel@suse.de, treding@nvidia.com, digetx@gmail.com,
-        gregkh@linuxfoundation.org, willy.mh.wolff.ml@gmail.com,
-        Lukasz Luba <l.luba@partner.samsung.com>
-Subject: [PATCH v9 13/13] ARM: exynos_defconfig: enable DMC driver
-Date:   Fri,  7 Jun 2019 16:35:07 +0200
-Message-Id: <20190607143507.30286-14-l.luba@partner.samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190607143507.30286-1-l.luba@partner.samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0WSWUxTQRSGnd4VtORaUSZupE1I1ChIADO4r+FGXyA+GBGjBa+lgYL2Ql3w
-        oUoUi1SMLKJAQNGgBYPWWsEQwEpEQCmLkU0UxASRRRAwolhse6u+/fOf7585Z2ZoTNJLLKaV
-        cQmcOk4eKyPdcfOL6aY1SPMzYu2YMQg9zCkjUPvkAIEKapsIVDLeD1ByURmJMhryRejVJRVK
-        7x/CkNX6gEKvzw1TqEu7FI2nvSdQ29M8Ek3oawHKsVaJ0P3aHgq1NOxC3Wfvkuj5cAqBbG8f
-        4qj6zW7U/csDfX/5EWz1Yr9PXcXZrx3nKTZX24KzFTd6KNZo0JFsdX4pxeqTR0n22WiliL1s
-        MgD2UWMSO2FcHjo33H3jES5WqeHUfpsPu0ebGyrJY2PEyanrnbgWZBOpwI2GTCDUp7TiqcCd
-        ljB3AcxKbiaFxSSA41mzrsoEgI+sXfYI7Yz0W6WOtIQpBtB8J/hf4N4bM+VgSMYXlhuOOxhP
-        JgfA3M97HQzGPMHgSPc74CgsYLbD4pIBzKFxxgemzOY4fTGzFX6ZnQZCe96w5EGNk3Gz+7nm
-        cmd3kNHTsL7S5JphJ9S3WClBL4Bf6kwuvRQ2ZqThguahVn/TtekZ2J+e72I2wOd1Lc7BMGYl
-        LHvqJ9jbYLL2l2teD9gxMt9hY3Z51XwNE2wxvHhBItAroCmtWSToRbC4NJsSEBZm2qKE28kA
-        cKjwgugK8L7x/6xCAAzAi0vkVQqO94/jTvjychWfGKfwjYpXGYH93zXa6r6Vg6nWSAtgaCCb
-        J2ap6QgJIdfwp1QWAGlM5inWNP+IkIiPyE+d5tTxh9SJsRxvAUtoXOYlTprTe0DCKOQJXAzH
-        HePUf6si2m2xFsRL9/3+FD6k3DI5GHZ+jWSMMLJhSXJ/qf05TOqM0JlNP3XS+ABYpAs8G9ge
-        Yjxom11ZnW6wcKtDIrsvznyQBvWheTsq9t/X+NRk7jnZUdN3VBcckP+4oLOqfszjtmqZUawc
-        XHhrS3Pewc21w7q2tqnsmHVmTpGnezyzPtNm6JThfLTcfxWm5uV/AFZEY71zAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCIsWRmVeSWpSXmKPExsVy+t/xu7rmZb9iDJZMs7LYOGM9q8X1L89Z
-        LeYfOcdqsfrjY0aL5sXr2Swmn5rLZHGmO9ei//FrZovz5zewW5xtesNucatBxuJjzz1Wi8u7
-        5rBZfO49wmgx4/w+Jou1R+6yW1w85Wpxu3EFm8XhN+2sFv+ubWSx2H/Fy+L2bz6LbyceMTqI
-        e3z7OonF4/2NVnaP2Q0XWTx2zrrL7rFpVSebx/65a9g9epvfsXkcfLeHyaNvyypGj82nqz0+
-        b5IL4I7SsynKLy1JVcjILy6xVYo2tDDSM7S00DMysdQzNDaPtTIyVdK3s0lJzcksSy3St0vQ
-        y9h2ag9bwQfWiq8zb7I0ME5j7WLk4JAQMJF4fF6xi5GLQ0hgKaPE6lP7gOKcQHExiUn7trND
-        2MISf651sUEUfWKU6Gz6xgjSzCagJ7FjVSFIXERgDqPEz65tjCAOs8BZZondK94wgXQLCzhJ
-        LF/9nBnEZhFQlWj/P4MRxOYVcJB49f8nI8QGeYnVGw6A1XACxWdv28EGskBIwF5i1XOHCYx8
-        CxgZVjGKpJYW56bnFhvpFSfmFpfmpesl5+duYgTG4LZjP7fsYOx6F3yIUYCDUYmHdwbTzxgh
-        1sSy4srcQ4wSHMxKIrxlF37ECPGmJFZWpRblxxeV5qQWH2I0BbppIrOUaHI+MD3klcQbmhqa
-        W1gamhubG5tZKInzdggcjBESSE8sSc1OTS1ILYLpY+LglGpgNBCfsqLHa/+vThku58qpubs/
-        zpKO/eu7cVXVsspHm1bOKlWb/WJ51VndmBlV8nyG/mFrfwVtCU2SO255XvWt+AzVC69PtGbz
-        Bljd2fp+bdvWT6UmLjUb/iUl/rkx7cqZ+nulJUqXapLVgvy+lCk7CrQ3aHv+5zaa6qW8a7vD
-        anGRp4XrVxtFKLEUZyQaajEXFScCAHlofL3XAgAA
-X-CMS-MailID: 20190607143536eucas1p2192a9061b835502ada88262ef427ce8a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190607143536eucas1p2192a9061b835502ada88262ef427ce8a
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190607143536eucas1p2192a9061b835502ada88262ef427ce8a
-References: <20190607143507.30286-1-l.luba@partner.samsung.com>
-        <CGME20190607143536eucas1p2192a9061b835502ada88262ef427ce8a@eucas1p2.samsung.com>
+        id S1729342AbfFGPM6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 7 Jun 2019 11:12:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53150 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729173AbfFGPM6 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 7 Jun 2019 11:12:58 -0400
+Received: from localhost.localdomain (cpe-70-114-128-244.austin.res.rr.com [70.114.128.244])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4E9E72089E;
+        Fri,  7 Jun 2019 15:12:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559920377;
+        bh=PYE7F0VVjdf0vn+IZNw1mdkAtynuZLWLMkQ4OG1xVHM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GCu5nhiQHWhVnddGDLLHNh3mQALfm432JmbJzsGfUqdMScXWnhNciawmGYUWbNXlN
+         DImU8IicdD2NyxGAnC9EB6/0lCxBhmhb6MU0xAWLKMbI0A0R4sGQkJOTxlc2Z6JbuJ
+         RQGBuG0oscXyAz7na8T1oSn1To9R/bqOGIxFkfzA=
+From:   Dinh Nguyen <dinguyen@kernel.org>
+To:     linux-clk@vger.kernel.org
+Cc:     dinguyen@kernel.org, mturquette@baylibre.com,
+        stable@vger.kernel.org
+Subject: [PATCH] clk: socfpga: stratix10: fix divider entry for the emac clocks
+Date:   Fri,  7 Jun 2019 10:12:46 -0500
+Message-Id: <20190607151246.8700-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.20.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Enable driver for Exynos5422 Dynamic Memory Controller supporting
-dynamic frequency and voltage scaling in Exynos5422 SoCs.
+The fixed dividers for the emac clocks should be 2 not 4.
 
-Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 ---
- arch/arm/configs/exynos_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/clk/socfpga/clk-s10.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/configs/exynos_defconfig b/arch/arm/configs/exynos_defconfig
-index c95c54284da2..0cd16c924941 100644
---- a/arch/arm/configs/exynos_defconfig
-+++ b/arch/arm/configs/exynos_defconfig
-@@ -290,6 +290,7 @@ CONFIG_DEVFREQ_GOV_PERFORMANCE=y
- CONFIG_DEVFREQ_GOV_POWERSAVE=y
- CONFIG_DEVFREQ_GOV_USERSPACE=y
- CONFIG_ARM_EXYNOS_BUS_DEVFREQ=y
-+CONFIG_ARM_EXYNOS5422_DMC=y
- CONFIG_DEVFREQ_EVENT_EXYNOS_NOCP=y
- CONFIG_EXYNOS_IOMMU=y
- CONFIG_EXTCON=y
+diff --git a/drivers/clk/socfpga/clk-s10.c b/drivers/clk/socfpga/clk-s10.c
+index 8281dfbf38c2..5bed36e12951 100644
+--- a/drivers/clk/socfpga/clk-s10.c
++++ b/drivers/clk/socfpga/clk-s10.c
+@@ -103,9 +103,9 @@ static const struct stratix10_perip_cnt_clock s10_main_perip_cnt_clks[] = {
+ 	{ STRATIX10_NOC_CLK, "noc_clk", NULL, noc_mux, ARRAY_SIZE(noc_mux),
+ 	  0, 0, 0, 0x3C, 1},
+ 	{ STRATIX10_EMAC_A_FREE_CLK, "emaca_free_clk", NULL, emaca_free_mux, ARRAY_SIZE(emaca_free_mux),
+-	  0, 0, 4, 0xB0, 0},
++	  0, 0, 2, 0xB0, 0},
+ 	{ STRATIX10_EMAC_B_FREE_CLK, "emacb_free_clk", NULL, emacb_free_mux, ARRAY_SIZE(emacb_free_mux),
+-	  0, 0, 4, 0xB0, 1},
++	  0, 0, 2, 0xB0, 1},
+ 	{ STRATIX10_EMAC_PTP_FREE_CLK, "emac_ptp_free_clk", NULL, emac_ptp_free_mux,
+ 	  ARRAY_SIZE(emac_ptp_free_mux), 0, 0, 4, 0xB0, 2},
+ 	{ STRATIX10_GPIO_DB_FREE_CLK, "gpio_db_free_clk", NULL, gpio_db_free_mux,
 -- 
-2.17.1
+2.20.0
 
