@@ -2,36 +2,35 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD923D523
-	for <lists+linux-clk@lfdr.de>; Tue, 11 Jun 2019 20:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A183D50E
+	for <lists+linux-clk@lfdr.de>; Tue, 11 Jun 2019 20:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406933AbfFKSI2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 11 Jun 2019 14:08:28 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34200 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2406931AbfFKSI1 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 11 Jun 2019 14:08:27 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 07B3EAD85;
-        Tue, 11 Jun 2019 18:08:26 +0000 (UTC)
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     stefan.wahren@i2se.com, linux-kernel@vger.kernel.org
-Cc:     mbrugger@suse.de, viresh.kumar@linaro.org, rjw@rjwysocki.net,
-        sboyd@kernel.org, eric@anholt.net, f.fainelli@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, ptesarik@suse.com,
-        linux-rpi-kernel@lists.infradead.org, ssuloev@orpaltech.com,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        mturquette@baylibre.com, linux-pm@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>
-Subject: [PATCH v3 7/7] arm64: defconfig: enable cpufreq support for RPi3
-Date:   Tue, 11 Jun 2019 19:58:46 +0200
-Message-Id: <20190611175839.28351-8-nsaenzjulienne@suse.de>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190611175839.28351-1-nsaenzjulienne@suse.de>
-References: <20190611175839.28351-1-nsaenzjulienne@suse.de>
+        id S2406854AbfFKSIJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 11 Jun 2019 14:08:09 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:60230 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406739AbfFKSIJ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 11 Jun 2019 14:08:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1560276483; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=F92Hgvhl4FW1kSKmvn0gmYzIQd65L6N4f7rKJUGKlLY=;
+        b=MFYmu7nMhGPBRi2lqewJHzgo4uCKPVKDPAJ2IbRdcv3xvqrH6HVC5rEoiygSPWVspfSDWg
+        dIY3wMpsk1tB4ZTywq5TD9PHRlqDMjkTlkR5OP8S7Tf9ECcXy6pdxGj7rArW+wplLhUASP
+        pJfiOFRo5tQAHHVP6aTXHB/XTHtZgAs=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        James Hogan <jhogan@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     od@zcrc.me, linux-mips@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH v2 1/5] clk: ingenic: Add missing header in cgu.h
+Date:   Tue, 11 Jun 2019 20:07:53 +0200
+Message-Id: <20190611180757.32299-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
@@ -39,38 +38,83 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This enables both the new firmware clock driver and cpufreq driver
-available for the RPi3 family of boards.
+The cgu.h has structures that contain 'clk_onecell_data' and 'clk_hw'
+structures (no pointers), so the <linux/clk-provider.h> header should be
+included.
 
-Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
 
-Changes since v2:
-  - Build both drivers as modules
+Notes:
+    v2: Rebase on v5.2-rc4
 
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/clk/ingenic/cgu.h         | 1 +
+ drivers/clk/ingenic/jz4725b-cgu.c | 1 -
+ drivers/clk/ingenic/jz4740-cgu.c  | 1 -
+ drivers/clk/ingenic/jz4770-cgu.c  | 1 -
+ drivers/clk/ingenic/jz4780-cgu.c  | 1 -
+ 5 files changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index bb0705e1f52e..73fb2067a905 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -83,6 +83,7 @@ CONFIG_ACPI_CPPC_CPUFREQ=m
- CONFIG_ARM_ARMADA_37XX_CPUFREQ=y
- CONFIG_ARM_SCPI_CPUFREQ=y
- CONFIG_ARM_IMX_CPUFREQ_DT=m
-+CONFIG_ARM_RASPBERRYPI_CPUFREQ=m
- CONFIG_ARM_TEGRA186_CPUFREQ=y
- CONFIG_ARM_SCPI_PROTOCOL=y
- CONFIG_RASPBERRYPI_FIRMWARE=y
-@@ -652,6 +653,7 @@ CONFIG_COMMON_CLK_CS2000_CP=y
- CONFIG_COMMON_CLK_S2MPS11=y
- CONFIG_CLK_QORIQ=y
- CONFIG_COMMON_CLK_PWM=y
-+CONFIG_CLK_RASPBERRYPI=m
- CONFIG_CLK_IMX8MM=y
- CONFIG_CLK_IMX8MQ=y
- CONFIG_CLK_IMX8QXP=y
+diff --git a/drivers/clk/ingenic/cgu.h b/drivers/clk/ingenic/cgu.h
+index bfbcf6db437d..ef2db1e26e58 100644
+--- a/drivers/clk/ingenic/cgu.h
++++ b/drivers/clk/ingenic/cgu.h
+@@ -10,6 +10,7 @@
+ #define __DRIVERS_CLK_INGENIC_CGU_H__
+ 
+ #include <linux/bitops.h>
++#include <linux/clk-provider.h>
+ #include <linux/of.h>
+ #include <linux/spinlock.h>
+ 
+diff --git a/drivers/clk/ingenic/jz4725b-cgu.c b/drivers/clk/ingenic/jz4725b-cgu.c
+index 8901ea0295b7..6e8bbf620c76 100644
+--- a/drivers/clk/ingenic/jz4725b-cgu.c
++++ b/drivers/clk/ingenic/jz4725b-cgu.c
+@@ -6,7 +6,6 @@
+  * Author: Paul Cercueil <paul@crapouillou.net>
+  */
+ 
+-#include <linux/clk-provider.h>
+ #include <linux/delay.h>
+ #include <linux/of.h>
+ #include <dt-bindings/clock/jz4725b-cgu.h>
+diff --git a/drivers/clk/ingenic/jz4740-cgu.c b/drivers/clk/ingenic/jz4740-cgu.c
+index c77f4e1506dc..2deac19a8d04 100644
+--- a/drivers/clk/ingenic/jz4740-cgu.c
++++ b/drivers/clk/ingenic/jz4740-cgu.c
+@@ -6,7 +6,6 @@
+  * Author: Paul Burton <paul.burton@mips.com>
+  */
+ 
+-#include <linux/clk-provider.h>
+ #include <linux/delay.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
+diff --git a/drivers/clk/ingenic/jz4770-cgu.c b/drivers/clk/ingenic/jz4770-cgu.c
+index dfce740c25a8..42b2ee121642 100644
+--- a/drivers/clk/ingenic/jz4770-cgu.c
++++ b/drivers/clk/ingenic/jz4770-cgu.c
+@@ -5,7 +5,6 @@
+  */
+ 
+ #include <linux/bitops.h>
+-#include <linux/clk-provider.h>
+ #include <linux/delay.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
+diff --git a/drivers/clk/ingenic/jz4780-cgu.c b/drivers/clk/ingenic/jz4780-cgu.c
+index 2464fc4032af..6d524e760180 100644
+--- a/drivers/clk/ingenic/jz4780-cgu.c
++++ b/drivers/clk/ingenic/jz4780-cgu.c
+@@ -6,7 +6,6 @@
+  * Author: Paul Burton <paul.burton@mips.com>
+  */
+ 
+-#include <linux/clk-provider.h>
+ #include <linux/delay.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
 -- 
-2.21.0
+2.21.0.593.g511ec345e18
 
