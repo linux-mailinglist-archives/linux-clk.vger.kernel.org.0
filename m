@@ -2,132 +2,91 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17CC93D518
-	for <lists+linux-clk@lfdr.de>; Tue, 11 Jun 2019 20:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BC23D690
+	for <lists+linux-clk@lfdr.de>; Tue, 11 Jun 2019 21:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406891AbfFKSIU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 11 Jun 2019 14:08:20 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:60354 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406922AbfFKSIT (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 11 Jun 2019 14:08:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1560276492; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0viPHiuXiALagAuJTSTKg7DcwkXlKKizYTwevl9VkvY=;
-        b=OTwdAqC2vxPwXL7L28WXviP21bWFGV8y+cGYif32mwzSRT/BCSzKwjk+Q1ux7qa69HTLuA
-        NMsb+cpARFlcB6oDVxpRdkKf5ip8o5k64lSVX4AREDhS8/6/Lvkb5Mo2To3RRy5ez6iVzS
-        Xz7JVemZ00WM1JLCzB/0e01Vrd1ZMHs=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        James Hogan <jhogan@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     od@zcrc.me, linux-mips@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 5/5] MIPS: Remove dead code
-Date:   Tue, 11 Jun 2019 20:07:57 +0200
-Message-Id: <20190611180757.32299-5-paul@crapouillou.net>
-In-Reply-To: <20190611180757.32299-1-paul@crapouillou.net>
-References: <20190611180757.32299-1-paul@crapouillou.net>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S2404972AbfFKTTy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 11 Jun 2019 15:19:54 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:39090 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404789AbfFKTTy (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 11 Jun 2019 15:19:54 -0400
+Received: by mail-pf1-f194.google.com with SMTP id j2so8040531pfe.6;
+        Tue, 11 Jun 2019 12:19:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=J/xZLDiLprAi8z9dQ/9qJB5+wewmwploxA4je19QCGk=;
+        b=n0ptaN8NAlVFDirqrMfLJYeUXgSiyaLf29Dh9YaFfz7g7LBipHlM70KT57ZKMQPpGB
+         /AVpxACi089JSUlKgJqwp6/J4lJlVFgWtDYGHTBPkWFiHGA0n+qUrDygFp7eWRrkEims
+         adE34NmdTIEPBTiNBxrRA/iH5juB2l5ulbpISEm6mZdk1Hzqj4bA2w0yG8fjNnSS9PzN
+         y9nNEaQsLDwN4Uol7pGro41rMQKFhJxj9D//pVJCr/6OOUXLm7atYkw2K4KRnDo5ZTdf
+         M4FCoHxYPXIUmL4tSih6hJDaO2mL1GnygigO2ZZkU99bN2PfAiETtQPdnn7e+FU+u0Ka
+         MLdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=J/xZLDiLprAi8z9dQ/9qJB5+wewmwploxA4je19QCGk=;
+        b=cS3VDnQeukjMugEN3RkArfcihwRwyStJbP/zsGPmFXnHHO+l6oOVDOGWHjxqi7OABa
+         A7c+0vqWEvkF8lFrmyJHCMI9nDIXRoFlilv9UDBgjJInkJwBiNVzFtQnD7PIkArjDTZA
+         NFSdJ0fQKTZm6t+PInuk7ZwCxumcIjeDh36gDwruWF4r3aPho2udHXNeskh4x8U3y3AE
+         jBuoxGdGdxapqh11iC694sTkJwwdvWeDAVa4RbKgBjZ6nSbATjsh1/rVljPgk7LRDvUN
+         aemjNuIwpeIhuqJZJnEx9WKiRK8QpnP+uCqam4Xq/oHHGUF1+/yM1vHleJwTZCO2ZKwC
+         o0HA==
+X-Gm-Message-State: APjAAAXNcl3m1E42ghW3RMR3oyyU9+ae1zSeG4deCOUGfN+XqI72x0Jz
+        73/q4/ifrtdHQQOqfQq7xVQ=
+X-Google-Smtp-Source: APXvYqzmRn16DG7bbYc+884o1bq/aK/65WwHVB908fINU8aVL18oOFnbAE7r4ioRxEXGZBjLYZg55Q==
+X-Received: by 2002:a17:90a:9bca:: with SMTP id b10mr27672945pjw.90.1560280793850;
+        Tue, 11 Jun 2019 12:19:53 -0700 (PDT)
+Received: from aw-bldr-10.qualcomm.com (i-global254.qualcomm.com. [199.106.103.254])
+        by smtp.gmail.com with ESMTPSA id 19sm3112635pjj.8.2019.06.11.12.19.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 11 Jun 2019 12:19:53 -0700 (PDT)
+From:   Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+Cc:     agross@kernel.org, david.brown@linaro.org,
+        bjorn.andersson@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        marc.w.gonzalez@free.fr, jcrouse@codeaurora.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+Subject: [PATCH v3 0/2] MSM8998 GPUCC Support
+Date:   Tue, 11 Jun 2019 12:19:49 -0700
+Message-Id: <20190611191949.14906-1-jeffrey.l.hugo@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Remove the unused <asm/mach-jz4740/clock.h> include.
+The Adreno GPU on MSM8998 has its own clock controller, which is a
+dependency for bringing up the GPU.  This series gets the gpucc all in
+place as another step on the road to getting the GPU enabled.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
+v3:
+-drop accepted DT patch
+-correct "avoid" typo
+-expand comment on why XO is required
 
-Notes:
-    v2: Rebase on v5.2-rc4
+v2:
+-drop dead code
 
- arch/mips/include/asm/mach-jz4740/clock.h | 22 ----------------------
- arch/mips/jz4740/board-qi_lb60.c          |  2 --
- arch/mips/jz4740/platform.c               |  2 --
- arch/mips/jz4740/time.c                   |  3 ---
- 4 files changed, 29 deletions(-)
- delete mode 100644 arch/mips/include/asm/mach-jz4740/clock.h
+Jeffrey Hugo (3):
+  dt-bindings: clock: Document gpucc for msm8998
+  clk: qcom: Add MSM8998 GPU Clock Controller (GPUCC) driver
+  arm64: dts: qcom: msm8998: Add gpucc node
 
-diff --git a/arch/mips/include/asm/mach-jz4740/clock.h b/arch/mips/include/asm/mach-jz4740/clock.h
-deleted file mode 100644
-index 600d5051691a..000000000000
---- a/arch/mips/include/asm/mach-jz4740/clock.h
-+++ /dev/null
-@@ -1,22 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- *  Copyright (C) 2010, Lars-Peter Clausen <lars@metafoo.de>
-- */
--
--#ifndef __ASM_JZ4740_CLOCK_H__
--#define __ASM_JZ4740_CLOCK_H__
--
--enum jz4740_wait_mode {
--	JZ4740_WAIT_MODE_IDLE,
--	JZ4740_WAIT_MODE_SLEEP,
--};
--
--void jz4740_clock_set_wait_mode(enum jz4740_wait_mode mode);
--
--void jz4740_clock_suspend(void);
--void jz4740_clock_resume(void);
--
--void jz4740_clock_udc_enable_auto_suspend(void);
--void jz4740_clock_udc_disable_auto_suspend(void);
--
--#endif
-diff --git a/arch/mips/jz4740/board-qi_lb60.c b/arch/mips/jz4740/board-qi_lb60.c
-index 071e9d94eea7..d07ee418e5b0 100644
---- a/arch/mips/jz4740/board-qi_lb60.c
-+++ b/arch/mips/jz4740/board-qi_lb60.c
-@@ -37,8 +37,6 @@
- 
- #include <asm/mach-jz4740/platform.h>
- 
--#include "clock.h"
--
- /* GPIOs */
- #define QI_LB60_GPIO_KEYOUT(x)		(JZ_GPIO_PORTC(10) + (x))
- #define QI_LB60_GPIO_KEYIN(x)		(JZ_GPIO_PORTD(18) + (x))
-diff --git a/arch/mips/jz4740/platform.c b/arch/mips/jz4740/platform.c
-index 4b89abb17950..c74c99f5951d 100644
---- a/arch/mips/jz4740/platform.c
-+++ b/arch/mips/jz4740/platform.c
-@@ -21,8 +21,6 @@
- #include <linux/serial_core.h>
- #include <linux/serial_8250.h>
- 
--#include "clock.h"
--
- /* USB Device Controller */
- struct platform_device jz4740_udc_xceiv_device = {
- 	.name = "usb_phy_generic",
-diff --git a/arch/mips/jz4740/time.c b/arch/mips/jz4740/time.c
-index a3260c754e65..cb768e560d8b 100644
---- a/arch/mips/jz4740/time.c
-+++ b/arch/mips/jz4740/time.c
-@@ -13,13 +13,10 @@
- #include <linux/clockchips.h>
- #include <linux/sched_clock.h>
- 
--#include <asm/mach-jz4740/clock.h>
- #include <asm/mach-jz4740/irq.h>
- #include <asm/mach-jz4740/timer.h>
- #include <asm/time.h>
- 
--#include "clock.h"
--
- #define TIMER_CLOCKEVENT 0
- #define TIMER_CLOCKSOURCE 1
- 
+ .../devicetree/bindings/clock/qcom,gpucc.txt  |   4 +-
+ arch/arm64/boot/dts/qcom/msm8998.dtsi         |  15 +
+ drivers/clk/qcom/Kconfig                      |   8 +
+ drivers/clk/qcom/Makefile                     |   1 +
+ drivers/clk/qcom/gpucc-msm8998.c              | 364 ++++++++++++++++++
+ .../dt-bindings/clock/qcom,gpucc-msm8998.h    |  29 ++
+ 6 files changed, 420 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/clk/qcom/gpucc-msm8998.c
+ create mode 100644 include/dt-bindings/clock/qcom,gpucc-msm8998.h
+
 -- 
-2.21.0.593.g511ec345e18
+2.17.1
 
