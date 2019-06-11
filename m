@@ -2,122 +2,102 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F091B3C87E
-	for <lists+linux-clk@lfdr.de>; Tue, 11 Jun 2019 12:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554B13CB15
+	for <lists+linux-clk@lfdr.de>; Tue, 11 Jun 2019 14:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405457AbfFKKSE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 11 Jun 2019 06:18:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46074 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405334AbfFKKR0 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 11 Jun 2019 06:17:26 -0400
-Received: from wens.tw (mirror2.csie.ntu.edu.tw [140.112.30.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 70B8B2175B;
-        Tue, 11 Jun 2019 10:17:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560248245;
-        bh=9M2CWTBDajph3liNCMQ1zO3nEAzcbL60QXlognK2zZQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ti8co0mWrNPMHt8orQW+xMMZwvzaI3zLdq6i177oKhynbAGXpr1Epw9pcFKnFWaay
-         OJKJBu0E/Hj2UarjT77Af+0uIjVRN4YrXm0zTPIAk9Nm4paz1GTHfa9io6FALNUO1R
-         ZOee6Miy0MVKuZqVpZJt3Fbq0yg/dN0m4KirxtFQ=
-Received: by wens.tw (Postfix, from userid 1000)
-        id B60D460CA9; Tue, 11 Jun 2019 18:17:18 +0800 (CST)
-From:   Chen-Yu Tsai <wens@kernel.org>
-To:     Maxime Ripard <maxime.ripard@bootlin.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        id S2388708AbfFKMXh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 11 Jun 2019 08:23:37 -0400
+Received: from mail-wr1-f42.google.com ([209.85.221.42]:41415 "EHLO
+        mail-wr1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388573AbfFKMXg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 11 Jun 2019 08:23:36 -0400
+Received: by mail-wr1-f42.google.com with SMTP id c2so12790223wrm.8
+        for <linux-clk@vger.kernel.org>; Tue, 11 Jun 2019 05:23:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=c73N5jUPM/J0OD+sWtA4JTF4ruEO6lqjlOFnfBibFJ4=;
+        b=YsYy1GQVeHNTQznm9/zw9NwkAReGWAuXSF/wJB+OrCZRtpbp+rjw/uhQxFOTSY8jGc
+         cdTQUPKB3/YClD6yimkLAnJNgPN7iAnSGY+cR/dSXGqAsiMz2XE8rKZ7aSPlDT86B51W
+         i7fdCnAbqeSWReVeapblyV6F5E+MEs2t6CuVZt7ZlUWzx6s8PpiarBMxdMMHASnL0WqW
+         TRSyQ5adYSe7qyBtaq0M1yuGWTEg9GX010tMqlbD44g2Fwp2o9jLe0mi2tir4a4vHxTm
+         dQK3B9nExt6fKC7OAozQrP/Na35nKC9PWYko9AWsWNBQsV2GEoT/5iaPmiMBOMrbxVCa
+         xmcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=c73N5jUPM/J0OD+sWtA4JTF4ruEO6lqjlOFnfBibFJ4=;
+        b=Nc+wbVlmh+UelkRjP8BuPOpTywpnXeUR1OBkESmZeCjAUeXsckkRcMJD0YlD4koSF1
+         yjR/psXApSe6z+90/CKGqARZdkuuVp6ZHUJP/622oI6jA0UDguCytuQCJLoiiql98Vf+
+         gV+EgmWzeQKqZ+M1HZaJTuVbCPxr5wWhoADuUlrTobHYO3Zdwr3r1/J2MNVdILiG6Kw0
+         8oGIBrmw+R3EZCL+yE/XxlbfwXGny7998bfi4AXaNOvc1cuN5Jo+REGPVCAV/EfRAS8c
+         IipaCMRZN6RpGqwXh9fVg31xsAlpvWHHpZuxRwA7ieAA2CV8w7cr4Jyb5o1pJXRZe5P3
+         wy7w==
+X-Gm-Message-State: APjAAAUhanzPgQQoTWcDWbW4W8ncS5jnt2vflGc+7y3O2j2UnPDNxJaQ
+        ngAjLXxrIlXADE0+vVIU2LPVrA==
+X-Google-Smtp-Source: APXvYqwYlZ+zFYRWi8q9YLBImzdjepRt/8CxplAnJJHZ/hUrbiOzzjhfkLhOcltyUANCG0YK5OxoGQ==
+X-Received: by 2002:adf:fbc2:: with SMTP id d2mr2661934wrs.334.1560255814706;
+        Tue, 11 Jun 2019 05:23:34 -0700 (PDT)
+Received: from boomer.baylibre.com (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id b2sm19572023wrp.72.2019.06.11.05.23.33
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 11 Jun 2019 05:23:34 -0700 (PDT)
+Message-ID: <a834836da8de689ec541093f3226a853af001fe4.camel@baylibre.com>
+Subject: [GIT PULL] clk: meson: fixes for v5.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>
-Cc:     Chen-Yu Tsai <wens@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>
-Subject: [PATCH v2 25/25] clk: sunxi-ng: sun8i-r: Use local parent references for SUNXI_CCU_GATE
-Date:   Tue, 11 Jun 2019 18:16:58 +0800
-Message-Id: <20190611101658.23855-26-wens@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190611101658.23855-1-wens@kernel.org>
-References: <20190611101658.23855-1-wens@kernel.org>
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Date:   Tue, 11 Jun 2019 14:23:33 +0200
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Chen-Yu Tsai <wens@csie.org>
+Dear clock maintainers,
 
-With the new clk parenting code and SUNXI_CCU_GATE macros, we can
-reference parents locally via pointers to struct clk_hw or DT
-clock-names.
+Below is a request to pull a couple of fixes on Amlogic clocks for v5.2
+These are typos in recently added clocks, the most annoying one being in
+the DT binding identifier on the MPLL50M which is used by the network PLL.
 
-Convert existing SUNXI_CCU_GATE definitions to SUNXI_CCU_GATE_HWS
-as the parent clock is internal to this clock unit.
+Regards
 
-To avoid duplication of clock definitions, we fix up the parent
-reference for A83T in the A83T init function.
+The following changes since commit a188339ca5a396acc588e5851ed7e19f66b0ebd9:
 
-Acked-by: Maxime Ripard <maxime.ripard@bootlin.com>
-Signed-off-by: Chen-Yu Tsai <wens@csie.org>
----
- drivers/clk/sunxi-ng/ccu-sun8i-r.c | 37 +++++++++++++++++++-----------
- 1 file changed, 23 insertions(+), 14 deletions(-)
+  Linux 5.2-rc1 (2019-05-19 15:47:09 -0700)
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-r.c b/drivers/clk/sunxi-ng/ccu-sun8i-r.c
-index 4a111c28b8c3..a7a21feaf143 100644
---- a/drivers/clk/sunxi-ng/ccu-sun8i-r.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun8i-r.c
-@@ -73,20 +73,26 @@ static struct ccu_div apb0_clk = {
- 
- static SUNXI_CCU_M(a83t_apb0_clk, "apb0", "ahb0", 0x0c, 0, 2, 0);
- 
--static SUNXI_CCU_GATE(apb0_pio_clk,	"apb0-pio",	"apb0",
--		      0x28, BIT(0), 0);
--static SUNXI_CCU_GATE(apb0_ir_clk,	"apb0-ir",	"apb0",
--		      0x28, BIT(1), 0);
--static SUNXI_CCU_GATE(apb0_timer_clk,	"apb0-timer",	"apb0",
--		      0x28, BIT(2), 0);
--static SUNXI_CCU_GATE(apb0_rsb_clk,	"apb0-rsb",	"apb0",
--		      0x28, BIT(3), 0);
--static SUNXI_CCU_GATE(apb0_uart_clk,	"apb0-uart",	"apb0",
--		      0x28, BIT(4), 0);
--static SUNXI_CCU_GATE(apb0_i2c_clk,	"apb0-i2c",	"apb0",
--		      0x28, BIT(6), 0);
--static SUNXI_CCU_GATE(apb0_twd_clk,	"apb0-twd",	"apb0",
--		      0x28, BIT(7), 0);
-+/*
-+ * Define the parent as an array that can be reused to save space
-+ * instead of having compound literals for each gate. Also have it
-+ * non-const so we can change it on the A83T.
-+ */
-+static const struct clk_hw *apb0_gate_parent[] = { &apb0_clk.common.hw };
-+static SUNXI_CCU_GATE_HWS(apb0_pio_clk,		"apb0-pio",
-+			  apb0_gate_parent, 0x28, BIT(0), 0);
-+static SUNXI_CCU_GATE_HWS(apb0_ir_clk,		"apb0-ir",
-+			  apb0_gate_parent, 0x28, BIT(1), 0);
-+static SUNXI_CCU_GATE_HWS(apb0_timer_clk,	"apb0-timer",
-+			  apb0_gate_parent, 0x28, BIT(2), 0);
-+static SUNXI_CCU_GATE_HWS(apb0_rsb_clk,		"apb0-rsb",
-+			  apb0_gate_parent, 0x28, BIT(3), 0);
-+static SUNXI_CCU_GATE_HWS(apb0_uart_clk,	"apb0-uart",
-+			  apb0_gate_parent, 0x28, BIT(4), 0);
-+static SUNXI_CCU_GATE_HWS(apb0_i2c_clk,		"apb0-i2c",
-+			  apb0_gate_parent, 0x28, BIT(6), 0);
-+static SUNXI_CCU_GATE_HWS(apb0_twd_clk,		"apb0-twd",
-+			  apb0_gate_parent, 0x28, BIT(7), 0);
- 
- static const char * const r_mod0_default_parents[] = { "osc32k", "osc24M" };
- static SUNXI_CCU_MP_WITH_MUX_GATE(ir_clk, "ir",
-@@ -284,6 +290,9 @@ static void __init sunxi_r_ccu_init(struct device_node *node,
- 
- static void __init sun8i_a83t_r_ccu_setup(struct device_node *node)
- {
-+	/* Fix apb0 bus gate parents here */
-+	apb0_gate_parent[0] = &a83t_apb0_clk.common.hw;
-+
- 	sunxi_r_ccu_init(node, &sun8i_a83t_r_ccu_desc);
- }
- CLK_OF_DECLARE(sun8i_a83t_r_ccu, "allwinner,sun8i-a83t-r-ccu",
--- 
-2.20.1
+are available in the Git repository at:
+
+  git://github.com/BayLibre/clk-meson.git tags/clk-meson-5.2-1-fixes
+
+for you to fetch changes up to 3ff46efbcd90d3d469de8eddaf03d12293aaa50c:
+
+  clk: meson: meson8b: fix a typo in the VPU parent names array variable (2019-05-20 12:11:08 +0200)
+
+----------------------------------------------------------------
+MPLL50M DT bindings typo fix
+Meson9 VPU typo fixes
+
+----------------------------------------------------------------
+Jerome Brunet (1):
+      clk: meson: fix MPLL 50M binding id typo
+
+Martin Blumenstingl (1):
+      clk: meson: meson8b: fix a typo in the VPU parent names array variable
+
+ drivers/clk/meson/g12a.c              |  4 ++--
+ drivers/clk/meson/g12a.h              |  2 +-
+ drivers/clk/meson/meson8b.c           | 10 +++++-----
+ include/dt-bindings/clock/g12a-clkc.h |  2 +-
+ 4 files changed, 9 insertions(+), 9 deletions(-)
+
+
 
