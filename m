@@ -2,101 +2,158 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56DB23C7BD
-	for <lists+linux-clk@lfdr.de>; Tue, 11 Jun 2019 11:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BEF03C8A3
+	for <lists+linux-clk@lfdr.de>; Tue, 11 Jun 2019 12:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729011AbfFKJ4p (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 11 Jun 2019 05:56:45 -0400
-Received: from mail-eopbgr80077.outbound.protection.outlook.com ([40.107.8.77]:1856
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727726AbfFKJ4p (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 11 Jun 2019 05:56:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=P2+iRFvcKX/B0Fgo8rl2Va9Wr5wecC2g8skImnvvOt4=;
- b=d6W435ilLK7PLGLjYDS65kjb9XWAWxAHO/05QG3z/K6WUnla3HS1p8YmhKuYy8XqN5MpO0Gr+vM5Y2JanNOk2Dy4OQeCdFLvKHPM+rTxjnlrHLgJ9SXaScnh2UB3g1OlVhFSOwLnO4mFFhE7olIqKc9A88WZ+jHZRm5uSIHz4Ik=
-Received: from VI1PR0402MB3485.eurprd04.prod.outlook.com (52.134.3.153) by
- VI1PR0402MB3677.eurprd04.prod.outlook.com (52.134.15.19) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1965.15; Tue, 11 Jun 2019 09:56:41 +0000
-Received: from VI1PR0402MB3485.eurprd04.prod.outlook.com
- ([fe80::ccaf:f4a1:704a:e745]) by VI1PR0402MB3485.eurprd04.prod.outlook.com
- ([fe80::ccaf:f4a1:704a:e745%4]) with mapi id 15.20.1965.017; Tue, 11 Jun 2019
- 09:56:41 +0000
-From:   Horia Geanta <horia.geanta@nxp.com>
-To:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>
-CC:     Chris Spencer <christopher.spencer@sea.co.uk>,
-        Aymen Sghaier <aymen.sghaier@nxp.com>,
-        Cory Tusar <cory.tusar@zii.aero>,
-        Chris Healy <cphealy@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v2 1/4] crypto: caam - do not initialise clocks on the
- i.MX8
-Thread-Topic: [PATCH v2 1/4] crypto: caam - do not initialise clocks on the
- i.MX8
-Thread-Index: AQHVHWwGsMxFSBPcUUWzlXHZD6TwyA==
-Date:   Tue, 11 Jun 2019 09:56:40 +0000
-Message-ID: <VI1PR0402MB34855AC8C617A3D7A584A1B798ED0@VI1PR0402MB3485.eurprd04.prod.outlook.com>
-References: <20190607200225.21419-1-andrew.smirnov@gmail.com>
- <20190607200225.21419-2-andrew.smirnov@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=horia.geanta@nxp.com; 
-x-originating-ip: [212.146.100.6]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1e8d4328-fb86-46c4-d806-08d6ee531a5d
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR0402MB3677;
-x-ms-traffictypediagnostic: VI1PR0402MB3677:
-x-microsoft-antispam-prvs: <VI1PR0402MB3677CB501F7CA9E8DBD6238098ED0@VI1PR0402MB3677.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-forefront-prvs: 006546F32A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(376002)(366004)(39860400002)(346002)(396003)(136003)(189003)(199004)(4744005)(66066001)(3846002)(4326008)(52536014)(2906002)(74316002)(81156014)(6116002)(71200400001)(81166006)(71190400001)(8936002)(305945005)(55016002)(229853002)(7736002)(8676002)(478600001)(14454004)(2501003)(6436002)(66476007)(110136005)(66446008)(66556008)(476003)(53936002)(5660300002)(64756008)(316002)(102836004)(25786009)(54906003)(9686003)(76116006)(86362001)(66946007)(256004)(446003)(73956011)(53546011)(68736007)(76176011)(6246003)(33656002)(26005)(186003)(7696005)(6506007)(486006)(99286004)(44832011);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR0402MB3677;H:VI1PR0402MB3485.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 4uFTjBb6zhrXMfmPlFhHOYmNtCiQlApNIOx70ctP1hwMNDQ67bZ+/atSKi20MNYngJ5dBvxqUUaQT4erMpdgwQN3I4kPZIMBXRcnQQY/El7bahjEJiTHxzyYHyHkQsJPlKn/5B8O/XDjaAejlQ1aHbIPF0v0mGPiYnsTz3L+PlK1YRW3kvXkQ9fnWubkTPlQ6i+tiRKelx+BghBpz+XD4dnbjIed2iVODQQ8bX4sWkP5bUyIYGD0cFAxQqHD00lhn79Ol3u2iSc0XPci6VS/7LevdcoZxoCFawBdJBHdOcN3vuQfqHSqTx3OiAtbQnDAta2739fWAolNnA0EECRO5PbzjkhGmqC71nruW33bw2Eou21L7eZfV79CFtfk4jg42DVw3olSD5pDLCBvSw4VZRpgR343ejwtvoVaLzGwDoE=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S2405317AbfFKKTE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 11 Jun 2019 06:19:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45566 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405104AbfFKKRW (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 11 Jun 2019 06:17:22 -0400
+Received: from wens.tw (mirror2.csie.ntu.edu.tw [140.112.30.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 26ED72146E;
+        Tue, 11 Jun 2019 10:17:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560248241;
+        bh=ECxRPjnnyOauLHhaZ2dGgISLKOhjT/mVaqEpGjVMnh0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=K/6bUhwaYp9/MWjk2zZJtPZ8uEqONxLXgvGkOchuijFaSBSSr0b38F6VzmafLosY4
+         NNHC8feiwpsi1pFLMlGJ88Kcl37Ht2W+yGRhGa5L+yTDweHtJ5XH/kaH4QYEPtPRtY
+         e6C3Xo32z1ZqyJSL3c2n+7t2hiLliYvdYMQMjRVQ=
+Received: by wens.tw (Postfix, from userid 1000)
+        id 0A2275FBB7; Tue, 11 Jun 2019 18:17:18 +0800 (CST)
+From:   Chen-Yu Tsai <wens@kernel.org>
+To:     Maxime Ripard <maxime.ripard@bootlin.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     Chen-Yu Tsai <wens@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/25] clk: sunxi-ng: clk parent rewrite part 1
+Date:   Tue, 11 Jun 2019 18:16:33 +0800
+Message-Id: <20190611101658.23855-1-wens@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e8d4328-fb86-46c4-d806-08d6ee531a5d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jun 2019 09:56:40.9638
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: horia.geanta@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0402MB3677
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 6/7/2019 11:03 PM, Andrey Smirnov wrote:=0A=
-> From: Chris Spencer <christopher.spencer@sea.co.uk>=0A=
-> =0A=
-> There are no clocks that the CAAM driver needs to initialise on the=0A=
-> i.MX8.=0A=
-> =0A=
-RM lists 5 clocks for CAAM module (instance.clock): caam.aclk, caam.ipg_clk=
-,=0A=
-caam.ipg_clk_s, caam_exsc.aclk_exsc, caam_mem.clk=0A=
-				=0A=
-Wouldn't it be better to have these clocks in DT, instead of relying that t=
-heir=0A=
-root clocks (ccm_ahb_clk_root, ccm_ipg_clk_root) are critical / always on?=
-=0A=
-=0A=
-Thanks,=0A=
-Horia=0A=
-=0A=
+From: Chen-Yu Tsai <wens@csie.org>
+
+Hi everyone,
+
+This is v2 of the sunxi-ng clk parent rewrite part 1.
+
+Changes since v1:
+
+  - Collected Maxime's Acked-by for sunxi patches
+  - Expanded possible_parents_show() to cover most cases
+  - Added comment to CLK_HW_INIT_HWS detailing usage for sharing
+    compound literal
+
+As mentioned in my reply to the cover letter of v1, I can merge all the
+patches through the sunxi tree and send a combined (with other sunxi
+stuff) PR, or as an independent branch, whichever is preferred.
+
+Excerpt from original cover letter follows:
+
+This is series is the first part of a large series (I haven't done the
+rest) of patches to rewrite the clk parent relationship handling within
+the sunxi-ng clk driver. This is based on Stephen's recent work allowing
+clk drivers to specify clk parents using struct clk_hw * or parsing DT
+phandles in the clk node.
+
+This series can be split into a few major parts:
+
+1) The first patch is a small fix for clk debugfs representation. This
+   was done before commit 1a079560b145 ("clk: Cache core in 
+   clk_fetch_parent_index() without names") was posted, so it might or
+   might not be needed. Found this when checking my work using
+   clk_possible_parents.
+
+2) A bunch of CLK_HW_INIT_* helper macros are added. These cover the
+   situations I encountered, or assume I will encounter, such as single
+   internal (struct clk_hw *) parent, single DT (struct clk_parent_data
+   .fw_name), multiple internal parents, and multiple mixed (internal +
+   DT) parents. A special variant for just an internal single parent is
+   added, CLK_HW_INIT_HWS, which lets the driver share the singular
+   list, instead of having the compiler create a compound literal every
+   time. It might even make sense to only keep this variant.
+
+3) A bunch of CLK_FIXED_FACTOR_* helper macros are added. The rationale
+   is the same as the single parent CLK_HW_INIT_* helpers.
+
+4) Bulk conversion of CLK_FIXED_FACTOR to use local parent references,
+   either struct clk_hw * or DT .fw_name types, whichever the hardware
+   requires.
+
+5) The beginning of SUNXI_CCU_GATE conversion to local parent
+   references. This part is not done. They are included as justification
+   and examples for the shared list of clk parents case.
+
+
+Thanks
+ChenYu
+
+
+Chen-Yu Tsai (25):
+  clk: Fix debugfs clk_possible_parents for clks without parent string
+    names
+  clk: Add CLK_HW_INIT_* macros using .parent_hws
+  clk: Add CLK_HW_INIT_FW_NAME macro using .fw_name in .parent_data
+  clk: Add CLK_HW_INIT_PARENT_DATA macro using .parent_data
+  clk: fixed-factor: Add CLK_FIXED_FACTOR_HW which takes clk_hw pointer
+    as parent
+  clk: fixed-factor: Add CLK_FIXED_FACTOR_HWS which takes list of struct
+    clk_hw *
+  clk: fixed-factor: Add CLK_FIXED_FACTOR_FW_NAME for DT clock-names
+    parent
+  clk: sunxi-ng: switch to of_clk_hw_register() for registering clks
+  clk: sunxi-ng: sun8i-r: Use local parent references for CLK_HW_INIT_*
+  clk: sunxi-ng: a10: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: sun5i: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: a31: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: a23: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: a33: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: h3: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: r40: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: v3s: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: sun8i-r: Use local parent references for
+    CLK_FIXED_FACTOR
+  clk: sunxi-ng: f1c100s: Use local parent references for
+    CLK_FIXED_FACTOR
+  clk: sunxi-ng: a64: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: h6: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: h6-r: Use local parent references for CLK_FIXED_FACTOR
+  clk: sunxi-ng: gate: Add macros for referencing local clock parents
+  clk: sunxi-ng: a80-usb: Use local parent references for SUNXI_CCU_GATE
+  clk: sunxi-ng: sun8i-r: Use local parent references for SUNXI_CCU_GATE
+
+ drivers/clk/clk.c                        |  44 +++++++++-
+ drivers/clk/sunxi-ng/ccu-sun4i-a10.c     |  39 ++++++---
+ drivers/clk/sunxi-ng/ccu-sun50i-a64.c    |  41 +++++----
+ drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c   |   2 +-
+ drivers/clk/sunxi-ng/ccu-sun50i-h6.c     |  69 +++++++++------
+ drivers/clk/sunxi-ng/ccu-sun5i.c         |  34 +++++---
+ drivers/clk/sunxi-ng/ccu-sun6i-a31.c     |  39 ++++++---
+ drivers/clk/sunxi-ng/ccu-sun8i-a23.c     |  34 +++++---
+ drivers/clk/sunxi-ng/ccu-sun8i-a33.c     |  34 +++++---
+ drivers/clk/sunxi-ng/ccu-sun8i-h3.c      |  29 ++++---
+ drivers/clk/sunxi-ng/ccu-sun8i-r.c       | 104 +++++++++++------------
+ drivers/clk/sunxi-ng/ccu-sun8i-r40.c     |  46 ++++++----
+ drivers/clk/sunxi-ng/ccu-sun8i-v3s.c     |  29 ++++---
+ drivers/clk/sunxi-ng/ccu-sun9i-a80-usb.c |  32 ++++---
+ drivers/clk/sunxi-ng/ccu-suniv-f1c100s.c |  29 ++++---
+ drivers/clk/sunxi-ng/ccu_common.c        |   2 +-
+ drivers/clk/sunxi-ng/ccu_gate.h          |  53 ++++++++++++
+ include/linux/clk-provider.h             |  89 +++++++++++++++++++
+ 18 files changed, 526 insertions(+), 223 deletions(-)
+
+-- 
+2.20.1
+
