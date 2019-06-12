@@ -2,122 +2,62 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD25D4293D
-	for <lists+linux-clk@lfdr.de>; Wed, 12 Jun 2019 16:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DA042A37
+	for <lists+linux-clk@lfdr.de>; Wed, 12 Jun 2019 17:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437776AbfFLObG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 12 Jun 2019 10:31:06 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:51676 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437584AbfFLObG (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 12 Jun 2019 10:31:06 -0400
-Received-SPF: Pass (esa2.microchip.iphmx.com: domain of
-  Ludovic.Desroches@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Ludovic.Desroches@microchip.com";
-  x-sender="Ludovic.Desroches@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
-  a:mx2.microchip.iphmx.com include:servers.mcsv.net
-  include:mktomail.com include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa2.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Ludovic.Desroches@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa2.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Ludovic.Desroches@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
-X-IronPort-AV: E=Sophos;i="5.63,366,1557212400"; 
-   d="scan'208";a="37046409"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Jun 2019 07:30:17 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex01.mchp-main.com (10.10.87.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Wed, 12 Jun 2019 07:30:17 -0700
-Received: from localhost (10.10.85.251) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.1713.5 via Frontend
- Transport; Wed, 12 Jun 2019 07:30:16 -0700
-Date:   Wed, 12 Jun 2019 16:29:17 +0200
-From:   Ludovic Desroches <ludovic.desroches@microchip.com>
-To:     Nicolas Ferre - M43238 <Nicolas.Ferre@microchip.com>
-CC:     Codrin Ciubotariu - M19940 <Codrin.Ciubotariu@microchip.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] clk: at91: generated: Truncate divisor to
- GENERATED_MAX_DIV + 1
-Message-ID: <20190612142917.sbpks6nhf7fy6rk6@M43218.corp.atmel.com>
-Mail-Followup-To: Nicolas Ferre - M43238 <Nicolas.Ferre@microchip.com>,
-        Codrin Ciubotariu - M19940 <Codrin.Ciubotariu@microchip.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20190610151712.16572-1-codrin.ciubotariu@microchip.com>
- <7306f2c5-e035-31d1-194e-6b4afb6a61c1@microchip.com>
+        id S2408637AbfFLPD6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 12 Jun 2019 11:03:58 -0400
+Received: from ns.iliad.fr ([212.27.33.1]:40876 "EHLO ns.iliad.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2408311AbfFLPD6 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 12 Jun 2019 11:03:58 -0400
+Received: from ns.iliad.fr (localhost [127.0.0.1])
+        by ns.iliad.fr (Postfix) with ESMTP id 15DF8202EC;
+        Wed, 12 Jun 2019 17:03:57 +0200 (CEST)
+Received: from [192.168.108.49] (freebox.vlq16.iliad.fr [213.36.7.13])
+        by ns.iliad.fr (Postfix) with ESMTP id F2B0720D88;
+        Wed, 12 Jun 2019 17:03:56 +0200 (CEST)
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
+Subject: [PATCH v1] clk: xgene: Don't build COMMON_CLK_XGENE by default
+Cc:     linux-clk <linux-clk@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Feng Kan <fkan@apm.com>
+Message-ID: <68c0d022-569c-c529-047a-a0bfae17994d@free.fr>
+Date:   Wed, 12 Jun 2019 17:03:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <7306f2c5-e035-31d1-194e-6b4afb6a61c1@microchip.com>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Wed Jun 12 17:03:57 2019 +0200 (CEST)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Jun 12, 2019 at 03:54:00PM +0200, Nicolas Ferre - M43238 wrote:
-> On 10/06/2019 at 17:20, Codrin Ciubotariu - M19940 wrote:
-> > From: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-> > 
-> > In clk_generated_determine_rate(), if the divisor is greater than
-> > GENERATED_MAX_DIV + 1, then the wrong best_rate will be returned.
-> > If clk_generated_set_rate() will be called later with this wrong
-> > rate, it will return -EINVAL, so the generated clock won't change
-> > its value. Do no let the divisor be greater than GENERATED_MAX_DIV + 1.
-> > 
-> > Fixes: 8c7aa6328947 ("clk: at91: clk-generated: remove useless divisor loop")
-> > Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-> 
-> Yes:
-> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Building COMMON_CLK_XGENE is pointless, unless we're building for
+an XGENE system.
 
-Acked-by: Ludovic Desroches <ludovic.desroches@microchip.com>
+Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
+---
+ drivers/clk/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks
-
-Ludovic
-
-> 
-> Thanks for having fixed this Codrin. Best regards,
->    Nicolas
-> 
-> > ---
-> >   drivers/clk/at91/clk-generated.c | 2 ++
-> >   1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/clk/at91/clk-generated.c b/drivers/clk/at91/clk-generated.c
-> > index 5f18847965c1..290cffe35deb 100644
-> > --- a/drivers/clk/at91/clk-generated.c
-> > +++ b/drivers/clk/at91/clk-generated.c
-> > @@ -146,6 +146,8 @@ static int clk_generated_determine_rate(struct clk_hw *hw,
-> >   			continue;
-> >   
-> >   		div = DIV_ROUND_CLOSEST(parent_rate, req->rate);
-> > +		if (div > GENERATED_MAX_DIV + 1)
-> > +			div = GENERATED_MAX_DIV + 1;
-> >   
-> >   		clk_generated_best_diff(req, parent, parent_rate, div,
-> >   					&best_diff, &best_rate);
-> > 
-> 
-> 
-> -- 
-> Nicolas Ferre
+diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+index fc1e0cf44995..b97974662a1f 100644
+--- a/drivers/clk/Kconfig
++++ b/drivers/clk/Kconfig
+@@ -215,7 +215,7 @@ config CLK_QORIQ
+ 
+ config COMMON_CLK_XGENE
+ 	bool "Clock driver for APM XGene SoC"
+-	default y
++	default ARCH_XGENE
+ 	depends on ARM64 || COMPILE_TEST
+ 	---help---
+ 	  Sypport for the APM X-Gene SoC reference, PLL, and device clocks.
+-- 
+2.17.1
