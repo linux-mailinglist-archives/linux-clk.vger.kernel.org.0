@@ -2,112 +2,101 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B4742FB6
-	for <lists+linux-clk@lfdr.de>; Wed, 12 Jun 2019 21:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F4F43066
+	for <lists+linux-clk@lfdr.de>; Wed, 12 Jun 2019 21:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728399AbfFLTND (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 12 Jun 2019 15:13:03 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:43738 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727496AbfFLTND (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 12 Jun 2019 15:13:03 -0400
-Received: by mail-pg1-f195.google.com with SMTP id f25so9440759pgv.10
-        for <linux-clk@vger.kernel.org>; Wed, 12 Jun 2019 12:13:03 -0700 (PDT)
+        id S1728124AbfFLTrU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 12 Jun 2019 15:47:20 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:37263 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727924AbfFLTrT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 12 Jun 2019 15:47:19 -0400
+Received: by mail-oi1-f195.google.com with SMTP id t76so12610499oih.4;
+        Wed, 12 Jun 2019 12:47:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=T+RRgg1K5LwClEl17mECCpFAJnPrxCkPYv4gJ/BZlgo=;
-        b=WcncelRIf/GhuCYp31jFfmC/CT6gi9hyGO8tZtDqa3S6I763xjCea8yODKmDo/SK0M
-         Oz4BKUZU5706cuMRBI8ksIz3TVzUDglZHgHYxOdna+5Qrfxp0bQwAsSIvqWUXP+8Gua7
-         HQSKA+I8pSN/RBDfOimd6xuTlV7zM/uzwRhMVC6MlsqKZ2k5261Q7gOubWik/0DuTaAy
-         lR8yYhu9rqIBuncO7aBzMKZIdXgZD+tJC9+FYWt6lwj/EgH575dhO9h/8ufCZlgD0Jq1
-         BH89C/yWVhXL8M005z/KdU1z6hDilRA8Se3NkE38zClneJphRKvB3hj7NwMxmQKBJl4Y
-         6BgQ==
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=EwdJu4okQ0L+2u52FXeBDXEGzF/ps8ei03aC+UR7txM=;
+        b=jCItuHIqjcFP/izwsSFnf5iZ4EN8OEZMF4/+XoTAcFGTIvjn8FEFSDtrZZEXarIJht
+         XFvZdFpsTYx2UKP8PreoZMEQCIurJCAtxHYRQnD1cDiUz4rMk9IZ5jwLjsMkH6YwbfV8
+         JK7juYY/NCn4SQ+bolXDhhhULZdOmNaiTFX6lctDPTgbJ6gXu4x0ppbCc25UIyEGVQtp
+         oUF9u4OeEsxLsGYmWkYR/KK1cMA1rXxJ0a5UKjCDFAyN28VcUBpUKp09Cc2KrkGEUmwm
+         uhHb8XCubFuUi3Xf0TqPGnVSzGzpC6kjENt0cAfNwGqVy32ibiYbhHmkyb1DMkDKOBAr
+         C6pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=T+RRgg1K5LwClEl17mECCpFAJnPrxCkPYv4gJ/BZlgo=;
-        b=POJhBpyk8Y1GtqXB8ArpPsiSy+MoUVuisJHN+nNu/lqyBFT5PwWRHv+oOR3iNkKU0G
-         UNYeDGmF9BYGCPFyUw3evzGxLtq3i1ozB2tCJ9DpiGdAMizJPezOjKSie5abPGNXkhQG
-         BOeoisuW54qCmJO+awb9WPFwRV/G8oUsXG39BPyDnf7a6Ql1G28WWqiEB6urqyB00zcp
-         bbit2m1mNylVtcnYVgs1j52XpFKgjmi2zgnxE1Ikj+tx7RoNiQxzOcaOlHV2E/7mNhl4
-         TZEImXzILAObwE+dH5RMGz9kMuUoRTpIfe2q3Jvltcz4Llh2Vgfd2TT4EjCVVLTs03Z3
-         dswQ==
-X-Gm-Message-State: APjAAAXW5CY03NqjZYYXt02U/JpiA0LTOLu+kwy2bwP2rLYyb63Cggz0
-        AdvbFTJgzt6GWy9ZYyYvVJll+A==
-X-Google-Smtp-Source: APXvYqwILt61lSMu2MlpNBfbNURs3gIUH9XAmDY/cSvzbtjVDYAc25LwFlB5j4/TEyd5sKywi+jDuw==
-X-Received: by 2002:a63:31d8:: with SMTP id x207mr25147871pgx.403.1560366782531;
-        Wed, 12 Jun 2019 12:13:02 -0700 (PDT)
-Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id j2sm308430pfb.157.2019.06.12.12.13.01
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 12 Jun 2019 12:13:01 -0700 (PDT)
-Date:   Wed, 12 Jun 2019 12:13:47 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Marc Gonzalez <marc.w.gonzalez@free.fr>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>
-Subject: Re: [PATCH v1] clk: qcom: msm8916: Don't build support by default
-Message-ID: <20190612191347.GE22737@tuxbook-pro>
-References: <49b95f19-4da6-4491-6ed7-5238ecfc35a8@free.fr>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=EwdJu4okQ0L+2u52FXeBDXEGzF/ps8ei03aC+UR7txM=;
+        b=gXvgu8JXznQEOFUpkx3VQfZjre+qsxVSkSBWDeUeBCAx+ys68pIDj4Ks4FFIp4e/EJ
+         h+29HGMkoN60nArVODe7tR82MRa/3xynbqA2OEyay4xYMVsr/WVf8i+opHErm/x2Ve5s
+         5aJVYFFiNZYiFbOCaKfTPDrj1QfA+tr4+S2r/S3B3SD+xOtBL8WLlZ1hnkEnazyYlHB6
+         rHPU9ch8Ec9RjpgBdQ3lN9pJ0cdLMfEEOrlq1s76JLnqGtTyN2c+Jh/BsdZM2mKCI6Xr
+         KI6KmB8WhZB7+6Uu90vdrx+NMy4sC+EbyxqTjDq0S4y75Cn6lKc9NP0b9wNrP5/VFLRv
+         bVkQ==
+X-Gm-Message-State: APjAAAV6COKj6NLHhODnvxQeOxKTcs5CoINdV83wKQno45B4DnQlaWnr
+        auVjru0VupKoyars4LLFR8Dlgmrj8npApSvu+VU=
+X-Google-Smtp-Source: APXvYqxI6uMKFy/wojvtvvvIYK/SGmxdGD9fTWk5+T6YyUI+oS3PdPTdR1rtH6s0f//6So6WdhsACfIUlxQ2vDXFdDk=
+X-Received: by 2002:aca:f144:: with SMTP id p65mr598979oih.47.1560368838921;
+ Wed, 12 Jun 2019 12:47:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <49b95f19-4da6-4491-6ed7-5238ecfc35a8@free.fr>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+References: <20190608180626.30589-1-martin.blumenstingl@googlemail.com>
+ <20190608180626.30589-5-martin.blumenstingl@googlemail.com> <20190611163318.tfb5c4jbekjybj76@pengutronix.de>
+In-Reply-To: <20190611163318.tfb5c4jbekjybj76@pengutronix.de>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Wed, 12 Jun 2019 21:47:07 +0200
+Message-ID: <CAFBinCA1SVXVPJdLQr4S99qEoowqXsNqP5tr64xn46xjaKLqeA@mail.gmail.com>
+Subject: Re: [PATCH v2 04/14] pwm: meson: change MISC_CLK_SEL_WIDTH to MISC_CLK_SEL_MASK
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-amlogic@lists.infradead.org, linux-pwm@vger.kernel.org,
+        thierry.reding@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed 12 Jun 08:52 PDT 2019, Marc Gonzalez wrote:
+Hi Uwe,
 
-> Build QCOM_A53PLL and QCOM_CLK_APCS_MSM8916 by default only when
-> we're building MSM_GCC_8916.
-> 
-> Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
+On Tue, Jun 11, 2019 at 6:33 PM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+[...]
+> > @@ -463,7 +463,7 @@ static int meson_pwm_init_channels(struct meson_pwm=
+ *meson,
+> >
+> >               channel->mux.reg =3D meson->base + REG_MISC_AB;
+> >               channel->mux.shift =3D mux_reg_shifts[i];
+> > -             channel->mux.mask =3D BIT(MISC_CLK_SEL_WIDTH) - 1;
+> > +             channel->mux.mask =3D MISC_CLK_SEL_MASK;
+> >               channel->mux.flags =3D 0;
+> >               channel->mux.lock =3D &meson->lock;
+> >               channel->mux.table =3D NULL;
+>
+> IMHO clk_mux is ugly here. It could easily just take
+>
+>         .mask =3D 3 << mux_reg_shifts[i],
+in most cases that would be even nicer to read because it could be expresse=
+d as:
+  .mask =3D GENMASK(5, 4)
 
-Not sure why these are default at all.
+so I like your idea in general
+though I think it should not block this patch
 
-But both drivers are used on platforms other than 8916 as well, so if
-anything a fix would be to rename the APCS_MSM8916 to something more
-generic (such as QCOM_CLK_APCS_GLOBAL) - but then the content should be
-updated and the APCS mailbox driver as well...
+[...]
+> Apart from that, I wonder if the pwm-meson driver should better use
+> clk_register_mux instead of open coding it. (Though there doesn't seem
+> to exists a devm_ variant of it.)
+I tried to use clk_register_mux in the past. it works but it's not as
+nice to read as the open-coded variant because it takes 10 parameters.
+I find it easier to read 13 separate lines compared to reading a
+function call with 10 parameters
 
-Regards,
-Bjorn
 
-> ---
->  drivers/clk/qcom/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index e1ff83cc361e..d5b065f64afc 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -21,7 +21,7 @@ if COMMON_CLK_QCOM
->  
->  config QCOM_A53PLL
->  	tristate "MSM8916 A53 PLL"
-> -	default ARCH_QCOM
-> +	default MSM_GCC_8916
->  	help
->  	  Support for the A53 PLL on MSM8916 devices. It provides
->  	  the CPU with frequencies above 1GHz.
-> @@ -31,7 +31,7 @@ config QCOM_A53PLL
->  config QCOM_CLK_APCS_MSM8916
->  	tristate "MSM8916 APCS Clock Controller"
->  	depends on QCOM_APCS_IPC || COMPILE_TEST
-> -	default ARCH_QCOM
-> +	default MSM_GCC_8916
->  	help
->  	  Support for the APCS Clock Controller on msm8916 devices. The
->  	  APCS is managing the mux and divider which feeds the CPUs.
-> -- 
-> 2.17.1
+Martin
