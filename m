@@ -2,73 +2,109 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD7C642B43
-	for <lists+linux-clk@lfdr.de>; Wed, 12 Jun 2019 17:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C168B42E91
+	for <lists+linux-clk@lfdr.de>; Wed, 12 Jun 2019 20:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437478AbfFLPwX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 12 Jun 2019 11:52:23 -0400
-Received: from ns.iliad.fr ([212.27.33.1]:50248 "EHLO ns.iliad.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726829AbfFLPwX (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 12 Jun 2019 11:52:23 -0400
-Received: from ns.iliad.fr (localhost [127.0.0.1])
-        by ns.iliad.fr (Postfix) with ESMTP id 9F7FA20BC5;
-        Wed, 12 Jun 2019 17:52:21 +0200 (CEST)
-Received: from [192.168.108.49] (freebox.vlq16.iliad.fr [213.36.7.13])
-        by ns.iliad.fr (Postfix) with ESMTP id 8A0D01FF7C;
-        Wed, 12 Jun 2019 17:52:21 +0200 (CEST)
-From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
-Subject: [PATCH v1] clk: qcom: msm8916: Don't build support by default
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-clk <linux-clk@vger.kernel.org>,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Message-ID: <49b95f19-4da6-4491-6ed7-5238ecfc35a8@free.fr>
-Date:   Wed, 12 Jun 2019 17:52:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726167AbfFLSZQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 12 Jun 2019 14:25:16 -0400
+Received: from mx2.suse.de ([195.135.220.15]:35240 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725497AbfFLSZQ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 12 Jun 2019 14:25:16 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id B9B2CAFFA;
+        Wed, 12 Jun 2019 18:25:14 +0000 (UTC)
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     stefan.wahren@i2se.com, linux-kernel@vger.kernel.org
+Cc:     mbrugger@suse.de, viresh.kumar@linaro.org, rjw@rjwysocki.net,
+        sboyd@kernel.org, eric@anholt.net, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, ptesarik@suse.com,
+        linux-rpi-kernel@lists.infradead.org, ssuloev@orpaltech.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        mturquette@baylibre.com, linux-pm@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Subject: [PATCH v4 0/7] cpufreq support for Raspberry Pi
+Date:   Wed, 12 Jun 2019 20:24:52 +0200
+Message-Id: <20190612182500.4097-1-nsaenzjulienne@suse.de>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Wed Jun 12 17:52:21 2019 +0200 (CEST)
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Build QCOM_A53PLL and QCOM_CLK_APCS_MSM8916 by default only when
-we're building MSM_GCC_8916.
+Hi all,
+this aims at adding cpufreq support to the Raspberry Pi family of
+boards.
 
-Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
+The series first factors out 'pllb' from clk-bcm2385 and creates a new
+clk driver that operates it over RPi's firmware interface[1]. We are
+forced to do so as the firmware 'owns' the pll and we're not allowed to
+change through the register interface directly as we might race with the
+over-temperature and under-voltage protections provided by the firmware.
+
+Next it creates a minimal cpufreq driver that populates the CPU's opp
+table, and registers cpufreq-dt. Which is needed as the firmware
+controls the max and min frequencies available.
+
+This was tested on a RPi3b+ and RPI2b, both using multi_v7_defconfig and
+arm64's defconfig.
+
+That's all,
+kind regards,
+Nicolas
+
+[1] https://github.com/raspberrypi/firmware/wiki/Mailbox-property-interface
+
 ---
- drivers/clk/qcom/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-index e1ff83cc361e..d5b065f64afc 100644
---- a/drivers/clk/qcom/Kconfig
-+++ b/drivers/clk/qcom/Kconfig
-@@ -21,7 +21,7 @@ if COMMON_CLK_QCOM
- 
- config QCOM_A53PLL
- 	tristate "MSM8916 A53 PLL"
--	default ARCH_QCOM
-+	default MSM_GCC_8916
- 	help
- 	  Support for the A53 PLL on MSM8916 devices. It provides
- 	  the CPU with frequencies above 1GHz.
-@@ -31,7 +31,7 @@ config QCOM_A53PLL
- config QCOM_CLK_APCS_MSM8916
- 	tristate "MSM8916 APCS Clock Controller"
- 	depends on QCOM_APCS_IPC || COMPILE_TEST
--	default ARCH_QCOM
-+	default MSM_GCC_8916
- 	help
- 	  Support for the APCS Clock Controller on msm8916 devices. The
- 	  APCS is managing the mux and divider which feeds the CPUs.
+Changes since v3:
+  - Fix sparse warnings in clk-raspberrypi.c
+  - Minor cleanups
+
+Changes since v2:
+  - Fixed configs to match Stefan's comments
+  - Round OPP frequencies
+  - Rebase onto linux-next
+  - Minor cleanups & checkpatch.pl
+
+Changes since v1:
+  - Enabled by default on the whole family of devices
+  - Added/Fixed module support
+  - clk device now registered by firmware driver
+  - raspberrypi-cpufreq device now registered by clk driver
+  - Reimplemented clk rounding unsing determine_rate()
+  - Enabled in configs for arm and arm64
+
+Changes since RFC:
+  - Move firmware clk device into own driver
+
+Nicolas Saenz Julienne (7):
+  clk: bcm2835: remove pllb
+  clk: bcm283x: add driver interfacing with Raspberry Pi's firmware
+  firmware: raspberrypi: register clk device
+  cpufreq: add driver for Raspberry Pi
+  clk: raspberrypi: register platform device for raspberrypi-cpufreq
+  ARM: defconfig: enable cpufreq driver for RPi
+  arm64: defconfig: enable cpufreq support for RPi3
+
+ arch/arm/configs/bcm2835_defconfig    |   9 +
+ arch/arm/configs/multi_v7_defconfig   |   2 +
+ arch/arm64/configs/defconfig          |   2 +
+ drivers/clk/bcm/Kconfig               |   7 +
+ drivers/clk/bcm/Makefile              |   1 +
+ drivers/clk/bcm/clk-bcm2835.c         |  28 +--
+ drivers/clk/bcm/clk-raspberrypi.c     | 315 ++++++++++++++++++++++++++
+ drivers/cpufreq/Kconfig.arm           |   8 +
+ drivers/cpufreq/Makefile              |   1 +
+ drivers/cpufreq/raspberrypi-cpufreq.c |  97 ++++++++
+ drivers/firmware/raspberrypi.c        |  10 +
+ 11 files changed, 456 insertions(+), 24 deletions(-)
+ create mode 100644 drivers/clk/bcm/clk-raspberrypi.c
+ create mode 100644 drivers/cpufreq/raspberrypi-cpufreq.c
+
 -- 
-2.17.1
+2.21.0
+
