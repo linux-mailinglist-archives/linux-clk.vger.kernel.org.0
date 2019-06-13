@@ -2,107 +2,118 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 543F543CDD
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Jun 2019 17:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68ECA43EDB
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Jun 2019 17:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728847AbfFMPiO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 13 Jun 2019 11:38:14 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:40841 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726424AbfFMPiN (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 13 Jun 2019 11:38:13 -0400
-Received: by mail-pl1-f196.google.com with SMTP id a93so8319718pla.7
-        for <linux-clk@vger.kernel.org>; Thu, 13 Jun 2019 08:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=NsCl+jcY3prb6sL8d4R7dMFJh2KQ7NpmK3YBOqHAoNM=;
-        b=Wsz0h2gxegM8cTTN62AKR3fOsoZrE9ufIqMw3Peexu+eaBFtEUgcgEcawREWwquMoa
-         A6o30acE27+qdgYeXPRKS+r+gY+CnxGpJTwfgeOFwDYU368HN5TEr+Km5RLfBSp4T1nf
-         S1CUhNQI3bT7N7ZUFzPs+nK+0f/nE70Rc/QucXUDAK6VM329pQHw/R2ZF1zfn05Kyhbz
-         AsmtdUR6uS9EJcgpqUSMqBHKximAI0zLDuPqCysCeUyY1x+vFd3q96o4A0qIolZeXMRx
-         Ii5F9g4hxHf3JJsOlS7BoT3H6A9lCE/eaZdFX2/1i0RysQWtdujBX/+yVYQKDjLMzoqe
-         Z4Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NsCl+jcY3prb6sL8d4R7dMFJh2KQ7NpmK3YBOqHAoNM=;
-        b=OXnaDni4SE8Aw5ojiFdutABcQMb/zWm5ZggqSdZbB7lUROcMwFJGy/S07oiUA2YvvS
-         k8wJqC9OM1WD1S0KBV4NeMwWZnpRDjULZuW0+cHdCTyJvl3WGO6DFqOs3HeYGJSwcvu3
-         Bdx/88FV1tdWMRMdAnTxLr5dGH8N7Hi5U6MRRI201nZF+Cr+sy/Ycmmrb8+Lk0YXlJNB
-         0G1sTWB0AKzWq2i10AFpFIJua+MGCzuSCmLI4dDQmPgda5MvOqIS+No1aDvtUDPRFh8U
-         ZxNymXj1y5Rflt9C32szSav70USo61rza6yGNy/oqO2rzoJ2L7uNq4OtPEPQD7XIOB3N
-         8IQw==
-X-Gm-Message-State: APjAAAX1DatWGxSwGFmNRBpZJHuyyW6TP8rCA/84rDHRgSoQMzznXm90
-        XNtCpQS+HvP0CN2iP6SGQ/E1yA==
-X-Google-Smtp-Source: APXvYqw2bFFTvTat1VVEhfhx9vDMP+Oe+aWwmaNVtjrNNXdKoUetz2qyIKgh+6lRBxS2DNVjMTo5xA==
-X-Received: by 2002:a17:902:9f93:: with SMTP id g19mr72995347plq.223.1560440293028;
-        Thu, 13 Jun 2019 08:38:13 -0700 (PDT)
-Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id f10sm44348pfd.151.2019.06.13.08.38.12
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 13 Jun 2019 08:38:12 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 08:38:10 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Marc Gonzalez <marc.w.gonzalez@free.fr>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>
-Subject: Re: [PATCH v2] clk: qcom: msm8916: Don't build by default
-Message-ID: <20190613153810.GG6792@builder>
-References: <d654907d-a3a2-a00f-d6f5-3a34ae25ebcf@free.fr>
+        id S1727668AbfFMPx2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 13 Jun 2019 11:53:28 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:9822 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728558AbfFMPx2 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 13 Jun 2019 11:53:28 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d0271760001>; Thu, 13 Jun 2019 08:53:26 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 13 Jun 2019 08:53:26 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 13 Jun 2019 08:53:26 -0700
+Received: from [10.21.132.148] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 13 Jun
+ 2019 15:53:24 +0000
+Subject: Re: [PATCH V2] clk: tegra210: Fix default rates for HDA clocks
+To:     Sasha Levin <sashal@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>
+CC:     <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <stable@vger.kernel.org>
+References: <1559743299-11576-1-git-send-email-jonathanh@nvidia.com>
+ <20190607002314.4AEF321019@mail.kernel.org>
+From:   Jon Hunter <jonathanh@nvidia.com>
+Message-ID: <d69e549b-1509-b249-0a4e-16417b2ce3e8@nvidia.com>
+Date:   Thu, 13 Jun 2019 16:53:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d654907d-a3a2-a00f-d6f5-3a34ae25ebcf@free.fr>
-User-Agent: Mutt/1.10.0 (2018-05-17)
+In-Reply-To: <20190607002314.4AEF321019@mail.kernel.org>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1560441206; bh=7kUpFFpRMuOMI9kyrgi28sxzCDqI4E0BfWOUhr+G4+s=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=TecXneTy+K46gqE29Dgo0E0GKMaJ8/SpshUuqqkUGKwcN3k9hqz0IXjbNhAs/Uwzd
+         lRIAIQ8FRuiRw2iph+6kVxK9I30rMCshr3HPGBrlATXBAzfNdCUDQO9VTpkJRSl6tR
+         jv8ZvBmgXBVlgBtOhxVa1nPp+E0xSBNRr331fdNiftCeI7eiUz3yre07RrLTsL1CKx
+         xP9mpf8ijZ6c5fP3prwCBs0EhzAEtPEQ4vlFSp1jTcc1gX8+wen+NDcSYPhRV/YLnH
+         yeYp9asmz5K160Vtzi36kNqqUiH+tFcfy3f59IWCRueKyW5I88mgcewUtHnM3S1ZZa
+         DsnIWsmC5oJ3w==
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu 13 Jun 08:09 PDT 2019, Marc Gonzalez wrote:
 
-> QCOM_A53PLL and QCOM_CLK_APCS_MSM8916 stand out as the only options
-> built by default. Let's bring them back in line with the rest.
+On 07/06/2019 01:23, Sasha Levin wrote:
+> Hi,
 > 
-> Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
-
-This looks reasonable
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-> ---
-> Changes from v1:
-> - Drop the default altogether, instead of changing it to 'default MSM_GCC_8916'
-> ---
->  drivers/clk/qcom/Kconfig | 2 --
->  1 file changed, 2 deletions(-)
+> [This is an automated email]
 > 
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index e1ff83cc361e..6461a1aa7325 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -21,7 +21,6 @@ if COMMON_CLK_QCOM
->  
->  config QCOM_A53PLL
->  	tristate "MSM8916 A53 PLL"
-> -	default ARCH_QCOM
->  	help
->  	  Support for the A53 PLL on MSM8916 devices. It provides
->  	  the CPU with frequencies above 1GHz.
-> @@ -31,7 +30,6 @@ config QCOM_A53PLL
->  config QCOM_CLK_APCS_MSM8916
->  	tristate "MSM8916 APCS Clock Controller"
->  	depends on QCOM_APCS_IPC || COMPILE_TEST
-> -	default ARCH_QCOM
->  	help
->  	  Support for the APCS Clock Controller on msm8916 devices. The
->  	  APCS is managing the mux and divider which feeds the CPUs.
-> -- 
-> 2.17.1
+> This commit has been processed because it contains a -stable tag.
+> The stable tag indicates that it's relevant for the following trees: all
+> 
+> The bot has tested the following trees: v5.1.7, v5.0.21, v4.19.48, v4.14.123, v4.9.180, v4.4.180.
+> 
+> v5.1.7: Build OK!
+> v5.0.21: Build OK!
+> v4.19.48: Failed to apply! Possible dependencies:
+>     845d782d9144 ("clk: tegra: Fix maximum audio sync clock for Tegra124/210")
+> 
+> v4.14.123: Failed to apply! Possible dependencies:
+>     26f8590c4a1f ("clk: tegra: Make vic03 a child of pll_c3")
+>     845d782d9144 ("clk: tegra: Fix maximum audio sync clock for Tegra124/210")
+>     c485ad63abb4 ("clk: tegra: Specify VDE clock rate")
+> 
+> v4.9.180: Failed to apply! Possible dependencies:
+>     24c3ebef1ab6 ("clk: tegra: Add aclk")
+>     26f8590c4a1f ("clk: tegra: Make vic03 a child of pll_c3")
+>     319af7975c9f ("clk: tegra: Define Tegra210 DMIC sync clocks")
+>     34ac2c278b30 ("clk: tegra: Fix ISP clock modelling")
+>     3843832fc8ca ("clk: tegra: Handle UTMIPLL IDDQ")
+>     845d782d9144 ("clk: tegra: Fix maximum audio sync clock for Tegra124/210")
+>     8dce89a1c2cf ("clk: tegra: Don't warn for PLL defaults unnecessarily")
+>     9326947f2215 ("clk: tegra: Fix pll_a1 iddq register, add pll_a1")
+>     bfa34832df1f ("clk: tegra: Add CEC clock")
+>     c485ad63abb4 ("clk: tegra: Specify VDE clock rate")
+>     e745f992cf4b ("clk: tegra: Rework pll_u")
+> 
+> v4.4.180: Failed to apply! Possible dependencies:
+>     26f8590c4a1f ("clk: tegra: Make vic03 a child of pll_c3")
+>     385f9adf625f ("clk: tegra: Constify pdiv-to-hw mappings")
+>     407254da291c ("clk: tegra: pll: Add logic for out-of-table rates for T210")
+>     6583a6309e83 ("clk: tegra: pll: Add tegra_pll_wait_for_lock to clk header")
+>     845d782d9144 ("clk: tegra: Fix maximum audio sync clock for Tegra124/210")
+>     86c679a52294 ("clk: tegra: pll: Fix _pll_ramp_calc_pll logic and _calc_dynamic_ramp_rate")
+>     8d99704fde54 ("clk: tegra: Format tables consistently")
+>     c485ad63abb4 ("clk: tegra: Specify VDE clock rate")
+>     c4947e364b50 ("clk: tegra: Fix 26 MHz oscillator frequency")
+>     d907f4b4a178 ("clk: tegra: pll: Add logic for handling SDM data")
+>     dd322f047d22 ("clk: tegra: pll: Add specialized logic for Tegra210")
+>     e52d7c04bb39 ("clk: tegra: Miscellaneous coding style cleanups")
+>     e745f992cf4b ("clk: tegra: Rework pll_u")
+> 
+> 
+> How should we proceed with this patch?
+
+I think that applying to 5.0 and 5.1 is fine for now.
+
+Thanks
+Jon
+
+-- 
+nvpublic
