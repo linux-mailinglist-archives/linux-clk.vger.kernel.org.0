@@ -2,128 +2,107 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D751C43CC6
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Jun 2019 17:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 543F543CDD
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Jun 2019 17:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728569AbfFMPhy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 13 Jun 2019 11:37:54 -0400
-Received: from esa5.microchip.iphmx.com ([216.71.150.166]:62623 "EHLO
-        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727135AbfFMPhu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 13 Jun 2019 11:37:50 -0400
-Received-SPF: Pass (esa5.microchip.iphmx.com: domain of
-  Claudiu.Beznea@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa5.microchip.iphmx.com;
-  envelope-from="Claudiu.Beznea@microchip.com";
-  x-sender="Claudiu.Beznea@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
-  a:mx2.microchip.iphmx.com include:servers.mcsv.net
-  include:mktomail.com include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa5.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa5.microchip.iphmx.com;
-  envelope-from="Claudiu.Beznea@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa5.microchip.iphmx.com; spf=Pass smtp.mailfrom=Claudiu.Beznea@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
-X-IronPort-AV: E=Sophos;i="5.63,369,1557212400"; 
-   d="scan'208";a="35722873"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Jun 2019 08:37:49 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.87.71) by
- chn-vm-ex01.mchp-main.com (10.10.87.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 13 Jun 2019 08:37:31 -0700
-Received: from NAM03-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5 via Frontend
- Transport; Thu, 13 Jun 2019 08:37:31 -0700
+        id S1728847AbfFMPiO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 13 Jun 2019 11:38:14 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:40841 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726424AbfFMPiN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 13 Jun 2019 11:38:13 -0400
+Received: by mail-pl1-f196.google.com with SMTP id a93so8319718pla.7
+        for <linux-clk@vger.kernel.org>; Thu, 13 Jun 2019 08:38:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector1-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UOZ9+vPbOcFNoSthQyXk2v4olF8WrSzzh6Nv3CHKd2M=;
- b=kbfqa1M9ikRf5H7Hn0J/uT/zV5mHc+bsWbyv+cNfmrZDwnBDndNbPEzaneClhRByaNS97COKyBtRniYAO/i+IFsMjLyU1W4J6tIe99WTnYOVJDbLrG7VfTCBy3n5T982gv+56lu6PwpdWwS0LVQqyP4rv5iO2S3JfplaM0UGn38=
-Received: from MWHPR11MB1549.namprd11.prod.outlook.com (10.172.54.17) by
- MWHPR11MB1343.namprd11.prod.outlook.com (10.169.232.18) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1987.10; Thu, 13 Jun 2019 15:37:31 +0000
-Received: from MWHPR11MB1549.namprd11.prod.outlook.com
- ([fe80::316b:7774:8db6:30ec]) by MWHPR11MB1549.namprd11.prod.outlook.com
- ([fe80::316b:7774:8db6:30ec%7]) with mapi id 15.20.1987.012; Thu, 13 Jun 2019
- 15:37:31 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>
-CC:     <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <claudiu.beznea@gmail.com>,
-        <Claudiu.Beznea@microchip.com>
-Subject: [PATCH 7/7] clk: at91: sckc: use dedicated functions to unregister
- clock
-Thread-Topic: [PATCH 7/7] clk: at91: sckc: use dedicated functions to
- unregister clock
-Thread-Index: AQHVIf3qCcDPnGZNZEKT8OcqVXuveQ==
-Date:   Thu, 13 Jun 2019 15:37:31 +0000
-Message-ID: <1560440205-4604-8-git-send-email-claudiu.beznea@microchip.com>
-References: <1560440205-4604-1-git-send-email-claudiu.beznea@microchip.com>
-In-Reply-To: <1560440205-4604-1-git-send-email-claudiu.beznea@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: VI1PR09CA0174.eurprd09.prod.outlook.com
- (2603:10a6:800:120::28) To MWHPR11MB1549.namprd11.prod.outlook.com
- (2603:10b6:301:c::17)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: git-send-email 2.7.4
-x-originating-ip: [94.177.32.154]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 09a276d2-3e5b-4400-f9b6-08d6f0150a85
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR11MB1343;
-x-ms-traffictypediagnostic: MWHPR11MB1343:
-x-microsoft-antispam-prvs: <MWHPR11MB1343A06916FE767F83D045B187EF0@MWHPR11MB1343.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1227;
-x-forefront-prvs: 0067A8BA2A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(979002)(39860400002)(396003)(366004)(376002)(136003)(346002)(189003)(199004)(81156014)(14454004)(486006)(102836004)(50226002)(8936002)(81166006)(99286004)(110136005)(71190400001)(71200400001)(54906003)(53936002)(6436002)(316002)(72206003)(68736007)(8676002)(52116002)(478600001)(2501003)(446003)(25786009)(476003)(386003)(5660300002)(2616005)(86362001)(6506007)(36756003)(11346002)(76176011)(64756008)(6512007)(4326008)(26005)(66476007)(66556008)(2906002)(4744005)(6116002)(73956011)(66946007)(66446008)(3846002)(107886003)(7736002)(256004)(6486002)(305945005)(186003)(66066001)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1101;SCL:1;SRVR:MWHPR11MB1343;H:MWHPR11MB1549.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: mcUM4w9TL+JPNsvlXd5BVcemipc/pxPpf01hPhHy+z0Ev/Q4Pqhc+YXBN6+J0Wr5qBZTaLCi3ipEQmDRJGbE6VbOhWAIeV/AdLKf7ZldzoWBM4MP8yXvzAwVZSSECFPQTJ/WQTdJIeGWklAB7/1pzewkCRUXE3YNPN85yG2IVr5Nd7agX/z+TiDvqsDmBnzekGJGwjLaBE46giTnKNv5vyVtGe6hlWxHFiX05tr400FKX3Fu4vkmQ3F+HT+wpOX0TUGEjLJvOWViObY5e/UllaP0PWlI0nAG33DdTjR9wjnRDRx1K4X6iilPxywaI/tITc9TOipmw6NLEK0x2FGn1OfQ7XGB0WEVdDAB2Ail+MBXxBWIkGOgPU4h2sAl5uRn8DGe7zenZEc/aPC5/hfrgKLzGqr3r0B8txDgio3Oeio=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=NsCl+jcY3prb6sL8d4R7dMFJh2KQ7NpmK3YBOqHAoNM=;
+        b=Wsz0h2gxegM8cTTN62AKR3fOsoZrE9ufIqMw3Peexu+eaBFtEUgcgEcawREWwquMoa
+         A6o30acE27+qdgYeXPRKS+r+gY+CnxGpJTwfgeOFwDYU368HN5TEr+Km5RLfBSp4T1nf
+         S1CUhNQI3bT7N7ZUFzPs+nK+0f/nE70Rc/QucXUDAK6VM329pQHw/R2ZF1zfn05Kyhbz
+         AsmtdUR6uS9EJcgpqUSMqBHKximAI0zLDuPqCysCeUyY1x+vFd3q96o4A0qIolZeXMRx
+         Ii5F9g4hxHf3JJsOlS7BoT3H6A9lCE/eaZdFX2/1i0RysQWtdujBX/+yVYQKDjLMzoqe
+         Z4Ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=NsCl+jcY3prb6sL8d4R7dMFJh2KQ7NpmK3YBOqHAoNM=;
+        b=OXnaDni4SE8Aw5ojiFdutABcQMb/zWm5ZggqSdZbB7lUROcMwFJGy/S07oiUA2YvvS
+         k8wJqC9OM1WD1S0KBV4NeMwWZnpRDjULZuW0+cHdCTyJvl3WGO6DFqOs3HeYGJSwcvu3
+         Bdx/88FV1tdWMRMdAnTxLr5dGH8N7Hi5U6MRRI201nZF+Cr+sy/Ycmmrb8+Lk0YXlJNB
+         0G1sTWB0AKzWq2i10AFpFIJua+MGCzuSCmLI4dDQmPgda5MvOqIS+No1aDvtUDPRFh8U
+         ZxNymXj1y5Rflt9C32szSav70USo61rza6yGNy/oqO2rzoJ2L7uNq4OtPEPQD7XIOB3N
+         8IQw==
+X-Gm-Message-State: APjAAAX1DatWGxSwGFmNRBpZJHuyyW6TP8rCA/84rDHRgSoQMzznXm90
+        XNtCpQS+HvP0CN2iP6SGQ/E1yA==
+X-Google-Smtp-Source: APXvYqw2bFFTvTat1VVEhfhx9vDMP+Oe+aWwmaNVtjrNNXdKoUetz2qyIKgh+6lRBxS2DNVjMTo5xA==
+X-Received: by 2002:a17:902:9f93:: with SMTP id g19mr72995347plq.223.1560440293028;
+        Thu, 13 Jun 2019 08:38:13 -0700 (PDT)
+Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id f10sm44348pfd.151.2019.06.13.08.38.12
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 13 Jun 2019 08:38:12 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 08:38:10 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Marc Gonzalez <marc.w.gonzalez@free.fr>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>
+Subject: Re: [PATCH v2] clk: qcom: msm8916: Don't build by default
+Message-ID: <20190613153810.GG6792@builder>
+References: <d654907d-a3a2-a00f-d6f5-3a34ae25ebcf@free.fr>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09a276d2-3e5b-4400-f9b6-08d6f0150a85
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jun 2019 15:37:31.4883
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: claudiu.beznea@microchip.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR11MB1343
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d654907d-a3a2-a00f-d6f5-3a34ae25ebcf@free.fr>
+User-Agent: Mutt/1.10.0 (2018-05-17)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-RnJvbTogQ2xhdWRpdSBCZXpuZWEgPGNsYXVkaXUuYmV6bmVhQG1pY3JvY2hpcC5jb20+DQoNClVz
-ZSBhdDkxIHNwZWNpZmljIGZ1bmN0aW9ucyB0byBmcmVlIGFsbCByZXNvdXJjZXMgaW4gY2FzZSBv
-ZiBlcnJvci4NCg0KU2lnbmVkLW9mZi1ieTogQ2xhdWRpdSBCZXpuZWEgPGNsYXVkaXUuYmV6bmVh
-QG1pY3JvY2hpcC5jb20+DQotLS0NCiBkcml2ZXJzL2Nsay9hdDkxL3Nja2MuYyB8IDQgKystLQ0K
-IDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQoNCmRpZmYg
-LS1naXQgYS9kcml2ZXJzL2Nsay9hdDkxL3Nja2MuYyBiL2RyaXZlcnMvY2xrL2F0OTEvc2NrYy5j
-DQppbmRleCBmN2FkM2U5NDE0ZGMuLjQyNTAyODMwYTU2YSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMv
-Y2xrL2F0OTEvc2NrYy5jDQorKysgYi9kcml2ZXJzL2Nsay9hdDkxL3Nja2MuYw0KQEAgLTUxNCwx
-MyArNTE0LDEzIEBAIHN0YXRpYyB2b2lkIF9faW5pdCBvZl9zYW05eDYwX3Nja2Nfc2V0dXAoc3Ry
-dWN0IGRldmljZV9ub2RlICpucCkNCiAJcmV0dXJuOw0KIA0KIHVucmVnaXN0ZXJfdGRfc2xjazoN
-Ci0JY2xrX2h3X3VucmVnaXN0ZXIoY2xrX2RhdGEtPmh3c1sxXSk7DQorCWF0OTFfY2xrX3VucmVn
-aXN0ZXJfc2FtOXg1X3Nsb3coY2xrX2RhdGEtPmh3c1sxXSk7DQogdW5yZWdpc3Rlcl9tZF9zbGNr
-Og0KIAljbGtfaHdfdW5yZWdpc3RlcihjbGtfZGF0YS0+aHdzWzBdKTsNCiBjbGtfZGF0YV9mcmVl
-Og0KIAlrZnJlZShjbGtfZGF0YSk7DQogdW5yZWdpc3Rlcl9zbG93X29zYzoNCi0JY2xrX2h3X3Vu
-cmVnaXN0ZXIoc2xvd19vc2MpOw0KKwlhdDkxX2Nsa191bnJlZ2lzdGVyX3Nsb3dfb3NjKHNsb3df
-b3NjKTsNCiB1bnJlZ2lzdGVyX3Nsb3dfcmM6DQogCWNsa19od191bnJlZ2lzdGVyKHNsb3dfcmMp
-Ow0KIH0NCi0tIA0KMi43LjQNCg0K
+On Thu 13 Jun 08:09 PDT 2019, Marc Gonzalez wrote:
+
+> QCOM_A53PLL and QCOM_CLK_APCS_MSM8916 stand out as the only options
+> built by default. Let's bring them back in line with the rest.
+> 
+> Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
+
+This looks reasonable
+
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+> ---
+> Changes from v1:
+> - Drop the default altogether, instead of changing it to 'default MSM_GCC_8916'
+> ---
+>  drivers/clk/qcom/Kconfig | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index e1ff83cc361e..6461a1aa7325 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -21,7 +21,6 @@ if COMMON_CLK_QCOM
+>  
+>  config QCOM_A53PLL
+>  	tristate "MSM8916 A53 PLL"
+> -	default ARCH_QCOM
+>  	help
+>  	  Support for the A53 PLL on MSM8916 devices. It provides
+>  	  the CPU with frequencies above 1GHz.
+> @@ -31,7 +30,6 @@ config QCOM_A53PLL
+>  config QCOM_CLK_APCS_MSM8916
+>  	tristate "MSM8916 APCS Clock Controller"
+>  	depends on QCOM_APCS_IPC || COMPILE_TEST
+> -	default ARCH_QCOM
+>  	help
+>  	  Support for the APCS Clock Controller on msm8916 devices. The
+>  	  APCS is managing the mux and divider which feeds the CPUs.
+> -- 
+> 2.17.1
