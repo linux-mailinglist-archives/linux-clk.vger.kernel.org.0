@@ -2,71 +2,273 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6CA43DA0
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Jun 2019 17:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6838D43BE0
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Jun 2019 17:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728180AbfFMPnr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 13 Jun 2019 11:43:47 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:40438 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731832AbfFMJp5 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 13 Jun 2019 05:45:57 -0400
-Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id 6274225B7FA;
-        Thu, 13 Jun 2019 19:45:55 +1000 (AEST)
-Received: by reginn.horms.nl (Postfix, from userid 7100)
-        id 5CE8B940483; Thu, 13 Jun 2019 11:45:53 +0200 (CEST)
-Date:   Thu, 13 Jun 2019 11:45:53 +0200
-From:   Simon Horman <horms@verge.net.au>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-i2c@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
+        id S1727527AbfFMPcT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 13 Jun 2019 11:32:19 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:6058 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728488AbfFMKtw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 13 Jun 2019 06:49:52 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d022a4c0000>; Thu, 13 Jun 2019 03:49:49 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Thu, 13 Jun 2019 03:49:49 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Thu, 13 Jun 2019 03:49:49 -0700
+Received: from tbergstrom-lnx.Nvidia.com (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 13 Jun
+ 2019 10:49:48 +0000
+Received: by tbergstrom-lnx.Nvidia.com (Postfix, from userid 1000)
+        id D21EA428B8; Thu, 13 Jun 2019 13:49:45 +0300 (EEST)
+Date:   Thu, 13 Jun 2019 13:49:45 +0300
+From:   Peter De Schrijver <pdeschrijver@nvidia.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/34] clk: clk-cdce706: simplify getting the adapter of
- a client
-Message-ID: <20190613094553.k7shy2w32cdkkfrb@verge.net.au>
-References: <20190608105619.593-1-wsa+renesas@sang-engineering.com>
- <20190608105619.593-2-wsa+renesas@sang-engineering.com>
+        Joseph Lo <josephl@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Prashant Gaikwad" <pgaikwad@nvidia.com>,
+        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/8] clk: tegra20/30: Add custom EMC clock
+ implementation
+Message-ID: <20190613104945.GJ29894@pdeschrijver-desktop.Nvidia.com>
+References: <20190524172353.29087-1-digetx@gmail.com>
+ <20190524172353.29087-2-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20190608105619.593-2-wsa+renesas@sang-engineering.com>
-Organisation: Horms Solutions BV
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190524172353.29087-2-digetx@gmail.com>
+X-NVConfidentiality: public
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL108.nvidia.com (172.18.146.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1560422990; bh=Svkffrzg9Qo8t+19JaPU6eSSVSlhSnK0UJSc2PwhXqY=;
+        h=X-PGP-Universal:Date:From:To:CC:Subject:Message-ID:References:
+         MIME-Version:Content-Type:Content-Disposition:In-Reply-To:
+         X-NVConfidentiality:User-Agent:X-Originating-IP:X-ClientProxiedBy;
+        b=UKErXfoZX8fBeo8pJphs+pXKPN/qUdnPdhh3imY7LG5sN8OAz+LuncRLyMAgLSEdt
+         wXQIkM6Juzou5eZVAnilQQl2n9g5wqfZSIVDQdCGi4j14pK3cOGRaW1tdrQyXQP75l
+         s+hDhqTcpPsOTx/5fBqSWlc4eJaXuT4sOb6FgGWXzMfq3KJJYuwSZX7vMbr3BM7Ce0
+         Pt5kOtXEh5OyxULRG7WwJE2owokAKwPX3txvXSjQUJZnsZbVMNtrHLh6gcCFZeP8Nf
+         CXVAc4Ok5n/txeHnjhD/4sskTMEcISpcQeGRM/FRjq13Ipx3VSqlVcQ05w3BZKoGKo
+         1LsvbSMAeamCA==
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sat, Jun 08, 2019 at 12:55:40PM +0200, Wolfram Sang wrote:
-> We have a dedicated pointer for that, so use it. Much easier to read and
-> less computation involved.
+On Fri, May 24, 2019 at 08:23:46PM +0300, Dmitry Osipenko wrote:
+> A proper External Memory Controller clock rounding and parent selection
+> functionality is required by the EMC drivers. It is not available using
+> the generic clock implementation, hence add a custom one. The clock rate
+> rounding shall be done by the EMC drivers because they have information
+> about available memory timings, so the drivers will have to register a
+> callback that will round the requested rate. EMC clock users won't be able
+> to request EMC clock by getting -EPROBE_DEFER until EMC driver is probed
+> and the callback is set up. The functionality is somewhat similar to the
+> clk-emc.c which serves Tegra124+ SoC's, the later HW generations support
+> more parent clock sources and the HW configuration and integration with
+> the EMC drivers differs a tad from the older gens, hence it's not really
+> worth to try to squash everything into a single source file.
 > 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Reviewed-by: Simon Horman <horms+renesas@verge.net.au>
-
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
+>  drivers/clk/tegra/Makefile          |   2 +
+>  drivers/clk/tegra/clk-tegra20-emc.c | 299 ++++++++++++++++++++++++++++
+>  drivers/clk/tegra/clk-tegra20.c     |  55 ++---
+>  drivers/clk/tegra/clk-tegra30.c     |  38 +++-
+>  drivers/clk/tegra/clk.h             |   6 +
+>  include/linux/clk/tegra.h           |  14 ++
+>  6 files changed, 362 insertions(+), 52 deletions(-)
+>  create mode 100644 drivers/clk/tegra/clk-tegra20-emc.c
 > 
-> Please apply to your subsystem tree.
-> 
->  drivers/clk/clk-cdce706.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/clk-cdce706.c b/drivers/clk/clk-cdce706.c
-> index f21d9092564f..476d29c013e5 100644
-> --- a/drivers/clk/clk-cdce706.c
-> +++ b/drivers/clk/clk-cdce706.c
-> @@ -633,7 +633,7 @@ of_clk_cdce_get(struct of_phandle_args *clkspec, void *data)
->  static int cdce706_probe(struct i2c_client *client,
->  			 const struct i2c_device_id *id)
->  {
-> -	struct i2c_adapter *adapter = to_i2c_adapter(client->dev.parent);
-> +	struct i2c_adapter *adapter = client->adapter;
->  	struct cdce706_dev_data *cdce;
->  	int ret;
->  
-> -- 
-> 2.19.1
-> 
+> diff --git a/drivers/clk/tegra/Makefile b/drivers/clk/tegra/Makefile
+> index 4812e45c2214..df966ca06788 100644
+> --- a/drivers/clk/tegra/Makefile
+> +++ b/drivers/clk/tegra/Makefile
+> @@ -17,7 +17,9 @@ obj-y					+= clk-tegra-fixed.o
+>  obj-y					+= clk-tegra-super-gen4.o
+>  obj-$(CONFIG_TEGRA_CLK_EMC)		+= clk-emc.o
+>  obj-$(CONFIG_ARCH_TEGRA_2x_SOC)         += clk-tegra20.o
+> +obj-$(CONFIG_ARCH_TEGRA_2x_SOC)		+= clk-tegra20-emc.o
+>  obj-$(CONFIG_ARCH_TEGRA_3x_SOC)         += clk-tegra30.o
+> +obj-$(CONFIG_ARCH_TEGRA_3x_SOC)		+= clk-tegra20-emc.o
+>  obj-$(CONFIG_ARCH_TEGRA_114_SOC)	+= clk-tegra114.o
+>  obj-$(CONFIG_ARCH_TEGRA_124_SOC)	+= clk-tegra124.o
+>  obj-$(CONFIG_TEGRA_CLK_DFLL)		+= clk-tegra124-dfll-fcpu.o
+> diff --git a/drivers/clk/tegra/clk-tegra20-emc.c b/drivers/clk/tegra/clk-tegra20-emc.c
+> new file mode 100644
+> index 000000000000..d971b5425ce3
+> --- /dev/null
+> +++ b/drivers/clk/tegra/clk-tegra20-emc.c
+> @@ -0,0 +1,299 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/bits.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/clk/tegra.h>
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/slab.h>
+> +
+> +#include "clk.h"
+> +
+> +#define CLK_SOURCE_EMC_2X_CLK_DIVISOR_MASK	GENMASK(7, 0)
+> +#define CLK_SOURCE_EMC_2X_CLK_SRC_MASK		GENMASK(31, 30)
+> +#define CLK_SOURCE_EMC_2X_CLK_SRC_SHIFT		30
+> +
+> +#define MC_EMC_SAME_FREQ	BIT(16)
+> +#define USE_PLLM_UD		BIT(29)
+> +
+> +#define EMC_SRC_PLL_M		0
+> +#define EMC_SRC_PLL_C		1
+> +#define EMC_SRC_PLL_P		2
+> +#define EMC_SRC_CLK_M		3
+> +
+> +static const char * const emc_parent_clk_names[] = {
+> +	"pll_m", "pll_c", "pll_p", "clk_m",
+> +};
+> +
+> +struct tegra_clk_emc {
+> +	struct clk_hw hw;
+> +	void __iomem *reg;
+> +	bool mc_same_freq;
+> +	bool want_low_jitter;
+> +
+> +	tegra20_clk_emc_round_cb *round_cb;
+> +	void *cb_arg;
+> +};
+> +
+> +static inline struct tegra_clk_emc *to_tegra_clk_emc(struct clk_hw *hw)
+> +{
+> +	return container_of(hw, struct tegra_clk_emc, hw);
+> +}
+> +
+> +static unsigned long emc_recalc_rate(struct clk_hw *hw,
+> +				     unsigned long parent_rate)
+> +{
+> +	struct tegra_clk_emc *emc = to_tegra_clk_emc(hw);
+> +	u32 val, div;
+> +
+> +	val = readl_relaxed(emc->reg);
+> +	div = val & CLK_SOURCE_EMC_2X_CLK_DIVISOR_MASK;
+> +
+> +	return DIV_ROUND_UP(parent_rate * 2, div + 2);
+> +}
+> +
+> +static u8 emc_get_parent(struct clk_hw *hw)
+> +{
+> +	struct tegra_clk_emc *emc = to_tegra_clk_emc(hw);
+> +
+> +	return readl_relaxed(emc->reg) >> CLK_SOURCE_EMC_2X_CLK_SRC_SHIFT;
+> +}
+> +
+> +static int emc_set_parent(struct clk_hw *hw, u8 index)
+> +{
+> +	struct tegra_clk_emc *emc = to_tegra_clk_emc(hw);
+> +	u32 val, div;
+> +
+> +	val = readl_relaxed(emc->reg);
+> +	val &= ~CLK_SOURCE_EMC_2X_CLK_SRC_MASK;
+> +	val |= index << CLK_SOURCE_EMC_2X_CLK_SRC_SHIFT;
+> +
+> +	div = val & CLK_SOURCE_EMC_2X_CLK_DIVISOR_MASK;
+> +
+> +	if (index == EMC_SRC_PLL_M && div == 0 && emc->want_low_jitter)
+> +		val |= USE_PLLM_UD;
+> +	else
+> +		val &= ~USE_PLLM_UD;
+> +
+> +	if (emc->mc_same_freq)
+> +		val |= MC_EMC_SAME_FREQ;
+> +	else
+> +		val &= ~MC_EMC_SAME_FREQ;
+> +
+> +	writel_relaxed(val, emc->reg);
+> +
+
+I think technically you need a fence_udelay(1) here, but in practice
+this is probably not needed because you will poll some EMC register for
+the frequency completion anyway. Maybe add a comment about this?
+
+> +	return 0;
+> +}
+> +
+> +static int emc_set_rate(struct clk_hw *hw, unsigned long rate,
+> +			unsigned long parent_rate)
+> +{
+> +	struct tegra_clk_emc *emc = to_tegra_clk_emc(hw);
+> +	unsigned int index;
+> +	u32 val, div;
+> +
+> +	div = div_frac_get(rate, parent_rate, 8, 1, 0);
+> +
+> +	val = readl_relaxed(emc->reg);
+> +	val &= ~CLK_SOURCE_EMC_2X_CLK_DIVISOR_MASK;
+> +	val |= div;
+> +
+> +	index = val >> CLK_SOURCE_EMC_2X_CLK_SRC_SHIFT;
+> +
+> +	if (index == EMC_SRC_PLL_M && div == 0 && emc->want_low_jitter)
+> +		val |= USE_PLLM_UD;
+> +	else
+> +		val &= ~USE_PLLM_UD;
+> +
+> +	if (emc->mc_same_freq)
+> +		val |= MC_EMC_SAME_FREQ;
+> +	else
+> +		val &= ~MC_EMC_SAME_FREQ;
+> +
+> +	writel_relaxed(val, emc->reg);
+> +
+
+Same here.
+
+> +	return 0;
+> +}
+> +
+> +static int emc_set_rate_and_parent(struct clk_hw *hw,
+> +				   unsigned long rate,
+> +				   unsigned long parent_rate,
+> +				   u8 index)
+> +{
+> +	struct tegra_clk_emc *emc = to_tegra_clk_emc(hw);
+> +	u32 val, div;
+> +
+> +	div = div_frac_get(rate, parent_rate, 8, 1, 0);
+> +
+> +	val = readl_relaxed(emc->reg);
+> +
+> +	val &= ~CLK_SOURCE_EMC_2X_CLK_SRC_MASK;
+> +	val |= index << CLK_SOURCE_EMC_2X_CLK_SRC_SHIFT;
+> +
+> +	val &= ~CLK_SOURCE_EMC_2X_CLK_DIVISOR_MASK;
+> +	val |= div;
+> +
+> +	if (index == EMC_SRC_PLL_M && div == 0 && emc->want_low_jitter)
+> +		val |= USE_PLLM_UD;
+> +	else
+> +		val &= ~USE_PLLM_UD;
+> +
+> +	if (emc->mc_same_freq)
+> +		val |= MC_EMC_SAME_FREQ;
+> +	else
+> +		val &= ~MC_EMC_SAME_FREQ;
+> +
+> +	writel_relaxed(val, emc->reg);
+> +
+
+And here.
+
+> +	return 0;
+> +}
+
+Peter.
