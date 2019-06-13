@@ -2,53 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B7744869
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Jun 2019 19:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78349449CA
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Jun 2019 19:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729769AbfFMRDl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 13 Jun 2019 13:03:41 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:33859 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389334AbfFMRDj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 13 Jun 2019 13:03:39 -0400
-Received: by mail-qt1-f193.google.com with SMTP id m29so23405950qtu.1
-        for <linux-clk@vger.kernel.org>; Thu, 13 Jun 2019 10:03:38 -0700 (PDT)
+        id S1726965AbfFMRly (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 13 Jun 2019 13:41:54 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:39806 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725616AbfFMRly (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 13 Jun 2019 13:41:54 -0400
+Received: by mail-qk1-f194.google.com with SMTP id i125so13316760qkd.6
+        for <linux-clk@vger.kernel.org>; Thu, 13 Jun 2019 10:41:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:from:date:message-id:subject:to:cc;
-        bh=+fM9s+ZRu6a19ZVI0lc0MDu5AlmUc3QAgWfYbHMegA8=;
-        b=qEi0As9FjslOUPyhy3Net8r6QbVgxoEl6gBQAvYjq4/nRnz7G3BE7He7EpNC/OXmBy
-         q55XHN5KFNJpcOA/O+b9YOeBjoC219W355lHTG2oxWTzi/fcPQ6E9vhYB+iC8NgRq4vm
-         8sURicPrA7zOoCFDeJl/egMR5HLgU9Sb2DueqkXvjKTLguUlVuG7RRu7zsTBhnkYIvgt
-         fIPop3Ujnh2MeBfj1OeDEtCATPphFRkp3elQDHPRJ0z3FhRyAgHQPoweAVLo0ieppyRD
-         X+OWwLS7qqUfYtLrO02SWcySfoUVqHpYZXmMiw2l0gDYKfHOvOm6EfIx7oInZIi+Guh/
-         +X4A==
+        bh=znrYd7kPsXyXAwfYH7xJxUXj1XKDDXu18nA2wghybU4=;
+        b=uqOVke8S1gDDw3ySGtzk/HZT47/YVoOjoN4s0HDDuOIOSuaHS9k96Z1JDh/vnC0E6r
+         rbRSjY6vEttsVgnNnU4X9PI4saELaVwM8sgvPpU4uALHGymqT537Vl+AthqX/r10fFTN
+         gCv8hKu+2ygLzEclE3xTJ18ejBNbQITsR2YuW4fW/dXtXWd0kIxah3rTz9vnHB0BgqoB
+         HLJNQ2segz6drY+Exhq3u76N3T+zwInfYL7Y2D2B73ZLb7MlCgd8tOuk5/nUPwRbuOYg
+         85GF3H2innfQJbamjaqSD0OirVIIVh18L8uy7rXWdGz+gcDUY5XXoGQ4BdWLOQ4w7Cy8
+         +NaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=+fM9s+ZRu6a19ZVI0lc0MDu5AlmUc3QAgWfYbHMegA8=;
-        b=lhbxJbx/mHjcpr2g0kzC/2ThkUvopQ+GR+00My1NFsZytV2CXVpJ0Z6thzFGSFQVS9
-         K2/SD/Flg/j9omKc+OHKrz6ZrSgq7VxzhvGFhDjAbJJXyR0yAq+r3FrbywF5f3X9Mm5c
-         dL2qbgSqkGlPlZdDjgMg0emSRcX3V5L4eLHTRcV8JWeWBHMQghdWmysLyG7dKBDGXG1J
-         sKgxyPWv0qhMDEnfg6e9Nrg635nl81a+U0dCYj3ggTKdVcSdEp7XCagIu6CI4RNAWdQA
-         Ba7pdSEq6w16ZklGG4pudoNqp3GoQ7Hi9BAphPr4g9wGlhbFs7zovMbMYA5GZi4oFS2I
-         6XFQ==
-X-Gm-Message-State: APjAAAW6xIWwM6DlQj+lB8WItphiWbWv+HuOFRbW0NvRQUNG8QvBdtgH
-        8DWh5p1tafOn7BcoYhTbyocsgNrYIJ8AD0ynDT2f1Q==
-X-Google-Smtp-Source: APXvYqxiy5kouzZBRbpjgIdOzVKd074tyypO+LFeT69dim/yHszXr0rChCoWGVx/P0+4hEwdMRtozIq6/hSSH8DadPI=
-X-Received: by 2002:a0c:ba21:: with SMTP id w33mr4559727qvf.122.1560445418047;
- Thu, 13 Jun 2019 10:03:38 -0700 (PDT)
+        bh=znrYd7kPsXyXAwfYH7xJxUXj1XKDDXu18nA2wghybU4=;
+        b=ai4lmlC6+WjitUw5Mnbp4i9T6pqBkUeyHhoVjXqqMSijUNRSl6F1jCT6cC9a4qEujK
+         LccPRgkD/QL1SUo+qZvjIzWdpDOiZcShEJ00Y6G6tmPobkqtIvXa2QzqpurmHGn2ql9D
+         ImY6oPJVdkqMR5YIZq2sXxsVCn7Q/BM244OxODMXgyMaUFrcI2pMmjABg7OIGc4raNTd
+         SGOa8RDOPRy/eYyZPC7eUJZNSNIdX6Z5wbVGWpgK8nL8MIwEIQKJpMmGQtF7PE6a4CQ5
+         hqf0MwSpC51vqPvRpwHLYARV3zqWBlU6VKjUe9HAH4pj4AooTty55zfqgJe7KsiHExvR
+         T06g==
+X-Gm-Message-State: APjAAAVRsjkqHdcWjNJzfjA+MGAHteI6I3xDGwsOor1uIDVlf6UBwGHq
+        Q2jPXGB9dfsi/ocSJ/bAfuwVdBkPYDmljSL2Il+s9A==
+X-Google-Smtp-Source: APXvYqy2LZudB8Tf21SWqHPQSyT/yXKbAb3NdC/zLYsVWNbgvN7vIx0nABVWEKQPSl0WcxnjiteVbF1pdfvZ+1ZubRc=
+X-Received: by 2002:a37:634f:: with SMTP id x76mr70478855qkb.205.1560447713808;
+ Thu, 13 Jun 2019 10:41:53 -0700 (PDT)
 MIME-Version: 1.0
 From:   Nathan Huckleberry <nhuck@google.com>
-Date:   Thu, 13 Jun 2019 10:03:27 -0700
-Message-ID: <CAJkfWY4aYAwUWMGu02=0ibae05Qo3_Yqy-Q0eFw0k=2torhEHQ@mail.gmail.com>
-Subject: Cleanup of -Wunused-const-variable in drivers/clk/rockchip/clk-rv1108.c
-To:     shawn.lin@rock-chips.com,
+Date:   Thu, 13 Jun 2019 10:41:43 -0700
+Message-ID: <CAJkfWY7qEX3AX3BMqYUranCeQ1j-MvQiZtqesBfwOOW-ZpqkcQ@mail.gmail.com>
+Subject: Cleanup of -Wunused-const-variable in drivers/clk/clk-qoriq.c
+To:     scottwood@freescale.com,
         Michael Turquette <mturquette@baylibre.com>, sboyd@kernel.org,
-        heiko@sntech.de
-Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        clang-built-linux@googlegroups.com
+        tglx@linutronix.de
+Cc:     linux-clk@vger.kernel.org, clang-built-linux@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
@@ -57,16 +55,14 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 Hey all,
 
-I'm looking into cleaning up ignored warnings in the kernel so we can
-remove compiler flags to ignore warnings. There's a variable
-(mux_pll_src_3plls_p) in clk-rv1108.c causing an unused const warning.
-Just wanted to reach out to ask if this variable is intended to be
-used.
+I'm investigating compiler warnings in the kernel and noticed a couple
+unused variables.
 
-It doesn't look like it has been used since it was first introduced.
-If it is no longer needed I'd like to remove it.
+https://github.com/ClangBuiltLinux/linux/issues/525
 
-https://github.com/ClangBuiltLinux/linux/issues/524
+It looks like the wrong clockgen_muxinfo is being used in the p5020's
+clockgen_chipinfo. Just wanted to make sure this is not intended
+behavior before submitting a patch.
 
 Thanks,
 Nathan Huckleberry
