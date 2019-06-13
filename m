@@ -2,111 +2,90 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB82B43A1A
-	for <lists+linux-clk@lfdr.de>; Thu, 13 Jun 2019 17:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719BF43850
+	for <lists+linux-clk@lfdr.de>; Thu, 13 Jun 2019 17:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727065AbfFMPSi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 13 Jun 2019 11:18:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38886 "EHLO mail.kernel.org"
+        id S1732507AbfFMPFM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 13 Jun 2019 11:05:12 -0400
+Received: from ns.iliad.fr ([212.27.33.1]:58456 "EHLO ns.iliad.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732155AbfFMNFd (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 13 Jun 2019 09:05:33 -0400
-Received: from earth.universe (dyndsl-095-033-011-189.ewe-ip-backbone.de [95.33.11.189])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 67C3B205ED;
-        Thu, 13 Jun 2019 13:05:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560431132;
-        bh=9nw7s7Y1QRBTXFeeD1F8tOL9Kaizm2l7e3Ph/Xz+h50=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wzRm/x10/pYWTJzw5naJiqba5efR9LYMIKMLRdFAtvkvh4JkXIQ56p6+ZjI0kXE0E
-         4jpE1a6LzXszIazL6ARJUwzldZdqylsrebyOpqTNJ5qL7VHd/4wQCvVTMNCCqflaAB
-         cl/R3NEOjn2v+4zgAZE6fn0tBF9DEiTradMT58MI=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 0F2303C0C77; Thu, 13 Jun 2019 15:05:30 +0200 (CEST)
-Date:   Thu, 13 Jun 2019 15:05:29 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     mazziesaccount@gmail.com, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S1732540AbfFMPFL (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 13 Jun 2019 11:05:11 -0400
+Received: from ns.iliad.fr (localhost [127.0.0.1])
+        by ns.iliad.fr (Postfix) with ESMTP id EC80020C0F;
+        Thu, 13 Jun 2019 17:05:08 +0200 (CEST)
+Received: from [192.168.108.49] (freebox.vlq16.iliad.fr [213.36.7.13])
+        by ns.iliad.fr (Postfix) with ESMTP id D67B020BC5;
+        Thu, 13 Jun 2019 17:05:08 +0200 (CEST)
+Subject: Re: [PATCH v1] clk: qcom: msm8916: Don't build support by default
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v15 0/7] support ROHM BD70528 PMIC
-Message-ID: <20190613130529.kgswgbuszb24itxz@earth.universe>
-References: <cover.1559546139.git.matti.vaittinen@fi.rohmeurope.com>
- <20190611200043.eib3g3acc7ilawsx@earth.universe>
- <20190612060328.GQ4797@dell>
+        linux-clk <linux-clk@vger.kernel.org>,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>
+References: <49b95f19-4da6-4491-6ed7-5238ecfc35a8@free.fr>
+ <20190612191347.GE22737@tuxbook-pro>
+From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
+Message-ID: <ca7c9fbd-d611-6ab6-6d23-54dfc4c2f165@free.fr>
+Date:   Thu, 13 Jun 2019 17:05:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="z7gwwmvwfgzls6v6"
-Content-Disposition: inline
-In-Reply-To: <20190612060328.GQ4797@dell>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190612191347.GE22737@tuxbook-pro>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Thu Jun 13 17:05:08 2019 +0200 (CEST)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On 12/06/2019 21:13, Bjorn Andersson wrote:
 
---z7gwwmvwfgzls6v6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Wed 12 Jun 08:52 PDT 2019, Marc Gonzalez wrote:
+> 
+>> Build QCOM_A53PLL and QCOM_CLK_APCS_MSM8916 by default only when
+>> we're building MSM_GCC_8916.
+>>
+>> Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
+> 
+> Not sure why these are default at all.
+> 
+> But both drivers are used on platforms other than 8916 as well, so if
+> anything a fix would be to rename the APCS_MSM8916 to something more
+> generic (such as QCOM_CLK_APCS_GLOBAL) - but then the content should be
+> updated and the APCS mailbox driver as well...
 
-Hi,
+Used on platforms other than 8916?  do you see that?
 
-On Wed, Jun 12, 2019 at 07:03:28AM +0100, Lee Jones wrote:
-> On Tue, 11 Jun 2019, Sebastian Reichel wrote:
-> > On Mon, Jun 03, 2019 at 10:23:37AM +0300, Matti Vaittinen wrote:
-> > > Patch series introducing support for ROHM BD70528 PMIC
-> > > [...]
-> >=20
-> > I think all patches have been reviewed by the respective subsystem
-> > maintainers. Lee, can you provide an immutable branch with the MFD
-> > patches (1, 2, 4)? Looks like the other patches only depend on those
-> > and can go through their respective subsystems.
->=20
-> Yes.  It's on my TODO list.
+$ git grep compatible drivers/clk/qcom/a53-pll.c
+	{ .compatible = "qcom,msm8916-a53pll" },
 
-Thanks.
+$ git grep qcom,msm8916-a53pll arch/arm64/boot/dts
+arch/arm64/boot/dts/qcom/msm8916.dtsi:                  compatible = "qcom,msm8916-a53pll";
 
-> Would you prefer this method over me just taking them all and sending
-> out a PR?  The latter is my usual flow, but I'm happy with either.
 
-Both methods are fine with me. I usually go with "my" method, since
-that results in less shared commits. It simplifies potential
-follow-up bug fixes, since there is only one tree to fix.
+drivers/clk/qcom/apcs-msm8916.c doesn't seem to support DT...
 
--- Sebastian
+$ git grep qcom-apcs-msm8916-clk
+drivers/clk/qcom/apcs-msm8916.c:                .name = "qcom-apcs-msm8916-clk",
+drivers/mailbox/qcom-apcs-ipc-mailbox.c:                                                          "qcom-apcs-msm8916-clk",
 
---z7gwwmvwfgzls6v6
-Content-Type: application/pgp-signature; name="signature.asc"
+	if (of_device_is_compatible(np, "qcom,msm8916-apcs-kpss-global")) {
+		apcs->clk = platform_device_register_data(&pdev->dev, "qcom-apcs-msm8916-clk", -1, NULL, 0);
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl0CShYACgkQ2O7X88g7
-+pr+dQ//UKZYRSKZHKIkw81U/LPaGmkXOWyyYGwVfxHDYeMyeHur/klljg+mU4bW
-gMCGCns23SP/L4c9lOc3aY/Ovkjuq2gjonKtMFo66fY9slf6MdnC4L9FNXXUqsPK
-oa8Fir0ful7FdJ4HxsxLqkiTT1wWDNRgchMI/iNEhcjMt14rlzwIM7wyktT8O/Zr
-9Om2Cx282JEE5hGbl2D98VPrR67vqNRqOwIhZ+lQBNgXiOUgvlh2UDqpXziOjdwX
-vxgmoxUB1v72itnyz0qf46L+ayqnPmBH6MSEdTYs5vYz4l64c4jIXoyyJ/pPr+ck
-rb6eygO0LkADnW6zab11yWn1HH/CYJG1TUNMNOw8a4RFPpCyDW17U5ksICi55hhx
-HrG1YXCPgpiGV2d0MawLwLhEbv3FXIYDPPt6xEne0FXUHg53apOQjmyPoGP404RN
-M7jJJlpkGyHd5N2iskFU79NBES64aHkc/uvmEZw56xHUVg0SZ9e/V7zLKWwxMYeM
-C0kaTjsN86xnoNwsMoVx94RiIjk38xDz1anaAafOtpkUxdFb2xL9qpGWiUlwZKVJ
-ALa7k8jleI0Mzv/fOFHGBZzkGoPCdqURkANKyCLHBA8Pi++nGR4RHF2Om/goK/mb
-pLme4LVfDKswR8HYUbrfCBLsG/uBNX1GfoEH9/CQ2gNKSphUZ90=
-=ScGm
------END PGP SIGNATURE-----
+$ git grep qcom,msm8916-apcs-kpss-global
+Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.txt:                "qcom,msm8916-apcs-kpss-global",
+Documentation/devicetree/bindings/mailbox/qcom,apcs-kpss-global.txt:            compatible = "qcom,msm8916-apcs-kpss-global";
+arch/arm64/boot/dts/qcom/msm8916.dtsi:                  compatible = "qcom,msm8916-apcs-kpss-global", "syscon";
+drivers/mailbox/qcom-apcs-ipc-mailbox.c:        if (of_device_is_compatible(np, "qcom,msm8916-apcs-kpss-global")) {
+drivers/mailbox/qcom-apcs-ipc-mailbox.c:        { .compatible = "qcom,msm8916-apcs-kpss-global", .data = (void *)8 },
 
---z7gwwmvwfgzls6v6--
+
+Are you sure about other platforms?
+
+Regards.
