@@ -2,83 +2,129 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A5244F6A
-	for <lists+linux-clk@lfdr.de>; Fri, 14 Jun 2019 00:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6250E452CF
+	for <lists+linux-clk@lfdr.de>; Fri, 14 Jun 2019 05:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725941AbfFMWly (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 13 Jun 2019 18:41:54 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:36678 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725835AbfFMWly (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 13 Jun 2019 18:41:54 -0400
-Received: by mail-qk1-f194.google.com with SMTP id g18so492006qkl.3;
-        Thu, 13 Jun 2019 15:41:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=555W8SlOEWdbOmtVeCHjPCQVdc/MKI4w8OP/WDqt3z8=;
-        b=qx//8Yf0gVSHXYZL+432RNJe2E6hPhn2fNe/bp/R4w+6I56gEyz/4/FujBKesnffL9
-         MiQaXshokMBco6iPV2/yLvbX9f4RmOmaySlALpTvKvkK43wcwNTHei/bHCw/S+9mmALd
-         DKs4HGy8CTL8ZS4lVW0wTr1esboEk8KFjKIzjAUb+qHjfmc9mKCKU6iGurxQRMSVylVH
-         SGAd7EWUZfIEWJ74zaHgPEMKx2yJ4T5Mej26TcpM3ZBBOfIBy75q0evTichmAWZrOB9Q
-         JHCTz25K93S5VVnVpvsD/bwnH88BNx+ogW4ghz6PJlr1f5r1wU5KyGjLijgm/sIw9AqJ
-         mZ1Q==
-X-Gm-Message-State: APjAAAU6eouH9TUTPjOVFUvjyEGjLOm2QkcAlHuC9tBdF8innhZFT2U+
-        WuOO8yyPBbB9YXxEmHaniw==
-X-Google-Smtp-Source: APXvYqzBvDkee2tbRQ7LDu7J0RLvPSx9PFA+ewlhL0hdgzb8u7tmMhGmcaUxchrxz5GjWKXYafhucw==
-X-Received: by 2002:a37:b044:: with SMTP id z65mr72541781qke.294.1560465713376;
-        Thu, 13 Jun 2019 15:41:53 -0700 (PDT)
-Received: from localhost ([64.188.179.243])
-        by smtp.gmail.com with ESMTPSA id o54sm706848qtb.63.2019.06.13.15.41.52
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 13 Jun 2019 15:41:52 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 16:41:51 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mike Looijmans <mike.looijmans@topic.nl>
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        Mike Looijmans <mike.looijmans@topic.nl>
-Subject: Re: [PATCH v3] dt-bindings: clock: Add silabs,si5341
-Message-ID: <20190613224151.GA32304@bogus>
-References: <20190424090216.18417-1-mike.looijmans@topic.nl>
- <155623344648.15276.18213024444708122458@swboyd.mtv.corp.google.com>
- <3ea2d720-f49b-586c-e402-07db289b39a8@topic.nl>
- <155632584222.168659.9675557812377718927@swboyd.mtv.corp.google.com>
- <cd52a35b-d289-24e1-70db-9d63fd9f6448@topic.nl>
- <20190507140413.28335-1-mike.looijmans@topic.nl>
- <20190513203146.GA24085@bogus>
- <20190517132020.31081-1-mike.looijmans@topic.nl>
+        id S1726807AbfFNDWG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 13 Jun 2019 23:22:06 -0400
+Received: from lucky1.263xmail.com ([211.157.147.130]:38100 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726028AbfFNDWF (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 13 Jun 2019 23:22:05 -0400
+Received: from tony.xie?rock-chips.com (unknown [192.168.167.229])
+        by lucky1.263xmail.com (Postfix) with ESMTP id B29D95E8A4;
+        Fri, 14 Jun 2019 11:14:37 +0800 (CST)
+X-263anti-spam: KSV:0;BIG:0;
+X-MAIL-GRAY: 1
+X-MAIL-DELIVERY: 0
+X-KSVirus-check: 0
+X-ADDR-CHECKED4: 1
+X-ABS-CHECKED: 1
+X-SKE-CHECKED: 1
+X-ANTISPAM-LEVEL: 2
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P13273T140214467016448S1560482074692142_;
+        Fri, 14 Jun 2019 11:14:36 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <da7045de40a53e67fa1df5b4903fd717>
+X-RL-SENDER: tony.xie@rock-chips.com
+X-SENDER: xxx@rock-chips.com
+X-LOGIN-NAME: tony.xie@rock-chips.com
+X-FST-TO: heiko@sntech.de
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-DNS-TYPE: 0
+From:   Tony Xie <tony.xie@rock-chips.com>
+To:     heiko@sntech.de
+Cc:     broonie@kernel.org, lee.jones@linaro.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chenjh@rock-chips.com,
+        xsf@rock-chips.com, zhangqing@rock-chips.com,
+        huangtao@rock-chips.com, tony.xie@rock-chips.com
+Subject: [PATCH v9 0/6] support a new type of PMIC,including two chips(rk817 and rk809)
+Date:   Thu, 13 Jun 2019 23:14:19 -0400
+Message-Id: <20190614031425.15741-1-tony.xie@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190517132020.31081-1-mike.looijmans@topic.nl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, 17 May 2019 15:20:20 +0200, Mike Looijmans wrote:
-> Adds the devicetree bindings for the Si5341 and Si5340 chips from
-> Silicon Labs. These are multiple-input multiple-output clock
-> synthesizers.
-> 
-> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
-> 
-> ---
-> v3: Remove synthesizers child nodes
->     Fix typo
-> v2: Add data sheet reference.
->     Restructured to enable use of "assigned-clock*" properties to set
->     up both outputs and internal synthesizers.
->     Nicer indentation.
->     Updated subject line and body of commit message.
-> 
->  .../bindings/clock/silabs,si5341.txt          | 162 ++++++++++++++++++
->  1 file changed, 162 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/silabs,si5341.txt
-> 
+Most of functions and registers of the rk817 and rk808 are the same,
+so they can share allmost all codes.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Their specifications are as follows:
+  1) The RK809 and RK809 consist of 5 DCDCs, 9 LDOs and have the same
+registers
+     for these components except dcdc5.
+  2) The dcdc5 is a boost dcdc for RK817 and is a buck for RK809.
+  3) The RK817 has one switch but The Rk809 has two.
+
+Changes in V2:
+1. initialize the pm_pwroff_fn to NULL.
+2. use EXPORT_SYMBOL_GPL to export pm_power_off_prepare.
+3. change patch 2/3/4/5 subjects.
+
+Changes in V3
+1. change patch 4 subjects
+2. replace pr_ with dev_ for printing in patch 2
+3. modify switch1 and switch2 configs in patch 2
+4. explain gpio information for rk809 and rk817 in patch 4
+
+Changes in V4:
+1. modify some codes for patch 2 and patch 5 according to comments
+2. add reviewer mail lists for patch 3 and 4
+
+Changes in V5:
+modify some codes for patch 1 according to reveiw comments for v3.
+ 1) remove the pm_power_off_prepare() and replace with shutdown
+call-back from syscore
+ 2) move the macro REGMAP_IRQ_M into the regmap.h and rename it
+REGMAP_IRQ_LINE
+ 3) make some dev_warn() log clear
+
+Changes in V6:
+modify some codes according to reveiw comments for v5.
+
+Changes in V7:
+modify some codes for patch 2 according to reveiw comments.
+
+Changes in V8:
+For helping me promote this work, Heiko send the V8
+
+Changes in V9:
+1.base on the V8
+2.modify some codes according to reveiw comments for V8 from Mark Brown
+
+Tony Xie (6):
+  mfd: rk808: remove the id_table
+  mfd: rk808: Add RK817 and RK809 support
+  regulator: rk808: add RK809 and RK817 support.
+  dt-bindings: mfd: rk808: Add binding information for RK809 and RK817.
+  rtc: rk808: add RK809 and RK817 support.
+  clk: RK808: add RK809 and RK817 support.
+
+ .../devicetree/bindings/mfd/rk808.txt         |  44 ++
+ drivers/clk/Kconfig                           |   9 +-
+ drivers/clk/clk-rk808.c                       |  64 +-
+ drivers/mfd/Kconfig                           |   6 +-
+ drivers/mfd/rk808.c                           | 199 +++++-
+ drivers/regulator/Kconfig                     |   4 +-
+ drivers/regulator/rk808-regulator.c           | 646 +++++++++++++++++-
+ drivers/rtc/Kconfig                           |   4 +-
+ drivers/rtc/rtc-rk808.c                       |  68 +-
+ include/linux/mfd/rk808.h                     | 175 +++++
+ 10 files changed, 1155 insertions(+), 64 deletions(-)
+
+-- 
+2.17.1
+
+
+
