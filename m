@@ -2,177 +2,109 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C4E452AB
-	for <lists+linux-clk@lfdr.de>; Fri, 14 Jun 2019 05:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0124533C
+	for <lists+linux-clk@lfdr.de>; Fri, 14 Jun 2019 06:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726447AbfFNDUG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 13 Jun 2019 23:20:06 -0400
-Received: from lucky1.263xmail.com ([211.157.147.132]:34690 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726305AbfFNDUF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 13 Jun 2019 23:20:05 -0400
-Received: from tony.xie?rock-chips.com (unknown [192.168.167.152])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 28D7C54DEB;
-        Fri, 14 Jun 2019 11:17:43 +0800 (CST)
-X-263anti-spam: KSV:0;BIG:0;
-X-MAIL-GRAY: 1
-X-MAIL-DELIVERY: 0
-X-KSVirus-check: 0
-X-ADDR-CHECKED4: 1
-X-ABS-CHECKED: 1
-X-SKE-CHECKED: 1
-X-ANTISPAM-LEVEL: 2
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P20303T139952891324160S1560482259794024_;
-        Fri, 14 Jun 2019 11:17:41 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <253e62f960b9431d8ca182157cc282f4>
-X-RL-SENDER: tony.xie@rock-chips.com
-X-SENDER: xxx@rock-chips.com
-X-LOGIN-NAME: tony.xie@rock-chips.com
-X-FST-TO: heiko@sntech.de
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-DNS-TYPE: 0
-From:   Tony Xie <tony.xie@rock-chips.com>
-To:     heiko@sntech.de
-Cc:     broonie@kernel.org, lee.jones@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chenjh@rock-chips.com,
-        xsf@rock-chips.com, zhangqing@rock-chips.com,
-        huangtao@rock-chips.com, tony.xie@rock-chips.com
-Subject: [PATCH v9 6/6] clk: RK808: add RK809 and RK817 support.
-Date:   Thu, 13 Jun 2019 23:17:38 -0400
-Message-Id: <20190614031738.15909-1-tony.xie@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190614031425.15741-1-tony.xie@rock-chips.com>
-References: <20190614031425.15741-1-tony.xie@rock-chips.com>
+        id S1725814AbfFNEH1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 14 Jun 2019 00:07:27 -0400
+Received: from anchovy1.45ru.net.au ([203.30.46.145]:50701 "EHLO
+        anchovy1.45ru.net.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725774AbfFNEH1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 14 Jun 2019 00:07:27 -0400
+X-Greylist: delayed 877 seconds by postgrey-1.27 at vger.kernel.org; Fri, 14 Jun 2019 00:07:26 EDT
+Received: (qmail 365 invoked by uid 5089); 14 Jun 2019 03:52:47 -0000
+Received: by simscan 1.2.0 ppid: 337, pid: 338, t: 0.0345s
+         scanners: regex: 1.2.0 attach: 1.2.0 clamav: 0.88.3/m:40/d:1950
+X-RBL:  $rbltext
+Received: from unknown (HELO preid-c7.electromag.com.au) (preid@electromag.com.au@203.59.235.95)
+  by anchovy1.45ru.net.au with ESMTPA; 14 Jun 2019 03:52:47 -0000
+Received: by preid-c7.electromag.com.au (Postfix, from userid 1000)
+        id F34A0201497BF; Fri, 14 Jun 2019 11:52:45 +0800 (AWST)
+From:   Phil Reid <preid@electromag.com.au>
+To:     mturquette@baylibre.com, sboyd@kernel.org, preid@electromag.com.au,
+        linux-clk@vger.kernel.org
+Subject: [PATCH 1/1] clk: clk-cdce925: Add regulator support
+Date:   Fri, 14 Jun 2019 11:52:43 +0800
+Message-Id: <1560484363-77239-1-git-send-email-preid@electromag.com.au>
+X-Mailer: git-send-email 1.8.3.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-RK809 and RK817 are power management IC chips for multimedia products.
-most of their functions and registers are same, including the clkout
-funciton.
+The cdce925 power supplies could be controllable on some platforms.
+Enable them before communicating with the cdce925.
 
-Signed-off-by: Tony Xie <tony.xie@rock-chips.com>
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Phil Reid <preid@electromag.com.au>
 ---
- drivers/clk/Kconfig     |  9 +++---
- drivers/clk/clk-rk808.c | 64 ++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 67 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index e5b2fe80eab4..532ab112fa8a 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -52,13 +52,12 @@ config COMMON_CLK_MAX9485
- 	  This driver supports Maxim 9485 Programmable Audio Clock Generator
+Notes:
+    We see a kernel panic later in the boot if the regulator is not
+    enabled. Unsure what in the driver is causing that. Something
+    to do with regmap perhaps?
+
+ drivers/clk/clk-cdce925.c | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/drivers/clk/clk-cdce925.c b/drivers/clk/clk-cdce925.c
+index a98b3f19..2678ee6 100644
+--- a/drivers/clk/clk-cdce925.c
++++ b/drivers/clk/clk-cdce925.c
+@@ -16,6 +16,7 @@
+ #include <linux/module.h>
+ #include <linux/i2c.h>
+ #include <linux/regmap.h>
++#include <linux/regulator/consumer.h>
+ #include <linux/slab.h>
+ #include <linux/gcd.h>
  
- config COMMON_CLK_RK808
--	tristate "Clock driver for RK805/RK808/RK818"
-+	tristate "Clock driver for RK805/RK808/RK809/RK817/RK818"
- 	depends on MFD_RK808
- 	---help---
--	  This driver supports RK805, RK808 and RK818 crystal oscillator clock. These
--	  multi-function devices have two fixed-rate oscillators,
--	  clocked at 32KHz each. Clkout1 is always on, Clkout2 can off
--	  by control register.
-+	  This driver supports RK805, RK809 and RK817, RK808 and RK818 crystal oscillator clock.
-+	  These multi-function devices have two fixed-rate oscillators, clocked at 32KHz each.
-+	  Clkout1 is always on, Clkout2 can off by control register.
- 
- config COMMON_CLK_HI655X
- 	tristate "Clock driver for Hi655x" if EXPERT
-diff --git a/drivers/clk/clk-rk808.c b/drivers/clk/clk-rk808.c
-index 8d90bdf5b946..75f2cf0dfc9f 100644
---- a/drivers/clk/clk-rk808.c
-+++ b/drivers/clk/clk-rk808.c
-@@ -96,6 +96,68 @@ of_clk_rk808_get(struct of_phandle_args *clkspec, void *data)
- 	return idx ? &rk808_clkout->clkout2_hw : &rk808_clkout->clkout1_hw;
+@@ -602,6 +603,30 @@ static int cdce925_regmap_i2c_read(void *context,
+ 	return &data->clk[idx].hw;
  }
  
-+static int rk817_clkout2_enable(struct clk_hw *hw, bool enable)
++static void cdce925_regulator_disable(void *regulator)
 +{
-+	struct rk808_clkout *rk808_clkout = container_of(hw,
-+							 struct rk808_clkout,
-+							 clkout2_hw);
-+	struct rk808 *rk808 = rk808_clkout->rk808;
-+
-+	return regmap_update_bits(rk808->regmap, RK817_SYS_CFG(1),
-+				  RK817_CLK32KOUT2_EN,
-+				  enable ? RK817_CLK32KOUT2_EN : 0);
++	regulator_disable(regulator);
 +}
 +
-+static int rk817_clkout2_prepare(struct clk_hw *hw)
++static int cdce925_regulator_enable(struct device *dev, const char *name)
 +{
-+	return rk817_clkout2_enable(hw, true);
-+}
++	struct regulator *regulator;
++	int err;
 +
-+static void rk817_clkout2_unprepare(struct clk_hw *hw)
-+{
-+	rk817_clkout2_enable(hw, false);
-+}
++	regulator = devm_regulator_get(dev, name);
++	if (IS_ERR(regulator))
++		return PTR_ERR(regulator);
 +
-+static int rk817_clkout2_is_prepared(struct clk_hw *hw)
-+{
-+	struct rk808_clkout *rk808_clkout = container_of(hw,
-+							 struct rk808_clkout,
-+							 clkout2_hw);
-+	struct rk808 *rk808 = rk808_clkout->rk808;
-+	unsigned int val;
-+
-+	int ret = regmap_read(rk808->regmap, RK817_SYS_CFG(1), &val);
-+
-+	if (ret < 0)
-+		return 0;
-+
-+	return (val & RK817_CLK32KOUT2_EN) ? 1 : 0;
-+}
-+
-+static const struct clk_ops rk817_clkout2_ops = {
-+	.prepare = rk817_clkout2_prepare,
-+	.unprepare = rk817_clkout2_unprepare,
-+	.is_prepared = rk817_clkout2_is_prepared,
-+	.recalc_rate = rk808_clkout_recalc_rate,
-+};
-+
-+static const struct clk_ops *rkpmic_get_ops(long variant)
-+{
-+	switch (variant) {
-+	case RK809_ID:
-+	case RK817_ID:
-+		return &rk817_clkout2_ops;
-+	/*
-+	 * For the default case, it match the following PMIC type.
-+	 * RK805_ID
-+	 * RK808_ID
-+	 * RK818_ID
-+	 */
-+	default:
-+		return &rk808_clkout2_ops;
++	err = regulator_enable(regulator);
++	if (err) {
++		dev_err(dev, "Failed to enable %s: %d\n", name, err);
++		return err;
 +	}
++
++	return devm_add_action_or_reset(dev, cdce925_regulator_disable,
++					regulator);
 +}
 +
- static int rk808_clkout_probe(struct platform_device *pdev)
- {
- 	struct rk808 *rk808 = dev_get_drvdata(pdev->dev.parent);
-@@ -127,7 +189,7 @@ static int rk808_clkout_probe(struct platform_device *pdev)
- 		return ret;
+ /* The CDCE925 uses a funky way to read/write registers. Bulk mode is
+  * just weird, so just use the single byte mode exclusively. */
+ static struct regmap_bus regmap_cdce925_bus = {
+@@ -630,6 +655,15 @@ static int cdce925_probe(struct i2c_client *client,
+ 	};
  
- 	init.name = "rk808-clkout2";
--	init.ops = &rk808_clkout2_ops;
-+	init.ops = rkpmic_get_ops(rk808->variant);
- 	rk808_clkout->clkout2_hw.init = &init;
- 
- 	/* optional override of the clockname */
+ 	dev_dbg(&client->dev, "%s\n", __func__);
++
++	err = cdce925_regulator_enable(&client->dev, "vdd");
++	if (err)
++		return err;
++
++	err = cdce925_regulator_enable(&client->dev, "vddout");
++	if (err)
++		return err;
++
+ 	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+ 		return -ENOMEM;
 -- 
-2.17.1
-
-
+1.8.3.1
 
