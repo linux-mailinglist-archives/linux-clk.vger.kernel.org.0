@@ -2,139 +2,84 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF56F482F6
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Jun 2019 14:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4179C48323
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Jun 2019 14:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726673AbfFQMuM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-clk@lfdr.de>); Mon, 17 Jun 2019 08:50:12 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:41657 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725973AbfFQMuM (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Jun 2019 08:50:12 -0400
-X-Originating-IP: 90.88.23.150
-Received: from xps13 (aaubervilliers-681-1-81-150.w90-88.abo.wanadoo.fr [90.88.23.150])
-        (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 7F0EC40005;
-        Mon, 17 Jun 2019 12:50:05 +0000 (UTC)
-Date:   Mon, 17 Jun 2019 14:50:04 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Antoine Tenart <antoine.tenart@bootlin.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Nadav Haklai <nadavh@marvell.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2 2/4] clk: mvebu: armada-37xx-periph: change
- suspend/resume time
-Message-ID: <20190617145004.7b11988f@xps13>
-In-Reply-To: <CAErSpo7fimH5QhHTLsF2ASyPqstkw7Zibe3CYB=KXTYBOh-4GQ@mail.gmail.com>
-References: <20190521130357.20803-1-miquel.raynal@bootlin.com>
-        <20190521130357.20803-3-miquel.raynal@bootlin.com>
-        <CAErSpo5i3y4CxZXV7E4tUR66uXaUa3B_-YT2+zfzZUGMmge7Ow@mail.gmail.com>
-        <20190527154610.6d4d5eff@xps13>
-        <CAErSpo7fimH5QhHTLsF2ASyPqstkw7Zibe3CYB=KXTYBOh-4GQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+        id S1728030AbfFQMw7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 17 Jun 2019 08:52:59 -0400
+Received: from michel.telenet-ops.be ([195.130.137.88]:40264 "EHLO
+        michel.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727541AbfFQMw7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Jun 2019 08:52:59 -0400
+Received: from ramsan ([84.194.111.163])
+        by michel.telenet-ops.be with bizsmtp
+        id Rosg2000e3XaVaC06osgLK; Mon, 17 Jun 2019 14:52:46 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1hcr7n-0001ru-Hn; Mon, 17 Jun 2019 14:52:39 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1hcr7n-0003al-FW; Mon, 17 Jun 2019 14:52:39 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 0/5] clk: renesas: rcar-gen2/gen3: Switch to .determine_rate()
+Date:   Mon, 17 Jun 2019 14:52:33 +0200
+Message-Id: <20190617125238.13761-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Bjorn,
+	Hi Mike, Stephen,
 
-Bjorn Helgaas <bhelgaas@google.com> wrote on Tue, 4 Jun 2019 15:52:31
--0500:
+As the .round_rate() callback returns a long clock rate, it cannot
+return clock rates that do not fit in signed long, but do fit in
+unsigned long.  The newer .determine_rate() callback does not suffer
+from this limitation.  In addition, .determine_rate() provides the
+ability to specify a rate range.
 
-> On Mon, May 27, 2019 at 8:46 AM Miquel Raynal <miquel.raynal@bootlin.com> wrote:
-> >
-> > Hi Bjorn,
-> >
-> > Thanks for the feedback.
-> >
-> > Bjorn Helgaas <bhelgaas@google.com> wrote on Tue, 21 May 2019 17:43:05
-> > -0500:
-> >  
-> > > From: Miquel Raynal <miquel.raynal@bootlin.com>
-> > > Date: Tue, May 21, 2019 at 8:04 AM
-> > > To: Michael Turquette, Stephen Boyd, Rob Herring, Mark Rutland
-> > > Cc: <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>, Thomas
-> > > Petazzoni, Antoine Tenart, Gregory Clement, Maxime Chevallier, Nadav
-> > > Haklai, Bjorn Helgaas, Rafael J . Wysocki, <linux-pm@vger.kernel.org>,
-> > > Miquel Raynal
-> > >  
-> > > > Armada 3700 PCIe IP relies on the PCIe clock managed by this
-> > > > driver. For reasons related to the PCI core's organization when
-> > > > suspending/resuming, PCI host controller drivers must reconfigure
-> > > > their register at suspend_noirq()/resume_noirq() which happens after
-> > > > suspend()/suspend_late() and before resume_early()/resume().  
-> > >
-> > > "For reasons related to the PCI core's organization" manages to
-> > > suggest that this change wouldn't be needed if only the PCI core did
-> > > something differently, without actually being specific about what it
-> > > would need to do differently.
-> > >
-> > > Is there something the PCI core could do better to make this easier?
-> > > Or is it just something like "the PCI core needs to access registers
-> > > after suspend_late()"?  You mention the host controller, but of course
-> > > that's not itself a PCI device, so the PCI core doesn't have much to
-> > > do with it directly.  
-> >
-> > Actually, if I understand correctly the below commit [1] and the core
-> > [2] & [3], PCI device fixups can happen at any time, including at the
-> > _noirq phase where, obviously, the PCI controller must be already
-> > setup.
-> >
-> > I don't think changing this behavior is a viable solution and I would
-> > not see it as a "PCI core could do better" alternative.
-> >
-> > ---8<---
-> >
-> > [1]
-> > commit ab14d45ea58eae67c739e4ba01871cae7b6c4586
-> > Author: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> > Date:   Tue Mar 17 15:55:45 2015 +0100
-> >
-> >     PCI: mvebu: Add suspend/resume support
-> >
-> >     Add suspend/resume support for the mvebu PCIe host driver.  Without
-> >     this commit, the system will panic at resume time when PCIe devices
-> >     are connected.
-> >
-> >     Note that we have to use the ->suspend_noirq() and ->resume_noirq()
-> >     hooks, because at resume time, the PCI fixups are done at  
-> >     ->resume_noirq() time, so the PCIe controller has to be ready at  
-> >     this point.
-> >
-> >     Signed-off-by: Thomas Petazzoni
-> >     <thomas.petazzoni@free-electrons.com> Signed-off-by: Bjorn Helgaas
-> >     <bhelgaas@google.com> Acked-by: Jason Cooper <jason@lakedaemon.net>
-> >
-> > [2] https://elixir.bootlin.com/linux/v5.2-rc1/source/drivers/pci/pci-driver.c#L1181
-> > [3] https://elixir.bootlin.com/linux/v5.2-rc1/source/drivers/pci/pci-driver.c#L522
-> >  
-> > --->8---  
-> >  
-> > >
-> > > s/register/registers/ ?  
-> >
-> > Indeed. I would like to sort out the above technical point before
-> > sending a v3 with this typo corrected.  
-> 
-> I don't have anything more to contribute here; just wanted to make
-> sure this wasn't working around a fixable problem in PCI.
+Hence this patch series switches the Z (CPU) and SD clocks in the R-Car
+Gen2 and Gen3 clock drivers from the .round_rate() to the
+.determine_rate() callback.
 
-Great! Would you mind adding a A-b/R-b tag then?
+Note that the "div6" clock driver hasn't been converted yet, so div6
+clocks still use .round_rate().
 
+This has been tested on R-Car M2-W and R-Car M3-N, and should have no
+behavioral impact.
 
-Thanks,
-Miquèl
+To be queued in clk-renesas-for-v5.3, if approved.
+
+Thanks for your comments!
+
+Geert Uytterhoeven (5):
+  clk: renesas: rcar-gen2-legacy: Switch Z clock to .determine_rate()
+  clk: renesas: rcar-gen2: Switch Z clock to .determine_rate()
+  clk: renesas: rcar-gen3: Switch Z clocks to .determine_rate()
+  clk: renesas: rcar-gen3: Avoid double table iteration in SD
+    .set_rate()
+  clk: renesas: rcar-gen3: Switch SD clocks to .determine_rate()
+
+ drivers/clk/renesas/clk-rcar-gen2.c | 23 ++++++-----
+ drivers/clk/renesas/rcar-gen2-cpg.c | 23 ++++++-----
+ drivers/clk/renesas/rcar-gen3-cpg.c | 64 ++++++++++++++++-------------
+ 3 files changed, 61 insertions(+), 49 deletions(-)
+
+-- 
+2.17.1
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
