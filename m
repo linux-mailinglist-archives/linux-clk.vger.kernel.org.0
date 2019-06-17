@@ -2,101 +2,74 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0124774E
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Jun 2019 01:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF0C478A3
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Jun 2019 05:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727519AbfFPXgg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 16 Jun 2019 19:36:36 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:39467 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727544AbfFPXgS (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 16 Jun 2019 19:36:18 -0400
-Received: by mail-lf1-f67.google.com with SMTP id p24so5144339lfo.6;
-        Sun, 16 Jun 2019 16:36:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/LoNLOLC4v22fCk8MRxYZiVyFU9l44MdyNDw1bDmHwQ=;
-        b=m2yYGjNriXkaj18ueVpnD4vnoouUICdAj4mYFBxnqWOZGiwAaR5Bs62vrnNjku/2vP
-         X67mpJWA+Abgp3FLwUmzC4yHD/IIBAci1l5sCvSuG+RQj1QTQ4TBNADrYYOoJbkuKhZB
-         w56N3l17SwypZ6jd/tRs51e+XOyJr/UyXacC/6cZkB715iKmYAC2qQq3oVJZ2CdMIM8/
-         xiqV/zALHGyJE0dADZZDSa2AGYqQoRM85PqPwEFDpRKyfwFdjgM1tJGkTjxbivOYl5Bv
-         YlTMe6qRuDuKUcifzd1nvbQtVzFmLd8jB2MlIK4Zi0M+rUhN188PdRy25B6MGy6lxBzE
-         +wYg==
+        id S1727471AbfFQD3i (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 16 Jun 2019 23:29:38 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:37302 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727413AbfFQD3i (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 16 Jun 2019 23:29:38 -0400
+Received: by mail-ed1-f67.google.com with SMTP id w13so13917850eds.4;
+        Sun, 16 Jun 2019 20:29:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/LoNLOLC4v22fCk8MRxYZiVyFU9l44MdyNDw1bDmHwQ=;
-        b=JldVCg+NoqVj19IuB9My4zeUyA0WRDy70zx1prCZJ8lQANPP9hwpJMMqssyuW5GhZ9
-         Bm/7kbbNLkehqyoNb1KPPEwuvFNqGQL9ZTK0fOpcVXyyWk9G4o0rfz8eZE5XiA0Qf48U
-         nueNDBNzMIhTjLSClEweKB9E+XPi6xxzAvaBcGT266WBSfOOx5PCrazRHRsJBZXyQ3US
-         eDJHLAhY+CHd2OHt9eeRy8YsPcxc8OcOvfbF6bl0bs7FJyKoCkgH8O7+Yh62+MBKg9Ui
-         qMd/ph65XVD9hQl4IxY6fn6m/pxO4cmvu8wCfC+lLbKT1OMSgEtOPMqI1tqEyFvSBmsp
-         Hclw==
-X-Gm-Message-State: APjAAAVgmEFqD1DjY82Pzm8FkI72eO5uDmxu5DpoUFO8CC/skRLTVs5D
-        7zyPTx4gWklVHPKwsVfiSHw=
-X-Google-Smtp-Source: APXvYqzrZ4HrWxTmGdAtjCWvopnaULhASTi++CVRUtOFAy27Rd4qfCGCV/jA8t8SLbcC9nAlQ6DX4A==
-X-Received: by 2002:ac2:5212:: with SMTP id a18mr46653296lfl.50.1560728176194;
-        Sun, 16 Jun 2019 16:36:16 -0700 (PDT)
-Received: from localhost.localdomain (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
-        by smtp.gmail.com with ESMTPSA id q4sm2008377lje.99.2019.06.16.16.36.15
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 16 Jun 2019 16:36:15 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Joseph Lo <josephl@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 10/10] ARM: dts: tegra30: Add External Memory Controller node
-Date:   Mon, 17 Jun 2019 02:35:51 +0300
-Message-Id: <20190616233551.6838-11-digetx@gmail.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190616233551.6838-1-digetx@gmail.com>
-References: <20190616233551.6838-1-digetx@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sFjB0B2Yj7Wbf8qVffPV3cOdRNWRzp8gkqP8qHZXJ9A=;
+        b=jsfzMfsdWloq/J6ATyzGIVoDvsFo1+bBHE5Pm7g/SGPHf+zgNs43kLRHMOT48zjXPp
+         79Kybiiqp3XjABXzeBmBLwnFCeB8EN2cnl1S2gW0Vv+VAQmG9WGvDUEsRKMtO6tdhE1b
+         9M+C8TGC4v98NeTTizYEx1DnxBMc8HHWAR2PhYdMO5s5HzTme5B1YzzvBfdZKsuoM1IN
+         qq7i+Zu4aU6UWRihu/JPPF7XxS7Nmi5OfWH7vs1lAlQkykAAm5Dyd35pABclGJl6V9da
+         DDQ0D8cfpzyA3zYWiGKYzOdMJpZZq8w5rds6tI9GF6H6W9CxGwqtuoC8CZOAPZlTbPi9
+         tT3Q==
+X-Gm-Message-State: APjAAAUi4e9kizKaltR9RziiF5Mu7Y/7Ld+53LbsnDsunPodcCrgMYhn
+        SBRwk0QZK2/ZPDR5aKzlKx57/8A0AdI=
+X-Google-Smtp-Source: APXvYqwUGmot489/eBfMiHVs4cEG70kRwdMiO5DKoYERtSSKZcjIURlTZgkHHPL2N0Rb1xiTQJeJhA==
+X-Received: by 2002:a17:906:1c94:: with SMTP id g20mr9187614ejh.179.1560742175643;
+        Sun, 16 Jun 2019 20:29:35 -0700 (PDT)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id i5sm3349681edc.20.2019.06.16.20.29.35
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Sun, 16 Jun 2019 20:29:35 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id p13so8197667wru.10;
+        Sun, 16 Jun 2019 20:29:35 -0700 (PDT)
+X-Received: by 2002:adf:fc85:: with SMTP id g5mr74039823wrr.324.1560742175356;
+ Sun, 16 Jun 2019 20:29:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190614181040.67326-1-sboyd@kernel.org>
+In-Reply-To: <20190614181040.67326-1-sboyd@kernel.org>
+From:   Chen-Yu Tsai <wens@csie.org>
+Date:   Mon, 17 Jun 2019 11:29:25 +0800
+X-Gmail-Original-Message-ID: <CAGb2v67s0H2XWx09o=LTDb=9Pc01RZhnf=qxcmqGs7Vih4tRVA@mail.gmail.com>
+Message-ID: <CAGb2v67s0H2XWx09o=LTDb=9Pc01RZhnf=qxcmqGs7Vih4tRVA@mail.gmail.com>
+Subject: Re: [PATCH] clk: Do a DT parent lookup even when index < 0
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add External Memory Controller node to the device-tree.
+On Sat, Jun 15, 2019 at 2:10 AM Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> We want to allow the parent lookup to happen even if the index is some
+> value less than 0. This may be the case if a clk provider only specifies
+> the .name member to match a string in the "clock-names" DT property. We
+> shouldn't require that the index be >= 0 to make this use case work.
+>
+> Fixes: 601b6e93304a ("clk: Allow parents to be specified via clkspec index")
+> Reported-by: Alexandre Mergnat <amergnat@baylibre.com>
+> Cc: Jerome Brunet <jbrunet@baylibre.com>
+> Cc: Chen-Yu Tsai <wens@csie.org>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- arch/arm/boot/dts/tegra30.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+FWIW,
 
-diff --git a/arch/arm/boot/dts/tegra30.dtsi b/arch/arm/boot/dts/tegra30.dtsi
-index e074258d4518..92c4aeafab29 100644
---- a/arch/arm/boot/dts/tegra30.dtsi
-+++ b/arch/arm/boot/dts/tegra30.dtsi
-@@ -732,6 +732,17 @@
- 		#reset-cells = <1>;
- 	};
- 
-+	memory-controller@7000f400 {
-+		compatible = "nvidia,tegra30-emc";
-+		reg = <0x7000f400 0x400>;
-+		interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&tegra_car TEGRA30_CLK_EMC>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		nvidia,memory-controller = <&mc>;
-+	};
-+
- 	fuse@7000f800 {
- 		compatible = "nvidia,tegra30-efuse";
- 		reg = <0x7000f800 0x400>;
--- 
-2.22.0
-
+Reviewed-by: Chen-Yu Tsai <wens@csie.org>
