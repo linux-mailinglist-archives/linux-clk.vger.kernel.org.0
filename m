@@ -2,70 +2,73 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A378D481F2
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Jun 2019 14:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31433482B4
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Jun 2019 14:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727477AbfFQMZk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 17 Jun 2019 08:25:40 -0400
-Received: from xavier.telenet-ops.be ([195.130.132.52]:42052 "EHLO
-        xavier.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725973AbfFQMZk (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Jun 2019 08:25:40 -0400
+        id S1727771AbfFQMkM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 17 Jun 2019 08:40:12 -0400
+Received: from andre.telenet-ops.be ([195.130.132.53]:51562 "EHLO
+        andre.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726683AbfFQMkL (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Jun 2019 08:40:11 -0400
 Received: from ramsan ([84.194.111.163])
-        by xavier.telenet-ops.be with bizsmtp
-        id RoRe2000W3XaVaC01oReQC; Mon, 17 Jun 2019 14:25:39 +0200
+        by andre.telenet-ops.be with bizsmtp
+        id Rofo2000F3XaVaC01ofoht; Mon, 17 Jun 2019 14:39:58 +0200
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan with esmtp (Exim 4.90_1)
         (envelope-from <geert@linux-m68k.org>)
-        id 1hcqhe-0001jZ-MV; Mon, 17 Jun 2019 14:25:38 +0200
+        id 1hcqvM-0001pq-A7; Mon, 17 Jun 2019 14:39:48 +0200
 Received: from geert by rox.of.borg with local (Exim 4.90_1)
         (envelope-from <geert@linux-m68k.org>)
-        id 1hcqhe-0002z0-K2; Mon, 17 Jun 2019 14:25:38 +0200
+        id 1hcqvM-0003OJ-7q; Mon, 17 Jun 2019 14:39:48 +0200
 From:   Geert Uytterhoeven <geert+renesas@glider.be>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-clk@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] clk: renesas: cpg-mssr: Update kerneldoc for struct cpg_mssr_priv
-Date:   Mon, 17 Jun 2019 14:25:37 +0200
-Message-Id: <20190617122537.11423-1-geert+renesas@glider.be>
+Subject: [PATCH 0/3] clk: renesas: mstp: Combine private data and array allocation
+Date:   Mon, 17 Jun 2019 14:39:40 +0200
+Message-Id: <20190617123943.12990-1-geert+renesas@glider.be>
 X-Mailer: git-send-email 2.17.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-New fields were added, but kerneldoc was forgotten, or inserted at the
-wrong place.
+	Hi Mike, Stephen,
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-To be queued in clk-renesas-for-v5.3.
+This patch series combines multiple allocations of driver-private data
+and arrays in the Renesas clock drivers to single allocations, using
+flexible array members and the new struct_size() helper.
 
- drivers/clk/renesas/renesas-cpg-mssr.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+This has a contextual dependency on "[PATCH] clk: renesas: cpg-mssr:
+Update kerneldoc for struct cpg_mssr_priv".
 
-diff --git a/drivers/clk/renesas/renesas-cpg-mssr.c b/drivers/clk/renesas/renesas-cpg-mssr.c
-index 082d0bf12ea7f219..4ddf688b8bcc7ed8 100644
---- a/drivers/clk/renesas/renesas-cpg-mssr.c
-+++ b/drivers/clk/renesas/renesas-cpg-mssr.c
-@@ -112,14 +112,15 @@ static const u16 srcr[] = {
-  * @dev: CPG/MSSR device
-  * @base: CPG/MSSR register block base address
-  * @rmw_lock: protects RMW register accesses
-+ * @np: Device node in DT for this CPG/MSSR module
-  * @clks: Array containing all Core and Module Clocks
-  * @num_core_clks: Number of Core Clocks in clks[]
-  * @num_mod_clks: Number of Module Clocks in clks[]
-  * @last_dt_core_clk: ID of the last Core Clock exported to DT
-+ * @stbyctrl: This device has Standby Control Registers
-  * @notifiers: Notifier chain to save/restore clock state for system resume
-  * @smstpcr_saved[].mask: Mask of SMSTPCR[] bits under our control
-  * @smstpcr_saved[].val: Saved values of SMSTPCR[]
-- * @stbyctrl: This device has Standby Control Registers
-  */
- struct cpg_mssr_priv {
- #ifdef CONFIG_RESET_CONTROLLER
+To be queued in clk-renesas-for-v5.3, if approved.
+
+Thanks for your comments!
+
+Geert Uytterhoeven (3):
+  clk: renesas: cpg-mssr: Combine driver-private and clock array
+    allocation
+  clk: renesas: div6: Combine clock-private and parent array allocation
+  clk: renesas: mstp: Combine group-private and clock array allocation
+
+ drivers/clk/renesas/clk-div6.c         | 19 +++++--------------
+ drivers/clk/renesas/clk-mstp.c         | 12 ++++++------
+ drivers/clk/renesas/renesas-cpg-mssr.c | 20 ++++++--------------
+ 3 files changed, 17 insertions(+), 34 deletions(-)
+
 -- 
 2.17.1
 
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
