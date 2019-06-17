@@ -2,116 +2,102 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACD447F20
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Jun 2019 12:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A20E247FB9
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Jun 2019 12:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727938AbfFQKEt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 17 Jun 2019 06:04:49 -0400
-Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:50942 "EHLO
-        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728059AbfFQKEr (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Jun 2019 06:04:47 -0400
-Received: from mmarshal3.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id DFEF2891AB;
-        Mon, 17 Jun 2019 22:04:44 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1560765884;
-        bh=wqBkEYXWtPPxu4J3I2mSTeb2gWRTtAdwWYpWsZ0Pz5w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=kTFmqq8TYh5IsmqlGGqsjJuGggnRyLewB5suQn6SKcuuvkb9BgrP1R1bW9XVU3c9k
-         dx9OkXrMFR+Fcx+TmhFIPZSPifHMNkfG9hA9L4utzAxbt3hgcFxNfYqfNpjazhXYA+
-         sjp7FWA8dFtEkEjoswYzDjfWxEZcizWKZuIu/h60iTgjr8l/D5OTTqxSW1wB88UW1B
-         +wUx29ZtQQ1Y55KtKe5Z5uUqRvCyazqwxo1ICvYPrqsx54v1LPiuJfGeAbnQE2gW0H
-         e96D2nk1j+y/rsKo66nYN2jU6JIbosHbCr1VUUa1NvfLKd+lwalsw2PAKQ4VZIo/KW
-         qZzz5hWVpYtHA==
-Received: from smtp (Not Verified[10.32.16.33]) by mmarshal3.atlnz.lc with Trustwave SEG (v7,5,8,10121)
-        id <B5d0765bc0004>; Mon, 17 Jun 2019 22:04:44 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by smtp (Postfix) with ESMTP id BAF9913EED3;
-        Mon, 17 Jun 2019 22:04:45 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 921251E04F0; Mon, 17 Jun 2019 22:04:44 +1200 (NZST)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, linus.walleij@linaro.org,
-        jason@lakedaemon.net, andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH 4/4] clk: kirkwood: Add support for MV98DX1135
-Date:   Mon, 17 Jun 2019 22:04:32 +1200
-Message-Id: <20190617100432.13037-5-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190617100432.13037-1-chris.packham@alliedtelesis.co.nz>
-References: <20190617100432.13037-1-chris.packham@alliedtelesis.co.nz>
+        id S1727109AbfFQKcw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 17 Jun 2019 06:32:52 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:6371 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726091AbfFQKcw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Jun 2019 06:32:52 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d076c530000>; Mon, 17 Jun 2019 03:32:51 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Mon, 17 Jun 2019 03:32:51 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Mon, 17 Jun 2019 03:32:51 -0700
+Received: from [10.21.132.148] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 17 Jun
+ 2019 10:32:49 +0000
+Subject: Re: [PATCH 1/3] clk: tegra: Do not warn unnecessarily
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+CC:     Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Alex Frid <afrid@nvidia.com>, <linux-clk@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>
+References: <20190613161225.2531-1-thierry.reding@gmail.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+Message-ID: <cad0866c-3667-8a17-8351-222e3cca73cb@nvidia.com>
+Date:   Mon, 17 Jun 2019 11:32:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-x-atlnz-ls: pat
+In-Reply-To: <20190613161225.2531-1-thierry.reding@gmail.com>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL103.nvidia.com (172.20.187.11) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1560767572; bh=sgUi3SjZ1T5o88iiK/A31ZDmOrHPfKalXGMR/PxBLHc=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=Xkz+egEtKsrF6ab4spRleRS5+4UXWYQmoOqaccMl1LRFoXWGTFke3pa66fbnFAbhb
+         5vdl30vX61VV//AIT3q/xV/ACCTBfSYZpLssRucEEUfoBoFGL+MHUkl1Mj1Lf+WrI2
+         VwnnvKPvCj+cj8A46+F+8Mowj+CCaylywBhjBC5OJ0CA0hGwJbreQhWRtjQOAbkqzV
+         n3vkMgKif63n4RSrel9bojwiKv4C0wbiuBg3c2U+twBQMpTRYLdXHAi14Nd3zHRjDi
+         oQHrkODHhmxiw/Ai9BcX0ODLFrGmqNmYSQWMZ/yF7QcmHYU5lgfLZ6fZMeHk8zhxza
+         xGXr26bCh51+g==
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The 98DX1135 is a switch chip with an integrated CPU. This is similar to
-the 98DX4122 except that the core clock speed is fixed to 166Mhz.
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
- drivers/clk/mvebu/kirkwood.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+On 13/06/2019 17:12, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+> 
+> There is no need to warn if the reference PLL is enabled with the
+> correct defaults. Only warn if the boot values don't match the defaults.
+> 
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  drivers/clk/tegra/clk-tegra210.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/clk/tegra/clk-tegra210.c b/drivers/clk/tegra/clk-tegra210.c
+> index e1ba62d2b1a0..4904ac4a75db 100644
+> --- a/drivers/clk/tegra/clk-tegra210.c
+> +++ b/drivers/clk/tegra/clk-tegra210.c
+> @@ -984,8 +984,6 @@ static void tegra210_pllre_set_defaults(struct tegra_clk_pll *pllre)
+>  	pllre->params->defaults_set = true;
+>  
+>  	if (val & PLL_ENABLE) {
+> -		pr_warn("PLL_RE already enabled. Postponing set full defaults\n");
+> -
+>  		/*
+>  		 * PLL is ON: check if defaults already set, then set those
+>  		 * that can be updated in flight.
+> @@ -1012,6 +1010,9 @@ static void tegra210_pllre_set_defaults(struct tegra_clk_pll *pllre)
+>  		writel_relaxed(val, clk_base + pllre->params->ext_misc_reg[0]);
+>  		udelay(1);
+>  
+> +		if (!pllre->params->defaults_set)
+> +			pr_warn("PLL_RE already enabled. Postponing set full defaults\n");
+> +
+>  		return;
+>  	}
 
-diff --git a/drivers/clk/mvebu/kirkwood.c b/drivers/clk/mvebu/kirkwood.c
-index 35af3aa18f1c..47680237d0be 100644
---- a/drivers/clk/mvebu/kirkwood.c
-+++ b/drivers/clk/mvebu/kirkwood.c
-@@ -185,6 +185,11 @@ static void __init mv88f6180_get_clk_ratio(
- 	}
- }
-=20
-+static u32 __init mv98dx1135_get_tclk_freq(void __iomem *sar)
-+{
-+	return 166666667;
-+}
-+
- static const struct coreclk_soc_desc kirkwood_coreclks =3D {
- 	.get_tclk_freq =3D kirkwood_get_tclk_freq,
- 	.get_cpu_freq =3D kirkwood_get_cpu_freq,
-@@ -201,6 +206,14 @@ static const struct coreclk_soc_desc mv88f6180_corec=
-lks =3D {
- 	.num_ratios =3D ARRAY_SIZE(kirkwood_coreclk_ratios),
- };
-=20
-+static const struct coreclk_soc_desc mv98dx1135_coreclks =3D {
-+	.get_tclk_freq =3D mv98dx1135_get_tclk_freq,
-+	.get_cpu_freq =3D kirkwood_get_cpu_freq,
-+	.get_clk_ratio =3D kirkwood_get_clk_ratio,
-+	.ratios =3D kirkwood_coreclk_ratios,
-+	.num_ratios =3D ARRAY_SIZE(kirkwood_coreclk_ratios),
-+};
-+
- /*
-  * Clock Gating Control
-  */
-@@ -325,6 +338,8 @@ static void __init kirkwood_clk_init(struct device_no=
-de *np)
-=20
- 	if (of_device_is_compatible(np, "marvell,mv88f6180-core-clock"))
- 		mvebu_coreclk_setup(np, &mv88f6180_coreclks);
-+	else if (of_device_is_compatible(np, "marvell,mv98dx1135-core-clock"))
-+		mvebu_coreclk_setup(np, &mv98dx1135_coreclks);
- 	else
- 		mvebu_coreclk_setup(np, &kirkwood_coreclks);
-=20
-@@ -339,3 +354,5 @@ CLK_OF_DECLARE(kirkwood_clk, "marvell,kirkwood-core-c=
-lock",
- 	       kirkwood_clk_init);
- CLK_OF_DECLARE(mv88f6180_clk, "marvell,mv88f6180-core-clock",
- 	       kirkwood_clk_init);
-+CLK_OF_DECLARE(98dx1135_clk, "marvell,mv98dx1135-core-clock",
-+	       kirkwood_clk_init);
---=20
-2.21.0
+Acked-by: Jon Hunter <jonathanh@nvidia.com>
 
+Cheers
+Jon
+
+-- 
+nvpublic
