@@ -2,93 +2,192 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7427649B2A
-	for <lists+linux-clk@lfdr.de>; Tue, 18 Jun 2019 09:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA10B49CEF
+	for <lists+linux-clk@lfdr.de>; Tue, 18 Jun 2019 11:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729256AbfFRHrW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 18 Jun 2019 03:47:22 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:9740 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729251AbfFRHrW (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 18 Jun 2019 03:47:22 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d0897080000>; Tue, 18 Jun 2019 00:47:20 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 18 Jun 2019 00:47:21 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 18 Jun 2019 00:47:21 -0700
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL104.nvidia.com
- (172.18.146.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 18 Jun
- 2019 07:47:20 +0000
-Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Tue, 18 Jun 2019 07:47:20 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.168.217]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5d0897060003>; Tue, 18 Jun 2019 00:47:20 -0700
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <tglx@linutronix.de>, <jason@lakedaemon.net>,
-        <marc.zyngier@arm.com>, <linus.walleij@linaro.org>,
-        <stefan@agner.ch>, <mark.rutland@arm.com>
-CC:     <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
-        <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <jckuo@nvidia.com>,
-        <josephl@nvidia.com>, <talho@nvidia.com>, <skomatineni@nvidia.com>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <mperttunen@nvidia.com>, <spatra@nvidia.com>, <robh+dt@kernel.org>,
-        <digetx@gmail.com>, <devicetree@vger.kernel.org>
-Subject: [PATCH V3 17/17] arm64: dts: tegra210-p2180: Jetson TX1 SC7 timings
-Date:   Tue, 18 Jun 2019 00:46:31 -0700
-Message-ID: <1560843991-24123-18-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1560843991-24123-1-git-send-email-skomatineni@nvidia.com>
+        id S1729176AbfFRJTm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 18 Jun 2019 05:19:42 -0400
+Received: from foss.arm.com ([217.140.110.172]:58892 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729137AbfFRJTm (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 18 Jun 2019 05:19:42 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D547E344;
+        Tue, 18 Jun 2019 02:19:40 -0700 (PDT)
+Received: from [10.1.197.61] (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A18AD3F246;
+        Tue, 18 Jun 2019 02:19:33 -0700 (PDT)
+Subject: Re: [PATCH V3 01/17] irqchip: tegra: do not disable COP IRQ during
+ suspend
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, tglx@linutronix.de,
+        jason@lakedaemon.net, linus.walleij@linaro.org, stefan@agner.ch,
+        mark.rutland@arm.com
+Cc:     pdeschrijver@nvidia.com, pgaikwad@nvidia.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        jckuo@nvidia.com, josephl@nvidia.com, talho@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mperttunen@nvidia.com, spatra@nvidia.com, robh+dt@kernel.org,
+        digetx@gmail.com, devicetree@vger.kernel.org
 References: <1560843991-24123-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
+ <1560843991-24123-2-git-send-email-skomatineni@nvidia.com>
+From:   Marc Zyngier <marc.zyngier@arm.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=marc.zyngier@arm.com; prefer-encrypt=mutual; keydata=
+ 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
+ Z46HaNmN2hZS/oJ69c1DI5Rcww==
+Organization: ARM Ltd
+Message-ID: <dc4b60ae-8716-0e7e-4e41-431c0ef9f50f@arm.com>
+Date:   Tue, 18 Jun 2019 10:19:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1560844041; bh=Vsp36/vqBLGzaHV4U5nFiJBH5J5qqVmQ31C7uPAHcPk=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=rKHUB+HqOYKLOeLs3gxU+2VJICl873Ak0DxOzwmFxJZtt4Rp0tDiqJwLoQAf2qHEe
-         bFfkRful2dQCxQoJuqpkTKOVj4/yD2dC6WT7xi8zRhobYnUS4uKcOa+Yzn3ey5QgUc
-         iSSNhOqqtjMwLwlrTl3kgmE/K7AW0VcJil7Z6O5Rspqz0LKi9ChNJwkIvBaYQMxG8F
-         +/yJ75T4Rigjpd8SWCxauF8IkDj+H9CfO3QTSOjKyE1FXg0TBAwt3gCM/rxMHKBkGq
-         kl71f1CHD6tzP7ABi5ojSXQHJQ1cZBpvdEve42/MNE67nkDNUDldpsob1DTwJxfo4X
-         Z88pVPot5Alnw==
+In-Reply-To: <1560843991-24123-2-git-send-email-skomatineni@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This patch has Jetson TX1 platform specific SC7 timing configuration
-in device tree.
+On 18/06/2019 08:46, Sowjanya Komatineni wrote:
+> Tegra210 platforms use sc7 entry firmware to program Tegra LP0/SC7 entry
+> sequence and sc7 entry firmware is run from COP/BPMP-Lite.
+> 
+> So, COP/BPMP-Lite still need IRQ function to finish SC7 suspend sequence
+> for Tegra210.
+> 
+> This patch has fix for leaving the COP IRQ enabled for Tegra210 during
+> interrupt controller suspend operation.
+> 
+> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+> ---
+>  drivers/irqchip/irq-tegra.c | 21 +++++++++++++++++++--
+>  1 file changed, 19 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-tegra.c b/drivers/irqchip/irq-tegra.c
+> index e1f771c72fc4..cf0c07052064 100644
+> --- a/drivers/irqchip/irq-tegra.c
+> +++ b/drivers/irqchip/irq-tegra.c
+> @@ -44,18 +44,22 @@ static unsigned int num_ictlrs;
+>  
+>  struct tegra_ictlr_soc {
+>  	unsigned int num_ictlrs;
+> +	bool supports_sc7;
+>  };
+>  
+>  static const struct tegra_ictlr_soc tegra20_ictlr_soc = {
+>  	.num_ictlrs = 4,
+> +	.supports_sc7 = false,
 
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+nit: that's the default for a statically initialized structure.
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi b/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi
-index e8654061ce03..f7c9332085f8 100644
---- a/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi
-@@ -279,6 +279,13 @@
- 
- 	pmc@7000e400 {
- 		nvidia,invert-interrupt;
-+		nvidia,suspend-mode = <0>;
-+		nvidia,cpu-pwr-good-time = <0>;
-+		nvidia,cpu-pwr-off-time = <0>;
-+		nvidia,core-pwr-good-time = <4587 3876>;
-+		nvidia,core-pwr-off-time = <39065>;
-+		nvidia,core-power-req-active-high;
-+		nvidia,sys-clock-req-active-high;
- 	};
- 
- 	/* eMMC */
+>  };
+>  
+>  static const struct tegra_ictlr_soc tegra30_ictlr_soc = {
+>  	.num_ictlrs = 5,
+> +	.supports_sc7 = false,
+>  };
+>  
+>  static const struct tegra_ictlr_soc tegra210_ictlr_soc = {
+>  	.num_ictlrs = 6,
+> +	.supports_sc7 = true,
+>  };
+>  
+>  static const struct of_device_id ictlr_matches[] = {
+> @@ -67,6 +71,7 @@ static const struct of_device_id ictlr_matches[] = {
+>  
+>  struct tegra_ictlr_info {
+>  	void __iomem *base[TEGRA_MAX_NUM_ICTLRS];
+> +	const struct tegra_ictlr_soc *soc;
+>  #ifdef CONFIG_PM_SLEEP
+>  	u32 cop_ier[TEGRA_MAX_NUM_ICTLRS];
+>  	u32 cop_iep[TEGRA_MAX_NUM_ICTLRS];
+> @@ -147,8 +152,19 @@ static int tegra_ictlr_suspend(void)
+>  		lic->cop_ier[i] = readl_relaxed(ictlr + ICTLR_COP_IER);
+>  		lic->cop_iep[i] = readl_relaxed(ictlr + ICTLR_COP_IEP_CLASS);
+>  
+> -		/* Disable COP interrupts */
+> -		writel_relaxed(~0ul, ictlr + ICTLR_COP_IER_CLR);
+> +		/*
+> +		 * AVP/COP/BPMP-Lite is the Tegra boot processor.
+> +		 *
+> +		 * Tegra210 system suspend flow uses sc7entry firmware which
+> +		 * is executed by COP/BPMP and it includes disabling COP IRQ,
+> +		 * clamping CPU rail, turning off VDD_CPU, and preparing the
+> +		 * system to go to SC7/LP0.
+> +		 *
+> +		 * COP/BPMP wakes up when COP IRQ is triggered and runs
+> +		 * sc7entry-firmware. So need to keep COP interrupt enabled.
+
+It is great that you're describing what happens when the system does
+support this SC7 thing...
+
+> +		 */
+> +		if (!lic->soc->supports_sc7)
+> +			writel_relaxed(~0ul, ictlr + ICTLR_COP_IER_CLR);
+
+Except that the code actually deals with *not* having this SC7, and
+you've deleted the one line of comment that was explaining it.
+
+>  
+>  		/* Disable CPU interrupts */
+>  		writel_relaxed(~0ul, ictlr + ICTLR_CPU_IER_CLR);
+> @@ -339,6 +355,7 @@ static int __init tegra_ictlr_init(struct device_node *node,
+>  		goto out_unmap;
+>  	}
+>  
+> +	lic->soc = soc;
+>  	tegra_ictlr_syscore_init();
+>  
+>  	pr_info("%pOF: %d interrupts forwarded to %pOF\n",
+> 
+
+Otherwise looks OK to me.
+
+Thanks,
+
+	M.
 -- 
-2.7.4
-
+Jazz is not dead. It just smells funny...
