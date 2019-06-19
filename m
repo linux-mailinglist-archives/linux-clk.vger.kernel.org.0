@@ -2,106 +2,83 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C580C4BB0A
-	for <lists+linux-clk@lfdr.de>; Wed, 19 Jun 2019 16:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D424BB83
+	for <lists+linux-clk@lfdr.de>; Wed, 19 Jun 2019 16:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730764AbfFSOQ2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 19 Jun 2019 10:16:28 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:56553 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730844AbfFSOQ1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Jun 2019 10:16:27 -0400
+        id S1729730AbfFSObW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 19 Jun 2019 10:31:22 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:52483 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725899AbfFSObW (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Jun 2019 10:31:22 -0400
 X-Originating-IP: 92.137.69.152
 Received: from localhost (alyon-656-1-672-152.w92-137.abo.wanadoo.fr [92.137.69.152])
-        (Authenticated sender: gregory.clement@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 980F94000D;
-        Wed, 19 Jun 2019 14:16:23 +0000 (UTC)
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Jason Cooper <jason@lakedaemon.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Antoine Tenart <antoine.tenart@bootlin.com>,
-        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>
-Subject: [PATCH v6 6/6] arm64: dts: marvell: Add cpu clock node on Armada 7K/8K
-Date:   Wed, 19 Jun 2019 16:15:39 +0200
-Message-Id: <20190619141539.16884-7-gregory.clement@bootlin.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190619141539.16884-1-gregory.clement@bootlin.com>
-References: <20190619141539.16884-1-gregory.clement@bootlin.com>
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 5EA3620016;
+        Wed, 19 Jun 2019 14:31:14 +0000 (UTC)
+Date:   Wed, 19 Jun 2019 16:31:12 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Lee Jones <lee.jones@linaro.org>, mazziesaccount@gmail.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v15 0/7] support ROHM BD70528 PMIC
+Message-ID: <20190619143112.GO23549@piout.net>
+References: <cover.1559546139.git.matti.vaittinen@fi.rohmeurope.com>
+ <20190611200043.eib3g3acc7ilawsx@earth.universe>
+ <20190612060328.GQ4797@dell>
+ <20190613130529.kgswgbuszb24itxz@earth.universe>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190613130529.kgswgbuszb24itxz@earth.universe>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add cpu clock node on AP
+On 13/06/2019 15:05:29+0200, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Wed, Jun 12, 2019 at 07:03:28AM +0100, Lee Jones wrote:
+> > On Tue, 11 Jun 2019, Sebastian Reichel wrote:
+> > > On Mon, Jun 03, 2019 at 10:23:37AM +0300, Matti Vaittinen wrote:
+> > > > Patch series introducing support for ROHM BD70528 PMIC
+> > > > [...]
+> > > 
+> > > I think all patches have been reviewed by the respective subsystem
+> > > maintainers. Lee, can you provide an immutable branch with the MFD
+> > > patches (1, 2, 4)? Looks like the other patches only depend on those
+> > > and can go through their respective subsystems.
+> > 
+> > Yes.  It's on my TODO list.
+> 
+> Thanks.
+> 
+> > Would you prefer this method over me just taking them all and sending
+> > out a PR?  The latter is my usual flow, but I'm happy with either.
+> 
+> Both methods are fine with me. I usually go with "my" method, since
+> that results in less shared commits. It simplifies potential
+> follow-up bug fixes, since there is only one tree to fix.
+> 
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
----
- arch/arm64/boot/dts/marvell/armada-ap806-quad.dtsi | 4 ++++
- arch/arm64/boot/dts/marvell/armada-ap806.dtsi      | 7 +++++++
- 2 files changed, 11 insertions(+)
+Personally, I'm fine with Lee taking everything in his tree as it is
+very unlikely to require follow up patches this cycle (i.e before rc1).
 
-diff --git a/arch/arm64/boot/dts/marvell/armada-ap806-quad.dtsi b/arch/arm64/boot/dts/marvell/armada-ap806-quad.dtsi
-index 2baafe12ebd4..472211159979 100644
---- a/arch/arm64/boot/dts/marvell/armada-ap806-quad.dtsi
-+++ b/arch/arm64/boot/dts/marvell/armada-ap806-quad.dtsi
-@@ -20,24 +20,28 @@
- 			compatible = "arm,cortex-a72";
- 			reg = <0x000>;
- 			enable-method = "psci";
-+			clocks = <&cpu_clk 0>;
- 		};
- 		cpu1: cpu@1 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a72";
- 			reg = <0x001>;
- 			enable-method = "psci";
-+			clocks = <&cpu_clk 0>;
- 		};
- 		cpu2: cpu@100 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a72";
- 			reg = <0x100>;
- 			enable-method = "psci";
-+			clocks = <&cpu_clk 1>;
- 		};
- 		cpu3: cpu@101 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a72";
- 			reg = <0x101>;
- 			enable-method = "psci";
-+			clocks = <&cpu_clk 1>;
- 		};
- 	};
- };
-diff --git a/arch/arm64/boot/dts/marvell/armada-ap806.dtsi b/arch/arm64/boot/dts/marvell/armada-ap806.dtsi
-index 91dad7e4ee59..ed039aa8188f 100644
---- a/arch/arm64/boot/dts/marvell/armada-ap806.dtsi
-+++ b/arch/arm64/boot/dts/marvell/armada-ap806.dtsi
-@@ -280,6 +280,13 @@
- 				#address-cells = <1>;
- 				#size-cells = <1>;
- 
-+				cpu_clk: clock-cpu@0 {
-+					compatible = "marvell,ap806-cpu-clock";
-+					clocks = <&ap_clk 0>, <&ap_clk 1>;
-+					#clock-cells = <1>;
-+					reg = <0x278 0xa30>;
-+				};
-+
- 				ap_thermal: thermal-sensor@80 {
- 					compatible = "marvell,armada-ap806-thermal";
- 					reg = <0x80 0x10>;
+
 -- 
-2.20.1
-
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
