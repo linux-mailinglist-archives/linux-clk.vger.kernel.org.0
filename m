@@ -2,57 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 092D54D136
-	for <lists+linux-clk@lfdr.de>; Thu, 20 Jun 2019 17:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5F64D119
+	for <lists+linux-clk@lfdr.de>; Thu, 20 Jun 2019 17:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731802AbfFTPAY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 20 Jun 2019 11:00:24 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:40385 "EHLO
+        id S1731805AbfFTPAZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 20 Jun 2019 11:00:25 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:51434 "EHLO
         mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726675AbfFTPAX (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Jun 2019 11:00:23 -0400
-Received: by mail-wm1-f68.google.com with SMTP id v19so3496313wmj.5
-        for <linux-clk@vger.kernel.org>; Thu, 20 Jun 2019 08:00:22 -0700 (PDT)
+        with ESMTP id S1726654AbfFTPAY (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Jun 2019 11:00:24 -0400
+Received: by mail-wm1-f68.google.com with SMTP id 207so3418317wma.1
+        for <linux-clk@vger.kernel.org>; Thu, 20 Jun 2019 08:00:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LYe7DDXQIL9cgrU/J6+VemHeiSBNByBQZKqrYUm/eeo=;
-        b=SZ6V1yjLoHGVxYhYdXZ8SkshTMpt0KSi4NFSU2/xx/+B0QFCZ/xBQx3++HsNUvz09q
-         f8371/tpFqWte+O1B0mJZDY/m+oXsJXHnkEbSDAAnhNkUO8PnzGSlg4II9sJ3hdcTjOd
-         J9WFwVcXw1Db8/Z5WDM1EbNM6t7arljsdr1fNxbt9cblHpMLQs1tfjOgBG2COUK6/X/6
-         7OSdVHmMLNv3VZoB/VKHC6lVJjxUgqUX9LPBujDSjUYkKdwn8GW7yX10YVjW2J9tabmQ
-         cir+m7HPer+bOdYUNrInyBmC6SndMtZN6uaPzr+/1Qtquu9r+rrXslmH7bFbqZz3QtqX
-         JdnA==
+        bh=By2vibD8ed5SvKJiLslQhTFpnxDveNnIcoeXnTW3Wf0=;
+        b=aQf+Iy0nQ0FQz8qVhHiGfNhuG8rZz4Xwl8uToXWSA9d/lK5cjgTn5CJbCx89xFVaUY
+         zhvkAyBr0XVnDpxdj7Os7AjgRlMh3uMWCzy7V7QqvOBDr9m3wKmhkzqxgw02c/jmoZDd
+         pkYbaHjQAE+XlY0OUqp+Tm3cMJVRI8gogX6H21TYpYDn6V0yTXXjkgr6zLhR1ccb/Qur
+         Sy0w50kZ1kuE5m2WZZog4dyJjKa5qzizHbfwjscF+BBrU/SGTkIKzLvD9lbMoJIKyhFF
+         vpshSB7255OsuDSy8vFEEwplNxQtoiCs3MhaVO1BfwvwWxNTNrQGApMOsLU8dmjwWgSg
+         zkrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LYe7DDXQIL9cgrU/J6+VemHeiSBNByBQZKqrYUm/eeo=;
-        b=bzBwjloWK5lQqCMwi4XO3ckx60QijNtfvbmYsC1lBhTF0lfbLaymrclJYYVnMaqZJa
-         O7FOKBBcv+TQS8lsgT44GY4hHgqIInhoEQkLrOi27vkrSt/swG2GMRvnfhP6v0/Qpupf
-         PnXEdF8PlacyLipgkFw6n8XPmIawhJFappiIJWDpkVMRG5ST9RRad3rxKZxj8hQgEGBa
-         KeH+cJKTWSDVzJQvhrZFrdc8PoSQC6m8JyE8idS71lNZvZoTd5p37QykuLm9O5F1I303
-         FoAlwcw9fgu3FIMW29LJF9Cmf6UNqtqmH17+AtENJAIlnkFo0LsGKDYYx6ywGap1Ks9y
-         1RbA==
-X-Gm-Message-State: APjAAAXwwdXga0atKQuivkNDaaoXHIBmluLHQaot6mmVIUcp/fhQOjyu
-        e3rK4jJTH0rqEo3EcaIMENG1vw==
-X-Google-Smtp-Source: APXvYqyNNg0N3Vh+whUhU6uiroJxzDG3nOrILtRfiPwOSwkxjLjsRkVzUds9/M79qG+gl3Xaq9YOhg==
-X-Received: by 2002:a1c:3587:: with SMTP id c129mr69933wma.90.1561042821614;
-        Thu, 20 Jun 2019 08:00:21 -0700 (PDT)
+        bh=By2vibD8ed5SvKJiLslQhTFpnxDveNnIcoeXnTW3Wf0=;
+        b=FV3M1/4iH+8zHWEpbpKEM8jptxvDaL9vuaZgCp2X8zy5rFIAqna/kpgIUfYkm5ZRx2
+         WDchA+7jYau+0zSFX+EP+Mwptq+UwHa8RvrHnJJ2RFzXYJ57s/KIvrlWfBHlbZxMMVVN
+         EPiR+Af8l50YOMLHxWLh1dtY1o4oeIU8aD89anwQk1LjaiswaXP27YTYLsML8P96+8bv
+         l5jg9KbKdr8yAqnkEcYwX+2emsdTLPqvkNcvGVpTMl0Z3djdCljjgJ5m9xNZTunG09KL
+         g7t9w2DKf1f8GeiNE6LjqQeHFif6ESXNp0+l68gwGsZANiPxK+5gTtwzp139etHD2apV
+         wcSA==
+X-Gm-Message-State: APjAAAU+IBTZIhP+oEDOfJAtfBO6O8Ztl7PI58XIYOScsYAMjyieT6dj
+        ItNaHxSK6agavhyB12Tr0ZG9SA==
+X-Google-Smtp-Source: APXvYqy4PpfMpc89fPxuLdkIg+PgewzWYS4fDQc+uPktXcbMW544oq2gwfbsa8I3ngP0nFcrvQzD3A==
+X-Received: by 2002:a1c:f205:: with SMTP id s5mr81645wmc.14.1561042822413;
+        Thu, 20 Jun 2019 08:00:22 -0700 (PDT)
 Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id o126sm6802520wmo.1.2019.06.20.08.00.20
+        by smtp.gmail.com with ESMTPSA id o126sm6802520wmo.1.2019.06.20.08.00.21
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 20 Jun 2019 08:00:20 -0700 (PDT)
+        Thu, 20 Jun 2019 08:00:21 -0700 (PDT)
 From:   Neil Armstrong <narmstrong@baylibre.com>
 To:     jbrunet@baylibre.com, khilman@baylibre.com
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, martin.blumenstingl@googlemail.com,
         Neil Armstrong <narmstrong@baylibre.com>
-Subject: [RFC/RFT 01/14] pinctrl: meson-g12a: add pwm_a on GPIOE_2 pinmux
-Date:   Thu, 20 Jun 2019 17:00:00 +0200
-Message-Id: <20190620150013.13462-2-narmstrong@baylibre.com>
+Subject: [RFC/RFT 02/14] clk: core: introduce clk_hw_set_parent()
+Date:   Thu, 20 Jun 2019 17:00:01 +0200
+Message-Id: <20190620150013.13462-3-narmstrong@baylibre.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190620150013.13462-1-narmstrong@baylibre.com>
 References: <20190620150013.13462-1-narmstrong@baylibre.com>
@@ -63,54 +63,47 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the missing pinmux for the pwm_a function on the GPIOE_2 pin.
+Introduce the clk_hw_set_parent() provider call to change parent of
+a clock by using the clk_hw pointers.
+
+This eases the clock reparenting from clock rate notifiers and
+implementing DVFS with simpler code avoiding the boilerplates
+functions as __clk_lookup(clk_hw_get_name()) then clk_set_parent().
 
 Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
 ---
- drivers/pinctrl/meson/pinctrl-meson-g12a.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/clk/clk.c            | 5 +++++
+ include/linux/clk-provider.h | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/drivers/pinctrl/meson/pinctrl-meson-g12a.c b/drivers/pinctrl/meson/pinctrl-meson-g12a.c
-index 3475cd7bd2af..582665fd362a 100644
---- a/drivers/pinctrl/meson/pinctrl-meson-g12a.c
-+++ b/drivers/pinctrl/meson/pinctrl-meson-g12a.c
-@@ -801,6 +801,9 @@ static const unsigned int remote_ao_input_pins[]	= { GPIOAO_5 };
- /* ir_out */
- static const unsigned int remote_ao_out_pins[]		= { GPIOAO_4 };
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index aa51756fd4d6..3e98f7dec626 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -2490,6 +2490,11 @@ static int clk_core_set_parent_nolock(struct clk_core *core,
+ 	return ret;
+ }
  
-+/* pwm_a_e */
-+static const unsigned int pwm_a_e_pins[]		= { GPIOE_2 };
++int clk_hw_set_parent(struct clk_hw *hw, struct clk_hw *parent)
++{
++	return clk_core_set_parent_nolock(hw->core, parent->core);
++}
 +
- /* pwm_ao_a */
- static const unsigned int pwm_ao_a_pins[]		= { GPIOAO_11 };
- static const unsigned int pwm_ao_a_hiz_pins[]		= { GPIOAO_11 };
-@@ -888,6 +891,7 @@ static struct meson_pmx_group meson_g12a_aobus_groups[] = {
- 	GROUP(i2c_ao_slave_sda,		3),
- 	GROUP(remote_ao_input,		1),
- 	GROUP(remote_ao_out,		1),
-+	GROUP(pwm_a_e,			3),
- 	GROUP(pwm_ao_a,			3),
- 	GROUP(pwm_ao_a_hiz,		2),
- 	GROUP(pwm_ao_b,			3),
-@@ -1192,6 +1196,10 @@ static const char * const remote_ao_out_groups[] = {
- 	"remote_ao_out",
- };
- 
-+static const char * const pwm_a_e_groups[] = {
-+	"pwm_a_e",
-+};
-+
- static const char * const pwm_ao_a_groups[] = {
- 	"pwm_ao_a", "pwm_ao_a_hiz",
- };
-@@ -1290,6 +1298,7 @@ static struct meson_pmx_func meson_g12a_aobus_functions[] = {
- 	FUNCTION(i2c_ao_slave),
- 	FUNCTION(remote_ao_input),
- 	FUNCTION(remote_ao_out),
-+	FUNCTION(pwm_a_e),
- 	FUNCTION(pwm_ao_a),
- 	FUNCTION(pwm_ao_b),
- 	FUNCTION(pwm_ao_c),
+ /**
+  * clk_set_parent - switch the parent of a mux clk
+  * @clk: the mux clk whose input we are switching
+diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+index bb6118f79784..8a453380f9a4 100644
+--- a/include/linux/clk-provider.h
++++ b/include/linux/clk-provider.h
+@@ -812,6 +812,7 @@ unsigned int clk_hw_get_num_parents(const struct clk_hw *hw);
+ struct clk_hw *clk_hw_get_parent(const struct clk_hw *hw);
+ struct clk_hw *clk_hw_get_parent_by_index(const struct clk_hw *hw,
+ 					  unsigned int index);
++int clk_hw_set_parent(struct clk_hw *hw, struct clk_hw *new_parent);
+ unsigned int __clk_get_enable_count(struct clk *clk);
+ unsigned long clk_hw_get_rate(const struct clk_hw *hw);
+ unsigned long __clk_get_flags(struct clk *clk);
 -- 
 2.21.0
 
