@@ -2,57 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 207704D130
-	for <lists+linux-clk@lfdr.de>; Thu, 20 Jun 2019 17:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 078724D11E
+	for <lists+linux-clk@lfdr.de>; Thu, 20 Jun 2019 17:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732215AbfFTPBM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 20 Jun 2019 11:01:12 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:41132 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732022AbfFTPAa (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Jun 2019 11:00:30 -0400
-Received: by mail-wr1-f68.google.com with SMTP id c2so3364899wrm.8
-        for <linux-clk@vger.kernel.org>; Thu, 20 Jun 2019 08:00:30 -0700 (PDT)
+        id S1732087AbfFTPAe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 20 Jun 2019 11:00:34 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:53443 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732054AbfFTPAd (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Jun 2019 11:00:33 -0400
+Received: by mail-wm1-f66.google.com with SMTP id x15so3392519wmj.3
+        for <linux-clk@vger.kernel.org>; Thu, 20 Jun 2019 08:00:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lvCQg8fkf4AhMPMA11E/TDsr9RLDhACmfamGvoLo6Us=;
-        b=ZkNBuemC27/s9vbgndDsGwjRRSiLq96YdfPINqqKzDjQn90Qcm8t0Lj58ZfQBZYKGg
-         8bcR/XvPsILe892VTo0OmoSCiekCJCX3TlbRmHEHJ3vzE9+sGXw+vnKAhBs45P2SI07v
-         e3Oxz+tucuq69krMLV2LUbPRErpWXYbw1Js/nnOYU/94RZS05BAgy3h/bPO6/zfrOwZ4
-         F7pNiAUgM8QtuJCVp8ilAjUhGe61FLORLA8seVVdFd2cslK6440TD2MBCqoSVTL6xu0X
-         wVzWvyWRK4E0sVAODLvJRbX8E+NbHm9dcASo78JP08wjbXVEPa1TxBSF3Hg3xqEq4xUN
-         RHHA==
+        bh=eF8xBGeTljvvRz8oIGPjn0ZgbNxxAvWP0tXIK0uht64=;
+        b=G+jGjIMvhLDlHlsS6ZUQa62iQPcD1g9joTMkE88tdYoN0qASnjniGNFYJPZU+MLSCX
+         H7EPMSh7fkUYj/ww1ZZ4miAqZl1duvLB+21CLWFEY9BOKNgXt9caf9pxRR0j94gTykle
+         oZzT0WdZTg3PVn2yUYMarDfak4tAp1QeolW/5s6jNYm8aZxbPu/oQRZCVsjn8zZDkjR3
+         g9qrP/pXJWwTpDIiKG3L5k4I7FRfpiQ4v2MH31zO/f3/tgspZsezciharlR3DlUw9mXJ
+         0aaBOLMZUcIGomlBEMSR0QE/fZONdiICEkN1HZ0hE/PFo6spyeh0+0S+2jraLAi9vYs1
+         AMQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lvCQg8fkf4AhMPMA11E/TDsr9RLDhACmfamGvoLo6Us=;
-        b=P+OsAVWb3+K1HSqwP+fQU/xySNtCkuCj+7eRCIsffKVE7RlVtC9lY/dLGbG2fY3zQb
-         wENLBgVjL1PIn/eA26jNMfUnRi7zBWXtRUcseAjR8zjmHXZ8um16hAmJTYHwbHOapIkh
-         iA2hzI0MUAhEDt0E6MYPnKD5KFoWSJsinl50ZEXn//A8WgwQQVD2qe16D0oz5uHKaHGw
-         giS/HSqW87wIXDrY2Ux3uSjvW5iUkv2DEskLmqPOHyYzc6mAAZi5P40e9iqyPzsXnTFP
-         1PdkRkF5j2iTChSjg6yr2l9cFwPs+nABiGcvcimkCrxuiSmuQWZkVwWxTUFQapSNUTm2
-         hXHA==
-X-Gm-Message-State: APjAAAUPUNGYZg8u/2NHEmaTN9+9CdrD/u+cNLXZyOTquR8f7qBnbu/C
-        Z23hezKCkAc3mR0OclzCM8CflA==
-X-Google-Smtp-Source: APXvYqzLYovsxFjf46DbcbhAjqfq5ncPgOBrMCKwL4HgOuGrU6Zszy7/dmR3PIOLGHWu/FGiIBljIQ==
-X-Received: by 2002:adf:df10:: with SMTP id y16mr4435320wrl.302.1561042829338;
-        Thu, 20 Jun 2019 08:00:29 -0700 (PDT)
+        bh=eF8xBGeTljvvRz8oIGPjn0ZgbNxxAvWP0tXIK0uht64=;
+        b=V5wbwfOkPtA7nEslGHNh8+dVlLOx8xjsGj4hNKM+c58fLs1mTTRGfyzpmhIWTXY7f5
+         f35o0cHP6cjbESNHptjTDaFtBXOLmLh1S8cnTLysE+wezonwxW/AQy/Q83XuknQoEB0c
+         7+68z0Ftpx+jKTpZU+rXixF5J5cICczvlYH+Li5P8TUsdV+BRQcfB3L9HuTftIyTRPe0
+         YQqEbs2gymWcxQCFEGhr/x9yBLJ939YJsB0PWflWD/i0hIqXrm6yvHr8DjPfQeLB5rTq
+         R/WTP7rPyCs+aJdTaJEvEvshvgSeVczD59BupQRiwv9MIfwYD5VNGKasJIATBP0fdUH4
+         Ey9g==
+X-Gm-Message-State: APjAAAWosP/hOpLmXVyktNwnuzaEgHHEpCi455UrdBEgOHCw8QJAX194
+        sTBdKE4Hs6Jq6cBIr36Bj6hqNQ==
+X-Google-Smtp-Source: APXvYqyB0M/8J7elbFZ7JqzPsyIKsmt8dD5yRCndjrBFTtmLDZMEgDCJQgbv0JCT6BR9I/9CVeq96w==
+X-Received: by 2002:a1c:1fc2:: with SMTP id f185mr56296wmf.154.1561042831759;
+        Thu, 20 Jun 2019 08:00:31 -0700 (PDT)
 Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id o126sm6802520wmo.1.2019.06.20.08.00.28
+        by smtp.gmail.com with ESMTPSA id o126sm6802520wmo.1.2019.06.20.08.00.30
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 20 Jun 2019 08:00:28 -0700 (PDT)
+        Thu, 20 Jun 2019 08:00:31 -0700 (PDT)
 From:   Neil Armstrong <narmstrong@baylibre.com>
 To:     jbrunet@baylibre.com, khilman@baylibre.com
 Cc:     linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, martin.blumenstingl@googlemail.com,
         Neil Armstrong <narmstrong@baylibre.com>
-Subject: [RFC/RFT 08/14] clk: meson: g12a: expose CPUB clock ID for G12B
-Date:   Thu, 20 Jun 2019 17:00:07 +0200
-Message-Id: <20190620150013.13462-9-narmstrong@baylibre.com>
+Subject: [RFC/RFT 10/14] arm64: dts: meson-g12-common: add pwm_a on GPIOE_2 pinmux
+Date:   Thu, 20 Jun 2019 17:00:09 +0200
+Message-Id: <20190620150013.13462-11-narmstrong@baylibre.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190620150013.13462-1-narmstrong@baylibre.com>
 References: <20190620150013.13462-1-narmstrong@baylibre.com>
@@ -63,25 +63,32 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Expose the CPUB clock id to add DVFS to the second CPU cluster of
-the Amlogic G12B SoC.
+Add the ao_pinctrl subnode for the pwm_a function on GPIOE_2.
 
 Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
 ---
- include/dt-bindings/clock/g12a-clkc.h | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/include/dt-bindings/clock/g12a-clkc.h b/include/dt-bindings/clock/g12a-clkc.h
-index b6b127e45634..8ccc29ac7a72 100644
---- a/include/dt-bindings/clock/g12a-clkc.h
-+++ b/include/dt-bindings/clock/g12a-clkc.h
-@@ -137,5 +137,6 @@
- #define CLKID_VDEC_HEVC				207
- #define CLKID_VDEC_HEVCF			210
- #define CLKID_TS				212
-+#define CLKID_CPUB_CLK				224
+diff --git a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+index 2baa04303762..76484801478d 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi
+@@ -1984,6 +1984,14 @@
+ 						};
+ 					};
  
- #endif /* __G12A_CLKC_H */
++					pwm_a_e_pins: pwm-a-e {
++						mux {
++							groups = "pwm_a_e";
++							function = "pwm_a_e";
++							bias-disable;
++						};
++					};
++
+ 					pwm_ao_a_pins: pwm-ao-a {
+ 						mux {
+ 							groups = "pwm_ao_a";
 -- 
 2.21.0
 
