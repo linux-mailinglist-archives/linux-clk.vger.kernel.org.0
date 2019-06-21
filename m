@@ -2,177 +2,97 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A50DD4E622
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Jun 2019 12:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0FA4E8AD
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Jun 2019 15:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726696AbfFUKfD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 21 Jun 2019 06:35:03 -0400
-Received: from lucky1.263xmail.com ([211.157.147.134]:54120 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726289AbfFUKfD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 21 Jun 2019 06:35:03 -0400
-Received: from tony.xie?rock-chips.com (unknown [192.168.167.234])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 0CD9538753;
-        Fri, 21 Jun 2019 18:34:59 +0800 (CST)
-X-263anti-spam: KSV:0;BIG:0;
-X-MAIL-GRAY: 1
-X-MAIL-DELIVERY: 0
-X-KSVirus-check: 0
-X-ADDR-CHECKED4: 1
-X-ABS-CHECKED: 1
-X-SKE-CHECKED: 1
-X-ANTISPAM-LEVEL: 2
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P8407T139759443769088S1561113296058606_;
-        Fri, 21 Jun 2019 18:34:57 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <68853aa28a350f80205b3cfab4ccfa75>
-X-RL-SENDER: tony.xie@rock-chips.com
-X-SENDER: xxx@rock-chips.com
-X-LOGIN-NAME: tony.xie@rock-chips.com
-X-FST-TO: heiko@sntech.de
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-DNS-TYPE: 0
-From:   Tony Xie <tony.xie@rock-chips.com>
-To:     heiko@sntech.de
-Cc:     broonie@kernel.org, lee.jones@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chenjh@rock-chips.com,
-        xsf@rock-chips.com, zhangqing@rock-chips.com,
-        huangtao@rock-chips.com, tony.xie@rock-chips.com
-Subject: [PATCH v10 6/6] clk: RK808: add RK809 and RK817 support.
-Date:   Fri, 21 Jun 2019 06:34:55 -0400
-Message-Id: <20190621103455.8294-1-tony.xie@rock-chips.com>
+        id S1726757AbfFUNN5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 21 Jun 2019 09:13:57 -0400
+Received: from baptiste.telenet-ops.be ([195.130.132.51]:41460 "EHLO
+        baptiste.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726285AbfFUNN5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 21 Jun 2019 09:13:57 -0400
+Received: from ramsan ([84.194.111.163])
+        by baptiste.telenet-ops.be with bizsmtp
+        id TRDv2000W3XaVaC01RDvCY; Fri, 21 Jun 2019 15:13:56 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1heJMZ-00040d-Ig; Fri, 21 Jun 2019 15:13:55 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1heHiT-0000p0-VR; Fri, 21 Jun 2019 13:28:25 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [git pull] clk: renesas: Updates for v5.3 (take two)
+Date:   Fri, 21 Jun 2019 13:28:21 +0200
+Message-Id: <20190621112821.3104-1-geert+renesas@glider.be>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190621103258.8154-1-tony.xie@rock-chips.com>
-References: <20190621103258.8154-1-tony.xie@rock-chips.com>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-RK809 and RK817 are power management IC chips for multimedia products.
-most of their functions and registers are same, including the clkout
-funciton.
+	Hi Mike, Stephen,
 
-Signed-off-by: Tony Xie <tony.xie@rock-chips.com>
-Acked-by: Stephen Boyd <sboyd@kernel.org>
----
- drivers/clk/Kconfig     |  9 +++---
- drivers/clk/clk-rk808.c | 64 ++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 67 insertions(+), 6 deletions(-)
+The following changes since commit aad03a66f902e18bab612870261bde647fdbda2c:
 
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index e5b2fe80eab4..532ab112fa8a 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -52,13 +52,12 @@ config COMMON_CLK_MAX9485
- 	  This driver supports Maxim 9485 Programmable Audio Clock Generator
- 
- config COMMON_CLK_RK808
--	tristate "Clock driver for RK805/RK808/RK818"
-+	tristate "Clock driver for RK805/RK808/RK809/RK817/RK818"
- 	depends on MFD_RK808
- 	---help---
--	  This driver supports RK805, RK808 and RK818 crystal oscillator clock. These
--	  multi-function devices have two fixed-rate oscillators,
--	  clocked at 32KHz each. Clkout1 is always on, Clkout2 can off
--	  by control register.
-+	  This driver supports RK805, RK809 and RK817, RK808 and RK818 crystal oscillator clock.
-+	  These multi-function devices have two fixed-rate oscillators, clocked at 32KHz each.
-+	  Clkout1 is always on, Clkout2 can off by control register.
- 
- config COMMON_CLK_HI655X
- 	tristate "Clock driver for Hi655x" if EXPERT
-diff --git a/drivers/clk/clk-rk808.c b/drivers/clk/clk-rk808.c
-index 8d90bdf5b946..75f2cf0dfc9f 100644
---- a/drivers/clk/clk-rk808.c
-+++ b/drivers/clk/clk-rk808.c
-@@ -96,6 +96,68 @@ of_clk_rk808_get(struct of_phandle_args *clkspec, void *data)
- 	return idx ? &rk808_clkout->clkout2_hw : &rk808_clkout->clkout1_hw;
- }
- 
-+static int rk817_clkout2_enable(struct clk_hw *hw, bool enable)
-+{
-+	struct rk808_clkout *rk808_clkout = container_of(hw,
-+							 struct rk808_clkout,
-+							 clkout2_hw);
-+	struct rk808 *rk808 = rk808_clkout->rk808;
-+
-+	return regmap_update_bits(rk808->regmap, RK817_SYS_CFG(1),
-+				  RK817_CLK32KOUT2_EN,
-+				  enable ? RK817_CLK32KOUT2_EN : 0);
-+}
-+
-+static int rk817_clkout2_prepare(struct clk_hw *hw)
-+{
-+	return rk817_clkout2_enable(hw, true);
-+}
-+
-+static void rk817_clkout2_unprepare(struct clk_hw *hw)
-+{
-+	rk817_clkout2_enable(hw, false);
-+}
-+
-+static int rk817_clkout2_is_prepared(struct clk_hw *hw)
-+{
-+	struct rk808_clkout *rk808_clkout = container_of(hw,
-+							 struct rk808_clkout,
-+							 clkout2_hw);
-+	struct rk808 *rk808 = rk808_clkout->rk808;
-+	unsigned int val;
-+
-+	int ret = regmap_read(rk808->regmap, RK817_SYS_CFG(1), &val);
-+
-+	if (ret < 0)
-+		return 0;
-+
-+	return (val & RK817_CLK32KOUT2_EN) ? 1 : 0;
-+}
-+
-+static const struct clk_ops rk817_clkout2_ops = {
-+	.prepare = rk817_clkout2_prepare,
-+	.unprepare = rk817_clkout2_unprepare,
-+	.is_prepared = rk817_clkout2_is_prepared,
-+	.recalc_rate = rk808_clkout_recalc_rate,
-+};
-+
-+static const struct clk_ops *rkpmic_get_ops(long variant)
-+{
-+	switch (variant) {
-+	case RK809_ID:
-+	case RK817_ID:
-+		return &rk817_clkout2_ops;
-+	/*
-+	 * For the default case, it match the following PMIC type.
-+	 * RK805_ID
-+	 * RK808_ID
-+	 * RK818_ID
-+	 */
-+	default:
-+		return &rk808_clkout2_ops;
-+	}
-+}
-+
- static int rk808_clkout_probe(struct platform_device *pdev)
- {
- 	struct rk808 *rk808 = dev_get_drvdata(pdev->dev.parent);
-@@ -127,7 +189,7 @@ static int rk808_clkout_probe(struct platform_device *pdev)
- 		return ret;
- 
- 	init.name = "rk808-clkout2";
--	init.ops = &rk808_clkout2_ops;
-+	init.ops = rkpmic_get_ops(rk808->variant);
- 	rk808_clkout->clkout2_hw.init = &init;
- 
- 	/* optional override of the clockname */
--- 
-2.17.1
+  clk: renesas: r9a06g032: Add clock domain support (2019-06-04 11:51:00 +0200)
 
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git tags/clk-renesas-for-v5.3-tag2
 
+for you to fetch changes up to ec2b827be39624bab743730385bc170d29472965:
+
+  clk: renesas: cpg-mssr: Use [] to denote a flexible array member (2019-06-20 11:37:16 +0200)
+
+----------------------------------------------------------------
+clk: renesas: Updates for v5.3 (take two)
+
+  - Add CMM (Color Management Module) clocks on R-Car H3, M3-N, E3, and
+    D3,
+  - Add TPU (Timer Pulse Unit / PWM) clocks on RZ/G2M,
+  - Small cleanups and fixes.
+
+Thanks for pulling!
+
+----------------------------------------------------------------
+Fabrizio Castro (1):
+      clk: renesas: r8a774a1: Add TMU clock
+
+Geert Uytterhoeven (5):
+      clk: renesas: cpg-mssr: Update kerneldoc for struct cpg_mssr_priv
+      clk: renesas: div6: Combine clock-private and parent array allocation
+      clk: renesas: mstp: Combine group-private and clock array allocation
+      clk: renesas: cpg-mssr: Combine driver-private and clock array allocation
+      clk: renesas: cpg-mssr: Use [] to denote a flexible array member
+
+Jacopo Mondi (4):
+      clk: renesas: r8a7795: Add CMM clocks
+      clk: renesas: r8a77965: Add CMM clocks
+      clk: renesas: r8a77990: Add CMM clocks
+      clk: renesas: r8a77995: Add CMM clocks
+
+ drivers/clk/renesas/clk-div6.c          | 19 +++++--------------
+ drivers/clk/renesas/clk-mstp.c          | 12 ++++++------
+ drivers/clk/renesas/r8a774a1-cpg-mssr.c |  5 +++++
+ drivers/clk/renesas/r8a7795-cpg-mssr.c  |  4 ++++
+ drivers/clk/renesas/r8a77965-cpg-mssr.c |  3 +++
+ drivers/clk/renesas/r8a77990-cpg-mssr.c |  2 ++
+ drivers/clk/renesas/r8a77995-cpg-mssr.c |  2 ++
+ drivers/clk/renesas/renesas-cpg-mssr.c  | 25 +++++++++----------------
+ 8 files changed, 36 insertions(+), 36 deletions(-)
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
