@@ -2,76 +2,109 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E5984E0CA
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Jun 2019 09:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A824E1C2
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Jun 2019 10:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726287AbfFUHFu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 21 Jun 2019 03:05:50 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:38570 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726008AbfFUHFp (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 21 Jun 2019 03:05:45 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 2296A200911;
-        Fri, 21 Jun 2019 09:05:44 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E309D200902;
-        Fri, 21 Jun 2019 09:05:33 +0200 (CEST)
-Received: from mega.ap.freescale.net (mega.ap.freescale.net [10.192.208.232])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 67799402DF;
-        Fri, 21 Jun 2019 15:05:21 +0800 (SGT)
-From:   Anson.Huang@nxp.com
-To:     catalin.marinas@arm.com, will@kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, mturquette@baylibre.com,
-        sboyd@kernel.org, leonard.crestez@nxp.com, aisheng.dong@nxp.com,
-        ping.bai@nxp.com, daniel.baluta@nxp.com, peng.fan@nxp.com,
-        abel.vesa@nxp.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        id S1726171AbfFUIOj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 21 Jun 2019 04:14:39 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:60523 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726030AbfFUIOj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 21 Jun 2019 04:14:39 -0400
+Received: from localhost (aaubervilliers-681-1-41-156.w90-88.abo.wanadoo.fr [90.88.16.156])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id DBF74240005;
+        Fri, 21 Jun 2019 08:14:35 +0000 (UTC)
+Date:   Fri, 21 Jun 2019 10:14:35 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@codeaurora.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
         linux-clk@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH 4/4] arm64: dts: imx8mm: Add system counter node
-Date:   Fri, 21 Jun 2019 15:07:20 +0800
-Message-Id: <20190621070720.12395-4-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190621070720.12395-1-Anson.Huang@nxp.com>
-References: <20190621070720.12395-1-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+Subject: [GIT PULL] Allwinner Clock Changes for 5.3
+Message-ID: <fa2e50d6-b01d-48f4-8ddf-77488f11036e.lettre@localhost>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="7nrsb5xw5ieoesh4"
+Content-Disposition: inline
+User-Agent: NeoMutt/20180716
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Anson Huang <Anson.Huang@nxp.com>
 
-Add i.MX8MM system counter node to enable timer-imx-sysctr
-broadcast timer driver.
+--7nrsb5xw5ieoesh4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8mm.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Hi,
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-index 232a741..f606efa 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-@@ -510,6 +510,15 @@
- 				#pwm-cells = <2>;
- 				status = "disabled";
- 			};
-+
-+			system_counter: timer@306a0000 {
-+				compatible = "nxp,sysctr-timer";
-+				reg = <0x306a0000 0x30000>;
-+				interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>,
-+					     <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clk IMX8MM_CLK_SYS_CTR>;
-+				clock-names = "per";
-+			};
- 		};
- 
- 		aips3: bus@30800000 {
--- 
-2.7.4
+Please pull the following changes for the next release.
 
+Thanks!
+Maxime
+
+The following changes since commit a188339ca5a396acc588e5851ed7e19f66b0ebd9:
+
+  Linux 5.2-rc1 (2019-05-19 15:47:09 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git refs/tags=
+/sunxi-clk-for-5.3-201906210814
+
+for you to fetch changes up to b467ec063ec56900e1ebba4d5aeb50b0a7cb0ef8:
+
+  dt-bindings: clk: Convert Allwinner CCU to a schema (2019-06-05 14:32:08 =
++0200)
+
+----------------------------------------------------------------
+A few patches to fix two minor bugs, and to introduce a schemas for
+our device tree bindings.
+
+----------------------------------------------------------------
+Gen Zhang (1):
+      clk-sunxi: fix a missing-check bug in sunxi_divs_clk_setup()
+
+Maxime Ripard (1):
+      dt-bindings: clk: Convert Allwinner CCU to a schema
+
+Ondrej Jirman (1):
+      clk: sunxi-ng: sun50i-h6-r: Fix incorrect W1 clock gate register
+
+
+ Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-ccu.yaml | 141=
+ +++++++-
+ Documentation/devicetree/bindings/clock/sunxi-ccu.txt                |  62=
+ +---
+ drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c                               |   2=
+ +-
+ drivers/clk/sunxi/clk-sunxi.c                                        |   2=
+ +-
+ 4 files changed, 144 insertions(+), 63 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i=
+-a10-ccu.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/sunxi-ccu.txt
+
+
+
+--=20
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+--7nrsb5xw5ieoesh4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXQyR6wAKCRDj7w1vZxhR
+xQRaAP9Xhmy1qm0KuuUPap4yaBzivCPU9gMJnpXd1U9/q0GisgD+KR+IEnaSC9IW
+TRI8JPg3bNELIxz+AAgz8FskRHMM1Q8=
+=aVEh
+-----END PGP SIGNATURE-----
+
+--7nrsb5xw5ieoesh4--
