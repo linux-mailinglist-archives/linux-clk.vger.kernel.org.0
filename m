@@ -2,88 +2,205 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7E34FDBC
-	for <lists+linux-clk@lfdr.de>; Sun, 23 Jun 2019 20:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0766A4FF5F
+	for <lists+linux-clk@lfdr.de>; Mon, 24 Jun 2019 04:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726285AbfFWSyj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 23 Jun 2019 14:54:39 -0400
-Received: from mail-ua1-f65.google.com ([209.85.222.65]:33579 "EHLO
-        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726274AbfFWSyj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 23 Jun 2019 14:54:39 -0400
-Received: by mail-ua1-f65.google.com with SMTP id f20so4911149ual.0
-        for <linux-clk@vger.kernel.org>; Sun, 23 Jun 2019 11:54:39 -0700 (PDT)
+        id S1727141AbfFXC2B (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 23 Jun 2019 22:28:01 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:39706 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726334AbfFXC2B (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 23 Jun 2019 22:28:01 -0400
+Received: by mail-lj1-f194.google.com with SMTP id v18so10959956ljh.6;
+        Sun, 23 Jun 2019 19:27:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nwiVA+zdiXVtcAA48z1FRqgt/DlrA/D4evtHSh23uZY=;
-        b=WXW9FMSzc1UsTJ9rcjpMCaBxf1C5ZoHQ14UHz9qlPWDHQ33TLNnXHqXeCW1ClW/+ST
-         XQwra40eUZSCdu4HdPc9kJ1NmaHLfVy1gGjvaL1awaEzqtNkPwTte9x7gYkuYF0fhGnF
-         GU5wQy9BmQqlbvy6M6Z44zI4no0tW6MjFIU/7bFpx7Tl3VPemNK1v+iApt6V8tkbxPPB
-         pr3hMV+RUiwIsvrH15F4EshfYsykku4k2+kHzf2Cpz0WEDF/utrZSZBCbTYCw/jLYpor
-         O++P00M0YlBYp2h7ISt02IDLepKg3z9WgCBPolmvzaWqrpK92FeNZwoIYiCLcEXPSgvM
-         ekMA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AxwkbS0fcKxl/zIGar7QxJotcV1Cfh9QGSRQWWbJSBg=;
+        b=Ei9NsraczeHKUZb0Z0zmCoMcPr+e5hwgLg05gvNPMZ8DLa4IiTm2zelemz7bINhTwi
+         vy2xpLJ8202+q2bOJBRssMDimnxVFqyGvWutFBzgawBniOHvXtAo11l0ozfiFSxOyTbv
+         TukZ8a0b8HG6Gi0LcreguEcrmfDwqxC5X4rNLaEaF/scgej/hruRcBf1XXsXR4b/O5YW
+         Daheluu9KxWOa5ApxVukBIoglVVOXH1FWPs24mKHEFyuv0+Lnt83tz8s65ptamRRKmad
+         yHlK+llIfRy9Z+9Oulq9aZFWJSq6mIQvZ/XCGHIrnPfoQDTWvovjVhQNKgmhucfdo+jq
+         5dXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nwiVA+zdiXVtcAA48z1FRqgt/DlrA/D4evtHSh23uZY=;
-        b=l3cMEFv6xflTz/94e3xx6IV9VvgPzk9hOkQG7eXEIkUusAtKzar7Flvk8/9GN/J0sy
-         XOIym/YvD4TXn4EHFsZTk4KEtXW/pQN2Ih7KCG7cAc653sN0bOgj+ymC9KbSBn5kwzmR
-         CuD/sDYqTSfMYE6Gyfz5TqmluJcaOAVff4ZesXiqB6Dp1yu2vW8bWhsvU2NJ0xhO/nh4
-         Y8yncaECtDh6TpzEnPIF4pWm++5wueZurFRERQiyhrlj+JItPElEKazgRc/10X1O12MK
-         bHpCvIBGW3lLKV62qDMbKtQftda/DLJokIBafJ8E2nyK4YPvKcZzj0y3yp0tS6hlHutf
-         kvTg==
-X-Gm-Message-State: APjAAAXHHQOKJWugAmAmZp249gdQDOonzmYJx9Ar9HmTxLYkcklFjZ02
-        qtHO3xey9MOcnQ/8HpPZeVYKDfHzeUryyH+P4qhVWg==
-X-Google-Smtp-Source: APXvYqzCzRAym8rh7cPGxz5P73v27dCWRwG4pG1j4xoLUfqZS/QTXvBWM1/a80OjBJmtJ0Ubodh9P1H1ZuNsZ8OVOQY=
-X-Received: by 2002:ab0:23ce:: with SMTP id c14mr9036423uan.77.1561316078413;
- Sun, 23 Jun 2019 11:54:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <0171956f-b367-9f3b-f690-71657d8c50ec@free.fr> <fe935706-b18d-8966-a447-c1fb2be25c85@linaro.org>
- <d6f20e7b-2609-faf3-3dfa-aba644d8a9b6@free.fr>
-In-Reply-To: <d6f20e7b-2609-faf3-3dfa-aba644d8a9b6@free.fr>
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Mon, 24 Jun 2019 00:24:27 +0530
-Message-ID: <CAHLCerP-dwpEdquSJ8F-tWatp97LHaF-uCxPNrvB4FStdTw0gw@mail.gmail.com>
-Subject: Re: [PATCH v3] clk: qcom: msm8916: Don't build drivers by default
-To:     Marc Gonzalez <marc.w.gonzalez@free.fr>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AxwkbS0fcKxl/zIGar7QxJotcV1Cfh9QGSRQWWbJSBg=;
+        b=DYgmO1YW7VN+qXB4K+LorDpsMYGb3yApY524TiXAPqoDH+x6K3wZd0X+Nu6YY65Du2
+         ois3KWr7JQ0qZ52g+W6tX8MZxIzLSA5R8VI0R9ZAbI4DJwKBnUZP4eT0DTk3blL1AkIJ
+         ZwgNHmAI0qAAaCAEQG+qIvleBB0p7qvZYLp1j86ih+EMf3NG3HyFTB0Gvn7KBMDs8vSP
+         PiwRwBhizdBdR8WnYlWeZoeYDNM3f5kcfCUj+J6vBW5DNMEVABgAGgXGzFSEewm24EaD
+         pXPFpo27zhwa4H6ed5vyrzlddFvJXxKUqtp/RU3Q+rQAAxjvOHPDU1BVpLzk5qLwzxR0
+         zAyA==
+X-Gm-Message-State: APjAAAV2F39LLbdF9G3z7N/1TcZ5HtftpK0Fp7t2fB2uiBELchJMLWIm
+        hHB8BoKtlOyk3g31mMOgk9uX0krn
+X-Google-Smtp-Source: APXvYqwPpB9/9fAw0cA0stESzi1IeHuvaf8NeVtoSNT9CqQKSwzfeCmcUwm33KL6BbTdnMnqUTIqeQ==
+X-Received: by 2002:a2e:9ec9:: with SMTP id h9mr40819998ljk.90.1561336316510;
+        Sun, 23 Jun 2019 17:31:56 -0700 (PDT)
+Received: from localhost.localdomain (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
+        by smtp.gmail.com with ESMTPSA id y5sm1495146ljj.5.2019.06.23.17.31.55
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 23 Jun 2019 17:31:55 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        Joseph Lo <josephl@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 00/10] memory: tegra: Introduce Tegra30 EMC driver
+Date:   Mon, 24 Jun 2019 03:31:22 +0300
+Message-Id: <20190624003132.29473-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.22.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, Jun 21, 2019 at 5:06 PM Marc Gonzalez <marc.w.gonzalez@free.fr> wrote:
->
-> On 19/06/2019 15:47, Georgi Djakov wrote:
->
-> > On 19.06.19 14:44, Marc Gonzalez wrote:
-> >
-> >> QCOM_A53PLL and QCOM_CLK_APCS_MSM8916 stand out as the only options
-> >> built by default. List them in defconfig after dropping the default.
-> >>
-> >> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> >> Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
-> >> ---
-> >>  arch/arm64/configs/defconfig | 2 ++
-> >>  drivers/clk/qcom/Kconfig     | 2 --
-> >>  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > Sorry, I wasn't very clear. IMHO the defconfig change should be a
-> > separate patch and the v2 of this patch is ok as it is. It would just
-> > make things easier to merge.
->
-> Oh, I see. Could you give your Ack on patch 2 then?
->
-> Would the defconfig change go through the clk tree?
-> Or maybe through the qcom tree?
+Hello,
 
-This defconfig change could easily go through the qcom tree IMO.
+This series introduces driver for the External Memory Controller (EMC)
+found on Tegra30 chips, it controls the external DRAM on the board. The
+purpose of this driver is to program memory timing for external memory on
+the EMC clock rate change. The driver was tested using the ACTMON devfreq
+driver that performs memory frequency scaling based on memory-usage load.
+
+Changelog:
+
+v5: - Addressed review comments that were made by Thierry Reding to v4 by
+      adding appropriate copyrights to the source code headers and making
+      Tegra30 EMC driver to use common Tegra20 CLK API directly instead
+      of having a dummy-proxy functions specifically for Tegra30.
+
+    - Addressed review comments that were made by Stephen Boyd to v4 by
+      rewording commit message of the "Add custom EMC clock implementation"
+      patch and adding clarifying comment (to that patch as well) which
+      tells why EMC is a critical clock.
+
+    - Added suspend-resume to Tegra30 EMC driver to error out if EMC driver
+      is in a "bad state" as it will likely cause a hang on entering suspend.
+
+    - Dropped patch "tegra20-emc: Replace clk_get_sys with devm_clk_get"
+      because the replaced clocks are actually should be removed altogether
+      in the "Drop setting EMC rate to max on probe" patch and that was
+      missed by an accident.
+
+    - Added "tegra20-emc: Pre-configure debug register" patch which ensures
+      that inappropriate HW debug features are disabled at a probe time.
+      The same change is also made in the "Introduce Tegra30 EMC driver"
+      patch.
+
+    - Added ACKs to the patches from Peter De Schrijver that he gave to v4
+      since all of the v5 changes are actually very minor.
+
+v4: - Addressed review comments that were made by Peter De Schrijver to v3
+      by adding fence_udelay() after writes in the "Add custom EMC clock
+      implementation" patch.
+
+    - Added two new minor patches:
+
+        memory: tegra: Ensure timing control debug features are disabled
+        memory: tegra: Consolidate registers definition into one place
+
+      The first one is needed to ensure that EMC driver will work
+      properly regardless of hardware configuration left after boot.
+      The second patch is just a minor code cleanup.
+
+    - The "Introduce Tegra30 EMC driver" got also few very minor changes.
+      Now every possible error case is handled, nothing is ignored.
+      The EMC_DBG register is explicitly initialized during probe to be
+      on the safe side.
+
+v3: - Addressed review comments that were made by Stephen Boyd to v2 by
+      adding explicit typing for the callback variable, by including
+      "clk-provider.h" directly in the code and by dropping __clk_lookup
+      usage where possible.
+
+    - Added more patches into this series:
+
+        memory: tegra20-emc: Drop setting EMC rate to max on probe
+        memory: tegra20-emc: Adapt for clock driver changes
+        memory: tegra20-emc: Include io.h instead of iopoll.h
+        memory: tegra20-emc: Replace clk_get_sys with devm_clk_get
+
+      Initially I was going to include these patches into other patchset,
+      but changed my mind after rearranging things a tad. The "Adapt for
+      clock driver changes" patch is directly related to the clock changes
+      done in the first patch of this series, the rest are minor cleanups
+      that are fine to include here as well.
+
+    - Added some more words to the commit message of "Add binding for NVIDIA
+      Tegra30 External Memory Controller" patch, clarifying why common DDR
+      timing device-tree form isn't suitable for Tegra30.
+
+    - The Tegra30 EMC driver now explicitly selects the registers access
+      mode (EMC_DBG mux), not relying on the setting left from bootloader.
+
+v2: - Added support for changing MC clock diver configuration based on
+      Memory Controller (MC) configuration which is part of the memory
+      timing.
+
+    - Merged the "Add custom EMC clock implementation" patch into this
+      series because the "Introduce Tegra30 EMC driver" patch directly
+      depends on it. Please note that Tegra20 EMC driver will need to be
+      adapted for the clock changes as well, I'll send out the Tegra20
+      patches after this series will be applied because of some other
+      dependencies (devfreq) and because the temporary breakage won't
+      be critical (driver will just error out on probe).
+
+    - EMC driver now performs MC configuration validation by checking
+      that the number of MC / EMC timings matches and that the timings
+      rate is the same.
+
+    - EMC driver now supports timings that want to change the MC clock
+      configuration.
+
+    - Other minor prettifying changes of the code.
+
+Dmitry Osipenko (10):
+  clk: tegra20/30: Add custom EMC clock implementation
+  memory: tegra20-emc: Drop setting EMC rate to max on probe
+  memory: tegra20-emc: Adapt for clock driver changes
+  memory: tegra20-emc: Include io.h instead of iopoll.h
+  memory: tegra20-emc: Pre-configure debug register
+  dt-bindings: memory: Add binding for NVIDIA Tegra30 External Memory
+    Controller
+  memory: tegra: Introduce Tegra30 EMC driver
+  memory: tegra: Ensure timing control debug features are disabled
+  memory: tegra: Consolidate registers definition into common header
+  ARM: dts: tegra30: Add External Memory Controller node
+
+ .../memory-controllers/nvidia,tegra30-emc.txt |  249 ++++
+ arch/arm/boot/dts/tegra30.dtsi                |   11 +
+ drivers/clk/tegra/Makefile                    |    2 +
+ drivers/clk/tegra/clk-tegra20-emc.c           |  293 ++++
+ drivers/clk/tegra/clk-tegra20.c               |   55 +-
+ drivers/clk/tegra/clk-tegra30.c               |   38 +-
+ drivers/clk/tegra/clk.h                       |    3 +
+ drivers/memory/tegra/Kconfig                  |   10 +
+ drivers/memory/tegra/Makefile                 |    1 +
+ drivers/memory/tegra/mc.c                     |   42 +-
+ drivers/memory/tegra/mc.h                     |   74 +-
+ drivers/memory/tegra/tegra124.c               |   20 -
+ drivers/memory/tegra/tegra20-emc.c            |  119 +-
+ drivers/memory/tegra/tegra30-emc.c            | 1225 +++++++++++++++++
+ drivers/memory/tegra/tegra30.c                |   24 +
+ include/linux/clk/tegra.h                     |   11 +
+ include/soc/tegra/mc.h                        |    2 +-
+ 17 files changed, 1995 insertions(+), 184 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/nvidia,tegra30-emc.txt
+ create mode 100644 drivers/clk/tegra/clk-tegra20-emc.c
+ create mode 100644 drivers/memory/tegra/tegra30-emc.c
+
+-- 
+2.22.0
+
