@@ -2,93 +2,85 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAAC4FFCA
-	for <lists+linux-clk@lfdr.de>; Mon, 24 Jun 2019 05:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABB2503FB
+	for <lists+linux-clk@lfdr.de>; Mon, 24 Jun 2019 09:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727624AbfFXDD5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 23 Jun 2019 23:03:57 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:13267 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727617AbfFXDD4 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 23 Jun 2019 23:03:56 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d103d9b0001>; Sun, 23 Jun 2019 20:03:55 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Sun, 23 Jun 2019 20:03:55 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Sun, 23 Jun 2019 20:03:55 -0700
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL104.nvidia.com
- (172.18.146.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 24 Jun
- 2019 03:03:55 +0000
-Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Mon, 24 Jun 2019 03:03:55 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.174.126]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5d103d980002>; Sun, 23 Jun 2019 20:03:55 -0700
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <tglx@linutronix.de>, <jason@lakedaemon.net>,
-        <marc.zyngier@arm.com>, <linus.walleij@linaro.org>,
-        <stefan@agner.ch>, <mark.rutland@arm.com>
-CC:     <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
-        <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <jckuo@nvidia.com>,
-        <josephl@nvidia.com>, <talho@nvidia.com>, <skomatineni@nvidia.com>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <mperttunen@nvidia.com>, <spatra@nvidia.com>, <robh+dt@kernel.org>,
-        <digetx@gmail.com>, <devicetree@vger.kernel.org>
-Subject: [PATCH V4 18/18] arm64: dts: tegra210-p2180: Jetson TX1 SC7 timings
-Date:   Sun, 23 Jun 2019 20:02:59 -0700
-Message-ID: <1561345379-2429-19-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1561345379-2429-1-git-send-email-skomatineni@nvidia.com>
-References: <1561345379-2429-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
+        id S1727234AbfFXHuH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 24 Jun 2019 03:50:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46796 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726807AbfFXHuH (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 24 Jun 2019 03:50:07 -0400
+Received: from localhost (unknown [106.201.35.23])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5A1482089F;
+        Mon, 24 Jun 2019 07:50:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561362607;
+        bh=NUTTLothhzzOC0j5vETDOOEWK+MUpP+R2scD8KdK/uI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BXuHjSgHZJKxpUdzMa11Wo38NxGuIWwnrrv60gbZ5/K+HOSGQq11oqhRlNTEL24vq
+         Q34eihSka8mFMqZ9Wx0aOwJTxCMUrkSql1oyThwmGTq/zrNqBOht+ichGirmtkBE95
+         kU1YDEPUVASPDm9F1qjIJvg9GWKmC9NOObhx/FeI=
+Date:   Mon, 24 Jun 2019 13:16:57 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        David Brown <david.brown@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] clk: qcom: clk-alpha-pll: Remove unnecessary cast
+Message-ID: <20190624074657.GX2962@vkoul-mobl>
+References: <20190612091722.9377-1-vkoul@kernel.org>
+ <20190612091722.9377-2-vkoul@kernel.org>
+ <20190617043734.GH750@tuxbook-pro>
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1561345435; bh=3ikE8x0cNN1fPtdTTddMKObVTKhfyEJPwIrj8ksa4Wg=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=NJDNIdtgFCnSUNvZiIZyyoYq1MWL9GEcD/rJdXw/+TFyNHK0D8uab/04bae25LrUk
-         hu0quJxkUQhU6l9Zc6HE448Vdi+Ze21BYW3dJQ22g95Xp/wRccKQ/UWuHnnU0xabj9
-         I4TG90+yg0sPZnCo4TZ17nUr/oLJExjB6SE0ETOtZKaXY38weSTY2Yw8Hn2Q8zNP4v
-         vRGRS7XsMCWFIsVRE+c7bHU400IxlGM4hnaEN+S+h7y2ku+LDHVPrF+FYhwxcmVIqB
-         SI1nqT2QU46yMOK8Oj50NrTQtBQ5N+vHxQxR2UYuvceFQrsAK4nHh94nwaUqnPWBEr
-         z5tKKIND8eUAg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190617043734.GH750@tuxbook-pro>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This patch has Jetson TX1 platform specific SC7 timing configuration
-in device tree.
+On 16-06-19, 21:37, Bjorn Andersson wrote:
+> On Wed 12 Jun 02:17 PDT 2019, Vinod Koul wrote:
+> 
+> > We have couple of instances in the driver with unnecessary
+> > u64 casts, drop them.
+> > 
+> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > ---
+> >  drivers/clk/qcom/clk-alpha-pll.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
+> > index 0ced4a5a9a17..b48707693ffd 100644
+> > --- a/drivers/clk/qcom/clk-alpha-pll.c
+> > +++ b/drivers/clk/qcom/clk-alpha-pll.c
+> > @@ -832,7 +832,7 @@ static int clk_alpha_pll_postdiv_set_rate(struct clk_hw *hw, unsigned long rate,
+> >  	int div;
+> >  
+> >  	/* 16 -> 0xf, 8 -> 0x7, 4 -> 0x3, 2 -> 0x1, 1 -> 0x0 */
+> > -	div = DIV_ROUND_UP_ULL((u64)parent_rate, rate) - 1;
+> > +	div = DIV_ROUND_UP_ULL(parent_rate, rate) - 1;
+> 
+> Afaict DIV_ROUND_UP_ULL() will first add "parent_rate" and "rate" and
+> then stash this in a unsigned long long and do the division. So what
+> happens if parent_rate + rate > 32 bits on a 32-bit target?
+> 
+> (Shouldn't there be a cast of (ll) in the macro to ULL?)
 
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+Agreed, though DIV_ROUND_DOWN_ULL does it correctly, right fix would be to make it:
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi b/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi
-index 27723829d033..cb58f79deb48 100644
---- a/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi
-@@ -279,6 +279,13 @@
- 
- 	pmc@7000e400 {
- 		nvidia,invert-interrupt;
-+		nvidia,suspend-mode = <0>;
-+		nvidia,cpu-pwr-good-time = <0>;
-+		nvidia,cpu-pwr-off-time = <0>;
-+		nvidia,core-pwr-good-time = <4587 3876>;
-+		nvidia,core-pwr-off-time = <39065>;
-+		nvidia,core-power-req-active-high;
-+		nvidia,sys-clock-req-active-high;
- 	};
- 
- 	/* eMMC */
+#define DIV_ROUND_UP_ULL(ll, d)         DIV_ROUND_DOWN_ULL(unsigned long long(ll) + (d) - 1, (d)) 
+
+I will post that as well..
+
+Thanks
+
 -- 
-2.7.4
-
+~Vinod
