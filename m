@@ -2,132 +2,164 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1DE4FF6F
-	for <lists+linux-clk@lfdr.de>; Mon, 24 Jun 2019 04:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2054FFFC
+	for <lists+linux-clk@lfdr.de>; Mon, 24 Jun 2019 05:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726334AbfFXCfO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 23 Jun 2019 22:35:14 -0400
-Received: from mail-eopbgr130087.outbound.protection.outlook.com ([40.107.13.87]:48377
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726321AbfFXCfO (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 23 Jun 2019 22:35:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NZeeXzWt1XmqT19Qpk7iZfEjso8yLeo1VZwQGVaEWxI=;
- b=edz9BwIliZ/aMTAs1liCH64je3tItsS0a3NzjD4PxSvcp8SNCRtFPRoZdTYkWXGCP7wnmkSgaEAMVlWF3t3j5kicfNDGuXgodDiRYW2Ql7Rp/dx59NP7oY4H1m9c6PT7j3oia82GRbfbt1NM7/dfFJOJmRjMA2yLq4jR4Hi01S0=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
- DB3PR0402MB3833.eurprd04.prod.outlook.com (52.134.67.14) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2008.16; Mon, 24 Jun 2019 02:35:10 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::3945:fcda:5bdd:8191]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::3945:fcda:5bdd:8191%4]) with mapi id 15.20.2008.014; Mon, 24 Jun 2019
- 02:35:10 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Shawn Guo <shawnguo@kernel.org>
-CC:     "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Abel Vesa <abel.vesa@nxp.com>
-Subject: RE: [PATCH 1/4] arm64: Enable TIMER_IMX_SYS_CTR for ARCH_MXC
- platforms
-Thread-Topic: [PATCH 1/4] arm64: Enable TIMER_IMX_SYS_CTR for ARCH_MXC
- platforms
-Thread-Index: AQHVJ/+7WzrDWTethU+K40MoFm49OKaqFzaAgAABdQCAAADrQA==
-Date:   Mon, 24 Jun 2019 02:35:10 +0000
-Message-ID: <DB3PR0402MB39162662C69B45BDB948D002F5E00@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-References: <20190621070720.12395-1-Anson.Huang@nxp.com>
- <20190624022200.GN3800@dragon> <20190624022713.GO3800@dragon>
-In-Reply-To: <20190624022713.GO3800@dragon>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=anson.huang@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 03c3dd5c-e3ab-4c9d-b1da-08d6f84c940e
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB3PR0402MB3833;
-x-ms-traffictypediagnostic: DB3PR0402MB3833:
-x-microsoft-antispam-prvs: <DB3PR0402MB38331DAAB7A0F22A906BDEC6F5E00@DB3PR0402MB3833.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
-x-forefront-prvs: 007814487B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(376002)(136003)(396003)(39860400002)(366004)(13464003)(199004)(189003)(26005)(256004)(486006)(68736007)(446003)(54906003)(33656002)(66446008)(71190400001)(71200400001)(7736002)(476003)(305945005)(229853002)(99286004)(74316002)(7696005)(2906002)(14454004)(73956011)(8676002)(81156014)(81166006)(66946007)(9686003)(66476007)(66556008)(64756008)(102836004)(55016002)(66066001)(76116006)(14444005)(478600001)(186003)(76176011)(11346002)(316002)(6436002)(3846002)(53546011)(6506007)(6116002)(44832011)(4326008)(6916009)(86362001)(25786009)(52536014)(5660300002)(7416002)(6246003)(8936002)(53936002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3833;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: +QjgEHai9r1W1l4kjkaB92skWpd7Qp4zdMfWOwejloY/2iRNLLlVfwmbla1h0840Ewt2B6Xp7HXaSqGphA5EZM5lqpix7lvkLrNkHFWkmwopFIlszOFi6Hdxs5WbbBwbdOyZA+XXUxgzBAKDApsuLcZTKgosW3cqz+V5fjSnBKtJMPDKG78lKfH9x1JHKP4SP3ILtvf1S+HpRhB2s4dQpukYc6lqBwh9XVs1Wc1UC8tpeuHZSdmD+FoG0iecJnYEqI/Dsr1rQ+A4m5MS9qNuxRKrrBZEu6XcTbWrymUDWvK5fFCoGGEJ9NoWneVu7YMbgHxVW5Ij5KiN+qTg8RZx3GSWNhXXI1VmIFAErD6KkL150hs9ZywCAkAW6VX95GLfh0CChKY7aZLyg/vg7RWib1bZLXSKbcP5uSxjvnj++xY=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726393AbfFXDDG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 23 Jun 2019 23:03:06 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:13165 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726340AbfFXDDG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 23 Jun 2019 23:03:06 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d103d670001>; Sun, 23 Jun 2019 20:03:03 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Sun, 23 Jun 2019 20:03:04 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Sun, 23 Jun 2019 20:03:04 -0700
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL106.nvidia.com
+ (172.18.146.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 24 Jun
+ 2019 03:03:03 +0000
+Received: from HQMAIL104.nvidia.com (172.18.146.11) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 24 Jun
+ 2019 03:03:03 +0000
+Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL104.nvidia.com
+ (172.18.146.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 24 Jun 2019 03:03:03 +0000
+Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.174.126]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5d103d650000>; Sun, 23 Jun 2019 20:03:03 -0700
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <tglx@linutronix.de>, <jason@lakedaemon.net>,
+        <marc.zyngier@arm.com>, <linus.walleij@linaro.org>,
+        <stefan@agner.ch>, <mark.rutland@arm.com>
+CC:     <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
+        <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <jckuo@nvidia.com>,
+        <josephl@nvidia.com>, <talho@nvidia.com>, <skomatineni@nvidia.com>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <mperttunen@nvidia.com>, <spatra@nvidia.com>, <robh+dt@kernel.org>,
+        <digetx@gmail.com>, <devicetree@vger.kernel.org>
+Subject: [PATCH V4 00/18] SC7 entry and exit support for Tegra210
+Date:   Sun, 23 Jun 2019 20:02:41 -0700
+Message-ID: <1561345379-2429-1-git-send-email-skomatineni@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03c3dd5c-e3ab-4c9d-b1da-08d6f84c940e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jun 2019 02:35:10.3018
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: anson.huang@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3833
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1561345383; bh=FXKH8IMDorFgav/DVdwP1OzQMzFRRIOPr/T/3uTyBFU=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=IpCOSL/++rOP3zioi/NBgfIA6zsHbAjJJ24ukprP13lUzOAxnN2GiEvaiwmb7w58E
+         qGSq8jMusbPDKl4Y+9zQ4eoYjiK6uhKJP27/EKvf4k6iI+w8JwEVASr9LMjSGmf2Uz
+         Q6wy8Dc8uWeSkGCumppxlCCJ6g9q7UXdvsQ23SzlxoXpy+Xc6iLxrzN8UJJ4+xlzaj
+         8sSGNG6Teyuk6/EBLuG7asHCddGLsKy57KfSbsXjljUQ/BqdJSodLg0meOj4YLLQ1t
+         smhCJYwoGq7P031IaID+NefAxIec7M3i4rqYRT0w3uoLCgjhL3kaJiMLKZbPraX5q7
+         /Yjnmdo8DUV7Q==
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-SGksIFNoYXduDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogU2hhd24g
-R3VvIDxzaGF3bmd1b0BrZXJuZWwub3JnPg0KPiBTZW50OiBNb25kYXksIEp1bmUgMjQsIDIwMTkg
-MTA6MjcgQU0NCj4gVG86IEFuc29uIEh1YW5nIDxhbnNvbi5odWFuZ0BueHAuY29tPg0KPiBDYzog
-bWFyay5ydXRsYW5kQGFybS5jb207IEFpc2hlbmcgRG9uZyA8YWlzaGVuZy5kb25nQG54cC5jb20+
-OyBQZW5nDQo+IEZhbiA8cGVuZy5mYW5AbnhwLmNvbT47IGZlc3RldmFtQGdtYWlsLmNvbTsgSmFj
-a3kgQmFpDQo+IDxwaW5nLmJhaUBueHAuY29tPjsgZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc7
-IHNib3lkQGtlcm5lbC5vcmc7DQo+IGNhdGFsaW4ubWFyaW5hc0Bhcm0uY29tOyBzLmhhdWVyQHBl
-bmd1dHJvbml4LmRlOyBsaW51eC0NCj4ga2VybmVsQHZnZXIua2VybmVsLm9yZzsgRGFuaWVsIEJh
-bHV0YSA8ZGFuaWVsLmJhbHV0YUBueHAuY29tPjsgbGludXgtDQo+IGNsa0B2Z2VyLmtlcm5lbC5v
-cmc7IHJvYmgrZHRAa2VybmVsLm9yZzsgZGwtbGludXgtaW14IDxsaW51eC0NCj4gaW14QG54cC5j
-b20+OyBrZXJuZWxAcGVuZ3V0cm9uaXguZGU7IExlb25hcmQgQ3Jlc3Rleg0KPiA8bGVvbmFyZC5j
-cmVzdGV6QG54cC5jb20+OyB3aWxsQGtlcm5lbC5vcmc7IG10dXJxdWV0dGVAYmF5bGlicmUuY29t
-Ow0KPiBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmc7IEFiZWwgVmVzYSA8YWJl
-bC52ZXNhQG54cC5jb20+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggMS80XSBhcm02NDogRW5hYmxl
-IFRJTUVSX0lNWF9TWVNfQ1RSIGZvciBBUkNIX01YQw0KPiBwbGF0Zm9ybXMNCj4gDQo+IE9uIE1v
-biwgSnVuIDI0LCAyMDE5IGF0IDEwOjIyOjAxQU0gKzA4MDAsIFNoYXduIEd1byB3cm90ZToNCj4g
-PiBPbiBGcmksIEp1biAyMSwgMjAxOSBhdCAwMzowNzoxN1BNICswODAwLCBBbnNvbi5IdWFuZ0Bu
-eHAuY29tIHdyb3RlOg0KPiA+ID4gRnJvbTogQW5zb24gSHVhbmcgPEFuc29uLkh1YW5nQG54cC5j
-b20+DQo+ID4gPg0KPiA+ID4gQVJDSF9NWEMgcGxhdGZvcm1zIG5lZWRzIHN5c3RlbSBjb3VudGVy
-IGFzIGJyb2FkY2FzdCB0aW1lciB0bw0KPiA+ID4gc3VwcG9ydCBjcHVpZGxlLCBlbmFibGUgaXQg
-YnkgZGVmYXVsdC4NCj4gPiA+DQo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBBbnNvbiBIdWFuZyA8QW5z
-b24uSHVhbmdAbnhwLmNvbT4NCj4gPiA+IC0tLQ0KPiA+ID4gIGFyY2gvYXJtNjQvS2NvbmZpZy5w
-bGF0Zm9ybXMgfCAxICsNCj4gPiA+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykNCj4g
-PiA+DQo+ID4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm02NC9LY29uZmlnLnBsYXRmb3Jtcw0KPiA+
-ID4gYi9hcmNoL2FybTY0L0tjb25maWcucGxhdGZvcm1zIGluZGV4IDQ3NzhjNzcuLmY1ZTYyM2Yg
-MTAwNjQ0DQo+ID4gPiAtLS0gYS9hcmNoL2FybTY0L0tjb25maWcucGxhdGZvcm1zDQo+ID4gPiAr
-KysgYi9hcmNoL2FybTY0L0tjb25maWcucGxhdGZvcm1zDQo+ID4gPiBAQCAtMTczLDYgKzE3Myw3
-IEBAIGNvbmZpZyBBUkNIX01YQw0KPiA+ID4gIAlzZWxlY3QgUE0NCj4gPiA+ICAJc2VsZWN0IFBN
-X0dFTkVSSUNfRE9NQUlOUw0KPiA+ID4gIAlzZWxlY3QgU09DX0JVUw0KPiA+ID4gKwlzZWxlY3Qg
-VElNRVJfSU1YX1NZU19DVFINCj4gPg0KPiA+IFdoZXJlIGlzIHRoYXQgZHJpdmVyPw0KPiANCj4g
-T2theSwganVzdCBmb3VuZCBpdCBpbiB0aGUgbWFpbGJveC4gIFRoZXkgc2VlbSB0byBiZSBzZW50
-IGluIHRoZSB3cm9uZyBvcmRlci4NCj4gUmVhbGx5LCB5b3Ugc2hvdWxkIHNlbmQgdGhpcyBzZXJp
-ZXMgb25seSBhZnRlciB0aGUgZHJpdmVyIGxhbmRzIG9uIG1haW5saW5lLg0KDQpPSywganVzdCBu
-b3RpY2VkIHRoYXQgbWFpbmxpbmUgZG9lcyBOT1QgaGF2ZSBpdCwgc2luY2UgSSBkaWQgaXQgYmFz
-ZWQgb24gbmV4dCB0cmVlLg0KSSB3aWxsIHJlc2VuZCB0aGUgcGF0Y2ggc2VyaWVzIGFmdGVyIHRo
-ZSBzeXN0ZW0gY291bnRlciBkcml2ZXIgbGFuZGluZyBvbiBtYWlubGluZS4NCg0KVGhhbmtzLA0K
-QW5zb24uDQoNCj4gDQo+IFNoYXduDQo=
+This patch series includes Tegra210 deepsleep support with RTC alarm
+wake event.
+
+This series also includes save and restore of PLLs, clocks, OSC contexts
+for deepsleep exit to normal operation.
+
+This patch series doesn't support 100% suspend/resume to allow fully
+functional state upon resume and we are working on some more drivers suspend
+and resume implementations.
+
+[V4]: Changes between V3 & V4 are
+	- V3 feedback fixes
+	- Removed park bits clear for EMMC pads in pinctrl-tegra driver
+	  function tegra_pinctrl_clear_parked_bits as based on V3 feedback
+	  parked_bit is updated to parked_bitmask to use with DRV_PINGROUP
+	  as well and thierry posted patch series for this.
+	- Implemented all peripheral clocks save and restore through their
+	  corresponding clk_ops save_context and restore_context and removed
+	  all direct registers store and restore in clk-tegra210 driver.
+	- Created separate patch for fence_delay update during PLLU init based
+	  on V3 feedback.
+	- Added more comments in tegra210_clk_resume regarding dfll restore
+	  sequence and its dependency on peripheral clocks restore.
+
+[V3]: Changes between V2 & V3 are
+	- V2 feedback fixes
+	- GPIO restore should happen prior to Pinctrl restore to prevent
+	  glitch on GPIO lines. So using resume_noirq for gpio tegra to allow
+	  gpio resume prior to pinctrl resume.
+	- Implemented save_context and restore_context callbacks for clock
+	  plls, pll outs and dividers in corresponding drivers.
+	  Note: Peripheral clocks and clock enable and reset need to be in
+	  Tegra210 clock suspend/resume as they need to be in proper sequence
+	  w.r.t DFLL resume for restoring CPU clock.
+	- Removed gpio-tegra changes for hierarchical support to have PMC as
+	  parent to GPIOs for GPIO wake event support. Thierry is working on
+	  gpiolib for some cleanup before adding hierarchical support. So
+	  holding on to GPIO wake support for now.
+
+[V2] : V1 feedback fixes
+	Patch 0002: This version still using syscore. Thierry suggest not to
+	use syscore and waiting on suggestion from Linux Walleij for any better
+	way of storing current state of pins before suspend entry and restoring
+	them on resume at very early stage. So left this the same way as V1 and
+	will address once I get more feedback on this.
+	Also need to findout and implement proper way of forcing resume order
+	between pinctrl and gpio driver.
+
+[V1]:	Tegra210 SC7 entry and exit thru RTC wake and Power button GPIO wake
+	using hierarchical IRQ with PMC as parent to GPIO.
+
+
+
+Sowjanya Komatineni (18):
+  irqchip: tegra: do not disable COP IRQ during suspend
+  pinctrl: tegra: add suspend and resume support
+  gpio: tegra: use resume_noirq for tegra gpio resume
+  clk: tegra: save and restore divider rate
+  clk: tegra: pllout: save and restore pllout context
+  clk: tegra: pll: save and restore pll context
+  clk: tegra: save and restore CPU and System clocks context
+  clk: tegra: support for saving and restoring OSC context
+  clk: tegra: add suspend resume support for DFLL
+  clk: tegra: add save and restore context support for peripheral clocks
+  clk: tegra210: use fence_udelay during PLLU init
+  clk: tegra210: support for Tegra210 clocks suspend and resume
+  soc/tegra: pmc: allow support for more tegra wake
+  soc/tegra: pmc: add pmc wake support for tegra210
+  arm64: tegra: enable wake from deep sleep on RTC alarm.
+  soc/tegra: pmc: configure core power request polarity
+  soc/tegra: pmc: configure deep sleep control settings
+  arm64: dts: tegra210-p2180: Jetson TX1 SC7 timings
+
+ arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi |   7 ++
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi       |   5 +-
+ drivers/clk/tegra/clk-dfll.c                   |  78 ++++++++++++++
+ drivers/clk/tegra/clk-dfll.h                   |   2 +
+ drivers/clk/tegra/clk-divider.c                |  23 ++++
+ drivers/clk/tegra/clk-periph-fixed.c           |  31 ++++++
+ drivers/clk/tegra/clk-periph-gate.c            |  34 ++++++
+ drivers/clk/tegra/clk-periph.c                 |  43 ++++++++
+ drivers/clk/tegra/clk-pll-out.c                |  28 +++++
+ drivers/clk/tegra/clk-pll.c                    | 115 ++++++++++++++------
+ drivers/clk/tegra/clk-sdmmc-mux.c              |  30 ++++++
+ drivers/clk/tegra/clk-tegra-fixed.c            |  14 +++
+ drivers/clk/tegra/clk-tegra-super-gen4.c       |   4 -
+ drivers/clk/tegra/clk-tegra210.c               | 123 +++++++++++++++++++--
+ drivers/clk/tegra/clk.c                        |  94 ++++++++++++++++
+ drivers/clk/tegra/clk.h                        |  35 +++++-
+ drivers/gpio/gpio-tegra.c                      |   5 +-
+ drivers/irqchip/irq-tegra.c                    |  20 +++-
+ drivers/pinctrl/tegra/pinctrl-tegra.c          |  47 ++++++++
+ drivers/pinctrl/tegra/pinctrl-tegra.h          |   4 +
+ drivers/pinctrl/tegra/pinctrl-tegra210.c       |   6 ++
+ drivers/soc/tegra/pmc.c                        | 143 ++++++++++++++++++++++++-
+ 22 files changed, 838 insertions(+), 53 deletions(-)
+
+-- 
+2.7.4
+
