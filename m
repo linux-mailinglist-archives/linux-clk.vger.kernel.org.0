@@ -2,63 +2,82 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6322B55AEB
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2019 00:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEEC955B33
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2019 00:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726274AbfFYWRh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 25 Jun 2019 18:17:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58180 "EHLO mail.kernel.org"
+        id S1725782AbfFYWcY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 25 Jun 2019 18:32:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38398 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725914AbfFYWRh (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 25 Jun 2019 18:17:37 -0400
+        id S1725914AbfFYWcY (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 25 Jun 2019 18:32:24 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 853892086D;
-        Tue, 25 Jun 2019 22:17:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3B8EC2053B;
+        Tue, 25 Jun 2019 22:32:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561501056;
-        bh=HQ27fxr0ZnCr/zXy05lhsA8/iiTCNB/xaDEjAfuRrro=;
-        h=In-Reply-To:References:To:Cc:Subject:From:Date:From;
-        b=n79BUbixZSY08kOmfpVsAsuUWP2HiIMOwm0Y5SZEZqQH3cJsb0dMSLNOCJh1KNvCV
-         OzxzQ7LRTkwFiSb8TeZkzAAk1foGrXfAoLmmTdtGKSDYkJXnBgqfwKVERoJ1pC53u1
-         J6dzbYKJH1bCIMHEBXTOdDMbK0BdWB9HV5+XUJC0=
+        s=default; t=1561501943;
+        bh=cSuQxxaq84YwOFPQHIHja20RlhSxafVamByUrHvRrDQ=;
+        h=In-Reply-To:References:To:From:Subject:Cc:Date:From;
+        b=uOThxdWIbQIHssS8dVd8WO2sv4HnWY9Krnf6kAdWBWn+vn4mff8AGaU7SXJfDPhQh
+         R4W3J5zoId9HAY1DA6y3R2SF0uCSl/dNLEEHvscypDCrIjnWYyYi9IAO2n+zDnSwEJ
+         9POD0+D4ltW1DyG5nDqCpTX0MxTKdezfL79viuNE=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190611180757.32299-1-paul@crapouillou.net>
-References: <20190611180757.32299-1-paul@crapouillou.net>
-To:     James Hogan <jhogan@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Ralf Baechle <ralf@linux-mips.org>
-Cc:     od@zcrc.me, linux-mips@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 1/5] clk: ingenic: Add missing header in cgu.h
+In-Reply-To: <1561453316-11481-1-git-send-email-abel.vesa@nxp.com>
+References: <1561453316-11481-1-git-send-email-abel.vesa@nxp.com>
+To:     Abel Vesa <abel.vesa@nxp.com>, Anson Huang <anson.huang@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
 From:   Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH] clk: imx8mq: Mark AHB clock as critical
+Cc:     NXP Linux Team <linux-imx@nxp.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Abel Vesa <abel.vesa@nxp.com>
 User-Agent: alot/0.8.1
-Date:   Tue, 25 Jun 2019 15:17:35 -0700
-Message-Id: <20190625221736.853892086D@mail.kernel.org>
+Date:   Tue, 25 Jun 2019 15:32:22 -0700
+Message-Id: <20190625223223.3B8EC2053B@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Paul Cercueil (2019-06-11 11:07:53)
-> The cgu.h has structures that contain 'clk_onecell_data' and 'clk_hw'
-> structures (no pointers), so the <linux/clk-provider.h> header should be
-> included.
+Quoting Abel Vesa (2019-06-25 02:01:56)
+> Keep the AHB clock always on since there is no driver to control it and
+> all the other clocks that use it as parent rely on it being always enable=
+d.
 >=20
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 > ---
+>  drivers/clk/imx/clk-imx8mq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
-> Notes:
->     v2: Rebase on v5.2-rc4
+> diff --git a/drivers/clk/imx/clk-imx8mq.c b/drivers/clk/imx/clk-imx8mq.c
+> index 5fbc2a7..b48268b 100644
+> --- a/drivers/clk/imx/clk-imx8mq.c
+> +++ b/drivers/clk/imx/clk-imx8mq.c
+> @@ -398,7 +398,7 @@ static int imx8mq_clocks_probe(struct platform_device=
+ *pdev)
+>         clks[IMX8MQ_CLK_NOC_APB] =3D imx8m_clk_composite_critical("noc_ap=
+b", imx8mq_noc_apb_sels, base + 0x8d80);
+> =20
+>         /* AHB */
+> -       clks[IMX8MQ_CLK_AHB] =3D imx8m_clk_composite("ahb", imx8mq_ahb_se=
+ls, base + 0x9000);
+> +       clks[IMX8MQ_CLK_AHB] =3D imx8m_clk_composite_critical("ahb", imx8=
+mq_ahb_sels, base + 0x9000);
 
-You seemed to miss my review comments on patch set #1.
+Please add a comment into the code why it's critical.
 
-https://lkml.kernel.org/r/155726035790.14659.7321778387595703949@swboyd.mtv=
-.corp.google.com
-
+>         clks[IMX8MQ_CLK_AUDIO_AHB] =3D imx8m_clk_composite("audio_ahb", i=
+mx8mq_audio_ahb_sels, base + 0x9100);
+> =20
+>         /* IPG */
+> --=20
+> 2.7.4
+>=20
