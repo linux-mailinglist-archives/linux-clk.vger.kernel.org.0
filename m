@@ -2,53 +2,59 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9ECB55BB9
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2019 00:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D67555BC6
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2019 00:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726086AbfFYWzy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 25 Jun 2019 18:55:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47092 "EHLO mail.kernel.org"
+        id S1725914AbfFYW6f (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 25 Jun 2019 18:58:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47734 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726077AbfFYWzy (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 25 Jun 2019 18:55:54 -0400
+        id S1725782AbfFYW6f (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 25 Jun 2019 18:58:35 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 10DBC2086D;
-        Tue, 25 Jun 2019 22:55:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B6E972084B;
+        Tue, 25 Jun 2019 22:58:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561503353;
-        bh=SYMcIFxgtO+dsktSi7jnPUjz1SSVD8CyNCsa+fKpnM0=;
+        s=default; t=1561503514;
+        bh=8SZy9CuPsIuAEKonya0wbhkOSTztivF6u7odkDAhOlg=;
         h=In-Reply-To:References:To:From:Subject:Cc:Date:From;
-        b=g41o+waZoBKq5DrPrSDLQQkj1KxdmRMY4drEZFcRcJDHvbKaxBgO3zuEuSXxQbXUU
-         OzU4FbO3HDIHoeqCPECNFtnQdsGRtXpPmHR45HScKLU8c/Sy5dx1Clt8hv4RYUBzIe
-         pAzGJ4rzOzyf8nmj94pY8kqCqfv1uLt4imf280J0=
+        b=vO86YorkBNc62UV2N7y9Vzqub90UnOgak7AMFwpaFYt2kj6CiWFFh4ZtfxPr1XRrN
+         MQ2+t+DhBVLxoNJjZ0ld0kM48n/nsoHxIszi+LhT7Hb5qSNGNf2K2Yr+idXEQdAbWz
+         IgDy+YpQvrS8Xs+mKjwbin2ITVvwDPCB5FCo0zo8=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190608105619.593-2-wsa+renesas@sang-engineering.com>
-References: <20190608105619.593-1-wsa+renesas@sang-engineering.com> <20190608105619.593-2-wsa+renesas@sang-engineering.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-i2c@vger.kernel.org
+In-Reply-To: <1556261624-20504-1-git-send-email-vabhav.sharma@nxp.com>
+References: <1556261624-20504-1-git-send-email-vabhav.sharma@nxp.com>
+To:     "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Vabhav Sharma <vabhav.sharma@nxp.com>
 From:   Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH 01/34] clk: clk-cdce706: simplify getting the adapter of a client
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] clk: qoriq: add support for lx2160a
+Cc:     "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        Vabhav Sharma <vabhav.sharma@nxp.com>,
+        Andy Tang <andy.tang@nxp.com>,
+        Yogesh Narayan Gaur <yogeshnarayan.gaur@nxp.com>
 User-Agent: alot/0.8.1
-Date:   Tue, 25 Jun 2019 15:55:52 -0700
-Message-Id: <20190625225553.10DBC2086D@mail.kernel.org>
+Date:   Tue, 25 Jun 2019 15:58:33 -0700
+Message-Id: <20190625225834.B6E972084B@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Wolfram Sang (2019-06-08 03:55:40)
-> We have a dedicated pointer for that, so use it. Much easier to read and
-> less computation involved.
+Quoting Vabhav Sharma (2019-04-25 23:53:38)
+> Add clockgen support and configuration for NXP SoC lx2160a
+> with compatible property as "fsl,lx2160a-clockgen".
 >=20
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Signed-off-by: Tang Yuantian <andy.tang@nxp.com>
+> Signed-off-by: Yogesh Gaur <yogeshnarayan.gaur@nxp.com>
+> Signed-off-by: Vabhav Sharma <vabhav.sharma@nxp.com>
+> Acked-by: Scott Wood <oss@buserror.net>
+> Acked-by: Stephen Boyd <sboyd@kernel.org>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
 
 Applied to clk-next
