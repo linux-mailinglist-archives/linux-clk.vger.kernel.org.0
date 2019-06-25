@@ -2,48 +2,48 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B85F55512
-	for <lists+linux-clk@lfdr.de>; Tue, 25 Jun 2019 18:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66120554DC
+	for <lists+linux-clk@lfdr.de>; Tue, 25 Jun 2019 18:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730371AbfFYQsu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 25 Jun 2019 12:48:50 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:55918 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730674AbfFYQrm (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 25 Jun 2019 12:47:42 -0400
-Received: by mail-wm1-f66.google.com with SMTP id a15so3541578wmj.5
-        for <linux-clk@vger.kernel.org>; Tue, 25 Jun 2019 09:47:41 -0700 (PDT)
+        id S1731201AbfFYQrq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 25 Jun 2019 12:47:46 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:33379 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730820AbfFYQro (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 25 Jun 2019 12:47:44 -0400
+Received: by mail-wr1-f66.google.com with SMTP id n9so18728303wru.0
+        for <linux-clk@vger.kernel.org>; Tue, 25 Jun 2019 09:47:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DnmUUmlBFAOJ6r0lO2j/n/ft2AG+WeYI8h0EcXuhXCs=;
-        b=Xbo7XSFN9rED5NZS/+c+eS51wLoYcSb+HfUkS0fXp+WEVZI/klmyc/xzDQcSk6kbda
-         PLkTwD+LzBS3AZ94fFA8beUaDPzXToHiAtQGtYgMEa7xGSHRnmt9i8HHb4RkAENDHe5e
-         IsL0oKoIDRchTHu/mEX4S5wUizdEf+RMRPLLMDrB7AmcmgO+P7E3pn73quB2Juy8UxTW
-         jEED9bkXwE57LB6U9SOCXArx0Oju7R8iZ1WfU5HvlkhPqgCsPcO1+tnAvFeSoPUrrDae
-         33cxR70DEVqATeHx9PamU6pz/v/4lzjTi/KGso5mz5Zz8Vhl6pl2nCo9mmky/EQOLFvo
-         3uUQ==
+        bh=bWqeg/uRBmP4v1S0mrfdgUlh6T/cak+6t6geY/+2zUc=;
+        b=unkd+FMrbJN9AzanjOJ4wpmc5HlH/ET5TudwrnAvOcWYz1FhJuNWwwXVCCo/y84G6i
+         nH2bHVyL1b8OXnBdWWvQ9MPcfVs/5S5DYUf7iCUuZS47RVYNIleEcEDKbEsYWLMeLJ6e
+         TLKLP7ZrGuZSCTyJbu20xIi0iuhnhI4FBK6EYE/Os57yaBo1IYfBAiv9pUjyFW/4j6Q2
+         rpsOjD52BAjQRBC4//y1jisx8bzNWSTn0Xf52FSCHwQHBaHwrjO82XvDAsHMtRvJpfDn
+         9iuwnV+CGdKw0aqvwaspbpSaq14/rrZ3eqD1COJr+X3VxcezUlVryu0Eo02Tqu9s5TrR
+         DbxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DnmUUmlBFAOJ6r0lO2j/n/ft2AG+WeYI8h0EcXuhXCs=;
-        b=Gv6LN7DXwNS2BBGUNV8hQD9UOQ6l+JJzjjuWqwfh/HaGR4Ui0NLWwuiLTVQ3yM4CJR
-         YgyZd/43Z8/1z8javMiddmi5MWjfmzvXUJhBtRjeAW4eRXr6aGVFeujyzPqmhcBx7gAV
-         CaaIjwQ92c+lsSbF3oaTaxr4iZSbaZJ8VKWuoaUdeTtD7JYfm9Z0kjQCKmwSMtlcdOtt
-         m/VLbRV6t7/X2BoOo42V+rTVHpfokHXD33yKw5xibBMOzz0HhlqRmmxHVtqyfv10gWJc
-         fNR+Y9J2HwZBgRTRuJChIaRGHXlNUmMN5Y5No8p9OsizRfisXG614tGjJoH0a6/gmWVc
-         gVWw==
-X-Gm-Message-State: APjAAAWQagGsZs34UzD1RfhJK5SL9HpDZ0znlRalEHI7gyyXGsirgT2V
-        I8tBvQ3qjWyCYXYW5UtUJvXNsg==
-X-Google-Smtp-Source: APXvYqw0MlFamdgw8IfuZ/mw6IFGIsihCgTjA9lyv6BtUZRI3MTMXO+uUOMmyuh2w+RBxwxPXQqvxw==
-X-Received: by 2002:a1c:cb4d:: with SMTP id b74mr14944322wmg.43.1561481260999;
-        Tue, 25 Jun 2019 09:47:40 -0700 (PDT)
+        bh=bWqeg/uRBmP4v1S0mrfdgUlh6T/cak+6t6geY/+2zUc=;
+        b=FRlHb0k+CF+M6PWbOEAHxv8tP3kcNMbE4O/5k/BwYhjDdRA7THcxlGYGpYIknM9wE3
+         omEnL/Pphm52QRYDtWS84pjp0U7eFOaLR4bSnSa9/fOgagtJLhc/j81RMAxlLMAZGY5L
+         ojYfNZ7lWFpRLO31FsnrnWw6D95d7FJKJW0fMdTooqIpYxUuqAj+r+qmy/VwES52BdDa
+         d3REhSPLVcnc7iBSLF8nwEa45NS0/3HAaUMPJqKv+M5jQco/2m1MFHXh9eh7uyrE9D09
+         fsybQZsW2pJW7EabThUgXCUv1wYtSMoKqTeHVouQRzPLkq+gXeRPMjULvxeH5sUnkq0c
+         1QsA==
+X-Gm-Message-State: APjAAAWIytIA+kOdmed/VfzEIHw5QbvzBcR+gqCGCku/LgCfpQNvE4oU
+        Vz60IB+h6VAkKOCFRGc68Fedlw==
+X-Google-Smtp-Source: APXvYqy6K2OKJaRWYw2cM2myPOUo982DJCOgC+HO5QqOBSGkx5aQTFdQWGebuD8lsFMVewG0rHya+Q==
+X-Received: by 2002:adf:f948:: with SMTP id q8mr17100963wrr.196.1561481262770;
+        Tue, 25 Jun 2019 09:47:42 -0700 (PDT)
 Received: from localhost.localdomain (30.red-83-34-200.dynamicip.rima-tde.net. [83.34.200.30])
-        by smtp.gmail.com with ESMTPSA id d18sm42594476wrb.90.2019.06.25.09.47.39
+        by smtp.gmail.com with ESMTPSA id d18sm42594476wrb.90.2019.06.25.09.47.41
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 25 Jun 2019 09:47:40 -0700 (PDT)
+        Tue, 25 Jun 2019 09:47:42 -0700 (PDT)
 From:   Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
 To:     jorge.ramirez-ortiz@linaro.org, sboyd@kernel.org,
         bjorn.andersson@linaro.org, david.brown@linaro.org,
@@ -57,9 +57,9 @@ Cc:     vkoul@kernel.org, niklas.cassel@linaro.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, khasim.mohammed@linaro.org
-Subject: [PATCH v3 02/14] mbox: qcom: add APCS child device for QCS404
-Date:   Tue, 25 Jun 2019 18:47:21 +0200
-Message-Id: <20190625164733.11091-3-jorge.ramirez-ortiz@linaro.org>
+Subject: [PATCH v3 03/14] mbox: qcom: replace integer with valid macro
+Date:   Tue, 25 Jun 2019 18:47:22 +0200
+Message-Id: <20190625164733.11091-4-jorge.ramirez-ortiz@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190625164733.11091-1-jorge.ramirez-ortiz@linaro.org>
 References: <20190625164733.11091-1-jorge.ramirez-ortiz@linaro.org>
@@ -70,46 +70,27 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-There is clock controller functionality in the APCS hardware block of
-qcs404 devices similar to msm8916.
+Use the correct macro when registering the platform device.
 
 Co-developed-by: Niklas Cassel <niklas.cassel@linaro.org>
 Signed-off-by: Niklas Cassel <niklas.cassel@linaro.org>
 Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
 ---
- drivers/mailbox/qcom-apcs-ipc-mailbox.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ drivers/mailbox/qcom-apcs-ipc-mailbox.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/mailbox/qcom-apcs-ipc-mailbox.c b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-index 705e17a5479c..a05dc3aabac7 100644
+index a05dc3aabac7..c8088e9caf02 100644
 --- a/drivers/mailbox/qcom-apcs-ipc-mailbox.c
 +++ b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-@@ -89,16 +89,18 @@ static int qcom_apcs_ipc_probe(struct platform_device *pdev)
- 		return ret;
- 	}
+@@ -97,7 +97,7 @@ static int qcom_apcs_ipc_probe(struct platform_device *pdev)
  
--	if (of_device_is_compatible(np, "qcom,msm8916-apcs-kpss-global")) {
--		apcs->clk = platform_device_register_data(&pdev->dev,
--							  "qcom-apcs-msm8916-clk",
--							  -1, NULL, 0);
--		if (IS_ERR(apcs->clk))
--			dev_err(&pdev->dev, "failed to register APCS clk\n");
--	}
--
- 	platform_set_drvdata(pdev, apcs);
- 
-+	if (!of_device_is_compatible(np, "qcom,msm8916-apcs-kpss-global") &&
-+	    !of_device_is_compatible(np, "qcom,qcs404-apcs-apps-global"))
-+		return 0;
-+
-+	apcs->clk = platform_device_register_data(&pdev->dev,
-+						  "qcom-apcs-msm8916-clk",
-+						  -1, NULL, 0);
-+	if (IS_ERR(apcs->clk))
-+		dev_err(&pdev->dev, "failed to register APCS clk\n");
-+
- 	return 0;
- }
+ 	apcs->clk = platform_device_register_data(&pdev->dev,
+ 						  "qcom-apcs-msm8916-clk",
+-						  -1, NULL, 0);
++						  PLATFORM_DEVID_NONE, NULL, 0);
+ 	if (IS_ERR(apcs->clk))
+ 		dev_err(&pdev->dev, "failed to register APCS clk\n");
  
 -- 
 2.21.0
