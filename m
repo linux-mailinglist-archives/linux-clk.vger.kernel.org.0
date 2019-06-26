@@ -2,59 +2,84 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C23B3570C7
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2019 20:37:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D6A57110
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2019 20:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726328AbfFZShA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 26 Jun 2019 14:37:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46640 "EHLO mail.kernel.org"
+        id S1726370AbfFZSyA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 26 Jun 2019 14:54:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60864 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726104AbfFZSg7 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 26 Jun 2019 14:36:59 -0400
+        id S1726104AbfFZSyA (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 26 Jun 2019 14:54:00 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BA53A216FD;
-        Wed, 26 Jun 2019 18:36:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D90C120B1F;
+        Wed, 26 Jun 2019 18:53:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561574218;
-        bh=rPjrA5UKDItDDeBvMzrvupA/HE7q5dkO/2GejoVYEsU=;
+        s=default; t=1561575240;
+        bh=f5WpHBtEtFahIw3vdUhL2oQjYqmF7FGf/RrCjS8X2io=;
         h=In-Reply-To:References:Subject:To:Cc:From:Date:From;
-        b=pyiZmAQTWwmV9IucQm5qJLcRgqCJyBirwquRA9A0YFbOVE7WcEhB0PDd0LFoFh5Ux
-         Q83RYbitSQbtdPIkzJtkHGO+01GyWUg6bJwAIrpsMyR9912CITIh7IHLBXagIsyHaJ
-         FKm1pvMRlGh1yefdXwX/3Iz7HKwi3ncOw+5djHXA=
+        b=2DgVwPGP72rgzQZSWHXMghXrWIppNM0nQ8i48SfoOD1tLrP9zDD7brzNtRI0QJOXc
+         Qe+aMbqYbnlToGBRDg97O+pH0iaHjjItDJlEQ5QnLdAvFL8zCBC8FrUnBJnw34Zq/W
+         juX/mJDB/4OZrSjpNW/8We1tG3C7qk6zjbQyeYFo=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1558433454-27971-5-git-send-email-claudiu.beznea@microchip.com>
-References: <1558433454-27971-1-git-send-email-claudiu.beznea@microchip.com> <1558433454-27971-5-git-send-email-claudiu.beznea@microchip.com>
-Subject: Re: [PATCH v4 4/4] clk: at91: sckc: add support for SAM9X60
-To:     Claudiu.Beznea@microchip.com, Ludovic.Desroches@microchip.com,
-        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
-        mark.rutland@arm.com, mturquette@baylibre.com, robh+dt@kernel.org
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+In-Reply-To: <20190621093302.GJ23549@piout.net>
+References: <1560440205-4604-1-git-send-email-claudiu.beznea@microchip.com> <20190618095521.GE23549@piout.net> <929ac20b-db1d-3f7a-b37c-0dfb253156d5@microchip.com> <20190621093302.GJ23549@piout.net>
+Subject: Re: [PATCH 0/7] clk: at91: sckc: improve error path
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Claudiu.Beznea@microchip.com
+Cc:     mturquette@baylibre.com, Nicolas.Ferre@microchip.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, claudiu.beznea@gmail.com
 From:   Stephen Boyd <sboyd@kernel.org>
 User-Agent: alot/0.8.1
-Date:   Wed, 26 Jun 2019 11:36:58 -0700
-Message-Id: <20190626183658.BA53A216FD@mail.kernel.org>
+Date:   Wed, 26 Jun 2019 11:53:59 -0700
+Message-Id: <20190626185359.D90C120B1F@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Claudiu.Beznea@microchip.com (2019-05-21 03:11:33)
-> From: Claudiu Beznea <claudiu.beznea@microchip.com>
+Quoting Alexandre Belloni (2019-06-21 02:33:02)
+> On 20/06/2019 10:30:42+0000, Claudiu.Beznea@microchip.com wrote:
+> > Hi,
+> >=20
+> > On 18.06.2019 12:55, Alexandre Belloni wrote:
+> > > On 13/06/2019 15:37:06+0000, Claudiu.Beznea@microchip.com wrote:
+> > >> From: Claudiu Beznea <claudiu.beznea@microchip.com>
+> > >>
+> > >> Hi,
+> > >>
+> > >> This series tries to improve error path for slow clock registrations
+> > >> by adding functions to free resources and using them on failures.
+> > >>
+> > >=20
+> > > Does the platform even boot when the slow clock is not available?=20
+> > >=20
+> > > The TCB clocksource would fail at:
+> > >=20
+> > >         tc.slow_clk =3D of_clk_get_by_name(node->parent, "slow_clk");
+> > >         if (IS_ERR(tc.slow_clk))
+> > >                 return PTR_ERR(tc.slow_clk);
+> > >=20
+> >=20
+> > In case of using TC as clocksource, yes, the platform wouldn't boot if =
+slow
+> > clock is not available, because, anyway the TC needs it. PIT may work
+> > without it (if slow clock is not used to drive the PIT).
+> >=20
+> > For sure there are other IPs (which may be or are driven by slow clock)
+> > which may not work if slow clock is driven them.
+> >=20
+> > Anyway, please let me know if you feel this series has no meaning.
+> >=20
 >=20
-> Add support for SAM9X60's slow clock.
+> Well, I'm not sure it is worth it but at the same time, it is not adding
+> many lines and you already developed it...
 >=20
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> ---
 
-FYI, this patch is base64 encoded and causes my MUA to have lots of
-pain. It would be nice if you could send plain text emails, otherwise it
-takes me a few more seconds to extract the patch. Of course, it reminds
-me that I need to fix my MUA so maybe this is OK!
+Is that a Reviewed-by or a Rejected-by tag?
 
