@@ -2,27 +2,27 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C44F2570B4
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2019 20:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C23B3570C7
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2019 20:37:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726341AbfFZSfB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 26 Jun 2019 14:35:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44206 "EHLO mail.kernel.org"
+        id S1726328AbfFZShA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 26 Jun 2019 14:37:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46640 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726239AbfFZSfB (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 26 Jun 2019 14:35:01 -0400
+        id S1726104AbfFZSg7 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 26 Jun 2019 14:36:59 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6F3A7216FD;
-        Wed, 26 Jun 2019 18:35:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BA53A216FD;
+        Wed, 26 Jun 2019 18:36:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561574100;
-        bh=1Fa3GzD7Zx/S78fqFWID8nEnvt0Oqq0Uj2Y76wE8Eck=;
+        s=default; t=1561574218;
+        bh=rPjrA5UKDItDDeBvMzrvupA/HE7q5dkO/2GejoVYEsU=;
         h=In-Reply-To:References:Subject:To:Cc:From:Date:From;
-        b=MPdbaLTT76g//kxRlojWUk7EQjgN29cR2W5ZlPPvKjbuXtAgdjwxiNijs1Cabxr+M
-         cmin0O9i9bpFq4oRY32rgqt52wg7usPpzW0xxaXPGiWMZDCNCMx1IMLf5UAo9qUXjp
-         TUxh3kbmGKjOhtn+ZJKmn2t6waE99w7PJaAsoVhk=
+        b=pyiZmAQTWwmV9IucQm5qJLcRgqCJyBirwquRA9A0YFbOVE7WcEhB0PDd0LFoFh5Ux
+         Q83RYbitSQbtdPIkzJtkHGO+01GyWUg6bJwAIrpsMyR9912CITIh7IHLBXagIsyHaJ
+         FKm1pvMRlGh1yefdXwX/3Iz7HKwi3ncOw+5djHXA=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
@@ -37,8 +37,8 @@ Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         Claudiu.Beznea@microchip.com
 From:   Stephen Boyd <sboyd@kernel.org>
 User-Agent: alot/0.8.1
-Date:   Wed, 26 Jun 2019 11:34:59 -0700
-Message-Id: <20190626183500.6F3A7216FD@mail.kernel.org>
+Date:   Wed, 26 Jun 2019 11:36:58 -0700
+Message-Id: <20190626183658.BA53A216FD@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
@@ -53,5 +53,8 @@ Quoting Claudiu.Beznea@microchip.com (2019-05-21 03:11:33)
 > Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 > ---
 
-Applied to clk-next
+FYI, this patch is base64 encoded and causes my MUA to have lots of
+pain. It would be nice if you could send plain text emails, otherwise it
+takes me a few more seconds to extract the patch. Of course, it reminds
+me that I need to fix my MUA so maybe this is OK!
 
