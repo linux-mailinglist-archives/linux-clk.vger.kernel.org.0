@@ -2,92 +2,149 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D345612D
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2019 06:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC245646A
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2019 10:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726643AbfFZEPE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 26 Jun 2019 00:15:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36276 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726152AbfFZEPE (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 26 Jun 2019 00:15:04 -0400
-Received: from mail.kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 76D322146E;
-        Wed, 26 Jun 2019 04:15:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561522503;
-        bh=nLhLl0KRASWFnS70bdCvQOMOFLG+QXRubn6Xsywf0Zg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2odwG4C0c+WfqgHqocwKhJvQuog8CyN+0KKVO72O7lAEC1sLKz0fDyNoxUNS3v53N
-         VITNRI4TZWa55Y5uWsxzUp+648pHQXhgKAxk94KA0CgjftaFhfWbV5e4oPeRPGBqqw
-         7uYDkgYA91GnkCjBmwu89AgrsvhdiMk27m+gMHIU=
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH 2/2] clk: Unexport __clk_of_table
-Date:   Tue, 25 Jun 2019 21:15:02 -0700
-Message-Id: <20190626041502.237211-3-sboyd@kernel.org>
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-In-Reply-To: <20190626041502.237211-1-sboyd@kernel.org>
-References: <20190626041502.237211-1-sboyd@kernel.org>
+        id S1726006AbfFZIWf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 26 Jun 2019 04:22:35 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:37086 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725379AbfFZIWe (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 26 Jun 2019 04:22:34 -0400
+Received: by mail-wm1-f66.google.com with SMTP id f17so1100497wme.2
+        for <linux-clk@vger.kernel.org>; Wed, 26 Jun 2019 01:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:openpgp:autocrypt:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=+1vXdrly/KKiPqvFxYM7XB433XMEyXUZAd1m9h/Udp0=;
+        b=z39lVS78Qd8LsObNTDJptYvZFlnljYD1/l9S+K88DbOWu+RAaVyti1qPZXmOS5JlEN
+         zvBt9xhrfQcCo5TkUbYdU6LzGPUVUMLzA7IEkmpTibZVuTzrx7/bvqj7Kn6qApO2QHBZ
+         FwwpFO0alongPRREarxn4HXCZLCWwq1w61zkw/JiqFC79fgWcAOQZIA+2BwuEl5grCpd
+         JVf9RVZzWZigZJMN/xOd/XUgd1IZO4OCmFPStSToFbLa2rwDU7F4OfSfEUSPCA7X/ky9
+         S/yLYTk7wjhJq6KrC7+xO/l2fSpM/ZflP0Z55+uvnVIykoCK+eiHPNcBk0+ZaYXgjVaa
+         tCzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=+1vXdrly/KKiPqvFxYM7XB433XMEyXUZAd1m9h/Udp0=;
+        b=OqROPI65PqYZ1ZrlQDIVsupbf7b2dMQzOREbX5JcN4ZpdQbs7LngWTL8PnSXaCHvzw
+         6yqx5bXMUKK+l5fN+gNIa8BnzgM628OPNryzbQF2TfWUNlj/H8OVid0bg30CJiB4oHiU
+         1lD1caedpG37VW9q6MFJcuH/JCDG8EkXj+8nHvoWAc8WKTcX/w3jouncA+05KCwr6rmf
+         BKlExPLdp3N5NT5tCOt2UdS9kZmiZ+F+IgYrogEBypB2QQyIeR27Ha2gwo+x8Tl+9/w3
+         H8DZ+VJwFzujDb39Frtb5GWR2BEupJKuNaqRwuiypTQSWP/wMbSCake82zsvXzBm2H2Q
+         2jTQ==
+X-Gm-Message-State: APjAAAXlT8jL5iclaENWI4Npv5OFCLFIgGrZiDlSXcMBZH9gB53NmMkE
+        iwA/th1z/0y+Azw+ZQ64RLlj5Q==
+X-Google-Smtp-Source: APXvYqwAfu7tVUTxwap7hfLOj6FWPZA+a9/PN312n5G/314+TAkWHAFN38HC0Xj6e+8HLxE6+VdIcA==
+X-Received: by 2002:a1c:6154:: with SMTP id v81mr1754258wmb.92.1561537351305;
+        Wed, 26 Jun 2019 01:22:31 -0700 (PDT)
+Received: from [10.1.2.12] (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id t63sm1162851wmt.6.2019.06.26.01.22.30
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 26 Jun 2019 01:22:30 -0700 (PDT)
+Subject: Re: [RFC/RFT 02/14] clk: core: introduce clk_hw_set_parent()
+To:     Stephen Boyd <sboyd@kernel.org>, jbrunet@baylibre.com,
+        khilman@baylibre.com
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, martin.blumenstingl@googlemail.com
+References: <20190620150013.13462-1-narmstrong@baylibre.com>
+ <20190620150013.13462-3-narmstrong@baylibre.com>
+ <20190625203227.9696920665@mail.kernel.org>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
+ 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
+ ZaTUOEkgIor5losDrePdPgE=
+Organization: Baylibre
+Message-ID: <64441b77-1d99-44ec-d4b1-c18f1c75d523@baylibre.com>
+Date:   Wed, 26 Jun 2019 10:22:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190625203227.9696920665@mail.kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This symbol doesn't need to be exported to clk providers anymore.
-Originally, it was hidden inside clk.c, but then OMAP needed to get
-access to it in commit 819b4861c18d ("CLK: ti: add init support for
-clock IP blocks"), but eventually that code also changed in commit
-c08ee14cc663 ("clk: ti: change clock init to use generic of_clk_init")
-and we were left with this exported. Move this back into clk.c so that
-it isn't exposed anymore.
+On 25/06/2019 22:32, Stephen Boyd wrote:
+> Quoting Neil Armstrong (2019-06-20 08:00:01)
+>> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+>> index aa51756fd4d6..3e98f7dec626 100644
+>> --- a/drivers/clk/clk.c
+>> +++ b/drivers/clk/clk.c
+>> @@ -2490,6 +2490,11 @@ static int clk_core_set_parent_nolock(struct clk_core *core,
+>>         return ret;
+>>  }
+>>  
+>> +int clk_hw_set_parent(struct clk_hw *hw, struct clk_hw *parent)
+>> +{
+>> +       return clk_core_set_parent_nolock(hw->core, parent->core);
+>> +}
+> 
+> Will this be used from a module? Maybe it needs an EXPORT_SYMBOL_GPL().
 
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
----
- drivers/clk/clk.c            | 1 +
- include/linux/clk-provider.h | 4 ----
- 2 files changed, 1 insertion(+), 4 deletions(-)
+Probably since it's in clk-provider.h
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index aa51756fd4d6..b34e84bb8167 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -4038,6 +4038,7 @@ struct of_clk_provider {
- 	void *data;
- };
- 
-+extern struct of_device_id __clk_of_table;
- static const struct of_device_id __clk_of_table_sentinel
- 	__used __section(__clk_of_table_end);
- 
-diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index 3bced2ec9f26..9ba000e3a50d 100644
---- a/include/linux/clk-provider.h
-+++ b/include/linux/clk-provider.h
-@@ -865,8 +865,6 @@ static inline long divider_ro_round_rate(struct clk_hw *hw, unsigned long rate,
-  */
- unsigned long clk_hw_round_rate(struct clk_hw *hw, unsigned long rate);
- 
--struct of_device_id;
--
- struct clk_onecell_data {
- 	struct clk **clks;
- 	unsigned int clk_num;
-@@ -877,8 +875,6 @@ struct clk_hw_onecell_data {
- 	struct clk_hw *hws[];
- };
- 
--extern struct of_device_id __clk_of_table;
--
- #define CLK_OF_DECLARE(name, compat, fn) OF_DECLARE_1(clk, name, compat, fn)
- 
- /*
--- 
-Sent by a computer through tubes
+Will add.
+
+> 
+>> +
+>>  /**
+>>   * clk_set_parent - switch the parent of a mux clk
+>>   * @clk: the mux clk whose input we are switching
 
