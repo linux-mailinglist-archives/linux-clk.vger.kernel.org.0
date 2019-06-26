@@ -2,114 +2,104 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A4F55D38
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2019 03:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F9D55D59
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2019 03:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726223AbfFZBGd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 25 Jun 2019 21:06:33 -0400
-Received: from anchovy2.45ru.net.au ([203.30.46.146]:52087 "EHLO
-        anchovy2.45ru.net.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726068AbfFZBGc (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 25 Jun 2019 21:06:32 -0400
-Received: (qmail 6858 invoked by uid 5089); 26 Jun 2019 01:06:30 -0000
-Received: by simscan 1.2.0 ppid: 6792, pid: 6794, t: 0.0620s
-         scanners: regex: 1.2.0 attach: 1.2.0 clamav: 0.88.3/m:40/d:1950
-Received: from unknown (HELO ?192.168.0.128?) (preid@electromag.com.au@203.59.235.95)
-  by anchovy3.45ru.net.au with ESMTPA; 26 Jun 2019 01:06:30 -0000
-Subject: Re: [PATCH 1/1] clk: clk-cdce925: Add regulator support
-To:     Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        mturquette@baylibre.com
-References: <1560484363-77239-1-git-send-email-preid@electromag.com.au>
- <20190625225453.1BDD020665@mail.kernel.org>
-From:   Phil Reid <preid@electromag.com.au>
-Message-ID: <1bf34693-a4e9-bbdd-9066-ff5dc5c6ce32@electromag.com.au>
-Date:   Wed, 26 Jun 2019 09:06:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1726068AbfFZB1l (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 25 Jun 2019 21:27:41 -0400
+Received: from mail-eopbgr80079.outbound.protection.outlook.com ([40.107.8.79]:23008
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726037AbfFZB1l (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 25 Jun 2019 21:27:41 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=testarcselector01; d=microsoft.com; cv=none;
+ b=jHfIavMYi+FmyMgzuYoiMQH/pUffto6ViqIym1Q7U6GXW9ciyKUCCLOIP4HSktiaWvT963SkB7rSGkMPX4PalABv9omuaL1sHaiIzxWVBAR27qbrxayy6cBo3VaDTwC+a4/6mq/A7AQgZdyI6+UzUnw6Zruy2G0c5a7rOMjRNY4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=testarcselector01;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=csQSXRYE+TCUqMsr28qwHWrafGyLL5yibgytYDNIpec=;
+ b=ATJdsswEiZYbK8aUwbU0pExH3wGe6ecpY+F+96vGWyQW8ijKJOcTNOnJBItkKEJHr9OyBM+l0/NSjcu7DvY61HUuzEcPCUm8ROp8imkxI4MRfuSuBP0CqhoTLDzWdCCYHyso2+E+07kJ3Ye02xPOr4lfV0FgnQP6ZYVb0JUZzso=
+ARC-Authentication-Results: i=1; test.office365.com
+ 1;spf=none;dmarc=none;dkim=none;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=csQSXRYE+TCUqMsr28qwHWrafGyLL5yibgytYDNIpec=;
+ b=mPQ0+WgjYTTevhbZvrBpUo3rBjkp7r5NhkpPJcmfN9fBl1HpmjurZ4diBz9OoORlLC4TPO5NrH0NBSd3Sh5O3LtKnmtrcD+/cmXDecdtFi6DLFimY8vpaKNsTyn0FBNeLEQNamArR1dmfU+XX+SA4sSEMlsqNLbc3QZhoGANdQk=
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
+ DB3PR0402MB3932.eurprd04.prod.outlook.com (52.134.72.11) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2008.16; Wed, 26 Jun 2019 01:27:37 +0000
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::3945:fcda:5bdd:8191]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::3945:fcda:5bdd:8191%4]) with mapi id 15.20.2008.014; Wed, 26 Jun 2019
+ 01:27:37 +0000
+From:   Anson Huang <anson.huang@nxp.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        Peng Fan <peng.fan@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>
+CC:     dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH 2/2] clk: imx8mm: GPT1 clock mux option #5 should be
+ sys_pll1_80m
+Thread-Topic: [PATCH 2/2] clk: imx8mm: GPT1 clock mux option #5 should be
+ sys_pll1_80m
+Thread-Index: AQHVKyQzKPUFbrQbpkOHEAmz7VbUT6as1W6AgABQuHA=
+Date:   Wed, 26 Jun 2019 01:27:37 +0000
+Message-ID: <DB3PR0402MB39164A0E42B9EBE8ED832174F5E20@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+References: <20190625070602.37670-1-Anson.Huang@nxp.com>
+ <20190625070602.37670-2-Anson.Huang@nxp.com>
+ <20190625203751.E2894205ED@mail.kernel.org>
+In-Reply-To: <20190625203751.E2894205ED@mail.kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=anson.huang@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b6d0ce3e-d7f7-4e9e-d609-08d6f9d57955
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB3PR0402MB3932;
+x-ms-traffictypediagnostic: DB3PR0402MB3932:
+x-microsoft-antispam-prvs: <DB3PR0402MB3932AAAEFBA49EE8058FA67BF5E20@DB3PR0402MB3932.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4303;
+x-forefront-prvs: 00808B16F3
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(136003)(376002)(396003)(346002)(366004)(189003)(199004)(316002)(52536014)(186003)(7736002)(26005)(99286004)(7696005)(81166006)(8936002)(81156014)(102836004)(68736007)(76176011)(55016002)(305945005)(74316002)(486006)(256004)(6506007)(3846002)(478600001)(229853002)(6436002)(66066001)(6116002)(11346002)(446003)(476003)(33656002)(53936002)(8676002)(5660300002)(71200400001)(4326008)(66946007)(6246003)(110136005)(71190400001)(76116006)(86362001)(66556008)(2906002)(25786009)(9686003)(14454004)(66476007)(64756008)(44832011)(2201001)(4744005)(66446008)(2501003)(73956011)(921003)(32563001)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3932;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: SZCc37DbwxBGy0teEOvuGtwOn2LZ408rjh5tdHR/rr/Li1EpBJ8yEDP8yI+opz0Rkdi6culmGYFFijoES+RwopSoga+CTNxBeGNboPxpMJxHUd2N8RujX2tWPFxqGry4FaiCEDOY8K6J+1KwqwSpll9OxYtUDLYIG20Zjnd9g50lWzfOVMoxy/+1oNk9Ez07LUWPVzv7vkdqh0y5xBRORQpd0QOcc5XVcmRgXJ4bPNPTd6Vj3r9ZKvX5X1yIlNo6Kb6iuT/qipkijMLjjYv2BniLeTymzV6veCClA/dXn6r2IvQQyiVcutn676U3aHjWIClDmTCHYtVVNnTCTlxaQDyop+srpz02OL7lvoxRDY2obbtbRUmlkBTzSFFK9uy93O6AOX66KkHX3Y1dzVw1V27Aso3+c340MSFtW2vZueY=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <20190625225453.1BDD020665@mail.kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-AU
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b6d0ce3e-d7f7-4e9e-d609-08d6f9d57955
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2019 01:27:37.6623
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: anson.huang@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3932
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 26/06/2019 06:54, Stephen Boyd wrote:
-> Quoting Phil Reid (2019-06-13 20:52:43)
->> The cdce925 power supplies could be controllable on some platforms.
->> Enable them before communicating with the cdce925.
->>
->> Signed-off-by: Phil Reid <preid@electromag.com.au>
->> ---
->>
->> Notes:
->>      We see a kernel panic later in the boot if the regulator is not
->>      enabled. Unsure what in the driver is causing that. Something
->>      to do with regmap perhaps?
->>
->>   drivers/clk/clk-cdce925.c | 34 ++++++++++++++++++++++++++++++++++
->>   1 file changed, 34 insertions(+)
->>
->> diff --git a/drivers/clk/clk-cdce925.c b/drivers/clk/clk-cdce925.c
->> index a98b3f19..2678ee6 100644
->> --- a/drivers/clk/clk-cdce925.c
->> +++ b/drivers/clk/clk-cdce925.c
->> @@ -16,6 +16,7 @@
->>   #include <linux/module.h>
->>   #include <linux/i2c.h>
->>   #include <linux/regmap.h>
->> +#include <linux/regulator/consumer.h>
->>   #include <linux/slab.h>
->>   #include <linux/gcd.h>
->>   
->> @@ -602,6 +603,30 @@ static int cdce925_regmap_i2c_read(void *context,
->>          return &data->clk[idx].hw;
->>   }
->>   
->> +static void cdce925_regulator_disable(void *regulator)
->> +{
->> +       regulator_disable(regulator);
->> +}
->> +
->> +static int cdce925_regulator_enable(struct device *dev, const char *name)
->> +{
->> +       struct regulator *regulator;
->> +       int err;
->> +
->> +       regulator = devm_regulator_get(dev, name);
->> +       if (IS_ERR(regulator))
->> +               return PTR_ERR(regulator);
->> +
->> +       err = regulator_enable(regulator);
-> 
-G'day Stephen,
-
-Thanks for looking at this.
-> The regulator is never turned off though. Are these regulators really
-> just always on regulators that don't need to be managed by this driver?
-> 
-For our system the regulator needs to be enabled before we try talking to the chip.
-Funny that.
-Unloading the driver will disable the regulator thru the devm call to
-cdce925_regulator_disable
-
-> +	return devm_add_action_or_reset(dev, cdce925_regulator_disable,
-> +					regulator);
-> +}
-
-In the future suspend/resume support could be added to power the device down.
-The system I have doesn't support suspending thou.
-
-> Also, is there an update to the DT binding somewhere?
-> 
-No I didn't update that.
-It seems a bit adhoc if supply reference are including in the DT docs.
-I can add something if your happy with the pathc in general.
-
-
--- 
-Regards
-Phil Reid
-
+SGksIFN0ZXBoZW4NCg0KPiBRdW90aW5nIEFuc29uLkh1YW5nQG54cC5jb20gKDIwMTktMDYtMjUg
+MDA6MDY6MDIpDQo+ID4gRnJvbTogQW5zb24gSHVhbmcgPEFuc29uLkh1YW5nQG54cC5jb20+DQo+
+ID4NCj4gPiBpLk1YOE1NJ3MgR1BUMSBjbG9jayBtdXggb3B0aW9uICM1IHNob3VsZCBiZSBzeXNf
+cGxsMV84MG0sIE5PVA0KPiA+IHN5c19wbGwxXzgwMG0sIGNvcnJlY3QgaXQuDQo+ID4NCj4gPiBT
+aWduZWQtb2ZmLWJ5OiBBbnNvbiBIdWFuZyA8QW5zb24uSHVhbmdAbnhwLmNvbT4NCj4gDQo+IEFu
+eSBGaXhlcyB0YWdzPw0KDQpPb3BzLCBJIGZvcmdvdCB0byBhZGQgZml4ZWQgdGFncywganVzdCBy
+ZXNlbnQgdGhlIHBhdGNoIHNldCwgc29ycnkgZm9yIHRoYXQuDQoNClRoYW5rcywNCkFuc29uDQoN
+Cg0K
