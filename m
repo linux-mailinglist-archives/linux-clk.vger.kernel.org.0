@@ -2,48 +2,48 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE0C56534
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2019 11:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCA25651A
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2019 11:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727065AbfFZJGo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 26 Jun 2019 05:06:44 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:41584 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726985AbfFZJGo (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 26 Jun 2019 05:06:44 -0400
-Received: by mail-wr1-f68.google.com with SMTP id c2so1770189wrm.8
-        for <linux-clk@vger.kernel.org>; Wed, 26 Jun 2019 02:06:43 -0700 (PDT)
+        id S1727080AbfFZJGq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 26 Jun 2019 05:06:46 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:39874 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727042AbfFZJGp (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 26 Jun 2019 05:06:45 -0400
+Received: by mail-wr1-f67.google.com with SMTP id x4so1780436wrt.6
+        for <linux-clk@vger.kernel.org>; Wed, 26 Jun 2019 02:06:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=j3tTOMHSiFLp+myEpmzmt12jpkjBS7JqoQLTAOWEufU=;
-        b=kvEHQB03XrT84WCCgsKDcFFTwKXwKaZ9mDxKAfYFkJG0CyuFNQRy4K8U+kFQ/pSpA8
-         r0FZiPGnVvSVEjDRozPe/MTE6t5BbBDy+i0PBLgpt+6tDDw0RzZ2vS3LjJWOZN4DwRZL
-         BGnJh7xqxgqmsiPsbISq953QPFmuJ9iADvx8lIEBJ/xkcF+gctf3zO6QpOwhzOmBF0i1
-         zfriLTSiHGJYZUvcZGdIIDxwbOSLyx4mRW2hQBrweBIY/TdJaOqa6xp4pvLLXuH0TY6O
-         TWQOef7/FtK0IATdV/kq073FgFeAQjyr2yZVKMps3dem6FK9Oa5Oh7L7ggjpbboZhhhZ
-         YYWg==
+        bh=xpe6ifKz7SuClVLyY+/xaKksjob7YtLZf3uysFqr17Y=;
+        b=EnSOVVnY6HmW74fsUG11uqh4W9Ca4fhJ6b5ER6IbuUpbfQu++NdU/5WF603Kdm+tcR
+         8Qt0AUaAuNZ+O0/4eJBu22IJ6rLN+IhUSoCUJFwXv98a8K5b6osxC5AJ4aHO9p9ryvJX
+         qBbMvEAY/TDyWVnHEMQp3n+nr+M6YuHimQVA17Oglt+iPBFs5OgtmJPG+G6M2BEdg2QR
+         gr4R89VAPzlxxwU3/vgiVpjydXGpqNYFOQcN3/dkh8M9IAkZfzq+NwCLa54zL7RvpQoZ
+         4YQGtIQ3hpSRX7qed0bdC+ASgPHKNsZD09k7UmbT5JnuK6UM+bEy0RsllPrsz5Aams3U
+         ce1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=j3tTOMHSiFLp+myEpmzmt12jpkjBS7JqoQLTAOWEufU=;
-        b=AXM7fb2zcj5f2017e9ORjCxcJj0H8nyEkp6d1ZKGj5UaNqLc0JaiTLaBPiklhAtVBC
-         Ee1U9Qx9SIIz7BjbY7K7GUUZQ5gDaV2dojvkN3AVq6x3TJmHlAtiq4WfFYLIIL7/G6vA
-         uOEDZ/hesWtBUvADTtN2C3HnYNRDUj8LOvi0N77vvbs9RGP/XL76L2T5Bnq1pRz/Q1on
-         K50Cnz1kVUx/VDeWwAvlsOyUezlbD5UDuxVlVTreDtoUNpEYt3fl1M2isxW4ddRPdklU
-         DiDqlnftOqjOEcgUCkEjYcdHDsAF3u31GEbX7P489znKUzvmbcZXd4YnTWAZmMS6iBPm
-         GqKQ==
-X-Gm-Message-State: APjAAAUf0Ae/XtF3ddC2jvEdhZVfnXpZBm6XcDrkz7PZJ5oQJZ/dDibB
-        vVTBO7tFzP8yD0Ht26lAkNmsBw==
-X-Google-Smtp-Source: APXvYqzlmS3faQEc6tabH/P7o/TLm9JFP3+2CcVMZrRoZkQ0ElNEXs3j3ITiywoJc77PAE2qCCbTaw==
-X-Received: by 2002:adf:e2cb:: with SMTP id d11mr2768630wrj.66.1561540002580;
-        Wed, 26 Jun 2019 02:06:42 -0700 (PDT)
+        bh=xpe6ifKz7SuClVLyY+/xaKksjob7YtLZf3uysFqr17Y=;
+        b=QnYaM+o0mmgW1rnY2FnmL1GpGDulk3rPfs6E4Esg6bI4LnLsW8Ka5JbL/cV+borwg3
+         ecZaZhi0Kcc6fPJYp7VKthtI81jFQescwcPPGLBqEebzT0Yp/3dwj+fdzwgreQcTN6H0
+         PxlQk40uQ7ePajIF/EYaGJGK3Uanf2iznQ9LfxpPxlaLpXLlS/gotf9YGxDBK+z1QcZp
+         iF0OYMXWhBYywwD5kV1n8vemSPcNDYVmTCDpUb383yZ62GoMTVH+/rihPAl5z5/YHXVC
+         0Pc6Wj5ZwVZkjdRvP/SiPTwi8O3lJN4W7h02OFm7I/o38SwU6bVi+Bf+V/qWdCm2W1XT
+         +6MQ==
+X-Gm-Message-State: APjAAAVasgp010BsuX7Fvrlt8cTxznOP1b01gd+DmDX7s3NH72eYO+T/
+        K+WisMlDWtcu5SRV6Dvtl3F2dg==
+X-Google-Smtp-Source: APXvYqz+1B6DzS6Kjekyrh2jZBiRU6kd29TGoNp8T45F8kR2z/VFBuW6kGnRaU/9KV8IL6dxlckyrw==
+X-Received: by 2002:adf:fe4e:: with SMTP id m14mr2893052wrs.21.1561540003566;
+        Wed, 26 Jun 2019 02:06:43 -0700 (PDT)
 Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id o6sm1925797wmc.46.2019.06.26.02.06.41
+        by smtp.gmail.com with ESMTPSA id o6sm1925797wmc.46.2019.06.26.02.06.42
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 26 Jun 2019 02:06:41 -0700 (PDT)
+        Wed, 26 Jun 2019 02:06:42 -0700 (PDT)
 From:   Neil Armstrong <narmstrong@baylibre.com>
 To:     jbrunet@baylibre.com, khilman@baylibre.com
 Cc:     linux-arm-kernel@lists.infradead.org,
@@ -51,9 +51,9 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         linux-clk@vger.kernel.org, martin.blumenstingl@googlemail.com,
         linux-gpio@vger.kernel.org,
         Neil Armstrong <narmstrong@baylibre.com>
-Subject: [RFC/RFT v2 05/14] soc: amlogic: meson-clk-measure: protect measure with a mutex
-Date:   Wed, 26 Jun 2019 11:06:23 +0200
-Message-Id: <20190626090632.7540-6-narmstrong@baylibre.com>
+Subject: [RFC/RFT v2 06/14] soc: amlogic: meson-clk-measure: add G12B second cluster cpu clk
+Date:   Wed, 26 Jun 2019 11:06:24 +0200
+Message-Id: <20190626090632.7540-7-narmstrong@baylibre.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190626090632.7540-1-narmstrong@baylibre.com>
 References: <20190626090632.7540-1-narmstrong@baylibre.com>
@@ -64,59 +64,28 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-In order to protect clock measuring when multiple process asks for
-a mesure, protect the main measure function with mutexes.
+Add the G12B second CPU cluster CPU and SYS_PLL measure IDs.
+
+These IDs returns 0Hz on G12A.
 
 Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
 ---
- drivers/soc/amlogic/meson-clk-measure.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/soc/amlogic/meson-clk-measure.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/soc/amlogic/meson-clk-measure.c b/drivers/soc/amlogic/meson-clk-measure.c
-index 19d4cbc93a17..c470e24f1dfa 100644
+index c470e24f1dfa..f09b404b39d3 100644
 --- a/drivers/soc/amlogic/meson-clk-measure.c
 +++ b/drivers/soc/amlogic/meson-clk-measure.c
-@@ -11,6 +11,8 @@
- #include <linux/debugfs.h>
- #include <linux/regmap.h>
- 
-+static DEFINE_MUTEX(measure_lock);
-+
- #define MSR_CLK_DUTY		0x0
- #define MSR_CLK_REG0		0x4
- #define MSR_CLK_REG1		0x8
-@@ -360,6 +362,10 @@ static int meson_measure_id(struct meson_msr_id *clk_msr_id,
- 	unsigned int val;
- 	int ret;
- 
-+	ret = mutex_lock_interruptible(&measure_lock);
-+	if (ret)
-+		return ret;
-+
- 	regmap_write(priv->regmap, MSR_CLK_REG0, 0);
- 
- 	/* Set measurement duration */
-@@ -377,8 +383,10 @@ static int meson_measure_id(struct meson_msr_id *clk_msr_id,
- 
- 	ret = regmap_read_poll_timeout(priv->regmap, MSR_CLK_REG0,
- 				       val, !(val & MSR_BUSY), 10, 10000);
--	if (ret)
-+	if (ret) {
-+		mutex_unlock(&measure_lock);
- 		return ret;
-+	}
- 
- 	/* Disable */
- 	regmap_update_bits(priv->regmap, MSR_CLK_REG0, MSR_ENABLE, 0);
-@@ -386,6 +394,8 @@ static int meson_measure_id(struct meson_msr_id *clk_msr_id,
- 	/* Get the value in multiple of gate time counts */
- 	regmap_read(priv->regmap, MSR_CLK_REG2, &val);
- 
-+	mutex_unlock(&measure_lock);
-+
- 	if (val >= MSR_VAL_MASK)
- 		return -EINVAL;
- 
+@@ -324,6 +324,8 @@ static struct meson_msr_id clk_msr_g12a[CLK_MSR_MAX] = {
+ 	CLK_MSR_ID(84, "co_tx"),
+ 	CLK_MSR_ID(89, "hdmi_todig"),
+ 	CLK_MSR_ID(90, "hdmitx_sys"),
++	CLK_MSR_ID(91, "sys_cpub_div16"),
++	CLK_MSR_ID(92, "sys_pll_cpub_div16"),
+ 	CLK_MSR_ID(94, "eth_phy_rx"),
+ 	CLK_MSR_ID(95, "eth_phy_pll"),
+ 	CLK_MSR_ID(96, "vpu_b"),
 -- 
 2.21.0
 
