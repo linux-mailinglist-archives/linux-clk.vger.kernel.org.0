@@ -2,48 +2,48 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4AED5653A
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2019 11:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353CE56525
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Jun 2019 11:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727139AbfFZJHY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 26 Jun 2019 05:07:24 -0400
-Received: from mail-wr1-f45.google.com ([209.85.221.45]:45813 "EHLO
-        mail-wr1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727131AbfFZJGu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 26 Jun 2019 05:06:50 -0400
-Received: by mail-wr1-f45.google.com with SMTP id f9so1746172wre.12
-        for <linux-clk@vger.kernel.org>; Wed, 26 Jun 2019 02:06:49 -0700 (PDT)
+        id S1727163AbfFZJGx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 26 Jun 2019 05:06:53 -0400
+Received: from mail-wr1-f49.google.com ([209.85.221.49]:47030 "EHLO
+        mail-wr1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727117AbfFZJGw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 26 Jun 2019 05:06:52 -0400
+Received: by mail-wr1-f49.google.com with SMTP id n4so1740752wrw.13
+        for <linux-clk@vger.kernel.org>; Wed, 26 Jun 2019 02:06:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ilVEeuyiLJqEM//7LRcyaeEvGW66sRMbkqNNEOmiSkI=;
-        b=cwwWP69NVx6TY/Gz7Z5p/lOUqhwSvirq/vUFxmAFk6SolV3fKhmbczvggqjW5Mlk3A
-         pDSxzCm/JDvZOz1aoNw1hlKwtY+LoadFpo84hRAKUUFzkK6cUwfWKJJMFJV9AYtbzWCr
-         /KJsASkXrd6fkobkgaqua+oCVzf5D5X0pyHOpksG9HOx40Gg4BLd/oZQ7RM0r/mjWd6L
-         B7GDAvIbXTTDRJi6PQI8gLJDWi1eUBjM7aQTRV9fPVaijB8D8Bo/oNMaOpXO8yR3P8J7
-         gDWR309Auoj3m0VarJzHvrCdAdsnrv0hV+7Qj8GrjPkvyrWiJ8LTzyR94NiLZsMrIiGk
-         HuUA==
+        bh=N2giQ2yIsAWn8MusPqgS1CP/DkqViRRuAeJS4LgppK4=;
+        b=DXSZ+VO0OEC6jKtn+s80RNGXITCcDwHwpLndzhr+8/KJniKqMGcmDjaqxbUJjooJGg
+         F93CGu/xmItuu5qshmofSmPhYhdz+Xg27J6AaPOmcfkQ5jwdz38oQ1J53U2paFI6LBjh
+         ZFTAa0oUmX7iJqvSrOiDK8oXod/fF3aumKEhRhZgq3vnY+JI5+vAHf0MU1rsn3a4hmv6
+         WhX+cqC7EmxBY/EwU+TSTEcQJBbQ0KNLr7t3hNd8M6AfS1rqEuOJL1NDetJemg5hlmQP
+         13pM9OArLIhYk/rg36EuouDxealfUL6WRZbinROyxqCmyjPP7fjEtcIsJoN1DVUfbcwJ
+         Ua2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ilVEeuyiLJqEM//7LRcyaeEvGW66sRMbkqNNEOmiSkI=;
-        b=ERlfmgSEyDV6sIldhn0XHboMbY0eiC+Pt3TRRaxYyWAyQSIMA6g6UXmyh7vUiHHZH+
-         hI5/GYag48Mr5QILOXFzHCS2k3rmB4dgrX4uMs1ZZ0wxLHay1FsHxz+4L1lzymQfemCS
-         4T4dRAnfX4cAOMA+DFStXXaAP4VyvZpF2mVifWFEU7PjgysygayI1EAK7lecu8Df8Z3T
-         1VAlXjioura/nnWchapyU91dlqVwkwTGrxZt3KTuRYVYrEQVVo2l4jXBNxXXOhRruGOV
-         8kygPj0zblo4ubcHXrpC6wYa+tRiZ9Rx2DV8OiyHFXJaLthdN8Kvp8J55dW3yCBnUeqP
-         2gkQ==
-X-Gm-Message-State: APjAAAX/FGMLVHIYdmRU4ji1KrKd5NkxpGKqS8ire8RzFeuEGCTeEInm
-        5A6jZNc99zGHaPminiIP0UkuWw==
-X-Google-Smtp-Source: APXvYqzb1BGQn5vh83E/EV9iV7LTP4OmIHphpQesTpBpBMUvyLfTVQWwspLS+svQzdCN9waUUwRJIQ==
-X-Received: by 2002:a5d:518f:: with SMTP id k15mr2642212wrv.321.1561540008423;
-        Wed, 26 Jun 2019 02:06:48 -0700 (PDT)
+        bh=N2giQ2yIsAWn8MusPqgS1CP/DkqViRRuAeJS4LgppK4=;
+        b=t4jj1r3JjYr119PL0N7MVo2epP309c8/8JARtqN85Dx/RA83OqnfXjNxZ168Cx17i1
+         wGkby2y59flKO1giUNfim2HheT/zE87QH8m3mbVBbwUrx4Vg5G4Z1ocdwWV75MWS4ASo
+         Qq3SXjzw4gG3m78zuwld7N+HpKNi+V8MardCFagjldAjzJOCbc6UyRiC1tc437Q7F2A2
+         nn70zyCZcfwWZbXMJAjgTo31VmWvZXSHnFs876USYHVWWR6Vzw3bQdrsWbPbyJcDcnzc
+         fbpglRppUE8BFjqp42JfH7hFgGFENcNaOFOo3pJvy8NM75Fx44Org3fd4ZHoRdOOF79z
+         ZsJw==
+X-Gm-Message-State: APjAAAXK+xwFsLtk6bCYw/AF+tR8G/7nXVq3qMPXYlU0ou4haXXOD3pq
+        7KieyoOQr15ixpcCre0egXUBSoPEAOk=
+X-Google-Smtp-Source: APXvYqz4hNZI6MaHjKVesPZ/4zgZ1NEbidAbDtUEDcFlcGeFBwbA5LHEybYag7mNYd9FG0MHg+dHJA==
+X-Received: by 2002:adf:f503:: with SMTP id q3mr2722506wro.43.1561540009429;
+        Wed, 26 Jun 2019 02:06:49 -0700 (PDT)
 Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id o6sm1925797wmc.46.2019.06.26.02.06.47
+        by smtp.gmail.com with ESMTPSA id o6sm1925797wmc.46.2019.06.26.02.06.48
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 26 Jun 2019 02:06:47 -0700 (PDT)
+        Wed, 26 Jun 2019 02:06:48 -0700 (PDT)
 From:   Neil Armstrong <narmstrong@baylibre.com>
 To:     jbrunet@baylibre.com, khilman@baylibre.com
 Cc:     linux-arm-kernel@lists.infradead.org,
@@ -51,9 +51,9 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         linux-clk@vger.kernel.org, martin.blumenstingl@googlemail.com,
         linux-gpio@vger.kernel.org,
         Neil Armstrong <narmstrong@baylibre.com>
-Subject: [RFC/RFT v2 11/14] arm64: dts: meson-g12a: add cpus OPP table
-Date:   Wed, 26 Jun 2019 11:06:29 +0200
-Message-Id: <20190626090632.7540-12-narmstrong@baylibre.com>
+Subject: [RFC/RFT v2 12/14] arm64: dts: meson-g12a: enable DVFS on G12A boards
+Date:   Wed, 26 Jun 2019 11:06:30 +0200
+Message-Id: <20190626090632.7540-13-narmstrong@baylibre.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190626090632.7540-1-narmstrong@baylibre.com>
 References: <20190626090632.7540-1-narmstrong@baylibre.com>
@@ -64,103 +64,263 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the OPP table taken from the vendor u200 and u211 DTS.
+Enable DVFS for the U200, SEI520 and X96-Max Amlogic G12A based board
+by setting the clock, OPP and supply for each CPU cores.
 
-The Amlogic G12A SoC seems to available in 3 types :
-- low-speed: up to 1,8GHz
-- mid-speed: up to 1,908GHz
-- high-speed: up to 2.1GHz
+The CPU cluster power supply can achieve 0.73V to 1.01V using a PWM
+output clocked at 800KHz with an inverse duty-cycle.
 
-And the S905X2 opp voltages are slightly higher than the S905D2
-OPP voltages for the low-speed table.
-
-This adds the conservative OPP table with the S905X2 higher voltages
-and the maximum low-speed OPP frequency.
-
-The values were tested to be stable on an Amlogic U200 Reference Board,
-SeiRobotics SEI510 and X96 Max Set-Top-Boxes running the arm64 cpuburn
-at [1] and cycling between all the possible cpufreq translations and
-checking the final frequency using the clock-measurer, script at [2].
+DVFS has been tested by running the arm64 cpuburn at [1] and cycling
+between all the possible cpufreq translations and checking the final
+frequency using the clock-measurer, script at [2].
 
 [1] https://github.com/ssvb/cpuburn-arm/blob/master/cpuburn-a53.S
 [2] https://gist.github.com/superna9999/d4de964dbc0f84b7d527e1df2ddea25f
 
 Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
 ---
- arch/arm64/boot/dts/amlogic/meson-g12a.dtsi | 60 +++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+ .../boot/dts/amlogic/meson-g12a-sei510.dts    | 55 +++++++++++++++++++
+ .../boot/dts/amlogic/meson-g12a-u200.dts      | 55 +++++++++++++++++++
+ .../boot/dts/amlogic/meson-g12a-x96-max.dts   | 52 ++++++++++++++++++
+ 3 files changed, 162 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi
-index ac15967bb7fa..733a9d46fc4b 100644
---- a/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi
-@@ -48,6 +48,66 @@
- 			compatible = "cache";
- 		};
+diff --git a/arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dts b/arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dts
+index bd26b35102ff..be45437c51e1 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dts
++++ b/arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dts
+@@ -129,6 +129,25 @@
+ 		enable-active-high;
  	};
+ 
++	vddcpu: regulator-vddcpu {
++		/*
++		 * SY8120B1ABC DC/DC Regulator.
++		 */
++		compatible = "pwm-regulator";
 +
-+	cpu_opp_table: opp-table {
-+		compatible = "operating-points-v2";
-+		opp-shared;
++		regulator-name = "VDDCPU";
++		regulator-min-microvolt = <721000>;
++		regulator-max-microvolt = <1022000>;
 +
-+		opp-100000000 {
-+			opp-hz = /bits/ 64 <100000000>;
-+			opp-microvolt = <731000>;
-+		};
++		vin-supply = <&dc_in>;
 +
-+		opp-250000000 {
-+			opp-hz = /bits/ 64 <250000000>;
-+			opp-microvolt = <731000>;
-+		};
++		pwms = <&pwm_AO_cd 1 1250 0>;
++		pwm-dutycycle-range = <100 0>;
 +
-+		opp-500000000 {
-+			opp-hz = /bits/ 64 <500000000>;
-+			opp-microvolt = <731000>;
-+		};
-+
-+		opp-667000000 {
-+			opp-hz = /bits/ 64 <666666666>;
-+			opp-microvolt = <731000>;
-+		};
-+
-+		opp-1000000000 {
-+			opp-hz = /bits/ 64 <1000000000>;
-+			opp-microvolt = <731000>;
-+		};
-+
-+		opp-1200000000 {
-+			opp-hz = /bits/ 64 <1200000000>;
-+			opp-microvolt = <731000>;
-+		};
-+
-+		opp-1398000000 {
-+			opp-hz = /bits/ 64 <1398000000>;
-+			opp-microvolt = <761000>;
-+		};
-+
-+		opp-1512000000 {
-+			opp-hz = /bits/ 64 <1512000000>;
-+			opp-microvolt = <791000>;
-+		};
-+
-+		opp-1608000000 {
-+			opp-hz = /bits/ 64 <1608000000>;
-+			opp-microvolt = <831000>;
-+		};
-+
-+		opp-1704000000 {
-+			opp-hz = /bits/ 64 <1704000000>;
-+			opp-microvolt = <861000>;
-+		};
-+
-+		opp-1800000000 {
-+			opp-hz = /bits/ 64 <1800000000>;
-+			opp-microvolt = <981000>;
-+		};
++		regulator-boot-on;
++		regulator-always-on;
 +	};
++
+ 	vddio_ao1v8: regulator-vddio_ao1v8 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "VDDIO_AO1V8";
+@@ -297,6 +316,34 @@
+ 	status = "okay";
  };
  
- &sd_emmc_a {
++&cpu0 {
++	cpu-supply = <&vddcpu>;
++	operating-points-v2 = <&cpu_opp_table>;
++	clocks = <&clkc CLKID_CPU_CLK>;
++	clock-latency = <50000>;
++};
++
++&cpu1 {
++	cpu-supply = <&vddcpu>;
++	operating-points-v2 = <&cpu_opp_table>;
++	clocks = <&clkc CLKID_CPU_CLK>;
++	clock-latency = <50000>;
++};
++
++&cpu2 {
++	cpu-supply = <&vddcpu>;
++	operating-points-v2 = <&cpu_opp_table>;
++	clocks = <&clkc CLKID_CPU_CLK>;
++	clock-latency = <50000>;
++};
++
++&cpu3 {
++	cpu-supply = <&vddcpu>;
++	operating-points-v2 = <&cpu_opp_table>;
++	clocks = <&clkc CLKID_CPU_CLK>;
++	clock-latency = <50000>;
++};
++
+ &cvbs_vdac_port {
+ 	cvbs_vdac_out: endpoint {
+ 		remote-endpoint = <&cvbs_connector_in>;
+@@ -339,6 +386,14 @@
+ 	pinctrl-names = "default";
+ };
+ 
++&pwm_AO_cd {
++	pinctrl-0 = <&pwm_ao_d_e_pins>;
++	pinctrl-names = "default";
++	clocks = <&xtal>;
++	clock-names = "clkin1";
++	status = "okay";
++};
++
+ &pwm_ef {
+ 	status = "okay";
+ 	pinctrl-0 = <&pwm_e_pins>;
+diff --git a/arch/arm64/boot/dts/amlogic/meson-g12a-u200.dts b/arch/arm64/boot/dts/amlogic/meson-g12a-u200.dts
+index 332a4b27174b..b6bd96ee394a 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-g12a-u200.dts
++++ b/arch/arm64/boot/dts/amlogic/meson-g12a-u200.dts
+@@ -136,6 +136,25 @@
+ 		regulator-always-on;
+ 	};
+ 
++	vddcpu: regulator-vddcpu {
++		/*
++		 * MP8756GD Regulator.
++		 */
++		compatible = "pwm-regulator";
++
++		regulator-name = "VDDCPU";
++		regulator-min-microvolt = <721000>;
++		regulator-max-microvolt = <1022000>;
++
++		vin-supply = <&main_12v>;
++
++		pwms = <&pwm_AO_cd 1 1250 0>;
++		pwm-dutycycle-range = <100 0>;
++
++		regulator-boot-on;
++		regulator-always-on;
++	};
++
+ 	sound {
+ 		compatible = "amlogic,axg-sound-card";
+ 		model = "G12A-U200";
+@@ -305,6 +324,34 @@
+ 	status = "okay";
+ };
+ 
++&cpu0 {
++	cpu-supply = <&vddcpu>;
++	operating-points-v2 = <&cpu_opp_table>;
++	clocks = <&clkc CLKID_CPU_CLK>;
++	clock-latency = <50000>;
++};
++
++&cpu1 {
++	cpu-supply = <&vddcpu>;
++	operating-points-v2 = <&cpu_opp_table>;
++	clocks = <&clkc CLKID_CPU_CLK>;
++	clock-latency = <50000>;
++};
++
++&cpu2 {
++	cpu-supply = <&vddcpu>;
++	operating-points-v2 = <&cpu_opp_table>;
++	clocks = <&clkc CLKID_CPU_CLK>;
++	clock-latency = <50000>;
++};
++
++&cpu3 {
++	cpu-supply = <&vddcpu>;
++	operating-points-v2 = <&cpu_opp_table>;
++	clocks = <&clkc CLKID_CPU_CLK>;
++	clock-latency = <50000>;
++};
++
+ &cvbs_vdac_port {
+ 	cvbs_vdac_out: endpoint {
+ 		remote-endpoint = <&cvbs_connector_in>;
+@@ -369,6 +416,14 @@
+ 	pinctrl-names = "default";
+ };
+ 
++&pwm_AO_cd {
++	pinctrl-0 = <&pwm_ao_d_e_pins>;
++	pinctrl-names = "default";
++	clocks = <&xtal>;
++	clock-names = "clkin1";
++	status = "okay";
++};
++
+ /* SD card */
+ &sd_emmc_b {
+ 	status = "okay";
+diff --git a/arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dts b/arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dts
+index d37868d21114..099ccf67547e 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dts
++++ b/arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dts
+@@ -132,6 +132,22 @@
+ 		regulator-always-on;
+ 	};
+ 
++	vddcpu: regulator-vddcpu {
++		compatible = "pwm-regulator";
++
++		regulator-name = "VDDCPU";
++		regulator-min-microvolt = <721000>;
++		regulator-max-microvolt = <1022000>;
++
++		vin-supply = <&dc_in>;
++
++		pwms = <&pwm_AO_cd 1 1250 0>;
++		pwm-dutycycle-range = <100 0>;
++
++		regulator-boot-on;
++		regulator-always-on;
++	};
++
+ 	sound {
+ 		compatible = "amlogic,axg-sound-card";
+ 		model = "G12A-X96-MAX";
+@@ -242,6 +258,34 @@
+ 	status = "okay";
+ };
+ 
++&cpu0 {
++	cpu-supply = <&vddcpu>;
++	operating-points-v2 = <&cpu_opp_table>;
++	clocks = <&clkc CLKID_CPU_CLK>;
++	clock-latency = <50000>;
++};
++
++&cpu1 {
++	cpu-supply = <&vddcpu>;
++	operating-points-v2 = <&cpu_opp_table>;
++	clocks = <&clkc CLKID_CPU_CLK>;
++	clock-latency = <50000>;
++};
++
++&cpu2 {
++	cpu-supply = <&vddcpu>;
++	operating-points-v2 = <&cpu_opp_table>;
++	clocks = <&clkc CLKID_CPU_CLK>;
++	clock-latency = <50000>;
++};
++
++&cpu3 {
++	cpu-supply = <&vddcpu>;
++	operating-points-v2 = <&cpu_opp_table>;
++	clocks = <&clkc CLKID_CPU_CLK>;
++	clock-latency = <50000>;
++};
++
+ &cvbs_vdac_port {
+ 	cvbs_vdac_out: endpoint {
+ 		remote-endpoint = <&cvbs_connector_in>;
+@@ -279,6 +323,14 @@
+ 	pinctrl-names = "default";
+ };
+ 
++&pwm_AO_cd {
++	pinctrl-0 = <&pwm_ao_d_e_pins>;
++	pinctrl-names = "default";
++	clocks = <&xtal>;
++	clock-names = "clkin1";
++	status = "okay";
++};
++
+ &ext_mdio {
+ 	external_phy: ethernet-phy@0 {
+ 		/* Realtek RTL8211F (0x001cc916) */
 -- 
 2.21.0
 
