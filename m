@@ -2,65 +2,54 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCBB584F5
-	for <lists+linux-clk@lfdr.de>; Thu, 27 Jun 2019 16:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB795851D
+	for <lists+linux-clk@lfdr.de>; Thu, 27 Jun 2019 17:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726472AbfF0O5j (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 27 Jun 2019 10:57:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53592 "EHLO mail.kernel.org"
+        id S1726370AbfF0PDi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 27 Jun 2019 11:03:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56418 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726443AbfF0O5j (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 27 Jun 2019 10:57:39 -0400
+        id S1726465AbfF0PDi (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 27 Jun 2019 11:03:38 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 42BD52086D;
-        Thu, 27 Jun 2019 14:57:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A233320B1F;
+        Thu, 27 Jun 2019 15:03:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561647458;
-        bh=V7tnhDpdCEtH0xy4BaUun+rbJC5qQflf0ihlbDGxrYw=;
+        s=default; t=1561647817;
+        bh=9dRzJf1rsWkfWTu0ToX4+aWY5ycqC1dpc9g5Yw8Jh0Q=;
         h=In-Reply-To:References:To:From:Subject:Cc:Date:From;
-        b=R0kBGt0GTuwC1Zo9rNGZHKLtrEYrtoQVP7zIoYYbLiFkAPc6AUs1WbNxw9j612hz7
-         DBT+YCVJggrBEzdC/GFIogNnciL3PH7tP2xMKT3nLs61+Iu6dRTHwL5vkPOqH9LU/E
-         CszflHmvGLcG9DecNWSBoIU5+AvkYk4KBmlHgg7c=
+        b=PCdi9WNkUdNkeOnM37HFHkZUCXv33cJ0PYLTwP2k6PPaZd2eYJ1BRSGAGJF+1teGV
+         qzJ3EzWvpetvUKxCcuAY1gojA8KQ0UCfkJW+OZf4+oZvv4DGmgCTVzT580x6J1rcBB
+         9s6YmZhQ5kqh7JHcv/malFvvkudboo0ddeXqK8pw=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1561646841-7663-1-git-send-email-claudiu.beznea@microchip.com>
-References: <1561646841-7663-1-git-send-email-claudiu.beznea@microchip.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
-        mark.rutland@arm.com, mturquette@baylibre.com,
-        nicolas.ferre@microchip.com, robh+dt@kernel.org
+In-Reply-To: <1560440205-4604-1-git-send-email-claudiu.beznea@microchip.com>
+References: <1560440205-4604-1-git-send-email-claudiu.beznea@microchip.com>
+To:     Claudiu.Beznea@microchip.com, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, mturquette@baylibre.com
 From:   Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH v5 0/4] add slow clock support for SAM9X60
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: Re: [PATCH 0/7] clk: at91: sckc: improve error path
+Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, claudiu.beznea@gmail.com,
+        Claudiu.Beznea@microchip.com
 User-Agent: alot/0.8.1
-Date:   Thu, 27 Jun 2019 07:57:37 -0700
-Message-Id: <20190627145738.42BD52086D@mail.kernel.org>
+Date:   Thu, 27 Jun 2019 08:03:36 -0700
+Message-Id: <20190627150337.A233320B1F@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Claudiu Beznea (2019-06-27 07:47:17)
+Quoting Claudiu.Beznea@microchip.com (2019-06-13 08:37:06)
+> From: Claudiu Beznea <claudiu.beznea@microchip.com>
+>=20
 > Hi,
 >=20
-> This series add slow clock support for SAM9X60. Apart from previous IPs, =
-this
-> one uses different offsets in control register for different functionalit=
-ies.
-> The series adapt current driver to work for all IPs using per IP
-> configurations initialized at probe.
->=20
-> Stephen,
->=20
-> I send a new version of this since I'm not seeing the patches on clk-next
-> and I though you may had issues with the previous version of this series.
+> This series tries to improve error path for slow clock registrations
+> by adding functions to free resources and using them on failures.
 
-Ok thanks. I see that you've fixed it to send plain text. Great! But I
-already applied the other patches so I'll just keep what I had. Should
-be pushed out to clk-next today.
+If possible, resend this patch series in plain text. Thanks.
 
