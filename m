@@ -2,96 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C76A59063
-	for <lists+linux-clk@lfdr.de>; Fri, 28 Jun 2019 04:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B06C591E3
+	for <lists+linux-clk@lfdr.de>; Fri, 28 Jun 2019 05:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726785AbfF1CNv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 27 Jun 2019 22:13:51 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:17643 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726664AbfF1CNj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 Jun 2019 22:13:39 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d1577d00000>; Thu, 27 Jun 2019 19:13:36 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 27 Jun 2019 19:13:37 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 27 Jun 2019 19:13:37 -0700
-Received: from HQMAIL102.nvidia.com (172.18.146.10) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 28 Jun
- 2019 02:13:37 +0000
-Received: from HQMAIL104.nvidia.com (172.18.146.11) by HQMAIL102.nvidia.com
- (172.18.146.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 28 Jun
- 2019 02:13:36 +0000
-Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL104.nvidia.com
- (172.18.146.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Fri, 28 Jun 2019 02:13:36 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.110.102.155]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5d1577d00002>; Thu, 27 Jun 2019 19:13:36 -0700
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <tglx@linutronix.de>, <jason@lakedaemon.net>,
-        <marc.zyngier@arm.com>, <linus.walleij@linaro.org>,
-        <stefan@agner.ch>, <mark.rutland@arm.com>
-CC:     <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
-        <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <jckuo@nvidia.com>,
-        <josephl@nvidia.com>, <talho@nvidia.com>, <skomatineni@nvidia.com>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <mperttunen@nvidia.com>, <spatra@nvidia.com>, <robh+dt@kernel.org>,
-        <digetx@gmail.com>, <devicetree@vger.kernel.org>
-Subject: [PATCH V5 18/18] arm64: dts: tegra210-p3450: Jetson nano SC7 timings
-Date:   Thu, 27 Jun 2019 19:12:52 -0700
-Message-ID: <1561687972-19319-19-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1561687972-19319-1-git-send-email-skomatineni@nvidia.com>
-References: <1561687972-19319-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
-MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1561688016; bh=nUcVR3aZhc7CmOqQ/Gf0Or0b77WEAikV513SetsAm3o=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=lV07bS1nw6Nyav+vjPMiy5zgQnmLOJyQ8iBL05bLAZxsqvAkPZm4pvjAu9G3/loHd
-         v39prKHsdCGeOTbBQBfiJfJHfX15MR373/8gVHDi07luwpwEfwNaNr9JghYaDUPvlt
-         eVhlsRK458IhZT6LIHRPHvUwNSbMx9xMFZb4TpPL/wL7v3rywlSQryJSAXW709u/Kz
-         8BN+icPwB73mJ/xSlwBc2chhvx2TzTETtNH53BS+cF/jMkJ8pOITVCHZvMgw0PhgEy
-         2rm6GIKIt7dCO/bj1VSmsxiCoOxXmuevPT23KfqCJOLwQAPfT7a7rLlkWD3SPYQpw+
-         7KQcNQ0s5s0lA==
+        id S1726844AbfF1DTR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 27 Jun 2019 23:19:17 -0400
+Received: from anchovy2.45ru.net.au ([203.30.46.146]:49286 "EHLO
+        anchovy2.45ru.net.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726565AbfF1DTQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 Jun 2019 23:19:16 -0400
+Received: (qmail 11898 invoked by uid 5089); 28 Jun 2019 03:19:13 -0000
+Received: by simscan 1.2.0 ppid: 11873, pid: 11874, t: 0.0449s
+         scanners: regex: 1.2.0 attach: 1.2.0 clamav: 0.88.3/m:40/d:1950
+X-RBL:  $rbltext
+Received: from unknown (HELO preid-c7.electromag.com.au) (preid@electromag.com.au@203.59.235.95)
+  by anchovy3.45ru.net.au with ESMTPA; 28 Jun 2019 03:19:13 -0000
+Received: by preid-c7.electromag.com.au (Postfix, from userid 1000)
+        id ED70320077899; Fri, 28 Jun 2019 11:19:11 +0800 (AWST)
+From:   Phil Reid <preid@electromag.com.au>
+To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, preid@electromag.com.au,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v2 0/2] clk: clk-cdce925: Add regulator support
+Date:   Fri, 28 Jun 2019 11:19:08 +0800
+Message-Id: <1561691950-42154-1-git-send-email-preid@electromag.com.au>
+X-Mailer: git-send-email 1.8.3.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This patch adds Jetson nano platform specific SC7 timing configuration
-in the device tree.
+The cdce925 power supplies could be controllable on some platforms.
+Enable them before communicating with the cdce925.
 
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts | 7 +++++++
- 1 file changed, 7 insertions(+)
+Changes from V1
+- Add devicetree updates
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts b/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
-index 9d17ec707bce..b81bfdfbc115 100644
---- a/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
-+++ b/arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts
-@@ -382,6 +382,13 @@
- 
- 	pmc@7000e400 {
- 		nvidia,invert-interrupt;
-++		nvidia,suspend-mode = <0>;
-+		nvidia,cpu-pwr-good-time = <0>;
-+		nvidia,cpu-pwr-off-time = <0>;
-+		nvidia,core-pwr-good-time = <4587 3876>;
-+		nvidia,core-pwr-off-time = <39065>;
-+		nvidia,core-power-req-active-high;
-+		nvidia,sys-clock-req-active-high;
- 	};
- 
- 	hda@70030000 {
+
+Phil Reid (2):
+  dt-bindings: clock: cdce925: Add regulator documentation
+  clk: clk-cdce925: Add regulator support
+
+ .../devicetree/bindings/clock/ti,cdce925.txt       |  4 +++
+ drivers/clk/clk-cdce925.c                          | 34 ++++++++++++++++++++++
+ 2 files changed, 38 insertions(+)
+
 -- 
-2.7.4
+1.8.3.1
 
