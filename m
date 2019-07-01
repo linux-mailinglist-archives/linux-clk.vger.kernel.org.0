@@ -2,100 +2,178 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB835B1C3
-	for <lists+linux-clk@lfdr.de>; Sun, 30 Jun 2019 23:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 806775B332
+	for <lists+linux-clk@lfdr.de>; Mon,  1 Jul 2019 06:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727199AbfF3VEz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 30 Jun 2019 17:04:55 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:45851 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727171AbfF3VEz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 30 Jun 2019 17:04:55 -0400
-Received: by mail-lj1-f194.google.com with SMTP id m23so10894887lje.12;
-        Sun, 30 Jun 2019 14:04:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3ErUctKt9CJ3rgf9ZExT4u2Tmx1X1fVjtqY74IUmVOo=;
-        b=mDI+oZlsTjMZ011aaWfEOzGbNWiemzxQO7S1znKAjaG9I4rRDjx5EWabNeNZQ66jyC
-         row9h2FgywRmlwPif8BkAuj52pWOQ2xZqHeulXTwLSjxkzpwd93F92IHymOoVOKgZCxx
-         zU0DfjYHCkvy7Zn+iVoGseJDq3KZaLBlgXIuY/klh4dqhrOmwHs/OG2fPbISrt0lEUuW
-         Eg1OJxOEvOeTzGBwO+gDr74Zf1j9c0QlFormhMF8mxDFborDgdOzrKFx1NDPiox+pK1G
-         nF8dWqjO/jYtLPcZfM59nYrr08Kgs5bsTcBb78nx+9kZXvKXImhAZhGjaIwfPBhVsP7i
-         HfTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3ErUctKt9CJ3rgf9ZExT4u2Tmx1X1fVjtqY74IUmVOo=;
-        b=uDiQKGrxb9eW5fr7ePOQz6sD2zf1LgZ3dz+vmF7qjTuJKSTUlJBXUpd1WqWJrpw30Y
-         nv2MZlBgIQFc4edb1girgABN3phn+xTktrZgXGLb/l42SdNLxj7oZ2PogAI/vsq2BlwR
-         RK3LyvIntmch4EKbgbZ5A7ozIRNyuV5hdLeXWbX/LWhQt1+e94aWSE5KbHNEatQJgx3f
-         s/uIQBr/ssyD4bYZud/Qz4lxdhbaC01q2z2de/WQHDFKzPc3ZIzWoQPNtPJAaOLTeanp
-         y+gHOMTX0fkTWY39N0UfV9QA9Lz3BoX+pHBHuPe0JM56Y4j+zD0F55MbHMtq9dYBv4vd
-         ncGg==
-X-Gm-Message-State: APjAAAUSPGKYN0587WTWhETYu7ahs1QLOD8KjT8xM551BuBd6HeDKiqu
-        d59fGDiKC7S+uk+4ayGvcl4=
-X-Google-Smtp-Source: APXvYqxMSOrFJP6zHqgaD4UXKs1yS4doambgrEVLaOY6bgg0oynk4XyWhKJMI02wb5r/vMxpeHVJFw==
-X-Received: by 2002:a2e:8847:: with SMTP id z7mr12128141ljj.51.1561928692491;
-        Sun, 30 Jun 2019 14:04:52 -0700 (PDT)
-Received: from localhost.localdomain (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
-        by smtp.gmail.com with ESMTPSA id u9sm2221408lfb.38.2019.06.30.14.04.51
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 30 Jun 2019 14:04:51 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
+        id S1725777AbfGAEAk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 1 Jul 2019 00:00:40 -0400
+Received: from mailgw01.mediatek.com ([216.200.240.184]:53742 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725616AbfGAEAj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 1 Jul 2019 00:00:39 -0400
+X-Greylist: delayed 300 seconds by postgrey-1.27 at vger.kernel.org; Mon, 01 Jul 2019 00:00:39 EDT
+X-UUID: e1d7852b40184f43b704b28d2b031933-20190630
+X-UUID: e1d7852b40184f43b704b28d2b031933-20190630
+Received: from mtkcas67.mediatek.inc [(172.29.193.45)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (musrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 2113796546; Sun, 30 Jun 2019 19:55:34 -0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ MTKMBS62N2.mediatek.inc (172.29.193.42) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Sun, 30 Jun 2019 20:55:31 -0700
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Mon, 1 Jul 2019 11:55:17 +0800
+Message-ID: <1561953318.25914.9.camel@mtksdaap41>
+Subject: Re: [PATCH v5 08/12] dt-bindings: mediatek: Change the binding for
+ mmsys clocks
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Matthias Brugger <mbrugger@suse.com>
+CC:     Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Sean Wang <sean.wang@kernel.org>,
+        "David Airlie" <airlied@linux.ie>,
         Michael Turquette <mturquette@baylibre.com>,
-        Joseph Lo <josephl@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 15/15] ARM: dts: tegra30: Add External Memory Controller node
-Date:   Mon,  1 Jul 2019 00:00:19 +0300
-Message-Id: <20190630210019.26914-16-digetx@gmail.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190630210019.26914-1-digetx@gmail.com>
-References: <20190630210019.26914-1-digetx@gmail.com>
+        Sean Wang <Sean.Wang@mediatek.com>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Ulrich Hecht <ulrich.hecht+renesas@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "Randy Dunlap" <rdunlap@infradead.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "matthias.bgg@kernel.org" <matthias.bgg@kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Mon, 1 Jul 2019 11:55:18 +0800
+In-Reply-To: <a229bfc7-683f-5b0d-7b71-54f934de6214@suse.com>
+References: <20181116125449.23581-1-matthias.bgg@kernel.org>
+         <20181116125449.23581-9-matthias.bgg@kernel.org>
+         <20181116231522.GA18006@bogus>
+         <2a23e407-4cd4-2e2b-97a5-4e2bb96846e0@gmail.com>
+         <CAL_JsqKJQwfDJbpmwW+oCxiDkSp5+6mG-uoURmCQVEMP_jFOEg@mail.gmail.com>
+         <154281878765.88331.10581984256202566195@swboyd.mtv.corp.google.com>
+         <458178ac-c0fc-9671-7fc8-ed2d6f61424c@suse.com>
+         <154356023767.88331.18401188808548429052@swboyd.mtv.corp.google.com>
+         <a229bfc7-683f-5b0d-7b71-54f934de6214@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add External Memory Controller node to the device-tree.
+Hi, Matthias:
 
-Acked-by: Peter De Schrijver <pdeschrijver@nvidia.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- arch/arm/boot/dts/tegra30.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+On Fri, 2018-11-30 at 16:59 +0800, Matthias Brugger wrote:
+> 
+> On 30/11/2018 07:43, Stephen Boyd wrote:
+> > Quoting Matthias Brugger (2018-11-21 09:09:52)
+> >>
+> >>
+> >> On 21/11/2018 17:46, Stephen Boyd wrote:
+> >>> Quoting Rob Herring (2018-11-19 11:15:16)
+> >>>> On Sun, Nov 18, 2018 at 11:12 AM Matthias Brugger
+> >>>> <matthias.bgg@gmail.com> wrote:
+> >>>>> On 11/17/18 12:15 AM, Rob Herring wrote:
+> >>>>>> On Fri, Nov 16, 2018 at 01:54:45PM +0100, matthias.bgg@kernel.org wrote:
+> >>>>>>> -    #clock-cells = <1>;
+> >>>>>>> +
+> >>>>>>> +    mmsys_clk: clock-controller@14000000 {
+> >>>>>>> +            compatible = "mediatek,mt2712-mmsys-clk";
+> >>>>>>> +            #clock-cells = <1>;
+> >>>>>>
+> >>>>>> This goes against the general direction of not defining separate nodes
+> >>>>>> for providers with no resources.
+> >>>>>>
+> >>>>>> Why do you need this and what does it buy if you have to continue to
+> >>>>>> support the existing chips?
+> >>>>>>
+> >>>>>
+> >>>>> It would show explicitly that the mmsys block is used to probe two
+> >>>>> drivers, one for the gpu and one for the clocks. Otherwise that is
+> >>>>> hidden in the drm driver code. I think it is cleaner to describe that in
+> >>>>> the device tree.
+> >>>>
+> >>>> No, that's maybe cleaner for the driver implementation in the Linux
+> >>>> kernel. What about other OS's or when Linux drivers and subsystems
+> >>>> needs change? Cleaner for DT is design bindings that reflect the h/w.
+> >>>> Hardware is sometimes just messy.
+> >>>>
+> >>>
+> >>> I agree. I fail to see what this patch series is doing besides changing
+> >>> driver probe and device creation methods and making a backwards
+> >>> incompatible change to DT. Is there any other benefit here?
+> >>>
+> >>
+> >> You are referring whole series?
+> >> Citing the cover letter:
+> >> "MMSYS in Mediatek SoCs has some registers to control clock gates (which is
+> >> used in the clk driver) and some registers to set the routing and enable
+> >> the differnet (sic!) blocks of the display subsystem.
+> >>
+> >> Up to now both drivers, clock and drm are probed with the same device tree
+> >> compatible. But only the first driver get probed, which in effect breaks
+> >> graphics on mt8173 and mt2701.
+> > 
+> > Ouch!
+> > 
+> 
+> Yes :)
+> 
+> >>
+> >> This patch uses a platform device registration in the DRM driver, which
+> >> will trigger the probe of the corresponding clock driver. It was tested on the
+> >> bananapi-r2 and the Acer R13 Chromebook."
+> > 
+> > Alright, please don't add nodes in DT just to make device drivers probe.
+> > Instead, register clks from the drm driver or create a child platform
+> > device for the clk bits purely in the drm driver and have that probe the
+> > associated clk driver from there.
+> > 
+> 
+> I'll make the other SoCs probe via a child platform device from the drm driver,
+> as already done in 2/12 and 3/12.
 
-diff --git a/arch/arm/boot/dts/tegra30.dtsi b/arch/arm/boot/dts/tegra30.dtsi
-index e074258d4518..8355264e2265 100644
---- a/arch/arm/boot/dts/tegra30.dtsi
-+++ b/arch/arm/boot/dts/tegra30.dtsi
-@@ -732,6 +732,15 @@
- 		#reset-cells = <1>;
- 	};
- 
-+	memory-controller@7000f400 {
-+		compatible = "nvidia,tegra30-emc";
-+		reg = <0x7000f400 0x400>;
-+		interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&tegra_car TEGRA30_CLK_EMC>;
-+
-+		nvidia,memory-controller = <&mc>;
-+	};
-+
- 	fuse@7000f800 {
- 		compatible = "nvidia,tegra30-efuse";
- 		reg = <0x7000f800 0x400>;
--- 
-2.22.0
+This series have been pending for half an year, would you keep going on
+this series? If you're busy, I could complete this series, but I need to
+know what you have plan to do.
+
+I guess that 1/12 ~ 5/12 is for MT2701/MT8173 and that patches meet this
+discussion. 6/12 ~ 12/12 is for MT2712/MT6797 but that patches does not
+meet this discussion. So the unfinished work is to make MT2712/MT6797 to
+align MT2701/MT8173, is this right?
+
+Regards,
+CK
+
+> 
+> Regards,
+> Matthias
+> 
+> >>
+> >> DT is broken right now, because two drivers rely on the same node, which gets
+> >> consumed just once. The new DT introduced does not break anything because it is
+> >> only used for boards that: "[..] are not available to the general public
+> >> (mt2712e) or only have the mmsys clock driver part implemented (mt6797)."
+> > 
+> > Ok, so backwards compatibility is irrelevant then. Sounds fine to me.
+> > 
+> > 
+> 
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+
 
