@@ -2,130 +2,111 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF665BC75
-	for <lists+linux-clk@lfdr.de>; Mon,  1 Jul 2019 15:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAEDC5BCA7
+	for <lists+linux-clk@lfdr.de>; Mon,  1 Jul 2019 15:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728909AbfGANMB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 1 Jul 2019 09:12:01 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:49259 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728861AbfGANMB (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 1 Jul 2019 09:12:01 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190701131200euoutp02122c8a27135bd2c3f390a5030e9fc436~tSqVqNyb41207912079euoutp02b
-        for <linux-clk@vger.kernel.org>; Mon,  1 Jul 2019 13:12:00 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190701131200euoutp02122c8a27135bd2c3f390a5030e9fc436~tSqVqNyb41207912079euoutp02b
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1561986720;
-        bh=6Yr0cfbNf5pOBz/M7zrCaVD8oUBVDD8thshT1MqD9b4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UDheMqmD4KeN3kAPIrzzUJ+Ywxh8fp/Jh+nNPcT7/YnR8Ad+obSIHoovW5y9X9Zvn
-         KvnP8e36jA+E/WIaxsBBnH00asCay2SZ2IMhj7hMVc+xTJlThP6pulaxwDeSv7Ytn4
-         iPVn3fkrUL/pgLGWI2TVSPik+RNUdtXx/WnWlRiA=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190701131158eucas1p133fc961ac9c32734c5d9cb90da50b96e~tSqUlWEtk0797807978eucas1p1I;
-        Mon,  1 Jul 2019 13:11:58 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 57.2B.04298.E960A1D5; Mon,  1
-        Jul 2019 14:11:58 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20190701131158eucas1p2392cc10dfabbd2628c160d0aa3abecb8~tSqT59B7m0924209242eucas1p2g;
-        Mon,  1 Jul 2019 13:11:58 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190701131157eusmtrp25676b4a56ce3fbb7d8603a47677b6420~tSqTryTav0788807888eusmtrp2W;
-        Mon,  1 Jul 2019 13:11:57 +0000 (GMT)
-X-AuditID: cbfec7f2-f2dff700000010ca-ae-5d1a069e5948
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 2B.02.04146.D960A1D5; Mon,  1
-        Jul 2019 14:11:57 +0100 (BST)
-Received: from AMDC3778.DIGITAL.local (unknown [106.120.51.20]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190701131156eusmtip14f13b22fca0fc3af7a8f07488f5e180d~tSqSsyDpI2796027960eusmtip1Y;
-        Mon,  1 Jul 2019 13:11:56 +0000 (GMT)
-From:   Lukasz Luba <l.luba@partner.samsung.com>
-To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     mturquette@baylibre.com, sboyd@kernel.org,
-        b.zolnierkie@samsung.com, krzk@kernel.org, kgene@kernel.org,
-        cw00.choi@samsung.com, kyungmin.park@samsung.com,
-        m.szyprowski@samsung.com, s.nawrocki@samsung.com,
-        myungjoo.ham@samsung.com, keescook@chromium.org, tony@atomide.com,
-        jroedel@suse.de, treding@nvidia.com, digetx@gmail.com,
-        gregkh@linuxfoundation.org, willy.mh.wolff.ml@gmail.com,
-        Lukasz Luba <l.luba@partner.samsung.com>
-Subject: [PATCH v11 9/9] ARM: exynos_defconfig: enable DMC driver
-Date:   Mon,  1 Jul 2019 15:11:38 +0200
-Message-Id: <20190701131138.22666-10-l.luba@partner.samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190701131138.22666-1-l.luba@partner.samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA0WSe0hTURzHO7tPzeVtiZ5MFJZFVmpW1IkiFAwuQRD2tJJaeVHRTdvVfAUt
-        pVLTfFam+cgi56N8NEyl8knLRzkrU1yGuswyK8w0hmRt3kn/fc73+/2d7zmHQ2OSEcKRDlFE
-        ckqFLExKWuN1z4097oWkY8CmwZR1qCa3ikD9v8YJVNT+ikAVUwaAEu9WkSi7s0CEuq/KUbrh
-        K4Z6eqop9DJhkkKDKic0lfqBQG8ab5NoOq0doNyeZyL0oH2IQr2de5D+oppEbZNXCDT/rgZH
-        TW/3Iv3cMjT7YhR4O7CzM1k4+2PgEsXmq3pxtiFviGJry5NJtqmgkmLTEr+TbMv3JyL2mqYc
-        sI+64tnpWuf9S49Z7wrkwkLOcUrP3aesg2815+ARf4gY3Vw2pQJ3iBRgRUNmK0wwaExsTUsY
-        NYAZn4cWDAnzC8D+nAjBmAawNOkuuThRaLhPCkYpgPPDbSJhYZrQDv+mUgBNk4wHrC8/ax6w
-        Y3IBzP98wJzBmMcY/KZ/D8zGCsYHDnwxUmbGmTWwrmpUZGYx4w11mhlMaHOBFdXNC2xl0l/P
-        DC00QyaZhk19lZZL+MIBoxEIvAJOaDWUwE7wb0ORSGAeqtLuWDLnoSG9wJLZCdu0vYT50Bjj
-        BqsaPQXZB+r0H3GzDJllcODbcrOMmTCr7iYmyGKYdFkipNdBTarOUmQPSytvWDZn4bi6jBIe
-        NBvAT3qfDOCS97+rGIBy4MBF8fIgjvdScNEevEzORymCPM6Ey2uB6eN1zWt/1oOZ16dbAUMD
-        qY1Y9R4GSAjZOT5W3gogjUntxE3qlQEScaAsNo5Thp9URoVxfCtYReNSB3H8kuHjEiZIFsmF
-        clwEp1x0RbSVowrkrc5rrRw7FOPkb6codna9l9lnsxl/Ol5S7Gd/9DAaLBNv3qDWcW62k598
-        u/0f8tjs9f0fqidatAcjjcszjXHx0SPNJTd18WBtuo0/6zcy1ebO+jA5218eWTraHJd7YpvL
-        xjHke/RR5IWSkyEdE/tcU0Kfde2IRlvGwi/E2Xbkc1KcD5Z5rceUvOwfq2NeqXQDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrGIsWRmVeSWpSXmKPExsVy+t/xu7pz2aRiDV5uM7bYOGM9q8X1L89Z
-        LeYfOcdqsfrjY0aL5sXr2Swmn5rLZHGmO9ei//FrZovz5zewW5xtesNucatBxuJjzz1Wi8u7
-        5rBZfO49wmgx4/w+Jou1R+6yW1w85Wpxu3EFm8XhN+2sFv+ubWSx2H/Fy+L2bz6LbyceMTqI
-        e3z7OonF4/2NVnaP2Q0XWTx2zrrL7rFpVSebx/65a9g9epvfsXkcfLeHyaNvyypGj82nqz0+
-        b5IL4I7SsynKLy1JVcjILy6xVYo2tDDSM7S00DMysdQzNDaPtTIyVdK3s0lJzcksSy3St0vQ
-        y5h5YApLwV/Wigu/J7M3MC5k7WLk5JAQMJGY93gZWxcjF4eQwFJGiTfrjrNDJMQkJu3bDmUL
-        S/y51gVV9IlRonP2A6BuDg42AT2JHasKQeIiAnMYJX52bWMEcZgFzjJL7F7xhgmkW1jAUeLG
-        y59gk1gEVCW2rX8EFucVcJC4sOUrM8QGeYnVGw6A2ZxA8Utf77KB2EIC9hLrFt9gnMDIt4CR
-        YRWjSGppcW56brGhXnFibnFpXrpecn7uJkZgHG479nPzDsZLG4MPMQpwMCrx8GrckogVYk0s
-        K67MPcQowcGsJMK7f4VkrBBvSmJlVWpRfnxRaU5q8SFGU6CjJjJLiSbnA1NEXkm8oamhuYWl
-        obmxubGZhZI4b4fAwRghgfTEktTs1NSC1CKYPiYOTqkGRsFQs88h66S+8FSWSXzZ17Q5tI7f
-        d6XAA8eFNs5/fsZ/Ffv4as7Mj5H6HvN+XxLpOSFjb3UydUpJi99Gj8TZrj+Kg7d+kfi0+WNp
-        1Nfl8rpC2ce6c1RL8tndFR/uYlOY0RH6+67+BIs3rumndr3yMag5e42JXVa293sFJ6vzi0U7
-        wo+4J64xUGIpzkg01GIuKk4EAD86CovZAgAA
-X-CMS-MailID: 20190701131158eucas1p2392cc10dfabbd2628c160d0aa3abecb8
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190701131158eucas1p2392cc10dfabbd2628c160d0aa3abecb8
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190701131158eucas1p2392cc10dfabbd2628c160d0aa3abecb8
-References: <20190701131138.22666-1-l.luba@partner.samsung.com>
-        <CGME20190701131158eucas1p2392cc10dfabbd2628c160d0aa3abecb8@eucas1p2.samsung.com>
+        id S1728102AbfGANNz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 1 Jul 2019 09:13:55 -0400
+Received: from mail-eopbgr20082.outbound.protection.outlook.com ([40.107.2.82]:50663
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726329AbfGANNy (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 1 Jul 2019 09:13:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2fueU2UwK+/gsfQtwExuuI6ZQTbXw3lV0Mpoy/e8Zu0=;
+ b=QVMHP+mTT55Z2ZJmvmEhaxijb34dupKo/QYFdN/WiSvYagsfXIyursqKP4BBJ5yIuGJwbk0egXfj9SOKNiom8qSQwuBm+9KOON4H0B9wX0Qy0lWrjwNYRp5MUOoyruvtUWrvaIgL6fqF6pyCWBMnDLAQ+5kRZc8i9/pb/GI4T2A=
+Received: from VI1PR04MB5055.eurprd04.prod.outlook.com (20.177.50.140) by
+ VI1PR04MB5136.eurprd04.prod.outlook.com (20.177.50.161) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2032.20; Mon, 1 Jul 2019 13:13:52 +0000
+Received: from VI1PR04MB5055.eurprd04.prod.outlook.com
+ ([fe80::d83:14c4:dedb:213b]) by VI1PR04MB5055.eurprd04.prod.outlook.com
+ ([fe80::d83:14c4:dedb:213b%5]) with mapi id 15.20.2032.019; Mon, 1 Jul 2019
+ 13:13:52 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2] clk: Add clk_min/max_rate entries in debugfs
+Thread-Topic: [PATCH v2] clk: Add clk_min/max_rate entries in debugfs
+Thread-Index: AQHVLajUq4SmNwzvekSbL/iOzo8zow==
+Date:   Mon, 1 Jul 2019 13:13:52 +0000
+Message-ID: <VI1PR04MB50555EBAFE8CF34189635B18EEF90@VI1PR04MB5055.eurprd04.prod.outlook.com>
+References: <0c12208398cadb7450b6b7745e99c55770c0ccf8.1561709827.git.leonard.crestez@nxp.com>
+ <CAMuHMdWVoYPZFZPmfTWMU3pZc633uqkn70MyApcPhgUSgmCW-A@mail.gmail.com>
+ <20190628193556.BC814208CB@mail.kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [82.144.34.2]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 40dd0c26-23db-427a-796e-08d6fe25f68f
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB5136;
+x-ms-traffictypediagnostic: VI1PR04MB5136:
+x-microsoft-antispam-prvs: <VI1PR04MB51362912B69052ABD788C92DEEF90@VI1PR04MB5136.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 00851CA28B
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(39860400002)(396003)(376002)(366004)(136003)(199004)(189003)(102836004)(53936002)(8676002)(76176011)(55016002)(99286004)(5660300002)(3846002)(9686003)(54906003)(53546011)(71190400001)(6246003)(8936002)(186003)(81166006)(81156014)(6116002)(229853002)(316002)(14454004)(26005)(6436002)(7696005)(71200400001)(6506007)(25786009)(4326008)(110136005)(478600001)(446003)(256004)(66066001)(14444005)(476003)(74316002)(66556008)(44832011)(2906002)(86362001)(73956011)(66946007)(66476007)(486006)(66446008)(64756008)(68736007)(91956017)(76116006)(7736002)(33656002)(52536014)(305945005);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5136;H:VI1PR04MB5055.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: SBTYgtpRajBVQzl+AWbogus3M3DNdhvBh3J/bQZwdiitgKbs0XjirHGoqg3DDoIZ9k3mKT6LZjyXo00+GhYjDFTxwIV9ot7+ss70MtuPQs2jX6HKnOWBHlpH54qMYRzfQuxqAb+diCiYFKJzD3wSQznU0bf/x7rXG9wmg0zogO52LiXtMdQDEUT0GVK8UhpZQqf5Ux5/n4cg7hjht2jM1SpPxDESt1V98ssE45makkoznWAmKZuiZ0phHxasdVR5LOa2uTT5P+5DwYa5gw9f3QoOcU9L2vG0HVr56j7r6jelU310mjNXVpG6pZ+CxyAzqPZC9VMmqpqlPcJy/pPpkZgzH4eP9zHzV7WUZ64FjuDsi8dpIHQV92XgfVgpJ1JjSluy/uAf5e7b3vmpOXGRH3YPF+cSvnlkt929VZ64t4Y=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40dd0c26-23db-427a-796e-08d6fe25f68f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2019 13:13:52.1887
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: leonard.crestez@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5136
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Enable driver for Exynos5422 Dynamic Memory Controller supporting
-dynamic frequency and voltage scaling in Exynos5422 SoCs.
-
-Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
----
- arch/arm/configs/exynos_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/arm/configs/exynos_defconfig b/arch/arm/configs/exynos_defconfig
-index c95c54284da2..4e7e52786174 100644
---- a/arch/arm/configs/exynos_defconfig
-+++ b/arch/arm/configs/exynos_defconfig
-@@ -290,6 +290,8 @@ CONFIG_DEVFREQ_GOV_PERFORMANCE=y
- CONFIG_DEVFREQ_GOV_POWERSAVE=y
- CONFIG_DEVFREQ_GOV_USERSPACE=y
- CONFIG_ARM_EXYNOS_BUS_DEVFREQ=y
-+CONFIG_EXYNOS5422_DMC=y
-+CONFIG_DDR=y
- CONFIG_DEVFREQ_EVENT_EXYNOS_NOCP=y
- CONFIG_EXYNOS_IOMMU=y
- CONFIG_EXTCON=y
--- 
-2.17.1
-
+On 6/28/2019 10:36 PM, Stephen Boyd wrote:=0A=
+> Quoting Geert Uytterhoeven (2019-06-28 04:58:27)=0A=
+>> On Fri, Jun 28, 2019 at 10:19 AM Leonard Crestez=0A=
+>>=0A=
+>>> --- a/drivers/clk/clk.c=0A=
+>>> +++ b/drivers/clk/clk.c=0A=
+>>> @@ -591,10 +591,12 @@ static void clk_core_get_boundaries(struct clk_co=
+re *core,=0A=
+>>>                                      unsigned long *min_rate,=0A=
+>>>                                      unsigned long *max_rate)=0A=
+>>>   {=0A=
+>>>          struct clk *clk_user;=0A=
+>>>=0A=
+>>> +       lockdep_assert_held(&prepare_lock);=0A=
+>>> +=0A=
+>>=0A=
+>> I guess the clock maintainers want to see the addition of this check=0A=
+>> spun off into a separate patch....=0A=
+> =0A=
+> Yes. I'm not sure we should have the assertion in there. I seem to=0A=
+> recall that we thought it might not always be necessary to have the=0A=
+> lock, but maybe that was wrong.=0A=
+=0A=
+The clk_core_get_boundaries function iterates consumers so locking is =0A=
+required. Looking at other functions manipulating clks_node (such as =0A=
+__clk_put, clk_core_link/unlink_consumer) this is always done under =0A=
+prepare_lock.=0A=
+=0A=
+In theory without locking debugfs could read freed memory if it happens =0A=
+at the same time as device removal.=0A=
+=0A=
+--=0A=
+Regards,=0A=
+Leonard=0A=
