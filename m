@@ -2,83 +2,146 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 395665CF1E
-	for <lists+linux-clk@lfdr.de>; Tue,  2 Jul 2019 14:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B875D0A2
+	for <lists+linux-clk@lfdr.de>; Tue,  2 Jul 2019 15:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726418AbfGBMGa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 2 Jul 2019 08:06:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34794 "EHLO mail.kernel.org"
+        id S1726824AbfGBN1R (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 2 Jul 2019 09:27:17 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:44594 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725922AbfGBMGa (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 2 Jul 2019 08:06:30 -0400
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9660F21851;
-        Tue,  2 Jul 2019 12:06:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562069188;
-        bh=JMUvbK/LfOJhb6Ete6QNsOakQUnGfCiPzMOmNQ6+NCg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HwC20ALa2Bz/YOW4FKBF/0iy/VmbQeOGBkAAkPTbw4EE8VmR2fSspfXMqIqwBdVc/
-         zFjLG4As/+XHC/UKUp9UeDb1GP5DlrEAxFpWnUT/UA0QODaoSD5VDW5BRnZQkzNU7U
-         H+wq0YOGmgvMgbg3tmtNjBKsB7mFNNQ1FiH5MGuI=
-Received: by mail-lj1-f175.google.com with SMTP id p17so16648026ljg.1;
-        Tue, 02 Jul 2019 05:06:28 -0700 (PDT)
-X-Gm-Message-State: APjAAAUr1uZ4khOmwGJGEWjlGlNrEcklBi3a+VGqK2KhyTPKYszaSXmj
-        C89t7oVNmtl3OeBRKrhrPO0hMOEeXpNxT1jeg3Q=
-X-Google-Smtp-Source: APXvYqzUYFM/EIyZphFmV/SpQwmAz/C+DNi3kHPWXR6+ebp2/C/4bHX7aVTINZ72IbXpXBNvNjj3Ls2f2eDhzgGnXR8=
-X-Received: by 2002:a2e:8155:: with SMTP id t21mr16985058ljg.80.1562069186791;
- Tue, 02 Jul 2019 05:06:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <CGME20190701131152eucas1p2c5ac5f1611fd07e3b7a4ad289abe3e81@eucas1p2.samsung.com>
- <20190701131138.22666-1-l.luba@partner.samsung.com> <20190701131138.22666-4-l.luba@partner.samsung.com>
-In-Reply-To: <20190701131138.22666-4-l.luba@partner.samsung.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Tue, 2 Jul 2019 14:06:15 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPcc3q4_GLg21TL=xNO5U1Kp9ZHqpSERHFVCi8OLasgm3Q@mail.gmail.com>
-Message-ID: <CAJKOXPcc3q4_GLg21TL=xNO5U1Kp9ZHqpSERHFVCi8OLasgm3Q@mail.gmail.com>
-Subject: Re: [PATCH v11 3/9] drivers: memory: extend of_memory by LPDDR3 support
-To:     Lukasz Luba <l.luba@partner.samsung.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>, linux-clk@vger.kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        =?UTF-8?B?QmFydMWCb21pZWogxbtvxYJuaWVya2lld2ljeg==?= 
-        <b.zolnierkie@samsung.com>, kgene@kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        kyungmin.park@samsung.com,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        s.nawrocki@samsung.com, myungjoo.ham@samsung.com,
-        keescook@chromium.org, tony@atomide.com, jroedel@suse.de,
-        treding@nvidia.com, digetx@gmail.com, gregkh@linuxfoundation.org,
-        willy.mh.wolff.ml@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+        id S1725922AbfGBN1R (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 2 Jul 2019 09:27:17 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id F022C1A0233;
+        Tue,  2 Jul 2019 15:27:14 +0200 (CEST)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id DA1471A0230;
+        Tue,  2 Jul 2019 15:27:14 +0200 (CEST)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 984752061C;
+        Tue,  2 Jul 2019 15:27:14 +0200 (CEST)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 1/2] clk: Add clk_min/max_rate entries in debugfs
+Date:   Tue,  2 Jul 2019 16:27:09 +0300
+Message-Id: <68e96af2df96512300604d797ade2088d7e6e496.1562073871.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, 1 Jul 2019 at 15:11, Lukasz Luba <l.luba@partner.samsung.com> wrote:
->
-> The patch adds AC timings information needed to support LPDDR3 and memory
-> controllers. The structure is used in of_memory and currently in Exynos
-> 5422 DMC. Add parsing data needed for LPDDR3 support.
-> It is currently used in Exynos5422 Dynamic Memory Controller.
->
-> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
-> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
-> ---
->  drivers/memory/of_memory.c | 149 +++++++++++++++++++++++++++++++++++++
->  drivers/memory/of_memory.h |  18 +++++
->  include/memory/jedec_ddr.h |  61 +++++++++++++++
->  3 files changed, 228 insertions(+)
+Add two files to expose min/max clk rates as determined by
+clk_core_get_boundaries, taking all consumer requests into account.
 
-Hi,
+This information does not appear to be otherwise exposed to userspace.
 
-As I mentioned before in v10, I can take entire patchset through
-samsung-soc but this one patch requires ack or at least reviews.
+Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 
-Best regards,
-Krzysztof
+---
+ drivers/clk/clk.c | 37 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+
+Changes since v2:
+* Shrink clk_prepare_lock
+* Split lock assertion to separate patch
+Link to v2: https://patchwork.kernel.org/patch/11021609/
+
+Changes since v1:
+* Call clk_prepare_lock/clk_prepare_unlock (Geert)
+* Also include in clk_dump, but only with non-default values
+Link to v1: https://patchwork.kernel.org/patch/11019873/
+
+Don't add to clk_summary because min/max rates are rarely used and
+clk_summary already has too many columns.
+
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index c0990703ce54..e4e224982ae3 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -2894,19 +2894,26 @@ static int clk_summary_show(struct seq_file *s, void *data)
+ }
+ DEFINE_SHOW_ATTRIBUTE(clk_summary);
+ 
+ static void clk_dump_one(struct seq_file *s, struct clk_core *c, int level)
+ {
++	unsigned long min_rate, max_rate;
++
+ 	if (!c)
+ 		return;
+ 
+ 	/* This should be JSON format, i.e. elements separated with a comma */
+ 	seq_printf(s, "\"%s\": { ", c->name);
+ 	seq_printf(s, "\"enable_count\": %d,", c->enable_count);
+ 	seq_printf(s, "\"prepare_count\": %d,", c->prepare_count);
+ 	seq_printf(s, "\"protect_count\": %d,", c->protect_count);
+ 	seq_printf(s, "\"rate\": %lu,", clk_core_get_rate(c));
++	clk_core_get_boundaries(c, &min_rate, &max_rate);
++	if (min_rate != 0)
++		seq_printf(s, "\"min_rate\": %lu,", min_rate);
++	if (max_rate != ULONG_MAX)
++		seq_printf(s, "\"max_rate\": %lu,", max_rate);
+ 	seq_printf(s, "\"accuracy\": %lu,", clk_core_get_accuracy(c));
+ 	seq_printf(s, "\"phase\": %d,", clk_core_get_phase(c));
+ 	seq_printf(s, "\"duty_cycle\": %u",
+ 		   clk_core_get_scaled_duty_cycle(c, 100000));
+ }
+@@ -3062,10 +3069,38 @@ static int clk_duty_cycle_show(struct seq_file *s, void *data)
+ 
+ 	return 0;
+ }
+ DEFINE_SHOW_ATTRIBUTE(clk_duty_cycle);
+ 
++static int clk_min_rate_show(struct seq_file *s, void *data)
++{
++	struct clk_core *core = s->private;
++	unsigned long min_rate, max_rate;
++
++	clk_prepare_lock();
++	clk_core_get_boundaries(core, &min_rate, &max_rate);
++	clk_prepare_unlock();
++	seq_printf(s, "%lu\n", min_rate);
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(clk_min_rate);
++
++static int clk_max_rate_show(struct seq_file *s, void *data)
++{
++	struct clk_core *core = s->private;
++	unsigned long min_rate, max_rate;
++
++	clk_prepare_lock();
++	clk_core_get_boundaries(core, &min_rate, &max_rate);
++	clk_prepare_unlock();
++	seq_printf(s, "%lu\n", max_rate);
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(clk_max_rate);
++
+ static void clk_debug_create_one(struct clk_core *core, struct dentry *pdentry)
+ {
+ 	struct dentry *root;
+ 
+ 	if (!core || !pdentry)
+@@ -3073,10 +3108,12 @@ static void clk_debug_create_one(struct clk_core *core, struct dentry *pdentry)
+ 
+ 	root = debugfs_create_dir(core->name, pdentry);
+ 	core->dentry = root;
+ 
+ 	debugfs_create_ulong("clk_rate", 0444, root, &core->rate);
++	debugfs_create_file("clk_min_rate", 0444, root, core, &clk_min_rate_fops);
++	debugfs_create_file("clk_max_rate", 0444, root, core, &clk_max_rate_fops);
+ 	debugfs_create_ulong("clk_accuracy", 0444, root, &core->accuracy);
+ 	debugfs_create_u32("clk_phase", 0444, root, &core->phase);
+ 	debugfs_create_file("clk_flags", 0444, root, core, &clk_flags_fops);
+ 	debugfs_create_u32("clk_prepare_count", 0444, root, &core->prepare_count);
+ 	debugfs_create_u32("clk_enable_count", 0444, root, &core->enable_count);
+-- 
+2.17.1
+
