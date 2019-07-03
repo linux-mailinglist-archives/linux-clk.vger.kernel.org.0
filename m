@@ -2,100 +2,79 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A33885E38A
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2019 14:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583DB5E3DB
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2019 14:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726217AbfGCMMe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 3 Jul 2019 08:12:34 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:43718 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725830AbfGCMMd (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 3 Jul 2019 08:12:33 -0400
-Received: by mail-ot1-f68.google.com with SMTP id q10so2065270otk.10;
-        Wed, 03 Jul 2019 05:12:33 -0700 (PDT)
+        id S1726679AbfGCM0Y (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 3 Jul 2019 08:26:24 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:44279 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725830AbfGCM0Y (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 3 Jul 2019 08:26:24 -0400
+Received: by mail-wr1-f65.google.com with SMTP id b2so1342336wrx.11
+        for <linux-clk@vger.kernel.org>; Wed, 03 Jul 2019 05:26:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mH2lyxDMkrD7XdLOxAFWGZyjvyOXaNVi0/ntCaxja1Y=;
-        b=CtYhWINebh0TkuL+oXcaXo183wNNBg6jq4kBnoqD4X5Lt4Vhcyoochri/u/cY6y6El
-         y76PWe4b0agnkFCB5lWeO8QXTRw3iGVqZZnJYEKjpsmZ7tJHeLFeqpuaVad8p+SH1MBj
-         uRdE5wjDx/nrBSZ10/v1tsRnVD0XmuND8FsBFiZ72mPWKT3YUGrtXrR5nB8bxKuHNoPn
-         qI1/geq5LfbEluFVoreQC/bhwvWszF4iHfZxMBPzbpfQC78N0z9RQ42vIMUgGFw7Wozb
-         EbeOWgaoRnO3AqXqn0PXEC1DwnGGeQXLqJy8UQguQvty39kol54Blk3MoAAsxP7g2Olj
-         18cA==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fqRlKVNruC97TKfS68sR9FKZBA0FRnpxLwfr/fXEA2s=;
+        b=gNa86D9pGZJ5sdLRnW2ukNzqCVR5k6+Da2hEivCl62/mYUQYGg/amqyl0D+c4nCzuI
+         2LXQn3sqxDBW/+yHMGMcpLF+i6+IazKtkgrxKZv6ryTJKduLQe0kDCYo1zCqe7D8OkAl
+         asxi9z0OkpUZ8jpkuI27yKLUiOdhmYzCvxsKmRWzibuV14Sjh4GZ1RGMIuHx3LexGMhV
+         G+d/aXOIMhokQRx4fcF013uGI0+Do6/gNgaye0nEGt6NYVBuWWd93DKnWDbt2KCmhKxf
+         pzYOeDXwLHam/t5zs0IZGmnKRzgkgW7LOOQ8ZuXTa8SFe/4xNvDx90v3VnpVaSeWsdJy
+         EG2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mH2lyxDMkrD7XdLOxAFWGZyjvyOXaNVi0/ntCaxja1Y=;
-        b=UtCd+xiV3G0sgCRB7tOL0pA6rgS3HwcI/QKp1KjWDtvO9wS4iLo+dUuwYhio9e6i90
-         o1RP7hQ0v5p2Vt/cVEg/kOQGtJMMmdYqwFFFEODEbW+qtL/XhQizTujRMXn4Hg/fEK9m
-         ghLNcQ2cJ0GUvEAlRHdiVbFWYhw79EVSGZQSmPK5/vGU089QhOPlJ38cYbGmzuHKK+p2
-         EC7/Q5subiriR8MOtQfeND1ebgx/DTOIzcJHgs6e61wPMuxK/PSjJEICCX0fZTWQ72/X
-         tbRh4RJks22CTicZFrPEca6ogsPNm80DFaEt9QFck3JHxlN1IKdtu+NcfhiCQz/RVDjP
-         CQhA==
-X-Gm-Message-State: APjAAAVVbONO+b+vv+e3ejkMQbSSuaIMjauWp5Nm0xo+IXnKPnPyqXux
-        25/+t/sThUuLs8oRWvHi5dCxdBlTG2Qj5Du9GeM=
-X-Google-Smtp-Source: APXvYqyHjGppN3tIIiaPddI2WT4l1OOcds5DkRdEgJQOZDr9uZ31b+RJY1XmKW37lEvv3kuJ9imk6UwFGNQZzxqlDPY=
-X-Received: by 2002:a9d:226c:: with SMTP id o99mr27745852ota.42.1562155952743;
- Wed, 03 Jul 2019 05:12:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190701091258.3870-1-narmstrong@baylibre.com>
- <20190701091258.3870-12-narmstrong@baylibre.com> <CAFBinCBg57gh1x3CKs-YrCvTD0WR2s5zVGWtycb=RGqMiQ-VgA@mail.gmail.com>
- <7acdafc1-39e7-a2ec-886f-ca337c60dfe7@baylibre.com>
-In-Reply-To: <7acdafc1-39e7-a2ec-886f-ca337c60dfe7@baylibre.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Wed, 3 Jul 2019 14:12:21 +0200
-Message-ID: <CAFBinCC1sJxBA8NgDNzLaWJV7Y+fARVczy31rHkbtkj58XKUUQ@mail.gmail.com>
-Subject: Re: [RFC/RFT v3 11/14] arm64: dts: meson-g12a: add cpus OPP table
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fqRlKVNruC97TKfS68sR9FKZBA0FRnpxLwfr/fXEA2s=;
+        b=CAdq2F+c1DpJPrHzX9C0V7Gm1JyXMXeW6vbWd7mz4GejhaX4Vc7Ob2dnDmYdkHxKAF
+         el9X+lWYxE9n/CcX9xfzqq/GcU8VksH4ZUTD68vuyBFYQd+rrRovkG9nBtENAf21BBFu
+         KVJ3fN37Aehgbn+WKrvrDmjEMuPp4VkpNs2KQiwZyyVUQyCsfX0mrSuacQGtJYv3t1pH
+         9XJ6IkdrYntIEgeWLFCOwUQAq3w50GQ8CfmpdkIzS1Obh0Qwl15QCE1FIOCjbbCXBOvS
+         OfOe95qEhqm86Pr9FqMhvgm2XqujtQkN5Z9NSXxx9JKq7pGI1fbfaV9J7YIrtcozq1G4
+         pYoQ==
+X-Gm-Message-State: APjAAAVee3H1fJRmJRHgFshdjm7tp4y1gv2FtbSfoEnvV6/Ldy3CfPbz
+        QTMQHp8w3PDJzsOigKalTJxAmw==
+X-Google-Smtp-Source: APXvYqyzZFKUhirNmVYzoxkyGXKg/pBa0jfrzsPgw0VJQHASHTlsxPSCVkavu9zNjfP6kzDjMMS85g==
+X-Received: by 2002:a5d:56c7:: with SMTP id m7mr19293000wrw.64.1562156782290;
+        Wed, 03 Jul 2019 05:26:22 -0700 (PDT)
+Received: from starbuck.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id v67sm2868132wme.24.2019.07.03.05.26.21
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 03 Jul 2019 05:26:21 -0700 (PDT)
+From:   Jerome Brunet <jbrunet@baylibre.com>
 To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     jbrunet@baylibre.com, khilman@baylibre.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] clk: meson: axg-audio: add reset support
+Date:   Wed,  3 Jul 2019 14:26:12 +0200
+Message-Id: <20190703122614.3579-1-jbrunet@baylibre.com>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Neil,
+This patchset adds support for the reset provided in the register space
+of the g12a audio clock controller
 
-On Wed, Jul 3, 2019 at 1:53 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
->
-> On 03/07/2019 01:47, Martin Blumenstingl wrote:
-> > Hi Neil,
-> >
-> > On Mon, Jul 1, 2019 at 11:13 AM Neil Armstrong <narmstrong@baylibre.com> wrote:
-> >>
-> >> Add the OPP table taken from the vendor u200 and u211 DTS.
-> >>
-> >> The Amlogic G12A SoC seems to available in 3 types :
-> >> - low-speed: up to 1,8GHz
-> >> - mid-speed: up to 1,908GHz
-> >> - high-speed: up to 2.1GHz
-> >>
-> >> And the S905X2 opp voltages are slightly higher than the S905D2
-> >> OPP voltages for the low-speed table.
-> >>
-> >> This adds the conservative OPP table with the S905X2 higher voltages
-> >> and the maximum low-speed OPP frequency.
-> > have you considered all three as separate voltage tables?
-> > you're other patches are assigning the OPP table to the CPU in the
-> > board.dts anyways, so it's easy to use different OPP tables for
-> > different boards
->
-> We can't assume the board and the CPU type :-/
-OK, should we assign the OPP table to the CPU cores then in the
-soc.dtsi (instead of board.dts like the other patches from this series
-do)?
+Jerome Brunet (2):
+  dt-bindings: clock: meson: add resets to the audio clock controller
+  clk: meson: axg-audio: add g12a reset support
 
-> Kevin told me about cpufreq policy, where we could add a policy reading the
-> eFUSE and changing the max frequency, then we could add the whole OPP table.
-we can still do that in a second step, so I'm all for starting with
-the "conservative" OPP table and then improve performance (by having
-detecting the SoC and using the correct OPP table)
+ .../bindings/clock/amlogic,axg-audio-clkc.txt |   1 +
+ drivers/clk/meson/axg-audio.c                 | 107 +++++++++++++++++-
+ drivers/clk/meson/axg-audio.h                 |   1 +
+ .../reset/amlogic,meson-g12a-audio-reset.h    |  38 +++++++
+ 4 files changed, 145 insertions(+), 2 deletions(-)
+ create mode 100644 include/dt-bindings/reset/amlogic,meson-g12a-audio-reset.h
 
+-- 
+2.21.0
 
-Martin
