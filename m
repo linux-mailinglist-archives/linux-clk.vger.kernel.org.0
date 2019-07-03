@@ -2,243 +2,100 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0D15E3DC
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2019 14:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F245E41B
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2019 14:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726871AbfGCM0m (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 3 Jul 2019 08:26:42 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:34984 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726845AbfGCM00 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 3 Jul 2019 08:26:26 -0400
-Received: by mail-wr1-f68.google.com with SMTP id c27so2608072wrb.2
-        for <linux-clk@vger.kernel.org>; Wed, 03 Jul 2019 05:26:24 -0700 (PDT)
+        id S1726486AbfGCMk7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 3 Jul 2019 08:40:59 -0400
+Received: from mail-wm1-f51.google.com ([209.85.128.51]:50625 "EHLO
+        mail-wm1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726430AbfGCMk7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 3 Jul 2019 08:40:59 -0400
+Received: by mail-wm1-f51.google.com with SMTP id n9so2069720wmi.0
+        for <linux-clk@vger.kernel.org>; Wed, 03 Jul 2019 05:40:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JILUVyhQViuGdxVU7msStBtHX6blqTuLXOnzbseIUxY=;
-        b=15DE6QGNII0vC99FAxzXL/XNAKOz1spvux5aiNDajerPemkY0N0Yvhp2NZCZ56aXTd
-         V2F1xuct6cDSpr46JtcIMfT0bY+qWkhe+ryMJyyN3VyCojjWzkFD36pkScxrT6gquK2Z
-         mNf6E4S6+B9Vjc3sY/l4IQ40/p5dnlRb044FAl8PI7y18/lcpTNGk2LBS1A4BV2d5VkC
-         UVkkVb7iyhWRM4GL6g9a1XzJi/zV/bzZ3psfBINcuReBkawJoee3Vf9yBnestkcfkdaZ
-         Rji7UjMscG4KTSfq2gpJBzs8UNT7oFgw3yE4242/k0j/r450VClhz57RXPNJt3Rba9cJ
-         gcng==
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=REnOeEN5yGA6DyLHYZUXObOyZCyVPJqos2PFAeloT7k=;
+        b=tozxBVBj8Zx3/S4JOAkF4a5m+vhqYKE2FZcfa+qH6ELSArafWHyGRNUtG6pNYT7Ovt
+         R3w4RriHSl55srSSXoSz60ResDvaxdxcBnlkj77F1MXPQ82WER6328sXmSyr5Z/EMTin
+         kAZt+LVQ3GpKa9SEdo5HpNqtgLpy66dR5K8Djxhcrqms6IOr5yD+bp93WooNpo0sBFbv
+         TGgkW76J/K7eDePQ7M63uxp8HWfr5Jom2D9uQA5KFDp+H3ySKnVMtExmwcvKwU1UfH8C
+         bPoMr/V3aIqJ9xwS5Nyy04U+/UEKh5x/GE1NtHu/xl/qRUSD744fvS0ieYvdzSYsxMnV
+         HdWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JILUVyhQViuGdxVU7msStBtHX6blqTuLXOnzbseIUxY=;
-        b=GhB0ZDep5DeFhnjEOGf5H3fV++7WPRW0zNKtYYBHp1cUhYKmvQL7LLCK6672Si70vt
-         VWjyPFUE6zazKzjcAzR/30RKWtiuB8JauPbxrBWZb60FjNZq2FWEFdO4waYeb4ZCra/F
-         GicT5XIb98Wz2824+I+ijMZz7GitZWS88XavH+AGs4LdPwT102+Vkze1dj/LK0wX0vMC
-         E6TW67wEUc3a5aHeFHSSetl+sfLfeVtajx5ygV+44gSOdmVLPfMaYtdCENaThBuZOTMw
-         VaMqAo7CrEYyEIi10yBN0e7GdoCKoJaBZLWN2uisZPLfj6nX+e3XzQqK5aBs73XXCzp0
-         Fezw==
-X-Gm-Message-State: APjAAAUm4aNAqDOVwX90UUxroH2FUuqVgScxFZEJaMlAb1zM0MmBsdVX
-        W5aQcaHvq6aqBighqJdBXMdWYg==
-X-Google-Smtp-Source: APXvYqw/fJylWhA1wOFDAASQ7snUTEyMNdcCC+ljsbuq5ZdsSzk61cFVRouS0SUaOm+SNLZ6a3mjPA==
-X-Received: by 2002:a5d:4ecc:: with SMTP id s12mr29803490wrv.157.1562156784072;
-        Wed, 03 Jul 2019 05:26:24 -0700 (PDT)
-Received: from starbuck.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id v67sm2868132wme.24.2019.07.03.05.26.23
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=REnOeEN5yGA6DyLHYZUXObOyZCyVPJqos2PFAeloT7k=;
+        b=Uub2epdQT11JAn9va6k9XJdKSeYVicVEfI6utcjymdA1PjsoffqY7zIYlGgfwE3/1A
+         g6R9as0GUdtzjNMOmU3Ik+4bbIsTPxHgFPAYXpDodhrsAfScbbu30d4PRqtT3Pjgwb8y
+         zQQNvCTTZRtUyko8+AxSFrGDoyxbo9Y3mSdkXLs7cRhQtDKh+S7jsfVuQYwc/p7r1pQ5
+         VyLWZ0t8pbskENf1YlgOTNfOFMU2i+NGx1l7PomVXcnLiWC4NiOCWvdN3+o/xwaecVS+
+         xVx/Y6H3k9FD/Y7C15qYUv9aPVs/Xl2/edntPppzW0+vkfT5oYjmTEggEBFswrTHWlR1
+         XPlA==
+X-Gm-Message-State: APjAAAWvz7rLhtpjKpprEyskeux/vMIfetk29Rj/1b94881TFrMK8JSd
+        vcNAUjHKwigEFuYRvNs57jk3ZQ==
+X-Google-Smtp-Source: APXvYqzv39vxjEOuFXIZd2izLbkL+W+voUSFY7XUgtQYBiXS3oC/SBtBaMlJedbypMkeWFSaJyc9mQ==
+X-Received: by 2002:a7b:c94a:: with SMTP id i10mr2879582wml.97.1562157657223;
+        Wed, 03 Jul 2019 05:40:57 -0700 (PDT)
+Received: from localhost (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id c65sm2327372wma.44.2019.07.03.05.40.56
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 03 Jul 2019 05:26:23 -0700 (PDT)
+        Wed, 03 Jul 2019 05:40:56 -0700 (PDT)
 From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] clk: meson: axg-audio: add g12a reset support
-Date:   Wed,  3 Jul 2019 14:26:14 +0200
-Message-Id: <20190703122614.3579-3-jbrunet@baylibre.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190703122614.3579-1-jbrunet@baylibre.com>
-References: <20190703122614.3579-1-jbrunet@baylibre.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     khilman@baylibre.com, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        amergnat@baylibre.com
+Subject: Re: [RFC/RFT v3 04/14] clk: meson: eeclk: add setup callback
+In-Reply-To: <301695b6-52ba-92b1-ca1a-d4d587b33eeb@baylibre.com>
+References: <20190701091258.3870-1-narmstrong@baylibre.com> <20190701091258.3870-5-narmstrong@baylibre.com> <CAFBinCA1gUUbEj=++1rGcFQ1RdyxSheofAo=TKw3-UaenFAcug@mail.gmail.com> <301695b6-52ba-92b1-ca1a-d4d587b33eeb@baylibre.com>
+Date:   Wed, 03 Jul 2019 14:40:55 +0200
+Message-ID: <1jo92b70ko.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On the g12a, the register space dedicated to the audio clock also
-provides some resets. Let the clock controller register a reset
-provider as well for this SoC family.
+On Wed 03 Jul 2019 at 13:45, Neil Armstrong <narmstrong@baylibre.com> wrote:
 
-the axg SoC family does not appear to provide this feature.
+> On 03/07/2019 01:16, Martin Blumenstingl wrote:
+>> +Cc Alexandre Mergnat
+>> 
+>> On Mon, Jul 1, 2019 at 11:13 AM Neil Armstrong <narmstrong@baylibre.com> wrote:
+>>>
+>>> Add a setup() callback in the eeclk structure, to call an optional
+>>> call() function at end of eeclk probe to setup clocks.
+>>>
+>>> It's used for the G12A clock controller to setup the CPU clock notifiers.
+>>>
+>>> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+>> this will probably work fine, but I want do double check first
+>> 
+>> are we planning to get rid of meson-eeclk (mid-term)?
+>
+> AFAIK no, but maybe I'm not aware of it !
+>
+> Neil
+>
+>> Alex has some patches to get rid of all these IN_PREFIX logic.
 
-Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
----
- drivers/clk/meson/axg-audio.c | 107 +++++++++++++++++++++++++++++++++-
- drivers/clk/meson/axg-audio.h |   1 +
- 2 files changed, 106 insertions(+), 2 deletions(-)
+The prefix logic will go away with Alex's rework, so are the input clock
+But meson-eeclk, which is just a common probe function do avoid
+repeating the same things over and over, will stay
 
-diff --git a/drivers/clk/meson/axg-audio.c b/drivers/clk/meson/axg-audio.c
-index 8028ff6f6610..ce163bd03aad 100644
---- a/drivers/clk/meson/axg-audio.c
-+++ b/drivers/clk/meson/axg-audio.c
-@@ -12,6 +12,7 @@
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/reset.h>
-+#include <linux/reset-controller.h>
- #include <linux/slab.h>
- 
- #include "axg-audio.h"
-@@ -916,6 +917,84 @@ static int axg_register_clk_hw_inputs(struct device *dev,
- 	return 0;
- }
- 
-+struct axg_audio_reset_data {
-+	struct reset_controller_dev rstc;
-+	struct regmap *map;
-+	unsigned int offset;
-+};
-+
-+static void axg_audio_reset_reg_and_bit(struct axg_audio_reset_data *rst,
-+					unsigned long id,
-+					unsigned int *reg,
-+					unsigned int *bit)
-+{
-+	unsigned int stride = regmap_get_reg_stride(rst->map);
-+
-+	*reg = (id / (stride * BITS_PER_BYTE)) * stride;
-+	*reg += rst->offset;
-+	*bit = id % (stride * BITS_PER_BYTE);
-+}
-+
-+static int axg_audio_reset_update(struct reset_controller_dev *rcdev,
-+				unsigned long id, bool assert)
-+{
-+	struct axg_audio_reset_data *rst =
-+		container_of(rcdev, struct axg_audio_reset_data, rstc);
-+	unsigned int offset, bit;
-+
-+	axg_audio_reset_reg_and_bit(rst, id, &offset, &bit);
-+
-+	regmap_update_bits(rst->map, offset, BIT(bit),
-+			assert ? BIT(bit) : 0);
-+
-+	return 0;
-+}
-+
-+static int axg_audio_reset_status(struct reset_controller_dev *rcdev,
-+				unsigned long id)
-+{
-+	struct axg_audio_reset_data *rst =
-+		container_of(rcdev, struct axg_audio_reset_data, rstc);
-+	unsigned int val, offset, bit;
-+
-+	axg_audio_reset_reg_and_bit(rst, id, &offset, &bit);
-+
-+	regmap_read(rst->map, offset, &val);
-+
-+	return !!(val & BIT(bit));
-+}
-+
-+static int axg_audio_reset_assert(struct reset_controller_dev *rcdev,
-+				unsigned long id)
-+{
-+	return axg_audio_reset_update(rcdev, id, true);
-+}
-+
-+static int axg_audio_reset_deassert(struct reset_controller_dev *rcdev,
-+				unsigned long id)
-+{
-+	return axg_audio_reset_update(rcdev, id, false);
-+}
-+
-+static int axg_audio_reset_toggle(struct reset_controller_dev *rcdev,
-+				unsigned long id)
-+{
-+	int ret;
-+
-+	ret = axg_audio_reset_assert(rcdev, id);
-+	if (ret)
-+		return ret;
-+
-+	return axg_audio_reset_deassert(rcdev, id);
-+}
-+
-+static const struct reset_control_ops axg_audio_rstc_ops = {
-+	.assert = axg_audio_reset_assert,
-+	.deassert = axg_audio_reset_deassert,
-+	.reset = axg_audio_reset_toggle,
-+	.status = axg_audio_reset_status,
-+};
-+
- static const struct regmap_config axg_audio_regmap_cfg = {
- 	.reg_bits	= 32,
- 	.val_bits	= 32,
-@@ -925,12 +1004,15 @@ static const struct regmap_config axg_audio_regmap_cfg = {
- 
- struct audioclk_data {
- 	struct clk_hw_onecell_data *hw_onecell_data;
-+	unsigned int reset_offset;
-+	unsigned int reset_num;
- };
- 
- static int axg_audio_clkc_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	const struct audioclk_data *data;
-+	struct axg_audio_reset_data *rst;
- 	struct regmap *map;
- 	struct resource *res;
- 	void __iomem *regs;
-@@ -1005,8 +1087,27 @@ static int axg_audio_clkc_probe(struct platform_device *pdev)
- 		}
- 	}
- 
--	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
--					   data->hw_onecell_data);
-+	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
-+					data->hw_onecell_data);
-+	if (ret)
-+		return ret;
-+
-+	/* Stop here if there is no reset */
-+	if (!data->reset_num)
-+		return 0;
-+
-+	rst = devm_kzalloc(dev, sizeof(*rst), GFP_KERNEL);
-+	if (!rst)
-+		return -ENOMEM;
-+
-+	rst->map = map;
-+	rst->offset = data->reset_offset;
-+	rst->rstc.nr_resets = data->reset_num;
-+	rst->rstc.ops = &axg_audio_rstc_ops;
-+	rst->rstc.of_node = dev->of_node;
-+	rst->rstc.owner = THIS_MODULE;
-+
-+	return ret = devm_reset_controller_register(dev, &rst->rstc);
- }
- 
- static const struct audioclk_data axg_audioclk_data = {
-@@ -1015,6 +1116,8 @@ static const struct audioclk_data axg_audioclk_data = {
- 
- static const struct audioclk_data g12a_audioclk_data = {
- 	.hw_onecell_data = &g12a_audio_hw_onecell_data,
-+	.reset_offset = AUDIO_SW_RESET,
-+	.reset_num = 26,
- };
- 
- static const struct of_device_id clkc_match_table[] = {
-diff --git a/drivers/clk/meson/axg-audio.h b/drivers/clk/meson/axg-audio.h
-index 5d972d55d6c7..c00e28b2e1a9 100644
---- a/drivers/clk/meson/axg-audio.h
-+++ b/drivers/clk/meson/axg-audio.h
-@@ -22,6 +22,7 @@
- #define AUDIO_MCLK_F_CTRL	0x018
- #define AUDIO_MST_PAD_CTRL0	0x01c
- #define AUDIO_MST_PAD_CTRL1	0x020
-+#define AUDIO_SW_RESET		0x024
- #define AUDIO_MST_A_SCLK_CTRL0	0x040
- #define AUDIO_MST_A_SCLK_CTRL1	0x044
- #define AUDIO_MST_B_SCLK_CTRL0	0x048
--- 
-2.21.0
+>> I'm asking because if we want to get rid of meson-eeclk it may be the
 
+May I ask why ?
+
+>> time to do so now to have less logic to migrate later on
+>> 
+>> 
+>> Martin
+>> 
