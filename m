@@ -2,105 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2435DC14
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2019 04:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58ED25DEEA
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Jul 2019 09:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728224AbfGCCSR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 2 Jul 2019 22:18:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56212 "EHLO mail.kernel.org"
+        id S1726764AbfGCHcl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 3 Jul 2019 03:32:41 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:45424 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727919AbfGCCSR (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 2 Jul 2019 22:18:17 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5FF5221873;
-        Wed,  3 Jul 2019 02:18:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562120296;
-        bh=8Khvw1CXl7hKEvHm32HTns+qzUCEgZkcV/yGjgbRFyU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rGH9f/6zl6a/GJU0dxQWZ0syRpdTX7Zgf+sHe2QP6NHiEFAojCqEAayqyuNUni51h
-         v/VzhwPYDAUZ6DyFNhDr6C0vQFNtEziyUuJVBAAswY/vaz3FYTUUhKHS96pjPDURAn
-         cR5lwkpArwJEAaqJuKwh/bhU1k2hOHXNw7ZUIPRA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-omap@vger.kernel.org,
+        id S1726327AbfGCHcl (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 3 Jul 2019 03:32:41 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 48410200350;
+        Wed,  3 Jul 2019 09:32:40 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 66F372000AF;
+        Wed,  3 Jul 2019 09:32:30 +0200 (CEST)
+Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 54C86402E1;
+        Wed,  3 Jul 2019 15:32:18 +0800 (SGT)
+From:   jun.li@nxp.com
+To:     shawnguo@kernel.org, sboyd@kernel.org, robh+dt@kernel.org
+Cc:     mark.rutland@arm.com, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        mturquette@baylibre.com, Peter.Chen@nxp.com, ping.bai@nxp.com,
+        leonard.crestez@nxp.com, daniel.baluta@nxp.com, jun.li@nxp.com,
+        Anson.Huang@nxp.com, aisheng.dong@nxp.com, peng.fan@nxp.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 01/13] clk: ti: clkctrl: Fix returning uninitialized data
-Date:   Tue,  2 Jul 2019 22:18:02 -0400
-Message-Id: <20190703021814.18385-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Subject: [PATCH 3/5] clk: imx8mm: correct the usb1_ctrl parent to be usb_bus
+Date:   Wed,  3 Jul 2019 15:23:25 +0800
+Message-Id: <20190703072327.38165-1-jun.li@nxp.com>
+X-Mailer: git-send-email 2.14.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Tony Lindgren <tony@atomide.com>
+From: Li Jun <jun.li@nxp.com>
 
-[ Upstream commit 41b3588dba6ef4b7995735a97e47ff0aeea6c276 ]
+Per latest imx8mm datasheet of CCM, the parent of usb1_ctrl_root_clk
+should be usb_bus.
 
-If we do a clk_get() for a clock that does not exists, we have
-_ti_omap4_clkctrl_xlate() return uninitialized data if no match
-is found. This can be seen in some cases with SLAB_DEBUG enabled:
-
-Unable to handle kernel paging request at virtual address 5a5a5a5a
-...
-clk_hw_create_clk.part.33
-sysc_notifier_call
-notifier_call_chain
-blocking_notifier_call_chain
-device_add
-
-Let's fix this by setting a found flag only when we find a match.
-
-Reported-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
-Fixes: 88a172526c32 ("clk: ti: add support for clkctrl clocks")
-Signed-off-by: Tony Lindgren <tony@atomide.com>
-Tested-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
-Tested-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Li Jun <jun.li@nxp.com>
 ---
- drivers/clk/ti/clkctrl.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/clk/imx/clk-imx8mm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/ti/clkctrl.c b/drivers/clk/ti/clkctrl.c
-index 82e4d5cccf84..2df8564f08a0 100644
---- a/drivers/clk/ti/clkctrl.c
-+++ b/drivers/clk/ti/clkctrl.c
-@@ -215,6 +215,7 @@ static struct clk_hw *_ti_omap4_clkctrl_xlate(struct of_phandle_args *clkspec,
- {
- 	struct omap_clkctrl_provider *provider = data;
- 	struct omap_clkctrl_clk *entry;
-+	bool found = false;
- 
- 	if (clkspec->args_count != 2)
- 		return ERR_PTR(-EINVAL);
-@@ -224,11 +225,13 @@ static struct clk_hw *_ti_omap4_clkctrl_xlate(struct of_phandle_args *clkspec,
- 
- 	list_for_each_entry(entry, &provider->clocks, node) {
- 		if (entry->reg_offset == clkspec->args[0] &&
--		    entry->bit_offset == clkspec->args[1])
-+		    entry->bit_offset == clkspec->args[1]) {
-+			found = true;
- 			break;
-+		}
- 	}
- 
--	if (!entry)
-+	if (!found)
- 		return ERR_PTR(-EINVAL);
- 
- 	return entry->clk;
+diff --git a/drivers/clk/imx/clk-imx8mm.c b/drivers/clk/imx/clk-imx8mm.c
+index 6b8e75d..735cf9d 100644
+--- a/drivers/clk/imx/clk-imx8mm.c
++++ b/drivers/clk/imx/clk-imx8mm.c
+@@ -631,7 +631,7 @@ static int __init imx8mm_clocks_init(struct device_node *ccm_node)
+ 	clks[IMX8MM_CLK_UART2_ROOT] = imx_clk_gate4("uart2_root_clk", "uart2", base + 0x44a0, 0);
+ 	clks[IMX8MM_CLK_UART3_ROOT] = imx_clk_gate4("uart3_root_clk", "uart3", base + 0x44b0, 0);
+ 	clks[IMX8MM_CLK_UART4_ROOT] = imx_clk_gate4("uart4_root_clk", "uart4", base + 0x44c0, 0);
+-	clks[IMX8MM_CLK_USB1_CTRL_ROOT] = imx_clk_gate4("usb1_ctrl_root_clk", "usb_core_ref", base + 0x44d0, 0);
++	clks[IMX8MM_CLK_USB1_CTRL_ROOT] = imx_clk_gate4("usb1_ctrl_root_clk", "usb_bus", base + 0x44d0, 0);
+ 	clks[IMX8MM_CLK_GPU3D_ROOT] = imx_clk_gate4("gpu3d_root_clk", "gpu3d_div", base + 0x44f0, 0);
+ 	clks[IMX8MM_CLK_USDHC1_ROOT] = imx_clk_gate4("usdhc1_root_clk", "usdhc1", base + 0x4510, 0);
+ 	clks[IMX8MM_CLK_USDHC2_ROOT] = imx_clk_gate4("usdhc2_root_clk", "usdhc2", base + 0x4520, 0);
 -- 
-2.20.1
+2.7.4
 
