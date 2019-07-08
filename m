@@ -2,100 +2,105 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A42FF61835
-	for <lists+linux-clk@lfdr.de>; Mon,  8 Jul 2019 00:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7D96250D
+	for <lists+linux-clk@lfdr.de>; Mon,  8 Jul 2019 17:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728260AbfGGWzX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 7 Jul 2019 18:55:23 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:35568 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728192AbfGGWzX (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 7 Jul 2019 18:55:23 -0400
-Received: by mail-qt1-f195.google.com with SMTP id d23so16325054qto.2;
-        Sun, 07 Jul 2019 15:55:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3ErUctKt9CJ3rgf9ZExT4u2Tmx1X1fVjtqY74IUmVOo=;
-        b=JlXHeBGDcgPOSpehTvZEUAPwg/03JUwV5Oib3l8ccCErTyvUSFpKvVXITpSsuA5HzZ
-         CZ6UqCpB/q5sef/EOkgQ+RsNCm+A+sejBBhaTqvqalSylNB+1z72WqFs4hGxaL6+kTLx
-         r2AYuXIBh2hRcjmmVkIZ+ofmon6UkniG1b16MVJK3t7bykOnH3VeebDj5Mf8gtetiy3w
-         l23+w1477IPOqnjYRFfQN+gVtIRb6eML5Ua0AXJOpOI8veBT1wkZ9Hkaqnhed6YwRWF+
-         POemOi6hU9+/cb+G6ei/SF0+GceH7PAbstYAin10hez1zUwXJxw8m5XPlg4jlXYCSEAV
-         b9wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3ErUctKt9CJ3rgf9ZExT4u2Tmx1X1fVjtqY74IUmVOo=;
-        b=sWzGiyt942qXq8zzrqt/dEppl+Hpk9lwWBIJ0vvzCCC0HjRquxo3bmXL/sr5Z1CDCs
-         +kkzCn/oGoUMg1tKvsuasv/1ihI+RqDGaTfdgbBtfRU8RA6WDCEdnUbcQ4qO4HW2oFp2
-         X2+38mx4F8CI+Ttfgnqd5lFmVAu55VjKeMlsKu4XtT9yNleXjrcolBEwiIjKcgZAMT9+
-         FsSv0SKWdr3Ya6umaQpMO2Xk02F6sMApUTIF4m6TMM7JZyTrFNFn9QFpNQFR7nUicfwE
-         OcFTpDJJnqiU70QDIlufF6bnXdvJwhkTVIeGhY33cjv+D1QX5F4OmOz/fjkJ/WJX/K4G
-         op4A==
-X-Gm-Message-State: APjAAAUEf++3KKLOfbSoCy/UVSvVqCKyo/JND/2Vh4UOu6odoJcmU5Dj
-        6cbxA18vwCJnivgYiGCfn20=
-X-Google-Smtp-Source: APXvYqxAEVv5dxzJ388e9Q4kk1sMyPRq1q9tmbkqaHtnpponx5iIEAxZARkOStaKXXWWHRbiGikZJw==
-X-Received: by 2002:ac8:26c8:: with SMTP id 8mr11617758qtp.308.1562540122068;
-        Sun, 07 Jul 2019 15:55:22 -0700 (PDT)
-Received: from localhost.localdomain (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
-        by smtp.gmail.com with ESMTPSA id t2sm8217556qth.33.2019.07.07.15.55.19
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 07 Jul 2019 15:55:21 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Joseph Lo <josephl@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v7 13/13] ARM: dts: tegra30: Add External Memory Controller node
-Date:   Mon,  8 Jul 2019 01:54:24 +0300
-Message-Id: <20190707225424.9562-14-digetx@gmail.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190707225424.9562-1-digetx@gmail.com>
-References: <20190707225424.9562-1-digetx@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S2391387AbfGHPsC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 8 Jul 2019 11:48:02 -0400
+Received: from foss.arm.com ([217.140.110.172]:52420 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391341AbfGHPry (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 8 Jul 2019 11:47:54 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C12B360;
+        Mon,  8 Jul 2019 08:47:54 -0700 (PDT)
+Received: from usa.arm.com (e107155-lin.cambridge.arm.com [10.1.196.42])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C750F3F59C;
+        Mon,  8 Jul 2019 08:47:52 -0700 (PDT)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Bo Zhang <bozhang.zhang@broadcom.com>,
+        Volodymyr Babchuk <volodymyr_babchuk@epam.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
+Subject: [PATCH 10/11] firmware: arm_scmi: Drop config flag in clk_ops->rate_set
+Date:   Mon,  8 Jul 2019 16:47:29 +0100
+Message-Id: <20190708154730.16643-11-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190708154730.16643-1-sudeep.holla@arm.com>
+References: <20190708154730.16643-1-sudeep.holla@arm.com>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add External Memory Controller node to the device-tree.
+CLOCK_PROTOCOL_ATTRIBUTES provides attributes to indicate the maximum
+number of pending asynchronous clock rate changes supported by the
+platform. If it's non-zero, then we should be able to use asynchronous
+clock rate set for any clocks until the maximum limit is reached.
 
-Acked-by: Peter De Schrijver <pdeschrijver@nvidia.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+In order to add that support, let's drop the config flag passed to
+clk_ops->rate_set and handle the asynchronous requests dynamically.
+
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-clk@vger.kernel.org
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
- arch/arm/boot/dts/tegra30.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/clk/clk-scmi.c            | 2 +-
+ drivers/firmware/arm_scmi/clock.c | 4 ++--
+ include/linux/scmi_protocol.h     | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/tegra30.dtsi b/arch/arm/boot/dts/tegra30.dtsi
-index e074258d4518..8355264e2265 100644
---- a/arch/arm/boot/dts/tegra30.dtsi
-+++ b/arch/arm/boot/dts/tegra30.dtsi
-@@ -732,6 +732,15 @@
- 		#reset-cells = <1>;
- 	};
+diff --git a/drivers/clk/clk-scmi.c b/drivers/clk/clk-scmi.c
+index a2287c770d5c..886f7c5df51a 100644
+--- a/drivers/clk/clk-scmi.c
++++ b/drivers/clk/clk-scmi.c
+@@ -69,7 +69,7 @@ static int scmi_clk_set_rate(struct clk_hw *hw, unsigned long rate,
+ {
+ 	struct scmi_clk *clk = to_scmi_clk(hw);
  
-+	memory-controller@7000f400 {
-+		compatible = "nvidia,tegra30-emc";
-+		reg = <0x7000f400 0x400>;
-+		interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&tegra_car TEGRA30_CLK_EMC>;
-+
-+		nvidia,memory-controller = <&mc>;
-+	};
-+
- 	fuse@7000f800 {
- 		compatible = "nvidia,tegra30-efuse";
- 		reg = <0x7000f800 0x400>;
+-	return clk->handle->clk_ops->rate_set(clk->handle, clk->id, 0, rate);
++	return clk->handle->clk_ops->rate_set(clk->handle, clk->id, rate);
+ }
+ 
+ static int scmi_clk_enable(struct clk_hw *hw)
+diff --git a/drivers/firmware/arm_scmi/clock.c b/drivers/firmware/arm_scmi/clock.c
+index 0a194af92438..dd215bd11a58 100644
+--- a/drivers/firmware/arm_scmi/clock.c
++++ b/drivers/firmware/arm_scmi/clock.c
+@@ -218,7 +218,7 @@ scmi_clock_rate_get(const struct scmi_handle *handle, u32 clk_id, u64 *value)
+ }
+ 
+ static int scmi_clock_rate_set(const struct scmi_handle *handle, u32 clk_id,
+-			       u32 config, u64 rate)
++			       u64 rate)
+ {
+ 	int ret;
+ 	struct scmi_xfer *t;
+@@ -230,7 +230,7 @@ static int scmi_clock_rate_set(const struct scmi_handle *handle, u32 clk_id,
+ 		return ret;
+ 
+ 	cfg = t->tx.buf;
+-	cfg->flags = cpu_to_le32(config);
++	cfg->flags = cpu_to_le32(0);
+ 	cfg->id = cpu_to_le32(clk_id);
+ 	cfg->value_low = cpu_to_le32(rate & 0xffffffff);
+ 	cfg->value_high = cpu_to_le32(rate >> 32);
+diff --git a/include/linux/scmi_protocol.h b/include/linux/scmi_protocol.h
+index 1be16d7730e2..1694ee1b410e 100644
+--- a/include/linux/scmi_protocol.h
++++ b/include/linux/scmi_protocol.h
+@@ -71,7 +71,7 @@ struct scmi_clk_ops {
+ 	int (*rate_get)(const struct scmi_handle *handle, u32 clk_id,
+ 			u64 *rate);
+ 	int (*rate_set)(const struct scmi_handle *handle, u32 clk_id,
+-			u32 config, u64 rate);
++			u64 rate);
+ 	int (*enable)(const struct scmi_handle *handle, u32 clk_id);
+ 	int (*disable)(const struct scmi_handle *handle, u32 clk_id);
+ };
 -- 
-2.22.0
+2.17.1
 
