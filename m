@@ -2,81 +2,96 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEB169983
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Jul 2019 19:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BF9869A01
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Jul 2019 19:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731611AbfGORDp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 15 Jul 2019 13:03:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51330 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730782AbfGORDp (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 15 Jul 2019 13:03:45 -0400
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 454392080A;
-        Mon, 15 Jul 2019 17:03:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563210224;
-        bh=rjrlrnQPDBPyEI2VvOI7m0hccqKp54THKXzQCNuj7e8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rD0dF+yCPBgLJ83N++laHPgUXgCYGAMz72tCRtdR8UGZKaN70hvg/XOtOAQglbDmg
-         G89e88qOwY2fe8WqBu5ApgXpAqOOVcczcWs2prqWcWewX7h8rF6gJN105q/T1aiRvU
-         USG4hd3jDr+PTIiK0elLNX7e1NozVpX8HYEvRdtA=
-Received: by mail-qt1-f181.google.com with SMTP id w17so16369330qto.10;
-        Mon, 15 Jul 2019 10:03:44 -0700 (PDT)
-X-Gm-Message-State: APjAAAX64xkwZdlrM4yLU4NvYSbGWek+DmWwPIoiRU2QI344R+MHMJ8w
-        Ibzodl8cqPpnLXXTnse2h/eJHJ+Sni+uGwKpJQ==
-X-Google-Smtp-Source: APXvYqwJvWYWvEZ7jhvuIO0kny3nJ2FG1ki4BA/d03vXMpzs2ob165VOtQejHnSTXliJm/t+yYCx8Ni0kj3f+zn0LUM=
-X-Received: by 2002:ac8:368a:: with SMTP id a10mr19043100qtc.143.1563210223567;
- Mon, 15 Jul 2019 10:03:43 -0700 (PDT)
+        id S1731670AbfGORgN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 15 Jul 2019 13:36:13 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:42809 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731278AbfGORgN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Jul 2019 13:36:13 -0400
+Received: by mail-lj1-f196.google.com with SMTP id t28so17106778lje.9;
+        Mon, 15 Jul 2019 10:36:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Izt+ifnTdXDEdpjOeoavyKG1OamdhIvLqFqLmRqtdBw=;
+        b=Dn0QN+NPAmGj7e3TS5cEs/Sd6D8+yQfObWTSqfbum3gsfER6MPh3aKVowzKQTv6SVd
+         LCzh105qCcsYb9PLaZeKV1bK5T27h+1kptY1DgFu4noH9Y7RQWRSOnVXTKvDooE0BQIA
+         xH1UJvWwwhEQf7p/27hp4//xUMze21b8rdRwa3zqoWyigx/ZVAWvzlOmqzRdpAwDSxYN
+         NBWBhVrVWExWlbWdNCBNCh2DHaExwx4MT1DLuHmxyCA3YleSzkU68rATALa+YSn/XokC
+         +/amsCsLc8gaDnSfZunMCQRPUJOXEj2w1Y+1rgdC+VDSeIzl93d7ui+WbbJ+L6Z6Lxtc
+         sr9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Izt+ifnTdXDEdpjOeoavyKG1OamdhIvLqFqLmRqtdBw=;
+        b=seyiab0lLdIWA8jJ2P7Abm9iCx+c8xopIdbYERbmj4uuDv6mg2neg3+Wm/OWeCVxej
+         XdQaDzkWRAcF4NzMXJ4V0lEYLxB8o+n8ROwxDguLMN8Oe0BWiE/rmWIglvXdNC1ANDoP
+         ge7AcOGBnJZyfa4JunaEJtH6rSffXkbb4xnEU4I2D11wf0c+DDtdEU+pABJIZQ5+zmfq
+         +tpM1JEk2fBjEhIPXKpya6K0K/s52hhwGusxA/2prG0oFVax57DoLDeSRgehF+3L+0GT
+         zcTiZUSID8JGFB8P1wMIhUoj8oTNxLWZ8HZPpbxZR7GFYmD2VhCD3oVMGv3u0dwvih4d
+         U7YA==
+X-Gm-Message-State: APjAAAUOSOyr0Fggl4Ek50/V3xWymXaejyyGrc3R8UdcuGMAmeqT6HXJ
+        De9Hoq8gxXKBWF/QEnsoFoT/9g0K
+X-Google-Smtp-Source: APXvYqxpvqvI0+jk9iLbgqR2x/SuIW6p0cd6GajffhStu1ZAxQkb7D0C/6AxPUCMlN4UK656Ra4/KA==
+X-Received: by 2002:a2e:8944:: with SMTP id b4mr14359695ljk.154.1563212171248;
+        Mon, 15 Jul 2019 10:36:11 -0700 (PDT)
+Received: from localhost.localdomain (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
+        by smtp.gmail.com with ESMTPSA id o8sm1869131lfi.15.2019.07.15.10.36.10
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 15 Jul 2019 10:36:10 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/2] clk: tegra: divider: Fix missing check for enable-bit on rate's recalculation
+Date:   Mon, 15 Jul 2019 20:35:26 +0300
+Message-Id: <20190715173527.5719-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-References: <20190713034634.44585-1-icenowy@aosc.io> <20190713034634.44585-8-icenowy@aosc.io>
-In-Reply-To: <20190713034634.44585-8-icenowy@aosc.io>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 15 Jul 2019 11:03:32 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLk0EkF5YK6AvK0JFMH7JbdFvYK2XKh37rJv651DZ_M2g@mail.gmail.com>
-Message-ID: <CAL_JsqLk0EkF5YK6AvK0JFMH7JbdFvYK2XKh37rJv651DZ_M2g@mail.gmail.com>
-Subject: Re: [PATCH v4 7/8] dt-bindings: arm: sunxi: add binding for Lichee
- Zero Plus core board
-To:     Icenowy Zheng <icenowy@aosc.io>
-Cc:     Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-sunxi <linux-sunxi@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, Jul 12, 2019 at 9:49 PM Icenowy Zheng <icenowy@aosc.io> wrote:
->
-> The Lichee Zero Plus is a core board made by Sipeed, with a microUSB
-> connector on it, TF slot or WSON8 SD chip, optional eMMC or SPI Flash.
-> It has a gold finger connector for expansion, and UART is available from
-> reserved pins w/ 2.54mm pitch. The board can use either SoChip S3 or
-> Allwinner V3L SoCs.
->
-> Add the device tree binding of the basic version of the core board --
-> w/o eMMC or SPI Flash, w/ TF slot or WSON8 SD, and use S3 SoC.
->
-> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-> ---
-> No changes since v3.
->
-> Patch introduced in v2.
->
->  Documentation/devicetree/bindings/arm/sunxi.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
+Unset "enable" bit means that divider is in bypass mode, hence it doesn't
+have any effect in that case.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/clk/tegra/clk-divider.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/clk/tegra/clk-divider.c b/drivers/clk/tegra/clk-divider.c
+index e76731fb7d69..f33c19045386 100644
+--- a/drivers/clk/tegra/clk-divider.c
++++ b/drivers/clk/tegra/clk-divider.c
+@@ -40,8 +40,13 @@ static unsigned long clk_frac_div_recalc_rate(struct clk_hw *hw,
+ 	int div, mul;
+ 	u64 rate = parent_rate;
+ 
+-	reg = readl_relaxed(divider->reg) >> divider->shift;
+-	div = reg & div_mask(divider);
++	reg = readl_relaxed(divider->reg);
++
++	if ((divider->flags & TEGRA_DIVIDER_UART) &&
++	    !(reg & PERIPH_CLK_UART_DIV_ENB))
++		return rate;
++
++	div = (reg >> divider->shift) & div_mask(divider);
+ 
+ 	mul = get_mul(divider);
+ 	div += mul;
+-- 
+2.22.0
 
-Rob
