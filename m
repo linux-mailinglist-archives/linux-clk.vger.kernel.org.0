@@ -2,92 +2,152 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D58569C76
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Jul 2019 22:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBCAC69E7E
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Jul 2019 23:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731368AbfGOUM7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 15 Jul 2019 16:12:59 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:45009 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732359AbfGOUMy (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Jul 2019 16:12:54 -0400
-Received: by mail-pf1-f195.google.com with SMTP id t16so7923925pfe.11;
-        Mon, 15 Jul 2019 13:12:53 -0700 (PDT)
+        id S1731858AbfGOVpb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 15 Jul 2019 17:45:31 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:45971 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730647AbfGOVpb (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Jul 2019 17:45:31 -0400
+Received: by mail-pl1-f196.google.com with SMTP id y8so8950679plr.12
+        for <linux-clk@vger.kernel.org>; Mon, 15 Jul 2019 14:45:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4AxHo20cpPm/W3wEm88+I5u1phSMUfiBcovFIe0miYs=;
-        b=XUUaPG5nxmt6MX9oO4OuNI7ZEmksD7SNdmudaVKnX9gtzsrAfvXOJ++XysB5veR5Z7
-         774wUO4X32g2WGY9TZbmLV2NU5qSuYbLZz2eEjZRNYFyZwdNx+Nicmu/KLEvRXa6NfjJ
-         UYsLordgh/KaPoxBAF4q745TnQukni134KSpZbYdp+rIvILlM6GP2pjBMEHl2JkAl/eN
-         6caSdHswVYlUcqstbM2CyySzgg6qNxAkBlu9hlU7lanUdh+7hCFhSQ887EWJfymxI9gV
-         wbKdzb10plrLqWYe4xYPUGipPPH/VNHYeo1AZI6R+MZaNG1/BHDnUU7nbhnO9Obc1fvp
-         TcAw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=hOM2v5hU56mID9YuYmmucDqwTVT51b3w3HZDsPVe9j4=;
+        b=aDeZNMtooxl695Jq44V8IEomR07n7GCItQuCyk51sAt4aNCq3TYnWF4Xh3UG6ODhdp
+         jtMBYRlMSxN9nyMw4rCHobIDaomN9XCC/6UPxEwHVxs+6ZrtelWkKu6kuExJb1bjm0JI
+         DjwmoL0ILn4xq0PFZ3h5zIjDQySyOJh9n5kY020tFPSq2Nbug5FxawMlgX/WQlTOLv3K
+         ijeQgwobaTr9/539aQaWP1u4idf2IoHiAWqN0qCE1Qo5uYCItCHK+2G2pBEdJx7rmeyz
+         OTUitPvnWzoQ45NJHCVpzC3PHDKzj5ZHPRxq/zlT35MqbPfjy417btF9rf8b0Q+LxCgL
+         rGbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4AxHo20cpPm/W3wEm88+I5u1phSMUfiBcovFIe0miYs=;
-        b=rIc/YoglmjeCo9ID3p6/AjABuSMOJn4TlQvnc4mlqdgdqTdV/sYvWWVIGbENgd7qs9
-         baem9EXE9kLKztxInhvAvFT2+vQieJji8Dg6bCAoyKK7cKOTcObqB0Vid61zvm/uvxdY
-         TNrtSCAtLGX70w+SCRs1zdNDvqziO3ZL3JG+darrxJ92rhlQPjf8jh9MOzNXbEZGBj+k
-         mcFopoC8NT+utRpRH1NJ9bRLWdBZzteAaXpvTvmaaS86Q5Vl7aZmsHaF2LRsHd1XSz57
-         K4/Oz6xhCE4dWB7CRUnBKEWD8CB9hwo6dcTQsXYE/DwSw/qmgvcgUSSyY+wZ6iALxNIS
-         eijg==
-X-Gm-Message-State: APjAAAXwq8KMpOpqJVHJ5h/d+m5iF0dj5xNHVK7pg7Ml9MtC5VPVuV3A
-        1IQOpPCiUxDCOZvFC44xIq6MMObR
-X-Google-Smtp-Source: APXvYqwz7qi222kKr5U+GxET6ohcsuPcHHhRH2cnZi5gAEZU/EPVSTrv90JucGBWlPFi5pBHRep0wA==
-X-Received: by 2002:a63:dd4e:: with SMTP id g14mr18449598pgj.227.1563221573007;
-        Mon, 15 Jul 2019 13:12:53 -0700 (PDT)
-Received: from localhost.lan (c-67-185-54-80.hsd1.wa.comcast.net. [67.185.54.80])
-        by smtp.gmail.com with ESMTPSA id d21sm7327783pgm.75.2019.07.15.13.12.52
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=hOM2v5hU56mID9YuYmmucDqwTVT51b3w3HZDsPVe9j4=;
+        b=sIDTW8HvJWjxgHW8QzEuow0A2Lmp7EobbjCYpOUidEXHBv9XIdbCwkDJTOyYs0J1yU
+         Xb1RfnNTix4Np6M4Y1cpo/rn2860WilaRrR25Z0XnZ4vZlX4M9SqO+anBYZTdfyHeKXL
+         W5h6PmKf8FpbIgX+uxMRpYJs3u5SpSpkZ5o+JRrvLBMrF7n5qAqXLkZfYHfta1z+adzG
+         qEHwW3s0k2sIRCcnUG9ZZx38vfGedJglm5ZjeDOePp2qunpyh7KtK6JoRQEN69cHolXu
+         MIaQZtgGU4vsSiIlJJfwU9xaWuHEqFBMZ25du4mVx1w8Rjtea8gqhmR8lp39AvHJhO5o
+         pc9A==
+X-Gm-Message-State: APjAAAV6Brb2fldOXg48fY1Tkqcod57M9rL/AO8JGFXjc3jExedOy5Tv
+        v+txHI3HqmKeMyEMdoUzAFQ5sg==
+X-Google-Smtp-Source: APXvYqygmIThR7CWZd2S/zUr5WJnIk/hHSphgbemuWJ1x8uUYo3hBc6a/yRRRFF2AOHr67pE+h8zfQ==
+X-Received: by 2002:a17:902:86:: with SMTP id a6mr31188398pla.244.1563227130294;
+        Mon, 15 Jul 2019 14:45:30 -0700 (PDT)
+Received: from tuxbook-pro (pat_11.qualcomm.com. [192.35.156.11])
+        by smtp.gmail.com with ESMTPSA id b24sm17017167pfd.98.2019.07.15.14.45.29
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 15 Jul 2019 13:12:52 -0700 (PDT)
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-To:     linux-clk@vger.kernel.org
-Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Chris Healy <cphealy@gmail.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] clk: Constify second argument of clk_bulk_disable_unprepare()
-Date:   Mon, 15 Jul 2019 13:12:34 -0700
-Message-Id: <20190715201234.13556-6-andrew.smirnov@gmail.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190715201234.13556-1-andrew.smirnov@gmail.com>
-References: <20190715201234.13556-1-andrew.smirnov@gmail.com>
+        Mon, 15 Jul 2019 14:45:29 -0700 (PDT)
+Date:   Mon, 15 Jul 2019 14:46:47 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Marc Gonzalez <marc.w.gonzalez@free.fr>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Neusch?fer <j.neuschaefer@gmx.net>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v1] clk: Add devm_clk_{prepare,enable,prepare_enable}
+Message-ID: <20190715214647.GY7234@tuxbook-pro>
+References: <1d7a1b3b-e9bf-1d80-609d-a9c0c932b15a@free.fr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1d7a1b3b-e9bf-1d80-609d-a9c0c932b15a@free.fr>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Both clk_bulk_disable() and clk_bulk_unprepare() take const struct
-clk_bulk_data, so change clk_bulk_disable_unprepare() to do so as
-well. No functional change intended.
+On Mon 15 Jul 08:34 PDT 2019, Marc Gonzalez wrote:
 
-Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Chris Healy <cphealy@gmail.com>
-Cc: linux-clk@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- include/linux/clk.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[..]
+> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> index c0990703ce54..5e85548357c0 100644
+> --- a/drivers/clk/clk.c
+> +++ b/drivers/clk/clk.c
+> @@ -914,6 +914,18 @@ int clk_prepare(struct clk *clk)
+>  }
+>  EXPORT_SYMBOL_GPL(clk_prepare);
+>  
+> +static void unprepare(void *clk)
 
-diff --git a/include/linux/clk.h b/include/linux/clk.h
-index 3956ae05b1cf..7a795fd6d141 100644
---- a/include/linux/clk.h
-+++ b/include/linux/clk.h
-@@ -936,7 +936,7 @@ clk_bulk_prepare_enable(int num_clks, const struct clk_bulk_data *clks)
- }
- 
- static inline void clk_bulk_disable_unprepare(int num_clks,
--					      struct clk_bulk_data *clks)
-+					      const struct clk_bulk_data *clks)
- {
- 	clk_bulk_disable(num_clks, clks);
- 	clk_bulk_unprepare(num_clks, clks);
--- 
-2.21.0
+This deserves a less generic name.
 
+> +{
+> +	clk_unprepare(clk);
+> +}
+> +
+> +int devm_clk_prepare(struct device *dev, struct clk *clk)
+> +{
+> +	int rc = clk_prepare(clk);
+> +	return rc ? : devm_add_action_or_reset(dev, unprepare, clk);
+> +}
+> +EXPORT_SYMBOL_GPL(devm_clk_prepare);
+> +
+>  static void clk_core_disable(struct clk_core *core)
+>  {
+>  	lockdep_assert_held(&enable_lock);
+> @@ -1136,6 +1148,18 @@ int clk_enable(struct clk *clk)
+>  }
+>  EXPORT_SYMBOL_GPL(clk_enable);
+>  
+> +static void disable(void *clk)
+> +{
+> +	clk_disable(clk);
+> +}
+> +
+> +int devm_clk_enable(struct device *dev, struct clk *clk)
+
+clk_enable() is used in code that can't sleep, in what scenario do you
+envision it being useful to enable a clock from such region until devres
+cleans up the associated device?
+
+> +{
+> +	int rc = clk_enable(clk);
+> +	return rc ? : devm_add_action_or_reset(dev, disable, clk);
+
+devm_add_action_or_reset() allocates the devres object with GFP_KERNEL,
+so this won't work.
+
+> +}
+> +EXPORT_SYMBOL_GPL(devm_clk_enable);
+> +
+>  static int clk_core_prepare_enable(struct clk_core *core)
+>  {
+>  	int ret;
+> diff --git a/include/linux/clk.h b/include/linux/clk.h
+> index 3c096c7a51dc..d09b5207e3f1 100644
+> --- a/include/linux/clk.h
+> +++ b/include/linux/clk.h
+> @@ -895,6 +895,14 @@ static inline void clk_restore_context(void) {}
+>  
+>  #endif
+>  
+> +int devm_clk_prepare(struct device *dev, struct clk *clk);
+> +int devm_clk_enable(struct device *dev, struct clk *clk);
+> +static inline int devm_clk_prepare_enable(struct device *dev, struct clk *clk)
+
+devm_clk_prepare_enable() sounds very useful, devm_clk_prepare() might
+be useful, so keep those and drop devm_clk_enable().
+
+Regards,
+Bjorn
+
+> +{
+> +	int rc = devm_clk_prepare(dev, clk);
+> +	return rc ? : devm_clk_enable(dev, clk);
+> +}
+> +
+>  /* clk_prepare_enable helps cases using clk_enable in non-atomic context. */
+>  static inline int clk_prepare_enable(struct clk *clk)
+>  {
+> -- 
+> 2.17.1
