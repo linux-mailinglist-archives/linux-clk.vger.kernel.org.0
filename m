@@ -2,63 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 759CF69A02
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Jul 2019 19:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8B369C70
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Jul 2019 22:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731278AbfGORgO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 15 Jul 2019 13:36:14 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:34677 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731574AbfGORgO (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Jul 2019 13:36:14 -0400
-Received: by mail-lj1-f194.google.com with SMTP id p17so17148725ljg.1;
-        Mon, 15 Jul 2019 10:36:12 -0700 (PDT)
+        id S1731055AbfGOUMs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 15 Jul 2019 16:12:48 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36381 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730371AbfGOUMs (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Jul 2019 16:12:48 -0400
+Received: by mail-pf1-f196.google.com with SMTP id r7so7942608pfl.3;
+        Mon, 15 Jul 2019 13:12:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0PMRfKqUM64Kq/wVxUa7k/YufQQA+RCsvqjLh/9HcSo=;
-        b=X+TpJT4xZ/9Lxy1t/ff6N8LrdftCRIBFzNFuWt+av2w0RbuYQ4+ObTjT1/eetGMysj
-         njfdS8d+1knVnwhxbN8xzEqjf5fOIIpx275AkJwzQxyTUqosZGTTs+EFW6Ex/+IwNzWd
-         BBrnpp16OIBDX0HogxvaPN9KQEjTBlorGjWibxUtHOeH4supvKizCB6nW5L19k0pDwNm
-         GT52JlZm8txV/IfKwrBDNKXAKAjfA6MwYe87AbLRiPk8uYPKfQ/Cqw8sZE1qvzxNNaOa
-         Vw7O+OYJLFT6Fe0/93Jt6LP5CApZpEblbt+NNjkkW8BFFoC385/8iSeLTED1mXR3mSw9
-         E6cA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EFHU8jgY3TxdaihzIPG/nX9WOPct/kS+iwLsN1JrgDM=;
+        b=Xa5ufhqNsV9uATb0H6bQ9qRGI8kVtjsLrscoS0+hms16q6PLbWMSaa6sQX8NOQRkhH
+         YE/6yIF6C+Oa1eKVkzw9iQ6Sukx8HB5eMmPJarAUJ/S8YmGdX5e1RJ3Xe8xIIVr9Lrvp
+         16RkgL9NpGLfLKcnxUG1nt4CfozEkvEsIdiuEgE9J3XaXRTMEWVMpxS1G96tPUwsp/Ce
+         RuDgMewdxAx/cEvnq9uUGg06xpALNXL56bw+EGdLBCYs0dnjAlPjDRsM2eCgMQ/ufFQT
+         7Qxj0p/qGDkQnZYG2MZza4/KzdOab9ANH6CK7ZvgQzFSYNmW6+nINttW+N33VEcmIu6V
+         4DWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0PMRfKqUM64Kq/wVxUa7k/YufQQA+RCsvqjLh/9HcSo=;
-        b=YW8EI5N/mspTLdTL/SwKs8SNdF5t8O4QsuMfwk2IKjd+wlah/lEx6Wc61DdubfGExX
-         nnu9ynKAsDIYmq2cd86U1upvvTJH84T/CHmIDe/Ycr4+W309DZEvxVFQebo/1WYayViO
-         Emf+3NAbZDqlPBzhxFmnpQnNzlQm2kOC1iSHue6BGmE23kzDjgS2uyXd59olAos0SNYD
-         JvrgSnxFy3djrWaakDpB8YShTCN98WAC+D4mFodm+Hrw8RWseL/edbkcOlMgjO1EdbVp
-         3CNAlp21zsRdkKF1abjkVq/I1gNDs3abp7pCOuULPrxlQy/tZlyeUoe7+2tz9+jTSkSo
-         ytyg==
-X-Gm-Message-State: APjAAAWmzkPKsMSlwxYguPbi8EvrsbqqdZmpKwjQ0JuKwq34Yolr5yng
-        g3qcIojR4F1x5pe/hkbgmMw=
-X-Google-Smtp-Source: APXvYqwgEh3J9df/Bb9vC2X+CvuZEFtq0Vtyjxzjj+oqStW68PHQPy9U0T2SB5MTRdt5wSdV/m06qw==
-X-Received: by 2002:a2e:6348:: with SMTP id x69mr14892434ljb.186.1563212172294;
-        Mon, 15 Jul 2019 10:36:12 -0700 (PDT)
-Received: from localhost.localdomain (ppp79-139-233-208.pppoe.spdop.ru. [79.139.233.208])
-        by smtp.gmail.com with ESMTPSA id o8sm1869131lfi.15.2019.07.15.10.36.11
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 15 Jul 2019 10:36:11 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] clk: tegra: divider: Support enable-bit for Super clocks
-Date:   Mon, 15 Jul 2019 20:35:27 +0300
-Message-Id: <20190715173527.5719-2-digetx@gmail.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190715173527.5719-1-digetx@gmail.com>
-References: <20190715173527.5719-1-digetx@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EFHU8jgY3TxdaihzIPG/nX9WOPct/kS+iwLsN1JrgDM=;
+        b=dt4rm+1bIL2xuL8YvZtRlvuQBHdGKYSFJRI9UWqgX9ITuHRJe50e4YaRfGBBE5Z90t
+         101qY8qxYTq1L+/N9iVqzhgLiuNPmvT3eHoKXfHUffMu4kPfAES2QctMMQpQSHWe9QtD
+         489LGZEXl5oyyNsDqehbuglOray7wFM9hFJ91UrlYa1LLuoUMerS4pUzboOiyE/Ca1Br
+         iCwiZVVpVENRZNti9M/5BcfZsqkAhf9kWMHK7b/Dq5CAheRfsy/nMyq10rr9bXie6hGA
+         65Fe8y3Ctyv1QpU+bd9UXgm62aJ9mYSZbLEAZ3RwDJgMJ1CuGgW9BilGrO/lh/2uufYS
+         NjNQ==
+X-Gm-Message-State: APjAAAUNQQ2Au2OfW52D7U7LOzbffQhaWKzFRY3XvPZ81JpWkudc91Em
+        C7iwAQ+ThiZ+W5l4GHFL4XBq893q
+X-Google-Smtp-Source: APXvYqxEIpLPloFXmRit3o8nJFvto+NCwRwwNByFuexN1TfVy9Gep+QkIU4Yqc32w7cRa7kQT9cr2w==
+X-Received: by 2002:a63:ad07:: with SMTP id g7mr26834526pgf.405.1563221566834;
+        Mon, 15 Jul 2019 13:12:46 -0700 (PDT)
+Received: from localhost.lan (c-67-185-54-80.hsd1.wa.comcast.net. [67.185.54.80])
+        by smtp.gmail.com with ESMTPSA id d21sm7327783pgm.75.2019.07.15.13.12.45
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 15 Jul 2019 13:12:46 -0700 (PDT)
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+To:     linux-clk@vger.kernel.org
+Cc:     Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Chris Healy <cphealy@gmail.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/6] clk: Sync prototypes for clk_bulk_enable()
+Date:   Mon, 15 Jul 2019 13:12:29 -0700
+Message-Id: <20190715201234.13556-1-andrew.smirnov@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
@@ -66,86 +60,32 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-All "super" clock dividers have enable bit.
+No-op version of clk_bulk_enable() should have the same protoype as
+the real implementation, so constify the last argument to make it so.
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Chris Healy <cphealy@gmail.com>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 ---
- drivers/clk/tegra/clk-divider.c | 12 ++++++++++++
- drivers/clk/tegra/clk-super.c   |  1 +
- drivers/clk/tegra/clk.h         |  4 ++++
- 3 files changed, 17 insertions(+)
+ include/linux/clk.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/tegra/clk-divider.c b/drivers/clk/tegra/clk-divider.c
-index f33c19045386..a980b9bddecd 100644
---- a/drivers/clk/tegra/clk-divider.c
-+++ b/drivers/clk/tegra/clk-divider.c
-@@ -17,6 +17,7 @@
- #define get_max_div(d) div_mask(d)
+diff --git a/include/linux/clk.h b/include/linux/clk.h
+index 3c096c7a51dc..a35868ccc912 100644
+--- a/include/linux/clk.h
++++ b/include/linux/clk.h
+@@ -819,7 +819,8 @@ static inline int clk_enable(struct clk *clk)
+ 	return 0;
+ }
  
- #define PERIPH_CLK_UART_DIV_ENB BIT(24)
-+#define SUPER_CLK_DIV_ENB BIT(31)
- 
- static int get_div(struct tegra_clk_frac_div *divider, unsigned long rate,
- 		   unsigned long parent_rate)
-@@ -46,6 +47,10 @@ static unsigned long clk_frac_div_recalc_rate(struct clk_hw *hw,
- 	    !(reg & PERIPH_CLK_UART_DIV_ENB))
- 		return rate;
- 
-+	if ((divider->flags & TEGRA_DIVIDER_SUPER) &&
-+	    !(reg & SUPER_CLK_DIV_ENB))
-+		return rate;
-+
- 	div = (reg >> divider->shift) & div_mask(divider);
- 
- 	mul = get_mul(divider);
-@@ -96,6 +101,13 @@ static int clk_frac_div_set_rate(struct clk_hw *hw, unsigned long rate,
- 	val &= ~(div_mask(divider) << divider->shift);
- 	val |= div << divider->shift;
- 
-+	if (divider->flags & TEGRA_DIVIDER_SUPER) {
-+		if (div)
-+			val |= SUPER_CLK_DIV_ENB;
-+		else
-+			val &= ~SUPER_CLK_DIV_ENB;
-+	}
-+
- 	if (divider->flags & TEGRA_DIVIDER_UART) {
- 		if (div)
- 			val |= PERIPH_CLK_UART_DIV_ENB;
-diff --git a/drivers/clk/tegra/clk-super.c b/drivers/clk/tegra/clk-super.c
-index 39ef31b46df5..4d8e36b04f03 100644
---- a/drivers/clk/tegra/clk-super.c
-+++ b/drivers/clk/tegra/clk-super.c
-@@ -220,6 +220,7 @@ struct clk *tegra_clk_register_super_clk(const char *name,
- 	super->frac_div.width = 8;
- 	super->frac_div.frac_width = 1;
- 	super->frac_div.lock = lock;
-+	super->frac_div.flags = TEGRA_DIVIDER_SUPER;
- 	super->div_ops = &tegra_clk_frac_div_ops;
- 
- 	/* Data in .init is copied by clk_register(), so stack variable OK */
-diff --git a/drivers/clk/tegra/clk.h b/drivers/clk/tegra/clk.h
-index 905bf1096558..a4fbf55930aa 100644
---- a/drivers/clk/tegra/clk.h
-+++ b/drivers/clk/tegra/clk.h
-@@ -53,6 +53,9 @@ struct clk *tegra_clk_register_sync_source(const char *name,
-  * TEGRA_DIVIDER_UART - UART module divider has additional enable bit which is
-  *      set when divider value is not 0. This flags indicates that the divider
-  *      is for UART module.
-+ * TEGRA_DIVIDER_SUPER - Super clock divider has additional enable bit which
-+ *      is set when divider value is not 0. This flags indicates that the
-+ *      divider is for super clock.
-  */
- struct tegra_clk_frac_div {
- 	struct clk_hw	hw;
-@@ -70,6 +73,7 @@ struct tegra_clk_frac_div {
- #define TEGRA_DIVIDER_FIXED BIT(1)
- #define TEGRA_DIVIDER_INT BIT(2)
- #define TEGRA_DIVIDER_UART BIT(3)
-+#define TEGRA_DIVIDER_SUPER BIT(4)
- 
- extern const struct clk_ops tegra_clk_frac_div_ops;
- struct clk *tegra_clk_register_divider(const char *name,
+-static inline int __must_check clk_bulk_enable(int num_clks, struct clk_bulk_data *clks)
++static inline int __must_check clk_bulk_enable(int num_clks,
++					       const struct clk_bulk_data *clks)
+ {
+ 	return 0;
+ }
 -- 
-2.22.0
+2.21.0
 
