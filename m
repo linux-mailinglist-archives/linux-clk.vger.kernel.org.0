@@ -2,44 +2,43 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7E76B873
-	for <lists+linux-clk@lfdr.de>; Wed, 17 Jul 2019 10:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 112586B889
+	for <lists+linux-clk@lfdr.de>; Wed, 17 Jul 2019 10:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725907AbfGQIju (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 17 Jul 2019 04:39:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42382 "EHLO mail.kernel.org"
+        id S1729059AbfGQIsY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 17 Jul 2019 04:48:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52382 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725873AbfGQIju (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 17 Jul 2019 04:39:50 -0400
+        id S1727005AbfGQIsY (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 17 Jul 2019 04:48:24 -0400
 Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E642D217F9;
-        Wed, 17 Jul 2019 08:39:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D5DB52182B;
+        Wed, 17 Jul 2019 08:48:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563352789;
-        bh=3AsfA0apHgKPHqSErY1FFUic2G0ulq9KKXmKDllcBcQ=;
+        s=default; t=1563353303;
+        bh=/NRR6ZVfH/r+x8OphvuI+fLrW6gXRTqze46/dbMGmOI=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SgAXPRs6GJZnZ4dXfaI5y+fqWmAL7vSP8DcilTZOMiaFiRuMkriRkV2D7uDUMRsHD
-         LuOrCUBJADNdyG96KBNIcHBVXxPWwdvnZB7W23YzPXUGsU2DRyL7pCEuvDEI7FPSaG
-         8V0w+33PvRBAUq9VEUGaunN4tWBv4nQIt0r5tjnM=
-Received: by mail-lj1-f170.google.com with SMTP id z28so22819895ljn.4;
-        Wed, 17 Jul 2019 01:39:48 -0700 (PDT)
-X-Gm-Message-State: APjAAAXXS45LH6tK+Aqz9v+dMPbEeTJo2ZrzMQgFnF0tvW8RtvaRCsyF
-        LXevqW2P3Mn3ZpS3RdHuicSPORuUdVpDIXxXn4k=
-X-Google-Smtp-Source: APXvYqyRN0A/GOrnI+2UBk5Z9rTURP+hHTiKsonTWMcGbY1Ffif3bsCYCsun+URUyB4xBf4ku2h81Gn6CSsFtvv1zzo=
-X-Received: by 2002:a2e:124b:: with SMTP id t72mr20492141lje.143.1563352787197;
- Wed, 17 Jul 2019 01:39:47 -0700 (PDT)
+        b=tA5kUXM3g/1ITmUwtPKsFJorXYYsWdZPHAI65v2pUAzTk0G5/mXlmAZqiLe87cBVD
+         /sQ70iUvSiRZ/W+QQu6S+F5ksO6lCrzb3eKHLMB1FQ+oSm56MGSh+k147/dEnsqsPE
+         gmGQ6cLFuCsF+OJfdHUaTux6Z4yf/vaDW0bFDT8s=
+Received: by mail-lj1-f170.google.com with SMTP id 16so22768465ljv.10;
+        Wed, 17 Jul 2019 01:48:22 -0700 (PDT)
+X-Gm-Message-State: APjAAAVz8vBVbhqqhisGUxSXt74Ld+AhEtJx3LiuQJs51yVv0cnZloEZ
+        I/4+JXEeik/lomEPtE74VDlvJomXOhohsRv+nHQ=
+X-Google-Smtp-Source: APXvYqwGbnK8q2TQAV3pBRB1WO6v0CtEUty37EkyvFjQViT6TKr312fFJIuwughcF6XBbdD2YqagKHof7D4Ib2xJ1sQ=
+X-Received: by 2002:a2e:8155:: with SMTP id t21mr20046257ljg.80.1563353301198;
+ Wed, 17 Jul 2019 01:48:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <CGME20190715124450eucas1p189043d196375aa6adacf898de81bfa9b@eucas1p1.samsung.com>
- <20190715124417.4787-1-l.luba@partner.samsung.com> <20190715124417.4787-21-l.luba@partner.samsung.com>
-In-Reply-To: <20190715124417.4787-21-l.luba@partner.samsung.com>
+References: <CGME20190715124451eucas1p2904b49f59cca0cbbc22381f168affbb5@eucas1p2.samsung.com>
+ <20190715124417.4787-1-l.luba@partner.samsung.com> <20190715124417.4787-22-l.luba@partner.samsung.com>
+In-Reply-To: <20190715124417.4787-22-l.luba@partner.samsung.com>
 From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 17 Jul 2019 10:39:36 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPfHgmBo9NX6jO8qSqXjN1pFmnKkQEWbou+q7-BDq2XKQg@mail.gmail.com>
-Message-ID: <CAJKOXPfHgmBo9NX6jO8qSqXjN1pFmnKkQEWbou+q7-BDq2XKQg@mail.gmail.com>
-Subject: Re: [PATCH v1 20/50] ARM: dts: exynos: change and rename FSYS OPP
- table in Exynos5420
+Date:   Wed, 17 Jul 2019 10:48:10 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPd0kzwZ9_eCK9r04Qj0Rf5SSSnMmwDj11cZozmu0gqsgw@mail.gmail.com>
+Message-ID: <CAJKOXPd0kzwZ9_eCK9r04Qj0Rf5SSSnMmwDj11cZozmu0gqsgw@mail.gmail.com>
+Subject: Re: [PATCH v1 21/50] ARM: dts: exynos: add OPP into FSYS APB bus in Exynos5420
 To:     Lukasz Luba <l.luba@partner.samsung.com>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
@@ -60,67 +59,15 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 On Mon, 15 Jul 2019 at 14:44, Lukasz Luba <l.luba@partner.samsung.com> wrote:
 >
-> The FSYS and FSYS2 buses have similar characteristics and both have max
-> frequency 240MHz. The old OPP table bus_fsys_apb_opp_table should be used
-> only to FSYS APB bus because APB max frequency is 200MHz.
-> The new OPPs for FSYS should increase its performance and related devices.
+> Add an OPP for FSYS APB which reflects the real possible frequency.
+> The bus will have a new parent clock which speed has 600MHz, thus
+> a new possible frequency provided by the clock divider is 150MHz.
+> According to the documentation max possible frequency for this bus is
+> 200MHz.
 
-I do not understand the explanation. You say that there are two buses
-- FSYS and FSYS2 - and old OPP table should be used for FSYS APB but
-you remove the old one (by renaming). Or which one is the 'old one'
-here? The reason is speed... wait, what? Usually DTS should describe
-the HW so I imagine that proper opp table should be used for proper
-bus. It surprised me that we switch a bus to different OPP table just
-because of speed concerns. It should be correctness concern.
-
-Please clarify and reword all this.
-
-I am also not sure how this relates with previous patch - whether you
-are fixing independent issues. Maybe because I do not see the issue
-fixed... change the commit title and adjust the messages to focus WHY
-you are doing it. For small fixes WHAT you are doing is rather obvious
-so commit msg (and title) should not focus on it.
+Commit msg is good but title could be improved. Focus in the title
+what problem/issue you are solving - add intermediate step in scaling
+of FSYS APB?
 
 Best regards,
 Krzysztof
-
->
-> Signed-off-by: Lukasz Luba <l.luba@partner.samsung.com>
-> ---
->  arch/arm/boot/dts/exynos5420.dtsi | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/arm/boot/dts/exynos5420.dtsi b/arch/arm/boot/dts/exynos5420.dtsi
-> index 941c58bdd809..c7fc4b829b2a 100644
-> --- a/arch/arm/boot/dts/exynos5420.dtsi
-> +++ b/arch/arm/boot/dts/exynos5420.dtsi
-> @@ -995,7 +995,7 @@
->                         compatible = "samsung,exynos-bus";
->                         clocks = <&clock CLK_DOUT_ACLK200_FSYS>;
->                         clock-names = "bus";
-> -                       operating-points-v2 = <&bus_fsys_apb_opp_table>;
-> +                       operating-points-v2 = <&bus_fsys_opp_table>;
->                         status = "disabled";
->                 };
->
-> @@ -1003,7 +1003,7 @@
->                         compatible = "samsung,exynos-bus";
->                         clocks = <&clock CLK_DOUT_ACLK200_FSYS2>;
->                         clock-names = "bus";
-> -                       operating-points-v2 = <&bus_fsys2_opp_table>;
-> +                       operating-points-v2 = <&bus_fsys_opp_table>;
->                         status = "disabled";
->                 };
->
-> @@ -1157,7 +1157,7 @@
->                         };
->                 };
->
-> -               bus_fsys2_opp_table: opp_table5 {
-> +               bus_fsys_opp_table: opp_table5 {
->                         compatible = "operating-points-v2";
->
->                         opp00 {
-> --
-> 2.17.1
->
