@@ -2,60 +2,104 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DACD70F4F
-	for <lists+linux-clk@lfdr.de>; Tue, 23 Jul 2019 04:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E25D70F5A
+	for <lists+linux-clk@lfdr.de>; Tue, 23 Jul 2019 04:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732131AbfGWCwS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 22 Jul 2019 22:52:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42590 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729066AbfGWCwS (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 22 Jul 2019 22:52:18 -0400
-Received: from dragon (98.142.130.235.16clouds.com [98.142.130.235])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7F37522387;
-        Tue, 23 Jul 2019 02:52:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563850337;
-        bh=cKV8vZriVe9N4KR1Ynxsn5jL6pnY+Z6YbKZNF3ww9JU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0RrnLlyEGlBwKBK5VbAg6ODpRhy76XatqfhongR7oZMfMsEKaxyf5Cio/Xv0IjUIz
-         s35VyYm0te5EYF1WoQfkIccDh5Ii+dD7CoaaqknUl2dgvaANy+PNMT47tZTJiKgYKV
-         XA7E/H44bKrR+u/UWim3CeegZHlQGYlf278wrR9g=
-Date:   Tue, 23 Jul 2019 10:51:44 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Anson.Huang@nxp.com
-Cc:     rui.zhang@intel.com, edubezval@gmail.com,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, mturquette@baylibre.com,
-        sboyd@kernel.org, l.stach@pengutronix.de, abel.vesa@nxp.com,
-        andrew.smirnov@gmail.com, angus@akkea.ca, ccaione@baylibre.com,
-        agx@sigxcpu.org, leonard.crestez@nxp.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        Linux-imx@nxp.com
-Subject: Re: [PATCH 6/6] arm64: dts: imx8mq: Add clock for TMU node
-Message-ID: <20190723025143.GJ3738@dragon>
-References: <20190705045612.27665-1-Anson.Huang@nxp.com>
- <20190705045612.27665-6-Anson.Huang@nxp.com>
+        id S1732222AbfGWCxB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 22 Jul 2019 22:53:01 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:33642 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725848AbfGWCxA (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 22 Jul 2019 22:53:00 -0400
+Received: by mail-lf1-f67.google.com with SMTP id x3so28268433lfc.0;
+        Mon, 22 Jul 2019 19:52:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UGzqbbB1U0ppZ2A02MGdrN83+wMNNh/kz49yjkRagg4=;
+        b=oGOorPHkG3fQQXMk4jmm3uqhV8r8dArAEn5qvIPCMkpwf/5MW5gfmXTishC51IYLD0
+         gXyyk/zX1ndUDIEFEjxz2gWX7ui0buUAVeEbs++OEPsrFqCY19QmGCDA9vmGYPiUJlmV
+         j1QupIgqpdTXLMXNni5PsAvXkRUgzWUcbbVaPRpCQ1N/Td2qr6LQhH17rvAb2CSdAXYr
+         thCYI+tSL7SHjPzXIwZUUhQV16LOBkOIOdrwFinYx/hg42koRNMJA97e2gYN4AbbMfgw
+         URqr1Kci6UhZMS5726Pl9z4WIf1PmOOsJlKarubM/xYofn3PqUbmWMn3AJpj8zjPRHl5
+         dBZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UGzqbbB1U0ppZ2A02MGdrN83+wMNNh/kz49yjkRagg4=;
+        b=PO1BfaElMttj4/7xtChA/hie2wBQF2Sl444VreFEKIA+w+tBdHAAwVEiMkgixE25bi
+         9modekcid43u5GbfToaqyO45eks5AWOTlCX4So6b9U052td95T8BJAMIb7qdxpeDUCtC
+         654r/3yq3sYSPx4bYqjx5csw15XRnYoW10QNh+ZBfyi9p9BFSl4cEVGnSFQ7lqFt0McV
+         aawqVWVZ1Xh0FnKcOpHlpjv0Uc3m0XfzKMxwR00/CI6+oa8LpJ7nYJRwwp4S20HdU86o
+         Fc0P7G7e/GfZjOG2jLzLP+anpJzwD1S4zjYAXjfMVSLidZ8DJPhsP3TYzL0BCPz7Aito
+         wFww==
+X-Gm-Message-State: APjAAAUrH9YUuojlrRl/Iq482eul65DtSj2PW0EjD4Qts1Bks2BSUuAv
+        UYmlVa/Oo/MyeYq/Zn27Q9s=
+X-Google-Smtp-Source: APXvYqzkQl297ESK1gCyraELtwkgRNbj+CQx/Air8IrnkAcz+ps43Ei6UF1+13i4+edz7NFSQUcldw==
+X-Received: by 2002:a19:8c57:: with SMTP id i23mr32883196lfj.192.1563850378088;
+        Mon, 22 Jul 2019 19:52:58 -0700 (PDT)
+Received: from localhost.localdomain (ppp91-78-220-99.pppoe.mtu-net.ru. [91.78.220.99])
+        by smtp.gmail.com with ESMTPSA id v4sm7757477lji.103.2019.07.22.19.52.56
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 22 Jul 2019 19:52:57 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] clk: tegra: divider: Add missing check for enable-bit on rate's recalculation
+Date:   Tue, 23 Jul 2019 05:52:44 +0300
+Message-Id: <20190723025245.27754-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190705045612.27665-6-Anson.Huang@nxp.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, Jul 05, 2019 at 12:56:12PM +0800, Anson.Huang@nxp.com wrote:
-> From: Anson Huang <Anson.Huang@nxp.com>
-> 
-> i.MX8MQ has clock gate for TMU module, add clock info to TMU
-> node for clock management.
-> 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+Unset "enable" bit means that divider is in bypass mode, hence it doesn't
+have any effect in that case. Please note that there are no known bugs
+caused by the missing check.
 
-Applied, thanks.
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+
+Changelog:
+
+v2: Changed the commit's description from 'Fix' to 'Add' in response to the
+    Stephen's Boyd question about the need to backport the patch into stable
+    kernels. The backporting is not really needed.
+
+ drivers/clk/tegra/clk-divider.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clk/tegra/clk-divider.c b/drivers/clk/tegra/clk-divider.c
+index e76731fb7d69..f33c19045386 100644
+--- a/drivers/clk/tegra/clk-divider.c
++++ b/drivers/clk/tegra/clk-divider.c
+@@ -40,8 +40,13 @@ static unsigned long clk_frac_div_recalc_rate(struct clk_hw *hw,
+ 	int div, mul;
+ 	u64 rate = parent_rate;
+ 
+-	reg = readl_relaxed(divider->reg) >> divider->shift;
+-	div = reg & div_mask(divider);
++	reg = readl_relaxed(divider->reg);
++
++	if ((divider->flags & TEGRA_DIVIDER_UART) &&
++	    !(reg & PERIPH_CLK_UART_DIV_ENB))
++		return rate;
++
++	div = (reg >> divider->shift) & div_mask(divider);
+ 
+ 	mul = get_mul(divider);
+ 	div += mul;
+-- 
+2.22.0
+
