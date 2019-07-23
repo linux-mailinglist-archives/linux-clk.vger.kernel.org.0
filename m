@@ -2,68 +2,110 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53AF4711C9
-	for <lists+linux-clk@lfdr.de>; Tue, 23 Jul 2019 08:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F5C717B5
+	for <lists+linux-clk@lfdr.de>; Tue, 23 Jul 2019 14:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728942AbfGWGV7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 23 Jul 2019 02:21:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57508 "EHLO mail.kernel.org"
+        id S1729509AbfGWMGr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 23 Jul 2019 08:06:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39472 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725837AbfGWGV7 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 23 Jul 2019 02:21:59 -0400
-Received: from dragon (98.142.130.235.16clouds.com [98.142.130.235])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        id S1727789AbfGWMGr (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 23 Jul 2019 08:06:47 -0400
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D7493218D4;
-        Tue, 23 Jul 2019 06:21:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9D7942238E;
+        Tue, 23 Jul 2019 12:06:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563862918;
-        bh=OgDxbod6Qfkmt/g27y5ShwVP5xlMwBRDW5wzrzqw47E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T7L0zh3SHOKJeX/pVipnV/beItuDd8FoZ6IqBZaDxQF9pYrXx86UelKWqvF+JGybi
-         RCivj2XkZtGWJHljYYaUvFmjKxHMzwWzhqX71jjJMPOugZuYCG/Cyu8vZ+/NW8d/lT
-         QraCPCEQLxrVeKZ5reNgoXkzalMi1pz5g+8DPUUo=
-Date:   Tue, 23 Jul 2019 14:21:27 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "van.freenix@gmail.com" <van.freenix@gmail.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] clk: imx: imx8mm: fix audio pll setting
-Message-ID: <20190723062126.GC15632@dragon>
-References: <1563157783-31846-1-git-send-email-peng.fan@nxp.com>
+        s=default; t=1563883606;
+        bh=DKrbsHStPDRY+4kxJ4/+/qAdj1UDVR+qwitPFb6G9XQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ts2zKnryAHCcWuV+jQCtZ1fXUaMYtk/rse8t/JdjssvTDla0eLrQ7l7Fy7A91meAb
+         4dq5/+DeF78UIQcOHR3q6qljcYC+4rwJc2IGbOzlxegYgRIX8xVXiAozEtcohEjzSQ
+         NgbJODdAIYTnBIHU6w/0RraMEYcpUUjG5MLfKfAY=
+Received: by mail-lf1-f51.google.com with SMTP id u10so29137682lfm.12;
+        Tue, 23 Jul 2019 05:06:45 -0700 (PDT)
+X-Gm-Message-State: APjAAAVbVfIZ0hJpoM11wp+xUFDO6jte7b6wvxP//so07W6yI3b3LePa
+        W7ZgxVpX8sLzxA1KJppeia6ej+kioGvRjjEoxWQ=
+X-Google-Smtp-Source: APXvYqw0eaw2TRxK/9H3Y8sqHS2pEMb0cITDxk01/sRGaTfe105d+yhQepbEgz1kqWQFScY4g8NDo+cJjofy04prss4=
+X-Received: by 2002:a19:f007:: with SMTP id p7mr34881578lfc.24.1563883603819;
+ Tue, 23 Jul 2019 05:06:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1563157783-31846-1-git-send-email-peng.fan@nxp.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <CGME20190715124504eucas1p1afe0da2c6ac3a8b45d85017a77ba9edf@eucas1p1.samsung.com>
+ <20190715124417.4787-1-l.luba@partner.samsung.com> <20190715124417.4787-38-l.luba@partner.samsung.com>
+ <CAJKOXPfrGgAczQ-=1aE453RpJ9BN10ZDmFcrEMPkNyF6GcGtNA@mail.gmail.com>
+ <2fe2e840-f4b2-773b-7d92-4ffb8502d4e6@partner.samsung.com>
+ <CAJKOXPd3gm7no-0TnPmgFg+X3FgdiM6ov5rtzFSM6hKEdEzRCg@mail.gmail.com>
+ <518c26ca-4254-056c-d6d0-ae1b4b63709c@partner.samsung.com>
+ <CAJKOXPfDX06s7eMctbnPabxho2EaWcTM4xAGKCd_+O6jCCDcRQ@mail.gmail.com> <7ad899c5-347d-546e-a2e9-d96f0203210c@partner.samsung.com>
+In-Reply-To: <7ad899c5-347d-546e-a2e9-d96f0203210c@partner.samsung.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Tue, 23 Jul 2019 14:06:32 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPdC7U64dqFJzJNJJXPQ8_K_SXUOVrNGjOQqcDyNsmskwA@mail.gmail.com>
+Message-ID: <CAJKOXPdC7U64dqFJzJNJJXPQ8_K_SXUOVrNGjOQqcDyNsmskwA@mail.gmail.com>
+Subject: Re: [PATCH v1 37/50] ARM: dts: exynos: change parent and rate of
+ bus_fsys in Exynos5422
+To:     Lukasz Luba <l.luba@partner.samsung.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>, linux-clk@vger.kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        =?UTF-8?B?QmFydMWCb21pZWogxbtvxYJuaWVya2lld2ljeg==?= 
+        <b.zolnierkie@samsung.com>, kgene@kernel.org, mark.rutland@arm.com,
+        robh+dt@kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
+        kyungmin.park@samsung.com, Andrzej Hajda <a.hajda@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        s.nawrocki@samsung.com, myungjoo.ham@samsung.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, Jul 15, 2019 at 02:55:43AM +0000, Peng Fan wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> The AUDIO PLL max support 650M, so the original clk settings violate
-> spec. This patch makes the output 786432000 -> 393216000,
-> and 722534400 -> 361267200 to aligned with NXP vendor kernel without any
-> impact on audio functionality and go within 650MHz PLL limit.
-> 
-> Cc: <stable@vger.kernel.org>
-> Fixes: ba5625c3e272 ("clk: imx: Add clock driver support for imx8mm")
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+On Wed, 17 Jul 2019 at 14:56, Lukasz Luba <l.luba@partner.samsung.com> wrote:
+>
+>
+> On 7/17/19 1:11 PM, Krzysztof Kozlowski wrote:
+> > On Wed, 17 Jul 2019 at 13:06, Lukasz Luba <l.luba@partner.samsung.com> wrote:
+> >>
+> >>
+> >>
+> >> On 7/17/19 12:45 PM, Krzysztof Kozlowski wrote:
+> >>> On Wed, 17 Jul 2019 at 12:39, Lukasz Luba <l.luba@partner.samsung.com> wrote:
+> >>>>>>
+> >>>>>>     &bus_fsys {
+> >>>>>>            devfreq = <&bus_wcore>;
+> >>>>>> +       assigned-clocks = <&clock CLK_MOUT_ACLK200_FSYS>,
+> >>>>>> +                         <&clock CLK_DOUT_ACLK200_FSYS>,
+> >>>>>> +                         <&clock CLK_FOUT_DPLL>;
+> >>>>>> +       assigned-clock-parents = <&clock CLK_MOUT_SCLK_DPLL>;
+> >>>>>> +       assigned-clock-rates = <0>, <240000000>,<1200000000>;
+> >>>>>
+> >>>>> Here and in all other patches:
+> >>>>> I am not entirely sure that this should be here. It looks like
+> >>>>> property of the SoC. Do we expect that buses will be configured to
+> >>>>> different clock rates between different boards?
+> This is the board file for Exynos5420/5422/5800 which enables buses.
+> Thus, I have change them here. Patch 49/50 adds these buses to
+> Exynos5800 (Peach Pi). In Exynos5420 there is no clock tree for
+> bus_isp266. The parents for different devices could be also different.
+> It is because i.e. in 5420 there is 2 bit in the WCORE 1st mux while in
+> 5422 there is 3 bits (6 parents possible).
+> That's why I have picked exynos5422-odroid-core.dtsi to reference
+> the bus devices and pinned them into proper parent and changed rate.
+> When you check patch 49/50 for 5800 not all the parents are the same.
+>
+> (1) I could create a dedicated files like: exynos5422-bus.dtsi,
+> exynos5420-bus.dtsi, exynos5800-bus.dtsi which would include some
+> base file with the basic &bus_X and set the right parent, rate.
+> Then these files would be included into proper board file like:
+> exynos5800-peach-pi.dts.
+> Is this something that you would like to see?
 
-Applied, thanks.
+I see now. Are there any differences in all these properties between
+Peach Pi and Odroids? Both of them are using exynos5800.dtsi so that
+could be a place for all clock assignments.
+
+Best regards,
+Krzysztof
