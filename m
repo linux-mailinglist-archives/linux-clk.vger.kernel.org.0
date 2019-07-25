@@ -2,184 +2,108 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEBC7546B
-	for <lists+linux-clk@lfdr.de>; Thu, 25 Jul 2019 18:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012AE75520
+	for <lists+linux-clk@lfdr.de>; Thu, 25 Jul 2019 19:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390923AbfGYQnR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 25 Jul 2019 12:43:17 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:32973 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390873AbfGYQnI (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 25 Jul 2019 12:43:08 -0400
-Received: by mail-wr1-f66.google.com with SMTP id n9so51590518wru.0
-        for <linux-clk@vger.kernel.org>; Thu, 25 Jul 2019 09:43:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=BuoDlpPb1vre+s0M4n7UQuzVeVmwTbnqlEv8lDT4UWI=;
-        b=k4OX4HGImt6xJlUN6U2THTvrSVKuSh9FSo+O95Rlh5GKBhaTqsoufUxODGokpDbNy7
-         p/DH7+UZgOrr37x9eVV7qAgknaolCqsA0K4TxkHGApyhLMUkTdZm4pELHy+R3Tf6tLFO
-         hppZsemHCX2UyAHXLQpmSfWlPsmZrFkFj+PukmvDNdXkEYWyMjV2eGyI4BtfBE3FDcjI
-         rARknSq9seZ53bOmA3HD7tQQNkYniZTYGAs1yjDm4jhbxOpplAxW6KpdG/ly9y6E/K1/
-         cffygjbxWExgDOYzK2WScKYqVUhNb+8rlIjR58rqQvwidazqKDQLz/sjLdjqSPkJAOpP
-         V6Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=BuoDlpPb1vre+s0M4n7UQuzVeVmwTbnqlEv8lDT4UWI=;
-        b=WK8mecwpWUwkIXdIqo/NgMIKZ6FAAMHuNI/7RUJz3YhWkwv8kwZGlBQGa8fm1J483O
-         9ptk8lKecn1pjREH4aW+SweSu0OLPWid+C6RpZlZR34hkD2hOcPEP/vVmAIQF5g7wRQ7
-         tDgXb3DKoBW9Qw9pszhS4RPaehciqr77IuFThMdIlVWXxe0i01Hekn+KTrAcQ17gL0zZ
-         WftVC3juhfpGRVPDWJDF7xMMubqwkaG194i//aFz0hXL99tcSc7mtQUDog5+sQ6PUt8B
-         cWrZfnPXT9nWotvXKLtGmyRGwbB1J4VFSvbWWmYbsgSB5hVXiFX+wqS8sqkk2P3Woe2Q
-         3ovA==
-X-Gm-Message-State: APjAAAUIlQfzedV7IwOtzmit3sB071BGa9Anx7sDj5mR+A3Xwecw92Hq
-        xO5vzTEP+GYm0OcHLXwqEjhHGA==
-X-Google-Smtp-Source: APXvYqyqEGwWoPn3HegjruZUySUlT+U/WLjOjEXs2C6Mm+iF/93A1j0eOnV5Nv0nkLc8sV6thc7lsQ==
-X-Received: by 2002:a5d:564e:: with SMTP id j14mr93443861wrw.1.1564072987152;
-        Thu, 25 Jul 2019 09:43:07 -0700 (PDT)
-Received: from pop-os.baylibre.local ([2a01:e35:8ad2:2cb0:2dbb:fac9:5ec0:e3ef])
-        by smtp.googlemail.com with ESMTPSA id 91sm103031727wrp.3.2019.07.25.09.43.06
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Jul 2019 09:43:06 -0700 (PDT)
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-To:     jbrunet@baylibre.com
-Cc:     khilman@baylibre.com, sboyd@kernel.org, narmstrong@baylibre.com,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        baylibre-upstreaming@groups.io,
+        id S2388591AbfGYRJf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 25 Jul 2019 13:09:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36796 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388559AbfGYRJf (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 25 Jul 2019 13:09:35 -0400
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 64C3822C7B;
+        Thu, 25 Jul 2019 17:09:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564074573;
+        bh=rkdM8CWr1A1LMWe/EH04Dnfcj0n7tqCfgrgm7BTi5jQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=V2kS5kGzF++a03Gk5zIP6RZHen6WFgWlfieoKDlrHqhEHPec5TNp/uyFIM1M9uehw
+         LnN/eGuu4aLZCbQHXlzK4cEM25XKPTnaNYChzXcEWdoNw9zQyjL+vFPdlyy6PV4aH5
+         wyN/g5oynAZo0AxPt7Dvwsws0Sm+M9vkaj0veq4o=
+Received: by mail-wr1-f50.google.com with SMTP id n9so51672752wru.0;
+        Thu, 25 Jul 2019 10:09:33 -0700 (PDT)
+X-Gm-Message-State: APjAAAVchACu9+4DfrJwnByOAiWXS7fa4zbLsTb942psMJLSrWTENUrN
+        ls4uYm87r0BqtAcxe5ZdkT9zv+sbF1z9ypuV6dE=
+X-Google-Smtp-Source: APXvYqyhMUD0VRm57goMo+umKK9xrgzMe/ILEaoUR4e6spWK6lgrnxam7yAoo2qceAKGdHiCpgWiUDRXhXO1xXYbZ1k=
+X-Received: by 2002:adf:c613:: with SMTP id n19mr39171710wrg.109.1564074571943;
+ Thu, 25 Jul 2019 10:09:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190722095425.14193-1-amergnat@baylibre.com> <20190722095425.14193-4-amergnat@baylibre.com>
+ <1j5znqxj74.fsf@starbuckisacylon.baylibre.com>
+In-Reply-To: <1j5znqxj74.fsf@starbuckisacylon.baylibre.com>
+From:   Chen-Yu Tsai <wens@kernel.org>
+Date:   Fri, 26 Jul 2019 01:09:20 +0800
+X-Gmail-Original-Message-ID: <CAGb2v64AJFMkZQaytYMN+EsLT0sS-3VwzWUfb3g7SdL7kCfu+g@mail.gmail.com>
+Message-ID: <CAGb2v64AJFMkZQaytYMN+EsLT0sS-3VwzWUfb3g7SdL7kCfu+g@mail.gmail.com>
+Subject: Re: [PATCH 3/8] clk: meson: gxbb: migrate to the new parent
+ description method
+To:     Jerome Brunet <jbrunet@baylibre.com>,
         Alexandre Mergnat <amergnat@baylibre.com>
-Subject: [PATCH v2 8/8] clk: meson: remove clk input helper
-Date:   Thu, 25 Jul 2019 18:42:38 +0200
-Message-Id: <20190725164238.27991-9-amergnat@baylibre.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190725164238.27991-1-amergnat@baylibre.com>
-References: <20190725164238.27991-1-amergnat@baylibre.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        baylibre-upstreaming@groups.io,
+        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The clk input function which allows clock controllers to register a bypass
-clock from a clock producer is no longer needed anymore since meson clock
-controllers have migrated to a new parent allocation method.
+On Thu, Jul 25, 2019 at 10:50 PM Jerome Brunet <jbrunet@baylibre.com> wrote:
+>
+> On Mon 22 Jul 2019 at 11:54, Alexandre Mergnat <amergnat@baylibre.com> wrote:
+>
+>
+> > @@ -1592,13 +1737,29 @@ static struct clk_regmap gxbb_vid_pll_div = {
+> >       .hw.init = &(struct clk_init_data) {
+> >               .name = "vid_pll_div",
+> >               .ops = &meson_vid_pll_div_ro_ops,
+> > -             .parent_names = (const char *[]){ "hdmi_pll" },
+> > +             .parent_data = &(const struct clk_parent_data) {
+> > +                     /*
+> > +                      * This clock is declared here for GXL and GXBB SoC, so
+> > +                      * we must use string name to set this parent to avoid
+> > +                      * pointer issue.
+> > +                      */
+>
+> I don't really get the issue with this comment.
+>
+> How about:
+>
+> /*
+>  * Note:
+>  * gxl and gxbb have different hdmi_plls (with different struct clk_hw).
+>  * We fallback to the global naming string mechanism so vid_pll_div picks
+>  * up the appropriate one.
+>  */
 
-Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
----
- drivers/clk/meson/Kconfig     |  3 ---
- drivers/clk/meson/Makefile    |  1 -
- drivers/clk/meson/clk-input.c | 49 -----------------------------------
- drivers/clk/meson/clk-input.h | 19 --------------
- 4 files changed, 72 deletions(-)
- delete mode 100644 drivers/clk/meson/clk-input.c
- delete mode 100644 drivers/clk/meson/clk-input.h
+If you're sticking to global names for now, you could just skip converting
+this clock altogether. I suspect .parent_names will be around for some time.
 
-diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
-index 72a37572501f..500be0b0d473 100644
---- a/drivers/clk/meson/Kconfig
-+++ b/drivers/clk/meson/Kconfig
-@@ -1,7 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
--config COMMON_CLK_MESON_INPUT
--	tristate
--
- config COMMON_CLK_MESON_REGMAP
- 	tristate
- 	select REGMAP
-diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
-index bc35a4efd6b7..f09d83dc3d60 100644
---- a/drivers/clk/meson/Makefile
-+++ b/drivers/clk/meson/Makefile
-@@ -4,7 +4,6 @@
- obj-$(CONFIG_COMMON_CLK_MESON_AO_CLKC) += meson-aoclk.o
- obj-$(CONFIG_COMMON_CLK_MESON_DUALDIV) += clk-dualdiv.o
- obj-$(CONFIG_COMMON_CLK_MESON_EE_CLKC) += meson-eeclk.o
--obj-$(CONFIG_COMMON_CLK_MESON_INPUT) += clk-input.o
- obj-$(CONFIG_COMMON_CLK_MESON_MPLL) += clk-mpll.o
- obj-$(CONFIG_COMMON_CLK_MESON_PHASE) += clk-phase.o
- obj-$(CONFIG_COMMON_CLK_MESON_PLL) += clk-pll.o
-diff --git a/drivers/clk/meson/clk-input.c b/drivers/clk/meson/clk-input.c
-deleted file mode 100644
-index 086226e9dba6..000000000000
---- a/drivers/clk/meson/clk-input.c
-+++ /dev/null
-@@ -1,49 +0,0 @@
--// SPDX-License-Identifier: (GPL-2.0 OR MIT)
--/*
-- * Copyright (c) 2018 BayLibre, SAS.
-- * Author: Jerome Brunet <jbrunet@baylibre.com>
-- */
--
--#include <linux/clk.h>
--#include <linux/clk-provider.h>
--#include <linux/device.h>
--#include <linux/module.h>
--#include "clk-input.h"
--
--static const struct clk_ops meson_clk_no_ops = {};
--
--struct clk_hw *meson_clk_hw_register_input(struct device *dev,
--					   const char *of_name,
--					   const char *clk_name,
--					   unsigned long flags)
--{
--	struct clk *parent_clk = devm_clk_get(dev, of_name);
--	struct clk_init_data init;
--	const char *parent_name;
--	struct clk_hw *hw;
--	int ret;
--
--	if (IS_ERR(parent_clk))
--		return (struct clk_hw *)parent_clk;
--
--	hw = devm_kzalloc(dev, sizeof(*hw), GFP_KERNEL);
--	if (!hw)
--		return ERR_PTR(-ENOMEM);
--
--	parent_name = __clk_get_name(parent_clk);
--	init.name = clk_name;
--	init.ops = &meson_clk_no_ops;
--	init.flags = flags;
--	init.parent_names = &parent_name;
--	init.num_parents = 1;
--	hw->init = &init;
--
--	ret = devm_clk_hw_register(dev, hw);
--
--	return ret ? ERR_PTR(ret) : hw;
--}
--EXPORT_SYMBOL_GPL(meson_clk_hw_register_input);
--
--MODULE_DESCRIPTION("Amlogic clock input helper");
--MODULE_AUTHOR("Jerome Brunet <jbrunet@baylibre.com>");
--MODULE_LICENSE("GPL v2");
-diff --git a/drivers/clk/meson/clk-input.h b/drivers/clk/meson/clk-input.h
-deleted file mode 100644
-index 4a541b9685a6..000000000000
---- a/drivers/clk/meson/clk-input.h
-+++ /dev/null
-@@ -1,19 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * Copyright (c) 2019 BayLibre, SAS.
-- * Author: Jerome Brunet <jbrunet@baylibre.com>
-- */
--
--#ifndef __MESON_CLK_INPUT_H
--#define __MESON_CLK_INPUT_H
--
--#include <linux/clk-provider.h>
--
--struct device;
--
--struct clk_hw *meson_clk_hw_register_input(struct device *dev,
--					   const char *of_name,
--					   const char *clk_name,
--					   unsigned long flags);
--
--#endif /* __MESON_CLK_INPUT_H */
--- 
-2.17.1
+On the other hand, if you really want to get rid of global clock name based
+parenting, you could use clk_hw pointers, and have the probe function fix
+up this one based on the compatible string. That's what I did.
 
+Just my two cents.
+
+ChenYu
+
+> > +                     .name = "hdmi_pll",
+> > +                     .index = -1,
+> > +             },
+> >               .num_parents = 1,
+> >               .flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE,
+> >       },
+> >  };
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
