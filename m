@@ -2,146 +2,106 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B88787637E
-	for <lists+linux-clk@lfdr.de>; Fri, 26 Jul 2019 12:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5169D76ABF
+	for <lists+linux-clk@lfdr.de>; Fri, 26 Jul 2019 16:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726470AbfGZK2B (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 26 Jul 2019 06:28:01 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:37213 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726074AbfGZK2B (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 26 Jul 2019 06:28:01 -0400
-Received: by mail-io1-f67.google.com with SMTP id q22so103700398iog.4
-        for <linux-clk@vger.kernel.org>; Fri, 26 Jul 2019 03:28:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PzjlKYE1qIEe+zKWFnMwDGXGnYev6skKpACtw6FQfYA=;
-        b=p+nKFgaFf1tHT5RNgpYZWcBsVVbiRzd9FTC6bAefOmIFtOJykeCT870R0C3ufGn4vc
-         PWNSHa9kupTBucYBi70mlGlMiWsQwW88AcJuMNi5mjP54uMz6VZTDvOW5gQB50uT826R
-         /3jc+gCyD43CXmaYBm+H1J6xVxPIKxZljbTPKqfSqimsMLP1H/7mnErn8M/dO8XfkwBs
-         Y8w+IWSRvxAAfKb+sUeug4rr67gfH28OOcUOArjUBaDPMDvrVhBHZHe4UYjco91heF+s
-         t/WQTFMrSsSh695Tzti0YJ2GBXe7DRanAgzk+m0sBiPGcJrsR60z20QSPaumVw4KZ0cp
-         y5Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PzjlKYE1qIEe+zKWFnMwDGXGnYev6skKpACtw6FQfYA=;
-        b=U5wJazNTBPaUwkdNnhCBKnJmcFH9oI0q+VudpYaqLLuzMMp6zN5BgWnfmEEJ/Vrjfy
-         cqmV7uyw4kAIPwdRm05+j1UWc3VeZ6wOURVYG1qLKMDs+eQ5N8+FaOzdS5byOe1/a85b
-         6YEAKTXoHlvdhMVKyKnhKTUImQCOxxMJ6jikrtdtEreAyvja8n6Zr/ypV6H/CKelFwLX
-         iM1LvnOU8i3ERbyeO5tRhZFJnwwlItfX4OTLxrddXyUekNj4jLK/zl6q0rG1CgYuP6id
-         rlvYcr5tqcbSKLVrBYfT+D0iFl2DLUkJB2VWgxdaaU8O4XcgtYk2J0MS6zUZAAjzXrwL
-         YksA==
-X-Gm-Message-State: APjAAAXS/4OR5gFIp3mkLRDedcZxsGTVvxLhvo4QDxq0AQDcrqkaXBpY
-        rr02VPmDpNEmeCmi70hk0X32a1hISYGQaZH9/ounBg==
-X-Google-Smtp-Source: APXvYqxoHOdlu6x2hPEYf3RYGZ50mSWqUgxy2lpy/ibkVJblKXu8OocARgg+QmSbMwzq0EcY+IGZEkPKkyfBWG3maHg=
-X-Received: by 2002:a5d:8e08:: with SMTP id e8mr7172969iod.139.1564136880220;
- Fri, 26 Jul 2019 03:28:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190722095425.14193-1-amergnat@baylibre.com> <20190722095425.14193-4-amergnat@baylibre.com>
- <1j5znqxj74.fsf@starbuckisacylon.baylibre.com> <CAGb2v64AJFMkZQaytYMN+EsLT0sS-3VwzWUfb3g7SdL7kCfu+g@mail.gmail.com>
-In-Reply-To: <CAGb2v64AJFMkZQaytYMN+EsLT0sS-3VwzWUfb3g7SdL7kCfu+g@mail.gmail.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Fri, 26 Jul 2019 12:27:48 +0200
-Message-ID: <CAFGrd9pWdhktEjQzGTTk1zdVVXuXaZL--CFjA-BPwia6AzmRQA@mail.gmail.com>
-Subject: Re: [PATCH 3/8] clk: meson: gxbb: migrate to the new parent
- description method
-To:     Chen-Yu Tsai <wens@kernel.org>
+        id S1727368AbfGZNjn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 26 Jul 2019 09:39:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45534 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727336AbfGZNjm (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 26 Jul 2019 09:39:42 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 56E9322BF5;
+        Fri, 26 Jul 2019 13:39:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564148381;
+        bh=gnAI7TMKcTyegOT0vgw/DwcaWyOPR9eTp+ndZdPTykA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RTywxIJfRzEKNevD5GBt33NkJzuRFMulWV1Gqit5nvuSUT1RXws7vWLAo5FlxzIgU
+         cdWvDgCfg4noFAfyTWVSx2MqL4gdGB+QZyrxj5vEwPQ5wxFbz69Fvb8hz7hSIa7IY9
+         aBFJy8zN9a6ANGKkevX2VC/I/PObnyK9n/ayv8J0=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        baylibre-upstreaming@groups.io,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 04/85] clk: meson: mpll: properly handle spread spectrum
+Date:   Fri, 26 Jul 2019 09:38:14 -0400
+Message-Id: <20190726133936.11177-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190726133936.11177-1-sashal@kernel.org>
+References: <20190726133936.11177-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Le jeu. 25 juil. 2019 =C3=A0 19:09, Chen-Yu Tsai <wens@kernel.org> a =C3=A9=
-crit :
->
-> On Thu, Jul 25, 2019 at 10:50 PM Jerome Brunet <jbrunet@baylibre.com> wro=
-te:
-> >
-> > On Mon 22 Jul 2019 at 11:54, Alexandre Mergnat <amergnat@baylibre.com> =
-wrote:
-> >
-> >
-> > > @@ -1592,13 +1737,29 @@ static struct clk_regmap gxbb_vid_pll_div =3D=
- {
-> > >       .hw.init =3D &(struct clk_init_data) {
-> > >               .name =3D "vid_pll_div",
-> > >               .ops =3D &meson_vid_pll_div_ro_ops,
-> > > -             .parent_names =3D (const char *[]){ "hdmi_pll" },
-> > > +             .parent_data =3D &(const struct clk_parent_data) {
-> > > +                     /*
-> > > +                      * This clock is declared here for GXL and GXBB=
- SoC, so
-> > > +                      * we must use string name to set this parent t=
-o avoid
-> > > +                      * pointer issue.
-> > > +                      */
-> >
-> > I don't really get the issue with this comment.
-> >
-> > How about:
-> >
-> > /*
-> >  * Note:
-> >  * gxl and gxbb have different hdmi_plls (with different struct clk_hw)=
-.
-> >  * We fallback to the global naming string mechanism so vid_pll_div pic=
-ks
-> >  * up the appropriate one.
-> >  */
->
-> If you're sticking to global names for now, you could just skip convertin=
-g
-> this clock altogether. I suspect .parent_names will be around for some ti=
-me.
+From: Jerome Brunet <jbrunet@baylibre.com>
 
-I prefer to perform a complete migration because it is possible that
-.parent_names
-becomes deprecated one day. I think it's cleaner to do it one shot and
-avoid keeping
-redundant structure with the new one.
+[ Upstream commit f9b3eeebef6aabaa37a351715374de53b6da860c ]
 
->
-> On the other hand, if you really want to get rid of global clock name bas=
-ed
-> parenting, you could use clk_hw pointers, and have the probe function fix
-> up this one based on the compatible string. That's what I did.
+The bit 'SSEN' available on some MPLL DSS outputs is not related to the
+fractional part of the divider but to the function called
+'Spread Spectrum'.
 
-Sounds good, may I have the commit or file which is implement this please?
-I wonder if it worth to add complexity in probe instead of using a dedicate=
-d
-field in .parent_data for string name. I guess that depend on the complexit=
-y
-done in probe.
+This function might be used to solve EM issues by adding a jitter on
+clock signal. This widens the signal spectrum and weakens the peaks in it.
 
->
-> Just my two cents.
->
-> ChenYu
->
-> > > +                     .name =3D "hdmi_pll",
-> > > +                     .index =3D -1,
-> > > +             },
-> > >               .num_parents =3D 1,
-> > >               .flags =3D CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE,
-> > >       },
-> > >  };
-> >
-> > _______________________________________________
-> > linux-arm-kernel mailing list
-> > linux-arm-kernel@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+While spread spectrum might be useful for some application, it is
+problematic for others, such as audio.
+
+This patch introduce a new flag to the MPLL driver to enable (or not) the
+spread spectrum function.
+
+Fixes: 1f737ffa13ef ("clk: meson: mpll: fix mpll0 fractional part ignored")
+Tested-by: Martin Blumenstingl<martin.blumenstingl@googlemail.com>
+Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/clk/meson/clk-mpll.c | 9 ++++++---
+ drivers/clk/meson/clk-mpll.h | 1 +
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/clk/meson/clk-mpll.c b/drivers/clk/meson/clk-mpll.c
+index f76850d99e59..d3f42e086431 100644
+--- a/drivers/clk/meson/clk-mpll.c
++++ b/drivers/clk/meson/clk-mpll.c
+@@ -119,9 +119,12 @@ static int mpll_set_rate(struct clk_hw *hw,
+ 	meson_parm_write(clk->map, &mpll->sdm, sdm);
+ 	meson_parm_write(clk->map, &mpll->sdm_en, 1);
+ 
+-	/* Set additional fractional part enable if required */
+-	if (MESON_PARM_APPLICABLE(&mpll->ssen))
+-		meson_parm_write(clk->map, &mpll->ssen, 1);
++	/* Set spread spectrum if possible */
++	if (MESON_PARM_APPLICABLE(&mpll->ssen)) {
++		unsigned int ss =
++			mpll->flags & CLK_MESON_MPLL_SPREAD_SPECTRUM ? 1 : 0;
++		meson_parm_write(clk->map, &mpll->ssen, ss);
++	}
+ 
+ 	/* Set the integer divider part */
+ 	meson_parm_write(clk->map, &mpll->n2, n2);
+diff --git a/drivers/clk/meson/clk-mpll.h b/drivers/clk/meson/clk-mpll.h
+index cf79340006dd..0f948430fed4 100644
+--- a/drivers/clk/meson/clk-mpll.h
++++ b/drivers/clk/meson/clk-mpll.h
+@@ -23,6 +23,7 @@ struct meson_clk_mpll_data {
+ };
+ 
+ #define CLK_MESON_MPLL_ROUND_CLOSEST	BIT(0)
++#define CLK_MESON_MPLL_SPREAD_SPECTRUM	BIT(1)
+ 
+ extern const struct clk_ops meson_clk_mpll_ro_ops;
+ extern const struct clk_ops meson_clk_mpll_ops;
+-- 
+2.20.1
+
