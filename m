@@ -2,88 +2,82 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8D078C92
-	for <lists+linux-clk@lfdr.de>; Mon, 29 Jul 2019 15:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2479078EB6
+	for <lists+linux-clk@lfdr.de>; Mon, 29 Jul 2019 17:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388009AbfG2NRF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 29 Jul 2019 09:17:05 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:45006 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728569AbfG2NRE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Jul 2019 09:17:04 -0400
-Received: by mail-wr1-f67.google.com with SMTP id p17so61797761wrf.11
-        for <linux-clk@vger.kernel.org>; Mon, 29 Jul 2019 06:17:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ltJPPDWabsUlJorNT/pL+2/ECTl6gVgAMBWFdGaDQ84=;
-        b=pVbiBPMm6SpLXIpX+IysAx+M7uYYiZVNUHK4cRqpcHT4bhslA9fb1WJdYavZyEaF14
-         TttRxyNTWjKiIqvdRwzAND5beoTc63m4e36jXYVL+MLX47ItIFt7BPZulacmatmymlEX
-         RrMrgBeQIu8+AVEy3dmmL2CIFYGA/+mwAPtBUrtiDgJ36sTXFhtLIpaIq2GlARknK9QH
-         X4r2gXXGEUFf0BTmac0lvKalJhjAC0qC8O+V3EoTfdJv6pouRN+9wlfz+AfjInZAkYOx
-         AS0DY+ed0wPnjfQLhaBS51YyK2oUWtav5L/mAcsXNpHCLrpz/JvhEZVoREK2RrL1iy8S
-         Atgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ltJPPDWabsUlJorNT/pL+2/ECTl6gVgAMBWFdGaDQ84=;
-        b=PmMkqRNnqOq00qgwgj7PSMCVaehOT6cycOkgB+A15RW6xZStzLe0mjxga4gX4Nnb2N
-         1q7UmOy8yzm2BrUCLUNMU9yhBADs/g8VJFmcWTJd1czDGp8SGW5d8x5sYKfbWwR6p9wz
-         zvoO1oN9I24rlN+T2OqQhV3EBMq0Y1crgbLeQlocq57FOyz5I3cxdayFVvtqmgUcdwXF
-         IvL3tJWReXucCQUKr8nYbgnpWaT5XKxeAhyRqPcl6Ktn2ITe1uoJ5YLKYWplbNC2STBg
-         /mQjoZS+n04GSxr8EVD+YE5FL2NF9/9yARj54SfxeWUY0WZLf8hpbUy4NqerJpZzksQn
-         C5cw==
-X-Gm-Message-State: APjAAAVoiw1/FljMzgULKuwbBW4aEItvoCiMxd1aL7JETnjB20Ae35HL
-        zyxvEFRI9DioXkmRsFSCFii5WQ==
-X-Google-Smtp-Source: APXvYqwryv/2IoM8ffGzyChl3S2d0DkZh7a8zvilEyFNjbR2pZuJzuKruegF7emcN7xLlzRI3SlLPg==
-X-Received: by 2002:adf:f40b:: with SMTP id g11mr51785582wro.81.1564406222292;
-        Mon, 29 Jul 2019 06:17:02 -0700 (PDT)
-Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id b5sm52520490wru.69.2019.07.29.06.17.01
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 29 Jul 2019 06:17:01 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     jbrunet@baylibre.com
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH 4/4] clk: meson: g12a: expose CPUB clock ID for G12B
-Date:   Mon, 29 Jul 2019 15:16:56 +0200
-Message-Id: <20190729131656.7308-5-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190729131656.7308-1-narmstrong@baylibre.com>
-References: <20190729131656.7308-1-narmstrong@baylibre.com>
+        id S2387494AbfG2PHP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 29 Jul 2019 11:07:15 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:37338 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387402AbfG2PHP (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 29 Jul 2019 11:07:15 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 08FEF1A0241;
+        Mon, 29 Jul 2019 17:07:13 +0200 (CEST)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id F084F1A0157;
+        Mon, 29 Jul 2019 17:07:12 +0200 (CEST)
+Received: from fsr-ub1664-175.ea.freescale.net (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id D19D52060A;
+        Mon, 29 Jul 2019 17:07:12 +0200 (CEST)
+Date:   Mon, 29 Jul 2019 18:07:12 +0300
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Guido Gunther <agx@sigxcpu.org>,
+        Anson Huang <anson.huang@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] clk: imx8mq: Mark AHB clock as critical
+Message-ID: <20190729150712.3ah2ayeonhdfrt5n@fsr-ub1664-175>
+References: <1564384997-16775-1-git-send-email-abel.vesa@nxp.com>
+ <CAOMZO5C0WbaDzFcjeXeS1PivWUme=bzPur6Hj_xNz1oVzvpW2Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOMZO5C0WbaDzFcjeXeS1PivWUme=bzPur6Hj_xNz1oVzvpW2Q@mail.gmail.com>
+User-Agent: NeoMutt/20180622
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Expose the CPUB clock id to add DVFS to the second CPU cluster of
-the Amlogic G12B SoC.
+Hi Fabio,
 
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
- include/dt-bindings/clock/g12a-clkc.h | 1 +
- 1 file changed, 1 insertion(+)
+On 19-07-29 09:19:01, Fabio Estevam wrote:
+> Hi Abel,
+> 
+> On Mon, Jul 29, 2019 at 4:23 AM Abel Vesa <abel.vesa@nxp.com> wrote:
+> >
+> > Keep the AHB clock always on since there is no driver to control it and
+> > all the other clocks that use it as parent rely on it being always enabled.
+> >
+> > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> > Tested-by: Daniel Baluta <daniel.baluta@nxp.com>
+> > ---
+> >
+> > Changes since v1:
+> >  * added comment in code why this clock is critical
+> >  * added T-b by Daniel
+> >
+> > This needs to go in ASAP to fix the boot hang.
+> 
+> Which boot hang exactly? Are you referring to the TMU clock hang?
+> 
+> On the TMU clock hang, the issue was that the qoriq_thermal needs to
+> enable the TMU clock.
+> 
+> Please always provide a detailed description in the commit log.
+> 
+> Also, if this fixes a hang it should contain a Fixes tag.
 
-diff --git a/include/dt-bindings/clock/g12a-clkc.h b/include/dt-bindings/clock/g12a-clkc.h
-index b6b127e45634..8ccc29ac7a72 100644
---- a/include/dt-bindings/clock/g12a-clkc.h
-+++ b/include/dt-bindings/clock/g12a-clkc.h
-@@ -137,5 +137,6 @@
- #define CLKID_VDEC_HEVC				207
- #define CLKID_VDEC_HEVCF			210
- #define CLKID_TS				212
-+#define CLKID_CPUB_CLK				224
- 
- #endif /* __G12A_CLKC_H */
--- 
-2.22.0
+Please have a the explanation here:
 
+https://lkml.org/lkml/2019/7/28/306
