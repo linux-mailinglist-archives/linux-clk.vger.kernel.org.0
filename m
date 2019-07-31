@@ -2,145 +2,113 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7ADE7CCD5
-	for <lists+linux-clk@lfdr.de>; Wed, 31 Jul 2019 21:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E590E7CD37
+	for <lists+linux-clk@lfdr.de>; Wed, 31 Jul 2019 21:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726096AbfGaTfd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 31 Jul 2019 15:35:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34950 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731000AbfGaTfW (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 31 Jul 2019 15:35:22 -0400
-Received: from mail.kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 63449214DA;
-        Wed, 31 Jul 2019 19:35:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564601721;
-        bh=kc72/E5XexhPlpGwGLpvTOqPNTR45fQ6H/K9mIVhkQg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bP64uCk5TDuTLBTED+NkynhYxzswLg9oxvXZflCv11C5ZUHVS8iq+4FiuzMbVwHYV
-         q9xUEFKKVrjrVqG2xI0pdMketUubPQFbNkcbKQfRkPAlVYdtIv3CqW5YX7YkcQmarf
-         VKKN5wlnPICZNA57Vs7NRgcwW1kj9UTMLTA+TCBQ=
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Doug Anderson <dianders@chromium.org>
-Subject: [PATCH 9/9] clk: Overwrite clk_hw::init with NULL during clk_register()
-Date:   Wed, 31 Jul 2019 12:35:17 -0700
-Message-Id: <20190731193517.237136-10-sboyd@kernel.org>
-X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
-In-Reply-To: <20190731193517.237136-1-sboyd@kernel.org>
+        id S1726944AbfGaTxg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 31 Jul 2019 15:53:36 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:46157 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726901AbfGaTxg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 31 Jul 2019 15:53:36 -0400
+Received: by mail-wr1-f66.google.com with SMTP id z1so70948557wru.13
+        for <linux-clk@vger.kernel.org>; Wed, 31 Jul 2019 12:53:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=DebYcibpFlX9HWHSEI2N/34iRm3HFDnu/1MahZ1ImJE=;
+        b=gW1xlxN4FGKnPnwokH6ImBm/2zHuAaIx5QLGZexzg+jqwNo2DRmxv3BJJOTF4QJzJO
+         fS+ZEueC2a6T5bg49fh2tOpkJY2Th8AK/ilf2SVfuEiQbjby6BZ427lm0N1+kcr29gN4
+         K6oFp3NZgoZqafToayZ+xoQ4KNp+1ZTq39319D7tMIjeVLrtpVAt8lib6sE7UtVnUHET
+         sEWiAJssnj66BuGKgYiBbwp0f6fzUR9F6so/Bv4ugffrYnjWbbOcwHryuE+dY168XHg2
+         o36pSlSOtXZ/Yzlja5yiBJuLMsipb1dBRj+UE3N04NA9h2UDquyd2PU4X10HSHJmpOyA
+         QtBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=DebYcibpFlX9HWHSEI2N/34iRm3HFDnu/1MahZ1ImJE=;
+        b=Y1ApK3MjIShb+F8eRwuVYPb+UrEwuOmK1M46jf0aYjhcjJJrJViJMTDlv53/+/AvV1
+         eMseVVkYQPRAmUy+wnLxpta2fQDIDNvWf0R9PHJig5Nn2z6aEFH9HAXKOkkjXxouUKFR
+         vNaUypmLZtaZcmo5Z3b1S1/3jqXnCRNbYCxkcVdvCwQmFQLLizyENxcsAJzEY6x5i38g
+         i2wn12kr5BVD7R3FOYvO13DYzO6Ai5ZnFKh/k61MXeoaljdQCsjBlc2PsSNDrojwSZ5p
+         d6oAyvCWcUD1FwSbGbRUpdI7KCDyS+445mSJH6wVkn8GUg9Eq4mQFM4UHTh3qptKXWeu
+         Zdzw==
+X-Gm-Message-State: APjAAAVsbIll/9QfU57BC7t2ZTaVfVJtu/94015YpAL2O31tOi6vl844
+        3OI/OS/cndTZvI5zHfe1GSwAgA==
+X-Google-Smtp-Source: APXvYqyR3nZH8cS1o8duJ2kRVS3erqv31+gYqTrLlWnwZm0aIho44x9EJcFrKxxUCYkahKIWeudLQg==
+X-Received: by 2002:a5d:6182:: with SMTP id j2mr87769889wru.275.1564602813671;
+        Wed, 31 Jul 2019 12:53:33 -0700 (PDT)
+Received: from [192.168.1.77] (176-150-251-154.abo.bbox.fr. [176.150.251.154])
+        by smtp.gmail.com with ESMTPSA id f3sm51237858wrt.56.2019.07.31.12.53.32
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 31 Jul 2019 12:53:33 -0700 (PDT)
+Subject: Re: [PATCH 3/9] clk: meson: axg-audio: Don't reference clk_init_data
+ after registration
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
 References: <20190731193517.237136-1-sboyd@kernel.org>
+ <20190731193517.237136-4-sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Jerome Brunet <jbrunet@baylibre.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Message-ID: <c81ead7e-3e29-2a7e-aa8e-79cc0a711fb2@baylibre.com>
+Date:   Wed, 31 Jul 2019 21:53:31 +0200
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:45.0)
+ Gecko/20100101 Thunderbird/45.8.0
 MIME-Version: 1.0
+In-Reply-To: <20190731193517.237136-4-sboyd@kernel.org>
+Content-Type: text/plain; charset=windows-1252
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-We don't want clk provider drivers to use the init structure after clk
-registration time, but we leave a dangling reference to it by means of
-clk_hw::init. Let's overwrite the member with NULL during clk_register()
-so that this can't be used anymore after registration time.
+Hi Stephen,
 
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Doug Anderson <dianders@chromium.org>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
----
+Le 31/07/2019 à 21:35, Stephen Boyd a écrit :
+> A future patch is going to change semantics of clk_register() so that
+> clk_hw::init is guaranteed to be NULL after a clk is registered. Avoid
+> referencing this member here so that we don't run into NULL pointer
+> exceptions.
+> 
+> Cc: Neil Armstrong <narmstrong@baylibre.com>
+> Cc: Jerome Brunet <jbrunet@baylibre.com>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> ---
+> 
+> Please ack so I can take this through clk tree
+> 
+>  drivers/clk/meson/axg-audio.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/clk/meson/axg-audio.c b/drivers/clk/meson/axg-audio.c
+> index 8028ff6f6610..db0b73d53551 100644
+> --- a/drivers/clk/meson/axg-audio.c
+> +++ b/drivers/clk/meson/axg-audio.c
+> @@ -992,15 +992,18 @@ static int axg_audio_clkc_probe(struct platform_device *pdev)
+>  
+>  	/* Take care to skip the registered input clocks */
+>  	for (i = AUD_CLKID_DDR_ARB; i < data->hw_onecell_data->num; i++) {
+> +		const char *name;
+> +
+>  		hw = data->hw_onecell_data->hws[i];
+>  		/* array might be sparse */
+>  		if (!hw)
+>  			continue;
+>  
+> +		name = hw->init->name;
+> +
+>  		ret = devm_clk_hw_register(dev, hw);
+>  		if (ret) {
+> -			dev_err(dev, "failed to register clock %s\n",
+> -				hw->init->name);
+> +			dev_err(dev, "failed to register clock %s\n", name);
+>  			return ret;
+>  		}
+>  	}
+> 
 
-Please ack so I can take this through clk tree
-
- drivers/clk/clk.c            | 24 ++++++++++++++++--------
- include/linux/clk-provider.h |  3 ++-
- 2 files changed, 18 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index c0990703ce54..efac620264a2 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -3484,9 +3484,9 @@ static int clk_cpy_name(const char **dst_p, const char *src, bool must_exist)
- 	return 0;
- }
- 
--static int clk_core_populate_parent_map(struct clk_core *core)
-+static int clk_core_populate_parent_map(struct clk_core *core,
-+					const struct clk_init_data *init)
- {
--	const struct clk_init_data *init = core->hw->init;
- 	u8 num_parents = init->num_parents;
- 	const char * const *parent_names = init->parent_names;
- 	const struct clk_hw **parent_hws = init->parent_hws;
-@@ -3566,6 +3566,14 @@ __clk_register(struct device *dev, struct device_node *np, struct clk_hw *hw)
- {
- 	int ret;
- 	struct clk_core *core;
-+	const struct clk_init_data *init = hw->init;
-+
-+	/*
-+	 * The init data is not supposed to be used outside of registration path.
-+	 * Set it to NULL so that provider drivers can't use it either and so that
-+	 * we catch use of hw->init early on in the core.
-+	 */
-+	hw->init = NULL;
- 
- 	core = kzalloc(sizeof(*core), GFP_KERNEL);
- 	if (!core) {
-@@ -3573,17 +3581,17 @@ __clk_register(struct device *dev, struct device_node *np, struct clk_hw *hw)
- 		goto fail_out;
- 	}
- 
--	core->name = kstrdup_const(hw->init->name, GFP_KERNEL);
-+	core->name = kstrdup_const(init->name, GFP_KERNEL);
- 	if (!core->name) {
- 		ret = -ENOMEM;
- 		goto fail_name;
- 	}
- 
--	if (WARN_ON(!hw->init->ops)) {
-+	if (WARN_ON(!init->ops)) {
- 		ret = -EINVAL;
- 		goto fail_ops;
- 	}
--	core->ops = hw->init->ops;
-+	core->ops = init->ops;
- 
- 	if (dev && pm_runtime_enabled(dev))
- 		core->rpm_enabled = true;
-@@ -3592,13 +3600,13 @@ __clk_register(struct device *dev, struct device_node *np, struct clk_hw *hw)
- 	if (dev && dev->driver)
- 		core->owner = dev->driver->owner;
- 	core->hw = hw;
--	core->flags = hw->init->flags;
--	core->num_parents = hw->init->num_parents;
-+	core->flags = init->flags;
-+	core->num_parents = init->num_parents;
- 	core->min_rate = 0;
- 	core->max_rate = ULONG_MAX;
- 	hw->core = core;
- 
--	ret = clk_core_populate_parent_map(core);
-+	ret = clk_core_populate_parent_map(core, init);
- 	if (ret)
- 		goto fail_parents;
- 
-diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index 2ae7604783dd..214c75ed62ae 100644
---- a/include/linux/clk-provider.h
-+++ b/include/linux/clk-provider.h
-@@ -299,7 +299,8 @@ struct clk_init_data {
-  * into the clk API
-  *
-  * @init: pointer to struct clk_init_data that contains the init data shared
-- * with the common clock framework.
-+ * with the common clock framework. This pointer will be set to NULL once
-+ * a clk_register() variant is called on this clk_hw pointer.
-  */
- struct clk_hw {
- 	struct clk_core *core;
--- 
-Sent by a computer through tubes
-
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
