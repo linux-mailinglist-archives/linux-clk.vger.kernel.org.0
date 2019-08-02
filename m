@@ -2,25 +2,25 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB61E80231
-	for <lists+linux-clk@lfdr.de>; Fri,  2 Aug 2019 23:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 539EC8034B
+	for <lists+linux-clk@lfdr.de>; Sat,  3 Aug 2019 01:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405483AbfHBVS5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 2 Aug 2019 17:18:57 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:5045 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727611AbfHBVS4 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 2 Aug 2019 17:18:56 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d44a8be0002>; Fri, 02 Aug 2019 14:18:54 -0700
+        id S1731823AbfHBXwG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 2 Aug 2019 19:52:06 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:19159 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726422AbfHBXwG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 2 Aug 2019 19:52:06 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d44ccaa0004>; Fri, 02 Aug 2019 16:52:10 -0700
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Fri, 02 Aug 2019 14:18:54 -0700
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 02 Aug 2019 16:52:00 -0700
 X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Fri, 02 Aug 2019 14:18:54 -0700
+        by hqpgpgate101.nvidia.com on Fri, 02 Aug 2019 16:52:00 -0700
 Received: from [10.2.165.119] (10.124.1.5) by HQMAIL107.nvidia.com
  (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 2 Aug
- 2019 21:18:52 +0000
+ 2019 23:51:59 +0000
 Subject: Re: [PATCH v7 07/20] clk: tegra: clk-periph: Add save and restore
  support
 To:     Dmitry Osipenko <digetx@gmail.com>, <thierry.reding@gmail.com>,
@@ -55,8 +55,8 @@ References: <1564532424-10449-1-git-send-email-skomatineni@nvidia.com>
  <c6e1d744-3a7a-fe1b-2c86-a3d49f022232@nvidia.com>
  <73cd521b-782c-7fb2-d904-ae8b07927d47@gmail.com>
 From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-Message-ID: <5bddc7dd-b819-6978-4d0b-8880f85fbb87@nvidia.com>
-Date:   Fri, 2 Aug 2019 14:18:51 -0700
+Message-ID: <d82de63a-02a3-8fb0-57e7-7fe00d6b86ab@nvidia.com>
+Date:   Fri, 2 Aug 2019 16:51:58 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
@@ -68,17 +68,17 @@ Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: quoted-printable
 Content-Language: en-US
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1564780734; bh=Mas461/KIFprfzYHVKYDT7Fxz3p4nZbDZdvIU94fi2w=;
+        t=1564789930; bh=brVEnoDA2u1ZoizrNbotUjy3VdBQNuX5IXBvm9TpBjE=;
         h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
          User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
          X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
          Content-Language;
-        b=UNuCu+AqMjn2n0KsNpMACnHiEjKvifjykKiBmKe2nNtt9iZnRnQcQhXrVyst4Zb0n
-         q2FCQn2iy1Ua2hYUBH0d+T95BQGxpoiyXNfkunHrnl219BO0TI9rxfSxWBJH3v0l6D
-         ERcHBNRZv5pECJFmpQXbSRcR7xnT9dYqB48Onl7hg48q71GMWhpcYUVO/NV7IWxj8m
-         QdP+sGZRQhWZEkkkK9Ynbbgc0OnTHnUqYa3zcCLy9swhn/heEzVyEA+JGbESGlg6Tm
-         Er5PtOfYu4yi7w0h46eaePxgEIRnKLw4Gabc8djcu6ND9FUn86aIzoF1+Nbyki+qx3
-         4/wVbLAIUZ4Nw==
+        b=Qn/Gdm8CUJscLYBWtmMOI809KqcLqiC+0i7v7BZ2l1iEwOuiAfR155I/a67vfWrKk
+         fU8bGRa4Rcqk+XG3liWHwXfyLBb8pg/SxPmU21LQB/oiPA/BCqKTWs5FdmnsUqPUgB
+         rJYq5KhgB/V1L5dkRkNvgG0XxlxHVdIPbDPyiDXqDbrg8mNpE/i1hHw+Rp+Lc/ChwA
+         4L89uQzJAv/4JyoPKHzjHuzxsoy0iqat1hVmktKdPoZPKMMr8A7v5T5h7qTFFRBDbu
+         mJ/u4ItobSwO2d+eohGoUUdm3JfBo1Omm64B9PaEAqFgado+awSHbv5Tr9qdObW/uS
+         5/KsDzgvo3q5w==
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
@@ -484,6 +484,16 @@ se
 >>>>>>> clk_set_parent with mux_hw as they invoke mux_ops get/set parent
 >>>>>>> anyway.
 >>>>>>> Will do this for periph clk mux
+
+Just to be clear, clk_mux don't have cached parent. get_parent is by=20
+register read. So, cant directly use get_parent and then set during restore=
+.
+
+So will create both clk_mux_save/restore_context in generic clk driver=20
+and will invoke them during tegra peripheral clock suspend/resume.
+
+
+
 >>>>>>>>>>> Reg clk_gate, looks like we cant use generic
 >>>>>>>>>>> clk_gate_restore_context
 >>>>>>>>>>> for clk-periph as it calls enable/disable callbacks and
@@ -572,5 +582,3 @@ in
 > The ungating and resetting could be done separately to keep things cleane=
 r.
 >
-OK, Will move back to register wise save/restore for clk_enb/rst_dev in=20
-next version.
