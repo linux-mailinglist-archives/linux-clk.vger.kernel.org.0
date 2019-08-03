@@ -2,63 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A88280524
-	for <lists+linux-clk@lfdr.de>; Sat,  3 Aug 2019 10:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF49B8053A
+	for <lists+linux-clk@lfdr.de>; Sat,  3 Aug 2019 10:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387499AbfHCIAr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 3 Aug 2019 04:00:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53250 "EHLO mail.kernel.org"
+        id S2387604AbfHCINw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 3 Aug 2019 04:13:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58060 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387429AbfHCIAr (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sat, 3 Aug 2019 04:00:47 -0400
+        id S2387532AbfHCINw (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sat, 3 Aug 2019 04:13:52 -0400
 Received: from X250.getinternet.no (98.142.130.235.16clouds.com [98.142.130.235])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3E22820665;
-        Sat,  3 Aug 2019 08:00:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9CBC321726;
+        Sat,  3 Aug 2019 08:13:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564819247;
-        bh=0D9LEf7wHMiPCCMe2BEWfRqCtH8Tiw3F45yuca8eAxw=;
+        s=default; t=1564820031;
+        bh=xRf3PhzKfClVfWXbj3OVmFX6p7PLIiziHpTBekdtiCA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1CO1UKEx8X4QQjbU9R0btlfxlNvFUwPCoCtfAPl4OauxWJa800ETYFVp6P5uVUNOJ
-         gvdYvZNGC5AXKICU7dv+KdaZ7eFC03WB3cYI4bm0nULOl3/C4F5apTWTE5o8zTQNB4
-         iLpHYLnmOZx5FnU5tnzk8gUY2utQdmJv9QYAjyz8=
-Date:   Sat, 3 Aug 2019 10:00:40 +0200
+        b=Ss9AepiccoCuwp3jI5V+AvCYwJ22kCiRaDT5KOS6xQIatNXunmHVenhgXnMD80Qc7
+         TqOSBRs+EXOFgBBij2U6aNxOn0caKeWWE6vXq6w/NSBgOCx27W/Ng3JVTPvTg/Eryz
+         5i7jnRf79SbA0CzZKOO5R8mlymy/qdjEkCD2L+vU=
+Date:   Sat, 3 Aug 2019 10:13:44 +0200
 From:   Shawn Guo <shawnguo@kernel.org>
-To:     Daniel Baluta <daniel.baluta@gmail.com>
-Cc:     Abel Vesa <abel.vesa@nxp.com>, Anson Huang <anson.huang@nxp.com>,
+To:     Abel Vesa <abel.vesa@nxp.com>
+Cc:     Mike Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
         Sascha Hauer <kernel@pengutronix.de>,
         Fabio Estevam <fabio.estevam@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] clk: imx8mq: Mark AHB clock as critical
-Message-ID: <20190803080038.GA8870@X250.getinternet.no>
-References: <1561453316-11481-1-git-send-email-abel.vesa@nxp.com>
- <20190625223223.3B8EC2053B@mail.kernel.org>
- <20190705085218.lvvqnqx6nfph2era@fsr-ub1664-175>
- <20190722212537.41C9121900@mail.kernel.org>
- <CAEnQRZAFdvSzh-pDJ-rsyaEJw83ymSVW0CC2+QZyWwAPeTOyBw@mail.gmail.com>
- <20190803072723.GB7597@X250>
+        Anson Huang <anson.huang@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] clk: imx8mm: Switch to platform driver
+Message-ID: <20190803081344.GD8870@X250.getinternet.no>
+References: <1562682003-20951-1-git-send-email-abel.vesa@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190803072723.GB7597@X250>
+In-Reply-To: <1562682003-20951-1-git-send-email-abel.vesa@nxp.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sat, Aug 03, 2019 at 09:27:25AM +0200, Shawn Guo wrote:
-> > Also, without this patch linux-next hangs on imx8mq.
+On Tue, Jul 09, 2019 at 05:20:03PM +0300, Abel Vesa wrote:
+> There is no strong reason for this to use CLK_OF_DECLARE instead
+> of being a platform driver. Plus, this will now be aligned with the
+> other i.MX8M clock drivers which are platform drivers.
 > 
-> How does that happen?  Mainline is fine there?
+> In order to make the clock provider a platform driver
+> all the data and code needs to be outside of .init section.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 
-Okay, understood it by reading more threads.
-
-Shawn
+Applied, thanks.
