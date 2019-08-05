@@ -2,156 +2,67 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 345BA81777
-	for <lists+linux-clk@lfdr.de>; Mon,  5 Aug 2019 12:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E5B81A0B
+	for <lists+linux-clk@lfdr.de>; Mon,  5 Aug 2019 14:54:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728508AbfHEKuM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 5 Aug 2019 06:50:12 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:37278 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728520AbfHEKuL (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 5 Aug 2019 06:50:11 -0400
-Received: by mail-lf1-f65.google.com with SMTP id c9so57502539lfh.4;
-        Mon, 05 Aug 2019 03:50:09 -0700 (PDT)
+        id S1726779AbfHEMyN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 5 Aug 2019 08:54:13 -0400
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:40155 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726559AbfHEMyN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 5 Aug 2019 08:54:13 -0400
+Received: by mail-vs1-f68.google.com with SMTP id a186so54248562vsd.7
+        for <linux-clk@vger.kernel.org>; Mon, 05 Aug 2019 05:54:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=QQyVc+vK6ut2H0EG3cdDkucf3SZC0gbmKE/5o4Bm72I=;
-        b=l+hxbhJ5A2G+CiX6S/ucjwNgK6YG4cRCO+fATV6YsGv1HWP8zgWZEMGvqqcfHy4cwC
-         DoT62oUQtZP70wA62cDV4yZv1gjoj+r/rtuthaQfnyX6tGOmaMQXcGaXvxEPDxWfKPcm
-         ImhDgPsdikVBORVOJa4tbEPdHa46e1Fy0G0hKuOidDmHZ0ucaqwWBLLj5fpJkm8B8PR6
-         Tc6+puPFpiI7euURISTNr4sw/jv+uNYlXelMv/tYzL9x+iOrCeWanjfZXyBQKXkfnDtg
-         QsHeqSX+CQonsYIJ1C8U5rV653ZncxJRKwPQ3uq/PwJzLDklOM2MJa0sewO+6GuqoAKl
-         u0pw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=IVi0+NZ0tWSCQF2G+E9doP//jdO8wcwv1z7Q+3dAsws=;
+        b=TdUv0WuUQgNqRa43a5L84k9FANTXd2cQwV8ogSzUuASi/fKpl+nPR1ITVIy5O/tnsF
+         8+9l3+/wfalP4EPXpPXA7tRjDiAF4j1G4cnHlc7c31WypLIRHe2jSc0ooRDL0/dLmQLh
+         WFRdVZ3gE/JgS96ytk2O6SAcW24XUZ81IM8d/c4zxuDYxCcj+nGZZRoj6JDpw33dbB35
+         utzncznaflTnyOiWswGsS3sxlS642ChJnGHVgyaVvn0sj057H2KXxeNz3ap1mokE+DRQ
+         QAI9O4Bsi6ymrRL+63GhNSbDu+r7juDmxnq/ZTyPngoS7uzXZd/LQ/amvekOzORB8FcC
+         1Y7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=QQyVc+vK6ut2H0EG3cdDkucf3SZC0gbmKE/5o4Bm72I=;
-        b=gEeJqBHLkfcHRKJAohG4UBH90WwhM+ydqmQ4aJXOfDoOvI3Z+kj7urHqslxBO7Chet
-         nrZSfDzFLbEWCt/RkID7zYx2QSHnoQdTvCuggQTQOrly1KUlsgijwwgld0wuOD3atRr0
-         z5WWEXjC6CI3jstSMd6lZIjI8rupwx7PoSBG6o1sarORTEWkv64aAApYvUnMrpFStVq0
-         JrebJCozdkLuUTaG6/lBWur5cqJ3cLS+MiDK4Kna4eOM6q8H5kdSrIo9KjzTMFCwxW5H
-         ekh3oRfELkS7yF+BMFE8VH0zCspIZsz/KAKbUWSWWKpsFdTXH3O/QL4Wxnaxu0qcZatj
-         Ge4w==
-X-Gm-Message-State: APjAAAX+Ida2n8Ih5nqjpyKGlMdR6kpoVum8akCdvZUYbHdaoqxuEKld
-        dVWxw0xmz96dKv4Buaj0TMvoE5dM
-X-Google-Smtp-Source: APXvYqwCMD+UPHgwi0+gii65cCcprbuoYyXe5kKadJL+bGPq6VyxKoiIx5GYVs6OAThHmSQPKiw0Kg==
-X-Received: by 2002:a05:6512:4c8:: with SMTP id w8mr5749003lfq.98.1565002208653;
-        Mon, 05 Aug 2019 03:50:08 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-78-220-99.pppoe.mtu-net.ru. [91.78.220.99])
-        by smtp.googlemail.com with ESMTPSA id n10sm14787543lfe.24.2019.08.05.03.50.06
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Aug 2019 03:50:07 -0700 (PDT)
-Subject: Re: [PATCH v7 01/20] pinctrl: tegra: Add suspend and resume support
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, tglx@linutronix.de,
-        jason@lakedaemon.net, marc.zyngier@arm.com,
-        linus.walleij@linaro.org, stefan@agner.ch, mark.rutland@arm.com
-Cc:     pdeschrijver@nvidia.com, pgaikwad@nvidia.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        jckuo@nvidia.com, josephl@nvidia.com, talho@nvidia.com,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mperttunen@nvidia.com, spatra@nvidia.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, linux-pm@vger.kernel.org
-References: <1564607463-28802-1-git-send-email-skomatineni@nvidia.com>
- <1564607463-28802-2-git-send-email-skomatineni@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <6b1482f6-0578-f602-d8d1-541d86303ce2@gmail.com>
-Date:   Mon, 5 Aug 2019 13:50:06 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=IVi0+NZ0tWSCQF2G+E9doP//jdO8wcwv1z7Q+3dAsws=;
+        b=sem9yznTOVM2P9RtIFO+LCoVQWu3xA1outzpZH0nMux0aB90imC9uBH6UXg63uH9fS
+         N2YxAXvL1rXQsc1XNnA3DZeXNMU/kUu11z16bM/UcQfFsZ0yiCzQrN1ZFwNy44xOZR4G
+         z1xi6XG5Y/0avAdm7hTzwmNGZ6ZfGZql/NXRQ6aswEzyll5SxwMFIVpufzg+aHW+OXcR
+         /U0sC7A9XmwjvxVfN2AvSfnzVOjep9SmjD35pEb3Z0Zq5wivkO6O75eYHMkykCzqEpQj
+         iTEermAuCyDyWcJLwhIFg3UMR7wV1tq6RW8pvePMm37C2FwJK9vv+FDtni13AwiDN/Y+
+         DWBA==
+X-Gm-Message-State: APjAAAW2TzM27r7yOVsvbX8GrNijApewQn+B/VsS4Wv5zRhpsZLg8Egw
+        G/ssde9rUJm9F8bfXoxexvxfERfiDHi4xEanTB0=
+X-Google-Smtp-Source: APXvYqxvb/3orKGYZSzZyODivU42xw5l9qYqyBQj1bVjmJ0puLFjVkJpl5ZjPAbh2VgJS5WVtNt3cCH2S3qMCMEwWkA=
+X-Received: by 2002:a67:7a11:: with SMTP id v17mr97602798vsc.114.1565009652139;
+ Mon, 05 Aug 2019 05:54:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1564607463-28802-2-git-send-email-skomatineni@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a67:7915:0:0:0:0:0 with HTTP; Mon, 5 Aug 2019 05:54:11 -0700 (PDT)
+Reply-To: eddywilliam0002@gmail.com
+From:   eddy william <missdonnahistory@gmail.com>
+Date:   Mon, 5 Aug 2019 14:54:11 +0200
+Message-ID: <CACROPfGr=pBLEufa2ey3TG4+GOwQ2s6FbOtoi7Q9y2GR28Ezaw@mail.gmail.com>
+Subject: hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-01.08.2019 0:10, Sowjanya Komatineni пишет:
-> This patch adds support for Tegra pinctrl driver suspend and resume.
-> 
-> During suspend, context of all pinctrl registers are stored and
-> on resume they are all restored to have all the pinmux and pad
-> configuration for normal operation.
-> 
-> Acked-by: Thierry Reding <treding@nvidia.com>
-> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
-> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
-> ---
->  drivers/pinctrl/tegra/pinctrl-tegra.c | 59 +++++++++++++++++++++++++++++++++++
->  drivers/pinctrl/tegra/pinctrl-tegra.h |  3 ++
->  2 files changed, 62 insertions(+)
-> 
-> diff --git a/drivers/pinctrl/tegra/pinctrl-tegra.c b/drivers/pinctrl/tegra/pinctrl-tegra.c
-> index 186ef98e7b2b..e3a237534281 100644
-> --- a/drivers/pinctrl/tegra/pinctrl-tegra.c
-> +++ b/drivers/pinctrl/tegra/pinctrl-tegra.c
-> @@ -631,6 +631,58 @@ static void tegra_pinctrl_clear_parked_bits(struct tegra_pmx *pmx)
->  	}
->  }
->  
-> +static size_t tegra_pinctrl_get_bank_size(struct device *dev,
-> +					  unsigned int bank_id)
-> +{
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +	struct resource *res;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, bank_id);
-> +
-> +	return resource_size(res) / 4;
-> +}
-> +
-> +static int tegra_pinctrl_suspend(struct device *dev)
-> +{
-> +	struct tegra_pmx *pmx = dev_get_drvdata(dev);
-> +	u32 *backup_regs = pmx->backup_regs;
-> +	u32 *regs;
-> +	size_t bank_size;
-> +	unsigned int i, k;
-> +
-> +	for (i = 0; i < pmx->nbanks; i++) {
-> +		bank_size = tegra_pinctrl_get_bank_size(dev, i);
-> +		regs = pmx->regs[i];
-> +		for (k = 0; k < bank_size; k++)
-> +			*backup_regs++ = readl_relaxed(regs++);
-> +	}
-> +
-> +	return pinctrl_force_sleep(pmx->pctl);
-> +}
-> +
-> +static int tegra_pinctrl_resume(struct device *dev)
-> +{
-> +	struct tegra_pmx *pmx = dev_get_drvdata(dev);
-> +	u32 *backup_regs = pmx->backup_regs;
-> +	u32 *regs;
-> +	size_t bank_size;
-> +	unsigned int i, k;
-> +
-> +	for (i = 0; i < pmx->nbanks; i++) {
-> +		bank_size = tegra_pinctrl_get_bank_size(dev, i);
-> +		regs = pmx->regs[i];
-> +		for (k = 0; k < bank_size; k++)
-> +			writel_relaxed(*backup_regs++, regs++);
-> +	}
+Hello
 
-I'm now curious whether any kind of barrier is needed after the
-writings. The pmx_writel() doesn't insert a barrier after the write and
-seems it just misuses writel, which actually should be writel_relaxed()
-+ barrier, IIUC.
+My name is Eddy William I am a lawyer by profession. I wish to offer you
+the next of kin to my client. You will inherit the sum of ($8.5 Million)
+dollars my client left in the bank before his death.
 
-It's also not obvious whether PINCTRL HW has any kind of write-FIFO and
-thus maybe read-back + rmb() is needed in order ensure that writes are
-actually completed.
+My client is a citizen of your country who died in auto crash with his wife
+and only son. I will be entitled with 50% of the total fund while 50% will
+be for you.
+Please contact my private email here for more details:eddywilliam0002@gmail.com
 
-The last thing which is not obvious is when the new configuration
-actually takes into effect, does it happen immediately or maybe some
-delay is needed?
-
-[snip]
+Many thanks in advance,
+Mr.Eddy William,
