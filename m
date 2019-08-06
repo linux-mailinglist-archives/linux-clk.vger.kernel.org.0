@@ -2,41 +2,38 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD1183CCB
-	for <lists+linux-clk@lfdr.de>; Tue,  6 Aug 2019 23:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9AF83B75
+	for <lists+linux-clk@lfdr.de>; Tue,  6 Aug 2019 23:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726934AbfHFVd2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 6 Aug 2019 17:33:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51214 "EHLO mail.kernel.org"
+        id S1728456AbfHFVf0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 6 Aug 2019 17:35:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53174 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726902AbfHFVd1 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 6 Aug 2019 17:33:27 -0400
+        id S1727321AbfHFVfZ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 6 Aug 2019 17:35:25 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9A7562089E;
-        Tue,  6 Aug 2019 21:33:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A7E002089E;
+        Tue,  6 Aug 2019 21:35:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565127206;
-        bh=8zooDDLk4SMfizKNkmpLcqjt64Lv2VSIABX6QBeAj3M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NeoyDLdAR+/Ef96Sz438sod+W/rrGAg/Alvq5LaqeUGE+gPxR2oel1X/eSTsu72Nj
-         qbdDhajebdAx1lGHOJHkQuD+7Y1tXqUHRioZOvKf2um0gxncOpwt336YOG3KFbzrEA
-         R52/kQglXlPk2I1pNdSiqqPP53YOAjRBvukOENHg=
+        s=default; t=1565127324;
+        bh=DQdXSQ4X7DbgcH47Q4hpV8D3kwoEFSWaAT50oKzYm0g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ROeYcGBEApysa4cK44kwK/wrda/Hg2GjSHI7CYrMChFerlmbYcHWEtfs6Lztq4t0o
+         9iEcfe6n0Cx7+/iQZCkEBLQZl5vrMtrjMmYP4c19mtpyU02jqkKMOT04SKyHFQrSlJ
+         0658CgBXsB/nFOwfySs9CeEZ3JbTB49F5Jm6zvYA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Yao Lihua <Lihua.Yao@desay-svautomotive.com>,
-        Linh Phung <linh.phung.jy@renesas.com>,
+Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 05/59] clk: renesas: cpg-mssr: Fix reset control race condition
-Date:   Tue,  6 Aug 2019 17:32:25 -0400
-Message-Id: <20190806213319.19203-5-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 01/32] clk: at91: generated: Truncate divisor to GENERATED_MAX_DIV + 1
+Date:   Tue,  6 Aug 2019 17:34:49 -0400
+Message-Id: <20190806213522.19859-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190806213319.19203-1-sashal@kernel.org>
-References: <20190806213319.19203-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -46,109 +43,39 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 
-[ Upstream commit e1f1ae8002e4b06addc52443fcd975bbf554ae92 ]
+[ Upstream commit 1573eebeaa8055777eb753f9b4d1cbe653380c38 ]
 
-The module reset code in the Renesas CPG/MSSR driver uses
-read-modify-write (RMW) operations to write to a Software Reset Register
-(SRCRn), and simple writes to write to a Software Reset Clearing
-Register (SRSTCLRn), as was mandated by the R-Car Gen2 and Gen3 Hardware
-User's Manuals.
+In clk_generated_determine_rate(), if the divisor is greater than
+GENERATED_MAX_DIV + 1, then the wrong best_rate will be returned.
+If clk_generated_set_rate() will be called later with this wrong
+rate, it will return -EINVAL, so the generated clock won't change
+its value. Do no let the divisor be greater than GENERATED_MAX_DIV + 1.
 
-However, this may cause a race condition when two devices are reset in
-parallel: if the reset for device A completes in the middle of the RMW
-operation for device B, device A may be reset again, causing subtle
-failures (e.g. i2c timeouts):
-
-	thread A			thread B
-	--------			--------
-
-	val = SRCRn
-	val |= bit A
-	SRCRn = val
-
-	delay
-
-					val = SRCRn (bit A is set)
-
-	SRSTCLRn = bit A
-	(bit A in SRCRn is cleared)
-
-					val |= bit B
-					SRCRn = val (bit A and B are set)
-
-This can be reproduced on e.g. Salvator-XS using:
-
-    $ while true; do i2cdump -f -y 4 0x6A b > /dev/null; done &
-    $ while true; do i2cdump -f -y 2 0x10 b > /dev/null; done &
-
-    i2c-rcar e6510000.i2c: error -110 : 40000002
-    i2c-rcar e66d8000.i2c: error -110 : 40000002
-
-According to the R-Car Gen3 Hardware Manual Errata for Rev.
-0.80 of Feb 28, 2018, reflected in Rev. 1.00 of the R-Car Gen3 Hardware
-User's Manual, writes to SRCRn do not require read-modify-write cycles.
-
-Note that the R-Car Gen2 Hardware User's Manual has not been updated
-yet, and still says a read-modify-write sequence is required.  According
-to the hardware team, the reset hardware block is the same on both R-Car
-Gen2 and Gen3, though.
-
-Hence fix the issue by replacing the read-modify-write operations on
-SRCRn by simple writes.
-
-Reported-by: Yao Lihua <Lihua.Yao@desay-svautomotive.com>
-Fixes: 6197aa65c4905532 ("clk: renesas: cpg-mssr: Add support for reset control")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Linh Phung <linh.phung.jy@renesas.com>
+Fixes: 8c7aa6328947 ("clk: at91: clk-generated: remove useless divisor loop")
+Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Acked-by: Ludovic Desroches <ludovic.desroches@microchip.com>
 Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/renesas/renesas-cpg-mssr.c | 16 ++--------------
- 1 file changed, 2 insertions(+), 14 deletions(-)
+ drivers/clk/at91/clk-generated.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/clk/renesas/renesas-cpg-mssr.c b/drivers/clk/renesas/renesas-cpg-mssr.c
-index 0201809bbd377..9dfa28d6fd9f9 100644
---- a/drivers/clk/renesas/renesas-cpg-mssr.c
-+++ b/drivers/clk/renesas/renesas-cpg-mssr.c
-@@ -576,17 +576,11 @@ static int cpg_mssr_reset(struct reset_controller_dev *rcdev,
- 	unsigned int reg = id / 32;
- 	unsigned int bit = id % 32;
- 	u32 bitmask = BIT(bit);
--	unsigned long flags;
--	u32 value;
+diff --git a/drivers/clk/at91/clk-generated.c b/drivers/clk/at91/clk-generated.c
+index 33481368740e7..113152425a95d 100644
+--- a/drivers/clk/at91/clk-generated.c
++++ b/drivers/clk/at91/clk-generated.c
+@@ -153,6 +153,8 @@ static int clk_generated_determine_rate(struct clk_hw *hw,
+ 			continue;
  
- 	dev_dbg(priv->dev, "reset %u%02u\n", reg, bit);
+ 		div = DIV_ROUND_CLOSEST(parent_rate, req->rate);
++		if (div > GENERATED_MAX_DIV + 1)
++			div = GENERATED_MAX_DIV + 1;
  
- 	/* Reset module */
--	spin_lock_irqsave(&priv->rmw_lock, flags);
--	value = readl(priv->base + SRCR(reg));
--	value |= bitmask;
--	writel(value, priv->base + SRCR(reg));
--	spin_unlock_irqrestore(&priv->rmw_lock, flags);
-+	writel(bitmask, priv->base + SRCR(reg));
- 
- 	/* Wait for at least one cycle of the RCLK clock (@ ca. 32 kHz) */
- 	udelay(35);
-@@ -603,16 +597,10 @@ static int cpg_mssr_assert(struct reset_controller_dev *rcdev, unsigned long id)
- 	unsigned int reg = id / 32;
- 	unsigned int bit = id % 32;
- 	u32 bitmask = BIT(bit);
--	unsigned long flags;
--	u32 value;
- 
- 	dev_dbg(priv->dev, "assert %u%02u\n", reg, bit);
- 
--	spin_lock_irqsave(&priv->rmw_lock, flags);
--	value = readl(priv->base + SRCR(reg));
--	value |= bitmask;
--	writel(value, priv->base + SRCR(reg));
--	spin_unlock_irqrestore(&priv->rmw_lock, flags);
-+	writel(bitmask, priv->base + SRCR(reg));
- 	return 0;
- }
- 
+ 		clk_generated_best_diff(req, parent, parent_rate, div,
+ 					&best_diff, &best_rate);
 -- 
 2.20.1
 
