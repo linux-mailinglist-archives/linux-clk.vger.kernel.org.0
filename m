@@ -2,72 +2,65 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F5484816
-	for <lists+linux-clk@lfdr.de>; Wed,  7 Aug 2019 10:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1CE784C55
+	for <lists+linux-clk@lfdr.de>; Wed,  7 Aug 2019 15:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387562AbfHGItF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 7 Aug 2019 04:49:05 -0400
-Received: from baptiste.telenet-ops.be ([195.130.132.51]:35558 "EHLO
-        baptiste.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728360AbfHGItF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 7 Aug 2019 04:49:05 -0400
-Received: from ramsan ([84.194.98.4])
-        by baptiste.telenet-ops.be with bizsmtp
-        id m8p22000X05gfCL018p2fS; Wed, 07 Aug 2019 10:49:03 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan with esmtp (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1hvHd0-0002ea-QO; Wed, 07 Aug 2019 10:49:02 +0200
-Received: from geert by rox.of.borg with local (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1hvHd0-0006Ld-O6; Wed, 07 Aug 2019 10:49:02 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] clk: renesas: rcar-usb2-clock-sel: Use devm_platform_ioremap_resource() helper
-Date:   Wed,  7 Aug 2019 10:49:01 +0200
-Message-Id: <20190807084901.24359-1-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.17.1
+        id S2387970AbfHGNFE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 7 Aug 2019 09:05:04 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:51474 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387476AbfHGNFE (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 7 Aug 2019 09:05:04 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x77D504C056000;
+        Wed, 7 Aug 2019 08:05:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1565183100;
+        bh=jhssGt2ewkitOak3BNmAutgMVExRPPs+Oro+ZadcTuo=;
+        h=From:To:CC:Subject:Date;
+        b=xcIVS+/hA8noofLLRPFvxYdK9YnzzhNCPEclfodxsby8Xj8hBnBt+PvCIx9sf5fTf
+         1LMQQyXOpQsoRYQzlHXRnleqvN0GUbwWbryGdTZL2krMChZEGZsngEfY/cS8POFnRA
+         ApsPUgHbKNg/eSCXe3JwfueAeGQXls+TYbudsC4E=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x77D50Zr040009
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 7 Aug 2019 08:05:00 -0500
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 7 Aug
+ 2019 08:05:00 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Wed, 7 Aug 2019 08:05:00 -0500
+Received: from gomoku.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x77D4i1c081508;
+        Wed, 7 Aug 2019 08:04:52 -0500
+From:   Tero Kristo <t-kristo@ti.com>
+To:     <linux-clk@vger.kernel.org>, <sboyd@kernel.org>,
+        <mturquette@baylibre.com>
+CC:     <linux-omap@vger.kernel.org>, <tony@atomide.com>, <s-anna@ti.com>
+Subject: [PATCH 0/3] clk: ti: couple of fixes towards 5.4
+Date:   Wed, 7 Aug 2019 16:04:36 +0300
+Message-ID: <1565183079-27798-1-git-send-email-t-kristo@ti.com>
+X-Mailer: git-send-email 1.9.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Use the devm_platform_ioremap_resource() helper instead of open-coding
-the same operation.
+Hi,
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-To be queued in clk-renesas-for-v5.4.
+Here are some TI clock fixes which can be queued for 5.4. These are
+needed for getting remoteproc functionality working properly, as these
+depend on reset handling also and timing out with clocks is bad for
+them. The timer clock alias fix is needed for the same, as remoteprocs
+depend on certain HW timers for their functionality.
 
- drivers/clk/renesas/rcar-usb2-clock-sel.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+-Tero
 
-diff --git a/drivers/clk/renesas/rcar-usb2-clock-sel.c b/drivers/clk/renesas/rcar-usb2-clock-sel.c
-index cc90b11a9c250a0a..b97f5f9326cfc709 100644
---- a/drivers/clk/renesas/rcar-usb2-clock-sel.c
-+++ b/drivers/clk/renesas/rcar-usb2-clock-sel.c
-@@ -117,7 +117,6 @@ static int rcar_usb2_clock_sel_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct device_node *np = dev->of_node;
- 	struct usb2_clock_sel_priv *priv;
--	struct resource *res;
- 	struct clk *clk;
- 	struct clk_init_data init;
- 
-@@ -125,8 +124,7 @@ static int rcar_usb2_clock_sel_probe(struct platform_device *pdev)
- 	if (!priv)
- 		return -ENOMEM;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	priv->base = devm_ioremap_resource(dev, res);
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(priv->base))
- 		return PTR_ERR(priv->base);
- 
--- 
-2.17.1
-
+--
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
