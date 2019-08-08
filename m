@@ -2,54 +2,59 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8D98593E
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2019 06:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA46A85941
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Aug 2019 06:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726449AbfHHEaL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 8 Aug 2019 00:30:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42360 "EHLO mail.kernel.org"
+        id S1727242AbfHHEab (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 8 Aug 2019 00:30:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42394 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725446AbfHHEaL (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 8 Aug 2019 00:30:11 -0400
+        id S1726749AbfHHEab (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 8 Aug 2019 00:30:31 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5FEDD21743;
-        Thu,  8 Aug 2019 04:30:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 189CC21743;
+        Thu,  8 Aug 2019 04:30:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565238610;
-        bh=uSAOwY7t+VKF9iLq+Lh4X44seGUzqHQM08FmelLcOYM=;
+        s=default; t=1565238630;
+        bh=1+URRL/j1c6HgZHm2mFbkwJnj6VhhDQ/uYDMJL+bsww=;
         h=In-Reply-To:References:From:Cc:To:Subject:Date:From;
-        b=hnikIz8Sijjukq3s/G9PiMYgu56+SyBiJzNFm3f0Z8JnLqThuY3DMIbZdz0aMJIp0
-         JbEENRec7JbaoTlFcMRrw35n7AEaxj4YxIBfn+6z57XF+pS5oyxTudqRrF/OqwoOB2
-         S/pHPnRp+KBOUe1cVmdJUjdoEH1tl5iGY33SgsV0=
+        b=AoK5J6tsBtjT5LrjB5/Jsz4NnqGOAmXU2c7HMrVwVV0s46E1oCl4zmmbpJcVu4MWP
+         2l109zLiFvNdiN6hlhITPkbrc3xfDEVhvVe6Pdun69359Ez4frtNuIT6+emDqpYVV6
+         bStOdoBTh+OK14xNqGIWQHOXZAGzurRJMu4rtSBc=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <d654907d-a3a2-a00f-d6f5-3a34ae25ebcf@free.fr>
-References: <d654907d-a3a2-a00f-d6f5-3a34ae25ebcf@free.fr>
+In-Reply-To: <20190722074348.29582-2-vkoul@kernel.org>
+References: <20190722074348.29582-1-vkoul@kernel.org> <20190722074348.29582-2-vkoul@kernel.org>
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk <linux-clk@vger.kernel.org>,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Marc Gonzalez <marc.w.gonzalez@free.fr>,
-        Michael Turquette <mturquette@baylibre.com>
-Subject: Re: [PATCH v2] clk: qcom: msm8916: Don't build by default
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Deepak Katragadda <dkatraga@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        David Brown <david.brown@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
+        linux-kernel@vger.kernel.org
+To:     Vinod Koul <vkoul@kernel.org>
+Subject: Re: [PATCH v4 1/5] clk: qcom: clk-alpha-pll: Remove unnecessary cast
 User-Agent: alot/0.8.1
-Date:   Wed, 07 Aug 2019 21:30:09 -0700
-Message-Id: <20190808043010.5FEDD21743@mail.kernel.org>
+Date:   Wed, 07 Aug 2019 21:30:29 -0700
+Message-Id: <20190808043030.189CC21743@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Marc Gonzalez (2019-06-13 08:09:34)
-> QCOM_A53PLL and QCOM_CLK_APCS_MSM8916 stand out as the only options
-> built by default. Let's bring them back in line with the rest.
+Quoting Vinod Koul (2019-07-22 00:43:44)
+> Commit 8f9fab480c7a ("linux/kernel.h: fix overflow for
+> DIV_ROUND_UP_ULL") fixed the overflow for DIV_ROUND_UP_ULL, so we no
+> longer need the cast for DIV_ROUND_UP_ULL, so remove the unnecessary
+> u64 casts.
 >=20
-> Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
 > ---
 
 Applied to clk-next
