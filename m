@@ -2,266 +2,216 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A91B286D94
-	for <lists+linux-clk@lfdr.de>; Fri,  9 Aug 2019 01:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4DD886E7D
+	for <lists+linux-clk@lfdr.de>; Fri,  9 Aug 2019 01:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404557AbfHHXDC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 8 Aug 2019 19:03:02 -0400
-Received: from mail-eopbgr760133.outbound.protection.outlook.com ([40.107.76.133]:55054
-        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1732796AbfHHXDB (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 8 Aug 2019 19:03:01 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hP7kh4L8r0cKyb+7tZvwDoMlhDs4wFZzz9r2FaXXjm1BbHTn3Vf4jMiJTlIcAEpBM0bhLRdmTI8BD2wpRcMKgFa7e1YTiSr3eydXTAfziWSwbx5XnQoJgI6Bk9+umoxoHXW7EAdfg8uWugWRkswDWqrSbl+kb/bI+w42gRtwmUPLtTETH6Ys/e1799RHK29cJ7I6uq9w77A3N6PwS+xIr+u2szakW/4a/MjW9aR9TADylc54K/PTXirOaPvV/H2i3Kzj2iuTrxUjUWn05W3fXWWcwUghxUNiJQr0twKVCQFVJu6s3YWxHEIZqKVSGoR20zM/qGdz1v/M1x49ywsg0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=J2Us1fcbZ0oA9O/Ov32Tvv+defUi7PRsGKZB9h/VRtM=;
- b=ltM3MqQ2jTWRu6q1ZF8i1OUSg1tTGdjHbpZ67vDA9rIlaDeTK2103HoD3eRZa5sd7lF2d1/PUMQWBFvhK2gx8spMwvl/V2woHvTKxs7eSwu+wjNiTZRxZj6+KB3pprRum6dgiglsjoaNt+SaZSL0tDyJtK2lXNh7b/bQs4Nar9Htq1joALMj05kWT+vwRAa3krhG8spTepmMtqVbT85B+a4LNtjd7Lb1DCY0AL6bSICBSEiRZuekGovg0iDrLgBzg38VWPf7Em4l6ztKzT9sFxtag7R+CDvssOUEJXcUBJk6qwzf4bcSgM60QPiA1be5fLhpNreMGZ+aTUCu3u0XeQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wavecomp.com; dmarc=pass action=none header.from=mips.com;
- dkim=pass header.d=mips.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=J2Us1fcbZ0oA9O/Ov32Tvv+defUi7PRsGKZB9h/VRtM=;
- b=OfFQZ2+66AX0YhDIhz3KIiLZ8J1pDQTfdkN/0v9cxOebC6e+/jZHKB0PYQfzPCLEf462PLzBjbLuzkt7fE3uksXHqbfxHJjBXJI+FY7NruuExJcB//BInra0qBwa0dw3Eg70aCp8p05morDEeLOqszpRSu0dXZ7W/UJ4KrkBIrk=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1279.namprd22.prod.outlook.com (10.174.162.19) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2157.18; Thu, 8 Aug 2019 23:02:58 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::f566:bf1f:dcd:862c]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::f566:bf1f:dcd:862c%10]) with mapi id 15.20.2157.015; Thu, 8 Aug 2019
- 23:02:57 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <pburton@wavecomp.com>,
-        James Hogan <jhogan@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "od@zcrc.me" <od@zcrc.me>, Mathieu Malaterre <malat@debian.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH v15 00/13] TCU patchset v15
-Thread-Topic: [PATCH v15 00/13] TCU patchset v15
-Thread-Index: AQHVTj1rjdYXClittEGwDcWyx/ar0A==
-Date:   Thu, 8 Aug 2019 23:02:57 +0000
-Message-ID: <MWHPR2201MB12771581FD6FBA4634D53566C1D70@MWHPR2201MB1277.namprd22.prod.outlook.com>
-References: <20190724171615.20774-1-paul@crapouillou.net>
-In-Reply-To: <20190724171615.20774-1-paul@crapouillou.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR01CA0016.prod.exchangelabs.com (2603:10b6:a02:80::29)
- To MWHPR2201MB1277.namprd22.prod.outlook.com (2603:10b6:301:18::12)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [12.94.197.246]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 53a3e6b6-3505-4ba2-a0d2-08d71c548d8a
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1279;
-x-ms-traffictypediagnostic: MWHPR2201MB1279:
-x-ms-exchange-purlcount: 13
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR2201MB12793952A51003A6C0A31D55C1D70@MWHPR2201MB1279.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 012349AD1C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39840400004)(366004)(136003)(346002)(376002)(396003)(189003)(199004)(54534003)(53936002)(81166006)(81156014)(8676002)(6436002)(71190400001)(4326008)(74316002)(6916009)(229853002)(66556008)(66946007)(7736002)(66476007)(305945005)(66446008)(316002)(6246003)(26005)(6506007)(386003)(64756008)(102836004)(33656002)(186003)(8936002)(52116002)(76176011)(7696005)(476003)(446003)(486006)(44832011)(11346002)(42882007)(71200400001)(54906003)(9686003)(14454004)(5660300002)(55016002)(66066001)(6306002)(7416002)(966005)(256004)(2906002)(25786009)(99286004)(478600001)(3846002)(6116002)(52536014);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1279;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: DL7Djz/7xrehf61Dp3oVrBnYgW1n9HgIvc5fVkZE1bQw3DcHfmxfols00fyoGZtHKoFTWTugZH6P67STaGEUdFSXZ3s1q76MMVXiY7sgnva5af7nxkM9By/sQ8tm3CTYw6hnOFR1jz+SHiRBpXliaxBnzMVXPqBUFtAWh4B0XGRbGu0FD95kgMYnUw/tSoGRhVpfSdQZde9vZi//wg7A7bvN0zMrwMQN52BUjJAAoa5EOPl2RAfcdSHBYiYvPjmv0Hk4Ru+N+nIA1twavRvRyyVBkZd2yjLXNWDYT6b3BFRhVFd7LRyBKHZBlA7CuifObupVy5wJcx/4Q/bkuMiwlkNukJoTRvMkUmNWHIHWLAqLmJHNj4S+S2kJz8P4y7G2a5XM/pQayikYI7jNp+ay3xS5vsbuf7gr+nKl3EuOGm8=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S2404880AbfHHXrF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 8 Aug 2019 19:47:05 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:12738 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732796AbfHHXrF (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 8 Aug 2019 19:47:05 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d4cb4800004>; Thu, 08 Aug 2019 16:47:12 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Thu, 08 Aug 2019 16:47:02 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Thu, 08 Aug 2019 16:47:02 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 8 Aug
+ 2019 23:47:02 +0000
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 8 Aug
+ 2019 23:47:01 +0000
+Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Thu, 8 Aug 2019 23:47:01 +0000
+Received: from skomatineni-linux.nvidia.com (Not Verified[10.110.103.110]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5d4cb4750003>; Thu, 08 Aug 2019 16:47:01 -0700
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+To:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <tglx@linutronix.de>, <jason@lakedaemon.net>,
+        <marc.zyngier@arm.com>, <linus.walleij@linaro.org>,
+        <stefan@agner.ch>, <mark.rutland@arm.com>
+CC:     <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
+        <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <jckuo@nvidia.com>,
+        <josephl@nvidia.com>, <talho@nvidia.com>, <skomatineni@nvidia.com>,
+        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <mperttunen@nvidia.com>, <spatra@nvidia.com>, <robh+dt@kernel.org>,
+        <digetx@gmail.com>, <devicetree@vger.kernel.org>,
+        <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
+        <linux-pm@vger.kernel.org>
+Subject: [PATCH v8 00/21] SC7 entry and exit support for Tegra210
+Date:   Thu, 8 Aug 2019 16:46:39 -0700
+Message-ID: <1565308020-31952-1-git-send-email-skomatineni@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53a3e6b6-3505-4ba2-a0d2-08d71c548d8a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Aug 2019 23:02:57.6136
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 72u9iSqnxrnJit87qsw5cIa3HSufYiKpG7pgYbHBnNTsNHLqOMgSJXWimVyXZ0izzoX2CNqk6HXdlR0RnPBlJg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1279
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1565308032; bh=EgYLiwe2CvChAnWbOIKpUtKlaBT/RzrYeRVChw1CODQ=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=pTB9G5pxiek6wCRDjVYoCJ4ckBK93ubdmM8PjvyJ+AHJ6EwJhProgeGGHwVPjeJXW
+         8cHWvh/tFoMINnzaJZnqwTUk3YitU6Ug7nW+DVpawSNlSyW7kFfmRbTqOFBRFnWA8m
+         21jSwJGlMIXLKtNxfqTazAi0M+zIMGqbu/avDik7oqGgjUdYiUUKE+R/2FPLEiXmIH
+         GIIXYmRLFSNIRnKtAhBJE4TS7jE8drwQe+qNz6eszr4JC4K0QH7HLXhhdHY2FYHAPb
+         E923dSQyExElGWUeR1U/GKyAa1l/YcSQeyWMOKnhhYQY0h34pMLfN0RIkmXYTDEApf
+         6v1qtvviZXzdQ==
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello,
+This patch series includes Tegra210 deepsleep (SC7) support with RTC alarm
+wake event.
 
-Paul Cercueil wrote:
-> Hi,
->=20
-> This is the V15 of my Ingenic TCU patchet.
->=20
-> The big change since V14 is that the custom MFD driver
-> (ex patch 04/13) was dropped in favor of a small patch to syscon
-> and a "simple-mfd" compatible.
->=20
-> The patchset was based on mips/mips-next, but all of them minus
-> the last one will apply cleanly on v5.3-rc1.
->=20
-> Changelog:
->=20
-> * [02/13]: Remove info about MFD driver
-> * [03/13]: Add "simple-mfd" compatible string
-> * [04/13]: New patch
-> * [05/13]: - Use CLK_OF_DECLARE_DRIVER since we use "simple-mfd"
->            - Use device_node_to_regmap()
-> * [06/13]: Use device_node_to_regmap()
-> * [07/13]: Use device_node_to_regmap()
-> * [09/13]: Add "simple-mfd" compatible string
->=20
-> Cheers,
+This series also includes save and restore of PLLs, clocks, OSC contexts
+for deepsleep exit to normal operation.
 
-Series applied to mips-next.
+This patch series doesn't support 100% suspend/resume to allow fully
+functional state upon resume and we are working on some more drivers suspend
+and resume implementations.
 
-> dt-bindings: ingenic: Add DT bindings for TCU clocks
->   commit 4bc3c420246e
->   https://git.kernel.org/mips/c/4bc3c420246e
->  =20
->   Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->   Tested-by: Mathieu Malaterre <malat@debian.org>
->   Tested-by: Artur Rojek <contact@artur-rojek.eu>
->   Reviewed-by: Rob Herring <robh@kernel.org>
->   Acked-by: Stephen Boyd <sboyd@kernel.org>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> doc: Add doc for the Ingenic TCU hardware
->   commit 97689a1a3fda
->   https://git.kernel.org/mips/c/97689a1a3fda
->  =20
->   Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->   Tested-by: Mathieu Malaterre <malat@debian.org>
->   Tested-by: Artur Rojek <contact@artur-rojek.eu>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> dt-bindings: Add doc for the Ingenic TCU drivers
->   commit 2e8722a5255e
->   https://git.kernel.org/mips/c/2e8722a5255e
->  =20
->   Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->   Reviewed-by: Rob Herring <robh@kernel.org>
->   Tested-by: Mathieu Malaterre <malat@debian.org>
->   Tested-by: Artur Rojek <contact@artur-rojek.eu>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> mfd/syscon: Add device_node_to_regmap()
->   commit 39233b7c6112
->   https://git.kernel.org/mips/c/39233b7c6112
->  =20
->   Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->   Acked-by: Arnd Bergmann <arnd@arndb.de>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> clk: ingenic: Add driver for the TCU clocks
->   commit 4f89e4b8f121
->   https://git.kernel.org/mips/c/4f89e4b8f121
->  =20
->   Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->   Tested-by: Mathieu Malaterre <malat@debian.org>
->   Tested-by: Artur Rojek <contact@artur-rojek.eu>
->   Acked-by: Stephen Boyd <sboyd@kernel.org>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> irqchip: Add irq-ingenic-tcu driver
->   commit 9536eba03ec7
->   https://git.kernel.org/mips/c/9536eba03ec7
->  =20
->   Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->   Tested-by: Mathieu Malaterre <malat@debian.org>
->   Tested-by: Artur Rojek <contact@artur-rojek.eu>
->   Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
->   Acked-by: Marc Zyngier <maz@kernel.org>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> clocksource: Add a new timer-ingenic driver
->   commit 34e9368301d5
->   https://git.kernel.org/mips/c/34e9368301d5
->  =20
->   Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->   Tested-by: Mathieu Malaterre <malat@debian.org>
->   Tested-by: Artur Rojek <contact@artur-rojek.eu>
->   Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> clk: jz4740: Add TCU clock
->   commit 73dd11dc1a88
->   https://git.kernel.org/mips/c/73dd11dc1a88
->  =20
->   Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->   Tested-by: Mathieu Malaterre <malat@debian.org>
->   Tested-by: Artur Rojek <contact@artur-rojek.eu>
->   Acked-by: Stephen Boyd <sboyd@kernel.org>
->   Acked-by: Rob Herring <robh@kernel.org>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> MIPS: jz4740: Add DTS nodes for the TCU drivers
->   commit 36aafdbd5288
->   https://git.kernel.org/mips/c/36aafdbd5288
->  =20
->   Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->   Tested-by: Mathieu Malaterre <malat@debian.org>
->   Tested-by: Artur Rojek <contact@artur-rojek.eu>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> MIPS: qi_lb60: Reduce system timer and clocksource to 750 kHz
->   commit a68d3b052b57
->   https://git.kernel.org/mips/c/a68d3b052b57
->  =20
->   Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->   Tested-by: Mathieu Malaterre <malat@debian.org>
->   Tested-by: Artur Rojek <contact@artur-rojek.eu>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> MIPS: CI20: Reduce system timer and clocksource to 3 MHz
->   commit 157c887aff52
->   https://git.kernel.org/mips/c/157c887aff52
->  =20
->   Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->   Tested-by: Mathieu Malaterre <malat@debian.org>
->   Tested-by: Artur Rojek <contact@artur-rojek.eu>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> MIPS: GCW0: Reduce system timer and clocksource to 750 kHz
->   commit 967a7100400a
->   https://git.kernel.org/mips/c/967a7100400a
->  =20
->   Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->   Tested-by: Mathieu Malaterre <malat@debian.org>
->   Tested-by: Artur Rojek <contact@artur-rojek.eu>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
->=20
-> MIPS: jz4740: Drop obsolete code
->   commit abc552284f6b
->   https://git.kernel.org/mips/c/abc552284f6b
->  =20
->   Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->   Tested-by: Mathieu Malaterre <malat@debian.org>
->   Tested-by: Artur Rojek <contact@artur-rojek.eu>
->   Signed-off-by: Paul Burton <paul.burton@mips.com>
+[v8]: Changes between v7 & v8 are
+	- v7 feedback fixes
+	- moved clock enable/disable state and reset enable/disable state
+	  restore from clk_save/restore_context back to clk-tegra210 driver
+	  to do complete register value store/restore.
+	- Removed manual store/restore of peripheral parent context and added
+	  API in clk core to retrieve clock parent index to use during
+	  restoring parent on resume.
+	- Implemented Tegra recommended clock source programming sequence
+	  during restore (CLK ENB ON followed by divider/source programming
+	  followed by restoring CLK ENB ON/OFF state followed by restoring
+	  RST state).
+	- Removed pinctrl suspend/resume patch from this series as pinctrl
+	  suspend/resume patch from v7 got acked and merged.
+	- Added pinctrl patch-0001 to update pmx_writel for proper placement
+	  of write barrier.
+	- Added pinctrl patch-0002 to insert write barrier after all pinctrl
+	  register writes during pinctrl resume.
 
-Thanks,
-    Paul
+	Note:
+	  Below patch is also needed for SC7 support as GPIO restore need
+	  to happen prior to pinctrl.
+	  https://patchwork.kernel.org/patch/11012077/
 
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paul.burton@mips.com to report it. ]
+[v7]: Changes between V6 & v7 are
+	- V6 feedback fixes
+	- Removed patch-0001 from V6 which keeps COP IRQ enabled. Looking
+	  more into ATF FW, it loads SC7 entry FW into IRAM and sets the
+	  COP reset vector to SC7 FW load address and resets COP. So, COP
+	  IRQ can be cleared during suspend.
+
+	Note:
+	  Below patch is also needed for SC7 support as GPIO restore need
+	  to happen prior to pinctrl.
+	  https://patchwork.kernel.org/patch/11012077/
+
+[V6]: Changes between V5 & V6 are
+	- V5 feedback fixes
+	- DFLL suspend and resume moved to DFLL clock driver
+	- Add suspend and resume support for CPUFreq driver to explicitly
+	  switch source to safe source of PLLP and disable DFLL clock.
+	- Fix to super clock driver to enable PLLP branch to CPU before
+	  source switch to PLLP.
+	- Added save and restore support for super clock driver.
+
+[V5]: Changes between V4 & V5 are
+	- V4 feedback fixes
+
+[V4]: Changes between V3 & V4 are
+	- V3 feedback fixes
+	- Removed park bits clear for EMMC pads in pinctrl-tegra driver
+	  function tegra_pinctrl_clear_parked_bits as based on V3 feedback
+	  parked_bit is updated to parked_bitmask to use with DRV_PINGROUP
+	  as well and thierry posted patch series for this.
+	- Implemented all peripheral clocks save and restore through their
+	  corresponding clk_ops save_context and restore_context and removed
+	  all direct registers store and restore in clk-tegra210 driver.
+	- Created separate patch for fence_delay update during PLLU init based
+	  on V3 feedback.
+	- Added more comments in tegra210_clk_resume regarding dfll restore
+	  sequence and its dependency on peripheral clocks restore.
+
+[V3]: Changes between V2 & V3 are
+	- V2 feedback fixes
+	- GPIO restore should happen prior to Pinctrl restore to prevent
+	  glitch on GPIO lines. So using resume_noirq for gpio tegra to allow
+	  gpio resume prior to pinctrl resume.
+	- Implemented save_context and restore_context callbacks for clock
+	  plls, pll outs and dividers in corresponding drivers.
+	  Note: Peripheral clocks and clock enable and reset need to be in
+	  Tegra210 clock suspend/resume as they need to be in proper sequence
+	  w.r.t DFLL resume for restoring CPU clock.
+	- Removed gpio-tegra changes for hierarchical support to have PMC as
+	  parent to GPIOs for GPIO wake event support. Thierry is working on
+	  gpiolib for some cleanup before adding hierarchical support. So
+	  holding on to GPIO wake support for now.
+
+[V2] : V1 feedback fixes
+	Patch 0002: This version still using syscore. Thierry suggest not to
+	use syscore and waiting on suggestion from Linux Walleij for any better
+	way of storing current state of pins before suspend entry and restoring
+	them on resume at very early stage. So left this the same way as V1 and
+	will address once I get more feedback on this.
+	Also need to findout and implement proper way of forcing resume order
+	between pinctrl and gpio driver.
+
+[V1]:	Tegra210 SC7 entry and exit thru RTC wake and Power button GPIO wake
+	using hierarchical IRQ with PMC as parent to GPIO.
+
+
+Sowjanya Komatineni (21):
+  pinctrl: tegra: Fix write barrier placement in pmx_writel
+  pinctrl: tegra: Add write barrier after all pinctrl register writes
+  clk: tegra: divider: Save and restore divider rate
+  clk: tegra: pllout: Save and restore pllout context
+  clk: tegra: pll: Save and restore pll context
+  clk: tegra: Support for OSC context save and restore
+  clk: Add API to get index of the clock parent
+  clk: tegra: periph: Add restore_context support
+  clk: tegra: clk-super: Fix to enable PLLP branches to CPU
+  clk: tegra: clk-super: Add restore-context support
+  clk: tegra: clk-dfll: Add suspend and resume support
+  cpufreq: tegra124: Add suspend and resume support
+  clk: tegra210: Use fence_udelay during PLLU init
+  clk: tegra210: Add suspend and resume support
+  soc/tegra: pmc: Allow to support more tegras wake
+  soc/tegra: pmc: Add pmc wake support for tegra210
+  arm64: tegra: Enable wake from deep sleep on RTC alarm
+  soc/tegra: pmc: Configure core power request polarity
+  soc/tegra: pmc: Configure deep sleep control settings
+  arm64: dts: tegra210-p2180: Jetson TX1 SC7 timings
+  arm64: dts: tegra210-p3450: Jetson Nano SC7 timings
+
+ arch/arm64/boot/dts/nvidia/tegra210-p2180.dtsi     |   7 ++
+ arch/arm64/boot/dts/nvidia/tegra210-p3450-0000.dts |   7 ++
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi           |   5 +-
+ drivers/clk/clk.c                                  |  17 +++
+ drivers/clk/tegra/clk-dfll.c                       |  56 +++++++++
+ drivers/clk/tegra/clk-dfll.h                       |   2 +
+ drivers/clk/tegra/clk-divider.c                    |  11 ++
+ drivers/clk/tegra/clk-periph.c                     |  18 +++
+ drivers/clk/tegra/clk-pll-out.c                    |   9 ++
+ drivers/clk/tegra/clk-pll.c                        |  88 +++++++++-----
+ drivers/clk/tegra/clk-sdmmc-mux.c                  |  12 ++
+ drivers/clk/tegra/clk-super.c                      |  35 ++++++
+ drivers/clk/tegra/clk-tegra-fixed.c                |  15 +++
+ drivers/clk/tegra/clk-tegra-super-gen4.c           |   7 +-
+ drivers/clk/tegra/clk-tegra124-dfll-fcpu.c         |   1 +
+ drivers/clk/tegra/clk-tegra210.c                   | 114 ++++++++++++++++--
+ drivers/clk/tegra/clk.c                            |  78 +++++++++++++
+ drivers/clk/tegra/clk.h                            |  17 +++
+ drivers/cpufreq/tegra124-cpufreq.c                 |  60 ++++++++++
+ drivers/pinctrl/tegra/pinctrl-tegra.c              |   6 +-
+ drivers/soc/tegra/pmc.c                            | 129 ++++++++++++++++++++-
+ include/linux/clk-provider.h                       |   1 +
+ 22 files changed, 646 insertions(+), 49 deletions(-)
+
+-- 
+2.7.4
+
