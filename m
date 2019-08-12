@@ -2,100 +2,95 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30800893E7
-	for <lists+linux-clk@lfdr.de>; Sun, 11 Aug 2019 23:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3975089870
+	for <lists+linux-clk@lfdr.de>; Mon, 12 Aug 2019 10:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726654AbfHKVCH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 11 Aug 2019 17:02:07 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:42143 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726675AbfHKVBp (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 11 Aug 2019 17:01:45 -0400
-Received: by mail-lf1-f67.google.com with SMTP id s19so10284489lfb.9;
-        Sun, 11 Aug 2019 14:01:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3ErUctKt9CJ3rgf9ZExT4u2Tmx1X1fVjtqY74IUmVOo=;
-        b=jGEd5UOL6f98H6d9lWDdBF0tDLQhodxBKsyskxAtdT7jABiBUDFoO8vGh4+W+9mF32
-         BfM1g3CRpA6EMr6KrXdh4GI309W8Lz/j1Om4GHR5KA6eSYIMS89+5Ab2rvbAaiQtTbK4
-         kzxUzQG4kBmKFrSuj82WftSfbq/mYQgSh9numgfPkcV28JIhMbH66G1h8FssMuLdEQOR
-         gBrwPDfZ5BquYzFN2dygXZsSthLzb7g7D5wXL9khRVfB7W4gbRcAJreYw2fI3E1LheTl
-         yX9Y+14iZOeznspLUe1EyY+EjA7LpjlKf46A28IJZUbqvidPZh39vpY039D1Ov+rEwii
-         1d9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3ErUctKt9CJ3rgf9ZExT4u2Tmx1X1fVjtqY74IUmVOo=;
-        b=UIEFFvwT+tyZ2v/+Vqsaw9y5E+ajM0OZamLit0WzOD2njNHIZY2KfwFoQrNiAXOEtj
-         xJVvFDzM9rq7qlSGikpjstpI87HRZ19Af2zj27HglOK9EwxL4X1gGGHnneVHx8EUy3Ri
-         APm/A25grXHIjHqGt2pAtxWeuay5cl3tXL/InGXBc8lzuVmcf2Xgigu9OaFLYWhTvavP
-         s8TMDfvGTf3l7+jpjCLVzWlkcGbt3pbGWxUXwKF3IlY++I7BYisvG9aYFLv8udfdF5ki
-         JBqtcJ0MeuXOHmIVNO3ao+44DCwAx6abGFfPoLPR4FybRBdzs+gOl9yxPJ7L+NMNbcCg
-         ff8Q==
-X-Gm-Message-State: APjAAAXMU3tlIDWhgCeJdKs9onkzUSljbk5BQ7i0gsYkpuKdFJDQ9rAq
-        Y8RpJ+To+hYYoRJeunfbXaQ=
-X-Google-Smtp-Source: APXvYqwcVR/JomYFG2mKKrmisBy3ksrqMbR2iWb0QAH4erviQYOhWFCXudyo1pGkliRlHPg+71Ad9A==
-X-Received: by 2002:a19:234c:: with SMTP id j73mr17739317lfj.96.1565557302583;
-        Sun, 11 Aug 2019 14:01:42 -0700 (PDT)
-Received: from localhost.localdomain ([94.29.34.218])
-        by smtp.gmail.com with ESMTPSA id z25sm18708161lfi.51.2019.08.11.14.01.41
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 11 Aug 2019 14:01:42 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Joseph Lo <josephl@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v10 15/15] ARM: dts: tegra30: Add External Memory Controller node
-Date:   Mon, 12 Aug 2019 00:00:43 +0300
-Message-Id: <20190811210043.20122-16-digetx@gmail.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190811210043.20122-1-digetx@gmail.com>
-References: <20190811210043.20122-1-digetx@gmail.com>
+        id S1726937AbfHLIH6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 12 Aug 2019 04:07:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47554 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726405AbfHLIH5 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 12 Aug 2019 04:07:57 -0400
+Received: from localhost (lfbn-1-17395-211.w86-250.abo.wanadoo.fr [86.250.200.211])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 62E70206C2;
+        Mon, 12 Aug 2019 08:07:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565597276;
+        bh=rfwD66AedIpA/3YE2dWFn8YCpnEehefOryrXd0y6bio=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TH581SWmFX5Vu6WBmaibZ4b8HqpSesdZ9B8gRjIiM+ftqFvUWyIG4J9oD/o8xDBaZ
+         4EOPkWYiJUWIBlolpVAenfFXazLeuyXQ4Owqj3+RBAyWEqHZvQyniCnt3m88lmuzbd
+         tnmIHtFxQyKlmk+kt7gW0A7xtcnNrGAQZcF73pBo=
+Date:   Mon, 12 Aug 2019 10:07:54 +0200
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Icenowy Zheng <icenowy@aosc.io>
+Cc:     Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-sunxi@googlegroups.com
+Subject: Re: [PATCH v5 0/6] Support for Allwinner V3/S3L and Sochip S3
+Message-ID: <20190812080754.n7dgogopm3ytd6h5@flea>
+References: <20190728031227.49140-1-icenowy@aosc.io>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="he4xln2tfu7hadbz"
+Content-Disposition: inline
+In-Reply-To: <20190728031227.49140-1-icenowy@aosc.io>
+User-Agent: NeoMutt/20180716
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add External Memory Controller node to the device-tree.
 
-Acked-by: Peter De Schrijver <pdeschrijver@nvidia.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- arch/arm/boot/dts/tegra30.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+--he4xln2tfu7hadbz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/arch/arm/boot/dts/tegra30.dtsi b/arch/arm/boot/dts/tegra30.dtsi
-index e074258d4518..8355264e2265 100644
---- a/arch/arm/boot/dts/tegra30.dtsi
-+++ b/arch/arm/boot/dts/tegra30.dtsi
-@@ -732,6 +732,15 @@
- 		#reset-cells = <1>;
- 	};
- 
-+	memory-controller@7000f400 {
-+		compatible = "nvidia,tegra30-emc";
-+		reg = <0x7000f400 0x400>;
-+		interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&tegra_car TEGRA30_CLK_EMC>;
-+
-+		nvidia,memory-controller = <&mc>;
-+	};
-+
- 	fuse@7000f800 {
- 		compatible = "nvidia,tegra30-efuse";
- 		reg = <0x7000f800 0x400>;
--- 
-2.22.0
+On Sun, Jul 28, 2019 at 11:12:21AM +0800, Icenowy Zheng wrote:
+> This patchset tries to add support for Allwinner V3/S3L and Sochip S3.
+>
+> Allwinner V3/V3s/S3L and Sochip S3 share the same die, but with
+> different package. V3 is BGA w/o co-packaged DDR, V3s is QFP w/ DDR2,
+> S3L is BGA w/ DDR2 and S3 is BGA w/ DDR3. (S3 and S3L is compatible
+> for pinout, but because of different DDR, DDR voltage is different
+> between the two variants). Because of the pin count of V3s is
+> restricted due to the package, some pins are not bound on V3s, but
+> they're bound on V3/S3/S3L.
+>
+> Currently the kernel is only prepared for the features available on V3s.
+> This patchset adds the features missing on V3s for using them on
+> V3/S3/S3L, and add bindings for V3/S3/S3L. It also adds a S3 SoM by
+> Sipeed, called Lichee Zero Plus.
+>
+> Icenowy Zheng (6):
+>   pinctrl: sunxi: v3s: introduce support for V3
+>   clk: sunxi-ng: v3s: add missing clock slices for MMC2 module clocks
+>   clk: sunxi-ng: v3s: add Allwinner V3 support
+>   ARM: sunxi: dts: s3/s3l/v3: add DTSI files for S3/S3L/V3 SoCs
+>   dt-bindings: arm: sunxi: add binding for Lichee Zero Plus core board
+>   ARM: dts: sun8i: s3: add devicetree for Lichee zero plus w/ S3
 
+Applied the patches 2 to 6, thanks!
+Maxime
+
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+--he4xln2tfu7hadbz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXVEeWgAKCRDj7w1vZxhR
+xc1HAQC4pz8qSqTprqKaHx4vMzq28Cpy8SSZNQyYzojW9ba9VQEAuyb7C8zQZ1Qn
+xIEmEbly3ZpRq6N6RP/EFwfX+rg2HgM=
+=3RxS
+-----END PGP SIGNATURE-----
+
+--he4xln2tfu7hadbz--
