@@ -2,158 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 276428EA04
-	for <lists+linux-clk@lfdr.de>; Thu, 15 Aug 2019 13:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4E48EA2B
+	for <lists+linux-clk@lfdr.de>; Thu, 15 Aug 2019 13:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731550AbfHOLS1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 15 Aug 2019 07:18:27 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:42662 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731216AbfHOLSX (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 15 Aug 2019 07:18:23 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id C82F42000B7;
-        Thu, 15 Aug 2019 13:18:20 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E3819200296;
-        Thu, 15 Aug 2019 13:18:12 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 8A56340313;
-        Thu, 15 Aug 2019 19:18:03 +0800 (SGT)
-From:   Anson.Huang@nxp.com
-To:     robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        mturquette@baylibre.com, sboyd@kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, leonard.crestez@nxp.com,
-        abel.vesa@nxp.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH 6/6] arm64: dts: imx8mn: Add cpu-freq support
-Date:   Thu, 15 Aug 2019 06:59:43 -0400
-Message-Id: <1565866783-19672-6-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1565866783-19672-1-git-send-email-Anson.Huang@nxp.com>
-References: <1565866783-19672-1-git-send-email-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1730808AbfHOL0S (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 15 Aug 2019 07:26:18 -0400
+Received: from mail-wr1-f99.google.com ([209.85.221.99]:42844 "EHLO
+        mail-wr1-f99.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726865AbfHOL0S (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 15 Aug 2019 07:26:18 -0400
+Received: by mail-wr1-f99.google.com with SMTP id b16so1902785wrq.9
+        for <linux-clk@vger.kernel.org>; Thu, 15 Aug 2019 04:26:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=nXAyjVHn0p+4CAgtCNYorSwp/PP+/ZyXWDDK+y7KYL4=;
+        b=hRJXfy0LQRjMjQTg11paX04IYYBsK9sNeptx/TkzekKjf0KRo4FdKLQlCwULu9bwsx
+         y7ZnENcD1O3sdjb9S1ncfTkbTmzdhSabs+UKnzfhffim4XKFa/qmhVEHR7NqzE+1Eoau
+         KUd/Ln/v9pjSlf680p2UhnjJLxouaxucdvHnYLZ+JLuRGShngYj+N3N6MTdMkFkVbjci
+         KsEtIAbhZDbAvQlSP16wqSerwj9dkZREKYqTR9w7iMK4bFocF+4s7fM/B0+dUJ0fcMKS
+         m0dS0L5IRYvgoKVDhK2VX5GlzO8WiXXLJODmsl8Ls/Vxu27SvW4H4xIAcyvMgFMrzXgO
+         vOzg==
+X-Gm-Message-State: APjAAAWfYRVrN1XWpvzC81efwIgPvEvASJLWNw788Vv5+pud1fLBaLdM
+        V0uiRcA8WTTYGApChHkRK1cxuqjiJxK9CzWcf+3PxUdh8/G/VsKcNIxlGXZMXWAw4w==
+X-Google-Smtp-Source: APXvYqwE8AmkN+3MXDrwKQaFOiSfludhujVv2awbLexD+71rwuqfo/tkaDpNPzNDAfUOBE6TTmh7ETRU8D4R
+X-Received: by 2002:a5d:5543:: with SMTP id g3mr5069751wrw.166.1565868376359;
+        Thu, 15 Aug 2019 04:26:16 -0700 (PDT)
+Received: from heliosphere.sirena.org.uk (heliosphere.sirena.org.uk. [2a01:7e01::f03c:91ff:fed4:a3b6])
+        by smtp-relay.gmail.com with ESMTPS id n3sm41979wru.48.2019.08.15.04.26.16
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 15 Aug 2019 04:26:16 -0700 (PDT)
+X-Relaying-Domain: sirena.org.uk
+Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1hyDtX-0003HY-Th; Thu, 15 Aug 2019 11:26:15 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 033DD2742A76; Thu, 15 Aug 2019 12:26:14 +0100 (BST)
+Date:   Thu, 15 Aug 2019 12:26:14 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     "kernelci.org bot" <bot@kernelci.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        enric.balletbo@collabora.com, guillaume.tucker@collabora.com,
+        khilman@baylibre.com, matthew.hart@linaro.org,
+        mgalka@collabora.com, tomeu.vizoso@collabora.com,
+        Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: clk/clk-next boot bisection: v5.3-rc1-79-g31f58d2f58cb on
+ sun8i-h3-libretech-all-h3-cc
+Message-ID: <20190815112614.GA4841@sirena.co.uk>
+References: <5d54d2fd.1c69fb81.e13e5.7422@mx.google.com>
+ <20190815040221.DE28F2067D@mail.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vtzGhvizbBRQ85DL"
+Content-Disposition: inline
+In-Reply-To: <20190815040221.DE28F2067D@mail.kernel.org>
+X-Cookie: MIT:
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Anson Huang <Anson.Huang@nxp.com>
 
-Add A53 OPP table, cpu regulator and speed grading node to
-support cpu-freq driver.
+--vtzGhvizbBRQ85DL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts |  4 +++
- arch/arm64/boot/dts/freescale/imx8mn.dtsi         | 41 +++++++++++++++++++++++
- 2 files changed, 45 insertions(+)
+On Wed, Aug 14, 2019 at 09:02:20PM -0700, Stephen Boyd wrote:
+> Quoting kernelci.org bot (2019-08-14 20:35:25)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts b/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts
-index 10ebf77..11c705d 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts
-@@ -27,6 +27,10 @@
- 	};
- };
- 
-+&A53_0 {
-+	cpu-supply = <&buck2_reg>;
-+};
-+
- &iomuxc {
- 	pinctrl-names = "default";
- 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-index 1d8899b..785f4c4 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-@@ -51,6 +51,9 @@
- 			clocks = <&clk IMX8MN_CLK_ARM>;
- 			enable-method = "psci";
- 			next-level-cache = <&A53_L2>;
-+			operating-points-v2 = <&a53_opp_table>;
-+			nvmem-cells = <&cpu_speed_grade>;
-+			nvmem-cell-names = "speed_grade";
- 		};
- 
- 		A53_1: cpu@1 {
-@@ -61,6 +64,7 @@
- 			clocks = <&clk IMX8MN_CLK_ARM>;
- 			enable-method = "psci";
- 			next-level-cache = <&A53_L2>;
-+			operating-points-v2 = <&a53_opp_table>;
- 		};
- 
- 		A53_2: cpu@2 {
-@@ -71,6 +75,7 @@
- 			clocks = <&clk IMX8MN_CLK_ARM>;
- 			enable-method = "psci";
- 			next-level-cache = <&A53_L2>;
-+			operating-points-v2 = <&a53_opp_table>;
- 		};
- 
- 		A53_3: cpu@3 {
-@@ -81,6 +86,7 @@
- 			clocks = <&clk IMX8MN_CLK_ARM>;
- 			enable-method = "psci";
- 			next-level-cache = <&A53_L2>;
-+			operating-points-v2 = <&a53_opp_table>;
- 		};
- 
- 		A53_L2: l2-cache0 {
-@@ -88,6 +94,35 @@
- 		};
- 	};
- 
-+	a53_opp_table: opp-table {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		opp-1200000000 {
-+			opp-hz = /bits/ 64 <1200000000>;
-+			opp-microvolt = <850000>;
-+			opp-supported-hw = <0xb00>, <0x7>;
-+			clock-latency-ns = <150000>;
-+			opp-suspend;
-+		};
-+
-+		opp-1400000000 {
-+			opp-hz = /bits/ 64 <1400000000>;
-+			opp-microvolt = <950000>;
-+			opp-supported-hw = <0x300>, <0x7>;
-+			clock-latency-ns = <150000>;
-+			opp-suspend;
-+		};
-+
-+		opp-1500000000 {
-+			opp-hz = /bits/ 64 <1500000000>;
-+			opp-microvolt = <1000000>;
-+			opp-supported-hw = <0x100>, <0x3>;
-+			clock-latency-ns = <150000>;
-+			opp-suspend;
-+		};
-+	};
-+
- 	memory@40000000 {
- 		device_type = "memory";
- 		reg = <0x0 0x40000000 0 0x80000000>;
-@@ -288,6 +323,12 @@
- 				compatible = "fsl,imx8mn-ocotp", "fsl,imx7d-ocotp", "syscon";
- 				reg = <0x30350000 0x10000>;
- 				clocks = <&clk IMX8MN_CLK_OCOTP_ROOT>;
-+				#address-cells = <1>;
-+				#size-cells = <1>;
-+
-+				cpu_speed_grade: speed-grade@10 {
-+					reg = <0x10 4>;
-+				};
- 			};
- 
- 			anatop: anatop@30360000 {
--- 
-2.7.4
+> > clk/clk-next boot bisection: v5.3-rc1-79-g31f58d2f58cb on sun8i-h3-libretech-all-h3-cc
 
+> If this is the only board that failed, great! Must be something in a
+> sun8i driver that uses the init structure after registration.
+
+The infrastructure suppresses duplicate-seeming bisections so I'd not
+count on it, check the reports on the web site.
+
+--vtzGhvizbBRQ85DL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1VQVQACgkQJNaLcl1U
+h9CXxggAhQAYqpIA036IQyAKgnQ2F/AJYfCXVuQIqvyJUzJcymafEwN1LN7ZCTGO
+OYXotEHUAo0yWqEZHGYRT80yqKRDeaVSUYJ33xCHJEZXIuMULFRie3d5Qa62BejZ
+kc1DtLpAWExTsK5KJA/vUAIFqiISlVFSU/XXQGx+nc1kEYMeobT6IkkZLxZhyEZ5
+ft2eUwlXieQEtNHFQo2B8OmJMfjGeBTUkeSb/A8XYrAPmyvDxxBf01kyLSclZmvs
+Q9ddNUKGQdhwsMlr216GOhBxtPDl6fXaKxvNaX37lzYKbTVZjYjcVfvhR1AeCJ7a
+59WliRvBt6vgidBtATvY/5bgJaQY1Q==
+=4B/b
+-----END PGP SIGNATURE-----
+
+--vtzGhvizbBRQ85DL--
