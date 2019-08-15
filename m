@@ -2,81 +2,69 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 578A98EFEF
-	for <lists+linux-clk@lfdr.de>; Thu, 15 Aug 2019 18:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC47C8EFFA
+	for <lists+linux-clk@lfdr.de>; Thu, 15 Aug 2019 18:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729562AbfHOQAb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 15 Aug 2019 12:00:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46556 "EHLO mail.kernel.org"
+        id S1730612AbfHOQBC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 15 Aug 2019 12:01:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47080 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729539AbfHOQAX (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 15 Aug 2019 12:00:23 -0400
-Received: from mail.kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1730560AbfHOQBC (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 15 Aug 2019 12:01:02 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5EFBA2171F;
-        Thu, 15 Aug 2019 16:00:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CC5C2206C1;
+        Thu, 15 Aug 2019 16:01:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565884823;
-        bh=A4wQl6vcC8iZEo+vLLbng0Wix6dTYFgjLABnwe1gTpY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YC9e654T/YbzSJ2/aIR2ryASLUL2B5Uu0n1AxyMJhG/B3tjT6DSd0JQYAvHdw3ose
-         1SvsZKH1vaij+mxpOTcfr9+N5HrM8bcw4G+DoqXmYvqAsxXneDziMTe9+IaRrJMzit
-         xMAeOPSyULkiHT+QQrS2pk8v9ap8ygmcYPC6V80o=
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Taniya Das <tdas@codeaurora.org>
-Subject: [PATCH 4/4] clk: qcom: Remove error prints from DFS registration
-Date:   Thu, 15 Aug 2019 09:00:20 -0700
-Message-Id: <20190815160020.183334-5-sboyd@kernel.org>
-X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
-In-Reply-To: <20190815160020.183334-1-sboyd@kernel.org>
-References: <20190815160020.183334-1-sboyd@kernel.org>
+        s=default; t=1565884861;
+        bh=cYMyekZWfGeKYfCELWTIU6Cir2T/oO1xG9xOUMlirTc=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=t6XYsGcy+Xk8gD+pazia6bEL8H5BdgcTIqFqdfEjWMBm16nEPzpafO0MgA7MpVU95
+         5nbHHR/1No2sgtFWPW1Ep4iZQyeWHRa32aDEAI4jAHB2g3od4PCUf0ZBosKqLe304a
+         elsivyskSllgbZ1bK52z/Z2rw9ru85l2kpWr4rww=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190815151616.2A298206C1@mail.kernel.org>
+References: <5d54d2fd.1c69fb81.e13e5.7422@mx.google.com> <20190815040221.DE28F2067D@mail.kernel.org> <20190815112614.GA4841@sirena.co.uk> <20190815151616.2A298206C1@mail.kernel.org>
+Subject: Re: clk/clk-next boot bisection: v5.3-rc1-79-g31f58d2f58cb on sun8i-h3-libretech-all-h3-cc
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     "kernelci.org bot" <bot@kernelci.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        enric.balletbo@collabora.com, guillaume.tucker@collabora.com,
+        khilman@baylibre.com, matthew.hart@linaro.org,
+        mgalka@collabora.com, tomeu.vizoso@collabora.com,
+        Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Mark Brown <broonie@kernel.org>
+User-Agent: alot/0.8.1
+Date:   Thu, 15 Aug 2019 09:01:01 -0700
+Message-Id: <20190815160101.CC5C2206C1@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-These aren't useful and they reference the init structure name. Let's
-just drop them.
+Quoting Stephen Boyd (2019-08-15 08:16:15)
+> Quoting Mark Brown (2019-08-15 04:26:14)
+> > On Wed, Aug 14, 2019 at 09:02:20PM -0700, Stephen Boyd wrote:
+> > > Quoting kernelci.org bot (2019-08-14 20:35:25)
+> >=20
+> > > > clk/clk-next boot bisection: v5.3-rc1-79-g31f58d2f58cb on sun8i-h3-=
+libretech-all-h3-cc
+> >=20
+> > > If this is the only board that failed, great! Must be something in a
+> > > sun8i driver that uses the init structure after registration.
+> >=20
+> > The infrastructure suppresses duplicate-seeming bisections so I'd not
+> > count on it, check the reports on the web site.
+>=20
+> Hmm ok. I can remove the change from -next, but I'd still like to figure
+> out what is using the init pointer after registration. Is there a way to
+> get earlycon logs?
 
-Cc: Taniya Das <tdas@codeaurora.org>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
----
- drivers/clk/qcom/clk-rcg2.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
-
-diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-index 8c02bffe50df..161a6498ed5a 100644
---- a/drivers/clk/qcom/clk-rcg2.c
-+++ b/drivers/clk/qcom/clk-rcg2.c
-@@ -1105,8 +1105,6 @@ static int clk_rcg2_enable_dfs(const struct clk_rcg_dfs_data *data,
- 
- 	rcg->freq_tbl = NULL;
- 
--	pr_debug("DFS registered for clk %s\n", init->name);
--
- 	return 0;
- }
- 
-@@ -1117,12 +1115,8 @@ int qcom_cc_register_rcg_dfs(struct regmap *regmap,
- 
- 	for (i = 0; i < len; i++) {
- 		ret = clk_rcg2_enable_dfs(&rcgs[i], regmap);
--		if (ret) {
--			const char *name = rcgs[i].init->name;
--
--			pr_err("DFS register failed for clk %s\n", name);
-+		if (ret)
- 			return ret;
--		}
- 	}
- 
- 	return 0;
--- 
-Sent by a computer through tubes
+Ok I sent a patch series which may solve the problem for Allwinner.
 
