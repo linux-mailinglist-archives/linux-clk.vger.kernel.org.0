@@ -2,57 +2,91 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 141F190700
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Aug 2019 19:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6285190709
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Aug 2019 19:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727381AbfHPRfO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 16 Aug 2019 13:35:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54318 "EHLO mail.kernel.org"
+        id S1727555AbfHPRgO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 16 Aug 2019 13:36:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54540 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727005AbfHPRfO (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 16 Aug 2019 13:35:14 -0400
+        id S1726900AbfHPRgO (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 16 Aug 2019 13:36:14 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7D0C32086C;
-        Fri, 16 Aug 2019 17:35:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 491082086C;
+        Fri, 16 Aug 2019 17:36:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565976913;
-        bh=KwRVVOrbytzGnxOURauAndFe+pfthF388DNgyyvGERk=;
+        s=default; t=1565976973;
+        bh=sNq0ZIrjqyjv9St1Tf5KuLvW39QxNdAcBWHz6ktST40=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=xpQpUa2BQ0TqloUC1TlYy1EeGHiyVhpeP/kdEpmzeD87XGk3bB/a3CsWlqZ4ZJLX4
-         clm9pfY59Kr3mcwsfTD0QxZwyX1v3TB6MSrl2Mg0ZxQUKBOVnNaskq2FD0MEOZUTQ/
-         bAuMuZQ9A8Q3PE0oDC82fmx52XsZDpXJKeXJFAyA=
+        b=m4OaQKNgfU6xahKExwpvjNk54djLgfZJfU9mMXq7vKSbqzdUDrtmQBNr2fxG5DpS1
+         pHZA/rgHUEcugY+gWqf/s+DCZRA+ZVjBGLNPsIkzQF7gEkgue7+A7y0cZLmqjAjPCC
+         dYNLd2aZ48t5CTprKS6l2JR7nLAl0vtl3Y3uF87M=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190816135944.54232-1-yuehaibing@huawei.com>
-References: <20190816135944.54232-1-yuehaibing@huawei.com>
-Subject: Re: [PATCH -next] clk: qcom: clk-rpm: remove unused code
+In-Reply-To: <20190816135523.73520-1-yuehaibing@huawei.com>
+References: <20190816135523.73520-1-yuehaibing@huawei.com>
+Subject: Re: [PATCH -next] clk: st: clkgen-pll: remove unused variable 'st_pll3200c32_407_a0'
 From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, YueHaibing <yuehaibing@huawei.com>
-To:     YueHaibing <yuehaibing@huawei.com>, agross@kernel.org,
-        mturquette@baylibre.com
+        YueHaibing <yuehaibing@huawei.com>
+To:     YueHaibing <yuehaibing@huawei.com>, allison@lohutok.net,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        Gabriel FERNANDEZ <gabriel.fernandez@st.com>
 User-Agent: alot/0.8.1
-Date:   Fri, 16 Aug 2019 10:35:12 -0700
-Message-Id: <20190816173513.7D0C32086C@mail.kernel.org>
+Date:   Fri, 16 Aug 2019 10:36:12 -0700
+Message-Id: <20190816173613.491082086C@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting YueHaibing (2019-08-16 06:59:44)
-> drivers/clk/qcom/clk-rpm.c:453:29: warning:
->  clk_rpm_branch_ops defined but not used [-Wunused-const-variable=3D]
+Quoting YueHaibing (2019-08-16 06:55:23)
+> drivers/clk/st/clkgen-pll.c:64:37: warning:
+>  st_pll3200c32_407_a0 defined but not used [-Wunused-const-variable=3D]
 >=20
-> It is never used, also the macros 'DEFINE_CLK_RPM_CXO_BRANCH'
-> and 'DEFINE_CLK_RPM_CXO_BRANCH' are unused, so remove them.
+> It is never used, so can be removed.
 >=20
 > Reported-by: Hulk Robot <hulkci@huawei.com>
 > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 > ---
 
-Sorry, apparently we're leaving this code around for qcom folks to use
-one day.
+Adding Gabriel, please ack/review.
 
+>  drivers/clk/st/clkgen-pll.c | 13 -------------
+>  1 file changed, 13 deletions(-)
+>=20
+> diff --git a/drivers/clk/st/clkgen-pll.c b/drivers/clk/st/clkgen-pll.c
+> index d8a688b..c3952f2 100644
+> --- a/drivers/clk/st/clkgen-pll.c
+> +++ b/drivers/clk/st/clkgen-pll.c
+> @@ -61,19 +61,6 @@ static const struct clk_ops stm_pll3200c32_ops;
+>  static const struct clk_ops stm_pll3200c32_a9_ops;
+>  static const struct clk_ops stm_pll4600c28_ops;
+> =20
+> -static const struct clkgen_pll_data st_pll3200c32_407_a0 =3D {
+> -       /* 407 A0 */
+> -       .pdn_status     =3D CLKGEN_FIELD(0x2a0,   0x1,                   =
+ 8),
+> -       .pdn_ctrl       =3D CLKGEN_FIELD(0x2a0,   0x1,                   =
+ 8),
+> -       .locked_status  =3D CLKGEN_FIELD(0x2a0,   0x1,                   =
+ 24),
+> -       .ndiv           =3D CLKGEN_FIELD(0x2a4,   C32_NDIV_MASK,         =
+ 16),
+> -       .idf            =3D CLKGEN_FIELD(0x2a4,   C32_IDF_MASK,          =
+ 0x0),
+> -       .num_odfs =3D 1,
+> -       .odf            =3D { CLKGEN_FIELD(0x2b4, C32_ODF_MASK,          =
+ 0) },
+> -       .odf_gate       =3D { CLKGEN_FIELD(0x2b4, 0x1,                   =
+ 6) },
+> -       .ops            =3D &stm_pll3200c32_ops,
+> -};
+> -
+>  static const struct clkgen_pll_data st_pll3200c32_cx_0 =3D {
+>         /* 407 C0 PLL0 */
+>         .pdn_status     =3D CLKGEN_FIELD(0x2a0,   0x1,                   =
+ 8),
