@@ -2,58 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE14906FC
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Aug 2019 19:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141F190700
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Aug 2019 19:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727357AbfHPRex (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 16 Aug 2019 13:34:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54212 "EHLO mail.kernel.org"
+        id S1727381AbfHPRfO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 16 Aug 2019 13:35:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54318 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727067AbfHPRex (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 16 Aug 2019 13:34:53 -0400
+        id S1727005AbfHPRfO (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 16 Aug 2019 13:35:14 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7EF5F2086C;
-        Fri, 16 Aug 2019 17:34:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7D0C32086C;
+        Fri, 16 Aug 2019 17:35:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565976892;
-        bh=1oe6NzSGm38zRqgP0VASJ7S94TJ/KghmSj5jyFDjQZ8=;
+        s=default; t=1565976913;
+        bh=KwRVVOrbytzGnxOURauAndFe+pfthF388DNgyyvGERk=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=ilypoaSHeev0JULBweVkw4UbrW45Oq3D1fZWgFZmejx9ITCG5XKNOPdGp2jO2mTGh
-         fTpYNJ0zHYCclKfzJOjAEIJz67C44Ct17ORgLRzmbp39eIX8rpAeUlNRr43KeTOL+V
-         ZLk2zLzDD3dgnLP6wsPgiu2wdcLmfqKzRMwbJ310=
+        b=xpQpUa2BQ0TqloUC1TlYy1EeGHiyVhpeP/kdEpmzeD87XGk3bB/a3CsWlqZ4ZJLX4
+         clm9pfY59Kr3mcwsfTD0QxZwyX1v3TB6MSrl2Mg0ZxQUKBOVnNaskq2FD0MEOZUTQ/
+         bAuMuZQ9A8Q3PE0oDC82fmx52XsZDpXJKeXJFAyA=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190816140200.55040-1-yuehaibing@huawei.com>
-References: <20190816140200.55040-1-yuehaibing@huawei.com>
-Subject: Re: [PATCH -next] clk: armada-xp: remove unused code
+In-Reply-To: <20190816135944.54232-1-yuehaibing@huawei.com>
+References: <20190816135944.54232-1-yuehaibing@huawei.com>
+Subject: Re: [PATCH -next] clk: qcom: clk-rpm: remove unused code
 From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        YueHaibing <yuehaibing@huawei.com>
-To:     YueHaibing <yuehaibing@huawei.com>, gregory.clement@bootlin.com,
+        linux-arm-msm@vger.kernel.org, YueHaibing <yuehaibing@huawei.com>
+To:     YueHaibing <yuehaibing@huawei.com>, agross@kernel.org,
         mturquette@baylibre.com
 User-Agent: alot/0.8.1
-Date:   Fri, 16 Aug 2019 10:34:51 -0700
-Message-Id: <20190816173452.7EF5F2086C@mail.kernel.org>
+Date:   Fri, 16 Aug 2019 10:35:12 -0700
+Message-Id: <20190816173513.7D0C32086C@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting YueHaibing (2019-08-16 07:02:00)
-> drivers/clk/mvebu/armada-xp.c:171:38: warning:
->  mv98dx3236_coreclks defined but not used [-Wunused-const-variable=3D]
-> drivers/clk/mvebu/armada-xp.c:213:41: warning:
->  mv98dx3236_gating_desc defined but not used [-Wunused-const-variable=3D]
+Quoting YueHaibing (2019-08-16 06:59:44)
+> drivers/clk/qcom/clk-rpm.c:453:29: warning:
+>  clk_rpm_branch_ops defined but not used [-Wunused-const-variable=3D]
 >=20
-> They are never used, so can be remove. Also remove
-> the related functions.
+> It is never used, also the macros 'DEFINE_CLK_RPM_CXO_BRANCH'
+> and 'DEFINE_CLK_RPM_CXO_BRANCH' are unused, so remove them.
 >=20
 > Reported-by: Hulk Robot <hulkci@huawei.com>
 > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 > ---
 
-I'll wait for Gregory to review.
+Sorry, apparently we're leaving this code around for qcom folks to use
+one day.
 
