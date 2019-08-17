@@ -2,64 +2,68 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C20CB90D9E
-	for <lists+linux-clk@lfdr.de>; Sat, 17 Aug 2019 09:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC6590DB7
+	for <lists+linux-clk@lfdr.de>; Sat, 17 Aug 2019 09:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725945AbfHQHFG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 17 Aug 2019 03:05:06 -0400
-Received: from muru.com ([72.249.23.125]:58110 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725267AbfHQHFF (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sat, 17 Aug 2019 03:05:05 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 53AB0812D;
-        Sat, 17 Aug 2019 07:05:32 +0000 (UTC)
-Date:   Sat, 17 Aug 2019 00:05:01 -0700
-From:   Tony Lindgren <tony@atomide.com>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Linux-OMAP <linux-omap@vger.kernel.org>,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Filip =?utf-8?Q?Matijevi=C4=87?= <filip.matijevic.pz@gmail.com>,
-        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        =?utf-8?B?UGF3ZcWC?= Chmiel <pawel.mikolaj.chmiel@gmail.com>,
-        Philipp Rossak <embed3d@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>, Tero Kristo <t-kristo@ti.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        moaz korena <moaz@korena.xyz>, "Andrew F. Davis" <afd@ti.com>
-Subject: Re: [PATCH 0/6] Configure sgx interconnect data for some omap
- variants
-Message-ID: <20190817070501.GK52127@atomide.com>
-References: <20190814131408.57162-1-tony@atomide.com>
- <CAHCN7x+p5+XoRHJP--mZ0QcP0FzpYK+pRj7d8Y-js6a8z=p_7A@mail.gmail.com>
- <20190815040248.GF52127@atomide.com>
- <20190815041502.GG52127@atomide.com>
- <CAHCN7xLNmTkvX9cKdRTu6xLvX+G-kkN6CbwXU0z+mdqscB3fvQ@mail.gmail.com>
+        id S1725889AbfHQH3h (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 17 Aug 2019 03:29:37 -0400
+Received: from smtprelay0095.hostedemail.com ([216.40.44.95]:39730 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725832AbfHQH3h (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 17 Aug 2019 03:29:37 -0400
+X-Greylist: delayed 402 seconds by postgrey-1.27 at vger.kernel.org; Sat, 17 Aug 2019 03:29:36 EDT
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave05.hostedemail.com (Postfix) with ESMTP id 5360218026599
+        for <linux-clk@vger.kernel.org>; Sat, 17 Aug 2019 07:22:55 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay07.hostedemail.com (Postfix) with ESMTP id BF910181D33FC;
+        Sat, 17 Aug 2019 07:22:53 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::,RULES_HIT:41:355:379:599:968:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1538:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2828:3138:3139:3140:3141:3142:3352:3622:3653:3865:3867:3868:3870:3871:4321:5007:7903:10004:10400:10848:11232:11658:11914:12049:12297:12740:12760:12895:13069:13311:13357:13439:14659:14721:21060:21080:21627:30054:30091,0,RBL:23.242.196.136:@perches.com:.lbl8.mailshell.net-62.14.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:25,LUA_SUMMARY:none
+X-HE-Tag: fish56_5354f57556556
+X-Filterd-Recvd-Size: 1469
+Received: from XPS-9350.home (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
+        (Authenticated sender: joe@perches.com)
+        by omf02.hostedemail.com (Postfix) with ESMTPA;
+        Sat, 17 Aug 2019 07:22:52 +0000 (UTC)
+Message-ID: <74b4a00b524cf8dd11631692dee65ccbba34b8cb.camel@perches.com>
+Subject: Re: [PATCH] clk: Remove extraneous 'for' word in comments
+From:   Joe Perches <joe@perches.com>
+To:     Rishi Gupta <gupt21@gmail.com>, sboyd@kernel.org,
+        kernel-janitors <kernel-janitors@vger.kernel.org>
+Cc:     mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Sat, 17 Aug 2019 00:22:51 -0700
+In-Reply-To: <1566023759-7880-1-git-send-email-gupt21@gmail.com>
+References: <1566023759-7880-1-git-send-email-gupt21@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.32.1-2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHCN7xLNmTkvX9cKdRTu6xLvX+G-kkN6CbwXU0z+mdqscB3fvQ@mail.gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-* Adam Ford <aford173@gmail.com> [190815 13:06]:
-> On Wed, Aug 14, 2019 at 11:15 PM Tony Lindgren <tony@atomide.com> wrote:
-> > Looks like omap34xx OCP registers are not readable unlike on omap36xx.
-> > We use SGX revision register instead of the OCP revision register for
-> > 34xx and do not configure any SYSCONFIG register unlike for 36xx.
-> 
-> Do you want/need me to test the OMAP3530?  I can run the same tests I
-> did for the DM3730.
+On Sat, 2019-08-17 at 12:05 +0530, Rishi Gupta wrote:
+> An extra 'for' word is grammatically incorrect in the comment
+> 'verifying ops for multi-parent clks'. This commit removes
+> this extra for word.
 
-Sure if you can dod that easily.
+A few other repeated word typos in comments are 
+common in the kernel and most could be changed.
 
-Regards,
+$ git grep -P '^\s*/?\*.*\bthe the\b' | wc -l
+285
+$ git grep -P '^\s*/?\*.*\bto to\b' | wc -l
+62
+$ git grep -P '^\s*/?\*.*\bfor for\b' | wc -l
+31
+$ git grep -P
+'^\s*/?\*.*\bfrom from\b' | wc -l
+22
+$ git grep -P '^\s*/?\*.*\bare are\b'
+| wc -l
+16
 
-Tony
+
