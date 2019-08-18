@@ -2,108 +2,110 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7C0917C6
-	for <lists+linux-clk@lfdr.de>; Sun, 18 Aug 2019 18:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD71591852
+	for <lists+linux-clk@lfdr.de>; Sun, 18 Aug 2019 19:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726742AbfHRQYW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 18 Aug 2019 12:24:22 -0400
-Received: from mout.gmx.net ([212.227.15.18]:57915 "EHLO mout.gmx.net"
+        id S1726089AbfHRR2B (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 18 Aug 2019 13:28:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39704 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726089AbfHRQYW (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 18 Aug 2019 12:24:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1566145453;
-        bh=CzdbVQq8IrILnm9Q22KWEYU789AoTBUeM4pr8EHs4B0=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=BE9iF8C9awFP40knspDwDKei8JkqD7bb9v5Gi76ncS8K5jBzRguKhTSnq8tlqV+/x
-         MwuCbxOZ47MpMMglpq9dybmhqtl4OZ86/UsZGS+/ZUpghSjnA3/r6lF2PwWD+EQRfA
-         JpCiMyy6mD80XCggcJmH/vNZ4CR9MgEBRPC7W1U8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([37.4.249.106]) by mail.gmx.com
- (mrgmx003 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 0LikE1-1iXL961U8j-00cwDf; Sun, 18 Aug 2019 18:24:13 +0200
-From:   Stefan Wahren <wahrenst@gmx.net>
-To:     Eric Anholt <eric@anholt.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S1725786AbfHRR2A (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 18 Aug 2019 13:28:00 -0400
+Received: from localhost.localdomain (unknown [194.230.155.124])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A67302146E;
+        Sun, 18 Aug 2019 17:27:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566149279;
+        bh=iig6Re8PWJsFt/crrOvV4t6QJEhoY/povqVGZtQWCL8=;
+        h=From:To:Subject:Date:From;
+        b=xkCa3hC33h5bg5KUuIkrzhe1uCPvM7Tl/5rmvlydeZZ5K8asuzIByBwRVGSLc0I75
+         XFDFI6xzc/4Dptm6HwBTdxhmviFC7R0LryBCOuDNdp/qnZTJfCiaGTPBC4GA/NYgZ7
+         G+btALSxtO5dpm8uO0FF9jEZnumSpanY166oLTG0=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Kamil Konieczny <k.konieczny@partner.samsung.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH 4/4] clk: bcm2835: Mark PLLD_PER as CRITICAL
-Date:   Sun, 18 Aug 2019 18:23:44 +0200
-Message-Id: <1566145424-3186-5-git-send-email-wahrenst@gmx.net>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1566145424-3186-1-git-send-email-wahrenst@gmx.net>
-References: <1566145424-3186-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:Y5KnN3P4dN6rJKtSRnxV6bmbDrsIR6RJHsGa2SS5ZGPEIdDjLld
- m9M0ggJUPJlABn8hfTzpFBgFqiYKPW5JlB5RGi+IvwChqvpw7psC09DRv2MM+TDMNATZCE3
- G4l1+YDGPkAM574T8IeaN/7Vdauxv9c2tqnK5l0dpWv3V8n2W2AV4q4FoKZvvePl5g6afXY
- itREXpAZkk6eV5xJwAMpw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:6nY4L7DJmR8=:qhqpx98PZ0Yv7ARb0iDSAf
- h2jl3qUYO/BYr+H/YYgmWcwtz1Iz6YTHj0jSXT4ri44f5vZsuYU5nCMsgzxakTYnSUnOCayXi
- 3jghAzsIWTwYXFfFmv+KKDhQMlTkBL0dleN9e5c34P4eVhPMNdtmfzZgjpQjPuj6O37VWU9Hl
- 8om56VkzvFVkHwRuugO/4+roZQLgg9QGexvtS7xsBcbm7MpltLKKqJ8KaVCNHFYAPSPWAt9Bk
- UxdjgujtrotUVTeWuKcKzSpwf9dVde15sXHtUKoHvBKWwLSypkxsKXU503ykjrD2peGxhWXz4
- tVH6Dslruvn59VAL6MycATISgVL8EeMM/gERlOOh9MfF/yapVaUMXE14oxixsE4VrooWeOo/z
- 6fTILJZC9dssUEU8SzbvlH93OlGAjnePFjk+B2CJ7RSHX8NiJbWbOlFhEA7FU4RVL3eJZw6zY
- 5EQxckN9iUNzqv3Is1zhKJSWpQU951FYleYSo9KcB9jo6ZgXeHuGCEwIXCTsRdHZokZQ36dBZ
- DeAHtkuGuWNPhFiDn9bgNllVmoW6IyOI5TeIpPgcloH9aqsBJzn6F1i6U1cjRsiw6ba19FN8z
- AuJ9LWblHpgFsVZzY/1nDUloY6BUNlkYunlUHOf7sjP1PyDUMO7dNvW7+I6D6UgaGvV3RWfvy
- 74zmGfI780eyqA1BxJlcxkoWv6slxYY12jDw+85ItsYkf3CMo6J9seVW5Ge9em1Jy6FeQdNix
- 8zrITqCH+HiADIMXbpFoi70etb9NwIQ+z+t+ykhfBsi7eQV+B6uRdpOQl1Xfrd7jdo7tagYgK
- sJRGuyvumkKICNyaLyKC8h2SSbUdbyfaTDUE9x4qTYGDKU9n3WMyBusU0ekXAAjtGIXVEDJKl
- sgb5yn2VmWSd1dskSnkynpVsZQLu4rYs+Y2ntcByXXamfzfrTT3wpHL7Pi/rcI2dZOMXhXbG4
- wSIl5eRxC42HjYGdgaQuKW1Im6z+T7JJaAKffe+varrIARFWFURLxj67BdT0Swiz28P0kmriK
- Ugte/8SCJsdJzDsvIPmhrLnHWQVHOcrrbXzi1CpF9xqZNQ8XxbtH6vhEJeCBJoHw5kqcsFVCm
- Ddp+Cw6a5hIaMTqsZpo1VXc2xV+pE+ryXSCqVf8J1NQNtTXbNySvuJB4X3bYGpnoBLaqbzyfC
- O0zwjoIsF8nN/La0J/60/xCWk455dDKt9r2EjdfFCO25se2g==
-Content-Transfer-Encoding: quoted-printable
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: Extend patterns for Samsung SoC, Security Subsystem and clock drivers
+Date:   Sun, 18 Aug 2019 19:27:50 +0200
+Message-Id: <20190818172750.20921-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The VPU firmware assume that the PLLD_PER isn't modified by the ARM core.
-Otherwise this could cause firmware lookups. So mark the clock as critical
-to avoid this.
+Extend the patterns to cover all related files in respective
+categories:
+1. Samsung Exynos ARM architecture: add soc drivers headers and make
+   directory matches consistent,
+2. Samsung Security SubSystem driver (crypto): add bindings,
+3. Samsung SoC clock drivers: add S3C24xx, S3C64xx and S5Pv210 bindings.
 
-Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-Reviewed-by: Eric Anholt <eric@anholt.net>
-=2D--
- drivers/clk/bcm/clk-bcm2835.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Cc: Kukjin Kim <kgene@kernel.org>
+Cc: Vladimir Zapolskiy <vz@mleia.com>
+Cc: Kamil Konieczny <k.konieczny@partner.samsung.com>
+Cc: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc: Tomasz Figa <tomasz.figa@gmail.com>
+Cc: Chanwoo Choi <cw00.choi@samsung.com>
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-diff --git a/drivers/clk/bcm/clk-bcm2835.c b/drivers/clk/bcm/clk-bcm2835.c
-index fdf672a..802e488 100644
-=2D-- a/drivers/clk/bcm/clk-bcm2835.c
-+++ b/drivers/clk/bcm/clk-bcm2835.c
-@@ -1776,6 +1776,11 @@ static const struct bcm2835_clk_desc clk_desc_array=
-[] =3D {
- 		.hold_mask =3D CM_PLLD_HOLDCORE,
- 		.fixed_divider =3D 1,
- 		.flags =3D CLK_SET_RATE_PARENT),
-+	/*
-+	 * VPU firmware assumes that PLLD_PER isn't disabled by the ARM core.
-+	 * Otherwise this could cause firmware lookups. That's why we mark
-+	 * it as critical.
-+	 */
- 	[BCM2835_PLLD_PER]	=3D REGISTER_PLL_DIV(
- 		SOC_ALL,
- 		.name =3D "plld_per",
-@@ -1785,7 +1790,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.load_mask =3D CM_PLLD_LOADPER,
- 		.hold_mask =3D CM_PLLD_HOLDPER,
- 		.fixed_divider =3D 1,
--		.flags =3D CLK_SET_RATE_PARENT),
-+		.flags =3D CLK_IS_CRITICAL | CLK_SET_RATE_PARENT),
- 	[BCM2835_PLLD_DSI0]	=3D REGISTER_PLL_DIV(
- 		SOC_ALL,
- 		.name =3D "plld_dsi0",
-=2D-
-2.7.4
+---
+
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-clk@vger.kernel.org
+---
+ MAINTAINERS | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 420567d1519a..35a4002ac58b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2199,8 +2199,9 @@ F:	drivers/*/*s3c24*
+ F:	drivers/*/*/*s3c24*
+ F:	drivers/*/*s3c64xx*
+ F:	drivers/*/*s5pv210*
+-F:	drivers/memory/samsung/*
+-F:	drivers/soc/samsung/*
++F:	drivers/memory/samsung/
++F:	drivers/soc/samsung/
++F:	include/linux/soc/samsung/
+ F:	Documentation/arm/samsung/
+ F:	Documentation/devicetree/bindings/arm/samsung/
+ F:	Documentation/devicetree/bindings/sram/samsung-sram.txt
+@@ -14174,6 +14175,8 @@ M:	Kamil Konieczny <k.konieczny@partner.samsung.com>
+ L:	linux-crypto@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+ S:	Maintained
++F:	Documentation/devicetree/bindings/crypto/samsung-slimsss.txt
++F:	Documentation/devicetree/bindings/crypto/samsung-sss.txt
+ F:	drivers/crypto/s5p-sss.c
+ 
+ SAMSUNG S5P/EXYNOS4 SOC SERIES CAMERA SUBSYSTEM DRIVERS
+@@ -14194,6 +14197,8 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/snawrocki/clk.git
+ F:	drivers/clk/samsung/
+ F:	include/dt-bindings/clock/exynos*.h
+ F:	Documentation/devicetree/bindings/clock/exynos*.txt
++F:	Documentation/devicetree/bindings/clock/samsung,s3c*
++F:	Documentation/devicetree/bindings/clock/samsung,s5p*
+ 
+ SAMSUNG SPI DRIVERS
+ M:	Kukjin Kim <kgene@kernel.org>
+-- 
+2.17.1
 
