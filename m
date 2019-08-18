@@ -2,158 +2,69 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E38E691393
-	for <lists+linux-clk@lfdr.de>; Sun, 18 Aug 2019 00:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87FE9913E3
+	for <lists+linux-clk@lfdr.de>; Sun, 18 Aug 2019 03:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726632AbfHQWrJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 17 Aug 2019 18:47:09 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:52906 "EHLO inva021.nxp.com"
+        id S1726294AbfHRBKp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 17 Aug 2019 21:10:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44556 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726208AbfHQWrI (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sat, 17 Aug 2019 18:47:08 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 5586F20010A;
-        Sun, 18 Aug 2019 00:47:05 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 6E19E200689;
-        Sun, 18 Aug 2019 00:46:57 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id A61EA40319;
-        Sun, 18 Aug 2019 06:46:47 +0800 (SGT)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     robh+dt@kernel.org, mark.rutland@arm.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        mturquette@baylibre.com, sboyd@kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, leonard.crestez@nxp.com,
-        abel.vesa@nxp.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH V2 6/6] arm64: dts: imx8mn: Add cpu-freq support
-Date:   Sat, 17 Aug 2019 18:28:20 -0400
-Message-Id: <1566080900-2539-6-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1566080900-2539-1-git-send-email-Anson.Huang@nxp.com>
-References: <1566080900-2539-1-git-send-email-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726045AbfHRBKp (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sat, 17 Aug 2019 21:10:45 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B21742173B;
+        Sun, 18 Aug 2019 01:10:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566090644;
+        bh=i3YpEXnym46J8n6fFZZQkuId1yawTkolYP1kiWYjf0o=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=wVxF4GLFbd6Ma/3RyvYzcb8xuaPz/SeNzKFdG0Yp2Y8ZVYDt+hdpHX23WBp0tg8bL
+         ksTCOWtOus8PJaNkl1Ndis+Mw8EJTv4z91jfRWM+ub2SUbfU9a3ZJ+F2ElBXL5PeJH
+         x19yVV3XVajgMODyxILEE4sS3wysBBBOEYHveX3o=
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190611192049.14958-1-jeffrey.l.hugo@gmail.com>
+References: <20190611191949.14906-1-jeffrey.l.hugo@gmail.com> <20190611192049.14958-1-jeffrey.l.hugo@gmail.com>
+Subject: Re: [PATCH v3 1/2] clk: qcom: Add MSM8998 GPU Clock Controller (GPUCC) driver
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     agross@kernel.org, david.brown@linaro.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, marc.w.gonzalez@free.fr,
+        jcrouse@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+To:     Jeffrey Hugo <jeffrey.l.hugo@gmail.com>, mturquette@baylibre.com
+User-Agent: alot/0.8.1
+Date:   Sat, 17 Aug 2019 18:10:43 -0700
+Message-Id: <20190818011044.B21742173B@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add A53 OPP table, cpu regulator and speed grading node to
-support cpu-freq driver.
+Quoting Jeffrey Hugo (2019-06-11 12:20:49)
+> +
+> +static int gpucc_msm8998_probe(struct platform_device *pdev)
+> +{
+> +       struct regmap *regmap;
+> +       struct clk *xo;
+> +
+> +       /*
+> +        * We must have a valid XO to continue until orphan probe defer is
+> +        * implemented.  XO is basically the root of everything.  Since we
+> +        * cannot control probe order, its possible XO won't be available
+> +        * and the clk framework will allow clients to operate on their
+> +        * clocks that depend on XO, which has been observed to cause iss=
+ues.
+> +        */
+> +       xo =3D clk_get(&pdev->dev, "xo");
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
----
-No changes.
----
- arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts |  4 +++
- arch/arm64/boot/dts/freescale/imx8mn.dtsi         | 41 +++++++++++++++++++++++
- 2 files changed, 45 insertions(+)
+Sorry, it still bothers me. Please remove any clk consumer API calls in
+these MSM8998 drivers and don't put XO into DT for these nodes until the
+"observed issues" are resolved with the clk framework.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts b/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts
-index 10ebf77..11c705d 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dts
-@@ -27,6 +27,10 @@
- 	};
- };
- 
-+&A53_0 {
-+	cpu-supply = <&buck2_reg>;
-+};
-+
- &iomuxc {
- 	pinctrl-names = "default";
- 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-index 1d8899b..785f4c4 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-@@ -51,6 +51,9 @@
- 			clocks = <&clk IMX8MN_CLK_ARM>;
- 			enable-method = "psci";
- 			next-level-cache = <&A53_L2>;
-+			operating-points-v2 = <&a53_opp_table>;
-+			nvmem-cells = <&cpu_speed_grade>;
-+			nvmem-cell-names = "speed_grade";
- 		};
- 
- 		A53_1: cpu@1 {
-@@ -61,6 +64,7 @@
- 			clocks = <&clk IMX8MN_CLK_ARM>;
- 			enable-method = "psci";
- 			next-level-cache = <&A53_L2>;
-+			operating-points-v2 = <&a53_opp_table>;
- 		};
- 
- 		A53_2: cpu@2 {
-@@ -71,6 +75,7 @@
- 			clocks = <&clk IMX8MN_CLK_ARM>;
- 			enable-method = "psci";
- 			next-level-cache = <&A53_L2>;
-+			operating-points-v2 = <&a53_opp_table>;
- 		};
- 
- 		A53_3: cpu@3 {
-@@ -81,6 +86,7 @@
- 			clocks = <&clk IMX8MN_CLK_ARM>;
- 			enable-method = "psci";
- 			next-level-cache = <&A53_L2>;
-+			operating-points-v2 = <&a53_opp_table>;
- 		};
- 
- 		A53_L2: l2-cache0 {
-@@ -88,6 +94,35 @@
- 		};
- 	};
- 
-+	a53_opp_table: opp-table {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		opp-1200000000 {
-+			opp-hz = /bits/ 64 <1200000000>;
-+			opp-microvolt = <850000>;
-+			opp-supported-hw = <0xb00>, <0x7>;
-+			clock-latency-ns = <150000>;
-+			opp-suspend;
-+		};
-+
-+		opp-1400000000 {
-+			opp-hz = /bits/ 64 <1400000000>;
-+			opp-microvolt = <950000>;
-+			opp-supported-hw = <0x300>, <0x7>;
-+			clock-latency-ns = <150000>;
-+			opp-suspend;
-+		};
-+
-+		opp-1500000000 {
-+			opp-hz = /bits/ 64 <1500000000>;
-+			opp-microvolt = <1000000>;
-+			opp-supported-hw = <0x100>, <0x3>;
-+			clock-latency-ns = <150000>;
-+			opp-suspend;
-+		};
-+	};
-+
- 	memory@40000000 {
- 		device_type = "memory";
- 		reg = <0x0 0x40000000 0 0x80000000>;
-@@ -288,6 +323,12 @@
- 				compatible = "fsl,imx8mn-ocotp", "fsl,imx7d-ocotp", "syscon";
- 				reg = <0x30350000 0x10000>;
- 				clocks = <&clk IMX8MN_CLK_OCOTP_ROOT>;
-+				#address-cells = <1>;
-+				#size-cells = <1>;
-+
-+				cpu_speed_grade: speed-grade@10 {
-+					reg = <0x10 4>;
-+				};
- 			};
- 
- 			anatop: anatop@30360000 {
--- 
-2.7.4
-
+> +       if (IS_ERR(xo))
