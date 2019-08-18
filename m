@@ -2,26 +2,26 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 258BF917CA
-	for <lists+linux-clk@lfdr.de>; Sun, 18 Aug 2019 18:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED85917C8
+	for <lists+linux-clk@lfdr.de>; Sun, 18 Aug 2019 18:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726261AbfHRQYZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 18 Aug 2019 12:24:25 -0400
-Received: from mout.gmx.net ([212.227.15.18]:50827 "EHLO mout.gmx.net"
+        id S1726089AbfHRQYW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 18 Aug 2019 12:24:22 -0400
+Received: from mout.gmx.net ([212.227.15.18]:52027 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726247AbfHRQYZ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 18 Aug 2019 12:24:25 -0400
+        id S1726097AbfHRQYW (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 18 Aug 2019 12:24:22 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1566145452;
-        bh=2EQQbD1OW5Bat6jRODQb5wvrchX/224QkLBdZwcOXzg=;
+        s=badeba3b8450; t=1566145453;
+        bh=IM5UxVrBLP5hF/1d1ZFHRD2GqKmi/z5awy9hXKawSn0=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=VdXh5FGDMapgTSr12/QmTtV/UlGS8CuQjDa2sK0Niv+b1O4Yfc5dgOq58N6RXfXec
-         c8YR4ZM843RkL+KEA0XGrg/1HOF37XlTkia74NzpI8M+rd+reYxD5H5uxJSL1PhsNk
-         YvyAawFNzF4ZHjcKwLjjCQPnKt0/oVenlgMCVh0c=
+        b=VJQRqdVGHgbBsll1Q6/ZxhVx4LMhKHwxogARlRTqPT6fvTAQNtl9wsNYetEmiH/rP
+         P7i0TWzXvcbhTSA6O4JRjfY3w0i6OIddUJ0hs3jwU3P2XW9g1Nm1EFD+t2e9lBCMSu
+         K7FTt0AS+IR514jkzbxSDcpyfK+09lPuIqIjZ/TQ=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([37.4.249.106]) by mail.gmx.com
  (mrgmx003 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 0MGSgq-1i3jYa2Jay-00DEvS; Sun, 18 Aug 2019 18:24:12 +0200
+ 0LiDrv-1idL9r45ul-00nOkz; Sun, 18 Aug 2019 18:24:13 +0200
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Eric Anholt <eric@anholt.net>,
         Florian Fainelli <f.fainelli@gmail.com>,
@@ -32,671 +32,106 @@ To:     Eric Anholt <eric@anholt.net>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-clk@vger.kernel.org, Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH 2/4] clk: bcm2835: Introduce SoC specific clock registration
-Date:   Sun, 18 Aug 2019 18:23:42 +0200
-Message-Id: <1566145424-3186-3-git-send-email-wahrenst@gmx.net>
+Subject: [PATCH 3/4] clk: bcm2835: Add BCM2711_CLOCK_EMMC2 support
+Date:   Sun, 18 Aug 2019 18:23:43 +0200
+Message-Id: <1566145424-3186-4-git-send-email-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1566145424-3186-1-git-send-email-wahrenst@gmx.net>
 References: <1566145424-3186-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:3+OL5bhxKNbr6IFtcjyo9FSr2ymBIiDKeonKZfyvq8Cau5Cj9lp
- mAepi+FeNDU80vobYer0HxKU98DzzIfjiuyHM3oJHK99FpxqXN07wS7pyo9KFZ8QQyxGg7w
- c/MLdAHVAuIgXn9OwfKvfS5pI7QvyhkZEuWGfiX2lMgrAotYnaJfH7gVBYcT0mizKAsFx/P
- qiviF+vIDtrdmtROE+FqQ==
+X-Provags-ID: V03:K1:3ix2WU/9XnteCrpqo9GRNBYCbCi4Wfo4+blR26+ik5fMozdrR6M
+ IghvLQO/EwpzWfdg9kKXg2hsd3BK+ZoToDC0ZpJYldJ/xLjeZ8BJSK/nK+oDAJHpWo56YW9
+ RyrSQLY7JZsEIzW6TnBFCZ+ZUbiYE8Iqdzd2YiiagIiwCRWHF1k/yYMT7X6bcjZ9Cs0Xapz
+ yjF5mlpWix3xuvMimQqhw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:wnYFS8Kxe9k=:L8xS8SfUMwrvKcHDsW9HX8
- LiNv2UPjodY8Z8rChhHVToQnqAO+cwnbLe88sDa3o+SGePTNZ2kiVetLnc3EeLKufYX0M+ow5
- B8kcUM21u+uBy8SKuSyu2+thZds+vmFTYQZBrNAZpGn6rG7fxso3My+ihf8AZ9PSBVSGsIuMp
- 7nIlrt4JCmmkATprBwU8IiWW6CaP/egqCxbIFbtduiy3Obl1gzCBD8VRHyD2QCmB1sSIm6pMY
- dsV4rgJ+FknzgR4aIW8TV1g3hC8YsxBeEWwR650W38yFN7Wcfnal6A1JJnMf1va84nd5NLHkJ
- XxoUHIOOEG9nCXePJN3tw8i8fmAW/7B42EG86G61w6miF6WLSif+vgqWBUY9pyk/cmkY40X4L
- WlVmIqMG97n0tRDDz/Ph8lp4x6zRFo17fvtMNxGhb57Ei5XJzpRfViy+aLXSpJBADgKRUfe4Q
- ibLeEfYKGcxPFibrsO6u48jCvUCuoWCkB70I6v1ZhQR7Tcv7uD+7IcxGj7PJcI1RUy2acJGQR
- Qv3r0HjeXgFc5kmRyhfClo20jtBub+/qo/mKYWb97j7CmS7gfWSgT9e6ROJtck79OzT06/hXp
- qxz6oLVjD6Et291ePU/YKDQrsc5WCxEmqUxw4YHRYEPoF15UXQoONAvNoeEgDDauRT2I6YeBA
- ZNlMO1xooObMDpXaC8d6Hn21iiIQ+MTiq2qTZK8iFd/rv5LVzJjOcFPFCcZ081zwRt6NNYklI
- EASX2MH8/YBsl5nuZjIw3ofX+C77FNvFE6imop0hKwgWGTYkHzvPE+Rbepie141VuL6WhhA4Z
- 639/XiFa3Nud93xTdbQFv/3gWkRPP+SD83Ge900tVz0BSN6jRAkUy66AJOUVi0SlE+MYjG2ZM
- LFqTnvBYsZ0eIcuNb5Syv9X4fl4HGOvDBgfgwVVGChsud1KAQkoCJW233Ks41tje5dLqLc3bM
- qOVNubYrHHRGrpNvlwHEu6hVppZAdbSExQc+OBx+KSwbusBZ8u4pc8Nph2SobEUNl3YDg9tf8
- YK70ZQzq77akPGegm4Ecb0I/u5rCgIUXWyqmEHryCIHo13QaBtWjDug+PYtvotYhyW6xfuF7p
- hma6mkWfYFoWUZ7U951MKyR7LCNkI8D6wdpEJBr8ySFq0Bkx0T41yvKp4nWwPWXh22idwEciZ
- RkLjkh3VYoASapliZI1dwr2a6B1yyr1ApPljMXsIPTTCdkzg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:7CXaunGzrZ4=:Egj7MudH8uxFdxWABY4fA7
+ AhhP/oquYGzDWVx+MzIW4sjt96cAt6IvJ3v4lge5brB2XY7Ongklh7dktv1BuA/wu6Q4Yex2u
+ 5Clq1mLb5PgyEsltJsKbHG95mPSrYsJ/RJ4q6wJnQbkFuTC4Dk6z7VHrxwWxgQe2eNTKBCDGQ
+ 1/znipapwh8wa1Y7xV8Lzj7AlEff5F5ppEenvc2wBQrVu7xu/DT4x/xIlD5RSJIa4BbMPRKFG
+ Kj8svd7XsWFuN07ec3HTjJdHS7L0ujKbaBiJjGPFXeB2nzU3ezLDxpUrYeUNyJ6etLiPxN0gH
+ 8dUwxwSFh7V0DmX5VImGLn/jpg6+YlJuLxbvXf08ibSykNOAFGeiQ14SPup58kMmJUZzuCnlh
+ W/aJgX9sCa00zFf0Y94rC2I52A5werh6PA27/uaYv4t3X6yoa1wERQvMT/6BGCX6x5v0AEB/q
+ DCKr0GSzdK1eGx0m5W+/3fJDGdd9jTGZetIN1QZ21qIlglk3/DWuMKVU6KoVi5v2bYy6u5uCm
+ uimyNWu4oWYmzDOwvVcWKMkE+I7OTpmQ4rVdSks/7ZWbTpzHNxtFbF+ykBl3jafWOMxyGIZd+
+ sAJiVT/SJFlnVbp/prsxSCyVzoKBptsf7sEhMuAdGdK15+VynrayO2ECwMNxJwyxNbFQQDmki
+ EuiNKmZb3SgOsEYKOgW6SUK/AUScx3m01PPOeOu0AXDUXJpNS1cYDBM5YkB2extJVjvdIwIJv
+ qukGm+WDAuEpg0KKhzJMOHDDiyhDwmRhQMrujiRAmCWsjcmqH7L9wD32riu+36gicJhl8pq7B
+ 50py9QA+fCH1LJ3i0t1frOtfxP/iyxU6kXxA1MxGk0llcpvIf8RF+9FdzLcwr0tifXyIaXauw
+ l1WwUFsmsoOLfboAc4A7Bp9ngxMr2rINpcmOBwHWd0sI6k5s4YhxT2xpaqAAPIDsr3uHSDOLD
+ MUjasn8zBVqjG8CQEtZL4IsT8WtpLOfw0Nu2lVNP4tfioL1v3QcnUKxFJuyGj9OtTXsAh4Qec
+ ausLzF9H5JHYpmXeA0hRST2CW8roj2efbega2zkd/AN4QbMN0vSxdPIZCjb8F9IYGS3tljA9m
+ s/nuGA0lXG5Sw+MEc2zHRo5VFJtYdt6kgnL0Ep9sFPrFxt22Q/kSzx6BmwgbL9yTr3nMFDOtz
+ aeqxQNKqE742PAxTNWkJo49/geXMtnJ1UlIQxykMOYbPNNOQ==
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-In order to support SoC specific clocks (e.g. emmc2 for BCM2711), we
-extend the description with a SoC support flag. This approach avoids long
-and mostly redundant lists of clock IDs. Since PLLH is specific to
-BCM2835, we register only rest of the clocks as common to all SoC.
+The new BCM2711 supports an additional clock for the emmc2 block.
+So add a new compatible and register this clock only for BCM2711.
 
-Suggested-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 Reviewed-by: Matthias Brugger <mbrugger@suse.com>
 Acked-by: Eric Anholt <eric@anholt.net>
 Reviewed-by: Eric Anholt <eric@anholt.net>
 =2D--
- drivers/clk/bcm/clk-bcm2835.c | 113 +++++++++++++++++++++++++++++++++++--=
------
- 1 file changed, 96 insertions(+), 17 deletions(-)
+ drivers/clk/bcm/clk-bcm2835.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/clk/bcm/clk-bcm2835.c b/drivers/clk/bcm/clk-bcm2835.c
-index 867ae3c..21cd952 100644
+index 21cd952..fdf672a 100644
 =2D-- a/drivers/clk/bcm/clk-bcm2835.c
 +++ b/drivers/clk/bcm/clk-bcm2835.c
-@@ -31,7 +31,7 @@
- #include <linux/delay.h>
- #include <linux/io.h>
- #include <linux/module.h>
--#include <linux/of.h>
-+#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <dt-bindings/clock/bcm2835.h>
-@@ -289,6 +289,9 @@
- #define LOCK_TIMEOUT_NS		100000000
+@@ -114,6 +114,8 @@
+ #define CM_AVEODIV		0x1bc
+ #define CM_EMMCCTL		0x1c0
+ #define CM_EMMCDIV		0x1c4
++#define CM_EMMC2CTL		0x1d0
++#define CM_EMMC2DIV		0x1d4
+
+ /* General bits for the CM_*CTL regs */
+ # define CM_ENABLE			BIT(4)
+@@ -290,7 +292,8 @@
  #define BCM2835_MAX_FB_RATE	1750000000u
 
-+#define SOC_BCM2835		BIT(0)
-+#define SOC_ALL			(SOC_BCM2835)
-+
+ #define SOC_BCM2835		BIT(0)
+-#define SOC_ALL			(SOC_BCM2835)
++#define SOC_BCM2711		BIT(1)
++#define SOC_ALL			(SOC_BCM2835 | SOC_BCM2711)
+
  /*
   * Names of clocks used within the driver that need to be replaced
-  * with an external parent's name.  This array is in the order that
-@@ -320,6 +323,10 @@ struct bcm2835_cprman {
- 	struct clk_hw_onecell_data onecell;
- };
+@@ -2003,6 +2006,16 @@ static const struct bcm2835_clk_desc clk_desc_array=
+[] =3D {
+ 		.frac_bits =3D 8,
+ 		.tcnt_mux =3D 39),
 
-+struct cprman_plat_data {
-+	unsigned int soc;
-+};
++	/* EMMC2 clock (only available for BCM2711) */
++	[BCM2711_CLOCK_EMMC2]	=3D REGISTER_PER_CLK(
++		SOC_BCM2711,
++		.name =3D "emmc2",
++		.ctl_reg =3D CM_EMMC2CTL,
++		.div_reg =3D CM_EMMC2DIV,
++		.int_bits =3D 4,
++		.frac_bits =3D 8,
++		.tcnt_mux =3D 42),
 +
- static inline void cprman_write(struct bcm2835_cprman *cprman, u32 reg, u=
-32 val)
- {
- 	writel(CM_PASSWORD | val, cprman->regs + reg);
-@@ -1451,22 +1458,28 @@ typedef struct clk_hw *(*bcm2835_clk_register)(str=
-uct bcm2835_cprman *cprman,
- 					       const void *data);
- struct bcm2835_clk_desc {
- 	bcm2835_clk_register clk_register;
-+	unsigned int supported;
- 	const void *data;
- };
-
- /* assignment helper macros for different clock types */
--#define _REGISTER(f, ...) { .clk_register =3D (bcm2835_clk_register)f, \
--			    .data =3D __VA_ARGS__ }
--#define REGISTER_PLL(...)	_REGISTER(&bcm2835_register_pll,	\
-+#define _REGISTER(f, s, ...) { .clk_register =3D (bcm2835_clk_register)f,=
- \
-+			       .supported =3D s,				\
-+			       .data =3D __VA_ARGS__ }
-+#define REGISTER_PLL(s, ...)	_REGISTER(&bcm2835_register_pll,	\
-+					  s,				\
- 					  &(struct bcm2835_pll_data)	\
- 					  {__VA_ARGS__})
--#define REGISTER_PLL_DIV(...)	_REGISTER(&bcm2835_register_pll_divider, \
--					  &(struct bcm2835_pll_divider_data) \
--					  {__VA_ARGS__})
--#define REGISTER_CLK(...)	_REGISTER(&bcm2835_register_clock,	\
-+#define REGISTER_PLL_DIV(s, ...) _REGISTER(&bcm2835_register_pll_divider,=
- \
-+					   s,				  \
-+					   &(struct bcm2835_pll_divider_data) \
-+					   {__VA_ARGS__})
-+#define REGISTER_CLK(s, ...)	_REGISTER(&bcm2835_register_clock,	\
-+					  s,				\
- 					  &(struct bcm2835_clock_data)	\
- 					  {__VA_ARGS__})
--#define REGISTER_GATE(...)	_REGISTER(&bcm2835_register_gate,	\
-+#define REGISTER_GATE(s, ...)	_REGISTER(&bcm2835_register_gate,	\
-+					  s,				\
- 					  &(struct bcm2835_gate_data)	\
- 					  {__VA_ARGS__})
-
-@@ -1480,7 +1493,8 @@ static const char *const bcm2835_clock_osc_parents[]=
- =3D {
- 	"testdebug1"
- };
-
--#define REGISTER_OSC_CLK(...)	REGISTER_CLK(				\
-+#define REGISTER_OSC_CLK(s, ...)	REGISTER_CLK(			\
-+	s,								\
- 	.num_mux_parents =3D ARRAY_SIZE(bcm2835_clock_osc_parents),	\
- 	.parents =3D bcm2835_clock_osc_parents,				\
- 	__VA_ARGS__)
-@@ -1497,7 +1511,8 @@ static const char *const bcm2835_clock_per_parents[]=
- =3D {
- 	"pllh_aux",
- };
-
--#define REGISTER_PER_CLK(...)	REGISTER_CLK(				\
-+#define REGISTER_PER_CLK(s, ...)	REGISTER_CLK(			\
-+	s,								\
- 	.num_mux_parents =3D ARRAY_SIZE(bcm2835_clock_per_parents),	\
- 	.parents =3D bcm2835_clock_per_parents,				\
- 	__VA_ARGS__)
-@@ -1522,7 +1537,8 @@ static const char *const bcm2835_pcm_per_parents[] =
-=3D {
- 	"-",
- };
-
--#define REGISTER_PCM_CLK(...)	REGISTER_CLK(				\
-+#define REGISTER_PCM_CLK(s, ...)	REGISTER_CLK(			\
-+	s,								\
- 	.num_mux_parents =3D ARRAY_SIZE(bcm2835_pcm_per_parents),		\
- 	.parents =3D bcm2835_pcm_per_parents,				\
- 	__VA_ARGS__)
-@@ -1541,7 +1557,8 @@ static const char *const bcm2835_clock_vpu_parents[]=
- =3D {
- 	"pllc_core2",
- };
-
--#define REGISTER_VPU_CLK(...)	REGISTER_CLK(				\
-+#define REGISTER_VPU_CLK(s, ...)	REGISTER_CLK(			\
-+	s,								\
- 	.num_mux_parents =3D ARRAY_SIZE(bcm2835_clock_vpu_parents),	\
- 	.parents =3D bcm2835_clock_vpu_parents,				\
- 	__VA_ARGS__)
-@@ -1577,12 +1594,14 @@ static const char *const bcm2835_clock_dsi1_parent=
-s[] =3D {
- 	"dsi1_byte_inv",
- };
-
--#define REGISTER_DSI0_CLK(...)	REGISTER_CLK(				\
-+#define REGISTER_DSI0_CLK(s, ...)	REGISTER_CLK(			\
-+	s,								\
- 	.num_mux_parents =3D ARRAY_SIZE(bcm2835_clock_dsi0_parents),	\
- 	.parents =3D bcm2835_clock_dsi0_parents,				\
- 	__VA_ARGS__)
-
--#define REGISTER_DSI1_CLK(...)	REGISTER_CLK(				\
-+#define REGISTER_DSI1_CLK(s, ...)	REGISTER_CLK(			\
-+	s,								\
- 	.num_mux_parents =3D ARRAY_SIZE(bcm2835_clock_dsi1_parents),	\
- 	.parents =3D bcm2835_clock_dsi1_parents,				\
- 	__VA_ARGS__)
-@@ -1602,6 +1621,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 	 * AUDIO domain is on.
- 	 */
- 	[BCM2835_PLLA]		=3D REGISTER_PLL(
-+		SOC_ALL,
- 		.name =3D "plla",
- 		.cm_ctrl_reg =3D CM_PLLA,
- 		.a2w_ctrl_reg =3D A2W_PLLA_CTRL,
-@@ -1616,6 +1636,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.max_rate =3D 2400000000u,
- 		.max_fb_rate =3D BCM2835_MAX_FB_RATE),
- 	[BCM2835_PLLA_CORE]	=3D REGISTER_PLL_DIV(
-+		SOC_ALL,
- 		.name =3D "plla_core",
- 		.source_pll =3D "plla",
- 		.cm_reg =3D CM_PLLA,
-@@ -1625,6 +1646,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.fixed_divider =3D 1,
- 		.flags =3D CLK_SET_RATE_PARENT),
- 	[BCM2835_PLLA_PER]	=3D REGISTER_PLL_DIV(
-+		SOC_ALL,
- 		.name =3D "plla_per",
- 		.source_pll =3D "plla",
- 		.cm_reg =3D CM_PLLA,
-@@ -1634,6 +1656,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.fixed_divider =3D 1,
- 		.flags =3D CLK_SET_RATE_PARENT),
- 	[BCM2835_PLLA_DSI0]	=3D REGISTER_PLL_DIV(
-+		SOC_ALL,
- 		.name =3D "plla_dsi0",
- 		.source_pll =3D "plla",
- 		.cm_reg =3D CM_PLLA,
-@@ -1642,6 +1665,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.hold_mask =3D CM_PLLA_HOLDDSI0,
- 		.fixed_divider =3D 1),
- 	[BCM2835_PLLA_CCP2]	=3D REGISTER_PLL_DIV(
-+		SOC_ALL,
- 		.name =3D "plla_ccp2",
- 		.source_pll =3D "plla",
- 		.cm_reg =3D CM_PLLA,
-@@ -1663,6 +1687,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 	 * AUDIO domain is on.
- 	 */
- 	[BCM2835_PLLC]		=3D REGISTER_PLL(
-+		SOC_ALL,
- 		.name =3D "pllc",
- 		.cm_ctrl_reg =3D CM_PLLC,
- 		.a2w_ctrl_reg =3D A2W_PLLC_CTRL,
-@@ -1677,6 +1702,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.max_rate =3D 3000000000u,
- 		.max_fb_rate =3D BCM2835_MAX_FB_RATE),
- 	[BCM2835_PLLC_CORE0]	=3D REGISTER_PLL_DIV(
-+		SOC_ALL,
- 		.name =3D "pllc_core0",
- 		.source_pll =3D "pllc",
- 		.cm_reg =3D CM_PLLC,
-@@ -1686,6 +1712,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.fixed_divider =3D 1,
- 		.flags =3D CLK_SET_RATE_PARENT),
- 	[BCM2835_PLLC_CORE1]	=3D REGISTER_PLL_DIV(
-+		SOC_ALL,
- 		.name =3D "pllc_core1",
- 		.source_pll =3D "pllc",
- 		.cm_reg =3D CM_PLLC,
-@@ -1695,6 +1722,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.fixed_divider =3D 1,
- 		.flags =3D CLK_SET_RATE_PARENT),
- 	[BCM2835_PLLC_CORE2]	=3D REGISTER_PLL_DIV(
-+		SOC_ALL,
- 		.name =3D "pllc_core2",
- 		.source_pll =3D "pllc",
- 		.cm_reg =3D CM_PLLC,
-@@ -1704,6 +1732,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.fixed_divider =3D 1,
- 		.flags =3D CLK_SET_RATE_PARENT),
- 	[BCM2835_PLLC_PER]	=3D REGISTER_PLL_DIV(
-+		SOC_ALL,
- 		.name =3D "pllc_per",
- 		.source_pll =3D "pllc",
- 		.cm_reg =3D CM_PLLC,
-@@ -1720,6 +1749,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 	 * AUDIO domain is on.
- 	 */
- 	[BCM2835_PLLD]		=3D REGISTER_PLL(
-+		SOC_ALL,
- 		.name =3D "plld",
- 		.cm_ctrl_reg =3D CM_PLLD,
- 		.a2w_ctrl_reg =3D A2W_PLLD_CTRL,
-@@ -1734,6 +1764,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.max_rate =3D 2400000000u,
- 		.max_fb_rate =3D BCM2835_MAX_FB_RATE),
- 	[BCM2835_PLLD_CORE]	=3D REGISTER_PLL_DIV(
-+		SOC_ALL,
- 		.name =3D "plld_core",
- 		.source_pll =3D "plld",
- 		.cm_reg =3D CM_PLLD,
-@@ -1743,6 +1774,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.fixed_divider =3D 1,
- 		.flags =3D CLK_SET_RATE_PARENT),
- 	[BCM2835_PLLD_PER]	=3D REGISTER_PLL_DIV(
-+		SOC_ALL,
- 		.name =3D "plld_per",
- 		.source_pll =3D "plld",
- 		.cm_reg =3D CM_PLLD,
-@@ -1752,6 +1784,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.fixed_divider =3D 1,
- 		.flags =3D CLK_SET_RATE_PARENT),
- 	[BCM2835_PLLD_DSI0]	=3D REGISTER_PLL_DIV(
-+		SOC_ALL,
- 		.name =3D "plld_dsi0",
- 		.source_pll =3D "plld",
- 		.cm_reg =3D CM_PLLD,
-@@ -1760,6 +1793,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.hold_mask =3D CM_PLLD_HOLDDSI0,
- 		.fixed_divider =3D 1),
- 	[BCM2835_PLLD_DSI1]	=3D REGISTER_PLL_DIV(
-+		SOC_ALL,
- 		.name =3D "plld_dsi1",
- 		.source_pll =3D "plld",
- 		.cm_reg =3D CM_PLLD,
-@@ -1775,6 +1809,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 	 * It is in the HDMI power domain.
- 	 */
- 	[BCM2835_PLLH]		=3D REGISTER_PLL(
-+		SOC_BCM2835,
- 		"pllh",
- 		.cm_ctrl_reg =3D CM_PLLH,
- 		.a2w_ctrl_reg =3D A2W_PLLH_CTRL,
-@@ -1789,6 +1824,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.max_rate =3D 3000000000u,
- 		.max_fb_rate =3D BCM2835_MAX_FB_RATE),
- 	[BCM2835_PLLH_RCAL]	=3D REGISTER_PLL_DIV(
-+		SOC_BCM2835,
- 		.name =3D "pllh_rcal",
- 		.source_pll =3D "pllh",
- 		.cm_reg =3D CM_PLLH,
-@@ -1798,6 +1834,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.fixed_divider =3D 10,
- 		.flags =3D CLK_SET_RATE_PARENT),
- 	[BCM2835_PLLH_AUX]	=3D REGISTER_PLL_DIV(
-+		SOC_BCM2835,
- 		.name =3D "pllh_aux",
- 		.source_pll =3D "pllh",
- 		.cm_reg =3D CM_PLLH,
-@@ -1807,6 +1844,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.fixed_divider =3D 1,
- 		.flags =3D CLK_SET_RATE_PARENT),
- 	[BCM2835_PLLH_PIX]	=3D REGISTER_PLL_DIV(
-+		SOC_BCM2835,
- 		.name =3D "pllh_pix",
- 		.source_pll =3D "pllh",
- 		.cm_reg =3D CM_PLLH,
-@@ -1822,6 +1860,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
-
- 	/* One Time Programmable Memory clock.  Maximum 10Mhz. */
- 	[BCM2835_CLOCK_OTP]	=3D REGISTER_OSC_CLK(
-+		SOC_ALL,
- 		.name =3D "otp",
- 		.ctl_reg =3D CM_OTPCTL,
- 		.div_reg =3D CM_OTPDIV,
-@@ -1833,6 +1872,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 	 * bythe watchdog timer and the camera pulse generator.
- 	 */
- 	[BCM2835_CLOCK_TIMER]	=3D REGISTER_OSC_CLK(
-+		SOC_ALL,
- 		.name =3D "timer",
- 		.ctl_reg =3D CM_TIMERCTL,
- 		.div_reg =3D CM_TIMERDIV,
-@@ -1843,12 +1883,14 @@ static const struct bcm2835_clk_desc clk_desc_arra=
-y[] =3D {
- 	 * Generally run at 2Mhz, max 5Mhz.
- 	 */
- 	[BCM2835_CLOCK_TSENS]	=3D REGISTER_OSC_CLK(
-+		SOC_ALL,
- 		.name =3D "tsens",
- 		.ctl_reg =3D CM_TSENSCTL,
- 		.div_reg =3D CM_TSENSDIV,
- 		.int_bits =3D 5,
- 		.frac_bits =3D 0),
- 	[BCM2835_CLOCK_TEC]	=3D REGISTER_OSC_CLK(
-+		SOC_ALL,
- 		.name =3D "tec",
- 		.ctl_reg =3D CM_TECCTL,
- 		.div_reg =3D CM_TECDIV,
-@@ -1857,6 +1899,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
-
- 	/* clocks with vpu parent mux */
- 	[BCM2835_CLOCK_H264]	=3D REGISTER_VPU_CLK(
-+		SOC_ALL,
- 		.name =3D "h264",
- 		.ctl_reg =3D CM_H264CTL,
- 		.div_reg =3D CM_H264DIV,
-@@ -1864,6 +1907,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.frac_bits =3D 8,
- 		.tcnt_mux =3D 1),
- 	[BCM2835_CLOCK_ISP]	=3D REGISTER_VPU_CLK(
-+		SOC_ALL,
- 		.name =3D "isp",
- 		.ctl_reg =3D CM_ISPCTL,
- 		.div_reg =3D CM_ISPDIV,
-@@ -1876,6 +1920,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 	 * in the SDRAM controller can't be used.
- 	 */
- 	[BCM2835_CLOCK_SDRAM]	=3D REGISTER_VPU_CLK(
-+		SOC_ALL,
- 		.name =3D "sdram",
- 		.ctl_reg =3D CM_SDCCTL,
- 		.div_reg =3D CM_SDCDIV,
-@@ -1883,6 +1928,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.frac_bits =3D 0,
- 		.tcnt_mux =3D 3),
- 	[BCM2835_CLOCK_V3D]	=3D REGISTER_VPU_CLK(
-+		SOC_ALL,
- 		.name =3D "v3d",
- 		.ctl_reg =3D CM_V3DCTL,
- 		.div_reg =3D CM_V3DDIV,
-@@ -1896,6 +1942,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 	 * in various hardware documentation.
- 	 */
- 	[BCM2835_CLOCK_VPU]	=3D REGISTER_VPU_CLK(
-+		SOC_ALL,
- 		.name =3D "vpu",
- 		.ctl_reg =3D CM_VPUCTL,
- 		.div_reg =3D CM_VPUDIV,
-@@ -1907,6 +1954,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
-
- 	/* clocks with per parent mux */
- 	[BCM2835_CLOCK_AVEO]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "aveo",
- 		.ctl_reg =3D CM_AVEOCTL,
- 		.div_reg =3D CM_AVEODIV,
-@@ -1914,6 +1962,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.frac_bits =3D 0,
- 		.tcnt_mux =3D 38),
- 	[BCM2835_CLOCK_CAM0]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "cam0",
- 		.ctl_reg =3D CM_CAM0CTL,
- 		.div_reg =3D CM_CAM0DIV,
-@@ -1921,6 +1970,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.frac_bits =3D 8,
- 		.tcnt_mux =3D 14),
- 	[BCM2835_CLOCK_CAM1]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "cam1",
- 		.ctl_reg =3D CM_CAM1CTL,
- 		.div_reg =3D CM_CAM1DIV,
-@@ -1928,12 +1978,14 @@ static const struct bcm2835_clk_desc clk_desc_arra=
-y[] =3D {
- 		.frac_bits =3D 8,
- 		.tcnt_mux =3D 15),
- 	[BCM2835_CLOCK_DFT]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "dft",
- 		.ctl_reg =3D CM_DFTCTL,
- 		.div_reg =3D CM_DFTDIV,
- 		.int_bits =3D 5,
- 		.frac_bits =3D 0),
- 	[BCM2835_CLOCK_DPI]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "dpi",
- 		.ctl_reg =3D CM_DPICTL,
- 		.div_reg =3D CM_DPIDIV,
-@@ -1943,6 +1995,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
-
- 	/* Arasan EMMC clock */
- 	[BCM2835_CLOCK_EMMC]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "emmc",
- 		.ctl_reg =3D CM_EMMCCTL,
- 		.div_reg =3D CM_EMMCDIV,
-@@ -1952,6 +2005,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
-
  	/* General purpose (GPIO) clocks */
  	[BCM2835_CLOCK_GP0]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "gp0",
- 		.ctl_reg =3D CM_GP0CTL,
- 		.div_reg =3D CM_GP0DIV,
-@@ -1960,6 +2014,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.is_mash_clock =3D true,
- 		.tcnt_mux =3D 20),
- 	[BCM2835_CLOCK_GP1]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "gp1",
- 		.ctl_reg =3D CM_GP1CTL,
- 		.div_reg =3D CM_GP1DIV,
-@@ -1969,6 +2024,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.is_mash_clock =3D true,
- 		.tcnt_mux =3D 21),
- 	[BCM2835_CLOCK_GP2]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "gp2",
- 		.ctl_reg =3D CM_GP2CTL,
- 		.div_reg =3D CM_GP2DIV,
-@@ -1978,6 +2034,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
+ 		SOC_ALL,
+@@ -2238,8 +2251,13 @@ static const struct cprman_plat_data cprman_bcm2835=
+_plat_data =3D {
+ 	.soc =3D SOC_BCM2835,
+ };
 
- 	/* HDMI state machine */
- 	[BCM2835_CLOCK_HSM]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "hsm",
- 		.ctl_reg =3D CM_HSMCTL,
- 		.div_reg =3D CM_HSMDIV,
-@@ -1985,6 +2042,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.frac_bits =3D 8,
- 		.tcnt_mux =3D 22),
- 	[BCM2835_CLOCK_PCM]	=3D REGISTER_PCM_CLK(
-+		SOC_ALL,
- 		.name =3D "pcm",
- 		.ctl_reg =3D CM_PCMCTL,
- 		.div_reg =3D CM_PCMDIV,
-@@ -1994,6 +2052,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.low_jitter =3D true,
- 		.tcnt_mux =3D 23),
- 	[BCM2835_CLOCK_PWM]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "pwm",
- 		.ctl_reg =3D CM_PWMCTL,
- 		.div_reg =3D CM_PWMDIV,
-@@ -2002,6 +2061,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.is_mash_clock =3D true,
- 		.tcnt_mux =3D 24),
- 	[BCM2835_CLOCK_SLIM]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "slim",
- 		.ctl_reg =3D CM_SLIMCTL,
- 		.div_reg =3D CM_SLIMDIV,
-@@ -2010,6 +2070,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.is_mash_clock =3D true,
- 		.tcnt_mux =3D 25),
- 	[BCM2835_CLOCK_SMI]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "smi",
- 		.ctl_reg =3D CM_SMICTL,
- 		.div_reg =3D CM_SMIDIV,
-@@ -2017,6 +2078,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.frac_bits =3D 8,
- 		.tcnt_mux =3D 27),
- 	[BCM2835_CLOCK_UART]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "uart",
- 		.ctl_reg =3D CM_UARTCTL,
- 		.div_reg =3D CM_UARTDIV,
-@@ -2026,6 +2088,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
-
- 	/* TV encoder clock.  Only operating frequency is 108Mhz.  */
- 	[BCM2835_CLOCK_VEC]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "vec",
- 		.ctl_reg =3D CM_VECCTL,
- 		.div_reg =3D CM_VECDIV,
-@@ -2040,6 +2103,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
-
- 	/* dsi clocks */
- 	[BCM2835_CLOCK_DSI0E]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "dsi0e",
- 		.ctl_reg =3D CM_DSI0ECTL,
- 		.div_reg =3D CM_DSI0EDIV,
-@@ -2047,6 +2111,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.frac_bits =3D 8,
- 		.tcnt_mux =3D 18),
- 	[BCM2835_CLOCK_DSI1E]	=3D REGISTER_PER_CLK(
-+		SOC_ALL,
- 		.name =3D "dsi1e",
- 		.ctl_reg =3D CM_DSI1ECTL,
- 		.div_reg =3D CM_DSI1EDIV,
-@@ -2054,6 +2119,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.frac_bits =3D 8,
- 		.tcnt_mux =3D 19),
- 	[BCM2835_CLOCK_DSI0P]	=3D REGISTER_DSI0_CLK(
-+		SOC_ALL,
- 		.name =3D "dsi0p",
- 		.ctl_reg =3D CM_DSI0PCTL,
- 		.div_reg =3D CM_DSI0PDIV,
-@@ -2061,6 +2127,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 		.frac_bits =3D 0,
- 		.tcnt_mux =3D 12),
- 	[BCM2835_CLOCK_DSI1P]	=3D REGISTER_DSI1_CLK(
-+		SOC_ALL,
- 		.name =3D "dsi1p",
- 		.ctl_reg =3D CM_DSI1PCTL,
- 		.div_reg =3D CM_DSI1PDIV,
-@@ -2077,6 +2144,7 @@ static const struct bcm2835_clk_desc clk_desc_array[=
-] =3D {
- 	 * non-stop vpu clock.
- 	 */
- 	[BCM2835_CLOCK_PERI_IMAGE] =3D REGISTER_GATE(
-+		SOC_ALL,
- 		.name =3D "peri_image",
- 		.parent =3D "vpu",
- 		.ctl_reg =3D CM_PERIICTL),
-@@ -2109,9 +2177,14 @@ static int bcm2835_clk_probe(struct platform_device=
- *pdev)
- 	struct resource *res;
- 	const struct bcm2835_clk_desc *desc;
- 	const size_t asize =3D ARRAY_SIZE(clk_desc_array);
-+	const struct cprman_plat_data *pdata;
- 	size_t i;
- 	int ret;
-
-+	pdata =3D of_device_get_match_data(&pdev->dev);
-+	if (!pdata)
-+		return -ENODEV;
-+
- 	cprman =3D devm_kzalloc(dev,
- 			      struct_size(cprman, onecell.hws, asize),
- 			      GFP_KERNEL);
-@@ -2147,8 +2220,10 @@ static int bcm2835_clk_probe(struct platform_device=
- *pdev)
-
- 	for (i =3D 0; i < asize; i++) {
- 		desc =3D &clk_desc_array[i];
--		if (desc->clk_register && desc->data)
-+		if (desc->clk_register && desc->data &&
-+		    (desc->supported & pdata->soc)) {
- 			hws[i] =3D desc->clk_register(cprman, desc->data);
-+		}
- 	}
-
- 	ret =3D bcm2835_mark_sdc_parent_critical(hws[BCM2835_CLOCK_SDRAM]->clk);
-@@ -2159,8 +2234,12 @@ static int bcm2835_clk_probe(struct platform_device=
- *pdev)
- 				      &cprman->onecell);
- }
-
-+static const struct cprman_plat_data cprman_bcm2835_plat_data =3D {
-+	.soc =3D SOC_BCM2835,
++static const struct cprman_plat_data cprman_bcm2711_plat_data =3D {
++	.soc =3D SOC_BCM2711,
 +};
 +
  static const struct of_device_id bcm2835_clk_of_match[] =3D {
--	{ .compatible =3D "brcm,bcm2835-cprman", },
-+	{ .compatible =3D "brcm,bcm2835-cprman", .data =3D &cprman_bcm2835_plat_=
+ 	{ .compatible =3D "brcm,bcm2835-cprman", .data =3D &cprman_bcm2835_plat_=
+data },
++	{ .compatible =3D "brcm,bcm2711-cprman", .data =3D &cprman_bcm2711_plat_=
 data },
  	{}
  };
