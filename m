@@ -2,47 +2,47 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F3F92427
-	for <lists+linux-clk@lfdr.de>; Mon, 19 Aug 2019 15:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 312BC92429
+	for <lists+linux-clk@lfdr.de>; Mon, 19 Aug 2019 15:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727715AbfHSNCU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 19 Aug 2019 09:02:20 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:41005 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727696AbfHSNCR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 19 Aug 2019 09:02:17 -0400
-Received: by mail-pf1-f196.google.com with SMTP id 196so1137838pfz.8
-        for <linux-clk@vger.kernel.org>; Mon, 19 Aug 2019 06:02:17 -0700 (PDT)
+        id S1727730AbfHSNCW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 19 Aug 2019 09:02:22 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:34462 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727728AbfHSNCW (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 19 Aug 2019 09:02:22 -0400
+Received: by mail-pf1-f195.google.com with SMTP id b24so1149900pfp.1
+        for <linux-clk@vger.kernel.org>; Mon, 19 Aug 2019 06:02:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Y6Dgg0LHIAz3laO+y1ntUkl0I7eVRTHEz+QlpqCcJzM=;
-        b=oUuNpnyzcfdqKYcffE+4dkTe7aZEcILFVqNYBqgS31D2oB9ZdNMSzqH3x9M8VIlV04
-         1Upc1YdIcPe1dVxazZwZKLbp9SpwjHA2LYfKWqd+5fjyE/8SU1hZqDQP/VXsalwyyCbw
-         9hlqtvSre+Ha34CmHb5r6Jhm0IubTiHR6lRKAOX7wdPcXIkC7sUp5JkIgY+EOIudE3WG
-         +kw6w7hLqVXGd7EhgluRQpjoap2kzXtxlBY5C6+OR8ZiAuE5yrj46CoNxC3NHXRO8/Yn
-         ejdUdKCTPHIPyTnA2+PHcnzUmVnir/ovoYNwoy87fQdj9xrO+bWCuc5dOn9CCTnkwBnY
-         hKSg==
+        bh=kgB5pCuOS2QWyyNQUlCeMbbF7mRF+VE6sHHJ2GG7b1c=;
+        b=nw9Dwk3QD2aloehUTET6YzOtYe6ra0WCysGEa6TihGulv553Lr1X+HSYd/2rg+jiaB
+         52ovxI4pcqXrV/m2Dedi1UjjV5ga8rEYW2ds9BoTNqUdRvLqGaVrGtlVzGk4Q5wyjlWQ
+         iSN/EMURafFVa3z4DnfSYWt4a8FdwNAuJeknlGyH8haT0WOi8tsXDJg2IgtZosn0Igdl
+         IOKJmpYZiDfIFg8wmxdECQJ4kLNHfvehjTh00bxK1hPdEOhnbKdm8VrNGnXgUv3dPZr7
+         AJjPxQ2bfDD0tAZeY8dhttfynSZJwNsoL2R+PoolRdgDuA0aZpFQJ+6/AMp4Klb3nxrA
+         8AXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=Y6Dgg0LHIAz3laO+y1ntUkl0I7eVRTHEz+QlpqCcJzM=;
-        b=YEGY49PmGieRBiAlqakRP2L+rlqPT37vtmuIgLuqhHtadam35soPTjmicvYfxHUXdM
-         qSpoJi5bwNvsa89g3AhAWOSF62+Z5013ADTOH6PpRTCyFRE8pqXnUmFVqRgQbmEThL8n
-         G4BaeFP+qFOfrSwGVcb0bKGyzaoIyhUe8C3ERabXSEcZTcL1zNvkSQZHitpSFAh5XVwH
-         6f+1bp+YVy6tdjMcausYeE1vMTZPSmQU1q7I9pckUJALcHmUYyiUA3mwAe+n9sbZvFDl
-         VVmqyYpQqW57FWfSKLG2ksoCB6ujQe62e8M1fgduKUlco7dhiXZcRbBNQ0Bpq8c8d9+z
-         zRbg==
-X-Gm-Message-State: APjAAAW+MYjStbnogSd5bZ3wA4SZbt2Xw1XaQArbVCvjF9RZMhVu7e6D
-        oX5j1+zgQqvSEzQvePRuAJue
-X-Google-Smtp-Source: APXvYqxoz5vqs+kPpeQc0ASPsmVB2/qitpzmhueGxst/kcbfKnB65wPKIF40VAc9jqd224Gxj6uEeA==
-X-Received: by 2002:aa7:9591:: with SMTP id z17mr24134756pfj.215.1566219737275;
-        Mon, 19 Aug 2019 06:02:17 -0700 (PDT)
+        bh=kgB5pCuOS2QWyyNQUlCeMbbF7mRF+VE6sHHJ2GG7b1c=;
+        b=N2D09hk0IBMKSKfY/nAqldP9lB7Qy0Gj/JDBIEDorp4ym7ruBOPuSk+2/7y1/d84Bz
+         vqa3WoYyJ2m/ifxdLn7AhqHW6e9eeb/5PTtcX9wI+YugOVZu9U1ATDP2LQa5GlNTW0lQ
+         eD0NmuHx7j45e1RQQ4bt1DH9N/VgC0bHkig51Nr2jnCK4JQFEq3C1TDUtwhLVyX/NsvM
+         V+eS+mtl3xfijCMk44Btk2mp6cczM9Jm75SeNiNgYpTiZPhVYJPEXdearySaBOwQFQHC
+         BRIOz4YCReURF3HIlwV34KKWm0Q1rT7tHLaPEVDbB+93wpn9OB+wwcGW9ay5rPWRlFU6
+         RcSg==
+X-Gm-Message-State: APjAAAWdO6BPFW5BSKiqgwruDHp89wd45fiUApwpgIz7rEjuZJ6WrUxz
+        l9zcRy/hU8DSewcL4gBRrdW4
+X-Google-Smtp-Source: APXvYqyxTu93lSgG0ipCJ/sEY9G898TS5YJu+VnCzNMANbL34jMSGysDOcwcQmR8TknOEIRGN6bn9Q==
+X-Received: by 2002:a62:144f:: with SMTP id 76mr24023906pfu.62.1566219741193;
+        Mon, 19 Aug 2019 06:02:21 -0700 (PDT)
 Received: from localhost.localdomain ([103.59.133.81])
-        by smtp.googlemail.com with ESMTPSA id l123sm20626464pfl.9.2019.08.19.06.02.13
+        by smtp.googlemail.com with ESMTPSA id l123sm20626464pfl.9.2019.08.19.06.02.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2019 06:02:16 -0700 (PDT)
+        Mon, 19 Aug 2019 06:02:20 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     sboyd@kernel.org, mturquette@baylibre.com, robh+dt@kernel.org
 Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -50,9 +50,9 @@ Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         haitao.suo@bitmain.com, darren.tsao@bitmain.com,
         fisher.cheng@bitmain.com, alec.lin@bitmain.com,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3 5/8] arm64: dts: bitmain: Add clock controller support for BM1880 SoC
-Date:   Mon, 19 Aug 2019 18:31:40 +0530
-Message-Id: <20190819130143.18778-6-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v3 6/8] arm64: dts: bitmain: Source common clock for UART controllers
+Date:   Mon, 19 Aug 2019 18:31:41 +0530
+Message-Id: <20190819130143.18778-7-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190819130143.18778-1-manivannan.sadhasivam@linaro.org>
 References: <20190819130143.18778-1-manivannan.sadhasivam@linaro.org>
@@ -61,54 +61,97 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add clock controller support for Bitmain BM1880 SoC.
+Remove fixed clock and source common clock for UART controllers.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- arch/arm64/boot/dts/bitmain/bm1880.dtsi | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ arch/arm64/boot/dts/bitmain/bm1880-sophon-edge.dts |  9 ---------
+ arch/arm64/boot/dts/bitmain/bm1880.dtsi            | 12 ++++++++++++
+ 2 files changed, 12 insertions(+), 9 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/bitmain/bm1880.dtsi b/arch/arm64/boot/dts/bitmain/bm1880.dtsi
-index d65453f99a99..8471662413da 100644
---- a/arch/arm64/boot/dts/bitmain/bm1880.dtsi
-+++ b/arch/arm64/boot/dts/bitmain/bm1880.dtsi
-@@ -4,6 +4,7 @@
-  * Author: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-  */
- 
-+#include <dt-bindings/clock/bm1880-clock.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/reset/bitmain,bm1880-reset.h>
- 
-@@ -66,6 +67,12 @@
- 			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
+diff --git a/arch/arm64/boot/dts/bitmain/bm1880-sophon-edge.dts b/arch/arm64/boot/dts/bitmain/bm1880-sophon-edge.dts
+index 3e8c70778e24..7a2c7f9c2660 100644
+--- a/arch/arm64/boot/dts/bitmain/bm1880-sophon-edge.dts
++++ b/arch/arm64/boot/dts/bitmain/bm1880-sophon-edge.dts
+@@ -49,12 +49,6 @@
+ 		reg = <0x1 0x00000000 0x0 0x40000000>; // 1GB
  	};
  
-+	osc: osc {
-+		compatible = "fixed-clock";
-+		clock-frequency = <25000000>;
-+		#clock-cells = <0>;
-+	};
-+
+-	uart_clk: uart-clk {
+-		compatible = "fixed-clock";
+-		clock-frequency = <500000000>;
+-		#clock-cells = <0>;
+-	};
+-
  	soc {
- 		compatible = "simple-bus";
- 		#address-cells = <2>;
-@@ -94,6 +101,15 @@
- 				reg = <0x400 0x120>;
- 			};
+ 		gpio0: gpio@50027000 {
+ 			porta: gpio-controller@0 {
+@@ -173,21 +167,18 @@
  
-+			clk: clock-controller@e8 {
-+				compatible = "bitmain,bm1880-clk";
-+				reg = <0xe8 0x0c>, <0x800 0xb0>;
-+				reg-names = "pll", "sys";
-+				clocks = <&osc>;
-+				clock-names = "osc";
-+				#clock-cells = <1>;
-+			};
-+
- 			rst: reset-controller@c00 {
- 				compatible = "bitmain,bm1880-reset";
- 				reg = <0xc00 0x8>;
+ &uart0 {
+ 	status = "okay";
+-	clocks = <&uart_clk>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_uart0_default>;
+ };
+ 
+ &uart1 {
+ 	status = "okay";
+-	clocks = <&uart_clk>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_uart1_default>;
+ };
+ 
+ &uart2 {
+ 	status = "okay";
+-	clocks = <&uart_clk>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_uart2_default>;
+ };
+diff --git a/arch/arm64/boot/dts/bitmain/bm1880.dtsi b/arch/arm64/boot/dts/bitmain/bm1880.dtsi
+index 8471662413da..fa6e6905f588 100644
+--- a/arch/arm64/boot/dts/bitmain/bm1880.dtsi
++++ b/arch/arm64/boot/dts/bitmain/bm1880.dtsi
+@@ -174,6 +174,9 @@
+ 		uart0: serial@58018000 {
+ 			compatible = "snps,dw-apb-uart";
+ 			reg = <0x0 0x58018000 0x0 0x2000>;
++			clocks = <&clk BM1880_CLK_UART_500M>,
++				 <&clk BM1880_CLK_APB_UART>;
++			clock-names = "baudclk", "apb_pclk";
+ 			interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+ 			reg-shift = <2>;
+ 			reg-io-width = <4>;
+@@ -184,6 +187,9 @@
+ 		uart1: serial@5801A000 {
+ 			compatible = "snps,dw-apb-uart";
+ 			reg = <0x0 0x5801a000 0x0 0x2000>;
++			clocks = <&clk BM1880_CLK_UART_500M>,
++				 <&clk BM1880_CLK_APB_UART>;
++			clock-names = "baudclk", "apb_pclk";
+ 			interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+ 			reg-shift = <2>;
+ 			reg-io-width = <4>;
+@@ -194,6 +200,9 @@
+ 		uart2: serial@5801C000 {
+ 			compatible = "snps,dw-apb-uart";
+ 			reg = <0x0 0x5801c000 0x0 0x2000>;
++			clocks = <&clk BM1880_CLK_UART_500M>,
++				 <&clk BM1880_CLK_APB_UART>;
++			clock-names = "baudclk", "apb_pclk";
+ 			interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
+ 			reg-shift = <2>;
+ 			reg-io-width = <4>;
+@@ -204,6 +213,9 @@
+ 		uart3: serial@5801E000 {
+ 			compatible = "snps,dw-apb-uart";
+ 			reg = <0x0 0x5801e000 0x0 0x2000>;
++			clocks = <&clk BM1880_CLK_UART_500M>,
++				 <&clk BM1880_CLK_APB_UART>;
++			clock-names = "baudclk", "apb_pclk";
+ 			interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
+ 			reg-shift = <2>;
+ 			reg-io-width = <4>;
 -- 
 2.17.1
 
