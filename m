@@ -2,515 +2,98 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BD395504
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Aug 2019 05:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A8E95667
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Aug 2019 07:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729159AbfHTDXV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 19 Aug 2019 23:23:21 -0400
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:53323 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729133AbfHTDXV (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 19 Aug 2019 23:23:21 -0400
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 234313536;
-        Mon, 19 Aug 2019 23:23:19 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 19 Aug 2019 23:23:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm3; bh=43b9Z0w2/sueU
-        Lbuz+zMR9jc90HTmmnqAVIiMUenoB4=; b=zr/QsYb7GW02BBon48QgyvHZFGFmJ
-        AhRSb2wPmN/9eN7aCVTUYiBvaAR/3Jx9mYnSqRD27fiAuy0lHRCArbCRlOepDAmD
-        PQV+ML9pdFYfAcpjzB5LFlvdplqUVbUOrKgnmGFF30WmHKOoqkKsbMJ5kwoLCKWM
-        eGlspU8+IFA251/p8EfBV3WFZWkhPBhWNThpvzV+5L/C3YsCXKtkk0da5yXBcqrf
-        CrTVLAVn4z4pNcTUSBW8FB2jlmuLdlzZsMRr8tD+94T/05i3Yed17AXRQ0q/tQDT
-        /ZYuMk+wLgh4b4yEJ7sBX2c3QKBkn3bb9gh3IV/dLNJlriZttipMAB++g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=43b9Z0w2/sueULbuz+zMR9jc90HTmmnqAVIiMUenoB4=; b=G1/LcdY1
-        mepSW5OoCYBnm/dkEwBGJiXGordmGRP8MTUnEcgVSxH6sKdi+g8AxT4Ez2FJ426q
-        hGk6/2npLayNMvVpxYEzU4VlGLL/YTyO2TdVcEFCmGg4dwDz09YhMOHuzJ+7Kxth
-        +b1DGWbE0+Ami+pLwvpguyRjGEfTUQBUh1XOpRprvjHrCnwHRnpXQ1DfxsJbF5RG
-        7wBlwCjZsJkJ0Ln3Z4FdwavKpdS0ansetqLzY1U9KIFOJdj3RSnEwEJ99kQ+G4SM
-        btwcj5VpNMF0WuGMIiwBaIX3c9ue5U0M1vDB2P9Psp3K4gJ8cLnh5pkQ5Qek8/5r
-        czR7tt6Wkr/OlA==
-X-ME-Sender: <xms:pmdbXfEexxX7CxiFXxRfSYB9MFWmWf3Z56-3Sgi9ws2buNwjzYhFgQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrudegtddgjeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucffoh
-    hmrghinhepghhithhhuhgsrdgtohhmnecukfhppeejtddrudefhedrudegkedrudehuden
-    ucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-    enucevlhhushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:pmdbXYsyofB8SopFw2iujTzsyMWYY8aZmjHpJ97XfQD72b3TNfA5pA>
-    <xmx:pmdbXVn46qxXRojU9qfy_AFoEtDZwbB2zKtqEhykSVcLWCgm0tE-gw>
-    <xmx:pmdbXbPIbGJgN-k36-y0iJefwKEjVbybaRCh8FkUqpazxNSSHc5D_Q>
-    <xmx:p2dbXUdjDzuGT2yM0xczGpLEH-VQDM1cFJgjuf5C2Y61xa0cM0J5qQ>
-Received: from titanium.stl.sholland.net (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 0E8DB80059;
-        Mon, 19 Aug 2019 23:23:18 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
+        id S1729072AbfHTFEr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 20 Aug 2019 01:04:47 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:36817 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727006AbfHTFEr (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 20 Aug 2019 01:04:47 -0400
+Received: by mail-pg1-f195.google.com with SMTP id l21so2494443pgm.3
+        for <linux-clk@vger.kernel.org>; Mon, 19 Aug 2019 22:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=J5jmxPECEtlkSClh6kdjYePWOqswhvSklEpB5MKVT2Y=;
+        b=pGeoQ2K6G50W9ZHfxskCOsB70zYcEDk3+0sg6mf3aj26fQVNcSwz9vG3Q5kcD9V2vB
+         wgSYF8Gcnkl8SXlHpT3XNfFsXNdVR9l6mSAlxf8qIfFIEm+tOQaClKUBMtSrrvb6EBGc
+         nWJu4SumKg0eSOtk0EORJuaZNYK9lPNs9gZ8j1MRxgSXKMSCy9tuSaaFSg49zFAWkuKX
+         9NG7xsanhuzJInrKpC7u4ZFiQWfpXEir+zG31vlNKQ4go6IoFVHP6Vnv86fpe5dduqQ8
+         DBYPhiISQXQUW2EwZ8hoZBAQNfZ8Da84tL+2zOm7Mo0+34Iu6JU+Dc00NPrI2GfUjHw1
+         rhbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=J5jmxPECEtlkSClh6kdjYePWOqswhvSklEpB5MKVT2Y=;
+        b=K9jJVCQDcvEL2CG2qezPyxSJzBgt3AgLiqrWjrrP32ggBUxzYXF/hx324SH2/7lRcF
+         7vOHeI7zWPpDvhJc1KOV/tabAipWhrKRG9iKVLwSgm5SGwG4TtCgT83iovRC9g2re0Us
+         shXfDJwfOkk4COlBozqYsf0/jY03DzWDrviyTFloZVKA+kkME/LmegFchLMnRhP+I0aP
+         viAC8FJBkksSVpEjzIFtBuNbBTe6eqoERrO/RUJgemLXwVQnPbKxBPQwmwvQJs3HXBXc
+         LQskrwsfZk/dVE0WNedoOnlXMtRxIxJCRBEd5Sg9bu+/b4ogEjDZ+yQTUu631WVqc6WR
+         aQ4g==
+X-Gm-Message-State: APjAAAV2gs/66AeIa85iZWsVBWxAY5Nuph0Oe3pbaDZLKmmnUaSxJeNt
+        W3TK5S1LkS1NdSkPHysxY5S7+Q==
+X-Google-Smtp-Source: APXvYqz1mx/jDQWX30lQ9e88jbA/Mq4fclvAAYQEup4fkkADK+YsB/Y8B+YuEW8GnHCulPOX3NsCug==
+X-Received: by 2002:aa7:8611:: with SMTP id p17mr28252702pfn.41.1566277486139;
+        Mon, 19 Aug 2019 22:04:46 -0700 (PDT)
+Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id t6sm16419128pgu.23.2019.08.19.22.04.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Aug 2019 22:04:45 -0700 (PDT)
+Date:   Mon, 19 Aug 2019 22:06:23 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com, Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v4 10/10] [DO NOT MERGE] drivers: firmware: msgbox demo
-Date:   Mon, 19 Aug 2019 22:23:11 -0500
-Message-Id: <20190820032311.6506-11-samuel@sholland.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190820032311.6506-1-samuel@sholland.org>
-References: <20190820032311.6506-1-samuel@sholland.org>
+        Mark Rutland <mark.rutland@arm.com>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: clock: Document the parent clocks
+Message-ID: <20190820050623.GI26807@tuxbook-pro>
+References: <20190819073947.17258-1-vkoul@kernel.org>
+ <20190819073947.17258-2-vkoul@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190819073947.17258-2-vkoul@kernel.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This driver provides a trivial mailbox client that can be used with the
-mailbox-demo branch of https://github.com/crust-firmware/crust for
-verifying the functionality of the sunxi-msgbox driver.
+On Mon 19 Aug 00:39 PDT 2019, Vinod Koul wrote:
 
-This is not a "real" driver, nor a "real" firmware protocol. This driver
-is not intended to be merged. It is provided only as an example that
-won't interfere with any other hardware.
+> With clock parent data scheme we must specify the parent clocks for the
+> rpmhcc nodes. So describe the parent clock for rpmhcc in the bindings.
+> 
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
- arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi |  24 ++
- arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi  |  24 ++
- drivers/firmware/Kconfig                      |   6 +
- drivers/firmware/Makefile                     |   1 +
- drivers/firmware/sunxi_msgbox_demo.c          | 310 ++++++++++++++++++
- 5 files changed, 365 insertions(+)
- create mode 100644 drivers/firmware/sunxi_msgbox_demo.c
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-index 428f539a091a..78315d5512db 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-@@ -121,6 +121,30 @@
- 		};
- 	};
- 
-+	demo_0 {
-+		compatible = "allwinner,sunxi-msgbox-demo";
-+		mboxes = <&msgbox 0>, <&msgbox 1>;
-+		mbox-names = "tx", "rx";
-+	};
-+
-+	demo_1 {
-+		compatible = "allwinner,sunxi-msgbox-demo";
-+		mboxes = <&msgbox 2>, <&msgbox 3>;
-+		mbox-names = "tx", "rx";
-+	};
-+
-+	demo_2 {
-+		compatible = "allwinner,sunxi-msgbox-demo";
-+		mboxes = <&msgbox 4>, <&msgbox 5>;
-+		mbox-names = "tx", "rx";
-+	};
-+
-+	demo_3 {
-+		compatible = "allwinner,sunxi-msgbox-demo";
-+		mboxes = <&msgbox 6>, <&msgbox 7>;
-+		mbox-names = "tx", "rx";
-+	};
-+
- 	de: display-engine {
- 		compatible = "allwinner,sun50i-a64-display-engine";
- 		allwinner,pipelines = <&mixer0>,
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi
-index f002a496d7cb..5a2d85b7e0a1 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi
-@@ -76,6 +76,30 @@
- 		};
- 	};
- 
-+	demo_0 {
-+		compatible = "allwinner,sunxi-msgbox-demo";
-+		mboxes = <&msgbox 0>, <&msgbox 1>;
-+		mbox-names = "tx", "rx";
-+	};
-+
-+	demo_1 {
-+		compatible = "allwinner,sunxi-msgbox-demo";
-+		mboxes = <&msgbox 2>, <&msgbox 3>;
-+		mbox-names = "tx", "rx";
-+	};
-+
-+	demo_2 {
-+		compatible = "allwinner,sunxi-msgbox-demo";
-+		mboxes = <&msgbox 4>, <&msgbox 5>;
-+		mbox-names = "tx", "rx";
-+	};
-+
-+	demo_3 {
-+		compatible = "allwinner,sunxi-msgbox-demo";
-+		mboxes = <&msgbox 6>, <&msgbox 7>;
-+		mbox-names = "tx", "rx";
-+	};
-+
- 	psci {
- 		compatible = "arm,psci-0.2";
- 		method = "smc";
-diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-index ba8d3d0ef32c..e0f8f3c856c1 100644
---- a/drivers/firmware/Kconfig
-+++ b/drivers/firmware/Kconfig
-@@ -240,6 +240,12 @@ config QCOM_SCM_DOWNLOAD_MODE_DEFAULT
- 
- 	  Say Y here to enable "download mode" by default.
- 
-+config SUNXI_MSGBOX_DEMO
-+	tristate "sunxi msgbox demo"
-+	depends on MAILBOX
-+	help
-+	  Demo client for demo firmware to use in mailbox driver validation.
-+
- config TI_SCI_PROTOCOL
- 	tristate "TI System Control Interface (TISCI) Message Protocol"
- 	depends on TI_MESSAGE_MANAGER
-diff --git a/drivers/firmware/Makefile b/drivers/firmware/Makefile
-index 3fa0b34eb72f..6f8e17a854b6 100644
---- a/drivers/firmware/Makefile
-+++ b/drivers/firmware/Makefile
-@@ -20,6 +20,7 @@ obj-$(CONFIG_QCOM_SCM)		+= qcom_scm.o
- obj-$(CONFIG_QCOM_SCM_64)	+= qcom_scm-64.o
- obj-$(CONFIG_QCOM_SCM_32)	+= qcom_scm-32.o
- CFLAGS_qcom_scm-32.o :=$(call as-instr,.arch armv7-a\n.arch_extension sec,-DREQUIRES_SEC=1) -march=armv7-a
-+obj-$(CONFIG_SUNXI_MSGBOX_DEMO)	+= sunxi_msgbox_demo.o
- obj-$(CONFIG_TI_SCI_PROTOCOL)	+= ti_sci.o
- obj-$(CONFIG_TRUSTED_FOUNDATIONS) += trusted_foundations.o
- 
-diff --git a/drivers/firmware/sunxi_msgbox_demo.c b/drivers/firmware/sunxi_msgbox_demo.c
-new file mode 100644
-index 000000000000..9431b1ef1841
---- /dev/null
-+++ b/drivers/firmware/sunxi_msgbox_demo.c
-@@ -0,0 +1,310 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Copyright (c) 2018-2019 Samuel Holland <samuel@sholland.org>
-+
-+#include <linux/completion.h>
-+#include <linux/mailbox_client.h>
-+#include <linux/module.h>
-+#include <linux/of_platform.h>
-+#include <linux/random.h>
-+
-+enum {
-+	OP_MAGIC,
-+	OP_VERSION,
-+	OP_LOOPBACK,
-+	OP_LOOPBACK_INVERTED,
-+	OP_TIME_SECONDS,
-+	OP_TIME_TICKS,
-+	OP_DELAY_MICROS,
-+	OP_DELAY_MILLIS,
-+	OP_ADDR_SET_LO,
-+	OP_ADDR_SET_HI,
-+	OP_ADDR_READ,
-+	OP_ADDR_WRITE,
-+	OP_INVALID_1,
-+	OP_INVALID_2,
-+	OP_RESET = 16,
-+};
-+
-+struct msgbox_demo {
-+	struct mbox_chan *rx_chan;
-+	struct mbox_chan *tx_chan;
-+	struct mbox_client cl;
-+	struct completion completion;
-+	uint32_t request;
-+	uint32_t response;
-+	uint32_t address;
-+	uint32_t value;
-+};
-+
-+static void msgbox_demo_rx(struct mbox_client *cl, void *msg)
-+{
-+	struct msgbox_demo *demo = container_of(cl, struct msgbox_demo, cl);
-+
-+	demo->response = *(uint32_t *)msg;
-+	complete(&demo->completion);
-+}
-+
-+static int msgbox_demo_tx(struct msgbox_demo *demo, uint32_t request)
-+{
-+	unsigned long timeout = msecs_to_jiffies(10);
-+	int ret;
-+
-+	demo->request  = request;
-+	demo->response = 0;
-+	reinit_completion(&demo->completion);
-+
-+	ret = mbox_send_message(demo->tx_chan, &demo->request);
-+	if (ret < 0) {
-+		dev_err(demo->cl.dev, "Failed to send request: %d\n", ret);
-+		return ret;
-+	}
-+
-+	if (wait_for_completion_timeout(&demo->completion, timeout))
-+		return 0;
-+
-+	return -ETIMEDOUT;
-+}
-+
-+static void msgbox_demo_do_operation(struct msgbox_demo *demo, uint16_t op)
-+{
-+	struct device *dev = demo->cl.dev;
-+	uint16_t data = 0;
-+	uint32_t resp = 0;
-+	int exp = 0;
-+	int ret;
-+
-+	switch (op) {
-+	case OP_MAGIC:
-+		resp = 0x1a2a3a4a;
-+		break;
-+	case OP_LOOPBACK:
-+		data = get_random_u32();
-+		resp = data;
-+		break;
-+	case OP_LOOPBACK_INVERTED:
-+		data = get_random_u32();
-+		resp = ~data;
-+		break;
-+	case OP_DELAY_MICROS:
-+		data = 25000;
-+		exp  = -ETIMEDOUT;
-+		break;
-+	case OP_DELAY_MILLIS:
-+		data = 500;
-+		exp  = -ETIMEDOUT;
-+		break;
-+	case OP_ADDR_SET_LO:
-+		data = demo->address & 0xffff;
-+		resp = demo->address;
-+		break;
-+	case OP_ADDR_SET_HI:
-+		data = demo->address >> 16;
-+		break;
-+	case OP_ADDR_WRITE:
-+		data = demo->value;
-+		resp = demo->value;
-+		break;
-+	case OP_INVALID_1:
-+	case OP_INVALID_2:
-+		resp = -1U;
-+		break;
-+	case OP_RESET:
-+		exp  = -ETIMEDOUT;
-+		break;
-+	}
-+
-+	dev_info(demo->cl.dev, "Sending opcode %d, data 0x%08x\n", op, data);
-+	ret = msgbox_demo_tx(demo, op << 16 | data);
-+
-+	if (ret) {
-+		/* Nothing was received. */
-+		if (exp)
-+			dev_info(dev, "No response received, as expected\n");
-+		else
-+			dev_err(dev, "Timeout receiving response\n");
-+		return;
-+	}
-+
-+	/* Something was received. */
-+	if (exp)
-+		dev_err(dev, "Unexpected response 0x%08x\n", demo->response);
-+	else if (!resp)
-+		dev_info(dev, "Received response 0x%08x\n", demo->response);
-+	else if (demo->response == resp)
-+		dev_info(dev, "Good response 0x%08x\n", resp);
-+	else
-+		dev_err(dev, "Expected 0x%08x, received 0x%08x\n",
-+			     resp, demo->response);
-+}
-+
-+ssize_t demo_address_show(struct device *dev, struct device_attribute *attr,
-+			  char *buf)
-+{
-+	struct msgbox_demo *demo = dev_get_drvdata(dev);
-+
-+	return sprintf(buf, "%08x\n", demo->address);
-+}
-+
-+static ssize_t demo_address_store(struct device *dev,
-+				  struct device_attribute *attr,
-+				  const char *buf, size_t count)
-+{
-+	struct msgbox_demo *demo = dev_get_drvdata(dev);
-+	uint32_t val;
-+
-+	if (sscanf(buf, "%x", &val)) {
-+		demo->address = val;
-+		msgbox_demo_do_operation(demo, OP_ADDR_SET_HI);
-+		msgbox_demo_do_operation(demo, OP_ADDR_SET_LO);
-+		return count;
-+	}
-+
-+	return 0;
-+}
-+
-+ssize_t demo_value_show(struct device *dev, struct device_attribute *attr,
-+			char *buf)
-+{
-+	struct msgbox_demo *demo = dev_get_drvdata(dev);
-+
-+	msgbox_demo_do_operation(demo, OP_ADDR_READ);
-+	demo->value = demo->response;
-+
-+	return sprintf(buf, "%08x\n", demo->value);
-+}
-+
-+static ssize_t demo_value_store(struct device *dev,
-+				struct device_attribute *attr,
-+				const char *buf, size_t count)
-+{
-+	struct msgbox_demo *demo = dev_get_drvdata(dev);
-+	int16_t val;
-+
-+	if (sscanf(buf, "%hx", &val)) {
-+		demo->value = (int32_t)val;
-+		msgbox_demo_do_operation(demo, OP_ADDR_WRITE);
-+		return count;
-+	}
-+
-+	return 0;
-+}
-+
-+static ssize_t demo_operation_store(struct device *dev,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	struct msgbox_demo *demo = dev_get_drvdata(dev);
-+	uint16_t val;
-+
-+	if (sscanf(buf, "%hu", &val)) {
-+		msgbox_demo_do_operation(demo, val);
-+		return count;
-+	}
-+
-+	return 0;
-+}
-+
-+static DEVICE_ATTR(demo_address,   0644, demo_address_show, demo_address_store);
-+static DEVICE_ATTR(demo_value,     0644, demo_value_show,   demo_value_store);
-+static DEVICE_ATTR(demo_operation, 0200, NULL,              demo_operation_store);
-+
-+static int msgbox_demo_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device_attribute *attr;
-+	struct msgbox_demo *demo;
-+	int ret;
-+
-+	demo = devm_kzalloc(dev, sizeof(*demo), GFP_KERNEL);
-+	if (!demo)
-+		return -ENOMEM;
-+
-+	demo->cl.dev         = dev;
-+	demo->cl.rx_callback = msgbox_demo_rx;
-+
-+	if (of_get_property(dev->of_node, "mbox-names", NULL)) {
-+		demo->rx_chan = mbox_request_channel_byname(&demo->cl, "rx");
-+		if (IS_ERR(demo->rx_chan)) {
-+			ret = PTR_ERR(demo->rx_chan);
-+			dev_err(dev, "Failed to request rx mailbox channel\n");
-+			goto err;
-+		}
-+		demo->tx_chan = mbox_request_channel_byname(&demo->cl, "tx");
-+		if (IS_ERR(demo->tx_chan)) {
-+			ret = PTR_ERR(demo->tx_chan);
-+			dev_err(dev, "Failed to request tx mailbox channel\n");
-+			goto err_free_rx_chan;
-+		}
-+	} else {
-+		demo->rx_chan = mbox_request_channel(&demo->cl, 0);
-+		demo->tx_chan = demo->rx_chan;
-+		if (IS_ERR(demo->tx_chan)) {
-+			ret = PTR_ERR(demo->tx_chan);
-+			dev_err(dev, "Failed to request mailbox channel\n");
-+			goto err;
-+		}
-+	}
-+
-+	attr = &dev_attr_demo_address;
-+	ret = device_create_file(dev, attr);
-+	if (ret)
-+		goto err_creating_files;
-+	attr = &dev_attr_demo_value;
-+	ret = device_create_file(dev, attr);
-+	if (ret)
-+		goto err_creating_files;
-+	attr = &dev_attr_demo_operation;
-+	ret = device_create_file(dev, attr);
-+	if (ret)
-+		goto err_creating_files;
-+
-+	init_completion(&demo->completion);
-+
-+	platform_set_drvdata(pdev, demo);
-+
-+	msgbox_demo_do_operation(demo, OP_VERSION);
-+
-+	return 0;
-+
-+err_creating_files:
-+	dev_err(dev, "Failed to create sysfs attribute %s: %d\n",
-+		attr->attr.name, ret);
-+	if (demo->tx_chan != demo->rx_chan)
-+		mbox_free_channel(demo->tx_chan);
-+err_free_rx_chan:
-+	mbox_free_channel(demo->rx_chan);
-+err:
-+	return ret;
-+}
-+
-+static int msgbox_demo_remove(struct platform_device *pdev)
-+{
-+	struct msgbox_demo *demo = platform_get_drvdata(pdev);
-+
-+	if (demo->tx_chan != demo->rx_chan)
-+		mbox_free_channel(demo->tx_chan);
-+	mbox_free_channel(demo->rx_chan);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id msgbox_demo_of_match[] = {
-+	{ .compatible = "allwinner,sunxi-msgbox-demo" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, msgbox_demo_of_match);
-+
-+static struct platform_driver msgbox_demo_driver = {
-+	.driver = {
-+		.name = KBUILD_MODNAME,
-+		.of_match_table = msgbox_demo_of_match,
-+	},
-+	.probe  = msgbox_demo_probe,
-+	.remove = msgbox_demo_remove,
-+};
-+module_platform_driver(msgbox_demo_driver);
-+
-+MODULE_AUTHOR("Samuel Holland <samuel@sholland.org>");
-+MODULE_DESCRIPTION("sunxi msgbox demo");
-+MODULE_LICENSE("GPL v2");
--- 
-2.21.0
-
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/clock/qcom,rpmh-clk.txt | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,rpmh-clk.txt b/Documentation/devicetree/bindings/clock/qcom,rpmh-clk.txt
+> index 3c007653da31..8b97968f9c88 100644
+> --- a/Documentation/devicetree/bindings/clock/qcom,rpmh-clk.txt
+> +++ b/Documentation/devicetree/bindings/clock/qcom,rpmh-clk.txt
+> @@ -9,6 +9,9 @@ Required properties :
+>  - compatible : shall contain "qcom,sdm845-rpmh-clk"
+>  
+>  - #clock-cells : must contain 1
+> +- clocks: a list of phandles and clock-specifier pairs,
+> +	  one for each entry in clock-names.
+> +- clock-names: Parent board clock: "xo".
+>  
+>  Example :
+>  
+> -- 
+> 2.20.1
+> 
