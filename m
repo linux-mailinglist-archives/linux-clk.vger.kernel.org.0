@@ -2,126 +2,101 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDB1988A2
-	for <lists+linux-clk@lfdr.de>; Thu, 22 Aug 2019 02:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D14998958
+	for <lists+linux-clk@lfdr.de>; Thu, 22 Aug 2019 04:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729212AbfHVAqL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 21 Aug 2019 20:46:11 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:12180 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729081AbfHVAqL (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 21 Aug 2019 20:46:11 -0400
-X-UUID: 3903fa845faf47d685a9fa1ac8adcc0d-20190822
-X-UUID: 3903fa845faf47d685a9fa1ac8adcc0d-20190822
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
-        (envelope-from <mars.cheng@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0707 with TLS)
-        with ESMTP id 658753542; Thu, 22 Aug 2019 08:46:04 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Thu, 22 Aug 2019 08:46:00 +0800
-Received: from [172.21.77.33] (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 22 Aug 2019 08:46:00 +0800
-Message-ID: <1566434764.14794.2.camel@mtkswgap22>
-Subject: Re: [PATCH v2 11/11] arm64: dts: add dts nodes for MT6779
-From:   Mars Cheng <mars.cheng@mediatek.com>
-To:     Marc Zyngier <maz@kernel.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Sean Wang <sean.wang@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <devicetree@vger.kernel.org>, CC Hwang <cc.hwang@mediatek.com>,
-        <wsd_upstream@mediatek.com>, Loda Chou <loda.chou@mediatek.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        mtk01761 <wendell.lin@mediatek.com>, <linux-clk@vger.kernel.org>
-Date:   Thu, 22 Aug 2019 08:46:04 +0800
-In-Reply-To: <c533371d-efcd-59dc-0172-3f5775221302@kernel.org>
-References: <1566206502-4347-1-git-send-email-mars.cheng@mediatek.com>
-         <1566206502-4347-12-git-send-email-mars.cheng@mediatek.com>
-         <adec38bf-735b-9131-2b9d-1e427d47f88d@kernel.org>
-         <1566214950.17081.3.camel@mtkswgap22>
-         <c533371d-efcd-59dc-0172-3f5775221302@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
-MIME-Version: 1.0
-X-MTK:  N
+        id S1731222AbfHVCSy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 21 Aug 2019 22:18:54 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:37128 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731190AbfHVCSx (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 21 Aug 2019 22:18:53 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 738A32005B5;
+        Thu, 22 Aug 2019 04:18:51 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id EC4D82005B4;
+        Thu, 22 Aug 2019 04:18:45 +0200 (CEST)
+Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id F407740296;
+        Thu, 22 Aug 2019 10:18:38 +0800 (SGT)
+From:   Wen He <wen.he_1@nxp.com>
+To:     linux-devel@linux.nxdi.nxp.com, Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     leoyang.li@nxp.com, liviu.dudau@arm.com, Wen He <wen.he_1@nxp.com>
+Subject: [v3 1/2] dt/bindings: clk: Add YAML schemas for LS1028A Display Clock bindings
+Date:   Thu, 22 Aug 2019 10:08:46 +0800
+Message-Id: <20190822020847.10159-1-wen.he_1@nxp.com>
+X-Mailer: git-send-email 2.9.5
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Marc
+LS1028A has a clock domain PXLCLK0 used for provide pixel clocks to Display
+output interface. Add a YAML schema for this.
 
-> >>> +	soc {
-> >>> +		#address-cells = <2>;
-> >>> +		#size-cells = <2>;
-> >>> +		compatible = "simple-bus";
-> >>> +		ranges;
-> >>> +
-> >>> +		gic: interrupt-controller@0c000000 {
-> >>> +			compatible = "arm,gic-v3";
-> >>> +			#interrupt-cells = <3>;
-> >>
-> >> You also haven't described the CPU PMUs. Depending on how they are wired
-> >> (SPIs or PPIs), you may have to change the interrupt-cells property to
-> >> include a cell for the PPI partitioning.
-> >>
-> > 
-> > pmu nodes would be:
-> > 
-> >         pmu {
-> >                 compatible = "arm,armv8-pmuv3";
-> >                 interrupt-parent = <&gic>;
-> >                 interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_LOW>;
-> >         };
-> > 
-> >         dsu-pmu-0 {
-> >                 compatible = "arm,dsu-pmu";
-> >                 interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
-> >                 cpus = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>,
-> >                         <&cpu4>, <&cpu5>, <&cpu6>, <&cpu7>;
-> >         };
-> > 
-> > so I think interrupt-cells could be <3>, will add pmu nodes in v3.
-> 
-> No, that's wrong, at least for the CPU pmu node.
-> 
-> First, you need two of them (one for the A55s, one for the A75s).
-> Then you need to partition the corresponding PPI so that they can be
-> described as separate affinity sets.
-> Finally, this implies that #interrupt-cells goes up to 4, and all the
-> interrupts directly routed to the GIC must be updated.
-> 
-> You should have something like this:
-> 
-> 	&gic {
-> 		ppi-partitions {
-> 			cluster0: interrupt-partition-0 {
-> 				affinity = <&cpu0 &cpu1 &cpu2
->                                             &cpu3 &cpu4 &cpu5>;
-> 			};
-> 
-> 			cluster1: interrupt-partition-1 {
-> 				affinity = <&cpu6 &cpu7>;
-> 			};
-> 	};
-> 
-> 	pmu_a55 {
-> 		compatible = "arm,cortex-a55-pmu", "arm,armv8-pmuv3";
-> 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_LOW &cluster0>;
-> 	};
-> 
-> 	pmu_a75 {
-> 		compatible = "arm,cortex-a75-pmu", "arm,armv8-pmuv3";
-> 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_LOW &cluster1>;
-> 	};
-> 
-> Please see the rk3399 usage of the binding, as it is the canonical example.
-> 
-> > 
+Signed-off-by: Wen He <wen.he_1@nxp.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/clock/fsl,plldig.yaml | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/fsl,plldig.yaml
 
-Got the idea. Will check rk3399 and fix our part. Thanks for reviewing.
+diff --git a/Documentation/devicetree/bindings/clock/fsl,plldig.yaml b/Documentation/devicetree/bindings/clock/fsl,plldig.yaml
+new file mode 100644
+index 000000000000..32274e94aafc
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/fsl,plldig.yaml
+@@ -0,0 +1,43 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/bindings/clock/fsl,plldig.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP QorIQ Layerscape LS1028A Display PIXEL Clock Binding
++
++maintainers:
++  - Wen He <wen.he_1@nxp.com>
++
++description: |
++  NXP LS1028A has a clock domain PXLCLK0 used for the Display output
++  interface in the display core, as implemented in TSMC CLN28HPM PLL.
++  which generate and offers pixel clocks to Display.
++
++properties:
++  compatible:
++    const: fsl,ls1028a-plldig
++
++  reg:
++    maxItems: 1
++
++  '#clock-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - '#clock-cells'
++
++examples:
++  # Display PIXEL Clock node:
++  - |
++    dpclk: clock-display@f1f0000 {
++        compatible = "fsl,ls1028a-plldig";
++        reg = <0x0 0xf1f0000 0x0 0xffff>;
++        #clock-cells = <0>;
++        clocks = <&osc_27m>;
++    };
++
++...
+-- 
+2.17.1
 
