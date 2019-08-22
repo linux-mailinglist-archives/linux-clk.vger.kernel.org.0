@@ -2,128 +2,64 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4F498FB4
-	for <lists+linux-clk@lfdr.de>; Thu, 22 Aug 2019 11:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DC6698FCE
+	for <lists+linux-clk@lfdr.de>; Thu, 22 Aug 2019 11:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387452AbfHVJe3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 22 Aug 2019 05:34:29 -0400
-Received: from shell.v3.sk ([90.176.6.54]:35956 "EHLO shell.v3.sk"
+        id S1731161AbfHVJgL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 22 Aug 2019 05:36:11 -0400
+Received: from shell.v3.sk ([90.176.6.54]:35995 "EHLO shell.v3.sk"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387446AbfHVJe2 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 22 Aug 2019 05:34:28 -0400
+        id S1726738AbfHVJgL (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 22 Aug 2019 05:36:11 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 40298D7556;
-        Thu, 22 Aug 2019 11:34:26 +0200 (CEST)
+        by zimbra.v3.sk (Postfix) with ESMTP id BE832D7556;
+        Thu, 22 Aug 2019 11:36:09 +0200 (CEST)
 Received: from shell.v3.sk ([127.0.0.1])
         by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id zsL6hMHcVi52; Thu, 22 Aug 2019 11:34:02 +0200 (CEST)
+        with ESMTP id 1v5Ri6TRypyq; Thu, 22 Aug 2019 11:36:05 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id DE273D755E;
-        Thu, 22 Aug 2019 11:33:07 +0200 (CEST)
+        by zimbra.v3.sk (Postfix) with ESMTP id 3B668D755A;
+        Thu, 22 Aug 2019 11:36:05 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at zimbra.v3.sk
 Received: from shell.v3.sk ([127.0.0.1])
         by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ihugTon7VsWS; Thu, 22 Aug 2019 11:33:05 +0200 (CEST)
-Received: from belphegor.brq.redhat.com (nat-pool-brq-t.redhat.com [213.175.37.10])
-        by zimbra.v3.sk (Postfix) with ESMTPSA id 36A7B57D64;
-        Thu, 22 Aug 2019 11:31:45 +0200 (CEST)
+        with ESMTP id jvTFurhOyODo; Thu, 22 Aug 2019 11:36:04 +0200 (CEST)
+Received: from belphegor (nat-pool-brq-t.redhat.com [213.175.37.10])
+        by zimbra.v3.sk (Postfix) with ESMTPSA id 009DDD7556;
+        Thu, 22 Aug 2019 11:36:03 +0200 (CEST)
+Message-ID: <1e13a307539b47b8d874bdc5c36b705ba7a72f7e.camel@v3.sk>
+Subject: Re: [PATCH] clk: tidy up the help tags in Kconfig
 From:   Lubomir Rintel <lkundrak@v3.sk>
 To:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lubomir Rintel <lkundrak@v3.sk>
-Subject: [PATCH] clk: remove extra ---help--- tags in Kconfig
-Date:   Thu, 22 Aug 2019 11:31:26 +0200
-Message-Id: <20190822093126.594013-1-lkundrak@v3.sk>
-X-Mailer: git-send-email 2.21.0
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 22 Aug 2019 11:36:02 +0200
+In-Reply-To: <20190816192707.DCC022133F@mail.kernel.org>
+References: <20190816185716.530013-1-lkundrak@v3.sk>
+         <20190816192707.DCC022133F@mail.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Sometimes an extraneous "---help---" follows "help". That is probably a
-copy&paste error stemming from their inconsistent use. Remove those.
+On Fri, 2019-08-16 at 12:27 -0700, Stephen Boyd wrote:
+> Quoting Lubomir Rintel (2019-08-16 11:57:16)
+> > Sometimes an extraneous "---help---" follows "help". That is probably a
+> > copy&paste error stemming from their inconsistent use. Let's just replace
+> > them all with "help", removing the extra ones along the way.
+> 
+> Can you just send the patch to remove the extra ones? I don't really
+> care to make it consistent in the same patch.
 
-Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
----
- drivers/clk/Kconfig | 9 ---------
- 1 file changed, 9 deletions(-)
+Sure. Just done so.
 
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index 801fa1cd03217..c44247d0b83e8 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -116,7 +116,6 @@ config COMMON_CLK_SI514
- 	depends on OF
- 	select REGMAP_I2C
- 	help
--	---help---
- 	  This driver supports the Silicon Labs 514 programmable clock
- 	  generator.
-=20
-@@ -125,7 +124,6 @@ config COMMON_CLK_SI544
- 	depends on I2C
- 	select REGMAP_I2C
- 	help
--	---help---
- 	  This driver supports the Silicon Labs 544 programmable clock
- 	  generator.
-=20
-@@ -135,7 +133,6 @@ config COMMON_CLK_SI570
- 	depends on OF
- 	select REGMAP_I2C
- 	help
--	---help---
- 	  This driver supports Silicon Labs 570/571/598/599 programmable
- 	  clock generators.
-=20
-@@ -153,7 +150,6 @@ config COMMON_CLK_CDCE925
- 	depends on OF
- 	select REGMAP_I2C
- 	help
--	---help---
- 	  This driver supports the TI CDCE913/925/937/949 programmable clock
- 	  synthesizer. Each chip has different number of PLLs and outputs.
- 	  For example, the CDCE925 contains two PLLs with spread-spectrum
-@@ -212,7 +208,6 @@ config COMMON_CLK_AXI_CLKGEN
- 	tristate "AXI clkgen driver"
- 	depends on ARCH_ZYNQ || MICROBLAZE || COMPILE_TEST
- 	help
--	---help---
- 	  Support for the Analog Devices axi-clkgen pcore clock generator for X=
-ilinx
- 	  FPGAs. It is commonly used in Analog Devices' reference designs.
-=20
-@@ -279,26 +274,22 @@ config COMMON_CLK_VC5
- 	depends on OF
- 	select REGMAP_I2C
- 	help
--	---help---
- 	  This driver supports the IDT VersaClock 5 and VersaClock 6
- 	  programmable clock generators.
-=20
- config COMMON_CLK_STM32MP157
- 	def_bool COMMON_CLK && MACH_STM32MP157
- 	help
--	---help---
- 	  Support for stm32mp157 SoC family clocks
-=20
- config COMMON_CLK_STM32F
- 	def_bool COMMON_CLK && (MACH_STM32F429 || MACH_STM32F469 || MACH_STM32F=
-746)
- 	help
--	---help---
- 	  Support for stm32f4 and stm32f7 SoC families clocks
-=20
- config COMMON_CLK_STM32H7
- 	def_bool COMMON_CLK && MACH_STM32H743
- 	help
--	---help---
- 	  Support for stm32h7 SoC family clocks
-=20
- config COMMON_CLK_BD718XX
---=20
-2.21.0
+Do you also care about making it consistent, or is it okay to just
+leave it as it is?
+
+Thanks
+Lubo
 
