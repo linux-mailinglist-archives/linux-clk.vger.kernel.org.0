@@ -2,64 +2,74 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC6698FCE
-	for <lists+linux-clk@lfdr.de>; Thu, 22 Aug 2019 11:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5691D990E7
+	for <lists+linux-clk@lfdr.de>; Thu, 22 Aug 2019 12:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731161AbfHVJgL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 22 Aug 2019 05:36:11 -0400
-Received: from shell.v3.sk ([90.176.6.54]:35995 "EHLO shell.v3.sk"
+        id S1731114AbfHVKcC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 22 Aug 2019 06:32:02 -0400
+Received: from foss.arm.com ([217.140.110.172]:43376 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726738AbfHVJgL (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 22 Aug 2019 05:36:11 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id BE832D7556;
-        Thu, 22 Aug 2019 11:36:09 +0200 (CEST)
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 1v5Ri6TRypyq; Thu, 22 Aug 2019 11:36:05 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 3B668D755A;
-        Thu, 22 Aug 2019 11:36:05 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at zimbra.v3.sk
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id jvTFurhOyODo; Thu, 22 Aug 2019 11:36:04 +0200 (CEST)
-Received: from belphegor (nat-pool-brq-t.redhat.com [213.175.37.10])
-        by zimbra.v3.sk (Postfix) with ESMTPSA id 009DDD7556;
-        Thu, 22 Aug 2019 11:36:03 +0200 (CEST)
-Message-ID: <1e13a307539b47b8d874bdc5c36b705ba7a72f7e.camel@v3.sk>
-Subject: Re: [PATCH] clk: tidy up the help tags in Kconfig
-From:   Lubomir Rintel <lkundrak@v3.sk>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 22 Aug 2019 11:36:02 +0200
-In-Reply-To: <20190816192707.DCC022133F@mail.kernel.org>
-References: <20190816185716.530013-1-lkundrak@v3.sk>
-         <20190816192707.DCC022133F@mail.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+        id S1725783AbfHVKcC (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 22 Aug 2019 06:32:02 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AEE8915AD;
+        Thu, 22 Aug 2019 03:32:01 -0700 (PDT)
+Received: from [10.1.197.61] (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 188B93F246;
+        Thu, 22 Aug 2019 03:31:58 -0700 (PDT)
+Subject: Re: [PATCH v2 00/20] Initial support for Marvell MMP3 SoC
+To:     Lubomir Rintel <lkundrak@v3.sk>, Olof Johansson <olof@lixom.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org
+References: <20190822092643.593488-1-lkundrak@v3.sk>
+From:   Marc Zyngier <maz@kernel.org>
+Organization: Approximate
+Message-ID: <244fdc87-0fe5-be79-d9cd-2395d0ac3f57@kernel.org>
+Date:   Thu, 22 Aug 2019 11:31:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20190822092643.593488-1-lkundrak@v3.sk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, 2019-08-16 at 12:27 -0700, Stephen Boyd wrote:
-> Quoting Lubomir Rintel (2019-08-16 11:57:16)
-> > Sometimes an extraneous "---help---" follows "help". That is probably a
-> > copy&paste error stemming from their inconsistent use. Let's just replace
-> > them all with "help", removing the extra ones along the way.
+On 22/08/2019 10:26, Lubomir Rintel wrote:
+> Hi, 
 > 
-> Can you just send the patch to remove the extra ones? I don't really
-> care to make it consistent in the same patch.
+> this is a second spin of a patch set that adds support for the Marvell
+> MMP3 processor. MMP3 is used in OLPC XO-4 laptops, Panasonic Toughpad
+> FZ-A1 tablet and Dell Wyse 3020 Tx0D thin clients. 
+> 
+> Compared to v1, there's a handful of fixes in response to reviews. Patch
+> 02/20 is new. Details in individual patches.
+>  
+> Apart from the adjustments in mach-mmp/, the patch makes necessary 
+> changes to the irqchip driver and adds an USB2 PHY driver. The latter 
+> has a dependency on the mach-mmp/ changes, so it can't be submitted 
+> separately.
+>  
+> The patch set has been tested to work on Wyse Tx0D and not ruin MMP2 
+> support on XO-1.75. 
 
-Sure. Just done so.
+How do you want this series to be merged? I'm happy to take the irqchip
+related patches as well as the corresponding DT change (once reviewed)
+through my tree.
 
-Do you also care about making it consistent, or is it okay to just
-leave it as it is?
+Thanks,
 
-Thanks
-Lubo
-
+	M.
+-- 
+Jazz is not dead, it just smells funny...
