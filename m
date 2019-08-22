@@ -2,74 +2,91 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5691D990E7
-	for <lists+linux-clk@lfdr.de>; Thu, 22 Aug 2019 12:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800A999373
+	for <lists+linux-clk@lfdr.de>; Thu, 22 Aug 2019 14:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731114AbfHVKcC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 22 Aug 2019 06:32:02 -0400
-Received: from foss.arm.com ([217.140.110.172]:43376 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725783AbfHVKcC (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 22 Aug 2019 06:32:02 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AEE8915AD;
-        Thu, 22 Aug 2019 03:32:01 -0700 (PDT)
-Received: from [10.1.197.61] (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 188B93F246;
-        Thu, 22 Aug 2019 03:31:58 -0700 (PDT)
-Subject: Re: [PATCH v2 00/20] Initial support for Marvell MMP3 SoC
-To:     Lubomir Rintel <lkundrak@v3.sk>, Olof Johansson <olof@lixom.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org
-References: <20190822092643.593488-1-lkundrak@v3.sk>
-From:   Marc Zyngier <maz@kernel.org>
-Organization: Approximate
-Message-ID: <244fdc87-0fe5-be79-d9cd-2395d0ac3f57@kernel.org>
-Date:   Thu, 22 Aug 2019 11:31:57 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1732746AbfHVM3X (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 22 Aug 2019 08:29:23 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:43878 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732713AbfHVM3X (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 22 Aug 2019 08:29:23 -0400
+Received: by mail-lf1-f65.google.com with SMTP id c19so4378579lfm.10
+        for <linux-clk@vger.kernel.org>; Thu, 22 Aug 2019 05:29:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=Uh83TYpKL0GQ/nM6wFMlLCF+K/QQ+NWaS4ZIx2sQQvI0KNNqN/E6zTArGpXOLOBt/f
+         N6QFHzklBH631+fvsO6vTelavHgyHvvHVBwI+y20TBUOZtQ5/sT4JlP23bjtE/oA0X0A
+         xvXAKbCZ0pU5aA60LB4dH6xcUJXMTHD8lsxQmkm/vQ11xahFHBmNMIdacasF15YPXded
+         CUm/z2mtG67xtMwBBKPI8MsyFlOGkBdqomx6M8r6sJ/85QLiNUCv9kdIKNh8VC0ZCY5l
+         yK5dXChs/m/0WrIay4/uBCczsKiY1ayIx+UdL3eXQ5RZfdSnei35OgrfUOHzvU7muA6w
+         OR9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=Y6dcCwaZxmRCC44oWIX8+U61VVLPEArLAHNLEtIUBkvhcYy/hmLcjBPDg6e11B5LY2
+         ltXWgQTYy4CcRTa7/dlZNXHdyAeKd/lvCcvXiyB1YMgECI+0qMb+4vUohSfBhbN054Mz
+         4LHyCuauUWu6PaFEHf5h5ysVaVnRoPx8y3hOQNbi58DaKi7m/T+8gi6B86sJ5EaKzdJq
+         ZT9gemG+cTvXlw7nHCRRFG82IofswIXvYLbYpAN0C4YNeOi4JZx1YCoRc6l5SbBKAuxQ
+         lYliDQrELtnx5WQVMuO3lY263Lr4ZT5FhBAwmbNt6XRvUT5ySBRt5c4WfjvtQK5blccc
+         lvrg==
+X-Gm-Message-State: APjAAAWb7Qi8rXURpz1WIQnTVbIj3IQU3L3RAT8dA7MXRjDT8929U3zY
+        xevR0oQh6XzonUTJItFPCmvhP9YmAaKJH+O7Jco=
+X-Google-Smtp-Source: APXvYqw9sQwSpmxjAXS7bfZJ09F9JlAGXMwoQhntJWPTMt4Hq9l+6KygepnFg49Lj9VXPBN7VHtr8pRnDUQyUgeXodI=
+X-Received: by 2002:a19:ed11:: with SMTP id y17mr21470359lfy.141.1566476961148;
+ Thu, 22 Aug 2019 05:29:21 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190822092643.593488-1-lkundrak@v3.sk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a19:dc4f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:29:20
+ -0700 (PDT)
+Reply-To: eku.lawfirm@gmail.com
+From:   "Law firm(Eku and Associates)" <elenabaltach66@gmail.com>
+Date:   Thu, 22 Aug 2019 12:29:20 +0000
+Message-ID: <CAOGpsp6x-FLHmOKGyjMV8QnAdMQ5tZOzyu8q0D-N36-PB1LdEA@mail.gmail.com>
+Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 22/08/2019 10:26, Lubomir Rintel wrote:
-> Hi, 
-> 
-> this is a second spin of a patch set that adds support for the Marvell
-> MMP3 processor. MMP3 is used in OLPC XO-4 laptops, Panasonic Toughpad
-> FZ-A1 tablet and Dell Wyse 3020 Tx0D thin clients. 
-> 
-> Compared to v1, there's a handful of fixes in response to reviews. Patch
-> 02/20 is new. Details in individual patches.
->  
-> Apart from the adjustments in mach-mmp/, the patch makes necessary 
-> changes to the irqchip driver and adds an USB2 PHY driver. The latter 
-> has a dependency on the mach-mmp/ changes, so it can't be submitted 
-> separately.
->  
-> The patch set has been tested to work on Wyse Tx0D and not ruin MMP2 
-> support on XO-1.75. 
+--=20
+Dear,
+With due respect this is not spam or Scam mail, because I have
+contacted you before and there was no response from you,I apologise if
+the contents of this mail are contrary to your moral ethics, which I
+feel may be of great disturbance to your person, but please treat this
+with absolute confidentiality, believing that this email reaches you
+in good faith. My contacting you is not a mistake or a coincidence
+because God can use any person known or unknown to accomplish great
+things.
+I am a lawyer and I have an investment business proposal to offer you.
+It is not official but should be considered as legal and confidential
+business. I have a customer's deposit of $US25 million dollars ready
+to be moved for investment if you can partner with us. We are ready to
+offer you 10% of this total amount as your compensation for supporting
+the transaction to completion. If you are interested to help me please
+reply me with your full details as stated below:
+(1) Your full names:
+(2) Your address:
+(3) Your occupation:
+(4) Your mobile telephone number:
+(5) Your nationality:
+(6) Your present location:
+(7) Your age:
+So that I will provide you more details on what to do and what is
+required for successful completion.
+Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
+MENTIONED DETAILS
 
-How do you want this series to be merged? I'm happy to take the irqchip
-related patches as well as the corresponding DT change (once reviewed)
-through my tree.
-
-Thanks,
-
-	M.
--- 
-Jazz is not dead, it just smells funny...
+Sinc=C3=A8rement v=C3=B4tre,
+Avocat Etienne Eku Esq.(Lawfirm)
+Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
+=E2=80=99ouest.
+Skype:westafricalawfirm
