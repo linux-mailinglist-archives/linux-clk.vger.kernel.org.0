@@ -2,103 +2,163 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D319CF58
-	for <lists+linux-clk@lfdr.de>; Mon, 26 Aug 2019 14:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D019D202
+	for <lists+linux-clk@lfdr.de>; Mon, 26 Aug 2019 16:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731784AbfHZMQr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 26 Aug 2019 08:16:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38350 "EHLO mail.kernel.org"
+        id S1732400AbfHZOzg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 26 Aug 2019 10:55:36 -0400
+Received: from muru.com ([72.249.23.125]:58640 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731774AbfHZMQq (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 26 Aug 2019 08:16:46 -0400
-Received: from localhost.localdomain (unknown [122.178.200.231])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 421282184D;
-        Mon, 26 Aug 2019 12:16:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566821805;
-        bh=tXUqhiySfD6lPQAcB630z21XV3dVhvqoXjyurJHZJkc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W1UXCNaH526rfnt/Gnf1co3YeSkueiuxRQl7HqbnsZcc5wutcRJjFkv0tBX0SUfVJ
-         20qsRNy0ogWIc0TKIxHpEyUd0l8zJIemPwp/wu3H69xEpoHhbvysHS4+CWaXXZBPhg
-         fyYHXhAR/tXpnxw6sbXLzEOuEZ8GekDeTwnroTu0=
-From:   Vinod Koul <vkoul@kernel.org>
+        id S1732396AbfHZOzg (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 26 Aug 2019 10:55:36 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 96AAC80AA;
+        Mon, 26 Aug 2019 14:56:02 +0000 (UTC)
+Date:   Mon, 26 Aug 2019 07:55:30 -0700
+From:   Tony Lindgren <tony@atomide.com>
 To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+Cc:     linux-omap@vger.kernel.org,
+        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        devicetree@vger.kernel.org, Adam Ford <aford173@gmail.com>,
+        Filip =?utf-8?Q?Matijevi=C4=87?= <filip.matijevic.pz@gmail.com>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+        moaz korena <moaz@korena.xyz>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        =?utf-8?B?UGF3ZcWC?= Chmiel <pawel.mikolaj.chmiel@gmail.com>,
+        Philipp Rossak <embed3d@gmail.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 4/4] clk: qcom: clk-rpmh: Add support for SM8150
-Date:   Mon, 26 Aug 2019 17:44:53 +0530
-Message-Id: <20190826121453.21732-5-vkoul@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190826121453.21732-1-vkoul@kernel.org>
-References: <20190826121453.21732-1-vkoul@kernel.org>
+        Tero Kristo <t-kristo@ti.com>, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 4/6] ARM: dts: Configure sgx for omap5
+Message-ID: <20190826145530.GT52127@atomide.com>
+References: <20190814131408.57162-1-tony@atomide.com>
+ <20190814131408.57162-5-tony@atomide.com>
+ <20190815182348.8A1BA2063F@mail.kernel.org>
+ <20190817065615.GI52127@atomide.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190817065615.GI52127@atomide.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add support for rpmh clocks found in SM8150
+* Tony Lindgren <tony@atomide.com> [190817 06:56]:
+> * Stephen Boyd <sboyd@kernel.org> [190815 18:24]:
+> > Quoting Tony Lindgren (2019-08-14 06:14:06)
+> > > diff --git a/arch/arm/boot/dts/omap54xx-clocks.dtsi b/arch/arm/boot/dts/omap54xx-clocks.dtsi
+> > > --- a/arch/arm/boot/dts/omap54xx-clocks.dtsi
+> > > +++ b/arch/arm/boot/dts/omap54xx-clocks.dtsi
+> > > @@ -1146,6 +1146,20 @@
+> > >                 };
+> > >         };
+> > >  
+> > > +       gpu_cm: gpu_cm@1500 {
+> > 
+> > Node names shouldn't have underscores. Maybe clock-controller?
+> 
+> OK yeah clock-controller sounds good to me.
 
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Below is this one updated to use clock-controller naming.
+
+Regards,
+
+Tony
+
+8< ---------------------------
+From tony Mon Sep 17 00:00:00 2001
+From: Tony Lindgren <tony@atomide.com>
+Date: Wed, 14 Aug 2019 05:18:16 -0700
+Subject: [PATCH] ARM: dts: Configure sgx for omap5
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+I've tested that the interconnect target module enables and idles
+just fine when probed with ti-sysc with PM runtime control via sys:
+
+# echo on > $(find /sys -name control | grep \/5600)
+# rwmem 0x5600fe00	# OCP Revision
+0x5600fe00 = 0x40000000
+# echo auto > $(find /sys -name control | grep \/5600)
+# rwmem 0x5600fe10
+# rwmem 0x56000024
+
+Cc: Adam Ford <aford173@gmail.com>
+Cc: Filip Matijević <filip.matijevic.pz@gmail.com>
+Cc: "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+Cc: moaz korena <moaz@korena.xyz>
+Cc: Merlijn Wajer <merlijn@wizzup.org>
+Cc: Paweł Chmiel <pawel.mikolaj.chmiel@gmail.com>
+Cc: Philipp Rossak <embed3d@gmail.com>
+Cc: Tomi Valkeinen <tomi.valkeinen@ti.com>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
 ---
- drivers/clk/qcom/clk-rpmh.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ arch/arm/boot/dts/omap5.dtsi           | 23 +++++++++++++++++++++++
+ arch/arm/boot/dts/omap54xx-clocks.dtsi | 14 ++++++++++++++
+ 2 files changed, 37 insertions(+)
 
-diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-index 97aa092f5f40..082d0b72fe1e 100644
---- a/drivers/clk/qcom/clk-rpmh.c
-+++ b/drivers/clk/qcom/clk-rpmh.c
-@@ -374,6 +374,33 @@ static const struct clk_rpmh_desc clk_rpmh_sdm845 = {
- 	.num_clks = ARRAY_SIZE(sdm845_rpmh_clocks),
- };
+diff --git a/arch/arm/boot/dts/omap5.dtsi b/arch/arm/boot/dts/omap5.dtsi
+--- a/arch/arm/boot/dts/omap5.dtsi
++++ b/arch/arm/boot/dts/omap5.dtsi
+@@ -257,6 +257,29 @@
+ 			ports-implemented = <0x1>;
+ 		};
  
-+DEFINE_CLK_RPMH_ARC(sm8150, bi_tcxo, bi_tcxo_ao, "xo.lvl", 0x3, 2);
-+DEFINE_CLK_RPMH_VRM(sm8150, ln_bb_clk2, ln_bb_clk2_ao, "lnbclka2", 2);
-+DEFINE_CLK_RPMH_VRM(sm8150, ln_bb_clk3, ln_bb_clk3_ao, "lnbclka3", 2);
-+DEFINE_CLK_RPMH_VRM(sm8150, rf_clk1, rf_clk1_ao, "rfclka1", 1);
-+DEFINE_CLK_RPMH_VRM(sm8150, rf_clk2, rf_clk2_ao, "rfclka2", 1);
-+DEFINE_CLK_RPMH_VRM(sm8150, rf_clk3, rf_clk3_ao, "rfclka3", 1);
++		target-module@56000000 {
++			compatible = "ti,sysc-omap4", "ti,sysc";
++			reg = <0x5600fe00 0x4>,
++			      <0x5600fe10 0x4>;
++			reg-names = "rev", "sysc";
++			ti,sysc-midle = <SYSC_IDLE_FORCE>,
++					<SYSC_IDLE_NO>,
++					<SYSC_IDLE_SMART>;
++			ti,sysc-sidle = <SYSC_IDLE_FORCE>,
++					<SYSC_IDLE_NO>,
++					<SYSC_IDLE_SMART>;
++			clocks = <&gpu_clkctrl OMAP5_GPU_CLKCTRL 0>;
++			clock-names = "fck";
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges = <0 0x56000000 0x2000000>;
 +
-+static struct clk_hw *sm8150_rpmh_clocks[] = {
-+	[RPMH_CXO_CLK]		= &sm8150_bi_tcxo.hw,
-+	[RPMH_CXO_CLK_A]	= &sm8150_bi_tcxo_ao.hw,
-+	[RPMH_LN_BB_CLK2]	= &sm8150_ln_bb_clk2.hw,
-+	[RPMH_LN_BB_CLK2_A]	= &sm8150_ln_bb_clk2_ao.hw,
-+	[RPMH_LN_BB_CLK3]	= &sm8150_ln_bb_clk3.hw,
-+	[RPMH_LN_BB_CLK3_A]	= &sm8150_ln_bb_clk3_ao.hw,
-+	[RPMH_RF_CLK1]		= &sm8150_rf_clk1.hw,
-+	[RPMH_RF_CLK1_A]	= &sm8150_rf_clk1_ao.hw,
-+	[RPMH_RF_CLK2]		= &sm8150_rf_clk2.hw,
-+	[RPMH_RF_CLK2_A]	= &sm8150_rf_clk2_ao.hw,
-+	[RPMH_RF_CLK3]		= &sm8150_rf_clk3.hw,
-+	[RPMH_RF_CLK3_A]	= &sm8150_rf_clk3_ao.hw,
-+};
++			/*
++			 * Closed source PowerVR driver, no child device
++			 * binding or driver in mainline
++			 */
++		};
 +
-+static const struct clk_rpmh_desc clk_rpmh_sm8150 = {
-+	.clks = sm8150_rpmh_clocks,
-+	.num_clks = ARRAY_SIZE(sm8150_rpmh_clocks),
-+};
-+
- static struct clk_hw *of_clk_rpmh_hw_get(struct of_phandle_args *clkspec,
- 					 void *data)
- {
-@@ -453,6 +480,7 @@ static int clk_rpmh_probe(struct platform_device *pdev)
+ 		dss: dss@58000000 {
+ 			compatible = "ti,omap5-dss";
+ 			reg = <0x58000000 0x80>;
+diff --git a/arch/arm/boot/dts/omap54xx-clocks.dtsi b/arch/arm/boot/dts/omap54xx-clocks.dtsi
+--- a/arch/arm/boot/dts/omap54xx-clocks.dtsi
++++ b/arch/arm/boot/dts/omap54xx-clocks.dtsi
+@@ -1146,6 +1146,20 @@
+ 		};
+ 	};
  
- static const struct of_device_id clk_rpmh_match_table[] = {
- 	{ .compatible = "qcom,sdm845-rpmh-clk", .data = &clk_rpmh_sdm845},
-+	{ .compatible = "qcom,sm8150-rpmh-clk", .data = &clk_rpmh_sm8150},
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, clk_rpmh_match_table);
++	gpu_cm: clock-controller@1500 {
++		compatible = "ti,omap4-cm";
++		reg = <0x1500 0x100>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0 0x1500 0x100>;
++
++		gpu_clkctrl: clk@20 {
++			compatible = "ti,clkctrl";
++			reg = <0x20 0x4>;
++			#clock-cells = <2>;
++		};
++	};
++
+ 	l3init_cm: l3init_cm@1600 {
+ 		compatible = "ti,omap4-cm";
+ 		reg = <0x1600 0x100>;
 -- 
-2.20.1
-
+2.23.0
