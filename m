@@ -2,115 +2,183 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B3B9D443
-	for <lists+linux-clk@lfdr.de>; Mon, 26 Aug 2019 18:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FE89D476
+	for <lists+linux-clk@lfdr.de>; Mon, 26 Aug 2019 18:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732996AbfHZQpU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 26 Aug 2019 12:45:20 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:35391 "EHLO
+        id S1732358AbfHZQuC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 26 Aug 2019 12:50:02 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:34703 "EHLO
         mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732983AbfHZQpU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Aug 2019 12:45:20 -0400
-Received: by mail-wr1-f68.google.com with SMTP id k2so16001048wrq.2
-        for <linux-clk@vger.kernel.org>; Mon, 26 Aug 2019 09:45:19 -0700 (PDT)
+        with ESMTP id S1731149AbfHZQuB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Aug 2019 12:50:01 -0400
+Received: by mail-wr1-f68.google.com with SMTP id s18so16033690wrn.1
+        for <linux-clk@vger.kernel.org>; Mon, 26 Aug 2019 09:49:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=AduWeROQMDkKls+kl/fLswGL+rHZfEiqcyM0mR/LCMQ=;
-        b=ZIQIzeKYCgaQGA3mvoHdMljzb0wEi7oer9LTbZr5HMpxDFPOgxtKb6VqdW862YV8km
-         04stCMBB1CU0drEjv/HuwbCLA/Jd1m4jBj2IX5eP5GcLNb5H0y96of/8RLrgkCVmJDiA
-         t6avVK9FSWPEWWBcj4zHGwA+FTc9+7NYbGw2PSPIWtdzIIsiVV33OHd06oRpaEnDWfjN
-         kAPZ/UIGq3FLf5aMXUUhbColc9tbabiobhcFIRuv2HQxs7FFIh+m2bjFJ1v2eRfkr8lt
-         L8NkMZsn9ZC+KG+n8ZrT/975M13k6QJZKo3CsK2SJT13L/Z7K/MRW8HEtqxwztb/2Xk0
-         6QVg==
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9O3VW3qz3WP/gvDFs/gxnhqdNJMrlfVE1S3aHZOLj9E=;
+        b=HWMFq+cz5DqcHZUfi0dmj3bx0hOg0UV25W7l6S656MlMQyKPXIcSUcrnzpLxkluIYh
+         OilnzePPW1Z6DjubzBLxs+3jW5nIc9WdTQnLjS5oJbRRdZK4303IVNDj1be+qElbZe0q
+         /pNOrM/MTeU3voPjffFv9+Zxh3dQEQX2NObtrbLh+9D13NA7qeiD+R6xCNOBYXKJ6XzY
+         ku73gyCf5EyxKwaH9e8nWcfrNquMFyPD9L7dsLYjorOlWRMX6dZE+KPXOIQDq4QP+mO+
+         R0UjhUAdcM79vu43aHBTs4bUFjC70Do/BKPxrxiLHzADeTtwg9KEvzGRTSooxslorgVu
+         SZ5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=AduWeROQMDkKls+kl/fLswGL+rHZfEiqcyM0mR/LCMQ=;
-        b=syR7NCtFZbEFIeOg1Zn2Ow+mc+DjDbK0wLyUkoIMkiIFVPv5VGsy/vBLWwOcqn2NSx
-         gqJPiJyH8tjyLc4/yZ7+lLyqRrKTkafQiMUkRNiVeBnE7URDsy9ijJDXPhXwxtv8VZ9Q
-         Bzltl4Mxnr15EXkv2g+FR2hrlOfkEWKitMBk01rIHDbzbpi3KnBXanjpLqC2wIgVlV/G
-         PlgbppfIZ6qptav2p3UB/oIxdJ5eZUYK1Vu9HyrQyCUJSmfMNZnAGFJwpGx1uPB5kYGD
-         s4S08tqmbNXiEekYeERVNzM+Ru5YPx3uS0zxCF5mz47raVPab6/K8Le+ELz5ZmzKEF1M
-         L8Lg==
-X-Gm-Message-State: APjAAAUvJhVc5ojGEHFvwF4vSbBXmIc4vQothtKewB4SIS6ZPOM0JGe1
-        oMtW6dVdWPcxjfY/Hc/N9hZioA==
-X-Google-Smtp-Source: APXvYqy0keQA67hzBHSf6JmnEJPjZvrevuThhyTnApH6TfZIBG2gotXVyRWSN+8mPw7MptkOjV1tqw==
-X-Received: by 2002:a5d:610d:: with SMTP id v13mr24331376wrt.249.1566837918384;
-        Mon, 26 Aug 2019 09:45:18 -0700 (PDT)
-Received: from localhost.localdomain (124.red-83-36-179.dynamicip.rima-tde.net. [83.36.179.124])
-        by smtp.gmail.com with ESMTPSA id l62sm77872wml.13.2019.08.26.09.45.17
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 26 Aug 2019 09:45:17 -0700 (PDT)
-From:   Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-To:     jorge.ramirez-ortiz@linaro.org, sboyd@kernel.org,
-        agross@kernel.org, mturquette@baylibre.com
-Cc:     bjorn.andersson@linaro.org, niklas.cassel@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] clk: qcom: hfpll: CLK_IGNORE_UNUSED
-Date:   Mon, 26 Aug 2019 18:45:10 +0200
-Message-Id: <20190826164510.6425-5-jorge.ramirez-ortiz@linaro.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190826164510.6425-1-jorge.ramirez-ortiz@linaro.org>
-References: <20190826164510.6425-1-jorge.ramirez-ortiz@linaro.org>
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9O3VW3qz3WP/gvDFs/gxnhqdNJMrlfVE1S3aHZOLj9E=;
+        b=Q+ETbR2w+PioeJu/RhY4KiEy80g51Adod50Jn2KpVK070tKRqhC/FEupezNl1MY69G
+         WabZuT/OifSAJgCMxn3BqjGngDudBgY0H7XgD+Tj/pLtkGDGtTRjFwV+3MXCqFQkU4xB
+         yDuGiU3N7p38YaTo44C9/n5dIH79i2K0isriPBMS+pxxCU0FKMIyz7rEv3fVsThoikox
+         Eo7rP8JzQiEcb9MGSEilQaWh3U26ubjRXmYpFai1mu3V/lTnAAqr9j79o55aXcFsj4Yq
+         MN22TXmwdSSISzyHO0qLF4YVpAoL21dq1z0w3Ifh0SlHxGwrClb4l2DQRN1Bw/Uuni8j
+         GIyw==
+X-Gm-Message-State: APjAAAW4Am+pvNAoR4RYrI7wIP7JSYqXiI9PWNOvQgCq2mwrmYs0T5zf
+        w9DA2C7IdMkLvVvc5uRGkLI/2g==
+X-Google-Smtp-Source: APXvYqzZyta820DGKYuXk323AK7pGPLNWaOkL+Aei8zaUqk5nIuD17ybsHumS8O17dakMKqBLy73gw==
+X-Received: by 2002:adf:90e7:: with SMTP id i94mr22117449wri.224.1566838199090;
+        Mon, 26 Aug 2019 09:49:59 -0700 (PDT)
+Received: from [192.168.1.6] (124.red-83-36-179.dynamicip.rima-tde.net. [83.36.179.124])
+        by smtp.gmail.com with ESMTPSA id j20sm32590323wre.65.2019.08.26.09.49.56
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 26 Aug 2019 09:49:58 -0700 (PDT)
+Subject: Re: [PATCH v4 00/13] Support CPU frequency scaling on QCS404
+From:   Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>
+To:     bjorn.andersson@linaro.org, sboyd@kernel.org,
+        david.brown@linaro.org, jassisinghbrar@gmail.com,
+        mark.rutland@arm.com, mturquette@baylibre.com, robh+dt@kernel.org,
+        will.deacon@arm.com, arnd@arndb.de, horms+renesas@verge.net.au,
+        heiko@sntech.de, sibis@codeaurora.org,
+        enric.balletbo@collabora.com, jagan@amarulasolutions.com,
+        olof@lixom.net
+Cc:     vkoul@kernel.org, niklas.cassel@linaro.org,
+        georgi.djakov@linaro.org, amit.kucheria@linaro.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, khasim.mohammed@linaro.org
+References: <20190731202929.16443-1-jorge.ramirez-ortiz@linaro.org>
+ <f34a75d0-c479-267d-b4a1-c2418d4efb22@linaro.org>
+Message-ID: <0098ab9d-9abc-ac9d-5f36-67ad7cbc4f9c@linaro.org>
+Date:   Mon, 26 Aug 2019 18:49:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <f34a75d0-c479-267d-b4a1-c2418d4efb22@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-When COMMON_CLK_DISABLED_UNUSED is set, in an effort to save power and
-to keep the software model of the clock in line with reality, the
-framework transverses the clock tree and disables those clocks that
-were enabled by the firmware but have not been enabled by any device
-driver.
+On 8/26/19 08:54, Jorge Ramirez wrote:
+> On 7/31/19 22:29, Jorge Ramirez-Ortiz wrote:
+>> The following patchset enables CPU frequency scaling support on the
+>> QCS404 (with dynamic voltage scaling).
+>>
+>> It is important to notice that this functionality will be superseded
+>> by Core Power Reduction (CPR), a more accurate form of AVS found on
+>> certain Qualcomm SoCs.
+>>
+>> Some of the changes required to support CPR do conflict with the
+>> configuration required for CPUFreq.
+>>
+>> In particular, the following commit for CPR - already merged - will
+>> need to be reverted in order to enable CPUFreq.
+>>
+>>    Author: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+>>    Date:   Thu Jul 25 12:41:36 2019 +0200
+>>        cpufreq: Add qcs404 to cpufreq-dt-platdev blacklist
+>>     
+>> Patch 8 "clk: qcom: hfpll: CLK_IGNORE_UNUSED" is a bit controversial;
+>> in this platform, this PLL provides the clock signal to a CPU
+>> core. But in others it might not.
+>>
+>> We opted for the minimal ammount of changes without affecting the
+>> default functionality: simply bypassing the COMMON_CLK_DISABLE_UNUSED
+>> framework and letting the firwmare chose whether to enable or disable
+>> the clock at boot. However maybe a DT property and marking the clock
+>> as critical would be more appropriate for this PLL. we'd appreciate the
+>> maintainer's input on this topic.
+>>
+>> v2:
+>>    - dts: ms8916: apcs mux/divider: new bindings
+>>      (the driver can still support the old bindings)
+>>
+>>    - qcs404.dtsi
+>>      fix apcs-hfpll definition
+>>      fix cpu_opp_table definition
+>>
+>>    - GPLL0_AO_OUT operating frequency
+>>      define new alpha_pll_fixed_ops to limit the operating frequency
+>>
+>> v3:
+>>   - qcom-apcs-ipc-mailbox
+>>     replace goto to ease readability
+>>
+>>   - apcs-msm8916.c
+>>     rework patch to use of_clk_parent_fill
+>>
+>>   - hfpll.c
+>>     add relevant comments to the code
+>>
+>>   - qcs404.dtsi
+>>     add voltage scaling support
+>>
+>> v4:
+>>  - squash OPP definition and DVFS enablement in dts
+>>    (patches 10 and 13 in previous version)
+>>    
+>>  - qcom-apcs-ipc-mailbox
+>>    replace return condition for readability
+>>    
+>>  - answer one question on CLK_IGNORE_UNUSED in mailing list
+>>
+>> Jorge Ramirez-Ortiz, Niklas Cassel (13):
+>>   clk: qcom: gcc: limit GPLL0_AO_OUT operating frequency
+>>   mbox: qcom: add APCS child device for QCS404
+>>   mbox: qcom: replace integer with valid macro
+>>   dt-bindings: mailbox: qcom: Add clock-name optional property
+>>   clk: qcom: apcs-msm8916: get parent clock names from DT
+>>   clk: qcom: hfpll: get parent clock names from DT
+>>   clk: qcom: hfpll: register as clock provider
+>>   clk: qcom: hfpll: CLK_IGNORE_UNUSED
+>>   arm64: dts: qcom: msm8916: Add the clocks for the APCS mux/divider
+>>   arm64: dts: qcom: qcs404: Add HFPLL node
+>>   arm64: dts: qcom: qcs404: Add the clocks for APCS mux/divider
+>>   arm64: dts: qcom: qcs404: Add DVFS support
+>>   arm64: defconfig: Enable HFPLL
+>>
+>>  .../mailbox/qcom,apcs-kpss-global.txt         | 24 +++++++++--
+>>  arch/arm64/boot/dts/qcom/msm8916.dtsi         |  3 +-
+>>  arch/arm64/boot/dts/qcom/qcs404.dtsi          | 43 +++++++++++++++++++
+>>  arch/arm64/configs/defconfig                  |  1 +
+>>  drivers/clk/qcom/apcs-msm8916.c               | 23 ++++++++--
+>>  drivers/clk/qcom/clk-alpha-pll.c              |  8 ++++
+>>  drivers/clk/qcom/clk-alpha-pll.h              |  1 +
+>>  drivers/clk/qcom/gcc-qcs404.c                 |  2 +-
+>>  drivers/clk/qcom/hfpll.c                      | 25 ++++++++++-
+>>  drivers/mailbox/qcom-apcs-ipc-mailbox.c       | 11 +++--
+>>  10 files changed, 128 insertions(+), 13 deletions(-)
+>>
+> 
+> any feedback on this set?
+> 
+> TIA
+> 
 
-If CPUFREQ is enabled, early during the system boot, it might attempt
-to change the CPU frequency ("set_rate"). If the HFPLL is selected as
-a provider, it will then change the rate for this clock.
+trying to ease the maintainers task, I have resent the series split in
+three individual sets:
 
-As boot continues, clk_disable_unused_subtree will run. Since it wont
-find a valid counter (enable_count) for a clock that is actually
-enabled it will attempt to disable it which will cause the CPU to
-stop. Notice that in this driver, calls to check whether the clock is
-enabled are routed via the is_enabled callback which queries the
-hardware.
+- device tree
+- clk
+- mbox
 
-The following commit, rather than marking the clock critical and
-forcing the clock to be always enabled, addresses the above scenario
-making sure the clock is not disabled but it continues to rely on the
-firmware to enable the clock.
+for full functionality obviously all of them are required
 
-Co-developed-by: Niklas Cassel <niklas.cassel@linaro.org>
-Signed-off-by: Niklas Cassel <niklas.cassel@linaro.org>
-Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- drivers/clk/qcom/hfpll.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/clk/qcom/hfpll.c b/drivers/clk/qcom/hfpll.c
-index 0ffed0d41c50..d5fd27938e7b 100644
---- a/drivers/clk/qcom/hfpll.c
-+++ b/drivers/clk/qcom/hfpll.c
-@@ -58,6 +58,13 @@ static int qcom_hfpll_probe(struct platform_device *pdev)
- 		.parent_names = (const char *[]){ "xo" },
- 		.num_parents = 1,
- 		.ops = &clk_ops_hfpll,
-+		/*
-+		 * rather than marking the clock critical and forcing the clock
-+		 * to be always enabled, we make sure that the clock is not
-+		 * disabled: the firmware remains responsible of enabling this
-+		 * clock (for more info check the commit log)
-+		 */
-+		.flags = CLK_IGNORE_UNUSED,
- 	};
- 
- 	h = devm_kzalloc(dev, sizeof(*h), GFP_KERNEL);
--- 
-2.22.0
+please let me know if there is anything else I can do.
 
