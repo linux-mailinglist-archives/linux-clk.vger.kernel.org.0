@@ -2,57 +2,112 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB50F9D7E9
-	for <lists+linux-clk@lfdr.de>; Mon, 26 Aug 2019 23:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8589D807
+	for <lists+linux-clk@lfdr.de>; Mon, 26 Aug 2019 23:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727692AbfHZVGo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 26 Aug 2019 17:06:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59244 "EHLO mail.kernel.org"
+        id S1727048AbfHZVUo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 26 Aug 2019 17:20:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37100 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726380AbfHZVGn (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 26 Aug 2019 17:06:43 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726760AbfHZVUo (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 26 Aug 2019 17:20:44 -0400
+Received: from mail.kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A873C21881;
-        Mon, 26 Aug 2019 21:06:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5F9D620850;
+        Mon, 26 Aug 2019 21:20:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566853602;
-        bh=vJ5uUohdIc/5pI1u/M25vO7AHh7h8uA742G5yrcV0Fo=;
-        h=In-Reply-To:References:Cc:Subject:To:From:Date:From;
-        b=BXcFaalVBpVIp5kgqs4OU3EG22zeIPuaxTV+l6NABfRck3//2UC+vOYLpWsP2z2VJ
-         yX4aQivm2AmGzabk0iZf1Wzv9hlylP/FfJxlI9dqAjMqNZlD3oSNWBvJl9J9qmi+cG
-         OsQGG7LOG8cLzSHTdqR5i2gvFZZVO811tLOHNbxw=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190819222915.56150-1-sboyd@kernel.org>
-References: <20190819222915.56150-1-sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Phil Edworthy <phil.edworthy@renesas.com>
-Subject: Re: [PATCH] clk: Make of_parse_clkspec() return -ENOENT on errors
+        s=default; t=1566854443;
+        bh=T0JD8qnI+1dYLW2ehX5/L9s6yP8c59bF7QrrvgHwOqk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WUYTOWgHppyB/BswRdS0DFRR1o3k9ofrSF27KtjH+NIJYMe5zaYJ54v5BbnrNfhdf
+         kMNHH7En6RqGUfnK/ADf8ZI2CNOH4zjBjrGK3bmnRQAyDQ+6wrWwWJ2+8Kz+m4O/pZ
+         jGsewM4Cc5vasiPUe7FruSKOwEmJLXlNg2muIa9Q=
+From:   Stephen Boyd <sboyd@kernel.org>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
-From:   Stephen Boyd <sboyd@kernel.org>
-User-Agent: alot/0.8.1
-Date:   Mon, 26 Aug 2019 14:06:41 -0700
-Message-Id: <20190826210642.A873C21881@mail.kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Phil Edworthy <phil.edworthy@renesas.com>
+Subject: [PATCH v2] clk: Document of_parse_clkspec() some more
+Date:   Mon, 26 Aug 2019 14:20:42 -0700
+Message-Id: <20190826212042.48642-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.23.0.187.g17f5b7556c-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hrmm.. the subject is misleading. Let me reword it and resend.
+The return value of of_parse_clkspec() is peculiar. If the function is
+called with a NULL argument for 'name' it will return -ENOENT, but if
+it's called with a non-NULL argument for 'name' it will return -EINVAL.
+This peculiarity is documented by commit 5c56dfe63b6e ("clk: Add comment
+about __of_clk_get_by_name() error values").
 
-Quoting Stephen Boyd (2019-08-19 15:29:15)
-> The return value of of_parse_clkspec() is peculiar. If the function is
-> called with a NULL argument for 'name' it will return -ENOENT, but if
-> it's called with a non-NULL argument for 'name' it will return -EINVAL.
-> This peculiarity is documented by commit 5c56dfe63b6e ("clk: Add comment
-> about __of_clk_get_by_name() error values").
->=20
-> Let's further document this function so that it's clear what the return
-> value is and how to use the arguments to parse clk specifiers.
->=20
-> Cc: Phil Edworthy <phil.edworthy@renesas.com>
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Let's further document this function so that it's clear what the return
+value is and how to use the arguments to parse clk specifiers.
+
+Cc: Phil Edworthy <phil.edworthy@renesas.com>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+---
+ drivers/clk/clk.c | 43 +++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 37 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index c0990703ce54..5c6585eb35d4 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -4316,12 +4316,43 @@ void devm_of_clk_del_provider(struct device *dev)
+ }
+ EXPORT_SYMBOL(devm_of_clk_del_provider);
+ 
+-/*
+- * Beware the return values when np is valid, but no clock provider is found.
+- * If name == NULL, the function returns -ENOENT.
+- * If name != NULL, the function returns -EINVAL. This is because
+- * of_parse_phandle_with_args() is called even if of_property_match_string()
+- * returns an error.
++/**
++ * of_parse_clkspec() - Parse a DT clock specifier for a given device node
++ * @np: device node to parse clock specifier from
++ * @index: index of phandle to parse clock out of. If index < 0, @name is used
++ * @name: clock name to find and parse. If name is NULL, the index is used
++ * @out_args: Result of parsing the clock specifier
++ *
++ * Parses a device node's "clocks" and "clock-names" properties to find the
++ * phandle and cells for the index or name that is desired. The resulting clock
++ * specifier is placed into @out_args, or an errno is returned when there's a
++ * parsing error. The @index argument is ignored if @name is non-NULL.
++ *
++ * Example:
++ *
++ * phandle1: clock-controller@1 {
++ *	#clock-cells = <2>;
++ * }
++ *
++ * phandle2: clock-controller@2 {
++ *	#clock-cells = <1>;
++ * }
++ *
++ * clock-consumer@3 {
++ *	clocks = <&phandle1 1 2 &phandle2 3>;
++ *	clock-names = "name1", "name2";
++ * }
++ *
++ * To get a device_node for `clock-controller@2' node you may call this
++ * function a few different ways:
++ *
++ *   of_parse_clkspec(clock-consumer@3, -1, "name2", &args);
++ *   of_parse_clkspec(clock-consumer@3, 1, NULL, &args);
++ *   of_parse_clkspec(clock-consumer@3, 1, "name2", &args);
++ *
++ * Return: 0 upon successfully parsing the clock specifier. Otherwise, -ENOENT
++ * if @name is NULL or -EINVAL if @name is non-NULL and it can't be found in
++ * the "clock-names" property of @np.
+  */
+ static int of_parse_clkspec(const struct device_node *np, int index,
+ 			    const char *name, struct of_phandle_args *out_args)
+-- 
+Sent by a computer through tubes
+
