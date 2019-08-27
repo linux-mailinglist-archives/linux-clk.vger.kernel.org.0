@@ -2,84 +2,123 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C35C9F0C2
-	for <lists+linux-clk@lfdr.de>; Tue, 27 Aug 2019 18:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 685649F0BA
+	for <lists+linux-clk@lfdr.de>; Tue, 27 Aug 2019 18:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727401AbfH0Qwf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 27 Aug 2019 12:52:35 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:43184 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727138AbfH0Qwf (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 27 Aug 2019 12:52:35 -0400
-Received: by mail-ot1-f66.google.com with SMTP id e12so19316456otp.10;
-        Tue, 27 Aug 2019 09:52:34 -0700 (PDT)
+        id S1730079AbfH0Quz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 27 Aug 2019 12:50:55 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:45459 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728312AbfH0Quz (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 27 Aug 2019 12:50:55 -0400
+Received: by mail-pl1-f196.google.com with SMTP id y8so12076994plr.12
+        for <linux-clk@vger.kernel.org>; Tue, 27 Aug 2019 09:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=kShiklbxXonPvyTtTpQ9U0Ep+Qam/mfANXjVpM7jQl4=;
+        b=zWc3gZnr0b+oGaMG1D8r6/cR+FDRLjznPoGq2Lo20/Q9xX/PzIkD8n+5E//ntur0E8
+         WR/9POMJW62WmqhFxPj8iFoyAKjCNFDZxUpIc9pBJ+VIkuwmFIUi75ZLkrD4+zsbSHM9
+         nTrzh1chNlu0s97T4KsQBe18nkqS2NSVAGjPbjP3WcetOSCxZQ1EqdQOU2YpBUKvfwqj
+         5Ju35G1nmWDdlUbUckIzVsAvIZDz1+rffnd/4UxQfftwA12tZkSsHjjvweieGo637UAP
+         GHAxwfusWmrKnJ75mCVXVuw//K9f2lLdzLRa0r7YqeLTl3gu44ViTQwGviDloqJ+0AWe
+         YlWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=tJQaEfQzxJRI95haC9x8BQf6ZaZH5SadaGLixg3pTkQ=;
-        b=ltbrHqYba7IzgagVKBCD8naFBE2hcVeC0AmB3d2nVj0rw0pXDTCtdu2CTS/ql1gJIY
-         DdJxJ8yTKZ3NkObexBgnIClylH89VrFOEj9If8U882EI4XVO2b4GK/wtYqxV3y1hEXN7
-         c5Vqlmfqjp9K/dg4mQTJvPMeAU4hWyW8gkEUmlHi17x7SUB17mbhICsK5GN5sxp1KuHo
-         HAPNqFIbrL+BrIic+eybDuESGiGnPAzBhZqNsfS7WjZ+qa+HgKtVZlOtgPvqmTA4Y0Jz
-         rQ9BJR+ygH3+kbOj2e+pvo1TTaPRuEZsV4Ooqe3pdF2bfDJg9N+eV7f5MlRFhIcQsV0t
-         nvEg==
-X-Gm-Message-State: APjAAAXh6tNOmhlSHaAfmbxeC1fYDAt2gY2cmXuiWbORPeqTY+61xzkv
-        VDaqb2Gyk4Fvfh/Kx+JonA==
-X-Google-Smtp-Source: APXvYqyGilh1hnFSb4yL7j69xPv3YKAFNDENe5C8fgprVeR9noOD6uBNAfoQufznTGF82er1HpBS6Q==
-X-Received: by 2002:a9d:65ca:: with SMTP id z10mr19808758oth.167.1566924754327;
-        Tue, 27 Aug 2019 09:52:34 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id s22sm4240569oij.37.2019.08.27.09.52.33
+        bh=kShiklbxXonPvyTtTpQ9U0Ep+Qam/mfANXjVpM7jQl4=;
+        b=l/vR2OAek92b6FbnrzGP9gmqa7eenRwmBiB0VEJfaYNiZ6swdFwRQOVNWh1e/Wv96r
+         i/oKciRl/ozLKJ9QFrydErXGMk4nGTEFKP+d+u6mSyzdOgua5LMj5/mABoVFU0doGUzB
+         VaRhKWaTsZHWKsPo7sBF92dCHCE+rztb/ldUMX/9LkS4c7N8UO7JJ2XF9cNx9D2A7b30
+         3Deu5mpv2WQoIm7XbSxxTt5TjhFtFCnEnQPhx01dKdII5gwfNXYsimDWPsO6/XKJiLcg
+         Xhsv+G76Oq32TYTku72lcNC9WgVbu7dT4w4m/Z9X8R++QaeVnnhwB28AblPRpsePgkzt
+         Tt2g==
+X-Gm-Message-State: APjAAAXfWpjFR1m8t62VWOEW58veG8dniKRcXyWuX+WIDq/NjwoNWOH5
+        XyQDDA3+GUHCITSNg2pSQVnP2w==
+X-Google-Smtp-Source: APXvYqyhmY7LYOx1nKrYPzEEZ/udP6aG+qMVvXVKYs5SpBKNQI8RISuq2sDW1fwdsrEe7X14JGEuCA==
+X-Received: by 2002:a17:902:fe8c:: with SMTP id x12mr10273576plm.55.1566924654505;
+        Tue, 27 Aug 2019 09:50:54 -0700 (PDT)
+Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id o129sm16313302pfg.1.2019.08.27.09.50.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2019 09:52:33 -0700 (PDT)
-Date:   Tue, 27 Aug 2019 11:52:32 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Mars Cheng <mars.cheng@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        CC Hwang <cc.hwang@mediatek.com>,
-        Loda Chou <loda.chou@mediatek.com>,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, wsd_upstream@mediatek.com,
-        mtk01761 <wendell.lin@mediatek.com>, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 08/11] dt-bindings: mediatek: bindings for MT6779 clk
-Message-ID: <20190827165232.GA28828@bogus>
-References: <1566206502-4347-1-git-send-email-mars.cheng@mediatek.com>
- <1566206502-4347-9-git-send-email-mars.cheng@mediatek.com>
+        Tue, 27 Aug 2019 09:50:53 -0700 (PDT)
+Date:   Tue, 27 Aug 2019 09:52:45 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Niklas Cassel <niklas.cassel@linaro.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        MSM <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH] clk: qcom: msm8916: Add 2 clk options in defconfig
+Message-ID: <20190827165245.GD26807@tuxbook-pro>
+References: <d654907d-a3a2-a00f-d6f5-3a34ae25ebcf@free.fr>
+ <f96ab735-1001-5319-a314-b8079efd9046@linaro.org>
+ <5d1ff6a7-7b3b-9bbf-f737-5347555a2076@free.fr>
+ <CAP245DWbC8vY1pVuYnGvZ=7LVAAaqAm9TtccCktdxNWuuoxf5w@mail.gmail.com>
+ <d8cf720c-b44f-f4ea-1c26-92ce34fd31e6@free.fr>
+ <20190808042925.90F3721743@mail.kernel.org>
+ <20190827144855.GA17311@centauri>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1566206502-4347-9-git-send-email-mars.cheng@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190827144855.GA17311@centauri>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, 19 Aug 2019 17:21:39 +0800, Mars Cheng wrote:
-> From: mtk01761 <wendell.lin@mediatek.com>
+On Tue 27 Aug 07:48 PDT 2019, Niklas Cassel wrote:
+
+> On Wed, Aug 07, 2019 at 09:29:24PM -0700, Stephen Boyd wrote:
+> > Quoting Marc Gonzalez (2019-07-03 07:00:31)
+> > > On 24/06/2019 15:57, Amit Kucheria wrote:
+> > > 
+> > > > On Mon, Jun 24, 2019 at 6:56 PM Marc Gonzalez <marc.w.gonzalez@free.fr> wrote:
+> > > >>
+> > > >> QCOM_A53PLL and QCOM_CLK_APCS_MSM8916 used to be enabled by default
+> > > >> in drivers/clk/qcom/Kconfig. A recent patch changed that by dropping
+> > > >> the 'default ARCH_QCOM' directive.
+> > > >>
+> > > >> Add the two options explicitly in the arm64 defconfig, to avoid
+> > > >> functional regressions.
+> > > >>
+> > > >> Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
+> > > > 
+> > > > Acked-by: Amit Kucheria <amit.kucheria@linaro.org>
+> > > 
+> > > Stephen,
+> > > 
+> > > Can you take the following two patches through the clk tree?
+> > > 
+> > > [PATCH v2] clk: qcom: msm8916: Don't build by default
+> > > [PATCH] clk: qcom: msm8916: Add 2 clk options in defconfig
+> > > 
+> > 
+> > Did Andy pick up this defconfig change? The subject is misleading.
+> > defconfig changes should be something like
 > 
-> This patch adds the binding documentation for
-> apmixedsys, audiosys, camsys, imgsys, ipesys,
-> infracfg, mfgcfg, mmsys, topckgen, vdecsys,
-> and vencsys for Mediatek MT6779.
+> Neither Andy nor Bjorn has picked this.
 > 
-> Signed-off-by: mtk01761 <wendell.lin@mediatek.com>
-> ---
->  .../bindings/arm/mediatek/mediatek,apmixedsys.txt  |    1 +
->  .../bindings/arm/mediatek/mediatek,audsys.txt      |    1 +
->  .../bindings/arm/mediatek/mediatek,camsys.txt      |    1 +
->  .../bindings/arm/mediatek/mediatek,imgsys.txt      |    1 +
->  .../bindings/arm/mediatek/mediatek,infracfg.txt    |    1 +
->  .../bindings/arm/mediatek/mediatek,ipesys.txt      |   22 ++++++++++++++++++++
->  .../bindings/arm/mediatek/mediatek,mfgcfg.txt      |    1 +
->  .../bindings/arm/mediatek/mediatek,mmsys.txt       |    1 +
->  .../bindings/arm/mediatek/mediatek,topckgen.txt    |    1 +
->  .../bindings/arm/mediatek/mediatek,vdecsys.txt     |    1 +
->  .../bindings/arm/mediatek/mediatek,vencsys.txt     |    1 +
->  11 files changed, 32 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,ipesys.txt
+> Could you please pick it up? (possibly with subject fixed up)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Picked up and updated the subject.
+
+Thanks Marc!
+
+Regards,
+Bjorn
+
+> > 
+> > 	arm64: defconfig: Add qcom clk options
+> > 
+> > I don't think I need to pick up the defconfig change. It can go through
+> > Andy and arm-soc. So I'll just grab the first one and guess it won't
+> > break much on the way in.
+> > 
