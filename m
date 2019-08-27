@@ -2,123 +2,72 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 685649F0BA
-	for <lists+linux-clk@lfdr.de>; Tue, 27 Aug 2019 18:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 510849F0C8
+	for <lists+linux-clk@lfdr.de>; Tue, 27 Aug 2019 18:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730079AbfH0Quz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 27 Aug 2019 12:50:55 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:45459 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728312AbfH0Quz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 27 Aug 2019 12:50:55 -0400
-Received: by mail-pl1-f196.google.com with SMTP id y8so12076994plr.12
-        for <linux-clk@vger.kernel.org>; Tue, 27 Aug 2019 09:50:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kShiklbxXonPvyTtTpQ9U0Ep+Qam/mfANXjVpM7jQl4=;
-        b=zWc3gZnr0b+oGaMG1D8r6/cR+FDRLjznPoGq2Lo20/Q9xX/PzIkD8n+5E//ntur0E8
-         WR/9POMJW62WmqhFxPj8iFoyAKjCNFDZxUpIc9pBJ+VIkuwmFIUi75ZLkrD4+zsbSHM9
-         nTrzh1chNlu0s97T4KsQBe18nkqS2NSVAGjPbjP3WcetOSCxZQ1EqdQOU2YpBUKvfwqj
-         5Ju35G1nmWDdlUbUckIzVsAvIZDz1+rffnd/4UxQfftwA12tZkSsHjjvweieGo637UAP
-         GHAxwfusWmrKnJ75mCVXVuw//K9f2lLdzLRa0r7YqeLTl3gu44ViTQwGviDloqJ+0AWe
-         YlWw==
+        id S1730035AbfH0QxJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 27 Aug 2019 12:53:09 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:45192 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727064AbfH0QxJ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 27 Aug 2019 12:53:09 -0400
+Received: by mail-ot1-f65.google.com with SMTP id m24so19315395otp.12;
+        Tue, 27 Aug 2019 09:53:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kShiklbxXonPvyTtTpQ9U0Ep+Qam/mfANXjVpM7jQl4=;
-        b=l/vR2OAek92b6FbnrzGP9gmqa7eenRwmBiB0VEJfaYNiZ6swdFwRQOVNWh1e/Wv96r
-         i/oKciRl/ozLKJ9QFrydErXGMk4nGTEFKP+d+u6mSyzdOgua5LMj5/mABoVFU0doGUzB
-         VaRhKWaTsZHWKsPo7sBF92dCHCE+rztb/ldUMX/9LkS4c7N8UO7JJ2XF9cNx9D2A7b30
-         3Deu5mpv2WQoIm7XbSxxTt5TjhFtFCnEnQPhx01dKdII5gwfNXYsimDWPsO6/XKJiLcg
-         Xhsv+G76Oq32TYTku72lcNC9WgVbu7dT4w4m/Z9X8R++QaeVnnhwB28AblPRpsePgkzt
-         Tt2g==
-X-Gm-Message-State: APjAAAXfWpjFR1m8t62VWOEW58veG8dniKRcXyWuX+WIDq/NjwoNWOH5
-        XyQDDA3+GUHCITSNg2pSQVnP2w==
-X-Google-Smtp-Source: APXvYqyhmY7LYOx1nKrYPzEEZ/udP6aG+qMVvXVKYs5SpBKNQI8RISuq2sDW1fwdsrEe7X14JGEuCA==
-X-Received: by 2002:a17:902:fe8c:: with SMTP id x12mr10273576plm.55.1566924654505;
-        Tue, 27 Aug 2019 09:50:54 -0700 (PDT)
-Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id o129sm16313302pfg.1.2019.08.27.09.50.53
+        bh=tXZ+L1izx3v6iUiXs7Bmef3akgnqSl4UHvWXUS90ess=;
+        b=Gpen/bScC7QWsCaxSYyPFbWXLr/Fah/GigR6RuDqd26V2iJSf0civGNqg4KnNjWFsm
+         i2vSXXf8PImIcL73g6gZNtEBvAZ8hv/OaBPOnfTTn3fQnulAt90IlIPz1aN3UVwc7g/G
+         jC5Y4oW2j+zvM7cbTdYWzPQQ6lB0OFlOsTHp1vOnQKozr8leiRC+zNR1qK7cLp00fBEJ
+         fFx6+4akBWxGYfrq8KwrsLsFRI2U6q55J17EUOniSg3aLv7znIPB78y/OiMnCSZF7QeN
+         gVKvZuFKpqiwbktrnI/n1OheIvLI+R6pvvxX0mZpU2CFVLRiL3pVAkY1x7ecZvq2Xfrm
+         uGzg==
+X-Gm-Message-State: APjAAAXedfoMplXwMQ5qK3j479s/rFfROzGt5VxG10D3cUpmHOf3qFAy
+        ibFczigzGYFxLlRP7EelTQ==
+X-Google-Smtp-Source: APXvYqwqaZqJc0EiQWQhXT7audNujzC7IOtWcqZLwMXAJYa90ehz6JXD56+/jyz25pglcwAaTH3NUg==
+X-Received: by 2002:a05:6830:4d6:: with SMTP id s22mr4181259otd.295.1566924788324;
+        Tue, 27 Aug 2019 09:53:08 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id a16sm4318199oid.26.2019.08.27.09.53.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2019 09:50:53 -0700 (PDT)
-Date:   Tue, 27 Aug 2019 09:52:45 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Niklas Cassel <niklas.cassel@linaro.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Marc Gonzalez <marc.w.gonzalez@free.fr>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        MSM <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH] clk: qcom: msm8916: Add 2 clk options in defconfig
-Message-ID: <20190827165245.GD26807@tuxbook-pro>
-References: <d654907d-a3a2-a00f-d6f5-3a34ae25ebcf@free.fr>
- <f96ab735-1001-5319-a314-b8079efd9046@linaro.org>
- <5d1ff6a7-7b3b-9bbf-f737-5347555a2076@free.fr>
- <CAP245DWbC8vY1pVuYnGvZ=7LVAAaqAm9TtccCktdxNWuuoxf5w@mail.gmail.com>
- <d8cf720c-b44f-f4ea-1c26-92ce34fd31e6@free.fr>
- <20190808042925.90F3721743@mail.kernel.org>
- <20190827144855.GA17311@centauri>
+        Tue, 27 Aug 2019 09:53:07 -0700 (PDT)
+Date:   Tue, 27 Aug 2019 11:53:07 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Mars Cheng <mars.cheng@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        CC Hwang <cc.hwang@mediatek.com>,
+        Loda Chou <loda.chou@mediatek.com>,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org, wsd_upstream@mediatek.com,
+        mtk01761 <wendell.lin@mediatek.com>, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v2 09/11] clk: mediatek: Add dt-bindings for MT6779 clocks
+Message-ID: <20190827165307.GA29782@bogus>
+References: <1566206502-4347-1-git-send-email-mars.cheng@mediatek.com>
+ <1566206502-4347-10-git-send-email-mars.cheng@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190827144855.GA17311@centauri>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <1566206502-4347-10-git-send-email-mars.cheng@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue 27 Aug 07:48 PDT 2019, Niklas Cassel wrote:
-
-> On Wed, Aug 07, 2019 at 09:29:24PM -0700, Stephen Boyd wrote:
-> > Quoting Marc Gonzalez (2019-07-03 07:00:31)
-> > > On 24/06/2019 15:57, Amit Kucheria wrote:
-> > > 
-> > > > On Mon, Jun 24, 2019 at 6:56 PM Marc Gonzalez <marc.w.gonzalez@free.fr> wrote:
-> > > >>
-> > > >> QCOM_A53PLL and QCOM_CLK_APCS_MSM8916 used to be enabled by default
-> > > >> in drivers/clk/qcom/Kconfig. A recent patch changed that by dropping
-> > > >> the 'default ARCH_QCOM' directive.
-> > > >>
-> > > >> Add the two options explicitly in the arm64 defconfig, to avoid
-> > > >> functional regressions.
-> > > >>
-> > > >> Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
-> > > > 
-> > > > Acked-by: Amit Kucheria <amit.kucheria@linaro.org>
-> > > 
-> > > Stephen,
-> > > 
-> > > Can you take the following two patches through the clk tree?
-> > > 
-> > > [PATCH v2] clk: qcom: msm8916: Don't build by default
-> > > [PATCH] clk: qcom: msm8916: Add 2 clk options in defconfig
-> > > 
-> > 
-> > Did Andy pick up this defconfig change? The subject is misleading.
-> > defconfig changes should be something like
+On Mon, 19 Aug 2019 17:21:40 +0800, Mars Cheng wrote:
+> From: mtk01761 <wendell.lin@mediatek.com>
 > 
-> Neither Andy nor Bjorn has picked this.
+> Add MT6779 clock dt-bindings, include topckgen, apmixedsys,
+> infracfg, and subsystem clocks.
 > 
-> Could you please pick it up? (possibly with subject fixed up)
+> Signed-off-by: mtk01761 <wendell.lin@mediatek.com>
+> ---
+>  include/dt-bindings/clock/mt6779-clk.h |  436 ++++++++++++++++++++++++++++++++
+>  1 file changed, 436 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/mt6779-clk.h
 > 
 
-Picked up and updated the subject.
-
-Thanks Marc!
-
-Regards,
-Bjorn
-
-> > 
-> > 	arm64: defconfig: Add qcom clk options
-> > 
-> > I don't think I need to pick up the defconfig change. It can go through
-> > Andy and arm-soc. So I'll just grab the first one and guess it won't
-> > break much on the way in.
-> > 
+Reviewed-by: Rob Herring <robh@kernel.org>
