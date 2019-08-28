@@ -2,56 +2,56 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E79BA9FF99
-	for <lists+linux-clk@lfdr.de>; Wed, 28 Aug 2019 12:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E559A9FF9B
+	for <lists+linux-clk@lfdr.de>; Wed, 28 Aug 2019 12:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726571AbfH1KUc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 28 Aug 2019 06:20:32 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:35270 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726370AbfH1KUc (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 28 Aug 2019 06:20:32 -0400
-Received: by mail-wr1-f66.google.com with SMTP id g7so710942wrx.2
-        for <linux-clk@vger.kernel.org>; Wed, 28 Aug 2019 03:20:30 -0700 (PDT)
+        id S1726599AbfH1KUe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 28 Aug 2019 06:20:34 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:33267 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726370AbfH1KUe (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 28 Aug 2019 06:20:34 -0400
+Received: by mail-wm1-f67.google.com with SMTP id r17so1405588wme.0
+        for <linux-clk@vger.kernel.org>; Wed, 28 Aug 2019 03:20:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vhUrL9mznbKbDwWt10f4mJGIdooAUf9Uhe1m9/Iutrw=;
-        b=iXoXKKVpfVZQOKjhT3vzMvUGPd8S+FlwLWuYAabc4A2vOH8Fw1YYctz+lcT/aUlsMB
-         gDIBhgg2LzhBN5I855AoE/Omjyg64lINze/sqC+hgWZFS3EVlJM3CovV62q5D4f70gSD
-         DMgY7MRIr/CWOUEF+yDVODqMIiLyxLrl1x2dC055GN6eH4AXL/JCdpk5Mvwfnwf+0Xni
-         79Yk15/UxpkcA/pt7jw6f82IrRZQXdNjKKnhf3DPKIVLlo9cuDS6SrHMouP97AJPryr1
-         xMl6TzYzwOxD01fZFpMY5J3IyFov0ChQceU3mjAkikIlhBmV+MfZSBlXB4p0YjWGfUii
-         dRVA==
+        bh=6JeaLNeVGrpuHN5qsBgIMkLYYfes0jmN0ZtXw6fwOes=;
+        b=nz9YOFTHuLEuNhg3oUswqY6pvpI9zxc6DcSagdaPjBOq57tbhDBjmoHJGYYBSCYG3I
+         EUJ7VnkSE0KxM6IxWH7qPVax8gGw5dwAnKAGBnEhUx8S7LNWQ7N5FBQLS3zESL4D1SKz
+         XaNW3tcDOmIK+ecLzUdBeLhIhNSW+ydLNbe4C6Xa/CDppY4ttXX2t7F4tO7UcfBYhvs5
+         V2bwsnkLiS2xRBc81lYaug4WlVRBt+Ulu+S92EpiWFrqahRcyItzQ/dZhgDvKaiaajIq
+         kpW1eFk9GkiB4fG/AWfnBl4OXcWNKstlciwM7wmLsOplh8ehJ/hXh6M2L/h8hF+CvZni
+         eqPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vhUrL9mznbKbDwWt10f4mJGIdooAUf9Uhe1m9/Iutrw=;
-        b=TZ5RPUk+ogdfE2BLA0HFAX3tGropnvU3hgIUJrLws+LtNGM0MVYHefAMJlLno+VsvK
-         nuX55QyM2rYvMgNwimLMW4ANe/IWBXR4N4hjOW9qoj4sR45MABCY/3ZdtDiugmwu6Ffi
-         wtIuY+6+RpFMvXj7/QX3RGJKwAByGwmsUFMuolN18KNizp/Sdiez+k3Sm5MJ44kSYlwm
-         8Wc7upyBw1gXxirp6Iid0cGTaGlhdxAa2eAtRjKRJpwB+tyhh/jjSX121g6ala+MJwJg
-         kHOTm2G+Hg/37bGZrMY6iwN3MOg4rQbr6DLlEesDDfjdP15Su9abAH49VJ79LPcgmNhX
-         JLOg==
-X-Gm-Message-State: APjAAAUEuh4sWq7imhynkXZFSOah3BfjaW/olORWj5modS9R5vqUHY65
-        8X8OCVMG48UlhASjP9RfgCglCw==
-X-Google-Smtp-Source: APXvYqymGpHh/gsheS6NtTZqrLpy7ADw869X1AOQbTcA2ljSHC73cnXbo/RDYN9uF4OrkKEBFRq04g==
-X-Received: by 2002:a5d:4b8c:: with SMTP id b12mr3937852wrt.26.1566987629931;
-        Wed, 28 Aug 2019 03:20:29 -0700 (PDT)
+        bh=6JeaLNeVGrpuHN5qsBgIMkLYYfes0jmN0ZtXw6fwOes=;
+        b=HhjWS5nU/9RIy8SeH0jG4lmK7kFKGF1X0C3l3cr/PKu/yUWDV2pVFk/EsWeyiigHMw
+         XSjak+MKmxbHX/yIdISTL2tprPOPsJk609bswVKAU5WxalpzDalhMAvD15dK4F64YPKZ
+         th7Ut2icxgZzhkgQZ02OWs7IO+56xDdDJL40nixlCF/y+haLlTLneam+yAoig1KRlY3Y
+         j9vJtNncsbF3ZS2jyCPLT7R3wmawtFD0Gl/LXif+2oXLys76z5AaWSjafxGepSqThpOI
+         zng9f1coNDPX9VEyRUtLilJ/DUHKQlLcbcjCKaSq1qpZZxfmhIV4tB7w4nKS2zOPh5LY
+         tJOQ==
+X-Gm-Message-State: APjAAAUiS2eEWolza4EtrawlKLs/ihMyiympeawPMbE+ZGJtq6ue7Ce7
+        MUONLoLsv/ItLp6SVXR+lcuX0Q==
+X-Google-Smtp-Source: APXvYqyXB9rxZ0YLPewHNzxplfYv4wfNKBitr/9KfvTSb/4ASnCP1ua/wRZMBT7b8XPoXtAaGzvNOA==
+X-Received: by 2002:a7b:c157:: with SMTP id z23mr3904986wmi.104.1566987630841;
+        Wed, 28 Aug 2019 03:20:30 -0700 (PDT)
 Received: from starbuck.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id k9sm2583522wrq.15.2019.08.28.03.20.28
+        by smtp.googlemail.com with ESMTPSA id k9sm2583522wrq.15.2019.08.28.03.20.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2019 03:20:29 -0700 (PDT)
+        Wed, 28 Aug 2019 03:20:30 -0700 (PDT)
 From:   Jerome Brunet <jbrunet@baylibre.com>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     Jerome Brunet <jbrunet@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>, linux-clk@vger.kernel.org
-Subject: [PATCH RFC 3/5] clk: add terminate callback to clk_ops
-Date:   Wed, 28 Aug 2019 12:20:10 +0200
-Message-Id: <20190828102012.4493-4-jbrunet@baylibre.com>
+Subject: [PATCH RFC 4/5] clk: add placeholder for clock internal data
+Date:   Wed, 28 Aug 2019 12:20:11 +0200
+Message-Id: <20190828102012.4493-5-jbrunet@baylibre.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190828102012.4493-1-jbrunet@baylibre.com>
 References: <20190828102012.4493-1-jbrunet@baylibre.com>
@@ -62,68 +62,60 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add a terminate callback to the clk_ops to release the resources
-claimed in .init()
+Add placeholder in clock core to save per clock data.
+Such placeholder could use for clock doing memory allocation in .init().
+It may also be useful for the save/restore_context() callbacks.
 
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- drivers/clk/clk.c            | 7 ++++++-
- include/linux/clk-provider.h | 3 +++
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ drivers/clk/clk.c            | 13 +++++++++++++
+ include/linux/clk-provider.h |  2 ++
+ 2 files changed, 15 insertions(+)
 
 diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index f1681555abdf..c703aa35ca37 100644
+index c703aa35ca37..aa77a2a98ea4 100644
 --- a/drivers/clk/clk.c
 +++ b/drivers/clk/clk.c
-@@ -3828,6 +3828,7 @@ static const struct clk_ops clk_nodrv_ops = {
- void clk_unregister(struct clk *clk)
- {
- 	unsigned long flags;
-+	const struct clk_ops *ops;
- 
- 	if (!clk || WARN_ON_ONCE(IS_ERR(clk)))
- 		return;
-@@ -3836,7 +3837,8 @@ void clk_unregister(struct clk *clk)
- 
- 	clk_prepare_lock();
- 
--	if (clk->core->ops == &clk_nodrv_ops) {
-+	ops = clk->core->ops;
-+	if (ops == &clk_nodrv_ops) {
- 		pr_err("%s: unregistered clock: %s\n", __func__,
- 		       clk->core->name);
- 		goto unlock;
-@@ -3849,6 +3851,9 @@ void clk_unregister(struct clk *clk)
- 	clk->core->ops = &clk_nodrv_ops;
- 	clk_enable_unlock(flags);
- 
-+	if (ops->terminate)
-+		ops->terminate(clk->core->hw);
-+
- 	if (!hlist_empty(&clk->core->children)) {
- 		struct clk_core *child;
- 		struct hlist_node *t;
-diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index b82ec4c4ca95..5a5a64785923 100644
---- a/include/linux/clk-provider.h
-+++ b/include/linux/clk-provider.h
-@@ -197,6 +197,8 @@ struct clk_duty {
-  *		such as rate or parents.
-  *		Returns 0 on success, -EERROR otherwise.
-  *
-+ * @terminate:  Free any resource allocated by init.
-+ *
-  * @debug_init:	Set up type-specific debugfs entries for this clock.  This
-  *		is called once, after the debugfs directory entry for this
-  *		clock has been created.  The dentry pointer representing that
-@@ -248,6 +250,7 @@ struct clk_ops {
- 	int		(*set_duty_cycle)(struct clk_hw *hw,
- 					  struct clk_duty *duty);
- 	int		(*init)(struct clk_hw *hw);
-+	void		(*terminate)(struct clk_hw *hw);
- 	void		(*debug_init)(struct clk_hw *hw, struct dentry *dentry);
+@@ -83,6 +83,7 @@ struct clk_core {
+ 	struct hlist_node	debug_node;
+ #endif
+ 	struct kref		ref;
++	void			*priv;
  };
  
+ #define CREATE_TRACE_POINTS
+@@ -281,6 +282,18 @@ struct clk_hw *clk_hw_get_parent(const struct clk_hw *hw)
+ }
+ EXPORT_SYMBOL_GPL(clk_hw_get_parent);
+ 
++void clk_hw_set_data(const struct clk_hw *hw, void *data)
++{
++	hw->core->priv = data;
++}
++EXPORT_SYMBOL_GPL(clk_hw_set_data);
++
++void *clk_hw_get_data(const struct clk_hw *hw)
++{
++	return hw->core->priv;
++}
++EXPORT_SYMBOL_GPL(clk_hw_get_data);
++
+ static struct clk_core *__clk_lookup_subtree(const char *name,
+ 					     struct clk_core *core)
+ {
+diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+index 5a5a64785923..e54c165af021 100644
+--- a/include/linux/clk-provider.h
++++ b/include/linux/clk-provider.h
+@@ -821,6 +821,8 @@ static inline struct clk_hw *__clk_get_hw(struct clk *clk)
+ 	return (struct clk_hw *)clk;
+ }
+ #endif
++void clk_hw_set_data(const struct clk_hw *hw, void *data);
++void *clk_hw_get_data(const struct clk_hw *hw);
+ unsigned int clk_hw_get_num_parents(const struct clk_hw *hw);
+ struct clk_hw *clk_hw_get_parent(const struct clk_hw *hw);
+ struct clk_hw *clk_hw_get_parent_by_index(const struct clk_hw *hw,
 -- 
 2.21.0
 
