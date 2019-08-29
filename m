@@ -2,39 +2,39 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3465EA16ED
-	for <lists+linux-clk@lfdr.de>; Thu, 29 Aug 2019 12:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A368DA16D4
+	for <lists+linux-clk@lfdr.de>; Thu, 29 Aug 2019 12:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728517AbfH2KvM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 29 Aug 2019 06:51:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58992 "EHLO mail.kernel.org"
+        id S1728604AbfH2KvV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 29 Aug 2019 06:51:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59282 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728506AbfH2KvL (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 29 Aug 2019 06:51:11 -0400
+        id S1728598AbfH2KvT (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 29 Aug 2019 06:51:19 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 967D72342A;
-        Thu, 29 Aug 2019 10:51:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E008423405;
+        Thu, 29 Aug 2019 10:51:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567075870;
-        bh=6ZTbBvYvBxAA5ThjBoEmBwgFxQiPy3QjeGMo/nvlzno=;
+        s=default; t=1567075878;
+        bh=r2NLeZ554bhmZAOjT99GenY02RjdypTtJwuhqPonDkI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qQyzEaGEUJI4Gl79HKHxlbkPUlbBcUfpPhiyFG9QhImYgVNP8T4LmjXG7RsMdf8Iq
-         B9ljpgX939DVVGyJS5Gn0sufrT2GD6MYMwbzVrwFJB4aFzQQHKmA8qsEMZCX2FHgEx
-         5CVXLz6YRvj5taw0aRfDY1dVNUasBCueHMRrJuDg=
+        b=XeIQEed8rHRpNfMq2MCjcC1UQwXlR0HksGdPfub+ENFM1IDLcy7qebmrZvh6sZ86P
+         UwU1CpVW4PJBGgQIOV5ICSpdROxMA1dVKytH0UpN6m4iu2rK/Km9vfoXbAFzDqq7bR
+         XZx4IDCw1luMCxIj+fz0Dk3pcR+jLPS8pTro4RHs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Nathan Chancellor <natechancellor@gmail.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 8/8] clk: s2mps11: Add used attribute to s2mps11_dt_match
-Date:   Thu, 29 Aug 2019 06:51:00 -0400
-Message-Id: <20190829105100.2649-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 6/6] clk: s2mps11: Add used attribute to s2mps11_dt_match
+Date:   Thu, 29 Aug 2019 06:51:10 -0400
+Message-Id: <20190829105110.2748-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190829105100.2649-1-sashal@kernel.org>
-References: <20190829105100.2649-1-sashal@kernel.org>
+In-Reply-To: <20190829105110.2748-1-sashal@kernel.org>
+References: <20190829105110.2748-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -88,10 +88,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/clk/clk-s2mps11.c b/drivers/clk/clk-s2mps11.c
-index 14071a57c9262..f5d74e8db4327 100644
+index 785864893f9a6..14af5c916c9ca 100644
 --- a/drivers/clk/clk-s2mps11.c
 +++ b/drivers/clk/clk-s2mps11.c
-@@ -255,7 +255,7 @@ MODULE_DEVICE_TABLE(platform, s2mps11_clk_id);
+@@ -307,7 +307,7 @@ MODULE_DEVICE_TABLE(platform, s2mps11_clk_id);
   * This requires of_device_id table.  In the same time this will not change the
   * actual *device* matching so do not add .of_match_table.
   */
