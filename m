@@ -2,36 +2,36 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BBD0A260E
-	for <lists+linux-clk@lfdr.de>; Thu, 29 Aug 2019 20:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B39A25BB
+	for <lists+linux-clk@lfdr.de>; Thu, 29 Aug 2019 20:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728656AbfH2SeT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 29 Aug 2019 14:34:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55228 "EHLO mail.kernel.org"
+        id S1728041AbfH2Sb7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 29 Aug 2019 14:31:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56200 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727437AbfH2SNc (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 29 Aug 2019 14:13:32 -0400
+        id S1727867AbfH2SOe (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 29 Aug 2019 14:14:34 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CC37C22CF5;
-        Thu, 29 Aug 2019 18:13:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8C76C23429;
+        Thu, 29 Aug 2019 18:14:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567102411;
-        bh=1INPA2/FoQpndSSJunCkoNJ7Pr5YjxALkzj1u7Kv3hA=;
+        s=default; t=1567102473;
+        bh=pq9bQ5wT6Ve5WC5CTmr2kRFot80lY7XVeGuKxFWObXM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xNaDkFrchchUbSJWp34T/B9dNXVffUEX1UwacUqr34LtneSVIpMd6lX4G/tQbfImy
-         2aPmAHcyMb9nDLkienwgQyb6RqwM7OZel644RF4z7fcLmKHlrylprMv9DuEJxrJh8t
-         am6649EOxwe8kgnfdLO6/yMzjLHyk0gbyoGZLvxE=
+        b=NiZxnt8pGXR7qQ2mLS8nK/w5SSsgQOgW4IFpHIsvXKu+dA+kGgMQ0xGUtwxFJ6TU8
+         XUV669GHlriLFrKDyJXdMknAqxZkHm7yhfxTZtnak0tkTDOV0PQfNcDN8YLaKAwiqT
+         T0n2mlfArt1m/E9kcL+M0igCgHyUA9C4S6umHkaQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 08/76] clk: samsung: exynos542x: Move MSCL subsystem clocks to its sub-CMU
-Date:   Thu, 29 Aug 2019 14:12:03 -0400
-Message-Id: <20190829181311.7562-8-sashal@kernel.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Taniya Das <tdas@codeaurora.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Chen-Yu Tsai <wens@csie.org>, Sasha Levin <sashal@kernel.org>,
+        linux-clk@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 37/76] clk: Fix falling back to legacy parent string matching
+Date:   Thu, 29 Aug 2019 14:12:32 -0400
+Message-Id: <20190829181311.7562-37-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190829181311.7562-1-sashal@kernel.org>
 References: <20190829181311.7562-1-sashal@kernel.org>
@@ -44,122 +44,126 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Marek Szyprowski <m.szyprowski@samsung.com>
+From: Stephen Boyd <sboyd@kernel.org>
 
-[ Upstream commit baf7b79e1ad79a41fafd8ab8597b9a96962d822d ]
+[ Upstream commit 4f8c6aba37da199155a121c6cdc38505a9eb0259 ]
 
-M2M scaler clocks require special handling of their parent bus clock during
-power domain on/off sequences. MSCL clocks were not initially added to the
-sub-CMU handler, because that time there was no driver for the M2M scaler
-device and it was not possible to test it.
+Calls to clk_core_get() will return ERR_PTR(-EINVAL) if we've started
+migrating a clk driver to use the DT based style of specifying parents
+but we haven't made any DT updates yet. This happens when we pass a
+non-NULL value as the 'name' argument of of_parse_clkspec(). That
+function returns -EINVAL in such a situation, instead of -ENOENT like we
+expected. The return value comes back up to clk_core_fill_parent_index()
+which proceeds to skip calling clk_core_lookup() because the error
+pointer isn't equal to -ENOENT, it's -EINVAL.
 
-This patch fixes this issue. Parent clock for M2M scaler devices is now
-properly preserved during MSC power domain on/off sequence. This gives M2M
-scaler devices proper performance: fullHD XRGB32 image 1000 rotations test
-takes 3.17s instead of 45.08s.
+Furthermore, we blindly overwrite the error pointer returned by
+clk_core_get() with NULL when there isn't a legacy .name member
+specified in the parent map. This isn't too bad right now because we
+don't really care to differentiate NULL from an error, but in the future
+we should only try to do a legacy lookup if we know we might find
+something. This way DT lookups that fail don't try to lookup based on
+strings when there isn't any string to match, hiding the error from DT
+parsing.
 
-Fixes: b06a532bf1fa ("clk: samsung: Add Exynos5 sub-CMU clock driver")
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Link: https://lkml.kernel.org/r/20190808121839.23892-1-m.szyprowski@samsung.com
-Acked-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Fix both these problems so that clk provider drivers can use the new
+style of parent mapping without having to also update their DT at the
+same time. This patch is based on an earlier patch from Taniya Das which
+checked for -EINVAL in addition to -ENOENT return values from
+clk_core_get().
+
+Fixes: 601b6e93304a ("clk: Allow parents to be specified via clkspec index")
+Cc: Taniya Das <tdas@codeaurora.org>
+Cc: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Chen-Yu Tsai <wens@csie.org>
+Reported-by: Taniya Das <tdas@codeaurora.org>
 Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Link: https://lkml.kernel.org/r/20190813214147.34394-1-sboyd@kernel.org
+Tested-by: Taniya Das <tdas@codeaurora.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/samsung/clk-exynos5420.c | 48 ++++++++++++++++++++--------
- 1 file changed, 34 insertions(+), 14 deletions(-)
+ drivers/clk/clk.c | 46 ++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 34 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/clk/samsung/clk-exynos5420.c b/drivers/clk/samsung/clk-exynos5420.c
-index 5eb0ce4b2648b..893697e00d2aa 100644
---- a/drivers/clk/samsung/clk-exynos5420.c
-+++ b/drivers/clk/samsung/clk-exynos5420.c
-@@ -870,9 +870,6 @@ static const struct samsung_div_clock exynos5x_div_clks[] __initconst = {
- 	/* GSCL Block */
- 	DIV(0, "dout_gscl_blk_333", "aclk333_432_gscl", DIV2_RATIO0, 6, 2),
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 87b410d6e51de..498cd7bbe8984 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -324,6 +324,25 @@ static struct clk_core *clk_core_lookup(const char *name)
+ 	return NULL;
+ }
  
--	/* MSCL Block */
--	DIV(0, "dout_mscl_blk", "aclk400_mscl", DIV2_RATIO0, 28, 2),
++#ifdef CONFIG_OF
++static int of_parse_clkspec(const struct device_node *np, int index,
++			    const char *name, struct of_phandle_args *out_args);
++static struct clk_hw *
++of_clk_get_hw_from_clkspec(struct of_phandle_args *clkspec);
++#else
++static inline int of_parse_clkspec(const struct device_node *np, int index,
++				   const char *name,
++				   struct of_phandle_args *out_args)
++{
++	return -ENOENT;
++}
++static inline struct clk_hw *
++of_clk_get_hw_from_clkspec(struct of_phandle_args *clkspec)
++{
++	return ERR_PTR(-ENOENT);
++}
++#endif
++
+ /**
+  * clk_core_get - Find the clk_core parent of a clk
+  * @core: clk to find parent of
+@@ -355,8 +374,9 @@ static struct clk_core *clk_core_lookup(const char *name)
+  *      };
+  *
+  * Returns: -ENOENT when the provider can't be found or the clk doesn't
+- * exist in the provider. -EINVAL when the name can't be found. NULL when the
+- * provider knows about the clk but it isn't provided on this system.
++ * exist in the provider or the name can't be found in the DT node or
++ * in a clkdev lookup. NULL when the provider knows about the clk but it
++ * isn't provided on this system.
+  * A valid clk_core pointer when the clk can be found in the provider.
+  */
+ static struct clk_core *clk_core_get(struct clk_core *core, u8 p_index)
+@@ -367,17 +387,19 @@ static struct clk_core *clk_core_get(struct clk_core *core, u8 p_index)
+ 	struct device *dev = core->dev;
+ 	const char *dev_id = dev ? dev_name(dev) : NULL;
+ 	struct device_node *np = core->of_node;
++	struct of_phandle_args clkspec;
+ 
+-	if (np && (name || index >= 0))
+-		hw = of_clk_get_hw(np, index, name);
 -
- 	/* PSGEN */
- 	DIV(0, "dout_gen_blk", "mout_user_aclk266", DIV2_RATIO0, 8, 1),
- 	DIV(0, "dout_jpg_blk", "aclk166", DIV2_RATIO0, 20, 1),
-@@ -1136,17 +1133,6 @@ static const struct samsung_gate_clock exynos5x_gate_clks[] __initconst = {
- 	GATE(CLK_FIMC_LITE3, "fimc_lite3", "aclk333_432_gscl",
- 			GATE_IP_GSCL1, 17, 0, 0),
+-	/*
+-	 * If the DT search above couldn't find the provider or the provider
+-	 * didn't know about this clk, fallback to looking up via clkdev based
+-	 * clk_lookups
+-	 */
+-	if (PTR_ERR(hw) == -ENOENT && name)
++	if (np && (name || index >= 0) &&
++	    !of_parse_clkspec(np, index, name, &clkspec)) {
++		hw = of_clk_get_hw_from_clkspec(&clkspec);
++		of_node_put(clkspec.np);
++	} else if (name) {
++		/*
++		 * If the DT search above couldn't find the provider fallback to
++		 * looking up via clkdev based clk_lookups.
++		 */
+ 		hw = clk_find_hw(dev_id, name);
++	}
  
--	/* MSCL Block */
--	GATE(CLK_MSCL0, "mscl0", "aclk400_mscl", GATE_IP_MSCL, 0, 0, 0),
--	GATE(CLK_MSCL1, "mscl1", "aclk400_mscl", GATE_IP_MSCL, 1, 0, 0),
--	GATE(CLK_MSCL2, "mscl2", "aclk400_mscl", GATE_IP_MSCL, 2, 0, 0),
--	GATE(CLK_SMMU_MSCL0, "smmu_mscl0", "dout_mscl_blk",
--			GATE_IP_MSCL, 8, 0, 0),
--	GATE(CLK_SMMU_MSCL1, "smmu_mscl1", "dout_mscl_blk",
--			GATE_IP_MSCL, 9, 0, 0),
--	GATE(CLK_SMMU_MSCL2, "smmu_mscl2", "dout_mscl_blk",
--			GATE_IP_MSCL, 10, 0, 0),
--
- 	/* ISP */
- 	GATE(CLK_SCLK_UART_ISP, "sclk_uart_isp", "dout_uart_isp",
- 			GATE_TOP_SCLK_ISP, 0, CLK_SET_RATE_PARENT, 0),
-@@ -1229,6 +1215,28 @@ static struct exynos5_subcmu_reg_dump exynos5x_mfc_suspend_regs[] = {
- 	{ DIV4_RATIO, 0, 0x3 },			/* DIV dout_mfc_blk */
- };
- 
-+static const struct samsung_gate_clock exynos5x_mscl_gate_clks[] __initconst = {
-+	/* MSCL Block */
-+	GATE(CLK_MSCL0, "mscl0", "aclk400_mscl", GATE_IP_MSCL, 0, 0, 0),
-+	GATE(CLK_MSCL1, "mscl1", "aclk400_mscl", GATE_IP_MSCL, 1, 0, 0),
-+	GATE(CLK_MSCL2, "mscl2", "aclk400_mscl", GATE_IP_MSCL, 2, 0, 0),
-+	GATE(CLK_SMMU_MSCL0, "smmu_mscl0", "dout_mscl_blk",
-+			GATE_IP_MSCL, 8, 0, 0),
-+	GATE(CLK_SMMU_MSCL1, "smmu_mscl1", "dout_mscl_blk",
-+			GATE_IP_MSCL, 9, 0, 0),
-+	GATE(CLK_SMMU_MSCL2, "smmu_mscl2", "dout_mscl_blk",
-+			GATE_IP_MSCL, 10, 0, 0),
-+};
-+
-+static const struct samsung_div_clock exynos5x_mscl_div_clks[] __initconst = {
-+	DIV(0, "dout_mscl_blk", "aclk400_mscl", DIV2_RATIO0, 28, 2),
-+};
-+
-+static struct exynos5_subcmu_reg_dump exynos5x_mscl_suspend_regs[] = {
-+	{ GATE_IP_MSCL, 0xffffffff, 0xffffffff }, /* MSCL gates */
-+	{ SRC_TOP3, 0, BIT(4) },		/* MUX mout_user_aclk400_mscl */
-+	{ DIV2_RATIO0, 0, 0x30000000 },		/* DIV dout_mscl_blk */
-+};
- 
- static const struct samsung_gate_clock exynos5800_mau_gate_clks[] __initconst = {
- 	GATE(CLK_MAU_EPLL, "mau_epll", "mout_user_mau_epll",
-@@ -1273,6 +1281,16 @@ static const struct exynos5_subcmu_info exynos5x_mfc_subcmu = {
- 	.pd_name	= "MFC",
- };
- 
-+static const struct exynos5_subcmu_info exynos5x_mscl_subcmu = {
-+	.div_clks	= exynos5x_mscl_div_clks,
-+	.nr_div_clks	= ARRAY_SIZE(exynos5x_mscl_div_clks),
-+	.gate_clks	= exynos5x_mscl_gate_clks,
-+	.nr_gate_clks	= ARRAY_SIZE(exynos5x_mscl_gate_clks),
-+	.suspend_regs	= exynos5x_mscl_suspend_regs,
-+	.nr_suspend_regs = ARRAY_SIZE(exynos5x_mscl_suspend_regs),
-+	.pd_name	= "MSC",
-+};
-+
- static const struct exynos5_subcmu_info exynos5800_mau_subcmu = {
- 	.gate_clks	= exynos5800_mau_gate_clks,
- 	.nr_gate_clks	= ARRAY_SIZE(exynos5800_mau_gate_clks),
-@@ -1285,12 +1303,14 @@ static const struct exynos5_subcmu_info *exynos5x_subcmus[] = {
- 	&exynos5x_disp_subcmu,
- 	&exynos5x_gsc_subcmu,
- 	&exynos5x_mfc_subcmu,
-+	&exynos5x_mscl_subcmu,
- };
- 
- static const struct exynos5_subcmu_info *exynos5800_subcmus[] = {
- 	&exynos5x_disp_subcmu,
- 	&exynos5x_gsc_subcmu,
- 	&exynos5x_mfc_subcmu,
-+	&exynos5x_mscl_subcmu,
- 	&exynos5800_mau_subcmu,
- };
+ 	if (IS_ERR(hw))
+ 		return ERR_CAST(hw);
+@@ -401,7 +423,7 @@ static void clk_core_fill_parent_index(struct clk_core *core, u8 index)
+ 			parent = ERR_PTR(-EPROBE_DEFER);
+ 	} else {
+ 		parent = clk_core_get(core, index);
+-		if (IS_ERR(parent) && PTR_ERR(parent) == -ENOENT)
++		if (IS_ERR(parent) && PTR_ERR(parent) == -ENOENT && entry->name)
+ 			parent = clk_core_lookup(entry->name);
+ 	}
  
 -- 
 2.20.1
