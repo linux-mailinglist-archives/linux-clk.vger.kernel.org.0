@@ -2,104 +2,102 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A368DA16D4
-	for <lists+linux-clk@lfdr.de>; Thu, 29 Aug 2019 12:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E7DBA17C7
+	for <lists+linux-clk@lfdr.de>; Thu, 29 Aug 2019 13:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728604AbfH2KvV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 29 Aug 2019 06:51:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59282 "EHLO mail.kernel.org"
+        id S1727122AbfH2LJr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 29 Aug 2019 07:09:47 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:55524 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728598AbfH2KvT (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 29 Aug 2019 06:51:19 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E008423405;
-        Thu, 29 Aug 2019 10:51:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567075878;
-        bh=r2NLeZ554bhmZAOjT99GenY02RjdypTtJwuhqPonDkI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XeIQEed8rHRpNfMq2MCjcC1UQwXlR0HksGdPfub+ENFM1IDLcy7qebmrZvh6sZ86P
-         UwU1CpVW4PJBGgQIOV5ICSpdROxMA1dVKytH0UpN6m4iu2rK/Km9vfoXbAFzDqq7bR
-         XZx4IDCw1luMCxIj+fz0Dk3pcR+jLPS8pTro4RHs=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
+        id S1727061AbfH2LJr (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 29 Aug 2019 07:09:47 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 0893F20033A;
+        Thu, 29 Aug 2019 13:09:43 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 839C020014F;
+        Thu, 29 Aug 2019 13:09:37 +0200 (CEST)
+Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 8D2ED402DE;
+        Thu, 29 Aug 2019 19:09:30 +0800 (SGT)
+From:   Wen He <wen.he_1@nxp.com>
+To:     linux-devel@linux.nxdi.nxp.com,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 6/6] clk: s2mps11: Add used attribute to s2mps11_dt_match
-Date:   Thu, 29 Aug 2019 06:51:10 -0400
-Message-Id: <20190829105110.2748-6-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190829105110.2748-1-sashal@kernel.org>
-References: <20190829105110.2748-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     leoyang.li@nxp.com, liviu.dudau@arm.com, Wen He <wen.he_1@nxp.com>
+Subject: [v4 1/2] dt/bindings: clk: Add YAML schemas for LS1028A Display Clock bindings
+Date:   Thu, 29 Aug 2019 18:59:18 +0800
+Message-Id: <20190829105919.44363-1-wen.he_1@nxp.com>
+X-Mailer: git-send-email 2.9.5
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Nathan Chancellor <natechancellor@gmail.com>
+LS1028A has a clock domain PXLCLK0 used for provide pixel clocks to Display
+output interface. Add a YAML schema for this.
 
-[ Upstream commit 9c940bbe2bb47e03ca5e937d30b6a50bf9c0e671 ]
-
-Clang warns after commit 8985167ecf57 ("clk: s2mps11: Fix matching when
-built as module and DT node contains compatible"):
-
-drivers/clk/clk-s2mps11.c:242:34: warning: variable 's2mps11_dt_match'
-is not needed and will not be emitted [-Wunneeded-internal-declaration]
-static const struct of_device_id s2mps11_dt_match[] = {
-                                 ^
-1 warning generated.
-
-This warning happens when a variable is used in some construct that
-doesn't require a reference to that variable to be emitted in the symbol
-table; in this case, it's MODULE_DEVICE_TABLE, which only needs to hold
-the data of the variable, not the variable itself.
-
-$ nm -S drivers/clk/clk-s2mps11.o | rg s2mps11_dt_match
-00000078 000003d4 R __mod_of__s2mps11_dt_match_device_table
-
-Normally, with device ID table variables, it means that the variable
-just needs to be tied to the device declaration at the bottom of the
-file, like s2mps11_clk_id:
-
-$ nm -S drivers/clk/clk-s2mps11.o | rg s2mps11_clk_id
-00000000 00000078 R __mod_platform__s2mps11_clk_id_device_table
-00000000 00000078 r s2mps11_clk_id
-
-However, because the comment above this deliberately doesn't want this
-variable added to .of_match_table, we need to mark s2mps11_dt_match as
-__used to silence this warning. This makes it clear to Clang that the
-variable is used for something, even if a reference to it isn't being
-emitted.
-
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-Fixes: 8985167ecf57 ("clk: s2mps11: Fix matching when built as module and DT node contains compatible")
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Wen He <wen.he_1@nxp.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- drivers/clk/clk-s2mps11.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/clock/fsl,plldig.yaml | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/fsl,plldig.yaml
 
-diff --git a/drivers/clk/clk-s2mps11.c b/drivers/clk/clk-s2mps11.c
-index 785864893f9a6..14af5c916c9ca 100644
---- a/drivers/clk/clk-s2mps11.c
-+++ b/drivers/clk/clk-s2mps11.c
-@@ -307,7 +307,7 @@ MODULE_DEVICE_TABLE(platform, s2mps11_clk_id);
-  * This requires of_device_id table.  In the same time this will not change the
-  * actual *device* matching so do not add .of_match_table.
-  */
--static const struct of_device_id s2mps11_dt_match[] = {
-+static const struct of_device_id s2mps11_dt_match[] __used = {
- 	{
- 		.compatible = "samsung,s2mps11-clk",
- 		.data = (void *)S2MPS11X,
+diff --git a/Documentation/devicetree/bindings/clock/fsl,plldig.yaml b/Documentation/devicetree/bindings/clock/fsl,plldig.yaml
+new file mode 100644
+index 000000000000..32274e94aafc
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/fsl,plldig.yaml
+@@ -0,0 +1,43 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/bindings/clock/fsl,plldig.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP QorIQ Layerscape LS1028A Display PIXEL Clock Binding
++
++maintainers:
++  - Wen He <wen.he_1@nxp.com>
++
++description: |
++  NXP LS1028A has a clock domain PXLCLK0 used for the Display output
++  interface in the display core, as implemented in TSMC CLN28HPM PLL.
++  which generate and offers pixel clocks to Display.
++
++properties:
++  compatible:
++    const: fsl,ls1028a-plldig
++
++  reg:
++    maxItems: 1
++
++  '#clock-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - '#clock-cells'
++
++examples:
++  # Display PIXEL Clock node:
++  - |
++    dpclk: clock-display@f1f0000 {
++        compatible = "fsl,ls1028a-plldig";
++        reg = <0x0 0xf1f0000 0x0 0xffff>;
++        #clock-cells = <0>;
++        clocks = <&osc_27m>;
++    };
++
++...
 -- 
-2.20.1
+2.17.1
 
