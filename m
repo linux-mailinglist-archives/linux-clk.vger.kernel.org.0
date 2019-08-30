@@ -2,35 +2,35 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CE0A3A06
-	for <lists+linux-clk@lfdr.de>; Fri, 30 Aug 2019 17:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C833A3A08
+	for <lists+linux-clk@lfdr.de>; Fri, 30 Aug 2019 17:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728199AbfH3PJ0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 30 Aug 2019 11:09:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42530 "EHLO mail.kernel.org"
+        id S1728463AbfH3PKP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 30 Aug 2019 11:10:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42532 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727938AbfH3PJ0 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        id S1728072AbfH3PJ0 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
         Fri, 30 Aug 2019 11:09:26 -0400
 Received: from mail.kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E2EC023429;
-        Fri, 30 Aug 2019 15:09:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3AD042342A;
+        Fri, 30 Aug 2019 15:09:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1567177765;
-        bh=RILJflNJ5mDBzGYY/ADbLlIE/PJaU8KzdXSJ7NiVjTw=;
+        bh=M3Fl0uQFBB1nB7g0eSzHp8Gkjc0rQVUxsBYc58NL1Ys=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KRb3iD3pSLS3VXWhSQb4uFGSE1thomPJ3NTp7bvotm/5Mufk8KL1Bm/yMRzraI4zO
-         xjhIvvaEwVQiCjA9qwRQQlkoKRNADGZaBnNIjR/kMjvEwMcJe5z+Spvl+a4BwdZKqs
-         VpfCpXmr6Y3myQ5ff5bnN8fqjpB9pd0MY4gWKhVE=
+        b=Mb9SoIQYAchwKNOyX9XLVV1AI0H5MpUnaNYXOr0yURusYgCVdbwjxiAxT1yykMvxE
+         Iid4xCC1puokSs3ZcRdCSepqSTsVwReUGd8Kmdd5HUHm0QMkGD17G8o4rcDjomWGkN
+         nFJ0G3HLvUf+m2lgg9rYPUue/l1YRXAd/3OP5xbk=
 From:   Stephen Boyd <sboyd@kernel.org>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 02/12] clk: fixed-rate: Convert to clk_hw based APIs
-Date:   Fri, 30 Aug 2019 08:09:13 -0700
-Message-Id: <20190830150923.259497-3-sboyd@kernel.org>
+Subject: [PATCH 03/12] clk: fixed-rate: Remove clk_register_fixed_rate_with_accuracy()
+Date:   Fri, 30 Aug 2019 08:09:14 -0700
+Message-Id: <20190830150923.259497-4-sboyd@kernel.org>
 X-Mailer: git-send-email 2.23.0.187.g17f5b7556c-goog
 In-Reply-To: <20190830150923.259497-1-sboyd@kernel.org>
 References: <20190830150923.259497-1-sboyd@kernel.org>
@@ -41,101 +41,70 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This code still uses struct clk to register clks from the probe path.
-Migrate this to the clk_hw based APIs to modernize the code. Also, this
-isn't a module and it can't be one because the driver is always builtin
-so drop the module table.
+There aren't any users of this API anymore. Remove it.
 
 Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 ---
- drivers/clk/clk-fixed-rate.c | 31 +++++++++++++++----------------
- 1 file changed, 15 insertions(+), 16 deletions(-)
+ drivers/clk/clk-fixed-rate.c | 23 +++++++----------------
+ include/linux/clk-provider.h |  3 ---
+ 2 files changed, 7 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/clk/clk-fixed-rate.c b/drivers/clk/clk-fixed-rate.c
-index a7e4aef7a376..eed0be664c07 100644
+index eed0be664c07..f4044091907f 100644
 --- a/drivers/clk/clk-fixed-rate.c
 +++ b/drivers/clk/clk-fixed-rate.c
-@@ -155,9 +155,9 @@ void clk_hw_unregister_fixed_rate(struct clk_hw *hw)
- EXPORT_SYMBOL_GPL(clk_hw_unregister_fixed_rate);
- 
- #ifdef CONFIG_OF
--static struct clk *_of_fixed_clk_setup(struct device_node *node)
-+static struct clk_hw *_of_fixed_clk_setup(struct device_node *node)
- {
--	struct clk *clk;
-+	struct clk_hw *hw;
- 	const char *clk_name = node->name;
- 	u32 rate;
- 	u32 accuracy = 0;
-@@ -170,18 +170,18 @@ static struct clk *_of_fixed_clk_setup(struct device_node *node)
- 
- 	of_property_read_string(node, "clock-output-names", &clk_name);
- 
--	clk = clk_register_fixed_rate_with_accuracy(NULL, clk_name, NULL,
-+	hw = clk_hw_register_fixed_rate_with_accuracy(NULL, clk_name, NULL,
- 						    0, rate, accuracy);
--	if (IS_ERR(clk))
--		return clk;
-+	if (IS_ERR(hw))
-+		return hw;
- 
--	ret = of_clk_add_provider(node, of_clk_src_simple_get, clk);
-+	ret = of_clk_add_hw_provider(node, of_clk_hw_simple_get, hw);
- 	if (ret) {
--		clk_unregister(clk);
-+		clk_hw_unregister_fixed_rate(hw);
- 		return ERR_PTR(ret);
- 	}
- 
--	return clk;
-+	return hw;
+@@ -89,20 +89,6 @@ struct clk_hw *clk_hw_register_fixed_rate_with_accuracy(struct device *dev,
  }
+ EXPORT_SYMBOL_GPL(clk_hw_register_fixed_rate_with_accuracy);
  
+-struct clk *clk_register_fixed_rate_with_accuracy(struct device *dev,
+-		const char *name, const char *parent_name, unsigned long flags,
+-		unsigned long fixed_rate, unsigned long fixed_accuracy)
+-{
+-	struct clk_hw *hw;
+-
+-	hw = clk_hw_register_fixed_rate_with_accuracy(dev, name, parent_name,
+-			flags, fixed_rate, fixed_accuracy);
+-	if (IS_ERR(hw))
+-		return ERR_CAST(hw);
+-	return hw->clk;
+-}
+-EXPORT_SYMBOL_GPL(clk_register_fixed_rate_with_accuracy);
+-
  /**
-@@ -195,27 +195,27 @@ CLK_OF_DECLARE(fixed_clk, "fixed-clock", of_fixed_clk_setup);
- 
- static int of_fixed_clk_remove(struct platform_device *pdev)
+  * clk_hw_register_fixed_rate - register fixed-rate clock with the clock
+  * framework
+@@ -125,8 +111,13 @@ struct clk *clk_register_fixed_rate(struct device *dev, const char *name,
+ 		const char *parent_name, unsigned long flags,
+ 		unsigned long fixed_rate)
  {
--	struct clk *clk = platform_get_drvdata(pdev);
-+	struct clk_hw *hw = platform_get_drvdata(pdev);
- 
- 	of_clk_del_provider(pdev->dev.of_node);
--	clk_unregister_fixed_rate(clk);
-+	clk_hw_unregister_fixed_rate(hw);
- 
- 	return 0;
- }
- 
- static int of_fixed_clk_probe(struct platform_device *pdev)
- {
--	struct clk *clk;
+-	return clk_register_fixed_rate_with_accuracy(dev, name, parent_name,
+-						     flags, fixed_rate, 0);
 +	struct clk_hw *hw;
- 
- 	/*
- 	 * This function is not executed when of_fixed_clk_setup
- 	 * succeeded.
- 	 */
--	clk = _of_fixed_clk_setup(pdev->dev.of_node);
--	if (IS_ERR(clk))
--		return PTR_ERR(clk);
-+	hw = _of_fixed_clk_setup(pdev->dev.of_node);
++
++	hw = clk_hw_register_fixed_rate_with_accuracy(dev, name, parent_name,
++						      flags, fixed_rate, 0);
 +	if (IS_ERR(hw))
-+		return PTR_ERR(hw);
- 
--	platform_set_drvdata(pdev, clk);
-+	platform_set_drvdata(pdev, hw);
- 
- 	return 0;
++		return ERR_CAST(hw);
++	return hw->clk;
  }
-@@ -224,7 +224,6 @@ static const struct of_device_id of_fixed_clk_ids[] = {
- 	{ .compatible = "fixed-clock" },
- 	{ }
- };
--MODULE_DEVICE_TABLE(of, of_fixed_clk_ids);
+ EXPORT_SYMBOL_GPL(clk_register_fixed_rate);
  
- static struct platform_driver of_fixed_clk_driver = {
- 	.driver = {
+diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+index 32beac39e5a3..52c08fd0211c 100644
+--- a/include/linux/clk-provider.h
++++ b/include/linux/clk-provider.h
+@@ -336,9 +336,6 @@ struct clk *clk_register_fixed_rate(struct device *dev, const char *name,
+ struct clk_hw *clk_hw_register_fixed_rate(struct device *dev, const char *name,
+ 		const char *parent_name, unsigned long flags,
+ 		unsigned long fixed_rate);
+-struct clk *clk_register_fixed_rate_with_accuracy(struct device *dev,
+-		const char *name, const char *parent_name, unsigned long flags,
+-		unsigned long fixed_rate, unsigned long fixed_accuracy);
+ void clk_unregister_fixed_rate(struct clk *clk);
+ struct clk_hw *clk_hw_register_fixed_rate_with_accuracy(struct device *dev,
+ 		const char *name, const char *parent_name, unsigned long flags,
 -- 
 Sent by a computer through tubes
 
