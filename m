@@ -2,114 +2,95 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87322A32FB
-	for <lists+linux-clk@lfdr.de>; Fri, 30 Aug 2019 10:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A0CA380B
+	for <lists+linux-clk@lfdr.de>; Fri, 30 Aug 2019 15:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728210AbfH3InN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 30 Aug 2019 04:43:13 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:45476 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728211AbfH3InM (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 30 Aug 2019 04:43:12 -0400
-Received: by mail-ot1-f66.google.com with SMTP id m24so6179977otp.12;
-        Fri, 30 Aug 2019 01:43:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x+eQ4ygc879/tUqyWUApJY09ToNtkEXXbRgeINUKyoc=;
-        b=oqTvteU8QyH6bS2ZcROjY64E+dzmBVpHjiZJCX/8Ff6dixOqFT7uKRZSzl6lW606uK
-         5GWUNV3A5BMmdvhxFstUNjQSqjySQ682kjbnx1wrFuV79kPRH9yV7Z+bMxGmg9aj1vNB
-         qHBX422KK/Bn1p193oHoCJX6bUsu1VwdhVx32GZrde6L6mLNjBb8GNRtUTxpiz7ZUx3/
-         eg905zbNqYZVJe/bnfsN58TkPYKEeLy+J3gLr2jwYJ4k02TTSfVYodvSVQXCQ+Xbb9aA
-         AedKGoMFdY74fhku4PYpIugEmyV1LTQZs1Qh3iGnu0mtWeYbVdHNokv0w8YzLhHDJf7l
-         e/eg==
-X-Gm-Message-State: APjAAAU4cE83jWI3JHNyiSVNOkqHk6pSHhqBw0D04Hpu+f9R6DCn6Otl
-        fyaotaFJrMZNoK7zwd2CW/OW2g4mu5Jigv0tbMY=
-X-Google-Smtp-Source: APXvYqxUPtRzDOkBrOYmHo96TQGYYZ+ECdJ3YdUU7QY5Dfa9xLLnS5vg7oGNZgYYHTnWv6pdG8EFYTXoT2FxUGOM/cU=
-X-Received: by 2002:a9d:3e50:: with SMTP id h16mr10748352otg.107.1567154592099;
- Fri, 30 Aug 2019 01:43:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190617125238.13761-1-geert+renesas@glider.be>
- <20190617125238.13761-2-geert+renesas@glider.be> <20190618110937.2s7h5vtssymfrxxq@verge.net.au>
-In-Reply-To: <20190618110937.2s7h5vtssymfrxxq@verge.net.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 30 Aug 2019 10:43:01 +0200
-Message-ID: <CAMuHMdUe_kvB_z0y99y_kkRaUCW9NZneRUtNh=+PC9sC3buDjg@mail.gmail.com>
-Subject: Re: [PATCH 1/5] clk: renesas: rcar-gen2-legacy: Switch Z clock to .determine_rate()
-To:     Simon Horman <horms@verge.net.au>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1727899AbfH3NuW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 30 Aug 2019 09:50:22 -0400
+Received: from andre.telenet-ops.be ([195.130.132.53]:48690 "EHLO
+        andre.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727857AbfH3NuV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 30 Aug 2019 09:50:21 -0400
+Received: from ramsan ([84.194.98.4])
+        by andre.telenet-ops.be with bizsmtp
+        id vRqK2000505gfCL01RqK3u; Fri, 30 Aug 2019 15:50:19 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1i3hIB-0003KX-0s; Fri, 30 Aug 2019 15:50:19 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1i3hDK-00037U-Ng; Fri, 30 Aug 2019 15:45:18 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v2 0/8] clk: renesas: rcar-gen2/gen3: Switch to .determine_rate()
+Date:   Fri, 30 Aug 2019 15:45:07 +0200
+Message-Id: <20190830134515.11925-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Simon,
+	Hi Mike, Stephen,
 
-On Tue, Jun 18, 2019 at 1:09 PM Simon Horman <horms@verge.net.au> wrote:
-> On Mon, Jun 17, 2019 at 02:52:34PM +0200, Geert Uytterhoeven wrote:
-> > As the .round_rate() callback returns a long clock rate, it cannot
-> > return clock rates that do not fit in signed long, but do fit in
-> > unsigned long.  Hence switch the Z clock on R-Car Gen2 from the old
-> > .round_rate() callback to the newer .determine_rate() callback, which
-> > does not suffer from this limitation.
-> >
-> > This includes implementing range checking.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+As the .round_rate() callback returns a long clock rate, it cannot
+return clock rates that do not fit in signed long, but do fit in
+unsigned long.  The newer .determine_rate() callback does not suffer
+from this limitation.  In addition, .determine_rate() provides the
+ability to specify a rate range.
 
-> > --- a/drivers/clk/renesas/clk-rcar-gen2.c
-> > +++ b/drivers/clk/renesas/clk-rcar-gen2.c
-> > @@ -66,19 +66,22 @@ static unsigned long cpg_z_clk_recalc_rate(struct clk_hw *hw,
-> >       return div_u64((u64)parent_rate * mult, 32);
-> >  }
-> >
-> > -static long cpg_z_clk_round_rate(struct clk_hw *hw, unsigned long rate,
-> > -                              unsigned long *parent_rate)
-> > +static int cpg_z_clk_determine_rate(struct clk_hw *hw,
-> > +                                 struct clk_rate_request *req)
-> >  {
-> > -     unsigned long prate  = *parent_rate;
-> > -     unsigned int mult;
-> > +     unsigned long prate = req->best_parent_rate;
-> > +     unsigned int min_mult, max_mult, mult;
-> >
-> > -     if (!prate)
-> > -             prate = 1;
-> > +     min_mult = max(div_u64(req->min_rate * 32ULL, prate), 1ULL);
-> > +     max_mult = min(div_u64(req->max_rate * 32ULL, prate), 32ULL);
->
-> nit: the type of the second parameter doesn't look correct to me,
-> div_u64 expects a u32 divisor.
+This patch series performs the customary preparatory cleanups, and
+switches the Z (CPU) and SD clocks in the R-Car Gen2 and Gen3 clock
+drivers from the .round_rate() to the .determine_rate() callback.
+Note that the "div6" clock driver hasn't been converted yet, so div6
+clocks still use .round_rate().
 
-Yes, this should use div64_ul() instead.
+Changes compared to v1[1]:
+  - Add preparatory arithmetic division improvements
+  - Split off cpg_sd_clock_calc_div() absorption and SD clock best rate
+    calculation,
+  - Use div_u64() for division by unsigned long,
 
-> > +     if (max_mult < min_mult)
-> > +             return -EINVAL;
-> >
-> > -     mult = div_u64((u64)rate * 32, prate);
-> > -     mult = clamp(mult, 1U, 32U);
-> > +     mult = div_u64(req->rate * 32ULL, prate);
->
-> Likewise, do we care that prate will be 64bit on 64bit platforms?
-> (Yes, I know gen2 SoCs are 32bit :)
+This has been tested on R-Car M2-W and various R-Car Gen3, and should
+have no behavioral impact.
 
-Likewise, div64_ul().
+To be queued in clk-renesas-for-v5.5.
 
-Thanks a lot!
+Thanks for your comments!
+
+[1] [PATCH 0/5] clk: renesas: rcar-gen2/gen3: Switch to .determine_rate()
+    https://lore.kernel.org/linux-clk/20190617125238.13761-1-geert+renesas@glider.be/
+
+Geert Uytterhoeven (8):
+  clk: renesas: rcar-gen2: Improve arithmetic divisions
+  clk: renesas: rcar-gen3: Improve arithmetic divisions
+  clk: renesas: rcar-gen3: Avoid double table iteration in SD
+    .set_rate()
+  clk: renesas: rcar-gen3: Absorb cpg_sd_clock_calc_div()
+  clk: renesas: rcar-gen3: Loop to find best rate in
+    cpg_sd_clock_round_rate()
+  clk: renesas: rcar-gen2: Switch Z clock to .determine_rate()
+  clk: renesas: rcar-gen3: Switch Z clocks to .determine_rate()
+  clk: renesas: rcar-gen3: Switch SD clocks to .determine_rate()
+
+ drivers/clk/renesas/rcar-gen2-cpg.c | 25 ++++++-----
+ drivers/clk/renesas/rcar-gen3-cpg.c | 64 ++++++++++++++++-------------
+ 2 files changed, 49 insertions(+), 40 deletions(-)
+
+-- 
+2.17.1
 
 Gr{oetje,eeting}s,
 
-                        Geert
+						Geert
 
--- 
+--
 Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
 In personal conversations with technical people, I call myself a hacker. But
 when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+							    -- Linus Torvalds
