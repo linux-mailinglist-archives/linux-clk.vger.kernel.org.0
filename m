@@ -2,35 +2,35 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE1FA39FC
-	for <lists+linux-clk@lfdr.de>; Fri, 30 Aug 2019 17:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D165A39F8
+	for <lists+linux-clk@lfdr.de>; Fri, 30 Aug 2019 17:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727135AbfH3PJm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 30 Aug 2019 11:09:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42540 "EHLO mail.kernel.org"
+        id S1728216AbfH3PJa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 30 Aug 2019 11:09:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42562 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728236AbfH3PJ3 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 30 Aug 2019 11:09:29 -0400
+        id S1728247AbfH3PJa (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 30 Aug 2019 11:09:30 -0400
 Received: from mail.kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C1B622342C;
-        Fri, 30 Aug 2019 15:09:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1936823429;
+        Fri, 30 Aug 2019 15:09:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567177767;
-        bh=MJlkPCYkMD+Y4plwpCnKgMza3JHPd1xCzxfWRQinRPY=;
+        s=default; t=1567177768;
+        bh=xIhLZ5nQAJ+eSeWsA3OmkjA5SXsmQHdnjxdh2RGML7k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A3eaj/gfSXqT12nTZlrstVUXIce3wQVBSETDlIcLybRHyum1IS0MDZytDZzrmdGap
-         ygOu1zJMWe26WMuwznYqEpAY9a9qNRxyD6n29sLtduHMhNu1IlEcxXgoha27ZqZziG
-         xVwIs+TyMxvMjyEU0NiQ9Ac50T+Ihxw4mtm3bs+Q=
+        b=OtZLu7qaPx+EwM2gwRVjpwQjD49FHn/UzbEhMD766q53R7KqhcEYXT1glEhSScCxO
+         Du+TtUrzcCkzxJut/QF1Kgh8DKfxcYLElcUEAi2RGJqC+vvOJPWOJHULNyLswiFPr3
+         KmqQCdbtM2RFmEuCGJ8lW5dFhvS9mRAImfdGvOfc=
 From:   Stephen Boyd <sboyd@kernel.org>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 11/12] clk: gate: Add support for specifying parents via DT/pointers
-Date:   Fri, 30 Aug 2019 08:09:22 -0700
-Message-Id: <20190830150923.259497-12-sboyd@kernel.org>
+Subject: [PATCH 12/12] clk: divider: Add support for specifying parents via DT/pointers
+Date:   Fri, 30 Aug 2019 08:09:23 -0700
+Message-Id: <20190830150923.259497-13-sboyd@kernel.org>
 X-Mailer: git-send-email 2.23.0.187.g17f5b7556c-goog
 In-Reply-To: <20190830150923.259497-1-sboyd@kernel.org>
 References: <20190830150923.259497-1-sboyd@kernel.org>
@@ -44,7 +44,7 @@ X-Mailing-List: linux-clk@vger.kernel.org
 After commit fc0c209c147f ("clk: Allow parents to be specified without
 string names") we can use DT or direct clk_hw pointers to specify
 parents. Create a generic function that shouldn't be used very often to
-encode the multitude of ways of registering a gate clk with different
+encode the multitude of ways of registering a divider clk with different
 parent information. Then add a bunch of wrapper macros that only pass
 down what needs to be passed down to the generic function to support
 this with less arguments.
@@ -52,163 +52,295 @@ this with less arguments.
 Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 ---
+ drivers/clk/clk-divider.c    |  84 ++-----------------
+ include/linux/clk-provider.h | 153 ++++++++++++++++++++++++++++++++---
+ 2 files changed, 147 insertions(+), 90 deletions(-)
 
-I'm debating having the multiplexer function take a DT index, clk_hw
-pointer, fw_name and name as different parameters. Then we can just
-always use the parent_data approach and cover all bases.
-
- drivers/clk/clk-gate.c       | 35 ++++++++++-----------
- include/linux/clk-provider.h | 59 ++++++++++++++++++++++++++++++++++--
- 2 files changed, 74 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/clk/clk-gate.c b/drivers/clk/clk-gate.c
-index 1b99fc962745..4296bb012abf 100644
---- a/drivers/clk/clk-gate.c
-+++ b/drivers/clk/clk-gate.c
-@@ -123,26 +123,18 @@ const struct clk_ops clk_gate_ops = {
+diff --git a/drivers/clk/clk-divider.c b/drivers/clk/clk-divider.c
+index 3f9ff78c4a2a..b2ecf7ebdbe4 100644
+--- a/drivers/clk/clk-divider.c
++++ b/drivers/clk/clk-divider.c
+@@ -463,8 +463,9 @@ const struct clk_ops clk_divider_ro_ops = {
  };
- EXPORT_SYMBOL_GPL(clk_gate_ops);
+ EXPORT_SYMBOL_GPL(clk_divider_ro_ops);
+ 
+-static struct clk_hw *_register_divider(struct device *dev, const char *name,
+-		const char *parent_name, unsigned long flags,
++struct clk_hw *__clk_hw_register_divider(struct device *dev, struct device_node *np,
++		const char *name, const char *parent_name, const struct clk_hw *parent_hw,
++		const struct clk_parent_data *parent_data, unsigned long flags,
+ 		void __iomem *reg, u8 shift, u8 width,
+ 		u8 clk_divider_flags, const struct clk_div_table *table,
+ 		spinlock_t *lock)
+@@ -515,55 +516,6 @@ static struct clk_hw *_register_divider(struct device *dev, const char *name,
+ 	return hw;
+ }
  
 -/**
-- * clk_hw_register_gate - register a gate clock with the clock framework
-- * @dev: device that is registering this clock
+- * clk_register_divider - register a divider clock with the clock framework
+- * @dev: device registering this clock
 - * @name: name of this clock
-- * @parent_name: name of this clock's parent
-- * @flags: framework-specific flags for this clock
-- * @reg: register address to control gating of this clock
-- * @bit_idx: which bit in the register controls gating of this clock
-- * @clk_gate_flags: gate-specific flags for this clock
+- * @parent_name: name of clock's parent
+- * @flags: framework-specific flags
+- * @reg: register address to adjust divider
+- * @shift: number of bits to shift the bitfield
+- * @width: width of the bitfield
+- * @clk_divider_flags: divider-specific flags for this clock
 - * @lock: shared register lock for this clock
 - */
--struct clk_hw *clk_hw_register_gate(struct device *dev, const char *name,
+-struct clk *clk_register_divider(struct device *dev, const char *name,
 -		const char *parent_name, unsigned long flags,
-+struct clk_hw *__clk_hw_register_gate(struct device *dev,
-+		struct device_node *np, const char *name,
-+		const char *parent_name, const struct clk_hw *parent_hw,
-+		const struct clk_parent_data *parent_data,
-+		unsigned long flags,
- 		void __iomem *reg, u8 bit_idx,
- 		u8 clk_gate_flags, spinlock_t *lock)
+-		void __iomem *reg, u8 shift, u8 width,
+-		u8 clk_divider_flags, spinlock_t *lock)
+-{
+-	struct clk_hw *hw;
+-
+-	hw =  _register_divider(dev, name, parent_name, flags, reg, shift,
+-			width, clk_divider_flags, NULL, lock);
+-	if (IS_ERR(hw))
+-		return ERR_CAST(hw);
+-	return hw->clk;
+-}
+-EXPORT_SYMBOL_GPL(clk_register_divider);
+-
+-/**
+- * clk_hw_register_divider - register a divider clock with the clock framework
+- * @dev: device registering this clock
+- * @name: name of this clock
+- * @parent_name: name of clock's parent
+- * @flags: framework-specific flags
+- * @reg: register address to adjust divider
+- * @shift: number of bits to shift the bitfield
+- * @width: width of the bitfield
+- * @clk_divider_flags: divider-specific flags for this clock
+- * @lock: shared register lock for this clock
+- */
+-struct clk_hw *clk_hw_register_divider(struct device *dev, const char *name,
+-		const char *parent_name, unsigned long flags,
+-		void __iomem *reg, u8 shift, u8 width,
+-		u8 clk_divider_flags, spinlock_t *lock)
+-{
+-	return _register_divider(dev, name, parent_name, flags, reg, shift,
+-			width, clk_divider_flags, NULL, lock);
+-}
+-EXPORT_SYMBOL_GPL(clk_hw_register_divider);
+-
+ /**
+  * clk_register_divider_table - register a table based divider clock with
+  * the clock framework
+@@ -586,39 +538,15 @@ struct clk *clk_register_divider_table(struct device *dev, const char *name,
  {
- 	struct clk_gate *gate;
  	struct clk_hw *hw;
- 	struct clk_init_data init;
--	int ret;
-+	int ret = -EINVAL;
  
- 	if (clk_gate_flags & CLK_GATE_HIWORD_MASK) {
- 		if (bit_idx > 15) {
-@@ -160,7 +152,12 @@ struct clk_hw *clk_hw_register_gate(struct device *dev, const char *name,
- 	init.ops = &clk_gate_ops;
- 	init.flags = flags;
- 	init.parent_names = parent_name ? &parent_name : NULL;
--	init.num_parents = parent_name ? 1 : 0;
-+	init.parent_hws = parent_hw ? &parent_hw : NULL;
-+	init.parent_data = parent_data;
-+	if (parent_name || parent_hw || parent_data)
-+		init.num_parents = 1;
-+	else
-+		init.num_parents = 0;
- 
- 	/* struct clk_gate assignments */
- 	gate->reg = reg;
-@@ -170,15 +167,19 @@ struct clk_hw *clk_hw_register_gate(struct device *dev, const char *name,
- 	gate->hw.init = &init;
- 
- 	hw = &gate->hw;
--	ret = clk_hw_register(dev, hw);
-+	if (dev || !np)
-+		ret = clk_hw_register(dev, hw);
-+	else if (np)
-+		ret = of_clk_hw_register(np, hw);
- 	if (ret) {
- 		kfree(gate);
- 		hw = ERR_PTR(ret);
- 	}
- 
- 	return hw;
-+
+-	hw =  _register_divider(dev, name, parent_name, flags, reg, shift,
+-			width, clk_divider_flags, table, lock);
++	hw =  __clk_hw_register_divider(dev, NULL, name, parent_name, NULL,
++			NULL, flags, reg, shift, width, clk_divider_flags,
++			table, lock);
+ 	if (IS_ERR(hw))
+ 		return ERR_CAST(hw);
+ 	return hw->clk;
  }
--EXPORT_SYMBOL_GPL(clk_hw_register_gate);
-+EXPORT_SYMBOL_GPL(__clk_hw_register_gate);
+ EXPORT_SYMBOL_GPL(clk_register_divider_table);
  
- struct clk *clk_register_gate(struct device *dev, const char *name,
- 		const char *parent_name, unsigned long flags,
+-/**
+- * clk_hw_register_divider_table - register a table based divider clock with
+- * the clock framework
+- * @dev: device registering this clock
+- * @name: name of this clock
+- * @parent_name: name of clock's parent
+- * @flags: framework-specific flags
+- * @reg: register address to adjust divider
+- * @shift: number of bits to shift the bitfield
+- * @width: width of the bitfield
+- * @clk_divider_flags: divider-specific flags for this clock
+- * @table: array of divider/value pairs ending with a div set to 0
+- * @lock: shared register lock for this clock
+- */
+-struct clk_hw *clk_hw_register_divider_table(struct device *dev,
+-		const char *name, const char *parent_name, unsigned long flags,
+-		void __iomem *reg, u8 shift, u8 width,
+-		u8 clk_divider_flags, const struct clk_div_table *table,
+-		spinlock_t *lock)
+-{
+-	return _register_divider(dev, name, parent_name, flags, reg, shift,
+-			width, clk_divider_flags, table, lock);
+-}
+-EXPORT_SYMBOL_GPL(clk_hw_register_divider_table);
+-
+ void clk_unregister_divider(struct clk *clk)
+ {
+ 	struct clk_divider *div;
 diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index 47dd0efce416..04576a7a0f37 100644
+index 04576a7a0f37..728b20708ab2 100644
 --- a/include/linux/clk-provider.h
 +++ b/include/linux/clk-provider.h
-@@ -475,14 +475,67 @@ struct clk_gate {
- #define CLK_GATE_BIG_ENDIAN		BIT(2)
+@@ -625,24 +625,153 @@ int divider_get_val(unsigned long rate, unsigned long parent_rate,
+ 		const struct clk_div_table *table, u8 width,
+ 		unsigned long flags);
  
- extern const struct clk_ops clk_gate_ops;
--struct clk *clk_register_gate(struct device *dev, const char *name,
+-struct clk *clk_register_divider(struct device *dev, const char *name,
 -		const char *parent_name, unsigned long flags,
-+struct clk_hw *__clk_hw_register_gate(struct device *dev,
-+		struct device_node *np, const char *name,
-+		const char *parent_name, const struct clk_hw *parent_hw,
-+		const struct clk_parent_data *parent_data,
-+		unsigned long flags,
- 		void __iomem *reg, u8 bit_idx,
- 		u8 clk_gate_flags, spinlock_t *lock);
--struct clk_hw *clk_hw_register_gate(struct device *dev, const char *name,
-+struct clk *clk_register_gate(struct device *dev, const char *name,
- 		const char *parent_name, unsigned long flags,
- 		void __iomem *reg, u8 bit_idx,
- 		u8 clk_gate_flags, spinlock_t *lock);
+-		void __iomem *reg, u8 shift, u8 width,
+-		u8 clk_divider_flags, spinlock_t *lock);
+-struct clk_hw *clk_hw_register_divider(struct device *dev, const char *name,
+-		const char *parent_name, unsigned long flags,
+-		void __iomem *reg, u8 shift, u8 width,
+-		u8 clk_divider_flags, spinlock_t *lock);
+-struct clk *clk_register_divider_table(struct device *dev, const char *name,
+-		const char *parent_name, unsigned long flags,
++struct clk_hw *__clk_hw_register_divider(struct device *dev, struct device_node *np,
++		const char *name, const char *parent_name, const struct clk_hw *parent_hw,
++		const struct clk_parent_data *parent_data, unsigned long flags,
+ 		void __iomem *reg, u8 shift, u8 width,
+ 		u8 clk_divider_flags, const struct clk_div_table *table,
+ 		spinlock_t *lock);
+-struct clk_hw *clk_hw_register_divider_table(struct device *dev,
+-		const char *name, const char *parent_name, unsigned long flags,
++struct clk *clk_register_divider_table(struct device *dev, const char *name,
++		const char *parent_name, unsigned long flags,
+ 		void __iomem *reg, u8 shift, u8 width,
+ 		u8 clk_divider_flags, const struct clk_div_table *table,
+ 		spinlock_t *lock);
 +/**
-+ * clk_hw_register_gate - register a gate clock with the clock framework
-+ * @dev: device that is registering this clock
++ * clk_register_divider - register a divider clock with the clock framework
++ * @dev: device registering this clock
 + * @name: name of this clock
-+ * @parent_name: name of this clock's parent
-+ * @flags: framework-specific flags for this clock
-+ * @reg: register address to control gating of this clock
-+ * @bit_idx: which bit in the register controls gating of this clock
-+ * @clk_gate_flags: gate-specific flags for this clock
++ * @parent_name: name of clock's parent
++ * @flags: framework-specific flags
++ * @reg: register address to adjust divider
++ * @shift: number of bits to shift the bitfield
++ * @width: width of the bitfield
++ * @clk_divider_flags: divider-specific flags for this clock
 + * @lock: shared register lock for this clock
 + */
-+#define clk_hw_register_gate(dev, name, parent_name, flags, reg, bit_idx,     \
-+			     clk_gate_flags, lock)			      \
-+	__clk_hw_register_gate((dev), NULL, (name), (parent_name), NULL,      \
-+			       NULL, (flags), (reg), (bit_idx),		      \
-+			       (clk_gate_flags), (lock))
++#define clk_register_divider(dev, name, parent_name, flags, reg, shift, width, \
++			     clk_divider_flags, lock)			       \
++	clk_register_divider_table((dev), (name), (parent_name), (flags),      \
++				   (reg), (shift), (width),		       \
++				   (clk_divider_flags), NULL, (lock))
 +/**
-+ * clk_hw_register_gate_parent_hw - register a gate clock with the clock
++ * clk_hw_register_divider - register a divider clock with the clock framework
++ * @dev: device registering this clock
++ * @name: name of this clock
++ * @parent_name: name of clock's parent
++ * @flags: framework-specific flags
++ * @reg: register address to adjust divider
++ * @shift: number of bits to shift the bitfield
++ * @width: width of the bitfield
++ * @clk_divider_flags: divider-specific flags for this clock
++ * @lock: shared register lock for this clock
++ */
++#define clk_hw_register_divider(dev, name, parent_name, flags, reg, shift,    \
++			        width, clk_divider_flags, lock)		      \
++	__clk_hw_register_divider((dev), NULL, (name), (parent_name), NULL,   \
++				  NULL, (flags), (reg), (shift), (width),     \
++				  (clk_divider_flags), NULL, (lock))
++/**
++ * clk_hw_register_divider_parent_hw - register a divider clock with the clock
 + * framework
-+ * @dev: device that is registering this clock
++ * @dev: device registering this clock
 + * @name: name of this clock
 + * @parent_hw: pointer to parent clk
-+ * @flags: framework-specific flags for this clock
-+ * @reg: register address to control gating of this clock
-+ * @bit_idx: which bit in the register controls gating of this clock
-+ * @clk_gate_flags: gate-specific flags for this clock
++ * @flags: framework-specific flags
++ * @reg: register address to adjust divider
++ * @shift: number of bits to shift the bitfield
++ * @width: width of the bitfield
++ * @clk_divider_flags: divider-specific flags for this clock
 + * @lock: shared register lock for this clock
 + */
-+#define clk_hw_register_gate_parent_hw(dev, name, parent_name, flags, reg,    \
-+				       bit_idx, clk_gate_flags, lock)	      \
-+	__clk_hw_register_gate((dev), NULL, (name), (parent_name), NULL,      \
-+			       NULL, (flags), (reg), (bit_idx),		      \
-+			       (clk_gate_flags), (lock))
++#define clk_hw_register_divider_parent_hw(dev, name, parent_hw, flags, reg,   \
++					  shift, width, clk_divider_flags,    \
++					  lock)				      \
++	__clk_hw_register_divider((dev), NULL, (name), NULL, (parent_hw),     \
++				  NULL, (flags), (reg), (shift), (width),     \
++				  (clk_divider_flags), NULL, (lock))
 +/**
-+ * clk_hw_register_gate_parent_data - register a gate clock with the clock
++ * clk_hw_register_divider_parent_data - register a divider clock with the clock
 + * framework
-+ * @dev: device that is registering this clock
++ * @dev: device registering this clock
 + * @name: name of this clock
 + * @parent_data: parent clk data
-+ * @flags: framework-specific flags for this clock
-+ * @reg: register address to control gating of this clock
-+ * @bit_idx: which bit in the register controls gating of this clock
-+ * @clk_gate_flags: gate-specific flags for this clock
++ * @flags: framework-specific flags
++ * @reg: register address to adjust divider
++ * @shift: number of bits to shift the bitfield
++ * @width: width of the bitfield
++ * @clk_divider_flags: divider-specific flags for this clock
 + * @lock: shared register lock for this clock
 + */
-+#define clk_hw_register_gate_parent_data(dev, name, parent_name, flags, reg,  \
-+				       bit_idx, clk_gate_flags, lock)	      \
-+	__clk_hw_register_gate((dev), NULL, (name), (parent_name), NULL,      \
-+			       NULL, (flags), (reg), (bit_idx),		      \
-+			       (clk_gate_flags), (lock))
- void clk_unregister_gate(struct clk *clk);
- void clk_hw_unregister_gate(struct clk_hw *hw);
- int clk_gate_is_enabled(struct clk_hw *hw);
++#define clk_hw_register_divider_parent_data(dev, name, parent_data, flags,    \
++					    reg, shift, width,		      \
++					    clk_divider_flags, lock)	      \
++	__clk_hw_register_divider((dev), NULL, (name), NULL, NULL,	      \
++				  (parent_data), (flags), (reg), (shift),     \
++				  (width), (clk_divider_flags), NULL, (lock))
++/**
++ * clk_hw_register_divider_table - register a table based divider clock with
++ * the clock framework
++ * @dev: device registering this clock
++ * @name: name of this clock
++ * @parent_name: name of clock's parent
++ * @flags: framework-specific flags
++ * @reg: register address to adjust divider
++ * @shift: number of bits to shift the bitfield
++ * @width: width of the bitfield
++ * @clk_divider_flags: divider-specific flags for this clock
++ * @table: array of divider/value pairs ending with a div set to 0
++ * @lock: shared register lock for this clock
++ */
++#define clk_hw_register_divider_table(dev, name, parent_name, flags, reg,     \
++				      shift, width, clk_divider_flags, table, \
++				      lock)				      \
++	__clk_hw_register_divider((dev), NULL, (name), (parent_name), NULL,   \
++				  NULL, (flags), (reg), (shift), (width),     \
++				  (clk_divider_flags), (table), (lock))
++/**
++ * clk_hw_register_divider_table_parent_hw - register a table based divider
++ * clock with the clock framework
++ * @dev: device registering this clock
++ * @name: name of this clock
++ * @parent_hw: pointer to parent clk
++ * @flags: framework-specific flags
++ * @reg: register address to adjust divider
++ * @shift: number of bits to shift the bitfield
++ * @width: width of the bitfield
++ * @clk_divider_flags: divider-specific flags for this clock
++ * @table: array of divider/value pairs ending with a div set to 0
++ * @lock: shared register lock for this clock
++ */
++#define clk_hw_register_divider_table_parent_hw(dev, name, parent_hw, flags,  \
++						reg, shift, width,	      \
++						clk_divider_flags, table,     \
++						lock)			      \
++	__clk_hw_register_divider((dev), NULL, (name), NULL, (parent_hw),     \
++				  NULL, (flags), (reg), (shift), (width),     \
++				  (clk_divider_flags), (table), (lock))
++/**
++ * clk_hw_register_divider_table_parent_data - register a table based divider
++ * clock with the clock framework
++ * @dev: device registering this clock
++ * @name: name of this clock
++ * @parent_data: parent clk data
++ * @flags: framework-specific flags
++ * @reg: register address to adjust divider
++ * @shift: number of bits to shift the bitfield
++ * @width: width of the bitfield
++ * @clk_divider_flags: divider-specific flags for this clock
++ * @table: array of divider/value pairs ending with a div set to 0
++ * @lock: shared register lock for this clock
++ */
++#define clk_hw_register_divider_table_parent_data(dev, name, parent_data,     \
++						  flags, reg, shift, width,   \
++						  clk_divider_flags, table,   \
++						  lock)			      \
++	__clk_hw_register_divider((dev), NULL, (name), NULL, NULL,	      \
++				  (parent_data), (flags), (reg), (shift),     \
++				  (width), (clk_divider_flags), (table),      \
++				  (lock))
++
+ void clk_unregister_divider(struct clk *clk);
+ void clk_hw_unregister_divider(struct clk_hw *hw);
+ 
 -- 
 Sent by a computer through tubes
 
