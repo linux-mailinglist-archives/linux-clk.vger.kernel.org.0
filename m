@@ -2,606 +2,139 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6DEA403F
-	for <lists+linux-clk@lfdr.de>; Sat, 31 Aug 2019 00:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75C5A4038
+	for <lists+linux-clk@lfdr.de>; Sat, 31 Aug 2019 00:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728181AbfH3WQW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 30 Aug 2019 18:16:22 -0400
-Received: from shell.v3.sk ([90.176.6.54]:56367 "EHLO shell.v3.sk"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728345AbfH3WQV (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 30 Aug 2019 18:16:21 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id F2B44D87F2;
-        Sat, 31 Aug 2019 00:09:11 +0200 (CEST)
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 8kSbS11p4SBx; Sat, 31 Aug 2019 00:08:25 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 98475D87EC;
-        Sat, 31 Aug 2019 00:08:06 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at zimbra.v3.sk
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 2YsIOZak8TFw; Sat, 31 Aug 2019 00:08:01 +0200 (CEST)
-Received: from belphegor.brq.redhat.com (nat-pool-brq-t.redhat.com [213.175.37.10])
-        by zimbra.v3.sk (Postfix) with ESMTPSA id 7FBB6D87F6;
-        Sat, 31 Aug 2019 00:07:54 +0200 (CEST)
-From:   Lubomir Rintel <lkundrak@v3.sk>
-To:     "To : Olof Johansson" <olof@lixom.net>
-Cc:     "Cc : Rob Herring" <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, Lubomir Rintel <lkundrak@v3.sk>
-Subject: [PATCH v3 16/16] ARM: dts: mmp3: Add MMP3 SoC dts file
-Date:   Sat, 31 Aug 2019 00:07:43 +0200
-Message-Id: <20190830220743.439670-17-lkundrak@v3.sk>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190830220743.439670-1-lkundrak@v3.sk>
-References: <20190830220743.439670-1-lkundrak@v3.sk>
+        id S1728258AbfH3WOp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 30 Aug 2019 18:14:45 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:35577 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728257AbfH3WOo (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 30 Aug 2019 18:14:44 -0400
+Received: by mail-lj1-f194.google.com with SMTP id l14so7812246lje.2
+        for <linux-clk@vger.kernel.org>; Fri, 30 Aug 2019 15:14:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=bEQ69WeIauTgFDJQNBz5ypiOnyZ2Lbzr1a7apMN0/Xg=;
+        b=lWK4O2f9muuZTEoKWoR1hlG3kuqWwGNBSdfZjN1J5o1krOuGnCfqsPY29mt+IjIk2K
+         AHBbBcZkOS1m2n3z8+fKNSNn4Mj5jvUvwKNphTQS5BREMoYsACeTlyeXqpvqjMQ+tm6J
+         sAbBKvkFLYyHx7Ta1qflWC9wqR1dxvlzn5VYzU/wJDJBO994m33AiFk4QT9KfYUUGcVD
+         pOBMVuxfN9h3J82U19lreLGFuVrwHJ90Wg2c3cUan+WBjw07sGBww7aWjhkgON7oferl
+         UvV40lRgdKPxBlxH7BvIHcQRbhX8ffl2LH5h//zBdjDcCadWLw7ZTBKlHdMa1AQl8cRf
+         qBFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=bEQ69WeIauTgFDJQNBz5ypiOnyZ2Lbzr1a7apMN0/Xg=;
+        b=kTyCt+MSdATHQi//Ox8GC8+vnHnlj5ZD+t4N4feQj8oc46ZBXV+JRNQ3n6JHFCaZY/
+         BpcTEebTn2T5gN+F1xpGl3Be8f1z6RWg9Pq8DcF8+snkHM2NmnHRE3REvL3G5jIYYez1
+         /XNEF0DVvMU8tz5hx8/RKdfOk9UizoM7gSnWN7mAPiZ93CScKk3XvQU35cHhT+lNDiWC
+         dCHk/kmwCxRYBtt3xQFflsE58UsEqikfzclTVaw9gWhJ2jbAdSck7s458eR+go4rY1AB
+         +X4PvfnXd6T32WfgSGjwQGvpbDxBfYt24lsSfN4vsMaO+0MuWTLy90qQKrf2I1x4jd+u
+         LbvQ==
+X-Gm-Message-State: APjAAAWYSzdk70EROfM0GDm2w7D5/U2JW+fqvQJMRB4ju7f/ikKazCXN
+        qYahE34FobnbL8J0ZWYxb/tLbg==
+X-Google-Smtp-Source: APXvYqxifJKGr5l9Dw9jQ8hUAzx2mCk1etj+NtHRvPjDa5RAs6TSLysAh7dy7PoBpRvzK0sbsoYDxQ==
+X-Received: by 2002:a2e:6a04:: with SMTP id f4mr9869654ljc.150.1567203282876;
+        Fri, 30 Aug 2019 15:14:42 -0700 (PDT)
+Received: from localhost (h-177-236.A463.priv.bahnhof.se. [217.31.177.236])
+        by smtp.gmail.com with ESMTPSA id m74sm1174676lje.72.2019.08.30.15.14.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Aug 2019 15:14:42 -0700 (PDT)
+Date:   Sat, 31 Aug 2019 00:14:41 +0200
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v2 4/8] clk: renesas: rcar-gen3: Absorb
+ cpg_sd_clock_calc_div()
+Message-ID: <20190830221441.GT8479@bigcity.dyn.berto.se>
+References: <20190830134515.11925-1-geert+renesas@glider.be>
+ <20190830134515.11925-5-geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190830134515.11925-5-geert+renesas@glider.be>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Describes most of the hardware found on Marvell MMP3, aka PXA2128, aka
-Armada 620. Missing bits are the LCD controller, HSIC controllers,
-Audio and GPU. Will be completed once bindings and drivers settle.
+Hi Geert,
 
-Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
----
- arch/arm/boot/dts/mmp3.dtsi | 534 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 534 insertions(+)
- create mode 100644 arch/arm/boot/dts/mmp3.dtsi
+Thanks for your work.
 
-diff --git a/arch/arm/boot/dts/mmp3.dtsi b/arch/arm/boot/dts/mmp3.dtsi
-new file mode 100644
-index 0000000000000..5a6275257ebdd
---- /dev/null
-+++ b/arch/arm/boot/dts/mmp3.dtsi
-@@ -0,0 +1,534 @@
-+// SPDX-License-Identifier: GPL-2.0+ OR MIT
-+/*
-+ *  Copyright (C) 2019 Lubomir Rintel <lkundrak@v3.sk>
-+ */
-+
-+#include <dt-bindings/clock/marvell,mmp2.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+/ {
-+	#address-cells =3D <1>;
-+	#size-cells =3D <1>;
-+
-+	aliases {
-+		serial0 =3D &uart1;
-+		serial1 =3D &uart2;
-+		serial2 =3D &uart3;
-+		serial3 =3D &uart4;
-+	};
-+
-+	cpus {
-+		#address-cells =3D <1>;
-+		#size-cells =3D <0>;
-+		enable-method =3D "marvell,mmp3-smp";
-+
-+		cpu@0 {
-+			compatible =3D "marvell,pj4b";
-+			device_type =3D "cpu";
-+			next-level-cache =3D <&l2>;
-+			reg =3D <0>;
-+		};
-+
-+		cpu@1 {
-+			compatible =3D "marvell,pj4b";
-+			device_type =3D "cpu";
-+			next-level-cache =3D <&l2>;
-+			reg =3D <1>;
-+		};
-+	};
-+
-+	soc {
-+		#address-cells =3D <1>;
-+		#size-cells =3D <1>;
-+		compatible =3D "simple-bus";
-+		interrupt-parent =3D <&gic>;
-+		ranges;
-+
-+		axi@d4200000 {
-+			compatible =3D "simple-bus";
-+			#address-cells =3D <1>;
-+			#size-cells =3D <1>;
-+			reg =3D <0xd4200000 0x00200000>;
-+			ranges;
-+
-+			interrupt-controller@d4282000 {
-+				compatible =3D "marvell,mmp3-intc";
-+				interrupt-controller;
-+				#interrupt-cells =3D <1>;
-+				reg =3D <0xd4282000 0x1000>,
-+				      <0xd4284000 0x100>;
-+				mrvl,intc-nr-irqs =3D <64>;
-+			};
-+
-+			pmic_mux: interrupt-controller@d4282150 {
-+				compatible =3D "mrvl,mmp2-mux-intc";
-+				interrupts =3D <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-controller;
-+				#interrupt-cells =3D <1>;
-+				reg =3D <0x150 0x4>, <0x168 0x4>;
-+				reg-names =3D "mux status", "mux mask";
-+				mrvl,intc-nr-irqs =3D <4>;
-+			};
-+
-+			rtc_mux: interrupt-controller@d4282154 {
-+				compatible =3D "mrvl,mmp2-mux-intc";
-+				interrupts =3D <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-controller;
-+				#interrupt-cells =3D <1>;
-+				reg =3D <0x154 0x4>, <0x16c 0x4>;
-+				reg-names =3D "mux status", "mux mask";
-+				mrvl,intc-nr-irqs =3D <2>;
-+			};
-+
-+			hsi3_mux: interrupt-controller@d42821bc {
-+				compatible =3D "mrvl,mmp2-mux-intc";
-+				interrupts =3D <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-controller;
-+				#interrupt-cells =3D <1>;
-+				reg =3D <0x1bc 0x4>, <0x1a4 0x4>;
-+				reg-names =3D "mux status", "mux mask";
-+				mrvl,intc-nr-irqs =3D <3>;
-+			};
-+
-+			gpu_mux: interrupt-controller@d42821c0 {
-+				compatible =3D "mrvl,mmp2-mux-intc";
-+				interrupts =3D <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-controller;
-+				#interrupt-cells =3D <1>;
-+				reg =3D <0x1c0 0x4>, <0x1a8 0x4>;
-+				reg-names =3D "mux status", "mux mask";
-+				mrvl,intc-nr-irqs =3D <3>;
-+			};
-+
-+			twsi_mux: interrupt-controller@d4282158 {
-+				compatible =3D "mrvl,mmp2-mux-intc";
-+				interrupts =3D <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-controller;
-+				#interrupt-cells =3D <1>;
-+				reg =3D <0x158 0x4>, <0x170 0x4>;
-+				reg-names =3D "mux status", "mux mask";
-+				mrvl,intc-nr-irqs =3D <5>;
-+			};
-+
-+			hsi2_mux: interrupt-controller@d42821c4 {
-+				compatible =3D "mrvl,mmp2-mux-intc";
-+				interrupts =3D <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-controller;
-+				#interrupt-cells =3D <1>;
-+				reg =3D <0x1c4 0x4>, <0x1ac 0x4>;
-+				reg-names =3D "mux status", "mux mask";
-+				mrvl,intc-nr-irqs =3D <2>;
-+			};
-+
-+			dxo_mux: interrupt-controller@d42821c8 {
-+				compatible =3D "mrvl,mmp2-mux-intc";
-+				interrupts =3D <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-controller;
-+				#interrupt-cells =3D <1>;
-+				reg =3D <0x1c8 0x4>, <0x1b0 0x4>;
-+				reg-names =3D "mux status", "mux mask";
-+				mrvl,intc-nr-irqs =3D <2>;
-+			};
-+
-+			misc1_mux: interrupt-controller@d428215c {
-+				compatible =3D "mrvl,mmp2-mux-intc";
-+				interrupts =3D <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-controller;
-+				#interrupt-cells =3D <1>;
-+				reg =3D <0x15c 0x4>, <0x174 0x4>;
-+				reg-names =3D "mux status", "mux mask";
-+				mrvl,intc-nr-irqs =3D <31>;
-+			};
-+
-+			ci_mux: interrupt-controller@d42821cc {
-+				compatible =3D "mrvl,mmp2-mux-intc";
-+				interrupts =3D <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-controller;
-+				#interrupt-cells =3D <1>;
-+				reg =3D <0x1cc 0x4>, <0x1b4 0x4>;
-+				reg-names =3D "mux status", "mux mask";
-+				mrvl,intc-nr-irqs =3D <2>;
-+			};
-+
-+			ssp_mux: interrupt-controller@d4282160 {
-+				compatible =3D "mrvl,mmp2-mux-intc";
-+				interrupts =3D <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-controller;
-+				#interrupt-cells =3D <1>;
-+				reg =3D <0x160 0x4>, <0x178 0x4>;
-+				reg-names =3D "mux status", "mux mask";
-+				mrvl,intc-nr-irqs =3D <2>;
-+			};
-+
-+			hsi1_mux: interrupt-controller@d4282184 {
-+				compatible =3D "mrvl,mmp2-mux-intc";
-+				interrupts =3D <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-controller;
-+				#interrupt-cells =3D <1>;
-+				reg =3D <0x184 0x4>, <0x17c 0x4>;
-+				reg-names =3D "mux status", "mux mask";
-+				mrvl,intc-nr-irqs =3D <4>;
-+			};
-+
-+			misc2_mux: interrupt-controller@d4282188 {
-+				compatible =3D "mrvl,mmp2-mux-intc";
-+				interrupts =3D <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-controller;
-+				#interrupt-cells =3D <1>;
-+				reg =3D <0x188 0x4>, <0x180 0x4>;
-+				reg-names =3D "mux status", "mux mask";
-+				mrvl,intc-nr-irqs =3D <20>;
-+			};
-+
-+			hsi0_mux: interrupt-controller@d42821d0 {
-+				compatible =3D "mrvl,mmp2-mux-intc";
-+				interrupts =3D <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-controller;
-+				#interrupt-cells =3D <1>;
-+				reg =3D <0x1d0 0x4>, <0x1b8 0x4>;
-+				reg-names =3D "mux status", "mux mask";
-+				mrvl,intc-nr-irqs =3D <5>;
-+			};
-+
-+			usb_otg_phy0: usb-otg-phy@d4207000 {
-+				compatible =3D "marvell,mmp3-usb-phy";
-+				reg =3D <0xd4207000 0x40>;
-+				#phy-cells =3D <0>;
-+				status =3D "disabled";
-+			};
-+
-+			usb_otg0: usb-otg@d4208000 {
-+				compatible =3D "marvell,pxau2o-ehci";
-+				reg =3D <0xd4208000 0x200>;
-+				interrupts =3D <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks =3D <&soc_clocks MMP2_CLK_USB>;
-+				clock-names =3D "USBCLK";
-+				phys =3D <&usb_otg_phy0>;
-+				phy-names =3D "usb";
-+				status =3D "disabled";
-+			};
-+
-+			mmc1: mmc@d4280000 {
-+				compatible =3D "mrvl,pxav3-mmc";
-+				reg =3D <0xd4280000 0x120>;
-+				clocks =3D <&soc_clocks MMP2_CLK_SDH0>;
-+				clock-names =3D "io";
-+				interrupts =3D <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
-+				status =3D "disabled";
-+			};
-+
-+			mmc2: mmc@d4280800 {
-+				compatible =3D "mrvl,pxav3-mmc";
-+				reg =3D <0xd4280800 0x120>;
-+				clocks =3D <&soc_clocks MMP2_CLK_SDH1>;
-+				clock-names =3D "io";
-+				interrupts =3D <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
-+				status =3D "disabled";
-+			};
-+
-+			mmc3: mmc@d4281000 {
-+				compatible =3D "mrvl,pxav3-mmc";
-+				reg =3D <0xd4281000 0x120>;
-+				clocks =3D <&soc_clocks MMP2_CLK_SDH2>;
-+				clock-names =3D "io";
-+				interrupts =3D <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
-+				status =3D "disabled";
-+			};
-+
-+			mmc4: mmc@d4281800 {
-+				compatible =3D "mrvl,pxav3-mmc";
-+				reg =3D <0xd4281800 0x120>;
-+				clocks =3D <&soc_clocks MMP2_CLK_SDH3>;
-+				clock-names =3D "io";
-+				interrupts =3D <GIC_SPI 54 IRQ_TYPE_LEVEL_HIGH>;
-+				status =3D "disabled";
-+			};
-+
-+			camera0: camera@d420a000 {
-+				compatible =3D "marvell,mmp2-ccic";
-+				reg =3D <0xd420a000 0x800>;
-+				interrupts =3D <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks =3D <&soc_clocks MMP2_CLK_CCIC0>;
-+				clock-names =3D "axi";
-+				#clock-cells =3D <0>;
-+				clock-output-names =3D "mclk";
-+				status =3D "disabled";
-+			};
-+
-+			camera1: camera@d420a800 {
-+				compatible =3D "marvell,mmp2-ccic";
-+				reg =3D <0xd420a800 0x800>;
-+				interrupts =3D <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks =3D <&soc_clocks MMP2_CLK_CCIC1>;
-+				clock-names =3D "axi";
-+				#clock-cells =3D <0>;
-+				clock-output-names =3D "mclk";
-+				status =3D "disabled";
-+			};
-+		};
-+
-+		apb@d4000000 {
-+			compatible =3D "simple-bus";
-+			#address-cells =3D <1>;
-+			#size-cells =3D <1>;
-+			reg =3D <0xd4000000 0x00200000>;
-+			ranges;
-+
-+			timer: timer@d4014000 {
-+				compatible =3D "mrvl,mmp-timer";
-+				reg =3D <0xd4014000 0x100>;
-+				interrupts =3D <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks =3D <&soc_clocks MMP2_CLK_TIMER>;
-+			};
-+
-+			uart1: uart@d4030000 {
-+				compatible =3D "mrvl,mmp-uart";
-+				reg =3D <0xd4030000 0x1000>;
-+				interrupts =3D <GIC_SPI 27 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks =3D <&soc_clocks MMP2_CLK_UART0>;
-+				resets =3D <&soc_clocks MMP2_CLK_UART0>;
-+				reg-shift =3D <2>;
-+				status =3D "disabled";
-+			};
-+
-+			uart2: uart@d4017000 {
-+				compatible =3D "mrvl,mmp-uart";
-+				reg =3D <0xd4017000 0x1000>;
-+				interrupts =3D <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks =3D <&soc_clocks MMP2_CLK_UART1>;
-+				resets =3D <&soc_clocks MMP2_CLK_UART1>;
-+				reg-shift =3D <2>;
-+				status =3D "disabled";
-+			};
-+
-+			uart3: uart@d4018000 {
-+				compatible =3D "mrvl,mmp-uart";
-+				reg =3D <0xd4018000 0x1000>;
-+				interrupts =3D <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks =3D <&soc_clocks MMP2_CLK_UART2>;
-+				resets =3D <&soc_clocks MMP2_CLK_UART2>;
-+				reg-shift =3D <2>;
-+				status =3D "disabled";
-+			};
-+
-+			uart4: uart@d4016000 {
-+				compatible =3D "mrvl,mmp-uart";
-+				reg =3D <0xd4016000 0x1000>;
-+				interrupts =3D <GIC_SPI 46 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks =3D <&soc_clocks MMP2_CLK_UART3>;
-+				resets =3D <&soc_clocks MMP2_CLK_UART3>;
-+				reg-shift =3D <2>;
-+				status =3D "disabled";
-+			};
-+
-+			gpio: gpio@d4019000 {
-+				compatible =3D "marvell,mmp2-gpio";
-+				#address-cells =3D <1>;
-+				#size-cells =3D <1>;
-+				reg =3D <0xd4019000 0x1000>;
-+				gpio-controller;
-+				#gpio-cells =3D <2>;
-+				interrupts =3D <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-names =3D "gpio_mux";
-+				clocks =3D <&soc_clocks MMP2_CLK_GPIO>;
-+				resets =3D <&soc_clocks MMP2_CLK_GPIO>;
-+				interrupt-controller;
-+				#interrupt-cells =3D <2>;
-+				ranges;
-+
-+				gcb0: gpio@d4019000 {
-+					reg =3D <0xd4019000 0x4>;
-+				};
-+
-+				gcb1: gpio@d4019004 {
-+					reg =3D <0xd4019004 0x4>;
-+				};
-+
-+				gcb2: gpio@d4019008 {
-+					reg =3D <0xd4019008 0x4>;
-+				};
-+
-+				gcb3: gpio@d4019100 {
-+					reg =3D <0xd4019100 0x4>;
-+				};
-+
-+				gcb4: gpio@d4019104 {
-+					reg =3D <0xd4019104 0x4>;
-+				};
-+
-+				gcb5: gpio@d4019108 {
-+					reg =3D <0xd4019108 0x4>;
-+				};
-+			};
-+
-+			twsi1: i2c@d4011000 {
-+				compatible =3D "mrvl,mmp-twsi";
-+				reg =3D <0xd4011000 0x1000>;
-+				interrupts =3D <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks =3D <&soc_clocks MMP2_CLK_TWSI0>;
-+				resets =3D <&soc_clocks MMP2_CLK_TWSI0>;
-+				#address-cells =3D <1>;
-+				#size-cells =3D <0>;
-+				mrvl,i2c-fast-mode;
-+				status =3D "disabled";
-+			};
-+
-+			twsi2: i2c@d4031000 {
-+				compatible =3D "mrvl,mmp-twsi";
-+				reg =3D <0xd4031000 0x1000>;
-+				interrupt-parent =3D <&twsi_mux>;
-+				interrupts =3D <0>;
-+				clocks =3D <&soc_clocks MMP2_CLK_TWSI1>;
-+				resets =3D <&soc_clocks MMP2_CLK_TWSI1>;
-+				#address-cells =3D <1>;
-+				#size-cells =3D <0>;
-+				status =3D "disabled";
-+			};
-+
-+			twsi3: i2c@d4032000 {
-+				compatible =3D "mrvl,mmp-twsi";
-+				reg =3D <0xd4032000 0x1000>;
-+				interrupt-parent =3D <&twsi_mux>;
-+				interrupts =3D <1>;
-+				clocks =3D <&soc_clocks MMP2_CLK_TWSI2>;
-+				resets =3D <&soc_clocks MMP2_CLK_TWSI2>;
-+				#address-cells =3D <1>;
-+				#size-cells =3D <0>;
-+				status =3D "disabled";
-+			};
-+
-+			twsi4: i2c@d4033000 {
-+				compatible =3D "mrvl,mmp-twsi";
-+				reg =3D <0xd4033000 0x1000>;
-+				interrupt-parent =3D <&twsi_mux>;
-+				interrupts =3D <2>;
-+				clocks =3D <&soc_clocks MMP2_CLK_TWSI3>;
-+				resets =3D <&soc_clocks MMP2_CLK_TWSI3>;
-+				#address-cells =3D <1>;
-+				#size-cells =3D <0>;
-+				status =3D "disabled";
-+			};
-+
-+
-+			twsi5: i2c@d4033800 {
-+				compatible =3D "mrvl,mmp-twsi";
-+				reg =3D <0xd4033800 0x1000>;
-+				interrupt-parent =3D <&twsi_mux>;
-+				interrupts =3D <3>;
-+				clocks =3D <&soc_clocks MMP2_CLK_TWSI4>;
-+				resets =3D <&soc_clocks MMP2_CLK_TWSI4>;
-+				#address-cells =3D <1>;
-+				#size-cells =3D <0>;
-+				status =3D "disabled";
-+			};
-+
-+			twsi6: i2c@d4034000 {
-+				compatible =3D "mrvl,mmp-twsi";
-+				reg =3D <0xd4034000 0x1000>;
-+				interrupt-parent =3D <&twsi_mux>;
-+				interrupts =3D <4>;
-+				clocks =3D <&soc_clocks MMP2_CLK_TWSI5>;
-+				resets =3D <&soc_clocks MMP2_CLK_TWSI5>;
-+				#address-cells =3D <1>;
-+				#size-cells =3D <0>;
-+				status =3D "disabled";
-+			};
-+
-+			rtc: rtc@d4010000 {
-+				compatible =3D "mrvl,mmp-rtc";
-+				reg =3D <0xd4010000 0x1000>;
-+				interrupts =3D <1 0>;
-+				interrupt-names =3D "rtc 1Hz", "rtc alarm";
-+				interrupt-parent =3D <&rtc_mux>;
-+				clocks =3D <&soc_clocks MMP2_CLK_RTC>;
-+				resets =3D <&soc_clocks MMP2_CLK_RTC>;
-+				status =3D "disabled";
-+			};
-+
-+			ssp1: spi@d4035000 {
-+				compatible =3D "marvell,mmp2-ssp";
-+				reg =3D <0xd4035000 0x1000>;
-+				clocks =3D <&soc_clocks MMP2_CLK_SSP0>;
-+				interrupts =3D <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
-+				#address-cells =3D <1>;
-+				#size-cells =3D <0>;
-+				status =3D "disabled";
-+			};
-+
-+			ssp2: spi@d4036000 {
-+				compatible =3D "marvell,mmp2-ssp";
-+				reg =3D <0xd4036000 0x1000>;
-+				clocks =3D <&soc_clocks MMP2_CLK_SSP1>;
-+				interrupts =3D <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>;
-+				#address-cells =3D <1>;
-+				#size-cells =3D <0>;
-+				status =3D "disabled";
-+			};
-+
-+			ssp3: spi@d4037000 {
-+				compatible =3D "marvell,mmp2-ssp";
-+				reg =3D <0xd4037000 0x1000>;
-+				clocks =3D <&soc_clocks MMP2_CLK_SSP2>;
-+				interrupts =3D <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
-+				#address-cells =3D <1>;
-+				#size-cells =3D <0>;
-+				status =3D "disabled";
-+			};
-+
-+			ssp4: spi@d4039000 {
-+				compatible =3D "marvell,mmp2-ssp";
-+				reg =3D <0xd4039000 0x1000>;
-+				clocks =3D <&soc_clocks MMP2_CLK_SSP3>;
-+				interrupts =3D <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
-+				#address-cells =3D <1>;
-+				#size-cells =3D <0>;
-+				status =3D "disabled";
-+			};
-+		};
-+
-+		l2: l2-cache-controller@d0020000 {
-+			compatible =3D "marvell,tauros3-cache", "arm,pl310-cache";
-+			reg =3D <0xd0020000 0x1000>;
-+			cache-unified;
-+			cache-level =3D <2>;
-+		};
-+
-+		soc_clocks: clocks {
-+			compatible =3D "marvell,mmp2-clock";
-+			reg =3D <0xd4050000 0x1000>,
-+			      <0xd4282800 0x400>,
-+			      <0xd4015000 0x1000>;
-+			reg-names =3D "mpmu", "apmu", "apbc";
-+			#clock-cells =3D <1>;
-+			#reset-cells =3D <1>;
-+			#power-domain-cells =3D <1>;
-+		};
-+
-+		snoop-control-unit@e0000000 {
-+			compatible =3D "arm,arm11mp-scu";
-+			reg =3D <0xe0000000 0x100>;
-+		};
-+
-+		gic: interrupt-controller@e0001000 {
-+			compatible =3D "arm,arm11mp-gic";
-+			interrupt-controller;
-+			#interrupt-cells =3D <3>;
-+			reg =3D <0xe0001000 0x1000>,
-+			      <0xe0000100 0x100>;
-+		};
-+
-+		local-timer@e0000600 {
-+			compatible =3D "arm,arm11mp-twd-timer";
-+			interrupts =3D <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(2) |
-+						  IRQ_TYPE_EDGE_RISING)>;
-+			reg =3D <0xe0000600 0x20>;
-+		};
-+
-+		watchdog@2c000620 {
-+			compatible =3D "arm,arm11mp-twd-wdt";
-+			reg =3D <0xe0000620 0x20>;
-+			interrupts =3D <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(2) |
-+						  IRQ_TYPE_EDGE_RISING)>;
-+		};
-+	};
-+};
---=20
-2.21.0
+On 2019-08-30 15:45:11 +0200, Geert Uytterhoeven wrote:
+> cpg_sd_clock_round_rate() is the sole caller of cpg_sd_clock_calc_div(),
+> hence absorb the latter into the former.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+
+> ---
+> v2:
+>   - Split off from "clk: renesas: rcar-gen3: Switch SD clocks to
+>     .determine_rate()".
+> ---
+>  drivers/clk/renesas/rcar-gen3-cpg.c | 19 +++++--------------
+>  1 file changed, 5 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/clk/renesas/rcar-gen3-cpg.c b/drivers/clk/renesas/rcar-gen3-cpg.c
+> index 9f457411984b1ca4..12ea5c9a671de788 100644
+> --- a/drivers/clk/renesas/rcar-gen3-cpg.c
+> +++ b/drivers/clk/renesas/rcar-gen3-cpg.c
+> @@ -309,15 +309,15 @@ static unsigned long cpg_sd_clock_recalc_rate(struct clk_hw *hw,
+>  				 clock->div_table[clock->cur_div_idx].div);
+>  }
+>  
+> -static unsigned int cpg_sd_clock_calc_div(struct sd_clock *clock,
+> -					  unsigned long rate,
+> -					  unsigned long parent_rate)
+> +static long cpg_sd_clock_round_rate(struct clk_hw *hw, unsigned long rate,
+> +				      unsigned long *parent_rate)
+>  {
+>  	unsigned long calc_rate, diff, diff_min = ULONG_MAX;
+> +	struct sd_clock *clock = to_sd_clock(hw);
+>  	unsigned int i, best_div = 0;
+>  
+>  	for (i = 0; i < clock->div_num; i++) {
+> -		calc_rate = DIV_ROUND_CLOSEST(parent_rate,
+> +		calc_rate = DIV_ROUND_CLOSEST(*parent_rate,
+>  					      clock->div_table[i].div);
+>  		diff = calc_rate > rate ? calc_rate - rate : rate - calc_rate;
+>  		if (diff < diff_min) {
+> @@ -326,16 +326,7 @@ static unsigned int cpg_sd_clock_calc_div(struct sd_clock *clock,
+>  		}
+>  	}
+>  
+> -	return best_div;
+> -}
+> -
+> -static long cpg_sd_clock_round_rate(struct clk_hw *hw, unsigned long rate,
+> -				      unsigned long *parent_rate)
+> -{
+> -	struct sd_clock *clock = to_sd_clock(hw);
+> -	unsigned int div = cpg_sd_clock_calc_div(clock, rate, *parent_rate);
+> -
+> -	return DIV_ROUND_CLOSEST(*parent_rate, div);
+> +	return DIV_ROUND_CLOSEST(*parent_rate, best_div);
+>  }
+>  
+>  static int cpg_sd_clock_set_rate(struct clk_hw *hw, unsigned long rate,
+> -- 
+> 2.17.1
+> 
+
+-- 
+Regards,
+Niklas Söderlund
