@@ -2,71 +2,70 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E2F1A8EC1
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Sep 2019 21:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0954A9183
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Sep 2019 21:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387899AbfIDR7x (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 4 Sep 2019 13:59:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38900 "EHLO mail.kernel.org"
+        id S2390016AbfIDSRS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 4 Sep 2019 14:17:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57898 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388299AbfIDR7x (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 4 Sep 2019 13:59:53 -0400
+        id S2389864AbfIDSNM (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 4 Sep 2019 14:13:12 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 743DF22CEA;
-        Wed,  4 Sep 2019 17:59:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BFD1F208E4;
+        Wed,  4 Sep 2019 18:13:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567619992;
-        bh=B2bXI6eXgFsDNSmO81chznZP1whYX5IyKLZi4UfA7ek=;
+        s=default; t=1567620791;
+        bh=3jHminz3YdT9MdadS5kKTfIqy3pQoGEAUZ8tniXD4rg=;
         h=In-Reply-To:References:Cc:Subject:To:From:Date:From;
-        b=EtZenjjLlZ3DAnLkRCqez2j2Trg9Z1uF2ol5DoH4SFwbYtZiLldm6ntyaGkzlj4jd
-         uYIPZRcv9c2HZbh92jeUS8TwfdPUJxgA1DrYUVMiPoD2QNtdMoGpnmZfN7YOOLNy2G
-         2GN2gY/d/RTx7kyy0TT7ZXQAOjHLSk/5kd6TdYis=
+        b=tqLtGOc0E3SNT83XMp9Lg1zsznc2P+WpNwm5rt3a2bxqqH3OpbnHbmVPEUVjkEjz3
+         JkvEgelijBohZ/unci0YvEilG9IUjAW5hJXL4yOXZjnneFZmsyGNakp+EH0Ckih3D4
+         j9bCKqTFh5bPSc4qttV6Z0VYExFpq2HJAprbd7IU=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1j8srg6t12.fsf@starbuckisacylon.baylibre.com>
-References: <1j8srg6t12.fsf@starbuckisacylon.baylibre.com>
-Cc:     Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-amlogic@lists.infradead.org
-Subject: Re: [GIT PULL] clk: meson: 2nd round of updates for 5.4
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>
+In-Reply-To: <20190825115505.GA20454@X250>
+References: <20190825115505.GA20454@X250>
+Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        Fabio Estevam <festevam@gmail.com>,
+        Stefan Agner <stefan@agner.ch>, linux-imx@nxp.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [GIT PULL] i.MX clock changes for 5.4
+To:     Shawn Guo <shawnguo@kernel.org>
 From:   Stephen Boyd <sboyd@kernel.org>
 User-Agent: alot/0.8.1
-Date:   Wed, 04 Sep 2019 10:59:51 -0700
-Message-Id: <20190904175952.743DF22CEA@mail.kernel.org>
+Date:   Wed, 04 Sep 2019 11:13:10 -0700
+Message-Id: <20190904181311.BFD1F208E4@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Jerome Brunet (2019-08-26 04:54:49)
+Quoting Shawn Guo (2019-08-25 04:55:06)
+> Hi Stephen,
 >=20
-> Dear clock maintainers,
+> This is the i.MX clock changes I collected for 5.4.  Please help pull,
+> and keep commit 6ad7cb7122ce ("clk: imx8: Add DSP related clocks")
+> stable, as I pulled it into my DT branch as dependency.  Thanks!
 >=20
-> Below is a request to pull another batch of Amlogic clock updates for
-> v5.4. It brings reset support in the for the g12a audio controller and
-> sm1 support in the main clock controller.
+> Shawn
 >=20
-> Cheers
-> Jerome
 >=20
-> The following changes since commit 1d97657a4794ab23b47bd9921978ddd82569fc=
-f4:
+> The following changes since commit 5f9e832c137075045d15cd6899ab0505cfb2ca=
+4b:
 >=20
->   Merge branch 'v5.4/dt' into v5.4/drivers (2019-08-09 12:12:58 +0200)
+>   Linus 5.3-rc1 (2019-07-21 14:05:38 -0700)
 >=20
 > are available in the Git repository at:
 >=20
->   git://github.com/BayLibre/clk-meson.git tags/clk-meson-v5.4-2
+>   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/c=
+lk-imx-5.4
 >=20
-> for you to fetch changes up to da3ceae4ec9f581a50dc0763710078f22d3bc72a:
+> for you to fetch changes up to 760e548e7f885d89bf2dfab4838df9379edd19fc:
 >=20
->   clk: meson: g12a: add support for SM1 CPU 1, 2 & 3 clocks (2019-08-26 1=
-1:04:54 +0200)
+>   clk: imx: imx8mn: fix audio pll setting (2019-08-24 21:04:27 +0200)
 >=20
 > ----------------------------------------------------------------
 
