@@ -2,53 +2,52 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1276AD7F3
-	for <lists+linux-clk@lfdr.de>; Mon,  9 Sep 2019 13:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B9BAD83F
+	for <lists+linux-clk@lfdr.de>; Mon,  9 Sep 2019 13:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390984AbfIILdS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 9 Sep 2019 07:33:18 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:39881 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391081AbfIILdR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 Sep 2019 07:33:17 -0400
-Received: by mail-io1-f65.google.com with SMTP id d25so27799855iob.6
-        for <linux-clk@vger.kernel.org>; Mon, 09 Sep 2019 04:33:15 -0700 (PDT)
+        id S2404461AbfIILtq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 9 Sep 2019 07:49:46 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:38266 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404455AbfIILtp (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 Sep 2019 07:49:45 -0400
+Received: by mail-io1-f67.google.com with SMTP id k5so2585656iol.5
+        for <linux-clk@vger.kernel.org>; Mon, 09 Sep 2019 04:49:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lIwVXF9pE1FT7bnrzezd7oAZ7WJ0Y3NJXiACUekNGI4=;
-        b=JJxbLyn4OvBhNZjZQXQWA0R9ozhoS2LPM/TA45dfZi43evnpOTEvxDJOPW8wtXHfIf
-         ADU8Jn2yshA3gc/3rcqqDfuCl3CIVDLCislKrNeX2hGCXBBum5I4iSnj2J5w/o64CpT0
-         IcGaX1/mHmTTx3MGWE+q9pSqKwvhniiu/XkuYhe45ASuOc7Y55bSQDf82+5/XQ+MGpdJ
-         laZJ6PuByKG15TKEBs6CbTYCRuX0qHiUXH9xZsRXaBjQXYRHEWzGvVrcbue6G0lz1Zn3
-         rEQpou6U4lDfnjWYhMy5TCZTi3U1SkHtyvAnTjGhIvt8fotKkzxRJQq4u/F13WY4f1kp
-         vaFA==
+        bh=M21UYXJyYebbHCHFFmhcntmZuuRnDyVimorrVNeCzlo=;
+        b=fFkbYU0u2ypzChewVrqRwuJpt84/NW3foUpfTgiGUS9mscuErEVh6S/LyVaKNuzWpb
+         rQfRpN/WeaxkQqc+XZgqqpWPxoxi/UqYMlsuAUha5Y0/w66eYaS3xlJod8seR0RT1tz8
+         mG+vLOECAbp+8QjtXAq+acAJqz1ocd5h8eBBWeLObWUnF/wquu4BWOcJfuQL1PQzkXv1
+         K3lDjBomyxvJpg2oHhWN9AUm5sDC991rvS1+Sc6auZOtaYKY18xXLM1dBkVoDq9G8D2y
+         GGQ2uUBqCCtw6/XGuebPsbmeo7I3FAlLYlJXEj+vRbh0e5+ztwfOs5AeiuOeuWKgQa0+
+         aRFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lIwVXF9pE1FT7bnrzezd7oAZ7WJ0Y3NJXiACUekNGI4=;
-        b=P0CcK4u25WT83mOlMUmKBP/HuOl3tz98VVsRbCSLGfMpUP284223mida7fxsxZpOGl
-         QN4BRwAxFmwOraI+50mdwVL7jxpjC4m4Oo6iNPfyVf1TIDm5Bon2dYaXvhmso2o7V2KD
-         xFO4xsHiEyBLUSqRsNndBTyt+NZipkU+UzkOMmuDDp2hoAhry3QZ1cmpQte/EJ5hhWZm
-         IFMdO6uV0EQ0x6/9vXTx8oesXTz5sMxyo3aVJI3yXNpo0zArMtmC7uM2poH05FhdqVk3
-         bNq8mlYaHBiczuirlBoacrLj/ZEeTSjQe8R2wSdISXT0+rvUuZZDOBWAPxV3ChOg3Ncv
-         P3lg==
-X-Gm-Message-State: APjAAAWHYgdfWPwAEqsYwvHLAKkcUl5jn/t+Qp3Q5Q8Y4XK+eLIeZA67
-        oSJg6aGYwJvMHT1tMvBU8+aMDZjeIX9rG+8YoCQ=
-X-Google-Smtp-Source: APXvYqzznKrlCoXkzTu0gbF0faeVH29biPOBKSaOYFRVWyrA+6EFFF+BOrMD2Sex/ORaTXzi0JFJ7i3p1tgUMU777G4=
-X-Received: by 2002:a6b:ee17:: with SMTP id i23mr3732157ioh.168.1568028795550;
- Mon, 09 Sep 2019 04:33:15 -0700 (PDT)
+        bh=M21UYXJyYebbHCHFFmhcntmZuuRnDyVimorrVNeCzlo=;
+        b=tlFp4QaiIQBK5BxWM//3HmfJUuWbHHLfqDdSW/Io11ICmQBzE+jaHB0zC5r0iGDsvZ
+         fgoaos52rBefmO2SQOorVEV4smtPlCqVrVtgcgAwtyAF+smfJX/kj4RU0EtF5KGR9ZGC
+         vx1em77Bo5WfuQSHB0MHZG2sMdD8vpgXy3PLZknUwX8leqnfHcIu086Zrr9M/Lwpfw3b
+         ptnnx1AKY/AyM2gfM5CBsjz7E79LZXzBUTGoFHDix7HapEAeYW+ZxWjAS2ecbr/ttXCr
+         SM7Sdu7JViediO+Hi61QZLW3M2eecFjxIc5AixPFfSL0uxnNBuYhOwjFr5xIybrXiwkh
+         MfIQ==
+X-Gm-Message-State: APjAAAUPC39Cp1rri2QqYWUWmwCx6sEqVAH2KXMXSXwTZvtNOOPAfNO/
+        WS/vgos+nv1c9kLyq50Z9siRqXUHStf+0Xubckk=
+X-Google-Smtp-Source: APXvYqzjGqfWDT6ZIpciIE24q+d4sdKvSrtYbGzyXxi6pqsxLQVMj6YBwVO/W1OR5iRPtVFXjC6cuC3EvoFajlMG/gw=
+X-Received: by 2002:a6b:e514:: with SMTP id y20mr18875550ioc.197.1568029784817;
+ Mon, 09 Sep 2019 04:49:44 -0700 (PDT)
 MIME-Version: 1.0
 References: <1566299605-15641-1-git-send-email-aisheng.dong@nxp.com>
- <1566299605-15641-9-git-send-email-aisheng.dong@nxp.com> <20190906171323.8847820640@mail.kernel.org>
-In-Reply-To: <20190906171323.8847820640@mail.kernel.org>
+ <1566299605-15641-12-git-send-email-aisheng.dong@nxp.com> <20190906171454.167BF20640@mail.kernel.org>
+In-Reply-To: <20190906171454.167BF20640@mail.kernel.org>
 From:   Dong Aisheng <dongas86@gmail.com>
-Date:   Mon, 9 Sep 2019 19:23:14 +0800
-Message-ID: <CAA+hA=QJwfHsRA+G2oT2awLxx659qXLPsiECV6VYcJ181c6D8w@mail.gmail.com>
-Subject: Re: [PATCH V4 08/11] clk: imx: imx8qxp-lpcg: add parsing clocks from
- device tree
+Date:   Mon, 9 Sep 2019 19:39:43 +0800
+Message-ID: <CAA+hA=TApgehM8kTdA2Py5Uuiy8=5eG7GvuyhUdPrFj_SEkR_g@mail.gmail.com>
+Subject: Re: [PATCH V4 11/11] clk: imx: lpcg: add suspend/resume support
 To:     Stephen Boyd <sboyd@kernel.org>
 Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
         linux-clk <linux-clk@vger.kernel.org>,
@@ -65,75 +64,75 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-]On Sat, Sep 7, 2019 at 5:35 PM Stephen Boyd <sboyd@kernel.org> wrote:
+On Sat, Sep 7, 2019 at 9:22 PM Stephen Boyd <sboyd@kernel.org> wrote:
 >
-> Quoting Dong Aisheng (2019-08-20 04:13:22)
-> > Add parsing clocks from device tree.
->
-> Please describe some more here.
-
-Will improve.
-
-> > +       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > +       base = devm_ioremap_resource(&pdev->dev, res);
-> > +       if (IS_ERR(base))
-> > +               return PTR_ERR(base);
+> Quoting Dong Aisheng (2019-08-20 04:13:25)
+> > diff --git a/drivers/clk/imx/clk-lpcg-scu.c b/drivers/clk/imx/clk-lpcg-scu.c
+> > index 3c092a0..4df0818 100644
+> > --- a/drivers/clk/imx/clk-lpcg-scu.c
+> > +++ b/drivers/clk/imx/clk-lpcg-scu.c
+> > @@ -33,6 +33,9 @@ struct clk_lpcg_scu {
+> >         void __iomem *reg;
+> >         u8 bit_idx;
+> >         bool hw_gate;
 > > +
-> > +       count = of_property_count_u32_elems(np, "clock-indices");
-> > +       if (count < 0) {
-> > +               dev_err(&pdev->dev, "failed to count clocks\n");
-> > +               return -EINVAL;
-> > +       }
->
-> Is 'count' expected to be equal to IMX_LPCG_MAX_CLKS? Because later on
-> in this function we set the num of clks to the MAX instead of the count
-> from clock-indices.
->
-
-No. Here is a tricky to ease the clk getting.
-For example, one LPCG supports up to 8 clock outputs which each of them
-is fixed to 4 bits. Then we can easily use the bit-offset/clk-indices
-parsed from DT
-to fetch the corresponding clock by hws[clkspec->args[0] / 4].
-And the cost is very limited with only a few pointers.
-
+> > +       /* for state save&restore */
+> > +       u32 state;
+> >  };
+> >
+> >  #define to_clk_lpcg_scu(_hw) container_of(_hw, struct clk_lpcg_scu, hw)
+> > @@ -112,5 +115,35 @@ struct clk_hw *__imx_clk_lpcg_scu(struct device *dev, const char *name,
+> >                 hw = ERR_PTR(ret);
+> >         }
+> >
+> > +       if (dev)
+> > +               dev_set_drvdata(dev, clk);
 > > +
-> > +       clk_data = devm_kzalloc(&pdev->dev, struct_size(clk_data, hws, IMX_LPCG_MAX_CLKS),
->
-> This line is too long.
->
-
-Will improve.
-
-> > +                               GFP_KERNEL);
-> > +       if (!clk_data)
-> > +               return -ENOMEM;
+> >         return hw;
+> >  }
 > > +
-> > +       clk_data->num = IMX_LPCG_MAX_CLKS;
-> > +       clk_hws = clk_data->hws;
+> > +int __maybe_unused imx_clk_lpcg_scu_suspend(struct device *dev)
+>
+> static?
+>
+> > +{
+> > +       struct clk_lpcg_scu *clk = dev_get_drvdata(dev);
 > > +
-> > +       ret = of_property_read_u32_array(np, "clock-indices", bit_offset,
-> > +                                        count);
-> > +       if (ret < 0) {
-> > +               dev_err(&pdev->dev, "failed to read clocks bit-offset\n");
->
-> This isn't called bit-offset anymore.
->
-
-Will improve.
-
-> > +               return -EINVAL;
-> > +       }
+> > +       clk->state = readl_relaxed(clk->reg);
+> > +       dev_dbg(dev, "save lpcg state 0x%x\n", clk->state);
 > > +
-> > +       ret = of_clk_parent_fill(np, parent_names, count);
-> > +       if (ret != count) {
-> > +               dev_err(&pdev->dev, "failed to get clock parent names\n");
-> > +               return -EINVAL;
+> > +       return 0;
+> > +}
+> > +
+> > +int __maybe_unused imx_clk_lpcg_scu_resume(struct device *dev)
 >
-> return count?
+> static?
 >
 
-Okay
+Will fix.
+
+> > +{
+> > +       struct clk_lpcg_scu *clk = dev_get_drvdata(dev);
+> > +
+> > +       /* FIXME: double write in case a failure */
+>
+> What does this mean? Sometimes writes don't work unless the CPU issues
+> them twice?
+>
+
+Yes, it's a hardware timing issues.
 
 Regards
 Aisheng
+
+> > +       writel(clk->state, clk->reg);
+> > +       writel(clk->state, clk->reg);
+> > +       dev_dbg(dev, "restore lpcg state 0x%x\n", clk->state);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +const struct dev_pm_ops imx_clk_lpcg_scu_pm_ops = {
+> > +       SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(imx_clk_lpcg_scu_suspend,
+> > +                                     imx_clk_lpcg_scu_resume)
+> > +};
