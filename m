@@ -2,237 +2,133 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE9FAD916
-	for <lists+linux-clk@lfdr.de>; Mon,  9 Sep 2019 14:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09FC7ADAFA
+	for <lists+linux-clk@lfdr.de>; Mon,  9 Sep 2019 16:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727492AbfIIMgK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 9 Sep 2019 08:36:10 -0400
-Received: from vps.xff.cz ([195.181.215.36]:37556 "EHLO vps.xff.cz"
+        id S2387401AbfIIOQf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 9 Sep 2019 10:16:35 -0400
+Received: from mga09.intel.com ([134.134.136.24]:33539 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727428AbfIIMgK (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 9 Sep 2019 08:36:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
-        t=1568032567; bh=uTm+MnC373y5QNcajftT9i4MZQ4QqvnPoh06Z6jmTyU=;
-        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
-        b=f8TSLfG0FgnnsVDqQHUDpPwvjBM30WhHeeNdeMT6ybxKyqMt8/zLjAyZPRRoB4qEA
-         49EeMmF3ZolOe1v3gnza8o59B+1sH9f2zigNcPhry7l4Zn+Pes6wcvQ3BMBl0khMW0
-         Ii/WXL4ece+wdMOu7f12J1Ipr0rR+rVAGaieX45E=
-Date:   Mon, 9 Sep 2019 14:36:06 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 00/10] Allwinner sunxi message box support
-Message-ID: <20190909123606.ezsjisxpj7747h6b@core.my.home>
-Mail-Followup-To: Samuel Holland <samuel@sholland.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>, Jassi Brar <jassisinghbrar@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@googlegroups.com,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20190820032311.6506-1-samuel@sholland.org>
- <20190909032208.rlorx2ppytymtyej@core.my.home>
- <bb6eab9a-f9cc-81ca-5e8c-9fb867c61ec2@sholland.org>
+        id S1730690AbfIIOQf (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 9 Sep 2019 10:16:35 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Sep 2019 07:16:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,484,1559545200"; 
+   d="scan'208";a="185204986"
+Received: from cheolyon-mobl.gar.corp.intel.com (HELO [10.249.76.127]) ([10.249.76.127])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Sep 2019 07:16:30 -0700
+Subject: Re: [PATCH v1 1/2] clk: intel: Add CGU clock driver for a new SoC
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "Tanwar, Rahul" <rahul.tanwar@linux.intel.com>, sboyd@kernel.org
+Cc:     andriy.shevchenko@intel.com, cheol.yong.kim@intel.com,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, mturquette@baylibre.com,
+        qi-ming.wu@intel.com, rahul.tanwar@intel.com, robh+dt@kernel.org,
+        robh@kernel.org, yixin.zhu@linux.intel.com
+References: <6a3c26bc6e25d883686287883528dbde30725922.1566975410.git.rahul.tanwar@linux.intel.com>
+ <20190902222015.11360-1-martin.blumenstingl@googlemail.com>
+ <d9e96dab-96be-0c14-b7af-e1f2dc07ebd2@linux.intel.com>
+ <CAFBinCARQJ7q9q3r6c6Yr2SD0Oo_Drah-kxss3Obs-g=B1M28A@mail.gmail.com>
+ <b7920723-1df2-62df-61c7-98c3a1665aa1@linux.intel.com>
+ <CAFBinCA+J-HnXfRnquqviXvX0Jo84hoLC9=_uHbyWKZycwyAFw@mail.gmail.com>
+From:   "Kim, Cheol Yong" <cheol.yong.kim@linux.intel.com>
+Message-ID: <4e1ddc50-7ae3-3ba9-7e41-80a834fa2dbf@linux.intel.com>
+Date:   Mon, 9 Sep 2019 22:16:29 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <bb6eab9a-f9cc-81ca-5e8c-9fb867c61ec2@sholland.org>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
+In-Reply-To: <CAFBinCA+J-HnXfRnquqviXvX0Jo84hoLC9=_uHbyWKZycwyAFw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi,
 
-On Sun, Sep 08, 2019 at 10:54:17PM -0500, Samuel Holland wrote:
-> On 9/8/19 10:22 PM, Ondřej Jirman wrote:
-> > Hello Samuel,
-> > 
-> > On Mon, Aug 19, 2019 at 10:23:01PM -0500, Samuel Holland wrote:
-> >> This series adds support for the "hardware message box" in sun8i, sun9i,
-> >> and sun50i SoCs, used for communication with the ARISC management
-> >> processor (the platform's equivalent of the ARM SCP). The end goal is to
-> >> use the arm_scpi driver as a client, communicating with firmware running
-> >> on the AR100 CPU, or to use the mailbox to forward NMIs that the
-> >> firmware picks up from R_INTC.
-> >>
-> >> Unfortunately, the ARM SCPI client no longer works with this driver
-> >> since it now exposes all 8 hardware FIFOs individually. The SCPI client
-> >> could be made to work (and I posted proof-of-concept code to that effect
-> >> with v1 of this series), but that is a low priority, as Linux does not
-> >> directly use SCPI with the current firmware version; all SCPI use goes
-> >> through ATF via PSCI.
-> >>
-> >> As requested in the comments to v3 of this patchset, a demo client is
-> >> provided in the final patch. This demo goes along with a toy firmware
-> >> which shows that the driver does indeed work for two-way communication
-> >> on all channels. To build the firmware component, run:
-> > 
-> > I've tried using this driver with mainline arm_scpi driver (which is probably
-> > an expected future use, since crust provides SCPI interface).
-> 
-> If you've verified in some way that this driver works on A83T, I'd appreciate
-> your Tested-by, so I can send a patch for the A83T device tree node.
+On 9/6/2019 4:47 AM, Martin Blumenstingl wrote:
+> Hi Rahul,
+>
+> On Wed, Sep 4, 2019 at 10:04 AM Tanwar, Rahul
+> <rahul.tanwar@linux.intel.com> wrote:
+>>
+>> Hi Martin,
+>>
+>> On 4/9/2019 2:53 AM, Martin Blumenstingl wrote:
+>>>> My understanding is that if we do not use syscon, then there is no
+>>>> point in using regmap because this driver uses simple 32 bit register
+>>>> access. Can directly read/write registers using readl() & writel().
+>>>>
+>>>> Would you agree ?
+>>> if there was only the LGM SoC then I would say: drop regmap
+>>>
+>>> however, last year a driver for the GRX350/GRX550 SoCs was proposed: [0]
+>>> this was never updated but it seems to use the same "framework" as the
+>>> LGM driver
+>>> with this in mind I am for keeping regmap support because.
+>>> I think it will be easier to add support for old SoCs like
+>>> GRX350/GRX550 (but also VRX200), because the PLL sub-driver (I am
+>>> assuming that it is similar on all SoCs) or some other helpers can be
+>>> re-used across various SoCs instead of "duplicating" code (where one
+>>> variant would use regmap and the other readl/writel).
+>>
+>> Earlier, we had discussed about it in our team.  There are no plans to
+>> upstream mips based platform code, past up-streaming efforts for mips
+>> platforms were also dropped. GRX350/GRX550/VRX200 are all mips
+>> based platforms. Plan is to upstream only x86 based platforms. In-fact,
+>> i had removed GRX & other older SoCs support from this driver before
+>> sending for review. So we can consider only x86 based LGM family of
+>> SoCs for this driver & all of them will be reusing same IP.
+> this is very sad news
+> as far as I can tell many IP cores are similar/identical on
+> GRX350/GRX550, LGM and even VRX200
+>
+> I already know that VRX200 is a legacy product and you won't be supporting it
+> once LGM support lands upstream you could add support for
+> GRX350/GRX550 with small to medium effort
+> that is a big win (in my opinion) because it means happier end-users
+> (see XWAY and VRX200 support in OpenWrt for example: while support
+> from Intel/Lantiq has died long ago these devices can still run a
+> recent LTS kernel and get security updates. without OpenWrt these
+> devices would probably end up as electronic waste)
 
-Tested-by: Ondrej Jirman <megous@megous.com>
+I'm sorry to say that we don't plan to support legacy SOCs. As you might 
+know, we tried to upstream some of drivers last year but found a lot of 
+problems to support both legacy SOCs and LGM.
 
-(on A83T)
+It was a real pain to support all of them with limited resources/time 
+and we couldn't make it. Our new plan was to reattempt to upstream LGM 
+drivers only. This can be more realistic target for us.
 
-> > The problem I've found is that arm_scpi expects message box to be
-> > bi-directional, but this driver provides uni-directional interface.
-> > 
-> > What do you think about making this driver provide bi-directional interface?
-> > We could halve the number of channels to 4 and mandate TX/RX configuration
-> > (from main CPU's PoV) as ABI.
-> 
-> Funny you mention that. That's what I did originally for v1, but it got NAKed by
-> Maxime, Andre, and Jassi:
-> 
-> https://lkml.org/lkml/2018/2/28/125
-> https://lkml.org/lkml/2018/2/28/944
-> 
-> > Otherwise it's impossible to use it with the arm_scpi driver.
-> > 
-> > Or do you have any other ideas? I guess arm_scpi can be fixed to add a
-> > property that would make it possible to use single shmem with two
-> > mailboxes, one for rx and one for tx, but making sun6i mailbox have
-> > bi-directional interface sounds easier.
-> 
-> Yes, you can use the existence of the mbox-names property to determine if the
-> driver needs one mailbox or two, as I did in this driver:
-> 
-> https://lkml.org/lkml/2019/3/1/789
-> 
-> I'll have a patch available soon that implements this for arm_scpi.
+>
+> maybe implementing a re-usable regmap clock driver (for mux, gate and
+> divider) means less effort (compared to converting everything to
+> standard clock ops) for you.
+> (we did the switch from standard clock ops to regmap for the Amlogic
+> Meson clock drivers when we discovered that there were some non-clock
+> registers that belong to other IP blocks in it and it was a lot of
+> effort)
+> this will allow you to add support for GRX350/GRX550 in the future if
+> demand for upstream drivers rises.
 
-Yeah, I've patched arm_scpi too. :)
+I've discussed internally the amount of efforts to create a reusable 
+regmap clock driver which might be reused by other companies too.
 
-https://megous.com/git/linux/commit/?h=tbs-5.3&id=69a0cd0093a63039ace2f763e8d82009c50ff03c
+It seems it requires significant efforts for implementation/tests. As we 
+don't plan to support our old SOCs for now, I'm not sure if we need to 
+put such a big efforts.
 
-(but that's just for the test, because it breaks the existing interface for
-other uses)
+Stephan,
 
-Anyway, using mbox-names looks like a nice solution! Thanks! Though,
-arm_scpi driver has a bit more complicated existing interface, where it can use
-multiple mailboxes and rotates through them after every message.
+It seems you don't like both meson/qcom regmap clock implementation.
 
-BTW, I'm slowly laboring through understanding how to get suspend to ram working
-on one A83T tablet. https://xnux.eu/tablet-hacking/ Which is how I tested this
-driver.
+What is your opinion for our current CGU clock driver implementation?
 
-regards,
-	o.
 
-> Cheers,
-> Samuel
-> 
-> > regards,
-> > 	o.
-> > 
-> >>   git clone https://github.com/crust-firmware/meta meta
-> >>   git clone -b mailbox-demo https://github.com/crust-firmware/crust meta/crust
-> >>   cd meta
-> >>   make
-> >>
-> >> That will by default produce a U-Boot + ATF + SCP firmware image in
-> >> [meta/]build/pinebook/u-boot-sunxi-with-spl.bin. See the top-level
-> >> README.md for more information, such as cross-compiler setup.
-> >>
-> >> I've now used this driver with three separate clients over the past two
-> >> years, and they all work. If there are no remaining concerns with the
-> >> driver, I'd like it to get merged.
-> >>
-> >> Even without the driver, the clock patches (1-2) can go in at any time.
-> >>
-> >> Changes from v3:
-> >>   - Rebased on sunxi-next
-> >>   - Added Rob's Reviewed-by for patch 3
-> >>   - Fixed a crash when receiving a message on a disabled channel
-> >>   - Cleaned up some comments/formatting in the driver
-> >>   - Fixed #mbox-cells in sunxi-h3-h5.dtsi (patch 7)
-> >>   - Removed the irqchip example (no longer relevant to the fw design)
-> >>   - Added a demo/example client that uses the driver and a toy firmware
-> >>
-> >> Changes from v2:
-> >>   - Merge patches 1-3
-> >>   - Add a comment in the code explaining the CLK_IS_CRITICAL usage
-> >>   - Add a patch to mark the AR100 clocks as critical
-> >>   - Use YAML for the device tree binding
-> >>   - Include a not-for-merge example usage of the mailbox
-> >>
-> >> Changes from v1:
-> >>   - Marked message box clocks as critical instead of hacks in the driver
-> >>   - 8 unidirectional channels instead of 4 bidirectional pairs
-> >>   - Use per-SoC compatible strings and an A31 fallback compatible
-> >>   - Dropped the mailbox framework patch
-> >>   - Include DT patches for SoCs that document the message box
-> >>
-> >> Samuel Holland (10):
-> >>   clk: sunxi-ng: Mark msgbox clocks as critical
-> >>   clk: sunxi-ng: Mark AR100 clocks as critical
-> >>   dt-bindings: mailbox: Add a sunxi message box binding
-> >>   mailbox: sunxi-msgbox: Add a new mailbox driver
-> >>   ARM: dts: sunxi: a80: Add msgbox node
-> >>   ARM: dts: sunxi: a83t: Add msgbox node
-> >>   ARM: dts: sunxi: h3/h5: Add msgbox node
-> >>   arm64: dts: allwinner: a64: Add msgbox node
-> >>   arm64: dts: allwinner: h6: Add msgbox node
-> >>   [DO NOT MERGE] drivers: firmware: msgbox demo
-> >>
-> >>  .../mailbox/allwinner,sunxi-msgbox.yaml       |  79 +++++
-> >>  arch/arm/boot/dts/sun8i-a83t.dtsi             |  10 +
-> >>  arch/arm/boot/dts/sun9i-a80.dtsi              |  10 +
-> >>  arch/arm/boot/dts/sunxi-h3-h5.dtsi            |  10 +
-> >>  arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi |  34 ++
-> >>  arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi  |  24 ++
-> >>  arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  |  10 +
-> >>  drivers/clk/sunxi-ng/ccu-sun50i-a64.c         |   3 +-
-> >>  drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c        |   2 +-
-> >>  drivers/clk/sunxi-ng/ccu-sun50i-h6.c          |   3 +-
-> >>  drivers/clk/sunxi-ng/ccu-sun8i-a23.c          |   3 +-
-> >>  drivers/clk/sunxi-ng/ccu-sun8i-a33.c          |   3 +-
-> >>  drivers/clk/sunxi-ng/ccu-sun8i-a83t.c         |   3 +-
-> >>  drivers/clk/sunxi-ng/ccu-sun8i-h3.c           |   3 +-
-> >>  drivers/clk/sunxi-ng/ccu-sun8i-r.c            |   2 +-
-> >>  drivers/clk/sunxi-ng/ccu-sun9i-a80.c          |   3 +-
-> >>  drivers/firmware/Kconfig                      |   6 +
-> >>  drivers/firmware/Makefile                     |   1 +
-> >>  drivers/firmware/sunxi_msgbox_demo.c          | 307 +++++++++++++++++
-> >>  drivers/mailbox/Kconfig                       |  10 +
-> >>  drivers/mailbox/Makefile                      |   2 +
-> >>  drivers/mailbox/sunxi-msgbox.c                | 323 ++++++++++++++++++
-> >>  22 files changed, 842 insertions(+), 9 deletions(-)
-> >>  create mode 100644 Documentation/devicetree/bindings/mailbox/allwinner,sunxi-msgbox.yaml
-> >>  create mode 100644 drivers/firmware/sunxi_msgbox_demo.c
-> >>  create mode 100644 drivers/mailbox/sunxi-msgbox.c
-> >>
-> >> -- 
-> >> 2.21.0
-> >>
-> >> _______________________________________________
-> >> linux-arm-kernel mailing list
-> >> linux-arm-kernel@lists.infradead.org
-> >> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>
+> Martin
+>
