@@ -2,60 +2,74 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E39AEDD4
-	for <lists+linux-clk@lfdr.de>; Tue, 10 Sep 2019 16:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83497AEE52
+	for <lists+linux-clk@lfdr.de>; Tue, 10 Sep 2019 17:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393695AbfIJOx1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 10 Sep 2019 10:53:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35302 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393693AbfIJOx1 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 10 Sep 2019 10:53:27 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 946A621479;
-        Tue, 10 Sep 2019 14:53:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568127206;
-        bh=pUryn9WqGUSNogBctTeoXa0sx1NkQRLY6uysdLw32VE=;
-        h=In-Reply-To:References:Cc:To:From:Subject:Date:From;
-        b=IlqPaKo38YOb2bnVgeiWP3n/6PBesSjcaF3Ce3yIjfRwyOS7TENRbKaIcHPgVcXYY
-         PtXdZb8ZfSNUjQteNvvXvH941h5CcXAK+feuiNSlBOmVbzrxmxop0lPnVaHDtCQw9j
-         3CoQO6FteCUAU+89CWR1bJcwP916ja1Nx1pCdyo4=
-Content-Type: text/plain; charset="utf-8"
+        id S1729662AbfIJPQI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 10 Sep 2019 11:16:08 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:47511 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726060AbfIJPQI (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 10 Sep 2019 11:16:08 -0400
+X-Originating-IP: 148.69.85.38
+Received: from localhost (unknown [148.69.85.38])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 684E51C0004;
+        Tue, 10 Sep 2019 15:16:06 +0000 (UTC)
+Date:   Tue, 10 Sep 2019 17:16:03 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Eugen.Hristev@microchip.com
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Nicolas.Ferre@microchip.com,
+        Ludovic.Desroches@microchip.com
+Subject: Re: [PATCH 1/2] clk: at91: fix update bit maps on CFG_MOR write
+Message-ID: <20190910151603.GZ21254@piout.net>
+References: <1568042692-11784-1-git-send-email-eugen.hristev@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1566206502-4347-11-git-send-email-mars.cheng@mediatek.com>
-References: <1566206502-4347-1-git-send-email-mars.cheng@mediatek.com> <1566206502-4347-11-git-send-email-mars.cheng@mediatek.com>
-Cc:     CC Hwang <cc.hwang@mediatek.com>,
-        Loda Chou <loda.chou@mediatek.com>,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, wsd_upstream@mediatek.com,
-        mtk01761 <wendell.lin@mediatek.com>, linux-clk@vger.kernel.org
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Mars Cheng <mars.cheng@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh@kernel.org>, Sean Wang <sean.wang@kernel.org>
-From:   Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH v2 10/11] clk: mediatek: Add MT6779 clock support
-User-Agent: alot/0.8.1
-Date:   Tue, 10 Sep 2019 07:53:25 -0700
-Message-Id: <20190910145326.946A621479@mail.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1568042692-11784-1-git-send-email-eugen.hristev@microchip.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Mars Cheng (2019-08-19 02:21:41)
-> From: mtk01761 <wendell.lin@mediatek.com>
->=20
-> Add MT6779 clock support, include topckgen, apmixedsys,
-> infracfg, and subsystem clocks.
->=20
-> Signed-off-by: mtk01761 <wendell.lin@mediatek.com>
+On 09/09/2019 15:30:31+0000, Eugen.Hristev@microchip.com wrote:
+> From: Eugen Hristev <eugen.hristev@microchip.com>
+> 
+> The regmap update bits call was not selecting the proper mask, considering
+> the bits which was updating.
+> Update the mask from call to also include OSCBYPASS.
+> Removed MOSCEN which was not updated.
+> 
+> Fixes: 1bdf02326b71 ("clk: at91: make use of syscon/regmap internally")
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+
 > ---
+>  drivers/clk/at91/clk-main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/at91/clk-main.c b/drivers/clk/at91/clk-main.c
+> index f607ee7..ebe9b99 100644
+> --- a/drivers/clk/at91/clk-main.c
+> +++ b/drivers/clk/at91/clk-main.c
+> @@ -152,7 +152,7 @@ at91_clk_register_main_osc(struct regmap *regmap,
+>  	if (bypass)
+>  		regmap_update_bits(regmap,
+>  				   AT91_CKGR_MOR, MOR_KEY_MASK |
+> -				   AT91_PMC_MOSCEN,
+> +				   AT91_PMC_OSCBYPASS,
+>  				   AT91_PMC_OSCBYPASS | AT91_PMC_KEY);
+>  
+>  	hw = &osc->hw;
+> -- 
+> 2.7.4
+> 
 
-Applied to clk-next
-
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
