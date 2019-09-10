@@ -2,232 +2,122 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F6BADF08
-	for <lists+linux-clk@lfdr.de>; Mon,  9 Sep 2019 20:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5109CAE26D
+	for <lists+linux-clk@lfdr.de>; Tue, 10 Sep 2019 04:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732080AbfIISfX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 9 Sep 2019 14:35:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49820 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727014AbfIISfX (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 9 Sep 2019 14:35:23 -0400
-Received: from localhost.localdomain (unknown [194.230.155.145])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8356621924;
-        Mon,  9 Sep 2019 18:35:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568054121;
-        bh=f3ulxYMQ251eTpcR2jzC5NSbqNu5aS1zSMbuOorVhGE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YSTMb7x7r97T0Ks+pfIvlvyXiDpse7jcUdQfun5USL8Qf72zKmOdwYFxG/Og20NdR
-         EwXkY3VwuOBg7At10VIafoG9bbUfiKlUAgMJOumyoulx2joqpTkvWFIHTHzlZzOTsC
-         tSt1sJ4XmVj3WYasMaYq5rKxVce2vbsFlaFQDKWA=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Maciej Falkowski <m.falkowski@samsung.com>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-leds@vger.kernel.org,
-        linux-clk@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [RFC PATCH 2/2] dt-bindings: pwm: Convert Samsung PWM bindings to json-schema
-Date:   Mon,  9 Sep 2019 20:34:36 +0200
-Message-Id: <20190909183436.9045-2-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190909183436.9045-1-krzk@kernel.org>
-References: <20190909183436.9045-1-krzk@kernel.org>
+        id S2389525AbfIJCsF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 9 Sep 2019 22:48:05 -0400
+Received: from mail-eopbgr40069.outbound.protection.outlook.com ([40.107.4.69]:28847
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728749AbfIJCsE (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 9 Sep 2019 22:48:04 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CXqQpO26SoHspM4ugLIzXrWTZnCCCCLAxN7rYwLMbRKQ1SgxbMuf2ikDivsRR05T915qhkihHNpXagUqSumrvM/I5rvzkiDEjnJUzsDAEXSFaH2ynQ82nsqckITXpYX5SDHAtBs1XzOfmaZ/A+JzYI/eczyC3zJjyZ8dve0enr4aP7AUioWHyHk8qSXhMbPIXM2pM1W9OU/MjJ4zZF0d8Pib9MiblaLAuAR3cASRyS1mF2QXQP4rFi9kvA8Zz3gyE/nUHazS1OkDfJWsJDJ6x9ppaFVJ5zs672aAtTupXDgaVOCySSE/qoVXXonvsBFL16pYP5Gd0YJ0KebqMZvMkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=93C4EF6p9yjCol0Pwl/5OV6PN6Rv53cVVcsuP2uFuMs=;
+ b=lBr3kDcULnr9slFee0ebW6jjN2OWE3GsD7z5Y9425AH+x1cSjgpHXPQeRYsaUhHscVKLv3RL01SjUu0H9gvFir/L+Kp96PoN3a43+3II4A4sDZyD461REUpV2SWz9Z78g/tF74ao6y6vr2Uc5M29I0lerTMdCF9XVCrppTk7E8zcun/P2BtXTxBPxon95cCd30QhKkJaWJ/R6UVMsUW+P2wfb/AxEnBTecvDTqNbNqmBpgTXODgs/udj39aGy0pMSHz7MkgEx2TZnvo8ZKNHYjwLXoXjfAchAWlIipw93EyBbSKwFt0ssbzdCxpanaTbR6pWqNX2+PwIUt55Q/zU8g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=93C4EF6p9yjCol0Pwl/5OV6PN6Rv53cVVcsuP2uFuMs=;
+ b=Gvjb6lxgxN9gOoU/MnX/MzTPRdUB0AW1mZiYe7SsMHXackXoi+J7ANVXWk+AabpA3yzKZIvozUxOI1P71W1j6f+tXGRu1Y6LgxwZM/4ChTwtAIkOFPtSb/7rQ70HWd6lKqWwkpW17YuoyeYG+hTizxzowNxgsjT53DHvIU7I+mA=
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (52.134.72.18) by
+ DB3PR0402MB3931.eurprd04.prod.outlook.com (52.134.65.153) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2241.15; Tue, 10 Sep 2019 02:47:59 +0000
+Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::8958:299c:bc54:2a38]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
+ ([fe80::8958:299c:bc54:2a38%7]) with mapi id 15.20.2241.018; Tue, 10 Sep 2019
+ 02:47:59 +0000
+From:   Anson Huang <anson.huang@nxp.com>
+To:     Dong Aisheng <dongas86@gmail.com>, Stephen Boyd <sboyd@kernel.org>,
+        Peng Fan <peng.fan@nxp.com>
+CC:     "festevam@gmail.com" <festevam@gmail.com>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] clk: imx: lpcg: write twice when writing lpcg regs
+Thread-Topic: [PATCH] clk: imx: lpcg: write twice when writing lpcg regs
+Thread-Index: AQHVXK/qRNohGClvt0yC94cqOwkPUKce9XOAgARa7gCAAPmTYA==
+Date:   Tue, 10 Sep 2019 02:47:59 +0000
+Message-ID: <DB3PR0402MB3916906683B58843B459ABE1F5B60@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+References: <1566936978-28519-1-git-send-email-peng.fan@nxp.com>
+ <20190906172044.B99FB20838@mail.kernel.org>
+ <CAA+hA=To9B0H1z6Hh1eSZN9_rcextT_Oe-CTMmz9fC9CDNUBTQ@mail.gmail.com>
+In-Reply-To: <CAA+hA=To9B0H1z6Hh1eSZN9_rcextT_Oe-CTMmz9fC9CDNUBTQ@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=anson.huang@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 40c0b3e7-865a-4a8b-2aee-08d735994ae8
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB3PR0402MB3931;
+x-ms-traffictypediagnostic: DB3PR0402MB3931:|DB3PR0402MB3931:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB3PR0402MB39319FF4AACD2A5837BC05A0F5B60@DB3PR0402MB3931.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 01565FED4C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(366004)(136003)(376002)(39860400002)(396003)(199004)(189003)(64756008)(7696005)(11346002)(446003)(71190400001)(71200400001)(110136005)(74316002)(7736002)(478600001)(305945005)(52536014)(14454004)(3846002)(5660300002)(33656002)(6116002)(66066001)(9686003)(66946007)(76116006)(66446008)(6636002)(54906003)(256004)(316002)(6246003)(102836004)(6506007)(53546011)(8676002)(6436002)(86362001)(76176011)(26005)(8936002)(486006)(99286004)(44832011)(66476007)(4326008)(55016002)(186003)(81156014)(81166006)(2906002)(66556008)(229853002)(476003)(53936002)(7416002)(25786009);DIR:OUT;SFP:1101;SCL:1;SRVR:DB3PR0402MB3931;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: QcwUnDESFfBUDm4toHS5RvQyN8BgiaZyYFpK+bSdQq7m2E5uiTa8R0twqcnuOlnsfXmboiOvyH4cOUo49ds4HtmKtLPeAwiK8ebdeLMHaq5VId9jYKuED8Jdt+Dx0+/gj2MFtVbEfKHc/MEOegLAYdvlXOyXK7f/9o9OK2h2A7zIZ7zNtgbEraUNGNsYeTA8IvR1trgboH9K9FKh9XWWEzDpRJ3yH02CdpF5uTJEv+OiYayF2AEtur4Olchbprl6hraM2p+BxManG+jMlr/ejgSFpkRHsVyGZo0nh8pgGayrHyJDxPb1eUzYrHv2CWHeEEJW4TSsG18v7Z2Slhvv+VLbUlR9Yl8ujbsRw5Euu5POZR/imBVc5pok6rZzCe7HSXeC4L2SGoe855hHCw1E5whOXJQEyPnBBZ/udO+XpEQ=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40c0b3e7-865a-4a8b-2aee-08d735994ae8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Sep 2019 02:47:59.8092
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 41aLjU+y76hCUEVKAXE6UlLWtLqGtWcHdu6frcEWAm2sFMhYfjUil/yq3CCXNZrGcZRyJLa0T3Dz4/ty6aAZIQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3931
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Convert Samsung PWM (S3C, S5P and Exynos SoCs) bindings to DT schema
-format using json-schema.
-
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- .../devicetree/bindings/pwm/pwm-samsung.txt   |  51 --------
- .../devicetree/bindings/pwm/pwm-samsung.yaml  | 111 ++++++++++++++++++
- 2 files changed, 111 insertions(+), 51 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/pwm/pwm-samsung.txt
- create mode 100644 Documentation/devicetree/bindings/pwm/pwm-samsung.yaml
-
-diff --git a/Documentation/devicetree/bindings/pwm/pwm-samsung.txt b/Documentation/devicetree/bindings/pwm/pwm-samsung.txt
-deleted file mode 100644
-index 5538de9c2007..000000000000
---- a/Documentation/devicetree/bindings/pwm/pwm-samsung.txt
-+++ /dev/null
-@@ -1,51 +0,0 @@
--* Samsung PWM timers
--
--Samsung SoCs contain PWM timer blocks which can be used for system clock source
--and clock event timers, as well as to drive SoC outputs with PWM signal. Each
--PWM timer block provides 5 PWM channels (not all of them can drive physical
--outputs - see SoC and board manual).
--
--Be aware that the clocksource driver supports only uniprocessor systems.
--
--Required properties:
--- compatible : should be one of following:
--    samsung,s3c2410-pwm - for 16-bit timers present on S3C24xx SoCs
--    samsung,s3c6400-pwm - for 32-bit timers present on S3C64xx SoCs
--    samsung,s5p6440-pwm - for 32-bit timers present on S5P64x0 SoCs
--    samsung,s5pc100-pwm - for 32-bit timers present on S5PC100, S5PV210,
--			  Exynos4210 rev0 SoCs
--    samsung,exynos4210-pwm - for 32-bit timers present on Exynos4210,
--                          Exynos4x12, Exynos5250 and Exynos5420 SoCs
--- reg: base address and size of register area
--- interrupts: list of timer interrupts (one interrupt per timer, starting at
--  timer 0)
--- clock-names: should contain all following required clock names:
--    - "timers" - PWM base clock used to generate PWM signals,
--  and any subset of following optional clock names:
--    - "pwm-tclk0" - first external PWM clock source,
--    - "pwm-tclk1" - second external PWM clock source.
--  Note that not all IP variants allow using all external clock sources.
--  Refer to SoC documentation to learn which clock source configurations
--  are available.
--- clocks: should contain clock specifiers of all clocks, which input names
--  have been specified in clock-names property, in same order.
--- #pwm-cells: should be 3. See pwm.txt in this directory for a description of
--  the cells format. The only third cell flag supported by this binding is
--  PWM_POLARITY_INVERTED.
--
--Optional properties:
--- samsung,pwm-outputs: list of PWM channels used as PWM outputs on particular
--    platform - an array of up to 5 elements being indices of PWM channels
--    (from 0 to 4), the order does not matter.
--
--Example:
--	pwm@7f006000 {
--		compatible = "samsung,s3c6400-pwm";
--		reg = <0x7f006000 0x1000>;
--		interrupt-parent = <&vic0>;
--		interrupts = <23>, <24>, <25>, <27>, <28>;
--		clocks = <&clock 67>;
--		clock-names = "timers";
--		samsung,pwm-outputs = <0>, <1>;
--		#pwm-cells = <3>;
--	}
-diff --git a/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml b/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml
-new file mode 100644
-index 000000000000..90fb467bcdd5
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml
-@@ -0,0 +1,111 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pwm/pwm-samsung.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Samsung SoC PWM timers
-+
-+maintainers:
-+  - Thierry Reding <thierry.reding@gmail.com>
-+  - Krzysztof Kozlowski <krzk@kernel.org>
-+
-+description: |+
-+  Samsung SoCs contain PWM timer blocks which can be used for system clock source
-+  and clock event timers, as well as to drive SoC outputs with PWM signal. Each
-+  PWM timer block provides 5 PWM channels (not all of them can drive physical
-+  outputs - see SoC and board manual).
-+
-+  Be aware that the clocksource driver supports only uniprocessor systems.
-+
-+allOf:
-+  - $ref: pwm.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - samsung,s3c2410-pwm             # 16-bit, S3C24xx
-+      - samsung,s3c6400-pwm             # 32-bit, S3C64xx
-+      - samsung,s5p6440-pwm             # 32-bit, S5P64x0
-+      - samsung,s5pc100-pwm             # 32-bit, S5PC100, S5PV210, Exynos4210 rev0 SoCs
-+      - samsung,exynos4210-pwm          # 32-bit, Exynos
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+    maxItems: 3
-+
-+  clock-names:
-+    description: |
-+      Should contain all following required clock names:
-+      - "timers" - PWM base clock used to generate PWM signals,
-+      and any subset of following optional clock names:
-+      - "pwm-tclk0" - first external PWM clock source,
-+      - "pwm-tclk1" - second external PWM clock source.
-+      Note that not all IP variants allow using all external clock sources.
-+      Refer to SoC documentation to learn which clock source configurations
-+      are available.
-+    oneOf:
-+      - items:
-+        - const: "timers"
-+      - items:
-+        - const: "timers"
-+        - const: "pwm-tclk0"
-+      - items:
-+        - const: "timers"
-+        - const: "pwm-tclk1"
-+      - items:
-+        - const: "timers"
-+        - const: "pwm-tclk0"
-+        - const: "pwm-tclk1"
-+
-+  interrupts:
-+    description:
-+      One interrupt per timer, starting at timer 0.
-+    minItems: 1
-+    maxItems: 5
-+
-+  "#pwm-cells":
-+    description:
-+      The only third cell flag supported by this binding
-+      is PWM_POLARITY_INVERTED.
-+    const: 3
-+
-+  samsung,pwm-outputs:
-+    description:
-+      A list of PWM channels used as PWM outputs on particular platform.
-+      It is an array of up to 5 elements being indices of PWM channels
-+      (from 0 to 4), the order does not matter.
-+    # TODO: Values should not repeat
-+    allOf:
-+      - $ref: /schemas/types.yaml#/definitions/uint32-array
-+      # FIXME: min/max limit of items does not work
-+      - items:
-+          minItems: 1
-+          maxItems: 5
-+      - items:
-+          minimum: 0
-+          maximum: 4
-+
-+required:
-+  - clocks
-+  - clock-names
-+  - compatible
-+  - interrupts
-+  - "#pwm-cells"
-+  - reg
-+
-+examples:
-+  - |
-+    pwm@7f006000 {
-+      compatible = "samsung,s3c6400-pwm";
-+      reg = <0x7f006000 0x1000>;
-+      interrupt-parent = <&vic0>;
-+      interrupts = <23>, <24>, <25>, <27>, <28>;
-+      clocks = <&clock 67>;
-+      clock-names = "timers";
-+      samsung,pwm-outputs = <0>, <1>;
-+      #pwm-cells = <3>;
-+    };
--- 
-2.17.1
-
+DQoNCj4gT24gU2F0LCBTZXAgNywgMjAxOSBhdCA5OjQ3IFBNIFN0ZXBoZW4gQm95ZCA8c2JveWRA
+a2VybmVsLm9yZz4gd3JvdGU6DQo+ID4NCj4gPiBRdW90aW5nIFBlbmcgRmFuICgyMDE5LTA4LTI3
+IDAxOjE3OjUwKQ0KPiA+ID4gRnJvbTogUGVuZyBGYW4gPHBlbmcuZmFuQG54cC5jb20+DQo+ID4g
+Pg0KPiA+ID4gVGhlcmUgaXMgaGFyZHdhcmUgaXNzdWUgdGhhdDoNCj4gPiA+IFRoZSBvdXRwdXQg
+Y2xvY2sgdGhlIExQQ0cgY2VsbCB3aWxsIG5vdCB0dXJuIGJhY2sgb24gYXMgZXhwZWN0ZWQsDQo+
+ID4gPiBldmVuIHRob3VnaCBhIHJlYWQgb2YgdGhlIElQRyByZWdpc3RlcnMgaW4gdGhlIExQQ0cg
+aW5kaWNhdGVzIHRoYXQNCj4gPiA+IHRoZSBjbG9jayBzaG91bGQgYmUgZW5hYmxlZC4NCj4gPiA+
+DQo+ID4gPiBUaGUgc29mdHdhcmUgd29ya2Fyb3VuZCBpcyB0byB3cml0ZSB0d2ljZSB0byBlbmFi
+bGUgdGhlIExQQ0cgY2xvY2sNCj4gPiA+IG91dHB1dC4NCj4gPiA+DQo+ID4gPiBTaWduZWQtb2Zm
+LWJ5OiBQZW5nIEZhbiA8cGVuZy5mYW5AbnhwLmNvbT4NCj4gPg0KPiA+IERvZXMgdGhpcyBuZWVk
+IGEgRml4ZXMgdGFnPw0KPiANCj4gTm90IHN1cmUgYXMgaXQncyBub3QgY29kZSBsb2dpYyBpc3N1
+ZSBidXQgYSBoYXJkd2FyZSBidWcuDQo+IEFuZCA0LjE5IExUUyBzdGlsbCBoYXZlIG5vdCB0aGlz
+IGRyaXZlciBzdXBwb3J0Lg0KDQpMb29rcyBsaWtlIHRoZXJlIGlzIGFuIGVycmF0YSBmb3IgdGhp
+cyBpc3N1ZSwgYW5kIFJhbmphbmkganVzdCBzZW50IGEgcGF0Y2ggZm9yIHJldmlldyBpbnRlcm5h
+bGx5LA0KDQpCYWNrLXRvLWJhY2sgTFBDRyB3cml0ZXMgY2FuIGJlIGlnbm9yZWQgYnkgdGhlIExQ
+Q0cgcmVnaXN0ZXIgZHVlIHRvIGEgDQpIVyBidWcuIFRoZSB3cml0ZXMgbmVlZCB0byBiZSBzZXBh
+cmF0ZWQgYnkgYXRsZWFzdCA0IGN5Y2xlcyBvZiB0aGUgZ2F0ZWQgY2xvY2suDQpUaGUgd29ya2Fy
+b3VuZCBpcyBpbXBsZW1lbnRlZCBhcyBmb2xsb3dzOg0KMS4gRm9yIGNsb2NrcyBydW5uaW5nIGdy
+ZWF0ZXIgdGhhbiA1ME1IeiBubyBkZWxheSBpcyByZXF1aXJlZCBhcyB0aGUgDQpkZWxheSBpbiBh
+Y2Nlc3NpbmcgdGhlIExQQ0cgcmVnaXN0ZXIgaXMgc3VmZmljaWVudC4NCjIuIEZvciBjbG9ja3Mg
+cnVubmluZyBncmVhdGVyIHRoYW4gMjNNSHosIGEgcmVhZCBmb2xsb3dlZCBieSB0aGUgd3JpdGUg
+DQp3aWxsIHByb3ZpZGUgdGhlIHN1ZmZpY2llbnQgZGVsYXkuDQozLiBGb3IgY2xvY2tzIHJ1bm5p
+bmcgYmVsb3cgMjNNSHosIExQQ0cgaXMgbm90IHVzZWQuDQoNCk5lZWQgZG91YmxlIGNoZWNrPw0K
+DQpBbnNvbi4NCg==
