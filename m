@@ -2,87 +2,89 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D43B0FDB
-	for <lists+linux-clk@lfdr.de>; Thu, 12 Sep 2019 15:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6959B10E2
+	for <lists+linux-clk@lfdr.de>; Thu, 12 Sep 2019 16:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732114AbfILN0k (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 12 Sep 2019 09:26:40 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:41666 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732098AbfILN0k (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 12 Sep 2019 09:26:40 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8CDQbaQ049583;
-        Thu, 12 Sep 2019 08:26:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1568294797;
-        bh=K2Q92adlyOlFE+55nlrsCH8twyZ1qvVGlSQOn8cJ0jo=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=R5Sx57oFPzATZ7B13TRpt+LVvRAA0YJuP5aYxx+jWwNQS8vfMX2aRi0AnKQvVctj6
-         rd3Gyqgm0kY4w4SV8D22PnJimdgujRGc8b6mV/24mjp7YJFQ9zha7YqPb9IcnowqyP
-         SLlcNO9g8efjY/UQmGU1UXuIXex4Rfpf5mIkFftk=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8CDQbGA071418;
-        Thu, 12 Sep 2019 08:26:37 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 12
- Sep 2019 08:26:37 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Thu, 12 Sep 2019 08:26:37 -0500
-Received: from sokoban.bb.dnainternet.fi (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8CDQFvZ130575;
-        Thu, 12 Sep 2019 08:26:35 -0500
-From:   Tero Kristo <t-kristo@ti.com>
-To:     <linux-omap@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <sboyd@kernel.org>, <mturquette@baylibre.com>
-CC:     <tony@atomide.com>, <s-anna@ti.com>
-Subject: [PATCHv3 10/10] clk: ti: am33xx: drop idlest polling from pruss clkctrl clock
-Date:   Thu, 12 Sep 2019 16:26:13 +0300
-Message-ID: <20190912132613.28093-11-t-kristo@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190912132613.28093-1-t-kristo@ti.com>
-References: <20190912132613.28093-1-t-kristo@ti.com>
+        id S1732455AbfILOQG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 12 Sep 2019 10:16:06 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:39986 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732444AbfILOPm (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 12 Sep 2019 10:15:42 -0400
+Received: by mail-wr1-f67.google.com with SMTP id l3so5920792wru.7
+        for <linux-clk@vger.kernel.org>; Thu, 12 Sep 2019 07:15:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PBfT3mxgX+rD0lAyvtzYZMZFZtcbsSUwaCSVY0jK/V8=;
+        b=SZNIb9+Gj9o3ah2gIfkl6oIdgZYqAZVtp23KLGveHqrOnNJzkhqhla52cvSzsRHd7j
+         ZtzRW28j/osny8ID4m9lctcdlPwbylWBbyjXDK5Ax7Qsi9NNRG0vyfN6T4RTALd8OP6d
+         8FGozzt1l5j/c4WaDBYTA1+A5JCDbweZ+4oj6ZW/Pnyxku9ZBHInY/JjD4k5DegrGeFo
+         zJVH6eaeMsKR+3i8rIADhF6Ehl8yvLw89idDpLJiwTqbPKTTfvGOIGe9F6G4UMW9TX10
+         jRraENoy2m9ExdecOsU/jSIn225lO+R2zapaUHPLRf7Wrywk83zv26DktFnHWccbI+lC
+         IsrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PBfT3mxgX+rD0lAyvtzYZMZFZtcbsSUwaCSVY0jK/V8=;
+        b=jAzsoCOwzNhuWUZ7MW7yNhQvDHv+4h+PQqlMpwwyruIMKM+qDXkBIW0Q35TTnNaZVJ
+         b931+zE1gXjG+wh24lVAcTFdb52UxzVKtzM3dmPQY13x3OM6gQPKMIL61jx14TfCyCMl
+         +Id862/mnNwaVDh+OoZCKOXZZZDeMtgquoO1sPoOX42Od/KSExbWnz2Sb6gGZaT+ENdD
+         4sWb0OBFFZKLgCKr8oGNGMSMM893dFONPGFR5TYJOYnYv3TAdqIvfUa0aNHUHaQXzk6z
+         ynL0XS1cGb1Rh99Os+5fE0srvCkoYsk3u3LOSnvmVcWQ2xdxduL52fK7vD5oo9mXG+/8
+         CfFQ==
+X-Gm-Message-State: APjAAAV9ioB5IhvjAfku3DicwRMkdyGO4suGZCNqZcN8OALDVxdufXhu
+        j1ZYpLi5/PURxqUiedEjvdr3Gw==
+X-Google-Smtp-Source: APXvYqwmScopqV21yxQR5oM3O6jHJFfw901TYP57XVjX/n1COgdd1lAJ8vCwY/XQG2an4RNcpVQruw==
+X-Received: by 2002:a5d:4649:: with SMTP id j9mr34265501wrs.193.1568297740484;
+        Thu, 12 Sep 2019 07:15:40 -0700 (PDT)
+Received: from localhost.localdomain (69.red-83-35-113.dynamicip.rima-tde.net. [83.35.113.69])
+        by smtp.gmail.com with ESMTPSA id p23sm137599wma.18.2019.09.12.07.15.39
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Thu, 12 Sep 2019 07:15:39 -0700 (PDT)
+From:   Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+To:     jorge.ramirez-ortiz@linaro.org, sboyd@kernel.org,
+        agross@kernel.org, mturquette@baylibre.com,
+        bjorn.andersson@linaro.org
+Cc:     niklas.cassel@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] Clock changes to support cpufreq on QCS404 
+Date:   Thu, 12 Sep 2019 16:15:29 +0200
+Message-Id: <20190912141534.28870-1-jorge.ramirez-ortiz@linaro.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The PRUSS module on AM33xx SoCs has a hardreset line and is controlled
-by a PRCM reset line. Any clkctrl enable/disable operations cannot be
-checked for module enabled/disabled status independent of the reset
-operation, and this causes some unwanted timeouts in the kernel and
-unbalanced states for the PRUSS clocks. These details should be handled
-by the driver integration code itself.
+The following clock changes are required to enable cpufreq support on
+the QCS404
 
-Add the CLKF_NO_IDLEST flag to the PRUSS clkctrl clock so that these
-module status checks are skipped.
+v2: sboyd review of v1
+    -------------------
+    missing cover letter
+    reorder the patchset
+    use clk_parent data to speficy the parent clock
+    dong ignore the clock position abi
 
-Signed-off-by: Tero Kristo <t-kristo@ti.com>
----
- drivers/clk/ti/clk-33xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Jorge Ramirez-Ortiz (5):
+  clk: qcom: gcc: limit GPLL0_AO_OUT operating frequency
+  clk: qcom: hfpll: register as clock provider
+  clk: qcom: hfpll: CLK_IGNORE_UNUSED
+  clk: qcom: hfpll: use clk_parent_data to specify the parent
+  clk: qcom: apcs-msm8916: get parent clock names from DT
 
-diff --git a/drivers/clk/ti/clk-33xx.c b/drivers/clk/ti/clk-33xx.c
-index a360d3109555..935efb66b389 100644
---- a/drivers/clk/ti/clk-33xx.c
-+++ b/drivers/clk/ti/clk-33xx.c
-@@ -107,7 +107,7 @@ static const struct omap_clkctrl_reg_data am3_l4hs_clkctrl_regs[] __initconst =
- };
- 
- static const struct omap_clkctrl_reg_data am3_pruss_ocp_clkctrl_regs[] __initconst = {
--	{ AM3_PRUSS_OCP_PRUSS_CLKCTRL, NULL, CLKF_SW_SUP, "pruss_ocp_gclk" },
-+	{ AM3_PRUSS_OCP_PRUSS_CLKCTRL, NULL, CLKF_SW_SUP | CLKF_NO_IDLEST, "pruss_ocp_gclk" },
- 	{ 0 },
- };
- 
+ drivers/clk/qcom/apcs-msm8916.c  | 15 ++++++++++++---
+ drivers/clk/qcom/clk-alpha-pll.c |  8 ++++++++
+ drivers/clk/qcom/clk-alpha-pll.h |  1 +
+ drivers/clk/qcom/gcc-qcs404.c    |  2 +-
+ drivers/clk/qcom/hfpll.c         | 21 +++++++++++++++++++--
+ 5 files changed, 41 insertions(+), 6 deletions(-)
+
 -- 
-2.17.1
+2.23.0
 
---
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
