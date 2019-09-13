@@ -2,91 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B93E1B1B67
-	for <lists+linux-clk@lfdr.de>; Fri, 13 Sep 2019 12:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E52B1CF4
+	for <lists+linux-clk@lfdr.de>; Fri, 13 Sep 2019 14:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388069AbfIMKMp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 13 Sep 2019 06:12:45 -0400
-Received: from foss.arm.com ([217.140.110.172]:41410 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388066AbfIMKMo (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 13 Sep 2019 06:12:44 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC85A28;
-        Fri, 13 Sep 2019 03:12:43 -0700 (PDT)
-Received: from bogus (e107155-lin.cambridge.arm.com [10.1.196.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE5D83F59C;
-        Fri, 13 Sep 2019 03:12:41 -0700 (PDT)
-Date:   Fri, 13 Sep 2019 11:12:39 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Amit Kucheria <amit.kucheria@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        arm@kernel.org, Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, Will Deacon <will@kernel.org>,
-        linux-clk@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH 3/4] arm64: Kconfig: Fix VEXPRESS driver dependencies
-Message-ID: <20190913101239.GB2559@bogus>
-References: <cover.1568239378.git.amit.kucheria@linaro.org>
- <8f539b28c25d22b8f515c131cd6b24c309f7ca90.1568239378.git.amit.kucheria@linaro.org>
+        id S2388013AbfIMMDG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 13 Sep 2019 08:03:06 -0400
+Received: from alexa-out-blr-02.qualcomm.com ([103.229.18.198]:25811 "EHLO
+        alexa-out-blr.qualcomm.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2387896AbfIMMDG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 13 Sep 2019 08:03:06 -0400
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by alexa-out-blr.qualcomm.com with ESMTP/TLS/AES256-SHA; 13 Sep 2019 17:26:39 +0530
+Received: from gokulsri-linux.qualcomm.com ([10.201.2.207])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 13 Sep 2019 17:26:13 +0530
+Received: by gokulsri-linux.qualcomm.com (Postfix, from userid 432570)
+        id B23C9372A; Fri, 13 Sep 2019 17:26:11 +0530 (IST)
+From:   Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
+To:     gokulsri@codeaurora.org, sboyd@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, david.brown@linaro.org,
+        devicetree@vger.kernel.org, jassisinghbrar@gmail.com,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        mark.rutland@arm.com, mturquette@baylibre.com, ohad@wizery.com,
+        robh+dt@kernel.org, sricharan@codeaurora.org,
+        nprakash@codeaurora.org
+Subject: [PATCH V2 00/12] remoteproc: qcom: q6v5-wcss: Add support for secure pil
+Date:   Fri, 13 Sep 2019 17:25:59 +0530
+Message-Id: <1568375771-22933-1-git-send-email-gokulsri@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8f539b28c25d22b8f515c131cd6b24c309f7ca90.1568239378.git.amit.kucheria@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, Sep 12, 2019 at 03:48:47AM +0530, Amit Kucheria wrote:
-> Push various VEXPRESS drivers behind ARCH_VEXPRESS dependency so that it
-> doesn't get enabled by default on other platforms.
->
+IPQ8074 needs support for secure pil as well.
+Also, currently only unified firmware is supported.
+IPQ8074 supports split firmware for q6 and m3, so
+adding support for that.
 
-I couldn't understand the motivation for these changes from the cover letter.
+ Also, this series is based on Govind’s,
+ “[v4] Add non PAS wcss Q6 support for QCS404”
+ https://www.spinics.net/lists/linux-remoteproc/msg03612.html
 
-> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> ---
->  drivers/bus/Kconfig           | 2 +-
->  drivers/clk/versatile/Kconfig | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
-> index d80e8d70bf10..b2b1beee9953 100644
-> --- a/drivers/bus/Kconfig
-> +++ b/drivers/bus/Kconfig
-> @@ -166,7 +166,7 @@ config UNIPHIER_SYSTEM_BUS
->  
->  config VEXPRESS_CONFIG
->  	bool "Versatile Express configuration bus"
-> -	default y if ARCH_VEXPRESS
-> +	depends on ARCH_VEXPRESS
->  	depends on ARM || ARM64
->  	depends on OF
->  	select REGMAP
-> diff --git a/drivers/clk/versatile/Kconfig b/drivers/clk/versatile/Kconfig
-> index ac766855ba16..826750292c1e 100644
-> --- a/drivers/clk/versatile/Kconfig
-> +++ b/drivers/clk/versatile/Kconfig
-> @@ -5,8 +5,8 @@ config ICST
->  config COMMON_CLK_VERSATILE
->  	bool "Clock driver for ARM Reference designs"
->  	depends on ARCH_INTEGRATOR || ARCH_REALVIEW || \
-> -		ARCH_VERSATILE || ARCH_VEXPRESS || ARM64 || \
-> -		COMPILE_TEST
-> +		ARCH_VERSATILE || ARCH_VEXPRESS || COMPILE_TEST
-> +	depends on ARM64
+[V2] Fixed all comments
 
-This will break 32-bit platforms.
+Gokul Sriram Palanisamy (12):
+  remoteproc: qcom: Add PRNG proxy clock
+  remoteproc: qcom: Add secure PIL support
+  remoteproc: qcom: Add support for split q6 + m3 wlan firmware
+  remoteproc: qcom: Add ssr subdevice identifier
+  remoteproc: qcom: Update regmap offsets for halt register
+  dt-bindings: clock: qcom: Add reset for WCSSAON
+  clk: qcom: Add WCSSAON reset
+  dt-bindings: mailbox: qom: Add ipq8074 APPS compatible
+  mailbox: qcom: Add support for IPQ8074 APCS
+  dt-bindings: firmware: qcom: Add compatible for IPQ8074 SoC
+  arm64: dts: Add support for scm on IPQ8074 SoCs
+  arm64: dts: qcom: Enable Q6v5 WCSS for ipq8074 SoC
 
---
-Regards,
-Sudeep
+ .../devicetree/bindings/firmware/qcom,scm.txt      |   1 +
+ .../bindings/mailbox/qcom,apcs-kpss-global.txt     |   1 +
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi              | 132 +++++++++++++++++
+ drivers/clk/qcom/gcc-ipq8074.c                     |   1 +
+ drivers/mailbox/qcom-apcs-ipc-mailbox.c            |   1 +
+ drivers/remoteproc/qcom_q6v5_wcss.c                | 158 +++++++++++++++++----
+ include/dt-bindings/clock/qcom,gcc-ipq8074.h       |   1 +
+ 7 files changed, 265 insertions(+), 30 deletions(-)
+
+-- 
+1.9.1
+
