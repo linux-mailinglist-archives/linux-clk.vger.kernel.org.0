@@ -2,247 +2,523 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA46B6982
-	for <lists+linux-clk@lfdr.de>; Wed, 18 Sep 2019 19:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2104B69F0
+	for <lists+linux-clk@lfdr.de>; Wed, 18 Sep 2019 19:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387937AbfIRRc7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 18 Sep 2019 13:32:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43612 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387890AbfIRRc6 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 18 Sep 2019 13:32:58 -0400
-Received: from localhost.localdomain (unknown [194.230.155.145])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6F47621925;
-        Wed, 18 Sep 2019 17:32:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568827977;
-        bh=NfJ9sRleyQQ5tZgP4QFSZEUinJ+3DSTjk/BekNqpBzg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DvkvvauWtTZxYAuzUUBqMADQXEYtupsymGMZ9i8bCRI0eD4uxwy9Mrekx+m7lo608
-         xXOoC18wwUbAVnB6tbyj6CivJ990xXRyTxbCl/ehV5A+YCwzqW6gWTAS6TYIk27B/m
-         t5v6muzQDp89MsyDGgmfGZt6jDCemAvG/Z7pkoDA=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-crypto@vger.kernel.org, linux-watchdog@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v2 8/8] dt-bindings: pwm: Convert Samsung PWM bindings to json-schema
-Date:   Wed, 18 Sep 2019 19:31:41 +0200
-Message-Id: <20190918173141.4314-8-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190918173141.4314-1-krzk@kernel.org>
-References: <20190918173141.4314-1-krzk@kernel.org>
+        id S2387433AbfIRRxE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 18 Sep 2019 13:53:04 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:35098 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387415AbfIRRxE (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 18 Sep 2019 13:53:04 -0400
+Received: by mail-pf1-f193.google.com with SMTP id 205so494529pfw.2
+        for <linux-clk@vger.kernel.org>; Wed, 18 Sep 2019 10:53:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zPkmWhTEOgVWyMbCMBPQIeNFinodsP7S1cmh7eh7uPg=;
+        b=kKksnrzJRE5Gj39bk/xIPqJyuWBFe9meU0J2qB10Qq7kZbI2oF9/Ys8VNFMj3LAt24
+         W1ilCkKo9MwiKaaoOOCcmgDHSCqjUjKeO8/UF43QaipA17lQdfdLoFkOGJ88RrRF6Omh
+         SKCY3/se9We+H6LJSp7OhUHe8ps5g/0juIqLE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zPkmWhTEOgVWyMbCMBPQIeNFinodsP7S1cmh7eh7uPg=;
+        b=GuT0RNvLJ1mfmxIw7OdG1i+veboKG/n4MCh3+/dKcOlpo9K7Vxc+7ZxfGIlFn0gss5
+         f7/C7cdVCYoqKxmbqNqBC2ufsC+QqcranM69xreDlFhHP3KnEG8ZI7QXabeX9KMvoUhR
+         RHZWeu/KepjbQnIJBpL2l7V5YLJGqT0oker3CxfYN3iwFJI5yBZ9BHwhPP9etTnj6F6a
+         Nd/HzrWdvF2UFrxJfxV1qoGm67t6VK9ewZLisqlhobcq9hr5UYMSmujlKhgsiIesU7Ro
+         GS2KltQ617GJs26O0YDnUUSSbIHeBgL/BGnn9oKEUQQwGkE8R1rx7ad4j71s9TaZsb5p
+         EHpg==
+X-Gm-Message-State: APjAAAUM0xdt1xdRn3CN0xn0t559TyB+TOCCCOqr3l0Kru7qQwHKC8p6
+        rcoP6E61pa/NbhDj1bLmD/vPDg==
+X-Google-Smtp-Source: APXvYqyDSDByYnU4omzQnLNajzuNIdwyaNrSFDYZ1pBp+EJgXvKHvtAUw74sz6Jl20YLNOQBgDyfIQ==
+X-Received: by 2002:a63:c09:: with SMTP id b9mr4985093pgl.245.1568829183014;
+        Wed, 18 Sep 2019 10:53:03 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:75a:3f6e:21d:9374])
+        by smtp.gmail.com with ESMTPSA id 69sm8362930pfb.145.2019.09.18.10.53.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Sep 2019 10:53:02 -0700 (PDT)
+Date:   Wed, 18 Sep 2019 10:52:56 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Taniya Das <tdas@codeaurora.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette =?utf-8?B?wqA=?= <mturquette@baylibre.com>,
+        robh+dt@kernel.org, David Brown <david.brown@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] dt-bindings: clk: qcom: Add YAML schemas for the
+ GCC clock bindings
+Message-ID: <20190918175256.GM133864@google.com>
+References: <20190918095018.17979-1-tdas@codeaurora.org>
+ <20190918095018.17979-3-tdas@codeaurora.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190918095018.17979-3-tdas@codeaurora.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Convert Samsung PWM (S3C, S5P and Exynos SoCs) bindings to DT schema
-format using json-schema.
+Hi Taniya,
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+not a full review, just a couple of things I noticed, comments inline.
 
----
+On Wed, Sep 18, 2019 at 03:20:17PM +0530, Taniya Das wrote:
+> The GCC clock provider have a bunch of generic properties that
+> are needed in a device tree. Add a YAML schemas for those. Also update
+> the compatible for SC7180 along with example for clocks & clock-names.
 
-Changes since v1:
-1. Indent example with four spaces (more readable),
-2. Fix samsung,pwm-outputs after review,
-3. Remove double-quotes from clock names.
----
- .../devicetree/bindings/pwm/pwm-samsung.txt   |  51 ---------
- .../devicetree/bindings/pwm/pwm-samsung.yaml  | 107 ++++++++++++++++++
- 2 files changed, 107 insertions(+), 51 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/pwm/pwm-samsung.txt
- create mode 100644 Documentation/devicetree/bindings/pwm/pwm-samsung.yaml
+I would suggest to split this in two:
 
-diff --git a/Documentation/devicetree/bindings/pwm/pwm-samsung.txt b/Documentation/devicetree/bindings/pwm/pwm-samsung.txt
-deleted file mode 100644
-index 5538de9c2007..000000000000
---- a/Documentation/devicetree/bindings/pwm/pwm-samsung.txt
-+++ /dev/null
-@@ -1,51 +0,0 @@
--* Samsung PWM timers
--
--Samsung SoCs contain PWM timer blocks which can be used for system clock source
--and clock event timers, as well as to drive SoC outputs with PWM signal. Each
--PWM timer block provides 5 PWM channels (not all of them can drive physical
--outputs - see SoC and board manual).
--
--Be aware that the clocksource driver supports only uniprocessor systems.
--
--Required properties:
--- compatible : should be one of following:
--    samsung,s3c2410-pwm - for 16-bit timers present on S3C24xx SoCs
--    samsung,s3c6400-pwm - for 32-bit timers present on S3C64xx SoCs
--    samsung,s5p6440-pwm - for 32-bit timers present on S5P64x0 SoCs
--    samsung,s5pc100-pwm - for 32-bit timers present on S5PC100, S5PV210,
--			  Exynos4210 rev0 SoCs
--    samsung,exynos4210-pwm - for 32-bit timers present on Exynos4210,
--                          Exynos4x12, Exynos5250 and Exynos5420 SoCs
--- reg: base address and size of register area
--- interrupts: list of timer interrupts (one interrupt per timer, starting at
--  timer 0)
--- clock-names: should contain all following required clock names:
--    - "timers" - PWM base clock used to generate PWM signals,
--  and any subset of following optional clock names:
--    - "pwm-tclk0" - first external PWM clock source,
--    - "pwm-tclk1" - second external PWM clock source.
--  Note that not all IP variants allow using all external clock sources.
--  Refer to SoC documentation to learn which clock source configurations
--  are available.
--- clocks: should contain clock specifiers of all clocks, which input names
--  have been specified in clock-names property, in same order.
--- #pwm-cells: should be 3. See pwm.txt in this directory for a description of
--  the cells format. The only third cell flag supported by this binding is
--  PWM_POLARITY_INVERTED.
--
--Optional properties:
--- samsung,pwm-outputs: list of PWM channels used as PWM outputs on particular
--    platform - an array of up to 5 elements being indices of PWM channels
--    (from 0 to 4), the order does not matter.
--
--Example:
--	pwm@7f006000 {
--		compatible = "samsung,s3c6400-pwm";
--		reg = <0x7f006000 0x1000>;
--		interrupt-parent = <&vic0>;
--		interrupts = <23>, <24>, <25>, <27>, <28>;
--		clocks = <&clock 67>;
--		clock-names = "timers";
--		samsung,pwm-outputs = <0>, <1>;
--		#pwm-cells = <3>;
--	}
-diff --git a/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml b/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml
-new file mode 100644
-index 000000000000..06d11faabff6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/pwm/pwm-samsung.yaml
-@@ -0,0 +1,107 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/pwm/pwm-samsung.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Samsung SoC PWM timers
-+
-+maintainers:
-+  - Thierry Reding <thierry.reding@gmail.com>
-+  - Krzysztof Kozlowski <krzk@kernel.org>
-+
-+description: |+
-+  Samsung SoCs contain PWM timer blocks which can be used for system clock source
-+  and clock event timers, as well as to drive SoC outputs with PWM signal. Each
-+  PWM timer block provides 5 PWM channels (not all of them can drive physical
-+  outputs - see SoC and board manual).
-+
-+  Be aware that the clocksource driver supports only uniprocessor systems.
-+
-+allOf:
-+  - $ref: pwm.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - samsung,s3c2410-pwm             # 16-bit, S3C24xx
-+      - samsung,s3c6400-pwm             # 32-bit, S3C64xx
-+      - samsung,s5p6440-pwm             # 32-bit, S5P64x0
-+      - samsung,s5pc100-pwm             # 32-bit, S5PC100, S5PV210, Exynos4210 rev0 SoCs
-+      - samsung,exynos4210-pwm          # 32-bit, Exynos
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+    maxItems: 3
-+
-+  clock-names:
-+    description: |
-+      Should contain all following required clock names:
-+      - "timers" - PWM base clock used to generate PWM signals,
-+      and any subset of following optional clock names:
-+      - "pwm-tclk0" - first external PWM clock source,
-+      - "pwm-tclk1" - second external PWM clock source.
-+      Note that not all IP variants allow using all external clock sources.
-+      Refer to SoC documentation to learn which clock source configurations
-+      are available.
-+    oneOf:
-+      - items:
-+        - const: timers
-+      - items:
-+        - const: timers
-+        - const: pwm-tclk0
-+      - items:
-+        - const: timers
-+        - const: pwm-tclk1
-+      - items:
-+        - const: timers
-+        - const: pwm-tclk0
-+        - const: pwm-tclk1
-+
-+  interrupts:
-+    description:
-+      One interrupt per timer, starting at timer 0.
-+    minItems: 1
-+    maxItems: 5
-+
-+  "#pwm-cells":
-+    description:
-+      The only third cell flag supported by this binding
-+      is PWM_POLARITY_INVERTED.
-+    const: 3
-+
-+  samsung,pwm-outputs:
-+    description:
-+      A list of PWM channels used as PWM outputs on particular platform.
-+      It is an array of up to 5 elements being indices of PWM channels
-+      (from 0 to 4), the order does not matter.
-+    allOf:
-+      - $ref: /schemas/types.yaml#/definitions/uint32-array
-+      - uniqueItems: true
-+      - items:
-+          minimum: 0
-+          maximum: 4
-+
-+required:
-+  - clocks
-+  - clock-names
-+  - compatible
-+  - interrupts
-+  - "#pwm-cells"
-+  - reg
-+
-+examples:
-+  - |
-+    pwm@7f006000 {
-+        compatible = "samsung,s3c6400-pwm";
-+        reg = <0x7f006000 0x1000>;
-+        interrupt-parent = <&vic0>;
-+        interrupts = <23>, <24>, <25>, <27>, <28>;
-+        clocks = <&clock 67>;
-+        clock-names = "timers";
-+        samsung,pwm-outputs = <0>, <1>;
-+        #pwm-cells = <3>;
-+    };
--- 
-2.17.1
+1. conversion to YAML
+2. add SC7180 header and example
 
+> Signed-off-by: Taniya Das <tdas@codeaurora.org>
+> ---
+>  .../devicetree/bindings/clock/qcom,gcc.txt    |  94 -----------
+>  .../devicetree/bindings/clock/qcom,gcc.yaml   | 157 ++++++++++++++++++
+>  include/dt-bindings/clock/qcom,gcc-sc7180.h   | 155 +++++++++++++++++
+>  3 files changed, 312 insertions(+), 94 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc.txt
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,gcc-sc7180.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc.txt b/Documentation/devicetree/bindings/clock/qcom,gcc.txt
+> deleted file mode 100644
+> index d14362ad4132..000000000000
+> --- a/Documentation/devicetree/bindings/clock/qcom,gcc.txt
+> +++ /dev/null
+> @@ -1,94 +0,0 @@
+> -Qualcomm Global Clock & Reset Controller Binding
+> -------------------------------------------------
+> -
+> -Required properties :
+> -- compatible : shall contain only one of the following:
+> -
+> -			"qcom,gcc-apq8064"
+> -			"qcom,gcc-apq8084"
+> -			"qcom,gcc-ipq8064"
+> -			"qcom,gcc-ipq4019"
+> -			"qcom,gcc-ipq8074"
+> -			"qcom,gcc-msm8660"
+> -			"qcom,gcc-msm8916"
+> -			"qcom,gcc-msm8960"
+> -			"qcom,gcc-msm8974"
+> -			"qcom,gcc-msm8974pro"
+> -			"qcom,gcc-msm8974pro-ac"
+> -			"qcom,gcc-msm8994"
+> -			"qcom,gcc-msm8996"
+> -			"qcom,gcc-msm8998"
+> -			"qcom,gcc-mdm9615"
+> -			"qcom,gcc-qcs404"
+> -			"qcom,gcc-sdm630"
+> -			"qcom,gcc-sdm660"
+> -			"qcom,gcc-sdm845"
+> -			"qcom,gcc-sm8150"
+> -
+> -- reg : shall contain base register location and length
+> -- #clock-cells : shall contain 1
+> -- #reset-cells : shall contain 1
+> -
+> -Optional properties :
+> -- #power-domain-cells : shall contain 1
+> -- Qualcomm TSENS (thermal sensor device) on some devices can
+> -be part of GCC and hence the TSENS properties can also be
+> -part of the GCC/clock-controller node.
+> -For more details on the TSENS properties please refer
+> -Documentation/devicetree/bindings/thermal/qcom-tsens.txt
+> -- protected-clocks : Protected clock specifier list as per common clock
+> - binding.
+> -
+> -For SM8150 only:
+> -       - clocks: a list of phandles and clock-specifier pairs,
+> -                 one for each entry in clock-names.
+> -       - clock-names: "bi_tcxo" (required)
+> -                      "sleep_clk" (optional)
+> -                      "aud_ref_clock" (optional)
+> -
+> -Example:
+> -	clock-controller@900000 {
+> -		compatible = "qcom,gcc-msm8960";
+> -		reg = <0x900000 0x4000>;
+> -		#clock-cells = <1>;
+> -		#reset-cells = <1>;
+> -		#power-domain-cells = <1>;
+> -	};
+> -
+> -Example of GCC with TSENS properties:
+> -	clock-controller@900000 {
+> -		compatible = "qcom,gcc-apq8064";
+> -		reg = <0x00900000 0x4000>;
+> -		nvmem-cells = <&tsens_calib>, <&tsens_backup>;
+> -		nvmem-cell-names = "calib", "calib_backup";
+> -		#clock-cells = <1>;
+> -		#reset-cells = <1>;
+> -		#thermal-sensor-cells = <1>;
+> -	};
+> -
+> -Example of GCC with protected-clocks properties:
+> -	clock-controller@100000 {
+> -		compatible = "qcom,gcc-sdm845";
+> -		reg = <0x100000 0x1f0000>;
+> -		#clock-cells = <1>;
+> -		#reset-cells = <1>;
+> -		#power-domain-cells = <1>;
+> -		protected-clocks = <GCC_QSPI_CORE_CLK>,
+> -				   <GCC_QSPI_CORE_CLK_SRC>,
+> -				   <GCC_QSPI_CNOC_PERIPH_AHB_CLK>,
+> -				   <GCC_LPASS_Q6_AXI_CLK>,
+> -				   <GCC_LPASS_SWAY_CLK>;
+> -	};
+> -
+> -Example of GCC with clocks
+> -	gcc: clock-controller@100000 {
+> -		compatible = "qcom,gcc-sm8150";
+> -		reg = <0x00100000 0x1f0000>;
+> -		#clock-cells = <1>;
+> -		#reset-cells = <1>;
+> -		#power-domain-cells = <1>;
+> -		clock-names = "bi_tcxo",
+> -		              "sleep_clk";
+> -		clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
+> -			 <&sleep_clk>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+> new file mode 100644
+> index 000000000000..056a7977c458
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+> @@ -0,0 +1,157 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/qcom,gcc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Global Clock & Reset Controller Binding
+> +
+> +maintainers:
+> +  - Stephen Boyd <sboyd@kernel.org>
+> +
+> +properties:
+> +  "#clock-cells":
+> +    const: 1
+> +
+> +  "#reset-cells":
+> +    const: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  compatible :
+> +     enum:
+> +       - qcom,gcc-apq8064
+> +       - qcom,gcc-apq8084
+> +       - qcom,gcc-ipq8064
+> +       - qcom,gcc-ipq4019
+> +       - qcom,gcc-ipq8074
+> +       - qcom,gcc-msm8660
+> +       - qcom,gcc-msm8916
+> +       - qcom,gcc-msm8960
+> +       - qcom,gcc-msm8974
+> +       - qcom,gcc-msm8974pro
+> +       - qcom,gcc-msm8974pro-ac
+> +       - qcom,gcc-msm8994
+> +       - qcom,gcc-msm8996
+> +       - qcom,gcc-msm8998
+> +       - qcom,gcc-mdm9615
+> +       - qcom,gcc-qcs404
+> +       - qcom,gcc-sdm630
+> +       - qcom,gcc-sdm660
+> +       - qcom,gcc-sdm845
+> +       - qcom,gcc-sm8150
+> +       - qcom,gcc-sc7180
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 3
+> +    items:
+> +      - description: Board XO source
+> +      - description: Board active XO source
+> +      - description: Sleep clock source(optional)
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 3
+> +    items:
+> +      - const: bi_tcxo
+> +      - const: bi_tcxo_ao
+> +      - const: sleep_clk
+> +
+> +  nvmem-cells:
+> +    minItems: 1
+> +    maxItems: 2
+> +    description:
+> +      Qualcomm TSENS (thermal sensor device) on some devices can
+> +      be part of GCC and hence the TSENS properties can also be part
+> +      of the GCC/clock-controller node.
+> +      For more details on the TSENS properties please refer
+> +      Documentation/devicetree/bindings/thermal/qcom-tsens.txt
+> +
+> +  nvmem-cell-names:
+> +    minItems: 1
+> +    maxItems: 2
+> +    description:
+> +      Names for each nvmem-cells specified.
+> +    items:
+> +      - const: calib
+> +      - const: calib_backup
+> +
+> +  "#thermal-sensor-cells":
+> +    const: 1
+> +
+> +  "#power-domain-cells":
+> +    const: 1
+> +
+> +  protected-clocks:
+> +    description:
+> +       Protected clock specifier list as per common clock binding
+> +
+> +required:
+> +  - "#clock-cells"
+> +  - "#reset-cells"
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +
+> +examples:
+> +  - |
+> +    // Example:
+> +    clock-controller@900000 {
+> +      compatible = "qcom,gcc-msm8960";
+> +      reg = <0x900000 0x4000>;
+> +      #clock-cells = <1>;
+> +      #reset-cells = <1>;
+> +      #power-domain-cells = <1>;
+> +    };
+> +
+> +
+> +  - |
+> +    // Example of GCC with TSENS properties:
+> +    clock-controller@900000 {
+> +      compatible = "qcom,gcc-apq8064";
+> +      reg = <0x00900000 0x4000>;
+> +      nvmem-cells = <&tsens_calib>, <&tsens_backup>;
+> +      nvmem-cell-names = "calib", "calib_backup";
+> +      #clock-cells = <1>;
+> +      #reset-cells = <1>;
+> +      #thermal-sensor-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    //Example of GCC with protected-clocks properties:
+> +    clock-controller@100000 {
+> +      compatible = "qcom,gcc-sdm845";
+> +      reg = <0x100000 0x1f0000>;
+> +      #clock-cells = <1>;
+> +      #reset-cells = <1>;
+> +      #power-domain-cells = <1>;
+> +      protected-clocks = <187>, <188>, <189>, <190>, <191>;
+> +    };
+> +
+> +  - |
+> +    //Example of GCC with clock node properties for SM8150:
+> +    clock-controller@100000 {
+> +      compatible = "qcom,gcc-sm8150";
+> +      reg = <0x00100000 0x1f0000>;
+> +      #clock-cells = <1>;
+> +      #reset-cells = <1>;
+> +      #power-domain-cells = <1>;
+> +      clocks = <&rpmhcc 0>, <&rpmhcc 1>, <&sleep_clk>;
+> +      clock-names = "bi_tcxo", "bi_tcxo_ao", "sleep_clk";
+> +     };
+> +
+> +  - |
+> +    //Example of GCC with clock nodes properties:
+
+add "for SC7180"
+
+> +    clock-controller@100000 {
+> +      compatible = "qcom,gcc-sc7180";
+> +      reg = <0x100000 0x1f0000>;
+> +      clocks = <&rpmhcc 0>, <&rpmhcc 1>;
+
+IIUC the ids correspond to GCC_GPLL0_MAIN_DIV_CDIV and GPLL0. If
+that is correct I guess the intention is to use the constants in the
+DT?
+
+> +      clock-names = "bi_tcxo", "bi_tcxo_ao";
+> +      #clock-cells = <1>;
+> +      #reset-cells = <1>;
+> +      #power-domain-cells = <1>;
+> +    };
+> +...
+> diff --git a/include/dt-bindings/clock/qcom,gcc-sc7180.h b/include/dt-bindings/clock/qcom,gcc-sc7180.h
+> new file mode 100644
+> index 000000000000..d76b061f6a4e
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/qcom,gcc-sc7180.h
+> @@ -0,0 +1,155 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2019, The Linux Foundation. All rights reserved.
+> + */
+> +
+> +#ifndef _DT_BINDINGS_CLK_QCOM_GCC_SC7180_H
+> +#define _DT_BINDINGS_CLK_QCOM_GCC_SC7180_H
+> +
+> +/* GCC clocks */
+> +#define GCC_GPLL0_MAIN_DIV_CDIV					0
+> +#define GPLL0							1
+> +#define GPLL0_OUT_EVEN						2
+> +#define GPLL1							3
+> +#define GPLL4							4
+> +#define GPLL6							5
+> +#define GPLL7							6
+> +#define GCC_AGGRE_UFS_PHY_AXI_CLK				7
+> +#define GCC_AGGRE_USB3_PRIM_AXI_CLK				8
+> +#define GCC_BOOT_ROM_AHB_CLK					9
+> +#define GCC_CAMERA_AHB_CLK					10
+> +#define GCC_CAMERA_HF_AXI_CLK					11
+> +#define GCC_CAMERA_THROTTLE_HF_AXI_CLK				12
+> +#define GCC_CAMERA_XO_CLK					13
+> +#define GCC_CE1_AHB_CLK						14
+> +#define GCC_CE1_AXI_CLK						15
+> +#define GCC_CE1_CLK						16
+> +#define GCC_CFG_NOC_USB3_PRIM_AXI_CLK				17
+> +#define GCC_CPUSS_AHB_CLK					18
+> +#define GCC_CPUSS_AHB_CLK_SRC					19
+> +#define GCC_CPUSS_GNOC_CLK					20
+> +#define GCC_CPUSS_RBCPR_CLK					21
+> +#define GCC_DDRSS_GPU_AXI_CLK					22
+> +#define GCC_DISP_AHB_CLK					23
+> +#define GCC_DISP_GPLL0_CLK_SRC					24
+> +#define GCC_DISP_GPLL0_DIV_CLK_SRC				25
+> +#define GCC_DISP_HF_AXI_CLK					26
+> +#define GCC_DISP_THROTTLE_HF_AXI_CLK				27
+> +#define GCC_DISP_XO_CLK						28
+> +#define GCC_GP1_CLK						29
+> +#define GCC_GP1_CLK_SRC						30
+> +#define GCC_GP2_CLK						31
+> +#define GCC_GP2_CLK_SRC						32
+> +#define GCC_GP3_CLK						33
+> +#define GCC_GP3_CLK_SRC						34
+> +#define GCC_GPU_CFG_AHB_CLK					35
+> +#define GCC_GPU_GPLL0_CLK_SRC					36
+> +#define GCC_GPU_GPLL0_DIV_CLK_SRC				37
+> +#define GCC_GPU_MEMNOC_GFX_CLK					38
+> +#define GCC_GPU_SNOC_DVM_GFX_CLK				39
+> +#define GCC_NPU_AXI_CLK						40
+> +#define GCC_NPU_BWMON_AXI_CLK					41
+> +#define GCC_NPU_BWMON_DMA_CFG_AHB_CLK				42
+> +#define GCC_NPU_BWMON_DSP_CFG_AHB_CLK				43
+> +#define GCC_NPU_CFG_AHB_CLK					44
+> +#define GCC_NPU_DMA_CLK						45
+> +#define GCC_NPU_GPLL0_CLK_SRC					46
+> +#define GCC_NPU_GPLL0_DIV_CLK_SRC				47
+> +#define GCC_PDM2_CLK						48
+> +#define GCC_PDM2_CLK_SRC					49
+> +#define GCC_PDM_AHB_CLK						50
+> +#define GCC_PDM_XO4_CLK						51
+> +#define GCC_PRNG_AHB_CLK					52
+> +#define GCC_QSPI_CNOC_PERIPH_AHB_CLK				53
+> +#define GCC_QSPI_CORE_CLK					54
+> +#define GCC_QSPI_CORE_CLK_SRC					55
+> +#define GCC_QUPV3_WRAP0_CORE_2X_CLK				56
+> +#define GCC_QUPV3_WRAP0_CORE_CLK				57
+> +#define GCC_QUPV3_WRAP0_S0_CLK					58
+> +#define GCC_QUPV3_WRAP0_S0_CLK_SRC				59
+> +#define GCC_QUPV3_WRAP0_S1_CLK					60
+> +#define GCC_QUPV3_WRAP0_S1_CLK_SRC				61
+> +#define GCC_QUPV3_WRAP0_S2_CLK					62
+> +#define GCC_QUPV3_WRAP0_S2_CLK_SRC				63
+> +#define GCC_QUPV3_WRAP0_S3_CLK					64
+> +#define GCC_QUPV3_WRAP0_S3_CLK_SRC				65
+> +#define GCC_QUPV3_WRAP0_S4_CLK					66
+> +#define GCC_QUPV3_WRAP0_S4_CLK_SRC				67
+> +#define GCC_QUPV3_WRAP0_S5_CLK					68
+> +#define GCC_QUPV3_WRAP0_S5_CLK_SRC				69
+> +#define GCC_QUPV3_WRAP1_CORE_2X_CLK				70
+> +#define GCC_QUPV3_WRAP1_CORE_CLK				71
+> +#define GCC_QUPV3_WRAP1_S0_CLK					72
+> +#define GCC_QUPV3_WRAP1_S0_CLK_SRC				73
+> +#define GCC_QUPV3_WRAP1_S1_CLK					74
+> +#define GCC_QUPV3_WRAP1_S1_CLK_SRC				75
+> +#define GCC_QUPV3_WRAP1_S2_CLK					76
+> +#define GCC_QUPV3_WRAP1_S2_CLK_SRC				77
+> +#define GCC_QUPV3_WRAP1_S3_CLK					78
+> +#define GCC_QUPV3_WRAP1_S3_CLK_SRC				79
+> +#define GCC_QUPV3_WRAP1_S4_CLK					80
+> +#define GCC_QUPV3_WRAP1_S4_CLK_SRC				81
+> +#define GCC_QUPV3_WRAP1_S5_CLK					82
+> +#define GCC_QUPV3_WRAP1_S5_CLK_SRC				83
+> +#define GCC_QUPV3_WRAP_0_M_AHB_CLK				84
+> +#define GCC_QUPV3_WRAP_0_S_AHB_CLK				85
+> +#define GCC_QUPV3_WRAP_1_M_AHB_CLK				86
+> +#define GCC_QUPV3_WRAP_1_S_AHB_CLK				87
+> +#define GCC_SDCC1_AHB_CLK					88
+> +#define GCC_SDCC1_APPS_CLK					89
+> +#define GCC_SDCC1_APPS_CLK_SRC					90
+> +#define GCC_SDCC1_ICE_CORE_CLK					91
+> +#define GCC_SDCC1_ICE_CORE_CLK_SRC				92
+> +#define GCC_SDCC2_AHB_CLK					93
+> +#define GCC_SDCC2_APPS_CLK					94
+> +#define GCC_SDCC2_APPS_CLK_SRC					95
+> +#define GCC_SYS_NOC_CPUSS_AHB_CLK				96
+> +#define GCC_UFS_MEM_CLKREF_CLK					97
+> +#define GCC_UFS_PHY_AHB_CLK					98
+> +#define GCC_UFS_PHY_AXI_CLK					99
+> +#define GCC_UFS_PHY_AXI_CLK_SRC					100
+> +#define GCC_UFS_PHY_ICE_CORE_CLK				101
+> +#define GCC_UFS_PHY_ICE_CORE_CLK_SRC				102
+> +#define GCC_UFS_PHY_PHY_AUX_CLK					103
+> +#define GCC_UFS_PHY_PHY_AUX_CLK_SRC				104
+> +#define GCC_UFS_PHY_RX_SYMBOL_0_CLK				105
+> +#define GCC_UFS_PHY_TX_SYMBOL_0_CLK				106
+> +#define GCC_UFS_PHY_UNIPRO_CORE_CLK				107
+> +#define GCC_UFS_PHY_UNIPRO_CORE_CLK_SRC				108
+> +#define GCC_USB30_PRIM_MASTER_CLK				109
+> +#define GCC_USB30_PRIM_MASTER_CLK_SRC				110
+> +#define GCC_USB30_PRIM_MOCK_UTMI_CLK				111
+> +#define GCC_USB30_PRIM_MOCK_UTMI_CLK_SRC			112
+> +#define GCC_USB30_PRIM_SLEEP_CLK				113
+> +#define GCC_USB3_PRIM_CLKREF_CLK				114
+> +#define GCC_USB3_PRIM_PHY_AUX_CLK				115
+> +#define GCC_USB3_PRIM_PHY_AUX_CLK_SRC				116
+> +#define GCC_USB3_PRIM_PHY_COM_AUX_CLK				117
+> +#define GCC_USB3_PRIM_PHY_PIPE_CLK				118
+> +#define GCC_USB_PHY_CFG_AHB2PHY_CLK				119
+> +#define GCC_VIDEO_AHB_CLK					120
+> +#define GCC_VIDEO_AXI_CLK					121
+> +#define GCC_VIDEO_GPLL0_DIV_CLK_SRC				122
+> +#define GCC_VIDEO_THROTTLE_AXI_CLK				123
+> +#define GCC_VIDEO_XO_CLK					124
+> +
+> +/* GCC resets */
+> +#define GCC_QUSB2PHY_PRIM_BCR					0
+> +#define GCC_QUSB2PHY_SEC_BCR					1
+> +#define GCC_UFS_PHY_BCR						2
+> +#define GCC_USB30_PRIM_BCR					3
+> +#define GCC_USB3_DP_PHY_PRIM_BCR				4
+> +#define GCC_USB3_DP_PHY_SEC_BCR					5
+> +#define GCC_USB3_PHY_PRIM_BCR					6
+> +#define GCC_USB3_PHY_SEC_BCR					7
+> +#define GCC_USB3PHY_PHY_PRIM_BCR				8
+> +#define GCC_USB3PHY_PHY_SEC_BCR					9
+> +#define GCC_USB_PHY_CFG_AHB2PHY_BCR				10
+> +
+> +/* GCC GDSCRs */
+> +#define UFS_PHY_GDSC						0
+> +#define USB30_PRIM_GDSC						1
+> +#define HLOS1_VOTE_MMNOC_MMU_TBU_HF0_GDSC			2
+> +#define HLOS1_VOTE_MMNOC_MMU_TBU_SF_GDSC			3
+> +
+> +#endif
