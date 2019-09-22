@@ -2,61 +2,61 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA9FB9E91
-	for <lists+linux-clk@lfdr.de>; Sat, 21 Sep 2019 17:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3B6BABDF
+	for <lists+linux-clk@lfdr.de>; Mon, 23 Sep 2019 00:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438199AbfIUPS5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 21 Sep 2019 11:18:57 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:33621 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438182AbfIUPS5 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 21 Sep 2019 11:18:57 -0400
-Received: by mail-wm1-f66.google.com with SMTP id r17so11623708wme.0;
-        Sat, 21 Sep 2019 08:18:55 -0700 (PDT)
+        id S1725787AbfIVWQl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 22 Sep 2019 18:16:41 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:42757 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725208AbfIVWQk (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 22 Sep 2019 18:16:40 -0400
+Received: by mail-lf1-f65.google.com with SMTP id c195so8596823lfg.9;
+        Sun, 22 Sep 2019 15:16:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ryY1C6V/Fnndw45BEkZbgWqU1CO6K4z5Y17d3HMNBz4=;
-        b=jbSHNaXEeYn6hTwnob4r0cFK1tawMR7cK74NLvuSDg9K1Q+i9UN9MDMzyPNum1rg3u
-         3+Zlha3bTktCHxytNPYwWn53kVqaCHTgDo1L0cjl3wRSBAjIgHQkbY/BPedgCdfd+m9m
-         JA6TQEeNuoNw7bN0LVMoBnGgKOo5DmAPmrUPyP62jHCdLV+yumcWomD7WbfFLICNTIMl
-         wOB/n0k8in4sKU/Ftefui+uGHNdWEvAMHFdPXAUmYacmj0L6jE0PslD3GpFqk++rcNG6
-         8ykti5lqNIIgp4jx0YLk0usYFU/nzwdGlTbqK72AnwmeBGV/FbdcGgiN58hjVeP3yfjM
-         XSnA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rFYD+fwmoSXyFmKBXVRXyEsrw6rBXAJ+UIU1iw4pKzQ=;
+        b=MCNItgjhLhk8mYA+AOoQ7mP3woaPOSlkJnIUVWGkUasSlp4iivPfIGV85YMTEN8nZt
+         brB57fJtVWUsS42btjoZVs/kbIvViAf3IpOKUfnmfn9IY6II1vsOlkk7WGx53cRYRsP+
+         wTx1m1k6zSvNwAeCAs5WmlKy8lub+Q8KnWVPyZlKgBgKnbxb6Ns25UoMEn9TxRtshCPH
+         iMgrYfrsrc04vjYiG/kI6qZ6NrNo82+f3aMnPCTJarAXvXyhFboxio7Wz2l3Peals6An
+         xdYHKrtCnDE4Um4WPxp0BTi1c5taTAStfSH+KRGZo4XhK6aElBnJK70LuiNlryiy8upH
+         rLPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ryY1C6V/Fnndw45BEkZbgWqU1CO6K4z5Y17d3HMNBz4=;
-        b=o2dAXi0lZ2SbqSq9U5qnP3uRVuFwPHMmjHL43wzVfpNrnGe4NIqZod1FY6FH/v/kPh
-         /zzGpxwokbe+boXQfzIfr099Y+sHvQ6HjzF9Bc/kZgVPbPaeYdT/5cv2nloQ8w5s5h/p
-         +9Ql+PGAcbaHpuCW+rFandoZO470g7phaUbMvHm8nMW2nqYNPEV/2C19woyG1wAcv7gO
-         gt+7TVkAb8HX3u8r/us72MgdwE/FA/NhWD95aajOfA6IdOPdDb4PDpfGNbab1tFSxCtb
-         OR3F7BMqw4P5zr2slwZTeQ8aelUzG/96GpHvVFtwHzpKl3ty0+nNnPLfCywZulQQIbdl
-         CmLw==
-X-Gm-Message-State: APjAAAUuXXZkQCzNIstXrQf2Gnl3wEBQWqmmELW8iyiX9Sp9VCmi9bLE
-        Auznc1RkMZ/vgfQMn49DkZM=
-X-Google-Smtp-Source: APXvYqzBWlO/a1o7buEzHL4fJp72XmAnFcohUCZlv806SiF/cVfQ3RUOZrNiEOVvXdyUtLEN+b6d2A==
-X-Received: by 2002:a05:600c:217:: with SMTP id 23mr7868145wmi.76.1569079134900;
-        Sat, 21 Sep 2019 08:18:54 -0700 (PDT)
-Received: from blackbox.darklights.net (p200300F133CE0B0028BAA8C744A6F562.dip0.t-ipconnect.de. [2003:f1:33ce:b00:28ba:a8c7:44a6:f562])
-        by smtp.googlemail.com with ESMTPSA id c6sm6003120wrb.60.2019.09.21.08.18.53
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rFYD+fwmoSXyFmKBXVRXyEsrw6rBXAJ+UIU1iw4pKzQ=;
+        b=TqyEWLJMtHirAvSpvm7cD4M9Jo/9JxfzC5n1JHq/sc7BuhcQyxBZrnq2G9YkmErOLQ
+         F32JqwadTsUb6cZ/hamqDEDtOfuTlhTQ3cN68dePjPH3d5lmi54F4xlz79Rk85TVnBw3
+         PB0e194Fx7v6t9k8/O6VkFt1m7iy7AjJshokOLJ7LpOlDFAkBr7mvkx1qAKwJvzwU5Kz
+         EJaxYGnlNWmUoKDuFUYQqFKDoypr6JzdL2ciUCIrta8dfQz/IgUCuQSgROXvVkoo/ByB
+         60PW19947axkhzRVfroH6z8QEmp7zENI1zzqflwTF7CMFQRapBxiaaDSwTjfA82FLkfM
+         2mqA==
+X-Gm-Message-State: APjAAAV7NqwlMN9OfxebkaLuqwnpXYTMPKoAJCabEHtU1A9QTORoo2Nz
+        pRf4pzFkYCUbeQXphLu79WE=
+X-Google-Smtp-Source: APXvYqwAK2TAL/PtM5Cs3y25z0RHYQu9TSu6qftq1slRlj05KUFVL0zKYx4YxQksn7N8uqOr+30eQg==
+X-Received: by 2002:ac2:5445:: with SMTP id d5mr14558180lfn.43.1569189204261;
+        Sun, 22 Sep 2019 14:53:24 -0700 (PDT)
+Received: from localhost.localdomain (ppp94-29-32-67.pppoe.spdop.ru. [94.29.32.67])
+        by smtp.gmail.com with ESMTPSA id k8sm2071373ljg.9.2019.09.22.14.53.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Sep 2019 08:18:54 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     narmstrong@baylibre.com, jbrunet@baylibre.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, linux-amlogic@lists.infradead.org,
-        devicetree@vger.kernel.org, khilman@baylibre.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH 6/6] ARM: dts: meson8b: add the DDR clock controller
-Date:   Sat, 21 Sep 2019 17:18:35 +0200
-Message-Id: <20190921151835.770263-7-martin.blumenstingl@googlemail.com>
+        Sun, 22 Sep 2019 14:53:23 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] clk: tegra20/30: Optimize PLLX configuration restoring
+Date:   Mon, 23 Sep 2019 00:52:03 +0300
+Message-Id: <20190922215203.32103-1-digetx@gmail.com>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190921151835.770263-1-martin.blumenstingl@googlemail.com>
-References: <20190921151835.770263-1-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
@@ -64,53 +64,102 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the DDR clock controller and pass it's DDR_CLKID_DDR_PLL to the main
-(HHI) clock controller as "ddr_clk". The "ddr_clk" is used as one of the
-inputs for the audio clock muxes.
+There is no need to re-configure PLLX if its configuration in unchanged
+on return from suspend / cpuidle, this saves 300us if PLLX is already
+enabled (common case for cpuidle).
 
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/boot/dts/meson8b.dtsi | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ drivers/clk/tegra/clk-tegra20.c | 25 ++++++++++++++++---------
+ drivers/clk/tegra/clk-tegra30.c | 25 ++++++++++++++++---------
+ 2 files changed, 32 insertions(+), 18 deletions(-)
 
-diff --git a/arch/arm/boot/dts/meson8b.dtsi b/arch/arm/boot/dts/meson8b.dtsi
-index 1934666ff60f..8ac8bdfaf58f 100644
---- a/arch/arm/boot/dts/meson8b.dtsi
-+++ b/arch/arm/boot/dts/meson8b.dtsi
-@@ -4,6 +4,7 @@
-  * Author: Carlo Caione <carlo@endlessm.com>
-  */
+diff --git a/drivers/clk/tegra/clk-tegra20.c b/drivers/clk/tegra/clk-tegra20.c
+index cceefbd67a3b..4d8222f5c638 100644
+--- a/drivers/clk/tegra/clk-tegra20.c
++++ b/drivers/clk/tegra/clk-tegra20.c
+@@ -955,6 +955,7 @@ static void tegra20_cpu_clock_suspend(void)
+ static void tegra20_cpu_clock_resume(void)
+ {
+ 	unsigned int reg, policy;
++	u32 misc, base;
  
-+#include <dt-bindings/clock/meson8-ddr-clkc.h>
- #include <dt-bindings/clock/meson8b-clkc.h>
- #include <dt-bindings/gpio/meson8b-gpio.h>
- #include <dt-bindings/reset/amlogic,meson8b-reset.h>
-@@ -172,6 +173,14 @@
- 		#size-cells = <1>;
- 		ranges = <0x0 0xc8000000 0x8000>;
+ 	/* Is CPU complex already running on PLLX? */
+ 	reg = readl(clk_base + CCLK_BURST_POLICY);
+@@ -968,15 +969,21 @@ static void tegra20_cpu_clock_resume(void)
+ 		BUG();
  
-+		ddr_clkc: clock-controller@400 {
-+			compatible = "amlogic,meson8b-ddr-clkc";
-+			reg = <0x400 0x20>;
-+			clocks = <&xtal>;
-+			clock-names = "xtal";
-+			#clock-cells = <1>;
-+		};
+ 	if (reg != CCLK_BURST_POLICY_PLLX) {
+-		/* restore PLLX settings if CPU is on different PLL */
+-		writel(tegra20_cpu_clk_sctx.pllx_misc,
+-					clk_base + PLLX_MISC);
+-		writel(tegra20_cpu_clk_sctx.pllx_base,
+-					clk_base + PLLX_BASE);
+-
+-		/* wait for PLL stabilization if PLLX was enabled */
+-		if (tegra20_cpu_clk_sctx.pllx_base & (1 << 30))
+-			udelay(300);
++		misc = readl_relaxed(clk_base + PLLX_MISC);
++		base = readl_relaxed(clk_base + PLLX_BASE);
 +
- 		dmcbus: bus@6000 {
- 			compatible = "simple-bus";
- 			reg = <0x6000 0x400>;
-@@ -434,8 +443,8 @@
- &hhi {
- 	clkc: clock-controller {
- 		compatible = "amlogic,meson8-clkc";
--		clocks = <&xtal>;
--		clock-names = "xtal";
-+		clocks = <&xtal>, <&ddr_clkc DDR_CLKID_DDR_PLL>;
-+		clock-names = "xtal", "ddr_pll";
- 		#clock-cells = <1>;
- 		#reset-cells = <1>;
- 	};
++		if (misc != tegra20_cpu_clk_sctx.pllx_misc ||
++		    base != tegra20_cpu_clk_sctx.pllx_base) {
++			/* restore PLLX settings if CPU is on different PLL */
++			writel(tegra20_cpu_clk_sctx.pllx_misc,
++						clk_base + PLLX_MISC);
++			writel(tegra20_cpu_clk_sctx.pllx_base,
++						clk_base + PLLX_BASE);
++
++			/* wait for PLL stabilization if PLLX was enabled */
++			if (tegra20_cpu_clk_sctx.pllx_base & (1 << 30))
++				udelay(300);
++		}
+ 	}
+ 
+ 	/*
+diff --git a/drivers/clk/tegra/clk-tegra30.c b/drivers/clk/tegra/clk-tegra30.c
+index a19840fac716..3b5bca44b7aa 100644
+--- a/drivers/clk/tegra/clk-tegra30.c
++++ b/drivers/clk/tegra/clk-tegra30.c
+@@ -1135,6 +1135,7 @@ static void tegra30_cpu_clock_suspend(void)
+ static void tegra30_cpu_clock_resume(void)
+ {
+ 	unsigned int reg, policy;
++	u32 misc, base;
+ 
+ 	/* Is CPU complex already running on PLLX? */
+ 	reg = readl(clk_base + CLK_RESET_CCLK_BURST);
+@@ -1148,15 +1149,21 @@ static void tegra30_cpu_clock_resume(void)
+ 		BUG();
+ 
+ 	if (reg != CLK_RESET_CCLK_BURST_POLICY_PLLX) {
+-		/* restore PLLX settings if CPU is on different PLL */
+-		writel(tegra30_cpu_clk_sctx.pllx_misc,
+-					clk_base + CLK_RESET_PLLX_MISC);
+-		writel(tegra30_cpu_clk_sctx.pllx_base,
+-					clk_base + CLK_RESET_PLLX_BASE);
+-
+-		/* wait for PLL stabilization if PLLX was enabled */
+-		if (tegra30_cpu_clk_sctx.pllx_base & (1 << 30))
+-			udelay(300);
++		misc = readl_relaxed(clk_base + CLK_RESET_PLLX_MISC);
++		base = readl_relaxed(clk_base + CLK_RESET_PLLX_BASE);
++
++		if (misc != tegra30_cpu_clk_sctx.pllx_misc ||
++		    base != tegra30_cpu_clk_sctx.pllx_base) {
++			/* restore PLLX settings if CPU is on different PLL */
++			writel(tegra30_cpu_clk_sctx.pllx_misc,
++						clk_base + CLK_RESET_PLLX_MISC);
++			writel(tegra30_cpu_clk_sctx.pllx_base,
++						clk_base + CLK_RESET_PLLX_BASE);
++
++			/* wait for PLL stabilization if PLLX was enabled */
++			if (tegra30_cpu_clk_sctx.pllx_base & (1 << 30))
++				udelay(300);
++		}
+ 	}
+ 
+ 	/*
 -- 
 2.23.0
 
