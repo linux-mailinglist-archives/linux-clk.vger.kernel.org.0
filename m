@@ -2,81 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B3DDBBA98
-	for <lists+linux-clk@lfdr.de>; Mon, 23 Sep 2019 19:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8463BBD4C
+	for <lists+linux-clk@lfdr.de>; Mon, 23 Sep 2019 22:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437678AbfIWRgJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 23 Sep 2019 13:36:09 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:45101 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407427AbfIWRgJ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 23 Sep 2019 13:36:09 -0400
-Received: by mail-oi1-f194.google.com with SMTP id o205so8302938oib.12
-        for <linux-clk@vger.kernel.org>; Mon, 23 Sep 2019 10:36:09 -0700 (PDT)
+        id S2502570AbfIWUtu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 23 Sep 2019 16:49:50 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:44648 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2502482AbfIWUtu (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 23 Sep 2019 16:49:50 -0400
+Received: by mail-ot1-f68.google.com with SMTP id 21so13364579otj.11;
+        Mon, 23 Sep 2019 13:49:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=XNaGnPLBrYlAHfoGjy0jKQo/KIqdraCEqQpwAJaDfZU=;
-        b=ZOij/jqUeyqlWbehaHe97cAC+dc4xpguajHiagJGy6PkiAuvojfc/DKOn+NapT2mDh
-         AYnJgEXZ7hdYYnuPHeULNFZ65oWSjcH5Ia6HVq1eomqru3iGiIX1oF9ztlmD2NdSu7yk
-         /UGq1U6cGAgvsj6N9xZ4yxd/vhD9h3XCS+NtFY/SH0skkjIV2tGrSb0Gq6ku/J7orItP
-         PBSAwZzplOiIQI2IFicTyMS38uh4hZVVz+h7s8McdbDqnJPZ9tFfVcalztUhy8gxPXYo
-         mnoFlpNFVqCaqj/L0Axcwjk2wAelkI21RghCn09sI8LOQmixwHL6G+uzBPlcZZ6zmq71
-         Nhrw==
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MAD3Xg1lcz/vWNfKOXbNQkNK8JcAqagoLevWw8c1H8w=;
+        b=Uc1rJg9EHlGwJNJeN6soMEoo/3M+ZsjMSxAMCVEA+f9rOyJvTLPXhHKYXJwgIcEzBr
+         e+3CndfndOMezv1Ptw3MLfFegfdCU9l142+6xMNb6yc4r537qDyguMUGRJy+2tVBa8tR
+         F3znac2BBuFbLhadIwE1d+eNekHVycr0brsa51/cTtZc6+gj6CyZzfwmL64hoJreYrbK
+         BNsn+vt4zqHzlSpK9FPzf9skcHsynz8YunjI1ogBbKbkLYBspiO7cYeF+/GORadBkgQs
+         BoXGJUuzpml3+FLUCkphSuXEpIZ0v82lo8jO+mArHKkjDH3EoiOUfBwEJn5ZHqf0JXAZ
+         jGjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=XNaGnPLBrYlAHfoGjy0jKQo/KIqdraCEqQpwAJaDfZU=;
-        b=Na9sO/944ldso36/lgByQ8MUwGyCVk89oILy/F3n3pdMYdE/8IQobN5whuCX2lmqBd
-         TouSVY+8Y1nOiwG59Cv9LMFJ+bxam30erYW/FToZg4r7SC6trotCUGRDTYPKAiE6W5GH
-         B8pjgLGhqtkJ0Vprno9Lop0S0x86YRr16Ie/OEjNnXqBhYp/5Wh+kFxCcKNh8C6G+vEF
-         EMqvPerT0N3NlJlKS2TvHFeS46rnZdnlUYO9ruW5j9BBa9rOrPWPmpFkxcz6onMuojSZ
-         TkU5z2oSH2HG6ZF7he8jbc34bM0NO0t2s0bmSBFj0o718f3OXxCBG65HVV2bDY3YoLna
-         FOnQ==
-X-Gm-Message-State: APjAAAX7hBEny+lVVp2+UKvTIFmaUYGQ5pWuARC8VhWsn94D0DFe+nuw
-        bQXaNgGtnuJ7yBVEsbKUZnYhXhaWA90+XHR2BXY=
-X-Google-Smtp-Source: APXvYqyOxzrlnvzmLK3BKmRfwnwArLoK1jNlR7dBkorsL90OIvPOGRUnQkRfzL97+o9hAP63ApIxI0s+yrjj9ojG9U4=
-X-Received: by 2002:aca:f002:: with SMTP id o2mr1094461oih.62.1569260168796;
- Mon, 23 Sep 2019 10:36:08 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MAD3Xg1lcz/vWNfKOXbNQkNK8JcAqagoLevWw8c1H8w=;
+        b=PLmrPInu5OXnrGrF8J7C3YZJPgTC4PA3T1SG+S5f9yInUquXSo3wMwL19gp1IopejS
+         pGudY5gqp4/noo/VMd6QHJk3hCnCc7wTcIA3gUuNmrG6lJmCPHdVOupDwH4kaaWH4oGq
+         xHypUMEO+YGQTs36GXsUYDHlw+uqTiKCzf4BmYruJSvAi/etUv82cpkIZ2X9dvmupfCy
+         djI+IfRoa9LjU9FDw+PnbmQT5Yg892pEGwSIRJ3TFfUaKxkhjVnkqftpT2Jvt2Wd6u5P
+         6cL/VMB4JbsQ7+B2nl/DkDCieb0eAddFrU9Psr9xC2DeAmyP4yaBE+Y3kd6t+IyTIpnx
+         MAJw==
+X-Gm-Message-State: APjAAAUzh5pabybEZajfMJt/lIO+Kp/ge+ets2T0xHoMXIJgbF3cbPcz
+        KW3pt01wV7waswd0CmEmVC6ndQIkW6IUEVBHCqI=
+X-Google-Smtp-Source: APXvYqxg9tfZ17T4nhNMMZMbP5FnSoEzZH0Yj/hpHqWL0Dt5cVhCyLOpWwrFdj59nZDuupSIBtRiMaKO4g+TxYTiSnw=
+X-Received: by 2002:a9d:7d17:: with SMTP id v23mr161527otn.81.1569271789175;
+ Mon, 23 Sep 2019 13:49:49 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a4a:9488:0:0:0:0:0 with HTTP; Mon, 23 Sep 2019 10:36:05
- -0700 (PDT)
-Reply-To: stellerbarid@barid.com
-From:   "Mrs. Stellar Maoris" <mrsbeccy8@gmail.com>
-Date:   Mon, 23 Sep 2019 10:36:05 -0700
-Message-ID: <CAHU1do3ry5ZJOuXbmZN9wvwm5kDn45vFe+dw3NK3iaxQLx-dhA@mail.gmail.com>
-Subject: Hello Dear Friend
-To:     undisclosed-recipients:;
+References: <20190921151835.770263-1-martin.blumenstingl@googlemail.com> <1jsgons4wy.fsf@starbuckisacylon.baylibre.com>
+In-Reply-To: <1jsgons4wy.fsf@starbuckisacylon.baylibre.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 23 Sep 2019 22:49:37 +0200
+Message-ID: <CAFBinCAHD+D=a2mHeHMGq12MvoksHBr308jSrdcH+UYsUmwd8w@mail.gmail.com>
+Subject: Re: [PATCH 0/6] add the DDR clock controller on Meson8 and Meson8b
+To:     Jerome Brunet <jbrunet@baylibre.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>, robh+dt@kernel.org,
+        mark.rutland@arm.com, linux-amlogic@lists.infradead.org,
+        devicetree@vger.kernel.org, khilman@baylibre.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello Dear Friend.
+Hi Jerome,
 
-I=E2=80=99m  Mrs. Stellar Maoris  a manger in  HSBC  bank  of  Spain Madrid=
-, I
-am sending
-this brief letter  to seek for  your partnership and long term relationship=
-,
-I have an important and urgent issue I want to discuss with you privately a=
-bout
-Transaction fund worth the sum of $9.5m America dollars left by most
-of the greedy
-Asia Kuwait politician in our bank here in Spain Madrid A fund which
-suppose to have been use to develop the continent.
+On Mon, Sep 23, 2019 at 12:06 PM Jerome Brunet <jbrunet@baylibre.com> wrote:
+>
+> On Sat 21 Sep 2019 at 17:18, Martin Blumenstingl <martin.blumenstingl@googlemail.com> wrote:
+>
+> > Meson8 and Meson8b SoCs embed a DDR clock controller in their MMCBUS
+> > registers. This series:
+> > - adds support for this DDR clock controller (patches 0 and 1)
+> > - wires up the DDR PLL as input for two audio clocks (patches 2 and 3)
+>
+> Have you been able to validate somehow that DDR rate calculated by CCF
+> is the actual rate that gets to the audio clocks ?
+no, I haven't been able to validate this (yet)
 
-If you know that you can invest this fund into profitable business in
-your country by the end we shall have 50%50 share each, kindly get
-back to me for more detail and procedures.
+> While I understand the interest for completeness, I suspect the having
+> the DDR clock as an audio parent was just for debugging purpose. IOW,
+> I'm not sure if adding this parent is useful to an actual audio use
+> case. As far as audio would be concerned, I think we are better of
+> without this parent.
+there at least three other (potential) consumers of the ddr_pll clocks
+on the 32-bit SoCs:
+- CPU clock mux [0]
+- clk81 mux [1]
+- USB PHY [2]
 
-Your urgent respond will be highly appreciated
-Awaiting to hear from you asap.
-My Regard.
-Stellar Maoris
-Email: stellerbarid@barid.com
-Phone Number:  +34(62) 768 5146
+I have not validated any of these either
+
+> > - adds the DDR clock controller to meson8.dtsi and meson8b.dtsi
+> >
+>
+> Could you please separate the driver and DT series in the future ? Those
+> take different paths and are meant for different maintainers.
+sure - so far Kevin has been doing a great job of still tracking these
+but I'm happy to split this into two patchsets
+
+
+Martin
+
+
+[0] https://github.com/endlessm/u-boot-meson/blob/345ee7eb02903f5ecb1173ffb2cd36666e44ebed/board/amlogic/m8b_m201_v1/firmware/timming.c#L441
+[1] https://github.com/endlessm/u-boot-meson/blob/345ee7eb02903f5ecb1173ffb2cd36666e44ebed/board/amlogic/m8b_m201_v1/firmware/timming.c#L452
+[2] https://github.com/endlessm/u-boot-meson/blob/f1ee03e3f7547d03e1478cc1fc967a9e5a121d92/arch/arm/cpu/aml_meson/m8/firmware/usb_boot/platform.c#L22
