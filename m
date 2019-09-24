@@ -2,37 +2,38 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FD4BCFC2
-	for <lists+linux-clk@lfdr.de>; Tue, 24 Sep 2019 19:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 471E7BCFB4
+	for <lists+linux-clk@lfdr.de>; Tue, 24 Sep 2019 19:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2633154AbfIXQoY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 24 Sep 2019 12:44:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33444 "EHLO mail.kernel.org"
+        id S2409925AbfIXQoz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 24 Sep 2019 12:44:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34312 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2633147AbfIXQoX (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 24 Sep 2019 12:44:23 -0400
+        id S2409919AbfIXQoy (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 24 Sep 2019 12:44:54 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 39B6921783;
-        Tue, 24 Sep 2019 16:44:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BD971217D9;
+        Tue, 24 Sep 2019 16:44:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569343462;
-        bh=lDL5rQ0iQjQPgcCdFBsieK5RO/jzJBnGB/H48wyFqpE=;
+        s=default; t=1569343493;
+        bh=ufQvx7ZNex7e9L1n3iz0qxl2DPV4jX3rgvJ6+P7qKWY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MGutvuIVg4mbHxJ0lDIpoL1YJUCZ8ZSM3m0BZbtNgzwT5h0kSySAzGuiFOFM2RIzx
-         4qx5BCezBq/cWzc17QFyaQZoQODE74cyCSCVOtNHAJaSlviQR2tH0K/cn+g3T0NiaW
-         Tu3EZwv8rHA8gW1pqCdHiQboZE2+aJvsV+xCeCvs=
+        b=WAjV6HN8gdrTNe2vPwKlBWRH1xihV1OeYA2OQJOqadFPzEX7hNMomuvxrO5CDMjbu
+         N2uv+4IW6IDclb3toYX4gkwkh7sKjNMh1qCCPtPHcwdGB0i4ERE3kf1te2ziPseBQA
+         7vWafXFJBaM4XweQwZtWn09LDkg3DBX1Udyvsmpw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Simon Horman <horms+renesas@verge.net.au>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 58/87] clk: renesas: cpg-mssr: Set GENPD_FLAG_ALWAYS_ON for clock domain
-Date:   Tue, 24 Sep 2019 12:41:14 -0400
-Message-Id: <20190924164144.25591-58-sashal@kernel.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.3 70/87] clk: qcom: gcc-sdm845: Use floor ops for sdcc clks
+Date:   Tue, 24 Sep 2019 12:41:26 -0400
+Message-Id: <20190924164144.25591-70-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190924164144.25591-1-sashal@kernel.org>
 References: <20190924164144.25591-1-sashal@kernel.org>
@@ -45,42 +46,54 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Stephen Boyd <swboyd@chromium.org>
 
-[ Upstream commit f787216f33ce5b5a2567766398f44ab62157114c ]
+[ Upstream commit 5e4b7e82d497580bc430576c4c9bce157dd72512 ]
 
-The CPG/MSSR Clock Domain driver does not implement the
-generic_pm_domain.power_{on,off}() callbacks, as the domain itself
-cannot be powered down.  Hence the domain should be marked as always-on
-by setting the GENPD_FLAG_ALWAYS_ON flag, to prevent the core PM Domain
-code from considering it for power-off, and doing unnessary processing.
+Some MMC cards fail to enumerate properly when inserted into an MMC slot
+on sdm845 devices. This is because the clk ops for qcom clks round the
+frequency up to the nearest rate instead of down to the nearest rate.
+For example, the MMC driver requests a frequency of 52MHz from
+clk_set_rate() but the qcom implementation for these clks rounds 52MHz
+up to the next supported frequency of 100MHz. The MMC driver could be
+modified to request clk rate ranges but for now we can fix this in the
+clk driver by changing the rounding policy for this clk to be round down
+instead of round up.
 
-Note that this only affects RZ/A2 SoCs.  On R-Car Gen2 and Gen3 SoCs,
-the R-Car SYSC driver handles Clock Domain creation, and offloads only
-device attachment/detachment to the CPG/MSSR driver.
-
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Simon Horman <horms+renesas@verge.net.au>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Fixes: 06391eddb60a ("clk: qcom: Add Global Clock controller (GCC) driver for SDM845")
+Reported-by: Douglas Anderson <dianders@chromium.org>
+Cc: Taniya Das <tdas@codeaurora.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Link: https://lkml.kernel.org/r/20190830195142.103564-1-swboyd@chromium.org
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/renesas/renesas-cpg-mssr.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/clk/qcom/gcc-sdm845.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/renesas/renesas-cpg-mssr.c b/drivers/clk/renesas/renesas-cpg-mssr.c
-index d4075b1306742..132cc96895e3a 100644
---- a/drivers/clk/renesas/renesas-cpg-mssr.c
-+++ b/drivers/clk/renesas/renesas-cpg-mssr.c
-@@ -551,7 +551,8 @@ static int __init cpg_mssr_add_clk_domain(struct device *dev,
+diff --git a/drivers/clk/qcom/gcc-sdm845.c b/drivers/clk/qcom/gcc-sdm845.c
+index 7131dcf9b0603..95be125c3bddf 100644
+--- a/drivers/clk/qcom/gcc-sdm845.c
++++ b/drivers/clk/qcom/gcc-sdm845.c
+@@ -685,7 +685,7 @@ static struct clk_rcg2 gcc_sdcc2_apps_clk_src = {
+ 		.name = "gcc_sdcc2_apps_clk_src",
+ 		.parent_names = gcc_parent_names_10,
+ 		.num_parents = 5,
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_floor_ops,
+ 	},
+ };
  
- 	genpd = &pd->genpd;
- 	genpd->name = np->name;
--	genpd->flags = GENPD_FLAG_PM_CLK | GENPD_FLAG_ACTIVE_WAKEUP;
-+	genpd->flags = GENPD_FLAG_PM_CLK | GENPD_FLAG_ALWAYS_ON |
-+		       GENPD_FLAG_ACTIVE_WAKEUP;
- 	genpd->attach_dev = cpg_mssr_attach_dev;
- 	genpd->detach_dev = cpg_mssr_detach_dev;
- 	pm_genpd_init(genpd, &pm_domain_always_on_gov, false);
+@@ -709,7 +709,7 @@ static struct clk_rcg2 gcc_sdcc4_apps_clk_src = {
+ 		.name = "gcc_sdcc4_apps_clk_src",
+ 		.parent_names = gcc_parent_names_0,
+ 		.num_parents = 4,
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_floor_ops,
+ 	},
+ };
+ 
 -- 
 2.20.1
 
