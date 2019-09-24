@@ -2,113 +2,98 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CEABCF40
-	for <lists+linux-clk@lfdr.de>; Tue, 24 Sep 2019 19:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B26BD370
+	for <lists+linux-clk@lfdr.de>; Tue, 24 Sep 2019 22:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405997AbfIXQyJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 24 Sep 2019 12:54:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46146 "EHLO mail.kernel.org"
+        id S1727891AbfIXUUQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 24 Sep 2019 16:20:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51848 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437937AbfIXQwW (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 24 Sep 2019 12:52:22 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1727264AbfIXUUQ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 24 Sep 2019 16:20:16 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B56A9222C9;
-        Tue, 24 Sep 2019 16:52:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EFEBF20640;
+        Tue, 24 Sep 2019 20:20:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569343941;
-        bh=TkRXmpHdZvwNp4jqEj1dbBI2v217kXfJTlu2W7Axhqk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KJsdbNdi79P0wBTBBLCVDfWLC+YAfi7e8WAM36oD0KvI1HT19NxypjIUHYxPfnRtL
-         NYTi/bWStnQE8M5qbBbF+we1/eRcOif4ZNq2UML+Ic5BwEMWMtvUL/DzeojNA3r8kH
-         62Z2FqXQHyyuNze/fcNhrY0jU0wPYhNwqSrcaclo=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Stephen Boyd <sboyd@kernel.org>, Guo Zeng <Guo.Zeng@csr.com>,
-        Barry Song <Baohua.Song@csr.com>,
-        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 05/14] clk: sirf: Don't reference clk_init_data after registration
-Date:   Tue, 24 Sep 2019 12:52:03 -0400
-Message-Id: <20190924165214.28857-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190924165214.28857-1-sashal@kernel.org>
-References: <20190924165214.28857-1-sashal@kernel.org>
+        s=default; t=1569356416;
+        bh=1CorAmS8XtFV4yXtNftl8NnpMjYiQ/U6EHGYysnVmmQ=;
+        h=In-Reply-To:References:Cc:To:From:Subject:Date:From;
+        b=T3Vd7fmkABMggKs4QJTa2QS19/Mp7JeXBuGWJlrfj3AFrKdWzVDNxkS27ltN080+7
+         PForK+42VCuwL8nN5QWwd2rPhWVhehGEznqoSpWz83fT9hZnFIx4GKMAy5tJp/gpMe
+         MuKGeKUfk4UUuysJNCgXkDzyWtCaFhrUZebjkbOI=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190924122147.fojcu5u44letrele@pengutronix.de>
+References: <20190920153906.20887-1-alexandre.belloni@bootlin.com> <20190924122147.fojcu5u44letrele@pengutronix.de>
+Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        <u.kleine-koenig@pengutronix.de>
+From:   Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH] clk: at91: avoid sleeping early
+User-Agent: alot/0.8.1
+Date:   Tue, 24 Sep 2019 13:20:15 -0700
+Message-Id: <20190924202015.EFEBF20640@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Stephen Boyd <sboyd@kernel.org>
+Quoting Uwe  (2019-09-24 05:21:47)
+> On Fri, Sep 20, 2019 at 05:39:06PM +0200, Alexandre Belloni wrote:
+> > Note that this was already discussed a while ago and Arnd said this app=
+roach was
+> > reasonable:
+> >   https://lore.kernel.org/lkml/6120818.MyeJZ74hYa@wuerfel/
+> >=20
+> >  drivers/clk/at91/clk-main.c |  5 ++++-
+> >  drivers/clk/at91/sckc.c     | 20 ++++++++++++++++----
+> >  2 files changed, 20 insertions(+), 5 deletions(-)
+> >=20
+> > diff --git a/drivers/clk/at91/clk-main.c b/drivers/clk/at91/clk-main.c
+> > index f607ee702c83..ccd48e7a3d74 100644
+> > --- a/drivers/clk/at91/clk-main.c
+> > +++ b/drivers/clk/at91/clk-main.c
+> > @@ -293,7 +293,10 @@ static int clk_main_probe_frequency(struct regmap =
+*regmap)
+> >               regmap_read(regmap, AT91_CKGR_MCFR, &mcfr);
+> >               if (mcfr & AT91_PMC_MAINRDY)
+> >                       return 0;
+> > -             usleep_range(MAINF_LOOP_MIN_WAIT, MAINF_LOOP_MAX_WAIT);
+> > +             if (system_state < SYSTEM_RUNNING)
+> > +                     udelay(MAINF_LOOP_MIN_WAIT);
+> > +             else
+> > +                     usleep_range(MAINF_LOOP_MIN_WAIT, MAINF_LOOP_MAX_=
+WAIT);
+>=20
+> Given that this construct is introduced several times, I wonder if we
+> want something like:
+>=20
+>         static inline void early_usleep_range(unsigned long min, unsigned=
+ long max)
+>         {
+>                 if (system_state < SYSTEM_RUNNING)
+>                         udelay(min);
+>                 else
+>                         usleep_range(min, max);
+>         }
+>=20
 
-[ Upstream commit af55dadfbce35b4f4c6247244ce3e44b2e242b84 ]
+Maybe, but I think the intent is to not encourage this behavior? So
+providing a wrapper will make it "easy" and then we'll have to tell
+users to stop calling it. Another idea would be to make usleep_range()
+"do the right thing" and call udelay if the system isn't running. And
+another idea from tlgx[1] is to pull the delay logic into another clk op
+that we can call to see when the enable or prepare is done. That may be
+possible by introducing another clk_ops callback that when present
+indicates we should sleep or delay for so much time while waiting for
+the prepare or enable to complete.
 
-A future patch is going to change semantics of clk_register() so that
-clk_hw::init is guaranteed to be NULL after a clk is registered. Avoid
-referencing this member here so that we don't run into NULL pointer
-exceptions.
-
-Cc: Guo Zeng <Guo.Zeng@csr.com>
-Cc: Barry Song <Baohua.Song@csr.com>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Link: https://lkml.kernel.org/r/20190731193517.237136-6-sboyd@kernel.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/clk/sirf/clk-common.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/clk/sirf/clk-common.c b/drivers/clk/sirf/clk-common.c
-index 77e1e2491689b..edb7197cc4b4d 100644
---- a/drivers/clk/sirf/clk-common.c
-+++ b/drivers/clk/sirf/clk-common.c
-@@ -298,9 +298,10 @@ static u8 dmn_clk_get_parent(struct clk_hw *hw)
- {
- 	struct clk_dmn *clk = to_dmnclk(hw);
- 	u32 cfg = clkc_readl(clk->regofs);
-+	const char *name = clk_hw_get_name(hw);
- 
- 	/* parent of io domain can only be pll3 */
--	if (strcmp(hw->init->name, "io") == 0)
-+	if (strcmp(name, "io") == 0)
- 		return 4;
- 
- 	WARN_ON((cfg & (BIT(3) - 1)) > 4);
-@@ -312,9 +313,10 @@ static int dmn_clk_set_parent(struct clk_hw *hw, u8 parent)
- {
- 	struct clk_dmn *clk = to_dmnclk(hw);
- 	u32 cfg = clkc_readl(clk->regofs);
-+	const char *name = clk_hw_get_name(hw);
- 
- 	/* parent of io domain can only be pll3 */
--	if (strcmp(hw->init->name, "io") == 0)
-+	if (strcmp(name, "io") == 0)
- 		return -EINVAL;
- 
- 	cfg &= ~(BIT(3) - 1);
-@@ -354,7 +356,8 @@ static long dmn_clk_round_rate(struct clk_hw *hw, unsigned long rate,
- {
- 	unsigned long fin;
- 	unsigned ratio, wait, hold;
--	unsigned bits = (strcmp(hw->init->name, "mem") == 0) ? 3 : 4;
-+	const char *name = clk_hw_get_name(hw);
-+	unsigned bits = (strcmp(name, "mem") == 0) ? 3 : 4;
- 
- 	fin = *parent_rate;
- 	ratio = fin / rate;
-@@ -376,7 +379,8 @@ static int dmn_clk_set_rate(struct clk_hw *hw, unsigned long rate,
- 	struct clk_dmn *clk = to_dmnclk(hw);
- 	unsigned long fin;
- 	unsigned ratio, wait, hold, reg;
--	unsigned bits = (strcmp(hw->init->name, "mem") == 0) ? 3 : 4;
-+	const char *name = clk_hw_get_name(hw);
-+	unsigned bits = (strcmp(name, "mem") == 0) ? 3 : 4;
- 
- 	fin = parent_rate;
- 	ratio = fin / rate;
--- 
-2.20.1
+[1] https://lkml.kernel.org/r/alpine.DEB.2.11.1606061448010.28031@nanos
 
