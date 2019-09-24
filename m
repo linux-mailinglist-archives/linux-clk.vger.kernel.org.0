@@ -2,36 +2,37 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C73B9BCFFC
-	for <lists+linux-clk@lfdr.de>; Tue, 24 Sep 2019 19:03:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4FDFBCFCA
+	for <lists+linux-clk@lfdr.de>; Tue, 24 Sep 2019 19:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2411063AbfIXRCS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 24 Sep 2019 13:02:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60468 "EHLO mail.kernel.org"
+        id S1728345AbfIXRBH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 24 Sep 2019 13:01:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33414 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2633015AbfIXQnd (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 24 Sep 2019 12:43:33 -0400
+        id S2387913AbfIXQoV (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 24 Sep 2019 12:44:21 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2C08621928;
-        Tue, 24 Sep 2019 16:43:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F2C3B21928;
+        Tue, 24 Sep 2019 16:44:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569343412;
-        bh=ghPfPE3Dv9KM5BihfJgp2aHVM6ja4supiXXbg586G2g=;
+        s=default; t=1569343460;
+        bh=bSxSZR+V3L5L3KCQ7M6cYOUgKsuuT07h+lzgj35jKmE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fn9qKZVgVqQsHe8ut5F/IUcQl9ApKfoIUg7DWF7iqIbLlsfO4Q6GXY3SIQGwhQRUg
-         j4fZIqOCOAGRtNE6rKtfaTcLSJrvTNtkVv3wqcjBp6TOxzsrVJlR4PdBxe5Tzvv0pz
-         xMqq8YfkZoN7+vREIiiXJnnNsH+MUQ5fSZAlwlgE=
+        b=ruOitwMRPz9dJYChAbxVkm5XLCV7JQMyh49jCynn6Eq6uGw78NPeKV8/VhYv6WPyH
+         o25at64PQt6sPePvw7xDD0k+myJouXrlKJKfSWTG0PVcUyPmDEk09Xe854n9ynq4Gq
+         nzdywkCxw5zQYSYLanOQPqm2mxFSa/+6fkLo2Lzo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>, Sasha Levin <sashal@kernel.org>,
-        linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 41/87] clk: sunxi: Don't call clk_hw_get_name() on a hw that isn't registered
-Date:   Tue, 24 Sep 2019 12:40:57 -0400
-Message-Id: <20190924164144.25591-41-sashal@kernel.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Simon Horman <horms+renesas@verge.net.au>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.3 57/87] clk: renesas: mstp: Set GENPD_FLAG_ALWAYS_ON for clock domain
+Date:   Tue, 24 Sep 2019 12:41:13 -0400
+Message-Id: <20190924164144.25591-57-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190924164144.25591-1-sashal@kernel.org>
 References: <20190924164144.25591-1-sashal@kernel.org>
@@ -44,46 +45,43 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Stephen Boyd <sboyd@kernel.org>
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-[ Upstream commit a7b85ad25a97cf897b4819a121655c483d86156f ]
+[ Upstream commit a459a184c978ca9ad538aab93aafdde873953f30 ]
 
-The implementation of clk_hw_get_name() relies on the clk_core
-associated with the clk_hw pointer existing. If of_clk_hw_register()
-fails, there isn't a clk_core created yet, so calling clk_hw_get_name()
-here fails. Extract the name first so we can print it later.
+The CPG/MSTP Clock Domain driver does not implement the
+generic_pm_domain.power_{on,off}() callbacks, as the domain itself
+cannot be powered down.  Hence the domain should be marked as always-on
+by setting the GENPD_FLAG_ALWAYS_ON flag, to prevent the core PM Domain
+code from considering it for power-off, and doing unnessary processing.
 
-Fixes: 1d80c14248d6 ("clk: sunxi-ng: Add common infrastructure")
-Cc: Maxime Ripard <maxime.ripard@bootlin.com>
-Cc: Chen-Yu Tsai <wens@csie.org>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+This also gets rid of a boot warning when the Clock Domain contains an
+IRQ-safe device, e.g. on RZ/A1:
+
+    sh_mtu2 fcff0000.timer: PM domain cpg_clocks will not be powered off
+
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Simon Horman <horms+renesas@verge.net.au>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/sunxi-ng/ccu_common.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/clk/renesas/clk-mstp.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/sunxi-ng/ccu_common.c b/drivers/clk/sunxi-ng/ccu_common.c
-index 7fe3ac980e5f9..2e20e650b6c01 100644
---- a/drivers/clk/sunxi-ng/ccu_common.c
-+++ b/drivers/clk/sunxi-ng/ccu_common.c
-@@ -97,14 +97,15 @@ int sunxi_ccu_probe(struct device_node *node, void __iomem *reg,
+diff --git a/drivers/clk/renesas/clk-mstp.c b/drivers/clk/renesas/clk-mstp.c
+index 2db9093546c60..e326e6dc09fce 100644
+--- a/drivers/clk/renesas/clk-mstp.c
++++ b/drivers/clk/renesas/clk-mstp.c
+@@ -334,7 +334,8 @@ void __init cpg_mstp_add_clk_domain(struct device_node *np)
+ 		return;
  
- 	for (i = 0; i < desc->hw_clks->num ; i++) {
- 		struct clk_hw *hw = desc->hw_clks->hws[i];
-+		const char *name;
- 
- 		if (!hw)
- 			continue;
- 
-+		name = hw->init->name;
- 		ret = of_clk_hw_register(node, hw);
- 		if (ret) {
--			pr_err("Couldn't register clock %d - %s\n",
--			       i, clk_hw_get_name(hw));
-+			pr_err("Couldn't register clock %d - %s\n", i, name);
- 			goto err_clk_unreg;
- 		}
- 	}
+ 	pd->name = np->name;
+-	pd->flags = GENPD_FLAG_PM_CLK | GENPD_FLAG_ACTIVE_WAKEUP;
++	pd->flags = GENPD_FLAG_PM_CLK | GENPD_FLAG_ALWAYS_ON |
++		    GENPD_FLAG_ACTIVE_WAKEUP;
+ 	pd->attach_dev = cpg_mstp_attach_dev;
+ 	pd->detach_dev = cpg_mstp_detach_dev;
+ 	pm_genpd_init(pd, &pm_domain_always_on_gov, false);
 -- 
 2.20.1
 
