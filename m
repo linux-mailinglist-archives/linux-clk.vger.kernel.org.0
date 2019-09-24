@@ -2,35 +2,35 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB111BCF6C
-	for <lists+linux-clk@lfdr.de>; Tue, 24 Sep 2019 19:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 636E4BCEEE
+	for <lists+linux-clk@lfdr.de>; Tue, 24 Sep 2019 19:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729681AbfIXQ4g (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 24 Sep 2019 12:56:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41692 "EHLO mail.kernel.org"
+        id S2410297AbfIXQt0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 24 Sep 2019 12:49:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41706 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2441469AbfIXQtZ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 24 Sep 2019 12:49:25 -0400
+        id S2410111AbfIXQt0 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 24 Sep 2019 12:49:26 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A10A221D7E;
-        Tue, 24 Sep 2019 16:49:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BC4A820673;
+        Tue, 24 Sep 2019 16:49:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569343764;
-        bh=VZnmPg5IckIkj42+lltGSiTdBTdV0VvKLXMECgyNU+E=;
+        s=default; t=1569343765;
+        bh=QupKWh7rUQgJ8ktqyzVPLYtsgPGbrWH0XN6BQUvicMk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p4vUa/Zgt5IJQSJ95Pp00Zf9t6ztsjDXatCPe7YtojWCNvsbHoRbnVFWP9INr3hDL
-         JSJq7l8qm6xA2Cq+TXGR9vEiYeVeAxZxZjml8o50qkqWT44JDIDqCEvwbSiKnLkOdV
-         Od/ZsfIU3OMEBm0cKW2LjNItglwJb0llSRbEEQ10=
+        b=F4wVI3AaDucl4NR8cjoi5hkgDdQyw742kq5KHvSwSj8mcVDA47uzCOWaolbr20KEg
+         u0ZHFwA/pOBOQGTbpFwnaJWifk3YxoDQJ9u57+m8n/zwdWnVqRR5Z9v2fU/pvkvU33
+         xtPZd4yVpPQjefsTf4oW2x3WhATBFOnsY8crncOM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+Cc:     Stephen Boyd <sboyd@kernel.org>, Guo Zeng <Guo.Zeng@csr.com>,
+        Barry Song <Baohua.Song@csr.com>,
         Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 19/50] clk: actions: Don't reference clk_init_data after registration
-Date:   Tue, 24 Sep 2019 12:48:16 -0400
-Message-Id: <20190924164847.27780-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 20/50] clk: sirf: Don't reference clk_init_data after registration
+Date:   Tue, 24 Sep 2019 12:48:17 -0400
+Message-Id: <20190924164847.27780-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190924164847.27780-1-sashal@kernel.org>
 References: <20190924164847.27780-1-sashal@kernel.org>
@@ -45,47 +45,70 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 From: Stephen Boyd <sboyd@kernel.org>
 
-[ Upstream commit cf9ec1fc6d7cceb73e7f1efd079d2eae173fdf57 ]
+[ Upstream commit af55dadfbce35b4f4c6247244ce3e44b2e242b84 ]
 
 A future patch is going to change semantics of clk_register() so that
 clk_hw::init is guaranteed to be NULL after a clk is registered. Avoid
 referencing this member here so that we don't run into NULL pointer
 exceptions.
 
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Guo Zeng <Guo.Zeng@csr.com>
+Cc: Barry Song <Baohua.Song@csr.com>
 Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Link: https://lkml.kernel.org/r/20190731193517.237136-2-sboyd@kernel.org
-[sboyd@kernel.org: Move name to after checking for error or NULL hw]
-Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Link: https://lkml.kernel.org/r/20190731193517.237136-6-sboyd@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/actions/owl-common.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/clk/sirf/clk-common.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clk/actions/owl-common.c b/drivers/clk/actions/owl-common.c
-index 61c1071b5180a..e9be34b17f3f5 100644
---- a/drivers/clk/actions/owl-common.c
-+++ b/drivers/clk/actions/owl-common.c
-@@ -67,16 +67,17 @@ int owl_clk_probe(struct device *dev, struct clk_hw_onecell_data *hw_clks)
- 	struct clk_hw *hw;
+diff --git a/drivers/clk/sirf/clk-common.c b/drivers/clk/sirf/clk-common.c
+index d8f9efa5129ad..25351d6a55ba2 100644
+--- a/drivers/clk/sirf/clk-common.c
++++ b/drivers/clk/sirf/clk-common.c
+@@ -298,9 +298,10 @@ static u8 dmn_clk_get_parent(struct clk_hw *hw)
+ {
+ 	struct clk_dmn *clk = to_dmnclk(hw);
+ 	u32 cfg = clkc_readl(clk->regofs);
++	const char *name = clk_hw_get_name(hw);
  
- 	for (i = 0; i < hw_clks->num; i++) {
-+		const char *name;
+ 	/* parent of io domain can only be pll3 */
+-	if (strcmp(hw->init->name, "io") == 0)
++	if (strcmp(name, "io") == 0)
+ 		return 4;
  
- 		hw = hw_clks->hws[i];
--
- 		if (IS_ERR_OR_NULL(hw))
- 			continue;
+ 	WARN_ON((cfg & (BIT(3) - 1)) > 4);
+@@ -312,9 +313,10 @@ static int dmn_clk_set_parent(struct clk_hw *hw, u8 parent)
+ {
+ 	struct clk_dmn *clk = to_dmnclk(hw);
+ 	u32 cfg = clkc_readl(clk->regofs);
++	const char *name = clk_hw_get_name(hw);
  
-+		name = hw->init->name;
- 		ret = devm_clk_hw_register(dev, hw);
- 		if (ret) {
- 			dev_err(dev, "Couldn't register clock %d - %s\n",
--				i, hw->init->name);
-+				i, name);
- 			return ret;
- 		}
- 	}
+ 	/* parent of io domain can only be pll3 */
+-	if (strcmp(hw->init->name, "io") == 0)
++	if (strcmp(name, "io") == 0)
+ 		return -EINVAL;
+ 
+ 	cfg &= ~(BIT(3) - 1);
+@@ -354,7 +356,8 @@ static long dmn_clk_round_rate(struct clk_hw *hw, unsigned long rate,
+ {
+ 	unsigned long fin;
+ 	unsigned ratio, wait, hold;
+-	unsigned bits = (strcmp(hw->init->name, "mem") == 0) ? 3 : 4;
++	const char *name = clk_hw_get_name(hw);
++	unsigned bits = (strcmp(name, "mem") == 0) ? 3 : 4;
+ 
+ 	fin = *parent_rate;
+ 	ratio = fin / rate;
+@@ -376,7 +379,8 @@ static int dmn_clk_set_rate(struct clk_hw *hw, unsigned long rate,
+ 	struct clk_dmn *clk = to_dmnclk(hw);
+ 	unsigned long fin;
+ 	unsigned ratio, wait, hold, reg;
+-	unsigned bits = (strcmp(hw->init->name, "mem") == 0) ? 3 : 4;
++	const char *name = clk_hw_get_name(hw);
++	unsigned bits = (strcmp(name, "mem") == 0) ? 3 : 4;
+ 
+ 	fin = parent_rate;
+ 	ratio = fin / rate;
 -- 
 2.20.1
 
