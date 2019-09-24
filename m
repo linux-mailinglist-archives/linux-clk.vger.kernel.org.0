@@ -2,39 +2,38 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1BABCF80
-	for <lists+linux-clk@lfdr.de>; Tue, 24 Sep 2019 19:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32162BCF73
+	for <lists+linux-clk@lfdr.de>; Tue, 24 Sep 2019 19:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729738AbfIXQ5g (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 24 Sep 2019 12:57:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40378 "EHLO mail.kernel.org"
+        id S1729488AbfIXQ45 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 24 Sep 2019 12:56:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41348 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730534AbfIXQsj (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 24 Sep 2019 12:48:39 -0400
+        id S1730678AbfIXQtJ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 24 Sep 2019 12:49:09 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 07D1921906;
-        Tue, 24 Sep 2019 16:48:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 66D7221906;
+        Tue, 24 Sep 2019 16:49:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569343718;
-        bh=RWaQefVK8ASVG6pbqzbUIqMWiTGMpl6fvlxtzPjJeq0=;
+        s=default; t=1569343749;
+        bh=zL1w5syTRE29MPGD3HK6k4a/25ozxavpM0xkeCziFPM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qJyM9dlizzdeHcpXDziW2bNnh3ZhrqPlZZ2sNOo4OXpl6ZnqetLfXwak0VxXLo2tp
-         iNBsRi/YwWaf4OS9HOrP3YghgkJ97q7modAPZaCjljpbxejupSD3mk87TEeSYBiv8J
-         EayYa+2+ai8K8Crpn2ne6vQoi/agJaL7GOIKCdBY=
+        b=JiG4kkP+CMBu3Z1irJUc6Zt2HgHxuCiF+9FME2jK3ysMRVgQhqJpPm4sujHLXwRbb
+         Q7EFdtByTwVnIXvCGiZj+xoTbdH3ts2ZDhlLbbsAEUEyIXSWnAkZlAZ0pTd07uSGJI
+         Fkh61Z6Oe0X74p/ypJ4MEAzc6wOCW3QJaVVsdHlw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+Cc:     Icenowy Zheng <icenowy@aosc.io>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
         Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 65/70] clk: sprd: add missing kfree
-Date:   Tue, 24 Sep 2019 12:45:44 -0400
-Message-Id: <20190924164549.27058-65-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 14/50] clk: sunxi-ng: v3s: add missing clock slices for MMC2 module clocks
+Date:   Tue, 24 Sep 2019 12:48:11 -0400
+Message-Id: <20190924164847.27780-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190924164549.27058-1-sashal@kernel.org>
-References: <20190924164549.27058-1-sashal@kernel.org>
+In-Reply-To: <20190924164847.27780-1-sashal@kernel.org>
+References: <20190924164847.27780-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,43 +43,37 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+From: Icenowy Zheng <icenowy@aosc.io>
 
-[ Upstream commit 5e75ea9c67433a065b0e8595ad3c91c7c0ca0d2d ]
+[ Upstream commit 720099603d1f62e37b789366d7e89824b009ca28 ]
 
-The number of config registers for different pll clocks probably are not
-same, so we have to use malloc, and should free the memory before return.
+The MMC2 clock slices are currently not defined in V3s CCU driver, which
+makes MMC2 not working.
 
-Fixes: 3e37b005580b ("clk: sprd: add adjustable pll support")
-Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-Signed-off-by: Chunyan Zhang <zhang.lyra@gmail.com>
-Link: https://lkml.kernel.org/r/20190905103009.27166-1-zhang.lyra@gmail.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Fix this issue.
+
+Fixes: d0f11d14b0bc ("clk: sunxi-ng: add support for V3s CCU")
+Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/sprd/pll.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/clk/sunxi-ng/ccu-sun8i-v3s.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/clk/sprd/pll.c b/drivers/clk/sprd/pll.c
-index 36b4402bf09e3..640270f51aa56 100644
---- a/drivers/clk/sprd/pll.c
-+++ b/drivers/clk/sprd/pll.c
-@@ -136,6 +136,7 @@ static unsigned long _sprd_pll_recalc_rate(const struct sprd_pll *pll,
- 					 k2 + refin * nint * CLK_PLL_1M;
- 	}
- 
-+	kfree(cfg);
- 	return rate;
- }
- 
-@@ -222,6 +223,7 @@ static int _sprd_pll_set_rate(const struct sprd_pll *pll,
- 	if (!ret)
- 		udelay(pll->udelay);
- 
-+	kfree(cfg);
- 	return ret;
- }
- 
+diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
+index ac12f261f8caa..9e3f4088724b4 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
++++ b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
+@@ -499,6 +499,9 @@ static struct clk_hw_onecell_data sun8i_v3s_hw_clks = {
+ 		[CLK_MMC1]		= &mmc1_clk.common.hw,
+ 		[CLK_MMC1_SAMPLE]	= &mmc1_sample_clk.common.hw,
+ 		[CLK_MMC1_OUTPUT]	= &mmc1_output_clk.common.hw,
++		[CLK_MMC2]		= &mmc2_clk.common.hw,
++		[CLK_MMC2_SAMPLE]	= &mmc2_sample_clk.common.hw,
++		[CLK_MMC2_OUTPUT]	= &mmc2_output_clk.common.hw,
+ 		[CLK_CE]		= &ce_clk.common.hw,
+ 		[CLK_SPI0]		= &spi0_clk.common.hw,
+ 		[CLK_USB_PHY0]		= &usb_phy0_clk.common.hw,
 -- 
 2.20.1
 
