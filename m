@@ -2,84 +2,96 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30776BEFF5
-	for <lists+linux-clk@lfdr.de>; Thu, 26 Sep 2019 12:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EADFBF8D8
+	for <lists+linux-clk@lfdr.de>; Thu, 26 Sep 2019 20:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725946AbfIZKpS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 26 Sep 2019 06:45:18 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:53208 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725806AbfIZKpS (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 26 Sep 2019 06:45:18 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8QAjG1t016292;
-        Thu, 26 Sep 2019 05:45:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1569494716;
-        bh=8ZpbwIFfnIeJPCxkSU1C35jGPhlIYupajT7QsiKWxSU=;
-        h=From:To:CC:Subject:Date;
-        b=xZ/zoK6ue5oTJdGlpVg7JJ/D4vkqLVrXl2RpORjzXhGykJ5g7AmzoCOHCCT+1s9jA
-         yuY7t6OFzkApKoLU0fNmd7G1LEALqibXjdZBrLQ1OkXY3vqus1JFuQDlpfco0TEe+B
-         veetjHwCSHAs7vNb2ozT9yE1ryprxoCGaNKUUMf8=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8QAjGLS037943
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 26 Sep 2019 05:45:16 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 26
- Sep 2019 05:45:08 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Thu, 26 Sep 2019 05:45:08 -0500
-Received: from feketebors.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8QAjD4w034957;
-        Thu, 26 Sep 2019 05:45:13 -0500
-From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
-To:     <t-kristo@ti.com>, <mturquette@baylibre.com>
-CC:     <sboyd@kernel.org>, <linux-omap@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] clk: ti: dra7-atl-clock: Remove ti_clk_add_alias call
-Date:   Thu, 26 Sep 2019 13:45:56 +0300
-Message-ID: <20190926104556.28716-1-peter.ujfalusi@ti.com>
-X-Mailer: git-send-email 2.23.0
+        id S1727842AbfIZSKk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 26 Sep 2019 14:10:40 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:32864 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727796AbfIZSKk (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 26 Sep 2019 14:10:40 -0400
+Received: by mail-lf1-f65.google.com with SMTP id y127so2427564lfc.0;
+        Thu, 26 Sep 2019 11:10:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=58oAE4FBJrvRDbJC9Z0EK/F0sTVW2LhvzqkiBlcRcx8=;
+        b=u8U76DKjRJoT8QCsQV+FPzbekduPDZgnFTln6B26fZz44ZHloyZi9UTQ0fHPQUj/Ue
+         ohQAL9LYNvJaf7453XeiAM2FJbop88jKCf7o4tTUYe2yccfTc2+6mLxb6QikGQt/jHOx
+         9GdlqiqxFAI3tBWFd9kdukJQqgF8PUShBKEwSisgbyB8SdQjWryFQRL57AmkIaqgrSgn
+         etD/9GT0+9mPKJnvRPH7WEN1rdlakfS3UtkwBlMd/EvqPvkPP2H+16kM5sRfByZ7dOUU
+         q4+z87r+y6FWA0Ovm8HpizSQlw48AtbvE00/5s8valSjwbplHbhOlTBTdH3+PVQ6kkXK
+         ZfsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=58oAE4FBJrvRDbJC9Z0EK/F0sTVW2LhvzqkiBlcRcx8=;
+        b=aU1TrFPUv/Iee1lqtL9lnBAdzymsBbdIzSa4Kb0TxEj2AjYrlJIHBYi1g7tzsnGcR4
+         XbdpJXyUSAMIjxZddx4kXeb65tzl2aI5ok1HbMDPU8GLNRbmnV2gJV40SvDXmpfU8k3x
+         u6ZVZzjzeZoKuOWMA3KDi8uV6J1RY8RkCxZB026n/eitnXFpmNDpx9ERaRmOkFd0dDME
+         tVbsqkDPNXolLfT61QwiMvpxFVgMUP1RQm+vgsndwqSu8+rEIxbj2s7rCANGUfJBsfDB
+         52nVtL1/Quiqey+2VWZsMX07gTIsgcxZC05vP2xK1cm74BocWT7awIZ9eesQjx4Y3hDo
+         F+oQ==
+X-Gm-Message-State: APjAAAUQcB6lGUzeugOsGdg9W/xr+kdWq8V6pDAL7XbQCK7fgXjHfCPe
+        mRcURXMgJIjCwKHMmYVraWG2WCH0CBONcgplhno=
+X-Google-Smtp-Source: APXvYqzubaCnRVu7ayU2jYF8LqYdVO+Sza2X45C+oWz4ZSoRko77F0nvAR95UPKZWe40qIwNje8/fb835ElINZntf1I=
+X-Received: by 2002:a19:f11c:: with SMTP id p28mr2982279lfh.44.1569521438172;
+ Thu, 26 Sep 2019 11:10:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <1556169264-31683-1-git-send-email-Anson.Huang@nxp.com>
+ <1556169264-31683-2-git-send-email-Anson.Huang@nxp.com> <155623699177.15276.12577395377027956830@swboyd.mtv.corp.google.com>
+ <DB3PR0402MB39165F69F8B684D323C683B1F5C60@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <DB3PR0402MB3916F96CD6F3E874204E6972F5D50@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+In-Reply-To: <DB3PR0402MB3916F96CD6F3E874204E6972F5D50@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 26 Sep 2019 15:10:48 -0300
+Message-ID: <CAOMZO5AweYkXXuBqvw+T_fOttKpbOnekKq5CA2-3a_ag1DwnWg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] clk: imx: disable i.mx7ulp composite clock during initialization
+To:     Anson Huang <anson.huang@nxp.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        dl-linux-imx <linux-imx@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-ti_clk_register() calls it already so the driver should not create
-duplicated alias.
+Hi Anson,
 
-Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
----
- drivers/clk/ti/clk-dra7-atl.c | 5 -----
- 1 file changed, 5 deletions(-)
+On Mon, Aug 5, 2019 at 11:25 PM Anson Huang <anson.huang@nxp.com> wrote:
+>
+> Hi, Stephen
+>         I think we should resume this thread, without this patch, mainlin=
+e kernel boot up will cause mmc timeout all the time. If it is NOT good to =
+disabling those peripheral devices' clock in i.MX7ULP's clock driver, then =
+we have to change the core framework to disable clock explicitly if the CLK=
+_SET_RATE_GATE/CLK_SET_PARENT_GATE is present, most likely it will impact o=
+ther platforms I think, so the most safe way is just to do it inside our i.=
+MX7ULP composite clock driver. What do you think?
 
-diff --git a/drivers/clk/ti/clk-dra7-atl.c b/drivers/clk/ti/clk-dra7-atl.c
-index a01ca9395179..c0e0ee974151 100644
---- a/drivers/clk/ti/clk-dra7-atl.c
-+++ b/drivers/clk/ti/clk-dra7-atl.c
-@@ -207,11 +207,6 @@ static void __init of_dra7_atl_clock_setup(struct device_node *node)
- 	clk = ti_clk_register(NULL, &clk_hw->hw, node->name);
- 
- 	if (!IS_ERR(clk)) {
--		ret = ti_clk_add_alias(NULL, clk, node->name);
--		if (ret) {
--			clk_unregister(clk);
--			goto cleanup;
--		}
- 		of_clk_add_provider(node, of_clk_src_simple_get, clk);
- 		kfree(parent_names);
- 		return;
--- 
-Peter
+Just tested your patch against 5.3 and mmc card can be detected with it.
 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Please note that I had to manually add:
+#include <linux/io.h>
 
+so that it can build.
+
+I agree we need to come to a solution for this.
+
+Stephen, please let us know your thoughts.
+
+Thanks
