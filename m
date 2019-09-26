@@ -2,81 +2,84 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ABEC6BEFE0
-	for <lists+linux-clk@lfdr.de>; Thu, 26 Sep 2019 12:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30776BEFF5
+	for <lists+linux-clk@lfdr.de>; Thu, 26 Sep 2019 12:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725812AbfIZKoE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 26 Sep 2019 06:44:04 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:42030 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725208AbfIZKoE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 26 Sep 2019 06:44:04 -0400
-Received: by mail-io1-f65.google.com with SMTP id n197so5184765iod.9
-        for <linux-clk@vger.kernel.org>; Thu, 26 Sep 2019 03:44:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=y7cIzG0PVrRis126czyvwHkkalaXGhnWuRZIJrhxFOU=;
-        b=ZWWzY74uIfSWV+URtAnHFAkd79RdtJYePup62zhvflVIU+GGexZqD4nzbrEB2uuu1/
-         K+xa8fS8ovFGd3qnTNLceKVNbaNBC00w/ZGgYSoOOVstBWg7+fQBZQuMKS5XlnZa1+2A
-         GB+mx5UBbymvKmh7/XWkmujpf6DBgMT1vgITJAajqFZf9Rif54A/6MCI3gCFphMPEcE/
-         NNM5lW7e/BV09W/oAziamU/SxV4tGJ9dPi2o6e0YVvmWtehIK91O2T6XzbP2Hd3i9jiF
-         oOkVMFKF4mOrlKBP03j2EeoZYCpdo4OANWsV+qg7uGQEAlcn8AX3W8yO9JS/KXQC4EZ7
-         sF1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=y7cIzG0PVrRis126czyvwHkkalaXGhnWuRZIJrhxFOU=;
-        b=CoBDmgcP0FD9grHJKlChy2McCD8816bXDCw9W0taboLCnZ0n6E3fcJDigkz5hCLX3o
-         Dxy6Y1WmE6ZgohjkF56OLHokIffIpyLUnYbtL8SV3kQN1ZHlQwfDcKXpamxg2+cDtQ8k
-         GwZRDOLGFI6GHoxfHAi28gw+F2a2kwE/jKMuXfo6aA6PSrT8wiezhxLrTY1h9sxjJ8bG
-         l6u4iKvcz2uIaEOSN5o7sf/Kmh5ehi2UA2yo+kpwF5ai7mwsQOa5diW5czOoO7iB3GvM
-         jQUU8qiq2DRWtYxMuPKDteKhUHfzPpbUrhobyogY26TVygizDYkuFZfRc1W4SlOTB9j5
-         wWBA==
-X-Gm-Message-State: APjAAAU8j1jhyKqel4ChCGrx+gQbY3sj84xbWUy7pxTLiOxTpbT1S5uu
-        rJuZgzblGYVO3frliWRJ9tILdNLk9HdACQdHt4Q=
-X-Google-Smtp-Source: APXvYqyBkKr2Jo8/mQCqnx77SRC8rBVDJ8k8O9PIcClzepGMr9fIBfcINyJvlrml2vBMtSd0TPRNepHC+J1dtf7n1ug=
-X-Received: by 2002:a92:db0c:: with SMTP id b12mr1567408iln.27.1569494643368;
- Thu, 26 Sep 2019 03:44:03 -0700 (PDT)
+        id S1725946AbfIZKpS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 26 Sep 2019 06:45:18 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:53208 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725806AbfIZKpS (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 26 Sep 2019 06:45:18 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8QAjG1t016292;
+        Thu, 26 Sep 2019 05:45:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1569494716;
+        bh=8ZpbwIFfnIeJPCxkSU1C35jGPhlIYupajT7QsiKWxSU=;
+        h=From:To:CC:Subject:Date;
+        b=xZ/zoK6ue5oTJdGlpVg7JJ/D4vkqLVrXl2RpORjzXhGykJ5g7AmzoCOHCCT+1s9jA
+         yuY7t6OFzkApKoLU0fNmd7G1LEALqibXjdZBrLQ1OkXY3vqus1JFuQDlpfco0TEe+B
+         veetjHwCSHAs7vNb2ozT9yE1ryprxoCGaNKUUMf8=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8QAjGLS037943
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 26 Sep 2019 05:45:16 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 26
+ Sep 2019 05:45:08 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Thu, 26 Sep 2019 05:45:08 -0500
+Received: from feketebors.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8QAjD4w034957;
+        Thu, 26 Sep 2019 05:45:13 -0500
+From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
+To:     <t-kristo@ti.com>, <mturquette@baylibre.com>
+CC:     <sboyd@kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] clk: ti: dra7-atl-clock: Remove ti_clk_add_alias call
+Date:   Thu, 26 Sep 2019 13:45:56 +0300
+Message-ID: <20190926104556.28716-1-peter.ujfalusi@ti.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Received: by 2002:a4f:1b16:0:0:0:0:0 with HTTP; Thu, 26 Sep 2019 03:44:02
- -0700 (PDT)
-Reply-To: ayishagddafio@mail.com
-From:   AISHA GADDAFI <uusembassy@gmail.com>
-Date:   Thu, 26 Sep 2019 03:44:02 -0700
-Message-ID: <CAAFfNTazddxDrqUYgrMYwmSVEcne-q5WzB4wXjEj33BEPeM0rg@mail.gmail.com>
-Subject: Dear Friend (Assalamu Alaikum),
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+ti_clk_register() calls it already so the driver should not create
+duplicated alias.
+
+Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
+---
+ drivers/clk/ti/clk-dra7-atl.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/drivers/clk/ti/clk-dra7-atl.c b/drivers/clk/ti/clk-dra7-atl.c
+index a01ca9395179..c0e0ee974151 100644
+--- a/drivers/clk/ti/clk-dra7-atl.c
++++ b/drivers/clk/ti/clk-dra7-atl.c
+@@ -207,11 +207,6 @@ static void __init of_dra7_atl_clock_setup(struct device_node *node)
+ 	clk = ti_clk_register(NULL, &clk_hw->hw, node->name);
+ 
+ 	if (!IS_ERR(clk)) {
+-		ret = ti_clk_add_alias(NULL, clk, node->name);
+-		if (ret) {
+-			clk_unregister(clk);
+-			goto cleanup;
+-		}
+ 		of_clk_add_provider(node, of_clk_src_simple_get, clk);
+ 		kfree(parent_names);
+ 		return;
 -- 
-Dear Friend (Assalamu Alaikum),
+Peter
 
-I came across your e-mail contact prior a private search while in need of
-your assistance. My name is Aisha  Al-Qaddafi a single Mother and a Widow
-with three Children. I am the only biological Daughter of late Libyan
-President (Late Colonel Muammar Gaddafi).
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
 
-I have investment funds worth Twenty Seven Million Five Hundred Thousand
-United State Dollar ($27.500.000.00 ) and i need a trusted investment
-Manager/Partner because of my current refugee status, however, I am
-interested in you for investment project assistance in your country, may be
-from there, we can build business relationship in the nearest future.
-
-I am willing to negotiate investment/business profit sharing ratio with you
-base on the future investment earning profits.
-
-If you are willing to handle this project on my behalf kindly reply urgent
-to enable me provide you more information about the investment funds.
-
-Your Urgent Reply Will Be Appreciated. write me at this email address(
-ayishagddafio@mail.com ) for further discussion.
-
-Best Regards
-Mrs Aisha Al-Qaddafi
-Reply to: ayishagddafio@mail.com
