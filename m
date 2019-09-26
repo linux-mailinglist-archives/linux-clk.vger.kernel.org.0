@@ -2,127 +2,81 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE2CBE86C
-	for <lists+linux-clk@lfdr.de>; Thu, 26 Sep 2019 00:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABEC6BEFE0
+	for <lists+linux-clk@lfdr.de>; Thu, 26 Sep 2019 12:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729657AbfIYWri (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 25 Sep 2019 18:47:38 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:42513 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729618AbfIYWri (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 25 Sep 2019 18:47:38 -0400
-Received: by mail-pf1-f195.google.com with SMTP id q12so403799pff.9
-        for <linux-clk@vger.kernel.org>; Wed, 25 Sep 2019 15:47:36 -0700 (PDT)
+        id S1725812AbfIZKoE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 26 Sep 2019 06:44:04 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:42030 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725208AbfIZKoE (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 26 Sep 2019 06:44:04 -0400
+Received: by mail-io1-f65.google.com with SMTP id n197so5184765iod.9
+        for <linux-clk@vger.kernel.org>; Thu, 26 Sep 2019 03:44:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=i+W79Fs+JtLmvj8CWOzkvZTsSvzosH+D6ZGyUem3ZnA=;
-        b=QiOYkbRmVsN0NOymJrZmyNk1Aqs67OzdvJqNVdBgR1dAcP4rnJgsfYdIiaSEoto46F
-         Jz05CrdMfASGsfvx5uv5JpHJk/u8jtuxC7qN8ceDRcUwoV+tZQ/pzFDvo9ENX/IOInt1
-         F21xWgdJ446psjlOHyUlz8fTjAqdrTpwK8msB0hKdgsYgf2cGR6fEc7iDCD3shAxGd1W
-         aXm7YRXOtY4TbhADrjU9hMXBWsaEJVy+8InX35P8rxGIA/P+2i8iB6cLsaa9mxgb/GJb
-         /QejV4k2p03XCnSOcWdeEaWORIHuF4vrHU1GFW1bVSrrlWcx/stVQYHCq0DIVxhfDffB
-         Y/VQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=y7cIzG0PVrRis126czyvwHkkalaXGhnWuRZIJrhxFOU=;
+        b=ZWWzY74uIfSWV+URtAnHFAkd79RdtJYePup62zhvflVIU+GGexZqD4nzbrEB2uuu1/
+         K+xa8fS8ovFGd3qnTNLceKVNbaNBC00w/ZGgYSoOOVstBWg7+fQBZQuMKS5XlnZa1+2A
+         GB+mx5UBbymvKmh7/XWkmujpf6DBgMT1vgITJAajqFZf9Rif54A/6MCI3gCFphMPEcE/
+         NNM5lW7e/BV09W/oAziamU/SxV4tGJ9dPi2o6e0YVvmWtehIK91O2T6XzbP2Hd3i9jiF
+         oOkVMFKF4mOrlKBP03j2EeoZYCpdo4OANWsV+qg7uGQEAlcn8AX3W8yO9JS/KXQC4EZ7
+         sF1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=i+W79Fs+JtLmvj8CWOzkvZTsSvzosH+D6ZGyUem3ZnA=;
-        b=BDXpgwEwbmCInT1w3kB+ywDzg7pMzM7oYxZOxWbF4t9NfxtyV2beemoCIKJ4U04+ug
-         ExsQeSzFRJMmndfQA1qpB1aADYcgoL7PfqJp0QN1oBSztBurwhHqqNLPSaImVSWv2/Mh
-         msF1f/9mD6N2YK76djEHVSR6YdcOmsV4Ry874kpKn2gkcw5yMGO+ofxN/ZFZDIr7Cen0
-         lXZaLCRIIz8APDGg+Jr8yLTYfxM9QdIsHdbO1uaFPwA759BDEJOOWZCa3rvncoW6oqS0
-         z1NJu3PurtVknMX/ifNSir49rbJAR23ja3Sx3rvBXZl9IPe9mo+a4kuSGMb/pHfG0SVn
-         LNxQ==
-X-Gm-Message-State: APjAAAVPb9EFCbfAUSyOksRIHQGOcjq3hdVjoLJM8F/Ei1IvaepjtoZx
-        /mr0EYOr5FHwiA2DdaOlX6lXbQ==
-X-Google-Smtp-Source: APXvYqz9kGKfiISSY6GKYU59WSD/o/ecZYyCnkLsLXzxHGjEjI0j1FcxGdHUuVDusWLEWSDsnbyIGQ==
-X-Received: by 2002:a17:90a:d792:: with SMTP id z18mr106795pju.60.1569451655789;
-        Wed, 25 Sep 2019 15:47:35 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id bb15sm205894pjb.2.2019.09.25.15.47.35
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 25 Sep 2019 15:47:35 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>, robh+dt@kernel.org,
-        mark.rutland@arm.com, linux-amlogic@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH 0/5] provide the XTAL clock via OF on Meson8/8b/8m2
-In-Reply-To: <CAFBinCA0NaCJEDfNEg+LRfW3wxfNFGbXmGS+z7D5792TsupVAA@mail.gmail.com>
-References: <20190921151223.768842-1-martin.blumenstingl@googlemail.com> <1jzhivs6n6.fsf@starbuckisacylon.baylibre.com> <CAFBinCA0NaCJEDfNEg+LRfW3wxfNFGbXmGS+z7D5792TsupVAA@mail.gmail.com>
-Date:   Wed, 25 Sep 2019 15:47:34 -0700
-Message-ID: <7h7e5wt2m1.fsf@baylibre.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=y7cIzG0PVrRis126czyvwHkkalaXGhnWuRZIJrhxFOU=;
+        b=CoBDmgcP0FD9grHJKlChy2McCD8816bXDCw9W0taboLCnZ0n6E3fcJDigkz5hCLX3o
+         Dxy6Y1WmE6ZgohjkF56OLHokIffIpyLUnYbtL8SV3kQN1ZHlQwfDcKXpamxg2+cDtQ8k
+         GwZRDOLGFI6GHoxfHAi28gw+F2a2kwE/jKMuXfo6aA6PSrT8wiezhxLrTY1h9sxjJ8bG
+         l6u4iKvcz2uIaEOSN5o7sf/Kmh5ehi2UA2yo+kpwF5ai7mwsQOa5diW5czOoO7iB3GvM
+         jQUU8qiq2DRWtYxMuPKDteKhUHfzPpbUrhobyogY26TVygizDYkuFZfRc1W4SlOTB9j5
+         wWBA==
+X-Gm-Message-State: APjAAAU8j1jhyKqel4ChCGrx+gQbY3sj84xbWUy7pxTLiOxTpbT1S5uu
+        rJuZgzblGYVO3frliWRJ9tILdNLk9HdACQdHt4Q=
+X-Google-Smtp-Source: APXvYqyBkKr2Jo8/mQCqnx77SRC8rBVDJ8k8O9PIcClzepGMr9fIBfcINyJvlrml2vBMtSd0TPRNepHC+J1dtf7n1ug=
+X-Received: by 2002:a92:db0c:: with SMTP id b12mr1567408iln.27.1569494643368;
+ Thu, 26 Sep 2019 03:44:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+Received: by 2002:a4f:1b16:0:0:0:0:0 with HTTP; Thu, 26 Sep 2019 03:44:02
+ -0700 (PDT)
+Reply-To: ayishagddafio@mail.com
+From:   AISHA GADDAFI <uusembassy@gmail.com>
+Date:   Thu, 26 Sep 2019 03:44:02 -0700
+Message-ID: <CAAFfNTazddxDrqUYgrMYwmSVEcne-q5WzB4wXjEj33BEPeM0rg@mail.gmail.com>
+Subject: Dear Friend (Assalamu Alaikum),
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Martin Blumenstingl <martin.blumenstingl@googlemail.com> writes:
+-- 
+Dear Friend (Assalamu Alaikum),
 
-> Hi Jerome,
->
-> On Mon, Sep 23, 2019 at 11:29 AM Jerome Brunet <jbrunet@baylibre.com> wrote:
->>
->> On Sat 21 Sep 2019 at 17:12, Martin Blumenstingl <martin.blumenstingl@googlemail.com> wrote:
->>
->> > So far the HHI clock controller has been providing the XTAL clock on
->> > Amlogic Meson8/Meson8b/Meson8m2 SoCs.
->> > This is not correct because the XTAL is actually a crystal on the
->> > boards and the SoC has a dedicated input for it.
->> >
->> > This updates the dt-bindings of the HHI clock controller and defines
->> > a fixed-clock in meson.dtsi (along with switching everything over to
->> > use this clock).
->> > The clock driver needs three updates to use this:
->> > - patch #2 uses clk_hw_set_parent in the CPU clock notifier. This drops
->> >   the explicit reference to CLKID_XTAL while at the same time making
->> >   the code much easier (thanks to Neil for providing this new method
->> >   as part of the G12A CPU clock bringup!)
->> > - patch #3 ensures that the clock driver doesn't rely on it's internal
->> >   XTAL clock while not losing support for older .dtbs that don't have
->> >   the XTAL clock input yet
->> > - with patch #4 the clock controller's own XTAL clock is not registered
->> >   anymore when a clock input is provided via OF
->> >
->> > This series is a functional no-op. It's main goal is to better represent
->> > how the actual hardware looks like.
->>
->> I'm a bit unsure about this series.
->>
->> On one hand, I totally agree with you ... having the xtal in DT is the
->> right way to do it ... when done from the start
-> yep
->
->> On the other hand, things have been this way for years, they are working
->> and going for xtal in DT does not solve any pending issue. Doing this
->> means adding complexity in the driver to support both methods. It is
->> also quite a significant change in DT :/
-> my two main motivations were:
-> - keeping the 32-bit SoCs as similar as possible to the 64-bit ones in
-> terms of "how are the [clock] drivers implemented"
-> - with the DDR clock controller the .dts looked weird: &ddr_clkc took
-> CLKID_XTAL from &clkc as input and &clkc took DDR_CLKID_DDR_PLL as
-> input from &ddr_clkc
->
-> RE complexity in the driver to support both:
-> I still have a cleanup of the meson8b.c init code on my TODO-list
-> because we're still supporting .dtbs without parent syscon
-> my plan is to drop that code-path along with the newly added fallback
-> for "skip CLKID_XTAL" (assuming this is accepted) together for v5.6 or
-> v5.7
+I came across your e-mail contact prior a private search while in need of
+your assistance. My name is Aisha  Al-Qaddafi a single Mother and a Widow
+with three Children. I am the only biological Daughter of late Libyan
+President (Late Colonel Muammar Gaddafi).
 
-TBH, I'm big(ish) "functional no-op" changes like this are not things I
-get super exicted about, especially for SoCs that have been working well
-for awhile, and are do not have a large (upstream) userbase.
+I have investment funds worth Twenty Seven Million Five Hundred Thousand
+United State Dollar ($27.500.000.00 ) and i need a trusted investment
+Manager/Partner because of my current refugee status, however, I am
+interested in you for investment project assistance in your country, may be
+from there, we can build business relationship in the nearest future.
 
-OTOH, since Martin is doing most of the heavy lifting for keeping this
-platform working upstream, I'm happy to take the changes, as long as
-Martin is willing to deal with any fallout.
+I am willing to negotiate investment/business profit sharing ratio with you
+base on the future investment earning profits.
 
-Kevin
+If you are willing to handle this project on my behalf kindly reply urgent
+to enable me provide you more information about the investment funds.
+
+Your Urgent Reply Will Be Appreciated. write me at this email address(
+ayishagddafio@mail.com ) for further discussion.
+
+Best Regards
+Mrs Aisha Al-Qaddafi
+Reply to: ayishagddafio@mail.com
