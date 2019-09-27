@@ -2,90 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC6AC0B63
-	for <lists+linux-clk@lfdr.de>; Fri, 27 Sep 2019 20:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C236C0BB7
+	for <lists+linux-clk@lfdr.de>; Fri, 27 Sep 2019 20:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726033AbfI0Si7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 27 Sep 2019 14:38:59 -0400
-Received: from 10.mo3.mail-out.ovh.net ([87.98.165.232]:38892 "EHLO
-        10.mo3.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726676AbfI0Si7 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 27 Sep 2019 14:38:59 -0400
-Received: from player691.ha.ovh.net (unknown [10.108.54.217])
-        by mo3.mail-out.ovh.net (Postfix) with ESMTP id 15579229480
-        for <linux-clk@vger.kernel.org>; Fri, 27 Sep 2019 20:00:29 +0200 (CEST)
-Received: from RCM-web9.webmail.mail.ovh.net (unknown [109.190.253.11])
-        (Authenticated sender: steve@sk2.org)
-        by player691.ha.ovh.net (Postfix) with ESMTPSA id 9F609A6A320C;
-        Fri, 27 Sep 2019 18:00:21 +0000 (UTC)
+        id S1728084AbfI0Spt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 27 Sep 2019 14:45:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48308 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726294AbfI0Sps (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 27 Sep 2019 14:45:48 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 312AA20872;
+        Fri, 27 Sep 2019 18:45:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569609948;
+        bh=2abY4RvzDrV7ZdSCeY547gsiUtUpdWNapfjq46d9c7Q=;
+        h=In-Reply-To:References:Cc:To:From:Subject:Date:From;
+        b=Og+/hr+fuIIOHhez7V7VPkBCoxZr4ITEX2BxG9MRmuniM2cx3yEsZsqBLv5Dhz6zE
+         46WzEkQRmPRYcDeFhLvYNDluemYdAfSlpVGU8Wt3b0qSvENOf3AFyj8hixS13h7We8
+         6m6I1ZlfILLt5xs6LB9Soh7Bj0Etq1lOJfpPdXE0=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Fri, 27 Sep 2019 20:00:21 +0200
-From:   Stephen Kitt <steve@sk2.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Tero Kristo <t-kristo@ti.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-omap@vger.kernel.org,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <b7fbe8776703b9d637ab82ad4724353b359f1d04.1569555841.git.baolin.wang@linaro.org>
+References: <b7fbe8776703b9d637ab82ad4724353b359f1d04.1569555841.git.baolin.wang@linaro.org>
+Cc:     orsonzhai@gmail.com, baolin.wang@linaro.org, zhang.lyra@gmail.com,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk/ti/adpll: allocate room for terminating null
-In-Reply-To: <20190927152315.GE5610@atomide.com>
-References: <20190927145737.7832-1-steve@sk2.org>
- <20190927152315.GE5610@atomide.com>
-Message-ID: <cec235b3e2e4e3b206fa9444b643fa56@sk2.org>
-X-Sender: steve@sk2.org
-User-Agent: Roundcube Webmail/1.3.10
-X-Originating-IP: 109.190.253.11
-X-Webmail-UserID: steve@sk2.org
-X-Ovh-Tracer-Id: 5637380835038678298
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedufedrfeeigdduudekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddm
+To:     Baolin Wang <baolin.wang@linaro.org>, mturquette@baylibre.com
+From:   Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH 1/2] clk: sprd: Use IS_ERR() to validate the return value of syscon_regmap_lookup_by_phandle()
+User-Agent: alot/0.8.1
+Date:   Fri, 27 Sep 2019 11:45:47 -0700
+Message-Id: <20190927184548.312AA20872@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Le 27/09/2019 17:23, Tony Lindgren a écrit :
-> * Stephen Kitt <steve@sk2.org> [190927 15:13]:
->> The buffer allocated in ti_adpll_clk_get_name doesn't account for the
->> terminating null. This patch adds the extra byte, and switches to
->> snprintf to avoid overflowing.
->> 
->> Signed-off-by: Stephen Kitt <steve@sk2.org>
->> ---
->>  drivers/clk/ti/adpll.c | 7 ++++---
->>  1 file changed, 4 insertions(+), 3 deletions(-)
->> 
->> diff --git a/drivers/clk/ti/adpll.c b/drivers/clk/ti/adpll.c
->> index fdfb90058504..27933c4e8a27 100644
->> --- a/drivers/clk/ti/adpll.c
->> +++ b/drivers/clk/ti/adpll.c
->> @@ -196,12 +196,13 @@ static const char *ti_adpll_clk_get_name(struct 
->> ti_adpll_data *d,
->>  	} else {
->>  		const char *base_name = "adpll";
->>  		char *buf;
->> +		size_t size = 8 + 1 + strlen(base_name) + 1 +
->> +			      strlen(postfix) + 1;
->> 
->> -		buf = devm_kzalloc(d->dev, 8 + 1 + strlen(base_name) + 1 +
->> -				    strlen(postfix), GFP_KERNEL);
->> +		buf = devm_kzalloc(d->dev, size, GFP_KERNEL);
->>  		if (!buf)
->>  			return NULL;
->> -		sprintf(buf, "%08lx.%s.%s", d->pa, base_name, postfix);
->> +		snprintf(buf, size, "%08lx.%s.%s", d->pa, base_name, postfix);
->>  		name = buf;
->>  	}
->> 
-> 
-> Thanks for catching this. Maybe just use devm_kasprintf() here?
+Quoting Baolin Wang (2019-09-26 20:50:53)
+> The syscon_regmap_lookup_by_phandle() will never return NULL, thus use
+> IS_ERR() to validate the return value instead of IS_ERR_OR_NULL().
+>=20
+> Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
+> ---
+>  drivers/clk/sprd/common.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ah yes, that would be much better! V2 coming up, thanks for the 
-suggestion.
+Fixes tag?
 
-Regards,
-
-Stephen
