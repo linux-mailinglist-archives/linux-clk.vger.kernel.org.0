@@ -2,60 +2,72 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99366C26F4
-	for <lists+linux-clk@lfdr.de>; Mon, 30 Sep 2019 22:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26DD7C2F76
+	for <lists+linux-clk@lfdr.de>; Tue,  1 Oct 2019 11:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729870AbfI3Unh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 30 Sep 2019 16:43:37 -0400
-Received: from honk.sigxcpu.org ([24.134.29.49]:41306 "EHLO honk.sigxcpu.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729179AbfI3Ung (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 30 Sep 2019 16:43:36 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by honk.sigxcpu.org (Postfix) with ESMTP id 8F9A1FB02;
-        Mon, 30 Sep 2019 22:26:04 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
-Received: from honk.sigxcpu.org ([127.0.0.1])
-        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id YmdQpU_p0ZnW; Mon, 30 Sep 2019 22:26:03 +0200 (CEST)
-Received: by bogon.sigxcpu.org (Postfix, from userid 1000)
-        id DCDC348868; Mon, 30 Sep 2019 22:26:01 +0200 (CEST)
-From:   =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] clk: bd718x7: Add MODULE_ALIAS()
-Date:   Mon, 30 Sep 2019 22:26:01 +0200
-Message-Id: <e1d01b68cdf7dbff9bdd03bab953f828431ad292.1569875042.git.agx@sigxcpu.org>
-X-Mailer: git-send-email 2.23.0.rc1
-In-Reply-To: <cover.1569875042.git.agx@sigxcpu.org>
-References: <cover.1569875042.git.agx@sigxcpu.org>
+        id S1729878AbfJAJCO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 1 Oct 2019 05:02:14 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:36792 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729787AbfJAJCO (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 1 Oct 2019 05:02:14 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9192CXm039617;
+        Tue, 1 Oct 2019 04:02:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1569920532;
+        bh=bb3PN6ZPkSOf4jE89BUFD3OKLOIRfJAYWUH5WWSH5/U=;
+        h=From:To:CC:Subject:Date;
+        b=RbKJ8NpAvYcy3hDwWpDYPsI1YiEP13/rs87lOh/Frhuy1X+4gNi6b9jFaqEaAaI3W
+         ge5Frk8WqITQFwuxs3Z4nPq2njYFpEVZ0C/LP/htHeT1boS0q2LoOWkVXoSCakQ6At
+         GuQaK8pyssNlEAeck0nDgESmzWFefB/Ikb9fbC08=
+Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9192Bpo073743
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 1 Oct 2019 04:02:12 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 1 Oct
+ 2019 04:02:11 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Tue, 1 Oct 2019 04:02:01 -0500
+Received: from sokoban.bb.dnainternet.fi (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x919290I032920;
+        Tue, 1 Oct 2019 04:02:10 -0500
+From:   Tero Kristo <t-kristo@ti.com>
+To:     <linux-clk@vger.kernel.org>, <sboyd@kernel.org>,
+        <mturquette@baylibre.com>
+CC:     <tomi.valkeinen@ti.com>
+Subject: [PATCH 0/4] clk: debugfs: add some simple debug functionality
+Date:   Tue, 1 Oct 2019 12:01:58 +0300
+Message-ID: <20191001090202.26346-1-t-kristo@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This fixes device probing when built as a module.
+Hi,
 
-Signed-off-by: Guido Günther <agx@sigxcpu.org>
----
- drivers/clk/clk-bd718x7.c | 1 +
- 1 file changed, 1 insertion(+)
+I have been using a variation of these patches myself for several years
+for debugging / testing different clock issues. Basically what I do here
+is extend the functionality of debugfs to allow write access to certain
+properties, like rate, enable / prepare counts, mux parents.
 
-diff --git a/drivers/clk/clk-bd718x7.c b/drivers/clk/clk-bd718x7.c
-index ae6e5baee330..00926c587390 100644
---- a/drivers/clk/clk-bd718x7.c
-+++ b/drivers/clk/clk-bd718x7.c
-@@ -133,3 +133,4 @@ module_platform_driver(bd71837_clk);
- MODULE_AUTHOR("Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>");
- MODULE_DESCRIPTION("BD71837/BD71847/BD70528 chip clk driver");
- MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:bd718xx-clk");
--- 
-2.23.0.rc1
+This allows simple testing of new features or debugging directly from
+userspace. The functionality is hidden behind a Kconfig option because
+it can be rather dangerous to allow access to these unconditionally if
+the user does not know what they are doing.
 
+Any thoughts?
+
+-Tero
+
+
+--
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
