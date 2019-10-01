@@ -2,65 +2,107 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D440C428D
-	for <lists+linux-clk@lfdr.de>; Tue,  1 Oct 2019 23:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6705C434F
+	for <lists+linux-clk@lfdr.de>; Tue,  1 Oct 2019 23:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726852AbfJAVVH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 1 Oct 2019 17:21:07 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:44537 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727761AbfJAVVE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 1 Oct 2019 17:21:04 -0400
-Received: by mail-oi1-f194.google.com with SMTP id w6so15770555oie.11
-        for <linux-clk@vger.kernel.org>; Tue, 01 Oct 2019 14:21:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ffy7ik8tMNlg+8qyltSb6cmvYYkvXVlCoaWdUSbEBAw=;
-        b=gDE5dj7Z9tEK+pSj9YNBDU7alXjvcXJUaaBbdNsIae3poVVFRTM2wikSDKDzXarSvE
-         WshslJcaWFjR37xUwc4zRQrS0p+nRU3xndQP2vxVovtYL3egfaWVZaW5bUujIKgfU+1f
-         EjQVk2otICupo79nD7bXf8mpnUu9T20dgDgzE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ffy7ik8tMNlg+8qyltSb6cmvYYkvXVlCoaWdUSbEBAw=;
-        b=g+8G6rhQO9CyMVT7R6wA+Y3x/V1tkpZy/hYgiKmQq1fw+h7+C91nVv/8EdXmOpYq9g
-         6zjduxZeM/8UndvlELt03+0egv1wmxzVaEXBtIkpDjb4w1sFt3xAOuosCuj7ztJVnwWQ
-         ALM+POPD2UBCG80FTEDZRKGnkFUjLAjQX2ITgybM8Mfir3Nv3QmjCtpKsGVXQTKA2FWl
-         lBBJx1SGnK/e5/0vrTSfeQ1wz8s2k1mpe4UqJu0Ivbjy2InTXKsYnizsys4Z6qzcrLrO
-         lo2P7ZeL7nvKL5AblSPTod41KBTtRdOiURr7AdINNXbfI4P82hQBLb2yhB1tiNlAQJrG
-         gbbA==
-X-Gm-Message-State: APjAAAU7gKxzAWTbxXwd/gm6Bxi/RsNv3qcX8kmfhXBb3cdIQXPDDp0k
-        bTyRVw9tEr6x0d+4fWfUiGDi2jGxMsw=
-X-Google-Smtp-Source: APXvYqxFvZ8g+nmJEbXM+TRIpxtOL2c0PlJHE5dpQ+F89RETU/gK40/DgHWS/uu+kGXNOYdQiqWsRw==
-X-Received: by 2002:aca:d9c3:: with SMTP id q186mr54583oig.53.1569964863244;
-        Tue, 01 Oct 2019 14:21:03 -0700 (PDT)
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com. [209.85.166.48])
-        by smtp.gmail.com with ESMTPSA id b31sm4638599otc.70.2019.10.01.14.21.02
-        for <linux-clk@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Oct 2019 14:21:02 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id u8so51844640iom.5
-        for <linux-clk@vger.kernel.org>; Tue, 01 Oct 2019 14:21:02 -0700 (PDT)
-X-Received: by 2002:a5d:88c9:: with SMTP id i9mr221760iol.269.1569964861763;
- Tue, 01 Oct 2019 14:21:01 -0700 (PDT)
+        id S1726614AbfJAV6o (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 1 Oct 2019 17:58:44 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:51685 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725865AbfJAV6o (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 1 Oct 2019 17:58:44 -0400
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20191001215842epoutp030e983fa937e6545c3a783781b41f48cf~JpMef_awX1909219092epoutp034
+        for <linux-clk@vger.kernel.org>; Tue,  1 Oct 2019 21:58:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20191001215842epoutp030e983fa937e6545c3a783781b41f48cf~JpMef_awX1909219092epoutp034
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1569967122;
+        bh=H/0dSSjQJh50vWIB+t6HbKYzbJxNvuzWkwr+dDXz20Y=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=g0so+B7CxHlRpy7IbWWbttU620mM7YKVG+imDiSGIrGd49MDf3mmt737ZeirQbnu8
+         7TeRVYffjeDRXAChSlBej5VJBpvuFZzKNEP1uIbwzMJB15LiGp3Nuzk409CwUlsf4t
+         wi2PDwib1yir+j+YrBGVNdqnAJvBnmN96KgT9OeY=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20191001215842epcas1p113b96a8b43fcfd930b43aa62b1bbc992~JpMeMXho52865128651epcas1p1W;
+        Tue,  1 Oct 2019 21:58:42 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.40.157]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 46jY7N525mzMqYll; Tue,  1 Oct
+        2019 21:58:40 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E9.31.04144.01CC39D5; Wed,  2 Oct 2019 06:58:40 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20191001215839epcas1p3923451e15fe6ca2b4bbf683ae952a447~JpMcEI0Nm2397523975epcas1p3m;
+        Tue,  1 Oct 2019 21:58:39 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191001215839epsmtrp10ed6b14c794967dd2a14749a0176afec~JpMcDdPUM1192611926epsmtrp1D;
+        Tue,  1 Oct 2019 21:58:39 +0000 (GMT)
+X-AuditID: b6c32a35-2c7ff70000001030-f8-5d93cc108e5d
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        53.40.04081.F0CC39D5; Wed,  2 Oct 2019 06:58:39 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20191001215839epsmtip162057a0488cfcf942d14f18a844f1c2d~JpMb4utbb0288002880epsmtip1H;
+        Tue,  1 Oct 2019 21:58:39 +0000 (GMT)
+Subject: Re: [PATCH] clk: samsung: exynos5433: Fix potential NULL pointer
+ dereference
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-clk@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Cc:     Sylwester Nawrocki <snawrocki@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <3c3d500a-d2ef-8606-f549-eb82d7f877be@samsung.com>
+Date:   Wed, 2 Oct 2019 07:03:27 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20191001174439.182435-1-sboyd@kernel.org>
-In-Reply-To: <20191001174439.182435-1-sboyd@kernel.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 1 Oct 2019 14:20:50 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VBWuMwLOCvUK0JRsFPSvkCu2RNAa4=2g5CpsGRS--1UA@mail.gmail.com>
-Message-ID: <CAD=FV=VBWuMwLOCvUK0JRsFPSvkCu2RNAa4=2g5CpsGRS--1UA@mail.gmail.com>
-Subject: Re: [PATCH] clk: Don't cache errors from clk_ops::get_phase()
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20191001130921.24571-1-m.szyprowski@samsung.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0hTcRTH+e3uXq/h6tfSPC6oeRXChY/rWk5TCbIQEpGSDHHYxV2nuVe7
+        s5om2NNHo5cFNrF3RKJoptHLnI9eFK4HilSWWFEG9rAHRg/adpP873N+53vO4Xt+hybkRykF
+        XWy28zYzZ2SoWdLLfVHR0fhBnS7O0xepvVjfSmo9nrYA7WfnC1Jb77kp0bb0jwRoq96MEyuo
+        9PamGip9f0cTSv/SvjCLyC1JLuI5PW9T8uYCi77YbEhh1qzLX5mvWRbHRrOJ2gRGaeZMfAqT
+        lpEVvbrY6J3LKLdwxlLvUxYnCExsarLNUmrnlUUWwZ7C8Fa90ZpojRE4k1BqNsQUWExJbFxc
+        vMYr3FhStGP3J9I6SG9rvFkvrUR7A2pRIA14KQzsu+3lWbQcX0Ew0NBHiMEkgu9dPaQYfEdw
+        unUITZc0OsckYqILQc/odUoMPiK4MTHhzdD0PJwDtSO0D4OxBVwT2b5aAjsRtDWn+ZjCKuh+
+        N0z5eA4Oh8GpV/7+MpwKl666SB9LcSS0jE35OQRvgMnRPlLUzIV7x15LfRzo1Z/v9EjF/qHw
+        9PUJiciLYFdng98N4GcU1Jx9T4gG0uCr+4dU5Hnw/k7Hv10oYPzA9F7K4cK9fkosrkbQ0f2Q
+        FBNq6D5X5/dI4ChovRYrPofD1Z+NSBw8Gz58c5I+CWAZVO+Vi5IIeDI6IhE5DM5U1VAHEeOa
+        Ycc1w4JrhgXX/2EnkbQJzeetgsnAC6yVnfnZ7ch/kirNFXRkIKMXYRoxQbLh7DqdnOS2CA5T
+        LwKaYIJlyb8O6+QyPeco422WfFupkRd6kca77UOEIqTA4j1wsz2f1cSr1WrtUnaZhmWZUFm6
+        oVInxwbOzpfwvJW3TddJ6EBFJXKbYrvX4rfjFb2/cbgn6dBxp1DQoFeX3Nn6PGj70OPmxR8+
+        7+t56s7M1h81BN89/VGxvjAvXmIqH13c8uhPZGqhmtnUeCtsST+lO3W/835W0k7H5syqPTkn
+        Xnocgf1l11qW535LULnzlLctYZO6VRXxqz3UApxRtRWdMkdQhSG7GalQxLEqwiZwfwF0ZPgf
+        qAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkkeLIzCtJLcpLzFFi42LZdlhJTpf/zORYg++rtSw2zljPanH+/AZ2
+        i48991gtZpzfx2Sx9shddov2py+ZHdg8Nq3qZPPo27KK0ePzJrkA5igum5TUnMyy1CJ9uwSu
+        jMaWD6wFVzkq5u6bwdLA2MbexcjJISFgIjG35xFTFyMXh5DAbkaJKdf2sUIkJCWmXTzK3MXI
+        AWQLSxw+XAxR85ZR4uDV8ywgcWGBcImuuxwg5SIC+RIz7vQygtQwC/QxShzoWcUO0TCRUeL8
+        pMNg29gEtCT2v7jBBmLzCyhKXP3xmBHE5hWwk9i8cxbYYhYBFYm1j36A2aICERKHd8yCqhGU
+        ODnzCQuIzQlUv3zreTCbWUBd4s+8S8wQtrjErSfzmSBseYnmrbOZJzAKz0LSPgtJyywkLbOQ
+        tCxgZFnFKJlaUJybnltsWGCYl1quV5yYW1yal66XnJ+7iREcMVqaOxgvL4k/xCjAwajEw9sQ
+        NDlWiDWxrLgy9xCjBAezkgivzZ9JsUK8KYmVValF+fFFpTmpxYcYpTlYlMR5n+YdixQSSE8s
+        Sc1OTS1ILYLJMnFwSjUwckpfvexp7PbxfMJD4YSH2+NTJTX/f+muYkiPeLoiqeX8J98UkV0l
+        j74HMZ1P7LlX4bz4sNOxD296yo22dYhkPr2wQjw4Om4hd++V/1s++3M1/l3bHsaT8+xgnp9w
+        9KHfyp/KJTuXvp391jNdsevrLoHyrkgHsWSTjybXlmzcU/Ne6NeukMoSJZbijERDLeai4kQA
+        tVBd95QCAAA=
+X-CMS-MailID: 20191001215839epcas1p3923451e15fe6ca2b4bbf683ae952a447
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20191001130929eucas1p114d229f779680122c629396a4fc040c0
+References: <CGME20191001130929eucas1p114d229f779680122c629396a4fc040c0@eucas1p1.samsung.com>
+        <20191001130921.24571-1-m.szyprowski@samsung.com>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
@@ -68,106 +110,35 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 Hi,
 
-On Tue, Oct 1, 2019 at 10:44 AM Stephen Boyd <sboyd@kernel.org> wrote:
->
-> We don't check for errors from clk_ops::get_phase() before storing away
-> the result into the clk_core::phase member. This can lead to some fairly
-> confusing debugfs information if these ops do return an error. Let's
-> skip the store when this op fails to fix this. While we're here, move
-> the locking outside of clk_core_get_phase() to simplify callers from
-> the debugfs side.
->
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Cc: Heiko Stuebner <heiko@sntech.de>
-> Cc: Jerome Brunet <jbrunet@baylibre.com>
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+On 19. 10. 1. 오후 10:09, Marek Szyprowski wrote:
+> devm_kcalloc might fail, so avoid accessing the allocated object in such
+> case.
+> 
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > ---
->
-> Resending because I couldn't find this anywhere.
+>  drivers/clk/samsung/clk-exynos5433.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/samsung/clk-exynos5433.c b/drivers/clk/samsung/clk-exynos5433.c
+> index 7824c2ba3d8e..6afbcd0ae96f 100644
+> --- a/drivers/clk/samsung/clk-exynos5433.c
+> +++ b/drivers/clk/samsung/clk-exynos5433.c
+> @@ -5592,7 +5592,8 @@ static int __init exynos5433_cmu_probe(struct platform_device *pdev)
+>  	if (data->nr_pclks > 0) {
+>  		data->pclks = devm_kcalloc(dev, sizeof(struct clk *),
+>  					   data->nr_pclks, GFP_KERNEL);
+> -
+> +		if (!data->pclks)
+> +			return -ENOMEM;
+>  		for (i = 0; i < data->nr_pclks; i++) {
+>  			struct clk *clk = of_clk_get(dev->of_node, i);
+>  
+> 
 
-It was at:
+I think it is needed when 'data->pclks' memory allocation failed.
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 
-https://lore.kernel.org/r/155692148370.12939.291938595926908281@swboyd.mtv.corp.google.com
-
-
-> @@ -2640,14 +2640,14 @@ EXPORT_SYMBOL_GPL(clk_set_phase);
->
->  static int clk_core_get_phase(struct clk_core *core)
->  {
-> -       int ret;
-> +       int ret = 0;
->
-> -       clk_prepare_lock();
-> +       lockdep_assert_held(&prepare_lock);
->         /* Always try to update cached phase if possible */
->         if (core->ops->get_phase)
-> -               core->phase = core->ops->get_phase(core->hw);
-> -       ret = core->phase;
-> -       clk_prepare_unlock();
-> +               ret = core->ops->get_phase(core->hw);
-> +       if (ret >= 0)
-> +               core->phase = ret;
-
-It doesn't matter much, but if it were me I'd add this under the "if
-(core->ops->get_phase)" statement.  Then we don't keep doing a memory
-write of 0 to "core->phase" all the time when "core->ops->get_phase"
-isn't there.  ...plus (to me) it makes more logical sense.
-
-I'd guess you were trying to make sure that core->phase got set to 0
-like the old code did in __clk_core_init().  ...but that really
-shouldn't be needed since the clk_core is initted with kzalloc().
-
-
-> @@ -2661,10 +2661,16 @@ static int clk_core_get_phase(struct clk_core *core)
->   */
->  int clk_get_phase(struct clk *clk)
->  {
-> +       int ret;
-> +
->         if (!clk)
->                 return 0;
->
-> -       return clk_core_get_phase(clk->core);
-> +       clk_prepare_unlock();
-> +       ret = clk_core_get_phase(clk->core);
-> +       clk_prepare_unlock();
-
-Probably the first of these two should be clk_prepare_lock() unless
-you really really wanted the clock to be unlocked.
-
-
-> @@ -2878,13 +2884,21 @@ static struct hlist_head *orphan_list[] = {
->  static void clk_summary_show_one(struct seq_file *s, struct clk_core *c,
->                                  int level)
->  {
-> -       seq_printf(s, "%*s%-*s %7d %8d %8d %11lu %10lu %5d %6d\n",
-> +       int phase;
-> +
-> +       seq_printf(s, "%*s%-*s %7d %8d %8d %11lu %10lu ",
->                    level * 3 + 1, "",
->                    30 - level * 3, c->name,
->                    c->enable_count, c->prepare_count, c->protect_count,
-> -                  clk_core_get_rate(c), clk_core_get_accuracy(c),
-> -                  clk_core_get_phase(c),
-> -                  clk_core_get_scaled_duty_cycle(c, 100000));
-> +                  clk_core_get_rate(c), clk_core_get_accuracy(c));
-> +
-> +       phase = clk_core_get_phase(c);
-
-Don't you need a clk_prepare_lock() / clk_prepare_unlock() around this now?
-
-
-> @@ -3349,10 +3366,7 @@ static int __clk_core_init(struct clk_core *core)
->          * Since a phase is by definition relative to its parent, just
->          * query the current clock phase, or just assume it's in phase.
-
-Maybe update the comment to something like "clk_core_get_phase() will
-cache the phase for us".
-
-
->          */
-> -       if (core->ops->get_phase)
-> -               core->phase = core->ops->get_phase(core->hw);
-> -       else
-> -               core->phase = 0;
-> +       clk_core_get_phase(core);
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
