@@ -2,20 +2,20 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48611C4293
-	for <lists+linux-clk@lfdr.de>; Tue,  1 Oct 2019 23:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3B6C4292
+	for <lists+linux-clk@lfdr.de>; Tue,  1 Oct 2019 23:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727724AbfJAVVv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        id S1727601AbfJAVVv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
         Tue, 1 Oct 2019 17:21:51 -0400
-Received: from avon.wwwdotorg.org ([104.237.132.123]:40806 "EHLO
+Received: from avon.wwwdotorg.org ([104.237.132.123]:40810 "EHLO
         avon.wwwdotorg.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727677AbfJAVVu (ORCPT
+        with ESMTP id S1727724AbfJAVVu (ORCPT
         <rfc822;linux-clk@vger.kernel.org>); Tue, 1 Oct 2019 17:21:50 -0400
 Received: from swarren-lx1.nvidia.com (unknown [216.228.112.24])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by avon.wwwdotorg.org (Postfix) with ESMTPSA id 411071C0162;
-        Tue,  1 Oct 2019 15:14:02 -0600 (MDT)
+        by avon.wwwdotorg.org (Postfix) with ESMTPSA id 4BBCC1C0B2F;
+        Tue,  1 Oct 2019 15:14:03 -0600 (MDT)
 X-Virus-Status: Clean
 X-Virus-Scanned: clamav-milter 0.100.3 at avon.wwwdotorg.org
 From:   Stephen Warren <swarren@wwwdotorg.org>
@@ -27,10 +27,12 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH 1/4] clk: tegra: Enable fuse clock on Tegra124
-Date:   Tue,  1 Oct 2019 15:13:43 -0600
-Message-Id: <20191001211346.104400-1-swarren@wwwdotorg.org>
+Subject: [PATCH 2/4] ARM: tegra: Enable PLLP bypass during Tegra124 LP1
+Date:   Tue,  1 Oct 2019 15:13:44 -0600
+Message-Id: <20191001211346.104400-2-swarren@wwwdotorg.org>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191001211346.104400-1-swarren@wwwdotorg.org>
+References: <20191001211346.104400-1-swarren@wwwdotorg.org>
 MIME-Version: 1.0
 X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
@@ -45,8 +47,22 @@ For a little over a year, U-Boot has configured the flow controller to
 perform automatic RAM re-repair on off->on power transitions of the CPU
 rail1]. This is mandatory for correct operation of Tegra124. However, RAM
 re-repair relies on certain clocks, which the kernel must enable and
-leave running. The fuse clock is one of those clocks. Enable this clock
-so that LP1 power mode (system suspend) operates correctly.
+leave running. PLLP is one of those clocks. This clock is shut down
+during LP1 in order to save power. Enable bypass (which I believe routes
+osc_div_clk, essentially the crystal clock, to the PLL output) so that
+this clock signal toggles even though the PLL is not active. This is
+required so that LP1 power mode (system suspend) operates correctly.
+
+The bypass configuration must then be undone when resuming from LP1, so
+that all peripheral clocks run at the expected rate. Without this, many
+peripherals won't work correctly; for example, the UART baud rate would
+be incorrect.
+
+NVIDIA's downstream kernel code only does this if not compiled for
+Tegra30, so the added code is made conditional upon the chip ID. NVIDIA's
+downstream code makes this change conditional upon the active CPU
+cluster. The upstream kernel currently doesn't support cluster switching,
+so this patch doesn't test the active CPU cluster ID.
 
 [1] 3cc7942a4ae5 ARM: tegra: implement RAM repair
 
@@ -54,21 +70,39 @@ Reported-by: Jonathan Hunter <jonathanh@nvidia.com>
 Cc: stable@vger.kernel.org
 Signed-off-by: Stephen Warren <swarren@nvidia.com>
 ---
- drivers/clk/tegra/clk-tegra124.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/mach-tegra/sleep-tegra30.S | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/clk/tegra/clk-tegra124.c b/drivers/clk/tegra/clk-tegra124.c
-index 0224fdc4766f..f53f6315c646 100644
---- a/drivers/clk/tegra/clk-tegra124.c
-+++ b/drivers/clk/tegra/clk-tegra124.c
-@@ -1291,6 +1291,7 @@ static struct tegra_clk_init_table common_init_table[] __initdata = {
- };
+diff --git a/arch/arm/mach-tegra/sleep-tegra30.S b/arch/arm/mach-tegra/sleep-tegra30.S
+index b408fa56eb89..6922dd8d3e2d 100644
+--- a/arch/arm/mach-tegra/sleep-tegra30.S
++++ b/arch/arm/mach-tegra/sleep-tegra30.S
+@@ -370,6 +370,14 @@ _pll_m_c_x_done:
+ 	pll_locked r1, r0, CLK_RESET_PLLC_BASE
+ 	pll_locked r1, r0, CLK_RESET_PLLX_BASE
  
- static struct tegra_clk_init_table tegra124_init_table[] __initdata = {
-+	{ TEGRA124_CLK_FUSE, -1, 0, 1 },
- 	{ TEGRA124_CLK_SOC_THERM, TEGRA124_CLK_PLL_P, 51000000, 0 },
- 	{ TEGRA124_CLK_CCLK_G, TEGRA124_CLK_CLK_MAX, 0, 1 },
- 	{ TEGRA124_CLK_HDA, TEGRA124_CLK_PLL_P, 102000000, 0 },
++	tegra_get_soc_id TEGRA_APB_MISC_BASE, r1
++	cmp	r1, #TEGRA30
++	beq	1f
++	ldr	r1, [r0, #CLK_RESET_PLLP_BASE]
++	bic	r1, r1, #(1<<31)	@ disable PllP bypass
++	str	r1, [r0, #CLK_RESET_PLLP_BASE]
++1:
++
+ 	mov32	r7, TEGRA_TMRUS_BASE
+ 	ldr	r1, [r7]
+ 	add	r1, r1, #LOCK_DELAY
+@@ -630,7 +638,10 @@ tegra30_switch_cpu_to_clk32k:
+ 	str	r0, [r4, #PMC_PLLP_WB0_OVERRIDE]
+ 
+ 	/* disable PLLP, PLLA, PLLC and PLLX */
++	tegra_get_soc_id TEGRA_APB_MISC_BASE, r1
++	cmp	r1, #TEGRA30
+ 	ldr	r0, [r5, #CLK_RESET_PLLP_BASE]
++	orrne	r0, r0, #(1 << 31)	@ enable PllP bypass on fast cluster
+ 	bic	r0, r0, #(1 << 30)
+ 	str	r0, [r5, #CLK_RESET_PLLP_BASE]
+ 	ldr	r0, [r5, #CLK_RESET_PLLA_BASE]
 -- 
 2.23.0
 
