@@ -2,57 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21756C3373
-	for <lists+linux-clk@lfdr.de>; Tue,  1 Oct 2019 13:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BEC2C337D
+	for <lists+linux-clk@lfdr.de>; Tue,  1 Oct 2019 13:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732719AbfJALzT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 1 Oct 2019 07:55:19 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:35812 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732621AbfJALzT (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 1 Oct 2019 07:55:19 -0400
-Received: by mail-wr1-f68.google.com with SMTP id v8so15169071wrt.2
-        for <linux-clk@vger.kernel.org>; Tue, 01 Oct 2019 04:55:18 -0700 (PDT)
+        id S1733101AbfJALzf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 1 Oct 2019 07:55:35 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:46151 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732684AbfJALzU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 1 Oct 2019 07:55:20 -0400
+Received: by mail-wr1-f65.google.com with SMTP id o18so15105805wrv.13
+        for <linux-clk@vger.kernel.org>; Tue, 01 Oct 2019 04:55:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vWHRyjfWyVAvZ0d9limuIhAOHFkppMKjucGsUpwzYtI=;
-        b=grap3Gg+njPsUDZJvi+5N988zkuIY9UxxiAnU0VRPLMx9Jncik4nhsgWikB914Y81p
-         YMzi2iGLOSGmwKQVRjeJ6zBWv3/Aswn+qpQu4m4WJrjY8rFmHY2VHjH/RXe+QsS2zVLo
-         sUKDy2c/Zixv4brzqxdE9UJgQ8HRJ3PIvUknjLcCh06funyQ8MykRmuAvH2n8fVPN7/i
-         iSmQ95R6Hq0PxY965QoDJoytnlOv6jF2jxJuPCPEpHC9f2bpaSAtUW2YTKOn8OLlGIoh
-         HDCZo7+1c3De/vwmxCRZB/3mQS4OoFugLFf3CMevQ/aX7ZZJDza4ZEZb4Q13lNEoQZpB
-         nAGg==
+        bh=nE4XL8qms/9Kpgy3n+0LiYMlRLilMKnu0uTWVFko214=;
+        b=oWJ+OKnvV1nEG85+oJzgPToAX9vlxIWdG33ZmNo089bYl4219SMu9P+4ZiKS5alPnv
+         5UHCIPKTg/6CjUPmjjl7COJyHASgZ7djN6vERzU3JRqTG5L8bPIElMntHt+sA8PpJI1V
+         IvJlWa3b5iRZTemB7JePoQxA3AXeJx/CCyRXUiWTRLx2vb3eXCNIM5RKPGSL/X4pnFF2
+         D4F2zIBTK+yyY8Eju1H5Iyw/NAbBZBOyZL4Gb/UDwyYhEwLtKHiaHV8ePa5S72ivUO5X
+         opbH8Sxi5bqTWYhRKCyjxnb9bQPWuHeY8sZVnOQd3+cPmzSeWbxKdgHs8yRkyeD1CM2x
+         DyoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vWHRyjfWyVAvZ0d9limuIhAOHFkppMKjucGsUpwzYtI=;
-        b=Yhm250dpz6NeXx8nYLWWAnejUr+4OPxRdkEo7Wht1PX4BXqZh2qt26sjbwEIWYCeUy
-         nAzN7XsBD82NaU+wQrxhjsijxR+503XAUUvh1GBRvSblufd/E5iJXqp65myZZS7J6usE
-         G0KJ2rDYqJP7rmhnqESI/uxFK5+fUlDBCHFb0T8fCKs6iixUpbxx1slYM3Lt4i6qDQWW
-         uxYJEGjQk7Van0+NQC6y5douitW53wCDmhhqULjgYw16222z6lSCts8nm262fEwEfDjg
-         tu12auEJO0ClhWlBomI1FOhHT4nOrBu70n82fEENboc7O31jCllQ6IhvNR0gHVpG1i5l
-         fHyg==
-X-Gm-Message-State: APjAAAXvz2tOc61She5lvt5Sgk3JQnKQCfDYqapseVi5efnwg8167iJG
-        ZKI/bhiPfmPyd8nasGxOIQ6tXg==
-X-Google-Smtp-Source: APXvYqxSEjde5T7oaO8yL+dpzl0wq5+pUK/A/ouT8K50PSZW7sinF8PXGrTpu5PeDSyXTSIs4dN+9Q==
-X-Received: by 2002:adf:f44e:: with SMTP id f14mr16561465wrp.290.1569930917901;
-        Tue, 01 Oct 2019 04:55:17 -0700 (PDT)
+        bh=nE4XL8qms/9Kpgy3n+0LiYMlRLilMKnu0uTWVFko214=;
+        b=Tzh6qa/njfHlbmdLjuee3VKcqEt22vYkkaFz21pdxB3TtAwoMQWZoSPU7AWTxLvAql
+         KsPU4Yl07hOT7w4oKKRFaSMmp5WbrLAi14aWPQG/yWbegQkJg0WwOTwJ9ye/s5AYFKng
+         UD0T0Z/yOuIZtxGmJ+L11cxYH/v9e/X1uoalOOo/hib/sxu5KYUWWweqa/KBIRYBRhMd
+         COrQ8bFSj99i3mwvF1OK8sxjI4Vd0Z47t47gQjQyrv19X9y+btvCErkK9a3qVREyJOAl
+         t/0a4wIIchiK0GZ68nYw4kHB915hB6dckvMJgh+YnSgLkw7O/LNqRwMp7mrpiRqsn+vw
+         tFgA==
+X-Gm-Message-State: APjAAAWTGVCGTjNa8u2UYu1r5gveWWzgvq4aEauLVqke4vf+b5KYd86S
+        Xp8JqyLTbephlWB5+Q3xay/ny8TSnw4=
+X-Google-Smtp-Source: APXvYqxw28X8pR77Rx9+mC0iRniK+Od8uatu5Uhz9j9oHbBWi+WdTmjujMGlSGZOE+lCuwODEk45pA==
+X-Received: by 2002:adf:cf0c:: with SMTP id o12mr17227829wrj.30.1569930918809;
+        Tue, 01 Oct 2019 04:55:18 -0700 (PDT)
 Received: from starbuck.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id p85sm4052171wme.23.2019.10.01.04.55.16
+        by smtp.googlemail.com with ESMTPSA id p85sm4052171wme.23.2019.10.01.04.55.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Oct 2019 04:55:17 -0700 (PDT)
+        Tue, 01 Oct 2019 04:55:18 -0700 (PDT)
 From:   Jerome Brunet <jbrunet@baylibre.com>
 To:     Neil Armstrong <narmstrong@baylibre.com>
 Cc:     Jerome Brunet <jbrunet@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>,
         linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/7] clk: meson: axg-audio: remove useless defines
-Date:   Tue,  1 Oct 2019 13:55:06 +0200
-Message-Id: <20191001115511.17357-4-jbrunet@baylibre.com>
+Subject: [PATCH v2 4/7] clk: meson: axg-audio: fix regmap last register
+Date:   Tue,  1 Oct 2019 13:55:07 +0200
+Message-Id: <20191001115511.17357-5-jbrunet@baylibre.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20191001115511.17357-1-jbrunet@baylibre.com>
 References: <20191001115511.17357-1-jbrunet@baylibre.com>
@@ -63,31 +63,29 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Defining the number of each input type is no longer necessary since
-we are not using the clk-input hack anymore
+Since the addition of the g12a, the last register is
+AUDIO_CLK_SPDIFOUT_B_CTRL.
 
-Fixes: 282420eed23f ("clk: meson: axg-audio: migrate to the new parent description method")
+Fixes: 075001385c66 ("clk: meson: axg-audio: add g12a support")
 Acked-by: Neil Armstrong <narmstrong@baylibre.com>
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- drivers/clk/meson/axg-audio.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/clk/meson/axg-audio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/clk/meson/axg-audio.c b/drivers/clk/meson/axg-audio.c
-index 18b23cdf679c..60ac71856e5e 100644
+index 60ac71856e5e..4b34601342bb 100644
 --- a/drivers/clk/meson/axg-audio.c
 +++ b/drivers/clk/meson/axg-audio.c
-@@ -20,10 +20,6 @@
- #include "clk-phase.h"
- #include "sclk-div.h"
+@@ -997,7 +997,7 @@ static const struct regmap_config axg_audio_regmap_cfg = {
+ 	.reg_bits	= 32,
+ 	.val_bits	= 32,
+ 	.reg_stride	= 4,
+-	.max_register	= AUDIO_CLK_PDMIN_CTRL1,
++	.max_register	= AUDIO_CLK_SPDIFOUT_B_CTRL,
+ };
  
--#define AUD_MST_IN_COUNT	8
--#define AUD_SLV_SCLK_COUNT	10
--#define AUD_SLV_LRCLK_COUNT	10
--
- #define AUD_GATE(_name, _reg, _bit, _phws, _iflags)			\
- struct clk_regmap aud_##_name = {					\
- 	.data = &(struct clk_regmap_gate_data){				\
+ struct audioclk_data {
 -- 
 2.21.0
 
