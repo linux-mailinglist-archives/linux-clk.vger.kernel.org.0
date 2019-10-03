@@ -2,98 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02361CAAC7
-	for <lists+linux-clk@lfdr.de>; Thu,  3 Oct 2019 19:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB55CABE3
+	for <lists+linux-clk@lfdr.de>; Thu,  3 Oct 2019 19:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389804AbfJCRNZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 3 Oct 2019 13:13:25 -0400
-Received: from avon.wwwdotorg.org ([104.237.132.123]:47840 "EHLO
-        avon.wwwdotorg.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390424AbfJCQ2v (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 3 Oct 2019 12:28:51 -0400
-Received: from [10.20.204.51] (unknown [216.228.112.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1729059AbfJCQBc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 3 Oct 2019 12:01:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45864 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731812AbfJCQBb (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 3 Oct 2019 12:01:31 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by avon.wwwdotorg.org (Postfix) with ESMTPSA id 2E1E51C0162;
-        Thu,  3 Oct 2019 10:28:50 -0600 (MDT)
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.100.3 at avon.wwwdotorg.org
-Subject: Re: [PATCH 1/4] clk: tegra: Enable fuse clock on Tegra124
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>, linux-tegra@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20191001211346.104400-1-swarren@wwwdotorg.org>
- <7f8934d9-8192-f88e-a329-630209d42a85@gmail.com>
-From:   Stephen Warren <swarren@wwwdotorg.org>
-Message-ID: <9e192a8a-8129-0fd7-9041-047b436ef848@wwwdotorg.org>
-Date:   Thu, 3 Oct 2019 10:28:49 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        by mail.kernel.org (Postfix) with ESMTPSA id 5A19B222D0;
+        Thu,  3 Oct 2019 16:01:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570118490;
+        bh=ttiPKL2jzgASsca2BGk27wEdRl5hmkMpvPvhdH5dU9o=;
+        h=In-Reply-To:References:From:To:Cc:Subject:Date:From;
+        b=PR8idfJjm1O7W4H7sSBvf60VNidTUzimxOuz/YuQxqeTR9ZLI8hhm1xAxkHqKYzBE
+         0G1fEJ36nFEaqWXzC3bt6NufrBH2MfEFd7DxV3tE//Vt9O6a/R0BzQzj8bgifWaiby
+         VFLCRE6KfsZchQdSn6X9Wz5mmkvAPOi7kjrRhCLE=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <7f8934d9-8192-f88e-a329-630209d42a85@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <7ac5f6bf-33c5-580e-bd40-e82f3052d460@codeaurora.org>
+References: <20190918095018.17979-1-tdas@codeaurora.org> <20190918095018.17979-4-tdas@codeaurora.org> <20190918213946.DC03521924@mail.kernel.org> <a3cd82c9-8bfa-f4a3-ab1f-2e397fbd9d16@codeaurora.org> <20190924231223.9012C207FD@mail.kernel.org> <347780b9-c66b-01c4-b547-b03de2cf3078@codeaurora.org> <20190925130346.42E0820640@mail.kernel.org> <35f8b699-6ff7-9104-5e3d-ef4ee8635832@codeaurora.org> <20191001143825.CD3212054F@mail.kernel.org> <7ac5f6bf-33c5-580e-bd40-e82f3052d460@codeaurora.org>
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <tdas@codeaurora.org>, robh+dt@kernel.org
+Cc:     David Brown <david.brown@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] clk: qcom: Add Global Clock controller (GCC) driver for SC7180
+User-Agent: alot/0.8.1
+Date:   Thu, 03 Oct 2019 09:01:29 -0700
+Message-Id: <20191003160130.5A19B222D0@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 10/3/19 5:23 AM, Dmitry Osipenko wrote:
-> 02.10.2019 00:13, Stephen Warren пишет:
->> From: Stephen Warren <swarren@nvidia.com>
->>
->> For a little over a year, U-Boot has configured the flow controller to
->> perform automatic RAM re-repair on off->on power transitions of the CPU
->> rail1]. This is mandatory for correct operation of Tegra124. However, RAM
->> re-repair relies on certain clocks, which the kernel must enable and
->> leave running. The fuse clock is one of those clocks. Enable this clock
->> so that LP1 power mode (system suspend) operates correctly.
->>
->> [1] 3cc7942a4ae5 ARM: tegra: implement RAM repair
->>
->> Reported-by: Jonathan Hunter <jonathanh@nvidia.com>
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Stephen Warren <swarren@nvidia.com>
->> ---
->>   drivers/clk/tegra/clk-tegra124.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/clk/tegra/clk-tegra124.c b/drivers/clk/tegra/clk-tegra124.c
->> index 0224fdc4766f..f53f6315c646 100644
->> --- a/drivers/clk/tegra/clk-tegra124.c
->> +++ b/drivers/clk/tegra/clk-tegra124.c
->> @@ -1291,6 +1291,7 @@ static struct tegra_clk_init_table common_init_table[] __initdata = {
->>   };
->>   
->>   static struct tegra_clk_init_table tegra124_init_table[] __initdata = {
->> +	{ TEGRA124_CLK_FUSE, -1, 0, 1 },
->>   	{ TEGRA124_CLK_SOC_THERM, TEGRA124_CLK_PLL_P, 51000000, 0 },
->>   	{ TEGRA124_CLK_CCLK_G, TEGRA124_CLK_CLK_MAX, 0, 1 },
->>   	{ TEGRA124_CLK_HDA, TEGRA124_CLK_PLL_P, 102000000, 0 },
->>
-> 
-> Hello Stephen,
-> 
-> Does this mean that devices which are using older U-Boot version were always in a trouble?
+Quoting Taniya Das (2019-10-03 03:31:15)
+> Hi Stephen,
+>=20
+> On 10/1/2019 8:08 PM, Stephen Boyd wrote:
+> >=20
+> > Why do you want to keep them critical and registered? I'm suggesting
+> > that any clk that is marked critical and doesn't have a parent should
+> > instead become a register write in probe to turn the clk on.
+> >=20
+> Sure, let me do a one-time enable from probe for the clocks which=20
+> doesn't have a parent.
+> But I would now have to educate the clients of these clocks to remove=20
+> using them.
+>=20
 
-Yes. RAM re-repair wouldn't have been enabled, so in theory any device 
-could fail after an LP1 resume, or indeed anything that caused the CPU 
-complex rail to be gated.
+If anyone is using these clks we can return NULL from the provider for
+the specifier so that we indicate there isn't support for them in the
+kernel. At least I hope that code path still works given all the recent
+changes to clk_get().
 
-> It sounds to me that the RAM re-repair should be also enabled by the kernel's flow
-> controller driver in a case if bootloader did not enable it.
-
-Yes, that might be a good idea too.
-
-> If enabling RAM re-repair is a change that won't be easily backportable to stable kernels,
-> then may be it's worth to simply force-disable LP1 on T124 for the older kernels.
-
-The first two patches in this series are all that's strictly required, 
-and the change are pretty small and isolated, so it should be easy to 
-back-port.
