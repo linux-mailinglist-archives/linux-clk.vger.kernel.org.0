@@ -2,130 +2,108 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C768D018A
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Oct 2019 21:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76FAD045D
+	for <lists+linux-clk@lfdr.de>; Wed,  9 Oct 2019 01:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730697AbfJHTzT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Oct 2019 15:55:19 -0400
-Received: from mail-ed1-f42.google.com ([209.85.208.42]:46898 "EHLO
-        mail-ed1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730549AbfJHTzT (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Oct 2019 15:55:19 -0400
-Received: by mail-ed1-f42.google.com with SMTP id t3so16791835edw.13
-        for <linux-clk@vger.kernel.org>; Tue, 08 Oct 2019 12:55:18 -0700 (PDT)
+        id S1729937AbfJHXqP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Oct 2019 19:46:15 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:36755 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729789AbfJHXqP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Oct 2019 19:46:15 -0400
+Received: by mail-io1-f65.google.com with SMTP id b136so928103iof.3
+        for <linux-clk@vger.kernel.org>; Tue, 08 Oct 2019 16:46:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
-        b=aMQQgi7dIXVBnmVMSSMCLgb3oXTzeafbZdgWl2Y7dgh9d3yilS1+9yTnvWoS7+GzUk
-         LWbTYKnbDzuBJ3/U6U4a0Txwis4unkVKDohWYyBjnKYrTLghN7laSYeGp1/FcmznDyEO
-         GS9pgiMN+uT0qCjbihaa5wuvtHOM98vqOW8UVjJ7Cv+EprgLSNS8LJdhrjnJyNqQEN56
-         5sfOyU15h4kpoOXNgzNljIz5N8IZnpl4XHLYJYLCwvTOpHMRDfM3ywlgrk+4Qs+isMtv
-         bwWMXB9P8rpPXCaQx70qpw2S2sG0Q07XznOIe3PPQ9uFVdh7+iWMtRM+rtyrWFblwrYM
-         wXZw==
+        d=sifive.com; s=google;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=SPl3L4+4Zy9QlJN3K7IuqOc2JedlA0ldY7i+AP0Siqo=;
+        b=I+N5hkvPCF8K1LY460NnH3Bs+ppv36e7pHAAko5cPGtVK7Q1xpMFtMk1sbwX3EL9Ae
+         UX5ufwjfjE2WsQxxVvaJrkkGtrrD1A1swJroeZ6oWYFiFUD/gbGKkY6710T0F0X5S5Xo
+         BF95rAFQKdDZy+9dBrgr05QKn2VguSytZtPaHPhpxauj1vAvK0o8UX1wBJzBZa1yl7EV
+         jLHoqHF7Hse1l/Ohr1dGC6ATYWRzE6EftbRk42hoGB79bBRXmsmPeyS2gmRpO97jk05b
+         X+CS58w6j5DGF3spjHV4AncNibrgaK8A9wTUdRqszmiSN3PwPwqQA/IsTfJ60gtOiuUB
+         4Xrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
-        b=XdcNtscOC9zfruIjpINAlArrO7vbT6JfPK9eMjWCUzSQ8xuM6MOAdApY0XnWS1zIra
-         WQm6brKISexW6YAAmjqQLtotiNO5IZFkYUM6Ys8Rg+0ggEWXfIBVReCE6/DBFfP7ytbD
-         RK9Uwq6nt8QfUgKlsWXzTUIAoA6Rbp0W57wvfaH41wEvDjls9Un7clHDahYtsi03iqnj
-         gF7dXj67q0sWOTDTzqZ2SU19jeyS80K/kV0Mh3h3qL0et5hNNJX9pI70eUo1U+pXLJyJ
-         pbttcMASUrU8AoMgRNbYvC1A5CyGdqJuCR8dGYo+phmWEoId/FUb6TFU75IhzbGIGYMx
-         qHRQ==
-X-Gm-Message-State: APjAAAVX/dF47DRFIvtaNrkW65MXy6sVgN9//6XXcKKTdXTtYAYZ5XWH
-        svUSGiTlD7Qk2NbK/1sUTV4kwph1A2toWfoUVlU=
-X-Google-Smtp-Source: APXvYqxaZfvXk0/G1PfPN40JEbEfue6b7v2Lk/SQWmnUxoxmnZyxXwpPNC4UPIh9mJw4kQ9atMHeHG1Orcb22TWXOSk=
-X-Received: by 2002:a50:c306:: with SMTP id a6mr36339639edb.108.1570564517490;
- Tue, 08 Oct 2019 12:55:17 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=SPl3L4+4Zy9QlJN3K7IuqOc2JedlA0ldY7i+AP0Siqo=;
+        b=HAlPfbkv1EXwdrXH4nNWtW+Rt8AQTsasSl1XnSYcaWNtJfLDwe4i5V8+H2qwE0h8QU
+         WeWFy4xdiUORj+2tBCR72QN/Ql1kWjg0r42t5SSKHuJoLH/p8a/9TNVuNSOXWiLHpCF+
+         iLyry3fjnGak7fDOZpgFN908FZqfEy7NNZCA38WQrUhO5com8GmWU1na03ohaPvEzh4y
+         gyqVu02XT9q9KmCZ+8F4Dg7FZedwA0KQQCr3hULiibyqZU4JHhxTr1fr5aBenIm/Rata
+         y2+evzieOBY2FTAPzkV5EmG4fuzsgRgO884Vkb/U6Hn9vL4uNBGuE5LVedfgQyjyXgOM
+         HmBg==
+X-Gm-Message-State: APjAAAW+uVpaz2BZx3uPOqenQv8Br3VquzZzbOoYiJKakszUqqxlIOcF
+        JZw6quDDHVK5JiuQsYyXaVBeOA==
+X-Google-Smtp-Source: APXvYqz97nlCIt/+/P4PPfxa3nO+CVIeqE66+NVgtpZhnKj/IpAG2fhUxvCWOIqX/CoRt6DSjpBBFw==
+X-Received: by 2002:a92:d084:: with SMTP id h4mr287013ilh.223.1570578372595;
+        Tue, 08 Oct 2019 16:46:12 -0700 (PDT)
+Received: from localhost ([64.62.168.194])
+        by smtp.gmail.com with ESMTPSA id m11sm250603ioq.5.2019.10.08.16.46.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Oct 2019 16:46:12 -0700 (PDT)
+Date:   Tue, 8 Oct 2019 16:46:06 -0700 (PDT)
+From:   Paul Walmsley <paul.walmsley@sifive.com>
+X-X-Sender: paulw@viisi.sifive.com
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?ISO-8859-15?Q?Uwe_Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-tegra@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH v3 1/2] dt-bindings: pwm: Convert PWM bindings to
+ json-schema
+In-Reply-To: <20191002164047.14499-1-krzk@kernel.org>
+Message-ID: <alpine.DEB.2.21.9999.1910081643220.11044@viisi.sifive.com>
+References: <20191002164047.14499-1-krzk@kernel.org>
+User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
 MIME-Version: 1.0
-Received: by 2002:a17:906:cc89:0:0:0:0 with HTTP; Tue, 8 Oct 2019 12:55:16
- -0700 (PDT)
-Reply-To: moneygram.1820@outlook.fr
-From:   MONEY GRAM <currency1000000@gmail.com>
-Date:   Tue, 8 Oct 2019 20:55:16 +0100
-Message-ID: <CAPqfnSEO==O6BEtBbcMMZfh3qcY4Bz0qndhCqbcLqZx4DCs44A@mail.gmail.com>
-Subject: HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE M.T.C.N:78393135
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE
-M.T.C.N:78393135
+On Wed, 2 Oct 2019, Krzysztof Kozlowski wrote:
 
-Attn: Beneficiary,
+> Convert generic PWM bindings to DT schema format using json-schema.  The
+> consumer bindings are split to separate file.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> 
+> ---
+> 
 
-This is to inform you that the America Embassy office was instructed
-to transfer your fund $980,000.00 U.S Dollars compensating all the
-SCAM VICTIMS and your email was found as one of the VICTIMS. by
-America security leading team and America representative officers so
-between today the 8th of October till 1ST Of December 2019 you will
-be receiving MONEY GRAM the sum of $6,000 dollars per day. However be informed
-that we have already sent the $6,000 dollars this morning to avoid
-cancellation of your payment, remain the total sum of $980,000.00.
+[ ... ]
 
-You have only six hours to call this office upon the receipt of this
-email the maximum amount you will be receiving per a day starting from
-today's $6,000 and the Money Transfer Control Number of today is
-below.
+> diff --git a/Documentation/devicetree/bindings/pwm/pwm-sifive.txt b/Documentation/devicetree/bindings/pwm/pwm-sifive.txt
+> index 36447e3c9378..3d1dd7b06efc 100644
+> --- a/Documentation/devicetree/bindings/pwm/pwm-sifive.txt
+> +++ b/Documentation/devicetree/bindings/pwm/pwm-sifive.txt
+> @@ -17,7 +17,7 @@ Required properties:
+>    Please refer to sifive-blocks-ip-versioning.txt for details.
+>  - reg: physical base address and length of the controller's registers
+>  - clocks: Should contain a clock identifier for the PWM's parent clock.
+> -- #pwm-cells: Should be 3. See pwm.txt in this directory
+> +- #pwm-cells: Should be 3. See pwm.yaml in this directory
+>    for a description of the cell format.
+>  - interrupts: one interrupt per PWM channel
 
-NOTE; The sent $6,000 is on hold because of the instruction from IMF
-office, they asked us to place it on hold by requesting the (Clean
-Bill Record Certificate) which will cost you $25 in order to fulfill
-all the necessary obligation to avoid any hitches while sending you
-the payment through MONEY GRAM money transfer, the necessary
-obligation I mean here is to obtain the (Clean Bill Record
-Certificate)
+For the SiFive PWM driver documentation:
 
-Below is the information of today track it in our
+Acked-by: Paul Walmsley <paul.walmsley@sifive.com>
 
-websitehttps://moneygarm.com/asp/orderStatus.asp?country=global
-to see is available to pick up by the receiver, but if we didn't here
-from you soon we'll pickup it up from line for security reason to
-avoid hackers stealing the money online.
 
-Money Transfer Control Number M.T.C.N)::78393135
-SENDERS FIRST NAME: John
-SENDERS LAST NAME: Chun
-SENDERS COUNTRY...BENIN REPUBLIC
-TEXT QUESTION: A
-ANSWER: B
-AMOUNT: $6,000
-
-We need the below details from you, to enable us place the payment to
-your name and transfer the fund to you.
-
-(Full Receivers name)...................
-(You're Country)................................
-(Address)......................................
-(Phone NuMBER-...............................
-(You're Age)............................
-(OCCUPATION)..REAL ESTATE..................
-(A Copy of Your ID CARD).SEE ATTACHMENTS.............
-
-HOWEVER YOU HAVE TO PAY $25 FOR THE (Clean Bill Record Certificate)
-AND THAT IS ALL YOU HAVE TO DO ASAP.
-
-The payment will be sending to below information, such as:
-
-Receiver.............. ALAN UDE
-Country................Benin Republic
-Amount: ....................$25
-Question: .....................A
-Answer:................... B
-Sender...............Name:
-MTCN :..............
-
-According to the instruction and order we received from IMF the their
-requested $25 must be made directly to the above info's.
-
-Furthermore you are advised to call us as the instruction was passed
-that within 6hours without hearing from you, Count your payment
-canceled. Number to call is below listed manager director office of
-release order:
-DR.ALAN UDE
-Director MONEY GRAM-Benin
+- Paul
