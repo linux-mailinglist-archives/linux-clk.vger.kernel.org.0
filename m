@@ -2,76 +2,91 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E82DDD2A72
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Oct 2019 15:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335CED2C12
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Oct 2019 16:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387898AbfJJNK0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 10 Oct 2019 09:10:26 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:39003 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387873AbfJJNKZ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 10 Oct 2019 09:10:25 -0400
-Received: by mail-wm1-f66.google.com with SMTP id v17so6728918wml.4
-        for <linux-clk@vger.kernel.org>; Thu, 10 Oct 2019 06:10:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ub-ac-id.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=GO77O9NugfDMF3sM0pFxjAVwqVXEKORDEOteZl6SPpM=;
-        b=CGCreGJpdYxCMpEc/r9slhW8rmU4TymtGsZBbMvDrYU9kNDYb/svfNqW4a9C3bf+BM
-         kbbK67I1e9UwX3fKfloVVqGUficTgv9o2fidC9QOglrpEVTLPie7uGXXXMLngCYMp9E6
-         e1G7SoSNqGaXSVVCXpOpdpvb0A8fMNBKZxZ0BtpQtjukZwxsZRCmNZI4BAshhKy/TpMX
-         cw6GUcF4zQkxYbiYk8Zc9Q5BgmsPWwDaAcit4uR9TdxpIZhjqfdPdhnWI4FmlB59CCrQ
-         jL4JcdQ1JsmKakx8RnWJPmM+NlHwOF4if6xijGII/IpnJBxXJ+ZMDdPqVJen2xHSCBhr
-         7XbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=GO77O9NugfDMF3sM0pFxjAVwqVXEKORDEOteZl6SPpM=;
-        b=opUy1mijYUu46L4435tAOZ3q3jP21QUpYWdP2yUNTRBaC+jLIMDNjoPByadehKjdaw
-         q60hMQZG6ToWpUOmI8iR4IhXi+ZaQDTut6XqqHay49yfGc7Lmx03aS1hINhJZErGBPqn
-         WTHrHv1QqQJgxUr7fSeDiDqsaeTwj2Q99T5ZqmuU56uMuOlGlQhOAF+pgAstXTZ9Yrta
-         5e/Qo6TLe+znP2Ab4aipnAKMEBwIgUGbvtsNBMHQwgdZr5uKYmX7+gmApx8XyXYAn+9N
-         LeXqfOWaMKUjZnibVRGNK9MYBdrk3mSoB7swR1SObsGAwfD2oEaWG3sG1MegMJVVPhiN
-         Q33Q==
-X-Gm-Message-State: APjAAAVvP0FELFYWbtjs7PxGy0sLMRoG+xKzAZyIarXtOzsyotxHdJH2
-        WT6/bCaiOlKU8UBOjA37nCy/VpKkYRN+B8CG8CxGkQ==
-X-Google-Smtp-Source: APXvYqz37xeAxTc9n4Vw6+baO3ezaqmb44jTN53afpnazNh08T2YGGy0G+RdMm3GW6VpJFx3Vu2hAyZqrm4Tj/MIr/c=
-X-Received: by 2002:a7b:c3cf:: with SMTP id t15mr7388687wmj.85.1570713023114;
- Thu, 10 Oct 2019 06:10:23 -0700 (PDT)
+        id S1726146AbfJJOFY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 10 Oct 2019 10:05:24 -0400
+Received: from muru.com ([72.249.23.125]:36920 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725923AbfJJOFY (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 10 Oct 2019 10:05:24 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id A751B80BB;
+        Thu, 10 Oct 2019 14:05:56 +0000 (UTC)
+Date:   Thu, 10 Oct 2019 07:05:19 -0700
+From:   Tony Lindgren <tony@atomide.com>
+To:     Keerthy <j-keerthy@ti.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Tero Kristo <t-kristo@ti.com>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-omap@vger.kernel.org
+Subject: Re: [PATCH] clk: ti: clkctrl: Fix failed to enable error with double
+ udelay timeout
+Message-ID: <20191010140519.GV5610@atomide.com>
+References: <20190930154001.46581-1-tony@atomide.com>
+ <93a6448d-cece-a903-5c7e-ade793d62063@ti.com>
 MIME-Version: 1.0
-Received: by 2002:adf:efc4:0:0:0:0:0 with HTTP; Thu, 10 Oct 2019 06:10:22
- -0700 (PDT)
-Reply-To: sunrisefundingltd50@gmail.com
-From:   "Coryna Rizky Amelia, SST" <coryna_fk@ub.ac.id>
-Date:   Thu, 10 Oct 2019 14:10:22 +0100
-Message-ID: <CADotR_p9GxtkfVe36w7PBHwuwOdZcV4TCMOT+O50+azDL8EhmA@mail.gmail.com>
-Subject: Apply For Financial investment at a lower rate 2%
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <93a6448d-cece-a903-5c7e-ade793d62063@ti.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
--- 
-Hello,
+* Keerthy <j-keerthy@ti.com> [191007 00:57]:
+> 
+> 
+> On 30/09/19 9:10 PM, Tony Lindgren wrote:
+> > Commit 3d8598fb9c5a ("clk: ti: clkctrl: use fallback udelay approach if
+> > timekeeping is suspended") added handling for cases when timekeeping is
+> > suspended. But looks like we can still get occasional "failed to enable"
+> > errors on the PM runtime resume path with udelay() returning faster than
+> > expected.
+> > 
+> > With ti-sysc interconnect target module driver this leads into device
+> > failure with PM runtime failing with "failed to enable" clkctrl error.
+> > 
+> > Let's fix the issue with a delay of two times the desired delay as in
+> > often done for udelay() to account for the inaccuracy.
+> 
+> Tested for DS0 and rtc+ddr modes on am43 and ds0 on am33.
+> 
+> Tested-by: Keerthy <j-keerthy@ti.com>
 
-We are private lenders based in UK.
-Do you need a loan (credit) as soon as possible. Are you in search of
-money to solve your personal needs or finance your business venture,
-then get Your desired loan today! Consult us at Sunrise Funding Ltd.
+Thanks for testing. This one should be applied into v5.4-rc series
+please if no more comments.
 
-* We offer personal loan & huge capital loan at 2% interest rate to
-the general public both locally and internationally.
-* Credit amount range from $5,000.00 -- $500,000.00 and above.
-* Special $10,000,000.00 Loan offer for huge project also available.
-* Loan period of 6 months -- 10 years.
-* Loan is granted 24 hours after approval and accredited, directly in
-hand or bank account.
+Regards,
 
-Please note that you are advised to contact us for more details via
-the following e-mail address below;
+Tony
 
-EMAIL : sunrisefundingltd50@gmail.com
-FIRM : Sunrise Funding Ltd UK.
+> > Fixes: 3d8598fb9c5a ("clk: ti: clkctrl: use fallback udelay approach if timekeeping is suspended")
+> > Cc: Keerthy <j-keerthy@ti.com>
+> > Cc: Tero Kristo <t-kristo@ti.com>
+> > Signed-off-by: Tony Lindgren <tony@atomide.com>
+> > ---
+> >   drivers/clk/ti/clkctrl.c | 5 +++--
+> >   1 file changed, 3 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/clk/ti/clkctrl.c b/drivers/clk/ti/clkctrl.c
+> > --- a/drivers/clk/ti/clkctrl.c
+> > +++ b/drivers/clk/ti/clkctrl.c
+> > @@ -100,11 +100,12 @@ static bool _omap4_is_timeout(union omap4_timeout *time, u32 timeout)
+> >   	 * can be from a timer that requires pm_runtime access, which
+> >   	 * will eventually bring us here with timekeeping_suspended,
+> >   	 * during both suspend entry and resume paths. This happens
+> > -	 * at least on am43xx platform.
+> > +	 * at least on am43xx platform. Account for flakeyness
+> > +	 * with udelay() by multiplying the timeout value by 2.
+> >   	 */
+> >   	if (unlikely(_early_timeout || timekeeping_suspended)) {
+> >   		if (time->cycles++ < timeout) {
+> > -			udelay(1);
+> > +			udelay(1 * 2);
+> >   			return false;
+> >   		}
+> >   	} else {
+> > 
