@@ -2,77 +2,122 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8C6D3E3B
-	for <lists+linux-clk@lfdr.de>; Fri, 11 Oct 2019 13:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E8ED4131
+	for <lists+linux-clk@lfdr.de>; Fri, 11 Oct 2019 15:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727549AbfJKLUz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 11 Oct 2019 07:20:55 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:39409 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727198AbfJKLUz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 11 Oct 2019 07:20:55 -0400
-Received: by mail-lj1-f196.google.com with SMTP id y3so9446408ljj.6;
-        Fri, 11 Oct 2019 04:20:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EtNnfZSNIM+FE/Ouxm1KBXCTSzFBGzlbFpsvpsa6fzI=;
-        b=D2OqE7PnNRoUmWNbgTg4s/KS8g6W7Ej8Lz/BB12Px1dRFIkn9T/mePVU+H/hIHV56J
-         64v5oYuvA2yBVwR0KjYpdXT/oXajCzphVepm43ADpOGt2tkvfG7g+ZFrAf7vUYqBiwfu
-         EjGV7zGmT3Co3lrzt/KGm2dHBVc8id1bTLHciUJIAOh8xvd9figVUKdPFEFHeguDB88M
-         MtLMtaaxHw6QUzwR1PJNwwgfViWo4DK6326sFZVy7QzQuw4tbK0TeUnOf345R0Q4EuZa
-         CAzVC4ECxAv5aVbB5KLueckmLSFulPvJYY6CEPwIjImSvxfmQszWMcLYYEHWMSGewiS8
-         AtEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EtNnfZSNIM+FE/Ouxm1KBXCTSzFBGzlbFpsvpsa6fzI=;
-        b=gvq9R9vyMHd5xIHJO9sVkhc4ZHKQeCSaRWUZ2xA3jBiJUgBc+YYvBlczanXf/YAu+s
-         dobcfRPRkdoHOEt3psHklGU1OMO1SneU1tlqQOEcvndWs4XO8g+myWz+vkfQMunBYay9
-         0NwjHVDQrdlK9UkvJuafIYBl1kbURhmCjK5QDg7i3P8l+FBKFCc0wWTRW8XOtSS5DPEc
-         B2qyrDZV4IN54K7APTcrPTZ1Cw8N/7tip4TOys8nSep3Ea41gNhr9rpVHoNffZxmi78p
-         KwW7YNsPFscGy8urQcVs9kr3EJ0hx40CErLjM36zlSgYcd0u4xrMTlNXgWbUEVooVl4y
-         CxTA==
-X-Gm-Message-State: APjAAAWXJs2vlbMg+eBjL4QkIgFeVVUDz8urHFYzMXJKjCa6WhMcgDt6
-        TxGfG3U+kxKWePQnb5fkOSbzVrcPF6bDiYCFuNBhmlYZ
-X-Google-Smtp-Source: APXvYqzE/zVDPjPyTom42qRHj6q37hTnXXPuz3aalIoov7655nQZiN5T5dR7/JP1C+tRL0z2N/CI/hjBxsug7ERVx48=
-X-Received: by 2002:a2e:42d6:: with SMTP id h83mr8801587ljf.21.1570792852255;
- Fri, 11 Oct 2019 04:20:52 -0700 (PDT)
+        id S1728584AbfJKN3z (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 11 Oct 2019 09:29:55 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:39898 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728503AbfJKN3t (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 11 Oct 2019 09:29:49 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 7DA2660FE9; Fri, 11 Oct 2019 13:29:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1570800588;
+        bh=wPt8dTRY1vwDtipaF1AobEy140jYfsyW5pbIhikPLM8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BKnb1LhSPvK/Ac0DboWEOA1McNXJh4xAnbPTsR3mECobYi1XZuR3mS1Wtmjq27Sb+
+         JjIEMHyia7ePRm/wXBAag8HFss0w8jq4gRgJD1VTstJ0zOxSFkSuR8/fLyuIBqK3ga
+         Qxx+rvPyZrbxZxQXl0fzkuQf3ZPCvQlxPWGznAvg=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from govinds-linux.qualcomm.com (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: govinds@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E219160FEB;
+        Fri, 11 Oct 2019 13:29:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1570800588;
+        bh=wPt8dTRY1vwDtipaF1AobEy140jYfsyW5pbIhikPLM8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BKnb1LhSPvK/Ac0DboWEOA1McNXJh4xAnbPTsR3mECobYi1XZuR3mS1Wtmjq27Sb+
+         JjIEMHyia7ePRm/wXBAag8HFss0w8jq4gRgJD1VTstJ0zOxSFkSuR8/fLyuIBqK3ga
+         Qxx+rvPyZrbxZxQXl0fzkuQf3ZPCvQlxPWGznAvg=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E219160FEB
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=govinds@codeaurora.org
+From:   Govind Singh <govinds@codeaurora.org>
+To:     robh@kernel.org, sboyd@kernel.org
+Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-soc@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Govind Singh <govinds@codeaurora.org>
+Subject: [PATCH v4 1/2] dt-bindings: clock: qcom: Add QCOM Q6SSTOP clock controller bindings
+Date:   Fri, 11 Oct 2019 18:59:27 +0530
+Message-Id: <20191011132928.9388-2-govinds@codeaurora.org>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20191011132928.9388-1-govinds@codeaurora.org>
+References: <20191011132928.9388-1-govinds@codeaurora.org>
 MIME-Version: 1.0
-References: <1570784940-5965-1-git-send-email-Anson.Huang@nxp.com>
-In-Reply-To: <1570784940-5965-1-git-send-email-Anson.Huang@nxp.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Fri, 11 Oct 2019 08:20:43 -0300
-Message-ID: <CAOMZO5D_Yxzq83zKGM=qUbBjP3c4UB9_GRBAAcMDEvzTYMuyfA@mail.gmail.com>
-Subject: Re: [PATCH] clk: imx7ulp: Correct DDR clock mux options
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        NXP Linux Team <Linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, Oct 11, 2019 at 6:11 AM Anson Huang <Anson.Huang@nxp.com> wrote:
->
-> In the latest reference manual Rev.0,06/2019, the DDR clock mux
-> is extended to 2 bits, and the clock options are also changed,
-> correct them accordingly.
->
-> Fixes: b1260067ac3d ("clk: imx: add imx7ulp clk driver")
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+Add devicetree binding for the Q6SSTOP clock controller found in QCS404.
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Govind Singh <govinds@codeaurora.org>
+---
+ .../bindings/clock/qcom,q6sstopcc.yaml        | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml
+
+diff --git a/Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml b/Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml
+new file mode 100644
+index 000000000000..bbaaf1e2a203
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml
+@@ -0,0 +1,43 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/qcom,q6sstopcc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Q6SSTOP clock Controller
++
++maintainers:
++  - Govind Singh <govinds@codeaurora.org>
++
++properties:
++  compatible:
++    const: "qcom,qcs404-q6sstopcc"
++
++  reg:
++    items:
++      - description: Q6SSTOP clocks register region
++      - description: Q6SSTOP_TCSR register region
++
++  clocks:
++    items:
++      - description: ahb clock for the q6sstopCC
++
++  '#clock-cells':
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - '#clock-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    q6sstopcc: clock-controller@7500000 {
++      compatible = "qcom,qcs404-q6sstopcc";
++      reg = <0x07500000 0x4e000>, <0x07550000 0x10000>;
++      clocks = <&gcc 141>;
++      #clock-cells = <1>;
++    };
+-- 
+2.22.0
+
