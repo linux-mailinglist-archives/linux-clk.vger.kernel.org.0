@@ -2,34 +2,35 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A25D5030
-	for <lists+linux-clk@lfdr.de>; Sat, 12 Oct 2019 15:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E5AD5057
+	for <lists+linux-clk@lfdr.de>; Sat, 12 Oct 2019 16:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729069AbfJLN4J (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 12 Oct 2019 09:56:09 -0400
-Received: from mout.web.de ([212.227.15.4]:60579 "EHLO mout.web.de"
+        id S1729307AbfJLORV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 12 Oct 2019 10:17:21 -0400
+Received: from mout.web.de ([212.227.15.4]:59891 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726751AbfJLN4J (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sat, 12 Oct 2019 09:56:09 -0400
+        id S1728373AbfJLORU (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sat, 12 Oct 2019 10:17:20 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1570888555;
-        bh=YdsuZrSP+jJJMluIACwENlwHKGfUwYpdRS9znBsqOH8=;
+        s=dbaedf251592; t=1570889825;
+        bh=43EzPAmHAZ0Dtzuyzozgs7lVBnutIVoFvCod4h9g4DI=;
         h=X-UI-Sender-Class:To:From:Subject:Cc:Date;
-        b=UerOCV7unbMXupz5/JZ7ZHjLBGOSySWDAstzIbEciWvdUk45/iifgUfy2VQizQiUN
-         VSifMEWLXQnOoFpVv3rtGt35qOdYI4T9gb/rXn5Y5dkNhR/ZyyV7ps1ewXq9pPIgFm
-         cWmjB4R1F4CIiob1+5FmhSesFt0CP4T9VjP8TMhQ=
+        b=JuXWBELfqZxYq75SyY4FA8T9ZwrMndK75bPMQcAWvIiVovaNLEY3qfi9wWE1YIsi3
+         COkiHdDk+6lQbkjFnoD1w2xyWAnDEkViFEYUw1T6cvt5mv0k5AAn1JGsvQPHKFnSkA
+         PfzJMbo8EQGfk/z91WJ6nxyIcboOGrask02ShAqI=
 X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([93.132.155.250]) by smtp.web.de (mrweb001
- [213.165.67.108]) with ESMTPSA (Nemesis) id 0Lsy7e-1hvSLo3MNO-012bFA; Sat, 12
- Oct 2019 15:55:54 +0200
-To:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+Received: from [192.168.1.2] ([93.132.155.250]) by smtp.web.de (mrweb002
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 0MBTXi-1iC7C31qgo-00AYYg; Sat, 12
+ Oct 2019 16:17:05 +0200
+To:     linux-clk@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
+        Stephen Boyd <sboyd@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>
 From:   Markus Elfring <Markus.Elfring@web.de>
-Subject: clk: rockchip: Checking a kmemdup() call in
- rockchip_clk_register_pll()
+Subject: clk: samsung: Checking a kmemdup() call in
+ _samsung_clk_register_pll()
 Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
  +v43YoGpDNyhgA0w9CEhuwfZrE91GocMtjLO67TAc2i2nxMc/FJRDI0OemO4VJ9RwID6ltwt
@@ -77,38 +78,42 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         kernel-janitors@vger.kernel.org, Aditya Pakki <pakki001@umn.edu>,
         Kangjie Lu <kjlu@umn.edu>, Navid Emamdoost <emamd001@umn.edu>,
         Stephen McCamant <smccaman@umn.edu>
-Message-ID: <e96505a8-b554-f61e-3940-0b9e9c7850ff@web.de>
-Date:   Sat, 12 Oct 2019 15:55:44 +0200
+Message-ID: <7933ce8f-ca1b-6ed8-14b9-59679130dc47@web.de>
+Date:   Sat, 12 Oct 2019 16:17:03 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:lfuKZ77lF7iOIkLERuu8Fipch5A0vXrXLcCnxR+nhPRJzXd1O5n
- LxtG8xETpSQLuwurZpMMSk18/YBSZFblP0REDBZ1L8B8W+J1enbIClSuRXZM2U636EPlAdU
- S3YQIZEHCfo17jED1mBt9bw8l4iqtJbPm5M/y1b/ZwljtvrU9fXxrTkWfVmPiKECb279KRI
- 4ooFcnZez1ZBL+Ob666AQ==
+X-Provags-ID: V03:K1:X1F7tXo59Mds4Q/yyqvj3QxLex00lBUKxtlaIFwh25KSANcGpxn
+ Y3LGyt1zzJBnC+26feUrO8TcJmyExJsYS0Cb8AP3uiRCJtDEDF+gLMUpRHgjJ0KYCJjr6I5
+ 2/UikgLihOpi/S0oaiMJm/7foukO0sGsvC6GDg2oPpR/APCmj3Qp9CecOCa9fj6NuoNh7ks
+ rZX6DnEGzftbYkvyjtxsg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pQ0RpfS4Wdw=:uaTSn9e6mWPRfwImIcKNNn
- gbKBjD+IcCl0LnR+GI7YbPxI9NHXx2bC3TJZBIOoyS5GzmoBlMO//dYkNo2uLZXnUjH200Jpt
- 8zERy+C+52/xfGQ3X4d4fNqX5ajvNqqsg2K+C5hzZucy1Nev3vKwFOszsefvn0NPqvwqmpDTX
- Rx1BfUG0cWG+8phexbs2k79CrpUXXsONZ2BVo/EMlto3a4ShKDN+XCCGbg7sViK9yXbF0L8dI
- 149SfMdzlDEOHol+dP9+Mybwzb7zghMlvp5uM7bOaOds0NpXcvgKJkU4ZpX45qZg9+bNTRXMV
- eaJXLuO3y3BWuWPVcoVQOPfL7ofA/WkioRgI7FAQMVDmgjhgx6Ca3oJVAZtxizEWL3jFYxoY+
- XSRx+41uAh7MWnRcmSLrn1vcPuC4jZDYpr2OPMt5Lpbk8YNkLlAqCbPvM/P/A3GRmlG3wT31I
- fFIWjRJkQlq7BOgEsXEtiutjoS7l1z4pIz9w0bP9VmdzRseH8X9bBecWfTnJ8cTwKrvPqixHr
- UMwf7NxUmPxqlrW3m20aU6iLz7S4iDm+gvU2ODtQ8hAoRj5izjE5yqVOrGobrbYJ9ihoQlvYB
- SV6Eqys8nJJ/Hp5E45wco1FZd6ag3U47owsGUgw2OtvC6et+X2vGy8o4z6daIxLvviQE4PVxB
- 1i0vRfAjrBDKGQu7U4g4tT5eMoK9b+qKSVW+gw8nu9byLJ1zS3ylLB9Pj5U8f8YCmeSACyGGO
- aJQ+J88lB0Ds325YCHmASepaOrdrZ49Y2knScabV8LxY+TBYPSoTASpTeaQxKFCpu3aVOBcVW
- vnkDZh57/z6H3MBE/B4oNwRbtzg0cd0guB1KjdEx2zKI5Kf4iwr6apo+tuor6n/swAmhY1Mtc
- wZFz1xYsLwM69g89dS48Ovy1CK6xDuBBr/uUDVNlV3LDqYL2DtY4R0wUF1zDym3PAB5PmyRrC
- HKadU2KCVlpaSklYdrTdRKKt2tHNAyir0sX5e046sSwVIZFbijkerbEOf641xVdjijCbW1VAY
- AouQ4cZ5de/BHvsRfVPQ/JN1IE5dPXFNJO0OiFm/gZ/1U6zvm9LyUaz6j2oWpG1gl3WPPPgjB
- Y2c4halA+RbF8KESIRFoRe0+8bzeWI8RqCVbHw95cw4HHF4N7SQrUCq0/E8VzmdCSKhe7S78V
- Ci0ZHZ3WHYbXhNmEHwAC/fyEVigjVGvbpI1HqlS0XMM7Xby6upoc1+wk7xlFsuPQ3ugnAdNyB
- zZhdSqycu8dIa4Ue408mD2tIttdm7Uai71Zpu9lZyiU4MRA4VQ9KwZ0pM4Vs=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0WcCnuuFAB4=:frsiWahP/7pzcJsiZW06Vo
+ hYPZDrCKKHY31HWE5noTfSQVE7Oe05KEq5PZTmwXo6CzkNgFIAvjBXl5PGgzYuu6rAlKAYBfj
+ T1wWp41vmG7oSvYLgRq/pe5Cz1BTTK+vUPelAZ2erhJj3KOSmuaYrWa3aEtpElhqJoraHAdte
+ vWEBX/EWQeHWbDz70nJx2YYAheiEDTECTJbA3IFbD2tXXOL3hqJmLy8qOhxY3vi7xRTuh91Rd
+ V9v00l1UElDRSc2RHHxdXIDSFi9z2i/Jhu43noK0U7vbRfE9SiDoXjLp+qyDU3/1gYYUiyAyL
+ QTPhqU/4ZgVnxHvj02cEdz45jrh01Wt00LipU147OSwDzHwNsxI+lobj/5eqnZjglS207HcCO
+ Tehi/tLcQgS92kEmECpdnu83kWrzV54vkZupkXRei9RPUDWnf//aeDD2+zoeNBEiXOxGoLXFm
+ LERudq0aW8aKkfomA6Nzn2HSBUR4x0zPzAB1eDO5/zap3wjEyaN9ErF9xdHd/mOb2uDGPz4Tj
+ +sKlUKV1fHud+0soy567VkMZYPvp16xV5e9QQVoFqN2LcFrofyFXLNnxlaWw124q6i5kKn72l
+ OxjvnJkMVFPNaKbtGkr/HTjvKha5h2SRxDmqJLhGtboxqACb32W56V5ZsPdCbw/VsHDcwR6M1
+ 3HFJTHJowMk5BKy5Gj8w5WsKMUqf6WV2YYlLMIukNQiV2IGR7c9DYjqlA/2JbGI4rsv03GREz
+ xpMh5Jkd2BxsYwmbQxVC3JPMNABxMelclfBGJHFlRX+DoostiQ3f+1qZVobHH1UtasrVRi20I
+ RluqxKJY7tPR6B+xbyrbJ7qjtwx4r8rx47t1azirbtJI+ppX/eWx9UYLBaPc4lOXtHcmNDMqE
+ veU8OCDm3iLg8ciabdRuPXtcdCI4ptnJVDOxSIVii0x9ersnJrYdVatdHrwH6GFauyqBjmqD4
+ FRwkY8EtYdaP4zYnN3Nuq9DpsJgoOGpJ/c+CImTLOk1A0nNwMoHINSubcbj75OxYYIMPkERn0
+ Byfc/DjXZDrshFTPnQ46BG1prucCcGo9p0FMjluHHhKdrbhYyserrT4noOBO2pcU8yWOnssR6
+ oozTZqfXuWAT649VELrR1gtbYJVL8PSrsVCEXe/5/T7zALMWwGemMI/9ctkB9dgNU2oMvs64J
+ aH90GFF33NjzXYsd11OyB4Arm/hc8nSM7c8n75ElHk5kvMAnHZr52Q2276kqOaNi4Cmxi7aqx
+ sNnkkRjfP0g17giEQ80VU3qr2VkQnWaQN5C967NOBdMmgY50o0fo9IWGBJFhp08bpH20rymcI
+ 3hnc7ZGbfj5KC0rDXM81lIp/n9GmCWlmhEjhRX//H3XjfgMtpHHRlZ3MlhqfhiVJZ0iT9Z1z2
+ vGH+mB3E6kSA7515HhDh/5giWJpk+t6dj3Ozl2/R3hrzIyF4m6pfipakAiH8JTVanrSbhrG2a
+ SheLY8n7/ft8GPJdmh1fZA9FhOSQJdPhgbn+aAyowvVugbQb1J3We4pNNfpRZ+uPKriOCSkC+
+ 5SA==
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
@@ -118,14 +123,14 @@ Hello,
 
 I tried another script for the semantic patch language out.
 This source code analysis approach points out that the implementation
-of the function =E2=80=9Crockchip_clk_register_pll=E2=80=9D contains also =
+of the function =E2=80=9C_samsung_clk_register_pll=E2=80=9D contains also =
 a call
 of the function =E2=80=9Ckmemdup=E2=80=9D.
 https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/dr=
-ivers/clk/rockchip/clk-pll.c?id=3D1c0cc5f1ae5ee5a6913704c0d75a6e99604ee30a=
-#n913
-https://elixir.bootlin.com/linux/v5.4-rc2/source/drivers/clk/rockchip/clk-=
-pll.c#L913
+ivers/clk/samsung/clk-pll.c?id=3D1c0cc5f1ae5ee5a6913704c0d75a6e99604ee30a#=
+n1275
+https://elixir.bootlin.com/linux/v5.4-rc2/source/drivers/clk/samsung/clk-p=
+ll.c#L1275
 
 * Do you find the usage of the format string =E2=80=9C%s: could not alloca=
 te
