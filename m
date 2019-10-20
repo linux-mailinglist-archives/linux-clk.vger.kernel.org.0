@@ -2,106 +2,42 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 15972DE6A2
-	for <lists+linux-clk@lfdr.de>; Mon, 21 Oct 2019 10:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2BCDE8D2
+	for <lists+linux-clk@lfdr.de>; Mon, 21 Oct 2019 11:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726725AbfJUIfR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 21 Oct 2019 04:35:17 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:41775 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726648AbfJUIfR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 21 Oct 2019 04:35:17 -0400
-Received: by mail-ot1-f66.google.com with SMTP id g13so10250798otp.8;
-        Mon, 21 Oct 2019 01:35:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=47SSiwR+Xxy2it4PXYteDhm2ayO8B+8rs50qRRDrcBQ=;
-        b=JR2SemYpoINWzapOBxJPdsWz2pjKBvJlDErwVFpvXiONKdsBbveon4jw5Asg5OkDmf
-         hE7DJeBaUXOVlZxe+mY6cHapbo2hZ8bu/DJ0wdcsqJKxXCGMQ3TgmbdKlWhFOHnqaeel
-         NHWsFIEui648ZxMafEnqAaOku4go2XWXb1hGtHJ8EDvQRT4UxxOtSRNY8aHLRhZgoF09
-         MKodwJPMejMUXSJRLr4KhnsExSc2CpUqYXZ8njcgs5ZSKU9gIcj8NWnjGyX9/Pvzf/Ca
-         cF+USoGsySgxjHZeF219/7y54g/tUYBXiLQAUhTWYNdyS4z+piQwACqVHDhIkSwY4JHY
-         D0sw==
-X-Gm-Message-State: APjAAAWkowWq0ivjBEG7to5Kd+p/lMG3SMcUiLBnHXRX8YhLJeVcVQB3
-        FMka6P5z0UbMEynjYXE1HXYLJHkdRCOt5RhDv5Y=
-X-Google-Smtp-Source: APXvYqwpm0zKxftgprHIrxznPCX8WUaH3MTx/C5legL3pGDYZW4sLskL4PuHLhDupuEHvGf43JI3Q0SeRz8uEgqnXNg=
-X-Received: by 2002:a9d:7345:: with SMTP id l5mr17929115otk.39.1571646915982;
- Mon, 21 Oct 2019 01:35:15 -0700 (PDT)
+        id S1727572AbfJUJ7k (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 21 Oct 2019 05:59:40 -0400
+Received: from [139.59.62.52] ([139.59.62.52]:33344 "EHLO mail.gatefjohn.tk"
+        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
+        id S1727649AbfJUJ7k (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 21 Oct 2019 05:59:40 -0400
+Received: by mail.gatefjohn.tk (Postfix, from userid 48)
+        id 31F8930A2F8; Sun, 20 Oct 2019 20:03:08 +0000 (UTC)
+To:     linux-clk@vger.kernel.org
+Subject: Purchase Order
+X-PHP-Originating-Script: 0:ygehagea.php
+From:   Daniel Murray <sinara-group@bk.ru>
+Reply-To: sinara-group@list.ru
 MIME-Version: 1.0
-References: <20190830134515.11925-1-geert+renesas@glider.be>
- <20190903220954.7753320882@mail.kernel.org> <CAMuHMdVxktbMUn-JCO6Oz8zgG5V+dLv=3cMompErU33DkBG=0w@mail.gmail.com>
- <20190911162445.F377E2085B@mail.kernel.org>
-In-Reply-To: <20190911162445.F377E2085B@mail.kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 21 Oct 2019 10:35:04 +0200
-Message-ID: <CAMuHMdWgwmjsixF4WePC3Jc2OZKCcVaXOZ8Q6A_C3GrYTGTFUw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/8] clk: renesas: rcar-gen2/gen3: Switch to .determine_rate()
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+Message-Id: <20191020223304.31F8930A2F8@mail.gatefjohn.tk>
+Date:   Sun, 20 Oct 2019 20:03:08 +0000 (UTC)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Stephen,
+Hi,friend,
 
-On Wed, Sep 11, 2019 at 6:24 PM Stephen Boyd <sboyd@kernel.org> wrote:
-> Quoting Geert Uytterhoeven (2019-09-03 23:51:10)
-> > On Wed, Sep 4, 2019 at 12:09 AM Stephen Boyd <sboyd@kernel.org> wrote:
-> > > Quoting Geert Uytterhoeven (2019-08-30 06:45:07)
-> > > > As the .round_rate() callback returns a long clock rate, it cannot
-> > > > return clock rates that do not fit in signed long, but do fit in
-> > > > unsigned long.  The newer .determine_rate() callback does not suffer
-> > > > from this limitation.  In addition, .determine_rate() provides the
-> > > > ability to specify a rate range.
-> > > >
-> > > > This patch series performs the customary preparatory cleanups, and
-> > > > switches the Z (CPU) and SD clocks in the R-Car Gen2 and Gen3 clock
-> > > > drivers from the .round_rate() to the .determine_rate() callback.
-> > > > Note that the "div6" clock driver hasn't been converted yet, so div6
-> > > > clocks still use .round_rate().
-> > > >
-> > > > Changes compared to v1[1]:
-> > > >   - Add preparatory arithmetic division improvements
-> > > >   - Split off cpg_sd_clock_calc_div() absorption and SD clock best rate
-> > > >     calculation,
-> > > >   - Use div_u64() for division by unsigned long,
-> > > >
-> > > > This has been tested on R-Car M2-W and various R-Car Gen3, and should
-> > > > have no behavioral impact.
-> > >
-> > > From what I recall the rate range code is broken but I can't remember
-> > > how. Anyway, I was just curious if you ran into any issues with that
-> > > code.
-> >
-> > I didn't ran into any issues.  But please note that in all tested cases, the
-> > limits were 0 and ULONG_MAX anyway, so probably it didn't trigger the
-> > broken cases in the rate range code.
-> >
-> > So, is it good to have .determine_rate() support in individual clock drivers
-> > now, or do you want me to postpone the last 3 patches of my series until the
-> > rate range code is fixed?
-> >
->
-> It's fine to use .determine_rate() because we'll fix the problems in the
-> clk framework. So no concern from me here. Just curious if you ran into
-> any problems.
+This is Daniel Murray and i am purchasing manager from Sinara Group Co.,LTD in Russia.
+We are glad to know about your company from the web and we are interested in your products.
+Could you kindly send us your Latest catalog and price list for our trial order.
 
-Thanks, queued in clk-renesas-for-v5.5.
+Thanks and Best Regards,
 
-Gr{oetje,eeting}s,
+Daniel Murray
+Purchasing Manager
+Sinara Group Co.,LTD
 
-                        Geert
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
