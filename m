@@ -2,115 +2,98 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F91AE6425
-	for <lists+linux-clk@lfdr.de>; Sun, 27 Oct 2019 17:23:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB35E671F
+	for <lists+linux-clk@lfdr.de>; Sun, 27 Oct 2019 22:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727774AbfJ0QXt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 27 Oct 2019 12:23:49 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:38276 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727008AbfJ0QXt (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 27 Oct 2019 12:23:49 -0400
-Received: by mail-wr1-f66.google.com with SMTP id v9so7381734wrq.5;
-        Sun, 27 Oct 2019 09:23:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ryY1C6V/Fnndw45BEkZbgWqU1CO6K4z5Y17d3HMNBz4=;
-        b=jcOMNoQZGE9P0d7ffCbmKdcF2AySd4aXs7mnjS66WOxzthrRtgWPSkR4yREp3Dhjus
-         b2F3R9ITtpURe2IPC5wwadQlQyvuKJrFrk3yBzUZ1+/l6WiYQ2uV76nVGWuFrBkvPtXU
-         ur8ioS5ptyCrLH6LXPMyoI6NmrqHQvEWML9l5VQcjGN/r9vBImUZVVq01cN5dsvE5BeT
-         2A+wXJje9nr3TzcAhZjfbBwmlClZ7Qe4krqF06Ux+refnB98YpCI95RGgdkm2nog97M7
-         K881kAGJNyLP9Ataz2iPfbnCepVvnGOEMDtyMNOe3PxBcE+q4iMFVzjSQe4wkxrQ/y7o
-         0lKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ryY1C6V/Fnndw45BEkZbgWqU1CO6K4z5Y17d3HMNBz4=;
-        b=sqroOMyJxLva5YXyo/bgys3J9RWt1/5HFzZnvX5GrdCFqFOkxVj3ITvOPOe07eUbGu
-         k9ehvSotZGcrJ3/vigzDW2DeM+F9UzwOTGdFOOcDinBQ0sWj+CfowFrgAma8YYAnkG/5
-         qe4PQ2VmGPRt4T2BUNIsraA/WauG0ubhvR5hcSn7RjkmEuoLK3QObvWtejGjfI8vgf/W
-         GcnLgeKIKEfLdysS71qtmON+GJ0w7J3Kgn3WDb9q7m/LJ5FeIS28EEClqTGuRLJTs0ge
-         wlN91/Yv4+5ZFhbX7tZ/U1q/GzIC3Uu9eui/m33dYgNIUn+hJRnziZAlO7zKkQHjvh/w
-         iMJw==
-X-Gm-Message-State: APjAAAWiG5XHnWM3NnG+D6ygPf9DkHpoEA3SFMViP0kBvmnYVpd+GZsD
-        8c6CI/0xvm0OQPT8G5dg/L0=
-X-Google-Smtp-Source: APXvYqzJzVDuGRmFzkWeOr3NTHwTi62Xi6QJDu+uSXbftVSyV4pNzDeuETaGgy0zSi4H/2tKNFxJFg==
-X-Received: by 2002:a5d:5609:: with SMTP id l9mr11506053wrv.113.1572193426246;
-        Sun, 27 Oct 2019 09:23:46 -0700 (PDT)
-Received: from localhost.localdomain (p200300F133D01300428D5CFFFEB99DB8.dip0.t-ipconnect.de. [2003:f1:33d0:1300:428d:5cff:feb9:9db8])
-        by smtp.googlemail.com with ESMTPSA id 1sm8243299wrr.16.2019.10.27.09.23.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Oct 2019 09:23:45 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     narmstrong@baylibre.com, jbrunet@baylibre.com,
-        linux-amlogic@lists.infradead.org, khilman@baylibre.com
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v2 5/5] ARM: dts: meson8b: add the DDR clock controller
-Date:   Sun, 27 Oct 2019 17:23:28 +0100
-Message-Id: <20191027162328.1177402-6-martin.blumenstingl@googlemail.com>
+        id S1731247AbfJ0VSQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 27 Oct 2019 17:18:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38380 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731224AbfJ0VSO (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 27 Oct 2019 17:18:14 -0400
+Received: from localhost (100.50.158.77.rev.sfr.net [77.158.50.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F26DD20717;
+        Sun, 27 Oct 2019 21:18:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572211094;
+        bh=KfIBcyEnuRceF3vKSjN16F7+m+qFJm3bdbFB9alfQcw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=X3I9Q4NpD0grjadVLmYkKMlx/5RXW8eUA4E0Fw1S2Owjw6inF+FN0qLmjo3QKLZe5
+         5UupRs3XmSHEL39pEOUf+WuA5Hf4mjqh6JpjPPl3dDkwaf3LvdQn5C01w8BKLdFxrH
+         SS1iFBYIC6i8bdMVkVc1Xi1kl6xAHEgmk+6nSOjg=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, linux-clk@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Suman Anna <s-anna@ti.com>,
+        Tero Kristo <t-kristo@ti.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.3 003/197] clk: ti: dra7: Fix mcasp8 clock bits
+Date:   Sun, 27 Oct 2019 21:58:41 +0100
+Message-Id: <20191027203351.876536314@linuxfoundation.org>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191027162328.1177402-1-martin.blumenstingl@googlemail.com>
-References: <20191027162328.1177402-1-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20191027203351.684916567@linuxfoundation.org>
+References: <20191027203351.684916567@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the DDR clock controller and pass it's DDR_CLKID_DDR_PLL to the main
-(HHI) clock controller as "ddr_clk". The "ddr_clk" is used as one of the
-inputs for the audio clock muxes.
+From: Tony Lindgren <tony@atomide.com>
 
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+[ Upstream commit dd8882a255388ba66175098b1560d4f81c100d30 ]
+
+There's a typo for dra7 mcasp clkctrl bit, it should be 22 like the other
+macasp instances, and not 24. And in dra7xx_clks[] we have the bits wrong
+way around.
+
+Fixes: dffa9051d546 ("clk: ti: dra7: add new clkctrl data")
+Cc: linux-clk@vger.kernel.org
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Suman Anna <s-anna@ti.com>
+Cc: Tero Kristo <t-kristo@ti.com>
+Acked-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/meson8b.dtsi | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ drivers/clk/ti/clk-7xx.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/meson8b.dtsi b/arch/arm/boot/dts/meson8b.dtsi
-index 1934666ff60f..8ac8bdfaf58f 100644
---- a/arch/arm/boot/dts/meson8b.dtsi
-+++ b/arch/arm/boot/dts/meson8b.dtsi
-@@ -4,6 +4,7 @@
-  * Author: Carlo Caione <carlo@endlessm.com>
-  */
- 
-+#include <dt-bindings/clock/meson8-ddr-clkc.h>
- #include <dt-bindings/clock/meson8b-clkc.h>
- #include <dt-bindings/gpio/meson8b-gpio.h>
- #include <dt-bindings/reset/amlogic,meson8b-reset.h>
-@@ -172,6 +173,14 @@
- 		#size-cells = <1>;
- 		ranges = <0x0 0xc8000000 0x8000>;
- 
-+		ddr_clkc: clock-controller@400 {
-+			compatible = "amlogic,meson8b-ddr-clkc";
-+			reg = <0x400 0x20>;
-+			clocks = <&xtal>;
-+			clock-names = "xtal";
-+			#clock-cells = <1>;
-+		};
-+
- 		dmcbus: bus@6000 {
- 			compatible = "simple-bus";
- 			reg = <0x6000 0x400>;
-@@ -434,8 +443,8 @@
- &hhi {
- 	clkc: clock-controller {
- 		compatible = "amlogic,meson8-clkc";
--		clocks = <&xtal>;
--		clock-names = "xtal";
-+		clocks = <&xtal>, <&ddr_clkc DDR_CLKID_DDR_PLL>;
-+		clock-names = "xtal", "ddr_pll";
- 		#clock-cells = <1>;
- 		#reset-cells = <1>;
- 	};
+diff --git a/drivers/clk/ti/clk-7xx.c b/drivers/clk/ti/clk-7xx.c
+index b57fe09b428be..9dd6185a4b4e2 100644
+--- a/drivers/clk/ti/clk-7xx.c
++++ b/drivers/clk/ti/clk-7xx.c
+@@ -683,7 +683,7 @@ static const struct omap_clkctrl_reg_data dra7_l4per2_clkctrl_regs[] __initconst
+ 	{ DRA7_L4PER2_MCASP2_CLKCTRL, dra7_mcasp2_bit_data, CLKF_SW_SUP, "l4per2-clkctrl:0154:22" },
+ 	{ DRA7_L4PER2_MCASP3_CLKCTRL, dra7_mcasp3_bit_data, CLKF_SW_SUP, "l4per2-clkctrl:015c:22" },
+ 	{ DRA7_L4PER2_MCASP5_CLKCTRL, dra7_mcasp5_bit_data, CLKF_SW_SUP, "l4per2-clkctrl:016c:22" },
+-	{ DRA7_L4PER2_MCASP8_CLKCTRL, dra7_mcasp8_bit_data, CLKF_SW_SUP, "l4per2-clkctrl:0184:24" },
++	{ DRA7_L4PER2_MCASP8_CLKCTRL, dra7_mcasp8_bit_data, CLKF_SW_SUP, "l4per2-clkctrl:0184:22" },
+ 	{ DRA7_L4PER2_MCASP4_CLKCTRL, dra7_mcasp4_bit_data, CLKF_SW_SUP, "l4per2-clkctrl:018c:22" },
+ 	{ DRA7_L4PER2_UART7_CLKCTRL, dra7_uart7_bit_data, CLKF_SW_SUP, "l4per2-clkctrl:01c4:24" },
+ 	{ DRA7_L4PER2_UART8_CLKCTRL, dra7_uart8_bit_data, CLKF_SW_SUP, "l4per2-clkctrl:01d4:24" },
+@@ -828,8 +828,8 @@ static struct ti_dt_clk dra7xx_clks[] = {
+ 	DT_CLK(NULL, "mcasp6_aux_gfclk_mux", "l4per2-clkctrl:01f8:22"),
+ 	DT_CLK(NULL, "mcasp7_ahclkx_mux", "l4per2-clkctrl:01fc:24"),
+ 	DT_CLK(NULL, "mcasp7_aux_gfclk_mux", "l4per2-clkctrl:01fc:22"),
+-	DT_CLK(NULL, "mcasp8_ahclkx_mux", "l4per2-clkctrl:0184:22"),
+-	DT_CLK(NULL, "mcasp8_aux_gfclk_mux", "l4per2-clkctrl:0184:24"),
++	DT_CLK(NULL, "mcasp8_ahclkx_mux", "l4per2-clkctrl:0184:24"),
++	DT_CLK(NULL, "mcasp8_aux_gfclk_mux", "l4per2-clkctrl:0184:22"),
+ 	DT_CLK(NULL, "mmc1_clk32k", "l3init-clkctrl:0008:8"),
+ 	DT_CLK(NULL, "mmc1_fclk_div", "l3init-clkctrl:0008:25"),
+ 	DT_CLK(NULL, "mmc1_fclk_mux", "l3init-clkctrl:0008:24"),
 -- 
-2.23.0
+2.20.1
+
+
 
