@@ -2,131 +2,71 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EBFFE87BB
-	for <lists+linux-clk@lfdr.de>; Tue, 29 Oct 2019 13:08:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C95DDE881D
+	for <lists+linux-clk@lfdr.de>; Tue, 29 Oct 2019 13:27:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731409AbfJ2MIZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 29 Oct 2019 08:08:25 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:41146 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730303AbfJ2MIZ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 29 Oct 2019 08:08:25 -0400
-Received: by mail-wr1-f67.google.com with SMTP id p4so13351554wrm.8
-        for <linux-clk@vger.kernel.org>; Tue, 29 Oct 2019 05:08:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=AThmdWLvoHXRd+gCJ7Rc/MdmxHKDL94oX7/2fySCtI4=;
-        b=P5lX77UJ1HJtxK6+w+SrHuDYaDtyieTnHZhqXpqYQooiSH5Kll8AXspDAhkEL4wIlw
-         hBQYFRsjp/fhhGLvnGTbxW6Cyas8J5lT2DcgCgvszMF1npFF0o8wt1J4os797vV6KthD
-         nch41e/zHWkALfLf1XQs2qEjEnQM6Z9jR0kMq9jvNfBVQj50Ghnb0ZLGlD58WAS85xzH
-         TTGyIn5cfIa7QmPPxEX7tFIwsMjItnnJ5oIxUu8Tvlmktoq1n6/IUWv/sEjQKzxXF3B1
-         rsdKdUZQNLGLRGmFYe1SoMSneOkEPEKsXkC4N3S2QAEX/dSXn/h+46Mutakba5iRRMUf
-         9RuA==
+        id S1728409AbfJ2M1H (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 29 Oct 2019 08:27:07 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:43068 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726290AbfJ2M1H (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 29 Oct 2019 08:27:07 -0400
+Received: by mail-ot1-f67.google.com with SMTP id b19so7206716otq.10;
+        Tue, 29 Oct 2019 05:27:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=AThmdWLvoHXRd+gCJ7Rc/MdmxHKDL94oX7/2fySCtI4=;
-        b=FDvv91zEMxCyMr4oiej/mueB7xHE+1JojXVNROxtBY20OoEw1bpeTvEroYHFNbP+cL
-         McYX2VebdMXqdEYhvxPTejFXxKtOBV9enbe2GAKJUVUrDumpDcRyaoaGng6nFX5oA78M
-         wNHBS+h2rn6hFkzK1U3vC64ChfBxGXlaLkNZ/LT20ZZuWkZ3C3GKVE7Kbr5PlphBQI6T
-         Euov23QLv8AgUHlW1nDk6/ZyjtrqYWM6IPs07bmF1GPZT9UiW+kYXdEemu0/fz1PkAnW
-         9mUMu5ELTAQtSIRtl7wVw52BtFnnek9nPre5Jj9twt0S9amiTRJOkepj3BqW4kgbQVAD
-         tAQw==
-X-Gm-Message-State: APjAAAVoRomK0uPHVjHXJb9Jd7n0al5L0PEAehxaZ9XMYPdu0PzaPoXc
-        7O0yaEsZPtyFnLwlNT3UKuw4oA==
-X-Google-Smtp-Source: APXvYqzgTN+N15xxbnf2G3a5OZaR/6UqN35YmkJy8Yi15GIpGWNYrXR0LpTtgteSgBb/D3JIn1j0jQ==
-X-Received: by 2002:adf:e488:: with SMTP id i8mr19406966wrm.302.1572350903096;
-        Tue, 29 Oct 2019 05:08:23 -0700 (PDT)
-Received: from dell ([2.31.163.64])
-        by smtp.gmail.com with ESMTPSA id g5sm2893643wmg.12.2019.10.29.05.08.21
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 29 Oct 2019 05:08:22 -0700 (PDT)
-Date:   Tue, 29 Oct 2019 12:08:20 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
-Cc:     "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-        "dmurphy@ti.com" <dmurphy@ti.com>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "jacek.anaszewski@gmail.com" <jacek.anaszewski@gmail.com>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "bgolaszewski@baylibre.com" <bgolaszewski@baylibre.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "broonie@kernel.org" <broonie@kernel.org>
-Subject: Re: [RFC PATCH v2 02/13] dt-bindings: mfd: Document ROHM BD71828
- bindings
-Message-ID: <20191029120820.GA4484@dell>
-References: <cover.1571915550.git.matti.vaittinen@fi.rohmeurope.com>
- <0182df3c49c6c804ee20ef32fc4b85b50ff45fca.1571915550.git.matti.vaittinen@fi.rohmeurope.com>
- <ed0b2aa8-8a70-0341-4ecf-8959f37c53bd@ti.com>
- <5c793f1308ccc6e787260b64fe6a875a8d0eb9d0.camel@fi.rohmeurope.com>
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=LE4PO0l8sU/LMs15ntY9NP1K54bi7Rn7T6Rvaa70k0c=;
+        b=jatZl43+T1OAL+mtytfjxt5ONLw4ptfpIwjE/JagPLOYGBYq/xH8KNU31Q2e8/OUfk
+         KdwfOk/JyAyhm66p+WV02Wjne4coodHaH62OzyGp+SM5zRYdtvFY+n+DPmn053NASUJw
+         /XKETfGQ89DTKXBzDNbBuN0hntOJjAikGZ4OhLMx804Z92xHgXjN4k3udfRuCNDYu0X6
+         zug7YnivB7sronBUKD7tGI8IS/goFzrvd/zQzJQn8Rs1qauC3TW60o57visQ0X+9KREY
+         jFd8lug7DZFU/vTqqn5ZewOhWWmevmEY2MxEF0k8YQnDB7kmJLohL96bDxSgZ2+qjDSJ
+         y7pw==
+X-Gm-Message-State: APjAAAV83eqM4xEgaS1L/Pbj3QLLXwwUIBNi0zzP0/JyaJKUpilSIzOU
+        NQADShGSmTq2BkP2CHlQfg==
+X-Google-Smtp-Source: APXvYqz/kSbsYZbjOtemCxn0+8PVX7DGw9O5oetqGXvmK6OEFhe1CXtflAPDXmoOIX77jKZU/YDcDg==
+X-Received: by 2002:a9d:7a90:: with SMTP id l16mr7208693otn.295.1572352026208;
+        Tue, 29 Oct 2019 05:27:06 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id l7sm1629839otf.39.2019.10.29.05.27.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Oct 2019 05:27:05 -0700 (PDT)
+Date:   Tue, 29 Oct 2019 07:27:04 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Taniya Das <tdas@codeaurora.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette =?iso-8859-1?Q?=A0?= 
+        <mturquette@baylibre.com>, Andy Gross <andy.gross@linaro.org>,
+        David Brown <david.brown@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh@kernel.org, robh+dt@kernel.org,
+        Taniya Das <tdas@codeaurora.org>
+Subject: Re: [PATCH v1 2/3] dt-bindings: clock: Introduce RPMHCC bindings for
+ SC7180
+Message-ID: <20191029122704.GA8251@bogus>
+References: <1571393364-32697-1-git-send-email-tdas@codeaurora.org>
+ <1571393364-32697-3-git-send-email-tdas@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5c793f1308ccc6e787260b64fe6a875a8d0eb9d0.camel@fi.rohmeurope.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <1571393364-32697-3-git-send-email-tdas@codeaurora.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, 25 Oct 2019, Vaittinen, Matti wrote:
-
-> Hello Dan,
+On Fri, 18 Oct 2019 15:39:23 +0530, Taniya Das wrote:
+> Add compatible for SC7180 RPMHCC.
 > 
-> Thanks again for checking this :)
+> Signed-off-by: Taniya Das <tdas@codeaurora.org>
+> ---
+>  Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> On Thu, 2019-10-24 at 14:35 -0500, Dan Murphy wrote:
-> > Matti
-> > 
-> > On 10/24/19 6:41 AM, Matti Vaittinen wrote:
-> > > ROHM BD71828 Power management IC integrates 7 buck converters, 7
-> > > LDOs,
-> > > a real-time clock (RTC), 3 GPO/regulator control pins, HALL input
-> > > and a 32.768 kHz clock gate.
-> > > 
-> > > Document the dt bindings drivers are using.
-> > > 
-> > > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> > > ---
-> > > 
-> > > No changes since v1
-> > > 
-> > >   .../bindings/mfd/rohm,bd71828-pmic.txt        | 180
-> > > ++++++++++++++++++
-> > >   1 file changed, 180 insertions(+)
-> > >   create mode 100644
-> > > Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.txt
-> > 
-> > I will let maintainers weigh in here but if this is new this should 
-> > probably be in the yaml format to avoid conversion in the future
 
-Yes please.
-
-> Oh... This is new to me. I guess there are reasons for this - but I
-> must say I am not excited as I have never used yaml for anything. I'll
-> do as you suggest and wait for what others have to say :) Thanks for
-> pointing this out though.
-
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Acked-by: Rob Herring <robh@kernel.org>
