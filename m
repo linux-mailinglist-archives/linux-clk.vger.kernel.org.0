@@ -2,38 +2,39 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF91EA507
-	for <lists+linux-clk@lfdr.de>; Wed, 30 Oct 2019 21:57:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1DAEA511
+	for <lists+linux-clk@lfdr.de>; Wed, 30 Oct 2019 22:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726964AbfJ3U5R (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 30 Oct 2019 16:57:17 -0400
-Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:44923 "EHLO
+        id S1726948AbfJ3VAI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 30 Oct 2019 17:00:08 -0400
+Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:41521 "EHLO
         smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726953AbfJ3U5R (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 30 Oct 2019 16:57:17 -0400
+        with ESMTP id S1726749AbfJ3VAI (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 30 Oct 2019 17:00:08 -0400
 Received: from belgarion ([90.55.204.252])
         by mwinf5d15 with ME
-        id KwxF210025TFNlm03wxFig; Wed, 30 Oct 2019 21:57:15 +0100
+        id Kx06210075TFNlm03x06pi; Wed, 30 Oct 2019 22:00:07 +0100
 X-ME-Helo: belgarion
 X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
-X-ME-Date: Wed, 30 Oct 2019 21:57:15 +0100
+X-ME-Date: Wed, 30 Oct 2019 22:00:07 +0100
 X-ME-IP: 90.55.204.252
 From:   Robert Jarzmik <robert.jarzmik@free.fr>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Daniel Mack <daniel@zonque.org>,
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Subject: Re: [PATCH 36/46] ARM: pxa: move smemc register access from clk to platform
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH 37/46] ARM: pxa: move clk register definitions to driver
 References: <20191018154052.1276506-1-arnd@arndb.de>
-        <20191018154201.1276638-36-arnd@arndb.de>
+        <20191018154201.1276638-37-arnd@arndb.de>
+        <20191028093421.4F5C120B7C@mail.kernel.org>
 X-URL:  http://belgarath.falguerolles.org/
-Date:   Wed, 30 Oct 2019 21:57:15 +0100
-In-Reply-To: <20191018154201.1276638-36-arnd@arndb.de> (Arnd Bergmann's
-        message of "Fri, 18 Oct 2019 17:41:51 +0200")
-Message-ID: <87pnielzo4.fsf@belgarion.home>
+Date:   Wed, 30 Oct 2019 22:00:06 +0100
+In-Reply-To: <20191028093421.4F5C120B7C@mail.kernel.org> (Stephen Boyd's
+        message of "Mon, 28 Oct 2019 02:34:20 -0700")
+Message-ID: <87lft2lzjd.fsf@belgarion.home>
 User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -42,27 +43,25 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Arnd Bergmann <arnd@arndb.de> writes:
+Stephen Boyd <sboyd@kernel.org> writes:
 
-> The get_sdram_rows() and get_memclkdiv() helpers need smemc
-> register that are separate from the clk registers, move
-> them out of the clk driver, and use an extern declaration
-> instead.
+> Quoting Arnd Bergmann (2019-10-18 08:41:52)
+>> The clock register definitions are now used (almost) exclusively in the
+>> clk driver, and that relies on no other mach/*.h header files any more.
+>> 
+>> Remove the dependency on mach/pxa*-regs.h by addressing the registers
+>> as offsets from a void __iomem * pointer, which is either passed from
+>> a board file, or (for the moment) ioremapped at boot time from a hardcoded
+>> address in case of DT (this should be moved into the DT of course).
+>> 
+>> Cc: Michael Turquette <mturquette@baylibre.com>
+>> Cc: Stephen Boyd <sboyd@kernel.org>
+>> Cc: linux-clk@vger.kernel.org
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>> ---
 >
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: linux-clk@vger.kernel.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-This patch bothers me a bit.
-
-The idea behind generic.c is that it's a file common to all pxa2xx, pxa3xx
-platforms. Yet with this patch, someone without history will believe that
-calling pxa_smemc_get_sdram_rows() on a pxa3xx platform is perfectly valid,
-while it is not, because DRAC2 doesn't exist on pxa3xx (bits are not defined in
-MDCNFG).
-
-At least I'll rename the function to pxa2xx_smemc_get_sdram_rows() if you don't
-have a better idea.
+> Acked-by: Stephen Boyd <sboyd@kernel.org>
+Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
 
 Cheers.
 
