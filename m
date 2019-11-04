@@ -2,67 +2,81 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE05EE6D1
-	for <lists+linux-clk@lfdr.de>; Mon,  4 Nov 2019 19:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117A0EE6FD
+	for <lists+linux-clk@lfdr.de>; Mon,  4 Nov 2019 19:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728012AbfKDSAQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 4 Nov 2019 13:00:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37070 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727998AbfKDSAQ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 4 Nov 2019 13:00:16 -0500
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E89C420B7C;
-        Mon,  4 Nov 2019 18:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572890416;
-        bh=gXrJj408R+3JEAaui6yuBsw4emXJCh8v5eUygTDK8TI=;
-        h=In-Reply-To:References:Cc:From:Subject:To:Date:From;
-        b=MNvsJMkNlrXLPK4QrUbUIg5cFxSNvwEEm3060UzNGTET1p7ltlN3U5OSTH1FaWAv9
-         v/+PkK8y1tORPbkiU/I2bEOSefma/D2by/oj1U3feqy/omfkMohH862GYdElCuhYCc
-         UVkz450797IRo806d99nRM9kEEhcvy+BO+fzp4NY=
-Content-Type: text/plain; charset="utf-8"
+        id S1728174AbfKDSMm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 4 Nov 2019 13:12:42 -0500
+Received: from smtprelay0076.hostedemail.com ([216.40.44.76]:56688 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727998AbfKDSMm (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 4 Nov 2019 13:12:42 -0500
+X-Greylist: delayed 494 seconds by postgrey-1.27 at vger.kernel.org; Mon, 04 Nov 2019 13:12:41 EST
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave04.hostedemail.com (Postfix) with ESMTP id 2787218020B00;
+        Mon,  4 Nov 2019 18:04:28 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 35FEA8384368;
+        Mon,  4 Nov 2019 18:04:26 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::,RULES_HIT:41:355:379:599:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1540:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3870:3872:3873:3874:4321:4362:4605:5007:6117:6119:9010:10004:10400:10848:11026:11232:11473:11658:11914:12048:12296:12297:12679:12740:12760:12895:13069:13311:13357:13439:14659:14721:21080:21627:30012:30054:30070:30091,0,RBL:47.151.135.224:@perches.com:.lbl8.mailshell.net-62.8.0.100 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:24,LUA_SUMMARY:none
+X-HE-Tag: hour56_60b9b720d6924
+X-Filterd-Recvd-Size: 1844
+Received: from XPS-9350.home (unknown [47.151.135.224])
+        (Authenticated sender: joe@perches.com)
+        by omf16.hostedemail.com (Postfix) with ESMTPA;
+        Mon,  4 Nov 2019 18:04:24 +0000 (UTC)
+Message-ID: <d3626d96b7fb9e0b1b25159a85d337f8882ceca1.camel@perches.com>
+Subject: Re: [PATCH v5 1/3] clk: qcom: Allow constant ratio freq tables for
+ rcg
+From:   Joe Perches <joe@perches.com>
+To:     Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
+        bjorn.andersson@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org
+Cc:     agross@kernel.org, marc.w.gonzalez@free.fr,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 04 Nov 2019 10:04:14 -0800
+In-Reply-To: <20191031185715.15504-1-jeffrey.l.hugo@gmail.com>
+References: <20191031185538.15402-1-jeffrey.l.hugo@gmail.com>
+         <20191031185715.15504-1-jeffrey.l.hugo@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.34.1-2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <7647a10d-8e37-f086-a014-77f8ddcdd006@samsung.com>
-References: <CGME20191025153902eucas1p174c36ab6b80d297290181456bebacca2@eucas1p1.samsung.com> <7647a10d-8e37-f086-a014-77f8ddcdd006@samsung.com>
-Cc:     linux-clk <linux-clk@vger.kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>
-From:   Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [GIT PULL] clk/samsung fixes for v5.4
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>
-User-Agent: alot/0.8.1
-Date:   Mon, 04 Nov 2019 10:00:15 -0800
-Message-Id: <20191104180015.E89C420B7C@mail.kernel.org>
+Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Sylwester Nawrocki (2019-10-25 08:39:01)
-> Hi Stephen, Mike,
->=20
-> The following changes since commit 54ecb8f7028c5eb3d740bb82b0f1d90f2df63c=
-5c:
->=20
->   Linux 5.4-rc1 (2019-09-30 10:35:40 -0700)
->=20
-> are available in the Git repository at:
->=20
->   https://git.kernel.org/pub/scm/linux/kernel/git/snawrocki/clk.git tags/=
-clk-v5.4-samsung-fixes
->=20
-> for you to fetch changes up to e9323b664ce29547d996195e8a6129a351c39108:
->=20
->   clk: samsung: exynos5420: Preserve PLL configuration during suspend/res=
-ume (2019-10-25 11:20:00 +0200)
->=20
-> ----------------------------------------------------------------
+On Thu, 2019-10-31 at 11:57 -0700, Jeffrey Hugo wrote:
+> Some RCGs (the gfx_3d_src_clk in msm8998 for example) are basically just
+> some constant ratio from the input across the entire frequency range.  It
+> would be great if we could specify the frequency table as a single entry
+> constant ratio instead of a long list, ie:
+> 
+> 	{ .src = P_GPUPLL0_OUT_EVEN, .pre_div = 3 },
+>         { }
+> 
+> So, lets support that.
+[]
+> diff --git a/drivers/clk/qcom/common.c b/drivers/clk/qcom/common.c
+[]
+> @@ -29,6 +29,9 @@ struct freq_tbl *qcom_find_freq(const struct freq_tbl *f, unsigned long rate)
+>  	if (!f)
+>  		return NULL;
+>  
+> +	if(!f->freq)
+> +		return f;
+> +
 
-Thanks. Pulled into clk-fixes.
+trivia:
+
+Space after if before open parenthesis please.
+
+Can you please make sure to style check your
+code with checkpatch before submission?
+
+Thanks.
+
 
