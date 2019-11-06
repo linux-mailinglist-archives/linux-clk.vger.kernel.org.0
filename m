@@ -2,82 +2,65 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FD9F1FC6
-	for <lists+linux-clk@lfdr.de>; Wed,  6 Nov 2019 21:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F24F200E
+	for <lists+linux-clk@lfdr.de>; Wed,  6 Nov 2019 21:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732598AbfKFUYN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 6 Nov 2019 15:24:13 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:48162 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732234AbfKFUYL (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 6 Nov 2019 15:24:11 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id xA6KO3VG123411;
-        Wed, 6 Nov 2019 14:24:03 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1573071843;
-        bh=VoYslfXJH/dRezZ9Hx7G8CLZwxc7DT3fLk41RUrcppA=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=iPZ9nctaByjTC+bwjosx/OHzKSvQc8nEHumJWob4H3o0AKzdnsDPzjIK6KgNVUgq4
-         rkHO45MmfArYCX5DKbvC3DCCF3EYYaaGz6whjB2uW9b09zHomRATijJd4II14h8tEH
-         pP3Y15Dtxv6SQYhndQRFxm1BP9ZlVJh5PsV96QV4=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xA6KO2Cp015609
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 6 Nov 2019 14:24:03 -0600
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 6 Nov
- 2019 14:23:46 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Wed, 6 Nov 2019 14:23:46 -0600
-Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA6KNsiw119124;
-        Wed, 6 Nov 2019 14:24:01 -0600
-From:   Benoit Parrot <bparrot@ti.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Tony Lindgren <tony@atomide.com>, Tero Kristo <t-kristo@ti.com>
-CC:     <linux-omap@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-media@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v3 5/5] media: ti-vpe: vpe: fix compatible to match bindings
-Date:   Wed, 6 Nov 2019 14:26:22 -0600
-Message-ID: <20191106202622.2648-6-bparrot@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191106202622.2648-1-bparrot@ti.com>
-References: <20191106202622.2648-1-bparrot@ti.com>
+        id S1727587AbfKFUqA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 6 Nov 2019 15:46:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33426 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727376AbfKFUqA (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 6 Nov 2019 15:46:00 -0500
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B14A120869;
+        Wed,  6 Nov 2019 20:45:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573073159;
+        bh=8EobBLdg79BFoLW8z+BryoGeSM6L13OfS+/VN6yROKM=;
+        h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+        b=oY84uH53kicG5g/Aec/DaE31sE1u7PRypCK2hfInsLsk49g4rcGFVwm/mTzTp2qxR
+         W3w0jwu/xCvpsDorwK83rau4PwqFn9J0ISe4eXPbJzCIX1E21PuCc45j0Guls4slmO
+         gSRCBY4GHRSQfb5/m0Mp+4JkYIf4UAAd8aOMr170=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20191018101212.26432-1-geert+renesas@glider.be>
+References: <20191018101212.26432-1-geert+renesas@glider.be>
+Subject: Re: [GIT PULL] clk: renesas: Updates for v5.5
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     linux-clk@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+User-Agent: alot/0.8.1
+Date:   Wed, 06 Nov 2019 12:45:58 -0800
+Message-Id: <20191106204559.B14A120869@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Update the compatible string to match the updated bindings.
+Quoting Geert Uytterhoeven (2019-10-18 03:12:12)
+>         Hi Mike, Stephen,
+>=20
+> The following changes since commit 54ecb8f7028c5eb3d740bb82b0f1d90f2df63c=
+5c:
+>=20
+>   Linux 5.4-rc1 (2019-09-30 10:35:40 -0700)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git=
+ tags/clk-renesas-for-v5.5-tag1
+>=20
+> for you to fetch changes up to 56278c8fcb71874d591907d654272d511ce3597c:
+>=20
+>   clk: renesas: r8a774b1: Add TMU clock (2019-10-07 14:29:53 +0200)
+>=20
+> ----------------------------------------------------------------
 
-Signed-off-by: Benoit Parrot <bparrot@ti.com>
----
- drivers/media/platform/ti-vpe/vpe.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks. Picked this description from here too.
 
-diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index b54f637633a7..65c2c048b018 100644
---- a/drivers/media/platform/ti-vpe/vpe.c
-+++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -2644,7 +2644,7 @@ static int vpe_remove(struct platform_device *pdev)
- #if defined(CONFIG_OF)
- static const struct of_device_id vpe_of_match[] = {
- 	{
--		.compatible = "ti,vpe",
-+		.compatible = "ti,dra7-vpe",
- 	},
- 	{},
- };
--- 
-2.17.1
 
