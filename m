@@ -2,182 +2,293 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48631F8CF0
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Nov 2019 11:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF391F8E6A
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Nov 2019 12:22:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727133AbfKLKiq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 12 Nov 2019 05:38:46 -0500
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:23009 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727049AbfKLKii (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 12 Nov 2019 05:38:38 -0500
-Received-SPF: Pass (esa2.microchip.iphmx.com: domain of
-  Nicolas.Ferre@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Nicolas.Ferre@microchip.com";
-  x-sender="Nicolas.Ferre@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
-  a:mx2.microchip.iphmx.com include:servers.mcsv.net
-  include:mktomail.com include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa2.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Nicolas.Ferre@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa2.microchip.iphmx.com; spf=Pass smtp.mailfrom=Nicolas.Ferre@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: IqvHGZCNQKbz8oD5R7IlY+qpbGh8EZQF6I92vjarC0dajycIcE9y8gCNWxeC3+ribYrY5+Nb3b
- VJmrWuhAi8P7T3NxaEgh1gxpv2ACYnwyDRb0tiC/sAQuKQ5fhbOFiFGiydb+fpFWhPVvlGbHcz
- cDTQaVIDk3nGgnmKy8TMSeddkKqbbzUhHWsNEUlxq8OZvCoJ14qMMdvnIQEmezTMnL75QlFhOM
- UHwX8TDtufuNHgMYky9KUPMrk3hO+WZ0euWsW6al/9WLJVUxgBX6qmhHcOu5QyC2qYAENXrLVD
- I/U=
-X-IronPort-AV: E=Sophos;i="5.68,296,1569308400"; 
-   d="scan'208";a="56200532"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Nov 2019 03:38:37 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Tue, 12 Nov 2019 03:38:37 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Tue, 12 Nov 2019 03:38:36 -0700
+        id S1727604AbfKLLVz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 12 Nov 2019 06:21:55 -0500
+Received: from mail-eopbgr20087.outbound.protection.outlook.com ([40.107.2.87]:64066
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727281AbfKLLSK (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 12 Nov 2019 06:18:10 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P42S+s1T8krwYRB1JwnyTx33Vj7jGv7wG2v1+rMJXzz9fs2zHdsQaq2ePFHTfLuz/hDNDcIfMBDlg9DA7cuEj+HTf3hZK+A7ilTVia9IZXFUzMqH+o54NZewAVNLWbfLtQtHW6euHV0afpgzNZQOfnlb5XEuj1GREtKaniv0/5u2eVpx6ghBFXZBG9XLsKjrYoAUTw9+hkLKAkyZERWcqoS8lah+8C1A17f8GpT3jMUx/WszXgxFYAFFEvDr/bElLKFJLVwaYw1zz/HtJSNd8q9I/7sbYWSkFkx4NNdi+6R3sb1Qlv74LsoO5EfIBlG1A+3Ae1/IJx5J6V8bpFhSlg==
+ b=beY1kPs0ItmyEC9ara0M/79wNC3BYsu7lskAXzhE2V2lbSORlCn106vXdSspAk1M7wc8nibubK8IsBUMIlaPMtNyvzXhxChj7rtpqECV8AqLcI+qSzR0AJGQaOtq3+U7Q+kIqHW7cHXnLO53uE7aJGXxJ89KwOYImXndPR0/2bCJyvuZ+8YVa7ZmSFjaDk6Mt70JSSIOk79odwWyWAu/34KTIFPlsmDOxL4FFTT1WLLIAj7KgU8YGHMvlZiXjfQmskL3LUsdw2ilI80uyMbZPhHaDv23XaN0LY8LF8wOmeeWA1tE92g5q0Is/nrEjksdmfiJAUbD9p7swVzqSawRIQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e3lr2XAScR9iq+EeeRqTGXeyYOg1GAd/JaIVh+dYOU0=;
- b=NAY84Nzp4mgeJhx/F7KdOj4Hw97tWzFp9T1VvVhnyeuf20/B+ZCjA4JTNyerTCtjgy2FHiEtDa1rkkkm6h8mz7FrUHQENAu8In0r9gKmOh/v9A57wJJ29uXXcMy0o7CDuwUqKOS5UIKMyO/vIsO4/785sxepCMY9WmBir+4fF1jdHSu0mdRDHautz13Z0szParCqBo6ekxkWhwMVEqcpYUARi2AWBW7gX2jK9xCPtPDscAe7QIViUyG+cDVyj9tBo9HCgYpQfPBoRMCQIbW+iSiY/bhBnLugDi/cB4VSpTkoGIVRUoXKqVHJZXqBrOGMDiSqtJNlNH/hNT8V8b/r2Q==
+ bh=L6gVKOTRJEEcvDhtPX8de3LGPo8grudqnmZUlbE1h5g=;
+ b=FQp/LKuiGKwoCs1NVmrAvEFFzgpq1jhEE2x2m5ul2mZDQbJ0oITC8vNl27dzGkZbxHwY6lP4nP2kjA2DNaP+ASW8afFMXmOHgz2lRtEbMYPnIefr7YSWksD70idpaPJfawNY4Dbv0j/uYiLaqtZn/O83a7YyM3LJTQRvNMoAZUmsp2wjLx/QigAJAG1p1gHF9kZIDbRZNXmggA4LUeSJydoqxCH1yl0APyBZEfG2cGAj/YJ95cWPDyWDiwSq3uzY0BWU2w2kQlwq1BHci4cHq7eM99LrZy1VSj2Vsh+sGbC85RfeJcCZyxizwenUBrTuk6IEpBffN2ai/lW6GfXibA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e3lr2XAScR9iq+EeeRqTGXeyYOg1GAd/JaIVh+dYOU0=;
- b=QsGl+gUjnhr0+W2Zh0apiGXRuaA8XFObPMk1hUljIGO+jbi9MzGgJi1CI3cavqFLbUz1YiMOi6o9R88r5A7rhA6D077sOJgaTMtFPqauE03DYlWysFmtiaON8GaKbzdpJjfXGzEShPCAlaiZlS9lzsyGUExy2y/xpUpctiNLT8o=
-Received: from SN6PR11MB2830.namprd11.prod.outlook.com (52.135.93.21) by
- SN6PR11MB2655.namprd11.prod.outlook.com (52.135.91.154) with Microsoft SMTP
+ bh=L6gVKOTRJEEcvDhtPX8de3LGPo8grudqnmZUlbE1h5g=;
+ b=nV3+sqX8Ow3LajG1lF8D5tnigXE657i0fBMZZstXB44D2aSUoojjuHyTX9ICnruKUYBwjVmyQAu3rIF80Wi+px0r0hk0ZEgvoVNBbJqvtI0kNuzEvSq2eRXq4qY+hSFFIYKnGB6c1tjQqq0kw6pm/JWtPn6e5zLRqmmmCJbj45Y=
+Received: from AM0PR04MB5779.eurprd04.prod.outlook.com (20.178.202.151) by
+ AM0PR04MB6113.eurprd04.prod.outlook.com (20.179.33.148) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2430.20; Tue, 12 Nov 2019 10:38:35 +0000
-Received: from SN6PR11MB2830.namprd11.prod.outlook.com
- ([fe80::6460:e571:9440:bd83]) by SN6PR11MB2830.namprd11.prod.outlook.com
- ([fe80::6460:e571:9440:bd83%6]) with mapi id 15.20.2430.027; Tue, 12 Nov 2019
- 10:38:35 +0000
-From:   <Nicolas.Ferre@microchip.com>
-To:     <Eugen.Hristev@microchip.com>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <alexandre.belloni@bootlin.com>,
-        <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <Ludovic.Desroches@microchip.com>
-Subject: Re: [PATCH] clk: at91: sam9x60-pll: adapt PMC_PLL_ACR default value
-Thread-Topic: [PATCH] clk: at91: sam9x60-pll: adapt PMC_PLL_ACR default value
-Thread-Index: AQHVmJP4gkFvDXEvgEe8yodmIU1IZqeHWXyA
-Date:   Tue, 12 Nov 2019 10:38:35 +0000
-Message-ID: <67fc1d0b-5280-3bd6-10ba-0a303b4dc064@microchip.com>
-References: <1573478913-19737-1-git-send-email-eugen.hristev@microchip.com>
-In-Reply-To: <1573478913-19737-1-git-send-email-eugen.hristev@microchip.com>
+ 15.20.2430.22; Tue, 12 Nov 2019 11:18:04 +0000
+Received: from AM0PR04MB5779.eurprd04.prod.outlook.com
+ ([fe80::fd44:1b14:587c:9fde]) by AM0PR04MB5779.eurprd04.prod.outlook.com
+ ([fe80::fd44:1b14:587c:9fde%7]) with mapi id 15.20.2430.027; Tue, 12 Nov 2019
+ 11:18:04 +0000
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+CC:     Stephen Boyd <sboyd@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        Martin Kepplinger <martink@posteo.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <anson.huang@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v4 1/6] clk: imx8m: Set CLK_GET_RATE_NOCACHE on dram
+ clocks
+Thread-Topic: [PATCH v4 1/6] clk: imx8m: Set CLK_GET_RATE_NOCACHE on dram
+ clocks
+Thread-Index: AQHVloV7VZOJz0hWAkeO+G3807P1dqeHaKeA
+Date:   Tue, 12 Nov 2019 11:18:04 +0000
+Message-ID: <20191112111803.c5624in2masqipqf@fsr-ub1664-175>
+References: <cover.1573252696.git.leonard.crestez@nxp.com>
+ <0e0eeeee546a3bb664935184d66866f1c66458ce.1573252696.git.leonard.crestez@nxp.com>
+In-Reply-To: <0e0eeeee546a3bb664935184d66866f1c66458ce.1573252696.git.leonard.crestez@nxp.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: PR0P264CA0182.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:100:1c::26) To SN6PR11MB2830.namprd11.prod.outlook.com
- (2603:10b6:805:5b::21)
+x-clientproxiedby: AM0PR0202CA0035.eurprd02.prod.outlook.com
+ (2603:10a6:208:1::48) To AM0PR04MB5779.eurprd04.prod.outlook.com
+ (2603:10a6:208:131::23)
+x-originating-ip: [89.37.124.34]
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=abel.vesa@nxp.com; 
 x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [213.41.198.74]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0db63444-2d7f-4d6b-a880-08d7675c7884
-x-ms-traffictypediagnostic: SN6PR11MB2655:
-x-ms-exchange-purlcount: 1
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 7ac35b0d-7eec-436f-9fa9-08d76761fcb4
+x-ms-traffictypediagnostic: AM0PR04MB6113:|AM0PR04MB6113:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <SN6PR11MB2655964375E73CC392D5DCB5E0770@SN6PR11MB2655.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-microsoft-antispam-prvs: <AM0PR04MB6113D9C5381B288DE3617C3FF6770@AM0PR04MB6113.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:843;
 x-forefront-prvs: 021975AE46
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(396003)(366004)(39860400002)(346002)(376002)(199004)(189003)(36756003)(107886003)(19627235002)(4326008)(5660300002)(256004)(2201001)(31696002)(66556008)(86362001)(229853002)(64756008)(66476007)(6512007)(66446008)(6306002)(31686004)(66066001)(6486002)(99286004)(6246003)(6436002)(66946007)(76176011)(305945005)(7736002)(8936002)(316002)(110136005)(966005)(14454004)(478600001)(186003)(2501003)(6506007)(102836004)(53546011)(386003)(476003)(2616005)(11346002)(446003)(26005)(486006)(25786009)(3846002)(81166006)(6116002)(81156014)(8676002)(2906002)(71190400001)(52116002)(71200400001);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR11MB2655;H:SN6PR11MB2830.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(376002)(39860400002)(366004)(346002)(136003)(396003)(189003)(199004)(86362001)(3846002)(33716001)(4326008)(6116002)(66066001)(6486002)(5660300002)(64756008)(66946007)(66446008)(66476007)(66556008)(6246003)(1076003)(478600001)(7736002)(316002)(44832011)(305945005)(7416002)(25786009)(6862004)(52116002)(99286004)(102836004)(76176011)(2906002)(6636002)(486006)(26005)(53546011)(6506007)(6512007)(71200400001)(9686003)(386003)(14454004)(6436002)(14444005)(186003)(8676002)(81156014)(229853002)(256004)(446003)(8936002)(54906003)(476003)(11346002)(71190400001)(81166006)(32563001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB6113;H:AM0PR04MB5779.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9aqfYbLxnw1L/oDJCnVkoTEc32BOSGubgYykyZK9MV3mKJs3P+xm5hBOIRu37/2bZNHvLyM4/1Cpsm1YZqhUKd4Q9FN5Z+RBPU7syhkgGMqhdnaaG2IFbg1bQlZkzxe2W6WkO/0rZyUbMjn7crBs3e8fWyUK3Ero6Gan2n52kofTtRV+A+johGcjlNOCaKYBC4wRJeE3eHOvSMmh2QALggE8wriYMg2aTVj0V6REvaD3oqAl5ZQYS/jXHbv7hfI/EuGmOyu6cM0L3TI9Yxu7y5kdI06mW7Zyl9SyGPV2YTqAzELZqFRNrgjejQSAmrNZFC7VyFcsr8M7IsefPOl593C9HakMfAbh9/fpfc8BntLVlAcUp+QZVMyhzoSWhw1ETsVbi1O3txAQikAs6guDg3zJWy4inpVJte5r87h0Ct3CumZm1WRC1OeMKxMNISDihkyMhqrLZvPYxOX7R9W5G5rmUfdjvFT1VCqV28O3dSE=
-Content-Type: text/plain; charset="Windows-1252"
-Content-ID: <37C28964F57BC048A57CA9A75B8F7EFE@namprd11.prod.outlook.com>
+x-microsoft-antispam-message-info: QLOnpDQ50oy4YYD3vso7LoVB1Q9PRHPgxPlAPXF8Q9K4+EXYQ1X/tMiHq4+tm+rqxvEtBinIDaO6qc6/w7XWVFOsCWuwCfpu+2/a0zKw1hqhEn4vxKpOrsvQdageglqMYn6rpyzq6yF+PRk4ZXMr2Mt1O000EWN0z8Is557gNEI+vIUzcFqAKByKJUgPm2/zO99QZSaXSlBs2lWYSzAhdR5DudNJw/+gJ89LT3YN74OvVkjl70rLBBDtVLALIGny68USCZWIkcpWMLjZ4aczMKvEjQBYkwTfBYv11nU89iscR1x4/U9FTP6LS2yg7y8bf02Rv2RdIL2qsiq0Y0de3vAvYCGmXkQdCRJ7QRuwKn/0A02H1Ec8Bh1ZBzunqhIjBtADBFt8snaNqku0d/8tjEXxgBta1LbB0bA2lJzwZPnLT/rLTnThAsTr7Orwire2
+Content-Type: text/plain; charset="iso-8859-2"
+Content-ID: <38B37E1CA4CBAC4B94040C69C2ECE4D2@eurprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0db63444-2d7f-4d6b-a880-08d7675c7884
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Nov 2019 10:38:35.5984
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ac35b0d-7eec-436f-9fa9-08d76761fcb4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Nov 2019 11:18:04.7257
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Tg4DSTlgE1W3ez6VlW4u9vsjSqSt+h1wNnqWdlg5u9RMaW5lZ5VikdFewkWKzkr6GuKS169C+tx8RXpoEao/orVqpsLADLJpXLLPo2xjtQU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB2655
+X-MS-Exchange-CrossTenant-userprincipalname: C3AMSYKqQxkBy2umZK8AeBdBt2u8oQRYgtqCj+neXpEPrHz99WgVeppWFlyu0Rv9wzqPoZmZUhoW+5+gMGKZ1Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6113
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 11/11/2019 at 14:28, Eugen Hristev - M18282 wrote:
-> From: Eugen Hristev <eugen.hristev@microchip.com>
+On 19-11-09 00:39:51, Leonard Crestez wrote:
+> These clocks are only modified as part of DRAM frequency switches during
+> which DRAM itself is briefly inaccessible. The switch is performed with
+> a SMC call to by TF-A which runs from a SRAM area; upon returning to
+> linux several clocks bits are modified and we need to update them.
 >=20
-> Product datasheet recommends different values for UPLL and PLLA analog co=
-ntrol
-> register.
-> Adapt accordingly.
+> For rate bits an easy solution is to just mark with
+> CLK_GET_RATE_NOCACHE so that new rates are always read back from
+> registers.
 >=20
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-
-Best regards,
-   Nicolas
-
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
 > ---
+>  drivers/clk/imx/clk-imx8mm.c | 11 +++++++++--
+>  drivers/clk/imx/clk-imx8mn.c | 12 ++++++++++--
+>  drivers/clk/imx/clk-imx8mq.c | 15 +++++++++++----
+>  3 files changed, 30 insertions(+), 8 deletions(-)
 >=20
-> datasheet link http://ww1.microchip.com/downloads/en/DeviceDoc/SAM9X60-Da=
-ta-Sheet-DS60001579A.pdf
-> chapter 57.7.10 optimal setting of the PLLA and PLLUTMI
->=20
->   drivers/clk/at91/clk-sam9x60-pll.c | 8 ++++++--
->   1 file changed, 6 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/clk/at91/clk-sam9x60-pll.c b/drivers/clk/at91/clk-sa=
-m9x60-pll.c
-> index 34b8178..dfb354a 100644
-> --- a/drivers/clk/at91/clk-sam9x60-pll.c
-> +++ b/drivers/clk/at91/clk-sam9x60-pll.c
-> @@ -25,7 +25,8 @@
->   #define		PMC_PLL_CTRL1_MUL_MSK		GENMASK(30, 24)
->  =20
->   #define PMC_PLL_ACR	0x18
-> -#define		PMC_PLL_ACR_DEFAULT		0x1b040010UL
-> +#define		PMC_PLL_ACR_DEFAULT_UPLL	0x12020010UL
-> +#define		PMC_PLL_ACR_DEFAULT_PLLA	0x00020010UL
->   #define		PMC_PLL_ACR_UTMIVR		BIT(12)
->   #define		PMC_PLL_ACR_UTMIBG		BIT(13)
->   #define		PMC_PLL_ACR_LOOP_FILTER_MSK	GENMASK(31, 24)
-> @@ -88,7 +89,10 @@ static int sam9x60_pll_prepare(struct clk_hw *hw)
->   	}
->  =20
->   	/* Recommended value for PMC_PLL_ACR */
-> -	val =3D PMC_PLL_ACR_DEFAULT;
-> +	if (pll->characteristics->upll)
-> +		val =3D PMC_PLL_ACR_DEFAULT_UPLL;
-> +	else
-> +		val =3D PMC_PLL_ACR_DEFAULT_PLLA;
->   	regmap_write(regmap, PMC_PLL_ACR, val);
->  =20
->   	regmap_write(regmap, PMC_PLL_CTRL1,
->=20
+> diff --git a/drivers/clk/imx/clk-imx8mm.c b/drivers/clk/imx/clk-imx8mm.c
+> index 030b15d7c0ce..c58f988191a5 100644
+> --- a/drivers/clk/imx/clk-imx8mm.c
+> +++ b/drivers/clk/imx/clk-imx8mm.c
+> @@ -440,13 +440,20 @@ static int imx8mm_clocks_probe(struct platform_devi=
+ce *pdev)
+> =20
+>  	/* IPG */
+>  	clks[IMX8MM_CLK_IPG_ROOT] =3D imx_clk_divider2("ipg_root", "ahb", base =
++ 0x9080, 0, 1);
+>  	clks[IMX8MM_CLK_IPG_AUDIO_ROOT] =3D imx_clk_divider2("ipg_audio_root", =
+"audio_ahb", base + 0x9180, 0, 1);
+> =20
+> +	/*
+> +	 * DRAM clocks are manipulated from TF-A outside clock framework.
+> +	 * Mark with GET_RATE_NOCACHE to always read div value from hardware
+> +	 */
+> +	clks[IMX8MM_CLK_DRAM_ALT] =3D __imx8m_clk_composite("dram_alt", imx8mm_=
+dram_alt_sels, base + 0xa000,
+> +			CLK_GET_RATE_NOCACHE);
+> +	clks[IMX8MM_CLK_DRAM_APB] =3D __imx8m_clk_composite("dram_apb", imx8mm_=
+dram_apb_sels, base + 0xa080,
+> +			CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
+> +
+>  	/* IP */
+> -	clks[IMX8MM_CLK_DRAM_ALT] =3D imx8m_clk_composite("dram_alt", imx8mm_dr=
+am_alt_sels, base + 0xa000);
+> -	clks[IMX8MM_CLK_DRAM_APB] =3D imx8m_clk_composite_critical("dram_apb", =
+imx8mm_dram_apb_sels, base + 0xa080);
+>  	clks[IMX8MM_CLK_VPU_G1] =3D imx8m_clk_composite("vpu_g1", imx8mm_vpu_g1=
+_sels, base + 0xa100);
+>  	clks[IMX8MM_CLK_VPU_G2] =3D imx8m_clk_composite("vpu_g2", imx8mm_vpu_g2=
+_sels, base + 0xa180);
+>  	clks[IMX8MM_CLK_DISP_DTRC] =3D imx8m_clk_composite("disp_dtrc", imx8mm_=
+disp_dtrc_sels, base + 0xa200);
+>  	clks[IMX8MM_CLK_DISP_DC8000] =3D imx8m_clk_composite("disp_dc8000", imx=
+8mm_disp_dc8000_sels, base + 0xa280);
+>  	clks[IMX8MM_CLK_PCIE1_CTRL] =3D imx8m_clk_composite("pcie1_ctrl", imx8m=
+m_pcie1_ctrl_sels, base + 0xa300);
+> diff --git a/drivers/clk/imx/clk-imx8mn.c b/drivers/clk/imx/clk-imx8mn.c
+> index 9f5a5a56b45e..ca78cb1249a7 100644
+> --- a/drivers/clk/imx/clk-imx8mn.c
+> +++ b/drivers/clk/imx/clk-imx8mn.c
+> @@ -428,12 +428,20 @@ static int imx8mn_clocks_probe(struct platform_devi=
+ce *pdev)
+>  	clks[IMX8MN_CLK_AHB] =3D imx8m_clk_composite_critical("ahb", imx8mn_ahb=
+_sels, base + 0x9000);
+>  	clks[IMX8MN_CLK_AUDIO_AHB] =3D imx8m_clk_composite("audio_ahb", imx8mn_=
+audio_ahb_sels, base + 0x9100);
+>  	clks[IMX8MN_CLK_IPG_ROOT] =3D imx_clk_divider2("ipg_root", "ahb", base =
++ 0x9080, 0, 1);
+>  	clks[IMX8MN_CLK_IPG_AUDIO_ROOT] =3D imx_clk_divider2("ipg_audio_root", =
+"audio_ahb", base + 0x9180, 0, 1);
+>  	clks[IMX8MN_CLK_DRAM_CORE] =3D imx_clk_mux2_flags("dram_core_clk", base=
+ + 0x9800, 24, 1, imx8mn_dram_core_sels, ARRAY_SIZE(imx8mn_dram_core_sels),=
+ CLK_IS_CRITICAL);
+> -	clks[IMX8MN_CLK_DRAM_ALT] =3D imx8m_clk_composite("dram_alt", imx8mn_dr=
+am_alt_sels, base + 0xa000);
+> -	clks[IMX8MN_CLK_DRAM_APB] =3D imx8m_clk_composite_critical("dram_apb", =
+imx8mn_dram_apb_sels, base + 0xa080);
+> +
+> +	/*
+> +	 * DRAM clocks are manipulated from TF-A outside clock framework.
+> +	 * Mark with GET_RATE_NOCACHE to always read div value from hardware
+> +	 */
+> +	clks[IMX8MN_CLK_DRAM_ALT] =3D __imx8m_clk_composite("dram_alt", imx8mn_=
+dram_alt_sels, base + 0xa000,
+> +			CLK_GET_RATE_NOCACHE);
+> +	clks[IMX8MN_CLK_DRAM_APB] =3D __imx8m_clk_composite("dram_apb", imx8mn_=
+dram_apb_sels, base + 0xa080,
+> +			CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
 
+nitpick: I think it looks better if we stick to one line each clock.=20
+I know it's against the 80 chars rule, but at least is consistent.
 
---=20
-Nicolas Ferre
+> +
+>  	clks[IMX8MN_CLK_DISP_PIXEL] =3D imx8m_clk_composite("disp_pixel", imx8m=
+n_disp_pixel_sels, base + 0xa500);
+>  	clks[IMX8MN_CLK_SAI2] =3D imx8m_clk_composite("sai2", imx8mn_sai2_sels,=
+ base + 0xa600);
+>  	clks[IMX8MN_CLK_SAI3] =3D imx8m_clk_composite("sai3", imx8mn_sai3_sels,=
+ base + 0xa680);
+>  	clks[IMX8MN_CLK_SAI5] =3D imx8m_clk_composite("sai5", imx8mn_sai5_sels,=
+ base + 0xa780);
+>  	clks[IMX8MN_CLK_SAI6] =3D imx8m_clk_composite("sai6", imx8mn_sai6_sels,=
+ base + 0xa800);
+> diff --git a/drivers/clk/imx/clk-imx8mq.c b/drivers/clk/imx/clk-imx8mq.c
+> index 5f10a606d836..3e2ccc17dc66 100644
+> --- a/drivers/clk/imx/clk-imx8mq.c
+> +++ b/drivers/clk/imx/clk-imx8mq.c
+> @@ -341,11 +341,12 @@ static int imx8mq_clocks_probe(struct platform_devi=
+ce *pdev)
+>  	clks[IMX8MQ_VIDEO_PLL1_OUT] =3D imx_clk_gate("video_pll1_out", "video_p=
+ll1_bypass", base + 0x10, 21);
+> =20
+>  	clks[IMX8MQ_SYS1_PLL_OUT] =3D imx_clk_fixed("sys1_pll_out", 800000000);
+>  	clks[IMX8MQ_SYS2_PLL_OUT] =3D imx_clk_fixed("sys2_pll_out", 1000000000)=
+;
+>  	clks[IMX8MQ_SYS3_PLL_OUT] =3D imx_clk_sccg_pll("sys3_pll_out", sys3_pll=
+_out_sels, ARRAY_SIZE(sys3_pll_out_sels), 0, 0, 0, base + 0x48, CLK_IS_CRIT=
+ICAL);
+> -	clks[IMX8MQ_DRAM_PLL_OUT] =3D imx_clk_sccg_pll("dram_pll_out", dram_pll=
+_out_sels, ARRAY_SIZE(dram_pll_out_sels), 0, 0, 0, base + 0x60, CLK_IS_CRIT=
+ICAL);
+> +	clks[IMX8MQ_DRAM_PLL_OUT] =3D imx_clk_sccg_pll("dram_pll_out", dram_pll=
+_out_sels, ARRAY_SIZE(dram_pll_out_sels), 0, 0, 0, base + 0x60,
+> +			CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
+>  	clks[IMX8MQ_VIDEO2_PLL_OUT] =3D imx_clk_sccg_pll("video2_pll_out", vide=
+o2_pll_out_sels, ARRAY_SIZE(video2_pll_out_sels), 0, 0, 0, base + 0x54, 0);
+> =20
+>  	/* SYS PLL1 fixed output */
+>  	clks[IMX8MQ_SYS1_PLL_40M_CG] =3D imx_clk_gate("sys1_pll_40m_cg", "sys1_=
+pll_out", base + 0x30, 9);
+>  	clks[IMX8MQ_SYS1_PLL_80M_CG] =3D imx_clk_gate("sys1_pll_80m_cg", "sys1_=
+pll_out", base + 0x30, 11);
+> @@ -433,15 +434,21 @@ static int imx8mq_clocks_probe(struct platform_devi=
+ce *pdev)
+> =20
+>  	/* IPG */
+>  	clks[IMX8MQ_CLK_IPG_ROOT] =3D imx_clk_divider2("ipg_root", "ahb", base =
++ 0x9080, 0, 1);
+>  	clks[IMX8MQ_CLK_IPG_AUDIO_ROOT] =3D imx_clk_divider2("ipg_audio_root", =
+"audio_ahb", base + 0x9180, 0, 1);
+> =20
+> -	/* IP */
+> +	/*
+> +	 * DRAM clocks are manipulated from TF-A outside clock framework.
+> +	 * Mark with GET_RATE_NOCACHE to always read div value from hardware
+> +	 */
+>  	clks[IMX8MQ_CLK_DRAM_CORE] =3D imx_clk_mux2_flags("dram_core_clk", base=
+ + 0x9800, 24, 1, imx8mq_dram_core_sels, ARRAY_SIZE(imx8mq_dram_core_sels),=
+ CLK_IS_CRITICAL);
+> +	clks[IMX8MQ_CLK_DRAM_ALT] =3D __imx8m_clk_composite("dram_alt", imx8mq_=
+dram_alt_sels, base + 0xa000,
+> +			CLK_GET_RATE_NOCACHE);
+> +	clks[IMX8MQ_CLK_DRAM_APB] =3D __imx8m_clk_composite("dram_apb", imx8mq_=
+dram_apb_sels, base + 0xa080,
+> +			CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
+> =20
+> -	clks[IMX8MQ_CLK_DRAM_ALT] =3D imx8m_clk_composite("dram_alt", imx8mq_dr=
+am_alt_sels, base + 0xa000);
+> -	clks[IMX8MQ_CLK_DRAM_APB] =3D imx8m_clk_composite_critical("dram_apb", =
+imx8mq_dram_apb_sels, base + 0xa080);
+> +	/* IP */
+>  	clks[IMX8MQ_CLK_VPU_G1] =3D imx8m_clk_composite("vpu_g1", imx8mq_vpu_g1=
+_sels, base + 0xa100);
+>  	clks[IMX8MQ_CLK_VPU_G2] =3D imx8m_clk_composite("vpu_g2", imx8mq_vpu_g2=
+_sels, base + 0xa180);
+>  	clks[IMX8MQ_CLK_DISP_DTRC] =3D imx8m_clk_composite("disp_dtrc", imx8mq_=
+disp_dtrc_sels, base + 0xa200);
+>  	clks[IMX8MQ_CLK_DISP_DC8000] =3D imx8m_clk_composite("disp_dc8000", imx=
+8mq_disp_dc8000_sels, base + 0xa280);
+>  	clks[IMX8MQ_CLK_PCIE1_CTRL] =3D imx8m_clk_composite("pcie1_ctrl", imx8m=
+q_pcie1_ctrl_sels, base + 0xa300);
+> --=20
+> 2.17.1
+>=20
