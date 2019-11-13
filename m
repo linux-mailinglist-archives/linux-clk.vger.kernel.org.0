@@ -2,59 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01223FBC20
-	for <lists+linux-clk@lfdr.de>; Thu, 14 Nov 2019 00:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD175FBC2F
+	for <lists+linux-clk@lfdr.de>; Thu, 14 Nov 2019 00:04:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbfKMXDD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 13 Nov 2019 18:03:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32908 "EHLO mail.kernel.org"
+        id S1726489AbfKMXEW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 13 Nov 2019 18:04:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33244 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726434AbfKMXDD (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 13 Nov 2019 18:03:03 -0500
+        id S1726409AbfKMXEV (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 13 Nov 2019 18:04:21 -0500
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 726AE206E3;
-        Wed, 13 Nov 2019 23:03:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 48A04206E3;
+        Wed, 13 Nov 2019 23:04:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573686183;
-        bh=DWcG9g07tw3M9huN94BEIUVN9ivCwtJITvLSKkiiuyE=;
+        s=default; t=1573686262;
+        bh=hVxRaAKO0Uplv/Oc7yoFCmBYC10wOCMNRXTieFKdhrs=;
         h=In-Reply-To:References:Cc:To:From:Subject:Date:From;
-        b=SOC6qBd2cEUfb5+s6YU7eZCakm6+GOmE95FNDCaYeTPsvzu/5j1O3FrbsbDGEqoT6
-         u0hjg0ZRsWu37cOMfuUxDxItmpds5ZLkPtPSw4FIhTvvzDsYhgfxFhs/vOqZZhHTIE
-         VLgmxubTZDNysAtypoBxw2pyB3S/wTwlIIoPDBA8=
+        b=EqDjLfdAniDVLR4+36d5vVDB7xvMJ/Q3raqmT+k9PWjKTYmtb9RUheNBn9/YELbxZ
+         Q9Ioc0G+laMtSa/ZCii9zf3BAQftZ4FVYvUDKBS0h2KG5s1ai8qgrtdUIdpAGGtzBL
+         z7oS7+JtuNmx1d6pBQkpPLSbVC1ndJn4cVxxYNlU=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20191030004813.9187-1-digetx@gmail.com>
-References: <20191030004813.9187-1-digetx@gmail.com>
+In-Reply-To: <20191109034226.21044-1-yuehaibing@huawei.com>
+References: <20191109034226.21044-1-yuehaibing@huawei.com>
 Cc:     linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>
+        linux-kernel@vger.kernel.org, YueHaibing <yuehaibing@huawei.com>
+To:     YueHaibing <yuehaibing@huawei.com>, jonathanh@nvidia.com,
+        mturquette@baylibre.com, pdeschrijver@nvidia.com,
+        pgaikwad@nvidia.com, thierry.reding@gmail.com
 From:   Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH v2] clk: tegra: divider: Check UART's divider enable-bit state on rate's recalculation
+Subject: Re: [PATCH -next] clk: tegra: Use match_string() helper to simplify the code
 User-Agent: alot/0.8.1
-Date:   Wed, 13 Nov 2019 15:03:01 -0800
-Message-Id: <20191113230303.726AE206E3@mail.kernel.org>
+Date:   Wed, 13 Nov 2019 15:04:20 -0800
+Message-Id: <20191113230422.48A04206E3@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Dmitry Osipenko (2019-10-29 17:48:13)
-> UART clock is divided using divisor values from DLM/DLL registers when
-> enable-bit is unset in clk register and clk's divider configuration isn't
-> taken onto account in this case. This doesn't cause any problems, but
-> let's add a check for the divider's enable-bit state, for consistency.
+Quoting YueHaibing (2019-11-08 19:42:26)
+> match_string() returns the array index of a matching string.
+> Use it instead of the open-coded implementation.
 >=20
-> Acked-by: Peter De Schrijver <pdeschrijver@nvidia.com>
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 > ---
 
-Is this going to be picked up or should I just apply atop the tegra PR?
+Applied to clk-next
 
