@@ -2,175 +2,122 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 959C6FADDD
-	for <lists+linux-clk@lfdr.de>; Wed, 13 Nov 2019 11:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FD8FADE2
+	for <lists+linux-clk@lfdr.de>; Wed, 13 Nov 2019 11:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726339AbfKMKCI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 13 Nov 2019 05:02:08 -0500
-Received: from mail-eopbgr20043.outbound.protection.outlook.com ([40.107.2.43]:23271
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726338AbfKMKCH (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 13 Nov 2019 05:02:07 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bXruUUhSi3HNjtFy9UF7jwkFfavCzE0hqhLoSzI23mzt3Ie7QUjBpDVnczjzSBCSrH4U/ErNy+QY5OcajkjVcu9Z2reK7pYJWRVOuESJrKe/yDTdqVAMtVOC4gOjByDf4ryU0NopILKNHeZyVf9eGyqJDU+DLTbDTZMcXCvkKnkdqZW9ypR/BiOcadgUOXMwwusAtsAdiscbUeWuBj0tB9GSX3zW25126TJQNCXC2z8mG0FeEiBoqDfLizutlwFBArQnp4/JET+gqcBMuEKA5AtwhfJsnOajXlimj4hooTZxAzXWa+u/M6buMnjbWL1+WhdTqovCKDLzXCbt26LeFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rLmrB5D04yOJegmBFfizvGX9OeLI7oDQb4m2MVPRTFE=;
- b=O8Zt7gjvGcC8wQZEZRQU0buLW3ILULn0TqshgzDB0houOeQPWblKw5/0o40rGOBH5QGQC6mVsw/FUi3dzWU7OjaXcP558U+GBQB5UVuZ4BbGSrAYbzlMLJmhSBeTrzLkh3u+KifsJK4kYsxPYNxMJFJaA8ZDxohikr6konksm2tY8mp9V3hniYdl4SqwlZgAd5bVvlLjMVkHnSzs715OjLhYKbUwwzx1Gjzs7/S5opG6/wQQw2wc9Xsj+ArjAkTwsOaOv2U7fYdZLBGAGLxJhHyKhqvxj96uWNiz8rNiaQRGzP5GtT8vOqME7Kww0gymA/+BopFENJ8SHmr8JP5sWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rLmrB5D04yOJegmBFfizvGX9OeLI7oDQb4m2MVPRTFE=;
- b=D9hwoOyRdNDRIuYdfVXuGs603Ym+QXSeUcO0XsfuqUMPBYSIKDJ9VsfNLkoKbOEefngYNp88nYof5KVsUJMrJztuASFE8GCfcYPm71w0mCsMVx+C7trPq1mH/ztSLgvXY7kbBPZEfolqpT/5GrYU/PEc8qlzB+S6oghn/2xQUnI=
-Received: from AM0PR04MB4481.eurprd04.prod.outlook.com (52.135.147.15) by
- AM0PR04MB5812.eurprd04.prod.outlook.com (20.178.119.145) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2430.20; Wed, 13 Nov 2019 10:02:03 +0000
-Received: from AM0PR04MB4481.eurprd04.prod.outlook.com
- ([fe80::f16d:a26a:840:f97c]) by AM0PR04MB4481.eurprd04.prod.outlook.com
- ([fe80::f16d:a26a:840:f97c%4]) with mapi id 15.20.2451.023; Wed, 13 Nov 2019
- 10:02:03 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     "sboyd@kernel.org" <sboyd@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        Abel Vesa <abel.vesa@nxp.com>
-CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Alice Guo <alice.guo@nxp.com>, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH 1/2] clk: imx: sccg: use relaxed io api
-Thread-Topic: [PATCH 1/2] clk: imx: sccg: use relaxed io api
-Thread-Index: AQHVmgllyVcYHISGfUyhube4yQW84A==
-Date:   Wed, 13 Nov 2019 10:02:03 +0000
-Message-ID: <1573638817-4363-1-git-send-email-peng.fan@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.7.4
-x-clientproxiedby: HK2PR03CA0044.apcprd03.prod.outlook.com
- (2603:1096:202:17::14) To AM0PR04MB4481.eurprd04.prod.outlook.com
- (2603:10a6:208:70::15)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peng.fan@nxp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: dd3e53d3-b599-48e2-4d0a-08d768208730
-x-ms-traffictypediagnostic: AM0PR04MB5812:|AM0PR04MB5812:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM0PR04MB5812ABFD218BC89BBFDD236988760@AM0PR04MB5812.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5516;
-x-forefront-prvs: 0220D4B98D
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(136003)(396003)(366004)(39860400002)(199004)(189003)(110136005)(8676002)(2201001)(478600001)(71190400001)(71200400001)(54906003)(50226002)(486006)(81156014)(36756003)(99286004)(86362001)(476003)(25786009)(81166006)(2616005)(8936002)(2906002)(66066001)(7736002)(305945005)(256004)(26005)(14444005)(386003)(102836004)(6506007)(316002)(186003)(2501003)(6636002)(6116002)(52116002)(3846002)(4326008)(66446008)(6512007)(6486002)(6436002)(5660300002)(44832011)(64756008)(66556008)(66476007)(14454004)(66946007);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB5812;H:AM0PR04MB4481.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: V2R0XVAQJfZK7vl5Ug2OROohyq8RndcOwX0O8gwwdQuAubP6zLY9G9hxQhAFb/R7E/OwOYPRtNy/EJjVCi5FnAA5IjPSNe0hdpWNFHIsJpgk/Dji+lI4cGNdp6jE51fpqaJkEYn7J71SUMdwQsnHAjgmKn8+ifXSwrn6Veoy5tmkIpQ6cR49XggFpnVX+0jstO8WJ2vhenejscZAKSbvPN0sWv08QVIx+ioDPM1WTOpANucCd8Dw9iIViRLtYAEeaUu1ui39kUpHZN9u3oyWmHL2zDcTmp6r09hbMe/RSuPlWfZkMSmqL6xaXKhKTHziJxF29bLFmY+SnL/js2/U0LFsWjUU32bVmwCv9LsuPH+FbmFhxJLE4TEvwK4P6VkXH9LUXnkQTw/A6RfjcSaOu1OOx802E4t4C3nk/ys8gDb2wD5YYWATb/pJc+jwGWav
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1727321AbfKMKCQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 13 Nov 2019 05:02:16 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:32790 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727378AbfKMKCO (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 13 Nov 2019 05:02:14 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id xADA2AV5089065;
+        Wed, 13 Nov 2019 04:02:10 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1573639330;
+        bh=uDTNTh6hH0C3Y7IA3uJaDhPfkgnTiptkt7nzyp3BEfc=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=lH/bBBdVl8WS/xICwSKoShTWtH3TLVwioqks+DZVYawGRSuemTfzLmdsQhki/GIUA
+         QXdyFDoXJ8kuIF0RMzibXeXysncVq52YsT8XEyQyXDiT2MAdsMl56N4hRlD5JKGoh+
+         DwRkellp1DfeX7PPaTBwLDvn60AkmugCwcNNX74k=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xADA2ANp117514
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 13 Nov 2019 04:02:10 -0600
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 13
+ Nov 2019 04:01:52 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 13 Nov 2019 04:01:52 -0600
+Received: from [10.250.98.116] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id xADA28Vm006400;
+        Wed, 13 Nov 2019 04:02:08 -0600
+Subject: Re: [PATCH] clk: ti: dra7: fix parent for gmac_clkctrl
+To:     Tony Lindgren <tony@atomide.com>
+CC:     Michael Turquette <mturquette@baylibre.com>,
+        Tero Kristo <t-kristo@ti.com>, <linux-omap@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+References: <20191109142017.10851-1-grygorii.strashko@ti.com>
+ <20191111171255.GU5610@atomide.com>
+From:   Grygorii Strashko <grygorii.strashko@ti.com>
+Message-ID: <d22abbd3-518d-3f2b-a1d7-50601e89e9e1@ti.com>
+Date:   Wed, 13 Nov 2019 12:02:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dd3e53d3-b599-48e2-4d0a-08d768208730
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Nov 2019 10:02:03.2374
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mp5ovHvzUmbbRsYktpZSHOtp9HuX3dCm25nj9UsV/c8xP+x9lxTLOt3ee8Bh/KDTQhlrta0AENtTJXbrLPAbGA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5812
+In-Reply-To: <20191111171255.GU5610@atomide.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
 
-It is ok to use relaxed api here, no need to use stronger readl/writel
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/clk/imx/clk-sccg-pll.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+On 11/11/2019 19:12, Tony Lindgren wrote:
+> * Grygorii Strashko <grygorii.strashko@ti.com> [191109 14:21]:
+>> The parent clk for gmac clk ctrl has to be gmac_main_clk (125MHz) instead
+>> of dpll_gmac_ck (1GHz). This is caused incorrect CPSW MDIO operation.
+>> Hence, fix it.
+>>
+>> Fixes: commit dffa9051d546 ('clk: ti: dra7: add new clkctrl data')
+>> Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
+> 
+> Hmm is there a mux for the source though?
 
-diff --git a/drivers/clk/imx/clk-sccg-pll.c b/drivers/clk/imx/clk-sccg-pll.=
-c
-index 2cf874813458..e03f8acb1e82 100644
---- a/drivers/clk/imx/clk-sccg-pll.c
-+++ b/drivers/clk/imx/clk-sccg-pll.c
-@@ -106,8 +106,9 @@ static int clk_sccg_pll_wait_lock(struct clk_sccg_pll *=
-pll)
-=20
- 	/* don't wait for lock if all plls are bypassed */
- 	if (!(val & SSCG_PLL_BYPASS2_MASK))
--		return readl_poll_timeout(pll->base, val, val & PLL_LOCK_MASK,
--						0, PLL_SCCG_LOCK_TIMEOUT);
-+		return readl_relaxed_poll_timeout(pll->base, val,
-+						  val & PLL_LOCK_MASK,
-+						  0, PLL_SCCG_LOCK_TIMEOUT);
-=20
- 	return 0;
- }
-@@ -349,7 +350,7 @@ static unsigned long clk_sccg_pll_recalc_rate(struct cl=
-k_hw *hw,
-=20
- 	temp64 =3D parent_rate;
-=20
--	val =3D readl(pll->base + PLL_CFG0);
-+	val =3D readl_relaxed(pll->base + PLL_CFG0);
- 	if (val & SSCG_PLL_BYPASS2_MASK) {
- 		temp64 =3D parent_rate;
- 	} else if (val & SSCG_PLL_BYPASS1_MASK) {
-@@ -372,10 +373,10 @@ static int clk_sccg_pll_set_rate(struct clk_hw *hw, u=
-nsigned long rate,
- 	u32 val;
-=20
- 	/* set bypass here too since the parent might be the same */
--	val =3D readl(pll->base + PLL_CFG0);
-+	val =3D readl_relaxed(pll->base + PLL_CFG0);
- 	val &=3D ~SSCG_PLL_BYPASS_MASK;
- 	val |=3D FIELD_PREP(SSCG_PLL_BYPASS_MASK, setup->bypass);
--	writel(val, pll->base + PLL_CFG0);
-+	writel_relaxed(val, pll->base + PLL_CFG0);
-=20
- 	val =3D readl_relaxed(pll->base + PLL_CFG2);
- 	val &=3D ~(PLL_DIVF1_MASK | PLL_DIVF2_MASK);
-@@ -396,7 +397,7 @@ static u8 clk_sccg_pll_get_parent(struct clk_hw *hw)
- 	u32 val;
- 	u8 ret =3D pll->parent;
-=20
--	val =3D readl(pll->base + PLL_CFG0);
-+	val =3D readl_relaxed(pll->base + PLL_CFG0);
- 	if (val & SSCG_PLL_BYPASS2_MASK)
- 		ret =3D pll->bypass2;
- 	else if (val & SSCG_PLL_BYPASS1_MASK)
-@@ -409,10 +410,10 @@ static int clk_sccg_pll_set_parent(struct clk_hw *hw,=
- u8 index)
- 	struct clk_sccg_pll *pll =3D to_clk_sccg_pll(hw);
- 	u32 val;
-=20
--	val =3D readl(pll->base + PLL_CFG0);
-+	val =3D readl_relaxed(pll->base + PLL_CFG0);
- 	val &=3D ~SSCG_PLL_BYPASS_MASK;
- 	val |=3D FIELD_PREP(SSCG_PLL_BYPASS_MASK, pll->setup.bypass);
--	writel(val, pll->base + PLL_CFG0);
-+	writel_relaxed(val, pll->base + PLL_CFG0);
-=20
- 	return clk_sccg_pll_wait_lock(pll);
- }
---=20
-2.16.4
+Not sure what do you mean here :(
 
+fck clock for CPSW and MDIO is "gmac_main_clk" which is 125MHz and
+that what need to be passed to drivers and enabled through the clock tree.
+The TI specific PM is handled by gmac_clkctrl DRA7_GMAC_GMAC_CLKCTRL 0
+which required sysc programming and child modules dosn't need to even know that.
+
+So, this patch is simply correct clock tree for dra7:
+dpll_gmac_ck -> .... -> gmac_main_clk -> gmac_clkctrl DRA7_GMAC_GMAC_CLKCTRL 0
+
+Seems MDIO dt also need to be fixed to use:
+gmac_main_clk as "fck". I'll try and send patch.
+
+By the way, the patch follows am3/am4 (am4_cpsw_125mhz_clkctrl_regs,
+  am3_cpsw_125mhz_clkctrl_regs)
+
+
+> 
+> In that case using assigned-clocks and assigned-clock-parents in
+> addition to a related clk-7xx.c fix would be needed.
+> 
+> Regards,
+> 
+> Tony
+> 
+>> ---
+>>   drivers/clk/ti/clk-7xx.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/clk/ti/clk-7xx.c b/drivers/clk/ti/clk-7xx.c
+>> index 9dd6185a4b4e..66e4b2b9ec60 100644
+>> --- a/drivers/clk/ti/clk-7xx.c
+>> +++ b/drivers/clk/ti/clk-7xx.c
+>> @@ -405,7 +405,7 @@ static const struct omap_clkctrl_bit_data dra7_gmac_bit_data[] __initconst = {
+>>   };
+>>   
+>>   static const struct omap_clkctrl_reg_data dra7_gmac_clkctrl_regs[] __initconst = {
+>> -	{ DRA7_GMAC_GMAC_CLKCTRL, dra7_gmac_bit_data, CLKF_SW_SUP, "dpll_gmac_ck" },
+>> +	{ DRA7_GMAC_GMAC_CLKCTRL, dra7_gmac_bit_data, CLKF_SW_SUP, "gmac_main_clk" },
+>>   	{ 0 },
+>>   };
+>>   
+>> -- 
+>> 2.17.1
+>>
+
+-- 
+Best regards,
+grygorii
