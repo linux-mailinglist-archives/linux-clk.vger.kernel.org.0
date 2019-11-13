@@ -2,118 +2,73 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A330FFB4EE
-	for <lists+linux-clk@lfdr.de>; Wed, 13 Nov 2019 17:22:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC79FB8A8
+	for <lists+linux-clk@lfdr.de>; Wed, 13 Nov 2019 20:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728220AbfKMQWo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 13 Nov 2019 11:22:44 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:36780 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728305AbfKMQWo (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 13 Nov 2019 11:22:44 -0500
-Received: by mail-lj1-f195.google.com with SMTP id k15so3271940lja.3;
-        Wed, 13 Nov 2019 08:22:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/NPT2VbqBD/1/3nxqwL+OAW0hVteVP5bc9nbYT9sEWw=;
-        b=TCUiQT7JDPjm9ZDg0Vzu38IlPaZ5tO/stIvb/xwZ0XpUs93vCiPqU8zUC/HnYM3vr6
-         v52ml+3tmPsBYOP+DTmBc558lXk2sHLf9NsAxejdS46A0QCD9jlNB+aL4eMyQOi57Xwl
-         SIakmAC6pclJPomWXqIInEmRx/lk2tTkrYe1cCZFZwU2FVPWz/CWbz++PFBYfSLH1ML/
-         M2X9j8owFamvUc2idjYI1eGjX5q5/B1BlDxCrCLdW2lFwkevIwESTUdicWwKJqLk/Ixj
-         dINXdaGcMyHePZe7lEbya/rouptapaeKveZvag/tRzxVnluBGYfxjXWSueTBDmHnmG7t
-         EUUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/NPT2VbqBD/1/3nxqwL+OAW0hVteVP5bc9nbYT9sEWw=;
-        b=NdWEUnKFdPdBXa0iklUiNUSw2SvTww7VZSLJuhK2hQ1zKUO5gRCOev1Oye7NIflk4r
-         YT3Ny+8LFhFdrJiASzJKJwVfo9qf1rj9Wf4DrG9qLMUfsWVMmb75GUWhS2mOcXaR6JhW
-         3r/CNLLPwiVhnZHa5gI8mLXt7GBQheAAtWEA599awV5GrLBwZwqYNcpqhyHa/njzbDF3
-         JG+UasoouZ93kcjEl+mlcg+pnqapwRoAV0X2rnmJisth5J50QPgfHnHVsl7zldr2+Ha0
-         C0QQgIxRcXQbVxxr4DruGiYDrdqpU/QZoJ4PdxevYkF5K2ZTnNsNFJnlGKX5L5MrEZKe
-         FDQA==
-X-Gm-Message-State: APjAAAXayz7Fdx7ihvwoh+4W3Zl3BVD4D+ioqdqHZyXT/8hM3l19tyFW
-        FjSrd5t3FBZeoRU2H95JxfqDwEcv
-X-Google-Smtp-Source: APXvYqzyck+QscJgPGHJHezhAv7xscVf5jyjQo+FEHbpQ0mvtZpFzoFgG83d9v4QvhOqJnbbV8YZxA==
-X-Received: by 2002:a2e:9bc9:: with SMTP id w9mr3335411ljj.35.1573662161438;
-        Wed, 13 Nov 2019 08:22:41 -0800 (PST)
-Received: from [192.168.2.145] (94-29-10-250.dynamic.spd-mgts.ru. [94.29.10.250])
-        by smtp.googlemail.com with ESMTPSA id x23sm1275538lfe.8.2019.11.13.08.22.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Nov 2019 08:22:40 -0800 (PST)
-Subject: Re: [PATCH v1] clk: tegra: clk-dfll: Fix to remove
- pm_runtime_irq_safe
-To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, sboyd@kernel.org,
-        mturquette@baylibre.com, pgaikwad@nvidia.com
-Cc:     pdeschrijver@nvidia.com, linux-tegra@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1573575426-31314-1-git-send-email-skomatineni@nvidia.com>
- <1573575426-31314-2-git-send-email-skomatineni@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <353b9aef-3bcc-65d2-a942-91d6710b89ca@gmail.com>
-Date:   Wed, 13 Nov 2019 19:22:39 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        id S1726434AbfKMTSX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 13 Nov 2019 14:18:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40706 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726066AbfKMTSX (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 13 Nov 2019 14:18:23 -0500
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7F88E20679;
+        Wed, 13 Nov 2019 19:18:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573672703;
+        bh=x5oKcg3HSeuyXJJKrQPbij2hWdoRQE5vfY2awGbtJbA=;
+        h=In-Reply-To:References:To:From:Subject:Cc:Date:From;
+        b=e7bLC1H3VBhRoATvYun0TLSLqKDsySMv1uqHhfEYwvfMA8tWO875VZER6fF3QnW8m
+         GVYbcJfrutwVynv7Jh0pYs6FJD40IeG/ON9Qovmn58RYRG0bvLYakEKMLhCTg56WAm
+         mEsyG9T/B16Fb4u/pzjUsy6GWTIIAf/pGMwEb0TA=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <1573575426-31314-2-git-send-email-skomatineni@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20191111144507.4027979-1-thierry.reding@gmail.com>
+References: <20191111144507.4027979-1-thierry.reding@gmail.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+From:   Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [GIT PULL v2 1/2] clk: Changes for v5.5-rc1
+Cc:     linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org
+User-Agent: alot/0.8.1
+Date:   Wed, 13 Nov 2019 11:18:22 -0800
+Message-Id: <20191113191823.7F88E20679@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-12.11.2019 19:17, Sowjanya Komatineni пишет:
-> pm_runtime_irq_safe is not needed as interrupts are allowed during
-> suspend and resume. This was added mistakenly during dfll suspend
-> and resume support patch.
-> 
-> This patch includes fix to remove pm_runtime_irq_safe.
-> 
-> Also updated description of dfll_suspend argument.
-> 
-> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
-> ---
->  drivers/clk/tegra/clk-dfll.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/clk/tegra/clk-dfll.c b/drivers/clk/tegra/clk-dfll.c
-> index c051d92c2bbf..cfbaa90c7adb 100644
-> --- a/drivers/clk/tegra/clk-dfll.c
-> +++ b/drivers/clk/tegra/clk-dfll.c
-> @@ -1487,7 +1487,6 @@ static int dfll_init(struct tegra_dfll *td)
->  	td->last_unrounded_rate = 0;
->  
->  	pm_runtime_enable(td->dev);
-> -	pm_runtime_irq_safe(td->dev);
->  	pm_runtime_get_sync(td->dev);
->  
->  	dfll_set_mode(td, DFLL_DISABLED);
-> @@ -1516,7 +1515,7 @@ static int dfll_init(struct tegra_dfll *td)
->  
->  /**
->   * tegra_dfll_suspend - check DFLL is disabled
-> - * @dev: DFLL device *
-> + * @dev: DFLL instance
->   *
->   * DFLL clock should be disabled by the CPUFreq driver. So, make
->   * sure it is disabled and disable all clocks needed by the DFLL.
-> 
+Quoting Thierry Reding (2019-11-11 06:45:06)
+> Hi Michael, Stephen,
+>=20
+> The following changes since commit 54ecb8f7028c5eb3d740bb82b0f1d90f2df63c=
+5c:
+>=20
+>   Linux 5.4-rc1 (2019-09-30 10:35:40 -0700)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegr=
+a-for-5.5-clk-core-v2
+>=20
+> for you to fetch changes up to d9b86cc48283112f06738d45031b88bd3f9ecb92:
+>=20
+>   clk: Add API to get index of the clock parent (2019-11-11 13:59:35 +010=
+0)
+>=20
+> This is an updated pull request that contains the revised version of the
+> new API as discussed with Stephen in this thread:
+>=20
+>     https://lore.kernel.org/linux-clk/1565984527-5272-8-git-send-email-sk=
+omatineni@nvidia.com/
+>=20
+> Thanks,
+> Thierry
+>=20
+> ----------------------------------------------------------------
 
-Hello Sowjanya,
+Thanks. Pulled into clk-next
 
-It should be better to have the commit's title saying something more
-generic like "Clean up code" or to have two separate patches because
-this patch does two things that are unrelated to each other in
-accordance to the title and this is a bit confusing at first glance.
-Although, that's not a big deal for a trivial patch like this and it
-should be fine as is (IMO). Please take into account in the future
-patches that both commit's title and description should be accurate.
-
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
