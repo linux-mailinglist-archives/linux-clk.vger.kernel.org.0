@@ -2,36 +2,37 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62BB3FA5E5
-	for <lists+linux-clk@lfdr.de>; Wed, 13 Nov 2019 03:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6A3FA565
+	for <lists+linux-clk@lfdr.de>; Wed, 13 Nov 2019 03:22:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727888AbfKMBvd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 12 Nov 2019 20:51:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39382 "EHLO mail.kernel.org"
+        id S1728527AbfKMBxS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 12 Nov 2019 20:53:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42838 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727881AbfKMBvc (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 12 Nov 2019 20:51:32 -0500
+        id S1728520AbfKMBxS (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 12 Nov 2019 20:53:18 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 300A12246A;
-        Wed, 13 Nov 2019 01:51:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0524F222CD;
+        Wed, 13 Nov 2019 01:53:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573609891;
-        bh=FK6rddTPTwK/CMpUf7Wy6HlR4JUMAdjtf1wQY9MQNek=;
+        s=default; t=1573609997;
+        bh=t/kBS8ZyburwAEd/tWcHp44RfmpPV30AzLZAShq5ZZk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jV73X+KhYA+AslQT/jB71taClsrbvY7ZdCJ5CC0UBf4BbByGfd8bAYeo0CyzLN7Ql
-         E5TkWUMNtZYCq/zWEgTp3aqXh9+nhTWmubQcaCSDDwFQs5JiRMnK6/0h/Rkv1MHL1e
-         nWuuY0+00AtG93L81Ky05SYldOpSvoC6z3Yt/gzc=
+        b=Ckoux5DLtGj81GLTtHgJg79eDwDZDUjiIRdlKDcwYDTwG8QIuBwZXnw2ZU2gObCmO
+         OvIDPwlCZwgWEH09k1W1SEir/mBrqevNUSqGsj4QoLlyGhv4AEFSQzWpanIgW0oUj5
+         FZV1hxAjfNnzCRu5MZT5oZ/83ekYeUO9WUFbWYvg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 049/209] clk: keystone: Enable TISCI clocks if K3_ARCH
-Date:   Tue, 12 Nov 2019 20:47:45 -0500
-Message-Id: <20191113015025.9685-49-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 106/209] clk: samsung: Use NOIRQ stage for Exynos5433 clocks suspend/resume
+Date:   Tue, 12 Nov 2019 20:48:42 -0500
+Message-Id: <20191113015025.9685-106-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191113015025.9685-1-sashal@kernel.org>
 References: <20191113015025.9685-1-sashal@kernel.org>
@@ -44,47 +45,40 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Nishanth Menon <nm@ti.com>
+From: Marek Szyprowski <m.szyprowski@samsung.com>
 
-[ Upstream commit 2f149e6e14bcb5e581e49307b54aafcd6f74a74f ]
+[ Upstream commit 70da9ee80228e6d98fd68e3c1db124c4461d283c ]
 
-K3_ARCH uses TISCI for clocks as well. Enable the same
-for the driver support.
+SoC clock drivers should suspend after every other drivers in the system,
+which are using clocks and resume before them. The last stage for calling
+suspend device callbacks is NOIRQ stage and there exists driver, which use
+that state (dwmmc-exynos), so Exynos5433 clocks driver should also use it.
+During the same stage, clocks driver will be always suspended after its
+clients as a direct result of proper device probe order (deferred probe
+reorders the suspend call sequence).
 
-Signed-off-by: Nishanth Menon <nm@ti.com>
-Acked-by: Santosh Shilimkar <ssantosh@kernel.org>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+Signed-off-by: Sylwester Nawrocki <snawrocki@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/Makefile         | 1 +
- drivers/clk/keystone/Kconfig | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/clk/samsung/clk-exynos5433.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index a84c5573cabea..ed344eb717cc4 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -73,6 +73,7 @@ obj-$(CONFIG_ARCH_HISI)			+= hisilicon/
- obj-y					+= imgtec/
- obj-$(CONFIG_ARCH_MXC)			+= imx/
- obj-$(CONFIG_MACH_INGENIC)		+= ingenic/
-+obj-$(CONFIG_ARCH_K3)			+= keystone/
- obj-$(CONFIG_ARCH_KEYSTONE)		+= keystone/
- obj-$(CONFIG_MACH_LOONGSON32)		+= loongson1/
- obj-y					+= mediatek/
-diff --git a/drivers/clk/keystone/Kconfig b/drivers/clk/keystone/Kconfig
-index 7e9f0176578a6..b04927d06cd10 100644
---- a/drivers/clk/keystone/Kconfig
-+++ b/drivers/clk/keystone/Kconfig
-@@ -7,7 +7,7 @@ config COMMON_CLK_KEYSTONE
+diff --git a/drivers/clk/samsung/clk-exynos5433.c b/drivers/clk/samsung/clk-exynos5433.c
+index 162de44df099b..426980514e679 100644
+--- a/drivers/clk/samsung/clk-exynos5433.c
++++ b/drivers/clk/samsung/clk-exynos5433.c
+@@ -5630,7 +5630,7 @@ static const struct of_device_id exynos5433_cmu_of_match[] = {
+ static const struct dev_pm_ops exynos5433_cmu_pm_ops = {
+ 	SET_RUNTIME_PM_OPS(exynos5433_cmu_suspend, exynos5433_cmu_resume,
+ 			   NULL)
+-	SET_LATE_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
++	SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
+ 				     pm_runtime_force_resume)
+ };
  
- config TI_SCI_CLK
- 	tristate "TI System Control Interface clock drivers"
--	depends on (ARCH_KEYSTONE || COMPILE_TEST) && OF
-+	depends on (ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST) && OF
- 	depends on TI_SCI_PROTOCOL
- 	default ARCH_KEYSTONE
- 	---help---
 -- 
 2.20.1
 
