@@ -2,37 +2,37 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C831CFEE6D
-	for <lists+linux-clk@lfdr.de>; Sat, 16 Nov 2019 16:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28FD6FEF7A
+	for <lists+linux-clk@lfdr.de>; Sat, 16 Nov 2019 16:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730782AbfKPPvc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 16 Nov 2019 10:51:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60222 "EHLO mail.kernel.org"
+        id S1731369AbfKPPyB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 16 Nov 2019 10:54:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35394 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729891AbfKPPvc (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:51:32 -0500
+        id S1731366AbfKPPyA (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:54:00 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 516AF20723;
-        Sat, 16 Nov 2019 15:51:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 133F92184B;
+        Sat, 16 Nov 2019 15:54:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919491;
-        bh=X93YxrL4e1zQIw8m5y0o6WIOY4hS2G+mT0DqMqffEj4=;
+        s=default; t=1573919640;
+        bh=QCIZeCkQ0r6C4cbohp8AQg8/ULaLDHBUimyrxqpfD38=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KkSFJtffvbNXq/VkCGmwTq5yL4c2NBNrPvy0o70gruVn8zhhHuGV1Y5VpDRiq0JiZ
-         WHsS1+InTLRJ8Ni2QvXPR85F0Pos+lnkYreL3+Cv6LtakgHz2rNLMHNzaEW+Wb9BlP
-         39/EpbziF6+eDrxl+PzaHwvvAcFoydg7NCV9dbMg=
+        b=u4dhYnPrwm08RwkUc7RiSuhd9xgZcnzUr7jc+6UOuxdQwBAn2r5I/cwd4vdwHlWmI
+         LeEzb3KhXfRqPBCq7yju1RRYr9jjsURm+/v4on+4mtvpSNiP3LztBFmeuAw/S9oEs2
+         MLMafF9BwDxE2wWk8PyCScdXmarFjdpPOAWJz6y8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Lubomir Rintel <lkundrak@v3.sk>, Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 21/99] clk: mmp2: fix the clock id for sdh2_clk and sdh3_clk
-Date:   Sat, 16 Nov 2019 10:49:44 -0500
-Message-Id: <20191116155103.10971-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 19/77] clk: mmp2: fix the clock id for sdh2_clk and sdh3_clk
+Date:   Sat, 16 Nov 2019 10:52:41 -0500
+Message-Id: <20191116155339.11909-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191116155103.10971-1-sashal@kernel.org>
-References: <20191116155103.10971-1-sashal@kernel.org>
+In-Reply-To: <20191116155339.11909-1-sashal@kernel.org>
+References: <20191116155339.11909-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,7 +58,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/clk/mmp/clk-of-mmp2.c b/drivers/clk/mmp/clk-of-mmp2.c
-index 9adaf48aea231..061a9f10218b3 100644
+index f261b1d292c74..8b45cb2caed1b 100644
 --- a/drivers/clk/mmp/clk-of-mmp2.c
 +++ b/drivers/clk/mmp/clk-of-mmp2.c
 @@ -227,8 +227,8 @@ static struct mmp_param_gate_clk apmu_gate_clks[] = {
