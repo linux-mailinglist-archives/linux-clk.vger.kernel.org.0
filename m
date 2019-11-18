@@ -2,109 +2,75 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C38100EC1
-	for <lists+linux-clk@lfdr.de>; Mon, 18 Nov 2019 23:28:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD31100EC8
+	for <lists+linux-clk@lfdr.de>; Mon, 18 Nov 2019 23:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726767AbfKRW2X (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 18 Nov 2019 17:28:23 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:44784 "EHLO inva020.nxp.com"
+        id S1726647AbfKRWaM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 18 Nov 2019 17:30:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60588 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726272AbfKRW2X (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 18 Nov 2019 17:28:23 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id CBC011A03CE;
-        Mon, 18 Nov 2019 23:28:20 +0100 (CET)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id BED411A012D;
-        Mon, 18 Nov 2019 23:28:20 +0100 (CET)
-Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 3F13F20396;
-        Mon, 18 Nov 2019 23:28:20 +0100 (CET)
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Abel Vesa <abel.vesa@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-imx@nxp.com, kernel@pengutronix.de
-Subject: [PATCH] clk: imx8m: Suppress bind attrs
-Date:   Tue, 19 Nov 2019 00:28:16 +0200
-Message-Id: <9f2ac65bab203a943de947465d6534980585e144.1574116045.git.leonard.crestez@nxp.com>
-X-Mailer: git-send-email 2.17.1
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726272AbfKRWaM (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 18 Nov 2019 17:30:12 -0500
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 814DD22312;
+        Mon, 18 Nov 2019 22:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574116211;
+        bh=khxFIvRa0WHBu3BPSpSp4o8e8vlX/Ch1fJFSYdneD1g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=B8LWMYXp1+IGaUXr0uhktgBFNAO0EUQPoDl4ZO6KXa4ZuxKz1lc+Klt9zdeMN0Byg
+         A1qBk27AObhn8bnOiT+nmyy4ea74+Q1yhe6THBpSc0wQG2Sn5mcYM39u5I80spCYXR
+         H3MTMAbeFuLriXNtdbEuyRFTN/Yx4Z587oUMbUtc=
+Received: by mail-qv1-f45.google.com with SMTP id cv8so7142352qvb.3;
+        Mon, 18 Nov 2019 14:30:11 -0800 (PST)
+X-Gm-Message-State: APjAAAVADF5dd3czrJ+fG0j2g0SkLnGQV2hZQ+a+5mePJ0RZTNkAIM4g
+        IFQNi2qzgjZigG8f75N8E/0XQtQ3M7C0LOMqLw==
+X-Google-Smtp-Source: APXvYqwTs2co+HBbq2oe5+YXOU23+vJDFGQ7niNbj9Q1SHsVHHK3eLM9UQAJDYzQb4QVp4Z73nckDWhocRD43GBWIEg=
+X-Received: by 2002:a0c:d2b4:: with SMTP id q49mr15752471qvh.135.1574116210565;
+ Mon, 18 Nov 2019 14:30:10 -0800 (PST)
+MIME-Version: 1.0
+References: <20191114101817.20831-1-peter.ujfalusi@ti.com>
+In-Reply-To: <20191114101817.20831-1-peter.ujfalusi@ti.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 18 Nov 2019 16:29:59 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLahJZ0TqmgNS_cvwtTUw4kRCjD2bn-vdAN8xYmM7zY0w@mail.gmail.com>
+Message-ID: <CAL_JsqLahJZ0TqmgNS_cvwtTUw4kRCjD2bn-vdAN8xYmM7zY0w@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: clock: Move ti-dra7-atl.h to dt-bindigs/clock
+To:     Peter Ujfalusi <peter.ujfalusi@ti.com>
+Cc:     Tero Kristo <t-kristo@ti.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-omap <linux-omap@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Tony Lindgren <tony@atomide.com>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The clock drivers on imx8m series are registered as platform devices and
-this opens the possibility of reloading the driver at runtime:
+On Thu, Nov 14, 2019 at 4:17 AM Peter Ujfalusi <peter.ujfalusi@ti.com> wrote:
+>
 
-This doesn't actually work: clocks are never removed and attempting to
-bind again results in registration errors and a crash.
+typo in subject.
 
-Fix this by explicitly suppressing bind attrs like several other
-drivers.
+> Most of the clock related dt-binding header files are located in
+> dt-bindings/clock folder. It would be good to keep all the similar
+> header files at a single location.
+>
+> Suggested-by: Tony Lindgren <tony@atomide.com>
+> Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
+> ---
+>  Documentation/devicetree/bindings/clock/ti/dra7-atl.txt | 4 ++--
+>  arch/arm/boot/dts/dra7-evm-common.dtsi                  | 2 +-
+>  arch/arm/boot/dts/dra72-evm-common.dtsi                 | 2 +-
+>  include/dt-bindings/{clk => clock}/ti-dra7-atl.h        | 0
+>  4 files changed, 4 insertions(+), 4 deletions(-)
+>  rename include/dt-bindings/{clk => clock}/ti-dra7-atl.h (100%)
 
-Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+Otherwise,
 
----
-No cc: stable because because there are likely many other opportunities
-to crash the system by echoing random stuff in sysfs as root.
-
- drivers/clk/imx/clk-imx8mm.c | 1 +
- drivers/clk/imx/clk-imx8mn.c | 1 +
- drivers/clk/imx/clk-imx8mq.c | 1 +
- 3 files changed, 3 insertions(+)
-
-diff --git a/drivers/clk/imx/clk-imx8mm.c b/drivers/clk/imx/clk-imx8mm.c
-index 9246e89bb5fd..3cb75ad4270d 100644
---- a/drivers/clk/imx/clk-imx8mm.c
-+++ b/drivers/clk/imx/clk-imx8mm.c
-@@ -619,9 +619,10 @@ MODULE_DEVICE_TABLE(of, imx8mm_clk_of_match);
- 
- static struct platform_driver imx8mm_clk_driver = {
- 	.probe = imx8mm_clocks_probe,
- 	.driver = {
- 		.name = "imx8mm-ccm",
-+		.suppress_bind_attrs = true,
- 		.of_match_table = of_match_ptr(imx8mm_clk_of_match),
- 	},
- };
- module_platform_driver(imx8mm_clk_driver);
-diff --git a/drivers/clk/imx/clk-imx8mn.c b/drivers/clk/imx/clk-imx8mn.c
-index 4749beab9fc8..d16530430ac2 100644
---- a/drivers/clk/imx/clk-imx8mn.c
-+++ b/drivers/clk/imx/clk-imx8mn.c
-@@ -576,9 +576,10 @@ MODULE_DEVICE_TABLE(of, imx8mn_clk_of_match);
- 
- static struct platform_driver imx8mn_clk_driver = {
- 	.probe = imx8mn_clocks_probe,
- 	.driver = {
- 		.name = "imx8mn-ccm",
-+		.suppress_bind_attrs = true,
- 		.of_match_table = of_match_ptr(imx8mn_clk_of_match),
- 	},
- };
- module_platform_driver(imx8mn_clk_driver);
-diff --git a/drivers/clk/imx/clk-imx8mq.c b/drivers/clk/imx/clk-imx8mq.c
-index c8ab86fcba7c..0e0f69e881bd 100644
---- a/drivers/clk/imx/clk-imx8mq.c
-+++ b/drivers/clk/imx/clk-imx8mq.c
-@@ -611,9 +611,10 @@ MODULE_DEVICE_TABLE(of, imx8mq_clk_of_match);
- 
- static struct platform_driver imx8mq_clk_driver = {
- 	.probe = imx8mq_clocks_probe,
- 	.driver = {
- 		.name = "imx8mq-ccm",
-+		.suppress_bind_attrs = true,
- 		.of_match_table = of_match_ptr(imx8mq_clk_of_match),
- 	},
- };
- module_platform_driver(imx8mq_clk_driver);
--- 
-2.17.1
-
+Acked-by: Rob Herring <robh@kernel.org>
