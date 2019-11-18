@@ -2,130 +2,153 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08611100923
-	for <lists+linux-clk@lfdr.de>; Mon, 18 Nov 2019 17:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2751009A8
+	for <lists+linux-clk@lfdr.de>; Mon, 18 Nov 2019 17:47:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726322AbfKRQZG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 18 Nov 2019 11:25:06 -0500
-Received: from foss.arm.com ([217.140.110.172]:36762 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726216AbfKRQZG (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 18 Nov 2019 11:25:06 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D16DEDA7;
-        Mon, 18 Nov 2019 08:25:04 -0800 (PST)
-Received: from localhost (unknown [10.37.6.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 12FD93F703;
-        Mon, 18 Nov 2019 08:25:04 -0800 (PST)
-Date:   Mon, 18 Nov 2019 16:25:02 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com, Lee Jones <lee.jones@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        id S1726809AbfKRQqu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 18 Nov 2019 11:46:50 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:47054 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726314AbfKRQqu (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 18 Nov 2019 11:46:50 -0500
+Received: by mail-lf1-f66.google.com with SMTP id o65so14366493lff.13;
+        Mon, 18 Nov 2019 08:46:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=phMD8PdGXzZHxIPzUIGGOTL/baj6HbkviILSGV70YKs=;
+        b=vBpuzV4SNFWuCGyOtxImv/mAsJr7JwC4RvaOejCdwmpx56d778BFkGB5aXiMMAuwih
+         w2in/AVltkhsCEwVKFHkpeCM9vVbnrXdVbASrrzAHrlp0Rrph+jejExUEylaI21QTolT
+         RRb7D17SE3Ff/L8Qw5JI/1O7zR1jhAdulIH/XhAA0buMR3cw2TnipbgZRb/6QyeYRXDU
+         lhxPBnJ8B5VWJEXTUYTvSK2wmmklt2W21LKbjhEtFnJ+DS8jnqfMW/SZUi/+Tvzh/OOU
+         GaPp9mv2ZnFp8uQWBNvxxXHgPfEBApYJDD4S/7kO/4HMdq4z8TdMMd4xIyyYeohD6Qkd
+         kMDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=phMD8PdGXzZHxIPzUIGGOTL/baj6HbkviILSGV70YKs=;
+        b=BCmB7UDi34ZBvGfiLo//l5bUsR4CNDFaOvIz16ZQdsO76KciTu1Rih7NlLxlecRMYa
+         cHfICk2fWFuBquFd7i05cXCGeEiaHebXj2tNpjUlkKe3mnTlqpNX6Q7FalfeLGUMurgy
+         E3RlCqhSwqYbPiu/m5dVaAUrdgA0ZXwq+Ta21P8yLuRTniLONbdPb+h25FRPVeGg1NBt
+         l7QJ0Zb2bBDvPdFo5W7imy+LMNH650PGJhdrC4zCT1/5pYgE2rbvvcvvzDGy9NT3YNwI
+         Y291okZJpZxLCDWTZvFOMucUcttnCc9IzgiaL64tHcIkkF97jcI+ZIMu0Tfed/bOzHBh
+         jxlg==
+X-Gm-Message-State: APjAAAUAIvqid80tooc+ze5XY0QjdyxV/sM0GWuifalx0VQNSfSdc7OF
+        BXwDxcM+J40paSsl+8zA8ZU=
+X-Google-Smtp-Source: APXvYqwT/6HhtDPNmdYtw10DaxhKzpq/rf6PjbXXv7ZS/RPO+DeC4MueWjz2+1WYGFgnAcRQKuWqrw==
+X-Received: by 2002:ac2:5930:: with SMTP id v16mr295569lfi.34.1574095605353;
+        Mon, 18 Nov 2019 08:46:45 -0800 (PST)
+Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.gmail.com with ESMTPSA id d4sm8880307lfi.32.2019.11.18.08.46.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Nov 2019 08:46:44 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Nicholas Mc Guire <hofrat@osadl.org>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v5 01/16] dt-bindings: regulator: Document ROHM BD71282
- regulator bindings
-Message-ID: <20191118162502.GJ9761@sirena.org.uk>
-References: <cover.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
- <d29e0eb587b764f3ea77647392e45fac67bbd757.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 00/11] NVIDIA Tegra20 CPUFreq driver major update
+Date:   Mon, 18 Nov 2019 19:45:01 +0300
+Message-Id: <20191118164512.8676-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8tZVdKiiYitVG083"
-Content-Disposition: inline
-In-Reply-To: <d29e0eb587b764f3ea77647392e45fac67bbd757.1574059625.git.matti.vaittinen@fi.rohmeurope.com>
-X-Cookie: no maintenance:
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Hello,
 
---8tZVdKiiYitVG083
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series moves intermediate-clk handling from tegra20-cpufreq into
+tegra-clk driver. This allows us to switch to generic cpufreq-dt driver
+which brings voltage scaling, per-hardware OPPs and Tegra30 support out
+of the box. All boards need to adopt CPU OPPs in their device-trees in
+order to get cpufreq support.
 
-On Mon, Nov 18, 2019 at 08:53:57AM +0200, Matti Vaittinen wrote:
+Changelog:
 
-> +#Supported default DVS states:
-> +#buck		| run		| idle		| suspend	| lpsr
-> +#-----------------------------------------------------------------------=
------
-> +#1, 2, 6, and 7	| supported	| supported	| 	supported (*)
-> +#-----------------------------------------------------------------------=
------
-> +#3, 4, and 5	| 			supported (**)
-> +#-----------------------------------------------------------------------=
------
-> +#(*)  LPSR and SUSPEND states use same voltage but both states have own =
-enable /
-> +#     disable settings. Voltage 0 can be specified for a state to make r=
-egulator
-> +#     disabled on that state.
-> +#(**) All states use same voltage but have own enable / disable settings.
-> +#     Voltage 0 can be specified for a state to make regulator disabled =
-on that
-> +#     state.
-> +
-> +      rohm,dvs-runlvl-ctrl:
-> +        description: |
-> +          buck control is done based on run-level. Regulator is not
-> +          individually controllable. See ../mfd/rohm,bd71828-pmic.yaml f=
-or
-> +          how to specify run-level control mechanism. Only bucks 1, 2, 6
-> +          and 7 support this.
-> +        type: boolean
+v5: - The "Use generic cpufreq-dt driver (Tegra30 supported now)" patch
+      is separated now into two patches by factoring out the blacklisting
+      of cpufreq-dt-platdev into a standalone patch. This is done in a
+      response to request from Jon Hunter to fix the warning splats during
+      boot that are coming from OPP core because OPPs are unavailable. The
+      OPPs will become available once tegra20-cpufreq driver will be updated
+      to support the cpufreq-dt.
 
-I don't think I saw this having the effect on set_voltage() that I'd
-have expected in the driver? =20
+v4: - Updated CCLK diagram in the "Add custom CCLK implementation" patch.
 
-> +      rohm,dvs-runlevel-microvolts:
-> +        minimum: 0
-> +        maximum: 2000000
-> +        maxItems: 4
-> +        description:
-> +          Array of voltages for run-levels. First value is for run-level=
- 0,
-> +          second for run-level 1 etc. Microvolts.
+    - <linux/cpu.h> is now included in the "Use generic cpufreq-dt driver"
+      patch, for consistency.
 
-What's the mapping from array indexes to the names used elsewhere to
-support runlevels?
+    - Returned value of get_cpu_device() is now checked in the "Use generic
+      cpufreq-dt driver" patch, for consistency as well.
 
---8tZVdKiiYitVG083
-Content-Type: application/pgp-signature; name="signature.asc"
+v3: - The "Add custom CCLK implementation" patch was updated in accordance
+      to the comments from Peter De Schrijver. We will not use the clock
+      skipper.
 
------BEGIN PGP SIGNATURE-----
+    - Re added OPPs for T30 Beaver board because Thierry has that board ;)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl3Sxd0ACgkQJNaLcl1U
-h9CCTwf/XyyhpE5QABB0yoyT4n2JEfyYggDTfnGhWaILUDJBNnJ7inK77EpoLaGL
-ybxABHwiIONAnVzWxn+N2THjqO+fbukf7LO6DvYe8FCfoaIz8A6qgGm+P9IC1CWw
-xeWdZwGwWh63iRZ+fR422SlmmNtykgb4QHUdvwEZ9fqMhqPgRGP6YWl5RSuCnC8R
-oE9SPG2GlA/I4kadkV6O503q496yvB6hLiOgXWZ3yWJY2uYNYJvn0sNpd+k0iZK4
-H4iyzLTOIUiD3RpLgNTPrmYXn1D/wClO+l2FqRjpzgq7tDO4xVyEOY8bTH9MrFoD
-36C7jhTJbW2tecxGFK5eemuG+i4Vxg==
-=mxuN
------END PGP SIGNATURE-----
+    - Added r-b for the "DT binding" patch from Rob Herring.
 
---8tZVdKiiYitVG083--
+v2: - Kept modularity of the tegra20-cpufreq as was requested by Viresh Kumar
+      in a review comment to v1.
+
+    - Added acks from Viresh Kumar.
+
+    - Added tested-by from Nicolas Chauvet to the "trimslice" patch.
+      Nicolas told me on IRC that it works fine.
+
+    - Fixed compilation of the "Add custom CCLK implementation" patch. The
+      error happened because v1 was based on top of yet unreviewed/unapplied
+      patch "clk: tegra: divider: Support enable-bit for Super clocks".
+      Thanks to Peter Geis for reporting the problem.
+
+    - Replaced Tegra30 "beaver" board with "cardhu-a04" because turned out
+      that's what NVIDIA uses in the testing farm.
+
+Dmitry Osipenko (11):
+  clk: tegra: Add custom CCLK implementation
+  clk: tegra: pll: Add pre/post rate-change hooks
+  clk: tegra: cclk: Add helpers for handling PLLX rate changes
+  clk: tegra20: Use custom CCLK implementation
+  clk: tegra30: Use custom CCLK implementation
+  dt-bindings: cpufreq: Add binding for NVIDIA Tegra20/30
+  cpufreq: dt-platdev: Blacklist NVIDIA Tegra20 and Tegra30 SoCs
+  cpufreq: tegra20: Use generic cpufreq-dt driver (Tegra30 supported
+    now)
+  ARM: tegra: Create tegra20-cpufreq platform device on Tegra30
+  ARM: dts: tegra30: beaver: Set up voltage regulators for DVFS
+  ARM: dts: tegra30: beaver: Add CPU Operating Performance Points
+
+ .../cpufreq/nvidia,tegra20-cpufreq.txt        |  56 +++++
+ arch/arm/boot/dts/tegra30-beaver.dts          |  40 +++-
+ arch/arm/mach-tegra/tegra.c                   |   4 +
+ drivers/clk/tegra/Makefile                    |   1 +
+ drivers/clk/tegra/clk-pll.c                   |  12 +-
+ drivers/clk/tegra/clk-tegra-super-cclk.c      | 212 +++++++++++++++++
+ drivers/clk/tegra/clk-tegra20.c               |   7 +-
+ drivers/clk/tegra/clk-tegra30.c               |   6 +-
+ drivers/clk/tegra/clk.h                       |  19 +-
+ drivers/cpufreq/Kconfig.arm                   |   6 +-
+ drivers/cpufreq/cpufreq-dt-platdev.c          |   2 +
+ drivers/cpufreq/tegra20-cpufreq.c             | 217 +++++-------------
+ 12 files changed, 408 insertions(+), 174 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/nvidia,tegra20-cpufreq.txt
+ create mode 100644 drivers/clk/tegra/clk-tegra-super-cclk.c
+
+-- 
+2.23.0
+
