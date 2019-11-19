@@ -2,92 +2,92 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF3C1019B6
-	for <lists+linux-clk@lfdr.de>; Tue, 19 Nov 2019 07:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CA7101A06
+	for <lists+linux-clk@lfdr.de>; Tue, 19 Nov 2019 08:09:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727940AbfKSGvV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 19 Nov 2019 01:51:21 -0500
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:14361 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727926AbfKSGvV (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 19 Nov 2019 01:51:21 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dd390e50000>; Mon, 18 Nov 2019 22:51:17 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 18 Nov 2019 22:51:20 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 18 Nov 2019 22:51:20 -0800
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 19 Nov
- 2019 06:51:19 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Tue, 19 Nov 2019 06:51:19 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.175.254]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5dd390e60000>; Mon, 18 Nov 2019 22:51:19 -0800
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <digetx@gmail.com>,
-        <mperttunen@nvidia.com>, <gregkh@linuxfoundation.org>,
-        <sboyd@kernel.org>, <tglx@linutronix.de>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>
-CC:     <allison@lohutok.net>, <pdeschrijver@nvidia.com>,
-        <pgaikwad@nvidia.com>, <mturquette@baylibre.com>,
-        <horms+renesas@verge.net.au>, <Jisheng.Zhang@synaptics.com>,
-        <krzk@kernel.org>, <arnd@arndb.de>, <spujar@nvidia.com>,
-        <josephl@nvidia.com>, <vidyas@nvidia.com>,
-        <daniel.lezcano@linaro.org>, <mmaddireddy@nvidia.com>,
-        <markz@nvidia.com>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 17/17] ASoC: nau8825: change Tegra clk_out_2 provider from tegra_car to pmc
-Date:   Mon, 18 Nov 2019 22:50:34 -0800
-Message-ID: <1574146234-3871-18-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1574146234-3871-1-git-send-email-skomatineni@nvidia.com>
-References: <1574146234-3871-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
+        id S1726948AbfKSHJp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 19 Nov 2019 02:09:45 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:36035 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725873AbfKSHJp (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 19 Nov 2019 02:09:45 -0500
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1iWxdt-00041U-2G; Tue, 19 Nov 2019 08:09:41 +0100
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1iWxdp-0002Xl-Np; Tue, 19 Nov 2019 08:09:37 +0100
+Date:   Tue, 19 Nov 2019 08:09:37 +0100
+From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>, linux-imx@nxp.com,
+        kernel@pengutronix.de, Fabio Estevam <fabio.estevam@nxp.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Abel Vesa <abel.vesa@nxp.com>
+Subject: Re: [PATCH] clk: imx8m: Suppress bind attrs
+Message-ID: <20191119070937.bcvezx5mwkqqymfo@pengutronix.de>
+References: <9f2ac65bab203a943de947465d6534980585e144.1574116045.git.leonard.crestez@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1574146277; bh=qTvAji4nlSTfeFg4MTzoqwXKbO75ceIOy1l+c/njykQ=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=XSLyLdvjW2mBOG+rtLmBReEZEyHFu74qYEfUx/86ZVr4Z7mxoCqah+0ytTnGOHT9P
-         NzK4wssJlVWpWFB7z6OZx+jnhNc4J7OBdvSU3j8txYXtlGlBCb0K8AuQoI2Ty9PgZp
-         hfT2aWqNJDCkdXahGVafypYOyy9g4Ds9f3fJyaFxSICM0zIplcL3At6N0wIbY03EsR
-         I5+y/AmWggulqlU6Qv0LAdKI4df/0mzAOrPtjNDNYAas8zekqMIpYRrjhApo9/XtCa
-         6En1WflKGJ6cDuoCx0oKL7GM/r+QndchWXoLuhBLOR1r5JWlb+LYS/cLb+2E1YlsgS
-         PwSQOI5XhhiBw==
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9f2ac65bab203a943de947465d6534980585e144.1574116045.git.leonard.crestez@nxp.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Tegra clk_out_1, clk_out_2, and clk_out_3 are part of PMC block and pmc is
-the provider for these clocks.
+On Tue, Nov 19, 2019 at 12:28:16AM +0200, Leonard Crestez wrote:
+> The clock drivers on imx8m series are registered as platform devices and
+> this opens the possibility of reloading the driver at runtime:
+> 
+> This doesn't actually work: clocks are never removed and attempting to
+> bind again results in registration errors and a crash.
+> 
+> Fix this by explicitly suppressing bind attrs like several other
+> drivers.
+> 
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> 
+> ---
+> No cc: stable because because there are likely many other opportunities
+> to crash the system by echoing random stuff in sysfs as root.
+> 
+>  drivers/clk/imx/clk-imx8mm.c | 1 +
+>  drivers/clk/imx/clk-imx8mn.c | 1 +
+>  drivers/clk/imx/clk-imx8mq.c | 1 +
+>  3 files changed, 3 insertions(+)
+> 
+> diff --git a/drivers/clk/imx/clk-imx8mm.c b/drivers/clk/imx/clk-imx8mm.c
+> index 9246e89bb5fd..3cb75ad4270d 100644
+> --- a/drivers/clk/imx/clk-imx8mm.c
+> +++ b/drivers/clk/imx/clk-imx8mm.c
+> @@ -619,9 +619,10 @@ MODULE_DEVICE_TABLE(of, imx8mm_clk_of_match);
+>  
+>  static struct platform_driver imx8mm_clk_driver = {
+>  	.probe = imx8mm_clocks_probe,
+>  	.driver = {
+>  		.name = "imx8mm-ccm",
+> +		.suppress_bind_attrs = true,
 
-Update bindings document to use pmc as clock provider for clk_out_2 and
-change id to pmc clock id.
+Maybe add a comment similar to the motivation in the commit log here?
+(And of course in the other files, too.)
 
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- Documentation/devicetree/bindings/sound/nau8825.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Best regards
+Uwe
 
-diff --git a/Documentation/devicetree/bindings/sound/nau8825.txt b/Documentation/devicetree/bindings/sound/nau8825.txt
-index d16d96839bcb..487eb9574ee2 100644
---- a/Documentation/devicetree/bindings/sound/nau8825.txt
-+++ b/Documentation/devicetree/bindings/sound/nau8825.txt
-@@ -101,5 +101,5 @@ Example:
-       nuvoton,crosstalk-enable;
- 
-       clock-names = "mclk";
--      clocks = <&tegra_car TEGRA210_CLK_CLK_OUT_2>;
-+      clocks = <&pmc TEGRA_PMC_CLK_OUT_2>;
-   };
 -- 
-2.7.4
-
+Pengutronix e.K.                           | Uwe Kleine-König            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
