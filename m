@@ -2,136 +2,148 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF6D10675D
-	for <lists+linux-clk@lfdr.de>; Fri, 22 Nov 2019 08:57:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3FB106908
+	for <lists+linux-clk@lfdr.de>; Fri, 22 Nov 2019 10:45:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbfKVH5A (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 22 Nov 2019 02:57:00 -0500
-Received: from mail-eopbgr10044.outbound.protection.outlook.com ([40.107.1.44]:61262
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        id S1726994AbfKVJpt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 22 Nov 2019 04:45:49 -0500
+Received: from mail-eopbgr820044.outbound.protection.outlook.com ([40.107.82.44]:57703
+        "EHLO NAM01-SN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726018AbfKVH5A (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 22 Nov 2019 02:57:00 -0500
+        id S1727096AbfKVJpt (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 22 Nov 2019 04:45:49 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JFtNn3CdKNluBlyS3DdJFrDC0+ZgA2oGLrQt9ti+K/Xb/FHYFAzNVqgrGvn4oI/Ci+6g5vVF0I+F77RplwlF3Xvc4rT7N/Z+z7FquaEGv1t1gNVIg6rb9eavdqqPHoODrF6GHqbSFAAc55YM0kgzazdss/ppEa9H5okgyC8oQ1iLPcXGoc2H9eBg2gVtb8g4rtF8+1WJlC0YsrZhaRCwn9kYgRcSWSoGOOEQsLHt/u3dVJk37DI+N2pDGhj4SJW5NkuXxu2WHqF1RfpkXGM/rJidutwQHCm5WB4A1vb6fPsGMECIuyMsBcQ9rFKVJcUPfqTnddLv19177NOmzE34Eg==
+ b=Lqk13rmbQ3Ed5b8G1IhcayDtyB7PptUjucLzksEqcKtouXcTYc7gqjSaXXOtTLquPrzS533m1Woyq9uSYr/jH0yD+pbLPD1cgIlXRzNK3gPHsRL4+03bUvisYrTqbIQT+LmRoGaLiTaKmvUS62LaKlWazlv+H0fb1J8HnT9rbDSIAvi8ieQXJDKkysCkXumPJ4d6vfbCfnTMS6ssy7wzQNtlixRgAdiHFuGF7L/fuCca7bHAbiyPEDzzA42ESg4mw++UfghX/GTXzuQ+2LZyX/UnIpt44FSdH5Yc0uxYhQANOjLFNHENZ1KNNTBxTqBgYwOBINps/quUssAyaysPuA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Nzi+V84V86ZKbhw7QU9ksxpenLpTZvyv6Ll5XQlrEuA=;
- b=D+kDOZJnciUr23iDwNMwQXmWx402ZEQMrfznS3NF2KOYam7eLGUCo+440Y1L6c0Q3po+dKaGXizjEAGoys22KXzry1Ltty3BKk43fV/LQUuuqnecRMQ3i2Xy0txiPqp4bl+H5HbiwILVik6IStfDtvjXaG3SdornyynkGirI95rJzL/yosUSeRCFyCp8AuaW1E2M6oChpgz09+o2gXwgJ+DEoJkWXzbqjgIuoOzBCN49TXEt389msGGqzZosJ2mYdWmfJhBe20jQHsQ8j2orlyySKMyzSb09K8fz66sjZLZ6cUtzkoNCsDrIa8Mbcypryb5zFANUsW+6C8/eAFN3vg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ bh=5hjL7FUO2D73EHBOW35TqeOgZrf/JF28iZk56yrENfU=;
+ b=IiZ45kPULyyp/gF3XkrdJb18CfZp/9L9H61CxBYFijMjjlD/Fu/uua1MHxhii0vV8VUKzBezVfajWbq8oKPNtcf+C5RiifF2Y5RQScGjLHXk30t8pnzHqJFOoMQEF4Vqu0YyPlF62kb/VhFKgZkq50uWLGpg40qm6bgTmg/wLjoDT4+Q5pZik90qiVm+dCAXkBUs4GT8UvL5PmPijVtlHhkgGTdyCM4Y0Bna7HOR0TzFLppKdywNJOwjZi37CMo96vLiEGYRwXvQrn4SCwMdz3w5qWKdlDSJJR+SsesOSK5oaQHhYi1b6UYRyMzZ0ZQjcSpQgZIyDm33othfLHmvfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.60.83) smtp.rcpttodomain=lists.infradead.org
+ smtp.mailfrom=xilinx.com; dmarc=bestguesspass action=none
+ header.from=xilinx.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Nzi+V84V86ZKbhw7QU9ksxpenLpTZvyv6Ll5XQlrEuA=;
- b=e2dfL6iLaub887SrYZRS/s9IoAWrbcuxkdQZs4uGWzrd7V9KInWC3zPtuxWF9RMkgmb058DVFCqNHN+Oneem3zcUnynNkL8yThaWvqNHmmh17GcT4MpxaU12l4BmnO/eKt5zyzyoFoCkfCW6tW9H+XtO2NninWR0N18474TPfz8=
-Received: from AM0PR04MB4481.eurprd04.prod.outlook.com (52.135.147.15) by
- AM0PR04MB5937.eurprd04.prod.outlook.com (20.178.114.146) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2474.16; Fri, 22 Nov 2019 07:56:53 +0000
-Received: from AM0PR04MB4481.eurprd04.prod.outlook.com
- ([fe80::f16d:a26a:840:f97c]) by AM0PR04MB4481.eurprd04.prod.outlook.com
- ([fe80::f16d:a26a:840:f97c%4]) with mapi id 15.20.2474.021; Fri, 22 Nov 2019
- 07:56:53 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Abel Vesa <abel.vesa@nxp.com>, Aisheng Dong <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Jacky Bai <ping.bai@nxp.com>
-CC:     dl-linux-imx <linux-imx@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 0/9] clk: imx: Trivial cleanups for clk_hw based API
-Thread-Topic: [PATCH 0/9] clk: imx: Trivial cleanups for clk_hw based API
-Thread-Index: AQHVnuLWT6CchFdcV0y5WK5bSM6NyqeW1t9Q
-Date:   Fri, 22 Nov 2019 07:56:52 +0000
-Message-ID: <AM0PR04MB4481B956515863CC096852B888490@AM0PR04MB4481.eurprd04.prod.outlook.com>
-References: <1574172496-12987-1-git-send-email-abel.vesa@nxp.com>
-In-Reply-To: <1574172496-12987-1-git-send-email-abel.vesa@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peng.fan@nxp.com; 
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 5ca59c18-3495-40a1-1061-08d76f2189be
-x-ms-traffictypediagnostic: AM0PR04MB5937:|AM0PR04MB5937:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM0PR04MB593722CB849613A319CC475888490@AM0PR04MB5937.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1091;
-x-forefront-prvs: 02296943FF
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(396003)(366004)(39860400002)(376002)(136003)(199004)(189003)(3846002)(71200400001)(316002)(54906003)(110136005)(99286004)(256004)(305945005)(86362001)(74316002)(7736002)(55016002)(8936002)(9686003)(6436002)(6636002)(229853002)(71190400001)(6506007)(33656002)(7696005)(186003)(5660300002)(76116006)(44832011)(66476007)(64756008)(25786009)(66446008)(102836004)(66556008)(14454004)(66946007)(52536014)(478600001)(6246003)(446003)(11346002)(2906002)(6116002)(4326008)(81156014)(8676002)(76176011)(26005)(66066001)(81166006);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB5937;H:AM0PR04MB4481.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kXmfkc6z+G+BzjYbA11X5HKYI8c2iwSi3BRfhlDMZ59T8C0aHXm41Isk2L6vmatYwVbrjDmAl9R7nDSKTkrjENMhvdybA+Sq+op5cRpuj6kEmuB3Ow1YkoHutGAy+F9Ezzi9nLID5KCt34MSWJn93/KqcXwWVDW9hbqaeF6BQHQohudkpIMB5kpHx4u9qhra451vf92OASiTHtdQGiWIFpDkbtil7eQW1g80gejf68oKU3GrQuv4JsR43bCbuQMyoDe9+A2lWZbL+CVpJMDTDzdO49Hs7ZPw2VSZiByyrUIwGY9c72uZ+cuos7iTA5SBCvj9iZ9FPo1Rr7wZjPPSNFBGq5OcS4de18T9SWhyJRDQc3uzcz+xsnTu1ssYNfLxOCIyzUY699krFRIUu2C3vyMr3X8xU3hwTE/TqthoiqNbBLd9pHDtUKP6vv6Ls3FV
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ bh=5hjL7FUO2D73EHBOW35TqeOgZrf/JF28iZk56yrENfU=;
+ b=OM5SOJsf16gu31SIDGSvuP9Fs7p+UTae3pZ6Y8+tY7W4B2kh4YggHsUIGlIdWj/baWE288ptA6M0FSILpiLOU2GHfXGFBHN6t1F7gxMldgi5mI+WxKpk4Sd1+CSu1Wuyevhzk++BIV+AUc5BWXGH9YIO1lBkwFtTuBaIWKY+Q0g=
+Received: from MWHPR02CA0024.namprd02.prod.outlook.com (2603:10b6:300:4b::34)
+ by CY4PR0201MB3411.namprd02.prod.outlook.com (2603:10b6:910:93::34) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2451.23; Fri, 22 Nov
+ 2019 09:45:35 +0000
+Received: from BL2NAM02FT057.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e46::201) by MWHPR02CA0024.outlook.office365.com
+ (2603:10b6:300:4b::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2474.18 via Frontend
+ Transport; Fri, 22 Nov 2019 09:45:35 +0000
+Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; lists.infradead.org; dkim=none (message not signed)
+ header.d=none;lists.infradead.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ BL2NAM02FT057.mail.protection.outlook.com (10.152.77.36) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2474.17
+ via Frontend Transport; Fri, 22 Nov 2019 09:45:34 +0000
+Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
+        (envelope-from <rajan.vaja@xilinx.com>)
+        id 1iY5VO-0008SJ-An; Fri, 22 Nov 2019 01:45:34 -0800
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <rajan.vaja@xilinx.com>)
+        id 1iY5VJ-0002pC-8j; Fri, 22 Nov 2019 01:45:29 -0800
+Received: from xsj-pvapsmtp01 (xsj-pvapsmtp01.xilinx.com [149.199.38.66])
+        by xsj-smtp-dlp1.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id xAM9jLqS003465;
+        Fri, 22 Nov 2019 01:45:21 -0800
+Received: from [172.19.2.91] (helo=xsjjollys50.xilinx.com)
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <rajan.vaja@xilinx.com>)
+        id 1iY5VB-0002ob-DO; Fri, 22 Nov 2019 01:45:21 -0800
+From:   Rajan Vaja <rajan.vaja@xilinx.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, michal.simek@xilinx.com,
+        jolly.shah@xilinx.com, m.tretter@pengutronix.de,
+        gustavo@embeddedor.com, dan.carpenter@oracle.com,
+        tejas.patel@xilinx.com, nava.manne@xilinx.com, mdf@kernel.org
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Rajan Vaja <rajan.vaja@xilinx.com>
+Subject: [PATCH v2 0/6] clk: zynqmp: Extend and fix zynqmp clock driver
+Date:   Fri, 22 Nov 2019 01:43:28 -0800
+Message-Id: <1574415814-19797-1-git-send-email-rajan.vaja@xilinx.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1573564580-9006-1-git-send-email-rajan.vaja@xilinx.com>
+References: <1573564580-9006-1-git-send-email-rajan.vaja@xilinx.com>
+X-RCIS-Action: ALLOW
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(346002)(39860400002)(136003)(396003)(376002)(199004)(189003)(8936002)(47776003)(50226002)(81166006)(81156014)(8676002)(36386004)(106002)(26005)(48376002)(50466002)(70586007)(16586007)(9786002)(70206006)(356004)(7416002)(316002)(186003)(76176011)(2616005)(305945005)(36756003)(44832011)(426003)(336012)(446003)(11346002)(51416003)(5660300002)(2906002)(7696005)(107886003)(4326008)(478600001)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:CY4PR0201MB3411;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;A:1;MX:1;
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ca59c18-3495-40a1-1061-08d76f2189be
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2019 07:56:53.0163
+Content-Type: text/plain
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: aafb8ff4-1971-4cfb-8739-08d76f30b919
+X-MS-TrafficTypeDiagnostic: CY4PR0201MB3411:
+X-Microsoft-Antispam-PRVS: <CY4PR0201MB341125DB4F938857C600A300B7490@CY4PR0201MB3411.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:3826;
+X-Forefront-PRVS: 02296943FF
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Sg/HSNpYpBZqDAw1kV1/zpGZBUVSnr6I7bv/N7Vv7hF24sFyXELHMZUBJKfbcH7VzvQtQII3cLcarVKih4KPt+FHUDR410G6HoUh+OSUVzbNy1qo+H8Phd4476/naS4Dqicp+mN24OpIVlsBfb3o2KzRVJp1QSbQYfNUffQhRhqYrNPbGiBTB8jCpNCJmuNYJZ5nK+96/ix44Z6DXTa/kenW2IzpHLuxVr6P1j1dbyYyy97EpYOCNNki2UepW8A7Ni1rVw0gx2dqJuIzM62UGeFfnGFeU82wYKq74X75pm4ZJDZbXao1np4KOFDLegDVhxYJOmbQsgmpXQ4t7SPJHdrlDN4NQFzRXeQeu1m1hg/xlCrgrKj5HCUlvWDTn8Jx9XjRM9JNa/6Y/AKe9UCXmljFxqz6sAGAJ7a4Jq9PzBOddW51xul5mAZnGtoS0VmA
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2019 09:45:34.9044
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: caqGq/Gj7FoH1cKKfowZRu/eITf3d2bVfLPFvtg4cgMo5keXc6ZtvBHOlYbEALcA4O8KTOXHoBwC2YnOc2eMFQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5937
+X-MS-Exchange-CrossTenant-Network-Message-Id: aafb8ff4-1971-4cfb-8739-08d76f30b919
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR0201MB3411
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-> Subject: [PATCH 0/9] clk: imx: Trivial cleanups for clk_hw based API
->=20
-> These changes are cleanups for the clk_hw based API i.MX clock drivers
-> switch longterm effort. As mentioned in the commit messages, the end goal
-> here is to have all the i.MX drivers use clk_hw based API only.
->=20
-> I've put these all in a single patchset since they do not impact in any w=
-ay the
-> expected behavior of the drivers and they are quite obvious trivial ones.
-> More patches to follow for the older i.MX platforms but those might not b=
-e as
-> harmless (and trivial) as these ones.
+ZynqMP clock driver can be used for Versal platform also. Add support
+for Versal platform in ZynqMP clock driver.
 
-For the patchset,
+Also this patch series fixes divider calculation and adds support for get
+maximum divider, clock with CLK_DIVIDER_POWER_OF_TWO flag and warn user if
+clock users are more than allowed.
 
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
+Rajan Vaja (5):
+  dt-bindings: clock: Add bindings for versal clock driver
+  clk: zynqmp: Extend driver for versal
+  clk: zynqmp: Warn user if clock user are more than allowed
+  clk: zynqmp: Add support for get max divider
+  clk: zynqmp: Fix divider calculation
 
->=20
-> Abel Vesa (9):
->   clk: imx: Replace all the clk based helpers with macros
->   clk: imx: pllv1: Switch to clk_hw based API
->   clk: imx: pllv2: Switch to clk_hw based API
->   clk: imx: imx7ulp composite: Rename to show is clk_hw based
->   clk: imx: Rename sccg and frac pll register to suggest clk_hw
->   clk: imx: Rename the imx_clk_pllv4 to imply it's clk_hw based
->   clk: imx: Rename the imx_clk_pfdv2 to imply it's clk_hw based
->   clk: imx: Rename the imx_clk_divider_gate to imply it's clk_hw based
->   clk: imx7up: Rename the clks to hws
->=20
->  drivers/clk/imx/clk-composite-7ulp.c |   2 +-
->  drivers/clk/imx/clk-divider-gate.c   |   2 +-
->  drivers/clk/imx/clk-frac-pll.c       |   7 +-
->  drivers/clk/imx/clk-imx7ulp.c        | 182
-> +++++++++++++++++------------------
->  drivers/clk/imx/clk-pfdv2.c          |   2 +-
->  drivers/clk/imx/clk-pllv1.c          |  14 ++-
->  drivers/clk/imx/clk-pllv2.c          |  14 ++-
->  drivers/clk/imx/clk-pllv4.c          |   2 +-
->  drivers/clk/imx/clk-sccg-pll.c       |   4 +-
->  drivers/clk/imx/clk.h                |  69 +++++++------
->  10 files changed, 153 insertions(+), 145 deletions(-)
->=20
-> --
-> 2.7.4
+Tejas Patel (1):
+  clk: zynqmp: Add support for clock with CLK_DIVIDER_POWER_OF_TWO flag
+
+ .../devicetree/bindings/clock/xlnx,versal-clk.yaml |  64 +++++++++++
+ drivers/clk/zynqmp/clkc.c                          |   3 +-
+ drivers/clk/zynqmp/divider.c                       | 118 +++++++++++++++++++-
+ drivers/clk/zynqmp/pll.c                           |   6 +-
+ drivers/firmware/xilinx/zynqmp.c                   |   2 +
+ include/dt-bindings/clock/xlnx-versal-clk.h        | 123 +++++++++++++++++++++
+ include/linux/firmware/xlnx-zynqmp.h               |   2 +
+ 7 files changed, 310 insertions(+), 8 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
+ create mode 100644 include/dt-bindings/clock/xlnx-versal-clk.h
+
+-- 
+Changes in v2:
+ - [PATCH 7/7]: Removed patch #7 to fix clock frac to handle backward
+		compatibility. Will send this patch separately with
+		proper backward compatibility handling.
+ - Rest of the changes are mentioned in individual patches.
+-- 
+2.7.4
 
