@@ -2,218 +2,132 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A87BB106912
-	for <lists+linux-clk@lfdr.de>; Fri, 22 Nov 2019 10:46:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8C5B106981
+	for <lists+linux-clk@lfdr.de>; Fri, 22 Nov 2019 11:05:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727146AbfKVJqF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 22 Nov 2019 04:46:05 -0500
-Received: from mail-eopbgr800079.outbound.protection.outlook.com ([40.107.80.79]:32288
-        "EHLO NAM03-DM3-obe.outbound.protection.outlook.com"
+        id S1726634AbfKVKE6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 22 Nov 2019 05:04:58 -0500
+Received: from mail-eopbgr150085.outbound.protection.outlook.com ([40.107.15.85]:18563
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726802AbfKVJpj (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 22 Nov 2019 04:45:39 -0500
+        id S1726417AbfKVKE5 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 22 Nov 2019 05:04:57 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QREfbtL1r4ZC19dYer52NhlmgszAeYKHFOv6s263rsUPZ61hbXCGOC/3v0SFCWp8Y1NTCswEUOpBefPr3l4ZVubxx3Dc3pPIwmeqKTB9iEWEhzFgWd0LlpmaKPwmEcxzzt3lMJBSdab+2wuQPRLj+pt9UeliFXokuoyNXl+eepZ31WX/RK6+ewBbRAMz6Sh00CivB3ekLB+h0/OeqGDHZnadPM765WF4CA+mRKL31DNwYLFkFzH9/0rrSjk2+eet2JcQxuSSzrGG5MkFEDHR3/7WeMLIsWN9d/mNRejRN3rSce9umukiOZjQyGJBNr5RUAxKG0QdMVfDza9cJ8ODtw==
+ b=ZQDht7dRWtYC/Rq6o6cEZZrUBioR+Rb5fgEzyw+lEELNJ5AUKxUsM9B0Jn3pE2Zi2plKFQb+u0E7j9Gv3H4tB42XwWX31rnko/pE/m1CBGPsiKm1K50weSCSi0ra1mXN7UuuvqGgu0rXg3GTYFVmIHG26XMLVYrCwmdBMZypFmudwhWVd4EFGSvHHXfCtbD4BwhOZ+BJosTes4AUh0TwalunDXdkZQvbwPsRFdEh31KP4qY5p/8jnrp3AeOS8vN+NxHGZ0PjCUng2SqbAWcBL8X5IiWJln08TRPuojVk3IL4HCrKeTYDKlYGpqsonQ7rhIO1/+t494yfgkFd6hpHWA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=My5GEXzjq+YdSFxcfZdDk/JzMNz28rCI+oq70GAKch8=;
- b=QWMe2iJFTxiZy+yAlRggIpsqJFgLgBlbulDp4yWwPdWfF1HLqqdrpAl+rcF++ihbc2Ct3RrMqdt+XP2hl2igIJAYEFWwZIlot3R1nZB3ZTW8KYKJgbalBPo3A2KiF1qGgLrxu1so3Wt0HPjqduXFSBDZR5i+TwVG4xQeqE3+Omh3gGVFXSxRvSHkPeUlo57nh5CnBzEQasruiAHjoxDQnTDaaoL4epK8PYeSj4DvN8h3fHWzvdTCpPyLVHuZ96btj0UxUMAolazZMadF4fyZ/Rc3qeFfs3TSWurGL/SxMYJ7d2krVE97lmWKhdKeKwCQpTh+HTZOVSwvvm+b8kybfQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.60.83) smtp.rcpttodomain=lists.infradead.org
- smtp.mailfrom=xilinx.com; dmarc=bestguesspass action=none
- header.from=xilinx.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ bh=nasq4Kzwbp+1Bz7M3ImYiiVEpr7ppoY09uVt22CM3HI=;
+ b=inO15Zbqf1gwR9mR0fG1r3T/fy+lqvnn/tUFtHDxWu80bzUFj1vHfdvVkgBtk9YsS2KNh2ScFzPkacW5u2VHYCPUk0CGj1Qf3UqwybNth2UJ1gRioLI6AwSNlnPToFJg5Vpqcs2c3zJ5ykXLODcfgMoW+O1qdQGlEeTsA1G9lAcXnTaNIkwHYoyHPgBRjwbhy8AoK1wMOdNZY7XKgyKOH6UPI+NJvgsFGeVGKFYQ2P8bYL44M4Jlol8q47k84TdR8vsoCXmECMyQknnkFrW1VpXrLQrDbnZPUMZuQX3D932CszvIIPSrBMJDFQzTtJrZ1kwOWMiPLEDJAo4edjRTSw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=My5GEXzjq+YdSFxcfZdDk/JzMNz28rCI+oq70GAKch8=;
- b=ENayHrXVe+CUDC+FARwK+8OEc4iJ8+4H6B01ym+IFAbS8O6VQVdQby4mRpspu3rfqPT4tLrLG23F27rU14SCKLVgZ6bkJlA83KbGGi5HhuZx9bSS6WBPQ7HYQ+mMc+EqZyI1YQweUC3fX701i8QnjhMDUP5BRL81Srt+2ayKGus=
-Received: from MN2PR02CA0031.namprd02.prod.outlook.com (2603:10b6:208:fc::44)
- by DM5PR0201MB3413.namprd02.prod.outlook.com (2603:10b6:4:7d::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2474.16; Fri, 22 Nov
- 2019 09:45:35 +0000
-Received: from SN1NAM02FT049.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e44::202) by MN2PR02CA0031.outlook.office365.com
- (2603:10b6:208:fc::44) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2474.18 via Frontend
- Transport; Fri, 22 Nov 2019 09:45:35 +0000
-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
- smtp.mailfrom=xilinx.com; lists.infradead.org; dkim=none (message not signed)
- header.d=none;lists.infradead.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- SN1NAM02FT049.mail.protection.outlook.com (10.152.72.166) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2474.17
- via Frontend Transport; Fri, 22 Nov 2019 09:45:34 +0000
-Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
-        (envelope-from <rajan.vaja@xilinx.com>)
-        id 1iY5VO-0008SL-Dq; Fri, 22 Nov 2019 01:45:34 -0800
-Received: from [127.0.0.1] (helo=localhost)
-        by xsj-pvapsmtp01 with smtp (Exim 4.63)
-        (envelope-from <rajan.vaja@xilinx.com>)
-        id 1iY5VJ-0002pC-Bt; Fri, 22 Nov 2019 01:45:29 -0800
-Received: from xsj-pvapsmtp01 (xsj-smtp1.xilinx.com [149.199.38.66])
-        by xsj-smtp-dlp1.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id xAM9jLiW003475;
-        Fri, 22 Nov 2019 01:45:22 -0800
-Received: from [172.19.2.91] (helo=xsjjollys50.xilinx.com)
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <rajan.vaja@xilinx.com>)
-        id 1iY5VB-0002ob-PK; Fri, 22 Nov 2019 01:45:21 -0800
-From:   Rajan Vaja <rajan.vaja@xilinx.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, michal.simek@xilinx.com,
-        jolly.shah@xilinx.com, m.tretter@pengutronix.de,
-        gustavo@embeddedor.com, dan.carpenter@oracle.com,
-        tejas.patel@xilinx.com, nava.manne@xilinx.com, mdf@kernel.org
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
-        Rajan Vaja <rajan.vaja@xilinx.com>
-Subject: [PATCH v2 6/6] clk: zynqmp: Add support for clock with CLK_DIVIDER_POWER_OF_TWO flag
-Date:   Fri, 22 Nov 2019 01:43:34 -0800
-Message-Id: <1574415814-19797-7-git-send-email-rajan.vaja@xilinx.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1574415814-19797-1-git-send-email-rajan.vaja@xilinx.com>
-References: <1573564580-9006-1-git-send-email-rajan.vaja@xilinx.com>
- <1574415814-19797-1-git-send-email-rajan.vaja@xilinx.com>
-X-RCIS-Action: ALLOW
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-User-Approved-Sender: Yes;Yes
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(346002)(396003)(39860400002)(136003)(376002)(189003)(199004)(26005)(6666004)(356004)(478600001)(54906003)(36756003)(2906002)(44832011)(47776003)(11346002)(446003)(70206006)(48376002)(70586007)(2616005)(8676002)(8936002)(81166006)(50226002)(336012)(9786002)(81156014)(426003)(50466002)(4326008)(76176011)(7416002)(106002)(305945005)(36386004)(5660300002)(107886003)(16586007)(186003)(7696005)(316002)(51416003)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR0201MB3413;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;MX:1;A:1;
+ bh=nasq4Kzwbp+1Bz7M3ImYiiVEpr7ppoY09uVt22CM3HI=;
+ b=PiBwbXUNH929Hs6RqkvhdDQBN/Eve2Quzmr4W/J7yZ8Gi5eMxBwP5AsuNjJWu10baGDptd8llNYIf5jjWBqP5iDVRjAbhtS5K4RVVtXPk8ub8vYL+OqxLD9TuWp6EvuP1us3jfcwqd8SMqGWqlUPdfUUMijXYv9Zdye7djuyMNA=
+Received: from AM0PR04MB4481.eurprd04.prod.outlook.com (52.135.147.15) by
+ AM0PR04MB4594.eurprd04.prod.outlook.com (52.135.149.20) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2451.30; Fri, 22 Nov 2019 10:04:53 +0000
+Received: from AM0PR04MB4481.eurprd04.prod.outlook.com
+ ([fe80::f16d:a26a:840:f97c]) by AM0PR04MB4481.eurprd04.prod.outlook.com
+ ([fe80::f16d:a26a:840:f97c%4]) with mapi id 15.20.2474.021; Fri, 22 Nov 2019
+ 10:04:53 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     "sboyd@kernel.org" <sboyd@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        Alice Guo <alice.guo@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: [PATCH V2] clk: imx: clk-imx7ulp: Add missing sentinel of
+ ulp_div_table
+Thread-Topic: [PATCH V2] clk: imx: clk-imx7ulp: Add missing sentinel of
+ ulp_div_table
+Thread-Index: AQHVoRxJ5RRsuDSV80CDoqBvpvLXvA==
+Date:   Fri, 22 Nov 2019 10:04:53 +0000
+Message-ID: <1574416982-3467-1-git-send-email-peng.fan@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.7.4
+x-clientproxiedby: HK2PR02CA0201.apcprd02.prod.outlook.com
+ (2603:1096:201:20::13) To AM0PR04MB4481.eurprd04.prod.outlook.com
+ (2603:10a6:208:70::15)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peng.fan@nxp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 8573dbcd-70a8-40c0-e920-08d76f336b76
+x-ms-traffictypediagnostic: AM0PR04MB4594:|AM0PR04MB4594:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR04MB459471BE5692C620F63D374F88490@AM0PR04MB4594.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:873;
+x-forefront-prvs: 02296943FF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(396003)(136003)(346002)(366004)(39860400002)(199004)(189003)(81166006)(6636002)(256004)(14444005)(2501003)(52116002)(4326008)(305945005)(5660300002)(110136005)(2906002)(71200400001)(81156014)(86362001)(66946007)(44832011)(478600001)(102836004)(3846002)(66446008)(71190400001)(6116002)(2616005)(14454004)(26005)(8676002)(386003)(6506007)(8936002)(50226002)(186003)(54906003)(2201001)(316002)(66066001)(25786009)(64756008)(66476007)(6436002)(66556008)(7736002)(4744005)(6512007)(36756003)(6486002)(99286004);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB4594;H:AM0PR04MB4481.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0WemzPL8aN9nSrZ/N6O7KabnSk75+w8tfys0FmDF7xq05VqsqU1tiK3zqsOsBMji03xNi/7psbqERd3f6C4YdLFHZ0UqSPRHQtCY1Nhou3BUrjc386atgzB5IcsaMn17WDsAqoBXq9/cOxzLH9PGRiwlFFSWjLuDobMJ5UNSb20qC4YcpX9pUKaOAe4sf0Lvu/lLVrByjy2cRIlic/Aa2HyEvGg97Z2w4r1lKwYybNpTXwmJk8ZZK5qgoZN6IcQ0d7TPOlJpMAzE+5vGlPzqa20I0RPM7LxRjnnsUg6NGw7VziHvTOyxKHdSRSWauI0xlegSCn5WQsXi65QLadsVr9WfVEG9pt7AUW83d5/BP7Qz+F2MHv7lUTxGuVk+RE1LQFT1g1fd4ovH2kbwBnJUFgwQHQ7kYxss7JgUJohamOMJI/gdToga4dt5OkSiIXii
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b7e8aea9-e3fc-4a8f-fc66-08d76f30b90b
-X-MS-TrafficTypeDiagnostic: DM5PR0201MB3413:
-X-Microsoft-Antispam-PRVS: <DM5PR0201MB3413B5D9B9F88BD1CF3D0832B7490@DM5PR0201MB3413.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:1186;
-X-Forefront-PRVS: 02296943FF
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wJiay6tkmJr1pNWMFXn85jWOt6mdL+ZLAnBydbVQk21YkTp0hmA7XU3zo+7MF0BV1ogZWHy1fDNpbbp6wPBcWCBcM/oDBgYLui4R9s5GZ2KGq0qMPK6JsvQC+SQiLoC6xyOZ6n8i+E44iixhSpr4AJYhvLHry4Daznw0aAe9B0Jjx8jGl+YkzsXU3SLQyLT3W01UN4pGCnfTWhzRAqlJk1eE5xp7tgalsOeZQrXrIBf/nn7VoMbm2y+wdTyHKC77z/ZugnCwJ0WoB5Iv3cQBbwpEL4/Z7XZMRDoRkYLRAlVG08eFmN5hnRD2ztAgCeP/UY9XrYUsxekaA7lfM3Cilb5i0BlVl7O48b21OSIo+Tb/WOYLm59XlfLV0O5v4j9d6sIyVdaaWESoRIH3E1mNJBGQvgQ6VKXtL/tsVL3t1CyhFjneRNSjL1q1B/IufI4o
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Nov 2019 09:45:34.8427
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8573dbcd-70a8-40c0-e920-08d76f336b76
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2019 10:04:53.6702
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7e8aea9-e3fc-4a8f-fc66-08d76f30b90b
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR0201MB3413
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mwALuZk3u1VELHZEj/rJLcBeY1KCL6mEoEhroi534XX6mZBegc5aYe9MLQ4J0yaXklIfOG6rX3BY6JnWmBbN2g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4594
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Tejas Patel <tejas.patel@xilinx.com>
+From: Peng Fan <peng.fan@nxp.com>
 
-Existing clock divider functions is not checking for
-base of divider. So, if any clock divider is power of 2
-then clock rate calculation will be wrong.
+There should be a sentinel of ulp_div_table, otherwise _get_table_div
+may access data out of the array.
 
-Add support to calculate divider value for the clocks
-with CLK_DIVIDER_POWER_OF_TWO flag.
-
-Signed-off-by: Tejas Patel <tejas.patel@xilinx.com>
-Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Signed-off-by: Rajan Vaja <rajan.vaja@xilinx.com>
+Fixes: b1260067ac3d ("clk: imx: add imx7ulp clk driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
 ---
- drivers/clk/zynqmp/divider.c | 36 +++++++++++++++++++++++++++++++-----
- 1 file changed, 31 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clk/zynqmp/divider.c b/drivers/clk/zynqmp/divider.c
-index e0d49cc..1d5a416 100644
---- a/drivers/clk/zynqmp/divider.c
-+++ b/drivers/clk/zynqmp/divider.c
-@@ -2,7 +2,7 @@
- /*
-  * Zynq UltraScale+ MPSoC Divider support
-  *
-- *  Copyright (C) 2016-2018 Xilinx
-+ *  Copyright (C) 2016-2019 Xilinx
-  *
-  * Adjustable divider clock implementation
-  */
-@@ -45,9 +45,26 @@ struct zynqmp_clk_divider {
+V2:
+ cc stable mail list
+
+ drivers/clk/imx/clk-imx7ulp.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/clk/imx/clk-imx7ulp.c b/drivers/clk/imx/clk-imx7ulp.c
+index 3fdf3d494f0a..281191b55b3a 100644
+--- a/drivers/clk/imx/clk-imx7ulp.c
++++ b/drivers/clk/imx/clk-imx7ulp.c
+@@ -40,6 +40,7 @@ static const struct clk_div_table ulp_div_table[] =3D {
+ 	{ .val =3D 5, .div =3D 16, },
+ 	{ .val =3D 6, .div =3D 32, },
+ 	{ .val =3D 7, .div =3D 64, },
++	{ /* sentinel */ },
  };
- 
- static inline int zynqmp_divider_get_val(unsigned long parent_rate,
--					 unsigned long rate)
-+					 unsigned long rate, u16 flags)
- {
--	return DIV_ROUND_CLOSEST(parent_rate, rate);
-+	int up, down;
-+	unsigned long up_rate, down_rate;
-+
-+	if (flags & CLK_DIVIDER_POWER_OF_TWO) {
-+		up = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
-+		down = DIV_ROUND_DOWN_ULL((u64)parent_rate, rate);
-+
-+		up = __roundup_pow_of_two(up);
-+		down = __rounddown_pow_of_two(down);
-+
-+		up_rate = DIV_ROUND_UP_ULL((u64)parent_rate, up);
-+		down_rate = DIV_ROUND_UP_ULL((u64)parent_rate, down);
-+
-+		return (rate - up_rate) <= (down_rate - rate) ? up : down;
-+
-+	} else {
-+		return DIV_ROUND_CLOSEST(parent_rate, rate);
-+	}
- }
- 
- /**
-@@ -79,6 +96,9 @@ static unsigned long zynqmp_clk_divider_recalc_rate(struct clk_hw *hw,
- 	else
- 		value = div >> 16;
- 
-+	if (divider->flags & CLK_DIVIDER_POWER_OF_TWO)
-+		value = 1 << value;
-+
- 	if (!value) {
- 		WARN(!(divider->flags & CLK_DIVIDER_ALLOW_ZERO),
- 		     "%s: Zero divisor and CLK_DIVIDER_ALLOW_ZERO not set\n",
-@@ -157,10 +177,13 @@ static long zynqmp_clk_divider_round_rate(struct clk_hw *hw,
- 		else
- 			bestdiv  = bestdiv >> 16;
- 
-+		if (divider->flags & CLK_DIVIDER_POWER_OF_TWO)
-+			bestdiv = 1 << bestdiv;
-+
- 		return DIV_ROUND_UP_ULL((u64)*prate, bestdiv);
- 	}
- 
--	bestdiv = zynqmp_divider_get_val(*prate, rate);
-+	bestdiv = zynqmp_divider_get_val(*prate, rate, divider->flags);
- 
- 	/*
- 	 * In case of two divisors, compute best divider values and return
-@@ -198,7 +221,7 @@ static int zynqmp_clk_divider_set_rate(struct clk_hw *hw, unsigned long rate,
- 	int ret;
- 	const struct zynqmp_eemi_ops *eemi_ops = zynqmp_pm_get_eemi_ops();
- 
--	value = zynqmp_divider_get_val(parent_rate, rate);
-+	value = zynqmp_divider_get_val(parent_rate, rate, divider->flags);
- 	if (div_type == TYPE_DIV1) {
- 		div = value & 0xFFFF;
- 		div |= 0xffff << 16;
-@@ -207,6 +230,9 @@ static int zynqmp_clk_divider_set_rate(struct clk_hw *hw, unsigned long rate,
- 		div |= value << 16;
- 	}
- 
-+	if (divider->flags & CLK_DIVIDER_POWER_OF_TWO)
-+		div = __ffs(div);
-+
- 	ret = eemi_ops->clock_setdivider(clk_id, div);
- 
- 	if (ret)
--- 
-2.7.4
+=20
+ static const int pcc2_uart_clk_ids[] __initconst =3D {
+--=20
+2.16.4
 
