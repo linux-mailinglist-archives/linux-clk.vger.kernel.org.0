@@ -2,99 +2,73 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D23108ED6
-	for <lists+linux-clk@lfdr.de>; Mon, 25 Nov 2019 14:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C03EA108E85
+	for <lists+linux-clk@lfdr.de>; Mon, 25 Nov 2019 14:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727497AbfKYN0V (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 25 Nov 2019 08:26:21 -0500
-Received: from aliyun-cloud.icoremail.net ([47.90.73.12]:18180 "HELO
-        aliyun-sdnproxy-4.icoremail.net" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with SMTP id S1727393AbfKYN0V (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 25 Nov 2019 08:26:21 -0500
-X-Greylist: delayed 1203 seconds by postgrey-1.27 at vger.kernel.org; Mon, 25 Nov 2019 08:26:19 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=buaa.edu.cn; s=buaa; h=Received:From:To:Cc:Subject:Date:
-        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=UP7iGuZyWy
-        7rUnb0BqANyOczNI15OI3BvmT6wTeNlTs=; b=eXZ2QhdAr0Eyh94pU+Rqp9+x7t
-        2zeecmS/wKv+KbWTbb8a6UEeVVp4jNp9wE8FTl18CWzy8edd0vItJ3seI6IeoUhO
-        MN1Fklnl1NIFUTPZGekVfxgQsWOdRnLnpwos6+z8CecGCwKsKRRq+nbdQK+Thai5
-        hZCVHNE/da2va4hEI=
-Received: from localhost.localdomain (unknown [10.136.208.163])
-        by coremail-app1 (Coremail) with SMTP id RYCowACXebb6z9tdwLfmAQ--.36688S2;
-        Mon, 25 Nov 2019 20:58:37 +0800 (CST)
-From:   Yunhao Tian <18373444@buaa.edu.cn>
-Cc:     Icenowy Zheng <icenowy@aosc.io>,
-        Yunhao Tian <18373444@buaa.edu.cn>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
+        id S1725862AbfKYNKX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 25 Nov 2019 08:10:23 -0500
+Received: from ns.iliad.fr ([212.27.33.1]:53878 "EHLO ns.iliad.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725823AbfKYNKX (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 25 Nov 2019 08:10:23 -0500
+Received: from ns.iliad.fr (localhost [127.0.0.1])
+        by ns.iliad.fr (Postfix) with ESMTP id C272920C1C;
+        Mon, 25 Nov 2019 14:10:21 +0100 (CET)
+Received: from [192.168.108.51] (freebox.vlq16.iliad.fr [213.36.7.13])
+        by ns.iliad.fr (Postfix) with ESMTP id ABD03206AB;
+        Mon, 25 Nov 2019 14:10:21 +0100 (CET)
+Subject: Re: [PATCH v1] clk: Add devm_clk_{prepare,enable,prepare_enable}
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: sunxi-ng: v3s: Fix incorrect number of hw_clks.
-Date:   Mon, 25 Nov 2019 20:58:32 +0800
-Message-Id: <20191125125833.8023-1-18373444@buaa.edu.cn>
-X-Mailer: git-send-email 2.24.0
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <1d7a1b3b-e9bf-1d80-609d-a9c0c932b15a@free.fr>
+ <34e32662-c909-9eb3-e561-3274ad0bf3cc@free.fr>
+ <20191125125530.GP25745@shell.armlinux.org.uk>
+From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
+Message-ID: <c7414301-da0d-cd4d-237d-34277f5ee1d2@free.fr>
+Date:   Mon, 25 Nov 2019 14:10:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: RYCowACXebb6z9tdwLfmAQ--.36688S2
-X-Coremail-Antispam: 1UD129KBjvJXoWrZr1xZFy7Ar4fKFWxWr43Awb_yoW8Jr47pF
-        W7J34FqF1rJ3Wagay3Ar1xCFy5ua4Y9FyUCrWUA3y5Zrn7JF1rt3Wjy34DAFykCrWfZr1Y
-        yrnrZry8CF4DZa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24V
-        AvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
-        McIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
-        v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVCm
-        -wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26F1DJr1UJwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylx4CE04Ijxs4lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
-        s7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r
-        4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRCg4fUUUUU
-X-CM-SenderInfo: yrytljauuuquxxddhvlgxou0/
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20191125125530.GP25745@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Mon Nov 25 14:10:21 2019 +0100 (CET)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The hws field of sun8i_v3s_hw_clks has only 74
-members. However, the number specified by CLK_NUMBER
-is 77 (= CLK_I2S0 + 1). This leads to runtime segmentation
-fault that is not always reproducible.
+On 25/11/2019 13:55, Russell King - ARM Linux admin wrote:
 
-This patch fixes the problem by specifying correct clock number.
+> It's also worth reading https://lore.kernel.org/patchwork/patch/755667/
+> and considering whether you really are using the clk_prepare() and
+> clk_enable() APIs correctly.  Wanting these devm functions suggests
+> you aren't...
 
-Signed-off-by: Yunhao Tian <18373444@buaa.edu.cn>
----
- drivers/clk/sunxi-ng/ccu-sun8i-v3s.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+In that older thread, you wrote:
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
-index 5c779eec454b..0e36ca3bf3d5 100644
---- a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
-@@ -618,7 +618,7 @@ static struct clk_hw_onecell_data sun8i_v3s_hw_clks = {
- 		[CLK_MBUS]		= &mbus_clk.common.hw,
- 		[CLK_MIPI_CSI]		= &mipi_csi_clk.common.hw,
- 	},
--	.num	= CLK_NUMBER,
-+	.num	= CLK_PLL_DDR1 + 1,
- };
- 
- static struct clk_hw_onecell_data sun8i_v3_hw_clks = {
-@@ -700,7 +700,7 @@ static struct clk_hw_onecell_data sun8i_v3_hw_clks = {
- 		[CLK_MBUS]		= &mbus_clk.common.hw,
- 		[CLK_MIPI_CSI]		= &mipi_csi_clk.common.hw,
- 	},
--	.num	= CLK_NUMBER,
-+	.num	= CLK_I2S0 + 1,
- };
- 
- static struct ccu_reset_map sun8i_v3s_ccu_resets[] = {
--- 
-2.24.0
+> If you take the view that trying to keep clocks disabled is a good way
+> to save power, then you'd have the clk_prepare() or maybe
+> clk_prepare_enable() in your run-time PM resume handler, or maybe even
+> deeper in the driver... the original design goal of the clk API was to
+> allow power saving and clock control.
+> 
+> With that in mind, getting and enabling the clock together in the
+> probe function didn't make sense.
+> 
+> I feel that aspect has been somewhat lost, and people now regard much
+> of the clk API as a bit of a probe-time nuisance.
 
+In the few drivers I've written, I call clk_prepare_enable() at probe.
+
+And since clk_prepare_enable() is the only non-devm function in probe,
+I need either a remove function, or an explicit registration step.
+
+You seem to be saying I'm using the clk API in the wrong way?
+
+Regards.
