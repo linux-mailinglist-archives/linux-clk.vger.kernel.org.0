@@ -2,92 +2,100 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B65610A9AC
-	for <lists+linux-clk@lfdr.de>; Wed, 27 Nov 2019 06:01:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D22C10AA3B
+	for <lists+linux-clk@lfdr.de>; Wed, 27 Nov 2019 06:35:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727340AbfK0E7u (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 26 Nov 2019 23:59:50 -0500
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:17880 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727333AbfK0E7t (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 26 Nov 2019 23:59:49 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dde02c70000>; Tue, 26 Nov 2019 20:59:51 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 26 Nov 2019 20:59:47 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 26 Nov 2019 20:59:47 -0800
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 27 Nov
- 2019 04:59:47 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 27 Nov 2019 04:59:47 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.169.149]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5dde02c20000>; Tue, 26 Nov 2019 20:59:47 -0800
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <digetx@gmail.com>,
-        <mperttunen@nvidia.com>, <gregkh@linuxfoundation.org>,
-        <sboyd@kernel.org>, <tglx@linutronix.de>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>
-CC:     <allison@lohutok.net>, <pdeschrijver@nvidia.com>,
-        <pgaikwad@nvidia.com>, <mturquette@baylibre.com>,
-        <horms+renesas@verge.net.au>, <Jisheng.Zhang@synaptics.com>,
-        <krzk@kernel.org>, <arnd@arndb.de>, <spujar@nvidia.com>,
-        <josephl@nvidia.com>, <vidyas@nvidia.com>,
-        <daniel.lezcano@linaro.org>, <mmaddireddy@nvidia.com>,
-        <markz@nvidia.com>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 11/11] ASoC: nau8825: change Tegra clk_out_2 provider from tegra_car to pmc
-Date:   Tue, 26 Nov 2019 20:59:33 -0800
-Message-ID: <1574830773-14892-12-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1574830773-14892-1-git-send-email-skomatineni@nvidia.com>
-References: <1574830773-14892-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
+        id S1726026AbfK0FfY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 27 Nov 2019 00:35:24 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:35484 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725827AbfK0FfY (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 27 Nov 2019 00:35:24 -0500
+Received: by mail-ed1-f67.google.com with SMTP id f8so3337188edv.2;
+        Tue, 26 Nov 2019 21:35:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=49Oa8wYum3/ZSF68b6FEDAYGeeDj1B7QQTfs5X12P5o=;
+        b=orG7A/Ag4Mpz194IxVqBueUmwn4kcBrVHzZgSJ1Ge8qVVvCffnV7hSLi39OuHvPBWq
+         5ECqbBft5gcDI7jRMhhdbklzC7Q20ek16p74SljfvnVM0pRLFa0LYwP5d2F98xfdS2BS
+         eOlS5WXgMWStnv0CDrBHQOmZbOdnY81OgeQDtxqwzOTtvycIlqOm1dkgBa6xMZ5QDU3a
+         63GeMux9odh+61DP5cmXh73oH6n2gA8aFMnTlXFIOKRhZ3JQg6QyI1Sea6MacTn813Bl
+         BOjWQlQGraKo9jkwyV7qEgq/BEcbObhGOTBvYAxMj4yrg1cArNCMiAJZoB8XB60Xebva
+         G1qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=49Oa8wYum3/ZSF68b6FEDAYGeeDj1B7QQTfs5X12P5o=;
+        b=dyk4vPDYNRSaKfUDVlisngitbSZZjVojgO9bvmNifkMoChrRvThNQod4dTqj0B3lFz
+         aBDfC/rxiXxHl7gRiFJFgjT+ADTzuR4AfuOhX2O42AxEvfryeeVCoBOrsERv4MrWt4dp
+         71FhA59fCHwJuJtd03EXzbPmwqdyk3ZCjfJBaXCmMI1v0Q6TJpjXxzsmXYcH8qkjdUGK
+         kErdWXf37q0GerxHE63qHM1LVFrIi4OhwGN5Fx9+wFujPr5Fu3etD8EYdWAdAcXgoB3x
+         bFoITrVGFjgY7HKbeoset00iJf2m0ZJghnfFMUND+Ki959KQPR+Ka2qmCgggVcJ8LmLz
+         tMyA==
+X-Gm-Message-State: APjAAAUF4OHGZPT13SG7lh09wKPgXybT1QltjrZozw/5D1zfydEdTZ0d
+        r2EecnOdw/ee8kLwGvaEJtt8JBzrWaUenDcIY5c=
+X-Google-Smtp-Source: APXvYqwQ8AbGM+kwuh2SxRqlpxfz20rbamxx7D0GEgKxBjcYRfCoJeN0AJA3JWgCFCweR06OFu5kduxXacMMGLAhPMI=
+X-Received: by 2002:a50:a2e5:: with SMTP id 92mr30508816edm.195.1574832922697;
+ Tue, 26 Nov 2019 21:35:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1574830791; bh=qTvAji4nlSTfeFg4MTzoqwXKbO75ceIOy1l+c/njykQ=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=DX9p2d4BWmAjL6PqXaAC5V0B7ZJSrOBVEfVYpIaH6fFGwVc4/MGUh0FR8doMo8Pv9
-         efq5hILPLn0AoXC4W3eorlApWwRbltVOMTCZNRdMNblcYfMe+ei8anssrs6aD7JYGp
-         9jXD+pPNUdJGfH2ONYbQHfpKVK28z0XeHtdlCO+6769wHlxBjeffcDD9L4ZjcWJXep
-         b5EO2XZBetawG4l0TI/75+8uI621hJEQK9aa/opQiISsvTUFqiMlJ6I41OVjqWgDnG
-         +dbxbv/jrEa0csUlpkY2ikavgb2zrhnIvOpBRsfB/samUV/QWiL4ZkTIfb3xXnmU9L
-         Hn5uQ10ABgsUA==
+References: <1573820552-21164-1-git-send-email-shubhrajyoti.datta@gmail.com> <20191126180932.3A04620727@mail.kernel.org>
+In-Reply-To: <20191126180932.3A04620727@mail.kernel.org>
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
+Date:   Wed, 27 Nov 2019 11:05:11 +0530
+Message-ID: <CAKfKVtEkffpzPHX1=fm1gBEz=3wRKmjqc5bdj054Ubj+SB+a=Q@mail.gmail.com>
+Subject: Re: [PATCHv2 1/2] clk: clock-wizard: Move the clockwizard to clk
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-clk@vger.kernel.org,
+        Mike Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Tegra clk_out_1, clk_out_2, and clk_out_3 are part of PMC block and pmc is
-the provider for these clocks.
+On Tue, Nov 26, 2019 at 11:39 PM Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting shubhrajyoti.datta@gmail.com (2019-11-15 04:22:31)
+> > From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> >
+> > Move the clocking wizard driver from staging to clk.
+> >
+> > Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> > ---
+> > this is moving the drivers/staging/clocking-wizard to clk
+> > v2:
+> > Added the makefile  and kconfig
+> >
+> >  drivers/clk/Kconfig                 |   6 +
+> >  drivers/clk/Makefile                |   1 +
+> >  drivers/clk/clk-xlnx-clock-wizard.c | 335 ++++++++++++++++++++++++++++++++++++
+>
+> Where is the deletion of the file from staging? Has the TODO file in
+> staging been resolved?
+I was trying to address the  set rate and the reconfig and will post
+patches for the
+fractional part.
 
-Update bindings document to use pmc as clock provider for clk_out_2 and
-change id to pmc clock id.
+As part of that discussion[1]
+Greg suggested to move the code out of the staging.
 
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- Documentation/devicetree/bindings/sound/nau8825.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[1] https://spinics.net/lists/linux-driver-devel/msg117326.html
 
-diff --git a/Documentation/devicetree/bindings/sound/nau8825.txt b/Documentation/devicetree/bindings/sound/nau8825.txt
-index d16d96839bcb..487eb9574ee2 100644
---- a/Documentation/devicetree/bindings/sound/nau8825.txt
-+++ b/Documentation/devicetree/bindings/sound/nau8825.txt
-@@ -101,5 +101,5 @@ Example:
-       nuvoton,crosstalk-enable;
- 
-       clock-names = "mclk";
--      clocks = <&tegra_car TEGRA210_CLK_CLK_OUT_2>;
-+      clocks = <&pmc TEGRA_PMC_CLK_OUT_2>;
-   };
--- 
-2.7.4
 
+
+
+>Please Cc Soren and Greg on these patches. Also
+> include a cover letter and convince us _why_ we should review these
+> patches in the commit text. Stating what the patch is doing, i.e.
+> "moving code around", is not helpful.
+Sure will do.
+
+
+>
