@@ -2,96 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CDA410CA90
-	for <lists+linux-clk@lfdr.de>; Thu, 28 Nov 2019 15:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F3D10CE0C
+	for <lists+linux-clk@lfdr.de>; Thu, 28 Nov 2019 18:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727004AbfK1Opa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 28 Nov 2019 09:45:30 -0500
-Received: from mout.kundenserver.de ([217.72.192.73]:49515 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726723AbfK1OpW (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 Nov 2019 09:45:22 -0500
-Received: from orion.localdomain ([95.117.37.214]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MXHBo-1iJE7H3s34-00Ygma; Thu, 28 Nov 2019 15:45:18 +0100
-From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     mturquette@baylibre.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org
-Subject: [PATCH 7/7] drivers: clk: unexport clk_hw_register_gpio_mux()
-Date:   Thu, 28 Nov 2019 15:44:50 +0100
-Message-Id: <20191128144450.24094-7-info@metux.net>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20191128144450.24094-1-info@metux.net>
-References: <20191128144450.24094-1-info@metux.net>
-X-Provags-ID: V03:K1:GpHErHNI82WASHVkE8THZ9nr+ptmFzHW5fL+3h+SQyUE0+IsZt7
- f77t2/XVg0JKnfGAaz3mqg7B6Tc5QfbM78Xjnau34BTdHgKZKOTuvWUYkpIuE+GZMwjoXBk
- oNJ781QC/qVpcuSqkoxMsITGkiAcfCJk9mU2y5RB0IJAL9AOjjiS6y6wS1d+FN4Iu8yHcCI
- LcPtyB8vP+sSdlLIT49RA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Xdy895FX+Oo=:nCp7NpLYbFJBJsIZ+rXIpJ
- EdEFHNvkXKmUqBnd97WH6j685quUAkfkC6Kso8Y4wzZ7pPEb9IDtP+5U9fMagi5lS34qxenOQ
- VwlmvSUhyBooyu2YO7ApP6/aosmmZ1LEgNGOmjbARAHIkNsjMrDOvafmAuCu1YYwxHdVqd8xY
- O+jLhFhxLjAqi65KutMRTrBqvG+qmo/Qz9GWKPJOl5v1f5mZVyngs6LkLJt2GPqZs4znjZH93
- 09Gjm7KjJoS3F8Xu+1kItZe9Ua9Tsagb4KxYrBOYIhSTXrJifYo+RqqYTsZ+cFDPSg5OpKAlW
- vRiZWt4zTinmoYBHS/wbfW/mEBKap3F1VtlApPFX4FZSs3ehWUw6tZxqODcfg2Q4QItmF37kN
- P13On90zxcpSg39oCafEiiNIVDwi/H5PtTY3kCi/yZTVvehjHrmE0dfpldnBEE/GSVjCEXI/z
- S8QXpKI+1VMBe+8zvXdPKiyO5lpDkObmg8KE2Wdntb/zj29ErfKpoEtHvuhvDU/yiX4EFQK7y
- 4m7IGsIIEhVRf7w6/QcqAaM6YnxhSQoHTT/zBqmm+nXG1OeYrXKO8xiTInuL9VE4G35zCx5sX
- QlZqOkev8/C2mb4eHwTrJHUzUdzvaL45Nvb5xlIIaHTso9MnjKnizP5S3C4plP3jdEjSdrRIL
- 4ST3PM0HCPPR9OhAv+cnR6dh5A7/52BFq890qjWjQXNWoNzKqTOgiPgE4CX9L807cEOWxXNPv
- H5hrmLhbc+2diTXsr1/6x3UyHDLKKir/Uc5w8lK/WzQIVjt3qGCIjcAzYBBqU2u+kh9UW2SqH
- 5dNIraNoiLFqQ1aMv0023CfgjS1wqqMrtKYYOz4uNDPmgRtBif8XsK8guv1V891qeBFehc7os
- dYZstFxgOIxskzQqY3zw==
+        id S1726569AbfK1Ror (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 28 Nov 2019 12:44:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57620 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726446AbfK1Ror (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 28 Nov 2019 12:44:47 -0500
+Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6821821781;
+        Thu, 28 Nov 2019 17:44:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574963086;
+        bh=cz99d7VnCSzayawBtX02NKhGh1MPuM8LousFrM8rWO8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nur2kTuKF2C7fIttF4ho3dt9RM0yi9+NaXYXKdNq7XxeF2pbzA2KdoYM6VqgMX7mH
+         tKEA7a6rMKCShzTVzzjd9b1tQXIl5+CJbrs/UNj1kV2YFed32ieOG73RxUBY1QvHFZ
+         w/1FEW/Tl02O/oZmD0PQVbPPUzG2pubZ97z+02bU=
+Date:   Thu, 28 Nov 2019 18:44:44 +0100
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Yunhao Tian <18373444@buaa.edu.cn>
+Cc:     Icenowy Zheng <icenowy@aosc.io>, Chen-Yu Tsai <wens@csie.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: sunxi-ng: v3s: Fix incorrect number of hw_clks.
+Message-ID: <20191128174444.ypkqrbsge7g3t6mg@gilmour.lan>
+References: <20191125125833.8023-1-18373444@buaa.edu.cn>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2vgvz5ipypry7sum"
+Content-Disposition: inline
+In-Reply-To: <20191125125833.8023-1-18373444@buaa.edu.cn>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The function clk_hw_register_gpio_mux() doesn't seem to have any
-users outside clk-gpio.c, thus unexport and make it static.
 
-Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
----
- drivers/clk/clk-gpio.c       | 3 +--
- include/linux/clk-provider.h | 3 ---
- 2 files changed, 1 insertion(+), 5 deletions(-)
+--2vgvz5ipypry7sum
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/clk/clk-gpio.c b/drivers/clk/clk-gpio.c
-index a7e75a038728..70381bf75d02 100644
---- a/drivers/clk/clk-gpio.c
-+++ b/drivers/clk/clk-gpio.c
-@@ -204,7 +204,7 @@ static struct clk *clk_register_gpio_gate(struct device *dev, const char *name,
-  * @gpiod: gpio descriptor to gate this clock
-  * @flags: clock flags
-  */
--struct clk_hw *clk_hw_register_gpio_mux(struct device *dev, const char *name,
-+static struct clk_hw *clk_hw_register_gpio_mux(struct device *dev, const char *name,
- 		const char * const *parent_names, u8 num_parents, struct gpio_desc *gpiod,
- 		unsigned long flags)
- {
-@@ -216,7 +216,6 @@ struct clk_hw *clk_hw_register_gpio_mux(struct device *dev, const char *name,
- 	return clk_register_gpio(dev, name, parent_names, num_parents,
- 			gpiod, flags, &clk_gpio_mux_ops);
- }
--EXPORT_SYMBOL_GPL(clk_hw_register_gpio_mux);
- 
- static struct clk *clk_register_gpio_mux(struct device *dev, const char *name,
- 		const char * const *parent_names, u8 num_parents, struct gpio_desc *gpiod,
-diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index 59a7f273a182..961c1048a9ca 100644
---- a/include/linux/clk-provider.h
-+++ b/include/linux/clk-provider.h
-@@ -772,9 +772,6 @@ struct clk_gpio {
- 
- #define to_clk_gpio(_hw) container_of(_hw, struct clk_gpio, hw)
- 
--struct clk_hw *clk_hw_register_gpio_mux(struct device *dev, const char *name,
--		const char * const *parent_names, u8 num_parents, struct gpio_desc *gpiod,
--		unsigned long flags);
- void clk_hw_unregister_gpio_mux(struct clk_hw *hw);
- 
- struct clk *clk_register(struct device *dev, struct clk_hw *hw);
--- 
-2.11.0
+On Mon, Nov 25, 2019 at 08:58:32PM +0800, Yunhao Tian wrote:
+> The hws field of sun8i_v3s_hw_clks has only 74
+> members. However, the number specified by CLK_NUMBER
+> is 77 (= CLK_I2S0 + 1). This leads to runtime segmentation
+> fault that is not always reproducible.
+>
+> This patch fixes the problem by specifying correct clock number.
+>
+> Signed-off-by: Yunhao Tian <18373444@buaa.edu.cn>
 
+Queued as a fix, thanks!
+Maxime
+>
+
+--2vgvz5ipypry7sum
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXeAHjAAKCRDj7w1vZxhR
+xZ9EAQD4x+F88mtI2oJSbsrjcUafFH0q/ESBzvhi8Ii8aB8kXgD9FkwUCrG7y4di
+Qe+I/O7uhmYsoZBb8fRi+ku/eDY9ywE=
+=FAhq
+-----END PGP SIGNATURE-----
+
+--2vgvz5ipypry7sum--
