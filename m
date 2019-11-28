@@ -2,127 +2,138 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8544810C407
-	for <lists+linux-clk@lfdr.de>; Thu, 28 Nov 2019 07:37:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E20910C46F
+	for <lists+linux-clk@lfdr.de>; Thu, 28 Nov 2019 08:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727391AbfK1GhR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 28 Nov 2019 01:37:17 -0500
-Received: from mail-eopbgr690047.outbound.protection.outlook.com ([40.107.69.47]:11926
-        "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727300AbfK1GhQ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 28 Nov 2019 01:37:16 -0500
-Received: from BN6PR02CA0030.namprd02.prod.outlook.com (2603:10b6:404:5f::16)
- by MWHPR02MB3328.namprd02.prod.outlook.com (2603:10b6:301:62::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2474.17; Thu, 28 Nov
- 2019 06:37:14 +0000
-Received: from BL2NAM02FT043.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e46::201) by BN6PR02CA0030.outlook.office365.com
- (2603:10b6:404:5f::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2495.17 via Frontend
- Transport; Thu, 28 Nov 2019 06:37:14 +0000
-Authentication-Results: spf=softfail (sender IP is 149.199.60.83)
- smtp.mailfrom=gmail.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=fail action=none header.from=gmail.com;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
- gmail.com discourages use of 149.199.60.83 as permitted sender)
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- BL2NAM02FT043.mail.protection.outlook.com (10.152.77.95) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2474.17
- via Frontend Transport; Thu, 28 Nov 2019 06:37:14 +0000
-Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
-        (envelope-from <shubhrajyoti.datta@gmail.com>)
-        id 1iaDQP-0007Z3-Ll; Wed, 27 Nov 2019 22:37:13 -0800
-Received: from [127.0.0.1] (helo=xsj-smtp-dlp2.xlnx.xilinx.com)
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <shubhrajyoti.datta@gmail.com>)
-        id 1iaDQK-0005Gv-ID; Wed, 27 Nov 2019 22:37:08 -0800
-Received: from xsj-pvapsmtp01 (xsj-smtp1.xilinx.com [149.199.38.66])
-        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id xAS6b7gm007343;
-        Wed, 27 Nov 2019 22:37:07 -0800
-Received: from [10.140.6.59] (helo=xhdshubhraj40.xilinx.com)
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <shubhrajyoti.datta@gmail.com>)
-        id 1iaDQJ-00059i-3I; Wed, 27 Nov 2019 22:37:07 -0800
-From:   shubhrajyoti.datta@gmail.com
-To:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devel@driverdev.osuosl.org
-Cc:     gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        shubhrajyoti.datta@gmail.com, devicetree@vger.kernel.org,
-        soren.brinkmann@xilinx.com,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Subject: [PATCH v3 10/10] clk: clock-wizard: Fix the compilation failure
-Date:   Thu, 28 Nov 2019 12:06:17 +0530
-Message-Id: <a0880cfbbcc729171a37e2a3bc27680efb06e398.1574922435.git.shubhrajyoti.datta@xilinx.com>
-X-Mailer: git-send-email 2.1.1
-In-Reply-To: <cover.1574922435.git.shubhrajyoti.datta@xilinx.com>
+        id S1726715AbfK1Hpc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 28 Nov 2019 02:45:32 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:54088 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726448AbfK1Hpc (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 Nov 2019 02:45:32 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAS7jMFU011581;
+        Thu, 28 Nov 2019 07:45:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2019-08-05;
+ bh=OdpF9tLxLFKM7EnkRAYagcdyDm+kWt6AXF8o3UG4bMk=;
+ b=HRyajfzZSaedBpO9gCM8SyuLLeUKiQaJk00s0eoc8hVckt3gaA1AV+q/ZJ6FVwyQ/W0o
+ 7F/iR7RmlNP/u0pnPjcm73b2QO3/CQdeSNw5JH1VklUlMCEwnPYN0f4k7Bm9ux746Z44
+ b32LFfmdGVwYUh0G4S1awoYDG4Q2JEyxVFDtw8k5P7dCL8lxpIRKWi9pgyKlwlQMZT6+
+ PSLFYkzNYatwp2pOyMHYJ7Xsil0Mwp2ObSl49eNFpRrjqnPHVrDWuL0jwAPfmTteCZvd
+ szy5CxlWFNGkCcYyqv10C6Mw6BzqP9R+gyuYZXWx6bivGNv65Xmk6JqUT0a6PkJ8qCdy 9Q== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 2wevqqhxn9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Nov 2019 07:45:22 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAS7jAWt049678;
+        Thu, 28 Nov 2019 07:45:21 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 2why49m30r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 28 Nov 2019 07:45:21 +0000
+Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xAS7jEpZ028073;
+        Thu, 28 Nov 2019 07:45:15 GMT
+Received: from kadam (/129.205.23.165)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 27 Nov 2019 23:45:14 -0800
+Date:   Thu, 28 Nov 2019 10:45:05 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     shubhrajyoti.datta@gmail.com
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@driverdev.osuosl.org, mark.rutland@arm.com,
+        devicetree@vger.kernel.org, sboyd@kernel.org,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
+        robh+dt@kernel.org, soren.brinkmann@xilinx.com
+Subject: Re: [PATCH v3 08/10] clk: clock-wizard: Make the output names unique
+Message-ID: <20191128074505.GC1781@kadam>
 References: <cover.1574922435.git.shubhrajyoti.datta@xilinx.com>
-X-RCIS-Action: ALLOW
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-Result: No--5.920-7.0-31-1
-X-imss-scan-details: No--5.920-7.0-31-1;No--5.920-5.0-31-1
-X-TM-AS-User-Approved-Sender: No;No
-X-TM-AS-Result-Xfilter: Match text exemption rules:No
-X-EOPAttributedMessage: 0
-X-Matching-Connectors: 132193966344852820;(f9e945fa-a09a-4caa-7158-08d2eb1d8c44);()
-X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(376002)(396003)(346002)(136003)(39860400002)(189003)(199004)(82202003)(356004)(446003)(11346002)(6666004)(8936002)(81166006)(50226002)(8676002)(81156014)(86362001)(426003)(9786002)(47776003)(118296001)(5660300002)(9686003)(50466002)(48376002)(305945005)(76482006)(498600001)(107886003)(73392003)(450100002)(2906002)(336012)(26005)(7696005)(51416003)(4326008)(76176011)(16586007)(36756003)(70206006)(70586007)(316002);DIR:OUT;SFP:1101;SCL:1;SRVR:MWHPR02MB3328;H:xsj-pvapsmtpgw01;FPR:;SPF:SoftFail;LANG:en;PTR:unknown-60-83.xilinx.com;MX:1;A:1;
+ <d9277db2692bb77a41dfed927cfb791bdcced17d.1574922435.git.shubhrajyoti.datta@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e8960153-af31-44ac-fa7d-08d773cd67d7
-X-MS-TrafficTypeDiagnostic: MWHPR02MB3328:
-X-Microsoft-Antispam-PRVS: <MWHPR02MB3328A71624480BD0486F959D87470@MWHPR02MB3328.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:862;
-X-Forefront-PRVS: 0235CBE7D0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ftl+ZRXdXsGRsP9gQNi5YR1sOOBW+62MJKXDY9HcWVBCVfjhsdX0oxP+50aYB47T9WwXusUSS8rErtX6+rmpQGvLLrQnLHHYkAdowCiA3GFMzAQKhQWNowv/iHZbAI+LJmjhodK4TuyBYnMjOBZgS3r7seTr11CQWQxZmcfdKniWaZ74fyDK9njA9O4WD9Kndl0UgnJgr+mn6tTiMx6T+J67J9GfX/DXcpYW5JlH/kZrmkvohxE6KZ9VxdJ49vYoAEwLRB4z2YFhJuH84G+8xPm32TW9/Se131nxr8BRXnHyRe6kx3xXsM9a5jWM2uO38jcMazCNWZaXKd8JYgyBdZu5CozIgI3GH4Os42cQaR+LeYWdmk8vyRblknM22LiBMXu+9m/FVnqyYw9vhnEiZfoF615rnb8V/uW1L1FWpdnlaisH0SXHHDzRjYwo4hbL
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2019 06:37:14.2533
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e8960153-af31-44ac-fa7d-08d773cd67d7
-X-MS-Exchange-CrossTenant-Id: 5afe0b00-7697-4969-b663-5eab37d5f47e
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5afe0b00-7697-4969-b663-5eab37d5f47e;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR02MB3328
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d9277db2692bb77a41dfed927cfb791bdcced17d.1574922435.git.shubhrajyoti.datta@xilinx.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9454 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-1911280065
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9454 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-1911280065
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+On Thu, Nov 28, 2019 at 12:06:15PM +0530, shubhrajyoti.datta@gmail.com wrote:
+> From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> 
+> Incase there are more than one instance of the clocking wizard.
+> And if the output name given is the same then the probe fails.
+> Fix the same by appending the device name to the output name to
+> make it unique.
+> 
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> ---
+>  drivers/clk/clk-xlnx-clock-wizard.c | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/clk/clk-xlnx-clock-wizard.c b/drivers/clk/clk-xlnx-clock-wizard.c
+> index 75ea745..9993543 100644
+> --- a/drivers/clk/clk-xlnx-clock-wizard.c
+> +++ b/drivers/clk/clk-xlnx-clock-wizard.c
+> @@ -555,6 +555,9 @@ static int clk_wzrd_probe(struct platform_device *pdev)
+>  		ret = -ENOMEM;
+>  		goto err_disable_clk;
+>  	}
+> +	outputs = of_property_count_strings(np, "clock-output-names");
+> +	if (outputs == 1)
+> +		flags = CLK_SET_RATE_PARENT;
+>  	clk_wzrd->clks_internal[wzrd_clk_mul] = clk_register_fixed_factor
+>  			(&pdev->dev, clk_name,
+>  			 __clk_get_name(clk_wzrd->clk_in1),
+> @@ -566,9 +569,6 @@ static int clk_wzrd_probe(struct platform_device *pdev)
+>  		goto err_disable_clk;
+>  	}
+>  
+> -	outputs = of_property_count_strings(np, "clock-output-names");
+> -	if (outputs == 1)
+> -		flags = CLK_SET_RATE_PARENT;
+>  	clk_name = kasprintf(GFP_KERNEL, "%s_mul_div", dev_name(&pdev->dev));
+>  	if (!clk_name) {
+>  		ret = -ENOMEM;
+> @@ -591,6 +591,7 @@ static int clk_wzrd_probe(struct platform_device *pdev)
+>  	/* register div per output */
+>  	for (i = outputs - 1; i >= 0 ; i--) {
+>  		const char *clkout_name;
+> +		const char *clkout_name_wiz;
+>  
+>  		if (of_property_read_string_index(np, "clock-output-names", i,
+>  						  &clkout_name)) {
+> @@ -599,9 +600,11 @@ static int clk_wzrd_probe(struct platform_device *pdev)
+>  			ret = -EINVAL;
+>  			goto err_rm_int_clks;
+>  		}
+> +		clkout_name_wiz = kasprintf(GFP_KERNEL, "%s_%s",
+> +					    dev_name(&pdev->dev), clkout_name);
 
-After 90b6c5c73 (clk: Remove CLK_IS_BASIC clk flag)
-The CLK_IS_BASIC is deleted. Adapt the driver for the same.
+If this kasprintf() crashes then clk_wzrd_register_divf() will fail.
+But that was a headache to review.  Just add a check for NULL.  We need
+a kfree() as well.
 
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
----
- drivers/clk/clk-xlnx-clock-wizard.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+One alternative would be to just declare a buffer on the stack and use
+snprintf().  We don't need to keep the name around after the call to
+clk_wzrd_register_divf().
 
-diff --git a/drivers/clk/clk-xlnx-clock-wizard.c b/drivers/clk/clk-xlnx-clock-wizard.c
-index 9993543..76cfa05 100644
---- a/drivers/clk/clk-xlnx-clock-wizard.c
-+++ b/drivers/clk/clk-xlnx-clock-wizard.c
-@@ -345,7 +345,7 @@ static struct clk *clk_wzrd_register_divf(struct device *dev,
- 	else
- 		init.ops = &clk_wzrd_clk_divider_ops_f;
- 
--	init.flags = flags | CLK_IS_BASIC;
-+	init.flags = flags;
- 	init.parent_names = (parent_name ? &parent_name : NULL);
- 	init.num_parents = (parent_name ? 1 : 0);
- 
-@@ -402,7 +402,7 @@ static struct clk *clk_wzrd_register_divider(struct device *dev,
- 		init.ops = &clk_divider_ro_ops;
- 	else
- 		init.ops = &clk_wzrd_clk_divider_ops;
--	init.flags = flags | CLK_IS_BASIC;
-+	init.flags = flags;
- 	init.parent_names = (parent_name ? &parent_name : NULL);
- 	init.num_parents = (parent_name ? 1 : 0);
- 
--- 
-2.1.1
+regards,
+dan carpenter
 
