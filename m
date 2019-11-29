@@ -2,23 +2,55 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6CA10D760
-	for <lists+linux-clk@lfdr.de>; Fri, 29 Nov 2019 15:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDBC10D7DF
+	for <lists+linux-clk@lfdr.de>; Fri, 29 Nov 2019 16:28:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726903AbfK2OsD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 29 Nov 2019 09:48:03 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:44155 "EHLO
-        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726808AbfK2OsD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 29 Nov 2019 09:48:03 -0500
-Received: from droid15-sz.amlogic.com (10.28.8.25) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server id 15.1.1591.10; Fri, 29 Nov 2019
- 22:47:48 +0800
-From:   Jian Hu <jian.hu@amlogic.com>
-To:     Jerome Brunet <jbrunet@baylibre.com>,
+        id S1726608AbfK2P2d (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 29 Nov 2019 10:28:33 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:40096 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726808AbfK2P2d (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 29 Nov 2019 10:28:33 -0500
+Received: by mail-wr1-f67.google.com with SMTP id c14so11060818wrn.7
+        for <linux-clk@vger.kernel.org>; Fri, 29 Nov 2019 07:28:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=QBYK1E+SFEUtR4nuF0Hq1/Zl0vxT8rcgdq12kebEYCw=;
+        b=fybemh1fl5FELIMmoJZnWKoGU6gkjl55CTvBtsMkTjKBe9+9q5azX3vK7CrnWlD4+m
+         ATTa/+yYn808n2UnMe0zSU27V/ALJzcfyewxcwoGDLMpE+3nRgHaRQI6DA94AukXUiJB
+         hjsqV4+jtcmEmj/BDh8dLZ/DRjse6sDrT0bCl7ecTrNNyYBw6BwzfFzs7Ti5p0v23MnE
+         +fDRYLnLSJ559SpDXDxTsKfDHmPdDwfAe4/MCFncI1Wzvl2k8yyzbCe3Y5158WP0Gpt4
+         xntmd2a+Rl7Oonw3WrC2tR2S9zGYEskSnvLdMeDrEhklUgWbep0gTuvPx0qYaX4l87Lz
+         Gxwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=QBYK1E+SFEUtR4nuF0Hq1/Zl0vxT8rcgdq12kebEYCw=;
+        b=dnX53ggtiY3FFltbqW1r7WSqHlNdPA9mn4KRPHENeJ6WhzXf6BJchGPt6thFMtoyVE
+         RePEaKaOf6gadLyz023sbKqL6RG5FoScNB9ZNAnHkS048soYW/jH2glUuMrxU4XAKPE+
+         0M+t4ZqiD+ujfIc3dpgfgFEZpgUHWy4Ex+/3lQcrXGX+IsJ6y4sBMpZeD/xErd65aunj
+         VOIOsjmfsA/ofhnXoO0zPrKgGk7b3gsn7BVRNsJ4pNLHb9Df1fD6aiKsGT960bQIo8PE
+         0HCrwcdWKaji/DdbJ8X8K0/hqDRdNaHUQOcXxOpQ0dNyR9PD4ex1XS/1CZrD6JocPEwJ
+         Ry4w==
+X-Gm-Message-State: APjAAAUHb1PbGvnE/WKDAg2dbCYuhsG7CSoaavnMKypfE7TN4MvIFrB1
+        sNl9rUxdbCCUevGkagVwKKVDFg==
+X-Google-Smtp-Source: APXvYqwp522ZQItIPDw0UZZeNpADWsIPr6wHnrqJzszsiD5Ngr1SfU1KzHkCvXFfBFKhk2oWIkEzYw==
+X-Received: by 2002:a5d:4d8d:: with SMTP id b13mr10405744wru.6.1575041310867;
+        Fri, 29 Nov 2019 07:28:30 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id m3sm27328570wrw.20.2019.11.29.07.28.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Nov 2019 07:28:30 -0800 (PST)
+References: <20191129144605.182774-1-jian.hu@amlogic.com>
+User-agent: mu4e 1.3.3; emacs 26.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Jian Hu <jian.hu@amlogic.com>,
         Neil Armstrong <narmstrong@baylibre.com>
-CC:     Jian Hu <jian.hu@amlogic.com>, Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        "Rob Herring" <robh@kernel.org>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -26,77 +58,91 @@ CC:     Jian Hu <jian.hu@amlogic.com>, Kevin Hilman <khilman@baylibre.com>,
         Jianxin Pan <jianxin.pan@amlogic.com>,
         Victor Wan <victor.wan@amlogic.com>,
         Chandle Zou <chandle.zou@amlogic.com>,
-        <linux-clk@vger.kernel.org>, <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 7/7] arm64: dts: meson: add A1 PLL and periphs clock controller
-Date:   Fri, 29 Nov 2019 22:46:05 +0800
-Message-ID: <20191129144605.182774-8-jian.hu@amlogic.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191129144605.182774-1-jian.hu@amlogic.com>
-References: <20191129144605.182774-1-jian.hu@amlogic.com>
+        linux-clk@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 0/7] add Amlogic A1 clock controller driver
+In-reply-to: <20191129144605.182774-1-jian.hu@amlogic.com>
+Date:   Fri, 29 Nov 2019 16:28:29 +0100
+Message-ID: <1jwobi7lcy.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.8.25]
+Content-Type: text/plain
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add A1 PLL and periphs clock controller node, there are parent
-clocks in periphs clocks for PLL clocks, and there are parent
-clocks in PLL clocks for periphs clocks. They rely on each other.
 
-Signed-off-by: Jian Hu <jian.hu@amlogic.com>
----
- arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 26 +++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+On Fri 29 Nov 2019 at 15:45, Jian Hu <jian.hu@amlogic.com> wrote:
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-index 7210ad049d1d..ba1cb4aa594b 100644
---- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-@@ -5,6 +5,8 @@
- 
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/clock/a1-pll-clkc.h>
-+#include <dt-bindings/clock/a1-clkc.h>
- 
- / {
- 	compatible = "amlogic,a1";
-@@ -74,6 +76,30 @@
- 			#size-cells = <2>;
- 			ranges = <0x0 0x0 0x0 0xfe000000 0x0 0x1000000>;
- 
-+			clkc_pll: pll-clock-controller {
-+				compatible = "amlogic,a1-pll-clkc";
-+				#clock-cells = <1>;
-+				reg = <0 0x7c80 0 0x21c>;
-+				clocks = <&clkc_periphs CLKID_XTAL_FIXPLL>,
-+					 <&clkc_periphs CLKID_XTAL_HIFIPLL>;
-+				clock-names = "xtal_fixpll", "xtal_hifipll";
-+			};
-+
-+			clkc_periphs: periphs-clock-controller {
-+				compatible = "amlogic,a1-periphs-clkc";
-+				#clock-cells = <1>;
-+				reg = <0 0x800 0 0x104>;
-+				clocks = <&clkc_pll CLKID_FCLK_DIV2>,
-+					 <&clkc_pll CLKID_FCLK_DIV3>,
-+					 <&clkc_pll CLKID_FCLK_DIV5>,
-+					 <&clkc_pll CLKID_FCLK_DIV7>,
-+					 <&clkc_pll CLKID_HIFI_PLL>,
-+					 <&xtal>;
-+					clock-names = "fclk_div2", "fclk_div3",
-+						      "fclk_div5", "fclk_div7",
-+						      "hifi_pll", "xtal";
-+			};
-+
- 			uart_AO: serial@1c00 {
- 				compatible = "amlogic,meson-gx-uart",
- 					     "amlogic,meson-ao-uart";
--- 
-2.24.0
+> add support for Amlogic A1 clock driver, the clock includes 
+> three parts: peripheral clocks, pll clocks, CPU clocks.
+> sys pll and CPU clocks will be sent in next patch.
+>
+> Changes since v1 at [2]:
+
+v2 or v1 ??
+
+> -add probe function for A1
+> -seperate the clock driver into two patch
+> -change some clock flags and ops
+> -add support for a1 PLL ops
+> -add A1 clock node
+>
+> Changes since v1 at [1]:
+> -place A1 config alphabetically
+> -add actual reason for RO ops, CLK_IS_CRITICAL, CLK_IGNORE_UNUSED
+> -separate the driver into two driver: peripheral and pll driver
+> -delete CLK_IGNORE_UNUSED flag for pwm b/c/d/e/f clock, dsp clock
+> -delete the change in Kconfig.platforms, address to Kevin alone
+> -remove the useless comments
+> -modify the meson pll driver to support A1 PLLs
+>
+> [1] https://lkml.kernel.org/r/1569411888-98116-1-git-send-email-jian.hu@amlogic.com
+> [2] https://lkml.kernel.org/r/1571382865-41978-1-git-send-email-jian.hu@amlogic.com
+>
+> Jian Hu (7):
+>   dt-bindings: clock: meson: add A1 PLL clock controller bindings
+>   clk: meson: add support for A1 PLL clock ops
+>   clk: meson: eeclk: refactor eeclk common driver to support A1
+>   clk: meson: a1: add support for Amlogic A1 PLL clock driver
+>   dt-bindings: clock: meson: add A1 peripheral clock controller bindings
+>   clk: meson: a1: add support for Amlogic A1 Peripheral clock driver
+>   arm64: dts: meson: add A1 PLL and periphs clock controller
+
+The arm64 is for the DT maintainer. Please send it separately after this
+series is applied (if it gets applied)
+
+> Please fix the underlying issue, then you can post your series again.
+
+This was a comment on your v2. Did you fix the orphan/ordering issue ?
+If you did, you probably should mention it here.
+If you did not, I'm probably not going to review this further until you do.
+
+>
+>  .../bindings/clock/amlogic,a1-clkc.yaml       |   70 +
+>  .../bindings/clock/amlogic,a1-pll-clkc.yaml   |   56 +
+>  arch/arm64/boot/dts/amlogic/meson-a1.dtsi     |   26 +
+>  drivers/clk/meson/Kconfig                     |   20 +
+>  drivers/clk/meson/Makefile                    |    2 +
+>  drivers/clk/meson/a1-pll.c                    |  334 +++
+>  drivers/clk/meson/a1-pll.h                    |   56 +
+>  drivers/clk/meson/a1.c                        | 2309 +++++++++++++++++
+>  drivers/clk/meson/a1.h                        |  120 +
+>  drivers/clk/meson/clk-pll.c                   |   21 +
+>  drivers/clk/meson/clk-pll.h                   |    1 +
+>  drivers/clk/meson/meson-eeclk.c               |   59 +-
+>  drivers/clk/meson/meson-eeclk.h               |    2 +
+>  drivers/clk/meson/parm.h                      |    1 +
+>  include/dt-bindings/clock/a1-clkc.h           |   98 +
+>  include/dt-bindings/clock/a1-pll-clkc.h       |   16 +
+>  16 files changed, 3181 insertions(+), 10 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+>  create mode 100644 drivers/clk/meson/a1-pll.c
+>  create mode 100644 drivers/clk/meson/a1-pll.h
+>  create mode 100644 drivers/clk/meson/a1.c
+>  create mode 100644 drivers/clk/meson/a1.h
+>  create mode 100644 include/dt-bindings/clock/a1-clkc.h
+>  create mode 100644 include/dt-bindings/clock/a1-pll-clkc.h
 
