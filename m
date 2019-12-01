@@ -2,146 +2,89 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 347F710D9DD
-	for <lists+linux-clk@lfdr.de>; Fri, 29 Nov 2019 20:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA98610E2D7
+	for <lists+linux-clk@lfdr.de>; Sun,  1 Dec 2019 19:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726980AbfK2TCd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 29 Nov 2019 14:02:33 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:35768 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726926AbfK2TCd (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 29 Nov 2019 14:02:33 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xATIx7XI022707;
-        Fri, 29 Nov 2019 19:02:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2019-08-05;
- bh=PMSpyAZwm5n49dSwZWbSUza3afbhx07BpmaBJxUA6eY=;
- b=Ah15mlbZc28+/ntfcw2uJeT2TY5X7o46m8gJwAB6hxe8t+zIxqhbH4QGVJ+jfyftyys4
- SodtDo+RPH236douXuWTTMRJPJXm0klYO8BP6PleBT6Pa/R0NAA4M7e2hA2Oq5N0hFO8
- IHOVJdSUHL2zxs21DSL5j1UxMraE0XTjF0yiaUncs98utz4eQeoNtMTbWWUr6yccSD8w
- dHmyIFMj2d6DS/RaImxn3ws0turngLE52pAQpvWLLZn3yLV8J33JUT5cIWGcprh1hKer
- R2sQSyjNjS4qvBDJz9BJefHGUUILYJrUF+7+YfaI3Ginzmbv2sALG/g/dNw8paesBi52 dg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 2wevqqwscr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Nov 2019 19:02:22 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xATIrXnY155220;
-        Fri, 29 Nov 2019 19:02:21 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 2wjh0tccg1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 29 Nov 2019 19:02:21 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xATJ2Ifg023014;
-        Fri, 29 Nov 2019 19:02:19 GMT
-Received: from kadam (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 29 Nov 2019 11:02:18 -0800
-Date:   Fri, 29 Nov 2019 22:02:06 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
-Cc:     devel@driverdev.osuosl.org, Mark Rutland <mark.rutland@arm.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
-        =?iso-8859-1?Q?S=F6ren?= Brinkmann <soren.brinkmann@xilinx.com>
-Subject: Re: [PATCH v3 08/10] clk: clock-wizard: Make the output names unique
-Message-ID: <20191129190205.GA3282@kadam>
-References: <cover.1574922435.git.shubhrajyoti.datta@xilinx.com>
- <d9277db2692bb77a41dfed927cfb791bdcced17d.1574922435.git.shubhrajyoti.datta@xilinx.com>
- <20191128074505.GC1781@kadam>
- <CAKfKVtHpP4j32CNA8ioET=wqYPWtzrQvH-A+4n-pcvj1KZy=fg@mail.gmail.com>
+        id S1727231AbfLASOO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 1 Dec 2019 13:14:14 -0500
+Received: from mtax.cdmx.gob.mx ([187.141.35.197]:14200 "EHLO mtax.cdmx.gob.mx"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726965AbfLASOO (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 1 Dec 2019 13:14:14 -0500
+X-Greylist: delayed 6235 seconds by postgrey-1.27 at vger.kernel.org; Sun, 01 Dec 2019 13:14:13 EST
+X-NAI-Header: Modified by McAfee Email Gateway (4500)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cdmx.gob.mx; s=72359050-3965-11E6-920A-0192F7A2F08E;
+        t=1575217540; h=DKIM-Filter:X-Virus-Scanned:
+         Content-Type:MIME-Version:Content-Transfer-Encoding:
+         Content-Description:Subject:To:From:Date:Message-Id:
+         X-AnalysisOut:X-AnalysisOut:X-AnalysisOut:
+         X-AnalysisOut:X-AnalysisOut:X-SAAS-TrackingID:
+         X-NAI-Spam-Flag:X-NAI-Spam-Threshold:X-NAI-Spam-Score:
+         X-NAI-Spam-Rules:X-NAI-Spam-Version; bh=M
+        8rWdUYQ57RAYAgTWJQ4Rsch0kO0UXllaAVDzocOs4
+        8=; b=dQ5h7eoTTf1e6qzz2Ax2Vd/h6dkXvLwtbW1kQT0aOnRe
+        QzvUYO1hwxxKvgT5eAx5vuNlSdsuNk6CWdPcgOsZxn2HKeJcga
+        wSR+qz+Gay8BnXb+brYPfRm+zyZdwIlI6z8ylPQK1HkMgfuhel
+        ia6YlU8feZPe5XC5+67dG+e2opo=
+Received: from cdmx.gob.mx (correo.cdmx.gob.mx [10.250.108.150]) by mtax.cdmx.gob.mx with smtp
+        (TLS: TLSv1/SSLv3,256bits,ECDHE-RSA-AES256-GCM-SHA384)
+         id 217f_5cf3_771e7348_2c0e_4eb9_a01e_1f853785aecf;
+        Sun, 01 Dec 2019 10:25:39 -0600
+Received: from localhost (localhost [127.0.0.1])
+        by cdmx.gob.mx (Postfix) with ESMTP id 39B681E2B7C;
+        Sun,  1 Dec 2019 10:17:53 -0600 (CST)
+Received: from cdmx.gob.mx ([127.0.0.1])
+        by localhost (cdmx.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id jLAjdgTXe4bQ; Sun,  1 Dec 2019 10:17:53 -0600 (CST)
+Received: from localhost (localhost [127.0.0.1])
+        by cdmx.gob.mx (Postfix) with ESMTP id 7EB7B1E30D4;
+        Sun,  1 Dec 2019 10:12:43 -0600 (CST)
+DKIM-Filter: OpenDKIM Filter v2.9.2 cdmx.gob.mx 7EB7B1E30D4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cdmx.gob.mx;
+        s=72359050-3965-11E6-920A-0192F7A2F08E; t=1575216763;
+        bh=M8rWdUYQ57RAYAgTWJQ4Rsch0kO0UXllaAVDzocOs48=;
+        h=Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:
+         From:Date:Message-Id;
+        b=tFvvkfveWhaKX+Yv7cpLvSYBk8CHFUDGKbCuJMegqkmC8/VxAJzLVGBh6KW3/6iN5
+         c+PVQgDBdMhz+r+y+nlzXJvEB3fmihRJmvsj5mGfs1+6VmPXJRE7bgcLlb+7pvyNT/
+         AskWDxOSQTsDZ+tzOed6agzOnDXrrs49RZSWUSQ8=
+X-Virus-Scanned: amavisd-new at cdmx.gob.mx
+Received: from cdmx.gob.mx ([127.0.0.1])
+        by localhost (cdmx.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id RIL-bkCJ9paZ; Sun,  1 Dec 2019 10:12:43 -0600 (CST)
+Received: from [192.168.0.104] (unknown [188.125.168.160])
+        by cdmx.gob.mx (Postfix) with ESMTPSA id 382C61E2D2E;
+        Sun,  1 Dec 2019 10:03:38 -0600 (CST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfKVtHpP4j32CNA8ioET=wqYPWtzrQvH-A+4n-pcvj1KZy=fg@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9456 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-1911290163
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9456 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-1911290164
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Congratulations
+To:     Recipients <aac-styfe@cdmx.gob.mx>
+From:   "Bishop Johnr" <aac-styfe@cdmx.gob.mx>
+Date:   Sun, 01 Dec 2019 17:03:29 +0100
+Message-Id: <20191201160339.382C61E2D2E@cdmx.gob.mx>
+X-AnalysisOut: [v=2.2 cv=Ibr3YSia c=1 sm=1 tr=0 p=6K-Ig8iNAUou4E5wYCEA:9 p]
+X-AnalysisOut: [=zRI05YRXt28A:10 a=T6zFoIZ12MK39YzkfxrL7A==:117 a=9152RP8M]
+X-AnalysisOut: [6GQqDhC/mI/QXQ==:17 a=8nJEP1OIZ-IA:10 a=pxVhFHJ0LMsA:10 a=]
+X-AnalysisOut: [pGLkceISAAAA:8 a=wPNLvfGTeEIA:10 a=M8O0W8wq6qAA:10 a=Ygvjr]
+X-AnalysisOut: [iKHvHXA2FhpO6d-:22]
+X-SAAS-TrackingID: 289e3ed5.0.48577115.00-2328.81662976.s12p02m013.mxlogic.net
+X-NAI-Spam-Flag: NO
+X-NAI-Spam-Threshold: 3
+X-NAI-Spam-Score: -5000
+X-NAI-Spam-Rules: 1 Rules triggered
+        WHITELISTED=-5000
+X-NAI-Spam-Version: 2.3.0.9418 : core <6686> : inlines <7165> : streams
+ <1840193> : uri <2949748>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, Nov 29, 2019 at 05:37:57PM +0530, Shubhrajyoti Datta wrote:
-> On Thu, Nov 28, 2019 at 1:15 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> >
-> > On Thu, Nov 28, 2019 at 12:06:15PM +0530, shubhrajyoti.datta@gmail.com wrote:
-> > > From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> > >
-> > > Incase there are more than one instance of the clocking wizard.
-> > > And if the output name given is the same then the probe fails.
-> > > Fix the same by appending the device name to the output name to
-> > > make it unique.
-> > >
-> > > Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> > > ---
-> > >  drivers/clk/clk-xlnx-clock-wizard.c | 13 ++++++++-----
-> > >  1 file changed, 8 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/drivers/clk/clk-xlnx-clock-wizard.c b/drivers/clk/clk-xlnx-clock-wizard.c
-> > > index 75ea745..9993543 100644
-> > > --- a/drivers/clk/clk-xlnx-clock-wizard.c
-> > > +++ b/drivers/clk/clk-xlnx-clock-wizard.c
-> > > @@ -555,6 +555,9 @@ static int clk_wzrd_probe(struct platform_device *pdev)
-> > >               ret = -ENOMEM;
-> > >               goto err_disable_clk;
-> > >       }
-> > > +     outputs = of_property_count_strings(np, "clock-output-names");
-> > > +     if (outputs == 1)
-> > > +             flags = CLK_SET_RATE_PARENT;
-> > >       clk_wzrd->clks_internal[wzrd_clk_mul] = clk_register_fixed_factor
-> > >                       (&pdev->dev, clk_name,
-> > >                        __clk_get_name(clk_wzrd->clk_in1),
-> > > @@ -566,9 +569,6 @@ static int clk_wzrd_probe(struct platform_device *pdev)
-> > >               goto err_disable_clk;
-> > >       }
-> > >
-> > > -     outputs = of_property_count_strings(np, "clock-output-names");
-> > > -     if (outputs == 1)
-> > > -             flags = CLK_SET_RATE_PARENT;
-> > >       clk_name = kasprintf(GFP_KERNEL, "%s_mul_div", dev_name(&pdev->dev));
-> > >       if (!clk_name) {
-> > >               ret = -ENOMEM;
-> > > @@ -591,6 +591,7 @@ static int clk_wzrd_probe(struct platform_device *pdev)
-> > >       /* register div per output */
-> > >       for (i = outputs - 1; i >= 0 ; i--) {
-> > >               const char *clkout_name;
-> > > +             const char *clkout_name_wiz;
-> > >
-> > >               if (of_property_read_string_index(np, "clock-output-names", i,
-> > >                                                 &clkout_name)) {
-> > > @@ -599,9 +600,11 @@ static int clk_wzrd_probe(struct platform_device *pdev)
-> > >                       ret = -EINVAL;
-> > >                       goto err_rm_int_clks;
-> > >               }
-> > > +             clkout_name_wiz = kasprintf(GFP_KERNEL, "%s_%s",
-> > > +                                         dev_name(&pdev->dev), clkout_name);
-> >
-> > If this kasprintf() crashes then clk_wzrd_register_divf() will fail.
-
-I meant if kasprintf() returns NULL not crashes...  :/
-
-> > But that was a headache to review.  Just add a check for NULL.  We need
-> > a kfree() as well.
-
-regards,
-dan carpenter
+Money was donated to you by Mr and Mrs Allen and Violet Large, just contact=
+ them with this email for more information =
 
 
+EMail: allenandvioletlargeaward@gmail.com
