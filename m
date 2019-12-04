@@ -2,18 +2,18 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 065121124F6
+	by mail.lfdr.de (Postfix) with ESMTP id 0DFB01124F7
 	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2019 09:30:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726166AbfLDIaE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 4 Dec 2019 03:30:04 -0500
-Received: from lucky1.263xmail.com ([211.157.147.133]:40348 "EHLO
+        id S1725951AbfLDIaF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 4 Dec 2019 03:30:05 -0500
+Received: from lucky1.263xmail.com ([211.157.147.135]:52032 "EHLO
         lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725951AbfLDIaD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 Dec 2019 03:30:03 -0500
+        with ESMTP id S1726679AbfLDIaF (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 Dec 2019 03:30:05 -0500
 Received: from localhost (unknown [192.168.167.13])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 9B7AB7F168;
-        Wed,  4 Dec 2019 16:22:08 +0800 (CST)
+        by lucky1.263xmail.com (Postfix) with ESMTP id 0E0FC4BD55;
+        Wed,  4 Dec 2019 16:21:59 +0800 (CST)
 X-MAIL-GRAY: 0
 X-MAIL-DELIVERY: 1
 X-ADDR-CHECKED4: 1
@@ -21,9 +21,9 @@ X-ANTISPAM-LEVEL: 2
 X-ABS-CHECKED: 0
 Received: from localhost.localdomain (unknown [58.22.7.114])
         by smtp.263.net (postfix) whith ESMTP id P8551T139845177427712S1575447579673282_;
-        Wed, 04 Dec 2019 16:19:41 +0800 (CST)
+        Wed, 04 Dec 2019 16:19:42 +0800 (CST)
 X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <cea2e463ad378ee25ff8f0934b08a611>
+X-UNIQUE-TAG: <a2268dcd35cb21faf6c277875473bfec>
 X-RL-SENDER: zhangqing@rock-chips.com
 X-SENDER: zhangqing@rock-chips.com
 X-LOGIN-NAME: zhangqing@rock-chips.com
@@ -38,54 +38,57 @@ Cc:     mturquette@baylibre.com, sboyd@kernel.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
         xxx@rock-chips.com, xf@rock-chips.com, huangtao@rock-chips.com,
         Elaine Zhang <zhangqing@rock-chips.com>
-Subject: [PATCH v4 0/5] clk: rockchip: Support for some new features
-Date:   Wed,  4 Dec 2019 16:18:54 +0800
-Message-Id: <20191204081859.19454-1-zhangqing@rock-chips.com>
+Subject: [PATCH v4 2/5] clk: rockchip: fix up the frac clk get rate error
+Date:   Wed,  4 Dec 2019 16:18:56 +0800
+Message-Id: <20191204081859.19454-3-zhangqing@rock-chips.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191204081859.19454-1-zhangqing@rock-chips.com>
+References: <20191204081859.19454-1-zhangqing@rock-chips.com>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-1. Support for some new features
-2. fix up some error
+support fractional divider with only one level parent clock
 
-Chang in V4:
-[PATCH v3 1/5] : Update the commit message.
+Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+---
+ drivers/clk/rockchip/clk.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
-Chang in V3:
-[PATCH v2 3/6] : It's been merged
-So rebased and resubmit.
-
-Chang in V2:
-[PATCH v2 5/6] : fix up the Register error, and add delay.
-
-Elaine Zhang (4):
-  clk: rockchip: fix up the frac clk get rate error
-  clk: rockchip: add a clock-type for muxes based in the pmugrf
-  clk: rockchip: add pll up and down when change pll freq
-  clk: rockchip: support pll setting by auto
-
-Finley Xiao (1):
-  clk: rockchip: Add supprot to limit input rate for fractional divider
-
- drivers/clk/rockchip/clk-pll.c    | 236 ++++++++++++++++++++++++++++--
- drivers/clk/rockchip/clk-px30.c   |  29 ++--
- drivers/clk/rockchip/clk-rk3036.c |  13 +-
- drivers/clk/rockchip/clk-rk3128.c |  15 +-
- drivers/clk/rockchip/clk-rk3188.c |  24 +--
- drivers/clk/rockchip/clk-rk3228.c |  18 ++-
- drivers/clk/rockchip/clk-rk3288.c |  19 ++-
- drivers/clk/rockchip/clk-rk3308.c |  46 +++---
- drivers/clk/rockchip/clk-rk3328.c |  17 ++-
- drivers/clk/rockchip/clk-rk3368.c |  17 ++-
- drivers/clk/rockchip/clk-rk3399.c |  32 ++--
- drivers/clk/rockchip/clk-rv1108.c |  14 +-
- drivers/clk/rockchip/clk.c        |  39 ++++-
- drivers/clk/rockchip/clk.h        |  27 +++-
- include/linux/clk-provider.h      |   2 +
- 15 files changed, 422 insertions(+), 126 deletions(-)
-
+diff --git a/drivers/clk/rockchip/clk.c b/drivers/clk/rockchip/clk.c
+index fac5a4a3f5c3..8f77c3f9fab7 100644
+--- a/drivers/clk/rockchip/clk.c
++++ b/drivers/clk/rockchip/clk.c
+@@ -190,16 +190,21 @@ static void rockchip_fractional_approximation(struct clk_hw *hw,
+ 	if (((rate * 20 > p_rate) && (p_rate % rate != 0)) ||
+ 	    (fd->max_prate && fd->max_prate < p_rate)) {
+ 		p_parent = clk_hw_get_parent(clk_hw_get_parent(hw));
+-		p_parent_rate = clk_hw_get_rate(p_parent);
+-		*parent_rate = p_parent_rate;
+-		if (fd->max_prate && p_parent_rate > fd->max_prate) {
+-			div = DIV_ROUND_UP(p_parent_rate, fd->max_prate);
+-			*parent_rate = p_parent_rate / div;
++		if (!p_parent) {
++			*parent_rate = p_rate;
++		} else {
++			p_parent_rate = clk_hw_get_rate(p_parent);
++			*parent_rate = p_parent_rate;
++			if (fd->max_prate && p_parent_rate > fd->max_prate) {
++				div = DIV_ROUND_UP(p_parent_rate,
++						   fd->max_prate);
++				*parent_rate = p_parent_rate / div;
++			}
+ 		}
+ 
+ 		if (*parent_rate < rate * 20) {
+-			pr_err("%s parent_rate(%ld) is low than rate(%ld)*20, fractional div is not allowed\n",
+-			       clk_hw_get_name(hw), *parent_rate, rate);
++			pr_warn("%s p_rate(%ld) is low than rate(%ld)*20, use integer or half-div\n",
++				clk_hw_get_name(hw), *parent_rate, rate);
+ 			*m = 0;
+ 			*n = 1;
+ 			return;
 -- 
 2.17.1
 
