@@ -2,293 +2,322 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B26B11249D
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2019 09:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6FD1124F9
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2019 09:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727647AbfLDIWQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 4 Dec 2019 03:22:16 -0500
-Received: from a27-186.smtp-out.us-west-2.amazonses.com ([54.240.27.186]:59552
-        "EHLO a27-186.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727635AbfLDIWQ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 Dec 2019 03:22:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1575447735;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
-        bh=y/oX2bh9QX8WcWjXBSwEOXS/IKLIsMVTKHPjuzm/4tg=;
-        b=A6ql4A1s6dzH2Q/s53lPwEna9co7NrhwaDHR5SQThDcLV6JNxOmK7XjeKPRMi0CV
-        XZYymVEpJPzQccT5XmeiwpasuwgrPCiAJGg3oTHAmM7A4QoWeseO3ViMCcLcqqhHLpi
-        Ep9YSiQiPhtGQihwcF9izE0JBBTKVxu+jL52hPxQ=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1575447735;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:Feedback-ID;
-        bh=y/oX2bh9QX8WcWjXBSwEOXS/IKLIsMVTKHPjuzm/4tg=;
-        b=OPN/dN8p5CkWlKh5EmBDDkX90q6mldz9lgXZ+FMPrcYOeFSq/ycIMfXvFdelTaJi
-        nd3/bQFgvXRSL7ig4Wu4aCeRGTK+0l0cGCWaWJbnQMQwoZLCV/DGP3FApzr52CQmv9k
-        6GwK0Knn7voteJ0BOKFi9o5ddFrPM9dZ9gOdDkoY=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 90C8CC447B8
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=tdas@codeaurora.org
-From:   Taniya Das <tdas@codeaurora.org>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?q?Michael=20Turquette=20=C2=A0?= <mturquette@baylibre.com>,
-        robh+dt@kernel.org
-Cc:     David Brown <david.brown@linaro.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        robh@kernel.org, Taniya Das <tdas@codeaurora.org>
-Subject: [PATCH v1 3/3] clk: qcom: Add modem clock controller driver for  SC7180
-Date:   Wed, 4 Dec 2019 08:22:14 +0000
-Message-ID: <0101016ed000aa2f-ac50e86c-7955-4182-8beb-d2af2d9ff7d0-000000@us-west-2.amazonses.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1575447687-9296-1-git-send-email-tdas@codeaurora.org>
-References: <1575447687-9296-1-git-send-email-tdas@codeaurora.org>
-X-SES-Outgoing: 2019.12.04-54.240.27.186
-Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
+        id S1726166AbfLDIaS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 4 Dec 2019 03:30:18 -0500
+Received: from lucky1.263xmail.com ([211.157.147.130]:54048 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725839AbfLDIaS (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 Dec 2019 03:30:18 -0500
+Received: from localhost (unknown [192.168.167.69])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 576DD79864;
+        Wed,  4 Dec 2019 16:30:12 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P29210T140217073772288S1575447928786120_;
+        Wed, 04 Dec 2019 16:25:30 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <8fabd335a09b755d178ee73c5a87b63f>
+X-RL-SENDER: zhangqing@rock-chips.com
+X-SENDER: zhangqing@rock-chips.com
+X-LOGIN-NAME: zhangqing@rock-chips.com
+X-FST-TO: heiko@sntech.de
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-DNS-TYPE: 0
+From:   Elaine Zhang <zhangqing@rock-chips.com>
+To:     heiko@sntech.de
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        xxx@rock-chips.com, xf@rock-chips.com, huangtao@rock-chips.com,
+        Elaine Zhang <zhangqing@rock-chips.com>
+Subject: [PATCH v4 5/5] clk: rockchip: support pll setting by auto
+Date:   Wed,  4 Dec 2019 16:25:27 +0800
+Message-Id: <20191204082527.19957-1-zhangqing@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191204081859.19454-1-zhangqing@rock-chips.com>
+References: <20191204081859.19454-1-zhangqing@rock-chips.com>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add support for the modem clock controller found on SC7180
-based devices. This would allow modem drivers to probe and
-control their clocks.
+If setting freq is not support in rockchip_pll_rate_table,
+It can calculate and set pll params by auto.
 
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
+Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
 ---
- drivers/clk/qcom/Kconfig      |  9 +++++
- drivers/clk/qcom/Makefile     |  1 +
- drivers/clk/qcom/gcc-sc7180.c | 70 ++++++++++++++++++++++++++++++++
- drivers/clk/qcom/mss-sc7180.c | 93 +++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 173 insertions(+)
- create mode 100644 drivers/clk/qcom/mss-sc7180.c
+ drivers/clk/rockchip/clk-pll.c | 215 ++++++++++++++++++++++++++++++---
+ 1 file changed, 200 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-index 3b33ef1..5d4b6e5 100644
---- a/drivers/clk/qcom/Kconfig
-+++ b/drivers/clk/qcom/Kconfig
-@@ -245,6 +245,15 @@ config SC_GCC_7180
- 	  Say Y if you want to use peripheral devices such as UART, SPI,
- 	  I2C, USB, UFS, SDCC, etc.
-
-+config SC_MSS_7180
-+	tristate "SC7180 MSS Clock Controller"
-+	select SC_GCC_7180
-+	help
-+	  Support for the MSS clock controller on Qualcomm Technologies, Inc
-+	  SC7180 devices.
-+	  Say Y if you want to use the MSS branch clocks of the MSS clock
-+	  controller to reset the MSS subsystem.
+diff --git a/drivers/clk/rockchip/clk-pll.c b/drivers/clk/rockchip/clk-pll.c
+index 390e9473807a..ac8c62c531f0 100644
+--- a/drivers/clk/rockchip/clk-pll.c
++++ b/drivers/clk/rockchip/clk-pll.c
+@@ -14,6 +14,7 @@
+ #include <linux/clk-provider.h>
+ #include <linux/regmap.h>
+ #include <linux/clk.h>
++#include <linux/gcd.h>
+ #include "clk.h"
+ 
+ #define PLL_MODE_MASK		0x3
+@@ -46,6 +47,198 @@ struct rockchip_clk_pll {
+ #define to_rockchip_clk_pll_nb(nb) \
+ 			container_of(nb, struct rockchip_clk_pll, clk_nb)
+ 
++#define MHZ			(1000UL * 1000UL)
++#define KHZ			(1000UL)
 +
- config SDM_CAMCC_845
- 	tristate "SDM845 Camera Clock Controller"
- 	select SDM_GCC_845
-diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-index d899661..0e66bc6 100644
---- a/drivers/clk/qcom/Makefile
-+++ b/drivers/clk/qcom/Makefile
-@@ -46,6 +46,7 @@ obj-$(CONFIG_QCS_GCC_404) += gcc-qcs404.o
- obj-$(CONFIG_QCS_Q6SSTOP_404) += q6sstop-qcs404.o
- obj-$(CONFIG_QCS_TURING_404) += turingcc-qcs404.o
- obj-$(CONFIG_SC_GCC_7180) += gcc-sc7180.o
-+obj-$(CONFIG_SC_MSS_7180) += mss-sc7180.o
- obj-$(CONFIG_SDM_CAMCC_845) += camcc-sdm845.o
- obj-$(CONFIG_SDM_DISPCC_845) += dispcc-sdm845.o
- obj-$(CONFIG_SDM_GCC_660) += gcc-sdm660.o
-diff --git a/drivers/clk/qcom/gcc-sc7180.c b/drivers/clk/qcom/gcc-sc7180.c
-index 38424e6..7b3a705 100644
---- a/drivers/clk/qcom/gcc-sc7180.c
-+++ b/drivers/clk/qcom/gcc-sc7180.c
-@@ -2165,6 +2165,71 @@ static struct clk_branch gcc_video_xo_clk = {
- 	},
- };
-
-+static struct clk_branch gcc_mss_cfg_ahb_clk = {
-+	.halt_reg = 0x8a000,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x8a000,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "gcc_mss_cfg_ahb_clk",
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
++/* CLK_PLL_TYPE_RK3066_AUTO type ops */
++#define PLL_FREF_MIN		(269 * KHZ)
++#define PLL_FREF_MAX		(2200 * MHZ)
 +
-+static struct clk_branch gcc_mss_mfab_axis_clk = {
-+	.halt_reg = 0x8a004,
-+	.halt_check = BRANCH_HALT_VOTED,
-+	.clkr = {
-+		.enable_reg = 0x8a004,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "gcc_mss_mfab_axis_clk",
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
++#define PLL_FVCO_MIN		(440 * MHZ)
++#define PLL_FVCO_MAX		(2200 * MHZ)
 +
-+static struct clk_branch gcc_mss_nav_axi_clk = {
-+	.halt_reg = 0x8a00c,
-+	.halt_check = BRANCH_HALT_VOTED,
-+	.clkr = {
-+		.enable_reg = 0x8a00c,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "gcc_mss_nav_axi_clk",
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
++#define PLL_FOUT_MIN		(27500 * KHZ)
++#define PLL_FOUT_MAX		(2200 * MHZ)
 +
-+static struct clk_branch gcc_mss_snoc_axi_clk = {
-+	.halt_reg = 0x8a150,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x8a150,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "gcc_mss_snoc_axi_clk",
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
++#define PLL_NF_MAX		(4096)
++#define PLL_NR_MAX		(64)
++#define PLL_NO_MAX		(16)
 +
-+static struct clk_branch gcc_mss_q6_memnoc_axi_clk = {
-+	.halt_reg = 0x8a154,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x8a154,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "gcc_mss_q6_memnoc_axi_clk",
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
++/* CLK_PLL_TYPE_RK3036/3366/3399_AUTO type ops */
++#define MIN_FOUTVCO_FREQ	(800 * MHZ)
++#define MAX_FOUTVCO_FREQ	(2000 * MHZ)
 +
- static struct gdsc ufs_phy_gdsc = {
- 	.gdscr = 0x77004,
- 	.pd = {
-@@ -2334,6 +2399,11 @@ static struct clk_regmap *gcc_sc7180_clocks[] = {
- 	[GPLL7] = &gpll7.clkr,
- 	[GPLL4] = &gpll4.clkr,
- 	[GPLL1] = &gpll1.clkr,
-+	[GCC_MSS_CFG_AHB_CBCR] = &gcc_mss_cfg_ahb_clk.clkr,
-+	[GCC_MSS_MFAB_AXIS_CBCR] = &gcc_mss_mfab_axis_clk.clkr,
-+	[GCC_MSS_NAV_AXI_CBCR] = &gcc_mss_nav_axi_clk.clkr,
-+	[GCC_MSS_Q6_MEMNOC_AXI_CBCR] = &gcc_mss_q6_memnoc_axi_clk.clkr,
-+	[GCC_MSS_SNOC_AXI_CBCR] = &gcc_mss_snoc_axi_clk.clkr,
- };
-
- static const struct qcom_reset_map gcc_sc7180_resets[] = {
-diff --git a/drivers/clk/qcom/mss-sc7180.c b/drivers/clk/qcom/mss-sc7180.c
-new file mode 100644
-index 0000000..319cf89
---- /dev/null
-+++ b/drivers/clk/qcom/mss-sc7180.c
-@@ -0,0 +1,93 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2019, The Linux Foundation. All rights reserved.
-+ */
++static struct rockchip_pll_rate_table auto_table;
 +
-+#include <linux/platform_device.h>
-+#include <linux/module.h>
-+#include <linux/of_address.h>
-+#include <linux/regmap.h>
-+
-+#include <dt-bindings/clock/qcom,mss-sc7180.h>
-+
-+#include "clk-regmap.h"
-+#include "clk-branch.h"
-+#include "common.h"
-+
-+static struct clk_branch mss_axi_nav_clk = {
-+	.halt_reg = 0xbc,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0xbc,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "mss_axi_nav_clk",
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch mss_axi_crypto_clk = {
-+	.halt_reg = 0xcc,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0xcc,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "mss_axi_crypto_clk",
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct regmap_config mss_regmap_config = {
-+	.reg_bits	= 32,
-+	.reg_stride	= 4,
-+	.val_bits	= 32,
-+	.fast_io	= true,
-+};
-+
-+static struct clk_regmap *mss_sc7180_clocks[] = {
-+	[MSS_AXI_CRYPTO_CLK] = &mss_axi_crypto_clk.clkr,
-+	[MSS_AXI_NAV_CLK] = &mss_axi_nav_clk.clkr,
-+};
-+
-+static const struct qcom_cc_desc mss_sc7180_desc = {
-+	.config = &mss_regmap_config,
-+	.clks = mss_sc7180_clocks,
-+	.num_clks = ARRAY_SIZE(mss_sc7180_clocks),
-+};
-+
-+static int mss_sc7180_probe(struct platform_device *pdev)
++static struct rockchip_pll_rate_table *rk_pll_rate_table_get(void)
 +{
-+	return qcom_cc_probe(pdev, &mss_sc7180_desc);
++	return &auto_table;
 +}
 +
-+static const struct of_device_id mss_sc7180_match_table[] = {
-+	{ .compatible = "qcom,sc7180-mss" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, mss_sc7180_match_table);
-+
-+static struct platform_driver mss_sc7180_driver = {
-+	.probe		= mss_sc7180_probe,
-+	.driver		= {
-+		.name		= "sc7180-mss",
-+		.of_match_table = mss_sc7180_match_table,
-+	},
-+};
-+
-+static int __init mss_sc7180_init(void)
++static int rockchip_pll_clk_set_postdiv(unsigned long fout_hz,
++					u32 *postdiv1,
++					u32 *postdiv2,
++					u32 *foutvco)
 +{
-+	return platform_driver_register(&mss_sc7180_driver);
-+}
-+subsys_initcall(mss_sc7180_init);
++	unsigned long freq;
 +
-+static void __exit mss_sc7180_exit(void)
++	if (fout_hz < MIN_FOUTVCO_FREQ) {
++		for (*postdiv1 = 1; *postdiv1 <= 7; (*postdiv1)++) {
++			for (*postdiv2 = 1; *postdiv2 <= 7; (*postdiv2)++) {
++				freq = fout_hz * (*postdiv1) * (*postdiv2);
++				if (freq >= MIN_FOUTVCO_FREQ &&
++				    freq <= MAX_FOUTVCO_FREQ) {
++					*foutvco = freq;
++					return 0;
++				}
++			}
++		}
++		pr_err("CANNOT FIND postdiv1/2 to make fout in range from 800M to 2000M,fout = %lu\n",
++		       fout_hz);
++	} else {
++		*postdiv1 = 1;
++		*postdiv2 = 1;
++	}
++	return 0;
++}
++
++static struct rockchip_pll_rate_table *
++rockchip_pll_clk_set_by_auto(struct rockchip_clk_pll *pll,
++			     unsigned long fin_hz,
++			     unsigned long fout_hz)
 +{
-+	platform_driver_unregister(&mss_sc7180_driver);
-+}
-+module_exit(mss_sc7180_exit);
++	struct rockchip_pll_rate_table *rate_table = rk_pll_rate_table_get();
++	/* FIXME set postdiv1/2 always 1*/
++	u32 foutvco = fout_hz;
++	u64 fin_64, frac_64;
++	u32 f_frac, postdiv1, postdiv2;
++	unsigned long clk_gcd = 0;
 +
-+MODULE_DESCRIPTION("QTI MSS SC7180 Driver");
-+MODULE_LICENSE("GPL v2");
---
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
-of the Code Aurora Forum, hosted by the  Linux Foundation.
++	if (fin_hz == 0 || fout_hz == 0 || fout_hz == fin_hz)
++		return NULL;
++
++	rockchip_pll_clk_set_postdiv(fout_hz, &postdiv1, &postdiv2, &foutvco);
++	rate_table->postdiv1 = postdiv1;
++	rate_table->postdiv2 = postdiv2;
++	rate_table->dsmpd = 1;
++
++	if (fin_hz / MHZ * MHZ == fin_hz && fout_hz / MHZ * MHZ == fout_hz) {
++		fin_hz /= MHZ;
++		foutvco /= MHZ;
++		clk_gcd = gcd(fin_hz, foutvco);
++		rate_table->refdiv = fin_hz / clk_gcd;
++		rate_table->fbdiv = foutvco / clk_gcd;
++
++		rate_table->frac = 0;
++
++		pr_debug("fin = %lu, fout = %lu, clk_gcd = %lu, refdiv = %u, fbdiv = %u, postdiv1 = %u, postdiv2 = %u, frac = %u\n",
++			 fin_hz, fout_hz, clk_gcd, rate_table->refdiv,
++			 rate_table->fbdiv, rate_table->postdiv1,
++			 rate_table->postdiv2, rate_table->frac);
++	} else {
++		pr_debug("frac div running, fin_hz = %lu, fout_hz = %lu, fin_INT_mhz = %lu, fout_INT_mhz = %lu\n",
++			 fin_hz, fout_hz,
++			 fin_hz / MHZ * MHZ,
++			 fout_hz / MHZ * MHZ);
++		pr_debug("frac get postdiv1 = %u,  postdiv2 = %u, foutvco = %u\n",
++			 rate_table->postdiv1, rate_table->postdiv2, foutvco);
++		clk_gcd = gcd(fin_hz / MHZ, foutvco / MHZ);
++		rate_table->refdiv = fin_hz / MHZ / clk_gcd;
++		rate_table->fbdiv = foutvco / MHZ / clk_gcd;
++		pr_debug("frac get refdiv = %u,  fbdiv = %u\n",
++			 rate_table->refdiv, rate_table->fbdiv);
++
++		rate_table->frac = 0;
++
++		f_frac = (foutvco % MHZ);
++		fin_64 = fin_hz;
++		do_div(fin_64, (u64)rate_table->refdiv);
++		frac_64 = (u64)f_frac << 24;
++		do_div(frac_64, fin_64);
++		rate_table->frac = (u32)frac_64;
++		if (rate_table->frac > 0)
++			rate_table->dsmpd = 0;
++		pr_debug("frac = %x\n", rate_table->frac);
++	}
++	return rate_table;
++}
++
++static struct rockchip_pll_rate_table *
++rockchip_rk3066_pll_clk_set_by_auto(struct rockchip_clk_pll *pll,
++				    unsigned long fin_hz,
++				    unsigned long fout_hz)
++{
++	struct rockchip_pll_rate_table *rate_table = rk_pll_rate_table_get();
++	u32 nr, nf, no, nonr;
++	u32 nr_out, nf_out, no_out;
++	u32 n;
++	u32 numerator, denominator;
++	u64 fref, fvco, fout;
++	unsigned long clk_gcd = 0;
++
++	nr_out = PLL_NR_MAX + 1;
++	no_out = 0;
++	nf_out = 0;
++
++	if (fin_hz == 0 || fout_hz == 0 || fout_hz == fin_hz)
++		return NULL;
++
++	clk_gcd = gcd(fin_hz, fout_hz);
++
++	numerator = fout_hz / clk_gcd;
++	denominator = fin_hz / clk_gcd;
++
++	for (n = 1;; n++) {
++		nf = numerator * n;
++		nonr = denominator * n;
++		if (nf > PLL_NF_MAX || nonr > (PLL_NO_MAX * PLL_NR_MAX))
++			break;
++
++		for (no = 1; no <= PLL_NO_MAX; no++) {
++			if (!(no == 1 || !(no % 2)))
++				continue;
++
++			if (nonr % no)
++				continue;
++			nr = nonr / no;
++
++			if (nr > PLL_NR_MAX)
++				continue;
++
++			fref = fin_hz / nr;
++			if (fref < PLL_FREF_MIN || fref > PLL_FREF_MAX)
++				continue;
++
++			fvco = fref * nf;
++			if (fvco < PLL_FVCO_MIN || fvco > PLL_FVCO_MAX)
++				continue;
++
++			fout = fvco / no;
++			if (fout < PLL_FOUT_MIN || fout > PLL_FOUT_MAX)
++				continue;
++
++			/* select the best from all available PLL settings */
++			if ((no > no_out) ||
++			    ((no == no_out) && (nr < nr_out))) {
++				nr_out = nr;
++				nf_out = nf;
++				no_out = no;
++			}
++		}
++	}
++
++	/* output the best PLL setting */
++	if ((nr_out <= PLL_NR_MAX) && (no_out > 0)) {
++		rate_table->nr = nr_out;
++		rate_table->nf = nf_out;
++		rate_table->no = no_out;
++	} else {
++		return NULL;
++	}
++
++	return rate_table;
++}
++
+ static const struct rockchip_pll_rate_table *rockchip_get_pll_settings(
+ 			    struct rockchip_clk_pll *pll, unsigned long rate)
+ {
+@@ -57,24 +250,16 @@ static const struct rockchip_pll_rate_table *rockchip_get_pll_settings(
+ 			return &rate_table[i];
+ 	}
+ 
+-	return NULL;
++	if (pll->type == pll_rk3066)
++		return rockchip_rk3066_pll_clk_set_by_auto(pll, 24 * MHZ, rate);
++	else
++		return rockchip_pll_clk_set_by_auto(pll, 24 * MHZ, rate);
+ }
+ 
+ static long rockchip_pll_round_rate(struct clk_hw *hw,
+ 			    unsigned long drate, unsigned long *prate)
+ {
+-	struct rockchip_clk_pll *pll = to_rockchip_clk_pll(hw);
+-	const struct rockchip_pll_rate_table *rate_table = pll->rate_table;
+-	int i;
+-
+-	/* Assumming rate_table is in descending order */
+-	for (i = 0; i < pll->rate_count; i++) {
+-		if (drate >= rate_table[i].rate)
+-			return rate_table[i].rate;
+-	}
+-
+-	/* return minimum supported value */
+-	return rate_table[i - 1].rate;
++	return drate;
+ }
+ 
+ /*
+@@ -154,7 +339,7 @@ static unsigned long rockchip_rk3036_pll_recalc_rate(struct clk_hw *hw,
+ {
+ 	struct rockchip_clk_pll *pll = to_rockchip_clk_pll(hw);
+ 	struct rockchip_pll_rate_table cur;
+-	u64 rate64 = prate;
++	u64 rate64 = prate, frac_rate64 = prate;
+ 
+ 	rockchip_rk3036_pll_get_params(pll, &cur);
+ 
+@@ -163,7 +348,7 @@ static unsigned long rockchip_rk3036_pll_recalc_rate(struct clk_hw *hw,
+ 
+ 	if (cur.dsmpd == 0) {
+ 		/* fractional mode */
+-		u64 frac_rate64 = prate * cur.frac;
++		frac_rate64 *= cur.frac;
+ 
+ 		do_div(frac_rate64, cur.refdiv);
+ 		rate64 += frac_rate64 >> 24;
+-- 
+2.17.1
+
+
 
