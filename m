@@ -2,85 +2,92 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF931123F1
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2019 08:57:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 065121124F6
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Dec 2019 09:30:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726217AbfLDH5n (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 4 Dec 2019 02:57:43 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:45962 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726053AbfLDH5n (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 Dec 2019 02:57:43 -0500
-Received: by mail-oi1-f196.google.com with SMTP id v10so3948377oiv.12;
-        Tue, 03 Dec 2019 23:57:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O4LalYjsnfEaSEeb2Zehe/J93R0bKGaAEEsomnP7Lc4=;
-        b=PRvqFkHg9bv4mpYaE8XKLbG5GEGz7O2LmBAOb0awr22hFcyxza1O0PDVjIJpdGdVHk
-         d31/MqFt7uNNCkMexqygSi45B6yBlCTTN8VAWs8aQ8LbcklnBxASRl4esqhDjxVaxJIe
-         QeU/SGP+0L9wqy5L77nm4gcZSSk1DPyn4ozhi+Yll0tK/lomRrPwwOeLm8LgUAY4yAOx
-         jMD1BFVXNc7xqYEkLlGqh14jceyBAVx/n0hTDOvWaSAGZSQRXov0bIvVEHB4hkX4bPlW
-         27yZSoJ6+f+MRkI/fsHwGb9eFrEPPkYY1+4LzUL1AtULQ0+jX4R0691fggYv+4ZMoiDx
-         t8KA==
-X-Gm-Message-State: APjAAAX8MT75CbnQsq+QicFbCqVwwfCeYx053cIbgIcVlv57jPrHZiVv
-        nVwk1dlI4i7uFyi+/2AvQiVVgtDHL3TFK4azgClJAg==
-X-Google-Smtp-Source: APXvYqzjyb4FJbVQHtyhh2tGF9RdLiHEpGR+02icu52LShy7lvntJoGkd+WARmtOCmx9JC+h7OytDime9XYsdUgzjLY=
-X-Received: by 2002:aca:4e87:: with SMTP id c129mr1455643oib.153.1575446262417;
- Tue, 03 Dec 2019 23:57:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20191203034519.5640-1-chris.brandt@renesas.com>
- <20191203034519.5640-6-chris.brandt@renesas.com> <CAMuHMdXS_dSEGdMzHFuYraP=dU5WQFM+9DbPW1rFYH2reG2QhA@mail.gmail.com>
- <TY1PR01MB1562E550DD31E799446F0FD48A420@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-In-Reply-To: <TY1PR01MB1562E550DD31E799446F0FD48A420@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 4 Dec 2019 08:57:31 +0100
-Message-ID: <CAMuHMdVO2ud70cxVUHpCpvvZiMidHG1091bg3iOoOnFGOqpqWQ@mail.gmail.com>
-Subject: Re: [PATCH 5/6] ARM: dts: r7s9210: Add SPIBSC Device support
-To:     Chris Brandt <Chris.Brandt@renesas.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mason Yang <masonccyang@mxic.com.tw>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726166AbfLDIaE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 4 Dec 2019 03:30:04 -0500
+Received: from lucky1.263xmail.com ([211.157.147.133]:40348 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725951AbfLDIaD (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 Dec 2019 03:30:03 -0500
+Received: from localhost (unknown [192.168.167.13])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 9B7AB7F168;
+        Wed,  4 Dec 2019 16:22:08 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P8551T139845177427712S1575447579673282_;
+        Wed, 04 Dec 2019 16:19:41 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <cea2e463ad378ee25ff8f0934b08a611>
+X-RL-SENDER: zhangqing@rock-chips.com
+X-SENDER: zhangqing@rock-chips.com
+X-LOGIN-NAME: zhangqing@rock-chips.com
+X-FST-TO: heiko@sntech.de
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-DNS-TYPE: 0
+From:   Elaine Zhang <zhangqing@rock-chips.com>
+To:     heiko@sntech.de
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        xxx@rock-chips.com, xf@rock-chips.com, huangtao@rock-chips.com,
+        Elaine Zhang <zhangqing@rock-chips.com>
+Subject: [PATCH v4 0/5] clk: rockchip: Support for some new features
+Date:   Wed,  4 Dec 2019 16:18:54 +0800
+Message-Id: <20191204081859.19454-1-zhangqing@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Chris,
+1. Support for some new features
+2. fix up some error
 
-On Tue, Dec 3, 2019 at 11:38 PM Chris Brandt <Chris.Brandt@renesas.com> wrote:
-> On Tue, Dec 3, 2019, Geert Uytterhoeven wrote:
-> > > +                       reg = <0x1f800000 0x8c>, <0x20000000
-> > > + 0x10000000 >;
-> >
-> > Any specific reason you're using 0x8c, not 0x100?
->
-> Because....I keep forgetting what is the latest 'correct' size:
->   A. The exact size of the register range
-> or
->   B. The size rounded up to look nicer
+Chang in V4:
+[PATCH v3 1/5] : Update the commit message.
 
-C. The size used by the on-chip address decoder providing the module's
-   select signal? I doubt that's not a power of two ;-)
+Chang in V3:
+[PATCH v2 3/6] : It's been merged
+So rebased and resubmit.
 
-Gr{oetje,eeting}s,
+Chang in V2:
+[PATCH v2 5/6] : fix up the Register error, and add delay.
 
-                        Geert
+Elaine Zhang (4):
+  clk: rockchip: fix up the frac clk get rate error
+  clk: rockchip: add a clock-type for muxes based in the pmugrf
+  clk: rockchip: add pll up and down when change pll freq
+  clk: rockchip: support pll setting by auto
+
+Finley Xiao (1):
+  clk: rockchip: Add supprot to limit input rate for fractional divider
+
+ drivers/clk/rockchip/clk-pll.c    | 236 ++++++++++++++++++++++++++++--
+ drivers/clk/rockchip/clk-px30.c   |  29 ++--
+ drivers/clk/rockchip/clk-rk3036.c |  13 +-
+ drivers/clk/rockchip/clk-rk3128.c |  15 +-
+ drivers/clk/rockchip/clk-rk3188.c |  24 +--
+ drivers/clk/rockchip/clk-rk3228.c |  18 ++-
+ drivers/clk/rockchip/clk-rk3288.c |  19 ++-
+ drivers/clk/rockchip/clk-rk3308.c |  46 +++---
+ drivers/clk/rockchip/clk-rk3328.c |  17 ++-
+ drivers/clk/rockchip/clk-rk3368.c |  17 ++-
+ drivers/clk/rockchip/clk-rk3399.c |  32 ++--
+ drivers/clk/rockchip/clk-rv1108.c |  14 +-
+ drivers/clk/rockchip/clk.c        |  39 ++++-
+ drivers/clk/rockchip/clk.h        |  27 +++-
+ include/linux/clk-provider.h      |   2 +
+ 15 files changed, 422 insertions(+), 126 deletions(-)
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.17.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+
