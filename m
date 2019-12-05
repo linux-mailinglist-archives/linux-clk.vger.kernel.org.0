@@ -2,175 +2,150 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AAF711395D
-	for <lists+linux-clk@lfdr.de>; Thu,  5 Dec 2019 02:38:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E49C2113BCE
+	for <lists+linux-clk@lfdr.de>; Thu,  5 Dec 2019 07:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728374AbfLEBip (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 4 Dec 2019 20:38:45 -0500
-Received: from mail-eopbgr30075.outbound.protection.outlook.com ([40.107.3.75]:35994
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        id S1728621AbfLEGhx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 5 Dec 2019 01:37:53 -0500
+Received: from mail-eopbgr680074.outbound.protection.outlook.com ([40.107.68.74]:2267
+        "EHLO NAM04-BN3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728098AbfLEBip (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 4 Dec 2019 20:38:45 -0500
+        id S1726211AbfLEGhk (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 5 Dec 2019 01:37:40 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P/SD23e+TElT/aWa5ywIyRJqriVxGbRGX6cMKQZy+hcVEbDrg1yifeodIkyo4FCMBz+rhT6evvyc/97m/HVkftgCnXxv38AfmCwsoCawoj0sUmyW/Z17/tUXo6VjY6/aOnOWkDx0A88AZnv2RlPpQ2gqW3NaVKiCv9/WHc8zf8LeRjdtdxjKgzJWZLuf9IlUA55pKwImwsxSVCoIl3EWLhGbcnPiiwnlwI40J5FgjZXA1TzTmjpqtHWvlXMKvrJ4ZPyNB6Hinlv7ohyAwQkM/5LQHGJFRGTkdaAcpmH4vYZKdSEvZQtlacPfx1De19jOGyUksQ0ENSUbkSrc3Q5IBA==
+ b=RVk1kCycfYPkLbfNWkT4UdIhWBW3pdBKyaMnWgcFqtvxJBBRXmZPB6esP8fBjEVB+k3fYTAf0zGK0VRu+zCuuILM0pqodpvBasrnKdQDbeKshv/fhLoIdtYPBeWGfCnoThD4AE4hH7WYr0emguVYDSRPyuKj75iQg22fkAg6tGoL6E0BKW+/O1Fgf3GrPVMxDi78QagWs1dPYU7zU/E6TYMQxc0TtJ5wD/cQACV60sstGCYtTlRNOWPkA9vRLHVyhcoUlE/gmEvStUyFUDB4x8xK1PLIr6oQl6lX3egW4XejjhN8M3lXMTEB0vQkNJKy3zERGm0JyRjj9UCtIKnksQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hBnpDcN5yK/3mX2A+pTFoqZcr0kZgbfYt+qJs7S99V8=;
- b=ZkNJtR+gj8WZkEJEg/ImBp/QZ0TlI7fu3ZdhxTp6hjsn9DJn/u5HXa0LEO0cjXSGuwop6VRaeogmvLnRFXT3ZR7R6Cjlel68ovZo4JZassG+eBsmxgpU/lh6jQQbUcUbZKdr9xtp3SgdlWucXi6lXwUJ0zTNlEbmZc/MwMcARQW80WYHHjj5dpLPEAmkG4SHYQegh1zTCU5OzR7v4nUj3U4R6VZ31T7or1JhPwlouJLPtwQxzro/sembV0lAdGgGOwgURmSUAYXUO962n34hY1WwzzFsOiP0L1ewvmIImI2fLvd/HbqjzfNxO6/ZtKrZ031ZByeBfotjsfORJ59Whg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ bh=33LS+ZyloUssHMLNiVKIi6pfKqJm0s1OswnsyX5QmCY=;
+ b=kwxhVZfxMESCN1b2sRR0PKUNNkomisw9kJgmbvdBuX3xsP8uEpoKK5+S/ss8TAV3NnczgCqdOJgZU9ky1ib2xKddprdkghqQscaYcLZMqR72ZsT9plOGRQErqX22Omcm8oZd+zqe6cGbPoefthn8XUKZGkfxx9DtFi5HBrnyRl2zSV8wDVPmekdA0S9RTTErM51rjqesnm8CWe1newjAQnvIwvG4PpcsIMrCO/P+PTgwU/OVanMZZG87QkOAMxG1tCW0UzYPN7jemCKMrSa7EgVCkzUT2mtRGt5vjhcdbXhXJevGlq2cEW/gqqtydbAP3rynv1GpMb5qDRb60g8h3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.60.83) smtp.rcpttodomain=lists.infradead.org
+ smtp.mailfrom=xilinx.com; dmarc=bestguesspass action=none
+ header.from=xilinx.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hBnpDcN5yK/3mX2A+pTFoqZcr0kZgbfYt+qJs7S99V8=;
- b=OqYt9BiW3yWPdL0EneZxRTPLmq5wjR+0CzAAsagtap5JT5K6ZASTX5cruKP8Dmi/Bp+PK5o+JDn9U3Ymw19/5AGuyBhhXNLvCSCwTNoMysXj6BmQuCbsDFmNYf/eTqUggsqHvJpCjn/4DZLKaoPV4CrK1hktR4n/N2yLO8vYnb4=
-Received: from AM0PR04MB4481.eurprd04.prod.outlook.com (52.135.147.15) by
- AM0PR04MB4723.eurprd04.prod.outlook.com (20.176.214.148) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2516.13; Thu, 5 Dec 2019 01:37:59 +0000
-Received: from AM0PR04MB4481.eurprd04.prod.outlook.com
- ([fe80::f16d:a26a:840:f97c]) by AM0PR04MB4481.eurprd04.prod.outlook.com
- ([fe80::f16d:a26a:840:f97c%4]) with mapi id 15.20.2495.014; Thu, 5 Dec 2019
- 01:37:59 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Leonard Crestez <leonard.crestez@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>
-CC:     "sboyd@kernel.org" <sboyd@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Alice Guo <alice.guo@nxp.com>
-Subject: RE: [PATCH] clk: imx: imx8qxp-lpcg: use
- devm_platform_ioremap_resource
-Thread-Topic: [PATCH] clk: imx: imx8qxp-lpcg: use
- devm_platform_ioremap_resource
-Thread-Index: AQHVqoum7IH7ZRFDgESKl5wnHnxd3aeqw/Ew
-Date:   Thu, 5 Dec 2019 01:37:59 +0000
-Message-ID: <AM0PR04MB4481FC4A8FD76A01242424B5885C0@AM0PR04MB4481.eurprd04.prod.outlook.com>
-References: <1575454349-5762-1-git-send-email-peng.fan@nxp.com>
- <VI1PR04MB7023E9790323200A4B122445EE5D0@VI1PR04MB7023.eurprd04.prod.outlook.com>
-In-Reply-To: <VI1PR04MB7023E9790323200A4B122445EE5D0@VI1PR04MB7023.eurprd04.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peng.fan@nxp.com; 
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 9d3936dd-d7d2-4caf-cd09-08d77923c2d5
-x-ms-traffictypediagnostic: AM0PR04MB4723:|AM0PR04MB4723:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM0PR04MB47238F3A5623A76AB4820180885C0@AM0PR04MB4723.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 02426D11FE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(136003)(346002)(366004)(376002)(39860400002)(199004)(189003)(6116002)(2501003)(86362001)(2906002)(3846002)(8676002)(966005)(14454004)(33656002)(478600001)(14444005)(81166006)(305945005)(81156014)(74316002)(71200400001)(8936002)(7736002)(6636002)(71190400001)(229853002)(25786009)(6436002)(110136005)(76176011)(66946007)(54906003)(76116006)(6246003)(4326008)(9686003)(55016002)(99286004)(7696005)(6306002)(66446008)(53546011)(64756008)(66556008)(66476007)(11346002)(186003)(6506007)(5660300002)(26005)(52536014)(102836004)(44832011)(316002)(32563001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB4723;H:AM0PR04MB4481.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yFEoVQISX54BfRSyEXkUh2aDa/cs6zHWele1TTzedkK2olV59pxAennHBxy2Nva4QVfwLZ4P737CNy8qcH98aNzkIrbwanL2giyGlYEqoD6cFYhNPqjlXyN92rFifWBXJjqMFaZqWuVgfUErL0o317ZcRlFBBIbn8/CG1+hVj5wFTLGa5sMirEHEHGEhMqqif5ytBn2eVFia51ZwwlnzbJL1wu8UU/q1/PxqNnVr3Qw5PHg8lblSlMwapoH+BakJ5MyfZIalb4w37rgQB8xFkTQZO+BjJokknmrbPobVxLC1QTzjftghRqUdUPIIdM6zHR99tbSQwM+ycfIugg1h65/O+mAZsEInplnSZUP3whrC8Bj5F1JcJvu4paxHgDfQUt3MpafatcmHZy+palG7h9AdVT+ZVQ1WG/KKBWG/KB4n7zKThI+nOrR4NQ3Kh7joA04OlCe8kM5Meop7PoPNdOemYXGB25urnAkHhpmnj3G+hXuUO09/s0MO//xnTrBBbyNiF0qL8pPpyaAlmxAhDQ==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ bh=33LS+ZyloUssHMLNiVKIi6pfKqJm0s1OswnsyX5QmCY=;
+ b=XtbWNw7PeC8HngHNHgxnqby5z51/+Pw3X/tfyDDhA6R0RCaVdtbvWzHybwtsAK7tD/O7KudJHqTxV0ewYJx64Lh14wTGXc3cG2eIPc0EX4DoD9YgLARPQ/KiuIEPAg/2K2APtMpgtRPVgdQHlBczfe3s/PmIpVESLosjdpna7jc=
+Received: from BL0PR02CA0130.namprd02.prod.outlook.com (2603:10b6:208:35::35)
+ by BN7PR02MB4978.namprd02.prod.outlook.com (2603:10b6:408:2a::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2495.18; Thu, 5 Dec
+ 2019 06:37:36 +0000
+Received: from BL2NAM02FT013.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e46::204) by BL0PR02CA0130.outlook.office365.com
+ (2603:10b6:208:35::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2495.18 via Frontend
+ Transport; Thu, 5 Dec 2019 06:37:36 +0000
+Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; lists.infradead.org; dkim=none (message not signed)
+ header.d=none;lists.infradead.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ BL2NAM02FT013.mail.protection.outlook.com (10.152.77.19) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2474.17
+ via Frontend Transport; Thu, 5 Dec 2019 06:37:36 +0000
+Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
+        (envelope-from <rajan.vaja@xilinx.com>)
+        id 1icklb-0000xN-1u; Wed, 04 Dec 2019 22:37:35 -0800
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <rajan.vaja@xilinx.com>)
+        id 1icklV-0000XV-Un; Wed, 04 Dec 2019 22:37:29 -0800
+Received: from xsj-pvapsmtp01 (xsj-smtp.xilinx.com [149.199.38.66])
+        by xsj-smtp-dlp1.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id xB56bJdw010325;
+        Wed, 4 Dec 2019 22:37:19 -0800
+Received: from [172.19.2.91] (helo=xsjjollys50.xilinx.com)
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <rajan.vaja@xilinx.com>)
+        id 1icklL-0000WL-Mg; Wed, 04 Dec 2019 22:37:19 -0800
+From:   Rajan Vaja <rajan.vaja@xilinx.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, michal.simek@xilinx.com,
+        jolly.shah@xilinx.com, m.tretter@pengutronix.de,
+        gustavo@embeddedor.com, tejas.patel@xilinx.com,
+        nava.manne@xilinx.com, mdf@kernel.org
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Rajan Vaja <rajan.vaja@xilinx.com>
+Subject: [PATCH v3 0/6] clk: zynqmp: Extend and fix zynqmp clock driver
+Date:   Wed,  4 Dec 2019 22:35:53 -0800
+Message-Id: <1575527759-26452-1-git-send-email-rajan.vaja@xilinx.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1574415814-19797-1-git-send-email-rajan.vaja@xilinx.com>
+References: <1574415814-19797-1-git-send-email-rajan.vaja@xilinx.com>
+X-RCIS-Action: ALLOW
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(376002)(396003)(346002)(136003)(39860400002)(199004)(189003)(4326008)(5660300002)(16586007)(50466002)(7696005)(81166006)(316002)(336012)(8676002)(48376002)(9786002)(107886003)(76176011)(356004)(51416003)(6666004)(81156014)(11346002)(305945005)(478600001)(14444005)(50226002)(8936002)(26005)(36756003)(7416002)(426003)(186003)(2616005)(2906002)(70206006)(44832011)(70586007)(36386004)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:BN7PR02MB4978;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;A:1;MX:1;
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d3936dd-d7d2-4caf-cd09-08d77923c2d5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Dec 2019 01:37:59.4363
+Content-Type: text/plain
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 008fa6ff-3627-4751-bf7b-08d7794d9e10
+X-MS-TrafficTypeDiagnostic: BN7PR02MB4978:
+X-Microsoft-Antispam-PRVS: <BN7PR02MB4978A89B46C8FDFAF7DF1354B75C0@BN7PR02MB4978.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:3826;
+X-Forefront-PRVS: 02426D11FE
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GixZawCC27bTcGF15s5shn5D7og2KQf6FBLpMwvLopd7E2MG1Bkm6XHqwa323sQe1kdWialSpvRtL5OeMXjtBEp3UKHSmqahn+ToANwUG9KR0zPyzxBta+IQEeWA82FQ99ZY3Pd4thmlSZyMN8iQGlOhe0D/1CVg3alGrDRN5rGcK6axvw1efNK2CThYkGWBOZW7eVlilo2PZDYyZgtJ+uf8nt8fXq0P3nV7vFJpzQTwtrWXsPqIAGyDcq+SqWKl69Ucezk5VZOXtnOvMHzEldRW/WhNYUhw4VghvJ4/xwxUE7p0LEOwqGZEAV5FcPDXp78dHPHvQIK9bVR/pifG68w3FFE6wb5edzR5pdg3KUnJ2Y2e9a8jdGBDZ5qTWh7PJr51K+3afDsKSNkiFwrWZM9Wd5yd836VG+CYSWBMcD+saytjXHTq3E9jBCBLz6W2y+H2jqv6oauq74Wb4OBFAwdjqU4MmoXlI5DBNOKTjM+XtsVTMpQzIOWDAG7Mc2s2
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2019 06:37:36.5823
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gzsFxphH313WphDGJBKw9D+OHvAahXPSj7U2979XVIb2DWwKeyQ8LoGjOyrioVhLgGs3f65KEkhHgm/9tVpjYQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4723
+X-MS-Exchange-CrossTenant-Network-Message-Id: 008fa6ff-3627-4751-bf7b-08d7794d9e10
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR02MB4978
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-> Subject: Re: [PATCH] clk: imx: imx8qxp-lpcg: use
-> devm_platform_ioremap_resource
->=20
-> On 2019-12-04 12:14 PM, Peng Fan wrote:
-> > From: Peng Fan <peng.fan@nxp.com>
-> >
-> > devm_platform_ioremap_resource() wraps platform_get_resource() and
-> > devm_ioremap_resource(), we could use this API to simplify the code.
-> >
-> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
->=20
-> This patch has been posted before and it breaks uart on imx8qxp-mek and
-> possibly other things.
->=20
-> The old and new paths are not equivalent: devm_platform_ioremap_resource
-> calls devm_ioremap_resource differs from devm_ioremap by also calling
-> devm_request_mem_region.
->=20
-> This prevents other mappings in the area; this is not an issue for most d=
-rivers
-> but imx8qxp-lpcg maps whole subsystems. For example:
->=20
->                  adma_lpcg: clock-controller@59000000 {
->                          compatible =3D "fsl,imx8qxp-lpcg-adma";
->                          reg =3D <0x59000000 0x2000000>;
->                          #clock-cells =3D <1>;
->                  };
->=20
->                  adma_lpuart0: serial@5a060000 {
->                          reg =3D <0x5a060000 0x1000>;
-> 			...
-> 		};
->=20
-> Previously: https://patchwork.kernel.org/patch/10908807/
+ZynqMP clock driver can be used for Versal platform also. Add support
+for Versal platform in ZynqMP clock driver.
 
-Thanks. I think at least need to provide some comments in code.
+Also this patch series fixes divider calculation and adds support for get
+maximum divider, clock with CLK_DIVIDER_POWER_OF_TWO flag and warn user if
+clock users are more than allowed.
 
-Thanks,
-Peng.
+Rajan Vaja (5):
+  dt-bindings: clock: Add bindings for versal clock driver
+  clk: zynqmp: Extend driver for versal
+  clk: zynqmp: Warn user if clock user are more than allowed
+  clk: zynqmp: Add support for get max divider
+  clk: zynqmp: Fix divider calculation
 
->=20
-> > ---
-> >   drivers/clk/imx/clk-imx8qxp-lpcg.c | 8 ++------
-> >   1 file changed, 2 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/clk/imx/clk-imx8qxp-lpcg.c
-> > b/drivers/clk/imx/clk-imx8qxp-lpcg.c
-> > index c0aff7ca6374..3f2c2b068c73 100644
-> > --- a/drivers/clk/imx/clk-imx8qxp-lpcg.c
-> > +++ b/drivers/clk/imx/clk-imx8qxp-lpcg.c
-> > @@ -164,7 +164,6 @@ static int imx8qxp_lpcg_clk_probe(struct
-> platform_device *pdev)
-> >   	struct clk_hw_onecell_data *clk_data;
-> >   	const struct imx8qxp_ss_lpcg *ss_lpcg;
-> >   	const struct imx8qxp_lpcg_data *lpcg;
-> > -	struct resource *res;
-> >   	struct clk_hw **clks;
-> >   	void __iomem *base;
-> >   	int i;
-> > @@ -173,12 +172,9 @@ static int imx8qxp_lpcg_clk_probe(struct
-> platform_device *pdev)
-> >   	if (!ss_lpcg)
-> >   		return -ENODEV;
-> >
-> > -	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > -	if (!res)
-> > -		return -EINVAL;
-> > -	base =3D devm_ioremap(dev, res->start, resource_size(res));
-> > +	base =3D devm_platform_ioremap_resource(pdev, 0);
-> >   	if (!base)
-> > -		return -ENOMEM;
-> > +		return PTR_ERR(base);
-> >
-> >   	clk_data =3D devm_kzalloc(&pdev->dev, struct_size(clk_data, hws,
-> >   				ss_lpcg->num_max), GFP_KERNEL);
-> >
+Tejas Patel (1):
+  clk: zynqmp: Add support for clock with CLK_DIVIDER_POWER_OF_TWO flag
+
+ .../devicetree/bindings/clock/xlnx,versal-clk.yaml |  64 +++++++++++
+ drivers/clk/zynqmp/clkc.c                          |   3 +-
+ drivers/clk/zynqmp/divider.c                       | 118 +++++++++++++++++++-
+ drivers/clk/zynqmp/pll.c                           |   6 +-
+ drivers/firmware/xilinx/zynqmp.c                   |   2 +
+ include/dt-bindings/clock/xlnx-versal-clk.h        | 123 +++++++++++++++++++++
+ include/linux/firmware/xlnx-zynqmp.h               |   2 +
+ 7 files changed, 310 insertions(+), 8 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/xlnx,versal-clk.yaml
+ create mode 100644 include/dt-bindings/clock/xlnx-versal-clk.h
+
+-- 
+Changes in v3:
+ - [PATCH 1/7]: Update SPDX-License-Identifier.
+Changes in v2:
+ - [PATCH 7/7]: Removed patch #7 to fix clock frac to handle backward
+		compatibility. Will send this patch separately with
+		proper backward compatibility handling.
+ - Rest of the changes are mentioned in individual patches.
+-- 
+2.7.4
 
