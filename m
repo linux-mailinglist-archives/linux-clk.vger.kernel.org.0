@@ -2,119 +2,186 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DB3115C08
-	for <lists+linux-clk@lfdr.de>; Sat,  7 Dec 2019 12:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9077115D28
+	for <lists+linux-clk@lfdr.de>; Sat,  7 Dec 2019 15:26:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbfLGLjg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 7 Dec 2019 06:39:36 -0500
-Received: from mta03.svc.cra.dublin.eircom.net ([159.134.118.145]:37659 "HELO
-        mta03.svc.cra.dublin.eircom.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with SMTP id S1726196AbfLGLjg (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 7 Dec 2019 06:39:36 -0500
-Received: (qmail 46199 messnum 15605531 invoked from network[213.94.190.15/avas03.vendorsvc.cra.dublin.eircom.net]); 7 Dec 2019 11:32:52 -0000
-Received: from avas03.vendorsvc.cra.dublin.eircom.net (HELO avas03) (213.94.190.15)
-  by mta03.svc.cra.dublin.eircom.net (qp 46199) with SMTP; 7 Dec 2019 11:32:52 -0000
-Received: from vzmbx14.eircom.net ([86.43.60.94])
-        by Cloudmark Gateway with SMTP
-        id dYKSizK99bSpIdYKSiLxAB; Sat, 07 Dec 2019 11:32:52 +0000
-X-Spam-Flag: NO
-X-CNFS-Analysis: v=2.2 cv=FcBH/N26 c=1 sm=1 tr=0
- a=FAmDTrhRXWZidKp3IXrKKA==:117 a=9cW_t1CCXrUA:10 a=FKkrIqjQGGEA:10
- a=l6OWq-7Ic60A:10 a=V4UkPbaUNaMA:10 a=IkcTkHD0fZMA:10 a=x7bEGLp0ZPQA:10
- a=JhbabEnV4CkA:10 a=GPaJ0X9CnZ8A:10 a=doXRSIeQvv4A:10 a=ZZnuYtJkoWoA:10
- a=bDN84i_9AAAA:8 a=EdtodJE04Z9qwSBKOeQA:9 a=+jEqtf1s3R9VXZ0wqowq2kgwd+I=:19
- a=kARj0y1wozw4h1xa:21 a=ipNiNumy32TAO5wm:21 a=QEXdDO2ut3YA:10
- a=0cDKMq5RG4gA:10 a=J2PsDwZO0S0EpbpLmD-j:22
-Date:   Sat, 7 Dec 2019 11:32:52 +0000 (GMT)
-From:   Janet Keuler <alanmitc@eircom.net>
-Reply-To: Janet Keuler <3114494846@qq.com>
-Message-ID: <1485127759.95429.1575718372166.JavaMail.zimbra@eircom.net>
-Subject: YOUR COMPENSATION PAYMENT OF $1,500,000.00 USD
+        id S1726410AbfLGO0V (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 7 Dec 2019 09:26:21 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:41820 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726397AbfLGO0U (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 7 Dec 2019 09:26:20 -0500
+Received: by mail-lj1-f194.google.com with SMTP id h23so10731697ljc.8;
+        Sat, 07 Dec 2019 06:26:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=y2jLemfM6NAa2htdvtNYO/Blymq/6is+o20B/osA9Ro=;
+        b=qIF9CxEQ6k1EF/wqZtxvEai9mTLlsDwyNz++ooTbsAS9QwTtkSqRAk+YvNmtXp9QPe
+         k/4V29MeSX3PW7cKFz65qoEa3W9fgRweWAYOFYYc3WpCESIC9euKFqMe1lVW2EOievFt
+         3/h1JzjIiU5M1miTi/jx+eUuQ/seDVanFdxnI0cxiEDdSutLkFFP/cCVb8Er3+3eEmaX
+         dztGrSqarJD18XnypryEKxayizmfQISw/uRsHZk89Hoj9j8aOXNNOogX3tpCbVqBLtXt
+         Eya6SEryR9plGqUKupDB8B3lHDzo2dO4p6ZAphHrhZWb58dO2mbfMR5jJRPBX60n/2Gc
+         KtaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=y2jLemfM6NAa2htdvtNYO/Blymq/6is+o20B/osA9Ro=;
+        b=orotlePkznKHY5ULOhSPPWVj7hWRE0jjrudPrFwRT4t+6RmCLnVUMh2onVrUeYhmf0
+         9eMuv9QHkI49EvIlH7NZhyWCiz56b8JXAWdcC7wbXUJt80RL4bwyuPREGS6F0FDaqlVP
+         Yi0bRVGbvfTH3045UUBTThC/JrMx4GcJsdRu2WzWGvFDipgb5RT/AyFl+fmlOuaHMepn
+         iIF1IrmbgBREXUK3gup+knaX2wecOV1JtHL59Q8C7sLk/K8lSCqGlXx88C1gZpxOSmln
+         6LGrco/QksBXG1WynzpI2qcopbm6bN6VD43v604TU5bAACaYfxkdvpWV4XiiGOAfnBFB
+         lcCA==
+X-Gm-Message-State: APjAAAUl3Qi1HXgrAOYiua/O8KxiYeFIIme2CzvQHi86+huMssPQWBVj
+        UMtdZKlZ8T+c6iy4Gmk/NW8=
+X-Google-Smtp-Source: APXvYqz1YRFRFNxLt0h0j6p1bp3b8kcTYDbdTpKf1RHHQ0N+EIL0IYrF/JF8vAisr83u1gPfUooNgg==
+X-Received: by 2002:a05:651c:1139:: with SMTP id e25mr11792174ljo.200.1575728777693;
+        Sat, 07 Dec 2019 06:26:17 -0800 (PST)
+Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.googlemail.com with ESMTPSA id d16sm8147955lfa.16.2019.12.07.06.26.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 07 Dec 2019 06:26:16 -0800 (PST)
+Subject: Re: [PATCH v3 00/15] Move PMC clocks into Tegra PMC driver
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        mperttunen@nvidia.com, gregkh@linuxfoundation.org,
+        sboyd@kernel.org, tglx@linutronix.de, robh+dt@kernel.org,
+        mark.rutland@arm.com, allison@lohutok.net, pdeschrijver@nvidia.com,
+        pgaikwad@nvidia.com, mturquette@baylibre.com,
+        horms+renesas@verge.net.au, Jisheng.Zhang@synaptics.com,
+        krzk@kernel.org, arnd@arndb.de, spujar@nvidia.com,
+        josephl@nvidia.com, vidyas@nvidia.com, daniel.lezcano@linaro.org,
+        mmaddireddy@nvidia.com, markz@nvidia.com,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, alexios.zavras@intel.com,
+        alsa-devel@alsa-project.org
+References: <1575600535-26877-1-git-send-email-skomatineni@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <dfda896d-27f3-7185-146e-4f697d823471@gmail.com>
+Date:   Sat, 7 Dec 2019 17:26:15 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
+In-Reply-To: <1575600535-26877-1-git-send-email-skomatineni@nvidia.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [60.109.142.132]
-X-Mailer: Zimbra 8.6.0_GA_1242 (ZimbraWebClient - FF70 (Win)/8.6.0_GA_1242)
-Thread-Topic: YOUR COMPENSATION PAYMENT OF $1,500,000.00 USD
-Thread-Index: QszVs4th17t95KHsUggm9vryXit3BQ==
-X-CMAE-Envelope: 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
-To:     unlisted-recipients:; (no To-header on input)
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+06.12.2019 05:48, Sowjanya Komatineni пишет:
+> Tegra PMC has clk_out_1, clk_out_2, clk_out_3 and blink controls which
+> are currently registered by Tegra clock driver using clk_regiser_mux and
+> clk_register_gate which performs direct Tegra PMC register access.
+> 
+> When Tegra PMC is in secure mode, any access from non-secure world will
+> not go through.
+> 
+> This patch series adds these Tegra PMC clocks and blink controls to Tegra
+> PMC driver with PMC as clock provider and removed them from Tegra clock
+> driver. This also adds PMC specific clock id's to use in device tree and
+> removed clock ids of PMC clock from Tegra clock driver.
+> 
+> clk_out_1 is dedicated for audio mclk and current ASoC driver does not
+> setting extern1 as parent for clk_out_1 and enabling clk_out_1 and
+> currently this is taken care by Tegra clock driver during clock inits
+> and there is no need to enable this during clock init.
+> 
+> So, this series also includes patch that updates ASoC driver to take
+> care of configuring parent of mclk and enabling mclk using both extern1
+> and clk_out_1 and updates all device trees to use clk_out_1 from pmc as
+> mclk incase if device tree don't specify assigned-clock-parents.
+> 
+> This series also includes a patch for mclk fallback to use extern1
+> when retrieving mclk fails with new device tree which uses pmc provider
+> to have this backward compatible of new DT with old kernels.
+> 
+> This series also includes a patch to remove clock ids for these clocks
+> from clock dt-binding as these clocks are not used in any of the existing
+> device tree except in tegra210-smaug.dts and this series includes a patch
+> to update clock provider from tegra_car to pmc in tegra210-smaug.dts for
+> clk_out_2.
+> 
+> [v3]:	Changes between v2 and v3 are
+> 	- Removes set parent of clk_out_1_mux to extern1 and enabling
+> 	  extern1 from the clock driver.
+> 	- Doesn't enable clk_out_1 and blink by default in pmc driver
+> 	- Updates ASoC driver to take care of audio mclk parent
+> 	  configuration incase if device tree don't specify assigned
+> 	  clock parent properties and enables mclk using both clk_out_1
+> 	  and extern1.
+> 	- updates all device trees using extern1 as mclk in sound node
+> 	  to use clk_out_1 from pmc.
+> 	- patch for YAML format pmc dt-binding
+> 	- Includes v2 feedback
+> 
+> [v2]:	Changes between v1 and v2 are
+> 	- v2 includes patches for adding clk_out_1, clk_out_2, clk_out_3,
+> 	  blink controls to Tegra PMC driver and removing clk-tegra-pmc.
+> 	- feedback related to pmc clocks in Tegra PMC driver from v1
+> 	- Removed patches for WB0 PLLM overrides and PLLE IDDQ PMC programming
+> 	  by the clock driver using helper functions from Tegra PMC.
+> 
+>  	  Note:
+> 	  To use helper functions from PMC driver, PMC early init need to
+> 	  happen prior to using helper functions and these helper functions are
+> 	  for PLLM Override and PLLE IDDQ programming in PMC during PLLM/PLLE
+> 	  clock registration which happen in clock_init prior to Tegra PMC
+> 	  probe.
+> 	  Moving PLLM/PLLE clocks registration to happen after Tegra PMC
+> 	  impacts other clocks EMC, MC and corresponding tegra_emc_init and
+> 	  tegra_mc_init.
+> 	  This implementation of configuring PMC registers thru helper
+> 	  functions in clock driver needs proper changes across PMC, Clock,
+> 	  EMC and MC inits to have it work across all Tegra platforms.
+> 
+> 	  Currently PLLM Override is not enabled in the bootloader so proper
+> 	  patches for this fix will be taken care separately.
+> 
+> [v1]:	v1 includes patches for below fixes.
+> 	- adding clk_out_1, clk_out_2, clk_out_3, blink controls to Tegra PMC
+> 	  driver and removing clk-tegra-pmc.
+> 	- updated clock provider from tegra_car to pmc in the device tree
+> 	  tegra210-smaug.dts that uses clk_out_2.
+> 	- Added helper functions in PMC driver for WB0 PLLM overrides and PLLE
+> 	  IDDQ programming to use by clock driver and updated clock driver to
+> 	  use these helper functions and removed direct PMC access from clock
+> 	  driver and all pmc base address references in clock driver.
+> 
+> 
+> Sowjanya Komatineni (15):
+>   dt-bindings: soc: tegra-pmc: Add Tegra PMC clock bindings
+>   dt-bindings: tegra: Convert Tegra PMC bindings to YAML
+>   soc: tegra: Add Tegra PMC clock registrations into PMC driver
+>   dt-bindings: soc: tegra-pmc: Add id for Tegra PMC blink control
+>   soc: pmc: Add blink output clock registration to Tegra PMC
+>   clk: tegra: Remove tegra_pmc_clk_init along with clk ids
+>   dt-bindings: clock: tegra: Remove pmc clock ids from clock dt-bindings
+>   ASoC: tegra: Add audio mclk control through clk_out_1 and extern1
+>   ASoC: tegra: Add fallback for audio mclk
+>   clk: tegra: Remove extern1 and cdev1 from clocks inittable
+>   ARM: dts: tegra: Add clock-cells property to pmc
 
 
--- 
-Attention: Beneficiary,
+>   arm64: tegra: Add clock-cells property to Tegra PMC node
+>   ARM: tegra: Update sound node clocks in device tree
+>   arm64: tegra: smaug: Change clk_out_2 provider to pmc
+>   ASoC: nau8825: change Tegra clk_out_2 provider from tegra_car to pmc
 
-NOTE: IF YOU RECEIVED THIS MESSAGE IN YOUR SPAM / BULK FOLDER, THAT IS BECAUSE OF THE RESTRICTIONS IMPLEMENTED BY YOUR INTERNET SERVICE PROVIDER, WE URGE YOU TO TREAT IT GENUINELY.
+Hello Sowjanya,
 
-This is the second time we are notifying you about the statue of your compensation payment of ( $1,500,000.00). Be inform that We have been authorized by the United Nations Compensation Commission (UNCC) to release your compensation payment totaling the sum of US$1,500,000.00 through MoneyGram money transfer service. You will be receiving the sum of US$5,000.00 daily until the total sum of US $1,500,000.00 is completely transferred to you.
+Something gone wrong with these patches because I didn't receive them
+and don't see them on the ML either.
 
-Besides,we have already credited your first payment of US$5,000.00 today,therefore,you are advice to contact our director of foreign Remittance Department MR.ROBERT TAIWO and request him to give you the details of your first payment such as Money Transfer Control Number (MTCN) and senders name to enable you pick up your first payment of US$5,000.00 at any MoneyGram office located around you. Kindly contact him through the information stated below for faster process.
-
-CONTACT PERSON: MR.ROBERT TAIWO
-E-MAIL:  ( transfermoney212@foxmail.com )
-TEL: (+229) 96 54 83 88
-
-REMEMBER TO FORWARD HIM YOUR FULL INFORMATION AS REQUIRED BELOW TO ENABLE HIM LOCATE YOUR PAYMENT FILE AND ATTEND TO YOU IMMEDIATELY.
-
-1. Your Full Name:
-2. Address:
-3. Age:
-4. Occupation:
-5. Telephone:
-6. Country:
-
-NOTE: that the amount to be paid to you is (USD1.500, 000.00), we expect your urgent response to this email to enable us monitor the  transaction effectively.
-
-Best Regards
-Mrs. Janet Keuler.
+Also, the list of email correspondents looks a bit too larger. I'm
+pretty sure some of the people do not care much about this series. I
+tend to use script/get_maintainer.pl and then manually pick the relevant
+people for patches.
