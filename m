@@ -2,64 +2,82 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03387116520
-	for <lists+linux-clk@lfdr.de>; Mon,  9 Dec 2019 03:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36832116582
+	for <lists+linux-clk@lfdr.de>; Mon,  9 Dec 2019 04:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726841AbfLICym (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 8 Dec 2019 21:54:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47136 "EHLO mail.kernel.org"
+        id S1726894AbfLIDkD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 8 Dec 2019 22:40:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53832 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726748AbfLICym (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 8 Dec 2019 21:54:42 -0500
+        id S1726748AbfLIDkD (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 8 Dec 2019 22:40:03 -0500
 Received: from dragon (98.142.130.235.16clouds.com [98.142.130.235])
         (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CD05E20692;
-        Mon,  9 Dec 2019 02:54:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D4E1920663;
+        Mon,  9 Dec 2019 03:39:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1575860081;
-        bh=IiKeChNrtz/p4Aq7d3yVyybl+heL9RFk0ZAzNPQG1Gw=;
+        s=default; t=1575862802;
+        bh=d+hshf6HNbYVQ7YUWyTquZO8CIdL9NhE1d6gbrTXxqw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JaetPVHtG558XXBCJass8k6qiJ2BAGyXNmZtm1j9zhSpZ590C4I6hV2eqsEbd7gqQ
-         Cu2pdg2Ryk5JWHQ2HaKYGZPyDOoSwwmWPBQebOho2kHB9eTRiblJuxWxc5om6CVOq2
-         EVMDdWutnd6DYlz4q0vXjHTQvKb/tgOy9G7/zJ1Y=
-Date:   Mon, 9 Dec 2019 10:54:26 +0800
+        b=dVrbfbQPmtX1764syBxFyHfYgT9SyVYo53w4afoqGNmqZ0yOzCqhl5fqIIBBZsgh4
+         uYdJoTij9+ZqM2RdNOBbmPfUJXpQIbigcbGXSwo/rL8sSo+OYACQFr0StELYspkKub
+         LqZaBP9P944GTrANZ5qme08q6yAq16Ai13Jh9rv0=
+Date:   Mon, 9 Dec 2019 11:39:47 +0800
 From:   Shawn Guo <shawnguo@kernel.org>
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     "sboyd@kernel.org" <sboyd@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+To:     Abel Vesa <abel.vesa@nxp.com>
+Cc:     Aisheng Dong <aisheng.dong@nxp.com>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Jacky Bai <ping.bai@nxp.com>, Peng Fan <peng.fan@nxp.com>,
         dl-linux-imx <linux-imx@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
         "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Alice Guo <alice.guo@nxp.com>
-Subject: Re: [PATCH] clk: imx: clk-imx7ulp: Add missing sentinel of
- ulp_div_table
-Message-ID: <20191209025425.GW3365@dragon>
-References: <1574402986-11117-1-git-send-email-peng.fan@nxp.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 00/11] clk: imx: Trivial cleanups for clk_hw based API
+Message-ID: <20191209033946.GX3365@dragon>
+References: <1574419679-3813-1-git-send-email-abel.vesa@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1574402986-11117-1-git-send-email-peng.fan@nxp.com>
+In-Reply-To: <1574419679-3813-1-git-send-email-abel.vesa@nxp.com>
 User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, Nov 22, 2019 at 06:11:42AM +0000, Peng Fan wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Fri, Nov 22, 2019 at 10:48:09AM +0000, Abel Vesa wrote:
+> These changes are cleanups for the clk_hw based API i.MX clock drivers switch
+> longterm effort. As mentioned in the commit messages, the end goal here is to
+> have all the i.MX drivers use clk_hw based API only.
 > 
-> There should be a sentinel of ulp_div_table, otherwise _get_table_div
-> may access data out of the array.
+> I've put these all in a single patchset since they do not impact in any way
+> the expected behavior of the drivers and they are quite obvious trivial ones.
+> More patches to follow for the older i.MX platforms but those might not be as
+> harmless (and trivial) as these ones.
 > 
-> Fixes: b1260067ac3d ("clk: imx: add imx7ulp clk driver")
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> Changes since v1:
+>  - added a patch that takes care of the register function handling when the
+>    clk based API helpers are used, as suggested by Leonard Crestez.
+>  - Renamed the SCCG to SSCG, as suggested by Leonard Crestez.
+> 
+> Abel Vesa (11):
+>   clk: imx: Add correct failure handling for clk based helpers
+>   clk: imx: Rename the SCCG to SSCG
+>   clk: imx: Replace all the clk based helpers with macros
+>   clk: imx: pllv1: Switch to clk_hw based API
+>   clk: imx: pllv2: Switch to clk_hw based API
+>   clk: imx: imx7ulp composite: Rename to show is clk_hw based
+>   clk: imx: Rename sccg and frac pll register to suggest clk_hw
+>   clk: imx: Rename the imx_clk_pllv4 to imply it's clk_hw based
+>   clk: imx: Rename the imx_clk_pfdv2 to imply it's clk_hw based
+>   clk: imx: Rename the imx_clk_divider_gate to imply it's clk_hw based
+>   clk: imx7up: Rename the clks to hws
 
-Applied, thanks.
+I'm fine with the series.  But it doesn't apply to my clk/imx branch.
+Can you rebase and resend?
+
+Shawn
