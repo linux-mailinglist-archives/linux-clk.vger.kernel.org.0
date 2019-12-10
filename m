@@ -2,214 +2,94 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 260A4117CB8
-	for <lists+linux-clk@lfdr.de>; Tue, 10 Dec 2019 01:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74FC3117D7C
+	for <lists+linux-clk@lfdr.de>; Tue, 10 Dec 2019 03:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727387AbfLJAyg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 9 Dec 2019 19:54:36 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:16186 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727304AbfLJAyg (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 Dec 2019 19:54:36 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5deeecb60000>; Mon, 09 Dec 2019 16:54:14 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 09 Dec 2019 16:54:34 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 09 Dec 2019 16:54:34 -0800
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 10 Dec
- 2019 00:54:34 +0000
-Received: from [10.2.174.71] (10.124.1.5) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 10 Dec
- 2019 00:54:32 +0000
-Subject: Re: [PATCH v3 08/15] ASoC: tegra: Add audio mclk control through
- clk_out_1 and extern1
-To:     Dmitry Osipenko <digetx@gmail.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <mperttunen@nvidia.com>,
-        <gregkh@linuxfoundation.org>, <sboyd@kernel.org>,
-        <tglx@linutronix.de>, <robh+dt@kernel.org>, <mark.rutland@arm.com>
-CC:     <allison@lohutok.net>, <pdeschrijver@nvidia.com>,
-        <pgaikwad@nvidia.com>, <mturquette@baylibre.com>,
-        <horms+renesas@verge.net.au>, <Jisheng.Zhang@synaptics.com>,
-        <krzk@kernel.org>, <arnd@arndb.de>, <spujar@nvidia.com>,
-        <josephl@nvidia.com>, <vidyas@nvidia.com>,
-        <daniel.lezcano@linaro.org>, <mmaddireddy@nvidia.com>,
-        <markz@nvidia.com>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <perex@perex.cz>, <tiwai@suse.com>,
-        <alexios.zavras@intel.com>, <alsa-devel@alsa-project.org>
-References: <1575600535-26877-1-git-send-email-skomatineni@nvidia.com>
- <1575600535-26877-9-git-send-email-skomatineni@nvidia.com>
- <0ce2e83b-800c-da1e-7a3c-3cf1427cfe20@gmail.com>
- <2eeceabe-b5f0-6f9e-ff8c-4ac6167b7cc3@nvidia.com>
- <5d26e32c-a346-4d42-9872-840964512144@gmail.com>
- <79661e2f-dcd4-6dd5-9b4d-9dcc40de478a@nvidia.com>
- <664a0b15-7136-2a11-f0a0-06f32cca1a9c@gmail.com>
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-Message-ID: <d984ca35-2c8f-d28c-e3c8-688f76ecd98f@nvidia.com>
-Date:   Mon, 9 Dec 2019 16:54:31 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1726605AbfLJCGO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 9 Dec 2019 21:06:14 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:35479 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726538AbfLJCGN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 Dec 2019 21:06:13 -0500
+Received: by mail-lj1-f196.google.com with SMTP id j6so18005081lja.2;
+        Mon, 09 Dec 2019 18:06:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AmQ89GILhlx/U5P8wU6P6IdbZMbjFb3kbbiTdTM2PN8=;
+        b=K42xURoUdWBqhYqBJsTlXFkBp+gv727RKojcVrVpC4YZ8E4bbMVrGlBdAoc1gaY4nl
+         tJAybS6U2p76KORxvwPIY7BrslTlGtz1O/memkiy6v5u3loWBan8WH+YiTYV4SpjV4IC
+         dxZ+82w4EY2WVvdlRPU+pekuBIUvxBnlaR6TZfu1u9//78vSXpvaqVOGQ+84ZiWvw1oj
+         e4M+xiVCD4JHh/qKeVcsexKW2Mwc76yZ9h+F20++l2bcWd2D2xao0oT2gxgXJVhL5R8Q
+         +eFRctm5FdUZRiEnr3K2bTQzX5dKQp04KrvGra/8ZEALyZBjUSoA98hCM0/aWLJvhaVD
+         gK0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AmQ89GILhlx/U5P8wU6P6IdbZMbjFb3kbbiTdTM2PN8=;
+        b=So+FUes6uWJ6ofF+wH2pIfOhJS1nD3FXQjO1LYJPsUah247hWoSGpIL7DLWw+ctS/z
+         cdokKo/xY0Fk118dLDBvLHnBU1dSB0eaoi1bRqTVb0gIC775FtKTAAkX+BSACi4KQ2p4
+         4JwH1MQkmiQvU8mxq4agKKrGvYDAJQguGjbUyK3AOy6rf8LCClL/L1PqUNQDfqEk52tZ
+         sH06JuL9PU1dT0sgd3ylIkdRfOkp/FaAkwsRxcYepwAUB7A0svuK2Vo9qYGrT1wGuhRx
+         L5BK8SYwTNdXobC4sAGXIiWgdcQTostOzH1yhLSYnlAsDzZx+w+tmv4tZyt6+1jRgTDd
+         kWLw==
+X-Gm-Message-State: APjAAAWUamPNmqcx7Eht3X6vKQfPZZeT2Dmx2NdC2zvvg2JrGPBcmHjU
+        00NBZ+508ACluJoAXII9pY4=
+X-Google-Smtp-Source: APXvYqyAlnA1BMRhELESRDbCH7OGjo25oaNp4BWKPx/VCjt0jyNLpGnyzNhReAYH7B90uswNz0W1GA==
+X-Received: by 2002:a2e:8e97:: with SMTP id z23mr17993160ljk.125.1575943571643;
+        Mon, 09 Dec 2019 18:06:11 -0800 (PST)
+Received: from localhost.localdomain (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.gmail.com with ESMTPSA id o20sm789018ljc.35.2019.12.09.18.06.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Dec 2019 18:06:11 -0800 (PST)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-tegra@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] clk: tegra: Fix double-free in tegra_clk_init()
+Date:   Tue, 10 Dec 2019 05:05:12 +0300
+Message-Id: <20191210020512.6088-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-In-Reply-To: <664a0b15-7136-2a11-f0a0-06f32cca1a9c@gmail.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1575939254; bh=oDpjvhPKdKxOplyhkA/Vfi4vK8JfrUiRbAih49q1Mfs=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
-         Content-Language;
-        b=XXH6hTtnAn/LTfi8HDcMWBLKXf7wQZ8g4Jd0G2RFr5XlQ4/e9PjS+vRf7+eEliPRc
-         qHVjDkvIMROEDusdyotvvJVYpuQzMsXNBKW0cQ64dsYkUUAXOqmRPlBREQ/Zlh1CqD
-         B5zp50Z0ru9e7dsc8/5Y6lNtJfYovm980v0EeldVnao/o23euDd3uXtLH/ANKMHxMk
-         cpxwmYQ+64ZKXtZXXf+WPSX/NQDdB0S3fexhbfdH4ku92wEyOOQJMfxVsjiMYfXx6G
-         nbcWaO27zdlPinIjs0FVkpgR1Hndq8h3wkOwmj908Cz/UEC74zYWXV7Dt+kadzOQZu
-         F3CCjYSv0fehA==
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+It's unlikely to happen in practice ever, but makes static checkers happy.
 
-On 12/9/19 3:12 PM, Dmitry Osipenko wrote:
-> 10.12.2019 02:05, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->> On 12/9/19 12:06 PM, Dmitry Osipenko wrote:
->>> 07.12.2019 22:20, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->>>> On 12/7/19 6:58 AM, Dmitry Osipenko wrote:
->>>>> 06.12.2019 05:48, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->>>>>> Current ASoC driver uses extern1 as cdev1 clock from Tegra30 onwards
->>>>>> through device tree.
->>>>>>
->>>>>> Actual audio mclk is clk_out_1 and to use PLLA for mclk rate control=
-,
->>>>>> need to clk_out_1_mux parent to extern1 and extern1 parent to
->>>>>> PLLA_OUT0.
->>>>>>
->>>>>> Currently Tegra clock driver init sets the parents and enables both
->>>>>> clk_out_1 and extern1 clocks. But these clocks parent and enables
->>>>>> should
->>>>>> be controlled by ASoC driver.
->>>>>>
->>>>>> Clock parents can be specified in device tree using assigned-clocks
->>>>>> and assigned-clock-parents.
->>>>>>
->>>>>> To enable audio mclk, both clk_out_1 and extern1 clocks need to be
->>>>>> enabled.
->>>>>>
->>>>>> This patch configures parents for clk_out_1 and extern1 clocks if
->>>>>> device
->>>>>> tree does not specify clock parents inorder to support old device tr=
-ee
->>>>>> and controls mclk using both clk_out_1 and extern1 clocks.
->>>>>>
->>>>>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
->>>>>> ---
->>>>>>  =C2=A0=C2=A0 sound/soc/tegra/tegra_asoc_utils.c | 66
->>>>>> ++++++++++++++++++++++++++++++++++++++
->>>>>>  =C2=A0=C2=A0 sound/soc/tegra/tegra_asoc_utils.h |=C2=A0 1 +
->>>>>>  =C2=A0=C2=A0 2 files changed, 67 insertions(+)
->>>>>>
->>>>>> diff --git a/sound/soc/tegra/tegra_asoc_utils.c
->>>>>> b/sound/soc/tegra/tegra_asoc_utils.c
->>>>>> index 536a578e9512..8e3a3740df7c 100644
->>>>>> --- a/sound/soc/tegra/tegra_asoc_utils.c
->>>>>> +++ b/sound/soc/tegra/tegra_asoc_utils.c
->>>>>> @@ -60,6 +60,7 @@ int tegra_asoc_utils_set_rate(struct
->>>>>> tegra_asoc_utils_data *data, int srate,
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 data->set_mclk =3D 0;
->>>>>>  =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clk_disable_unprepare(d=
-ata->clk_cdev1);
->>>>>> +=C2=A0=C2=A0=C2=A0 clk_disable_unprepare(data->clk_extern1);
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clk_disable_unprepare(data->cl=
-k_pll_a_out0);
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clk_disable_unprepare(data->cl=
-k_pll_a);
->>>>>>  =C2=A0=C2=A0 @@ -89,6 +90,14 @@ int tegra_asoc_utils_set_rate(struc=
-t
->>>>>> tegra_asoc_utils_data *data, int srate,
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return=
- err;
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>>>>  =C2=A0=C2=A0 +=C2=A0=C2=A0=C2=A0 if (!IS_ERR_OR_NULL(data->clk_exte=
-rn1)) {
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 err =3D clk_prepare_enab=
-le(data->clk_extern1);
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (err) {
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-dev_err(data->dev, "Can't enable extern1: %d\n", err);
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-return err;
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>>>> +=C2=A0=C2=A0=C2=A0 }
->>>>>> +
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 err =3D clk_prepare_enable(dat=
-a->clk_cdev1);
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (err) {
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_er=
-r(data->dev, "Can't enable cdev1: %d\n", err);
->>>>>> @@ -109,6 +118,7 @@ int tegra_asoc_utils_set_ac97_rate(struct
->>>>>> tegra_asoc_utils_data *data)
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int err;
->>>>>>  =C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clk_disable_unprepare(d=
-ata->clk_cdev1);
->>>>>> +=C2=A0=C2=A0=C2=A0 clk_disable_unprepare(data->clk_extern1);
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clk_disable_unprepare(data->cl=
-k_pll_a_out0);
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clk_disable_unprepare(data->cl=
-k_pll_a);
->>>>>>  =C2=A0=C2=A0 @@ -142,6 +152,14 @@ int tegra_asoc_utils_set_ac97_rat=
-e(struct
->>>>>> tegra_asoc_utils_data *data)
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return=
- err;
->>>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>>>>  =C2=A0=C2=A0 +=C2=A0=C2=A0=C2=A0 if (!IS_ERR_OR_NULL(data->clk_exte=
-rn1)) {
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 err =3D clk_prepare_enab=
-le(data->clk_extern1);
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (err) {
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-dev_err(data->dev, "Can't enable extern1: %d\n", err);
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-return err;
->>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>>>> +=C2=A0=C2=A0=C2=A0 }
->>>>> Why this is needed given that clk_extern1 is either a child of MCLK o=
-r
->>>>> MCLK itself (on T20)? The child clocks are enabled when the parent is
->>>>> enabled.
->>>> For T30 and later, clk_extern1 is one of the source for clk_out_1_mux.
->>>> clk_extern1 is in CAR and it has its own gate and mux.
->>>>
->>>> As audio mclk related clocks (clk_out_1, clk_out_1_mux, and extern1) a=
-re
->>>> moved into ASoC driver from clock driver
->>>>
->>>> need to enable extern1 gate as well along with clk_out1 for T30 throug=
-h
->>>> T210.
->>>>
->>>> Just FYI, extern1 enable here happens only when data->clk_extern1 is
->>>> available which is for T30 onwards.
->>> clk_out_1 is the parent of extern1, thus extern1 is enabled by the clk
->>> core whenever clk_out_1 is enabled because data->clk_cdev1=3Dclk_out_1.=
- An
->>> I missing something?
->>>
->>> [snip]
->> extern1 is the parent for clk_out_1. explained extern1 clock path to
->> clk_out in reply to your comment in other patch of this series.
-> Right, I meant extern1 the parent of clk_out_1, sorry for the confusion.
-> So when clk_out_1 (child) is enabled, extern1 (parent) is enabled as well=
-.
->
-> I'll take a closer look at the other email tomorrow.
-yes, will remove explicitly enabling extern1 in next version.
+Fixes: 535f296d47de ("clk: tegra: Add suspend and resume support on Tegra210")
+Reported-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/clk/tegra/clk.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/clk/tegra/clk.c b/drivers/clk/tegra/clk.c
+index e6bd6d1ea012..f6cdce441cf7 100644
+--- a/drivers/clk/tegra/clk.c
++++ b/drivers/clk/tegra/clk.c
+@@ -231,8 +231,10 @@ struct clk ** __init tegra_clk_init(void __iomem *regs, int num, int banks)
+ 	periph_banks = banks;
+ 
+ 	clks = kcalloc(num, sizeof(struct clk *), GFP_KERNEL);
+-	if (!clks)
++	if (!clks) {
+ 		kfree(periph_clk_enb_refcnt);
++		return NULL;
++	}
+ 
+ 	clk_num = num;
+ 
+-- 
+2.24.0
+
