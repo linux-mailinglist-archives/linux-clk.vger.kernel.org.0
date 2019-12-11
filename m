@@ -2,100 +2,168 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2FE11B686
-	for <lists+linux-clk@lfdr.de>; Wed, 11 Dec 2019 17:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AAA611B865
+	for <lists+linux-clk@lfdr.de>; Wed, 11 Dec 2019 17:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730780AbfLKPN3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 11 Dec 2019 10:13:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37000 "EHLO mail.kernel.org"
+        id S1730150AbfLKQRc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 11 Dec 2019 11:17:32 -0500
+Received: from ns.iliad.fr ([212.27.33.1]:46870 "EHLO ns.iliad.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731422AbfLKPN2 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 11 Dec 2019 10:13:28 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7D93624685;
-        Wed, 11 Dec 2019 15:13:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576077208;
-        bh=qLeT4GxcH0g5QErrR4SX5v90f8Y1T5ZXWdgd+HBEe+o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y+g1QBzWfRtZbQmfRb03b7TnVig/pnuafxpAon3anleMdmV75d/SmItBObdMdzZEz
-         mKqNY+oSVLdDliUiCirjazWHcipqjPKlTAHmqBFjWERaVJs14+o2OqI3LyxvrjenA8
-         OFfZl5JAeDH1rUWFXltzNy+nFFJF6Zc0ZF7rSkU0=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Tero Kristo <t-kristo@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 090/134] clk: Fix memory leak in clk_unregister()
-Date:   Wed, 11 Dec 2019 10:11:06 -0500
-Message-Id: <20191211151150.19073-90-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191211151150.19073-1-sashal@kernel.org>
-References: <20191211151150.19073-1-sashal@kernel.org>
+        id S1729742AbfLKQRb (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 11 Dec 2019 11:17:31 -0500
+Received: from ns.iliad.fr (localhost [127.0.0.1])
+        by ns.iliad.fr (Postfix) with ESMTP id 6989D20348;
+        Wed, 11 Dec 2019 17:17:28 +0100 (CET)
+Received: from [192.168.108.51] (freebox.vlq16.iliad.fr [213.36.7.13])
+        by ns.iliad.fr (Postfix) with ESMTP id 3EDE020159;
+        Wed, 11 Dec 2019 17:17:28 +0100 (CET)
+Subject: Re: [PATCH v1] clk: Convert managed get functions to devm_add_action
+ API
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <3d8a58bf-0814-1ec1-038a-10a20b9646ad@free.fr>
+ <20191128185630.GK82109@yoga> <20191202014237.GR248138@dtor-ws>
+ <f177ef95-ef7e-cab0-1322-6de28f18ecdb@free.fr>
+ <c0ccca86-b7b1-b587-60c1-4794376fa789@arm.com>
+From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
+Message-ID: <ba630966-5479-c831-d0e2-bc2eb12bc317@free.fr>
+Date:   Wed, 11 Dec 2019 17:17:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <c0ccca86-b7b1-b587-60c1-4794376fa789@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Wed Dec 11 17:17:28 2019 +0100 (CET)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Kishon Vijay Abraham I <kishon@ti.com>
+On 02/12/2019 14:51, Robin Murphy wrote:
 
-[ Upstream commit 8247470772beb38822f226c99a2ed8c195f6b438 ]
+> On 02/12/2019 9:25 am, Marc Gonzalez wrote:
+>
+>> On 02/12/2019 02:42, Dmitry Torokhov wrote:
+>>
+>>> On Thu, Nov 28, 2019 at 10:56:30AM -0800, Bjorn Andersson wrote:
+>>>
+>>>> On Tue 26 Nov 08:13 PST 2019, Marc Gonzalez wrote:
+>>>>
+>>>>> Date: Tue, 26 Nov 2019 13:56:53 +0100
+>>>>>
+>>>>> Using devm_add_action_or_reset() produces simpler code and smaller
+>>>>> object size:
+>>>>>
+>>>>> 1 file changed, 16 insertions(+), 46 deletions(-)
+>>>>>
+>>>>>      text	   data	    bss	    dec	    hex	filename
+>>>>> -   1797	     80	      0	   1877	    755	drivers/clk/clk-devres.o
+>>>>> +   1499	     56	      0	   1555	    613	drivers/clk/clk-devres.o
+>>>>>
+>>>>> Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
+>>>>
+>>>> Looks neat
+>>>>
+>>>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>>>
+>>> This however increases the runtime costs as each custom action cost us
+>>> an extra pointer. Given that in a system we likely have many clocks
+>>> managed by devres, I am not sure that this code savings is actually
+>>> gives us overall win. It might still, I just want to understand how we
+>>> are allocating/packing devres structures.
+>>
+>> I'm not 100% sure what you are saying.
+> 
+> You reduce the text size by a constant amount, at the cost of allocating 
+> twice as much runtime data per clock (struct action_devres  vs. void*). 
+> Assuming 64-bit pointers, that means that in principle your ~320-byte 
+> saving would be cancelled out at ~40 managed clocks. However, that's 
+> also assuming that the minimum allocation granularity is no larger than 
+> a single pointer, which generally isn't true, so in reality it depends 
+> on whether the difference in data pushes the total struct devres 
+> allocation over the next ARCH_KMALLOC_MINALIGN boundary - if it doesn't, 
+> the difference comes entirely for free; if it does, the memory cost 
+> tradeoff gets even worse.
 
-Memory allocated in alloc_clk() for 'struct clk' and
-'const char *con_id' while invoking clk_register() is never freed
-in clk_unregister(), resulting in kmemleak showing the following
-backtrace.
+Aaah... memory overhead. Thanks for pointing it out.
 
-  backtrace:
-    [<00000000546f5dd0>] kmem_cache_alloc+0x18c/0x270
-    [<0000000073a32862>] alloc_clk+0x30/0x70
-    [<0000000082942480>] __clk_register+0xc8/0x760
-    [<000000005c859fca>] devm_clk_register+0x54/0xb0
-    [<00000000868834a8>] 0xffff800008c60950
-    [<00000000d5a80534>] platform_drv_probe+0x50/0xa0
-    [<000000001b3889fc>] really_probe+0x108/0x348
-    [<00000000953fa60a>] driver_probe_device+0x58/0x100
-    [<0000000008acc17c>] device_driver_attach+0x6c/0x90
-    [<0000000022813df3>] __driver_attach+0x84/0xc8
-    [<00000000448d5443>] bus_for_each_dev+0x74/0xc8
-    [<00000000294aa93f>] driver_attach+0x20/0x28
-    [<00000000e5e52626>] bus_add_driver+0x148/0x1f0
-    [<000000001de21efc>] driver_register+0x60/0x110
-    [<00000000af07c068>] __platform_driver_register+0x40/0x48
-    [<0000000060fa80ee>] 0xffff800008c66020
+BEFORE
 
-Fix it here.
+devm_clk_get()
+  -> devres_alloc(devm_clk_release, sizeof(*ptr), GFP_KERNEL);
+     allocates space for a struct devres + a pointer
 
-Cc: Tomi Valkeinen <tomi.valkeinen@ti.com>
-Cc: Tero Kristo <t-kristo@ti.com>
-Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
-Link: https://lkml.kernel.org/r/20191022071153.21118-1-kishon@ti.com
-Fixes: 1df4046a93e0 ("clk: Combine __clk_get() and __clk_create_clk()")
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/clk/clk.c | 1 +
- 1 file changed, 1 insertion(+)
+struct devres {
+	struct devres_node		node;
+	/*
+	 * Some archs want to perform DMA into kmalloc caches
+	 * and need a guaranteed alignment larger than
+	 * the alignment of a 64-bit integer.
+	 * Thus we use ARCH_KMALLOC_MINALIGN here and get exactly the same
+	 * buffer alignment as if it was allocated by plain kmalloc().
+	 */
+	u8 __aligned(ARCH_KMALLOC_MINALIGN) data[];
+};
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 1c677d7f7f530..2f2eea26c3750 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -3879,6 +3879,7 @@ void clk_unregister(struct clk *clk)
- 					__func__, clk->core->name);
- 
- 	kref_put(&clk->core->ref, __clk_release);
-+	free_clk(clk);
- unlock:
- 	clk_prepare_unlock();
- }
--- 
-2.20.1
+Not sure what it means for a flexible array member to be X-aligned...
 
+(Since the field's address depends on the start address, which is only
+determined at run-time...)
+
+For example, on arm64, ARCH_KMALLOC_MINALIGN appears to be 128 (sometimes).
+
+/*
+ * Memory returned by kmalloc() may be used for DMA, so we must make
+ * sure that all such allocations are cache aligned. Otherwise,
+ * unrelated code may cause parts of the buffer to be read into the
+ * cache before the transfer is done, causing old data to be seen by
+ * the CPU.
+ */
+#define ARCH_DMA_MINALIGN	(128)
+
+
+Unless the strict alignment is also imposed on kmalloc?
+
+So basically, a struct devres starts on a multiple-of-128 address,
+first the devres_node member, then padding to the next 128, then the
+data member?
+
+
+/*
+ * Some archs want to perform DMA into kmalloc caches and need a guaranteed
+ * alignment larger than the alignment of a 64-bit integer.
+ * Setting ARCH_KMALLOC_MINALIGN in arch headers allows that.
+ */
+#if defined(ARCH_DMA_MINALIGN) && ARCH_DMA_MINALIGN > 8
+#define ARCH_KMALLOC_MINALIGN ARCH_DMA_MINALIGN
+#define KMALLOC_MIN_SIZE ARCH_DMA_MINALIGN
+#define KMALLOC_SHIFT_LOW ilog2(ARCH_DMA_MINALIGN)
+#else
+#define ARCH_KMALLOC_MINALIGN __alignof__(unsigned long long)
+#endif
+
+
+A devres_node boils down to 2 object pointers + 1 function pointer.
+
+Are there architectures supported by Linux where a function pointer
+is not the same size as an object pointer? (ia64 maybe?)
+
+
+
+OK, I will give this patch some more thought.
+
+But I need to ask: what is the rationale for the devm_add_action API?
+
+Regards.
