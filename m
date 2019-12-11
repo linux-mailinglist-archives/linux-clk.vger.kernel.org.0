@@ -2,124 +2,100 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F7F11AC02
-	for <lists+linux-clk@lfdr.de>; Wed, 11 Dec 2019 14:24:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0416111ACD1
+	for <lists+linux-clk@lfdr.de>; Wed, 11 Dec 2019 15:04:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729132AbfLKNYF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 11 Dec 2019 08:24:05 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:17383 "EHLO
-        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727477AbfLKNYF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 11 Dec 2019 08:24:05 -0500
-Received: from droid15-sz.amlogic.com (10.28.8.25) by mail-sz.amlogic.com
- (10.28.11.5) with Microsoft SMTP Server id 15.1.1591.10; Wed, 11 Dec 2019
- 21:24:35 +0800
-From:   Jian Hu <jian.hu@amlogic.com>
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>
-CC:     Jian Hu <jian.hu@amlogic.com>, Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Chandle Zou <chandle.zou@amlogic.com>,
-        <linux-clk@vger.kernel.org>, <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: [PATCH v2] arm64: dts: meson: add A1 periphs and PLL clock nodes
-Date:   Wed, 11 Dec 2019 21:23:59 +0800
-Message-ID: <20191211132359.53647-1-jian.hu@amlogic.com>
-X-Mailer: git-send-email 2.24.0
+        id S1729856AbfLKODP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 11 Dec 2019 09:03:15 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:59020 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729845AbfLKODP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 11 Dec 2019 09:03:15 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xBBE2b0g050797;
+        Wed, 11 Dec 2019 08:02:37 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1576072957;
+        bh=bcyBGbO4wvsS0lpmPcVyZHoazDhW9nqnboevNW7KZ4U=;
+        h=From:To:CC:Subject:Date;
+        b=OZk2zuOhYH7MewgYe76IdtFV/pl2zbG0nV24r4iHujE8TiB5WfOSz7334+46XCA6r
+         aNKsVCPjggUD9SrQHtz0gGVTg1Iz94DoFa+je6VrRe+zdp0dSGz2zKucLH8MNTk5RK
+         2atL4CDU5V5/q6M7nrRexzhRLfvzyeIoycSwLVe4=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBBE2aKJ098221;
+        Wed, 11 Dec 2019 08:02:36 -0600
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 11
+ Dec 2019 08:02:36 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 11 Dec 2019 08:02:36 -0600
+Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBBE2afk007398;
+        Wed, 11 Dec 2019 08:02:36 -0600
+From:   Benoit Parrot <bparrot@ti.com>
+To:     Tony Lindgren <tony@atomide.com>, Tero Kristo <t-kristo@ti.com>,
+        <linux-omap@vger.kernel.org>, <linux-clk@vger.kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
+Subject: [Patch v4 00/10] ARM: dts: dra7: add cal nodes 
+Date:   Wed, 11 Dec 2019 08:05:48 -0600
+Message-ID: <20191211140558.10407-1-bparrot@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.8.25]
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add A1 periphs and PLL clock controller nodes, Some clocks
-in periphs controller are the parents of PLL clocks, Meanwhile
-some clocks in PLL controller are those of periphs clocks.
-They rely on each other.
+This patch series adds the needed clkctrl and ty-sysc nodes for CAL module.
+It also adds support for the module in related dtsi and dts for DRA72,
+DRA76 and AM654 SoC.
 
-Signed-off-by: Jian Hu <jian.hu@amlogic.com>
----
-Compared with the previous series, the register region
-is only for the clock. So syscon is not used in A1.
+Changes since v3:
+- Added Tony's ack
+- Added Rob's ack
+- In all 3 .dts patch removed unneeded cal 'status = "ok"' lines 
 
-This patch depends on A1 clock patchset at [0]
+Changes since v2:
+- Add non-standard clock node naming to commit message as per Tony's
+  comment
 
-Changes since v1 at [1]:
--remove the compared message in commit description,
- And put it after the '---'
--reorder order the includes
--reorder the clock node
--change the clock node name
+Changes since v1:
+- Fix clock name to make it generic
+- Updated the binding to use ti,camerrx-control instead of sycon_camerrx
+- Split off the clk code into its own patch
+- Add clk mailing list as requested
 
-[0] https://lkml.kernel.org/r/20191206074052.15557-1-jian.hu@amlogic.com
-[1] https://lkml.kernel.org/r/20191211070835.83489-1-jian.hu@amlogic.com
+Benoit Parrot (10):
+  clk: ti: dra7: add cam clkctrl data
+  ARM: dts: dra7: add cam clkctrl node
+  ARM: OMAP: DRA7xx: Make CAM clock domain SWSUP only
+  ARM: dts: dra7-l4: Add ti-sysc node for CAM
+  ARM: dts: DRA72: Add CAL dtsi node
+  arm: dts: dra72-evm-common: Add entries for the CSI2 cameras
+  arm: dtsi: dra76x: Add CAL dtsi node
+  arm: dts: dra76-evm: Add CAL and OV5640 nodes
+  arm64: dts: k3-am65-main Add CAL node
+  arm64: dts: k3-am654-base-board: Add CSI2 OV5640 camera
 
----
----
- arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 26 +++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ arch/arm/boot/dts/dra7-l4.dtsi                | 43 ++++++++++++++++---
+ arch/arm/boot/dts/dra72-evm-common.dtsi       | 31 +++++++++++++
+ arch/arm/boot/dts/dra72x.dtsi                 | 42 ++++++++++++++++++
+ arch/arm/boot/dts/dra76-evm.dts               | 35 +++++++++++++++
+ arch/arm/boot/dts/dra76x.dtsi                 | 42 ++++++++++++++++++
+ arch/arm/boot/dts/dra7xx-clocks.dtsi          | 14 ++++++
+ arch/arm/mach-omap2/clockdomains7xx_data.c    |  2 +-
+ arch/arm64/boot/dts/ti/k3-am65-main.dtsi      | 22 ++++++++++
+ .../arm64/boot/dts/ti/k3-am654-base-board.dts | 32 ++++++++++++++
+ drivers/clk/ti/clk-7xx.c                      | 19 ++++++++
+ include/dt-bindings/clock/dra7.h              | 10 +++++
+ 11 files changed, 285 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-index 7210ad049d1d..48ba3eba547d 100644
---- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-@@ -3,6 +3,8 @@
-  * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
-  */
- 
-+#include <dt-bindings/clock/a1-pll-clkc.h>
-+#include <dt-bindings/clock/a1-clkc.h>
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- 
-@@ -74,6 +76,21 @@
- 			#size-cells = <2>;
- 			ranges = <0x0 0x0 0x0 0xfe000000 0x0 0x1000000>;
- 
-+			clkc_periphs: clock-controller@800 {
-+				compatible = "amlogic,a1-periphs-clkc";
-+				#clock-cells = <1>;
-+				reg = <0 0x800 0 0x104>;
-+				clocks = <&clkc_pll CLKID_FCLK_DIV2>,
-+					 <&clkc_pll CLKID_FCLK_DIV3>,
-+					 <&clkc_pll CLKID_FCLK_DIV5>,
-+					 <&clkc_pll CLKID_FCLK_DIV7>,
-+					 <&clkc_pll CLKID_HIFI_PLL>,
-+					 <&xtal>;
-+				clock-names = "fclk_div2", "fclk_div3",
-+					      "fclk_div5", "fclk_div7",
-+					      "hifi_pll", "xtal";
-+			};
-+
- 			uart_AO: serial@1c00 {
- 				compatible = "amlogic,meson-gx-uart",
- 					     "amlogic,meson-ao-uart";
-@@ -93,6 +110,15 @@
- 				clock-names = "xtal", "pclk", "baud";
- 				status = "disabled";
- 			};
-+
-+			clkc_pll: clock-controller@7c80 {
-+				compatible = "amlogic,a1-pll-clkc";
-+				#clock-cells = <1>;
-+				reg = <0 0x7c80 0 0x21c>;
-+				clocks = <&clkc_periphs CLKID_XTAL_FIXPLL>,
-+					 <&clkc_periphs CLKID_XTAL_HIFIPLL>;
-+				clock-names = "xtal_fixpll", "xtal_hifipll";
-+			};
- 		};
- 
- 		gic: interrupt-controller@ff901000 {
 -- 
-2.24.0
+2.17.1
 
