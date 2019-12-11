@@ -2,65 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D986111AD73
-	for <lists+linux-clk@lfdr.de>; Wed, 11 Dec 2019 15:29:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92DB111B3ED
+	for <lists+linux-clk@lfdr.de>; Wed, 11 Dec 2019 16:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729865AbfLKO3E (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 11 Dec 2019 09:29:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34860 "EHLO mail.kernel.org"
+        id S1733285AbfLKP1Q (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 11 Dec 2019 10:27:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:32826 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729829AbfLKO3E (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 11 Dec 2019 09:29:04 -0500
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+        id S1733279AbfLKP1Q (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 11 Dec 2019 10:27:16 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D453C22B48;
-        Wed, 11 Dec 2019 14:29:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8C7032467D;
+        Wed, 11 Dec 2019 15:27:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576074544;
-        bh=N8PbFLkORFvjWt9sLI4T9YHFqVWqnofZgm531GGx/5U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Q/vHswAa4Py9NtwngVg0E+ERq9UCWTuf40G9x6bs+Qa5YGvhxP55rO15r5AqfsuJH
-         2PvUT0gv7XO2QvD7ipJK2H4nU7mf3DJp9SrEHCBzWSXZwqBuNCxqIQxvScy7g0tdX2
-         uRUotylziv8axWluuyh6XFmtVzD4iB5hUXX4EybQ=
-Received: by mail-qv1-f47.google.com with SMTP id t7so5794868qve.4;
-        Wed, 11 Dec 2019 06:29:03 -0800 (PST)
-X-Gm-Message-State: APjAAAXL/qxRrMyG04jhHBrDv0zePHRADHuijmGWIs3jpvOsEZHm9L8N
-        NcKV1XC2V2EdA04ZkmIwzTH224nJyTmAGy+U+w==
-X-Google-Smtp-Source: APXvYqyslXHQeTlnxyWBHE+KQno4F7yO5jXM3IgMVqdVyPdAJw+emUIKIy0nf6WbxEaL8liKiMq7CxtC86P/ZYmk4FI=
-X-Received: by 2002:a0c:f6cd:: with SMTP id d13mr3244655qvo.20.1576074542962;
- Wed, 11 Dec 2019 06:29:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20191209233305.18619-1-michael@walle.cc>
-In-Reply-To: <20191209233305.18619-1-michael@walle.cc>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 11 Dec 2019 08:28:51 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJB5oeUmtzV0jT0f-Rh22Cf3OzMVpfZvRa6xOEhx3e2cA@mail.gmail.com>
-Message-ID: <CAL_JsqJB5oeUmtzV0jT0f-Rh22Cf3OzMVpfZvRa6xOEhx3e2cA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: clock: document the fsl-sai driver
-To:     Michael Walle <michael@walle.cc>
-Cc:     linux-clk <linux-clk@vger.kernel.org>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
+        s=default; t=1576078035;
+        bh=Pr2oFJ7XY1TZXcI3B8gnXwsouW7AxpiOMBNsqEIjfSs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Ziv6c5X8ReFKVAQFYcqi7UIoQKD3VtJWO7HjetWSM38IJp3F7GihDxzVhf2QZlD/L
+         iCGrCRyqnQ/zxjhtdQRoN369LxczD1b9RlbxYZd8m7wL4Z4IXJpf9S9VUNbPTeHeSu
+         j4OSra5ZdtEkNw0MHonyelqp1NjrvThq/4h+0gaE=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 29/79] clk: qcom: Allow constant ratio freq tables for rcg
+Date:   Wed, 11 Dec 2019 10:25:53 -0500
+Message-Id: <20191211152643.23056-29-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191211152643.23056-1-sashal@kernel.org>
+References: <20191211152643.23056-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, Dec 9, 2019 at 5:33 PM Michael Walle <michael@walle.cc> wrote:
->
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
-> changes since v1:
->  - dual license gpl-2.0-only and bsd-2-clause
->  - add "additionalProperties: false"
->  - wrap example in soc {} node with correct #address-cells and #size-cells
->
->  .../bindings/clock/fsl,sai-clock.yaml         | 55 +++++++++++++++++++
->  1 file changed, 55 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/fsl,sai-clock.yaml
+From: Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+[ Upstream commit efd164b5520afd6fb2883b68e0d408a7de29c491 ]
+
+Some RCGs (the gfx_3d_src_clk in msm8998 for example) are basically just
+some constant ratio from the input across the entire frequency range.  It
+would be great if we could specify the frequency table as a single entry
+constant ratio instead of a long list, ie:
+
+	{ .src = P_GPUPLL0_OUT_EVEN, .pre_div = 3 },
+        { }
+
+So, lets support that.
+
+We need to fix a corner case in qcom_find_freq() where if the freq table
+is non-null, but has no frequencies, we end up returning an "entry" before
+the table array, which is bad.  Then, we need ignore the freq from the
+table, and instead base everything on the requested freq.
+
+Suggested-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+Link: https://lkml.kernel.org/r/20191031185715.15504-1-jeffrey.l.hugo@gmail.com
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/clk/qcom/clk-rcg2.c | 2 ++
+ drivers/clk/qcom/common.c   | 3 +++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
+index 52208d4165f43..51b2388d80ac9 100644
+--- a/drivers/clk/qcom/clk-rcg2.c
++++ b/drivers/clk/qcom/clk-rcg2.c
+@@ -206,6 +206,8 @@ static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
+ 	if (clk_flags & CLK_SET_RATE_PARENT) {
+ 		rate = f->freq;
+ 		if (f->pre_div) {
++			if (!rate)
++				rate = req->rate;
+ 			rate /= 2;
+ 			rate *= f->pre_div + 1;
+ 		}
+diff --git a/drivers/clk/qcom/common.c b/drivers/clk/qcom/common.c
+index db9b2471ac401..bfb6d6065a90c 100644
+--- a/drivers/clk/qcom/common.c
++++ b/drivers/clk/qcom/common.c
+@@ -29,6 +29,9 @@ struct freq_tbl *qcom_find_freq(const struct freq_tbl *f, unsigned long rate)
+ 	if (!f)
+ 		return NULL;
+ 
++	if (!f->freq)
++		return f;
++
+ 	for (; f->freq; f++)
+ 		if (rate <= f->freq)
+ 			return f;
+-- 
+2.20.1
+
