@@ -2,361 +2,323 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A1211A6E7
-	for <lists+linux-clk@lfdr.de>; Wed, 11 Dec 2019 10:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0076211A730
+	for <lists+linux-clk@lfdr.de>; Wed, 11 Dec 2019 10:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728478AbfLKJ0M (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 11 Dec 2019 04:26:12 -0500
-Received: from inva021.nxp.com ([92.121.34.21]:42734 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728511AbfLKJ0K (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 11 Dec 2019 04:26:10 -0500
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3C2952008DD;
-        Wed, 11 Dec 2019 10:26:08 +0100 (CET)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 2E21B20026A;
-        Wed, 11 Dec 2019 10:26:08 +0100 (CET)
-Received: from fsr-ub1664-175.ea.freescale.net (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id AAF5420568;
-        Wed, 11 Dec 2019 10:26:07 +0100 (CET)
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Shawn Guo <shawnguo@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>
-Cc:     Dong Aisheng <aisheng.dong@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>, Abel Vesa <abel.vesa@nxp.com>
-Subject: [RESEND v2 11/11] clk: imx7up: Rename the clks to hws
-Date:   Wed, 11 Dec 2019 11:25:50 +0200
-Message-Id: <1576056350-20715-12-git-send-email-abel.vesa@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1576056350-20715-1-git-send-email-abel.vesa@nxp.com>
-References: <1576056350-20715-1-git-send-email-abel.vesa@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1728104AbfLKJdz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 11 Dec 2019 04:33:55 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:39123 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727493AbfLKJdz (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 11 Dec 2019 04:33:55 -0500
+Received: by mail-lj1-f194.google.com with SMTP id e10so23238760ljj.6;
+        Wed, 11 Dec 2019 01:33:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=TlYw4x/tHwVI0dRLY0QzV+kpny0bo02jjIsi/oQ03gU=;
+        b=nCck7R90EpD9xDsjVpymDmX6/wD1e797gXNP+6zJxkTEfUf/GYcuLXnwc0WIeXbpco
+         YFBTwnTtkzBFeXqu6+7mEfDqTYLOGliW8sK27tWMjgNmlRbjvbWwfxwqr2CDG/uCrG6Q
+         T7Ivb7u7KF9PES4wKfpkNxqapS+hz0WNCuYgMTRtyCo6lBTmEALppQrzlHnBYyBYoNvE
+         ZomeM90Rv+SYwzCQUT9evjfnvfgkOTZ//ktjfLLK4wqZPUSIE2gVCwEoZQTD59tBXWeT
+         45nLbFJPuqeLbpbO7yHaO6dMRN5/kitZmsH12nwXmh58T0AAzPgYv4sr/oGQXBVSZkHZ
+         slBw==
+X-Gm-Message-State: APjAAAWnssG/iL8ZOWBwWGL01wEGeWWeFk8VztjWR99KpZ0KvYURahzn
+        BnkYYu15kQvenhtagRhOda0=
+X-Google-Smtp-Source: APXvYqy+UY0L5JsVLPiSqpWo2g55mt10zvhkCTZu9sH5Ez2g+pG6biqXkIkDCjH/b77xpF4sLo75Ow==
+X-Received: by 2002:a2e:9b05:: with SMTP id u5mr1345153lji.59.1576056830465;
+        Wed, 11 Dec 2019 01:33:50 -0800 (PST)
+Received: from localhost.localdomain ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id n11sm814317ljg.15.2019.12.11.01.33.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Dec 2019 01:33:49 -0800 (PST)
+Date:   Wed, 11 Dec 2019 11:33:42 +0200
+From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
+Cc:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Subject: [PATCH v6 00/15] Support ROHM BD71828 PMIC
+Message-ID: <cover.1576054779.git.matti.vaittinen@fi.rohmeurope.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This is just to keep in line with the other i.MX clock drivers that are
-clk_hw based. Plus, it makes more sense to be called hws since its type is
-clk_hw not clk.
+Patch series introducing support for ROHM BD71828 PMIC
 
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
+ROHM BD71828 is a power management IC containing 7 bucks and 7 LDOs. All
+regulators can be controlled individually via I2C. Bucks 1,2,6 and
+7 can also be assigned to a "regulator group" controlled by run-levels.
+Eg. Run level specific voltages and enable/disable statuses for each of
+these bucks can be set via register interface. The buck run-level group
+assignment (selection if buck is to be controlled individually or via
+run-levels) can be changed at run-time via I2C.
+
+This patch series brings only the basic support for controlling
+regulators individually via I2C.
+
+In addition to the bucks and LDOs there are:
+
+- The usual clk gate
+- 4 IO pins (mostly usable as GPO or tied to specific purpose)
+- power button support
+- RTC
+- two LEDs
+- battery charger
+- HALL sensor input
+
+This patch series adds support to regulators, clk, RTC, GPIOs and LEDs.
+
+Power-supply driver for charger is not included in this series.
+
+The series also adds LED DT-node lookup based on node name or given
+property name/value pair in LED core. It also adds generic default-state
+and default-trigger property handling to LED core. Follow-up patches
+simplifying few other LED drivers should follow.
+
+In GPIO framework this series adds devm-support for gpio_array getting
+for MFD sub-devices whose GPIO consumer information may be in parent
+device's DT node. And while I was at it I also added few missing GPIO devm
+functions to the documentaton listing.
+
+Changelog v6:
+  Rebased on top of v5.5-rc1
+  LED core:
+    - Do new fw-node look-up only if the new match data is given. That
+      way behaviour for existing drivers is not changed
+    - Handle generic LED properties by core only if explisitly requested
+      in init-data. That way behaviour for existing drivers is not changed
+      until they are verified to work.
+  BD71828 LEDs:
+    - Fix module loading by adding "dummy" of_device_id table.
+  DT bindings:
+    All:
+    - Remove regulator run-level properties as run-level support was
+      dropped for now.
+    - Change SPDX to dual lisence
+    LED:
+    - added select: false
+    - replace oneOf + const by enum
+    Regulator:
+    - remove forgotten comments
+    - comment indenting
+    MFD:
+    - remove unnecessary descriptions
+  Regulators:
+    - Dropped patch 12 with run-level controls
+    - Dropped unnecessary ramp_delay_supported() - ram_delay ops were
+      already only filled for DVS bucks.
+  GPIO:
+    - rename internal function.
+  RTC:
+    - Added missing blank line
+  
+Changelog v5:
+  Only LED patch (patch 15) changed, rest as in v4.
+  LED:
+    - Fixed issues reported by Dan Carpenter and kbuild-bot static
+      analysis.
+Changelog v4 (first non RFC):
+  General:
+    - Changed subdevice loading and chip version identification to use
+      platform ID.
+    - License identifiers changed to GPL-2.0-only
+  MFD:
+    - Styling fixes mostly
+  DT-Bindings:
+    - a few more checks as suggested by Rob Herring.
+    - Order of DT patches changed.
+    - me as maintainer
+    - standard units to new properties (microvolts, ohms)
+    - runlevel values in an array
+  LED:
+    - BD71828 driver added (back)
+      - Added DT support
+    - Added LED DT node lookup in led framework when init_data is given
+      with DT node match information.
+    - Added common property parsing for default-state and
+      default-trigger.
+  Regulators:
+    - dropped sysfs interfaces
+    - fixed module unload/reload by binding gpio consumer information to
+      regulator device not to MFD.
+  GPIO:
+    - Added devm_gpiod_get_parent_array
+    - added few missing devm functions to documentation
+
+Changelog v3:
+  DT-Bindings:
+    - yamlify
+    - add LED binding doc
+  CLK:
+    - Move clk register definitions from MFD headers to clk driver
+  GPIO:
+    - Add generic direction define and use it.
+  LED:
+    - Drop LED driver from the series (for now).
+
+Changelog v2: Mainly RTC and GPIO fixes suggested by Alexandre and Bartosz
+  General:
+    -Patch ordering changed to provide dt binding documents right after the
+     MFD core.
+  DT-Bindings for regulators (Patch 3)
+    -Fix typo in PMIC model number
+  RTC (patch 11)
+    -Reverted renaming in order to reduce patch size.
+    -Reworded commit message
+  BD71828 regulator (patch 7)
+    -Add MODULE_ALIAS
+  GPIO (patch 12)
+    -Remove file-name from comment
+    -prefix IN and OUT defines with chip type
+    -improved documentation for the INPUT only pin.
+    -removed empty left-over function
+    -removed unnecessary #ifdef CONFIG_OF_GPIO
+    -removed unnecessary error print
+    -Add MODULE_ALIAS
+
+Patch 1:
+        dt-bindings for regulators on BD71828 PMIC
+Patch 2:
+        dt-bindings for LEDs on BD71828 PMIC
+Patch 3:
+	dt-bindings for BD71828 PMIC
+Patch 4:
+	Convert rohm PMICs with common sub-devices to use platform_
+	device_id to match MFD sub-devices
+Patch 5:
+        BD71828 MFD core.
+Patch 6:
+	Power button support using GPIO keys.
+Patch 7:
+        CLK gate support using existing clk-bd718x7
+Patch 8:
+        Split existing bd718x7 regulator driver to generic ROHM dt
+        parsing portion (used by more than one ROHM drivers) and
+        bd718x8 specific parts
+Patch 9:
+        Basic regulator support (individual control via I2C). This
+        should be pretty standard stuff.
+Patch 10:
+	Add devm_gpiod_get_parent_array
+Patch 11:
+	Add missing managed GPIO array get functions to documentation
+Patch 12:
+        Support BD71828 RTC block using BD70528 RTC driver
+Patch 13:
+        Allow control of GP(I)O pins on BD71828 via GPIO subsystem
+Patch 14:
+	Add LED node lookup and common LED binding parsing support
+	to LED class/core
+Patch 15:
+        Support toggling the LEDs on BD71828.
+
+This patch series is based on v5.5-rc1
+
 ---
- drivers/clk/imx/clk-imx7ulp.c | 182 +++++++++++++++++++++---------------------
- 1 file changed, 91 insertions(+), 91 deletions(-)
 
-diff --git a/drivers/clk/imx/clk-imx7ulp.c b/drivers/clk/imx/clk-imx7ulp.c
-index efd9a42..1ad1092 100644
---- a/drivers/clk/imx/clk-imx7ulp.c
-+++ b/drivers/clk/imx/clk-imx7ulp.c
-@@ -58,7 +58,7 @@ static struct clk **pcc3_uart_clks[ARRAY_SIZE(pcc3_uart_clk_ids) + 1] __initdata
- static void __init imx7ulp_clk_scg1_init(struct device_node *np)
- {
- 	struct clk_hw_onecell_data *clk_data;
--	struct clk_hw **clks;
-+	struct clk_hw **hws;
- 	void __iomem *base;
- 
- 	clk_data = kzalloc(struct_size(clk_data, hws, IMX7ULP_CLK_SCG1_END),
-@@ -67,76 +67,76 @@ static void __init imx7ulp_clk_scg1_init(struct device_node *np)
- 		return;
- 
- 	clk_data->num = IMX7ULP_CLK_SCG1_END;
--	clks = clk_data->hws;
-+	hws = clk_data->hws;
- 
--	clks[IMX7ULP_CLK_DUMMY]		= imx_clk_hw_fixed("dummy", 0);
-+	hws[IMX7ULP_CLK_DUMMY]		= imx_clk_hw_fixed("dummy", 0);
- 
--	clks[IMX7ULP_CLK_ROSC]		= imx_obtain_fixed_clk_hw(np, "rosc");
--	clks[IMX7ULP_CLK_SOSC]		= imx_obtain_fixed_clk_hw(np, "sosc");
--	clks[IMX7ULP_CLK_SIRC]		= imx_obtain_fixed_clk_hw(np, "sirc");
--	clks[IMX7ULP_CLK_FIRC]		= imx_obtain_fixed_clk_hw(np, "firc");
--	clks[IMX7ULP_CLK_UPLL]		= imx_obtain_fixed_clk_hw(np, "upll");
-+	hws[IMX7ULP_CLK_ROSC]		= imx_obtain_fixed_clk_hw(np, "rosc");
-+	hws[IMX7ULP_CLK_SOSC]		= imx_obtain_fixed_clk_hw(np, "sosc");
-+	hws[IMX7ULP_CLK_SIRC]		= imx_obtain_fixed_clk_hw(np, "sirc");
-+	hws[IMX7ULP_CLK_FIRC]		= imx_obtain_fixed_clk_hw(np, "firc");
-+	hws[IMX7ULP_CLK_UPLL]		= imx_obtain_fixed_clk_hw(np, "upll");
- 
- 	/* SCG1 */
- 	base = of_iomap(np, 0);
- 	WARN_ON(!base);
- 
- 	/* NOTE: xPLL config can't be changed when xPLL is enabled */
--	clks[IMX7ULP_CLK_APLL_PRE_SEL]	= imx_clk_hw_mux_flags("apll_pre_sel", base + 0x508, 0, 1, pll_pre_sels, ARRAY_SIZE(pll_pre_sels), CLK_SET_PARENT_GATE);
--	clks[IMX7ULP_CLK_SPLL_PRE_SEL]	= imx_clk_hw_mux_flags("spll_pre_sel", base + 0x608, 0, 1, pll_pre_sels, ARRAY_SIZE(pll_pre_sels), CLK_SET_PARENT_GATE);
-+	hws[IMX7ULP_CLK_APLL_PRE_SEL]	= imx_clk_hw_mux_flags("apll_pre_sel", base + 0x508, 0, 1, pll_pre_sels, ARRAY_SIZE(pll_pre_sels), CLK_SET_PARENT_GATE);
-+	hws[IMX7ULP_CLK_SPLL_PRE_SEL]	= imx_clk_hw_mux_flags("spll_pre_sel", base + 0x608, 0, 1, pll_pre_sels, ARRAY_SIZE(pll_pre_sels), CLK_SET_PARENT_GATE);
- 
- 	/*							   name		    parent_name	   reg			shift	width	flags */
--	clks[IMX7ULP_CLK_APLL_PRE_DIV]	= imx_clk_hw_divider_flags("apll_pre_div", "apll_pre_sel", base + 0x508,	8,	3,	CLK_SET_RATE_GATE);
--	clks[IMX7ULP_CLK_SPLL_PRE_DIV]	= imx_clk_hw_divider_flags("spll_pre_div", "spll_pre_sel", base + 0x608,	8,	3,	CLK_SET_RATE_GATE);
-+	hws[IMX7ULP_CLK_APLL_PRE_DIV]	= imx_clk_hw_divider_flags("apll_pre_div", "apll_pre_sel", base + 0x508,	8,	3,	CLK_SET_RATE_GATE);
-+	hws[IMX7ULP_CLK_SPLL_PRE_DIV]	= imx_clk_hw_divider_flags("spll_pre_div", "spll_pre_sel", base + 0x608,	8,	3,	CLK_SET_RATE_GATE);
- 
- 	/*						name	 parent_name	 base */
--	clks[IMX7ULP_CLK_APLL]		= imx_clk_hw_pllv4("apll",  "apll_pre_div", base + 0x500);
--	clks[IMX7ULP_CLK_SPLL]		= imx_clk_hw_pllv4("spll",  "spll_pre_div", base + 0x600);
-+	hws[IMX7ULP_CLK_APLL]		= imx_clk_hw_pllv4("apll",  "apll_pre_div", base + 0x500);
-+	hws[IMX7ULP_CLK_SPLL]		= imx_clk_hw_pllv4("spll",  "spll_pre_div", base + 0x600);
- 
- 	/* APLL PFDs */
--	clks[IMX7ULP_CLK_APLL_PFD0]	= imx_clk_hw_pfdv2("apll_pfd0", "apll", base + 0x50c, 0);
--	clks[IMX7ULP_CLK_APLL_PFD1]	= imx_clk_hw_pfdv2("apll_pfd1", "apll", base + 0x50c, 1);
--	clks[IMX7ULP_CLK_APLL_PFD2]	= imx_clk_hw_pfdv2("apll_pfd2", "apll", base + 0x50c, 2);
--	clks[IMX7ULP_CLK_APLL_PFD3]	= imx_clk_hw_pfdv2("apll_pfd3", "apll", base + 0x50c, 3);
-+	hws[IMX7ULP_CLK_APLL_PFD0]	= imx_clk_hw_pfdv2("apll_pfd0", "apll", base + 0x50c, 0);
-+	hws[IMX7ULP_CLK_APLL_PFD1]	= imx_clk_hw_pfdv2("apll_pfd1", "apll", base + 0x50c, 1);
-+	hws[IMX7ULP_CLK_APLL_PFD2]	= imx_clk_hw_pfdv2("apll_pfd2", "apll", base + 0x50c, 2);
-+	hws[IMX7ULP_CLK_APLL_PFD3]	= imx_clk_hw_pfdv2("apll_pfd3", "apll", base + 0x50c, 3);
- 
- 	/* SPLL PFDs */
--	clks[IMX7ULP_CLK_SPLL_PFD0]	= imx_clk_hw_pfdv2("spll_pfd0", "spll", base + 0x60C, 0);
--	clks[IMX7ULP_CLK_SPLL_PFD1]	= imx_clk_hw_pfdv2("spll_pfd1", "spll", base + 0x60C, 1);
--	clks[IMX7ULP_CLK_SPLL_PFD2]	= imx_clk_hw_pfdv2("spll_pfd2", "spll", base + 0x60C, 2);
--	clks[IMX7ULP_CLK_SPLL_PFD3]	= imx_clk_hw_pfdv2("spll_pfd3", "spll", base + 0x60C, 3);
-+	hws[IMX7ULP_CLK_SPLL_PFD0]	= imx_clk_hw_pfdv2("spll_pfd0", "spll", base + 0x60C, 0);
-+	hws[IMX7ULP_CLK_SPLL_PFD1]	= imx_clk_hw_pfdv2("spll_pfd1", "spll", base + 0x60C, 1);
-+	hws[IMX7ULP_CLK_SPLL_PFD2]	= imx_clk_hw_pfdv2("spll_pfd2", "spll", base + 0x60C, 2);
-+	hws[IMX7ULP_CLK_SPLL_PFD3]	= imx_clk_hw_pfdv2("spll_pfd3", "spll", base + 0x60C, 3);
- 
- 	/* PLL Mux */
--	clks[IMX7ULP_CLK_APLL_PFD_SEL]	= imx_clk_hw_mux_flags("apll_pfd_sel", base + 0x508, 14, 2, apll_pfd_sels, ARRAY_SIZE(apll_pfd_sels), CLK_SET_RATE_PARENT | CLK_SET_PARENT_GATE);
--	clks[IMX7ULP_CLK_SPLL_PFD_SEL]	= imx_clk_hw_mux_flags("spll_pfd_sel", base + 0x608, 14, 2, spll_pfd_sels, ARRAY_SIZE(spll_pfd_sels), CLK_SET_RATE_PARENT | CLK_SET_PARENT_GATE);
--	clks[IMX7ULP_CLK_APLL_SEL]	= imx_clk_hw_mux_flags("apll_sel", base + 0x508, 1, 1, apll_sels, ARRAY_SIZE(apll_sels), CLK_SET_RATE_PARENT | CLK_SET_PARENT_GATE);
--	clks[IMX7ULP_CLK_SPLL_SEL]	= imx_clk_hw_mux_flags("spll_sel", base + 0x608, 1, 1, spll_sels, ARRAY_SIZE(spll_sels), CLK_SET_RATE_PARENT | CLK_SET_PARENT_GATE);
-+	hws[IMX7ULP_CLK_APLL_PFD_SEL]	= imx_clk_hw_mux_flags("apll_pfd_sel", base + 0x508, 14, 2, apll_pfd_sels, ARRAY_SIZE(apll_pfd_sels), CLK_SET_RATE_PARENT | CLK_SET_PARENT_GATE);
-+	hws[IMX7ULP_CLK_SPLL_PFD_SEL]	= imx_clk_hw_mux_flags("spll_pfd_sel", base + 0x608, 14, 2, spll_pfd_sels, ARRAY_SIZE(spll_pfd_sels), CLK_SET_RATE_PARENT | CLK_SET_PARENT_GATE);
-+	hws[IMX7ULP_CLK_APLL_SEL]	= imx_clk_hw_mux_flags("apll_sel", base + 0x508, 1, 1, apll_sels, ARRAY_SIZE(apll_sels), CLK_SET_RATE_PARENT | CLK_SET_PARENT_GATE);
-+	hws[IMX7ULP_CLK_SPLL_SEL]	= imx_clk_hw_mux_flags("spll_sel", base + 0x608, 1, 1, spll_sels, ARRAY_SIZE(spll_sels), CLK_SET_RATE_PARENT | CLK_SET_PARENT_GATE);
- 
--	clks[IMX7ULP_CLK_SPLL_BUS_CLK]	= imx_clk_hw_divider_gate("spll_bus_clk", "spll_sel", CLK_SET_RATE_GATE, base + 0x604, 8, 3, 0, ulp_div_table, &imx_ccm_lock);
-+	hws[IMX7ULP_CLK_SPLL_BUS_CLK]	= imx_clk_hw_divider_gate("spll_bus_clk", "spll_sel", CLK_SET_RATE_GATE, base + 0x604, 8, 3, 0, ulp_div_table, &imx_ccm_lock);
- 
- 	/* scs/ddr/nic select different clock source requires that clock to be enabled first */
--	clks[IMX7ULP_CLK_SYS_SEL]	= imx_clk_hw_mux2("scs_sel", base + 0x14, 24, 4, scs_sels, ARRAY_SIZE(scs_sels));
--	clks[IMX7ULP_CLK_HSRUN_SYS_SEL] = imx_clk_hw_mux2("hsrun_scs_sel", base + 0x1c, 24, 4, scs_sels, ARRAY_SIZE(scs_sels));
--	clks[IMX7ULP_CLK_NIC_SEL]	= imx_clk_hw_mux2("nic_sel", base + 0x40, 28, 1, nic_sels, ARRAY_SIZE(nic_sels));
--	clks[IMX7ULP_CLK_DDR_SEL]	= imx_clk_hw_mux_flags("ddr_sel", base + 0x30, 24, 2, ddr_sels, ARRAY_SIZE(ddr_sels), CLK_SET_RATE_PARENT | CLK_OPS_PARENT_ENABLE);
-+	hws[IMX7ULP_CLK_SYS_SEL]	= imx_clk_hw_mux2("scs_sel", base + 0x14, 24, 4, scs_sels, ARRAY_SIZE(scs_sels));
-+	hws[IMX7ULP_CLK_HSRUN_SYS_SEL] = imx_clk_hw_mux2("hsrun_scs_sel", base + 0x1c, 24, 4, scs_sels, ARRAY_SIZE(scs_sels));
-+	hws[IMX7ULP_CLK_NIC_SEL]	= imx_clk_hw_mux2("nic_sel", base + 0x40, 28, 1, nic_sels, ARRAY_SIZE(nic_sels));
-+	hws[IMX7ULP_CLK_DDR_SEL]	= imx_clk_hw_mux_flags("ddr_sel", base + 0x30, 24, 2, ddr_sels, ARRAY_SIZE(ddr_sels), CLK_SET_RATE_PARENT | CLK_OPS_PARENT_ENABLE);
- 
--	clks[IMX7ULP_CLK_CORE_DIV]	= imx_clk_hw_divider_flags("divcore",	"scs_sel",  base + 0x14, 16, 4, CLK_SET_RATE_PARENT);
--	clks[IMX7ULP_CLK_HSRUN_CORE_DIV] = imx_clk_hw_divider_flags("hsrun_divcore", "hsrun_scs_sel", base + 0x1c, 16, 4, CLK_SET_RATE_PARENT);
-+	hws[IMX7ULP_CLK_CORE_DIV]	= imx_clk_hw_divider_flags("divcore",	"scs_sel",  base + 0x14, 16, 4, CLK_SET_RATE_PARENT);
-+	hws[IMX7ULP_CLK_HSRUN_CORE_DIV] = imx_clk_hw_divider_flags("hsrun_divcore", "hsrun_scs_sel", base + 0x1c, 16, 4, CLK_SET_RATE_PARENT);
- 
--	clks[IMX7ULP_CLK_DDR_DIV]	= imx_clk_hw_divider_gate("ddr_clk", "ddr_sel", CLK_SET_RATE_PARENT | CLK_IS_CRITICAL, base + 0x30, 0, 3,
-+	hws[IMX7ULP_CLK_DDR_DIV]	= imx_clk_hw_divider_gate("ddr_clk", "ddr_sel", CLK_SET_RATE_PARENT | CLK_IS_CRITICAL, base + 0x30, 0, 3,
- 							       0, ulp_div_table, &imx_ccm_lock);
- 
--	clks[IMX7ULP_CLK_NIC0_DIV]	= imx_clk_hw_divider_flags("nic0_clk",		"nic_sel",  base + 0x40, 24, 4, CLK_SET_RATE_PARENT | CLK_IS_CRITICAL);
--	clks[IMX7ULP_CLK_NIC1_DIV]	= imx_clk_hw_divider_flags("nic1_clk",		"nic0_clk", base + 0x40, 16, 4, CLK_SET_RATE_PARENT | CLK_IS_CRITICAL);
--	clks[IMX7ULP_CLK_NIC1_BUS_DIV]	= imx_clk_hw_divider_flags("nic1_bus_clk",	"nic0_clk", base + 0x40, 4,  4, CLK_SET_RATE_PARENT | CLK_IS_CRITICAL);
-+	hws[IMX7ULP_CLK_NIC0_DIV]	= imx_clk_hw_divider_flags("nic0_clk",		"nic_sel",  base + 0x40, 24, 4, CLK_SET_RATE_PARENT | CLK_IS_CRITICAL);
-+	hws[IMX7ULP_CLK_NIC1_DIV]	= imx_clk_hw_divider_flags("nic1_clk",		"nic0_clk", base + 0x40, 16, 4, CLK_SET_RATE_PARENT | CLK_IS_CRITICAL);
-+	hws[IMX7ULP_CLK_NIC1_BUS_DIV]	= imx_clk_hw_divider_flags("nic1_bus_clk",	"nic0_clk", base + 0x40, 4,  4, CLK_SET_RATE_PARENT | CLK_IS_CRITICAL);
- 
--	clks[IMX7ULP_CLK_GPU_DIV]	= imx_clk_hw_divider("gpu_clk", "nic0_clk", base + 0x40, 20, 4);
-+	hws[IMX7ULP_CLK_GPU_DIV]	= imx_clk_hw_divider("gpu_clk", "nic0_clk", base + 0x40, 20, 4);
- 
--	clks[IMX7ULP_CLK_SOSC_BUS_CLK]	= imx_clk_hw_divider_gate("sosc_bus_clk", "sosc", 0, base + 0x104, 8, 3,
-+	hws[IMX7ULP_CLK_SOSC_BUS_CLK]	= imx_clk_hw_divider_gate("sosc_bus_clk", "sosc", 0, base + 0x104, 8, 3,
- 							       CLK_DIVIDER_READ_ONLY, ulp_div_table, &imx_ccm_lock);
--	clks[IMX7ULP_CLK_FIRC_BUS_CLK]	= imx_clk_hw_divider_gate("firc_bus_clk", "firc", 0, base + 0x304, 8, 3,
-+	hws[IMX7ULP_CLK_FIRC_BUS_CLK]	= imx_clk_hw_divider_gate("firc_bus_clk", "firc", 0, base + 0x304, 8, 3,
- 							       CLK_DIVIDER_READ_ONLY, ulp_div_table, &imx_ccm_lock);
- 
--	imx_check_clk_hws(clks, clk_data->num);
-+	imx_check_clk_hws(hws, clk_data->num);
- 
- 	of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_data);
- }
-@@ -145,7 +145,7 @@ CLK_OF_DECLARE(imx7ulp_clk_scg1, "fsl,imx7ulp-scg1", imx7ulp_clk_scg1_init);
- static void __init imx7ulp_clk_pcc2_init(struct device_node *np)
- {
- 	struct clk_hw_onecell_data *clk_data;
--	struct clk_hw **clks;
-+	struct clk_hw **hws;
- 	void __iomem *base;
- 	int i;
- 
-@@ -155,42 +155,42 @@ static void __init imx7ulp_clk_pcc2_init(struct device_node *np)
- 		return;
- 
- 	clk_data->num = IMX7ULP_CLK_PCC2_END;
--	clks = clk_data->hws;
-+	hws = clk_data->hws;
- 
- 	/* PCC2 */
- 	base = of_iomap(np, 0);
- 	WARN_ON(!base);
- 
--	clks[IMX7ULP_CLK_DMA1]		= imx_clk_hw_gate("dma1", "nic1_clk", base + 0x20, 30);
--	clks[IMX7ULP_CLK_RGPIO2P1]	= imx_clk_hw_gate("rgpio2p1", "nic1_bus_clk", base + 0x3c, 30);
--	clks[IMX7ULP_CLK_DMA_MUX1]	= imx_clk_hw_gate("dma_mux1", "nic1_bus_clk", base + 0x84, 30);
--	clks[IMX7ULP_CLK_CAAM]		= imx_clk_hw_gate("caam", "nic1_clk", base + 0x90, 30);
--	clks[IMX7ULP_CLK_LPTPM4]	= imx7ulp_clk_hw_composite("lptpm4",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x94);
--	clks[IMX7ULP_CLK_LPTPM5]	= imx7ulp_clk_hw_composite("lptpm5",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x98);
--	clks[IMX7ULP_CLK_LPIT1]		= imx7ulp_clk_hw_composite("lpit1",   periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x9c);
--	clks[IMX7ULP_CLK_LPSPI2]	= imx7ulp_clk_hw_composite("lpspi2",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0xa4);
--	clks[IMX7ULP_CLK_LPSPI3]	= imx7ulp_clk_hw_composite("lpspi3",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0xa8);
--	clks[IMX7ULP_CLK_LPI2C4]	= imx7ulp_clk_hw_composite("lpi2c4",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0xac);
--	clks[IMX7ULP_CLK_LPI2C5]	= imx7ulp_clk_hw_composite("lpi2c5",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0xb0);
--	clks[IMX7ULP_CLK_LPUART4]	= imx7ulp_clk_hw_composite("lpuart4", periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0xb4);
--	clks[IMX7ULP_CLK_LPUART5]	= imx7ulp_clk_hw_composite("lpuart5", periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0xb8);
--	clks[IMX7ULP_CLK_FLEXIO1]	= imx7ulp_clk_hw_composite("flexio1", periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0xc4);
--	clks[IMX7ULP_CLK_USB0]		= imx7ulp_clk_hw_composite("usb0",    periph_plat_sels, ARRAY_SIZE(periph_plat_sels), true, true,  true, base + 0xcc);
--	clks[IMX7ULP_CLK_USB1]		= imx7ulp_clk_hw_composite("usb1",    periph_plat_sels, ARRAY_SIZE(periph_plat_sels), true, true,  true, base + 0xd0);
--	clks[IMX7ULP_CLK_USB_PHY]	= imx_clk_hw_gate("usb_phy", "nic1_bus_clk", base + 0xd4, 30);
--	clks[IMX7ULP_CLK_USDHC0]	= imx7ulp_clk_hw_composite("usdhc0",  periph_plat_sels, ARRAY_SIZE(periph_plat_sels), true, true,  true, base + 0xdc);
--	clks[IMX7ULP_CLK_USDHC1]	= imx7ulp_clk_hw_composite("usdhc1",  periph_plat_sels, ARRAY_SIZE(periph_plat_sels), true, true,  true, base + 0xe0);
--	clks[IMX7ULP_CLK_WDG1]		= imx7ulp_clk_hw_composite("wdg1",    periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, true,  true, base + 0xf4);
--	clks[IMX7ULP_CLK_WDG2]		= imx7ulp_clk_hw_composite("wdg2",    periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, true,  true, base + 0x10c);
--
--	imx_check_clk_hws(clks, clk_data->num);
-+	hws[IMX7ULP_CLK_DMA1]		= imx_clk_hw_gate("dma1", "nic1_clk", base + 0x20, 30);
-+	hws[IMX7ULP_CLK_RGPIO2P1]	= imx_clk_hw_gate("rgpio2p1", "nic1_bus_clk", base + 0x3c, 30);
-+	hws[IMX7ULP_CLK_DMA_MUX1]	= imx_clk_hw_gate("dma_mux1", "nic1_bus_clk", base + 0x84, 30);
-+	hws[IMX7ULP_CLK_CAAM]		= imx_clk_hw_gate("caam", "nic1_clk", base + 0x90, 30);
-+	hws[IMX7ULP_CLK_LPTPM4]		= imx7ulp_clk_hw_composite("lptpm4",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x94);
-+	hws[IMX7ULP_CLK_LPTPM5]		= imx7ulp_clk_hw_composite("lptpm5",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x98);
-+	hws[IMX7ULP_CLK_LPIT1]		= imx7ulp_clk_hw_composite("lpit1",   periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x9c);
-+	hws[IMX7ULP_CLK_LPSPI2]		= imx7ulp_clk_hw_composite("lpspi2",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0xa4);
-+	hws[IMX7ULP_CLK_LPSPI3]		= imx7ulp_clk_hw_composite("lpspi3",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0xa8);
-+	hws[IMX7ULP_CLK_LPI2C4]		= imx7ulp_clk_hw_composite("lpi2c4",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0xac);
-+	hws[IMX7ULP_CLK_LPI2C5]		= imx7ulp_clk_hw_composite("lpi2c5",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0xb0);
-+	hws[IMX7ULP_CLK_LPUART4]	= imx7ulp_clk_hw_composite("lpuart4", periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0xb4);
-+	hws[IMX7ULP_CLK_LPUART5]	= imx7ulp_clk_hw_composite("lpuart5", periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0xb8);
-+	hws[IMX7ULP_CLK_FLEXIO1]	= imx7ulp_clk_hw_composite("flexio1", periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0xc4);
-+	hws[IMX7ULP_CLK_USB0]		= imx7ulp_clk_hw_composite("usb0",    periph_plat_sels, ARRAY_SIZE(periph_plat_sels), true, true,  true, base + 0xcc);
-+	hws[IMX7ULP_CLK_USB1]		= imx7ulp_clk_hw_composite("usb1",    periph_plat_sels, ARRAY_SIZE(periph_plat_sels), true, true,  true, base + 0xd0);
-+	hws[IMX7ULP_CLK_USB_PHY]	= imx_clk_hw_gate("usb_phy", "nic1_bus_clk", base + 0xd4, 30);
-+	hws[IMX7ULP_CLK_USDHC0]		= imx7ulp_clk_hw_composite("usdhc0",  periph_plat_sels, ARRAY_SIZE(periph_plat_sels), true, true,  true, base + 0xdc);
-+	hws[IMX7ULP_CLK_USDHC1]		= imx7ulp_clk_hw_composite("usdhc1",  periph_plat_sels, ARRAY_SIZE(periph_plat_sels), true, true,  true, base + 0xe0);
-+	hws[IMX7ULP_CLK_WDG1]		= imx7ulp_clk_hw_composite("wdg1",    periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, true,  true, base + 0xf4);
-+	hws[IMX7ULP_CLK_WDG2]		= imx7ulp_clk_hw_composite("wdg2",    periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, true,  true, base + 0x10c);
-+
-+	imx_check_clk_hws(hws, clk_data->num);
- 
- 	of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_data);
- 
- 	for (i = 0; i < ARRAY_SIZE(pcc2_uart_clk_ids); i++) {
- 		int index = pcc2_uart_clk_ids[i];
- 
--		pcc2_uart_clks[i] = &clks[index]->clk;
-+		pcc2_uart_clks[i] = &hws[index]->clk;
- 	}
- 
- 	imx_register_uart_clocks(pcc2_uart_clks);
-@@ -200,7 +200,7 @@ CLK_OF_DECLARE(imx7ulp_clk_pcc2, "fsl,imx7ulp-pcc2", imx7ulp_clk_pcc2_init);
- static void __init imx7ulp_clk_pcc3_init(struct device_node *np)
- {
- 	struct clk_hw_onecell_data *clk_data;
--	struct clk_hw **clks;
-+	struct clk_hw **hws;
- 	void __iomem *base;
- 	int i;
- 
-@@ -210,41 +210,41 @@ static void __init imx7ulp_clk_pcc3_init(struct device_node *np)
- 		return;
- 
- 	clk_data->num = IMX7ULP_CLK_PCC3_END;
--	clks = clk_data->hws;
-+	hws = clk_data->hws;
- 
- 	/* PCC3 */
- 	base = of_iomap(np, 0);
- 	WARN_ON(!base);
- 
--	clks[IMX7ULP_CLK_LPTPM6]	= imx7ulp_clk_hw_composite("lptpm6",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x84);
--	clks[IMX7ULP_CLK_LPTPM7]	= imx7ulp_clk_hw_composite("lptpm7",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x88);
-+	hws[IMX7ULP_CLK_LPTPM6]	= imx7ulp_clk_hw_composite("lptpm6",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x84);
-+	hws[IMX7ULP_CLK_LPTPM7]	= imx7ulp_clk_hw_composite("lptpm7",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x88);
- 
--	clks[IMX7ULP_CLK_MMDC]		= clk_hw_register_gate(NULL, "mmdc", "nic1_clk", CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
-+	hws[IMX7ULP_CLK_MMDC]		= clk_hw_register_gate(NULL, "mmdc", "nic1_clk", CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
- 							       base + 0xac, 30, 0, &imx_ccm_lock);
--	clks[IMX7ULP_CLK_LPI2C6]	= imx7ulp_clk_hw_composite("lpi2c6",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x90);
--	clks[IMX7ULP_CLK_LPI2C7]	= imx7ulp_clk_hw_composite("lpi2c7",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x94);
--	clks[IMX7ULP_CLK_LPUART6]	= imx7ulp_clk_hw_composite("lpuart6", periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x98);
--	clks[IMX7ULP_CLK_LPUART7]	= imx7ulp_clk_hw_composite("lpuart7", periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x9c);
--	clks[IMX7ULP_CLK_DSI]		= imx7ulp_clk_hw_composite("dsi",     periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, true,  true, base + 0xa4);
--	clks[IMX7ULP_CLK_LCDIF]		= imx7ulp_clk_hw_composite("lcdif",   periph_plat_sels, ARRAY_SIZE(periph_plat_sels), true, true,  true, base + 0xa8);
-+	hws[IMX7ULP_CLK_LPI2C6]	= imx7ulp_clk_hw_composite("lpi2c6",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x90);
-+	hws[IMX7ULP_CLK_LPI2C7]	= imx7ulp_clk_hw_composite("lpi2c7",  periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x94);
-+	hws[IMX7ULP_CLK_LPUART6]	= imx7ulp_clk_hw_composite("lpuart6", periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x98);
-+	hws[IMX7ULP_CLK_LPUART7]	= imx7ulp_clk_hw_composite("lpuart7", periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, false, true, base + 0x9c);
-+	hws[IMX7ULP_CLK_DSI]		= imx7ulp_clk_hw_composite("dsi",     periph_bus_sels, ARRAY_SIZE(periph_bus_sels), true, true,  true, base + 0xa4);
-+	hws[IMX7ULP_CLK_LCDIF]		= imx7ulp_clk_hw_composite("lcdif",   periph_plat_sels, ARRAY_SIZE(periph_plat_sels), true, true,  true, base + 0xa8);
- 
--	clks[IMX7ULP_CLK_VIU]		= imx_clk_hw_gate("viu",   "nic1_clk",	   base + 0xa0, 30);
--	clks[IMX7ULP_CLK_PCTLC]		= imx_clk_hw_gate("pctlc", "nic1_bus_clk", base + 0xb8, 30);
--	clks[IMX7ULP_CLK_PCTLD]		= imx_clk_hw_gate("pctld", "nic1_bus_clk", base + 0xbc, 30);
--	clks[IMX7ULP_CLK_PCTLE]		= imx_clk_hw_gate("pctle", "nic1_bus_clk", base + 0xc0, 30);
--	clks[IMX7ULP_CLK_PCTLF]		= imx_clk_hw_gate("pctlf", "nic1_bus_clk", base + 0xc4, 30);
-+	hws[IMX7ULP_CLK_VIU]		= imx_clk_hw_gate("viu",   "nic1_clk",	   base + 0xa0, 30);
-+	hws[IMX7ULP_CLK_PCTLC]		= imx_clk_hw_gate("pctlc", "nic1_bus_clk", base + 0xb8, 30);
-+	hws[IMX7ULP_CLK_PCTLD]		= imx_clk_hw_gate("pctld", "nic1_bus_clk", base + 0xbc, 30);
-+	hws[IMX7ULP_CLK_PCTLE]		= imx_clk_hw_gate("pctle", "nic1_bus_clk", base + 0xc0, 30);
-+	hws[IMX7ULP_CLK_PCTLF]		= imx_clk_hw_gate("pctlf", "nic1_bus_clk", base + 0xc4, 30);
- 
--	clks[IMX7ULP_CLK_GPU3D]		= imx7ulp_clk_hw_composite("gpu3d",   periph_plat_sels, ARRAY_SIZE(periph_plat_sels), true, false, true, base + 0x140);
--	clks[IMX7ULP_CLK_GPU2D]		= imx7ulp_clk_hw_composite("gpu2d",   periph_plat_sels, ARRAY_SIZE(periph_plat_sels), true, false, true, base + 0x144);
-+	hws[IMX7ULP_CLK_GPU3D]		= imx7ulp_clk_hw_composite("gpu3d",   periph_plat_sels, ARRAY_SIZE(periph_plat_sels), true, false, true, base + 0x140);
-+	hws[IMX7ULP_CLK_GPU2D]		= imx7ulp_clk_hw_composite("gpu2d",   periph_plat_sels, ARRAY_SIZE(periph_plat_sels), true, false, true, base + 0x144);
- 
--	imx_check_clk_hws(clks, clk_data->num);
-+	imx_check_clk_hws(hws, clk_data->num);
- 
- 	of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_data);
- 
- 	for (i = 0; i < ARRAY_SIZE(pcc3_uart_clk_ids); i++) {
- 		int index = pcc3_uart_clk_ids[i];
- 
--		pcc3_uart_clks[i] = &clks[index]->clk;
-+		pcc3_uart_clks[i] = &hws[index]->clk;
- 	}
- 
- 	imx_register_uart_clocks(pcc3_uart_clks);
-@@ -254,7 +254,7 @@ CLK_OF_DECLARE(imx7ulp_clk_pcc3, "fsl,imx7ulp-pcc3", imx7ulp_clk_pcc3_init);
- static void __init imx7ulp_clk_smc1_init(struct device_node *np)
- {
- 	struct clk_hw_onecell_data *clk_data;
--	struct clk_hw **clks;
-+	struct clk_hw **hws;
- 	void __iomem *base;
- 
- 	clk_data = kzalloc(struct_size(clk_data, hws, IMX7ULP_CLK_SMC1_END),
-@@ -263,15 +263,15 @@ static void __init imx7ulp_clk_smc1_init(struct device_node *np)
- 		return;
- 
- 	clk_data->num = IMX7ULP_CLK_SMC1_END;
--	clks = clk_data->hws;
-+	hws = clk_data->hws;
- 
- 	/* SMC1 */
- 	base = of_iomap(np, 0);
- 	WARN_ON(!base);
- 
--	clks[IMX7ULP_CLK_ARM] = imx_clk_hw_mux_flags("arm", base + 0x10, 8, 2, arm_sels, ARRAY_SIZE(arm_sels), CLK_IS_CRITICAL);
-+	hws[IMX7ULP_CLK_ARM] = imx_clk_hw_mux_flags("arm", base + 0x10, 8, 2, arm_sels, ARRAY_SIZE(arm_sels), CLK_IS_CRITICAL);
- 
--	imx_check_clk_hws(clks, clk_data->num);
-+	imx_check_clk_hws(hws, clk_data->num);
- 
- 	of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_data);
- }
+Matti Vaittinen (15):
+  dt-bindings: regulator: Document ROHM BD71282 regulator bindings
+  dt-bindings: leds: ROHM BD71282 PMIC LED driver
+  dt-bindings: mfd: Document ROHM BD71828 bindings
+  mfd: rohm PMICs - use platform_device_id to match MFD sub-devices
+  mfd: bd71828: Support ROHM BD71828 PMIC - core
+  mfd: input: bd71828: Add power-key support
+  clk: bd718x7: Support ROHM BD71828 clk block
+  regulator: bd718x7: Split driver to common and bd718x7 specific parts
+  regulator: bd71828: Basic support for ROHM bd71828 PMIC regulators
+  gpio: devres: Add devm_gpiod_get_parent_array
+  docs: driver-model: Add missing managed GPIO array get functions
+  rtc: bd70528 add BD71828 support
+  gpio: bd71828: Initial support for ROHM BD71828 PMIC GPIOs
+  leds: Add common LED binding parsing support to LED class/core
+  led: bd71828: Support LED outputs on ROHM BD71828 PMIC
+
+ .../bindings/leds/rohm,bd71828-leds.yaml      |  52 ++
+ .../bindings/mfd/rohm,bd71828-pmic.yaml       | 193 +++++
+ .../regulator/rohm,bd71828-regulator.yaml     | 107 +++
+ .../driver-api/driver-model/devres.rst        |   3 +
+ drivers/clk/Kconfig                           |   6 +-
+ drivers/clk/clk-bd718x7.c                     |  50 +-
+ drivers/gpio/Kconfig                          |  12 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-bd71828.c                   | 159 ++++
+ drivers/gpio/gpiolib-devres.c                 |  65 +-
+ drivers/leds/Kconfig                          |  10 +
+ drivers/leds/Makefile                         |   1 +
+ drivers/leds/led-class.c                      |  99 ++-
+ drivers/leds/led-core.c                       | 258 +++++-
+ drivers/leds/leds-bd71828.c                   | 118 +++
+ drivers/mfd/Kconfig                           |  15 +
+ drivers/mfd/Makefile                          |   2 +-
+ drivers/mfd/rohm-bd70528.c                    |   3 +-
+ drivers/mfd/rohm-bd71828.c                    | 345 ++++++++
+ drivers/mfd/rohm-bd718x7.c                    |  39 +-
+ drivers/regulator/Kconfig                     |  16 +
+ drivers/regulator/Makefile                    |   2 +
+ drivers/regulator/bd71828-regulator.c         | 812 ++++++++++++++++++
+ drivers/regulator/bd718x7-regulator.c         | 200 ++---
+ drivers/regulator/rohm-regulator.c            |  95 ++
+ drivers/rtc/Kconfig                           |   3 +-
+ drivers/rtc/rtc-bd70528.c                     | 168 +++-
+ include/linux/gpio/consumer.h                 |   5 +
+ include/linux/leds.h                          |  94 +-
+ include/linux/mfd/rohm-bd70528.h              |  19 +-
+ include/linux/mfd/rohm-bd71828.h              | 423 +++++++++
+ include/linux/mfd/rohm-bd718x7.h              |   6 -
+ include/linux/mfd/rohm-generic.h              |  48 +-
+ include/linux/mfd/rohm-shared.h               |  27 +
+ 34 files changed, 3177 insertions(+), 279 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.yaml
+ create mode 100644 drivers/gpio/gpio-bd71828.c
+ create mode 100644 drivers/leds/leds-bd71828.c
+ create mode 100644 drivers/mfd/rohm-bd71828.c
+ create mode 100644 drivers/regulator/bd71828-regulator.c
+ create mode 100644 drivers/regulator/rohm-regulator.c
+ create mode 100644 include/linux/mfd/rohm-bd71828.h
+ create mode 100644 include/linux/mfd/rohm-shared.h
+
 -- 
-2.7.4
+2.21.0
 
+
+-- 
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =] 
