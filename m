@@ -2,100 +2,65 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3009411E663
-	for <lists+linux-clk@lfdr.de>; Fri, 13 Dec 2019 16:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE67911E68E
+	for <lists+linux-clk@lfdr.de>; Fri, 13 Dec 2019 16:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726528AbfLMPVj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 13 Dec 2019 10:21:39 -0500
-Received: from out28-52.mail.aliyun.com ([115.124.28.52]:42509 "EHLO
-        out28-52.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727872AbfLMPVi (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 13 Dec 2019 10:21:38 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07670759|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.826969-0.0200583-0.152973;DS=CONTINUE|ham_system_inform|0.423128-0.00153908-0.575333;FP=12401601434723292222|1|1|1|0|-1|-1|-1;HT=e02c03306;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.GGSxanS_1576250475;
-Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.GGSxanS_1576250475)
-          by smtp.aliyun-inc.com(10.147.40.233);
-          Fri, 13 Dec 2019 23:21:29 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        paul.burton@mips.com, paulburton@kernel.org, paul@crapouillou.net,
-        mturquette@baylibre.com, sboyd@kernel.org, mark.rutland@arm.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
-Subject: [PATCH v2 5/5] clk: Ingenic: Remove unnecessary spinlock when reading registers.
-Date:   Fri, 13 Dec 2019 23:21:12 +0800
-Message-Id: <1576250472-124315-7-git-send-email-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1576250472-124315-1-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1576250472-124315-1-git-send-email-zhouyanjie@wanyeetech.com>
+        id S1727674AbfLMP3l (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 13 Dec 2019 10:29:41 -0500
+Received: from muru.com ([72.249.23.125]:47128 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726599AbfLMP3l (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 13 Dec 2019 10:29:41 -0500
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 369A88181;
+        Fri, 13 Dec 2019 15:30:20 +0000 (UTC)
+Date:   Fri, 13 Dec 2019 07:29:38 -0800
+From:   Tony Lindgren <tony@atomide.com>
+To:     Tero Kristo <t-kristo@ti.com>
+Cc:     Benoit Parrot <bparrot@ti.com>, linux-omap@vger.kernel.org,
+        linux-clk@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Patch v3 0/3] ARM: dts: am43x-vpfe/ov2659.patch
+Message-ID: <20191213152938.GK35479@atomide.com>
+References: <20191211140720.10539-1-bparrot@ti.com>
+ <20191212174123.GF35479@atomide.com>
+ <c4ae58dc-3c81-f493-a665-6926baa0f04c@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c4ae58dc-3c81-f493-a665-6926baa0f04c@ti.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-It is not necessary to use spinlock when reading registers,
-so remove it from cgu.c.
+* Tero Kristo <t-kristo@ti.com> [191213 07:43]:
+> On 12/12/2019 19:41, Tony Lindgren wrote:
+> > * Benoit Parrot <bparrot@ti.com> [191211 06:04]:
+> > > This patch series adds the missing camera endpoint (ov2659) as well as
+> > > the required source clocks nodes for the sensor.
+> > > 
+> > > On the am437x-sk-evm the camera sensor is sourced from clkout1 but that
+> > > clock nodes/tree was removed as it was unsed at the time, we are
+> > > re-adding the needed clock nodes here.
+> > 
+> > Tero, it seems I can already pick this series?
+> 
+> I believe it is ready if you approve the clkout1 clock patch.
 
-Suggested-by: Paul Cercueil <paul@crapouillou.net>
-Suggested-by: Paul Burton <paulburton@kernel.org>
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
----
+OK yeah looks fine.
 
-Notes:
-    v2:
-    New Patch.
+> > Or ou want to queue the changes to am43xx-clocks.dtsi along with all
+> > your other clock patches?
+> 
+> Well, I have actually never queued any omap2+ dts patches myself, and I
+> don't think there would be too many of those coming for next merge either.
 
- drivers/clk/ingenic/cgu.c | 8 --------
- 1 file changed, 8 deletions(-)
+OK will queue this series then. For the other ones from Benoit
+looks like we need an immutable clock branch before I can apply
+anything.
 
-diff --git a/drivers/clk/ingenic/cgu.c b/drivers/clk/ingenic/cgu.c
-index ae1ddcb..3c95451 100644
---- a/drivers/clk/ingenic/cgu.c
-+++ b/drivers/clk/ingenic/cgu.c
-@@ -76,16 +76,13 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
- 	const struct ingenic_cgu_pll_info *pll_info;
- 	unsigned m, n, od_enc, od;
- 	bool bypass;
--	unsigned long flags;
- 	u32 ctl;
- 
- 	clk_info = &cgu->clock_info[ingenic_clk->idx];
- 	BUG_ON(clk_info->type != CGU_CLK_PLL);
- 	pll_info = &clk_info->pll;
- 
--	spin_lock_irqsave(&cgu->lock, flags);
- 	ctl = readl(cgu->base + pll_info->pll_reg);
--	spin_unlock_irqrestore(&cgu->lock, flags);
- 
- 	m = (ctl >> pll_info->m_shift) & GENMASK(pll_info->m_bits - 1, 0);
- 	m += pll_info->m_offset;
-@@ -94,9 +91,7 @@ ingenic_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
- 	od_enc = ctl >> pll_info->od_shift;
- 	od_enc &= GENMASK(pll_info->od_bits - 1, 0);
- 
--	spin_lock_irqsave(&cgu->lock, flags);
- 	ctl = readl(cgu->base + pll_info->bypass_reg);
--	spin_unlock_irqrestore(&cgu->lock, flags);
- 
- 	bypass = !pll_info->no_bypass_bit &&
- 		 !!(ctl & BIT(pll_info->bypass_bit));
-@@ -269,12 +264,9 @@ static int ingenic_pll_is_enabled(struct clk_hw *hw)
- 	struct ingenic_cgu *cgu = ingenic_clk->cgu;
- 	const struct ingenic_cgu_clk_info *clk_info = to_clk_info(ingenic_clk);
- 	const struct ingenic_cgu_pll_info *pll_info = &clk_info->pll;
--	unsigned long flags;
- 	u32 ctl;
- 
--	spin_lock_irqsave(&cgu->lock, flags);
- 	ctl = readl(cgu->base + pll_info->pll_reg);
--	spin_unlock_irqrestore(&cgu->lock, flags);
- 
- 	return !!(ctl & BIT(pll_info->enable_bit));
- }
--- 
-2.7.4
+Regards,
 
+Tony
