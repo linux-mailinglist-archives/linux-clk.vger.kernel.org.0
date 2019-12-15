@@ -2,334 +2,161 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA63611F516
-	for <lists+linux-clk@lfdr.de>; Sun, 15 Dec 2019 00:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20AAC11F597
+	for <lists+linux-clk@lfdr.de>; Sun, 15 Dec 2019 05:25:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727120AbfLNXkw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 14 Dec 2019 18:40:52 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:37748 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727091AbfLNXkw (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 14 Dec 2019 18:40:52 -0500
-Received: by mail-wm1-f65.google.com with SMTP id f129so2691972wmf.2;
-        Sat, 14 Dec 2019 15:40:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=HK4ZUk2RrQbJn9u/ZAGcwGNg99C7gN0OBa5d5+v6ey4=;
-        b=r5hCX8z/38dPb5myme7epOIigAdO+zD5iP/de51ZhIKk/n0KMmwHEM9rtiFL9c0fII
-         PSFGcAdJVH8PeUiWc9UjSC9Vmgp4CDCbjLYRjHtzURBgjwN2JTdhk2LtzEek5gajoJPI
-         6/IyEkG3i2d+ScHxjOSWeB0/iHkFYhPgc2zLEQg/onuKyI0buFZ5mmzYjc0E940eWayE
-         MkCxWFszc/b1PbhrYt4rNm2bhKTkQoycGKJWrlh+BQwpNyG6ZE2q8L1rXoVbVLotAFKb
-         Sp2eWNwjy9krShe2fYFP63UyqqWCe4vrB3Znv6ebUsBIOVjnPT+RKgHJtMS1R9rnJjlu
-         auNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=HK4ZUk2RrQbJn9u/ZAGcwGNg99C7gN0OBa5d5+v6ey4=;
-        b=DsK5Hn0zVNYoX70k4bZJnREdHOq5HJDP86yUrHSDGuDDvDN6g/VIhZPBXYYHwBGTVo
-         Oqt8REpklG7fnu0sYl5onOyNHmXSklviYnWt/NmSYN8hnLJCnxzekJlCV3deDBNLroIV
-         xPOrAIxWdju2Y9CFx6BZbtHX0kZMcTkgMnQPTkCt74+8rkvjfj3WyexyeHgWsqYeeVR0
-         8L2dBPYjhCh1EEJLvpTKzp504/sYP+ehF5oIKv9OHuiQiuXM4bqpsp32XWDo/Um+Rt+V
-         uaeZWmFRXurK09TuFwmCHAZQfjyYNWSZi6vun027eT+5hSsQShOcN+A/R1TL/Hc7fpuT
-         brvA==
-X-Gm-Message-State: APjAAAW24o2dMupa33qREhZkauPQRnMTomlZajHH6lp3N1wrve7EqjWQ
-        fH1x9STZ63kILRJ1E7lQHIO45JmInDg=
-X-Google-Smtp-Source: APXvYqxoPqTJIx5C5j0+yQRP9NWOQKspY2Cnh9arhNt/uS4XxdfYvtt1/ywSyupEAX8C5roQzCYbvA==
-X-Received: by 2002:a1c:f60f:: with SMTP id w15mr21165036wmc.132.1576366847786;
-        Sat, 14 Dec 2019 15:40:47 -0800 (PST)
-Received: from ziggy.stardust ([95.169.225.199])
-        by smtp.gmail.com with ESMTPSA id m7sm15443988wma.39.2019.12.14.15.40.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Dec 2019 15:40:47 -0800 (PST)
-Subject: Re: [PATCH v6 6/8] soc: mediatek: add MT6765 scpsys and subdomain
- support
-To:     Macpaul Lin <macpaul.lin@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
+        id S1726101AbfLOEZA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 14 Dec 2019 23:25:00 -0500
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:59753 "EHLO
+        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726036AbfLOEZA (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 14 Dec 2019 23:25:00 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 9B5E45AC7;
+        Sat, 14 Dec 2019 23:24:58 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sat, 14 Dec 2019 23:24:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm1; bh=yF1ILw6fVT9Ms/aRvWhr5GmNy8
+        yCGr3pdt2J77P8Ksg=; b=BV/CcvtMaUwJ5Xkmrafcunww9v4v4S5kcTx99tU1EB
+        sOPSEYwERghframe5KVWMwobt2PY4HQNQQu2M1chgX+ubpFEf3J8XO3qD4JJxmln
+        RflPCYFWyHYjDGPo78fb47HlR078gaPkLsEdr9P9jqliVCTo1SY7AJ6Hp6rWd8r7
+        W5DBV/pMMSJkh1q0OIQIBhbSExv75caTPQgBunbHvXNqGH4vSRUFdyKso0gdEgM8
+        0onhPU13x8uBGlfOA8LWsEv03wWaPsxzbIfiZnlnV6Fy7uI7HbSi6igzK+X/cb3n
+        zvG7ebfYEYT56dV/G5nuOu1eYZqjq36OhZCZy7RGnQAQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=yF1ILw6fVT9Ms/aRv
+        Whr5GmNy8yCGr3pdt2J77P8Ksg=; b=TTQOvW6r9Mi392k9GGi6muC4N+pNtQ0Xm
+        GdWhR+xYvDth+aBUAQdmPL/NmyJcHOcCwhhdoqed8QlH0hqrAVK6M9vJ+iolQ51o
+        tybj41uNSMpYU/HPiznEFifdy/VzsCUbOLw87LXXKwB0dJANNXhQwfGCu4pb8GD6
+        7zoDYpbfXvxsFgVmUnoXCrhPGyIlKQkH5Bn0uPnpn6N6WFpjuezhxMmYUXUwUuX0
+        btYLyeaZ7K1D8fKxLnGrrTEEsQIv/cqF6UiOCt+EXXNDtVdLGzmkkVrhNnAGUY4z
+        63iWDlkgSRUlLr7ZDRAV2K7d/mD5Qid43lMtdemyYwn+tBfg4yB/A==
+X-ME-Sender: <xms:mbX1XSkQcijX_Y6EzV-uhI2a9R45QZY5H9LY2SSO8tivwy6LVJIpbA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrvddtvddgieelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucfkphepje
+    dtrddufeehrddugeekrdduhedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgv
+    lhesshhhohhllhgrnhgurdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:mbX1XfHA4DWZTjW_wQrEfGKPsFvCpNrWl6sarDuEFlgi5KMgA1K4_Q>
+    <xmx:mbX1XSVMypIjxbOqYHykcFy4kPMrcwFCew_zUWsipqB1yqKG1kG8kg>
+    <xmx:mbX1Xeyf8LwH_9K-1dQEO830eTGigJUaAxK_Zx2PTGAq6J1Yas7iHA>
+    <xmx:mrX1XYRbkjBPBJSJfIXXEqhDzpdYk8PWkZBxxL5FMcffXggFEGcI6A>
+Received: from titanium.stl.sholland.net (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
+        by mail.messagingengine.com (Postfix) with ESMTPA id B5ACC80060;
+        Sat, 14 Dec 2019 23:24:56 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mars Cheng <mars.cheng@mediatek.com>,
-        Owen Chen <owen.chen@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     wsd_upstream@mediatek.com, CC Hwang <cc.hwang@mediatek.com>,
-        Loda Chou <loda.chou@mediatek.com>, devicetree@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-clk@vger.kernel.org
-References: <1562924653-10056-1-git-send-email-macpaul.lin@mediatek.com>
- <1562924653-10056-7-git-send-email-macpaul.lin@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Autocrypt: addr=matthias.bgg@gmail.com; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <bdadcb15-7bbc-11a9-5780-edcb984b051a@gmail.com>
-Date:   Sun, 15 Dec 2019 00:40:46 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ondrej Jirman <megous@megous.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@googlegroups.com, Samuel Holland <samuel@sholland.org>
+Subject: [PATCH v5 0/8] Allwinner sun6i message box support
+Date:   Sat, 14 Dec 2019 22:24:47 -0600
+Message-Id: <20191215042455.51001-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <1562924653-10056-7-git-send-email-macpaul.lin@mediatek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+This series adds support for the "hardware message box" in sun8i, sun9i,
+and sun50i SoCs, used for communication with the ARISC management
+processor (the platform's equivalent of the ARM SCP). The end goal is to
+use the arm_scpi driver as a client, communicating with firmware running
+on the ARISC CPU.
 
+I have tested this driver with various firmware programs on the A64, H5,
+and H6 SoCs (including specifically this arm_scpi patch on A64 and H6),
+and Ondrej Jirman has tested the driver on the A83T (using a similar
+patch to arm_scpi).
 
-On 12/07/2019 11:43, Macpaul Lin wrote:
-> From: Mars Cheng <mars.cheng@mediatek.com>
-> 
-> This adds scpsys support for MT6765
-> Add subdomain support for MT6765:
-> isp, mm, connsys, mfg, and cam.
-> 
-> Signed-off-by: Mars Cheng <mars.cheng@mediatek.com>
-> Signed-off-by: Owen Chen <owen.chen@mediatek.com>
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+The change to make the arm_scpi compatible with unidirectional mailbox
+controllers is attached to the end of this patch series. While it would
+be nice to get this merged too, I don't consider it a prerequisite to
+getting the driver merged. And even without the driver, the clock change
+(patch #1) can go in at any time.
 
-Applied to v5.5-next/soc
+Thanks,
+Samuel
 
-> ---
->  drivers/soc/mediatek/mtk-scpsys.c | 130 ++++++++++++++++++++++++++++++
->  1 file changed, 130 insertions(+)
-> 
-> diff --git a/drivers/soc/mediatek/mtk-scpsys.c b/drivers/soc/mediatek/mtk-scpsys.c
-> index ea5a221a16e9..ff124c514e9c 100644
-> --- a/drivers/soc/mediatek/mtk-scpsys.c
-> +++ b/drivers/soc/mediatek/mtk-scpsys.c
-> @@ -16,6 +16,7 @@
->  
->  #include <dt-bindings/power/mt2701-power.h>
->  #include <dt-bindings/power/mt2712-power.h>
-> +#include <dt-bindings/power/mt6765-power.h>
->  #include <dt-bindings/power/mt6797-power.h>
->  #include <dt-bindings/power/mt7622-power.h>
->  #include <dt-bindings/power/mt7623a-power.h>
-> @@ -869,6 +870,120 @@ static const struct scp_subdomain scp_subdomain_mt2712[] = {
->  	{MT2712_POWER_DOMAIN_MFG_SC2, MT2712_POWER_DOMAIN_MFG_SC3},
->  };
->  
-> +/*
-> + * MT6765 power domain support
-> + */
-> +#define SPM_PWR_STATUS_MT6765			0x0180
-> +#define SPM_PWR_STATUS_2ND_MT6765		0x0184
-> +
-> +static const struct scp_domain_data scp_domain_data_mt6765[] = {
-> +	[MT6765_POWER_DOMAIN_VCODEC] = {
-> +		.name = "vcodec",
-> +		.sta_mask = BIT(26),
-> +		.ctl_offs = 0x300,
-> +		.sram_pdn_bits = GENMASK(8, 8),
-> +		.sram_pdn_ack_bits = GENMASK(12, 12),
-> +	},
-> +	[MT6765_POWER_DOMAIN_ISP] = {
-> +		.name = "isp",
-> +		.sta_mask = BIT(5),
-> +		.ctl_offs = 0x308,
-> +		.sram_pdn_bits = GENMASK(8, 8),
-> +		.sram_pdn_ack_bits = GENMASK(12, 12),
-> +		.subsys_clk_prefix = "isp",
-> +		.bp_table = {
-> +			BUS_PROT(IFR_TYPE, 0x2A8, 0x2AC, 0, 0x258,
-> +				BIT(20), BIT(20)),
-> +			BUS_PROT(SMI_TYPE, 0x3C4, 0x3C8, 0, 0x3C0,
-> +				BIT(2), BIT(2)),
-> +		},
-> +	},
-> +	[MT6765_POWER_DOMAIN_MM] = {
-> +		.name = "mm",
-> +		.sta_mask = BIT(3),
-> +		.ctl_offs = 0x30C,
-> +		.sram_pdn_bits = GENMASK(8, 8),
-> +		.sram_pdn_ack_bits = GENMASK(12, 12),
-> +		.basic_clk_id = {"mm"},
-> +		.subsys_clk_prefix = "mm",
-> +		.bp_table = {
-> +			BUS_PROT(IFR_TYPE, 0x2A8, 0x2AC, 0, 0x258,
-> +				BIT(16) | BIT(17), BIT(16) | BIT(17)),
-> +			BUS_PROT(IFR_TYPE, 0x2A0, 0x2A4, 0, 0x228,
-> +				BIT(10) | BIT(11), BIT(10) | BIT(11)),
-> +			BUS_PROT(IFR_TYPE, 0x2A0, 0x2A4, 0, 0x228,
-> +				BIT(1) | BIT(2), BIT(1) | BIT(2)),
-> +		},
-> +	},
-> +	[MT6765_POWER_DOMAIN_CONN] = {
-> +		.name = "conn",
-> +		.sta_mask = BIT(1),
-> +		.ctl_offs = 0x32C,
-> +		.sram_pdn_bits = 0,
-> +		.sram_pdn_ack_bits = 0,
-> +		.bp_table = {
-> +			BUS_PROT(IFR_TYPE, 0x2A0, 0x2A4, 0, 0x228,
-> +				BIT(13), BIT(13)),
-> +			BUS_PROT(IFR_TYPE, 0x2A8, 0x2AC, 0, 0x258,
-> +				BIT(18), BIT(18)),
-> +			BUS_PROT(IFR_TYPE, 0x2A0, 0x2A4, 0, 0x228,
-> +				BIT(14) | BIT(16), BIT(14) | BIT(16)),
-> +		},
-> +	},
-> +	[MT6765_POWER_DOMAIN_MFG_ASYNC] = {
-> +		.name = "mfg_async",
-> +		.sta_mask = BIT(23),
-> +		.ctl_offs = 0x334,
-> +		.sram_pdn_bits = 0,
-> +		.sram_pdn_ack_bits = 0,
-> +		.basic_clk_id = {"mfg"},
-> +	},
-> +	[MT6765_POWER_DOMAIN_MFG] = {
-> +		.name = "mfg",
-> +		.sta_mask = BIT(4),
-> +		.ctl_offs = 0x338,
-> +		.sram_pdn_bits = GENMASK(8, 8),
-> +		.sram_pdn_ack_bits = GENMASK(12, 12),
-> +		.bp_table = {
-> +			BUS_PROT(IFR_TYPE, 0x2A0, 0x2A4, 0, 0x228,
-> +				BIT(25), BIT(25)),
-> +			BUS_PROT(IFR_TYPE, 0x2A0, 0x2A4, 0, 0x228,
-> +				BIT(21) | BIT(22), BIT(21) | BIT(22)),
-> +		}
-> +	},
-> +	[MT6765_POWER_DOMAIN_CAM] = {
-> +		.name = "cam",
-> +		.sta_mask = BIT(25),
-> +		.ctl_offs = 0x344,
-> +		.sram_pdn_bits = GENMASK(8, 9),
-> +		.sram_pdn_ack_bits = GENMASK(12, 13),
-> +		.subsys_clk_prefix = "cam",
-> +		.bp_table = {
-> +			BUS_PROT(IFR_TYPE, 0x2A8, 0x2AC, 0, 0x258,
-> +				BIT(19) | BIT(21), BIT(19) | BIT(21)),
-> +			BUS_PROT(IFR_TYPE, 0x2A0, 0x2A4, 0, 0x228,
-> +				BIT(20), BIT(20)),
-> +			BUS_PROT(SMI_TYPE, 0x3C4, 0x3C8, 0, 0x3C0,
-> +				BIT(3), BIT(3)),
-> +		}
-> +	},
-> +	[MT6765_POWER_DOMAIN_MFG_CORE0] = {
-> +		.name = "mfg_core0",
-> +		.sta_mask = BIT(7),
-> +		.ctl_offs = 0x34C,
-> +		.sram_pdn_bits = GENMASK(8, 8),
-> +		.sram_pdn_ack_bits = GENMASK(12, 12),
-> +	},
-> +};
-> +
-> +static const struct scp_subdomain scp_subdomain_mt6765[] = {
-> +	{MT6765_POWER_DOMAIN_MM, MT6765_POWER_DOMAIN_CAM},
-> +	{MT6765_POWER_DOMAIN_MM, MT6765_POWER_DOMAIN_ISP},
-> +	{MT6765_POWER_DOMAIN_MM, MT6765_POWER_DOMAIN_VCODEC},
-> +	{MT6765_POWER_DOMAIN_MFG_ASYNC, MT6765_POWER_DOMAIN_MFG},
-> +	{MT6765_POWER_DOMAIN_MFG, MT6765_POWER_DOMAIN_MFG_CORE0},
-> +};
-> +
->  /*
->   * MT6797 power domain support
->   */
-> @@ -1363,6 +1478,18 @@ static const struct scp_soc_data mt2712_data = {
->  	.bus_prot_reg_update = false,
->  };
->  
-> +static const struct scp_soc_data mt6765_data = {
-> +	.domains = scp_domain_data_mt6765,
-> +	.num_domains = ARRAY_SIZE(scp_domain_data_mt6765),
-> +	.subdomains = scp_subdomain_mt6765,
-> +	.num_subdomains = ARRAY_SIZE(scp_subdomain_mt6765),
-> +	.regs = {
-> +		.pwr_sta_offs = SPM_PWR_STATUS_MT6765,
-> +		.pwr_sta2nd_offs = SPM_PWR_STATUS_2ND_MT6765,
-> +	},
-> +	.bus_prot_reg_update = true,
-> +};
-> +
->  static const struct scp_soc_data mt6797_data = {
->  	.domains = scp_domain_data_mt6797,
->  	.num_domains = ARRAY_SIZE(scp_domain_data_mt6797),
-> @@ -1429,6 +1556,9 @@ static const struct of_device_id of_scpsys_match_tbl[] = {
->  	}, {
->  		.compatible = "mediatek,mt2712-scpsys",
->  		.data = &mt2712_data,
-> +	}, {
-> +		.compatible = "mediatek,mt6765-scpsys",
-> +		.data = &mt6765_data,
->  	}, {
->  		.compatible = "mediatek,mt6797-scpsys",
->  		.data = &mt6797_data,
-> 
+Changes from v4:
+  - Rebased on sunxi-next
+  - Dropped AR100 clock patch, as it was controversial and unnecessary
+  - Renamed sunxi-msgbox to sun6i-msgbox and sun6i-a31-msgbox
+  - Added comments about not asserting the reset line
+  - Dropped A80 DTS changes as they were untested
+  - Added Ondrej's Tested-by for A83T
+  - Dropped the demo; replaced with a real arm_scpi fix
+
+Changes from v3:
+  - Rebased on sunxi-next
+  - Added Rob's Reviewed-by for patch 3
+  - Fixed a crash when receiving a message on a disabled channel
+  - Cleaned up some comments/formatting in the driver
+  - Fixed #mbox-cells in sunxi-h3-h5.dtsi (patch 7)
+  - Removed the irqchip example (no longer relevant to the fw design)
+  - Added a demo/example client that uses the driver and a toy firmware
+
+Changes from v2:
+  - Merge patches 1-3
+  - Add a comment in the code explaining the CLK_IS_CRITICAL usage
+  - Add a patch to mark the AR100 clocks as critical
+  - Use YAML for the device tree binding
+  - Include a not-for-merge example usage of the mailbox
+
+Changes from v1:
+  - Marked message box clocks as critical instead of hacks in the driver
+  - 8 unidirectional channels instead of 4 bidirectional pairs
+  - Use per-SoC compatible strings and an A31 fallback compatible
+  - Dropped the mailbox framework patch
+  - Include DT patches for SoCs that document the message box
+
+Samuel Holland (8):
+  clk: sunxi-ng: Mark msgbox clocks as critical
+  dt-bindings: mailbox: Add a sun6i message box binding
+  mailbox: sun6i-msgbox: Add a new mailbox driver
+  ARM: dts: sunxi: a83t: Add msgbox node
+  ARM: dts: sunxi: h3/h5: Add msgbox node
+  arm64: dts: allwinner: a64: Add msgbox node
+  arm64: dts: allwinner: h6: Add msgbox node
+  firmware: arm_scpi: Support unidirectional mailbox channels
+
+ .../mailbox/allwinner,sun6i-a31-msgbox.yaml   |  78 ++++
+ arch/arm/boot/dts/sun8i-a83t.dtsi             |  10 +
+ arch/arm/boot/dts/sunxi-h3-h5.dtsi            |  10 +
+ arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi |  10 +
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  |  10 +
+ drivers/clk/sunxi-ng/ccu-sun50i-a64.c         |   3 +-
+ drivers/clk/sunxi-ng/ccu-sun50i-h6.c          |   3 +-
+ drivers/clk/sunxi-ng/ccu-sun8i-a23.c          |   3 +-
+ drivers/clk/sunxi-ng/ccu-sun8i-a33.c          |   3 +-
+ drivers/clk/sunxi-ng/ccu-sun8i-a83t.c         |   3 +-
+ drivers/clk/sunxi-ng/ccu-sun8i-h3.c           |   3 +-
+ drivers/clk/sunxi-ng/ccu-sun9i-a80.c          |   3 +-
+ drivers/firmware/arm_scpi.c                   |  58 ++-
+ drivers/mailbox/Kconfig                       |   9 +
+ drivers/mailbox/Makefile                      |   2 +
+ drivers/mailbox/sun6i-msgbox.c                | 332 ++++++++++++++++++
+ 16 files changed, 520 insertions(+), 19 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mailbox/allwinner,sun6i-a31-msgbox.yaml
+ create mode 100644 drivers/mailbox/sun6i-msgbox.c
+
+-- 
+2.23.0
+
