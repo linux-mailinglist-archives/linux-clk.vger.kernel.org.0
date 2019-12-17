@@ -2,156 +2,123 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BECE31235B5
-	for <lists+linux-clk@lfdr.de>; Tue, 17 Dec 2019 20:30:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 093081235F7
+	for <lists+linux-clk@lfdr.de>; Tue, 17 Dec 2019 20:54:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727546AbfLQTaG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 17 Dec 2019 14:30:06 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:38212 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726612AbfLQTaG (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 17 Dec 2019 14:30:06 -0500
-Received: by mail-lj1-f196.google.com with SMTP id k8so905969ljh.5
-        for <linux-clk@vger.kernel.org>; Tue, 17 Dec 2019 11:30:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Dt7nMF9lAkMR+CxlS7AwqAXWN5PCEwzjfiKWmOUTLlg=;
-        b=Ns+AKACOV6e7e9TkvUXRNw8Wva+XCOU9aloQmpthLvLBSl6JESIcpisGlyuFN0JRWu
-         ln/8BwL5r0jFtBfhVcW1SMD0HcLJggp8GPwd1xnttoIJU1yy8eiI9wKfodItjtwbK26l
-         xPBrfg8nF7Wb7ZcZRrua07jxCmDqwfRfii5TIk1wWkgO6C+wpbiKkJ5gwZrEfJqmZogp
-         e6glKtXnUgksZLkpbY9PxGArUy1yhm5IIpW3aROW4+7ThByK7XNxBJ54ecvWD2dC19Sw
-         CjwcDG2mw3ejnYLKY/d2xlov04GLWFd2CzOMIzsiF0TA4nWAw69WcPBQR4s+tgd/rgHh
-         3GmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=Dt7nMF9lAkMR+CxlS7AwqAXWN5PCEwzjfiKWmOUTLlg=;
-        b=bgPswGMLMZknxX87jCsrMy36UkrS2VGjcuQnhnZn2dn6Lb9v5RQ5pyThiz3MLcw92y
-         trh58jpJCu6Wb60o8kEuvsHSWQePTtp9gIZcUPExcS5Rufkixmv5sMKrVVMzEjygFWFW
-         FZvZr4QEVuRAiki0Q0IpuxNqirzfbb5yaXdzKlLz0MkvDlo5Z5Wd0g1n2yc5cfqWezM6
-         pYe8zbowQYmq9W7x4mxEL7igwO+4eGg7hia83dslZDvPj7WxqrWLmURcMnVksLLXoxZy
-         M7NvVWkNni3dvl310j9n7NWDex2X4MtrrWHNQCuCP0QFGBrr1ve5TXJBiOI1ILUAnePD
-         qm2Q==
-X-Gm-Message-State: APjAAAV9S/ESN94XXL1ersE/PnFGp5uiOlEtehI6S88zJHl5gjGfdxDp
-        lScy0HeNz9C/WUVMSy0Tk1cG+w==
-X-Google-Smtp-Source: APXvYqwtdqLcLDLULkyXRPxe+Tq0eGIziCjfHWNA2pKHIBv1+qMr2mEGCl6NlJu00JcDH7T8xu6aUw==
-X-Received: by 2002:a2e:9095:: with SMTP id l21mr4378074ljg.175.1576611004354;
-        Tue, 17 Dec 2019 11:30:04 -0800 (PST)
-Received: from wasted.cogentembedded.com ([2a00:1fa0:411:5312:624c:c19e:baea:21d3])
-        by smtp.gmail.com with ESMTPSA id q25sm13291384lji.7.2019.12.17.11.30.02
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 17 Dec 2019 11:30:03 -0800 (PST)
-Subject: Re: [PATCH v2 0/6] spi: Add Renesas SPIBSC controller
-To:     Chris Brandt <Chris.Brandt@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        Mason Yang <masonccyang@mxic.com.tw>
-References: <20191206134202.18784-1-chris.brandt@renesas.com>
- <922cfa46-efb5-9e6d-67ea-3ac505b8211c@cogentembedded.com>
- <TY1PR01MB156215E8668C0317FA0826B18A580@TY1PR01MB1562.jpnprd01.prod.outlook.com>
- <e6a73df5-31c4-3472-f7bc-a0984f1f5380@cogentembedded.com>
- <TY1PR01MB1562D343E1AB06DCA2973DAC8A550@TY1PR01MB1562.jpnprd01.prod.outlook.com>
- <590840ce-a250-2512-3d04-c2420d83f7da@cogentembedded.com>
- <TY1PR01MB1562B9EB96818DCA507079808A510@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Organization: Cogent Embedded
-Message-ID: <bb630141-021c-5618-f266-b98b29956fa8@cogentembedded.com>
-Date:   Tue, 17 Dec 2019 22:30:02 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
+        id S1727803AbfLQTyB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 17 Dec 2019 14:54:01 -0500
+Received: from mga02.intel.com ([134.134.136.20]:22025 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727492AbfLQTyB (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 17 Dec 2019 14:54:01 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Dec 2019 11:54:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,326,1571727600"; 
+   d="scan'208";a="389942445"
+Received: from vramados-mobl.amr.corp.intel.com (HELO [10.254.1.250]) ([10.254.1.250])
+  by orsmga005.jf.intel.com with ESMTP; 17 Dec 2019 11:53:59 -0800
+Subject: Re: [alsa-devel] [PATCH 06/10] mfd: Add core driver for AD242x A2B
+ transceivers
+To:     Daniel Mack <daniel@zonque.org>, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Cc:     lars@metafoo.de, sboyd@kernel.org, mturquette@baylibre.com,
+        robh+dt@kernel.org, broonie@kernel.org, pascal.huerst@gmail.com,
+        lee.jones@linaro.org
+References: <20191209183511.3576038-1-daniel@zonque.org>
+ <20191209183511.3576038-8-daniel@zonque.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Message-ID: <c3885b01-e6ec-1b67-6e48-69e3fc40bb62@linux.intel.com>
+Date:   Tue, 17 Dec 2019 13:16:04 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <TY1PR01MB1562B9EB96818DCA507079808A510@TY1PR01MB1562.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-MW
+In-Reply-To: <20191209183511.3576038-8-daniel@zonque.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello!
 
-On 12/17/2019 01:21 AM, Chris Brandt wrote:
+> +config MFD_AD242X
+> +	bool "Analog Devices AD242x A2B support"
+> +	select MFD_CORE
+> +	select REGMAP_I2C
+> +	depends on I2C=y && OF
 
->>> As a side note, there is another HW block in Renesas that does the same
->>> thing as the SPI-BSC that they use in the MCU devices. That one they
->>
->>    MCU?
-> Yup.
->   But...it has no significance to this discussion though :)
+is there a specific reason why I2C needs to be built-in (as opposed to 'm')?
 
-   But what does the acronym mean?
+> +/* See Table 3-2 in the datasheet */
 
->>> When I first saw the series on the mailing list, my plan was to just wait
->>> and then add RZ/A1 and RZ/A2 support. But....it looks like it all died.
->>
->>    No. :-) It was worked on during all these months... I just finally decided
->> to stop, take a deep breath, and post what patches I had accumulated, without
->> the whole driver suite working first... I'm sorry it took so long....
-> 
-> So at the moment, there is nothing yet for me to 'try' on the RZ/A series, correct?
+is the datasheet public? I thought it was only available under NDA.
 
-   Why, I can send you a working version of the SPI driver, and even HF one if you're
-interested.
- 
->>> My understanding is that HyperFlash uses standard CFI commands, so all
->>
->>    The CFI command set driver needed some changes too (e.g. using the status
->> register to determine if a command is done).
-> 
-> So the existing MTD-SPI layer knows how to talk to SPI devices.
+> +	master->sync_clk = devm_clk_get(dev, "sync");
+> +	if (IS_ERR(master->sync_clk)) {
+> +		ret = PTR_ERR(master->sync_clk);
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(dev, "failed to get sync clk: %d\n", ret);
+> +
+> +		return ret;
+> +	}
+> +
+> +	if (of_property_read_u32(dev->of_node, "clock-frequency",
+> +				 &master->sync_clk_rate)) {
+> +		ret = clk_set_rate(master->sync_clk, master->sync_clk_rate);
 
-   SPI-NOR does it with a help of drivers/spi/spi-mem.c... As for the HyperFlash,
-it needs a HyperBus driver (that I have a working patch for)...
+shouldn't you check the rate before setting it?
 
-> And, you've fixed up the existing CFI layer to talk to HyperFlash evices.
+> +		if (ret < 0) {
+> +			dev_err(dev, "Cannot set sync clock rate: %d\n", ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	master->sync_clk_rate = clk_get_rate(master->sync_clk);
+> +	if (master->sync_clk_rate != 44100 && master->sync_clk_rate != 48000) {
+> +		dev_err(dev, "SYNC clock rate %d is invalid\n",
+> +			master->sync_clk_rate);
+> +		return -EINVAL;
+> +	}
 
-   Mostly Boris B. did it... :-)
+this is a bit odd, you set the rate in case there is a property but get 
+it anyways. the last block could be an else?
 
-> But, you do not want these MTD layer to talk directly to a Renesas HW driver?
+> +
+> +	ret = clk_prepare_enable(master->sync_clk);
+> +	if (ret < 0) {
+> +		dev_err(dev, "failed to enable sync clk: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/* Master node setup */
+> +
+> +	ret = regmap_write(regmap, AD242X_CONTROL,
+> +			   AD242X_CONTROL_MSTR | AD242X_CONTROL_SOFTRST);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = ad242x_wait_for_irq(master, &master->run_completion, 10);
 
-   Yes, because the SPI-NOR and HyperBus have different driver APIs.
+what is 10?
 
-> You want to put another software layer in between?
 
-   Yes.
+> +static int ad242x_master_remove(struct i2c_client *i2c)
+> +{
+> +	struct ad242x_master *master = i2c_get_clientdata(i2c);
+> +
+> +	if (master->sync_clk)
+> +		clk_disable_unprepare(master->sync_clk);
 
-> I'm guessing that from this statement....
+earlier you tested for IS_ERR(master->sync_clk)?
 
->>>>> library that you are proposing have a very different API than just
->>>>> 'send bytes' and 'receive bytes'?
->>>>
->>>>    There's "prepare" and "transfer" APIs and also "direct map read" API.
->>
->>   The 1st one prepares the values to be written in either SPI mode or direct
->> read mode registers. Then you can call "transfer" or "direct mao read" which
->> would write out the register values into either set...
-> 
-> ...that you want more control of the data stream being passed to the RPC-IF driver.
-> Correct??
-> 
-> It all keeps sounding complicated, unless I'm just not understanding the code
-> you are trying to implement.
+> +	for (i = 0; i < 4; i++) {
 
-   Well, it reflects the fact that the "SPI mode" and "direct read" register sets
-are largely identical. The "preparation" stage sets up the register values, the 
-other stages use that data to set up the real register sets and then do the
-needed transfers...
+what is 4? 4 hops?
 
-> Chris
-
-MBR, Sergei
