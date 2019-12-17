@@ -2,89 +2,88 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A6E12363A
-	for <lists+linux-clk@lfdr.de>; Tue, 17 Dec 2019 21:04:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EA17123741
+	for <lists+linux-clk@lfdr.de>; Tue, 17 Dec 2019 21:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728276AbfLQUEk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 17 Dec 2019 15:04:40 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:1842 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728019AbfLQUE0 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 17 Dec 2019 15:04:26 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5df934c00000>; Tue, 17 Dec 2019 12:04:16 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 17 Dec 2019 12:04:25 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 17 Dec 2019 12:04:25 -0800
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 17 Dec
- 2019 20:04:24 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Tue, 17 Dec 2019 20:04:24 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.174.101]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5df934c80001>; Tue, 17 Dec 2019 12:04:24 -0800
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <digetx@gmail.com>,
-        <mperttunen@nvidia.com>, <gregkh@linuxfoundation.org>,
-        <sboyd@kernel.org>, <robh+dt@kernel.org>, <mark.rutland@arm.com>
-CC:     <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
-        <spujar@nvidia.com>, <josephl@nvidia.com>,
-        <daniel.lezcano@linaro.org>, <mmaddireddy@nvidia.com>,
-        <markz@nvidia.com>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 19/19] ASoC: nau8825: change Tegra clk_out_2 provider from tegra_car to pmc
-Date:   Tue, 17 Dec 2019 12:04:06 -0800
-Message-ID: <1576613046-17159-20-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1576613046-17159-1-git-send-email-skomatineni@nvidia.com>
-References: <1576613046-17159-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
+        id S1727933AbfLQU0r convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-clk@lfdr.de>); Tue, 17 Dec 2019 15:26:47 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:33184 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727437AbfLQU0r (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 17 Dec 2019 15:26:47 -0500
+Received: by mail-ot1-f65.google.com with SMTP id b18so6575069otp.0;
+        Tue, 17 Dec 2019 12:26:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=f3gn/oPr6CxFsDIcXTI6Rn3BNMNX8Zy6VkrjtLwd+wI=;
+        b=pV/IB7+bw1Wuym2T70mnEnQawUKEjDgF6GyaviKPb1UvNL7GPI2055MXp1f18PmHRG
+         M8YDAuBGqScy3FSKJyWE7K8kUpIasuXAFVFRYH4PfqCOK9BvFxGMsGB5r85cxZx3fREc
+         LOrZDGIDjEH3wGYr+20NUnMjfCvNKZ239axIly3HQ0QGnXXmw7yWdAuImen1VKPvutLq
+         Jt2bTyUvBuFG/bPddVmKkZvi8Z8T/qKL2lBAYq7w7pZ7lEYN6rs+L02PC0b22QWL0Ovm
+         tkDUxv5hKS2RNYVwikuJuxkLdmxIsgReUYSJtWd5tfNVFTDH5uO6dL2TW+0K7pGcaMJt
+         6O9w==
+X-Gm-Message-State: APjAAAUQIE2Jrcz7XxvHsxREGaY3b9YQNhUSFAJrHkiZ1YAD9Skqgntl
+        mowaSVMxldJL5/jYGPySySQ/SSU33iz0HG3ct4M=
+X-Google-Smtp-Source: APXvYqw4ewhq5K6U9XDjyTAdZX/UY2Fmz1YMPelz213yxmeZOuT6WiuiWSkZYJjY12spRU3p5UX/09gTIseqYiaY7o0=
+X-Received: by 2002:a05:6830:18e2:: with SMTP id d2mr9920053otf.107.1576614406335;
+ Tue, 17 Dec 2019 12:26:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1576613056; bh=PrJKaLT/EBKy1A4Ripk7ZLqgcw5ax7h/7twSjXlR9bk=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=ZfuNq+aoAZXKKt2lAJBUGgoo6EqlGW2cMO02Jo72CGhp8jynF/7tHEzACu4tVaNfY
-         nq8lLcDdii/LDWMdC3HvflQwwkjuc4ZiMsf4q1mk5NoCs/2xmmvSDJId4TEED7gsa/
-         Ke+hA/2sc/KTyDGzh0N8gshBC+gqrRqpw81N5MxqhRedAQ38JqRPgedvyEMOm5YRPH
-         DLlfjtA+DycPyVawKkY7bmIGiNAW1TVd1MFoa+U10SqrKxIKO8/djJKt4g+4T2Cnf8
-         clBINMfCPbsIS2ZIvXTzInO39zLVz+nsMPB+VRSqHnt/CS8Fi2jMrK0HWTRcbWeOIT
-         0FczNivRmQsBQ==
+References: <20191206134202.18784-1-chris.brandt@renesas.com>
+ <922cfa46-efb5-9e6d-67ea-3ac505b8211c@cogentembedded.com> <TY1PR01MB156215E8668C0317FA0826B18A580@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+ <e6a73df5-31c4-3472-f7bc-a0984f1f5380@cogentembedded.com> <TY1PR01MB1562D343E1AB06DCA2973DAC8A550@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+ <590840ce-a250-2512-3d04-c2420d83f7da@cogentembedded.com> <TY1PR01MB1562B9EB96818DCA507079808A510@TY1PR01MB1562.jpnprd01.prod.outlook.com>
+ <bb630141-021c-5618-f266-b98b29956fa8@cogentembedded.com>
+In-Reply-To: <bb630141-021c-5618-f266-b98b29956fa8@cogentembedded.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 17 Dec 2019 21:26:35 +0100
+Message-ID: <CAMuHMdUBEnM3SPkK4o8jSPnKMpcbx1EJs4p5PvhC1cGcWpqYAQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] spi: Add Renesas SPIBSC controller
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Cc:     Chris Brandt <Chris.Brandt@renesas.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Mason Yang <masonccyang@mxic.com.tw>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Tegra clk_out_1, clk_out_2, and clk_out_3 are part of PMC block and
-these clocks are moved from clock drvier to pmc driver with pmc as
-a provider for these clocks.
+Hi Sergei,
 
-Update bindings document to use pmc as clock provider for clk_out_2 and
-change id to pmc clock id.
+On Tue, Dec 17, 2019 at 8:30 PM Sergei Shtylyov
+<sergei.shtylyov@cogentembedded.com> wrote:
+> On 12/17/2019 01:21 AM, Chris Brandt wrote:
+> >>> As a side note, there is another HW block in Renesas that does the same
+> >>> thing as the SPI-BSC that they use in the MCU devices. That one they
+> >>
+> >>    MCU?
+> > Yup.
+> >   But...it has no significance to this discussion though :)
+>
+>    But what does the acronym mean?
 
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- Documentation/devicetree/bindings/sound/nau8825.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Микроконтро́ллер (англ. Micro Controller Unit, MCU)
 
-diff --git a/Documentation/devicetree/bindings/sound/nau8825.txt b/Documentation/devicetree/bindings/sound/nau8825.txt
-index d16d96839bcb..487eb9574ee2 100644
---- a/Documentation/devicetree/bindings/sound/nau8825.txt
-+++ b/Documentation/devicetree/bindings/sound/nau8825.txt
-@@ -101,5 +101,5 @@ Example:
-       nuvoton,crosstalk-enable;
- 
-       clock-names = "mclk";
--      clocks = <&tegra_car TEGRA210_CLK_CLK_OUT_2>;
-+      clocks = <&pmc TEGRA_PMC_CLK_OUT_2>;
-   };
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.7.4
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
