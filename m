@@ -2,15 +2,15 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5401B123F6C
-	for <lists+linux-clk@lfdr.de>; Wed, 18 Dec 2019 07:13:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76EE5123F71
+	for <lists+linux-clk@lfdr.de>; Wed, 18 Dec 2019 07:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725810AbfLRGNG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 18 Dec 2019 01:13:06 -0500
-Received: from mail-sz.amlogic.com ([211.162.65.117]:17078 "EHLO
+        id S1725955AbfLRGO3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 18 Dec 2019 01:14:29 -0500
+Received: from mail-sz.amlogic.com ([211.162.65.117]:9309 "EHLO
         mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725799AbfLRGNF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 18 Dec 2019 01:13:05 -0500
+        with ESMTP id S1725797AbfLRGO3 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 18 Dec 2019 01:14:29 -0500
 Received: from [10.28.39.99] (10.28.39.99) by mail-sz.amlogic.com (10.28.11.5)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Wed, 18 Dec
