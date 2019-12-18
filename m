@@ -2,83 +2,79 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1F1124D1E
-	for <lists+linux-clk@lfdr.de>; Wed, 18 Dec 2019 17:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D6A124C94
+	for <lists+linux-clk@lfdr.de>; Wed, 18 Dec 2019 17:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727185AbfLRQXv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 18 Dec 2019 11:23:51 -0500
-Received: from mga03.intel.com ([134.134.136.65]:15079 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726985AbfLRQXu (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 18 Dec 2019 11:23:50 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Dec 2019 08:23:49 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,330,1571727600"; 
-   d="scan'208";a="415881663"
-Received: from dshoemak-mobl.amr.corp.intel.com (HELO [10.251.3.243]) ([10.251.3.243])
-  by fmsmga005.fm.intel.com with ESMTP; 18 Dec 2019 08:23:47 -0800
-Subject: Re: [alsa-devel] [PATCH 10/10] ASoC: Add codec component for AD242x
- nodes
-To:     Daniel Mack <daniel@zonque.org>, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     lars@metafoo.de, sboyd@kernel.org, mturquette@baylibre.com,
-        robh+dt@kernel.org, broonie@kernel.org, pascal.huerst@gmail.com,
-        lee.jones@linaro.org
-References: <20191209183511.3576038-1-daniel@zonque.org>
- <20191209183511.3576038-12-daniel@zonque.org>
- <0565e5cd-9a6e-db65-0632-0bc1aa1d79db@linux.intel.com>
- <35e7e6e7-7c70-785c-bdf3-79089134699e@zonque.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Message-ID: <ff0e2420-a2c6-17e7-2761-f6544e2c0cb7@linux.intel.com>
-Date:   Wed, 18 Dec 2019 09:32:40 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
-MIME-Version: 1.0
-In-Reply-To: <35e7e6e7-7c70-785c-bdf3-79089134699e@zonque.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1727277AbfLRQGV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 18 Dec 2019 11:06:21 -0500
+Received: from alexa-out-blr-01.qualcomm.com ([103.229.18.197]:63168 "EHLO
+        alexa-out-blr-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727121AbfLRQGV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 18 Dec 2019 11:06:21 -0500
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by alexa-out-blr-01.qualcomm.com with ESMTP/TLS/AES256-SHA; 18 Dec 2019 21:36:17 +0530
+Received: from gokulsri-linux.qualcomm.com ([10.201.2.207])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 18 Dec 2019 21:35:48 +0530
+Received: by gokulsri-linux.qualcomm.com (Postfix, from userid 432570)
+        id A895E3C50; Wed, 18 Dec 2019 21:35:46 +0530 (IST)
+From:   Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
+To:     gokulsri@codeaurora.org, sboyd@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, david.brown@linaro.org,
+        devicetree@vger.kernel.org, jassisinghbrar@gmail.com,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        mark.rutland@arm.com, mturquette@baylibre.com, ohad@wizery.com,
+        robh+dt@kernel.org, sricharan@codeaurora.org,
+        nprakash@codeaurora.org
+Subject: [PATCH V4 00/10] remoteproc: qcom: q6v5-wcss: Add support for secure pil
+Date:   Wed, 18 Dec 2019 21:35:36 +0530
+Message-Id: <1576685146-17135-1-git-send-email-gokulsri@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+IPQ8074 needs support for secure pil as well.
+Also, currently only unified firmware is supported.
+IPQ8074 supports split firmware for q6 and m3, so
+adding support for that.
 
+This series is based on Govind's
+"[v5] Add non PAS wcss Q6 support for QCS404"
 
-On 12/18/19 3:49 AM, Daniel Mack wrote:
-> Hi,
-> 
-> On 12/17/19 8:28 PM, Pierre-Louis Bossart wrote:
->> On 12/9/19 12:35 PM, Daniel Mack wrote:
-> 
->>> +    if (!ad242x_node_is_master(priv->node) &&
->>> +       ((format & SND_SOC_DAIFMT_MASTER_MASK) !=
->>> SND_SOC_DAIFMT_CBM_CFM)) {
->>> +        dev_err(component->dev, "slave node must be clock master\n");
->>> +        return -EINVAL;
->>> +    }
->>
->> It was my understanding that the master node provides the clock to the
->> bus, so not sure how it could be a clock slave, and conversely how a
->> slave node could provide a clock to the bus?
-> 
-> The slave nodes receive the A2B clock from the master node and then
-> produce digital audio output that is sent to other components such as
-> codecs. Hence, in ASoC terms, they are the clock master.
-> 
-> Likewise, as the master node is receiving its clock from other
-> components, it has to be a clock slave in the audio network.
-> 
-> Does that make sense?
+changes since v3:
+ - In patch 10, Added release_firmware to free up
+   memory requested for m3 firmware.
 
-Your slave node acts as a bridge then, but it seems you don't model the 
-bus-facing interface, which has to follow the master clock. Or do you?
+changes since v2:
+ - In patch 5, Added a driver data 'bcr_reset_required'
+   to select if bcr reset is required
+ - In patch 10, Removed syscon implementation and moved
+   to mailbox framework to access APCS IPC
 
-Likewise the master has an 'SOC-facing' interface and a bus-facing 
-interface. it *could* be master on both if ASRC was supported. The point 
-is that the bus-facing interface is not clock slave.
+changes since v1:
+ - In patch 10, Addressed minor review comments.
+
+Gokul Sriram Palanisamy (10):
+  remoteproc: qcom: Add PRNG proxy clock
+  remoteproc: qcom: Add secure PIL support
+  remoteproc: qcom: Add support for split q6 + m3 wlan firmware
+  remoteproc: qcom: Add ssr subdevice identifier
+  remoteproc: qcom: Update regmap offsets for halt register
+  dt-bindings: clock: qcom: Add reset for WCSSAON
+  clk: qcom: Add WCSSAON reset
+  dt-bindings: firmware: qcom: Add compatible for IPQ8074 SoC
+  arm64: dts: Add support for scm on IPQ8074 SoCs
+  arm64: dts: qcom: Enable Q6v5 WCSS for ipq8074 SoC
+
+ .../devicetree/bindings/firmware/qcom,scm.txt      |   1 +
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi              | 127 +++++++++++++++++
+ drivers/clk/qcom/gcc-ipq8074.c                     |   1 +
+ drivers/remoteproc/qcom_q6v5_wcss.c                | 157 +++++++++++++++++----
+ include/dt-bindings/clock/qcom,gcc-ipq8074.h       |   1 +
+ 5 files changed, 258 insertions(+), 29 deletions(-)
+
+-- 
+1.9.1
+
