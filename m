@@ -2,291 +2,212 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D9D124D10
-	for <lists+linux-clk@lfdr.de>; Wed, 18 Dec 2019 17:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E299124D8D
+	for <lists+linux-clk@lfdr.de>; Wed, 18 Dec 2019 17:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727021AbfLRQW1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 18 Dec 2019 11:22:27 -0500
-Received: from mail-eopbgr40080.outbound.protection.outlook.com ([40.107.4.80]:28644
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727124AbfLRQW0 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 18 Dec 2019 11:22:26 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=clRIXXL0G13Nnuh3UVWQEy1wE9Ys9ILspf7HFrwwSCDg2Z5g2+NJODBvg3ysV+xADyC9vkTIJyurb+nTMrBBPLRy3cu4IzB+DKWuznlgxFWxpe9Ht9lcutmwmrGy49b68w4cu0uA4XIowJUhbqe9VxH6NUASUq1xl0h48tG4YqH7hGUq84N1ZQ7pq84q7zU2g32p3ie7yDW2UT0AyONp+KK18aZughyRXythaJi5TOiHZt+AkOWeYZX9o+u5+AOFYhDwGnSbJiqwwtsLi5gcUX83+OeO/4A9fcHYXWEQ5oXPENBabtmuOlQFKmsuDUq+Jn0LeFJD/TpDKFXfDVvj7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sKdab3p6OxgZ99tL83gL2haeWlKPxNNLswcCH4jOCPI=;
- b=b9XT7tNKXlZxD0xADeS3AHCIeN8BC3XgGPTwstg79wcPPP8BN83inG/ElaeoncL/wZjvqbxfSk9LedFmVD4+dDbr20ymWsCZsVRp0LhAF4Z0rs2iqPRzljYgESFI02gsg1z8Q9m2Ge1066di+Xz4VbCq5UjlHG4SNYc4t0OXGwdmRbR2Net3BkQkNY0LOmybKfx2m0Hm9NMJKV84gjOkMcPJkkMGhtMiyD2whrY+4kwJAUgpTAYYaS2wJFIPjdA8NLq89UU1GzHFrugeGwZbtiW4Rkykz5KmDdtSkpSCkXa+PNzmlQA120Zvvjm0+YZkBDZQK9JFGXpKTZBWP20JhA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sKdab3p6OxgZ99tL83gL2haeWlKPxNNLswcCH4jOCPI=;
- b=TkYNmdIx4K96VFR4tSamqdd5gKZYTim8pBN7TsX2bsAtQpT5wf4U/BYvpSdgvo5OIeZ4hCWqljl517Zyd9ldIUAz5lu6dewGtY6mDa43Urlwptf6C+lI3jFjERS3aUsrtgV1gB1Wc8Jp6vyg8rCv+cuiNn2dVBHkVmovRSzzTaw=
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
- VI1PR04MB5693.eurprd04.prod.outlook.com (20.178.126.142) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2559.14; Wed, 18 Dec 2019 16:22:21 +0000
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::2c49:44c8:2c02:68b1]) by VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::2c49:44c8:2c02:68b1%5]) with mapi id 15.20.2559.012; Wed, 18 Dec 2019
- 16:22:21 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Adam Ford <aford173@gmail.com>, Jacky Bai <ping.bai@nxp.com>
-CC:     Stephen Boyd <sboyd@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Angus Ainslie <angus@akkea.ca>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Martin Kepplinger <martink@posteo.de>,
-        Silvano Di Ninno <silvano.dininno@nxp.com>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-Subject: Re: [PATCH v7 0/5] PM / devfreq: Add dynamic scaling for imx8m ddr
- controller
-Thread-Topic: [PATCH v7 0/5] PM / devfreq: Add dynamic scaling for imx8m ddr
- controller
-Thread-Index: AQHVoX4nPagdJ4eJVUSp7HmX0gzdZg==
-Date:   Wed, 18 Dec 2019 16:22:21 +0000
-Message-ID: <VI1PR04MB702379645745FB697033FE6BEE530@VI1PR04MB7023.eurprd04.prod.outlook.com>
-References: <cover.1574458460.git.leonard.crestez@nxp.com>
- <CAHCN7xKNwit8ueUO0OkebfYh=4hsL7_+DRWEbn2dEt0H322W4w@mail.gmail.com>
- <VI1PR04MB70231CA0E3C4574211518359EE530@VI1PR04MB7023.eurprd04.prod.outlook.com>
- <CAHCN7xJNy0z2hvWbM3UhLni5ruS+sCLeBH8BKiYexe3Sp=6Q0w@mail.gmail.com>
- <VI1PR04MB70235951BC137515BDD2FDC7EE530@VI1PR04MB7023.eurprd04.prod.outlook.com>
- <CAHCN7xKHJAb8k1A+WC3EUOmgLTx-Kbjw_5EsmwyhDkkOKCsmGQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [89.37.124.34]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 20fc3907-ca29-45c8-c1a9-08d783d675bb
-x-ms-traffictypediagnostic: VI1PR04MB5693:|VI1PR04MB5693:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB56931FE04880016924AD6C04EE530@VI1PR04MB5693.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3044;
-x-forefront-prvs: 0255DF69B9
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(366004)(396003)(376002)(136003)(39860400002)(199004)(189003)(45080400002)(55016002)(110136005)(54906003)(71200400001)(86362001)(7416002)(316002)(9686003)(2906002)(966005)(5660300002)(6636002)(33656002)(6506007)(26005)(44832011)(8936002)(52536014)(8676002)(7696005)(81156014)(53546011)(81166006)(66446008)(4326008)(66476007)(66556008)(64756008)(478600001)(66946007)(76116006)(91956017)(186003)(32563001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5693;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: x8kk0StQWxHRAgR/85IEuqKJUyt/qXeuxRStcwKAocaQ3eJUfUDY/eaD/eBjnKPBe3fwC83rto49mOspPkM4vSGdPslt9Xj7Is7Q88/A5gHRnbLe6zrm3CAcysnWYRvvXqyvtxoy7AdbEU7MRwM7SbT9NZphsOpnp/EAKF6k50erBohBrrUwcFPMT8gpZKusf+1RiicI9Kniz/pHc4mJm76MP7wH2J2cqLGVllUsR8BWqxPrCZuCv8yPQyit5AxHAxb2MdjGpsakiqoi2SreDjb3oSsPQLmIqkrstSu7DD97QisiAIdiIgW6B7yhTLJXFm82/wWM/E0y/nmvmGA0O+Tigpqt78vzzmZ/x3SLssWD/fnD+INBHzLXk51+0Nl8Yawb1W5+cDvBRihFOnr+RvTrbgq/Pl2lhFDH34wPUgb40ap8h8VjcDiwvseOfeIy3gIZb+epmlvI86Azpt0rMIi23mLr29QMdIEllrFfRsYFhw8b5fOUXS/dQu4HyBsTbhyZ72uWJZ9UfxK93QmuHA==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1727185AbfLRQ3R (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 18 Dec 2019 11:29:17 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:39996 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726931AbfLRQ3R (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 18 Dec 2019 11:29:17 -0500
+Received: by mail-lj1-f194.google.com with SMTP id u1so2829414ljk.7;
+        Wed, 18 Dec 2019 08:29:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WQicZqKEkT2OZmLOJnAO4CaO5tjlYphliKW/thglAIk=;
+        b=mRjbZ5kqRb+nZFf1VYRVS1SFpeF3hbzu+2gaBs5D6Y2M+gnXwgTING/FvsX+tThtKq
+         5rTMofkjV/E5e/MZ2j3tDncSitqVr6ADrqGh3gW0MIH6jXgQ7BbwX+CUCcHOI3+6Xcxi
+         97QSlFdsUcmdVBFG1VE+oMSIiDWaFff3Mir25eMJE4x2iY0h8l53ivzAeDTGe8640P+2
+         Sl5cDTP9ce5q8uGCXLt+wsXeyEBpIxz/NCwIA2BAaKGk4H6rKTGGnyi4+UycA47MIvyI
+         FI2sw8osMwmsURvQ6ZK9B/QWQeAcUh9Dk7MGjlCBuplDJk02So++mPvc1teFE8iUjS1L
+         bqkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WQicZqKEkT2OZmLOJnAO4CaO5tjlYphliKW/thglAIk=;
+        b=TSzxmyUj/M9xm7SqTYOv5lmXhgRMQYSe/rAMnzu/p9iqRgA8zByB5PSiFl1eLrfgTP
+         5KQpwYcfnE1qx0p9azkRS5W5San5EHSI33BpMFty3FQVnKTYRezAKWAxuor8hYnMfSWh
+         UBcVwPGba6gSf69IgJ0dH/MsrCBBPiXd9R8uRPXiVwjNeX7U0NnjZ51pkERXDPjxpE5b
+         V1M0xpyJXe0veylyUv9rdIAQiEo/TvDIiNE0/ZnsPXVgkKkcvzmiKWD10lIJ4RVUDaD2
+         SMVZBaaQYkwF4YKrwJ1W1Esx16oJ3k5ulF8a16Y+r3FfVplT8jsE+5tcOQ8ME4Gkapai
+         7HJg==
+X-Gm-Message-State: APjAAAXLYo8Y6QXKl18TQn69jubDhK3qvXHaFKrVZyu0P0d5UCYxzlUt
+        wkekC/WCYPRzVGwnjqjiwOxCmeEy
+X-Google-Smtp-Source: APXvYqyLt6czXw6YDKW6MkhVKWnt1H6Ng7jVNikMA9C5Un3Gx3rBOieGP7JmsHrw3Bj3sbIKfp167A==
+X-Received: by 2002:a2e:9ad8:: with SMTP id p24mr2437609ljj.148.1576686553416;
+        Wed, 18 Dec 2019 08:29:13 -0800 (PST)
+Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
+        by smtp.googlemail.com with ESMTPSA id u16sm1426742ljo.22.2019.12.18.08.29.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Dec 2019 08:29:12 -0800 (PST)
+Subject: Re: [PATCH v4 13/19] ASoC: tegra: Add fallback implementation for
+ audio mclk
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        mperttunen@nvidia.com, gregkh@linuxfoundation.org,
+        sboyd@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com
+Cc:     pdeschrijver@nvidia.com, pgaikwad@nvidia.com, spujar@nvidia.com,
+        josephl@nvidia.com, daniel.lezcano@linaro.org,
+        mmaddireddy@nvidia.com, markz@nvidia.com,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1576613046-17159-1-git-send-email-skomatineni@nvidia.com>
+ <1576613046-17159-14-git-send-email-skomatineni@nvidia.com>
+ <e2f96102-33fa-cbe5-f488-666b7b7ffb06@gmail.com>
+ <7e49fef8-112c-1694-9316-7a23db8a01a4@gmail.com>
+ <66a28f8a-82e8-5b12-464c-4c91441d1511@nvidia.com>
+ <fb36edbf-08c9-aa7e-a7fd-6ee15261a525@gmail.com>
+ <de4d2693-3d5c-d154-22eb-2e41ddc12974@gmail.com>
+ <1499a012-f5e1-3c76-6750-5858765a0532@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <13074e67-2807-d494-b8b4-b2e3b529117a@gmail.com>
+Date:   Wed, 18 Dec 2019 19:29:11 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20fc3907-ca29-45c8-c1a9-08d783d675bb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Dec 2019 16:22:21.6200
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: fdRdvQT2rZ19bgfhFpR/ZInT9hDPHhoTQFJwlBth/u4+CRw/pbNfV1FhxpUrqW7roX0tLR4ntqYoXYmBFbK49g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5693
+In-Reply-To: <1499a012-f5e1-3c76-6750-5858765a0532@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 18.12.2019 17:37, Adam Ford wrote:=0A=
-> On Wed, Dec 18, 2019 at 9:16 AM Leonard Crestez <leonard.crestez@nxp.com>=
- wrote:=0A=
->>=0A=
->> On 18.12.2019 17:05, Adam Ford wrote:=0A=
->>> On Wed, Dec 18, 2019 at 8:44 AM Leonard Crestez <leonard.crestez@nxp.co=
-m> wrote:=0A=
->>>>=0A=
->>>> On 18.12.2019 15:35, Adam Ford wrote:=0A=
->>>>> On Fri, Nov 22, 2019 at 3:45 PM Leonard Crestez <leonard.crestez@nxp.=
-com> wrote:=0A=
->>>>>>=0A=
->>>>>> This adds support for dynamic scaling of the DDR Controller (ddrc)=
-=0A=
->>>>>> present on i.MX8M series chips. Actual frequency switching is=0A=
->>>>>> implemented inside TF-A, this driver wraps the SMC calls and=0A=
->>>>>> synchronizes the clk tree.=0A=
->>>>>>=0A=
->>>>>> DRAM frequency switching requires clock manipulation but during this=
- operation=0A=
->>>>>> DRAM itself is briefly inaccessible so this operation is performed a=
- SMC call=0A=
->>>>>> to by TF-A which runs from a SRAM area. Upon returning to linux the =
-clock tree=0A=
->>>>>> is updated to correspond to hardware configuration.=0A=
->>>>>>=0A=
->>>>>> This is handled via CLK_GET_RATE_NO_CACHE for dividers but muxes are=
- handled=0A=
->>>>>> manually: the driver will prepare/enable the new parents ahead of sw=
-itching (so=0A=
->>>>>> that the expected roots are enabled) and afterwards it will call clk=
-_set_parent=0A=
->>>>>> to ensure the parents in clock framework are up-to-date.=0A=
->>>>>>=0A=
->>>>>> This series is useful standalone and roughly similar to devfreq driv=
-ers for=0A=
->>>>>> tegra and rockchip.=0A=
->>>>>>=0A=
->>>>>> Running at lower dram rates saves power but can affect the functiona=
-lity of=0A=
->>>>>> other blocks in the chip (display, vpu etc). Support for in-kernel c=
-onstraints=0A=
->>>>>> will some separately.=0A=
->>>>>>=0A=
->>>>>> This series has no dependencies outside linux-next. The driver depen=
-ds=0A=
->>>>>> on features from the NXP branch of TF-A and will cleanly fail to pro=
-be=0A=
->>>>>> on mainline. There are also plans to upstream dram dvfs in TF-A.=0A=
->>>>>>=0A=
->>>>>> Leonard Crestez (5):=0A=
->>>>>>      clk: imx8m: Set CLK_GET_RATE_NOCACHE on dram clocks=0A=
->>>>>>      clk: imx: Mark dram pll on 8mm and 8mn with CLK_GET_RATE_NOCACH=
-E=0A=
->>>>>>      dt-bindings: memory: Add bindings for imx8m ddr controller=0A=
->>>>>>      PM / devfreq: Add dynamic scaling for imx8m ddr controller=0A=
->>>>>>      arm64: dts: imx8m: Add ddr controller nodes=0A=
->>>>>>=0A=
->>>>>>     .../memory-controllers/fsl/imx8m-ddrc.yaml    |  72 +++=0A=
->>>>>>     arch/arm64/boot/dts/freescale/imx8mm-evk.dts  |  18 +=0A=
->>>>>>     arch/arm64/boot/dts/freescale/imx8mm.dtsi     |  10 +=0A=
->>>>>>     .../boot/dts/freescale/imx8mn-ddr4-evk.dts    |  18 +=0A=
->>>>>>     arch/arm64/boot/dts/freescale/imx8mn.dtsi     |  10 +=0A=
->>>>>>     arch/arm64/boot/dts/freescale/imx8mq-evk.dts  |  24 +=0A=
->>>>>>     arch/arm64/boot/dts/freescale/imx8mq.dtsi     |  10 +=0A=
->>>>>>     drivers/clk/imx/clk-imx8mm.c                  |  11 +-=0A=
->>>>>>     drivers/clk/imx/clk-imx8mn.c                  |  12 +-=0A=
->>>>>>     drivers/clk/imx/clk-imx8mq.c                  |  12 +-=0A=
->>>>>>     drivers/clk/imx/clk-pll14xx.c                 |   7 +=0A=
->>>>>>     drivers/clk/imx/clk.h                         |   1 +=0A=
->>>>>>     drivers/devfreq/Kconfig                       |   9 +=0A=
->>>>>=0A=
->>>>> Since there is a Kconfig change, should there me a defconfig change?=
-=0A=
->>>>=0A=
->>>> Yes, you need to enable CONFIG_ARM_IMX8M_DDRC_DEVFREQ in order to test=
-=0A=
->>>> this. Enabling as "m" should work.=0A=
->>>=0A=
->>> I enabled it as 'm' but I was more curious to know if we should push=0A=
->>> this upstream with the rest of the series.=0A=
->>=0A=
->> I skipped enabling because it's very experimental; maybe after imx=0A=
->> interconnect is also enabled?=0A=
->>=0A=
->>>>>>     drivers/devfreq/Makefile                      |   1 +=0A=
->>>>>>     drivers/devfreq/imx8m-ddrc.c                  | 465 ++++++++++++=
-++++++=0A=
->>>>>>     15 files changed, 670 insertions(+), 10 deletions(-)=0A=
->>>>>>     create mode 100644 Documentation/devicetree/bindings/memory-cont=
-rollers/fsl/imx8m-ddrc.yaml=0A=
->>>>>>     create mode 100644 drivers/devfreq/imx8m-ddrc.c=0A=
->>>>>=0A=
->>>>> I applied the whole series against 5.5-rc1 and I am trying to test it=
-.=0A=
->>>>> I know the 4.14 kernel NXP posted on Code Aurora is capable to=0A=
->>>>> lowering the DDRC controller to 25MHz on the 8MM when the video is=0A=
->>>>> off.  Since there is no video support yet for the 8MM, I was expectin=
-g=0A=
->>>>> to see the DDRC clock to be at or around 25MHz.=0A=
->>>>>=0A=
->>>>> Using debug FS, I can see the dram core clock is still running at=0A=
->>>>> 750MHz, and measuring power, it shows something consistent with what =
-I=0A=
->>>>> see on the Code Aurora kernel with video turned on and the clock at=
-=0A=
->>>>> 750MHz.=0A=
->>>>>=0A=
->>>>> Is there some way to get the dram_core_clk to drop to 25MHz to see=0A=
->>>>> some power reduction?  The same commands used in the Yocto build don'=
-t=0A=
->>>>> apply here since we don't have video.=0A=
->>>>=0A=
->>>> Current upstream driver just keeps current frequency by default. Try t=
-he=0A=
->>>> following:=0A=
->>>>=0A=
->>>> cd /sys/class/devfreq/devices/devfreq0=0A=
->>>=0A=
->>> can't cd to /sys/class/devfreq/devices/devfreq0: No such file or direct=
-ory=0A=
->>>=0A=
->>> I did some checking and I found:=0A=
->>>       imx8m-ddrc-devfreq 3d400000.memory-controller: failed to init=0A=
->>> firmware freq info: -19=0A=
->>>=0A=
->>> Was there some prerequisite patches I needed to apply before your serie=
-s?=0A=
->>=0A=
->> You need a recent version of TF-A from nxp ( upstream). Try this:=0A=
->>=0A=
->> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fsour=
-ce.codeaurora.org%2Fexternal%2Fimx%2Fimx-atf%2Flog%2F%3Fh%3Dimx_4.19.35_1.1=
-.0&amp;data=3D02%7C01%7Cleonard.crestez%40nxp.com%7Cc07fadd829994fe6293c08d=
-783d02fa9%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637122802480130351&a=
-mp;sdata=3DdVovGr1ttwrnSz39MPNNVg%2FB8HV5AjrHXGbksO3XvVo%3D&amp;reserved=3D=
-0=0A=
->>=0A=
->> Or this:=0A=
->> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgith=
-ub.com%2Fcdleonard%2Farm-trusted-firmware%2Fcommits%2Fimx_2.0.y_busfreq&amp=
-;data=3D02%7C01%7Cleonard.crestez%40nxp.com%7Cc07fadd829994fe6293c08d783d02=
-fa9%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637122802480140347&amp;sda=
-ta=3DQ9KPq60FOxJ7GflwupNaXvbqHIR40Ej5GxeY%2BhHI658%3D&amp;reserved=3D0=0A=
->>=0A=
->> Support on upstream ATF is not yet available=0A=
-> =0A=
-> I cloned your github branch and built it per the instructions in the=0A=
-> u-boot readme file.=0A=
-> did a make clean on u-boot, copied the bl31.bin to u-boot and rebuild=0A=
-> per U-Boot's instructions.=0A=
-> =0A=
-> U-Boot booted and Linux booted, but I still get:=0A=
-> =0A=
->     imx8m-ddrc-devfreq 3d400000.memory-controller: failed to init=0A=
-> firmware freq info: -19=0A=
-=0A=
-Which version of u-boot is that, upstream? I'm subscribed to uboot =0A=
-mailing list and I see that imx8m support has its own separate issues =0A=
-but my familiarity is limited :(=0A=
-=0A=
-I've only ever tested with NXP uboot and the NXP version of mkimage:=0A=
-=0A=
-https://source.codeaurora.org/external/imx/uboot-imx/log/?h=3Dimx_v2019.04_=
-4.19.35_1.1.0=0A=
-https://source.codeaurora.org/external/imx/imx-mkimage/=0A=
-=0A=
-My bootloader prints the following BuildInfo:=0A=
-   - ATF 70fa7bc =0A=
-=0A=
-   - U-Boot 2019.04-00019-g4d377539a119=0A=
-=0A=
---=0A=
-Regards,=0A=
-Leonard=0A=
+18.12.2019 18:43, Sowjanya Komatineni пишет:
+> 
+> On 12/17/19 11:31 PM, Dmitry Osipenko wrote:
+>> 18.12.2019 10:22, Dmitry Osipenko пишет:
+>>> 18.12.2019 10:14, Sowjanya Komatineni пишет:
+>>>> On 12/17/19 11:01 PM, Dmitry Osipenko wrote:
+>>>>> 18.12.2019 09:59, Dmitry Osipenko пишет:
+>>>>>> 17.12.2019 23:04, Sowjanya Komatineni пишет:
+>>>>>>> mclk is from clk_out_1 which is part of Tegra PMC block and pmc
+>>>>>>> clocks
+>>>>>>> are moved to Tegra PMC driver with pmc as clock provider and
+>>>>>>> using pmc
+>>>>>>> clock ids.
+>>>>>>>
+>>>>>>> New device tree uses clk_out_1 from pmc clock provider.
+>>>>>>>
+>>>>>>> So, this patch adds implementation for mclk fallback to extern1 when
+>>>>>>> retrieving mclk returns -ENOENT to be backward compatible of new
+>>>>>>> device
+>>>>>>> tree with older kernels.
+>>>>>>>
+>>>>>>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+>>>>>>> ---
+>>>>>>>    sound/soc/tegra/tegra_asoc_utils.c | 11 ++++++++++-
+>>>>>>>    1 file changed, 10 insertions(+), 1 deletion(-)
+>>>>>>>
+>>>>>>> diff --git a/sound/soc/tegra/tegra_asoc_utils.c
+>>>>>>> b/sound/soc/tegra/tegra_asoc_utils.c
+>>>>>>> index fe9ca8acd0fb..1b88c6043082 100644
+>>>>>>> --- a/sound/soc/tegra/tegra_asoc_utils.c
+>>>>>>> +++ b/sound/soc/tegra/tegra_asoc_utils.c
+>>>>>>> @@ -191,7 +191,16 @@ int tegra_asoc_utils_init(struct
+>>>>>>> tegra_asoc_utils_data *data,
+>>>>>>>        data->clk_cdev1 = devm_clk_get(dev, "mclk");
+>>>>>>>        if (IS_ERR(data->clk_cdev1)) {
+>>>>>>>            dev_err(data->dev, "Can't retrieve clk cdev1\n");
+>>>>>>> -        return PTR_ERR(data->clk_cdev1);
+>>>>>>> +        if (PTR_ERR(data->clk_cdev1) != -ENOENT)
+>>>>>>> +            return PTR_ERR(data->clk_cdev1);
+>>>>>>> +        /* Fall back to extern1 */
+>>>>>>> +        data->clk_cdev1 = devm_clk_get(dev, "extern1");
+>>>>>>> +        if (IS_ERR(data->clk_cdev1)) {
+>>>>>>> +            dev_err(data->dev, "Can't retrieve clk extern1\n");
+>>>>>>> +            return PTR_ERR(data->clk_cdev1);
+>>>>>>> +        }
+>>>>>>> +
+>>>>>>> +        dev_err(data->dev, "Falling back to extern1\n");
+>>>>>>>        }
+>>>>>>>          /*
+>>>>>>>
+>>>>>> [    1.769091] ------------[ cut here ]------------
+>>>>>> [    1.769249] WARNING: CPU: 2 PID: 1 at drivers/clk/clk.c:954
+>>>>>> clk_core_disable+0xa5/0x1d4
+>>>>>> [    1.769330] clk_out_1 already disabled
+>>>>>> [    1.769459] Modules linked in:
+>>>>>> [    1.769541] CPU: 2 PID: 1 Comm: swapper/0 Not tainted
+>>>>>> 5.5.0-rc1-next-20191213-00167-g6b9fbcdac8f3-dirty #266
+>>>>>> [    1.769676] Hardware name: NVIDIA Tegra SoC (Flattened Device
+>>>>>> Tree)
+>>>>>> [    1.769775] [<c010e4bd>] (unwind_backtrace) from [<c010a0fd>]
+>>>>>> (show_stack+0x11/0x14)
+>>>>>> [    1.769918] [<c010a0fd>] (show_stack) from [<c09a37b1>]
+>>>>>> (dump_stack+0x85/0x94)
+>>>>>> [    1.770061] [<c09a37b1>] (dump_stack) from [<c011f3d1>]
+>>>>>> (__warn+0xc1/0xc4)
+>>>>>> [    1.770144] [<c011f3d1>] (__warn) from [<c011f691>]
+>>>>>> (warn_slowpath_fmt+0x61/0x78)
+>>>>>> [    1.770285] [<c011f691>] (warn_slowpath_fmt) from [<c04a0e7d>]
+>>>>>> (clk_core_disable+0xa5/0x1d4)
+>>>>>> [    1.770427] [<c04a0e7d>] (clk_core_disable) from [<c04a0fc3>]
+>>>>>> (clk_core_disable_lock+0x17/0x20)
+>>>>>> [    1.770516] [<c04a0fc3>] (clk_core_disable_lock) from [<c07792bb>]
+>>>>>> (tegra_asoc_utils_set_rate+0x53/0x208)
+>>>>>> [    1.770662] [<c07792bb>] (tegra_asoc_utils_set_rate) from
+>>>>>> [<c077b8c5>] (tegra_rt5640_probe+0xd5/0x128)
+>>>>>> [    1.770808] [<c077b8c5>] (tegra_rt5640_probe) from [<c0555eb7>]
+>>>>>> (platform_drv_probe+0x33/0x68)
+>>>>>> [    1.770958] [<c0555eb7>] (platform_drv_probe) from [<c055471d>]
+>>>>>> (really_probe+0x14d/0x240)
+>>>>>> [    1.771099] [<c055471d>] (really_probe) from [<c055493f>]
+>>>>>> (driver_probe_device+0x43/0x11c)
+>>>>>> [    1.771187] [<c055493f>] (driver_probe_device) from [<c0554b25>]
+>>>>>> (device_driver_attach+0x3d/0x40)
+>>>>>> [    1.771328] [<c0554b25>] (device_driver_attach) from [<c0554b5f>]
+>>>>>> (__driver_attach+0x37/0x78)
+>>>>>> [    1.771469] [<c0554b5f>] (__driver_attach) from [<c05532fb>]
+>>>>>> (bus_for_each_dev+0x43/0x6c)
+>>>>>> [    1.771609] [<c05532fb>] (bus_for_each_dev) from [<c0553e0f>]
+>>>>>> (bus_add_driver+0xe3/0x148)
+>>>>>> [    1.771692] [<c0553e0f>] (bus_add_driver) from [<c055531d>]
+>>>>>> (driver_register+0x39/0xa0)
+>>>>>> [    1.771833] [<c055531d>] (driver_register) from [<c0102c2f>]
+>>>>>> (do_one_initcall+0x43/0x1bc)
+>>>>>> [    1.771979] [<c0102c2f>] (do_one_initcall) from [<c1000ce5>]
+>>>>>> (kernel_init_freeable+0x121/0x194)
+>>>>>> [    1.772129] [<c1000ce5>] (kernel_init_freeable) from [<c09b40e9>]
+>>>>>> (kernel_init+0xd/0xd0)
+>>>>>> [    1.772215] [<c09b40e9>] (kernel_init) from [<c01010bd>]
+>>>>>> (ret_from_fork+0x11/0x34)
+>>>>>> [    1.772349] Exception stack(0xde907fb0 to 0xde907ff8)
+>>>>>>
+>>>>> Although, that's probably related to the "ASoC: tegra: Add initial
+>>>>> parent configuration for audio mclk".
+>>>>>
+>>>> Actually I see these warnings of already unprepared and already
+>>>> disabled
+>>>> for pll_a, pll_a_out0, and clk_out_1 even without this whole patch
+>>>> series as well.
+>>>>
+>>>> I think its from tegra_asoc_utils_set_rate() doing
+>>>> clk_disable_unprepare
+>>>> and these clocks are already unprepared and disabled so its just
+>>>> warning
+>>>> from clk_core_unprepare and clk_core_disable.
+>>> Doesn't happen for me without this series.
+> 
+> I looked at wrong log, right earlier clock driver keeps them enabled so
+> asoc_utils_set_rate() disables the clock fine but now enabling audio
+> clock should be done in asoc_utils_init() to let the
+> clk_disable_unprepare from asoc_utils_set_rate not to show this warning.
+> 
+> But actually we don't need to have clock enabled in asoc_utils_init
+> prior to invoking asoc_utils_set_rate from utils_init and its just warns
+> during sound driver probe because clock is already in disabled state. At
+> same time it doesn't harm to have it kept enabled in utils_init. So will
+> keep it enabled in asoc_utils_init to prevent this warning to show up.
+> 
+>> But sound works with both old/new device-trees.
+
+The rule of thumb: don't enable anything when it shouldn't be enabled.
+If clocks are disabled at the time of drivers probe, then drivers
+shouldn't disable the clocks.
