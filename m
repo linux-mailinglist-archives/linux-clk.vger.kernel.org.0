@@ -2,90 +2,80 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AEC9125F7F
-	for <lists+linux-clk@lfdr.de>; Thu, 19 Dec 2019 11:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3C4126475
+	for <lists+linux-clk@lfdr.de>; Thu, 19 Dec 2019 15:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727114AbfLSKn0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 19 Dec 2019 05:43:26 -0500
-Received: from mail26.static.mailgun.info ([104.130.122.26]:61144 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727072AbfLSKn0 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Dec 2019 05:43:26 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1576752205; h=References: In-Reply-To: Message-Id: Date:
- Subject: To: From: Sender;
- bh=bSLZceWLpbuLh8mq5FOYDleaSxcBcQF+ETxIbFoBFUw=; b=Dv1YBNC+jJVDwU2sA81Gt1Gx8iq4XnNQ0I0Rc5Yw7KII8Rek0Vl6CbHM9X47kNtnyODLV1My
- yrSdYBQCg42QrcGtspkCL39qipTW1rUCZRcUt2Q2VXFFfonJpHdhzKhqWu4SVCPIkFUBndxN
- vyKJLvAOUxMU9L+rqlLAjka2XxM=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5dfb544a.7f61c288aca8-smtp-out-n01;
- Thu, 19 Dec 2019 10:43:22 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 34364C53824; Thu, 19 Dec 2019 10:43:21 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from srichara-linux.qualcomm.com (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sricharan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id C5A9DC53815;
-        Thu, 19 Dec 2019 10:43:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C5A9DC53815
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sricharan@codeaurora.org
-From:   Sricharan R <sricharan@codeaurora.org>
-To:     sricharan@codeaurora.org, agross@kernel.org,
-        devicetree@vger.kernel.org, linus.walleij@linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-soc@vger.kernel.org, robh+dt@kernel.org, sboyd@kernel.org,
-        sivaprak@codeaurora.org
-Subject: [PATCH V2 7/7] arm64: defconfig: Enable qcom ipq6018 clock and pinctrl
-Date:   Thu, 19 Dec 2019 16:11:49 +0530
-Message-Id: <1576752109-24497-8-git-send-email-sricharan@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1576752109-24497-1-git-send-email-sricharan@codeaurora.org>
-References: <1576752109-24497-1-git-send-email-sricharan@codeaurora.org>
+        id S1726744AbfLSOUf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 19 Dec 2019 09:20:35 -0500
+Received: from mail-io1-f67.google.com ([209.85.166.67]:42063 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726695AbfLSOUf (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Dec 2019 09:20:35 -0500
+Received: by mail-io1-f67.google.com with SMTP id n11so4368981iom.9;
+        Thu, 19 Dec 2019 06:20:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d3uNqyau+uqHl1+nVlgL9fnHSgknMtxXHMZq1PGXbPI=;
+        b=fIjaEL+xy1liB8a19YiHcLE/YmTaQAcfoRDPTsFpSyJAWVR/R+GbGxWTkTlklsSPjX
+         Yu3FCBgbImKi2S9yWuq/Npy+Idoa147eGtNr5dCggAIUGBVk7rz0wkRkoqvV/BU15Clo
+         GOkz839U3L8RH6QMkA17wi+1ZGyFSpMmcZuNe1OmqmA/hLOkcCDBSCGGfk8C78vv+h3J
+         UiwvHtSeS3wvhRDLAiBbY4YzDVmZwFGFV3Cp6Nts75kM7OaYbn5fJQS9eDpGjbIP+/Nr
+         qiAi/fj7z/9aAFtIM+VhPKC7tMqGFjp4+IPHBCocWN/yTnJwqGvSNxQcbmtGQT/ieM/x
+         01Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d3uNqyau+uqHl1+nVlgL9fnHSgknMtxXHMZq1PGXbPI=;
+        b=qsTzIjSzpy3fiz8FNlJqS3Vd6TlT1Kfff1fwbpZ430wg7XoXbJ+drERvkmHo5gYN03
+         oDwT7cRV4WezTM8gZxkKWul8afSwwyTfRsYUZ19B2YyRirPQfbmAsqwwCYJILzElBE52
+         KUKkXIKf9a0QfaTp2rzTOwEOvWOU4UPRWsWn+AVTJiDDsIgKOTn5B2/K1GYen+4QJPa2
+         jSKPM2NoieSI5Hz6aNhPxhSO92vsjZgoaXDA3rEAdzNqX75Szi43Z74kVKBXZmxeof6f
+         J4dZbWHInceMhu70bFlGTxajTGUS5MyA6q7k5VV+wY8iUB44jwjAvdWg8zn9Yg79TlQ+
+         sd8g==
+X-Gm-Message-State: APjAAAXsnqoyqpR3qcY4UZwE5A/VgjIEN59v2cxWzHvl1jIXJcd/o75H
+        u3WPC9hC3OzLk5i8H5jtQTxUTSDrNIAtbBwAX8A=
+X-Google-Smtp-Source: APXvYqyse2tZmLbWeTJHu9jPZ4y7jNwi6OE18BMIORT8ZvbIy8VS+HkWhe05B83mbuQvzggj2mMbqfwpJ8aQ0JO88YY=
+X-Received: by 2002:a5d:9c4e:: with SMTP id 14mr6199922iof.166.1576765234271;
+ Thu, 19 Dec 2019 06:20:34 -0800 (PST)
+MIME-Version: 1.0
+References: <20191217171205.5492-1-jeffrey.l.hugo@gmail.com> <20191219060020.573342146E@mail.kernel.org>
+In-Reply-To: <20191219060020.573342146E@mail.kernel.org>
+From:   Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+Date:   Thu, 19 Dec 2019 07:20:23 -0700
+Message-ID: <CAOCk7NpZmH8XahFmcKXSGsbT2nrY7kuWftGW1Ss6NdkqGs08cA@mail.gmail.com>
+Subject: Re: [PATCH] clk: qcom: Make gcc_gpu_cfg_ahb_clk critical
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        MSM <linux-arm-msm@vger.kernel.org>, linux-clk@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-These configs are required for booting kernel in qcom
-ipq6018 boards.
+On Wed, Dec 18, 2019 at 11:00 PM Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting Jeffrey Hugo (2019-12-17 09:12:05)
+> > diff --git a/drivers/clk/qcom/gcc-msm8998.c b/drivers/clk/qcom/gcc-msm8998.c
+> > index df1d7056436c..26cc1458ce4a 100644
+> > --- a/drivers/clk/qcom/gcc-msm8998.c
+> > +++ b/drivers/clk/qcom/gcc-msm8998.c
+> > @@ -2044,6 +2044,7 @@ static struct clk_branch gcc_gpu_cfg_ahb_clk = {
+> >                 .hw.init = &(struct clk_init_data){
+> >                         .name = "gcc_gpu_cfg_ahb_clk",
+> >                         .ops = &clk_branch2_ops,
+> > +                       .flags = CLK_IS_CRITICAL, /* to access gpucc */
+>
+> Can we not do the thing that Bjorn did to turn on ahb clks with runtime
+> PM for clk controllers that need them? See 892df0191b29 ("clk: qcom: Add
+> QCS404 TuringCC").
+>
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Sricharan R <sricharan@codeaurora.org>
----
- arch/arm64/configs/defconfig | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 6a83ba2..497d5f0 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -399,6 +399,7 @@ CONFIG_PINCTRL_IMX8MN=y
- CONFIG_PINCTRL_IMX8MQ=y
- CONFIG_PINCTRL_IMX8QXP=y
- CONFIG_PINCTRL_IPQ8074=y
-+CONFIG_PINCTRL_IPQ6018=y
- CONFIG_PINCTRL_MSM8916=y
- CONFIG_PINCTRL_MSM8994=y
- CONFIG_PINCTRL_MSM8996=y
-@@ -700,6 +701,8 @@ CONFIG_QCOM_CLK_APCS_MSM8916=y
- CONFIG_QCOM_CLK_SMD_RPM=y
- CONFIG_QCOM_CLK_RPMH=y
- CONFIG_IPQ_GCC_8074=y
-+CONFIG_IPQ_GCC_6018=y
-+CONFIG_IPQ_APSS_6018=y
- CONFIG_MSM_GCC_8916=y
- CONFIG_MSM_GCC_8994=y
- CONFIG_MSM_MMCC_8996=y
--- 
-1.9.1
+Interesting.  I didn't think of that solution, nor was I aware of that
+change.  Let me have a look.  Thanks for the tip.
