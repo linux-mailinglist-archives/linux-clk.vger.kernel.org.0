@@ -2,196 +2,83 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE2D125D44
-	for <lists+linux-clk@lfdr.de>; Thu, 19 Dec 2019 10:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA9E125DBB
+	for <lists+linux-clk@lfdr.de>; Thu, 19 Dec 2019 10:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726699AbfLSJHW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 19 Dec 2019 04:07:22 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:41915 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726620AbfLSJHU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Dec 2019 04:07:20 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 2C40928FF;
-        Thu, 19 Dec 2019 04:07:19 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 19 Dec 2019 04:07:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=XXdtMM7vLgAct
-        /8ZdLZvRsgE1myTwo/2GhT2QNhyDlY=; b=M4v4rZdhWbr9cX1QUXXwJtgzhfuqF
-        iOw0EdJcP3SUy1dLy0PbMKvhHoqP3FVCYy4S2TcfeqjNXVdMtDvEBmBhNA4CdbLj
-        TQxe2GKHT11KSJvVT4KUOspCkJ5i9GWM7V84WsFYD8iIoxFTaAWU9iEWd0ei5q33
-        4HJ+WamrcjHqTME/rYXL/02az3sAihWzM/sSJEkrcg09PVfLQ8bvWB5eEMi40XKo
-        6zYTddqyl0FBNsibBW4lC5Wa7gJ4X8ENnLrgPdkWS+DUdyFJcm0xuT6LJ9iYaPl6
-        Q0Q3Wsiy6JoovuE6g/ozG4nilUXKibhjWFf6zL1Djh21DEBCRRe4Vq1vA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=XXdtMM7vLgAct/8ZdLZvRsgE1myTwo/2GhT2QNhyDlY=; b=UT7qZQ9A
-        on3BmBsuuTrx+dfNsmwH2v49p4btyDjmNNfLxPm3febbgL4uNIxUB8A4OKoqD8Ik
-        kt6i0IEYc5IT9xPF5ySCArXMtqcGFR4SxKGwjMtOBHrj5OLLJUph84rnpiMhGM+J
-        RtCMeLVa9H3T+5ehtZVK6n84h4ZKqsEAtOkbHDLJBiI9o19nUIXgjF05dM+1UYWC
-        wY5Dvk6osYlyhg/aF1TmODdEaBo8LKqe4dyc/8awkmnX696+wdHlHdu4rO/rpxIm
-        FFC+C1bocbaWg9CBhqdw2tm7JXUSctl6anwr0An6zEs01EpJmUZVXoPERCBnPeEy
-        /gawBs3VpdlBaQ==
-X-ME-Sender: <xms:xz37XbfEjvVwiX2QIrsKkAVXUDW4kKVhrE3yUrUZwp_yr1zJT4aZtA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrvdduudcutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogevoh
-    grshhtrghlqdfhgeduvddqtddvucdludehtddmnecujfgurhephffvufffkffojghfggfg
-    sedtkeertdertddtnecuhfhrohhmpeforgigihhmvgcutfhiphgrrhguuceomhgrgihimh
-    gvsegtvghrnhhordhtvggthheqnecuffhomhgrihhnpeguvghvihgtvghtrhgvvgdrohhr
-    ghenucfkphepledtrdekledrieekrdejieenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthhenucevlhhushhtvghrufhiiigvpedu
-X-ME-Proxy: <xmx:xz37XTPy1qD09GxIkPJd_s3qySsbYvtFR17f4VaBX3bCZSTrfoJsDw>
-    <xmx:xz37XdVIV9vEUTwkrCjnK8bXPTsnvQY1psz-XMD2KqdeKffEvL2Qew>
-    <xmx:xz37XU3NzmsWuS7kFAia5W6kasP4sCi0POqlGXw-qBBB0U0GmZDD3A>
-    <xmx:xz37XZ4Kt-zjvxfz5AgzJSSjtt02HrdIrtNvCFWbdQoqGd7Vzx3ahg>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id AAACF8005A;
-        Thu, 19 Dec 2019 04:07:18 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     p.zabel@pengutronix.de, Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@codeaurora.org>, lee.jones@linaro.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH 3/3] dt-bindings: resets: Convert Allwinner legacy resets to schemas
-Date:   Thu, 19 Dec 2019 10:07:12 +0100
-Message-Id: <20191219090712.947490-3-maxime@cerno.tech>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191219090712.947490-1-maxime@cerno.tech>
-References: <20191219090712.947490-1-maxime@cerno.tech>
+        id S1726664AbfLSJdt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 19 Dec 2019 04:33:49 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:45534 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726617AbfLSJds (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Dec 2019 04:33:48 -0500
+Received: by mail-ot1-f65.google.com with SMTP id 59so6444584otp.12;
+        Thu, 19 Dec 2019 01:33:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Itgc1DJzsEvBHkSe6A7L+muBojC3hvR2dVcWBCiTB90=;
+        b=BCQ/qceUyp9XIm3vrIa/j/ISB5xY/1ec3MvlFIM3uG5jrrvBniTJFi/HoY4Sru41KJ
+         5OpHxNYF/POi9IpjF5IQ0yziCZx740djQ5Yd8X+NJ3Y4zrC7UnCd0KXrr6kWfq/Q5Nkn
+         qHuMzlGSWSsV04XNcfIqCQUiESN4f1JYLQvGALqhxdpLzESCf49/ae6b+94zNQpOxFUi
+         xDWUygRG9uaG0QQpZUE3S7aLxfaKs/wQgmTiynmhhgyiauvHop8JzOm6yvvZIo1uHXmh
+         XBpbak0F5/A4EEn/nOWkLVghLQ9BNxyNWaFZan/up38yvrl+n9z3zw+Mim87200wlVNY
+         yyPQ==
+X-Gm-Message-State: APjAAAXlPLQAn9MZhqX+2tr9mG5N9hp3qoLg5tvDm0OJuUtYcnOXFmvl
+        aOvCSD62vnue43lWGpglEeMqpz3YD8NjMWIZP/JMiA==
+X-Google-Smtp-Source: APXvYqz+b/l1UyOL/G78QFesbR1f9uv8LKNCZ4hGUaZ9p6mG72cwUUIiD1cVj3Ik063i2NFU0R+0Ata+TSpyMa0lLfQ=
+X-Received: by 2002:a9d:7984:: with SMTP id h4mr7991127otm.297.1576748027939;
+ Thu, 19 Dec 2019 01:33:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <1576673984-37752-1-git-send-email-biju.das@bp.renesas.com>
+In-Reply-To: <1576673984-37752-1-git-send-email-biju.das@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 19 Dec 2019 10:33:36 +0100
+Message-ID: <CAMuHMdVcf7gsnrDfqTD0MpxBj_iPt_pFnuddfp_BeYpGF8-taQ@mail.gmail.com>
+Subject: Re: [PATCH V2] clock: renesas: cpg-mssr: Fix the typo
+To:     Biju Das <biju.das@bp.renesas.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Simon Horman <horms@verge.net.au>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Marian-Cristian Rotariu 
+        <marian-cristian.rotariu.rb@bp.renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The Allwinner SoCs have a legacy set of bindings (and a framework to
-support it in Linux) for their reset controllers.
+On Wed, Dec 18, 2019 at 2:01 PM Biju Das <biju.das@bp.renesas.com> wrote:
+> This patch fixes the typo %s/r8a774a1/r8a774b1/.
+>
+> Fixes: 10003938a0c64 ("dt-bindings: clock: renesas: cpg-mssr: Document r8a774b1 binding")
+> Signed-off-by: Biju Das <biju.das@bp.renesas.com>
+> ---
+> V1-->V2
+>  * Incorporated Sergei's review comments.
 
-Now that we have the DT validation in place, let's split into separate file
-and convert the device tree bindings for those resets to schemas, and mark
-them all as deprecated.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in clk-renesas-for-v5.6, with the oneline summary
+changed to:
 
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- .../allwinner,sun6i-a31-clock-reset.yaml      | 68 +++++++++++++++++++
- .../reset/allwinner,sunxi-clock-reset.txt     | 21 ------
- 2 files changed, 68 insertions(+), 21 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/reset/allwinner,sun6i-a31-clock-reset.yaml
- delete mode 100644 Documentation/devicetree/bindings/reset/allwinner,sunxi-clock-reset.txt
+    dt-bindings: clock: renesas: cpg-mssr: Fix r8a774b1 typo
 
-diff --git a/Documentation/devicetree/bindings/reset/allwinner,sun6i-a31-clock-reset.yaml b/Documentation/devicetree/bindings/reset/allwinner,sun6i-a31-clock-reset.yaml
-new file mode 100644
-index 000000000000..001c0d2a8c1f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/reset/allwinner,sun6i-a31-clock-reset.yaml
-@@ -0,0 +1,68 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/reset/allwinner,sun6i-a31-clock-reset.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Allwinner A31 Peripheral Reset Controller Device Tree Bindings
-+
-+maintainers:
-+  - Chen-Yu Tsai <wens@csie.org>
-+  - Maxime Ripard <mripard@kernel.org>
-+
-+deprecated: true
-+
-+select:
-+  properties:
-+    compatible:
-+      contains:
-+        enum:
-+          - allwinner,sun6i-a31-ahb1-reset
-+          - allwinner,sun6i-a31-clock-reset
-+
-+  # The PRCM on the A31 and A23 will have the reg property missing,
-+  # since it's set at the upper level node, and will be validated by
-+  # PRCM's schema. Make sure we only validate standalone nodes.
-+  required:
-+    - compatible
-+    - reg
-+
-+properties:
-+  "#reset-cells":
-+    const: 1
-+    description: >
-+      This additional argument passed to that reset controller is the
-+      offset of the bit controlling this particular reset line in the
-+      register.
-+
-+  compatible:
-+    enum:
-+      - allwinner,sun6i-a31-ahb1-reset
-+      - allwinner,sun6i-a31-clock-reset
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - "#reset-cells"
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    ahb1_rst: reset@1c202c0 {
-+        #reset-cells = <1>;
-+        compatible = "allwinner,sun6i-a31-ahb1-reset";
-+        reg = <0x01c202c0 0xc>;
-+    };
-+
-+  - |
-+    apbs_rst: reset@80014b0 {
-+        #reset-cells = <1>;
-+        compatible = "allwinner,sun6i-a31-clock-reset";
-+        reg = <0x080014b0 0x4>;
-+    };
-+
-+...
-diff --git a/Documentation/devicetree/bindings/reset/allwinner,sunxi-clock-reset.txt b/Documentation/devicetree/bindings/reset/allwinner,sunxi-clock-reset.txt
-deleted file mode 100644
-index 4ca66c96fe97..000000000000
---- a/Documentation/devicetree/bindings/reset/allwinner,sunxi-clock-reset.txt
-+++ /dev/null
-@@ -1,21 +0,0 @@
--Allwinner sunxi Peripheral Reset Controller
--===========================================
--
--Please also refer to reset.txt in this directory for common reset
--controller binding usage.
--
--Required properties:
--- compatible: Should be one of the following:
--  "allwinner,sun6i-a31-ahb1-reset"
--  "allwinner,sun6i-a31-clock-reset"
--- reg: should be register base and length as documented in the
--  datasheet
--- #reset-cells: 1, see below
--
--example:
--
--ahb1_rst: reset@1c202c0 {
--	#reset-cells = <1>;
--	compatible = "allwinner,sun6i-a31-ahb1-reset";
--	reg = <0x01c202c0 0xc>;
--};
--- 
-2.23.0
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
