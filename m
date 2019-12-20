@@ -2,95 +2,142 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1624A1284B8
-	for <lists+linux-clk@lfdr.de>; Fri, 20 Dec 2019 23:28:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 100C4128521
+	for <lists+linux-clk@lfdr.de>; Fri, 20 Dec 2019 23:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727743AbfLTW1e (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 20 Dec 2019 17:27:34 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:7326 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727725AbfLTW12 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 20 Dec 2019 17:27:28 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dfd4ab00002>; Fri, 20 Dec 2019 14:26:56 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 20 Dec 2019 14:27:27 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 20 Dec 2019 14:27:27 -0800
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 20 Dec
- 2019 22:27:27 +0000
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 20 Dec
- 2019 22:27:26 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Fri, 20 Dec 2019 22:27:26 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.169.197]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5dfd4acd0003>; Fri, 20 Dec 2019 14:27:26 -0800
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <broonie@kernel.org>,
-        <lgirdwood@gmail.com>, <perex@perex.cz>, <tiwai@suse.com>,
-        <digetx@gmail.com>, <mperttunen@nvidia.com>,
-        <gregkh@linuxfoundation.org>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <mark.rutland@arm.com>
-CC:     <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
-        <spujar@nvidia.com>, <josephl@nvidia.com>,
-        <daniel.lezcano@linaro.org>, <mmaddireddy@nvidia.com>,
-        <markz@nvidia.com>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 19/19] ASoC: nau8825: change Tegra clk_out_2 provider from tegra_car to pmc
-Date:   Fri, 20 Dec 2019 14:27:05 -0800
-Message-ID: <1576880825-15010-20-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1576880825-15010-1-git-send-email-skomatineni@nvidia.com>
-References: <1576880825-15010-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
+        id S1726129AbfLTWo6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 20 Dec 2019 17:44:58 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:39248 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726030AbfLTWo6 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 20 Dec 2019 17:44:58 -0500
+Received: by mail-io1-f68.google.com with SMTP id c16so9537103ioh.6;
+        Fri, 20 Dec 2019 14:44:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7WksmJcfldBGfJZrpiFcVuuuNcslqmFm7JaA1MXSRJw=;
+        b=WvV4M3SZMDzHl53cn3HF3nz3zDmc4Dtwj1+38BeOwH27LvVBnfbhYolB8FbLskxmlZ
+         qm1yRDarf0SGqod6ugjwLkPs8VFxsskG3jUtaqRIs74/8iB9dcQ9wJxeGFsO5Cp58vSx
+         KxGDFLCUnkoIeqsLtIQRlWSY3Z+vjZ5b+u0MkwNzY+L/PvoszZtIPjCPAzC8mR95gyDC
+         uFfYSKpWb4m4i8XRcen76F/9bBZv1A5DlOdWyQNIDq8NCiRXCuCeXxclUShGEw7o/NPc
+         D7n19KIL+ZLCNpDS6c4x58i9eIqtW7xH4Xw3NmJpS/L9puF4fswAbHqHAEEruY0wXI6p
+         41RA==
+X-Gm-Message-State: APjAAAXXqEAAHF6nmQTGRKnPrC1fa3wjn7uUpR7wPNrz09Y5zj3JCK1a
+        1+KAOjSl7UjBrOYDmlV23w==
+X-Google-Smtp-Source: APXvYqwtuXnxyLzSziWitzIzubl3H2AMh1E7q6ytM/gh5JGmnxiN9pRqFX6kE1zi5VLp9PQSEdPfJg==
+X-Received: by 2002:a02:a309:: with SMTP id q9mr14248125jai.141.1576881897182;
+        Fri, 20 Dec 2019 14:44:57 -0800 (PST)
+Received: from localhost ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id e85sm5472679ilk.78.2019.12.20.14.44.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Dec 2019 14:44:56 -0800 (PST)
+Date:   Fri, 20 Dec 2019 15:44:55 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     p.zabel@pengutronix.de, Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@codeaurora.org>, lee.jones@linaro.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: Re: [PATCH 1/3] dt-bindings: clocks: Convert Allwinner legacy clocks
+ to schemas
+Message-ID: <20191220224455.GA18967@bogus>
+References: <20191219090712.947490-1-maxime@cerno.tech>
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1576880816; bh=3/z4wcLO56+BeZp414C24586DH5MDkYRn6sb6Gjt3tk=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=I4QBlSkN4a4SkV9E11r6WC2jv6cdvz0hwSKml+HIr8/XK4haC+IUEGaavKcKz5jO4
-         HYDvA+f5/M9wyqAuF55F50BYadlW5G8abhQjgOiUW/YRJWed1Xkp/t9wE1x7XTPte7
-         nY3l2ZkAXF8P7E/HyXmk5i5T9BK/3A2AXhnAnfL30CkyRFv2Xbsmrn4lC0oPORvfYe
-         Im/TJ2zwum15H+Oo7L6w/eF08vr2N+ROvTvV2rL5Q6mU8ePDNrhi/ZeSqeYl6RHSlp
-         zKeXF9CVK2SF3S/6U76v2pomDxEblV5EB4KNqyfRpFP3ySJZZR5BEDo4fuquqUG4LC
-         9tOUa/fHXhbbA==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191219090712.947490-1-maxime@cerno.tech>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Tegra clk_out_1, clk_out_2, and clk_out_3 are part of PMC block and
-these clocks are moved from clock drvier to pmc driver with pmc as
-a provider for these clocks.
+On Thu, 19 Dec 2019 10:07:10 +0100, Maxime Ripard wrote:
+> The Allwinner SoCs have a legacy set of bindings (and a framework to
+> support it in Linux) for their clock controllers.
+> 
+> Now that we have the DT validation in place, let's split into separate file
+> and convert the device tree bindings for those clocks to schemas, and mark
+> them all as deprecated.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>  .../clock/allwinner,sun4i-a10-ahb-clk.yaml    | 108 +++++++++
+>  .../clock/allwinner,sun4i-a10-apb0-clk.yaml   |  50 ++++
+>  .../clock/allwinner,sun4i-a10-apb1-clk.yaml   |  52 ++++
+>  .../clock/allwinner,sun4i-a10-axi-clk.yaml    |  61 +++++
+>  .../clock/allwinner,sun4i-a10-cpu-clk.yaml    |  52 ++++
+>  .../allwinner,sun4i-a10-display-clk.yaml      |  57 +++++
+>  .../clock/allwinner,sun4i-a10-gates-clk.yaml  | 152 ++++++++++++
+>  .../clock/allwinner,sun4i-a10-mbus-clk.yaml   |  63 +++++
+>  .../clock/allwinner,sun4i-a10-mmc-clk.yaml    |  87 +++++++
+>  .../clock/allwinner,sun4i-a10-mod0-clk.yaml   |  80 +++++++
+>  .../clock/allwinner,sun4i-a10-mod1-clk.yaml   |  57 +++++
+>  .../clock/allwinner,sun4i-a10-osc-clk.yaml    |  51 ++++
+>  .../clock/allwinner,sun4i-a10-pll1-clk.yaml   |  71 ++++++
+>  .../clock/allwinner,sun4i-a10-pll3-clk.yaml   |  50 ++++
+>  .../clock/allwinner,sun4i-a10-pll5-clk.yaml   |  53 +++++
+>  .../clock/allwinner,sun4i-a10-pll6-clk.yaml   |  53 +++++
+>  .../allwinner,sun4i-a10-tcon-ch0-clk.yaml     |  77 ++++++
+>  .../clock/allwinner,sun4i-a10-usb-clk.yaml    | 166 +++++++++++++
+>  .../clock/allwinner,sun4i-a10-ve-clk.yaml     |  55 +++++
+>  .../clock/allwinner,sun5i-a13-ahb-clk.yaml    |  52 ++++
+>  .../clock/allwinner,sun6i-a31-pll6-clk.yaml   |  53 +++++
+>  .../clock/allwinner,sun7i-a20-gmac-clk.yaml   |  51 ++++
+>  .../clock/allwinner,sun7i-a20-out-clk.yaml    |  52 ++++
+>  .../allwinner,sun8i-h3-bus-gates-clk.yaml     | 103 ++++++++
+>  .../clock/allwinner,sun9i-a80-ahb-clk.yaml    |  52 ++++
+>  .../clock/allwinner,sun9i-a80-apb0-clk.yaml   |  63 +++++
+>  .../clock/allwinner,sun9i-a80-cpus-clk.yaml   |  52 ++++
+>  .../clock/allwinner,sun9i-a80-gt-clk.yaml     |  52 ++++
+>  .../allwinner,sun9i-a80-mmc-config-clk.yaml   |  68 ++++++
+>  .../clock/allwinner,sun9i-a80-pll4-clk.yaml   |  50 ++++
+>  .../allwinner,sun9i-a80-usb-mod-clk.yaml      |  60 +++++
+>  .../allwinner,sun9i-a80-usb-phy-clk.yaml      |  60 +++++
+>  .../devicetree/bindings/clock/sunxi.txt       | 225 ------------------
+>  33 files changed, 2163 insertions(+), 225 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-ahb-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-apb0-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-apb1-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-axi-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-cpu-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-display-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-gates-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-mbus-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-mmc-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-mod0-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-mod1-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-osc-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-pll1-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-pll3-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-pll5-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-pll6-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-tcon-ch0-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-usb-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-ve-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun5i-a13-ahb-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun6i-a31-pll6-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun7i-a20-gmac-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun7i-a20-out-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun8i-h3-bus-gates-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun9i-a80-ahb-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun9i-a80-apb0-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun9i-a80-cpus-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun9i-a80-gt-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun9i-a80-mmc-config-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun9i-a80-pll4-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun9i-a80-usb-mod-clk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/allwinner,sun9i-a80-usb-phy-clk.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/clock/sunxi.txt
+> 
 
-Update bindings document to use pmc as clock provider for clk_out_2 and
-change id to pmc clock id.
+Applied, thanks.
 
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- Documentation/devicetree/bindings/sound/nau8825.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/sound/nau8825.txt b/Documentation/devicetree/bindings/sound/nau8825.txt
-index d16d96839bcb..388a7bc60b1f 100644
---- a/Documentation/devicetree/bindings/sound/nau8825.txt
-+++ b/Documentation/devicetree/bindings/sound/nau8825.txt
-@@ -101,5 +101,5 @@ Example:
-       nuvoton,crosstalk-enable;
- 
-       clock-names = "mclk";
--      clocks = <&tegra_car TEGRA210_CLK_CLK_OUT_2>;
-+      clocks = <&tegra_pmc TEGRA_PMC_CLK_OUT_2>;
-   };
--- 
-2.7.4
-
+Rob
