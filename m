@@ -2,59 +2,69 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE93129E21
-	for <lists+linux-clk@lfdr.de>; Tue, 24 Dec 2019 07:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E986129E48
+	for <lists+linux-clk@lfdr.de>; Tue, 24 Dec 2019 07:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726246AbfLXGhp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 24 Dec 2019 01:37:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59534 "EHLO mail.kernel.org"
+        id S1726047AbfLXGyQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 24 Dec 2019 01:54:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38866 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726070AbfLXGhp (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 24 Dec 2019 01:37:45 -0500
+        id S1726043AbfLXGyP (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 24 Dec 2019 01:54:15 -0500
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D4C62206B7;
-        Tue, 24 Dec 2019 06:37:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D09B620706;
+        Tue, 24 Dec 2019 06:54:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577169464;
-        bh=aBYtKXHcrTUI4HLdUJthX1une9TMYMbyNl3Sz6xLWVU=;
+        s=default; t=1577170454;
+        bh=ZKiiDeIHEimT5RF49wdxk08CEo4aIHjAHjFkXzaey7Y=;
         h=In-Reply-To:References:Cc:From:To:Subject:Date:From;
-        b=kc9SC2Re0MDROGqcRJWyOfJ0t/40UOMlraA3Vsl/RP2K7TXVcuSSoz3+CVW5+JL0y
-         rVak8uNA0N5PRr1fI6vcQeQUbZTUWMB6zU/Jfg1ESKjWE1GyuKTriq9rCFJF7Ax8i0
-         u/uj8JIUlpGbS9qdhc6tRokqmrxELh5vvNHGfIu4=
+        b=XD/RA8iIKhhmqKRAYapiwrONvPCq/s/0rct5T1yVgKpw15dEQr4ILYfgyPZaPBQ0N
+         w2MGva0yTs/pjiEyEbMOCYXAOeYP9ZSfev1N/rA9WOhHHH8pu1G0qouZQNUj/1P3n+
+         kW+SQz5bkTrNMQWF30Q6IHU4RMWGk3jkJcoRpSX8=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1573812304-24074-3-git-send-email-tdas@codeaurora.org>
-References: <1573812304-24074-1-git-send-email-tdas@codeaurora.org> <1573812304-24074-3-git-send-email-tdas@codeaurora.org>
-Cc:     David Brown <david.brown@linaro.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh@kernel.org, robh+dt@kernel.org,
-        Taniya Das <tdas@codeaurora.org>
+In-Reply-To: <4907f35240ae77bba4a27fd32f1e586e00cd434d.1576745635.git.matti.vaittinen@fi.rohmeurope.com>
+References: <cover.1576745635.git.matti.vaittinen@fi.rohmeurope.com> <4907f35240ae77bba4a27fd32f1e586e00cd434d.1576745635.git.matti.vaittinen@fi.rohmeurope.com>
+Cc:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
 From:   Stephen Boyd <sboyd@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <tdas@codeaurora.org>
-Subject: Re: [PATCH v2 2/8] clk: qcom: clk-alpha-pll: Add support for Fabia PLL calibration
+To:     matti.vaittinen@fi.rohmeurope.com, mazziesaccount@gmail.com
+Subject: Re: [PATCH v7 07/12] clk: bd718x7: Support ROHM BD71828 clk block
 User-Agent: alot/0.8.1
-Date:   Mon, 23 Dec 2019 22:37:44 -0800
-Message-Id: <20191224063744.D4C62206B7@mail.kernel.org>
+Date:   Mon, 23 Dec 2019 22:54:14 -0800
+Message-Id: <20191224065414.D09B620706@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Taniya Das (2019-11-15 02:04:58)
-> In the cases where the PLL is not calibrated the PLL could fail to lock.
-> Add support for prepare ops which would take care of the same.
+Quoting Matti Vaittinen (2019-12-19 01:52:13)
+> BD71828GW is a single-chip power management IC for battery-powered portab=
+le
+> devices. Add support for controlling BD71828 clk using bd718x7 driver.
 >=20
-> Fabia PLL user/test control registers might required to be configured, so
-> add support for configuring them.
->=20
-> Signed-off-by: Taniya Das <tdas@codeaurora.org>
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
 > ---
 
-Applied to clk-next
+Acked-by: Stephen Boyd <sboyd@kernel.org>
+
+I guess we can't win and break the build dependency on the "generic"
+header file :/
 
