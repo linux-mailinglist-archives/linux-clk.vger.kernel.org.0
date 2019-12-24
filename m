@@ -2,58 +2,96 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8CA129F22
-	for <lists+linux-clk@lfdr.de>; Tue, 24 Dec 2019 09:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D6612A208
+	for <lists+linux-clk@lfdr.de>; Tue, 24 Dec 2019 15:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726314AbfLXIhY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 24 Dec 2019 03:37:24 -0500
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:40161 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726278AbfLXIhX (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 24 Dec 2019 03:37:23 -0500
-Received: by mail-qt1-f195.google.com with SMTP id e6so17618062qtq.7
-        for <linux-clk@vger.kernel.org>; Tue, 24 Dec 2019 00:37:23 -0800 (PST)
+        id S1726140AbfLXORU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 24 Dec 2019 09:17:20 -0500
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:35002 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726128AbfLXORU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 24 Dec 2019 09:17:20 -0500
+Received: by mail-ed1-f65.google.com with SMTP id f8so18061146edv.2;
+        Tue, 24 Dec 2019 06:17:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
-        b=eygDl7YBOCWWlQe5JjF71GUH0MxM2GnwKjuCnN7TJql3Th2giuJ6whXX6bgil+EExJ
-         9q7jYtqcvwBdzX9QmcdS5Or8CwSEfjU/0/6EcB0lhs2iKt4PXI5gP8H4utHkg0jLU9pY
-         B3mJ64Fh1mzjTJR24vDJfgXQy9lm4sSOGyTAmophO5wmGAx5nYj7rGjQfi7P3LAErQ+9
-         nhoHpZhHZfmEvsP3QBOkQ8v7+CQPKZ7xdr5PRDvAs49FpgCEc+DOuULzYeX+h2ST5GXh
-         R1VWtI5/q+jGX0u6pDRVuuLWSSgz7y4RrZwwTh9WgOyOHzfF2l/9tXjgijxyMV1XszYE
-         /ocA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OwIM/6cz60aNzrhaQrqrMVGzhfDf7WlhxDj7li/s5F8=;
+        b=I5YXx13f5Qp5fHQV6xCwP7z5y+V1kYpSkwJT/YEKyKWi+z2WLsImzP25a2CBbcYxNq
+         RGBBzVz7jkkhHx3Flu9Fx5JOFBt106W50i0N9H9OZitpzvAFEhekbALhRNGkWSxE4chM
+         ZqKv9jx4zNHJ4UZuS6mgNZbxDOd547G3b/+NQOGx1PIaWf5LbxqlE1dSndCcUFSp2oLZ
+         cx/DKhtNLG6kmwJX2KDClt4zB5UnEb/DDI43yqkkSs8S6c4bq/126QvadErid7s/NFgQ
+         4uOc/o6ySAsh+DyHGaVOjUYLdmWhuOK25beRRG4Nov7LL4BEWY6MiLy8Jkpvbg7zoEja
+         t1pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
-        b=LdurXODTs9mBcNc9092PBa0nRFVXqwdxQyBR4CPTjzXIpSkXq1d7EzY3SXb3cGgxf7
-         tCbg62vDJawRf3clOzYfoh4xoV7VbS0PbgPsyZO9D+ocPLYyF4PM0xg2jTo5Ct1TKwt2
-         kUs/r/Vyi0ryKPtUtntD12ZsuZ2TKjw4Q2eK9tEG5AD+IwFixHPOsteNIT9ljAYH+b3s
-         EJW0Z7NVTlfplsq9GsLK7Q63gadRqrut7+U7O53K8I/dWap+tJWWrVAThjk2X5+VitYm
-         gCMQLQ1uGRAXBd9q+2o7ajInd0xOC+sVzyF8pPmIoTeO9y3YgzL0bHDS7stSRDXrLGL0
-         Geew==
-X-Gm-Message-State: APjAAAUUR1/uyAqvpYz+fQHTwa8kIbeO0I+LrM0j+YYinq3WQ/+i7vGg
-        n9iI+3dP8N+PfUZmEagaU5K1Hw1bNNHEU6rlUX8=
-X-Google-Smtp-Source: APXvYqyA2n44646Wl9JB8Imy9OLLzJdjXN8GcJmUl6KzhAVYFQ3YkgwqF66v+1Fe8G1X849TvuFmMEcglRF1JWQ82U4=
-X-Received: by 2002:ac8:2b26:: with SMTP id 35mr26070705qtu.341.1577176642769;
- Tue, 24 Dec 2019 00:37:22 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OwIM/6cz60aNzrhaQrqrMVGzhfDf7WlhxDj7li/s5F8=;
+        b=RaOiBhjWqo6tA0BYG8nhQ029Yfeg0VtB4A/ydgXnZAeAuTnujU06RDcH7gwE4Ftmji
+         FJnR65BmhfBPNbnfJDjQqMyXl9Iol2JuVGqYVWXxdmLEUY65z/g/WogZh0M1weF3+s8O
+         S3tOS68bxEDMIOFdau+V9I+VQk0vZwDlHhvghcbh67PPLkpaZT37FUBPZP8i+a7WuBGX
+         UhdfZ96w8NI0jD43FIEwG2Zp1AvR3Pk9ceUW6/LG2uOJsW7eZN4WmobzBHpspNFDFuOx
+         wYdnhEzcIgLRoQG8S61vn/uhKVaEtyqr5M27C3x+99eI/PFDr9b1ZdajID/+6xqDseO4
+         g/dA==
+X-Gm-Message-State: APjAAAX1mubz/GewpgZieoGEF0WmG4KTn7Zzs13EGyBirebKKJravqMo
+        /KiX3Xk9Gi/IhCh2vURpsZDLzryjGiB/irqc9dM3J4uOkwM=
+X-Google-Smtp-Source: APXvYqz/P0UqlYNNcPT+eGRq4v7AomIRC1X88sjHfSUfWMqRof8CiIRHZ5X0mHE2TUrGwossoMwGRKtg9kLH9FiPC3g=
+X-Received: by 2002:a50:f704:: with SMTP id g4mr38811179edn.123.1577197038209;
+ Tue, 24 Dec 2019 06:17:18 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:ad4:530a:0:0:0:0:0 with HTTP; Tue, 24 Dec 2019 00:37:22
- -0800 (PST)
-Reply-To: bethnatividad9@gmail.com
-From:   Beth Nat <anthonymoore105@gmail.com>
-Date:   Tue, 24 Dec 2019 08:37:22 +0000
-Message-ID: <CAKqrdYA5V4KZX0c4sA1FEJYxSJKRN5oMbBm3OFwOCwGFzixGXg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20191015103221.51345-1-kholk11@gmail.com> <20191015103221.51345-3-kholk11@gmail.com>
+In-Reply-To: <20191015103221.51345-3-kholk11@gmail.com>
+From:   Vladimir Oltean <olteanv@gmail.com>
+Date:   Tue, 24 Dec 2019 16:17:07 +0200
+Message-ID: <CA+h21hpmeMhKWeAMLZP1wr+OXUubUPADDH164geDwZ0BaR_0aQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] dt-bindings: clock: Document MSM8976 gcc compatible
+To:     kholk11@gmail.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, mturquette@baylibre.com,
+        agross@kernel.org, bjorn.andersson@linaro.org, marijns95@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-How are you today my dear? i saw your profile and it interests me, i
-am a Military nurse from USA. Can we be friend? I want to know more
-about you.
+Hi Angelo,
+
+On Tue, 15 Oct 2019 at 14:42, <kholk11@gmail.com> wrote:
+>
+> From: AngeloGioacchino Del Regno <kholk11@gmail.com>
+>
+> Document the Global Clock Controller driver (gcc-msm8976)
+> compatible string.
+> This driver is valid for MSM8976, MSM8956 and APQ variants.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/clock/qcom,gcc.txt | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc.txt b/Documentation/devicetree/bindings/clock/qcom,gcc.txt
+> index d14362ad4132..565bba5df298 100644
+> --- a/Documentation/devicetree/bindings/clock/qcom,gcc.txt
+> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc.txt
+> @@ -15,6 +15,7 @@ Required properties :
+>                         "qcom,gcc-msm8974"
+>                         "qcom,gcc-msm8974pro"
+>                         "qcom,gcc-msm8974pro-ac"
+> +                       "qcom,gcc-msm8976"
+>                         "qcom,gcc-msm8994"
+>                         "qcom,gcc-msm8996"
+>                         "qcom,gcc-msm8998"
+> --
+> 2.21.0
+>
+
+You should respin this 2-patch series because qcom,gcc.txt was
+converted to qcom,gcc.yaml and this patch no longer applies.
+
+Thanks,
+-Vladimir
