@@ -2,155 +2,121 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D28A912B7C0
-	for <lists+linux-clk@lfdr.de>; Fri, 27 Dec 2019 18:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5619212BB31
+	for <lists+linux-clk@lfdr.de>; Fri, 27 Dec 2019 22:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727612AbfL0RvN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 27 Dec 2019 12:51:13 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40970 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728238AbfL0Rn2 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 27 Dec 2019 12:43:28 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A63B821744;
-        Fri, 27 Dec 2019 17:43:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577468607;
-        bh=ta6P7W4Qxx76cOxWAlSlu27XJGWgczrHYC2HaYJxa4o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i1R8KvnO8Py5NUmbcgVF31xE7Rx4O/AvPkg8WjwzCCEsiM3knECYStBvI7myMf4Ul
-         xlvmTGUfVfxuVC+9D3oo3TO+3p3BDPodA6bjr7iF4LnO2mgnDt6JJrpLarmVnWFW3C
-         aEoXDN7CZojteSugWdAv3GXlRwhSoKg/ieZNvEwI=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 127/187] clk: at91: fix possible deadlock
-Date:   Fri, 27 Dec 2019 12:39:55 -0500
-Message-Id: <20191227174055.4923-127-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191227174055.4923-1-sashal@kernel.org>
-References: <20191227174055.4923-1-sashal@kernel.org>
+        id S1726369AbfL0VUC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 27 Dec 2019 16:20:02 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:17303 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725860AbfL0VUC (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 27 Dec 2019 16:20:02 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e0675740000>; Fri, 27 Dec 2019 13:19:48 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 27 Dec 2019 13:20:01 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 27 Dec 2019 13:20:01 -0800
+Received: from [10.2.173.37] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 27 Dec
+ 2019 21:20:00 +0000
+Subject: Re: [PATCH v5 12/19] ASoC: tegra: Add initial parent configuration
+ for audio mclk
+To:     Dmitry Osipenko <digetx@gmail.com>, Mark Brown <broonie@kernel.org>
+CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <lgirdwood@gmail.com>, <perex@perex.cz>, <tiwai@suse.com>,
+        <mperttunen@nvidia.com>, <gregkh@linuxfoundation.org>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
+        <spujar@nvidia.com>, <josephl@nvidia.com>,
+        <daniel.lezcano@linaro.org>, <mmaddireddy@nvidia.com>,
+        <markz@nvidia.com>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1576880825-15010-1-git-send-email-skomatineni@nvidia.com>
+ <1576880825-15010-13-git-send-email-skomatineni@nvidia.com>
+ <a6567ff1-7bc2-3ca5-1200-92a63eb44ddb@gmail.com>
+ <20191225175736.GC27497@sirena.org.uk>
+ <856d8a92-0c24-6722-952c-06b86c706e97@gmail.com>
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+Message-ID: <dbbce994-27f5-d949-078d-05646100e6be@nvidia.com>
+Date:   Fri, 27 Dec 2019 13:19:59 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <856d8a92-0c24-6722-952c-06b86c706e97@gmail.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1577481588; bh=jZvV6hBkMM5Yr4UvEkRndXiGnt0j3d2GsRy1bKw+1ZQ=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=lTrdhLtUMlsmPRtO7bEC9eQVmtszFNAjGEyoJHTAOJ8YDvmYcui+mjFF69f9bWcC+
+         OFQ8IWLdsk5RdSDVMkbHkx3KCe21Zq1G3HJaZ6TohE2lccvfrJOKWKs36P0OJ9603T
+         Y0WTQ8Ys+blXlqceLQWV0xhIYxm32fNGilkLjhgbH6sjl2BVQHuTSySSt6X+GyUNmC
+         taUJ70fgL3aFAIdXl4XNC8/guhno7Q130wn/idkaoNsIF4nC1Mt8ECvC5tFjhFkqiC
+         qQWB+vY/2FO9+hSliRute35To65/jV2jle+TCNQ95EpycJWV4rZXedCxHvlM2Tlxzz
+         LPRkQ7BA/Beyg==
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-[ Upstream commit 6956eb33abb5deab2cd916b4c31226b57736bc3c ]
+On 12/27/19 6:56 AM, Dmitry Osipenko wrote:
+> 25.12.2019 20:57, Mark Brown =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>> On Mon, Dec 23, 2019 at 12:14:34AM +0300, Dmitry Osipenko wrote:
+>>> 21.12.2019 01:26, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>>>> Tegra PMC clock clk_out_1 is dedicated for audio mclk from Tegra30
+>>>> through Tegra210 and currently Tegra clock driver does initial parent
+>>>> configuration for audio mclk "clk_out_1" and enables them by default.
+>> Please delete unneeded context from mails when replying.  Doing this
+>> makes it much easier to find your reply in the message, helping ensure
+>> it won't be missed by people scrolling through the irrelevant quoted
+>> material.
+> Ok
+>
+>>>> -	clk_disable_unprepare(data->clk_cdev1);
+>>>> -	clk_disable_unprepare(data->clk_pll_a_out0);
+>>>> -	clk_disable_unprepare(data->clk_pll_a);
+>>>> +	if (__clk_is_enabled(data->clk_cdev1))
+>>>> +		clk_disable_unprepare(data->clk_cdev1);
+>>> The root of the problem is that you removed clocks enabling from
+>>> tegra_asoc_utils_init().
+currently, audio mclk and its parent clocks enabling are from clock=20
+driver init and not from tegra_asoc_utils_init.
+>>> I'm not sure why clocks should be disabled during the rate-changing,
+>>> probably this action is not really needed.
+>> I know nothing about this particular device but this is not that
+>> unusual a restriction for audio hardware, you often can't
+>> robustly reconfigure the clocking for a device while it's active
+>> due to issues in the hardware.  You often see issues with FIFOs
+>> glitching or state machines getting stuck.  This may not be an
+>> issue here but if it's something that's documented as a
+>> requirement it's probably good to pay attention.
+> I don't know details about that hardware either, maybe it is simply not
+> safe to change PLL_A rate dynamically and then CLK_SET_RATE_GATE could
+> be used.
+>
+> If nobody knows for sure, then will be better to keep
+> tegra_asoc_utils_set_rate() unchanged.
+plla rate change through tegra_asoc_utils_set_rate() happens only when=20
+there is not active playback or record corresponding to this sound device.
 
-Lockdep warns about a possible circular locking dependency because using
-syscon_node_to_regmap() will make the created regmap get and enable the
-first clock it can parse from the device tree. This clock is not needed to
-access the registers and should not be enabled at that time.
+So, I don't see reason for disabling clock during rate change and not=20
+sure why we had this from the beginning.
 
-Use the recently introduced device_node_to_regmap to solve that as it looks
-up the regmap in the same list but doesn't care about the clocks.
+Thierry/Sameer,
 
-Reported-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lkml.kernel.org/r/20191128102531.817549-1-alexandre.belloni@bootlin.com
-Tested-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/clk/at91/at91sam9260.c | 2 +-
- drivers/clk/at91/at91sam9rl.c  | 2 +-
- drivers/clk/at91/at91sam9x5.c  | 2 +-
- drivers/clk/at91/pmc.c         | 2 +-
- drivers/clk/at91/sama5d2.c     | 2 +-
- drivers/clk/at91/sama5d4.c     | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+Can you please comment?
 
-diff --git a/drivers/clk/at91/at91sam9260.c b/drivers/clk/at91/at91sam9260.c
-index 0aabe49aed09..a9d4234758d7 100644
---- a/drivers/clk/at91/at91sam9260.c
-+++ b/drivers/clk/at91/at91sam9260.c
-@@ -348,7 +348,7 @@ static void __init at91sam926x_pmc_setup(struct device_node *np,
- 		return;
- 	mainxtal_name = of_clk_get_parent_name(np, i);
- 
--	regmap = syscon_node_to_regmap(np);
-+	regmap = device_node_to_regmap(np);
- 	if (IS_ERR(regmap))
- 		return;
- 
-diff --git a/drivers/clk/at91/at91sam9rl.c b/drivers/clk/at91/at91sam9rl.c
-index 0ac34cdaa106..77fe83a73bf4 100644
---- a/drivers/clk/at91/at91sam9rl.c
-+++ b/drivers/clk/at91/at91sam9rl.c
-@@ -83,7 +83,7 @@ static void __init at91sam9rl_pmc_setup(struct device_node *np)
- 		return;
- 	mainxtal_name = of_clk_get_parent_name(np, i);
- 
--	regmap = syscon_node_to_regmap(np);
-+	regmap = device_node_to_regmap(np);
- 	if (IS_ERR(regmap))
- 		return;
- 
-diff --git a/drivers/clk/at91/at91sam9x5.c b/drivers/clk/at91/at91sam9x5.c
-index 0855f3a80cc7..086cf0b4955c 100644
---- a/drivers/clk/at91/at91sam9x5.c
-+++ b/drivers/clk/at91/at91sam9x5.c
-@@ -146,7 +146,7 @@ static void __init at91sam9x5_pmc_setup(struct device_node *np,
- 		return;
- 	mainxtal_name = of_clk_get_parent_name(np, i);
- 
--	regmap = syscon_node_to_regmap(np);
-+	regmap = device_node_to_regmap(np);
- 	if (IS_ERR(regmap))
- 		return;
- 
-diff --git a/drivers/clk/at91/pmc.c b/drivers/clk/at91/pmc.c
-index 0b03cfae3a9d..b71515acdec1 100644
---- a/drivers/clk/at91/pmc.c
-+++ b/drivers/clk/at91/pmc.c
-@@ -275,7 +275,7 @@ static int __init pmc_register_ops(void)
- 
- 	np = of_find_matching_node(NULL, sama5d2_pmc_dt_ids);
- 
--	pmcreg = syscon_node_to_regmap(np);
-+	pmcreg = device_node_to_regmap(np);
- 	if (IS_ERR(pmcreg))
- 		return PTR_ERR(pmcreg);
- 
-diff --git a/drivers/clk/at91/sama5d2.c b/drivers/clk/at91/sama5d2.c
-index 0de1108737db..ff7e3f727082 100644
---- a/drivers/clk/at91/sama5d2.c
-+++ b/drivers/clk/at91/sama5d2.c
-@@ -162,7 +162,7 @@ static void __init sama5d2_pmc_setup(struct device_node *np)
- 		return;
- 	mainxtal_name = of_clk_get_parent_name(np, i);
- 
--	regmap = syscon_node_to_regmap(np);
-+	regmap = device_node_to_regmap(np);
- 	if (IS_ERR(regmap))
- 		return;
- 
-diff --git a/drivers/clk/at91/sama5d4.c b/drivers/clk/at91/sama5d4.c
-index 25b156d4e645..a6dee4a3b6e4 100644
---- a/drivers/clk/at91/sama5d4.c
-+++ b/drivers/clk/at91/sama5d4.c
-@@ -136,7 +136,7 @@ static void __init sama5d4_pmc_setup(struct device_node *np)
- 		return;
- 	mainxtal_name = of_clk_get_parent_name(np, i);
- 
--	regmap = syscon_node_to_regmap(np);
-+	regmap = device_node_to_regmap(np);
- 	if (IS_ERR(regmap))
- 		return;
- 
--- 
-2.20.1
+Yes, we can use CLK_SET_RATE_GATE for PLLA and remove clock disabling=20
+before rate change.
 
