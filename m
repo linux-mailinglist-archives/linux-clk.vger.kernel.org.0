@@ -2,126 +2,98 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 584FD12BDEF
-	for <lists+linux-clk@lfdr.de>; Sat, 28 Dec 2019 16:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB2512C02C
+	for <lists+linux-clk@lfdr.de>; Sun, 29 Dec 2019 03:59:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbfL1Pkq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 28 Dec 2019 10:40:46 -0500
-Received: from mout.web.de ([217.72.192.78]:52443 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726220AbfL1Pkq (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sat, 28 Dec 2019 10:40:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1577547623;
-        bh=YFMosZ3KSjH/9NQAwyfAzyn6J9r6yetoddXRUSTzSrE=;
-        h=X-UI-Sender-Class:Cc:References:Subject:To:From:Date:In-Reply-To;
-        b=d2x1JE0jM4GIDLAUndF8n6y2VLw0yjyqENCBdgehyxiiw5j/A9524BoW2xKCUWuwt
-         Aau3mb8x28MpQ8XFUiR7GgItUQ6DNsEPgyTK8CexaEQvLJXPTDspd2UsEit3rSF4dY
-         jOa3TcSs3MlJZXm7adeVaMyv6mHkGHVKskPfzn4Y=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([78.48.3.151]) by smtp.web.de (mrweb103
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0MgOCo-1j5U4v1VBu-00NeTt; Sat, 28
- Dec 2019 16:40:23 +0100
-Cc:     linux-kernel@vger.kernel.org,
-        =?UTF-8?B?R8O8bnRlciBSw7Zjaw==?= <linux@roeck-us.net>,
-        Jerome Brunet <jbrunet@baylibre.com>
-References: <20191226221354.11957-1-sboyd@kernel.org>
-Subject: Re: [PATCH] clk: Warn about critical clks that fail to enable
-To:     Stephen Boyd <sboyd@kernel.org>,
+        id S1726619AbfL2C71 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 28 Dec 2019 21:59:27 -0500
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:36429 "EHLO
+        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726425AbfL2C71 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 28 Dec 2019 21:59:27 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 87E91537;
+        Sat, 28 Dec 2019 21:59:25 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sat, 28 Dec 2019 21:59:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm1; bh=FlxbmteQj2WfnOCq43+POyjgaR
+        NNd4vGvnrLYbVa018=; b=hP+2x3RwHA3UR0joBco7hsH26HJmyEJjWlsrO+4jbn
+        73sPMUwMW7N27SwXqYlUT7YjbWmyLyghXRwZeTNkaGZOqc1eiEJSxdX5scMblEay
+        lPj0wf09y79VAwkO7Non2mY2yTMnvsCbFgL+OH5nnmKfhVCkFNPOAVAgXOzUbmRG
+        J/bbkGhQUDaw65YxxuSZFOUkiX+J43Jl7wWgQCRppJAQnE36qAPmchd79Ae/9jcQ
+        CpQ0/9+NJ6MhcDN9IzuINTq3pduFZlzYnXhA0SRxWN4/NnMPtmtqxbFLwtnZHzGE
+        C/cx+JrUbCJ+akp4eypRAlZJGkzxpEDC/JGaaY60Uj9Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=FlxbmteQj2WfnOCq4
+        3+POyjgaRNNd4vGvnrLYbVa018=; b=FGozJWtQof7jiY8CiORe8lHSAX4MqcFsB
+        yXh4D1JovsDfDSYUwVSfi+EK2bC1rXPABSe6OWtvaBzkiHZJVi9aepajnn7WhRBL
+        rIOvyp9S2CH2K8ttx4SSQQ1e3Ge93EbimH7CtSw0Gc5xQ3RweaVWfQjRMt1d/V+7
+        LFxbAjz54X1by8HJda6zUL4ci5F6ni/X9UuBTo5Oz4AcZnH0bUOWJVJEQnRqRgYi
+        GN18Z3j7mK8CsKu5YFOiD0wVVqPOytHioefz3ZLuoylt85Zmpxmq3V2TgWCvYiVG
+        oSRh+Byd19Mtccg+lLUBVYThhhpLf1cT/PZiYmQdhPFOCPcd4qrIA==
+X-ME-Sender: <xms:ixYIXljUarw-Gh-lyibCkYHK5EKjk9vYGa2R-0SO4kpC1He6I0QRnQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrvdefuddgheduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucffohhmrg
+    hinhepghhithhhuhgsrdgtohhmnecukfhppeejtddrudefhedrudegkedrudehudenucfr
+    rghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdrohhrghenuc
+    evlhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:ixYIXr7hUahlrmd6LV4tZ66SzIHFT4r--_GGVqgqR06B3VCk_gRuQQ>
+    <xmx:ixYIXpsOliV2fm9ITGyqHjIpd2PJ2Iahm7QK9I4no4RQsowzSaVd1A>
+    <xmx:ixYIXozCUEblDR0G-Ysnq6vah39iSvK5cWQZXwi5So_hQycbFTzNiQ>
+    <xmx:jRYIXleAogyinq1v7lZxBcr2Wrj5dGTYic4K7xrtHW5k58HAtChB9Q>
+Received: from titanium.stl.sholland.net (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 75C793060938;
+        Sat, 28 Dec 2019 21:59:23 -0500 (EST)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org
-From:   Markus Elfring <Markus.Elfring@web.de>
-Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
- 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 FEE=
-Message-ID: <f3c9ba97-2058-a315-d00a-b2fb159cb888@web.de>
-Date:   Sat, 28 Dec 2019 16:40:21 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@googlegroups.com,
+        Samuel Holland <samuel@sholland.org>
+Subject: [PATCH 0/3] A64/H3/H6 R_CCU clock fixes
+Date:   Sat, 28 Dec 2019 20:59:19 -0600
+Message-Id: <20191229025922.46899-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <20191226221354.11957-1-sboyd@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-X-Provags-ID: V03:K1:Cu9EAHDijdHP9sATOEASk+mpN8+JwxaKzV8XQV2jSSr4Zn9FgKk
- flurxrvvSKxFm1dLAxMYi2iUZJ4KNk6QA4S7T/8FvKMTBEQpjgUTPJ89O7BBsGUL56jUx3S
- OgLwiOxbLdGIY/VgOqWIUX91RoFCNuTbPKyK7ERo/yMmC0qf9s3bdHL9tESDrkZ/RBNZctu
- mX+Y73f1Mh3ShoefpESGw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:B+5ZSgloTkA=:cTzd9fXeJ52KFMOcY3Jw8o
- URgpjcGIUNfqAcyIwo56rWyKi5EH5Tg3rGaxNGQZ3SxtjaFVVBveCEyPTxSCNS8420+geeM+r
- X6+TIZvAN0NoZBo9aQ1P6/M4uPQ3dPV8hxToqbXdN7sYm426xYJqzxeEiPgd7GdUKCq2zS1pb
- oYw0d9FRv8sG9cvwQ5YgtHlJmjgs2xSeEZxvyc2GpYwkrVGKOM0ya+e5a9KZhJWHxdSMTfJg2
- gpBJYIKEeo71wKSwJmweGMEeixyp+ToyHZvxRMJXCboKf4aIemD+m8idMAXfZ9t/Yjh0KwQYP
- hiCmBRTjMKiDYuJqrpeSaZA+CZ15ivXwmG4WRd09Y6LgBSaXSdvakNeoT9pLeRnbZyH9gpTsW
- ZD4Irr8fUdQshoR8fJx9I/Hj810LfoelfDbPQZhFVozwKfzoJA0pt/QP0S0JqGX3/A+g9dxVN
- iOcmgHBGCA5EXA3qF5kvjtcE2NBx1vf5oc/hXCxboimqclsbqZCsUECcpyGFm29qknKDHS82o
- 2gnv89xTHJ5RVFD9yFWlviU7WSc7xh3PfXZRRepBxlSB9HT78HUVvDPoZJKOa/ycO2lWn93Y3
- 0UPeZzee0/iZ9ZllIeWIOl7cqF3VzPAbQWOL9u41JwZRYOwpM+xrEpwZn8LDkvwBZvY3J8ujZ
- qYsTWps8Sswr2Kl3+N3cYTAhZ7ZQXu/CrsWQsC0zSouHicv8z7H8NXhhE8KVusySYo8h3DRAw
- gjz/GjBSGgy7NNJXs1Br/12bcBiExrlrw9cIdl3H5/JKf0PkB5/biOvCoAXAsJpQzJ31ZdccB
- yjS9cq/ZFpRIshLIOZk6wD5qsNtoq4kauhWT9XR7wwYYvGfpnsL3QYVqdfzP4nZPb2MEedmfM
- JgR3Y+cq3SjqyuthahJP8PhX1rq8W2zOvA8qJiji0LHWNYqm+7rG0iOXSNOkzBii5pfp798Oj
- 9RjeNaaNkj2e7N7Grc0Oy1A/Q51BGRMz1wYp3Pf/y4dPcZTYWR3wkxTfSTP8t/F8JdEm5jB+U
- 1FGrGHrcH63UoY13S32QuKhQ8eTPRenW7bY3eoAFa2hC7UR3v2y+XQjhwW6u5/cxBvMt5eCr1
- gUbwiLlDn/0eYcYqwuHDTDcroIK5N8D2b6JvRkdO//bagbiuB5Tn0OFzX9bMLOnjh0o3O+Ja2
- Eh8W/yW/7LTNhvYAk2rvhMh7nFn0t9QxIjrvrRy837F6OX5jCcfkt6M+0Hu2GlvgfwiXIBdP4
- AFHa+fFr8n/xYbbAl7YONMNf/2hi1pHoHWWRPdPUfR6ujbBLFy6OQKjE1SFY=
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-> If we don't warn here users of the CLK_IS_CRITICAL flag may not know
-> that their clk isn't actually enabled because it silently fails to
-> enable. Let's drop a big WARN_ON in that case so developers find these
-> problems faster.
+Hi all,
 
-Would you like to avoid an extra warning for failures with non-critical clocks?
+I was examining the H6 BSP clock driver[1] for guidance when porting an
+AR100 firmware[2] to the H6 SoC. I found some inconsistencies between
+that code and the sunxi-ng driver.
 
+I don't have a good way to verify the first patch. Someone with an
+oscilloscope could set the divider and check the I2C/RSB frequency.
 
-> I suspect that this may start warning for other users.
+Patch 2 should have no functional change.
 
-Will this software development concern trigger any further collateral evolution?
+Patch 3 was verified by benchmarking. Details are in the commit message.
 
-Regards,
-Markus
+[1]: https://github.com/Allwinner-Homlet/H6-BSP4.9-linux
+[2]: https://github.com/crust-firmware/crust
+
+Samuel Holland (3):
+  clk: sunxi-ng: sun8i-r: Fix divider on APB0 clock
+  clk: sunxi-ng: h6-r: Simplify R_APB1 clock definition
+  clk: sunxi-ng: h6-r: Fix AR100/R_APB2 parent order
+
+ drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c | 16 +++-------------
+ drivers/clk/sunxi-ng/ccu-sun8i-r.c     | 21 +++------------------
+ 2 files changed, 6 insertions(+), 31 deletions(-)
+
+-- 
+2.23.0
+
