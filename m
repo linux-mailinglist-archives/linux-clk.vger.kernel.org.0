@@ -2,91 +2,55 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 586A512D2FA
-	for <lists+linux-clk@lfdr.de>; Mon, 30 Dec 2019 18:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A764812D30D
+	for <lists+linux-clk@lfdr.de>; Mon, 30 Dec 2019 19:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727326AbfL3RzS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 30 Dec 2019 12:55:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57858 "EHLO mail.kernel.org"
+        id S1727207AbfL3SCq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 30 Dec 2019 13:02:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60216 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726602AbfL3RzS (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 30 Dec 2019 12:55:18 -0500
+        id S1726602AbfL3SCq (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 30 Dec 2019 13:02:46 -0500
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D2CC620718;
-        Mon, 30 Dec 2019 17:55:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E76A820718;
+        Mon, 30 Dec 2019 18:02:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577728517;
-        bh=M0/ttevZTgcpcd8Idxm8eB8MLA1mcc9lSUmyIBKekxU=;
+        s=default; t=1577728966;
+        bh=gRKYcl0jCq7nW7Gxn+7gNtKzmmdScmcjqsaffdi6YAc=;
         h=In-Reply-To:References:From:Cc:To:Subject:Date:From;
-        b=PaPnzyQ4K1+//4jh3fQIEplyIXxWomxNeON0szeoPODwiO0npd4DwEsATRV9V493m
-         IWeBVU/XnBiY5/Ng7ZdmFgKvFcb0hiKgftL20nXixmj9KxVtIZrfkccv/PtEV2F0Zo
-         Vl5MKT2iJx8zVwmjKyFBIDnGEspt0Dz8HcTekciU=
+        b=vSiG+ePNA5iMVvnrQ9qXREgzn1ME5/fjIl9LGPYvAP3NwvAh+s5VPG60KXKssWe0m
+         fNa+nIK1v43x+g+N1Luwxwz5KvAnx1yvVgvJxQEGJ7UjMCf62sTxJo9kFMtcCuRyL/
+         58qjHbTJsxzWjKYqvhI+MznhgVYhhnF4VZqAeMrs=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20191226221354.11957-1-sboyd@kernel.org>
-References: <20191226221354.11957-1-sboyd@kernel.org>
+In-Reply-To: <1577421760-1174-1-git-send-email-tdas@codeaurora.org>
+References: <1577421760-1174-1-git-send-email-tdas@codeaurora.org>
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Guenter Roeck <linux@roeck-us.net>
+Cc:     David Brown <david.brown@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        robh@kernel.org, robh+dt@kernel.org,
+        Taniya Das <tdas@codeaurora.org>
 To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH] clk: Warn about critical clks that fail to enable
+        Taniya Das <tdas@codeaurora.org>
+Subject: Re: [PATCH v2 0/3] Add modem Clock controller (MSS CC) driver for SC7180
 User-Agent: alot/0.8.1
-Date:   Mon, 30 Dec 2019 09:55:17 -0800
-Message-Id: <20191230175517.D2CC620718@mail.kernel.org>
+Date:   Mon, 30 Dec 2019 10:02:45 -0800
+Message-Id: <20191230180245.E76A820718@mail.kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Stephen Boyd (2019-12-26 14:13:54)
-> If we don't warn here users of the CLK_IS_CRITICAL flag may not know
-> that their clk isn't actually enabled because it silently fails to
-> enable. Let's drop a big WARN_ON in that case so developers find these
-> problems faster.
->=20
-> Suggested-by: Jerome Brunet <jbrunet@baylibre.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-> ---
->=20
-> I suspect that this may start warning for other users. Let's see
-> and revert in case it doesn't work.
->=20
->  drivers/clk/clk.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-> index 772258de2d1f..6a9a66dfdeaa 100644
-> --- a/drivers/clk/clk.c
-> +++ b/drivers/clk/clk.c
-> @@ -3427,13 +3427,13 @@ static int __clk_core_init(struct clk_core *core)
->                 unsigned long flags;
-> =20
->                 ret =3D clk_core_prepare(core);
-> -               if (ret)
-> +               if (WARN_ON(ret))
+Quoting Taniya Das (2019-12-26 20:42:37)
+> [v2]
+>   * Update the license for the documentation and fix minor comments in the
+>     YAML bindings.
 
-We should probably just print the clk name that failed to be critically
-enabled with a pr_warn(). The traceback pointing to this location will
-be really hard to understand otherwise.
+I see Sibi has comments. Please resend with those comments addressed.
 
->                         goto out;
-> =20
->                 flags =3D clk_enable_lock();
->                 ret =3D clk_core_enable(core);
->                 clk_enable_unlock(flags);
-> -               if (ret) {
-> +               if (WARN_ON(ret)) {
->                         clk_core_unprepare(core);
->                         goto out;
->                 }
->=20
-> base-commit: 12ead77432f2ce32dea797742316d15c5800cb32
-> --=20
-> Sent by a computer, using git, on the internet
->=20
