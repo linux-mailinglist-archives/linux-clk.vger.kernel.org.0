@@ -2,100 +2,87 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E30712FD96
-	for <lists+linux-clk@lfdr.de>; Fri,  3 Jan 2020 21:19:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E5A12FEC6
+	for <lists+linux-clk@lfdr.de>; Fri,  3 Jan 2020 23:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728648AbgACUTr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 3 Jan 2020 15:19:47 -0500
-Received: from mail-qv1-f68.google.com ([209.85.219.68]:39558 "EHLO
-        mail-qv1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728636AbgACUTq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 3 Jan 2020 15:19:46 -0500
-Received: by mail-qv1-f68.google.com with SMTP id y8so16693092qvk.6
-        for <linux-clk@vger.kernel.org>; Fri, 03 Jan 2020 12:19:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
-        b=AWCc/ylFmQ91zZEJrbKovcmODhKduqUVkKGxHK8uCtVvWppAnjCzAVhlqtuTB6Zv3H
-         fwGfadWPG5OWx3vtouAanI9rAb4+nCSTS9ougZHH94RmFVRXusGOhSeq6LcZbXUbpYke
-         LecHuReAxOHZIAlNr0puF8IN10taJseJbu/8dZmgE65qy44VHc90CsjCbMPz9YIW56uc
-         KAocddCq9fbTe+4eLEe4ukQAx3KuF/S8Bs/5ss0PU18bAsmodPObJCziaNGvW+fW97nj
-         vqPpR6NvW2UHqccwDYrcuioTdRRCTX8F5vGOe97A6Uj5iUQG4sbm5c76feOsNIPb/J8O
-         nOKQ==
+        id S1728848AbgACW3a (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 3 Jan 2020 17:29:30 -0500
+Received: from mail-il1-f193.google.com ([209.85.166.193]:44719 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728687AbgACW3a (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 3 Jan 2020 17:29:30 -0500
+Received: by mail-il1-f193.google.com with SMTP id z12so1387662iln.11
+        for <linux-clk@vger.kernel.org>; Fri, 03 Jan 2020 14:29:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
-        b=QPBU1jPRbg5Z3uvJwaqYEWQCeRFqSNzFlWTP4vwnjZHEq9n4OzFvvIiKHpSmqTbF8a
-         rQe6oe6lk026dg0ip8E9u8nTuhVWlrGsUzkRaStb3Sb52WtRwP1VnjK7MmJixy4r8J5M
-         d6tr8agyzqPfJf1du5rIFYtIC1ghILqsCiUQ0bqLreX3xnprRLNfcbHkzRFowrtpkjXK
-         n0WNVhyiK9z6y4vjO+f5LdRDyvktlHmv1WvPrDWO6fj1lN/4eMDDGiJNm85UY97XmETH
-         acjTgqiYewbFvC6ZtqFsmeQ7JMdoMpWthqCR21g8AwwHLdo/Q0x8M9+hanPMViqC5VH6
-         SZSg==
-X-Gm-Message-State: APjAAAUmFO6fMpEvYN8i9Yp38Q5cTsDkzNyS7XKidXT1XpAxNmetFbh+
-        0pNLzlLwAuCfxYU8z96YTGashwm1e6op9hXxNqs=
-X-Google-Smtp-Source: APXvYqwTD0MzQRfSqMjBdpNUeZAJzfDvhrEGhXGCrMyvXGb//+N8M9ASxsqTbkQfP5NbaV7n6hKI5gEfY+hOjDS6Fyg=
-X-Received: by 2002:ad4:478b:: with SMTP id z11mr69635758qvy.185.1578082785331;
- Fri, 03 Jan 2020 12:19:45 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TFDz39ekdeb/43sN0oag/MOWFARZHq5KPLmY9cO79x8=;
+        b=PvBFgn1FxABlS1H3LMnGNNVlrsY3Wksdk35VUK336qv9CauFH+PmKSB1wRwmcrtx+X
+         90i7IJXg6fyX8bwFpRpEIqaXPlklOG2rc3gWxwUxaQDdl7XAXV6p6LvkcWx315jRIWHd
+         nYyjA/5FgR5BB6UZPDdrAGRR5ph0sc1n00rPPRtrarZ0B1VyTUeKKMOclDrd7xwM3Ami
+         YuW9B1ZiB6oLgAwMjne9msO42RSVod9ADzBoBe3MGNqhrNPEfNARtgiVhIdU8G6NZbc7
+         B8k7Y7ye56Emr4WssG4upegWjnzotLiqtjEaZIqrp/OQNuPVcEGRY5ruu11VUmCzYzmt
+         zRzA==
+X-Gm-Message-State: APjAAAX3FuVhXvpOg18JY237cSZagdu5TsQBMFHLRQCUkiU6AkKxDg2q
+        hyruQWWcclpZ/A/4UONhKIVg/Lo=
+X-Google-Smtp-Source: APXvYqxE01YWP5s+w/HEUY+h0Xs8MTXDiLkp1gGbxAyTzCM/T4EMys15F0KDqfClirafE6WluEektg==
+X-Received: by 2002:a92:d7c6:: with SMTP id g6mr74349082ilq.282.1578090568923;
+        Fri, 03 Jan 2020 14:29:28 -0800 (PST)
+Received: from rob-hp-laptop ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id p65sm21353295ili.71.2020.01.03.14.29.26
+        for <linux-clk@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jan 2020 14:29:28 -0800 (PST)
+Received: from rob (uid 1000)
+        (envelope-from rob@rob-hp-laptop)
+        id 2219b7
+        by rob-hp-laptop (DragonFly Mail Agent v0.11);
+        Fri, 03 Jan 2020 15:29:25 -0700
+Date:   Fri, 3 Jan 2020 15:29:25 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Jian Hu <jian.hu@amlogic.com>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Chandle Zou <chandle.zou@amlogic.com>,
+        linux-clk@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 1/5] dt-bindings: clock: meson: add A1 PLL clock
+ controller bindings
+Message-ID: <20200103222925.GA654@bogus>
+References: <20191227094606.143637-1-jian.hu@amlogic.com>
+ <20191227094606.143637-2-jian.hu@amlogic.com>
 MIME-Version: 1.0
-Received: by 2002:ac8:4410:0:0:0:0:0 with HTTP; Fri, 3 Jan 2020 12:19:45 -0800 (PST)
-From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
-        <westernunion.benin982@gmail.com>
-Date:   Fri, 3 Jan 2020 21:19:45 +0100
-Message-ID: <CAP=nHBKxfmbdRg7q4-1jdSUL6+zok9agasMSrXV5CsEJEmZz3A@mail.gmail.com>
-Subject: I promise you must be happy today, God has uplifted you and your
- family ok
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191227094606.143637-2-jian.hu@amlogic.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Dear Friend
+On Fri, 27 Dec 2019 17:46:02 +0800, Jian Hu wrote:
+> Add the documentation to support Amlogic A1 PLL clock driver,
+> and add A1 PLL clock controller bindings.
+> 
+> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
+> ---
+>  .../bindings/clock/amlogic,a1-pll-clkc.yaml   | 54 +++++++++++++++++++
+>  include/dt-bindings/clock/a1-pll-clkc.h       | 16 ++++++
+>  2 files changed, 70 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+>  create mode 100644 include/dt-bindings/clock/a1-pll-clkc.h
+> 
 
-i hope all is well with you,if so, glory be to God almighty. I'm very
-happy to inform you, about my success in getting payment funds under
-the cooperation of a new partner from United States of
-America.Presently I am in uk for investment projects with my own share
-of the total sum. I didn't forget your past efforts. IMF finally
-approved your compensation payment funds this morning by prepaid (ATM)
-Debit card of US$12,500.000.00Million Dollars, Since you not received
-this payment yet, I was not certified
-but it is not your fault and not my fault, I hold nothing against
-you.than bank official whom has been detaining the transfer in the
-bank, trying to claim your funds by themselves.
-
-Therefore, in appreciation of your effort I have raised an
-International prepaid (ATM) Debit card of US$12,500.000.00 in your
-favor as compensation to you.
-
-Now, i want you to contact my Diplomatic Agent, His name is Mike Benz
-on His  e-mail Address (mikebenz550@aol.com
-
-ask Him to send the Prepaid (ATM) Debit card to you. Bear in mind that
-the money is in Prepaid (ATM) Debit card, not cash, so you need to
-send to him,
-your full name
-address  where the prepaid (ATM) Debit card will be delivered to you,
-including your cell phone number. Finally, I left explicit
-instructions with him, on how to send the (ATM CARD) to you.
-
-The Prepaid (ATM) Debit card, will be send to you through my
-Diplomatic Agent Mr. Mike Benz immediately you contact him. So contact
-my Diplomatic Agent Mr. Mike Benz immediately you receive this letter.
-Below is his contact information:
-
-NAME : MIKE BENZ
-EMAIL ADDRESS: mikebenz550@aol.com
-Text Him, (256) 284-4886
-
-Request for Delivery of the Prepaid (ATM) Debit card  to you today.
-Note, please I have paid for the whole service fees for you, so the
-only money you will send to my Diplomatic Agent Mr. Mike Benz is
-$50.00 for your prepaid (ATM) Debit card DELIVERY FEE to your address
-ok.
-Let me know once you receive this Card at your address.
-Best regards,
-Rev.Dr, George Adadar
+Reviewed-by: Rob Herring <robh@kernel.org>
