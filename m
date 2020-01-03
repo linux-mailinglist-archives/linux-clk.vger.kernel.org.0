@@ -2,127 +2,100 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFA212FCE4
-	for <lists+linux-clk@lfdr.de>; Fri,  3 Jan 2020 20:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E30712FD96
+	for <lists+linux-clk@lfdr.de>; Fri,  3 Jan 2020 21:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728452AbgACTQD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 3 Jan 2020 14:16:03 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:35309 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728380AbgACTQD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 3 Jan 2020 14:16:03 -0500
-Received: by mail-pf1-f194.google.com with SMTP id i23so18503609pfo.2
-        for <linux-clk@vger.kernel.org>; Fri, 03 Jan 2020 11:16:02 -0800 (PST)
+        id S1728648AbgACUTr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 3 Jan 2020 15:19:47 -0500
+Received: from mail-qv1-f68.google.com ([209.85.219.68]:39558 "EHLO
+        mail-qv1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728636AbgACUTq (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 3 Jan 2020 15:19:46 -0500
+Received: by mail-qv1-f68.google.com with SMTP id y8so16693092qvk.6
+        for <linux-clk@vger.kernel.org>; Fri, 03 Jan 2020 12:19:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=vZomX7k0gRVpj14/WdJAyZSo4OdRTfm/ogrPyU/9NuM=;
-        b=VmUoJ7cuQOj8yvosIWRMEu6d5NSTnv4p0HCrFcIu9fQ4l81Ey6q939zzYUJeJaZ64a
-         ZH8V3w/Bxs4NPF/ciAa/Idlx5QoLWz7IlUOexJ2fdFdHBiONrwSU/VYL5byEW+44CLfQ
-         SMfc1uIBdlW6N7rHmwH63GYVPdqwbGIdXyBTt5ll2vlVFjZw6dO7LIYME8drzz9PvEUf
-         Cr4DqbBrGxUqrRXNQYMHmTDa8yTAWLx+XW05Xb12ejiGIgLOCQ1KDNTsEubkkZQ4vg0n
-         HDrz4DuaHQxjGrYKBtm18XZDIWGtMELTBthS32VS8DHo3BsMjSYp/gr1AWuQYKhJ/JGx
-         7hcQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
+        b=AWCc/ylFmQ91zZEJrbKovcmODhKduqUVkKGxHK8uCtVvWppAnjCzAVhlqtuTB6Zv3H
+         fwGfadWPG5OWx3vtouAanI9rAb4+nCSTS9ougZHH94RmFVRXusGOhSeq6LcZbXUbpYke
+         LecHuReAxOHZIAlNr0puF8IN10taJseJbu/8dZmgE65qy44VHc90CsjCbMPz9YIW56uc
+         KAocddCq9fbTe+4eLEe4ukQAx3KuF/S8Bs/5ss0PU18bAsmodPObJCziaNGvW+fW97nj
+         vqPpR6NvW2UHqccwDYrcuioTdRRCTX8F5vGOe97A6Uj5iUQG4sbm5c76feOsNIPb/J8O
+         nOKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vZomX7k0gRVpj14/WdJAyZSo4OdRTfm/ogrPyU/9NuM=;
-        b=hBNi+87qGyI+/LRgRaMHpk88/0DjfifdgvO3jIWkysb+XRa/0cK8TsF9RyX9PVX6oV
-         wojEvRaTSH3d4rL76VrscgU/W/daFYBsAygIajwHCZgEs3SKSxLlVoJGFLv5GCArE1pT
-         Wz6TKx9JvUMy6yn7lg5CIJ+QUzZ9pPyRcoIgvm5MfPjkssSqbhGIyWjIpawIZa+ElhQM
-         wtI7p4wQc1NVxAXHX2vuWRsP6fHjhcFx8W7HvRoo8kR8UdD1RWjeDYvD3hCa0pi6oSwd
-         OQ2Ty5ArrquqnZVYpYbM432MgvBj8gn9ZnzWCbhjzQHPhVgJDRfn1mPxvbk8lyX5n4DJ
-         rgkg==
-X-Gm-Message-State: APjAAAW8cPTW20uxLyXoa5hXy4v9oCEqc/C25nPtO8pjgroz319GAQdD
-        s7Pelu9xeZHTCCYtxcyG7fx4UMsTs/k=
-X-Google-Smtp-Source: APXvYqwbWrzgOHLfBKPcJOel52aFz7gJfvMHupIec6iWxtw+mfGglLXvkI30VeaYCSjb/tycYQe4Sg==
-X-Received: by 2002:a63:6c82:: with SMTP id h124mr97258222pgc.328.1578078962175;
-        Fri, 03 Jan 2020 11:16:02 -0800 (PST)
-Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id 13sm67210755pfi.78.2020.01.03.11.16.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jan 2020 11:16:01 -0800 (PST)
-Date:   Fri, 3 Jan 2020 11:15:59 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Niklas Cassel <nks@flawful.org>
-Cc:     sboyd@kernel.org, mturquette@baylibre.com,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v4] clk: qcom: apcs-msm8916: use clk_parent_data to
- specify the parent
-Message-ID: <20200103191559.GV549437@yoga>
-References: <20200103111429.1347-1-nks@flawful.org>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
+        b=QPBU1jPRbg5Z3uvJwaqYEWQCeRFqSNzFlWTP4vwnjZHEq9n4OzFvvIiKHpSmqTbF8a
+         rQe6oe6lk026dg0ip8E9u8nTuhVWlrGsUzkRaStb3Sb52WtRwP1VnjK7MmJixy4r8J5M
+         d6tr8agyzqPfJf1du5rIFYtIC1ghILqsCiUQ0bqLreX3xnprRLNfcbHkzRFowrtpkjXK
+         n0WNVhyiK9z6y4vjO+f5LdRDyvktlHmv1WvPrDWO6fj1lN/4eMDDGiJNm85UY97XmETH
+         acjTgqiYewbFvC6ZtqFsmeQ7JMdoMpWthqCR21g8AwwHLdo/Q0x8M9+hanPMViqC5VH6
+         SZSg==
+X-Gm-Message-State: APjAAAUmFO6fMpEvYN8i9Yp38Q5cTsDkzNyS7XKidXT1XpAxNmetFbh+
+        0pNLzlLwAuCfxYU8z96YTGashwm1e6op9hXxNqs=
+X-Google-Smtp-Source: APXvYqwTD0MzQRfSqMjBdpNUeZAJzfDvhrEGhXGCrMyvXGb//+N8M9ASxsqTbkQfP5NbaV7n6hKI5gEfY+hOjDS6Fyg=
+X-Received: by 2002:ad4:478b:: with SMTP id z11mr69635758qvy.185.1578082785331;
+ Fri, 03 Jan 2020 12:19:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200103111429.1347-1-nks@flawful.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Received: by 2002:ac8:4410:0:0:0:0:0 with HTTP; Fri, 3 Jan 2020 12:19:45 -0800 (PST)
+From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
+        <westernunion.benin982@gmail.com>
+Date:   Fri, 3 Jan 2020 21:19:45 +0100
+Message-ID: <CAP=nHBKxfmbdRg7q4-1jdSUL6+zok9agasMSrXV5CsEJEmZz3A@mail.gmail.com>
+Subject: I promise you must be happy today, God has uplifted you and your
+ family ok
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri 03 Jan 03:14 PST 2020, Niklas Cassel wrote:
+Dear Friend
 
-> From: Niklas Cassel <niklas.cassel@linaro.org>
-> 
-> Allow accessing the parent clock names required for the driver operation
-> by using the device tree 'clock-names' property, while falling back to
-> the previous method of using names in the global name space.
-> 
-> This permits extending the driver to other platforms without having to
-> modify its source code.
-> 
-> Co-developed-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-> Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
-> Signed-off-by: Niklas Cassel <niklas.cassel@linaro.org>
+i hope all is well with you,if so, glory be to God almighty. I'm very
+happy to inform you, about my success in getting payment funds under
+the cooperation of a new partner from United States of
+America.Presently I am in uk for investment projects with my own share
+of the total sum. I didn't forget your past efforts. IMF finally
+approved your compensation payment funds this morning by prepaid (ATM)
+Debit card of US$12,500.000.00Million Dollars, Since you not received
+this payment yet, I was not certified
+but it is not your fault and not my fault, I hold nothing against
+you.than bank official whom has been detaining the transfer in the
+bank, trying to claim your funds by themselves.
 
-Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Therefore, in appreciation of your effort I have raised an
+International prepaid (ATM) Debit card of US$12,500.000.00 in your
+favor as compensation to you.
 
-Regards,
-Bjorn
+Now, i want you to contact my Diplomatic Agent, His name is Mike Benz
+on His  e-mail Address (mikebenz550@aol.com
 
-> ---
-> Changes since v3:
-> -Don't set dev->of_node explicitly, since the clock framework will now
-> automatically use the parent node pointer when needed.
-> 
-> Requires the following patch to the clock framework to land first:
-> https://patchwork.kernel.org/patch/11313639/
-> 
->  drivers/clk/qcom/apcs-msm8916.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/apcs-msm8916.c b/drivers/clk/qcom/apcs-msm8916.c
-> index 46061b3d230e..cf69a97d0439 100644
-> --- a/drivers/clk/qcom/apcs-msm8916.c
-> +++ b/drivers/clk/qcom/apcs-msm8916.c
-> @@ -19,9 +19,9 @@
->  
->  static const u32 gpll0_a53cc_map[] = { 4, 5 };
->  
-> -static const char * const gpll0_a53cc[] = {
-> -	"gpll0_vote",
-> -	"a53pll",
-> +static const struct clk_parent_data pdata[] = {
-> +	{ .fw_name = "aux", .name = "gpll0_vote", },
-> +	{ .fw_name = "pll", .name = "a53pll", },
->  };
->  
->  /*
-> @@ -62,8 +62,8 @@ static int qcom_apcs_msm8916_clk_probe(struct platform_device *pdev)
->  		return -ENOMEM;
->  
->  	init.name = "a53mux";
-> -	init.parent_names = gpll0_a53cc;
-> -	init.num_parents = ARRAY_SIZE(gpll0_a53cc);
-> +	init.parent_data = pdata;
-> +	init.num_parents = ARRAY_SIZE(pdata);
->  	init.ops = &clk_regmap_mux_div_ops;
->  	init.flags = CLK_SET_RATE_PARENT;
->  
-> -- 
-> 2.24.1
-> 
+ask Him to send the Prepaid (ATM) Debit card to you. Bear in mind that
+the money is in Prepaid (ATM) Debit card, not cash, so you need to
+send to him,
+your full name
+address  where the prepaid (ATM) Debit card will be delivered to you,
+including your cell phone number. Finally, I left explicit
+instructions with him, on how to send the (ATM CARD) to you.
+
+The Prepaid (ATM) Debit card, will be send to you through my
+Diplomatic Agent Mr. Mike Benz immediately you contact him. So contact
+my Diplomatic Agent Mr. Mike Benz immediately you receive this letter.
+Below is his contact information:
+
+NAME : MIKE BENZ
+EMAIL ADDRESS: mikebenz550@aol.com
+Text Him, (256) 284-4886
+
+Request for Delivery of the Prepaid (ATM) Debit card  to you today.
+Note, please I have paid for the whole service fees for you, so the
+only money you will send to my Diplomatic Agent Mr. Mike Benz is
+$50.00 for your prepaid (ATM) Debit card DELIVERY FEE to your address
+ok.
+Let me know once you receive this Card at your address.
+Best regards,
+Rev.Dr, George Adadar
