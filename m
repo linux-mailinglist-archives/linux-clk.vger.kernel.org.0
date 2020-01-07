@@ -2,106 +2,78 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2FC132D96
-	for <lists+linux-clk@lfdr.de>; Tue,  7 Jan 2020 18:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C71BC133026
+	for <lists+linux-clk@lfdr.de>; Tue,  7 Jan 2020 20:56:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728531AbgAGRwX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 7 Jan 2020 12:52:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49670 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728358AbgAGRwX (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 7 Jan 2020 12:52:23 -0500
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6B5052073D;
-        Tue,  7 Jan 2020 17:52:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578419542;
-        bh=N8kKuZH+IiH6SzhPc6h2mqRI8IEhFlVh6ta+BjiG0PA=;
-        h=In-Reply-To:References:Cc:To:Subject:From:Date:From;
-        b=ybRlfiE8lpreqNDlmuq0T6s79Vk91yUUXBueGQJwCTKHg0CwwBoLldVavaNiR5c2i
-         bGGVFO9iCfDMwDucVKX23f2QJV9gtQw9fLOBSf4W7e0SGBSuEd16lAp5F8k9Uc2sV6
-         HRVEpzGgo5tFSXUv2uwUFX9Lr/mCTssneGSpO0g8=
-Content-Type: text/plain; charset="utf-8"
+        id S1728669AbgAGT4s (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 7 Jan 2020 14:56:48 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:42199 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728624AbgAGT4h (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 7 Jan 2020 14:56:37 -0500
+Received: by mail-ed1-f68.google.com with SMTP id e10so603543edv.9
+        for <linux-clk@vger.kernel.org>; Tue, 07 Jan 2020 11:56:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=lUsTd9lJYwK928kai9reachpHe0HC9Hv8/gDLGwtaBI=;
+        b=m/Udengj3famfT4AeeQ1IRW+yMW7VasUnASahB37i/PoeHrkRBk2CGyFKYNukmjW7S
+         L8SRka5Jakx3oOkJPsG2IofN9vOqI+MJeZI3Q0YE0hhIfxJgla/Mvi4GlBIJ0+PXKJyR
+         fGhtIsUmeS9lphgKJPwASTV0Wis5x+akjvA6FztTMBR/K8fgi7sOjdtLa1OeTeeGw/oC
+         WuhGv+1qsxod0shrSr56iRhzuujf6ypC8mQV8JosjFfNeYtuq3xDGNFupimiXFOQL0SO
+         8SxYRsEAywqZcf7WmcQRmN/Qkf20W+/a6rRSJl252WjsQoa/SZxLvQ4mGRJVkfZ3ex9s
+         ABpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=lUsTd9lJYwK928kai9reachpHe0HC9Hv8/gDLGwtaBI=;
+        b=nMBeU1DUdZGBt60rb+TF6ql/34qvCIvT8HF2FQJ+q6FSawx7L/lz9W9giCc696lHXF
+         2L2taMJOUfeALEeb+Ewmo7OHTwkEHJE+qxevqhPjkZGtmLeUjXRb93ToE03ixtmHkO3E
+         W9Cw3BfVLSGG/mR06Ulhc/zK2QfG1dZMwBtDUvAOfaQld9EFyklWzwslmHLjWBrq0CKk
+         UIEVt+XEhcIK3596KuM8hsBXZaiNE59lCbyOgDvfxA5pyM6cgGq2z7ouUtamNXZlFSeY
+         L4PBx0PlVv/p7lnWnqtdWFrm84g1tqgqXCUVoiZwoJ6RT48XsvS1+6HJXz+uhIISDxD7
+         TtOw==
+X-Gm-Message-State: APjAAAWCFVW0R6HOBQnjt5ux+7ONe4Py3VFGg8aF6VfbFsDFm1r0sFfg
+        iceHF1cScTvzTlF0wMB59ts8uxrcoSkAQ3KPRuw=
+X-Google-Smtp-Source: APXvYqzNbcT08PcgNHBR6CjdjGMonF1aREtl3FixKkalZzLFfyP3YZsjOtPyVn2SjFoUiZ8TzNVIEuitC7fnDU0d3Kk=
+X-Received: by 2002:a17:907:20ef:: with SMTP id rh15mr1111482ejb.325.1578426995176;
+ Tue, 07 Jan 2020 11:56:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200107120317.GB8083@onstation.org>
-References: <20191205002503.13088-1-masneyb@onstation.org> <20191205002503.13088-5-masneyb@onstation.org> <20200105083534.01EB12071A@mail.kernel.org> <20200107120317.GB8083@onstation.org>
-Cc:     dmitry.torokhov@gmail.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, mturquette@baylibre.com,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-To:     Brian Masney <masneyb@onstation.org>
-Subject: Re: [PATCH 4/7] dt-bindings: Input: introduce new clock vibrator bindings
-From:   Stephen Boyd <sboyd@kernel.org>
-User-Agent: alot/0.8.1
-Date:   Tue, 07 Jan 2020 09:52:21 -0800
-Message-Id: <20200107175222.6B5052073D@mail.kernel.org>
+Received: by 2002:a17:906:72c6:0:0:0:0 with HTTP; Tue, 7 Jan 2020 11:56:34
+ -0800 (PST)
+Reply-To: dhlexpresscouriercompany.nyusa@gmail.com
+From:   "Dr. William Johnson" <currency1000000@gmail.com>
+Date:   Tue, 7 Jan 2020 20:56:34 +0100
+Message-ID: <CAPqfnSEyU1pBR_7HT2g1KK7i8caLMBQ8yPA8KRDVm+MN-K_Z4w@mail.gmail.com>
+Subject: contact Dhl office New York to receive your Prepaid ATM Master Card
+ worth $15.8Million US DOLLARS now.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Brian Masney (2020-01-07 04:03:17)
-> On Sun, Jan 05, 2020 at 12:35:33AM -0800, Stephen Boyd wrote:
-> > Quoting Brian Masney (2019-12-04 16:25:00)
-> > > +examples:
-> > > +  - |
-> > > +    #include <dt-bindings/clock/qcom,mmcc-msm8974.h>
-> > > +    #include <dt-bindings/gpio/gpio.h>
-> > > +
-> > > +    vibrator {
-> > > +        compatible =3D "clk-vibrator";
-> > > +
-> > > +        vcc-supply =3D <&pm8941_l19>;
-> > > +
-> > > +        clocks =3D <&mmcc CAMSS_GP1_CLK>;
-> > > +        clock-names =3D "core";
-> > > +        clock-frequency =3D <24000>;
-> > > +
-> > > +        enable-gpios =3D <&msmgpio 60 GPIO_ACTIVE_HIGH>;
-> > > +
-> > > +        pinctrl-names =3D "default";
-> > > +        pinctrl-0 =3D <&vibrator_pin>;
-> >=20
-> > I'm still trying to wrap my head around this. I think we can have a pwm
-> > provider in a clk controller node (so imagine &mmcc has #pwm-cells) and
-> > then this 'clk-vibrator' binding wouldn't exist? Instead we would have
-> > some sort of binding for a device that expects a pwm and whatever else
-> > is required, like the enable gpio and power supply. Is there an actual
-> > hardware block that is this way? Does it have a real product id and is
-> > made by some company? Right now this looks a little too generic to not
-> > just be a catch-all for something that buzzes.
->=20
-> So have some of the Qualcomm clocks like this one register with both the
-> clk and the pwm frameworks? I feel that approach would better represent
-> the hardware in device tree.
-
-That is one option. Or another option would be to have another node that
-"adapts" a clk signal to a pwm provider. Similar to how we adapt a gpio
-to make a clk gate or mux. Something like:
-
-	gcc: clock-controller@f00d {
-		reg =3D <0xf00d 0xd00d>;
-		#clock-cells =3D <1>;
-	};
-
-
-	pwm {
-		compatible =3D "pwm-clk";
-		#pwm-cells =3D <0>;
-		clocks =3D <&gcc 45>;
-		assigned-clocks =3D <&gcc 45>;
-		assigned-clock-rates =3D <1400000>;
-	};
-
-And then the pwm-clk driver would adjust the duty cycle to generate a
-pwm.
-
->=20
-> If we did that, then the pwm-vibra driver in the input subsystem could
-> be used.
-
+ATTN Dear Beneficiary.
+Goodnews
+I have Registered your Prepaid ATM Master Card
+worth $15.800,000.00 US DOLLARS with Courier company
+asigned to deliver it to you today.
+So contact Dhl office New York to receive your Prepaid ATM Master Card
+worth $15.8Million US DOLLARS now.
+Contact Person: Mrs. Mary Michael, Director, DHL Courier Company-NY USA. 10218
+Email. dhlexpresscouriercompany.nyusa@gmail.com
+Call the office +(202) 890-8752
+Rec-Confirmed your mailing address to the office as I listed below.
+Your Full Name--------------
+House Address-----------
+Your working Phone Number----------------
+ID copy-------------------------
+Sex-----------------------------
+Note,delivery fee to your address is only $25.00. send it to this
+company urgent on itunes card today so that DHL will deliver this
+Prepaid ATM Master Card to you today according to our finally
+agreement.
+Thanks for coperations,
+Dr. William Johnson
