@@ -2,318 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A39AD1326CF
-	for <lists+linux-clk@lfdr.de>; Tue,  7 Jan 2020 13:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E75E9132B6D
+	for <lists+linux-clk@lfdr.de>; Tue,  7 Jan 2020 17:52:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728003AbgAGM5l (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 7 Jan 2020 07:57:41 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:38226 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727996AbgAGM5k (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 7 Jan 2020 07:57:40 -0500
-Received: by mail-wr1-f68.google.com with SMTP id y17so53837261wrh.5
-        for <linux-clk@vger.kernel.org>; Tue, 07 Jan 2020 04:57:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=93QCy+6lfoPu6T2jeY2YuuqgksbRKDw7v2F+iiG2Jic=;
-        b=FyRzPZicMMxp+pAWuWqWtAdTwZ3vMQndL9HoJsAxXaC8Lui7wOPJsm0geFbfSDw6Dd
-         nrwfovxHI2u0lUEJ4C2RPqAfw31p0iI2xgo7ZzLfgOy5BYd9eo5LPjQ79nKmMn7uXpji
-         yWh0Qk1MIyP/EkWv1WHtqJrguSIy8bXZFWFL952IlOzXB095CADywjTfy7mVkmAFOXmP
-         n7n/QLfzytJQbbEyIFCceszQFyaNeJdQNyOoHKHwmieOTUvhyHgbxgncBq21oWX0Iq2n
-         tNujW6zoah5QZurnwEcCLBSJw9Tot2YZXDBpxsHvcBJ8DAk9hvV3t50r2/cmCEzOizS7
-         /1Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=93QCy+6lfoPu6T2jeY2YuuqgksbRKDw7v2F+iiG2Jic=;
-        b=JuRLGlqsKvFSNc6awfMbDCBkJ7uZakCCyPLALpxmkSJuyDuGikUPac03zTLGr8Ej+z
-         PDHhV7CVdnLQXwiHwXGZ3lRtJ5zp+7JyE6JzffX2OBCLY8D3T0ZWGSPqCydIS7RJvhE7
-         HpuoZNkGV8O8v2wjVKmUd1BG57uirrAgawuJbQBiGJcw0zk/n3dJ9ouxqSrs8lq/us91
-         oAr3z6llfH1Yaglz779F6eCxL0lwY++abMSr5QXkHs0AEAqKSbmsN8urBzR8hAUpV0rG
-         NSMQs7Ev2rkpz89i3wW1Lu0KlB5AMHgj9Y36y/RiDkCYMo/SoId+JnIAGaYkxyLjD6wN
-         3GOg==
-X-Gm-Message-State: APjAAAU5dUc7Ec/4xcS+fIEAgoeNtrwPOoOor0p3c4yUoRgpuzM4GBbV
-        H/O91AAlUoD2x49/I4pRXJSsxQ==
-X-Google-Smtp-Source: APXvYqwOseVEoEwqvKt/WKPStKBJ1FZIuG8u48y75PfT52y/SVxc8BBiYwOqw0EIng9E63iyfPitLw==
-X-Received: by 2002:adf:f80c:: with SMTP id s12mr108243229wrp.1.1578401858462;
-        Tue, 07 Jan 2020 04:57:38 -0800 (PST)
-Received: from dell ([2.27.35.135])
-        by smtp.gmail.com with ESMTPSA id m10sm77330092wrx.19.2020.01.07.04.57.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2020 04:57:37 -0800 (PST)
-Date:   Tue, 7 Jan 2020 12:57:51 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     mazziesaccount@gmail.com,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S1728366AbgAGQwL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 7 Jan 2020 11:52:11 -0500
+Received: from avon.wwwdotorg.org ([104.237.132.123]:34038 "EHLO
+        avon.wwwdotorg.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728215AbgAGQwL (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 7 Jan 2020 11:52:11 -0500
+X-Greylist: delayed 455 seconds by postgrey-1.27 at vger.kernel.org; Tue, 07 Jan 2020 11:52:11 EST
+Received: from [10.20.204.51] (unknown [216.228.112.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by avon.wwwdotorg.org (Postfix) with ESMTPSA id 1DE3A1C009A;
+        Tue,  7 Jan 2020 09:44:34 -0700 (MST)
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.101.4 at avon.wwwdotorg.org
+Subject: Re: [PATCH V3 1/4] clk: tegra: mark fuse clock as critical
+From:   Stephen Warren <swarren@wwwdotorg.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org
-Subject: Re: [PATCH v8 09/12] rtc: bd70528: add BD71828 support
-Message-ID: <20200107125751.GJ14821@dell>
-References: <cover.1577694311.git.matti.vaittinen@fi.rohmeurope.com>
- <b904fd485b61d3f3af3c100855f5100940916abf.1577694311.git.matti.vaittinen@fi.rohmeurope.com>
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20191003205033.98381-1-swarren@wwwdotorg.org>
+Message-ID: <0902e0c7-5d71-e7aa-ee5d-21933e1b47fe@wwwdotorg.org>
+Date:   Tue, 7 Jan 2020 09:44:33 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b904fd485b61d3f3af3c100855f5100940916abf.1577694311.git.matti.vaittinen@fi.rohmeurope.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191003205033.98381-1-swarren@wwwdotorg.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, 30 Dec 2019, Matti Vaittinen wrote:
-
-> ROHM BD71828 PMIC RTC block is from many parts similar to one
-> on BD70528. Support BD71828 RTC using BD70528 RTC driver and
-> avoid re-inventing the wheel.
+On 10/3/19 2:50 PM, Stephen Warren wrote:
+> From: Stephen Warren <swarren@nvidia.com>
 > 
-> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> ---
+> For a little over a year, U-Boot on Tegra124 has configured the flow
+> controller to perform automatic RAM re-repair on off->on power transitions
+> of the CPU rail1]. This is mandatory for correct operation of Tegra124.
+> However, RAM re-repair relies on certain clocks, which the kernel must
+> enable and leave running. The fuse clock is one of those clocks. Mark this
+> clock as critical so that LP1 power mode (system suspend) operates
+> correctly.
 > 
-> Changes from v7 - no changes
-> 
->  drivers/rtc/Kconfig              |   3 +-
->  drivers/rtc/rtc-bd70528.c        | 168 ++++++++++++++++++++++++++++---
->  include/linux/mfd/rohm-bd70528.h |  13 +--
->  include/linux/mfd/rohm-bd71828.h |   4 +-
->  include/linux/mfd/rohm-shared.h  |  27 +++++
->  5 files changed, 186 insertions(+), 29 deletions(-)
->  create mode 100644 include/linux/mfd/rohm-shared.h
-> 
-> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-> index d77515d8382c..df7a3843069d 100644
-> --- a/drivers/rtc/Kconfig
-> +++ b/drivers/rtc/Kconfig
-> @@ -498,12 +498,13 @@ config RTC_DRV_M41T80_WDT
->  	help
->  	  If you say Y here you will get support for the
->  	  watchdog timer in the ST M41T60 and M41T80 RTC chips series.
-> +
->  config RTC_DRV_BD70528
->  	tristate "ROHM BD70528 PMIC RTC"
->  	depends on MFD_ROHM_BD70528 && (BD70528_WATCHDOG || !BD70528_WATCHDOG)
->  	help
->  	  If you say Y here you will get support for the RTC
-> -	  on ROHM BD70528 Power Management IC.
-> +	  block on ROHM BD70528 and BD71828 Power Management IC.
->  
->  	  This driver can also be built as a module. If so, the module
->  	  will be called rtc-bd70528.
-> diff --git a/drivers/rtc/rtc-bd70528.c b/drivers/rtc/rtc-bd70528.c
-> index 627037aa66a8..2ce202040556 100644
-> --- a/drivers/rtc/rtc-bd70528.c
-> +++ b/drivers/rtc/rtc-bd70528.c
-> @@ -6,6 +6,7 @@
->  
->  #include <linux/bcd.h>
->  #include <linux/mfd/rohm-bd70528.h>
-> +#include <linux/mfd/rohm-bd71828.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/platform_device.h>
-> @@ -15,7 +16,7 @@
->  /*
->   * We read regs RTC_SEC => RTC_YEAR
->   * this struct is ordered according to chip registers.
-> - * Keep it u8 only to avoid padding issues.
-> + * Keep it u8 only (or packed) to avoid padding issues.
->   */
->  struct bd70528_rtc_day {
->  	u8 sec;
-> @@ -36,6 +37,13 @@ struct bd70528_rtc_wake {
->  	u8 ctrl;
->  } __packed;
->  
-> +struct bd71828_rtc_alm {
-> +	struct bd70528_rtc_data alm0;
-> +	struct bd70528_rtc_data alm1;
-> +	u8 alm_mask;
-> +	u8 alm1_mask;
-> +} __packed;
-> +
->  struct bd70528_rtc_alm {
->  	struct bd70528_rtc_data data;
->  	u8 alm_mask;
-> @@ -45,6 +53,8 @@ struct bd70528_rtc_alm {
->  struct bd70528_rtc {
->  	struct rohm_regmap_dev *mfd;
+> [1] 3cc7942a4ae5 ARM: tegra: implement RAM repair
 
-I think it would be better if you fixed this up be more forthcoming.
-It took some grepping to find out what this actually meant.  An MFD
-isn't really a thing, we made it up.  Here you are referring to this
-platform device's parent's device data.
-
-With that in mind I offer some suggestions:
-
-  'struct rohm_parent_ddata pddata'
-  'struct rohm_parent_ddata parent'
-
->  	struct device *dev;
-> +	u8 reg_time_start;
-> +	bool has_rtc_timers;
->  };
-
-[...]
-
-> +static int bd71828_set_alarm(struct device *dev, struct rtc_wkalrm *a)
-> +{
-> +	int ret;
-> +	struct bd71828_rtc_alm alm;
-> +	struct bd70528_rtc *r = dev_get_drvdata(dev);
-> +	struct rohm_regmap_dev *bd71828 = r->mfd;
-
-Then ...
-
-	struct rohm_parent_ddata *parent = r->parent;
-
-	ret = regmap_bulk_read(parent->regmap, BD71828_REG_RTC_ALM_START,
-			       &alm, sizeof(alm));
-	if (ret) {
-		dev_err(dev, "Failed to read alarm regs\n");
-		return ret;
-	}
-
-[...]
-
-> diff --git a/include/linux/mfd/rohm-bd70528.h b/include/linux/mfd/rohm-bd70528.h
-> index 2ad2320d0a96..a57af878fd0c 100644
-> --- a/include/linux/mfd/rohm-bd70528.h
-> +++ b/include/linux/mfd/rohm-bd70528.h
-> @@ -7,6 +7,7 @@
->  #include <linux/bits.h>
->  #include <linux/device.h>
->  #include <linux/mfd/rohm-generic.h>
-> +#include <linux/mfd/rohm-shared.h>
->  #include <linux/regmap.h>
->  
->  enum {
-> @@ -307,17 +308,6 @@ enum {
->  
->  /* RTC masks to mask out reserved bits */
->  
-> -#define BD70528_MASK_RTC_SEC		0x7f
-> -#define BD70528_MASK_RTC_MINUTE		0x7f
-> -#define BD70528_MASK_RTC_HOUR_24H	0x80
-> -#define BD70528_MASK_RTC_HOUR_PM	0x20
-> -#define BD70528_MASK_RTC_HOUR		0x1f
-> -#define BD70528_MASK_RTC_DAY		0x3f
-> -#define BD70528_MASK_RTC_WEEK		0x07
-> -#define BD70528_MASK_RTC_MONTH		0x1f
-> -#define BD70528_MASK_RTC_YEAR		0xff
-> -#define BD70528_MASK_RTC_COUNT_L	0x7f
-> -
->  #define BD70528_MASK_ELAPSED_TIMER_EN	0x1
->  /* Mask second, min and hour fields
->   * HW would support ALM irq for over 24h
-> @@ -326,7 +316,6 @@ enum {
->   * wake-up we limit ALM to 24H and only
->   * unmask sec, min and hour
->   */
-> -#define BD70528_MASK_ALM_EN		0x7
->  #define BD70528_MASK_WAKE_EN		0x1
->  
->  /* WDT masks */
-> diff --git a/include/linux/mfd/rohm-bd71828.h b/include/linux/mfd/rohm-bd71828.h
-> index d013e03f742d..017a4c01cb31 100644
-> --- a/include/linux/mfd/rohm-bd71828.h
-> +++ b/include/linux/mfd/rohm-bd71828.h
-> @@ -5,6 +5,7 @@
->  #define __LINUX_MFD_BD71828_H__
->  
->  #include <linux/mfd/rohm-generic.h>
-> +#include <linux/mfd/rohm-shared.h>
-
-Isn't generic shared?
-
->  /* Regulator IDs */
->  enum {
-> @@ -160,6 +161,7 @@ enum {
->  #define BD71828_REG_RTC_YEAR		0x52
->  
->  #define BD71828_REG_RTC_ALM0_SEC	0x53
-> +#define BD71828_REG_RTC_ALM_START	BD71828_REG_RTC_ALM0_SEC
->  #define BD71828_REG_RTC_ALM0_MINUTE	0x54
->  #define BD71828_REG_RTC_ALM0_HOUR	0x55
->  #define BD71828_REG_RTC_ALM0_WEEK	0x56
-> @@ -178,6 +180,7 @@ enum {
->  #define BD71828_REG_RTC_ALM1_MASK	0x62
->  
->  #define BD71828_REG_RTC_ALM2		0x63
-> +#define BD71828_REG_RTC_START		BD71828_REG_RTC_SEC
->  
->  /* Charger/Battey */
->  #define BD71828_REG_CHG_STATE		0x65
-> @@ -204,7 +207,6 @@ enum {
->  #define BD71828_REG_INT_MASK_TEMP	0xdd
->  #define BD71828_REG_INT_MASK_RTC	0xde
->  
-> -
->  #define BD71828_REG_INT_MAIN		0xdf
->  #define BD71828_REG_INT_BUCK		0xe0
->  #define BD71828_REG_INT_DCIN1		0xe1
-> diff --git a/include/linux/mfd/rohm-shared.h b/include/linux/mfd/rohm-shared.h
-> new file mode 100644
-> index 000000000000..f16fc3b5000e
-> --- /dev/null
-> +++ b/include/linux/mfd/rohm-shared.h
-> @@ -0,0 +1,27 @@
-> +/* SPDX-License-Identifier: GPL-2.0-or-later */
-> +/* Copyright (C) 2018 ROHM Semiconductors */
-
-This is very out of data now!
-
-> +
-> +#ifndef __LINUX_MFD_ROHM_SHARED_H__
-> +#define __LINUX_MFD_ROHM_SHARED_H__
-> +
-> +/*
-> + * RTC definitions shared between
-> + *
-> + * BD70528
-> + * and BD71828
-
-This reads poorly.
-
-Either form a bullet pointed list, or just write it out.
-
-> + */
-> +
-> +
-> +#define BD70528_MASK_RTC_SEC		0x7f
-> +#define BD70528_MASK_RTC_MINUTE	0x7f
-> +#define BD70528_MASK_RTC_HOUR_24H	0x80
-> +#define BD70528_MASK_RTC_HOUR_PM	0x20
-> +#define BD70528_MASK_RTC_HOUR		0x3f
-> +#define BD70528_MASK_RTC_DAY		0x3f
-> +#define BD70528_MASK_RTC_WEEK		0x07
-> +#define BD70528_MASK_RTC_MONTH		0x1f
-> +#define BD70528_MASK_RTC_YEAR		0xff
-> +#define BD70528_MASK_ALM_EN		0x7
-> +
-> +#endif /* __LINUX_MFD_ROHM_SHARED_H__ */
-
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Thierry, this series doesn't seem to be applied yet; could you please 
+take a look? Thanks.
