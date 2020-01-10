@@ -2,64 +2,108 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC07E136438
-	for <lists+linux-clk@lfdr.de>; Fri, 10 Jan 2020 01:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9B01364E8
+	for <lists+linux-clk@lfdr.de>; Fri, 10 Jan 2020 02:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730001AbgAJALj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 9 Jan 2020 19:11:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33302 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730095AbgAJALj (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 9 Jan 2020 19:11:39 -0500
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BEB1C20848;
-        Fri, 10 Jan 2020 00:11:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578615098;
-        bh=GQ1rsUyL8Tp8YqroWPfW4PnceOHEcnwNATCAVnNLfvA=;
-        h=In-Reply-To:References:Cc:Subject:To:From:Date:From;
-        b=Isc61OqAqq1tmQxZlF6/hpYjPaIN6PgQvbg/CPB/PBLg7jBxxTEn7ND69rFqjuX3K
-         NM80M7MTsTwYfClmRCKNa8j+KpqZK7kYz2kblFQQHpyBMOBQWUvlzY2bl5Qsjq702L
-         WWoQ/gGoCZHWuI268tDODH5qWbbfamrHMYHtSd8U=
-Content-Type: text/plain; charset="utf-8"
+        id S1730617AbgAJBjQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 9 Jan 2020 20:39:16 -0500
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:3544 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730601AbgAJBjP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 9 Jan 2020 20:39:15 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e17d5b00000>; Thu, 09 Jan 2020 17:38:56 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 09 Jan 2020 17:39:14 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 09 Jan 2020 17:39:14 -0800
+Received: from [10.110.103.92] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 10 Jan
+ 2020 01:39:14 +0000
+Subject: Re: [PATCH v7 00/21] Move PMC clocks into Tegra PMC driver
+To:     Dmitry Osipenko <digetx@gmail.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <broonie@kernel.org>,
+        <lgirdwood@gmail.com>, <perex@perex.cz>, <tiwai@suse.com>,
+        <mperttunen@nvidia.com>, <gregkh@linuxfoundation.org>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>, <mark.rutland@arm.com>
+CC:     <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
+        <spujar@nvidia.com>, <josephl@nvidia.com>,
+        <daniel.lezcano@linaro.org>, <mmaddireddy@nvidia.com>,
+        <markz@nvidia.com>, <devicetree@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1578457515-3477-1-git-send-email-skomatineni@nvidia.com>
+ <4e9fab30-14b5-bf1f-dc91-fd57ef614503@gmail.com>
+From:   Sowjanya Komatineni <skomatineni@nvidia.com>
+Message-ID: <61a78ba8-4cc3-f6a6-513b-36daa9be32f0@nvidia.com>
+Date:   Thu, 9 Jan 2020 17:39:13 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
+In-Reply-To: <4e9fab30-14b5-bf1f-dc91-fd57ef614503@gmail.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1578557121-423-3-git-send-email-sricharan@codeaurora.org>
-References: <1578557121-423-1-git-send-email-sricharan@codeaurora.org> <1578557121-423-3-git-send-email-sricharan@codeaurora.org>
-Cc:     Anusha Canchi Ramachandra Rao <anusharao@codeaurora.org>,
-        Abhishek Sahu <absahu@codeaurora.org>
-Subject: Re: [PATCH V2 2/2] clk: qcom: Add ipq6018 Global Clock Controller support
-To:     agross@kernel.org, devicetree@vger.kernel.org,
-        linus.walleij@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-soc@vger.kernel.org, robh+dt@kernel.org,
-        sivaprak@codeaurora.org, sricharan@codeaurora.org
-From:   Stephen Boyd <sboyd@kernel.org>
-User-Agent: alot/0.8.1
-Date:   Thu, 09 Jan 2020 16:11:38 -0800
-Message-Id: <20200110001138.BEB1C20848@mail.kernel.org>
+Content-Language: en-US
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1578620336; bh=TEyph305SGFKLXuFDQSfRRNPpBb2Qcw+rzGH7+g9RCM=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
+         Content-Language;
+        b=jZ7LmOgJ3X9CqsuPrT4gbvHXep3nztWX+cwqZ29zspMGe6q3dn9fx4ZQUzcrOzAXI
+         G1zboO/l/IhLIq0oWM8juJqyZp30lJ1T6O7Ma0OfP/2C4bxwtIYgm7tu31Zb7mgEbL
+         DwTrUY3xLhSvopL3m4Sl+kurq00qd8lrzKCEry4ce5lte+kN+pqasukdT/vmM/I6Iy
+         GXTmEKyfKuCcYAxDjw8mj13McuN25q+ZYsLYPlPRkW8bwcQbk1RFUSQolIX54VjPId
+         ZzVGCX1DP/+jtgwzdDO8MWKMx9TMR80iJ2swRXP3bHFqjI8zz0Rr1Vb1NdI7q/y/IS
+         dFn/Yc9tZcGrA==
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Sricharan R (2020-01-09 00:05:21)
-> This patch adds support for the global clock controller found on
-> the ipq6018 based devices.
->=20
-> Also fixed the sparse warnings reported by,
-> Reported-by: kbuild test robot <lkp@intel.com>
-> Co-developed-by: Anusha Canchi Ramachandra Rao <anusharao@codeaurora.org>
-> Signed-off-by: Anusha Canchi Ramachandra Rao <anusharao@codeaurora.org>
-> Co-developed-by: Abhishek Sahu <absahu@codeaurora.org>
-> Signed-off-by: Abhishek Sahu <absahu@codeaurora.org>
-> Co-developed-by: Sivaprakash Murugesan <sivaprak@codeaurora.org>
-> Signed-off-by: Sivaprakash Murugesan <sivaprak@codeaurora.org>
-> Signed-off-by: Sricharan R <sricharan@codeaurora.org>
-> ---
 
-Applied to clk-next
-
+On 1/9/20 11:44 AM, Dmitry Osipenko wrote:
+> External email: Use caution opening links or attachments
+>
+>
+> 08.01.2020 07:24, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+>> This patch series moves Tegra PMC clocks from clock driver to pmc driver
+>> along with the device trees changes and audio driver which uses one of
+>> the pmc clock for audio mclk.
+>>
+>> Tegra PMC has clk_out_1, clk_out_2, clk_out_3 and blink controls which
+>> are currently registered by Tegra clock driver using clk_regiser_mux and
+>> clk_register_gate which performs direct Tegra PMC register access.
+>>
+>> When Tegra PMC is in secure mode, any access from non-secure world will
+>> not go through.
+>>
+>> This patch series adds these Tegra PMC clocks and blink controls to Tegr=
+a
+>> PMC driver with PMC as clock provider and removes them from Tegra clock
+>> driver.
+>>
+>> PMC clock clk_out_1 is dedicated for audio mclk from Tegra30 thru Tegra2=
+10
+>> and clock driver does inital parent configuration for it and enables the=
+m.
+>> But this clock should be taken care by audio driver as there is no need
+>> to have this clock pre enabled.
+>>
+>> So, this series also includes patch that updates ASoC driver to take
+>> care of parent configuration for mclk if device tree don't specify
+>> initial parent configuration using assigned-clock-parents and controls
+>> audio mclk enable/disable during ASoC machine startup and shutdown.
+>>
+>> DTs are also updated to use clk_out_1 as audio mclk rather than extern1.
+>>
+>> This series also includes a patch for mclk fallback to extern1 when
+>> retrieving mclk fails to have this backward compatible of new DT with
+>> old kernels.
+> Suspend-resume doesn't work anymore, reverting this series helps. I
+> don't have any other information yet, please take a look.
+Thanks Dmitry. Will test suspend resume and check..
