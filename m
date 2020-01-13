@@ -2,72 +2,94 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE09138B77
-	for <lists+linux-clk@lfdr.de>; Mon, 13 Jan 2020 06:52:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 800BE138E4E
+	for <lists+linux-clk@lfdr.de>; Mon, 13 Jan 2020 10:56:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730663AbgAMFww (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 13 Jan 2020 00:52:52 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:36053 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731590AbgAMFwZ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 Jan 2020 00:52:25 -0500
-Received: by mail-oi1-f193.google.com with SMTP id c16so7219135oic.3
-        for <linux-clk@vger.kernel.org>; Sun, 12 Jan 2020 21:52:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
-        b=El5YZgtDEXJCHEtZrRB1ujEJT5GnrR9nqQvx3oNXkD1KXWKAy5lE4fahagwXmNRBuY
-         Z373bCStdjZZAvrcMmyjZhqXNYKD7qS8gpQ1uKt4Zm/CJYofbOmd6y2KCfdaIf8lu4gx
-         e04Qq2Wd5k0QzXhgODgXLh9+BTAbr7mIJG1kvrHD2cB5892G2QaMtoQjZ8YbwAsn/v/R
-         qN1ulSwy8kLJzDOOwwvDkEa6g0paOaNUUW6lO8NcaOsOsQMTh2eV34LXY/bnRxfyDcL+
-         OFIAYoYpyWTxvo4nB11oXa8J2BNLiFXnr18VfN4DCPOmpXqWPT8f/9GzmZX8VWLxs4VK
-         s+8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
-        b=JOhz/ZafHCnif+4cohpzByniU45hgpOci/0oNulvrv5OjxTBZBj13Ln4QooM0JnzVl
-         /7nH33iTPyGQsIDQNFZFMuadrbR333kDvyK072HrzqoMhHgQaT6SfI5NzZJfIPxaYcak
-         Sc+Xqm0QoSWuuNBKhi01QE/vI/YZdBktcDcMfzwL2D8NR9IG1JudK9pW/UxnVyitz/ER
-         jMLXOM7owYE+DPIpDVMgV1fkuS2OyzxipCFbO/KJeoP5QL8erszAhZbSFhth1D56Zd7h
-         zcZJaXnvCRBk1GSpYG2N2x6w0j4fHA+cMsMy6wHedtehADmL2BUcwfQeo5mCSx3kgNvv
-         ytcQ==
-X-Gm-Message-State: APjAAAWbYaLwKHTqXmQt2L0zXOrGZI8STNNV+/GfeUT+ySz3RPUiWcjd
-        K45imzplFdfC058Rsxx1GChsqhj1on9Ub3zSlzI=
-X-Google-Smtp-Source: APXvYqy7JhGBt0ZjJ/1t4CT74GIhTuvbOMnCynReBbsGRcTAfZPwoiLBCe9XiPA9xaK1JAPmy14eucUMWI9DLkbKsUo=
-X-Received: by 2002:a54:4713:: with SMTP id k19mr11513430oik.113.1578894745174;
- Sun, 12 Jan 2020 21:52:25 -0800 (PST)
+        id S1725978AbgAMJ4V (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 13 Jan 2020 04:56:21 -0500
+Received: from mail25.static.mailgun.info ([104.130.122.25]:59808 "EHLO
+        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726480AbgAMJ4V (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 Jan 2020 04:56:21 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1578909380; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=Q/2ImYuKYZGan94DZJlYZatYbdTBLNMNXpcAS+vGAww=; b=dYNPjK0csn1Nk1nvIwljabkz6Ndk/wne6Uxj6REQpr1BjSw7gbiMadge9AbvvWKda1W5hSsk
+ /DfAZh+0K2Gb801lsOx/9Z7qXGmPkiBIzo5htWDnQp1ehrS9vGdFgcv529LFnL1rwiOHS83v
+ lSmA4R7MHotkRLLRqwj+LsboWJc=
+X-Mailgun-Sending-Ip: 104.130.122.25
+X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e1c3ec3.7f2ac18796c0-smtp-out-n01;
+ Mon, 13 Jan 2020 09:56:19 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 70B34C433CB; Mon, 13 Jan 2020 09:56:19 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.0
+Received: from [10.206.28.9] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: tdas)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7CB59C4479C;
+        Mon, 13 Jan 2020 09:56:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7CB59C4479C
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=tdas@codeaurora.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: clock: Add YAML schemas for the QCOM
+ MSS clock bindings
+To:     Sibi Sankar <sibis@codeaurora.org>, bjorn.andersson@linaro.org
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        David Brown <david.brown@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        robh@kernel.org, robh+dt@kernel.org,
+        linux-arm-msm-owner@vger.kernel.org
+References: <1577421760-1174-1-git-send-email-tdas@codeaurora.org>
+ <1577421760-1174-2-git-send-email-tdas@codeaurora.org>
+ <5b16d051146224c1efad40c4548dd0c4@codeaurora.org>
+From:   Taniya Das <tdas@codeaurora.org>
+Message-ID: <d4793817-d6bd-b0ab-2b59-2c27c9edbdbe@codeaurora.org>
+Date:   Mon, 13 Jan 2020 15:26:11 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-Received: by 2002:a4a:41cb:0:0:0:0:0 with HTTP; Sun, 12 Jan 2020 21:52:24
- -0800 (PST)
-Reply-To: rickschaech@gmail.com
-From:   Rick Schaech <cathben72@gmail.com>
-Date:   Mon, 13 Jan 2020 01:52:24 -0400
-Message-ID: <CAEcBxO=TAnFn5LzizHa22hUC0Db5FuiZJF28m=yX3_9m--jRqg@mail.gmail.com>
-Subject: I wait for your swift response,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <5b16d051146224c1efad40c4548dd0c4@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Dear, I'm Mr Rick Schaech, I am the General Account Auditor, Though i
-know we have not meet each other before but sometimes in life God have
-a reason of bringing two people from two different countries together
-as business partners or life partners.
+Thanks Sibi, will take care of mapping the entire region.
 
-My dear friend, I have the sum of 15.7 Million USD i wish to put in
-your name due to the death of my late client who died several years
-ago as his next of kin column still remain blank. Though the internet
-medium is highly abuse these days but am assuring you that this
-transaction is legitimate and I am contacting you that we may have a
-deal, note for your cooperation and collaboration 40% of the sum will
-be for you while the other 60% will be for me as well. I wait for your
-swift response for more details. please forward your response to my
-personal E-mail: rickschaech@gmail.com
++      reg = <0x041aa000 0x100>;
+> 
+> Bjorn/me had a discussion about the size
+> a while back, we should use the entire
+> reg space instead of fragmenting it.
+> 
+> reg = <0x041a8000 0x8000>;
+> 
+> We should just use ^^ instead.
+> 
+>> +      #clock-cells = <1>;
+>> +    };
+>> +...
+>> -- 
+>> Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
+>> of the Code Aurora Forum, hosted by the  Linux Foundation.
+> 
 
-Yours sincerely,
-Rick Schaech.
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation.
+
+--
