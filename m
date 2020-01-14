@@ -2,170 +2,136 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 585BB13A1C4
-	for <lists+linux-clk@lfdr.de>; Tue, 14 Jan 2020 08:25:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1256913A210
+	for <lists+linux-clk@lfdr.de>; Tue, 14 Jan 2020 08:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729180AbgANHYt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 14 Jan 2020 02:24:49 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:6499 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729163AbgANHYs (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Jan 2020 02:24:48 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e1d6cab0000>; Mon, 13 Jan 2020 23:24:27 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 13 Jan 2020 23:24:47 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 13 Jan 2020 23:24:47 -0800
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 14 Jan
- 2020 07:24:46 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Tue, 14 Jan 2020 07:24:46 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.169.242]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e1d6cbd0003>; Mon, 13 Jan 2020 23:24:46 -0800
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <broonie@kernel.org>,
-        <lgirdwood@gmail.com>, <perex@perex.cz>, <tiwai@suse.com>,
-        <digetx@gmail.com>, <mperttunen@nvidia.com>,
-        <gregkh@linuxfoundation.org>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <mark.rutland@arm.com>
-CC:     <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
-        <spujar@nvidia.com>, <josephl@nvidia.com>,
-        <daniel.lezcano@linaro.org>, <mmaddireddy@nvidia.com>,
-        <markz@nvidia.com>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v8 22/22] clk: tegra: Remove audio clocks configuration from clock driver
-Date:   Mon, 13 Jan 2020 23:24:27 -0800
-Message-ID: <1578986667-16041-23-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1578986667-16041-1-git-send-email-skomatineni@nvidia.com>
-References: <1578986667-16041-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
+        id S1729009AbgANH1Q (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 14 Jan 2020 02:27:16 -0500
+Received: from mail-eopbgr70052.outbound.protection.outlook.com ([40.107.7.52]:36462
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728877AbgANH1Q (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 14 Jan 2020 02:27:16 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bmDzc7m7+BZBAB5bPXo7Xx12rBryiD2KcJEDSh+DJG/PDr++CPz4njcWw7nV9NsMnPbRVjwwJosXYJKWqJMVAuPkOp5CmdpgYq6ydXpEBdyMOVi8fMWusWwtwgrfkEJmZFLzqlC98GGzdvqaJupnrk3sfEhXy59VSfnS8WWIQZixkqCtEzsIxDW1cdHBcwekPv202AafWpPD3Fd1cnr1Z0EMV9aXu/jRweLUmBSpnYQ6QmGUL4AIBhWkpn8/CaKHVVj/w4p3Zv80PlBk1r8TwQMJeuJF5B2PxGVIxQ+UaXdnFCg48hYIDePYbkuWfOCJF4MhFWNS7eYdvnN6wrNgTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vTfFJDq15ddji1P+Ws6ZW93IiCXDYAJ9Pv/q7a7AeGw=;
+ b=Am25Rit9az5cNGO3C2DyF7x1Pwjcm5bVGPXHj8MJzZOzyT+6hmSEtID2EMPfOOOdQKjgEbKFBS+/XDCeF7YvJzV2viSEZcXg++BbDr9ve+M+TM56+FL1taeu4V6V8ZHzxD1SGSgunzRA+0JcsHqwZX5QXqWF69EFS0ZxYr+IyCKtaBy5EOTtCsNM05Moc/HBjny+Ru+Qp7MHO4vBWlUjt62eSqV2WEAP9YK5t4w+Mr8y9GZxzMKUBX1RQxCx/v9jQG2IDdZVp+b6obeLjzdIKg33okXw5fJQVpff8Nn7987bTEfY0Y9J6KYvd5Vgm1YE+aDsd711rb+Zn76dDcYx6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vTfFJDq15ddji1P+Ws6ZW93IiCXDYAJ9Pv/q7a7AeGw=;
+ b=Q5UBVus+eHAyRpiOrFtt/xoEj55XFNcI+UfOFKy81+iN4HtQQDOKoc6rYQX0KECqaRw1jeeDRxDgO42epErnrcV+NT2yYg2i9QMytFkEMDG23q09VloJZIHZ8PjzRPgmByeBt2Ds1huZ8j6yXBJR0Y2nU8wgjPzDCzni3AvqEeU=
+Received: from AM0PR04MB4481.eurprd04.prod.outlook.com (52.135.147.15) by
+ AM0PR04MB5490.eurprd04.prod.outlook.com (20.178.115.24) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2623.10; Tue, 14 Jan 2020 07:27:11 +0000
+Received: from AM0PR04MB4481.eurprd04.prod.outlook.com
+ ([fe80::91e2:17:b3f4:d422]) by AM0PR04MB4481.eurprd04.prod.outlook.com
+ ([fe80::91e2:17:b3f4:d422%3]) with mapi id 15.20.2623.015; Tue, 14 Jan 2020
+ 07:27:10 +0000
+Received: from localhost.localdomain (119.31.174.66) by SGXP274CA0009.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.2623.9 via Frontend Transport; Tue, 14 Jan 2020 07:27:05 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     "sboyd@kernel.org" <sboyd@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Leonard Crestez <leonard.crestez@nxp.com>
+CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Anson Huang <anson.huang@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V2 0/4] clk: imx: imx8m: fix a53 cpu clock
+Thread-Topic: [PATCH V2 0/4] clk: imx: imx8m: fix a53 cpu clock
+Thread-Index: AQHVyqwI/Q11JwojXU6mQ7Vn6Yy0zw==
+Date:   Tue, 14 Jan 2020 07:27:10 +0000
+Message-ID: <1578986576-6168-1-git-send-email-peng.fan@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.7.4
+x-clientproxiedby: SGXP274CA0009.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::21)
+ To AM0PR04MB4481.eurprd04.prod.outlook.com (2603:10a6:208:70::15)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peng.fan@nxp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 99af563f-b85e-47ec-e132-08d798c32b09
+x-ms-traffictypediagnostic: AM0PR04MB5490:|AM0PR04MB5490:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR04MB5490D5B0CAFD83F1ADEF3D8588340@AM0PR04MB5490.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 028256169F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(366004)(136003)(396003)(376002)(346002)(189003)(199004)(66476007)(478600001)(66946007)(2906002)(66446008)(66556008)(6506007)(64756008)(52116002)(186003)(2616005)(26005)(44832011)(16526019)(8936002)(71200400001)(69590400006)(956004)(81166006)(8676002)(36756003)(81156014)(86362001)(6666004)(5660300002)(4326008)(6486002)(6636002)(110136005)(6512007)(316002)(54906003)(32563001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB5490;H:AM0PR04MB4481.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: OzsB0fofNzIXkl338jyPAL+NEGYAkwy6Xc39YGC/s2FGFXi7GywZPINCT63byqbuXj+fr7aAOLyOLpBT+6GRA5NqkyJMOJPTwYVshrlVK474SFr9kA7a79eR4hmqBpo8rAECDArZu/dssiL4d5yeJcMomrz+Ao2aldg0H8lMnC56phm/FdLnkIfpDM1abnQ/Plg6tMMsDoFTo2TXT9HjH/0dJZbFcBTsA+HITOWlH6RTlC+BxS7f++/A7LyzFqyt5SCFS09JkxFRBJC9Kr6+HwXxQ76qm3hz5vehVyZicpFBz9kA0iJXFdoxlv+2lJiPjzFri/i3fY4hsFOPAq51PSFHCOSAoGMW0HQNpGssXh6GB11IiqaClT39oGgpAmqksTrCuzDFy93LqgjjqvPnCwkeGjaqzxe2V36nOEo1RsWly0P1TkF2+kxUstEX12rB8qB0zqypreTOxtdY0mQVAG6HNK+juHtAvO6TFO5b118dofmUpn2k2MPugm1lixbbUARHAqyjQpKRzzBodVLmNg==
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1578986667; bh=9n0i70uqB/SBucs2JdxwPHD5wO5OH4uHQGIBNiAAbZ8=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=qDV4EkZpTa2kxN3VAFRrqD3Kewct0gJjNOk5II/BJDCokuYnsPlWqnf4FJsgSKibx
-         Sp9Qcvl1aveQ4n88e64k3SNrJsXr0MwmiiVSJfpxern8+beXIW907SpHICDAl7FfFq
-         0PlTLOMt+SduYhhny9Z2tQcRevZrChXy9kmWEhmbeBBdvbv8d+GIY8sJS8F4PyjmkK
-         q5Faj7SZc9un5Iu7bnbwWc4HrMZa6g/lwXoP3kf1gwUjObZm+vqM7ZZIRlif03yP0a
-         g9a8Re2ZvOBhFHVh2xQIvj5j8xFFciJXbu+34BaTzduX2cpT9k6xUoYjJFxWLCcQVn
-         +m/n8X3V1HeoA==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 99af563f-b85e-47ec-e132-08d798c32b09
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jan 2020 07:27:10.7525
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: TY2mpqbr15y832BgDyIsJh7Ut+aUHcb+ujIxAZ9hKzWGXWRaAUYJK1SpceQeo5Ng37PZ/TSBHXDeug0nPJ5NmA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5490
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Current clock driver enables PLLA, cdev1 on Tegra20 and extern1 on
-Tegra30 and above as a part of clocks init and there is no need to
-have these audio clocks enabled by the clock driver.
+From: Peng Fan <peng.fan@nxp.com>
 
-extern1 is used as parent for clk_out_1 and clk_out_1 is dedicated
-for audio mclk on Tegra30 and above Tegra platforms and these clocks
-are taken care by ASoC driver.
+V2:
+ Fix i.MX8MP build
+ Update cover letter, i.MX7D not have this issue=20
 
-So, this patch removes audio related clocks configuration from clock
-init of Tegra20 and above.
+The A53 CCM clk root only accepts input up to 1GHz, CCM A53 root
+signoff timing is 1Ghz, however the A53 core which sources from CCM
+root could run above 1GHz which voilates the CCM.
 
-Tested-by: Dmitry Osipenko <digetx@gmail.com>
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- drivers/clk/tegra/clk-tegra114.c | 5 ++---
- drivers/clk/tegra/clk-tegra124.c | 5 ++---
- drivers/clk/tegra/clk-tegra20.c  | 5 ++---
- drivers/clk/tegra/clk-tegra210.c | 5 ++---
- drivers/clk/tegra/clk-tegra30.c  | 5 ++---
- 5 files changed, 10 insertions(+), 15 deletions(-)
+There is a CORE_SEL slice before A53 core, we need configure the
+CORE_SEL slice source from ARM PLL, not A53 CCM clk root.
 
-diff --git a/drivers/clk/tegra/clk-tegra114.c b/drivers/clk/tegra/clk-tegra114.c
-index c138ef75480b..bc9e47a4cb60 100644
---- a/drivers/clk/tegra/clk-tegra114.c
-+++ b/drivers/clk/tegra/clk-tegra114.c
-@@ -1136,9 +1136,8 @@ static struct tegra_clk_init_table init_table[] __initdata = {
- 	{ TEGRA114_CLK_UARTB, TEGRA114_CLK_PLL_P, 408000000, 0 },
- 	{ TEGRA114_CLK_UARTC, TEGRA114_CLK_PLL_P, 408000000, 0 },
- 	{ TEGRA114_CLK_UARTD, TEGRA114_CLK_PLL_P, 408000000, 0 },
--	{ TEGRA114_CLK_PLL_A, TEGRA114_CLK_CLK_MAX, 564480000, 1 },
--	{ TEGRA114_CLK_PLL_A_OUT0, TEGRA114_CLK_CLK_MAX, 11289600, 1 },
--	{ TEGRA114_CLK_EXTERN1, TEGRA114_CLK_PLL_A_OUT0, 0, 1 },
-+	{ TEGRA114_CLK_PLL_A, TEGRA114_CLK_CLK_MAX, 564480000, 0 },
-+	{ TEGRA114_CLK_PLL_A_OUT0, TEGRA114_CLK_CLK_MAX, 11289600, 0 },
- 	{ TEGRA114_CLK_I2S0, TEGRA114_CLK_PLL_A_OUT0, 11289600, 0 },
- 	{ TEGRA114_CLK_I2S1, TEGRA114_CLK_PLL_A_OUT0, 11289600, 0 },
- 	{ TEGRA114_CLK_I2S2, TEGRA114_CLK_PLL_A_OUT0, 11289600, 0 },
-diff --git a/drivers/clk/tegra/clk-tegra124.c b/drivers/clk/tegra/clk-tegra124.c
-index 54cac77deaa3..64e229ddf2a5 100644
---- a/drivers/clk/tegra/clk-tegra124.c
-+++ b/drivers/clk/tegra/clk-tegra124.c
-@@ -1292,9 +1292,8 @@ static struct tegra_clk_init_table common_init_table[] __initdata = {
- 	{ TEGRA124_CLK_UARTB, TEGRA124_CLK_PLL_P, 408000000, 0 },
- 	{ TEGRA124_CLK_UARTC, TEGRA124_CLK_PLL_P, 408000000, 0 },
- 	{ TEGRA124_CLK_UARTD, TEGRA124_CLK_PLL_P, 408000000, 0 },
--	{ TEGRA124_CLK_PLL_A, TEGRA124_CLK_CLK_MAX, 564480000, 1 },
--	{ TEGRA124_CLK_PLL_A_OUT0, TEGRA124_CLK_CLK_MAX, 11289600, 1 },
--	{ TEGRA124_CLK_EXTERN1, TEGRA124_CLK_PLL_A_OUT0, 0, 1 },
-+	{ TEGRA124_CLK_PLL_A, TEGRA124_CLK_CLK_MAX, 564480000, 0 },
-+	{ TEGRA124_CLK_PLL_A_OUT0, TEGRA124_CLK_CLK_MAX, 11289600, 0 },
- 	{ TEGRA124_CLK_I2S0, TEGRA124_CLK_PLL_A_OUT0, 11289600, 0 },
- 	{ TEGRA124_CLK_I2S1, TEGRA124_CLK_PLL_A_OUT0, 11289600, 0 },
- 	{ TEGRA124_CLK_I2S2, TEGRA124_CLK_PLL_A_OUT0, 11289600, 0 },
-diff --git a/drivers/clk/tegra/clk-tegra20.c b/drivers/clk/tegra/clk-tegra20.c
-index fe536f1d770d..0da402c144d8 100644
---- a/drivers/clk/tegra/clk-tegra20.c
-+++ b/drivers/clk/tegra/clk-tegra20.c
-@@ -1029,9 +1029,8 @@ static struct tegra_clk_init_table init_table[] __initdata = {
- 	{ TEGRA20_CLK_UARTC, TEGRA20_CLK_PLL_P, 0, 0 },
- 	{ TEGRA20_CLK_UARTD, TEGRA20_CLK_PLL_P, 0, 0 },
- 	{ TEGRA20_CLK_UARTE, TEGRA20_CLK_PLL_P, 0, 0 },
--	{ TEGRA20_CLK_PLL_A, TEGRA20_CLK_CLK_MAX, 56448000, 1 },
--	{ TEGRA20_CLK_PLL_A_OUT0, TEGRA20_CLK_CLK_MAX, 11289600, 1 },
--	{ TEGRA20_CLK_CDEV1, TEGRA20_CLK_CLK_MAX, 0, 1 },
-+	{ TEGRA20_CLK_PLL_A, TEGRA20_CLK_CLK_MAX, 56448000, 0 },
-+	{ TEGRA20_CLK_PLL_A_OUT0, TEGRA20_CLK_CLK_MAX, 11289600, 0 },
- 	{ TEGRA20_CLK_I2S1, TEGRA20_CLK_PLL_A_OUT0, 11289600, 0 },
- 	{ TEGRA20_CLK_I2S2, TEGRA20_CLK_PLL_A_OUT0, 11289600, 0 },
- 	{ TEGRA20_CLK_SDMMC1, TEGRA20_CLK_PLL_P, 48000000, 0 },
-diff --git a/drivers/clk/tegra/clk-tegra210.c b/drivers/clk/tegra/clk-tegra210.c
-index d2f1e9c0ed25..c6304f5e813e 100644
---- a/drivers/clk/tegra/clk-tegra210.c
-+++ b/drivers/clk/tegra/clk-tegra210.c
-@@ -3442,9 +3442,8 @@ static struct tegra_clk_init_table init_table[] __initdata = {
- 	{ TEGRA210_CLK_UARTB, TEGRA210_CLK_PLL_P, 408000000, 0 },
- 	{ TEGRA210_CLK_UARTC, TEGRA210_CLK_PLL_P, 408000000, 0 },
- 	{ TEGRA210_CLK_UARTD, TEGRA210_CLK_PLL_P, 408000000, 0 },
--	{ TEGRA210_CLK_PLL_A, TEGRA210_CLK_CLK_MAX, 564480000, 1 },
--	{ TEGRA210_CLK_PLL_A_OUT0, TEGRA210_CLK_CLK_MAX, 11289600, 1 },
--	{ TEGRA210_CLK_EXTERN1, TEGRA210_CLK_PLL_A_OUT0, 0, 1 },
-+	{ TEGRA210_CLK_PLL_A, TEGRA210_CLK_CLK_MAX, 564480000, 0 },
-+	{ TEGRA210_CLK_PLL_A_OUT0, TEGRA210_CLK_CLK_MAX, 11289600, 0 },
- 	{ TEGRA210_CLK_I2S0, TEGRA210_CLK_PLL_A_OUT0, 11289600, 0 },
- 	{ TEGRA210_CLK_I2S1, TEGRA210_CLK_PLL_A_OUT0, 11289600, 0 },
- 	{ TEGRA210_CLK_I2S2, TEGRA210_CLK_PLL_A_OUT0, 11289600, 0 },
-diff --git a/drivers/clk/tegra/clk-tegra30.c b/drivers/clk/tegra/clk-tegra30.c
-index 5732fdbe20db..53d1c48532ae 100644
---- a/drivers/clk/tegra/clk-tegra30.c
-+++ b/drivers/clk/tegra/clk-tegra30.c
-@@ -1221,9 +1221,8 @@ static struct tegra_clk_init_table init_table[] __initdata = {
- 	{ TEGRA30_CLK_UARTC, TEGRA30_CLK_PLL_P, 408000000, 0 },
- 	{ TEGRA30_CLK_UARTD, TEGRA30_CLK_PLL_P, 408000000, 0 },
- 	{ TEGRA30_CLK_UARTE, TEGRA30_CLK_PLL_P, 408000000, 0 },
--	{ TEGRA30_CLK_PLL_A, TEGRA30_CLK_CLK_MAX, 564480000, 1 },
--	{ TEGRA30_CLK_PLL_A_OUT0, TEGRA30_CLK_CLK_MAX, 11289600, 1 },
--	{ TEGRA30_CLK_EXTERN1, TEGRA30_CLK_PLL_A_OUT0, 0, 1 },
-+	{ TEGRA30_CLK_PLL_A, TEGRA30_CLK_CLK_MAX, 564480000, 0 },
-+	{ TEGRA30_CLK_PLL_A_OUT0, TEGRA30_CLK_CLK_MAX, 11289600, 0 },
- 	{ TEGRA30_CLK_I2S0, TEGRA30_CLK_PLL_A_OUT0, 11289600, 0 },
- 	{ TEGRA30_CLK_I2S1, TEGRA30_CLK_PLL_A_OUT0, 11289600, 0 },
- 	{ TEGRA30_CLK_I2S2, TEGRA30_CLK_PLL_A_OUT0, 11289600, 0 },
--- 
-2.7.4
+The A53 CCM clk root should only be used when need to change ARM PLL
+frequency.
+
+Peng Fan (4):
+  clk: imx: imx8mq: fix a53 cpu clock
+  clk: imx: imx8mm: fix a53 cpu clock
+  clk: imx: imx8mn: fix a53 cpu clock
+  clk: imx: imx8mp: fix a53 cpu clock
+
+ drivers/clk/imx/clk-imx8mm.c             | 16 ++++++++++++----
+ drivers/clk/imx/clk-imx8mn.c             | 16 ++++++++++++----
+ drivers/clk/imx/clk-imx8mp.c             | 16 ++++++++++++----
+ drivers/clk/imx/clk-imx8mq.c             | 16 ++++++++++++----
+ include/dt-bindings/clock/imx8mm-clock.h |  4 +++-
+ include/dt-bindings/clock/imx8mn-clock.h |  4 +++-
+ include/dt-bindings/clock/imx8mp-clock.h |  3 ++-
+ include/dt-bindings/clock/imx8mq-clock.h |  4 +++-
+ 8 files changed, 59 insertions(+), 20 deletions(-)
+
+--=20
+2.16.4
 
