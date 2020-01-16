@@ -2,39 +2,39 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C7313E2FC
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Jan 2020 17:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA5013E452
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Jan 2020 18:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733148AbgAPQ7X (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 16 Jan 2020 11:59:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44542 "EHLO mail.kernel.org"
+        id S2389201AbgAPRHi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 16 Jan 2020 12:07:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39834 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387485AbgAPQ5Y (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 16 Jan 2020 11:57:24 -0500
+        id S2388149AbgAPRHi (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:07:38 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7DBE12192A;
-        Thu, 16 Jan 2020 16:57:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7FD672192A;
+        Thu, 16 Jan 2020 17:07:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579193843;
-        bh=i5owRwERAnOiCFmbkU+ANJ+g3C6UCYGaMA8Usv0k760=;
+        s=default; t=1579194457;
+        bh=Oy9+H6puvy3Hl0TrNbMsCtOCK+VFOA3wTa72gzc+lvY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WhPnKMYCvJYHQ93Jb3fCRZ1tsh7Mru960wyY+RfC5Oqe6skGM6im1WhnMC8ctgmNo
-         bmU+9OP1tc03tQSSnbWl/xe27l3C2tl0EEaFyYXKVJrbJdt/vUJ1YDoZMtiRnDYHNT
-         gQHS9K+QaNuN2ON9AdGRj8ppvBUYwtxFJ5bdam8Q=
+        b=wQuX150EsgT8Hj3fC2kfGvRwodXSx7KE4+9Ss0Rya+TQRLvUmz3y4TGx8P62erIxB
+         3bK9hh0DA0GwZFeRNCorXoV78JR+81vEn340J/JUoocbA9S0VM7lBf4QXrI6A0USL9
+         +VY8xVOiK70r5VtU+m7wav0yxGGfHz0cRYP92V2U=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yangtao Li <tiny.windzz@gmail.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 097/671] clk: dove: fix refcount leak in dove_clk_init()
-Date:   Thu, 16 Jan 2020 11:45:28 -0500
-Message-Id: <20200116165502.8838-97-sashal@kernel.org>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 4.19 366/671] clk: meson: axg: spread spectrum is on mpll2
+Date:   Thu, 16 Jan 2020 12:00:04 -0500
+Message-Id: <20200116170509.12787-103-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116165502.8838-1-sashal@kernel.org>
-References: <20200116165502.8838-1-sashal@kernel.org>
+In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
+References: <20200116170509.12787-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,45 +44,48 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Yangtao Li <tiny.windzz@gmail.com>
+From: Jerome Brunet <jbrunet@baylibre.com>
 
-[ Upstream commit 8d726c5128298386b907963033be93407b0c4275 ]
+[ Upstream commit dc4e62d373f881cbf51513296a6db7806516a01a ]
 
-The of_find_compatible_node() returns a node pointer with refcount
-incremented, but there is the lack of use of the of_node_put() when
-done. Add the missing of_node_put() to release the refcount.
+After testing, it appears that the SSEN bit controls the spread
+spectrum function on MPLL2, not MPLL0.
 
-Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>
-Reviewed-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Fixes: 8f7fc5450b64 ("clk: mvebu: dove: maintain clock init order")
-Fixes: 63b8d92c793f ("clk: add Dove PLL divider support for GPU, VMeta and AXI clocks")
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Fixes: 78b4af312f91 ("clk: meson-axg: add clock controller drivers")
+Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/mvebu/dove.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/clk/meson/axg.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clk/mvebu/dove.c b/drivers/clk/mvebu/dove.c
-index 59fad9546c84..5f258c9bb68b 100644
---- a/drivers/clk/mvebu/dove.c
-+++ b/drivers/clk/mvebu/dove.c
-@@ -190,10 +190,14 @@ static void __init dove_clk_init(struct device_node *np)
- 
- 	mvebu_coreclk_setup(np, &dove_coreclks);
- 
--	if (ddnp)
-+	if (ddnp) {
- 		dove_divider_clk_init(ddnp);
-+		of_node_put(ddnp);
-+	}
- 
--	if (cgnp)
-+	if (cgnp) {
- 		mvebu_clk_gating_setup(cgnp, dove_gating_desc);
-+		of_node_put(cgnp);
-+	}
- }
- CLK_OF_DECLARE(dove_clk, "marvell,dove-core-clock", dove_clk_init);
+diff --git a/drivers/clk/meson/axg.c b/drivers/clk/meson/axg.c
+index 02229d051d77..4e7dac24948b 100644
+--- a/drivers/clk/meson/axg.c
++++ b/drivers/clk/meson/axg.c
+@@ -461,11 +461,6 @@ static struct clk_regmap axg_mpll0_div = {
+ 			.shift   = 16,
+ 			.width   = 9,
+ 		},
+-		.ssen = {
+-			.reg_off = HHI_MPLL_CNTL,
+-			.shift   = 25,
+-			.width	 = 1,
+-		},
+ 		.misc = {
+ 			.reg_off = HHI_PLL_TOP_MISC,
+ 			.shift   = 0,
+@@ -560,6 +555,11 @@ static struct clk_regmap axg_mpll2_div = {
+ 			.shift   = 16,
+ 			.width   = 9,
+ 		},
++		.ssen = {
++			.reg_off = HHI_MPLL_CNTL,
++			.shift   = 25,
++			.width	 = 1,
++		},
+ 		.misc = {
+ 			.reg_off = HHI_PLL_TOP_MISC,
+ 			.shift   = 2,
 -- 
 2.20.1
 
