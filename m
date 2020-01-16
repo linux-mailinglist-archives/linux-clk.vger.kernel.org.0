@@ -2,175 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C20F13FAD5
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Jan 2020 21:48:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D105F13FF3B
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Jan 2020 00:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729145AbgAPUsU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 16 Jan 2020 15:48:20 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:42058 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726994AbgAPUsU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Jan 2020 15:48:20 -0500
-Received: by mail-ot1-f67.google.com with SMTP id 66so20650830otd.9;
-        Thu, 16 Jan 2020 12:48:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BKpDxkPQvhaYwq0BM0j0+4RX+8L/FqW/tD6hcJ/WZ8Y=;
-        b=ulOidGdKRiRdlY8VOZszJhyjAauTrxAXsdD7IE4cuJrJ30QApKjd0bvId4BtV+JP3p
-         UK4SbWHOqIgCWrxlej3LAP8DDdskftp9FTDtjHt98ieN1anyVCLBv2Ix6d2GChWkxL/t
-         BguuPl2HoetxwtUrcIRYT8SMLu9QM+/Lb9quMWrpMDXRIipIB5bZPBhASej64roO4s31
-         81Yu38XbJ96LgWTI/hq6Fo7DqI+eCLr+J/CerJCYILQasRaVJ1ikJECgdZollcXOS9VU
-         xd4LrQHJDHkCos37jQC1hY9x+lne9zXQxyOynoNq5Avf14doJl+CFCtrQvOU9syb8lxs
-         AyUw==
-X-Gm-Message-State: APjAAAUtsY1rsIF5Qn88rUTH41kodMdWHXq++ACf8NwxWt8CrCuiUqP3
-        VeyLo0eUM4qscGlDjUjS/g==
-X-Google-Smtp-Source: APXvYqwElUK+YujhdGIIl9hNxkKGMyK9dGJUHl9hNmGbi/q+K5ZFvapHlfm9AC50/8wXvJNavkLnjQ==
-X-Received: by 2002:a9d:6e03:: with SMTP id e3mr3614892otr.46.1579207699487;
-        Thu, 16 Jan 2020 12:48:19 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id a17sm8039507otp.66.2020.01.16.12.48.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2020 12:48:18 -0800 (PST)
-Received: (nullmailer pid 14099 invoked by uid 1000);
-        Thu, 16 Jan 2020 20:48:17 -0000
-Date:   Thu, 16 Jan 2020 14:48:17 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jian Hu <jian.hu@amlogic.com>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Chandle Zou <chandle.zou@amlogic.com>,
-        linux-clk@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 1/5] dt-bindings: clock: meson: add A1 PLL clock
- controller bindings
-Message-ID: <20200116204817.GA9529@bogus>
-References: <20200116080440.118679-1-jian.hu@amlogic.com>
- <20200116080440.118679-2-jian.hu@amlogic.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200116080440.118679-2-jian.hu@amlogic.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S2390297AbgAPXlA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 16 Jan 2020 18:41:00 -0500
+Received: from mail26.static.mailgun.info ([104.130.122.26]:38893 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2391743AbgAPXkP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Jan 2020 18:40:15 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1579218015; h=Message-Id: Date: Subject: To: From: Sender;
+ bh=woslbLm1gjtzm5ew1VVzOuguIL3JLQBdJQJckmH6FtA=; b=YYJ8Rl1TEK4Bx7+OBETfLOgLYxHrxiP2mmx6yMLnwnMSl2DoBUhEkFXZ8U2x2x4FvkG4gdrT
+ UqZoZwNGjGD8xlJLDF4VGec8gVfWVL00jOyipReD2Y7N1+w1zVfbbUToVMuIkWP+bU++cFV/
+ uOchxIXu2SQwXlpoFGgd13zqGUk=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e20f45b.7f257e987f80-smtp-out-n03;
+ Thu, 16 Jan 2020 23:40:11 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 78724C433CB; Thu, 16 Jan 2020 23:40:11 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from vgutta-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: vgutta)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id DB611C43383;
+        Thu, 16 Jan 2020 23:40:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org DB611C43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=vnkgutta@codeaurora.org
+From:   Venkata Narendra Kumar Gutta <vnkgutta@codeaurora.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, vinod.koul@linaro.org,
+        psodagud@codeaurora.org, tsoni@codeaurora.org,
+        jshriram@codeaurora.org, tdas@codeaurora.org,
+        vnkgutta@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/7] Add device tree and clock drivers for SM8250 SoC
+Date:   Thu, 16 Jan 2020 15:39:47 -0800
+Message-Id: <1579217994-22219-1-git-send-email-vnkgutta@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, Jan 16, 2020 at 04:04:36PM +0800, Jian Hu wrote:
-> Add the documentation to support Amlogic A1 PLL clock driver,
-> and add A1 PLL clock controller bindings.
-> 
-> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
-> ---
->  .../bindings/clock/amlogic,a1-pll-clkc.yaml   | 54 +++++++++++++++++++
->  include/dt-bindings/clock/a1-pll-clkc.h       | 16 ++++++
->  2 files changed, 70 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
->  create mode 100644 include/dt-bindings/clock/a1-pll-clkc.h
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
-> new file mode 100644
-> index 000000000000..071240b65e70
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
-> @@ -0,0 +1,54 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/amlogic,a1-pll-clkc.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Amlogic Meson A/C serials PLL Clock Control Unit Device Tree Bindings
-> +
-> +maintainers:
-> +  - Neil Armstrong <narmstrong@baylibre.com>
-> +  - Jerome Brunet <jbrunet@baylibre.com>
-> +  - Jian Hu <jian.hu@jian.hu.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: amlogic,a1-pll-clkc
-> +
-> +  "#clock-cells":
-> +    const: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 2
+This series adds device tree support and clock drivers support
+for SM8250 SoC.
+As part of the device tree, the sm8250 dts file has basic nodes
+like CPU, PSCI, intc, timer and clock controller.
 
-Not necessary, so drop. Implied by the length of 'items'.
+Required clock controller driver and RPMH cloks are added to
+support peripherals like USB.
 
-> +    items:
-> +     - description: input xtal_fixpll
-> +     - description: input xtal_hifipll
-> +
-> +  clock-names:
-> +    maxItems: 2
+All this configuration is added to support SM8250 to boot up to the
+serial console.
 
-Same here.
+This patchset depends on one of the RPMH clock driver fix
+https://patchwork.kernel.org/patch/11318949/
 
-> +    items:
-> +      - const: xtal_fixpll
-> +      - const: xtal_hifipll
-> +
-> +required:
-> +  - compatible
-> +  - "#clock-cells"
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    clkc_pll: pll-clock-controller@7c80 {
-> +                compatible = "amlogic,a1-pll-clkc";
-> +                reg = <0 0x7c80 0 0x18c>;
-> +                #clock-cells = <1>;
-> +                clocks = <&clkc_periphs CLKID_XTAL_FIXPLL>,
-> +                         <&clkc_periphs CLKID_XTAL_HIFIPLL>;
+Taniya Das (6):
+  dt-bindings: clock: Add RPMHCC bindings for SM8250
+  clk: qcom: rpmh: Add support for RPMH clocks on SM8250
+  clk: qcom: clk-alpha-pll: Refactor and cleanup trion PLL
+  clk: qcom: clk-alpha-pll: Add support for controlling Lucid PLLs
+  dt-bindings: clock: Add SM8250 GCC clock bindings
+  clk: qcom: gcc: Add global clock controller driver for SM8250
 
-The example will fail to build because these aren't defined.
+Venkata Narendra Kumar Gutta (1):
+  arm64: dts: qcom: sm8250: Add sm8250 dts file
 
-Run 'make dt_binding_check'.
+ .../devicetree/bindings/clock/qcom,gcc.yaml        |    1 +
+ .../devicetree/bindings/clock/qcom,rpmhcc.yaml     |    1 +
+ arch/arm64/boot/dts/qcom/Makefile                  |    1 +
+ arch/arm64/boot/dts/qcom/sm8250-mtp.dts            |   29 +
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               |  450 +++
+ drivers/clk/qcom/Kconfig                           |    7 +
+ drivers/clk/qcom/Makefile                          |    1 +
+ drivers/clk/qcom/clk-alpha-pll.c                   |  259 +-
+ drivers/clk/qcom/clk-alpha-pll.h                   |   12 +
+ drivers/clk/qcom/clk-rpmh.c                        |   25 +-
+ drivers/clk/qcom/gcc-sm8250.c                      | 3720 ++++++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-sm8250.h        |  271 ++
+ include/dt-bindings/clock/qcom,rpmh.h              |    4 +-
+ 13 files changed, 4731 insertions(+), 50 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8250-mtp.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8250.dtsi
+ create mode 100644 drivers/clk/qcom/gcc-sm8250.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-sm8250.h
 
-> +                clock-names = "xtal_fixpll", "xtal_hifipll";
-> +    };
-> diff --git a/include/dt-bindings/clock/a1-pll-clkc.h b/include/dt-bindings/clock/a1-pll-clkc.h
-> new file mode 100644
-> index 000000000000..58eae237e503
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/a1-pll-clkc.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
-> +/*
-> + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
-> + */
-> +
-> +#ifndef __A1_PLL_CLKC_H
-> +#define __A1_PLL_CLKC_H
-> +
-> +#define CLKID_FIXED_PLL				1
-> +#define CLKID_FCLK_DIV2				6
-> +#define CLKID_FCLK_DIV3				7
-> +#define CLKID_FCLK_DIV5				8
-> +#define CLKID_FCLK_DIV7				9
-> +#define CLKID_HIFI_PLL				10
-> +
-> +#endif /* __A1_PLL_CLKC_H */
-> -- 
-> 2.24.0
-> 
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
