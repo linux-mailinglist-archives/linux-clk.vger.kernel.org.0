@@ -2,36 +2,36 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8258113F410
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Jan 2020 19:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA39113F31C
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Jan 2020 19:40:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389743AbgAPRJ6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 16 Jan 2020 12:09:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47000 "EHLO mail.kernel.org"
+        id S2390377AbgAPRMC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 16 Jan 2020 12:12:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53962 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389794AbgAPRJ6 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:09:58 -0500
+        id S2390372AbgAPRMB (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:12:01 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 35A872468E;
-        Thu, 16 Jan 2020 17:09:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 23F422469F;
+        Thu, 16 Jan 2020 17:12:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194597;
-        bh=LCKPWLkODzpw6QsnzkhbK96CpxHMm83SsS2SL8upF8o=;
+        s=default; t=1579194720;
+        bh=kTIb/Y3XzjF2+VFSAC+cj2XncnKLjgkHWIlny1KaSHw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PISiSh0QwM3Ra4/6xgeSLVJNGnrN+G4ugRlG8F7f/sLURrZ6V/DIa+jHPke13l8jW
-         Hrzt34NNQrIAwqs06k/FcUJgI3LEVa01p7qdI7ng8CtyVf10ZhOnmrrtggCbcSOXmZ
-         am8Hv4lU6JbiXLEdct1Wk2fyTF+pFNQdyLNNvLNg=
+        b=N7fgVBB4TvCyDj3tAVaJw0xpWMf1UalDkcTkfz29sq3PcXkPyju2iTIhhDxucr+Gg
+         1jgn0t1we2VzqrJqgHbRQfb1mlwrD5Nj3fTxoFioTEOXhRf2iPpkAeoq1sE0s5Cr3J
+         Xo8YCWr+zvay25H0cgKFdBg6nQCjWxzAxzD4+HMc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Icenowy Zheng <icenowy@aosc.io>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 466/671] clk: sunxi-ng: v3s: add the missing PLL_DDR1
-Date:   Thu, 16 Jan 2020 12:01:44 -0500
-Message-Id: <20200116170509.12787-203-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 556/671] clk: actions: Fix factor clk struct member access
+Date:   Thu, 16 Jan 2020 12:03:14 -0500
+Message-Id: <20200116170509.12787-293-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
 References: <20200116170509.12787-1-sashal@kernel.org>
@@ -44,112 +44,61 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Icenowy Zheng <icenowy@aosc.io>
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-[ Upstream commit c5ed9475c22c89d5409402055142372e35d26a3f ]
+[ Upstream commit ed309bfb4812e8b31a3eb877e157b8028a49e50c ]
 
-The user manual of V3/V3s/S3 declares a PLL_DDR1, however it's forgot
-when developing the V3s CCU driver.
+Since the helper "owl_factor_helper_round_rate" is shared between factor
+and composite clocks, using the factor clk specific helper function
+like "hw_to_owl_factor" to access its members will create issues when
+called from composite clk specific code. Hence, pass the "factor_hw"
+struct pointer directly instead of fetching it using factor clk specific
+helpers.
 
-Add back the missing PLL_DDR1.
+This issue has been observed when a composite clock like "sd0_clk" tried
+to call "owl_factor_helper_round_rate" resulting in pointer dereferencing
+error.
 
-Fixes: d0f11d14b0bc ("clk: sunxi-ng: add support for V3s CCU")
-Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
+While we are at it, let's rename the "clk_val_best" function to
+"owl_clk_val_best" since this is an owl SoCs specific helper.
+
+Fixes: 4bb78fc9744a ("clk: actions: Add factor clock support")
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Link: https://lkml.kernel.org/r/20190916154546.24982-2-manivannan.sadhasivam@linaro.org
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/sunxi-ng/ccu-sun8i-v3s.c | 19 +++++++++++++++----
- drivers/clk/sunxi-ng/ccu-sun8i-v3s.h |  6 ++++--
- 2 files changed, 19 insertions(+), 6 deletions(-)
+ drivers/clk/actions/owl-factor.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
-index 9e3f4088724b..c7f9d974b10d 100644
---- a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.c
-@@ -84,7 +84,7 @@ static SUNXI_CCU_NM_WITH_FRAC_GATE_LOCK(pll_ve_clk, "pll-ve",
- 					BIT(28),	/* lock */
- 					0);
+diff --git a/drivers/clk/actions/owl-factor.c b/drivers/clk/actions/owl-factor.c
+index 317d4a9e112e..f15e2621fa18 100644
+--- a/drivers/clk/actions/owl-factor.c
++++ b/drivers/clk/actions/owl-factor.c
+@@ -64,11 +64,10 @@ static unsigned int _get_table_val(const struct clk_factor_table *table,
+ 	return val;
+ }
  
--static SUNXI_CCU_NKM_WITH_GATE_LOCK(pll_ddr_clk, "pll-ddr",
-+static SUNXI_CCU_NKM_WITH_GATE_LOCK(pll_ddr0_clk, "pll-ddr0",
- 				    "osc24M", 0x020,
- 				    8, 5,	/* N */
- 				    4, 2,	/* K */
-@@ -123,6 +123,14 @@ static SUNXI_CCU_NK_WITH_GATE_LOCK_POSTDIV(pll_periph1_clk, "pll-periph1",
- 					   2,		/* post-div */
- 					   0);
+-static int clk_val_best(struct clk_hw *hw, unsigned long rate,
++static int owl_clk_val_best(const struct owl_factor_hw *factor_hw,
++			struct clk_hw *hw, unsigned long rate,
+ 			unsigned long *best_parent_rate)
+ {
+-	struct owl_factor *factor = hw_to_owl_factor(hw);
+-	struct owl_factor_hw *factor_hw = &factor->factor_hw;
+ 	const struct clk_factor_table *clkt = factor_hw->table;
+ 	unsigned long parent_rate, try_parent_rate, best = 0, cur_rate;
+ 	unsigned long parent_rate_saved = *best_parent_rate;
+@@ -126,7 +125,7 @@ long owl_factor_helper_round_rate(struct owl_clk_common *common,
+ 	const struct clk_factor_table *clkt = factor_hw->table;
+ 	unsigned int val, mul = 0, div = 1;
  
-+static SUNXI_CCU_NM_WITH_GATE_LOCK(pll_ddr1_clk, "pll-ddr1",
-+				   "osc24M", 0x04c,
-+				   8, 7,	/* N */
-+				   0, 2,	/* M */
-+				   BIT(31),	/* gate */
-+				   BIT(28),	/* lock */
-+				   0);
-+
- static const char * const cpu_parents[] = { "osc32k", "osc24M",
- 					     "pll-cpu", "pll-cpu" };
- static SUNXI_CCU_MUX(cpu_clk, "cpu", cpu_parents,
-@@ -310,7 +318,8 @@ static SUNXI_CCU_GATE(usb_phy0_clk,	"usb-phy0",	"osc24M",
- static SUNXI_CCU_GATE(usb_ohci0_clk,	"usb-ohci0",	"osc24M",
- 		      0x0cc, BIT(16), 0);
+-	val = clk_val_best(&common->hw, rate, parent_rate);
++	val = owl_clk_val_best(factor_hw, &common->hw, rate, parent_rate);
+ 	_get_table_div_mul(clkt, val, &mul, &div);
  
--static const char * const dram_parents[] = { "pll-ddr", "pll-periph0-2x" };
-+static const char * const dram_parents[] = { "pll-ddr0", "pll-ddr1",
-+					     "pll-periph0-2x" };
- static SUNXI_CCU_M_WITH_MUX(dram_clk, "dram", dram_parents,
- 			    0x0f4, 0, 4, 20, 2, CLK_IS_CRITICAL);
- 
-@@ -369,10 +378,11 @@ static struct ccu_common *sun8i_v3s_ccu_clks[] = {
- 	&pll_audio_base_clk.common,
- 	&pll_video_clk.common,
- 	&pll_ve_clk.common,
--	&pll_ddr_clk.common,
-+	&pll_ddr0_clk.common,
- 	&pll_periph0_clk.common,
- 	&pll_isp_clk.common,
- 	&pll_periph1_clk.common,
-+	&pll_ddr1_clk.common,
- 	&cpu_clk.common,
- 	&axi_clk.common,
- 	&ahb1_clk.common,
-@@ -457,11 +467,12 @@ static struct clk_hw_onecell_data sun8i_v3s_hw_clks = {
- 		[CLK_PLL_AUDIO_8X]	= &pll_audio_8x_clk.hw,
- 		[CLK_PLL_VIDEO]		= &pll_video_clk.common.hw,
- 		[CLK_PLL_VE]		= &pll_ve_clk.common.hw,
--		[CLK_PLL_DDR]		= &pll_ddr_clk.common.hw,
-+		[CLK_PLL_DDR0]		= &pll_ddr0_clk.common.hw,
- 		[CLK_PLL_PERIPH0]	= &pll_periph0_clk.common.hw,
- 		[CLK_PLL_PERIPH0_2X]	= &pll_periph0_2x_clk.hw,
- 		[CLK_PLL_ISP]		= &pll_isp_clk.common.hw,
- 		[CLK_PLL_PERIPH1]	= &pll_periph1_clk.common.hw,
-+		[CLK_PLL_DDR1]		= &pll_ddr1_clk.common.hw,
- 		[CLK_CPU]		= &cpu_clk.common.hw,
- 		[CLK_AXI]		= &axi_clk.common.hw,
- 		[CLK_AHB1]		= &ahb1_clk.common.hw,
-diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.h b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.h
-index 4a4d36fdad96..a091b7217dfd 100644
---- a/drivers/clk/sunxi-ng/ccu-sun8i-v3s.h
-+++ b/drivers/clk/sunxi-ng/ccu-sun8i-v3s.h
-@@ -29,7 +29,7 @@
- #define CLK_PLL_AUDIO_8X	5
- #define CLK_PLL_VIDEO		6
- #define CLK_PLL_VE		7
--#define CLK_PLL_DDR		8
-+#define CLK_PLL_DDR0		8
- #define CLK_PLL_PERIPH0		9
- #define CLK_PLL_PERIPH0_2X	10
- #define CLK_PLL_ISP		11
-@@ -58,6 +58,8 @@
- 
- /* And the GPU module clock is exported */
- 
--#define CLK_NUMBER		(CLK_MIPI_CSI + 1)
-+#define CLK_PLL_DDR1		74
-+
-+#define CLK_NUMBER		(CLK_PLL_DDR1 + 1)
- 
- #endif /* _CCU_SUN8I_H3_H_ */
+ 	return *parent_rate * mul / div;
 -- 
 2.20.1
 
