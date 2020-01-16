@@ -2,39 +2,39 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77FF613EF25
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Jan 2020 19:13:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5CD13F59C
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Jan 2020 19:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393189AbgAPSNf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 16 Jan 2020 13:13:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51774 "EHLO mail.kernel.org"
+        id S2395092AbgAPSza (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 16 Jan 2020 13:55:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39780 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405202AbgAPRgu (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:36:50 -0500
+        id S2389195AbgAPRHg (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:07:36 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2CA66246B8;
-        Thu, 16 Jan 2020 17:36:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C6D42205F4;
+        Thu, 16 Jan 2020 17:07:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196210;
-        bh=ZGJmYlRjr2H0cz1pgfoxuIs7wu9sOSTq74J+NGGbjRw=;
+        s=default; t=1579194455;
+        bh=qvLxjJ+7RTcPVWEj5B8DKfhGrxf4MZTY7DMCPPaYJJE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dgn3RykfLEIcnLGf/6LMjzLGB+c2eak+Tu3H/7mVKlCoDza3Nzos1rLMTJg0YvODD
-         m1G2ZAwUaN9c5ZGb9C/JwCaJNnuxNCJVGJDrG22MumMWZ4o5CXcXDsPSSBtG0TMkdy
-         McF1V50+FRNGAmPupAbZPcGJMInX15kyRVqHYRcw=
+        b=dHs/GFf0B7v90zh6Q1KzycrdrvIkQaAPnMWRa44V49qKRp6QHahPXsUdU8iTXZrEQ
+         GHkWS8rUk9NqLTR3EhT4J+wG7sFMd/bQL5XFIsOPX2tNJM6Y/TIN1z6DfUX0dqDVoK
+         l+qrQl3mSXpr6laMgkw5TXOqBhyS+VBXOrten8vE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
         Sasha Levin <sashal@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 046/251] clk: sunxi-ng: sun8i-a23: Enable PLL-MIPI LDOs when ungating it
-Date:   Thu, 16 Jan 2020 12:33:15 -0500
-Message-Id: <20200116173641.22137-6-sashal@kernel.org>
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 4.19 365/671] clk: meson: gxbb: no spread spectrum on mpll0
+Date:   Thu, 16 Jan 2020 12:00:03 -0500
+Message-Id: <20200116170509.12787-102-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
-References: <20200116173641.22137-1-sashal@kernel.org>
+In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
+References: <20200116170509.12787-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,37 +44,39 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Chen-Yu Tsai <wens@csie.org>
+From: Jerome Brunet <jbrunet@baylibre.com>
 
-[ Upstream commit 108a459ef4cd17a28711d81092044e597b5c7618 ]
+[ Upstream commit 8925dbd03bb29b1b0de30ac4e02c18faf8ddc9db ]
 
-The PLL-MIPI clock is somewhat special as it has its own LDOs which
-need to be turned on for this PLL to actually work and output a clock
-signal.
+The documentation says there is an SSEN bit on mpll0 but, after testing
+it, no spread spectrum function appears to be enabled by this bit on any
+of the MPLLs.
 
-Add the 2 LDO enable bits to the gate bits.
+Let's remove it until we know more
 
-Fixes: 5690879d93e8 ("clk: sunxi-ng: Add A23 CCU")
-Signed-off-by: Chen-Yu Tsai <wens@csie.org>
-Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
+Fixes: 1f737ffa13ef ("clk: meson: mpll: fix mpll0 fractional part ignored")
+Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/sunxi-ng/ccu-sun8i-a23.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/meson/gxbb.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-a23.c b/drivers/clk/sunxi-ng/ccu-sun8i-a23.c
-index 5c6d37bdf247..765c6977484e 100644
---- a/drivers/clk/sunxi-ng/ccu-sun8i-a23.c
-+++ b/drivers/clk/sunxi-ng/ccu-sun8i-a23.c
-@@ -132,7 +132,7 @@ static SUNXI_CCU_NKM_WITH_GATE_LOCK(pll_mipi_clk, "pll-mipi",
- 				    8, 4,		/* N */
- 				    4, 2,		/* K */
- 				    0, 4,		/* M */
--				    BIT(31),		/* gate */
-+				    BIT(31) | BIT(23) | BIT(22), /* gate */
- 				    BIT(28),		/* lock */
- 				    CLK_SET_RATE_UNGATE);
- 
+diff --git a/drivers/clk/meson/gxbb.c b/drivers/clk/meson/gxbb.c
+index b039909e03cf..38ffa51a5bad 100644
+--- a/drivers/clk/meson/gxbb.c
++++ b/drivers/clk/meson/gxbb.c
+@@ -650,11 +650,6 @@ static struct clk_regmap gxbb_mpll0_div = {
+ 			.shift   = 16,
+ 			.width   = 9,
+ 		},
+-		.ssen = {
+-			.reg_off = HHI_MPLL_CNTL,
+-			.shift   = 25,
+-			.width	 = 1,
+-		},
+ 		.lock = &meson_clk_lock,
+ 	},
+ 	.hw.init = &(struct clk_init_data){
 -- 
 2.20.1
 
