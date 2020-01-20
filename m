@@ -2,147 +2,94 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C83AE142ECB
-	for <lists+linux-clk@lfdr.de>; Mon, 20 Jan 2020 16:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57316143251
+	for <lists+linux-clk@lfdr.de>; Mon, 20 Jan 2020 20:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728712AbgATPcx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 20 Jan 2020 10:32:53 -0500
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:45858 "EHLO
+        id S1727026AbgATTcL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 20 Jan 2020 14:32:11 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:37189 "EHLO
         mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726642AbgATPcw (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 Jan 2020 10:32:52 -0500
-Received: by mail-ed1-f68.google.com with SMTP id v28so29818241edw.12;
-        Mon, 20 Jan 2020 07:32:51 -0800 (PST)
+        with ESMTP id S1727114AbgATTcA (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 Jan 2020 14:32:00 -0500
+Received: by mail-ed1-f68.google.com with SMTP id cy15so612809edb.4
+        for <linux-clk@vger.kernel.org>; Mon, 20 Jan 2020 11:31:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=OOCggNlyS9YgNLOjDZC4k2CQrj3lgyEzbj3H+eP3SQE=;
-        b=dfMihwdTWj/I8wOKg2Rs9iY5ghrDiTIiktCY71UOSpkgssYifYXSdlBSd609/u9xjS
-         Ds5XiFhFGB5p8GMBSwQ9bZKjmlihWm66nuZmyaaMpi/JL+tME+w0seGaOeRaOg9fGaqW
-         94iTMGe9++uLByUGQzUl2nIquM6MJ3tOFOHU9AlgX6/x2YRYSS2ZN+8HJc6IX1rzz/Iu
-         FzdPETX1u4WE+J3M79HpiN/eryDdkm9hcvES6+9e4RNHGYM+kUdJv7BSLmmmTHJf9ANN
-         VZUv8VfYfOyFBDcmIMWV7byCSHZ/pKFimZbXmL5h2ueObDPJ8/ZoVK+OC77fg6HNkbd0
-         E+7Q==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
+        b=kLfnsSTIjE2YEe6HI6GtqXd6cMnhTRLMcstoRngEtLrpsW8Des52P9cJGak3H8TgGi
+         7pI7x0ReUsZVA5020Qw65cEVulbgAqf7PV7Yj5z98jIQHYXuhdjNseji1wTJmoRk9owd
+         jH0nw85bxKb6JNDbbMZz77rTtrhB/lrp1T9+1Yzp1e0fAmiYnPF2y/wqE3N2vxlEpqDg
+         Q62+v45VGQo8fprIjkXGYdl8n0+0lt4RTeTWLmEirmHeh05e1zsbOQ1RyEmjVmqN0eJc
+         PRg9w7tG3wGqyiL8Rgrtjody799fKx6nbHvtMQHhCmcCncWFfzoetJS1edNfQP320vCH
+         Vilg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=OOCggNlyS9YgNLOjDZC4k2CQrj3lgyEzbj3H+eP3SQE=;
-        b=qQ5b+yjmAR3V6I6tzHB1GXQWoTcGTsYYTjrPZ5Qx0ktr7+NQ56sPUB649MADnsVbTj
-         l5uVfR58jX5WfynbYHUoWPp4NK2Tae3bLyAhH0zWhiqdYYFCX+WuprRg50R3bfJ6mASx
-         1rNmwKSH+sxx/4ugY7uxp8peXvOpmDHXmsqCDQ+Ot+5ucLvfGOAq4STuhHlaMt1P+qRT
-         kLXfxHBPnyPjYLx+QH7S3Q0fu/ibi6RWur/PGpTFRMe3yOoYcOHfnDVVFj3mj6jJKB2G
-         8js3aVh/uGT4hYDI6PXhGd9VA4b9M+latJ1Y40N3i9EaR0Vxvm3Vo2WlmsfaYTs8VpuX
-         DPdA==
-X-Gm-Message-State: APjAAAUss5OQji2wzM5yxyhbF5Xi9cuHCHRI8+nPNf1VX41dYATfIY+0
-        bRwVphJKEhtAFqVZQtUEeXWZo52M
-X-Google-Smtp-Source: APXvYqxjYvtLuxzmFSvORJMHr9PS1DmMWSmU08ILsHKVYQCqsxBngzG4LUM4tpU9XK2ZYIqVfQd7Bg==
-X-Received: by 2002:a17:906:948e:: with SMTP id t14mr20975740ejx.123.1579534370408;
-        Mon, 20 Jan 2020 07:32:50 -0800 (PST)
-Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id z10sm1121714ejn.16.2020.01.20.07.32.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jan 2020 07:32:49 -0800 (PST)
-Subject: Re: [PATCH v8 19/22] ASoC: tegra: Enable audio mclk during
- tegra_asoc_utils_init
-To:     Sameer Pujar <spujar@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        thierry.reding@gmail.com, jonathanh@nvidia.com, broonie@kernel.org,
-        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        mperttunen@nvidia.com, gregkh@linuxfoundation.org,
-        sboyd@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com
-Cc:     pdeschrijver@nvidia.com, pgaikwad@nvidia.com, josephl@nvidia.com,
-        daniel.lezcano@linaro.org, mmaddireddy@nvidia.com,
-        markz@nvidia.com, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1578986667-16041-1-git-send-email-skomatineni@nvidia.com>
- <1578986667-16041-20-git-send-email-skomatineni@nvidia.com>
- <3a8e609a-58aa-d2c1-c140-e1f0127dd53b@gmail.com>
- <64027c16-763b-350f-9975-4f9727450ae9@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <0b13d21c-1daf-4e9d-f2c2-e78a3b8935f2@gmail.com>
-Date:   Mon, 20 Jan 2020 18:32:45 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
+        b=XfaBX7VFSgxcfahMA++pns8dH7Fer1zWII0Wr+9f+Lz0gDUNMsWNztkMK486D+7RLA
+         n1tLqCWih7csVZHowPBoCX10vAwj1SN3Yu2RIKufuo2G2jhU7TRSDTrlYq4Ym7pRXScJ
+         VZQiNWMUkNx+eBCf9WSfVxVaXvVgoGr0v3f7GvU5DstHqe/BbMAfrMXK50FqMTZXV+sn
+         jqjqoEiJ7lKLTh0BzT/+Zy7U2uhZlXP/DFT60y4ceR0YDS7GPOPjB1SQTRTfvOZBZbcN
+         BrOlwEhsBaDxx6RAIEcDsdaQSZJIhFnuAJytUGq+/zES82JBaXkE6+so5rI3axNo/jM0
+         lQJA==
+X-Gm-Message-State: APjAAAUTM2nIzkPCRrHSYQcrR2u0yRR0hGJBQejHn5Of+JQaMG4jLcLC
+        SPAequcKduxdQ8rn4urHE7hwTMVuucIBQNLE9Jk=
+X-Google-Smtp-Source: APXvYqwPh6D8ihOXjaVWGs/0GLulEekGPU0xOOyxhr7PagnLX+E8xWeQy/UQ09ZNp2jZFCCt0xVGiodDu+D5No4niKg=
+X-Received: by 2002:a05:6402:505:: with SMTP id m5mr609398edv.15.1579548719077;
+ Mon, 20 Jan 2020 11:31:59 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <64027c16-763b-350f-9975-4f9727450ae9@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Mon, 20 Jan 2020 11:31:57
+ -0800 (PST)
+Reply-To: mcclainejohn.13@gmail.com
+From:   "Prof, William Roberts" <eco.bank1204@gmail.com>
+Date:   Mon, 20 Jan 2020 20:31:57 +0100
+Message-ID: <CAOE+jAB9Cv76tHqc-hO92yWjVshCsALoX=zT1ruNmX+0-Bjyxw@mail.gmail.com>
+Subject: Contact Diplomatic Agent, Mr. Mcclaine John to receive your ATM CARD
+ valued the sum of $12.8Million United States Dollars
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-20.01.2020 07:10, Sameer Pujar пишет:
-> 
-> On 1/19/2020 8:44 PM, Dmitry Osipenko wrote:
->> External email: Use caution opening links or attachments
->>
->>
->> 14.01.2020 10:24, Sowjanya Komatineni пишет:
->>> Tegra PMC clock clk_out_1 is dedicated for audio mclk from Tegra30
->>> through Tegra210 and currently Tegra clock driver keeps the audio
->>> mclk enabled.
->>>
->>> With the move of PMC clocks from clock driver into pmc driver,
->>> audio mclk enable from clock driver is removed and this should be
->>> taken care by the audio driver.
->>>
->>> tegra_asoc_utils_init calls tegra_asoc_utils_set_rate and audio mclk
->>> rate configuration is not needed during init and set_rate is actually
->>> done during hw_params callback.
->>>
->>> So, this patch removes tegra_asoc_utils_set_rate call and just leaves
->>> the audio mclk enabled.
->>>
->>> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
->>> ---
->>>   sound/soc/tegra/tegra_asoc_utils.c | 11 +++++++++--
->>>   1 file changed, 9 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/sound/soc/tegra/tegra_asoc_utils.c
->>> b/sound/soc/tegra/tegra_asoc_utils.c
->>> index 1dce5ad6e665..99584970f5f4 100644
->>> --- a/sound/soc/tegra/tegra_asoc_utils.c
->>> +++ b/sound/soc/tegra/tegra_asoc_utils.c
->>> @@ -216,9 +216,16 @@ int tegra_asoc_utils_init(struct
->>> tegra_asoc_utils_data *data,
->>>                data->clk_cdev1 = clk_out_1;
->>>        }
->>>
->>> -     ret = tegra_asoc_utils_set_rate(data, 44100, 256 * 44100);
->>> -     if (ret)
->>> +     /*
->>> +      * FIXME: There is some unknown dependency between audio mclk
->>> disable
->>> +      * and suspend-resume functionality on Tegra30, although audio
->>> mclk is
->>> +      * only needed for audio.
->>> +      */
->>> +     ret = clk_prepare_enable(data->clk_cdev1);
->>> +     if (ret) {
->>> +             dev_err(data->dev, "Can't enable cdev1: %d\n", ret);
->>>                return ret;
->>> +     }
->>>
->>>        return 0;
->>>   }
->>>
->> Shouldn't the clock be disabled on driver's removal?
-> 
-> I am not sure if we really need to do in this series as it does not
-> change the behavior from what was there earlier. Also there is already a
-> FIXME item here and we end up adding clock disable in remove() path of
-> multiple drivers, which is going to be removed once we address FIXME.
-> 
+Attn: Dear Beneficiary,
 
-Well, perhaps this is indeed good enough for the time being.
+I wish to inform you that the diplomatic agent conveying your ATM CARD
+valued the sum of $12.8Million United States Dollars has misplaced
+your address and he is currently stranded at (George Bush
+International Airport) Houston Texas USA now
+We required you to reconfirm the following information's below to him
+so that he can deliver your Payment CARD to you today or tomorrow
+morning as information provided with open communications via email and
+telephone for security reasons.
+HERE IS THE DETAILS  HE NEED FROM YOU URGENT
+YOUR FULL NAME:========
+ADDRESS:========
+MOBILE NO:========
+NAME OF YOUR NEAREST AIRPORT:========
+A COPY OF YOUR IDENTIFICATION :========
 
-BTW, I didn't spot any suspend-resume problems using v8.
+Note; do contact the diplomatic agent immediately through the
+information's listed below
+Contact Person: Diplomatic Agent, Mr. Mcclaine John
+EMAIL: mcclainejohn.13@gmail.com
+Tel:(223) 777-7518
 
-Tested-by: Dmitry Osipenko <digetx@gmail.com>
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Contact the diplomatic agent immediately
+because he is waiting to hear from you today with the needed information's.
+
+NOTE: The Diplomatic agent does not know that the content of the
+consignment box is $12.800,000,00 Million United States Dollars and on
+no circumstances should you let him know the content. The consignment
+was moved from here as family treasures, so never allow him to open
+the box. Please I have paid delivery fees for you but the only money
+you must send to Mcclaine John is your ATM CARD delivery fee $25.00
+only. text Him as you contact Him Immediately
+
+Thanks,
+with Regards.
+Prof, William Roberts
+Director DHL COURIER SERVICES-Benin
