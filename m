@@ -2,94 +2,124 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57316143251
-	for <lists+linux-clk@lfdr.de>; Mon, 20 Jan 2020 20:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2C6143667
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Jan 2020 06:01:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727026AbgATTcL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 20 Jan 2020 14:32:11 -0500
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:37189 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727114AbgATTcA (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 Jan 2020 14:32:00 -0500
-Received: by mail-ed1-f68.google.com with SMTP id cy15so612809edb.4
-        for <linux-clk@vger.kernel.org>; Mon, 20 Jan 2020 11:31:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
-        b=kLfnsSTIjE2YEe6HI6GtqXd6cMnhTRLMcstoRngEtLrpsW8Des52P9cJGak3H8TgGi
-         7pI7x0ReUsZVA5020Qw65cEVulbgAqf7PV7Yj5z98jIQHYXuhdjNseji1wTJmoRk9owd
-         jH0nw85bxKb6JNDbbMZz77rTtrhB/lrp1T9+1Yzp1e0fAmiYnPF2y/wqE3N2vxlEpqDg
-         Q62+v45VGQo8fprIjkXGYdl8n0+0lt4RTeTWLmEirmHeh05e1zsbOQ1RyEmjVmqN0eJc
-         PRg9w7tG3wGqyiL8Rgrtjody799fKx6nbHvtMQHhCmcCncWFfzoetJS1edNfQP320vCH
-         Vilg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
-        b=XfaBX7VFSgxcfahMA++pns8dH7Fer1zWII0Wr+9f+Lz0gDUNMsWNztkMK486D+7RLA
-         n1tLqCWih7csVZHowPBoCX10vAwj1SN3Yu2RIKufuo2G2jhU7TRSDTrlYq4Ym7pRXScJ
-         VZQiNWMUkNx+eBCf9WSfVxVaXvVgoGr0v3f7GvU5DstHqe/BbMAfrMXK50FqMTZXV+sn
-         jqjqoEiJ7lKLTh0BzT/+Zy7U2uhZlXP/DFT60y4ceR0YDS7GPOPjB1SQTRTfvOZBZbcN
-         BrOlwEhsBaDxx6RAIEcDsdaQSZJIhFnuAJytUGq+/zES82JBaXkE6+so5rI3axNo/jM0
-         lQJA==
-X-Gm-Message-State: APjAAAUTM2nIzkPCRrHSYQcrR2u0yRR0hGJBQejHn5Of+JQaMG4jLcLC
-        SPAequcKduxdQ8rn4urHE7hwTMVuucIBQNLE9Jk=
-X-Google-Smtp-Source: APXvYqwPh6D8ihOXjaVWGs/0GLulEekGPU0xOOyxhr7PagnLX+E8xWeQy/UQ09ZNp2jZFCCt0xVGiodDu+D5No4niKg=
-X-Received: by 2002:a05:6402:505:: with SMTP id m5mr609398edv.15.1579548719077;
- Mon, 20 Jan 2020 11:31:59 -0800 (PST)
+        id S1725890AbgAUFBB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 21 Jan 2020 00:01:01 -0500
+Received: from mail-eopbgr80057.outbound.protection.outlook.com ([40.107.8.57]:18886
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725789AbgAUFBB (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 21 Jan 2020 00:01:01 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TMkaZqAV2nye8znyKXQQn/Rj2sZkUUjTlXbWjQPEW2qzV0GCMB3Bl0MIzXV0juK/U47E5U744XXA376HPwMq7deb6NP7/OZsqiQOSPorFICL3LqCehBVOpQkuHEIQ8xVIFo173/GNT69Pm17/8TPNUFBdBOx/388t46b1tUwueIR12pMDUprsOLrapSDsXWE9iPFMxu8vgP7joBbljl6uf18qPYmfXJhSYws3hXFHlXRCS3u3eCcOBoSrwx4/T7DITRORFTbWENgaPkrPENMKsQGHK7hhSGNL7JjVi6I/44JpQAbcAbQ2Ok5xQSOmRd+wNdOj3F1QtHpC6+lvlcaRA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bFe4TbvfHpRkdgZj0fJOTowKwVzhuQuceYxfQhwn+tg=;
+ b=EPdKB9Km55TcrbTWYnUE6MBLKe526ZBgkuPvQeWUQuWhM5/NPmxxf/0yJlgpvcI5bxfoxcG5pqSE0ZfNunipMKhJ/o2JSnpCWRXpWqM+1p5YNTi/peziCNF8C1YY6YcbUVk2PMmhm+ysYUNy0qYW2Cjo2ds/cU6VKZ+gquPLBoUe9o7zl+BJDtXioqEMe+G4tRnYQR6cFnsmufB/9RTEvGN+Ew/WkEn/NVBCRcnefdK70rsrN4nZ/3utArg3wQUadCQvaESVNwOJzL9t2Gg5m2AJBFvpj0PuNAwHZTksMpXBqxXXyFWPZyxm/e5jGjyNT2wkumTfaGsf/wfhzVXCsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bFe4TbvfHpRkdgZj0fJOTowKwVzhuQuceYxfQhwn+tg=;
+ b=D5jYPTerNHhBgiNprx353JJ89jZbw3Lcx6WEZqIdNLKm+sfql/wqsBATwM/HL4mT15Srw7WvY+JSj7cXJs9YbnRtQJ5cNwZAYl5LW/6S1p5WJQTUKdP93xMmA4jpCpbO68h/K67X0R6lJYEbTxthz0OUNxSmD/rdxPONrCzqR1g=
+Received: from AM0PR04MB4211.eurprd04.prod.outlook.com (52.134.92.158) by
+ AM0PR04MB4961.eurprd04.prod.outlook.com (20.177.42.12) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2644.24; Tue, 21 Jan 2020 05:00:56 +0000
+Received: from AM0PR04MB4211.eurprd04.prod.outlook.com
+ ([fe80::b9bd:470c:5f9c:1bfd]) by AM0PR04MB4211.eurprd04.prod.outlook.com
+ ([fe80::b9bd:470c:5f9c:1bfd%7]) with mapi id 15.20.2644.027; Tue, 21 Jan 2020
+ 05:00:56 +0000
+From:   Aisheng Dong <aisheng.dong@nxp.com>
+To:     Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>
+CC:     "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: RE: [PATCH RESEND V5 00/11] clk: imx8: add new clock binding for
+ better pm support
+Thread-Topic: [PATCH RESEND V5 00/11] clk: imx8: add new clock binding for
+ better pm support
+Thread-Index: AQHVnUJfJlMJ/jCUUkSe2HX97baBSqe0uPgAgCKYlZCAHaMQkA==
+Date:   Tue, 21 Jan 2020 05:00:56 +0000
+Message-ID: <AM0PR04MB42115D5A9D431D6EEA0C8D2D800D0@AM0PR04MB4211.eurprd04.prod.outlook.com>
+References: <1573993519-14308-1-git-send-email-aisheng.dong@nxp.com>
+ <20191211080525.GS15858@dragon>
+ <AM0PR04MB42111A436D719D321ADB479380200@AM0PR04MB4211.eurprd04.prod.outlook.com>
+In-Reply-To: <AM0PR04MB42111A436D719D321ADB479380200@AM0PR04MB4211.eurprd04.prod.outlook.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=aisheng.dong@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: ee47c8c6-cbb1-4027-1fa0-08d79e2ee672
+x-ms-traffictypediagnostic: AM0PR04MB4961:|AM0PR04MB4961:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR04MB4961898E087698AA082A35E0800D0@AM0PR04MB4961.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 0289B6431E
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(39860400002)(396003)(366004)(376002)(346002)(199004)(189003)(55016002)(26005)(186003)(6506007)(86362001)(52536014)(66446008)(66556008)(64756008)(7696005)(5660300002)(66946007)(66476007)(478600001)(76116006)(2906002)(71200400001)(44832011)(8676002)(110136005)(4326008)(9686003)(54906003)(81166006)(8936002)(33656002)(316002)(81156014);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB4961;H:AM0PR04MB4211.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: AZZZidb7dD+Fv4aWeY/NjXyifA0ON26BItgPAzOLg1H/xvvh2bjhqt3jOLEYv03/+Gavxm8SicqLacs2e7W3ZC+7KPDKIQfbHQmGyCsPxyL4cIktVM8vZVLljWrXN320aGcjU0Kcqyj1T/qgeQDMs9vmlYWmC9PT5w3AWX5nzDoSHkdsHRlL03kcxAPH2YPpxiSHiLrcpBIm9CMB4O8vsGSwEB8Coweu6g7bv8iA4wihxr/Bqp0Pu2QGBXlleWAXn+CaEVia7m7/1HZycuuttFJGnYOSWMKKP+lMDZF2Nphziu8P2vZB/WMyjkepePA0DC3HTxSdCWq6Lq0nVnVOGUiFnIiThVUzVn6HDq/J0ny1izWms5t9EDSF7YdfZqAum56HCBZ6Jjaz3/YmMmINpg1VwnVJZ1saTi6K3F4tmLem0uJRwU923AAJc0vKvEkI
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Mon, 20 Jan 2020 11:31:57
- -0800 (PST)
-Reply-To: mcclainejohn.13@gmail.com
-From:   "Prof, William Roberts" <eco.bank1204@gmail.com>
-Date:   Mon, 20 Jan 2020 20:31:57 +0100
-Message-ID: <CAOE+jAB9Cv76tHqc-hO92yWjVshCsALoX=zT1ruNmX+0-Bjyxw@mail.gmail.com>
-Subject: Contact Diplomatic Agent, Mr. Mcclaine John to receive your ATM CARD
- valued the sum of $12.8Million United States Dollars
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee47c8c6-cbb1-4027-1fa0-08d79e2ee672
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jan 2020 05:00:56.6438
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lSpWs55absCjitlErTjbh1MajjZ3R8beOF/XDcxYHwB4/H3Ngsq8SWXJjKBWXK3UyCgN+ri0sd5Qe34gacR6uQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4961
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Attn: Dear Beneficiary,
-
-I wish to inform you that the diplomatic agent conveying your ATM CARD
-valued the sum of $12.8Million United States Dollars has misplaced
-your address and he is currently stranded at (George Bush
-International Airport) Houston Texas USA now
-We required you to reconfirm the following information's below to him
-so that he can deliver your Payment CARD to you today or tomorrow
-morning as information provided with open communications via email and
-telephone for security reasons.
-HERE IS THE DETAILS  HE NEED FROM YOU URGENT
-YOUR FULL NAME:========
-ADDRESS:========
-MOBILE NO:========
-NAME OF YOUR NEAREST AIRPORT:========
-A COPY OF YOUR IDENTIFICATION :========
-
-Note; do contact the diplomatic agent immediately through the
-information's listed below
-Contact Person: Diplomatic Agent, Mr. Mcclaine John
-EMAIL: mcclainejohn.13@gmail.com
-Tel:(223) 777-7518
-
-Contact the diplomatic agent immediately
-because he is waiting to hear from you today with the needed information's.
-
-NOTE: The Diplomatic agent does not know that the content of the
-consignment box is $12.800,000,00 Million United States Dollars and on
-no circumstances should you let him know the content. The consignment
-was moved from here as family treasures, so never allow him to open
-the box. Please I have paid delivery fees for you but the only money
-you must send to Mcclaine John is your ATM CARD delivery fee $25.00
-only. text Him as you contact Him Immediately
-
-Thanks,
-with Regards.
-Prof, William Roberts
-Director DHL COURIER SERVICES-Benin
+R2VudGx5IHBpbmcuLg0KDQo+IEZyb206IEFpc2hlbmcgRG9uZyA8YWlzaGVuZy5kb25nQG54cC5j
+b20+DQo+IFNlbnQ6IFRodXJzZGF5LCBKYW51YXJ5IDIsIDIwMjAgNDoyNiBQTQ0KPiANCj4gSGkg
+U3RlcGhlbiwNCj4gDQo+IENvdWxkIHlvdSB0YWtlIGEgbG9vayBhdCB0aGlzPw0KPiANCj4gUmVn
+YXJkcw0KPiBBaXNoZW5nDQo+IA0KPiA+IEZyb206IFNoYXduIEd1byA8c2hhd25ndW9Aa2VybmVs
+Lm9yZz4NCj4gPiBTZW50OiBXZWRuZXNkYXksIERlY2VtYmVyIDExLCAyMDE5IDQ6MDUgUE0NCj4g
+Pg0KPiA+IE9uIFN1biwgTm92IDE3LCAyMDE5IGF0IDA4OjI1OjA4UE0gKzA4MDAsIERvbmcgQWlz
+aGVuZyB3cm90ZToNCj4gPiA+IFRoaXMgaXMgYSBmb2xsb3cgdXAgb2YgdGhpcyBwYXRjaCBzZXJp
+ZXMuDQo+ID4gPiBbVjIsMC8yXSBjbGs6IGlteDogc2N1OiBhZGQgcGFyc2luZyBjbG9ja3MgZnJv
+bSBkZXZpY2UgdHJlZSBzdXBwb3J0DQo+ID4gPg0KPiA+ID4gVGhpcyBwYXRjaCBzZXJpZXMgaXMg
+YSBwcmVwYXJhdGlvbiBmb3IgdGhlIE1YOCBBcmNoaXRlY3R1cmUgaW1wcm92ZW1lbnQuDQo+ID4g
+PiBBcyBmb3IgSU1YIFNDVSBiYXNlZCBwbGF0Zm9ybXMgbGlrZSBNWDhRTSBhbmQgTVg4UVhQLCB0
+aGV5IGFyZQ0KPiA+ID4gY29tcHJpc2VkIG9mIGEgY291cGxlIG9mIFNTKFN1YnN5c3RlbXMpIHdo
+aWxlIG1vc3Qgb2YgdGhlbSB3aXRoaW4NCj4gPiA+IHRoZSBzYW1lIFNTIGNhbiBiZSBzaGFyZWQu
+IGUuZy4gQ2xvY2tzLCBEZXZpY2VzIGFuZCBldGMuDQo+ID4gPg0KPiA+ID4gSG93ZXZlciwgY3Vy
+cmVudCBjbG9jayBiaW5kaW5nIGlzIHVzaW5nIFNXIElEcyBmb3IgZGV2aWNlIHRyZWUgdG8NCj4g
+PiA+IHVzZSB3aGljaCBjYW4gY2F1c2UgdHJvdWJsZXMgaW4gd3JpdGluZyB0aGUgY29tbW9uIDxz
+b2M+LXNzLXh4LmR0c2kNCj4gPiA+IGZpbGUgZm9yIGRpZmZlcmVudCBTb0NzLg0KPiA+ID4NCj4g
+PiA+IFRoaXMgcGF0Y2ggc2VyaWVzIGFpbXMgdG8gaW50cm9kdWNlIGEgbmV3IGJpbmRpbmcgd2hp
+Y2ggaXMgbW9yZQ0KPiA+ID4gY2xvc2UgdG8gaGFyZHdhcmUgYW5kIHBsYXRmb3JtIGluZGVwZW5k
+ZW50IGFuZCBjYW4gbWFrZXMgdXMgd3JpdGUgYQ0KPiA+ID4gbW9yZSBnZW5lcmFsIGRyaXZlcnMg
+Zm9yIGRpZmZlcmVudCBTQ1UgYmFzZWQgU29Dcy4NCj4gPiA+DQo+ID4gPiBBbm90aGVyIGltcG9y
+dGFudCB0aGluZyBpcyB0aGF0IG9uIE1YOCwgZWFjaCBDbG9jayByZXNvdXJjZSBpcw0KPiA+ID4g
+YXNzb2NpYXRlZCB3aXRoIGEgcG93ZXIgZG9tYWluLiBTbyB3ZSBoYXZlIHRvIGF0dGFjaCB0aGF0
+IGNsb2NrDQo+ID4gPiBkZXZpY2UgdG8gdGhlIHBvd2VyIGRvbWFpbiBpbiBvcmRlciB0byBtYWtl
+IGl0IHdvcmsgcHJvcGVybHkuDQo+ID4gPiBGdXJ0aGVyIG1vcmUsIHRoZSBjbG9jayBzdGF0ZSB3
+aWxsIGJlIGxvc3Qgd2hlbiBpdHMgcG93ZXIgZG9tYWluIGlzDQo+ID4gPiBjb21wbGV0ZWx5IG9m
+ZiBkdXJpbmcgc3VzcGVuZC9yZXN1bWUsIHNvIHdlIGFsc28gaW50cm9kdWNlIHRoZSBjbG9jaw0K
+PiA+ID4gc3RhdGUgc2F2ZSZyZXN0b3JlDQo+ID4gbWVjaGFuaXNtLg0KPiA+ID4NCj4gPiA+IENo
+YW5nZUxvZzoNCj4gPiA+IHY0LT52NToNCj4gPiA+ICAqIEFkZHJlc3MgYWxsIGNvbW1lbnRzIGZy
+b20gU3RlcGhlbg0KPiA+DQo+ID4gSGkgU3RlcGhlbiwNCj4gPg0KPiA+IEFyZSB5b3UgZmluZSB3
+aXRoIHRoaXMgdmVyc2lvbj8NCj4gPg0KPiA+IFNoYXduDQo=
