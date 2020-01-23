@@ -2,63 +2,142 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA16146225
-	for <lists+linux-clk@lfdr.de>; Thu, 23 Jan 2020 07:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3BF21464F5
+	for <lists+linux-clk@lfdr.de>; Thu, 23 Jan 2020 10:51:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725897AbgAWGqP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 23 Jan 2020 01:46:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36276 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725535AbgAWGqP (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 23 Jan 2020 01:46:15 -0500
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 78346217F4;
-        Thu, 23 Jan 2020 06:46:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579761974;
-        bh=T3vIGKZC1bfw3mu1T/uU0TZlAZMQ/9TbOrBDWxrgMfE=;
-        h=In-Reply-To:References:To:From:Subject:Date:From;
-        b=hsoi5gkWuNCLOIdDRxnpJEm08tN6cjSyI1suOqT/8ebYNe3ltG6ctwlRHSTwAlZKG
-         pN6p/6qWbUCHUthBWt6PCWBCNuk+qQQGyXanRUtqD3QBZaZPqmG1Deu0j83DUSAXla
-         VyOPHlN4gc/lIdAsagkBJ0NBjsPS7I69Oq0JzNns=
-Content-Type: text/plain; charset="utf-8"
+        id S1726703AbgAWJvm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 23 Jan 2020 04:51:42 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:42601 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728205AbgAWJvT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Jan 2020 04:51:19 -0500
+Received: by mail-wr1-f67.google.com with SMTP id q6so2297742wro.9
+        for <linux-clk@vger.kernel.org>; Thu, 23 Jan 2020 01:51:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:autocrypt:organization:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IL15pRU9pFPgz6S6Tf7uhh3iwf+4kU+o6fQpOFHsq5Q=;
+        b=Zs7/UVvf2IkrzBlosC4cjUUZhiO3Fdjkl90Zs9Gt4vVXIY0+sCmE14mQK4brxCJ1vr
+         lUfMrobrtE59nuM8Dac3pEa+G894wORGOO15xB7DhWQ3T9FZvVrifRCRJsLPUW9CgbgU
+         IhlwUfpLq3rEZragtyyTXDTCZzgA92NWCCOWNpMd2cy8HB+dd9hBoi/DEOg8Jyb+dsd3
+         9LNBzoY2env+HpPLBfpNg8Cjrddck1/fzrfXo8JSEBvbY2kMArMDmmw9LbLvXsFhqJew
+         eKJzcn5e59jh4srLzU6KtUUkap3RncAlKDaq1e0ODiQ7lgk+86eo79n83bHID+vZt7rs
+         Tgfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=IL15pRU9pFPgz6S6Tf7uhh3iwf+4kU+o6fQpOFHsq5Q=;
+        b=YGcK7DJnDEKb5u59RahvpkrOEUWylg3U8Lx9wHdlTFplkFApul3DLNTIzIClEbWpxj
+         1QYw7Mw4h1EAL+ZcF7HbuvcUHHLhzpFCFHQ13of3JxN1BCil55zJ1TaoWc4ad7yp9iQe
+         gP+XsM7FxytdKHa4ACceksV1wQOX1bLQmms7u+sK3/hPCUuPD2nlREnLjmifbIFTTOSX
+         pL1cO89EkQNY/swhtxIp3Bpasz1S7sQKsf5H12HowMHRl2xFW4uN8FusRQDqCb7OzKrT
+         09w7ps672NeP9wPtcrCgh9gOG17p6qXXGzOA4ZG6XbvyiD/FpfhDWef6Zvq+DsPb80wQ
+         WMNQ==
+X-Gm-Message-State: APjAAAVCKZ3lQFdjZ6D1rUr8qnolrHCuFF6NvTmVucx6XtZGtQR1w8S8
+        rIy5y+/xO7K1BHE9w1Eq1l9ywg==
+X-Google-Smtp-Source: APXvYqws0wuB0YrfK5tNuJ8KF0E7NpTeEXybHdH9RubT/0dKVHKDma2ewhI8Jx7Fh8LQ3yrvM7/IRw==
+X-Received: by 2002:a05:6000:1187:: with SMTP id g7mr16701836wrx.109.1579773076516;
+        Thu, 23 Jan 2020 01:51:16 -0800 (PST)
+Received: from [10.1.2.12] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id b68sm2039078wme.6.2020.01.23.01.51.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jan 2020 01:51:15 -0800 (PST)
+Subject: Re: [PATCH 1/3] dt-bindings: clk: meson: add the gxl internal dac
+ gate
+To:     Jerome Brunet <jbrunet@baylibre.com>, linux-clk@vger.kernel.org
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200122100451.2443153-1-jbrunet@baylibre.com>
+ <20200122100451.2443153-2-jbrunet@baylibre.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
+ 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
+ BSwxi7g3Mu7u5kUByanqHyA=
+Organization: Baylibre
+Message-ID: <8231eb08-06c9-7acd-317d-61ecf2a55ca2@baylibre.com>
+Date:   Thu, 23 Jan 2020 10:51:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1579217994-22219-3-git-send-email-vnkgutta@codeaurora.org>
-References: <1579217994-22219-1-git-send-email-vnkgutta@codeaurora.org> <1579217994-22219-3-git-send-email-vnkgutta@codeaurora.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        devicetree@vger.kernel.org, jshriram@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mark.rutland@arm.com,
-        mturquette@baylibre.com, psodagud@codeaurora.org,
-        robh+dt@kernel.org, tdas@codeaurora.org, tsoni@codeaurora.org,
-        vinod.koul@linaro.org, vnkgutta@codeaurora.org
-From:   Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH 2/7] clk: qcom: rpmh: Add support for RPMH clocks on SM8250
-User-Agent: alot/0.8.1
-Date:   Wed, 22 Jan 2020 22:46:13 -0800
-Message-Id: <20200123064614.78346217F4@mail.kernel.org>
+In-Reply-To: <20200122100451.2443153-2-jbrunet@baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Venkata Narendra Kumar Gutta (2020-01-16 15:39:49)
-> @@ -490,6 +512,7 @@ static int clk_rpmh_probe(struct platform_device *pde=
-v)
->         { .compatible =3D "qcom,sdm845-rpmh-clk", .data =3D &clk_rpmh_sdm=
-845},
->         { .compatible =3D "qcom,sm8150-rpmh-clk", .data =3D &clk_rpmh_sm8=
-150},
->         { .compatible =3D "qcom,sc7180-rpmh-clk", .data =3D &clk_rpmh_sc7=
-180},
-> +       { .compatible =3D "qcom,sm8250-rpmh-clk",  .data =3D &clk_rpmh_sm=
-8250},
+On 22/01/2020 11:04, Jerome Brunet wrote:
+> Add the gxl ACODEC clock id to the gxbb clock controller bindings
+> 
+> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+> ---
+>  include/dt-bindings/clock/gxbb-clkc.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/include/dt-bindings/clock/gxbb-clkc.h b/include/dt-bindings/clock/gxbb-clkc.h
+> index db0763e96173..4073eb7a9da1 100644
+> --- a/include/dt-bindings/clock/gxbb-clkc.h
+> +++ b/include/dt-bindings/clock/gxbb-clkc.h
+> @@ -146,5 +146,6 @@
+>  #define CLKID_CTS_VDAC		201
+>  #define CLKID_HDMI_TX		202
+>  #define CLKID_HDMI		205
+> +#define CLKID_ACODEC		206
+>  
+>  #endif /* __GXBB_CLKC_H */
+> 
 
-We should sort this on compatible.
-
->         { }
->  };
->  MODULE_DEVICE_TABLE(of, clk_rpmh_match_table);
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
