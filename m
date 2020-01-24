@@ -2,106 +2,114 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56EB3148FEA
-	for <lists+linux-clk@lfdr.de>; Fri, 24 Jan 2020 22:08:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E2B1490F0
+	for <lists+linux-clk@lfdr.de>; Fri, 24 Jan 2020 23:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726382AbgAXVIi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 24 Jan 2020 16:08:38 -0500
-Received: from [167.172.186.51] ([167.172.186.51]:57100 "EHLO shell.v3.sk"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725747AbgAXVIi (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 24 Jan 2020 16:08:38 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 3D8B6DFE17;
-        Fri, 24 Jan 2020 21:08:46 +0000 (UTC)
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id nsCRUdqw7lCo; Fri, 24 Jan 2020 21:08:45 +0000 (UTC)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 97A45DFEAD;
-        Fri, 24 Jan 2020 21:08:45 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at zimbra.v3.sk
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ELtJo5_L7sxB; Fri, 24 Jan 2020 21:08:45 +0000 (UTC)
-Received: from localhost (unknown [109.183.109.54])
-        by zimbra.v3.sk (Postfix) with ESMTPSA id 4F1C4DFE17;
-        Fri, 24 Jan 2020 21:08:45 +0000 (UTC)
-Date:   Fri, 24 Jan 2020 22:08:33 +0100
-From:   Lubomir Rintel <lkundrak@v3.sk>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Olof Johansson <olof@lixom.net>, linux-clk@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.4 028/107] clk: mmp2: Fix the order of timer
- mux parents
-Message-ID: <20200124210833.GA244505@furthur.local>
-References: <20200124141817.28793-1-sashal@kernel.org>
- <20200124141817.28793-28-sashal@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200124141817.28793-28-sashal@kernel.org>
+        id S1729267AbgAXWcu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 24 Jan 2020 17:32:50 -0500
+Received: from mail26.static.mailgun.info ([104.130.122.26]:16582 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729275AbgAXWcs (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 24 Jan 2020 17:32:48 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1579905167; h=Message-Id: Date: Subject: To: From: Sender;
+ bh=+VyCGh8CGrDtWBvdHmu30YsoZRjC+pFVKCdY2gMhLTo=; b=UySVP0HfPkyIlKSVT8XUKFHyU+o/TnaxFrbINaJ+Rszed6pHvzbDpy/cmRu6AM92rZF0cm3u
+ unFltG5FEAeCHGDqgPhgKLILXpbLzIDVtCMnExeSlrldmoEdfQNhxDtR5yedqG8p7pUtqxRw
+ 89as4vqK7lGpPKnSepsgCVqwVCw=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e2b7083.7f5b1894d8f0-smtp-out-n02;
+ Fri, 24 Jan 2020 22:32:35 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 29B73C447A4; Fri, 24 Jan 2020 22:32:34 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from vgutta-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: vgutta)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B681AC43383;
+        Fri, 24 Jan 2020 22:32:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B681AC43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=vnkgutta@codeaurora.org
+From:   Venkata Narendra Kumar Gutta <vnkgutta@codeaurora.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, vinod.koul@linaro.org,
+        psodagud@codeaurora.org, tsoni@codeaurora.org,
+        jshriram@codeaurora.org, tdas@codeaurora.org,
+        vnkgutta@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 0/7] Add device tree and clock drivers for SM8250 SoC
+Date:   Fri, 24 Jan 2020 14:32:20 -0800
+Message-Id: <1579905147-12142-1-git-send-email-vnkgutta@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, Jan 24, 2020 at 09:16:58AM -0500, Sasha Levin wrote:
-> From: Lubomir Rintel <lkundrak@v3.sk>
-> 
-> [ Upstream commit 8bea5ac0fbc5b2103f8779ddff216122e3c2e1ad ]
-> 
-> Determined empirically, no documentation is available.
-> 
-> The OLPC XO-1.75 laptop used parent 1, that one being VCTCXO/4 (65MHz), but
-> thought it's a VCTCXO/2 (130MHz). The mmp2 timer driver, not knowing
-> what is going on, ended up just dividing the rate as of
-> commit f36797ee4380 ("ARM: mmp/mmp2: dt: enable the clock")'
+This series adds device tree support and clock drivers support
+for SM8250 SoC.
+As part of the device tree, the sm8250 dts file has basic nodes
+like CPU, PSCI, intc, timer and clock controller.
 
-Hi,
+Required clock controller driver and RPMH cloks are added to
+support peripherals like USB.
 
-this has to go together with this one (in other stable trees too):
+All this configuration is added to support SM8250 to boot up to the
+serial console.
 
-  commit 0bd0f30bbf060891f58866a46083a9931f71787c
-  Author: Lubomir Rintel <lkundrak@v3.sk>
-  Date:   Wed Dec 18 20:04:53 2019 +0100
+V2:
+ * Addressed comments on patch 2, kept new compatible in sorted order
+   and fixed the additional spaces.
+ * Addressed comments on patch 7, fixed the clk-cells of "sleep_clk"
+   and updated name of the scm node.
+ * Added reviewed-by/Acked-by tags.
+
+Whole series:
+Tested-by: Vinod Koul <vkoul@kernel.org>
+Tested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
   
-      ARM: mmp: do not divide the clock rate
-      
-      This was done because the clock driver returned the wrong rate, which is
-      fixed in "clk: mmp2: Fix the order of timer mux parents" patch.
+This patchset depends on one of the RPMH clock driver fix
+https://patchwork.kernel.org/patch/11318949/
 
-It removes a workaround for the same issue from before it was
-understood what is going on. If it stays, the clock will run twice as
-fast.
+Taniya Das (6):
+  dt-bindings: clock: Add RPMHCC bindings for SM8250
+  clk: qcom: rpmh: Add support for RPMH clocks on SM8250
+  clk: qcom: clk-alpha-pll: Refactor and cleanup trion PLL
+  clk: qcom: clk-alpha-pll: Add support for controlling Lucid PLLs
+  dt-bindings: clock: Add SM8250 GCC clock bindings
+  clk: qcom: gcc: Add global clock controller driver for SM8250
 
-Thanks
-Lubo
+Venkata Narendra Kumar Gutta (1):
+  arm64: dts: qcom: sm8250: Add sm8250 dts file
 
-> 
-> Link: https://lore.kernel.org/r/20191218190454.420358-3-lkundrak@v3.sk
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> Acked-by: Stephen Boyd <sboyd@kernel.org>
-> Signed-off-by: Olof Johansson <olof@lixom.net>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  drivers/clk/mmp/clk-of-mmp2.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/mmp/clk-of-mmp2.c b/drivers/clk/mmp/clk-of-mmp2.c
-> index a60a1be937ad6..b4a95cbbda989 100644
-> --- a/drivers/clk/mmp/clk-of-mmp2.c
-> +++ b/drivers/clk/mmp/clk-of-mmp2.c
-> @@ -134,7 +134,7 @@ static DEFINE_SPINLOCK(ssp3_lock);
->  static const char *ssp_parent_names[] = {"vctcxo_4", "vctcxo_2", "vctcxo", "pll1_16"};
->  
->  static DEFINE_SPINLOCK(timer_lock);
-> -static const char *timer_parent_names[] = {"clk32", "vctcxo_2", "vctcxo_4", "vctcxo"};
-> +static const char *timer_parent_names[] = {"clk32", "vctcxo_4", "vctcxo_2", "vctcxo"};
->  
->  static DEFINE_SPINLOCK(reset_lock);
->  
-> -- 
-> 2.20.1
-> 
+ .../devicetree/bindings/clock/qcom,gcc.yaml        |    1 +
+ .../devicetree/bindings/clock/qcom,rpmhcc.yaml     |    1 +
+ arch/arm64/boot/dts/qcom/Makefile                  |    1 +
+ arch/arm64/boot/dts/qcom/sm8250-mtp.dts            |   29 +
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               |  450 +++
+ drivers/clk/qcom/Kconfig                           |    7 +
+ drivers/clk/qcom/Makefile                          |    1 +
+ drivers/clk/qcom/clk-alpha-pll.c                   |  259 +-
+ drivers/clk/qcom/clk-alpha-pll.h                   |   12 +
+ drivers/clk/qcom/clk-rpmh.c                        |   25 +-
+ drivers/clk/qcom/gcc-sm8250.c                      | 3720 ++++++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-sm8250.h        |  271 ++
+ include/dt-bindings/clock/qcom,rpmh.h              |    4 +-
+ 13 files changed, 4731 insertions(+), 50 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8250-mtp.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8250.dtsi
+ create mode 100644 drivers/clk/qcom/gcc-sm8250.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-sm8250.h
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
