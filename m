@@ -2,45 +2,45 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC36E149144
-	for <lists+linux-clk@lfdr.de>; Fri, 24 Jan 2020 23:44:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69FA8149121
+	for <lists+linux-clk@lfdr.de>; Fri, 24 Jan 2020 23:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387405AbgAXWoA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 24 Jan 2020 17:44:00 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:38725 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729213AbgAXWnR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 24 Jan 2020 17:43:17 -0500
-Received: by mail-pf1-f194.google.com with SMTP id x185so1797253pfc.5
-        for <linux-clk@vger.kernel.org>; Fri, 24 Jan 2020 14:43:17 -0800 (PST)
+        id S2387402AbgAXWnT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 24 Jan 2020 17:43:19 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:36657 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387401AbgAXWnS (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 24 Jan 2020 17:43:18 -0500
+Received: by mail-pj1-f66.google.com with SMTP id gv17so470847pjb.1
+        for <linux-clk@vger.kernel.org>; Fri, 24 Jan 2020 14:43:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=aUtLqcv/Vq5O1yPHr9lwO+Q2UaRXNLbVqC9iz4yzAPg=;
-        b=cL6KsxWn65i8MFgUEzTp+bXeafZ/i2X7w0dWVLte1h4a9phyM7AkaNYA76gqLq3hdV
-         sfTSY+rfJud6zwRGnrv6x3KeCEgrwx4OFCja6jk6Z3YhXkdDRd0ZCzFzBL61D8l8r4GI
-         L2yxfewfPBbhLFhiBN7XwL6Bp+fSwrYzQTqIg=
+        bh=XUY8OKSzBPGKXsy9C12HX4Zd6On+8bszenkjFTAhVcw=;
+        b=DH4yPU/+4ENvZ1SHdmkXG/qDzhONJtANeKgsBWF2MKama9XzUmkblLRrT/cItCZKj8
+         8Y2BMYOHgoRy5Bf8ONQUvRQ9k0wgYTzO7ax770GkY60FXeHJNdvANDEoCA0UBkaZmXuq
+         QICm4GNs/WQDglT6iZ7Ib965Jp/q1Yqp5t0JY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=aUtLqcv/Vq5O1yPHr9lwO+Q2UaRXNLbVqC9iz4yzAPg=;
-        b=aaa83Nff8bZCl5Mvqlpqa/saIh+BEWYHjABZ55CdRnLm6U4WMbSC1iZLzRzCjBHgs+
-         SLhz9yj6Uv7fDvq5yQI63qED4cyzxne9gtE1w187rbkUWj5ooXAfcHxXt0Fq1X0Gf/pV
-         odRkkBOSVkWwf+Fm1W4Iw6WEG3ie0//ikVmUzLyotstJKVqfOsyzlPu9DX5zhtgpuRgX
-         CL6oZ1U8OuxGLvs5M/zFefeTfzua2r+ehgB19AhgNd+xo+C4YiFXCHHpc+IqU7k+hvXz
-         cNi8HAuy2EXwlulRtOxSSMSGfLFxTCwiRePdocELgD71kk66MfvEV4pZflg5HEiIVbpL
-         vKVg==
-X-Gm-Message-State: APjAAAXtLT9dPBXrryOn+uJPRtUdu63oLTTqHsCQIWyi72sxy/Ffs0iU
-        BsrceIDJDMHzAcNM7o5EebmqPA==
-X-Google-Smtp-Source: APXvYqz/yZrIXvlaesHWaGFX+hjcycDFPTVmoM0llXD8iTg1khhXkmxb5j/IXoOJGvU5uVMlzcYJSg==
-X-Received: by 2002:a63:e954:: with SMTP id q20mr6967695pgj.204.1579905796900;
-        Fri, 24 Jan 2020 14:43:16 -0800 (PST)
+        bh=XUY8OKSzBPGKXsy9C12HX4Zd6On+8bszenkjFTAhVcw=;
+        b=LxhHahXkv5jt3g3V7ueGpwL9YB+2FKzjG9kCAJTnyK8CPevg+ZQct0h1d2NPJkQyt4
+         jnDpQgXsxn+vcjqL8BikZVe1NelBbRS3iBrPp2KnrbNcWdT5WuQZ096ZppbPOY0QnQYC
+         Hviy2TLrNv/zIdlDAJE7zXWMBmyzDIe3y0DMpzrIM1ktP9TBaVX1+z4bHp7GXECEJQjA
+         nbCH68AJEFmzHRy1mMJ9EkR+1QVGzgLrAGJ8rfAPfE7DPovxN1zGREKH+gqNETcPLJWr
+         p7Dma5hpTuQTMnULRR+FwmqAoQrkP7ee8xnadfeZ109I7oiIGSlCmv5Lny1rv7lexFkY
+         Rhrw==
+X-Gm-Message-State: APjAAAV6aDwLkmCxvAc4vy9vX6iFqhs6o5OFIBHNZYxdfzDomnLmfXN6
+        32S/vf/aZOaGtcZA6x6bdmj2aQ==
+X-Google-Smtp-Source: APXvYqx5KfK3OEW+qx8AJSVzFCWaLqn2Fo+x2QCA7ODGdtOJTbEJkWdllo7poK33dXuSQDkC1pMurw==
+X-Received: by 2002:a17:90b:342:: with SMTP id fh2mr1666659pjb.23.1579905797991;
+        Fri, 24 Jan 2020 14:43:17 -0800 (PST)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
-        by smtp.gmail.com with ESMTPSA id o2sm7690948pjo.26.2020.01.24.14.43.16
+        by smtp.gmail.com with ESMTPSA id o2sm7690948pjo.26.2020.01.24.14.43.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2020 14:43:16 -0800 (PST)
+        Fri, 24 Jan 2020 14:43:17 -0800 (PST)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -52,10 +52,10 @@ Cc:     Jeffrey Hugo <jhugo@codeaurora.org>,
         Mark Rutland <mark.rutland@arm.com>, linux-clk@vger.kernel.org,
         hoegsberg@chromium.org, Douglas Anderson <dianders@chromium.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 01/10] clk: qcom: rcg2: Don't crash if our parent can't be found; return an error
-Date:   Fri, 24 Jan 2020 14:42:16 -0800
-Message-Id: <20200124144154.v2.1.I7487325fe8e701a68a07d3be8a6a4b571eca9cfa@changeid>
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 02/10] dt-bindings: clock: Fix qcom,dispcc bindings for sdm845/sc7180
+Date:   Fri, 24 Jan 2020 14:42:17 -0800
+Message-Id: <20200124144154.v2.2.I0c4bbb0f75a0880cd4bd90d8b267271e2375e0d0@changeid>
 X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
 In-Reply-To: <20200124224225.22547-1-dianders@chromium.org>
 References: <20200124224225.22547-1-dianders@chromium.org>
@@ -66,69 +66,150 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-When I got my clock parenting slightly wrong I ended up with a crash
-that looked like this:
+The qcom,dispcc bindings had a few problems with them:
 
-  Unable to handle kernel NULL pointer dereference at virtual
-  address 0000000000000000
-  ...
-  pc : clk_hw_get_rate+0x14/0x44
-  ...
-  Call trace:
-   clk_hw_get_rate+0x14/0x44
-   _freq_tbl_determine_rate+0x94/0xfc
-   clk_rcg2_determine_rate+0x2c/0x38
-   clk_core_determine_round_nolock+0x4c/0x88
-   clk_core_round_rate_nolock+0x6c/0xa8
-   clk_core_round_rate_nolock+0x9c/0xa8
-   clk_core_set_rate_nolock+0x70/0x180
-   clk_set_rate+0x3c/0x6c
-   of_clk_set_defaults+0x254/0x360
-   platform_drv_probe+0x28/0xb0
-   really_probe+0x120/0x2dc
-   driver_probe_device+0x64/0xfc
-   device_driver_attach+0x4c/0x6c
-   __driver_attach+0xac/0xc0
-   bus_for_each_dev+0x84/0xcc
-   driver_attach+0x2c/0x38
-   bus_add_driver+0xfc/0x1d0
-   driver_register+0x64/0xf8
-   __platform_driver_register+0x4c/0x58
-   msm_drm_register+0x5c/0x60
-   ...
+1. They didn't specify all the clocks that dispcc is a client of.
+   Specifically on sc7180 there are two clocks from the DSI PHY and
+   two from the DP PHY.  On sdm845 there are actually two DSI PHYs
+   (each of which has two clocks).  These all need to be specified.
 
-It turned out that clk_hw_get_parent_by_index() was returning NULL and
-we weren't checking.  Let's check it so that we don't crash.
+2. The sdm845.dtsi has existed for quite some time without specifying
+   the clocks.  The Linux driver was relying on global names to match
+   things up.  While we should transition things, it should be noted
+   in the bindings.
 
-Fixes: ac269395cdd8 ("clk: qcom: Convert to clk_hw based provider APIs")
+NOTE: It may be slightly controversial that I didn't re-order the
+clocks and name the "DSI" clocks on sc7180 to "dsi0".  That would have
+allowed me to have a single table and just use minItems/maxItems to
+specify that sc7180 only had one DSI PHY.  I almost did that, but it
+felt a little weird.  Why did the DSI clock have a 0 but not the DP
+clock?  If we add a SoC that has a 2nd DP port then we can't
+retroactively name old ones.  What if we have a SoC that has HDMI but
+only one DSI lane?  It felt cleaner to me to just duplicate.
+
+Also note that I updated the example.
+
+Fixes: 5d28e44ba630 ("dt-bindings: clock: Add YAML schemas for the QCOM DISPCC clock bindings")
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
-I haven't gone back and tried to reproduce this same crash on older
-kernels, but I'll put the blame on commit ac269395cdd8 ("clk: qcom:
-Convert to clk_hw based provider APIs").  Before that if we got a NULL
-parent back it was fine and dandy since a NULL "struct clk" is valid
-to use but a NULL "struct clk_hw" is not.
 
 Changes in v2:
-- Patch ("clk: qcom: rcg2: Don't crash...") new for v2.
+- Patch ("dt-bindings: clock: Fix qcom,dispcc...") new for v2.
 
- drivers/clk/qcom/clk-rcg2.c | 3 +++
- 1 file changed, 3 insertions(+)
+ .../bindings/clock/qcom,dispcc.yaml           | 87 +++++++++++++++----
+ 1 file changed, 71 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-index da045b200def..9098001ac805 100644
---- a/drivers/clk/qcom/clk-rcg2.c
-+++ b/drivers/clk/qcom/clk-rcg2.c
-@@ -218,6 +218,9 @@ static int _freq_tbl_determine_rate(struct clk_hw *hw, const struct freq_tbl *f,
+diff --git a/Documentation/devicetree/bindings/clock/qcom,dispcc.yaml b/Documentation/devicetree/bindings/clock/qcom,dispcc.yaml
+index 9c58e02a1de1..560c52ce3da5 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,dispcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,dispcc.yaml
+@@ -19,18 +19,6 @@ properties:
+       - qcom,sc7180-dispcc
+       - qcom,sdm845-dispcc
  
- 	clk_flags = clk_hw_get_flags(hw);
- 	p = clk_hw_get_parent_by_index(hw, index);
-+	if (!p)
-+		return -EINVAL;
+-  clocks:
+-    minItems: 1
+-    maxItems: 2
+-    items:
+-      - description: Board XO source
+-      - description: GPLL0 source from GCC
+-
+-  clock-names:
+-    items:
+-      - const: xo
+-      - const: gpll0
+-
+   '#clock-cells':
+     const: 1
+ 
+@@ -52,16 +40,83 @@ required:
+   - '#reset-cells'
+   - '#power-domain-cells'
+ 
++if:
++  properties:
++    compatible:
++      contains:
++        const: qcom,sc7180-dispcc
++then:
++  properties:
++    clocks:
++      items:
++        - description: Board XO source
++        - description: GPLL0 source from GCC
++        - description: Byte clock from DSI PHY
++        - description: Pixel clock from DSI PHY
++        - description: Link clock from DP PHY
++        - description: VCO DIV clock from DP PHY
 +
- 	if (clk_flags & CLK_SET_RATE_PARENT) {
- 		rate = f->freq;
- 		if (f->pre_div) {
++    clock-names:
++      items:
++        - const: xo
++        - const: gpll0
++        - const: dsi_phy_pll_byte
++        - const: dsi_phy_pll_pixel
++        - const: dp_phy_pll_link
++        - const: dp_phy_pll_vco_div
++
++else:
++  if:
++    # NOTE: sdm845.dtsi existed for quite some time and specified no clocks.
++    # The code had to use hardcoded mechanisms to find the input clocks.
++    # Any sdm845 device trees should be transitioned, but actual code may
++    # need to handle old dts files.
++    properties:
++      compatible:
++        contains:
++          const: qcom,sdm845-dispcc
++  then:
++    properties:
++      clocks:
++        items:
++          - description: Board XO source
++          - description: GPLL0 source from GCC
++          - description: Byte clock from DSI PHY0
++          - description: Pixel clock from DSI PHY0
++          - description: Byte clock from DSI PHY1
++          - description: Pixel clock from DSI PHY1
++          - description: Link clock from DP PHY
++          - description: VCO DIV clock from DP PHY
++
++      clock-names:
++        items:
++          - const: xo
++          - const: gpll0
++          - const: dsi0_phy_pll_byte
++          - const: dsi0_phy_pll_pixel
++          - const: dsi1_phy_pll_byte
++          - const: dsi1_phy_pll_pixel
++          - const: dp_phy_pll_link
++          - const: dp_phy_pll_vco_div
++
+ examples:
+   # Example of DISPCC with clock node properties for SDM845:
+   - |
++    #include <dt-bindings/clock/qcom,gcc-sdm845.h>
++    #include <dt-bindings/clock/qcom,rpmh.h>
+     clock-controller@af00000 {
+       compatible = "qcom,sdm845-dispcc";
+-      reg = <0xaf00000 0x10000>;
+-      clocks = <&rpmhcc 0>, <&gcc 24>;
+-      clock-names = "xo", "gpll0";
++      reg = <0 0x0af00000 0 0x10000>;
++      clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_DISP_GPLL0_CLK_SRC>,
++               <&dsi0_phy 0>, <&dsi0_phy 1>,
++               <&dsi1_phy 0>, <&dsi1_phy 1>,
++               <&dp_phy 0>, <&dp_phy 1>;
++      clock-names = "xo", "gpll0",
++                    "dsi0_phy_pll_byte", "dsi0_phy_pll_pixel",
++                    "dsi1_phy_pll_byte", "dsi1_phy_pll_pixel",
++                    "dp_phy_pll_link", "dp_phy_pll_vco_div";
+       #clock-cells = <1>;
+       #reset-cells = <1>;
+       #power-domain-cells = <1>;
+-     };
++    };
+ ...
 -- 
 2.25.0.341.g760bfbb309-goog
 
