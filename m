@@ -2,200 +2,335 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A0614AF16
-	for <lists+linux-clk@lfdr.de>; Tue, 28 Jan 2020 06:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFA614AF3A
+	for <lists+linux-clk@lfdr.de>; Tue, 28 Jan 2020 06:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725951AbgA1F2y (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 28 Jan 2020 00:28:54 -0500
-Received: from mail-am6eur05on2056.outbound.protection.outlook.com ([40.107.22.56]:6070
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725914AbgA1F2x (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 28 Jan 2020 00:28:53 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q3NxCU/RxLvqZT6LU4YLjvy7gTFM+LZFpdAguZzbzxX4t/iG9SJxKo5BkRGRYCIhWDL/ypsHNOoRjHXEwDqAP7/NYIF51x9vOfrKGagLSRLDTvPcV824zCOl534zyRKTdRrZ2+xyUOpQuE5X/+3yKpip6FPkuahY5dxiAXss1z2YL05wgg3hXExIqKiirDz5rjQS2LdUNw0m9Rdeb0jJiFdmcsGUnkQ0Zt1pcDHAh5e9A/g/zP1Vgnx1xT5+PdCZfz0PJgzBJnRK8kRLB0Nrwq9lEMwkfUIHMdep+UuSYs+34cyw6fErWA+LfsSekaUuRuBmoaJMNq4ihR8P5PQoyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2aluJRYr7+ESBukTl+gMtMBFWXCBmGgbPL1P+N5fQws=;
- b=B2yjThC006Qzscl4wHDFjUZvWOGvXODuit6L81kNghbRihSfqbNZKBecldK1QosbXC5VOOd1cBfkrl3N2+WJEHtyRS8j00uHvjZDmhhpxG0N4gHOx0HPDaiB9MkVAWUq2lJMpjRB9Rm5914K9RnTMIHWJY2aNOzeMWzbnp84Ha0rYPgfeFqL3dMTJsElz8MqKAbT7lpseXpx3XG/uPbOrO6kVhHWMOcxfiLVVkBu6vSsCpSCFPPlXw8mxgHpZ33+4s7hVh3uPpD5YqFhjZp2ekbqJeA92fe/AB5Vsaz+pSxO5evfd+pMNLtxy15Wy8w2f9+lF0oIlAiCJmHmTWRe0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2aluJRYr7+ESBukTl+gMtMBFWXCBmGgbPL1P+N5fQws=;
- b=MwBto7jVexEQmknf/RUtGR3xfqmpkovl4vJD9s0g1t3F/sj1Y/7sJULW2uf+7j9CFj5G0LwJN3K/utgXtwOiV4YS9iBTPsM95rc/fkLBdWbw/T+d1uxE247Ita2fYXi4oPxI07Y0EKOuoxhhiqX3HFaMgG4VSKGrQRVTAPCt/SI=
-Received: from AM0PR04MB4481.eurprd04.prod.outlook.com (52.135.147.15) by
- AM0PR04MB5939.eurprd04.prod.outlook.com (20.178.112.158) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2665.23; Tue, 28 Jan 2020 05:28:50 +0000
-Received: from AM0PR04MB4481.eurprd04.prod.outlook.com
- ([fe80::91e2:17:b3f4:d422]) by AM0PR04MB4481.eurprd04.prod.outlook.com
- ([fe80::91e2:17:b3f4:d422%3]) with mapi id 15.20.2665.026; Tue, 28 Jan 2020
- 05:28:50 +0000
-Received: from localhost.localdomain (119.31.174.66) by HK0PR03CA0113.apcprd03.prod.outlook.com (2603:1096:203:b0::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.2665.22 via Frontend Transport; Tue, 28 Jan 2020 05:28:46 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     "sboyd@kernel.org" <sboyd@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Leonard Crestez <leonard.crestez@nxp.com>
-CC:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Anson Huang <anson.huang@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V4 4/4] clk: imx: imx8mn: use imx8m_clk_hw_composite_core
-Thread-Topic: [PATCH V4 4/4] clk: imx: imx8mn: use imx8m_clk_hw_composite_core
-Thread-Index: AQHV1ZvSbRtVno6oAk6bZpxHDhFKdg==
-Date:   Tue, 28 Jan 2020 05:28:50 +0000
-Message-ID: <1580189015-5744-5-git-send-email-peng.fan@nxp.com>
-References: <1580189015-5744-1-git-send-email-peng.fan@nxp.com>
-In-Reply-To: <1580189015-5744-1-git-send-email-peng.fan@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: git-send-email 2.7.4
-x-clientproxiedby: HK0PR03CA0113.apcprd03.prod.outlook.com
- (2603:1096:203:b0::29) To AM0PR04MB4481.eurprd04.prod.outlook.com
- (2603:10a6:208:70::15)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peng.fan@nxp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 10d818be-f5f0-44b0-7b77-08d7a3b2f509
-x-ms-traffictypediagnostic: AM0PR04MB5939:|AM0PR04MB5939:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM0PR04MB59396CB0E53CCB3B17AC06E8880A0@AM0PR04MB5939.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4125;
-x-forefront-prvs: 029651C7A1
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(136003)(346002)(39860400002)(366004)(376002)(189003)(199004)(2616005)(956004)(6666004)(110136005)(54906003)(44832011)(5660300002)(316002)(186003)(16526019)(71200400001)(69590400006)(26005)(478600001)(81156014)(81166006)(6486002)(52116002)(6506007)(6636002)(2906002)(8676002)(4326008)(8936002)(6512007)(86362001)(66946007)(36756003)(66476007)(66556008)(66446008)(64756008)(32563001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB5939;H:AM0PR04MB4481.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: C9F+Yy/Krm2IMh+9OxhWcdEJeKWca4k1fsUkqfx/AsFrKWwWAsVD5JOVWtzsku0cb4Gic+ANYoe7N0jrHdBcelztloubVDzBu5YQvAzsUaTUcohCNK0kv6vBUtZkWFuMH4NI7mlXlzGcEuxgI4XSCoSUOnPfyXGnbpUaxux4lZbrbf+pwdmernrgV3mSxGpWiIULJz4/EGspBvRQR4u/Q3YbpMMb1rx/WL5QOdtWJXIP221TFQrScvJBT5hxy+ghvzIOaeQ14yWxP1hThQydjmfS1umIHTPpzNElF3h2BgR6NSnGupNiskRhUJu+1ghhfU4ErygwY6dQ8HuoF9S8EU5DLSR5jJ0XZpeA3Ri7P+BSktFsbw1D1T85Znm0D/OGBkAcL/Wp/gWX/7kzM1yyznGWWbgYDH3KMKLxrJ6MNTZzFfUatQ9snOEG12raS0Tbj8LtPZoOTv2mGSL7TORfDLudUU5sgiSSRcZrF/gbcGlmpRSBjJTtogWKpnk8vpMplfZTNS8/GbeJwHz/pRgRSQseWy5GhA+Bdq6VTFZLX8g44Zr+iZ+qodMENTC+Q+EZ
-x-ms-exchange-antispam-messagedata: VRLr3z8ybOFTotqW4WnaHw/AFSb4ped4+l4jD4n0upAeC/f3YMPX8JUzOjXSusbmOiIo0MGFN43P+FwOI/UrxYN6V3hSUM8FtaF1+MvyQv7VBm0wIpmQtB2mAi24FobMPwZOsJFSeElsuKzLl9G/5Q==
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1725901AbgA1Fxv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 28 Jan 2020 00:53:51 -0500
+Received: from mail26.static.mailgun.info ([104.130.122.26]:52276 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725810AbgA1Fxv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 28 Jan 2020 00:53:51 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1580190830; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=X3kHMnYi5p9NsrX0pm8Pjhgyo6Dck8w6nOS+KLJtcPI=; b=FpVMB2haj9h90TiEGM4owkaJTOVAjyuAUGpGYOJKxRFpzONHyHxDUKFOwlG+YZbtmIa+olEy
+ iV9rIrnUdvTHRRQac7pvPjFXp1WIMHWWwsk3In+e2jgOPLx+qDaE9AFEZLVLJxiztW6gBY/O
+ QvdADtAmgy5MZ0TvnMws+AXtlFM=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e2fcc6c.7f0607407df8-smtp-out-n01;
+ Tue, 28 Jan 2020 05:53:48 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 9FDE5C433A2; Tue, 28 Jan 2020 05:53:48 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.206.28.9] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: tdas)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C0492C43383;
+        Tue, 28 Jan 2020 05:53:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C0492C43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=tdas@codeaurora.org
+Subject: Re: [PATCH v2 05/10] clk: qcom: Fix sc7180 dispcc parent data
+To:     Douglas Anderson <dianders@chromium.org>,
+        Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <sboyd@codeaurora.org>
+Cc:     Jeffrey Hugo <jhugo@codeaurora.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, harigovi@codeaurora.org,
+        mka@chromium.org, kalyan_t@codeaurora.org,
+        Mark Rutland <mark.rutland@arm.com>, linux-clk@vger.kernel.org,
+        hoegsberg@chromium.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+References: <20200124224225.22547-1-dianders@chromium.org>
+ <20200124144154.v2.5.If590c468722d2985cea63adf60c0d2b3098f37d9@changeid>
+From:   Taniya Das <tdas@codeaurora.org>
+Message-ID: <149394fe-b726-15da-1c6f-a223d57a009f@codeaurora.org>
+Date:   Tue, 28 Jan 2020 11:23:39 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 10d818be-f5f0-44b0-7b77-08d7a3b2f509
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jan 2020 05:28:50.8302
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OOcCT5SY36494rAT+6ns/A9lYri0TABCszG9l2m8f0/OKgDwccptaTaoyxtnYl5KOeY3jz/9H/7OO1eYJpktGQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5939
+In-Reply-To: <20200124144154.v2.5.If590c468722d2985cea63adf60c0d2b3098f37d9@changeid>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+Hi Doug,
 
-Use imx8m_clk_hw_composite_core to simplify code.
+Thanks for the patch.
 
-Add new definitions, and X_SRC/CG/DIV will be alias to the new
-definitions for backwards compatibility
+On 1/25/2020 4:12 AM, Douglas Anderson wrote:
+> The bindings file (qcom,dispcc.yaml) says that the two clocks that
+> dispcc is a client of are named "xo" and "gpll0".  That means we have
+> to refer to them by those names.  We weren't referring to "xo"
+> properly in the driver.
+> 
+> Then, in the patch ("dt-bindings: clock: Fix qcom,dispcc bindings for
+> sdm845/sc7180") we clarify the names for all of the clocks that we are
+> a client of.  Fix all those too, also getting rid of the "fallback"
+> names for them.  Since sc7180 is still in infancy there is no reason
+> to specify a fallback name.  People should just get the device tree
+> right.
+> 
+> Since we didn't add the "test" clock to the bindings (apparently it's
+> never used), kill it from the driver.  If someone has a use for it we
+> should add it to the bindings and bring it back.
+> 
+> Instead of updating all of the sizes of the arrays now that the test
+> clock is gone, switch to using the less error-prone ARRAY_SIZE.  Not
+> sure why it didn't always use that.
+> 
+> Fixes: dd3d06622138 ("clk: qcom: Add display clock controller driver for SC7180")
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> 
+> Changes in v2:
+> - Patch ("clk: qcom: Fix sc7180 dispcc parent data") new for v2.
+> 
+>   drivers/clk/qcom/dispcc-sc7180.c | 63 ++++++++++++--------------------
+>   1 file changed, 24 insertions(+), 39 deletions(-)
+> 
+> diff --git a/drivers/clk/qcom/dispcc-sc7180.c b/drivers/clk/qcom/dispcc-sc7180.c
+> index 30c1e25d3edb..380eca3f847d 100644
+> --- a/drivers/clk/qcom/dispcc-sc7180.c
+> +++ b/drivers/clk/qcom/dispcc-sc7180.c
+> @@ -43,7 +43,7 @@ static struct clk_alpha_pll disp_cc_pll0 = {
+>   		.hw.init = &(struct clk_init_data){
+>   			.name = "disp_cc_pll0",
+>   			.parent_data = &(const struct clk_parent_data){
+> -				.fw_name = "bi_tcxo",
+> +				.fw_name = "xo",
 
-Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/clk/imx/clk-imx8mn.c             | 19 +++++++++++--------
- include/dt-bindings/clock/imx8mn-clock.h |  5 ++++-
- 2 files changed, 15 insertions(+), 9 deletions(-)
+These clock names are as per our HW design and we would not like to 
+update them as they require lot of hand-coding. These codes are all 
+auto-generated.
 
-diff --git a/drivers/clk/imx/clk-imx8mn.c b/drivers/clk/imx/clk-imx8mn.c
-index c5e7316b4c66..e892302f93aa 100644
---- a/drivers/clk/imx/clk-imx8mn.c
-+++ b/drivers/clk/imx/clk-imx8mn.c
-@@ -413,15 +413,18 @@ static int imx8mn_clocks_probe(struct platform_device=
- *pdev)
-=20
- 	/* CORE */
- 	hws[IMX8MN_CLK_A53_SRC] =3D imx_clk_hw_mux2("arm_a53_src", base + 0x8000,=
- 24, 3, imx8mn_a53_sels, ARRAY_SIZE(imx8mn_a53_sels));
--	hws[IMX8MN_CLK_GPU_CORE_SRC] =3D imx_clk_hw_mux2("gpu_core_src", base + 0=
-x8180, 24, 3,  imx8mn_gpu_core_sels, ARRAY_SIZE(imx8mn_gpu_core_sels));
--	hws[IMX8MN_CLK_GPU_SHADER_SRC] =3D imx_clk_hw_mux2("gpu_shader_src", base=
- + 0x8200, 24, 3, imx8mn_gpu_shader_sels,  ARRAY_SIZE(imx8mn_gpu_shader_sel=
-s));
- 	hws[IMX8MN_CLK_A53_CG] =3D imx_clk_hw_gate3("arm_a53_cg", "arm_a53_src", =
-base + 0x8000, 28);
--	hws[IMX8MN_CLK_GPU_CORE_CG] =3D imx_clk_hw_gate3("gpu_core_cg", "gpu_core=
-_src", base + 0x8180, 28);
--	hws[IMX8MN_CLK_GPU_SHADER_CG] =3D imx_clk_hw_gate3("gpu_shader_cg", "gpu_=
-shader_src", base + 0x8200, 28);
--
- 	hws[IMX8MN_CLK_A53_DIV] =3D imx_clk_hw_divider2("arm_a53_div", "arm_a53_c=
-g", base + 0x8000, 0, 3);
--	hws[IMX8MN_CLK_GPU_CORE_DIV] =3D imx_clk_hw_divider2("gpu_core_div", "gpu=
-_core_cg", base + 0x8180, 0, 3);
--	hws[IMX8MN_CLK_GPU_SHADER_DIV] =3D imx_clk_hw_divider2("gpu_shader_div", =
-"gpu_shader_cg", base + 0x8200, 0, 3);
-+
-+	hws[IMX8MN_CLK_GPU_CORE] =3D imx8m_clk_hw_composite_core("gpu_core", imx8=
-mn_gpu_core_sels, base + 0x8180);
-+	hws[IMX8MN_CLK_GPU_SHADER] =3D imx8m_clk_hw_composite_core("gpu_shader", =
-imx8mn_gpu_shader_sels, base + 0x8200);
-+
-+	hws[IMX8MN_CLK_GPU_CORE_SRC] =3D hws[IMX8MN_CLK_GPU_CORE];
-+	hws[IMX8MN_CLK_GPU_CORE_CG] =3D hws[IMX8MN_CLK_GPU_CORE];
-+	hws[IMX8MN_CLK_GPU_CORE_DIV] =3D hws[IMX8MN_CLK_GPU_CORE];
-+	hws[IMX8MN_CLK_GPU_SHADER_SRC] =3D hws[IMX8MN_CLK_GPU_SHADER];
-+	hws[IMX8MN_CLK_GPU_SHADER_CG] =3D hws[IMX8MN_CLK_GPU_SHADER];
-+	hws[IMX8MN_CLK_GPU_SHADER_DIV] =3D hws[IMX8MN_CLK_GPU_SHADER];
-=20
- 	/* BUS */
- 	hws[IMX8MN_CLK_MAIN_AXI] =3D imx8m_clk_hw_composite_critical("main_axi", =
-imx8mn_main_axi_sels, base + 0x8800);
-@@ -528,7 +531,7 @@ static int imx8mn_clocks_probe(struct platform_device *=
-pdev)
- 	hws[IMX8MN_CLK_UART3_ROOT] =3D imx_clk_hw_gate4("uart3_root_clk", "uart3"=
-, base + 0x44b0, 0);
- 	hws[IMX8MN_CLK_UART4_ROOT] =3D imx_clk_hw_gate4("uart4_root_clk", "uart4"=
-, base + 0x44c0, 0);
- 	hws[IMX8MN_CLK_USB1_CTRL_ROOT] =3D imx_clk_hw_gate4("usb1_ctrl_root_clk",=
- "usb_bus", base + 0x44d0, 0);
--	hws[IMX8MN_CLK_GPU_CORE_ROOT] =3D imx_clk_hw_gate4("gpu_core_root_clk", "=
-gpu_core_div", base + 0x44f0, 0);
-+	hws[IMX8MN_CLK_GPU_CORE_ROOT] =3D imx_clk_hw_gate4("gpu_core_root_clk", "=
-gpu_core", base + 0x44f0, 0);
- 	hws[IMX8MN_CLK_USDHC1_ROOT] =3D imx_clk_hw_gate4("usdhc1_root_clk", "usdh=
-c1", base + 0x4510, 0);
- 	hws[IMX8MN_CLK_USDHC2_ROOT] =3D imx_clk_hw_gate4("usdhc2_root_clk", "usdh=
-c2", base + 0x4520, 0);
- 	hws[IMX8MN_CLK_WDOG1_ROOT] =3D imx_clk_hw_gate4("wdog1_root_clk", "wdog",=
- base + 0x4530, 0);
-diff --git a/include/dt-bindings/clock/imx8mn-clock.h b/include/dt-bindings=
-/clock/imx8mn-clock.h
-index 0f2b8423ce1d..95acfbe52665 100644
---- a/include/dt-bindings/clock/imx8mn-clock.h
-+++ b/include/dt-bindings/clock/imx8mn-clock.h
-@@ -228,6 +228,9 @@
- #define IMX8MN_SYS_PLL2_333M_CG			209
- #define IMX8MN_SYS_PLL2_500M_CG			210
-=20
--#define IMX8MN_CLK_END				211
-+#define IMX8MN_CLK_GPU_CORE			211
-+#define IMX8MN_CLK_GPU_SHADER			212
-+
-+#define IMX8MN_CLK_END				213
-=20
- #endif
---=20
-2.16.4
+>   			},
+>   			.num_parents = 1,
+>   			.ops = &clk_alpha_pll_fabia_ops,
+> @@ -76,40 +76,32 @@ static struct clk_alpha_pll_postdiv disp_cc_pll0_out_even = {
+>   
+>   static const struct parent_map disp_cc_parent_map_0[] = {
+>   	{ P_BI_TCXO, 0 },
+> -	{ P_CORE_BI_PLL_TEST_SE, 7 },
+>   };
+>   
+>   static const struct clk_parent_data disp_cc_parent_data_0[] = {
+> -	{ .fw_name = "bi_tcxo" },
+> -	{ .fw_name = "core_bi_pll_test_se", .name = "core_bi_pll_test_se" },
+> +	{ .fw_name = "xo" },
+>   };
+>   
+>   static const struct parent_map disp_cc_parent_map_1[] = {
+>   	{ P_BI_TCXO, 0 },
+>   	{ P_DP_PHY_PLL_LINK_CLK, 1 },
+>   	{ P_DP_PHY_PLL_VCO_DIV_CLK, 2 },
+> -	{ P_CORE_BI_PLL_TEST_SE, 7 },
+>   };
+>   
+>   static const struct clk_parent_data disp_cc_parent_data_1[] = {
+> -	{ .fw_name = "bi_tcxo" },
+> -	{ .fw_name = "dp_phy_pll_link_clk", .name = "dp_phy_pll_link_clk" },
+> -	{ .fw_name = "dp_phy_pll_vco_div_clk",
+> -				.name = "dp_phy_pll_vco_div_clk"},
+> -	{ .fw_name = "core_bi_pll_test_se", .name = "core_bi_pll_test_se" },
+> +	{ .fw_name = "xo" },
+> +	{ .fw_name = "dp_phy_pll_link" },
+> +	{ .fw_name = "dp_phy_pll_vco_div" },
 
+similar comments for these too. They would conflict with our HW design 
+clock names.
+>   };
+>   
+>   static const struct parent_map disp_cc_parent_map_2[] = {
+>   	{ P_BI_TCXO, 0 },
+>   	{ P_DSI0_PHY_PLL_OUT_BYTECLK, 1 },
+> -	{ P_CORE_BI_PLL_TEST_SE, 7 },
+>   };
+>   
+>   static const struct clk_parent_data disp_cc_parent_data_2[] = {
+> -	{ .fw_name = "bi_tcxo" },
+> -	{ .fw_name = "dsi0_phy_pll_out_byteclk",
+> -				.name = "dsi0_phy_pll_out_byteclk" },
+> -	{ .fw_name = "core_bi_pll_test_se", .name = "core_bi_pll_test_se" },
+> +	{ .fw_name = "xo" },
+> +	{ .fw_name = "dsi_phy_pll_byte" },
+>   };
+>   
+>   static const struct parent_map disp_cc_parent_map_3[] = {
+> @@ -117,40 +109,33 @@ static const struct parent_map disp_cc_parent_map_3[] = {
+>   	{ P_DISP_CC_PLL0_OUT_MAIN, 1 },
+>   	{ P_GPLL0_OUT_MAIN, 4 },
+>   	{ P_DISP_CC_PLL0_OUT_EVEN, 5 },
+> -	{ P_CORE_BI_PLL_TEST_SE, 7 },
+>   };
+>   
+>   static const struct clk_parent_data disp_cc_parent_data_3[] = {
+> -	{ .fw_name = "bi_tcxo" },
+> +	{ .fw_name = "xo" },
+>   	{ .hw = &disp_cc_pll0.clkr.hw },
+> -	{ .fw_name = "gcc_disp_gpll0_clk_src" },
+> +	{ .fw_name = "gpll0" },
+
+This is not the correct clock, we have a child/branch clock which 
+requires to be turned ON "gcc_disp_gpll0_clk_src" when we switch to this 
+source.
+
+>   	{ .hw = &disp_cc_pll0_out_even.clkr.hw },
+> -	{ .fw_name = "core_bi_pll_test_se", .name = "core_bi_pll_test_se" },
+>   };
+>   
+>   static const struct parent_map disp_cc_parent_map_4[] = {
+>   	{ P_BI_TCXO, 0 },
+>   	{ P_GPLL0_OUT_MAIN, 4 },
+> -	{ P_CORE_BI_PLL_TEST_SE, 7 },
+>   };
+>   
+>   static const struct clk_parent_data disp_cc_parent_data_4[] = {
+> -	{ .fw_name = "bi_tcxo" },
+> -	{ .fw_name = "gcc_disp_gpll0_clk_src" },
+> -	{ .fw_name = "core_bi_pll_test_se", .name = "core_bi_pll_test_se" },
+> +	{ .fw_name = "xo" },
+> +	{ .fw_name = "gpll0" },
+
+same comment as above.
+
+>   };
+>   
+>   static const struct parent_map disp_cc_parent_map_5[] = {
+>   	{ P_BI_TCXO, 0 },
+>   	{ P_DSI0_PHY_PLL_OUT_DSICLK, 1 },
+> -	{ P_CORE_BI_PLL_TEST_SE, 7 },
+>   };
+>   
+>   static const struct clk_parent_data disp_cc_parent_data_5[] = {
+> -	{ .fw_name = "bi_tcxo" },
+> -	{ .fw_name = "dsi0_phy_pll_out_dsiclk",
+> -				.name = "dsi0_phy_pll_out_dsiclk" },
+> -	{ .fw_name = "core_bi_pll_test_se", .name = "core_bi_pll_test_se" },
+> +	{ .fw_name = "xo" },
+> +	{ .fw_name = "dsi_phy_pll_pixel" },
+>   };
+>   
+>   static const struct freq_tbl ftbl_disp_cc_mdss_ahb_clk_src[] = {
+> @@ -169,7 +154,7 @@ static struct clk_rcg2 disp_cc_mdss_ahb_clk_src = {
+>   	.clkr.hw.init = &(struct clk_init_data){
+>   		.name = "disp_cc_mdss_ahb_clk_src",
+>   		.parent_data = disp_cc_parent_data_4,
+> -		.num_parents = 3,
+> +		.num_parents = ARRAY_SIZE(disp_cc_parent_data_4),
+>   		.flags = CLK_SET_RATE_PARENT,
+>   		.ops = &clk_rcg2_shared_ops,
+>   	},
+> @@ -183,7 +168,7 @@ static struct clk_rcg2 disp_cc_mdss_byte0_clk_src = {
+>   	.clkr.hw.init = &(struct clk_init_data){
+>   		.name = "disp_cc_mdss_byte0_clk_src",
+>   		.parent_data = disp_cc_parent_data_2,
+> -		.num_parents = 3,
+> +		.num_parents = ARRAY_SIZE(disp_cc_parent_data_2),
+>   		.flags = CLK_SET_RATE_PARENT,
+>   		.ops = &clk_byte2_ops,
+>   	},
+> @@ -203,7 +188,7 @@ static struct clk_rcg2 disp_cc_mdss_dp_aux_clk_src = {
+>   	.clkr.hw.init = &(struct clk_init_data){
+>   		.name = "disp_cc_mdss_dp_aux_clk_src",
+>   		.parent_data = disp_cc_parent_data_0,
+> -		.num_parents = 2,
+> +		.num_parents = ARRAY_SIZE(disp_cc_parent_data_0),
+>   		.ops = &clk_rcg2_ops,
+>   	},
+>   };
+> @@ -216,7 +201,7 @@ static struct clk_rcg2 disp_cc_mdss_dp_crypto_clk_src = {
+>   	.clkr.hw.init = &(struct clk_init_data){
+>   		.name = "disp_cc_mdss_dp_crypto_clk_src",
+>   		.parent_data = disp_cc_parent_data_1,
+> -		.num_parents = 4,
+> +		.num_parents = ARRAY_SIZE(disp_cc_parent_data_1),
+>   		.flags = CLK_SET_RATE_PARENT,
+>   		.ops = &clk_byte2_ops,
+>   	},
+> @@ -230,7 +215,7 @@ static struct clk_rcg2 disp_cc_mdss_dp_link_clk_src = {
+>   	.clkr.hw.init = &(struct clk_init_data){
+>   		.name = "disp_cc_mdss_dp_link_clk_src",
+>   		.parent_data = disp_cc_parent_data_1,
+> -		.num_parents = 4,
+> +		.num_parents = ARRAY_SIZE(disp_cc_parent_data_1),
+>   		.flags = CLK_SET_RATE_PARENT,
+>   		.ops = &clk_byte2_ops,
+>   	},
+> @@ -244,7 +229,7 @@ static struct clk_rcg2 disp_cc_mdss_dp_pixel_clk_src = {
+>   	.clkr.hw.init = &(struct clk_init_data){
+>   		.name = "disp_cc_mdss_dp_pixel_clk_src",
+>   		.parent_data = disp_cc_parent_data_1,
+> -		.num_parents = 4,
+> +		.num_parents = ARRAY_SIZE(disp_cc_parent_data_1),
+>   		.flags = CLK_SET_RATE_PARENT,
+>   		.ops = &clk_dp_ops,
+>   	},
+> @@ -259,7 +244,7 @@ static struct clk_rcg2 disp_cc_mdss_esc0_clk_src = {
+>   	.clkr.hw.init = &(struct clk_init_data){
+>   		.name = "disp_cc_mdss_esc0_clk_src",
+>   		.parent_data = disp_cc_parent_data_2,
+> -		.num_parents = 3,
+> +		.num_parents = ARRAY_SIZE(disp_cc_parent_data_2),
+>   		.ops = &clk_rcg2_ops,
+>   	},
+>   };
+> @@ -282,7 +267,7 @@ static struct clk_rcg2 disp_cc_mdss_mdp_clk_src = {
+>   	.clkr.hw.init = &(struct clk_init_data){
+>   		.name = "disp_cc_mdss_mdp_clk_src",
+>   		.parent_data = disp_cc_parent_data_3,
+> -		.num_parents = 5,
+> +		.num_parents = ARRAY_SIZE(disp_cc_parent_data_3),
+>   		.ops = &clk_rcg2_shared_ops,
+>   	},
+>   };
+> @@ -295,7 +280,7 @@ static struct clk_rcg2 disp_cc_mdss_pclk0_clk_src = {
+>   	.clkr.hw.init = &(struct clk_init_data){
+>   		.name = "disp_cc_mdss_pclk0_clk_src",
+>   		.parent_data = disp_cc_parent_data_5,
+> -		.num_parents = 3,
+> +		.num_parents = ARRAY_SIZE(disp_cc_parent_data_5),
+>   		.flags = CLK_SET_RATE_PARENT,
+>   		.ops = &clk_pixel_ops,
+>   	},
+> @@ -310,7 +295,7 @@ static struct clk_rcg2 disp_cc_mdss_rot_clk_src = {
+>   	.clkr.hw.init = &(struct clk_init_data){
+>   		.name = "disp_cc_mdss_rot_clk_src",
+>   		.parent_data = disp_cc_parent_data_3,
+> -		.num_parents = 5,
+> +		.num_parents = ARRAY_SIZE(disp_cc_parent_data_3),
+>   		.ops = &clk_rcg2_shared_ops,
+>   	},
+>   };
+> @@ -324,7 +309,7 @@ static struct clk_rcg2 disp_cc_mdss_vsync_clk_src = {
+>   	.clkr.hw.init = &(struct clk_init_data){
+>   		.name = "disp_cc_mdss_vsync_clk_src",
+>   		.parent_data = disp_cc_parent_data_0,
+> -		.num_parents = 2,
+> +		.num_parents = ARRAY_SIZE(disp_cc_parent_data_0),
+>   		.ops = &clk_rcg2_shared_ops,
+>   	},
+>   };
+> 
+
+All the above code are auto-generated and we really do not want to 
+hand-code.
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation.
+
+--
