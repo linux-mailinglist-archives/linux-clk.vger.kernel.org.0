@@ -2,170 +2,137 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3137614E485
-	for <lists+linux-clk@lfdr.de>; Thu, 30 Jan 2020 22:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FB314E4C6
+	for <lists+linux-clk@lfdr.de>; Thu, 30 Jan 2020 22:26:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727938AbgA3VNH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 30 Jan 2020 16:13:07 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:40681 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727884AbgA3VNG (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 30 Jan 2020 16:13:06 -0500
-Received: by mail-pf1-f194.google.com with SMTP id q8so2122919pfh.7
-        for <linux-clk@vger.kernel.org>; Thu, 30 Jan 2020 13:13:06 -0800 (PST)
+        id S1727482AbgA3V0u (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 30 Jan 2020 16:26:50 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:39728 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727263AbgA3V0u (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 30 Jan 2020 16:26:50 -0500
+Received: by mail-pl1-f193.google.com with SMTP id g6so1835636plp.6
+        for <linux-clk@vger.kernel.org>; Thu, 30 Jan 2020 13:26:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Oa49p/xGTn6NCKmNAd8eGM0hUYKRobdCqjFRXtL8/kA=;
-        b=YztztHo+5GQxLT621C7Rqngv72wMhREmQYp/vsbj0VtWWHVT1+KSLTkNKq3nPnnT77
-         u96ZJxht7JRHvwCE695YNRG5Uha2O2igcMyHdsHpf0hmrv3tbv/L2mWXHlqFgY431VFB
-         sFrWLJFUmpQYg22ekzG2C7G5D1oa04m585Vtc=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tKb9L35tQcyRyNMGKuAJ6Ea5QSPI1QLK9JjZ13bjSck=;
+        b=XucHTUJGVqo+dvrOVctD99spVTAWc6/H5Ie5rc4c68sI8IZEdOO3i5dcSPJG7jTxwY
+         yYLYXQG/Yetkj67ZkEKuFz/saEg5P6jcccVihpjXHkMTowW/qlFnfCP9iRao5tWTSGR6
+         76NU6QGK2oEpbP+jc2q8UeV0uStilfnAYz9Fs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Oa49p/xGTn6NCKmNAd8eGM0hUYKRobdCqjFRXtL8/kA=;
-        b=BkHjqyYFMSzu4aTxO9OwGQ/KZXP4DpnEcdkKuJAKoBorUfgjo1cNPLBgyhRGgcrgo3
-         tDb38CVZ8A4kqGTuV0NYfCZ/qRb/Kxs1F45i7lKqVZkeP/NHTQXny48fyl56sQ/QbPZU
-         L9BBD4gwLpNYpN7lniBNGxCYLyiVCllykScH+YZsGsDEeGue8BCXplXbwb6bXHrYcCD2
-         SzfKLoq0u+QQ6f7/bWCgEcsNUk99Za0wEt9xFC1tlViqb3oXliABIxxj03sfWQh0rYKt
-         ZaKhtdFRBeKYDgQB41jf3DZJyhjKF90OQ68iHwjb5WgYjO5Pr7+Nd6ya4gG6CpbrZqSx
-         dPIA==
-X-Gm-Message-State: APjAAAWoinhsDv+eOf6Fm3FSR09tkilfIa6XZdvSDmp2iOOmA68dAzGK
-        MYVF2gLsk/ra2vp7w2dOklWWlA==
-X-Google-Smtp-Source: APXvYqzzw2CG5kff+mpG3Nv7sadrfFm8uoc1EhB2TT6G2I2DqhJX1YdC+8eq25u2MR3IrmdXmtro/w==
-X-Received: by 2002:a62:1d07:: with SMTP id d7mr6747690pfd.159.1580418786161;
-        Thu, 30 Jan 2020 13:13:06 -0800 (PST)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
-        by smtp.gmail.com with ESMTPSA id ci5sm4343871pjb.5.2020.01.30.13.13.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jan 2020 13:13:05 -0800 (PST)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Jeffrey Hugo <jhugo@codeaurora.org>,
-        Taniya Das <tdas@codeaurora.org>, jeffrey.l.hugo@gmail.com,
-        linux-arm-msm@vger.kernel.org, harigovi@codeaurora.org,
-        devicetree@vger.kernel.org, mka@chromium.org,
-        kalyan_t@codeaurora.org, Mark Rutland <mark.rutland@arm.com>,
-        linux-clk@vger.kernel.org, hoegsberg@chromium.org,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH v3 15/15] arm64: dts: sc7180: Add clock controller nodes
-Date:   Thu, 30 Jan 2020 13:12:31 -0800
-Message-Id: <20200130131220.v3.15.I1a4b93fb005791e29a9dcf288fc8bd459a555a59@changeid>
-X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
-In-Reply-To: <20200130211231.224656-1-dianders@chromium.org>
-References: <20200130211231.224656-1-dianders@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tKb9L35tQcyRyNMGKuAJ6Ea5QSPI1QLK9JjZ13bjSck=;
+        b=Dh7brL9UGucWSMwihdRiz59td5FgIoe+yvMZDqhq87cM232bG7llTjgF0n6F9+nCPQ
+         OmZwcbeK7O7x4E5Kia/PahCnmPnzls4gd/j3rnUoL36kJlHZdX+mhLG5NXbJwSmN/W3M
+         GbiIuEyW5jhb1JKE6OUAjaN6khU05lP8qJsjYjF0qcM6RghKrf7PaJE8m9E2QlVtieHJ
+         502vUvWVm1r0/blJRc82ls6CDjz73EyRSGZ9fjgJ43R3XfHz8A47/Y6RLh496hfJv465
+         rHAEE5VlS1r1iPFb4IWMiB6bOk/LI0CVdsZfhmTC038lsX/4Z/5ZOedZlxg/UqbVRkhL
+         h+Gw==
+X-Gm-Message-State: APjAAAU1E/9s3Nq2+Tt+GmBJrPjgR6eTQ3kghrbPWc4hr3Qwd1SQKw0Y
+        FssuKMrH9ma+JNR5am7r15JygTfyRWY=
+X-Google-Smtp-Source: APXvYqz6kZtHVI+FdcxQTq/0BKp2V8ZDXhiAemXhK1DFIpbzT2ka7vdnSjRjOg4QIzO/9J8qDdeDjg==
+X-Received: by 2002:a17:90a:2ec5:: with SMTP id h5mr8302549pjs.79.1580419608282;
+        Thu, 30 Jan 2020 13:26:48 -0800 (PST)
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com. [209.85.210.179])
+        by smtp.gmail.com with ESMTPSA id f13sm7674060pfk.64.2020.01.30.13.26.48
+        for <linux-clk@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jan 2020 13:26:48 -0800 (PST)
+Received: by mail-pf1-f179.google.com with SMTP id s1so2134226pfh.10
+        for <linux-clk@vger.kernel.org>; Thu, 30 Jan 2020 13:26:48 -0800 (PST)
+X-Received: by 2002:a67:fa1a:: with SMTP id i26mr4644896vsq.169.1580419157458;
+ Thu, 30 Jan 2020 13:19:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200124224225.22547-1-dianders@chromium.org> <20200124144154.v2.5.If590c468722d2985cea63adf60c0d2b3098f37d9@changeid>
+ <20200129005152.2A3ED205F4@mail.kernel.org>
+In-Reply-To: <20200129005152.2A3ED205F4@mail.kernel.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 30 Jan 2020 13:19:05 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=WKDC-58Muq4-TWLZ3V20eQURm7cELMik1FfjcKBnpr7w@mail.gmail.com>
+Message-ID: <CAD=FV=WKDC-58Muq4-TWLZ3V20eQURm7cELMik1FfjcKBnpr7w@mail.gmail.com>
+Subject: Re: [PATCH v2 05/10] clk: qcom: Fix sc7180 dispcc parent data
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Jeffrey Hugo <jhugo@codeaurora.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Harigovindan P <harigovi@codeaurora.org>,
+        Matthias Kaehlcke <mka@chromium.org>, kalyan_t@codeaurora.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "Kristian H. Kristensen" <hoegsberg@chromium.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Taniya Das <tdas@codeaurora.org>
+Hi,
 
-Add the display, video & graphics clock controller nodes supported on
-SC7180.
+On Tue, Jan 28, 2020 at 4:51 PM Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting Douglas Anderson (2020-01-24 14:42:20)
+> >
+> > diff --git a/drivers/clk/qcom/dispcc-sc7180.c b/drivers/clk/qcom/dispcc-sc7180.c
+> > index 30c1e25d3edb..380eca3f847d 100644
+> > --- a/drivers/clk/qcom/dispcc-sc7180.c
+> > +++ b/drivers/clk/qcom/dispcc-sc7180.c
+> > @@ -76,40 +76,32 @@ static struct clk_alpha_pll_postdiv disp_cc_pll0_out_even = {
+> >
+> >  static const struct parent_map disp_cc_parent_map_0[] = {
+> >         { P_BI_TCXO, 0 },
+> > -       { P_CORE_BI_PLL_TEST_SE, 7 },
+> >  };
+> >
+> >  static const struct clk_parent_data disp_cc_parent_data_0[] = {
+> > -       { .fw_name = "bi_tcxo" },
+> > -       { .fw_name = "core_bi_pll_test_se", .name = "core_bi_pll_test_se" },
+> > +       { .fw_name = "xo" },
+>
+> If we can make the binding match the code here and keep saying "bi_tcxo"
+> then that is preferred. That way we don't have to see bi_tcxo changing
+> and qcom folks are happy to keep the weird name. The name in the binding
+> is really up to the binding writer.
 
-NOTE: the dispcc needs input clocks from various PHYs that aren't in
-the device tree yet.  For now we'll leave these stubbed out with <0>,
-which is apparently the magic way to do this.  These clocks aren't
-really "optional" and this stubbing out method is apparently the best
-way to handle it.
+v3 is now out and it still says "bi_tcxo" and generally uses the
+"internal" name.  The big exception is msm8998's gpucc.  It seems like
+a whole bunch of work has been done to move that over to more "purist"
+(AKA logical) names and I didn't want to undo that work.  If we should
+move msm8998 to match everyone else then hopefully someone can do it
+as a followup patch?
 
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
 
-Changes in v3:
-- Added videocc include file.
-- Unlike in v2, use internal name instead of purist name.
+> >  };
+> >
+> >  static const struct parent_map disp_cc_parent_map_1[] = {
+> >         { P_BI_TCXO, 0 },
+> >         { P_DP_PHY_PLL_LINK_CLK, 1 },
+> >         { P_DP_PHY_PLL_VCO_DIV_CLK, 2 },
+> > -       { P_CORE_BI_PLL_TEST_SE, 7 },
+> >  };
+> [...]
+> > @@ -203,7 +188,7 @@ static struct clk_rcg2 disp_cc_mdss_dp_aux_clk_src = {
+> >         .clkr.hw.init = &(struct clk_init_data){
+> >                 .name = "disp_cc_mdss_dp_aux_clk_src",
+> >                 .parent_data = disp_cc_parent_data_0,
+> > -               .num_parents = 2,
+> > +               .num_parents = ARRAY_SIZE(disp_cc_parent_data_0),
+>
+> Can you split this ARRAY_SIZE() stuff to another patch? That will keep
+> focus on what's relevant here without distracting from the patch
+> contents. I know that parent array size is changing, but I don't want it
+> to be changing this line too.
 
-Changes in v2:
-- Added includes
-- Changed various parent names to match bindings / driver
+It has been done.
 
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 47 ++++++++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 8011c5fe2a31..57ff5e0f7ae6 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -5,8 +5,11 @@
-  * Copyright (c) 2019, The Linux Foundation. All rights reserved.
-  */
- 
-+#include <dt-bindings/clock/qcom,dispcc-sc7180.h>
- #include <dt-bindings/clock/qcom,gcc-sc7180.h>
-+#include <dt-bindings/clock/qcom,gpucc-sc7180.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
-+#include <dt-bindings/clock/qcom,videocc-sc7180.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/phy/phy-qcom-qusb2.h>
- #include <dt-bindings/power/qcom-aoss-qmp.h>
-@@ -1039,6 +1042,20 @@ pinmux {
- 			};
- 		};
- 
-+		gpucc: clock-controller@5090000 {
-+			compatible = "qcom,sc7180-gpucc";
-+			reg = <0 0x05090000 0 0x9000>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+				 <&gcc GCC_GPU_GPLL0_CLK_SRC>,
-+				 <&gcc GCC_GPU_GPLL0_DIV_CLK_SRC>;
-+			clock-names = "bi_tcxo",
-+				      "gcc_gpu_gpll0_clk_src",
-+				      "gcc_gpu_gpll0_div_clk_src";
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		qspi: spi@88dc000 {
- 			compatible = "qcom,qspi-v1";
- 			reg = <0 0x088dc000 0 0x600>;
-@@ -1151,6 +1168,36 @@ usb_1_dwc3: dwc3@a600000 {
- 			};
- 		};
- 
-+		videocc: clock-controller@ab00000 {
-+			compatible = "qcom,sc7180-videocc";
-+			reg = <0 0x0ab00000 0 0x10000>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>;
-+			clock-names = "bi_tcxo";
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
-+		dispcc: clock-controller@af00000 {
-+			compatible = "qcom,sc7180-dispcc";
-+			reg = <0 0x0af00000 0 0x200000>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+				 <&gcc GCC_DISP_GPLL0_CLK_SRC>,
-+				 <0>,
-+				 <0>,
-+				 <0>,
-+				 <0>;
-+			clock-names = "bi_tcxo",
-+				      "gcc_disp_gpll0_clk_src",
-+				      "dsi0_phy_pll_out_byteclk",
-+				      "dsi0_phy_pll_out_dsiclk",
-+				      "dp_phy_pll_link_clk",
-+				      "dp_phy_pll_vco_div_clk";
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		pdc: interrupt-controller@b220000 {
- 			compatible = "qcom,sc7180-pdc", "qcom,pdc";
- 			reg = <0 0x0b220000 0 0x30000>;
--- 
-2.25.0.341.g760bfbb309-goog
-
+-Doug
