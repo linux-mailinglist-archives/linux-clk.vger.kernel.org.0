@@ -2,74 +2,118 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33EC615015C
-	for <lists+linux-clk@lfdr.de>; Mon,  3 Feb 2020 06:25:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9842E1502E8
+	for <lists+linux-clk@lfdr.de>; Mon,  3 Feb 2020 10:03:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727210AbgBCFZJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 3 Feb 2020 00:25:09 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52436 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725973AbgBCFZJ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 3 Feb 2020 00:25:09 -0500
-Received: from mail.kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DCB762080D;
-        Mon,  3 Feb 2020 05:25:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580707509;
-        bh=Aq0yEnBkPZ2i28u2kA+F5xCcoMjtJM3CWtJgcuQxAI8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q/928VeEyoFEYXbIWkImpCUwlhO4t9K/TmNAhMzMvbabz08lIhif7Mcwem0U1nMdG
-         NGiEk/fp9CgAS1qX0ixhQeyezgyRvifoGuavCo1BHNQ2UCkoDQL0fueNTL4TKF4sDZ
-         1C9RJzKs4knv6M41nQEXx6DbITIwgHdNvWIv83Kg=
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Wen He <wen.he_1@nxp.com>
-Subject: [PATCH 2/2] dt/bindings: clk: fsl,plldig: Drop 'bindings' from schema id
-Date:   Sun,  2 Feb 2020 21:25:07 -0800
-Message-Id: <20200203052507.93215-2-sboyd@kernel.org>
-X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
-In-Reply-To: <20200203052507.93215-1-sboyd@kernel.org>
-References: <20200203052507.93215-1-sboyd@kernel.org>
+        id S1727769AbgBCJDy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 3 Feb 2020 04:03:54 -0500
+Received: from mail-sz.amlogic.com ([211.162.65.117]:44332 "EHLO
+        mail-sz.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727308AbgBCJDy (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 3 Feb 2020 04:03:54 -0500
+Received: from [10.7.0.4] (10.28.11.250) by mail-sz.amlogic.com (10.28.11.5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Mon, 3 Feb
+ 2020 17:04:25 +0800
+Subject: Re: [PATCH v6 5/5] clk: meson: a1: add support for Amlogic A1
+ Peripheral clock driver
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+CC:     Kevin Hilman <khilman@baylibre.com>, Rob Herring <robh@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Chandle Zou <chandle.zou@amlogic.com>,
+        <linux-clk@vger.kernel.org>, <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20200116080440.118679-1-jian.hu@amlogic.com>
+ <20200116080440.118679-6-jian.hu@amlogic.com>
+ <20200129054253.6F8CD2071E@mail.kernel.org>
+From:   Jian Hu <jian.hu@amlogic.com>
+Message-ID: <3e103a45-62d4-1a10-e4af-5a4c588162d6@amlogic.com>
+Date:   Mon, 3 Feb 2020 17:04:25 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200129054253.6F8CD2071E@mail.kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.28.11.250]
+X-ClientProxiedBy: mail-sz.amlogic.com (10.28.11.5) To mail-sz.amlogic.com
+ (10.28.11.5)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Having 'bindings' in here causes a warning when checking the schema.
+Hi, Stephen
 
- Documentation/devicetree/bindings/clock/fsl,plldig.yaml:
- $id: relative path/filename doesn't match actual path or filename
-         expected: http://devicetree.org/schemas/clock/fsl,plldig.yaml#
+Thanks for your review
 
-Remove it.
-
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Wen He <wen.he_1@nxp.com>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
----
- Documentation/devicetree/bindings/clock/fsl,plldig.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/clock/fsl,plldig.yaml b/Documentation/devicetree/bindings/clock/fsl,plldig.yaml
-index ad37d3273229..c8350030b374 100644
---- a/Documentation/devicetree/bindings/clock/fsl,plldig.yaml
-+++ b/Documentation/devicetree/bindings/clock/fsl,plldig.yaml
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- %YAML 1.2
- ---
--$id: http://devicetree.org/schemas/bindings/clock/fsl,plldig.yaml#
-+$id: http://devicetree.org/schemas/clock/fsl,plldig.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
- title: NXP QorIQ Layerscape LS1028A Display PIXEL Clock Binding
--- 
-Sent by a computer, using git, on the internet
-
+On 2020/1/29 13:42, Stephen Boyd wrote:
+> Quoting Jian Hu (2020-01-16 00:04:40)
+>> diff --git a/drivers/clk/meson/a1.c b/drivers/clk/meson/a1.c
+>> new file mode 100644
+>> index 000000000000..2cf20ae1db75
+>> --- /dev/null
+>> +++ b/drivers/clk/meson/a1.c
+>> @@ -0,0 +1,2249 @@
+> [...]
+>> +       &a1_ceca_32k_clkout,
+>> +       &a1_cecb_32k_clkin,
+>> +       &a1_cecb_32k_div,
+>> +       &a1_cecb_32k_sel_pre,
+>> +       &a1_cecb_32k_sel,
+>> +       &a1_cecb_32k_clkout,
+>> +};
+>> +
+>> +static struct regmap_config clkc_regmap_config = {
+> 
+> Can this be const?
+OK, I will add const in next v8 version.
+> 
+>> +       .reg_bits       = 32,
+>> +       .val_bits       = 32,
+>> +       .reg_stride     = 4,
+>> +};
+>> +
+>> +static int meson_a1_periphs_probe(struct platform_device *pdev)
+>> +{
+>> +       struct device *dev = &pdev->dev;
+>> +       struct resource *res;
+>> +       void __iomem *base;
+>> +       struct regmap *map;
+>> +       int ret, i;
+>> +
+>> +       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>> +
+>> +       base = devm_ioremap_resource(dev, res);
+> 
+> Can you use the combination function that does the get resource and
+> ioremap in one function?
+OK, I will use 'devm_platform_ioremap_resource' here.
+> 
+>> +       if (IS_ERR(base))
+>> +               return PTR_ERR(base);
+>> +
+>> +       map = devm_regmap_init_mmio(dev, base, &clkc_regmap_config);
+>> +       if (IS_ERR(map))
+>> +               return PTR_ERR(map);
+>> +
+>> +       /* Populate regmap for the regmap backed clocks */
+> 
+> Seems like a useless comment.
+OK, I will remove it.
+> 
+>> +       for (i = 0; i < ARRAY_SIZE(a1_periphs_regmaps); i++)
+>> +               a1_periphs_regmaps[i]->map = map;
+>> +
+> 
+The same with a1-pll.c file, I will modify, too.
+> .
+> 
