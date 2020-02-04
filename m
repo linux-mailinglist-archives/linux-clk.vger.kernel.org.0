@@ -2,556 +2,167 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92DA8151AFF
-	for <lists+linux-clk@lfdr.de>; Tue,  4 Feb 2020 14:13:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D0C151B73
+	for <lists+linux-clk@lfdr.de>; Tue,  4 Feb 2020 14:41:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727149AbgBDNNw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 4 Feb 2020 08:13:52 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:54102 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727183AbgBDNNw (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 4 Feb 2020 08:13:52 -0500
-Received: by mail-wm1-f65.google.com with SMTP id s10so3260409wmh.3
-        for <linux-clk@vger.kernel.org>; Tue, 04 Feb 2020 05:13:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=4+ZreWNwYj7OFQFlzqzrrix3cuAHazWWj8/rPIGWyJo=;
-        b=M0Z99vfOMeym0k0M//ZRqU+XgeZnY+6k59gul5cLqImd+3v9xW4aoiAbsVNC8w/6Yc
-         tDqrAC+zFj7TTKo7eB0ggzzUtKSJO+QnWD/BCsVvCJ6SeN1bpaWFW7kka2vsXA+12I4h
-         MK81WKFwnpE+7jOpy3YiJlTgjmz6J24CXrkg43xeVEwDjN66647tsStwHpVHbH0ZLWlS
-         pGjEy5xsvrkxUeqhAocVKsLhpIYcdn6eyqUTCdZVfefDIY90Nu20K/hGEJtC8I5B8hGo
-         /L6QRROOxkUoOTLQ9axRkRAlUHdtN+RrZQ3oH5CChcJ5zBSYUNrBYE9JkxKaHfT7mPU8
-         qLSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=4+ZreWNwYj7OFQFlzqzrrix3cuAHazWWj8/rPIGWyJo=;
-        b=cX/MzEeLrSpanpUdN0eaY60ivrQHzROY0W+W4UNoTZmECNKBTxIBdVl0psbSkLx1lS
-         n16tIrlIQqhOEW/YSLx8GvfxdoGUXz/EC8q12pvBco033LeDQ5GuyB91Vl40SUhPaxP1
-         MnUELjgNup2bgvgh0DAMGZgJAVclPKKctzEr+oyynTDMNiHsdQSpK8cCXfnpQ1p2NEqB
-         RJDgNIdXVjYY6AcoGPNhu7zbuK0zKk9M9EPXjpKAIGGQtefsYrtiJ7pZsKmKu4UFByVg
-         wib8G24JCfrICTqdYqABOP7pnKifM4g28dkbdGAOlMhYT6AjY88SFScpEka5iiuO4j2C
-         1eMQ==
-X-Gm-Message-State: APjAAAWO1GmjYoAZw5miGwf2Dqe7IJNRKdjZQZk3f6Dm/QmiDdQDfHHw
-        vaeUB4Lwf12pjcYqGRZeZuMN8A==
-X-Google-Smtp-Source: APXvYqwa8TjVIISu4WpJ5BmARG51IeDoMGSBvNTNUaWV+PC+gcbDYGihp7zaopr8eYWtFU9TFpm06g==
-X-Received: by 2002:a1c:6389:: with SMTP id x131mr6064652wmb.155.1580822027625;
-        Tue, 04 Feb 2020 05:13:47 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id y20sm3571466wmi.25.2020.02.04.05.13.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2020 05:13:46 -0800 (PST)
-References: <20200120034937.128600-1-jian.hu@amlogic.com> <20200120034937.128600-4-jian.hu@amlogic.com>
-User-agent: mu4e 1.3.3; emacs 26.3
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Jian Hu <jian.hu@amlogic.com>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Kevin Hilman <khilman@baylibre.com>, Rob Herring <robh@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Chandle Zou <chandle.zou@amlogic.com>,
-        linux-clk@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 3/5] clk: meson: a1: add support for Amlogic A1 PLL clock driver
-In-reply-to: <20200120034937.128600-4-jian.hu@amlogic.com>
-Date:   Tue, 04 Feb 2020 14:13:46 +0100
-Message-ID: <1jeeva7awl.fsf@starbuckisacylon.baylibre.com>
-MIME-Version: 1.0
+        id S1727199AbgBDNlT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 4 Feb 2020 08:41:19 -0500
+Received: from mail-eopbgr40079.outbound.protection.outlook.com ([40.107.4.79]:13854
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727174AbgBDNlT (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 4 Feb 2020 08:41:19 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BUb1eUKBw5hKUYNJOUJVZixxL0lcp1xNS1FmlpWGp6VsFTb5wViI2p6YKfyO0rI4nBhsoZWCsg46mpt+onQIv/0YfN7wiiyBFH+ExdvGgkYqz6HA/gHnkfGVIflFrsa4DA2+TJlIr1VAoJJ7hqmAfxWNVI921q52z6BHDSb/4wOUlGYLpIQ0Im/P1RvRSPDXraWy9WCLxZ++SP0kvM968mTqH7q4+Bx2+1q/Xzcq7lkHs6DyiTP5DNWZ66GSFBvDBrVeZQ/XRey2evPTFv+Vnb9EiTwIb3jrW7tLrZywzJyhhNFH8qFLIL9/9coH7y85hBzoJmeI9u+1bcee915YjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TBlopLNh6wMXuG58P/lUZJO6Fuv4jSLilngPYWM4Si0=;
+ b=e5i5eTU6czPhU62lR1BlzSgDTAMzpf7aYsYjdAMF0wsK6l5anE38/Lfiz34sGyIuMjMaCLLuw3ob8cyGTeXLoD2zMxihMCGpuCUArKFO7+VXovYDy0tKLOApf8gmdCLMfDFMDCJO6sqbRn+Mh1iL1W2WaRmmpYA2+VdBrsY6v2RPpYGhXHQXoxG2OkR7KAD4MmuIDTiyLLKUvwZlVj5hrUr4uyYO6vZbWFUesJXcXxlU2csS4DDdR4GHDdEuxOyjzdGpf5Jxf3dskwWShPMIe9+hdCyDB9QrQLQ/OsM6DTJ9k5VAIdrdeZ3Pl68obolJaDXlYRjas0+nmTMCRefm8g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TBlopLNh6wMXuG58P/lUZJO6Fuv4jSLilngPYWM4Si0=;
+ b=lFM54PVJjTKaL540pzxoXp3+0Ce3iCRy5tDz3zS7B+gOEZ6rVpBryQBV1ZD7D+HDYKMJ2GYPa/BS06KQcMkuh1FDN1556nWwREPHnsYkQumEW/WpKDN7RVhu37yMo663tcdYNsTksERuDncfMQlAMDmkZ8wxb8tKgCx39N6WMEo=
+Authentication-Results: spf=none (sender IP is )
+ smtp.mailfrom=peng.fan@nxp.com; 
+Received: from AM0PR04MB4481.eurprd04.prod.outlook.com (52.135.147.15) by
+ AM0PR04MB6932.eurprd04.prod.outlook.com (52.132.213.86) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2686.27; Tue, 4 Feb 2020 13:41:09 +0000
+Received: from AM0PR04MB4481.eurprd04.prod.outlook.com
+ ([fe80::91e2:17:b3f4:d422]) by AM0PR04MB4481.eurprd04.prod.outlook.com
+ ([fe80::91e2:17:b3f4:d422%3]) with mapi id 15.20.2686.031; Tue, 4 Feb 2020
+ 13:41:09 +0000
+From:   peng.fan@nxp.com
+To:     shawnguo@kernel.org, s.hauer@pengutronix.de, sboyd@kernel.org,
+        abel.vesa@nxp.com, aisheng.dong@nxp.com, leonard.crestez@nxp.com
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        ping.bai@nxp.com, Anson.Huang@nxp.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH 0/7] ARM: imx: imx7ulp: add cpufreq support
+Date:   Tue,  4 Feb 2020 21:34:30 +0800
+Message-Id: <1580823277-13644-1-git-send-email-peng.fan@nxp.com>
+X-Mailer: git-send-email 2.7.4
 Content-Type: text/plain
+X-ClientProxiedBy: HK0PR03CA0107.apcprd03.prod.outlook.com
+ (2603:1096:203:b0::23) To AM0PR04MB4481.eurprd04.prod.outlook.com
+ (2603:10a6:208:70::15)
+MIME-Version: 1.0
+Received: from localhost.localdomain (119.31.174.66) by HK0PR03CA0107.apcprd03.prod.outlook.com (2603:1096:203:b0::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.2686.28 via Frontend Transport; Tue, 4 Feb 2020 13:41:05 +0000
+X-Mailer: git-send-email 2.7.4
+X-Originating-IP: [119.31.174.66]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 5943aa3c-205d-4ba7-e5a0-08d7a977e44c
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6932:|AM0PR04MB6932:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM0PR04MB69321DDF3D56EB0A07CDC90D88030@AM0PR04MB6932.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Forefront-PRVS: 03030B9493
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(366004)(39860400002)(396003)(136003)(346002)(189003)(199004)(16526019)(8936002)(26005)(186003)(2616005)(8676002)(81156014)(956004)(81166006)(4326008)(36756003)(86362001)(6666004)(478600001)(6506007)(66476007)(66556008)(66946007)(69590400006)(6512007)(9686003)(316002)(6486002)(2906002)(5660300002)(52116002);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB6932;H:AM0PR04MB4481.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+Received-SPF: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Gbj7O3cxuqi5rMuqGvXyd9YZmiP1nrJK+cU+je2Y8r3BD/euEfiFxv574iVrRfoSkpbsGkh2s5afXk2nqJSarTpPPoyTzRLZGPR4dDeDgmdFbtNy638g6A9P8sG4WnZoWGq9/9g2aWa41iXUXyvqSF6dE2r0cAFmFRMR0T9Cv3iqe7qNnDwS3ZqtZs6Trwfb0vEaiteWdgKr8PpoJ1KTImTSMS6HJYmJUY+pB8Uq/2uO968dtSI0qFvZXW8H1J/Jg5p9ox5bmYDJ0HXdZpXLuF5SuzpA+JZCyLB1r42k2ulphhJJRC+mVqdIYP+g70xEFmkbPGZeC7OOeBtiOOjv7NlBU41BPm5ZQcfly03Vwa0fA8oIzjS/WrR7oylBH0rwEssvZrV9bsm9qT+6jjI6JVRWYXDxz/B1a089srNtlpERunAsfSR0USSFwJ2BZGw4ArNZm5vG+w9MYHrVbIy8o5F7DBxhDnhbDgxLEeR5QBWnnmRTo6FKbL0imgHXO6mJW8Qc//WOmsB2oM/llVxsbwjhAnLJrh2y88AggqNIjSE=
+X-MS-Exchange-AntiSpam-MessageData: B3BDUcnekYlAqAfYWhbjKV/rUrJ3Ln1E+okJ8/UErVjzSyLKHiZSe7Jb3x2oqJCaMIjg4zltV5iQnKbEIt1r2LvzLuKoD3fUjRMaTpFYYPLR9mEOeTBHyx1FEzWGpQVr9JXAEUy1dcM/q0sNUD0Z+A==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5943aa3c-205d-4ba7-e5a0-08d7a977e44c
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2020 13:41:09.4160
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: U+uhDKtLu9QPXdoXzG0FEmOXBqU1ULkIc/Sq1pKJnPmGRNBm9K9j4vEIyuZlOl9Vd3gH9rCgVCvjSoHzVT5gBQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6932
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+From: Peng Fan <peng.fan@nxp.com>
 
-On Mon 20 Jan 2020 at 04:49, Jian Hu <jian.hu@amlogic.com> wrote:
+This patchset aims to use cpufreq-dt for i.MX7ULP to avoid
+plaform specific cpufreq driver. To use cpufreq-dt, we need
+a ARM core clock that could be easy to support freq change.
 
-> The Amlogic A1 clock includes three drivers:
-> pll clocks, peripheral clocks, CPU clocks.
-> sys pll and CPU clocks will be sent in next patch.
->
-> Unlike the previous series, there is no EE/AO domain
-> in A1 CLK controllers.
->
-> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
-> ---
->  drivers/clk/meson/Kconfig  |   9 +
->  drivers/clk/meson/Makefile |   1 +
->  drivers/clk/meson/a1-pll.c | 360 +++++++++++++++++++++++++++++++++++++
->  drivers/clk/meson/a1-pll.h |  56 ++++++
->  4 files changed, 426 insertions(+)
->  create mode 100644 drivers/clk/meson/a1-pll.c
->  create mode 100644 drivers/clk/meson/a1-pll.h
->
-> diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
-> index dabeb435d067..31613c3bbbc7 100644
-> --- a/drivers/clk/meson/Kconfig
-> +++ b/drivers/clk/meson/Kconfig
-> @@ -93,6 +93,15 @@ config COMMON_CLK_AXG_AUDIO
->  	  Support for the audio clock controller on AmLogic A113D devices,
->  	  aka axg, Say Y if you want audio subsystem to work.
->  
-> +config COMMON_CLK_A1_PLL
-> +	bool
-> +	depends on ARCH_MESON
-> +	select COMMON_CLK_MESON_REGMAP
-> +	select COMMON_CLK_MESON_PLL
-> +	help
-> +	  Support for the PLL clock controller on Amlogic A113L device,
-> +	  aka a1. Say Y if you want PLL to work.
-> +
->  config COMMON_CLK_G12A
->  	bool
->  	depends on ARCH_MESON
-> diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
-> index 3939f218587a..71d3b8e6fb8a 100644
-> --- a/drivers/clk/meson/Makefile
-> +++ b/drivers/clk/meson/Makefile
-> @@ -16,6 +16,7 @@ obj-$(CONFIG_COMMON_CLK_MESON_VID_PLL_DIV) += vid-pll-div.o
->  
->  obj-$(CONFIG_COMMON_CLK_AXG) += axg.o axg-aoclk.o
->  obj-$(CONFIG_COMMON_CLK_AXG_AUDIO) += axg-audio.o
-> +obj-$(CONFIG_COMMON_CLK_A1_PLL) += a1-pll.o
->  obj-$(CONFIG_COMMON_CLK_GXBB) += gxbb.o gxbb-aoclk.o
->  obj-$(CONFIG_COMMON_CLK_G12A) += g12a.o g12a-aoclk.o
->  obj-$(CONFIG_COMMON_CLK_MESON8B) += meson8b.o
-> diff --git a/drivers/clk/meson/a1-pll.c b/drivers/clk/meson/a1-pll.c
-> new file mode 100644
-> index 000000000000..69c1ca07d041
-> --- /dev/null
-> +++ b/drivers/clk/meson/a1-pll.c
-> @@ -0,0 +1,360 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
-> + * Author: Jian Hu <jian.hu@amlogic.com>
-> + */
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include "a1-pll.h"
-> +#include "clk-pll.h"
-> +#include "clk-regmap.h"
-> +
-> +static struct clk_regmap a1_fixed_pll_dco = {
-> +	.data = &(struct meson_clk_pll_data){
-> +		.en = {
-> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
-> +			.shift   = 28,
-> +			.width   = 1,
-> +		},
-> +		.m = {
-> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
-> +			.shift   = 0,
-> +			.width   = 8,
-> +		},
-> +		.n = {
-> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
-> +			.shift   = 10,
-> +			.width   = 5,
-> +		},
-> +		.frac = {
-> +			.reg_off = ANACTRL_FIXPLL_CTRL1,
-> +			.shift   = 0,
-> +			.width   = 19,
-> +		},
-> +		.l = {
-> +			.reg_off = ANACTRL_FIXPLL_STS,
-> +			.shift   = 31,
-> +			.width   = 1,
-> +		},
-> +		.rst = {
-> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
-> +			.shift   = 29,
-> +			.width   = 1,
-> +		},
-> +	},
-> +	.hw.init = &(struct clk_init_data){
-> +		.name = "fixed_pll_dco",
-> +		.ops = &meson_clk_pll_ro_ops,
-> +		.parent_data = &(const struct clk_parent_data) {
-> +			.fw_name = "xtal_fixpll",
-> +		},
-> +		.num_parents = 1,
-> +	},
-> +};
-> +
-> +static struct clk_regmap a1_fixed_pll = {
-> +	.data = &(struct clk_regmap_gate_data){
-> +		.offset = ANACTRL_FIXPLL_CTRL0,
-> +		.bit_idx = 20,
-> +	},
-> +	.hw.init = &(struct clk_init_data) {
-> +		.name = "fixed_pll",
-> +		.ops = &clk_regmap_gate_ops,
-> +		.parent_hws = (const struct clk_hw *[]) {
-> +			&a1_fixed_pll_dco.hw
-> +		},
-> +		.num_parents = 1,
-> +		/*
-> +		 * It is enough that the fdiv leaf has critical flag,
-> +		 * No critical or unused flag here.
-> +		 */
-> +	},
-> +};
-> +
-> +static const struct pll_mult_range a1_hifi_pll_mult_range = {
-> +	.min = 32,
-> +	.max = 64,
-> +};
-> +
-> +static const struct reg_sequence a1_hifi_init_regs[] = {
-> +	{ .reg = ANACTRL_HIFIPLL_CTRL1, .def = 0x01800000 },
-> +	{ .reg = ANACTRL_HIFIPLL_CTRL2, .def = 0x00001100 },
-> +	{ .reg = ANACTRL_HIFIPLL_CTRL3, .def = 0x100a1100 },
-> +	{ .reg = ANACTRL_HIFIPLL_CTRL4, .def = 0x00302000 },
-> +	{ .reg = ANACTRL_HIFIPLL_CTRL0, .def = 0x01f18440 },
-> +};
-> +
-> +static struct clk_regmap a1_hifi_pll = {
-> +	.data = &(struct meson_clk_pll_data){
-> +		.en = {
-> +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
-> +			.shift   = 28,
-> +			.width   = 1,
-> +		},
-> +		.m = {
-> +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
-> +			.shift   = 0,
-> +			.width   = 8,
-> +		},
-> +		.n = {
-> +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
-> +			.shift   = 10,
-> +			.width   = 5,
-> +		},
-> +		.frac = {
-> +			.reg_off = ANACTRL_HIFIPLL_CTRL1,
-> +			.shift   = 0,
-> +			.width   = 19,
-> +		},
-> +		.l = {
-> +			.reg_off = ANACTRL_HIFIPLL_STS,
-> +			.shift   = 31,
-> +			.width   = 1,
-> +		},
-> +		.current_en = {
-> +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
-> +			.shift   = 26,
-> +			.width   = 1,
-> +		},
-> +		.l_detect = {
-> +			.reg_off = ANACTRL_HIFIPLL_CTRL2,
-> +			.shift   = 6,
-> +			.width   = 1,
-> +		},
-> +		.range = &a1_hifi_pll_mult_range,
-> +		.init_regs = a1_hifi_init_regs,
-> +		.init_count = ARRAY_SIZE(a1_hifi_init_regs),
-> +	},
-> +	.hw.init = &(struct clk_init_data){
-> +		.name = "hifi_pll",
-> +		.ops = &meson_clk_pll_ops,
-> +		.parent_data = &(const struct clk_parent_data) {
-> +			.fw_name = "xtal_hifipll",
-> +		},
-> +		.num_parents = 1,
-> +	},
-> +};
-> +
-> +static struct clk_fixed_factor a1_fclk_div2_div = {
-> +	.mult = 1,
-> +	.div = 2,
-> +	.hw.init = &(struct clk_init_data){
-> +		.name = "fclk_div2_div",
-> +		.ops = &clk_fixed_factor_ops,
-> +		.parent_hws = (const struct clk_hw *[]) {
-> +			&a1_fixed_pll.hw
-> +		},
-> +		.num_parents = 1,
-> +	},
-> +};
-> +
-> +static struct clk_regmap a1_fclk_div2 = {
-> +	.data = &(struct clk_regmap_gate_data){
-> +		.offset = ANACTRL_FIXPLL_CTRL0,
-> +		.bit_idx = 21,
-> +	},
-> +	.hw.init = &(struct clk_init_data){
-> +		.name = "fclk_div2",
-> +		.ops = &clk_regmap_gate_ops,
-> +		.parent_hws = (const struct clk_hw *[]) {
-> +			&a1_fclk_div2_div.hw
-> +		},
-> +		.num_parents = 1,
-> +		/*
-> +		 * This clock is used by DDR clock in BL2 firmware
-> +		 * and is required by the platform to operate correctly.
-> +		 * Until the following condition are met, we need this clock to
-> +		 * be marked as critical:
-> +		 * a) Mark the clock used by a firmware resource, if possible
-> +		 * b) CCF has a clock hand-off mechanism to make the sure the
-> +		 *    clock stays on until the proper driver comes along
-> +		 */
-> +		.flags = CLK_IS_CRITICAL,
-> +	},
-> +};
-> +
-> +static struct clk_fixed_factor a1_fclk_div3_div = {
-> +	.mult = 1,
-> +	.div = 3,
-> +	.hw.init = &(struct clk_init_data){
-> +		.name = "fclk_div3_div",
-> +		.ops = &clk_fixed_factor_ops,
-> +		.parent_hws = (const struct clk_hw *[]) {
-> +			&a1_fixed_pll.hw
-> +		},
-> +		.num_parents = 1,
-> +	},
-> +};
-> +
-> +static struct clk_regmap a1_fclk_div3 = {
-> +	.data = &(struct clk_regmap_gate_data){
-> +		.offset = ANACTRL_FIXPLL_CTRL0,
-> +		.bit_idx = 22,
-> +	},
-> +	.hw.init = &(struct clk_init_data){
-> +		.name = "fclk_div3",
-> +		.ops = &clk_regmap_gate_ops,
-> +		.parent_hws = (const struct clk_hw *[]) {
-> +			&a1_fclk_div3_div.hw
-> +		},
-> +		.num_parents = 1,
-> +		/*
-> +		 * This clock is used by APB bus which is set in boot ROM code
-> +		 * and is required by the platform to operate correctly.
-> +		 * About critical, refer to a1_fclk_div2.
-> +		 */
-> +		.flags = CLK_IS_CRITICAL,
-> +	},
-> +};
-> +
-> +static struct clk_fixed_factor a1_fclk_div5_div = {
-> +	.mult = 1,
-> +	.div = 5,
-> +	.hw.init = &(struct clk_init_data){
-> +		.name = "fclk_div5_div",
-> +		.ops = &clk_fixed_factor_ops,
-> +		.parent_hws = (const struct clk_hw *[]) {
-> +			&a1_fixed_pll.hw
-> +		},
-> +		.num_parents = 1,
-> +	},
-> +};
-> +
-> +static struct clk_regmap a1_fclk_div5 = {
-> +	.data = &(struct clk_regmap_gate_data){
-> +		.offset = ANACTRL_FIXPLL_CTRL0,
-> +		.bit_idx = 23,
-> +	},
-> +	.hw.init = &(struct clk_init_data){
-> +		.name = "fclk_div5",
-> +		.ops = &clk_regmap_gate_ops,
-> +		.parent_hws = (const struct clk_hw *[]) {
-> +			&a1_fclk_div5_div.hw
-> +		},
-> +		.num_parents = 1,
-> +		/*
-> +		 * This clock is used by AXI bus which setted in Romcode
-> +		 * and is required by the platform to operate correctly.
-> +		 * About critical, refer to a1_fclk_div2.
-> +		 */
-> +		.flags = CLK_IS_CRITICAL,
-> +	},
-> +};
-> +
-> +static struct clk_fixed_factor a1_fclk_div7_div = {
-> +	.mult = 1,
-> +	.div = 7,
-> +	.hw.init = &(struct clk_init_data){
-> +		.name = "fclk_div7_div",
-> +		.ops = &clk_fixed_factor_ops,
-> +		.parent_hws = (const struct clk_hw *[]) {
-> +			&a1_fixed_pll.hw
-> +		},
-> +		.num_parents = 1,
-> +	},
-> +};
-> +
-> +static struct clk_regmap a1_fclk_div7 = {
-> +	.data = &(struct clk_regmap_gate_data){
-> +		.offset = ANACTRL_FIXPLL_CTRL0,
-> +		.bit_idx = 24,
-> +	},
-> +	.hw.init = &(struct clk_init_data){
-> +		.name = "fclk_div7",
-> +		.ops = &clk_regmap_gate_ops,
-> +		.parent_hws = (const struct clk_hw *[]) {
-> +			&a1_fclk_div7_div.hw
-> +		},
-> +		.num_parents = 1,
-> +	},
-> +};
-> +
-> +/* Array of all clocks provided by this provider */
-> +static struct clk_hw_onecell_data a1_pll_hw_onecell_data = {
-> +	.hws = {
-> +		[CLKID_FIXED_PLL_DCO]		= &a1_fixed_pll_dco.hw,
-> +		[CLKID_FIXED_PLL]		= &a1_fixed_pll.hw,
-> +		[CLKID_HIFI_PLL]		= &a1_hifi_pll.hw,
-> +		[CLKID_FCLK_DIV2]		= &a1_fclk_div2.hw,
-> +		[CLKID_FCLK_DIV3]		= &a1_fclk_div3.hw,
-> +		[CLKID_FCLK_DIV5]		= &a1_fclk_div5.hw,
-> +		[CLKID_FCLK_DIV7]		= &a1_fclk_div7.hw,
-> +		[CLKID_FCLK_DIV2_DIV]		= &a1_fclk_div2_div.hw,
-> +		[CLKID_FCLK_DIV3_DIV]		= &a1_fclk_div3_div.hw,
-> +		[CLKID_FCLK_DIV5_DIV]		= &a1_fclk_div5_div.hw,
-> +		[CLKID_FCLK_DIV7_DIV]		= &a1_fclk_div7_div.hw,
-> +		[NR_PLL_CLKS]			= NULL,
-> +	},
-> +	.num = NR_PLL_CLKS,
-> +};
-> +
-> +static struct clk_regmap *const a1_pll_regmaps[] = {
-> +	&a1_fixed_pll_dco,
-> +	&a1_fixed_pll,
-> +	&a1_hifi_pll,
-> +	&a1_fclk_div2,
-> +	&a1_fclk_div3,
-> +	&a1_fclk_div5,
-> +	&a1_fclk_div7,
-> +};
-> +
-> +static struct regmap_config clkc_regmap_config = {
-> +	.reg_bits       = 32,
-> +	.val_bits       = 32,
-> +	.reg_stride     = 4,
-> +};
-> +
-> +static int meson_a1_pll_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct resource *res;
-> +	void __iomem *base;
-> +	struct regmap *map;
-> +	int ret, i;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +
-> +	base = devm_ioremap_resource(dev, res);
-> +	if (IS_ERR(base))
-> +		return PTR_ERR(base);
-> +
-> +	map = devm_regmap_init_mmio(dev, base, &clkc_regmap_config);
-> +	if (IS_ERR(map))
-> +		return PTR_ERR(map);
-> +
-> +	/* Populate regmap for the regmap backed clocks */
-> +	for (i = 0; i < ARRAY_SIZE(a1_pll_regmaps); i++)
-> +		a1_pll_regmaps[i]->map = map;
-> +
-> +	for (i = 0; i < a1_pll_hw_onecell_data.num; i++) {
-> +		/* array might be sparse */
-> +		if (!a1_pll_hw_onecell_data.hws[i])
-> +			continue;
-> +
-> +		ret = devm_clk_hw_register(dev, a1_pll_hw_onecell_data.hws[i]);
-> +		if (ret) {
-> +			dev_err(dev, "Clock registration failed\n");
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
-> +					   &a1_pll_hw_onecell_data);
-> +}
-> +
-> +static const struct of_device_id clkc_match_table[] = {
-> +	{ .compatible = "amlogic,a1-pll-clkc", },
-> +	{}
-> +};
-> +
-> +static struct platform_driver a1_pll_driver = {
-> +	.probe		= meson_a1_pll_probe,
-> +	.driver		= {
-> +		.name	= "a1-pll-clkc",
-> +		.of_match_table = clkc_match_table,
-> +	},
-> +};
-> +
-> +builtin_platform_driver(a1_pll_driver);
-> diff --git a/drivers/clk/meson/a1-pll.h b/drivers/clk/meson/a1-pll.h
-> new file mode 100644
-> index 000000000000..8ded267061ad
-> --- /dev/null
-> +++ b/drivers/clk/meson/a1-pll.h
-> @@ -0,0 +1,56 @@
-> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
-> +/*
-> + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
-> + */
-> +
-> +#ifndef __A1_PLL_H
-> +#define __A1_PLL_H
-> +
-> +/* PLL register offset */
-> +#define ANACTRL_FIXPLL_CTRL0		0x0
-> +#define ANACTRL_FIXPLL_CTRL1		0x4
-> +#define ANACTRL_FIXPLL_CTRL2		0x8
-> +#define ANACTRL_FIXPLL_CTRL3		0xc
-> +#define ANACTRL_FIXPLL_CTRL4		0x10
-> +#define ANACTRL_FIXPLL_STS		0x14
-> +#define ANACTRL_SYSPLL_CTRL0		0x80
-> +#define ANACTRL_SYSPLL_CTRL1		0x84
-> +#define ANACTRL_SYSPLL_CTRL2		0x88
-> +#define ANACTRL_SYSPLL_CTRL3		0x8c
-> +#define ANACTRL_SYSPLL_CTRL4		0x90
-> +#define ANACTRL_SYSPLL_STS		0x94
-> +#define ANACTRL_HIFIPLL_CTRL0		0xc0
-> +#define ANACTRL_HIFIPLL_CTRL1		0xc4
-> +#define ANACTRL_HIFIPLL_CTRL2		0xc8
-> +#define ANACTRL_HIFIPLL_CTRL3		0xcc
-> +#define ANACTRL_HIFIPLL_CTRL4		0xd0
-> +#define ANACTRL_HIFIPLL_STS		0xd4
+However i.MX7ULP has some specific design that we could
+reuse imx_hw_clk_cpu that used on i.MX7D/8M. So
+introduced a new api imx_hw_clk_cpuv2 to add a virtual clk
+that could support ARM core freq change easily.
 
-Non of the definition below are used.
-What are they ? Do you need them ?
+Patch 1,2 is to change pfdv2 to make it could determine
+best parent clk, then we could directly configure pfdv2
+to get the best clk per i.MX7ULP datasheet "6.2.4 PLL PFD output"
 
-> +#define ANACTRL_AUDDDS_CTRL0		0x100
-> +#define ANACTRL_AUDDDS_CTRL1		0x104
-> +#define ANACTRL_AUDDDS_CTRL2		0x108
-> +#define ANACTRL_AUDDDS_CTRL3		0x10c
-> +#define ANACTRL_AUDDDS_CTRL4		0x110
-> +#define ANACTRL_AUDDDS_STS		0x114
-> +#define ANACTRL_MISCTOP_CTRL0		0x140
-> +#define ANACTRL_POR_CNTL		0x188
-> +
-> +/*
-> + * CLKID index values
-> + *
-> + * These indices are entirely contrived and do not map onto the hardware.
-> + * It has now been decided to expose everything by default in the DT header:
-> + * include/dt-bindings/clock/a1-pll-clkc.h. Only the clocks ids we don't want
-> + * to expose, such as the internal muxes and dividers of composite clocks,
-> + * will remain defined here.
-> + */
-> +#define CLKID_FIXED_PLL_DCO		0
-> +#define CLKID_FCLK_DIV2_DIV		2
-> +#define CLKID_FCLK_DIV3_DIV		3
-> +#define CLKID_FCLK_DIV5_DIV		4
-> +#define CLKID_FCLK_DIV7_DIV		5
-> +#define NR_PLL_CLKS			11
-> +
-> +/* include the CLKIDs that have been made part of the DT binding */
-> +#include <dt-bindings/clock/a1-pll-clkc.h>
-> +
-> +#endif /* __A1_PLL_H */
+
+I have tested with following diff applied, and mark fsl,imx7ulp as
+blacklist in cpufreq-dt driver(I also send out when this patchset
+is ok)
+diff --git a/arch/arm/boot/dts/imx7ulp.dtsi b/arch/arm/boot/dts/imx7ulp.dtsi
+index ab91c98f2124..11085b06506e 100644
+--- a/arch/arm/boot/dts/imx7ulp.dtsi
++++ b/arch/arm/boot/dts/imx7ulp.dtsi
+@@ -41,9 +41,29 @@
+                        compatible = "arm,cortex-a7";
+                        device_type = "cpu";
+                        reg = <0xf00>;
++                       clocks = <&smc1 IMX7ULP_CLK_ARM_FREQ>;
++                       clock-frequency = <500210000>;
++                       operating-points-v2 = <&cpu0_opp_table>;
+                };
+        };
+
++       cpu0_opp_table: opp-table {
++               compatible = "operating-points-v2";
++               opp-shared;
++
++               opp-500210000 {
++                       opp-hz = /bits/ 64 <500210000>;
++                       /*opp-microvolt = <1025000>;*/
++                       clock-latency-ns = <150000>;
++               };
++
++               opp-720000000 {
++                       opp-hz = /bits/ 64 <720000000>;
++                       /*opp-microvolt = <1125000>;*/
++                       clock-latency-ns = <150000>;
++               };
++       };
++
+
+I not include the voltage configuration, because imx-rpmsg
+and pf1550 rpmsg driver still not upstreamed.
+
+So I not included dts in this patchset, when imx-rpmsg and pf1550
+ready, the dts part could be added then.
+
+Anson Huang (1):
+  clk: imx: Fix division by zero warning on pfdv2
+
+Peng Fan (6):
+  clk: imx: pfdv2: switch to use determine_rate
+  clk: imx: pfdv2: determine best parent rate
+  clk: imx: add imx_hw_clk_cpuv2 for i.MX7ULP
+  clk: imx: imx7ulp: add IMX7ULP_CLK_ARM_FREQ clk
+  ARM: imx: imx7ulp: support HSRUN mode
+  ARM: imx: imx7ulp: create cpufreq device
+
+ arch/arm/mach-imx/mach-imx7ulp.c          |   2 +
+ arch/arm/mach-imx/pm-imx7ulp.c            |   4 +
+ drivers/clk/imx/Makefile                  |   1 +
+ drivers/clk/imx/clk-cpuv2.c               | 137 ++++++++++++++++++++++++++++++
+ drivers/clk/imx/clk-imx7ulp.c             |  15 +++-
+ drivers/clk/imx/clk-pfdv2.c               |  61 +++++++++----
+ drivers/clk/imx/clk.h                     |   9 ++
+ include/dt-bindings/clock/imx7ulp-clock.h |   3 +-
+ 8 files changed, 212 insertions(+), 20 deletions(-)
+ create mode 100644 drivers/clk/imx/clk-cpuv2.c
+
+-- 
+2.16.4
 
