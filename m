@@ -2,87 +2,174 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C660815547E
-	for <lists+linux-clk@lfdr.de>; Fri,  7 Feb 2020 10:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D21AA1555A5
+	for <lists+linux-clk@lfdr.de>; Fri,  7 Feb 2020 11:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727481AbgBGJXo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 7 Feb 2020 04:23:44 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:16898 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727446AbgBGJXo (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 7 Feb 2020 04:23:44 -0500
-X-UUID: c48d4d7cd20f4b9fb544ce5828f5ea85-20200207
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=UbnXG7anPzekXSKoVAsd9UcuJJBevQ2oSv9/xVk+BPE=;
-        b=oFi85Z211h5tt1kAgCy396ShlP04yQJioFeQxc6pFE1oBXfl0K5CMrnWSYd7YiMwVXs+ysTsz9uLxGIJF6T3ifwQ+/TWAHuxjQakgnuKs/U5mK48At9qfXllDycqmgLK8h3eOwmRMqyPA+D1anynG8MvrNIYDNsc56zt8hMd7n4=;
-X-UUID: c48d4d7cd20f4b9fb544ce5828f5ea85-20200207
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1628606181; Fri, 07 Feb 2020 17:23:38 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Fri, 7 Feb 2020 17:24:28 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Fri, 7 Feb 2020 17:22:59 +0800
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+        id S1726935AbgBGK14 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 7 Feb 2020 05:27:56 -0500
+Received: from mail26.static.mailgun.info ([104.130.122.26]:60236 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726867AbgBGK14 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 7 Feb 2020 05:27:56 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1581071275; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=SXtKwR+Qh4XdJBE5iN9hKj4xfIJl9gq5XMMKEVbj36E=; b=RrUF7JI3v4GIQ3eEv0lfsui/zvxpboylk5Ru0ehvNPSWL0kDMzf7nVFw+RH3fS2gWM0GJhDt
+ RsXBS4sfPhS3LsUKFbRzU1lQolBsZvDIHAMbXEtA6vVmESqmRWoqzR2mSenQefGGKM2C5iH4
+ U5JEH642Z7qLkToEwIonGdBW8es=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e3d3ba9.7f531d0fc298-smtp-out-n03;
+ Fri, 07 Feb 2020 10:27:53 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 224F0C4479C; Fri,  7 Feb 2020 10:27:53 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.206.28.9] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: tdas)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4EDA4C433CB;
+        Fri,  7 Feb 2020 10:27:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4EDA4C433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=tdas@codeaurora.org
+Subject: Re: [PATCH v3 1/3] dt-bindings: clock: Add YAML schemas for the QCOM
+ MSS clock bindings
+To:     Sibi Sankar <sibis@codeaurora.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        mtk01761 <wendell.lin@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>,
-        Mars Cheng <mars.cheng@mediatek.com>,
-        Sean Wang <Sean.Wang@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Owen Chen <owen.chen@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Evan Green <evgreen@chromium.org>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <jroedel@suse.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Ryder Lee <Ryder.Lee@mediatek.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>
-CC:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        CC Hwang <cc.hwang@mediatek.com>,
-        Loda Chou <loda.chou@mediatek.com>
-Subject: [PATCH v7 7/7] arm64: defconfig: add CONFIG_COMMON_CLK_MT6765_XXX clocks
-Date:   Fri, 7 Feb 2020 17:20:50 +0800
-Message-ID: <1581067250-12744-8-git-send-email-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1581067250-12744-1-git-send-email-macpaul.lin@mediatek.com>
-References: <1581067250-12744-1-git-send-email-macpaul.lin@mediatek.com>
+        David Brown <david.brown@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        robh@kernel.org, robh+dt@kernel.org,
+        linux-kernel-owner@vger.kernel.org
+References: <1580357923-19783-1-git-send-email-tdas@codeaurora.org>
+ <1580357923-19783-2-git-send-email-tdas@codeaurora.org>
+ <8d29b13e5444676df46b2479a1f48e36@codeaurora.org>
+From:   Taniya Das <tdas@codeaurora.org>
+Message-ID: <ca500b7e-2a58-8e72-255c-8a5c68cfaed4@codeaurora.org>
+Date:   Fri, 7 Feb 2020 15:57:45 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <8d29b13e5444676df46b2479a1f48e36@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-RnJvbTogT3dlbiBDaGVuIDxvd2VuLmNoZW5AbWVkaWF0ZWsuY29tPg0KDQpFbmFibGUgTVQ2NzY1
-IGNsb2NrIGNvbmZpZ3MsIGluY2x1ZGUgdG9wY2tnZW4sIGFwbWl4ZWRzeXMsDQppbmZyYWNmZywg
-YW5kIHN1YnN5c3RlbSBjbG9ja3MuDQoNClNpZ25lZC1vZmYtYnk6IE93ZW4gQ2hlbiA8b3dlbi5j
-aGVuQG1lZGlhdGVrLmNvbT4NClNpZ25lZC1vZmYtYnk6IE1hY3BhdWwgTGluIDxtYWNwYXVsLmxp
-bkBtZWRpYXRlay5jb20+DQotLS0NCiBhcmNoL2FybTY0L2NvbmZpZ3MvZGVmY29uZmlnIHwgNiAr
-KysrKysNCiAxIGZpbGUgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspDQoNCmRpZmYgLS1naXQgYS9h
-cmNoL2FybTY0L2NvbmZpZ3MvZGVmY29uZmlnIGIvYXJjaC9hcm02NC9jb25maWdzL2RlZmNvbmZp
-Zw0KaW5kZXggNmE4M2JhMmFlYTNlLi45ZDNkYTgxZDBkMDggMTAwNjQ0DQotLS0gYS9hcmNoL2Fy
-bTY0L2NvbmZpZ3MvZGVmY29uZmlnDQorKysgYi9hcmNoL2FybTY0L2NvbmZpZ3MvZGVmY29uZmln
-DQpAQCAtNDg5LDYgKzQ4OSwxMiBAQCBDT05GSUdfUkVHVUxBVE9SX1FDT01fU01EX1JQTT15DQog
-Q09ORklHX1JFR1VMQVRPUl9RQ09NX1NQTUk9eQ0KIENPTkZJR19SRUdVTEFUT1JfUks4MDg9eQ0K
-IENPTkZJR19SRUdVTEFUT1JfUzJNUFMxMT15DQorQ09ORklHX0NPTU1PTl9DTEtfTVQ2NzY1X0FV
-RElPU1lTPXkNCitDT05GSUdfQ09NTU9OX0NMS19NVDY3NjVfQ0FNU1lTPXkNCitDT05GSUdfQ09N
-TU9OX0NMS19NVDY3NjVfTU1TWVM9eQ0KK0NPTkZJR19DT01NT05fQ0xLX01UNjc2NV9JTUdTWVM9
-eQ0KK0NPTkZJR19DT01NT05fQ0xLX01UNjc2NV9WQ09ERUNTWVM9eQ0KK0NPTkZJR19DT01NT05f
-Q0xLX01UNjc2NV9NSVBJMEFTWVM9eQ0KIENPTkZJR19SRUdVTEFUT1JfVkNUUkw9bQ0KIENPTkZJ
-R19SQ19DT1JFPW0NCiBDT05GSUdfUkNfREVDT0RFUlM9eQ0KLS0gDQoyLjE4LjANCg==
 
+
+On 2/7/2020 12:57 PM, Sibi Sankar wrote:
+> Hey Taniya,
+> 
+> On 2020-01-30 09:48, Taniya Das wrote:
+>> The Modem Subsystem clock provider have a bunch of generic properties
+>> that are needed in a device tree. Add a YAML schemas for those.
+>>
+>> Signed-off-by: Taniya Das <tdas@codeaurora.org>
+>> ---
+>>  .../devicetree/bindings/clock/qcom,mss.yaml        | 58 
+>> ++++++++++++++++++++++
+>>  1 file changed, 58 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,mss.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/clock/qcom,mss.yaml
+>> b/Documentation/devicetree/bindings/clock/qcom,mss.yaml
+>> new file mode 100644
+>> index 0000000..ebb04e1
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/clock/qcom,mss.yaml
+>> @@ -0,0 +1,58 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/bindings/clock/qcom,mss.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm Modem Clock Controller Binding
+>> +
+>> +maintainers:
+>> +  - Taniya Das <tdas@codeaurora.org>
+>> +
+>> +description: |
+>> +  Qualcomm modem clock control module which supports the clocks.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +       - qcom,sc7180-mss
+>> +
+>> +  clocks:
+>> +    minItems: 1
+>> +    maxItems: 3
+>> +    items:
+>> +      - description: gcc_mss_mfab_axi clock from GCC
+>> +      - description: gcc_mss_nav_axi clock from GCC
+> 
+> we don't seem to be referencing the
+> mss_mfab_axi and mss_nav_axi in the
+> mss clk driver though, do we really
+> need them in bindings? If we dont
+> can we drop the clock-names as well.
+> 
+
+They are linked as parent for the clocks. So we need them.
++			.parent_data = &(const struct clk_parent_data){
++				.fw_name = "gcc_mss_nav_axi_clk",
++			},
+
+>> +      - description: gcc_mss_cfg_ahb clock from GCC
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: gcc_mss_mfab_axis_clk
+>> +      - const: gcc_mss_nav_axi_clk
+>> +      - const: cfg_clk
+>> +
+>> +  '#clock-cells':
+>> +    const: 1
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - clocks
+>> +  - '#clock-cells'
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  # Example of MSS with clock nodes properties for SC7180:
+>> +  - |
+>> +    clock-controller@41a8000 {
+>> +      compatible = "qcom,sc7180-mss";
+>> +      reg = <0x041a8000 0x8000>;
+>> +      clocks = <&gcc 126>, <&gcc 127>, <&gcc 125>;
+>> +      clock-names = "gcc_mss_mfab_axis_clk", "gcc_mss_nav_axi_clk", 
+>> "cfg_clk";
+>> +      #clock-cells = <1>;
+>> +    };
+>> +...
+>> -- 
+>> Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
+>> of the Code Aurora Forum, hosted by the  Linux Foundation.
+> 
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation.
+
+--
