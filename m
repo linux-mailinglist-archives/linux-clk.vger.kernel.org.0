@@ -2,99 +2,95 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A972315A521
-	for <lists+linux-clk@lfdr.de>; Wed, 12 Feb 2020 10:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E788115A54B
+	for <lists+linux-clk@lfdr.de>; Wed, 12 Feb 2020 10:48:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728721AbgBLJnV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 12 Feb 2020 04:43:21 -0500
-Received: from michel.telenet-ops.be ([195.130.137.88]:33088 "EHLO
-        michel.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728637AbgBLJnU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 12 Feb 2020 04:43:20 -0500
-Received: from ramsan ([84.195.182.253])
-        by michel.telenet-ops.be with bizsmtp
-        id 1ljJ2200Q5USYZQ06ljJnX; Wed, 12 Feb 2020 10:43:18 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan with esmtp (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1j1oYA-0000xk-Cl; Wed, 12 Feb 2020 10:43:18 +0100
-Received: from geert by rox.of.borg with local (Exim 4.90_1)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1j1oYA-0000Vp-Am; Wed, 12 Feb 2020 10:43:18 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] of: clk: Make of_clk_get_parent_{count,name}() parameter const
-Date:   Wed, 12 Feb 2020 10:43:17 +0100
-Message-Id: <20200212094317.1150-1-geert+renesas@glider.be>
-X-Mailer: git-send-email 2.17.1
+        id S1728909AbgBLJsv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 12 Feb 2020 04:48:51 -0500
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:46530 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728721AbgBLJss (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 12 Feb 2020 04:48:48 -0500
+Received: by mail-vs1-f67.google.com with SMTP id t12so727640vso.13
+        for <linux-clk@vger.kernel.org>; Wed, 12 Feb 2020 01:48:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=H+Fm6etSpj2MWADhXyV9PGzYJlmqEQ52/Wr0GihWUEQXNK+fU+p0POGfytLAx/6Bsp
+         BzMlNVCPKeEvhzVGjstuhRht1bH7ywg7kSlenTMuAPtkHHMMoeUTnXu7WEeU74X3foCD
+         isFOv3LKoMB5fibUdrkLkOdJ7MJ5UH3K7/nltzZqvO/4UUxs8qIxacnfwVD9F5NcbHc8
+         qSzLfmoRNq0cIYImWKhe9Uyl4pSVe4kF5uuP9h0Svm79jimK7mwgFO642CgG3cm45e8F
+         B3B2GqzYetAzsiW4KI5yYXMopwOsEyKhKnWphUw+G2jISTsn4cckJPSEfmrAqry6xSFz
+         RuRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=MT7fXBkx83ztMoes+8LJhkP7XeAquWWrKaDTJcxYPEJYsQ/uiZD2Gbh7qiLw5Wm37o
+         vZlo8yunwFV+cHj0w1Oht/M9fOodMtjAaRK/yc7zHTnTcPaJwAoralzYv0WgR5zOXtna
+         nd0/jknsx7aUVMzf8Vp9wuOxT5P9IQLdIaQK7g0Wi0NEgM1TXyVuet5LxGc8R1cTGn7G
+         JZwhm21ZUqhvAbjJb796B0LssR4zoLnDLw4f+zdC5qJTbYJU+HLd80GFR1TysIjeakG8
+         TBSTsfoxMG9SJ4ATXrNYIn5mfnsARpq6LYVbcTKT+uLa41LqSVigg4ALFQy1nEPqXZl1
+         UBMA==
+X-Gm-Message-State: APjAAAVnP3dQrjv67603kRqGCZyJ24c9iVjJ9G0L0WzVmTK2ERDs7qZU
+        SRRUqnmm/whizEcgA5St2hBnCDB//FbXSZQiXMU=
+X-Google-Smtp-Source: APXvYqwOiQbmR0FBvILhRTHuu7V+eRHPP+VcfL0g8Fma4XTHqSQ6mg0H05Af2W8R1Vn3xK4Cdsf+GJ06YFvAWkM72MM=
+X-Received: by 2002:a05:6102:2e4:: with SMTP id j4mr11694498vsj.134.1581500927003;
+ Wed, 12 Feb 2020 01:48:47 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a05:6102:109d:0:0:0:0 with HTTP; Wed, 12 Feb 2020 01:48:46
+ -0800 (PST)
+Reply-To: ayishagddafio@mail.ru
+From:   AISHA GADDAFI <mahasaliou99999@gmail.com>
+Date:   Wed, 12 Feb 2020 01:48:46 -0800
+Message-ID: <CAMugOs_Nqd3VGiRvkGZe9Z+YzyvjpAovouRdUNBFsOsy-QXWCw@mail.gmail.com>
+Subject: Lieber Freund (Assalamu Alaikum),?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-of_clk_get_parent_count() and of_clk_get_parent_name() never modify the
-device nodes passed, so they can be const.
+--=20
+Lieber Freund (Assalamu Alaikum),
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/clk/clk.c      | 4 ++--
- include/linux/of_clk.h | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen
+Ihre Hilfe. Mein Name ist Aisha Al-Qaddafi, eine alleinerziehende
+Mutter und eine Witwe
+mit drei Kindern. Ich bin die einzige leibliche Tochter des Sp=C3=A4tlibysc=
+hen
+Pr=C3=A4sident (verstorbener Oberst Muammar Gaddafi).
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index e42145cd996a1f77..b6696c8e02518177 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -4713,7 +4713,7 @@ EXPORT_SYMBOL(of_clk_get_by_name);
-  *
-  * Returns: The number of clocks that are possible parents of this node
-  */
--unsigned int of_clk_get_parent_count(struct device_node *np)
-+unsigned int of_clk_get_parent_count(const struct device_node *np)
- {
- 	int count;
- 
-@@ -4725,7 +4725,7 @@ unsigned int of_clk_get_parent_count(struct device_node *np)
- }
- EXPORT_SYMBOL_GPL(of_clk_get_parent_count);
- 
--const char *of_clk_get_parent_name(struct device_node *np, int index)
-+const char *of_clk_get_parent_name(const struct device_node *np, int index)
- {
- 	struct of_phandle_args clkspec;
- 	struct property *prop;
-diff --git a/include/linux/of_clk.h b/include/linux/of_clk.h
-index c86fcad23fc21725..31b73a0da9db33e8 100644
---- a/include/linux/of_clk.h
-+++ b/include/linux/of_clk.h
-@@ -11,17 +11,17 @@ struct of_device_id;
- 
- #if defined(CONFIG_COMMON_CLK) && defined(CONFIG_OF)
- 
--unsigned int of_clk_get_parent_count(struct device_node *np);
--const char *of_clk_get_parent_name(struct device_node *np, int index);
-+unsigned int of_clk_get_parent_count(const struct device_node *np);
-+const char *of_clk_get_parent_name(const struct device_node *np, int index);
- void of_clk_init(const struct of_device_id *matches);
- 
- #else /* !CONFIG_COMMON_CLK || !CONFIG_OF */
- 
--static inline unsigned int of_clk_get_parent_count(struct device_node *np)
-+static inline unsigned int of_clk_get_parent_count(const struct device_node *np)
- {
- 	return 0;
- }
--static inline const char *of_clk_get_parent_name(struct device_node *np,
-+static inline const char *of_clk_get_parent_name(const struct device_node *np,
- 						 int index)
- {
- 	return NULL;
--- 
-2.17.1
+Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
+f=C3=BCnfhunderttausend
+United State Dollar ($ 27.500.000.00) und ich brauche eine
+vertrauensw=C3=BCrdige Investition
+Manager / Partner aufgrund meines aktuellen Fl=C3=BCchtlingsstatus bin ich =
+jedoch
+M=C3=B6glicherweise interessieren Sie sich f=C3=BCr die Unterst=C3=BCtzung =
+von
+Investitionsprojekten in Ihrem Land
+Von dort aus k=C3=B6nnen wir in naher Zukunft Gesch=C3=A4ftsbeziehungen auf=
+bauen.
 
+Ich bin bereit, mit Ihnen =C3=BCber das Verh=C3=A4ltnis zwischen Investitio=
+n und
+Unternehmensgewinn zu verhandeln
+Basis f=C3=BCr die zuk=C3=BCnftige Investition Gewinne zu erzielen.
+
+Wenn Sie bereit sind, dieses Projekt in meinem Namen zu bearbeiten,
+antworten Sie bitte dringend
+Damit ich Ihnen mehr Informationen =C3=BCber die Investmentfonds geben kann=
+.
+
+Ihre dringende Antwort wird gesch=C3=A4tzt. schreibe mir an diese email adr=
+esse (
+ayishagddafio@mail.ru ) zur weiteren Diskussion.
+
+Freundliche Gr=C3=BC=C3=9Fe
+Frau Aisha Al-Qaddafi
