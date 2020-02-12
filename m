@@ -2,64 +2,88 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5596015A89C
-	for <lists+linux-clk@lfdr.de>; Wed, 12 Feb 2020 13:03:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC6A15A881
+	for <lists+linux-clk@lfdr.de>; Wed, 12 Feb 2020 13:02:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728370AbgBLMDZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 12 Feb 2020 07:03:25 -0500
-Received: from inva021.nxp.com ([92.121.34.21]:42724 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728457AbgBLMDY (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 12 Feb 2020 07:03:24 -0500
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 0CDE42041D1;
-        Wed, 12 Feb 2020 13:03:23 +0100 (CET)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 8ABE32014BE;
-        Wed, 12 Feb 2020 13:03:14 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 086C1402F3;
-        Wed, 12 Feb 2020 20:03:03 +0800 (SGT)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        allison@lohutok.net, gregkh@linuxfoundation.org,
-        tglx@linutronix.de, abel.vesa@nxp.com, leonard.crestez@nxp.com,
-        peng.fan@nxp.com, ping.bai@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH 5/5] clk: imx8mp: Add missing of_node_put()
-Date:   Wed, 12 Feb 2020 19:57:37 +0800
-Message-Id: <1581508657-12107-5-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1581508657-12107-1-git-send-email-Anson.Huang@nxp.com>
-References: <1581508657-12107-1-git-send-email-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1727041AbgBLMCr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 12 Feb 2020 07:02:47 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:45779 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725874AbgBLMCr (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 12 Feb 2020 07:02:47 -0500
+Received: by mail-pf1-f194.google.com with SMTP id 2so1127357pfg.12;
+        Wed, 12 Feb 2020 04:02:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Xw8F0MAhPNgiUaS09840sx7LbckyTA6PLEiym6zDUiM=;
+        b=aj694rFuab2x87PC7uIkm0Vi5hbAPJu/MyS3gdm3S1KSApSLXBigQNZ3dfjSWCIdqm
+         +FRDNLKadS/8jrPUdb8pO8bIX+Kfd/AoZFehzmw+ACRZBYQFku4f0XU5u6L3OA8Jv+HT
+         quNBAhLqeshXbSNY4uRf/Qn8Wlvp/7TQR8vg5MzU5MKvMkuzidATCLAaEcdZ/RZAQYLZ
+         dHYraqkUFl+7PZosNbZgnTdwjxH4lStisowuZd3zylIjpquuZKS0PgvMiXUv/oaG+RVa
+         2m/rYWDqcNDYglWXahBYV/T2UuNwukw6TSz4DwS5JThPQ9v2aiDpuLlYGgJOhr7B46A2
+         fosA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Xw8F0MAhPNgiUaS09840sx7LbckyTA6PLEiym6zDUiM=;
+        b=RXYdG7cPdjRljxRxhksz4U82aMS0qUxNswMn96texr78dh20ccQ1xEPfulsK5X9MLC
+         P9l6z42dZVP1nBpr/BF6p9rpvGfqGDefG36TDQ1J/ID7pUtphAM7kVCWK8Q6cQzSfzSt
+         FQaD+h8MPlsVSmvhFuD4/URmV7jivpi6GL65KQFAJGUOculsSAgfftn4TVEYJrsSa9ou
+         ItRZoEhMjUjFjxzE2kCvmeJViKHKSYJ1pGdRoUYuTZF3VJl+zjSe2AnaBdsKwLtJg01p
+         dq9xrqUALg7h8cHxglOejgswBczuYo5SPwagnbNrtRe9tof+Xc3Z+0f2ldURfEeaX1ad
+         k2gA==
+X-Gm-Message-State: APjAAAWlX7MOHQ9kmEeTYMR1vRLr0G9wtk2fB5RcsPG5b2jXqSAvFQIY
+        wqio73risSvYC4+87CYytWE=
+X-Google-Smtp-Source: APXvYqxU7IDMf52DUiq2vDOOz2xZ03U/hrRAqWXLxJtcTfAc8f8ik69Va9s1lkd1Y4mKxnI6Sd/Xbg==
+X-Received: by 2002:a65:5242:: with SMTP id q2mr11764466pgp.74.1581508966796;
+        Wed, 12 Feb 2020 04:02:46 -0800 (PST)
+Received: from localhost.localdomain ([45.114.62.33])
+        by smtp.gmail.com with ESMTPSA id b24sm682448pfo.84.2020.02.12.04.02.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Feb 2020 04:02:46 -0800 (PST)
+From:   Anand Moon <linux.amoon@gmail.com>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: [PATCHv1 0/2] Add FSYS2 power domain for MMC driver
+Date:   Wed, 12 Feb 2020 12:02:35 +0000
+Message-Id: <20200212120237.1332-1-linux.amoon@gmail.com>
+X-Mailer: git-send-email 2.25.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-After finishing using device node got from of_find_compatible_node(),
-of_node_put() needs to be called.
+This patches add the power domain for MMC driver,
+but somehow the suspend/resume feature is broken
+so any input on how to fix this.
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
----
- drivers/clk/imx/clk-imx8mp.c | 1 +
- 1 file changed, 1 insertion(+)
+Also on similar lines I tried to add power domain
+FSYS for usb3 and usb2 nodes but this time
+it failed to load the kernel, so how can I reslove
+this issue.
 
-diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
-index f6c120c..b6462c0 100644
---- a/drivers/clk/imx/clk-imx8mp.c
-+++ b/drivers/clk/imx/clk-imx8mp.c
-@@ -434,6 +434,7 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
- 
- 	np = of_find_compatible_node(NULL, NULL, "fsl,imx8mp-anatop");
- 	anatop_base = of_iomap(np, 0);
-+	of_node_put(np);
- 	if (WARN_ON(!anatop_base))
- 		return -ENOMEM;
- 
+-Anand
+
+Anand Moon (2):
+  ARM: dts: exynos: Add FSYS2 power domain to Exynos542x
+  clk: samsung: exynos542x: Move FSYS2 subsystem clocks to its sub-CMU
+
+ arch/arm/boot/dts/exynos5420.dtsi    | 10 ++++++++++
+ drivers/clk/samsung/clk-exynos5420.c | 24 +++++++++++++++++++++---
+ 2 files changed, 31 insertions(+), 3 deletions(-)
+
 -- 
-2.7.4
+2.25.0
 
