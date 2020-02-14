@@ -2,27 +2,27 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1982C15DF28
-	for <lists+linux-clk@lfdr.de>; Fri, 14 Feb 2020 17:08:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E118015E0A8
+	for <lists+linux-clk@lfdr.de>; Fri, 14 Feb 2020 17:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390575AbgBNQHG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 14 Feb 2020 11:07:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58070 "EHLO mail.kernel.org"
+        id S2392334AbgBNQOd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 14 Feb 2020 11:14:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44086 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390573AbgBNQHF (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:07:05 -0500
+        id S2392329AbgBNQOc (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:14:32 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 73D1B206D7;
-        Fri, 14 Feb 2020 16:07:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C7520246C3;
+        Fri, 14 Feb 2020 16:14:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696424;
-        bh=VR/tYj5donPID9f9La1GAChsuMa4kOjV/ethBBqSGqk=;
+        s=default; t=1581696871;
+        bh=Ag7cfjgAZDTtorJGvLhjabkF2VDVmnJ8PY2cP1WcwfE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1IRpv3gtiB6g/HEgvaF6Bl5lrYsZcaI2DjN50jrdmYqh6ZVY9CSA1vPAnVmgOLjrv
-         64V8yeVevovnrhA/e+aZSs4IQdx4ALvRHQ/4BsTBl2Asid6pI8836Pha3kkf5qp36U
-         bkwQ9T1pTXnBKXGOvAI24uzb4iGp+G4BqC2BHnk0=
+        b=xY6Q47yeeXz5lr26XpoykRzf8NJPNe3TrjFSVu8grCiybgGuRpn7xp6gG5v9rhAXq
+         ZHxbrczpCqABdyB7ACchkkoKB74LKWIGBnNRsVRoxwEDSbEVQpIabWDMZ6QUI7/Xph
+         opN8zs8SbORvU0Cacd5A64AE8Usg/ZdAQhqjf32o=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
@@ -30,12 +30,12 @@ Cc:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 244/459] clk: uniphier: Add SCSSI clock gate for each channel
-Date:   Fri, 14 Feb 2020 10:58:14 -0500
-Message-Id: <20200214160149.11681-244-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 129/252] clk: uniphier: Add SCSSI clock gate for each channel
+Date:   Fri, 14 Feb 2020 11:09:44 -0500
+Message-Id: <20200214161147.15842-129-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
-References: <20200214160149.11681-1-sashal@kernel.org>
+In-Reply-To: <20200214161147.15842-1-sashal@kernel.org>
+References: <20200214161147.15842-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -64,10 +64,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 8 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/clk/uniphier/clk-uniphier-peri.c b/drivers/clk/uniphier/clk-uniphier-peri.c
-index 9caa52944b1c5..3e32db9dad815 100644
+index 89b3ac378b3f9..8b75dc116a98c 100644
 --- a/drivers/clk/uniphier/clk-uniphier-peri.c
 +++ b/drivers/clk/uniphier/clk-uniphier-peri.c
-@@ -18,8 +18,8 @@
+@@ -27,8 +27,8 @@
  #define UNIPHIER_PERI_CLK_FI2C(idx, ch)					\
  	UNIPHIER_CLK_GATE("i2c" #ch, (idx), "i2c", 0x24, 24 + (ch))
  
@@ -78,7 +78,7 @@ index 9caa52944b1c5..3e32db9dad815 100644
  
  #define UNIPHIER_PERI_CLK_MCSSI(idx)					\
  	UNIPHIER_CLK_GATE("mcssi", (idx), "spi", 0x24, 14)
-@@ -35,7 +35,7 @@ const struct uniphier_clk_data uniphier_ld4_peri_clk_data[] = {
+@@ -44,7 +44,7 @@ const struct uniphier_clk_data uniphier_ld4_peri_clk_data[] = {
  	UNIPHIER_PERI_CLK_I2C(6, 2),
  	UNIPHIER_PERI_CLK_I2C(7, 3),
  	UNIPHIER_PERI_CLK_I2C(8, 4),
@@ -87,7 +87,7 @@ index 9caa52944b1c5..3e32db9dad815 100644
  	{ /* sentinel */ }
  };
  
-@@ -51,7 +51,10 @@ const struct uniphier_clk_data uniphier_pro4_peri_clk_data[] = {
+@@ -60,7 +60,10 @@ const struct uniphier_clk_data uniphier_pro4_peri_clk_data[] = {
  	UNIPHIER_PERI_CLK_FI2C(8, 4),
  	UNIPHIER_PERI_CLK_FI2C(9, 5),
  	UNIPHIER_PERI_CLK_FI2C(10, 6),
