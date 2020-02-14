@@ -2,144 +2,285 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 205CC15E566
-	for <lists+linux-clk@lfdr.de>; Fri, 14 Feb 2020 17:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B9915E649
+	for <lists+linux-clk@lfdr.de>; Fri, 14 Feb 2020 17:47:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405467AbgBNQWc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 14 Feb 2020 11:22:32 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:45247 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2405454AbgBNQWa (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 14 Feb 2020 11:22:30 -0500
-X-UUID: 5c86b13085f6448bb26c2de4c3496cdc-20200215
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=jz50ovHuZ2AHAX6u5vv4PbRhypnsxyFahZczIki6Y+E=;
-        b=YFofNpbvXaSGOcwur6pHAuRri8d4esErOX8+TM0/XglRKiFQiwvWboVD0cVMZbcO4eEg2Bdu3tvLWNbuHdZoNaqJMwcHCdjwAIJky3BCpeSYZXezShWXG87N07MBXE51OUsM5wvD2SrQ7ifnP7mUs3ps5CjZZY0WwXbPVfnDd3Y=;
-X-UUID: 5c86b13085f6448bb26c2de4c3496cdc-20200215
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1937256230; Sat, 15 Feb 2020 00:22:25 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Sat, 15 Feb 2020 00:21:35 +0800
-Received: from [172.21.77.4] (172.21.77.4) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Sat, 15 Feb 2020 00:22:21 +0800
-Message-ID: <1581697343.12471.4.camel@mtksdaap41>
-Subject: Re: [PATCH v7 01/13] dt-bindings: arm: move mmsys description to
- display
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <matthias.bgg@kernel.org>, <mark.rutland@arm.com>,
-        <airlied@linux.ie>, <mturquette@baylibre.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <laurent.pinchart@ideasonboard.com>,
-        <ulrich.hecht+renesas@gmail.com>, <linux-clk@vger.kernel.org>,
-        <drinkcat@chromium.org>, Weiyi Lu <weiyi.lu@mediatek.com>,
-        <wens@csie.org>, mtk01761 <wendell.lin@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <p.zabel@pengutronix.de>, <frank-w@public-files.de>,
-        <sean.wang@mediatek.com>, <robh+dt@kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <hsinyi@chromium.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Matthias Brugger <mbrugger@suse.com>, <sboyd@kernel.org>,
-        <rdunlap@infradead.org>, <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>
-Date:   Sat, 15 Feb 2020 00:22:23 +0800
-In-Reply-To: <022e8f64-b414-67a5-722e-bdd7c00230ff@collabora.com>
-References: <20200213201953.15268-1-matthias.bgg@kernel.org>
-         <20200213201953.15268-2-matthias.bgg@kernel.org>
-         <1581662577.17949.3.camel@mtksdaap41>
-         <2bda2dd7-9ed2-8b4c-897e-e585ccfa1fa5@gmail.com>
-         <022e8f64-b414-67a5-722e-bdd7c00230ff@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S2392926AbgBNQqv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 14 Feb 2020 11:46:51 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:51738 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389550AbgBNQqv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 14 Feb 2020 11:46:51 -0500
+Received: by mail-wm1-f67.google.com with SMTP id t23so10618600wmi.1;
+        Fri, 14 Feb 2020 08:46:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=A1PbDdtYgd7eIzgKkWykMOQVO3VO/61EFdSbHrXJXFY=;
+        b=KWbwuGICqb34KVFQ3jHfYb0adTm/KQL5iUBzkow0vRMO2XQNIY16b1vVu/CjOg0dvl
+         kHXsmdrq+OMB975yJkTYIxg9UssL5e9bqlYouLU3oUclA7HTag17h1EU7fcRFnzc9+/7
+         4eS8EYed9FahaCjuEfqcckjHtuTx5lF3K73mP+tXFOMUqpjv95bfWmRZy2Hcfnvd0YL1
+         tefnqxl40KbJZNJyUrbEkXmsU68pGc5IRdV+txtReQ3r+q8B4JYiZiDCZNXoADBEV51K
+         eeUvVbzf0y2jL5HM56d2QTnLW6B3Ik3Cvpr8g9WSb8nWCRkCTFkFNVgf8FcrFcZQJY7Y
+         Picg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=A1PbDdtYgd7eIzgKkWykMOQVO3VO/61EFdSbHrXJXFY=;
+        b=dsf/VrRrNnY2HsGEwTARKVKOW3BW8fhpqHbREfTx24i2cZzpkPUZ8Oi3zX7CFOpFYN
+         GryqxvLiZUtsZ8K3EzGpwk2OoH2y/wGTl8Mt0PRSkeXTW0dKKevqdHwWcr1H2Bg2tbVP
+         fay1S1UEuUbiLRWIwKsztuKg78pSjTDr7+eSJmT6tQmRtwa0+3XwsoEJBNUU1mscQt9t
+         g3x73g2uD5D8Y6Yk7lioE55OB3HK2BM6juNhV7PuHcp1embsELfAW7KMBi6ldPnVcStb
+         DHjPmbmszQyOAKdEE5YgpgYEf4/s6dZXF6r54KgrErLERdyO3ifHIemxphAN65i8EAWq
+         8ylw==
+X-Gm-Message-State: APjAAAX/9PwNsjkehXeHPQRvJdczIwpv2+J/1G+7Sj2BYhRbY7IHZyMf
+        kxpVw3j/yw5d0K2kowoC7xI=
+X-Google-Smtp-Source: APXvYqyF3XpdaM4IdFu2CaSKS00hpJ0X2NgcXVWbskC5SW8fFQOccCxVcWPv2ZRjPgzWMyeKv5NHpg==
+X-Received: by 2002:a1c:4d07:: with SMTP id o7mr5696440wmh.174.1581698808420;
+        Fri, 14 Feb 2020 08:46:48 -0800 (PST)
+Received: from localhost (p2E5BEF3F.dip0.t-ipconnect.de. [46.91.239.63])
+        by smtp.gmail.com with ESMTPSA id c77sm7872215wmd.12.2020.02.14.08.46.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Feb 2020 08:46:47 -0800 (PST)
+Date:   Fri, 14 Feb 2020 17:46:42 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>
+Cc:     jonathanh@nvidia.com, frankc@nvidia.com, hverkuil@xs4all.nl,
+        helen.koike@collabora.com, sboyd@kernel.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 4/6] media: tegra: Add Tegra210 Video input driver
+Message-ID: <20200214164642.GA1310813@ulmo>
+References: <1580937806-17376-1-git-send-email-skomatineni@nvidia.com>
+ <1580937806-17376-5-git-send-email-skomatineni@nvidia.com>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="lrZ03NoBR/3+SXJZ"
+Content-Disposition: inline
+In-Reply-To: <1580937806-17376-5-git-send-email-skomatineni@nvidia.com>
+User-Agent: Mutt/1.13.1 (2019-12-14)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-SGksIE1hdHRoaWFzICYgRW5yaWM6DQoNCk9uIEZyaSwgMjAyMC0wMi0xNCBhdCAxMzoxOSArMDEw
-MCwgRW5yaWMgQmFsbGV0Ym8gaSBTZXJyYSB3cm90ZToNCj4gSGkgQ0ssDQo+IA0KPiBPbiAxNC8y
-LzIwIDExOjAxLCBNYXR0aGlhcyBCcnVnZ2VyIHdyb3RlOg0KPiA+IA0KPiA+IA0KPiA+IE9uIDE0
-LzAyLzIwMjAgMDc6NDIsIENLIEh1IHdyb3RlOg0KPiA+PiBIaSwgTWF0dGhpYXM6DQo+ID4+DQo+
-ID4+IE9uIFRodSwgMjAyMC0wMi0xMyBhdCAyMToxOSArMDEwMCwgbWF0dGhpYXMuYmdnQGtlcm5l
-bC5vcmcgd3JvdGU6DQo+ID4+PiBGcm9tOiBNYXR0aGlhcyBCcnVnZ2VyIDxtYnJ1Z2dlckBzdXNl
-LmNvbT4NCj4gPj4+DQo+ID4+PiBUaGUgbW1zeXMgYmxvY2sgcHJvdmlkZXMgcmVnaXN0ZXJzIGFu
-ZCBjbG9ja3MgZm9yIHRoZSBkaXNwbGF5DQo+ID4+PiBzdWJzeXN0ZW0uIFRoZSBiaW5kaW5nIGRl
-c2NyaXB0aW9uIHNob3VsZCB0aGVyZWZvcmUgbGl2ZSB0b2dldGhlciB3aXRoDQo+ID4+PiB0aGUg
-cmVzdCBvZiB0aGUgZGlzcGxheSBkZXNjcmlwdGlvbnMuIE1vdmUgaXQgdG8gZGlzcGxheS9tZWRp
-YXRlay4NCj4gPj4+DQo+ID4+DQo+ID4+IFllcywgZm9yIHRoZSB1cHN0cmVhbWVkIGRyaXZlciwg
-b25seSBkaXNwbGF5IChEUk0pIHVzZSBtbXN5cyBjbG9jay4gRm9yDQo+ID4+IHNvbWUgTURQIHBh
-dGNoZXMgWzFdIGluIHByb2dyZXNzLCBNRFAgYWxzbyB1c2UgbW1zeXMgY2xvY2suIFNvIHdlIGp1
-c3QNCj4gPj4gY29uc2lkZXIgd2hhdCdzIHVwc3RyZWFtZWQgbm93Pw0KPiA+IA0KPiANCj4gTGV0
-IG1lIGp1bXAgaW50byB0aGUgZGlzY3Vzc2lvbiwgYW5kIHNvcnJ5IGlmIG15IHF1ZXN0aW9uIGlz
-IHNpbGx5IGJlY2F1c2UgSSdtDQo+IGp1c3Qgc3RhcnRpbmcgdG8gbG9vayBhdCB0aGlzIGNvZGUu
-DQo+IA0KPiBJTU8gd2Ugc2hvdWxkIGNvbnNpZGVyIGFsbCB0aGUgY2FzZXMgdG8gZmluZCBhIHBy
-b3BlciBmaXggb24gYWxsIHRoaXMsIGFuZCBpZg0KPiBNRFAgdXNlcyBhbHNvIG1tc3lzIGNsb2Nr
-cyB0aGlzIGFwcHJvYWNoIHdpbGwgbm90IHdvcmsuIEkgdGhpbmsgdGhlIG1haW4gcHJvYmxlbQ0K
-PiBoZXJlIGFuZCB0aGUgYmlnIHF1ZXN0aW9uIGlzIHdoYXQgZXhhY3RseSBpcyB0aGUgTU1TWVMg
-YmxvY2ssIGlzIGFuIGluZGVwZW5kZW50DQo+IGNsb2NrIGNvbnRyb2xsZXIgdGhhdCBwcm92aWRl
-cyBjbG9ja3MgdG8gRFJNIGFuZCBvdGhlciBibG9ja3M/IG9yIGlzIGhhcmRseSB0aWVkDQo+IHRv
-IHRoZSBEUk0gYmxvY2sgaW4gc29tZSB3YXk/DQo+IA0KPiBDb3VsZCB5b3UgZ2l2ZSB1cyBhIGJs
-b2NrIHNjaGVtYSBvbiBob3cgdGhlIHRoaW5ncyBhcmUgaW50ZXJjb25uZWN0ZWQ/DQo+IA0KPiBJ
-ZiBpcyBhbiBpbmRlcGVuZGVudCBjbG9jayBjb250cm9sbGVyIEkgdGhpbmsgdGhlcmUgd2FzIGEg
-bWlzdGFrZSB3aGVuIHRoZSBmaXJzdA0KPiBkcm0gZHJpdmVyIHdhcyBwdXNoZWQgYnkgdXNpbmcg
-dGhlIGNvbXBhdGlibGUgPSAibWVkaWF0ZWssbXQ4MTczLW1tc3lzIiBhcyBpZA0KPiBmb3IgdGhh
-dCBkcml2ZXIuDQo+IA0KDQpJIGNvcnJlY3QgbXkgbWlzdGFrZSBmaXJzdC4gSW4gbXQ4MTczLCBt
-ZHAgaGFzIGFscmVhZHkgdXBzdHJlYW1lZCBbMV0uDQoNClRoZXJlIGFyZSBtYW55IHBhcnRpdGlv
-bnMgaW4gTWVkaWF0ZWsgU29DLiBtbXN5cyBpcyBvbmUgb2YgdGhlc2UNCnBhcnRpdGlvbi4gVGhl
-cmUgYXJlIG1hbnkgZnVuY3Rpb24gYmxvY2tzIGluIG1tc3lzIHN1Y2ggYXMgT1ZMLCBSRE1BLA0K
-UlNaLCBXUk9ULCAuLi4uIFNvbWUgZGF0YSByb3V0aW5nIGJldHdlZW4gdGhlc2UgYmxvY2tzIGFy
-ZSBmaXhlZCBidXQNCnNvbWUgYXJlIGNoYW5nZWFibGUuIEZvciBhcHBsaWNhdGlvbiwgd2UgZ3Jv
-dXAgdGhlbSBpbnRvIGRpc3BsYXkgcGF0aA0KYW5kIG1kcCBwYXRoLiBDbG9jayBnYXRpbmcgcmVn
-aXN0ZXIgb2YgdGhlc2UgYmxvY2tzIGFyZSBpbiB0aGUgcmFuZ2Ugb2YNCjB4MTQwMDAwMDAgfiAw
-eDE0MDAwZmZmLiBUaGUgcm91dGluZyBjb250cm9sIHJlZ2lzdGVyIG9mIHRoZXNlIGJsb2Nrcw0K
-YXJlIGFsc28gaW4gdGhlIHJhbmdlIG9mIDB4MTQwMDAwMDAgfiAweDE0MDAwZmZmLiBTbyB0aGUg
-Y29udHJvbA0KZnVuY3Rpb24gYmVsb25nIHRvIG1tc3lzIHBhcnRpdGlvbiBidXQgbm90IGJlbG9u
-ZyB0byBzcGVjaWZpYyBmdW5jdGlvbg0KYmxvY2sgd291bGQgaW4gdGhlIHJlZ2lzdGVyIHJhbmdl
-IG9mIDB4MTQwMDAwMDAgfiAweDE0MDAwZmZmLiBJIHRoaW5rDQp0aGVyZSBjb3VsZCBiZSB0d28g
-ZGVmaW5pdGlvbiBvZiBtbXN5cyBkZXZpY2UuIE9uZSBpcyB0aGF0IG1tc3lzIGRldmljZQ0KaXMg
-dGhlIHdob2xlIG1tc3lzIHBhcnRpb3Rpb24sIHNvIE9WTCwgUkRNQSwgLi4uIHdvdWxkIGJlIHN1
-YiBkZXZpY2Ugb2YNCml0LiBBbm90aGVyIGlzIHRoYXQgbW1zeXMganVzdCBjb250cm9sIHJlZ2lz
-dGVyIG9mIDB4MTQwMDAwMDAgfg0KMHgxNDAwMGZmZiwgc28gaXQncyBwYXJ0IG9mIG1tc3lzIHBh
-cnRpdGlvbiBsaWtlIE9WTCwgUkRNQSwgLi4uLi4NCkN1cnJlbnRseSB3ZSBkZWZpbmUgbW1zeXMg
-YXMgdGhlIGxhdHRlciBvbmUuIEkndmUgbm8gaWRlYSBob3cgdG8gbWFwDQptbXN5cyBpbnRvIGN1
-cnJlbnQgTGludXggaGFyZHdhcmUgY2F0ZWdvcnksIGJ1dCBJIHRoaW5rIGl0IGlzIG5vdCBqdXN0
-IGENCmRpc3BsYXkgZGV2aWNlLg0KDQpbMV0NCmh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3Nj
-bS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdC90cmVlL2FyY2gvYXJtNjQvYm9v
-dC9kdHMvbWVkaWF0ZWsvbXQ4MTczLmR0c2k/aD12NS42LXJjMQ0KDQpSZWdhcmRzLA0KQ0sNCg0K
-PiBUaGFua3MsDQo+ICBFbnJpYw0KPiANCj4gDQo+ID4gSSdtIG5vdCBzdXJlIGlmIEkgdW5kZXJz
-dGFuZCB5b3UgY29ycmVjdGx5LiBBcmUgeW91IHByb3Bvc2luZyB0byBrZWVwIHRoZQ0KPiA+IGJp
-bmRpbmcgZGVzY3JpcHRpb24gaW4gYXJtL21lZGlhdGVrPw0KPiA+IA0KPiA+IFJlZ2FyZHMsDQo+
-ID4gTWF0dGhpYXMNCj4gPiANCj4gPj4NCj4gPj4gWzFdIGh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5l
-bC5vcmcvcGF0Y2gvMTExNDA3NDcvDQo+ID4+DQo+ID4+IFJlZ2FyZHMsDQo+ID4+IENLDQo+ID4+
-DQo+ID4+PiBTaWduZWQtb2ZmLWJ5OiBNYXR0aGlhcyBCcnVnZ2VyIDxtYnJ1Z2dlckBzdXNlLmNv
-bT4NCj4gPj4+DQo+ID4+PiAtLS0NCj4gPj4+DQo+ID4+PiBDaGFuZ2VzIGluIHY3Og0KPiA+Pj4g
-LSBtb3ZlIHRoZSBiaW5kaW5nIGRlc2NyaXB0aW9uDQo+ID4+Pg0KPiA+Pj4gQ2hhbmdlcyBpbiB2
-NjogTm9uZQ0KPiA+Pj4gQ2hhbmdlcyBpbiB2NTogTm9uZQ0KPiA+Pj4gQ2hhbmdlcyBpbiB2NDog
-Tm9uZQ0KPiA+Pj4gQ2hhbmdlcyBpbiB2MzogTm9uZQ0KPiA+Pj4gQ2hhbmdlcyBpbiB2MjogTm9u
-ZQ0KPiA+Pj4NCj4gPj4+ICAuLi4vYmluZGluZ3Mve2FybSA9PiBkaXNwbGF5fS9tZWRpYXRlay9t
-ZWRpYXRlayxtbXN5cy50eHQgICAgICAgICB8IDANCj4gPj4+ICAxIGZpbGUgY2hhbmdlZCwgMCBp
-bnNlcnRpb25zKCspLCAwIGRlbGV0aW9ucygtKQ0KPiA+Pj4gIHJlbmFtZSBEb2N1bWVudGF0aW9u
-L2RldmljZXRyZWUvYmluZGluZ3Mve2FybSA9PiBkaXNwbGF5fS9tZWRpYXRlay9tZWRpYXRlayxt
-bXN5cy50eHQgKDEwMCUpDQo+ID4+Pg0KPiA+Pj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24v
-ZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0vbWVkaWF0ZWsvbWVkaWF0ZWssbW1zeXMudHh0IGIvRG9j
-dW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2Rpc3BsYXkvbWVkaWF0ZWsvbWVkaWF0ZWss
-bW1zeXMudHh0DQo+ID4+PiBzaW1pbGFyaXR5IGluZGV4IDEwMCUNCj4gPj4+IHJlbmFtZSBmcm9t
-IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0vbWVkaWF0ZWsvbWVkaWF0ZWss
-bW1zeXMudHh0DQo+ID4+PiByZW5hbWUgdG8gRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
-bmdzL2Rpc3BsYXkvbWVkaWF0ZWsvbWVkaWF0ZWssbW1zeXMudHh0DQo+ID4+DQo+ID4+IF9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQo+ID4+IGxpbnV4LWFy
-bS1rZXJuZWwgbWFpbGluZyBsaXN0DQo+ID4+IGxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFk
-ZWFkLm9yZw0KPiA+PiBodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2xpbnV4LWFybS1rZXJuZWwNCj4gPj4NCj4gDQo+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fDQo+IExpbnV4LW1lZGlhdGVrIG1haWxpbmcgbGlzdA0KPiBM
-aW51eC1tZWRpYXRla0BsaXN0cy5pbmZyYWRlYWQub3JnDQo+IGh0dHA6Ly9saXN0cy5pbmZyYWRl
-YWQub3JnL21haWxtYW4vbGlzdGluZm8vbGludXgtbWVkaWF0ZWsNCg0K
 
+--lrZ03NoBR/3+SXJZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Wed, Feb 05, 2020 at 01:23:24PM -0800, Sowjanya Komatineni wrote:
+[...]
+> +static int tegra_channel_capture_frame(struct tegra_vi_channel *chan,
+> +				       struct tegra_channel_buffer *buf)
+> +{
+> +	int err = 0;
+> +	u32 thresh, value, frame_start;
+> +	int bytes_per_line = chan->format.bytesperline;
+> +
+> +	/* program buffer address by using surface 0 */
+> +	vi_csi_write(chan, TEGRA_VI_CSI_SURFACE0_OFFSET_MSB, 0x0);
+> +	vi_csi_write(chan, TEGRA_VI_CSI_SURFACE0_OFFSET_LSB, buf->addr);
+> +	vi_csi_write(chan, TEGRA_VI_CSI_SURFACE0_STRIDE, bytes_per_line);
+> +
+> +	/* increase syncpoint max */
+> +	thresh = host1x_syncpt_incr_max(chan->sp, 1);
+> +
+> +	/* program syncpoint */
+> +	frame_start = VI_CSI_PP_FRAME_START(chan->portno);
+> +	value = VI_CFG_VI_INCR_SYNCPT_COND(frame_start) |
+> +		host1x_syncpt_id(chan->sp);
+> +	tegra_vi_write(chan, TEGRA_VI_CFG_VI_INCR_SYNCPT, value);
+
+Okay, so this programs the VI to increment the given syncpoint upon
+frame start? What is that VI_CSI_PP_FRAME_START(chan->portno) exactly?
+
+> +
+> +	vi_csi_write(chan, TEGRA_VI_CSI_SINGLE_SHOT, SINGLE_SHOT_CAPTURE);
+
+And now we start capturing in single-shot mode.
+
+> +
+> +	/* move buffer to capture done queue */
+> +	spin_lock(&chan->done_lock);
+> +	list_add_tail(&buf->queue, &chan->done);
+> +	spin_unlock(&chan->done_lock);
+> +
+> +	/* wait up kthread for capture done */
+> +	wake_up_interruptible(&chan->done_wait);
+
+But this I don't understand. You wake up the kthread...
+
+> +
+> +	/* use syncpoint to wake up */
+> +	err = host1x_syncpt_wait(chan->sp, thresh,
+> +				 TEGRA_VI_SYNCPT_WAIT_TIMEOUT, &value);
+
+... and then wait for the syncpoint to reach the given threshold? Isn't
+that the wrong way around? Don't we need to wait for the syncpoint
+increment *before* we wake up the kthread that will return the buffer
+to userspace?
+
+> +	if (err) {
+> +		dev_err(&chan->video.dev,
+> +			"frame start syncpt timeout: %d\n", err);
+> +		tegra_channel_capture_error_status(chan);
+> +	}
+> +
+> +	return err;
+> +}
+> +
+> +static int tegra_channel_capture_done(struct tegra_vi_channel *chan,
+> +				      struct tegra_channel_buffer *buf)
+> +{
+> +	struct vb2_v4l2_buffer *vb = &buf->buf;
+> +	u32 thresh, value, mw_ack_done;
+> +	int ret = 0;
+> +
+> +	/* increase syncpoint max */
+> +	thresh = host1x_syncpt_incr_max(chan->sp, 1);
+> +
+> +	/* program syncpoint */
+> +	mw_ack_done = VI_CSI_MW_ACK_DONE(chan->portno);
+> +	value = VI_CFG_VI_INCR_SYNCPT_COND(mw_ack_done) |
+> +		host1x_syncpt_id(chan->sp);
+> +	tegra_vi_write(chan, TEGRA_VI_CFG_VI_INCR_SYNCPT, value);
+> +
+> +	if (!vi_csi_read(chan, TEGRA_VI_CSI_SINGLE_SHOT))
+> +		vi_csi_write(chan, TEGRA_VI_CSI_SINGLE_SHOT,
+> +			     SINGLE_SHOT_CAPTURE);
+> +
+> +	/* use syncpoint to wake up */
+> +	ret = host1x_syncpt_wait(chan->sp, thresh,
+> +				 TEGRA_VI_SYNCPT_WAIT_TIMEOUT, &value);
+> +	if (ret)
+> +		dev_err(&chan->video.dev,
+> +			"MW_ACK_DONE syncpoint timeout: %d\n", ret);
+
+Actually... there's another syncpoint wait here, so I guess this will
+stall until VI has actually completed writing the captured frame to
+memory.
+
+> +
+> +	/* captured one frame */
+> +	vb->sequence = chan->sequence++;
+> +	vb->field = V4L2_FIELD_NONE;
+> +	vb->vb2_buf.timestamp = ktime_get_ns();
+> +	vb2_buffer_done(&vb->vb2_buf,
+> +			ret < 0 ? VB2_BUF_STATE_ERROR : VB2_BUF_STATE_DONE);
+
+So it's really only at this point that we return the buffer to
+userspace, which should be after the hardware is done writing to the
+buffer, so this should be fine.
+
+That said, I'm wondering if host1x_syncpt_wait() is a good interface
+for this use-case. We don't really have anything else right now, but
+I think we may be able to add something to have a function called in
+case the syncpoint reaches a threshold. Having to spawn two separate
+threads with wait queues seems a bit overkill for this.
+
+It's fine to leave this as it is for now, but maybe something to
+consider as improvement in the future.
+
+> +	return ret;
+> +}
+> +
+> +static int chan_capture_kthread_start(void *data)
+> +{
+> +	struct tegra_vi_channel *chan = data;
+> +	struct tegra_channel_buffer *buf;
+> +	int err = 0;
+> +
+> +	set_freezable();
+> +
+> +	while (1) {
+> +		try_to_freeze();
+> +
+> +		wait_event_interruptible(chan->start_wait,
+> +					 !list_empty(&chan->capture) ||
+> +					 kthread_should_stop());
+> +		if (kthread_should_stop())
+> +			break;
+> +
+> +		if (err)
+> +			continue;
+> +
+> +		spin_lock(&chan->start_lock);
+> +		if (list_empty(&chan->capture)) {
+> +			spin_unlock(&chan->start_lock);
+> +			continue;
+> +		}
+> +
+> +		buf = list_entry(chan->capture.next,
+> +				 struct tegra_channel_buffer, queue);
+> +		list_del_init(&buf->queue);
+> +		spin_unlock(&chan->start_lock);
+> +		err = tegra_channel_capture_frame(chan, buf);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int chan_capture_kthread_done(void *data)
+> +{
+> +	struct tegra_vi_channel *chan = data;
+> +	struct tegra_channel_buffer *buf;
+> +	int err = 0;
+> +
+> +	set_freezable();
+> +
+> +	while (1) {
+> +		try_to_freeze();
+> +
+> +		wait_event_interruptible(chan->done_wait,
+> +					 !list_empty(&chan->done) ||
+> +					 kthread_should_stop());
+> +
+> +		if (kthread_should_stop())
+> +			break;
+> +
+> +		spin_lock(&chan->done_lock);
+> +		if (list_empty(&chan->done)) {
+> +			spin_unlock(&chan->done_lock);
+> +			continue;
+> +		}
+> +
+> +		buf = list_entry(chan->done.next, struct tegra_channel_buffer,
+> +				 queue);
+> +		if (!buf)
+> +			continue;
+> +
+> +		list_del_init(&buf->queue);
+> +		spin_unlock(&chan->done_lock);
+> +		err = tegra_channel_capture_done(chan, buf);
+
+What's with the error here? I think we should either handle it in some
+way, or just avoid even returning an error if we're not going to deal
+with it anyway.
+
+Thierry
+
+--lrZ03NoBR/3+SXJZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl5Gzu4ACgkQ3SOs138+
+s6Hd1w/+INwB+uEPRluAC0zs+uoEeVtXd/JX1Fz5YqyKmaJ9Lp/WNj9RHfluVU2K
+r7mIGLq2ia8bLekfTdh3+YX6uaHfPIDhlHNsE3yiCseiIH1mIYdNXgUng+8v9KbJ
+T8/84ICFZSc2fb4rhYhivXJ61JqGkRK5dh8dl1HVqgvdYmjofivHQCZcUXlUvq1x
+q7iBVXE3U762/FYGfA7v09BHejAnT5G2TUcnOkQknFk2XZi+uEgIVgxgz9MMz6Bw
+1bf2Za2wbfm4LFO7e2kjahZy/tHdrNOE7Nyz62fbYEybev5G6IDT16kGpsnGpsf2
+kJ8ohkuyYxsROI1uxoO5C1Uvsi52worYljuDlXlXuYwtfVFmky4Yyk8diO9b8TmP
+6ImPP6v9XO7cyyJG1A97Gk0sm4gCJbbKsNvahA9niPwPqlJsww+qvczhxBVvsIDb
+iqc6zFRPOYpPV3oyvjX0sQi27iBF5MsoxN9TpK7Ow7qhnoBmf7jJczVwdeHTCmHE
+HWIuaVrTiy9mY02T0GXbxHD9daOgxPFcfVbudsyX1NOxRjtreN16Bfc1bDX0Awlg
+VoimBA8iVkP7u3Igpyr3q1FhVrCfdeN9yZBrwI44aiEOa7i6D1sAf1bgC2VZ+L1U
+mhfXc3eLZZq3NfKdS2SpQ99Mq46lTV//ORM0LuiRY6k9mQuSqog=
+=StqB
+-----END PGP SIGNATURE-----
+
+--lrZ03NoBR/3+SXJZ--
