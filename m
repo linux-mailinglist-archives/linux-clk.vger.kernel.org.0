@@ -2,37 +2,35 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B5915EF04
-	for <lists+linux-clk@lfdr.de>; Fri, 14 Feb 2020 18:45:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 708BA15EE9F
+	for <lists+linux-clk@lfdr.de>; Fri, 14 Feb 2020 18:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389465AbgBNQCt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 14 Feb 2020 11:02:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49448 "EHLO mail.kernel.org"
+        id S2389655AbgBNQDb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 14 Feb 2020 11:03:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50704 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389072AbgBNQCt (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:02:49 -0500
+        id S2389652AbgBNQDb (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:03:31 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B980C2082F;
-        Fri, 14 Feb 2020 16:02:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F32E82067D;
+        Fri, 14 Feb 2020 16:03:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696168;
-        bh=LNZd425aiv0ZyvHJC6f+H2IvIXnySvmj0POmQMGzmiw=;
+        s=default; t=1581696210;
+        bh=KBb0SdUC0ZXoTdzjUeomddn5cDalwKuc/F+moiwCcbc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MoodqutW6eXjNbsQaLHNyAxXySEy1Qlkcpud5eKmCtrt4eQRa4ZxEQPiT80q4cgxB
-         y7x2GTh3TW+i0i6P1fn3NXS/itG2KdLeyCGI+hVnoC5ngV+pcPz0luJ/dN/W4zK5nk
-         V2RZETq8c3UoxGnVJ+N1h8ozf8XX2HRFB88+jLOQ=
+        b=l69wYUs/q37EPc5UWn++8OS33mXZRWujihSB9zOfVL0PoXj3ofQZTBpVOf9jJjYkj
+         VgVUDyOHwnW0r71nqdmr4ec3B9iHpI3jlf5l0tduU1aJNPSTDIi7rKGX5frOSgUML5
+         gTQO8JQwyP/WjiUGsDL/ZJ634F4enMaSGIUjGA0M=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 043/459] clk: meson: meson8b: make the CCF use the glitch-free mali mux
-Date:   Fri, 14 Feb 2020 10:54:53 -0500
-Message-Id: <20200214160149.11681-43-sashal@kernel.org>
+Cc:     Grygorii Strashko <grygorii.strashko@ti.com>,
+        Tero Kristo <t-kristo@ti.com>, Sasha Levin <sashal@kernel.org>,
+        linux-omap@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 075/459] clk: ti: dra7: fix parent for gmac_clkctrl
+Date:   Fri, 14 Feb 2020 10:55:25 -0500
+Message-Id: <20200214160149.11681-75-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
 References: <20200214160149.11681-1-sashal@kernel.org>
@@ -45,61 +43,33 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+From: Grygorii Strashko <grygorii.strashko@ti.com>
 
-[ Upstream commit 8daeaea99caabe24a0929fac17977ebfb882fa86 ]
+[ Upstream commit 69e300283796dae7e8c2e6acdabcd31336c0c93e ]
 
-The "mali_0" or "mali_1" clock trees should not be updated while the
-clock is running. Enforce this by setting CLK_SET_RATE_GATE on the
-"mali_0" and "mali_1" gates. This makes the CCF switch to the "mali_1"
-tree when "mali_0" is currently active and vice versa, which is exactly
-what the vendor driver does when updating the frequency of the mali
-clock.
+The parent clk for gmac clk ctrl has to be gmac_main_clk (125MHz) instead
+of dpll_gmac_ck (1GHz). This is caused incorrect CPSW MDIO operation.
+Hence, fix it.
 
-This fixes a potential hang when changing the GPU frequency at runtime.
-
-Fixes: 74e1f2521f16ff ("clk: meson: meson8b: add the GPU clock tree")
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+Fixes: dffa9051d546 ('clk: ti: dra7: add new clkctrl data')
+Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
+Signed-off-by: Tero Kristo <t-kristo@ti.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/meson/meson8b.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/clk/ti/clk-7xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/meson/meson8b.c b/drivers/clk/meson/meson8b.c
-index 67e6691e080c1..8856ce476ccfa 100644
---- a/drivers/clk/meson/meson8b.c
-+++ b/drivers/clk/meson/meson8b.c
-@@ -1764,8 +1764,11 @@ static struct clk_regmap meson8b_hdmi_sys = {
- 
- /*
-  * The MALI IP is clocked by two identical clocks (mali_0 and mali_1)
-- * muxed by a glitch-free switch on Meson8b and Meson8m2. Meson8 only
-- * has mali_0 and no glitch-free mux.
-+ * muxed by a glitch-free switch on Meson8b and Meson8m2. The CCF can
-+ * actually manage this glitch-free mux because it does top-to-bottom
-+ * updates the each clock tree and switches to the "inactive" one when
-+ * CLK_SET_RATE_GATE is set.
-+ * Meson8 only has mali_0 and no glitch-free mux.
-  */
- static const struct clk_hw *meson8b_mali_0_1_parent_hws[] = {
- 	&meson8b_xtal.hw,
-@@ -1830,7 +1833,7 @@ static struct clk_regmap meson8b_mali_0 = {
- 			&meson8b_mali_0_div.hw
- 		},
- 		.num_parents = 1,
--		.flags = CLK_SET_RATE_PARENT,
-+		.flags = CLK_SET_RATE_GATE | CLK_SET_RATE_PARENT,
- 	},
+diff --git a/drivers/clk/ti/clk-7xx.c b/drivers/clk/ti/clk-7xx.c
+index 9dd6185a4b4e2..66e4b2b9ec600 100644
+--- a/drivers/clk/ti/clk-7xx.c
++++ b/drivers/clk/ti/clk-7xx.c
+@@ -405,7 +405,7 @@ static const struct omap_clkctrl_bit_data dra7_gmac_bit_data[] __initconst = {
  };
  
-@@ -1885,7 +1888,7 @@ static struct clk_regmap meson8b_mali_1 = {
- 			&meson8b_mali_1_div.hw
- 		},
- 		.num_parents = 1,
--		.flags = CLK_SET_RATE_PARENT,
-+		.flags = CLK_SET_RATE_GATE | CLK_SET_RATE_PARENT,
- 	},
+ static const struct omap_clkctrl_reg_data dra7_gmac_clkctrl_regs[] __initconst = {
+-	{ DRA7_GMAC_GMAC_CLKCTRL, dra7_gmac_bit_data, CLKF_SW_SUP, "dpll_gmac_ck" },
++	{ DRA7_GMAC_GMAC_CLKCTRL, dra7_gmac_bit_data, CLKF_SW_SUP, "gmac_main_clk" },
+ 	{ 0 },
  };
  
 -- 
