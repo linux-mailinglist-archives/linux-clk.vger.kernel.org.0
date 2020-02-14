@@ -2,35 +2,36 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E4315F41F
-	for <lists+linux-clk@lfdr.de>; Fri, 14 Feb 2020 19:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D51715F2F0
+	for <lists+linux-clk@lfdr.de>; Fri, 14 Feb 2020 19:20:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404920AbgBNSSg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 14 Feb 2020 13:18:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55138 "EHLO mail.kernel.org"
+        id S1730846AbgBNPvo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 14 Feb 2020 10:51:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56848 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730584AbgBNPup (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 14 Feb 2020 10:50:45 -0500
+        id S1730843AbgBNPvn (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 14 Feb 2020 10:51:43 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DB56024650;
-        Fri, 14 Feb 2020 15:50:43 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D7AEB2467E;
+        Fri, 14 Feb 2020 15:51:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581695444;
-        bh=bnoGaRoBD2hyStehWg8KD7v12K1AJXgloD4rRnFFQ/c=;
+        s=default; t=1581695502;
+        bh=LUMQ4dfbhY9whkPxnaGYGSz/mst3o4nhse0JeJl/eyc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mHwKwiJUNv+7gk51nsD6A0KiE7lexBwEQdUtLhz+H03m+DUWGFZOv/+YhF/+cH32t
-         JgzSIKUYH2ahwf9Sn27WcoHM+80SVSkd4QDgQZcUZVcaDTQ6nD8IbAMRsC15pyofUr
-         5bhYXDTKBSKHZrY+WmYnJJ7OIwtoFGZUuBEzvQt8=
+        b=krkUnuZyd0c5sd/p3qINKvcQnHHFeHUcyZZJ9FkEnckgfXmkVS4nPdeUslAViDjdG
+         BnHg6snwQMaoLaRSxCVg16AnzqbP4hhMT8+v9ml8/XEGiE3wr0+hzbcK1SU6SJiDlW
+         6WMIR3rrdv0+m5p+vhPsOMQeNKNnGJEB0sF9zBgM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Grygorii Strashko <grygorii.strashko@ti.com>,
-        Tero Kristo <t-kristo@ti.com>, Sasha Levin <sashal@kernel.org>,
-        linux-omap@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 085/542] clk: ti: dra7: fix parent for gmac_clkctrl
-Date:   Fri, 14 Feb 2020 10:41:17 -0500
-Message-Id: <20200214154854.6746-85-sashal@kernel.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.5 129/542] clk: qcom: Don't overwrite 'cfg' in clk_rcg2_dfs_populate_freq()
+Date:   Fri, 14 Feb 2020 10:42:01 -0500
+Message-Id: <20200214154854.6746-129-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
 References: <20200214154854.6746-1-sashal@kernel.org>
@@ -43,35 +44,58 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Grygorii Strashko <grygorii.strashko@ti.com>
+From: Stephen Boyd <sboyd@kernel.org>
 
-[ Upstream commit 69e300283796dae7e8c2e6acdabcd31336c0c93e ]
+[ Upstream commit 21e157c62eeded8b1558a991b4820b761d48a730 ]
 
-The parent clk for gmac clk ctrl has to be gmac_main_clk (125MHz) instead
-of dpll_gmac_ck (1GHz). This is caused incorrect CPSW MDIO operation.
-Hence, fix it.
+The DFS frequency table logic overwrites 'cfg' while detecting the
+parent clk and then later on in clk_rcg2_dfs_populate_freq() we use that
+same variable to figure out the mode of the clk, either MND or not. Add
+a new variable to hold the parent clk bit so that 'cfg' is left
+untouched for use later.
 
-Fixes: dffa9051d546 ('clk: ti: dra7: add new clkctrl data')
-Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
-Signed-off-by: Tero Kristo <t-kristo@ti.com>
+This fixes problems in detecting the supported frequencies for any clks
+in DFS mode.
+
+Fixes: cc4f6944d0e3 ("clk: qcom: Add support for RCG to register for DFS")
+Reported-by: Rajendra Nayak <rnayak@codeaurora.org>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Link: https://lkml.kernel.org/r/20200128193329.45635-1-sboyd@kernel.org
+Tested-by: Rajendra Nayak <rnayak@codeaurora.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/ti/clk-7xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/qcom/clk-rcg2.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clk/ti/clk-7xx.c b/drivers/clk/ti/clk-7xx.c
-index 5f46782cebeb2..b656ba2abcf7e 100644
---- a/drivers/clk/ti/clk-7xx.c
-+++ b/drivers/clk/ti/clk-7xx.c
-@@ -405,7 +405,7 @@ static const struct omap_clkctrl_bit_data dra7_gmac_bit_data[] __initconst = {
- };
+diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
+index 8f4b9bec29565..5e0f7d8f168dd 100644
+--- a/drivers/clk/qcom/clk-rcg2.c
++++ b/drivers/clk/qcom/clk-rcg2.c
+@@ -952,7 +952,7 @@ static void clk_rcg2_dfs_populate_freq(struct clk_hw *hw, unsigned int l,
+ 	struct clk_rcg2 *rcg = to_clk_rcg2(hw);
+ 	struct clk_hw *p;
+ 	unsigned long prate = 0;
+-	u32 val, mask, cfg, mode;
++	u32 val, mask, cfg, mode, src;
+ 	int i, num_parents;
  
- static const struct omap_clkctrl_reg_data dra7_gmac_clkctrl_regs[] __initconst = {
--	{ DRA7_GMAC_GMAC_CLKCTRL, dra7_gmac_bit_data, CLKF_SW_SUP, "dpll_gmac_ck" },
-+	{ DRA7_GMAC_GMAC_CLKCTRL, dra7_gmac_bit_data, CLKF_SW_SUP, "gmac_main_clk" },
- 	{ 0 },
- };
+ 	regmap_read(rcg->clkr.regmap, rcg->cmd_rcgr + SE_PERF_DFSR(l), &cfg);
+@@ -962,12 +962,12 @@ static void clk_rcg2_dfs_populate_freq(struct clk_hw *hw, unsigned int l,
+ 	if (cfg & mask)
+ 		f->pre_div = cfg & mask;
  
+-	cfg &= CFG_SRC_SEL_MASK;
+-	cfg >>= CFG_SRC_SEL_SHIFT;
++	src = cfg & CFG_SRC_SEL_MASK;
++	src >>= CFG_SRC_SEL_SHIFT;
+ 
+ 	num_parents = clk_hw_get_num_parents(hw);
+ 	for (i = 0; i < num_parents; i++) {
+-		if (cfg == rcg->parent_map[i].cfg) {
++		if (src == rcg->parent_map[i].cfg) {
+ 			f->src = rcg->parent_map[i].src;
+ 			p = clk_hw_get_parent_by_index(&rcg->clkr.hw, i);
+ 			prate = clk_hw_get_rate(p);
 -- 
 2.20.1
 
