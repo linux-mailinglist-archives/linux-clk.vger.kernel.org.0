@@ -2,27 +2,27 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B7B15E2B1
-	for <lists+linux-clk@lfdr.de>; Fri, 14 Feb 2020 17:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E0315E5B2
+	for <lists+linux-clk@lfdr.de>; Fri, 14 Feb 2020 17:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406009AbgBNQYw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 14 Feb 2020 11:24:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33700 "EHLO mail.kernel.org"
+        id S2405149AbgBNQWD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 14 Feb 2020 11:22:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57038 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405999AbgBNQYv (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:24:51 -0500
+        id S2405061AbgBNQWD (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:22:03 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 90AA8247AC;
-        Fri, 14 Feb 2020 16:24:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4911B246D8;
+        Fri, 14 Feb 2020 16:22:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697490;
-        bh=+4Sh4W9Ou5A62S+AACM+nRArbTPrXUh5TK3knHdufww=;
+        s=default; t=1581697322;
+        bh=Omc6XSnNs5KMFz1tBz8lSNoR8tkXrcQQyKZa4berMYg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lAiHmMNQ4I++EgQC1lC+NkIT0EjfoJTtHQP2jTp54begpKsL3NJDHwMFnQqWzX8c3
-         hO7MSsKFfLInyix5pmfJUd3Bn/1o5x3AlVBziwa/Nr4iq2y1W8Jw11v51NqG2xUBNx
-         TLmYprbVhxwFRpxvdn/Dg9KTL7lIt3oS7HPWp5JU=
+        b=Cjbg+4uXM88/mvL71ebO3gFnAJWGvFvVzU4WQgOI5A010jBEAO+Se16H+B18TiYRi
+         NLIJGP+9kQYRX1XjLXzxHCjB9838gMytbrcH5epRxXyhJFQUYS2o483PuWi5mECPHM
+         ZSJIEkJmq7TGOxuOfis5Eo7F8SeS9sAhRjNqwJNw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Douglas Anderson <dianders@chromium.org>,
@@ -30,12 +30,12 @@ Cc:     Douglas Anderson <dianders@chromium.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 020/100] clk: qcom: rcg2: Don't crash if our parent can't be found; return an error
-Date:   Fri, 14 Feb 2020 11:23:04 -0500
-Message-Id: <20200214162425.21071-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 031/141] clk: qcom: rcg2: Don't crash if our parent can't be found; return an error
+Date:   Fri, 14 Feb 2020 11:19:31 -0500
+Message-Id: <20200214162122.19794-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214162425.21071-1-sashal@kernel.org>
-References: <20200214162425.21071-1-sashal@kernel.org>
+In-Reply-To: <20200214162122.19794-1-sashal@kernel.org>
+References: <20200214162122.19794-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -94,7 +94,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+)
 
 diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-index 350a01f748706..8b549ece9f13c 100644
+index 0ae1b0a66eb55..d8601b138dc1e 100644
 --- a/drivers/clk/qcom/clk-rcg2.c
 +++ b/drivers/clk/qcom/clk-rcg2.c
 @@ -194,6 +194,9 @@ static int _freq_tbl_determine_rate(struct clk_hw *hw,
