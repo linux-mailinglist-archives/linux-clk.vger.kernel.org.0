@@ -2,38 +2,42 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A21FF15ED3D
-	for <lists+linux-clk@lfdr.de>; Fri, 14 Feb 2020 18:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91E1915F4B6
+	for <lists+linux-clk@lfdr.de>; Fri, 14 Feb 2020 19:24:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390481AbgBNQGj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 14 Feb 2020 11:06:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57168 "EHLO mail.kernel.org"
+        id S2390439AbgBNSXX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 14 Feb 2020 13:23:23 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52138 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390153AbgBNQGj (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:06:39 -0500
+        id S1729883AbgBNPtV (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 14 Feb 2020 10:49:21 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E071F222C2;
-        Fri, 14 Feb 2020 16:06:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1E44624680;
+        Fri, 14 Feb 2020 15:49:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696398;
-        bh=9ua/guR1mxyD2PxnyswtbApfsZTNnJhfiDmUW4Mgjjk=;
+        s=default; t=1581695361;
+        bh=ml9s32sxFxF2khA9u9Gzm/r5nsPwJ65bZbYiix3UbLY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nf1rXeZhSNnGg+xZMBCLN11yG1Q0ECPr0ONSUvttljRt/o7h9LWbr7Gc2q0dlu//M
-         gqIl4KrT/3wcZVLku6NLo4NLbJXIN1sGf/8f6TFSNUvDyYQZsL21GBGj8vzTLB4NBW
-         r3ZDLikOrwG8o7DI+L9P19O81IHS8n8tY0bXSB5o=
+        b=k77pRCSO6Wk+ImLk39hjqGMo/jxgbGR9Ur1PU7w/hJUj1eY9h/2eNfABPV95xbibm
+         q2pE0Y9dp9t+mYttDKhA4WEJ9MJua5gxKVivUYK6IszEIDy3ugvVCvAgwEbnk285rc
+         I/Q6ZnylGCicBbb5TkjbjYS8ZV9LVwBCUwEGeo3g=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 223/459] clk: actually call the clock init before any other callback of the clock
-Date:   Fri, 14 Feb 2020 10:57:53 -0500
-Message-Id: <20200214160149.11681-223-sashal@kernel.org>
+        Dmitry Shmidt <dimitrysh@google.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.5 020/542] clk: meson: g12a: fix missing uart2 in regmap table
+Date:   Fri, 14 Feb 2020 10:40:12 -0500
+Message-Id: <20200214154854.6746-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
-References: <20200214160149.11681-1-sashal@kernel.org>
+In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
+References: <20200214154854.6746-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,64 +49,37 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 From: Jerome Brunet <jbrunet@baylibre.com>
 
-[ Upstream commit f6fa75ca912be6021335de63a32aa4d295f3c524 ]
+[ Upstream commit b1b3f0622a9d52ac19a63619911823c89a4d85a4 ]
 
- __clk_init_parent() will call the .get_parent() callback of the clock
- so .init() must run before.
+UART2 peripheral is missing from the regmap fixup table of the g12a family
+clock controller. As it is, any access to this clock would Oops, which is
+not great.
 
-Fixes: 541debae0adf ("clk: call the clock init() callback before any other ops callback")
+Add the clock to the table to fix the problem.
+
+Fixes: 085a4ea93d54 ("clk: meson: g12a: add peripheral clock controller")
+Reported-by: Dmitry Shmidt <dimitrysh@google.com>
+Tested-by: Dmitry Shmidt <dimitrysh@google.com>
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Tested-by: Kevin Hilman <khilman@baylibre.com>
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
-Link: https://lkml.kernel.org/r/20190924123954.31561-2-jbrunet@baylibre.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/clk.c | 26 +++++++++++++++-----------
- 1 file changed, 15 insertions(+), 11 deletions(-)
+ drivers/clk/meson/g12a.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 67f592fa083ab..b0344a1a03704 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -3320,6 +3320,21 @@ static int __clk_core_init(struct clk_core *core)
- 		goto out;
- 	}
- 
-+	/*
-+	 * optional platform-specific magic
-+	 *
-+	 * The .init callback is not used by any of the basic clock types, but
-+	 * exists for weird hardware that must perform initialization magic.
-+	 * Please consider other ways of solving initialization problems before
-+	 * using this callback, as its use is discouraged.
-+	 *
-+	 * If it exist, this callback should called before any other callback of
-+	 * the clock
-+	 */
-+	if (core->ops->init)
-+		core->ops->init(core->hw);
-+
-+
- 	core->parent = __clk_init_parent(core);
- 
- 	/*
-@@ -3344,17 +3359,6 @@ static int __clk_core_init(struct clk_core *core)
- 		core->orphan = true;
- 	}
- 
--	/*
--	 * optional platform-specific magic
--	 *
--	 * The .init callback is not used by any of the basic clock types, but
--	 * exists for weird hardware that must perform initialization magic.
--	 * Please consider other ways of solving initialization problems before
--	 * using this callback, as its use is discouraged.
--	 */
--	if (core->ops->init)
--		core->ops->init(core->hw);
--
- 	/*
- 	 * Set clk's accuracy.  The preferred method is to use
- 	 * .recalc_accuracy. For simple clocks and lazy developers the default
+diff --git a/drivers/clk/meson/g12a.c b/drivers/clk/meson/g12a.c
+index b3af61cc6fb94..d2760a021301d 100644
+--- a/drivers/clk/meson/g12a.c
++++ b/drivers/clk/meson/g12a.c
+@@ -4692,6 +4692,7 @@ static struct clk_regmap *const g12a_clk_regmaps[] = {
+ 	&g12a_bt656,
+ 	&g12a_usb1_to_ddr,
+ 	&g12a_mmc_pclk,
++	&g12a_uart2,
+ 	&g12a_vpu_intr,
+ 	&g12a_gic,
+ 	&g12a_sd_emmc_a_clk0,
 -- 
 2.20.1
 
