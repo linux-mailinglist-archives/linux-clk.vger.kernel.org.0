@@ -2,79 +2,86 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C5C15FFD8
-	for <lists+linux-clk@lfdr.de>; Sat, 15 Feb 2020 19:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0D2160379
+	for <lists+linux-clk@lfdr.de>; Sun, 16 Feb 2020 11:28:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727896AbgBOS4X (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 15 Feb 2020 13:56:23 -0500
-Received: from out28-123.mail.aliyun.com ([115.124.28.123]:37629 "EHLO
-        out28-123.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727780AbgBOS4W (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 15 Feb 2020 13:56:22 -0500
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.2654309|-1;CH=green;DM=CONTINUE|CONTINUE|true|0.0742753-0.00614346-0.919581;DS=CONTINUE|ham_system_inform|0.00902531-0.000445777-0.990529;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03278;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=24;RT=24;SR=0;TI=SMTPD_---.GoTIZgt_1581792955;
-Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.GoTIZgt_1581792955)
-          by smtp.aliyun-inc.com(10.147.42.241);
-          Sun, 16 Feb 2020 02:56:16 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, paul@crapouillou.net,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, ralf@linux-mips.org, paulburton@kernel.org,
-        jiaxun.yang@flygoat.com, chenhc@lemote.com, allison@lohutok.net,
-        tglx@linutronix.de, daniel.lezcano@linaro.org,
-        geert+renesas@glider.be, krzk@kernel.org, keescook@chromium.org,
-        ebiederm@xmission.com, miquel.raynal@bootlin.com,
-        paul@boddie.org.uk, hns@goldelico.com,
-        mips-creator-ci20-dev@googlegroups.com
-Subject: [PATCH v5 7/7] MIPS: CI20: Update defconfig to support SMP.
-Date:   Sun, 16 Feb 2020 02:55:32 +0800
-Message-Id: <1581792932-108032-9-git-send-email-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1581792932-108032-1-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1581792932-108032-1-git-send-email-zhouyanjie@wanyeetech.com>
+        id S1727720AbgBPK2E (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 16 Feb 2020 05:28:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44172 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725951AbgBPK2E (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 16 Feb 2020 05:28:04 -0500
+Received: from localhost.localdomain (unknown [122.178.194.127])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 889F820857;
+        Sun, 16 Feb 2020 10:27:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581848883;
+        bh=tFdLIRrPeGwxnZkYfT0YOBqyS7GHpTVYWDvgSynC27M=;
+        h=From:To:Cc:Subject:Date:From;
+        b=2Hg5+89t9fa2SU6yNsw+x3xqSTqi1E91mWoyMdZG8M3PKQgwr0tfD+7WK+CfIDzLs
+         E1k7KDr5x85RclQv9oSo8XbGsCAVqC2rwFKSaRPhv4fWWE1t2ynN6D9XpC+bnGHzr8
+         rR7hCGZnwgSFZe8BanZKfeTGV0OJkJDPHGI3LDjU=
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        psodagud@codeaurora.org, tsoni@codeaurora.org,
+        jshriram@codeaurora.org, tdas@codeaurora.org,
+        vnkgutta@codeaurora.org
+Subject: [PATCH v3 0/5] Add clock drivers for SM8250 SoC
+Date:   Sun, 16 Feb 2020 15:57:20 +0530
+Message-Id: <20200216102725.2629155-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add "CONFIG_SMP=y" and "CONFIG_NR_CPUS=2" to support SMP.
+This series adds clock drivers support for SM8250 SoC.  As part of the
+device tree, the sm8250 dts file has basic nodes like CPU, PSCI, intc, timer
+and clock controller.
 
-Tested-by: H. Nikolaus Schaller <hns@goldelico.com>
-Tested-by: Paul Boddie <paul@boddie.org.uk>
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
----
+Required clock controller driver and RPMH cloks are added to
+support peripherals like USB.
 
-Notes:
-    v1->v2:
-    No change.
-    
-    v2->v3:
-    No change.
-    
-    v3->v4:
-    Rebase on top of kernel 5.6-rc1.
-    
-    v4->v5:
-    No change.
+All this configuration is added to support SM8250 to boot up to the
+serial console.
 
- arch/mips/configs/ci20_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+Changes in v3:
+- Dropped accepted patches by Steve
+- Split the common rename patch to rename and refactor patches
+- Rebase on clk/clk-qcom and move yaml binding to .../bindings/clock/qcom,gcc-sm8250.yaml
+- Fix comments form Steve on gcc-sm8250 clk driver
 
-diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
-index be41df2..3aadb2e 100644
---- a/arch/mips/configs/ci20_defconfig
-+++ b/arch/mips/configs/ci20_defconfig
-@@ -1,3 +1,5 @@
-+CONFIG_SMP=y
-+CONFIG_NR_CPUS=2
- # CONFIG_LOCALVERSION_AUTO is not set
- CONFIG_KERNEL_XZ=y
- CONFIG_SYSVIPC=y
+Taniya Das (5):
+  clk: qcom: clk-alpha-pll: Use common names for defines
+  clk: qcom: clk-alpha-pll: Refactor trion PLL
+  clk: qcom: clk-alpha-pll: Add support for controlling Lucid PLLs
+  dt-bindings: clock: Add SM8250 GCC clock bindings
+  clk: qcom: gcc: Add global clock controller driver for SM8250
+
+ .../bindings/clock/qcom,gcc-sm8250.yaml       |   72 +
+ drivers/clk/qcom/Kconfig                      |    7 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/clk-alpha-pll.c              |  264 +-
+ drivers/clk/qcom/clk-alpha-pll.h              |   12 +
+ drivers/clk/qcom/gcc-sm8250.c                 | 3690 +++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-sm8250.h   |  271 ++
+ 7 files changed, 4268 insertions(+), 49 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml
+ create mode 100644 drivers/clk/qcom/gcc-sm8250.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-sm8250.h
+
 -- 
-2.7.4
+2.24.1
 
