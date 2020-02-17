@@ -2,66 +2,149 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5680B161264
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Feb 2020 13:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA41516135C
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Feb 2020 14:30:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728319AbgBQM6K (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 17 Feb 2020 07:58:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40152 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727803AbgBQM6K (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 17 Feb 2020 07:58:10 -0500
-Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A3FC620578;
-        Mon, 17 Feb 2020 12:58:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581944289;
-        bh=z2e1rZOv+WP3xOWtzUPRXPB3lFkCpqMrWk4ubOcCo44=;
-        h=Date:From:To:Cc:Subject:From;
-        b=aL4F/29WL7mbuG9SguO3G5HQxrqEIVSTUkyMgGSu99aYMYGHv3OV70n74elBhmFgx
-         karA6pL1mVKk2lUwngA/EV2fHb9f05hLamPz0RFPs1sUmQZV8uOxX9ulVeJ7R4yzuI
-         o7wDXxYs7KBUbOqrMbTiGqMbURkG9sCLAOjel070=
-Date:   Mon, 17 Feb 2020 20:58:01 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Fabio Estevam <festevam@gmail.com>, Stefan Agner <stefan@agner.ch>,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] i.MX clock fixes for 5.6
-Message-ID: <20200217125759.GA3671@dragon>
+        id S1728558AbgBQNaQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 17 Feb 2020 08:30:16 -0500
+Received: from mail-il1-f193.google.com ([209.85.166.193]:41720 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727089AbgBQNaQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Feb 2020 08:30:16 -0500
+Received: by mail-il1-f193.google.com with SMTP id f10so14217437ils.8;
+        Mon, 17 Feb 2020 05:30:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oKZige4m/AoNTTthLZdSUaeHyHzQ4UT6ng0N8s0kzVk=;
+        b=McIHR4HqYVgFbC6brytrdSkaOQ3tJKrEhWb45DEuUAYXqoA+IO8qwVbx2KpqFr9DUb
+         o6njCVJFfIXDCRBfv711DuWgjJphYFThWmvOv9evpZ3TsdOV/Rk1ZPIqXxZLs6Sainmc
+         S1zxOVLhQRiOwSH1GMfEcsuD2KtXgUMJrRMViVoq/UZL0HZt6ERELVgYoFml+6uggMFX
+         cGLzk6Weomiv0gAG8h5grNeHOOHNF15TVuokP0GoIDIxVc+bnGX1DzNdMRar+5yqfEM3
+         hAyOKF3b1iCXri88ClHayFeOvwp5Xp3aYia+cJ90T4xMdC1SDfrtBTehcKf/VtSEzeK+
+         LQjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oKZige4m/AoNTTthLZdSUaeHyHzQ4UT6ng0N8s0kzVk=;
+        b=oIZqnHx1fIU+6fY18zzifRFeJ/BZ68kZCa7SuKd3aZBWxmd4psvlmt72o+4cP3GmCT
+         FWCNkAEPVpnDh/3ghoAfPceiBCay3iq6IaIMySMcJztQdNiaFWK+sB8l5bdpqwLsQ9+r
+         A36EsXlEE8DU3w+x9yZE2tUkb3Q2eJ5KOk5vV/VBKMCjss60fciMzBx5pk/atwlBoVnz
+         i1aXx6Q6QM3wZup0GnpSTM85mFytq6MgQTBlBK36Z69M67O4M3yXTgNyRo8bI6wyMFRm
+         xeVVQ2+2dPmDZYyBq1dNR3rF+Jl11sqIG3aIbVYCYokR9LQUfjUZNdfZZeiw8ziV0brE
+         d7Ww==
+X-Gm-Message-State: APjAAAUifIlLy4phR3wlBwdvFy54gijNJXuX7y3COCU3sToiu8obnPPc
+        UXhWxw4qJqRjlwDaKwYLaKb7rEl6F5OJ8t9ZFiI=
+X-Google-Smtp-Source: APXvYqz/hD3abK5iZXSi3wPYlOwN8FrT1CFYkRgJTPJUClxe+fHEd7f1yn8unX05mzbhhqRWfk9p5Hb28CxRNQtgwpQ=
+X-Received: by 2002:a92:85c1:: with SMTP id f184mr14075867ilh.221.1581946214224;
+ Mon, 17 Feb 2020 05:30:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20200216173446.1823-1-linux.amoon@gmail.com> <20200216173446.1823-4-linux.amoon@gmail.com>
+ <1jmu9hzlo2.fsf@starbuckisacylon.baylibre.com>
+In-Reply-To: <1jmu9hzlo2.fsf@starbuckisacylon.baylibre.com>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Mon, 17 Feb 2020 19:00:04 +0530
+Message-ID: <CANAwSgSaQgU=H3h0S9deT11HA8z9R=Fhy5Kawii9tSBxKf2Wgw@mail.gmail.com>
+Subject: Re: [PATCHv1 3/3] clk: meson: g12a: set cpu clock divider flags too CLK_IS_CRITICAL
+To:     Jerome Brunet <jbrunet@baylibre.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-amlogic@lists.infradead.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
+Hi Jeronme,
 
-  Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
+Thanks for your  review comments.
+On Mon, 17 Feb 2020 at 13:32, Jerome Brunet <jbrunet@baylibre.com> wrote:
+>
+>
+> On Sun 16 Feb 2020 at 18:34, Anand Moon <linux.amoon@gmail.com> wrote:
+>
+> > Odroid N2 would fail to boot using microSD unless we set
+> > cpu freq clk divider flags to CLK_IS_CRITICAL to avoid stalling of
+> > cpu when booting, most likely because of PWM module linked to
+>
+> Where did you see a PWM ?
+>
+> > the CPU for DVFS is getting disabled in between the late_init call,
+>
+> between the late_init call and what ?
+>
+> > so gaiting the clock source shuts down the power to the codes.
+>
+> what code ?
+>
+Sorry, I was really upset about my self.
+I tried to improvise this commit message based on previous mails.
+sorry about that.
 
-are available in the Git repository at:
+> > Setting clk divider flags to CLK_IS_CRITICAL help resolve the issue.
+> >
+> > Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> > Cc: Jerome Brunet <jbrunet@baylibre.com>
+> > Cc: Neil Armstrong <narmstrong@baylibre.com>
+> > Suggested-by: Neil Armstrong <narmstrong@baylibre.com>
+> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > ---
+> >
+> > Following Neil's suggestion, I have prepared this patch.
+> > https://patchwork.kernel.org/patch/11177441/#22964889
+> > ---
+> >  drivers/clk/meson/g12a.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/clk/meson/g12a.c b/drivers/clk/meson/g12a.c
+> > index d2760a021301..accae3695fe5 100644
+> > --- a/drivers/clk/meson/g12a.c
+> > +++ b/drivers/clk/meson/g12a.c
+> > @@ -283,6 +283,7 @@ static struct clk_fixed_factor g12a_fclk_div2_div = {
+> >               .ops = &clk_fixed_factor_ops,
+> >               .parent_hws = (const struct clk_hw *[]) { &g12a_fixed_pll.hw },
+> >               .num_parents = 1,
+> > +             .flags = CLK_IS_CRITICAL,
+>
+> This makes no sense for because:
+> * This clock cannot gate and none of its parents can either. IOW, the
+> output of this clock is never disabled.
+> * I cannot guess the relation between fdiv2 and the commit description
+>
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/imx-clk-fixes-5.6
+Ok I check this code changes is not needed for this fix.
 
-for you to fetch changes up to 5eb40257047fb11085d582b7b9ccd0bffe900726:
+> >       },
+> >  };
+> >
+> > @@ -681,7 +682,7 @@ static struct clk_regmap g12b_cpub_clk = {
+> >                       &g12a_sys_pll.hw
+> >               },
+> >               .num_parents = 2,
+> > -             .flags = CLK_SET_RATE_PARENT,
+> > +             .flags = CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
+>
+> Why not. Neil what do you think of this ?
+> If nothing is claiming this clock and enabling it then I suppose it
+> could make sense.
+>
+I would like core developers to handle this.
+Sorry for the noise.
 
-  clk: imx8mn: Fix incorrect clock defines (2020-02-17 15:18:00 +0800)
-
-----------------------------------------------------------------
-i.MX clock fixes for 5.6:
-
-A fix on i.MX8MN I2C4 and UART1 clock IDs, which clash with PWM2 and
-PWM3 ID.  This bug makes I2C4 and UART1 device in i.MX8MN DT point to
-PWM2 and PWM3 clock.
-
-----------------------------------------------------------------
-Anson Huang (1):
-      clk: imx8mn: Fix incorrect clock defines
-
- include/dt-bindings/clock/imx8mn-clock.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+-Anand
+>
+> >       },
+> >  };
+>
