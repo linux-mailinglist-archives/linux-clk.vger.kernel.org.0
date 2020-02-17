@@ -2,203 +2,138 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D2961608DC
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Feb 2020 04:27:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55BB71608A3
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Feb 2020 04:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728088AbgBQD0y (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 16 Feb 2020 22:26:54 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:46250 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728087AbgBQD0r (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 16 Feb 2020 22:26:47 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 3E1FB1A1F30;
-        Mon, 17 Feb 2020 04:26:45 +0100 (CET)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 37F211A1F3D;
-        Mon, 17 Feb 2020 04:26:35 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 87FD0402E5;
-        Mon, 17 Feb 2020 11:26:23 +0800 (SGT)
-From:   Joakim Zhang <qiangqing.zhang@nxp.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        Anson.Huang@nxp.com, leonard.crestez@nxp.com,
-        daniel.baluta@nxp.com, aisheng.dong@nxp.com, peng.fan@nxp.com,
-        fugang.duan@nxp.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Joakim Zhang <qiangqing.zhang@nxp.com>
-Subject: [PATCH 7/7] arch: arm64: dts: imx8qxp: add device node for CAN in ADMA SS
-Date:   Mon, 17 Feb 2020 11:19:21 +0800
-Message-Id: <1581909561-12058-8-git-send-email-qiangqing.zhang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1581909561-12058-1-git-send-email-qiangqing.zhang@nxp.com>
-References: <1581909561-12058-1-git-send-email-qiangqing.zhang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726591AbgBQDXm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 16 Feb 2020 22:23:42 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:39271 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726498AbgBQDXl (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 16 Feb 2020 22:23:41 -0500
+Received: by mail-pj1-f67.google.com with SMTP id e9so6550159pjr.4;
+        Sun, 16 Feb 2020 19:23:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SdpdyX+qh74e/x9oRj15IViPzfI9gUxu2+ZyneQM7WE=;
+        b=Lp1S4bjFv9z7K/N+snC61ek2luA4OaF5fnbGKXm5z/o1JTxjD8zDsGjtFex6nIWqmy
+         p69m5mVIJcetEK1GN6SLSDdZQGpvKnjc57W4TGceqNZSHpVMbK1GkygNgh5dlp9CrpbS
+         WKftJ2tehC5z79XvLAPLhQLQIP7o6Qlsi1KorO4aTOXG/nExQyz/Vo2htgGLqS/1bkcG
+         G/qkUXDGA576plhbVbcpnnB/HScdFpqaVA0jAtLjK4S1PaJFfZ0MvKRMVUktNgoS1Hg3
+         uQHZG4lwpgtn+EJOEH15kHXyB7MWpQxrdW1aX0Fq48lpf0NfVh+E8xJLtkcNFmrlEjJf
+         dPYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SdpdyX+qh74e/x9oRj15IViPzfI9gUxu2+ZyneQM7WE=;
+        b=tm7xkT/HL2iu5E01gtaSSaLTqN7i2VMSMOZ+zdGQKBLzi1sDz2hOaY8lxWrZdzMTja
+         d5gCibvrQyorRbe6GQ+JmeniRn6xpyrwOgqptMaYI2fEFzaPr5rvkyyfkhrDBbP7gCRo
+         8T3NupvGwtH9w59DGG24bUzhkafSq5ZGnuwkcKNogCAOa4X2HlMf25hoCA8mZkH5PAuS
+         B0EMCD8+bsf2Zq0zwol0mt9ejrPz+yjx00xvLOk2hjM5cHinPiQs44e0kVgrRASDVklX
+         glyMPE3mwynJIydOsxM78Prysh7BrJ7aMRCpZru0xKPSfOX9ELr2Lz3t93jwPsrsKXjo
+         ff7Q==
+X-Gm-Message-State: APjAAAXa7Kqm3F43ueYAkCuMQeH+r3IUER+/WUgdL7gXsLQSz79RkXnp
+        mIIW1pxrbYfB/PdMcRvb/0k=
+X-Google-Smtp-Source: APXvYqxw58LR20P0nOqiPgbVPoG6FQmjzXPIHV7Z72OMm+op/MjkJsBl2KV1Xb9zdJN1PGWPWW70dw==
+X-Received: by 2002:a17:902:5a42:: with SMTP id f2mr14278395plm.19.1581909820990;
+        Sun, 16 Feb 2020 19:23:40 -0800 (PST)
+Received: from ubt.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id 76sm14644383pfx.97.2020.02.16.19.23.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Feb 2020 19:23:40 -0800 (PST)
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>
+Subject: [PATCH v4 0/7] Add clocks for Unisoc's SC9863A
+Date:   Mon, 17 Feb 2020 11:23:14 +0800
+Message-Id: <20200217032321.15164-1-zhang.lyra@gmail.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add device node for CAN in ADMA SS.
+From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 
-Signed-off-by: Joakim Zhang <qiangqing.zhang@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8qxp-mek.dts | 47 +++++++++++++++
- arch/arm64/boot/dts/freescale/imx8qxp.dtsi    | 59 +++++++++++++++++++
- 2 files changed, 106 insertions(+)
+Add SC9863A specific clock driver and devicetree bindings for it,
+this patch add to support the new way of specifying parents
+without name strings of clocks.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-index f88402ee650c..72a45dd7129e 100644
---- a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-@@ -28,6 +28,25 @@
- 		gpio = <&lsio_gpio4 19 GPIO_ACTIVE_HIGH>;
- 		enable-active-high;
- 	};
-+
-+	reg_can_en: regulator-can-en {
-+		compatible = "regulator-fixed";
-+		regulator-name = "can-en";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		gpio = <&pca6416 3 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
-+	reg_can_stby: regulator-can-stby {
-+		compatible = "regulator-fixed";
-+		regulator-name = "can-stby";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		gpio = <&pca6416 5 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		vin-supply = <&reg_can_en>;
-+	};
- };
- 
- &cm40_i2c {
-@@ -80,6 +99,20 @@
- 	};
- };
- 
-+&adma_flexcan0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_flexcan0>;
-+	xceiver-supply = <&reg_can_stby>;
-+	status = "okay";
-+};
-+
-+&adma_flexcan1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_flexcan1>;
-+	xceiver-supply = <&reg_can_stby>;
-+	status = "okay";
-+};
-+
- &adma_i2c1 {
- 	#address-cells = <1>;
- 	#size-cells = <0>;
-@@ -207,6 +240,20 @@
- 		>;
- 	};
- 
-+	pinctrl_flexcan0: flexcan0grp {
-+		fsl,pins = <
-+			IMX8QXP_FLEXCAN0_TX_ADMA_FLEXCAN0_TX			0x00000021
-+			IMX8QXP_FLEXCAN0_RX_ADMA_FLEXCAN0_RX			0x00000021
-+		>;
-+	};
-+
-+	pinctrl_flexcan1: flexcan1grp {
-+		fsl,pins = <
-+			IMX8QXP_FLEXCAN1_TX_ADMA_FLEXCAN1_TX			0x00000021
-+			IMX8QXP_FLEXCAN1_RX_ADMA_FLEXCAN1_RX			0x00000021
-+		>;
-+	};
-+
- 	pinctrl_ioexp_rst: ioexp_rst_grp {
- 		fsl,pins = <
- 			IMX8QXP_SPI2_SDO_LSIO_GPIO1_IO01			0x06000021
-diff --git a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-index cd10519eced7..f549e33d1c82 100644
---- a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-@@ -34,6 +34,9 @@
- 		serial1 = &adma_lpuart1;
- 		serial2 = &adma_lpuart2;
- 		serial3 = &adma_lpuart3;
-+		can0 = &adma_flexcan0;
-+		can1 = &adma_flexcan1;
-+		can2 = &adma_flexcan2;
- 	};
- 
- 	cpus {
-@@ -384,6 +387,62 @@
- 			power-domains = <&pd IMX_SC_R_I2C_3>;
- 			status = "disabled";
- 		};
-+
-+		adma_flexcan0: can@5a8d0000 {
-+			compatible = "fsl,imx8qxp-flexcan", "fsl,imx8qm-flexcan";
-+			reg = <0x5a8d0000 0x10000>;
-+			interrupts = <GIC_SPI 235 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-parent = <&gic>;
-+			clocks = <&adma_lpcg IMX_ADMA_LPCG_CAN0_IPG_CLK>,
-+				 <&adma_lpcg IMX_ADMA_LPCG_CAN0_IPG_PE_CLK>;
-+			clock-names = "ipg", "per";
-+			assigned-clocks = <&clk IMX_ADMA_CAN0_CLK>;
-+			assigned-clock-rates = <40000000>;
-+			power-domains = <&pd IMX_SC_R_CAN_0>;
-+			/* SLSlice[4] */
-+			fsl,clk-source = <0>;
-+			status = "disabled";
-+		};
-+
-+		adma_flexcan1: can@5a8e0000 {
-+			compatible = "fsl,imx8qxp-flexcan", "fsl,imx8qm-flexcan";
-+			reg = <0x5a8e0000 0x10000>;
-+			interrupts = <GIC_SPI 236 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-parent = <&gic>;
-+			/* CAN0 clock and PD is shared among all CAN instances
-+			 * as CAN1 shares CAN0's clock and to enable CAN0's
-+			 * clock it has to be powered on.
-+			 */
-+			clocks = <&adma_lpcg IMX_ADMA_LPCG_CAN0_IPG_CLK>,
-+				 <&adma_lpcg IMX_ADMA_LPCG_CAN0_IPG_PE_CLK>;
-+			clock-names = "ipg", "per";
-+			assigned-clocks = <&clk IMX_ADMA_CAN0_CLK>;
-+			assigned-clock-rates = <40000000>;
-+			power-domains = <&pd IMX_SC_R_CAN_1>;
-+			/* SLSlice[4] */
-+			fsl,clk-source = <0>;
-+			status = "disabled";
-+		};
-+
-+		adma_flexcan2: can@5a8f0000 {
-+			compatible = "fsl,imx8qxp-flexcan", "fsl,imx8qm-flexcan";
-+			reg = <0x5a8f0000 0x10000>;
-+			interrupts = <GIC_SPI 237 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-parent = <&gic>;
-+			/* CAN0 clock and PD is shared among all CAN instances
-+			 * as CAN2 shares CAN0's clock and to enable CAN0's
-+			 * clock it has to be powered on.
-+			 */
-+			clocks = <&adma_lpcg IMX_ADMA_LPCG_CAN0_IPG_CLK>,
-+				 <&adma_lpcg IMX_ADMA_LPCG_CAN0_IPG_PE_CLK>;
-+			clock-names = "ipg", "per";
-+			assigned-clocks = <&clk IMX_ADMA_CAN0_CLK>;
-+			assigned-clock-rates = <40000000>;
-+			power-domains = <&pd IMX_SC_R_CAN_2>;
-+			/* SLSlice[4] */
-+			fsl,clk-source = <0>;
-+			status = "disabled";
-+		};
- 	};
- 
- 	conn_subsys: bus@5b000000 {
+Also this patchset added support gate clock for pll which need to
+wait a certain time for stable after being switched on.
+
+Changes from v3:
+* Rebased onto v5.6-rc1.
+
+Changes from v2:
+* Addressed comments from Stephen:
+- Remove ununsed header file from sc9863a-clk.c;
+- Added comments for clocks which were marked with CLK_IGNORE_UNUSED,
+  and removed some unnecessary CLK_IGNORE_UNUSED;
+- Added error checking for sprd_clk_regmap_init().
+
+* Addressed comments from Rob:
+- Put some clocks under syscon nodes, since these clocks have the same
+  physical address base with the syscon;
+- Added clocks maxItems and listed out clock-names.
+
+* Added Rob's reviewed-by on patch 4.
+
+Changes from v1:
+* Addressed comments:
+- Removed redefine things;
+- Switched DT bindings to yaml schema;
+- Added macros for the new way of specifying clk parents; 
+- Switched to use the new way of specifying clk parents;
+- Clean CLK_IGNORE_UNUSED flags for some SC9863A clocks;
+- Dropped the module alias;
+- Use device_get_match_data() instead of of_match_node();
+
+* Added Rob's Acked-by on patch 2.
+
+Chunyan Zhang (6):
+  dt-bindings: clk: sprd: rename the common file name sprd.txt to SoC
+    specific
+  dt-bindings: clk: sprd: add bindings for sc9863a clock controller
+  clk: sprd: Add dt-bindings include file for SC9863A
+  clk: sprd: Add macros for referencing parents without strings
+  clk: sprd: support to get regmap from parent node
+  clk: sprd: add clocks support for SC9863A
+
+Xiaolong Zhang (1):
+  clk: sprd: add gate for pll clocks
+
+ .../clock/{sprd.txt => sprd,sc9860-clk.txt}   |    2 +-
+ .../bindings/clock/sprd,sc9863a-clk.yaml      |  103 +
+ drivers/clk/sprd/Kconfig                      |    8 +
+ drivers/clk/sprd/Makefile                     |    1 +
+ drivers/clk/sprd/common.c                     |   10 +-
+ drivers/clk/sprd/composite.h                  |   39 +-
+ drivers/clk/sprd/div.h                        |   20 +-
+ drivers/clk/sprd/gate.c                       |   17 +
+ drivers/clk/sprd/gate.h                       |  120 +-
+ drivers/clk/sprd/mux.h                        |   28 +-
+ drivers/clk/sprd/pll.h                        |   55 +-
+ drivers/clk/sprd/sc9863a-clk.c                | 1772 +++++++++++++++++
+ include/dt-bindings/clock/sprd,sc9863a-clk.h  |  334 ++++
+ 13 files changed, 2455 insertions(+), 54 deletions(-)
+ rename Documentation/devicetree/bindings/clock/{sprd.txt => sprd,sc9860-clk.txt} (98%)
+ create mode 100644 Documentation/devicetree/bindings/clock/sprd,sc9863a-clk.yaml
+ create mode 100644 drivers/clk/sprd/sc9863a-clk.c
+ create mode 100644 include/dt-bindings/clock/sprd,sc9863a-clk.h
+
 -- 
-2.17.1
+2.20.1
 
