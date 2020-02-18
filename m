@@ -2,65 +2,63 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E4BA162548
-	for <lists+linux-clk@lfdr.de>; Tue, 18 Feb 2020 12:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D582B162579
+	for <lists+linux-clk@lfdr.de>; Tue, 18 Feb 2020 12:25:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726415AbgBRLJY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 18 Feb 2020 06:09:24 -0500
-Received: from inva021.nxp.com ([92.121.34.21]:49256 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726640AbgBRLJX (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 18 Feb 2020 06:09:23 -0500
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 1AD3B2037CE;
-        Tue, 18 Feb 2020 12:09:22 +0100 (CET)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 0B40E2037A7;
-        Tue, 18 Feb 2020 12:09:15 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 65E3C4029B;
-        Tue, 18 Feb 2020 19:09:06 +0800 (SGT)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        leonard.crestez@nxp.com, abel.vesa@nxp.com, peng.fan@nxp.com,
-        ping.bai@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH 3/3] clk: imx8mn: Remove unused includes
-Date:   Tue, 18 Feb 2020 19:03:26 +0800
-Message-Id: <1582023806-6261-3-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1582023806-6261-1-git-send-email-Anson.Huang@nxp.com>
-References: <1582023806-6261-1-git-send-email-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726338AbgBRLZ2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 18 Feb 2020 06:25:28 -0500
+Received: from albert.telenet-ops.be ([195.130.137.90]:42654 "EHLO
+        albert.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726360AbgBRLZ2 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 18 Feb 2020 06:25:28 -0500
+Received: from ramsan ([84.195.182.253])
+        by albert.telenet-ops.be with bizsmtp
+        id 4BRS2200G5USYZQ06BRS3E; Tue, 18 Feb 2020 12:25:26 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1j410I-00043Y-73; Tue, 18 Feb 2020 12:25:26 +0100
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1j410I-0001Wp-5P; Tue, 18 Feb 2020 12:25:26 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] clk: renesas: Remove use of ARCH_R8A7796
+Date:   Tue, 18 Feb 2020 12:25:25 +0100
+Message-Id: <20200218112525.5834-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-There is nothing in use from init.h/of.h, remove them.
+CONFIG_ARCH_R8A7795 was split in CONFIG_ARCH_R8A77950 and
+CONFIG_ARCH_R8A77951 in commit b925adfceb529389 ("soc: renesas: Add
+ARCH_R8A7795[01] for existing R-Car H3"), so its users can be removed.
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/clk/imx/clk-imx8mn.c | 2 --
- 1 file changed, 2 deletions(-)
+To be queued in clk-renesas for v5.7.
+---
+ drivers/clk/renesas/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/imx/clk-imx8mn.c b/drivers/clk/imx/clk-imx8mn.c
-index 67b826d..fb47f86 100644
---- a/drivers/clk/imx/clk-imx8mn.c
-+++ b/drivers/clk/imx/clk-imx8mn.c
-@@ -6,10 +6,8 @@
- #include <dt-bindings/clock/imx8mn-clock.h>
- #include <linux/clk-provider.h>
- #include <linux/err.h>
--#include <linux/init.h>
- #include <linux/io.h>
- #include <linux/module.h>
--#include <linux/of.h>
- #include <linux/of_address.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
+diff --git a/drivers/clk/renesas/Kconfig b/drivers/clk/renesas/Kconfig
+index 250d8165167aa013..879d96ead06b62ff 100644
+--- a/drivers/clk/renesas/Kconfig
++++ b/drivers/clk/renesas/Kconfig
+@@ -20,7 +20,7 @@ config CLK_RENESAS
+ 	select CLK_R8A7791 if ARCH_R8A7791 || ARCH_R8A7793
+ 	select CLK_R8A7792 if ARCH_R8A7792
+ 	select CLK_R8A7794 if ARCH_R8A7794
+-	select CLK_R8A7795 if ARCH_R8A77950 || ARCH_R8A77951 || ARCH_R8A7795
++	select CLK_R8A7795 if ARCH_R8A77950 || ARCH_R8A77951
+ 	select CLK_R8A77960 if ARCH_R8A77960
+ 	select CLK_R8A77961 if ARCH_R8A77961
+ 	select CLK_R8A77965 if ARCH_R8A77965
 -- 
-2.7.4
+2.17.1
 
