@@ -2,192 +2,125 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ABE6164133
-	for <lists+linux-clk@lfdr.de>; Wed, 19 Feb 2020 11:05:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A171641B0
+	for <lists+linux-clk@lfdr.de>; Wed, 19 Feb 2020 11:23:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726453AbgBSKFy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 19 Feb 2020 05:05:54 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:40488 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726270AbgBSKFy (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Feb 2020 05:05:54 -0500
-Received: by mail-lf1-f67.google.com with SMTP id c23so16948682lfi.7
-        for <linux-clk@vger.kernel.org>; Wed, 19 Feb 2020 02:05:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Gxi6KYGr5mqVq8fzO7WJDSPc3JwpyT1jXF3qnuigAWw=;
-        b=v3+FsbmoIQQtOkkzrQpyy22SkRwnx1+JS1E8I/n6hdNh7XNG38hYWpByYwJCPR3P6j
-         RXFkhWnqaUc+aDe8Ilzuqx0w2yjhbP6zBKDI4CwyRItv4kd/Hs9YY+PSODOIl759LzBK
-         MC9XLSnd78vMatYpWiiwc+SGX56ttu5gec3GAdgCjHCAI7xIa3iwtOZCIgM2qxpjSZG0
-         oDIG3lMgUbtvDWdJCGClZmBsE23H+n4/MVeQIVFJCvayqCFt2yS0CFHXTRDOwsO3+pRv
-         71/tuKc+sXQKdd6ZNRHosnMDomluZTD2igpF7xciNDqfAtYSN49QDdipfZIcNKP0qZyh
-         C2xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Gxi6KYGr5mqVq8fzO7WJDSPc3JwpyT1jXF3qnuigAWw=;
-        b=a1DXmGOZPJLRl+SNt4ppsRZPQ5dHlDD1HcrbEpgzqRfLpj35LvFyE2WfG1prV78K7t
-         1dnfoXr9gBDlQKnnfil7gqSawqNgB1+CeRRpZJp5kJP00HDJYvtTK3DPtD5ZySqeY4K3
-         IYosxvWaoPMc/xzQf2cUOFtiMeQIoqz3NiTMiLQ/H6k3w+pnGVqFALamgT+6Wc2hSQPs
-         7n0zwAGsQw4/BWsXFCwPDM2kAGYJCs2iywiuFNHgd3AspoV4ntsDcu1yscRhBQBsL9Dr
-         Nw/pzNMSTCsAez0z/QvMofFUmgoZRYmjixEeyNB444tFfDF0VHX3lO8JD6ZWFZe4XWdx
-         Y6Qw==
-X-Gm-Message-State: APjAAAVb+AyHam/NA0rKpaxqfGdO/L6q5Dv/3+m5k0X5tzUXfiXzJHFO
-        oBQA2Te7A0dntRcW7Odve8VfkhFY6V4=
-X-Google-Smtp-Source: APXvYqx3iQsjpEqeXi8xn4Hpkmoi/scOdToBb9tKqNTemDoaHLz6+/2iFWvABtoCopSlAwxaWfF0Fw==
-X-Received: by 2002:a05:6512:3f6:: with SMTP id n22mr13249538lfq.59.1582106751346;
-        Wed, 19 Feb 2020 02:05:51 -0800 (PST)
-Received: from genomnajs.ideon.se ([85.235.10.227])
-        by smtp.gmail.com with ESMTPSA id r2sm1079982lff.63.2020.02.19.02.05.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2020 02:05:50 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 3/3 v2] clk: versatile: Add device tree probing for IM-PD1 clocks
-Date:   Wed, 19 Feb 2020 11:05:43 +0100
-Message-Id: <20200219100543.78424-3-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200219100543.78424-1-linus.walleij@linaro.org>
-References: <20200219100543.78424-1-linus.walleij@linaro.org>
+        id S1726270AbgBSKXN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 19 Feb 2020 05:23:13 -0500
+Received: from mail-eopbgr40061.outbound.protection.outlook.com ([40.107.4.61]:3302
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726617AbgBSKXN (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 19 Feb 2020 05:23:13 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IyzqVx1DYcKAx5uk+u9b2TVeX0MYd+8fIVNq8v72KMI8GSfllGBeCzVfiF6Nq8V5yko+e6/aLqGt3LwBLvG8TScCqxcSf7EmEgiZI+08Ryw+2zY4NqT7OJHzCy15QWWj26T42CQ4q07137Cyog9PVxbOUVP9oL6JDRF6ZAA7pSaeX0ArsJbN8Q3BQjrGzDPKLoSbcOb4rW6xf3pJQvfkeYaW1jT+ueHznAwAXOXccOxtwJHxx1FuFUwL4E+9mxosbbdnuS+q/PRGwpqQB73bcO/AdsR+9znTPIh1TtzwxQu4UpNdlBQt3mL9QA5b0F62G2Oj484/RwgEveZrn5hjEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qUs0+8jKfz67XE1EDU0COV3hY0F1wHrKeEL5stXCfh4=;
+ b=dLERd8OlQEae1PdD55jYvQFqDsHy4KiiUv7WZjnRK/YN3UzjKX/5H1mf+n5ly6G3rNxW8MtEJdtRBb+hcihdaWuGLsG63GPFH9OiGLDPdKGAA0rHHcXyF7Vj9iFFBuCT0kIcwAzo4KgbrtEH0ErhrSsabGs20yDBLNGln1FsWzB80fqFy+21dGPSwHxXA1ZY9gSnzYTQ4CvJtxHpVwhbgLP1u/GsIIU/RuOiEnn5PPXuy+T80WZbPnnNwMkejDuQ+PutbENbprW6zjv/HuteoWJr6G98YCl5xQDMLFS+Jvf/HXbt1qepBOkK9Y/Eqb12lFet+tW6001nkyHkc5tIYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qUs0+8jKfz67XE1EDU0COV3hY0F1wHrKeEL5stXCfh4=;
+ b=eDnN/5gAkDA4EqKLXXJkynbU7v5k91mUUAuN0McGNI/5X7WG9ruOyvvY30TZ2TA0UrYnx/kxpUxFxnpFZkIex9dqaw4f9//Jdxs9c9bJ0ECdBtPI/kOJ/l4nreiXVVyJI56QYhyzZirfag4wSrj4PrEOrJ3G5ZXQtMEcJ8DmB2Q=
+Authentication-Results: spf=none (sender IP is )
+ smtp.mailfrom=peng.fan@nxp.com; 
+Received: from AM0PR04MB4481.eurprd04.prod.outlook.com (52.135.147.15) by
+ AM0PR04MB4676.eurprd04.prod.outlook.com (52.135.152.10) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2729.31; Wed, 19 Feb 2020 10:23:08 +0000
+Received: from AM0PR04MB4481.eurprd04.prod.outlook.com
+ ([fe80::91e2:17:b3f4:d422]) by AM0PR04MB4481.eurprd04.prod.outlook.com
+ ([fe80::91e2:17:b3f4:d422%3]) with mapi id 15.20.2729.032; Wed, 19 Feb 2020
+ 10:23:08 +0000
+From:   peng.fan@nxp.com
+To:     sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, abel.vesa@nxp.com, leonard.crestez@nxp.com
+Cc:     kernel@pengutronix.de, linux-imx@nxp.com, aisheng.dong@nxp.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, anson.huang@nxp.com,
+        ping.bai@nxp.com, l.stach@pengutronix.de,
+        Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH RESEND v3 0/4] clk: imx: imx8m: fix a53 cpu clock
+Date:   Wed, 19 Feb 2020 18:17:05 +0800
+Message-Id: <1582107429-21123-1-git-send-email-peng.fan@nxp.com>
+X-Mailer: git-send-email 2.7.4
+Content-Type: text/plain
+X-ClientProxiedBy: HKAPR04CA0014.apcprd04.prod.outlook.com
+ (2603:1096:203:d0::24) To AM0PR04MB4481.eurprd04.prod.outlook.com
+ (2603:10a6:208:70::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: from localhost.localdomain (119.31.174.66) by HKAPR04CA0014.apcprd04.prod.outlook.com (2603:1096:203:d0::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.2729.23 via Frontend Transport; Wed, 19 Feb 2020 10:23:04 +0000
+X-Mailer: git-send-email 2.7.4
+X-Originating-IP: [119.31.174.66]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 5e70990e-8b29-43ee-7a65-08d7b525b6e2
+X-MS-TrafficTypeDiagnostic: AM0PR04MB4676:|AM0PR04MB4676:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM0PR04MB46769F0274F66B552AEA784588100@AM0PR04MB4676.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-Forefront-PRVS: 0318501FAE
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(366004)(39860400002)(396003)(136003)(189003)(199004)(6512007)(9686003)(86362001)(81166006)(36756003)(6486002)(5660300002)(8936002)(8676002)(316002)(2906002)(478600001)(81156014)(66946007)(66476007)(66556008)(52116002)(186003)(69590400006)(26005)(6506007)(16526019)(4326008)(956004)(2616005)(32563001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB4676;H:AM0PR04MB4481.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+Received-SPF: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wgbbEG2aSUB3dRoo7KwG0lokd86t6fsxg2NI3/H6xfTpjSVohyPv+xiD/D7bS/u3o6WDYmesSdrQKxX+Swl2uIQAaIwHGog2ZPAg/P5vMVSlyBBxqZMaOalSPlqJsH9ycRkB7bWGg4kDNtMwhAXwK2Ih8y9HxNZOSREF2BMvOxRJDYZpH9XxFzgykEVP9OAnS85L2dbOMeUPQHKznCI0rz4lB5CLQFtzyacoKGR0AnnG/5LfnO1MwqN9yv5Y0cXr4zGMmq/EHYMQQtZKF8xoMZRFFSay1/DvzCk3XRuNYIuNN7QMZSAlsQwF1btlKtRn8dcU+HaEZyHFQIEK1mtrNMsADrUkpRO3v7M/9qFk32hSg0DRsbM1MZWX4E8ijgxdPLCnWloq3mgh5I6bu/h360pMrooEgrXUpAEMsdygDVxBP6sg+wymZrj3XnGQDhE6NluHiXzbPZVqf6TMpQPB1J738ZHpBU8TfsPzYNrVQKH38pYITYl0VO5XAR2Fxr7Q+47kKMNE3Stp/fDSCq2uCufa3w6dDqvV3G5mvbzFOAa8/YH9HoKiSXPQjWF4z72A
+X-MS-Exchange-AntiSpam-MessageData: RSrON4Z9hRsWQV53vHUDoEPD6ZtFPrdPOAZTNejqhpSeBDY4tt5erMkD/udiRP7W4evltxdWfn9n8xEB3Vxdk5EN5TKpwgXLF6gET9GpaM9iIaWchbgHg1acKYCpQ6JYuE74KtmVSy2jQZbn9q7K5A==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e70990e-8b29-43ee-7a65-08d7b525b6e2
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2020 10:23:08.6325
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6rOrClj0yZtWOs2AXbMzKGo3fj3lSr7Hgs0OZUwRLYW6SUihlTJzeKZX5rhSKgJkswESyX0zCQ4fNgDsUtUxzA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4676
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-As we want to move these clocks over to probe from the device
-tree we add a device tree probing path.
+From: Peng Fan <peng.fan@nxp.com>
 
-The old platform data path will be deleted once we have the
-device tree overall code in place.
+V3:
+ Rebased to Shawn's for-next branch
+ Typo fix
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ChangeLog v1->v2:
-- Drop some __init tagging
-- Provide MODULE_DEVICE_TABLE()
-- Rewrote to use the same method with regmap as clk-icst.c
-- The reuse of clk-icst.c makes the clock probe using hw
-  and then it needs no special handling for clock output
-  names.
----
- drivers/clk/versatile/clk-icst.h  |  1 +
- drivers/clk/versatile/clk-impd1.c | 79 +++++++++++++++++++++++++++++++
- 2 files changed, 80 insertions(+)
+V2:
+ Fix i.MX8MP build
+ Update cover letter, i.MX7D not have this issue 
 
-diff --git a/drivers/clk/versatile/clk-icst.h b/drivers/clk/versatile/clk-icst.h
-index 1206f008c11a..1a119ef11066 100644
---- a/drivers/clk/versatile/clk-icst.h
-+++ b/drivers/clk/versatile/clk-icst.h
-@@ -11,6 +11,7 @@ enum icst_control_type {
- 	ICST_INTEGRATOR_AP_PCI, /* Odd bit pattern storage */
- 	ICST_INTEGRATOR_CP_CM_CORE, /* Only 8 bits of VDW and 3 bits of OD */
- 	ICST_INTEGRATOR_CP_CM_MEM, /* Only 8 bits of VDW and 3 bits of OD */
-+	ICST_INTEGRATOR_IM_PD1, /* Like the Versatile, all control bits */
- };
- 
- /**
-diff --git a/drivers/clk/versatile/clk-impd1.c b/drivers/clk/versatile/clk-impd1.c
-index 1991f15a5db9..b05da8516d4c 100644
---- a/drivers/clk/versatile/clk-impd1.c
-+++ b/drivers/clk/versatile/clk-impd1.c
-@@ -7,7 +7,11 @@
- #include <linux/clkdev.h>
- #include <linux/err.h>
- #include <linux/io.h>
-+#include <linux/platform_device.h>
- #include <linux/platform_data/clk-integrator.h>
-+#include <linux/module.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/regmap.h>
- 
- #include "icst.h"
- #include "clk-icst.h"
-@@ -175,3 +179,78 @@ void integrator_impd1_clk_exit(unsigned int id)
- 	kfree(imc->pclkname);
- }
- EXPORT_SYMBOL_GPL(integrator_impd1_clk_exit);
-+
-+static int integrator_impd1_clk_spawn(struct device *dev,
-+				      struct device_node *parent,
-+				      struct device_node *np)
-+{
-+	struct regmap *map;
-+	struct clk *clk = ERR_PTR(-EINVAL);
-+	const char *name = np->name;
-+	const char *parent_name;
-+	const struct clk_icst_desc *desc;
-+	int ret;
-+
-+	map = syscon_node_to_regmap(parent);
-+	if (IS_ERR(map)) {
-+		pr_err("no regmap for syscon IM-PD1 ICST clock parent\n");
-+		return PTR_ERR(map);
-+	}
-+
-+	if (of_device_is_compatible(np, "arm,impd1-vco1")) {
-+		desc = &impd1_icst1_desc;
-+	} else if (of_device_is_compatible(np, "arm,impd1-vco2")) {
-+		desc = &impd1_icst2_desc;
-+	} else {
-+		dev_err(dev, "not a clock node %s\n", name);
-+		return -ENODEV;
-+	}
-+
-+	parent_name = of_clk_get_parent_name(np, 0);
-+	clk = icst_clk_setup(NULL, desc, name, parent_name, map,
-+			     ICST_INTEGRATOR_IM_PD1);
-+	if (!IS_ERR(clk)) {
-+		of_clk_add_provider(np, of_clk_src_simple_get, clk);
-+		ret = 0;
-+	} else {
-+		dev_err(dev, "error setting up IM-PD1 ICST clock\n");
-+		ret = PTR_ERR(clk);
-+	}
-+
-+	return ret;
-+}
-+
-+static int integrator_impd1_clk_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
-+	struct device_node *child;
-+	int ret = 0;
-+
-+	for_each_available_child_of_node(np, child) {
-+		ret = integrator_impd1_clk_spawn(dev, np, child);
-+		if (ret)
-+			break;
-+	}
-+
-+	return ret;
-+}
-+
-+static const struct of_device_id impd1_syscon_match[] = {
-+	{ .compatible = "arm,im-pd1-syscon", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, impd1_syscon_match);
-+
-+static struct platform_driver impd1_clk_driver = {
-+	.driver = {
-+		.name = "impd1-clk",
-+		.of_match_table = impd1_syscon_match,
-+	},
-+	.probe  = integrator_impd1_clk_probe,
-+};
-+builtin_platform_driver(impd1_clk_driver);
-+
-+MODULE_AUTHOR("Linus Walleij <linusw@kernel.org>");
-+MODULE_DESCRIPTION("Arm IM-PD1 module clock driver");
-+MODULE_LICENSE("GPL v2");
+The A53 CCM clk root only accepts input up to 1GHz, CCM A53 root
+signoff timing is 1Ghz, however the A53 core which sources from CCM
+root could run above 1GHz which voilates the CCM.
+
+There is a CORE_SEL slice before A53 core, we need configure the
+CORE_SEL slice source from ARM PLL, not A53 CCM clk root.
+
+The A53 CCM clk root should only be used when need to change ARM PLL
+frequency.
+
+Peng Fan (4):
+  clk: imx: imx8mq: fix a53 cpu clock
+  clk: imx: imx8mm: fix a53 cpu clock
+  clk: imx: imx8mn: fix a53 cpu clock
+  clk: imx: imx8mp: fix a53 cpu clock
+
+ drivers/clk/imx/clk-imx8mm.c             | 16 ++++++++++++----
+ drivers/clk/imx/clk-imx8mn.c             | 16 ++++++++++++----
+ drivers/clk/imx/clk-imx8mp.c             | 16 ++++++++++++----
+ drivers/clk/imx/clk-imx8mq.c             | 16 ++++++++++++----
+ include/dt-bindings/clock/imx8mm-clock.h |  4 +++-
+ include/dt-bindings/clock/imx8mn-clock.h |  4 +++-
+ include/dt-bindings/clock/imx8mp-clock.h |  3 ++-
+ include/dt-bindings/clock/imx8mq-clock.h |  4 +++-
+ 8 files changed, 59 insertions(+), 20 deletions(-)
+
 -- 
-2.24.1
+2.16.4
 
