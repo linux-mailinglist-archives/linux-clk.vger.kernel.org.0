@@ -2,171 +2,310 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 743AF164114
-	for <lists+linux-clk@lfdr.de>; Wed, 19 Feb 2020 11:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F076C16412A
+	for <lists+linux-clk@lfdr.de>; Wed, 19 Feb 2020 11:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727001AbgBSKAW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 19 Feb 2020 05:00:22 -0500
-Received: from mail-eopbgr60089.outbound.protection.outlook.com ([40.107.6.89]:34030
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726963AbgBSKAV (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 19 Feb 2020 05:00:21 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gtlFd/FcrFOm+R75J4krxxW6kHY4bCj+Ekw7JTOPoRJB2HUjWQRtnPidhN6DTXZWNMqXXg0iXe5moMU5Vo6KIi22V55ozfBpvhS6RhNVWmYoqWQ8pDjyBO2LH5FLh2H3mSLhBiIVkWC5l8EYFuAqOqrcKuxQ9GHrQNBIJPTuVDEqPCFUpGAvZ+pj/rfHiY+XR5X0OzMpWaIB8YafM3tr0NZA6T6Cwde1yNeCCQEbl20ZDeSkgLcA7VRKi4tLjB5iKqpe2N1ngQgf/jE17HsjFN1RznsNe6PXVEeEj4w8tS9xRvabaRBb1sd6SR2+SNKJak8e/X0Jqjn1PXxKAUHmtw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=X3Oy1dR0aG8YGDdnOFrIOVj6WElHxZlH/iIKD9NQQQI=;
- b=hsJxz0Py/6bFc+mf/pU5CguHmpiqQdvV7/2g469fkyfqmfmPnMH3ZttJf4oxsxmkvVmdusmi9Pav7fAkV84aydw3Gpf9rCLZ0ty7YjmWaVl53wTzZM05ifKyf24397G86RW0X3RnS3Mm9EFoOw65MC9otEaqfYSeMb+0+uUEeWIfa68CUXRpKkzKIdIjJF5yLQRFzsVCHtVYjMzEs138L5521gkwSbjc6re+jVa4+6fNn8xTZh8Ho2ytCK8iC/pEnvuR7Kzli+O4Q2a8gC/XuISKCtxLrdKLTWwpfrNqv0DyhrAdU8ta3sa01pVPiFR3WtPbc8pDXoipHyrudETtIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=X3Oy1dR0aG8YGDdnOFrIOVj6WElHxZlH/iIKD9NQQQI=;
- b=gn2oQ9cJGP19prF0B5sXhGtoO+inScnQyrGtVlU99Kgj+UYglOg36GhIme/BbQ8Vg0W8EIciOjcuokr0VBPMcFO1YoZu+ALrARPlBnsvf3PFfWfTPImnDY178g2yuZtbxHv2pGkoA9Ec6xuphZ+GHuJD3Tykbce65bbp98dIm/U=
-Authentication-Results: spf=none (sender IP is )
- smtp.mailfrom=peng.fan@nxp.com; 
-Received: from AM0PR04MB4481.eurprd04.prod.outlook.com (52.135.147.15) by
- AM0PR04MB6770.eurprd04.prod.outlook.com (52.132.214.149) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2729.31; Wed, 19 Feb 2020 10:00:17 +0000
-Received: from AM0PR04MB4481.eurprd04.prod.outlook.com
- ([fe80::91e2:17:b3f4:d422]) by AM0PR04MB4481.eurprd04.prod.outlook.com
- ([fe80::91e2:17:b3f4:d422%3]) with mapi id 15.20.2729.032; Wed, 19 Feb 2020
- 10:00:17 +0000
-From:   peng.fan@nxp.com
-To:     sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, abel.vesa@nxp.com, leonard.crestez@nxp.com
-Cc:     kernel@pengutronix.de, linux-imx@nxp.com, aisheng.dong@nxp.com,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, anson.huang@nxp.com,
-        ping.bai@nxp.com, l.stach@pengutronix.de,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH v3 4/4] clk: imx: imx8mp: fix a53 cpu clock
-Date:   Wed, 19 Feb 2020 17:53:42 +0800
-Message-Id: <1582106022-20926-9-git-send-email-peng.fan@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1582106022-20926-1-git-send-email-peng.fan@nxp.com>
-References: <1582106022-20926-1-git-send-email-peng.fan@nxp.com>
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR0302CA0008.apcprd03.prod.outlook.com
- (2603:1096:202::18) To AM0PR04MB4481.eurprd04.prod.outlook.com
- (2603:10a6:208:70::15)
+        id S1726491AbgBSKEB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 19 Feb 2020 05:04:01 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:35938 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726453AbgBSKEA (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 19 Feb 2020 05:04:00 -0500
+Received: by mail-lf1-f67.google.com with SMTP id f24so16937803lfh.3
+        for <linux-clk@vger.kernel.org>; Wed, 19 Feb 2020 02:03:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9ex0WUr4F2ykNAf/zHRS2tfhIPnCxChpfveEhtUGkE0=;
+        b=C2uNySUwOeXYR/vew7ZZjkCVofjMXMj+nLEIq58Zg1YK8jCxDkcDmp2/mbQMJm83G/
+         piahvjEDPIwTmNhg28Yc1I5G6tVoQLboIm6/4xfUCiN50EfXiA910XCSUINyvei67vrq
+         y3N0YOB6uW7YRBGHRbkBMXQetSjWXJoNzWiUPCjt4VLmRAHR+1OdoSKrSjxqRDTmak72
+         sUPMZ/PFGqMUrjBwnjThdNLGZaDcjkKs+2q1a9fHefyCo5lpvvfyFskYskw/RuvqClBz
+         +XA8btAavsQ0y3+04JkqrR/w0y9nfgzE3uEEdZPZNLvVwpLXsZu6C7WyUIEyAo6auMRu
+         tiWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9ex0WUr4F2ykNAf/zHRS2tfhIPnCxChpfveEhtUGkE0=;
+        b=fhM8v8yPwI69yPzm5dm1RahdNrYNspTlIXtayL1V46+q7PrOEkfUjP5nRijTpWaxsB
+         RqyqQWkWHcQ5rL+OLp4kXsonJ9mYMOg0ZheqpXnRVbgivz44Qn38JcL6kEUH3OHV6USp
+         BKGzynSKLcYpubGdEOGF36hTzYo6hRAqYoF3BpNwIvTDrOZjL6RkL34E3NU7kHlePCg+
+         XBxQriWQhbThtpX2vI+28Nq91RJ97jFjmnfAjsLiJ3YqmnXfpFC1WV5Dd5C1P/5lUwEk
+         CmDl5PFn7O109Mn4jrJUi8EXBdBwejkt3/njiYAVpv1AibsM7cY64gUF+1XL1EcalEDq
+         ZSZA==
+X-Gm-Message-State: APjAAAXgwI8LE50jUCUiBac0kGfGMsy5M5i8yQgNmgnfguBAjzLowQD6
+        GE1x5uxP7YLR61yYf/9By6k9Cw==
+X-Google-Smtp-Source: APXvYqzuj2PjMvzj7EzYtgRASEpJMDNCrByBqcjlHrIBICaGty2X3Tjzk6HvHNW1CVKmSUN9qM4gwg==
+X-Received: by 2002:a19:c3c2:: with SMTP id t185mr13021040lff.56.1582106636682;
+        Wed, 19 Feb 2020 02:03:56 -0800 (PST)
+Received: from genomnajs.ideon.se ([85.235.10.227])
+        by smtp.gmail.com with ESMTPSA id n1sm918913lfq.16.2020.02.19.02.03.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Feb 2020 02:03:55 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@codeaurora.org>
+Cc:     linux-clk@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: [PATCH 1/3 v2] dt-bindings: clock: Create YAML schema for ICST clocks
+Date:   Wed, 19 Feb 2020 11:03:44 +0100
+Message-Id: <20200219100346.78227-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Received: from localhost.localdomain (119.31.174.66) by HK2PR0302CA0008.apcprd03.prod.outlook.com (2603:1096:202::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.2750.8 via Frontend Transport; Wed, 19 Feb 2020 10:00:13 +0000
-X-Mailer: git-send-email 2.7.4
-X-Originating-IP: [119.31.174.66]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: f308db0a-d74f-490b-3b62-08d7b52285ea
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6770:|AM0PR04MB6770:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM0PR04MB6770815FD086C1B433A0028C88100@AM0PR04MB6770.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3173;
-X-Forefront-PRVS: 0318501FAE
-X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(346002)(366004)(396003)(376002)(136003)(189003)(199004)(66476007)(66946007)(4326008)(66556008)(6666004)(5660300002)(86362001)(69590400006)(16526019)(8936002)(2906002)(316002)(956004)(6486002)(36756003)(52116002)(26005)(6506007)(186003)(478600001)(81166006)(8676002)(9686003)(2616005)(6512007)(81156014)(32563001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB6770;H:AM0PR04MB4481.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-Received-SPF: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5WnmOIZbeQ+hG3haYvRxAlTZZKJHYJVP3i3AFEom+yBzBkoA7gGztxopA/apTQjJaAkg001ZaecYnrs3kiBERYzgyhuxzSggT90pHCXXbQa4DwZY3Jsdsri7b/KzTFDidEIamf9b2LRHNolWr5xEsasPoS40RnLjLRAW0msPsoK4yhRbq+BQsFj6U4GKC9KlkF1qCVzVCJjILYcNFgN/WVdcnLJgiN+/b4MKqo2Aed+JrfPRY3VPiKcMihBSLyCk3hOrCDn6HEvLzYcFUcR7zuz3A3ojJQfswA8diNgAo66ar+Kk2lvyucnnkNCOA58ry2vF+RSpwo4Sixo5dZO8YSt6gQUbWrhBUzkRM7T4/Ig6IK1BN5CEuEk2cAlbGZcOrGxNbDgRLmgAectcDVMftD1KGxYS0scuipawgk9qkfXJ6FYiBYAxZrDnygNO8Kq7cUlfGKeWwxT7H+sVxqW9+abpNPtP+1eEsm/0v8jBg0TF9mXq8imtLvSaCTg+gWKRUBt6fkesz58M6wV9FeOMQdUVrOReiD8Ddy+VkTFKxugAbfovdNSOb84JySJXFmCr
-X-MS-Exchange-AntiSpam-MessageData: BYrnBWBoAo169dcoJH7e0i8szaYkKrlxk+MiQBpo7H9PY5AeC4HoVPUwyHuUa/1RpnTDpv0xTQIjpctB5cfA2E+G1HWwlX0MGTeyk8slpTkNkE4xhqgSAYJiCJPybBI9mfiEIraEbiRYfpAUWI8fKA==
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f308db0a-d74f-490b-3b62-08d7b52285ea
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2020 10:00:17.8629
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EP9Nntow6ExhkMXPb4tWSGU38SwmbOFPd2dOwgJ3imgEj6x5aNcKPC1naxQbqLCPgqqx+3x6MwD2G9YtQ9Ra6g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6770
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+The ICST clocks used in the ARM Integrator, Versatile and
+RealView platforms are updated to use YAML schema, and two
+new ICST clocks used by the Integrator IM-PD1 logical module
+are added in the process.
 
-The A53 CCM clk root only accepts input up to 1GHz, CCM A53 root
-signoff timing is 1Ghz, however the A53 core which sources from CCM
-root could run above 1GHz which voilates the CCM.
-
-There is a CORE_SEL slice before A53 core, we need configure the
-CORE_SEL slice source from ARM PLL, not A53 CCM clk root.
-
-The A53 CCM clk root should only be used when need to change ARM PLL
-frequency.
-
-Add arm_a53_core clk that could source from arm_a53_div and arm_pll_out.
-Configure a53 ccm root sources from 800MHz sys pll
-Configure a53 core sources from arm_pll_out
-Mark arm_a53_core as critical clk
-
-Reviewed-by: Jacky Bai <ping.bai@nxp.com>
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Cc: devicetree@vger.kernel.org
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/clk/imx/clk-imx8mp.c             | 16 ++++++++++++----
- include/dt-bindings/clock/imx8mp-clock.h |  3 ++-
- 2 files changed, 14 insertions(+), 5 deletions(-)
+ChangeLog v1->v2:
+- Add a literal | to preserve formatting in the bindings
+- Collect Rob's review tag
+---
+ .../bindings/clock/arm,syscon-icst.yaml       | 102 ++++++++++++++++++
+ .../bindings/clock/arm-integrator.txt         |  34 ------
+ .../bindings/clock/arm-syscon-icst.txt        |  70 ------------
+ 3 files changed, 102 insertions(+), 104 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/arm-integrator.txt
+ delete mode 100644 Documentation/devicetree/bindings/clock/arm-syscon-icst.txt
 
-diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
-index a16af4fce044..d67ee36b84de 100644
---- a/drivers/clk/imx/clk-imx8mp.c
-+++ b/drivers/clk/imx/clk-imx8mp.c
-@@ -34,6 +34,8 @@ static const char * const imx8mp_a53_sels[] = {"osc_24m", "arm_pll_out", "sys_pl
- 					       "sys_pll2_1000m", "sys_pll1_800m", "sys_pll1_400m",
- 					       "audio_pll1_out", "sys_pll3_out", };
- 
-+static const char * const imx8mp_a53_core_sels[] = {"arm_a53_div", "arm_pll_out", };
+diff --git a/Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml b/Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml
+new file mode 100644
+index 000000000000..06c4d84e8c3d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/arm,syscon-icst.yaml
+@@ -0,0 +1,102 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/arm,syscon-icst.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- static const char * const imx8mp_m7_sels[] = {"osc_24m", "sys_pll2_200m", "sys_pll2_250m",
- 					      "vpu_pll_out", "sys_pll1_800m", "audio_pll1_out",
- 					      "video_pll1_out", "sys_pll3_out", };
-@@ -554,6 +556,9 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
- 	hws[IMX8MP_CLK_HSIO_AXI_DIV] = imx_clk_hw_divider2("hsio_axi_div", "hsio_axi_cg", ccm_base + 0x8380, 0, 3);
- 	hws[IMX8MP_CLK_MEDIA_ISP_DIV] = imx_clk_hw_divider2("media_isp_div", "media_isp_cg", ccm_base + 0x8400, 0, 3);
- 
-+	/* CORE SEL */
-+	hws[IMX8MP_CLK_A53_CORE] = imx_clk_hw_mux2_flags("arm_a53_core", ccm_base + 0x9880, 24, 1, imx8mp_a53_core_sels, ARRAY_SIZE(imx8mp_a53_core_sels), CLK_IS_CRITICAL);
++title: ARM System Conctroller ICST Clocks
 +
- 	hws[IMX8MP_CLK_MAIN_AXI] = imx8m_clk_hw_composite_critical("main_axi", imx8mp_main_axi_sels, ccm_base + 0x8800);
- 	hws[IMX8MP_CLK_ENET_AXI] = imx8m_clk_hw_composite("enet_axi", imx8mp_enet_axi_sels, ccm_base + 0x8880);
- 	hws[IMX8MP_CLK_NAND_USDHC_BUS] = imx8m_clk_hw_composite_critical("nand_usdhc_bus", imx8mp_nand_usdhc_sels, ccm_base + 0x8900);
-@@ -724,11 +729,14 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
- 	hws[IMX8MP_CLK_VPU_ROOT] = imx_clk_hw_gate4("vpu_root_clk", "vpu_bus", ccm_base + 0x4630, 0);
- 	hws[IMX8MP_CLK_AUDIO_ROOT] = imx_clk_hw_gate4("audio_root_clk", "ipg_root", ccm_base + 0x4650, 0);
- 
--	hws[IMX8MP_CLK_ARM] = imx_clk_hw_cpu("arm", "arm_a53_div",
--					     hws[IMX8MP_CLK_A53_DIV]->clk,
--					     hws[IMX8MP_CLK_A53_SRC]->clk,
-+	clk_hw_set_parent(hws[IMX8MP_CLK_A53_SRC], hws[IMX8MP_SYS_PLL1_800M]);
-+	clk_hw_set_parent(hws[IMX8MP_CLK_A53_CORE], hws[IMX8MP_ARM_PLL_OUT]);
++maintainers:
++  - Linus Walleij <linusw@kernel.org>
 +
-+	hws[IMX8MP_CLK_ARM] = imx_clk_hw_cpu("arm", "arm_a53_core",
-+					     hws[IMX8MP_CLK_A53_CORE]->clk,
-+					     hws[IMX8MP_CLK_A53_CORE]->clk,
- 					     hws[IMX8MP_ARM_PLL_OUT]->clk,
--					     hws[IMX8MP_SYS_PLL1_800M]->clk);
-+					     hws[IMX8MP_CLK_A53_DIV]->clk);
- 
- 	imx_check_clk_hws(hws, IMX8MP_CLK_END);
- 
-diff --git a/include/dt-bindings/clock/imx8mp-clock.h b/include/dt-bindings/clock/imx8mp-clock.h
-index 2fab63186bca..c92d1f4117eb 100644
---- a/include/dt-bindings/clock/imx8mp-clock.h
-+++ b/include/dt-bindings/clock/imx8mp-clock.h
-@@ -294,7 +294,8 @@
- #define IMX8MP_CLK_DRAM_ALT_ROOT		285
- #define IMX8MP_CLK_DRAM_CORE			286
- #define IMX8MP_CLK_ARM				287
-+#define IMX8MP_CLK_A53_CORE			288
- 
--#define IMX8MP_CLK_END				288
-+#define IMX8MP_CLK_END				289
- 
- #endif
++description: The ICS525 and ICS307 oscillators are produced by Integrated
++  Devices Technology (IDT). ARM integrated these oscillators deeply into their
++  reference designs by adding special control registers that manage such
++  oscillators to their system controllers.
++
++  The various ARM system controllers contain logic to serialize and initialize
++  an ICST clock request after a write to the 32 bit register at an offset
++  into the system controller. Furthermore, to even be able to alter one of
++  these frequencies, the system controller must first be unlocked by
++  writing a special token to another offset in the system controller.
++
++  Some ARM hardware contain special versions of the serial interface that only
++  connects the low 8 bits of the VDW (missing one bit), hardwires RDW to
++  different values and sometimes also hardwire the output divider. They
++  therefore have special compatible strings as per this table (the OD value is
++  the value on the pins, not the resulting output divider).
++
++  In the core modules and logic tiles, the ICST is a configurable clock fed
++  from a 24 MHz clock on the motherboard (usually the main crystal) used for
++  generating e.g. video clocks. It is located on the core module and there is
++  only one of these. This clock node must be a subnode of the core module.
++
++  Hardware variant         RDW     OD          VDW
++
++  Integrator/AP            22      1           Bit 8 0, rest variable
++  integratorap-cm
++
++  Integrator/AP            46      3           Bit 8 0, rest variable
++  integratorap-sys
++
++  Integrator/AP            22 or   1           17 or (33 or 25 MHz)
++  integratorap-pci         14      1           14
++
++  Integrator/CP            22      variable    Bit 8 0, rest variable
++  integratorcp-cm-core
++
++  Integrator/CP            22      variable    Bit 8 0, rest variable
++  integratorcp-cm-mem
++
++  The ICST oscillator must be provided inside a system controller node.
++
++properties:
++  "#clock-cells":
++    const: 0
++
++  compatible:
++    enum:
++      - arm,syscon-icst525
++      - arm,syscon-icst307
++      - arm,syscon-icst525-integratorap-cm
++      - arm,syscon-icst525-integratorap-sys
++      - arm,syscon-icst525-integratorap-pci
++      - arm,syscon-icst525-integratorcp-cm-core
++      - arm,syscon-icst525-integratorcp-cm-mem
++      - arm,integrator-cm-auxosc
++      - arm,versatile-cm-auxosc
++      - arm,impd-vco1
++      - arm,impd-vco2
++
++  clocks:
++    description: Parent clock for the ICST VCO
++    maxItems: 1
++
++  clock-output-names:
++    maxItems: 1
++
++  lock-offset:
++    $ref: '/schemas/types.yaml#/definitions/uint32'
++    description: Offset to the unlocking register for the oscillator
++
++  vco-offset:
++    $ref: '/schemas/types.yaml#/definitions/uint32'
++    description: Offset to the VCO register for the oscillator
++
++required:
++  - "#clock-cells"
++  - compatible
++  - clocks
++
++examples:
++  - |
++    vco1: clock@00 {
++      compatible = "arm,impd1-vco1";
++      #clock-cells = <0>;
++      lock-offset = <0x08>;
++      vco-offset = <0x00>;
++      clocks = <&sysclk>;
++      clock-output-names = "IM-PD1-VCO1";
++    };
++
++...
+diff --git a/Documentation/devicetree/bindings/clock/arm-integrator.txt b/Documentation/devicetree/bindings/clock/arm-integrator.txt
+deleted file mode 100644
+index 11f5f95f571b..000000000000
+--- a/Documentation/devicetree/bindings/clock/arm-integrator.txt
++++ /dev/null
+@@ -1,34 +0,0 @@
+-Clock bindings for ARM Integrator and Versatile Core Module clocks
+-
+-Auxiliary Oscillator Clock
+-
+-This is a configurable clock fed from a 24 MHz chrystal,
+-used for generating e.g. video clocks. It is located on the
+-core module and there is only one of these.
+-
+-This clock node *must* be a subnode of the core module, since
+-it obtains the base address for it's address range from its
+-parent node.
+-
+-
+-Required properties:
+-- compatible: must be "arm,integrator-cm-auxosc" or "arm,versatile-cm-auxosc"
+-- #clock-cells: must be <0>
+-
+-Optional properties:
+-- clocks: parent clock(s)
+-
+-Example:
+-
+-core-module@10000000 {
+-	xtal24mhz: xtal24mhz@24M {
+-		#clock-cells = <0>;
+-		compatible = "fixed-clock";
+-		clock-frequency = <24000000>;
+-	};
+-	auxosc: cm_aux_osc@25M {
+-		#clock-cells = <0>;
+-		compatible = "arm,integrator-cm-auxosc";
+-		clocks = <&xtal24mhz>;
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/clock/arm-syscon-icst.txt b/Documentation/devicetree/bindings/clock/arm-syscon-icst.txt
+deleted file mode 100644
+index 4cd81742038f..000000000000
+--- a/Documentation/devicetree/bindings/clock/arm-syscon-icst.txt
++++ /dev/null
+@@ -1,70 +0,0 @@
+-ARM System Controller ICST clocks
+-
+-The ICS525 and ICS307 oscillators are produced by Integrated Devices
+-Technology (IDT). ARM integrated these oscillators deeply into their
+-reference designs by adding special control registers that manage such
+-oscillators to their system controllers.
+-
+-The various ARM system controllers contain logic to serialize and initialize
+-an ICST clock request after a write to the 32 bit register at an offset
+-into the system controller. Furthermore, to even be able to alter one of
+-these frequencies, the system controller must first be unlocked by
+-writing a special token to another offset in the system controller.
+-
+-Some ARM hardware contain special versions of the serial interface that only
+-connects the low 8 bits of the VDW (missing one bit), hardwires RDW to
+-different values and sometimes also hardwire the output divider. They
+-therefore have special compatible strings as per this table (the OD value is
+-the value on the pins, not the resulting output divider):
+-
+-Hardware variant:        RDW     OD          VDW
+-
+-Integrator/AP            22      1           Bit 8 0, rest variable
+-integratorap-cm
+-
+-Integrator/AP            46      3           Bit 8 0, rest variable
+-integratorap-sys
+-
+-Integrator/AP            22 or   1           17 or (33 or 25 MHz)
+-integratorap-pci         14      1           14
+-
+-Integrator/CP            22      variable    Bit 8 0, rest variable
+-integratorcp-cm-core
+-
+-Integrator/CP            22      variable    Bit 8 0, rest variable
+-integratorcp-cm-mem
+-
+-The ICST oscillator must be provided inside a system controller node.
+-
+-Required properties:
+-- compatible: must be one of
+-  "arm,syscon-icst525"
+-  "arm,syscon-icst307"
+-  "arm,syscon-icst525-integratorap-cm"
+-  "arm,syscon-icst525-integratorap-sys"
+-  "arm,syscon-icst525-integratorap-pci"
+-  "arm,syscon-icst525-integratorcp-cm-core"
+-  "arm,syscon-icst525-integratorcp-cm-mem"
+-- lock-offset: the offset address into the system controller where the
+-  unlocking register is located
+-- vco-offset: the offset address into the system controller where the
+-  ICST control register is located (even 32 bit address)
+-- #clock-cells: must be <0>
+-- clocks: parent clock, since the ICST needs a parent clock to derive its
+-  frequency from, this attribute is compulsory.
+-
+-Example:
+-
+-syscon: syscon@10000000 {
+-	compatible = "syscon";
+-	reg = <0x10000000 0x1000>;
+-
+-	oscclk0: osc0@c {
+-		compatible = "arm,syscon-icst307";
+-		#clock-cells = <0>;
+-		lock-offset = <0x20>;
+-		vco-offset = <0x0c>;
+-		clocks = <&xtal24mhz>;
+-	};
+-	(...)
+-};
 -- 
-2.16.4
+2.24.1
 
