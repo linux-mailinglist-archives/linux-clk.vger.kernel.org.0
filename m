@@ -2,69 +2,88 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C082D163CEB
-	for <lists+linux-clk@lfdr.de>; Wed, 19 Feb 2020 07:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C34163DC3
+	for <lists+linux-clk@lfdr.de>; Wed, 19 Feb 2020 08:35:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726106AbgBSGKP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 19 Feb 2020 01:10:15 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:36492 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726096AbgBSGKM (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 19 Feb 2020 01:10:12 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 78D5A1A097C;
-        Wed, 19 Feb 2020 07:10:10 +0100 (CET)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id F0E7E1A0890;
-        Wed, 19 Feb 2020 07:10:02 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id D8BAA402DD;
-        Wed, 19 Feb 2020 14:09:53 +0800 (SGT)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        robh+dt@kernel.org, mark.rutland@arm.com, abel.vesa@nxp.com,
-        peng.fan@nxp.com, fugang.duan@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH 3/3] clk: imx8mp: Correct the enet_qos parent clock
-Date:   Wed, 19 Feb 2020 14:04:11 +0800
-Message-Id: <1582092251-19222-3-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1582092251-19222-1-git-send-email-Anson.Huang@nxp.com>
-References: <1582092251-19222-1-git-send-email-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726779AbgBSHeD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 19 Feb 2020 02:34:03 -0500
+Received: from [167.172.186.51] ([167.172.186.51]:35050 "EHLO shell.v3.sk"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726772AbgBSHeC (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 19 Feb 2020 02:34:02 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id 8FF63E0071;
+        Wed, 19 Feb 2020 07:34:14 +0000 (UTC)
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id HN17adJcV5R0; Wed, 19 Feb 2020 07:34:13 +0000 (UTC)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id 1EE14E0046;
+        Wed, 19 Feb 2020 07:34:13 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at zimbra.v3.sk
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 2QCWGCc6_F_A; Wed, 19 Feb 2020 07:34:12 +0000 (UTC)
+Received: from furthur.lan (unknown [109.183.109.54])
+        by zimbra.v3.sk (Postfix) with ESMTPSA id 7C773DFCA2;
+        Wed, 19 Feb 2020 07:34:12 +0000 (UTC)
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 00/10] MMP2 CLK Update
+Date:   Wed, 19 Feb 2020 08:33:43 +0100
+Message-Id: <20200219073353.184336-1-lkundrak@v3.sk>
+X-Mailer: git-send-email 2.24.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Fugang Duan <fugang.duan@nxp.com>
+Hi,
 
-enet_qos is for eqos tsn AXI bus clock whose clock source is from
-ccm_enet_axi_clk_root, and controlled by CCM_CCGR59(offset 0x43b0)
-and CCM_CCGR64(offset 0x4400), so correct enet_qos root clock's
-parent clock to sim_enet.
+please consider applying this patch series. Its goal is to ultimately
+provide accurate clock sources from PLLs configured by firmware on MMP2 a=
+nd
+MMP3. Currently they are hardcoded to more or less wrong values, which
+causes bad timings when they are use (e.g. to generate display clock).
 
-Fixes: 9c140d992676 ("clk: imx: Add support for i.MX8MP clock driver")
-Signed-off-by: Fugang Duan <fugang.duan@nxp.com>
----
- drivers/clk/imx/clk-imx8mp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+It starts off with a handful of cleanups:
 
-diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
-index 1a9d7a0..cb58fb8 100644
---- a/drivers/clk/imx/clk-imx8mp.c
-+++ b/drivers/clk/imx/clk-imx8mp.c
-@@ -688,7 +688,7 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
- 	hws[IMX8MP_CLK_CAN1_ROOT] = imx_clk_hw_gate2("can1_root_clk", "can1", ccm_base + 0x4350, 0);
- 	hws[IMX8MP_CLK_CAN2_ROOT] = imx_clk_hw_gate2("can2_root_clk", "can2", ccm_base + 0x4360, 0);
- 	hws[IMX8MP_CLK_SDMA1_ROOT] = imx_clk_hw_gate4("sdma1_root_clk", "ipg_root", ccm_base + 0x43a0, 0);
--	hws[IMX8MP_CLK_ENET_QOS_ROOT] = imx_clk_hw_gate4("enet_qos_root_clk", "enet_axi", ccm_base + 0x43b0, 0);
-+	hws[IMX8MP_CLK_ENET_QOS_ROOT] = imx_clk_hw_gate4("enet_qos_root_clk", "sim_enet_root_clk", ccm_base + 0x43b0, 0);
- 	hws[IMX8MP_CLK_SIM_ENET_ROOT] = imx_clk_hw_gate4("sim_enet_root_clk", "enet_axi", ccm_base + 0x4400, 0);
- 	hws[IMX8MP_CLK_GPU2D_ROOT] = imx_clk_hw_gate4("gpu2d_root_clk", "gpu2d_div", ccm_base + 0x4450, 0);
- 	hws[IMX8MP_CLK_GPU3D_ROOT] = imx_clk_hw_gate4("gpu3d_root_clk", "gpu3d_core_div", ccm_base + 0x4460, 0);
--- 
-2.7.4
+  [PATCH 01/10] clk: mmp2: Remove a unused prototype
+  [PATCH 02/10] clk: mmp2: Constify some strings
+  [PATCH 03/10] dt-bindings: clock: Convert marvell,mmp2-clock to
+
+The next patch adds the logic for calculating the rate of clock signals
+coming from the PLLs dynamically, while not actually switching the
+driver over to using it.
+
+  [PATCH 04/10] clk: mmp2: Add support for PLL clock sources
+
+Then MMP2 is switched over:
+
+  [PATCH 05/10] clk: mmp2: Stop pretending PLL outputs are constant
+
+Switching MMP3 requires some more work, because until now, the driver
+has been the same for both versions of the SoC:
+
+  [PATCH 06/10] dt-bindings: clock: Add MMP3 compatible string
+  [PATCH 07/10] clk: mmp2: Check for MMP3
+  [PATCH 08/10] dt-bindings: marvell,mmp2: Add clock ids for MMP3 PLLs
+  [PATCH 09/10] clk: mmp2: Add PLLs that are available on MMP3
+  [PATCH 10/10] ARM: dts: mmp3: Use the MMP3 compatible string for
+
+The hardware vendor doesn't supply documentation, so this is best-effort
+work based on the code dump from Marvell.
+
+Tested on MMP2 and MMP3 based hardware I have; details in relevant
+commit messages.
+
+Thank you,
+Lubo
 
