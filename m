@@ -2,142 +2,85 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F66163BD7
-	for <lists+linux-clk@lfdr.de>; Wed, 19 Feb 2020 05:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E364A163CE6
+	for <lists+linux-clk@lfdr.de>; Wed, 19 Feb 2020 07:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726475AbgBSEJK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 18 Feb 2020 23:09:10 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:45554 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726439AbgBSEJK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 18 Feb 2020 23:09:10 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01J495wR059122;
-        Tue, 18 Feb 2020 22:09:05 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1582085345;
-        bh=NK2Nj1NvUb+C/gMl830shjWOUmD7nMVZidNLmQZoaDQ=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=dUWvTpbw47Zh5d39p9cosW2L+/KUflALNHPnhAdlq6FUnRgAX+fA6d4y08NpGZoIG
-         bAUz27PryAnFNIpyKLShGLtyWIv8wHY204xY1sF+h44iXPyW/Du8zA5DTax4Ix40q9
-         FjuWPdkZIhf/sE0+xh9sufjWJyBglnsxwEzTYWJU=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01J494iV089131;
-        Tue, 18 Feb 2020 22:09:05 -0600
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 18
- Feb 2020 22:09:04 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Tue, 18 Feb 2020 22:09:04 -0600
-Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01J490Wa014304;
-        Tue, 18 Feb 2020 22:09:01 -0600
-Subject: Re: [PATCH v3 1/2] dt-bindings: clock: Add binding documentation for
- TI syscon gate clock
-To:     Rob Herring <robh@kernel.org>
-CC:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Tero Kristo <t-kristo@ti.com>
-References: <20200215141724.32291-1-vigneshr@ti.com>
- <20200215141724.32291-2-vigneshr@ti.com> <20200219025811.GA20054@bogus>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-Message-ID: <5eb5521b-2752-68a3-c11d-eea38e325666@ti.com>
-Date:   Wed, 19 Feb 2020 09:39:39 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
-MIME-Version: 1.0
-In-Reply-To: <20200219025811.GA20054@bogus>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        id S1726202AbgBSGKK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 19 Feb 2020 01:10:10 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:45338 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726096AbgBSGKK (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 19 Feb 2020 01:10:10 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 202CA2032CA;
+        Wed, 19 Feb 2020 07:10:08 +0100 (CET)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 97E6C201283;
+        Wed, 19 Feb 2020 07:10:00 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 756AF402A0;
+        Wed, 19 Feb 2020 14:09:51 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        robh+dt@kernel.org, mark.rutland@arm.com, abel.vesa@nxp.com,
+        peng.fan@nxp.com, fugang.duan@nxp.com, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH 1/3] clk: imx8mp: Rename the IMX8MP_CLK_HDMI_27M clock
+Date:   Wed, 19 Feb 2020 14:04:09 +0800
+Message-Id: <1582092251-19222-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi,
+On i.MX8MP, internal HDMI 27M clock is actually 24MHz, so rename
+the IMX8MP_CLK_HDMI_27M to IMX8MP_CLK_HDMI_24M.
 
-On 19/02/20 8:28 am, Rob Herring wrote:
-> On Sat, Feb 15, 2020 at 07:47:23PM +0530, Vignesh Raghavendra wrote:
->> Add dt bindings for TI syscon gate clock driver that is used to control
->> EHRPWM's TimeBase clock (TBCLK) on TI's AM654 SoC.
->>
->> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
->> ---
->>  .../bindings/clock/ti,am654-ehrpwm-tbclk.yaml | 35 +++++++++++++++++++
->>  1 file changed, 35 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml b/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
->> new file mode 100644
->> index 000000000000..3bf954ecb803
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
->> @@ -0,0 +1,35 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/clock/ti,am654-ehrpwm-tbclk.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: TI syscon gate clock driver
-> 
-> Bindings are for h/w blocks, not drivers.
-> 
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+---
+ drivers/clk/imx/clk-imx8mp.c             | 4 ++--
+ include/dt-bindings/clock/imx8mp-clock.h | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Will drop driver from the title and commit msg
-
->> +
->> +maintainers:
->> +  - Vignesh Raghavendra <vigneshr@ti.com>
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - const: ti,am654-ehrpwm-tbclk
->> +      - const: syscon
-> 
-> Why is this a syscon? Are there other functions or it's just the easy 
-> way to get a regmap.
-> 
-
-Register that has tbclk enable/disable bit also contains bits to control
-other functionalities and would need to be shared. Therefore its modeled
-as syscon.
-
-Regards
-Vignesh
-
->> +
->> +  "#clock-cells":
->> +    const: 1
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - "#clock-cells"
->> +  - reg
->> +
->> +examples:
->> +  - |
->> +    ehrpwm_tbclk: syscon@4140 {
->> +        compatible = "ti,am654-ehrpwm-tbclk", "syscon";
->> +        reg = <0x4140 0x18>;
->> +        #clock-cells = <1>;
->> +    };
->> -- 
->> 2.25.0
->>
-
+diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
+index 3adc8aa..a6313cf 100644
+--- a/drivers/clk/imx/clk-imx8mp.c
++++ b/drivers/clk/imx/clk-imx8mp.c
+@@ -342,7 +342,7 @@ static const char * const imx8mp_hdmi_fdcc_tst_sels[] = {"osc_24m", "sys_pll1_26
+ 							 "sys_pll1_800m", "sys_pll2_1000m", "sys_pll3_out",
+ 							 "audio_pll2_out", "video_pll1_out", };
+ 
+-static const char * const imx8mp_hdmi_27m_sels[] = {"osc_24m", "sys_pll1_160m", "sys_pll2_50m",
++static const char * const imx8mp_hdmi_24m_sels[] = {"osc_24m", "sys_pll1_160m", "sys_pll2_50m",
+ 						    "sys_pll3_out", "audio_pll1_out", "video_pll1_out",
+ 						    "audio_pll2_out", "sys_pll1_133m", };
+ 
+@@ -632,7 +632,7 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
+ 	hws[IMX8MP_CLK_IPP_DO_CLKO1] = imx8m_clk_hw_composite("ipp_do_clko1", imx8mp_ipp_do_clko1_sels, ccm_base + 0xba00);
+ 	hws[IMX8MP_CLK_IPP_DO_CLKO2] = imx8m_clk_hw_composite("ipp_do_clko2", imx8mp_ipp_do_clko2_sels, ccm_base + 0xba80);
+ 	hws[IMX8MP_CLK_HDMI_FDCC_TST] = imx8m_clk_hw_composite("hdmi_fdcc_tst", imx8mp_hdmi_fdcc_tst_sels, ccm_base + 0xbb00);
+-	hws[IMX8MP_CLK_HDMI_27M] = imx8m_clk_hw_composite("hdmi_27m", imx8mp_hdmi_27m_sels, ccm_base + 0xbb80);
++	hws[IMX8MP_CLK_HDMI_24M] = imx8m_clk_hw_composite("hdmi_24m", imx8mp_hdmi_24m_sels, ccm_base + 0xbb80);
+ 	hws[IMX8MP_CLK_HDMI_REF_266M] = imx8m_clk_hw_composite("hdmi_ref_266m", imx8mp_hdmi_ref_266m_sels, ccm_base + 0xbc00);
+ 	hws[IMX8MP_CLK_USDHC3] = imx8m_clk_hw_composite("usdhc3", imx8mp_usdhc3_sels, ccm_base + 0xbc80);
+ 	hws[IMX8MP_CLK_MEDIA_CAM1_PIX] = imx8m_clk_hw_composite("media_cam1_pix", imx8mp_media_cam1_pix_sels, ccm_base + 0xbd00);
+diff --git a/include/dt-bindings/clock/imx8mp-clock.h b/include/dt-bindings/clock/imx8mp-clock.h
+index 2fab631..00d4d22 100644
+--- a/include/dt-bindings/clock/imx8mp-clock.h
++++ b/include/dt-bindings/clock/imx8mp-clock.h
+@@ -173,7 +173,7 @@
+ #define IMX8MP_CLK_IPP_DO_CLKO1			164
+ #define IMX8MP_CLK_IPP_DO_CLKO2			165
+ #define IMX8MP_CLK_HDMI_FDCC_TST		166
+-#define IMX8MP_CLK_HDMI_27M			167
++#define IMX8MP_CLK_HDMI_24M			167
+ #define IMX8MP_CLK_HDMI_REF_266M		168
+ #define IMX8MP_CLK_USDHC3			169
+ #define IMX8MP_CLK_MEDIA_CAM1_PIX		170
 -- 
-Regards
-Vignesh
+2.7.4
+
