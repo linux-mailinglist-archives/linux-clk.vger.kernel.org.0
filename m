@@ -2,114 +2,59 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BAC16757D
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Feb 2020 09:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD88D1678E0
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Feb 2020 09:57:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388773AbgBUI2O (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 21 Feb 2020 03:28:14 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:39522 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731611AbgBUI2O (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 21 Feb 2020 03:28:14 -0500
-Received: by mail-wm1-f68.google.com with SMTP id c84so724403wme.4
-        for <linux-clk@vger.kernel.org>; Fri, 21 Feb 2020 00:28:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:autocrypt:organization:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fCJ3KmigEs8DpBpdDcdTMD9jPsQq/gPkh1GOkuMWIrk=;
-        b=Ph1daRZgQrXTOABYhqK6etF+hn4Krad4bRIU/5HaO4vhUNxhFornWMCiOjZQ0N4c67
-         j4cagpxl8XlE1TRNwmzURH9TrAW+rOsoXRXxUgTnPsFNOEhktk8REO6+Room1yYQI+yh
-         H1iA0XYP9Po7bLwxW5m1QLPEihZEpxvzXcginRu4o4GYKqVbtEvXVeTGoszx8LzxoScc
-         77mwF9lyrQkNO3bLsKDFOhqg0YUK1oAKveDFUXfsDbtGXFp6O5Nibx22VDTbTBgZkIsr
-         kUvMsDi3zULvXWUOL/6LCnBv0gfpQs5Lpz96N+O0vNe4HgluWdMcRSnVnIeZc1HufT3A
-         G4dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :organization:message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=fCJ3KmigEs8DpBpdDcdTMD9jPsQq/gPkh1GOkuMWIrk=;
-        b=KKBKiwsp9UMYuEc8TedcbKKzJcmMYKHBofLsgfStzpLVlK7+fb3qEM2dpqp0O6I2ve
-         Y0s5P75a416ZfL+amE8gmsKznFcAfEDtLCUq6fU0ZwBwEioJgazm61OxGtZ2tTsiwj8V
-         AD95PcDLG5vPkZaaNH+HzysezDIZ8rXo26aujI/PQz1FVbdgsFfo6rs2FslTE+tdrw5k
-         +PgRoTyIHE9zfFV3hyyVjCOx9n1wx7stMqSFTqJI4qHOozpDA7fWWy5gaORg5Btb8kfk
-         uRzAQ4b7irDO8apLl+Di1Oa5Bd1thccfE4qvkPAMQEd9m2vDUQMv5f9+U9s6cHXMo1BL
-         zEbQ==
-X-Gm-Message-State: APjAAAV/+Wp4PxBHsABFwy5xgem6TiqQSeNNkLFdGYpmmKvWzNkmQJ8c
-        IzgGgzrzk3EFkktrsH8XeFSD9w==
-X-Google-Smtp-Source: APXvYqwzjlP0HTv4FL0F1MqSuF9uKA6+BP8tD+yxfzTz5t4OJUiTFFRHyLp2o35NMyA52dyHPuzrbA==
-X-Received: by 2002:a1c:7919:: with SMTP id l25mr2186757wme.135.1582273691154;
-        Fri, 21 Feb 2020 00:28:11 -0800 (PST)
-Received: from ?IPv6:2a01:e35:2ec0:82b0:4ca8:b25b:98e4:858? ([2a01:e35:2ec0:82b0:4ca8:b25b:98e4:858])
-        by smtp.gmail.com with ESMTPSA id m9sm3008198wrx.55.2020.02.21.00.28.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Feb 2020 00:28:10 -0800 (PST)
-Subject: Re: [PATCH] clk: meson: meson8b: set audio output clock hierarchy
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org, jbrunet@baylibre.com
-Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, sboyd@kernel.org,
-        mturquette@baylibre.com
-References: <20200220204433.67113-1-martin.blumenstingl@googlemail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
- 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
- BSwxi7g3Mu7u5kUByanqHyA=
-Organization: Baylibre
-Message-ID: <74a8613c-ba30-5f42-9edd-b5af1d7f330c@baylibre.com>
-Date:   Fri, 21 Feb 2020 09:28:09 +0100
+        id S1727036AbgBUI5F (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 21 Feb 2020 03:57:05 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:55442 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727213AbgBUI5F (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 21 Feb 2020 03:57:05 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: eballetbo)
+        with ESMTPSA id 986C728CC36
+Subject: Re: [PATCH v8 0/6] arm/arm64: mediatek: Fix mmsys device probing
+To:     CK Hu <ck.hu@mediatek.com>
+Cc:     robh+dt@kernel.org, mark.rutland@arm.com, p.zabel@pengutronix.de,
+        airlied@linux.ie, mturquette@baylibre.com, sboyd@kernel.org,
+        ulrich.hecht+renesas@gmail.com, laurent.pinchart@ideasonboard.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        rdunlap@infradead.org, dri-devel@lists.freedesktop.org,
+        Weiyi Lu <weiyi.lu@mediatek.com>,
+        Seiya Wang <seiya.wang@mediatek.com>,
+        linux-clk@vger.kernel.org,
+        Collabora Kernel ML <kernel@collabora.com>,
+        mtk01761 <wendell.lin@mediatek.com>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>, wens@csie.org,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        sean.wang@mediatek.com, frank-w@public-files.de,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        linux-mediatek@lists.infradead.org, hsinyi@chromium.org,
+        Matthias Brugger <mbrugger@suse.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Richard Fontana <rfontana@redhat.com>,
+        linux-kernel@vger.kernel.org, matthias.bgg@kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Fabien Parent <fparent@baylibre.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Owen Chen <owen.chen@mediatek.com>
+References: <20200220172147.919996-1-enric.balletbo@collabora.com>
+ <1582259996.1846.7.camel@mtksdaap41>
+From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Message-ID: <7a87b486-1622-7f27-f5af-427b94a14c00@collabora.com>
+Date:   Fri, 21 Feb 2020 09:56:56 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <20200220204433.67113-1-martin.blumenstingl@googlemail.com>
+In-Reply-To: <1582259996.1846.7.camel@mtksdaap41>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -118,60 +63,148 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 20/02/2020 21:44, Martin Blumenstingl wrote:
-> The aiu devices peripheral clocks needs the aiu and aiu_glue clocks to
-> operate. Reflect this hierarchy in the clock tree.
+Hi CK,
+
+Thanks for your quick answer.
+
+On 21/2/20 5:39, CK Hu wrote:
+> Hi, Enric:
 > 
-> Fixes: e31a1900c1ff73 ("meson: clk: Add support for clock gates")
-> Suggested-by: Jerome Brunet <jbrunet@baylibre.com>
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
-> This takes Jerome's patch for GXBB and ports it to the Meson8* SoCs.
-> Hence the Suggested-by.
+> On Thu, 2020-02-20 at 18:21 +0100, Enric Balletbo i Serra wrote:
+>> Dear all,
+>>
+>> Those patches are intended to solve an old standing issue on some
+>> Mediatek devices (mt8173, mt2701 and mt2712) in a slightly different way
+>> to the precedent series.
+>>
+>> Up to now both drivers, clock and drm are probed with the same device tree
+>> compatible. But only the first driver get probed, which in effect breaks
+>> graphics on those devices.
+>>
+>> The version eight of the series tries to solve the problem with a
+>> different approach than the previous series but similar to how is solved
+>> on other Mediatek devices.
+>>
+>> The MMSYS (Multimedia subsystem) in Mediatek SoCs has some registers to
+>> control clock gates (which is used in the clk driver) and some registers
+>> to set the routing and enable the differnet blocks of the display
+>> and MDP (Media Data Path) subsystem. On this series the clk driver is
+>> not a pure clock controller but a system controller that can provide
+>> access to the shared registers between the different drivers that need
+>> it (mediatek-drm and mediatek-mdp). And the biggest change is, that in
+>> this version, clk driver is the entry point (parent) which will trigger
+>> the probe of the corresponding mediatek-drm driver and pass its MMSYS
+>> platform data for display configuration.
 > 
-> 
->  drivers/clk/meson/meson8b.c | 21 +++++++++++++--------
->  1 file changed, 13 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/clk/meson/meson8b.c b/drivers/clk/meson/meson8b.c
-> index 9fd31f23b2a9..34a70c4b4899 100644
-> --- a/drivers/clk/meson/meson8b.c
-> +++ b/drivers/clk/meson/meson8b.c
-> @@ -2605,14 +2605,6 @@ static MESON_GATE(meson8b_spi, HHI_GCLK_MPEG0, 30);
->  static MESON_GATE(meson8b_i2s_spdif, HHI_GCLK_MPEG1, 2);
->  static MESON_GATE(meson8b_eth, HHI_GCLK_MPEG1, 3);
->  static MESON_GATE(meson8b_demux, HHI_GCLK_MPEG1, 4);
-> -static MESON_GATE(meson8b_aiu_glue, HHI_GCLK_MPEG1, 6);
-> -static MESON_GATE(meson8b_iec958, HHI_GCLK_MPEG1, 7);
-> -static MESON_GATE(meson8b_i2s_out, HHI_GCLK_MPEG1, 8);
-> -static MESON_GATE(meson8b_amclk, HHI_GCLK_MPEG1, 9);
-> -static MESON_GATE(meson8b_aififo2, HHI_GCLK_MPEG1, 10);
-> -static MESON_GATE(meson8b_mixer, HHI_GCLK_MPEG1, 11);
-> -static MESON_GATE(meson8b_mixer_iface, HHI_GCLK_MPEG1, 12);
-> -static MESON_GATE(meson8b_adc, HHI_GCLK_MPEG1, 13);
->  static MESON_GATE(meson8b_blkmv, HHI_GCLK_MPEG1, 14);
->  static MESON_GATE(meson8b_aiu, HHI_GCLK_MPEG1, 15);
->  static MESON_GATE(meson8b_uart1, HHI_GCLK_MPEG1, 16);
-> @@ -2659,6 +2651,19 @@ static MESON_GATE(meson8b_vclk2_vencl, HHI_GCLK_OTHER, 25);
->  static MESON_GATE(meson8b_vclk2_other, HHI_GCLK_OTHER, 26);
->  static MESON_GATE(meson8b_edp, HHI_GCLK_OTHER, 31);
->  
-> +/* AIU gates */
-> +#define MESON_AIU_GLUE_GATE(_name, _reg, _bit) \
-> +	MESON_PCLK(_name, _reg, _bit, &meson8b_aiu_glue.hw)
-> +
-> +static MESON_PCLK(meson8b_aiu_glue, HHI_GCLK_MPEG1, 6, &meson8b_aiu.hw);
-> +static MESON_AIU_GLUE_GATE(meson8b_iec958, HHI_GCLK_MPEG1, 7);
-> +static MESON_AIU_GLUE_GATE(meson8b_i2s_out, HHI_GCLK_MPEG1, 8);
-> +static MESON_AIU_GLUE_GATE(meson8b_amclk, HHI_GCLK_MPEG1, 9);
-> +static MESON_AIU_GLUE_GATE(meson8b_aififo2, HHI_GCLK_MPEG1, 10);
-> +static MESON_AIU_GLUE_GATE(meson8b_mixer, HHI_GCLK_MPEG1, 11);
-> +static MESON_AIU_GLUE_GATE(meson8b_mixer_iface, HHI_GCLK_MPEG1, 12);
-> +static MESON_AIU_GLUE_GATE(meson8b_adc, HHI_GCLK_MPEG1, 13);
-> +
->  /* Always On (AO) domain gates */
->  
->  static MESON_GATE(meson8b_ao_media_cpu, HHI_GCLK_AO, 0);
+> When mmsys is a system controller, I prefer to place mmsys in
+> drivers/soc/mediatek, and it share registers for clock, display, and mdp
+> driver. This means the probe function is placed in
+> drivers/soc/mediatek ,its display clock function, mdp clock function are
+> placed in drivers/clk, display routing are placed in drivers/gpu/drm,
+> and mdp routing are placed in dirvers/video.
 > 
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+I understand what you mean but I am not sure this makes the code clearer and
+useful. The driver in drivers/soc/mediatek will be a simple dummy implementation
+of a "simple-mfd" device (a driver that simply matches with
+"mediatek,mt8173-mmsys" and instantiates the "clk-mt8173-mm" and the
+"mediatek-drm" driver (note that mediatek-mdp" is already instantiated via
+device-tree).
+
+It'd be nice had a proper device-tree with a "simple-mfd" for mmsys from the
+beginning representing how really hardwware is, but I think that, change this
+now, will break backward compatibility.
+
+IMHO I think that considering the clk driver as entry point is fine, but this is
+something that the clock maintainers should decide.
+
+Also note that this is not only a MT8173 problem I am seeing the same problem on
+all other Mediatek SoCs.
+
+Thanks.
+
+> Regards,
+> CK
+> 
+>>
+>> All this series was tested on the Acer R13 Chromebook only.
+>>
+>> For reference, here are the links to the old discussions:
+>>
+>> * v7: https://patchwork.kernel.org/project/linux-mediatek/list/?series=241217
+>> * v6: https://patchwork.kernel.org/project/linux-mediatek/list/?series=213219
+>> * v5: https://patchwork.kernel.org/project/linux-mediatek/list/?series=44063
+>> * v4:
+>>   * https://patchwork.kernel.org/patch/10530871/
+>>   * https://patchwork.kernel.org/patch/10530883/
+>>   * https://patchwork.kernel.org/patch/10530885/
+>>   * https://patchwork.kernel.org/patch/10530911/
+>>   * https://patchwork.kernel.org/patch/10530913/
+>> * v3:
+>>   * https://patchwork.kernel.org/patch/10367857/
+>>   * https://patchwork.kernel.org/patch/10367861/
+>>   * https://patchwork.kernel.org/patch/10367877/
+>>   * https://patchwork.kernel.org/patch/10367875/
+>>   * https://patchwork.kernel.org/patch/10367885/
+>>   * https://patchwork.kernel.org/patch/10367883/
+>>   * https://patchwork.kernel.org/patch/10367889/
+>>   * https://patchwork.kernel.org/patch/10367907/
+>>   * https://patchwork.kernel.org/patch/10367909/
+>>   * https://patchwork.kernel.org/patch/10367905/
+>> * v2: No relevant discussion, see v3
+>> * v1:
+>>   * https://patchwork.kernel.org/patch/10016497/
+>>   * https://patchwork.kernel.org/patch/10016499/
+>>   * https://patchwork.kernel.org/patch/10016505/
+>>   * https://patchwork.kernel.org/patch/10016507/
+>>
+>> Best regards,
+>>  Enric
+>>
+>> Changes in v8:
+>> - Be a builtin_platform_driver like other mediatek mmsys drivers.
+>> - New patches introduced in this series.
+>>
+>> Changes in v7:
+>> - Add R-by from CK
+>> - Add R-by from CK
+>> - Fix check of return value of of_clk_get
+>> - Fix identation
+>> - Free clk_data->clks as well
+>> - Get rid of private data structure
+>>
+>> Enric Balletbo i Serra (2):
+>>   drm/mediatek: Move MMSYS configuration to include/linux/platform_data
+>>   clk/drm: mediatek: Fix mediatek-drm device probing
+>>
+>> Matthias Brugger (4):
+>>   drm/mediatek: Use regmap for register access
+>>   drm/mediatek: Omit warning on probe defers
+>>   media: mtk-mdp: Check return value of of_clk_get
+>>   clk: mediatek: mt8173: Switch MMSYS to platform driver
+>>
+>>  drivers/clk/mediatek/Kconfig                  |   6 +
+>>  drivers/clk/mediatek/Makefile                 |   1 +
+>>  drivers/clk/mediatek/clk-mt2701-mm.c          |  30 +++
+>>  drivers/clk/mediatek/clk-mt2712-mm.c          |  44 +++++
+>>  drivers/clk/mediatek/clk-mt8173-mm.c          | 172 ++++++++++++++++++
+>>  drivers/clk/mediatek/clk-mt8173.c             | 104 -----------
+>>  drivers/gpu/drm/mediatek/mtk_disp_color.c     |   5 +-
+>>  drivers/gpu/drm/mediatek/mtk_disp_ovl.c       |   5 +-
+>>  drivers/gpu/drm/mediatek/mtk_disp_rdma.c      |   5 +-
+>>  drivers/gpu/drm/mediatek/mtk_dpi.c            |  12 +-
+>>  drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |   4 +-
+>>  drivers/gpu/drm/mediatek/mtk_drm_ddp.c        |  53 +++---
+>>  drivers/gpu/drm/mediatek/mtk_drm_ddp.h        |   4 +-
+>>  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h   |  56 +-----
+>>  drivers/gpu/drm/mediatek/mtk_drm_drv.c        | 113 +-----------
+>>  drivers/gpu/drm/mediatek/mtk_drm_drv.h        |  13 +-
+>>  drivers/gpu/drm/mediatek/mtk_dsi.c            |   8 +-
+>>  drivers/gpu/drm/mediatek/mtk_hdmi.c           |   4 +-
+>>  drivers/media/platform/mtk-mdp/mtk_mdp_comp.c |   6 +
+>>  include/linux/platform_data/mtk_mmsys.h       |  73 ++++++++
+>>  20 files changed, 401 insertions(+), 317 deletions(-)
+>>  create mode 100644 drivers/clk/mediatek/clk-mt8173-mm.c
+>>  create mode 100644 include/linux/platform_data/mtk_mmsys.h
+>>
+> 
