@@ -2,122 +2,235 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB511695C9
-	for <lists+linux-clk@lfdr.de>; Sun, 23 Feb 2020 05:19:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F3E51697D1
+	for <lists+linux-clk@lfdr.de>; Sun, 23 Feb 2020 14:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727024AbgBWETv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 22 Feb 2020 23:19:51 -0500
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:53607 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726884AbgBWETv (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 22 Feb 2020 23:19:51 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5824321B01;
-        Sat, 22 Feb 2020 23:19:50 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sat, 22 Feb 2020 23:19:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=3tufXe1fL7t2q
-        MfUV7AoAiRO7jy5bJvdqR1dzLQlDus=; b=TsBQ7D98kh1a8h/iD/7I72q/WG6yY
-        0pkwFIcJndxaNtJ+XQ9l+MNjsh7Z4W27s/+7CM/8BCOkx0a1JlsWAqtESIP/tPfk
-        9rXkDeGOsOtYtn7sDaZTaZ6koH9O62VWP7y0ybUX0FXH+mIRCp99rv5gP4cAaplo
-        uK6GKuddfNKXy3x7Mksw7RR7M9iSbt/mMcJKTau/W7rUfEK6507yRHHPdk9F1Dal
-        Dq0qR0DIItwLDPauI8ks4Awdkzl4WBuKH+53CMzO8oqsajoz8h7Fxa1gYRV31SLg
-        sYYk9SOr7JkE5jCEri8swDi2Z4ENGpcvJMCIInjr/A0fx68g6ALha2XBQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; bh=3tufXe1fL7t2qMfUV7AoAiRO7jy5bJvdqR1dzLQlDus=; b=s72qjcMR
-        rkgX7SucHtZUUEYCFB1aG7fR7wLJ94MeJIVywjxQNFwGWAHpm9ghrmQTkhlvicI7
-        pxiWYaXH1tc4koeocnjm3RoEWPD2SiAm4FFl1p0DJElRb/ZSCE7rE2w0+2txjtpN
-        bGxHbWV+o/wGpuJPWSI4yEfsAaB+iXAp3Njlo7tmt3ymiRqkpYj1zkMeU+06VcG8
-        DGJeIXYPbPPLASNFT/Cv9iwNI28kZLu13e9cr4FbT74XJ5z62EQBk1Uq66G/70Kn
-        GHQftx9sgjdEcBb05sEm3BY0i9y4QEq1OOJ4Wly6A6WFBGzKEVtvYhjAG4dfv1cg
-        bnQ9MOuaR4PYuA==
-X-ME-Sender: <xms:Zf1RXqidYo4dxs34wPwvLCTzrcnBicU1EgWtK3TuduAI0iq7y2NCIg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrkeejgdeiiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecukfhppe
-    ejtddrudefhedrudegkedrudehudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
-    mhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:Zf1RXn7ln8dz9-LF5s3x_RmmCbIFy7S7lt2mdXPtq88lfcjZn2ESEw>
-    <xmx:Zf1RXh2g-IjbKl_TKWU9VdY4M8oURlTNwxFIG3cPxiaCgRBsecu7-A>
-    <xmx:Zf1RXitq8vP3mDa2BhFMBC2GNAfB7wtUwKULDBrfybSSRdFN8fYLFQ>
-    <xmx:Zv1RXiYirALwDSpzHxQ2bD2RDBBwxKqnfi-8LQGqZzqV9UioZoccXg>
-Received: from titanium.stl.sholland.net (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 4A0C4328005A;
-        Sat, 22 Feb 2020 23:19:49 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 2/2] Revert "clk: qcom: Support 'protected-clocks' property"
-Date:   Sat, 22 Feb 2020 22:19:48 -0600
-Message-Id: <20200223041948.3218-2-samuel@sholland.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200223041948.3218-1-samuel@sholland.org>
-References: <20200223041948.3218-1-samuel@sholland.org>
+        id S1726490AbgBWNef (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 23 Feb 2020 08:34:35 -0500
+Received: from mail-io1-f41.google.com ([209.85.166.41]:41692 "EHLO
+        mail-io1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726208AbgBWNef (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 23 Feb 2020 08:34:35 -0500
+Received: by mail-io1-f41.google.com with SMTP id m25so7494759ioo.8;
+        Sun, 23 Feb 2020 05:34:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pjlxCHc9TIK73b6JYIZFY6Ze1wSFh93pwbVlW0RqGQw=;
+        b=S4wXPHlYe1klCwC0XEptaw2iN6cSWpw4NT4/SAS2S/cEWnCAhupLRvzoqpScE8/iw4
+         OltgGfgfsOFQY82HJ8j7ZyEqT1KOJmDcXTRjnVzhlmaXIm2DPJB/eTcaJTSQzW1sVALD
+         P9qYRd9J0SVEpUnl1HUmrTnAHZL/hx0r7DYsGda6b2ZlBE0goXdH5yqCUomUx1XeRjz/
+         o0xh5HSIKDg7NfiVoCuK7Fdo+l0thF3jz5Q8DHmj6c/iptKCy7Zlc+6VhrNr7xcwyW3D
+         csalaThVXhZI3jGAyo9o7fwy4PkhBtkb6gg/7S+ak8m2hKpzPg3v+oGU9qjVblYBZJwP
+         7Ggw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pjlxCHc9TIK73b6JYIZFY6Ze1wSFh93pwbVlW0RqGQw=;
+        b=Jas6br1P419vGkHfBo3IB4KQShdxZoSRzGXTANhpLB3RUCCu5J+4IItj6n3TkHCwdu
+         0prb0BFjnPhUZEOynktprmUzRIo2oV7bmTfYISOltZD7gqg9SRTy3erL7Kd4l7LmbU1i
+         0COckqfthLv4pR9EBrILmjPldZoPzYFAjGzMUpNmxGfCuqKaYjpm5ao2uly7oTlWI7mh
+         LpGvaL0MLpr3J027/m+p71C47Jtwq+DilIaD6dcTMLLZEH9dB+yIyxJ7vscixgV009Bf
+         /PWufTlMjV1s8Q+G/thqcOjNymtW7PfT7FSZY9YfuWghmHByXKaFcDFFULR5EzPmLRwu
+         wkfQ==
+X-Gm-Message-State: APjAAAV9dXx/95P4xTBvGWkVjdEaGepsj9/Duu3VVuLvQecpc1c4w/5M
+        jsoxGbOAlN7rwiyZhfA8VYSthRMEhiG40+PSL7TRJ1G5
+X-Google-Smtp-Source: APXvYqzuka0HKg/Fr4Uu0KPzM3CzpCIv3wTW1akb/1w5wysjVXPDkvFNj8eadeNpBXZ1kbVST/UgckRZKgAKVMPUJY8=
+X-Received: by 2002:a5d:8790:: with SMTP id f16mr42917678ion.246.1582464874614;
+ Sun, 23 Feb 2020 05:34:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200216173446.1823-1-linux.amoon@gmail.com> <20200216173446.1823-4-linux.amoon@gmail.com>
+ <1jmu9hzlo2.fsf@starbuckisacylon.baylibre.com> <CANAwSgSaQgU=H3h0S9deT11HA8z9R=Fhy5Kawii9tSBxKf2Wgw@mail.gmail.com>
+ <CAFBinCCSosE1XfwbKZOR9G+DVYg8zFcKShmTNWUhh1e8W0VoAQ@mail.gmail.com>
+In-Reply-To: <CAFBinCCSosE1XfwbKZOR9G+DVYg8zFcKShmTNWUhh1e8W0VoAQ@mail.gmail.com>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Sun, 23 Feb 2020 19:04:23 +0530
+Message-ID: <CANAwSgRZy1K0GZq30cEoH2KiJfjX-5LvkMy79ZeM_aSEyrkD+g@mail.gmail.com>
+Subject: Re: [PATCHv1 3/3] clk: meson: g12a: set cpu clock divider flags too CLK_IS_CRITICAL
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-amlogic@lists.infradead.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Now that protected-clocks is handled in the clk core, this
-driver-specific implementation is redundant.
+Hi Martin / Jerome / Neil,
 
-This reverts commit b181b3b801da8893c8eb706e448dd5111b02de60.
+On Fri, 21 Feb 2020 at 02:45, Martin Blumenstingl
+<martin.blumenstingl@googlemail.com> wrote:
+>
+> Hi Anand,
+>
+> On Mon, Feb 17, 2020 at 2:30 PM Anand Moon <linux.amoon@gmail.com> wrote:
+> [...]
+> > > > @@ -681,7 +682,7 @@ static struct clk_regmap g12b_cpub_clk = {
+> > > >                       &g12a_sys_pll.hw
+> > > >               },
+> > > >               .num_parents = 2,
+> > > > -             .flags = CLK_SET_RATE_PARENT,
+> > > > +             .flags = CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
+> > >
+> > > Why not. Neil what do you think of this ?
+> > > If nothing is claiming this clock and enabling it then I suppose it
+> > > could make sense.
+> > >
+> > I would like core developers to handle this.
+> > Sorry for the noise.
+> can you please resend this patch with only the change to g12b_cpub_clk?
+> I have no G12B board myself so it would be great if you could take care of this!
+>
+>
+> Martin
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
- drivers/clk/qcom/common.c | 18 ------------------
- 1 file changed, 18 deletions(-)
+Thanks, yes I will try again, but I have a question.
 
-diff --git a/drivers/clk/qcom/common.c b/drivers/clk/qcom/common.c
-index 60d2a78d1395..6e150fd32dbe 100644
---- a/drivers/clk/qcom/common.c
-+++ b/drivers/clk/qcom/common.c
-@@ -194,22 +194,6 @@ int qcom_cc_register_sleep_clk(struct device *dev)
- }
- EXPORT_SYMBOL_GPL(qcom_cc_register_sleep_clk);
- 
--/* Drop 'protected-clocks' from the list of clocks to register */
--static void qcom_cc_drop_protected(struct device *dev, struct qcom_cc *cc)
--{
--	struct device_node *np = dev->of_node;
--	struct property *prop;
--	const __be32 *p;
--	u32 i;
--
--	of_property_for_each_u32(np, "protected-clocks", prop, p, i) {
--		if (i >= cc->num_rclks)
--			continue;
--
--		cc->rclks[i] = NULL;
--	}
--}
--
- static struct clk_hw *qcom_cc_clk_hw_get(struct of_phandle_args *clkspec,
- 					 void *data)
- {
-@@ -272,8 +256,6 @@ int qcom_cc_really_probe(struct platform_device *pdev,
- 	cc->rclks = rclks;
- 	cc->num_rclks = num_clks;
- 
--	qcom_cc_drop_protected(dev, cc);
--
- 	for (i = 0; i < num_clk_hws; i++) {
- 		ret = devm_clk_hw_register(dev, clk_hws[i]);
- 		if (ret)
--- 
-2.24.1
+On eMMC module  *cpub_clk* is not getting enabled, see below is
+clk_summay of eMMC.
+[...]
+          fclk_div2_div               1        1        0   999999985
+        0     0  50000
+             fclk_div2                2        2        0   999999985
+        0     0  50000
+                ff3f0000.ethernet#m250_sel       1        1        0
+999999985          0     0  50000
+                   ff3f0000.ethernet#m250_div       1        1
+0   249999997          0     0  50000
+                      ff3f0000.ethernet#fixed_div2       1        1
+    0   124999998          0     0  50000
+                         ff3f0000.ethernet#rgmii_tx_en       1
+1        0   124999998          0     0  50000
+                ffe07000.mmc#mux       1        1        0   999999985
+         0     0  50000
+                   ffe07000.mmc#div       1        1        0
+199999997          0     0  50000
+                cpub_clk_dyn1_sel       0        0        0
+999999985          0     0  50000
+                   cpub_clk_dyn1       0        0        0   999999985
+         0     0  50000
+                      cpub_clk_dyn       0        0        0
+999999985          0     0  50000
+                         cpub_clk       0        0        0
+999999985          0     0  50000
+                            cpub_clk_div8       0        0        0
+124999998          0     0  50000
+                            cpub_clk_div7       0        0        0
+142857140          0     0  50000
+                            cpub_clk_div6       0        0        0
+166666664          0     0  50000
+                               cpub_clk_trace_sel       0        0
+   0   166666664          0     0  50000
+                                  cpub_clk_trace       0        0
+  0   166666664          0     0  50000
+                            cpub_clk_div5       0        0        0
+199999997          0     0  50000
+                               cpub_clk_apb_sel       0        0
+ 0   199999997          0     0  50000
+                                  cpub_clk_apb       0        0
+0   199999997          0     0  50000
+                            cpub_clk_div4       0        0        0
+249999996          0     0  50000
+                            cpub_clk_div3       0        0        0
+333333328          0     0  50000
+                               cpub_clk_atb_sel       0        0
+ 0   333333328          0     0  50000
+                                  cpub_clk_atb       0        0
+0   333333328          0     0  50000
+                            cpub_clk_div2       0        0        0
+499999992          0     0  50000
+                               cpub_clk_axi_sel       0        0
+ 0   499999992          0     0  50000
+                                  cpub_clk_axi       0        0
+0   499999992          0     0  50000
+                            cpub_clk_div16_en       0        0
+0   999999985          0     0  50000
+                               cpub_clk_div16       0        0
+0    62499999          0     0  50000
 
+After enable *cpub_clk* flags with
+.flags = CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
+this clk is enabled on microSD card see clk_summary below.
+[...]
+         fclk_div2_div               1        1        0   999999985
+       0     0  50000
+             fclk_div2                3        3        0   999999985
+        0     0  50000
+                ff3f0000.ethernet#m250_sel       1        1        0
+999999985          0     0  50000
+                   ff3f0000.ethernet#m250_div       1        1
+0   249999997          0     0  50000
+                      ff3f0000.ethernet#fixed_div2       1        1
+    0   124999998          0     0  50000
+                         ff3f0000.ethernet#rgmii_tx_en       1
+1        0   124999998          0     0  50000
+                ffe05000.sd#mux       1        1        0   999999985
+        0     0  50000
+                   ffe05000.sd#div       1        1        0
+50000000          0     0  50000
+                cpub_clk_dyn1_sel       1        1        0
+999999985          0     0  50000
+                   cpub_clk_dyn1       1        1        0   999999985
+         0     0  50000
+                      cpub_clk_dyn       1        1        0
+999999985          0     0  50000
+                         cpub_clk       1        1        0
+999999985          0     0  50000
+                            cpub_clk_div8       0        0        0
+124999998          0     0  50000
+                            cpub_clk_div7       0        0        0
+142857140          0     0  50000
+                            cpub_clk_div6       0        0        0
+166666664          0     0  50000
+                               cpub_clk_trace_sel       0        0
+   0   166666664          0     0  50000
+                                  cpub_clk_trace       0        0
+  0   166666664          0     0  50000
+                            cpub_clk_div5       0        0        0
+199999997          0     0  50000
+                               cpub_clk_apb_sel       0        0
+ 0   199999997          0     0  50000
+                                  cpub_clk_apb       0        0
+0   199999997          0     0  50000
+                            cpub_clk_div4       0        0        0
+249999996          0     0  50000
+                            cpub_clk_div3       0        0        0
+333333328          0     0  50000
+                               cpub_clk_atb_sel       0        0
+ 0   333333328          0     0  50000
+                                  cpub_clk_atb       0        0
+0   333333328          0     0  50000
+                            cpub_clk_div2       0        0        0
+499999992          0     0  50000
+                               cpub_clk_axi_sel       0        0
+ 0   499999992          0     0  50000
+                                  cpub_clk_axi       0        0
+0   499999992          0     0  50000
+                            cpub_clk_div16_en       0        0
+0   999999985          0     0  50000
+                               cpub_clk_div16       0        0
+0    62499999          0     0  50000
+                   cpub_clk_dyn1_div       0        0        0
+999999985          0     0  50000
+
+Is this correct approach to set the flags to enable *cpub_clk*.
+.flags = CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
+
+What I meant is their *Dyn_enable[26]* field for enable/disable for
+HHI_SYS_CPU_CLK_CNTL0 and HHI_SYS_CPUB_CLK_CNTL clk controller.
+in the S922X datasheets which could help resolve this issue.
+Any thought on this.
+
+-Anand
