@@ -2,245 +2,256 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D3816A1A8
-	for <lists+linux-clk@lfdr.de>; Mon, 24 Feb 2020 10:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7AE16A251
+	for <lists+linux-clk@lfdr.de>; Mon, 24 Feb 2020 10:31:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728501AbgBXJQI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 24 Feb 2020 04:16:08 -0500
-Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:33209 "EHLO
-        wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728373AbgBXJQH (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Feb 2020 04:16:07 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 0160E61F;
-        Mon, 24 Feb 2020 04:09:28 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 24 Feb 2020 04:09:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=GJTCftH9+aMh6
-        9hSTQ5SiskF083sH6bzhzDLbLcu8to=; b=ZuqNwR/tnLyQbMrwfZAz4q0MVb3Cp
-        Rdb01zSvLob8F8GbbfiNuqpxCGHk1zUWXCW4uc1MyixE49lVBbcoJSoBRBbnuBxC
-        iKDgGz6IAb3kE1phNmfN2tI56wmNRkvcz2Y2L2Ng82zHA1THemcTQFFQ0/NVFCi5
-        wFEwJxwe+COUFxF7CTrAmTEXdVQS4K0MdNt98nX0ErGYYGa6girEBv1DLWJpwTka
-        LvIG94FWpRXqGdZk0lx6QR5c1uoKnEvMfocMum6ECBkK0Ex/Z8MhhN00TGojmb9h
-        hEzqg5r+PPxbRkHocseR+0LFSGwb+/l232OPdy75K3gWifjKtdPd4vCGw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; bh=GJTCftH9+aMh69hSTQ5SiskF083sH6bzhzDLbLcu8to=; b=nlJrwX8f
-        ALtwwc1dRumaQXpIWKFF4L9wWsBgmZKTXDPaQg7mu2DvCKdX2mscO7nUMaR5QSDy
-        c74mlIIh8efo0JcZAD90CedqCDkbX/RJkc1ywutf14NZmHlDvrmK3nwb19mD1g1c
-        yeb2k1oRnVJ0gPQcwieoWPP/Be6HoNjBusivW3K2rDGjp3tlQpHkwhKpFydmMmZT
-        oF2fO9ihdAP6JlO1RuSVqPazz+yAFgKV17x8b2nydoYyS1HyjXBtchm3aelWa4rj
-        8iyV7T0u+5ZSwHnj85CxN7hdOxlPxnxqYaBZKBPGKarQS5QNRxhz0RUkLHPGQmpl
-        uJcGmHFXKnLRbw==
-X-ME-Sender: <xms:yJJTXifYGygHEUw63DMiqToDF8BAZ0REtoNi7dbLogcdGcgZjkn-Zg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrledtucetufdoteggodetrfdotffvucfrrh
-    hofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    ephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhmvgcutfhi
-    phgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuffhomhgrihhnpehrtg
-    guvghvrdhnrhenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigv
-    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtg
-    hh
-X-ME-Proxy: <xmx:yJJTXm7rp1BpBGKc4PjUvRspH-8Y8122kT0D-pWW6TRu2ILvFsv_vg>
-    <xmx:yJJTXqLEK69NKIExlSi6QwiRx0iOBvDTw1tmT50kuWhfmZBovAvQRQ>
-    <xmx:yJJTXq7gzEY7u7MQcx8_pVEasOYdIZbT34GFCxy3nDvpCuXcJw3Svg>
-    <xmx:yJJTXvJc7CGTCjuWoY_QFgYNisSBglZsX7FO-aLiFlL4W-bIjlXYaT3n5dE>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 361363060FCB;
-        Mon, 24 Feb 2020 04:09:28 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Eric Anholt <eric@anholt.net>
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-rpi-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Tim Gover <tim.gover@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Maxime Ripard <maxime@cerno.tech>,
+        id S1726687AbgBXJbH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 24 Feb 2020 04:31:07 -0500
+Received: from mail-wm1-f47.google.com ([209.85.128.47]:40914 "EHLO
+        mail-wm1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726628AbgBXJbG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Feb 2020 04:31:06 -0500
+Received: by mail-wm1-f47.google.com with SMTP id t14so8547873wmi.5
+        for <linux-clk@vger.kernel.org>; Mon, 24 Feb 2020 01:31:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=YOte6mkbLz8vWB4XILdt5n/2oNrjFYd6rB4VsC43SZs=;
+        b=LkScTrUJ1WRO4koGPH5T6yQVaJ/OAjh8lS3tJhPh6V8y0lH1xCydRzutbqRCYe7YkX
+         6LLTRBr+r+C9S4l73An6he9drrVTqKpwJzpWa1OtuF68XVklQ/WCaHFqmdPtH/lHa02R
+         bZ8c4UQgfobDpNloGFB1ahsWLkuaTVdBhvPc0Qoga/kfGKD01BdL4TGDToph7eEY7HrP
+         vznp3bUWfpFS7RClFIgV6Bn7gt8Uvlc8Rp5JMwlKd+7aY8ADJ6DJNHCG8c+l7HRESLuc
+         iZpnocdwelXCfeYzSjkL9abx7gx+LJgIOrob4VmGvA5ViD9up+PMrfJHwaKHHzch9bxk
+         LlKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=YOte6mkbLz8vWB4XILdt5n/2oNrjFYd6rB4VsC43SZs=;
+        b=cJw8XpZTexbP2GLWtbBj6/PFHjpEpf+3uYzWaS3OGK9BsB/QsFahrbNXSiwNGnMwvX
+         NJPBfIkbadYpKgISLKlZtIIA3soXNr4umd6Z4tks79RiYNF9QRu9gG3kauvgvt/ncfZY
+         x2nnS5B+iP3YACaUviwoV/zsnKlJ0+feAzPTu92/Ea0M2qcM2WL2Gs9Qty+IVGzMM7dx
+         EB77Ee2qX1j6Z6nxSYzuXNIQw2FGN7DTO8Sx5Ik3H+N+9uR2VRSJSV2/7uJCAqtYyM/e
+         iCrxK4Gp5m+DoZocSuDObGtWRm7WkUjMToB9Umv4kgifoZgWj7Nf28Uz28y19eCiA5yk
+         4VEw==
+X-Gm-Message-State: APjAAAWt7WaSbGxGiJBzwz6Y011GBVZGU/0A6dndINXBzFFBio0t5YxD
+        F7MbnZ0++jBtV9h0iS4N+vTHoQ==
+X-Google-Smtp-Source: APXvYqzpPJJc/gi2QDQZsmpxB1GGyiaXMyI3zKCeQIn/x5jdKbDBEK0RMFsxIzWortV5efOCDJJqpA==
+X-Received: by 2002:a1c:a443:: with SMTP id n64mr20158521wme.141.1582536663181;
+        Mon, 24 Feb 2020 01:31:03 -0800 (PST)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id 133sm18669254wme.32.2020.02.24.01.31.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Feb 2020 01:31:02 -0800 (PST)
+References: <20200216173446.1823-1-linux.amoon@gmail.com> <20200216173446.1823-4-linux.amoon@gmail.com> <1jmu9hzlo2.fsf@starbuckisacylon.baylibre.com> <CANAwSgSaQgU=H3h0S9deT11HA8z9R=Fhy5Kawii9tSBxKf2Wgw@mail.gmail.com> <CAFBinCCSosE1XfwbKZOR9G+DVYg8zFcKShmTNWUhh1e8W0VoAQ@mail.gmail.com> <CANAwSgRZy1K0GZq30cEoH2KiJfjX-5LvkMy79ZeM_aSEyrkD+g@mail.gmail.com>
+User-agent: mu4e 1.3.3; emacs 26.3
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Anand Moon <linux.amoon@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH 27/89] clk: bcm: Add BCM2711 DVP driver
-Date:   Mon, 24 Feb 2020 10:06:29 +0100
-Message-Id: <6dd6bd48e894c1e8ee85c29a30ba1b18041d83c4.1582533919.git-series.maxime@cerno.tech>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <cover.6c896ace9a5a7840e9cec008b553cbb004ca1f91.1582533919.git-series.maxime@cerno.tech>
-References: <cover.6c896ace9a5a7840e9cec008b553cbb004ca1f91.1582533919.git-series.maxime@cerno.tech>
+        Kevin Hilman <khilman@baylibre.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-amlogic@lists.infradead.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        "open list\:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>
+Subject: Re: [PATCHv1 3/3] clk: meson: g12a: set cpu clock divider flags too CLK_IS_CRITICAL
+In-reply-to: <CANAwSgRZy1K0GZq30cEoH2KiJfjX-5LvkMy79ZeM_aSEyrkD+g@mail.gmail.com>
+Date:   Mon, 24 Feb 2020 10:31:01 +0100
+Message-ID: <1jo8togwmi.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The HDMI block has a block that controls clocks and reset signals to the
-HDMI0 and HDMI1 controllers.
 
-Let's expose that through a clock driver implementing a clock and reset
-provider.
+On Sun 23 Feb 2020 at 14:34, Anand Moon <linux.amoon@gmail.com> wrote:
 
-Cc: Michael Turquette <mturquette@baylibre.com>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-clk@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/clk/bcm/Kconfig           |   1 +-
- drivers/clk/bcm/Makefile          |   1 +-
- drivers/clk/bcm/clk-bcm2711-dvp.c | 113 +++++++++++++++++++++++++++++++-
- 3 files changed, 115 insertions(+)
- create mode 100644 drivers/clk/bcm/clk-bcm2711-dvp.c
+> Hi Martin / Jerome / Neil,
+>
+> On Fri, 21 Feb 2020 at 02:45, Martin Blumenstingl
+> <martin.blumenstingl@googlemail.com> wrote:
+>>
+>> Hi Anand,
+>>
+>> On Mon, Feb 17, 2020 at 2:30 PM Anand Moon <linux.amoon@gmail.com> wrote:
+>> [...]
+>> > > > @@ -681,7 +682,7 @@ static struct clk_regmap g12b_cpub_clk = {
+>> > > >                       &g12a_sys_pll.hw
+>> > > >               },
+>> > > >               .num_parents = 2,
+>> > > > -             .flags = CLK_SET_RATE_PARENT,
+>> > > > +             .flags = CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
+>> > >
+>> > > Why not. Neil what do you think of this ?
+>> > > If nothing is claiming this clock and enabling it then I suppose it
+>> > > could make sense.
+>> > >
+>> > I would like core developers to handle this.
+>> > Sorry for the noise.
+>> can you please resend this patch with only the change to g12b_cpub_clk?
+>> I have no G12B board myself so it would be great if you could take care of this!
+>>
+>>
+>> Martin
+>
+> Thanks, yes I will try again, but I have a question.
+>
+> On eMMC module  *cpub_clk* is not getting enabled, see below is
+> clk_summay of eMMC.
 
-diff --git a/drivers/clk/bcm/Kconfig b/drivers/clk/bcm/Kconfig
-index 8c83977a7dc4..03bbd8040451 100644
---- a/drivers/clk/bcm/Kconfig
-+++ b/drivers/clk/bcm/Kconfig
-@@ -4,6 +4,7 @@ config CLK_BCM2835
- 	depends on ARCH_BCM2835 || ARCH_BRCMSTB || COMPILE_TEST
- 	depends on COMMON_CLK
- 	default ARCH_BCM2835 || ARCH_BRCMSTB
-+	select RESET_SIMPLE
- 	help
- 	  Enable common clock framework support for Broadcom BCM2835
- 	  SoCs.
-diff --git a/drivers/clk/bcm/Makefile b/drivers/clk/bcm/Makefile
-index 0070ddf6cdd2..2c1349062147 100644
---- a/drivers/clk/bcm/Makefile
-+++ b/drivers/clk/bcm/Makefile
-@@ -6,6 +6,7 @@ obj-$(CONFIG_CLK_BCM_KONA)	+= clk-kona-setup.o
- obj-$(CONFIG_CLK_BCM_KONA)	+= clk-bcm281xx.o
- obj-$(CONFIG_CLK_BCM_KONA)	+= clk-bcm21664.o
- obj-$(CONFIG_COMMON_CLK_IPROC)	+= clk-iproc-armpll.o clk-iproc-pll.o clk-iproc-asiu.o
-+obj-$(CONFIG_CLK_BCM2835)	+= clk-bcm2711-dvp.o
- obj-$(CONFIG_CLK_BCM2835)	+= clk-bcm2835.o
- obj-$(CONFIG_CLK_BCM2835)	+= clk-bcm2835-aux.o
- obj-$(CONFIG_CLK_RASPBERRYPI)	+= clk-raspberrypi.o
-diff --git a/drivers/clk/bcm/clk-bcm2711-dvp.c b/drivers/clk/bcm/clk-bcm2711-dvp.c
-new file mode 100644
-index 000000000000..f4773cc92724
---- /dev/null
-+++ b/drivers/clk/bcm/clk-bcm2711-dvp.c
-@@ -0,0 +1,113 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+// Copyright 2020 Cerno
-+
-+#include <linux/clk-provider.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/reset-controller.h>
-+#include <linux/reset/reset-simple.h>
-+
-+#define DVP_HT_RPI_SW_INIT	0x04
-+#define DVP_HT_RPI_MISC_CONFIG	0x08
-+
-+#define NR_CLOCKS	2
-+#define NR_RESETS	6
-+
-+struct clk_dvp {
-+	struct clk			*clks[NR_CLOCKS];
-+	struct clk_onecell_data		clk_data;
-+	struct reset_simple_data	reset;
-+};
-+
-+static int clk_dvp_probe(struct platform_device *pdev)
-+{
-+	struct resource *res;
-+	struct clk_dvp *dvp;
-+	void __iomem *base;
-+	const char *parent;
-+	int ret;
-+
-+	dvp = devm_kzalloc(&pdev->dev, sizeof(*dvp), GFP_KERNEL);
-+	if (!dvp)
-+		return -ENOMEM;
-+	platform_set_drvdata(pdev, dvp);
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	base = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
-+
-+	dvp->reset.rcdev.owner = THIS_MODULE;
-+	dvp->reset.rcdev.nr_resets = NR_RESETS;
-+	dvp->reset.rcdev.ops = &reset_simple_ops;
-+	dvp->reset.rcdev.of_node = pdev->dev.of_node;
-+	dvp->reset.membase = base + DVP_HT_RPI_SW_INIT;
-+	spin_lock_init(&dvp->reset.lock);
-+
-+	ret = reset_controller_register(&dvp->reset.rcdev);
-+	if (ret)
-+		return ret;
-+
-+	parent = of_clk_get_parent_name(pdev->dev.of_node, 0);
-+	if (!parent)
-+		goto unregister_reset;
-+
-+	dvp->clks[0] = clk_register_gate(&pdev->dev, "hdmi0-108MHz",
-+					 parent, CLK_IS_CRITICAL,
-+					 base + DVP_HT_RPI_MISC_CONFIG, 3,
-+					 CLK_GATE_SET_TO_DISABLE, &dvp->reset.lock);
-+	if (IS_ERR(dvp->clks[0])) {
-+		ret = PTR_ERR(dvp->clks[0]);
-+		goto unregister_reset;
-+	}
-+
-+	dvp->clks[1] = clk_register_gate(&pdev->dev, "hdmi1-108MHz",
-+					 parent, CLK_IS_CRITICAL,
-+					 base + DVP_HT_RPI_MISC_CONFIG, 4,
-+					 CLK_GATE_SET_TO_DISABLE, &dvp->reset.lock);
-+	if (IS_ERR(dvp->clks[1])) {
-+		ret = PTR_ERR(dvp->clks[1]);
-+		goto unregister_clk0;
-+	}
-+
-+	dvp->clk_data.clks = dvp->clks;
-+	dvp->clk_data.clk_num = NR_CLOCKS;
-+	of_clk_add_provider(pdev->dev.of_node, of_clk_src_onecell_get,
-+			    &dvp->clk_data);
-+
-+	return 0;
-+
-+
-+unregister_clk0:
-+	clk_unregister_gate(dvp->clks[0]);
-+
-+unregister_reset:
-+	reset_controller_unregister(&dvp->reset.rcdev);
-+	return ret;
-+};
-+
-+static int clk_dvp_remove(struct platform_device *pdev)
-+{
-+	struct clk_dvp *dvp = platform_get_drvdata(pdev);
-+
-+	clk_unregister_gate(dvp->clks[1]);
-+	clk_unregister_gate(dvp->clks[0]);
-+	reset_controller_unregister(&dvp->reset.rcdev);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id clk_dvp_dt_ids[] = {
-+	{ .compatible = "brcm,brcm2711-dvp", },
-+	{ /* sentinel */ },
-+};
-+
-+static struct platform_driver clk_dvp_driver = {
-+	.probe	= clk_dvp_probe,
-+	.remove	= clk_dvp_remove,
-+	.driver	= {
-+		.name		= "brcm2711-dvp",
-+		.of_match_table	= clk_dvp_dt_ids,
-+	},
-+};
-+module_platform_driver(clk_dvp_driver);
--- 
-git-series 0.9.1
+I'm sorry but I don't understand the link between the cpu clock of the
+second cluster and MMC.
+
+> [...]
+>           fclk_div2_div               1        1        0   999999985
+>         0     0  50000
+>              fclk_div2                2        2        0   999999985
+>         0     0  50000
+>                 ff3f0000.ethernet#m250_sel       1        1        0
+> 999999985          0     0  50000
+>                    ff3f0000.ethernet#m250_div       1        1
+> 0   249999997          0     0  50000
+>                       ff3f0000.ethernet#fixed_div2       1        1
+>     0   124999998          0     0  50000
+>                          ff3f0000.ethernet#rgmii_tx_en       1
+> 1        0   124999998          0     0  50000
+>                 ffe07000.mmc#mux       1        1        0   999999985
+>          0     0  50000
+>                    ffe07000.mmc#div       1        1        0
+> 199999997          0     0  50000
+>                 cpub_clk_dyn1_sel       0        0        0
+> 999999985          0     0  50000
+>                    cpub_clk_dyn1       0        0        0   999999985
+>          0     0  50000
+>                       cpub_clk_dyn       0        0        0
+> 999999985          0     0  50000
+>                          cpub_clk       0        0        0
+> 999999985          0     0  50000
+>                             cpub_clk_div8       0        0        0
+> 124999998          0     0  50000
+>                             cpub_clk_div7       0        0        0
+> 142857140          0     0  50000
+>                             cpub_clk_div6       0        0        0
+> 166666664          0     0  50000
+>                                cpub_clk_trace_sel       0        0
+>    0   166666664          0     0  50000
+>                                   cpub_clk_trace       0        0
+>   0   166666664          0     0  50000
+>                             cpub_clk_div5       0        0        0
+> 199999997          0     0  50000
+>                                cpub_clk_apb_sel       0        0
+>  0   199999997          0     0  50000
+>                                   cpub_clk_apb       0        0
+> 0   199999997          0     0  50000
+>                             cpub_clk_div4       0        0        0
+> 249999996          0     0  50000
+>                             cpub_clk_div3       0        0        0
+> 333333328          0     0  50000
+>                                cpub_clk_atb_sel       0        0
+>  0   333333328          0     0  50000
+>                                   cpub_clk_atb       0        0
+> 0   333333328          0     0  50000
+>                             cpub_clk_div2       0        0        0
+> 499999992          0     0  50000
+>                                cpub_clk_axi_sel       0        0
+>  0   499999992          0     0  50000
+>                                   cpub_clk_axi       0        0
+> 0   499999992          0     0  50000
+>                             cpub_clk_div16_en       0        0
+> 0   999999985          0     0  50000
+>                                cpub_clk_div16       0        0
+> 0    62499999          0     0  50000
+
+I can't read that.
+
+>
+> After enable *cpub_clk* flags with
+> .flags = CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
+> this clk is enabled on microSD card see clk_summary below.
+
+Again, I don't get the relationship between cpub and sdcard (or eMMC)
+
+> [...]
+>          fclk_div2_div               1        1        0   999999985
+>        0     0  50000
+>              fclk_div2                3        3        0   999999985
+>         0     0  50000
+>                 ff3f0000.ethernet#m250_sel       1        1        0
+> 999999985          0     0  50000
+>                    ff3f0000.ethernet#m250_div       1        1
+> 0   249999997          0     0  50000
+>                       ff3f0000.ethernet#fixed_div2       1        1
+>     0   124999998          0     0  50000
+>                          ff3f0000.ethernet#rgmii_tx_en       1
+> 1        0   124999998          0     0  50000
+>                 ffe05000.sd#mux       1        1        0   999999985
+>         0     0  50000
+>                    ffe05000.sd#div       1        1        0
+> 50000000          0     0  50000
+>                 cpub_clk_dyn1_sel       1        1        0
+> 999999985          0     0  50000
+>                    cpub_clk_dyn1       1        1        0   999999985
+>          0     0  50000
+>                       cpub_clk_dyn       1        1        0
+> 999999985          0     0  50000
+>                          cpub_clk       1        1        0
+> 999999985          0     0  50000
+>                             cpub_clk_div8       0        0        0
+> 124999998          0     0  50000
+>                             cpub_clk_div7       0        0        0
+> 142857140          0     0  50000
+>                             cpub_clk_div6       0        0        0
+> 166666664          0     0  50000
+>                                cpub_clk_trace_sel       0        0
+>    0   166666664          0     0  50000
+>                                   cpub_clk_trace       0        0
+>   0   166666664          0     0  50000
+>                             cpub_clk_div5       0        0        0
+> 199999997          0     0  50000
+>                                cpub_clk_apb_sel       0        0
+>  0   199999997          0     0  50000
+>                                   cpub_clk_apb       0        0
+> 0   199999997          0     0  50000
+>                             cpub_clk_div4       0        0        0
+> 249999996          0     0  50000
+>                             cpub_clk_div3       0        0        0
+> 333333328          0     0  50000
+>                                cpub_clk_atb_sel       0        0
+>  0   333333328          0     0  50000
+>                                   cpub_clk_atb       0        0
+> 0   333333328          0     0  50000
+>                             cpub_clk_div2       0        0        0
+> 499999992          0     0  50000
+>                                cpub_clk_axi_sel       0        0
+>  0   499999992          0     0  50000
+>                                   cpub_clk_axi       0        0
+> 0   499999992          0     0  50000
+>                             cpub_clk_div16_en       0        0
+> 0   999999985          0     0  50000
+>                                cpub_clk_div16       0        0
+> 0    62499999          0     0  50000
+>                    cpub_clk_dyn1_div       0        0        0
+> 999999985          0     0  50000
+>
+> Is this correct approach to set the flags to enable *cpub_clk*.
+> .flags = CLK_SET_RATE_PARENT | CLK_IS_CRITICAL,
+>
+> What I meant is their *Dyn_enable[26]* field for enable/disable for
+> HHI_SYS_CPU_CLK_CNTL0 and HHI_SYS_CPUB_CLK_CNTL clk controller.
+> in the S922X datasheets which could help resolve this issue.
+> Any thought on this.
+
+I sorry but I'm just lost. I don't understand anything above so I can't
+comment.
+
+>
+> -Anand
+
