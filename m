@@ -2,73 +2,82 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AD82169CAB
-	for <lists+linux-clk@lfdr.de>; Mon, 24 Feb 2020 04:39:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 484D6169D07
+	for <lists+linux-clk@lfdr.de>; Mon, 24 Feb 2020 05:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727189AbgBXDjX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 23 Feb 2020 22:39:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48406 "EHLO mail.kernel.org"
+        id S1727275AbgBXEhE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 23 Feb 2020 23:37:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33936 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727166AbgBXDjX (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 23 Feb 2020 22:39:23 -0500
-Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
+        id S1727186AbgBXEhE (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 23 Feb 2020 23:37:04 -0500
+Received: from localhost (unknown [122.182.199.233])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8711620658;
-        Mon, 24 Feb 2020 03:39:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E67E820661;
+        Mon, 24 Feb 2020 04:37:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582515562;
-        bh=JkrEc2MaNepQNF9f/dnwBAADKS3nNGfp1NS3WsPz978=;
+        s=default; t=1582519023;
+        bh=P5Qao53KIB3kKLtEhL3ENA/1Qg4vJttiLKMmauTZHwM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hRRB/vVqLw+c4mdGgtuPTPGB088ciHEohbGC1mZe9LVWhf5auaqrw0Yw9DLW+eVNY
-         azTqZg+KuarjySjwk3i8iVbDsApgXZNFWanZ2ISkdUfTdCEOSOPsT1cR1zd6O6FuLK
-         hh9ISC3IqCMHsrWn+E+2dmI+qjOMk2TCgXgLMkog=
-Date:   Mon, 24 Feb 2020 11:39:11 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     peng.fan@nxp.com
-Cc:     sboyd@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        abel.vesa@nxp.com, leonard.crestez@nxp.com, kernel@pengutronix.de,
-        linux-imx@nxp.com, aisheng.dong@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        anson.huang@nxp.com, ping.bai@nxp.com, l.stach@pengutronix.de
-Subject: Re: [PATCH RESEND v3 0/4] clk: imx: imx8m: fix a53 cpu clock
-Message-ID: <20200224033911.GH27688@dragon>
-References: <1582107429-21123-1-git-send-email-peng.fan@nxp.com>
+        b=ewBQR6pVIKPrBiJR5jIKavdNiN5bHXovPDNL5epeduTDKGuszb0KwcL6I3Z8EJzdO
+         UaZafLdb473sPnq2h3vQ1sAPAS3Q7QwbTYnO1yynhfDT20e7bZFURSlIBeKadgx5m5
+         0iwvisMb55keuSIChleojblBwAbrykM223OLLR2M=
+Date:   Mon, 24 Feb 2020 10:06:59 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        psodagud@codeaurora.org, tsoni@codeaurora.org,
+        jshriram@codeaurora.org, vnkgutta@codeaurora.org
+Subject: Re: [PATCH v3 4/5] dt-bindings: clock: Add SM8250 GCC clock bindings
+Message-ID: <20200224043659.GS2618@vkoul-mobl>
+References: <20200216102725.2629155-1-vkoul@kernel.org>
+ <20200216102725.2629155-5-vkoul@kernel.org>
+ <20200218203345.GA19813@bogus>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1582107429-21123-1-git-send-email-peng.fan@nxp.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200218203345.GA19813@bogus>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 06:17:05PM +0800, peng.fan@nxp.com wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On 18-02-20, 14:33, Rob Herring wrote:
+> On Sun, Feb 16, 2020 at 03:57:24PM +0530, Vinod Koul wrote:
+> > From: Taniya Das <tdas@codeaurora.org>
+> > 
+> > Add device tree bindings for global clock controller on SM8250 SoCs.
+> > 
+> > Signed-off-by: Taniya Das <tdas@codeaurora.org>
+> > Signed-off-by: Venkata Narendra Kumar Gutta <vnkgutta@codeaurora.org>
+> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > ---
+> >  .../bindings/clock/qcom,gcc-sm8250.yaml       |  72 +++++
+> >  include/dt-bindings/clock/qcom,gcc-sm8250.h   | 271 ++++++++++++++++++
+> >  2 files changed, 343 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml
+> >  create mode 100644 include/dt-bindings/clock/qcom,gcc-sm8250.h
+> > 
+> > diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml
+> > new file mode 100644
+> > index 000000000000..d48fb25b0d44
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml
+> > @@ -0,0 +1,72 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only
 > 
-> V3:
->  Rebased to Shawn's for-next branch
->  Typo fix
+> Dual license new bindings please:
 > 
-> V2:
->  Fix i.MX8MP build
->  Update cover letter, i.MX7D not have this issue 
-> 
-> The A53 CCM clk root only accepts input up to 1GHz, CCM A53 root
-> signoff timing is 1Ghz, however the A53 core which sources from CCM
-> root could run above 1GHz which voilates the CCM.
-> 
-> There is a CORE_SEL slice before A53 core, we need configure the
-> CORE_SEL slice source from ARM PLL, not A53 CCM clk root.
-> 
-> The A53 CCM clk root should only be used when need to change ARM PLL
-> frequency.
-> 
-> Peng Fan (4):
->   clk: imx: imx8mq: fix a53 cpu clock
->   clk: imx: imx8mm: fix a53 cpu clock
->   clk: imx: imx8mn: fix a53 cpu clock
->   clk: imx: imx8mp: fix a53 cpu clock
+> (GPL-2.0-only OR BSD-2-Clause)
 
-Applied all, thanks.
+Sure will update, thanks for pointing
+
+-- 
+~Vinod
