@@ -2,55 +2,56 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F2916A18F
-	for <lists+linux-clk@lfdr.de>; Mon, 24 Feb 2020 10:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D3816A1A8
+	for <lists+linux-clk@lfdr.de>; Mon, 24 Feb 2020 10:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728153AbgBXJQD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 24 Feb 2020 04:16:03 -0500
-Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:35391 "EHLO
+        id S1728501AbgBXJQI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 24 Feb 2020 04:16:08 -0500
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:33209 "EHLO
         wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727709AbgBXJQD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Feb 2020 04:16:03 -0500
+        by vger.kernel.org with ESMTP id S1728373AbgBXJQH (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Feb 2020 04:16:07 -0500
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id C34CF60E;
-        Mon, 24 Feb 2020 04:09:21 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 24 Feb 2020 04:09:22 -0500
+        by mailnew.west.internal (Postfix) with ESMTP id 0160E61F;
+        Mon, 24 Feb 2020 04:09:28 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Mon, 24 Feb 2020 04:09:30 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=DwriZRHRN7fN7
-        mhHrJdEKvtb3nQZcEd0mgRQMVSwm/Y=; b=g5yDTxoj8S6kyr6YkHEMf6zhkqMYw
-        X/hsZAJnTYpW/02DOjvTpoXhDxSJjJ+9R38OQaJoDjKW2BqbbHt0zjYFEg10Uf1H
-        oCSnPOAEDiLQVu0HnrjbAVaGznXipSJHjuuPdPmDsDuPsi5fyIEgY2t/ZQrz1NKY
-        n4UX8M1ShIHmhvdd40MuhmtB9PM/H32vkIC7TQkSdsky7WSGlwDhcJx+6KQij5pQ
-        TfIEWojkAMLSIUWokAf+5xqMhHTUaItIEFczm+1g9eDpTW3Ln5aWxO9SA/shWmvF
-        1IihAxnEI67NS82Olc6EyO05AvG2HNtkdCkPAWHE3GFYjm46IICi7xcmw==
+        :mime-version:content-transfer-encoding; s=fm2; bh=GJTCftH9+aMh6
+        9hSTQ5SiskF083sH6bzhzDLbLcu8to=; b=ZuqNwR/tnLyQbMrwfZAz4q0MVb3Cp
+        Rdb01zSvLob8F8GbbfiNuqpxCGHk1zUWXCW4uc1MyixE49lVBbcoJSoBRBbnuBxC
+        iKDgGz6IAb3kE1phNmfN2tI56wmNRkvcz2Y2L2Ng82zHA1THemcTQFFQ0/NVFCi5
+        wFEwJxwe+COUFxF7CTrAmTEXdVQS4K0MdNt98nX0ErGYYGa6girEBv1DLWJpwTka
+        LvIG94FWpRXqGdZk0lx6QR5c1uoKnEvMfocMum6ECBkK0Ex/Z8MhhN00TGojmb9h
+        hEzqg5r+PPxbRkHocseR+0LFSGwb+/l232OPdy75K3gWifjKtdPd4vCGw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; bh=DwriZRHRN7fN7mhHrJdEKvtb3nQZcEd0mgRQMVSwm/Y=; b=Srvnlj1K
-        Kxj/m1XJXkyCSWasG+E6ij6xxmoBO4dsmBDqqeZxYQMSKC1m0a8nuO11TO5cpAX9
-        ZVh0ujUsk+R18ueIUCH/3IR/Ky3oQ9IFeyWKlq8Q4M4+nGC0oyX9slRROQ1mDx7P
-        CUEQhAkS6fyfrt/adZul1NavZhNV3MQqC+MggvYwQu5VfmMr5VYFBRhmUYxLDy+O
-        8haSarBhdGp67sY/BZecMg2rEqqPqNvcc2PwRlOw6zRgezyQY32jVYqxM55/w5Pr
-        vGbp/zYNxOmJCbFG4A2tb2SbnssJg7PApEW3WlwuybPzOz0yZKBNReJFP59hWM/d
-        60hJy8Fdph/pPw==
-X-ME-Sender: <xms:wZJTXpfi4TORHzfU00ftYVtX0zgquzWiqLvPXgGIdOcfe53c--i0sA>
+        fm2; bh=GJTCftH9+aMh69hSTQ5SiskF083sH6bzhzDLbLcu8to=; b=nlJrwX8f
+        ALtwwc1dRumaQXpIWKFF4L9wWsBgmZKTXDPaQg7mu2DvCKdX2mscO7nUMaR5QSDy
+        c74mlIIh8efo0JcZAD90CedqCDkbX/RJkc1ywutf14NZmHlDvrmK3nwb19mD1g1c
+        yeb2k1oRnVJ0gPQcwieoWPP/Be6HoNjBusivW3K2rDGjp3tlQpHkwhKpFydmMmZT
+        oF2fO9ihdAP6JlO1RuSVqPazz+yAFgKV17x8b2nydoYyS1HyjXBtchm3aelWa4rj
+        8iyV7T0u+5ZSwHnj85CxN7hdOxlPxnxqYaBZKBPGKarQS5QNRxhz0RUkLHPGQmpl
+        uJcGmHFXKnLRbw==
+X-ME-Sender: <xms:yJJTXifYGygHEUw63DMiqToDF8BAZ0REtoNi7dbLogcdGcgZjkn-Zg>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrledtucetufdoteggodetrfdotffvucfrrh
     hofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgenuceurghi
     lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
     ephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhmvgcutfhi
-    phgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecukfhppeeltddrkeelrd
-    eikedrjeeinecuvehluhhsthgvrhfuihiivgepudejnecurfgrrhgrmhepmhgrihhlfhhr
-    ohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:wZJTXjQtOglB95qFwblcXsCWP7ZIT-0qjP7-xRYaN-guU2DqkXo4-Q>
-    <xmx:wZJTXoex8IxFHOCS2SRYIjibQ1zvztreNMfb4jPeOoCzlvA10SCzig>
-    <xmx:wZJTXj7uwPL-zrYJOCNmIYsWGefee-Gs56OYQsb6g0e3U8PNzfT_bQ>
-    <xmx:wZJTXrYacj5H5ZbCVpp5wgA5f3TKO4lLE1_urUcra4UKROaUpUbPQK4qKAo>
+    phgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuffhomhgrihhnpehrtg
+    guvghvrdhnrhenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigv
+    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtg
+    hh
+X-ME-Proxy: <xmx:yJJTXm7rp1BpBGKc4PjUvRspH-8Y8122kT0D-pWW6TRu2ILvFsv_vg>
+    <xmx:yJJTXqLEK69NKIExlSi6QwiRx0iOBvDTw1tmT50kuWhfmZBovAvQRQ>
+    <xmx:yJJTXq7gzEY7u7MQcx8_pVEasOYdIZbT34GFCxy3nDvpCuXcJw3Svg>
+    <xmx:yJJTXvJc7CGTCjuWoY_QFgYNisSBglZsX7FO-aLiFlL4W-bIjlXYaT3n5dE>
 Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 0D5743280064;
-        Mon, 24 Feb 2020 04:09:20 -0500 (EST)
+        by mail.messagingengine.com (Postfix) with ESMTPA id 361363060FCB;
+        Mon, 24 Feb 2020 04:09:28 -0500 (EST)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
         Eric Anholt <eric@anholt.net>
@@ -63,10 +64,12 @@ Cc:     dri-devel@lists.freedesktop.org,
         Phil Elwell <phil@raspberrypi.com>,
         Maxime Ripard <maxime@cerno.tech>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH 22/89] clk: bcm: rpi: Discover the firmware clocks
-Date:   Mon, 24 Feb 2020 10:06:24 +0100
-Message-Id: <d197ab836d84b89b94ff1927872126767d921e94.1582533919.git-series.maxime@cerno.tech>
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH 27/89] clk: bcm: Add BCM2711 DVP driver
+Date:   Mon, 24 Feb 2020 10:06:29 +0100
+Message-Id: <6dd6bd48e894c1e8ee85c29a30ba1b18041d83c4.1582533919.git-series.maxime@cerno.tech>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <cover.6c896ace9a5a7840e9cec008b553cbb004ca1f91.1582533919.git-series.maxime@cerno.tech>
 References: <cover.6c896ace9a5a7840e9cec008b553cbb004ca1f91.1582533919.git-series.maxime@cerno.tech>
@@ -77,165 +80,167 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The firmware has an interface to discover the clocks it exposes.
+The HDMI block has a block that controls clocks and reset signals to the
+HDMI0 and HDMI1 controllers.
 
-Let's use it to discover, register the clocks in the clocks framework and
-then expose them through the device tree for consumers to use them.
+Let's expose that through a clock driver implementing a clock and reset
+provider.
 
 Cc: Michael Turquette <mturquette@baylibre.com>
 Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>
 Cc: linux-clk@vger.kernel.org
+Cc: devicetree@vger.kernel.org
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
- drivers/clk/bcm/clk-raspberrypi.c          | 105 +++++++++++++++++++---
- include/soc/bcm2835/raspberrypi-firmware.h |   5 +-
- 2 files changed, 98 insertions(+), 12 deletions(-)
+ drivers/clk/bcm/Kconfig           |   1 +-
+ drivers/clk/bcm/Makefile          |   1 +-
+ drivers/clk/bcm/clk-bcm2711-dvp.c | 113 +++++++++++++++++++++++++++++++-
+ 3 files changed, 115 insertions(+)
+ create mode 100644 drivers/clk/bcm/clk-bcm2711-dvp.c
 
-diff --git a/drivers/clk/bcm/clk-raspberrypi.c b/drivers/clk/bcm/clk-raspberrypi.c
-index 3f21888a3e3e..bf6a1e2dc099 100644
---- a/drivers/clk/bcm/clk-raspberrypi.c
-+++ b/drivers/clk/bcm/clk-raspberrypi.c
-@@ -285,6 +285,95 @@ static struct clk_hw *raspberrypi_register_pllb_arm(struct raspberrypi_clk *rpi)
- 	return &raspberrypi_clk_pllb_arm.hw;
- }
- 
-+static long raspberrypi_fw_dumb_round_rate(struct clk_hw *hw,
-+					   unsigned long rate,
-+					   unsigned long *parent_rate)
-+{
-+	return rate;
-+}
+diff --git a/drivers/clk/bcm/Kconfig b/drivers/clk/bcm/Kconfig
+index 8c83977a7dc4..03bbd8040451 100644
+--- a/drivers/clk/bcm/Kconfig
++++ b/drivers/clk/bcm/Kconfig
+@@ -4,6 +4,7 @@ config CLK_BCM2835
+ 	depends on ARCH_BCM2835 || ARCH_BRCMSTB || COMPILE_TEST
+ 	depends on COMMON_CLK
+ 	default ARCH_BCM2835 || ARCH_BRCMSTB
++	select RESET_SIMPLE
+ 	help
+ 	  Enable common clock framework support for Broadcom BCM2835
+ 	  SoCs.
+diff --git a/drivers/clk/bcm/Makefile b/drivers/clk/bcm/Makefile
+index 0070ddf6cdd2..2c1349062147 100644
+--- a/drivers/clk/bcm/Makefile
++++ b/drivers/clk/bcm/Makefile
+@@ -6,6 +6,7 @@ obj-$(CONFIG_CLK_BCM_KONA)	+= clk-kona-setup.o
+ obj-$(CONFIG_CLK_BCM_KONA)	+= clk-bcm281xx.o
+ obj-$(CONFIG_CLK_BCM_KONA)	+= clk-bcm21664.o
+ obj-$(CONFIG_COMMON_CLK_IPROC)	+= clk-iproc-armpll.o clk-iproc-pll.o clk-iproc-asiu.o
++obj-$(CONFIG_CLK_BCM2835)	+= clk-bcm2711-dvp.o
+ obj-$(CONFIG_CLK_BCM2835)	+= clk-bcm2835.o
+ obj-$(CONFIG_CLK_BCM2835)	+= clk-bcm2835-aux.o
+ obj-$(CONFIG_CLK_RASPBERRYPI)	+= clk-raspberrypi.o
+diff --git a/drivers/clk/bcm/clk-bcm2711-dvp.c b/drivers/clk/bcm/clk-bcm2711-dvp.c
+new file mode 100644
+index 000000000000..f4773cc92724
+--- /dev/null
++++ b/drivers/clk/bcm/clk-bcm2711-dvp.c
+@@ -0,0 +1,113 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++// Copyright 2020 Cerno
 +
-+static const struct clk_ops raspberrypi_firmware_clk_ops = {
-+	.is_prepared	= raspberrypi_fw_is_prepared,
-+	.recalc_rate	= raspberrypi_fw_get_rate,
-+	.round_rate	= raspberrypi_fw_dumb_round_rate,
-+	.set_rate	= raspberrypi_fw_set_rate,
++#include <linux/clk-provider.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/reset-controller.h>
++#include <linux/reset/reset-simple.h>
++
++#define DVP_HT_RPI_SW_INIT	0x04
++#define DVP_HT_RPI_MISC_CONFIG	0x08
++
++#define NR_CLOCKS	2
++#define NR_RESETS	6
++
++struct clk_dvp {
++	struct clk			*clks[NR_CLOCKS];
++	struct clk_onecell_data		clk_data;
++	struct reset_simple_data	reset;
 +};
 +
-+static struct clk_hw *raspberrypi_clk_register(struct raspberrypi_clk *rpi,
-+					       unsigned int parent,
-+					       unsigned int id)
++static int clk_dvp_probe(struct platform_device *pdev)
 +{
-+	struct raspberrypi_clk_data *data;
-+	struct clk_init_data init = {};
++	struct resource *res;
++	struct clk_dvp *dvp;
++	void __iomem *base;
++	const char *parent;
 +	int ret;
 +
-+	if (id == RPI_FIRMWARE_ARM_CLK_ID) {
-+		struct clk_hw *hw;
-+
-+		hw = raspberrypi_register_pllb(rpi);
-+		if (IS_ERR(hw)) {
-+			dev_err(rpi->dev, "Failed to initialize pllb, %ld\n",
-+				PTR_ERR(hw));
-+			return hw;
-+		}
-+
-+		hw = raspberrypi_register_pllb_arm(rpi);
-+		if (IS_ERR(hw))
-+			return hw;
-+
-+		return hw;
-+	}
-+
-+	data = devm_kzalloc(rpi->dev, sizeof(data), GFP_KERNEL);
-+	if (!data)
-+		return ERR_PTR(-ENOMEM);
-+	data->rpi = rpi;
-+	data->id = id;
-+
-+	init.name = devm_kasprintf(rpi->dev, GFP_KERNEL, "fw-clk-%u", id);
-+	init.ops = &raspberrypi_firmware_clk_ops;
-+	init.flags = CLK_GET_RATE_NOCACHE | CLK_IGNORE_UNUSED;
-+
-+	data->hw.init = &init;
-+
-+	ret = devm_clk_hw_register(rpi->dev, &data->hw);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	return &data->hw;
-+}
-+
-+static int raspberrypi_discover_clocks(struct raspberrypi_clk *rpi,
-+				       struct clk_hw_onecell_data *data)
-+{
-+	struct rpi_firmware_get_clocks_response *clks;
-+	size_t clks_size = NUM_FW_CLKS * sizeof(*clks);
-+	int ret;
-+
-+	clks = devm_kzalloc(rpi->dev, clks_size, GFP_KERNEL);
-+	if (!clks)
++	dvp = devm_kzalloc(&pdev->dev, sizeof(*dvp), GFP_KERNEL);
++	if (!dvp)
 +		return -ENOMEM;
++	platform_set_drvdata(pdev, dvp);
 +
-+	ret = rpi_firmware_property(rpi->firmware, RPI_FIRMWARE_GET_CLOCKS,
-+				    clks, clks_size);
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	base = devm_ioremap_resource(&pdev->dev, res);
++	if (IS_ERR(base))
++		return PTR_ERR(base);
++
++	dvp->reset.rcdev.owner = THIS_MODULE;
++	dvp->reset.rcdev.nr_resets = NR_RESETS;
++	dvp->reset.rcdev.ops = &reset_simple_ops;
++	dvp->reset.rcdev.of_node = pdev->dev.of_node;
++	dvp->reset.membase = base + DVP_HT_RPI_SW_INIT;
++	spin_lock_init(&dvp->reset.lock);
++
++	ret = reset_controller_register(&dvp->reset.rcdev);
 +	if (ret)
 +		return ret;
 +
-+	while (clks->id) {
-+		struct clk_hw *hw;
++	parent = of_clk_get_parent_name(pdev->dev.of_node, 0);
++	if (!parent)
++		goto unregister_reset;
 +
-+		hw = raspberrypi_clk_register(rpi, clks->parent, clks->id);
-+		if (IS_ERR(hw))
-+			return PTR_ERR(hw);
-+
-+		data->hws[clks->id] = hw;
-+		data->num = clks->id + 1;
-+		clks++;
++	dvp->clks[0] = clk_register_gate(&pdev->dev, "hdmi0-108MHz",
++					 parent, CLK_IS_CRITICAL,
++					 base + DVP_HT_RPI_MISC_CONFIG, 3,
++					 CLK_GATE_SET_TO_DISABLE, &dvp->reset.lock);
++	if (IS_ERR(dvp->clks[0])) {
++		ret = PTR_ERR(dvp->clks[0]);
++		goto unregister_reset;
 +	}
++
++	dvp->clks[1] = clk_register_gate(&pdev->dev, "hdmi1-108MHz",
++					 parent, CLK_IS_CRITICAL,
++					 base + DVP_HT_RPI_MISC_CONFIG, 4,
++					 CLK_GATE_SET_TO_DISABLE, &dvp->reset.lock);
++	if (IS_ERR(dvp->clks[1])) {
++		ret = PTR_ERR(dvp->clks[1]);
++		goto unregister_clk0;
++	}
++
++	dvp->clk_data.clks = dvp->clks;
++	dvp->clk_data.clk_num = NR_CLOCKS;
++	of_clk_add_provider(pdev->dev.of_node, of_clk_src_onecell_get,
++			    &dvp->clk_data);
++
++	return 0;
++
++
++unregister_clk0:
++	clk_unregister_gate(dvp->clks[0]);
++
++unregister_reset:
++	reset_controller_unregister(&dvp->reset.rcdev);
++	return ret;
++};
++
++static int clk_dvp_remove(struct platform_device *pdev)
++{
++	struct clk_dvp *dvp = platform_get_drvdata(pdev);
++
++	clk_unregister_gate(dvp->clks[1]);
++	clk_unregister_gate(dvp->clks[0]);
++	reset_controller_unregister(&dvp->reset.rcdev);
 +
 +	return 0;
 +}
 +
- static int raspberrypi_clk_probe(struct platform_device *pdev)
- {
- 	struct clk_hw_onecell_data *clk_data;
-@@ -292,7 +381,7 @@ static int raspberrypi_clk_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct rpi_firmware *firmware;
- 	struct raspberrypi_clk *rpi;
--	struct clk_hw *hw;
-+	int ret;
- 
- 	firmware_node = of_parse_phandle(dev->of_node, "raspberrypi,firmware", 0);
- 	if (!firmware_node) {
-@@ -317,17 +406,9 @@ static int raspberrypi_clk_probe(struct platform_device *pdev)
- 	if (!clk_data)
- 		return -ENOMEM;
- 
--	hw = raspberrypi_register_pllb(rpi);
--	if (IS_ERR(hw)) {
--		dev_err(dev, "Failed to initialize pllb, %ld\n", PTR_ERR(hw));
--		return PTR_ERR(hw);
--	}
--
--	hw = raspberrypi_register_pllb_arm(rpi);
--	if (IS_ERR(hw))
--		return PTR_ERR(hw);
--	clk_data->hws[RPI_FIRMWARE_ARM_CLK_ID] = hw;
--	clk_data->num = RPI_FIRMWARE_ARM_CLK_ID + 1;
-+	ret = raspberrypi_discover_clocks(rpi, clk_data);
-+	if (ret)
-+		return ret;
- 
- 	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
- 					  clk_data);
-diff --git a/include/soc/bcm2835/raspberrypi-firmware.h b/include/soc/bcm2835/raspberrypi-firmware.h
-index 7800e12ee042..e5b7a41bba6b 100644
---- a/include/soc/bcm2835/raspberrypi-firmware.h
-+++ b/include/soc/bcm2835/raspberrypi-firmware.h
-@@ -135,6 +135,11 @@ enum rpi_firmware_property_tag {
- 	RPI_FIRMWARE_GET_DMA_CHANNELS =                       0x00060001,
- };
- 
-+struct rpi_firmware_get_clocks_response {
-+	__le32	parent;
-+	__le32	id;
++static const struct of_device_id clk_dvp_dt_ids[] = {
++	{ .compatible = "brcm,brcm2711-dvp", },
++	{ /* sentinel */ },
 +};
 +
- #if IS_ENABLED(CONFIG_RASPBERRYPI_FIRMWARE)
- int rpi_firmware_property(struct rpi_firmware *fw,
- 			  u32 tag, void *data, size_t len);
++static struct platform_driver clk_dvp_driver = {
++	.probe	= clk_dvp_probe,
++	.remove	= clk_dvp_remove,
++	.driver	= {
++		.name		= "brcm2711-dvp",
++		.of_match_table	= clk_dvp_dt_ids,
++	},
++};
++module_platform_driver(clk_dvp_driver);
 -- 
 git-series 0.9.1
