@@ -2,22 +2,21 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4380416EB5E
-	for <lists+linux-clk@lfdr.de>; Tue, 25 Feb 2020 17:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D1A16EBAA
+	for <lists+linux-clk@lfdr.de>; Tue, 25 Feb 2020 17:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730109AbgBYQ0Q (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 25 Feb 2020 11:26:16 -0500
-Received: from mx2.suse.de ([195.135.220.15]:55718 "EHLO mx2.suse.de"
+        id S1729939AbgBYQpa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 25 Feb 2020 11:45:30 -0500
+Received: from mx2.suse.de ([195.135.220.15]:39358 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729206AbgBYQ0Q (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 25 Feb 2020 11:26:16 -0500
+        id S1729536AbgBYQpa (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 25 Feb 2020 11:45:30 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 6C079AD48;
-        Tue, 25 Feb 2020 16:26:14 +0000 (UTC)
-Message-ID: <0b93ed0c1332e9966616c8c2aaeac35503096f8f.camel@suse.de>
-Subject: Re: [PATCH 17/89] clk: bcm: rpi: Pass the clocks data to the
- firmware function
+        by mx2.suse.de (Postfix) with ESMTP id 9897AAAC2;
+        Tue, 25 Feb 2020 16:45:28 +0000 (UTC)
+Message-ID: <47f6f9f63a25820b9c9fb10d281f4824862a234b.camel@suse.de>
+Subject: Re: [PATCH 18/89] clk: bcm: rpi: Rename is_prepared function
 From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 To:     Maxime Ripard <maxime@cerno.tech>, Eric Anholt <eric@anholt.net>
 Cc:     dri-devel@lists.freedesktop.org,
@@ -29,12 +28,12 @@ Cc:     dri-devel@lists.freedesktop.org,
         Phil Elwell <phil@raspberrypi.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Date:   Tue, 25 Feb 2020 17:26:12 +0100
-In-Reply-To: <5a02a46e899abfca7257a725678f1131490e6b11.1582533919.git-series.maxime@cerno.tech>
+Date:   Tue, 25 Feb 2020 17:45:26 +0100
+In-Reply-To: <cdeaa4152ac84aecc362e09153d1427777e3d933.1582533919.git-series.maxime@cerno.tech>
 References: <cover.6c896ace9a5a7840e9cec008b553cbb004ca1f91.1582533919.git-series.maxime@cerno.tech>
-         <5a02a46e899abfca7257a725678f1131490e6b11.1582533919.git-series.maxime@cerno.tech>
+         <cdeaa4152ac84aecc362e09153d1427777e3d933.1582533919.git-series.maxime@cerno.tech>
 Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-k7HUefi2lZk06DdeDb2b"
+        protocol="application/pgp-signature"; boundary="=-RIXUZuAJcUivUhgI0C4B"
 User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
 Sender: linux-clk-owner@vger.kernel.org
@@ -43,42 +42,51 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 
---=-k7HUefi2lZk06DdeDb2b
+--=-RIXUZuAJcUivUhgI0C4B
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Mon, 2020-02-24 at 10:06 +0100, Maxime Ripard wrote:
-> The raspberry_clock_property only takes the clock ID as an argument, but
-> now that we have a clock data structure it makes more sense to just pass
-> that structure instead.
+> The raspberrypi_fw_pll_is_on function doesn't only apply to PLL
+> registered in the driver, but any clock exposed by the firmware.
 >=20
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: linux-clk@vger.kernel.org
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> Since we also implement the is_prepared hook, make the function
+> consistent with the other function names, and drop the fw from the
+> function name.
+
+It seems you didn't :)
+
+As it does use the fw interface I'd say keep it in the name, with that:
 
 Acked-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 
 Thanks!
 Nicolas
 
+>=20
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
 
---=-k7HUefi2lZk06DdeDb2b
+
+--=-RIXUZuAJcUivUhgI0C4B
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part
 Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl5VSqQACgkQlfZmHno8
-x/5d1wgAqGqboihG+8tsmV0N9IYrcZjuNVb4fKhnZwB2UhnwGBfzoV3LQiRwimoy
-w0VJB+ITS3nxs6gnUyb6c+wJmBalGd0odtCJd9IzkUsv+Zh6byikhlzDhPflCQ8S
-Qhcj4sMHLfuFW51+zTMw9WYtGiXmgDu3zUore5LCMO0cTQumDmwg1dqEr5MoCgPA
-N9rRKRtqTcs1JNlhxlT6XBv0zGTuwUOKkcab5dZ8P7TnZlcwNo6nvKpDHAy+ihC9
-1uai4H/hT3A0rDOeiEHhkVFL2SbFZaouYyAGSeZ04LmO9/LSQV7AWPJ9Afn4qkJQ
-mrf5zAjSWTH9A9xRPbUhLXrcGgeapA==
-=00Mu
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl5VTyYACgkQlfZmHno8
+x/5rAgf7BxTTPBRye7XRqwBPhoICcffv/Ii4T91MNAtumCd4F0s+hsYk44Ttsbrb
+tr9ZiFNFnOkV/rVNLG3cg/QhMaKotcAg59qVcw/g/ZDPc6xodEilj19jaf2WDIi1
+echfeq0yvG8cPb8ljFCPiKisneTp/ascqFR//M9Ap8zpfpQUCswisjsqzhSY1Y1k
+f5Dtc3fY+2szMYu08XhKojT0UUBt4gtxh5pAXk7RSG1moPrP/NGJpS/8XQ0w5EyT
+fs8hWtU4De7Ja4NH8Xb2haFk0kZgoJyqxGjhMOyeYtBUS8mpKbE0iWMg0fx2vW+/
+KtTtxwpzcWfrZ+Ox/njAdAXkd+CUOA==
+=pqBd
 -----END PGP SIGNATURE-----
 
---=-k7HUefi2lZk06DdeDb2b--
+--=-RIXUZuAJcUivUhgI0C4B--
 
