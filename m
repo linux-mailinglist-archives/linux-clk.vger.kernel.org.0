@@ -2,85 +2,78 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3F01702D2
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Feb 2020 16:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B702C17033F
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Feb 2020 16:55:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728301AbgBZPko (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 26 Feb 2020 10:40:44 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:37945 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728244AbgBZPko (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 26 Feb 2020 10:40:44 -0500
-Received: by mail-oi1-f194.google.com with SMTP id r137so3458139oie.5;
-        Wed, 26 Feb 2020 07:40:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3R1Mq+MisD9G4+ZpOmuB3h2FDH8y3/7UmntuhjMNOV0=;
-        b=pVNbzQ16z2M2NzzQzhTY6SZfRgQ+X/V0BaIoehJM3rODE/U8cA1CbMKmGyMaHq5flo
-         iG68PdXnHQ3PyenOf2Ejt9cdFbsu/1BPKCx6xkAQ1QMldE111BykOQ4xi5Z1DQbhx3Rb
-         goN0z+f7W6wgpe4KK93uHisFC2aHF9tScrOXeTUj16XK/edBVZb3EKvFXuj0TVqvNeNy
-         YdalOoJiPf11LNvnJCq2pR8Klbz0CTG4E3z8uxPi3yEf8a39Qm2YBLIQkl3WezBW6KIq
-         h1Zgi643oqXWzw5IBhX1PQkXLdTfSUoiNNam+QYkX4CvGbMwauRMjQfKil/YkvAQgw74
-         ursA==
-X-Gm-Message-State: APjAAAV+4w7W5ArgRK2jYtQT8e2d9MYenQBNFsXCfgk2C0okJLG3eTxn
-        YyTz7lxICcZagvpfKo6RnOwb2boUtw==
-X-Google-Smtp-Source: APXvYqxcBvbXOvynvDFxXZbtbXfYpnw0GKqWXRxA1hG0x/H5llfZKmKRiUnj9vUsgZ7itckep14F+w==
-X-Received: by 2002:aca:2315:: with SMTP id e21mr3589037oie.147.1582731643096;
-        Wed, 26 Feb 2020 07:40:43 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id f1sm889779otq.4.2020.02.26.07.40.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2020 07:40:42 -0800 (PST)
-Received: (nullmailer pid 21596 invoked by uid 1000);
-        Wed, 26 Feb 2020 15:40:40 -0000
-Date:   Wed, 26 Feb 2020 09:40:40 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     John Crispin <john@phrozen.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S1728511AbgBZPzH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 26 Feb 2020 10:55:07 -0500
+Received: from ns.iliad.fr ([212.27.33.1]:48486 "EHLO ns.iliad.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728470AbgBZPzG (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 26 Feb 2020 10:55:06 -0500
+Received: from ns.iliad.fr (localhost [127.0.0.1])
+        by ns.iliad.fr (Postfix) with ESMTP id D19A620076;
+        Wed, 26 Feb 2020 16:55:04 +0100 (CET)
+Received: from [192.168.108.51] (freebox.vlq16.iliad.fr [213.36.7.13])
+        by ns.iliad.fr (Postfix) with ESMTP id BF00C20025;
+        Wed, 26 Feb 2020 16:55:04 +0100 (CET)
+From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
+Subject: [RFC PATCH v4 0/2] Small devm helper for devm implementations
+To:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: qcom: clk-rpm: add missing rpm clk for ipq806x
-Message-ID: <20200226154040.GA17521@bogus>
-References: <20200219185226.1236-1-ansuelsmth@gmail.com>
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-clk <linux-clk@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Message-ID: <68219a85-295d-7b7c-9658-c3045bbcbaeb@free.fr>
+Date:   Wed, 26 Feb 2020 16:44:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200219185226.1236-1-ansuelsmth@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Wed Feb 26 16:55:04 2020 +0100 (CET)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 07:52:25PM +0100, Ansuel Smith wrote:
-> Add missing definition of rpm clk for ipq806x soc
-> 
-> Signed-off-by: John Crispin <john@phrozen.org>
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  .../devicetree/bindings/clock/qcom,rpmcc.txt  |  1 +
->  drivers/clk/qcom/clk-rpm.c                    | 35 +++++++++++++++++++
->  include/dt-bindings/clock/qcom,rpmcc.h        |  4 +++
->  3 files changed, 40 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,rpmcc.txt b/Documentation/devicetree/bindings/clock/qcom,rpmcc.txt
-> index 944719bd586f..dd0def465c79 100644
-> --- a/Documentation/devicetree/bindings/clock/qcom,rpmcc.txt
-> +++ b/Documentation/devicetree/bindings/clock/qcom,rpmcc.txt
-> @@ -16,6 +16,7 @@ Required properties :
->  			"qcom,rpmcc-msm8974", "qcom,rpmcc"
->  			"qcom,rpmcc-apq8064", "qcom,rpmcc"
->  			"qcom,rpmcc-msm8996", "qcom,rpmcc"
-> +			"qcom,rpmcc-ipq806x", "qcom,rpmcc"
->  			"qcom,rpmcc-msm8998", "qcom,rpmcc"
+Hello,
 
-Perhaps keep this somewhat in sorted order.
+Differences from v3 to v4
+x Add a bunch of kerneldoc above devm_add() [Greg KH]
+x Split patch in two [Greg KH]
 
->  			"qcom,rpmcc-qcs404", "qcom,rpmcc"
->  
+Differences from v2 to v3
+x Make devm_add() return an error-code rather than the raw data pointer
+  (in case devres_alloc ever returns an ERR_PTR) as suggested by Geert
+x Provide a variadic version devm_vadd() to work with structs as suggested
+  by Geert
+x Don't use nested ifs in clk_devm* implementations (hopefully simpler
+  code logic to follow) as suggested by Geert
+
+Marc Gonzalez (2):
+  devres: Provide new helper for devm functions
+  clk: Use devm_add in managed functions
+
+ drivers/base/devres.c    |  28 +++++++++++
+ drivers/clk/clk-devres.c | 101 ++++++++++++++-------------------------
+ include/linux/device.h   |   3 ++
+ 3 files changed, 68 insertions(+), 64 deletions(-)
+
+-- 
+2.17.1
