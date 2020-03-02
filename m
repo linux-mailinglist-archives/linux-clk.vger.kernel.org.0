@@ -2,117 +2,169 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A623175814
-	for <lists+linux-clk@lfdr.de>; Mon,  2 Mar 2020 11:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32CDB17590D
+	for <lists+linux-clk@lfdr.de>; Mon,  2 Mar 2020 12:02:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727305AbgCBKOn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 2 Mar 2020 05:14:43 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:36098 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726889AbgCBKOn (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 2 Mar 2020 05:14:43 -0500
-Received: by mail-ot1-f65.google.com with SMTP id j14so4842104otq.3;
-        Mon, 02 Mar 2020 02:14:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SVlemy32h72Zpj8jVlIGq7eQAhoadA5R3segFYSq66w=;
-        b=ELGPzNhp69sj+2oC0Y1Eh6u2+NdtJvFBULhKksN2+XrUtV4T+VM7c1VyjYFeARvPCl
-         MftwjcW/5q6KANeXz9vVyYKrt2ehobZzpq5unUneP5GfA5HRh9jJIaVtXjAOCja1esd5
-         1T1NeK7DFZuPphl+ztE9AK5jOrJ0rQDrWbN6IFsKhV/5RVe+gVgaZbg1+cdYI0B05u8p
-         L7EP/dOckGuLud6inX6FUhKgjFwA+rOYEYMsFaYy/kx82qXISyVJgLEQxvB+9VmZE+IO
-         LxmfuO4Plz+mRbwIY+OR2/gs4Gy6PJ7f38zhZ5nbXr5I/Zw88DGtI3JQ/KvG+d0HKqNx
-         5HaQ==
-X-Gm-Message-State: ANhLgQ0etdj+RxP+k+krSpUjyiERJq8VOGL/RR7KoP0sBkQ9DeCHO0ic
-        8pVL9J3z2BOKErjsierqCtu8eZpWM4qFRY46nhmWjw==
-X-Google-Smtp-Source: ADFU+vs/0ZiJfqPA7EukyL4+DZs2EJZ2FkBQDZwJ/jcv1Cma/xnhZmbg/F6SIEf/URrc+W049AaZlV2ArAclptArrf0=
-X-Received: by 2002:a05:6830:12d1:: with SMTP id a17mr3526676otq.39.1583144083038;
- Mon, 02 Mar 2020 02:14:43 -0800 (PST)
-MIME-Version: 1.0
-References: <68219a85-295d-7b7c-9658-c3045bbcbaeb@free.fr> <e88ca46a-799d-9c86-f2d2-6284eb3c3419@free.fr>
- <CAMuHMdUZfR6pYG-hourZCKT-jhh1t+x-ySF4JnEPJjscGAQT+A@mail.gmail.com> <7622db71-b1f4-62b4-86ee-78e00d5bd52c@free.fr>
-In-Reply-To: <7622db71-b1f4-62b4-86ee-78e00d5bd52c@free.fr>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 2 Mar 2020 11:14:21 +0100
-Message-ID: <CAMuHMdVYghD_xLeXVFD+PGBKECSkQ+_KxPBwFmUDDO3W5skscQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 2/2] clk: Use devm_add in managed functions
-To:     Marc Gonzalez <marc.w.gonzalez@free.fr>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        id S1727834AbgCBLBl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 2 Mar 2020 06:01:41 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:44412 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726831AbgCBLBk (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 2 Mar 2020 06:01:40 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: eballetbo)
+        with ESMTPSA id 2EE212949CC
+From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
+To:     robh+dt@kernel.org, mark.rutland@arm.com, ck.hu@mediatek.com,
+        p.zabel@pengutronix.de, airlied@linux.ie, mturquette@baylibre.com,
+        sboyd@kernel.org, ulrich.hecht+renesas@gmail.com,
+        laurent.pinchart@ideasonboard.com
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, rdunlap@infradead.org,
+        dri-devel@lists.freedesktop.org, Weiyi Lu <weiyi.lu@mediatek.com>,
+        Seiya Wang <seiya.wang@mediatek.com>,
+        linux-clk@vger.kernel.org,
+        Collabora Kernel ML <kernel@collabora.com>,
+        mtk01761 <wendell.lin@mediatek.com>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>, wens@csie.org,
+        Kate Stewart <kstewart@linuxfoundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        sean.wang@mediatek.com, frank-w@public-files.de,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        linux-mediatek@lists.infradead.org, hsinyi@chromium.org,
+        Matthias Brugger <mbrugger@suse.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Richard Fontana <rfontana@redhat.com>,
+        linux-kernel@vger.kernel.org, matthias.bgg@kernel.org,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: [PATCH v11 0/5] arm/arm64: mediatek: Fix mt8173 mmsys device probing
+Date:   Mon,  2 Mar 2020 12:01:23 +0100
+Message-Id: <20200302110128.2664251-1-enric.balletbo@collabora.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Marc,
+Dear all,
 
-On Mon, Mar 2, 2020 at 11:01 AM Marc Gonzalez <marc.w.gonzalez@free.fr> wrote:
-> On 27/02/2020 14:36, Geert Uytterhoeven wrote:
-> > On Wed, Feb 26, 2020 at 4:55 PM Marc Gonzalez <marc.w.gonzalez@free.fr> wrote:
-> >> Using the helper produces simpler code, and smaller object size.
+Those patches are intended to solve an old standing issue on some
+Mediatek devices (mt8173, mt2701 and mt2712 are affected by this issue).
 
-> >> --- a/drivers/clk/clk-devres.c
-> >> +++ b/drivers/clk/clk-devres.c
+Up to now both drivers, clock and drm are probed with the same device tree
+compatible. But only the first driver gets probed, which in effect breaks
+graphics on those devices.
 
-> >> @@ -128,30 +109,22 @@ static int devm_clk_match(struct device *dev, void *res, void *data)
-> >>
-> >>  void devm_clk_put(struct device *dev, struct clk *clk)
-> >>  {
-> >> -       int ret;
-> >> -
-> >> -       ret = devres_release(dev, devm_clk_release, devm_clk_match, clk);
-> >> -
-> >> -       WARN_ON(ret);
-> >> +       WARN_ON(devres_release(dev, my_clk_put, devm_clk_match, clk));
-> >
-> > Getting rid of "ret" is an unrelated change, which actually increases
-> > kernel size, as the WARN_ON() parameter is stringified for the warning
-> > message.
->
-> Weird... Are you sure about that? I built the preprocessed file,
-> and it didn't appear to be so.
->
-> #ifndef WARN_ON
-> #define WARN_ON(condition) ({                                           \
->         int __ret_warn_on = !!(condition);                              \
->         if (unlikely(__ret_warn_on))                                    \
->                 __WARN();                                               \
->         unlikely(__ret_warn_on);                                        \
-> })
-> #endif
->
-> Maybe you were thinking of i915's WARN_ON?
->
-> #define WARN_ON(x) WARN((x), "%s", "WARN_ON(" __stringify(x) ")")
+The MMSYS (Multimedia subsystem) in Mediatek SoCs has some registers to
+control clock gates (which is used in the clk driver) and some registers
+to set the routing and enable the differnet blocks of the display
+and MDP (Media Data Path) subsystem. On this series the clk driver is
+not a pure clock controller but a system controller that can provide
+access to the shared registers between the different drivers that need
+it (mediatek-drm and mediatek-mdp). Hence the MMSYS clk driver was moved
+to drivers/soc/mediatek and is the entry point (parent) which will trigger
+the probe of the corresponding mediatek-drm driver.
 
-Oops, you're right.  I got trapped again by an override of a standard macro
-(IMHO this should be removed).
+**IMPORTANT** This series only fixes the issue on mt8173 to make it
+simple and as is the only platform I can test. Similar changes should be
+applied for mt2701 and mt2712 to have display working.
 
-Gr{oetje,eeting}s,
+For reference, here are the links to the old discussions:
+* v10: https://patchwork.kernel.org/project/linux-mediatek/list/?series=248505
+* v9: https://patchwork.kernel.org/project/linux-clk/list/?series=247591
+* v8: https://patchwork.kernel.org/project/linux-mediatek/list/?series=244891
+* v7: https://patchwork.kernel.org/project/linux-mediatek/list/?series=241217
+* v6: https://patchwork.kernel.org/project/linux-mediatek/list/?series=213219
+* v5: https://patchwork.kernel.org/project/linux-mediatek/list/?series=44063
+* v4:
+  * https://patchwork.kernel.org/patch/10530871/
+  * https://patchwork.kernel.org/patch/10530883/
+  * https://patchwork.kernel.org/patch/10530885/
+  * https://patchwork.kernel.org/patch/10530911/
+  * https://patchwork.kernel.org/patch/10530913/
+* v3:
+  * https://patchwork.kernel.org/patch/10367857/
+  * https://patchwork.kernel.org/patch/10367861/
+  * https://patchwork.kernel.org/patch/10367877/
+  * https://patchwork.kernel.org/patch/10367875/
+  * https://patchwork.kernel.org/patch/10367885/
+  * https://patchwork.kernel.org/patch/10367883/
+  * https://patchwork.kernel.org/patch/10367889/
+  * https://patchwork.kernel.org/patch/10367907/
+  * https://patchwork.kernel.org/patch/10367909/
+  * https://patchwork.kernel.org/patch/10367905/
+* v2: No relevant discussion, see v3
+* v1:
+  * https://patchwork.kernel.org/patch/10016497/
+  * https://patchwork.kernel.org/patch/10016499/
+  * https://patchwork.kernel.org/patch/10016505/
+  * https://patchwork.kernel.org/patch/10016507/
 
-                        Geert
+Best regards,
+ Enric
+
+Changes in v11:
+- Select CONFIG_MTK_MMSYS (CK)
+- Pass device pointer of mmsys device instead of config regs (CK)
+
+Changes in v10:
+- Update the binding documentation for the mmsys system controller.
+- Renamed to be generic mtk-mmsys
+- Add driver data support to be able to support diferent SoCs
+- Introduced a new patch to move routing control into mmsys driver.
+- Removed the patch to use regmap as is not needed anymore.
+- Match driver data to get display routing.
+
+Changes in v9:
+- Move mmsys to drivers/soc/mediatek (CK)
+- Do not move the display routing from the drm driver (CK)
+
+Changes in v8:
+- Be a builtin_platform_driver like other mediatek mmsys drivers.
+- New patch introduced in this series.
+
+Changes in v7:
+- Free clk_data->clks as well
+- Get rid of private data structure
+
+Enric Balletbo i Serra (3):
+  dt-bindings: mediatek: Update mmsys binding to reflect it is a system
+    controller
+  soc / drm: mediatek: Move routing control to mmsys device
+  soc / drm: mediatek: Fix mediatek-drm device probing
+
+Matthias Brugger (2):
+  drm/mediatek: Omit warning on probe defers
+  soc: mediatek: Move mt8173 MMSYS to platform driver
+
+ .../bindings/arm/mediatek/mediatek,mmsys.txt  |   7 +-
+ drivers/clk/mediatek/clk-mt8173.c             | 104 -----
+ drivers/gpu/drm/mediatek/Kconfig              |   1 +
+ drivers/gpu/drm/mediatek/mtk_disp_color.c     |   5 +-
+ drivers/gpu/drm/mediatek/mtk_disp_ovl.c       |   5 +-
+ drivers/gpu/drm/mediatek/mtk_disp_rdma.c      |   5 +-
+ drivers/gpu/drm/mediatek/mtk_dpi.c            |  12 +-
+ drivers/gpu/drm/mediatek/mtk_drm_crtc.c       |  19 +-
+ drivers/gpu/drm/mediatek/mtk_drm_ddp.c        | 259 +----------
+ drivers/gpu/drm/mediatek/mtk_drm_ddp.h        |   7 -
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c        |  45 +-
+ drivers/gpu/drm/mediatek/mtk_drm_drv.h        |   2 +-
+ drivers/gpu/drm/mediatek/mtk_dsi.c            |   8 +-
+ drivers/gpu/drm/mediatek/mtk_hdmi.c           |   4 +-
+ drivers/soc/mediatek/Kconfig                  |   7 +
+ drivers/soc/mediatek/Makefile                 |   1 +
+ drivers/soc/mediatek/mtk-mmsys.c              | 437 ++++++++++++++++++
+ include/linux/soc/mediatek/mtk-mmsys.h        |  20 +
+ 18 files changed, 537 insertions(+), 411 deletions(-)
+ create mode 100644 drivers/soc/mediatek/mtk-mmsys.c
+ create mode 100644 include/linux/soc/mediatek/mtk-mmsys.h
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.25.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
