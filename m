@@ -2,51 +2,64 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D391758FA
-	for <lists+linux-clk@lfdr.de>; Mon,  2 Mar 2020 12:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA3C175ADA
+	for <lists+linux-clk@lfdr.de>; Mon,  2 Mar 2020 13:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727982AbgCBLCC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 2 Mar 2020 06:02:02 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44600 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727896AbgCBLBx (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 2 Mar 2020 06:01:53 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id 27F322949C5
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-To:     robh+dt@kernel.org, mark.rutland@arm.com, ck.hu@mediatek.com,
-        p.zabel@pengutronix.de, airlied@linux.ie, mturquette@baylibre.com,
-        sboyd@kernel.org, ulrich.hecht+renesas@gmail.com,
-        laurent.pinchart@ideasonboard.com
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>, rdunlap@infradead.org,
-        dri-devel@lists.freedesktop.org, Weiyi Lu <weiyi.lu@mediatek.com>,
-        Seiya Wang <seiya.wang@mediatek.com>,
-        linux-clk@vger.kernel.org,
-        Collabora Kernel ML <kernel@collabora.com>,
-        mtk01761 <wendell.lin@mediatek.com>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>, wens@csie.org,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        sean.wang@mediatek.com, frank-w@public-files.de,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        linux-mediatek@lists.infradead.org, hsinyi@chromium.org,
-        Matthias Brugger <mbrugger@suse.com>,
+        id S1727864AbgCBMx1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 2 Mar 2020 07:53:27 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:51221 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727848AbgCBMx0 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 2 Mar 2020 07:53:26 -0500
+Received: by mail-pj1-f65.google.com with SMTP id l8so878850pjy.1;
+        Mon, 02 Mar 2020 04:53:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YVlIC+o1X5elmxMJP01HUn8upQiGdfU1sajDVIWbpjM=;
+        b=YWL92tOaLSZeNycLdLFxyiYmZMgQecJvctiYRM5E2vH1K2tV1g9ns3RtWySc7VDcVB
+         lu+I4DHw1AQLcMmiYpGfikkJAvWt1qn7EHh6VfvVcRye9+kWerZ7rtCvpfJYCzxl0ADu
+         NALgrdqJNF6zkOn8LWHmNdZ2ECtjgynPfqOyiIHkWw2bXXhomNFCHlkdovnPNQgSduZJ
+         SODLphzf3FGoIkbY6cygVsPUEHkEsZmf7MQZ5SZqaoxLpeiaS/2jw+KeSAL5PyQgoOe4
+         3SGO2mtSja/mE9lUxr/ltkOlX7xW/tpKp0CD22DG2XK9eAYzZ06UbLs5Jx7imW9YdzK9
+         LIWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YVlIC+o1X5elmxMJP01HUn8upQiGdfU1sajDVIWbpjM=;
+        b=dxkUUJ4NojSRGvhbNd0G/o5ahQf8Ty7yyW293U/zay6pN9VyVAWC2AGVN3hjknuLDa
+         BXAwYYo5ZIY9Q2oaIpHrM6vNJmrR+yy5FsbESllGyIP3e4J3xEJTsw04ccoRRoTEM9F2
+         aq2GNEqZk1V3g3fHK8llyyJ1s6f1/2LaoFEe+VtTh3+ch01YgnHpWp4O1JwzwofgKQEz
+         hdD+vkJDhH+4O57+v9H2epehJC6S+9QlciDx2N1Cmw8nkU/r4irF9Mhqx/nORsmZqlmA
+         MOhkod3cuj9KoirXsvPE63/WjGC1UoPRNoBFdSAGsXLBKAYLMyiye6MjarA4Ogyde8L9
+         TF3Q==
+X-Gm-Message-State: APjAAAXnoy5rHhBHJpk9o8WPBxC8WGa8iD1xxgfCcCN+nPU1bTdrMxUu
+        wNCz7o6m2efglS45XuuIOdY=
+X-Google-Smtp-Source: APXvYqya77N8AIuo7S/nQDOfsridOc39JQclxt2ko2cBQ4x1i6EExyxwGxTkdNnrd8pZDKP8I4C6Hw==
+X-Received: by 2002:a17:90b:f06:: with SMTP id br6mr20963620pjb.125.1583153605167;
+        Mon, 02 Mar 2020 04:53:25 -0800 (PST)
+Received: from localhost.localdomain ([103.51.74.208])
+        by smtp.gmail.com with ESMTPSA id p2sm2138238pfb.41.2020.03.02.04.53.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Mar 2020 04:53:24 -0800 (PST)
+From:   Anand Moon <linux.amoon@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Kevin Hilman <khilman@baylibre.com>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Richard Fontana <rfontana@redhat.com>,
-        linux-kernel@vger.kernel.org, matthias.bgg@kernel.org,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: [PATCH v11 5/5] soc / drm: mediatek: Fix mediatek-drm device probing
-Date:   Mon,  2 Mar 2020 12:01:28 +0100
-Message-Id: <20200302110128.2664251-6-enric.balletbo@collabora.com>
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCHv2 0/2] Odroid N2 failes to boot using upstream kernel using microSD card
+Date:   Mon,  2 Mar 2020 12:53:07 +0000
+Message-Id: <20200302125310.742-1-linux.amoon@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200302110128.2664251-1-enric.balletbo@collabora.com>
-References: <20200302110128.2664251-1-enric.balletbo@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
@@ -54,129 +67,34 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-In the actual implementation the same compatible string
-"mediatek,<chip>-mmsys" is used to bind the clock drivers
-(drivers/soc/mediatek) as well as to the gpu driver
-(drivers/gpu/drm/mediatek/mtk_drm_drv.c). This ends with the problem
-that the only probed driver is the clock driver and there is no display
-at all.
+When we try to boot the device from microSD card, the board will
+stall in between, on suggestion from Martin, Jerome and Neil it was
+narrowed down to clk not getting enable.
 
-In any case having the same compatible string for two drivers is not
-correct and should be fixed. To fix this, and maintain backward
-compatibility, we can consider that the mmsys driver is the top-level
-entry point for the multimedia subsystem, so is not a pure clock
-controller but a system controller, and the drm driver is instantiated
-by that MMSYS driver.
+Fix the clk driver help booting of the kernel.
+Any more suggestion or inputs are welcome.
 
-Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
----
+Changes since PATCHv1:
+	[1] https://patchwork.kernel.org/cover/11384523/
+            drop the patch as it was not being parsed correctly.
+            https://patchwork.kernel.org/patch/11384533/
+            fixed the subject and message for core patch.
+            https://patchwork.kernel.org/patch/11384537/
+Changes since RFCv1:
+	[0] https://lore.kernel.org/linux-amlogic/20191007131649.1768-1-linux.amoon@gmail.com/
+	 drop some patches and fix the clk driver as suggested by Neil.
 
-Changes in v11: None
-Changes in v10:
-- Match driver data to get display routing.
+-Anand
 
-Changes in v9:
-- Do not move the display routing from the drm driver (CK)
+Anand Moon (2):
+  arm64: dts: meson: Add missing regulator linked to VDDAO_3V3 regulator
+    to FLASH_VDD
+  clk: meson: g12a: set cpub_clk flags to CLK_IS_CRITICAL
 
-Changes in v8:
-- New patch introduced in this series.
+ arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dts | 1 +
+ drivers/clk/meson/g12a.c                             | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-Changes in v7: None
-
- drivers/gpu/drm/mediatek/mtk_drm_drv.c | 31 ++++++++++++++++----------
- drivers/soc/mediatek/mtk-mmsys.c       |  6 +++++
- 2 files changed, 25 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 208f9c5256ef..bb26e346750a 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-@@ -422,9 +422,21 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[] = {
- 	{ }
- };
- 
-+static const struct of_device_id mtk_drm_of_ids[] = {
-+	{ .compatible = "mediatek,mt2701-mmsys",
-+	  .data = &mt2701_mmsys_driver_data},
-+	{ .compatible = "mediatek,mt2712-mmsys",
-+	  .data = &mt2712_mmsys_driver_data},
-+	{ .compatible = "mediatek,mt8173-mmsys",
-+	  .data = &mt8173_mmsys_driver_data},
-+	{ }
-+};
-+
- static int mtk_drm_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-+	struct device_node *phandle = dev->parent->of_node;
-+	const struct of_device_id *of_id;
- 	struct mtk_drm_private *private;
- 	struct device_node *node;
- 	struct component_match *match = NULL;
-@@ -442,8 +454,14 @@ static int mtk_drm_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	}
- 
-+	of_id = of_match_node(mtk_drm_of_ids, phandle);
-+	if (!of_id)
-+		return -ENODEV;
-+
-+	private->data = of_id->data;
-+
- 	/* Iterate over sibling DISP function blocks */
--	for_each_child_of_node(dev->of_node->parent, node) {
-+	for_each_child_of_node(phandle->parent, node) {
- 		const struct of_device_id *of_id;
- 		enum mtk_ddp_comp_type comp_type;
- 		int comp_id;
-@@ -575,22 +593,11 @@ static int mtk_drm_sys_resume(struct device *dev)
- static SIMPLE_DEV_PM_OPS(mtk_drm_pm_ops, mtk_drm_sys_suspend,
- 			 mtk_drm_sys_resume);
- 
--static const struct of_device_id mtk_drm_of_ids[] = {
--	{ .compatible = "mediatek,mt2701-mmsys",
--	  .data = &mt2701_mmsys_driver_data},
--	{ .compatible = "mediatek,mt2712-mmsys",
--	  .data = &mt2712_mmsys_driver_data},
--	{ .compatible = "mediatek,mt8173-mmsys",
--	  .data = &mt8173_mmsys_driver_data},
--	{ }
--};
--
- static struct platform_driver mtk_drm_platform_driver = {
- 	.probe	= mtk_drm_probe,
- 	.remove	= mtk_drm_remove,
- 	.driver	= {
- 		.name	= "mediatek-drm",
--		.of_match_table = mtk_drm_of_ids,
- 		.pm     = &mtk_drm_pm_ops,
- 	},
- };
-diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-mmsys.c
-index bb99a05fb278..090dbab41160 100644
---- a/drivers/soc/mediatek/mtk-mmsys.c
-+++ b/drivers/soc/mediatek/mtk-mmsys.c
-@@ -379,6 +379,7 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
- 	const struct mtk_mmsys_driver_data *data;
- 	struct clk_onecell_data *clk_data;
- 	struct device *dev = &pdev->dev;
-+	struct platform_device *drm;
- 	void __iomem *config_regs;
- 	struct resource *mem;
- 	int ret;
-@@ -409,6 +410,11 @@ static int mtk_mmsys_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
-+	drm = platform_device_register_data(&pdev->dev, "mediatek-drm",
-+					    PLATFORM_DEVID_NONE, NULL, 0);
-+	if (IS_ERR(drm))
-+		return PTR_ERR(drm);
-+
- 	return 0;
- }
- 
 -- 
 2.25.1
 
