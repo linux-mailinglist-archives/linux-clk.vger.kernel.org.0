@@ -2,118 +2,148 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7ED178ABD
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Mar 2020 07:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F39DA178B4A
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Mar 2020 08:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727595AbgCDGmV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 4 Mar 2020 01:42:21 -0500
-Received: from relmlor2.renesas.com ([210.160.252.172]:37535 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725773AbgCDGmU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 Mar 2020 01:42:20 -0500
-X-IronPort-AV: E=Sophos;i="5.70,513,1574089200"; 
-   d="scan'208";a="40717179"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 04 Mar 2020 15:42:18 +0900
-Received: from localhost.localdomain (unknown [10.166.252.89])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 8B0B541CBB7A;
-        Wed,  4 Mar 2020 15:42:18 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
-        robh+dt@kernel.org
+        id S1728259AbgCDH2N (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 4 Mar 2020 02:28:13 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:33244 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725825AbgCDH2N (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 Mar 2020 02:28:13 -0500
+Received: by mail-pg1-f195.google.com with SMTP id m5so579946pgg.0;
+        Tue, 03 Mar 2020 23:28:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GQ+CUp+1AMSQaNMNgIbviSQx1y9loRr5fUvJb8ibZj8=;
+        b=uiQLWorUiGOdPnaOOQlgkFoHplLC6t7myellJvAWKMqtP4ZS4J7gpqQdmuWCoQ9UE6
+         pzq6Tq+YcDvDiPls+QKJKDDSxPMfZb7H7g0cKTxR43zHm63Mv219RTwruHUjKXb7xdtA
+         jmqAKdUsJ7NMtjm8qiUHoe/t8KR/SoZXkDx4bbm8+WqYaEsjIzIHLBxKuonkf9pV8RMU
+         osOGeQtOc8BQAHzDxbJJE75YCEVXjqVIJWkjj4RNe+W33RzKie/qXizqEy+ZytvCjmwC
+         a2nrYDVxFZkmiG2qncdRM7TFvShT18y5ObxmJDc53mpOAZWkDUGGkofupP8n746iuxii
+         CBEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GQ+CUp+1AMSQaNMNgIbviSQx1y9loRr5fUvJb8ibZj8=;
+        b=bKq3rmm518j9SoYNNEz7U6PFXXrXQ6/vhX+0QKAE5Yn7xJWIPXVtgIL3xYix66BbXA
+         2vEyKF61mSeK4NUqTTF4HNp9h+segjWQAzdS5TRJ7kYs5ygjiwMevh4AlhRHyKWBdW+Z
+         oVc1ZXUH31zS9hr8an22GMTb1EiTDgC0h/g8IR+03aqqR0x+XmHAjhVIoVyGTRn82QWp
+         bWbL4qThAikdY9av81xVoiMTy/q24CKnGCIK5FULMZjLpq2TFw/nMdIXVEhG/b91rncK
+         /qZ6yOFEMO1CxtEB123rf6mHdXuH3Ush+5VrKMM+YlapKq43x0ThyO90AkfJJipsTSzo
+         HHVw==
+X-Gm-Message-State: ANhLgQ1sp+83OTLJZgsM+LAg7D229o4Ju166nVwl/ZD7r5MGEcm8U/8c
+        RSIVgul2+O3H3t4+kCRlDGIquivu
+X-Google-Smtp-Source: ADFU+vvtZwUp3H8qcdnnIzv+yvtHwIMTB9mu+belfvosBk7NPcEGmuHjXbVDPSNa+wrVld1kfeg8Kw==
+X-Received: by 2002:a62:cfc1:: with SMTP id b184mr1795452pfg.55.1583306892166;
+        Tue, 03 Mar 2020 23:28:12 -0800 (PST)
+Received: from ubt.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id j38sm23435859pgi.51.2020.03.03.23.28.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Mar 2020 23:28:11 -0800 (PST)
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
 Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH v4 4/4] clk: renesas: rcar-usb2-clock-sel: Add reset_control
-Date:   Wed,  4 Mar 2020 15:42:17 +0900
-Message-Id: <1583304137-28482-5-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1583304137-28482-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-References: <1583304137-28482-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+        linux-kernel@vger.kernel.org, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>
+Subject: [PATCH v6 0/7] Add clocks for Unisoc's SC9863A
+Date:   Wed,  4 Mar 2020 15:27:23 +0800
+Message-Id: <20200304072730.9193-1-zhang.lyra@gmail.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This hardware needs to deassert resets of both host and peripheral.
-So, this patch adds reset control.
+From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/clk/renesas/Kconfig               |  1 +
- drivers/clk/renesas/rcar-usb2-clock-sel.c | 15 ++++++++++++++-
- 2 files changed, 15 insertions(+), 1 deletion(-)
+Add SC9863A specific clock driver and devicetree bindings for it,
+this patch add to support the new way of specifying parents
+without name strings of clocks.
 
-diff --git a/drivers/clk/renesas/Kconfig b/drivers/clk/renesas/Kconfig
-index 879d96e..ac2dd92 100644
---- a/drivers/clk/renesas/Kconfig
-+++ b/drivers/clk/renesas/Kconfig
-@@ -161,6 +161,7 @@ config CLK_RCAR_GEN3_CPG
- config CLK_RCAR_USB2_CLOCK_SEL
- 	bool "Renesas R-Car USB2 clock selector support"
- 	depends on ARCH_RENESAS || COMPILE_TEST
-+	select RESET_CONTROLLER
- 	help
- 	  This is a driver for R-Car USB2 clock selector
- 
-diff --git a/drivers/clk/renesas/rcar-usb2-clock-sel.c b/drivers/clk/renesas/rcar-usb2-clock-sel.c
-index d5f47ab..d4c0298 100644
---- a/drivers/clk/renesas/rcar-usb2-clock-sel.c
-+++ b/drivers/clk/renesas/rcar-usb2-clock-sel.c
-@@ -19,6 +19,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm.h>
- #include <linux/pm_runtime.h>
-+#include <linux/reset.h>
- #include <linux/slab.h>
- 
- #define USB20_CLKSET0		0x00
-@@ -35,6 +36,7 @@ struct usb2_clock_sel_priv {
- 	void __iomem *base;
- 	struct clk_hw hw;
- 	struct clk_bulk_data clks[ARRAY_SIZE(rcar_usb2_clocks)];
-+	struct reset_control *rsts;
- 	bool extal;
- 	bool xtal;
- };
-@@ -62,10 +64,16 @@ static int usb2_clock_sel_enable(struct clk_hw *hw)
- 	struct usb2_clock_sel_priv *priv = to_priv(hw);
- 	int ret;
- 
--	ret = clk_bulk_prepare_enable(ARRAY_SIZE(priv->clks), priv->clks);
-+	ret = reset_control_deassert(priv->rsts);
- 	if (ret)
- 		return ret;
- 
-+	ret = clk_bulk_prepare_enable(ARRAY_SIZE(priv->clks), priv->clks);
-+	if (ret) {
-+		reset_control_assert(priv->rsts);
-+		return ret;
-+	}
-+
- 	usb2_clock_sel_enable_extal_only(priv);
- 
- 	return 0;
-@@ -78,6 +86,7 @@ static void usb2_clock_sel_disable(struct clk_hw *hw)
- 	usb2_clock_sel_disable_extal_only(priv);
- 
- 	clk_bulk_disable_unprepare(ARRAY_SIZE(priv->clks), priv->clks);
-+	reset_control_assert(priv->rsts);
- }
- 
- /*
-@@ -151,6 +160,10 @@ static int rcar_usb2_clock_sel_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		return ret;
- 
-+	priv->rsts = devm_reset_control_array_get(dev, true, false);
-+	if (IS_ERR(priv->rsts))
-+		return PTR_ERR(priv->rsts);
-+
- 	pm_runtime_enable(dev);
- 	pm_runtime_get_sync(dev);
- 
+Also this patchset added support gate clock for pll which need to
+wait a certain time for stable after being switched on.
+
+Changes from v5:
+* Addressed comments from Rob:
+- Removed description from "clock-names" and "reg" properties;
+- Added maxItem to "reg" property.
+* Modified the descriptions for those clocks which are a child node of
+  a syscon.
+
+Changes from v4:
+* Fixed dt_binding_check warnings.
+
+Changes from v3:
+* Rebased onto v5.6-rc1.
+
+Changes from v2:
+* Addressed comments from Stephen:
+- Remove ununsed header file from sc9863a-clk.c;
+- Added comments for clocks which were marked with CLK_IGNORE_UNUSED,
+  and removed some unnecessary CLK_IGNORE_UNUSED;
+- Added error checking for sprd_clk_regmap_init().
+
+* Addressed comments from Rob:
+- Put some clocks under syscon nodes, since these clocks have the same
+  physical address base with the syscon;
+- Added clocks maxItems and listed out clock-names.
+
+* Added Rob's reviewed-by on patch 4.
+
+Changes from v1:
+* Addressed comments:
+- Removed redefine things;
+- Switched DT bindings to yaml schema;
+- Added macros for the new way of specifying clk parents; 
+- Switched to use the new way of specifying clk parents;
+- Clean CLK_IGNORE_UNUSED flags for some SC9863A clocks;
+- Dropped the module alias;
+- Use device_get_match_data() instead of of_match_node();
+
+* Added Rob's Acked-by on patch 2.
+
+Chunyan Zhang (6):
+  dt-bindings: clk: sprd: rename the common file name sprd.txt to SoC
+    specific
+  dt-bindings: clk: sprd: add bindings for sc9863a clock controller
+  clk: sprd: Add dt-bindings include file for SC9863A
+  clk: sprd: Add macros for referencing parents without strings
+  clk: sprd: support to get regmap from parent node
+  clk: sprd: add clocks support for SC9863A
+
+Xiaolong Zhang (1):
+  clk: sprd: add gate for pll clocks
+
+ .../clock/{sprd.txt => sprd,sc9860-clk.txt}   |    2 +-
+ .../bindings/clock/sprd,sc9863a-clk.yaml      |  105 +
+ drivers/clk/sprd/Kconfig                      |    8 +
+ drivers/clk/sprd/Makefile                     |    1 +
+ drivers/clk/sprd/common.c                     |   10 +-
+ drivers/clk/sprd/composite.h                  |   39 +-
+ drivers/clk/sprd/div.h                        |   20 +-
+ drivers/clk/sprd/gate.c                       |   17 +
+ drivers/clk/sprd/gate.h                       |  120 +-
+ drivers/clk/sprd/mux.h                        |   28 +-
+ drivers/clk/sprd/pll.h                        |   55 +-
+ drivers/clk/sprd/sc9863a-clk.c                | 1772 +++++++++++++++++
+ include/dt-bindings/clock/sprd,sc9863a-clk.h  |  334 ++++
+ 13 files changed, 2457 insertions(+), 54 deletions(-)
+ rename Documentation/devicetree/bindings/clock/{sprd.txt => sprd,sc9860-clk.txt} (98%)
+ create mode 100644 Documentation/devicetree/bindings/clock/sprd,sc9863a-clk.yaml
+ create mode 100644 drivers/clk/sprd/sc9863a-clk.c
+ create mode 100644 include/dt-bindings/clock/sprd,sc9863a-clk.h
+
 -- 
-2.7.4
+2.20.1
 
