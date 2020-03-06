@@ -2,112 +2,131 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D8D17BAAE
-	for <lists+linux-clk@lfdr.de>; Fri,  6 Mar 2020 11:45:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 730F217BDB5
+	for <lists+linux-clk@lfdr.de>; Fri,  6 Mar 2020 14:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726069AbgCFKpi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-clk@lfdr.de>); Fri, 6 Mar 2020 05:45:38 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:46024 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726054AbgCFKpi (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 6 Mar 2020 05:45:38 -0500
-Received: by mail-oi1-f194.google.com with SMTP id v19so2058321oic.12
-        for <linux-clk@vger.kernel.org>; Fri, 06 Mar 2020 02:45:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HroD0on08tLEMYhs9qrREoR+/CxJ/32j4jpzzO71uX0=;
-        b=Z5wMs/coYeoADCQXX6FRUPtXvpO2hY+BtsLb9DQ/NQAzWP05gSApTR4kZBFu+mEyHf
-         lTBtSv6k8dZOUwgW/ouAcL4Nam3ynwSfnBF6GVgZmqoWbv9XHO+aadNU9p37jFGHdZbu
-         ET+9ndP4CaeS3eNtxXEIpVyYKZjE/iPl4DBtMGi4z1hqVvDXzGZgeHrH0pNwXExlq37x
-         6BKv5R2kAri34G/KJ0PbtaUojJIBWQpqm9SimHf2UbWfsgnRVferGSng9brsOROZWHyf
-         q1TyTQEPOdBpBp6cAD+q3s8TlHyRWwL3R2NWT9k572KuASibjKE7AjLr2rDKqoXl3gvr
-         p4ew==
-X-Gm-Message-State: ANhLgQ1TvHkJA3pIor/pLjK7UAAgk2IllLPhDVoEn/ni18dabaiHPyg7
-        05hRRCC7XR5hIK8o4K55Lj8pxEzipnLbZlVgLqA=
-X-Google-Smtp-Source: ADFU+vvtUPH3/Ph9fb3frspC4QqnvQ+CWNfeWzdZ5p3uA2hEhHOsJ1oZpb7TnnmVwlAmCRdczLdbAoij4DJyvJ/brwE=
-X-Received: by 2002:aca:1a06:: with SMTP id a6mr2005904oia.148.1583491536148;
- Fri, 06 Mar 2020 02:45:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20200302155703.278421-1-mylene.josserand@collabora.com>
- <20200302155703.278421-2-mylene.josserand@collabora.com> <2221545.2vEflg7qi2@diego>
-In-Reply-To: <2221545.2vEflg7qi2@diego>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 6 Mar 2020 11:45:25 +0100
-Message-ID: <CAMuHMdXJQqaCcMko9GUAeUiYQzmy3vnX42yVQNPzhj5ijtFuYA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] ARM: Rockchip: Handle rk3288/rk3288w revision
-To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc:     =?UTF-8?Q?Myl=C3=A8ne_Josserand?= <mylene.josserand@collabora.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        id S1726300AbgCFNID (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 6 Mar 2020 08:08:03 -0500
+Received: from mail.baikalelectronics.com ([87.245.175.226]:36444 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726579AbgCFNID (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 6 Mar 2020 08:08:03 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id BCBFC803078F;
+        Fri,  6 Mar 2020 13:00:53 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at baikalelectronics.ru
+Received: from mail.baikalelectronics.ru ([127.0.0.1])
+        by localhost (mail.baikalelectronics.ru [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id p-aO_RiIVZQH; Fri,  6 Mar 2020 16:00:53 +0300 (MSK)
+From:   <Sergey.Semin@baikalelectronics.ru>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>,
+        Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>,
+        Vadim Vlasov <V.Vlasov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/5] clk: Add Baikal-T1 SoC Clock Control Unit support
+Date:   Fri, 6 Mar 2020 16:00:43 +0300
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Message-Id: <20200306130053.BCBFC803078F@mail.baikalelectronics.ru>
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Heiko,
+From: Serge Semin <fancer.lancer@gmail.com>
 
-On Wed, Mar 4, 2020 at 12:00 PM Heiko Stübner <heiko@sntech.de> wrote:
-> Am Montag, 2. März 2020, 16:57:02 CET schrieb Mylène Josserand:
-> > Determine which revision of rk3288 by checking the HDMI version.
-> > According to the Rockchip BSP kernel, on rk3288w, the HDMI
-> > revision equals 0x1A which is not the case for the rk3288 [1].
-> >
-> > As these SOC have some differences, the new function
-> > 'soc_is_rk3288w' will help us to know on which revision
-> > we are.
->
-> what happened to just having a different compatible in the dts?
-> Aka doing a
->
-> rk3288w.dtsi with
->
-> #include "rk3288.dtsi"
->
-> &cru {
->         compatible = "rockchip,rk3288w-cru";
-> }
->
-> I somehow don't expect boards to just switch between soc variants
-> on the fly.
->
-> Also, doing things in mach-rockchip is not very future-proof:
->
-> (1) having random soc-specific APIs spanning the kernel feels wrong,
->     especially as at some point it might not be contained to our own special
->     drivers like the cru. I cannot really see people being enthusiastic if
->     something like this would be needed in say the core Analogix-DP bridge ;-)
+Clocks Control Unit is the core of Baikal-T1 SoC responsible for the chip
+subsystems clocking and resetting. The CCU is connected with an external
+fixed rate oscillator, which signal is transformed into clocks of various
+frequencies and then propagated to either individual IP-blocks or to groups
+of blocks (clock domains). The transformation is done by means of PLLs and
+gateable/non-gateable, fixed/variable dividers embedded into the CCU. There
+are five PLLs to create a clock for the MIPS P5600 cores, the embedded DDR
+controller, SATA, Ethernet and PCIe domains. The last three PLLs CLKOUT are
+then passed over CCU dividers to create signals required for the target clock
+domains: individual AXI and APB bus clocks, SoC devices reference clocks.
+The CCU divider registers may also provide a way to reset the target devices
+state.
 
-Indeed.  You're better of registering an soc_device_attribute using
-soc_device_register(), after which any driver can use soc_device_match()
-to differentiate based on the SoC revision.
+So this patchset introduces the Baikal-T1 clock and reset drivers of CCU
+PLLs, AXI-bus clock dividers and system devices clock dividers.
 
-> (2) I guess the rk3288w will not be the last soc doing this and on arm64 you
->     can't do it that way, as there is no mach-rockchip there
+This patchset is rebased and tested on the mainline Linux kernel 5.6-rc4:
+commit 98d54f81e36b ("Linux 5.6-rc4").
 
-There's drivers/soc/rockchip ;-)
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Signed-off-by: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Maxim Kaurkin <Maxim.Kaurkin@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Ramil Zaripov <Ramil.Zaripov@baikalelectronics.ru>
+Cc: Ekaterina Skachko <Ekaterina.Skachko@baikalelectronics.ru>
+Cc: Vadim Vlasov <V.Vlasov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: linux-clk@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-> So my personal preference would really would be just a specific compatible
-> for affected ip blocks.
+Serge Semin (5):
+  dt-bindings: clk: Add Baikal-T1 CCU PLLs bindings
+  dt-bindings: clk: Add Baikal-T1 AXI-bus CCU bindings
+  dt-bindings: clk: Add Baikal-T1 System Devices CCU bindings
+  clk: Add Baikal-T1 CCU PLLs driver
+  clk: Add Baikal-T1 CCU dividers driver
 
-Doing that only for affected IP blocks may miss integration differences.
-Of course, you can always resort to soc_device_match() to handle those...
-
-Gr{oetje,eeting}s,
-
-                        Geert
+ .../bindings/clock/be,bt1-ccu-axi.yaml        | 151 +++++
+ .../bindings/clock/be,bt1-ccu-pll.yaml        | 139 +++++
+ .../bindings/clock/be,bt1-ccu-sys.yaml        | 169 ++++++
+ drivers/clk/Kconfig                           |   1 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/baikal-t1/Kconfig                 |  46 ++
+ drivers/clk/baikal-t1/Makefile                |   3 +
+ drivers/clk/baikal-t1/ccu-div.c               | 531 ++++++++++++++++++
+ drivers/clk/baikal-t1/ccu-div.h               | 114 ++++
+ drivers/clk/baikal-t1/ccu-pll.c               | 474 ++++++++++++++++
+ drivers/clk/baikal-t1/ccu-pll.h               |  73 +++
+ drivers/clk/baikal-t1/clk-ccu-div.c           | 522 +++++++++++++++++
+ drivers/clk/baikal-t1/clk-ccu-pll.c           | 217 +++++++
+ drivers/clk/baikal-t1/common.h                |  51 ++
+ include/dt-bindings/clock/bt1-ccu.h           |  54 ++
+ include/dt-bindings/reset/bt1-ccu.h           |  27 +
+ 16 files changed, 2573 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/be,bt1-ccu-axi.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/be,bt1-ccu-pll.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/be,bt1-ccu-sys.yaml
+ create mode 100644 drivers/clk/baikal-t1/Kconfig
+ create mode 100644 drivers/clk/baikal-t1/Makefile
+ create mode 100644 drivers/clk/baikal-t1/ccu-div.c
+ create mode 100644 drivers/clk/baikal-t1/ccu-div.h
+ create mode 100644 drivers/clk/baikal-t1/ccu-pll.c
+ create mode 100644 drivers/clk/baikal-t1/ccu-pll.h
+ create mode 100644 drivers/clk/baikal-t1/clk-ccu-div.c
+ create mode 100644 drivers/clk/baikal-t1/clk-ccu-pll.c
+ create mode 100644 drivers/clk/baikal-t1/common.h
+ create mode 100644 include/dt-bindings/clock/bt1-ccu.h
+ create mode 100644 include/dt-bindings/reset/bt1-ccu.h
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.25.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
