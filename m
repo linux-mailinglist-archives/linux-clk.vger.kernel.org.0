@@ -2,87 +2,91 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E22A017E8A1
-	for <lists+linux-clk@lfdr.de>; Mon,  9 Mar 2020 20:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D64CC17E934
+	for <lists+linux-clk@lfdr.de>; Mon,  9 Mar 2020 20:51:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726595AbgCITfY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 9 Mar 2020 15:35:24 -0400
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:22379 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726520AbgCITfY (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 Mar 2020 15:35:24 -0400
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 09 Mar 2020 12:35:21 -0700
-Received: from gurus-linux.qualcomm.com ([10.46.162.81])
-  by ironmsg05-sd.qualcomm.com with ESMTP; 09 Mar 2020 12:35:20 -0700
-Received: by gurus-linux.qualcomm.com (Postfix, from userid 383780)
-        id 776CB463E; Mon,  9 Mar 2020 12:35:20 -0700 (PDT)
-From:   Guru Das Srinagesh <gurus@codeaurora.org>
-To:     linux-pwm@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Subbaraman Narayanamurthy <subbaram@codeaurora.org>,
-        linux-kernel@vger.kernel.org,
-        Guru Das Srinagesh <gurus@codeaurora.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH v7 01/13] clk: pwm: Use 64-bit division macros for period and duty cycle
-Date:   Mon,  9 Mar 2020 12:35:04 -0700
-Message-Id: <4e427fc990b214ec96840a96dfd59f4f56e01ecb.1583782035.git.gurus@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <cover.1583782035.git.gurus@codeaurora.org>
-References: <cover.1583782035.git.gurus@codeaurora.org>
-In-Reply-To: <cover.1583782035.git.gurus@codeaurora.org>
-References: <cover.1583782035.git.gurus@codeaurora.org>
+        id S1726623AbgCITu7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 9 Mar 2020 15:50:59 -0400
+Received: from v6.sk ([167.172.42.174]:34944 "EHLO v6.sk"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726202AbgCITu6 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 9 Mar 2020 15:50:58 -0400
+Received: from localhost (v6.sk [IPv6:::1])
+        by v6.sk (Postfix) with ESMTP id DBBDC60EEE;
+        Mon,  9 Mar 2020 19:43:00 +0000 (UTC)
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 00/17] clk: mmp2: MMP2 CLK Update
+Date:   Mon,  9 Mar 2020 20:42:37 +0100
+Message-Id: <20200309194254.29009-1-lkundrak@v3.sk>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Because period and duty cycle are defined in the PWM framework structs
-as ints with units of nanoseconds, the maximum time duration that can be
-set is limited to ~2.147 seconds. Redefining them as u64 values will
-enable larger time durations to be set.
+Hi,
 
-As a first step, prepare drivers to handle the switch to u64 period and
-duty_cycle by replacing division operations involving pwm period and duty cycle
-with their 64-bit equivalents as appropriate. The actual switch to u64 period
-and duty_cycle follows as a separate patch.
+please consider applying this patch series, that includes fixes and
+enhancements for the MMP2/MMP3 clock driver that I hope to get into 5.7.
+Compared to first submission, patches 11/17 to 17/17 were added.
+Details in changelogs of individual patches.
 
-Where the dividend is 64-bit but the divisor is 32-bit, use *_ULL
-macros:
-- DIV_ROUND_UP_ULL
-- DIV_ROUND_CLOSEST_ULL
-- div_u64
+It starts off with a handful of cleanups:
 
-Where the divisor is 64-bit (dividend may be 32-bit or 64-bit), use
-DIV64_* macros:
-- DIV64_U64_ROUND_CLOSEST
-- div64_u64
+  [PATCH v2 01/17] clk: mmp2: Remove a unused prototype
+  [PATCH v2 02/17] clk: mmp2: Constify some strings
+  [PATCH v2 03/17] dt-bindings: clock: Convert marvell,mmp2-clock to
 
-Cc: Michael Turquette <mturquette@baylibre.com>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org
+The next patch adds the logic for calculating the rate of clock signals
+coming from the PLLs dynamically. Currently they are hardcoded to more
+or less wrong values (how wrong it is depends on how did firmware set
+things up), which causes bad timings when they are used (e.g. to generate
+display clock).
 
-Signed-off-by: Guru Das Srinagesh <gurus@codeaurora.org>
----
- drivers/clk/clk-pwm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  [PATCH v2 04/17] clk: mmp2: Add support for PLL clock sources
 
-diff --git a/drivers/clk/clk-pwm.c b/drivers/clk/clk-pwm.c
-index 87fe0b0e..7b1f7a0 100644
---- a/drivers/clk/clk-pwm.c
-+++ b/drivers/clk/clk-pwm.c
-@@ -89,7 +89,7 @@ static int clk_pwm_probe(struct platform_device *pdev)
- 	}
- 
- 	if (of_property_read_u32(node, "clock-frequency", &clk_pwm->fixed_rate))
--		clk_pwm->fixed_rate = NSEC_PER_SEC / pargs.period;
-+		clk_pwm->fixed_rate = div64_u64(NSEC_PER_SEC, pargs.period);
- 
- 	if (pargs.period != NSEC_PER_SEC / clk_pwm->fixed_rate &&
- 	    pargs.period != DIV_ROUND_UP(NSEC_PER_SEC, clk_pwm->fixed_rate)) {
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Then MMP2 is switched over to use it:
+
+  [PATCH v2 05/17] clk: mmp2: Stop pretending PLL outputs are constant
+
+Switching MMP3 requires some more work, because until now, the driver
+didn't distinguish between the versions of the SoC:
+
+  [PATCH v2 06/17] dt-bindings: clock: Add MMP3 compatible string
+  [PATCH v2 07/17] clk: mmp2: Check for MMP3
+  [PATCH v2 08/17] dt-bindings: marvell,mmp2: Add clock ids for MMP3 PLLs
+  [PATCH v2 09/17] clk: mmp2: Add PLLs that are available on MMP3
+  [PATCH v2 10/17] ARM: dts: mmp3: Use the MMP3 compatible string for
+
+Patches that follow add just add more clocks paired with DT bindings:
+
+  [PATCH v2 11/17] dt-bindings: marvell,mmp2: Add clock ids for the GPU
+  [PATCH v2 12/17] clk: mmp2: add the GPU clocks
+  [PATCH v2 13/17] dt-bindings: marvell,mmp2: Add clock ids for the
+  [PATCH v2 14/17] clk: mmp2: Add clocks for the thermal sensors
+  [PATCH v2 15/17] dt-bindings: marvell,mmp2: Add clock id for the fifth
+  [PATCH v2 16/17] clk: mmp2: Add clock for fifth SD HCI on MMP3
+
+The last one is a straightforward bug fix, independent of the rest of the
+patch set:
+
+  [PATCH v2 17/17] clk: mmp2: Fix bit masks for LCDC I/O and pixel clocks
+
+The hardware vendor doesn't supply documentation, so this is best-effort
+work based on the code dump from Marvell and OLPC Open Firmware.
+
+Tested on MMP2 and MMP3 based hardware I have; details in relevant
+commit messages.
+
+Thank you,
+Lubo
+
 
