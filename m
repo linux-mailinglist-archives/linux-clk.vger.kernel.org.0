@@ -2,23 +2,23 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1607C17F4E9
-	for <lists+linux-clk@lfdr.de>; Tue, 10 Mar 2020 11:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC6217F4E4
+	for <lists+linux-clk@lfdr.de>; Tue, 10 Mar 2020 11:19:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726290AbgCJKTm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 10 Mar 2020 06:19:42 -0400
-Received: from ns.iliad.fr ([212.27.33.1]:60800 "EHLO ns.iliad.fr"
+        id S1726224AbgCJKTe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 10 Mar 2020 06:19:34 -0400
+Received: from ns.iliad.fr ([212.27.33.1]:60832 "EHLO ns.iliad.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726205AbgCJKTf (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 10 Mar 2020 06:19:35 -0400
+        id S1726164AbgCJKTe (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 10 Mar 2020 06:19:34 -0400
 Received: from ns.iliad.fr (localhost [127.0.0.1])
-        by ns.iliad.fr (Postfix) with ESMTP id 069311FFC2;
+        by ns.iliad.fr (Postfix) with ESMTP id 3851D20020;
         Tue, 10 Mar 2020 11:19:33 +0100 (CET)
 Received: from [192.168.108.51] (freebox.vlq16.iliad.fr [213.36.7.13])
-        by ns.iliad.fr (Postfix) with ESMTP id E68701FF7A;
-        Tue, 10 Mar 2020 11:19:32 +0100 (CET)
+        by ns.iliad.fr (Postfix) with ESMTP id 23F5C1FF7A;
+        Tue, 10 Mar 2020 11:19:33 +0100 (CET)
+Subject: [PATCH v5 1/2] devres: Provide new helper for devm functions
 From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
-Subject: [PATCH v5 0/2] Small devm helper for devm implementations
 To:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
@@ -38,11 +38,13 @@ To:     Stephen Boyd <sboyd@kernel.org>,
 Cc:     linux-clk <linux-clk@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         LKML <linux-kernel@vger.kernel.org>
-Message-ID: <e8221bff-3e2a-7607-c5c8-abcf9cebb1b5@free.fr>
-Date:   Tue, 10 Mar 2020 11:11:46 +0100
+References: <e8221bff-3e2a-7607-c5c8-abcf9cebb1b5@free.fr>
+Message-ID: <0b5c5f40-9118-1b87-6cf4-928107ccd20e@free.fr>
+Date:   Tue, 10 Mar 2020 11:15:10 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
+In-Reply-To: <e8221bff-3e2a-7607-c5c8-abcf9cebb1b5@free.fr>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -52,32 +54,67 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello,
+Provide a simple wrapper for devres_alloc / devres_add.
 
-Differences from v4 to v5
-x Fix the grammar in devm_add comments [Geert]
-x Undo an unrelated change in devm_clk_put [Geert]
+Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/base/devres.c  | 28 ++++++++++++++++++++++++++++
+ include/linux/device.h |  3 +++
+ 2 files changed, 31 insertions(+)
 
-Differences from v3 to v4
-x Add a bunch of kerneldoc above devm_add() [Greg KH]
-x Split patch in two [Greg KH]
-
-Differences from v2 to v3
-x Make devm_add() return an error-code rather than the raw data pointer
-  (in case devres_alloc ever returns an ERR_PTR) as suggested by Geert
-x Provide a variadic version devm_vadd() to work with structs as suggested
-  by Geert
-x Don't use nested ifs in clk_devm* implementations (hopefully simpler
-  code logic to follow) as suggested by Geert
-
-Marc Gonzalez (2):
-  devres: Provide new helper for devm functions
-  clk: Use devm_add in managed functions
-
- drivers/base/devres.c    | 28 ++++++++++++
- drivers/clk/clk-devres.c | 97 +++++++++++++++-------------------------
- include/linux/device.h   |  3 ++
- 3 files changed, 67 insertions(+), 61 deletions(-)
-
+diff --git a/drivers/base/devres.c b/drivers/base/devres.c
+index 0bbb328bd17f..b4c18c105f39 100644
+--- a/drivers/base/devres.c
++++ b/drivers/base/devres.c
+@@ -685,6 +685,34 @@ int devres_release_group(struct device *dev, void *id)
+ }
+ EXPORT_SYMBOL_GPL(devres_release_group);
+ 
++/**
++ * devm_add - allocate and register new device resource
++ * @dev: device to add resource to
++ * @func: resource release function
++ * @arg: resource data
++ * @size: resource data size
++ *
++ * Simple wrapper for devres_alloc / devres_add.
++ * Releases the resource if the allocation failed.
++ *
++ * RETURNS:
++ * 0 on success, -ENOMEM otherwise.
++ */
++int devm_add(struct device *dev, dr_release_t func, void *arg, size_t size)
++{
++	void *data = devres_alloc(func, size, GFP_KERNEL);
++
++	if (!data) {
++		func(dev, arg);
++		return -ENOMEM;
++	}
++
++	memcpy(data, arg, size);
++	devres_add(dev, data);
++	return 0;
++}
++EXPORT_SYMBOL_GPL(devm_add);
++
+ /*
+  * Custom devres actions allow inserting a simple function call
+  * into the teadown sequence.
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 0cd7c647c16c..55be3be9b276 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -247,6 +247,9 @@ void __iomem *devm_of_iomap(struct device *dev,
+ 			    struct device_node *node, int index,
+ 			    resource_size_t *size);
+ 
++int devm_add(struct device *dev, dr_release_t func, void *arg, size_t size);
++#define devm_vadd(dev, func, type, args...) \
++	devm_add(dev, func, &(struct type){args}, sizeof(struct type))
+ /* allows to add/remove a custom action to devres stack */
+ int devm_add_action(struct device *dev, void (*action)(void *), void *data);
+ void devm_remove_action(struct device *dev, void (*action)(void *), void *data);
 -- 
 2.17.1
