@@ -2,35 +2,64 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A195A1853D4
-	for <lists+linux-clk@lfdr.de>; Sat, 14 Mar 2020 02:27:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0E5185794
+	for <lists+linux-clk@lfdr.de>; Sun, 15 Mar 2020 02:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726893AbgCNB1X (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 13 Mar 2020 21:27:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60852 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726853AbgCNB1X (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 13 Mar 2020 21:27:23 -0400
-Received: from mail.kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 006392074C;
-        Sat, 14 Mar 2020 01:27:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584149243;
-        bh=swerRyUJxUODfmDzekCjsxd7ozDfqDISTBClgBXOfFE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=0UHuVr8i+OQnilm7VkRRv1BAqxlT/nxJQAuioO76UwF5jLBW8XshKQhae7T2OxRK+
-         5dFmWRdFwKVK3mFLu8doZMimwGHUJJXq0mlUGtEiM/YNIdVDmDk6x07xYWhMQg+1OZ
-         lgRrkWdAshDcgU/B+7a8eK+gno3l2yE8DGjnLc1Y=
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] clk fixes for v5.6-rc5
-Date:   Fri, 13 Mar 2020 18:27:22 -0700
-Message-Id: <20200314012722.234270-1-sboyd@kernel.org>
-X-Mailer: git-send-email 2.25.1.481.gfbce0eb801-goog
+        id S1726883AbgCOBl1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 14 Mar 2020 21:41:27 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:40174 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726530AbgCOBl0 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 14 Mar 2020 21:41:26 -0400
+Received: by mail-ed1-f67.google.com with SMTP id a24so17326162edy.7;
+        Sat, 14 Mar 2020 18:41:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Kdlcv0vXg+e3IXgeXkwIX+UvL6hiQeQvJR6h+ymcppc=;
+        b=thByE3DO/kUnWcOoocjbLM+DQ0XCQhtyskwN5xLJyReNqZElXrdPMTTWwftzA30vW2
+         qhyGZ6G2CbXzPpst6Usf+SuTPqDumFIEc+DrV2KGmCinoKV/scRi/P8TCBoCw0VSX2qH
+         vctWR/sd4lGzsFtO+1gEQrMkr5DQh9RwU93qP+9bGbJJNfZKN/k/SQARWsK8U9kOraPt
+         dpQZ652ktMOGKM543Lc8/b4AenNllPzSTxtVewwPDanpk3RZGoLErVQFqvyXqifUinO9
+         Tf9bUTEiUEzTuvYuEHSLqZJlHdE1TgHYH+nZajGvR1PzGL7HBf31lrCNxHJY8jzYyrTf
+         h5MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Kdlcv0vXg+e3IXgeXkwIX+UvL6hiQeQvJR6h+ymcppc=;
+        b=dWT+dQRGia3r4jzBGDm1Qzs1waRmy35YmYf2sV/MQntQsqGRr2UJydQKcG7xnqiUH7
+         YBK8zvyNX3KgHPRkUF2UHEJoqf44PqB8BgKbsGdtevWH4wJDsSEyMCnHetSSfj3cIvTB
+         3SBEvae0DNeOPAirNT9gLXeD7ZoMkFdbjR4kcktstBE9K5iXcDCfXv17h6pj7jX9jhzb
+         DcnUcF/kPSX3qHPT63zDRBVmH2uBi+nSbIXPStkEzos754v1EZyboPWYuH8ysSC8rHLA
+         Y8hi3wSm0yFFoDbZFzrASNRueSlkaLIZIvaBqg20cOprJ8EaNZLoCueAUHdgDFm6MtsK
+         QsuA==
+X-Gm-Message-State: ANhLgQ1lr3+x3FSx+puubgjL3Que6qci2fTHmXPjEi/W5RIUu2wXfvdu
+        JWmkVMoQpz2qR4kTd/a/Vno9QnPBpk2bog==
+X-Google-Smtp-Source: ADFU+vs00b+0TuPh7UK7ayrUuIskNi33PA5Zud2/5ALZ8kFWqEKnbRLGNhSAuC/yr9xghGmiwskgcQ==
+X-Received: by 2002:a05:6402:10c2:: with SMTP id p2mr6025962edu.375.1584192971411;
+        Sat, 14 Mar 2020 06:36:11 -0700 (PDT)
+Received: from Ansuel-XPS.localdomain (host129-252-dynamic.6-87-r.retail.telecomitalia.it. [87.6.252.129])
+        by smtp.googlemail.com with ESMTPSA id g5sm4066360edn.9.2020.03.14.06.36.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Mar 2020 06:36:10 -0700 (PDT)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     agross@kernel.org
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Abhishek Sahu <absahu@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kumar Gala <galak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH] ipq806x: gcc: Added the enable regs and mask for PRNG
+Date:   Sat, 14 Mar 2020 14:36:00 +0100
+Message-Id: <20200314133600.183-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.25.0
+In-Reply-To: <158413140244.164562.11497203149584037524@swboyd.mtv.corp.google.com>
+References: <158413140244.164562.11497203149584037524@swboyd.mtv.corp.google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
@@ -38,50 +67,31 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The following changes since commit bb6d3fb354c5ee8d6bde2d576eb7220ea09862b9:
+Kernel got hanged while reading from /dev/hwrng at the
+time of PRNG clock enable
 
-  Linux 5.6-rc1 (2020-02-09 16:08:48 -0800)
+Fixes: 24d8fba44af3 "clk: qcom: Add support for IPQ8064's global
+clock controller (GCC)"
 
-are available in the Git repository at:
+Signed-off-by: Abhishek Sahu <absahu@codeaurora.org>
+Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+---
+ drivers/clk/qcom/gcc-ipq806x.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
-
-for you to fetch changes up to 20055448dc1b439c87d0cb602e6d0469b0a3aaad:
-
-  Merge tag 'imx-clk-fixes-5.6' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into clk-fixes (2020-02-25 08:57:00 -0800)
-
-----------------------------------------------------------------
-A small collection of fixes. I'll make another sweep soon to look for
-more fixes for this -rc series.
-
- - Mark device node const in of_clk_get_parent APIs to ease landing
-   changes in users later
- - Fix flag for Qualcomm SC7180 video clocks where we thought it would
-   never turn off but actually hardware takes care of it
- - Remove disp_cc_mdss_rscc_ahb_clk on Qualcomm SC7180 SoCs because this
-   clk is always on anyway
- - Correct some bad dt-binding numbers for i.MX8MN SoCs
-
-----------------------------------------------------------------
-Anson Huang (1):
-      clk: imx8mn: Fix incorrect clock defines
-
-Geert Uytterhoeven (1):
-      of: clk: Make of_clk_get_parent_{count,name}() parameter const
-
-Stephen Boyd (1):
-      Merge tag 'imx-clk-fixes-5.6' of git://git.kernel.org/.../shawnguo/linux into clk-fixes
-
-Taniya Das (2):
-      clk: qcom: videocc: Update the clock flag for video_cc_vcodec0_core_clk
-      clk: qcom: dispcc: Remove support of disp_cc_mdss_rscc_ahb_clk
-
- drivers/clk/clk.c                        |  4 ++--
- drivers/clk/qcom/dispcc-sc7180.c         | 19 -------------------
- drivers/clk/qcom/videocc-sc7180.c        |  2 +-
- include/dt-bindings/clock/imx8mn-clock.h |  4 ++--
- include/linux/of_clk.h                   |  8 ++++----
- 5 files changed, 9 insertions(+), 28 deletions(-)
-
+diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
+index b0eee0903807..a8456e09c44d 100644
+--- a/drivers/clk/qcom/gcc-ipq806x.c
++++ b/drivers/clk/qcom/gcc-ipq806x.c
+@@ -1224,6 +1224,8 @@ static struct clk_rcg prng_src = {
+ 		.parent_map = gcc_pxo_pll8_map,
+ 	},
+ 	.clkr = {
++		.enable_reg = 0x2e80,
++		.enable_mask = BIT(11),
+ 		.hw.init = &(struct clk_init_data){
+ 			.name = "prng_src",
+ 			.parent_names = gcc_pxo_pll8,
 -- 
-Sent by a computer, using git, on the internet
+2.25.0
+
