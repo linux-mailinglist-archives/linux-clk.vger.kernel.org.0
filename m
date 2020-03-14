@@ -2,96 +2,118 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0E5185794
-	for <lists+linux-clk@lfdr.de>; Sun, 15 Mar 2020 02:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A02185830
+	for <lists+linux-clk@lfdr.de>; Sun, 15 Mar 2020 02:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726883AbgCOBl1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 14 Mar 2020 21:41:27 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:40174 "EHLO
+        id S1727490AbgCOB5c (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 14 Mar 2020 21:57:32 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:34683 "EHLO
         mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726530AbgCOBl0 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 14 Mar 2020 21:41:26 -0400
-Received: by mail-ed1-f67.google.com with SMTP id a24so17326162edy.7;
-        Sat, 14 Mar 2020 18:41:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Kdlcv0vXg+e3IXgeXkwIX+UvL6hiQeQvJR6h+ymcppc=;
-        b=thByE3DO/kUnWcOoocjbLM+DQ0XCQhtyskwN5xLJyReNqZElXrdPMTTWwftzA30vW2
-         qhyGZ6G2CbXzPpst6Usf+SuTPqDumFIEc+DrV2KGmCinoKV/scRi/P8TCBoCw0VSX2qH
-         vctWR/sd4lGzsFtO+1gEQrMkr5DQh9RwU93qP+9bGbJJNfZKN/k/SQARWsK8U9kOraPt
-         dpQZ652ktMOGKM543Lc8/b4AenNllPzSTxtVewwPDanpk3RZGoLErVQFqvyXqifUinO9
-         Tf9bUTEiUEzTuvYuEHSLqZJlHdE1TgHYH+nZajGvR1PzGL7HBf31lrCNxHJY8jzYyrTf
-         h5MA==
+        with ESMTP id S1726853AbgCOB5c (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 14 Mar 2020 21:57:32 -0400
+Received: by mail-ed1-f67.google.com with SMTP id i24so13489883eds.1;
+        Sat, 14 Mar 2020 18:57:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Kdlcv0vXg+e3IXgeXkwIX+UvL6hiQeQvJR6h+ymcppc=;
-        b=dWT+dQRGia3r4jzBGDm1Qzs1waRmy35YmYf2sV/MQntQsqGRr2UJydQKcG7xnqiUH7
-         YBK8zvyNX3KgHPRkUF2UHEJoqf44PqB8BgKbsGdtevWH4wJDsSEyMCnHetSSfj3cIvTB
-         3SBEvae0DNeOPAirNT9gLXeD7ZoMkFdbjR4kcktstBE9K5iXcDCfXv17h6pj7jX9jhzb
-         DcnUcF/kPSX3qHPT63zDRBVmH2uBi+nSbIXPStkEzos754v1EZyboPWYuH8ysSC8rHLA
-         Y8hi3wSm0yFFoDbZFzrASNRueSlkaLIZIvaBqg20cOprJ8EaNZLoCueAUHdgDFm6MtsK
-         QsuA==
-X-Gm-Message-State: ANhLgQ1lr3+x3FSx+puubgjL3Que6qci2fTHmXPjEi/W5RIUu2wXfvdu
-        JWmkVMoQpz2qR4kTd/a/Vno9QnPBpk2bog==
-X-Google-Smtp-Source: ADFU+vs00b+0TuPh7UK7ayrUuIskNi33PA5Zud2/5ALZ8kFWqEKnbRLGNhSAuC/yr9xghGmiwskgcQ==
-X-Received: by 2002:a05:6402:10c2:: with SMTP id p2mr6025962edu.375.1584192971411;
-        Sat, 14 Mar 2020 06:36:11 -0700 (PDT)
-Received: from Ansuel-XPS.localdomain (host129-252-dynamic.6-87-r.retail.telecomitalia.it. [87.6.252.129])
-        by smtp.googlemail.com with ESMTPSA id g5sm4066360edn.9.2020.03.14.06.36.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Mar 2020 06:36:10 -0700 (PDT)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     agross@kernel.org
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Abhishek Sahu <absahu@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=IGvteHNkCAAe9RzBu1B2j4q+4lEY8L8k3NmOvCcX8OE=;
+        b=KhwANvBcrTq2q2W5HVumXxXVfw3LRtfnYku9FMQ1suJpsKfm1z2FlTffMfi3FsbB/z
+         IVMP/udmVbpgTjKW5cNUjWgiV1tKC8kDYSO0gLZpwjEWBWrION7WTmd0TM8EJEgQOH8Z
+         eTNelbIFbn3OAHSNgYbM8h0d7qMMar0Bl4C/Siv215MIThh7Rb/Hf0UciLgjp0hufgBs
+         MnR1vOy4s76cXpYBYvMXauY51h/rWdykIJmS97Fx3tj838dCUXZmEtIBBj0R4eAOSpVR
+         EBiUdAe2DM/dJPL/nSR1jjY9CpXC1ER/ag4dJbFKldpE8HvCU6JNzqH4ubhvlpC7RmUQ
+         G6SA==
+X-Gm-Message-State: ANhLgQ2UywbPP/WnWS3yPZBN1VwWm8GBWPebJYVOudtwHeZJK9YCOcaC
+        R5m0GQ0kZ9ASWJ39wq6Xl9I4uG1JtWA=
+X-Google-Smtp-Source: ADFU+vvqta4B+r9p/W0zTELooOA9Cc7fWz4UD77LqxM6UYcl+Sd+u1u4HEDyOkSEfBTCw7OTPTESnQ==
+X-Received: by 2002:a50:d657:: with SMTP id c23mr19074934edj.18.1584210014117;
+        Sat, 14 Mar 2020 11:20:14 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.125])
+        by smtp.googlemail.com with ESMTPSA id n6sm2172656ejy.23.2020.03.14.11.20.12
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 14 Mar 2020 11:20:13 -0700 (PDT)
+Date:   Sat, 14 Mar 2020 19:20:10 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kumar Gala <galak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH] ipq806x: gcc: Added the enable regs and mask for PRNG
-Date:   Sat, 14 Mar 2020 14:36:00 +0100
-Message-Id: <20200314133600.183-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <158413140244.164562.11497203149584037524@swboyd.mtv.corp.google.com>
-References: <158413140244.164562.11497203149584037524@swboyd.mtv.corp.google.com>
+        Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCHv3 2/5] ARM: dts: exynos: Add missing usbdrd3 suspend clk
+Message-ID: <20200314182010.GB17580@kozik-lap>
+References: <20200310194854.831-1-linux.amoon@gmail.com>
+ <20200310194854.831-3-linux.amoon@gmail.com>
+ <CANAwSgR4fJK0uVANv-x-=iSL_hAKD8kvazACUsY9Meu5xonuqQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CANAwSgR4fJK0uVANv-x-=iSL_hAKD8kvazACUsY9Meu5xonuqQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Kernel got hanged while reading from /dev/hwrng at the
-time of PRNG clock enable
+On Sat, Mar 14, 2020 at 07:02:33PM +0530, Anand Moon wrote:
+> Hi Krzysztof,
+> 
+> On Wed, 11 Mar 2020 at 01:19, Anand Moon <linux.amoon@gmail.com> wrote:
+> >
+> > Add new compatible strings for USBDRD3 for adding missing
+> > suspend clk, exynos5422 usbdrd3 support two clk USBD300 and
+> > SCLK_USBD300, so add missing suspemd_clk for Exynos542x DWC3 nodes.
+> >
+> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> 
+> My assumption based on the FSYS clock source diagram below was bit wrong.
+> [0] https://imgur.com/gallery/zAiBoyh
+> 
+> And again re-looking into the driver source code, it turn out their
+> are *6 clock*
+> Here is the correct mapping as per the Exynos5420 clock driver.
+> 
+> USB-(phy@12100000)
+> |___________________CLK_SCLK_USBD300
+> |___________________CLK_SCLK_USBPHY300
+> 
+> USB-(phy@12500000)
+> |___________________CLK_SCLK_USBD301
+> |___________________CLK_SCLK_USBPHY301
+> 
+> USB-(dwc3@12000000)
+> |___________________CLK_USBD300
+> USB-(dwc3@12400000)
+> |___________________CLK_USBD301
+> 
+> Note: As per Exynos 5422 user manual, There are some more USB CLK
+> configuration missing in GATE_IP_FSYS. So we could enable another dwc3 clk,
+> If needed I would like too add this missing clk code and enable this
+> clk for dwc3 driver.
+> 
+> For some reason we already use CLK_USBD300 and CLK_USBD301
+> for PHY nodes, which lead to this confusion. So we need to update PHY clock
+> CLK_USBD300 with CLK_SCLK_USBD300 and clock CLK_USBD301 with CLK_SCLK_USBD301.
+> 
+> Please share your thought on linking PHY nodes above and add new DWC3 clock
+> and enable this clock.
 
-Fixes: 24d8fba44af3 "clk: qcom: Add support for IPQ8064's global
-clock controller (GCC)"
+The real clock topology of Exynos5422 is not properly reflected in the
+kernel. However cleaning this up is quite big task.
 
-Signed-off-by: Abhishek Sahu <absahu@codeaurora.org>
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
----
- drivers/clk/qcom/gcc-ipq806x.c | 2 ++
- 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
-index b0eee0903807..a8456e09c44d 100644
---- a/drivers/clk/qcom/gcc-ipq806x.c
-+++ b/drivers/clk/qcom/gcc-ipq806x.c
-@@ -1224,6 +1224,8 @@ static struct clk_rcg prng_src = {
- 		.parent_map = gcc_pxo_pll8_map,
- 	},
- 	.clkr = {
-+		.enable_reg = 0x2e80,
-+		.enable_mask = BIT(11),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "prng_src",
- 			.parent_names = gcc_pxo_pll8,
--- 
-2.25.0
+Best regards,
+Krzysztof
 
