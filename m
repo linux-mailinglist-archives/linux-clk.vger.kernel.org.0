@@ -2,108 +2,199 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8183518584D
-	for <lists+linux-clk@lfdr.de>; Sun, 15 Mar 2020 03:02:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A904185942
+	for <lists+linux-clk@lfdr.de>; Sun, 15 Mar 2020 03:42:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727464AbgCOCCc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 14 Mar 2020 22:02:32 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:55503 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726550AbgCOCCc (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 14 Mar 2020 22:02:32 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1584237751; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=bab8s4tBbO8m9drWNuWpC59mcIOm3kFwBEnRSL7ZdyI=; b=v1T5bXctYhFGXR2mq3grt0O5UqyFc9ldmDfNzxAVFA8ylnHGTbOd+ueuHIIvNza2FjSUSNJ1
- AZK4wT/MM1zCnoJcv27SBDj9CWdaOrfzrK8CXAmhArdY6m1i2uDdLuhKXjweKfV7t3b1ngCZ
- aGvbDkZZ+6zWWUhcljGeY4xr/KE=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e6d2768.7f0a8051d0d8-smtp-out-n04;
- Sat, 14 Mar 2020 18:50:16 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id CEA46C43636; Sat, 14 Mar 2020 18:50:14 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from tdas-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: tdas)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id EC741C433CB;
-        Sat, 14 Mar 2020 18:50:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org EC741C433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=tdas@codeaurora.org
-From:   Taniya Das <tdas@codeaurora.org>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?q?Michael=20Turquette=20=C2=A0?= <mturquette@baylibre.com>
-Cc:     David Brown <david.brown@linaro.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        robh@kernel.org, robh+dt@kernel.org,
-        Taniya Das <tdas@codeaurora.org>
-Subject: [PATCH v6 0/3] Add modem Clock controller (MSS CC) driver for SC7180
-Date:   Sun, 15 Mar 2020 00:19:55 +0530
-Message-Id: <1584211798-10332-1-git-send-email-tdas@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S1727361AbgCOCmu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 14 Mar 2020 22:42:50 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:43439 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726811AbgCOCmt (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 14 Mar 2020 22:42:49 -0400
+Received: by mail-qk1-f194.google.com with SMTP id x1so15210515qkx.10;
+        Sat, 14 Mar 2020 19:42:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Vc8LwrIaU40nI0L9rZtv7zvcU+o5GuwsQBOLTCK4qFI=;
+        b=OWQQM+EsX/WIldwdhGjM06LV5RrRYgpfmsg0veXZ5b1TbRwxXPK0G+WQbH1j1/L2e3
+         WVMPJDIpZH/IDd7nWjzggg03LB0+pgKuXyrM4YWKU83RqpkFLv4osM0SP36Yd9ttHUXY
+         Dveio6C8RFtOJ0nK3G1m6dGNn+ENhlyrEANU4viuG3hPzXpHAHcCOLm7mvyfoatCpxg5
+         Sp1pJoOdqMCYSFFy6f4AjVPkEtY933eukKKpmug2SRaZqoGbIF0WvkHyIMMzyrgMaYIh
+         ZzJxraxHiqWPV0u9qPQFucNts0nSW6OxBu8CGX6h4lxaE/5KvpRH2JAvjnHXM8nCLg1s
+         MXpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Vc8LwrIaU40nI0L9rZtv7zvcU+o5GuwsQBOLTCK4qFI=;
+        b=NVhea6Ed0yAqP9ufxC82kq3x5AZWSiT31UCiLUbv2OMJgIDG/G+ZKnSNsmNE7qUeZW
+         KdRohrY/9Q3xnpV5Hsd9ZB5jud/biFFLNCns+5H56fjC0ZC63OZCe7DZksN87eY49fTd
+         kzc1xF32VC1+MyA2M1aPaCCG3IKMgSgxNn61QdCNOk8oqCRME4qzbW5tDpXl12zj74Ji
+         EkgfHsGqnMTm+ng6Fk6pz8YwPRNoPFHqnhCJoPjUqnCrWhwfGGhpMkV0pql0jKx03s+M
+         /2El1zNvMPOA1DLo+yiyuPT+FcWPN6BnPSN5B2EsMgOUFY/N0NtEnKWbKCauO8+3tJmm
+         OIcw==
+X-Gm-Message-State: ANhLgQ1IAqsmTNMTDOElPgNQi2Lf8OqSYurorlinp5CrzMzTaCWV/Cjs
+        IiRH1QsjFH8reraW95+E9jYyrg2iVEjaGjTJhhDQlebC
+X-Google-Smtp-Source: ADFU+vvqbJcRXoy8MLoV6dVlKl4R88lrkt8lrWmZMrkz8gdnvH1wWUt998hcX+ARQdd6OcDsbFBEZdJVYtnNc81xZ1Q=
+X-Received: by 2002:a02:8795:: with SMTP id t21mr13779924jai.126.1584192765365;
+ Sat, 14 Mar 2020 06:32:45 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200310194854.831-1-linux.amoon@gmail.com> <20200310194854.831-3-linux.amoon@gmail.com>
+In-Reply-To: <20200310194854.831-3-linux.amoon@gmail.com>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Sat, 14 Mar 2020 19:02:33 +0530
+Message-ID: <CANAwSgR4fJK0uVANv-x-=iSL_hAKD8kvazACUsY9Meu5xonuqQ@mail.gmail.com>
+Subject: Re: [PATCHv3 2/5] ARM: dts: exynos: Add missing usbdrd3 suspend clk
+To:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-[v6]
- * Combine the Documentation YAML schema and clock IDs for GCC MSS and
-   MSS clocks.
- * Remove a unnecessary header file inclusion, define the max_registers for
-   regmap and also update the fw_name to remove _clk suffix.
- * Update the copyright year.
+Hi Krzysztof,
 
-[v5]
- * Update the clock ID for GCC_MSS_NAV_AXIS_CLK to GCC_MSS_NAV_AXI_CLK
+On Wed, 11 Mar 2020 at 01:19, Anand Moon <linux.amoon@gmail.com> wrote:
+>
+> Add new compatible strings for USBDRD3 for adding missing
+> suspend clk, exynos5422 usbdrd3 support two clk USBD300 and
+> SCLK_USBD300, so add missing suspemd_clk for Exynos542x DWC3 nodes.
+>
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
 
-[v4]
- * Split the GCC MSS clocks and Modem clock driver.
- * Update mss_regmap_config to const.
- * Rename the Documentation binding as per the latest convention.
- * Minor comments of clock-names/clocks properties updated.
+My assumption based on the FSYS clock source diagram below was bit wrong.
+[0] https://imgur.com/gallery/zAiBoyh
 
-[v3]
-  * Add clocks/clock-names required for the MSS clock controller.
-  * Add pm_ops to enable/disable the required dependent clock.
-  * Add parent_data for the MSS clocks.
-  * Update the GCC MSS clocks from _CBCR to _CLK.
+And again re-looking into the driver source code, it turn out their
+are *6 clock*
+Here is the correct mapping as per the Exynos5420 clock driver.
 
-[v2]
-  * Update the license for the documentation and fix minor comments in the
-    YAML bindings.
+USB-(phy@12100000)
+|___________________CLK_SCLK_USBD300
+|___________________CLK_SCLK_USBPHY300
 
-[v1]
-  * Add driver support for Modem clock controller for SC7180 and also
-    update device tree bindings for the various clocks supported in the
-    clock controller.
+USB-(phy@12500000)
+|___________________CLK_SCLK_USBD301
+|___________________CLK_SCLK_USBPHY301
 
-Taniya Das (3):
-  dt-bindings: clock: Add YAML schemas for the QCOM MSS clock bindings
-  clk: qcom: gcc: Add support for modem clocks in GCC
-  clk: qcom: Add modem clock controller driver for SC7180
+USB-(dwc3@12000000)
+|___________________CLK_USBD300
+USB-(dwc3@12400000)
+|___________________CLK_USBD301
 
- .../devicetree/bindings/clock/qcom,sc7180-mss.yaml |  62 +++++++++
- drivers/clk/qcom/Kconfig                           |   9 ++
- drivers/clk/qcom/Makefile                          |   1 +
- drivers/clk/qcom/gcc-sc7180.c                      |  72 ++++++++++-
- drivers/clk/qcom/mss-sc7180.c                      | 143 +++++++++++++++++++++
- include/dt-bindings/clock/qcom,gcc-sc7180.h        |   7 +-
- include/dt-bindings/clock/qcom,mss-sc7180.h        |  12 ++
- 7 files changed, 304 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,sc7180-mss.yaml
- create mode 100644 drivers/clk/qcom/mss-sc7180.c
- create mode 100644 include/dt-bindings/clock/qcom,mss-sc7180.h
+Note: As per Exynos 5422 user manual, There are some more USB CLK
+configuration missing in GATE_IP_FSYS. So we could enable another dwc3 clk,
+If needed I would like too add this missing clk code and enable this
+clk for dwc3 driver.
 
---
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
-of the Code Aurora Forum, hosted by the  Linux Foundation.
+For some reason we already use CLK_USBD300 and CLK_USBD301
+for PHY nodes, which lead to this confusion. So we need to update PHY clock
+CLK_USBD300 with CLK_SCLK_USBD300 and clock CLK_USBD301 with CLK_SCLK_USBD301.
+
+Please share your thought on linking PHY nodes above and add new DWC3 clock
+and enable this clock.
+
+-Anand
+
+> ---
+> fix the commit message
+> ---
+>  arch/arm/boot/dts/exynos5410.dtsi | 8 ++++----
+>  arch/arm/boot/dts/exynos5420.dtsi | 8 ++++----
+>  arch/arm/boot/dts/exynos54xx.dtsi | 4 ++--
+>  3 files changed, 10 insertions(+), 10 deletions(-)
+>
+> diff --git a/arch/arm/boot/dts/exynos5410.dtsi b/arch/arm/boot/dts/exynos5410.dtsi
+> index 2eab80bf5f3a..19845dcd528f 100644
+> --- a/arch/arm/boot/dts/exynos5410.dtsi
+> +++ b/arch/arm/boot/dts/exynos5410.dtsi
+> @@ -396,8 +396,8 @@ &trng {
+>  };
+>
+>  &usbdrd3_0 {
+> -       clocks = <&clock CLK_USBD300>;
+> -       clock-names = "usbdrd30";
+> +       clocks = <&clock CLK_USBD300>, <&clock CLK_SCLK_USBD300>;
+> +       clock-names = "usbdrd30", "usbdrd30_susp_clk";
+>  };
+>
+>  &usbdrd_phy0 {
+> @@ -407,8 +407,8 @@ &usbdrd_phy0 {
+>  };
+>
+>  &usbdrd3_1 {
+> -       clocks = <&clock CLK_USBD301>;
+> -       clock-names = "usbdrd30";
+> +       clocks = <&clock CLK_USBD301>, <&clock CLK_SCLK_USBD301>;
+> +       clock-names = "usbdrd30", "usbdrd30_susp_clk";
+>  };
+>
+>  &usbdrd_dwc3_1 {
+> diff --git a/arch/arm/boot/dts/exynos5420.dtsi b/arch/arm/boot/dts/exynos5420.dtsi
+> index b672080e7469..bd505256a223 100644
+> --- a/arch/arm/boot/dts/exynos5420.dtsi
+> +++ b/arch/arm/boot/dts/exynos5420.dtsi
+> @@ -1372,8 +1372,8 @@ &trng {
+>  };
+>
+>  &usbdrd3_0 {
+> -       clocks = <&clock CLK_USBD300>;
+> -       clock-names = "usbdrd30";
+> +       clocks = <&clock CLK_USBD300>, <&clock CLK_SCLK_USBD300>;
+> +       clock-names = "usbdrd30", "usbdrd30_susp_clk";
+>  };
+>
+>  &usbdrd_phy0 {
+> @@ -1383,8 +1383,8 @@ &usbdrd_phy0 {
+>  };
+>
+>  &usbdrd3_1 {
+> -       clocks = <&clock CLK_USBD301>;
+> -       clock-names = "usbdrd30";
+> +       clocks = <&clock CLK_USBD301>, <&clock CLK_SCLK_USBD301>;
+> +       clock-names = "usbdrd30", "usbdrd30_susp_clk";
+>  };
+>
+>  &usbdrd_dwc3_1 {
+> diff --git a/arch/arm/boot/dts/exynos54xx.dtsi b/arch/arm/boot/dts/exynos54xx.dtsi
+> index 8aa5117e58ce..0aac6255de5d 100644
+> --- a/arch/arm/boot/dts/exynos54xx.dtsi
+> +++ b/arch/arm/boot/dts/exynos54xx.dtsi
+> @@ -143,7 +143,7 @@ hsi2c_7: i2c@12cd0000 {
+>                 };
+>
+>                 usbdrd3_0: usb3-0 {
+> -                       compatible = "samsung,exynos5250-dwusb3";
+> +                       compatible = "samsung,exynos5420-dwusb3";
+>                         #address-cells = <1>;
+>                         #size-cells = <1>;
+>                         ranges;
+> @@ -165,7 +165,7 @@ usbdrd_phy0: phy@12100000 {
+>                 };
+>
+>                 usbdrd3_1: usb3-1 {
+> -                       compatible = "samsung,exynos5250-dwusb3";
+> +                       compatible = "samsung,exynos5420-dwusb3";
+>                         #address-cells = <1>;
+>                         #size-cells = <1>;
+>                         ranges;
+> --
+> 2.25.1
+>
