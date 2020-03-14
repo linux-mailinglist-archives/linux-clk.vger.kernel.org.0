@@ -2,54 +2,69 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 373571858F0
-	for <lists+linux-clk@lfdr.de>; Sun, 15 Mar 2020 03:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E90E18585F
+	for <lists+linux-clk@lfdr.de>; Sun, 15 Mar 2020 03:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727921AbgCOCYN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 14 Mar 2020 22:24:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39078 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727913AbgCOCYM (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sat, 14 Mar 2020 22:24:12 -0400
-Subject: Re: [GIT PULL] clk fixes for v5.6-rc5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584203708;
-        bh=nlkSd9dZ2OzupyIAX3ttyXzPZ+1/uu0Tt8oO6gT4tTg=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=zh4FGvEyBRXlInS75a2kUSdTtzf7g9HUQ7+EDh1ZSdyiINAMJL24+a7W1uRlq8FII
-         1JCDnZ/BexU3Wj/5EbAvM+czCk5q0p19EHhecQrzWgjmsDg2dMzkFm7GOTtnEeiwzg
-         FXirIhNvRU/415hL8+uCKd98JrrwLvMNKOZJ+a0w=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200314012722.234270-1-sboyd@kernel.org>
-References: <20200314012722.234270-1-sboyd@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200314012722.234270-1-sboyd@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
- tags/clk-fixes-for-linus
-X-PR-Tracked-Commit-Id: 20055448dc1b439c87d0cb602e6d0469b0a3aaad
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 69a4d0baeeb14b6a3c47570a0ac2e0fc4474f0e0
-Message-Id: <158420370808.8641.17291481150926081366.pr-tracker-bot@kernel.org>
-Date:   Sat, 14 Mar 2020 16:35:08 +0000
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S1726757AbgCOCFW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 14 Mar 2020 22:05:22 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:44046 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726130AbgCOCFW (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 14 Mar 2020 22:05:22 -0400
+Received: by mail-qk1-f196.google.com with SMTP id j4so3437158qkc.11
+        for <linux-clk@vger.kernel.org>; Sat, 14 Mar 2020 19:05:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=rySLrb6e8pdxDloLytBEUWmIP8HvBNLPxIuJLcg1j9c=;
+        b=jOBfC5O/vBSLdecO/QlWaVNApHJ26+h2FsT0+WvoPpqb2FIa4XKbiSPP5B9vUh4N2E
+         8dcd84mryHvGdhB4Panwk+QG1wHlVc/p+oPyhhzTLXGWyQciLI99UqCFci5qud7pVfpk
+         kuz3Kp6fX+gGb+ayyhPLjSf9NwTiaRmMzao7zqZoJ916qimH/ClhzK02cBxVS248yH/4
+         MLwgNkC0mvY3jImZm/H4tv1UsjRWq0IkEksqVOH7KwWPIcmFzVt3gZll4K4Zb8CTy399
+         YuuHCdbflo0rQ/ZRklWw2XvObc4jWALWXHICWm4sE8qCEXxtmRf7jaZzYRWn+4gkpOHW
+         ov3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=rySLrb6e8pdxDloLytBEUWmIP8HvBNLPxIuJLcg1j9c=;
+        b=UrynGM7B4Oddsk2U3GVqimaN4BSNpvK8aCyzrraOQcYQAxTfbkj5A4GRNrtixEx2by
+         5dUlGUFVx5uby5apM2FRfE2zj94dKUPwHPJ4ppnBT1r3i2e80rDmmpxlkkNBE/hgt7/h
+         kUeULsK2OEmFAhFq3ibLDqPstaWZoBbS8NQvYnDM5ZCZdZ9tbnMROBUFsB+1sTkZlT++
+         KWTvJVFTOpimvCuWvvIut3kbKaaVOsbsrWerOhRtLttS7MMK+bjLTCPo/1cfAb0doMv5
+         k+4pnm3Ki7HLpsumYAOC9rLzITSyxChx7U2X/3M76DTsDlZmiTJ1DjB3MBRg6f/S73IL
+         T2+Q==
+X-Gm-Message-State: ANhLgQ32ldm0BfBrvO3R+pa/u2SSmNdeL3VEh9g72Szj+BAQKn16aKIb
+        TklBiEm9xnj8VcJiQbF6oGjFs9G4nGJaiMpedkv2CoY2
+X-Google-Smtp-Source: ADFU+vtrCuIL7f0dLnfUqYduMJ2SDxRo018yLOP6NxdgbsfKecOZqAqtXXYgm7d639rR2SeNyBfiYoDDl9GfFzIVkd0=
+X-Received: by 2002:a02:8801:: with SMTP id r1mr18315992jai.50.1584205559100;
+ Sat, 14 Mar 2020 10:05:59 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a4f:4447:0:0:0:0:0 with HTTP; Sat, 14 Mar 2020 10:05:57
+ -0700 (PDT)
+From:   Omar Ousman <omarousman25@gmail.com>
+Date:   Sat, 14 Mar 2020 18:05:57 +0100
+X-Google-Sender-Auth: co2Ly_AxunXf6OTEIWso4hgD0hk
+Message-ID: <CAAai1fyC_-jJRVKHjo_nc0JFua5o7kbmYf0iBfeibOqkO5=pdA@mail.gmail.com>
+Subject: You received my last mail,,,,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The pull request you sent on Fri, 13 Mar 2020 18:27:22 -0700:
+I am Mr.Omar Ousman, a regional managing director (CORIS BANK
+INTERNATIONAL) Ouagadougou Burkina Faso, in my department we have
+US$9,500.0000 million united state dollars, to transfer into your
+account as a dormant fund.If you are interested to use this fund to
+help the orphans around the world contact and send me your personal
+information for more details to my email omarousman25@gmail.com
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
+Your full names..........
+Your country of origin..........
+Your occupation..........
+Your Age..........
+Your Mobile Number..........
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/69a4d0baeeb14b6a3c47570a0ac2e0fc4474f0e0
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Best Regards,
