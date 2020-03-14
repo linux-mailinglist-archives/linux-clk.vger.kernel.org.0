@@ -2,69 +2,167 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E90E18585F
-	for <lists+linux-clk@lfdr.de>; Sun, 15 Mar 2020 03:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 832C3185846
+	for <lists+linux-clk@lfdr.de>; Sun, 15 Mar 2020 03:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726757AbgCOCFW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 14 Mar 2020 22:05:22 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:44046 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726130AbgCOCFW (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 14 Mar 2020 22:05:22 -0400
-Received: by mail-qk1-f196.google.com with SMTP id j4so3437158qkc.11
-        for <linux-clk@vger.kernel.org>; Sat, 14 Mar 2020 19:05:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=rySLrb6e8pdxDloLytBEUWmIP8HvBNLPxIuJLcg1j9c=;
-        b=jOBfC5O/vBSLdecO/QlWaVNApHJ26+h2FsT0+WvoPpqb2FIa4XKbiSPP5B9vUh4N2E
-         8dcd84mryHvGdhB4Panwk+QG1wHlVc/p+oPyhhzTLXGWyQciLI99UqCFci5qud7pVfpk
-         kuz3Kp6fX+gGb+ayyhPLjSf9NwTiaRmMzao7zqZoJ916qimH/ClhzK02cBxVS248yH/4
-         MLwgNkC0mvY3jImZm/H4tv1UsjRWq0IkEksqVOH7KwWPIcmFzVt3gZll4K4Zb8CTy399
-         YuuHCdbflo0rQ/ZRklWw2XvObc4jWALWXHICWm4sE8qCEXxtmRf7jaZzYRWn+4gkpOHW
-         ov3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=rySLrb6e8pdxDloLytBEUWmIP8HvBNLPxIuJLcg1j9c=;
-        b=UrynGM7B4Oddsk2U3GVqimaN4BSNpvK8aCyzrraOQcYQAxTfbkj5A4GRNrtixEx2by
-         5dUlGUFVx5uby5apM2FRfE2zj94dKUPwHPJ4ppnBT1r3i2e80rDmmpxlkkNBE/hgt7/h
-         kUeULsK2OEmFAhFq3ibLDqPstaWZoBbS8NQvYnDM5ZCZdZ9tbnMROBUFsB+1sTkZlT++
-         KWTvJVFTOpimvCuWvvIut3kbKaaVOsbsrWerOhRtLttS7MMK+bjLTCPo/1cfAb0doMv5
-         k+4pnm3Ki7HLpsumYAOC9rLzITSyxChx7U2X/3M76DTsDlZmiTJ1DjB3MBRg6f/S73IL
-         T2+Q==
-X-Gm-Message-State: ANhLgQ32ldm0BfBrvO3R+pa/u2SSmNdeL3VEh9g72Szj+BAQKn16aKIb
-        TklBiEm9xnj8VcJiQbF6oGjFs9G4nGJaiMpedkv2CoY2
-X-Google-Smtp-Source: ADFU+vtrCuIL7f0dLnfUqYduMJ2SDxRo018yLOP6NxdgbsfKecOZqAqtXXYgm7d639rR2SeNyBfiYoDDl9GfFzIVkd0=
-X-Received: by 2002:a02:8801:: with SMTP id r1mr18315992jai.50.1584205559100;
- Sat, 14 Mar 2020 10:05:59 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a4f:4447:0:0:0:0:0 with HTTP; Sat, 14 Mar 2020 10:05:57
- -0700 (PDT)
-From:   Omar Ousman <omarousman25@gmail.com>
-Date:   Sat, 14 Mar 2020 18:05:57 +0100
-X-Google-Sender-Auth: co2Ly_AxunXf6OTEIWso4hgD0hk
-Message-ID: <CAAai1fyC_-jJRVKHjo_nc0JFua5o7kbmYf0iBfeibOqkO5=pdA@mail.gmail.com>
-Subject: You received my last mail,,,,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S1726157AbgCOCBS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 14 Mar 2020 22:01:18 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:57379 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726505AbgCOCBR (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 14 Mar 2020 22:01:17 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1584237677; h=References: In-Reply-To: Message-Id: Date:
+ Subject: Cc: To: From: Sender;
+ bh=lXhkIBcKbtLstxQRyAkgmmBBedPpvtcrGcYCAgn01SQ=; b=xbPf1zFmdO7WtzFCU2GuWC+7qTrZkJni4Pky2W9AHeTsR7vA0w/KnVKbzS35VT4BUW3vLL3Z
+ wFoM0VXhc1MisjFGvUh5R6xmUmrTTEz9RMFHsYJMnbfDK7mmElNUn6z2d91+rAtPHOUUxnjB
+ rzxvvh51szupKPxO+BGi6mtMDqs=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e6d24e5.7f8eb9e4ded8-smtp-out-n03;
+ Sat, 14 Mar 2020 18:39:33 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 3066CC432C2; Sat, 14 Mar 2020 18:39:32 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from tdas-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: tdas)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 6B123C433D2;
+        Sat, 14 Mar 2020 18:39:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 6B123C433D2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=tdas@codeaurora.org
+From:   Taniya Das <tdas@codeaurora.org>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?q?Michael=20Turquette=20=C2=A0?= <mturquette@baylibre.com>
+Cc:     David Brown <david.brown@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        robh@kernel.org, robh+dt@kernel.org,
+        Taniya Das <tdas@codeaurora.org>
+Subject: [PATCH v6 2/3] clk: qcom: gcc: Add support for modem clocks in GCC
+Date:   Sun, 15 Mar 2020 00:09:06 +0530
+Message-Id: <1584211147-5570-3-git-send-email-tdas@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1584211147-5570-1-git-send-email-tdas@codeaurora.org>
+References: <1584211147-5570-1-git-send-email-tdas@codeaurora.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-I am Mr.Omar Ousman, a regional managing director (CORIS BANK
-INTERNATIONAL) Ouagadougou Burkina Faso, in my department we have
-US$9,500.0000 million united state dollars, to transfer into your
-account as a dormant fund.If you are interested to use this fund to
-help the orphans around the world contact and send me your personal
-information for more details to my email omarousman25@gmail.com
+Add the required modem clocks in global clock controller which are
+required to bring the modem out of reset.
 
-Your full names..........
-Your country of origin..........
-Your occupation..........
-Your Age..........
-Your Mobile Number..........
+Signed-off-by: Taniya Das <tdas@codeaurora.org>
+---
+ drivers/clk/qcom/gcc-sc7180.c | 72 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 71 insertions(+), 1 deletion(-)
 
-Best Regards,
+diff --git a/drivers/clk/qcom/gcc-sc7180.c b/drivers/clk/qcom/gcc-sc7180.c
+index 7f59fb8..6a51b5b 100644
+--- a/drivers/clk/qcom/gcc-sc7180.c
++++ b/drivers/clk/qcom/gcc-sc7180.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+- * Copyright (c) 2019, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2019-2020, The Linux Foundation. All rights reserved.
+  */
+
+ #include <linux/clk-provider.h>
+@@ -2165,6 +2165,71 @@ static struct clk_branch gcc_video_xo_clk = {
+ 	},
+ };
+
++static struct clk_branch gcc_mss_cfg_ahb_clk = {
++	.halt_reg = 0x8a000,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x8a000,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "gcc_mss_cfg_ahb_clk",
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch gcc_mss_mfab_axis_clk = {
++	.halt_reg = 0x8a004,
++	.halt_check = BRANCH_HALT_VOTED,
++	.clkr = {
++		.enable_reg = 0x8a004,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "gcc_mss_mfab_axis_clk",
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch gcc_mss_nav_axi_clk = {
++	.halt_reg = 0x8a00c,
++	.halt_check = BRANCH_HALT_VOTED,
++	.clkr = {
++		.enable_reg = 0x8a00c,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "gcc_mss_nav_axi_clk",
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch gcc_mss_snoc_axi_clk = {
++	.halt_reg = 0x8a150,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x8a150,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "gcc_mss_snoc_axi_clk",
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch gcc_mss_q6_memnoc_axi_clk = {
++	.halt_reg = 0x8a154,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x8a154,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "gcc_mss_q6_memnoc_axi_clk",
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
+ static struct gdsc ufs_phy_gdsc = {
+ 	.gdscr = 0x77004,
+ 	.pd = {
+@@ -2336,6 +2401,11 @@ static struct clk_regmap *gcc_sc7180_clocks[] = {
+ 	[GPLL7] = &gpll7.clkr,
+ 	[GPLL4] = &gpll4.clkr,
+ 	[GPLL1] = &gpll1.clkr,
++	[GCC_MSS_CFG_AHB_CLK] = &gcc_mss_cfg_ahb_clk.clkr,
++	[GCC_MSS_MFAB_AXIS_CLK] = &gcc_mss_mfab_axis_clk.clkr,
++	[GCC_MSS_NAV_AXI_CLK] = &gcc_mss_nav_axi_clk.clkr,
++	[GCC_MSS_Q6_MEMNOC_AXI_CLK] = &gcc_mss_q6_memnoc_axi_clk.clkr,
++	[GCC_MSS_SNOC_AXI_CLK] = &gcc_mss_snoc_axi_clk.clkr,
+ };
+
+ static const struct qcom_reset_map gcc_sc7180_resets[] = {
+--
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
+of the Code Aurora Forum, hosted by the  Linux Foundation.
