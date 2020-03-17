@@ -2,660 +2,288 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD5C1889DB
-	for <lists+linux-clk@lfdr.de>; Tue, 17 Mar 2020 17:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03637188DEE
+	for <lists+linux-clk@lfdr.de>; Tue, 17 Mar 2020 20:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbgCQQKe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 17 Mar 2020 12:10:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36034 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726016AbgCQQKd (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 17 Mar 2020 12:10:33 -0400
-Received: from localhost.localdomain (cpe-70-114-128-244.austin.res.rr.com [70.114.128.244])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8460020735;
-        Tue, 17 Mar 2020 16:10:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584461432;
-        bh=8jPO70DOb82oskot9NH6Jvpt5vl3zZB6ctwcA/2nY38=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JZxUsTKsqZ3t5yQXoWA9SDFVkRU6mvY3TAQJNwrTAQrtal0gXazdjMCS368zx2qcq
-         /O+OJr+XSQ5XeiYPmInnEJVMcrDsABCw2YC2U6Xh2K1cGU2b/ikiVDmIxrhumPH8l1
-         DGF1aHw9Ya64iG/BT9QhA57w2F3xvrFLA3/gsbJQ=
-From:   Dinh Nguyen <dinguyen@kernel.org>
-To:     linux-clk@vger.kernel.org
-Cc:     dinguyen@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, sboyd@kernel.org,
-        mturquette@baylibre.com, robh+dt@kernel.org, mark.rutland@arm.com
-Subject: [PATCHv3 5/5] clk: socfpga: agilex: add clock driver for the Agilex platform
-Date:   Tue, 17 Mar 2020 11:10:22 -0500
-Message-Id: <20200317161022.11181-6-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200317161022.11181-1-dinguyen@kernel.org>
-References: <20200317161022.11181-1-dinguyen@kernel.org>
+        id S1726294AbgCQTZe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 17 Mar 2020 15:25:34 -0400
+Received: from mail-eopbgr10066.outbound.protection.outlook.com ([40.107.1.66]:19527
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726452AbgCQTZe (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 17 Mar 2020 15:25:34 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YwUUf+xos9Fu38Il5Ft1rLlvrmPC6fjcRreRxdTqCE2keVf+j+tRV9vnEsU5nnFwr/WtdZshMValEqJYk7xXs1kGWlVfShJEILdlpM72OiThybODsaPSlZ7omAF11VRcI6B4iMDh98+h9NNN79cwsAswnOs5U/NwCChsintWAhzI2Fg/0w2WM3Xw+39kmwvn6t+tur6Im4sA34FWUnqRGv7/F0fApDr42yOm5ZH2h00P1lvhjH/H7VPyrf2inzG4K2b8tzdxI/cgg7CwV+50+qNaBJkx5Cu3cVEUa4uc/DX6wzPbntCN+4EfUT+SuHT3ESVktgIugT9D+cWOUBfW5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zRr6IIQSfIOzAZex5zW8dYAPAp+aahvugMA72oRtshk=;
+ b=ZU1KuehTWsi0WjIWcmQAAIXuCiw8UZTqeaaFaWa5GhghoQ+J25iOPOV5Bkp0rp6AwKd0l40kRFFtXLyJ1YANfteM0NvM3zQxxq6xXFlWp/hHztt24E4N5Mbgnuvzyjpod3jfR/99BNa/ztUk756cJz8zpjPHrdQ9IW3LLdcWGSYYfOdkFfnvvkGlYVbs1sZqg2kUuLLUbmi13OxQkK5Q0yx7YLS2FECr2Dx8Fi9pFt+qm7GON+/scQAXdBJDc59q5Hy2oW+1m/mxUzGMeOdgSKQJsvEcS7V6ch6ilgLr4aktJQX/60R2nyGghLNWG1jfWaMqTEYP6F/bNrHSOfP/Fw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zRr6IIQSfIOzAZex5zW8dYAPAp+aahvugMA72oRtshk=;
+ b=aP8lAyE5RNz16DfZZIPlHoMxpO3vOsvfsbyVo4oC3c5KgiaF5pexNmEHPI0OijEHtNkWN045O9pZphWoAKXumebVsY3sRnCJt1Zg6zrViZdwEjp6pvjdG/AvTOdeDgOGEsOq/Pp+btzKuA5kh7sqhrRUpAxDqb6bsQT+CRAjJXM=
+Received: from VI1PR04MB6941.eurprd04.prod.outlook.com (52.133.244.87) by
+ VI1PR04MB4430.eurprd04.prod.outlook.com (20.177.53.95) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2814.21; Tue, 17 Mar 2020 19:25:27 +0000
+Received: from VI1PR04MB6941.eurprd04.prod.outlook.com
+ ([fe80::289c:fdf8:faf0:3200]) by VI1PR04MB6941.eurprd04.prod.outlook.com
+ ([fe80::289c:fdf8:faf0:3200%2]) with mapi id 15.20.2814.021; Tue, 17 Mar 2020
+ 19:25:27 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>
+CC:     Aisheng Dong <aisheng.dong@nxp.com>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Anson Huang <anson.huang@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Franck Lenormand <franck.lenormand@nxp.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: [PATCH v2 1/8] clk: imx: Align imx sc clock msg structs to 4
+Thread-Topic: [PATCH v2 1/8] clk: imx: Align imx sc clock msg structs to 4
+Thread-Index: AQHV6Ar29fUTh/h0xEeUNN9RFuY7RA==
+Date:   Tue, 17 Mar 2020 19:25:27 +0000
+Message-ID: <VI1PR04MB6941383E77EC501E96D2CBB0EEF60@VI1PR04MB6941.eurprd04.prod.outlook.com>
+References: <cover.1582216144.git.leonard.crestez@nxp.com>
+ <10e97a04980d933b2cfecb6b124bf9046b6e4f16.1582216144.git.leonard.crestez@nxp.com>
+ <158264951569.54955.16797064769391310232@swboyd.mtv.corp.google.com>
+ <VI1PR04MB70233A098DC4A2A82B114E93EEED0@VI1PR04MB7023.eurprd04.prod.outlook.com>
+ <158276809953.177367.6095692240077023796@swboyd.mtv.corp.google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [92.121.36.197]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 782aa1a2-dee5-4b89-fb80-08d7caa8f2c9
+x-ms-traffictypediagnostic: VI1PR04MB4430:|VI1PR04MB4430:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB44307A11C734F634C6F033BEEEF60@VI1PR04MB4430.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1107;
+x-forefront-prvs: 0345CFD558
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(376002)(346002)(396003)(39860400002)(136003)(199004)(186003)(44832011)(316002)(26005)(8936002)(8676002)(81156014)(54906003)(81166006)(5660300002)(7416002)(110136005)(71200400001)(2906002)(66556008)(7696005)(6506007)(66446008)(53546011)(76116006)(64756008)(478600001)(66946007)(55016002)(52536014)(91956017)(86362001)(66476007)(33656002)(4326008)(9686003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4430;H:VI1PR04MB6941.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: lho5ObqdQ9QumK0hbpy8nzcTQp5OPuBIJTujmOjVNxDEWd6lzs41w1RGDbkUutxi9cyjGkQmvbqavLrG0ZFKEf1OJtzbqAyC+Tm51GbMRDSCmskHtf4816W6E84NDzgpYGoFI0WqzhnyAGRKG40QO+3rlUlFsc2u9oLV3R/E1fjDQrefk/yJuHuQiST6Xcbe1taFMmHojvg6lJBHSnQqporNf/cPzvzCafuLvqco+N1Q7PVfGe9LxXoqZ6Tx/0u6mn9KPenRUSEkoA8op5RiIRxnLekC+ZGkJvRAAv+w7TopQbp3Y3HdjiaXJJ0Mv8etDyO7XEIQIsNl2ZYu5ze2YSWFyEcvhSWGUKNWQTruQ6JPtrH+t9tg9ATOveU0xXx/Ci2AJUqWr++fxML81B64BXUNKm175C6ej/xpgj4ceoMpL98Dw6xxUJDjgto3OgL2
+x-ms-exchange-antispam-messagedata: YMkPkaOe5AdkRaTySb+dJSfCThH+oCTZREqNFaoXUeqjzIqFMQqz0hs/Ekdef8LXzFG4NldAGPnTh7HHcDoadaFxtRX4i43hdF9TpYv2etfpUkjwJvVzSTKFJvn/Jil3boiVhrCUjpSgIOqdalepGQ==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 782aa1a2-dee5-4b89-fb80-08d7caa8f2c9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2020 19:25:27.1351
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kjL3YHcLIkDqxJxcwD9HHp5SJiGzq0xdz9KuNyGvNhoQU2FzRstowWWjUFlSCfsnM+bmO5UPPvWIXDKYpXqWHQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4430
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-For the most part the Agilex clock structure is very similar to
-Stratix10, so we re-use most of the Stratix10 clock driver.
-
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
----
-v3: Address Stephen Boyd's comments
-v2: update to use clk_parent_data
----
- drivers/clk/Makefile                |   3 +-
- drivers/clk/socfpga/Makefile        |   2 +
- drivers/clk/socfpga/clk-agilex.c    | 454 ++++++++++++++++++++++++++++
- drivers/clk/socfpga/clk-pll-s10.c   |  68 +++++
- drivers/clk/socfpga/stratix10-clk.h |   2 +
- 5 files changed, 528 insertions(+), 1 deletion(-)
- create mode 100644 drivers/clk/socfpga/clk-agilex.c
-
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index f4169cc2fd31..a178e4b6001f 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -104,10 +104,11 @@ obj-$(CONFIG_COMMON_CLK_SAMSUNG)	+= samsung/
- obj-$(CONFIG_CLK_SIFIVE)		+= sifive/
- obj-$(CONFIG_ARCH_SIRF)			+= sirf/
- obj-$(CONFIG_ARCH_SOCFPGA)		+= socfpga/
-+obj-$(CONFIG_ARCH_AGILEX)		+= socfpga/
-+obj-$(CONFIG_ARCH_STRATIX10)		+= socfpga/
- obj-$(CONFIG_PLAT_SPEAR)		+= spear/
- obj-$(CONFIG_ARCH_SPRD)			+= sprd/
- obj-$(CONFIG_ARCH_STI)			+= st/
--obj-$(CONFIG_ARCH_STRATIX10)		+= socfpga/
- obj-$(CONFIG_ARCH_SUNXI)		+= sunxi/
- obj-$(CONFIG_SUNXI_CCU)			+= sunxi-ng/
- obj-$(CONFIG_ARCH_TEGRA)		+= tegra/
-diff --git a/drivers/clk/socfpga/Makefile b/drivers/clk/socfpga/Makefile
-index ce5aa7802eb8..bf736f8d201a 100644
---- a/drivers/clk/socfpga/Makefile
-+++ b/drivers/clk/socfpga/Makefile
-@@ -3,3 +3,5 @@ obj-$(CONFIG_ARCH_SOCFPGA) += clk.o clk-gate.o clk-pll.o clk-periph.o
- obj-$(CONFIG_ARCH_SOCFPGA) += clk-pll-a10.o clk-periph-a10.o clk-gate-a10.o
- obj-$(CONFIG_ARCH_STRATIX10) += clk-s10.o
- obj-$(CONFIG_ARCH_STRATIX10) += clk-pll-s10.o clk-periph-s10.o clk-gate-s10.o
-+obj-$(CONFIG_ARCH_AGILEX) += clk-agilex.o
-+obj-$(CONFIG_ARCH_AGILEX) += clk-pll-s10.o clk-periph-s10.o clk-gate-s10.o
-diff --git a/drivers/clk/socfpga/clk-agilex.c b/drivers/clk/socfpga/clk-agilex.c
-new file mode 100644
-index 000000000000..699527f7e764
---- /dev/null
-+++ b/drivers/clk/socfpga/clk-agilex.c
-@@ -0,0 +1,454 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019, Intel Corporation
-+ */
-+#include <linux/slab.h>
-+#include <linux/clk-provider.h>
-+#include <linux/of_device.h>
-+#include <linux/of_address.h>
-+#include <linux/platform_device.h>
-+
-+#include <dt-bindings/clock/agilex-clock.h>
-+
-+#include "stratix10-clk.h"
-+
-+static const struct clk_parent_data pll_mux[] = {
-+	{ .fw_name = "osc1",
-+	  .name = "osc1", },
-+	{ .fw_name = "cb-intosc-hs-div2-clk",
-+	  .name = "cb-intosc-hs-div2-clk", },
-+	{ .fw_name = "f2s-free-clk",
-+	  .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data cntr_mux[] = {
-+	{ .fw_name = "main_pll",
-+	  .name = "main_pll", },
-+	{ .fw_name = "periph_pll",
-+	  .name = "periph_pll", },
-+	{ .fw_name = "osc1",
-+	  .name = "osc1", },
-+	{ .fw_name = "cb-intosc-hs-div2-clk",
-+	  .name = "cb-intosc-hs-div2-clk", },
-+	{ .fw_name = "f2s-free-clk",
-+	  .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data boot_mux[] = {
-+	{ .fw_name = "osc1",
-+	  .name = "osc1", },
-+	{ .fw_name = "cb-intosc-hs-div2-clk",
-+	  .name = "cb-intosc-hs-div2-clk", },
-+};
-+
-+static const struct clk_parent_data mpu_free_mux[] = {
-+	{ .fw_name = "main_pll_c0",
-+	  .name = "main_pll_c0", },
-+	{ .fw_name = "peri_pll_c0",
-+	  .name = "peri_pll_c0", },
-+	{ .fw_name = "osc1",
-+	  .name = "osc1", },
-+	{ .fw_name = "cb-intosc-hs-div2-clk",
-+	  .name = "cb-intosc-hs-div2-clk", },
-+	{ .fw_name = "f2s-free-clk",
-+	  .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data noc_free_mux[] = {
-+	{ .fw_name = "main_pll_c1",
-+	  .name = "main_pll_c1", },
-+	{ .fw_name = "peri_pll_c1",
-+	  .name = "peri_pll_c1", },
-+	{ .fw_name = "osc1",
-+	  .name = "osc1", },
-+	{ .fw_name = "cb-intosc-hs-div2-clk",
-+	  .name = "cb-intosc-hs-div2-clk", },
-+	{ .fw_name = "f2s-free-clk",
-+	  .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data emaca_free_mux[] = {
-+	{ .fw_name = "main_pll_c2",
-+	  .name = "main_pll_c2", },
-+	{ .fw_name = "peri_pll_c2",
-+	  .name = "peri_pll_c2", },
-+	{ .fw_name = "osc1",
-+	  .name = "osc1", },
-+	{ .fw_name = "cb-intosc-hs-div2-clk",
-+	  .name = "cb-intosc-hs-div2-clk", },
-+	{ .fw_name = "f2s-free-clk",
-+	  .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data emacb_free_mux[] = {
-+	{ .fw_name = "main_pll_c3",
-+	  .name = "main_pll_c3", },
-+	{ .fw_name = "peri_pll_c3",
-+	  .name = "peri_pll_c3", },
-+	{ .fw_name = "osc1",
-+	  .name = "osc1", },
-+	{ .fw_name = "cb-intosc-hs-div2-clk",
-+	  .name = "cb-intosc-hs-div2-clk", },
-+	{ .fw_name = "f2s-free-clk",
-+	  .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data emac_ptp_free_mux[] = {
-+	{ .fw_name = "main_pll_c3",
-+	  .name = "main_pll_c3", },
-+	{ .fw_name = "peri_pll_c3",
-+	  .name = "peri_pll_c3", },
-+	{ .fw_name = "osc1",
-+	  .name = "osc1", },
-+	{ .fw_name = "cb-intosc-hs-div2-clk",
-+	  .name = "cb-intosc-hs-div2-clk", },
-+	{ .fw_name = "f2s-free-clk",
-+	  .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data gpio_db_free_mux[] = {
-+	{ .fw_name = "main_pll_c3",
-+	  .name = "main_pll_c3", },
-+	{ .fw_name = "peri_pll_c3",
-+	  .name = "peri_pll_c3", },
-+	{ .fw_name = "osc1",
-+	  .name = "osc1", },
-+	{ .fw_name = "cb-intosc-hs-div2-clk",
-+	  .name = "cb-intosc-hs-div2-clk", },
-+	{ .fw_name = "f2s-free-clk",
-+	  .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data psi_ref_free_mux[] = {
-+	{ .fw_name = "main_pll_c3",
-+	  .name = "main_pll_c3", },
-+	{ .fw_name = "peri_pll_c3",
-+	  .name = "peri_pll_c3", },
-+	{ .fw_name = "osc1",
-+	  .name = "osc1", },
-+	{ .fw_name = "cb-intosc-hs-div2-clk",
-+	  .name = "cb-intosc-hs-div2-clk", },
-+	{ .fw_name = "f2s-free-clk",
-+	  .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data sdmmc_free_mux[] = {
-+	{ .fw_name = "main_pll_c3",
-+	  .name = "main_pll_c3", },
-+	{ .fw_name = "peri_pll_c3",
-+	  .name = "peri_pll_c3", },
-+	{ .fw_name = "osc1",
-+	  .name = "osc1", },
-+	{ .fw_name = "cb-intosc-hs-div2-clk",
-+	  .name = "cb-intosc-hs-div2-clk", },
-+	{ .fw_name = "f2s-free-clk",
-+	  .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data s2f_usr0_free_mux[] = {
-+	{ .fw_name = "main_pll_c2",
-+	  .name = "main_pll_c2", },
-+	{ .fw_name = "peri_pll_c2",
-+	  .name = "peri_pll_c2", },
-+	{ .fw_name = "osc1",
-+	  .name = "osc1", },
-+	{ .fw_name = "cb-intosc-hs-div2-clk",
-+	  .name = "cb-intosc-hs-div2-clk", },
-+	{ .fw_name = "f2s-free-clk",
-+	  .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data s2f_usr1_free_mux[] = {
-+	{ .fw_name = "main_pll_c2",
-+	  .name = "main_pll_c2", },
-+	{ .fw_name = "peri_pll_c2",
-+	  .name = "peri_pll_c2", },
-+	{ .fw_name = "osc1",
-+	  .name = "osc1", },
-+	{ .fw_name = "cb-intosc-hs-div2-clk",
-+	  .name = "cb-intosc-hs-div2-clk", },
-+	{ .fw_name = "f2s-free-clk",
-+	  .name = "f2s-free-clk", },
-+};
-+
-+static const struct clk_parent_data mpu_mux[] = {
-+	{ .fw_name = "mpu_free_clk",
-+	  .name = "mpu_free_clk", },
-+	{ .fw_name = "boot_clk",
-+	  .name = "boot_clk", },
-+};
-+
-+static const struct clk_parent_data s2f_usr0_mux[] = {
-+	{ .fw_name = "f2s-free-clk",
-+	  .name = "f2s-free-clk", },
-+	{ .fw_name = "boot_clk",
-+	  .name = "boot_clk", },
-+};
-+
-+static const struct clk_parent_data emac_mux[] = {
-+	{ .fw_name = "emaca_free_clk",
-+	  .name = "emaca_free_clk", },
-+	{ .fw_name = "emacb_free_clk",
-+	  .name = "emacb_free_clk", },
-+};
-+
-+static const struct clk_parent_data noc_mux[] = {
-+	{ .fw_name = "noc_free_clk",
-+	  .name = "noc_free_clk", },
-+	{ .fw_name = "boot_clk",
-+	  .name = "boot_clk", },
-+};
-+
-+/* clocks in AO (always on) controller */
-+static const struct stratix10_pll_clock agilex_pll_clks[] = {
-+	{ AGILEX_BOOT_CLK, "boot_clk", boot_mux, ARRAY_SIZE(boot_mux), 0,
-+	  0x0},
-+	{ AGILEX_MAIN_PLL_CLK, "main_pll", pll_mux, ARRAY_SIZE(pll_mux),
-+	  0, 0x48},
-+	{ AGILEX_PERIPH_PLL_CLK, "periph_pll", pll_mux, ARRAY_SIZE(pll_mux),
-+	  0, 0x9c},
-+};
-+
-+static const struct stratix10_perip_c_clock agilex_main_perip_c_clks[] = {
-+	{ AGILEX_MAIN_PLL_C0_CLK, "main_pll_c0", "main_pll", NULL, 1, 0, 0x58},
-+	{ AGILEX_MAIN_PLL_C1_CLK, "main_pll_c1", "main_pll", NULL, 1, 0, 0x5C},
-+	{ AGILEX_MAIN_PLL_C2_CLK, "main_pll_c2", "main_pll", NULL, 1, 0, 0x64},
-+	{ AGILEX_MAIN_PLL_C3_CLK, "main_pll_c3", "main_pll", NULL, 1, 0, 0x68},
-+	{ AGILEX_PERIPH_PLL_C0_CLK, "peri_pll_c0", "periph_pll", NULL, 1, 0, 0xAC},
-+	{ AGILEX_PERIPH_PLL_C1_CLK, "peri_pll_c1", "periph_pll", NULL, 1, 0, 0xB0},
-+	{ AGILEX_PERIPH_PLL_C2_CLK, "peri_pll_c2", "periph_pll", NULL, 1, 0, 0xB8},
-+	{ AGILEX_PERIPH_PLL_C3_CLK, "peri_pll_c3", "periph_pll", NULL, 1, 0, 0xBC},
-+};
-+
-+static const struct stratix10_perip_cnt_clock agilex_main_perip_cnt_clks[] = {
-+	{ AGILEX_MPU_FREE_CLK, "mpu_free_clk", NULL, mpu_free_mux, ARRAY_SIZE(mpu_free_mux),
-+	   0, 0x3C, 0, 0, 0},
-+	{ AGILEX_NOC_FREE_CLK, "noc_free_clk", NULL, noc_free_mux, ARRAY_SIZE(noc_free_mux),
-+	  0, 0x40, 0, 0, 1},
-+	{ AGILEX_L4_SYS_FREE_CLK, "l4_sys_free_clk", "noc_free_clk", NULL, 1, 0,
-+	  0, 4, 0, 0},
-+	{ AGILEX_NOC_CLK, "noc_clk", NULL, noc_mux, ARRAY_SIZE(noc_mux),
-+	  0, 0, 0, 0x30, 1},
-+	{ AGILEX_EMAC_A_FREE_CLK, "emaca_free_clk", NULL, emaca_free_mux, ARRAY_SIZE(emaca_free_mux),
-+	  0, 0xD4, 0, 0x88, 0},
-+	{ AGILEX_EMAC_B_FREE_CLK, "emacb_free_clk", NULL, emacb_free_mux, ARRAY_SIZE(emacb_free_mux),
-+	  0, 0xD8, 0, 0x88, 1},
-+	{ AGILEX_EMAC_PTP_FREE_CLK, "emac_ptp_free_clk", NULL, emac_ptp_free_mux,
-+	  ARRAY_SIZE(emac_ptp_free_mux), 0, 0xDC, 0, 0x88, 2},
-+	{ AGILEX_GPIO_DB_FREE_CLK, "gpio_db_free_clk", NULL, gpio_db_free_mux,
-+	  ARRAY_SIZE(gpio_db_free_mux), 0, 0xE0, 0, 0x88, 3},
-+	{ AGILEX_SDMMC_FREE_CLK, "sdmmc_free_clk", NULL, sdmmc_free_mux,
-+	  ARRAY_SIZE(sdmmc_free_mux), 0, 0xE4, 0, 0x88, 4},
-+	{ AGILEX_S2F_USER0_FREE_CLK, "s2f_user0_free_clk", NULL, s2f_usr0_free_mux,
-+	  ARRAY_SIZE(s2f_usr0_free_mux), 0, 0xE8, 0, 0, 0},
-+	{ AGILEX_S2F_USER1_FREE_CLK, "s2f_user1_free_clk", NULL, s2f_usr1_free_mux,
-+	  ARRAY_SIZE(s2f_usr1_free_mux), 0, 0xEC, 0, 0x88, 5},
-+	{ AGILEX_PSI_REF_FREE_CLK, "psi_ref_free_clk", NULL, psi_ref_free_mux,
-+	  ARRAY_SIZE(psi_ref_free_mux), 0, 0xF0, 0, 0x88, 6},
-+};
-+
-+static const struct stratix10_gate_clock agilex_gate_clks[] = {
-+	{ AGILEX_MPU_CLK, "mpu_clk", NULL, mpu_mux, ARRAY_SIZE(mpu_mux), 0, 0x24,
-+	  0, 0, 0, 0, 0x30, 0, 0},
-+	{ AGILEX_MPU_PERIPH_CLK, "mpu_periph_clk", "mpu_clk", NULL, 1, 0, 0x24,
-+	  0, 0, 0, 0, 0, 0, 4},
-+	{ AGILEX_MPU_L2RAM_CLK, "mpu_l2ram_clk", "mpu_clk", NULL, 1, 0, 0x24,
-+	  0, 0, 0, 0, 0, 0, 2},
-+	{ AGILEX_L4_MAIN_CLK, "l4_main_clk", "noc_clk", NULL, 1, 0, 0x24,
-+	  1, 0x44, 0, 2, 0, 0, 0},
-+	{ AGILEX_L4_MP_CLK, "l4_mp_clk", "noc_clk", NULL, 1, 0, 0x24,
-+	  2, 0x44, 8, 2, 0, 0, 0},
-+	/*
-+	 * The l4_sp_clk feeds a 100 MHz clock to various peripherals, one of them
-+	 * being the SP timers, thus cannot get gated.
-+	 */
-+	{ AGILEX_L4_SP_CLK, "l4_sp_clk", "noc_clk", NULL, 1, CLK_IS_CRITICAL, 0x24,
-+	  3, 0x44, 16, 2, 0, 0, 0},
-+	{ AGILEX_CS_AT_CLK, "cs_at_clk", "noc_clk", NULL, 1, 0, 0x24,
-+	  4, 0x44, 24, 2, 0, 0, 0},
-+	{ AGILEX_CS_TRACE_CLK, "cs_trace_clk", "noc_clk", NULL, 1, 0, 0x24,
-+	  4, 0x44, 26, 2, 0, 0, 0},
-+	{ AGILEX_CS_PDBG_CLK, "cs_pdbg_clk", "cs_at_clk", NULL, 1, 0, 0x24,
-+	  4, 0x44, 28, 1, 0, 0, 0},
-+	{ AGILEX_CS_TIMER_CLK, "cs_timer_clk", "noc_clk", NULL, 1, 0, 0x24,
-+	  5, 0, 0, 0, 0, 0, 0},
-+	{ AGILEX_S2F_USER0_CLK, "s2f_user0_clk", NULL, s2f_usr0_mux, ARRAY_SIZE(s2f_usr0_mux), 0, 0x24,
-+	  6, 0, 0, 0, 0, 0, 0},
-+	{ AGILEX_EMAC0_CLK, "emac0_clk", NULL, emac_mux, ARRAY_SIZE(emac_mux), 0, 0x7C,
-+	  0, 0, 0, 0, 0x94, 26, 0},
-+	{ AGILEX_EMAC1_CLK, "emac1_clk", NULL, emac_mux, ARRAY_SIZE(emac_mux), 0, 0x7C,
-+	  1, 0, 0, 0, 0x94, 27, 0},
-+	{ AGILEX_EMAC2_CLK, "emac2_clk", NULL, emac_mux, ARRAY_SIZE(emac_mux), 0, 0x7C,
-+	  2, 0, 0, 0, 0x94, 28, 0},
-+	{ AGILEX_EMAC_PTP_CLK, "emac_ptp_clk", "emac_ptp_free_clk", NULL, 1, 0, 0x7C,
-+	  3, 0, 0, 0, 0, 0, 0},
-+	{ AGILEX_GPIO_DB_CLK, "gpio_db_clk", "gpio_db_free_clk", NULL, 1, 0, 0x7C,
-+	  4, 0x98, 0, 16, 0, 0, 0},
-+	{ AGILEX_SDMMC_CLK, "sdmmc_clk", "sdmmc_free_clk", NULL, 1, 0, 0x7C,
-+	  5, 0, 0, 0, 0, 0, 4},
-+	{ AGILEX_S2F_USER1_CLK, "s2f_user1_clk", "s2f_user1_free_clk", NULL, 1, 0, 0x7C,
-+	  6, 0, 0, 0, 0, 0, 0},
-+	{ AGILEX_PSI_REF_CLK, "psi_ref_clk", "psi_ref_free_clk", NULL, 1, 0, 0x7C,
-+	  7, 0, 0, 0, 0, 0, 0},
-+	{ AGILEX_USB_CLK, "usb_clk", "l4_mp_clk", NULL, 1, 0, 0x7C,
-+	  8, 0, 0, 0, 0, 0, 0},
-+	{ AGILEX_SPI_M_CLK, "spi_m_clk", "l4_mp_clk", NULL, 1, 0, 0x7C,
-+	  9, 0, 0, 0, 0, 0, 0},
-+	{ AGILEX_NAND_CLK, "nand_clk", "l4_main_clk", NULL, 1, 0, 0x7C,
-+	  10, 0, 0, 0, 0, 0, 0},
-+};
-+
-+static int agilex_clk_register_c_perip(const struct stratix10_perip_c_clock *clks,
-+				       int nums, struct stratix10_clock_data *data)
-+{
-+	struct clk *clk;
-+	void __iomem *base = data->base;
-+	int i;
-+
-+	for (i = 0; i < nums; i++) {
-+		clk = s10_register_periph(&clks[i], base);
-+		if (IS_ERR(clk)) {
-+			pr_err("%s: failed to register clock %s\n",
-+			       __func__, clks[i].name);
-+			continue;
-+		}
-+		data->clk_data.clks[clks[i].id] = clk;
-+	}
-+	return 0;
-+}
-+
-+static int agilex_clk_register_cnt_perip(const struct stratix10_perip_cnt_clock *clks,
-+					 int nums, struct stratix10_clock_data *data)
-+{
-+	struct clk *clk;
-+	void __iomem *base = data->base;
-+	int i;
-+
-+	for (i = 0; i < nums; i++) {
-+		clk = s10_register_cnt_periph(&clks[i], base);
-+		if (IS_ERR(clk)) {
-+			pr_err("%s: failed to register clock %s\n",
-+			       __func__, clks[i].name);
-+			continue;
-+		}
-+		data->clk_data.clks[clks[i].id] = clk;
-+	}
-+
-+	return 0;
-+}
-+
-+static int agilex_clk_register_gate(const struct stratix10_gate_clock *clks,					    int nums, struct stratix10_clock_data *data)
-+{
-+	struct clk *clk;
-+	void __iomem *base = data->base;
-+	int i;
-+
-+	for (i = 0; i < nums; i++) {
-+		clk = s10_register_gate(&clks[i], base);
-+		if (IS_ERR(clk)) {
-+			pr_err("%s: failed to register clock %s\n",
-+			       __func__, clks[i].name);
-+			continue;
-+		}
-+		data->clk_data.clks[clks[i].id] = clk;
-+	}
-+
-+	return 0;
-+}
-+
-+static int agilex_clk_register_pll(const struct stratix10_pll_clock *clks,
-+				 int nums, struct stratix10_clock_data *data)
-+{
-+	struct clk *clk;
-+	void __iomem *base = data->base;
-+	int i;
-+
-+	for (i = 0; i < nums; i++) {
-+		clk = agilex_register_pll(&clks[i], base);
-+		if (IS_ERR(clk)) {
-+			pr_err("%s: failed to register clock %s\n",
-+			       __func__, clks[i].name);
-+			continue;
-+		}
-+		data->clk_data.clks[clks[i].id] = clk;
-+	}
-+
-+	return 0;
-+}
-+
-+static struct stratix10_clock_data *__socfpga_agilex_clk_init(struct platform_device *pdev,
-+						    int nr_clks)
-+{
-+	struct device_node *np = pdev->dev.of_node;
-+	struct device *dev = &pdev->dev;
-+	struct stratix10_clock_data *clk_data;
-+	struct clk **clk_table;
-+	struct resource *res;
-+	void __iomem *base;
-+	int ret;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	base = devm_ioremap_resource(dev, res);
-+	if (IS_ERR(base))
-+		return ERR_CAST(base);
-+
-+	clk_data = devm_kzalloc(dev, sizeof(*clk_data), GFP_KERNEL);
-+	if (!clk_data)
-+		return ERR_PTR(-ENOMEM);
-+
-+	clk_data->base = base;
-+	clk_table = devm_kcalloc(dev, nr_clks, sizeof(*clk_table), GFP_KERNEL);
-+	if (!clk_table)
-+		return ERR_PTR(-ENOMEM);
-+
-+	clk_data->clk_data.clks = clk_table;
-+	clk_data->clk_data.clk_num = nr_clks;
-+	ret = of_clk_add_provider(np, of_clk_src_onecell_get, &clk_data->clk_data);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	return clk_data;
-+}
-+
-+static int agilex_clkmgr_probe(struct platform_device *pdev)
-+{
-+	struct stratix10_clock_data *clk_data;
-+
-+	clk_data = __socfpga_agilex_clk_init(pdev, AGILEX_NUM_CLKS);
-+	if (IS_ERR(clk_data))
-+		return PTR_ERR(clk_data);
-+
-+	agilex_clk_register_pll(agilex_pll_clks, ARRAY_SIZE(agilex_pll_clks), clk_data);
-+
-+	agilex_clk_register_c_perip(agilex_main_perip_c_clks,
-+				 ARRAY_SIZE(agilex_main_perip_c_clks), clk_data);
-+
-+	agilex_clk_register_cnt_perip(agilex_main_perip_cnt_clks,
-+				   ARRAY_SIZE(agilex_main_perip_cnt_clks),
-+				   clk_data);
-+
-+	agilex_clk_register_gate(agilex_gate_clks, ARRAY_SIZE(agilex_gate_clks),
-+			      clk_data);
-+	return 0;
-+}
-+
-+static const struct of_device_id agilex_clkmgr_match_table[] = {
-+	{ .compatible = "intel,agilex-clkmgr",
-+	  .data = agilex_clkmgr_probe },
-+	{ }
-+};
-+
-+static struct platform_driver agilex_clkmgr_driver = {
-+	.probe		= agilex_clkmgr_probe,
-+	.driver		= {
-+		.name	= "agilex-clkmgr",
-+		.suppress_bind_attrs = true,
-+		.of_match_table = agilex_clkmgr_match_table,
-+	},
-+};
-+
-+static int __init agilex_clk_init(void)
-+{
-+	return platform_driver_register(&agilex_clkmgr_driver);
-+}
-+core_initcall(agilex_clk_init);
-diff --git a/drivers/clk/socfpga/clk-pll-s10.c b/drivers/clk/socfpga/clk-pll-s10.c
-index 5c3e1ee44f6b..4e268953b7da 100644
---- a/drivers/clk/socfpga/clk-pll-s10.c
-+++ b/drivers/clk/socfpga/clk-pll-s10.c
-@@ -18,8 +18,12 @@
- #define SOCFPGA_PLL_RESET_MASK		0x2
- #define SOCFPGA_PLL_REFDIV_MASK		0x00003F00
- #define SOCFPGA_PLL_REFDIV_SHIFT	8
-+#define SOCFPGA_PLL_AREFDIV_MASK	0x00000F00
-+#define SOCFPGA_PLL_DREFDIV_MASK	0x00003000
-+#define SOCFPGA_PLL_DREFDIV_SHIFT	12
- #define SOCFPGA_PLL_MDIV_MASK		0xFF000000
- #define SOCFPGA_PLL_MDIV_SHIFT		24
-+#define SOCFPGA_AGILEX_PLL_MDIV_MASK	0x000003FF
- #define SWCTRLBTCLKSEL_MASK		0x200
- #define SWCTRLBTCLKSEL_SHIFT		9
- 
-@@ -27,6 +31,27 @@
- 
- #define to_socfpga_clk(p) container_of(p, struct socfpga_pll, hw.hw)
- 
-+static unsigned long agilex_clk_pll_recalc_rate(struct clk_hw *hwclk,
-+						unsigned long parent_rate)
-+{
-+	struct socfpga_pll *socfpgaclk = to_socfpga_clk(hwclk);
-+	unsigned long arefdiv, reg, mdiv;
-+	unsigned long long vco_freq;
-+
-+	/* read VCO1 reg for numerator and denominator */
-+	reg = readl(socfpgaclk->hw.reg);
-+	arefdiv = (reg & SOCFPGA_PLL_AREFDIV_MASK) >> SOCFPGA_PLL_REFDIV_SHIFT;
-+
-+	vco_freq = (unsigned long long)parent_rate / arefdiv;
-+
-+	/* Read mdiv and fdiv from the fdbck register */
-+	reg = readl(socfpgaclk->hw.reg + 0x24);
-+	mdiv = reg & SOCFPGA_AGILEX_PLL_MDIV_MASK;
-+
-+	vco_freq = (unsigned long long)vco_freq * mdiv;
-+	return (unsigned long)vco_freq;
-+}
-+
- static unsigned long clk_pll_recalc_rate(struct clk_hw *hwclk,
- 					 unsigned long parent_rate)
- {
-@@ -98,6 +123,12 @@ static int clk_pll_prepare(struct clk_hw *hwclk)
- 	return 0;
- }
- 
-+static const struct clk_ops agilex_clk_pll_ops = {
-+	.recalc_rate = agilex_clk_pll_recalc_rate,
-+	.get_parent = clk_pll_get_parent,
-+	.prepare = clk_pll_prepare,
-+};
-+
- static const struct clk_ops clk_pll_ops = {
- 	.recalc_rate = clk_pll_recalc_rate,
- 	.get_parent = clk_pll_get_parent,
-@@ -146,3 +177,40 @@ struct clk *s10_register_pll(const struct stratix10_pll_clock *clks,
- 	}
- 	return clk;
- }
-+
-+struct clk *agilex_register_pll(const struct stratix10_pll_clock *clks,
-+				void __iomem *reg)
-+{
-+	struct clk *clk;
-+	struct socfpga_pll *pll_clk;
-+	struct clk_init_data init;
-+	const char *name = clks->name;
-+
-+	pll_clk = kzalloc(sizeof(*pll_clk), GFP_KERNEL);
-+	if (WARN_ON(!pll_clk))
-+		return NULL;
-+
-+	pll_clk->hw.reg = reg + clks->offset;
-+
-+	if (streq(name, SOCFPGA_BOOT_CLK))
-+		init.ops = &clk_boot_ops;
-+	else
-+		init.ops = &agilex_clk_pll_ops;
-+
-+	init.name = name;
-+	init.flags = clks->flags;
-+
-+	init.num_parents = clks->num_parents;
-+	init.parent_names = NULL;
-+	init.parent_data = clks->parent_data;
-+	pll_clk->hw.hw.init = &init;
-+
-+	pll_clk->hw.bit_idx = SOCFPGA_PLL_POWER;
-+
-+	clk = clk_register(NULL, &pll_clk->hw.hw);
-+	if (WARN_ON(IS_ERR(clk))) {
-+		kfree(pll_clk);
-+		return NULL;
-+	}
-+	return clk;
-+}
-diff --git a/drivers/clk/socfpga/stratix10-clk.h b/drivers/clk/socfpga/stratix10-clk.h
-index ffbd1fb2c8ef..f9d5d724c694 100644
---- a/drivers/clk/socfpga/stratix10-clk.h
-+++ b/drivers/clk/socfpga/stratix10-clk.h
-@@ -62,6 +62,8 @@ struct stratix10_gate_clock {
- 
- struct clk *s10_register_pll(const struct stratix10_pll_clock *,
- 			     void __iomem *);
-+struct clk *agilex_register_pll(const struct stratix10_pll_clock *,
-+				void __iomem *);
- struct clk *s10_register_periph(const struct stratix10_perip_c_clock *,
- 				void __iomem *);
- struct clk *s10_register_cnt_periph(const struct stratix10_perip_cnt_clock *,
--- 
-2.25.1
-
+On 2020-02-27 3:48 AM, Stephen Boyd wrote:=0A=
+> Quoting Leonard Crestez (2020-02-25 11:52:11)=0A=
+>> On 25.02.2020 18:52, Stephen Boyd wrote:=0A=
+>>> Quoting Leonard Crestez (2020-02-20 08:29:32)=0A=
+>>>> The imx SC api strongly assumes that messages are composed out of=0A=
+>>>> 4-bytes words but some of our message structs have odd sizeofs.=0A=
+>>>>=0A=
+>>>> This produces many oopses with CONFIG_KASAN=3Dy.=0A=
+>>>>=0A=
+>>>> Fix by marking with __aligned(4).=0A=
+>>>>=0A=
+>>>> Fixes: fe37b4820417 ("clk: imx: add scu clock common part")=0A=
+>>>> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>=0A=
+>>>> ---=0A=
+>>>>    drivers/clk/imx/clk-scu.c | 6 +++---=0A=
+>>>>    1 file changed, 3 insertions(+), 3 deletions(-)=0A=
+>>>>=0A=
+>>>> diff --git a/drivers/clk/imx/clk-scu.c b/drivers/clk/imx/clk-scu.c=0A=
+>>>> index fbef740704d0..3c5c42d8833e 100644=0A=
+>>>> --- a/drivers/clk/imx/clk-scu.c=0A=
+>>>> +++ b/drivers/clk/imx/clk-scu.c=0A=
+>>>> @@ -41,16 +41,16 @@ struct clk_scu {=0A=
+>>>>    struct imx_sc_msg_req_set_clock_rate {=0A=
+>>>>           struct imx_sc_rpc_msg hdr;=0A=
+>>>>           __le32 rate;=0A=
+>>>>           __le16 resource;=0A=
+>>>>           u8 clk;=0A=
+>>>> -} __packed;=0A=
+>>>> +} __packed __aligned(4);=0A=
+>>>=0A=
+>>> Sorry, this still doesn't make sense to me. Having __aligned(4) means=
+=0A=
+>>> that the struct is placed on the stack at some alignment, great, but it=
+=0A=
+>>> still has __packed so the sizeof this struct is some odd number like 11=
+.=0A=
+>>> If this struct is the last element on the stack it will end at some=0A=
+>>> unaligned address and the mailbox code will read a few bytes beyond the=
+=0A=
+>>> end of the stack.=0A=
+>>=0A=
+>> I checked again and marking the struct with __aligned(4) makes it have=
+=0A=
+>> sizeof =3D=3D 12 as intended. It was 11 before.=0A=
+>>=0A=
+>>       static_assert(sizeof(struct imx_sc_msg_req_set_clock_rate) =3D=3D =
+12);=0A=
+>>=0A=
+>> After reading through your email and gcc docs again I'm not sure if this=
+=0A=
+>> portable/reliable this is but as far as I understand "sizeof" needs to=
+=0A=
+>> account for alignment. Or is this just an accident with my compiler?=0A=
+>>=0A=
+>> Marking a structure both __packed and __aligned(4) means that __packed=
+=0A=
+>> only affects internal struct member layout but sizeof is still rounded=
+=0A=
+>> up to a multiple of 4:=0A=
+>>=0A=
+>> struct test {=0A=
+>>          u8      a;=0A=
+>>          u16     b;=0A=
+>> } __packed __aligned(4);=0A=
+>>=0A=
+>> static_assert(sizeof(struct test) =3D=3D 4);=0A=
+>> static_assert(offsetof(struct test, a) =3D=3D 0);=0A=
+>> static_assert(offsetof(struct test, b) =3D=3D 1);=0A=
+>>=0A=
+>> This test is not realistic because I don't think SCU messages have any=
+=0A=
+>> such oddly-aligned members.=0A=
+>>=0A=
+> =0A=
+> I'm not really sure as I'm not a linker expert. I'm just especially wary=
+=0A=
+> of using __packed or __aligned attributes because they silently generate=
+=0A=
+> code that is usually inefficient. This is why we typically do lots of=0A=
+> shifting and masking in the kernel, so that we can easily see how=0A=
+> complicated it is to pack bits into place. Maybe it makes sense to get=0A=
+> rid of the structs entirely and pack the bits into __le32 arrays of=0A=
+> varying length. Then we don't have to worry about packed or aligned or=0A=
+> what the compiler will do and we can easily be confident that we've put=
+=0A=
+> the bits in the right place in each u32 that is eventually written to=0A=
+> the mailbox register space.=0A=
+=0A=
+These message structs are not as complicated as hardware register, for =0A=
+example everything is always on a byte border.=0A=
+=0A=
+In older versions of the imx internal tree SC messaging is done by =0A=
+packing into arrays through a layer of generated code which looks like this=
+:=0A=
+=0A=
+          RPC_VER(&msg) =3D SC_RPC_VERSION;=0A=
+          RPC_SVC(&msg) =3D U8(SC_RPC_SVC_MISC);=0A=
+          RPC_FUNC(&msg) =3D U8(MISC_FUNC_SET_CONTROL);=0A=
+          RPC_U32(&msg, 0U) =3D U32(ctrl);=0A=
+          RPC_U32(&msg, 4U) =3D U32(val);=0A=
+          RPC_U16(&msg, 8U) =3D U16(resource);=0A=
+          RPC_SIZE(&msg) =3D 4U;=0A=
+=0A=
+The RPC_U32/U16 macros look like this:=0A=
+=0A=
+#define RPC_I32(MESG, IDX)      ((MESG)->DATA.i32[(IDX) / 4U])=0A=
+#define RPC_I16(MESG, IDX)      ((MESG)->DATA.i16[(IDX) / 2U])=0A=
+#define RPC_I8(MESG, IDX)       ((MESG)->DATA.i8[(IDX)])=0A=
+#define RPC_U32(MESG, IDX)      ((MESG)->DATA.u32[(IDX) / 4U])=0A=
+#define RPC_U16(MESG, IDX)      ((MESG)->DATA.u16[(IDX) / 2U])=0A=
+#define RPC_U8(MESG, IDX)       ((MESG)->DATA.u8[(IDX)])=0A=
+=0A=
+and the message struct itself has a big union for the data:=0A=
+=0A=
+typedef struct {=0A=
+          uint8_t version;=0A=
+          uint8_t size;=0A=
+          uint8_t svc;=0A=
+          uint8_t func;=0A=
+          union {=0A=
+                  int32_t i32[(SC_RPC_MAX_MSG - 1U)];=0A=
+                  int16_t i16[(SC_RPC_MAX_MSG - 1U) * 2U];=0A=
+                  int8_t i8[(SC_RPC_MAX_MSG - 1U) * 4U];=0A=
+                  uint32_t u32[(SC_RPC_MAX_MSG - 1U)];=0A=
+                  uint16_t u16[(SC_RPC_MAX_MSG - 1U) * 2U];=0A=
+                  uint8_t u8[(SC_RPC_MAX_MSG - 1U) * 4U];=0A=
+          } DATA;=0A=
+} sc_rpc_msg_t;=0A=
+=0A=
+This approach is very verbose to the point of being unreadable I think =0A=
+it's much to message structs instead. Compiler struct layout rules are =0A=
+not really all that complicated and casting binary data as structs is =0A=
+very common in areas such as networking. This approach is also used by =0A=
+other firmware interfaces like TI sci and nvidia bpmp.=0A=
+=0A=
+imx8 currently has manually written message structs, it's unfortunate =0A=
+that a bug was found and fixing required a scattering patches in =0A=
+multiple subsystems. Perhaps a better solution would be to centralize =0A=
+all structs in a single header similar to drivers/firmware/ti_sci.h?=0A=
+=0A=
+In order to ensrue that there are no issues specific to the compile =0A=
+version perhaps a bunch of static_assert statements could be added to =0A=
+check that sizeof and offset are as expected?=0A=
+=0A=
+---------------------------------=0A=
+=0A=
+As far as I can tell the issue KASAN warns about can be simplified to this:=
+=0A=
+=0A=
+struct __packed badpack {=0A=
+     u32     a;=0A=
+     u16     b;=0A=
+     u8      c;=0A=
+};=0A=
+=0A=
+static_assert(sizeof(struct badpack) =3D=3D 7);=0A=
+=0A=
+static void func(void *x)=0A=
+{=0A=
+     u32* arr =3D (u32*)x;=0A=
+     arr[0] =3D 0x11111111;=0A=
+     arr[1] =3D 0x22222222;=0A=
+}=0A=
+=0A=
+static int hello(void)=0A=
+{=0A=
+     struct badpack s;=0A=
+     u8 x =3D 0x33;=0A=
+=0A=
+     printk("&s=3D%px &x=3D%px\n", &s, &x);=0A=
+     func(&s);=0A=
+     // x could be overwritten here, depending on stack layout.=0A=
+     BUG_ON(x !=3D 0x33);=0A=
+=0A=
+     return 0;=0A=
+}=0A=
+=0A=
+Adding __aligned(4) bumps struct size to 8 and avoids the issue=0A=
+=0A=
+Added KASAN maintainers to check if this is a valid fix.=0A=
+=0A=
+--=0A=
+Regards,=0A=
+Leonard=0A=
