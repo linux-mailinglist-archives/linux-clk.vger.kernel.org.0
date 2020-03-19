@@ -2,34 +2,44 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A817718A9C5
-	for <lists+linux-clk@lfdr.de>; Thu, 19 Mar 2020 01:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 376D918AC44
+	for <lists+linux-clk@lfdr.de>; Thu, 19 Mar 2020 06:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726840AbgCSAaL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 18 Mar 2020 20:30:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46422 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726596AbgCSAaL (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 18 Mar 2020 20:30:11 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1725945AbgCSFgP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 19 Mar 2020 01:36:15 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:11391 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727011AbgCSFgO (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Mar 2020 01:36:14 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1584596174; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=MINbUZTkSWwgDB4Z3KnGKRZ0AOl8pKCct/9BN0h90hA=; b=F8ZyOumByw2O6b79C+FujGRTWQCm/VcIvdThIP4gmdEwHkqW2ewLoz6qYDNLXevffIHBiR6Y
+ BJRapCbv1FCz1/6oD89SmbLmuIb3SUH0oEQxZELf8S5OgfSQvehTQ/HLkcykBw2g9jukHfjD
+ 4xVGCqKbkNz1hU/0heZxFaWboVY=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e7304b7.7f6cebd052d0-smtp-out-n05;
+ Thu, 19 Mar 2020 05:35:51 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8598CC433BA; Thu, 19 Mar 2020 05:35:51 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from tdas-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 614D92076C;
-        Thu, 19 Mar 2020 00:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584577810;
-        bh=s+daCmIgkJ7+NjKAff/EpwgrnpoE3Bw4gorFJuVK7lE=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=J0RvQjwcG4ECsSP0uhPm3cSZa7LVzDMQj3cpywfskfbNYITmDrVz/CvifyrnbvZU/
-         G0C4vtFoyBuHIG2jWmnIxdMEmUIQ/Rt6AKielMZXPFocRPhkc9YaL0V86rAvIEofJ+
-         0Zb1/a9SxuLYoyXbGrfweKaXGWgVI4pLIwWz5dFM=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1584211798-10332-2-git-send-email-tdas@codeaurora.org>
-References: <1584211798-10332-1-git-send-email-tdas@codeaurora.org> <1584211798-10332-2-git-send-email-tdas@codeaurora.org>
-Subject: Re: [PATCH v6 1/3] dt-bindings: clock: Add YAML schemas for the QCOM MSS clock bindings
-From:   Stephen Boyd <sboyd@kernel.org>
+        (Authenticated sender: tdas)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id CBDCCC433D2;
+        Thu, 19 Mar 2020 05:35:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CBDCCC433D2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=tdas@codeaurora.org
+From:   Taniya Das <tdas@codeaurora.org>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?q?Michael=20Turquette=20=C2=A0?= <mturquette@baylibre.com>
 Cc:     David Brown <david.brown@linaro.org>,
         Rajendra Nayak <rnayak@codeaurora.org>,
         linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
@@ -37,61 +47,66 @@ Cc:     David Brown <david.brown@linaro.org>,
         Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
         robh@kernel.org, robh+dt@kernel.org,
         Taniya Das <tdas@codeaurora.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <tdas@codeaurora.org>
-Date:   Wed, 18 Mar 2020 17:30:09 -0700
-Message-ID: <158457780952.152100.6665964541366590027@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+Subject: [PATCH v7 0/3] Add modem Clock controller (MSS CC) driver for SC7180
+Date:   Thu, 19 Mar 2020 11:05:28 +0530
+Message-Id: <1584596131-22741-1-git-send-email-tdas@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Taniya Das (2020-03-14 11:49:56)
-> The Modem Subsystem clock provider have a bunch of generic properties
-> that are needed in a device tree. Add a YAML schemas for those.
->=20
-> Add clock ids for GCC MSS and MSS clocks which are required to bring
-> the modem out of reset.
->=20
-> Signed-off-by: Taniya Das <tdas@codeaurora.org>
-> ---
->  .../devicetree/bindings/clock/qcom,sc7180-mss.yaml | 62 ++++++++++++++++=
-++++++
->  include/dt-bindings/clock/qcom,gcc-sc7180.h        |  7 ++-
->  include/dt-bindings/clock/qcom,mss-sc7180.h        | 12 +++++
->  3 files changed, 80 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sc7180-m=
-ss.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,mss-sc7180.h
->=20
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,sc7180-mss.yaml=
- b/Documentation/devicetree/bindings/clock/qcom,sc7180-mss.yaml
-> new file mode 100644
-> index 0000000..72493dd
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/qcom,sc7180-mss.yaml
-> @@ -0,0 +1,62 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/bindings/clock/qcom,sc7180-mss.yaml#
+[v7]
+ * Fix Documentation YAML issues reported.
 
-remove 'bindings' above.
+[v6]
+ * Combine the Documentation YAML schema and clock IDs for GCC MSS and
+   MSS clocks.
+ * Remove a unnecessary header file inclusion, define the max_registers for
+   regmap and also update the fw_name to remove _clk suffix.
+ * Update the copyright year.
 
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Modem Clock Controller Binding
-> +
-> +maintainers:
-> +  - Taniya Das <tdas@codeaurora.org>
-> +
-> +description: |
-> +  Qualcomm modem clock control module which supports the clocks.
-> +
-> +  See also dt-bindings/clock/qcom,mss-sc7180.h.
+[v5]
+ * Update the clock ID for GCC_MSS_NAV_AXIS_CLK to GCC_MSS_NAV_AXI_CLK
 
-Can you follow how for example gcc-sc7180 does this?
+[v4]
+ * Split the GCC MSS clocks and Modem clock driver.
+ * Update mss_regmap_config to const.
+ * Rename the Documentation binding as per the latest convention.
+ * Minor comments of clock-names/clocks properties updated.
 
-  See also:
-  - dt-bindings/clock/qcom,mss-sc7180.h
+[v3]
+  * Add clocks/clock-names required for the MSS clock controller.
+  * Add pm_ops to enable/disable the required dependent clock.
+  * Add parent_data for the MSS clocks.
+  * Update the GCC MSS clocks from _CBCR to _CLK.
+
+[v2]
+  * Update the license for the documentation and fix minor comments in the
+    YAML bindings.
+
+[v1]
+  * Add driver support for Modem clock controller for SC7180 and also
+    update device tree bindings for the various clocks supported in the
+    clock controller.
+
+Taniya Das (3):
+  dt-bindings: clock: Add YAML schemas for the QCOM MSS clock bindings
+  clk: qcom: gcc: Add support for modem clocks in GCC
+  clk: qcom: Add modem clock controller driver for SC7180
+
+ .../devicetree/bindings/clock/qcom,sc7180-mss.yaml |  62 +++++++++
+ drivers/clk/qcom/Kconfig                           |   9 ++
+ drivers/clk/qcom/Makefile                          |   1 +
+ drivers/clk/qcom/gcc-sc7180.c                      |  72 ++++++++++-
+ drivers/clk/qcom/mss-sc7180.c                      | 143 +++++++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-sc7180.h        |   7 +-
+ include/dt-bindings/clock/qcom,mss-sc7180.h        |  12 ++
+ 7 files changed, 304 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,sc7180-mss.yaml
+ create mode 100644 drivers/clk/qcom/mss-sc7180.c
+ create mode 100644 include/dt-bindings/clock/qcom,mss-sc7180.h
+
+--
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
+of the Code Aurora Forum, hosted by the  Linux Foundation.
