@@ -2,198 +2,120 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F4618E796
-	for <lists+linux-clk@lfdr.de>; Sun, 22 Mar 2020 09:22:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EEBF18E836
+	for <lists+linux-clk@lfdr.de>; Sun, 22 Mar 2020 12:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726989AbgCVIV7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 22 Mar 2020 04:21:59 -0400
-Received: from out28-121.mail.aliyun.com ([115.124.28.121]:55884 "EHLO
-        out28-121.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726583AbgCVIV7 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 22 Mar 2020 04:21:59 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07526577|-1;CH=green;DM=||false|;DS=CONTINUE|ham_regular_dialog|0.0234105-0.000504511-0.976085;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03312;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.H3MM99h_1584865287;
-Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.H3MM99h_1584865287)
-          by smtp.aliyun-inc.com(10.147.40.200);
-          Sun, 22 Mar 2020 16:21:40 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     linux-clk@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        sboyd@kernel.org, mturquette@baylibre.com, robh+dt@kernel.org,
-        mark.rutland@arm.com, paul@crapouillou.net,
-        dongsheng.qiu@ingenic.com, yanfei.li@ingenic.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
-Subject: [PATCH v6 6/6] clk: X1000: Add FIXDIV for SSI clock of X1000.
-Date:   Sun, 22 Mar 2020 16:21:02 +0800
-Message-Id: <1584865262-25297-8-git-send-email-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1584865262-25297-1-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1584865262-25297-1-git-send-email-zhouyanjie@wanyeetech.com>
+        id S1726951AbgCVLBS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 22 Mar 2020 07:01:18 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:37580 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726936AbgCVLBS (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 22 Mar 2020 07:01:18 -0400
+Received: by mail-wr1-f65.google.com with SMTP id w10so12932550wrm.4;
+        Sun, 22 Mar 2020 04:01:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sSNfn1lOuwrdFcFfi180EAlddz36torDoaIxoG4z+2U=;
+        b=ri+n76E+3tHH8Z3EWDRFGOg52UBOIuh1YosaBsija/90WTG2WKxKUOKBNnnIgYpa8S
+         nF74tppOl3nSTC3mw4dszoys9PPkIVRdh0Q+VdMkWH4m6paGT6MXie2jmJdN/lV6csja
+         M+azlwzV3XG6UXsH9A2zeIhdLKLwTzuNWJUSIicFwQkaujfbYmbYTQVC2EDx0rL7e25G
+         jdZotnUuiVBz5dYL9dPzD7i4Eb3RwTRILrRr1aGOUlBc5SLWJXy0zhibuRPYoKC+x6NS
+         PXU6j4zMCJuIAJfVZVlF1NNxta4AbY6x7iEEa5PWsZ92iDwjT18ANYK/HD5EnapZ4YkI
+         lVyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sSNfn1lOuwrdFcFfi180EAlddz36torDoaIxoG4z+2U=;
+        b=IfMoWI7I43U6K8xuMdIPJAlVtRKC+lIWVKdnV+Ffy6b4CFZa6hVwUP+bP6VcqDO6H+
+         Im4B5ssBN6MM1W6bPyHIZNoGwpnQpOtMH7XRJRtbdcEde58IePBfqrNNATSXFwkqGFhi
+         UB6yblt9O8VoxPBdunHtmFAkcWNLeuRYf4eBcKKxSgJNxmz4WG98MUBUzzlyVUqr6Oe9
+         BEALv6ntRmjX+eHJLad/YlCVtcd2iRflqBsJKQX4YjhTeK5xxMSq9X8/A4YY2lrr1KkY
+         XUj9s1j9+ppec3DCZWV+dVcD2+R5sMTZhjf/9sIKzFYm57dmNZY22s3FGEWJ3sbLT1rt
+         XDmw==
+X-Gm-Message-State: ANhLgQ0HNU4pjZ3ngL5U3uJl63P2GDxEcLVrJ91GiVvohNXFXz6KQkec
+        h4B1KN+nh0ww4ZCDSO1Phyo/fr561wcOknIB85k=
+X-Google-Smtp-Source: ADFU+vsSBXMut+ZcU1fczh3pG4r8yPPPXaEt73HpCzUdEb+UaS8v/m5UKZuNuctmlE8iRS0oXgF7Gx/RJiLBK6bCOdc=
+X-Received: by 2002:a5d:674f:: with SMTP id l15mr4404734wrw.196.1584874876241;
+ Sun, 22 Mar 2020 04:01:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20200304072730.9193-1-zhang.lyra@gmail.com> <20200304072730.9193-4-zhang.lyra@gmail.com>
+ <158475317083.125146.1467485980949213245@swboyd.mtv.corp.google.com>
+In-Reply-To: <158475317083.125146.1467485980949213245@swboyd.mtv.corp.google.com>
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+Date:   Sun, 22 Mar 2020 19:00:39 +0800
+Message-ID: <CAAfSe-sQnZLn8J7Ct5OES=2PmT-nGT-_0zXxRaO=mcHVtgTcnQ@mail.gmail.com>
+Subject: Re: [PATCH v6 3/7] dt-bindings: clk: sprd: add bindings for sc9863a
+ clock controller
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-1.The SSI clock of X1000 not like JZ4770 and JZ4780, they are not
-  directly derived from the output of SSIPLL, but from the clock
-  obtained by dividing the frequency by 2. "X1000_CLK_SSIPLL_DIV2"
-  is added for this purpose, and ensure that it initialized before
-  "X1000_CLK_SSIMUX" when initializing the clocks.
-2.Clocks of LCD, OTG, EMC, EFUSE, OST, and gates of CPU, PCLK
-  are also added.
+Hi Stephen,
 
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
----
+On Sat, 21 Mar 2020 at 09:12, Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting Chunyan Zhang (2020-03-03 23:27:26)
+> > From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> >
+> > add a new bindings to describe sc9863a clock compatible string.
+> >
+> > Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> [...]
+> > +examples:
+> > +  - |
+> > +    ap_clk: clock-controller@21500000 {
+> > +      compatible = "sprd,sc9863a-ap-clk";
+> > +      reg = <0 0x21500000 0 0x1000>;
+> > +      clocks = <&ext_26m>, <&ext_32k>;
+> > +      clock-names = "ext-26m", "ext-32k";
+> > +      #clock-cells = <1>;
+> > +    };
+> > +
+> > +  - |
+> > +    soc {
+> > +      #address-cells = <2>;
+> > +      #size-cells = <2>;
+> > +
+> > +      ap_ahb_regs: syscon@20e00000 {
+> > +        compatible = "sprd,sc9863a-glbregs", "syscon", "simple-mfd";
+> > +        reg = <0 0x20e00000 0 0x4000>;
+> > +        #address-cells = <1>;
+> > +        #size-cells = <1>;
+> > +        ranges = <0 0 0x20e00000 0x4000>;
+> > +
+> > +        apahb_gate: apahb-gate@0 {
+>
+> Why do we need a node per "clk type" in the simple-mfd syscon? Can't we
+> register clks from the driver that matches the parent node and have that
+> driver know what sorts of clks are where? Sorry I haven't read the rest
+> of the patch series and I'm not aware if this came up before. If so,
+> please put details about this in the commit text.
 
-Notes:
-    v5:
-    New patch.
-    
-    V5->v6:
-    Add missing part of X1000's CGU.
+Please see the change logs after v2 in cover-letter.
 
- drivers/clk/ingenic/x1000-cgu.c | 56 ++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 50 insertions(+), 6 deletions(-)
+Rob suggested us to put some clocks under syscon nodes, since these
+clocks have the same
+physical address base with the syscon;
 
-diff --git a/drivers/clk/ingenic/x1000-cgu.c b/drivers/clk/ingenic/x1000-cgu.c
-index 6f0ec9d..7e3ef0d 100644
---- a/drivers/clk/ingenic/x1000-cgu.c
-+++ b/drivers/clk/ingenic/x1000-cgu.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-  * X1000 SoC CGU driver
-- * Copyright (c) 2019 Zhou Yanjie <zhouyanjie@zoho.com>
-+ * Copyright (c) 2019 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-  */
- 
- #include <linux/clk-provider.h>
-@@ -18,6 +18,7 @@
- #define CGU_REG_CLKGR		0x20
- #define CGU_REG_OPCR		0x24
- #define CGU_REG_DDRCDR		0x2c
-+#define CGU_REG_USBCDR		0x50
- #define CGU_REG_MACCDR		0x54
- #define CGU_REG_I2SCDR		0x60
- #define CGU_REG_LPCDR		0x64
-@@ -114,9 +115,10 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 	},
- 
- 	[X1000_CLK_CPU] = {
--		"cpu", CGU_CLK_DIV,
-+		"cpu", CGU_CLK_DIV | CGU_CLK_GATE,
- 		.parents = { X1000_CLK_CPUMUX, -1, -1, -1 },
- 		.div = { CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1 },
-+		.gate = { CGU_REG_CLKGR, 30 },
- 	},
- 
- 	[X1000_CLK_L2CACHE] = {
-@@ -145,9 +147,10 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 	},
- 
- 	[X1000_CLK_PCLK] = {
--		"pclk", CGU_CLK_DIV,
-+		"pclk", CGU_CLK_DIV | CGU_CLK_GATE,
- 		.parents = { X1000_CLK_AHB2PMUX, -1, -1, -1 },
- 		.div = { CGU_REG_CPCCR, 16, 1, 4, 20, -1, -1 },
-+		.gate = { CGU_REG_CLKGR, 28 },
- 	},
- 
- 	[X1000_CLK_DDR] = {
-@@ -160,12 +163,20 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_MAC] = {
- 		"mac", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
--		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL},
-+		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL },
- 		.mux = { CGU_REG_MACCDR, 31, 1 },
- 		.div = { CGU_REG_MACCDR, 0, 1, 8, 29, 28, 27 },
- 		.gate = { CGU_REG_CLKGR, 25 },
- 	},
- 
-+	[X1000_CLK_LCD] = {
-+		"lcd", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL },
-+		.mux = { CGU_REG_LPCDR, 31, 1 },
-+		.div = { CGU_REG_LPCDR, 0, 1, 8, 28, 27, 26 },
-+		.gate = { CGU_REG_CLKGR, 23 },
-+	},
-+
- 	[X1000_CLK_MSCMUX] = {
- 		"msc_mux", CGU_CLK_MUX,
- 		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL},
-@@ -186,6 +197,15 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 		.gate = { CGU_REG_CLKGR, 5 },
- 	},
- 
-+	[X1000_CLK_OTG] = {
-+		"otg", CGU_CLK_DIV | CGU_CLK_GATE | CGU_CLK_MUX,
-+		.parents = { X1000_CLK_EXCLK, -1,
-+					 X1000_CLK_APLL, X1000_CLK_MPLL },
-+		.mux = { CGU_REG_USBCDR, 30, 2 },
-+		.div = { CGU_REG_USBCDR, 0, 1, 8, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR, 3 },
-+	},
-+
- 	[X1000_CLK_SSIPLL] = {
- 		"ssi_pll", CGU_CLK_MUX | CGU_CLK_DIV,
- 		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL, -1, -1 },
-@@ -193,14 +213,32 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 		.div = { CGU_REG_SSICDR, 0, 1, 8, 29, 28, 27 },
- 	},
- 
-+	[X1000_CLK_SSIPLL_DIV2] = {
-+		"ssi_pll_div2", CGU_CLK_FIXDIV,
-+		.parents = { X1000_CLK_SSIPLL },
-+		.fixdiv = { 2 },
-+	},
-+
- 	[X1000_CLK_SSIMUX] = {
- 		"ssi_mux", CGU_CLK_MUX,
--		.parents = { X1000_CLK_EXCLK, X1000_CLK_SSIPLL, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK, X1000_CLK_SSIPLL_DIV2, -1, -1 },
- 		.mux = { CGU_REG_SSICDR, 30, 1 },
- 	},
- 
- 	/* Gate-only clocks */
- 
-+	[X1000_CLK_EMC] = {
-+		"emc", CGU_CLK_GATE,
-+		.parents = { X1000_CLK_AHB2, -1, -1, -1 },
-+		.gate = { CGU_REG_CLKGR, 0 },
-+	},
-+
-+	[X1000_CLK_EFUSE] = {
-+		"efuse", CGU_CLK_GATE,
-+		.parents = { X1000_CLK_AHB2, -1, -1, -1 },
-+		.gate = { CGU_REG_CLKGR, 1 },
-+	},
-+
- 	[X1000_CLK_SFC] = {
- 		"sfc", CGU_CLK_GATE,
- 		.parents = { X1000_CLK_SSIPLL, -1, -1, -1 },
-@@ -249,6 +287,12 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 		.gate = { CGU_REG_CLKGR, 19 },
- 	},
- 
-+	[X1000_CLK_OST] = {
-+		"ost", CGU_CLK_GATE,
-+		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.gate = { CGU_REG_CLKGR, 20 },
-+	},
-+
- 	[X1000_CLK_PDMA] = {
- 		"pdma", CGU_CLK_GATE,
- 		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-@@ -275,4 +319,4 @@ static void __init x1000_cgu_init(struct device_node *np)
- 
- 	ingenic_cgu_register_syscore_ops(cgu);
- }
--CLK_OF_DECLARE(x1000_cgu, "ingenic,x1000-cgu", x1000_cgu_init);
-+CLK_OF_DECLARE_DRIVER(x1000_cgu, "ingenic,x1000-cgu", x1000_cgu_init);
--- 
-2.7.4
+Thanks,
+Chunyan
 
+>
+> > +          compatible = "sprd,sc9863a-apahb-gate";
+> > +          reg = <0x0 0x1020>;
+> > +          #clock-cells = <1>;
