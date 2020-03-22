@@ -2,107 +2,41 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6B318E4BC
-	for <lists+linux-clk@lfdr.de>; Sat, 21 Mar 2020 22:18:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED95B18E786
+	for <lists+linux-clk@lfdr.de>; Sun, 22 Mar 2020 09:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728016AbgCUVSH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 21 Mar 2020 17:18:07 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:34121 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726366AbgCUVSH (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sat, 21 Mar 2020 17:18:07 -0400
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 48lD586W0tzqB;
-        Sat, 21 Mar 2020 22:18:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1584825484; bh=sRoF0NTwXhM6qBx6PuKDME7an8NdRlb3aLRGEWm6gbI=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=b3k5KTMr/dIZl82IKfC6wl4NTkz5MkliCylvznacPGK9wzNJ26WmKFE+L2LJTsWvv
-         2/tXRCsmuvhEC6qLZYRBBVD/Tbm04JMkvmaWZlT4g38U5ZEtrmz1jTyWiCzRkPYble
-         U7zvFo30MaoIYgVl29ZllySZ/Zl93GjI8LK5Tw8RW9LtQanUeRA+D+sx2cqgDkcc9v
-         QP7QieAbZFRa+plH4xxaM7DnljRY+ykkZ/j1ARGX9m6VPfw4awj6cTi6EBPrY7Pkly
-         POo4PpZLF+YCfOcqlg+VdrP44BWIEU9c8EEaN0toj63q8+Nr6bZVVcnwGj7V4p9le+
-         6mnD0CYKjVlfw==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Sat, 21 Mar 2020 22:18:04 +0100
-Message-Id: <135082dfafaa8bc106286dfbe7dd94b708c33f4b.1584825247.git.mirq-linux@rere.qmqm.pl>
-In-Reply-To: <cover.1584825247.git.mirq-linux@rere.qmqm.pl>
-References: <cover.1584825247.git.mirq-linux@rere.qmqm.pl>
-From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Subject: [PATCH v3 3/3] clk: at91: sama5d2: allow setting all PMC clock
- parents via DT
+        id S1726728AbgCVIVk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 22 Mar 2020 04:21:40 -0400
+Received: from out28-149.mail.aliyun.com ([115.124.28.149]:36663 "EHLO
+        out28-149.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726583AbgCVIVk (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 22 Mar 2020 04:21:40 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1742894|-1;CH=green;DM=||false|;DS=CONTINUE|ham_system_inform|0.0222771-0.000898251-0.976825;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03305;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.H3MM99h_1584865287;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.H3MM99h_1584865287)
+          by smtp.aliyun-inc.com(10.147.40.200);
+          Sun, 22 Mar 2020 16:21:33 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     linux-clk@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        sboyd@kernel.org, mturquette@baylibre.com, robh+dt@kernel.org,
+        mark.rutland@arm.com, paul@crapouillou.net,
+        dongsheng.qiu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
+Subject: Add support for the X1830 and fix bugs for X1000 v6.
+Date:   Sun, 22 Mar 2020 16:20:55 +0800
+Message-Id: <1584865262-25297-1-git-send-email-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-We need to have clocks accessible via phandle to select them
-as peripheral clock parent using assigned-clock-parents in DT.
-PLLACK and AUDIOPLLCK were missing for sama5d2. Add them.
-
-Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
----
-v2: rebase to clk/clk-at91 branch
-v3: no changes
----
- drivers/clk/at91/sama5d2.c       | 6 +++++-
- include/dt-bindings/clock/at91.h | 2 ++
- 2 files changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/clk/at91/sama5d2.c b/drivers/clk/at91/sama5d2.c
-index ae5e83cadb3d..b3fa2291ccd8 100644
---- a/drivers/clk/at91/sama5d2.c
-+++ b/drivers/clk/at91/sama5d2.c
-@@ -166,7 +166,7 @@ static void __init sama5d2_pmc_setup(struct device_node *np)
- 	if (IS_ERR(regmap))
- 		return;
- 
--	sama5d2_pmc = pmc_data_allocate(PMC_I2S1_MUX + 1,
-+	sama5d2_pmc = pmc_data_allocate(PMC_AUDIOPLLCK + 1,
- 					nck(sama5d2_systemck),
- 					nck(sama5d2_periph32ck),
- 					nck(sama5d2_gck), 3);
-@@ -202,6 +202,8 @@ static void __init sama5d2_pmc_setup(struct device_node *np)
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-+	sama5d2_pmc->chws[PMC_PLLACK] = hw;
-+
- 	hw = at91_clk_register_audio_pll_frac(regmap, "audiopll_fracck",
- 					      "mainck");
- 	if (IS_ERR(hw))
-@@ -217,6 +219,8 @@ static void __init sama5d2_pmc_setup(struct device_node *np)
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-+	sama5d2_pmc->chws[PMC_AUDIOPLLCK] = hw;
-+
- 	regmap_sfr = syscon_regmap_lookup_by_compatible("atmel,sama5d2-sfr");
- 	if (IS_ERR(regmap_sfr))
- 		regmap_sfr = NULL;
-diff --git a/include/dt-bindings/clock/at91.h b/include/dt-bindings/clock/at91.h
-index c3f4aa6a2d29..e57362e98129 100644
---- a/include/dt-bindings/clock/at91.h
-+++ b/include/dt-bindings/clock/at91.h
-@@ -21,6 +21,8 @@
- #define PMC_MCK2		4
- #define PMC_I2S0_MUX		5
- #define PMC_I2S1_MUX		6
-+#define PMC_PLLACK		7
-+#define PMC_AUDIOPLLCK		8
- 
- #ifndef AT91_PMC_MOSCS
- #define AT91_PMC_MOSCS		0		/* MOSCS Flag */
--- 
-2.20.1
+v5->v6:
+1.Revert "pll_reg" to "reg" to minimize patch as Paul Cercueil's suggest.
+2.Add missing part of X1830's CGU.
+3.Add missing part of X1000's CGU.
 
