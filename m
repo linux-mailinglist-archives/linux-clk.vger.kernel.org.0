@@ -2,84 +2,73 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 516C2191EF2
-	for <lists+linux-clk@lfdr.de>; Wed, 25 Mar 2020 03:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE28F191F0A
+	for <lists+linux-clk@lfdr.de>; Wed, 25 Mar 2020 03:28:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727259AbgCYCW7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 24 Mar 2020 22:22:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36614 "EHLO mail.kernel.org"
+        id S1727272AbgCYC2O (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 24 Mar 2020 22:28:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39578 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727253AbgCYCW7 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 24 Mar 2020 22:22:59 -0400
-Received: from mail.kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1727259AbgCYC2O (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 24 Mar 2020 22:28:14 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5E8F32072E;
-        Wed, 25 Mar 2020 02:22:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B862320714;
+        Wed, 25 Mar 2020 02:28:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585102978;
-        bh=U+knP07i54M5HZPZ5NicCCkJhRVYwH39OmNKxW+VlDk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rvpuwhvGapsq62EQSFXD0+nkfo/fg1qn/Hb/yYiScVUrGB5gx7VD52zLJimTOaILf
-         4p5A65OnHbwtkGb89KlmXWSnWM/EovfARf8B1uH/6ub8p8ACmS2xPNS315SRPyIcWr
-         zEP3tt3hr8VDtEGkPdSW4wa16RrgQqPm5n/BV0Wk=
+        s=default; t=1585103293;
+        bh=2DoQvWSfSUyb/O+cac3YzadOd+Zx15xEkvIy4BYdPpw=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=E5GK46EuR4njBQMPJqLwOWXoW6mRNvfouwqIxgMbkm9nlUhZBqlDWhS0HGZME6Bi9
+         TItLxgOkJgiefm1vS7c+ilr8/y6b2ZEPhgqH1ccU2DZ3+JuUsoXZa3VN5za1+iYAAM
+         nVMz9vyM+8noCvwi7jIO6KuY/D5eseHU6UXKmg54=
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200325022257.148244-1-sboyd@kernel.org>
+References: <20200325022257.148244-1-sboyd@kernel.org>
+Subject: Re: [PATCH] clk: Pass correct arguments to __clk_hw_register_gate()
 From:   Stephen Boyd <sboyd@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH] clk: Pass correct arguments to __clk_hw_register_gate()
-Date:   Tue, 24 Mar 2020 19:22:57 -0700
-Message-Id: <20200325022257.148244-1-sboyd@kernel.org>
-X-Mailer: git-send-email 2.25.1.696.g5e7596f4ac-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Date:   Tue, 24 Mar 2020 19:28:12 -0700
+Message-ID: <158510329289.125146.2737057581185153152@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-I copy/pasted these macros and forgot to update the argument
-names and where they're passed to. Fix it so that these macros make
-sense.
+Quoting Stephen Boyd (2020-03-24 19:22:57)
+> diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+> index 952ac035bab9..95cc8a4f6e39 100644
+> --- a/include/linux/clk-provider.h
+> +++ b/include/linux/clk-provider.h
+> @@ -539,10 +539,10 @@ struct clk *clk_register_gate(struct device *dev, c=
+onst char *name,
+>   * @clk_gate_flags: gate-specific flags for this clock
+>   * @lock: shared register lock for this clock
+>   */
+> -#define clk_hw_register_gate_parent_data(dev, name, parent_name, flags, =
+reg,  \
+> +#define clk_hw_register_gate_parent_data(dev, name, parent_data, flags, =
+reg,  \
+>                                        bit_idx, clk_gate_flags, lock)    =
+     \
+> -       __clk_hw_register_gate((dev), NULL, (name), (parent_name), NULL, =
+     \
+> -                              NULL, (flags), (reg), (bit_idx),          =
+     \
+> +       __clk_hw_register_gate((dev), NULL, (name), NULL, NULL, (parent_d=
+ata) \
 
-Reported-by: Maxime Ripard <maxime@cerno.tech>
-Fixes: 194efb6e2667 ("clk: gate: Add support for specifying parents via DT/pointers")
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
----
- include/linux/clk-provider.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+And this needs a comma after it.
 
-diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index 952ac035bab9..95cc8a4f6e39 100644
---- a/include/linux/clk-provider.h
-+++ b/include/linux/clk-provider.h
-@@ -522,9 +522,9 @@ struct clk *clk_register_gate(struct device *dev, const char *name,
-  * @clk_gate_flags: gate-specific flags for this clock
-  * @lock: shared register lock for this clock
-  */
--#define clk_hw_register_gate_parent_hw(dev, name, parent_name, flags, reg,    \
-+#define clk_hw_register_gate_parent_hw(dev, name, parent_hw, flags, reg,      \
- 				       bit_idx, clk_gate_flags, lock)	      \
--	__clk_hw_register_gate((dev), NULL, (name), (parent_name), NULL,      \
-+	__clk_hw_register_gate((dev), NULL, (name), NULL, (parent_hw),        \
- 			       NULL, (flags), (reg), (bit_idx),		      \
- 			       (clk_gate_flags), (lock))
- /**
-@@ -539,10 +539,10 @@ struct clk *clk_register_gate(struct device *dev, const char *name,
-  * @clk_gate_flags: gate-specific flags for this clock
-  * @lock: shared register lock for this clock
-  */
--#define clk_hw_register_gate_parent_data(dev, name, parent_name, flags, reg,  \
-+#define clk_hw_register_gate_parent_data(dev, name, parent_data, flags, reg,  \
- 				       bit_idx, clk_gate_flags, lock)	      \
--	__clk_hw_register_gate((dev), NULL, (name), (parent_name), NULL,      \
--			       NULL, (flags), (reg), (bit_idx),		      \
-+	__clk_hw_register_gate((dev), NULL, (name), NULL, NULL, (parent_data) \
-+			       (flags), (reg), (bit_idx),		      \
- 			       (clk_gate_flags), (lock))
- void clk_unregister_gate(struct clk *clk);
- void clk_hw_unregister_gate(struct clk_hw *hw);
--- 
-Sent by a computer, using git, on the internet
+I'll apply this to clk-fixes and send to Linus in the next few days.
 
+> +                              (flags), (reg), (bit_idx),                =
+     \
+>                                (clk_gate_flags), (lock))
