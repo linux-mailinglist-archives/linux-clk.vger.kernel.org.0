@@ -2,89 +2,83 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19623195834
-	for <lists+linux-clk@lfdr.de>; Fri, 27 Mar 2020 14:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6708195A29
+	for <lists+linux-clk@lfdr.de>; Fri, 27 Mar 2020 16:45:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727242AbgC0Nl1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 27 Mar 2020 09:41:27 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:40428 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726540AbgC0Nl1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 27 Mar 2020 09:41:27 -0400
-Received: by mail-il1-f196.google.com with SMTP id j9so8785219ilr.7
-        for <linux-clk@vger.kernel.org>; Fri, 27 Mar 2020 06:41:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=uIvUjlehSVigkxhw02yxSAS/Jekd0JL8sbxoZE/mhG8=;
-        b=nT2oJ9SVB/FoY5io1Mbg2fBJli9XXC/B954/cmbBwc4HwRv3RZOSiDWNTItleGNZtn
-         sKCJjmCQHAsEBy0Jyy3vmd4mYqBS27VFZYCOeTnTF9yStqRrpVxlnEFW5x+3yAEqvz+n
-         8OjDOpPaRR/K+rpr/mnAd034OzzScPUMeHEDcoYKDABzIoDiOtNsqHcqUpJVA8PTKgCZ
-         Cxg6hkv5Q+lq4WUYYfyJbYjU1lYBCk3yHyXopYDpua6tbadqOqc/ZkGRZdXin8RQr/iD
-         e1pbO65XjiP3l3YbwHaUF/XdTei+otHLpXJvdjjMr/w3JwR1gMSEx/kDP+kLIRNj89fp
-         I+KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=uIvUjlehSVigkxhw02yxSAS/Jekd0JL8sbxoZE/mhG8=;
-        b=tqx7osCulonSvwjSF9Ip9oVPdj7QhUAtK6LXNUFu6/yPpYMXWeVuuiNOBDcITwjufC
-         U5ouQnf6AuVclpzFKD0qPCYTOxYP5KdKkNfTrWyVBfrF6mzALIVXg2xA1nMAS0UA43Gv
-         FeVUEeOBenO74NyBlhGOwyV3aSvxBBdLxo1EvO3OUZOie+sN4pNNham5wGsXMx+LHtGf
-         GPwCvNY5WcwhXEwHfB5WP/NUiDAL23FAEvVOEPROiCeQSRm/QsppOREh90n4KFSgkk45
-         qCK5EC3FT/XwMY3c5It5I0GP/KiPTTB8uONfoOOFEq9/qR+oMMfn9HO1aknEQ6/bhAAK
-         KTrA==
-X-Gm-Message-State: ANhLgQ3QvdGxOgOHNLvr1vtr2gJ1m1ZMod7+u9TH0LjEwaL7XmNQ371t
-        5KvRyOQaUu7yLqe2bghnt8Ao6Thi3LBmvsd3cyQ=
-X-Google-Smtp-Source: ADFU+vuYylKn/s4Wcm8ahydLNHBnrgD+D9YvohynQpoBYEn2cTa6afgSUvXtNKfHheyias7P0ENvSGMvudbNA5XnEGs=
-X-Received: by 2002:a92:7b10:: with SMTP id w16mr13509604ilc.93.1585316486541;
- Fri, 27 Mar 2020 06:41:26 -0700 (PDT)
+        id S1727549AbgC0PpJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 27 Mar 2020 11:45:09 -0400
+Received: from foss.arm.com ([217.140.110.172]:47480 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726515AbgC0PpJ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 27 Mar 2020 11:45:09 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D4A341FB;
+        Fri, 27 Mar 2020 08:45:08 -0700 (PDT)
+Received: from localhost (unknown [10.37.6.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3402E3F71F;
+        Fri, 27 Mar 2020 08:45:08 -0700 (PDT)
+Date:   Fri, 27 Mar 2020 15:45:06 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        jonathanh@nvidia.com, perex@perex.cz, tiwai@suse.com,
+        digetx@gmail.com, mperttunen@nvidia.com,
+        gregkh@linuxfoundation.org, sboyd@kernel.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, pdeschrijver@nvidia.com, pgaikwad@nvidia.com,
+        spujar@nvidia.com, josephl@nvidia.com, daniel.lezcano@linaro.org,
+        mmaddireddy@nvidia.com, markz@nvidia.com,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 00/22] Move PMC clocks into Tegra PMC driver
+Message-ID: <20200327154506.GF4437@sirena.org.uk>
+References: <1578986667-16041-1-git-send-email-skomatineni@nvidia.com>
+ <20200325212708.GA836215@ulmo>
 MIME-Version: 1.0
-Received: by 2002:a5e:8817:0:0:0:0:0 with HTTP; Fri, 27 Mar 2020 06:41:26
- -0700 (PDT)
-Reply-To: officework_progress@yahoo.com
-From:   Andrew Ede <consumingfirechurch4@gmail.com>
-Date:   Fri, 27 Mar 2020 15:41:26 +0200
-Message-ID: <CAK6CGFeTAgG3XwVRcnAcWenHei8Ed-kYt2ZyHgV0iwdOSwwO2Q@mail.gmail.com>
-Subject: HOW ARE YOU?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6v9BRtpmy+umdQlo"
+Content-Disposition: inline
+In-Reply-To: <20200325212708.GA836215@ulmo>
+X-Cookie: Drop in any mailbox.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Good day.
 
-My reason of contacting you is that I and my colleagues working in our
-country=E2=80=99s National Petroleum Corporation want to buy any existing
-modern crude oil refinery in any part of the world.
+--6v9BRtpmy+umdQlo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-We are ready to buy any available land to build the Refinery or buy
-the existing one anywhere outside Africa. We will make you our foreign
-partner abroad with some percentage shareholding if you will be
-interested to work with us on this project.
+On Wed, Mar 25, 2020 at 10:27:08PM +0100, Thierry Reding wrote:
 
-We have the sum of ($600 Million Dollars) Six Hundred Million Dollars
-for this project.
+> there's a few runtime dependencies between the various patches in this
+> series, so I think it'd probably be best if I picked up the ASoC patches
+> into the Tegra tree and let them soak for a day or two in linux-next to
+> make sure everything is there and in the right order.
 
-Meanwhile, this amount of ($600 Million Dollars) will be accessible
-through Foreign Contract Purchase Fund. We are going to clarify what
-we meant by Foreign Contract Purchase Fund as soon as we hear from you
-for better understanding and the way forward.
+> Do you mind if I pick them up and send to you as a pull request in the
+> next few days?
 
-However, in case you are not capable to handle this project with us,
-please kindly connect us to any capable person or company that would
-handle the project with us in order to enable us proceed at once.
+I guess, I think I lost track of what was going on with this as it
+seemed to continually be getting lots of discussions:
 
-We hope to hear you in no distance time through this e-mail address
-at: officework_progress@yahoo.com, for immediate communication and
-more facts on how to go on.
+Acked-by: Mark Brown <broonie@kernel.org>
 
-With respect
+--6v9BRtpmy+umdQlo
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Best Regards
+-----BEGIN PGP SIGNATURE-----
 
-Andrew Ede and Co,,
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl5+H4IACgkQJNaLcl1U
+h9CSOAf/QSUkbVkzKfzHrLVi8t1LfFrrL8b00ZDF6zpPcKZ7xMhrTbzFDBQfh1/N
+OMocm4O6vBAKX9nnnW5nQrm0DwtDgBaCdw2LZ2vMHmjj+djIxeLUblO495rjKoSy
+eTMOEpejXV4hKE/XEiTeFyF/3xAzWaTwGFU5lnbm6gBGGo7FWHTjAikYvMCxfm85
+BFFGdkWccrl+RhvRPqlLqHLh4eLBXkHh6O88XXSkAd1uA74Ajm6KgnngXkowX40d
+NkkBVV9/AsRGicERL8Fl35btPAXe07mQNRC7cPcTlqbXOKr+ACnqdmAvPrj67gSd
+HfNd9wiUiT5pRu1Vm2vM93ZG0P3vzA==
+=JK9F
+-----END PGP SIGNATURE-----
+
+--6v9BRtpmy+umdQlo--
