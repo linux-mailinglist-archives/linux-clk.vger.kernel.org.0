@@ -2,157 +2,89 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B24BA1954D0
-	for <lists+linux-clk@lfdr.de>; Fri, 27 Mar 2020 11:05:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19623195834
+	for <lists+linux-clk@lfdr.de>; Fri, 27 Mar 2020 14:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726284AbgC0KFv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 27 Mar 2020 06:05:51 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:41158 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbgC0KFv (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 27 Mar 2020 06:05:51 -0400
-Received: by mail-il1-f195.google.com with SMTP id t6so4596430ilj.8;
-        Fri, 27 Mar 2020 03:05:50 -0700 (PDT)
+        id S1727242AbgC0Nl1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 27 Mar 2020 09:41:27 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:40428 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726540AbgC0Nl1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 27 Mar 2020 09:41:27 -0400
+Received: by mail-il1-f196.google.com with SMTP id j9so8785219ilr.7
+        for <linux-clk@vger.kernel.org>; Fri, 27 Mar 2020 06:41:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mZsT4s6F+0aWEjdDNvogNg/0Am8gEBeJU1RJCns6caM=;
-        b=gV4jBZADPsxxmOevqsFr3dUk30vQu2mpadyao8IthPFKxa47xf5Bz8Nk1TEoRMr5bQ
-         /W04tt9V2atdQkWrs8DjoRv2W0Rgu/p8Y4ZFuc2MkZtftHT3QyFS/fu/XPbCZ+IJ753E
-         QrHnLyL4zYnNjhab1vVN7k0O8ma3KlAOWSo3OqU+tFXq2ANgsUF9qOsZIjU4b2UgTufy
-         YbZQ/EboSRF25ESnLNjo46Wh6tJonA6UbQT9MnSSqgFbzouoXfH4zizbUYigAB9MvR+c
-         GO+zmNt/VpfpQTq3oqBQUEV5auZeKEXD59eV4v/EAB9GujHF/nKsfKt74SgwAliDMcWV
-         DnEg==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=uIvUjlehSVigkxhw02yxSAS/Jekd0JL8sbxoZE/mhG8=;
+        b=nT2oJ9SVB/FoY5io1Mbg2fBJli9XXC/B954/cmbBwc4HwRv3RZOSiDWNTItleGNZtn
+         sKCJjmCQHAsEBy0Jyy3vmd4mYqBS27VFZYCOeTnTF9yStqRrpVxlnEFW5x+3yAEqvz+n
+         8OjDOpPaRR/K+rpr/mnAd034OzzScPUMeHEDcoYKDABzIoDiOtNsqHcqUpJVA8PTKgCZ
+         Cxg6hkv5Q+lq4WUYYfyJbYjU1lYBCk3yHyXopYDpua6tbadqOqc/ZkGRZdXin8RQr/iD
+         e1pbO65XjiP3l3YbwHaUF/XdTei+otHLpXJvdjjMr/w3JwR1gMSEx/kDP+kLIRNj89fp
+         I+KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mZsT4s6F+0aWEjdDNvogNg/0Am8gEBeJU1RJCns6caM=;
-        b=I1MSPA1pxh3qYovgRI/kyLddhnG3s1QOqsd5LyhHT4Tp4wtwbMK+8AT7b4voeYwWN7
-         hvBWvf669q2C3XRc7A8cjLPU9bFTiddUe27LBEPeCbDxRRqnh1YLnoTMP8nBiq7HwwBD
-         +5MeAu8lUY75r2tFsF7wYTygiZpfEXCCZ8d26z7onmNKv/1oPYQVCT3Pqj9iqWInSpXu
-         GsP0A8KxKXV6Ec9ErAwGee16PnCgjE/KQhx5eB459vWRfk2zP1fZHnx+B+UogNfq8/oI
-         OE8YM/cwINyR2HaJcwMVd36fZSpUPLJ1uGkL1jj18JHjBjFa6R9yB5sE9tPwatQli3n6
-         2hlw==
-X-Gm-Message-State: ANhLgQ3bjGlKIVQ8PIdB375TU9nMAghIzcSlV++AG7MQQ3N9+Y2gZFgb
-        HFCsO/iespBkKMLj2okLwK9bC17ZtRtOlBVSYTyNIw==
-X-Google-Smtp-Source: ADFU+vvAWecQaQ2qW1YgilQmsVI3uI5JqfPepvsYLpxtZV8yAuZIrcbGWhZlHRsV9K6sZHE2tSS+7ODmNEZXozDh5Eo=
-X-Received: by 2002:a92:5dc7:: with SMTP id e68mr13177811ilg.205.1585303549723;
- Fri, 27 Mar 2020 03:05:49 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=uIvUjlehSVigkxhw02yxSAS/Jekd0JL8sbxoZE/mhG8=;
+        b=tqx7osCulonSvwjSF9Ip9oVPdj7QhUAtK6LXNUFu6/yPpYMXWeVuuiNOBDcITwjufC
+         U5ouQnf6AuVclpzFKD0qPCYTOxYP5KdKkNfTrWyVBfrF6mzALIVXg2xA1nMAS0UA43Gv
+         FeVUEeOBenO74NyBlhGOwyV3aSvxBBdLxo1EvO3OUZOie+sN4pNNham5wGsXMx+LHtGf
+         GPwCvNY5WcwhXEwHfB5WP/NUiDAL23FAEvVOEPROiCeQSRm/QsppOREh90n4KFSgkk45
+         qCK5EC3FT/XwMY3c5It5I0GP/KiPTTB8uONfoOOFEq9/qR+oMMfn9HO1aknEQ6/bhAAK
+         KTrA==
+X-Gm-Message-State: ANhLgQ3QvdGxOgOHNLvr1vtr2gJ1m1ZMod7+u9TH0LjEwaL7XmNQ371t
+        5KvRyOQaUu7yLqe2bghnt8Ao6Thi3LBmvsd3cyQ=
+X-Google-Smtp-Source: ADFU+vuYylKn/s4Wcm8ahydLNHBnrgD+D9YvohynQpoBYEn2cTa6afgSUvXtNKfHheyias7P0ENvSGMvudbNA5XnEGs=
+X-Received: by 2002:a92:7b10:: with SMTP id w16mr13509604ilc.93.1585316486541;
+ Fri, 27 Mar 2020 06:41:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200326213251.54457-1-aford173@gmail.com> <CAMuHMdU9tQwQHkX0MdQLkMfz-2ymDzfNTFGnzPoq=JQF+28HOg@mail.gmail.com>
-In-Reply-To: <CAMuHMdU9tQwQHkX0MdQLkMfz-2ymDzfNTFGnzPoq=JQF+28HOg@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Fri, 27 Mar 2020 05:05:38 -0500
-Message-ID: <CAHCN7xJ+bhDezLp+0F=WkM65d59RwmWsiFQ5gVD8KDLugFU-Og@mail.gmail.com>
-Subject: Re: [RFC] clk: vc5: Add bindings for output configurations
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Charles Stevens <charles.stevens@logicpd.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>
+Received: by 2002:a5e:8817:0:0:0:0:0 with HTTP; Fri, 27 Mar 2020 06:41:26
+ -0700 (PDT)
+Reply-To: officework_progress@yahoo.com
+From:   Andrew Ede <consumingfirechurch4@gmail.com>
+Date:   Fri, 27 Mar 2020 15:41:26 +0200
+Message-ID: <CAK6CGFeTAgG3XwVRcnAcWenHei8Ed-kYt2ZyHgV0iwdOSwwO2Q@mail.gmail.com>
+Subject: HOW ARE YOU?
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, Mar 27, 2020 at 4:41 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Adam,
->
-> CC Marek
->
-> On Thu, Mar 26, 2020 at 10:33 PM Adam Ford <aford173@gmail.com> wrote:
-> > The Versaclock can be purchased in a non-programmed configuration.
-> > If that is the case, the driver needs to configure the chip to
-> > output the correct signal type, voltage and slew.
-> >
-> > This RFC is proposing an additional binding to allow non-programmed
-> > chips to be configured beyond their default configuration.
-> >
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> >
-> > diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.txt b/Documentation/devicetree/bindings/clock/idt,versaclock5.txt
-> > index 05a245c9df08..4bc46ed9ba4a 100644
-> > --- a/Documentation/devicetree/bindings/clock/idt,versaclock5.txt
-> > +++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.txt
-> > @@ -30,6 +30,25 @@ Required properties:
-> >                 - 5p49v5933 and
-> >                 - 5p49v5935: (optional) property not present or "clkin".
-> >
-> > +For all output ports, an option child node can be used to specify:
-> > +
-> > +- mode: can be one of
-> > +                 - LVPECL: Low-voltage positive/psuedo emitter-coupled logic
-> > +                 - CMOS
-> > +                 - HCSL
-> > +                 - LVDS: Low voltage differential signal
-> > +
-> > +- voltage-level:  can be one of the following microvolts
-> > +                 - 1800000
-> > +                 - 2500000
-> > +                 - 3300000
-> > +-  slew: Percent of normal, can be one of
-> > +                 - P80
-> > +                 - P85
-> > +                 - P90
-> > +                 - P100
->
-> Why the P prefixes? Can't you just use integer values?
-> After the conversion to json-schema, these values can be validated, too.
->
-> > +
-> > +
-> >  ==Mapping between clock specifier and physical pins==
-> >
-> >  When referencing the provided clock in the DT using phandle and
-> > @@ -62,6 +81,8 @@ clock specifier, the following mapping applies:
-> >
-> >  ==Example==
-> >
-> > +#include <dt-bindings/versaclock.h>
->
-> Does not exist?
+Good day.
 
-Not yet.  Before actually coding anything, I wanted to get feedback on
-how the bindings should look.  In this file would be definitions of
-terms like P80, CMOS, and the other items that are defined for mode
-and slew.
+My reason of contacting you is that I and my colleagues working in our
+country=E2=80=99s National Petroleum Corporation want to buy any existing
+modern crude oil refinery in any part of the world.
 
->
-> > +
-> >  /* 25MHz reference crystal */
-> >  ref25: ref25m {
-> >         compatible = "fixed-clock";
-> > @@ -80,6 +101,13 @@ i2c-master-node {
-> >                 /* Connect XIN input to 25MHz reference */
-> >                 clocks = <&ref25m>;
-> >                 clock-names = "xin";
-> > +
-> > +               ports@1 {
-> > +                       reg = <1>;
-> > +                       mode = <CMOS>;
-> > +                       pwr_sel = <1800000>;
-> > +                       slew = <P80>;
-> > +               };
-> >         };
-> >  };
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+We are ready to buy any available land to build the Refinery or buy
+the existing one anywhere outside Africa. We will make you our foreign
+partner abroad with some percentage shareholding if you will be
+interested to work with us on this project.
+
+We have the sum of ($600 Million Dollars) Six Hundred Million Dollars
+for this project.
+
+Meanwhile, this amount of ($600 Million Dollars) will be accessible
+through Foreign Contract Purchase Fund. We are going to clarify what
+we meant by Foreign Contract Purchase Fund as soon as we hear from you
+for better understanding and the way forward.
+
+However, in case you are not capable to handle this project with us,
+please kindly connect us to any capable person or company that would
+handle the project with us in order to enable us proceed at once.
+
+We hope to hear you in no distance time through this e-mail address
+at: officework_progress@yahoo.com, for immediate communication and
+more facts on how to go on.
+
+With respect
+
+Best Regards
+
+Andrew Ede and Co,,
