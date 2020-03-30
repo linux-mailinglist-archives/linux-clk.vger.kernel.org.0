@@ -2,163 +2,116 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F011972C7
-	for <lists+linux-clk@lfdr.de>; Mon, 30 Mar 2020 05:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 882981975A6
+	for <lists+linux-clk@lfdr.de>; Mon, 30 Mar 2020 09:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728490AbgC3D3Q (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 29 Mar 2020 23:29:16 -0400
-Received: from mga18.intel.com ([134.134.136.126]:12334 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728107AbgC3D3Q (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 29 Mar 2020 23:29:16 -0400
-IronPort-SDR: 6tT6uq7p3NIff24VgkP16WaqdGIsI0UdTAuh/gMdZfDijT/7U5DMWVsnPVwERmKC5q20Zii+PT
- MxZb7BWwFdvA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2020 20:29:15 -0700
-IronPort-SDR: y/3bTEDA7n9CRAqYwSzGe6+s7KhfcxDilgaVk+4lIyiGhQ3zIMFTuugiuDePCAxAELkUeka0Su
- nhg+bWFtBa7Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,322,1580803200"; 
-   d="scan'208";a="449657435"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga006.fm.intel.com with ESMTP; 29 Mar 2020 20:29:14 -0700
-Received: from [10.226.38.46] (unknown [10.226.38.46])
-        by linux.intel.com (Postfix) with ESMTP id 07CFF5802A3;
-        Sun, 29 Mar 2020 20:29:11 -0700 (PDT)
-Subject: Re: [PATCH v7 0/2] clk: intel: Add a new driver for a new clock
- controller IP
-To:     sboyd@kernel.org, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org
-Cc:     robh@kernel.org, mark.rutland@arm.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        andriy.shevchenko@intel.com, qi-ming.wu@intel.com,
-        yixin.zhu@linux.intel.com, cheol.yong.kim@intel.com
-References: <cover.1585022347.git.rahul.tanwar@linux.intel.com>
-From:   "Tanwar, Rahul" <rahul.tanwar@linux.intel.com>
-Message-ID: <62be98d9-82a1-1062-22e1-4d1d1c008b27@linux.intel.com>
-Date:   Mon, 30 Mar 2020 11:29:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1729344AbgC3HaB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 30 Mar 2020 03:30:01 -0400
+Received: from condef-02.nifty.com ([202.248.20.67]:41104 "EHLO
+        condef-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729197AbgC3HaA (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 30 Mar 2020 03:30:00 -0400
+X-Greylist: delayed 833 seconds by postgrey-1.27 at vger.kernel.org; Mon, 30 Mar 2020 03:29:58 EDT
+Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-02.nifty.com with ESMTP id 02U7AC7C000608;
+        Mon, 30 Mar 2020 16:10:12 +0900
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 02U79xvR024938;
+        Mon, 30 Mar 2020 16:10:00 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 02U79xvR024938
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1585552200;
+        bh=ln1CQt+YaUVnJf/8SbMK3iPTVvG1KE5EE/FUul8MWQc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=1sthGaoHw8qoSp3F/D3eH8NqZjk++zLNoSrFExAge5M5k4o6izC7znUZmDsjrR95d
+         3LRi45OyZDxUKTfu4A/3P4aV5+yY39DtCxwP5T2nox/GAPp7PJ3ZaF7u226D4E6kMs
+         pxp3tchjSZY1dsGYXfpp7Fyf63ssOrWN+V8tr3iI8kkkZhdSc6hQrcCJehpowCH1tV
+         t5Ybjs0wWAwMh0SzhZruoB9o66WBYJD1t+qP7ZqRNrr7efxFSXjCoLMubpsREjCj3w
+         uh2OG10xugvGzdVuKY1o+FeM5bjbz3bVeCv27FcaCEJ6WsaSLhERu5H58t5BiMZ2Xi
+         G3vbpTZyiHDew==
+X-Nifty-SrcIP: [209.85.217.45]
+Received: by mail-vs1-f45.google.com with SMTP id z125so10303326vsb.13;
+        Mon, 30 Mar 2020 00:09:59 -0700 (PDT)
+X-Gm-Message-State: AGi0PuaxIQ01k2OIzzRmX0pmP4+GKnL2dKkEkaAhViRjVhNEthRWBKXc
+        iLGdsfopkiPxzS20T9vORC2VKBgWqZ276l6JheA=
+X-Google-Smtp-Source: APiQypLmGnB9GmkGFIr7L8MQtdRTKDMNPR3ere0jKX6O5/r2adqpWFQ5TPcwWpLgYxRGXDf4dZ6YCv27RE8dCFz54+s=
+X-Received: by 2002:a67:2d55:: with SMTP id t82mr7452280vst.215.1585552198446;
+ Mon, 30 Mar 2020 00:09:58 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <cover.1585022347.git.rahul.tanwar@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20200325220542.19189-1-robh@kernel.org> <20200325220542.19189-5-robh@kernel.org>
+In-Reply-To: <20200325220542.19189-5-robh@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 30 Mar 2020 16:09:22 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARJn4uugHxcjK+WOWBs0gPVZQsCu4y6M8hkNK1U5FehRA@mail.gmail.com>
+Message-ID: <CAK7LNARJn4uugHxcjK+WOWBs0gPVZQsCu4y6M8hkNK1U5FehRA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] dt-bindings: Add missing 'additionalProperties: false'
+To:     Rob Herring <robh@kernel.org>
+Cc:     DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Brian Masney <masneyb@onstation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Zhang Rui <rui.zhang@intel.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-iio@vger.kernel.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On Thu, Mar 26, 2020 at 7:06 AM Rob Herring <robh@kernel.org> wrote:
+>
+> Setting 'additionalProperties: false' is frequently omitted, but is
+> important in order to check that there aren't extra undocumented
+> properties in a binding.
+>
+> Ideally, we'd just add this automatically and make this the default, but
+> there's some cases where it doesn't work. For example, if a common
+> schema is referenced, then properties in the common schema aren't part
+> of what's considered for 'additionalProperties'. Also, sometimes there
+> are bus specific properties such as 'spi-max-frequency' that go into
+> bus child nodes, but aren't defined in the child node's schema.
+>
+> So let's stick with the json-schema defined default and add
+> 'additionalProperties: false' where needed. This will be a continual
+> review comment and game of wack-a-mole.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-Hi Stephen Boyd,
 
-After few rounds of review comments/updates from you & other reviewers,
-this patch series seems to be lost :-\. No further review concerns or
-acks from past 2 months.
+>  .../devicetree/bindings/gpio/socionext,uniphier-gpio.yaml      | 2 ++
 
-I am wondering if this is due to any outstanding concerns/expectations
-or it is just bad luck. Since you are the clk maintainer, may i ask you
-to clarify what is it that i am missing. Thanks.
 
-Regards,
-Rahul
+You may have already queue this up, but just in case.
 
-On 24/3/2020 12:05 pm, Rahul Tanwar wrote:
-> Hi,
->
-> This series adds clock driver for Clock Generation Unit(CGU) of
-> Lightning Mountain(LGM) SoC.
->
-> Patch 1 adds bindings document & include file for CGU.
-> Patch 2 adds common clock framework based clock driver for CGU.
->
-> These patches are baselined upon Linux 5.6-rc1 at below Git link:
-> git git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
->
-> v7:
-> - Fix a mistake in comments explaining structure fields.
->
-> v6:
-> - Resolve Kconfig dependencies issues (Randy Dunlap)
->
-> v5:
-> - Address review concerns - mainly below mentioned. (Stephen Boyd)
-> - Improve commit message, add COMPILE_TEST in KConfig dependency.
-> - Remove unused header include files, drop unnecessary casts.
-> - Switch to using readl_poll_timeout() instead of implementing timeout routine.
-> - Avoid using small functions which are called just once. Inline them or
->   remove them.
-> - const static --> static const
-> - Fix coding style/convention related review concerns.
-> - Use __iomem for all IO addresses variables.
-> - Consolidate clk_enable & clk_disable ops into a common clk_enable_disable
->   routine to avoid redundant code.
-> - Remove unnecessary dev pointers for clk data structures.
-> - Redesign code to use new way of specifying clk_parents i.e. use
->   clk_parent_data.fw_name instead of older parent_name strings.
-> - Switch from raw_spin_locks() to normal spin_locks() and realign locking.
-> - Drop __initconst, __init, __refdata.
-> - Reorder patch series - make dt-binding patch as first patch.
-> - Add pointer to include file in dt-bindings document.
-> - Remove CLK_IS_CRITICAL flag for clks for which IGNORE_UNUSED flag is enough.
->   Add comments for clks which are marked as CRITICAL.
-> - Fix $id path in dt-bindings - drop bindings. (Rob Herring).
-> - Add Reviewed-by tag from Rob Herring. Thanks Rob.
->
-> v4:
-> - Add drivers/clk/x86/Kconfig file which got missed in v3 by mistake.
->
-> v3:
-> - Address review concerns:
->   Add Kconfig entry in x86 folder instead of modifying clk/Kconfig. (Andy Shevchenko)
->   Fix coding style/convention related concerns. (Andy Shevchenko)
->   Improve description, licensing info, rename node name correctly in dt bindings
->   document & remove CLK_NR_CLKS from dt-bindings header file. (Stephen Boyd)
->   Fix a build warning reported by kbuild test robot & Nathan Chancellor
-> - Add few new clocks & rename few existing clocks.
-> - Add more ops for ddiv & divider clk_ops.
-> - Fix few minor bugs.
-> - Use CLK_IS_CRITICAL flag for clocks which shall never be disabled.
->
-> v2:
-> - Move the driver to x86 folder.
-> - Remove syscon usage.
-> - Remove regmap based access. Use direct readl()/write() instead. Add spinlocks.
-> - Change all enum values to capitals.
-> - Rename all data structures & functions from intel_* to lgm_*.
-> - Remove multiple header files. Keep only one header file.
-> - Make probe fail when any of the clk/pll registration fails.
-> - Fix few bugs with clk_init_data assignement.
-> - Address review concerns for code quality/style/convention.
->
-> v1:
-> - Initial version.
->
->
-> Rahul Tanwar (1):
->   dt-bindings: clk: intel: Add bindings document & header file for CGU
->
-> rtanwar (1):
->   clk: intel: Add CGU clock driver for a new SoC
->
->  .../devicetree/bindings/clock/intel,cgu-lgm.yaml   |  44 ++
->  drivers/clk/Kconfig                                |   1 +
->  drivers/clk/x86/Kconfig                            |   8 +
->  drivers/clk/x86/Makefile                           |   1 +
->  drivers/clk/x86/clk-cgu-pll.c                      | 156 +++++
->  drivers/clk/x86/clk-cgu.c                          | 636 +++++++++++++++++++++
->  drivers/clk/x86/clk-cgu.h                          | 335 +++++++++++
->  drivers/clk/x86/clk-lgm.c                          | 492 ++++++++++++++++
->  include/dt-bindings/clock/intel,lgm-clk.h          | 165 ++++++
->  9 files changed, 1838 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/intel,cgu-lgm.yaml
->  create mode 100644 drivers/clk/x86/Kconfig
->  create mode 100644 drivers/clk/x86/clk-cgu-pll.c
->  create mode 100644 drivers/clk/x86/clk-cgu.c
->  create mode 100644 drivers/clk/x86/clk-cgu.h
->  create mode 100644 drivers/clk/x86/clk-lgm.c
->  create mode 100644 include/dt-bindings/clock/intel,lgm-clk.h
->
+Acked-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 
+-- 
+Best Regards
+Masahiro Yamada
