@@ -2,64 +2,58 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A11198801
-	for <lists+linux-clk@lfdr.de>; Tue, 31 Mar 2020 01:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA303198876
+	for <lists+linux-clk@lfdr.de>; Tue, 31 Mar 2020 01:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729866AbgC3XUX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 30 Mar 2020 19:20:23 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:46212 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729863AbgC3XUN (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 30 Mar 2020 19:20:13 -0400
-Received: by mail-lf1-f66.google.com with SMTP id q5so15687397lfb.13;
-        Mon, 30 Mar 2020 16:20:12 -0700 (PDT)
+        id S1729021AbgC3Xpu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 30 Mar 2020 19:45:50 -0400
+Received: from mail-wr1-f46.google.com ([209.85.221.46]:44736 "EHLO
+        mail-wr1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728537AbgC3Xpt (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 30 Mar 2020 19:45:49 -0400
+Received: by mail-wr1-f46.google.com with SMTP id m17so23722912wrw.11;
+        Mon, 30 Mar 2020 16:45:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8UfEWDNpbPolJKdkCOPoWcOQm3ENr0nRZoY0pU9he7s=;
-        b=VTCqpi5okGLjmoXrf1j3aExTZ9AFELj7Vftzd0Al0NCS1VdY/r15/0dIj3jK/u7YQh
-         8hLwYBtbaFIqJNHpr+hrs/LhRZbM6Sa/EqwYp5PGlixtSSu2t/U7qQx+ZC+vYUN7ss1A
-         Zg7QLLKdwsigG1LT38wupUn9cBrdj808HGjcRNacPn3JZ33YcGWG3e6syKVuMfzWbG61
-         RmmMbe0sFKxp3CIX2rH+SWoN67hQpmHvMCeL6CLV9Z8w2YYPDa9ZdxWrETGvnm2W7i2q
-         qFJyBG64ErwvZEkCbadrPvxULjJ0tockdQNHRNXc3sG7q4c3Fhn86qqSS2B3bI1PIA3B
-         Oktg==
+        d=googlemail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GDnGHW3qNkgvLRDgu5vu6hawny2amkhzRWQ0FmPc35g=;
+        b=ABb6LM8ToMRg6Yrah5JleJW/rhbs3rC5+MnLM5ss4L9Xfh1nULPqhBYzglKJ13bYnM
+         GeMRq2+Nae3IN7gnVkDxuLoCOSqaXmP3MXm2UxG5mWjL36W+Ya2eqTCk4NFSwP0k2SYN
+         WxuwWXZV1tzZ0bydrILV8rQTb4H1n7CLzuxE1H0slY4VXo+0N8gIVUNCsGhMgxSQ9euT
+         k6aFpVUbFO3hYCImRqCGFZOWn8Ua52XZPtsPRe2hRh1FcsqWqJf1lcdnDgyDnU5XjZVz
+         7f9PE5gLJi+8GIpORxYMWz6v3qCnGsJZLirxmsBijnz7AqnYcccjMG3WmJDP/+FkHeYi
+         ocOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8UfEWDNpbPolJKdkCOPoWcOQm3ENr0nRZoY0pU9he7s=;
-        b=qSx0HhH/n8TJ4f1vIIWgBIzq9MmwYTVYM8fBsV8Yh2iig80Eh3/GWoS57gqG8f1piv
-         XGA59KAfQgYvb7IoJ9O3jhda+7ZqLPvxa8Q81KEJiKlsIawEoZ5ciTrntl1OkazpRWXu
-         qBBcT6gvAhP8eVRIcUoQ2qU1lf734le42NbmD6QUWy4OGii6sdRJO7KhWbX/vH1mN4c0
-         u3WWTdLUBNTgnXCSnGlY+8sH5oYVyUC6FeA91m/8jldSAGRm+m/yxhR6ML+CBG5wEptu
-         wIlsb8xTW+MZLYr5uxiQwPyZSMlmH8Tb26s0OlgWeKjPr3Fq70IUuDyIeCBmjWDKsDY2
-         fO9g==
-X-Gm-Message-State: AGi0PuaK7Cko9o0MsIg7axqfUQ1NrlavQdVPZuU4wQ6O3An0JjOKoi7X
-        OO1STnVDm4iLTIrXZDn2kik=
-X-Google-Smtp-Source: APiQypJMkkzsX2IZGzZHLEQXNLovTYLWU0IXUh0iCXC+VoKvQT5zhnCisz4dWTHvzkjOnuD74gcCFw==
-X-Received: by 2002:a19:f51a:: with SMTP id j26mr9556871lfb.54.1585610411689;
-        Mon, 30 Mar 2020 16:20:11 -0700 (PDT)
-Received: from localhost.localdomain (ppp91-78-208-152.pppoe.mtu-net.ru. [91.78.208.152])
-        by smtp.gmail.com with ESMTPSA id h3sm8773187lfk.30.2020.03.30.16.20.10
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GDnGHW3qNkgvLRDgu5vu6hawny2amkhzRWQ0FmPc35g=;
+        b=WUl4lWyd5zoGRFptE/XMXHJlSAii31xUHyrO/lop7KzhF0/bjX/MNEWZgZKsHprbeO
+         i5C0o5yQAlGYMPb3rqgcYAZXJ2ZAJLT1c4YDTVk/h5HaNNtxvJsy8iX53LAqTlDWUIex
+         DZWo/GAzAjvvAwE7rJysSAMY/0pLnycEvQbPx6dL8AeWUKvfd5FCaYcgh0pODeV9qXww
+         yeWN5rOo/G40c6tUfms/PmH7uUDiJoENrWiVafA6mQSitMjpz3UCBgD0a5lfcIMjIsvr
+         ZC0z++62nv2iwAFJHHLaZjYEaxtP2Y622pGSzj7Ofuznqspcy5/i5AAWe4OiFnt4ywAK
+         xGKw==
+X-Gm-Message-State: ANhLgQ1xRIaU//3pyhnr2OVmFMiAwcJdjE6sdFMKotylfDv0995QMaXb
+        EjYdatlVPeO+wWTBm1Mza6s=
+X-Google-Smtp-Source: ADFU+vsRAJpOrFH+eER9+kJfJgrHjQ2G/YBnZW8feggG/5Lyp88bIurZ3HekKzw9sQpYyAPLoBJuvA==
+X-Received: by 2002:a5d:60ca:: with SMTP id x10mr11321086wrt.372.1585611947798;
+        Mon, 30 Mar 2020 16:45:47 -0700 (PDT)
+Received: from localhost.localdomain (p200300F13710ED00428D5CFFFEB99DB8.dip0.t-ipconnect.de. [2003:f1:3710:ed00:428d:5cff:feb9:9db8])
+        by smtp.googlemail.com with ESMTPSA id v186sm1392953wme.24.2020.03.30.16.45.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2020 16:20:11 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 5/5] PM / devfreq: tegra30: Make CPUFreq notifier to take into account boosting
-Date:   Tue, 31 Mar 2020 02:16:17 +0300
-Message-Id: <20200330231617.17079-6-digetx@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200330231617.17079-1-digetx@gmail.com>
-References: <20200330231617.17079-1-digetx@gmail.com>
+        Mon, 30 Mar 2020 16:45:47 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux-amlogic@lists.infradead.org, jbrunet@baylibre.com,
+        narmstrong@baylibre.com
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH 0/2] clk: meson8b: allow the HDMI driver to manage "hdmi_sys"
+Date:   Tue, 31 Mar 2020 01:45:33 +0200
+Message-Id: <20200330234535.3327513-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
@@ -67,27 +61,25 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-MCCPU frequency boosting needs to be taken into account in order to avoid
-scheduling of unnecessary devfreq updates.
+The "hdmi_sys" clock is driving the HDMI TX controller. The
+controller's IP seems to use this clock for example to derived the DDC
+clock.
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/devfreq/tegra30-devfreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Testing has shown that we can disable this clock without locking up the
+system (as long as we don't read the HDMI TX registers while this clock
+is disabled - this can't happen as we don't have a driver yet and once
+we have one that driver will enable this clock).
 
-diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index 34f6291e880c..3b57aac9894c 100644
---- a/drivers/devfreq/tegra30-devfreq.c
-+++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -420,7 +420,7 @@ tegra_actmon_cpufreq_contribution(struct tegra_devfreq *tegra,
- 
- 	static_cpu_emc_freq = actmon_cpu_to_emc_rate(tegra, cpu_freq);
- 
--	if (dev_freq >= static_cpu_emc_freq)
-+	if (dev_freq + actmon_dev->boost_freq >= static_cpu_emc_freq)
- 		return 0;
- 
- 	return static_cpu_emc_freq;
+
+Martin Blumenstingl (2):
+  clk: meson8b: export the HDMI system clock
+  clk: meson: meson8b: make the hdmi_sys clock tree mutable
+
+ drivers/clk/meson/meson8b.c              | 6 +++---
+ drivers/clk/meson/meson8b.h              | 1 -
+ include/dt-bindings/clock/meson8b-clkc.h | 1 +
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
 -- 
-2.25.1
+2.26.0
 
