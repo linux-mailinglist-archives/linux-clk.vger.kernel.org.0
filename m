@@ -2,48 +2,48 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B5E19756A
-	for <lists+linux-clk@lfdr.de>; Mon, 30 Mar 2020 09:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B751975B7
+	for <lists+linux-clk@lfdr.de>; Mon, 30 Mar 2020 09:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729486AbgC3HQJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 30 Mar 2020 03:16:09 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:35305 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729460AbgC3HQJ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 30 Mar 2020 03:16:09 -0400
-Received: by mail-pg1-f195.google.com with SMTP id k5so6041755pga.2;
-        Mon, 30 Mar 2020 00:16:09 -0700 (PDT)
+        id S1729400AbgC3HbR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 30 Mar 2020 03:31:17 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:41107 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729344AbgC3HbR (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 30 Mar 2020 03:31:17 -0400
+Received: by mail-pf1-f193.google.com with SMTP id a24so1337561pfc.8;
+        Mon, 30 Mar 2020 00:31:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=gcJfZUp4ynRYK76cXvZbCVqckHbyLVdV4ZyTuUAfMgw=;
-        b=TZL3JFXiPGpYtlMni4teQYa0b9hmam1TZOnRqX2AhjSOrveUjcyMMyhYP7SEHeY31n
-         K0gx/euv6jphTSmPqfGnjRSFjIdvXxPhUQ6SOKVDoZXi6MDtbXXCWOhPa0NCOZieJ2dm
-         XO2Vfc/Zk35vB2pDlwhJNEOo0NSdjg+WoJgKO/jWaYXh/9oAhWCpgjLmXyRo+MeUbuBb
-         vLRSaTHn5n422pD2nrWa7SQAFA7Y06Ev64G/0hAFuDAbRUQJ8Q+TJZxkLYMnXSnW8w+U
-         D0tbVCYUjp73sp8a1mXwE1LN9bMJtHwHjEUhb4iaZuV6xQXJtpSiQWSuBJqXrfF4a+Xm
-         JqoQ==
+        bh=SEwlVyEv36eeIRNWATF1aFQ5BBswo3YJxEpbUEmPHfo=;
+        b=ulhlK3QDhORQq7j8zyNINp8aFMjGg4QklBE2Ocb/P/cRQVp98/JNMkMYa8ZPASSR5a
+         p2OKwOT8slo+Zm5wpjFiDY+RJJTjsbIiHMUPY7WxxI0mQwzeIYrw8G+Qcg3S2qQAKuvs
+         yi5X2sFwEJnuwxP09ETYhRcKkTZj0Ykk1wgjaQ/hRAymHRlljvO89nf5KMlC9s0kxh0s
+         pQF9gT2oJOs6JmMofg3z+9MAshfvsM2O7VGn9QZfVUvY3iW8aT5/mc1zkuVcZrQnY1px
+         x4TuNTEvtDzR1s1MiEOR6ojUcpOjNtpppW+BPLIUNf38+yiqCm0b6aAD+6VQ570LBR7c
+         iPww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=gcJfZUp4ynRYK76cXvZbCVqckHbyLVdV4ZyTuUAfMgw=;
-        b=FAblaruxmZ9+ddsgqcJaud2ZtUyxFrakA1NEQ385eAxFQwB//P7VoMkEnSJHVp3PUe
-         P/Z1la+WbmECkTTDQrcn+EgnwAMFTk/Egok+cRhbv+Z2Py1371+wvhIcFIzbUXuDqHNo
-         arE3gl2altfPdnQvItgyDxVMJfnf2e5LpJH5JD8da2Upy5nb/wxNyJjkhjm9OqhFoHcy
-         AP3cPmAk3giwmdVIxYY9/vZfJ/hJ4ubex4kERbYLHEzkin/F2awZ3WpJNYrTZTD5a8da
-         huJ0oaOJ0AlDySD4RE/3nxPvjrPlJPcZbbZo8+x0BDvG1yYTIlwaF9ikGBbWw82pSci1
-         RQxQ==
-X-Gm-Message-State: AGi0Pua8wWo719eKGjiPVl85RoS4ibg4GiFRew9cuxl3wKXs/28ozcC1
-        YK7mpABR+AD4UcP8c7ixAQedr4Ql
-X-Google-Smtp-Source: APiQypL4b9Yt1C3OKYXQ85WYhYCwCkwrZ7hOQkmE+Ysqu7PDnWNX4HLoSA5p8CkcG0mTLVvmSKEYGg==
-X-Received: by 2002:a62:870c:: with SMTP id i12mr4742503pfe.41.1585552568504;
-        Mon, 30 Mar 2020 00:16:08 -0700 (PDT)
+        bh=SEwlVyEv36eeIRNWATF1aFQ5BBswo3YJxEpbUEmPHfo=;
+        b=syBFb/rpb3m6cfxedrd2fsjbCpKWfSAzwbRiJ+RHB5s4MLlDw+1Y3mE5ejv0c6BaiI
+         /mceGhoyxpKTjIj3b47Txrt5tiWyT4TQKET7s7rIgOiond/p81i+N6vENt9zlC0wVlvz
+         DPlEMsvKzFv+mMd0T+lK2zzCOIIcI6KV2JLSd5DveX6xO0bxn2CfcmtxEUFgvQH6MOeG
+         /aWZA2rruYjnTvT9IJjZ2iPXUKp4BzExgWFWkLzMorBLJ691s6fH1XYw8MoxHzl55pjw
+         PDmm9Ix8tBULGN3wxaxq+FG0Tlf4T/66VKd+lrdmCZVYdhyHvDgC06MAPWRxWS0gAIKG
+         qCPA==
+X-Gm-Message-State: ANhLgQ1g3rh6XuJFK6HtSL3rceeQNRDsq0umZGFjqjg9/CTfS++6Oeaq
+        yqPODmDEmvf0ADyNnBVad8g=
+X-Google-Smtp-Source: ADFU+vvZhDfj+ZP7g9wtM/Cs/lguG9sQbIRc/a/b3v4CzDuWHLhq26abeNCo5nQjVkZd/YaXdbA/5w==
+X-Received: by 2002:a65:6855:: with SMTP id q21mr10003864pgt.188.1585553475645;
+        Mon, 30 Mar 2020 00:31:15 -0700 (PDT)
 Received: from ubt.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id l1sm9490484pje.9.2020.03.30.00.16.04
+        by smtp.gmail.com with ESMTPSA id r186sm9648935pfc.181.2020.03.30.00.31.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2020 00:16:07 -0700 (PDT)
+        Mon, 30 Mar 2020 00:31:15 -0700 (PDT)
 From:   Chunyan Zhang <zhang.lyra@gmail.com>
 To:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -54,12 +54,12 @@ Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         Baolin Wang <baolin.wang7@gmail.com>,
         Chunyan Zhang <zhang.lyra@gmail.com>,
         Chunyan Zhang <chunyan.zhang@unisoc.com>
-Subject: [PATCH 4/4] clk: sprd: add mipi_csi_xx gate clocks
-Date:   Mon, 30 Mar 2020 15:14:51 +0800
-Message-Id: <20200330071451.7899-5-zhang.lyra@gmail.com>
+Subject: [PATCH 1/4] clk: sprd: check its parent status before reading gate clock
+Date:   Mon, 30 Mar 2020 15:31:07 +0800
+Message-Id: <20200330073107.14180-1-zhang.lyra@gmail.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200330071451.7899-1-zhang.lyra@gmail.com>
-References: <20200330071451.7899-1-zhang.lyra@gmail.com>
+In-Reply-To: <20200330071451.7899-2-zhang.lyra@gmail.com>
+References: <20200330071451.7899-2-zhang.lyra@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
@@ -69,63 +69,56 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 
-mipi_csi_xx clocks are used by camera sensors.
+Some clocks only can be accessed if their parent is enabled. mipi_csi_xx
+clocks on SC9863A are examples. We have to ensure the parent clock is
+enabled when reading those clocks.
 
 Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
 ---
- drivers/clk/sprd/sc9863a-clk.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ drivers/clk/sprd/gate.c | 7 +++++++
+ drivers/clk/sprd/gate.h | 9 +++++++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/drivers/clk/sprd/sc9863a-clk.c b/drivers/clk/sprd/sc9863a-clk.c
-index a0631f7756cf..24f064262814 100644
---- a/drivers/clk/sprd/sc9863a-clk.c
-+++ b/drivers/clk/sprd/sc9863a-clk.c
-@@ -1615,6 +1615,36 @@ static const struct sprd_clk_desc sc9863a_mm_gate_desc = {
- 	.hw_clks	= &sc9863a_mm_gate_hws,
+diff --git a/drivers/clk/sprd/gate.c b/drivers/clk/sprd/gate.c
+index 574cfc116bbc..56e1714b541e 100644
+--- a/drivers/clk/sprd/gate.c
++++ b/drivers/clk/sprd/gate.c
+@@ -94,8 +94,15 @@ static int sprd_gate_is_enabled(struct clk_hw *hw)
+ {
+ 	struct sprd_gate *sg = hw_to_sprd_gate(hw);
+ 	struct sprd_clk_common *common = &sg->common;
++	struct clk_hw *parent;
+ 	unsigned int reg;
+ 
++	if (sg->flags & SPRD_GATE_NON_AON) {
++		parent = clk_hw_get_parent(hw);
++		if (!parent || !clk_hw_is_enabled(parent))
++			return 0;
++	}
++
+ 	regmap_read(common->regmap, common->reg, &reg);
+ 
+ 	if (sg->flags & CLK_GATE_SET_TO_DISABLE)
+diff --git a/drivers/clk/sprd/gate.h b/drivers/clk/sprd/gate.h
+index b55817869367..aa4d72381788 100644
+--- a/drivers/clk/sprd/gate.h
++++ b/drivers/clk/sprd/gate.h
+@@ -19,6 +19,15 @@ struct sprd_gate {
+ 	struct sprd_clk_common	common;
  };
  
-+/* mm clocks */
-+static SPRD_GATE_CLK_HW(mipi_csi_clk, "mipi-csi-clk", &mahb_ckg_eb.common.hw,
-+			0x20, BIT(16), 0, SPRD_GATE_NON_AON);
-+static SPRD_GATE_CLK_HW(mipi_csi_s_clk, "mipi-csi-s-clk", &mahb_ckg_eb.common.hw,
-+			0x24, BIT(16), 0, SPRD_GATE_NON_AON);
-+static SPRD_GATE_CLK_HW(mipi_csi_m_clk, "mipi-csi-m-clk", &mahb_ckg_eb.common.hw,
-+			0x28, BIT(16), 0, SPRD_GATE_NON_AON);
++/*
++ * sprd_gate->flags is used for:
++ * CLK_GATE_SET_TO_DISABLE	BIT(0)
++ * CLK_GATE_HIWORD_MASK		BIT(1)
++ * CLK_GATE_BIG_ENDIAN		BIT(2)
++ * so we define new flags from	BIT(3)
++ */
++#define SPRD_GATE_NON_AON BIT(3) /* not alway on, need to check before read */
 +
-+static struct sprd_clk_common *sc9863a_mm_clk_clks[] = {
-+	/* address base is 0x60900000 */
-+	&mipi_csi_clk.common,
-+	&mipi_csi_s_clk.common,
-+	&mipi_csi_m_clk.common,
-+};
-+
-+static struct clk_hw_onecell_data sc9863a_mm_clk_hws = {
-+	.hws	= {
-+		[CLK_MIPI_CSI]		= &mipi_csi_clk.common.hw,
-+		[CLK_MIPI_CSI_S]	= &mipi_csi_s_clk.common.hw,
-+		[CLK_MIPI_CSI_M]	= &mipi_csi_m_clk.common.hw,
-+	},
-+	.num	= CLK_MM_CLK_NUM,
-+};
-+
-+static const struct sprd_clk_desc sc9863a_mm_clk_desc = {
-+	.clk_clks	= sc9863a_mm_clk_clks,
-+	.num_clk_clks	= ARRAY_SIZE(sc9863a_mm_clk_clks),
-+	.hw_clks	= &sc9863a_mm_clk_hws,
-+};
-+
- static SPRD_SC_GATE_CLK_FW_NAME(sim0_eb,	"sim0-eb",	"ext-26m", 0x0,
- 				0x1000, BIT(0), 0, 0);
- static SPRD_SC_GATE_CLK_FW_NAME(iis0_eb,	"iis0-eb",	"ext-26m", 0x0,
-@@ -1737,6 +1767,8 @@ static const struct of_device_id sprd_sc9863a_clk_ids[] = {
- 	  .data = &sc9863a_aonapb_gate_desc },
- 	{ .compatible = "sprd,sc9863a-mm-gate",	/* 0x60800000 */
- 	  .data = &sc9863a_mm_gate_desc },
-+	{ .compatible = "sprd,sc9863a-mm-clk",	/* 0x60900000 */
-+	  .data = &sc9863a_mm_clk_desc },
- 	{ .compatible = "sprd,sc9863a-apapb-gate",	/* 0x71300000 */
- 	  .data = &sc9863a_apapb_gate_desc },
- 	{ }
+ #define SPRD_SC_GATE_CLK_HW_INIT_FN(_struct, _name, _parent, _reg,	\
+ 				    _sc_offset, _enable_mask, _flags,	\
+ 				    _gate_flags, _udelay, _ops, _fn)	\
 -- 
 2.20.1
 
