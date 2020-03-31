@@ -2,111 +2,166 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F38819A265
-	for <lists+linux-clk@lfdr.de>; Wed,  1 Apr 2020 01:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB48A19A243
+	for <lists+linux-clk@lfdr.de>; Wed,  1 Apr 2020 01:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731331AbgCaXVe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 31 Mar 2020 19:21:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47082 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731259AbgCaXVd (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 31 Mar 2020 19:21:33 -0400
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A9A4920787;
-        Tue, 31 Mar 2020 23:21:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585696893;
-        bh=WsfCUnixUcuW/Hxxf0cDgSU2hILcghynbB0/ocxWSWA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BSUjiGPdigzSvDZ4tnofPNAagDsoCyjzK8WO8VypFo7BVQKLeb4MLtGK3iPKrLUPR
-         GgnXsa6mIIMc6O+ZbIVKGdmokbqi1x1a5NNOkk0Hx1vjJB8QtCAhiM0wztg8SGQFMT
-         h+fhYRJLiqdNUP+02qSloeg/C6wipkNF1IgHeDNQ=
-Received: by mail-ed1-f54.google.com with SMTP id z65so27482135ede.0;
-        Tue, 31 Mar 2020 16:21:32 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ3n0s94W80UiJTqnNSWB5cePlnLiVDznKWj03LHWVyDLb3bjio9
-        sDHpE3zQFlSzsNdiQjU1Wi2lOd6KQVbc/W5d2w==
-X-Google-Smtp-Source: ADFU+vv3TGW/kwb5HMH/cRaDee3j5i5z0vjv/4XsV67d1Idq9Hu6wbNbfu8nd0HzCER7YmS8mN6zlRD2dLxeiQPcfX4=
-X-Received: by 2002:a17:906:124f:: with SMTP id u15mr17040650eja.360.1585696891114;
- Tue, 31 Mar 2020 16:21:31 -0700 (PDT)
+        id S1731424AbgCaXNb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 31 Mar 2020 19:13:31 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:38566 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731343AbgCaXNb (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 31 Mar 2020 19:13:31 -0400
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200331231329epoutp01c81f32e471d308d4d71b401471e5bceb~BhnudI5551243712437epoutp01h
+        for <linux-clk@vger.kernel.org>; Tue, 31 Mar 2020 23:13:29 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200331231329epoutp01c81f32e471d308d4d71b401471e5bceb~BhnudI5551243712437epoutp01h
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1585696409;
+        bh=NT/waN1WxKqs2OMuNZobwvVMLut5DpCIlxECcN/KHs0=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=Wh1USzc6K5Cq5VY3/SaExiSMwnBKyIG8DR2kf7ozo6wA3l9DtQ/fRy/EpnirIqxZS
+         KuYJDeaaCMDaoMNv/YglOxEFa5FZat69bW/Z7WOBg1c7dtFsMFZR/Pl0IwmUCgNe58
+         7AiZ08UmV4aqT/w+xzFFtoPR2Br9zKlmwMgiypTg=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20200331231328epcas1p1983b8a4359a003aaff08e227300747da~BhnttF8Bx0986009860epcas1p1R;
+        Tue, 31 Mar 2020 23:13:28 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.157]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 48sQ9f1dbpzMqYm2; Tue, 31 Mar
+        2020 23:13:25 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        43.1E.04074.59EC38E5; Wed,  1 Apr 2020 08:13:25 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200331231324epcas1p107bfd3412b713677290a810bbdf776b1~BhnqJCqrN0419604196epcas1p1-;
+        Tue, 31 Mar 2020 23:13:24 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200331231324epsmtrp2bb9b1fac3fa31042f76e8f77007f4b50~BhnqH3Kma1277512775epsmtrp2u;
+        Tue, 31 Mar 2020 23:13:24 +0000 (GMT)
+X-AuditID: b6c32a39-58bff70000000fea-b2-5e83ce956bf4
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        96.A5.04158.49EC38E5; Wed,  1 Apr 2020 08:13:24 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200331231324epsmtip2644286e363c458a2eea854e47e02c2d3~Bhnp54owu1925719257epsmtip21;
+        Tue, 31 Mar 2020 23:13:24 +0000 (GMT)
+Subject: Re: [PATCH v1 3/5] PM / devfreq: tegra20: Use
+ clk_round_rate_unboundly()
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <8e62e4ac-081c-a1ac-f0a9-b4e882fcd3b5@samsung.com>
+Date:   Wed, 1 Apr 2020 08:22:30 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-References: <20200331214609.1742152-1-enric.balletbo@collabora.com>
-In-Reply-To: <20200331214609.1742152-1-enric.balletbo@collabora.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Wed, 1 Apr 2020 07:21:20 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-=y+t1tDnV_muYs9KS_-mQK9UtRzHe_O1AnStB1XqrLg@mail.gmail.com>
-Message-ID: <CAAOTY_-=y+t1tDnV_muYs9KS_-mQK9UtRzHe_O1AnStB1XqrLg@mail.gmail.com>
-Subject: Re: [PATCH 1/4] soc: mediatek: Enable mmsys driver by default if
- Mediatek arch is selected
-To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>, CK Hu <ck.hu@mediatek.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        ulrich.hecht+renesas@gmail.com,
-        Matthias Brugger <mbrugger@suse.com>, hsinyi@chromium.org,
-        linux-kernel@vger.kernel.org,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        linux-mediatek@lists.infradead.org, matthias.bgg@kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200330231617.17079-4-digetx@gmail.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrNJsWRmVeSWpSXmKPExsWy7bCmnu7Uc81xBh/mG1is/viY0aJl1iIW
+        i7NNb9gtPvbcY7W4vGsOm8Xn3iOMFp1fZrFZXDzlanG7cQWbxb9rG1ksfu6ax+LA7fH+Riu7
+        x85Zd9k9Nq3qZPPobX7H5tG3ZRWjx+dNcgFsUdk2GamJKalFCql5yfkpmXnptkrewfHO8aZm
+        Boa6hpYW5koKeYm5qbZKLj4Bum6ZOUDnKSmUJeaUAoUCEouLlfTtbIryS0tSFTLyi0tslVIL
+        UnIKLAv0ihNzi0vz0vWS83OtDA0MjEyBChOyM9b1vmQp2MNfMfvDVpYGxgs8XYwcHBICJhLH
+        Fjp2MXJyCAnsYJQ42svSxcgFZH9ilLi3ciIzROIbo8T05cYgNkj9rHV/WCGK9jJKbPw9A6rj
+        PaPEi+/7wTqEBYIlZvdPYQJJiAgsZpJ4vXkuC0iCWaBEYvfEI0wgNpuAlsT+FzfYQGx+AUWJ
+        qz8eM4LYvAJ2Ev03J4LZLAIqEouXTQKrERUIkzi5rQWqRlDi5MwnYDM5Bcwklk/qZoSYLy5x
+        68l8JghbXmL72znMEGdPZpdoWSUBYbtIHJ7xjhXCFpZ4dXwLO4QtJfH53V42CLtaYuXJI2wg
+        D0gIdDBKbNl/AarBWGL/0slMoLBjFtCUWL9LHyKsKLHz91yoG/gk3n3tYYUEL69ER5sQRImy
+        xOUHd5kgbEmJxe2dbBMYlWYh+WYWkg9mIflgFsKyBYwsqxjFUguKc9NTiw0LTJHjehMjOOFq
+        We5gPHbO5xCjAAejEg+vglVznBBrYllxZe4hRgkOZiURXjb/hjgh3pTEyqrUovz4otKc1OJD
+        jKbAwJ7ILCWanA/MBnkl8YamRsbGxhYmhmamhoZK4rxTr+fECQmkJ5akZqemFqQWwfQxcXBK
+        NTB2N7xUjVhSUN10JsP6wNKeF49nfdZe++4Xd3jZBIlC8z+ZcgwcNTVcKx6ytIUI9/B76y7/
+        s/xjtqfoNt79O7KmJX6ODZKdrjPVb/H3JB65e8bBK6YJpCpt65RfxftvWVlJzcFvR4PqVNg2
+        xh3/fnOC5n3ZbZtObEoI2mQpqaqj1HDLU0TNXVyJpTgj0VCLuag4EQDDSbCnzgMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJIsWRmVeSWpSXmKPExsWy7bCSvO6Uc81xBgt+K1us/viY0aJl1iIW
+        i7NNb9gtPvbcY7W4vGsOm8Xn3iOMFp1fZrFZXDzlanG7cQWbxb9rG1ksfu6ax+LA7fH+Riu7
+        x85Zd9k9Nq3qZPPobX7H5tG3ZRWjx+dNcgFsUVw2Kak5mWWpRfp2CVwZ63pfshTs4a+Y/WEr
+        SwPjBZ4uRk4OCQETiVnr/rB2MXJxCAnsZpTYe/4PO0RCUmLaxaPMXYwcQLawxOHDxRA1bxkl
+        rp7dxApSIywQLDG7fwoTSEJEYCmTxIqbX8CamQVKJE48+wc1dSujxLqFc5lAEmwCWhL7X9xg
+        A7H5BRQlrv54zAhi8wrYSfTfnAhmswioSCxeNgmsRlQgTGLnksdMEDWCEidnPmEBsTkFzCSW
+        T+pmhFimLvFn3iVmCFtc4taT+UwQtrzE9rdzmCcwCs9C0j4LScssJC2zkLQsYGRZxSiZWlCc
+        m55bbFhglJdarlecmFtcmpeul5yfu4kRHIFaWjsYT5yIP8QowMGoxMOraNUcJ8SaWFZcmXuI
+        UYKDWUmEl82/IU6INyWxsiq1KD++qDQntfgQozQHi5I4r3z+sUghgfTEktTs1NSC1CKYLBMH
+        p1QDo8qG9Ctqu9TrJ3PohP++qpaVb88aFFIvcetN2J1qZhZZmaMWkqf36zteZ+7w0H1zYdss
+        scXnUoJP+24y/O6iermG62p0RBnn7/4LorNXRmWcfzLp1TTDg5or4q45CoS0HH9voHfWWTa2
+        8eyy8p/83OfePj5w972ar4ndmzjNhgk+BpwXJLY7KbEUZyQaajEXFScCAIZvho+8AgAA
+X-CMS-MailID: 20200331231324epcas1p107bfd3412b713677290a810bbdf776b1
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20200330232035epcas1p4dc533fd4e30d543a1cd12ebb5c5e80b3
+References: <20200330231617.17079-1-digetx@gmail.com>
+        <CGME20200330232035epcas1p4dc533fd4e30d543a1cd12ebb5c5e80b3@epcas1p4.samsung.com>
+        <20200330231617.17079-4-digetx@gmail.com>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi, Enric:
+Hi Dmitry,
 
-Enric Balletbo i Serra <enric.balletbo@collabora.com> =E6=96=BC 2020=E5=B9=
-=B44=E6=9C=881=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8A=E5=8D=885:46=E5=AF=AB=
-=E9=81=93=EF=BC=9A
->
-> The mmsys driver supports only MT8173 device for now, but like other syst=
-em
-> controllers is an important piece for other Mediatek devices. Actually
-> it depends on the mt8173 clock specific driver but that dependency is
-> not real as it can build without the clock driver. Instead of depends on
-> a specific model, make the driver depends on the generic ARCH_MEDIATEK an=
-d
-> enable by default so other Mediatek devices can start using it without
-> flood the Kconfig.
-
-I've no idea about 'enable by default'. For some product which has no
-display, it does not need mmsys partition (include drm and mdp). But
-the code size of mmsys is not large, so it seems enable it by default
-has no harm. Just provide some information for you.
-
-Regards,
-Chun-Kuang.
-
->
-> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+On 3/31/20 8:16 AM, Dmitry Osipenko wrote:
+> The clk_round_rate() doesn't work for us properly if clock rate is bounded
+> by a min/max rate that is requested by some other clk-user because we're
+> building devfreq's OPP table based on the rounding.
+> 
+> In particular this becomes a problem if display driver is probed earlier
+> than devfreq, and thus, display adds a memory bandwidth request using
+> interconnect API, which results in a minimum clock-rate being set for
+> the memory clk. In a result, the lowest devfreq OPP rate is getting
+> limited to the minimum rate imposed by the display driver.
+> 
+> Let's use new clk_round_rate_unboundly() that resolves the problem by
+> rounding clock rate without taking into account min/max limits imposed by
+> active clk users.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->
->  drivers/soc/mediatek/Kconfig | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/soc/mediatek/Kconfig b/drivers/soc/mediatek/Kconfig
-> index e84513318725..59a56cd790ec 100644
-> --- a/drivers/soc/mediatek/Kconfig
-> +++ b/drivers/soc/mediatek/Kconfig
-> @@ -46,8 +46,7 @@ config MTK_SCPSYS
->
->  config MTK_MMSYS
->         bool "MediaTek MMSYS Support"
-> -       depends on COMMON_CLK_MT8173_MMSYS
-> -       default COMMON_CLK_MT8173_MMSYS
-> +       default ARCH_MEDIATEK
->         help
->           Say yes here to add support for the MediaTek Multimedia
->           Subsystem (MMSYS).
-> --
-> 2.25.1
->
->
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+>  drivers/devfreq/tegra20-devfreq.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/devfreq/tegra20-devfreq.c b/drivers/devfreq/tegra20-devfreq.c
+> index ff82bac9ee4e..1bb10ef11dfe 100644
+> --- a/drivers/devfreq/tegra20-devfreq.c
+> +++ b/drivers/devfreq/tegra20-devfreq.c
+> @@ -149,10 +149,10 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>  
+>  	tegra->regs = mc->regs;
+>  
+> -	max_rate = clk_round_rate(tegra->emc_clock, ULONG_MAX);
+> +	max_rate = clk_round_rate_unboundly(tegra->emc_clock, ULONG_MAX);
+>  
+>  	for (rate = 0; rate <= max_rate; rate++) {
+> -		rate = clk_round_rate(tegra->emc_clock, rate);
+> +		rate = clk_round_rate_unboundly(tegra->emc_clock, rate);
+>  
+>  		err = dev_pm_opp_add(&pdev->dev, rate, 0);
+>  		if (err) {
+> 
+
+Firstly, patch1 have to be reviewed for this patch.
+I have no any objection. It looks good to me.
+
+If patch1 get the confirmation from clock maintainer,
+feel free to add my acked tag:
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
