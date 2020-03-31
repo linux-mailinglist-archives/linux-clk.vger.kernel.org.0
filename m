@@ -2,107 +2,179 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3624C19887D
-	for <lists+linux-clk@lfdr.de>; Tue, 31 Mar 2020 01:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB30198BB9
+	for <lists+linux-clk@lfdr.de>; Tue, 31 Mar 2020 07:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729404AbgC3Xpx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 30 Mar 2020 19:45:53 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:54984 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729358AbgC3Xpv (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 30 Mar 2020 19:45:51 -0400
-Received: by mail-wm1-f67.google.com with SMTP id c81so629518wmd.4;
-        Mon, 30 Mar 2020 16:45:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=5uzSi9/VYcTraEBB9HY7h/rXS2xZdLMR03bizri5gj4=;
-        b=U4dAz5JvC5Fm0PIcTcWwiVNghqf0QdYuFyDYQm3OPsDtjHrCfMpE46Qo7orMdSK05Y
-         P5DXJy38lM1lC7YIgMPBGH16GG5xBtNDRcaO6VhqWdmxtggajwky/+qcHKKF6NYHg00G
-         W9dFPn3vX5HJ5BC7X8j9SbXwS6bz5LpzRR4vsM7CdR1Yyyr61PXhKsAsfJFGgRFavQaF
-         EZ9CIwME/Ja3sdR3Y3OZLi5gA0KPfwcKI1DMz0CqjqajGHI5/TQsHPOpEJQX0P7FH1xD
-         51fdQHUq+OFjP3ufeY+q8KJZYGaed/SA62fyiiORqKhq8vCQbVrEpKBxkAZ4+oEyOazH
-         ZXnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=5uzSi9/VYcTraEBB9HY7h/rXS2xZdLMR03bizri5gj4=;
-        b=WxaEkxFQCTKSdfaJCXGIdjxg1OqNswcnvlTjAsAxmRLvHDc8QiYfx4IV1f8TS0PMly
-         at9uXGcLepjUtouOiRudcQkj7cR76x7DyjlfLQ+ABRNeQcIm5FrKWp86AamHy730hJjA
-         V+xmpS1A5NRKT6tISUbsRzK7wCC1JZQxa/wUyfhZVDA/a/Po2XNyOVZEMD+GaV6OvD2z
-         iqZdIoGzFY2/yoq7dEO79Apgtqu4PadA1ImWz20XM1a5vGBlYEzgpNgH9e6lKXBPI7P/
-         mK7KYPsmFGzkS/n7MDSstI/8yOsU+2FUZJfXZgrlpLrcFdwAdI166GVyN6fuwca2EHjS
-         iwqg==
-X-Gm-Message-State: ANhLgQ1FVaA9sqAZfQkaRtX7HPl7NPsqaIPmrvyy24x8Z7aUuc2o0EDv
-        SGJxbLesKAp9Is5PefTb6G4=
-X-Google-Smtp-Source: ADFU+vvtXm6WQtlMFz5iqFRMXzrlv57Bxn7PrxUOdXCnqT1tXpKTo5A1T4R+dQC9PFDeLc8AG/pT8Q==
-X-Received: by 2002:a1c:2484:: with SMTP id k126mr575356wmk.52.1585611949773;
-        Mon, 30 Mar 2020 16:45:49 -0700 (PDT)
-Received: from localhost.localdomain (p200300F13710ED00428D5CFFFEB99DB8.dip0.t-ipconnect.de. [2003:f1:3710:ed00:428d:5cff:feb9:9db8])
-        by smtp.googlemail.com with ESMTPSA id v186sm1392953wme.24.2020.03.30.16.45.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2020 16:45:49 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     linux-amlogic@lists.infradead.org, jbrunet@baylibre.com,
-        narmstrong@baylibre.com
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH 2/2] clk: meson: meson8b: make the hdmi_sys clock tree mutable
-Date:   Tue, 31 Mar 2020 01:45:35 +0200
-Message-Id: <20200330234535.3327513-3-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.26.0
-In-Reply-To: <20200330234535.3327513-1-martin.blumenstingl@googlemail.com>
-References: <20200330234535.3327513-1-martin.blumenstingl@googlemail.com>
+        id S1726216AbgCaFfd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 31 Mar 2020 01:35:33 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:50655 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726001AbgCaFfd (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 31 Mar 2020 01:35:33 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1585632932; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=fes4q3BYaybrvlgVDtBeVWule4OgaJcrX3+0iF8Z4cw=; b=Nyi/opZXctbl/B6m+MhrI6Ouq7w+dWNsniNcYd8kVxUipSOJhWjXTDgp1bRZzS3nR934Yb10
+ qYYQEOpi/ZcyLY6JX7JoVyM7obum7dMj+/gEUkKveRQ1DVOgR5ph2KRqhpTj4o3m5iXYRm72
+ 5Ij3ABjHltDQiFMUl/wwDR2GGC0=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e82d69c.7f59d0ebf928-smtp-out-n02;
+ Tue, 31 Mar 2020 05:35:24 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B9B0FC433BA; Tue, 31 Mar 2020 05:35:24 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.0.104] (unknown [183.82.140.164])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: tdas)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id F2464C433F2;
+        Tue, 31 Mar 2020 05:35:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org F2464C433F2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=tdas@codeaurora.org
+Subject: Re: [PATCH 1/4] clk: qcom: gdsc: Handle GDSC regulator supplies
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>
+References: <20200319053902.3415984-1-bjorn.andersson@linaro.org>
+ <20200319053902.3415984-2-bjorn.andersson@linaro.org>
+From:   Taniya Das <tdas@codeaurora.org>
+Message-ID: <5dbd8e67-cc9f-631b-0b4f-b45389be83cd@codeaurora.org>
+Date:   Tue, 31 Mar 2020 11:05:17 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200319053902.3415984-2-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The HDMI TX controller requires the hdmi_sys clock to be enabled. Allow
-changing the whole clock tree now that we know that one of our drivers
-requires this.
+Hi Stephen,
 
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
- drivers/clk/meson/meson8b.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I think the upstream design always wanted the client/consumer to enable 
+the GPU Rail and then turn ON the GDSC?
 
-diff --git a/drivers/clk/meson/meson8b.c b/drivers/clk/meson/meson8b.c
-index 34a70c4b4899..7c55c695cbae 100644
---- a/drivers/clk/meson/meson8b.c
-+++ b/drivers/clk/meson/meson8b.c
-@@ -1725,7 +1725,7 @@ static struct clk_regmap meson8b_hdmi_sys_sel = {
- 	},
- 	.hw.init = &(struct clk_init_data){
- 		.name = "hdmi_sys_sel",
--		.ops = &clk_regmap_mux_ro_ops,
-+		.ops = &clk_regmap_mux_ops,
- 		/* FIXME: all other parents are unknown */
- 		.parent_data = &(const struct clk_parent_data) {
- 			.fw_name = "xtal",
-@@ -1745,7 +1745,7 @@ static struct clk_regmap meson8b_hdmi_sys_div = {
- 	},
- 	.hw.init = &(struct clk_init_data){
- 		.name = "hdmi_sys_div",
--		.ops = &clk_regmap_divider_ro_ops,
-+		.ops = &clk_regmap_divider_ops,
- 		.parent_hws = (const struct clk_hw *[]) {
- 			&meson8b_hdmi_sys_sel.hw
- 		},
-@@ -1761,7 +1761,7 @@ static struct clk_regmap meson8b_hdmi_sys = {
- 	},
- 	.hw.init = &(struct clk_init_data) {
- 		.name = "hdmi_sys",
--		.ops = &clk_regmap_gate_ro_ops,
-+		.ops = &clk_regmap_gate_ops,
- 		.parent_hws = (const struct clk_hw *[]) {
- 			&meson8b_hdmi_sys_div.hw
- 		},
+Why are we going ahead with adding the support of regulator in the GDSC 
+driver?
+
+On 3/19/2020 11:08 AM, Bjorn Andersson wrote:
+> Certain GDSCs, such as the GPU_GX on MSM8996, requires that the upstream
+> regulator supply is powered in order to be turned on.
+> 
+> It's not guaranteed that the bootloader will leave these supplies on and
+> the driver core will attempt to enable any GDSCs before allowing the
+> individual drivers to probe defer on the PMIC regulator driver not yet
+> being present.
+> 
+> So the gdsc driver needs to be made aware of supplying regulators and
+> probe defer on their absence, and it needs to enable and disable the
+> regulator accordingly.
+> 
+> Voltage adjustments of the supplying regulator are deferred to the
+> client drivers themselves.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>   drivers/clk/qcom/gdsc.c | 24 ++++++++++++++++++++++++
+>   drivers/clk/qcom/gdsc.h |  4 ++++
+>   2 files changed, 28 insertions(+)
+> 
+> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+> index a250f59708d8..3528789cc9d0 100644
+> --- a/drivers/clk/qcom/gdsc.c
+> +++ b/drivers/clk/qcom/gdsc.c
+> @@ -13,6 +13,7 @@
+>   #include <linux/regmap.h>
+>   #include <linux/reset-controller.h>
+>   #include <linux/slab.h>
+> +#include <linux/regulator/consumer.h>
+>   #include "gdsc.h"
+>   
+>   #define PWR_ON_MASK		BIT(31)
+> @@ -112,6 +113,12 @@ static int gdsc_toggle_logic(struct gdsc *sc, enum gdsc_status status)
+>   	int ret;
+>   	u32 val = (status == GDSC_ON) ? 0 : SW_COLLAPSE_MASK;
+>   
+> +	if (status == GDSC_ON && sc->rsupply) {
+> +		ret = regulator_enable(sc->rsupply);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+>   	ret = regmap_update_bits(sc->regmap, sc->gdscr, SW_COLLAPSE_MASK, val);
+>   	if (ret)
+>   		return ret;
+> @@ -143,6 +150,13 @@ static int gdsc_toggle_logic(struct gdsc *sc, enum gdsc_status status)
+>   
+>   	ret = gdsc_poll_status(sc, status);
+>   	WARN(ret, "%s status stuck at 'o%s'", sc->pd.name, status ? "ff" : "n");
+> +
+> +	if (!ret && status == GDSC_OFF && sc->rsupply) {
+> +		ret = regulator_disable(sc->rsupply);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+>   	return ret;
+>   }
+>   
+> @@ -371,6 +385,16 @@ int gdsc_register(struct gdsc_desc *desc,
+>   	if (!data->domains)
+>   		return -ENOMEM;
+>   
+> +	/* Resolve any regulator supplies */
+> +	for (i = 0; i < num; i++) {
+> +		if (!scs[i] || !scs[i]->supply)
+> +			continue;
+> +
+> +		scs[i]->rsupply = devm_regulator_get(dev, scs[i]->supply);
+> +		if (IS_ERR(scs[i]->rsupply))
+> +			return PTR_ERR(scs[i]->rsupply);
+> +	}
+> +
+>   	data->num_domains = num;
+>   	for (i = 0; i < num; i++) {
+>   		if (!scs[i])
+> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
+> index 64cdc8cf0d4d..c36fc26dcdff 100644
+> --- a/drivers/clk/qcom/gdsc.h
+> +++ b/drivers/clk/qcom/gdsc.h
+> @@ -10,6 +10,7 @@
+>   #include <linux/pm_domain.h>
+>   
+>   struct regmap;
+> +struct regulator;
+>   struct reset_controller_dev;
+>   
+>   /**
+> @@ -52,6 +53,9 @@ struct gdsc {
+>   	struct reset_controller_dev	*rcdev;
+>   	unsigned int			*resets;
+>   	unsigned int			reset_count;
+> +
+> +	const char 			*supply;
+> +	struct regulator		*rsupply;
+>   };
+>   
+>   struct gdsc_desc {
+> 
+
 -- 
-2.26.0
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation.
 
+--
