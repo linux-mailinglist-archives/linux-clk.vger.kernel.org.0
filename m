@@ -2,150 +2,175 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DD219A261
-	for <lists+linux-clk@lfdr.de>; Wed,  1 Apr 2020 01:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F9719A2D6
+	for <lists+linux-clk@lfdr.de>; Wed,  1 Apr 2020 02:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731470AbgCaXUf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 31 Mar 2020 19:20:35 -0400
-Received: from mailout3.samsung.com ([203.254.224.33]:55358 "EHLO
-        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731259AbgCaXUe (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 31 Mar 2020 19:20:34 -0400
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20200331232032epoutp03a3475a03b03a9fb22cc425f4ffaeb7ef~Bht4drYc82272122721epoutp03p
-        for <linux-clk@vger.kernel.org>; Tue, 31 Mar 2020 23:20:32 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20200331232032epoutp03a3475a03b03a9fb22cc425f4ffaeb7ef~Bht4drYc82272122721epoutp03p
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1585696832;
-        bh=Ykc51i8hr0AncU8IY+n1mU9alBghALWWelj6pYw7wT8=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=GbksPALQYDbyuDVhQCba/AjdCK+F2JEAMKWVpG8p3Tt1tD6Toq1s8QxqbjNI5gSn5
-         0RgsOJ5ya1KDaOcBbb+1WvTrquOZU7yhskk088pyJBR17DpDG0MKbytJLXR8GonkME
-         S0/G/RbAQ20Dnf70Psq5dikp4IbRjHtB/oAYTeq0=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200331232031epcas1p198ac5d860533e73152c178ceb5a8b4d6~Bht3uqVc91864018640epcas1p10;
-        Tue, 31 Mar 2020 23:20:31 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.40.157]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 48sQKn0WwbzMqYm1; Tue, 31 Mar
-        2020 23:20:29 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        CE.1F.04140.A30D38E5; Wed,  1 Apr 2020 08:20:26 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200331232025epcas1p242a0b7a24c7a68d679ae6b42a40e3985~BhtyRVhZH3036430364epcas1p2I;
-        Tue, 31 Mar 2020 23:20:25 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200331232025epsmtrp1b84b8180cf280a74e93bbd400b0d6324~BhtyQa0M02638126381epsmtrp1I;
-        Tue, 31 Mar 2020 23:20:25 +0000 (GMT)
-X-AuditID: b6c32a36-fbbff7000000102c-57-5e83d03a5b87
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D6.75.04024.930D38E5; Wed,  1 Apr 2020 08:20:25 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200331232025epsmtip29ebcd9c061df67d3a392e4649743f696~BhtyAla7I2561625616epsmtip24;
-        Tue, 31 Mar 2020 23:20:25 +0000 (GMT)
-Subject: Re: [PATCH v1 5/5] PM / devfreq: tegra30: Make CPUFreq notifier to
- take into account boosting
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <afcc9f80-c102-da42-8f7f-9b66417a9d4d@samsung.com>
-Date:   Wed, 1 Apr 2020 08:29:31 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
-MIME-Version: 1.0
-In-Reply-To: <20200330231617.17079-6-digetx@gmail.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPJsWRmVeSWpSXmKPExsWy7bCmga7VheY4g5erxCxWf3zMaNEyaxGL
-        xdmmN+wWH3vusVpc3jWHzeJz7xFGi84vs9gsLp5ytbjduILN4t+1jSwWP3fNY3Hg9nh/o5Xd
-        Y+esu+wem1Z1snn0Nr9j8+jbsorR4/MmuQC2qGybjNTElNQihdS85PyUzLx0WyXv4HjneFMz
-        A0NdQ0sLcyWFvMTcVFslF58AXbfMHKDzlBTKEnNKgUIBicXFSvp2NkX5pSWpChn5xSW2SqkF
-        KTkFlgV6xYm5xaV56XrJ+blWhgYGRqZAhQnZGRNaWlgKHnBU9Lxay9TAOI+9i5GTQ0LAROJy
-        wxTWLkYuDiGBHYwSpxc1s0A4nxgl5n1qZIJwvjFKHF64A65l78fbUIm9jBLbJj9nh3DeM0p8
-        +LaXDaRKWCBDYumWE2BVIgKLmSReb57LApJgFiiR2D3xCBOIzSagJbH/xQ2wBn4BRYmrPx4z
-        gti8AnYSBw9dA4uzCKhIfHr6A6xeVCBM4uS2FqgaQYmTM5+AzeQUMJNon/uHGWK+uMStJ/OZ
-        IGx5ie1v5zCDHCEh0M8ucfZOIyPEDy4Ss7e0QP0jLPHq+BYoW0riZX8blF0tsfLkETaI5g5G
-        iS37L7BCJIwl9i+dDLSBA2iDpsT6XfoQYUWJnb/nMkIs5pN497WHFaREQoBXoqNNCKJEWeLy
-        g7tMELakxOL2TrYJjEqzkLwzC8kLs5C8MAth2QJGllWMYqkFxbnpqcWGBUbI8b2JEZx4tcx2
-        MC4653OIUYCDUYmHV8GqOU6INbGsuDL3EKMEB7OSCC+bf0OcEG9KYmVValF+fFFpTmrxIUZT
-        YGhPZJYSTc4HZoW8knhDUyNjY2MLE0MzU0NDJXHeqddz4oQE0hNLUrNTUwtSi2D6mDg4pRoY
-        NRIE+5JZZ/bcNakJ/Se00v1bqMbd4DMfqvJfe3k8UFjRpLJ5Vf1ptY5rt/OWhhyoX63rvufN
-        5IN7dBu9bq1Y+nvl55gwt72bN2ld/+IbxOZao8n3/YvHv/zJ60tffH+cltSi5vp8ycYDl2dM
-        8vRO1fRflZY5O+1yBfO6fI4yN14XzrJv0U9DlViKMxINtZiLihMBn1W5AtIDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJIsWRmVeSWpSXmKPExsWy7bCSvK7lheY4gxeblS1Wf3zMaNEyaxGL
-        xdmmN+wWH3vusVpc3jWHzeJz7xFGi84vs9gsLp5ytbjduILN4t+1jSwWP3fNY3Hg9nh/o5Xd
-        Y+esu+wem1Z1snn0Nr9j8+jbsorR4/MmuQC2KC6blNSczLLUIn27BK6MCS0tLAUPOCp6Xq1l
-        amCcx97FyMkhIWAisffjbaYuRi4OIYHdjBIzzmxlhkhISky7eBTI5gCyhSUOHy6GqHnLKLFt
-        ag8jSI2wQIbE0i0nwJpFBJYySay4+QVsKrNAicSJZ/9YITq2Mkr8bG8D62AT0JLY/+IGG4jN
-        L6AocfXHY7A4r4CdxMFD18DiLAIqEp+e/mACsUUFwiR2LnnMBFEjKHFy5hMWEJtTwEyife4f
-        Zohl6hJ/5l2CssUlbj2ZzwRhy0tsfzuHeQKj8Cwk7bOQtMxC0jILScsCRpZVjJKpBcW56bnF
-        hgWGeanlesWJucWleel6yfm5mxjBEailuYPx8pL4Q4wCHIxKPLwKVs1xQqyJZcWVuYcYJTiY
-        lUR42fwb4oR4UxIrq1KL8uOLSnNSiw8xSnOwKInzPs07FikkkJ5YkpqdmlqQWgSTZeLglGpg
-        9LC/mrlrVVeUq/kT58cLavNYXQ5zntzGY3Nqb/Ce3H260oEMsbtuBbPfq2UynarzMHu7mf+U
-        lx0HX/f+4xKNc9SIb/6yOdVL9pPoDONHQUqXZsdbveUQSzJZIZKsGyanlL4+4U+RutxPxady
-        9zi49F5seHNNRFXGdvWy9dfLFe2yrHqyqy8qsRRnJBpqMRcVJwIAo1QZCLwCAAA=
-X-CMS-MailID: 20200331232025epcas1p242a0b7a24c7a68d679ae6b42a40e3985
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200330232026epcas1p2234ae241b9693555b4df74aab3d8aee9
-References: <20200330231617.17079-1-digetx@gmail.com>
-        <CGME20200330232026epcas1p2234ae241b9693555b4df74aab3d8aee9@epcas1p2.samsung.com>
-        <20200330231617.17079-6-digetx@gmail.com>
+        id S1731438AbgDAAbQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 31 Mar 2020 20:31:16 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:20680 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729514AbgDAAbQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 31 Mar 2020 20:31:16 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1585701075; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=jKs23a+KxYOIlOtupnaTWCe1cd9luMMtAARYPo2luxQ=; b=S20tp+zr0P3OTviX+YE66z21/9Uj33p5uHb1p8rmLQZ9sAb6STKV+Kt6HrnfNKNcgrtnhwNA
+ 4A9yk4OEjePkPThvUhLbKx1wwqihVs57Ggx5bO/n2lO8P+p7m9/U4jSW0NZOAq06IY0EHqh1
+ 4plJd+0S1wjhrnSOu+ImL7zdZxQ=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e83e0c9.7f283214eb90-smtp-out-n01;
+ Wed, 01 Apr 2020 00:31:05 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 0BFFDC4478C; Wed,  1 Apr 2020 00:31:04 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from displaysanity13-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: varar)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id A5AC6C433F2;
+        Wed,  1 Apr 2020 00:31:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A5AC6C433F2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=tanmay@codeaurora.org
+From:   Tanmay Shah <tanmay@codeaurora.org>
+To:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, seanpaul@chromium.org,
+        swboyd@chromium.org
+Cc:     Tanmay Shah <tanmay@codeaurora.org>, robdclark@gmail.com,
+        abhinavk@codeaurora.org, nganji@codeaurora.org,
+        jsanka@codeaurora.org, aravindh@codeaurora.org,
+        hoegsberg@google.com, dri-devel@lists.freedesktop.org,
+        linux-clk@vger.kernel.org
+Subject: [DPU PATCH v5 0/5] Add support for DisplayPort driver on SnapDragon. 
+Date:   Tue, 31 Mar 2020 17:30:26 -0700
+Message-Id: <1585701031-28871-1-git-send-email-tanmay@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Dmitry,
+These patches add support for Display-Port driver on SnapDragon 845 hardware. It adds
+DP driver and DP PLL driver files along with the needed device-tree bindings.
 
-On 3/31/20 8:16 AM, Dmitry Osipenko wrote:
-> MCCPU frequency boosting needs to be taken into account in order to avoid
-> scheduling of unnecessary devfreq updates.
+The block diagram of DP driver is shown below:
 
-"in order to avoid scheduling of unnecessary devfreq updates."
-I don't understand the correct meaning of following description.
-Could you explain it more detailed?
 
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/devfreq/tegra30-devfreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-> index 34f6291e880c..3b57aac9894c 100644
-> --- a/drivers/devfreq/tegra30-devfreq.c
-> +++ b/drivers/devfreq/tegra30-devfreq.c
-> @@ -420,7 +420,7 @@ tegra_actmon_cpufreq_contribution(struct tegra_devfreq *tegra,
->  
->  	static_cpu_emc_freq = actmon_cpu_to_emc_rate(tegra, cpu_freq);
->  
-> -	if (dev_freq >= static_cpu_emc_freq)
-> +	if (dev_freq + actmon_dev->boost_freq >= static_cpu_emc_freq)
->  		return 0;
->  
->  	return static_cpu_emc_freq;
-> 
+                 +-------------+
+                 |DRM FRAMEWORK|
+                 +------+------+
+                        |
+                   +----v----+
+                   | DP DRM  |
+                   +----+----+
+                        |
+                   +----v----+
+     +------------+|   DP    +----------++------+
+     +             | DISPLAY |+---+      |      |
+     |             +-+-----+-+    |      |      |
+     |               |     |      |      |      |
+     |               |     |      |      |      |
+     |               |     |      |      |      |
+     v               v     v      v      v      v
+ +------+          +---+ +----+ +----+ +---+ +-----+
+ |  DP  |          |DP | | DP | | DP | |DP | | DP  |
+ |PARSER|          |AUX| |LINK| |CTRL| |PHY| |POWER|
+ +--+---+          +---+ +----+ +--+-+ +-+-+ +-----+
+    |                              |     |
+ +--v---+                         +v-----v+
+ |DEVICE|                         |  DP   |
+ | TREE |                         |CATALOG|
+ +------+                         +---+---+
+                                      |
+                                  +---v----+
+                                  |CTRL/PHY|
+                                  |   HW   |
+                                  +--------+
 
+
+These patches have dependency on clock driver changes mentioned below:
+https://patchwork.kernel.org/patch/10632753/ 
+https://patchwork.kernel.org/patch/10632757/
+
+Chandan Uddaraju (4):
+  dt-bindings: msm/dp: add bindings of DP/DP-PLL driver for Snapdragon
+  drm: add constant N value in helper file
+  drm/msm/dp: add displayPort driver support
+  drm/msm/dp: add support for DP PLL driver
+
+Jeykumar Sankaran (1):
+  drm/msm/dpu: add display port support in DPU
+
+ .../devicetree/bindings/display/msm/dp-sc7180.yaml |  325 ++++
+ .../devicetree/bindings/display/msm/dpu.txt        |   16 +-
+ drivers/gpu/drm/i915/display/intel_display.c       |    2 +-
+ drivers/gpu/drm/msm/Kconfig                        |   21 +
+ drivers/gpu/drm/msm/Makefile                       |   16 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |   28 +-
+ .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   |    8 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   65 +-
+ drivers/gpu/drm/msm/dp/dp_aux.c                    |  531 ++++++
+ drivers/gpu/drm/msm/dp/dp_aux.h                    |   35 +
+ drivers/gpu/drm/msm/dp/dp_catalog.c                |  988 +++++++++++
+ drivers/gpu/drm/msm/dp/dp_catalog.h                |   86 +
+ drivers/gpu/drm/msm/dp/dp_ctrl.c                   | 1707 ++++++++++++++++++++
+ drivers/gpu/drm/msm/dp/dp_ctrl.h                   |   35 +
+ drivers/gpu/drm/msm/dp/dp_display.c                |  943 +++++++++++
+ drivers/gpu/drm/msm/dp/dp_display.h                |   31 +
+ drivers/gpu/drm/msm/dp/dp_drm.c                    |  170 ++
+ drivers/gpu/drm/msm/dp/dp_drm.h                    |   19 +
+ drivers/gpu/drm/msm/dp/dp_hpd.c                    |   69 +
+ drivers/gpu/drm/msm/dp/dp_hpd.h                    |   79 +
+ drivers/gpu/drm/msm/dp/dp_link.c                   | 1216 ++++++++++++++
+ drivers/gpu/drm/msm/dp/dp_link.h                   |  132 ++
+ drivers/gpu/drm/msm/dp/dp_panel.c                  |  490 ++++++
+ drivers/gpu/drm/msm/dp/dp_panel.h                  |   95 ++
+ drivers/gpu/drm/msm/dp/dp_parser.c                 |  473 ++++++
+ drivers/gpu/drm/msm/dp/dp_parser.h                 |  220 +++
+ drivers/gpu/drm/msm/dp/dp_power.c                  |  545 +++++++
+ drivers/gpu/drm/msm/dp/dp_power.h                  |  115 ++
+ drivers/gpu/drm/msm/dp/dp_reg.h                    |  489 ++++++
+ drivers/gpu/drm/msm/dp/pll/dp_pll.c                |  127 ++
+ drivers/gpu/drm/msm/dp/pll/dp_pll.h                |   57 +
+ drivers/gpu/drm/msm/dp/pll/dp_pll_10nm.c           |  401 +++++
+ drivers/gpu/drm/msm/dp/pll/dp_pll_10nm.h           |   86 +
+ drivers/gpu/drm/msm/dp/pll/dp_pll_10nm_util.c      |  524 ++++++
+ drivers/gpu/drm/msm/msm_drv.c                      |    2 +
+ drivers/gpu/drm/msm/msm_drv.h                      |   53 +-
+ include/drm/drm_dp_helper.h                        |    2 +
+ 37 files changed, 10178 insertions(+), 23 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/display/msm/dp-sc7180.yaml
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_aux.c
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_aux.h
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_catalog.c
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_catalog.h
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_ctrl.c
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_ctrl.h
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_display.c
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_display.h
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_drm.c
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_drm.h
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_hpd.c
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_hpd.h
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_link.c
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_link.h
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_panel.c
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_panel.h
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_parser.c
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_parser.h
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_power.c
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_power.h
+ create mode 100644 drivers/gpu/drm/msm/dp/dp_reg.h
+ create mode 100644 drivers/gpu/drm/msm/dp/pll/dp_pll.c
+ create mode 100644 drivers/gpu/drm/msm/dp/pll/dp_pll.h
+ create mode 100644 drivers/gpu/drm/msm/dp/pll/dp_pll_10nm.c
+ create mode 100644 drivers/gpu/drm/msm/dp/pll/dp_pll_10nm.h
+ create mode 100644 drivers/gpu/drm/msm/dp/pll/dp_pll_10nm_util.c
 
 -- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+1.9.1
