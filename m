@@ -2,218 +2,155 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A65A19E87A
-	for <lists+linux-clk@lfdr.de>; Sun,  5 Apr 2020 04:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A868E19E897
+	for <lists+linux-clk@lfdr.de>; Sun,  5 Apr 2020 04:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726371AbgDECJv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 4 Apr 2020 22:09:51 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:35559 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726283AbgDECJv (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 4 Apr 2020 22:09:51 -0400
-Received: by mail-io1-f67.google.com with SMTP id o3so12036033ioh.2;
-        Sat, 04 Apr 2020 19:09:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HGvGldYqzcPwlD+W1QgZLducQvHDHG5zRE8/3hy9qmE=;
-        b=ZGiWJcKk5rA0RoQ9U4nQaFTbO/P84py6g8caDWaiK3W6urNUEKd44N0aZbaVt80AsY
-         aAqSZVzAZT7vROPohdF3K5YkZmfYjT0PuawPgXGa9M+MdHveUW5X2Z/6LR0Ad/cm3Wjj
-         nnJDl6npYLFfQJIKQM76y0BmSayv/LEBuP1XtHLU8Af2G8FA1zd0wOWjjTpbQUlbbygd
-         0+efNSCOseJznNB/OViPMONEPGT0e3XdrZSi+iuAbrMCXXoXST/X6d6sBmOw7shohKOj
-         1HVCQMf2eEjufXsbKJQhAVy3sGyRauZRQWhwTbSpuMZ9XOjOE1gj9fyJB6oDa+xUDLn3
-         Ukmw==
-X-Gm-Message-State: AGi0PuYcTzOB+aByDcGLXblKjkJDcBhOnQh7PwF7/g/B2btUmpdSA1/p
-        9mLYXBLWi0GVF2odDoYdVg==
-X-Google-Smtp-Source: APiQypLR+L4TyzsQ18uH/T8q5XIdKfhiVKmP6auhisbFB8B7HRQkYCMpG4OowZonWrf8jyvc8VdSIQ==
-X-Received: by 2002:a02:2a47:: with SMTP id w68mr3890967jaw.76.1586052589693;
-        Sat, 04 Apr 2020 19:09:49 -0700 (PDT)
-Received: from rob-hp-laptop ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id b6sm3770146iok.19.2020.04.04.19.09.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Apr 2020 19:09:48 -0700 (PDT)
-Received: (nullmailer pid 11718 invoked by uid 1000);
-        Sun, 05 Apr 2020 02:09:46 -0000
-Date:   Sat, 4 Apr 2020 20:09:46 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Taniya Das <tdas@codeaurora.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette =?iso-8859-1?Q?=A0?= 
-        <mturquette@baylibre.com>, David Brown <david.brown@linaro.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 2/4] dt-bindings: clock: Add YAML schemas for LPASS
- clocks on SC7180
-Message-ID: <20200405020946.GA6110@bogus>
-References: <1585338485-31820-1-git-send-email-tdas@codeaurora.org>
- <1585338485-31820-3-git-send-email-tdas@codeaurora.org>
+        id S1726490AbgDECv2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 4 Apr 2020 22:51:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44684 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726283AbgDECv0 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sat, 4 Apr 2020 22:51:26 -0400
+Received: from mail.kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EBA4A20672;
+        Sun,  5 Apr 2020 02:51:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586055084;
+        bh=428hrrLxGizYnfH4HkarazHDCjrvG1Td0mnE3ucsAuY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Bc7UTDRuEj52rjnEs57bgWoC+e2mCZiOxvX0KNY8ZEJPxGk8GcwIKASqSyHqkJJqQ
+         MsuQuLU82GKZJHqo7c9US+ROPKQ6vM9fcMvFqd67YMmQ90Xq3ga0Xa/Sl2G9umEFNb
+         A+I9rRoQoBfN74UrcFzf5/gfxqmzgezvAE2cBP0c=
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Alexander Shiyan <shc_work@mail.ru>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Aurelien Jacquiot <jacquiot.aurelien@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, chenhc@lemote.com,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guan Xuetao <gxt@pku.edu.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-c6x-dev@linux-c6x.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-sh@vger.kernel.org, Lubomir Rintel <lkundrak@v3.sk>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Mark Salter <msalter@redhat.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Paul Walmsley <paul@pwsan.com>, Rich Felker <dalias@libc.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thierry Reding <treding@nvidia.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tony Prisk <linux@prisktech.co.nz>,
+        uclinux-h8-devel@lists.sourceforge.jp,
+        Will Deacon <will@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Subject: [PATCH 0/9] Allow COMMON_CLK to be selectable
+Date:   Sat,  4 Apr 2020 19:51:14 -0700
+Message-Id: <20200405025123.154688-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.26.0.292.g33ef6b2f38-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1585338485-31820-3-git-send-email-tdas@codeaurora.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sat, Mar 28, 2020 at 01:18:03AM +0530, Taniya Das wrote:
-> The LPASS(Low Power Audio Subsystem) clock provider have a bunch of generic
-> properties that are needed in a device tree. Also add clock ids for GCC
-> LPASS and LPASS Core clock IDs for LPASS client to request for the clocks.
-> 
-> Signed-off-by: Taniya Das <tdas@codeaurora.org>
-> ---
->  .../bindings/clock/qcom,sc7180-lpasscorecc.yaml    | 81 ++++++++++++++++++++++
->  include/dt-bindings/clock/qcom,gcc-sc7180.h        |  1 +
->  .../dt-bindings/clock/qcom,lpasscorecc-sc7180.h    | 28 ++++++++
->  3 files changed, 110 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sc7180-lpasscorecc.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,lpasscorecc-sc7180.h
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,sc7180-lpasscorecc.yaml b/Documentation/devicetree/bindings/clock/qcom,sc7180-lpasscorecc.yaml
-> new file mode 100644
-> index 0000000..d040bd1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/qcom,sc7180-lpasscorecc.yaml
-> @@ -0,0 +1,81 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/qcom,sc7180-lpasscorecc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm LPASS Core Clock Controller Binding for SC7180
-> +
-> +maintainers:
-> +  - Taniya Das <tdas@codeaurora.org>
-> +
-> +description: |
-> +  Qualcomm LPASS core clock control module which supports the clocks and
-> +  power domains on SC7180.
-> +
-> +  See also:
-> +  - dt-bindings/clock/qcom,lpasscorecc-sc7180.h
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,sc7180-lpasshm
-> +      - qcom,sc7180-lpasscorecc
-> +
-> +  clocks:
-> +    items:
-> +      - description: gcc_lpass_sway clock from GCC
-> +
-> +  clock-names:
-> +    items:
-> +      - const: gcc_lpass_sway
-> +
-> +  power-domains:
-> +    items:
-> +      - description: LPASS CORE HM GSDCR
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +  '#power-domain-cells':
-> +    const: 1
-> +
-> +  reg:
-> +    minItems: 1
-> +    maxItems: 2
+This patch series cleans up a handful of selects that were redundant and
+deletes presumably dead code with the goal of making it possible to add
+kunit tests for the CCF in the future. To do that, we introduce a
+"legacy" clk Kconfig option to mark code that hasn't migrated to the
+common clk framework and then make the COMMON_CLK config option visible
+in the menuconfig as long as that legacy option isn't enabled. I've also
+included a couple patches at the end that may be more controversial but
+helped me consolidate all this logic/code.
 
-Need to define what each one is when there are 2.
+I haven't done more than compile test a few configs for arm, arm64,
+h8300, and mips. More testing is welcome.
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - '#clock-cells'
-> +  - '#power-domain-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,gcc-sc7180.h>
-> +    #include <dt-bindings/clock/qcom,lpasscorecc-sc7180.h>
-> +    clock-controller@63000000 {
-> +      compatible = "qcom,sc7180-lpasshm";
-> +        reg = <0 0x63000000 0 0x28>;
-> +        clocks = <&gcc GCC_LPASS_CFG_NOC_SWAY_CLK>;
-> +        clock-names = "gcc_lpass_sway";
-> +        #clock-cells = <1>;
-> +        #power-domain-cells = <1>;
-> +    };
-> +
-> +  - |
-> +    clock-controller@62d00000 {
-> +        compatible = "qcom,sc7180-lpasscorecc";
-> +        reg = <0 0x62d00000 0 0x50000>,
-> +            <0 0x62780000 0 0x30000>;
-> +        clocks = <&gcc GCC_LPASS_CFG_NOC_SWAY_CLK>;
-> +        clock-names = "gcc_lpass_sway";
-> +        power-domains = <&lpass_hm LPASS_CORE_HM_GDSCR>;
-> +        #clock-cells = <1>;
-> +        #power-domain-cells = <1>;
-> +    };
-> +...
-> diff --git a/include/dt-bindings/clock/qcom,gcc-sc7180.h b/include/dt-bindings/clock/qcom,gcc-sc7180.h
-> index 1258fd0..439476c 100644
-> --- a/include/dt-bindings/clock/qcom,gcc-sc7180.h
-> +++ b/include/dt-bindings/clock/qcom,gcc-sc7180.h
-> @@ -137,6 +137,7 @@
->  #define GCC_MSS_NAV_AXI_CLK					127
->  #define GCC_MSS_Q6_MEMNOC_AXI_CLK				128
->  #define GCC_MSS_SNOC_AXI_CLK					129
-> +#define GCC_LPASS_CFG_NOC_SWAY_CLK				130
-> 
->  /* GCC resets */
->  #define GCC_QUSB2PHY_PRIM_BCR					0
-> diff --git a/include/dt-bindings/clock/qcom,lpasscorecc-sc7180.h b/include/dt-bindings/clock/qcom,lpasscorecc-sc7180.h
-> new file mode 100644
-> index 0000000..9466d5e
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/qcom,lpasscorecc-sc7180.h
-> @@ -0,0 +1,28 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +#ifndef _DT_BINDINGS_CLK_QCOM_LPASS_CORE_CC_SC7180_H
-> +#define _DT_BINDINGS_CLK_QCOM_LPASS_CORE_CC_SC7180_H
-> +
-> +/* LPASS_CORE_CC clocks */
-> +#define LPASS_LPAAUDIO_DIG_PLL				0
-> +#define LPASS_LPAAUDIO_DIG_PLL_OUT_ODD			1
-> +#define CORE_CLK_SRC					2
-> +#define EXT_MCLK0_CLK_SRC				3
-> +#define LPAIF_PRI_CLK_SRC				4
-> +#define LPAIF_SEC_CLK_SRC				5
-> +#define LPASS_AUDIO_CORE_CORE_CLK			6
-> +#define LPASS_AUDIO_CORE_EXT_MCLK0_CLK			7
-> +#define LPASS_AUDIO_CORE_LPAIF_PRI_IBIT_CLK		8
-> +#define LPASS_AUDIO_CORE_LPAIF_SEC_IBIT_CLK		9
-> +#define LPASS_AUDIO_CORE_SYSNOC_MPORT_CORE_CLK		10
-> +
-> +/* LPASS power domains */
-> +#define LPASS_CORE_HM_GDSCR				0
-> +
-> +#define LPASS_AUDIO_HM_GDSCR				0
+The plan is that I'll just merge the whole pile through the clk tree. If
+the first five patches or the last three patches are better going
+through another tree like arm-soc or architecture trees that's fine too,
+but there are potential conflicts between trees so maybe it's better to
+just leave it all in one tree.
 
-Kind of odd that 2 are the same value.
+Stephen Boyd (9):
+  ARM: Remove redundant COMMON_CLK selects
+  ARM: Remove redundant CLKDEV_LOOKUP selects
+  arm64: tegra: Remove redundant CLKDEV_LOOKUP selects
+  h8300: Remove redundant CLKDEV_LOOKUP selects
+  MIPS: Remove redundant CLKDEV_LOOKUP selects
+  clk: Allow the common clk framework to be selectable
+  ARM: mmp: Remove legacy clk code
+  MIPS: Loongson64: Drop asm/clock.h include
+  clk: Move HAVE_CLK config out of architecture layer
 
-> +#define LPASS_PDC_HM_GDSCR				1
-> +
-> +#endif
-> --
-> Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
-> of the Code Aurora Forum, hosted by the  Linux Foundation.
-> 
+Cc: Alexander Shiyan <shc_work@mail.ru>
+Cc: "Andreas Färber" <afaerber@suse.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Aurelien Jacquiot <jacquiot.aurelien@gmail.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: <chenhc@lemote.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Guan Xuetao <gxt@pku.edu.cn>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: <linux-arm-kernel@lists.infradead.org>
+Cc: <linux-c6x-dev@linux-c6x.org>
+Cc: <linux-m68k@lists.linux-m68k.org>
+Cc: <linux-mips@vger.kernel.org>
+Cc: <linux-sh@vger.kernel.org>
+Cc: Lubomir Rintel <lkundrak@v3.sk>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Mark Salter <msalter@redhat.com>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Paul Walmsley <paul@pwsan.com>
+Cc: Rich Felker <dalias@libc.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Thierry Reding <treding@nvidia.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Tony Prisk <linux@prisktech.co.nz>
+Cc: uclinux-h8-devel@lists.sourceforge.jp
+Cc: Will Deacon <will@kernel.org>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+
+ arch/Kconfig                     |   6 --
+ arch/arm/Kconfig                 |   5 +-
+ arch/arm/mach-actions/Kconfig    |   1 -
+ arch/arm/mach-clps711x/Kconfig   |   1 -
+ arch/arm/mach-mmp/Kconfig        |   1 -
+ arch/arm/mach-mmp/Makefile       |   6 --
+ arch/arm/mach-mmp/clock-mmp2.c   | 114 -------------------------------
+ arch/arm/mach-mmp/clock-pxa168.c |  94 -------------------------
+ arch/arm/mach-mmp/clock-pxa910.c |  70 -------------------
+ arch/arm/mach-mmp/clock.c        | 105 ----------------------------
+ arch/arm/mach-mmp/clock.h        |  65 ------------------
+ arch/arm/mach-vt8500/Kconfig     |   1 -
+ arch/arm64/Kconfig.platforms     |   1 -
+ arch/c6x/Kconfig                 |   1 +
+ arch/h8300/Kconfig               |   1 -
+ arch/m68k/Kconfig.cpu            |   2 +-
+ arch/mips/Kconfig                |   8 +--
+ arch/mips/loongson2ef/Kconfig    |   2 +-
+ arch/mips/loongson64/smp.c       |   1 -
+ arch/sh/boards/Kconfig           |   5 ++
+ arch/unicore32/Kconfig           |   2 +-
+ drivers/clk/Kconfig              |  23 +++++--
+ 22 files changed, 34 insertions(+), 481 deletions(-)
+ delete mode 100644 arch/arm/mach-mmp/clock-mmp2.c
+ delete mode 100644 arch/arm/mach-mmp/clock-pxa168.c
+ delete mode 100644 arch/arm/mach-mmp/clock-pxa910.c
+ delete mode 100644 arch/arm/mach-mmp/clock.c
+ delete mode 100644 arch/arm/mach-mmp/clock.h
+
+
+base-commit: 7111951b8d4973bda27ff663f2cf18b663d15b48
+-- 
+Sent by a computer, using git, on the internet
+
