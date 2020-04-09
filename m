@@ -2,80 +2,94 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACAF51A2F93
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Apr 2020 08:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D54231A30ED
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Apr 2020 10:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726641AbgDIGw5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 9 Apr 2020 02:52:57 -0400
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:47343 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726470AbgDIGw4 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 9 Apr 2020 02:52:56 -0400
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Apr 2020 23:52:54 -0700
-Received: from gurus-linux.qualcomm.com ([10.46.162.81])
-  by ironmsg01-sd.qualcomm.com with ESMTP; 08 Apr 2020 23:52:54 -0700
-Received: by gurus-linux.qualcomm.com (Postfix, from userid 383780)
-        id 74AC64BF6; Wed,  8 Apr 2020 23:52:54 -0700 (PDT)
-From:   Guru Das Srinagesh <gurus@codeaurora.org>
-To:     linux-pwm@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Subbaraman Narayanamurthy <subbaram@codeaurora.org>,
-        David Collins <collinsd@codeaurora.org>,
-        linux-kernel@vger.kernel.org,
-        Guru Das Srinagesh <gurus@codeaurora.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH v12 10/11] clk: pwm: Use 64-bit division function
-Date:   Wed,  8 Apr 2020 23:52:39 -0700
-Message-Id: <d5127aa19a128edf7c3dd437291b366b77be4ac5.1586414867.git.gurus@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <cover.1586414867.git.gurus@codeaurora.org>
-References: <cover.1586414867.git.gurus@codeaurora.org>
-In-Reply-To: <cover.1586414867.git.gurus@codeaurora.org>
-References: <cover.1586414867.git.gurus@codeaurora.org>
+        id S1726137AbgDIIan (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 9 Apr 2020 04:30:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58724 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725828AbgDIIan (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 9 Apr 2020 04:30:43 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8D2E620784;
+        Thu,  9 Apr 2020 08:30:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586421042;
+        bh=tecY0VJsbe8EdmmXXtksU0Y0zBQ4pnIaVfI2igeka+g=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=ptohimgNcSS6YVP6voh44L9Sg9U4vla0zIuPhH//YJlP0Pij9fyw2K+ZNUAEHVrPo
+         Ro/p1DceVy1DmnpHiLRWeBbTqOmFjwO56VpfspN5AASuHpAIJ7hqo6PYHpZolmT3RQ
+         PQprX0YetLoQeGYubZAI1tdqQfcS3ncgfxC7byN4=
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200408160044.2550437-1-arnd@arndb.de>
+References: <20200408160044.2550437-1-arnd@arndb.de>
+Subject: Re: [PATCH] [RFC] clk: sprd: fix compile-testing
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     gregkh@linuxfoundation.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+To:     Arnd Bergmann <arnd@arndb.de>, catalin.marinas@arm.com,
+        chunyan.zhang@unisoc.com, mturquette@baylibre.com, will@kernel.org
+Date:   Thu, 09 Apr 2020 01:30:41 -0700
+Message-ID: <158642104168.126188.8440219577017239983@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Since the PWM framework is switching struct pwm_args.period's datatype
-to u64, prepare for this transition by using div64_u64 to handle a
-64-bit divisor.
+Quoting Arnd Bergmann (2020-04-08 09:00:44)
+> I got a build failure with CONFIG_ARCH_SPRD=3Dm when the
+> main portion of the clock driver failed to get linked into
+> the kernel:
+>=20
+> ERROR: modpost: "sprd_pll_sc_gate_ops" [drivers/clk/sprd/sc9863a-clk.ko] =
+undefined!
+> ERROR: modpost: "sprd_pll_ops" [drivers/clk/sprd/sc9863a-clk.ko] undefine=
+d!
+> ERROR: modpost: "sprd_div_ops" [drivers/clk/sprd/sc9863a-clk.ko] undefine=
+d!
+> ERROR: modpost: "sprd_comp_ops" [drivers/clk/sprd/sc9863a-clk.ko] undefin=
+ed!
+> ERROR: modpost: "sprd_mux_ops" [drivers/clk/sprd/sc9863a-clk.ko] undefine=
+d!
+> ERROR: modpost: "sprd_gate_ops" [drivers/clk/sprd/sc9863a-clk.ko] undefin=
+ed!
+> ERROR: modpost: "sprd_sc_gate_ops" [drivers/clk/sprd/sc9863a-clk.ko] unde=
+fined!
+> ERROR: modpost: "sprd_clk_probe" [drivers/clk/sprd/sc9863a-clk.ko] undefi=
+ned!
+> ERROR: modpost: "sprd_clk_regmap_init" [drivers/clk/sprd/sc9863a-clk.ko] =
+undefined!
+> ERROR: modpost: "sprd_pll_ops" [drivers/clk/sprd/sc9860-clk.ko] undefined!
+> ERROR: modpost: "sprd_div_ops" [drivers/clk/sprd/sc9860-clk.ko] undefined!
+> ERROR: modpost: "sprd_mux_ops" [drivers/clk/sprd/sc9860-clk.ko] undefined!
+>=20
+> This is a combination of two trivial bugs:
+>=20
+> - A platform should not be 'tristate', it should be a 'bool' symbol
+>   like the other platforms, if only for consistency, and to avoid
+>   surprises like this one.
+>=20
+> - The clk Makefile does not traverse into the sprd subdirectory
+>   if the platform is disabled but the drivers are enabled for
+>   compile-testing.
+>=20
+> Fixing either of the two would be sufficient to address the link failure,
+> but for correctness, both need to be changed.
+>=20
+> Fixes: 2b1b799d7630 ("arm64: change ARCH_SPRD Kconfig to tristate")
+> Fixes: d41f59fd92f2 ("clk: sprd: Add common infrastructure")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm64/Kconfig.platforms | 2 +-
+>  drivers/clk/Makefile         | 2 +-
 
-Also ensure that divide-by-zero (with fixed_rate as denominator) does
-not happen with an explicit check with probe failure as a consequence.
+For clk part
 
-Cc: Michael Turquette <mturquette@baylibre.com>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org
-
-Signed-off-by: Guru Das Srinagesh <gurus@codeaurora.org>
----
- drivers/clk/clk-pwm.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/clk/clk-pwm.c b/drivers/clk/clk-pwm.c
-index 87fe0b0e..86f2e2d 100644
---- a/drivers/clk/clk-pwm.c
-+++ b/drivers/clk/clk-pwm.c
-@@ -89,7 +89,12 @@ static int clk_pwm_probe(struct platform_device *pdev)
- 	}
- 
- 	if (of_property_read_u32(node, "clock-frequency", &clk_pwm->fixed_rate))
--		clk_pwm->fixed_rate = NSEC_PER_SEC / pargs.period;
-+		clk_pwm->fixed_rate = div64_u64(NSEC_PER_SEC, pargs.period);
-+
-+	if (!clk_pwm->fixed_rate) {
-+		dev_err(&pdev->dev, "fixed_rate cannot be zero\n");
-+		return -EINVAL;
-+	}
- 
- 	if (pargs.period != NSEC_PER_SEC / clk_pwm->fixed_rate &&
- 	    pargs.period != DIV_ROUND_UP(NSEC_PER_SEC, clk_pwm->fixed_rate)) {
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Acked-by: Stephen Boyd <sboyd@kernel.org>
