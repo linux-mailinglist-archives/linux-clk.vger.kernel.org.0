@@ -2,63 +2,61 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B461A8B82
-	for <lists+linux-clk@lfdr.de>; Tue, 14 Apr 2020 21:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A430D1A8BCD
+	for <lists+linux-clk@lfdr.de>; Tue, 14 Apr 2020 22:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731028AbgDNTvj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 14 Apr 2020 15:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
+        id S2505409AbgDNUBO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 14 Apr 2020 16:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2391637AbgDNTvU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Apr 2020 15:51:20 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E9EC0610D5;
-        Tue, 14 Apr 2020 12:51:20 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id a81so15661315wmf.5;
-        Tue, 14 Apr 2020 12:51:20 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S2505367AbgDNUA3 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Apr 2020 16:00:29 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5271C061A10;
+        Tue, 14 Apr 2020 13:00:28 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id d77so14474921wmd.3;
+        Tue, 14 Apr 2020 13:00:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wmfcMhvG8Z0vEINCyaO7pmox4TkBpgd1lx9zOICoTqE=;
-        b=EtkFVJ4P6kPq5zDhchMj44e/ao7tDFLAS5fHqVSp67Vc69oau+0lapCkGg4FAIEK0Y
-         3FwfBUpis4d+hn4MaQNoyQBYMD1RzN/d7yIslSCMyjynMvOsCK3htGSvk4XqFeC4X/wx
-         Ng74LeujzCDpUAcRKt9CGQw99YaEJdmHfcppaoRR7H8krAU5zuB6vga4msDAkdoKqgO9
-         AvuMS8NRgieEf/lICbyIfw7UrGkFiJvFPJvRPLYgJMxXl2KfNjOYKmHwDvRh79gARiHM
-         ac7Y9lL/7d0CiyZHui9LyXZ5U43j7xh/hXw2H6xTd9SkY/I/KkrKa1zkwgoCosFqrk2U
-         jTMw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MbzRA+liOSzspvRs73OjMhTVcZqxUfZ8JGqRb1at2eo=;
+        b=usV8Cm+MW1Z553yH7mGfuCKt4JU0Fhq3xzICPmxArO3E+urQeBT1EyrZWPC5ZBDm/g
+         R/MvcnhU5fUc6mVz4zsAjdiEWv8wCeJnrOeThXvKyO2jYb9TC0ropp/VHimX8zhadP5N
+         fHaHB/Q4ksh0GbpSQdY3kmeMGWzzifgG2v3V+5G89DAmT2jFRvEXNEBMq6ulr9H/SIwX
+         FC7WLLlB/BmPFrTtCUtpzWSguI3s4UclTDRm2RwvYVjrxPGrr5Q1h/9pW66K6Cxz0KLC
+         uW5Lw1+SIUHqcYEaf0pDNdVoVO4+jeqIz5K5tYn9K0jjO2HEywhQi7JwLag6Bu0m9hCw
+         KAUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wmfcMhvG8Z0vEINCyaO7pmox4TkBpgd1lx9zOICoTqE=;
-        b=ABWPnGHK0ls3iMNHOa58zUpB3EUm5BQP+b6MCEapykVFd5y01lH+R+ZPi6byA0gxKY
-         R7tWD/c2wRU89hkIMRtvvYlqysalNMZkBu760GcybPniHTGIptlF1pxfRSMKQhcWW5IY
-         IU6RR1myGZMACK3qhuACK8JdmCuMW1e7LtHul/CxsdZzl+NKWvIGzHB8iB8fkgsx4yjG
-         ZEAouu5uk9qGwT1UHrLbsoUjrFv6LRFhVZWb5p8g5/9L8dgoNCc/VKu/JEcciU38rLO8
-         i8zJwPd00/V1Wi/rJyiHA9TCh9XZwb8fEC97VV8ekeJ/cRpbPd7H0TmjskIGi2oWoczO
-         sm1g==
-X-Gm-Message-State: AGi0PuYcRfvllVPbJj/r1NwOThrgcXUTRA/ot+LqD5T1+TITKUnSgEZx
-        uQQi3qKSexCRR4islLxe7rmaSX6nLJM=
-X-Google-Smtp-Source: APiQypIRkBwsxASMLC6HHXJ5UwuAZ6o8hDlK7RWcSFluHkg0o2JANop6K6rTzyBdwrXR4xh1aml9rQ==
-X-Received: by 2002:a1c:e1c1:: with SMTP id y184mr1450299wmg.143.1586893878852;
-        Tue, 14 Apr 2020 12:51:18 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MbzRA+liOSzspvRs73OjMhTVcZqxUfZ8JGqRb1at2eo=;
+        b=C78XCC79Y1K5fr65XipGQf8jR8wbm6xXq/S3KyeoTQkghnm7RCNtJLm3KtC1rUKPOF
+         5zK+w4maCDt8hCIgElnPmyCwSk1tFbDsKGlJJubViuvNr32z+jrCnDdaCw+JiqnIc21p
+         zClEmvm7DL5llaiId2X0SDl98UteVXWu45gt2f3Rc2PjcjOtclI0hWqnwnjHttz8usIi
+         g78eOoTx6QisKBSUtE6Zsih+JdSB3iyTMcNRrTgBSUoHPteum1XTcITuKGW4okdeeZoO
+         M9jxcVxAHzq4hplvh7K9FLYgpEvSPFs8G1h9N8/JxgLahaF90HSbvANfCy/bZwDP9i9u
+         i85g==
+X-Gm-Message-State: AGi0PuY1HjtQdbW3rOQafGkisxHiuWCbFDKMXYVjWoacC5EYLYpVBfl+
+        Wn9Gw2G2XoCmtAU3BnC9ShUf8HcB/Zg=
+X-Google-Smtp-Source: APiQypJeEMY/H6VtUp7hGwSmUSJjjoRxaD3Z9HIbNZuaQuy98pOr+YMQ2RGA7ApjNpibPM4CdxN5QQ==
+X-Received: by 2002:a1c:dc0a:: with SMTP id t10mr1400936wmg.113.1586894427232;
+        Tue, 14 Apr 2020 13:00:27 -0700 (PDT)
 Received: from localhost.localdomain (p200300F13717DF00428D5CFFFEB99DB8.dip0.t-ipconnect.de. [2003:f1:3717:df00:428d:5cff:feb9:9db8])
-        by smtp.googlemail.com with ESMTPSA id s14sm20886844wme.33.2020.04.14.12.51.17
+        by smtp.googlemail.com with ESMTPSA id b4sm15540253wrv.42.2020.04.14.13.00.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2020 12:51:18 -0700 (PDT)
+        Tue, 14 Apr 2020 13:00:26 -0700 (PDT)
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 To:     jbrunet@baylibre.com, linux-amlogic@lists.infradead.org,
         linux-clk@vger.kernel.org
 Cc:     narmstrong@baylibre.com, mturquette@baylibre.com, sboyd@kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v2 2/2] clk: meson: g12a: Prepare the GPU clock tree to change at runtime
-Date:   Tue, 14 Apr 2020 21:50:31 +0200
-Message-Id: <20200414195031.224021-3-martin.blumenstingl@googlemail.com>
+Subject: [PATCH 0/4] clk: meson8b: updates for video clocks / resets
+Date:   Tue, 14 Apr 2020 22:00:13 +0200
+Message-Id: <20200414200017.226136-1-martin.blumenstingl@googlemail.com>
 X-Mailer: git-send-email 2.26.0
-In-Reply-To: <20200414195031.224021-1-martin.blumenstingl@googlemail.com>
-References: <20200414195031.224021-1-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
@@ -66,113 +64,36 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The "mali_0" or "mali_1" clock trees should not be updated while the
-clock is running. Enforce this by setting CLK_SET_RATE_GATE on the
-"mali_0" and "mali_1" gates. This makes the CCF switch to the "mali_1"
-tree when "mali_0" is currently active and vice versa, which is exactly
-what the vendor driver does when updating the frequency of the mali
-clock.
-Also propagate set_rate requests from the gate to the divider and from
-the divider to the the mux so the GPU clock frequency can be updated at
-runtime (which will be required for GPU DVFS). Don't propagate rate
-changes to the mux parents because we don't want to change the MPLL
-clocks (these are reserved for audio).
+This is the first batch of fixes and updates for the Meson8/8b/8m2
+clock controller driver.
 
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
- drivers/clk/meson/g12a.c | 30 ++++++++++++++++++++++--------
- 1 file changed, 22 insertions(+), 8 deletions(-)
+The first patch fixes the video clock hierarchy. Special thanks to
+Neil for providing a lot of details about the video clock tree!
 
-diff --git a/drivers/clk/meson/g12a.c b/drivers/clk/meson/g12a.c
-index fad616cac01e..30c15766ebb1 100644
---- a/drivers/clk/meson/g12a.c
-+++ b/drivers/clk/meson/g12a.c
-@@ -3702,7 +3702,9 @@ static struct clk_regmap g12a_hdmi = {
- 
- /*
-  * The MALI IP is clocked by two identical clocks (mali_0 and mali_1)
-- * muxed by a glitch-free switch.
-+ * muxed by a glitch-free switch. The CCF can manage this glitch-free
-+ * mux because it does top-to-bottom updates the each clock tree and
-+ * switches to the "inactive" one when CLK_SET_RATE_GATE is set.
-  */
- static const struct clk_parent_data g12a_mali_0_1_parent_data[] = {
- 	{ .fw_name = "xtal", },
-@@ -3726,7 +3728,13 @@ static struct clk_regmap g12a_mali_0_sel = {
- 		.ops = &clk_regmap_mux_ops,
- 		.parent_data = g12a_mali_0_1_parent_data,
- 		.num_parents = 8,
--		.flags = CLK_SET_RATE_NO_REPARENT,
-+		/*
-+		 * Don't request the parent to change the rate because
-+		 * all GPU frequencies can be derived from the fclk_*
-+		 * clocks and one special GP0_PLL setting. This is
-+		 * important because we need the MPLL clocks for audio.
-+		 */
-+		.flags = 0,
- 	},
- };
- 
-@@ -3743,7 +3751,7 @@ static struct clk_regmap g12a_mali_0_div = {
- 			&g12a_mali_0_sel.hw
- 		},
- 		.num_parents = 1,
--		.flags = CLK_SET_RATE_NO_REPARENT,
-+		.flags = CLK_SET_RATE_PARENT,
- 	},
- };
- 
-@@ -3759,7 +3767,7 @@ static struct clk_regmap g12a_mali_0 = {
- 			&g12a_mali_0_div.hw
- 		},
- 		.num_parents = 1,
--		.flags = CLK_SET_RATE_PARENT,
-+		.flags = CLK_SET_RATE_GATE | CLK_SET_RATE_PARENT,
- 	},
- };
- 
-@@ -3774,7 +3782,13 @@ static struct clk_regmap g12a_mali_1_sel = {
- 		.ops = &clk_regmap_mux_ops,
- 		.parent_data = g12a_mali_0_1_parent_data,
- 		.num_parents = 8,
--		.flags = CLK_SET_RATE_NO_REPARENT,
-+		/*
-+		 * Don't request the parent to change the rate because
-+		 * all GPU frequencies can be derived from the fclk_*
-+		 * clocks and one special GP0_PLL setting. This is
-+		 * important because we need the MPLL clocks for audio.
-+		 */
-+		.flags = 0,
- 	},
- };
- 
-@@ -3791,7 +3805,7 @@ static struct clk_regmap g12a_mali_1_div = {
- 			&g12a_mali_1_sel.hw
- 		},
- 		.num_parents = 1,
--		.flags = CLK_SET_RATE_NO_REPARENT,
-+		.flags = CLK_SET_RATE_PARENT,
- 	},
- };
- 
-@@ -3807,7 +3821,7 @@ static struct clk_regmap g12a_mali_1 = {
- 			&g12a_mali_1_div.hw
- 		},
- 		.num_parents = 1,
--		.flags = CLK_SET_RATE_PARENT,
-+		.flags = CLK_SET_RATE_GATE | CLK_SET_RATE_PARENT,
- 	},
- };
- 
-@@ -3827,7 +3841,7 @@ static struct clk_regmap g12a_mali = {
- 		.ops = &clk_regmap_mux_ops,
- 		.parent_hws = g12a_mali_parent_hws,
- 		.num_parents = 2,
--		.flags = CLK_SET_RATE_NO_REPARENT,
-+		.flags = CLK_SET_RATE_PARENT,
- 	},
- };
- 
+The second and third came up while testing video output on my EC-100
+(Endless Mini). This board is special because u-boot does not enable
+the video outputs like most other u-boot versions do. However, this
+is very useful for development because it shows (the hard way ;))
+where the existing code is buggy.
+
+The last patch is a small improvement for the VPU clock so we
+utilize the glitch-free mux (on SoCs which support it) and avoid
+problems by changing the "live" clock tree at runtime (with the mali
+clock this resulted in system hangs/freezes).
+
+In my opinion all of these patches - including the fixes - can go to
+"next" because the relevant clock trees are still read-only.
+
+
+Martin Blumenstingl (4):
+  clk: meson: meson8b: Fix the first parent of vid_pll_in_sel
+  clk: meson: meson8b: Fix the polarity of the RESET_N lines
+  clk: meson: meson8b: Fix the vclk_div{1,2,4,6,12}_en gate bits
+  clk: meson: meson8b: Make the CCF use the glitch-free VPU mux
+
+ drivers/clk/meson/meson8b.c | 107 +++++++++++++++++++++++++-----------
+ 1 file changed, 75 insertions(+), 32 deletions(-)
+
 -- 
 2.26.0
 
