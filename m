@@ -2,133 +2,73 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BEED1A71DC
-	for <lists+linux-clk@lfdr.de>; Tue, 14 Apr 2020 05:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635391A7457
+	for <lists+linux-clk@lfdr.de>; Tue, 14 Apr 2020 09:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404811AbgDNDd4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 13 Apr 2020 23:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2404802AbgDNDdu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 Apr 2020 23:33:50 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1BEC0A3BDC;
-        Mon, 13 Apr 2020 20:33:50 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id r4so5417338pgg.4;
-        Mon, 13 Apr 2020 20:33:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cqkf7LycevmgLpVmZeBhW8pIulT8kk5Dc9E7315h7UE=;
-        b=iVj3ydEAh62CBoXht/+aCOXhTYwDNNjnDe8lhYUYSTLwZ3LxeEis04wto1rgkhSlqW
-         y1P2YjAtSwKkjjRRWTSI/ioYWE4LHNoG5PysOhGTkFbBP7RwgzBDbAMjMOKJ9n1FeqjZ
-         b8ctz0UsvKDI3yl7lXuNwoVXDXHv/dTyEwpnuRB87YMIcchpYJfUnnipzL4eRz4xS21B
-         61jRmdLVjsFqed24Wz31wb7p9uCnjN8eAN5ewfQ27nUH/HeZ9d3gEz5aRmK3Nc+rGdqb
-         XdH+mzOKu6aztqb1i6rMGiyrvHgyUw8rVdtF1k8DwlHUS2xk1YcM3XzFoaGvBqDQ/a3k
-         K29w==
+        id S2406427AbgDNHJs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 14 Apr 2020 03:09:48 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:42988 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728832AbgDNHJr (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Apr 2020 03:09:47 -0400
+Received: by mail-oi1-f195.google.com with SMTP id d7so4558424oif.9;
+        Tue, 14 Apr 2020 00:09:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cqkf7LycevmgLpVmZeBhW8pIulT8kk5Dc9E7315h7UE=;
-        b=axHrTbHCVOgq7uh98p96Cm9LY0G1yH55HFSnEJlXTXFT3BfPuOTWE/tZWcF4eDskg0
-         56YftB2MyL3E5FuSCRoLblbrZyUo/oACN2pLNjWv0+rifS5pfBshKtngc0tsN5rKIgPo
-         5KBsn8oUalcfJ1NEWxrwUqx1gLbq9GQS3+ug9CMlLnE5DhwB+UhAApnBep1pN9p2bEze
-         7Nb+gC0T3UmeQ3nAgigCaG9kUFKzZ7SSO4yBnijTEnI7DO7bA+up44RH19422XJrdqba
-         +EWGJxFjddemPxFyoqb2jt4EbYR+jEaATB0Kp2Nk77lcYcvxiJ6O/Opnzc6e+RNsZt2Q
-         2ZNQ==
-X-Gm-Message-State: AGi0Pub+95lwmRGJ9Wi06u55ZPCrEylsffUFnGb+cpRoq5W+55HUaEoN
-        X5f2kwvICnLzAW8VlMT0wPE=
-X-Google-Smtp-Source: APiQypIJziMZE+6YUsFjdE6JClcRXH7crwIdbG3eyClM6w5FDgQJQmSKAjEX7nGKilsRcmRUdNaCdg==
-X-Received: by 2002:a63:eb15:: with SMTP id t21mr19840234pgh.279.1586835229655;
-        Mon, 13 Apr 2020 20:33:49 -0700 (PDT)
-Received: from ubt.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id 140sm5612440pge.49.2020.04.13.20.33.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2020 20:33:49 -0700 (PDT)
-From:   zhang.lyra@gmail.com
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>
-Subject: [PATCH v2 4/4] clk: sprd: add mipi_csi_xx gate clocks
-Date:   Tue, 14 Apr 2020 11:33:25 +0800
-Message-Id: <20200414033325.26536-5-zhang.lyra@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200414033325.26536-1-zhang.lyra@gmail.com>
-References: <20200414033325.26536-1-zhang.lyra@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9Z5zt2CUahX5IsPzgShiRFj23zj/g56lthuN3s9ga2E=;
+        b=fsFjPs6Y14mHhPJvwHG2nVoLYDeiYpwPqBi643pwYF8SsT936r5ZjyTw0+nzLN8NBZ
+         bswe+kkXZn0SDEeHK/9XVIKGOBfwSLqfmYS1dj8PRhVEHMIwg/zKaAfuLZiFpW+5ZK/O
+         KN/7iWu3GIKwYlMTlkPKL/E+/90in7Sd3M89Vk80M3lzlHeNoq8n2ehSg321k79a2ryB
+         uv/88vIUAGMGWxkRZTWcbtZI0GEvxTlxAbnH5vvR9DkzUWxI5kPU3NEkmEB9b7B/Jnw4
+         ZqBZ3BWnlrJP5JK1U+4Dnmo9G1RyWDi6UXnZ41hPQu7CidyZPpU8ntDcuW1il1Es9QUp
+         zXLA==
+X-Gm-Message-State: AGi0PubIsK/GfVSGqwICoMA8o+/vfisRtQV4MnHM4RjGUpf/GrnRQUuX
+        HffUSV6qfJErxPRTp4ybrRnILZdG98eMRPf6EFA=
+X-Google-Smtp-Source: APiQypJPAEdSB0/mCpnigVvRvJ7XIRVHn8kPh4UNvKk3GhriQALdtPNdVHc6H4U6yfJQ1kTqUN+mE1pGe6RO8Ue6wUc=
+X-Received: by 2002:aca:f541:: with SMTP id t62mr257295oih.148.1586848186462;
+ Tue, 14 Apr 2020 00:09:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200413041709.3630-1-christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20200413041709.3630-1-christophe.jaillet@wanadoo.fr>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 14 Apr 2020 09:09:35 +0200
+Message-ID: <CAMuHMdXoVGkRh63=H6P29JSS6yNCyKZdsAX1_qUNC_mH=aymyw@mail.gmail.com>
+Subject: Re: [PATCH] clk: renesas: r9a06g032: Fix some typo in comments
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+On Mon, Apr 13, 2020 at 5:12 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+> This file seems to be for R9A06G032 only. So replace reference to
+> R9A09G032 by R9A06G032 to avoid confusion.
+>
+> AFAIK, R9A09G032 does'nt exist.
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-mipi_csi_xx clocks are used by camera sensors.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in clk-renesas-for-v5.8.
 
-Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
----
- drivers/clk/sprd/sc9863a-clk.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+Gr{oetje,eeting}s,
 
-diff --git a/drivers/clk/sprd/sc9863a-clk.c b/drivers/clk/sprd/sc9863a-clk.c
-index a0631f7756cf..f67bd08f225c 100644
---- a/drivers/clk/sprd/sc9863a-clk.c
-+++ b/drivers/clk/sprd/sc9863a-clk.c
-@@ -1615,6 +1615,36 @@ static const struct sprd_clk_desc sc9863a_mm_gate_desc = {
- 	.hw_clks	= &sc9863a_mm_gate_hws,
- };
- 
-+/* camera sensor clocks */
-+static SPRD_GATE_CLK_HW(mipi_csi_clk, "mipi-csi-clk", &mahb_ckg_eb.common.hw,
-+			0x20, BIT(16), 0, SPRD_GATE_NON_AON);
-+static SPRD_GATE_CLK_HW(mipi_csi_s_clk, "mipi-csi-s-clk", &mahb_ckg_eb.common.hw,
-+			0x24, BIT(16), 0, SPRD_GATE_NON_AON);
-+static SPRD_GATE_CLK_HW(mipi_csi_m_clk, "mipi-csi-m-clk", &mahb_ckg_eb.common.hw,
-+			0x28, BIT(16), 0, SPRD_GATE_NON_AON);
-+
-+static struct sprd_clk_common *sc9863a_mm_clk_clks[] = {
-+	/* address base is 0x60900000 */
-+	&mipi_csi_clk.common,
-+	&mipi_csi_s_clk.common,
-+	&mipi_csi_m_clk.common,
-+};
-+
-+static struct clk_hw_onecell_data sc9863a_mm_clk_hws = {
-+	.hws	= {
-+		[CLK_MIPI_CSI]		= &mipi_csi_clk.common.hw,
-+		[CLK_MIPI_CSI_S]	= &mipi_csi_s_clk.common.hw,
-+		[CLK_MIPI_CSI_M]	= &mipi_csi_m_clk.common.hw,
-+	},
-+	.num	= CLK_MM_CLK_NUM,
-+};
-+
-+static const struct sprd_clk_desc sc9863a_mm_clk_desc = {
-+	.clk_clks	= sc9863a_mm_clk_clks,
-+	.num_clk_clks	= ARRAY_SIZE(sc9863a_mm_clk_clks),
-+	.hw_clks	= &sc9863a_mm_clk_hws,
-+};
-+
- static SPRD_SC_GATE_CLK_FW_NAME(sim0_eb,	"sim0-eb",	"ext-26m", 0x0,
- 				0x1000, BIT(0), 0, 0);
- static SPRD_SC_GATE_CLK_FW_NAME(iis0_eb,	"iis0-eb",	"ext-26m", 0x0,
-@@ -1737,6 +1767,8 @@ static const struct of_device_id sprd_sc9863a_clk_ids[] = {
- 	  .data = &sc9863a_aonapb_gate_desc },
- 	{ .compatible = "sprd,sc9863a-mm-gate",	/* 0x60800000 */
- 	  .data = &sc9863a_mm_gate_desc },
-+	{ .compatible = "sprd,sc9863a-mm-clk",	/* 0x60900000 */
-+	  .data = &sc9863a_mm_clk_desc },
- 	{ .compatible = "sprd,sc9863a-apapb-gate",	/* 0x71300000 */
- 	  .data = &sc9863a_apapb_gate_desc },
- 	{ }
+                        Geert
+
 -- 
-2.20.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
