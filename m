@@ -2,75 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 550931A890F
-	for <lists+linux-clk@lfdr.de>; Tue, 14 Apr 2020 20:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87ED71A88EA
+	for <lists+linux-clk@lfdr.de>; Tue, 14 Apr 2020 20:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503760AbgDNSRe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 14 Apr 2020 14:17:34 -0400
-Received: from mga14.intel.com ([192.55.52.115]:2610 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2503751AbgDNSR0 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 14 Apr 2020 14:17:26 -0400
-IronPort-SDR: RDWvki/Mb/EmFIqeFt9tNq4A85Pxwl6gYAatOqdPajWN9voNytS5egprwSA3HUed28tw8sBKsA
- 6CERGpoqrm+Q==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2020 11:17:25 -0700
-IronPort-SDR: zetcgI7Tu/vLLfaxeuL+7qG30tlfoiwW1C/aRreTbnxRrJpMKduGR6ULAHtMhkjjgKdDMDwX+r
- SAp+x+sP71sA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,383,1580803200"; 
-   d="scan'208";a="253273018"
-Received: from svarahab-mobl.amr.corp.intel.com (HELO [10.212.190.40]) ([10.212.190.40])
-  by orsmga003.jf.intel.com with ESMTP; 14 Apr 2020 11:17:20 -0700
-Subject: Re: [RFC PATCH 02/16] ASoC: pcm512x: use "sclk" string to retrieve
- clock
-To:     Mark Brown <broonie@kernel.org>
-Cc:     alsa-devel@alsa-project.org, tiwai@suse.de,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Matuschek <daniel@hifiberry.com>,
-        Matthias Reichl <hias@horus.com>,
-        Hui Wang <hui.wang@canonical.com>, linux-gpio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-clk@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-References: <20200409195841.18901-1-pierre-louis.bossart@linux.intel.com>
- <20200409195841.18901-3-pierre-louis.bossart@linux.intel.com>
- <20200414174530.GK5412@sirena.org.uk>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Message-ID: <8ee01a4f-ceb2-d207-7cef-cf766fa670af@linux.intel.com>
-Date:   Tue, 14 Apr 2020 13:14:41 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S2503673AbgDNSOs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 14 Apr 2020 14:14:48 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:33735 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2503671AbgDNSOr (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Apr 2020 14:14:47 -0400
+Received: by mail-ot1-f68.google.com with SMTP id j26so414481ots.0;
+        Tue, 14 Apr 2020 11:14:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=vo+OgfcLNvRkk7b5MXN+3p/k/pIzdHE7xLuHzqtnamk=;
+        b=aetBvNee6921I484h0Ks6mj4ZkbFiZS/lHjtqYW9UfHY0WVWBHwez3goyP1DBHBJqO
+         XKiu6/aiv42PDl8pBXE69kCZwVnkCTrpfNV6QFSe2vqbsSjFMsFYTn1NeAzvz/FQ7LV2
+         eTSoaQmeqRBrqRHVDQctih53Z0iJEXaDeXoOvRbznQUhlq+HsQiinfXIvdkJ+HrA3pzv
+         wrFXZC2V5bFI7VlYuvILIZs77kuJeDLLISRRmutIr0TZDnwDv1wD6zV9RV07cjDjG2Lt
+         dkIUJCwcXF6q0qQciN3UGOPJzvSGimtFQnhGuHJ/QVlQPkFGm3mTjpReQA9C/DbiHN09
+         FJPw==
+X-Gm-Message-State: AGi0PubUps7WhEajzHfxPUpsj2+p4zDRO+lsDtcdcCmKmnGxHbkaBzOt
+        rxmWy5L24bw4FZ8fnEUIiZRsALs=
+X-Google-Smtp-Source: APiQypKVLpJlG8c1B5PJ1L+aaHIRDG6Xc7WJ9Gk7A+JotcjqcV7ZsbWp8UQdCQSVEqQaQL3Ly19FYg==
+X-Received: by 2002:a9d:5187:: with SMTP id y7mr18979852otg.159.1586888085983;
+        Tue, 14 Apr 2020 11:14:45 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id o73sm5658056ota.77.2020.04.14.11.14.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2020 11:14:45 -0700 (PDT)
+Received: (nullmailer pid 17428 invoked by uid 1000);
+        Tue, 14 Apr 2020 18:14:44 -0000
+Date:   Tue, 14 Apr 2020 13:14:44 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>
+Cc:     skomatineni@nvidia.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, frankc@nvidia.com, hverkuil@xs4all.nl,
+        sakari.ailus@iki.fi, helen.koike@collabora.com, digetx@gmail.com,
+        sboyd@kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v6 5/9] dt-binding: tegra: Add VI and CSI bindings
+Message-ID: <20200414181444.GA17346@bogus>
+References: <1585963507-12610-1-git-send-email-skomatineni@nvidia.com>
+ <1585963507-12610-6-git-send-email-skomatineni@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <20200414174530.GK5412@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1585963507-12610-6-git-send-email-skomatineni@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-
-
-On 4/14/20 12:45 PM, Mark Brown wrote:
-> On Thu, Apr 09, 2020 at 02:58:27PM -0500, Pierre-Louis Bossart wrote:
->> Using devm_clk_get() with a NULL string fails on ACPI platforms, use
->> the "sclk" string as a fallback.
+On Fri, 3 Apr 2020 18:25:03 -0700, Sowjanya Komatineni wrote:
+> Tegra contains VI controller which can support up to 6 MIPI CSI
+> camera sensors.
 > 
-> Is this something that could be fixed at the ACPI level?
+> Each Tegra CSI port from CSI unit can be one-to-one mapper to
+> VI channel and can capture from an external camera sensor or
+> from built-in test pattern generator.
+> 
+> This patch adds dt-bindings for Tegra VI and CSI.
+> 
+> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+> ---
+>  .../display/tegra/nvidia,tegra20-host1x.txt        | 73 ++++++++++++++++++----
+>  1 file changed, 60 insertions(+), 13 deletions(-)
+> 
 
-I guess to fix this we'd need some sort of ACPI-level connection or 
-description of the clock, and I've never seen such a description?
-
-All the examples I've seen use an explicit 'mclk' string (that's e.g. 
-what we did for the PMC clocks for Baytrail/Cherrytrail machine drivers, 
-we added a lookup). Here I used 'sclk' since it's what TI refers to in 
-their documentation.
-
-I vaguely recall AMD had similar issues with another codec.
+Reviewed-by: Rob Herring <robh@kernel.org>
