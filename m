@@ -2,125 +2,177 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A01621A8B8C
-	for <lists+linux-clk@lfdr.de>; Tue, 14 Apr 2020 21:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B461A8B82
+	for <lists+linux-clk@lfdr.de>; Tue, 14 Apr 2020 21:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505227AbgDNTwc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 14 Apr 2020 15:52:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40486 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2440447AbgDNTui (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 14 Apr 2020 15:50:38 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A7F8B206E9;
-        Tue, 14 Apr 2020 19:50:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586893834;
-        bh=AaVRnbZybz5vMRXZrxlv2ehOvw55VQ60KvRSyrqRWl0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T6DqFvTy/pvyT/vTpQRGMizfJxyc3EUOxpiHF8nq8wCYcvaOJRCdXubaojqlSNNQh
-         hPmW0t2zAjzkUlwTXdJladshIu1UE1tKx3bVRfCUvqpqsJZltTJPomDV1QLNTQIbyR
-         r3Cjah8psl1vMBwD8+TnpWsd6ujezLfHBAHVO0a0=
-Date:   Tue, 14 Apr 2020 20:50:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     alsa-devel@alsa-project.org, tiwai@suse.de,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Matuschek <daniel@hifiberry.com>,
-        Matthias Reichl <hias@horus.com>,
-        Hui Wang <hui.wang@canonical.com>, linux-gpio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-clk@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [RFC PATCH 02/16] ASoC: pcm512x: use "sclk" string to retrieve
- clock
-Message-ID: <20200414195031.GP5412@sirena.org.uk>
-References: <20200409195841.18901-1-pierre-louis.bossart@linux.intel.com>
- <20200409195841.18901-3-pierre-louis.bossart@linux.intel.com>
- <20200414174530.GK5412@sirena.org.uk>
- <8ee01a4f-ceb2-d207-7cef-cf766fa670af@linux.intel.com>
- <20200414182728.GM5412@sirena.org.uk>
- <3017b762-7a0c-cee2-06dd-1e96f52eb849@linux.intel.com>
+        id S1731028AbgDNTvj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 14 Apr 2020 15:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2391637AbgDNTvU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Apr 2020 15:51:20 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E9EC0610D5;
+        Tue, 14 Apr 2020 12:51:20 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id a81so15661315wmf.5;
+        Tue, 14 Apr 2020 12:51:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=wmfcMhvG8Z0vEINCyaO7pmox4TkBpgd1lx9zOICoTqE=;
+        b=EtkFVJ4P6kPq5zDhchMj44e/ao7tDFLAS5fHqVSp67Vc69oau+0lapCkGg4FAIEK0Y
+         3FwfBUpis4d+hn4MaQNoyQBYMD1RzN/d7yIslSCMyjynMvOsCK3htGSvk4XqFeC4X/wx
+         Ng74LeujzCDpUAcRKt9CGQw99YaEJdmHfcppaoRR7H8krAU5zuB6vga4msDAkdoKqgO9
+         AvuMS8NRgieEf/lICbyIfw7UrGkFiJvFPJvRPLYgJMxXl2KfNjOYKmHwDvRh79gARiHM
+         ac7Y9lL/7d0CiyZHui9LyXZ5U43j7xh/hXw2H6xTd9SkY/I/KkrKa1zkwgoCosFqrk2U
+         jTMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=wmfcMhvG8Z0vEINCyaO7pmox4TkBpgd1lx9zOICoTqE=;
+        b=ABWPnGHK0ls3iMNHOa58zUpB3EUm5BQP+b6MCEapykVFd5y01lH+R+ZPi6byA0gxKY
+         R7tWD/c2wRU89hkIMRtvvYlqysalNMZkBu760GcybPniHTGIptlF1pxfRSMKQhcWW5IY
+         IU6RR1myGZMACK3qhuACK8JdmCuMW1e7LtHul/CxsdZzl+NKWvIGzHB8iB8fkgsx4yjG
+         ZEAouu5uk9qGwT1UHrLbsoUjrFv6LRFhVZWb5p8g5/9L8dgoNCc/VKu/JEcciU38rLO8
+         i8zJwPd00/V1Wi/rJyiHA9TCh9XZwb8fEC97VV8ekeJ/cRpbPd7H0TmjskIGi2oWoczO
+         sm1g==
+X-Gm-Message-State: AGi0PuYcRfvllVPbJj/r1NwOThrgcXUTRA/ot+LqD5T1+TITKUnSgEZx
+        uQQi3qKSexCRR4islLxe7rmaSX6nLJM=
+X-Google-Smtp-Source: APiQypIRkBwsxASMLC6HHXJ5UwuAZ6o8hDlK7RWcSFluHkg0o2JANop6K6rTzyBdwrXR4xh1aml9rQ==
+X-Received: by 2002:a1c:e1c1:: with SMTP id y184mr1450299wmg.143.1586893878852;
+        Tue, 14 Apr 2020 12:51:18 -0700 (PDT)
+Received: from localhost.localdomain (p200300F13717DF00428D5CFFFEB99DB8.dip0.t-ipconnect.de. [2003:f1:3717:df00:428d:5cff:feb9:9db8])
+        by smtp.googlemail.com with ESMTPSA id s14sm20886844wme.33.2020.04.14.12.51.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2020 12:51:18 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     jbrunet@baylibre.com, linux-amlogic@lists.infradead.org,
+        linux-clk@vger.kernel.org
+Cc:     narmstrong@baylibre.com, mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v2 2/2] clk: meson: g12a: Prepare the GPU clock tree to change at runtime
+Date:   Tue, 14 Apr 2020 21:50:31 +0200
+Message-Id: <20200414195031.224021-3-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.26.0
+In-Reply-To: <20200414195031.224021-1-martin.blumenstingl@googlemail.com>
+References: <20200414195031.224021-1-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0UhZIN3Sa23/ILEd"
-Content-Disposition: inline
-In-Reply-To: <3017b762-7a0c-cee2-06dd-1e96f52eb849@linux.intel.com>
-X-Cookie: I've only got 12 cards.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+The "mali_0" or "mali_1" clock trees should not be updated while the
+clock is running. Enforce this by setting CLK_SET_RATE_GATE on the
+"mali_0" and "mali_1" gates. This makes the CCF switch to the "mali_1"
+tree when "mali_0" is currently active and vice versa, which is exactly
+what the vendor driver does when updating the frequency of the mali
+clock.
+Also propagate set_rate requests from the gate to the divider and from
+the divider to the the mux so the GPU clock frequency can be updated at
+runtime (which will be required for GPU DVFS). Don't propagate rate
+changes to the mux parents because we don't want to change the MPLL
+clocks (these are reserved for audio).
 
---0UhZIN3Sa23/ILEd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+---
+ drivers/clk/meson/g12a.c | 30 ++++++++++++++++++++++--------
+ 1 file changed, 22 insertions(+), 8 deletions(-)
 
-On Tue, Apr 14, 2020 at 02:15:16PM -0500, Pierre-Louis Bossart wrote:
-> On 4/14/20 1:27 PM, Mark Brown wrote:
+diff --git a/drivers/clk/meson/g12a.c b/drivers/clk/meson/g12a.c
+index fad616cac01e..30c15766ebb1 100644
+--- a/drivers/clk/meson/g12a.c
++++ b/drivers/clk/meson/g12a.c
+@@ -3702,7 +3702,9 @@ static struct clk_regmap g12a_hdmi = {
+ 
+ /*
+  * The MALI IP is clocked by two identical clocks (mali_0 and mali_1)
+- * muxed by a glitch-free switch.
++ * muxed by a glitch-free switch. The CCF can manage this glitch-free
++ * mux because it does top-to-bottom updates the each clock tree and
++ * switches to the "inactive" one when CLK_SET_RATE_GATE is set.
+  */
+ static const struct clk_parent_data g12a_mali_0_1_parent_data[] = {
+ 	{ .fw_name = "xtal", },
+@@ -3726,7 +3728,13 @@ static struct clk_regmap g12a_mali_0_sel = {
+ 		.ops = &clk_regmap_mux_ops,
+ 		.parent_data = g12a_mali_0_1_parent_data,
+ 		.num_parents = 8,
+-		.flags = CLK_SET_RATE_NO_REPARENT,
++		/*
++		 * Don't request the parent to change the rate because
++		 * all GPU frequencies can be derived from the fclk_*
++		 * clocks and one special GP0_PLL setting. This is
++		 * important because we need the MPLL clocks for audio.
++		 */
++		.flags = 0,
+ 	},
+ };
+ 
+@@ -3743,7 +3751,7 @@ static struct clk_regmap g12a_mali_0_div = {
+ 			&g12a_mali_0_sel.hw
+ 		},
+ 		.num_parents = 1,
+-		.flags = CLK_SET_RATE_NO_REPARENT,
++		.flags = CLK_SET_RATE_PARENT,
+ 	},
+ };
+ 
+@@ -3759,7 +3767,7 @@ static struct clk_regmap g12a_mali_0 = {
+ 			&g12a_mali_0_div.hw
+ 		},
+ 		.num_parents = 1,
+-		.flags = CLK_SET_RATE_PARENT,
++		.flags = CLK_SET_RATE_GATE | CLK_SET_RATE_PARENT,
+ 	},
+ };
+ 
+@@ -3774,7 +3782,13 @@ static struct clk_regmap g12a_mali_1_sel = {
+ 		.ops = &clk_regmap_mux_ops,
+ 		.parent_data = g12a_mali_0_1_parent_data,
+ 		.num_parents = 8,
+-		.flags = CLK_SET_RATE_NO_REPARENT,
++		/*
++		 * Don't request the parent to change the rate because
++		 * all GPU frequencies can be derived from the fclk_*
++		 * clocks and one special GP0_PLL setting. This is
++		 * important because we need the MPLL clocks for audio.
++		 */
++		.flags = 0,
+ 	},
+ };
+ 
+@@ -3791,7 +3805,7 @@ static struct clk_regmap g12a_mali_1_div = {
+ 			&g12a_mali_1_sel.hw
+ 		},
+ 		.num_parents = 1,
+-		.flags = CLK_SET_RATE_NO_REPARENT,
++		.flags = CLK_SET_RATE_PARENT,
+ 	},
+ };
+ 
+@@ -3807,7 +3821,7 @@ static struct clk_regmap g12a_mali_1 = {
+ 			&g12a_mali_1_div.hw
+ 		},
+ 		.num_parents = 1,
+-		.flags = CLK_SET_RATE_PARENT,
++		.flags = CLK_SET_RATE_GATE | CLK_SET_RATE_PARENT,
+ 	},
+ };
+ 
+@@ -3827,7 +3841,7 @@ static struct clk_regmap g12a_mali = {
+ 		.ops = &clk_regmap_mux_ops,
+ 		.parent_hws = g12a_mali_parent_hws,
+ 		.num_parents = 2,
+-		.flags = CLK_SET_RATE_NO_REPARENT,
++		.flags = CLK_SET_RATE_PARENT,
+ 	},
+ };
+ 
+-- 
+2.26.0
 
-> > Wait, so SCLK is in the *global* namespace and the provider has to
-> > register the same name?  That doesn't sound clever.  It might be better
-> > to have the board register the connection from the clock provider to the
-> > device rather than hard code global namespace strings like this, that
-> > sounds like a recipie for misery.
-
-> I believe this change has zero impact on DT platforms.
-
-> The 'sclk' is a fallback here. If you find a clock with the NULL string,
-> it's what gets used. Likewise for the clock provider, the 'sclk' is a lookup
-> - an alias in other words. The use of the references and phandles should
-> work just fine for Device Tree.
-
-It's not just DT platforms that I'm worried about here, it's also ACPI
-systems - all it takes is for a system to have a second device and a
-name collision could happen, especially with such generic names.  We
-tried to avoid doing this for board files for the same reason.
-
-> > It is really sad that nobody involved in producing these systems that
-> > don't work with the current limitations in ACPI has been able to make
-> > progress on improving ACPI so it can cope with modern hardware and we're
-> > having to deal with this stuff.
-
-> I can't disagree but I have to live with what's available to me as an audio
-> guy...I had a solution two years ago where I could set the clock directly
-> from the machine driver. The recommendation at the time was to use the clk
-> framework, but that clk framework is limited for ACPI platforms, so we can
-> only use it with these global names.
-
-My understanding is that ACPI just doesn't have clock bindings (or audio
-bindings or...) so you're basically using board files here and board
-files can definitely do more than we're seeing here.
-
-> We had the same problem on Baytrail/Cherrytrail devices some 4 years ago and
-> we had to use an 'mclk' alias. We are going to have the same problem when we
-> expose the SSP MCLK, BLCK and FSYNC clocks - and that's also what the
-> Skylake driver did - we don't have a solution without global names.
-
-You should be able to register links between devices using the clock
-API, or add that functionality if it's not there but AFAIK clkdev still
-works.
-
---0UhZIN3Sa23/ILEd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6WFAYACgkQJNaLcl1U
-h9Byqwf9FHKLkxTXEYOkKQknonTH+2/9DiOFIk1jbin5OOzdlJzc682Clt8cCXGO
-IN2Se5PIYE0yU5nFwivSioVBRtyxjM1GSmw8B0iz6XdcF4OXa6FxNraCewLYuNoG
-+BsgxShrkzMixnTORYbOthcDHX2TsoNNBL3FkWBKvZRiG8BzObkztj+lDpRvgd+f
-I1d82Gdo9Hz6yozOskQnQDW0Dh/4uInR/V/cEzjcr+HaWJCD0aWkH+Ead4dYS0MA
-GcFLx/t86XUxXyz65R3PUh0exPZbiTCvWQPWlFBXsTTKV8pcN355Qox5zjESiz4+
-jaE33TfCTPpUXfwcwJzr0yPkBQiYHQ==
-=xvJN
------END PGP SIGNATURE-----
-
---0UhZIN3Sa23/ILEd--
