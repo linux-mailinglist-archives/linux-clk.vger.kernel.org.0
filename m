@@ -2,66 +2,61 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EFA61A8B0B
-	for <lists+linux-clk@lfdr.de>; Tue, 14 Apr 2020 21:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 308111A8B84
+	for <lists+linux-clk@lfdr.de>; Tue, 14 Apr 2020 21:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504970AbgDNTig (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 14 Apr 2020 15:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
+        id S2391652AbgDNTvu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 14 Apr 2020 15:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2504930AbgDNThE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Apr 2020 15:37:04 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AACF0C061A10;
-        Tue, 14 Apr 2020 12:37:04 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id t3so10850936qkg.1;
-        Tue, 14 Apr 2020 12:37:04 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1731039AbgDNTvS (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Apr 2020 15:51:18 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4431FC061A10;
+        Tue, 14 Apr 2020 12:51:18 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id d17so9030616wrg.11;
+        Tue, 14 Apr 2020 12:51:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XCcn0Oez3DHMoLsnomZlIHgSagkv3wP7zr1RDul2frQ=;
-        b=Ji2pnni81H/QdQEs26s4Z6fXdwADroSrbLcjIJGMVTNTartbwX0XW392IuZrXc7Ifw
-         oVFoF81CFjbTDEMGWse+IvV1faRL/tWjexR9bvnoVMGlhRDKFSKAzxi1L/RPKLX4BPzR
-         LIxUVeB2M5eShpy2usCUat2ZqVtGUF9SWq6u1oqrdGD+/kvVu05SgP3C8Xg7E9L/xx4P
-         yycRmLDE8sbIQj7w35UdiFT/BioiV+iRDHr1DPK9roYbKEwr3ttEL/nNDejoNJHEft6v
-         CId+3TA/LhVEw8rM4sY6hCSzrhDuhaS29UhN9piZKncmqlE9rULhx6n6vG/6g4QBC+Vx
-         2KZw==
+        d=googlemail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+N+iwx+s3b4ecaxzWwdiHxbedClo3dqSdoWLFQ6f1/U=;
+        b=UUxL1PnKnUg8fIrCWtbyWVCvceOj6quFpI5/ZqIp5wWjHBQs2jj8vpenLiBMybtZMj
+         eF9kGXUZn/M7fd8ZNyCtIQtIT5Z8fvBajTocjbk05VdH74TNqOKTbyek5eEC2qZK22yA
+         EoXNTrjsZ/EeuJXkudxFEESAUBypRQ8CElySNf3Xu1ZtCao72FHYzsnewRgzCoolv7nd
+         00a8xhEPPbDi3S0Pt3uyfHyxBizGsvzq1qJZteRoq9XQvErvnO+07byxwp65xHfuX4vK
+         JuZYlUV/tubF5tUBLkSaUnWkCNht9HzMU0ycgoE1FPS9jPYFJUoGAT2bidaF+IJH/bdZ
+         aGAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XCcn0Oez3DHMoLsnomZlIHgSagkv3wP7zr1RDul2frQ=;
-        b=BRa9JW/NAIoeGa88tjNqn0Vb/cmMpFEWyNpMpGajp/9MD8Yj2SpsfTrKiQZ3HPY8yi
-         lR6VEcvARDKX0jzMimJym0geYcsBZwOGEi8MFDdmRW4TxNbL0ESZrHIHbQhRpfNL24px
-         AAx/TztcUs4xEoPRgoioZ7xjUgWTWUS1IScnOqxMzx6vxqDlq95WOCN5QEkxsnWhVXDr
-         vVTiDGqrNaLoJsdxhQS1HDO+zhvOj7H5L+gZCBGifz96H55PqBBtaPZJvJQPMACR4NAk
-         b2U6nZCQwM2oJ9EiIt71NTV6RbgxMzp7x9gjzrSA+LhOgYEpN2w2ui0c0qUlVis2y9hN
-         5MTA==
-X-Gm-Message-State: AGi0PuYeRalQ8Fiba6x1hwFO8TJsUOyDUnL1Rdb9riF2LZnV9/psM01R
-        42Z/IZ36JAzZuwtNWGoF94GuuZB7r4w=
-X-Google-Smtp-Source: APiQypKKOaQjuwK0bBkDSboSxAgdBaOaejp9+0c2qyAgukhvcvo6tpyUJaIA8t7Avkf2ff2IiVKRaQ==
-X-Received: by 2002:ae9:e214:: with SMTP id c20mr11125186qkc.107.1586893023363;
-        Tue, 14 Apr 2020 12:37:03 -0700 (PDT)
-Received: from localhost.localdomain (c-73-37-219-234.hsd1.mn.comcast.net. [73.37.219.234])
-        by smtp.gmail.com with ESMTPSA id t15sm11960197qtc.64.2020.04.14.12.37.01
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+N+iwx+s3b4ecaxzWwdiHxbedClo3dqSdoWLFQ6f1/U=;
+        b=r43UINVKh0KmxA2yktoL/Ebmkg1pvUNP2BjNgqgFs3I3SSnmKzSgjbEC1fNcb7BVmn
+         0Vn5dW//8GQcrbZa+HWuvJzsuiU9/AJEoozWStb32lSeVqvScwLGT04wIue35FeOroJ1
+         HXsIo5GcAaSY4dGfiSlm5u1IsbWDMC1RM2PzPaen8rIK8MjanqJ7keaC1a8Ny7hui25b
+         nR71DO2YQXeyh9KFj0EOZ0QgvoBqGF6kiJ2AV/ZJ3vsLsciM1qDwNSNLgoteHIIbDCY0
+         wU+kRu3NH28e90C2HGR1x56MKbnjcNs3E/TbifqnM7Ic6gpC4bx0ZSJnjHpWH1KG6vLr
+         /SpQ==
+X-Gm-Message-State: AGi0PuY3F5nSl3XA2JhgxNauwqLkPKr9qv/0IhWIEV0PZPI4nm01ddDb
+        TwN8tuAjFRdCS66060Z54X0=
+X-Google-Smtp-Source: APiQypJYWEsJw+LuFClfHTnB3e9fwDUHMevyZXeHtabNPFK+dyJsx6HpmKnwmmfYDvv65aGRQFpHbg==
+X-Received: by 2002:a05:6000:8b:: with SMTP id m11mr11200017wrx.168.1586893876770;
+        Tue, 14 Apr 2020 12:51:16 -0700 (PDT)
+Received: from localhost.localdomain (p200300F13717DF00428D5CFFFEB99DB8.dip0.t-ipconnect.de. [2003:f1:3717:df00:428d:5cff:feb9:9db8])
+        by smtp.googlemail.com with ESMTPSA id s14sm20886844wme.33.2020.04.14.12.51.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Apr 2020 12:37:02 -0700 (PDT)
-From:   Adam Ford <aford173@gmail.com>
-To:     linux-clk@vger.kernel.org
-Cc:     aford@beaconembedded.com, charles.stevens@logicpd.com,
-        Adam Ford <aford173@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] dt: Add additional option bindings for IDT VersaClock
-Date:   Tue, 14 Apr 2020 14:36:16 -0500
-Message-Id: <20200414193616.1368209-3-aford173@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200414193616.1368209-1-aford173@gmail.com>
-References: <20200414193616.1368209-1-aford173@gmail.com>
+        Tue, 14 Apr 2020 12:51:16 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     jbrunet@baylibre.com, linux-amlogic@lists.infradead.org,
+        linux-clk@vger.kernel.org
+Cc:     narmstrong@baylibre.com, mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v2 0/2] clk: meson: prepare GX and G12 for GPU DVFS
+Date:   Tue, 14 Apr 2020 21:50:29 +0200
+Message-Id: <20200414195031.224021-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
@@ -69,66 +64,28 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The VersaClock driver now supports some additional bindings to support
-child nodes which can configure optional settings like mode, voltage
-and slew.
+This contains only the clock driver updates from my other series titled
+"GPU DVFS for Meson GXBB/GXL/GXM/G12A/G12B/SM1" from [0]
 
-This patch updates the binding document to describe what is available
-in the driver.
 
-Signed-off-by: Adam Ford <aford173@gmail.com>
+Changes since v1 at [0]:
+- update the patch descriptions to indicate that we explicitly don't
+  want CLK_SET_RATE_PARENT on the muxes
+- split into clock driver (this series) and .dts changes (future
+  series, waiting for testing feedback on v1 from [0])
 
-diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.txt b/Documentation/devicetree/bindings/clock/idt,versaclock5.txt
-index bcff681a4bd0..6165b6ddb1a9 100644
---- a/Documentation/devicetree/bindings/clock/idt,versaclock5.txt
-+++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.txt
-@@ -31,6 +31,29 @@ Required properties:
- 		- 5p49v5933 and
- 		- 5p49v5935: (optional) property not present or "clkin".
- 
-+For all output ports, a corresponding, optional child node named OUT1,
-+OUT2, etc. can represent a each output, and the node can be used to
-+specify the following:
-+
-+- itd,mode: can be one of the following:
-+                 - VC5_LVPECL
-+                 - VC5_CMOS
-+                 - VC5_HCSL33
-+                 - VC5_LVDS
-+                 - VC5_CMOS2
-+                 - VC5_CMOSD
-+                 - VC5_HCSL25
-+
-+- idt,voltage-microvolts:  can be one of the following
-+                 - 1800000
-+                 - 2500000
-+                 - 3300000
-+-  idt,slew-percent: Percent of normal, can be one of
-+                 - 80
-+                 - 85
-+                 - 90
-+                 - 100
-+
- ==Mapping between clock specifier and physical pins==
- 
- When referencing the provided clock in the DT using phandle and
-@@ -81,6 +104,16 @@ i2c-master-node {
- 		/* Connect XIN input to 25MHz reference */
- 		clocks = <&ref25m>;
- 		clock-names = "xin";
-+
-+		OUT1 {
-+			itd,mode = <VC5_CMOS>;
-+			idt,voltage-microvolts = <1800000>;
-+			idt,slew-percent = <80>;
-+		};
-+		OUT2 {
-+			...
-+		};
-+		...
- 	};
- };
- 
+
+[0] https://patchwork.kernel.org/cover/11466399/
+
+
+Martin Blumenstingl (2):
+  clk: meson: gxbb: Prepare the GPU clock tree to change at runtime
+  clk: meson: g12a: Prepare the GPU clock tree to change at runtime
+
+ drivers/clk/meson/g12a.c | 30 ++++++++++++++++++++++--------
+ drivers/clk/meson/gxbb.c | 40 ++++++++++++++++++++++------------------
+ 2 files changed, 44 insertions(+), 26 deletions(-)
+
 -- 
-2.25.1
+2.26.0
 
