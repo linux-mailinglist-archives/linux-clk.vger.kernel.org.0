@@ -2,76 +2,95 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0C81A713B
-	for <lists+linux-clk@lfdr.de>; Tue, 14 Apr 2020 04:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 397B41A71CE
+	for <lists+linux-clk@lfdr.de>; Tue, 14 Apr 2020 05:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404251AbgDNCze (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 13 Apr 2020 22:55:34 -0400
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:51914 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2404246AbgDNCze (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 Apr 2020 22:55:34 -0400
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Apr 2020 19:55:33 -0700
-Received: from sivaprak-linux.qualcomm.com ([10.201.3.202])
-  by ironmsg03-sd.qualcomm.com with ESMTP; 13 Apr 2020 19:55:29 -0700
-Received: by sivaprak-linux.qualcomm.com (Postfix, from userid 459349)
-        id BB9C9216BC; Tue, 14 Apr 2020 08:25:24 +0530 (IST)
-From:   Sivaprakash Murugesan <sivaprak@codeaurora.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        jassisinghbrar@gmail.com, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Sivaprakash Murugesan <sivaprak@codeaurora.org>
-Subject: [PATCH V3 8/8] arm64: dts: ipq6018: Add a53 pll and apcs clock
-Date:   Tue, 14 Apr 2020 08:25:22 +0530
-Message-Id: <1586832922-29191-9-git-send-email-sivaprak@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1586832922-29191-1-git-send-email-sivaprak@codeaurora.org>
-References: <1586832922-29191-1-git-send-email-sivaprak@codeaurora.org>
+        id S2404757AbgDNDdf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 13 Apr 2020 23:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49738 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2404756AbgDNDdf (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 Apr 2020 23:33:35 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B890BC0A3BDC;
+        Mon, 13 Apr 2020 20:33:33 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id x26so4233139pgc.10;
+        Mon, 13 Apr 2020 20:33:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e1I6YF+VJ57pEb1USvw1okp6yWunIg/IfHp9i2omTR0=;
+        b=F03OGL1NGLi1sgHbYBhEZNMP48siZFUj5XoT+Gyy9eeLJUCt7IjIoBFDkuohdy9um6
+         Z+eIV1Nnhl5f/Rnlh5TPju7t9FiEA9CEwSMr0fUw7T8C08qLMecp5YHhmb+q+y1NcCHu
+         S/50B+TqnCtl8F7vQ+Fv8B5iYXiD7en+BS0d+++VodBkLe/CUE3TEtGoXMqt6gToago6
+         Zdz2Xew+u5bc1tPNyd+sa8quuu+h2oOjv3uE5/VP5LOWd3PraeYiwvvTU1NHYusGc9wU
+         3yrJ0nFClaPnXsKw8GHk4nD7XG3iPHXOYCQdm8+g2xPiy7M3IK+QwJXW0Zg68INKG+OR
+         KvyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e1I6YF+VJ57pEb1USvw1okp6yWunIg/IfHp9i2omTR0=;
+        b=g+GGFCZXEPEoV4Y9UtAlwPJOBBkMGI0mZaKcLXqvp/68jHo7EvWL8KyM5PHaZ2bz+X
+         4ippF3SjZuTz25RLq1ywEuKLGduqLIOFm4LKDC1tkoNGxu0LbjfUiV3nO59VnHo+/ggd
+         iUDtuuAR34sNNhBmuCwbRqN/ppBKUEu7FUm6n5Ls93h2U9n+Fxl/AqoJ+imKHRHmqC92
+         nJKbX7sfVS4zof/4yMi9OEBHUNPkslUPaZKmg99hhdFwlPxL3qp/nl8m2paXJbJggWd7
+         r8rep5+3Gy+f0mh9no8DgZ0Zw8fdUADXHDEoTaq9R+n2pFW5chi+vJvsQ4kP6YZ9yRqb
+         60ig==
+X-Gm-Message-State: AGi0PuZy9b7TlOOIqsf83itlWGQveakEmKbBVkb4/g6IiwgQo9lCql0o
+        /MEveZhQ865IlK0VaNqP1Lc=
+X-Google-Smtp-Source: APiQypIFuvcgiaYOp3jBFttcXV/yqL76ouid7CoBnHHhWLQBwaNNFqlAJAiN6wOhME3K7vZQuxGJWw==
+X-Received: by 2002:aa7:9f0e:: with SMTP id g14mr297123pfr.75.1586835213326;
+        Mon, 13 Apr 2020 20:33:33 -0700 (PDT)
+Received: from ubt.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id 140sm5612440pge.49.2020.04.13.20.33.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Apr 2020 20:33:32 -0700 (PDT)
+From:   zhang.lyra@gmail.com
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>
+Subject: [PATCH v2 0/4] add mipi_csi_xx gate clocks for SC9863A
+Date:   Tue, 14 Apr 2020 11:33:21 +0800
+Message-Id: <20200414033325.26536-1-zhang.lyra@gmail.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-add support for a53 pll and apcs clock.
+From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 
-Signed-off-by: Sivaprakash Murugesan <sivaprak@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/ipq6018.dtsi | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+mipi_csi_xx clocks are used by camera sensors. These clocks cannot be
+accessed (even read) if their parent gate clock is disabled. So this
+patchset also add a check to parent clocks when reading these gate
+clocks which marked with the specific flag (SPRD_GATE_NON_AON).
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-index 1aa8d85..3c2d91a 100644
---- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-@@ -294,12 +294,22 @@
- 		};
- 
- 		apcs_glb: mailbox@b111000 {
--			compatible = "qcom,ipq8074-apcs-apps-global";
--			reg = <0x0b111000 0xc>;
--
-+			compatible = "qcom,ipq6018-apcs-apps-global";
-+			reg = <0x0b111000 0x1000>;
-+			#clock-cells = <1>;
-+			clocks = <&a53pll>, <&xo>;
-+			clock-names = "pll", "xo";
- 			#mbox-cells = <1>;
- 		};
- 
-+		a53pll: clock@b116000 {
-+			compatible = "qcom,ipq6018-a53pll";
-+			reg = <0x0b116000 0x40>;
-+			#clock-cells = <0>;
-+			clocks = <&xo>;
-+			clock-names = "xo";
-+		};
-+
- 		timer {
- 			compatible = "arm,armv8-timer";
- 			interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+changes from v1:
+* added Rob's acked-by;
+
+Chunyan Zhang (4):
+  clk: sprd: check its parent status before reading gate clock
+  dt-bindings: clk: sprd: add mipi_csi_xx clocks for SC9863A
+  clk: sprd: add dt-bindings include for mipi_csi_xx clocks
+  clk: sprd: add mipi_csi_xx gate clocks
+
+ .../bindings/clock/sprd,sc9863a-clk.yaml      |  1 +
+ drivers/clk/sprd/gate.c                       |  7 ++++
+ drivers/clk/sprd/gate.h                       |  9 ++++++
+ drivers/clk/sprd/sc9863a-clk.c                | 32 +++++++++++++++++++
+ include/dt-bindings/clock/sprd,sc9863a-clk.h  |  5 +++
+ 5 files changed, 54 insertions(+)
+
 -- 
-2.7.4
+2.20.1
 
