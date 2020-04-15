@@ -2,36 +2,37 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D651AA243
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Apr 2020 14:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8481AA22F
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Apr 2020 14:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S370546AbgDOMwq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Apr 2020 08:52:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33840 "EHLO mail.kernel.org"
+        id S2408919AbgDOMvh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Apr 2020 08:51:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34162 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2897147AbgDOLmd (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:42:33 -0400
+        id S2408893AbgDOLmq (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 15 Apr 2020 07:42:46 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 49ED4206A2;
-        Wed, 15 Apr 2020 11:42:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7F21220936;
+        Wed, 15 Apr 2020 11:42:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586950953;
-        bh=lbGMWCj1Ow4xOVH+P9eXNDdT+gYet8KYpgKFEEcJB1Q=;
+        s=default; t=1586950965;
+        bh=uHb5jBjIoswJZxzBsYgMUJiHR8BPe/xFo1UMnp0/+P8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TqlT7Wv3HJX1xD5UnEhxWSgkS0pynih6HItDoibC3ZjpqUCQXdCD5IKsnWYM3IR6L
-         u0UGhrf/11Jf/u8hN/qHNEvyWU16HsJaAlUFg4R9hQYkTJGfv6OFcq6nOBnH6+szUx
-         FjCITT4aCS+jneRxTWGfy48TPqHNIFMqvnGLX+AI=
+        b=sSpWdf6E8tfMc7w/PtYzR9B/229D8FIVmlyLC6IP4wrxs3eOu5UgtuMobxtDREipk
+         8562oZy7a6FcpmDiQka6eIVg/T5SzaGdITy8YdCDvgcfURCvPW8FwGSd4JSosf4FQ/
+         ARzaQ0WKmVu2wzkedFIHw8BPAgw3lJ7InSpJ4oYk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Anson Huang <Anson.Huang@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
+Cc:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <treding@nvidia.com>,
         Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.5 005/106] clk: imx: pll14xx: Add new frequency entries for pll1443x table
-Date:   Wed, 15 Apr 2020 07:40:45 -0400
-Message-Id: <20200415114226.13103-5-sashal@kernel.org>
+        linux-tegra@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.5 015/106] clk: tegra: Fix Tegra PMC clock out parents
+Date:   Wed, 15 Apr 2020 07:40:55 -0400
+Message-Id: <20200415114226.13103-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200415114226.13103-1-sashal@kernel.org>
 References: <20200415114226.13103-1-sashal@kernel.org>
@@ -44,36 +45,54 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Anson Huang <Anson.Huang@nxp.com>
+From: Sowjanya Komatineni <skomatineni@nvidia.com>
 
-[ Upstream commit 57795654fb553a78f07a9f92d87fb2582379cd93 ]
+[ Upstream commit 6fe38aa8cac3a5db38154331742835a4d9740788 ]
 
-Add new frequency entries to pll1443x table to meet different
-display settings requirement.
+Tegra PMC clocks clk_out_1, clk_out_2, and clk_out_3 supported parents
+are osc, osc_div2, osc_div4 and extern clock.
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Clock driver is using incorrect parents clk_m, clk_m_div2, clk_m_div4
+for PMC clocks.
+
+This patch fixes this.
+
+Tested-by: Dmitry Osipenko <digetx@gmail.com>
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/imx/clk-pll14xx.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/clk/tegra/clk-tegra-pmc.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/clk/imx/clk-pll14xx.c b/drivers/clk/imx/clk-pll14xx.c
-index 3636c8035c7d9..c5df14caa1675 100644
---- a/drivers/clk/imx/clk-pll14xx.c
-+++ b/drivers/clk/imx/clk-pll14xx.c
-@@ -55,8 +55,10 @@ static const struct imx_pll14xx_rate_table imx_pll1416x_tbl[] = {
+diff --git a/drivers/clk/tegra/clk-tegra-pmc.c b/drivers/clk/tegra/clk-tegra-pmc.c
+index bec3e008335f3..5e044ba1ae364 100644
+--- a/drivers/clk/tegra/clk-tegra-pmc.c
++++ b/drivers/clk/tegra/clk-tegra-pmc.c
+@@ -49,16 +49,16 @@ struct pmc_clk_init_data {
+ 
+ static DEFINE_SPINLOCK(clk_out_lock);
+ 
+-static const char *clk_out1_parents[] = { "clk_m", "clk_m_div2",
+-	"clk_m_div4", "extern1",
++static const char *clk_out1_parents[] = { "osc", "osc_div2",
++	"osc_div4", "extern1",
  };
  
- static const struct imx_pll14xx_rate_table imx_pll1443x_tbl[] = {
-+	PLL_1443X_RATE(1039500000U, 173, 2, 1, 16384),
- 	PLL_1443X_RATE(650000000U, 325, 3, 2, 0),
- 	PLL_1443X_RATE(594000000U, 198, 2, 2, 0),
-+	PLL_1443X_RATE(519750000U, 173, 2, 2, 16384),
- 	PLL_1443X_RATE(393216000U, 262, 2, 3, 9437),
- 	PLL_1443X_RATE(361267200U, 361, 3, 3, 17511),
+-static const char *clk_out2_parents[] = { "clk_m", "clk_m_div2",
+-	"clk_m_div4", "extern2",
++static const char *clk_out2_parents[] = { "osc", "osc_div2",
++	"osc_div4", "extern2",
  };
+ 
+-static const char *clk_out3_parents[] = { "clk_m", "clk_m_div2",
+-	"clk_m_div4", "extern3",
++static const char *clk_out3_parents[] = { "osc", "osc_div2",
++	"osc_div4", "extern3",
+ };
+ 
+ static struct pmc_clk_init_data pmc_clks[] = {
 -- 
 2.20.1
 
