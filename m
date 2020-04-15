@@ -2,165 +2,148 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF12A1A9131
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Apr 2020 04:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E691A9533
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Apr 2020 09:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729418AbgDOC54 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 14 Apr 2020 22:57:56 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:3781 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729115AbgDOC5w (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 14 Apr 2020 22:57:52 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e9677f50000>; Tue, 14 Apr 2020 19:56:53 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 14 Apr 2020 19:57:51 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 14 Apr 2020 19:57:51 -0700
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 15 Apr
- 2020 02:57:51 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 15 Apr 2020 02:57:51 +0000
-Received: from skomatineni-linux.nvidia.com (Not Verified[10.2.171.241]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e96782f0000>; Tue, 14 Apr 2020 19:57:51 -0700
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-To:     <skomatineni@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
-        <sakari.ailus@iki.fi>, <helen.koike@collabora.com>
-CC:     <digetx@gmail.com>, <sboyd@kernel.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [RFC PATCH v7 9/9] arm64: tegra: Add Tegra VI CSI support in device tree
-Date:   Tue, 14 Apr 2020 19:57:43 -0700
-Message-ID: <1586919463-30542-10-git-send-email-skomatineni@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1586919463-30542-1-git-send-email-skomatineni@nvidia.com>
-References: <1586919463-30542-1-git-send-email-skomatineni@nvidia.com>
-X-NVConfidentiality: public
+        id S2393705AbgDOHxt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Apr 2020 03:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2635367AbgDOHxb (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Apr 2020 03:53:31 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747F0C061A0C
+        for <linux-clk@vger.kernel.org>; Wed, 15 Apr 2020 00:53:29 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id x18so13622161wrq.2
+        for <linux-clk@vger.kernel.org>; Wed, 15 Apr 2020 00:53:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:autocrypt:organization:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=kBML5p9FTR/cSP2nmZwVa8/pgzdTVSXOXZP4sLP4ogs=;
+        b=Wjkf2zcCTUG0Ok/lmmvQx1NU3ss3JLnGjq1ip3x7xuG8mX6QkhkJYKhkW/3x+4YhXC
+         sc/hWNKOOyzsx5aNjSF9L5KaC1VFrGC12XwZYVNIVN0TS+Hp1RIDRjuSCiSjtC/i6NXm
+         FL1Sd//FQu62V9kfT/pxFHSB0ZjyXw8ZPfIC/ptx00qwBmN2QakxTpwkRNslE0N/LQrB
+         IXouroTWaS9U4k4Ju07aEhV2EZiYw/aQmnRao6LG1hQIwDW8LZ1eoz82EMRRv6n358SP
+         AUuZcAlwEQ064jgSriufkm35olJYkn2D29G3HEO+lGgKD5mmFrRgiOYImNA0ZouIs6Bx
+         Ft3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=kBML5p9FTR/cSP2nmZwVa8/pgzdTVSXOXZP4sLP4ogs=;
+        b=Q4KKcAUB0A6iDwIeGG1jciHGII6V0Z3PsXqAvhygUFnqSrP30M+gl4c8wNUQH4+6K6
+         vOos4InEh9OVeJPO1qJEltQkMVB2LD9rMmfnZzxzxJBKZu7cmk4RvPh3v2S6u0ztEQBg
+         UhYgrEVMJcSv7DC7kZzeQKaR2Q8SdLcKQmC1Eg5Zbn52gaUKPTGM9Ac0BSOwK39G3lj3
+         j8H/RMsQgpTfCUFrsZVW/PmdJqQq48caiS/gK64++ksIwB7TaB7EGTNJWiNbC+tu65HQ
+         OheshmXwzRJdNHapUxv2mppR9zqtmD+b2fBidS665zmWN/curRARBMba/85LgiAkVgP1
+         pl0g==
+X-Gm-Message-State: AGi0PuZKdrCuikwwDDy+0hvx0pJEIsO+3Zaw6s37XoDN0B2flr7SztGd
+        tulcFrVA4ata8QGPWHVFWk5yYw==
+X-Google-Smtp-Source: APiQypKy1+Tc3Y0hGUfB49///1SHeOTBpfPZpDWXkJypIieHtRzn2n8uDhg2Uo4QBcdWnBEmeE/s1g==
+X-Received: by 2002:adf:e944:: with SMTP id m4mr14535852wrn.366.1586937208116;
+        Wed, 15 Apr 2020 00:53:28 -0700 (PDT)
+Received: from ?IPv6:2a01:e35:2ec0:82b0:39cc:a07:8b48:cc56? ([2a01:e35:2ec0:82b0:39cc:a07:8b48:cc56])
+        by smtp.gmail.com with ESMTPSA id b4sm17408679wrv.42.2020.04.15.00.53.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Apr 2020 00:53:27 -0700 (PDT)
+Subject: Re: [PATCH v2 0/2] clk: meson: prepare GX and G12 for GPU DVFS
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        jbrunet@baylibre.com, linux-amlogic@lists.infradead.org,
+        linux-clk@vger.kernel.org
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20200414195031.224021-1-martin.blumenstingl@googlemail.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
+ 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
+ BSwxi7g3Mu7u5kUByanqHyA=
+Organization: Baylibre
+Message-ID: <fda0f007-4377-c78a-e2d7-aecb12779287@baylibre.com>
+Date:   Wed, 15 Apr 2020 09:53:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1586919413; bh=yB3b29VbNFtTvMcPZCMVxLppaVECoZp9WEY70dWiuUY=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=SziGpGhJe980GifGZkqDEWB8sMEsV/YcQhL0tGJ5mSYGCelUxz/IhdB7ZmiVt+vdR
-         69DcoiLaInltbB98jxe8gLeJxwml0SqzLLPjnMcJVlzzZrsu/35pxuQSqDCucPjPyW
-         FVpAs2RXLycyJBMSW343mL6V7XZIi80gg3o3yKk41QztmmV7y6yLvd0RxorNu97f/t
-         hEVJVcbkrR5FIcCEObYIN8+mmBm2wQ7N5GHmsRul+PkjvbUWp7w0ilRcGj54BiX202
-         ZkjBR83hGgnb05VgBkrMewCXwnx1xFFN0G6npZxNftn+S+m4lFFo01UulkXiSFFM8E
-         7Y7COsPM3lDfg==
+In-Reply-To: <20200414195031.224021-1-martin.blumenstingl@googlemail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Tegra210 contains VI controller for video input capture from MIPI
-CSI camera sensors and also supports built-in test pattern generator.
+On 14/04/2020 21:50, Martin Blumenstingl wrote:
+> This contains only the clock driver updates from my other series titled
+> "GPU DVFS for Meson GXBB/GXL/GXM/G12A/G12B/SM1" from [0]
+> 
+> 
+> Changes since v1 at [0]:
+> - update the patch descriptions to indicate that we explicitly don't
+>   want CLK_SET_RATE_PARENT on the muxes
+> - split into clock driver (this series) and .dts changes (future
+>   series, waiting for testing feedback on v1 from [0])
+> 
+> 
+> [0] https://patchwork.kernel.org/cover/11466399/
+> 
+> 
+> Martin Blumenstingl (2):
+>   clk: meson: gxbb: Prepare the GPU clock tree to change at runtime
+>   clk: meson: g12a: Prepare the GPU clock tree to change at runtime
+> 
+>  drivers/clk/meson/g12a.c | 30 ++++++++++++++++++++++--------
+>  drivers/clk/meson/gxbb.c | 40 ++++++++++++++++++++++------------------
+>  2 files changed, 44 insertions(+), 26 deletions(-)
+> 
 
-CSI ports can be one-to-one mapped to VI channels for capturing from
-an external sensor or from built-in test pattern generator.
 
-This patch adds support for VI and CSI and enables them in Tegra210
-device tree.
-
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
----
- arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi | 10 ++++++
- arch/arm64/boot/dts/nvidia/tegra210.dtsi       | 46 +++++++++++++++++++++++++-
- 2 files changed, 55 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi b/arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi
-index 313a4c2..b57d837 100644
---- a/arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi
-@@ -14,6 +14,16 @@
- 			status = "okay";
- 		};
- 
-+		vi@54080000 {
-+			status = "okay";
-+
-+			avdd-dsi-csi-supply = <&vdd_dsi_csi>;
-+
-+			csi@838 {
-+				status = "okay";
-+			};
-+		};
-+
- 		sor@54580000 {
- 			status = "okay";
- 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra210.dtsi b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-index 5b1dfd8..cad42a7 100644
---- a/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-@@ -137,9 +137,44 @@
- 
- 		vi@54080000 {
- 			compatible = "nvidia,tegra210-vi";
--			reg = <0x0 0x54080000 0x0 0x00040000>;
-+			reg = <0x0 0x54080000 0x0 0x700>;
- 			interrupts = <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
- 			status = "disabled";
-+			assigned-clocks = <&tegra_car TEGRA210_CLK_VI>;
-+			assigned-clock-parents = <&tegra_car TEGRA210_CLK_PLL_C4_OUT0>;
-+
-+			clocks = <&tegra_car TEGRA210_CLK_VI>;
-+			power-domains = <&pd_venc>;
-+
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			ranges = <0x0 0x0 0x54080000 0x2000>;
-+
-+			csi@838 {
-+				compatible = "nvidia,tegra210-csi";
-+				reg = <0x838 0x1300>;
-+				status = "disabled";
-+				assigned-clocks = <&tegra_car TEGRA210_CLK_CILAB>,
-+						  <&tegra_car TEGRA210_CLK_CILCD>,
-+						  <&tegra_car TEGRA210_CLK_CILE>,
-+						  <&tegra_car TEGRA210_CLK_CSI_TPG>;
-+				assigned-clock-parents = <&tegra_car TEGRA210_CLK_PLL_P>,
-+							 <&tegra_car TEGRA210_CLK_PLL_P>,
-+							 <&tegra_car TEGRA210_CLK_PLL_P>;
-+				assigned-clock-rates = <102000000>,
-+						       <102000000>,
-+						       <102000000>,
-+						       <972000000>;
-+
-+				clocks = <&tegra_car TEGRA210_CLK_CSI>,
-+					 <&tegra_car TEGRA210_CLK_CILAB>,
-+					 <&tegra_car TEGRA210_CLK_CILCD>,
-+					 <&tegra_car TEGRA210_CLK_CILE>,
-+					 <&tegra_car TEGRA210_CLK_CSI_TPG>;
-+				clock-names = "csi", "cilab", "cilcd", "cile", "csi_tpg";
-+				power-domains = <&pd_sor>;
-+			};
- 		};
- 
- 		tsec@54100000 {
-@@ -839,6 +874,15 @@
- 				reset-names = "vic";
- 				#power-domain-cells = <0>;
- 			};
-+
-+			pd_venc: venc {
-+				clocks = <&tegra_car TEGRA210_CLK_VI>,
-+					 <&tegra_car TEGRA210_CLK_CSI>;
-+				resets = <&mc TEGRA210_MC_RESET_VI>,
-+					 <&tegra_car TEGRA210_RST_VI>,
-+					 <&tegra_car TEGRA210_CLK_CSI>;
-+				#power-domain-cells = <0>;
-+			};
- 		};
- 
- 		sdmmc1_3v3: sdmmc1-3v3 {
--- 
-2.7.4
-
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
