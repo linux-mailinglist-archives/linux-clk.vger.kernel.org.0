@@ -2,97 +2,105 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD951A9E4B
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Apr 2020 13:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 321201AAB1E
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Apr 2020 17:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2897796AbgDOLxI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Apr 2020 07:53:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44012 "EHLO mail.kernel.org"
+        id S2388681AbgDOO5K (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Apr 2020 10:57:10 -0400
+Received: from mga17.intel.com ([192.55.52.151]:60655 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409448AbgDOLsR (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 15 Apr 2020 07:48:17 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 65C1020775;
-        Wed, 15 Apr 2020 11:48:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586951297;
-        bh=diZCH/Mg8n9hXnJ0WhmZgAaGP/vFOO2uGKOad9Enxpw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TDqNr59t4PMHxAz3NxIhbJp01/dK3UoOPI+47yYK8/NcXPy3VVlKSLA9Xm6JsFrLq
-         EbdWxPxPgtvZYLt1qLWeDshJKwHVuTlUtRiRgQ3WKi1BGsZ/JzeZNtBGEdbdj9S4sj
-         uZxSBe0g+h5HxKyXdh0q1AIp3+lFuLs8DFowJgfY=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 02/14] clk: tegra: Fix Tegra PMC clock out parents
-Date:   Wed, 15 Apr 2020 07:48:02 -0400
-Message-Id: <20200415114814.15954-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200415114814.15954-1-sashal@kernel.org>
-References: <20200415114814.15954-1-sashal@kernel.org>
+        id S371202AbgDOO5J (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 15 Apr 2020 10:57:09 -0400
+IronPort-SDR: 2Gvm1dA03VSQvTUL2wyt+uIlhnJgx9WbJfj7E9h0Hh4JOhQ2y5BsgxIpWdn86k6g8kQd/ZHsxN
+ /UpCVQ4T0mjg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2020 07:57:09 -0700
+IronPort-SDR: vTZGDdDuMV+ybxPP4XZua6xk6dUN/yHLuEGjn3AQCYHjh1uACWaSCt7N6rt09jcVkdqBHiXq2/
+ UTKYIoOEExpw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,387,1580803200"; 
+   d="scan'208";a="400337197"
+Received: from ccarey-mobl.amr.corp.intel.com (HELO [10.209.36.121]) ([10.209.36.121])
+  by orsmga004.jf.intel.com with ESMTP; 15 Apr 2020 07:57:07 -0700
+Subject: Re: [RFC PATCH 04/16] ASoC: Intel: sof-pcm512x: detect Hifiberry DAC+
+ PRO
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org, Matthias Reichl <hias@horus.com>,
+        tiwai@suse.de, Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Matuschek <daniel@hifiberry.com>,
+        linux-clk@vger.kernel.org, Hui Wang <hui.wang@canonical.com>,
+        linux-gpio@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        broonie@kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>
+References: <20200409195841.18901-1-pierre-louis.bossart@linux.intel.com>
+ <20200409195841.18901-5-pierre-louis.bossart@linux.intel.com>
+ <20200414172002.GD34613@smile.fi.intel.com>
+ <d3b154f4-fa8a-50a5-7246-51d31e18c4e6@linux.intel.com>
+ <20200415095526.GP34613@smile.fi.intel.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Message-ID: <664999e7-f345-7296-feca-56cb53a27eb1@linux.intel.com>
+Date:   Wed, 15 Apr 2020 09:07:20 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200415095526.GP34613@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Sowjanya Komatineni <skomatineni@nvidia.com>
 
-[ Upstream commit 6fe38aa8cac3a5db38154331742835a4d9740788 ]
 
-Tegra PMC clocks clk_out_1, clk_out_2, and clk_out_3 supported parents
-are osc, osc_div2, osc_div4 and extern clock.
+On 4/15/20 4:55 AM, Andy Shevchenko wrote:
+> On Tue, Apr 14, 2020 at 01:02:12PM -0500, Pierre-Louis Bossart wrote:
+>> On 4/14/20 12:20 PM, Andy Shevchenko wrote:
+>>> On Thu, Apr 09, 2020 at 02:58:29PM -0500, Pierre-Louis Bossart wrote:
+> 
+> ...
+> 
+>>>> +	ctx->sclk = devm_clk_get(rtd->card->dev, "sclk");
+>>>
+>>> Is this in the bindings?
+>>
+>> Not for now. the 'sclk' part is only used by me myself and I in an ACPI
+>> context. I can add this description if desired.
+> 
+> Unfortunately you need to add this to the bindings, because it's a part of it
+> and somebody may use it outside of your scope.
 
-Clock driver is using incorrect parents clk_m, clk_m_div2, clk_m_div4
-for PMC clocks.
+ok
 
-This patch fixes this.
 
-Tested-by: Dmitry Osipenko <digetx@gmail.com>
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
-Signed-off-by: Thierry Reding <treding@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/clk/tegra/clk-tegra-pmc.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+>>>> +	if (IS_ERR(ctx->sclk)) {
+>>>
+>>>> +		dev_info(dev, "Could not get SCLK, will operate in SOC master mode\n");
+>>>
+>>> Sounds like devm_clk_get_optional().
+>>
+>> I am not sure about the semantic here. This driver selects the one which
+>> implements this clock, so if we get a -ENOENT return it's a very bad sign.
+>> Not sure what suppressing the error and converting to NULL would do?
+> 
+> Same as per GPIO.
+> Can it work without this clock? How did it work before your change?
+> 
+> When you add any hard dependency always ask yourself above questions.
 
-diff --git a/drivers/clk/tegra/clk-tegra-pmc.c b/drivers/clk/tegra/clk-tegra-pmc.c
-index 91377abfefa19..17a04300f93bf 100644
---- a/drivers/clk/tegra/clk-tegra-pmc.c
-+++ b/drivers/clk/tegra/clk-tegra-pmc.c
-@@ -60,16 +60,16 @@ struct pmc_clk_init_data {
- 
- static DEFINE_SPINLOCK(clk_out_lock);
- 
--static const char *clk_out1_parents[] = { "clk_m", "clk_m_div2",
--	"clk_m_div4", "extern1",
-+static const char *clk_out1_parents[] = { "osc", "osc_div2",
-+	"osc_div4", "extern1",
- };
- 
--static const char *clk_out2_parents[] = { "clk_m", "clk_m_div2",
--	"clk_m_div4", "extern2",
-+static const char *clk_out2_parents[] = { "osc", "osc_div2",
-+	"osc_div4", "extern2",
- };
- 
--static const char *clk_out3_parents[] = { "clk_m", "clk_m_div2",
--	"clk_m_div4", "extern3",
-+static const char *clk_out3_parents[] = { "osc", "osc_div2",
-+	"osc_div4", "extern3",
- };
- 
- static struct pmc_clk_init_data pmc_clks[] = {
--- 
-2.20.1
+The clock is not required in codec slave mode, it's provided by the SOC.
 
+The clock is required when the codec is configured as master. Without 
+these GPIO selection there will be no audio. So yes we could move this 
+to devm_clk_get_optional() and change the test to IS_ERR_OR_NULL.
+
+
+
+>>>> +		goto skip_dacpro;
+>>>> +	}
+> 
