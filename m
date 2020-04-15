@@ -2,96 +2,138 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2E71AAA77
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Apr 2020 16:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7381AAB22
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Apr 2020 17:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S370821AbgDOOkZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Apr 2020 10:40:25 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:38109 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2636734AbgDOOkT (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Apr 2020 10:40:19 -0400
-Received: by mail-oi1-f193.google.com with SMTP id x21so7423663oic.5;
-        Wed, 15 Apr 2020 07:40:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JuvzyUQda56xAYCtJ1sYbNZE0RbPskAoqaEeQtvOFTc=;
-        b=Lm1SGHp1ePyVnSm8uGOUhjUuQugLoiqDF3i3pc3v/io2tYwopAXfLGrUZpAlY+KPkR
-         uJSRRnxUet1jAUqMYd2vfUbYArisZNOKSznGMKJ3txzgbGXzZqUToUw6ba282wIivcuv
-         HwIJ9U2jw1MhSQeIBmqqNfoWdKRx7XWdkLRf6ah0T8QkZp2I7UkkzzvwK/BU2u9vBse/
-         IStit7d8gG5MUcXE8HZyvaa0TAqKkzeogmxEsN3x0yFWuP14Qo1MVL/yhZgTjdYG343X
-         fNJy/BerqUGIj3lb352rX7ynWqzoVCIgzFC17Y7egIBx59inYMcHfF/2TbpiB5YN5e5u
-         QNLw==
-X-Gm-Message-State: AGi0PubXUwENK1l3z3uniWGVQS2YRsCjPDgFPUNnK/u7iR9+we2e5I1m
-        AyW2SCeWcYW34WXs9UmsZA==
-X-Google-Smtp-Source: APiQypKQDJ7OUo2PH72nmsevzWtRJ1xyeW5rr9pORlJ4+DM6LMTt1YQKtYojzR45dQWjeWOKMSmnqA==
-X-Received: by 2002:aca:ecce:: with SMTP id k197mr15969614oih.127.1586961617711;
-        Wed, 15 Apr 2020 07:40:17 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id y131sm6420487oie.39.2020.04.15.07.40.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2020 07:40:17 -0700 (PDT)
-Received: (nullmailer pid 11685 invoked by uid 1000);
-        Wed, 15 Apr 2020 14:40:16 -0000
-Date:   Wed, 15 Apr 2020 09:40:16 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, sboyd@kernel.org,
-        mturquette@baylibre.com, mark.rutland@arm.com
-Subject: Re: [PATCHv6 4/5] dt-bindings: documentation: add clock bindings
- information for Agilex
-Message-ID: <20200415144016.GA26244@bogus>
-References: <20200406160418.27476-1-dinguyen@kernel.org>
- <20200406160418.27476-5-dinguyen@kernel.org>
+        id S2392565AbgDOO5R (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Apr 2020 10:57:17 -0400
+Received: from mga17.intel.com ([192.55.52.151]:60655 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2392528AbgDOO5O (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 15 Apr 2020 10:57:14 -0400
+IronPort-SDR: /BxEBUZYruRdIrnVqlQ/bDLUT4qxdoWnwoFRXKn9bIqgvX/Luy2aP3B2l94VRToW9OuELU780h
+ dyz5TqzrhGvg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2020 07:57:13 -0700
+IronPort-SDR: TNZsy4SP9GBFchjn5F8fxYVqunPZfBr4bT/E/57a2xp65b6ujjeSwvZ/IlU6gpMvCpNL9io1CH
+ G+2zgrGgvWtQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,387,1580803200"; 
+   d="scan'208";a="400337213"
+Received: from ccarey-mobl.amr.corp.intel.com (HELO [10.209.36.121]) ([10.209.36.121])
+  by orsmga004.jf.intel.com with ESMTP; 15 Apr 2020 07:57:12 -0700
+Subject: Re: [RFC PATCH 02/16] ASoC: pcm512x: use "sclk" string to retrieve
+ clock
+To:     Mark Brown <broonie@kernel.org>
+Cc:     alsa-devel@alsa-project.org, tiwai@suse.de,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Matuschek <daniel@hifiberry.com>,
+        Matthias Reichl <hias@horus.com>,
+        Hui Wang <hui.wang@canonical.com>, linux-gpio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20200409195841.18901-1-pierre-louis.bossart@linux.intel.com>
+ <20200409195841.18901-3-pierre-louis.bossart@linux.intel.com>
+ <20200414174530.GK5412@sirena.org.uk>
+ <8ee01a4f-ceb2-d207-7cef-cf766fa670af@linux.intel.com>
+ <20200414182728.GM5412@sirena.org.uk>
+ <3017b762-7a0c-cee2-06dd-1e96f52eb849@linux.intel.com>
+ <20200414195031.GP5412@sirena.org.uk>
+ <0d2aed9b-5c79-9ed2-6ca1-67b2688e4c99@linux.intel.com>
+ <20200415113630.GC5265@sirena.org.uk>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Message-ID: <4635e57b-fccd-d8a9-fa99-8124debb3428@linux.intel.com>
+Date:   Wed, 15 Apr 2020 09:44:12 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200406160418.27476-5-dinguyen@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200415113630.GC5265@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, Apr 06, 2020 at 11:04:17AM -0500, Dinh Nguyen wrote:
-> Document the Agilex clock bindings, and add the clock header file. The
-> clock header is an enumeration of all the different clocks on the Agilex
-> platform.
+
+
+On 4/15/20 6:36 AM, Mark Brown wrote:
+> On Tue, Apr 14, 2020 at 03:13:01PM -0500, Pierre-Louis Bossart wrote:
+>> On 4/14/20 2:50 PM, Mark Brown wrote:
 > 
-> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-> ---
-> v6: fix build error by adding descriptions for clocks and reg in
->     properties
-> v5: update license to GPL-2.0-only
->     Add additionalProperties
->     Add clock input for clkmgr
-> v4: really fix build error(comment formatting was wrong)
-> v3: address comments from Stephen Boyd
->     fix build error(tab removed in line 37)
->     renamed to intel,agilex.yaml
-> v2: convert original document to YAML
-> ---
->  .../bindings/clock/intel,agilex.yaml          | 46 ++++++++++++
->  include/dt-bindings/clock/agilex-clock.h      | 70 +++++++++++++++++++
->  2 files changed, 116 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/intel,agilex.yaml
->  create mode 100644 include/dt-bindings/clock/agilex-clock.h
+>>> It's not just DT platforms that I'm worried about here, it's also ACPI
+>>> systems - all it takes is for a system to have a second device and a
+>>> name collision could happen, especially with such generic names.  We
+>>> tried to avoid doing this for board files for the same reason.
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/intel,agilex.yaml b/Documentation/devicetree/bindings/clock/intel,agilex.yaml
-> new file mode 100644
-> index 000000000000..83bca2661ec3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/intel,agilex.yaml
-> @@ -0,0 +1,46 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
+>> I am on the paranoid side but here I don't see much potential for conflicts:
+> 
+>> a) this only works for the Up2 board with a HAT connector
+>> b) this only work with the Hifiberry DAC+ PRO board.
+> 
+>> This codec is not used in any traditional client devices.
+> 
+> That's what you're doing right now but someone else can use the same
+> devices, or adopt the same approaches on something like a Chromebook.
+> 
+>>> My understanding is that ACPI just doesn't have clock bindings (or audio
+>>> bindings or...) so you're basically using board files here and board
+>>> files can definitely do more than we're seeing here.
+> 
+>> I don't understand your definition of board file, sorry. We've never had
+>> one, the only thing that's board-specific is the machine driver.
+> 
+> Architectures that don't have firmware bindings use straight C code to
+> register and set things up.  Machine drivers are essentially board
+> files, they're just audio specific bits of board file that use audio
+> APIs and so are in the sound directory.
 
-Dual license new bindings:
+Humm, we may have a conceptual disconnect here. In the ACPI world, there 
+is no support for the machine driver - unlike Device Tree. It is probed 
+when the SST/SOF driver creates a platform device using the codec _HID 
+as a key to hard-coded lookup tables in 
+sound/soc/intel/common/soc-acpi*.c - it will be probed *after* the codec 
+driver probes. I really don't see how to use the machine driver as 
+currently implemented to establish board-level connections that would 
+influence the codec driver probe and its use of a clock.
 
-(GPL-2.0-only OR BSD-2-Clause)
+> 
+>>> You should be able to register links between devices using the clock
+>>> API, or add that functionality if it's not there but AFAIK clkdev still
+>>> works.
+> 
+>> The machine driver has no information whatsoever on who provides the clock.
+>> I just don't see how I might link stuff without at least some amount of
+>> information?
+> 
+> The machine driver must have this information, it knows exactly what
+> hardware it runs on.  The whole point of a machine driver is that it's
+> board specific.
+> 
+>> All I needed was to toggle 2 gpios to select 44.1 or 48kHz...Looks like it's
+>> going to take two more years, oh well.
+> 
+> I think you're giving up way too easily here.  The kernel has really
+> good support for systems that don't have any firmware description at
+> all, this shouldn't be complex or breaking new ground.
 
-With that:
+See above, I don't think the machine driver can do what you had in mind?
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+I don't see how to proceed unless we remove all support for ACPI, both 
+for codec and clock driver, and trigger their probe "manually" with a 
+board-level initialization.
+
+And btw there's already a precedent for using global names, it's what 
+the Skylake driver does for the mclk and ssp clocks. To the best of my 
+knowledge the device specific namespacing does not exist on any ACPI 
+platform. We have a request from Dialog to implement the same thing for 
+SOF to solve dependencies on the clock being stable before turning on 
+the codec, so if global names are not acceptable we have a real problem.
+
