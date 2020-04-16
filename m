@@ -2,100 +2,161 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CD41ABFDE
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Apr 2020 13:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1509E1AC1B7
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Apr 2020 14:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2633637AbgDPLmt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 16 Apr 2020 07:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2505947AbgDPLmk (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Apr 2020 07:42:40 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39B2C061A0F
-        for <linux-clk@vger.kernel.org>; Thu, 16 Apr 2020 04:42:39 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id q19so7412025ljp.9
-        for <linux-clk@vger.kernel.org>; Thu, 16 Apr 2020 04:42:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PMemjoCt4EMKF+iaj5mfbjvOgSWo2uOQlvsUZEFak2w=;
-        b=d+ge5ueOEBxL85/Rug3S7EEuX77yMsrtiKnGUaRtQ7w1l8OIu5l5bvFy7ZuS4+iIDc
-         vEuvxgrjdYRMjzfB1i5140XxLorLvTk+XhU8Lw4ySKdwNEyiBqJ1e11vOAimeEDdeFsq
-         d5G10/xEhTp5FHT0pJH7mGsdf7DK30sWc0QPDKj4xkmzQvUvk97GJouZCpzE97tjVwAk
-         5vuoYW/mt34Hi9rtm+iEnu0/oKgBGroShdTRV5HUW+iduqhk9LagtACmFRFCGZT7azR9
-         htL5Wotiu2zhlKEoa4o/iQd5efO8JDhDuyekp+xZ2jonjMgCc03NFrnveMG4VUo2epW5
-         6Gag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PMemjoCt4EMKF+iaj5mfbjvOgSWo2uOQlvsUZEFak2w=;
-        b=sbQY5iNhpzrCqQz6fq2Ut01FNmzUYejviRb2/8BVzxBugAN+WiL+qF8FqGz7RKezbp
-         nuhQzcc4uNSD7kDVkjK8XnFSkN0GkSRGtfp9sKreMhXhAciMFGWVsR9PhabsHfCiftCD
-         J8MHM4AnS7ze6LiHvfLnmEJEXGBFUopMy4XePBYZZ8PLrwclyscQ9AYyg4CQc4iOpFYu
-         LQy1sGKk31CFBMzC8N++3PkcNxbfw4K5phlnC8ePTdVWic7Z7Hbhpy6S2QhGwral0ey7
-         dKNv1ldaY/jzLAv/XRvIITghqlRA+6cKpZ5AN+S4Wi2bUMypUmRUdKAXaexVk1disvEv
-         jWaw==
-X-Gm-Message-State: AGi0PuYGIBiYxj6hr4MXdBLqbzDz0NnmF1rIx3IydToyvB8QpI44rzmY
-        l5aPI9NL9d/Cfpsv1hfdAYKGfr0YlWfsHqrsvCACKw==
-X-Google-Smtp-Source: APiQypIiZuLzQrvYkiNeyORy157fLPptCAM8hPVcZFSfyIeA/0Aw/t8tq6u9+QYki+nEJa9ACas6eAvqHD2XaCatgUw=
-X-Received: by 2002:a05:651c:32e:: with SMTP id b14mr1319254ljp.277.1587037358214;
- Thu, 16 Apr 2020 04:42:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200409195841.18901-1-pierre-louis.bossart@linux.intel.com>
- <20200409195841.18901-2-pierre-louis.bossart@linux.intel.com> <20200414170934.GA34613@smile.fi.intel.com>
-In-Reply-To: <20200414170934.GA34613@smile.fi.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 16 Apr 2020 13:42:27 +0200
-Message-ID: <CACRpkdZRnSUhmVPKjJ6dWnSfhnvrAKUrBY6tWLkxPgT28CzbHw@mail.gmail.com>
-Subject: Re: [RFC PATCH 01/16] ASoC: pcm512x: expose 6 GPIOs
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michael Walle <michael@walle.cc>
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>, Takashi Iwai <tiwai@suse.de>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Matuschek <daniel@hifiberry.com>,
-        Matthias Reichl <hias@horus.com>,
-        Hui Wang <hui.wang@canonical.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
+        id S2636085AbgDPMoV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 16 Apr 2020 08:44:21 -0400
+Received: from asavdk4.altibox.net ([109.247.116.15]:33886 "EHLO
+        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2636077AbgDPMoR (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Apr 2020 08:44:17 -0400
+Received: from ravnborg.org (unknown [158.248.194.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by asavdk4.altibox.net (Postfix) with ESMTPS id 924AA80487;
+        Thu, 16 Apr 2020 14:44:00 +0200 (CEST)
+Date:   Thu, 16 Apr 2020 14:43:59 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: Clean-up schema indentation formatting
+Message-ID: <20200416124359.GB5785@ravnborg.org>
+References: <20200416005549.9683-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200416005549.9683-1-robh@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=XpTUx2N9 c=1 sm=1 tr=0
+        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
+        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10
+        a=xJWM5Xtqm7-vkBAKM1YA:9 a=bxeknKLoBf6BnO7k:21 a=StjP_oZuoJ7ca4eH:21
+        a=CjuIK1q_8ugA:10
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 7:09 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> On Thu, Apr 09, 2020 at 02:58:26PM -0500, Pierre-Louis Bossart wrote:
-> > The GPIOs are used e.g. on HifiBerry DAC+ HATs to control the LED
-> > (GPIO3) and the choice of the 44.1 (GPIO6) or 48 (GPIO3) kHz
-> > oscillator (when present).
-> >
-> > Enable basic gpio_chip to get/set values and get/set
-> > directions. Tested with GPIO_LIB from sys/class/gpio, the LED turns
-> > on/off as desired.
->
->
-> One question, can this use existing GPIO infrastructure, like bgpio_init()?
-> Ah, I see, that one operates over MMIO, while we would need something based on
-> regmap API.
->
-> Bartosz, do we have plans to have bgpio_regmap_init() or alike?
+Hi Rob.
 
-Michael Walle is working on that:
-https://lore.kernel.org/linux-gpio/20200402203656.27047-11-michael@walle.cc/
+On Wed, Apr 15, 2020 at 07:55:48PM -0500, Rob Herring wrote:
+> Fix various inconsistencies in schema indentation. Most of these are
+> list indentation which should be 2 spaces more than the start of the
+> enclosing keyword. This doesn't matter functionally, but affects running
+> scripts which do transforms on the schema files.
 
-I think we should try to merge it sooner rather than later.
-I can provide an ib-* branch for ASoC whenever we agreed
-on a basic generic driver.
+Are there any plans to improve the tooling so we get warnigns for this?
+Otherwise I am afraid we will see a lot of patches that gets this wrong.
 
-Yours,
-Linus Walleij
+As a follow-up patch it would be good if example-schema.yaml
+could gain some comments about the correct indentions.
+
+Some comments in the following.
+
+> diff --git a/Documentation/devicetree/bindings/arm/altera.yaml b/Documentation/devicetree/bindings/arm/altera.yaml
+> index 49e0362ddc11..b388c5aa7984 100644
+> --- a/Documentation/devicetree/bindings/arm/altera.yaml
+> +++ b/Documentation/devicetree/bindings/arm/altera.yaml
+> @@ -13,8 +13,8 @@ properties:
+>    compatible:
+>      items:
+>        - enum:
+> -        - altr,socfpga-cyclone5
+> -        - altr,socfpga-arria5
+> -        - altr,socfpga-arria10
+> +          - altr,socfpga-cyclone5
+> +          - altr,socfpga-arria5
+> +          - altr,socfpga-arria10
+>        - const: altr,socfpga
+
+So here "- enum" do not need the extra indent.
+Is it because this is not a list?
+
+>  ...
+> diff --git a/Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml b/Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml
+> index 66213bd95e6e..6cc74523ebfd 100644
+> --- a/Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml
+> +++ b/Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-gx-ao-secure.yaml
+> @@ -25,7 +25,7 @@ select:
+> 
+>  properties:
+>    compatible:
+> -   items:
+> +    items:
+>        - const: amlogic,meson-gx-ao-secure
+>        - const: syscon
+
+This is something I had expected the tooling to notice.
+I had expected the two "- const" to be indented with 4 spaces, not two.
+So there is something I do not understand.
+
+
+> diff --git a/Documentation/devicetree/bindings/arm/nxp/lpc32xx.yaml b/Documentation/devicetree/bindings/arm/nxp/lpc32xx.yaml
+> index 07f39d3eee7e..f7f024910e71 100644
+> --- a/Documentation/devicetree/bindings/arm/nxp/lpc32xx.yaml
+> +++ b/Documentation/devicetree/bindings/arm/nxp/lpc32xx.yaml
+> @@ -17,9 +17,8 @@ properties:
+>            - nxp,lpc3230
+>            - nxp,lpc3240
+>        - items:
+> -        - enum:
+> -            - ea,ea3250
+> -            - phytec,phy3250
+> -        - const: nxp,lpc3250
+> -
+> +          - enum:
+> +              - ea,ea3250
+> +              - phytec,phy3250
+> +          - const: nxp,lpc3250
+>  ...
+
+And here "- enum" receive extra indent.
+
+I trust you know what you are doing - but I do not get it.
+
+Some pointers or examples for the correct indention would be great.
+I cannot review this patch as long as I do not know the rules.
+
+My request to update example-schema.yaml was one way to teach me.
+(Some people will say that is difficult/impossible to teach me,
+but thats another story:-) ).
+
+	Sam
