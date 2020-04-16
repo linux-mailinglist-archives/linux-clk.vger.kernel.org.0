@@ -2,85 +2,94 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE651ABAEC
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Apr 2020 10:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A053F1ABD0D
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Apr 2020 11:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439980AbgDPIQb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 16 Apr 2020 04:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35162 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2441252AbgDPIQP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Apr 2020 04:16:15 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2106FC061A0C
-        for <linux-clk@vger.kernel.org>; Thu, 16 Apr 2020 01:16:00 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id z26so6760679ljz.11
-        for <linux-clk@vger.kernel.org>; Thu, 16 Apr 2020 01:16:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PbBj/6CAPFcoz5U/u034FtN2xNNp4RmuXD+n6O4qGMQ=;
-        b=zlEm/wHiJ9zzxulOaU9gI8Y/6ULXqoDmMiSwP1UU6rGWgW2QdVUjXPFzDr1U9VOBcB
-         9eq/tYFwHfKElvvudtpq+9aQdscqEJf2POXox4FmTVbVqQZf73/8UVHcriZjZn/18paS
-         m4ZuvYdNkwhOn+3f7dvO9F5/GbSmWE29XVjqTwN9wCMf7FbNqk45Et/l29WEOfFdmfMO
-         c5VcGtaVcOdLPEmFjfaqQ3HbqJseJCY4HdK2AJ5hVZa3S57v48cnE+FCsa40Tbhpq82n
-         j5t9GB6BPlcDDrHXFWjJf+Vmd0y6L2QBqfgLHXwKo9S3TFtqgwA8ISjhrgXdLIOIoChV
-         m9vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PbBj/6CAPFcoz5U/u034FtN2xNNp4RmuXD+n6O4qGMQ=;
-        b=o+AjvrZXnw4qNnjZNgGWdT9ZUM8ngNDGSgD4n90mYlAi5b5imM7BPD91xHEIGYWW9D
-         aHn+U5uWdAWVK7rqhgPlJlhMvA/JHq3y2oQiW1xY7wCeVT6C5Orx5199/Bn3XA8+rQEH
-         8kpt4xT1LXC3cmOIgGWxyBUQjbx8GqhVpMLr72sH3laaDCF/vGsZIyv9YdWESOJiMoFa
-         1PtC8u1w80yfIJC42KRYpFqptN3q0w9L5jua5qAZ6QlIQamodEO2R6wbYnKYBaKDBuGC
-         gzV4cvt/H9G3IGpRk59MeF55Kso21AT/OS7LGNiRPlftAksr5ZySM0TPpwE3B85+AVH+
-         C3+Q==
-X-Gm-Message-State: AGi0PuZXkUpdvaUYXJrpJCdlob/5hglAHRvNvWIdEawFVVwUcY2QU8sl
-        tYoXWcug7TLj38OGQLKfv+iERA==
-X-Google-Smtp-Source: APiQypIm9yBbUMllKk3Sn/qPq+i0hPbt3wtu3E9t1Iw36WPJPj+UU61utHTv2SDmGo83om6obhXcjA==
-X-Received: by 2002:a2e:3507:: with SMTP id z7mr5961621ljz.111.1587024958625;
-        Thu, 16 Apr 2020 01:15:58 -0700 (PDT)
-Received: from localhost.localdomain (c-f3d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.243])
-        by smtp.gmail.com with ESMTPSA id r23sm14567548lfi.33.2020.04.16.01.15.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2020 01:15:58 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH] clk: impd1: Look up clock-output-names
-Date:   Thu, 16 Apr 2020 10:13:48 +0200
-Message-Id: <20200416081348.326833-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.25.2
+        id S2503841AbgDPJjw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 16 Apr 2020 05:39:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2503607AbgDPJjj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Apr 2020 05:39:39 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40636C061A0C
+        for <linux-clk@vger.kernel.org>; Thu, 16 Apr 2020 02:39:39 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1jP0zd-0002ad-L6; Thu, 16 Apr 2020 11:39:33 +0200
+Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1jP0zc-0008A1-NM; Thu, 16 Apr 2020 11:39:32 +0200
+Date:   Thu, 16 Apr 2020 11:39:32 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Linux-imx@nxp.com
+Subject: Re: [PATCH V2 1/5] dt-bindings: clock: Convert i.MX6Q clock to
+ json-schema
+Message-ID: <20200416093932.2mkcyv4rs6v6a24a@pengutronix.de>
+References: <1587019158-12143-1-git-send-email-Anson.Huang@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1587019158-12143-1-git-send-email-Anson.Huang@nxp.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 11:37:20 up 153 days, 55 min, 168 users,  load average: 0.00, 0.06,
+ 0.07
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The IM-PD1 still need to pass the clock output names.
+Hi Anson,
 
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/clk/versatile/clk-impd1.c | 1 +
- 1 file changed, 1 insertion(+)
+On 20-04-16 14:39, Anson Huang wrote:
 
-diff --git a/drivers/clk/versatile/clk-impd1.c b/drivers/clk/versatile/clk-impd1.c
-index b05da8516d4c..f9f4babe3ca6 100644
---- a/drivers/clk/versatile/clk-impd1.c
-+++ b/drivers/clk/versatile/clk-impd1.c
-@@ -206,6 +206,7 @@ static int integrator_impd1_clk_spawn(struct device *dev,
- 		return -ENODEV;
- 	}
- 
-+	of_property_read_string(np, "clock-output-names", &name);
- 	parent_name = of_clk_get_parent_name(np, 0);
- 	clk = icst_clk_setup(NULL, desc, name, parent_name, map,
- 			     ICST_INTEGRATOR_IM_PD1);
--- 
-2.25.2
+...
 
+> diff --git a/Documentation/devicetree/bindings/clock/imx6q-clock.yaml b/Documentation/devicetree/bindings/clock/imx6q-clock.yaml
+> new file mode 100644
+> index 0000000..1c6e600
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/imx6q-clock.yaml
+> @@ -0,0 +1,66 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/imx6q-clock.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Clock bindings for Freescale i.MX6 Quad
+> +
+> +maintainers:
+> +  - Anson Huang <Anson.Huang@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: fsl,imx6q-ccm
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 2
+
+IMHO I would force them to have exactly two so we need
+minItems: 2 too here.
+
+Regards,
+  Marco
