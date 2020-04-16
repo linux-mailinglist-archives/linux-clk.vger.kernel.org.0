@@ -2,88 +2,173 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F721AB52E
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Apr 2020 03:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 964101AB6DD
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Apr 2020 06:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389178AbgDPA6t (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Apr 2020 20:58:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42272 "EHLO mail.kernel.org"
+        id S2391929AbgDPEea (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 16 Apr 2020 00:34:30 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:54912 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728100AbgDPA6r (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 15 Apr 2020 20:58:47 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BE0CF208E0;
-        Thu, 16 Apr 2020 00:58:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586998726;
-        bh=NjTvNrxjlHFScy4ebnKzSnM4jSIs1SlF2paT+ZaYBeI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tdrhhcUfkIKCM0s18mbeSn5SP9h0vWFC+0x6fkNf029GOJlZMaz2gbXoDORxN6UGT
-         Xk64ZR1+eHjz/HTPl+uZpf4Fq6rSk56xrWIJTvM4SVpKHaWp4yR/YfgpHAKb1prJeW
-         RTN8+ZqrEHL1ytzFowd4LpDpB9ps6wXa3Y8MCfHE=
-Received: by mail-qt1-f182.google.com with SMTP id l13so12390124qtr.7;
-        Wed, 15 Apr 2020 17:58:46 -0700 (PDT)
-X-Gm-Message-State: AGi0PuaxHTfiRVMXvt5bYs/eDBZ/PxT0rYXJss5oysmspdR980/EGdwh
-        CVfAN8LxqTnTPgiY8pmzyqldcX5s6d+4FEguOg==
-X-Google-Smtp-Source: APiQypIb8Qh+U7+DzcXL5pISte9uAUnyZWYerl12Hfw9dl6hFAs7Ug63drp+s8XNKQa3pH3auFFQ0DRFz+hVTsEascg=
-X-Received: by 2002:ac8:39e5:: with SMTP id v92mr24067936qte.224.1586998725925;
- Wed, 15 Apr 2020 17:58:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200409175238.3586487-1-thierry.reding@gmail.com>
- <20200409175238.3586487-3-thierry.reding@gmail.com> <20200415162449.GA1842@bogus>
- <20200415233532.GA211822@ulmo>
-In-Reply-To: <20200415233532.GA211822@ulmo>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 15 Apr 2020 19:58:33 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqK6Ku3woyc+9kxzjN_fih_ygWWnt3EFdVRi6UBd7=2iFw@mail.gmail.com>
-Message-ID: <CAL_JsqK6Ku3woyc+9kxzjN_fih_ygWWnt3EFdVRi6UBd7=2iFw@mail.gmail.com>
-Subject: Re: [PATCH v6 02/14] of: reserved-memory: Support lookup of regions
- by name
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Joseph Lo <josephl@nvidia.com>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S2388533AbgDPEe3 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 16 Apr 2020 00:34:29 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3D0DF200B6C;
+        Thu, 16 Apr 2020 06:34:26 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id C5BE3200B60;
+        Thu, 16 Apr 2020 06:34:19 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 2D88C402FC;
+        Thu, 16 Apr 2020 12:34:12 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH 1/5] dt-bindings: clock: Convert i.MX6Q clock to json-schema
+Date:   Thu, 16 Apr 2020 12:26:07 +0800
+Message-Id: <1587011171-24532-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Apr 15, 2020 at 6:35 PM Thierry Reding <thierry.reding@gmail.com> wrote:
->
-> On Wed, Apr 15, 2020 at 11:24:49AM -0500, Rob Herring wrote:
-> > On Thu,  9 Apr 2020 19:52:26 +0200, Thierry Reding wrote:
-> > > From: Thierry Reding <treding@nvidia.com>
-> > >
-> > > Add support for looking up memory regions by name. This looks up the
-> > > given name in the newly introduced memory-region-names property and
-> > > returns the memory region at the corresponding index in the memory-
-> > > region(s) property.
-> > >
-> > > Signed-off-by: Thierry Reding <treding@nvidia.com>
-> > > ---
-> > >  drivers/of/of_reserved_mem.c    | 19 +++++++++++++++++++
-> > >  include/linux/of_reserved_mem.h | 11 +++++++++++
-> > >  2 files changed, 30 insertions(+)
-> > >
-> >
-> > Reviewed-by: Rob Herring <robh@kernel.org>
->
-> Hi Rob,
->
-> thanks for the review. Do you want me to apply this and patch 3/14 to a
-> stable branch and send to you as a pull request? That way I could use
-> that same branch to resolve the dependency in the Tegra tree for the
-> memory controller driver patches.
+Convert the i.MX6Q clock binding to DT schema format using json-schema.
 
-I think it is fine for you to just take the patches.
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+---
+ .../devicetree/bindings/clock/imx6q-clock.txt      | 41 -------------
+ .../devicetree/bindings/clock/imx6q-clock.yaml     | 69 ++++++++++++++++++++++
+ 2 files changed, 69 insertions(+), 41 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/imx6q-clock.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/imx6q-clock.yaml
 
-Rob
+diff --git a/Documentation/devicetree/bindings/clock/imx6q-clock.txt b/Documentation/devicetree/bindings/clock/imx6q-clock.txt
+deleted file mode 100644
+index 13d36d4..0000000
+--- a/Documentation/devicetree/bindings/clock/imx6q-clock.txt
++++ /dev/null
+@@ -1,41 +0,0 @@
+-* Clock bindings for Freescale i.MX6 Quad
+-
+-Required properties:
+-- compatible: Should be "fsl,imx6q-ccm"
+-- reg: Address and length of the register set
+-- interrupts: Should contain CCM interrupt
+-- #clock-cells: Should be <1>
+-
+-Optional properties:
+-- fsl,pmic-stby-poweroff: Configure CCM to assert PMIC_STBY_REQ signal
+-  on power off.
+-  Use this property if the SoC should be powered off by external power
+-  management IC (PMIC) triggered via PMIC_STBY_REQ signal.
+-  Boards that are designed to initiate poweroff on PMIC_ON_REQ signal should
+-  be using "syscon-poweroff" driver instead.
+-- clocks: list of clock specifiers, must contain an entry for each entry
+-          in clock-names
+-- clock-names: valid names are "osc", "ckil", "ckih1", "anaclk1" and "anaclk2"
+-
+-The clock consumer should specify the desired clock by having the clock
+-ID in its "clocks" phandle cell.  See include/dt-bindings/clock/imx6qdl-clock.h
+-for the full list of i.MX6 Quad and DualLite clock IDs.
+-
+-Examples:
+-
+-#include <dt-bindings/clock/imx6qdl-clock.h>
+-
+-clks: ccm@20c4000 {
+-	compatible = "fsl,imx6q-ccm";
+-	reg = <0x020c4000 0x4000>;
+-	interrupts = <0 87 0x04 0 88 0x04>;
+-	#clock-cells = <1>;
+-};
+-
+-uart1: serial@2020000 {
+-	compatible = "fsl,imx6q-uart", "fsl,imx21-uart";
+-	reg = <0x02020000 0x4000>;
+-	interrupts = <0 26 0x04>;
+-	clocks = <&clks IMX6QDL_CLK_UART_IPG>, <&clks IMX6QDL_CLK_UART_SERIAL>;
+-	clock-names = "ipg", "per";
+-};
+diff --git a/Documentation/devicetree/bindings/clock/imx6q-clock.yaml b/Documentation/devicetree/bindings/clock/imx6q-clock.yaml
+new file mode 100644
+index 0000000..084d4f0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/imx6q-clock.yaml
+@@ -0,0 +1,69 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/imx6q-clock.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Clock bindings for Freescale i.MX6 Quad
++
++maintainers:
++  - Anson Huang <Anson.Huang@nxp.com>
++
++properties:
++  compatible:
++    const: fsl,imx6q-ccm
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    minItems: 1
++    maxItems: 2
++
++  '#clock-cells':
++    const: 1
++
++  clocks:
++    items:
++      - description: 24m osc
++      - description: 32k osc
++      - description: ckih1 clock input
++      - description: anaclk1 clock input
++      - description: anaclk2 clock input
++
++  clock-names:
++    items:
++      - const: osc
++      - const: ckil
++      - const: ckih1
++      - const: anaclk1
++      - const: anaclk2
++
++  fsl,pmic-stby-poweroff:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: |
++      Use this property if the SoC should be powered off by external power
++      management IC (PMIC) triggered via PMIC_STBY_REQ signal.
++      Boards that are designed to initiate poweroff on PMIC_ON_REQ signal should
++      be using "syscon-poweroff" driver instead.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - '#clock-cells'
++
++examples:
++  # Clock Control Module node:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    clks: clock-controller@20c4000 {
++        compatible = "fsl,imx6q-ccm";
++        reg = <0x020c4000 0x4000>;
++        interrupts = <0 87 IRQ_TYPE_LEVEL_HIGH>,
++                     <0 88 IRQ_TYPE_LEVEL_HIGH>;
++        #clock-cells = <1>;
++    };
++
++...
+-- 
+2.7.4
+
