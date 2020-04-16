@@ -2,108 +2,132 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53EAF1AC003
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Apr 2020 13:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDB21ABE52
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Apr 2020 12:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2506605AbgDPLq1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 16 Apr 2020 07:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
+        id S2505458AbgDPKom (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 16 Apr 2020 06:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2505035AbgDPKcZ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Apr 2020 06:32:25 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E821CC061A0C
-        for <linux-clk@vger.kernel.org>; Thu, 16 Apr 2020 03:32:23 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id y24so4247886wma.4
-        for <linux-clk@vger.kernel.org>; Thu, 16 Apr 2020 03:32:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=9L5k3Ln1Qt7W9TpURaqzpjRy4n7lxiu2UCwSIpKQOFY=;
-        b=Ryq1RWfipGTXPSDerCgXOnwVBcBk+SES+dQi/983JsKTieI0hUpxVt0XEnAt5BZtc+
-         3j0OPScJqjuBIE/e8RGOCz2qxvAOsR5mXaTJGLhb/2duJk/L3WjLQ/RFj565RNvubZUj
-         hrSaYRFzGzIrj5sKgXIknAqEaWAnJEKXWJhEzJV60auxxyKw0K6wI8LTl2AvhZqxAIzs
-         uUb+EokUxmU9Z5axhY1kITo29sfTFoPdQv2b6GKfiFiAtbS7xobLEghD53lOPZN2TpEu
-         nZmpRVx6DspQ/ffW9RGXXgnbX7+3JVYh3AZBYzIMNW5yjBNXwQzkQJY9vONcYn4HDTT4
-         WFog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=9L5k3Ln1Qt7W9TpURaqzpjRy4n7lxiu2UCwSIpKQOFY=;
-        b=Ynp2nhdysDKqfmS9sCj0OFYZB8Px92Y1Pn8vQryEZBMbLZjTVW4LLmEFgX4xmVIa12
-         nbjufCA6+pr+XIbuCqKtgEr9dluwFrahMIsPbO+lRTGO0XT+u7gqCvluFHwCXLGBTGYh
-         z0GYgCKDDW8LcyTpMrgU6+wySZ3UAa3PQkQkinZEz0+n2C0Wc56WkWuOOKSrYCTdSxao
-         Ubx7vnPk+lMvsjAKtpQZDs9Qme3O5z7NhHlPnbqTL4xxXRzBWSJTEw04LJqu07uNzJN9
-         eiv6D6Jrb//rMsCjqBB+28Pa2k4yOYzPyU5QDcgl6UVNHmo6v83Epolk+WXj6Zsg+LQQ
-         daGA==
-X-Gm-Message-State: AGi0PuYUbzmPnVp+FJJPh8EAfPZVxgVNCfhRZEVkzq9euvl9CguIVJya
-        HeLfOH1Jwek1xXZmvi7Ao7yBLA==
-X-Google-Smtp-Source: APiQypJclY5jrpfvL8yZKMalQnkMXP+jCZNrFkQ3BCEqz3+ltwYSFd7LZVCdQLzaOSzpaZBpIvP+Cw==
-X-Received: by 2002:a7b:c181:: with SMTP id y1mr4442183wmi.83.1587033142678;
-        Thu, 16 Apr 2020 03:32:22 -0700 (PDT)
-Received: from localhost (cag06-3-82-243-161-21.fbx.proxad.net. [82.243.161.21])
-        by smtp.gmail.com with ESMTPSA id j135sm3021115wmj.46.2020.04.16.03.32.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2020 03:32:22 -0700 (PDT)
-References: <20200414200017.226136-1-martin.blumenstingl@googlemail.com> <20200414200017.226136-2-martin.blumenstingl@googlemail.com>
-User-agent: mu4e 1.3.3; emacs 26.3
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org
-Cc:     narmstrong@baylibre.com, mturquette@baylibre.com, sboyd@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] clk: meson: meson8b: Fix the first parent of vid_pll_in_sel
-In-reply-to: <20200414200017.226136-2-martin.blumenstingl@googlemail.com>
-Date:   Thu, 16 Apr 2020 12:32:21 +0200
-Message-ID: <1jblnrbu16.fsf@starbuckisacylon.baylibre.com>
+        with ESMTP id S2505325AbgDPKiT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Apr 2020 06:38:19 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC320C061A0C
+        for <linux-clk@vger.kernel.org>; Thu, 16 Apr 2020 03:38:09 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1jP1uG-00044F-53; Thu, 16 Apr 2020 12:38:04 +0200
+Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1jP1uF-0002qS-5f; Thu, 16 Apr 2020 12:38:03 +0200
+Date:   Thu, 16 Apr 2020 12:38:03 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Anson Huang <anson.huang@nxp.com>
+Cc:     "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH V2 1/5] dt-bindings: clock: Convert i.MX6Q clock to
+ json-schema
+Message-ID: <20200416103803.eifgth77wi44pejc@pengutronix.de>
+References: <1587019158-12143-1-git-send-email-Anson.Huang@nxp.com>
+ <20200416093932.2mkcyv4rs6v6a24a@pengutronix.de>
+ <DB3PR0402MB391613C2B53CEE067E1C7EC7F5D80@DB3PR0402MB3916.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DB3PR0402MB391613C2B53CEE067E1C7EC7F5D80@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 12:35:43 up 153 days,  1:54, 168 users,  load average: 0.25, 0.26,
+ 0.19
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On 20-04-16 09:48, Anson Huang wrote:
+> Hi, Marco
+> 
+> > Subject: Re: [PATCH V2 1/5] dt-bindings: clock: Convert i.MX6Q clock to
+> > json-schema
+> > 
+> > Hi Anson,
+> > 
+> > On 20-04-16 14:39, Anson Huang wrote:
+> > 
+> > ...
+> > 
+> > > diff --git a/Documentation/devicetree/bindings/clock/imx6q-clock.yaml
+> > b/Documentation/devicetree/bindings/clock/imx6q-clock.yaml
+> > > new file mode 100644
+> > > index 0000000..1c6e600
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/clock/imx6q-clock.yaml
+> > > @@ -0,0 +1,66 @@
+> > > +# SPDX-License-Identifier: GPL-2.0
+> > > +%YAML 1.2
+> > > +---
+> > > +$id:
+> > https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetr
+> > ee.org%2Fschemas%2Fclock%2Fimx6q-clock.yaml%23&amp;data=02%7C01%
+> > 7Canson.huang%40nxp.com%7Ca840fd5be8c94d4d950608d7e1ea16a2%7C6
+> > 86ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C1%7C637226267845578228&
+> > amp;sdata=Iw1CkVBMqw3m6sox6C3khcMy0BHNCQ9v2k72q3CM6Xs%3D&a
+> > mp;reserved=0
+> > > +$schema:
+> > https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetr
+> > ee.org%2Fmeta-schemas%2Fcore.yaml%23&amp;data=02%7C01%7Canson.hu
+> > ang%40nxp.com%7Ca840fd5be8c94d4d950608d7e1ea16a2%7C686ea1d3bc2
+> > b4c6fa92cd99c5c301635%7C0%7C1%7C637226267845578228&amp;sdata=P
+> > Be2CEoDdMo9I1m3DHbITCyYxB4GF%2FigP%2FNd7YCopCQ%3D&amp;reserve
+> > d=0
+> > > +
+> > > +title: Clock bindings for Freescale i.MX6 Quad
+> > > +
+> > > +maintainers:
+> > > +  - Anson Huang <Anson.Huang@nxp.com>
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: fsl,imx6q-ccm
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  interrupts:
+> > > +    maxItems: 2
+> > 
+> > IMHO I would force them to have exactly two so we need
+> > minItems: 2 too here.
+> 
+> Actually, those 2 interrupts are NOT necessary for some platforms, such as i.MX platforms
+> do NOT enable them at all, so is it OK to force them to be '2' here?
 
-On Tue 14 Apr 2020 at 22:00, Martin Blumenstingl <martin.blumenstingl@googlemail.com> wrote:
+Why do we list them as required if they are not required? Currently all
+5 platforms adding both irqs so this won't break anything here.
 
-> Use hdmi_pll_lvds_out as parent of the vid_pll_in_sel clock. It's not
-> easy to see that the vendor kernel does the same, but it actually does.
-> meson_clk_pll_ops in mainline still cannot fully recalculate all rates
-> from the HDMI PLL registers because some register bits (at the time of
-> writing it's unknown which bits are used for this) double the HDMI PLL
-> output rate (compared to simply considering M, N and FRAC).
+Regards,
+  Marco
 
-Have you considered adding a fixed_factor pre-multiplier, like in the
-gxbb driver ?
-
-Seems to be the same thing
-
->
-> Update the vid_pll_in_sel parent so our clock calculation works for
-> simple clock settings like the CVBS output (where no rate doubling is
-> going on). The PLL ops need to be fixed later on for more complex clock
-> settings (all HDMI rates).
->
-> Fixes: 6cb57c678bb70 ("clk: meson: meson8b: add the read-only video clock trees")
-> Suggested-by: Neil Armstrong <narmstrong@baylibre.com>
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
->  drivers/clk/meson/meson8b.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/clk/meson/meson8b.c b/drivers/clk/meson/meson8b.c
-> index 7c55c695cbae..90d284ffc780 100644
-> --- a/drivers/clk/meson/meson8b.c
-> +++ b/drivers/clk/meson/meson8b.c
-> @@ -1077,7 +1077,7 @@ static struct clk_regmap meson8b_vid_pll_in_sel = {
->  		 * Meson8m2: vid2_pll
->  		 */
->  		.parent_hws = (const struct clk_hw *[]) {
-> -			&meson8b_hdmi_pll_dco.hw
-> +			&meson8b_hdmi_pll_lvds_out.hw
->  		},
->  		.num_parents = 1,
->  		.flags = CLK_SET_RATE_PARENT,
-
+> Thanks,
+> Anson
