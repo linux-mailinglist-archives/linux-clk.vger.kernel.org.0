@@ -2,63 +2,37 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA341AE4EC
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Apr 2020 20:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC701AE837
+	for <lists+linux-clk@lfdr.de>; Sat, 18 Apr 2020 00:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729258AbgDQSlp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 17 Apr 2020 14:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729136AbgDQSlo (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 17 Apr 2020 14:41:44 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900A9C061A0C;
-        Fri, 17 Apr 2020 11:41:44 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id i10so4167088wrv.10;
-        Fri, 17 Apr 2020 11:41:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=p4RArEPtRb6yXEdgtQ3ovyy6FMchkA9pg/LkRnSfJR8=;
-        b=LB3xbvk8qJejz7tCjtEyfb58WU6LIalruJuOoQB1Cneg3/jqPgHlbv12NNDaHlpzmV
-         o4uu9ADrf4vAphiHiJGYnZeemkZ8JE8PszXtVht45LbV0jh+JbkeLCUgh+NQv3ew0EET
-         5OiBadJ8IJ60jWXZcJ9Mh/m0VvlOUHi4cRATM4vw8O+eKPsyatKhe+icKhBA2UTl0dad
-         OLrmY/o1wUQK/j6xSJ9Pka6ITAWn4HHjRddCbGUV2CsNveMOBp6rZIwhb03JPd0/FdGw
-         erl8L7qmaKONyIRCGNvpUFl9zUFYxMecqk3JJryPWqoARSS8D+vPJJSMwceyE8a2smeE
-         sQgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=p4RArEPtRb6yXEdgtQ3ovyy6FMchkA9pg/LkRnSfJR8=;
-        b=sVNVKiXQH6qrORXRmzEMDiGYzre2Ql2TUYXCSIaeHEEHnx5hs5cIAHxj23qxMlg3Ct
-         IeRoBm0ja9IQ+XRajyenkDBdsORXjNIfKdE9g5xNeL96EnZzeH2MdmWDz5fD+9SwmLF8
-         MawFfdjGYg/18utl2+qeYMF6lhLvESAQwS1K1/DqUBGKsJiaAej7d2Dfi03hburHqI/L
-         cMq/Ib8Eiggu5GfIrMtzcR+Le745vDnKutdw7L7xXz0zSNj76HUeoZnGk78Nqebxu9Vi
-         cAzfHcZRFcqUtYD/iNQ5d3IXL2K4+/RThpMJmnveCgtrhuye4LP6EYzTJIaI9mIEBTjA
-         h8mQ==
-X-Gm-Message-State: AGi0PuYpadrW3gWc2sE+Fj/9hJ1nmDbRHhW272b+f4rBmSdB51Yi22Pg
-        IC7YQLSynLzueNpI+Asv5yM=
-X-Google-Smtp-Source: APiQypLp5qHymcuJPKjzUtOnmkQmLSVUjfmU7kNQvo46lL7qlgyByinKLdOTrFJU3TOKc0KrRY21yw==
-X-Received: by 2002:adf:f884:: with SMTP id u4mr5203954wrp.171.1587148903269;
-        Fri, 17 Apr 2020 11:41:43 -0700 (PDT)
-Received: from localhost.localdomain (p200300F137142E00428D5CFFFEB99DB8.dip0.t-ipconnect.de. [2003:f1:3714:2e00:428d:5cff:feb9:9db8])
-        by smtp.googlemail.com with ESMTPSA id c17sm33237391wrp.28.2020.04.17.11.41.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Apr 2020 11:41:42 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     jbrunet@baylibre.com, linux-amlogic@lists.infradead.org,
-        linux-clk@vger.kernel.org
-Cc:     narmstrong@baylibre.com, mturquette@baylibre.com, sboyd@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v2 4/4] clk: meson: meson8b: Make the CCF use the glitch-free VPU mux
-Date:   Fri, 17 Apr 2020 20:41:27 +0200
-Message-Id: <20200417184127.1319871-5-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.26.1
-In-Reply-To: <20200417184127.1319871-1-martin.blumenstingl@googlemail.com>
-References: <20200417184127.1319871-1-martin.blumenstingl@googlemail.com>
+        id S1728539AbgDQW2q (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 17 Apr 2020 18:28:46 -0400
+Received: from plaes.org ([188.166.43.21]:57482 "EHLO plaes.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728496AbgDQW2p (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 17 Apr 2020 18:28:45 -0400
+Received: from localhost (unknown [IPv6:2001:1530:1000:9d4d:940e:6b9e:3deb:4])
+        by plaes.org (Postfix) with ESMTPSA id E48EC404A6;
+        Fri, 17 Apr 2020 22:17:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=plaes.org; s=mail;
+        t=1587161871; bh=Et23DSQX+mYnPBoOaUK80Omdf6ErKOl84UqRoFglySE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VMv0txaDabnlDJtPEbe/qgBuhJXoBNCTYURXJYKEtGgcXzNxYwh0grJ/5uFNtWlDM
+         Wmq4RGo2277lZ8nYq0Wlpb6ZWXL3Tmzi8knUm0ZwTrfZ+qXoKFqfHd01BnRnJbp9FL
+         T130y4RuP7JUG0iqzwAzV6zhPmpzQW8805DTsNotayGIPj0e4B23jvu3Ex0lr+kIQ7
+         SbEByUN4KXl9uhr+J+cGZcwjJzxdKCes1lvw9e5LQ9Pe998QxoPJABh6m2suAczpH3
+         3ZgXqE9XkS8zINO1S4yPEUQcv7lPYixHVqJ/dE79tdgchxo6+jsUY8zNWU1ZIjFTaJ
+         PSSF1sajUKRAg==
+From:   Priit Laes <plaes@plaes.org>
+To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-sunxi@googlegroups.com
+Cc:     Priit Laes <plaes@plaes.org>
+Subject: [PATCH 0/4] ARM: sun7i: Convert A20 GMAC driver to CCU
+Date:   Sat, 18 Apr 2020 01:17:26 +0300
+Message-Id: <20200417221730.555954-1-plaes@plaes.org>
+X-Mailer: git-send-email 2.25.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
@@ -66,60 +40,36 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The "vpu_0" or "vpu_1" clock trees should not be updated while the
-clock is running. Enforce this by setting CLK_SET_RATE_GATE on the
-"vpu_0" and "vpu_1" gates. This makes the CCF switch to the "vpu_1"
-tree when "vpu_0" is currently active and vice versa, which is exactly
-what the vendor driver does when updating the frequency of the VPU
-clock.
+This serie converts Allwinner A20 (sun7i) GMAC driver to CCU
+while still retaining compatibility with existing devicetrees.
 
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
- drivers/clk/meson/meson8b.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+First two patches contain preliminary work which convert
+sun4i/sun7i clock drivers to platform devices and creates regmap
+to access gmac register from the sun7i gmac driver.
 
-diff --git a/drivers/clk/meson/meson8b.c b/drivers/clk/meson/meson8b.c
-index 6d1727e62b55..811af1c11456 100644
---- a/drivers/clk/meson/meson8b.c
-+++ b/drivers/clk/meson/meson8b.c
-@@ -2063,7 +2063,7 @@ static struct clk_regmap meson8b_vpu_0 = {
- 			&meson8b_vpu_0_div.hw
- 		},
- 		.num_parents = 1,
--		.flags = CLK_SET_RATE_PARENT,
-+		.flags = CLK_SET_RATE_GATE | CLK_SET_RATE_PARENT,
- 	},
- };
- 
-@@ -2134,10 +2134,18 @@ static struct clk_regmap meson8b_vpu_1 = {
- 			&meson8b_vpu_1_div.hw
- 		},
- 		.num_parents = 1,
--		.flags = CLK_SET_RATE_PARENT,
-+		.flags = CLK_SET_RATE_GATE | CLK_SET_RATE_PARENT,
- 	},
- };
- 
-+/*
-+ * The VPU clock has two two identical clock trees (vpu_0 and vpu_1)
-+ * muxed by a glitch-free switch on Meson8b and Meson8m2. The CCF can
-+ * actually manage this glitch-free mux because it does top-to-bottom
-+ * updates the each clock tree and switches to the "inactive" one when
-+ * CLK_SET_RATE_GATE is set.
-+ * Meson8 only has vpu_0 and no glitch-free mux.
-+ */
- static struct clk_regmap meson8b_vpu = {
- 	.data = &(struct clk_regmap_mux_data){
- 		.offset = HHI_VPU_CLK_CNTL,
-@@ -2152,7 +2160,7 @@ static struct clk_regmap meson8b_vpu = {
- 			&meson8b_vpu_1.hw,
- 		},
- 		.num_parents = 2,
--		.flags = CLK_SET_RATE_NO_REPARENT,
-+		.flags = CLK_SET_RATE_PARENT,
- 	},
- };
- 
+Third patch implements syscon-based regmap to allow driver manage
+its own clock source.
+
+Fourth patch updates the devicetree and drops the unused clocks.
+
+While testing the driver I noticed following bugs with the existing
+sun7i gmac driver:
+- driver relies on u-boot for initialization (fixed in this
+  implementation)
+- `systemctl restart networking` fails to bring the link up again.
+
+
+Priit Laes (4):
+  clk: sunxi-ng: a10/a20: rewrite init code to a platform driver
+  clk: sunxi-ng: a20: export a regmap to access the GMAC register
+  net: stmmac: dwmac-sunxi: Implement syscon-based clock handling
+  ARM: dts: sun7i: Use syscon-based implementation for gmac
+
+ arch/arm/boot/dts/sun7i-a20.dtsi              |  36 +----
+ drivers/clk/sunxi-ng/ccu-sun4i-a10.c          | 108 ++++++++++++---
+ .../net/ethernet/stmicro/stmmac/dwmac-sunxi.c | 124 ++++++++++++++++--
+ 3 files changed, 206 insertions(+), 62 deletions(-)
+
 -- 
-2.26.1
+2.25.2
 
