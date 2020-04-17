@@ -2,98 +2,78 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0061AD6BC
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Apr 2020 09:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B051AD70C
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Apr 2020 09:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728544AbgDQHBf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 17 Apr 2020 03:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728230AbgDQHBP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 17 Apr 2020 03:01:15 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47821C061A10
-        for <linux-clk@vger.kernel.org>; Fri, 17 Apr 2020 00:01:15 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id h69so665524pgc.8
-        for <linux-clk@vger.kernel.org>; Fri, 17 Apr 2020 00:01:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EaN0Seks3JgknsK9BVWkgtTm/fzHe3RWKNOjTd9p+qc=;
-        b=N2oHjmSUk1H3eZy02ScumUxitUXE/7djA+CdKOZRbv02gbQB/4+1vOymlchCMXQgRf
-         sWhee0lK0XhaWru25QV0dQi88JkGU6QKvheoj5dnaoZEBXYJw/oNmQbw6n9/c+N8N9ln
-         VpWWQur1cUWtzOJNcWt7ldKd0CQjyWuqjod+/Re+S8czpvszlqcneqlWA2loOvY5AHiE
-         W+27jroj6PpmZCsdhMk0VwbaxZfe1h28snyy98zQPo51o5dD0OU59v1Rn57uen8M8RE/
-         fSr/TVwuviDyoTJl8NaFpXSliWhM8LZhf5RwSBwtzGKoDpUg/B0pIAqoEvsvDIjNFYuc
-         1EpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EaN0Seks3JgknsK9BVWkgtTm/fzHe3RWKNOjTd9p+qc=;
-        b=U78p5csyT713SUoR6Vmu6yhdhW4Q6EU18q1g99fMJ2WA2OCiAtbNAD7ZOO88wXMAJC
-         1QKonudrP39yMEZxNtRknZqDD/+m9NAbrjr4iNna2ql+URa6prVbv83zr18Z6kl/eA3D
-         hgWTIw3Wjgy1kAMWr/qgsJBuEnGaP4+g+9GlHGxGhlu+yjT0Uuo4j7oDlnXL784PGWFV
-         hF5zBsC+7X4vVvlN7DgjxE0s4/anGxoFUXbkKIbxkZLjq/5i5EJ9JVP82PlCco7lArXS
-         VwLtkp8gi99QuLMNRUpfnCeYJu4II9jl35tZwXFaFWnd27mEzfP8aScbW0mGnGHU6GSL
-         AvTg==
-X-Gm-Message-State: AGi0Pua+d4RhmdxVxnQjLSBIQ2T0ObRKaR3Omau/eSuL83nJR8w/Nv4F
-        ZPKRFqlDSvodkYF070XEaXLCWQ==
-X-Google-Smtp-Source: APiQypI4H58E4Hn7junl0qfO7JnmLs7Wc3DZgo9GXuO7Bx45z0RdlE5e+2Hj0zhyut03Ql8vjew09g==
-X-Received: by 2002:aa7:943c:: with SMTP id y28mr1780257pfo.171.1587106874750;
-        Fri, 17 Apr 2020 00:01:14 -0700 (PDT)
-Received: from localhost.localdomain (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id c125sm18561609pfa.142.2020.04.17.00.01.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Apr 2020 00:01:14 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] arm64: dts: qcom: msm8996: Make GPU node control GPU_GX GDSC
-Date:   Fri, 17 Apr 2020 00:00:44 -0700
-Message-Id: <20200417070044.1376212-5-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20200417070044.1376212-1-bjorn.andersson@linaro.org>
-References: <20200417070044.1376212-1-bjorn.andersson@linaro.org>
+        id S1728655AbgDQHJH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 17 Apr 2020 03:09:07 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:2391 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728375AbgDQHJH (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 17 Apr 2020 03:09:07 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id E77479351F233395DA81;
+        Fri, 17 Apr 2020 15:09:03 +0800 (CST)
+Received: from huawei.com (10.175.124.28) by DGGEMS411-HUB.china.huawei.com
+ (10.3.19.211) with Microsoft SMTP Server id 14.3.487.0; Fri, 17 Apr 2020
+ 15:08:57 +0800
+From:   Jason Yan <yanaijie@huawei.com>
+To:     <t-kristo@ti.com>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <tony@atomide.com>, <linux-omap@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Jason Yan <yanaijie@huawei.com>, Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH] clk: ti: dra7: remove two unused symbols
+Date:   Fri, 17 Apr 2020 15:35:23 +0800
+Message-ID: <20200417073523.42520-1-yanaijie@huawei.com>
+X-Mailer: git-send-email 2.21.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.124.28]
+X-CFilter-Loop: Reflected
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Presumably the GPU node needs to control both the GPU and GPU GX power
-domains, but given that GPU GX now depends on the GPU GDSC both can
-effectively be controlled by controlling GPU GX. So use this instead.
+Fix the following gcc warning:
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+drivers/clk/ti/clk-7xx.c:320:43: warning: ‘dra7_gpu_sys_clk_data’
+defined but not used [-Wunused-const-variable=]
+ static const struct omap_clkctrl_div_data dra7_gpu_sys_clk_data
+__initconst = {
+                                           ^~~~~~~~~~~~~~~~~~~~~
+drivers/clk/ti/clk-7xx.c:315:27: warning: ‘dra7_gpu_sys_clk_parents’
+defined but not used [-Wunused-const-variable=]
+ static const char * const dra7_gpu_sys_clk_parents[] __initconst = {
+                           ^~~~~~~~~~~~~~~~~~~~~~~~
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Jason Yan <yanaijie@huawei.com>
 ---
+ drivers/clk/ti/clk-7xx.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-Changes since v1:
-- None
-
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index 895202d07a8b..af1f4977b97d 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -639,7 +639,7 @@ gpu@b00000 {
- 				"mem",
- 				"mem_iface";
+diff --git a/drivers/clk/ti/clk-7xx.c b/drivers/clk/ti/clk-7xx.c
+index 14b645093107..941a67dae22c 100644
+--- a/drivers/clk/ti/clk-7xx.c
++++ b/drivers/clk/ti/clk-7xx.c
+@@ -312,15 +312,6 @@ static const char * const dra7_gpu_hyd_mux_parents[] __initconst = {
+ 	NULL,
+ };
  
--			power-domains = <&mmcc GPU_GDSC>;
-+			power-domains = <&mmcc GPU_GX_GDSC>;
- 			iommus = <&adreno_smmu 0>;
- 
- 			nvmem-cells = <&gpu_speed_bin>;
+-static const char * const dra7_gpu_sys_clk_parents[] __initconst = {
+-	"sys_clkin",
+-	NULL,
+-};
+-
+-static const struct omap_clkctrl_div_data dra7_gpu_sys_clk_data __initconst = {
+-	.max_div = 2,
+-};
+-
+ static const struct omap_clkctrl_bit_data dra7_gpu_core_bit_data[] __initconst = {
+ 	{ 24, TI_CLK_MUX, dra7_gpu_core_mux_parents, NULL, },
+ 	{ 26, TI_CLK_MUX, dra7_gpu_hyd_mux_parents, NULL, },
 -- 
-2.24.0
+2.21.1
 
