@@ -2,39 +2,61 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7841AE2CC
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Apr 2020 18:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B158B1AE4E8
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Apr 2020 20:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728428AbgDQQ4M (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 17 Apr 2020 12:56:12 -0400
-Received: from muru.com ([72.249.23.125]:50298 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728379AbgDQQ4K (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 17 Apr 2020 12:56:10 -0400
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id DA5BF8192;
-        Fri, 17 Apr 2020 16:56:57 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     linux-omap@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, Keerthy <j-keerthy@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Tero Kristo <t-kristo@ti.com>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Adam Ford <aford173@gmail.com>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 14/14] bus: ti-sysc: Timers no longer need legacy quirk handling
-Date:   Fri, 17 Apr 2020 09:55:19 -0700
-Message-Id: <20200417165519.4979-15-tony@atomide.com>
+        id S1728182AbgDQSll (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 17 Apr 2020 14:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727969AbgDQSlk (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 17 Apr 2020 14:41:40 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36927C061A0C;
+        Fri, 17 Apr 2020 11:41:40 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id a25so4233880wrd.0;
+        Fri, 17 Apr 2020 11:41:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2fCasJ2C+JC/HUKeTPHMgTsMvggIkNTYgPJZjR55RsU=;
+        b=LXPAvTODuV1mrN7GJOFr+aeOYLH/I4yhHZmBHhlvtFZi3pHvCGkvG371ONKh08DYBs
+         0EQYOXKOXY6VDC87dCc0DQkR6gdnRcWmQ6XzatNBI9cibBQEWj8xf1hoAjfjqP2oTccI
+         OtNXrfTchRt7BQmA6d15v0lzSaUxgkdEV0JUgEYnoMLlqSFqhZyDaY0sGVR9+RHKZiKK
+         jXaIAbiV9NnrssX/9tq9BtOzZulYgXZoFTeTP57WOSNgeAZPHyXpKX4bhpUa8lplaueX
+         SnirzxJglgw3QODNUjEkIplsRTLIE4VSx/R3SSid24vAn+i/CnAZo5l3ETMRXla5SLwe
+         YkNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2fCasJ2C+JC/HUKeTPHMgTsMvggIkNTYgPJZjR55RsU=;
+        b=sAV4BE9R3n7cB3vTBrgSJ472tc1Riidm4YDs8yst3ESm2jMG5reAQEntlFWCl2pcM7
+         p650J5BciI7v5NRHHFI63QHFTOQVlEAX10O6MkF15UzwsjmVy7qCvP5bdenJicn0UnF0
+         gq4N7fpCeX+orcbud9uoLtPZnQqt0QCKlq3U5gx5LJZFR0sVMQ++KTzEzCFLAM8ssmwU
+         0/vSMDgGDst3uSdSlGBLrWN/NkQ5JUbVoKohTw1DKpZ+m7EJWpj3CrzWX0hVMspmTSr3
+         G3oCJi+bnqCNSlMu0wX+dKJxDXYmSCI3sGin/sdz9RspYq/pQlHYwxOAkduETZYTt8kM
+         p4eQ==
+X-Gm-Message-State: AGi0PuZEukYrjW7hY6iINaUzKFlFcnt6y84g484+IUenS/1GVVU3d6xW
+        pHyWDE6k2aZcBRogSocpDA0=
+X-Google-Smtp-Source: APiQypIIGUhAdLJvQZMeRku+d4KFp8njsgQOIbIzXEqczaUyWySh9fX7lU1ILP8NotRqPUayjCIXeg==
+X-Received: by 2002:a5d:51c6:: with SMTP id n6mr5298149wrv.314.1587148898835;
+        Fri, 17 Apr 2020 11:41:38 -0700 (PDT)
+Received: from localhost.localdomain (p200300F137142E00428D5CFFFEB99DB8.dip0.t-ipconnect.de. [2003:f1:3714:2e00:428d:5cff:feb9:9db8])
+        by smtp.googlemail.com with ESMTPSA id c17sm33237391wrp.28.2020.04.17.11.41.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Apr 2020 11:41:38 -0700 (PDT)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     jbrunet@baylibre.com, linux-amlogic@lists.infradead.org,
+        linux-clk@vger.kernel.org
+Cc:     narmstrong@baylibre.com, mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v2 0/4] clk: meson8b: updates for video clocks / resets
+Date:   Fri, 17 Apr 2020 20:41:23 +0200
+Message-Id: <20200417184127.1319871-1-martin.blumenstingl@googlemail.com>
 X-Mailer: git-send-email 2.26.1
-In-Reply-To: <20200417165519.4979-1-tony@atomide.com>
-References: <20200417165519.4979-1-tony@atomide.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
@@ -42,51 +64,47 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-As timers no longer need legacy quirk handling, let's move them to
-the CONFIG_DEBUG section to make it easier to see which drivers still
-need more work.
+This is the first batch of fixes and updates for the Meson8/8b/8m2
+clock controller driver.
 
-Let's also add detection for few more older timer revisions while at
-it as that makes CONFIG_DEBUG output easier to read with proper names.
+The first patch fixes the video clock hierarchy. Special thanks to
+Neil for providing a lot of details about the video clock tree!
 
-Cc: Keerthy <j-keerthy@ti.com>
-Cc: Lokesh Vutla <lokeshvutla@ti.com>
-Cc: Tero Kristo <t-kristo@ti.com>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
----
- drivers/bus/ti-sysc.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+The second and third came up while testing video output on my EC-100
+(Endless Mini). This board is special because u-boot does not enable
+the video outputs like most other u-boot versions do. However, this
+is very useful for development because it shows (the hard way ;))
+where the existing code is buggy.
 
-diff --git a/drivers/bus/ti-sysc.c b/drivers/bus/ti-sysc.c
---- a/drivers/bus/ti-sysc.c
-+++ b/drivers/bus/ti-sysc.c
-@@ -1275,13 +1275,6 @@ static const struct sysc_revision_quirk sysc_revision_quirks[] = {
- 		   SYSC_QUIRK_LEGACY_IDLE),
- 	SYSC_QUIRK("smartreflex", 0, -ENODEV, 0x38, -ENODEV, 0x00000000, 0xffffffff,
- 		   SYSC_QUIRK_LEGACY_IDLE),
--	SYSC_QUIRK("timer", 0, 0, 0x10, 0x14, 0x00000015, 0xffffffff,
--		   0),
--	/* Some timers on omap4 and later */
--	SYSC_QUIRK("timer", 0, 0, 0x10, -ENODEV, 0x50002100, 0xffffffff,
--		   0),
--	SYSC_QUIRK("timer", 0, 0, 0x10, -ENODEV, 0x4fff1301, 0xffff00ff,
--		   0),
- 	SYSC_QUIRK("uart", 0, 0x50, 0x54, 0x58, 0x00000046, 0xffffffff,
- 		   SYSC_QUIRK_SWSUP_SIDLE | SYSC_QUIRK_LEGACY_IDLE),
- 	SYSC_QUIRK("uart", 0, 0x50, 0x54, 0x58, 0x00000052, 0xffffffff,
-@@ -1404,6 +1397,13 @@ static const struct sysc_revision_quirk sysc_revision_quirks[] = {
- 	SYSC_QUIRK("slimbus", 0, 0, 0x10, -ENODEV, 0x40002903, 0xffffffff, 0),
- 	SYSC_QUIRK("spinlock", 0, 0, 0x10, -ENODEV, 0x50020000, 0xffffffff, 0),
- 	SYSC_QUIRK("rng", 0, 0x1fe0, 0x1fe4, -ENODEV, 0x00000020, 0xffffffff, 0),
-+	SYSC_QUIRK("timer", 0, 0, 0x10, 0x14, 0x00000013, 0xffffffff, 0),
-+	SYSC_QUIRK("timer", 0, 0, 0x10, 0x14, 0x00000015, 0xffffffff, 0),
-+	/* Some timers on omap4 and later */
-+	SYSC_QUIRK("timer", 0, 0, 0x10, -ENODEV, 0x50002100, 0xffffffff, 0),
-+	SYSC_QUIRK("timer", 0, 0, 0x10, -ENODEV, 0x4fff1301, 0xffff00ff, 0),
-+	SYSC_QUIRK("timer32k", 0, 0, 0x4, -ENODEV, 0x00000040, 0xffffffff, 0),
-+	SYSC_QUIRK("timer32k", 0, 0, 0x4, -ENODEV, 0x00000011, 0xffffffff, 0),
- 	SYSC_QUIRK("timer32k", 0, 0, 0x4, -ENODEV, 0x00000060, 0xffffffff, 0),
- 	SYSC_QUIRK("tpcc", 0, 0, -ENODEV, -ENODEV, 0x40014c00, 0xffffffff, 0),
- 	SYSC_QUIRK("usbhstll", 0, 0, 0x10, 0x14, 0x00000004, 0xffffffff, 0),
+The last patch is a small improvement for the VPU clock so we
+utilize the glitch-free mux (on SoCs which support it) and avoid
+problems by changing the "live" clock tree at runtime (with the mali
+clock this resulted in system hangs/freezes).
+
+In my opinion all of these patches - including the fixes - can go to
+"next" because the relevant clock trees are still read-only.
+
+
+Changes since v1 at [0]:
+- updated the description in patch #1 to clarify that (it seems that)
+  there is no fixed pre-multiplier for the HDMI PLL (like on GXL for
+  example). Spotted by Jerome - thanks!
+- simplified the logic for the active_low resets in patch #2 by
+  shortening the if ... else. Thanks to Jerome for the suggestion.
+
+
+[0] https://patchwork.kernel.org/cover/11489079/
+
+
+Martin Blumenstingl (4):
+  clk: meson: meson8b: Fix the first parent of vid_pll_in_sel
+  clk: meson: meson8b: Fix the polarity of the RESET_N lines
+  clk: meson: meson8b: Fix the vclk_div{1,2,4,6,12}_en gate bits
+  clk: meson: meson8b: Make the CCF use the glitch-free VPU mux
+
+ drivers/clk/meson/meson8b.c | 105 +++++++++++++++++++++++++-----------
+ 1 file changed, 73 insertions(+), 32 deletions(-)
+
 -- 
 2.26.1
+
