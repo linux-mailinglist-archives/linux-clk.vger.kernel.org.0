@@ -2,34 +2,44 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B621B1037
-	for <lists+linux-clk@lfdr.de>; Mon, 20 Apr 2020 17:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BFF1B1286
+	for <lists+linux-clk@lfdr.de>; Mon, 20 Apr 2020 19:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726838AbgDTPcg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 20 Apr 2020 11:32:36 -0400
-Received: from mout.kundenserver.de ([217.72.192.74]:35541 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726214AbgDTPcf (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 Apr 2020 11:32:35 -0400
-Received: from mail-qk1-f177.google.com ([209.85.222.177]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MKbXu-1jenVc2lZc-00KzPH; Mon, 20 Apr 2020 17:32:32 +0200
-Received: by mail-qk1-f177.google.com with SMTP id 20so10966769qkl.10;
-        Mon, 20 Apr 2020 08:32:32 -0700 (PDT)
-X-Gm-Message-State: AGi0PuZzKJZx5TUAXtVjzVIHfHDHAkzOgGby7jsFStrGdfJVyelJ9yDn
-        krqYZuwtbPKps75j8gNIJlzMTHJKEJnrbwXbi6w=
-X-Google-Smtp-Source: APiQypKsf/Hx11xL620kC/5u0IK+jaiJ9QMyBbO11T3fK9/yTcQO5zVm2KODcJguNDK4FKGUi7pp/GdcXdzmK3UiSdA=
-X-Received: by 2002:a37:ba47:: with SMTP id k68mr16851450qkf.394.1587396751408;
- Mon, 20 Apr 2020 08:32:31 -0700 (PDT)
+        id S1726209AbgDTRFj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 20 Apr 2020 13:05:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39812 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725784AbgDTRFi (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 20 Apr 2020 13:05:38 -0400
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4AA8E2145D;
+        Mon, 20 Apr 2020 17:05:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587402338;
+        bh=Xc6XrmLSCIcb51KsMBWF6mTM27IZYmEb7/lQXrM3bu4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=q4T1kv7HdPS1P5AZLjTSWBTvlZzn4+euSJBG9XPEJqjOF4FmZ514Wr1grHZzGoua5
+         6Z5ff+J6X2CSm24a61Qi0qetLCs0LuaKfQckhEVrAzSFRhtpFfxW3wmn5ON7BcecsZ
+         6dSEhbpXs3HPlIIV5+JtrFntF009WAxyXwsB7qck=
+Received: by mail-qv1-f43.google.com with SMTP id di6so5043991qvb.10;
+        Mon, 20 Apr 2020 10:05:38 -0700 (PDT)
+X-Gm-Message-State: AGi0PuZqErpcVbfR2EA8n7RaMcdOJQ+MLh8XDW1GAGAKVLMsyVoD8qKe
+        hN7OtplDue/2OyvCcgUOdU6cUljQnfOPIgOmBw==
+X-Google-Smtp-Source: APiQypIDWoULtjcdPMhHTwUbjhB5PgHOYuP8qk/54NpEcp5kyQVmA7he6ResPS2EXZ7aD56hadG6ccO+LfE9ccPnqZk=
+X-Received: by 2002:ad4:4ae3:: with SMTP id cp3mr14899713qvb.136.1587402337413;
+ Mon, 20 Apr 2020 10:05:37 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200419170810.5738-1-robh@kernel.org> <20200419170810.5738-13-robh@kernel.org>
-In-Reply-To: <20200419170810.5738-13-robh@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 20 Apr 2020 17:32:15 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2+o=DQNJ8UTJzq1ugm12RTfyaUwYx=KW6Xx6uWE2zOOw@mail.gmail.com>
-Message-ID: <CAK8P3a2+o=DQNJ8UTJzq1ugm12RTfyaUwYx=KW6Xx6uWE2zOOw@mail.gmail.com>
+ <CAK8P3a2+o=DQNJ8UTJzq1ugm12RTfyaUwYx=KW6Xx6uWE2zOOw@mail.gmail.com>
+In-Reply-To: <CAK8P3a2+o=DQNJ8UTJzq1ugm12RTfyaUwYx=KW6Xx6uWE2zOOw@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 20 Apr 2020 12:05:24 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKDXq9g3UsmNe1JbQuySYW0LhHpE3yR+Qowx9u3-T7eNQ@mail.gmail.com>
+Message-ID: <CAL_JsqKDXq9g3UsmNe1JbQuySYW0LhHpE3yR+Qowx9u3-T7eNQ@mail.gmail.com>
 Subject: Re: [PATCH 12/17] mfd: vexpress-sysreg: Support building as a module
-To:     Rob Herring <robh@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Liviu Dudau <liviu.dudau@arm.com>,
         Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
@@ -44,38 +54,28 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         linux-clk <linux-clk@vger.kernel.org>,
         Linux PM list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:qy1QX3kS57KI3Nikyt9zCKU14owQpJaLBWCFRTQeSNJipz3OotF
- ZgBvrd8JYP8M7uNtvvcU1r9aub0ioXxovy0y9IcySFvkvBmBIloBNcmgzM8S/iT65Il5Oyb
- NRos8r38ZbYbOgRna909nneCo8JBxOvMf8Ag3Kw4DNawLnhfTe7AxLjRO4n53GPC1XyFFl8
- 5eFNram3vONJq3wiSVkfA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:eiSP8PzxZFY=:eEtHIvo2boq4B7B0P+fLsh
- GdVbOpKRxZmBpMoQlkseR+RD2J/BegJp4pmFQ1sdAQiS2GlrgggFNzneKLRtEqEqPxC27Cb3f
- I1ThWpyeK7qMNy/+rkJpiVbUXJq0R6V8hvrhmQoPy7wK9LwNB8/73Sja4KcSp4XyuueMnU4V1
- qb23ev6hDdks8Z2AUWhn79kd7FDDP+AAzueJN/LNj/X3T+CZxKUXHAJR/74F+lmpB31hlIsV0
- RoVLKkCjEDcM2lKeKox2fWNP7u8J8l+Pe9sASvmrDAbAv8/zrYDVM6gVRx3hOEWjdJAV1ihnK
- pEY5nmTdVnVo6CiQ1SyIGHsFlMwG2SbiQBaNsp71eCwZikV6zoJDY6fZoRtc9JBvv+RdXwVT3
- 6DmftP5EJjpZgUYllhMifeTXT9NuNn5DaogavXDmXbVARDD7UNI/w5AORa3yR/5b307s9L+iD
- wJvaiirGTcVIySb2tzJmrKIfSN5dDnOwuryMPYZCpRsx5CRB6bqiBDp4LOKeeIe63dpeyTgX3
- QRggHbiU1mEySrmy+6Jqn+vMi1U3xlYTJtvZjJvvj1RonyG8/M26gePT0Q0v1Iu7tAcOo936Q
- vZvlidEexQ9AYNUg/PBmSl4dx0Xax/QlZA6czqbUlVk49P7qVU9kVvbwne+7ee89qYppiB8UM
- MMSZJoP36Bm4B7S4r8x80e19bgjqVFqIfewapOEyKjFC5aK4cH4jfRXMiKtqUbNkXrdWbqE4p
- Sw09//znDAG8LYMkZ3BbFuM7Rez8+CGKnlk11rsVsO5Zq20uVWU34O7Hoq5+T+3BdASs2XtF2
- u9gW4EKBcTM+Fy6xsERVBskLJ83KaPjYGodN35Xo0cXo33qY4g=
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sun, Apr 19, 2020 at 7:08 PM Rob Herring <robh@kernel.org> wrote:
+On Mon, Apr 20, 2020 at 10:32 AM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> Enable building the vexpress-sysreg driver as a module.
+> On Sun, Apr 19, 2020 at 7:08 PM Rob Herring <robh@kernel.org> wrote:
+> >
+> > Enable building the vexpress-sysreg driver as a module.
+>
+> > -
+> > -       /* Need the sysreg early, before any other device... */
+> > -       for_each_matching_node(node, vexpress_sysreg_match)
+> > -               of_platform_device_create(node, NULL, NULL);
+>
+> Is this safe to remove? If yes, please mention it in the changelog.
 
-> -
-> -       /* Need the sysreg early, before any other device... */
-> -       for_each_matching_node(node, vexpress_sysreg_match)
-> -               of_platform_device_create(node, NULL, NULL);
+Well, yes and no (I think). This was purely to instantiate the device
+early before the default DT probing would do it (as all the parents
+are 'simple-bus' the default would descend to these nodes). It's fine
+after patch 14 for sure, but before that I think it is changing the
+initcall/probe order. So I'll stick this between patch 15 and 16.
 
-Is this safe to remove? If yes, please mention it in the changelog.
-
-      Arnd
+Rob
