@@ -2,40 +2,40 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FFA1B17DA
-	for <lists+linux-clk@lfdr.de>; Mon, 20 Apr 2020 23:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD1F1B17EC
+	for <lists+linux-clk@lfdr.de>; Mon, 20 Apr 2020 23:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726792AbgDTVBM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 20 Apr 2020 17:01:12 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:38726 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726294AbgDTVBM (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 Apr 2020 17:01:12 -0400
-Received: by mail-oi1-f196.google.com with SMTP id r66so10127336oie.5;
-        Mon, 20 Apr 2020 14:01:11 -0700 (PDT)
+        id S1726893AbgDTVEA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 20 Apr 2020 17:04:00 -0400
+Received: from mail-oo1-f65.google.com ([209.85.161.65]:37426 "EHLO
+        mail-oo1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726494AbgDTVEA (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 Apr 2020 17:04:00 -0400
+Received: by mail-oo1-f65.google.com with SMTP id g14so2455593ooa.4;
+        Mon, 20 Apr 2020 14:03:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=tEPqLrCHDoG9Ero5B2m0h3HZkz0IPEK75a1FjNh32kg=;
-        b=DeCcHo9T5eGFt8i7eUroCnrsadFXJtBHHv66zxtqIv2kOikNDcAobaYZH9iwjDzVE0
-         S25lNUI8A/AwqDYGv5B/azRmW8+obX4W1Gli8+A2QDCGG/7cm/sSBUa2QDJ+FrbdaiY2
-         4/PVwlViEIQxlv/1NsURrU8ilCvt33GmmrDlxczkH9T01+tvZnU5asDcQbQk3CW+qqD/
-         vRoC2kUlZemO7an0utexZuLjeEzdUjUG4ruzjUQREZYpLfFKkPbwKTxHUla7lVsqN5eL
-         vwybom/YUVAzsoyHqLYkP/jaqtAmC2VCttlwfbRFGdS76KkOgwipD2ZbyYskhzThVj8X
-         zCPA==
-X-Gm-Message-State: AGi0PuZCWJaQmTpBX+WDzXdxKcfcD5sB2D6Lu9iZ5DJ3qd8vnhuNnaAA
-        7tLib6LNzT+sjit4wENP/w==
-X-Google-Smtp-Source: APiQypLjsiY39/Nvmw1B1qa5NtEoy7MDqhH5h9uokQff++VafGJL8qiYaQOFkvSPxqPJYJff2F6rFg==
-X-Received: by 2002:aca:6042:: with SMTP id u63mr987869oib.179.1587416470793;
-        Mon, 20 Apr 2020 14:01:10 -0700 (PDT)
+        bh=k3k0EYf2IYgH6XQhQIOehLwJor59vFsYaCxaDBtqyJs=;
+        b=jQyfWpAZcBGN/9q/db0cKtGPOvTTC72DHUIL3MgLnjsK05jkykciz4aPQifSno1p9B
+         nnP7y0mxjsbHTE5wmEpajLn4bEHSdvBBA3jgxMgSqREFV0Xqo5uoH1CeERXoT46NWLHT
+         G9n3hfwNkYvK92QrYxLQccyFEwYNp6RHk3mobapj/v4W+rcABOXLoMDmI+OL+HYpybes
+         6gPNyewcSGgTQ57FDIBQDL+kg2uTYs9yQalIyQBt4GCkUFCo1QpWoKB0+XvcIb1nIqmi
+         o1lBFpVjY3PUyKknbc5a44dCT1TqUkV5oszEw4eWZzA7KNGe61/4Q1rxLCuJGEOAQIiL
+         PlZA==
+X-Gm-Message-State: AGi0PuZ2z/K3+atqu+09iKst6QH2Kmo7PnhXhp0bYLfM/apZFdYm+Lzj
+        boq2ah6RlUghgtHqZATTdw==
+X-Google-Smtp-Source: APiQypLn1lVD/qUvj+MWk2m8JUL4UNVyrhfFu9tYRED9AQILx2Ta2a1VWLY0RN2xlNO+ZWAT0ojpWQ==
+X-Received: by 2002:a4a:d103:: with SMTP id k3mr14219011oor.68.1587416639023;
+        Mon, 20 Apr 2020 14:03:59 -0700 (PDT)
 Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id o34sm139742ooi.46.2020.04.20.14.01.09
+        by smtp.gmail.com with ESMTPSA id s69sm214690otb.4.2020.04.20.14.03.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Apr 2020 14:01:09 -0700 (PDT)
-Received: (nullmailer pid 21483 invoked by uid 1000);
-        Mon, 20 Apr 2020 21:01:08 -0000
-Date:   Mon, 20 Apr 2020 16:01:08 -0500
+        Mon, 20 Apr 2020 14:03:58 -0700 (PDT)
+Received: (nullmailer pid 25404 invoked by uid 1000);
+        Mon, 20 Apr 2020 21:03:56 -0000
+Date:   Mon, 20 Apr 2020 16:03:56 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Sivaprakash Murugesan <sivaprak@codeaurora.org>
 Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
@@ -45,7 +45,7 @@ Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH V3 2/8] dt-bindings: clock: Add YAML schemas for QCOM A53
  PLL
-Message-ID: <20200420210108.GA19108@bogus>
+Message-ID: <20200420210356.GA23568@bogus>
 References: <1586832922-29191-1-git-send-email-sivaprak@codeaurora.org>
  <1586832922-29191-3-git-send-email-sivaprak@codeaurora.org>
 MIME-Version: 1.0
@@ -127,6 +127,9 @@ On Tue, Apr 14, 2020 at 08:25:16AM +0530, Sivaprakash Murugesan wrote:
 > +    enum:
 > +      - qcom,msm8916-a53pll
 > +      - qcom,ipq6018-a53pll
+
+This new compatible goes in the next patch.
+
 > +
 > +  reg:
 > +    maxItems: 1
@@ -136,20 +139,11 @@ On Tue, Apr 14, 2020 at 08:25:16AM +0530, Sivaprakash Murugesan wrote:
 > +
 > +  clocks:
 > +    description: clocks required for this controller.
-
-That's every 'clocks'. Drop.
-
 > +    maxItems: 1
 > +
 > +  clock-names:
 > +    description: clock output names of required clocks.
-
-Drop. 'clock-names' are the input names.
-
 > +    maxItems: 1
-
-Need to define what the names are.
-
 > +
 > +required:
 > +  - compatible
