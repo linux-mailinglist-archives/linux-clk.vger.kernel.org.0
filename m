@@ -2,119 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E081B42A2
-	for <lists+linux-clk@lfdr.de>; Wed, 22 Apr 2020 13:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70D51B4236
+	for <lists+linux-clk@lfdr.de>; Wed, 22 Apr 2020 13:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726151AbgDVKAN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 22 Apr 2020 06:00:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47054 "EHLO mail.kernel.org"
+        id S1727072AbgDVKCz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 22 Apr 2020 06:02:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52214 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726590AbgDVKAD (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 22 Apr 2020 06:00:03 -0400
+        id S1727062AbgDVKCw (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 22 Apr 2020 06:02:52 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1CF0320776;
-        Wed, 22 Apr 2020 10:00:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AF30820B1F;
+        Wed, 22 Apr 2020 10:02:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587549602;
-        bh=fTbTECVBN+Kz09FDYc7YbldgvRd8WnH3neoB4D6wj34=;
+        s=default; t=1587549771;
+        bh=LnZRo6Hxvi5TmQdejLBPUBQPhDfSwxKOii0Tkhdj/mo=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=CyXnhtVQc/tjmkDRIYakYjCI5CAGw3rGlNL21QcC8sdhycajuvegJUEGK6GEUDnEz
-         te+rOS0eVTHZKW4ZCrTH3neUWbLJqt2rMAOOmJGQvCrt1ID0sBcQxwAZPtGxFb6+1t
-         LEZr/4pkNDHM8aSZQ3K75+O1a+/FaU4LRlcqPAy8=
+        b=RhEM734AtFLN0QmsgyCYHpRa2d3P36Y5dDqv4X/v0tc4zUAwCqMRcIomtWMgOnMpy
+         lhHMk02wk/CZHA53+iTcVPv7v0MhOAZXhWH6KQSyG1mPBc+AzaeRxRhGmDHdgAi8M/
+         bSqWZSIdFMK6JyOqsH9raIVAmao3dCMzvN/js/3c=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200414193616.1368209-2-aford173@gmail.com>
-References: <20200414193616.1368209-1-aford173@gmail.com> <20200414193616.1368209-2-aford173@gmail.com>
-Subject: Re: [PATCH 2/3] clk: vc5: Enable addition output configurations of the Versaclock
+In-Reply-To: <20200416081348.326833-1-linus.walleij@linaro.org>
+References: <20200416081348.326833-1-linus.walleij@linaro.org>
+Subject: Re: [PATCH] clk: impd1: Look up clock-output-names
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     aford@beaconembedded.com, charles.stevens@logicpd.com,
-        Adam Ford <aford173@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     Adam Ford <aford173@gmail.com>, linux-clk@vger.kernel.org
-Date:   Wed, 22 Apr 2020 03:00:01 -0700
-Message-ID: <158754960123.132238.9912757167863379129@swboyd.mtv.corp.google.com>
+Cc:     linux-clk@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Date:   Wed, 22 Apr 2020 03:02:50 -0700
+Message-ID: <158754977096.132238.12292029969034991900@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Adam Ford (2020-04-14 12:36:15)
-> @@ -865,6 +904,77 @@ static int vc5_probe(struct i2c_client *client,
->                                 init.name);
->                         goto err_clk;
->                 }
-> +
-> +               /* Fetch Clock Output configuration from DT (if specified=
-) */
-> +               child_name =3D kasprintf(GFP_KERNEL, "OUT%d", n);
-> +               np_output =3D of_get_child_by_name(client->dev.of_node, c=
-hild_name);
-> +               kfree(child_name);
-> +               if (!np_output)
-> +                       continue;
-> +               if (!(ret || of_property_read_u32(np_output,
-> +                       "idt,mode", &value))) {
-> +                       vc5->clk_out[n].clk_output_cfg0_mask |=3D VC5_CLK=
-_OUTPUT_CFG0_CFG_MASK;
-> +                       switch (value) {
-> +                       case VC5_CLK_OUTPUT_CFG0_CFG_LVPECL:
-> +                       case VC5_CLK_OUTPUT_CFG0_CFG_CMOS:
-> +                       case VC5_CLK_OUTPUT_CFG0_CFG_HCSL33:
-> +                       case VC5_CLK_OUTPUT_CFG0_CFG_LVDS:
-> +                       case VC5_CLK_OUTPUT_CFG0_CFG_CMOS2:
-> +                       case VC5_CLK_OUTPUT_CFG0_CFG_CMOSD:
-> +                       case VC5_CLK_OUTPUT_CFG0_CFG_HCSL25:
-> +                               vc5->clk_out[n].clk_output_cfg0 |=3D valu=
-e << VC5_CLK_OUTPUT_CFG0_CFG_SHIFT;
-> +                               break;
-> +                       default:
-> +                               ret =3D -EINVAL;
-> +                               break;
-> +                       }
-> +               }
+Quoting Linus Walleij (2020-04-16 01:13:48)
+> The IM-PD1 still need to pass the clock output names.
+>=20
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 
-Can these three things be functions that are called and passed a
-vc5->clk_out[n] pointer? Then the code would be something like=20
+Is this a
 
- ret =3D prop1_parse_and_update(vc5->clk_out[n]);
- if (ret)
- 	goto err_clk;
- ret =3D prop2_parse_and_update(...)
- if (ret)
- 	goto err_clk;
+Fixes: 84655b762a27 ("clk: versatile: Add device tree probing for IM-PD1 cl=
+ocks")
 
-
-> +               if (!(ret || of_property_read_u32(np_output,
-> +                       "idt,voltage-microvolts", &value))) {
-> +                       vc5->clk_out[n].clk_output_cfg0_mask |=3D VC5_CLK=
-_OUTPUT_CFG0_PWR_MASK;
-> diff --git a/include/dt-bindings/clk/versaclock.h b/include/dt-bindings/c=
-lk/versaclock.h
-> new file mode 100644
-> index 000000000000..30add3488713
-> --- /dev/null
-> +++ b/include/dt-bindings/clk/versaclock.h
-> @@ -0,0 +1,13 @@
-> +/* HEADER */
-
-Any SPDX license for this in place of HEADER?
-
-> +
-> +/* This file defines field values used by the versaclock 6 family
-> + * for defining output type
-> + */
-> +
-> +#define VC5_LVPECL     0
-> +#define VC5_CMOS       1
-> +#define VC5_HCSL33     2
-> +#define VC5_LVDS       3
-> +#define VC5_CMOS2      4
-> +#define VC5_CMOSD      5
-> +#define VC5_HCSL25     6
+change?
