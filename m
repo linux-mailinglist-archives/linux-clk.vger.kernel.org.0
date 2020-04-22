@@ -2,269 +2,133 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 939C71B404A
-	for <lists+linux-clk@lfdr.de>; Wed, 22 Apr 2020 12:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93AE01B427C
+	for <lists+linux-clk@lfdr.de>; Wed, 22 Apr 2020 13:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729984AbgDVKo4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 22 Apr 2020 06:44:56 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:56542 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731537AbgDVKoz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 22 Apr 2020 06:44:55 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1587552293; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: To:
- Subject: Sender; bh=X9RGF6DVDVLfxnPxoe5Yh8TPlAiL8319mi3nRhdPovs=; b=EbOVnHdybhI/Z+i0QSnG5GnFql4S0801W9Vooo0T1NjYkrpDgxWKrngk7PhjdD+V9DJqCVru
- faDrQiipOfq4aOlp13V075oif5yiFPGAm+vZD7WfKYxctR5v48qq+e/JYj4Jx9j4YHTpYMCN
- WQmN2inpIJOMfig0RrGWMllR/yg=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5ea02019.7ff1f3af2500-smtp-out-n05;
- Wed, 22 Apr 2020 10:44:41 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 05D28C433F2; Wed, 22 Apr 2020 10:44:40 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.0.105] (unknown [49.207.137.37])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sivaprak)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2CC38C433D2;
-        Wed, 22 Apr 2020 10:44:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2CC38C433D2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sivaprak@codeaurora.org
-Subject: Re: [PATCH V3 3/8] clk: qcom: Add A53 PLL support for ipq6018 devices
-To:     Stephen Boyd <sboyd@kernel.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, devicetree@vger.kernel.org,
-        jassisinghbrar@gmail.com, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mturquette@baylibre.com, robh+dt@kernel.org
-References: <1586832922-29191-1-git-send-email-sivaprak@codeaurora.org>
- <1586832922-29191-4-git-send-email-sivaprak@codeaurora.org>
- <158754602745.132238.14379194464345140559@swboyd.mtv.corp.google.com>
-From:   Sivaprakash Murugesan <sivaprak@codeaurora.org>
-Message-ID: <4025e5c3-b532-d235-f73b-2b86055bdde2@codeaurora.org>
-Date:   Wed, 22 Apr 2020 16:14:33 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1728507AbgDVLBp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 22 Apr 2020 07:01:45 -0400
+Received: from foss.arm.com ([217.140.110.172]:47584 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726742AbgDVLBo (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 22 Apr 2020 07:01:44 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B267231B;
+        Wed, 22 Apr 2020 04:01:43 -0700 (PDT)
+Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 905FE3F6CF;
+        Wed, 22 Apr 2020 04:01:43 -0700 (PDT)
+Received: by e110455-lin.cambridge.arm.com (Postfix, from userid 1000)
+        id 35482682F3D; Wed, 22 Apr 2020 12:01:42 +0100 (BST)
+Date:   Wed, 22 Apr 2020 12:01:42 +0100
+From:   Liviu Dudau <liviu.dudau@arm.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Will Deacon <will@kernel.org>,
+        Kevin Brodsky <Kevin.Brodsky@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>
+Subject: Re: [PATCH 08/17] clk: vexpress-osc: Support building as a module
+Message-ID: <20200422110142.GT364558@e110455-lin.cambridge.arm.com>
+References: <20200419170810.5738-1-robh@kernel.org>
+ <20200419170810.5738-9-robh@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <158754602745.132238.14379194464345140559@swboyd.mtv.corp.google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200419170810.5738-9-robh@kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Stephen,
+On Sun, Apr 19, 2020 at 12:08:01PM -0500, Rob Herring wrote:
+> Enable building the vexpress-osc clock driver as a module.
+> 
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Liviu Dudau <liviu.dudau@arm.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  drivers/clk/versatile/Kconfig            |  4 ++--
+>  drivers/clk/versatile/clk-vexpress-osc.c | 10 ++++------
+>  2 files changed, 6 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/clk/versatile/Kconfig b/drivers/clk/versatile/Kconfig
+> index 5bdd5c98990b..9de2396dcf9b 100644
+> --- a/drivers/clk/versatile/Kconfig
+> +++ b/drivers/clk/versatile/Kconfig
+> @@ -15,8 +15,8 @@ config CLK_SP810
+>  	  of the ARM SP810 System Controller cell.
+>  
+>  config CLK_VEXPRESS_OSC
+> -	bool "Clock driver for Versatile Express OSC clock generators"
+> -	depends on VEXPRESS_CONFIG || COMPILE_TEST
+> +	tristate "Clock driver for Versatile Express OSC clock generators"
+> +	depends on VEXPRESS_CONFIG
 
-On 4/22/2020 2:30 PM, Stephen Boyd wrote:
-> Quoting Sivaprakash Murugesan (2020-04-13 19:55:17)
->> The CPUs on Qualcomm IPQ6018 platform is primarily clocked by A53 PLL.
->> This patch adds support for the A53 PLL on IPQ6018 devices which can
->> support CPU frequencies above 1Ghz.
->>
->> Signed-off-by: Sivaprakash Murugesan <sivaprak@codeaurora.org>
->> ---
->>   drivers/clk/qcom/a53-pll.c | 136 ++++++++++++++++++++++++++++++++++++---------
->>   1 file changed, 111 insertions(+), 25 deletions(-)
->>
->> diff --git a/drivers/clk/qcom/a53-pll.c b/drivers/clk/qcom/a53-pll.c
->> index 45cfc57..a95351c 100644
->> --- a/drivers/clk/qcom/a53-pll.c
->> +++ b/drivers/clk/qcom/a53-pll.c
->> @@ -11,11 +11,40 @@
->>   #include <linux/platform_device.h>
->>   #include <linux/regmap.h>
->>   #include <linux/module.h>
->> +#include <linux/of_device.h>
-> Why does this driver need to change to use of_device APIs?
-we can use devm APIs and avoid this in next patch.
->
->>   
->>   #include "clk-pll.h"
->>   #include "clk-regmap.h"
->> +#include "clk-alpha-pll.h"
->>   
->> -static const struct pll_freq_tbl a53pll_freq[] = {
->> +struct a53_alpha_pll {
->> +       struct alpha_pll_config *pll_config;
->> +       struct clk_alpha_pll *pll;
->> +};
->> +
->> +union a53pll {
->> +       struct clk_pll *pll;
->> +       struct a53_alpha_pll alpha_pll;
->> +};
->> +
->> +struct a53pll_data {
->> +#define PLL_IS_ALPHA BIT(0)
->> +       u8 flags;
->> +       union a53pll a53pll;
-> Why is there a union? Can't we have different clk ops for the two types
-> of PLLs and then use container_of to get it from the clk ops?
-ok.
->
->> +};
->> +
->> +static const u8 ipq_pll_offsets[] = {
->> +       [PLL_OFF_L_VAL] = 0x08,
->> +       [PLL_OFF_ALPHA_VAL] = 0x10,
->> +       [PLL_OFF_USER_CTL] = 0x18,
->> +       [PLL_OFF_CONFIG_CTL] = 0x20,
->> +       [PLL_OFF_CONFIG_CTL_U] = 0x24,
->> +       [PLL_OFF_STATUS] = 0x28,
->> +       [PLL_OFF_TEST_CTL] = 0x30,
->> +       [PLL_OFF_TEST_CTL_U] = 0x34,
->> +};
->> +
->> +static const struct pll_freq_tbl msm8996_a53pll_freq[] = {
->>          {  998400000, 52, 0x0, 0x1, 0 },
->>          { 1094400000, 57, 0x0, 0x1, 0 },
->>          { 1152000000, 62, 0x0, 0x1, 0 },
->> @@ -26,6 +55,64 @@ static const struct pll_freq_tbl a53pll_freq[] = {
->>          { }
->>   };
->>   
->> +static struct clk_pll msm8996_pll = {
->> +       .mode_reg = 0x0,
->> +       .l_reg = 0x04,
->> +       .m_reg = 0x08,
->> +       .n_reg = 0x0c,
->> +       .config_reg = 0x14,
->> +       .status_reg = 0x1c,
->> +       .status_bit = 16,
->> +       .freq_tbl = msm8996_a53pll_freq,
->> +       .clkr.hw.init = &(struct clk_init_data){
->> +               .name = "a53pll",
->> +               .flags = CLK_IS_CRITICAL,
->> +               .parent_data = &(const struct clk_parent_data){
->> +                       .fw_name = "xo",
->> +                       .name = "xo",
->> +               },
->> +               .num_parents = 1,
->> +               .ops = &clk_pll_sr2_ops,
->> +       },
->> +};
->> +
->> +static struct clk_alpha_pll ipq6018_pll = {
->> +       .offset = 0x0,
->> +       .regs = ipq_pll_offsets,
->> +       .flags = SUPPORTS_DYNAMIC_UPDATE,
->> +       .clkr = {
->> +               .enable_reg = 0x0,
->> +               .enable_mask = BIT(0),
->> +               .hw.init = &(struct clk_init_data){
->> +                       .name = "a53pll",
->> +                       .flags = CLK_IS_CRITICAL,
->> +                       .parent_data = &(const struct clk_parent_data){
->> +                               .fw_name = "xo",
->> +                       },
->> +                       .num_parents = 1,
->> +                       .ops = &clk_alpha_pll_huayra_ops,
->> +               },
->> +       },
->> +};
->> +
->> +static struct alpha_pll_config ipq6018_pll_config = {
-> Can this be const?
-yeah it can be. will fix up in next patch.
->
->> +       .l = 0x37,
->> +       .config_ctl_val = 0x04141200,
->> +       .config_ctl_hi_val = 0x0,
->> +       .early_output_mask = BIT(3),
->> +       .main_output_mask = BIT(0),
->> +};
->> +
->> +static struct a53pll_data msm8996pll_data = {
->> +       .a53pll.pll = &msm8996_pll,
->> +};
->> +
->> +static struct a53pll_data ipq6018pll_data = {
->> +       .flags = PLL_IS_ALPHA,
->> +       .a53pll.alpha_pll.pll = &ipq6018_pll,
->> +       .a53pll.alpha_pll.pll_config = &ipq6018_pll_config,
->> +};
->> +
->>   static const struct regmap_config a53pll_regmap_config = {
->>          .reg_bits               = 32,
->>          .reg_stride             = 4,
->> @@ -39,14 +126,16 @@ static int qcom_a53pll_probe(struct platform_device *pdev)
->>          struct device *dev = &pdev->dev;
->>          struct regmap *regmap;
->>          struct resource *res;
->> -       struct clk_pll *pll;
->> +       const struct a53pll_data *pll_data;
->> +       struct clk_regmap *clkr;
->>          void __iomem *base;
->> -       struct clk_init_data init = { };
->>          int ret;
->>   
->> -       pll = devm_kzalloc(dev, sizeof(*pll), GFP_KERNEL);
->> -       if (!pll)
->> -               return -ENOMEM;
->> +       pll_data = of_device_get_match_data(dev);
-> Use device_get_match_data() please.
-ok.
->
->> +       if (!pll_data) {
->> +               dev_err(dev, "failed to get platform data\n");
-> No error message please.
-ok.
->
->> +               return -ENODEV;
->> +       }
->>   
->>          res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->>          base = devm_ioremap_resource(dev, res);
->> @@ -57,30 +146,26 @@ static int qcom_a53pll_probe(struct platform_device *pdev)
->>          if (IS_ERR(regmap))
->>                  return PTR_ERR(regmap);
->>   
->> -       pll->l_reg = 0x04;
->> -       pll->m_reg = 0x08;
->> -       pll->n_reg = 0x0c;
->> -       pll->config_reg = 0x14;
->> -       pll->mode_reg = 0x00;
->> -       pll->status_reg = 0x1c;
->> -       pll->status_bit = 16;
->> -       pll->freq_tbl = a53pll_freq;
->> -
->> -       init.name = "a53pll";
->> -       init.parent_names = (const char *[]){ "xo" };
->> -       init.num_parents = 1;
->> -       init.ops = &clk_pll_sr2_ops;
->> -       init.flags = CLK_IS_CRITICAL;
-> Please document why a clk is critical.
-ok
->
->> -       pll->clkr.hw.init = &init;
->> -
->> -       ret = devm_clk_register_regmap(dev, &pll->clkr);
->> +       if (pll_data->flags & PLL_IS_ALPHA) {
->> +               struct clk_alpha_pll *alpha_pll =
->> +                       pll_data->a53pll.alpha_pll.pll;
->> +               struct alpha_pll_config *alpha_pll_config =
->> +                       pll_data->a53pll.alpha_pll.pll_config;
->> +
->> +               clk_alpha_pll_configure(alpha_pll, regmap, alpha_pll_config);
->> +               clkr = &pll_data->a53pll.alpha_pll.pll->clkr;
->> +       } else {
->> +               clkr = &pll_data->a53pll.pll->clkr;
->> +       }
-> Sorry, the design is confusing.
+Looks good to me with the exception of COMPILE_TEST appearing in patch 5 and
+disappearing here. Which one should be the one to survive?
 
-The basic idea is to add support for various PLLs available to clock the 
-A53 core.
+Best regards,
+Liviu
 
-if this messing up the code, can the alpha pll support be moved to a 
-separate file?
+>  	default y if ARCH_VEXPRESS
+>  	---help---
+>  	  Simple regmap-based driver driving clock generators on Versatile
+> diff --git a/drivers/clk/versatile/clk-vexpress-osc.c b/drivers/clk/versatile/clk-vexpress-osc.c
+> index 5bb1d5a714d0..b2b32fa2d7c3 100644
+> --- a/drivers/clk/versatile/clk-vexpress-osc.c
+> +++ b/drivers/clk/versatile/clk-vexpress-osc.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/clkdev.h>
+>  #include <linux/clk-provider.h>
+>  #include <linux/err.h>
+> +#include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/slab.h>
+> @@ -108,6 +109,7 @@ static const struct of_device_id vexpress_osc_of_match[] = {
+>  	{ .compatible = "arm,vexpress-osc", },
+>  	{}
+>  };
+> +MODULE_DEVICE_TABLE(of, vexpress_osc_of_match);
+>  
+>  static struct platform_driver vexpress_osc_driver = {
+>  	.driver	= {
+> @@ -116,9 +118,5 @@ static struct platform_driver vexpress_osc_driver = {
+>  	},
+>  	.probe = vexpress_osc_probe,
+>  };
+> -
+> -static int __init vexpress_osc_init(void)
+> -{
+> -	return platform_driver_register(&vexpress_osc_driver);
+> -}
+> -core_initcall(vexpress_osc_init);
+> +module_platform_driver(vexpress_osc_driver);
+> +MODULE_LICENSE("GPL v2");
+> -- 
+> 2.20.1
+> 
 
-It would be very helpful if you provide your input on this.
+-- 
+====================
+| I would like to |
+| fix the world,  |
+| but they're not |
+| giving me the   |
+ \ source code!  /
+  ---------------
+    ¯\_(ツ)_/¯
