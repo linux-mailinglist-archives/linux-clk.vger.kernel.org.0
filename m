@@ -2,69 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BFE11B3BBC
-	for <lists+linux-clk@lfdr.de>; Wed, 22 Apr 2020 11:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6401B42D1
+	for <lists+linux-clk@lfdr.de>; Wed, 22 Apr 2020 13:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725980AbgDVJvJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 22 Apr 2020 05:51:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42648 "EHLO mail.kernel.org"
+        id S1726121AbgDVLJh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 22 Apr 2020 07:09:37 -0400
+Received: from mga01.intel.com ([192.55.52.88]:12656 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725912AbgDVJvJ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 22 Apr 2020 05:51:09 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C17BB2073A;
-        Wed, 22 Apr 2020 09:51:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587549068;
-        bh=bLJbp6+zinXZf+o+3jQEHKbAguMOzTp9z4BWNRFsioo=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=0tApOW/IF82Eyo4QYx0jHf79aQWnMBt4tiFgAQiWawt/Hk5icbg9am6XY+7DqRmuN
-         zt+gvXfeCjBOOG2tK1rcbSZ9xX2TmE6UiLZ+mShYcpTX/2wuAFACXBnYOQ5WALzdlK
-         OyMw7LUKAWkkHP4PO/2baErwXnqGV5FU2ZnarNOU=
-Content-Type: text/plain; charset="utf-8"
+        id S1726104AbgDVLJh (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 22 Apr 2020 07:09:37 -0400
+IronPort-SDR: ekUo6i82p9hH7RS1jH1EaSunQC3qds07G5RlC74mRAdLGnmSCjfguw0hllKYqzntIjiNLn6djz
+ u59BmNzMVulQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2020 04:09:37 -0700
+IronPort-SDR: C8gBEMh74DJeDpXbU7qrvhRVlQBYlnTsVVaUFYIoZGnnyDwZ/+ZG2r1FEdHQ7lc4xpWXXlpWMu
+ NJKRArDDUW6A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,414,1580803200"; 
+   d="scan'208";a="457108260"
+Received: from ajavier-mobl1.amr.corp.intel.com (HELO [10.255.68.153]) ([10.255.68.153])
+  by fmsmga006.fm.intel.com with ESMTP; 22 Apr 2020 04:09:36 -0700
+Subject: Re: [RFC PATCH 13/16] clk: hifiberry-dacpro: add "sclk" lookup
+To:     Stephen Boyd <sboyd@kernel.org>, alsa-devel@alsa-project.org
+Cc:     tiwai@suse.de, broonie@kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Matuschek <daniel@hifiberry.com>,
+        Matthias Reichl <hias@horus.com>,
+        Hui Wang <hui.wang@canonical.com>, linux-gpio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20200409195841.18901-1-pierre-louis.bossart@linux.intel.com>
+ <20200409195841.18901-14-pierre-louis.bossart@linux.intel.com>
+ <158754810745.132238.7647643247125302962@swboyd.mtv.corp.google.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Message-ID: <c52e0f7d-1eaf-a89b-ff5d-b2a02ad56021@linux.intel.com>
+Date:   Wed, 22 Apr 2020 04:51:52 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200419170810.5738-16-robh@kernel.org>
-References: <20200419170810.5738-1-robh@kernel.org> <20200419170810.5738-16-robh@kernel.org>
-Subject: Re: [PATCH 15/17] vexpress: Move site master init to vexpress-config bus
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Kevin Brodsky <Kevin.Brodsky@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Date:   Wed, 22 Apr 2020 02:51:08 -0700
-Message-ID: <158754906803.132238.5380277174069330915@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+In-Reply-To: <158754810745.132238.7647643247125302962@swboyd.mtv.corp.google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Is the subject supposed to say 'set master' vs. 'site master'?
 
-Quoting Rob Herring (2020-04-19 10:08:08)
-> There's only a single caller of vexpress_config_set_master() from
-> vexpress-sysreg.c. Let's just make the registers needed available to
-> vexpress-config and move all the code there. The registers needed aren't
-> used anywhere else either. With this, we can get rid of the private API
-> between these 2 drivers.
->=20
-> Cc: Liviu Dudau <liviu.dudau@arm.com>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Rob Herring <robh@kernel.org>
+
+>> +       proclk->sclk_lookup = clkdev_hw_create(&proclk->hw, "sclk", NULL);
+>> +       if (!proclk->sclk_lookup) {
+>> +#ifndef CONFIG_ACPI
+> 
+> Is it to save code space? Otherwise the ifdefs are pretty ugly and I'd
+> prefer we just call of_clk APIs and rely on the inline stubs when
+> CONFIG_OF isn't enabled to be optimized out.
+
+CONFIG_OF was added as a dependency (see patch 10/16) so that we can use 
+the 'compatible' string to probe w/ the PRP0001 device.
+
+I must admit I don't know what these functions do so I just filtered 
+them out in the ACPI case.
+
+>> +               of_clk_del_provider(dev->of_node);
+>> +#endif
+>> +               return -ENOMEM;
+>> +       }
+>> +
