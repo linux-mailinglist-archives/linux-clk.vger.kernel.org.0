@@ -2,91 +2,119 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19DBF1B63AE
-	for <lists+linux-clk@lfdr.de>; Thu, 23 Apr 2020 20:27:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A026E1B64BB
+	for <lists+linux-clk@lfdr.de>; Thu, 23 Apr 2020 21:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730274AbgDWS0w (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 23 Apr 2020 14:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52812 "EHLO
+        id S1726158AbgDWTrb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 23 Apr 2020 15:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730278AbgDWS0v (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Apr 2020 14:26:51 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F01C09B048
-        for <linux-clk@vger.kernel.org>; Thu, 23 Apr 2020 11:26:51 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id 19so7483861ioz.10
-        for <linux-clk@vger.kernel.org>; Thu, 23 Apr 2020 11:26:51 -0700 (PDT)
+        with ESMTP id S1726068AbgDWTrb (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Apr 2020 15:47:31 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3966BC09B042
+        for <linux-clk@vger.kernel.org>; Thu, 23 Apr 2020 12:47:31 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id pg17so5631014ejb.9
+        for <linux-clk@vger.kernel.org>; Thu, 23 Apr 2020 12:47:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
-        b=g40sBMuaO0eKdotmx6qgQBl63DKBmrekz5bvyEQHA4wVZtcqrxc+aFVgh/QD84O9VQ
-         7GeGJGwCstc5CQBYUut5JFB/SR9hiHRBoNucBdQ5+M/xcZE7LYnQNVriX94nlJDQQ53M
-         WWNnGuPMmJMtuCxOc6M3BOG48McWyi9pwkfv1qCbwmDhh95byI3UmcGK9ZJ59xQm/kqA
-         giNgZwxUHu+XTIAoqn/uu1orK63Ur+6hMBQW2TB101zb0oJ5HpVThkCq6id/TjpQtg27
-         HPMb1DcYsj7bM6wQaeV1UkPK6mgUhECRFNV10F5zDhvx1RXP4ikb8uuEIGMKOSNWVb51
-         vLew==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=eu1JjVOxELUgxTKtCnJF1cKtrRvuQ0zxNce+3IOPNG4=;
+        b=aHGGJBMO8aIh6R/t4vgw2/UnTvqfi88owWaY+ncPQ08ZHatVLp37vDcPdCWZ0/gqq3
+         3vxM0iZUqLHXZAMj1ERhl/ywNgIR1Qbf3SOusfZRl4iBSYO/QYqQdLiAPcB9EB9mhSK6
+         VK8UzAMtqOWp9EKATb419tFKLzbMtQM8JAT9b3lA8ohpLoqEbq+Hmm5sDXD4Hbf5RtN4
+         TV/iMEjmyqAig7+TZ+fbdtuksfHS8TcaauTJvhAuwNRMGtjPyMWf0JQuVFPtETztFSH8
+         n3mDPAJ0QD4CENuj06rSwH7KwoE5eLuvzbrmLHRHTmPXXzeuXrPWV+c+6m5p1tLDJgrF
+         Tokg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=DHzQtr3OkXyFWXbvXEU307GvVJtF7cl8Gt7nfdQPyE8=;
-        b=eEAjspU6DxxM83vZ1dpv1wHcbUA/hrg8EUAiy4bNyEFeDyiUKT3IDvyr0bbedv1YMb
-         lTJg0ZRVZg7rnIbZaF23t4DbyVj92DjbvcIfjcmsH3l8ML65fv0UnPTFzep7pFS37iMa
-         tzNbLI4yfxkzE3b8iEc7a2uxmNKqEhnm8hJAraugF+4BZFekqSCwXS7JrO7xw+HwkTGg
-         qY1stcmjcJQFmQmzYEQvLOKIHtlf5J6gnb7d4PTawDsCQQIxxn7a6dGZjoFEtb1TBygh
-         3Vi1XCULlHFSqz8x30zrEr40UnFLxpMAYe0K6yuK/LlmVhrFdNM0VRtSlIeIOcclogpd
-         w24Q==
-X-Gm-Message-State: AGi0PuYVlPlykA3rAYo8bmKocZWo2Njv+6eHG+VNbb8eL80cyWjfQoW5
-        Bhu6HS+tJF4VyRO2xzPpID07XPXhWSs9nEuz+A==
-X-Google-Smtp-Source: APiQypKZ88CB7WlyCjo0k9+cU4PX0VcggKkKtzSKgRJHkcPGizF0yZXAjzEMBgo6XH4xzBXv0KAOMjPM9p1sgpp6/70=
-X-Received: by 2002:a5e:9416:: with SMTP id q22mr2547966ioj.93.1587666410194;
- Thu, 23 Apr 2020 11:26:50 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=eu1JjVOxELUgxTKtCnJF1cKtrRvuQ0zxNce+3IOPNG4=;
+        b=hKf01PfNlW8maLOd6xDV8BpKk40T8pkGet1ZitpKjWd7v0Hp6ybzpkEJ8h901mSv8p
+         sAgmUKvJxTn/iuGuViD3L2WXasuirw4cty8KOo6dj68mSQQbdVkwn4vdDQDUoFjKBK0l
+         ddViGMTbpFKBUJKoPACFeFWxQ7PorSLLV2Oex636EBx7/NhC288LfFLRSosyq7m3Z0cm
+         lDcM+hht8RfrdIiAl5ocp6R0YRFtLFOdyXrValLHz3IPrEzhDt1CQRkMCEDcF4KYx8s1
+         N5gPV6yLIsTY4vS0r10oO3qZ3JsQK9Lp57s6OVRoBXn++DUepDVhc8mDtjBUo2XwqZwU
+         131w==
+X-Gm-Message-State: AGi0PuasjYtUVKHfrT6vpVF4qmUE7zzL3R3PBU8JL1cJCRMPwcBcZrQj
+        0b4wmWR22L+KKF4JzmpCkrI=
+X-Google-Smtp-Source: APiQypJugfkYwl8uXexYu1t6cGPzSC9w2g8IlN9KYueSes1YYC1D8Jp57AZsYlA+0fyUeBF6NK7dug==
+X-Received: by 2002:a17:906:4ecb:: with SMTP id i11mr3921141ejv.79.1587671249772;
+        Thu, 23 Apr 2020 12:47:29 -0700 (PDT)
+Received: from localhost (ipv6-80adf4751ff4da96.ost.clients.hamburg.freifunk.net. [2a03:2267:4:0:80ad:f475:1ff4:da96])
+        by smtp.gmail.com with ESMTPSA id m7sm290939edv.70.2020.04.23.12.47.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 23 Apr 2020 12:47:28 -0700 (PDT)
+Date:   Thu, 23 Apr 2020 21:47:26 +0200
+From:   Oliver Graute <oliver.graute@gmail.com>
+To:     Aisheng Dong <aisheng.dong@nxp.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        Oliver Graute <Oliver.Graute@KoCoConnector.com>,
+        John Stultz <john.stultz@linaro.org>
+Subject: Re: imx8qxp-lpcg-clk: probe of 5a4a0000.clock-controller failed with
+ error -110
+Message-ID: <20200423194726.GA18436@portage>
+References: <20200421142350.GA77260@archlinux.localdomain>
+ <AM6PR04MB4966D212E388766E8F6101A980D30@AM6PR04MB4966.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Received: by 2002:a02:c845:0:0:0:0:0 with HTTP; Thu, 23 Apr 2020 11:26:49
- -0700 (PDT)
-Reply-To: boa.benin107@yahoo.com
-From:   "Mrs. Angella Michelle" <info.zennitbankplcnigerian@gmail.com>
-Date:   Thu, 23 Apr 2020 20:26:49 +0200
-Message-ID: <CABHzvr=N78snvtMHePMOa+RLFdcZEjXLPkuhkojt4VoZGNzBsQ@mail.gmail.com>
-Subject: Contact Bank of Africa-Benin to receive your payment funds transfer
- amount of $12.800.000,00 Million USD,approved this morning by IMF.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AM6PR04MB4966D212E388766E8F6101A980D30@AM6PR04MB4966.eurprd04.prod.outlook.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Attn Dear.
-Contact Bank of Africa-Benin to receive your payment funds transfer amount =
-of
-$12.800.000,00 Million USD,approved this morning by IMF.
-Happy to inform you, we have finally deposited your payment funds
-$12.8 million us dollars with the Paying Bank of Africa-Benin
-to transfer the payment amount of $12.800,000,00 Million Us Dollars to you
-Contact the bank immediately you receive this email now.
-Director Bank of Africa-Benin: Dr. Festus Obiara
-Email id:  boa.benin107@yahoo.com
-Tel/mobile, (229) 62819378
-BOA-BENIN | GROUPE BANK OF AFRICA, boa-benin
-Avenue Jean-Paul II - 08 BP 0879 - Cotonou - B=C3=A9nin
-Phone:(229) 62819378.
-2020 GROUPE BANK OF AFRICA
-Be advised to re-confirm your bank details to this bank as listed.
-Your account Holder's name----------------
-Bank Name----------------------------------------------------------
-Bank address----------------------------------------------
-Account Numbers---------------------------------------
-Rounting-----------------------------------------------------------------
-Your direct Phone Numbers----------------------------------------------
-Note,I have paid the deposit and insurance fees for you
-But the only money you are to send to this bank is $150.00 us dollars
-Been for the wire transfer fees of your funds
-Contact Him now to receive your transfer deposited this morning
-I wait for your reply upon confirmation
-Mrs. Angella Michelle
-Editor, Zenith Bank- Companies Benin
-mrsa9389@gmail.com
+On 23/04/20, Aisheng Dong wrote:
+> > From: Oliver Graute <oliver.graute@gmail.com>
+> > Sent: Tuesday, April 21, 2020 10:24 PM
+> > 
+> > Hello,
+> > 
+> > I run into below clock probing issue, after upgrading from next-20200214 to
+> > next-20200420. I use the following patches series ontop:
+> > > 
+> > Some ideas what's the reason for this behavior? or how to fix this?
+> > 
+> 
+> I will check it tomorrow.
+> Before that, I need rebase my patch series to last kernel to reproduce this issue.
+
+ok fine, I have some bisect results for you I think this change is
+causing the issue.
+
+e2cec7d6853712295cef5377762165a489b2957f is the first bad commit
+commit e2cec7d6853712295cef5377762165a489b2957f
+Author: John Stultz <john.stultz@linaro.org>
+Date:   Tue Feb 25 05:08:24 2020 +0000
+
+    driver core: Set deferred_probe_timeout to a longer default if CONFIG_MODULES is set
+    
+    When using modules, its common for the modules not to be loaded
+    until quite late by userland. With the current code,
+    driver_deferred_probe_check_state() will stop returning
+    EPROBE_DEFER after late_initcall, which can cause module
+    dependency resolution to fail after that.
+    
+    So allow a longer window of 30 seconds (picked somewhat
+    arbitrarily, but influenced by the similar regulator core
+    timeout value) in the case where modules are enabled.
+
+ drivers/base/dd.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+Best regards,
+
+Oliver
