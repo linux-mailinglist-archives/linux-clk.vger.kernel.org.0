@@ -2,86 +2,150 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD1E1BDBAA
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Apr 2020 14:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6DF1BDC70
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Apr 2020 14:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgD2MOs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 29 Apr 2020 08:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
+        id S1726701AbgD2MhO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 29 Apr 2020 08:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726556AbgD2MOs (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 29 Apr 2020 08:14:48 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1311C03C1AD
-        for <linux-clk@vger.kernel.org>; Wed, 29 Apr 2020 05:14:47 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id a21so2307401ljj.11
-        for <linux-clk@vger.kernel.org>; Wed, 29 Apr 2020 05:14:47 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726740AbgD2MhN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 29 Apr 2020 08:37:13 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44866C03C1AE
+        for <linux-clk@vger.kernel.org>; Wed, 29 Apr 2020 05:37:12 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id v4so4822050wme.1
+        for <linux-clk@vger.kernel.org>; Wed, 29 Apr 2020 05:37:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t0srpPN0nwlyjFhHaF4ibgTa/JwHHIQbEOB7fBzG6QA=;
-        b=tTLZnF5kIusCAdwA9HNgdsweJr4mUMtTqr8Ekr6X777kaMhX+Vhu+WX7DllKVJsdke
-         1lQVhTpjaZH0oxi+8vfHQaJxdcqKnrX6C9fOqUBbGsKCHgGz3TUlLmCo+dtB5xbj4mnH
-         AU76EZWy/GcLRZif3lb0glyluqXV0gEWjtQMFZLRhGpTUNKMlCt2hSC3dvEe+TlC7UvQ
-         gek+P2jqTiG/IhMlWMURGpHhMrNpibAGRwCRX2kvOh+Uyt+sGyeZcM2DhhxwRKDLB6Wp
-         LP87J3N7G9fRYo4imcNGbvcSvlAaEQe1paMcUlNOSL4ROt9PrYY3C2VieuyunG317ppE
-         LkBQ==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=NkpmzV5D80JNy4ts2YZIu3+YM84vR2UzyeLRZ8y2XUk=;
+        b=RB2S6Kbc+kfXu6qf/y6WSvhN9KPpKce18ars9tpM2GQHKrokwDv6/gMX4kdak20F6j
+         KXNYe2U3QdGzROWkaeE5+5esEhR6IdymhTSFRH5is6PbUfFZjdXEhNZXda8pGH9KVC2H
+         wX/PkvDEyEKQ+60pRvswRIlPgDyTsEywC3MJkTI+LCDEJ//QbLAJ0qmL31Ql306LvGM6
+         5o+o682PQZk5WTzs0jbP/ePdF4FvqO+2vokdsZ2rnTvaqBsOLpIvsOr3AmoToWMeieYb
+         HoJxSlRteoXodvsrMnkadcgDRcAmpXv/EkkM0q4N6XjFvFN+jDEk1BF908zvESsOTGvR
+         Znrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t0srpPN0nwlyjFhHaF4ibgTa/JwHHIQbEOB7fBzG6QA=;
-        b=mjIQ/weqpa2Kh6jIIsBqelZeevLtVoVyA48+KanJbBe8D2syclIBKUTqO56GCq8hFv
-         llSCJZEsDG3ltEMa7rNevE/pdSXDMflG/6ATC9gZKZhnhz4Lowtsk0Ibj7iCqK+6bEoD
-         jjC75DnE3rL9fsxXoR7VSOoISwnCja+jKL9TY5e2Akk/i9RPdsCuW/pOmcg4dT6ygDDf
-         qAUw0U6Ymn/7dP5lAdXy79yitx01iPlTHJ58bpNUVFqjzgDpls3tDlJOg+h4UF/oIZy7
-         o92zqrOS33lkXqvYy776o0DrZ1fGspktwzGpm7Vj8XjAzgdqmwNFE7IMZicz8IEpBHGm
-         BM7w==
-X-Gm-Message-State: AGi0PubqMRaZWM/Ninj20YvoDihfKArbjDDZbW9RQMmERyoARlE4G4Jt
-        qZN0xPwBIyvzW0P98QMnvCr5uwMcVBRin1G5WBeCYA==
-X-Google-Smtp-Source: APiQypIxAbz5j3HXwxIi1dQ00eUTerhBD5tGQ1Wnimo7fE4AnVIPvPeFy6/Jq6uOFl3sZDVM5jywXDnZ5ado4cimkqA=
-X-Received: by 2002:a2e:8087:: with SMTP id i7mr19219536ljg.99.1588162486222;
- Wed, 29 Apr 2020 05:14:46 -0700 (PDT)
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=NkpmzV5D80JNy4ts2YZIu3+YM84vR2UzyeLRZ8y2XUk=;
+        b=N7c4wlkmreJAiGnMGqwRQ84cvFh/19i1BbXOinsO8PZo78IS3o5Fzir2USjz7w33zv
+         1OTH5fsmIl2u7vId604aRDueJ/a2CpamjRdq1NCwCnrbbm7aYiEE1qI0VUWiIpUNT3Ww
+         uXaGM6jfIi5w8EfRulLpwpmcRcR4kqmx7AI1zx7gluqmBzgOPuDynq5HM3r25TqV1DZR
+         8FRrsufpNd5SQB0C4ncnzm9dIq1I7amve7LJdY99pxBhSbPQPxEbIQExhWjODZ6E1N98
+         mj5NHFdLslijM5SvqjMRNfC39ydZRjJqbp+PcTwsdiWA4v9qnVoiE1nrQJu3oMMpRruF
+         vnWw==
+X-Gm-Message-State: AGi0PuZpnftk36Cv8OBsGPPXTH3YjHZEtHeT6A3o9dpG46ekIy+YdNGD
+        n38l8RAlC0qiRz9n4zsERPfzug==
+X-Google-Smtp-Source: APiQypJ9Jp2lZbXV6sSejvUm+Db6rvnl5p9Dp9DKoDBbqDndVu48hMIlklKxV/5CTB1MdnSh1tZZ3A==
+X-Received: by 2002:a1c:5403:: with SMTP id i3mr3302337wmb.10.1588163830921;
+        Wed, 29 Apr 2020 05:37:10 -0700 (PDT)
+Received: from localhost (cag06-3-82-243-161-21.fbx.proxad.net. [82.243.161.21])
+        by smtp.gmail.com with ESMTPSA id k23sm7597481wmi.46.2020.04.29.05.37.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Apr 2020 05:37:10 -0700 (PDT)
+References: <20200429031416.3900-1-bernard@vivo.com>
+User-agent: mu4e 1.3.3; emacs 26.3
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Bernard Zhao <bernard@vivo.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     opensource.kernel@vivo.com
+Subject: Re: [PATCH] clk/meson: fixes memleak issue in init err branch
+In-reply-to: <20200429031416.3900-1-bernard@vivo.com>
+Date:   Wed, 29 Apr 2020 14:37:09 +0200
+Message-ID: <1jpnbqii2y.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-References: <20200428204945.21067-1-robh@kernel.org>
-In-Reply-To: <20200428204945.21067-1-robh@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 29 Apr 2020 14:14:34 +0200
-Message-ID: <CACRpkdaUzK0jsOknvXTrZueT=Bq7GnhbTg7mTzHtYtLqp0=pYg@mail.gmail.com>
-Subject: Re: [PATCH] clk: versatile: Drop the legacy IM-PD1 clock code
-To:     Rob Herring <robh@kernel.org>
-Cc:     SoC Team <soc@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 10:49 PM Rob Herring <robh@kernel.org> wrote:
 
-> Now that the non-DT IM-PD1 support code has been removed, drop the clock
-> related code from clk-impd1.c.
+On Wed 29 Apr 2020 at 05:14, Bernard Zhao <bernard@vivo.com> wrote:
+
+> In common init function, when run into err branch, we didn`t
+> use kfree to release kzmalloc area, this may bring in memleak
+
+Thx for reporting this Bernard.
+I'm not a fan of adding kfree everywhere. I'd much prefer a label and
+clear error exit path.
+
+That being said, the allocation is probably not the only thing that
+needs to be undone in case of error. I guess this is due to conversion
+to CLK_OF_DECLARE_DRIVER() which forced to drop all the devm_
+This was done because the clock controller was required early in the
+boot sequence.
+
+There is 2 paths to properly solve this:
+1) Old school: manually undo everything with every error exit condition
+   Doable but probably a bit messy
+2) Convert back the driver to a real platform driver and use devm_.
+   We would still need the controller to register early but I wonder if
+   we could use the same method as drivers/clk/mediatek/clk-mt2701.c and
+   use arch_initcall() ?
+
+Martin, you did the initial conversion, what do you think of option 2 ?
+Would it still answer the problem you were trying to solve back then ?
+
+One added benefit of option 2 is we could drop CLK_OF_DECLARE_DRIVER().
+We could even do the same in for the other SoCs, which I suppose would
+avoid a fair amount of probe deferral.
+
 >
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-clk@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Bernard Zhao <bernard@vivo.com>
 > ---
-> This is depends on the pending IM-PD1 DT support Linus has queued up.
-> Perhaps apply on top of his PR '[GIT PULL] Versatile changes for v5.8
-> take 1'.
+>  drivers/clk/meson/meson8b.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/clk/meson/meson8b.c b/drivers/clk/meson/meson8b.c
+> index 34a70c4b4899..0f07d5a4cd16 100644
+> --- a/drivers/clk/meson/meson8b.c
+> +++ b/drivers/clk/meson/meson8b.c
+> @@ -3687,6 +3687,7 @@ static void __init meson8b_clkc_init_common(struct device_node *np,
+>  	if (ret) {
+>  		pr_err("%s: Failed to register clkc reset controller: %d\n",
+>  		       __func__, ret);
+> +		kfree(rstc);
+>  		return;
+>  	}
+>  
+> @@ -3710,8 +3711,10 @@ static void __init meson8b_clkc_init_common(struct device_node *np,
+>  			continue;
+>  
+>  		ret = of_clk_hw_register(np, clk_hw_onecell_data->hws[i]);
+> -		if (ret)
+> +		if (ret) {
+> +			kfree(rstc);
+>  			return;
+> +		}
+>  	}
+>  
+>  	meson8b_cpu_nb_data.cpu_clk = clk_hw_onecell_data->hws[CLKID_CPUCLK];
+> @@ -3727,13 +3730,16 @@ static void __init meson8b_clkc_init_common(struct device_node *np,
+>  	if (ret) {
+>  		pr_err("%s: failed to register the CPU clock notifier\n",
+>  		       __func__);
+> +		kfree(rstc);
+>  		return;
+>  	}
+>  
+>  	ret = of_clk_add_hw_provider(np, of_clk_hw_onecell_get,
+>  				     clk_hw_onecell_data);
+> -	if (ret)
+> +	if (ret) {
+>  		pr_err("%s: failed to register clock provider\n", __func__);
+> +		kfree(rstc);
+> +	}
+>  }
+>  
+>  static void __init meson8_clkc_init(struct device_node *np)
 
-I was actually gonna wait until next kernel cycle to do these cleanups,
-but fine with me :D
-
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-If the clk maintainers are OK with it, I would have the ARM SoC folks
-apply this on top of my Versatile patches in the ARM SoC tree.
-
-Yours,
-Linus Walleij
