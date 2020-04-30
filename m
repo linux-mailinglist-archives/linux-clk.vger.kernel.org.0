@@ -2,138 +2,49 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0C81C07C9
-	for <lists+linux-clk@lfdr.de>; Thu, 30 Apr 2020 22:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E401C07D0
+	for <lists+linux-clk@lfdr.de>; Thu, 30 Apr 2020 22:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726810AbgD3UWp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 30 Apr 2020 16:22:45 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:11591 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726745AbgD3UWp (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 30 Apr 2020 16:22:45 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5eab33510003>; Thu, 30 Apr 2020 13:21:37 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 30 Apr 2020 13:22:44 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 30 Apr 2020 13:22:44 -0700
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 30 Apr
- 2020 20:22:44 +0000
-Received: from [10.2.165.152] (10.124.1.5) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 30 Apr
- 2020 20:22:43 +0000
-Subject: Re: [RFC PATCH v11 6/9] media: tegra: Add Tegra210 Video input driver
-To:     Dmitry Osipenko <digetx@gmail.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <frankc@nvidia.com>, <hverkuil@xs4all.nl>,
-        <sakari.ailus@iki.fi>, <helen.koike@collabora.com>
-CC:     <sboyd@kernel.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1588197606-32124-1-git-send-email-skomatineni@nvidia.com>
- <1588197606-32124-7-git-send-email-skomatineni@nvidia.com>
- <eadf3a5a-f305-4561-10e1-1b9241b9c5c2@gmail.com>
- <bfd82642-9648-96f1-737d-4b9a869d34a3@nvidia.com>
- <52b98347-4b78-f637-04f4-cc730ad336f3@nvidia.com>
- <8da0929d-4a58-75b8-381c-511ce66f8d9d@gmail.com>
-From:   Sowjanya Komatineni <skomatineni@nvidia.com>
-Message-ID: <d9aa7cb7-cb16-9896-17c9-2d84fbaa0893@nvidia.com>
-Date:   Thu, 30 Apr 2020 13:21:15 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726893AbgD3UYm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 30 Apr 2020 16:24:42 -0400
+Received: from muru.com ([72.249.23.125]:52380 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726377AbgD3UYm (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 30 Apr 2020 16:24:42 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 8A4DA8123;
+        Thu, 30 Apr 2020 20:25:30 +0000 (UTC)
+Date:   Thu, 30 Apr 2020 13:24:38 -0700
+From:   Tony Lindgren <tony@atomide.com>
+To:     Tero Kristo <t-kristo@ti.com>
+Cc:     linux-clk@vger.kernel.org, sboyd@kernel.org,
+        mturquette@baylibre.com, linux-omap@vger.kernel.org
+Subject: Re: [PATCH] clk: ti: clkctrl: convert subclocks to use proper names
+ also
+Message-ID: <20200430202438.GY37466@atomide.com>
+References: <20200430083451.8562-1-t-kristo@ti.com>
 MIME-Version: 1.0
-In-Reply-To: <8da0929d-4a58-75b8-381c-511ce66f8d9d@gmail.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1588278097; bh=4+/UTSmWZA6aF77P2/8J93AOfTND6l5qFFYe2ctxF4Q=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Transfer-Encoding:
-         Content-Language;
-        b=e0NoxIpSz0QgI/vCC25BgCu4y5yZLE6jyMFQpqWNDabNeROYXEINBIS38hisW58mt
-         7xFe9s8UqXtWJkj59geL66IxPUXF9AJ3dUuB8N5DMQ1bd1v/VR5ZSpgcO5pP1k1E8G
-         q5dCCNhjEu3KwWtDp9EFBj5WRUXxhBeM3JhE+nWwOtpo0jXgb0pvehrDOrzziotrqc
-         L2dZIzDKVpN4Jv7l2g+c7+CGKb9MSuZeIRWtCunz8ov6PzcRDsk8gqpjBycIrGbh0R
-         iAkv9qC/0ZK2KuR4zDdXQiA9qoDR6i7NjV2rVZqrl89YIqMIarvcraMMoUhu74r5ZS
-         773zBlkpLz82w==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200430083451.8562-1-t-kristo@ti.com>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+* Tero Kristo <t-kristo@ti.com> [200430 08:35]:
+> Addition of the new internal API to get the clkctrl names missed adding
+> the same conversion in place for the subclocks. This leads into missed
+> parent/child relationships (i.e. orphaned clocks) with mixed node name
+> handling, for example with omap4/omap5 where the l4_per clocks are using
+> new naming, but rest are using old. Fix by converting the subclock
+> registration to pick correct names for the clocks also.
 
-On 4/30/20 1:21 PM, Dmitry Osipenko wrote:
-> 30.04.2020 23:09, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->> On 4/30/20 1:08 PM, Sowjanya Komatineni wrote:
->>> On 4/30/20 1:06 PM, Dmitry Osipenko wrote:
->>>> 30.04.2020 01:00, Sowjanya Komatineni =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->>>>> +static int chan_capture_kthread_start(void *data)
->>>>> +{
->>>>> +=C2=A0=C2=A0=C2=A0 struct tegra_vi_channel *chan =3D data;
->>>>> +=C2=A0=C2=A0=C2=A0 struct tegra_channel_buffer *buf;
->>>>> +=C2=A0=C2=A0=C2=A0 int err =3D 0;
->>>>> +
->>>>> +=C2=A0=C2=A0=C2=A0 set_freezable();
->>>>> +
->>>>> +=C2=A0=C2=A0=C2=A0 while (1) {
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 try_to_freeze();
->>>>> +
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Source is not str=
-eaming if error is non-zero.
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * So, do not dequeu=
-e buffers on error and let the thread
->>>>> sleep
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * till kthread stop=
- signal is received.
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 wait_event_interruptible(=
-chan->start_wait,
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kthread_should_stop(=
-) ||
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (!list_empty(&chan->=
-capture) &&
->>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 !err));
->>>> ...
->>>>> +static void tegra_channel_buffer_queue(struct vb2_buffer *vb)
->>>>> +{
->>>>> +=C2=A0=C2=A0=C2=A0 struct tegra_vi_channel *chan =3D vb2_get_drv_pri=
-v(vb->vb2_queue);
->>>>> +=C2=A0=C2=A0=C2=A0 struct vb2_v4l2_buffer *vbuf =3D to_vb2_v4l2_buff=
-er(vb);
->>>>> +=C2=A0=C2=A0=C2=A0 struct tegra_channel_buffer *buf =3D to_tegra_cha=
-nnel_buffer(vbuf);
->>>>> +
->>>>> +=C2=A0=C2=A0=C2=A0 /* put buffer into the capture queue */
->>>>> +=C2=A0=C2=A0=C2=A0 spin_lock(&chan->start_lock);
->>>>> +=C2=A0=C2=A0=C2=A0 list_add_tail(&buf->queue, &chan->capture);
->>>>> +=C2=A0=C2=A0=C2=A0 spin_unlock(&chan->start_lock);
->>>>> +
->>>>> +=C2=A0=C2=A0=C2=A0 /* wait up kthread for capture */
->>>>> +=C2=A0=C2=A0=C2=A0 wake_up_interruptible(&chan->start_wait);
->>>>> +}
->>>> The V4L doc says that buffers could be enqueued before streaming is
->>>> started. I guess it should be a trouble here, shouldn't it?
->>>>
->>>> https://elixir.bootlin.com/linux/v5.7-rc3/source/include/media/videobu=
-f2-core.h#L379
->>>>
->>> what trouble are you referring here?
->>>
->>> I dont think so as we set min buffers needed as 2 always there will be
->>> 2 per-queued buffers.
->> typo* pre-queued buffers before streaming start
->>> But buffers from this queue will be dequeued only when ready to
->>> processes in the capture thread
-> I see now that the threads won't be running until start_streaming() is
-> invoked, should be okay then.
-ok. yes threads run only during streaming
+OK, sorry for missing that part.
+
+> Fixes: 6c3090520554 ("clk: ti: clkctrl: Fix hidden dependency to node name")
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+
+Thanks for fixing it:
+
+Acked-by: Tony Lindgren <tony@atomide.com>
