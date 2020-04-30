@@ -2,143 +2,101 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 739C01BED50
-	for <lists+linux-clk@lfdr.de>; Thu, 30 Apr 2020 03:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFEAE1BEEB5
+	for <lists+linux-clk@lfdr.de>; Thu, 30 Apr 2020 05:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726701AbgD3BBG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 29 Apr 2020 21:01:06 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:37990 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726626AbgD3BBA (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 29 Apr 2020 21:01:00 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id C8A862005F8;
-        Thu, 30 Apr 2020 03:00:57 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id B6F812005E9;
-        Thu, 30 Apr 2020 03:00:52 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id C2EDD4030E;
-        Thu, 30 Apr 2020 09:00:46 +0800 (SGT)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH V4 5/5] dt-bindings: clock: Convert i.MX6UL clock to json-schema
-Date:   Thu, 30 Apr 2020 08:52:01 +0800
-Message-Id: <1588207921-20604-5-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1588207921-20604-1-git-send-email-Anson.Huang@nxp.com>
-References: <1588207921-20604-1-git-send-email-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726486AbgD3DkO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 29 Apr 2020 23:40:14 -0400
+Received: from m176148.mail.qiye.163.com ([59.111.176.148]:12360 "EHLO
+        m176148.mail.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726481AbgD3DkN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 29 Apr 2020 23:40:13 -0400
+Received: from vivo.com (wm-8.qy.internal [127.0.0.1])
+        by m176148.mail.qiye.163.com (Hmail) with ESMTP id AA5181A3FD3;
+        Thu, 30 Apr 2020 11:33:07 +0800 (CST)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+Message-ID: <AMEAJAC4CHW7UjeCKaE3F4rq.3.1588217587684.Hmail.bernard@vivo.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, opensource.kernel@vivo.com
+Subject: =?UTF-8?B?UmU6UmU6IFtQQVRDSF0gY2xrL21lc29uOiBmaXhlcyBtZW1sZWFrIGlzc3VlIGluIGluaXQgZXJyIGJyYW5jaA==?=
+X-Priority: 3
+X-Mailer: HMail Webmail Server V2.0 Copyright (c) 2016-163.com
+X-Originating-IP: 157.0.31.122
+In-Reply-To: <CAFBinCA7CvBzEYMG+VmJTRF9zxajj1KOHt0F4A2hUJhKrTpmhw@mail.gmail.com>
+MIME-Version: 1.0
+Received: from bernard@vivo.com( [157.0.31.122) ] by ajax-webmail ( [127.0.0.1] ) ; Thu, 30 Apr 2020 11:33:07 +0800 (GMT+08:00)
+From:   =?UTF-8?B?6LW15Yab5aWO?= <bernard@vivo.com>
+Date:   Thu, 30 Apr 2020 11:33:07 +0800 (GMT+08:00)
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZSFVLT0hLS0tJSUpJTklPT1lXWShZQU
+        hPN1dZLVlBSVdZCQ4XHghZQVk1NCk2OjckKS43PlkG
+X-HM-Sender-Digest: e1kJHlYWEh9ZQUhMTklMSU9ISk1DN1dZDB4ZWUEPCQ4eV1kSHx4VD1lB
+        WUc6Nj46MTo4TzgzLEwuER44MBo#SD1PCQpVSFVKTkNDSUpMTkNMTE5MVTMWGhIXVRkeCRUaCR87
+        DRINFFUYFBZFWVdZEgtZQVlKTkxVS1VISlVKSUlZV1kIAVlBTU5MSDcG
+X-HM-Tid: 0a71c92527f89394kuwsaa5181a3fd3
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Convert the i.MX6UL clock binding to DT schema format using json-schema.
-
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
----
-Changes since V3:
-	- update license to be with (GPL-2.0-only OR BSD-2-Clause);
-	- remove unnecessary minItem for interrupts;
-	- remove label in example.
----
- .../devicetree/bindings/clock/imx6ul-clock.txt     | 13 -----
- .../devicetree/bindings/clock/imx6ul-clock.yaml    | 60 ++++++++++++++++++++++
- 2 files changed, 60 insertions(+), 13 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/clock/imx6ul-clock.txt
- create mode 100644 Documentation/devicetree/bindings/clock/imx6ul-clock.yaml
-
-diff --git a/Documentation/devicetree/bindings/clock/imx6ul-clock.txt b/Documentation/devicetree/bindings/clock/imx6ul-clock.txt
-deleted file mode 100644
-index 571d503..0000000
---- a/Documentation/devicetree/bindings/clock/imx6ul-clock.txt
-+++ /dev/null
-@@ -1,13 +0,0 @@
--* Clock bindings for Freescale i.MX6 UltraLite
--
--Required properties:
--- compatible: Should be "fsl,imx6ul-ccm"
--- reg: Address and length of the register set
--- #clock-cells: Should be <1>
--- clocks: list of clock specifiers, must contain an entry for each required
--  entry in clock-names
--- clock-names: should include entries "ckil", "osc", "ipp_di0" and "ipp_di1"
--
--The clock consumer should specify the desired clock by having the clock
--ID in its "clocks" phandle cell.  See include/dt-bindings/clock/imx6ul-clock.h
--for the full list of i.MX6 UltraLite clock IDs.
-diff --git a/Documentation/devicetree/bindings/clock/imx6ul-clock.yaml b/Documentation/devicetree/bindings/clock/imx6ul-clock.yaml
-new file mode 100644
-index 0000000..e1477df
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/imx6ul-clock.yaml
-@@ -0,0 +1,60 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/imx6ul-clock.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Clock bindings for Freescale i.MX6 UltraLite
-+
-+maintainers:
-+  - Anson Huang <Anson.Huang@nxp.com>
-+
-+properties:
-+  compatible:
-+    const: fsl,imx6ul-ccm
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 2
-+
-+  '#clock-cells':
-+    const: 1
-+
-+  clocks:
-+    items:
-+      - description: 32k osc
-+      - description: 24m osc
-+      - description: ipp_di0 clock input
-+      - description: ipp_di1 clock input
-+
-+  clock-names:
-+    items:
-+      - const: ckil
-+      - const: osc
-+      - const: ipp_di0
-+      - const: ipp_di1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - '#clock-cells'
-+  - clocks
-+  - clock-names
-+
-+examples:
-+  # Clock Control Module node:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    clock-controller@20c4000 {
-+        compatible = "fsl,imx6ul-ccm";
-+        reg = <0x020c4000 0x4000>;
-+        interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>,
-+                     <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>;
-+        #clock-cells = <1>;
-+        clocks = <&ckil>, <&osc>, <&ipp_di0>, <&ipp_di1>;
-+        clock-names = "ckil", "osc", "ipp_di0", "ipp_di1";
-+    };
--- 
-2.7.4
-
+CkZyb206IE1hcnRpbiBCbHVtZW5zdGluZ2wgPG1hcnRpbi5ibHVtZW5zdGluZ2xAZ29vZ2xlbWFp
+bC5jb20+CkRhdGU6IDIwMjAtMDQtMzAgMDE6NDM6NTUKVG86ICBKZXJvbWUgQnJ1bmV0IDxqYnJ1
+bmV0QGJheWxpYnJlLmNvbT4KQ2M6ICBCZXJuYXJkIFpoYW8gPGJlcm5hcmRAdml2by5jb20+LE5l
+aWwgQXJtc3Ryb25nIDxuYXJtc3Ryb25nQGJheWxpYnJlLmNvbT4sU3RlcGhlbiBCb3lkIDxzYm95
+ZEBrZXJuZWwub3JnPixLZXZpbiBIaWxtYW4gPGtoaWxtYW5AYmF5bGlicmUuY29tPixsaW51eC1h
+bWxvZ2ljQGxpc3RzLmluZnJhZGVhZC5vcmcsbGludXgtY2xrQHZnZXIua2VybmVsLm9yZyxsaW51
+eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnLG9wZW5zb3VyY2Uua2VybmVsQHZpdm8uY29tClN1Ympl
+Y3Q6IFJlOiBbUEFUQ0hdIGNsay9tZXNvbjogZml4ZXMgbWVtbGVhayBpc3N1ZSBpbiBpbml0IGVy
+ciBicmFuY2g+SGkgSmVyb21lLAo+Cj5PbiBXZWQsIEFwciAyOSwgMjAyMCBhdCAyOjM3IFBNIEpl
+cm9tZSBCcnVuZXQgPGpicnVuZXRAYmF5bGlicmUuY29tPiB3cm90ZToKPj4KPj4KPj4gT24gV2Vk
+IDI5IEFwciAyMDIwIGF0IDA1OjE0LCBCZXJuYXJkIFpoYW8gPGJlcm5hcmRAdml2by5jb20+IHdy
+b3RlOgo+Pgo+PiA+IEluIGNvbW1vbiBpbml0IGZ1bmN0aW9uLCB3aGVuIHJ1biBpbnRvIGVyciBi
+cmFuY2gsIHdlIGRpZG5gdAo+PiA+IHVzZSBrZnJlZSB0byByZWxlYXNlIGt6bWFsbG9jIGFyZWEs
+IHRoaXMgbWF5IGJyaW5nIGluIG1lbWxlYWsKPj4KPj4gVGh4IGZvciByZXBvcnRpbmcgdGhpcyBC
+ZXJuYXJkLgo+PiBJJ20gbm90IGEgZmFuIG9mIGFkZGluZyBrZnJlZSBldmVyeXdoZXJlLiBJJ2Qg
+bXVjaCBwcmVmZXIgYSBsYWJlbCBhbmQKPj4gY2xlYXIgZXJyb3IgZXhpdCBwYXRoLgo+Pgo+PiBU
+aGF0IGJlaW5nIHNhaWQsIHRoZSBhbGxvY2F0aW9uIGlzIHByb2JhYmx5IG5vdCB0aGUgb25seSB0
+aGluZyB0aGF0Cj4+IG5lZWRzIHRvIGJlIHVuZG9uZSBpbiBjYXNlIG9mIGVycm9yLiBJIGd1ZXNz
+IHRoaXMgaXMgZHVlIHRvIGNvbnZlcnNpb24KPj4gdG8gQ0xLX09GX0RFQ0xBUkVfRFJJVkVSKCkg
+d2hpY2ggZm9yY2VkIHRvIGRyb3AgYWxsIHRoZSBkZXZtXwo+PiBUaGlzIHdhcyBkb25lIGJlY2F1
+c2UgdGhlIGNsb2NrIGNvbnRyb2xsZXIgd2FzIHJlcXVpcmVkIGVhcmx5IGluIHRoZQo+PiBib290
+IHNlcXVlbmNlLgo+Pgo+PiBUaGVyZSBpcyAyIHBhdGhzIHRvIHByb3Blcmx5IHNvbHZlIHRoaXM6
+Cj4+IDEpIE9sZCBzY2hvb2w6IG1hbnVhbGx5IHVuZG8gZXZlcnl0aGluZyB3aXRoIGV2ZXJ5IGVy
+cm9yIGV4aXQgY29uZGl0aW9uCj4+ICAgIERvYWJsZSBidXQgcHJvYmFibHkgYSBiaXQgbWVzc3kK
+Pj4gMikgQ29udmVydCBiYWNrIHRoZSBkcml2ZXIgdG8gYSByZWFsIHBsYXRmb3JtIGRyaXZlciBh
+bmQgdXNlIGRldm1fLgo+PiAgICBXZSB3b3VsZCBzdGlsbCBuZWVkIHRoZSBjb250cm9sbGVyIHRv
+IHJlZ2lzdGVyIGVhcmx5IGJ1dCBJIHdvbmRlciBpZgo+PiAgICB3ZSBjb3VsZCB1c2UgdGhlIHNh
+bWUgbWV0aG9kIGFzIGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDI3MDEuYyBhbmQKPj4gICAg
+dXNlIGFyY2hfaW5pdGNhbGwoKSA/Cj4+Cj4+IE1hcnRpbiwgeW91IGRpZCB0aGUgaW5pdGlhbCBj
+b252ZXJzaW9uLCB3aGF0IGRvIHlvdSB0aGluayBvZiBvcHRpb24gMiA/Cj5JIHRyaWVkIGl0IHdp
+dGggdGhlIGF0dGFjaGVkIHBhdGNoCj51bmZvcnR1bmF0ZWx5IG15ICJtOGJfY2xrY190ZXN0X3By
+b2JlIiBpcyBzdGlsbCBydW4gdG9vIGxhdGUKPgo+PiBXb3VsZCBpdCBzdGlsbCBhbnN3ZXIgdGhl
+IHByb2JsZW0geW91IHdlcmUgdHJ5aW5nIHRvIHNvbHZlIGJhY2sgdGhlbiA/Cj5JJ20gYWZyYWlk
+IGl0IGRvZXMgbm90Ogo+LSB0aGUgcmVzZXRzIGFyZSBuZWVkZWQgZWFybHkgZm9yIFNNUCBpbml0
+aWFsaXphdGlvbgo+LSB0aGUgY2xvY2tzIGFyZSBuZWVkZWQgZXZlbiBlYXJsaWVyIGZvciB0aW1l
+ciByZWdpc3RyYXRpb24gKHdlIGhhdmUKPmJvdGgsIHRoZSBBUk0gVFdEIHRpbWVyIGFuZCBzb21l
+IEFtbG9naWMgY3VzdG9tIHRpbWVyLiBib3RoIGhhdmUgY2xvY2sKPmlucHV0cykKPgo+PiBPbmUg
+YWRkZWQgYmVuZWZpdCBvZiBvcHRpb24gMiBpcyB3ZSBjb3VsZCBkcm9wIENMS19PRl9ERUNMQVJF
+X0RSSVZFUigpLgo+PiBXZSBjb3VsZCBldmVuIGRvIHRoZSBzYW1lIGluIGZvciB0aGUgb3RoZXIg
+U29Dcywgd2hpY2ggSSBzdXBwb3NlIHdvdWxkCj4+IGF2b2lkIGEgZmFpciBhbW91bnQgb2YgcHJv
+YmUgZGVmZXJyYWwuCj5pdCB3b3VsZCBiZSBncmVhdCwgaW5kZWVkCj5idXQgdGhpcyB3aWxsIG9u
+bHkgd29yayBvbmNlIHRpbWVyIGluaXRpYWxpemF0aW9uIGFuZCBTTVAgYm9vdCBjYW4KPmhhcHBl
+biBhdCBhIGxhdGVyIHN0YWdlCj4KPklmIHRoZSBjbG9jayBjb250cm9sbGVyIHJlZ2lzdHJhdGlv
+biBmYWlscyB0aGUgYm9hcmQgd29uJ3QgYm9vdC4gWWVzLAo+Y2xlYW5pbmcgdXAgbWVtb3J5IGlz
+IGdvb2QsIGJ1dCBpbiB0aGlzIHNwZWNpZmljIGNhc2UgaXQgd2lsbCBhZGQgYQo+Y291cGxlIG9m
+IGV4dHJhIENQVSBjeWNsZXMgYmVmb3JlIHRoZSBrZXJuZWwgaXMgZGVhZAo+U28sIGlmIHdlIHdh
+bnQgdG8gaWdub3JlIHRoYXQgZmFjdCB0aGVuIEkgYWdyZWUgd2l0aCB5b3VyIGZpcnN0IG9wdGlv
+bgo+KHVuZG9pbmcgdGhpbmdzIHRoZSAib2xkIHNjaG9vbCIgd2F5KS4KPgoKSGkKSSBhbSBub3Qg
+c3VyZSB3aGV0aGVyIG15IHVuZGVyc3RhbmRpbmcgaXMgY29ycmVjdC4gCkkgZmVlbHMgdGhhdCB0
+aGUgZmFpbHVyZSBvZiBvdXIgbW9kdWxlIGNhbiBub3QgYmxvY2sgdGhlIGVudGlyZSBrZXJuZWwg
+ZnJvbSBzdGFydGluZy4gCk1heWJlIHdlIHNob3VsZCB0aHJvdyBhbiBleGNlcHRpb24sIGNsZWFy
+IHRoZSBzdGF0dXMsIGFzICJvbGQgd2F5IiwgCmFuZCBjb250aW51ZSB0byBleGVjdXRlIHRoZSBr
+ZXJuZWwuCgpBbmQgaWYgb3VyIG1vZHVsZSByZXF1aXJlcyB0aGF0IHRoZSBrZXJuZWwgY2Fubm90
+IGNvbnRpbnVlIHRvIHJ1biB3aGVuIHRoZSBleGNlcHRpb24gb2NjdXJzLAp0aGVuIHdlIGRvIG5v
+dCBuZWVkIHRvIHJldHVybiBpbiB0aGUgZXJyb3IgYnJhbmNoLCBhbHNvIHdlIGRvIG5vdCBuZWVk
+IHRvIGtmcmVlLCBqdXN0IEJVR19PTigpLgoKUmVnYXJkcywKQmVybmFyZAoKPk1hcnRpbgoNCg0K
