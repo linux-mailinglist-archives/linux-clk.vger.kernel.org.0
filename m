@@ -2,93 +2,80 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A901C1F2A
-	for <lists+linux-clk@lfdr.de>; Fri,  1 May 2020 23:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 264A51C1F5F
+	for <lists+linux-clk@lfdr.de>; Fri,  1 May 2020 23:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726827AbgEAU6D (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 1 May 2020 16:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726272AbgEAU6C (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 1 May 2020 16:58:02 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80098C061A0C;
-        Fri,  1 May 2020 13:58:02 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id h4so1032304wmb.4;
-        Fri, 01 May 2020 13:58:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=l1iUiHlCX8vszl1pLIMm9oBcP0m3wLHIgAhR3pi1/gc=;
-        b=R1dtSs59fsjFRzPHIwWb4yTRE+E31KHdnKdsneQGBe3PMI7wjfX/XnBNLubf0Cau7I
-         11Pt525kwopAdHxhdpZLEWDe0qShC0nOI9H4Da/HZLql43PySYSNgrZT7fd+iD9D5U6B
-         oqre17gV5IZIEXQ2JaV6+ZJ7LGO9G7mHVv/DD5P5NyW/WNCA+7JwSsJLrsJyx9OKRiZZ
-         7vYjc0ZeI5LHltRx5a3j50azGNFIjp99gd5GlR395WdeacJ+UzAXO4n2Jh1FFmys10uD
-         mR+aqaOmKtmP5mSNkTzYOJT4UyzZuZLJ9yto+8caeEkBK2n63sSi3ZXpFNEVc2AuATXV
-         EpcA==
+        id S1726344AbgEAVM1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 1 May 2020 17:12:27 -0400
+Received: from mail-oo1-f66.google.com ([209.85.161.66]:41630 "EHLO
+        mail-oo1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726045AbgEAVM0 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 1 May 2020 17:12:26 -0400
+Received: by mail-oo1-f66.google.com with SMTP id t3so1002970oou.8;
+        Fri, 01 May 2020 14:12:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=l1iUiHlCX8vszl1pLIMm9oBcP0m3wLHIgAhR3pi1/gc=;
-        b=QKW7MImAyRhUIZ2iCjNfa4pa7iQQP9uM2919S6+6gmGpqw6ZTYp5dunHOIdo8HwS+B
-         6/Tq365xm8IPEVjLnu3JV9qd52ke6TY8mUR3dQTxkNJCB79E0A/FfFG4KciRJmJcnliN
-         9HYmGA9T3+Agpr/I7py8o0BN7A5pRtL3+32vSnVS1qwW/Og0HgPwCbFQuuLvYg87ptpL
-         4KxIXqPhw2rbc22m6Ibx3/Q4bmYn66yMST49eSWhWDCkDSqrNs81nFiwkpaVpHugtDRY
-         OXqwa4kNkHWqwIwRyX7sXoz/6Gonq9Al5HElqJBOiK6wvn36m4AQXbd9WvD6/5Ec2qDX
-         LL0Q==
-X-Gm-Message-State: AGi0PuYeMuaskcOeKvII5TDlzNRuF5IkPHYkuv73Dml/RYMwXaNEsRsI
-        UNYf7K+ctFMzCUwdhUAPcPQ=
-X-Google-Smtp-Source: APiQypKmMgxPx4x1odH3xpcFPlhTeEUfH/zoPMEBSYJLJcNOIh0g0pVsNllKp8TxSaZmSQkwXNW8tw==
-X-Received: by 2002:a7b:c944:: with SMTP id i4mr1423202wml.144.1588366681245;
-        Fri, 01 May 2020 13:58:01 -0700 (PDT)
-Received: from localhost.localdomain (abag125.neoplus.adsl.tpnet.pl. [83.6.170.125])
-        by smtp.googlemail.com with ESMTPSA id k14sm5970446wrp.53.2020.05.01.13.57.59
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=neD/3SOtF63yPlH47C0TH4isewUnsErPWNSdocH1b/Y=;
+        b=aiuzP5qOH6d70OLi4Luin5mjAw/76DNBRjlpbGbHSIDK/beuAmKc49S2MgDVd0Ubwy
+         YzpitNqtX6jpXc4kZ9MvgGg/+HJhg6Q49/KIyua+iNqlOv21ERQQIJL1o0HrMtpzjoSV
+         Y2X78GZ8wGoBaWZQMkPh7a4wtdQ3yRSHNcBKnM3P8e1WqQ2qxd/daRXFl33Zl8ZGBWt6
+         ETcYORcqdLnR+66JLKMlOZY6vjQGOAeWFysGjlhn7/hF2Uxf7rSqi6NILR5k/d99UzC8
+         i99Jo/0ZFCXaEZzlXlzSaF+T5zeL5KAoUd6UBrd50FyMrF/YY6LbNYm0IUe9v3fNmgzC
+         7CWg==
+X-Gm-Message-State: AGi0PuYvok34ntZBqtE+ZJdXRg7htYjjCZly07pS7Ye7TjT+ekr+Bzsq
+        802j37ByPVGz8vvJcNTHjQ==
+X-Google-Smtp-Source: APiQypKGhKxUyl+qsvUosFPfbz8Np364y+bmPabAQjUDSrdYJ8AgozNEzaWPIVO80Fd7yqrgs2bFCw==
+X-Received: by 2002:a4a:e60d:: with SMTP id f13mr5467792oot.6.1588367545541;
+        Fri, 01 May 2020 14:12:25 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id k24sm1118263otn.32.2020.05.01.14.12.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 May 2020 13:58:00 -0700 (PDT)
-From:   Konrad Dybcio <konradybcio@gmail.com>
-To:     skrzynka@konradybcio.pl
-Cc:     Vincent Knecht <vincent.knecht@mailoo.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] dt-bindings: soc: qcom: Document MSM8936 SMD RPM compatible
-Date:   Fri,  1 May 2020 22:57:28 +0200
-Message-Id: <20200501205728.152048-3-konradybcio@gmail.com>
-X-Mailer: git-send-email 2.26.1
-In-Reply-To: <20200501205728.152048-1-konradybcio@gmail.com>
-References: <20200501205728.152048-1-konradybcio@gmail.com>
+        Fri, 01 May 2020 14:12:24 -0700 (PDT)
+Received: (nullmailer pid 3449 invoked by uid 1000);
+        Fri, 01 May 2020 21:12:24 -0000
+Date:   Fri, 1 May 2020 16:12:24 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Priit Laes <plaes@plaes.org>
+Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-sunxi@googlegroups.com, Priit Laes <plaes@plaes.org>
+Subject: Re: [PATCH v3 4/6] dt-bindings: net: sun7i-gmac: Add syscon support
+Message-ID: <20200501211224.GA2673@bogus>
+References: <20200430115702.5768-1-plaes@plaes.org>
+ <20200430115702.5768-5-plaes@plaes.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200430115702.5768-5-plaes@plaes.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Vincent Knecht <vincent.knecht@mailoo.org>
+On Thu, 30 Apr 2020 14:57:00 +0300, Priit Laes wrote:
+> Now that driver supports syscon-based regmap access, document also the
+> devicetree binding.
+> 
+> Signed-off-by: Priit Laes <plaes@plaes.org>
+> ---
+>  .../bindings/net/allwinner,sun7i-a20-gmac.yaml    | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+> 
 
-Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
----
- Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.txt | 1 +
- 1 file changed, 1 insertion(+)
+My bot found errors running 'make dt_binding_check' on your patch:
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.txt b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.txt
-index 616fddcd09fd8..55f8abd845a7e 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.txt
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.txt
-@@ -21,6 +21,7 @@ resources.
- 	Definition: must be one of:
- 		    "qcom,rpm-apq8084"
- 		    "qcom,rpm-msm8916"
-+		    "qcom,rpm-msm8936"
- 		    "qcom,rpm-msm8974"
- 		    "qcom,rpm-msm8976"
- 		    "qcom,rpm-msm8998"
--- 
-2.26.1
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/allwinner,sun7i-a20-gmac.example.dt.yaml: ethernet@1c50000: clock-names: ['stmmaceth'] is too short
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/allwinner,sun7i-a20-gmac.example.dt.yaml: ethernet@1c50000: clocks: [[4294967295, 49]] is too short
 
+See https://patchwork.ozlabs.org/patch/1280292
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
+
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
+Please check and re-submit.
