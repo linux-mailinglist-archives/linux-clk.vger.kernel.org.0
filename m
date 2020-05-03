@@ -2,340 +2,58 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B87EB1C2E2F
-	for <lists+linux-clk@lfdr.de>; Sun,  3 May 2020 19:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F681C2EAA
+	for <lists+linux-clk@lfdr.de>; Sun,  3 May 2020 21:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728937AbgECRTb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 3 May 2020 13:19:31 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:29332 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728875AbgECRT2 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 3 May 2020 13:19:28 -0400
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 49FXly1fpfzKc;
-        Sun,  3 May 2020 19:19:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1588526366; bh=qeW+XwbS7bi3+mwVfBZUNSvc/cz03Zs7dROJVcXWe4I=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=aVDtSn6EKppQR09TqxsLQR1dl0/BEGdrW+z/cfDhTANElamT102Vn6Y3xZOGaGPGM
-         r+h9nZ92JAMHvtc1JJddUXp5aMVsK9eU8iwXXp/8US9dbohDZzehZppheMD0k/mXXs
-         X6UrV8RI/cnTR2wRKMEGVcw9k56B6XPGdgQed8jzIa5BDn9mvnLxtpOd5O7iifQNU+
-         IGDeEPPWd6dgOTBQ7tpYCAwc2ffeJkuCahp6Gb1LpgqTdda5JViQh+fvnZmvDybFPz
-         929IXn2iZ700IU/PoKJTN0U1c1MWd+XPeLiopoxhRFRAYxUt8IZt1ZllxiFtXJqRn/
-         KQLpF6klbnzvQ==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Sun, 03 May 2020 19:19:26 +0200
-Message-Id: <ae0c612ce6bc53ea726ddcb25eb36bca78055e33.1588526049.git.mirq-linux@rere.qmqm.pl>
-In-Reply-To: <cover.1588526049.git.mirq-linux@rere.qmqm.pl>
-References: <cover.1588526049.git.mirq-linux@rere.qmqm.pl>
-From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Subject: [PATCH v4 3/3] clk: at91: allow setting all PMC clock parents via DT
+        id S1729012AbgECTDd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 3 May 2020 15:03:33 -0400
+Received: from smtp13.smtpout.orange.fr ([80.12.242.135]:22323 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729007AbgECTDd (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 3 May 2020 15:03:33 -0400
+Received: from localhost.localdomain ([93.22.151.175])
+        by mwinf5d76 with ME
+        id aK3U2200V3nJVaM03K3Vc7; Sun, 03 May 2020 21:03:30 +0200
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 03 May 2020 21:03:30 +0200
+X-ME-IP: 93.22.151.175
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     mturquette@baylibre.com, sboyd@kernel.org
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] clk: clk-xgene: Fix a typo in Kconfig
+Date:   Sun,  3 May 2020 21:03:27 +0200
+Message-Id: <20200503190327.153249-1-christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-We need to have clocks accessible via phandle to select them
-as peripheral clock parent using assigned-clock-parents in DT.
-Add support for PLLACK/PLLBCK/AUDIOPLLCK clocks where available.
+s/Sypport/Support
 
-Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
-v2: rebase to clk/clk-at91 branch
-v3: no changes
-v4: extend to whole family
----
- drivers/clk/at91/at91rm9200.c    | 6 +++++-
- drivers/clk/at91/at91sam9260.c   | 6 +++++-
- drivers/clk/at91/at91sam9g45.c   | 4 +++-
- drivers/clk/at91/at91sam9n12.c   | 6 +++++-
- drivers/clk/at91/at91sam9rl.c    | 4 +++-
- drivers/clk/at91/at91sam9x5.c    | 4 +++-
- drivers/clk/at91/sam9x60.c       | 4 +++-
- drivers/clk/at91/sama5d2.c       | 6 +++++-
- drivers/clk/at91/sama5d3.c       | 4 +++-
- drivers/clk/at91/sama5d4.c       | 4 +++-
- include/dt-bindings/clock/at91.h | 3 +++
- 11 files changed, 41 insertions(+), 10 deletions(-)
+ drivers/clk/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/at91/at91rm9200.c b/drivers/clk/at91/at91rm9200.c
-index 8da88e9a95d8..38bdb4981315 100644
---- a/drivers/clk/at91/at91rm9200.c
-+++ b/drivers/clk/at91/at91rm9200.c
-@@ -98,7 +98,7 @@ static void __init at91rm9200_pmc_setup(struct device_node *np)
- 	if (IS_ERR(regmap))
- 		return;
+diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+index bcb257baed06..99ddc1478493 100644
+--- a/drivers/clk/Kconfig
++++ b/drivers/clk/Kconfig
+@@ -252,7 +252,7 @@ config COMMON_CLK_XGENE
+ 	default ARCH_XGENE
+ 	depends on ARM64 || COMPILE_TEST
+ 	---help---
+-	  Sypport for the APM X-Gene SoC reference, PLL, and device clocks.
++	  Support for the APM X-Gene SoC reference, PLL, and device clocks.
  
--	at91rm9200_pmc = pmc_data_allocate(PMC_MAIN + 1,
-+	at91rm9200_pmc = pmc_data_allocate(PMC_PLLBCK + 1,
- 					    nck(at91rm9200_systemck),
- 					    nck(at91rm9200_periphck), 0, 4);
- 	if (!at91rm9200_pmc)
-@@ -123,12 +123,16 @@ static void __init at91rm9200_pmc_setup(struct device_node *np)
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-+	at91rm9200_pmc->chws[PMC_PLLACK] = hw;
-+
- 	hw = at91_clk_register_pll(regmap, "pllbck", "mainck", 1,
- 				   &at91rm9200_pll_layout,
- 				   &rm9200_pll_characteristics);
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-+	at91rm9200_pmc->chws[PMC_PLLBCK] = hw;
-+
- 	parent_names[0] = slowxtal_name;
- 	parent_names[1] = "mainck";
- 	parent_names[2] = "pllack";
-diff --git a/drivers/clk/at91/at91sam9260.c b/drivers/clk/at91/at91sam9260.c
-index 7e5ff252fffc..6d0723aa8b13 100644
---- a/drivers/clk/at91/at91sam9260.c
-+++ b/drivers/clk/at91/at91sam9260.c
-@@ -352,7 +352,7 @@ static void __init at91sam926x_pmc_setup(struct device_node *np,
- 	if (IS_ERR(regmap))
- 		return;
- 
--	at91sam9260_pmc = pmc_data_allocate(PMC_MAIN + 1,
-+	at91sam9260_pmc = pmc_data_allocate(PMC_PLLBCK + 1,
- 					    ndck(data->sck, data->num_sck),
- 					    ndck(data->pck, data->num_pck),
- 					    0, data->num_progck);
-@@ -399,12 +399,16 @@ static void __init at91sam926x_pmc_setup(struct device_node *np,
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-+	at91sam9260_pmc->chws[PMC_PLLACK] = hw;
-+
- 	hw = at91_clk_register_pll(regmap, "pllbck", "mainck", 1,
- 				   data->pllb_layout,
- 				   data->pllb_characteristics);
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-+	at91sam9260_pmc->chws[PMC_PLLBCK] = hw;
-+
- 	parent_names[0] = slck_name;
- 	parent_names[1] = "mainck";
- 	parent_names[2] = "pllack";
-diff --git a/drivers/clk/at91/at91sam9g45.c b/drivers/clk/at91/at91sam9g45.c
-index 5d18eb04c218..9873b583c260 100644
---- a/drivers/clk/at91/at91sam9g45.c
-+++ b/drivers/clk/at91/at91sam9g45.c
-@@ -115,7 +115,7 @@ static void __init at91sam9g45_pmc_setup(struct device_node *np)
- 	if (IS_ERR(regmap))
- 		return;
- 
--	at91sam9g45_pmc = pmc_data_allocate(PMC_MAIN + 1,
-+	at91sam9g45_pmc = pmc_data_allocate(PMC_PLLACK + 1,
- 					    nck(at91sam9g45_systemck),
- 					    nck(at91sam9g45_periphck), 0, 2);
- 	if (!at91sam9g45_pmc)
-@@ -143,6 +143,8 @@ static void __init at91sam9g45_pmc_setup(struct device_node *np)
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-+	at91sam9g45_pmc->chws[PMC_PLLACK] = hw;
-+
- 	hw = at91_clk_register_utmi(regmap, NULL, "utmick", "mainck");
- 	if (IS_ERR(hw))
- 		goto err_free;
-diff --git a/drivers/clk/at91/at91sam9n12.c b/drivers/clk/at91/at91sam9n12.c
-index 3a2564c2f724..630dc5d87171 100644
---- a/drivers/clk/at91/at91sam9n12.c
-+++ b/drivers/clk/at91/at91sam9n12.c
-@@ -128,7 +128,7 @@ static void __init at91sam9n12_pmc_setup(struct device_node *np)
- 	if (IS_ERR(regmap))
- 		return;
- 
--	at91sam9n12_pmc = pmc_data_allocate(PMC_MAIN + 1,
-+	at91sam9n12_pmc = pmc_data_allocate(PMC_PLLBCK + 1,
- 					   nck(at91sam9n12_systemck), 31, 0, 2);
- 	if (!at91sam9n12_pmc)
- 		return;
-@@ -162,11 +162,15 @@ static void __init at91sam9n12_pmc_setup(struct device_node *np)
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-+	at91sam9n12_pmc->chws[PMC_PLLACK] = hw;
-+
- 	hw = at91_clk_register_pll(regmap, "pllbck", "mainck", 1,
- 				   &at91rm9200_pll_layout, &pllb_characteristics);
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-+	at91sam9n12_pmc->chws[PMC_PLLBCK] = hw;
-+
- 	parent_names[0] = slck_name;
- 	parent_names[1] = "mainck";
- 	parent_names[2] = "plladivck";
-diff --git a/drivers/clk/at91/at91sam9rl.c b/drivers/clk/at91/at91sam9rl.c
-index bcf07f6a0e0e..0d1cc44b056f 100644
---- a/drivers/clk/at91/at91sam9rl.c
-+++ b/drivers/clk/at91/at91sam9rl.c
-@@ -87,7 +87,7 @@ static void __init at91sam9rl_pmc_setup(struct device_node *np)
- 	if (IS_ERR(regmap))
- 		return;
- 
--	at91sam9rl_pmc = pmc_data_allocate(PMC_MAIN + 1,
-+	at91sam9rl_pmc = pmc_data_allocate(PMC_PLLACK + 1,
- 					   nck(at91sam9rl_systemck),
- 					   nck(at91sam9rl_periphck), 0, 2);
- 	if (!at91sam9rl_pmc)
-@@ -105,6 +105,8 @@ static void __init at91sam9rl_pmc_setup(struct device_node *np)
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-+	at91sam9rl_pmc->chws[PMC_PLLACK] = hw;
-+
- 	hw = at91_clk_register_utmi(regmap, NULL, "utmick", "mainck");
- 	if (IS_ERR(hw))
- 		goto err_free;
-diff --git a/drivers/clk/at91/at91sam9x5.c b/drivers/clk/at91/at91sam9x5.c
-index f13756b407e2..0ce3da080287 100644
---- a/drivers/clk/at91/at91sam9x5.c
-+++ b/drivers/clk/at91/at91sam9x5.c
-@@ -150,7 +150,7 @@ static void __init at91sam9x5_pmc_setup(struct device_node *np,
- 	if (IS_ERR(regmap))
- 		return;
- 
--	at91sam9x5_pmc = pmc_data_allocate(PMC_MAIN + 1,
-+	at91sam9x5_pmc = pmc_data_allocate(PMC_PLLACK + 1,
- 					   nck(at91sam9x5_systemck), 31, 0, 2);
- 	if (!at91sam9x5_pmc)
- 		return;
-@@ -184,6 +184,8 @@ static void __init at91sam9x5_pmc_setup(struct device_node *np,
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-+	at91sam9x5_pmc->chws[PMC_PLLACK] = hw;
-+
- 	hw = at91_clk_register_utmi(regmap, NULL, "utmick", "mainck");
- 	if (IS_ERR(hw))
- 		goto err_free;
-diff --git a/drivers/clk/at91/sam9x60.c b/drivers/clk/at91/sam9x60.c
-index db14e0427c7f..3e20aa68259f 100644
---- a/drivers/clk/at91/sam9x60.c
-+++ b/drivers/clk/at91/sam9x60.c
-@@ -182,7 +182,7 @@ static void __init sam9x60_pmc_setup(struct device_node *np)
- 	if (IS_ERR(regmap))
- 		return;
- 
--	sam9x60_pmc = pmc_data_allocate(PMC_MAIN + 1,
-+	sam9x60_pmc = pmc_data_allocate(PMC_PLLACK + 1,
- 					nck(sam9x60_systemck),
- 					nck(sam9x60_periphck),
- 					nck(sam9x60_gck), 8);
-@@ -214,6 +214,8 @@ static void __init sam9x60_pmc_setup(struct device_node *np)
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-+	sam9x60_pmc->chws[PMC_PLLACK] = hw;
-+
- 	hw = sam9x60_clk_register_pll(regmap, &pmc_pll_lock, "upllck",
- 				      "main_osc", 1, &upll_characteristics);
- 	if (IS_ERR(hw))
-diff --git a/drivers/clk/at91/sama5d2.c b/drivers/clk/at91/sama5d2.c
-index ae5e83cadb3d..b3fa2291ccd8 100644
---- a/drivers/clk/at91/sama5d2.c
-+++ b/drivers/clk/at91/sama5d2.c
-@@ -166,7 +166,7 @@ static void __init sama5d2_pmc_setup(struct device_node *np)
- 	if (IS_ERR(regmap))
- 		return;
- 
--	sama5d2_pmc = pmc_data_allocate(PMC_I2S1_MUX + 1,
-+	sama5d2_pmc = pmc_data_allocate(PMC_AUDIOPLLCK + 1,
- 					nck(sama5d2_systemck),
- 					nck(sama5d2_periph32ck),
- 					nck(sama5d2_gck), 3);
-@@ -202,6 +202,8 @@ static void __init sama5d2_pmc_setup(struct device_node *np)
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-+	sama5d2_pmc->chws[PMC_PLLACK] = hw;
-+
- 	hw = at91_clk_register_audio_pll_frac(regmap, "audiopll_fracck",
- 					      "mainck");
- 	if (IS_ERR(hw))
-@@ -217,6 +219,8 @@ static void __init sama5d2_pmc_setup(struct device_node *np)
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-+	sama5d2_pmc->chws[PMC_AUDIOPLLCK] = hw;
-+
- 	regmap_sfr = syscon_regmap_lookup_by_compatible("atmel,sama5d2-sfr");
- 	if (IS_ERR(regmap_sfr))
- 		regmap_sfr = NULL;
-diff --git a/drivers/clk/at91/sama5d3.c b/drivers/clk/at91/sama5d3.c
-index 507eef6797f1..eef7cf964600 100644
---- a/drivers/clk/at91/sama5d3.c
-+++ b/drivers/clk/at91/sama5d3.c
-@@ -125,7 +125,7 @@ static void __init sama5d3_pmc_setup(struct device_node *np)
- 	if (IS_ERR(regmap))
- 		return;
- 
--	sama5d3_pmc = pmc_data_allocate(PMC_MAIN + 1,
-+	sama5d3_pmc = pmc_data_allocate(PMC_PLLACK + 1,
- 					nck(sama5d3_systemck),
- 					nck(sama5d3_periphck), 0, 3);
- 	if (!sama5d3_pmc)
-@@ -158,6 +158,8 @@ static void __init sama5d3_pmc_setup(struct device_node *np)
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-+	sama5d2_pmc->chws[PMC_PLLACK] = hw;
-+
- 	hw = at91_clk_register_utmi(regmap, NULL, "utmick", "mainck");
- 	if (IS_ERR(hw))
- 		goto err_free;
-diff --git a/drivers/clk/at91/sama5d4.c b/drivers/clk/at91/sama5d4.c
-index 80692902b4e4..3c3f83870456 100644
---- a/drivers/clk/at91/sama5d4.c
-+++ b/drivers/clk/at91/sama5d4.c
-@@ -140,7 +140,7 @@ static void __init sama5d4_pmc_setup(struct device_node *np)
- 	if (IS_ERR(regmap))
- 		return;
- 
--	sama5d4_pmc = pmc_data_allocate(PMC_MCK2 + 1,
-+	sama5d4_pmc = pmc_data_allocate(PMC_PLLACK + 1,
- 					nck(sama5d4_systemck),
- 					nck(sama5d4_periph32ck), 0, 3);
- 	if (!sama5d4_pmc)
-@@ -173,6 +173,8 @@ static void __init sama5d4_pmc_setup(struct device_node *np)
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
-+	sama5d2_pmc->chws[PMC_PLLACK] = hw;
-+
- 	hw = at91_clk_register_utmi(regmap, NULL, "utmick", "mainck");
- 	if (IS_ERR(hw))
- 		goto err_free;
-diff --git a/include/dt-bindings/clock/at91.h b/include/dt-bindings/clock/at91.h
-index c3f4aa6a2d29..adcf608b41fa 100644
---- a/include/dt-bindings/clock/at91.h
-+++ b/include/dt-bindings/clock/at91.h
-@@ -21,6 +21,9 @@
- #define PMC_MCK2		4
- #define PMC_I2S0_MUX		5
- #define PMC_I2S1_MUX		6
-+#define PMC_PLLACK		7
-+#define PMC_PLLBCK		8
-+#define PMC_AUDIOPLLCK		8		/* SAMA5D2-only, no PLLB there */
- 
- #ifndef AT91_PMC_MOSCS
- #define AT91_PMC_MOSCS		0		/* MOSCS Flag */
+ config COMMON_CLK_LOCHNAGAR
+ 	tristate "Cirrus Logic Lochnagar clock driver"
 -- 
-2.20.1
+2.25.1
 
