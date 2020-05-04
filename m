@@ -2,76 +2,121 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C888F1C32A3
-	for <lists+linux-clk@lfdr.de>; Mon,  4 May 2020 08:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B071A1C32F1
+	for <lists+linux-clk@lfdr.de>; Mon,  4 May 2020 08:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727811AbgEDGUu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 4 May 2020 02:20:50 -0400
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:41354 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727808AbgEDGUg (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 4 May 2020 02:20:36 -0400
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 03 May 2020 23:20:35 -0700
+        id S1726712AbgEDGa5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 4 May 2020 02:30:57 -0400
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:52224 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726330AbgEDGa5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 4 May 2020 02:30:57 -0400
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 03 May 2020 23:30:31 -0700
 Received: from sivaprak-linux.qualcomm.com ([10.201.3.202])
-  by ironmsg03-sd.qualcomm.com with ESMTP; 03 May 2020 23:20:32 -0700
+  by ironmsg02-sd.qualcomm.com with ESMTP; 03 May 2020 23:30:29 -0700
 Received: by sivaprak-linux.qualcomm.com (Postfix, from userid 459349)
-        id 4DC2421758; Mon,  4 May 2020 11:50:27 +0530 (IST)
+        id 5BDE92168F; Mon,  4 May 2020 12:00:27 +0530 (IST)
 From:   Sivaprakash Murugesan <sivaprak@codeaurora.org>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        jassisinghbrar@gmail.com, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Sivaprakash Murugesan <sivaprak@codeaurora.org>
-Subject: [PATCH V4 8/8] arm64: dts: ipq6018: Add a53 pll and apcs clock
-Date:   Mon,  4 May 2020 11:50:24 +0530
-Message-Id: <1588573224-3038-9-git-send-email-sivaprak@codeaurora.org>
+Subject: [PATCH] dt-bindings: clock: Add YAML schemas for QCOM A53 PLL
+Date:   Mon,  4 May 2020 12:00:03 +0530
+Message-Id: <1588573803-3823-1-git-send-email-sivaprak@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1588573224-3038-1-git-send-email-sivaprak@codeaurora.org>
-References: <1588573224-3038-1-git-send-email-sivaprak@codeaurora.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-add support for apps pll and apcs clock.
+This patch adds schema for primary CPU PLL found on few Qualcomm
+platforms.
 
 Signed-off-by: Sivaprakash Murugesan <sivaprak@codeaurora.org>
 ---
- arch/arm64/boot/dts/qcom/ipq6018.dtsi | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ .../devicetree/bindings/clock/qcom,a53pll.txt      | 22 ------------
+ .../devicetree/bindings/clock/qcom,a53pll.yaml     | 40 ++++++++++++++++++++++
+ 2 files changed, 40 insertions(+), 22 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/qcom,a53pll.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,a53pll.yaml
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-index 1aa8d85..af2ceeb 100644
---- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-@@ -294,12 +294,22 @@
- 		};
- 
- 		apcs_glb: mailbox@b111000 {
--			compatible = "qcom,ipq8074-apcs-apps-global";
--			reg = <0x0b111000 0xc>;
+diff --git a/Documentation/devicetree/bindings/clock/qcom,a53pll.txt b/Documentation/devicetree/bindings/clock/qcom,a53pll.txt
+deleted file mode 100644
+index e3fa811..0000000
+--- a/Documentation/devicetree/bindings/clock/qcom,a53pll.txt
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Qualcomm MSM8916 A53 PLL Binding
+---------------------------------
+-The A53 PLL on MSM8916 platforms is the main CPU PLL used used for frequencies
+-above 1GHz.
 -
-+			compatible = "qcom,ipq6018-apcs-apps-global";
-+			reg = <0x0b111000 0x1000>;
-+			#clock-cells = <1>;
-+			clocks = <&apsspll>, <&xo>;
-+			clock-names = "pll", "xo";
- 			#mbox-cells = <1>;
- 		};
- 
-+		apsspll: clock@b116000 {
-+			compatible = "qcom,ipq-apss-pll";
-+			reg = <0x0b116000 0x40>;
-+			#clock-cells = <0>;
-+			clocks = <&xo>;
-+			clock-names = "xo";
-+		};
+-Required properties :
+-- compatible : Shall contain only one of the following:
+-
+-		"qcom,msm8916-a53pll"
+-
+-- reg : shall contain base register location and length
+-
+-- #clock-cells : must be set to <0>
+-
+-Example:
+-
+-	a53pll: clock@b016000 {
+-		compatible = "qcom,msm8916-a53pll";
+-		reg = <0xb016000 0x40>;
+-		#clock-cells = <0>;
+-	};
+-
+diff --git a/Documentation/devicetree/bindings/clock/qcom,a53pll.yaml b/Documentation/devicetree/bindings/clock/qcom,a53pll.yaml
+new file mode 100644
+index 0000000..20d2638
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/qcom,a53pll.yaml
+@@ -0,0 +1,40 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/qcom,a53pll.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- 		timer {
- 			compatible = "arm,armv8-timer";
- 			interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++title: Qualcomm A53 PLL Binding
++
++maintainers:
++  - Sivaprakash Murugesan <sivaprak@codeaurora.org>
++
++description:
++  The A53 PLL on few Qualcomm platforms is the main CPU PLL used used for
++  frequencies above 1GHz.
++
++properties:
++  compatible:
++    const: qcom,msm8916-a53pll
++
++  reg:
++    maxItems: 1
++
++  '#clock-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - '#clock-cells'
++
++additionalProperties: false
++
++examples:
++  #Example 1 - A53 PLL found on MSM8916 devices
++  - |
++    a53pll: clock@b016000 {
++        compatible = "qcom,msm8916-a53pll";
++        reg = <0xb016000 0x40>;
++        #clock-cells = <0>;
++    };
 -- 
 2.7.4
 
