@@ -2,106 +2,81 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0711C692F
-	for <lists+linux-clk@lfdr.de>; Wed,  6 May 2020 08:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D9F1C696E
+	for <lists+linux-clk@lfdr.de>; Wed,  6 May 2020 08:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727984AbgEFGmu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 6 May 2020 02:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33638 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727778AbgEFGmt (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 6 May 2020 02:42:49 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51C8C061A0F;
-        Tue,  5 May 2020 23:42:49 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id q124so343844pgq.13;
-        Tue, 05 May 2020 23:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=6OYAtQovas94oeU9iNU8MsCCycx+f76DGkCEYi2Qp+I=;
-        b=l/A7OFjUswLmXEWx30U77o4/Wz7vsqghg9D/5bpCSueH68jULm3lmf58hL8+qMqpAJ
-         i1747OQhv44vyaZ58GQ0UTYJmOp9034n+D9ebtjM6DSA82ofsmBaIhAWJIPk1YOzNvZj
-         YewtH6m3zMLHZujXRq3dLBkfEXJAc/Xbe00F/UDNj/KbK0tPLv3jQq8IVf9E72uaZQ0M
-         dboPrjM4njMwLoj/Wq+/bNOKAYaCvaC5uwF1GuX1EAA9Bl7OMz23N1S5/+cxbQVMrqS6
-         jMPE6+Q3/ZdlMYlnh2fT25NXVSzpa+jRXnGqlPIL+UU5p4wYGne40lOXu5YdT7tNjxKw
-         GxXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=6OYAtQovas94oeU9iNU8MsCCycx+f76DGkCEYi2Qp+I=;
-        b=ahOGoW7vMhwIxMDCQsx9z2Ui8oywRDipDx6+pvBR+DBBnIhdqPuLH0wJNCB7naBKOi
-         74DbEpxFLqUzqT+ZdpujWmsdIFReJk3GdEQohjCBEZ5KQe9Z3Nl1HqfmPLO9lom/yjpA
-         nk0y1CalRdOcY5o/r+mHqMB3FGGdce71oNAHcKVmUVzUxowe+skbShvXL2V3a0rDsgfv
-         1P3FxLXXzyIhNahYHon0o/cYZbAn/3iB6VeqJhbzWv5Z5sHUanqkmshfgTP4PX2mAF4f
-         6iClqG1GpKUh8kalBb7Er6ztZ7WYd5iFHjigwUczVT50eufn2IAdgt1mt9h1BLNAsJpd
-         g1Mw==
-X-Gm-Message-State: AGi0PuZ8eryAQKeImMHiaBocVqIpiBBeDCK7eqZ7V2jRBjidIJ4TG5Sd
-        OcP39w2ueWY16lsxh4UPtpU=
-X-Google-Smtp-Source: APiQypLjH1m7IH+Es3ImYbRw2ZMow3U5CDc3acH8t4Lng+3TAVYPSQ/UIQdCmjvWz6d0JGPABQhw/Q==
-X-Received: by 2002:a65:6795:: with SMTP id e21mr928114pgr.171.1588747369351;
-        Tue, 05 May 2020 23:42:49 -0700 (PDT)
-Received: from fmin-OptiPlex-7060.nreal.work ([103.206.190.146])
-        by smtp.gmail.com with ESMTPSA id b75sm3793254pjc.23.2020.05.05.23.42.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 05 May 2020 23:42:49 -0700 (PDT)
-From:   dillon.minfei@gmail.com
-To:     mturquette@baylibre.com, sboyd@kernel.org,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@st.com,
-        sam@ravnborg.org
-Cc:     linux-clk@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dillon min <dillon.minfei@gmail.com>
-Subject: [PATCH 4/4] clk: stm32f4: fix ltdc driver hang as clk set rate failed
-Date:   Wed,  6 May 2020 14:42:38 +0800
-Message-Id: <1588747358-31306-2-git-send-email-dillon.minfei@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1588747358-31306-1-git-send-email-dillon.minfei@gmail.com>
-References: <1588747358-31306-1-git-send-email-dillon.minfei@gmail.com>
+        id S1727067AbgEFGxm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 6 May 2020 02:53:42 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:36493 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725782AbgEFGxm (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 6 May 2020 02:53:42 -0400
+Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id WDvzjnD9u8hmdWDw2jBezh; Wed, 06 May 2020 08:53:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
+        t=1588748019; bh=Ddl4ba8z2sdkFORjy6VpZX0NiuD+njlkCF/5UPTFDhQ=;
+        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
+         Subject;
+        b=YdKKR/zFlVMl6PdQNI+Dz8Rbn1g7xsA5evWTPTtt1jiu54MRUrlAg2m+KYMxeSHyy
+         mXIiIfzm7gwfuQHU+0VzIEVF4OXRIBPf9Qi7YuKevqRW0jTsKMHs5cgS8IYgWWffPM
+         P5X+3WSljeKOZpZQgV1nQPmZj13LABeW5teoJ6xyErG+t5wMXWj6ngQjUYu2j0NSQq
+         dsUEi82QVqCu6huemIrzJ6vOGkSWlQrZ5Ewzi0JtywujZBJcZqCr8G32ZH2iO56ZjK
+         pNdI0HDGkLifgsVmxK9z4NlJuKqNfMG5BB/ARbwf33qGeJ82BvcA7AtvCewwmURnWD
+         /akEXcAHM1Xmw==
+Subject: Re: [RFC PATCH v12 6/9] media: tegra: Add Tegra210 Video input driver
+To:     Sowjanya Komatineni <skomatineni@nvidia.com>,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, frankc@nvidia.com,
+        sakari.ailus@iki.fi, helen.koike@collabora.com
+Cc:     digetx@gmail.com, sboyd@kernel.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1588645920-20557-1-git-send-email-skomatineni@nvidia.com>
+ <1588645920-20557-7-git-send-email-skomatineni@nvidia.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <e4a5c68b-4856-175f-5d02-06dc4a038b00@xs4all.nl>
+Date:   Wed, 6 May 2020 08:53:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <1588645920-20557-7-git-send-email-skomatineni@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfEX9ydVl7E+s7YONC63NHL4RtUlk0vpw7gHw/qvWvWz35D5FYSom7dt9UFaUAIfdPFX8sRJ0HiyPLTtK5e/ObCadkslhnRDwHBvi9T1SNxOF96nJN/Am
+ IW/x2eWW5iZMNib74/ndHPt58VApCxK0K2e7iiX9pwkJqXS3WxrOjKgL9OjrrDiKx9AOylCxAHqbY1jCXZZXYGaZyyyCpDlUnG6GxRXaD1W8tJBvwM5X5tyv
+ SHCxAXtDl3BXOot+PeDAHOl8oNh9epL+EHZIdNGZ3rhpolf8uLCydnKXrXpdo5dt4tQTUr88ukcQuJ7NNwcfvAgUHC11qKElGJCEC/FDy7ZmEahvOL6WWa63
+ wuffyJq3CSltos3h7/54WkLRR971dheZyeQqyQaiAZPUh4AQ5PNIsjMkbnHKAOhuLFpDulUNYwuhyq5vweZyXJsR5WaOI/6Q6cQjg7+zvSWEzCsQ4/VzWwki
+ OinvMOOb9SBSel5gULKfYRs+rxkoMQFhpAHwNhJ1saxNvZZnX1Hc0/fEmKrdWXyGV7IKvOBpeqPOW1Yrlk8RmqZBZPfavg3Pf5jt6XSK+NRVk4qOICgTXVdu
+ U+rXYmyVvU87pBkgaUsS+5wV
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: dillon min <dillon.minfei@gmail.com>
+On 05/05/2020 04:31, Sowjanya Komatineni wrote:
+> Tegra210 contains a powerful Video Input (VI) hardware controller
+> which can support up to 6 MIPI CSI camera sensors.
+> 
+> Each Tegra CSI port can be one-to-one mapped to VI channel and can
+> capture from an external camera sensor connected to CSI or from
+> built-in test pattern generator.
+> 
+> Tegra210 supports built-in test pattern generator from CSI to VI.
+> 
+> This patch adds a v4l2 capture driver with media interface for
+> Tegra210 built-in CSI to VI test pattern generator.
+> 
+> This patch includes TPG support only and all the video pipeline
+> configuration happens through the video device node.
+> 
+> Acked-by: Thierry Reding <treding@nvidia.com>
+> Signed-off-by: Sowjanya Komatineni <skomatineni@nvidia.com>
 
-should use PLL_SAI offset of clks , not PLL_VCO_SAI
-else can not get clk gate.
+Since this goes through Thierry:
 
-Signed-off-by: dillon min <dillon.minfei@gmail.com>
----
- drivers/clk/clk-stm32f4.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-diff --git a/drivers/clk/clk-stm32f4.c b/drivers/clk/clk-stm32f4.c
-index 18117ce..bdebe05 100644
---- a/drivers/clk/clk-stm32f4.c
-+++ b/drivers/clk/clk-stm32f4.c
-@@ -129,7 +129,8 @@ static const struct stm32f4_gate_data stm32f429_gates[] __initconst = {
- 	{ STM32F4_RCC_APB2ENR, 20,	"spi5",		"apb2_div" },
- 	{ STM32F4_RCC_APB2ENR, 21,	"spi6",		"apb2_div" },
- 	{ STM32F4_RCC_APB2ENR, 22,	"sai1",		"apb2_div" },
--	{ STM32F4_RCC_APB2ENR, 26,	"ltdc",		"apb2_div" },
-+	{ STM32F4_RCC_APB2ENR, 26,	"ltdc",		"apb2_div",
-+		CLK_IGNORE_UNUSED },
- };
- 
- static const struct stm32f4_gate_data stm32f469_gates[] __initconst = {
-@@ -1754,10 +1755,10 @@ static void __init stm32f4_rcc_init(struct device_node *np)
- 	stm32f4_rcc_register_pll("vco_in", &data->pll_data[0],
- 			&stm32f4_clk_lock);
- 
--	clks[PLL_VCO_I2S] = stm32f4_rcc_register_pll("vco_in",
-+	clks[PLL_I2S] = stm32f4_rcc_register_pll("vco_in",
- 			&data->pll_data[1], &stm32f4_clk_lock);
- 
--	clks[PLL_VCO_SAI] = stm32f4_rcc_register_pll("vco_in",
-+	clks[PLL_SAI] = stm32f4_rcc_register_pll("vco_in",
- 			&data->pll_data[2], &stm32f4_clk_lock);
- 
- 	for (n = 0; n < MAX_POST_DIV; n++) {
--- 
-2.7.4
+Regards,
 
+	Hans
