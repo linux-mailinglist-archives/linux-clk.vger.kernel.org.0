@@ -2,125 +2,227 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F7F1C719D
-	for <lists+linux-clk@lfdr.de>; Wed,  6 May 2020 15:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 378811C775A
+	for <lists+linux-clk@lfdr.de>; Wed,  6 May 2020 19:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728224AbgEFN1W (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 6 May 2020 09:27:22 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:36209 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728090AbgEFN1V (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 6 May 2020 09:27:21 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200506132719euoutp022dd429885a06de7b705370585d848171~Mc2ON_9P11742717427euoutp02t
-        for <linux-clk@vger.kernel.org>; Wed,  6 May 2020 13:27:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200506132719euoutp022dd429885a06de7b705370585d848171~Mc2ON_9P11742717427euoutp02t
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1588771640;
-        bh=7cVe9FNoEY7vct4ZEZCp84vawtIaH7A0TmBskq/XhEg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ErgG0OBxDhUYvvTUjQiMu+OlmWbAoaI9n3DMLZjF9PMJWAs1T7q+DeHTW0Pg3iskL
-         fUb6x8dJ6vRSFvfOetdz4ORzRIol0qwjSfHQEc8fzbgDxO6xZCXSlx0daUVxP6AeJ4
-         4ljxy2fy7yz2w6nCYtVyxu0DojMATSWGDt2DIIgo=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200506132719eucas1p273a130ab6a5d7d2406538a50d99442a0~Mc2N5kWl31505615056eucas1p2M;
-        Wed,  6 May 2020 13:27:19 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id A5.02.61286.73BB2BE5; Wed,  6
-        May 2020 14:27:19 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200506132719eucas1p258d3a6979ab111a7db4baf95c85c2591~Mc2NbXCgw2703327033eucas1p2G;
-        Wed,  6 May 2020 13:27:19 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200506132719eusmtrp27c32b66c833a62ae7b438ee8da68c919~Mc2Nati1u2008420084eusmtrp2e;
-        Wed,  6 May 2020 13:27:19 +0000 (GMT)
-X-AuditID: cbfec7f2-f0bff7000001ef66-15-5eb2bb37d22c
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 17.8C.07950.73BB2BE5; Wed,  6
-        May 2020 14:27:19 +0100 (BST)
-Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200506132718eusmtip26ca2f9d124286a5ba9aea510fc16243f~Mc2M45YKF0881508815eusmtip2d;
-        Wed,  6 May 2020 13:27:18 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-clk@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Marian Mihailescu <mihailescu2m@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH 2/2] clk: samsung: Fix CLK_SMMU_FIMCL3 clock name on
- Exynos542x
-Date:   Wed,  6 May 2020 15:26:59 +0200
-Message-Id: <20200506132659.17162-2-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200506132659.17162-1-m.szyprowski@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpmleLIzCtJLcpLzFFi42LZduzneV3z3ZviDNbPVLXYOGM9q8X1L89Z
-        Lc6f38Bu8bHnHqvFjPP7mCzWHrnLbrF+2k9Wi3/XNrJYtD99yezA6bFz1l12j02rOtk8+ras
-        YvT4vEkugCWKyyYlNSezLLVI3y6BK6Pn7T/mguXsFTsv3WFpYFzG1sXIySEhYCLx784iIJuL
-        Q0hgBaPE/ZZWFgjnC6PE6TcnoJzPjBJHmi8xwrTc2b6BCSKxnFHi6L/HzHAtW/9/YAapYhMw
-        lOh62wW2RETAQeLzp9eMIEXMApuYJK6s2QJWJCwQKLF0ykdWEJtFQFWi+dp/MJtXwFbi2+fT
-        TBDr5CVWbzgAVs8pYCfxsnc52E0SAt/ZJLbOuwFV5CKx69VKqPuEJV4d38IOYctI/N85nwmi
-        oZlR4uG5tewQTg+jxOWmGVAd1hJ3zv0CupUD6D5NifW79CHCjhLbFn8EC0sI8EnceCsIEmYG
-        Midtm84MEeaV6GgTgqhWk5h1fB3c2oMXLjFD2B4S768ugIbjREaJvz8bGCcwys9CWLaAkXEV
-        o3hqaXFuemqxYV5quV5xYm5xaV66XnJ+7iZGYNI4/e/4px2MXy8lHWIU4GBU4uE9sGxTnBBr
-        YllxZe4hRgkOZiURXp4fG+OEeFMSK6tSi/Lji0pzUosPMUpzsCiJ8xovehkrJJCeWJKanZpa
-        kFoEk2Xi4JRqYNx0+NzdjwtY7AX2vv9wo8RMNWUjy6ylFaslD0vu2nfRSSWCPfI24/1VU86f
-        P6jDezPHlrVTzlrt2ETusH1LT99h+LA1d1NnHftZVYNpC7imtB1YYJk8wc2iVO2EaiCr0f1z
-        4gvP33dgKqjfrCqncevYFf3NL3htVPZ/kN1xYP2nHUeTg3JYK+YosRRnJBpqMRcVJwIAtEbG
-        xRYDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMLMWRmVeSWpSXmKPExsVy+t/xe7rmuzfFGcybzGqxccZ6VovrX56z
-        Wpw/v4Hd4mPPPVaLGef3MVmsPXKX3WL9tJ+sFv+ubWSxaH/6ktmB02PnrLvsHptWdbJ59G1Z
-        xejxeZNcAEuUnk1RfmlJqkJGfnGJrVK0oYWRnqGlhZ6RiaWeobF5rJWRqZK+nU1Kak5mWWqR
-        vl2CXkbP23/MBcvZK3ZeusPSwLiMrYuRk0NCwETizvYNTF2MXBxCAksZJV7t3MkIkZCRODmt
-        gRXCFpb4c62LDaLoE6PEpxP7wYrYBAwlut52gU0SEXCSeLDuDTtIEbPANiaJndvvg3ULC/hL
-        XL23mxnEZhFQlWi+9h8szitgK/Ht82kmiA3yEqs3HACr4RSwk3jZu5wFxBYCqpk65xfzBEa+
-        BYwMqxhFUkuLc9Nzi430ihNzi0vz0vWS83M3MQIDeNuxn1t2MHa9Cz7EKMDBqMTDe2DZpjgh
-        1sSy4srcQ4wSHMxKIrw8PzbGCfGmJFZWpRblxxeV5qQWH2I0BTpqIrOUaHI+MLrySuINTQ3N
-        LSwNzY3Njc0slMR5OwQOxggJpCeWpGanphakFsH0MXFwSjUwlmbceaUu9/N87yun8OZ5b0pE
-        9/v5HJlw9XTnHsWlj4/6p6paLvMTaPP/2mRxxsPo23+3f0tqN9+69UCj973FP8WFZupnls6b
-        aKk18WhhECfr05/7j/3htN9nNpnpoEkkx6SvAScnLuY6ufpG0WmXrZKG81y25kesFVr1cNt1
-        k8CNdVFKwUkuckosxRmJhlrMRcWJAPaAOdJ2AgAA
-X-CMS-MailID: 20200506132719eucas1p258d3a6979ab111a7db4baf95c85c2591
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200506132719eucas1p258d3a6979ab111a7db4baf95c85c2591
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200506132719eucas1p258d3a6979ab111a7db4baf95c85c2591
-References: <20200506132659.17162-1-m.szyprowski@samsung.com>
-        <CGME20200506132719eucas1p258d3a6979ab111a7db4baf95c85c2591@eucas1p2.samsung.com>
+        id S1729710AbgEFRFM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 6 May 2020 13:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729414AbgEFRFM (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 6 May 2020 13:05:12 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3145DC061A0F;
+        Wed,  6 May 2020 10:05:12 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id e16so3076809wra.7;
+        Wed, 06 May 2020 10:05:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=3x0uOI1BgySr4JAhryI/+ahsj3uZRjc+tpO/+35ZZwM=;
+        b=Rgc7eSgJ+cqlaFrG9r5KSSCvjShNUu/8DSZbN8gI8P/1tuUWmgS+GTNh8XOlgSpfIb
+         hI90vv6rQOPGLNIPE3iDemjFkSKLOa0yiT1y2J8Fa93JPIA+MLml+Xwy7JfTjPRKetQg
+         1qclsBZFdjsCDg9AjerK1wjbNvXTaxS/y9YlGx1ryJJ4FR9MrvtXZjk0uci26KAuNsDO
+         K08kZWBfXsZXqBUGgnsdj0GXTziUvmI0Qp8Rx8QZJJZoTJA+1Fgww+c7hs2l1/Xwfy8H
+         vXvFD0gXJMEvinG6pZa+W8CIdWs9dCAWwUSFrc2aCGGyLz1PK7RSn2GPW6RKoTI8CABg
+         qdEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=3x0uOI1BgySr4JAhryI/+ahsj3uZRjc+tpO/+35ZZwM=;
+        b=BaUru9fQk80BQukvkSFKzweLUZqZo6A9p2vSYgH4F8MA5ONCfs4OYzJCAn12PNFgIE
+         3LKdKSVXZeCR/qGrqyDkN3dFAoLPgxeKnmEPTqrKaeNSOjsdkgj401+N8PzLXk7fhGwB
+         ckZdgx0EOyTYS5EhxKbqWMm6OVQ5uXcyrdwdFClPZH2dYClvTzQJ7eecZTvjM2wj/6QX
+         85ixt61zIet5xxexkxfHhpREgiG7cxqtxSpTCUEoOUwoZ3eNGHRv6Zc+jG/EWibr6RHN
+         Mw1z4fNvTcCJ3mPGRkcROQumkZTe3FjBlpLFSUZFiJd6AUAjOxSw1HbujQMdK1mXfy+f
+         /A/g==
+X-Gm-Message-State: AGi0PubTvAnZ64huk+nU4313E2eBynLajgop9HZvlgkmWTM0++pfWosQ
+        T608kS2lQ90wwki888Bl4oqfyH8P+0E=
+X-Google-Smtp-Source: APiQypIC+CI7iz0lwgrPCobaoNgtlY8ZcMXxo8iAjROexajFRgzSeVNvOyjJva4yc4ljkdQ68oMxBg==
+X-Received: by 2002:a5d:438c:: with SMTP id i12mr10557540wrq.14.1588784710844;
+        Wed, 06 May 2020 10:05:10 -0700 (PDT)
+Received: from localhost (p2E5BE57B.dip0.t-ipconnect.de. [46.91.229.123])
+        by smtp.gmail.com with ESMTPSA id 5sm3872042wmz.16.2020.05.06.10.05.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 May 2020 10:05:09 -0700 (PDT)
+Date:   Wed, 6 May 2020 19:05:08 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Jasper Korten <jja2000@gmail.com>,
+        David Heidelberg <david@ixit.cz>, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 00/12] NVIDIA Tegra20 CPUFreq driver major update
+Message-ID: <20200506170508.GE2723987@ulmo>
+References: <20200319190229.32200-1-digetx@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="10jrOL3x2xqLmOsH"
+Content-Disposition: inline
+In-Reply-To: <20200319190229.32200-1-digetx@gmail.com>
+User-Agent: Mutt/1.13.1 (2019-12-14)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The proper name for CLK_SMMU_FIMCL3 is "smmu_fimcl3". Remove obvious
-typo.
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- drivers/clk/samsung/clk-exynos5420.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--10jrOL3x2xqLmOsH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/clk/samsung/clk-exynos5420.c b/drivers/clk/samsung/clk-exynos5420.c
-index edb2363c735a..fea33399a632 100644
---- a/drivers/clk/samsung/clk-exynos5420.c
-+++ b/drivers/clk/samsung/clk-exynos5420.c
-@@ -1165,7 +1165,7 @@ static const struct samsung_gate_clock exynos5x_gate_clks[] __initconst = {
- 			CLK_IS_CRITICAL, 0),
- 	GATE(CLK_GSCL_WB, "gscl_wb", "sclk_gscl_wb", GATE_IP_GSCL1, 13,
- 			CLK_IS_CRITICAL, 0),
--	GATE(CLK_SMMU_FIMCL3, "smmu_fimcl3,", "dout_gscl_blk_333",
-+	GATE(CLK_SMMU_FIMCL3, "smmu_fimcl3", "dout_gscl_blk_333",
- 			GATE_IP_GSCL1, 16, 0, 0),
- 	GATE(CLK_FIMC_LITE3, "fimc_lite3", "aclk333_432_gscl",
- 			GATE_IP_GSCL1, 17, 0, 0),
--- 
-2.17.1
+On Thu, Mar 19, 2020 at 10:02:17PM +0300, Dmitry Osipenko wrote:
+> Hello,
+>=20
+> This series moves intermediate-clk handling from tegra20-cpufreq into
+> tegra-clk driver. This allows us to switch to generic cpufreq-dt driver
+> which brings voltage scaling, per-hardware OPPs and Tegra30 support out
+> of the box. All boards need to adopt CPU OPPs in their device-trees in
+> order to get cpufreq support.
+>=20
+> Changelog:
+>=20
+> v8: - Rebased on a recent linux-next because Thierry merged the cpuidle
+>       series first and now there is one minor conflict.
+>=20
+>     - Added tested-by from Nicolas Chauvet who was one of the first
+>       testers of the series.
+>=20
+> v7: - Added acks from Peter De Schrijver.
+>=20
+>     - Added tested-by from Marcel Ziswiler, Peter Geis, Jasper Korten and
+>       David Heidelberg who tested these patches on Apalis/Colibri devboar=
+ds,
+>       Ouya, TF300T and Nexus 7 devices respectively.
+>=20
+>     - Rebased series on top of recent linux-next.
+>=20
+> v6: - Dropped "cpufreq: dt-platdev: Blacklist NVIDIA Tegra20 and Tegra30 =
+SoCs"
+>       patch from the series since Viresh picked up that patch separately.
+>=20
+>     - Added two new patches to this series:
+>=20
+>         ARM: tegra: Switch CPU to PLLP on resume from LP1 on Tegra30/114/=
+124
+>         ARM: tegra: Don't enable PLLX while resuming from LP1 on Tegra30
+>=20
+>       Previously these patches were sent out separately from this series,
+>       but it should be more consistent to include them into the series si=
+nce
+>       they directly relate to enabling of the cpufreq driver on Tegra30.
+>=20
+> v5: - The "Use generic cpufreq-dt driver (Tegra30 supported now)" patch
+>       is separated now into two patches by factoring out the blacklisting
+>       of cpufreq-dt-platdev into a standalone patch. This is done in a
+>       response to request from Jon Hunter to fix the warning splats during
+>       boot that are coming from OPP core because OPPs are unavailable. The
+>       OPPs will become available once tegra20-cpufreq driver will be upda=
+ted
+>       to support the cpufreq-dt.
+>=20
+> v4: - Updated CCLK diagram in the "Add custom CCLK implementation" patch.
+>=20
+>     - <linux/cpu.h> is now included in the "Use generic cpufreq-dt driver"
+>       patch, for consistency.
+>=20
+>     - Returned value of get_cpu_device() is now checked in the "Use gener=
+ic
+>       cpufreq-dt driver" patch, for consistency as well.
+>=20
+> v3: - The "Add custom CCLK implementation" patch was updated in accordance
+>       to the comments from Peter De Schrijver. We will not use the clock
+>       skipper.
+>=20
+>     - Re added OPPs for T30 Beaver board because Thierry has that board ;)
+>=20
+>     - Added r-b for the "DT binding" patch from Rob Herring.
+>=20
+> v2: - Kept modularity of the tegra20-cpufreq as was requested by Viresh K=
+umar
+>       in a review comment to v1.
+>=20
+>     - Added acks from Viresh Kumar.
+>=20
+>     - Added tested-by from Nicolas Chauvet to the "trimslice" patch.
+>       Nicolas told me on IRC that it works fine.
+>=20
+>     - Fixed compilation of the "Add custom CCLK implementation" patch. The
+>       error happened because v1 was based on top of yet unreviewed/unappl=
+ied
+>       patch "clk: tegra: divider: Support enable-bit for Super clocks".
+>       Thanks to Peter Geis for reporting the problem.
+>=20
+>     - Replaced Tegra30 "beaver" board with "cardhu-a04" because turned out
+>       that's what NVIDIA uses in the testing farm.
+>=20
+> Dmitry Osipenko (12):
+>   clk: tegra: Add custom CCLK implementation
+>   clk: tegra: pll: Add pre/post rate-change hooks
+>   clk: tegra: cclk: Add helpers for handling PLLX rate changes
+>   clk: tegra20: Use custom CCLK implementation
+>   clk: tegra30: Use custom CCLK implementation
 
+Applied to for-5.8/clk.
+
+>   ARM: tegra: Switch CPU to PLLP on resume from LP1 on Tegra30/114/124
+>   ARM: tegra: Don't enable PLLX while resuming from LP1 on Tegra30
+
+Applied to for-5.8/arm/core.
+
+>   dt-bindings: cpufreq: Add binding for NVIDIA Tegra20/30
+
+Applied to for-5.8/dt-bindings.
+
+>   cpufreq: tegra20: Use generic cpufreq-dt driver (Tegra30 supported
+>     now)
+
+Applied to for-5.8/cpufreq.
+
+>   ARM: tegra: Create tegra20-cpufreq platform device on Tegra30
+
+Applied to for-5.8/arm/core.
+
+>   ARM: dts: tegra30: beaver: Set up voltage regulators for DVFS
+>   ARM: dts: tegra30: beaver: Add CPU Operating Performance Points
+
+Applied to for-5.8/arm/dt.
+
+Thanks,
+Thierry
+
+--10jrOL3x2xqLmOsH
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6y7kQACgkQ3SOs138+
+s6HkfRAAnqVNjXF+MUQ97q3hoKS/cJkVfNxJMHxvr3vdibV/jEzw02C4pFTiXLUI
+5bDlLr1I8SGVkSgaDYLq5ynvPwHaUtHZRUN15glFAm0iWHgga/OgKuMWJeQTwk5p
+cmMVFyNuuTMftYpGIE4tmSTXQmwHej1NrjUWrR0sJSf99MP9nAAiUd/3RC3s00bg
+OawwgEG4VDMvTuVhOIZNx1xDr2ZMbK81vChCLrI0ZIjvFoedmlR1AKheQ+io84Wf
+85WeTTcLc4XcciGhE3cnmp0DEtib+WNmDYF6uZujvcX/Z4GbhgXZOzXLi5LQUY6f
+2tuKez7A7LNhv7P4ix3VXRYwYlglhvkQagTpCjsqJKpZwEDbdVrvL0MWUcaIMmLW
+VQ7T5y9j7GAYlza4FFzJvttJmQob5GH9lho4eKJXeSRNAtOLnR7iPS8JyAIBrMaR
+8t7lRBjhcRwdllyAkvTtRlxwNavpvD2MkXwAt+pwIu1evSZIrSVQ/OIX0NWpxakn
+KcgM/0/w3fzCbNH0/fTbYV/+wGRtIj045Qqh9X7RVXlv5Z/gEMj1HFejsF/HYzKS
+MPAS9ykMwaMkfgb1d/Oe/j/fCkyyozewLnuXVKxjzLfc4YYtWhAs5Z/hjN0xLQnk
+hAjvAmlDHOsGrdwHloNDl1IC7gTi72YDmixLhAyE0gCcnWVfjCA=
+=H93k
+-----END PGP SIGNATURE-----
+
+--10jrOL3x2xqLmOsH--
