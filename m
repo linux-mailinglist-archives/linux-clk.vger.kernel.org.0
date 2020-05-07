@@ -2,69 +2,87 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7EAD1C8769
-	for <lists+linux-clk@lfdr.de>; Thu,  7 May 2020 12:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7DD1C8841
+	for <lists+linux-clk@lfdr.de>; Thu,  7 May 2020 13:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725939AbgEGK6E (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 7 May 2020 06:58:04 -0400
-Received: from elvis.franken.de ([193.175.24.41]:43501 "EHLO elvis.franken.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725923AbgEGK6E (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 7 May 2020 06:58:04 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1jWeE6-0007du-00; Thu, 07 May 2020 12:58:02 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 12503C03B1; Thu,  7 May 2020 12:00:57 +0200 (CEST)
-Date:   Thu, 7 May 2020 12:00:57 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH] MIPS: ingenic: Replace <linux/clk-provider.h> by
- <linux/of_clk.h>
-Message-ID: <20200507100057.GA10965@alpha.franken.de>
-References: <20200506090452.1290-1-geert+renesas@glider.be>
- <20200507084058.GA9624@alpha.franken.de>
- <CAMuHMdU=iZfBg9wkZ1JM_eLe8j-nVp0Q8761UM7p_UUEhuf1+w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdU=iZfBg9wkZ1JM_eLe8j-nVp0Q8761UM7p_UUEhuf1+w@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+        id S1726445AbgEGLaP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 7 May 2020 07:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726495AbgEGLaO (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 May 2020 07:30:14 -0400
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E541AC05BD14
+        for <linux-clk@vger.kernel.org>; Thu,  7 May 2020 04:30:13 -0700 (PDT)
+Received: from ramsan ([IPv6:2a02:1810:ac12:ed60:6572:4a1f:d283:9ae8])
+        by xavier.telenet-ops.be with bizsmtp
+        id bnW3220043ZRV0X01nW3Ki; Thu, 07 May 2020 13:30:11 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1jWej4-0006zG-Vp; Thu, 07 May 2020 13:30:02 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1jWej4-00068L-UG; Thu, 07 May 2020 13:30:02 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-ide@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 0/4] qoriq: Add platform dependencies
+Date:   Thu,  7 May 2020 13:29:51 +0200
+Message-Id: <20200507112955.23520-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, May 07, 2020 at 11:11:10AM +0200, Geert Uytterhoeven wrote:
-> Hi Thomas,
-> 
-> On Thu, May 7, 2020 at 11:05 AM Thomas Bogendoerfer
-> <tsbogend@alpha.franken.de> wrote:
-> > On Wed, May 06, 2020 at 11:04:52AM +0200, Geert Uytterhoeven wrote:
-> > > The JZ4740 setup code is not a clock provider, and just needs to call
-> > > of_clk_init().
-> > >
-> > > Hence it can include <linux/of_clk.h> instead of <linux/clk-provider.h>.
-> > >
-> > > Fixes: f932449c11dabb4b ("MIPS: ingenic: Drop obsolete code, merge the rest in setup.c")
-> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > ---
-> > >  arch/mips/jz4740/setup.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > Does this need to go via mips-fixes ? Or is mips-next good enough ?
-> 
-> The commit fixed is not yet upstream, only in next, and the fix is
-> non-critical.  It could even be merged into the original commit,
-> depending on your rebase policy.
+	Hi all,
 
-no rebase on mips-next. I've applied your patch to mips-next.
+Several QorIQ blocks are only present on Freescale or NXP SoCs.
+This series adds platform dependencies to the corresponding config
+ymbols, to avoid asking the user about them when configuring a kernel
+without support for these SoCs.
 
-Thomas.
+Most patches in this series are independent, but the third patch may
+cause some Kconfig warnings when applied before the second patch, and
+enabling the QorIQ CPU frequency scaling driver in a non-Layerscape
+kernel.
+
+Thanks for your comments!
+
+Geert Uytterhoeven (4):
+  ahci: qoriq: Add platform dependencies
+  cpufreq: qoriq: Add platform dependencies
+  clk: qoriq: Add platform dependencies
+  thermal: qoriq: Add platform dependencies
+
+ drivers/ata/Kconfig     | 1 +
+ drivers/clk/Kconfig     | 3 ++-
+ drivers/cpufreq/Kconfig | 3 ++-
+ drivers/thermal/Kconfig | 4 ++--
+ 4 files changed, 7 insertions(+), 4 deletions(-)
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.17.1
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
