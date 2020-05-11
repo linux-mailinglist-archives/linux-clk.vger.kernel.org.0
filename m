@@ -2,110 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C766D1CE209
-	for <lists+linux-clk@lfdr.de>; Mon, 11 May 2020 19:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4991CE440
+	for <lists+linux-clk@lfdr.de>; Mon, 11 May 2020 21:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728711AbgEKRvD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 May 2020 13:51:03 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:37485 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726310AbgEKRvC (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 May 2020 13:51:02 -0400
-Received: by mail-ot1-f67.google.com with SMTP id z17so8268432oto.4;
-        Mon, 11 May 2020 10:51:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dv11OYYCqnzc6zMWFHWY2m/yP18XAr5yVlsgzBkGlOM=;
-        b=jeKc0vj/lVHo7vMpdJ786URFlXgonD6KRT0VxE0e+ypxSX/pdXc4RQoPZSkQvzy45T
-         ykL1FQYnG+5RtAQ3anlImX69ymd8G07feSZZ2WNbQWBTSerQ8FkGECoazc7rdaZnjtnD
-         kDi+XP3rjOJX4Wr1p6F4lz4bl7RGkOEpsJVHd3IFmhuDLA9OGIffZbCa2DxUfapQGJTY
-         lwZCcuf8x1LOYiitlW+wixFP7Jtm9yhAuokS9lB2d6HGRQjM+DWhUYfzuwVIuiqnp6dP
-         HKU0pPolwPEXXWybw4zqFWw/6h9IVFrCnUC5mviePs2GvT7QB8QZkwXcmCYOJqqwmjPN
-         nyfg==
-X-Gm-Message-State: AGi0PuadJ+j+DuAzFIfrcTsD84ORj0CcpQTaAWkdKdhonY8UwYGyjvJ/
-        /2GNmegqJ9CoxFhF0L8huLe93D+QJXPCUTMv7rU=
-X-Google-Smtp-Source: APiQypLVjWlhqHxdXs6KSsw3VJLCELYOE+LtyrIZWUD1fQqtgg6kKCl9e9spU9G/3/FvPyZy+0QABE7Z3QIA6tvq7Ps=
-X-Received: by 2002:a9d:63da:: with SMTP id e26mr12743845otl.107.1589219461670;
- Mon, 11 May 2020 10:51:01 -0700 (PDT)
+        id S1731041AbgEKTZ3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 May 2020 15:25:29 -0400
+Received: from v6.sk ([167.172.42.174]:52316 "EHLO v6.sk"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729453AbgEKTZ3 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 11 May 2020 15:25:29 -0400
+Received: from localhost (v6.sk [IPv6:::1])
+        by v6.sk (Postfix) with ESMTP id 9E3DC610A9;
+        Mon, 11 May 2020 19:25:27 +0000 (UTC)
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     Michael Turquette <mturquette@baylibre.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 00/10] clk: mmp2: Enable Audio and GPU on MMP2 and MMP3
+Date:   Mon, 11 May 2020 21:25:07 +0200
+Message-Id: <20200511192517.1206442-1-lkundrak@v3.sk>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <1589214838-18075-1-git-send-email-uli+renesas@fpond.eu>
-In-Reply-To: <1589214838-18075-1-git-send-email-uli+renesas@fpond.eu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 11 May 2020 19:50:40 +0200
-Message-ID: <CAMuHMdUTgrWZcEO6msW13hW=UzbkQZcGY5b0d9uhWyJN_K3yDQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] clk: renesas: cpg-mssr: add never-disable option
-To:     Ulrich Hecht <uli+renesas@fpond.eu>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-CC clk
+Hi,
 
-Complete series at
-http://lore.kernel.org/r/1589214838-18075-1-git-send-email-uli+renesas@fpond.eu
+please consider applying this patch set for 5.8.
 
-On Mon, May 11, 2020 at 6:34 PM Ulrich Hecht <uli+renesas@fpond.eu> wrote:
-> This revision should work more reliably as it keeps the never-disable
-> handling in the clock driver instead of relying on the semantics of
-> CLK_IGNORE_UNUSED, which still allows clocks to be turned off for power
-> management.
->
-> This series adds the option for declaring clocks as "never-disable", i.e.
-> clocks that will not be turned on if not used, but also not turned off if
-> unused. It also enables this option for the RWDT clocks in (almost) all
-> SoCs.
->
-> The point of this is to allow a WDT that has been enabled by the bootloader
-> to survive these events:
->
-> - deferred probing of the WDT device, which can lead the clock driver
->   to disable the WDT clock until the WDT is re-probed, giving it a
->   blind spot
-> - probe failure in the WDT driver
->
-> There are a number of Gen2 and RZ/G1 SoCs that have the RWDT clock declared
-> as critical in order to allow SMP bringup code to work. These have been
-> left as they are.
->
-> CU
-> Uli
->
->
-> Changes since v2:
-> - use the term "never-disable" instead of "ignore-unused"
-> - do the handling internally instead of relying on the behavior of
->   CLK_IGNORE_UNUSED
->
-> Changes since v1:
-> - rename data structures for clarity
-> - squash SoC-specific patches into one per family
->
->
-> Ulrich Hecht (3):
->   clk: renesas: cpg-mssr: add support for never-disable clocks
->   clk: renesas: rcar-gen3: mark RWDT clocks as never-disable
->   clk: renesas: rzg2: mark RWDT clock as never-disable
->
->  drivers/clk/renesas/r8a774a1-cpg-mssr.c |  5 +++++
->  drivers/clk/renesas/r8a774b1-cpg-mssr.c |  5 +++++
->  drivers/clk/renesas/r8a774c0-cpg-mssr.c |  5 +++++
->  drivers/clk/renesas/r8a7795-cpg-mssr.c  |  6 +++++-
->  drivers/clk/renesas/r8a7796-cpg-mssr.c  |  6 +++++-
->  drivers/clk/renesas/r8a77965-cpg-mssr.c |  5 +++++
->  drivers/clk/renesas/r8a77970-cpg-mssr.c |  6 +++++-
->  drivers/clk/renesas/r8a77980-cpg-mssr.c |  6 +++++-
->  drivers/clk/renesas/r8a77990-cpg-mssr.c |  5 +++++
->  drivers/clk/renesas/r8a77995-cpg-mssr.c |  6 +++++-
->  drivers/clk/renesas/renesas-cpg-mssr.c  | 10 ++++++++++
->  drivers/clk/renesas/renesas-cpg-mssr.h  |  9 +++++++++
->  12 files changed, 69 insertions(+), 5 deletions(-)
+The goal is to add support for various clocks used by the GPUs and Audio
+subsystem MMP2 and MMP3-based machines.
+
+Probably the most significant part is that this adds support for runtime
+PM domains which is managed by the same PMU hardware as the clocks.
+
+Tested the GPUs on MMP2 and MMP3 as well as audio on MMP2. (I don't have
+an audio codec hooked up on MMP3, nor a camera on a MMP3 machine, so
+those remain untested for now).
+
+Compared to v1 this just adds a couple of ack tags for the DT bindings.
+
+Thank you
+Lubo
+
+
