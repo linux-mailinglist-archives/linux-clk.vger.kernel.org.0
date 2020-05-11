@@ -2,90 +2,59 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3DF1CE5A5
-	for <lists+linux-clk@lfdr.de>; Mon, 11 May 2020 22:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD3A1CE697
+	for <lists+linux-clk@lfdr.de>; Mon, 11 May 2020 23:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731639AbgEKUfF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 May 2020 16:35:05 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:43341 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727873AbgEKUfE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 May 2020 16:35:04 -0400
-Received: by mail-oi1-f193.google.com with SMTP id j16so16281447oih.10;
-        Mon, 11 May 2020 13:35:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xPfARJBDe31edRqTmB22eqqJ1jCXSCt4soTep9+eCZE=;
-        b=I3feRbee1STlb3Rm82R2kiNQj+ZBEHmm5dfpcX0CGR32SIzX3MEBRcYiC+WFuLk8eo
-         ZZKAmlyK/kUcZ2K1TyQntfaGIP46H1wKL2nQ4LqSlmRFNOXWSS6ceAiMJy02a2g6iBQ9
-         YDTdvAGeFYIEQ243RGt5YXfM66y4bcSxwy9vL5o066SZbkvH5JBhneU5IyKH/ymgT+8y
-         fsGjdcKN940bS+/XJ62nD9oRvPpyb4rgPOJtjy6PBWU0Lr04pDi5DYwBqDYK/qkXBKnH
-         dQvquvJgDKQInlbusEpYRcf5C411lG9BhU/X6rmKtdVd3fPhRuQ+pNSR6EntiUCCsbR8
-         tAjQ==
-X-Gm-Message-State: AGi0PuZUrCLP/Nx+RwYfy5lD5+6gRkDg/Tm9WkE5brEj4LelOc+UkGVp
-        DnrxKhkArVk3iHePTsA2d5oDEGc=
-X-Google-Smtp-Source: APiQypLhCz0Iweh6mDeRxFs1JldCYPCWFDZ/eWcgs5VYLylwJuEA3ROhRph1lzQha6aqqe17WNMHUA==
-X-Received: by 2002:aca:5643:: with SMTP id k64mr19984093oib.152.1589229303517;
-        Mon, 11 May 2020 13:35:03 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id y25sm1875229oto.29.2020.05.11.13.35.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 13:35:02 -0700 (PDT)
-Received: (nullmailer pid 32429 invoked by uid 1000);
-        Mon, 11 May 2020 20:35:01 -0000
-Date:   Mon, 11 May 2020 15:35:01 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        shawn.guo@linaro.org, p.zabel@pengutronix.de
-Subject: Re: [PATCH v3 2/2] clk: qcom: gcc-msm8939: Add MSM8939 Generic Clock
- Controller
-Message-ID: <20200511203501.GA29988@bogus>
-References: <20200423103406.481289-1-bryan.odonoghue@linaro.org>
- <20200423103406.481289-3-bryan.odonoghue@linaro.org>
+        id S1732318AbgEKVBm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 May 2020 17:01:42 -0400
+Received: from v6.sk ([167.172.42.174]:52536 "EHLO v6.sk"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732306AbgEKVBj (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 11 May 2020 17:01:39 -0400
+Received: from localhost (v6.sk [IPv6:::1])
+        by v6.sk (Postfix) with ESMTP id 421F1610A9;
+        Mon, 11 May 2020 21:01:37 +0000 (UTC)
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 00/11] Make sound work on DT-based MMP2 machines
+Date:   Mon, 11 May 2020 23:01:23 +0200
+Message-Id: <20200511210134.1224532-1-lkundrak@v3.sk>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200423103406.481289-3-bryan.odonoghue@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, Apr 23, 2020 at 11:34:06AM +0100, Bryan O'Donoghue wrote:
-> This patch adds support for the MSM8939 GCC. The MSM8939 is based on the
-> MSM8916. MSM8939 is compatible in several ways with MSM8916 but, has
-> additional functional blocks added which require additional PLL sources. In
-> some cases functional blocks from the MSM8916 have different clock sources
-> or different supported frequencies.
-> 
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: linux-arm-msm@vger.kernel.org
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  drivers/clk/qcom/Kconfig                     |    8 +
->  drivers/clk/qcom/Makefile                    |    1 +
->  drivers/clk/qcom/gcc-msm8939.c               | 3999 ++++++++++++++++++
+Hi,
 
->  include/dt-bindings/clock/qcom,gcc-msm8939.h |   27 +
->  include/dt-bindings/reset/qcom,gcc-msm8939.h |   10 +
+this patch set reworks the mmp-sspa driver to work on a device
+tree based MMP2 machines. My motivation is to make sound work on
+a MMP2-based OLPC XO-1.75 laptop.
 
-These go in patch 1.
+Note that currently the driver is pretty much orphaned -- it is not used by
+any boards and nothing in tree provides the necessary clocks. This means
+that risks of regressions are effectively zero; even though my test
+configuration is not exhaustive and do not possess the datasheet.
 
->  5 files changed, 4045 insertions(+)
->  create mode 100644 drivers/clk/qcom/gcc-msm8939.c
+I'm actually not convinced it would've worked too well if it was hooked
+on (due to what patches 01/11, 02/11 and perhaps 09/11).
+
+I've tested this on a XO-1.75 along with clk-audio driver that was
+submitted separately ("MMP2 Audio clock controller driver" [1]),
+mmp_tdma driver (with changes queued in linux-next), the rt5631 codec
+and audio-graph-card.
+
+[1] https://lore.kernel.org/lkml/20200511195534.1207927-1-lkundrak@v3.sk/
+
+Thank you,
+Lubo
+
+
