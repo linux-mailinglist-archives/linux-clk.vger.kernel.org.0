@@ -2,66 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 703C81CFF17
-	for <lists+linux-clk@lfdr.de>; Tue, 12 May 2020 22:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A541CFF2C
+	for <lists+linux-clk@lfdr.de>; Tue, 12 May 2020 22:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731020AbgELUOI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 12 May 2020 16:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725938AbgELUOH (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 12 May 2020 16:14:07 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC25C061A0C
-        for <linux-clk@vger.kernel.org>; Tue, 12 May 2020 13:14:07 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id z1so6915545pfn.3
-        for <linux-clk@vger.kernel.org>; Tue, 12 May 2020 13:14:07 -0700 (PDT)
+        id S1729420AbgELU0r (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 12 May 2020 16:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725950AbgELU0r (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 12 May 2020 16:26:47 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7D2C061A0F
+        for <linux-clk@vger.kernel.org>; Tue, 12 May 2020 13:21:05 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id e6so9956045pjt.4
+        for <linux-clk@vger.kernel.org>; Tue, 12 May 2020 13:21:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=yVbj2kYfNqCNXaolI+2XZgrd+V6K2rPAmk0JT9WEG78=;
-        b=XGD5nBU6JrgC3849IVhQBhLqb1DDeB1ZmAVFp8cIEyJsRPDHURkLigCz3PiMl7Ibc0
-         olFg2EW2Ea8pV2fcljIxY+SKxK842KxdaADXpXUSOUkRzWQSSCleFzHmUMyS0BngOzmd
-         8awe6Jo+tpxpuQPUPPXTJCg8e1Q14JdyAH+akE2eqErRb7x5ZL1xEeVzHL7snHDl6g+o
-         k+K9FDTPEIGp8hQ66LJEb/DvA4adP7J/6VfDCBij1qKrWNP9rRmZOiiUL78dAwu3VibT
-         5eBp724V5jFFRw4tibJ3CJOKfgk0ySonTB8eWh7Y6sLU/+jVyQe/ghI2DfjvVhl+bj6R
-         AVbw==
+        bh=72idvkPptmj1azU8rAtl48UwMaAUDdF2tMlyiTXbnO4=;
+        b=PqfkBtYQ1kGKKPCnNm4FQaAcD/duxrZ0D+KqZulhbu60V+BUGbU3hkn+7OlOnT7Rvd
+         TUuOw5ILHWJELrrGFl9NAjuOfL+avlMHcvT05sn6egYjgVnmjtwN5B4Y5YJmes4f83j2
+         jzUB2wKtNIHUs2AzJNj8IAX12teZOpIrsw5OpU02cadd3MzdcvySCv90rrQP/h2FD5nN
+         QZ1r1MIMWeFFA970hWjba9RpjQ0M4VmCQtQ6om1dhBKUz97cRWwmNRmnaedj+c2Hpvv3
+         aoYUwWwZu72kykMmaDgwibTh+fJ8dRyoDmx4zSqJsCDuDEuhJhSnyPyY/Qfo0PGlvwms
+         URYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=yVbj2kYfNqCNXaolI+2XZgrd+V6K2rPAmk0JT9WEG78=;
-        b=kXHFfH0x1H8Z66rLPaoNS/OU4TGNAldjX0GLccJufeZr18NXP1gyC62vVSk3NWUAWX
-         h7qt5aFMlaAtfGKmV7iymiZp4km1S0Z1VowxEr9t4VcBCqQexH73xq9pQwFciHl3lksV
-         WFwva1xWzrme6/nWSmX0hLipkl52M+4A1nr0mCEiANTk2FxWs4rc5mskmw6AIuuUVkS3
-         kx6datP3PGI6RdXhqJPAdQ3pY+RI4sQ6fRA4zwkhsqmNF4NWAqftwWYpPiMFCR6a2zlL
-         J48pMQZIyBHJUxWglnCjIF6Fs5V5bUXBIcKWRlL9nngfKm4ahWOT2B9BLYtH+OFopFo0
-         hI9g==
-X-Gm-Message-State: AGi0PubE3TZ0tIXzlil+F5vSkdL2gDXEAieUGNEizuvUFehhB47qHRI9
-        ylTFT5QEM4Hg42+Nw1IMS/EpeA==
-X-Google-Smtp-Source: APiQypK8S/5rcF+l1u/BQzeTY26XrRavipgCWhCkuOvvbFE6MVs3TXr//7a9kTCmKjx8LHEFh1l7FA==
-X-Received: by 2002:a62:7b03:: with SMTP id w3mr22334202pfc.313.1589314447191;
-        Tue, 12 May 2020 13:14:07 -0700 (PDT)
+        bh=72idvkPptmj1azU8rAtl48UwMaAUDdF2tMlyiTXbnO4=;
+        b=ZU0H+xZNUUgDueaaBMR0KS6/SpCVPZP0KPtQA9dkJfedoVg12k5EJou+sF9xZmve2V
+         mgekyiERU3C8TKd+PKs5Qs3+YK7165kA8+HOGki7XzyEztXc5M9XeJWuOdApdGvS3486
+         nWlkify66QI+JU6da9U8vq55J/l09Pkt5Cx/t/NmEJ0AJiqhjq5tX26MGubCQ++lGfwv
+         zNtJObk/nlY0zCcOSSvgnZYqK41ALNWDezbvsJGHYWvMlqYPOzl7fJQ52KDJj+LC0qaK
+         622osj179+NkD4kLyhfJJ4Uvu3SWS0Gdq5zCV/rSU5zqs9Cx4JnIr6sCiO6tSK9t4s0x
+         jiXA==
+X-Gm-Message-State: AGi0PubE7s777UkOp8sev0YGpF47ubqlXz1vK7ZswIwRHmUfqdIfLOUC
+        BsA6l5JZDeRnBnZP5SXOOUH/fQ==
+X-Google-Smtp-Source: APiQypLSU4mmFZVr2gVYe8hrtjzekUuVMmUf92oq/XmFxexZYGEEojsaDEN5PnC7TLeYTd7zUpFrmQ==
+X-Received: by 2002:a17:90a:80c2:: with SMTP id k2mr30090534pjw.6.1589314865246;
+        Tue, 12 May 2020 13:21:05 -0700 (PDT)
 Received: from builder.lan (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id o11sm11110711pgp.62.2020.05.12.13.14.05
+        by smtp.gmail.com with ESMTPSA id u5sm11055229pgi.70.2020.05.12.13.21.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 13:14:06 -0700 (PDT)
-Date:   Tue, 12 May 2020 13:12:33 -0700
+        Tue, 12 May 2020 13:21:04 -0700 (PDT)
+Date:   Tue, 12 May 2020 13:19:31 -0700
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Sivaprakash Murugesan <sivaprak@codeaurora.org>
 Cc:     agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
         robh+dt@kernel.org, jassisinghbrar@gmail.com,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V4 5/8] clk: qcom: Add ipq apss clock controller
-Message-ID: <20200512201233.GI2165@builder.lan>
+Subject: Re: [PATCH V4 7/8] mailbox: qcom: Add ipq6018 apcs compatible
+Message-ID: <20200512201931.GJ2165@builder.lan>
 References: <1588573224-3038-1-git-send-email-sivaprak@codeaurora.org>
- <1588573224-3038-6-git-send-email-sivaprak@codeaurora.org>
+ <1588573224-3038-8-git-send-email-sivaprak@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1588573224-3038-6-git-send-email-sivaprak@codeaurora.org>
+In-Reply-To: <1588573224-3038-8-git-send-email-sivaprak@codeaurora.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
@@ -69,175 +69,97 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 On Sun 03 May 23:20 PDT 2020, Sivaprakash Murugesan wrote:
 
-> The CPU on Qualcomm ipq platform is clocked primarily by a aplha PLL
-> and xo which are connected to a mux and enable block.
+> The Qualcomm ipq6018 has apcs block, add compatible for the same.
+> Also, the apcs provides a clock controller functionality similar
+> to msm8916 but the clock driver is different.
 > 
-> Add support for the mux and enable block which feeds the CPU on ipq
-> based devices.
+> Create a child platform device based on the apcs compatible for the
+> clock controller functionality.
 > 
+> Signed-off-by: Sivaprakash Murugesan <sivaprak@codeaurora.org>
+> ---
+>  drivers/mailbox/qcom-apcs-ipc-mailbox.c | 26 +++++++++++++++++---------
+>  1 file changed, 17 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/mailbox/qcom-apcs-ipc-mailbox.c b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
+> index eeebafd..7c0c4b0 100644
+> --- a/drivers/mailbox/qcom-apcs-ipc-mailbox.c
+> +++ b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
+> @@ -45,6 +45,16 @@ static const struct mbox_chan_ops qcom_apcs_ipc_ops = {
+>  	.send_data = qcom_apcs_ipc_send_data,
+>  };
+>  
+> +static const struct of_device_id apcs_clk_match_table[] = {
+> +	{ .compatible = "qcom,msm8916-apcs-kpss-global",
+> +	  .data = "qcom-apcs-msm8916-clk", },
 
-As with the A53 binding, I don't believe that this driver will support
-all past, present and future IPQ APSSs. Please make it more specific.
+These are easier to read if you ignore the 80-char limit.
+Unless Jassi's object that is.
+
+> +	{ .compatible = "qcom,qcs404-apcs-apps-global",
+> +	  .data = "qcom-apcs-msm8916-clk", },
+> +	{ .compatible = "qcom,ipq6018-apcs-apps-global",
+
+Add your entry on top, to maintain sort order.
+
+> +	  .data = "qcom,apss-ipq-clk", },
+> +	{}
+> +};
+> +
+>  static int qcom_apcs_ipc_probe(struct platform_device *pdev)
+>  {
+>  	struct qcom_apcs_ipc *apcs;
+> @@ -54,11 +64,7 @@ static int qcom_apcs_ipc_probe(struct platform_device *pdev)
+>  	void __iomem *base;
+>  	unsigned long i;
+>  	int ret;
+> -	const struct of_device_id apcs_clk_match_table[] = {
+> -		{ .compatible = "qcom,msm8916-apcs-kpss-global", },
+> -		{ .compatible = "qcom,qcs404-apcs-apps-global", },
+> -		{}
+> -	};
+> +	const struct of_device_id *clk_device;
+>  
+>  	apcs = devm_kzalloc(&pdev->dev, sizeof(*apcs), GFP_KERNEL);
+>  	if (!apcs)
+> @@ -93,11 +99,12 @@ static int qcom_apcs_ipc_probe(struct platform_device *pdev)
+>  		return ret;
+>  	}
+>  
+> -	if (of_match_device(apcs_clk_match_table, &pdev->dev)) {
+> +	clk_device = of_match_device(apcs_clk_match_table, &pdev->dev);
+
+Better use of_device_match_data() and get the string directly (or NULL).
+
+> +	if (clk_device) {
+>  		apcs->clk = platform_device_register_data(&pdev->dev,
+> -							  "qcom-apcs-msm8916-clk",
+> -							  PLATFORM_DEVID_NONE,
+> -							  NULL, 0);
+> +						(const char *)clk_device->data,
+> +						PLATFORM_DEVID_NONE,
+> +						NULL, 0);
+
+I didn't apply the patch to look for myself, but please ensure to
+maintain indentation to follow the parenthesis on the line before.
+
+>  		if (IS_ERR(apcs->clk))
+>  			dev_err(&pdev->dev, "failed to register APCS clk\n");
+>  	}
+> @@ -127,6 +134,7 @@ static const struct of_device_id qcom_apcs_ipc_of_match[] = {
+>  	{ .compatible = "qcom,sdm845-apss-shared", .data = (void *)12 },
+>  	{ .compatible = "qcom,sm8150-apss-shared", .data = (void *)12 },
+>  	{ .compatible = "qcom,ipq8074-apcs-apps-global", .data = (void *)8 },
+> +	{ .compatible = "qcom,ipq6018-apcs-apps-global", .data = (void *)8 },
+
+Add it one line up and you'll maintain partial sorting...
 
 Regards,
 Bjorn
 
-> Signed-off-by: Sivaprakash Murugesan <sivaprak@codeaurora.org>
-> ---
-> [V4]
->  * Addressed review comments
->  drivers/clk/qcom/Kconfig    |  11 +++++
->  drivers/clk/qcom/Makefile   |   1 +
->  drivers/clk/qcom/apss-ipq.c | 106 ++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 118 insertions(+)
->  create mode 100644 drivers/clk/qcom/apss-ipq.c
-> 
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index e70aa01..8d8465e 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -97,6 +97,17 @@ config IPQ_APSS_PLL
->  	  Say Y if you want to support CPU frequency scaling on ipq based
->  	  devices.
->  
-> +config IPQ_APSS
-> +	tristate "IPQ APSS Clock Controller"
-> +	select IPQ_APSS_PLL
-> +	depends on QCOM_APCS_IPC || COMPILE_TEST
-> +	help
-> +	  Support for APSS clock controller on IPQ platforms. The
-> +	  APSS clock controller manages the Mux and enable block that feeds the
-> +	  CPUs.
-> +	  Say Y if you want to support CPU frequency scaling on
-> +	  ipq based devices.
-> +
->  config IPQ_GCC_4019
->  	tristate "IPQ4019 Global Clock Controller"
->  	help
-> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-> index b4a6ba1..aab7a58 100644
-> --- a/drivers/clk/qcom/Makefile
-> +++ b/drivers/clk/qcom/Makefile
-> @@ -20,6 +20,7 @@ clk-qcom-$(CONFIG_QCOM_GDSC) += gdsc.o
->  obj-$(CONFIG_APQ_GCC_8084) += gcc-apq8084.o
->  obj-$(CONFIG_APQ_MMCC_8084) += mmcc-apq8084.o
->  obj-$(CONFIG_IPQ_APSS_PLL) += apss-ipq-pll.o
-> +obj-$(CONFIG_IPQ_APSS) += apss-ipq.o
->  obj-$(CONFIG_IPQ_GCC_4019) += gcc-ipq4019.o
->  obj-$(CONFIG_IPQ_GCC_6018) += gcc-ipq6018.o
->  obj-$(CONFIG_IPQ_GCC_806X) += gcc-ipq806x.o
-> diff --git a/drivers/clk/qcom/apss-ipq.c b/drivers/clk/qcom/apss-ipq.c
-> new file mode 100644
-> index 0000000..59ed8e7
-> --- /dev/null
-> +++ b/drivers/clk/qcom/apss-ipq.c
-> @@ -0,0 +1,106 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2018, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/err.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/regmap.h>
-> +#include <linux/module.h>
-> +
-> +#include <dt-bindings/clock/qcom,apss-ipq.h>
-> +
-> +#include "common.h"
-> +#include "clk-regmap.h"
-> +#include "clk-branch.h"
-> +#include "clk-alpha-pll.h"
-> +#include "clk-regmap-mux.h"
-> +
-> +enum {
-> +	P_XO,
-> +	P_APSS_PLL_EARLY,
-> +};
-> +
-> +static const struct clk_parent_data parents_apcs_alias0_clk_src[] = {
-> +	{ .fw_name = "xo" },
-> +	{ .fw_name = "pll" },
-> +};
-> +
-> +static const struct parent_map parents_apcs_alias0_clk_src_map[] = {
-> +	{ P_XO, 0 },
-> +	{ P_APSS_PLL_EARLY, 5 },
-> +};
-> +
-> +static struct clk_regmap_mux apcs_alias0_clk_src = {
-> +	.reg = 0x0050,
-> +	.width = 3,
-> +	.shift = 7,
-> +	.parent_map = parents_apcs_alias0_clk_src_map,
-> +	.clkr.hw.init = &(struct clk_init_data){
-> +		.name = "apcs_alias0_clk_src",
-> +		.parent_data = parents_apcs_alias0_clk_src,
-> +		.num_parents = 2,
-> +		.ops = &clk_regmap_mux_closest_ops,
-> +		.flags = CLK_SET_RATE_PARENT,
-> +	},
-> +};
-> +
-> +static struct clk_branch apcs_alias0_core_clk = {
-> +	.halt_reg = 0x0058,
-> +	.clkr = {
-> +		.enable_reg = 0x0058,
-> +		.enable_mask = BIT(0),
-> +		.hw.init = &(struct clk_init_data){
-> +			.name = "apcs_alias0_core_clk",
-> +			.parent_hws = (const struct clk_hw *[]){
-> +				&apcs_alias0_clk_src.clkr.hw },
-> +			.num_parents = 1,
-> +			.flags = CLK_SET_RATE_PARENT,
-> +			.ops = &clk_branch2_ops,
-> +		},
-> +	},
-> +};
-> +
-> +static const struct regmap_config apss_ipq_regmap_config = {
-> +	.reg_bits       = 32,
-> +	.reg_stride     = 4,
-> +	.val_bits       = 32,
-> +	.max_register   = 0x1000,
-> +	.fast_io        = true,
-> +};
-> +
-> +static struct clk_regmap *apss_ipq_clks[] = {
-> +	[APCS_ALIAS0_CLK_SRC] = &apcs_alias0_clk_src.clkr,
-> +	[APCS_ALIAS0_CORE_CLK] = &apcs_alias0_core_clk.clkr,
-> +};
-> +
-> +static const struct qcom_cc_desc apss_ipq_desc = {
-> +	.config = &apss_ipq_regmap_config,
-> +	.clks = apss_ipq_clks,
-> +	.num_clks = ARRAY_SIZE(apss_ipq_clks),
-> +};
-> +
-> +static int apss_ipq_probe(struct platform_device *pdev)
-> +{
-> +	struct regmap *regmap;
-> +
-> +	regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> +	if (IS_ERR(regmap))
-> +		return PTR_ERR(regmap);
-> +
-> +	return qcom_cc_really_probe(pdev, &apss_ipq_desc, regmap);
-> +}
-> +
-> +static struct platform_driver apss_ipq_driver = {
-> +	.probe = apss_ipq_probe,
-> +	.driver = {
-> +		.name   = "qcom,apss-ipq-clk",
-> +	},
-> +};
-> +
-> +module_platform_driver(apss_ipq_driver);
-> +
-> +MODULE_DESCRIPTION("QCOM APSS IPQ CLK Driver");
-> +MODULE_LICENSE("GPL v2");
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, qcom_apcs_ipc_of_match);
 > -- 
 > 2.7.4
 > 
