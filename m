@@ -2,197 +2,126 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 583CE1D0C46
-	for <lists+linux-clk@lfdr.de>; Wed, 13 May 2020 11:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB961D1048
+	for <lists+linux-clk@lfdr.de>; Wed, 13 May 2020 12:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732408AbgEMJcQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 13 May 2020 05:32:16 -0400
-Received: from alexa-out-blr-02.qualcomm.com ([103.229.18.198]:57584 "EHLO
-        alexa-out-blr-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730494AbgEMJcP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 13 May 2020 05:32:15 -0400
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by alexa-out-blr-02.qualcomm.com with ESMTP/TLS/AES256-SHA; 13 May 2020 15:01:35 +0530
-Received: from gokulsri-linux.qualcomm.com ([10.201.2.207])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 13 May 2020 15:01:09 +0530
-Received: by gokulsri-linux.qualcomm.com (Postfix, from userid 432570)
-        id 475522178A; Wed, 13 May 2020 15:01:07 +0530 (IST)
-From:   Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
-To:     gokulsri@codeaurora.org, sboyd@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, david.brown@linaro.org,
-        devicetree@vger.kernel.org, jassisinghbrar@gmail.com,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        mark.rutland@arm.com, mturquette@baylibre.com, ohad@wizery.com,
-        robh+dt@kernel.org, sricharan@codeaurora.org,
-        nprakash@codeaurora.org
-Subject: [PATCH V5 10/10] arm64: dts: qcom: Enable Q6v5 WCSS for ipq8074 SoC
-Date:   Wed, 13 May 2020 15:01:05 +0530
-Message-Id: <1589362265-22702-11-git-send-email-gokulsri@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1589362265-22702-1-git-send-email-gokulsri@codeaurora.org>
-References: <1589362265-22702-1-git-send-email-gokulsri@codeaurora.org>
+        id S1730405AbgEMKwm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 13 May 2020 06:52:42 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:34764 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726907AbgEMKwm (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 13 May 2020 06:52:42 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200513105240euoutp020d11e3c9030ee9725ad0428c5abcf690~OkQL3ck-j2333023330euoutp02L
+        for <linux-clk@vger.kernel.org>; Wed, 13 May 2020 10:52:40 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200513105240euoutp020d11e3c9030ee9725ad0428c5abcf690~OkQL3ck-j2333023330euoutp02L
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1589367160;
+        bh=Tvf4kiVemq3r9+xmj7efrH9zjjebQE9M8zr1Vnglgw0=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=N4LSWv7C5ziBELpdgorMQwfzPFGrXJ7OfDY7XNurz4kREbUEvAipN6haBYDPoV0/q
+         J5uvT/pbm2gGg4lBdbUgFXbX9km/5rAMiO+xwMo0WqOQ6treppTViGZUYngZXeQFYl
+         CSCTrzBeUREKNQzy08ZZqibzUxzjJU7Hpq+VVnJ4=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20200513105240eucas1p19278861ad99428e2f445f51bf4e2a6fd~OkQLmvQEU0938709387eucas1p1Q;
+        Wed, 13 May 2020 10:52:40 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 9D.9B.61286.871DBBE5; Wed, 13
+        May 2020 11:52:40 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200513105239eucas1p16722b08fa553be3672e2d3e7e9227ea8~OkQLRZn1R0936409364eucas1p1p;
+        Wed, 13 May 2020 10:52:39 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200513105239eusmtrp1e215b5ce140c7c2fed7086ea6f9ad05a~OkQLQpkO33200732007eusmtrp1c;
+        Wed, 13 May 2020 10:52:39 +0000 (GMT)
+X-AuditID: cbfec7f2-f0bff7000001ef66-fe-5ebbd1784cc7
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 78.0F.07950.771DBBE5; Wed, 13
+        May 2020 11:52:39 +0100 (BST)
+Received: from [106.210.123.115] (unknown [106.210.123.115]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200513105239eusmtip20ee84c7b59a356ba31cffff0764fc36c~OkQKm4dJz0893308933eusmtip25;
+        Wed, 13 May 2020 10:52:38 +0000 (GMT)
+Subject: Re: [PATCH 1/2] clk: samsung: Mark top ISP and CAM clocks on
+ Exynos542x as critical
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-clk@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Cc:     Sylwester Nawrocki <snawrocki@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Marian Mihailescu <mihailescu2m@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+Message-ID: <f4f8566d-6a49-1bfa-8bea-fc89722b8add@samsung.com>
+Date:   Wed, 13 May 2020 12:52:38 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <20200506132659.17162-1-m.szyprowski@samsung.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHKsWRmVeSWpSXmKPExsWy7djP87oVF3fHGSxZxGqxccZ6VovrX56z
+        Wpw/v4Hd4mPPPVaLGef3MVmsPXKX3WL9tJ+sFv+ubWSxaH/6ktmB02PnrLvsHptWdbJ59G1Z
+        xejxeZNcAEsUl01Kak5mWWqRvl0CV8bS5vvMBY/YK852KDcwrmbrYuTkkBAwkeg+38bexcjF
+        ISSwglHi0MczUM4XRonvu16wQDifGSUuPV7OBNOy5so5ZojEckaJL3+XMEE4HxklJu65yQxS
+        JSwQJzHxzTmgWRwcIgL5ErPehoCEmQWamSTO3lMDsdkEDCV6j/Yxgti8AnYSn2c1gbWyCKhK
+        rPh+BSwuKhArcXrxZqgaQYmTM5+wgNicQPUve5ezQMwUl7j1ZD4ThC0vsf3tHLDjJAR2sUss
+        7dgNdoOEgIvEsWdiEA8IS7w6voUdwpaROD25hwWivplRomf3bXYIZwKjxP3jCxghqqwl7pz7
+        xQYyiFlAU2L9Ln2IsKPEzGOz2SDm80nceCsIcQOfxKRt05khwrwSHW1CENUqEr9XTYeGoZRE
+        95P/LBMYlWYh+WwWkm9mIflmFsLeBYwsqxjFU0uLc9NTiw3zUsv1ihNzi0vz0vWS83M3MQJT
+        0el/xz/tYPx6KekQowAHoxIPL0Ptrjgh1sSy4srcQ4wSHMxKIrx+63fHCfGmJFZWpRblxxeV
+        5qQWH2KU5mBREuc1XvQyVkggPbEkNTs1tSC1CCbLxMEp1cC4hpHh4qnvDj33N52/tcJXyFK4
+        1q39gNxiucyVNRI5J8q+v5NeHTiBXVfi3vyztjOrlx5w3Fa0vqt21uvphUnZ/8zUE/nefpXL
+        21DpEtwv7GknuGlv45y1jEZ/pqe+7bAQf3zw1WkJtsw179SmxPw7v949OUsm++VRnqOXPmVE
+        Bocc+r3Q+4GFEktxRqKhFnNRcSIA1QgLtUEDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrEIsWRmVeSWpSXmKPExsVy+t/xe7rlF3fHGTTs1bHYOGM9q8X1L89Z
+        Lc6f38Bu8bHnHqvFjPP7mCzWHrnLbrF+2k9Wi3/XNrJYtD99yezA6bFz1l12j02rOtk8+ras
+        YvT4vEkugCVKz6Yov7QkVSEjv7jEVina0MJIz9DSQs/IxFLP0Ng81srIVEnfziYlNSezLLVI
+        3y5BL2Np833mgkfsFWc7lBsYV7N1MXJySAiYSKy5co65i5GLQ0hgKaNE89EZLF2MHEAJKYn5
+        LUoQNcISf651sUHUvGeU+Pr1LitIQlggTmLim3PsILaIQL7EjDu9jCBFzALNTBJHH6xjhOiY
+        yCjx7vgMsCo2AUOJ3qN9jCA2r4CdxOdZTcwgNouAqsSK71fA4qICsRKrr7VC1QhKnJz5hAXE
+        5gSqf9m7HMxmFlCX+DPvEjOELS5x68l8JghbXmL72znMExiFZiFpn4WkZRaSlllIWhYwsqxi
+        FEktLc5Nzy020itOzC0uzUvXS87P3cQIjL9tx35u2cHY9S74EKMAB6MSD29E/a44IdbEsuLK
+        3EOMEhzMSiK8fut3xwnxpiRWVqUW5ccXleakFh9iNAV6biKzlGhyPjA15JXEG5oamltYGpob
+        mxubWSiJ83YIHIwREkhPLEnNTk0tSC2C6WPi4JRqYFTgkpPwlepKcpX2snacs1Hg/LoCzVuF
+        fHMqYmp9297svBld6HWpSdIy2v/AqVlnmnPWHX4u7h6+7fu+V4am9z+lH/x3//bRWgcBWbs5
+        9q6rDc6IBU75LeMm892d6cE6JvW7umH3d37LdD0SsOOWdUHVFF/PuP1rT2yRMBZb5Nrr+/3y
+        lHKLxUosxRmJhlrMRcWJAIeOMWrVAgAA
+X-CMS-MailID: 20200513105239eucas1p16722b08fa553be3672e2d3e7e9227ea8
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200506132718eucas1p27ceb5f9d146beda30723ed99151ef51a
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200506132718eucas1p27ceb5f9d146beda30723ed99151ef51a
+References: <CGME20200506132718eucas1p27ceb5f9d146beda30723ed99151ef51a@eucas1p2.samsung.com>
+        <20200506132659.17162-1-m.szyprowski@samsung.com>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Enable remoteproc WCSS PIL driver with glink
-and ssr subdevices. Also configures shared memory
-and enables smp2p and mailboxes required for IPC.
+On 06.05.2020 15:26, Marek Szyprowski wrote:
+> The TOP 'aclk*_isp', 'aclk550_cam', 'gscl_wa' and 'gscl_wb' clocks must
+> be kept enabled all the time to allow proper access to power management
+> control for the ISP and CAM power domains. The last two clocks, although
+> related to GScaler device and GSCL power domain, provides also the
+> I_WRAP_CLK signal to MIPI CSIS0/1 devices, which are a part of CAM power
+> domain and are needed for proper power on/off sequence.
+> 
+> Currently there are no drivers for the devices, which are part of CAM and
+> ISP power domains yet. This patch only fixes the race between disabling
+> the unused power domains and disabling unused clocks, which randomly
+> resulted in the following error during boot:
+> 
+> Power domain CAM disable failed
+> Power domain ISP disable failed
+> 
+> Fixes: 318fa46cc60d ("clk/samsung: exynos542x: mark some clocks as critical")
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-Signed-off-by: Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
-Signed-off-by: Sricharan R <sricharan@codeaurora.org>
-Signed-off-by: Nikhil Prakash V <nprakash@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/ipq8074.dtsi | 121 ++++++++++++++++++++++++++++++++++
- 1 file changed, 121 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index 4107614..7d7bafe 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -10,12 +10,66 @@
- 	model = "Qualcomm Technologies, Inc. IPQ8074";
- 	compatible = "qcom,ipq8074";
- 
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		smem_region: memory@4ab00000 {
-+			no-map;
-+			reg = <0x0 0x4ab00000 0x0 0x00100000>;
-+		};
-+
-+		q6_region: memory@4b000000 {
-+			no-map;
-+			reg = <0x0 0x4b000000 0x0 0x05f00000>;
-+		};
-+	};
-+
- 	firmware {
- 		scm {
- 			compatible = "qcom,scm-ipq8074", "qcom,scm";
- 		};
- 	};
- 
-+	tcsr_mutex: hwlock@193d000 {
-+		compatible = "qcom,tcsr-mutex";
-+		syscon = <&tcsr_mutex_regs 0 0x80>;
-+		#hwlock-cells = <1>;
-+	};
-+
-+	smem {
-+		compatible = "qcom,smem";
-+		memory-region = <&smem_region>;
-+		hwlocks = <&tcsr_mutex 0>;
-+	};
-+
-+	wcss: smp2p-wcss {
-+		compatible = "qcom,smp2p";
-+		qcom,smem = <435>, <428>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <0 322 1>;
-+
-+		mboxes = <&apcs_glb 9>;
-+
-+		qcom,local-pid = <0>;
-+		qcom,remote-pid = <1>;
-+
-+		wcss_smp2p_out: master-kernel {
-+			qcom,entry-name = "master-kernel";
-+			qcom,smp2p-feature-ssr-ack;
-+			#qcom,smem-state-cells = <1>;
-+		};
-+
-+		wcss_smp2p_in: slave-kernel {
-+			qcom,entry-name = "slave-kernel";
-+
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
- 	soc: soc {
- 		#address-cells = <0x1>;
- 		#size-cells = <0x1>;
-@@ -432,6 +486,73 @@
- 				      "axi_m_sticky";
- 			status = "disabled";
- 		};
-+
-+		tcsr_q6: syscon@1945000 {
-+			compatible = "syscon";
-+			reg = <0x01945000 0xe000>;
-+		};
-+
-+		tcsr_mutex_regs: syscon@193d000 {
-+			compatible = "syscon";
-+			reg = <0x01905000 0x8000>;
-+		};
-+
-+		apcs_glb: mailbox@b111000 {
-+			compatible = "qcom,ipq8074-apcs-apps-global";
-+			reg = <0x0b111000 0x1000>;
-+
-+			#mbox-cells = <1>;
-+		};
-+
-+		q6v5_wcss: q6v5_wcss@cd00000 {
-+			compatible = "qcom,ipq8074-wcss-pil";
-+			reg = <0x0cd00000 0x4040>,
-+			      <0x004ab000 0x20>;
-+			reg-names = "qdsp6",
-+				    "rmb";
-+			qca,auto-restart;
-+			qca,extended-intc;
-+			interrupts-extended = <&intc 0 325 1>,
-+					      <&wcss_smp2p_in 0 0>,
-+					      <&wcss_smp2p_in 1 0>,
-+					      <&wcss_smp2p_in 2 0>,
-+					      <&wcss_smp2p_in 3 0>;
-+			interrupt-names = "wdog",
-+					  "fatal",
-+					  "ready",
-+					  "handover",
-+					  "stop-ack";
-+
-+			resets = <&gcc GCC_WCSSAON_RESET>,
-+				 <&gcc GCC_WCSS_BCR>,
-+				 <&gcc GCC_WCSS_Q6_BCR>;
-+
-+			reset-names = "wcss_aon_reset",
-+				      "wcss_reset",
-+				      "wcss_q6_reset";
-+
-+			clocks = <&gcc GCC_PRNG_AHB_CLK>;
-+			clock-names = "prng";
-+
-+			qcom,halt-regs = <&tcsr_q6 0xa000 0xd000 0x0>;
-+
-+			qcom,smem-states = <&wcss_smp2p_out 0>,
-+					   <&wcss_smp2p_out 1>;
-+			qcom,smem-state-names = "shutdown",
-+						"stop";
-+
-+			memory-region = <&q6_region>;
-+
-+			glink-edge {
-+				interrupts = <GIC_SPI 321 IRQ_TYPE_EDGE_RISING>;
-+				qcom,remote-pid = <1>;
-+				mboxes = <&apcs_glb 8>;
-+
-+				rpm_requests {
-+					qcom,glink-channels = "IPCRTR";
-+				};
-+			};
-+		};
- 	};
- 
- 	cpus {
--- 
-2.7.4
-
+Applied, thanks.
