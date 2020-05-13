@@ -2,58 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 009F81D030A
-	for <lists+linux-clk@lfdr.de>; Wed, 13 May 2020 01:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD6B1D037B
+	for <lists+linux-clk@lfdr.de>; Wed, 13 May 2020 02:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731598AbgELX1l (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 12 May 2020 19:27:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49142 "EHLO mail.kernel.org"
+        id S1731700AbgEMAU5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 12 May 2020 20:20:57 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:56324 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726031AbgELX1k (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 12 May 2020 19:27:40 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6765620753;
-        Tue, 12 May 2020 23:27:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589326060;
-        bh=Y9+FnbQlpSb4RPN2aukkia02/1PIeKWilIaFdtihQx8=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=MzGZmwzsR/TZHjURU5ETxm4UO57HfQ9OfDho0RnroKPSeIHVybIqvUozvfHhbwJ6D
-         z+G7URbyv1lM0TfcEp3Nay4gUOLINeXwouTv76djoCubzl+e8+hVNgshY/tTkvxFZJ
-         EeZ700gGcPiyhV/47y1OUuQY3egTq6sbrZCy9HiM=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200507075026.31941-1-geert+renesas@glider.be>
-References: <20200507075026.31941-1-geert+renesas@glider.be>
-Subject: Re: [PATCH] dt-bindings: clock: renesas: div6: Convert to json-schema
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 12 May 2020 16:27:39 -0700
-Message-ID: <158932605967.215346.579509459834719291@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+        id S1731604AbgEMAU4 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 12 May 2020 20:20:56 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 7049C1A12A9;
+        Wed, 13 May 2020 02:20:54 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 97B7D1A12A5;
+        Wed, 13 May 2020 02:20:49 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 4A5B0402BE;
+        Wed, 13 May 2020 08:20:43 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH V5 0/5] Convert i.MX6 SoCs clock bindings to json-schma
+Date:   Wed, 13 May 2020 08:11:19 +0800
+Message-Id: <1589328684-1397-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Geert Uytterhoeven (2020-05-07 00:50:26)
-> Convert the Renesas CPG DIV6 Clock Device Tree binding documentation to
-> json-schema.
->=20
-> Drop R-Car Gen2 compatible values, which were obsoleted by the unified
-> "Renesas Clock Pulse Generator / Module Standby and Software Reset" DT
-> bindings.
-> Update the example to match reality.
->=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
+Converts i.MX6Q/i.MX6SX/i.MX6SL/i.MX6SLL/i.MX6UL clock bindings to
+json-schma format.
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Changes since V4:
+	- add descriptions for interrupts and each item of it.
+
+Anson Huang (5):
+  dt-bindings: clock: Convert i.MX6Q clock to json-schema
+  dt-bindings: clock: Convert i.MX6SX clock to json-schema
+  dt-bindings: clock: Convert i.MX6SL clock to json-schema
+  dt-bindings: clock: Convert i.MX6SLL clock to json-schema
+  dt-bindings: clock: Convert i.MX6UL clock to json-schema
+
+ .../devicetree/bindings/clock/imx6q-clock.txt      | 41 ------------
+ .../devicetree/bindings/clock/imx6q-clock.yaml     | 72 ++++++++++++++++++++++
+ .../devicetree/bindings/clock/imx6sl-clock.txt     | 10 ---
+ .../devicetree/bindings/clock/imx6sl-clock.yaml    | 48 +++++++++++++++
+ .../devicetree/bindings/clock/imx6sll-clock.txt    | 36 -----------
+ .../devicetree/bindings/clock/imx6sll-clock.yaml   | 66 ++++++++++++++++++++
+ .../devicetree/bindings/clock/imx6sx-clock.txt     | 13 ----
+ .../devicetree/bindings/clock/imx6sx-clock.yaml    | 70 +++++++++++++++++++++
+ .../devicetree/bindings/clock/imx6ul-clock.txt     | 13 ----
+ .../devicetree/bindings/clock/imx6ul-clock.yaml    | 66 ++++++++++++++++++++
+ 10 files changed, 322 insertions(+), 113 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/imx6q-clock.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/imx6q-clock.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/imx6sl-clock.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/imx6sl-clock.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/imx6sll-clock.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/imx6sll-clock.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/imx6sx-clock.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/imx6sx-clock.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/imx6ul-clock.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/imx6ul-clock.yaml
+
+-- 
+2.7.4
+
