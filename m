@@ -2,127 +2,98 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D68D1D5528
-	for <lists+linux-clk@lfdr.de>; Fri, 15 May 2020 17:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A75D1D5720
+	for <lists+linux-clk@lfdr.de>; Fri, 15 May 2020 19:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbgEOPww (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 15 May 2020 11:52:52 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:10492 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726250AbgEOPww (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 15 May 2020 11:52:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1589557971; x=1621093971;
-  h=references:from:to:cc:subject:in-reply-to:date:
-   message-id:mime-version;
-  bh=DT1liw8u3FiqTUb6GhvHyfaThMNxutoSlfg3fkyelUI=;
-  b=ORLY53TB/xF7YGeQmJxPqtg/L+aq6lXgzHUPlV8IdFYspUIi29OopX/x
-   FcsuCYKAMYE9HOJU1xKZ07OBBLaFn9EnwtG+ImsyHT4STXwLvjJObF2rN
-   E+w3zMsC3BPUTmQIPoT0s1GBFidjnfLM9tN3oW4aDwW1ubLb3m/x2Ktv6
-   sVwgH98Oy1rS7QsEXMskyerXk70wtdmVyuenHepHwD6bBea4GZ/t1bYuN
-   P7xpuxyN0i0B0be7dkmwTE6BGCdxuwmi6UnNEIKucQwFqacRJ6QrV9K/i
-   YByRE1z+F1BX84PIhcZ7xFgoMv/40kZnu2F4DQhg7tGG0EI0In54wWuzL
-   A==;
-IronPort-SDR: ICu01KXEUFTELz9+q4Bnk3/5o0+7ZDR8cNHr+wFVRriw8cMa6LNxnLsS2rUWo/pBqtfDBEUDMh
- UioiNPZw09VcW8U3kSt9Q8b4Duy7/TtvIHtVunCZldj61/DIs6xCf5tYcnjb9od08vPgBz0McP
- JQNO7hWvLo8fRcAeFMicg6+9NhPA8BcJOnOXQ2uQQZ6L+YRD9U4cf1u8MotCTU+gNvd/YtZy8c
- WSIfrz4sVn2eTAIVy3namJZxzY7JQ4YxKOjPnhmBITMNvM7RPLsnndjgQMw1cYjPtRuS1ADJbA
- vOA=
-X-IronPort-AV: E=Sophos;i="5.73,395,1583218800"; 
-   d="scan'208";a="75403050"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 May 2020 08:52:50 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 15 May 2020 08:52:50 -0700
-Received: from soft-dev15.microsemi.net.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5
- via Frontend Transport; Fri, 15 May 2020 08:52:50 -0700
-References: <20200513125532.24585-10-lars.povlsen@microchip.com> <202005150200.wnjISCrm%lkp@intel.com>
-From:   Lars Povlsen <lars.povlsen@microchip.com>
-To:     kbuild test robot <lkp@intel.com>
-CC:     SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        <kbuild-all@lists.01.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        "Steen Hegelund" <Steen.Hegelund@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Olof Johansson <olof@lixom.net>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 09/14] pinctrl: ocelot: Add Sparx5 SoC support
-In-Reply-To: <202005150200.wnjISCrm%lkp@intel.com>
-Date:   Fri, 15 May 2020 17:52:46 +0200
-Message-ID: <87y2ptnqk1.fsf@soft-dev15.microsemi.net>
+        id S1726191AbgEORMs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 15 May 2020 13:12:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41470 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726183AbgEORMs (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 15 May 2020 13:12:48 -0400
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A1B78206C0;
+        Fri, 15 May 2020 17:12:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589562768;
+        bh=EwGY+MoNBkSyft3S/X2OQ943UQiliBzaUB3sMvP45qk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Qkpn1rx2fO7VBBWAguRho9/hhGaeqkssyzeUQzyAMMpJnf0Y7gv2dAe82V23wJbCH
+         fgogqXmzgXOO72sz93W1uavTF1Is33gZy+HGZW7cNM+H4f7JmF9VzRoiIzLZB6Hx+V
+         Idkn/CJhueIzloCTDk1wjq61HsGtvlEpr/RCUfH0=
+Date:   Fri, 15 May 2020 19:12:45 +0200
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Maxime Ripard <mripard@kernel.org>, linux-clk@vger.kernel.org,
+        Chen-Yu Tsai <wens@csie.org>
+Subject: [GIT PULL] Allwinner Clock Changes for 5.8
+Message-ID: <e18bd659-6a8f-4a4f-8308-8e5091ca8b45.lettre@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="UugvWAfsgieZRqgk"
+Content-Disposition: inline
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 
-kbuild test robot writes:
+--UugvWAfsgieZRqgk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->
-> Hi Lars,
->
-> I love your patch! Perhaps something to improve:
->
-> [auto build test WARNING on robh/for-next]
-> [also build test WARNING on pinctrl/devel clk/clk-next linus/master v5.7-rc5 next-20200512]
-> [if your patch is applied to the wrong git tree, please drop us a note to help
-> improve the system. BTW, we also suggest to use '--base' option to specify the
-> base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
->
-> url:    https://github.com/0day-ci/linux/commits/Lars-Povlsen/Adding-support-for-Microchip-Sparx5-SoC/20200514-163536
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-> config: powerpc-allyesconfig (attached as .config)
-> compiler: powerpc64-linux-gcc (GCC) 9.3.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day GCC_VERSION=9.3.0 make.cross ARCH=powerpc
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kbuild test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>, old ones prefixed by <<):
->
->>> drivers/pinctrl/pinctrl-ocelot.c:28: warning: "clrsetbits" redefined
-> 28 | #define clrsetbits(addr, clear, set)          |
-> In file included from include/linux/io.h:13,
-> from include/linux/irq.h:20,
-> from include/linux/gpio/driver.h:7,
-> from drivers/pinctrl/pinctrl-ocelot.c:10:
-> arch/powerpc/include/asm/io.h:849: note: this is the location of the previous definition
-> 849 | #define clrsetbits(type, addr, clear, set)          |
->
-> vim +/clrsetbits +28 drivers/pinctrl/pinctrl-ocelot.c
->
->     27
->   > 28  #define clrsetbits(addr, clear, set) \
->     29          writel((readl(addr) & ~(clear)) | (set), (addr))
->     30
->
+Hi,
 
-I'll change the code to avoid the name clash.
+Please pull the following changes for the next release.
 
-Thanks,
+Thanks!
+Maxime
+
+The following changes since commit 8f3d9f354286745c751374f5f1fcafee6b3f3136:
+
+  Linux 5.7-rc1 (2020-04-12 12:35:55 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git refs/tags/sunxi-clk-for-5.8-1
+
+for you to fetch changes up to ee25d9742dabed3fd18158b518f846abeb70f319:
+
+  clk: sunxi: Fix incorrect usage of round_down() (2020-04-14 09:21:05 +0200)
+
+----------------------------------------------------------------
+This time we only have a single minor rounding fix for the legacy
+Allwinner clock support.
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXr7NfAAKCRDj7w1vZxhR
+xXarAP4wdfOSI6mpPQstJnueouvozab7dSOAJhZCdyy6gD+SHQD/arhVv5dPyAub
+MUA0yjWdgCGSrD+UQjLwSb/RsinoVgA=
+=2qN3
+-----END PGP SIGNATURE-----
+
+----------------------------------------------------------------
+Rikard Falkeborn (1):
+      clk: sunxi: Fix incorrect usage of round_down()
 
 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/clk/sunxi/clk-sunxi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Lars Povlsen,
-Microchip
+
+
+--UugvWAfsgieZRqgk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXr7NjQAKCRDj7w1vZxhR
+xZoLAQD/9YigNJFFnX8mFRwxyxEVzsNrfVUbv92elrNT8zxqxgD/aH2PmctKZzJt
+XZiE0Nb93YEKo3ERHgSNcr+iRqBA1QE=
+=6u0v
+-----END PGP SIGNATURE-----
+
+--UugvWAfsgieZRqgk--
