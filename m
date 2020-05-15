@@ -2,187 +2,83 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E48281D4B18
-	for <lists+linux-clk@lfdr.de>; Fri, 15 May 2020 12:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F431D5069
+	for <lists+linux-clk@lfdr.de>; Fri, 15 May 2020 16:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728079AbgEOKdG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 15 May 2020 06:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728048AbgEOKdF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 15 May 2020 06:33:05 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66187C061A0C;
-        Fri, 15 May 2020 03:33:05 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id n11so1993795ilj.4;
-        Fri, 15 May 2020 03:33:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uxCT2XVxCtoNmTqiWhqBcEudlvFd9wfrP50N1uK7vP0=;
-        b=CEpylQx8/jmoucaFxOo6aDvRXqpObt3GOf3QrRyhcuqdkgrNf1lSuUtWU6UwC8nV1S
-         K+DOmwilg/Su+oxqQRNpuw5BhEJzEnUgmkfMeb1QnS2dglQiL3VeTsFf360Qb+lPaXbT
-         0nQQnlMc9696yhdUynH2cBEM6k1fMa3/3F3c2l8oJ27Z1IFD5oB4cjLYuvD4v7pLri3G
-         0xv6Bymoqgq33uYlm9zg8EA2fYhDFv34nSO0Th6tb8BoyWAg03s5OSGrP2Dr7GVzGUfS
-         4df6x/6gUqLeiPKccFIeBBtZeqnNF2UOUQ8eXik4yu/qS6URNVCNYGYQcHek958U0tWA
-         pjGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uxCT2XVxCtoNmTqiWhqBcEudlvFd9wfrP50N1uK7vP0=;
-        b=E43ozhrqq3yLsQP1QL95zYYSTg+dWhwxtUPenZg7HxOBr9zHcqCzrbRF0xvA30Grg3
-         AAGhvQkk/+uzDIk1eztaVjCjtmAVx8iFHUTAVD8QFlvZ5JiuLbETV7ODRrp8i2ZEyG5T
-         Wgs1DgDi9k9b/fCDJBNFmlexhTI9JzFaFedv3201GUnxSdn1fsAT8Oswc5Orwfa92lmd
-         PdMkOcdlYojElL+PnAiRkxWfgmN5MVoWxXTMkqXvfkleDba/2Xy8PIUK9VOB6aE5BPuQ
-         AqqQAzNTX+PpgOuA/pydUXV63hwmUhREcXsTDkO2Jx3OItnFPZscGEUIVJTp8yjykiSr
-         A++A==
-X-Gm-Message-State: AOAM531SbmIOIeIMc4DCbhWhw0BMw9pRQiDrU3S1Zv3sNaUrNvC5BnJd
-        tWfp0RZveL0vam+opF4/LS/FLHedSZM8JJ5vmAY=
-X-Google-Smtp-Source: ABdhPJzaWAkOj9ePr5WQ4WHJ7n0TNGqqxQVutiX22A22NsEmGBBEDDIzhAQZOVUh6ahtJoIJUaUjWwbwXnRetbDtAY0=
-X-Received: by 2002:a92:a1c9:: with SMTP id b70mr2367268ill.184.1589538784758;
- Fri, 15 May 2020 03:33:04 -0700 (PDT)
+        id S1726144AbgEOO1u (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 15 May 2020 10:27:50 -0400
+Received: from esa4.microchip.iphmx.com ([68.232.154.123]:49885 "EHLO
+        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726140AbgEOO1u (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 15 May 2020 10:27:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1589552869; x=1621088869;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0AgeZMJbdU9KyuRMCIUBu9McO6vER1rNgjfIxpR274I=;
+  b=KRvNnNJB0HVfuseGhqUR63+tun9Xkdo6d/3QrajlL0Tfh9Jc17y170Yb
+   kD5c6nM5fsesBe8rS6H9hUsJnZ2/MllbY+3agriQnImwOTuvQU/IpWC78
+   q/BYCzaviqRISummCmCUx5TMKcILJX3IShHMHWWHo5Vll2S5TudZtTvhd
+   zqDBWWQKG1WeC7l4ud8e2Gej1WV55kea+4SUCAT94hTPuIUnN12Ktrh9P
+   sVTfoHV5xjJzWssdjN0rATcCGmTU23Jv+AJTxQR/i6/5OI7a+qsTwHc6Y
+   NiXmo2A6NGJ+4rn5Y2/6OoiGefoR3T9jUZ/A4o/yIA2XSbzp6CFtDyn7u
+   A==;
+IronPort-SDR: zUxu1mdSuJ3C0VOKq9t5RCnhqUBxbNxPvczwXo6LzTRvz2lQnXu5v7wXQKdVigzrMMpTz+EdSc
+ /MirwJyXyPyEidppEp8ncornFCklQ36fIhbgdDnhbU8rN9l6orsNmkgOhAjAEXM8UuqQ/ySa5E
+ +a7PjsZosn5Ix6XFhtnJfPzZ3yXxevmfP4rlZunzd5bqvt19NPOqhgDkrvvj98X+VjL5NxGyoj
+ i1pXdHglL1KVHqkuXR/eAM1KydX0NQ9Ueihi0USx9WZ4syPGEFkz2ZHuDoruZcE7S6ETh73DxU
+ aJg=
+X-IronPort-AV: E=Sophos;i="5.73,395,1583218800"; 
+   d="scan'208";a="73584368"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 May 2020 07:27:49 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 15 May 2020 07:27:50 -0700
+Received: from rob-ult-m19940.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.1713.5 via Frontend Transport; Fri, 15 May 2020 07:27:30 -0700
+From:   Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+To:     <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <ludovic.desroches@microchip.com>, <eugen.hristev@microchip.com>,
+        "Codrin Ciubotariu" <codrin.ciubotariu@microchip.com>
+Subject: [PATCH] clk: at91: Add peripheral clock for PTC
+Date:   Fri, 15 May 2020 17:27:20 +0300
+Message-ID: <20200515142720.290206-1-codrin.ciubotariu@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <1589267017-17294-1-git-send-email-dillon.minfei@gmail.com>
- <1589267017-17294-4-git-send-email-dillon.minfei@gmail.com>
- <CACRpkda5VjjBdbruXTi33QBNb=VU6vK2zDE8yyQXoWw7=NQFeg@mail.gmail.com>
- <a4ebd7cd-5756-0683-135f-0f96be8a4a7b@st.com> <CAL9mu0Jt_xwo5pJfcx6G3grBuOaxLXvakpEjiB4gV3=bkiq2fg@mail.gmail.com>
- <818b93b4-4431-8338-cd90-ed125ecac615@st.com> <CAL9mu0L6d2V5qypPfOSeMdhc=DdHkcsaF4GysNG-vfDe5npkhw@mail.gmail.com>
- <2afd2853-e3bc-0c69-a0e5-8d4aa631a634@st.com>
-In-Reply-To: <2afd2853-e3bc-0c69-a0e5-8d4aa631a634@st.com>
-From:   dillon min <dillon.minfei@gmail.com>
-Date:   Fri, 15 May 2020 18:32:28 +0800
-Message-ID: <CAL9mu0J7s589e7weQ7vyi1iFCwPOmmyFHwqhwWfYwWVqJpN+Dw@mail.gmail.com>
-Subject: Re: [Linux-stm32] [PATCH v3 3/5] ARM: dts: stm32: enable ltdc binding
- with ili9341 on stm32429-disco board
-To:     Benjamin GAIGNARD <benjamin.gaignard@st.com>
-Cc:     Alexandre TORGUE <alexandre.torgue@st.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Dave Airlie <airlied@linux.ie>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Benjamin,
+PMC generates the peripheral clock for the PTC.
 
-got it, thanks a lot.
+Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+---
+ drivers/clk/at91/sama5d2.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-best regards
+diff --git a/drivers/clk/at91/sama5d2.c b/drivers/clk/at91/sama5d2.c
+index ff7e3f727082..73b287fbecb8 100644
+--- a/drivers/clk/at91/sama5d2.c
++++ b/drivers/clk/at91/sama5d2.c
+@@ -89,6 +89,7 @@ static const struct {
+ 	{ .n = "i2s1_clk",    .id = 55, .r = { .min = 0, .max = 83000000 }, },
+ 	{ .n = "can0_clk",    .id = 56, .r = { .min = 0, .max = 83000000 }, },
+ 	{ .n = "can1_clk",    .id = 57, .r = { .min = 0, .max = 83000000 }, },
++	{ .n = "ptc_clk",     .id = 58, .r = { .min = 0, .max = 83000000 }, },
+ 	{ .n = "classd_clk",  .id = 59, .r = { .min = 0, .max = 83000000 }, },
+ };
+ 
+-- 
+2.25.1
 
-Dillon
-
-On Fri, May 15, 2020 at 5:34 PM Benjamin GAIGNARD
-<benjamin.gaignard@st.com> wrote:
->
->
->
-> On 5/15/20 11:24 AM, dillon min wrote:
-> > Hi Benjamin,
-> >
-> > thanks for reply.
-> >
-> > On Fri, May 15, 2020 at 4:31 PM Benjamin GAIGNARD
-> > <benjamin.gaignard@st.com> wrote:
-> >>
-> >>
-> >> On 5/14/20 3:07 PM, dillon min wrote:
-> >>> Hi Alexandre,
-> >>>
-> >>> On Thu, May 14, 2020 at 8:53 PM Alexandre Torgue
-> >>> <alexandre.torgue@st.com> wrote:
-> >>>>
-> >>>> On 5/14/20 10:24 AM, Linus Walleij wrote:
-> >>>>> On Tue, May 12, 2020 at 9:04 AM <dillon.minfei@gmail.com> wrote:
-> >>>>>
-> >>>>>> From: dillon min <dillon.minfei@gmail.com>
-> >>>>>>
-> >>>>>> Enable the ltdc & ili9341 on stm32429-disco board.
-> >>>>>>
-> >>>>>> Signed-off-by: dillon min <dillon.minfei@gmail.com>
-> >>>>> This mostly looks good but...
-> >>>>>
-> >>>>>> +&spi5 {
-> >>>>>> +       status = "okay";
-> >>>>>> +       pinctrl-0 = <&spi5_pins>;
-> >>>>>> +       pinctrl-names = "default";
-> >>>>>> +       #address-cells = <1>;
-> >>>>>> +       #size-cells = <0>;
-> >>>>>> +       cs-gpios = <&gpioc 2 GPIO_ACTIVE_LOW>;
-> >>>>>> +       dmas = <&dma2 3 2 0x400 0x0>,
-> >>>>>> +              <&dma2 4 2 0x400 0x0>;
-> >>>>>> +       dma-names = "rx", "tx";
-> >>>>> These DMA assignments seem to be SoC things and should
-> >>>>> rather be in the DTS(I) file where &spi5 is defined, right?
-> >>>>> stm32f429.dtsi I suppose?
-> >>>> I agree with Linus, DMA have to be defined in SoC dtsi. And if a board
-> >>>> doesn't want to use it, we use the "delete-property".
-> >>> Yes, will move to Soc dtsi in next submits.
-> >>>
-> >>> i'm working on write a v4l2-m2m driver for dma2d of stm32 to support
-> >>> pixel conversion
-> >>> alpha blending between foreground and background graphics.
-> >>>
-> >>> as you know, some soc's engineer trying to add this function to drm system.
-> >>>
-> >>> do you know st's planning about soc's hardware accelerator driver on stm32mp?
-> >>> such as chrom-art, will add to drm subsystem via ioctl to access, or to v4l2,
-> >> On stm32mp we do not plan to use chrom-art in drm or v4l2 because it
-> >> does fit
-> >> with userland way of working. We use the GPU to do conversion, scaling,
-> >> blending
-> >> and composition in only one go.
-> >> As explain here [1] DRM subsytem it isn't a solution and v4l2-m2m isn't
-> >> used in any
-> >> mainline compositors like Weston or android surfaceflinger.
-> >>
-> >> Benjamin
-> >>
-> > After check stm32mp's datasheets, they don't have chrom-art ip inside. sorry for
-> > didn't check it yet.
-> >
-> > for stm32h7 series with chrom-art, jpeg hardware accelerator inside.
-> > does st has plan to
-> > setup a driver to support it ? i prefer v4l2-m2m should be easier to
-> > implement it.
-> > co work with dcmi, fbdev.
-> ST doesn't plan to create a driver for chrom-art because nothing in
-> mainline
-> userland could use it.
->
-> Benjamin
-> >
-> > thanks.
-> >
-> > best regards.
-> >
-> > Dillon
-> >> [1]
-> >> https://www.phoronix.com/scan.php?page=news_item&px=Linux-DRM-No-2D-Accel-API
-> >>> thanks.
-> >>>
-> >>>>> It is likely the same no matter which device is using spi5.
-> >>>>>
-> >>>>> Yours,
-> >>>>> Linus Walleij
-> >>>>>
-> >>> _______________________________________________
-> >>> Linux-stm32 mailing list
-> >>> Linux-stm32@st-md-mailman.stormreply.com
-> >>> https://st-md-mailman.stormreply.com/mailman/listinfo/linux-stm32
