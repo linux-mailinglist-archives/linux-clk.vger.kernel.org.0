@@ -2,105 +2,160 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5861D7C0B
-	for <lists+linux-clk@lfdr.de>; Mon, 18 May 2020 16:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4711D7CD9
+	for <lists+linux-clk@lfdr.de>; Mon, 18 May 2020 17:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727903AbgERO6O (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 18 May 2020 10:58:14 -0400
-Received: from mail-eopbgr80041.outbound.protection.outlook.com ([40.107.8.41]:19104
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726989AbgERO6N (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 18 May 2020 10:58:13 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m2uXWPQIgubSqUsUcgpiekebmsqdnnhimnPkhq/glUzkKNYinCManwSFPNpK11s9baIj12pIMEVF+/pf1ispSwLrcmDZ3ovbNghesJOILEUlqGGedHNp2OsR3XyujEvoGbeN+b4fzrNmAj9HblkcWEz8j2ns8LKLd208f/EN69b4oItAJGWZjEDEEmO+Vp6XHnQyFa1C+Ikb40m86i4cMPjJjrzYvFfiynns3V+seu/kGAGy+l8qwNYkPVZcj5VRVcr902G5IOzp5wBt9Qo26zJcsKr8kkmAn94iPrOAsppm4ll5ewBHlZNeR3DoujOWgtSw/KZoly+926MxA1u/qg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zylMsXVi2AUt/xI7mdoTChCykK/ltDRXXVPBrcDCskc=;
- b=EFYzI6HEVUfJKOVdvLrysrxZfS8llW5h+gHRFRgSPaP6uoNptqPKFdhoGC/7++cHGZJ+lATX98d/aBvwrm4d25FNHWPiHHT9jRcovggG48h9yfRpWzCRHA4x2H1xrybR2835XkKRTicny6eSHeST8ijTHEF5+zPo38aOy1BYMQaQaV96qhZVrFhXG6ikhFvw1a0Do0Eqvfz/Bn0ynx1qoKlnXQtRJ85Ex/HBaffwp7Wz2LDiChAfBPDjKTd10O0w5MIgDDQA/7M1X/bBnT11GNQXhEF0A5Btqm4Sv9kqRb0/WqPc8LPKZlVYHtR35IGTowZ6a8sGY1j7lkqH7hfD4g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zylMsXVi2AUt/xI7mdoTChCykK/ltDRXXVPBrcDCskc=;
- b=lKDnPMNzjSroVfL5UxiajMk6MeIT0mLvgK4OMlhgnvqmQDSUlNWaCUhhhNkRT9duZG8d6Gc7KUVLeZfZJzugRZRmlw32mA9Ta6TxxOP/Ewefi38VCjK1YvHg460S+rdfFzcDSP46RCCkdWAGnT/8h+1BLigMsmpdU64/A5OOoN0=
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com (2603:10a6:8:10::18)
- by DB3PR0402MB3739.eurprd04.prod.outlook.com (2603:10a6:8:6::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.20; Mon, 18 May
- 2020 14:58:10 +0000
-Received: from DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::1dab:b68c:e028:acb3]) by DB3PR0402MB3916.eurprd04.prod.outlook.com
- ([fe80::1dab:b68c:e028:acb3%6]) with mapi id 15.20.3000.033; Mon, 18 May 2020
- 14:58:10 +0000
-From:   Anson Huang <anson.huang@nxp.com>
-To:     Fabio Estevam <festevam@gmail.com>
-CC:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Frank Li <Frank.Li@freescale.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH] dt-bindings: clock: Convert i.MX7D clock to json-schema
-Thread-Topic: [PATCH] dt-bindings: clock: Convert i.MX7D clock to json-schema
-Thread-Index: AQHWLR72N3fl3eQKykOoBnP7ocNeoait65qAgAADcKA=
-Date:   Mon, 18 May 2020 14:58:09 +0000
-Message-ID: <DB3PR0402MB39165B7915BB178D645805F5F5B80@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-References: <1589810819-19851-1-git-send-email-Anson.Huang@nxp.com>
- <CAOMZO5BeBcvmAwEJTUhHSn=_chx7OVkkxj2oB+50hGH-7H7SfA@mail.gmail.com>
-In-Reply-To: <CAOMZO5BeBcvmAwEJTUhHSn=_chx7OVkkxj2oB+50hGH-7H7SfA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [183.192.13.100]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 3b40987f-3148-47ea-6d26-08d7fb3be189
-x-ms-traffictypediagnostic: DB3PR0402MB3739:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB3PR0402MB3739C3E99CDBF907EB3F2697F5B80@DB3PR0402MB3739.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1468;
-x-forefront-prvs: 04073E895A
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9X4an+es5wFo47mBQSdQGj5UPJvJnxKS0Iwi2UaHLvCRJG53TLqmy2F04eksyRtD/ef7EGIC2MmpBAG4HL5W88aebxqYJRKPcBhzFgUB4LwJbMhGPhjJUa4095E5EcGt2H8pQM/zssUSYd5OaJ5dWnt476q8ydEck0pyoaY+inK1aFz4GoIvbKkXXXtAuliiy2MbHYjcLZhki9/WiDw7+VypuCOeHhaE/EUWHfAi8t6SCgAsxrFMdR4ofU7Z1suuBxySwCSip5YS77x4X8jIzUHvnm8QJohEp25W38T+gWZyd5impLVn6tl714Nya5RNPpliCAJ0sN9TIA/IjM5CO3WyDolh6VSZWtVkhc/N8FM1l7v2QwvZ+pZH7bLW8Fl0eCC78WEiFAz/AXUTTWzxv1qxmOJOk9EjxnhhEBCYVodVk435VdQOAgy5749gAU7v
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB3PR0402MB3916.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39860400002)(366004)(136003)(376002)(396003)(346002)(55016002)(7416002)(9686003)(4744005)(5660300002)(4326008)(6506007)(53546011)(186003)(7696005)(86362001)(33656002)(44832011)(2906002)(54906003)(66476007)(66556008)(478600001)(66446008)(76116006)(66946007)(26005)(316002)(64756008)(8676002)(8936002)(71200400001)(6916009)(52536014);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: xgf6Ca0tH9R1b0j8W61xY9eu6DtPu0PLrvWP51FWQj6n3Flx/G+eUGbe8jGiiyZTUd9jgWi+SjokXVwSmpuGSq3niuZZ4K+90xVQ498bTLPC/1ZGERI6HIum/vo5Qqb5HBHt+OPfVCrB3b/KanF8minIfJlgVsY5GahHNQnn5+Svg5IdQ0yjqmaldXTHijJtEGfN1kqs+gK3kPxAOyXbaK6FedWaHHx5o/e2ebqrI6lpS4sIe9NCPL8cPk/6JvJDEuvobaNoI+LDoCPE8GrplZKDIKSvDCFqPKxtc/jQg6bEDCTzfWT7iiWpwMsvasyeFXydv2t59B/fIfptVDDw2bUZusPqvTtYwoGrIstMblwwnnGT2zFq9dGBS3t9QugD6KHRRIp11h0LTCgLXvStSs3dMDu5VyvXhJy6blDrupu1XOcl/neu3ESiDx2EnuSm2fUvrwUKCeQd/78B4GgWDS3hY4NnAZPvlSrLWAop5s3RND62LlN6Mi5wt8wIrJWa
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727903AbgERPa6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 18 May 2020 11:30:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34170 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726958AbgERPa6 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 18 May 2020 11:30:58 -0400
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E6A78207ED;
+        Mon, 18 May 2020 15:30:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589815857;
+        bh=mOGRIgATXCaoYLlPjTGM7OxQp7Rn0K8nGLavhwaGw/g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Lstul7dk5bmGsfDbFN8VWwMAuyU3oipItF/LaWXkWfhnn9aYwUES/qtRsj25CdqbI
+         HTyXMB/Edmia6M4okNtn4PIxXoPD3p3c6188gvqPnuOcYm539BpYxKW5MB++zFE53X
+         OoYgntGRVmBfRWI4aXOAGlzahVx5guUvw/de1fyU=
+Received: by mail-ej1-f51.google.com with SMTP id j21so4465296ejy.1;
+        Mon, 18 May 2020 08:30:56 -0700 (PDT)
+X-Gm-Message-State: AOAM532ilCbtSqznY2kYlBI/EyyO2MVRUjKciZQL31W2C6qDmJnUEun3
+        HamOt8oFx0M7Tss5r2ViqhqCcoIUVDH32F0wgQ==
+X-Google-Smtp-Source: ABdhPJycD95owhAarHRJ4FN02oHjKHI+oZIVAI4p7qeyibBNsTqdoru9JEcc0l+4TBtcPYB7VuZi4PHySGlFopHwhms=
+X-Received: by 2002:a17:906:2503:: with SMTP id i3mr14587876ejb.293.1589815855340;
+ Mon, 18 May 2020 08:30:55 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b40987f-3148-47ea-6d26-08d7fb3be189
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2020 14:58:10.0197
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EftTpW+h1utvwDwdJpJ5NGe49NwIx74T9m+gBqeOF8kJUL4IFUGr8+Pd0QDwZwfTcsDwav54JP9ORPkuv/tgLA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3739
+References: <20200518113156.25009-1-matthias.bgg@kernel.org>
+In-Reply-To: <20200518113156.25009-1-matthias.bgg@kernel.org>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Mon, 18 May 2020 23:30:42 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_9-_fy4oGTBLPsXkWJ2ihL7k2hzfwiTorit+YkNi_SeMw@mail.gmail.com>
+Message-ID: <CAAOTY_9-_fy4oGTBLPsXkWJ2ihL7k2hzfwiTorit+YkNi_SeMw@mail.gmail.com>
+Subject: Re: [PATCH 1/4] clk/soc: mediatek: mt8183: Bind clock driver from
+ platform device
+To:     matthias.bgg@kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        mtk01761 <wendell.lin@mediatek.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-clk@vger.kernel.org, Allison Randal <allison@lohutok.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-SGksIEZhYmlvDQoNCg0KPiBTdWJqZWN0OiBSZTogW1BBVENIXSBkdC1iaW5kaW5nczogY2xvY2s6
-IENvbnZlcnQgaS5NWDdEIGNsb2NrIHRvIGpzb24tc2NoZW1hDQo+IA0KPiBPbiBNb24sIE1heSAx
-OCwgMjAyMCBhdCAxMToxNiBBTSBBbnNvbiBIdWFuZyA8QW5zb24uSHVhbmdAbnhwLmNvbT4NCj4g
-d3JvdGU6DQo+IA0KPiA+ICttYWludGFpbmVyczoNCj4gPiArICAtIEZyYW5rIExpIDxGcmFuay5M
-aUBmcmVlc2NhbGUuY29tPg0KPiANCj4gVGhlIGZyZWVzY2FsZS5jb20gZS1tYWlsIGRvbWFpbiBp
-cyBubyBsb25nZXIgdmFsaWQgZm9yIHF1aXRlIHNvbWUgdGltZSA6LSkNCg0KVGhhbmtzIGZvciBy
-ZW1pbmRlciwgSSB3aWxsIHVzZSBGcmFuaydzIG54cCBlLW1haWwgYWRkcmVzcyBpbnN0ZWFkLg0K
-DQpBbnNvbg0K
+Hi, Matthias:
+
+<matthias.bgg@kernel.org> =E6=96=BC 2020=E5=B9=B45=E6=9C=8818=E6=97=A5 =E9=
+=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=887:32=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> From: Matthias Brugger <matthias.bgg@gmail.com>
+>
+> The mmsys driver is now the top level entry point for the multimedia
+> system (mmsys), we bind the clock driver by creating a platform device.
+> We also bind the MediaTek DRM driver which is not yet implement and
+> therefor will errror out for now.
+
+You may need to let CONFIG_MTK_MMSYS depends on
+CONFIG_COMMON_CLK_MT8173_MMSYS || CONFIG_COMMON_CLK_MT8183_MMSYS
+
+Regards,
+Chun-Kuang.
+
+>
+> Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+> ---
+>
+>  drivers/clk/mediatek/clk-mt8183-mm.c | 9 ++-------
+>  drivers/soc/mediatek/mtk-mmsys.c     | 8 ++++++++
+>  2 files changed, 10 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/clk/mediatek/clk-mt8183-mm.c b/drivers/clk/mediatek/=
+clk-mt8183-mm.c
+> index 720c696b506d..9d60e09619c1 100644
+> --- a/drivers/clk/mediatek/clk-mt8183-mm.c
+> +++ b/drivers/clk/mediatek/clk-mt8183-mm.c
+> @@ -84,8 +84,9 @@ static const struct mtk_gate mm_clks[] =3D {
+>
+>  static int clk_mt8183_mm_probe(struct platform_device *pdev)
+>  {
+> +       struct device *dev =3D &pdev->dev;
+> +       struct device_node *node =3D dev->parent->of_node;
+>         struct clk_onecell_data *clk_data;
+> -       struct device_node *node =3D pdev->dev.of_node;
+>
+>         clk_data =3D mtk_alloc_clk_data(CLK_MM_NR_CLK);
+>
+> @@ -95,16 +96,10 @@ static int clk_mt8183_mm_probe(struct platform_device=
+ *pdev)
+>         return of_clk_add_provider(node, of_clk_src_onecell_get, clk_data=
+);
+>  }
+>
+> -static const struct of_device_id of_match_clk_mt8183_mm[] =3D {
+> -       { .compatible =3D "mediatek,mt8183-mmsys", },
+> -       {}
+> -};
+> -
+>  static struct platform_driver clk_mt8183_mm_drv =3D {
+>         .probe =3D clk_mt8183_mm_probe,
+>         .driver =3D {
+>                 .name =3D "clk-mt8183-mm",
+> -               .of_match_table =3D of_match_clk_mt8183_mm,
+>         },
+>  };
+>
+> diff --git a/drivers/soc/mediatek/mtk-mmsys.c b/drivers/soc/mediatek/mtk-=
+mmsys.c
+> index cacafe23c823..783c3dd008b2 100644
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+> @@ -92,6 +92,10 @@ static const struct mtk_mmsys_driver_data mt8173_mmsys=
+_driver_data =3D {
+>         .clk_driver =3D "clk-mt8173-mm",
+>  };
+>
+> +static const struct mtk_mmsys_driver_data mt8183_mmsys_driver_data =3D {
+> +       .clk_driver =3D "clk-mt8183-mm",
+> +};
+> +
+>  static unsigned int mtk_mmsys_ddp_mout_en(enum mtk_ddp_comp_id cur,
+>                                           enum mtk_ddp_comp_id next,
+>                                           unsigned int *addr)
+> @@ -339,6 +343,10 @@ static const struct of_device_id of_match_mtk_mmsys[=
+] =3D {
+>                 .compatible =3D "mediatek,mt8173-mmsys",
+>                 .data =3D &mt8173_mmsys_driver_data,
+>         },
+> +       {
+> +               .compatible =3D "mediatek,mt8183-mmsys",
+> +               .data =3D &mt8183_mmsys_driver_data,
+> +       },
+>         { }
+>  };
+>
+> --
+> 2.26.2
+>
+>
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
