@@ -2,78 +2,143 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1031B1D7B94
-	for <lists+linux-clk@lfdr.de>; Mon, 18 May 2020 16:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 658411D7C2B
+	for <lists+linux-clk@lfdr.de>; Mon, 18 May 2020 17:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728061AbgEROnv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 18 May 2020 10:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726997AbgEROnu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 18 May 2020 10:43:50 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD13C061A0C;
-        Mon, 18 May 2020 07:43:50 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id x27so8161961lfg.9;
-        Mon, 18 May 2020 07:43:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DyWQUbdQsaHneMIkUnV+0Uk+0v8VHubO0aOYCQH2OTE=;
-        b=ozieOzdt8X9dRrNZ2ZBFb/NJ0RGMHbQ3G0pKcrAI4K8deYDIHTwEHkizIvfUP2PJf3
-         0jgF4HQmgdaYp1xOhtyN3xLe0Ntm40NsHOIxwe56JxpTa30T4cZvOVlwDhOFBXDOGate
-         Wpenob7UAHBnLuJQ/4BT8tbW1BTo9qk//+WZ1zsA50SUULGQ7H9xeU9IKiQfCwOB+6jq
-         qWuBcMqRn9aVcwpJRUSyfmr2db/NuDRbd1ElsaN/e8NsTaPFme/pjzrcBfrmW0ZESFoh
-         ia6R8Yrf92SS6WwoRdKM+mBeNbDJFizblaBIIi/dWxeEZbpJHHWknoLXa7chPAl+QRsr
-         o9Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DyWQUbdQsaHneMIkUnV+0Uk+0v8VHubO0aOYCQH2OTE=;
-        b=K1bCv8TT+DcDU1dW1O0p0zlW9xQrwxoVt2cJSoKL3p+ntW1YrMYPQIRvVj3bxZrgWO
-         7TLr/7PIXWulpFMqJF0P3aKmDY5NnH+9yQCOENkm5Qw5XYQmf+BQXXmnVLq6sFFVywBr
-         KrSOyp4UGTP63Ohh/32Q+11WmL4iLVIcrY296b0DZicGw0e19ueJ4x2x2ssRy+4x40Im
-         3Zzh/zKs7URhjOPxsGdjvVVDyKeY6xZQ0nc7pPMtXHO77A/V42R6Sk3lcaXNqbB4AdSA
-         DVNxWhtPFbV7tzwMPkrQAesMWXJarviyOlRN6rdn1P6zIFbUujPuRvdH4nOZU/876XTU
-         yVig==
-X-Gm-Message-State: AOAM532wEhQisodktmxy2MNsOFPJkskDQ4IGm8ZBnlmBqCdzdzE4jY3i
-        qrPYz05m0bf6dT8bXzX5WzD2k+9LhBNW8CKV7MHrzlqV
-X-Google-Smtp-Source: ABdhPJzqZ8nVo/dLSyrZUSSg9UbXrWgh7ZRtGhpGbCTSwOmErjkT5zwNhl9/wuvY2EmNrcCww0AbHYRzQN6W515PhCs=
-X-Received: by 2002:a19:c6c2:: with SMTP id w185mr10282694lff.69.1589813028498;
- Mon, 18 May 2020 07:43:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <1589810819-19851-1-git-send-email-Anson.Huang@nxp.com>
-In-Reply-To: <1589810819-19851-1-git-send-email-Anson.Huang@nxp.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Mon, 18 May 2020 11:45:07 -0300
-Message-ID: <CAOMZO5BeBcvmAwEJTUhHSn=_chx7OVkkxj2oB+50hGH-7H7SfA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: clock: Convert i.MX7D clock to json-schema
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Frank Li <Frank.Li@freescale.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        NXP Linux Team <Linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726940AbgERPCW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 18 May 2020 11:02:22 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:37808 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726918AbgERPCV (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 18 May 2020 11:02:21 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 6344A200941;
+        Mon, 18 May 2020 17:02:19 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 290352009C2;
+        Mon, 18 May 2020 17:02:14 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 6D2F9402AF;
+        Mon, 18 May 2020 23:02:07 +0800 (SGT)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, Frank.Li@nxp.com, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH V2] dt-bindings: clock: Convert i.MX7D clock to json-schema
+Date:   Mon, 18 May 2020 22:52:34 +0800
+Message-Id: <1589813554-20929-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, May 18, 2020 at 11:16 AM Anson Huang <Anson.Huang@nxp.com> wrote:
+Convert the i.MX7D clock binding to DT schema format using json-schema.
 
-> +maintainers:
-> +  - Frank Li <Frank.Li@freescale.com>
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+---
+Changes since V1:
+	- Update maintainer's e-mail address.
+---
+ .../devicetree/bindings/clock/imx7d-clock.txt      | 13 -----
+ .../devicetree/bindings/clock/imx7d-clock.yaml     | 64 ++++++++++++++++++++++
+ 2 files changed, 64 insertions(+), 13 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/imx7d-clock.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/imx7d-clock.yaml
 
-The freescale.com e-mail domain is no longer valid for quite some time :-)
+diff --git a/Documentation/devicetree/bindings/clock/imx7d-clock.txt b/Documentation/devicetree/bindings/clock/imx7d-clock.txt
+deleted file mode 100644
+index 9d3026d..0000000
+--- a/Documentation/devicetree/bindings/clock/imx7d-clock.txt
++++ /dev/null
+@@ -1,13 +0,0 @@
+-* Clock bindings for Freescale i.MX7 Dual
+-
+-Required properties:
+-- compatible: Should be "fsl,imx7d-ccm"
+-- reg: Address and length of the register set
+-- #clock-cells: Should be <1>
+-- clocks: list of clock specifiers, must contain an entry for each required
+-  entry in clock-names
+-- clock-names: should include entries "ckil", "osc"
+-
+-The clock consumer should specify the desired clock by having the clock
+-ID in its "clocks" phandle cell.  See include/dt-bindings/clock/imx7d-clock.h
+-for the full list of i.MX7 Dual clock IDs.
+diff --git a/Documentation/devicetree/bindings/clock/imx7d-clock.yaml b/Documentation/devicetree/bindings/clock/imx7d-clock.yaml
+new file mode 100644
+index 0000000..8cd0573
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/imx7d-clock.yaml
+@@ -0,0 +1,64 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/imx7d-clock.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Clock bindings for Freescale i.MX7 Dual
++
++maintainers:
++  - Frank Li <Frank.Li@nxp.com>
++  - Anson Huang <Anson.Huang@nxp.com>
++
++description: |
++  The clock consumer should specify the desired clock by having the clock
++  ID in its "clocks" phandle cell. See include/dt-bindings/clock/imx7d-clock.h
++  for the full list of i.MX7 Dual clock IDs.
++
++properties:
++  compatible:
++    const: fsl,imx7d-ccm
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    items:
++      - description: CCM interrupt request 1
++      - description: CCM interrupt request 2
++    maxItems: 2
++
++  '#clock-cells':
++    const: 1
++
++  clocks:
++    items:
++      - description: 32k osc
++      - description: 24m osc
++
++  clock-names:
++    items:
++      - const: ckil
++      - const: osc
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - '#clock-cells'
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    clock-controller@30380000 {
++        compatible = "fsl,imx7d-ccm";
++        reg = <0x30380000 0x10000>;
++        interrupts = <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
++        #clock-cells = <1>;
++        clocks = <&ckil>, <&osc>;
++        clock-names = "ckil", "osc";
++    };
+-- 
+2.7.4
+
