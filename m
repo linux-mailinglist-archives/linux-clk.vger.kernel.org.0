@@ -2,138 +2,124 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B00F1D9BE0
-	for <lists+linux-clk@lfdr.de>; Tue, 19 May 2020 18:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC251D9D8B
+	for <lists+linux-clk@lfdr.de>; Tue, 19 May 2020 19:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729356AbgESQAs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 19 May 2020 12:00:48 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:52741 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729211AbgESQAq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 19 May 2020 12:00:46 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200519160044euoutp01a28e2d33b208d56247870b6c73da1c50~QeU4Ax-8t2633826338euoutp01s
-        for <linux-clk@vger.kernel.org>; Tue, 19 May 2020 16:00:44 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200519160044euoutp01a28e2d33b208d56247870b6c73da1c50~QeU4Ax-8t2633826338euoutp01s
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1589904044;
-        bh=mfv7qvHfvq45NpEaYxxDp0Uspu0tWQaNUJ4rn5up5Mg=;
-        h=To:Cc:From:Subject:Date:References:From;
-        b=nPSlUeVWolwIm6939hSEVePIGEy1aIiZ1ODrZbvWR1anqZlyew2b9LrUqSrrN7o0q
-         Rzu4GkjClSQSwg6q6L5YH6CWk7TS1STdUjDarvaoXgAkkbaEom5GBnqH4nsauNFS54
-         9UCf2wKrKMJXdawlXl7qzfE0MGZktaVk9L25Bdd4=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200519160044eucas1p1ab7ee2150575ab8521eb51b43a032e0d~QeU30I1Nh1186011860eucas1p1h;
-        Tue, 19 May 2020 16:00:44 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id BD.A0.60679.CA204CE5; Tue, 19
-        May 2020 17:00:44 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200519160043eucas1p11d34223ddaddaf00e136abacc9f351e1~QeU3fXhz_1203412034eucas1p1j;
-        Tue, 19 May 2020 16:00:43 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200519160043eusmtrp12cadbc1abbfce6bcd05081456d3fb98e~QeU3ewtaW3256032560eusmtrp17;
-        Tue, 19 May 2020 16:00:43 +0000 (GMT)
-X-AuditID: cbfec7f4-0cbff7000001ed07-3d-5ec402aca0d7
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id E6.FA.07950.BA204CE5; Tue, 19
-        May 2020 17:00:43 +0100 (BST)
-Received: from [106.210.123.115] (unknown [106.210.123.115]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200519160043eusmtip2c1c10482d84f760512d6c9a739c8bd2a~QeU25pZkK2923329233eusmtip2S;
-        Tue, 19 May 2020 16:00:43 +0000 (GMT)
+        id S1729197AbgESRKH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 19 May 2020 13:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729132AbgESRKH (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 19 May 2020 13:10:07 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53989C08C5C0
+        for <linux-clk@vger.kernel.org>; Tue, 19 May 2020 10:10:07 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id u1so4833wmn.3
+        for <linux-clk@vger.kernel.org>; Tue, 19 May 2020 10:10:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Xs2DZn2lRCTad+sBiNc+BctIq4JOr+bWIH96SVwqx0c=;
+        b=fqL0h3c2Xp2hoK5XrJG/CvNKsMpLGHx9LRNboyPqdPp9c/5mvU5A/y/Q8stJOThqjp
+         keJv+36/P7d+MxJQZ4QYLzAw4eBJAAZg8lsHyPzcKnM9wgIhKZ/CMnK5ef/pC3Xzrp79
+         Op1JvCnUuMY/QJIW/Av/ffefwKvq2w4hy1GQYdEadYCDLE7AG4YqBWAzbuEP5KboSWAB
+         iIUo+FMMQ3iNkPdpgLHWgwlZHvZE/+cQjkn8YUznKN9v9Zk9uSXUss8rBHFGDD0XP4ER
+         pGyxboWn5rpsi/O3glHXHYFEf5jSypil8wxw2WNBVbsf9HfvJ9jqp+4QQXWNOiuTWHGb
+         d5WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Xs2DZn2lRCTad+sBiNc+BctIq4JOr+bWIH96SVwqx0c=;
+        b=kmt1seATNfzhg4VM0rivnariLRUfufxJRMbvcwQKg83QgrD3uSQB2/RqArz7JS300l
+         nT57WB3HZvgYmlb0Hw2ywSLMauzfgEvENCACYdLY+ag4mOircQ/0wH/wK92HDzru9Phy
+         gAf4CZxNCZcwZJ391hXDnTurghbC6erQfsiLM6uUmuyjNjBb48W7ZzbWfkV6b1b47sm3
+         /fbL/OFPovo8W9Ns/kNqDAaE0zFY+uNToxYTg1UU/k1DIjYqhf3Am3qV4zibMkjXgCjo
+         mUp3hInRVm1Ja9Gt/adM04rYAaQJGcYt3Jb5vuj0hQY2SgoqGGZDMAXKjkdfR18oM0Wq
+         TPFw==
+X-Gm-Message-State: AOAM531ZpDn+GoMZ8vQ4N0hFG6CJaVe5JPiQUHqOnRlFJM1YcBWV3rwj
+        bxSQRKobid+XCDYFYSKaRzg6ukUSG4g=
+X-Google-Smtp-Source: ABdhPJxxGkSH456U4yFcE/ijxHPZM9/w0ZbpuYtWJa6tbyJ/6YaYlZNtNUfv2VH19pVYKoaRtWmTRg==
+X-Received: by 2002:a1c:23d2:: with SMTP id j201mr406894wmj.48.1589907886459;
+        Tue, 19 May 2020 10:04:46 -0700 (PDT)
+Received: from starbuck.lan (cag06-3-82-243-161-21.fbx.proxad.net. [82.243.161.21])
+        by smtp.googlemail.com with ESMTPSA id b19sm352685wmd.26.2020.05.19.10.04.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2020 10:04:45 -0700 (PDT)
+From:   Jerome Brunet <jbrunet@baylibre.com>
 To:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-clk <linux-clk@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
-Subject: [GIT PULL] clk/samsung updates for 5.8
-Message-ID: <72d1868f-65c0-5dd7-b497-ebc5f78bc34b@samsung.com>
-Date:   Tue, 19 May 2020 18:00:42 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
-        Thunderbird/68.8.0
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: add api to get clk consummer from clk_hw
+Date:   Tue, 19 May 2020 19:04:40 +0200
+Message-Id: <20200519170440.294601-1-jbrunet@baylibre.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAKsWRmVeSWpSXmKPExsWy7djP87prmI7EGRz6wGaxccZ6VovrX56z
-        WnzsucdqMeP8PiaLi6dcLf5d28jiwObx/kYru8emVZ1sHn1bVjF6fN4kF8ASxWWTkpqTWZZa
-        pG+XwJVxa9c6poL1XBXfV2xlbWA8w9HFyMkhIWAiMffgGxYQW0hgBaPEx6ueXYxcQPYXRon1
-        /xcyQzifGSX2vmligel4sXcKK0RiOaPEuqkzWSCcj4wS3y/3sYJUiQgESdzpX8sGkmAWOMAo
-        0bF+DVg7m4ChRO/RPkYQW1hAX2Lbkn1sIDavgJ1Ew8NZYHEWAVWJS7OOgtWLCsRKnF68mRGi
-        RlDi5MwnYHFmAXGJW0/mM0HY8hLb384Bu1VCoJtd4vbUG2wQt7pITHv1B8oWlnh1fAs7hC0j
-        cXpyDwtEQzOjRM/u2+wQzgRGifvHFzBCVFlL3Dn3C6ibA2iFpsT6XfoQYUeJte+ugYUlBPgk
-        brwVhDiCT2LStunMEGFeiY42IYhqFYnfq6YzQdhSEt1P/rNAlHhIvGnOm8CoOAvJZ7OQfDYL
-        yWezEE5YwMiyilE8tbQ4Nz212CgvtVyvODG3uDQvXS85P3cTIzDdnP53/MsOxl1/kg4xCnAw
-        KvHwGuw5HCfEmlhWXJl7iFGCg1lJhHfCi0NxQrwpiZVVqUX58UWlOanFhxilOViUxHmNF72M
-        FRJITyxJzU5NLUgtgskycXBKNTDGdzPdc7ojkSDT/1LvXfevAhO5hqLe1J03H7QHtLO0lnP/
-        F/wRtZ/7jV7QnIQ9dhsmzWr6erf/7/FOkfZ3voc+/V22j/GTicxj+f2Mm20LI4sVnk2ZYuoi
-        vHpDUO3KHa33v0/iOzwvb+Z+df62U2I33CWcZa72Vx04ni7j5yfUOskz8s3De5ZKLMUZiYZa
-        zEXFiQDEvm1/MwMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJIsWRmVeSWpSXmKPExsVy+t/xe7qrmY7EGez7q2OxccZ6VovrX56z
-        WnzsucdqMeP8PiaLi6dcLf5d28jiwObx/kYru8emVZ1sHn1bVjF6fN4kF8ASpWdTlF9akqqQ
-        kV9cYqsUbWhhpGdoaaFnZGKpZ2hsHmtlZKqkb2eTkpqTWZZapG+XoJdxa9c6poL1XBXfV2xl
-        bWA8w9HFyMkhIWAi8WLvFFYQW0hgKaPEhSbBLkYOoLiUxPwWJYgSYYk/17rYuhi5gEreM0ps
-        e7WRHSQhIhAk8WvPPVaQBLPAIUaJixf3gw1iEzCU6D3axwhiCwvoS2xbso8NxOYVsJNoeDgL
-        LM4ioCpxadZRFhBbVCBWYvW1VkaIGkGJkzOfgMWZBdQl/sy7xAxhi0vcejKfCcKWl9j+dg7z
-        BEaBWUhaZiFpmYWkZRaSlgWMLKsYRVJLi3PTc4uN9IoTc4tL89L1kvNzNzECo2XbsZ9bdjB2
-        vQs+xCjAwajEw2uw53CcEGtiWXFlLtCDHMxKIrwTXhyKE+JNSaysSi3Kjy8qzUktPsRoCvTQ
-        RGYp0eR8YCTnlcQbmhqaW1gamhubG5tZKInzdggcjBESSE8sSc1OTS1ILYLpY+LglGpgtKkM
-        ddn85vDC1An+68MdbRMVnkvlnS996lXCEm2moBn9IMHm/DNx0eO2DsuP7O+VNS6IqNmm9eaa
-        /E7zCcyGmf8/uMi71Jqf+fBEb/rz0oVV+kX6RsUxO/j6QqcY5G/7/5pz3+7K575VxlZMf47N
-        uPmoINLT/ljcLJNbsrnT58+bmvMqqfiBEktxRqKhFnNRcSIAmqxL5qwCAAA=
-X-CMS-MailID: 20200519160043eucas1p11d34223ddaddaf00e136abacc9f351e1
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200519160043eucas1p11d34223ddaddaf00e136abacc9f351e1
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200519160043eucas1p11d34223ddaddaf00e136abacc9f351e1
-References: <CGME20200519160043eucas1p11d34223ddaddaf00e136abacc9f351e1@eucas1p1.samsung.com>
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Stephen, Mike
+clk_register() is deprecated. Using 'clk' member of struct clk_hw is
+discouraged. With this constrainst, it is difficult for driver to
+register clocks using the clk_hw API and then use the clock with
+the consummer API
 
-The following changes since commit 8f3d9f354286745c751374f5f1fcafee6b3f3136:
+This add a simple helper, clk_hw_get_clk(), to get a struct clk from
+a struct clk_hw. Like other clk_get() variant, each call to this helper
+must be balanced with a call to clk_put().
 
-  Linux 5.7-rc1 (2020-04-12 12:35:55 -0700)
+Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+---
+ drivers/clk/clk.c            | 17 +++++++++++++++++
+ include/linux/clk-provider.h |  1 +
+ 2 files changed, 18 insertions(+)
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/snawrocki/clk.git tags/clk-v5.8-samsung
-
-for you to fetch changes up to 25bdae0f1c6609ceaf55fe6700654f0be2253d8e:
-
-  clk: samsung: exynos5433: Add IGNORE_UNUSED flag to sclk_i2s1 (2020-05-19 16:58:42 +0200)
-
-----------------------------------------------------------------
-clk/samsung updates for 5.8
-
- - Regression fixes for exynos542x and exynos5433 SoCs,
- - use of fallthrough; attribute for s3c24xx.
-
-----------------------------------------------------------------
-Joe Perches (1):
-      ARM/SAMSUNG EXYNOS ARM ARCHITECTURES: Use fallthrough;
-
-Marek Szyprowski (3):
-      clk: samsung: Mark top ISP and CAM clocks on Exynos542x as critical
-      clk: samsung: Fix CLK_SMMU_FIMCL3 clock name on Exynos542x
-      clk: samsung: exynos5433: Add IGNORE_UNUSED flag to sclk_i2s1
-
- drivers/clk/samsung/clk-exynos5420.c | 18 ++++++++++--------
- drivers/clk/samsung/clk-exynos5433.c |  3 ++-
- drivers/clk/samsung/clk-s3c2443.c    |  2 +-
- drivers/i2c/busses/i2c-s3c2410.c     |  3 +--
- 4 files changed, 14 insertions(+), 12 deletions(-)
-
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 6fd23ce3cb03..d9946e192cbc 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -3625,6 +3625,23 @@ struct clk *clk_hw_create_clk(struct device *dev, struct clk_hw *hw,
+ 	return clk;
+ }
+ 
++/**
++ * clk_hw_get_clk: get clk consummer given an clk_hw
++ * @hw: clk_hw associated with the clk being consumed
++ *
++ * Returns: new clk consummer
++ * This is the function to be used by providers which need
++ * to get a consummer clk and act on the clock element
++ * Calls to this function must be balanced with calls clk_put()
++ */
++struct clk *clk_hw_get_clk(struct clk_hw *hw)
++{
++	struct device *dev = hw->core->dev;
++
++	return clk_hw_create_clk(dev, hw, dev_name(dev), NULL);
++}
++EXPORT_SYMBOL(clk_hw_get_clk);
++
+ static int clk_cpy_name(const char **dst_p, const char *src, bool must_exist)
+ {
+ 	const char *dst;
+diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+index bd1ee9039558..a8f466bdda1a 100644
+--- a/include/linux/clk-provider.h
++++ b/include/linux/clk-provider.h
+@@ -1088,6 +1088,7 @@ static inline struct clk_hw *__clk_get_hw(struct clk *clk)
+ 	return (struct clk_hw *)clk;
+ }
+ #endif
++struct clk *clk_hw_get_clk(struct clk_hw *hw);
+ unsigned int clk_hw_get_num_parents(const struct clk_hw *hw);
+ struct clk_hw *clk_hw_get_parent(const struct clk_hw *hw);
+ struct clk_hw *clk_hw_get_parent_by_index(const struct clk_hw *hw,
 -- 
-Regards,
-Sylwester
+2.25.4
+
