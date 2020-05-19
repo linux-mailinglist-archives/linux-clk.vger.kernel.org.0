@@ -2,295 +2,70 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A63EE1D9D81
-	for <lists+linux-clk@lfdr.de>; Tue, 19 May 2020 19:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDC31D9F97
+	for <lists+linux-clk@lfdr.de>; Tue, 19 May 2020 20:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729164AbgESRHl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 19 May 2020 13:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728689AbgESRHl (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 19 May 2020 13:07:41 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19C8C08C5C0
-        for <linux-clk@vger.kernel.org>; Tue, 19 May 2020 10:07:39 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id z72so4062wmc.2
-        for <linux-clk@vger.kernel.org>; Tue, 19 May 2020 10:07:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=muft4GcNATjEV4x01YH/79QbRCrzio+OZVwdxHw5SPY=;
-        b=I/ymuisp2aK26Obn2TT/OWU63j23sp1lm9thePiJAWx1TgitUiDRnh/kqHQJ6rOKWU
-         Y5TqOPiUq1Qt4ZN/kdhy1GdxUHrYlnPJoRGggXV0sBsTkKiuwEetV0gj/UujOMQ2/4kp
-         lRcz+ib8TXtBBCOg8wA/7yVMsOJe4SvQumTeK08wzLR/PE/Dvui1IdYjgi1zLTBMwXug
-         SmHOCD2+1tHRyA/jd2M8RLLMw4eXWCvpteOhCq26+N0WK5+CIieRkctsEnMcjAfDXvpi
-         DmW0wmNX0DcpYrUOvXHxQRQWaePZf3qknF1cKi051MJvNi+0YlmbmB1Y+zxF8M5toOTW
-         M3Zg==
+        id S1726779AbgESShD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 19 May 2020 14:37:03 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:36941 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726059AbgESShC (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 19 May 2020 14:37:02 -0400
+Received: by mail-io1-f66.google.com with SMTP id t15so266539ios.4;
+        Tue, 19 May 2020 11:37:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=muft4GcNATjEV4x01YH/79QbRCrzio+OZVwdxHw5SPY=;
-        b=WVelooVYl07fki9P+UMUc6D/0oqkxUNjFVuua/GrNb+dGAI97JewWUiwb6lqzjImpP
-         oSbr9IygNej8GxB6WOZ+eWP3lHGR2FG9H1ze4eaiSxWFtjp8ys9NB8cv5Z4AZdQzU0mK
-         uHYZj+WfwnPveC1Vx4g5vxue8AUHiGOMo7srmRaY7gFVr+D2NYo/hJAub3tr1/z9+duL
-         4D5D0rmAWFqhgHaua85v9Xp+Qx0MhAdhOcmzgVdXI3Jeon+Q3PaC0YyFDEE5DAvpkY9j
-         G0BgTXZWywvvK3XApyEPxycUgJhs0uL6Z24rnJbqu7h728XeofWY3poFC3AAQzWT5GP9
-         2EVw==
-X-Gm-Message-State: AOAM531X8vo2OeFWCWJbyTYN3GNu/9v/2HLogwgPl7zy+I1K2kJSkiqp
-        oqMZmVrDQPWDWJ4Z9tIKS5L2Ig==
-X-Google-Smtp-Source: ABdhPJyxewN7nNTcKNjJl7CerBfnul15agl1TPMcFp4JkElJdJZiwyXJymCrchHwGn7+zobVBPor7w==
-X-Received: by 2002:a7b:c4cc:: with SMTP id g12mr377327wmk.168.1589908058332;
-        Tue, 19 May 2020 10:07:38 -0700 (PDT)
-Received: from starbuck.lan (cag06-3-82-243-161-21.fbx.proxad.net. [82.243.161.21])
-        by smtp.googlemail.com with ESMTPSA id 89sm61592wrj.37.2020.05.19.10.07.37
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9gkfGJ7KJs1nebEF+m2qI6r0Zpzd4/7HhycMiWKPpMw=;
+        b=Opub0kShFShF8UDNFVKjrW6AN/4qxFYf0IQuXZGdqv5gqfY5ipjtB9IELyQmGXNavr
+         ZvtF70xvppZQhcZH50zn6ujyjtbcQwVb3DRmxr6+R2P5Vd9DCfcyXiW+0gukBSAGCKQB
+         t9ddVBvB5MCzBIYoDXKaI3I8AyvLxsRj2MDXyEPuNteWRsknaE9yEHWX8oIgyusshXGh
+         fnBWCKb5WJxTBIr8b7hmWBdycjRZLz2loxpp4WGAngMfhS552ZoEn+WU3/6TLpYi06qE
+         Hr4kChnaSRxL0TKV/RV4IJ1NOe+W0XGmzITwNFO84qgwmxHQhwj+3e8fLipf8tVlxoDt
+         V/kQ==
+X-Gm-Message-State: AOAM531/jF7ricChrUHkmUKqo4yTGzYvRHovaf+Ap9Z0GIgWAMw+G2ZY
+        msZ49gmR14DKvhxmE82zjmluRuY=
+X-Google-Smtp-Source: ABdhPJyl4q7PFUuNkIc0fWw+vhM8J2A7oPKEXlt3TrTeH8BFs3YwXt5tc+5BYWSxSBiI1ACKn3OxAg==
+X-Received: by 2002:a02:a895:: with SMTP id l21mr1005625jam.82.1589913422004;
+        Tue, 19 May 2020 11:37:02 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id j16sm128705ild.8.2020.05.19.11.37.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 May 2020 10:07:37 -0700 (PDT)
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>, linux-clk@vger.kernel.org
-Subject: [RFC PATCH] clk: rework clk_register to use the clk_hw API
-Date:   Tue, 19 May 2020 19:07:33 +0200
-Message-Id: <20200519170733.295100-1-jbrunet@baylibre.com>
-X-Mailer: git-send-email 2.25.4
+        Tue, 19 May 2020 11:37:01 -0700 (PDT)
+Received: (nullmailer pid 441282 invoked by uid 1000);
+        Tue, 19 May 2020 18:37:00 -0000
+Date:   Tue, 19 May 2020 12:37:00 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Lubomir Rintel <lkundrak@v3.sk>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-media@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH 10/11] dt-bindings: sound: Add Marvell MMP SSPA binding
+Message-ID: <20200519183700.GA441251@bogus>
+References: <20200511210134.1224532-1-lkundrak@v3.sk>
+ <20200511210134.1224532-11-lkundrak@v3.sk>
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200511210134.1224532-11-lkundrak@v3.sk>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This rework the clk_register/unregister functions to use the clk_hw API.
-The goal is to pave the way for the removal of the 'clk' member in
-struct clk_hw.
+On Mon, 11 May 2020 23:01:33 +0200, Lubomir Rintel wrote:
+> Add binding documentation for the audio serial port interface (I2S) on
+> Marvell MMP SoCs.
+> 
+> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+> ---
+>  .../bindings/sound/marvell,mmp-sspa.yaml      | 122 ++++++++++++++++++
+>  1 file changed, 122 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/marvell,mmp-sspa.yaml
+> 
 
-This member is used in about 60 drivers, most of them in drivers/clk/.
-Some cases will be trivial to remove but some drivers are hacking around
-it and will be tougher to deal with.
-
-This change is sent as an RFC because, until there is a clear plan to deal
-with drivers above, there is memory penality when using clk_register()
-(struct clk is allocated in __clk_hw_register() and clk_register())
-
-Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
----
- drivers/clk/clk.c | 110 ++++++++++++++++++++++++++--------------------
- 1 file changed, 62 insertions(+), 48 deletions(-)
-
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index d9946e192cbc..d93062673b2c 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -3736,8 +3736,8 @@ static void clk_core_free_parent_map(struct clk_core *core)
- 	kfree(core->parents);
- }
- 
--static struct clk *
--__clk_register(struct device *dev, struct device_node *np, struct clk_hw *hw)
-+static int
-+__clk_hw_register(struct device *dev, struct device_node *np, struct clk_hw *hw)
- {
- 	int ret;
- 	struct clk_core *core;
-@@ -3801,7 +3801,7 @@ __clk_register(struct device *dev, struct device_node *np, struct clk_hw *hw)
- 
- 	ret = __clk_core_init(core);
- 	if (!ret)
--		return hw->clk;
-+		return 0;
- 
- 	clk_prepare_lock();
- 	clk_core_unlink_consumer(hw->clk);
-@@ -3818,7 +3818,7 @@ __clk_register(struct device *dev, struct device_node *np, struct clk_hw *hw)
- fail_name:
- 	kfree(core);
- fail_out:
--	return ERR_PTR(ret);
-+	return ret;
- }
- 
- /**
-@@ -3843,6 +3843,24 @@ static struct device_node *dev_or_parent_of_node(struct device *dev)
- 	return np;
- }
- 
-+
-+/**
-+ * clk_hw_register - register a clk_hw and return an error code
-+ * @dev: device that is registering this clock
-+ * @hw: link to hardware-specific clock data
-+ *
-+ * clk_hw_register is the primary interface for populating the clock tree with
-+ * new clock nodes. It returns an integer equal to zero indicating success or
-+ * less than zero indicating failure. Drivers must test for an error code after
-+ * calling clk_hw_register().
-+ */
-+int clk_hw_register(struct device *dev, struct clk_hw *hw)
-+{
-+	return __clk_hw_register(dev, dev_or_parent_of_node(dev),
-+				 hw);
-+}
-+EXPORT_SYMBOL_GPL(clk_hw_register);
-+
- /**
-  * clk_register - allocate a new clock, register it and return an opaque cookie
-  * @dev: device that is registering this clock
-@@ -3858,26 +3876,19 @@ static struct device_node *dev_or_parent_of_node(struct device *dev)
-  */
- struct clk *clk_register(struct device *dev, struct clk_hw *hw)
- {
--	return __clk_register(dev, dev_or_parent_of_node(dev), hw);
--}
--EXPORT_SYMBOL_GPL(clk_register);
-+	struct clk *clk;
-+	int ret = clk_hw_register(dev, hw);
- 
--/**
-- * clk_hw_register - register a clk_hw and return an error code
-- * @dev: device that is registering this clock
-- * @hw: link to hardware-specific clock data
-- *
-- * clk_hw_register is the primary interface for populating the clock tree with
-- * new clock nodes. It returns an integer equal to zero indicating success or
-- * less than zero indicating failure. Drivers must test for an error code after
-- * calling clk_hw_register().
-- */
--int clk_hw_register(struct device *dev, struct clk_hw *hw)
--{
--	return PTR_ERR_OR_ZERO(__clk_register(dev, dev_or_parent_of_node(dev),
--			       hw));
-+	if (ret < 0)
-+		return ERR_PTR(ret);
-+
-+	clk = clk_hw_get_clk(hw);
-+	if (IS_ERR_OR_NULL(clk))
-+		clk_hw_unregister(hw);
-+
-+	return clk;
- }
--EXPORT_SYMBOL_GPL(clk_hw_register);
-+EXPORT_SYMBOL_GPL(clk_register);
- 
- /*
-  * of_clk_hw_register - register a clk_hw and return an error code
-@@ -3892,7 +3903,7 @@ EXPORT_SYMBOL_GPL(clk_hw_register);
-  */
- int of_clk_hw_register(struct device_node *node, struct clk_hw *hw)
- {
--	return PTR_ERR_OR_ZERO(__clk_register(NULL, node, hw));
-+	return __clk_hw_register(NULL, node, hw);
- }
- EXPORT_SYMBOL_GPL(of_clk_hw_register);
- 
-@@ -3972,25 +3983,25 @@ static void clk_core_evict_parent_cache(struct clk_core *core)
- }
- 
- /**
-- * clk_unregister - unregister a currently registered clock
-- * @clk: clock to unregister
-+ * clk_hw_unregister - unregister a currently registered clk_hw
-+ * @hw: hardware-specific clock data to unregister
-  */
--void clk_unregister(struct clk *clk)
-+void clk_hw_unregister(struct clk_hw *hw)
- {
- 	unsigned long flags;
- 	const struct clk_ops *ops;
- 
--	if (!clk || WARN_ON_ONCE(IS_ERR(clk)))
-+	if (!hw || WARN_ON_ONCE(IS_ERR(hw)))
- 		return;
- 
--	clk_debug_unregister(clk->core);
-+	clk_debug_unregister(hw->core);
- 
- 	clk_prepare_lock();
- 
--	ops = clk->core->ops;
-+	ops = hw->core->ops;
- 	if (ops == &clk_nodrv_ops) {
- 		pr_err("%s: unregistered clock: %s\n", __func__,
--		       clk->core->name);
-+		       hw->core->name);
- 		goto unlock;
- 	}
- 	/*
-@@ -3998,50 +4009,53 @@ void clk_unregister(struct clk *clk)
- 	 * a reference to this clock.
- 	 */
- 	flags = clk_enable_lock();
--	clk->core->ops = &clk_nodrv_ops;
-+	hw->core->ops = &clk_nodrv_ops;
- 	clk_enable_unlock(flags);
- 
- 	if (ops->terminate)
--		ops->terminate(clk->core->hw);
-+		ops->terminate(hw);
- 
--	if (!hlist_empty(&clk->core->children)) {
-+	if (!hlist_empty(&hw->core->children)) {
- 		struct clk_core *child;
- 		struct hlist_node *t;
- 
- 		/* Reparent all children to the orphan list. */
--		hlist_for_each_entry_safe(child, t, &clk->core->children,
-+		hlist_for_each_entry_safe(child, t, &hw->core->children,
- 					  child_node)
- 			clk_core_set_parent_nolock(child, NULL);
- 	}
- 
--	clk_core_evict_parent_cache(clk->core);
-+	clk_core_evict_parent_cache(hw->core);
- 
--	hlist_del_init(&clk->core->child_node);
-+	hlist_del_init(&hw->core->child_node);
- 
--	if (clk->core->prepare_count)
-+	if (hw->core->prepare_count)
- 		pr_warn("%s: unregistering prepared clock: %s\n",
--					__func__, clk->core->name);
-+					__func__, hw->core->name);
- 
--	if (clk->core->protect_count)
-+	if (hw->core->protect_count)
- 		pr_warn("%s: unregistering protected clock: %s\n",
--					__func__, clk->core->name);
-+					__func__, hw->core->name);
- 
--	kref_put(&clk->core->ref, __clk_release);
--	free_clk(clk);
-+	kref_put(&hw->core->ref, __clk_release);
-+	free_clk(hw->clk);
- unlock:
- 	clk_prepare_unlock();
- }
--EXPORT_SYMBOL_GPL(clk_unregister);
-+EXPORT_SYMBOL_GPL(clk_hw_unregister);
- 
- /**
-- * clk_hw_unregister - unregister a currently registered clk_hw
-- * @hw: hardware-specific clock data to unregister
-+ * clk_unregister - unregister a currently registered clock
-+ * @clk: clock to unregister
-  */
--void clk_hw_unregister(struct clk_hw *hw)
-+void clk_unregister(struct clk *clk)
- {
--	clk_unregister(hw->clk);
-+	struct clk_hw *hw = clk->core->hw;
-+
-+	clk_put(clk);
-+	clk_hw_unregister(hw);
- }
--EXPORT_SYMBOL_GPL(clk_hw_unregister);
-+EXPORT_SYMBOL_GPL(clk_unregister);
- 
- static void devm_clk_release(struct device *dev, void *res)
- {
--- 
-2.25.4
-
+Reviewed-by: Rob Herring <robh@kernel.org>
