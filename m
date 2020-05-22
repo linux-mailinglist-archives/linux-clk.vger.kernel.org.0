@@ -2,105 +2,125 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 250501DDDAC
-	for <lists+linux-clk@lfdr.de>; Fri, 22 May 2020 05:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2AA1DE2B2
+	for <lists+linux-clk@lfdr.de>; Fri, 22 May 2020 11:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727865AbgEVDI0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 21 May 2020 23:08:26 -0400
-Received: from smtp2207-205.mail.aliyun.com ([121.197.207.205]:50923 "EHLO
-        smtp2207-205.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727876AbgEVDI0 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 21 May 2020 23:08:26 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.2008003|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.101682-0.00181878-0.8965;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03312;MF=frank@allwinnertech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.HbxBGFJ_1590116882;
-Received: from allwinnertech.com(mailfrom:frank@allwinnertech.com fp:SMTPD_---.HbxBGFJ_1590116882)
-          by smtp.aliyun-inc.com(10.147.41.178);
-          Fri, 22 May 2020 11:08:22 +0800
-From:   Frank Lee <frank@allwinnertech.com>
-To:     mripard@kernel.org, wens@csie.org, robh+dt@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linus.walleij@linaro.org, p.zabel@pengutronix.de,
-        frank@allwinnertech.com, huangshuosheng@allwinnertech.com,
-        tiny.windzz@gmail.com
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Subject: [PATCH 4/4] arm64: allwinner: A100: add support for Allwinner Perf1 board
-Date:   Fri, 22 May 2020 11:07:43 +0800
-Message-Id: <20200522030743.10204-5-frank@allwinnertech.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20200522030743.10204-1-frank@allwinnertech.com>
-References: <20200522030743.10204-1-frank@allwinnertech.com>
+        id S1729728AbgEVJMf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 22 May 2020 05:12:35 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:52130 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729719AbgEVJMe (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 22 May 2020 05:12:34 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id D7BB42004D8;
+        Fri, 22 May 2020 11:12:32 +0200 (CEST)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id CB65F2004D2;
+        Fri, 22 May 2020 11:12:32 +0200 (CEST)
+Received: from localhost (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id B7682205C1;
+        Fri, 22 May 2020 11:12:32 +0200 (CEST)
+Date:   Fri, 22 May 2020 12:12:32 +0300
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     Aisheng Dong <aisheng.dong@nxp.com>
+Cc:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH] clk: imx8mp: Set the correct parent for audio_root_clk
+Message-ID: <20200522091232.gjmmbdlqwkp2kubq@fsr-ub1664-175>
+References: <1588000281-6594-1-git-send-email-abel.vesa@nxp.com>
+ <AM6PR04MB49663A072F56397BE55FF3C480AC0@AM6PR04MB4966.eurprd04.prod.outlook.com>
+ <20200430101107.t76727jwwkyhlkvd@fsr-ub1664-175>
+ <AM6PR04MB49664013B43C46422C0195A780AA0@AM6PR04MB4966.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <AM6PR04MB49664013B43C46422C0195A780AA0@AM6PR04MB4966.eurprd04.prod.outlook.com>
+User-Agent: NeoMutt/20180622
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-A100 perf1 is an Allwinner A100-based SBC, with the following features:
+On 20-04-30 10:18:24, Aisheng Dong wrote:
+> > From: Abel Vesa <abel.vesa@nxp.com>
+> > Sent: Thursday, April 30, 2020 6:11 PM
+> > 
 
-- 1GiB DDR3 DRAM
-- AXP803 PMIC
-- 2 USB 2.0 ports
-- MicroSD slot and on-board eMMC module
-- on-board Nand flash
-- ···
+Sorry I didn't answer the other ones earlier. See below.
 
-Adds initial support for it, including the UART.
+> > On 20-04-28 08:15:51, Aisheng Dong wrote:
+> > > > From: Abel Vesa <abel.vesa@nxp.com>
+> > > > Sent: Monday, April 27, 2020 11:11 PM
+> > > >
+> > > > Instead of ipg_root, the parent needs to be ipg_audio_root.
+> > > >
+> > > > Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> > >
+> > > I have a few doubts about this patch:
+> > > 1. From latest RM, it seems CCGR101 (0x4650) is a shared gate for many audio
+> > instances.
 
-Signed-off-by: Frank Lee <frank@allwinnertech.com>
----
- arch/arm64/boot/dts/allwinner/Makefile        |  1 +
- .../allwinner/sun50i-a100-allwinner-perf1.dts | 27 +++++++++++++++++++
- 2 files changed, 28 insertions(+)
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
+Yes. This is true. I'm working on adding the shared gate now.
 
-diff --git a/arch/arm64/boot/dts/allwinner/Makefile b/arch/arm64/boot/dts/allwinner/Makefile
-index e4d3cd0ac5bb..ab780dbdd17b 100644
---- a/arch/arm64/boot/dts/allwinner/Makefile
-+++ b/arch/arm64/boot/dts/allwinner/Makefile
-@@ -14,6 +14,7 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-pinephone-1.1.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-pinetab.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-sopine-baseboard.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-teres-i.dtb
-+dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a100-allwinner-perf1.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h5-bananapi-m2-plus.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h5-bananapi-m2-plus-v1.2.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h5-emlid-neutis-n5-devboard.dtb
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts b/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
-new file mode 100644
-index 000000000000..32c9986920ed
---- /dev/null
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-+/*
-+ * Copyright (c) 2020 Frank Lee <frank@allwinner.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include "sun50i-a100.dtsi"
-+
-+/{
-+	model = "A100 perf1";
-+	compatible = "allwinner,a100-perf1", "allwinner,sun50i-a100";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+};
-+
-+&uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_pb_pins>;
-+	status = "okay";
-+};
--- 
-2.24.0
+> > > 2. If this patch is about AUDIO_AHB_CLK_ROOT, then it's parent is
+> > AHB[POST_PODF] from the clock tree in RM.
+> > > Not quite understand why this patch changes to IPG[POST_PODF]. Is this RM
+> > incorrect issue?
 
+Yes. Right again. It needs to be the IMX8MP_CLK_AUDIO_AHB. Will change that now.
+
+> > >
+> > > BTW, if this patch is taken from someone else, we usually better keep the
+> > original author if not fundamental changes.
+> > >
+> > 
+> > I made this change at the suggestion from S.j. Wang.
+> > I'm the original author in linux-nxp (internal tree).
+> > 
+> 
+> That's fine. Then please ignore my "stupid" reminder. 😊
+> BTW, how about other questions?
+> 
+> Regards
+> Aisheng
+> 
+> > > Regards
+> > > Aisheng
+> > >
+> > > > ---
+> > > >  drivers/clk/imx/clk-imx8mp.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/clk/imx/clk-imx8mp.c
+> > > > b/drivers/clk/imx/clk-imx8mp.c index 41469e2..dcdfc9d 100644
+> > > > --- a/drivers/clk/imx/clk-imx8mp.c
+> > > > +++ b/drivers/clk/imx/clk-imx8mp.c
+> > > > @@ -727,7 +727,7 @@ static int imx8mp_clocks_probe(struct
+> > > > platform_device
+> > > > *pdev)
+> > > >  	hws[IMX8MP_CLK_HDMI_ROOT] =
+> > imx_clk_hw_gate4("hdmi_root_clk",
+> > > > "hdmi_axi", ccm_base + 0x45f0, 0);
+> > > >  	hws[IMX8MP_CLK_TSENSOR_ROOT] =
+> > > > imx_clk_hw_gate4("tsensor_root_clk", "ipg_root", ccm_base + 0x4620, 0);
+> > > >  	hws[IMX8MP_CLK_VPU_ROOT] = imx_clk_hw_gate4("vpu_root_clk",
+> > > > "vpu_bus", ccm_base + 0x4630, 0);
+> > > > -	hws[IMX8MP_CLK_AUDIO_ROOT] = imx_clk_hw_gate4("audio_root_clk",
+> > > > "ipg_root", ccm_base + 0x4650, 0);
+> > > > +	hws[IMX8MP_CLK_AUDIO_ROOT] = imx_clk_hw_gate4("audio_root_clk",
+> > > > +"ipg_audio_root", ccm_base + 0x4650, 0);
+> > > >
+> > > >  	hws[IMX8MP_CLK_ARM] = imx_clk_hw_cpu("arm", "arm_a53_core",
+> > > >  					     hws[IMX8MP_CLK_A53_CORE]->clk,
+> > > > --
+> > > > 2.7.4
+> > >
