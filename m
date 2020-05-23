@@ -2,98 +2,65 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 215841DF501
-	for <lists+linux-clk@lfdr.de>; Sat, 23 May 2020 07:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D441DF9D8
+	for <lists+linux-clk@lfdr.de>; Sat, 23 May 2020 20:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387590AbgEWFiv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 23 May 2020 01:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53652 "EHLO
+        id S1727123AbgEWSAZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 23 May 2020 14:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387456AbgEWFiu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 23 May 2020 01:38:50 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6FAC061A0E
-        for <linux-clk@vger.kernel.org>; Fri, 22 May 2020 22:38:50 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id x11so4268604plv.9
-        for <linux-clk@vger.kernel.org>; Fri, 22 May 2020 22:38:50 -0700 (PDT)
+        with ESMTP id S2388056AbgEWSAW (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 23 May 2020 14:00:22 -0400
+Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D77C08C5D1
+        for <linux-clk@vger.kernel.org>; Sat, 23 May 2020 11:00:20 -0700 (PDT)
+Received: by mail-qv1-xf42.google.com with SMTP id v15so6270759qvr.8
+        for <linux-clk@vger.kernel.org>; Sat, 23 May 2020 11:00:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gJrwsD95GiFyT9n16FxHRlHH8sHrHYZ+3946h1aQ09I=;
-        b=iQINVmOxAeLpDr0E2yIaMv28SPQnhgwEcX6Ju+vtadM9q9M2OLH6zrPh9QTPhnEPwr
-         3Fy7npvDe622nCK7raQJLFckR6yT7RiQnbSkq2Gzy4QZRUI5SmNsKENY1mhRoyZvneXh
-         QOtsKY6GxHaKwwxhc96ESAsE7obcP4zECHUfaFaUby39ploQCnD/ifATvlyCyAKMUl0P
-         pHmk651ADaXZKZoDt05z5BCxter4y7ZizKmkVEIDIWH4Pk90aGydVUgJZW2T3rjqRSuW
-         l4UyrR5YCwhPkzLEU4JmlIKi7UCxBUmF6Fx9At6x3hCKzrNVIwDCCBYqRRwFiZQ56n2V
-         PNpA==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=F3NMDrR9dummcUXdRfruEEfbIS6yB2vx68nB8Asq/5Q=;
+        b=DLUdlLdqK1bsV3DbEuTTyBWxouo7TOwyxri4APWQD3NqiMSIjirU+KuWgkxjC+SPXd
+         U5bKcUrFxXkujPWjXtLFF/k/nfilKzP5EjBajrS/8510fneO07cpMqdcHCxwrpi40/q7
+         /O0e1HoJlTbh5NB1junI0CHT5u7OlL96wLc3EVtoU1jy6h6mu/94Ij3+HmmWjDrdLWVh
+         jTwO4Rc/jE6wel14tPJDJsn6k0/UDkI9Or/XCFS691xyvyogoxyI2h7yK06Suh6ePv/U
+         +lZz7VywgsFgSxYL/B5mLPOXcZ0fktkIkUnyPxHg9tbmvqat4Bb8GZAodniIxvBVB3XB
+         mJxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gJrwsD95GiFyT9n16FxHRlHH8sHrHYZ+3946h1aQ09I=;
-        b=NZHMMgp29lEHjlFsqylTRqL67kPwMR4m14lNYRU7uBhYPoDc8hQXH0yTPPMJV5T697
-         gw84bbFY5cIu7bCwn+5hEGeX/OtqcgEw5K5xMILKORav+rHln1zvPYLytWoSLWLt1Dz+
-         W7Ajga3SUGMjmlocqtSJ9X7Xa/To9GdsxdbVHVlyt/p6XBY1WVC7p5JvGNPepN9paunG
-         oktnGvvHn0lcJTm9H406Az9KkbtJLu00IWEjYtyHzyBXzssgmkWcmSNSoKivBRDOjj10
-         y3GqT9b6A4Hj7YrTcZKZ7dmEChJvMSIeaH/aC+guakT+QHRSRw/S3tDy0OtHpWkvqc+w
-         KQcg==
-X-Gm-Message-State: AOAM531TntQM5pLhMZNEyY7EB4CbFb60Wz+iWWdkL+uqEfbzqT2Ce+1D
-        QDbmfNWX1VApr79QrWGrprC3EQ==
-X-Google-Smtp-Source: ABdhPJxhB1oBCneZ4xttQlsT2ySF2h6h3vamdFZz6sY9F6P4TuGI1WmzH/wlo8Z9uZQy0WBWdQraUw==
-X-Received: by 2002:a17:902:7e41:: with SMTP id a1mr3846943pln.72.1590212330089;
-        Fri, 22 May 2020 22:38:50 -0700 (PDT)
-Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id a71sm8638439pje.0.2020.05.22.22.38.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 May 2020 22:38:49 -0700 (PDT)
-Date:   Fri, 22 May 2020 22:38:46 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Jonathan Marek <jonathan@marek.ca>
-Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] clk: qcom: sm8250 gcc depends on QCOM_GDSC
-Message-ID: <20200523053846.GK11847@yoga>
-References: <20200523040947.31946-1-jonathan@marek.ca>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=F3NMDrR9dummcUXdRfruEEfbIS6yB2vx68nB8Asq/5Q=;
+        b=j6CST1VF/P4cCrBJfqgKifAL1QeOg9XO4Cbhfkf352n9zSY0Mc9SX6DRo4hCFzVNP3
+         C/q8CgO1hJ9VYwSCaIgyxcPPCEggdKAWnylfROt4+1C/TJZ5aV8uIJoiwx6gFPoErVsB
+         afaCdWZ/dGLp/Vsd2ze2ES2hK8phQvtAJnXYokEc+kfuQm59RbC93WoZvNt+NqSEWqRH
+         O/vrv3eo5ZEift+ngPljYvY61gLz3nFWW1l5LAkfuPyMtL2WaZRZ2EJWMcnbEXaCn5/1
+         nVpYGDKFoNbl16Y3uQ91KtfXksXq+1kV2+KnDYbvEYPP6HiMoip58+EoBHIu2R8cRXht
+         vfSA==
+X-Gm-Message-State: AOAM532hSu7nXiPa6TfcKWl/W9e876NpwkLPFxHLbiaZmHaZqnFZrmsl
+        KFyCgdRfto/EaMKItN9k3yWG2nDzUHFLWa9BIKU=
+X-Google-Smtp-Source: ABdhPJxI0GNvtYFRzubiNKehFnBmeNa8IdxO7hQ3TxAldsg7mTxyy0v9X6v2Fayhxp/lnxt7tCbB9QFJVJ60H98MgEQ=
+X-Received: by 2002:a0c:ed4b:: with SMTP id v11mr9120627qvq.179.1590256818769;
+ Sat, 23 May 2020 11:00:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200523040947.31946-1-jonathan@marek.ca>
+Received: by 2002:aed:3ac5:0:0:0:0:0 with HTTP; Sat, 23 May 2020 11:00:18
+ -0700 (PDT)
+Reply-To: mrs.chantala2055@gmail.com
+From:   mrs chantal <mrs.chantaltwo@gmail.com>
+Date:   Sat, 23 May 2020 18:00:18 +0000
+Message-ID: <CAGVwK0UnqGdMqCxvjeR06i5Ca=SScOHB3E1kfQEUa4_tgZN-cQ@mail.gmail.com>
+Subject: jjCompliment
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri 22 May 21:09 PDT 2020, Jonathan Marek wrote:
-
-> The driver will always fail to probe without QCOM_GDSC, so select it.
-> 
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Regards,
-Bjorn
-
-> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
-> ---
->  drivers/clk/qcom/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index 5df110be52c1..59dc0bdafad4 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -378,6 +378,7 @@ config SM_GCC_8150
->  
->  config SM_GCC_8250
->  	tristate "SM8250 Global Clock Controller"
-> +	select QCOM_GDSC
->  	help
->  	  Support for the global clock controller on SM8250 devices.
->  	  Say Y if you want to use peripheral devices such as UART,
-> -- 
-> 2.26.1
-> 
+     Compliment of the day to you. I am Mrs.CHANTAL I am sending this brief
+    letter to solicit your partnership to transfer $13.5 Million US
+    Dollars.I shall send you more information and procedures when I receive
+    positive response From you. Please send me a message in My private
+    email address is ( mrschantal066@gmail.com  )
+    Best Regards
+    MrS.Chantal
