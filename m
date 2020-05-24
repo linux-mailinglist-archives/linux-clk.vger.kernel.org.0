@@ -2,289 +2,111 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D99101E003A
-	for <lists+linux-clk@lfdr.de>; Sun, 24 May 2020 17:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA38D1E02CE
+	for <lists+linux-clk@lfdr.de>; Sun, 24 May 2020 23:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387737AbgEXPsS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 24 May 2020 11:48:18 -0400
-Received: from out28-2.mail.aliyun.com ([115.124.28.2]:35815 "EHLO
-        out28-2.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728870AbgEXPsQ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 24 May 2020 11:48:16 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436533|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.277908-0.000416784-0.721675;FP=0|0|0|0|0|-1|-1|-1;HT=e01a16370;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.HcyTzUM_1590335272;
-Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.HcyTzUM_1590335272)
-          by smtp.aliyun-inc.com(10.147.44.118);
-          Sun, 24 May 2020 23:48:04 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     linux-clk@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        sboyd@kernel.org, mturquette@baylibre.com, robh+dt@kernel.org,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, paul@crapouillou.net
-Subject: [PATCH v9 6/6] clk: X1000: Add FIXDIV for SSI clock of X1000.
-Date:   Sun, 24 May 2020 23:47:29 +0800
-Message-Id: <20200524154729.30958-8-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20200524154729.30958-1-zhouyanjie@wanyeetech.com>
-References: <20200524154729.30958-1-zhouyanjie@wanyeetech.com>
+        id S2387871AbgEXVGW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 24 May 2020 17:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387641AbgEXVGW (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 24 May 2020 17:06:22 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A08C061A0E
+        for <linux-clk@vger.kernel.org>; Sun, 24 May 2020 14:06:21 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id v4so12578122qte.3
+        for <linux-clk@vger.kernel.org>; Sun, 24 May 2020 14:06:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=marek-ca.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=33GqBqRR2Gx5o9WCKvD5zP6xFK/J0f9ce+9hLTx+wyU=;
+        b=dYUpyeZ88WeTWem/FswXsS44lrLQiybUFroMePC5CksOBACVAc+AP08HWM0w7Pb7Ac
+         F0NoPLjN8bl8FC/TOlPXgTDCHIwz9ScxlWhB+CCPJnvHPGin2bMTIy4i0dFKet5Uea+I
+         Ftpgtp3RfC4VlgKd07iaGfRxJQlavPnhVAETIyqC3PDPlQa3J/cWM70oWOXfKfWWjQrd
+         8mzF01SO6Lcs9PufgS4krp4OOJtNL/Etl+uokDY8imEP8PtmHaBekkQ6nLyEuIbpSq4u
+         /BM8C6gDx+6Mh7POr+o8fX9mWZ9Z+Hj0udzDuFnmZmicTN8UQx/A2Gy1I2bhd0IlZmk9
+         ZA4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=33GqBqRR2Gx5o9WCKvD5zP6xFK/J0f9ce+9hLTx+wyU=;
+        b=MrZb63DCP+NsifbzlSK25QM2e4bsKpe4uPorWJkuYir0xrkbVWdHUpYQFMpXcJ+lPc
+         EN8U76F2Gz9v4dIZeprJ/l+dkA+VTcHjggpz9+Ad0NZJ3Ze8/j50AwtjMMZ0pWI0pYPT
+         cF4zfYE0bawMB77d8D0YJhE8B98tm3FeiuCrKXKPDv17WFqO8Sgt6xLWFRoIxm5Z/vk6
+         OrE75g1SXyv6NB6ddRWdcw0gH2oXgOSqG+02QFwOcAx1K4i5WUtBjj/sE8mHfkbjt10K
+         HSM59MvWFbeI+wOPALopq0KcfhS5DL4UJ+CytDI9hJpc4/lxVNuZKmostoVd5CO9Ttii
+         wuzQ==
+X-Gm-Message-State: AOAM530Y6ffK4/zeg6UsBghSptK2T7AKEhXLCSD+boYK57LlagKwHlel
+        9Gceqgy+X2ntKVSXVR9Kb+QOmA==
+X-Google-Smtp-Source: ABdhPJwI1QyBwhsjxuoHpJ6tCXkyyAyYdQsPyhYI0RaCc5ILD7mHRyhYvqVq1nEthHB/cp/9qysgug==
+X-Received: by 2002:aed:2452:: with SMTP id s18mr11569062qtc.137.1590354379884;
+        Sun, 24 May 2020 14:06:19 -0700 (PDT)
+Received: from localhost.localdomain ([147.253.86.153])
+        by smtp.gmail.com with ESMTPSA id g51sm4401769qtb.69.2020.05.24.14.06.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 May 2020 14:06:19 -0700 (PDT)
+From:   Jonathan Marek <jonathan@marek.ca>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        linux-clk@vger.kernel.org (open list:COMMON CLK FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list),
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: [PATCH 00/10] Enable GPU for SM8150 and SM8250
+Date:   Sun, 24 May 2020 17:06:01 -0400
+Message-Id: <20200524210615.17035-1-jonathan@marek.ca>
+X-Mailer: git-send-email 2.26.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-1.The SSI clock of X1000 not like JZ4770 and JZ4780, they are not
-  directly derived from the output of SSIPLL, but from the clock
-  obtained by dividing the frequency by 2. "X1000_CLK_SSIPLL_DIV2"
-  is added for this purpose, and ensure that it initialized before
-  "X1000_CLK_SSIMUX" when initializing the clocks.
-2.Clocks of LCD, OTG, EMC, EFUSE, OST, and gates of CPU, PCLK
-  are also added.
-3.Use "CLK_OF_DECLARE_DRIVER" like the other CGU drivers.
+This series adds the missing clock drivers and dts nodes to enable
+the GPU on both SM8150 and SM8250.
 
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
----
+Adreno 640/650 support was recently added to drm/msm [1], but an
+extra patch [2] is still required for GPU to actually work on SM8250.
 
-Notes:
-    v5:
-    New patch.
-    
-    V5->v6:
-    Add missing part of X1000's CGU.
-    
-    v6->v7:
-    Update commit message.
-    
-    v7->v8:
-    No change.
-    
-    v8->v9:
-    Add Paul Cercueil's Reviewed-by, somehow his emails are not displayed
-    on the mailing list and patchwork of clock framework subsystem.
+[1] https://patchwork.freedesktop.org/series/76198/
+[2] https://gist.github.com/flto/784f1aca761ebf2fe6c105719a4a04ca
 
- drivers/clk/ingenic/x1000-cgu.c | 112 +++++++++++++++++++++++++++++++++++++---
- 1 file changed, 105 insertions(+), 7 deletions(-)
+Jonathan Marek (10):
+  clk: qcom: clk-alpha-pll: remove unused/incorrect PLL_CAL_VAL
+  clk: qcom: clk-alpha-pll: same regs and ops for trion and lucid
+  clk: qcom: clk-alpha-pll: use the right PCAL_DONE value for lucid pll
+  clk: qcom: gcc: remove unnecessary vco_table from SM8150
+  dt-bindings: clock: Introduce SM8150 QCOM Graphics clock bindings
+  dt-bindings: clock: Introduce SM8250 QCOM Graphics clock bindings
+  clk: qcom: Add graphics clock controller driver for SM8150
+  clk: qcom: Add graphics clock controller driver for SM8250
+  arm64: dts: qcom: add sm8150 GPU nodes
+  arm64: dts: qcom: add sm8250 GPU nodes
 
-diff --git a/drivers/clk/ingenic/x1000-cgu.c b/drivers/clk/ingenic/x1000-cgu.c
-index c33934d8ac14..a4110cf96a8a 100644
---- a/drivers/clk/ingenic/x1000-cgu.c
-+++ b/drivers/clk/ingenic/x1000-cgu.c
-@@ -1,15 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-  * X1000 SoC CGU driver
-- * Copyright (c) 2019 Zhou Yanjie <zhouyanjie@zoho.com>
-+ * Copyright (c) 2019 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-  */
- 
- #include <linux/clk-provider.h>
- #include <linux/delay.h>
- #include <linux/of.h>
--
- #include <dt-bindings/clock/x1000-cgu.h>
--
- #include "cgu.h"
- #include "pm.h"
- 
-@@ -20,6 +18,9 @@
- #define CGU_REG_CLKGR		0x20
- #define CGU_REG_OPCR		0x24
- #define CGU_REG_DDRCDR		0x2c
-+#define CGU_REG_USBPCR		0x3c
-+#define CGU_REG_USBPCR1		0x48
-+#define CGU_REG_USBCDR		0x50
- #define CGU_REG_MACCDR		0x54
- #define CGU_REG_I2SCDR		0x60
- #define CGU_REG_LPCDR		0x64
-@@ -40,8 +41,47 @@
- #define OPCR_SPENDN0		BIT(7)
- #define OPCR_SPENDN1		BIT(6)
- 
-+/* bits within the USBPCR register */
-+#define USBPCR_SIDDQ		BIT(21)
-+#define USBPCR_OTG_DISABLE	BIT(20)
-+
- static struct ingenic_cgu *cgu;
- 
-+static int x1000_usb_phy_enable(struct clk_hw *hw)
-+{
-+	void __iomem *reg_opcr		= cgu->base + CGU_REG_OPCR;
-+	void __iomem *reg_usbpcr	= cgu->base + CGU_REG_USBPCR;
-+
-+	writel(readl(reg_opcr) | OPCR_SPENDN0, reg_opcr);
-+	writel(readl(reg_usbpcr) & ~USBPCR_OTG_DISABLE & ~USBPCR_SIDDQ, reg_usbpcr);
-+	return 0;
-+}
-+
-+static void x1000_usb_phy_disable(struct clk_hw *hw)
-+{
-+	void __iomem *reg_opcr		= cgu->base + CGU_REG_OPCR;
-+	void __iomem *reg_usbpcr	= cgu->base + CGU_REG_USBPCR;
-+
-+	writel(readl(reg_opcr) & ~OPCR_SPENDN0, reg_opcr);
-+	writel(readl(reg_usbpcr) | USBPCR_OTG_DISABLE | USBPCR_SIDDQ, reg_usbpcr);
-+}
-+
-+static int x1000_usb_phy_is_enabled(struct clk_hw *hw)
-+{
-+	void __iomem *reg_opcr		= cgu->base + CGU_REG_OPCR;
-+	void __iomem *reg_usbpcr	= cgu->base + CGU_REG_USBPCR;
-+
-+	return (readl(reg_opcr) & OPCR_SPENDN0) &&
-+		!(readl(reg_usbpcr) & USBPCR_SIDDQ) &&
-+		!(readl(reg_usbpcr) & USBPCR_OTG_DISABLE);
-+}
-+
-+static const struct clk_ops x1000_otg_phy_ops = {
-+	.enable		= x1000_usb_phy_enable,
-+	.disable	= x1000_usb_phy_disable,
-+	.is_enabled	= x1000_usb_phy_is_enabled,
-+};
-+
- static const s8 pll_od_encoding[8] = {
- 	0x0, 0x1, -1, 0x2, -1, -1, -1, 0x3,
- };
-@@ -101,6 +141,15 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 		},
- 	},
- 
-+
-+	/* Custom (SoC-specific) OTG PHY */
-+
-+	[X1000_CLK_OTGPHY] = {
-+		"otg_phy", CGU_CLK_CUSTOM,
-+		.parents = { -1, -1, X1000_CLK_EXCLK, -1 },
-+		.custom = { &x1000_otg_phy_ops },
-+	},
-+
- 	/* Muxes & dividers */
- 
- 	[X1000_CLK_SCLKA] = {
-@@ -116,9 +165,10 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 	},
- 
- 	[X1000_CLK_CPU] = {
--		"cpu", CGU_CLK_DIV,
-+		"cpu", CGU_CLK_DIV | CGU_CLK_GATE,
- 		.parents = { X1000_CLK_CPUMUX, -1, -1, -1 },
- 		.div = { CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1 },
-+		.gate = { CGU_REG_CLKGR, 30 },
- 	},
- 
- 	[X1000_CLK_L2CACHE] = {
-@@ -147,9 +197,10 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 	},
- 
- 	[X1000_CLK_PCLK] = {
--		"pclk", CGU_CLK_DIV,
-+		"pclk", CGU_CLK_DIV | CGU_CLK_GATE,
- 		.parents = { X1000_CLK_AHB2PMUX, -1, -1, -1 },
- 		.div = { CGU_REG_CPCCR, 16, 1, 4, 20, -1, -1 },
-+		.gate = { CGU_REG_CLKGR, 28 },
- 	},
- 
- 	[X1000_CLK_DDR] = {
-@@ -162,12 +213,20 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 
- 	[X1000_CLK_MAC] = {
- 		"mac", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
--		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL},
-+		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL },
- 		.mux = { CGU_REG_MACCDR, 31, 1 },
- 		.div = { CGU_REG_MACCDR, 0, 1, 8, 29, 28, 27 },
- 		.gate = { CGU_REG_CLKGR, 25 },
- 	},
- 
-+	[X1000_CLK_LCD] = {
-+		"lcd", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL },
-+		.mux = { CGU_REG_LPCDR, 31, 1 },
-+		.div = { CGU_REG_LPCDR, 0, 1, 8, 28, 27, 26 },
-+		.gate = { CGU_REG_CLKGR, 23 },
-+	},
-+
- 	[X1000_CLK_MSCMUX] = {
- 		"msc_mux", CGU_CLK_MUX,
- 		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL},
-@@ -188,6 +247,15 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 		.gate = { CGU_REG_CLKGR, 5 },
- 	},
- 
-+	[X1000_CLK_OTG] = {
-+		"otg", CGU_CLK_DIV | CGU_CLK_GATE | CGU_CLK_MUX,
-+		.parents = { X1000_CLK_EXCLK, -1,
-+					 X1000_CLK_APLL, X1000_CLK_MPLL },
-+		.mux = { CGU_REG_USBCDR, 30, 2 },
-+		.div = { CGU_REG_USBCDR, 0, 1, 8, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR, 3 },
-+	},
-+
- 	[X1000_CLK_SSIPLL] = {
- 		"ssi_pll", CGU_CLK_MUX | CGU_CLK_DIV,
- 		.parents = { X1000_CLK_SCLKA, X1000_CLK_MPLL, -1, -1 },
-@@ -195,14 +263,32 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 		.div = { CGU_REG_SSICDR, 0, 1, 8, 29, 28, 27 },
- 	},
- 
-+	[X1000_CLK_SSIPLL_DIV2] = {
-+		"ssi_pll_div2", CGU_CLK_FIXDIV,
-+		.parents = { X1000_CLK_SSIPLL },
-+		.fixdiv = { 2 },
-+	},
-+
- 	[X1000_CLK_SSIMUX] = {
- 		"ssi_mux", CGU_CLK_MUX,
--		.parents = { X1000_CLK_EXCLK, X1000_CLK_SSIPLL, -1, -1 },
-+		.parents = { X1000_CLK_EXCLK, X1000_CLK_SSIPLL_DIV2, -1, -1 },
- 		.mux = { CGU_REG_SSICDR, 30, 1 },
- 	},
- 
- 	/* Gate-only clocks */
- 
-+	[X1000_CLK_EMC] = {
-+		"emc", CGU_CLK_GATE,
-+		.parents = { X1000_CLK_AHB2, -1, -1, -1 },
-+		.gate = { CGU_REG_CLKGR, 0 },
-+	},
-+
-+	[X1000_CLK_EFUSE] = {
-+		"efuse", CGU_CLK_GATE,
-+		.parents = { X1000_CLK_AHB2, -1, -1, -1 },
-+		.gate = { CGU_REG_CLKGR, 1 },
-+	},
-+
- 	[X1000_CLK_SFC] = {
- 		"sfc", CGU_CLK_GATE,
- 		.parents = { X1000_CLK_SSIPLL, -1, -1, -1 },
-@@ -245,12 +331,24 @@ static const struct ingenic_cgu_clk_info x1000_cgu_clocks[] = {
- 		.gate = { CGU_REG_CLKGR, 16 },
- 	},
- 
-+	[X1000_CLK_TCU] = {
-+		"tcu", CGU_CLK_GATE,
-+		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.gate = { CGU_REG_CLKGR, 18 },
-+	},
-+
- 	[X1000_CLK_SSI] = {
- 		"ssi", CGU_CLK_GATE,
- 		.parents = { X1000_CLK_SSIMUX, -1, -1, -1 },
- 		.gate = { CGU_REG_CLKGR, 19 },
- 	},
- 
-+	[X1000_CLK_OST] = {
-+		"ost", CGU_CLK_GATE,
-+		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
-+		.gate = { CGU_REG_CLKGR, 20 },
-+	},
-+
- 	[X1000_CLK_PDMA] = {
- 		"pdma", CGU_CLK_GATE,
- 		.parents = { X1000_CLK_EXCLK, -1, -1, -1 },
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          | 132 +++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          | 139 ++++++
+ drivers/clk/qcom/Kconfig                      |  16 +
+ drivers/clk/qcom/Makefile                     |   2 +
+ drivers/clk/qcom/clk-alpha-pll.c              |  70 ++-
+ drivers/clk/qcom/clk-alpha-pll.h              |  15 +-
+ drivers/clk/qcom/gcc-sm8150.c                 |  18 +-
+ drivers/clk/qcom/gpucc-sm8150.c               | 429 ++++++++++++++++
+ drivers/clk/qcom/gpucc-sm8250.c               | 458 ++++++++++++++++++
+ include/dt-bindings/clock/qcom,gpucc-sm8150.h |  40 ++
+ include/dt-bindings/clock/qcom,gpucc-sm8250.h |  40 ++
+ 11 files changed, 1304 insertions(+), 55 deletions(-)
+ create mode 100644 drivers/clk/qcom/gpucc-sm8150.c
+ create mode 100644 drivers/clk/qcom/gpucc-sm8250.c
+ create mode 100644 include/dt-bindings/clock/qcom,gpucc-sm8150.h
+ create mode 100644 include/dt-bindings/clock/qcom,gpucc-sm8250.h
+
 -- 
-2.11.0
+2.26.1
 
