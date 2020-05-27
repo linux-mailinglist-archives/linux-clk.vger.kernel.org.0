@@ -2,66 +2,128 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B281E39E4
-	for <lists+linux-clk@lfdr.de>; Wed, 27 May 2020 09:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BAE1E3A1A
+	for <lists+linux-clk@lfdr.de>; Wed, 27 May 2020 09:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728573AbgE0HKP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 27 May 2020 03:10:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36948 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726025AbgE0HKP (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 27 May 2020 03:10:15 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 879B22078C;
-        Wed, 27 May 2020 07:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590563414;
-        bh=5f88nzMEqPegezJKOkJqZXoqontH74AXnh+2bhAJsmo=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=t5cNX77+4RbiAEdrszt2vjDDTNux0be5OEVSAxqKUyMPYEKG6r+VUtx/2z9tO08B6
-         otpHXxk42k57ptJbk56rY8zXBpE+fImfz6Lz0Ir3aSShqx6hTwaG6hfuGw/GEhj5uI
-         F0Mpf+dwsLgmBUY6Q5bL2XeUP1Q3zkVIZZzLUtzg=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200508220238.4883-1-rikard.falkeborn@gmail.com>
-References: <20200508220238.4883-1-rikard.falkeborn@gmail.com>
-Subject: Re: [PATCH] clk: bcm2835: Constify struct debugfs_reg32
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>, eric@anholt.net,
-        f.fainelli@gmail.com, mturquette@baylibre.com,
-        nsaenzjulienne@suse.de, rjui@broadcom.com, sbranden@broadcom.com,
-        wahrenst@gmx.net
-Date:   Wed, 27 May 2020 00:10:13 -0700
-Message-ID: <159056341376.88029.8430380128281240784@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+        id S1729140AbgE0HP5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 27 May 2020 03:15:57 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:60396 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728821AbgE0HP5 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 27 May 2020 03:15:57 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr2ugE85eDIs5AA--.467S2;
+        Wed, 27 May 2020 15:15:44 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: [PATCH v2 1/2] clk: hisilicon: Use correct return value about hisi_reset_init()
+Date:   Wed, 27 May 2020 15:15:42 +0800
+Message-Id: <1590563743-30707-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dxr2ugE85eDIs5AA--.467S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZr1kZF4kKF13Ar18Xw4fKrg_yoW5WF1rpF
+        48JFW2ya4Yga17XFnrXrZ0yFy5Za42gayUGFW8Z3sxZwn8JrWUZr1fury8Xayqqrs3KFWa
+        9r40kr48uayjyFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkv14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4x
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUfpnQUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Rikard Falkeborn (2020-05-08 15:02:38)
-> bcm2835_debugfs_clock_reg32 is never changed and can therefore be made
-> const.
->=20
-> This allows the compiler to put it in the text section instead of the
-> data section.
->=20
-> Before:
->    text    data     bss     dec     hex filename
->   26598   16088      64   42750    a6fe drivers/clk/bcm/clk-bcm2835.o
->=20
-> After:
->    text    data     bss     dec     hex filename
->   26662   16024      64   42750    a6fe drivers/clk/bcm/clk-bcm2835.o
->=20
-> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
-> ---
+The return value about hisi_reset_init() is not correct, fix it.
 
-Applied to clk-next
+Fixes: e9a2310fb689 ("reset: hisilicon: fix potential NULL pointer dereference")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+
+v2:
+  - No changes, just add "Fixes:" tag
+
+ drivers/clk/hisilicon/clk-hi3519.c      | 4 ++--
+ drivers/clk/hisilicon/crg-hi3516cv300.c | 4 ++--
+ drivers/clk/hisilicon/crg-hi3798cv200.c | 4 ++--
+ drivers/clk/hisilicon/reset.c           | 4 ++--
+ 4 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/clk/hisilicon/clk-hi3519.c b/drivers/clk/hisilicon/clk-hi3519.c
+index ad0c7f3..803fa66 100644
+--- a/drivers/clk/hisilicon/clk-hi3519.c
++++ b/drivers/clk/hisilicon/clk-hi3519.c
+@@ -149,8 +149,8 @@ static int hi3519_clk_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	crg->rstc = hisi_reset_init(pdev);
+-	if (!crg->rstc)
+-		return -ENOMEM;
++	if (IS_ERR(crg->rstc))
++		return PTR_ERR(crg->rstc);
+ 
+ 	crg->clk_data = hi3519_clk_register(pdev);
+ 	if (IS_ERR(crg->clk_data)) {
+diff --git a/drivers/clk/hisilicon/crg-hi3516cv300.c b/drivers/clk/hisilicon/crg-hi3516cv300.c
+index 5d4e61c..c2af03d 100644
+--- a/drivers/clk/hisilicon/crg-hi3516cv300.c
++++ b/drivers/clk/hisilicon/crg-hi3516cv300.c
+@@ -271,8 +271,8 @@ static int hi3516cv300_crg_probe(struct platform_device *pdev)
+ 		return -ENOENT;
+ 
+ 	crg->rstc = hisi_reset_init(pdev);
+-	if (!crg->rstc)
+-		return -ENOMEM;
++	if (IS_ERR(crg->rstc))
++		return PTR_ERR(crg->rstc);
+ 
+ 	crg->clk_data = crg->funcs->register_clks(pdev);
+ 	if (IS_ERR(crg->clk_data)) {
+diff --git a/drivers/clk/hisilicon/crg-hi3798cv200.c b/drivers/clk/hisilicon/crg-hi3798cv200.c
+index 08a19ba..66fd6a9 100644
+--- a/drivers/clk/hisilicon/crg-hi3798cv200.c
++++ b/drivers/clk/hisilicon/crg-hi3798cv200.c
+@@ -354,8 +354,8 @@ static int hi3798cv200_crg_probe(struct platform_device *pdev)
+ 		return -ENOENT;
+ 
+ 	crg->rstc = hisi_reset_init(pdev);
+-	if (!crg->rstc)
+-		return -ENOMEM;
++	if (IS_ERR(crg->rstc))
++		return PTR_ERR(crg->rstc);
+ 
+ 	crg->clk_data = crg->funcs->register_clks(pdev);
+ 	if (IS_ERR(crg->clk_data)) {
+diff --git a/drivers/clk/hisilicon/reset.c b/drivers/clk/hisilicon/reset.c
+index 93cee17..f17d15f 100644
+--- a/drivers/clk/hisilicon/reset.c
++++ b/drivers/clk/hisilicon/reset.c
+@@ -93,11 +93,11 @@ struct hisi_reset_controller *hisi_reset_init(struct platform_device *pdev)
+ 
+ 	rstc = devm_kmalloc(&pdev->dev, sizeof(*rstc), GFP_KERNEL);
+ 	if (!rstc)
+-		return NULL;
++		return ERR_PTR(-ENOMEM);
+ 
+ 	rstc->membase = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(rstc->membase))
+-		return NULL;
++		return rstc->membase;
+ 
+ 	spin_lock_init(&rstc->lock);
+ 	rstc->rcdev.owner = THIS_MODULE;
+-- 
+2.1.0
+
