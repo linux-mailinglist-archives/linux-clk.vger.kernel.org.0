@@ -2,56 +2,56 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C7E1E4811
-	for <lists+linux-clk@lfdr.de>; Wed, 27 May 2020 17:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6D81E480E
+	for <lists+linux-clk@lfdr.de>; Wed, 27 May 2020 17:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389716AbgE0Ppc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 27 May 2020 11:45:32 -0400
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:46111 "EHLO
+        id S1730505AbgE0PrH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 27 May 2020 11:47:07 -0400
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:46999 "EHLO
         new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730427AbgE0Ppb (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 27 May 2020 11:45:31 -0400
+        by vger.kernel.org with ESMTP id S2389790AbgE0Ppe (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 27 May 2020 11:45:34 -0400
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 1402F581DB5;
-        Wed, 27 May 2020 11:45:30 -0400 (EDT)
+        by mailnew.nyi.internal (Postfix) with ESMTP id 25BC1581DBE;
+        Wed, 27 May 2020 11:45:33 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 27 May 2020 11:45:30 -0400
+  by compute4.internal (MEProxy); Wed, 27 May 2020 11:45:33 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm2; bh=Qm04qMuBv7fTr
-        3XQL3pQXZGC/epnrC5zo/RIT1dLqig=; b=w4AqbP6Fx3bkqMTIIxC49dmDC1/iE
-        cWFsjCA1OPveXcYYVnbrOP+8Oi9aRobj7RSrmm+NIg8i7OCT8bswzlpe+JgUpFaa
-        z5gy/b9TDd//QgpoUy01DMuHZ/M3YsgfZTu5Qm2ZgZ5P5Y0+fvSzid7yXZRyj++X
-        JoNqfJrhQY6XWNT1dpXjSll0oThTzgQhFtY4B5T11VKcSBwaOgmN9UyZWoWqv2XT
-        5JFVmZmKiuaqNE2WOu4RSPj2x4moJj3lE1gjZnHhIEzlEO4US9qGjAJqKOyYnWsM
-        uEDDJ1E4XukGgfu5enFFM75N8OdPyR4/xz3sjY01L9gaPvWacy8C/h9dw==
+        :mime-version:content-transfer-encoding; s=fm2; bh=Fs62D7m8qEeAr
+        zhgkrU642z9hHS4Rj749FWecfiG/o4=; b=XjckTWmVA6AXaIlgfI9V+QFwJly7R
+        4UiZgG59MvYGw6CiErHPl/z9fd/W9e71PY/N68H3W4tnDQYwmg1nmaoEEzedwq4J
+        HW/cm5gmq2OD+VNCMyNsqsJPpKOsZsygfyxAGp12BKiWBu2l1bUDMiRZl9bpEsd2
+        FfXB8yJP9AHdIhmTwBoha9Aur7BJj4U2FjpOf6OG2SVqsNzzltIaW7e29tLesjXM
+        +epiKvwHMK7WK2hV1ignXsbzBS6g39YjHrr4DUIaZnlDqKRLXuBLIXvPfGx9o9O9
+        GhIleWg8VHxaWq11blCKGiEEga81NLpxvVvZUauMIgZnsWj2de4/y70Dg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; bh=Qm04qMuBv7fTr3XQL3pQXZGC/epnrC5zo/RIT1dLqig=; b=Mf09Owfc
-        KKfh0rDn2rIcDV7vUKI+xDVRezuPkBWV7JIBJTTIMzxkS9cBbTDcqrDCY7H8ypjX
-        75OUJDbvTMql0I3TkzXIAq0xiVESBOaPi3ghRi3qFuZY3FbbXUQ7YeUm+3EqwIff
-        zZ95rJ2yiefhNbv9RiLNa1xnZ0NzV3e+eZ/czvK7W4oIfR/AhYCy8/ZG/FgIAhBY
-        7VOXH3AlluAa5I9IX2p4sU4hi4NJQA62qlDWT7z84WsHScy/VysNqTJv1tYpuLsg
-        ZM/oLnpPu4UElbpV4kWcM+47tg0h9J2A9Ywv75UnX1jFlYulwKC5I2clPsXXnFCD
-        LVCoJnNR0JVAJg==
-X-ME-Sender: <xms:GYvOXge7xsZKTiC23ggjl6y0ZfgG99KD-7IUqd1vV1Z2_3JkbzCDPw>
+        fm2; bh=Fs62D7m8qEeArzhgkrU642z9hHS4Rj749FWecfiG/o4=; b=3K3sodad
+        21MsV92ZB8yiWHKxwl1/j6ZB+uc1E2+IKMTH34+nxjVe09dGLzwM9Bz24Yu+7T4L
+        KyrY7uEkcM9TbYqd8Wa31fC6uh4yvq0SddiMI18rw5XNPVZYJWjY1N2ldTz2HMAE
+        T656jywveCIWWWFai1O7npnh1GhdZCWTwz2TxlTwPYB7Sq4fxyTNe9WZ/sXWfwV/
+        1YDBWiQrMx+Yz8LX9ieVchxCjemnl4bFpwFBiysTAkouwcvLctC/yi8qeW/4z7on
+        W1K9l2S61wsYqMt/gWOfcS66nsq+Yx4NTFUBhJva32qvISbw+LjbL+w/86+wIBPv
+        SiBn4nZzNC3XzQ==
+X-ME-Sender: <xms:HYvOXk2mREsszkBd7EIT862kgP7bk8QhLWEFv9WOcDbQnfWksMz7Pw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedruddvgedgkeefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhm
     vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
     htvghrnhepvdekleevfeffkeejhfffueelteelfeduieefheduudfggffhhfffheevveeh
-    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepvdenuc
     frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:GYvOXiMIEPOip-l58CNC8InHUNvlHf_VkEJrBI-TkfCnsVYBdaBC8g>
-    <xmx:GYvOXhhBx7ZtgBBv11j1uj2Mb8F0YUVrqs8YHHI2O7fdjXeSwQPrmg>
-    <xmx:GYvOXl-zVe6uNdYCtWoZIxjIsfU9LXmIG5cLjGgMsm75eDNPmYbFHA>
-    <xmx:GovOXtkY-vt99xFFopPmMhIXIpL-efiUrLSZ9wrLWut18vV4G3nMLg>
+X-ME-Proxy: <xmx:HYvOXvEYlhYkG05LbFMT835S4jQE1LQuyf_wFeuUYahlSU9gEExpDA>
+    <xmx:HYvOXs583WuM22YTAw0jRWwHrJ6wPrS_xysEqBuug5NP_gnvXi1OLw>
+    <xmx:HYvOXt2jOuKATwmt65KCo8NXtLZq67PzGXmDNDzMa0ayu12Sj6Yvvw>
+    <xmx:HYvOXtY0PSP1gcz2X6BhOa6AvV1Iwad68KutJpUq9WCqXEnP53AHlg>
 Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id A8DC53280066;
-        Wed, 27 May 2020 11:45:29 -0400 (EDT)
+        by mail.messagingengine.com (Postfix) with ESMTPA id B977A328005A;
+        Wed, 27 May 2020 11:45:32 -0400 (EDT)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 Cc:     linux-rpi-kernel@lists.infradead.org,
@@ -62,12 +62,10 @@ Cc:     linux-rpi-kernel@lists.infradead.org,
         Phil Elwell <phil@raspberrypi.com>,
         Maxime Ripard <maxime@cerno.tech>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v3 02/25] dt-bindings: clock: Add a binding for the RPi Firmware clocks
-Date:   Wed, 27 May 2020 17:44:58 +0200
-Message-Id: <919e2f2f13583d4d53d0e95b81fc3fb8a7606107.1590594293.git-series.maxime@cerno.tech>
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
+Subject: [PATCH v3 04/25] clk: bcm: rpi: Allow the driver to be probed by DT
+Date:   Wed, 27 May 2020 17:45:00 +0200
+Message-Id: <fa709f71b27aadf987685f7cae2a65cc3cef8e3d.1590594293.git-series.maxime@cerno.tech>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.662a8d401787ef33780d91252a352de91dc4be10.1590594293.git-series.maxime@cerno.tech>
 References: <cover.662a8d401787ef33780d91252a352de91dc4be10.1590594293.git-series.maxime@cerno.tech>
@@ -78,60 +76,64 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The firmware running on the RPi VideoCore can be used to discover and
-change the various clocks running in the BCM2711. Since devices will
-need to use them through the DT, let's add a pretty simple binding.
+The current firmware clock driver for the RaspberryPi can only be probed by
+manually registering an associated platform_device.
+
+While this works fine for cpufreq where the device gets attached a clkdev
+lookup, it would be tedious to maintain a table of all the devices using
+one of the clocks exposed by the firmware.
+
+Since the DT on the other hand is the perfect place to store those
+associations, make the firmware clocks driver probe-able through the device
+tree so that we can represent it as a node.
 
 Cc: Michael Turquette <mturquette@baylibre.com>
 Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>
 Cc: linux-clk@vger.kernel.org
-Cc: devicetree@vger.kernel.org
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
- Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/clk/bcm/clk-raspberrypi.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-index cec540c052b6..b48ed875eb8e 100644
---- a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-+++ b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-@@ -22,6 +22,25 @@ properties:
-       Phandle to the firmware device's Mailbox.
-       (See: ../mailbox/mailbox.txt for more information)
+diff --git a/drivers/clk/bcm/clk-raspberrypi.c b/drivers/clk/bcm/clk-raspberrypi.c
+index 1654fd0eedc9..8610355bda47 100644
+--- a/drivers/clk/bcm/clk-raspberrypi.c
++++ b/drivers/clk/bcm/clk-raspberrypi.c
+@@ -255,8 +255,16 @@ static int raspberrypi_clk_probe(struct platform_device *pdev)
+ 	struct raspberrypi_clk *rpi;
+ 	int ret;
  
-+  clocks:
-+    type: object
+-	firmware_node = of_find_compatible_node(NULL, NULL,
+-					"raspberrypi,bcm2835-firmware");
++	/*
++	 * We can be probed either through the an old-fashioned
++	 * platform device registration or through a DT node that is a
++	 * child of the firmware node. Handle both cases.
++	 */
++	if (dev->of_node)
++		firmware_node = of_get_parent(dev->of_node);
++	else
++		firmware_node = of_find_compatible_node(NULL, NULL,
++							"raspberrypi,bcm2835-firmware");
+ 	if (!firmware_node) {
+ 		dev_err(dev, "Missing firmware node\n");
+ 		return -ENOENT;
+@@ -300,9 +308,16 @@ static int raspberrypi_clk_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static const struct of_device_id raspberrypi_clk_match[] = {
++	{ .compatible = "raspberrypi,firmware-clocks" },
++	{ },
++};
++MODULE_DEVICE_TABLE(of, raspberrypi_clk_match);
 +
-+    properties:
-+      compatible:
-+        const: raspberrypi,firmware-clocks
-+
-+      "#clock-cells":
-+        const: 1
-+        description: >
-+          The argument is the ID of the clocks contained by the
-+          firmware messages.
-+
-+    required:
-+      - compatible
-+      - "#clock-cells"
-+
-+    additionalProperties: false
-+
- required:
-   - compatible
-   - mboxes
-@@ -31,5 +50,10 @@ examples:
-     firmware {
-         compatible = "raspberrypi,bcm2835-firmware", "simple-bus";
-         mboxes = <&mailbox>;
-+
-+        firmware_clocks: clocks {
-+            compatible = "raspberrypi,firmware-clocks";
-+            #clock-cells = <1>;
-+        };
-     };
- ...
+ static struct platform_driver raspberrypi_clk_driver = {
+ 	.driver = {
+ 		.name = "raspberrypi-clk",
++		.of_match_table = raspberrypi_clk_match,
+ 	},
+ 	.probe          = raspberrypi_clk_probe,
+ 	.remove		= raspberrypi_clk_remove,
 -- 
 git-series 0.9.1
