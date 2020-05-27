@@ -2,105 +2,67 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE091E4C77
-	for <lists+linux-clk@lfdr.de>; Wed, 27 May 2020 19:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BCA81E4CC7
+	for <lists+linux-clk@lfdr.de>; Wed, 27 May 2020 20:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390163AbgE0R5H (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 27 May 2020 13:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387653AbgE0R5G (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 27 May 2020 13:57:06 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104C9C03E97D;
-        Wed, 27 May 2020 10:57:06 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id z13so20366038ljn.7;
-        Wed, 27 May 2020 10:57:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=l4NpTDexV8NESh3eG0B8gFwKIHqu0TSUXXYRfhGYw7Y=;
-        b=b+B6T+tBvfzagYHPLXBQNz8SCjxiQkUWkDAaKG0p0w291UMQEAvZHxegetvnU3L7e+
-         B05xBzx9hfsr/9mYjUBl3SCsr4UsO4gBKG9HiLRBHerPk7RI+0YVH1nIfhvgZwqSV0gn
-         IWm0mzjFkedkZL8TjkmrIXq1Xow47cv6BtTlJlDhczotmg07MPPcXNKiA4vtl5H/gPeh
-         D06dSyaRBKsTEcLilqgxHYGw+y0ivMTHkKu4MPXa7fJmYW/9IgcwJAtoCJyvl3bOQCHb
-         vzXvrjLWQ6mx9XFAT4j45AkHTyVQLLZ3kP0wCCmydB9x1eO4pCU+ImVKjaebHXCvPjSu
-         rMOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=l4NpTDexV8NESh3eG0B8gFwKIHqu0TSUXXYRfhGYw7Y=;
-        b=CmblZwB2HwxXrK2vnf7/WVzeJiAF+JUOe0yh3x+KHaJN/7yq/bF0FHUNaApOdxa9Cf
-         QbIM8qZhDj+F/EcOqWDRMcGNmkeAp3eIYqR9+/yaxuBasjsRoMTeDhOOSN4KGrV5mPCQ
-         //+I9H5dH4sJDVNjUzhH/kYyeqqX5QXX8jBVUE01zgHbc9IBg2XS65XWqjPKQEmcEvZ5
-         MurKrn3I1ITyGlth5pGniuZfQCa8o+lDqqOwG+tcSMkMclbDAkUseLzcDzVA2qQaZBt/
-         zUPiCuS2twkOensfx76h7M6PsQ1yzbjUkY1aPKTYwB/IqoFBFGGN7xeGpLOLJsmLlNIK
-         brdQ==
-X-Gm-Message-State: AOAM531OgLOlt/1aH9tzzMXmIrivRIbFjNVrJpdQ2cJha32OKsLvCHjf
-        /LRxH/ny58TJD684vJ51JwpxpsKg
-X-Google-Smtp-Source: ABdhPJyqLNLcb7qoReLMeZMoVIOzAmQUlY1fXb7b0/Yec6i4WzKF+DVENYGIIo/mdHTuhx2vw5WHiA==
-X-Received: by 2002:a2e:860f:: with SMTP id a15mr3322870lji.197.1590602224226;
-        Wed, 27 May 2020 10:57:04 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-173-94.dynamic.spd-mgts.ru. [109.252.173.94])
-        by smtp.googlemail.com with ESMTPSA id s9sm819212ljc.43.2020.05.27.10.57.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 May 2020 10:57:03 -0700 (PDT)
-Subject: Re: [PATCH v1 2/5] clk: Introduce clk_round_rate_unboundly()
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200330231617.17079-1-digetx@gmail.com>
- <20200330231617.17079-3-digetx@gmail.com>
- <159055894944.88029.2029223648098859689@swboyd.mtv.corp.google.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <3fcac59c-7a37-d4af-9d12-710d7af05845@gmail.com>
-Date:   Wed, 27 May 2020 20:57:01 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S2389135AbgE0SGL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 27 May 2020 14:06:11 -0400
+Received: from out28-99.mail.aliyun.com ([115.124.28.99]:39888 "EHLO
+        out28-99.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388628AbgE0SGL (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 27 May 2020 14:06:11 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.09056586|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_social|0.00537309-0.000193602-0.994433;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03300;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.HeTMIqm_1590602766;
+Received: from 192.168.10.205(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.HeTMIqm_1590602766)
+          by smtp.aliyun-inc.com(10.147.41.143);
+          Thu, 28 May 2020 02:06:07 +0800
+Subject: Re: [PATCH v11 4/7] dt-bindings: clock: Add X1830 clock bindings.
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, sernia.zhou@foxmail.com,
+        sboyd@kernel.org, zhenwenjin@gmail.com, mturquette@baylibre.com,
+        yanfei.li@ingenic.com, aric.pzqi@ingenic.com, paul@crapouillou.net,
+        dongsheng.qiu@ingenic.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, rick.tyliu@ingenic.com,
+        linux-clk@vger.kernel.org
+References: <20200527085449.55573-1-zhouyanjie@wanyeetech.com>
+ <20200527085449.55573-5-zhouyanjie@wanyeetech.com>
+ <20200527173436.GA2411605@bogus>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <04bae797-0267-ad07-68dc-0bf98d8be59b@wanyeetech.com>
+Date:   Thu, 28 May 2020 02:06:06 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
 MIME-Version: 1.0
-In-Reply-To: <159055894944.88029.2029223648098859689@swboyd.mtv.corp.google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <20200527173436.GA2411605@bogus>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-27.05.2020 08:55, Stephen Boyd пишет:
-> Quoting Dmitry Osipenko (2020-03-30 16:16:14)
->> In same cases it may be desired to round clock's rate without taking into
->> account current min/max requests made by the clock's users. One example is
->> building up OPP table based on a possible clock rates.
-> 
-> Shouldn't the OPP table come from firmware/DT? I don't quite understand
-> why we're generating OPP tables on top of the rate rounding API.
-> clk_round_rate() is supposed to tell us what rate we'll get if we call
-> clk_set_rate() with the same arguments. An unboundly version of that
-> doesn't make sense. 
+Hi Rob,
 
-The OPP should come from the DT, but unfortunately DT and Tegra's
-devfreq driver wasn't designed like that from the start, so it will take
-some extra effort to re-do it properly now. I wanted to postpone that
-effort a tad and get at least the basics upstreamed for the starter.
+Could you take [3/11] in your tree? Stephen says the file named 
+"ingenic,cgu.yaml" is not in clk tree, but it is in your DT tree staged 
+for the next release, maybe you pick up the yaml file and he pick up the 
+header file is a good idea.
 
-> I wonder if perhaps the clk provider should be populating OPP tables in
-> this case? Or basically anything besides adding another clk consumer API
-> to solve this problem. Who is the caller? Something later in this
-> series?
+Thanks and best regards!
 
-I'll try to add a proper OPP table with freqs and voltages, will see how
-it goes. We will need to do it sooner or later anyways. So perhaps it's
-fine to drop the current approach with the clk_round_rate_unboundly()
-and re-focus on a proper OPP implementation.
-
-Thank you for getting back and replying to this topic :)
+在 2020/5/28 上午1:34, Rob Herring 写道:
+> On Wed, 27 May 2020 16:54:46 +0800, 周琰杰 (Zhou Yanjie) wrote:
+>> Add the clock bindings for the X1830 Soc from Ingenic.
+>>
+>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>> ---
+>>
+>> Notes:
+>>      v11:
+>>      New patch, split from [3/6] in v10.
+>>
+>>   include/dt-bindings/clock/x1830-cgu.h | 55 +++++++++++++++++++++++++++++++++++
+>>   1 file changed, 55 insertions(+)
+>>   create mode 100644 include/dt-bindings/clock/x1830-cgu.h
+>>
+> Acked-by: Rob Herring <robh@kernel.org>
