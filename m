@@ -2,130 +2,79 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06AF81E3854
-	for <lists+linux-clk@lfdr.de>; Wed, 27 May 2020 07:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741EB1E3878
+	for <lists+linux-clk@lfdr.de>; Wed, 27 May 2020 07:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726214AbgE0FhK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 27 May 2020 01:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46572 "EHLO
+        id S1725843AbgE0FtV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 27 May 2020 01:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726209AbgE0FhJ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 27 May 2020 01:37:09 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F251BC061A0F;
-        Tue, 26 May 2020 22:37:08 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id m7so9733730plt.5;
-        Tue, 26 May 2020 22:37:08 -0700 (PDT)
+        with ESMTP id S1725267AbgE0FtV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 27 May 2020 01:49:21 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA529C03E96E
+        for <linux-clk@vger.kernel.org>; Tue, 26 May 2020 22:49:20 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id b6so27405102ljj.1
+        for <linux-clk@vger.kernel.org>; Tue, 26 May 2020 22:49:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cqkf7LycevmgLpVmZeBhW8pIulT8kk5Dc9E7315h7UE=;
-        b=MUC+ktwXiZmTf+GNJYOcuArbLORoC4bO3Seb9eAiMiZiNcB4OH6xtny+LZIddrpyUO
-         e7T9adWN134UIMYOMwA64KOWAzer6xMCAWSUn6bAeg/7RKofNjaVAtLx2ecAZ5XsrerW
-         mBkecyDGJL0wztKLTWXMJ3dvDLYBZwIlBspQsUgGYTVCFcSfa8uglMJ7oszoDbTmXM3b
-         lZ2jfO5C/JkDJ1K9S0g9NCoY5LgJ7vvSDaojNtXog9gNbEqEyZ90dNnlfyTj5xlMfcZ6
-         DTzwLv5NyeltsWNX3RQMg/axB3GCl3jGo7qjZg8zNz71hv2ArFIOsI/PSdJSuI/sD22r
-         1uIQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6Ey3RUpCGa5Aox52KZ5G497GPuu8CFMaGOEj0YfbRCE=;
+        b=IHURO0exP8ThsysvtvUVDN5cTBjZW1A5ogekeUUqLNeYB2FGz4d/s/pWf9IREZvWh9
+         6f3oUSCkM5uanpvYDqHX3Mm1dW6YEvprJ2NdjOmDgkcMox49wszIokbgRyhNb/ash0mu
+         qYG2m30mWdIbE6HauFvsy7lUAeG0MY1Cm+vBQsDVjJpR9COGe8J5mWSqMVoOZlsvr2IP
+         oU15BvzZaVmPzyM5p78RnO4P8b+XQ8wJv69PMeJ0ggxtY8eq28DwZ3LeT+ptx8vU9z0A
+         KVTOsFtyrGmTzfq1xSBTHeSDuo80Ah7EpSzJJflNND68IyDuCgHx9iUdQKy9CgFuAM0I
+         +6vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cqkf7LycevmgLpVmZeBhW8pIulT8kk5Dc9E7315h7UE=;
-        b=TTZCYDpl3QfsKXSpGJ3SDD8zKMh4EnST8X8lWQ1PXKp1+gfY6ItAlG8G2FFTUPSphV
-         O7u8HzDKjzGCDoY7AC+Zq/IqKzXaNlComn8cA0YKRWVEwfloESGlvNQwmts89dRNXZvf
-         /4d0bDICz79BuZVc2jgJq3FNwGkpsOaxzu3xzLVJPc2eUB14SBMG5gkuS4CawexMqqLA
-         TV4rRpeFpM2tRwI4e9+8wgARpPWLhPFT98/xbKHaZbygSmsUtynBknpemp0G5UVwi3su
-         OPZXaEruwoOhYgQIRAitRpTe/pWidSoaaBN0UkGE9bumkEpNZJELqzO/fueEQNqozcoC
-         IaKg==
-X-Gm-Message-State: AOAM5332bziG6v81hGOqNfsJpLiiW8wq/74KqTwagDwnkOYWoJcWtS5M
-        mIfJWXKmb5QBExg/pQ+X4Jc=
-X-Google-Smtp-Source: ABdhPJy8K1WVcQM1HCK6TVkGYFSMk0D4eOQMyBO8IUfUJoEQH8Ney49GrcU3NPF9ePs8Y2CRZsSwPQ==
-X-Received: by 2002:a17:90b:a13:: with SMTP id gg19mr3070516pjb.49.1590557828509;
-        Tue, 26 May 2020 22:37:08 -0700 (PDT)
-Received: from ubt.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id r34sm1092406pgl.38.2020.05.26.22.37.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2020 22:37:07 -0700 (PDT)
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>
-Subject: [RESEND PATCH v2 4/4] clk: sprd: add mipi_csi_xx gate clocks
-Date:   Wed, 27 May 2020 13:36:38 +0800
-Message-Id: <20200527053638.31439-5-zhang.lyra@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200527053638.31439-1-zhang.lyra@gmail.com>
-References: <20200527053638.31439-1-zhang.lyra@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6Ey3RUpCGa5Aox52KZ5G497GPuu8CFMaGOEj0YfbRCE=;
+        b=qPAiAtlTIYsdqhC9TD0QK/w2+GYynaHEsnNxo5FZLIJUHdt8jzXP6lh5+Vxmh2+v7w
+         FaRo4TvYp85ljPNtpUkU4XbDz7ziFLw0nCUa7J0fbCgz2cEjf4EPqGmJQnc5medxPdaX
+         rucIgwGJaCXVt04jfjmWYoPpUqZvSoGtABr+f7rkSOyfp5ozbG8Tlzot1eXlMU/LAuo7
+         BIBT8aGc2KUijySK+JSMPWpE5dAQ++Y4GNs5txXSXf/DcGQH1iDGUdPHCg+avKTD/McC
+         eBx2/mHJjh8C4RmsUhgye0ySTPQZgjqq05v26Q+p5jMp2T4qIomgNd2RxgPQJo5SXCnF
+         1YyQ==
+X-Gm-Message-State: AOAM533HVQ2P3HnXQ4Dv7avMcA4bR6UK5sJy/M/AHwZbVhgqAkRkYDju
+        vmvZgHW3+fVAVEaUzvcFZ3O1Qr+02WYHnN9G4igF2w==
+X-Google-Smtp-Source: ABdhPJwnO7GDTOtyL2kiFe3jVfkqBAg7nq2J7SDhBgiLgtUefNePgtYaoje9dfB2Zk33EfyfNamq1jgS7Fz6Jg4SKys=
+X-Received: by 2002:a2e:8e91:: with SMTP id z17mr2117948ljk.144.1590558559281;
+ Tue, 26 May 2020 22:49:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200526224116.63549-1-colin.king@canonical.com>
+In-Reply-To: <20200526224116.63549-1-colin.king@canonical.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 27 May 2020 07:49:08 +0200
+Message-ID: <CACRpkdb7s77aOnQxMQ=Gi9zcy_fz37PZ5E3+vk0=P5N8wjA6sw@mail.gmail.com>
+Subject: Re: [PATCH] clk: versatile: remove redundant assignment to pointer clk
+To:     Colin King <colin.king@canonical.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+On Wed, May 27, 2020 at 12:41 AM Colin King <colin.king@canonical.com> wrote:
 
-mipi_csi_xx clocks are used by camera sensors.
+> From: Colin Ian King <colin.king@canonical.com>
+>
+> The pointer clk is being initialized with a value that is never read
+> and is being updated with a new value later on. The initialization
+> is redundant and can be removed.
+>
+> Addresses-Coverity: ("Unused value")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
-Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
----
- drivers/clk/sprd/sc9863a-clk.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-diff --git a/drivers/clk/sprd/sc9863a-clk.c b/drivers/clk/sprd/sc9863a-clk.c
-index a0631f7756cf..f67bd08f225c 100644
---- a/drivers/clk/sprd/sc9863a-clk.c
-+++ b/drivers/clk/sprd/sc9863a-clk.c
-@@ -1615,6 +1615,36 @@ static const struct sprd_clk_desc sc9863a_mm_gate_desc = {
- 	.hw_clks	= &sc9863a_mm_gate_hws,
- };
- 
-+/* camera sensor clocks */
-+static SPRD_GATE_CLK_HW(mipi_csi_clk, "mipi-csi-clk", &mahb_ckg_eb.common.hw,
-+			0x20, BIT(16), 0, SPRD_GATE_NON_AON);
-+static SPRD_GATE_CLK_HW(mipi_csi_s_clk, "mipi-csi-s-clk", &mahb_ckg_eb.common.hw,
-+			0x24, BIT(16), 0, SPRD_GATE_NON_AON);
-+static SPRD_GATE_CLK_HW(mipi_csi_m_clk, "mipi-csi-m-clk", &mahb_ckg_eb.common.hw,
-+			0x28, BIT(16), 0, SPRD_GATE_NON_AON);
-+
-+static struct sprd_clk_common *sc9863a_mm_clk_clks[] = {
-+	/* address base is 0x60900000 */
-+	&mipi_csi_clk.common,
-+	&mipi_csi_s_clk.common,
-+	&mipi_csi_m_clk.common,
-+};
-+
-+static struct clk_hw_onecell_data sc9863a_mm_clk_hws = {
-+	.hws	= {
-+		[CLK_MIPI_CSI]		= &mipi_csi_clk.common.hw,
-+		[CLK_MIPI_CSI_S]	= &mipi_csi_s_clk.common.hw,
-+		[CLK_MIPI_CSI_M]	= &mipi_csi_m_clk.common.hw,
-+	},
-+	.num	= CLK_MM_CLK_NUM,
-+};
-+
-+static const struct sprd_clk_desc sc9863a_mm_clk_desc = {
-+	.clk_clks	= sc9863a_mm_clk_clks,
-+	.num_clk_clks	= ARRAY_SIZE(sc9863a_mm_clk_clks),
-+	.hw_clks	= &sc9863a_mm_clk_hws,
-+};
-+
- static SPRD_SC_GATE_CLK_FW_NAME(sim0_eb,	"sim0-eb",	"ext-26m", 0x0,
- 				0x1000, BIT(0), 0, 0);
- static SPRD_SC_GATE_CLK_FW_NAME(iis0_eb,	"iis0-eb",	"ext-26m", 0x0,
-@@ -1737,6 +1767,8 @@ static const struct of_device_id sprd_sc9863a_clk_ids[] = {
- 	  .data = &sc9863a_aonapb_gate_desc },
- 	{ .compatible = "sprd,sc9863a-mm-gate",	/* 0x60800000 */
- 	  .data = &sc9863a_mm_gate_desc },
-+	{ .compatible = "sprd,sc9863a-mm-clk",	/* 0x60900000 */
-+	  .data = &sc9863a_mm_clk_desc },
- 	{ .compatible = "sprd,sc9863a-apapb-gate",	/* 0x71300000 */
- 	  .data = &sc9863a_apapb_gate_desc },
- 	{ }
--- 
-2.20.1
-
+Yours,
+Linus Walleij
