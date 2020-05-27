@@ -2,66 +2,117 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7BD1E4228
-	for <lists+linux-clk@lfdr.de>; Wed, 27 May 2020 14:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00771E43FE
+	for <lists+linux-clk@lfdr.de>; Wed, 27 May 2020 15:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729954AbgE0MZS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 27 May 2020 08:25:18 -0400
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:15050 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729937AbgE0MZR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 27 May 2020 08:25:17 -0400
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 May 2020 05:25:16 -0700
-Received: from sivaprak-linux.qualcomm.com ([10.201.3.202])
-  by ironmsg04-sd.qualcomm.com with ESMTP; 27 May 2020 05:25:03 -0700
-Received: by sivaprak-linux.qualcomm.com (Postfix, from userid 459349)
-        id 99BDB2180C; Wed, 27 May 2020 17:54:56 +0530 (IST)
-From:   Sivaprakash Murugesan <sivaprak@codeaurora.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Sivaprakash Murugesan <sivaprak@codeaurora.org>
-Subject: [PATCH V6 5/5] arm64: dts: ipq6018: Add support for apss pll
-Date:   Wed, 27 May 2020 17:54:52 +0530
-Message-Id: <1590582292-13314-6-git-send-email-sivaprak@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1590582292-13314-1-git-send-email-sivaprak@codeaurora.org>
-References: <1590582292-13314-1-git-send-email-sivaprak@codeaurora.org>
+        id S2387771AbgE0Nk4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 27 May 2020 09:40:56 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:54367 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387627AbgE0Nk4 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 27 May 2020 09:40:56 -0400
+Received: from localhost.localdomain ([149.172.98.151]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.129]) with ESMTPA (Nemesis) id
+ 1MxHLs-1ipQ2O23r6-00xZeZ; Wed, 27 May 2020 15:40:44 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: versatile: undo some dependency changes
+Date:   Wed, 27 May 2020 15:40:33 +0200
+Message-Id: <20200527134043.807045-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:oX8d96/3agk6HQYMnHtVprdFalOQlNymeCToneAXooVriuWLRR+
+ c/h+AwhIj6fC9vUzuz5Aa2eLCM3DNnwR+1QROcwAEUOdv4Lulkj+kNPH+g7+VS00QAnl+gr
+ c/dD0CTtn4iEhMxVhrytOTGK3BdJav61Y5VWmm06MbbfbRJF+wr0RM02TJCmEuNKu6GocqM
+ fVPA8dCdLvlOl5QyMJoIg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8aMReIkVdqU=:yhFX2lu64OasDPFeHhky3H
+ IC/WFCqnWvNVHYf5ttpwJsFmp8RmKdFCdbWyOd18oY93TMgMHBSi8BG4PNcmAcoOCzQbTAjVe
+ 2n0FO4gp/b8z0cbzciNh1NhDV0DzamUtNPfAS8PAhkfrmKZw8elLwnUZMZOT7mBFEkOgGvNzZ
+ ThhEgJyTv2JKI3sgBiQKIbZb8GRfvZJ3uGyje0aDEnZvabf/qwD8lcTjl9Ke1tA3R3Uli1pIv
+ YoMV4J4lZrUpvBNy8Hszb8VvYzzsmcfUTxRdAdpHfd6a6WiVtbzPYQCTCu0UYPfSgoXCDkm6k
+ Bl9xZ1P2tqJTpSTlI7fKnvmoU/cyRIE/E3ra0bIx1xIbMaptle12QYTc16RCVzmhe62aBMJ7J
+ Ml2ZBk2UrFyq8fbq0BoH6b/xnigNotBVskzXNTlpg+GA5iAgAVBC468xVXlMixGq51OsYx4ur
+ ikKJLzdpwjh+l5Ci1t7KLGorX51y2xm09nP3NGro/PAOMBUOC8JaaVCUxTy5QkjoWIveWwXfv
+ f4Vh12dELsS0OTHvouycvZJ7B8ti+36fqacZ///KhnekwVAtgGhn4/3MJCplRbvNIPV9c8jfG
+ pAmlZjnk/57dsb0vHyc7IO4OW+Lm6F8ZoFYg6K+W66eZNwPy269MjncCjaCFa2B7xl+/Ys+ug
+ +mW0eawTP/R9H0IE7cOoAfPolwNq2bevSAywLpxhuuU/cgovHRbYKgMBRInSn2LkLb7YkIoPU
+ L7z0bsXHv515uZ0R8FsS5miYtqW8nxOfNOvXXjBtw9udx3Qz5UiemItenrFyhRpLkCQzgja/D
+ vToTOthP83fSoshZtvzcCxjjx3RTDLF3cS67SJ6JCc5FYsPm2E=
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Enable apss pll support.
+SP810 and ICST are selected by a couple of platforms, most but
+not all in the versatile family:
 
-Signed-off-by: Sivaprakash Murugesan <sivaprak@codeaurora.org>
+WARNING: unmet direct dependencies detected for CLK_SP810
+  Depends on [n]: COMMON_CLK [=y] && COMMON_CLK_VERSATILE [=n]
+  Selected by [y]:
+  - ARCH_REALVIEW [=y] && (ARCH_MULTI_V5 [=n] || ARCH_MULTI_V6 [=n] ||
+ARCH_MULTI_V7 [=y])
+
+WARNING: unmet direct dependencies detected for ICST
+  Depends on [n]: COMMON_CLK [=y] && COMMON_CLK_VERSATILE [=n]
+  Selected by [y]:
+  - ARCH_REALVIEW [=y] && (ARCH_MULTI_V5 [=n] || ARCH_MULTI_V6 [=n] || ARCH_MULTI_V7 [=y])
+  - ARCH_VEXPRESS [=y] && ARCH_MULTI_V7 [=y]
+  - ARCH_ZYNQ [=y] && ARCH_MULTI_V7 [=y]
+
+Change back the Kconfig logic to allow these to be selected
+without the main option.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-[V6]
- * split the mailbox driver from this patch
- arch/arm64/boot/dts/qcom/ipq6018.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/clk/versatile/Kconfig | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-index 1aa8d85..3956e44 100644
---- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-@@ -300,6 +300,14 @@
- 			#mbox-cells = <1>;
- 		};
+diff --git a/drivers/clk/versatile/Kconfig b/drivers/clk/versatile/Kconfig
+index a0ed412e8396..a557886d813e 100644
+--- a/drivers/clk/versatile/Kconfig
++++ b/drivers/clk/versatile/Kconfig
+@@ -7,6 +7,18 @@ menuconfig COMMON_CLK_VERSATILE
  
-+		apsspll: clock@b116000 {
-+			compatible = "qcom,ipq6018-a53pll";
-+			reg = <0x0b116000 0x40>;
-+			#clock-cells = <0>;
-+			clocks = <&xo>;
-+			clock-names = "xo";
-+		};
+ if COMMON_CLK_VERSATILE
+ 
++config CLK_VEXPRESS_OSC
++	tristate "Clock driver for Versatile Express OSC clock generators"
++	depends on VEXPRESS_CONFIG
++	select REGMAP_MMIO
++	default y if ARCH_VEXPRESS
++	---help---
++	  Simple regmap-based driver driving clock generators on Versatile
++	  Express platforms hidden behind its configuration infrastructure,
++	  commonly known as OSCs.
 +
- 		timer {
- 			compatible = "arm,armv8-timer";
- 			interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++endif
++
+ config ICST
+ 	bool "Clock driver for ARM Reference designs ICST"
+ 	select REGMAP_MMIO
+@@ -22,14 +34,4 @@ config CLK_SP810
+ 	  Supports clock muxing (REFCLK/TIMCLK to TIMERCLKEN0-3) capabilities
+ 	  of the ARM SP810 System Controller cell.
+ 
+-config CLK_VEXPRESS_OSC
+-	tristate "Clock driver for Versatile Express OSC clock generators"
+-	depends on VEXPRESS_CONFIG
+-	select REGMAP_MMIO
+-	default y if ARCH_VEXPRESS
+-	---help---
+-	  Simple regmap-based driver driving clock generators on Versatile
+-	  Express platforms hidden behind its configuration infrastructure,
+-	  commonly known as OSCs.
+ 
+-endif
 -- 
-2.7.4
+2.26.2
 
