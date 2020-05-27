@@ -2,115 +2,74 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF301E4C6A
-	for <lists+linux-clk@lfdr.de>; Wed, 27 May 2020 19:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3FA1E4C82
+	for <lists+linux-clk@lfdr.de>; Wed, 27 May 2020 19:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387814AbgE0RyK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 27 May 2020 13:54:10 -0400
-Received: from out28-173.mail.aliyun.com ([115.124.28.173]:49203 "EHLO
-        out28-173.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387653AbgE0RyK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 27 May 2020 13:54:10 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07893082|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0599157-0.000270983-0.939813;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03310;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.HeTFPHM_1590602042;
-Received: from 192.168.10.205(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.HeTFPHM_1590602042)
-          by smtp.aliyun-inc.com(10.147.43.230);
-          Thu, 28 May 2020 01:54:03 +0800
-Subject: Re: [PATCH v10 3/6] dt-bindings: clock: Add X1830 bindings.
-To:     Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
+        id S2388754AbgE0R7V (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 27 May 2020 13:59:21 -0400
+Received: from out28-123.mail.aliyun.com ([115.124.28.123]:48214 "EHLO
+        out28-123.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388544AbgE0R7V (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 27 May 2020 13:59:21 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.2468916|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0315748-0.000160287-0.968265;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03303;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.HeTcPrZ_1590602337;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.HeTcPrZ_1590602337)
+          by smtp.aliyun-inc.com(10.147.43.95);
+          Thu, 28 May 2020 01:59:16 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     linux-clk@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        mturquette@baylibre.com, robh+dt@kernel.org,
+        sboyd@kernel.org, mturquette@baylibre.com, robh+dt@kernel.org,
         dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
         sernia.zhou@foxmail.com, zhenwenjin@gmail.com, paul@crapouillou.net
-References: <20200526144044.71413-1-zhouyanjie@wanyeetech.com>
- <20200526144044.71413-5-zhouyanjie@wanyeetech.com>
- <159056716225.88029.7227987261941853085@swboyd.mtv.corp.google.com>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <08fe6e46-99d3-c66c-4f60-adf87f1b8edf@wanyeetech.com>
-Date:   Thu, 28 May 2020 01:54:02 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
+Subject: [PATCH v12 0/7] Add support for the X1830 and fix bugs for X1000.
+Date:   Thu, 28 May 2020 01:56:28 +0800
+Message-Id: <20200527175635.5558-1-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-In-Reply-To: <159056716225.88029.7227987261941853085@swboyd.mtv.corp.google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Stephen,
+v10->v11:
+Split [3/6] in v10 to [3/7] in v11 and [4/7] in v11.
 
-I'm very sorry, forgive my carelessness, communication with Paul 
-Cercueil made me realize that the modification of 
-"CLK_OF_DECLARE_DRIVER" mentioned in comments of [7/7] has never really 
-existed in the patch, v12 has fixed this problem, and split the patch 
-about bindings according to your requirements, it may be a good idea to 
-retake [4/7] and [7/7] of v12.
+v11->v12:
+Use "CLK_OF_DECLARE_DRIVER" instead "CLK_OF_DECLARE",
+this modification was mentioned in the comments, but
+did not really exist in the patch.
+Reported-by: Paul Cercueil <paul@crapouillou.net>
 
-Thanks and best regards!
+周琰杰 (Zhou Yanjie) (7):
+  clk: Ingenic: Remove unnecessary spinlock when reading registers.
+  clk: Ingenic: Adjust cgu code to make it compatible with X1830.
+  dt-bindings: clock: Add documentation for X1830 bindings.
+  dt-bindings: clock: Add X1830 clock bindings.
+  clk: Ingenic: Add CGU driver for X1830.
+  dt-bindings: clock: Add and reorder ABI for X1000.
+  clk: X1000: Add FIXDIV for SSI clock of X1000.
 
-在 2020/5/27 下午4:12, Stephen Boyd 写道:
-> Quoting 周琰杰 (Zhou Yanjie) (2020-05-26 07:40:41)
->> Add the clock bindings for the X1830 Soc from Ingenic.
->>
->> Signed-off-by: \u5468\u7430\u6770 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> ---
->>
->> Notes:
->>      v2->v3:
->>      Adjust order from [3/5] in v2 to [4/5] in v3.
->>      
->>      v3->v4:
->>      Adjust order from [4/5] in v3 to [3/4] in v4.
->>      
->>      v4->v5:
->>      Rebase on top of kernel 5.6-rc1.
->>      
->>      v5->v6:
->>      Add missing part of X1830's CGU.
->>      
->>      v6->v7:
->>      No change.
->>      
->>      v7->v8:
->>      Rebase on top of linux-next.
->>      
->>      v8->v9:
->>      No change.
->>      
->>      v9->v10:
->>      Add missing "X1830_CLK_TCU".
->>
->>   .../devicetree/bindings/clock/ingenic,cgu.yaml     |  2 +
->>   include/dt-bindings/clock/x1830-cgu.h              | 55 ++++++++++++++++++++++
->>   2 files changed, 57 insertions(+)
->>   create mode 100644 include/dt-bindings/clock/x1830-cgu.h
->>
->> diff --git a/Documentation/devicetree/bindings/clock/ingenic,cgu.yaml b/Documentation/devicetree/bindings/clock/ingenic,cgu.yaml
-> This file is in Rob's DT tree staged for the next release, not in the
-> clk tree. Can you split this patch into two, one for the compatible
-> update and another for the header file update and send again? Then Rob
-> can pick up the yaml file change and I can pick up the header file
-> change.
->
->> index 0281cd1d7e1b..a952d5811823 100644
->> --- a/Documentation/devicetree/bindings/clock/ingenic,cgu.yaml
->> +++ b/Documentation/devicetree/bindings/clock/ingenic,cgu.yaml
->> @@ -25,6 +25,7 @@ select:
->>             - ingenic,jz4770-cgu
->>             - ingenic,jz4780-cgu
->>             - ingenic,x1000-cgu
->> +          - ingenic,x1830-cgu
->>     required:
->>       - compatible
->>   
->> @@ -51,6 +52,7 @@ properties:
->>           - ingenic,jz4770-cgu
->>           - ingenic,jz4780-cgu
->>           - ingenic,x1000-cgu
->> +        - ingenic,x1830-cgu
->>         - const: simple-mfd
->>       minItems: 1
->>
+ .../devicetree/bindings/clock/ingenic,cgu.yaml     |   2 +
+ drivers/clk/ingenic/Kconfig                        |  10 +
+ drivers/clk/ingenic/Makefile                       |   1 +
+ drivers/clk/ingenic/cgu.c                          |  28 +-
+ drivers/clk/ingenic/cgu.h                          |   4 +
+ drivers/clk/ingenic/jz4725b-cgu.c                  |   4 +
+ drivers/clk/ingenic/jz4740-cgu.c                   |   4 +
+ drivers/clk/ingenic/jz4770-cgu.c                   |   8 +-
+ drivers/clk/ingenic/jz4780-cgu.c                   |   3 +
+ drivers/clk/ingenic/x1000-cgu.c                    | 118 +++++-
+ drivers/clk/ingenic/x1830-cgu.c                    | 443 +++++++++++++++++++++
+ include/dt-bindings/clock/x1000-cgu.h              |  64 +--
+ include/dt-bindings/clock/x1830-cgu.h              |  55 +++
+ 13 files changed, 695 insertions(+), 49 deletions(-)
+ create mode 100644 drivers/clk/ingenic/x1830-cgu.c
+ create mode 100644 include/dt-bindings/clock/x1830-cgu.h
+
+-- 
+2.11.0
+
