@@ -2,87 +2,72 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA261E701A
-	for <lists+linux-clk@lfdr.de>; Fri, 29 May 2020 01:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 766031E7074
+	for <lists+linux-clk@lfdr.de>; Fri, 29 May 2020 01:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391535AbgE1XP4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 28 May 2020 19:15:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51614 "EHLO mail.kernel.org"
+        id S2437590AbgE1Xij (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 28 May 2020 19:38:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54790 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391508AbgE1XPy (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 28 May 2020 19:15:54 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S2436651AbgE1Xii (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 28 May 2020 19:38:38 -0400
+Received: from mail.kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2C5E720776;
-        Thu, 28 May 2020 23:15:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 94B702074B;
+        Thu, 28 May 2020 23:38:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590707754;
-        bh=6cRaMxa58tPApeIWKOSjOlyLMARaxMhQCEfel1rmCmU=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=UxtajneJu7lsjX8Uo5AuI7/mwnxyJdr4lqsaOz6snFoJN6452mridIBT7wtciVndj
-         gJkHEOTHzBCxrUGNB6bEuR4trNb0m1OJOY5VfdFWjmKLbvhG5xZXO84+dpHcK/xTMC
-         Drk4aLSl2kReD6JvQzEAJzfn7aERE6l1Ug+bkR7s=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <51c21311-a301-1a55-3eb1-a11583e7df43@loongson.cn>
-References: <1590590362-11570-1-git-send-email-yangtiezhu@loongson.cn> <159060638492.88029.3855641102752089121@swboyd.mtv.corp.google.com> <51c21311-a301-1a55-3eb1-a11583e7df43@loongson.cn>
-Subject: Re: [PATCH v4 1/2] clk: hisilicon: Use correct return value about hisi_reset_init()
+        s=default; t=1590709117;
+        bh=xOc6jIfIBzDUCIiwBriGiB/QH5iSqrRwXB9T1VRVhtw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JqYc/Mlkf2A1a5eOkXm2xA3qIK7+4L/10mENqkpOIQ8ZwlbkjlyvBATghs4tzH+/e
+         46+QB/uqIOftw4pLNgXiv3i9MJCT8dJgGnfa8KDoVP5AHTDtZw/rouyV2eI9Wzcodt
+         IbLiTuRDuNMl8lLGMnXn13QMXWXDZyy2+MEvxrNw=
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>
 To:     Michael Turquette <mturquette@baylibre.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>
-Date:   Thu, 28 May 2020 16:15:53 -0700
-Message-ID: <159070775347.69627.5841986835404441281@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        kbuild test robot <lkp@intel.com>
+Subject: [PATCH] clk: ingenic: Mark ingenic_tcu_of_match as __maybe_unused
+Date:   Thu, 28 May 2020 16:38:37 -0700
+Message-Id: <20200528233837.70269-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.27.0.rc0.183.gde8f92d652-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Tiezhu Yang (2020-05-27 19:27:42)
-> On 05/28/2020 03:06 AM, Stephen Boyd wrote:
-> > Quoting Tiezhu Yang (2020-05-27 07:39:21)
-> >> The return value about hisi_reset_init() is not correct, fix it.
-> >>
-> >> Fixes: e9a2310fb689 ("reset: hisilicon: fix potential NULL pointer der=
-eference")
-> > hisi_reset_init() returns NULL on error in that commit. This patch
-> > doesn't make sense.
->=20
-> Hi Stephen,
->=20
-> The initial aim of this patch is to use correct return value about
-> hisi_reset_init(), maybe NULL is OK, but the return value in this
-> patch is more accurate.
+This device id table is passed to of_match_node() later on in probe, but
+on CONFIG_OF=n builds of_match_node() doesn't do anything with the
+arguments. Lets just mark the table unused so that the compiler doesn't
+complain about this.
 
-The implementation of hisi_reset_init() that I see is this:
+drivers/clk/ingenic/tcu.c:326:34: warning: unused variable 'ingenic_tcu_of_match' [-Wunused-const-variable]
+static const struct of_device_id ingenic_tcu_of_match[] __initconst = {
+^
+1 warning generated.
 
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+---
+ drivers/clk/ingenic/tcu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	struct hisi_reset_controller *rstc;
+diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
+index 153a954b0d2f..9382dc3aa27e 100644
+--- a/drivers/clk/ingenic/tcu.c
++++ b/drivers/clk/ingenic/tcu.c
+@@ -323,7 +323,7 @@ static const struct ingenic_soc_info x1000_soc_info = {
+ 	.has_tcu_clk = false,
+ };
+ 
+-static const struct of_device_id ingenic_tcu_of_match[] __initconst = {
++static const struct of_device_id __maybe_unused ingenic_tcu_of_match[] __initconst = {
+ 	{ .compatible = "ingenic,jz4740-tcu", .data = &jz4740_soc_info, },
+ 	{ .compatible = "ingenic,jz4725b-tcu", .data = &jz4725b_soc_info, },
+ 	{ .compatible = "ingenic,jz4770-tcu", .data = &jz4770_soc_info, },
+-- 
+Sent by a computer, using git, on the internet
 
-	rstc =3D devm_kmalloc(&pdev->dev, sizeof(*rstc), GFP_KERNEL);
-	if (!rstc)
-		return NULL;
-
-	rstc->membase =3D devm_platform_ioremap_resource(pdev, 0);
-	if (IS_ERR(rstc->membase))
-		return NULL;
-
-	spin_lock_init(&rstc->lock);
-	rstc->rcdev.owner =3D THIS_MODULE;
-	rstc->rcdev.ops =3D &hisi_reset_ops;
-	rstc->rcdev.of_node =3D pdev->dev.of_node;
-	rstc->rcdev.of_reset_n_cells =3D 2;
-	rstc->rcdev.of_xlate =3D hisi_reset_of_xlate;
-	reset_controller_register(&rstc->rcdev);
-
-	return rstc;
-
-And that returns NULL on an error and a valid pointer on success.
-Changing the code to check the return value of hisi_reset_init() for an
-error pointer is simply wrong without updating hisi_reset_init() to
-return an error pointer on error. Where is the patch that changes
-hisi_reset_init() to return an error pointer?
