@@ -2,55 +2,110 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9D91E5290
-	for <lists+linux-clk@lfdr.de>; Thu, 28 May 2020 03:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB64B1E52B6
+	for <lists+linux-clk@lfdr.de>; Thu, 28 May 2020 03:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726761AbgE1BBr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 27 May 2020 21:01:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36950 "EHLO mail.kernel.org"
+        id S1725795AbgE1BMz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 27 May 2020 21:12:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39534 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726755AbgE1BBo (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 27 May 2020 21:01:44 -0400
+        id S1725294AbgE1BMy (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 27 May 2020 21:12:54 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0ABAE21475;
-        Thu, 28 May 2020 01:01:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 297B22078C;
+        Thu, 28 May 2020 01:12:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590627704;
-        bh=cskqufZHxJHeDsgBSq8PWkVg02ePAd9y2zQSozzdKU8=;
+        s=default; t=1590628374;
+        bh=hBO4N/AXK+LB2rPfZlEp7PblZQvv+rHSIrH7lefK8pk=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=0CbG02zZgYwMfdjM0rlkw4AZ2x6AtRx5uFLDfR/Ey8msJbW063kXIKjBQiDGbf9Sl
-         35EEx2uKGsOkRz29wgtDOQxGr+ON5LxDwDFe5wMse3Q4y7c/2d9QsFkOVyd6yVy0/o
-         h8/oWvQb50q3eSzaESOYctCJJM6iPhVVZngTX24k=
+        b=CNcMPAQnQ31fGrhuIAtzs5ukAtItClWFFzUAQFYoWiCft0d6vkBMTJCj4jB529FDr
+         NR4XGjAX0Zz3uNKVuK+K3L4DNMWJPIpWlk/sW9WpjJbIFu7sIkbKBLGZDcO9oYN9Ff
+         hGeBrcEhwDgLsTzSJEZF3R181Gvb6saMepcNpy1s=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200519224151.2074597-14-lkundrak@v3.sk>
-References: <20200519224151.2074597-1-lkundrak@v3.sk> <20200519224151.2074597-14-lkundrak@v3.sk>
-Subject: Re: [PATCH v3 13/13] clk: mmp2: Add audio clock controller driver
+In-Reply-To: <20200527175635.5558-8-zhouyanjie@wanyeetech.com>
+References: <20200527175635.5558-1-zhouyanjie@wanyeetech.com> <20200527175635.5558-8-zhouyanjie@wanyeetech.com>
+Subject: Re: [PATCH v12 7/7] clk: X1000: Add FIXDIV for SSI clock of X1000.
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Lubomir Rintel <lkundrak@v3.sk>
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Date:   Wed, 27 May 2020 18:01:43 -0700
-Message-ID: <159062770320.69627.13007012235774403220@swboyd.mtv.corp.google.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        mturquette@baylibre.com, robh+dt@kernel.org,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, paul@crapouillou.net
+To:     linux-clk@vger.kernel.org, Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Date:   Wed, 27 May 2020 18:12:53 -0700
+Message-ID: <159062837338.69627.14365746093599072888@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Lubomir Rintel (2020-05-19 15:41:51)
-> This is a driver for a block that generates master and bit clocks for
-> the I2S interface. It's separate from the PMUs that generate clocks for
-> the peripherals.
->=20
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
->=20
-> ---
+Quoting Zhou Yanjie (2020-05-27 10:56:35)
+> @@ -40,8 +43,47 @@
+>  #define OPCR_SPENDN0           BIT(7)
+>  #define OPCR_SPENDN1           BIT(6)
+> =20
+> +/* bits within the USBPCR register */
+> +#define USBPCR_SIDDQ           BIT(21)
+> +#define USBPCR_OTG_DISABLE     BIT(20)
+> +
+>  static struct ingenic_cgu *cgu;
+> =20
+> +static int x1000_usb_phy_enable(struct clk_hw *hw)
+> +{
+> +       void __iomem *reg_opcr          =3D cgu->base + CGU_REG_OPCR;
+> +       void __iomem *reg_usbpcr        =3D cgu->base + CGU_REG_USBPCR;
+> +
+> +       writel(readl(reg_opcr) | OPCR_SPENDN0, reg_opcr);
 
-Applied to clk-next
+Please include linux/io.h for writel/readl.
+
+> +       writel(readl(reg_usbpcr) & ~USBPCR_OTG_DISABLE & ~USBPCR_SIDDQ, r=
+eg_usbpcr);
+> +       return 0;
+> +}
+> +
+> +static void x1000_usb_phy_disable(struct clk_hw *hw)
+> +{
+> +       void __iomem *reg_opcr          =3D cgu->base + CGU_REG_OPCR;
+> +       void __iomem *reg_usbpcr        =3D cgu->base + CGU_REG_USBPCR;
+> +
+> +       writel(readl(reg_opcr) & ~OPCR_SPENDN0, reg_opcr);
+> +       writel(readl(reg_usbpcr) | USBPCR_OTG_DISABLE | USBPCR_SIDDQ, reg=
+_usbpcr);
+> +}
+> +
+> +static int x1000_usb_phy_is_enabled(struct clk_hw *hw)
+> +{
+> +       void __iomem *reg_opcr          =3D cgu->base + CGU_REG_OPCR;
+> +       void __iomem *reg_usbpcr        =3D cgu->base + CGU_REG_USBPCR;
+> +
+> +       return (readl(reg_opcr) & OPCR_SPENDN0) &&
+> +               !(readl(reg_usbpcr) & USBPCR_SIDDQ) &&
+> +               !(readl(reg_usbpcr) & USBPCR_OTG_DISABLE);
+> +}
+> +
+> +static const struct clk_ops x1000_otg_phy_ops =3D {
+> +       .enable         =3D x1000_usb_phy_enable,
+> +       .disable        =3D x1000_usb_phy_disable,
+> +       .is_enabled     =3D x1000_usb_phy_is_enabled,
+> +};
+> +
+>  static const s8 pll_od_encoding[8] =3D {
+>         0x0, 0x1, -1, 0x2, -1, -1, -1, 0x3,
+>  };
+> @@ -277,4 +377,4 @@ static void __init x1000_cgu_init(struct device_node =
+*np)
+> =20
+>         ingenic_cgu_register_syscore_ops(cgu);
+>  }
+> -CLK_OF_DECLARE(x1000_cgu, "ingenic,x1000-cgu", x1000_cgu_init);
+> +CLK_OF_DECLARE_DRIVER(x1000_cgu, "ingenic,x1000-cgu", x1000_cgu_init);
+
+Why does this change to DECLARE_DRIVER? Can you please add a comment
+here in the code indicating what other driver is probing this compatible
+string?
