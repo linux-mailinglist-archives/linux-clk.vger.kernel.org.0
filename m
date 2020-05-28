@@ -2,132 +2,95 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94EBA1E589F
-	for <lists+linux-clk@lfdr.de>; Thu, 28 May 2020 09:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE1D1E5B70
+	for <lists+linux-clk@lfdr.de>; Thu, 28 May 2020 11:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726207AbgE1HbA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 28 May 2020 03:31:00 -0400
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:59857 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725747AbgE1HbA (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 May 2020 03:31:00 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id B1C135801E3;
-        Thu, 28 May 2020 03:30:58 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 28 May 2020 03:30:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=DzfmDTRER5Rc6vqd8K3tdl/h7IL
-        LPrzRW6G6nM/VnN8=; b=Uo/3TSRDGuNYFTVIWjo5nW8GLeNnjf4YCBm0RvH8OIa
-        d9NQOKxlUg1FESR6IAXM5mj3dCtfSgJ52b9QgX4BbQXpaWRZ0V2mj5pbElDNg9xY
-        WoBkTMIQyU/2uLCVme027EGhgYmAZ/kBGpvEUjaTK8tB8zh7qLFjUq2y9M7CQlM5
-        MD+a0zkII7ReHXvr3Myih7oiMCzLIr6qJSbkdU96GdrU2l4xHKx0zu9/9B+e9Nh/
-        lH2L+GyXcRjyXo0v1AxKmSNI6EF6GfjfH7d6FDHnMymDy0hH5jhxxXgSNGIWnmZI
-        Dq68N3mnkUh8ZEoFVa0f+C8rDUU8HPjXpGGWgHElAbg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=DzfmDT
-        RER5Rc6vqd8K3tdl/h7ILLPrzRW6G6nM/VnN8=; b=KJHyh6XqKlTQ4MP0B3XhzN
-        YCyIFUWT+oDBebBgN3cMKQVzEx6whQoljUpQimvyyMAUdxHNajzjv1Eb6YfSvxem
-        Kz+iXJhMpOpKhzTHpkOkRjMEVzADfZLY+cFKzpJbQxpOcmDfZlIKouu8MTaOnwDa
-        b4zKDMS9u1OPxxiV65/Et3WpQ+XDk9rQbMJuPZVmi9Ge6EXdzLxWcD5C6D85TWyh
-        i65iIRKZS8OVmdVXgZEv0KZwdYv6exg7SwCRISRFiD/SiqzrDgGwpm4kLxFEKEil
-        Q8izo1OUn4kMo6xOquuuYDXVcBbgRiqAbztXNUGaU+tzRVfiGRRSTDWokeT4Qz1w
-        ==
-X-ME-Sender: <xms:sWjPXoONJgJEwoEq_FYCUe_RM3crKMcoo7E-FPok9IxHzYT67Q46Rw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedruddvhedguddtudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeevveefffduveeitdegtefhhfetueffteefffdvheevvdehteethedvleff
-    gfejvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeeltddrkeelrdeike
-    drjeeinecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhep
-    mhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:sWjPXu8OSORrgT7dwCMcLRO_66K0n8kL-N8hkR8uECjCsK3NZ3NpZw>
-    <xmx:sWjPXvRtze0HzvnWIkUsiiK-OMC0eioiyU_5C_9VzsvjpWy-KMqdVQ>
-    <xmx:sWjPXgt1FAvnCaJsnGRpBcolBHLPyMjUSIl2wixGr4MHY17_SwWhmg>
-    <xmx:smjPXo7uLD9f6nuRyVwYhByDit7NnBfwK4Rpk_3NZeXwPXg38J9vyQ>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 32F0B30614FA;
-        Thu, 28 May 2020 03:30:57 -0400 (EDT)
-Date:   Thu, 28 May 2020 09:30:55 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Daniel Drake <drake@endlessm.com>
-Cc:     Jian-Hong Pan <jian-hong@endlessm.com>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Eric Anholt <eric@anholt.net>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-rpi-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Linux Upstreaming Team <linux@endlessm.com>
-Subject: Re: [PATCH v2 00/91] drm/vc4: Support BCM2711 Display Pipelin
-Message-ID: <20200528073055.znutrhkryzu3grrl@gilmour.lan>
-References: <20200427072342.5499-1-jian-hong@endlessm.com>
- <20200428162152.ztsqp7nxqbwqrm6r@gilmour.lan>
- <CAPpJ_efvtVzb_hvoVOeaePh7UdE13wOiiGaDBH38cToB-yhkUg@mail.gmail.com>
- <20200507172158.cybtakpo6cxv6wcs@gilmour.lan>
- <CAPpJ_efxenmSXt2OXkhkQ1jDJ59tyWBDUvmpyOB-bfPMDENQZg@mail.gmail.com>
- <CAPpJ_ed9TMJjN8xS1_3saf5obQhULJSLNgQSAFxgiWM2QX9A7Q@mail.gmail.com>
- <20200526102018.kznh6aglpkqlp6en@gilmour.lan>
- <CAD8Lp467DiYWLwH6T1Jeq-uyN4VEuef-gGWw0_bBTtmSPr00Ag@mail.gmail.com>
- <20200527091335.7wc3uy67lbz7j4di@gilmour.lan>
- <CAD8Lp45ucK-yZ5G_DrUVA7rnxo58UF1LPUy65w2PCOcSxKx_Sg@mail.gmail.com>
+        id S1728086AbgE1JIj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 28 May 2020 05:08:39 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:59107 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728028AbgE1JIi (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 May 2020 05:08:38 -0400
+Received: from mail-qk1-f173.google.com ([209.85.222.173]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MXXZf-1jVZZi0jaJ-00Z3f9; Thu, 28 May 2020 11:08:37 +0200
+Received: by mail-qk1-f173.google.com with SMTP id s1so2377183qkf.9;
+        Thu, 28 May 2020 02:08:36 -0700 (PDT)
+X-Gm-Message-State: AOAM533jSxpUXDpqjMWjpSMuU4LgnWhsd5S1RpfnNQ7hNJEveCQHHVch
+        T+XJrMb1jac4a2X+wJ1iQZQoDyE7s9gpZOn/TEU=
+X-Google-Smtp-Source: ABdhPJxMRjUKxZH6xpszfE4Dyz28jyf10XmVj16uY61LsBkHJESGSohbLYv+tw2+D7hMoCFfByorAEYf1A5P7jeYv/I=
+X-Received: by 2002:a37:bc7:: with SMTP id 190mr1735331qkl.286.1590656915923;
+ Thu, 28 May 2020 02:08:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3roh2l2ctvp5d3wy"
-Content-Disposition: inline
-In-Reply-To: <CAD8Lp45ucK-yZ5G_DrUVA7rnxo58UF1LPUy65w2PCOcSxKx_Sg@mail.gmail.com>
+References: <20200527134043.807045-1-arnd@arndb.de> <159062606969.69627.15005677857751012104@swboyd.mtv.corp.google.com>
+In-Reply-To: <159062606969.69627.15005677857751012104@swboyd.mtv.corp.google.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 28 May 2020 11:08:19 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0uXyobHKzuEoK1Y8Dmp=x7BOSeZQi-S+_YU6TxnX0s9Q@mail.gmail.com>
+Message-ID: <CAK8P3a0uXyobHKzuEoK1Y8Dmp=x7BOSeZQi-S+_YU6TxnX0s9Q@mail.gmail.com>
+Subject: Re: [PATCH] clk: versatile: undo some dependency changes
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Iq/tHjUP/PEYdX00FfexK+7OlIFoe10YzrumlPv6tpnSCJITZi+
+ h6qksJxldwDxaZLtH8xMcF2IKGKFQRzY+mVeKcv8InIMo7SWy6JWJqgpQYHiAmJuCYlxcOK
+ AKm9J0cjq3mdZD6uwGcLzVk3KZoD/i+lS0ek00hFcdGMdV9in6BOXN65fndyrJ1yinGs3eS
+ gmuKUhYtJk405iQru0ILw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:KPKyQcKs6iM=:4OcgBNjhpyOZkKjqvHs8Ys
+ DgzJCk1CwJaHinJxF3LsfsGHnxy1Yt7qFRHNwvxBZ40liB9CElZhv+BykU3UcQ6GzdZzJtSaM
+ mHzp5cxETja+TyXlOt1Y9wLImUlnB2RSMujdTHcDhIR/KuQ55Hq+yBb45zzShAW73P7BmuqHZ
+ RMkm86EUBoMwc5zAnnnsVZhqrC/NrtMaSREzBehBguYuaqifd8OxJJts7PMQX7+Z0o+99ucE9
+ TK2VYmkSElqJ0VNrMCCII/CMyLApwKqSeIxB3o4RTjrIxd+MUqyxfYMbsoByWGvPeIwU0tsBw
+ 0CtzeC3T26E3sk643maMuFi5kFHxMPdubprmtnHWuIQTByAI1QkQQ4DmkxCTjYHbnQjA+tcMM
+ MEwQtSG1h/cpoOEDcY7QSPbGYHINHrqWL+EsnJh8jhT1ZdtXt7cai8/WKi4nqSy9lE/d9TH5w
+ IH1Yo6ga3vvLuBi/DJjaGAbKrqY9OVO9MTBZ95oElVZx400Ije7UpbenM2yXVZdw2eZJ1CVLW
+ jjjuFyq8fcW2x+Ow5uPSHofSpMztBxZcFuytdZNpnw6B9BkjFNwD9h/Gi71y3U4O3XTDdIXwm
+ 6h3Gn7AO4bu+GAjZxE6jQMxdCWx81u3ZaIlyjfe6ij73tYMdBiqOyfCyYVmhkF3oFBTtoWY1G
+ gP3D0Fq7thUwJVKGWs3R9PyE50Qews9UqTH8TjKcwAklQbhBLYSB4wgT+4tnKAW6STr1NAZmO
+ MxpcUk67/wZjgX8hEOerIS9XUBEVKcCrjouXHl5UvhhnKcmwhTo9Ntv5C91Qe6HegLQSU6+Zd
+ ytAKc+htWk0NvVEVjeXAPcwP8ekP+Kfho7f1em2H/WUQt+VKnE=
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On Thu, May 28, 2020 at 2:34 AM Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting Arnd Bergmann (2020-05-27 06:40:33)
+> > SP810 and ICST are selected by a couple of platforms, most but
+> > not all in the versatile family:
+> >
+> > WARNING: unmet direct dependencies detected for CLK_SP810
+> >   Depends on [n]: COMMON_CLK [=y] && COMMON_CLK_VERSATILE [=n]
+> >   Selected by [y]:
+> >   - ARCH_REALVIEW [=y] && (ARCH_MULTI_V5 [=n] || ARCH_MULTI_V6 [=n] ||
+> > ARCH_MULTI_V7 [=y])
+> >
+> > WARNING: unmet direct dependencies detected for ICST
+> >   Depends on [n]: COMMON_CLK [=y] && COMMON_CLK_VERSATILE [=n]
+> >   Selected by [y]:
+> >   - ARCH_REALVIEW [=y] && (ARCH_MULTI_V5 [=n] || ARCH_MULTI_V6 [=n] || ARCH_MULTI_V7 [=y])
+> >   - ARCH_VEXPRESS [=y] && ARCH_MULTI_V7 [=y]
+> >   - ARCH_ZYNQ [=y] && ARCH_MULTI_V7 [=y]
+> >
+> > Change back the Kconfig logic to allow these to be selected
+> > without the main option.
+> >
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > ---
+>
+> Is this similar to
+> https://lore.kernel.org/r/20200527181307.2482167-1-robh@kernel.org
+> ?
 
---3roh2l2ctvp5d3wy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It's similar, but that version still breaks ZYNQ when CONFIG_COMPILE_TEST
+is disabled.
 
-Hi Daniel,
-
-On Wed, May 27, 2020 at 05:15:12PM +0800, Daniel Drake wrote:
-> On Wed, May 27, 2020 at 5:13 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> > I'm about to send a v3 today or tomorrow, I can Cc you (and Jian-Hong) =
-if you
-> > want.
->=20
-> That would be great, although given the potentially inconsistent
-> results we've been seeing so far it would be great if you could
-> additionally push a git branch somewhere.
-> That way we can have higher confidence that we are applying exactly
-> the same patches to the same base etc.
-
-So I sent a new iteration yesterday, and of course forgot to cc you... Sorr=
-y for
-that.
-
-I've pushed my current branch here:
-https://git.kernel.org/pub/scm/linux/kernel/git/mripard/linux.git/log/?h=3D=
-rpi4-kms
-
-Maxime
-
---3roh2l2ctvp5d3wy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXs9orwAKCRDj7w1vZxhR
-xWNfAQCCSr9BEd1oYBuyc+wf4o1Fm9s0OrK6oNnc5glpsNR6QAEAmnvx5c11Eczw
-/TJeEz41Q44p4bi3Fmipemloq5mY/g4=
-=elb0
------END PGP SIGNATURE-----
-
---3roh2l2ctvp5d3wy--
+      Arnd
