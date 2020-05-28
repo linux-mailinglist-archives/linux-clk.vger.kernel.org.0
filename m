@@ -2,63 +2,56 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BEFA1E6E6A
-	for <lists+linux-clk@lfdr.de>; Fri, 29 May 2020 00:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 983A71E6FDC
+	for <lists+linux-clk@lfdr.de>; Fri, 29 May 2020 01:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436886AbgE1WMZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 28 May 2020 18:12:25 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:45708 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436887AbgE1WMY (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 May 2020 18:12:24 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1jeQl9-0007zv-Hz; Thu, 28 May 2020 22:12:19 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        id S1728589AbgE1XA7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 28 May 2020 19:00:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46298 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727899AbgE1XAz (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 28 May 2020 19:00:55 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 69B002074B;
+        Thu, 28 May 2020 23:00:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590706855;
+        bh=BjaPhLv7o3F9Baq35hcGqpi0Mk/SufIcuOaMQDHCS9c=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=P1T6h3goNb5Pe3t56fZFSyff4JfuW/pOATL+5x9+iVegZ36QKcaKYkXyDv4SHfVni
+         6kqffzJuvKhBpf2ykGLzze2sZd3t2q3qPKdPHu9zxEdxyGjY+Kh++JBtn/MOOK46yL
+         jaGpjXBITmL//5+If8qr08n/sGIkENepKN4yDNws=
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200528221219.535804-1-colin.king@canonical.com>
+References: <20200528221219.535804-1-colin.king@canonical.com>
+Subject: Re: [PATCH][next] clk: intel: remove redundant initialization of variable rate64
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Colin King <colin.king@canonical.com>,
+        Michael Turquette <mturquette@baylibre.com>,
         Rahul Tanwar <rahul.tanwar@linux.intel.com>,
         linux-clk@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] clk: intel: remove redundant initialization of variable rate64
-Date:   Thu, 28 May 2020 23:12:19 +0100
-Message-Id: <20200528221219.535804-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Date:   Thu, 28 May 2020 16:00:54 -0700
+Message-ID: <159070685467.69627.16613075011399178571@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Quoting Colin King (2020-05-28 15:12:19)
+> From: Colin Ian King <colin.king@canonical.com>
+>=20
+> The variable rate64 is being initialized with a value that is never read
+> and it is being updated later with a new value.  The initialization is
+> redundant and can be removed.
+>=20
+> Addresses-Coverity: ("Unused value")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
 
-The variable rate64 is being initialized with a value that is never read
-and it is being updated later with a new value.  The initialization is
-redundant and can be removed.
-
-Addresses-Coverity: ("Unused value")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/clk/x86/clk-cgu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/clk/x86/clk-cgu.c b/drivers/clk/x86/clk-cgu.c
-index 802a7fa88535..56af0e04ec1e 100644
---- a/drivers/clk/x86/clk-cgu.c
-+++ b/drivers/clk/x86/clk-cgu.c
-@@ -538,7 +538,7 @@ lgm_clk_ddiv_round_rate(struct clk_hw *hw, unsigned long rate,
- 	struct lgm_clk_ddiv *ddiv = to_lgm_clk_ddiv(hw);
- 	u32 div, ddiv1, ddiv2;
- 	unsigned long flags;
--	u64 rate64 = rate;
-+	u64 rate64;
- 
- 	div = DIV_ROUND_CLOSEST_ULL((u64)*prate, rate);
- 
--- 
-2.25.1
-
+Applied to clk-next
