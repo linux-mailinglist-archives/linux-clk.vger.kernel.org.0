@@ -2,140 +2,132 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C10921E58D6
-	for <lists+linux-clk@lfdr.de>; Thu, 28 May 2020 09:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94EBA1E589F
+	for <lists+linux-clk@lfdr.de>; Thu, 28 May 2020 09:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726883AbgE1Hie (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 28 May 2020 03:38:34 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:39412 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726860AbgE1Hie (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 28 May 2020 03:38:34 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id D4960200A25;
-        Thu, 28 May 2020 09:38:31 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 4C4DF200A1D;
-        Thu, 28 May 2020 09:38:26 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id EBB1F402D3;
-        Thu, 28 May 2020 15:38:18 +0800 (SGT)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, shc_work@mail.ru, s.trumtrar@pengutronix.de,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH 9/9] dt-bindings: clock: Convert i.MX1 clock to json-schema
-Date:   Thu, 28 May 2020 15:27:59 +0800
-Message-Id: <1590650879-18288-10-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1590650879-18288-1-git-send-email-Anson.Huang@nxp.com>
-References: <1590650879-18288-1-git-send-email-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726207AbgE1HbA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 28 May 2020 03:31:00 -0400
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:59857 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725747AbgE1HbA (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 May 2020 03:31:00 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id B1C135801E3;
+        Thu, 28 May 2020 03:30:58 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Thu, 28 May 2020 03:30:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=DzfmDTRER5Rc6vqd8K3tdl/h7IL
+        LPrzRW6G6nM/VnN8=; b=Uo/3TSRDGuNYFTVIWjo5nW8GLeNnjf4YCBm0RvH8OIa
+        d9NQOKxlUg1FESR6IAXM5mj3dCtfSgJ52b9QgX4BbQXpaWRZ0V2mj5pbElDNg9xY
+        WoBkTMIQyU/2uLCVme027EGhgYmAZ/kBGpvEUjaTK8tB8zh7qLFjUq2y9M7CQlM5
+        MD+a0zkII7ReHXvr3Myih7oiMCzLIr6qJSbkdU96GdrU2l4xHKx0zu9/9B+e9Nh/
+        lH2L+GyXcRjyXo0v1AxKmSNI6EF6GfjfH7d6FDHnMymDy0hH5jhxxXgSNGIWnmZI
+        Dq68N3mnkUh8ZEoFVa0f+C8rDUU8HPjXpGGWgHElAbg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=DzfmDT
+        RER5Rc6vqd8K3tdl/h7ILLPrzRW6G6nM/VnN8=; b=KJHyh6XqKlTQ4MP0B3XhzN
+        YCyIFUWT+oDBebBgN3cMKQVzEx6whQoljUpQimvyyMAUdxHNajzjv1Eb6YfSvxem
+        Kz+iXJhMpOpKhzTHpkOkRjMEVzADfZLY+cFKzpJbQxpOcmDfZlIKouu8MTaOnwDa
+        b4zKDMS9u1OPxxiV65/Et3WpQ+XDk9rQbMJuPZVmi9Ge6EXdzLxWcD5C6D85TWyh
+        i65iIRKZS8OVmdVXgZEv0KZwdYv6exg7SwCRISRFiD/SiqzrDgGwpm4kLxFEKEil
+        Q8izo1OUn4kMo6xOquuuYDXVcBbgRiqAbztXNUGaU+tzRVfiGRRSTDWokeT4Qz1w
+        ==
+X-ME-Sender: <xms:sWjPXoONJgJEwoEq_FYCUe_RM3crKMcoo7E-FPok9IxHzYT67Q46Rw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedruddvhedguddtudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeevveefffduveeitdegtefhhfetueffteefffdvheevvdehteethedvleff
+    gfejvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeeltddrkeelrdeike
+    drjeeinecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhep
+    mhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:sWjPXu8OSORrgT7dwCMcLRO_66K0n8kL-N8hkR8uECjCsK3NZ3NpZw>
+    <xmx:sWjPXvRtze0HzvnWIkUsiiK-OMC0eioiyU_5C_9VzsvjpWy-KMqdVQ>
+    <xmx:sWjPXgt1FAvnCaJsnGRpBcolBHLPyMjUSIl2wixGr4MHY17_SwWhmg>
+    <xmx:smjPXo7uLD9f6nuRyVwYhByDit7NnBfwK4Rpk_3NZeXwPXg38J9vyQ>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 32F0B30614FA;
+        Thu, 28 May 2020 03:30:57 -0400 (EDT)
+Date:   Thu, 28 May 2020 09:30:55 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Daniel Drake <drake@endlessm.com>
+Cc:     Jian-Hong Pan <jian-hong@endlessm.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Eric Anholt <eric@anholt.net>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-rpi-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Linux Upstreaming Team <linux@endlessm.com>
+Subject: Re: [PATCH v2 00/91] drm/vc4: Support BCM2711 Display Pipelin
+Message-ID: <20200528073055.znutrhkryzu3grrl@gilmour.lan>
+References: <20200427072342.5499-1-jian-hong@endlessm.com>
+ <20200428162152.ztsqp7nxqbwqrm6r@gilmour.lan>
+ <CAPpJ_efvtVzb_hvoVOeaePh7UdE13wOiiGaDBH38cToB-yhkUg@mail.gmail.com>
+ <20200507172158.cybtakpo6cxv6wcs@gilmour.lan>
+ <CAPpJ_efxenmSXt2OXkhkQ1jDJ59tyWBDUvmpyOB-bfPMDENQZg@mail.gmail.com>
+ <CAPpJ_ed9TMJjN8xS1_3saf5obQhULJSLNgQSAFxgiWM2QX9A7Q@mail.gmail.com>
+ <20200526102018.kznh6aglpkqlp6en@gilmour.lan>
+ <CAD8Lp467DiYWLwH6T1Jeq-uyN4VEuef-gGWw0_bBTtmSPr00Ag@mail.gmail.com>
+ <20200527091335.7wc3uy67lbz7j4di@gilmour.lan>
+ <CAD8Lp45ucK-yZ5G_DrUVA7rnxo58UF1LPUy65w2PCOcSxKx_Sg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="3roh2l2ctvp5d3wy"
+Content-Disposition: inline
+In-Reply-To: <CAD8Lp45ucK-yZ5G_DrUVA7rnxo58UF1LPUy65w2PCOcSxKx_Sg@mail.gmail.com>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Convert the i.MX1 clock binding to DT schema format using json-schema.
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
----
- .../devicetree/bindings/clock/imx1-clock.txt       | 26 ------------
- .../devicetree/bindings/clock/imx1-clock.yaml      | 49 ++++++++++++++++++++++
- 2 files changed, 49 insertions(+), 26 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/clock/imx1-clock.txt
- create mode 100644 Documentation/devicetree/bindings/clock/imx1-clock.yaml
+--3roh2l2ctvp5d3wy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/clock/imx1-clock.txt b/Documentation/devicetree/bindings/clock/imx1-clock.txt
-deleted file mode 100644
-index 9823baf..0000000
---- a/Documentation/devicetree/bindings/clock/imx1-clock.txt
-+++ /dev/null
-@@ -1,26 +0,0 @@
--* Clock bindings for Freescale i.MX1 CPUs
--
--Required properties:
--- compatible: Should be "fsl,imx1-ccm".
--- reg: Address and length of the register set.
--- #clock-cells: Should be <1>.
--
--The clock consumer should specify the desired clock by having the clock
--ID in its "clocks" phandle cell. See include/dt-bindings/clock/imx1-clock.h
--for the full list of i.MX1 clock IDs.
--
--Examples:
--	clks: ccm@21b000 {
--		#clock-cells = <1>;
--		compatible = "fsl,imx1-ccm";
--		reg = <0x0021b000 0x1000>;
--	};
--
--	pwm: pwm@208000 {
--		#pwm-cells = <2>;
--		compatible = "fsl,imx1-pwm";
--		reg = <0x00208000 0x1000>;
--		interrupts = <34>;
--		clocks = <&clks IMX1_CLK_DUMMY>, <&clks IMX1_CLK_PER1>;
--		clock-names = "ipg", "per";
--	};
-diff --git a/Documentation/devicetree/bindings/clock/imx1-clock.yaml b/Documentation/devicetree/bindings/clock/imx1-clock.yaml
-new file mode 100644
-index 0000000..06a0ff9
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/imx1-clock.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/imx1-clock.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Clock bindings for Freescale i.MX1 CPUs
-+
-+maintainers:
-+  - Alexander Shiyan <shc_work@mail.ru>
-+
-+description: |
-+  The clock consumer should specify the desired clock by having the clock
-+  ID in its "clocks" phandle cell. See include/dt-bindings/clock/imx1-clock.h
-+  for the full list of i.MX1 clock IDs.
-+
-+properties:
-+  compatible:
-+    const: fsl,imx1-ccm
-+
-+  reg:
-+    maxItems: 1
-+
-+  '#clock-cells':
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - '#clock-cells'
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/imx1-clock.h>
-+
-+    clock-controller@21b000 {
-+        #clock-cells = <1>;
-+        compatible = "fsl,imx1-ccm";
-+        reg = <0x0021b000 0x1000>;
-+    };
-+
-+    pwm@208000 {
-+        #pwm-cells = <2>;
-+        compatible = "fsl,imx1-pwm";
-+        reg = <0x00208000 0x1000>;
-+        interrupts = <34>;
-+        clocks = <&clks IMX1_CLK_DUMMY>, <&clks IMX1_CLK_PER1>;
-+        clock-names = "ipg", "per";
-+    };
--- 
-2.7.4
+Hi Daniel,
 
+On Wed, May 27, 2020 at 05:15:12PM +0800, Daniel Drake wrote:
+> On Wed, May 27, 2020 at 5:13 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> > I'm about to send a v3 today or tomorrow, I can Cc you (and Jian-Hong) =
+if you
+> > want.
+>=20
+> That would be great, although given the potentially inconsistent
+> results we've been seeing so far it would be great if you could
+> additionally push a git branch somewhere.
+> That way we can have higher confidence that we are applying exactly
+> the same patches to the same base etc.
+
+So I sent a new iteration yesterday, and of course forgot to cc you... Sorr=
+y for
+that.
+
+I've pushed my current branch here:
+https://git.kernel.org/pub/scm/linux/kernel/git/mripard/linux.git/log/?h=3D=
+rpi4-kms
+
+Maxime
+
+--3roh2l2ctvp5d3wy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXs9orwAKCRDj7w1vZxhR
+xWNfAQCCSr9BEd1oYBuyc+wf4o1Fm9s0OrK6oNnc5glpsNR6QAEAmnvx5c11Eczw
+/TJeEz41Q44p4bi3Fmipemloq5mY/g4=
+=elb0
+-----END PGP SIGNATURE-----
+
+--3roh2l2ctvp5d3wy--
