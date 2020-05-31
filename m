@@ -2,65 +2,100 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B67C21E9443
-	for <lists+linux-clk@lfdr.de>; Sun, 31 May 2020 00:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126B51E9997
+	for <lists+linux-clk@lfdr.de>; Sun, 31 May 2020 19:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729376AbgE3Wck (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 30 May 2020 18:32:40 -0400
-Received: from invention.AFNIGHTS.net ([46.166.185.243]:41614 "EHLO
-        host.acceswealthservice.xyz" rhost-flags-OK-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1729460AbgE3Wcj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 30 May 2020 18:32:39 -0400
-Received: from acceswealthservice.xyz (2t5j.w.time4vps.cloud [212.24.97.110])
-        by host.acceswealthservice.xyz (Postfix) with ESMTPA id 72363F65DD
-        for <linux-clk@vger.kernel.org>; Sun, 31 May 2020 00:29:22 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 host.acceswealthservice.xyz 72363F65DD
+        id S1728012AbgEaRrD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 31 May 2020 13:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726193AbgEaRrC (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 31 May 2020 13:47:02 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A85C061A0E;
+        Sun, 31 May 2020 10:47:02 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id x14so9247660wrp.2;
+        Sun, 31 May 2020 10:47:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=acceswealthservice.xyz; s=default; t=1590877762;
-        bh=td/1klW8T5Eyprv/u3iSt1Uq3pUK6RiW9JQei4VLqgo=;
-        h=Reply-To:From:To:Subject:Date:From;
-        b=duWY8XPJ/VxDp26+R/5djUQDnhOmwmrZmCQyDKoncUDmiGEGlLJtZBBTKm3NmeIJq
-         AuA/UiPbipgY9APrk8H4YQ1lFRIpxaZDvE0SNSPgPiGdHoFwf3QllcBfL5c0O5/gkC
-         IvL7BSZEvOsUsH/Sujuk7beseUYWSgZGlK1+hKDE=
-DKIM-Filter: OpenDKIM Filter v2.11.0 host.acceswealthservice.xyz 72363F65DD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=acceswealthservice.xyz; s=default; t=1590877762;
-        bh=td/1klW8T5Eyprv/u3iSt1Uq3pUK6RiW9JQei4VLqgo=;
-        h=Reply-To:From:To:Subject:Date:From;
-        b=duWY8XPJ/VxDp26+R/5djUQDnhOmwmrZmCQyDKoncUDmiGEGlLJtZBBTKm3NmeIJq
-         AuA/UiPbipgY9APrk8H4YQ1lFRIpxaZDvE0SNSPgPiGdHoFwf3QllcBfL5c0O5/gkC
-         IvL7BSZEvOsUsH/Sujuk7beseUYWSgZGlK1+hKDE=
-Reply-To: deanj22@accesswealthservices.online
-From:   Dean <deanj00@acceswealthservice.xyz>
-To:     linux-clk@vger.kernel.org
-Subject: Investment
-Date:   31 May 2020 01:29:22 +0300
-Message-ID: <20200531012922.A608AB76E76ADF18@acceswealthservice.xyz>
-Mime-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0igUM99u6qi0G2V9QHiKNIc+/Cm62S0GvQJm5Z6yraI=;
+        b=eP15yulHnOheIw44ncZUq2rVU/kWIIjQ51dynpgDc7ik+73HqCU6wNUlwCxROjyqFT
+         eCiV7qFJSjAfnfbwBs129WmT45YHyv0LEg/bdKmiS+IuRTR24PzFIGW6ujzHtYtVSABr
+         3OjuzaaLvJuQ0AKHOwoAvFe45B6H2sBtY/2NpEUtmu8sC18ZVQSF09fe+kchygYwYtgd
+         BIFMAI2LsFCNP1bFED3IBO4ruIGhcZXXFSMKNz8a8bm9YIGNeE1DycoTMIyTfSs+nyRb
+         MIHsqEn/Pz4L0zVREX3R92OSRkogU/Af0WkTFIa0A1CSk54JnzG0ar5zxDq2lzrnY/hK
+         +ugg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0igUM99u6qi0G2V9QHiKNIc+/Cm62S0GvQJm5Z6yraI=;
+        b=FLpNTlgVwpFTFlnfwDpuvr3/seW/KwNwY+34P/yEFyLaCYrdd8Pveo93ZQpIBHQHof
+         N4kD0219dZbNo4nur5mHPx5VrSryBQEjAxTyd9u+er1YcLMzfG7iR6031YoSOVOU1e9S
+         DANYcIcbu/LD8rpYI/vOP0q4a7dI95nSgogcegzvS39GAbOC/hHaup1TFX7Wm089hZ6J
+         8+FVAnVcHGKU6dM46re4Jlw5lRgizJXC/aP9vDx7LZqb4Xv5hi8Xh3lq5ECtvelpYTK6
+         I1nTcNVgpwlihekHehd7Cqfa37z0Fsep5Qw0Ur1ca7VjF+YMUptUSkT2K1/dvi9VF6wH
+         7eLw==
+X-Gm-Message-State: AOAM530xuXoYbviKXWTE7xtDKmTkj+71qzPqYONJ0IVNVYqwTboUa+nV
+        Brapqvkhj2lcL8XypXJ3UWs=
+X-Google-Smtp-Source: ABdhPJyTv1d7YcEb2pEVi4URbVPgL7HdLi/EU2CphoV+LO8URSwLmHF+DGnvsNadjC5gRxVvj2pwYQ==
+X-Received: by 2002:adf:80f0:: with SMTP id 103mr17371010wrl.232.1590947220924;
+        Sun, 31 May 2020 10:47:00 -0700 (PDT)
+Received: from localhost.localdomain (abad130.neoplus.adsl.tpnet.pl. [83.6.167.130])
+        by smtp.googlemail.com with ESMTPSA id x186sm9716494wmg.8.2020.05.31.10.46.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 May 2020 10:47:00 -0700 (PDT)
+From:   Konrad Dybcio <konradybcio@gmail.com>
+Cc:     Konrad Dybcio <konradybcio@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] Add msm8992 GCC driver
+Date:   Sun, 31 May 2020 19:46:06 +0200
+Message-Id: <20200531174612.260113-1-konradybcio@gmail.com>
+X-Mailer: git-send-email 2.26.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Good evening. I am Dean Johnston, a broker working with Access=20
-Wealth Services. I am contacting you because one of my high=20
-profile clients is interested in investing abroad and has asked=20
-me to look for individuals and companies with interesting=20
-business ideas and companies that he can invest in. He wants to=20
-expand his portfolio and has interest in investing a substantial=20
-amount of asset abroad. I got your contact (along with other=20
-contacts) through an online business directory and I thought I'd=20
-contact you to see if you are interested in this opportunity.
+This SoC is very similar to msm8994, but features
+less clocks (as in no UFS or PCIE1-related ones,
+for example). This implementation also adds support
+for GDSCs and resets, which are lacking in the current
+8994 driver and I can't test them over there, as I don't
+have a device featuring that SoC. Qualcomm also 
+separates 8992 and 8994 drivers on downstream kernels,
+so I find this appropriate.
 
-Please indicate your interest by replying back to this email.=20
-Once I get your response, I will give you more details and we can=20
-plan a strategy that will be beneficial to all parties.
+Konrad Dybcio (4):
+  drivers: clk: qcom: Add msm8992 GCC driver
+  Add compatible strings and the include files for the msm8992 GCC.
+  arm64: dts: Adjust msm8992 DTS to use the correct GCC driver
+  driver: clk: Add msm8992 GCC Kconfig and Makefile entries
 
-Best regards
+ .../devicetree/bindings/clock/qcom,gcc.yaml   |    2 +
+ arch/arm64/boot/dts/qcom/msm8992.dtsi         |   15 +-
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/gcc-msm8992.c                | 2429 +++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-msm8992.h  |  144 +
+ include/dt-bindings/reset/qcom,gcc-msm8992.h  |    8 +
+ 7 files changed, 2600 insertions(+), 7 deletions(-)
+ create mode 100644 drivers/clk/qcom/gcc-msm8992.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-msm8992.h
+ create mode 100644 include/dt-bindings/reset/qcom,gcc-msm8992.h
 
-D Johnston
-Access Wealth Services
-+27319400855
+-- 
+2.26.2
+
