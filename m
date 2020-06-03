@@ -2,114 +2,101 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C0A1ED097
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Jun 2020 15:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E52F1ED12F
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Jun 2020 15:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725834AbgFCNNk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 3 Jun 2020 09:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
+        id S1725993AbgFCNsu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 3 Jun 2020 09:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725780AbgFCNNk (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 3 Jun 2020 09:13:40 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BBDC08C5C1
-        for <linux-clk@vger.kernel.org>; Wed,  3 Jun 2020 06:13:39 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id k26so2009968wmi.4
-        for <linux-clk@vger.kernel.org>; Wed, 03 Jun 2020 06:13:39 -0700 (PDT)
+        with ESMTP id S1725965AbgFCNst (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 3 Jun 2020 09:48:49 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C4CC08C5C5
+        for <linux-clk@vger.kernel.org>; Wed,  3 Jun 2020 06:48:48 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id r125so1336294lff.13
+        for <linux-clk@vger.kernel.org>; Wed, 03 Jun 2020 06:48:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YvTYA3i3ql71PlM8AImNAHj0MEK/O19mMWzQp9IXa1c=;
-        b=B+sJbp19CMkL1IePV7SRjLL3NuueuIDnhgcTjsWMypxSEFEsr4Xi3kdwOgDaCnhtja
-         v29EADJmF0KGTZpbhsDR3QCgYXtMEc+HiHQ6Wn4GSp6Bbh3D2zyfB1Ah9AaTYU5/wFSv
-         uO4p5rj3+oMPLRlfhLADZ8bsB4BoiRx0kAKBS9fHGAVJ/q5UqIZOzOqTSWvV/ZytASMH
-         06f4JyIz/jAyxn5a1WoqF9OWvMLLOeAzMm5aAI19ioVk8O5JEYxbFFksq5eCtWkcD7AJ
-         GDEfI7umcefJunD1gNX8h/Mn+DQ/JzAmVulGKhFhb9DmnjcdaYGG7smoXTBZPlGdmA/o
-         l/yQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
+        b=LImzFWfFZ5MGhzJT1qzCsgEXVo7xW37sUIdrDLCKiXHQE0/Tq0rYX6Af/ld5dvlhmE
+         opFt8B8vUrhAfyxGIRs7eIQZmnu+cHCt7Dz4gEu/fnBWHDlMa8iVHDbM7XgqJUtNcgor
+         I4Oj1yGJ3ygOniFn6Dr+FHDS5BV48N/ldz+eBwWbR5/ADnYCL6KuztRZu9mrKJOxMODU
+         fmVICwwGmTYXXsgICTxE6unupuMdGq6+YZvkWKysZVLYK3Wwxrg7U2ecMo3WGycHWcU1
+         w35jxyjuynpm30G3kj/I18A4vO2Y2WN0kfTajUkGc1Xe9t84eQuWhnB4AGlAS8dbrawc
+         iC3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YvTYA3i3ql71PlM8AImNAHj0MEK/O19mMWzQp9IXa1c=;
-        b=BBf5HGpeZCbyzDo5uERnNG7iqHF6bdcBHbpL7PcKDZORu/eT5eliryIPqCIdxZuYiK
-         QyWrxE7P0T4C29lZIrjd7m5a2/vew3F4vUSx+GjWissq+TmC1b8EONLFBDaZ6+qYoOhe
-         5FdWbQZZk4Va9k/72lC3nAOgmaSobtSn4An829ADHwx75dsN1R9UyoFUK1VBndsxkLSH
-         BEsmiJBTEG5YSCYw4Qu3G4h0whX4zyNj79bU1Roj3RvCWRUj6zFJ2XPOkJj2f6PbYMQY
-         CL1NINyURjjjntMEAx7GxbcQFadhPEwZSHZaGs0i24ZePhiKBa/zO0YZXC+k8DKIHZOK
-         YuyA==
-X-Gm-Message-State: AOAM530hLBO3Bj1HLQpTHRMVLYIJm7A62JlTIGTYvm04307m1PlGCMdZ
-        Qgo+ifpd9Gionut9ZxKeLekTxQ==
-X-Google-Smtp-Source: ABdhPJz+8uZwZ5cW2ShXPRloMcUIcKMg45z3XnlS1ugHLPn7vS7DyOPoTzg6JGlGZfSiZeZmIvoBFQ==
-X-Received: by 2002:a05:600c:1:: with SMTP id g1mr8478525wmc.142.1591190018583;
-        Wed, 03 Jun 2020 06:13:38 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:2e56:dcff:fed2:c6d6])
-        by smtp.googlemail.com with ESMTPSA id l204sm3103888wmf.19.2020.06.03.06.13.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2020 06:13:37 -0700 (PDT)
-Date:   Wed, 3 Jun 2020 15:13:35 +0200
-From:   LABBE Corentin <clabbe@baylibre.com>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 2/2] clk: tegra: Always program PLL_E when enabled
-Message-ID: <20200603131335.GA3597@Red>
-References: <20200603111923.3545261-1-thierry.reding@gmail.com>
- <20200603111923.3545261-2-thierry.reding@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
+        b=b0XbQBWsy6IaISBBn3zowteHELQ9OPo5fHMeZBZOVaA6O8noakMWv4EZYVIUOSjkhZ
+         LOZqPu8J+TF2EA2Ba0yzNVT/LADYjotcyGrgGirgauvjWFciKieJytHS8Q/xUToOADIs
+         cS3UgffwTeRGI+oqpZnN5Oabv3G7L7c/BHoYWm81K67qT2bbkQzda3+2xCK4p1wlKaGX
+         ZASkyen1nIuALB1zPU9Azot24OY+S8ZLht80TY8ZwcIZKahFUHIMmZevqC4L9uPtfY0j
+         xok/cX0s02U1NvQyM/I14xWiKNAXywFPUvpOqr1dFMNs1a5F6areAz3UaKG/kVj6IIfs
+         pbyA==
+X-Gm-Message-State: AOAM5329++HUkXBy534omM/gUMUxVpbaJ6fJVuHhalGKh5q/G9SYHVI+
+        +scrK44omeizFKJtDciFHsJOWpJR8pR3rQ4TD7o=
+X-Google-Smtp-Source: ABdhPJzc66PsPJ7uf2JiXrqj7zfh07Ra5BpBms0TPKeexmxkWkfXYY+ch/Os+E85wJbdOE6Lm+0ANdybV/7KRG4HAcU=
+X-Received: by 2002:a05:6512:308e:: with SMTP id z14mr2566308lfd.29.1591192127287;
+ Wed, 03 Jun 2020 06:48:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200603111923.3545261-2-thierry.reding@gmail.com>
+Reply-To: susanjones.wife@gmail.com
+Received: by 2002:a19:a405:0:0:0:0:0 with HTTP; Wed, 3 Jun 2020 06:48:46 -0700 (PDT)
+From:   "Mrs.Susan Jones" <joneswife.susan@gmail.com>
+Date:   Wed, 3 Jun 2020 14:48:46 +0100
+X-Google-Sender-Auth: aH2vam-ZraP3yG1gz3ryctMgTE4
+Message-ID: <CALBhdBfusXWup1N4iFuTS3D1AZxWbZbTDS_qa-wA3FkbkE7MrQ@mail.gmail.com>
+Subject: HELLO: I AM MRS SUSAN JONES
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Jun 03, 2020 at 01:19:23PM +0200, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
-> 
-> Commit bff1cef5f23a ("clk: tegra: Don't enable already enabled PLLs")
-> added checks to avoid enabling PLLs that have already been enabled by
-> the bootloader. However, the PLL_E configuration inherited from the
-> bootloader isn't necessarily the one that is needed for the kernel.
-> 
-> This can cause SATA to fail like this:
-> 
->     [    5.310270] phy phy-sata.6: phy poweron failed --> -110
->     [    5.315604] tegra-ahci 70027000.sata: failed to power on AHCI controller: -110
->     [    5.323022] tegra-ahci: probe of 70027000.sata failed with error -110
-> 
-> Fix this by always programming the PLL_E. This ensures that any mis-
-> configuration by the bootloader will be overwritten by the kernel.
-> 
-> Fixes: bff1cef5f23a ("clk: tegra: Don't enable already enabled PLLs")
-> Reported-by: LABBE Corentin <clabbe@baylibre.com>
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> ---
->  drivers/clk/tegra/clk-pll.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/drivers/clk/tegra/clk-pll.c b/drivers/clk/tegra/clk-pll.c
-> index 583d2ac61e9e..b2d39a66f0fa 100644
-> --- a/drivers/clk/tegra/clk-pll.c
-> +++ b/drivers/clk/tegra/clk-pll.c
-> @@ -1601,9 +1601,6 @@ static int clk_plle_tegra114_enable(struct clk_hw *hw)
->  	unsigned long flags = 0;
->  	unsigned long input_rate;
->  
-> -	if (clk_pll_is_enabled(hw))
-> -		return 0;
-> -
->  	input_rate = clk_hw_get_rate(clk_hw_get_parent(hw));
->  
->  	if (_get_table_rate(hw, &sel, pll->params->fixed_rate, input_rate))
-> -- 
-> 2.24.1
-> 
+-- 
+OUR GOLDEN OPPORTUNITY
 
-Tested-by: Corentin Labbe <clabbe@baylibre.com>
+Hello Dear Friend,
 
-Thanks
+Complement of the day, i hope you are doing great today. However, I am
+Mrs.Susan Jones, an auditor with one of the new generation banks here
+in Burkina Faso.
+
+I am writing you this letter based on the latest development at my
+Department. i discovered some abandoned huge amount of money, Ten
+Million, Five hundred thousand  United States Dollars.($10.500.000).
+Now I am only contacting you as a foreigner because this money cannot
+be approved to a local bank account here, but can only be approved to
+any foreign account and foreign beneficiary because the money is in US
+dollars
+
+This will be  a legitimate transaction once you accept to build trust
+with me and follow simple instruction doing the transfer process,
+until the total sum transfer out of the bank here to your own bank
+account any where in the world, and I agreed to share the total money
+50/50 with you once you successful confirmed it in your bank account.
+But any expenses doing the transfer process will be deduct from the
+amount before sharing, If you are interested to work with me and
+provide a good receiving bank account, get back to me as soon as
+possible with the following details below.
+
+Your full name
+Your Profession
+Your direct mobile phone number
+Your Scanned International passport or any of your identity
+
+NOTE: PLEASE IT YOU ARE NOT INTERESTED DON'T BORDER TO RESPOND BACK TO
+AVOID TIME WASTED.
+
+As soon as I receive these data's, I will forward to you the
+application form which you will send to the bank for the claim and
+transfer of the fund into your bank account as the  new beneficial.
+
+I am waiting to hear from you soon
+
+Yours
+Mrs.Susan Jones
