@@ -2,253 +2,122 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CEFA1F2B85
-	for <lists+linux-clk@lfdr.de>; Tue,  9 Jun 2020 02:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E6F1F2E0D
+	for <lists+linux-clk@lfdr.de>; Tue,  9 Jun 2020 02:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731006AbgFIAQR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 8 Jun 2020 20:16:17 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:19814 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732946AbgFIAQO (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 8 Jun 2020 20:16:14 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1591661774; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=PvWYrDCuHj4FNQpaX2EaPOjvDJ9j1UuFf3vzoFveb9Q=;
- b=SEVyvQ1hf5NoUrfAxXlqr8sYzpyUQGT5uAdlX1vmkrWKxhLnppDCWfVcOGMCvIhxEymrJqg6
- c7DMRIEbHOWNJHkXa56jMP6I0/DzUHDsJBbufNrr0VngHYeHVW0JFv+ANP8jV5FgVkEEdtAt
- 03xOecdFEIppN5BrRh8KjQnJVhM=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n13.prod.us-east-1.postgun.com with SMTP id
- 5eded4c7d9f1a4ceeffc70c8 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 09 Jun 2020 00:16:07
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 0ACA5C433CB; Tue,  9 Jun 2020 00:16:06 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        id S1729255AbgFHXNL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 8 Jun 2020 19:13:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60934 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729222AbgFHXNF (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:13:05 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: tanmay)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 75919C4339C;
-        Tue,  9 Jun 2020 00:16:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 47CF720B80;
+        Mon,  8 Jun 2020 23:13:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591657985;
+        bh=7j31ytWFpCdfw0FB5VRFDqkG3S0rIAW1hLa6rqGWXpc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DeRUjI2rPln0Y4WqmO0OU++AmvA3uDLWqrfZXwjEXlRkmms9SDtz0Yu2v3HVAbUN+
+         C+cX0lKyQg+zl/Yx83d9qI+1SxCLGgfItiGtID8of/ZHQN73Iv2LC4AqG+zaKudaNn
+         qhfKql2smJFT+dwAzl1pPOVyNNzRcxaPq5qWzaMs=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Justin Swartz <justin.swartz@risingedge.co.za>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.6 045/606] clk: rockchip: fix incorrect configuration of rk3228 aclk_gpu* clocks
+Date:   Mon,  8 Jun 2020 19:02:50 -0400
+Message-Id: <20200608231211.3363633-45-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
+References: <20200608231211.3363633-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 08 Jun 2020 17:16:04 -0700
-From:   tanmay@codeaurora.org
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     devicetree@vger.kernel.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, seanpaul@chromium.org,
-        abhinavk@codeaurora.org, swboyd@chromium.org, robdclark@gmail.com,
-        nganji@codeaurora.org, hoegsberg@google.com,
-        dri-devel@lists.freedesktop.org, Vara Reddy <varar@codeaurora.org>,
-        jsanka@codeaurora.org, aravindh@codeaurora.org,
-        linux-clk@vger.kernel.org,
-        Chandan Uddaraju <chandanu@codeaurora.org>,
-        Freedreno <freedreno-bounces@lists.freedesktop.org>
-Subject: Re: [Freedreno] [DPU PATCH v5 4/5] drm/msm/dp: add support for DP PLL
- driver
-In-Reply-To: <158768799258.135303.4148133179625718198@swboyd.mtv.corp.google.com>
-References: <1585701031-28871-1-git-send-email-tanmay@codeaurora.org>
- <1585701031-28871-5-git-send-email-tanmay@codeaurora.org>
- <158768799258.135303.4148133179625718198@swboyd.mtv.corp.google.com>
-Message-ID: <55d0c7a95777a988eee64a5b7778c025@codeaurora.org>
-X-Sender: tanmay@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 2020-04-23 17:26, Stephen Boyd wrote:
-> Quoting Tanmay Shah (2020-03-31 17:30:30)
->> diff --git a/drivers/gpu/drm/msm/dp/pll/dp_pll_10nm.c
-> b/drivers/gpu/drm/msm/dp/pll/dp_pll_10nm.c
->> new file mode 100644
->> index 0000000..aa845d0
->> --- /dev/null
->> +++ b/drivers/gpu/drm/msm/dp/pll/dp_pll_10nm.c
->> @@ -0,0 +1,401 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (c) 2016-2020, The Linux Foundation. All rights 
->> reserved.
->> + */
->> +
->> +/*
->> + * Display Port PLL driver block diagram for branch clocks
->> + *
->> + *              +------------------------------+
->> + *              |         DP_VCO_CLK           |
->> + *              |                              |
->> + *              |    +-------------------+     |
->> + *              |    |   (DP PLL/VCO)    |     |
->> + *              |    +---------+---------+     |
->> + *              |              v               |
->> + *              |   +----------+-----------+   |
->> + *              |   | hsclk_divsel_clk_src |   |
->> + *              |   +----------+-----------+   |
->> + *              +------------------------------+
->> + *                              |
->> + *          +---------<---------v------------>----------+
->> + *          |                                           |
->> + * +--------v---------+                                 |
->> + * |    dp_phy_pll    |                                 |
->> + * |     link_clk     |                                 |
->> + * +--------+---------+                                 |
->> + *          |                                           |
->> + *          |                                           |
->> + *          v                                           v
->> + * Input to DISPCC block                                |
->> + * for link clk, crypto clk                             |
->> + * and interface clock                                  |
->> + *                                                      |
->> + *                                                      |
->> + *      +--------<------------+-----------------+---<---+
->> + *      |                     |                 |
->> + * +----v---------+  +--------v-----+  +--------v------+
->> + * | vco_divided  |  | vco_divided  |  | vco_divided   |
->> + * |    _clk_src  |  |    _clk_src  |  |    _clk_src   |
->> + * |              |  |              |  |               |
->> + * |divsel_six    |  |  divsel_two  |  |  divsel_four  |
->> + * +-------+------+  +-----+--------+  +--------+------+
->> + *         |                 |                  |
->> + *         v---->----------v-------------<------v
->> + *                         |
->> + *              +----------+---------+
->> + *              |   dp_phy_pll_vco   |
->> + *              |       div_clk      |
->> + *              +---------+----------+
->> + *                        |
->> + *                        v
->> + *              Input to DISPCC block
->> + *              for DP pixel clock
-> 
-> I suspect this shouldn't be a complicated clk provider at all. Take a
-> look at commit 42d068472ddf ("phy: Add DisplayPort configuration
-> options") for how the phy should manage the link rate, etc. If the
-> dispcc pixel clock needs to know what rate is coming in, then a single
-> clk_hw can be implemented here that tells the consumer (i.e. dispcc) 
-> the
-> rate that it will see at the output of this node. Otherwise, modeling
-> the clk tree inside this PLL block like this is super overly 
-> complicated
-> and wasteful. Don't do it.
-> 
-This will be taken care at later point of time. For now we have removed
-PLL bindings and made PLL as module of DP driver.
+From: Justin Swartz <justin.swartz@risingedge.co.za>
 
->> + *
->> + */
->> +
->> +#include <linux/clk.h>
->> +#include <linux/delay.h>
->> +#include <linux/err.h>
->> +#include <linux/kernel.h>
->> +#include <linux/regmap.h>
->> +
->> +#include "dp_pll_10nm.h"
->> +
->> +#define NUM_PROVIDED_CLKS              2
->> +
->> +#define DP_LINK_CLK_SRC                        0
->> +#define DP_PIXEL_CLK_SRC               1
->> +
-> [...]
->> diff --git a/drivers/gpu/drm/msm/dp/pll/dp_pll_10nm_util.c
-> b/drivers/gpu/drm/msm/dp/pll/dp_pll_10nm_util.c
->> new file mode 100644
->> index 0000000..fff2e8d
->> --- /dev/null
->> +++ b/drivers/gpu/drm/msm/dp/pll/dp_pll_10nm_util.c
->> @@ -0,0 +1,524 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (c) 2016-2020, The Linux Foundation. All rights 
->> reserved.
->> + */
->> +
->> +#define pr_fmt(fmt)    "%s: " fmt, __func__
->> +
->> +#include <linux/delay.h>
->> +#include <linux/err.h>
->> +#include <linux/iopoll.h>
->> +#include <linux/kernel.h>
->> +
->> +#include "dp_hpd.h"
->> +#include "dp_pll.h"
->> +#include "dp_pll_10nm.h"
->> +
-> [...]
->> +
->> +static int dp_config_vco_rate_10nm(struct msm_dp_pll *pll,
->> +               unsigned long rate)
->> +{
->> +       u32 res = 0;
->> +       struct dp_pll_10nm *dp_res = to_dp_pll_10nm(pll);
->> +
->> +       res = dp_vco_pll_init_db_10nm(pll, rate);
->> +       if (res) {
->> +               DRM_ERROR("VCO Init DB failed\n");
->> +               return res;
->> +       }
->> +
->> +       if (dp_res->lane_cnt != 4) {
->> +               if (dp_res->orientation == ORIENTATION_CC2)
->> +                       PLL_REG_W(dp_res->phy_base, REG_DP_PHY_PD_CTL,
-> 0x6d);
->> +               else
->> +                       PLL_REG_W(dp_res->phy_base, REG_DP_PHY_PD_CTL,
-> 0x75);
->> +       } else {
->> +               PLL_REG_W(dp_res->phy_base, REG_DP_PHY_PD_CTL, 0x7d);
->> +       }
-> 
-> For example, this part here can be done through the phy configuration
-> ops. A lane count check in the set rate clk op is quite odd!
-> 
-Same here.
->> +
->> +long dp_vco_round_rate_10nm(struct clk_hw *hw, unsigned long rate,
->> +                       unsigned long *parent_rate)
->> +{
->> +       unsigned long rrate = rate;
->> +       struct msm_dp_pll *pll = to_msm_dp_pll(hw);
->> +
->> +       if (rate <= pll->min_rate)
->> +               rrate = pll->min_rate;
->> +       else if (rate <= DP_VCO_HSCLK_RATE_2700MHZDIV1000)
->> +               rrate = DP_VCO_HSCLK_RATE_2700MHZDIV1000;
->> +       else if (rate <= DP_VCO_HSCLK_RATE_5400MHZDIV1000)
->> +               rrate = DP_VCO_HSCLK_RATE_5400MHZDIV1000;
->> +       else
->> +               rrate = pll->max_rate;
-> 
-> This is basically link rate setting through the clk framework. Calling
-> clk_set_rate() on the pixel clk is complicated and opaque. I'd expect 
-> to
-> see the DP controller driver set the link rate on the phy with
-> phy_configure(), and then that can change the rate that is seen
-> downstream at the pixel clk. Does the pixel clk need to do anything 
-> with
-> the rate? Probably not? I suspect it can just enable the pixel clk when
-> it needs to and disable it when it doesn't need it.
-> 
-Same here.
->> +
->> +       DRM_DEBUG_DP("%s: rrate=%ld\n", __func__, rrate);
->> +
->> +       *parent_rate = rrate;
-> _______________________________________________
-> Freedreno mailing list
-> Freedreno@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/freedreno
+commit cec9d101d70a3509da9bd2e601e0b242154ce616 upstream.
+
+The following changes prevent the unrecoverable freezes and rcu_sched
+stall warnings experienced in each of my attempts to take advantage of
+lima.
+
+Replace the COMPOSITE_NOGATE definition of aclk_gpu_pre with a
+COMPOSITE that retains the selection of HDMIPHY as the PLL source, but
+instead makes uses of the aclk_gpu PLL source gate and parent names
+defined by mux_pll_src_4plls_p rather than mux_aclk_gpu_pre_p.
+
+Remove the now unused mux_aclk_gpu_pre_p and the four named but also
+unused definitions (cpll_gpu, gpll_gpu, hdmiphy_gpu and usb480m_gpu)
+of the aclk_gpu PLL source gate.
+
+Use the correct gate offset for aclk_gpu and aclk_gpu_noc.
+
+Fixes: 307a2e9ac524 ("clk: rockchip: add clock controller for rk3228")
+Cc: stable@vger.kernel.org
+Signed-off-by: Justin Swartz <justin.swartz@risingedge.co.za>
+[double-checked against SoC manual and added fixes tag]
+Link: https://lore.kernel.org/r/20200114162503.7548-1-justin.swartz@risingedge.co.za
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/clk/rockchip/clk-rk3228.c | 17 ++++-------------
+ 1 file changed, 4 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/clk/rockchip/clk-rk3228.c b/drivers/clk/rockchip/clk-rk3228.c
+index d17cfb7a3ff4..d7243c09cc84 100644
+--- a/drivers/clk/rockchip/clk-rk3228.c
++++ b/drivers/clk/rockchip/clk-rk3228.c
+@@ -156,8 +156,6 @@ PNAME(mux_i2s_out_p)		= { "i2s1_pre", "xin12m" };
+ PNAME(mux_i2s2_p)		= { "i2s2_src", "i2s2_frac", "xin12m" };
+ PNAME(mux_sclk_spdif_p)		= { "sclk_spdif_src", "spdif_frac", "xin12m" };
+ 
+-PNAME(mux_aclk_gpu_pre_p)	= { "cpll_gpu", "gpll_gpu", "hdmiphy_gpu", "usb480m_gpu" };
+-
+ PNAME(mux_uart0_p)		= { "uart0_src", "uart0_frac", "xin24m" };
+ PNAME(mux_uart1_p)		= { "uart1_src", "uart1_frac", "xin24m" };
+ PNAME(mux_uart2_p)		= { "uart2_src", "uart2_frac", "xin24m" };
+@@ -468,16 +466,9 @@ static struct rockchip_clk_branch rk3228_clk_branches[] __initdata = {
+ 			RK2928_CLKSEL_CON(24), 6, 10, DFLAGS,
+ 			RK2928_CLKGATE_CON(2), 8, GFLAGS),
+ 
+-	GATE(0, "cpll_gpu", "cpll", 0,
+-			RK2928_CLKGATE_CON(3), 13, GFLAGS),
+-	GATE(0, "gpll_gpu", "gpll", 0,
+-			RK2928_CLKGATE_CON(3), 13, GFLAGS),
+-	GATE(0, "hdmiphy_gpu", "hdmiphy", 0,
+-			RK2928_CLKGATE_CON(3), 13, GFLAGS),
+-	GATE(0, "usb480m_gpu", "usb480m", 0,
++	COMPOSITE(0, "aclk_gpu_pre", mux_pll_src_4plls_p, 0,
++			RK2928_CLKSEL_CON(34), 5, 2, MFLAGS, 0, 5, DFLAGS,
+ 			RK2928_CLKGATE_CON(3), 13, GFLAGS),
+-	COMPOSITE_NOGATE(0, "aclk_gpu_pre", mux_aclk_gpu_pre_p, 0,
+-			RK2928_CLKSEL_CON(34), 5, 2, MFLAGS, 0, 5, DFLAGS),
+ 
+ 	COMPOSITE(SCLK_SPI0, "sclk_spi0", mux_pll_src_2plls_p, 0,
+ 			RK2928_CLKSEL_CON(25), 8, 1, MFLAGS, 0, 7, DFLAGS,
+@@ -582,8 +573,8 @@ static struct rockchip_clk_branch rk3228_clk_branches[] __initdata = {
+ 	GATE(0, "pclk_peri_noc", "pclk_peri", CLK_IGNORE_UNUSED, RK2928_CLKGATE_CON(12), 2, GFLAGS),
+ 
+ 	/* PD_GPU */
+-	GATE(ACLK_GPU, "aclk_gpu", "aclk_gpu_pre", 0, RK2928_CLKGATE_CON(13), 14, GFLAGS),
+-	GATE(0, "aclk_gpu_noc", "aclk_gpu_pre", 0, RK2928_CLKGATE_CON(13), 15, GFLAGS),
++	GATE(ACLK_GPU, "aclk_gpu", "aclk_gpu_pre", 0, RK2928_CLKGATE_CON(7), 14, GFLAGS),
++	GATE(0, "aclk_gpu_noc", "aclk_gpu_pre", 0, RK2928_CLKGATE_CON(7), 15, GFLAGS),
+ 
+ 	/* PD_BUS */
+ 	GATE(0, "sclk_initmem_mbist", "aclk_cpu", 0, RK2928_CLKGATE_CON(8), 1, GFLAGS),
+-- 
+2.25.1
+
