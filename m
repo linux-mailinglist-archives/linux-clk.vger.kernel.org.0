@@ -2,89 +2,83 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCAE1F4B50
-	for <lists+linux-clk@lfdr.de>; Wed, 10 Jun 2020 04:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9351F4B55
+	for <lists+linux-clk@lfdr.de>; Wed, 10 Jun 2020 04:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726105AbgFJCU5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 9 Jun 2020 22:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
+        id S1725999AbgFJCWq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 9 Jun 2020 22:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725798AbgFJCU5 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 9 Jun 2020 22:20:57 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317E1C03E96B
-        for <linux-clk@vger.kernel.org>; Tue,  9 Jun 2020 19:20:56 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id h95so230250pje.4
-        for <linux-clk@vger.kernel.org>; Tue, 09 Jun 2020 19:20:56 -0700 (PDT)
+        with ESMTP id S1725798AbgFJCWp (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 9 Jun 2020 22:22:45 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5D0C05BD1E;
+        Tue,  9 Jun 2020 19:22:45 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id y18so352486plr.4;
+        Tue, 09 Jun 2020 19:22:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:content-transfer-encoding:in-reply-to:references
-         :subject:from:cc:to:date:message-id:user-agent;
-        bh=dC9/KQFuZY34yyqjXgNCYCIKz+z0z+M8UxzxcZfntAU=;
-        b=LshfhBDcAKWKw+BwL1711CUtdj63qrkSDCAl1hU9a4s8T0Drnxqgtvu2sGmOsJJ2yl
-         hhnoTDwRU6tZveA+vXZWA7u1LgoUgm7DV4DVmTHTRN8gEI2fuqMAjW+hkOhnQRcep6A+
-         esCNzWyueKfigoevJr9Sf8d9sDZ06p66fvk6M=
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=UpfONqHOTnPkMZI1MuZIK6j7EXHEnIyi1MFBGT9FXEA=;
+        b=dMQRy+Gp5fMQtRBL8EX0XCXRRd9k8EdV1ldu8ZaCdpLe7rBBQxMquJ36WWEmNUoT/K
+         MUHvzmAFnuO10U79TmazJZX4rFRU04WjwPczqmhhgShahd6kXZMjJM7u3Q/ARC/0fe5+
+         SUGQjfdFo3lcXQGrDG+6aCIqRNcWpZsO6Oqw7ilikMHuu3AUSD3gpV5JhK6l71Piwyno
+         6O1ApwsVeiTwhPI+S3IYP2GtMvY7GePmdilTVmfbypUd2E/8AHpGF0PakV/NX/rEzyhu
+         9baoLc3XAWoK3ZQ4vGXhX0gBHCT3/1w2+skjZsXU8EOqFczeDb+OalNDj0ClPd80ez45
+         bvnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding
-         :in-reply-to:references:subject:from:cc:to:date:message-id
-         :user-agent;
-        bh=dC9/KQFuZY34yyqjXgNCYCIKz+z0z+M8UxzxcZfntAU=;
-        b=F2xvPc5exnXO88L1MyQl4kJuH5m2P57FdoBytlbyz9+eeZ4uDzcWNKFKJ48Kwwmr0E
-         lhbTayiV8dfimTpvTOyyrT8G+EPr2iu5rxy/QhH8Suhh3Kud5UUoMHa7mdCB4mjauuw9
-         gKojj6qYMNT55xNxSAUP3OtK3brkOfaWVTelCtR8FzkSNkiu73b9aYo4m9m2N0HVqf5m
-         PcVvVZHRZLNGldiRwmtmR9AQGthkoRiN79UPvEIPMyMmMiJrZIgtQJxv+plmvu4aU4kY
-         e//nLNdpBAqLfyZN1/NznJW31Mbp07KqBHooimZ4m5LHIwEbf3hjMSB0lkluCziDh1VK
-         qwLg==
-X-Gm-Message-State: AOAM532IyM7OJOL+1FwkoPpqW88dNE0DCOWQIliNDqDovwz/256RvhYI
-        w8YwpIPfEtZBSaL2n0Syk63wow==
-X-Google-Smtp-Source: ABdhPJxmED+EAnYjUtWkB7dB6RYq/eITyPggCRbENMcrnsfK8Hlc1oCgRoX7471ZCmTD51mFldzUag==
-X-Received: by 2002:a17:902:aa88:: with SMTP id d8mr1082183plr.257.1591755655666;
-        Tue, 09 Jun 2020 19:20:55 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id d2sm9249070pgp.56.2020.06.09.19.20.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2020 19:20:55 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=UpfONqHOTnPkMZI1MuZIK6j7EXHEnIyi1MFBGT9FXEA=;
+        b=Azl5K3CZAvO7V4gXWGCQZAIy9MZjjepbMzBd3kRfYV5ngAcmBSaE1C5OQ8n7YxKVp8
+         dlWQm8b15Jiq47DD6mq+u9LXhUXRobg/DCad+8PWWvseHzSliD92BMyTiDG0yhWK17Uf
+         VNMgWPXiNVgYOnjUIr8MxSeLGKRmoRg4Afx5TM7Cv3UWmqhWfmCy5YoS55K1ordta25C
+         aNRv72GysYiO21sGE4ow6/jmlAmmotgdhRurzUW9+1uC1yMNLT7lc09kafwecTndOl79
+         p/6TT+W3u9S0H3+ZEyEYLKurgWLQ+Dehmu+g3cwI50yTRuueAae6r8615Rjfzemzn/XK
+         BWRQ==
+X-Gm-Message-State: AOAM533q82GMPP1UddF4DVJaIMzkh+lNwSlCw9t9h3Ou4cwKObOnO1Lv
+        CKv5ieyluk6giidN5S2j+ELO/VAD
+X-Google-Smtp-Source: ABdhPJzaaYXoIL6215yKQWaWFR4LG1Geaz3r+nF0Ie6KUmiSAO7bVi4+B83Uaghj2fAMv8mERp0jPQ==
+X-Received: by 2002:a17:90b:430f:: with SMTP id ih15mr750281pjb.61.1591755764484;
+        Tue, 09 Jun 2020 19:22:44 -0700 (PDT)
+Received: from [10.230.188.43] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id m7sm11163371pfb.1.2020.06.09.19.22.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jun 2020 19:22:43 -0700 (PDT)
+Subject: Re: [PATCH] clk: bcm63xx-gate: fix last clock availability
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        mturquette@baylibre.com, sboyd@kernel.org, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, lkp@intel.com,
+        jonas.gorski@gmail.com, f4bug@amsat.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20200609110846.4029620-1-noltari@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <916f6100-34d4-cd5c-025d-de236546daa2@gmail.com>
+Date:   Tue, 9 Jun 2020 19:22:41 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200609034047.9407-1-tanmay@codeaurora.org>
-References: <20200609034047.9407-1-tanmay@codeaurora.org>
-Subject: Re: [PATCH v6 2/5] drm: add constant N value in helper file
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     sam@ravnborg.org, seanpaul@chromium.org,
-        freedreno@lists.freedesktop.org, chandanu@codeaurora.org,
-        robdclark@gmail.com, abhinavk@codeaurora.org,
-        nganji@codeaurora.org, linux-clk@vger.kernel.org,
-        Vara Reddy <varar@codeaurora.org>,
-        Tanmay Shah <tanmay@codeaurora.org>
-To:     Tanmay Shah <tanmay@codeaurora.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org
-Date:   Tue, 09 Jun 2020 19:20:54 -0700
-Message-ID: <159175565407.242598.7527036274929582020@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+In-Reply-To: <20200609110846.4029620-1-noltari@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Tanmay Shah (2020-06-08 20:40:47)
-> From: Chandan Uddaraju <chandanu@codeaurora.org>
->=20
-> The constant N value (0x8000) is used by i915 DP
-> driver. Define this value in dp helper header file
-> to use in multiple Display Port drivers. Change
-> i915 driver accordingly.
->=20
-> Change in v6: Change commit message
->=20
-> Signed-off-by: Chandan Uddaraju <chandanu@codeaurora.org>
-> Signed-off-by: Vara Reddy <varar@codeaurora.org>
-> Signed-off-by: Tanmay Shah <tanmay@codeaurora.org>
-> ---
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
-Can you resend this series as an actual patch series? None of the
-patches have the proper In-Reply-To headers so it is hard to track the
-thread.
+On 6/9/2020 4:08 AM, Álvaro Fernández Rojas wrote:
+> In order to make the last clock available, maxbit has to be set to the
+> highest bit value plus 1.
+> 
+> Fixes: 1c099779c1e2 ("clk: add BCM63XX gated clock controller driver")
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
