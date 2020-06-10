@@ -2,107 +2,85 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 261E71F53BD
-	for <lists+linux-clk@lfdr.de>; Wed, 10 Jun 2020 13:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 585D01F5684
+	for <lists+linux-clk@lfdr.de>; Wed, 10 Jun 2020 16:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728468AbgFJLqK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 10 Jun 2020 07:46:10 -0400
-Received: from mx1.tq-group.com ([62.157.118.193]:65308 "EHLO mx1.tq-group.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728481AbgFJLqK (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 10 Jun 2020 07:46:10 -0400
-X-Greylist: delayed 429 seconds by postgrey-1.27 at vger.kernel.org; Wed, 10 Jun 2020 07:46:09 EDT
-IronPort-SDR: QOZnzLdhziz0cwun+NJ8W3bVxIjr4WurjR7RBNs4PBZO+Eb4Cgyr5zPweL+8mSj6YsEbaDN2oE
- yVyWBhjMjAx+FoPoTJaFmc475fQXEyR96zKYUjy8ME6u4HtTtbe+nC+gR+OFbp44C9q6yQlE//
- NSHTzJ/4cDO9l/gq+Lm9eRINWtHlLBQR8nnCcEUOapEbihwnSDXM4zehioYXN8E0AtJisXu69N
- x14ySQG6VyUDFc61pV37PvrmTvEYO79jCuxY98akt+3QqcGqywHHsxq9HTm8la7hujvDPdkkSS
- BBg=
-X-IronPort-AV: E=Sophos;i="5.73,495,1583190000"; 
-   d="scan'208";a="12636204"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 10 Jun 2020 13:38:59 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 10 Jun 2020 13:38:59 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 10 Jun 2020 13:38:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1591789139; x=1623325139;
-  h=from:to:cc:subject:date:message-id;
-  bh=SCPwkIJO8ixVT8Es4oQfUibnuDS4476i4fJI4A1Ujgc=;
-  b=qJkJvsLSmJ0AZEo35xr3qVmsvWZkLFV9cPCtPxx3UWgWxVeDhbl36dll
-   5Lsp0gy/SbtXH3Gk7qc0Cktq3R+G0wyPx2M/1o7A/QjqODIFQmk3bvgVu
-   KuYMG2zrkK9VHkNM+hI045ghDiruzoqxwmnvJM+Om6Oxn/MPzd5jQQH9G
-   RtHNGPGZ9E9swqwY7rDbM71MWbVOLVd/dUGMr1dWTedfQihoXqqnC3CoS
-   3Uh1vAPvqizcsQUWweKhNkPpHtNtDNYo1VzHVEzCxr8Rw+nPy3zMNlmJw
-   c/7aMOWWJF9ThCgK+mpYyzglBbEZE5E7F4g7EgdHe/JPXLo7XSHE7uHYu
-   g==;
-IronPort-SDR: XUMlzlBV9h+REJeElJ2SARd/3O9iFEv8HKlxt0IDyFYU61iu+17k6VmCs3aBQXJ544Ayp9ykVO
- trIxKllXl0WKtlRuwCaRoODAizg/ZePSwvDfYzJiKc/v6anKBOZNML3BlSXUQCYpOp5c22nE2G
- +9FbHR+NgshCATn3WbujTigBuSB8l6ByO2Ht1tLfqj+EWYZ7kOZhXyLO2pjBh/+dGjpXmAm42N
- ltv9OmbZMc2ETh26zGY8XwWroosOMxBRNk+VgijpPwhU6blJFysmFukDQEA1GKnMPnErim7r6W
- 6cA=
-X-IronPort-AV: E=Sophos;i="5.73,495,1583190000"; 
-   d="scan'208";a="12636203"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 10 Jun 2020 13:38:59 +0200
-Received: from schifferm-ubuntu4.tq-net.de (schifferm-ubuntu4.tq-net.de [10.117.49.26])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 31011280065;
-        Wed, 10 Jun 2020 13:38:59 +0200 (CEST)
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Krummsdorf <michael.krummsdorf@tq-group.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Subject: [PATCH] clk: qoriq: add LS1021A core pll mux options
-Date:   Wed, 10 Jun 2020 13:38:37 +0200
-Message-Id: <20200610113837.27117-1-matthias.schiffer@ew.tq-group.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726997AbgFJOJF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 10 Jun 2020 10:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726841AbgFJOJE (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 10 Jun 2020 10:09:04 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E115C03E96B;
+        Wed, 10 Jun 2020 07:09:04 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id x6so2406722wrm.13;
+        Wed, 10 Jun 2020 07:09:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3F1gyxKHBurPb/9ok1v4N24kKX2n+9TWOucrfqchLWY=;
+        b=ioj0E5CLNbfjs5oCFAoQKIzYeZBkUzsBNDPcTEesJcSJ6K2WjEvS0sIXyNdZBne2fA
+         YVFOwVpX6Kvagq0fqimlc2N6UHRM3yksJYSb7cdJeqS69EwbPc7lWT+HhdtAD/Sl8MoY
+         LCK4KOoGz/PNI2oe94EnCJZhuHdMPSJZrfkrCERMqgfai5qijCfK4HEipycaa+0Q1CZb
+         jU1hc5X10bIoud+iLtWn8xlol613jWOuAg/hpOKsShywXzBWw8RLjXFtn4XT5b+9hCSC
+         G03APnvbzi4imW3NZmsUKI/D10zqfJWQqo+3rNODPeenxyc17qu4TDyRwkaMioqpAhUc
+         eK1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3F1gyxKHBurPb/9ok1v4N24kKX2n+9TWOucrfqchLWY=;
+        b=RrFYsjk9leu5TjRiTyB93r40aixrwBx7dO3hQO/T43qxqfSp9+gcyTvo+N9QHKuZuh
+         F8m83/ozqVnHlDuRz8MY2K7SXCaF+MaKd0tFHbb1JXsmSB5GK7gdB5pdIlAVyaDxZ4T8
+         o/UBnyhsEgaPekF+KfQAoJOxRxiOC9WcI4PGvSbdj2pMU063HN+4bbpR9RyTvClIPaoc
+         nR+hSIKRlZFMiG4f2kFE1c6vYRI6ts9aR7Z2zGtdqGoDamCRj3IKCzIrsrnvuSpOXmzM
+         G+cGB4yeRZG6IaIh0x4DJ0kONQF6/lHDry22K74uEB+YIsfmSXOGQYtGdnncU0Ob+atG
+         O3HA==
+X-Gm-Message-State: AOAM530kiFixfLw1KmRSFT1tj5+FdXPcEZ2JvFOnCM3790Sm3erqGTSh
+        WstyicpFmz16gzV7IF6reIY=
+X-Google-Smtp-Source: ABdhPJz+sj/GScpXnuaN0U+4nlhrlDJQgiftq51b43NZYNgW3u6u9jGX7pG3KxZLtkZNex4KR2PtwA==
+X-Received: by 2002:a5d:4bcb:: with SMTP id l11mr4180112wrt.363.1591798142300;
+        Wed, 10 Jun 2020 07:09:02 -0700 (PDT)
+Received: from skynet.lan (28.red-83-49-61.dynamicip.rima-tde.net. [83.49.61.28])
+        by smtp.gmail.com with ESMTPSA id r5sm8565883wrq.0.2020.06.10.07.09.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2020 07:09:01 -0700 (PDT)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        julia.lawall@lip6.fr, f4bug@amsat.org, jonas.gorski@gmail.com,
+        lkp@intel.com, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH v2 0/2] clk: bcm63xx-gate: add BCM6318 support
+Date:   Wed, 10 Jun 2020 16:08:56 +0200
+Message-Id: <20200610140858.207329-1-noltari@gmail.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200609113049.4035426-1-noltari@gmail.com>
+References: <20200609113049.4035426-1-noltari@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Michael Krummsdorf <michael.krummsdorf@tq-group.com>
+Add support for the gated clock controllers found on the BCM6318.
 
-This allows to clock the cores with 1 GHz, 500 MHz and 250 MHz.
+Álvaro Fernández Rojas (2):
+  dt-bindings: clock: bcm63xx: add 6318 gated clock bindings
+  clk: bcm63xx-gate: add BCM6318 support
 
-Signed-off-by: Michael Krummsdorf <michael.krummsdorf@tq-group.com>
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
----
- drivers/clk/clk-qoriq.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ .../bindings/clock/brcm,bcm63xx-clocks.txt    |  2 +
+ drivers/clk/bcm/clk-bcm63xx-gate.c            | 44 +++++++++++++++++++
+ 2 files changed, 46 insertions(+)
 
-diff --git a/drivers/clk/clk-qoriq.c b/drivers/clk/clk-qoriq.c
-index 374afcab89af..5942e9874bc0 100644
---- a/drivers/clk/clk-qoriq.c
-+++ b/drivers/clk/clk-qoriq.c
-@@ -244,6 +244,14 @@ static const struct clockgen_muxinfo clockgen2_cmux_cgb = {
- 	},
- };
- 
-+static const struct clockgen_muxinfo ls1021a_cmux = {
-+	{
-+		{ CLKSEL_VALID, CGA_PLL1, PLL_DIV1 },
-+		{ CLKSEL_VALID, CGA_PLL1, PLL_DIV2 },
-+		{ CLKSEL_VALID, CGA_PLL1, PLL_DIV4 },
-+	}
-+};
-+
- static const struct clockgen_muxinfo ls1028a_hwa1 = {
- 	{
- 		{ CLKSEL_VALID, PLATFORM_PLL, PLL_DIV1 },
-@@ -577,7 +585,7 @@ static const struct clockgen_chipinfo chipinfo[] = {
- 	{
- 		.compat = "fsl,ls1021a-clockgen",
- 		.cmux_groups = {
--			&t1023_cmux
-+			&ls1021a_cmux
- 		},
- 		.cmux_to_group = {
- 			0, -1
 -- 
-2.17.1
+2.26.2
 
