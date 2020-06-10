@@ -2,255 +2,107 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B39A1F5048
-	for <lists+linux-clk@lfdr.de>; Wed, 10 Jun 2020 10:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 261E71F53BD
+	for <lists+linux-clk@lfdr.de>; Wed, 10 Jun 2020 13:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbgFJIaV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 10 Jun 2020 04:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726788AbgFJIaU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 10 Jun 2020 04:30:20 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3F4C08C5C1
-        for <linux-clk@vger.kernel.org>; Wed, 10 Jun 2020 01:30:20 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id x14so1245480wrp.2
-        for <linux-clk@vger.kernel.org>; Wed, 10 Jun 2020 01:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=lPp6VqQcy0iQsfloe6knT20Y8DJvmbq6mVjmcioSaQ8=;
-        b=WrCVnVG5q5Fywz83luKZPdKhNAMMt74TBo3j5w35tQ6k35gB80ABhyYXmFImzBEzzX
-         uEBYq3Pn1lKubN+5j9bvpRK201nqTDdgrmqjmVrkpAwGJrtcB5J8lFRAoYdfRKQ6vIhV
-         ZLZ4a7ZZlVlnFNkdCJiARAP+Jrjn9EpcljWSTHTUAz8cyVdMU1ytmnrTJb4MYbwIKDim
-         F2zHhJCOaojRj0gXor65QgLghbwE5ueLnEuBTGUjbeR06TbX70h0QFZ0DNx4/kX1gMlJ
-         5uoel/rDosIB0hghoGbEdprLyuRVyvEfNdK5RTh3YY0aH1c8vQ2wzhSxvyD4/Uk9bYNV
-         8xew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=lPp6VqQcy0iQsfloe6knT20Y8DJvmbq6mVjmcioSaQ8=;
-        b=DEOiouseUwVH0l1LP+JHnsXx8Z3Yaj8aioAhqCQTvPU0RGhyi17uLPIQ5oBZyz2eTQ
-         RGGVLpStSiPa50BrzJ1EcyTBHAq+19g88B+4YM9BUIk40j0GkX5VXCXkPoWlN5jWOt6q
-         +7q0+A/pPSnvxEL/fYx+jmq9eHvCzLE+AcGIVMyw8oL+wLyt1k3y9KTZmb5PwFEHjS+b
-         7GE1TrYMVoDZ+uNIziPEgqnjAjhZ8K2ifTCn/vUfBkUv/0nyLaK02PbSxrI98GavEZEZ
-         cwwyecESwLy7o3UJA1Mt3q6wU+nDfsqPKMd3pg2cDQnb1OLrEiWyRueM5EITzzybRMik
-         xOlQ==
-X-Gm-Message-State: AOAM533wVd0CkebENWibABgFWclFSld8IIGiO2Jprb7FZFLqWs6c8BTJ
-        wmhwu5zyety5XQs1jQyDDuvsIA==
-X-Google-Smtp-Source: ABdhPJx94NKyXsKDcnV10IsqMYYY6faUswz/JNOerG8XPvisIU+VVaRhnwMUZi7QGcCrQRQ0u+fNrw==
-X-Received: by 2002:a5d:4e88:: with SMTP id e8mr2432582wru.188.1591777818862;
-        Wed, 10 Jun 2020 01:30:18 -0700 (PDT)
-Received: from bender.baylibre.local ([2a01:e35:2ec0:82b0:22:5867:d2c6:75f4])
-        by smtp.gmail.com with ESMTPSA id u13sm6958974wrp.53.2020.06.10.01.30.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jun 2020 01:30:18 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     jbrunet@baylibre.com
-Cc:     linux-clk@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dmitry Shmidt <dimitrysh@google.com>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: [PATCH 2/2] clk: meson: g12a: Add support for NNA CLK source clocks
-Date:   Wed, 10 Jun 2020 10:30:12 +0200
-Message-Id: <20200610083012.5024-3-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20200610083012.5024-1-narmstrong@baylibre.com>
-References: <20200610083012.5024-1-narmstrong@baylibre.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1728468AbgFJLqK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 10 Jun 2020 07:46:10 -0400
+Received: from mx1.tq-group.com ([62.157.118.193]:65308 "EHLO mx1.tq-group.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728481AbgFJLqK (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 10 Jun 2020 07:46:10 -0400
+X-Greylist: delayed 429 seconds by postgrey-1.27 at vger.kernel.org; Wed, 10 Jun 2020 07:46:09 EDT
+IronPort-SDR: QOZnzLdhziz0cwun+NJ8W3bVxIjr4WurjR7RBNs4PBZO+Eb4Cgyr5zPweL+8mSj6YsEbaDN2oE
+ yVyWBhjMjAx+FoPoTJaFmc475fQXEyR96zKYUjy8ME6u4HtTtbe+nC+gR+OFbp44C9q6yQlE//
+ NSHTzJ/4cDO9l/gq+Lm9eRINWtHlLBQR8nnCcEUOapEbihwnSDXM4zehioYXN8E0AtJisXu69N
+ x14ySQG6VyUDFc61pV37PvrmTvEYO79jCuxY98akt+3QqcGqywHHsxq9HTm8la7hujvDPdkkSS
+ BBg=
+X-IronPort-AV: E=Sophos;i="5.73,495,1583190000"; 
+   d="scan'208";a="12636204"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 10 Jun 2020 13:38:59 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 10 Jun 2020 13:38:59 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 10 Jun 2020 13:38:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1591789139; x=1623325139;
+  h=from:to:cc:subject:date:message-id;
+  bh=SCPwkIJO8ixVT8Es4oQfUibnuDS4476i4fJI4A1Ujgc=;
+  b=qJkJvsLSmJ0AZEo35xr3qVmsvWZkLFV9cPCtPxx3UWgWxVeDhbl36dll
+   5Lsp0gy/SbtXH3Gk7qc0Cktq3R+G0wyPx2M/1o7A/QjqODIFQmk3bvgVu
+   KuYMG2zrkK9VHkNM+hI045ghDiruzoqxwmnvJM+Om6Oxn/MPzd5jQQH9G
+   RtHNGPGZ9E9swqwY7rDbM71MWbVOLVd/dUGMr1dWTedfQihoXqqnC3CoS
+   3Uh1vAPvqizcsQUWweKhNkPpHtNtDNYo1VzHVEzCxr8Rw+nPy3zMNlmJw
+   c/7aMOWWJF9ThCgK+mpYyzglBbEZE5E7F4g7EgdHe/JPXLo7XSHE7uHYu
+   g==;
+IronPort-SDR: XUMlzlBV9h+REJeElJ2SARd/3O9iFEv8HKlxt0IDyFYU61iu+17k6VmCs3aBQXJ544Ayp9ykVO
+ trIxKllXl0WKtlRuwCaRoODAizg/ZePSwvDfYzJiKc/v6anKBOZNML3BlSXUQCYpOp5c22nE2G
+ +9FbHR+NgshCATn3WbujTigBuSB8l6ByO2Ht1tLfqj+EWYZ7kOZhXyLO2pjBh/+dGjpXmAm42N
+ ltv9OmbZMc2ETh26zGY8XwWroosOMxBRNk+VgijpPwhU6blJFysmFukDQEA1GKnMPnErim7r6W
+ 6cA=
+X-IronPort-AV: E=Sophos;i="5.73,495,1583190000"; 
+   d="scan'208";a="12636203"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 10 Jun 2020 13:38:59 +0200
+Received: from schifferm-ubuntu4.tq-net.de (schifferm-ubuntu4.tq-net.de [10.117.49.26])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 31011280065;
+        Wed, 10 Jun 2020 13:38:59 +0200 (CEST)
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michael Krummsdorf <michael.krummsdorf@tq-group.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Subject: [PATCH] clk: qoriq: add LS1021A core pll mux options
+Date:   Wed, 10 Jun 2020 13:38:37 +0200
+Message-Id: <20200610113837.27117-1-matthias.schiffer@ew.tq-group.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Dmitry Shmidt <dimitrysh@google.com>
+From: Michael Krummsdorf <michael.krummsdorf@tq-group.com>
 
-This adds the Neural Network Accelerator source clocks hierarchy, it's
-2 simple composite clocks to feed the AXI interface and the Core of
-the Neural Network Accelerator IP.
+This allows to clock the cores with 1 GHz, 500 MHz and 250 MHz.
 
-This IP is only present on the Amlogic SM1 SoCs family.
-
-Signed-off-by: Dmitry Shmidt <dimitrysh@google.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Michael Krummsdorf <michael.krummsdorf@tq-group.com>
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 ---
- drivers/clk/meson/g12a.c | 119 +++++++++++++++++++++++++++++++++++++++
- drivers/clk/meson/g12a.h |   7 ++-
- 2 files changed, 125 insertions(+), 1 deletion(-)
+ drivers/clk/clk-qoriq.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/meson/g12a.c b/drivers/clk/meson/g12a.c
-index 30c15766ebb1..9803d44bb157 100644
---- a/drivers/clk/meson/g12a.c
-+++ b/drivers/clk/meson/g12a.c
-@@ -3981,6 +3981,113 @@ static struct clk_regmap g12a_spicc1_sclk = {
+diff --git a/drivers/clk/clk-qoriq.c b/drivers/clk/clk-qoriq.c
+index 374afcab89af..5942e9874bc0 100644
+--- a/drivers/clk/clk-qoriq.c
++++ b/drivers/clk/clk-qoriq.c
+@@ -244,6 +244,14 @@ static const struct clockgen_muxinfo clockgen2_cmux_cgb = {
  	},
  };
  
-+/* Neural Network Accelerator source clock */
-+
-+static const struct clk_parent_data nna_clk_parent_data[] = {
-+	{ .fw_name = "xtal", },
-+	{ .hw = &g12a_gp0_pll.hw, },
-+	{ .hw = &g12a_hifi_pll.hw, },
-+	{ .hw = &g12a_fclk_div2p5.hw, },
-+	{ .hw = &g12a_fclk_div3.hw, },
-+	{ .hw = &g12a_fclk_div4.hw, },
-+	{ .hw = &g12a_fclk_div5.hw, },
-+	{ .hw = &g12a_fclk_div7.hw },
++static const struct clockgen_muxinfo ls1021a_cmux = {
++	{
++		{ CLKSEL_VALID, CGA_PLL1, PLL_DIV1 },
++		{ CLKSEL_VALID, CGA_PLL1, PLL_DIV2 },
++		{ CLKSEL_VALID, CGA_PLL1, PLL_DIV4 },
++	}
 +};
 +
-+static struct clk_regmap sm1_nna_axi_clk_sel = {
-+	.data = &(struct clk_regmap_mux_data){
-+		.offset = HHI_NNA_CLK_CNTL,
-+		.mask = 7,
-+		.shift = 9,
-+	},
-+	.hw.init = &(struct clk_init_data){
-+		.name = "nna_axi_clk_sel",
-+		.ops = &clk_regmap_mux_ops,
-+		.parent_data = nna_clk_parent_data,
-+		.num_parents = ARRAY_SIZE(nna_clk_parent_data),
-+	},
-+};
-+
-+static struct clk_regmap sm1_nna_axi_clk_div = {
-+	.data = &(struct clk_regmap_div_data){
-+		.offset = HHI_NNA_CLK_CNTL,
-+		.shift = 0,
-+		.width = 7,
-+	},
-+	.hw.init = &(struct clk_init_data){
-+		.name = "nna_axi_clk_div",
-+		.ops = &clk_regmap_divider_ops,
-+		.parent_hws = (const struct clk_hw *[]) {
-+			&sm1_nna_axi_clk_sel.hw
-+		},
-+		.num_parents = 1,
-+		.flags = CLK_SET_RATE_PARENT,
-+	},
-+};
-+
-+static struct clk_regmap sm1_nna_axi_clk = {
-+	.data = &(struct clk_regmap_gate_data){
-+		.offset = HHI_NNA_CLK_CNTL,
-+		.bit_idx = 8,
-+	},
-+	.hw.init = &(struct clk_init_data){
-+		.name = "nna_axi_clk",
-+		.ops = &clk_regmap_gate_ops,
-+		.parent_hws = (const struct clk_hw *[]) {
-+			&sm1_nna_axi_clk_div.hw
-+		},
-+		.num_parents = 1,
-+		.flags = CLK_SET_RATE_PARENT,
-+	},
-+};
-+
-+static struct clk_regmap sm1_nna_core_clk_sel = {
-+	.data = &(struct clk_regmap_mux_data){
-+		.offset = HHI_NNA_CLK_CNTL,
-+		.mask = 7,
-+		.shift = 25,
-+	},
-+	.hw.init = &(struct clk_init_data){
-+		.name = "nna_core_clk_sel",
-+		.ops = &clk_regmap_mux_ops,
-+		.parent_data = nna_clk_parent_data,
-+		.num_parents = ARRAY_SIZE(nna_clk_parent_data),
-+	},
-+};
-+
-+static struct clk_regmap sm1_nna_core_clk_div = {
-+	.data = &(struct clk_regmap_div_data){
-+		.offset = HHI_NNA_CLK_CNTL,
-+		.shift = 16,
-+		.width = 7,
-+	},
-+	.hw.init = &(struct clk_init_data){
-+		.name = "nna_core_clk_div",
-+		.ops = &clk_regmap_divider_ops,
-+		.parent_hws = (const struct clk_hw *[]) {
-+			&sm1_nna_core_clk_sel.hw
-+		},
-+		.num_parents = 1,
-+		.flags = CLK_SET_RATE_PARENT,
-+	},
-+};
-+
-+static struct clk_regmap sm1_nna_core_clk = {
-+	.data = &(struct clk_regmap_gate_data){
-+		.offset = HHI_NNA_CLK_CNTL,
-+		.bit_idx = 24,
-+	},
-+	.hw.init = &(struct clk_init_data){
-+		.name = "nna_core_clk",
-+		.ops = &clk_regmap_gate_ops,
-+		.parent_hws = (const struct clk_hw *[]) {
-+			&sm1_nna_core_clk_div.hw
-+		},
-+		.num_parents = 1,
-+		.flags = CLK_SET_RATE_PARENT,
-+	},
-+};
-+
- #define MESON_GATE(_name, _reg, _bit) \
- 	MESON_PCLK(_name, _reg, _bit, &g12a_clk81.hw)
- 
-@@ -4779,6 +4886,12 @@ static struct clk_hw_onecell_data sm1_hw_onecell_data = {
- 		[CLKID_SPICC1_SCLK_SEL]		= &g12a_spicc1_sclk_sel.hw,
- 		[CLKID_SPICC1_SCLK_DIV]		= &g12a_spicc1_sclk_div.hw,
- 		[CLKID_SPICC1_SCLK]		= &g12a_spicc1_sclk.hw,
-+		[CLKID_NNA_AXI_CLK_SEL]		= &sm1_nna_axi_clk_sel.hw,
-+		[CLKID_NNA_AXI_CLK_DIV]		= &sm1_nna_axi_clk_div.hw,
-+		[CLKID_NNA_AXI_CLK]		= &sm1_nna_axi_clk.hw,
-+		[CLKID_NNA_CORE_CLK_SEL]	= &sm1_nna_core_clk_sel.hw,
-+		[CLKID_NNA_CORE_CLK_DIV]	= &sm1_nna_core_clk_div.hw,
-+		[CLKID_NNA_CORE_CLK]		= &sm1_nna_core_clk.hw,
- 		[NR_CLKS]			= NULL,
- 	},
- 	.num = NR_CLKS,
-@@ -5020,6 +5133,12 @@ static struct clk_regmap *const g12a_clk_regmaps[] = {
- 	&g12a_spicc1_sclk_sel,
- 	&g12a_spicc1_sclk_div,
- 	&g12a_spicc1_sclk,
-+	&sm1_nna_axi_clk_sel,
-+	&sm1_nna_axi_clk_div,
-+	&sm1_nna_axi_clk,
-+	&sm1_nna_core_clk_sel,
-+	&sm1_nna_core_clk_div,
-+	&sm1_nna_core_clk,
- };
- 
- static const struct reg_sequence g12a_init_regs[] = {
-diff --git a/drivers/clk/meson/g12a.h b/drivers/clk/meson/g12a.h
-index a8852556836e..69b6a69549c7 100644
---- a/drivers/clk/meson/g12a.h
-+++ b/drivers/clk/meson/g12a.h
-@@ -70,6 +70,7 @@
- #define HHI_MALI_CLK_CNTL		0x1b0
- #define HHI_VPU_CLKC_CNTL		0x1b4
- #define HHI_VPU_CLK_CNTL		0x1bC
-+#define HHI_NNA_CLK_CNTL		0x1C8
- #define HHI_HDMI_CLK_CNTL		0x1CC
- #define HHI_VDEC_CLK_CNTL		0x1E0
- #define HHI_VDEC2_CLK_CNTL		0x1E4
-@@ -259,8 +260,12 @@
- #define CLKID_SPICC0_SCLK_DIV			257
- #define CLKID_SPICC1_SCLK_SEL			259
- #define CLKID_SPICC1_SCLK_DIV			260
-+#define CLKID_NNA_AXI_CLK_SEL			262
-+#define CLKID_NNA_AXI_CLK_DIV			263
-+#define CLKID_NNA_CORE_CLK_SEL			265
-+#define CLKID_NNA_CORE_CLK_DIV			266
- 
--#define NR_CLKS					262
-+#define NR_CLKS					268
- 
- /* include the CLKIDs that have been made part of the DT binding */
- #include <dt-bindings/clock/g12a-clkc.h>
+ static const struct clockgen_muxinfo ls1028a_hwa1 = {
+ 	{
+ 		{ CLKSEL_VALID, PLATFORM_PLL, PLL_DIV1 },
+@@ -577,7 +585,7 @@ static const struct clockgen_chipinfo chipinfo[] = {
+ 	{
+ 		.compat = "fsl,ls1021a-clockgen",
+ 		.cmux_groups = {
+-			&t1023_cmux
++			&ls1021a_cmux
+ 		},
+ 		.cmux_to_group = {
+ 			0, -1
 -- 
-2.22.0
+2.17.1
 
