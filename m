@@ -2,86 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB82E1F6685
-	for <lists+linux-clk@lfdr.de>; Thu, 11 Jun 2020 13:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03AE21F6A02
+	for <lists+linux-clk@lfdr.de>; Thu, 11 Jun 2020 16:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728054AbgFKLVM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 11 Jun 2020 07:21:12 -0400
-Received: from mx2.suse.de ([195.135.220.15]:33546 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727907AbgFKLVL (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 11 Jun 2020 07:21:11 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 12DD4ABE4;
-        Thu, 11 Jun 2020 11:21:13 +0000 (UTC)
-Message-ID: <4298d8db6dec26317f591271ee15041e0c12f6fd.camel@suse.de>
-Subject: Re: [PATCH v4 00/27] clk: bcm: rpi: Add support for BCM2711
- firmware clocks
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     linux-rpi-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Tim Gover <tim.gover@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 11 Jun 2020 13:21:07 +0200
-In-Reply-To: <cover.58c6e44891ff5bf61052b5804f7da9b5ba074840.1591860665.git-series.maxime@cerno.tech>
-References: <cover.58c6e44891ff5bf61052b5804f7da9b5ba074840.1591860665.git-series.maxime@cerno.tech>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-qp5pvNknzd1S2ihuXchJ"
-User-Agent: Evolution 3.36.2 
-MIME-Version: 1.0
+        id S1728344AbgFKO24 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 11 Jun 2020 10:28:56 -0400
+Received: from alexa-out-blr-02.qualcomm.com ([103.229.18.198]:25936 "EHLO
+        alexa-out-blr-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728321AbgFKO2z (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 11 Jun 2020 10:28:55 -0400
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by alexa-out-blr-02.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 Jun 2020 19:58:44 +0530
+Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 11 Jun 2020 19:58:16 +0530
+Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
+        id E908B2AC5; Thu, 11 Jun 2020 19:58:14 +0530 (IST)
+From:   Sandeep Maheswaram <sanm@codeaurora.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-clk@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: [PATCH 0/2] usb: dwc3:  Host wake up support from system suspend
+Date:   Thu, 11 Jun 2020 19:58:01 +0530
+Message-Id: <1591885683-29514-1-git-send-email-sanm@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Avoiding phy powerdown in host mode so that it can be wake up by devices.
+Set usb controller wakeup capable when wakeup capable devices are
+connected to the host.
 
---=-qp5pvNknzd1S2ihuXchJ
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Added GENPD_FLAG_ACTIVE_WAKEUP flag to keep usb30_prim gdsc active
+when  wakeup capable devices are connected to the host.
 
-On Thu, 2020-06-11 at 09:31 +0200, Maxime Ripard wrote:
-> Hi,
->=20
-> Since the whole DRM/HDMI support began to grow fairly big, I've chosen
-> to split away the two discussions between the firmware clocks and the
-> HDMI support.
->=20
-> Let me know what you think,
-> Maxime
->=20
+Sandeep Maheswaram (1):
+  usb: dwc3: Host wake up support from system suspend
 
-With patch #25 manually fixed, the series is:
+Taniya Das (1):
+  clk: qcom: gcc: Add genpd active wakeup flag for sc7180
 
-Tested-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+ drivers/clk/qcom/gcc-sc7180.c |  1 +
+ drivers/usb/dwc3/core.c       | 47 +++++++++++++++++++++++++-----
+ drivers/usb/dwc3/core.h       |  1 +
+ drivers/usb/dwc3/dwc3-qcom.c  | 66 ++++++++++++++++++++++++++++++++-----------
+ 4 files changed, 92 insertions(+), 23 deletions(-)
 
-Regards,
-Nicolas
-
-
---=-qp5pvNknzd1S2ihuXchJ
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl7iE6MACgkQlfZmHno8
-x/79PAgAp182wijp2dGoNNw89NchByhUXSoq3HViFvOMpA7tfknoLrvB2AF6YQXX
-2ve3ki9iwHaWWKFd58GmLurPDR7RcIVFHAtLT2RPwpbbf9RV8KiYp47xtBHZh8yg
-3oK9JGFkqfVh0qzEmbZ8xrOGqoNIRCNtty4tnzz5om+3ZL2xx3qETHIhiKVygxyu
-WS4nja+AQEG9wkqOGE+JXvi0kErid/NBN7dOH+QP2SH5GgpIeOjNTW36TPAkAzEv
-p5e2Ou504Ryah3il9bWZb/5r0O0njK4O8HJxPhw1k7S9vINYC50ucBTa+dZjYeU/
-/bl9Rt12SAtkbpaNEOm7n45tIqGRHA==
-=K1r7
------END PGP SIGNATURE-----
-
---=-qp5pvNknzd1S2ihuXchJ--
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
 
