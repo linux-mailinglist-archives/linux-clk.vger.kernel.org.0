@@ -2,120 +2,97 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3A21F64A1
-	for <lists+linux-clk@lfdr.de>; Thu, 11 Jun 2020 11:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48BF1F64AE
+	for <lists+linux-clk@lfdr.de>; Thu, 11 Jun 2020 11:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727012AbgFKJXb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 11 Jun 2020 05:23:31 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:60531 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726868AbgFKJX1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 11 Jun 2020 05:23:27 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 3651558018F;
-        Thu, 11 Jun 2020 05:23:26 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 11 Jun 2020 05:23:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm3; bh=2w0cp3nEr88sP
-        +MV7TWqwyUO3pJl2Co6QHKEM/4+4iE=; b=D9KYtJnso0yLpN7LL06zlKNHpB3WR
-        jObt6Zw/A6GW6r6tVON5GXSx4imn66XIWNtSx93DoKkt+hjCio97Cixn4t0DngV9
-        sRF9pfMX1LAEsNlMRf7D2kRqAI7TY9X+FVZvlg9b5Lx/KjEColzYX10XEZXabjRL
-        RsNNDpuDb8KmBM1k5wm5N3ePCqF4VRPw+Vk0OcNcLrDWt07QYoQqFCqv7yKEBHkm
-        /+ESJBtp3ItTM7V17faw/mcXLvA2RT2lPYOMG5LtKt/czc8tYBmWDq8mB805G5Ir
-        SGUVCUDA7m04L6hhXS+ja7IvPYS9Q0ctchWOmjFN+SvjaTmj93z+l3iew==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=2w0cp3nEr88sP+MV7TWqwyUO3pJl2Co6QHKEM/4+4iE=; b=u9FoXXIY
-        PUqL/VJbaHBLnYn124cS0+7UrZg/saefEqDDe4AIYCG/3/U97yRfR47VYk2i4/k2
-        S+WwE4l07yjNZuvL/58W0r7NkAH9rQpKU7HibRjJ3uVklbiuq4E+pkxiYhZLHFDI
-        WnCsQoDVxttRrqEIa/Ftk6GtB7IGcNu2xwJQLXkzk80CTjUidLaCepEgOpWmD99G
-        WvVd4qGvvFiATQMaK/lrlnTKQ1gjrzRXSttd993PWuFWY0wDJslNFqNog8mbyjKL
-        GfGrBFUI7FAhijxh/N8aIC4mK0B1Eu67B6F/4DIt+0Ab50tN1QJTJ992bxzQmj/Z
-        RFslTXRhxqh0pw==
-X-ME-Sender: <xms:DvjhXtRg8_O_-RUGFzjFKAzrvS6ZPZHJWoDrNS5_ooXyptTipi9fWQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudehkedgudeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepvdekleevfeffkeejhfffueelteelfeduieefheduudfggffhhfffheevveeh
-    hedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:DvjhXmzOBOsC4-63dg5pyuGuzBh09ZAmR76RtoBcL-UaBGdSJoD3Ag>
-    <xmx:DvjhXi1EcU2hn3f0tuVa7xlXShP_AhPoa6f38sPYghzt1g8Dpj5CqA>
-    <xmx:DvjhXlDh2eC0d7GSgh3d-PLlx0JM30qJtNOB8voukjJOe853XCKjOg>
-    <xmx:DvjhXhP2aQDt09Qt-FK04VqpzIaRQJLHuWdUShyqyPrJgWrCPhtgxw>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id C72E73060FE7;
-        Thu, 11 Jun 2020 05:23:25 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     linux-rpi-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Tim Gover <tim.gover@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v4 3/3] ARM: dts: bcm2711: Add HDMI DVP
-Date:   Thu, 11 Jun 2020 11:23:17 +0200
-Message-Id: <e22222ca7f41b960e9bb1a31e0dd2de95b8c0cd1.1591867332.git-series.maxime@cerno.tech>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.4c4625a8e076f3163b800b3d8986b282ee98d908.1591867332.git-series.maxime@cerno.tech>
-References: <cover.4c4625a8e076f3163b800b3d8986b282ee98d908.1591867332.git-series.maxime@cerno.tech>
+        id S1726708AbgFKJ0C (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 11 Jun 2020 05:26:02 -0400
+Received: from mga06.intel.com ([134.134.136.31]:43082 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726560AbgFKJ0C (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 11 Jun 2020 05:26:02 -0400
+IronPort-SDR: inFvZ5camFibgkFOLD91fdDC69QWLHXGEVVbR5eMNoHdxEye3kkln8hjyZVsISUQjig6tx+Adp
+ Plxyy6fjP5XA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2020 02:26:01 -0700
+IronPort-SDR: GPQzoh9Bx+RX+Tk1e1fWY7vAqHvvL6Vq+NjhyiNCj6ZIYNqwYaoN9QIW4YBXJ9HM4rjEvW7NKE
+ rWf9khWxisEw==
+X-IronPort-AV: E=Sophos;i="5.73,499,1583222400"; 
+   d="scan'208";a="447857473"
+Received: from cstenzel-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.45.107])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2020 02:25:57 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Tanmay Shah <tanmay@codeaurora.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     sam@ravnborg.org, abhinavk@codeaurora.org, swboyd@chromium.org,
+        seanpaul@chromium.org, Tanmay Shah <tanmay@codeaurora.org>,
+        Vara Reddy <varar@codeaurora.org>,
+        freedreno@lists.freedesktop.org, linux-clk@vger.kernel.org,
+        chandanu@codeaurora.org
+Subject: Re: [PATCH v6 2/5] drm: add constant N value in helper file
+In-Reply-To: <20200609034047.9407-1-tanmay@codeaurora.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20200609034047.9407-1-tanmay@codeaurora.org>
+Date:   Thu, 11 Jun 2020 12:25:54 +0300
+Message-ID: <87mu5avtr1.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Now that we have a driver for the DVP, let's add its DT node.
+On Mon, 08 Jun 2020, Tanmay Shah <tanmay@codeaurora.org> wrote:
+> From: Chandan Uddaraju <chandanu@codeaurora.org>
+>
+> The constant N value (0x8000) is used by i915 DP
+> driver. Define this value in dp helper header file
+> to use in multiple Display Port drivers. Change
+> i915 driver accordingly.
+>
+> Change in v6: Change commit message
+>
+> Signed-off-by: Chandan Uddaraju <chandanu@codeaurora.org>
+> Signed-off-by: Vara Reddy <varar@codeaurora.org>
+> Signed-off-by: Tanmay Shah <tanmay@codeaurora.org>
 
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- arch/arm/boot/dts/bcm2711.dtsi | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Acked-by: Jani Nikula <jani.nikula@intel.com>
 
-diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
-index a91cf68e3c4c..00bcaed1be32 100644
---- a/arch/arm/boot/dts/bcm2711.dtsi
-+++ b/arch/arm/boot/dts/bcm2711.dtsi
-@@ -12,6 +12,13 @@
- 
- 	interrupt-parent = <&gicv2>;
- 
-+	clk_108MHz: clk-108M {
-+		#clock-cells = <0>;
-+		compatible = "fixed-clock";
-+		clock-frequency = <108000000>;
-+		clock-output-names = "108MHz-clock";
-+	};
-+
- 	soc {
- 		/*
- 		 * Defined ranges:
-@@ -244,6 +251,14 @@
- 		hvs@7e400000 {
- 			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
- 		};
-+
-+		dvp: clock@7ef00000 {
-+			compatible = "brcm,brcm2711-dvp";
-+			reg = <0x7ef00000 0x10>;
-+			clocks = <&clk_108MHz>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+		};
- 	};
- 
- 	/*
+for merging via drm-misc if that helps you.
+
+
+> ---
+>  drivers/gpu/drm/i915/display/intel_display.c | 2 +-
+>  include/drm/drm_dp_helper.h                  | 1 +
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/i915/display/intel_display.c b/drivers/gpu/drm/i915/display/intel_display.c
+> index 9ea1a39..4b2cfff 100644
+> --- a/drivers/gpu/drm/i915/display/intel_display.c
+> +++ b/drivers/gpu/drm/i915/display/intel_display.c
+> @@ -8085,7 +8085,7 @@ static void compute_m_n(unsigned int m, unsigned int n,
+>  	 * which the devices expect also in synchronous clock mode.
+>  	 */
+>  	if (constant_n)
+> -		*ret_n = 0x8000;
+> +		*ret_n = DP_LINK_CONSTANT_N_VALUE;
+>  	else
+>  		*ret_n = min_t(unsigned int, roundup_pow_of_two(n), DATA_LINK_N_MAX);
+>  
+> diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
+> index 2035ac4..589132a 100644
+> --- a/include/drm/drm_dp_helper.h
+> +++ b/include/drm/drm_dp_helper.h
+> @@ -1134,6 +1134,7 @@
+>  #define DP_MST_PHYSICAL_PORT_0 0
+>  #define DP_MST_LOGICAL_PORT_0 8
+>  
+> +#define DP_LINK_CONSTANT_N_VALUE 0x8000
+>  #define DP_LINK_STATUS_SIZE	   6
+>  bool drm_dp_channel_eq_ok(const u8 link_status[DP_LINK_STATUS_SIZE],
+>  			  int lane_count);
+
 -- 
-git-series 0.9.1
+Jani Nikula, Intel Open Source Graphics Center
