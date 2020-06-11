@@ -2,22 +2,22 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F151A1F6671
-	for <lists+linux-clk@lfdr.de>; Thu, 11 Jun 2020 13:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB82E1F6685
+	for <lists+linux-clk@lfdr.de>; Thu, 11 Jun 2020 13:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728018AbgFKLSx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 11 Jun 2020 07:18:53 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60844 "EHLO mx2.suse.de"
+        id S1728054AbgFKLVM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 11 Jun 2020 07:21:12 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33546 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728014AbgFKLSx (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 11 Jun 2020 07:18:53 -0400
+        id S1727907AbgFKLVL (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 11 Jun 2020 07:21:11 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 62155AD12;
-        Thu, 11 Jun 2020 11:18:55 +0000 (UTC)
-Message-ID: <333956e7b6b186f751baf7f1b69be3c2cf4d077f.camel@suse.de>
-Subject: Re: [PATCH v4 27/27] clk: bcm: rpi: Remove the quirks for the CPU
- clock
+        by mx2.suse.de (Postfix) with ESMTP id 12DD4ABE4;
+        Thu, 11 Jun 2020 11:21:13 +0000 (UTC)
+Message-ID: <4298d8db6dec26317f591271ee15041e0c12f6fd.camel@suse.de>
+Subject: Re: [PATCH v4 00/27] clk: bcm: rpi: Add support for BCM2711
+ firmware clocks
 From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 To:     Maxime Ripard <maxime@cerno.tech>
 Cc:     linux-rpi-kernel@lists.infradead.org,
@@ -27,13 +27,14 @@ Cc:     linux-rpi-kernel@lists.infradead.org,
         Tim Gover <tim.gover@raspberrypi.com>,
         Phil Elwell <phil@raspberrypi.com>,
         Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Date:   Thu, 11 Jun 2020 13:18:50 +0200
-In-Reply-To: <a636a413f26014901ff1acb8df046049a79c4c6d.1591860665.git-series.maxime@cerno.tech>
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 11 Jun 2020 13:21:07 +0200
+In-Reply-To: <cover.58c6e44891ff5bf61052b5804f7da9b5ba074840.1591860665.git-series.maxime@cerno.tech>
 References: <cover.58c6e44891ff5bf61052b5804f7da9b5ba074840.1591860665.git-series.maxime@cerno.tech>
-         <a636a413f26014901ff1acb8df046049a79c4c6d.1591860665.git-series.maxime@cerno.tech>
 Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-U285mDlmyFSu1bffEK5R"
+        protocol="application/pgp-signature"; boundary="=-qp5pvNknzd1S2ihuXchJ"
 User-Agent: Evolution 3.36.2 
 MIME-Version: 1.0
 Sender: linux-clk-owner@vger.kernel.org
@@ -42,40 +43,45 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 
---=-U285mDlmyFSu1bffEK5R
+--=-qp5pvNknzd1S2ihuXchJ
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2020-06-11 at 09:32 +0200, Maxime Ripard wrote:
-> The CPU clock has had so far a bunch of quirks to expose the clock tree
-> properly, but since we reverted to exposing them through the MMIO driver,
-> we can remove that code from the firmware driver.
+On Thu, 2020-06-11 at 09:31 +0200, Maxime Ripard wrote:
+> Hi,
 >=20
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
+> Since the whole DRM/HDMI support began to grow fairly big, I've chosen
+> to split away the two discussions between the firmware clocks and the
+> HDMI support.
+>=20
+> Let me know what you think,
+> Maxime
+>=20
 
-Acked-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+With patch #25 manually fixed, the series is:
+
+Tested-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 
 Regards,
 Nicolas
 
 
---=-U285mDlmyFSu1bffEK5R
+--=-qp5pvNknzd1S2ihuXchJ
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part
 Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl7iExoACgkQlfZmHno8
-x/7NEwgAmtZn8c3AHDT++MR4B7LhujoGQ8LYybQXxK3GT42QsGrQC1gJTHb37q1h
-GFFMOJA+WL4dEvVOWujZe88cnZkIgoneF3a/y+6x9ZBDYRb15rljvJXxWDDEpDNq
-I4pzHw2RldYDTbe+bM8qy4c5LN+uPrtvujT9ZWXKBDjE2ixTwrVqWNBMMtiNacYu
-xEGJrr4Bwi11Gng1qmRD+MwNrwhIfQDMAqvhV865eqfWnri3+xws2Xa1wfcNYUaf
-oyX8gzx/LV8LbpdXLQpddhiPxKzDXWqXTHcnpZXyPPXAgRDUDLGy0I/Irxqnw5tk
-zOPDY89bcrKowlAUqAM5uDFIBI9btQ==
-=Cn2+
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl7iE6MACgkQlfZmHno8
+x/79PAgAp182wijp2dGoNNw89NchByhUXSoq3HViFvOMpA7tfknoLrvB2AF6YQXX
+2ve3ki9iwHaWWKFd58GmLurPDR7RcIVFHAtLT2RPwpbbf9RV8KiYp47xtBHZh8yg
+3oK9JGFkqfVh0qzEmbZ8xrOGqoNIRCNtty4tnzz5om+3ZL2xx3qETHIhiKVygxyu
+WS4nja+AQEG9wkqOGE+JXvi0kErid/NBN7dOH+QP2SH5GgpIeOjNTW36TPAkAzEv
+p5e2Ou504Ryah3il9bWZb/5r0O0njK4O8HJxPhw1k7S9vINYC50ucBTa+dZjYeU/
+/bl9Rt12SAtkbpaNEOm7n45tIqGRHA==
+=K1r7
 -----END PGP SIGNATURE-----
 
---=-U285mDlmyFSu1bffEK5R--
+--=-qp5pvNknzd1S2ihuXchJ--
 
