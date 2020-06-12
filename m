@@ -2,123 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1CFB1F7414
-	for <lists+linux-clk@lfdr.de>; Fri, 12 Jun 2020 08:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F112D1F76AF
+	for <lists+linux-clk@lfdr.de>; Fri, 12 Jun 2020 12:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726475AbgFLGrY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 12 Jun 2020 02:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726095AbgFLGrY (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 12 Jun 2020 02:47:24 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D94C03E96F;
-        Thu, 11 Jun 2020 23:47:22 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id q11so8556220wrp.3;
-        Thu, 11 Jun 2020 23:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=bEDPE0wLH9mbIJMf0kGvWOirp0WuDO4dvBhX04ygBLA=;
-        b=PDnKhcR2OKWwop1uvkMULWT6i/7vk+O9RNJihHhNTy6RkG3AMx2zlkW11DMKdLgtTb
-         ac5XQSh1LuUTTDbsN6AyZ11+Fv/KwLCXeDP03o/hkjb6656V2MGNVkRUf2sHcwPIOTv7
-         5OGCY77qTnoulvA/7h4BirLJ9RCSdxXQeldgZF+nkwW37WboQDU6OVdgJvq7yM0jvjjh
-         qEm8DUGQQumSiU4mG0+ZBYRA5GmpaDmD9GWhvm+Q/cm6HQcOtSLNPI597bX3P1mJWNwy
-         hoJcNrPXAo02glX3D5Q2yU7jsE936IfX9Q2UlzfjuzsucwJPUdrZ5XlYk6hyIop6OXee
-         IPhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bEDPE0wLH9mbIJMf0kGvWOirp0WuDO4dvBhX04ygBLA=;
-        b=S00WYaDNlipxNcH1Px5zVjkW5/t6StRvpAjaj1rbl3PqvzWL0jSjUhTaXqeN7CIPu4
-         GF7FEsIksm7rNGxGdsyxNLgFdWmkjzVboTUrj3pwHFDFI2+OgeI84iNbduWRvGRGNlL2
-         k5+Hz1tRbXlSkp3fEP4f72Eoe5n4UgpDptgn3bbDszhosmmIHZdch6WRwHXes1oUb+Pl
-         X3HGupUmDL9J4n5nfXKLKSxagTZebRGDsD2v+06S1jOMcGYRLnbIFgjNlZtzP+BJ3+sh
-         VKz5wilamvemgdyanOVuuZopMjrLXIsUTp9jpwQ/sucj/1M98H7oR3AvVCLdv6bLttHC
-         BtkA==
-X-Gm-Message-State: AOAM5301TIbyo/JsJrqVSdJvt4RcDBHJEI5++wgpOMrisNfyHeZEsek8
-        runtni+C0KxYr61LE9dLBDSYYPkr
-X-Google-Smtp-Source: ABdhPJwJAOei45XC0j5S56zzU0K7jY8wa+9ImMnUqdJ5h6skzOSWjMqam59s69hL/DHXMXwE5cdlXA==
-X-Received: by 2002:a05:6000:100e:: with SMTP id a14mr13202217wrx.349.1591944441631;
-        Thu, 11 Jun 2020 23:47:21 -0700 (PDT)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id s8sm8514759wrm.96.2020.06.11.23.47.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jun 2020 23:47:20 -0700 (PDT)
-Date:   Fri, 12 Jun 2020 08:47:19 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Anson Huang <Anson.Huang@nxp.com>, linux-clk@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Remove redundant 'maxItems'
-Message-ID: <20200612064719.GA2295929@ulmo>
-References: <20200611194738.1480393-1-robh@kernel.org>
+        id S1726319AbgFLKXr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 12 Jun 2020 06:23:47 -0400
+Received: from sonic310-57.consmr.mail.ir2.yahoo.com ([77.238.177.30]:43463
+        "EHLO sonic310-57.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726314AbgFLKXZ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 12 Jun 2020 06:23:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1591957403; bh=CPKiRa5U3AsWGiQa1t3nAdN7bYjYuC6JbDJgbXJA0WA=; h=Date:From:Reply-To:Subject:References:From:Subject; b=bRuJVyA5Nmin4ukoL8Cz4Tyy7VkSCLkElwHOEyLEpl+vVolZRDImDZJkbKccXQSoPzpH1WVJ2qckiPBjh+Ng5fZRvBsB/8MSJ+fwVR1OCDKOkqH/7gK+c67CoFposc08k7TTnilUXKCrj9vnmtqHMoxnaLdfsGIeYcDu3e0lZpGtTjUXT3TxLbeBf3cVu/UoLwi9j3T8617f17pn+gqYZc1UptwBDS6yc08XhbdWMnG63XU7QFSp8Y630sfOpvbSCHyidmC4OCNPx7SIWb5rdrEFu4hTiogTFHuLJ/vV4FShb6JS4+fb7AHFM8hRV/+A+rHQ+HQqZTUx3mw+k81RRw==
+X-YMail-OSG: eFd7kloVM1lmZ6bMEVPRFfjUKj.lUFE3BfnZtqhTrP2d8AJanW2676UH3bhZfom
+ Wc5eXTbOIBpDEyp33xMRx9GciR65zxtjFuQQ211oOaor1YttJW3BRIbPVf.Dbk8kRrSGjE6hFAum
+ RNhD6j1tVhMkcJdyNr2jCNbUnqmMQcvbVIkH70GaF7cacxsM77cTTpmPr3NsTn6BmBnyKRDkOcxF
+ GzEQgm1JfqoZcRhDQK.IaD5am0eW139Uu8LY4FJ41tmQ.P6vDViKWHnw_xQYJLNwvGEWko.Fj3SA
+ ce6juCdboPavd6eKUb0vxJ1SDLJg0mAWsMJNcaQw8rlvArq19vNaSa4tFVSlg373tdOAJwz6Jpjq
+ 8n5JykG7a2.p0f.b7DgJZ8iP9t_0jX3D0FBcCvCDI_XeYkqa.nhRlpg_hRAJGp277PBYLGBwuaB9
+ UepW4JV7XNDoV6s7cLjKp1AEoNdwShhbcFTKyuUINlRmXm1siABCO48T6xLKkJsrhGYBibxPyf8H
+ RgX4QR5Q4fcONLO6HCDiZb7e2flVYfuS9huMcmYvxDyZXUTGcZ_9MigXWytSLZlxmYQUZUDuSoLI
+ YJZ2dkGrDLgqP8pHrZbzXQWvKAnPrPKHEdSyBtcqe4keigPoh35yJagpstvWBWnDu.QgcUM4LVrF
+ 19ziIsU4oIw7mdDgZmmQlFFdRWmIJOZdlU7zCTQG_Ks6chSkNCBLY7t0uaMGY_Ta_1SdL_5zJrKy
+ nP6S0uwC1eGzjUaY_8P4H2QqRHQ0XOrFwxvRz3_Pbx9vUWIHo78TfiEzq92IhfUOBWfJLE187oaP
+ VBH9nbWwhhvHCxyySATK_ntPDFN3PxjeC9wYiEOkRlgcWP9kgxuCLxf4lfhLzF2.H0_VlJiqIzPW
+ u5Tx3uNnB442OXXEu71LJxzzYVR8AXs19xo_RB7BSCWHIvg57_ykrLbeoi_vtEDk7aeN.JsJ_1.Q
+ XMF4xCWGjQ6dtfZPfG.7SEXhNI5g9LHtkRTe5iuwhNU0CdlzUp8M9hcgZ_8lRtMN0EEVsHibyqr9
+ J5TSxxlQaaMwxV5Tfbfug.KfPKdvCSBHKMrRsvLCDt96lzvhfPQ56QRDPERSMe7YRD5zV1TVholS
+ dJx.5WQLqAwt2GRuAzGLgNrDM84wbRMMgluvdro1mNxNEr0A6jdF102cHtcn0c0FE.MQgPhqY2A9
+ _HfQb63oFKJpIVQqkVUWaoE95My1UUm5YUbIAqDpmdfKtwMsNzB7h5NX_1kZbPId3oJIIdKIsVbx
+ d.75OCajvRBtxLSOC3J_0uWmnT_LUN9TMXQj9Blej4D1tLpQSZG.1e.LqzUAL1_ET3uyHNQdsrA-
+ -
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ir2.yahoo.com with HTTP; Fri, 12 Jun 2020 10:23:23 +0000
+Date:   Fri, 12 Jun 2020 10:23:21 +0000 (UTC)
+From:   "Mrs. Anna H. Bruun" <mrs.kishmichael1@gmail.com>
+Reply-To: mrsannabruun111@gmail.com
+Message-ID: <1055471108.3699071.1591957401245@mail.yahoo.com>
+Subject: GOOD DAY
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zYM0uCDKw75PZbzx"
-Content-Disposition: inline
-In-Reply-To: <20200611194738.1480393-1-robh@kernel.org>
-User-Agent: Mutt/1.13.1 (2019-12-14)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <1055471108.3699071.1591957401245.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16072 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:77.0) Gecko/20100101 Firefox/77.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Hello Dear,
 
---zYM0uCDKw75PZbzx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Am Mrs. Anna H. Bruun I know that this message will be a surprise to you. Firstly, I am married to Mr. Patrick Bruun, A gold merchant who owns a small gold mine in Burkina Faso; He died of Cardiovascular Disease in mid-March 2011. During his lifetime, he deposited the sum of Eight million, Five hundred thousand Euros. in a bank in Ouagadougou the capital city of Burkina Faso in West Africa. The deposited money was from the sale of the shares, death benefits payment and entitlements of my deceased husband by his company.
 
-On Thu, Jun 11, 2020 at 01:47:38PM -0600, Rob Herring wrote:
-> There's no need to specify 'maxItems' with the same value as the number
-> of entries in 'items'. A meta-schema update will catch future cases.
->=20
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Anson Huang <Anson.Huang@nxp.com>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-pwm@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/clock/imx6q-clock.yaml     | 1 -
->  Documentation/devicetree/bindings/clock/imx6sl-clock.yaml    | 1 -
->  Documentation/devicetree/bindings/clock/imx6sll-clock.yaml   | 1 -
->  Documentation/devicetree/bindings/clock/imx6sx-clock.yaml    | 1 -
->  Documentation/devicetree/bindings/clock/imx6ul-clock.yaml    | 1 -
->  Documentation/devicetree/bindings/pwm/imx-pwm.yaml           | 2 --
->  Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml | 2 --
->  7 files changed, 9 deletions(-)
+I am sending this message to you praying that it will reach you in good health since I am not in good health condition in which I sleep every night without knowing if I may be alive to see the next day. I am suffering from long time cancer and presently I am partially suffering from a stroke illness which has become almost impossible for me to move around. I need your urgent answer to know if you will be able to execute this project, and I will give you more information on how the fund will be transferred to your bank account.
 
-Acked-by: Thierry Reding <thierry.reding@gmail.com>
-
---zYM0uCDKw75PZbzx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl7jJPQACgkQ3SOs138+
-s6HL2g//ZoscfSZkpDxD3dW2jxtxiLW+++f387MavWHS9QM8PYT+3MexQxkUWyjo
-MAxhB4FCLFjHaMCl2sD1vH/FkkfIMPzdV8TEtEGlIm+YO/pDci2EYfHOUHsmZe/A
-Dnn+e7XBzuJ2P9DwUaqszRXB1oO6zb32T9tklAN3qeF/W8Z44kNWE1C5AzlM7Ivw
-q1AoGUYx47iq0Wcqwq/DYATIc1BxT8OGl+rEUGnXXWbLS+NYVT4wi7ML6heNqdBl
-+2KbtWFzbdF3DyA1/b+3XVCGHGrGAnsLMjcNqJiLNnnbIS3v9I+HvzCGNGDDQiM1
-Ld8CfrsPzbKqMWYXhAcFTDtf7oyHrjPt/t1FiTok6i7yQNZ2waHpPF1GKbQ5SXe2
-ITA1XWnSaLJEIqXZMllgQ6cZtxIJmb9rjmbGtzq+YjjNTBWn2Us8K4hDGdx65ILl
-vL8fZd6DPHTyJF3CwK+D7ObJBWqjaZjNf+ViQRGzXTIsRufnA9xR3hNDMeAETJKX
-TGxOheAe1S9O0Rma6V0G1g0nbqX8V45/z1Tpd5L3rp9/ZRrg2RK+70+hBtbR2Jc4
-vLdDpb/4lyskRTU+DKgNtReVD2DP9okNErL5eGTXO81URug5Kr1mZB5+RqKjelnI
-mV/2sKfFnSX33cg3hbP/sDwDxMB+sjjGP+K1JXWxVj9Ez6osPPU=
-=WSuJ
------END PGP SIGNATURE-----
-
---zYM0uCDKw75PZbzx--
+Thanks
+Mrs. Anna H.
