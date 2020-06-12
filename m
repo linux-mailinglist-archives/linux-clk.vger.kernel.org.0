@@ -2,57 +2,97 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F112D1F76AF
-	for <lists+linux-clk@lfdr.de>; Fri, 12 Jun 2020 12:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD1D1F7F42
+	for <lists+linux-clk@lfdr.de>; Sat, 13 Jun 2020 00:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726319AbgFLKXr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 12 Jun 2020 06:23:47 -0400
-Received: from sonic310-57.consmr.mail.ir2.yahoo.com ([77.238.177.30]:43463
-        "EHLO sonic310-57.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726314AbgFLKXZ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 12 Jun 2020 06:23:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1591957403; bh=CPKiRa5U3AsWGiQa1t3nAdN7bYjYuC6JbDJgbXJA0WA=; h=Date:From:Reply-To:Subject:References:From:Subject; b=bRuJVyA5Nmin4ukoL8Cz4Tyy7VkSCLkElwHOEyLEpl+vVolZRDImDZJkbKccXQSoPzpH1WVJ2qckiPBjh+Ng5fZRvBsB/8MSJ+fwVR1OCDKOkqH/7gK+c67CoFposc08k7TTnilUXKCrj9vnmtqHMoxnaLdfsGIeYcDu3e0lZpGtTjUXT3TxLbeBf3cVu/UoLwi9j3T8617f17pn+gqYZc1UptwBDS6yc08XhbdWMnG63XU7QFSp8Y630sfOpvbSCHyidmC4OCNPx7SIWb5rdrEFu4hTiogTFHuLJ/vV4FShb6JS4+fb7AHFM8hRV/+A+rHQ+HQqZTUx3mw+k81RRw==
-X-YMail-OSG: eFd7kloVM1lmZ6bMEVPRFfjUKj.lUFE3BfnZtqhTrP2d8AJanW2676UH3bhZfom
- Wc5eXTbOIBpDEyp33xMRx9GciR65zxtjFuQQ211oOaor1YttJW3BRIbPVf.Dbk8kRrSGjE6hFAum
- RNhD6j1tVhMkcJdyNr2jCNbUnqmMQcvbVIkH70GaF7cacxsM77cTTpmPr3NsTn6BmBnyKRDkOcxF
- GzEQgm1JfqoZcRhDQK.IaD5am0eW139Uu8LY4FJ41tmQ.P6vDViKWHnw_xQYJLNwvGEWko.Fj3SA
- ce6juCdboPavd6eKUb0vxJ1SDLJg0mAWsMJNcaQw8rlvArq19vNaSa4tFVSlg373tdOAJwz6Jpjq
- 8n5JykG7a2.p0f.b7DgJZ8iP9t_0jX3D0FBcCvCDI_XeYkqa.nhRlpg_hRAJGp277PBYLGBwuaB9
- UepW4JV7XNDoV6s7cLjKp1AEoNdwShhbcFTKyuUINlRmXm1siABCO48T6xLKkJsrhGYBibxPyf8H
- RgX4QR5Q4fcONLO6HCDiZb7e2flVYfuS9huMcmYvxDyZXUTGcZ_9MigXWytSLZlxmYQUZUDuSoLI
- YJZ2dkGrDLgqP8pHrZbzXQWvKAnPrPKHEdSyBtcqe4keigPoh35yJagpstvWBWnDu.QgcUM4LVrF
- 19ziIsU4oIw7mdDgZmmQlFFdRWmIJOZdlU7zCTQG_Ks6chSkNCBLY7t0uaMGY_Ta_1SdL_5zJrKy
- nP6S0uwC1eGzjUaY_8P4H2QqRHQ0XOrFwxvRz3_Pbx9vUWIHo78TfiEzq92IhfUOBWfJLE187oaP
- VBH9nbWwhhvHCxyySATK_ntPDFN3PxjeC9wYiEOkRlgcWP9kgxuCLxf4lfhLzF2.H0_VlJiqIzPW
- u5Tx3uNnB442OXXEu71LJxzzYVR8AXs19xo_RB7BSCWHIvg57_ykrLbeoi_vtEDk7aeN.JsJ_1.Q
- XMF4xCWGjQ6dtfZPfG.7SEXhNI5g9LHtkRTe5iuwhNU0CdlzUp8M9hcgZ_8lRtMN0EEVsHibyqr9
- J5TSxxlQaaMwxV5Tfbfug.KfPKdvCSBHKMrRsvLCDt96lzvhfPQ56QRDPERSMe7YRD5zV1TVholS
- dJx.5WQLqAwt2GRuAzGLgNrDM84wbRMMgluvdro1mNxNEr0A6jdF102cHtcn0c0FE.MQgPhqY2A9
- _HfQb63oFKJpIVQqkVUWaoE95My1UUm5YUbIAqDpmdfKtwMsNzB7h5NX_1kZbPId3oJIIdKIsVbx
- d.75OCajvRBtxLSOC3J_0uWmnT_LUN9TMXQj9Blej4D1tLpQSZG.1e.LqzUAL1_ET3uyHNQdsrA-
- -
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ir2.yahoo.com with HTTP; Fri, 12 Jun 2020 10:23:23 +0000
-Date:   Fri, 12 Jun 2020 10:23:21 +0000 (UTC)
-From:   "Mrs. Anna H. Bruun" <mrs.kishmichael1@gmail.com>
-Reply-To: mrsannabruun111@gmail.com
-Message-ID: <1055471108.3699071.1591957401245@mail.yahoo.com>
-Subject: GOOD DAY
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <1055471108.3699071.1591957401245.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16072 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:77.0) Gecko/20100101 Firefox/77.0
-To:     unlisted-recipients:; (no To-header on input)
+        id S1726361AbgFLWwb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 12 Jun 2020 18:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726268AbgFLWwa (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 12 Jun 2020 18:52:30 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331B9C03E96F
+        for <linux-clk@vger.kernel.org>; Fri, 12 Jun 2020 15:52:30 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id p20so11596094ejd.13
+        for <linux-clk@vger.kernel.org>; Fri, 12 Jun 2020 15:52:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=D7ORPB0O89tNgrN/9KBjll99io72ZKSooj4kx4IJCSE=;
+        b=MwdW3bCR8Nn+pk+s1Vi4ICKQC9dSGSV7uklsiaqbyA4sLPSP98M06Sxk0YnRlmPcaZ
+         sA7BYFEl8mLWqFwZ6wfjbYseyHtR8VYf9R5sU5mUCoCPrOHvU3Bmm0NqwEiMLZ/1QGLO
+         xDid7EfTuEq18gwFvbjfAc7FvGZ8gdm7Zbzio=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=D7ORPB0O89tNgrN/9KBjll99io72ZKSooj4kx4IJCSE=;
+        b=bhSLpq5LxHOPL2fw6K4A8vJDKA1RqbOAEMnAGOgwg4HVCz5DEGOSYLfp4tOMfpen3d
+         dq22hEDoN2F9hsoPQt7QIWz3y+iQvtmsJ4BIbbI33YmXJ7ySyzxb7r9GUX971AnF34wJ
+         Ig0owYB2NNE1MTEtFBnHPf3EZYNayEWdF0YKIusO4FJhkYLEOK/yJa3Za+ASbVud2p3Y
+         AEb/VPJILot4aKywIvwBbKoeAfRcGXNsAHlxg2q6HBuhuVu0rUmUbFvn51FX2Zb1ZjH2
+         2nCEys9eVYMZolVP5Qf2DQL+a3qToREOdktKj4j/jaIwpbrobdnn9Di+z0Xr42kTXGHT
+         3H5A==
+X-Gm-Message-State: AOAM5321PgmZ15fSlcxL2YW0rA01xaQuU8ZJrVu2g2S5dlfDWCwWeIfV
+        UkSM3VcIe/JGSoQCh/s6u2F/Bw==
+X-Google-Smtp-Source: ABdhPJxSGVAxKxCFLMfetzl0IrrTxR2FBwpvNDo6LG/SnBb8uMHJ8SUDonYdOSLdrekVRGIKMJE5Vw==
+X-Received: by 2002:a17:906:799:: with SMTP id l25mr15073991ejc.234.1592002348562;
+        Fri, 12 Jun 2020 15:52:28 -0700 (PDT)
+Received: from rj-aorus.ric.broadcom.com ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id di14sm3781434edb.77.2020.06.12.15.52.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Jun 2020 15:52:27 -0700 (PDT)
+From:   Ray Jui <ray.jui@broadcom.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Lori Hikichi <lhikichi@broadcom.com>,
+        Ray Jui <ray.jui@broadcom.com>
+Subject: [PATCH] clk: iproc: round clock rate to the closest
+Date:   Fri, 12 Jun 2020 15:52:12 -0700
+Message-Id: <20200612225212.124301-1-ray.jui@broadcom.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello Dear,
+From: Lori Hikichi <lhikichi@broadcom.com>
 
-Am Mrs. Anna H. Bruun I know that this message will be a surprise to you. Firstly, I am married to Mr. Patrick Bruun, A gold merchant who owns a small gold mine in Burkina Faso; He died of Cardiovascular Disease in mid-March 2011. During his lifetime, he deposited the sum of Eight million, Five hundred thousand Euros. in a bank in Ouagadougou the capital city of Burkina Faso in West Africa. The deposited money was from the sale of the shares, death benefits payment and entitlements of my deceased husband by his company.
+Change from 'DIV_ROUND_UP' to 'DIV_ROUND_CLOSEST' when calculating the
+clock divisor in the iProc ASIU clock driver to allow to get to the
+closest clock rate.
 
-I am sending this message to you praying that it will reach you in good health since I am not in good health condition in which I sleep every night without knowing if I may be alive to see the next day. I am suffering from long time cancer and presently I am partially suffering from a stroke illness which has become almost impossible for me to move around. I need your urgent answer to know if you will be able to execute this project, and I will give you more information on how the fund will be transferred to your bank account.
+Fixes: 5fe225c105fd ("clk: iproc: add initial common clock support")
+Signed-off-by: Lori Hikichi <lhikichi@broadcom.com>
+Signed-off-by: Ray Jui <ray.jui@broadcom.com>
+---
+ drivers/clk/bcm/clk-iproc-asiu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks
-Mrs. Anna H.
+diff --git a/drivers/clk/bcm/clk-iproc-asiu.c b/drivers/clk/bcm/clk-iproc-asiu.c
+index 6fb8af506777..e062dd4992ea 100644
+--- a/drivers/clk/bcm/clk-iproc-asiu.c
++++ b/drivers/clk/bcm/clk-iproc-asiu.c
+@@ -119,7 +119,7 @@ static long iproc_asiu_clk_round_rate(struct clk_hw *hw, unsigned long rate,
+ 	if (rate == *parent_rate)
+ 		return *parent_rate;
+ 
+-	div = DIV_ROUND_UP(*parent_rate, rate);
++	div = DIV_ROUND_CLOSEST(*parent_rate, rate);
+ 	if (div < 2)
+ 		return *parent_rate;
+ 
+@@ -145,7 +145,7 @@ static int iproc_asiu_clk_set_rate(struct clk_hw *hw, unsigned long rate,
+ 		return 0;
+ 	}
+ 
+-	div = DIV_ROUND_UP(parent_rate, rate);
++	div = DIV_ROUND_CLOSEST(parent_rate, rate);
+ 	if (div < 2)
+ 		return -EINVAL;
+ 
+-- 
+2.17.1
+
