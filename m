@@ -2,97 +2,132 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD1D1F7F42
-	for <lists+linux-clk@lfdr.de>; Sat, 13 Jun 2020 00:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D111F814A
+	for <lists+linux-clk@lfdr.de>; Sat, 13 Jun 2020 08:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726361AbgFLWwb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 12 Jun 2020 18:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726268AbgFLWwa (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 12 Jun 2020 18:52:30 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331B9C03E96F
-        for <linux-clk@vger.kernel.org>; Fri, 12 Jun 2020 15:52:30 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id p20so11596094ejd.13
-        for <linux-clk@vger.kernel.org>; Fri, 12 Jun 2020 15:52:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=D7ORPB0O89tNgrN/9KBjll99io72ZKSooj4kx4IJCSE=;
-        b=MwdW3bCR8Nn+pk+s1Vi4ICKQC9dSGSV7uklsiaqbyA4sLPSP98M06Sxk0YnRlmPcaZ
-         sA7BYFEl8mLWqFwZ6wfjbYseyHtR8VYf9R5sU5mUCoCPrOHvU3Bmm0NqwEiMLZ/1QGLO
-         xDid7EfTuEq18gwFvbjfAc7FvGZ8gdm7Zbzio=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=D7ORPB0O89tNgrN/9KBjll99io72ZKSooj4kx4IJCSE=;
-        b=bhSLpq5LxHOPL2fw6K4A8vJDKA1RqbOAEMnAGOgwg4HVCz5DEGOSYLfp4tOMfpen3d
-         dq22hEDoN2F9hsoPQt7QIWz3y+iQvtmsJ4BIbbI33YmXJ7ySyzxb7r9GUX971AnF34wJ
-         Ig0owYB2NNE1MTEtFBnHPf3EZYNayEWdF0YKIusO4FJhkYLEOK/yJa3Za+ASbVud2p3Y
-         AEb/VPJILot4aKywIvwBbKoeAfRcGXNsAHlxg2q6HBuhuVu0rUmUbFvn51FX2Zb1ZjH2
-         2nCEys9eVYMZolVP5Qf2DQL+a3qToREOdktKj4j/jaIwpbrobdnn9Di+z0Xr42kTXGHT
-         3H5A==
-X-Gm-Message-State: AOAM5321PgmZ15fSlcxL2YW0rA01xaQuU8ZJrVu2g2S5dlfDWCwWeIfV
-        UkSM3VcIe/JGSoQCh/s6u2F/Bw==
-X-Google-Smtp-Source: ABdhPJxSGVAxKxCFLMfetzl0IrrTxR2FBwpvNDo6LG/SnBb8uMHJ8SUDonYdOSLdrekVRGIKMJE5Vw==
-X-Received: by 2002:a17:906:799:: with SMTP id l25mr15073991ejc.234.1592002348562;
-        Fri, 12 Jun 2020 15:52:28 -0700 (PDT)
-Received: from rj-aorus.ric.broadcom.com ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id di14sm3781434edb.77.2020.06.12.15.52.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Jun 2020 15:52:27 -0700 (PDT)
-From:   Ray Jui <ray.jui@broadcom.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Lori Hikichi <lhikichi@broadcom.com>,
-        Ray Jui <ray.jui@broadcom.com>
-Subject: [PATCH] clk: iproc: round clock rate to the closest
-Date:   Fri, 12 Jun 2020 15:52:12 -0700
-Message-Id: <20200612225212.124301-1-ray.jui@broadcom.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726432AbgFMG1J (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 13 Jun 2020 02:27:09 -0400
+Received: from relay-2.mailobj.net ([213.182.54.5]:48763 "EHLO
+        relay-2.mailobj.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725783AbgFMG1J (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 13 Jun 2020 02:27:09 -0400
+Received: from v-1.localdomain (v-1.in.mailobj.net [192.168.90.191])
+        by relay-2.mailobj.net (Postfix) with SMTP id 1317512EB;
+        Sat, 13 Jun 2020 08:27:06 +0200 (CEST)
+Received: by ip-25.net-c.com [213.182.54.25] with ESMTP
+        Sat, 13 Jun 2020 08:28:01 +0200 (CEST)
+X-EA-Auth: gCDkemgpab3r57raDVk3e6dU6QG0VvILS+PktL2zvaf02NHZKw8aazvbCo2bQXdeoms2YKGELTJ6kqWAggZLhPikVC84GhWGWUeRUvRoXTI=
+From:   Vincent Knecht <vincent.knecht@mailoo.org>
+To:     sboyd@kernel.org
+Cc:     konradybcio@gmail.com, Vincent Knecht <vincent.knecht@mailoo.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v3 1/4] clk: qcom: smd: Add support for MSM8936 rpm clocks
+Date:   Sat, 13 Jun 2020 08:26:39 +0200
+Message-Id: <20200613062642.1213591-2-vincent.knecht@mailoo.org>
+X-Mailer: git-send-email 2.25.4
+In-Reply-To: <20200613062642.1213591-1-vincent.knecht@mailoo.org>
+References: <20200613062642.1213591-1-vincent.knecht@mailoo.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Lori Hikichi <lhikichi@broadcom.com>
+Add missing definition of rpm clk for msm8936 soc (also used by msm8939)
 
-Change from 'DIV_ROUND_UP' to 'DIV_ROUND_CLOSEST' when calculating the
-clock divisor in the iProc ASIU clock driver to allow to get to the
-closest clock rate.
-
-Fixes: 5fe225c105fd ("clk: iproc: add initial common clock support")
-Signed-off-by: Lori Hikichi <lhikichi@broadcom.com>
-Signed-off-by: Ray Jui <ray.jui@broadcom.com>
+Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
 ---
- drivers/clk/bcm/clk-iproc-asiu.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/clk/qcom/clk-smd-rpm.c         | 50 ++++++++++++++++++++++++++
+ include/dt-bindings/clock/qcom,rpmcc.h |  2 ++
+ 2 files changed, 52 insertions(+)
 
-diff --git a/drivers/clk/bcm/clk-iproc-asiu.c b/drivers/clk/bcm/clk-iproc-asiu.c
-index 6fb8af506777..e062dd4992ea 100644
---- a/drivers/clk/bcm/clk-iproc-asiu.c
-+++ b/drivers/clk/bcm/clk-iproc-asiu.c
-@@ -119,7 +119,7 @@ static long iproc_asiu_clk_round_rate(struct clk_hw *hw, unsigned long rate,
- 	if (rate == *parent_rate)
- 		return *parent_rate;
+diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
+index 52f63ad787ba..de42f012af57 100644
+--- a/drivers/clk/qcom/clk-smd-rpm.c
++++ b/drivers/clk/qcom/clk-smd-rpm.c
+@@ -452,6 +452,55 @@ static const struct rpm_smd_clk_desc rpm_clk_msm8916 = {
+ 	.num_clks = ARRAY_SIZE(msm8916_clks),
+ };
  
--	div = DIV_ROUND_UP(*parent_rate, rate);
-+	div = DIV_ROUND_CLOSEST(*parent_rate, rate);
- 	if (div < 2)
- 		return *parent_rate;
++/* msm8936 */
++DEFINE_CLK_SMD_RPM(msm8936, pcnoc_clk, pcnoc_a_clk, QCOM_SMD_RPM_BUS_CLK, 0);
++DEFINE_CLK_SMD_RPM(msm8936, snoc_clk, snoc_a_clk, QCOM_SMD_RPM_BUS_CLK, 1);
++DEFINE_CLK_SMD_RPM(msm8936, bimc_clk, bimc_a_clk, QCOM_SMD_RPM_MEM_CLK, 0);
++DEFINE_CLK_SMD_RPM(msm8936, sysmmnoc_clk, sysmmnoc_a_clk, QCOM_SMD_RPM_BUS_CLK, 2);
++DEFINE_CLK_SMD_RPM_QDSS(msm8936, qdss_clk, qdss_a_clk, QCOM_SMD_RPM_MISC_CLK, 1);
++DEFINE_CLK_SMD_RPM_XO_BUFFER(msm8936, bb_clk1, bb_clk1_a, 1);
++DEFINE_CLK_SMD_RPM_XO_BUFFER(msm8936, bb_clk2, bb_clk2_a, 2);
++DEFINE_CLK_SMD_RPM_XO_BUFFER(msm8936, rf_clk1, rf_clk1_a, 4);
++DEFINE_CLK_SMD_RPM_XO_BUFFER(msm8936, rf_clk2, rf_clk2_a, 5);
++DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(msm8936, bb_clk1_pin, bb_clk1_a_pin, 1);
++DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(msm8936, bb_clk2_pin, bb_clk2_a_pin, 2);
++DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(msm8936, rf_clk1_pin, rf_clk1_a_pin, 4);
++DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(msm8936, rf_clk2_pin, rf_clk2_a_pin, 5);
++
++static struct clk_smd_rpm *msm8936_clks[] = {
++	[RPM_SMD_PCNOC_CLK]		= &msm8936_pcnoc_clk,
++	[RPM_SMD_PCNOC_A_CLK]		= &msm8936_pcnoc_a_clk,
++	[RPM_SMD_SNOC_CLK]		= &msm8936_snoc_clk,
++	[RPM_SMD_SNOC_A_CLK]		= &msm8936_snoc_a_clk,
++	[RPM_SMD_BIMC_CLK]		= &msm8936_bimc_clk,
++	[RPM_SMD_BIMC_A_CLK]		= &msm8936_bimc_a_clk,
++	[RPM_SMD_SYSMMNOC_CLK]		= &msm8936_sysmmnoc_clk,
++	[RPM_SMD_SYSMMNOC_A_CLK]	= &msm8936_sysmmnoc_a_clk,
++	[RPM_SMD_QDSS_CLK]		= &msm8936_qdss_clk,
++	[RPM_SMD_QDSS_A_CLK]		= &msm8936_qdss_a_clk,
++	[RPM_SMD_BB_CLK1]		= &msm8936_bb_clk1,
++	[RPM_SMD_BB_CLK1_A]		= &msm8936_bb_clk1_a,
++	[RPM_SMD_BB_CLK2]		= &msm8936_bb_clk2,
++	[RPM_SMD_BB_CLK2_A]		= &msm8936_bb_clk2_a,
++	[RPM_SMD_RF_CLK1]		= &msm8936_rf_clk1,
++	[RPM_SMD_RF_CLK1_A]		= &msm8936_rf_clk1_a,
++	[RPM_SMD_RF_CLK2]		= &msm8936_rf_clk2,
++	[RPM_SMD_RF_CLK2_A]		= &msm8936_rf_clk2_a,
++	[RPM_SMD_BB_CLK1_PIN]		= &msm8936_bb_clk1_pin,
++	[RPM_SMD_BB_CLK1_A_PIN]		= &msm8936_bb_clk1_a_pin,
++	[RPM_SMD_BB_CLK2_PIN]		= &msm8936_bb_clk2_pin,
++	[RPM_SMD_BB_CLK2_A_PIN]		= &msm8936_bb_clk2_a_pin,
++	[RPM_SMD_RF_CLK1_PIN]		= &msm8936_rf_clk1_pin,
++	[RPM_SMD_RF_CLK1_A_PIN]		= &msm8936_rf_clk1_a_pin,
++	[RPM_SMD_RF_CLK2_PIN]		= &msm8936_rf_clk2_pin,
++	[RPM_SMD_RF_CLK2_A_PIN]		= &msm8936_rf_clk2_a_pin,
++};
++
++static const struct rpm_smd_clk_desc rpm_clk_msm8936 = {
++		.clks = msm8936_clks,
++		.num_clks = ARRAY_SIZE(msm8936_clks),
++};
++
+ /* msm8974 */
+ DEFINE_CLK_SMD_RPM(msm8974, pnoc_clk, pnoc_a_clk, QCOM_SMD_RPM_BUS_CLK, 0);
+ DEFINE_CLK_SMD_RPM(msm8974, snoc_clk, snoc_a_clk, QCOM_SMD_RPM_BUS_CLK, 1);
+@@ -768,6 +817,7 @@ static const struct rpm_smd_clk_desc rpm_clk_msm8998 = {
  
-@@ -145,7 +145,7 @@ static int iproc_asiu_clk_set_rate(struct clk_hw *hw, unsigned long rate,
- 		return 0;
- 	}
+ static const struct of_device_id rpm_smd_clk_match_table[] = {
+ 	{ .compatible = "qcom,rpmcc-msm8916", .data = &rpm_clk_msm8916 },
++	{ .compatible = "qcom,rpmcc-msm8936", .data = &rpm_clk_msm8936 },
+ 	{ .compatible = "qcom,rpmcc-msm8974", .data = &rpm_clk_msm8974 },
+ 	{ .compatible = "qcom,rpmcc-msm8976", .data = &rpm_clk_msm8976 },
+ 	{ .compatible = "qcom,rpmcc-msm8996", .data = &rpm_clk_msm8996 },
+diff --git a/include/dt-bindings/clock/qcom,rpmcc.h b/include/dt-bindings/clock/qcom,rpmcc.h
+index ae74c43c485d..4a0238ccf9f2 100644
+--- a/include/dt-bindings/clock/qcom,rpmcc.h
++++ b/include/dt-bindings/clock/qcom,rpmcc.h
+@@ -133,5 +133,7 @@
+ #define RPM_SMD_RF_CLK3_A			87
+ #define RPM_SMD_RF_CLK3_PIN			88
+ #define RPM_SMD_RF_CLK3_A_PIN			89
++#define RPM_SMD_SYSMMNOC_CLK			90
++#define RPM_SMD_SYSMMNOC_A_CLK			91
  
--	div = DIV_ROUND_UP(parent_rate, rate);
-+	div = DIV_ROUND_CLOSEST(parent_rate, rate);
- 	if (div < 2)
- 		return -EINVAL;
- 
+ #endif
 -- 
-2.17.1
+2.25.4
+
 
