@@ -2,36 +2,34 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D331F814D
-	for <lists+linux-clk@lfdr.de>; Sat, 13 Jun 2020 08:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02591F8183
+	for <lists+linux-clk@lfdr.de>; Sat, 13 Jun 2020 09:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726466AbgFMG1N (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 13 Jun 2020 02:27:13 -0400
-Received: from relay-1.mailobj.net ([213.182.54.6]:46028 "EHLO
-        relay-1.mailobj.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725783AbgFMG1M (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 13 Jun 2020 02:27:12 -0400
+        id S1726424AbgFMH2K (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 13 Jun 2020 03:28:10 -0400
+Received: from relay-2.mailobj.net ([213.182.54.5]:53868 "EHLO
+        relay-2.mailobj.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725771AbgFMH2I (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 13 Jun 2020 03:28:08 -0400
 Received: from v-1.localdomain (v-1.in.mailobj.net [192.168.90.191])
-        by relay-1.mailobj.net (Postfix) with SMTP id 2BB491269;
-        Sat, 13 Jun 2020 08:27:10 +0200 (CEST)
+        by relay-2.mailobj.net (Postfix) with SMTP id 7782612F5;
+        Sat, 13 Jun 2020 09:28:06 +0200 (CEST)
 Received: by ip-25.net-c.com [213.182.54.25] with ESMTP
-        Sat, 13 Jun 2020 08:28:05 +0200 (CEST)
-X-EA-Auth: tTaKxTeiJSoaf6PZDPAaXBKYMy/mPy6nEafq15+/wKidNuheZOz0/4YiVzu1r5BHZQObR+spJI2OigYoWPwem3cYoOvne0NST7LYAqROibk=
+        Sat, 13 Jun 2020 09:29:01 +0200 (CEST)
+X-EA-Auth: l5PGjICbplBVFZcRa5FKA2zra6KgVtI3bKKlzxVI4zWQmjSg40+RR3Y7KSoqMunuUU5MCzo2jPXSnQAq/d8vl53sNJi8as1PHh4Ozu9DOYM=
 From:   Vincent Knecht <vincent.knecht@mailoo.org>
 To:     sboyd@kernel.org
 Cc:     konradybcio@gmail.com, Vincent Knecht <vincent.knecht@mailoo.org>,
-        Rob Herring <robh@kernel.org>, Andy Gross <agross@kernel.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/4] dt-bindings: clock: rpmcc: Document MSM8936 compatible
-Date:   Sat, 13 Jun 2020 08:26:40 +0200
-Message-Id: <20200613062642.1213591-3-vincent.knecht@mailoo.org>
+Subject: [PATCH v4 0/4] Add SMD RPM support for MSM8936
+Date:   Sat, 13 Jun 2020 09:27:41 +0200
+Message-Id: <20200613072745.1249003-1-vincent.knecht@mailoo.org>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20200613062642.1213591-1-vincent.knecht@mailoo.org>
-References: <20200613062642.1213591-1-vincent.knecht@mailoo.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
@@ -39,24 +37,30 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
----
- Documentation/devicetree/bindings/clock/qcom,rpmcc.txt | 1 +
- 1 file changed, 1 insertion(+)
+changes since v3:
+- added my missing Signed-off-by to patch 3
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,rpmcc.txt b/Documentation/devicetree/bindings/clock/qcom,rpmcc.txt
-index 90a1349bc713..51d1ef62c745 100644
---- a/Documentation/devicetree/bindings/clock/qcom,rpmcc.txt
-+++ b/Documentation/devicetree/bindings/clock/qcom,rpmcc.txt
-@@ -13,6 +13,7 @@ Required properties :
- 			"qcom,rpmcc-msm8660", "qcom,rpmcc"
- 			"qcom,rpmcc-apq8060", "qcom,rpmcc"
- 			"qcom,rpmcc-msm8916", "qcom,rpmcc"
-+			"qcom,rpmcc-msm8936", "qcom,rpmcc"
- 			"qcom,rpmcc-msm8974", "qcom,rpmcc"
- 			"qcom,rpmcc-msm8976", "qcom,rpmcc"
- 			"qcom,rpmcc-apq8064", "qcom,rpmcc"
+changes since v2:
+- fixed build error by adding forgotten qcom,rpmcc.h changes in patch 1
+
+changes since v1:
+- added a forgotten patch that adds the compat string to the driver
+
+Konrad Dybcio (1):
+  drivers: soc: Add MSM8936 SMD RPM compatible
+
+Vincent Knecht (3):
+  clk: qcom: smd: Add support for MSM8936 rpm clocks
+  dt-bindings: clock: rpmcc: Document MSM8936 compatible
+  dt-bindings: soc: qcom: Document MSM8936 SMD RPM
+
+ .../devicetree/bindings/clock/qcom,rpmcc.txt  |  1 +
+ .../bindings/soc/qcom/qcom,smd-rpm.txt        |  1 +
+ drivers/clk/qcom/clk-smd-rpm.c                | 50 +++++++++++++++++++
+ drivers/soc/qcom/smd-rpm.c                    |  1 +
+ include/dt-bindings/clock/qcom,rpmcc.h        |  2 +
+ 5 files changed, 55 insertions(+)
+
 -- 
 2.25.4
 
