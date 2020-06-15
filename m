@@ -2,112 +2,106 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 794861F9237
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Jun 2020 10:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358D91F9290
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Jun 2020 11:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729171AbgFOIuj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 15 Jun 2020 04:50:39 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:37884 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728496AbgFOIuj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Jun 2020 04:50:39 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05F8lwYA021890;
-        Mon, 15 Jun 2020 10:49:53 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=VJv/B5BqqCzIrb2NhvcIyxQJgblrWvMESlW9XtRoNEA=;
- b=0kZKh1SbuXWQB7p9qxsFxBRqM5mfwfpwfQppSZHbAi7aGlAxJMn6HF+ePByVUQeWhP5n
- KHEOUmeg4EKm8z+vwmjt3IOBgkxpIr2YfeCVj8ChuRaXXCTBuIspiTs1/dAn8wURSGv3
- Y6blL4F1iGve6mV/JSA2Pyx58BOe+zFpXoYwH56D9UtIt/jTmZ8DZ9aR36vl+fmDipKB
- R2v0LPU2N1A8tx4U+bnCxdr1YQs9SwTSs/TW9vbPuAGsUovU8eMdffUak45+mjdEPJwW
- S7cPK9U9RSfiHWTSauFsD/Mg20ZYaYQu+bkEKaSI52QL+y3Vo08SpxeK1fP9HowPDr67 wQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 31mnph0ecj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Jun 2020 10:49:53 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 76ACA10002A;
-        Mon, 15 Jun 2020 10:49:45 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4485B2BE225;
-        Mon, 15 Jun 2020 10:49:45 +0200 (CEST)
-Received: from lmecxl0912.tpe.st.com (10.75.127.51) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 15 Jun
- 2020 10:49:44 +0200
-Subject: Re: [PATCH v6 0/9] Enable ili9341 and l3gd20 on stm32f429-disco
-To:     <dillon.minfei@gmail.com>, <robh+dt@kernel.org>,
-        <p.zabel@pengutronix.de>, <mcoquelin.stm32@gmail.com>,
-        <thierry.reding@gmail.com>, <sam@ravnborg.org>, <airlied@linux.ie>,
-        <daniel@ffwll.ch>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <andy.shevchenko@gmail.com>, <noralf@tronnes.org>,
-        <linus.walleij@linaro.org>, <broonie@kernel.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-clk@vger.kernel.org>,
-        <dillonhua@gmail.com>
-References: <1590564453-24499-1-git-send-email-dillon.minfei@gmail.com>
-From:   Alexandre Torgue <alexandre.torgue@st.com>
-Message-ID: <bfb78ded-11bf-e9e3-4211-5fa86c6e0f0f@st.com>
-Date:   Mon, 15 Jun 2020 10:49:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1729118AbgFOJCi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 15 Jun 2020 05:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728496AbgFOJCg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Jun 2020 05:02:36 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DA1C061A0E;
+        Mon, 15 Jun 2020 02:02:35 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id t18so16244350wru.6;
+        Mon, 15 Jun 2020 02:02:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KsmsxYavbvBSrD5sd3Cy2FdQfI+TGdNIP59/SdH1Mm4=;
+        b=XwBqsCO46r6OWhyhznF6Z/MhW6Ua8eoX38PDoHAEMn14q9mq59VjfkDz1eUN5y/yeg
+         mSkLoRQyrDTeF8AmMj14+2AhyRAswUUrQp2A8gLDGVDGNwfL5Lvcpa9CIHnyUUq/twgz
+         psPXqAvyG/7IoMQP0SuHOWH5oSJEFOmPt1toEtWojywbnueZb/IA1qu5aALFKiXVWdDC
+         AbcvfsqaGseFN7g3IKw0xRibgtp/vQWU0tp5TtCasjp+IeJ7gZPvpD4xC+JwFeUqvZku
+         TQ5JfcqArjlKbKKZWF+L6H57EvgMotIk0dKN277WMVaJ7KZAKkMQiSlfBvi22IApd3qw
+         lCqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KsmsxYavbvBSrD5sd3Cy2FdQfI+TGdNIP59/SdH1Mm4=;
+        b=X4zvWwEAyU8LPz9T333TgyF1natnjvcEFVE6vG2p4Qkkw8xNN/5ZGsQidesB1sd9JS
+         rzaFe8Hk1HKmJvEd3S5wTgxhGqq/5WFp9rm6OFjxomvigYwGyE6EFm1QIE4PExes4qCu
+         LOD8vYXFz9XSGemv+L8CFJwVwZgGFNz8/wUj3q7rUH9UGi9t98vtE2II4YJcWbxJwEtr
+         WaitpTftN6hu1ak0SHX47rVSLpODOAUBToPhvDkoVBoyXk1ZTPIeu7+/gkeHxvZ8kb5a
+         zMQpr00gu8wHBQbva+5sRN9IAqOrnixsY6m4F5G6gLQlCA/TyaW8mePirrWny5CvLnV8
+         TeuA==
+X-Gm-Message-State: AOAM531JHzC3FVp3CtiMUNMIR+fWiRTD1Ebq1h8aQ9qyg2df/0muTdAP
+        Lv2EIMgT1gu0/nVqKaUCMPI=
+X-Google-Smtp-Source: ABdhPJz1qkel+LJCwlq+pVLtp371uDu4QDVVHHKTJSDLwykQvem70/CFBM7n0bsJ+1YdNRoatC4oWw==
+X-Received: by 2002:a5d:630f:: with SMTP id i15mr27280895wru.309.1592211753326;
+        Mon, 15 Jun 2020 02:02:33 -0700 (PDT)
+Received: from skynet.lan (168.red-88-20-188.staticip.rima-tde.net. [88.20.188.168])
+        by smtp.gmail.com with ESMTPSA id o15sm24089516wrv.48.2020.06.15.02.02.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jun 2020 02:02:32 -0700 (PDT)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, robh+dt@kernel.org,
+        julia.lawall@lip6.fr, jonas.gorski@gmail.com, lkp@intel.com,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH 0/8] clk: bcm63xx-gate: introduce dt-bindings definitions
+Date:   Mon, 15 Jun 2020 11:02:23 +0200
+Message-Id: <20200615090231.2932696-1-noltari@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <1590564453-24499-1-git-send-email-dillon.minfei@gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG4NODE3.st.com (10.75.127.12) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-15_01:2020-06-15,2020-06-15 signatures=0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Dillon,
+These patches add header files for bcm63xx-gate clock definitions in order
+to be able to use them in bcm63xx-gate controller driver and BMIPS device
+trees.
 
-On 5/27/20 9:27 AM, dillon.minfei@gmail.com wrote:
-> From: dillon min <dillon.minfei@gmail.com>
+"clk: bcm63xx-gate: add BCM6318 support" is required to correctly apply
+these patches.
 
-...
+Álvaro Fernández Rojas (8):
+  mips: bmips: add BCM3368 clock definitions
+  mips: bmips: add BCM6318 clock definitions
+  mips: bmips: add BCM6328 clock definitions
+  mips: bmips: add BCM6358 clock definitions
+  mips: bmips: add BCM6362 clock definitions
+  mips: bmips: add BCM6368 clock definitions
+  mips: bmips: add BCM63268 clock definitions
+  clk: bcm63xx-gate: switch to dt-bindings definitions
 
-> dillon min (9):
->    ARM: dts: stm32: Add dma config for spi5
->    ARM: dts: stm32: Add pin map for ltdc & spi5 on stm32f429-disco board
->    ARM: dts: stm32: enable ltdc binding with ili9341, gyro l3gd20 on
->      stm32429-disco board
->    dt-bindings: display: panel: Add ilitek ili9341 panel bindings
->    clk: stm32: Fix stm32f429's ltdc driver hang in set clock rate
->    clk: stm32: Fix ltdc's clock turn off by clk_disable_unused() after
->      kernel     startup
->    drm/panel: Add ilitek ili9341 panel driver
->    spi: stm32: Add 'SPI_SIMPLEX_RX', 'SPI_3WIRE_RX' support for stm32f4
->    spi: flags 'SPI_CONTROLLER_MUST_RX' and 'SPI_CONTROLLER_MUST_TX' can't
->      be     coexit with 'SPI_3WIRE' mode
-> 
->   .../bindings/display/panel/ilitek,ili9341.yaml     |   69 ++
->   arch/arm/boot/dts/stm32f4-pinctrl.dtsi             |   67 +
->   arch/arm/boot/dts/stm32f429-disco.dts              |   48 +
->   arch/arm/boot/dts/stm32f429.dtsi                   |    3 +
->   drivers/clk/clk-stm32f4.c                          |    7 +-
->   drivers/gpu/drm/panel/Kconfig                      |   12 +
->   drivers/gpu/drm/panel/Makefile                     |    1 +
->   drivers/gpu/drm/panel/panel-ilitek-ili9341.c       | 1288 ++++++++++++++++++++
->   drivers/spi/spi-stm32.c                            |   19 +-
->   drivers/spi/spi.c                                  |    3 +-
->   10 files changed, 1508 insertions(+), 9 deletions(-)
->   create mode 100644 Documentation/devicetree/bindings/display/panel/ilitek,ili9341.yaml
->   create mode 100644 drivers/gpu/drm/panel/panel-ilitek-ili9341.c
-> 
+ drivers/clk/bcm/clk-bcm63xx-gate.c         | 580 ++++++++++++++++-----
+ include/dt-bindings/clock/bcm3368-clock.h  |  24 +
+ include/dt-bindings/clock/bcm6318-clock.h  |  42 ++
+ include/dt-bindings/clock/bcm63268-clock.h |  30 ++
+ include/dt-bindings/clock/bcm6328-clock.h  |  19 +
+ include/dt-bindings/clock/bcm6358-clock.h  |  18 +
+ include/dt-bindings/clock/bcm6362-clock.h  |  26 +
+ include/dt-bindings/clock/bcm6368-clock.h  |  24 +
+ 8 files changed, 622 insertions(+), 141 deletions(-)
+ create mode 100644 include/dt-bindings/clock/bcm3368-clock.h
+ create mode 100644 include/dt-bindings/clock/bcm6318-clock.h
+ create mode 100644 include/dt-bindings/clock/bcm63268-clock.h
+ create mode 100644 include/dt-bindings/clock/bcm6328-clock.h
+ create mode 100644 include/dt-bindings/clock/bcm6358-clock.h
+ create mode 100644 include/dt-bindings/clock/bcm6362-clock.h
+ create mode 100644 include/dt-bindings/clock/bcm6368-clock.h
 
-DT patches (patch 1 to 3) applied on stm32-next. I assume that binding 
-one will go with drm/panel driver patch.
+-- 
+2.27.0
 
-Thanks
-Alex
