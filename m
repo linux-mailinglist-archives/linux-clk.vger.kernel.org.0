@@ -2,43 +2,45 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C368F1FBBC5
-	for <lists+linux-clk@lfdr.de>; Tue, 16 Jun 2020 18:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AF41FBBC7
+	for <lists+linux-clk@lfdr.de>; Tue, 16 Jun 2020 18:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730610AbgFPQci (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 16 Jun 2020 12:32:38 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.24]:34091 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729167AbgFPQci (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 16 Jun 2020 12:32:38 -0400
-X-Greylist: delayed 356 seconds by postgrey-1.27 at vger.kernel.org; Tue, 16 Jun 2020 12:32:36 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1592325155;
+        id S1730725AbgFPQcn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 16 Jun 2020 12:32:43 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.165]:13171 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730611AbgFPQcn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 16 Jun 2020 12:32:43 -0400
+X-Greylist: delayed 359 seconds by postgrey-1.27 at vger.kernel.org; Tue, 16 Jun 2020 12:32:42 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1592325161;
         s=strato-dkim-0002; d=fpond.eu;
-        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
-        Subject:Sender;
-        bh=FmE7e/I76oFWjpwU42EMD8UxbMc1b3P7Wn4az0pRclA=;
-        b=eEPiXZQo6jAYNaTvUMqa3wqVRFZoYANbpn4a81N4atGkGjknL/AaVHLwNIHY2IO8Gk
-        mWboSrR34dF5TdadnTCxIJOqlA+monxugskDEwvwZJU3/eGdkCjI5Y9YOm69YGJ1TpYw
-        pEFCvQt+LBlwQQ9SXlhu1f1lUOfkewGk5eUWexqCxIZF4MLPQ89ivq47taEPK2C66snh
-        rY7N6Io9KOxD0IUR9P+xLspVZa6nwnHGB3UwvFaBgxQ49if3fI9XhodOV9lwb9fMppq9
-        VqPzYOMBPNCVKSnsjiFY4tPZRy+lP1fu3S5dtqiXaVJQ0nLhzWtEuSj3dOQwqtHwpuI+
-        P5nQ==
+        h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=5rLze8ETBM66W9eUWsBWbpRpC1OnX9lhrFGmWOBpeY8=;
+        b=EVOi2x8arh6ZDQiGPNzyliblRASm0zuV/PqAnmQF7hTWEPsm3w52hxuTf4iQb+MfZk
+        wvm77mDa+e1EJgSD8r0extsRQR+UEcoDuNuVJiQ+kHGICgvx5qmj3X64pP6DGLf+J1e0
+        3v6P8Ykcv+9sFY8uN67diTVcuxZBevqfq6izM7xht+RA+LA3ChgvtJ8sw6FzkNkvVBsk
+        y7mmC3pLO+H3dFpogScLVHmu1hOt1VgY5tZFkVhrtYeX3s/H5D6D4VtiKWUtj8NELyNg
+        /HEUAupypg4oGBKSoNaRTF8lXsB/0uEfhnrtLadaPNielFspzh5LtagCiCw12F5JlTsv
+        mbeA==
 X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73dmm4I5W0/AvA67Ot4fvR8WdEaEuFwQ=="
 X-RZG-CLASS-ID: mo00
 Received: from groucho.site
         by smtp.strato.de (RZmta 46.10.4 DYNA|AUTH)
-        with ESMTPSA id a0ab6bw5GGQZFwQ
+        with ESMTPSA id a0ab6bw5GGQbFwS
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Tue, 16 Jun 2020 18:26:35 +0200 (CEST)
+        Tue, 16 Jun 2020 18:26:37 +0200 (CEST)
 From:   Ulrich Hecht <uli+renesas@fpond.eu>
 To:     linux-renesas-soc@vger.kernel.org
 Cc:     linux-clk@vger.kernel.org, wsa@the-dreams.de, geert@linux-m68k.org,
         magnus.damm@gmail.com, Ulrich Hecht <uli+renesas@fpond.eu>
-Subject: [PATCH v4 0/3] clk: renesas: cpg-mssr: add RWDT to critical clocks
-Date:   Tue, 16 Jun 2020 18:26:23 +0200
-Message-Id: <20200616162626.27944-1-uli+renesas@fpond.eu>
+Subject: [PATCH v4 1/3] clk: renesas: cpg-mssr: mark clocks as critical only if on at boot
+Date:   Tue, 16 Jun 2020 18:26:24 +0200
+Message-Id: <20200616162626.27944-2-uli+renesas@fpond.eu>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200616162626.27944-1-uli+renesas@fpond.eu>
+References: <20200616162626.27944-1-uli+renesas@fpond.eu>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
@@ -46,68 +48,52 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-(was: "clk: renesas: cpg-mssr: add never-disable option")
+This allows us to add the RWDT clock to the list of critical clocks without
+keeping it enabled needlessly if not used.
 
-Hi!
+Changing the semantics of crit_mod_clks in this way is safe for the current
+user (INTC-AP) because it is never off at boot time.
 
-The purpose of this series is to allow a WDT that has been enabled by the
-bootloader to survive these events:
+Signed-off-by: Ulrich Hecht <uli+renesas@fpond.eu>
+---
+ drivers/clk/renesas/renesas-cpg-mssr.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-- deferred probing of the WDT device, which can lead the clock driver
-  to disable the WDT clock until the WDT is re-probed, giving it a
-  blind spot
-- probe failure in the WDT driver
-
-Following a suggestion by Geert, this revision, instead of adding another
-list of clocks with special handling, changes the semantics of the
-crit_mod_clks[] array slightly by only marking clocks critical that are
-enabled at boot time. That way it can be used for RWDT without forcing the
-clock on unnecessarily.
-
-The other existing user of crit_mod_clks[] (INTC-AP) is always on at boot time
-and should thus not be affected by this change.
-
-There are a number of Gen2 and RZ/G1 SoCs that have the RWDT clock declared
-as critical already in order to allow SMP bringup code to work. That should
-still work with this series applied, assuming that the WDT clock is on at
-boot time.
-
-CU
-Uli
-
-
-Changes since v3:
-- drop separate array, add RWDT to crit_mod_clks[]
-- only mark clocks as critical if they are enabled on boot
-
-Changes since v2:
-- use the term "never-disable" instead of "ignore-unused"
-- do the handling internally instead of relying on the behavior of
-  CLK_IGNORE_UNUSED
-
-Changes since v1:
-- rename data structures for clarity
-- squash SoC-specific patches into one per family
-
-
-Ulrich Hecht (3):
-  clk: renesas: cpg-mssr: mark clocks as critical only if on at boot
-  clk: renesas: rcar-gen3: mark RWDT clocks as critical
-  clk: renesas: rzg2: mark RWDT clock as critical
-
- drivers/clk/renesas/r8a774a1-cpg-mssr.c |  1 +
- drivers/clk/renesas/r8a774b1-cpg-mssr.c |  1 +
- drivers/clk/renesas/r8a774c0-cpg-mssr.c |  1 +
- drivers/clk/renesas/r8a7795-cpg-mssr.c  |  2 +-
- drivers/clk/renesas/r8a7796-cpg-mssr.c  |  2 +-
- drivers/clk/renesas/r8a77965-cpg-mssr.c |  1 +
- drivers/clk/renesas/r8a77970-cpg-mssr.c |  2 +-
- drivers/clk/renesas/r8a77980-cpg-mssr.c |  2 +-
- drivers/clk/renesas/r8a77990-cpg-mssr.c |  1 +
- drivers/clk/renesas/r8a77995-cpg-mssr.c |  2 +-
- drivers/clk/renesas/renesas-cpg-mssr.c  | 17 +++++++++--------
- 11 files changed, 19 insertions(+), 13 deletions(-)
-
+diff --git a/drivers/clk/renesas/renesas-cpg-mssr.c b/drivers/clk/renesas/renesas-cpg-mssr.c
+index dcb6e2706d37..4648a829db66 100644
+--- a/drivers/clk/renesas/renesas-cpg-mssr.c
++++ b/drivers/clk/renesas/renesas-cpg-mssr.c
+@@ -416,14 +416,6 @@ static void __init cpg_mssr_register_mod_clk(const struct mssr_mod_clk *mod,
+ 	init.name = mod->name;
+ 	init.ops = &cpg_mstp_clock_ops;
+ 	init.flags = CLK_SET_RATE_PARENT;
+-	for (i = 0; i < info->num_crit_mod_clks; i++)
+-		if (id == info->crit_mod_clks[i]) {
+-			dev_dbg(dev, "MSTP %s setting CLK_IS_CRITICAL\n",
+-				mod->name);
+-			init.flags |= CLK_IS_CRITICAL;
+-			break;
+-		}
+-
+ 	parent_name = __clk_get_name(parent);
+ 	init.parent_names = &parent_name;
+ 	init.num_parents = 1;
+@@ -432,6 +424,15 @@ static void __init cpg_mssr_register_mod_clk(const struct mssr_mod_clk *mod,
+ 	clock->priv = priv;
+ 	clock->hw.init = &init;
+ 
++	for (i = 0; i < info->num_crit_mod_clks; i++)
++		if (id == info->crit_mod_clks[i] &&
++		    cpg_mstp_clock_is_enabled(&clock->hw)) {
++			dev_dbg(dev, "MSTP %s setting CLK_IS_CRITICAL\n",
++				mod->name);
++			init.flags |= CLK_IS_CRITICAL;
++			break;
++		}
++
+ 	clk = clk_register(NULL, &clock->hw);
+ 	if (IS_ERR(clk))
+ 		goto fail;
 -- 
 2.20.1
 
