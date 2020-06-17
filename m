@@ -2,200 +2,84 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEC71FD2AD
-	for <lists+linux-clk@lfdr.de>; Wed, 17 Jun 2020 18:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625F91FD78D
+	for <lists+linux-clk@lfdr.de>; Wed, 17 Jun 2020 23:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727793AbgFQQsk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 17 Jun 2020 12:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
+        id S1726950AbgFQVjC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 17 Jun 2020 17:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727106AbgFQQs2 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 17 Jun 2020 12:48:28 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8E8C06174E;
-        Wed, 17 Jun 2020 09:48:28 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id dr13so3135353ejc.3;
-        Wed, 17 Jun 2020 09:48:28 -0700 (PDT)
+        with ESMTP id S1726848AbgFQVjC (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 17 Jun 2020 17:39:02 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF85C06174E;
+        Wed, 17 Jun 2020 14:39:01 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id b7so2681052pju.0;
+        Wed, 17 Jun 2020 14:39:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6fVxLcF2XQJKtsCVrWUPWiIVRqtIIhB/4u8XgaRXYq8=;
-        b=PbDQlkylV8BzQ62QxvxU6i6zJ2z8rgpr4t36HTDAIUFbnjVkXEApnIwTiW6slNgUe8
-         FHdD7C9BjKXgEU77ydCgBJYAAcFTD7lZ7DFZ63+hBGZzBMkOENA8uuManPfMuhsStJcw
-         BbxnzmjNDi8e4ke9bS/G7tgJqeJvum6lGjlsMSaYJZr8nS6HVXnmyi+Z7NdK75jMV3D2
-         gYDlXcqW4RY2HNmvZZNDGM6wQyI0ZlWwirkYAhr2dOD/zB8E9lQztARmsugF0ILTZyT3
-         tGIeex77E1MIS5TnWqGTPnGeNLNGXLkbDl1qrCXnqNNfv6p9LNXEXuKIe7ryfyRD7XwQ
-         kI/g==
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=Z1L8zEnT0ez27hMPJfvySv6oSz2yh1sjZDdhcO8RfP0=;
+        b=WVUQiX4n9B4WfCJBET0HMR26vU5YifBBC/wyJt0FXFo1xS/PEUt4P9j1Yjm2b/b5jb
+         8zpmP4ZHRZNWEpI0mY/XCZ5N2kd2e0f/b0f6vqT93FbsNIQtb9ctyblIiWSX2c81oH3g
+         UQ9u/NivMKKM11OP7PxOWnqi271OlQTDB0idgVqXrgtxJkAJNYOZ7n8mQCDCfFz9jE7X
+         f8jTsMp06G6yb546m3ZsPNfPvOcWgkAYbDaxiwa8XgBxrkSU46kWFeRBKyrl0cUw8e3D
+         vI8nCAfl2ECyZVAuS8wlcSTkeEVKDuDRohwZxbRdneC5Be4FjTOwLNEzffi8AcWPV8D3
+         agIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6fVxLcF2XQJKtsCVrWUPWiIVRqtIIhB/4u8XgaRXYq8=;
-        b=g59DUv0nF2kFcPSZG84P1KJaz7isIwsbAl0lqayj2Abnf23itYnP1g3ai/CrV56ciw
-         Me+zJeMJI6zYxvQ6cuEQfrxgbrK5gbXBu2vGEOxG5kWa9xTE/qu2SqqgSEzjkSGdnBzB
-         XTI4mgj42h+hnHKeMyzl82bT6dxD9DqCnpnznrScYTWM2+y09dBN+w4e1niKZlxZEGC3
-         qOaqx1aPxRZMROr74EoW6fWBUkJbauURCmK++ycUiO6jeDnpgiu5BmRzL5fcH1u+Njrp
-         341y1vhYEuqTGo11Xn5PYSuh9014sYnWQi2uMU/Qs/hOWz1mWQm32kFnReXGnp3TkAhN
-         hY4A==
-X-Gm-Message-State: AOAM5305+h1C6I0wkxfU24/t/IBrqAMkWxQq8vZrXpUjyvY1XOfdX2Yu
-        Bo9Jzu4z8slrYPjXATeWW8A=
-X-Google-Smtp-Source: ABdhPJzvfkBjdaEucnW6Yw9j2N0utHDwTtXn2MmFds5w5ZZP1PDzlH/1fl3mYO0+UhnDesHXQctLAQ==
-X-Received: by 2002:a17:906:cc58:: with SMTP id mm24mr97135ejb.134.1592412506965;
-        Wed, 17 Jun 2020 09:48:26 -0700 (PDT)
-Received: from localhost.localdomain ([188.24.129.96])
-        by smtp.gmail.com with ESMTPSA id v3sm127124edj.89.2020.06.17.09.48.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2020 09:48:26 -0700 (PDT)
-From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-To:     =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-actions@lists.infradead.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 09/11] clk: actions: Add Actions S500 SoC Reset Management Unit support
-Date:   Wed, 17 Jun 2020 19:48:09 +0300
-Message-Id: <e361b46511756070277ff10f94e1735bb69cc300.1592407030.git.cristian.ciocaltea@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <cover.1592407030.git.cristian.ciocaltea@gmail.com>
-References: <cover.1592407030.git.cristian.ciocaltea@gmail.com>
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Z1L8zEnT0ez27hMPJfvySv6oSz2yh1sjZDdhcO8RfP0=;
+        b=tGlB91kNnDixHqvgNdkPLKmNOjEMizcaDMeHmSPJMKgC3zZ9xrX6L3gTxbQE5mLfLh
+         6HS8hSBX/CXTAG5T3cwZYr5Ou1IsDEmLHgkEWkzN+3tatZgdWG5kWMUIrYw5Ol2BrvW0
+         nwZWMBy1O6XexKplgrdMYiH8F9zxUDpXkpm5oAbQTPwXX7fE+vKNYI6b8UX21KH/BkAZ
+         v0dadacDIGqwNDLY7t6cR/qGyjrvHID3Ig/7jiO8EwYlz5ZGKjKx+diIyVLVMGjkN/PO
+         Lmv3XYClvA4WmgJceofiRwPmMGpdizyfl6hNn6UiKurTcc4hyf8PXfcDDI86BB1/Vd0h
+         7pRQ==
+X-Gm-Message-State: AOAM533TmN6lFZugA76XSJR5+46R6X4kXlibJLychtpqhensV9OmgwNV
+        1LylJ2dxgsAGH8ug2uY1Gs8MkuHD
+X-Google-Smtp-Source: ABdhPJz97eFcIZRAPlw+wrdz7tC9hhXVeN978btuN1qnKO9axu1PeT/YdSe8nJFrZiqd3ydWZR5BOw==
+X-Received: by 2002:a17:902:a410:: with SMTP id p16mr897252plq.283.1592429940900;
+        Wed, 17 Jun 2020 14:39:00 -0700 (PDT)
+Received: from [10.230.188.43] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id r4sm668701pgp.60.2020.06.17.14.38.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Jun 2020 14:39:00 -0700 (PDT)
+Subject: Re: [PATCH 1/8] mips: bmips: add BCM3368 clock definitions
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        mturquette@baylibre.com, sboyd@kernel.org, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, robh+dt@kernel.org,
+        julia.lawall@lip6.fr, jonas.gorski@gmail.com, lkp@intel.com,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+References: <20200615090231.2932696-1-noltari@gmail.com>
+ <20200615090231.2932696-2-noltari@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <699e92c7-d84a-5625-be90-8c97914d56bb@gmail.com>
+Date:   Wed, 17 Jun 2020 14:38:58 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.9.0
 MIME-Version: 1.0
+In-Reply-To: <20200615090231.2932696-2-noltari@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add Reset Management Unit (RMU) support for Actions Semi S500 SoC.
 
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
----
- drivers/clk/actions/owl-s500.c | 80 ++++++++++++++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
 
-diff --git a/drivers/clk/actions/owl-s500.c b/drivers/clk/actions/owl-s500.c
-index 025a8f6d6482..3bce72301c65 100644
---- a/drivers/clk/actions/owl-s500.c
-+++ b/drivers/clk/actions/owl-s500.c
-@@ -10,6 +10,8 @@
-  *
-  * Copyright (c) 2018 LSI-TEC - Caninos Loucos
-  * Author: Edgar Bernardi Righi <edgar.righi@lsitec.org.br>
-+ *
-+ * Copyright (c) 2020 Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-  */
- 
- #include <linux/clk-provider.h>
-@@ -23,8 +25,10 @@
- #include "owl-gate.h"
- #include "owl-mux.h"
- #include "owl-pll.h"
-+#include "owl-reset.h"
- 
- #include <dt-bindings/clock/actions,s500-cmu.h>
-+#include <dt-bindings/reset/actions,s500-reset.h>
- 
- #define CMU_COREPLL			(0x0000)
- #define CMU_DEVPLL			(0x0004)
-@@ -497,20 +501,96 @@ static struct clk_hw_onecell_data s500_hw_clks = {
- 	.num = CLK_NR_CLKS,
- };
- 
-+static const struct owl_reset_map s500_resets[] = {
-+	[RESET_DMAC]	= { CMU_DEVRST0, BIT(0) },
-+	[RESET_NORIF]	= { CMU_DEVRST0, BIT(1) },
-+	[RESET_DDR]	= { CMU_DEVRST0, BIT(2) },
-+	[RESET_NANDC]	= { CMU_DEVRST0, BIT(3) },
-+	[RESET_SD0]	= { CMU_DEVRST0, BIT(4) },
-+	[RESET_SD1]	= { CMU_DEVRST0, BIT(5) },
-+	[RESET_PCM1]	= { CMU_DEVRST0, BIT(6) },
-+	[RESET_DE]	= { CMU_DEVRST0, BIT(7) },
-+	[RESET_LCD]	= { CMU_DEVRST0, BIT(8) },
-+	[RESET_SD2]	= { CMU_DEVRST0, BIT(9) },
-+	[RESET_DSI]	= { CMU_DEVRST0, BIT(10) },
-+	[RESET_CSI]	= { CMU_DEVRST0, BIT(11) },
-+	[RESET_BISP]	= { CMU_DEVRST0, BIT(12) },
-+	[RESET_KEY]	= { CMU_DEVRST0, BIT(14) },
-+	[RESET_GPIO]	= { CMU_DEVRST0, BIT(15) },
-+	[RESET_AUDIO]	= { CMU_DEVRST0, BIT(17) },
-+	[RESET_PCM0]	= { CMU_DEVRST0, BIT(18) },
-+	[RESET_VDE]	= { CMU_DEVRST0, BIT(19) },
-+	[RESET_VCE]	= { CMU_DEVRST0, BIT(20) },
-+	[RESET_GPU3D]	= { CMU_DEVRST0, BIT(22) },
-+	[RESET_NIC301]	= { CMU_DEVRST0, BIT(23) },
-+	[RESET_LENS]	= { CMU_DEVRST0, BIT(26) },
-+	[RESET_PERIPHRESET] = { CMU_DEVRST0, BIT(27) },
-+	[RESET_USB2_0]	= { CMU_DEVRST1, BIT(0) },
-+	[RESET_TVOUT]	= { CMU_DEVRST1, BIT(1) },
-+	[RESET_HDMI]	= { CMU_DEVRST1, BIT(2) },
-+	[RESET_HDCP2TX]	= { CMU_DEVRST1, BIT(3) },
-+	[RESET_UART6]	= { CMU_DEVRST1, BIT(4) },
-+	[RESET_UART0]	= { CMU_DEVRST1, BIT(5) },
-+	[RESET_UART1]	= { CMU_DEVRST1, BIT(6) },
-+	[RESET_UART2]	= { CMU_DEVRST1, BIT(7) },
-+	[RESET_SPI0]	= { CMU_DEVRST1, BIT(8) },
-+	[RESET_SPI1]	= { CMU_DEVRST1, BIT(9) },
-+	[RESET_SPI2]	= { CMU_DEVRST1, BIT(10) },
-+	[RESET_SPI3]	= { CMU_DEVRST1, BIT(11) },
-+	[RESET_I2C0]	= { CMU_DEVRST1, BIT(12) },
-+	[RESET_I2C1]	= { CMU_DEVRST1, BIT(13) },
-+	[RESET_USB3]	= { CMU_DEVRST1, BIT(14) },
-+	[RESET_UART3]	= { CMU_DEVRST1, BIT(15) },
-+	[RESET_UART4]	= { CMU_DEVRST1, BIT(16) },
-+	[RESET_UART5]	= { CMU_DEVRST1, BIT(17) },
-+	[RESET_I2C2]	= { CMU_DEVRST1, BIT(18) },
-+	[RESET_I2C3]	= { CMU_DEVRST1, BIT(19) },
-+	[RESET_ETHERNET] = { CMU_DEVRST1, BIT(20) },
-+	[RESET_CHIPID]	= { CMU_DEVRST1, BIT(21) },
-+	[RESET_USB2_1]	= { CMU_DEVRST1, BIT(22) },
-+	[RESET_WD0RESET] = { CMU_DEVRST1, BIT(24) },
-+	[RESET_WD1RESET] = { CMU_DEVRST1, BIT(25) },
-+	[RESET_WD2RESET] = { CMU_DEVRST1, BIT(26) },
-+	[RESET_WD3RESET] = { CMU_DEVRST1, BIT(27) },
-+	[RESET_DBG0RESET] = { CMU_DEVRST1, BIT(28) },
-+	[RESET_DBG1RESET] = { CMU_DEVRST1, BIT(29) },
-+	[RESET_DBG2RESET] = { CMU_DEVRST1, BIT(30) },
-+	[RESET_DBG3RESET] = { CMU_DEVRST1, BIT(31) },
-+};
-+
- static struct owl_clk_desc s500_clk_desc = {
- 	.clks	    = s500_clks,
- 	.num_clks   = ARRAY_SIZE(s500_clks),
- 
- 	.hw_clks    = &s500_hw_clks,
-+
-+	.resets     = s500_resets,
-+	.num_resets = ARRAY_SIZE(s500_resets),
- };
- 
- static int s500_clk_probe(struct platform_device *pdev)
- {
- 	struct owl_clk_desc *desc;
-+	struct owl_reset *reset;
-+	int ret;
- 
- 	desc = &s500_clk_desc;
- 	owl_clk_regmap_init(pdev, desc);
- 
-+	reset = devm_kzalloc(&pdev->dev, sizeof(*reset), GFP_KERNEL);
-+	if (!reset)
-+		return -ENOMEM;
-+
-+	reset->rcdev.of_node = pdev->dev.of_node;
-+	reset->rcdev.ops = &owl_reset_ops;
-+	reset->rcdev.nr_resets = desc->num_resets;
-+	reset->reset_map = desc->resets;
-+	reset->regmap = desc->regmap;
-+
-+	ret = devm_reset_controller_register(&pdev->dev, &reset->rcdev);
-+	if (ret)
-+		dev_err(&pdev->dev, "Failed to register reset controller\n");
-+
- 	return owl_clk_probe(&pdev->dev, desc->hw_clks);
- }
- 
+On 6/15/2020 2:02 AM, Álvaro Fernández Rojas wrote:
+> Add header with BCM3368 definitions in order to be able to include it from
+> device tree files.
+> 
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.27.0
-
+Florian
