@@ -2,36 +2,38 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAAA31FE124
-	for <lists+linux-clk@lfdr.de>; Thu, 18 Jun 2020 03:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37CBF1FE0E7
+	for <lists+linux-clk@lfdr.de>; Thu, 18 Jun 2020 03:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731700AbgFRB0f (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 17 Jun 2020 21:26:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34096 "EHLO mail.kernel.org"
+        id S1731820AbgFRB1P (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 17 Jun 2020 21:27:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35222 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731044AbgFRB0d (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:26:33 -0400
+        id S1731815AbgFRB1N (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:27:13 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8B3F82088E;
-        Thu, 18 Jun 2020 01:26:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C8091221F4;
+        Thu, 18 Jun 2020 01:27:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443593;
-        bh=jMKMGH9oLq4ZwU2DuxOlSu/A8eXbglr0iWQy84qeamc=;
+        s=default; t=1592443632;
+        bh=Vgwn97CeZulKG1yZXGJOHSsrUjdcOzy3sqVgKXATIwU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=00CQXpGpTq32Zvca/DOfaYqa8jQ5A3GT3GiqxuweuH2rDfEZtUHpXa3SoaC2T68qo
-         pPCscwjpP/SoF81X0Dc/0nqFf98k4MavdHwUArdcWMhGyqMpEO5iY9nguiKRCyR8x1
-         7I5VnLR3ne2PtXypo+0F3UpIO42GjLnKvlAbdFP8=
+        b=fWIjQuxzVfL9kiiII7cMYXuR0Ps1P20P7r9L9f6wNHkGbAcOzW/DtzjbRI7CAubjM
+         16QeU88FRqfh9DSdrushrfk7yboXjGlR5Yd1fg9Nlnu9u1eByh5r8Jvl/tJ7fuit/W
+         EaJ8lA0C7SrwrQ5d/gEFinoPrZlMek44tHMpuSFs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alain Volmat <avolmat@me.com>,
-        Patrice Chotard <patrice.chotard@st.com>,
+Cc:     Tero Kristo <t-kristo@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Tony Lindgren <tony@atomide.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 026/108] clk: clk-flexgen: fix clock-critical handling
-Date:   Wed, 17 Jun 2020 21:24:38 -0400
-Message-Id: <20200618012600.608744-26-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-omap@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 056/108] clk: ti: composite: fix memory leak
+Date:   Wed, 17 Jun 2020 21:25:08 -0400
+Message-Id: <20200618012600.608744-56-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200618012600.608744-1-sashal@kernel.org>
 References: <20200618012600.608744-1-sashal@kernel.org>
@@ -44,35 +46,36 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Alain Volmat <avolmat@me.com>
+From: Tero Kristo <t-kristo@ti.com>
 
-[ Upstream commit a403bbab1a73d798728d76931cab3ff0399b9560 ]
+[ Upstream commit c7c1cbbc9217ebb5601b88d138d4a5358548de9d ]
 
-Fixes an issue leading to having all clocks following a critical
-clocks marked as well as criticals.
+The parent_names is never released for a component clock definition,
+causing some memory leak. Fix by releasing it once it is no longer
+needed.
 
-Fixes: fa6415affe20 ("clk: st: clk-flexgen: Detect critical clocks")
-Signed-off-by: Alain Volmat <avolmat@me.com>
-Link: https://lkml.kernel.org/r/20200322140740.3970-1-avolmat@me.com
-Reviewed-by: Patrice Chotard <patrice.chotard@st.com>
+Reported-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
+Signed-off-by: Tero Kristo <t-kristo@ti.com>
+Link: https://lkml.kernel.org/r/20200429131341.4697-2-t-kristo@ti.com
+Acked-by: Tony Lindgren <tony@atomide.com>
 Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/st/clk-flexgen.c | 1 +
+ drivers/clk/ti/composite.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/st/clk-flexgen.c b/drivers/clk/st/clk-flexgen.c
-index 918ba3164da9..cd856210db58 100644
---- a/drivers/clk/st/clk-flexgen.c
-+++ b/drivers/clk/st/clk-flexgen.c
-@@ -373,6 +373,7 @@ static void __init st_of_flexgen_setup(struct device_node *np)
- 			break;
- 		}
+diff --git a/drivers/clk/ti/composite.c b/drivers/clk/ti/composite.c
+index beea89463ca2..4ea5c08a1eb6 100644
+--- a/drivers/clk/ti/composite.c
++++ b/drivers/clk/ti/composite.c
+@@ -240,6 +240,7 @@ static void __init _register_composite(struct clk_hw *hw,
+ 		if (!cclk->comp_clks[i])
+ 			continue;
+ 		list_del(&cclk->comp_clks[i]->link);
++		kfree(cclk->comp_clks[i]->parent_names);
+ 		kfree(cclk->comp_clks[i]);
+ 	}
  
-+		flex_flags &= ~CLK_IS_CRITICAL;
- 		of_clk_detect_critical(np, i, &flex_flags);
- 
- 		/*
 -- 
 2.25.1
 
