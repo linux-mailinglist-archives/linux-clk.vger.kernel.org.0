@@ -2,36 +2,38 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5C51FE865
-	for <lists+linux-clk@lfdr.de>; Thu, 18 Jun 2020 04:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B04821FE7D3
+	for <lists+linux-clk@lfdr.de>; Thu, 18 Jun 2020 04:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726942AbgFRBKG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 17 Jun 2020 21:10:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36890 "EHLO mail.kernel.org"
+        id S1728736AbgFRCny (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 17 Jun 2020 22:43:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39242 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728377AbgFRBKD (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:10:03 -0400
+        id S1727831AbgFRBLY (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:11:24 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3E132221EA;
-        Thu, 18 Jun 2020 01:10:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 88EC621D7E;
+        Thu, 18 Jun 2020 01:11:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442603;
-        bh=ihHrUJsOCew8oKzpD6uj34VNb3wBjlV3dDlrBrZhBnA=;
+        s=default; t=1592442684;
+        bh=Sp+62r1czfVEY6NOVZ4jDMPfXjcGVIulcPXjrSyusyg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XEiYq+8LGen4idONssMiAplT1dl7YRgXqF1hCzlmixiAyPUr2hqIUwfOz9Zt2h1Ro
-         H1dgX5JG9GK3QtGVF7mS5HmQSzghzkytHEiAX/hG0tVMKpXpk6GmonbOsvG+7yyLjW
-         l4c97cgzeIvbzfQXKpn98g8LBMmB7eGeSsBAML70=
+        b=xUj7x4qJzrHG1HajKv+J3y5zydovRimhfkSiPJS+4R4ePND9SLCI9DICJE2AiT5uR
+         s8/cISoNfcuk5RJENlC1iF8QSkDLtYUbfLXJqTLP3wyguyrx0QFlH+VJBeLr1nclBj
+         XBpl1XkxRfYovP3GJiNCyuzhpBTnpDaYCI062c+k=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
         Sasha Levin <sashal@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 089/388] clk: sprd: fix compile-testing
-Date:   Wed, 17 Jun 2020 21:03:06 -0400
-Message-Id: <20200618010805.600873-89-sashal@kernel.org>
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.7 151/388] clk: meson: meson8b: Fix the first parent of vid_pll_in_sel
+Date:   Wed, 17 Jun 2020 21:04:08 -0400
+Message-Id: <20200618010805.600873-151-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
 References: <20200618010805.600873-1-sashal@kernel.org>
@@ -44,76 +46,46 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-[ Upstream commit b5f73d47f34b238221ac771b5fe4907df621d7cb ]
+[ Upstream commit da1978ac3d6cf278dedf5edbf350445a0fff2f08 ]
 
-I got a build failure with CONFIG_ARCH_SPRD=m when the
-main portion of the clock driver failed to get linked into
-the kernel:
+Use hdmi_pll_lvds_out as parent of the vid_pll_in_sel clock. It's not
+easy to see that the vendor kernel does the same, but it actually does.
+meson_clk_pll_ops in mainline still cannot fully recalculate all rates
+from the HDMI PLL registers because some register bits (at the time of
+writing it's unknown which bits are used for this) double the HDMI PLL
+output rate (compared to simply considering M, N and FRAC) for some (but
+not all) PLL settings.
 
-ERROR: modpost: "sprd_pll_sc_gate_ops" [drivers/clk/sprd/sc9863a-clk.ko] undefined!
-ERROR: modpost: "sprd_pll_ops" [drivers/clk/sprd/sc9863a-clk.ko] undefined!
-ERROR: modpost: "sprd_div_ops" [drivers/clk/sprd/sc9863a-clk.ko] undefined!
-ERROR: modpost: "sprd_comp_ops" [drivers/clk/sprd/sc9863a-clk.ko] undefined!
-ERROR: modpost: "sprd_mux_ops" [drivers/clk/sprd/sc9863a-clk.ko] undefined!
-ERROR: modpost: "sprd_gate_ops" [drivers/clk/sprd/sc9863a-clk.ko] undefined!
-ERROR: modpost: "sprd_sc_gate_ops" [drivers/clk/sprd/sc9863a-clk.ko] undefined!
-ERROR: modpost: "sprd_clk_probe" [drivers/clk/sprd/sc9863a-clk.ko] undefined!
-ERROR: modpost: "sprd_clk_regmap_init" [drivers/clk/sprd/sc9863a-clk.ko] undefined!
-ERROR: modpost: "sprd_pll_ops" [drivers/clk/sprd/sc9860-clk.ko] undefined!
-ERROR: modpost: "sprd_div_ops" [drivers/clk/sprd/sc9860-clk.ko] undefined!
-ERROR: modpost: "sprd_mux_ops" [drivers/clk/sprd/sc9860-clk.ko] undefined!
+Update the vid_pll_in_sel parent so our clock calculation works for
+simple clock settings like the CVBS output (where no rate doubling is
+going on). The PLL ops need to be fixed later on for more complex clock
+settings (all HDMI rates).
 
-This is a combination of two trivial bugs:
-
-- A platform should not be 'tristate', it should be a 'bool' symbol
-  like the other platforms, if only for consistency, and to avoid
-  surprises like this one.
-
-- The clk Makefile does not traverse into the sprd subdirectory
-  if the platform is disabled but the drivers are enabled for
-  compile-testing.
-
-Fixing either of the two would be sufficient to address the link failure,
-but for correctness, both need to be changed.
-
-Fixes: 2b1b799d7630 ("arm64: change ARCH_SPRD Kconfig to tristate")
-Fixes: d41f59fd92f2 ("clk: sprd: Add common infrastructure")
-Acked-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: 6cb57c678bb70 ("clk: meson: meson8b: add the read-only video clock trees")
+Suggested-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+Link: https://lore.kernel.org/r/20200417184127.1319871-2-martin.blumenstingl@googlemail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/Kconfig.platforms | 2 +-
- drivers/clk/Makefile         | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/clk/meson/meson8b.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 55d70cfe0f9e..3c7e310fd8bf 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -248,7 +248,7 @@ config ARCH_TEGRA
- 	  This enables support for the NVIDIA Tegra SoC family.
- 
- config ARCH_SPRD
--	tristate "Spreadtrum SoC platform"
-+	bool "Spreadtrum SoC platform"
- 	help
- 	  Support for Spreadtrum ARM based SoCs
- 
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index f4169cc2fd31..60e811d3f226 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -105,7 +105,7 @@ obj-$(CONFIG_CLK_SIFIVE)		+= sifive/
- obj-$(CONFIG_ARCH_SIRF)			+= sirf/
- obj-$(CONFIG_ARCH_SOCFPGA)		+= socfpga/
- obj-$(CONFIG_PLAT_SPEAR)		+= spear/
--obj-$(CONFIG_ARCH_SPRD)			+= sprd/
-+obj-y					+= sprd/
- obj-$(CONFIG_ARCH_STI)			+= st/
- obj-$(CONFIG_ARCH_STRATIX10)		+= socfpga/
- obj-$(CONFIG_ARCH_SUNXI)		+= sunxi/
+diff --git a/drivers/clk/meson/meson8b.c b/drivers/clk/meson/meson8b.c
+index 34a70c4b4899..ac4a883acd2a 100644
+--- a/drivers/clk/meson/meson8b.c
++++ b/drivers/clk/meson/meson8b.c
+@@ -1077,7 +1077,7 @@ static struct clk_regmap meson8b_vid_pll_in_sel = {
+ 		 * Meson8m2: vid2_pll
+ 		 */
+ 		.parent_hws = (const struct clk_hw *[]) {
+-			&meson8b_hdmi_pll_dco.hw
++			&meson8b_hdmi_pll_lvds_out.hw
+ 		},
+ 		.num_parents = 1,
+ 		.flags = CLK_SET_RATE_PARENT,
 -- 
 2.25.1
 
