@@ -2,120 +2,64 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC25320057D
-	for <lists+linux-clk@lfdr.de>; Fri, 19 Jun 2020 11:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D167A200559
+	for <lists+linux-clk@lfdr.de>; Fri, 19 Jun 2020 11:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732108AbgFSJkF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 19 Jun 2020 05:40:05 -0400
-Received: from lucky1.263xmail.com ([211.157.147.132]:50432 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732095AbgFSJkE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 19 Jun 2020 05:40:04 -0400
-X-Greylist: delayed 486 seconds by postgrey-1.27 at vger.kernel.org; Fri, 19 Jun 2020 05:40:02 EDT
-Received: from localhost (unknown [192.168.167.209])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 67FA2E988E;
-        Fri, 19 Jun 2020 17:30:28 +0800 (CST)
-X-MAIL-GRAY: 1
-X-MAIL-DELIVERY: 0
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-SKE-CHECKED: 1
-X-ABS-CHECKED: 1
-Received: from [172.16.12.64] (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P10489T139787484784384S1592559028011652_;
-        Fri, 19 Jun 2020 17:30:28 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <62c480b8cc5a488bc414f885ceaa2db0>
-X-RL-SENDER: shawn.lin@rock-chips.com
-X-SENDER: lintao@rock-chips.com
-X-LOGIN-NAME: shawn.lin@rock-chips.com
-X-FST-TO: linux-arm-kernel@lists.infradead.org
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-DNS-TYPE: 0
-X-System-Flag: 0
-Cc:     shawn.lin@rock-chips.com, linux-rockchip@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: =?UTF-8?Q?Re=3a_=5bRESEND_PATCH=5d_Revert_=22clk=3a_rockchip=3a_fix?=
- =?UTF-8?Q?_wrong_mmc_sample_phase_shift_for_rk3328=22=e3=80=90=e8=af=b7?=
- =?UTF-8?B?5rOo5oSP77yM6YKu5Lu255SxbGludXgtcm9ja2NoaXAtYm91bmNlcytzaGF3bi5s?=
- =?UTF-8?B?aW49cm9jay1jaGlwcy5jb21AbGlzdHMuaW5mcmFkZWFkLm9yZ+S7o+WPkeOAkQ==?=
-To:     Robin Murphy <robin.murphy@arm.com>, heiko@sntech.de,
-        mturquette@baylibre.com, sboyd@kernel.org
-References: <c80eb52e34c03f817586b6b7912fbd4e31be9079.1589475794.git.robin.murphy@arm.com>
-From:   Shawn Lin <shawn.lin@rock-chips.com>
-Message-ID: <0dd5e173-a656-a1be-0a44-1ea8a03ca6fd@rock-chips.com>
-Date:   Fri, 19 Jun 2020 17:30:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.0
+        id S1730380AbgFSJhj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 19 Jun 2020 05:37:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50912 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729195AbgFSJhj (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 19 Jun 2020 05:37:39 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BCE5120786;
+        Fri, 19 Jun 2020 09:37:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592559458;
+        bh=vjTpSmnTmmOv94IpDmGtPP99GpL12wdAHsgrEGDpfS0=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=1AJE04JNn56TsdMVZm9vO6voR+upA/wknlpCNJt7942CxnqoZyzuJDDBKYjQDd4/l
+         W3nDsaCvaAPbSzG66nwCLRZrfNfPhOMh1B+X/1dkby9154Iis2g0MHueQaVSQGfKcF
+         ELh9n6NzhkWboj+yZ6Ecvq9fl/vk9HHNh04veKw4=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <c80eb52e34c03f817586b6b7912fbd4e31be9079.1589475794.git.robin.murphy@arm.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <cover.98f979c2af2337c57217016d21d7c68e1ac2ce8a.1592210452.git-series.maxime@cerno.tech>
+References: <cover.98f979c2af2337c57217016d21d7c68e1ac2ce8a.1592210452.git-series.maxime@cerno.tech>
+Subject: Re: [PATCH v5 00/27] clk: bcm: rpi: Add support for BCM2711 firmware clocks
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-rpi-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Tim Gover <tim.gover@raspberrypi.com>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Mike Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
+        Maxime Ripard <maxime@cerno.tech>, devicetree@vger.kernel.org,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Date:   Fri, 19 Jun 2020 02:37:37 -0700
+Message-ID: <159255945796.62212.5838238989498858379@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Quoting Maxime Ripard (2020-06-15 01:40:40)
+> Hi,
+>=20
+> Since the whole DRM/HDMI support began to grow fairly big, I've chosen
+> to split away the two discussions between the firmware clocks and the
+> HDMI support.
+>=20
+> Let me know what you think,
+> Maxime
 
-On 2020/6/19 1:56, Robin Murphy wrote:
-> This reverts commit 82f4b67f018c88a7cc9337f0067ed3d6ec352648.
-> 
-> According to a subsequent revert in the vendor kernel, the original
-> change was based on unclear documentation and was in fact incorrect.
-> 
-
-Reviewed-by: Shawn Lin <shawn.lin@rock-chips.com>
-
-> Emprically, my board's HS200 eMMC at 200MHZ apparently gets lucky with a
-> phase where this had no impact, but limiting max-frequency to 150MHz to
-> match the nominal capability of the I/O pins made it virtually unusable,
-> constantly throwing errors and retuning. With this revert, it starts
-> behaving perfectly at 150MHz too.
-> 
-> Fixes: 82f4b67f018c ("clk: rockchip: fix wrong mmc sample phase shift for rk3328")
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-> ---
-> 
-> Resending with the edited commit log I actually meant, rather than the
-> earlier draft I managed to generate the previuous patch from, since that
-> one seems to have slipped through the cracks anyway.
-> 
-> ybetter commit message
->   drivers/clk/rockchip/clk-rk3328.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/clk/rockchip/clk-rk3328.c b/drivers/clk/rockchip/clk-rk3328.c
-> index c186a1985bf4..2429b7c2a8b3 100644
-> --- a/drivers/clk/rockchip/clk-rk3328.c
-> +++ b/drivers/clk/rockchip/clk-rk3328.c
-> @@ -808,22 +808,22 @@ static struct rockchip_clk_branch rk3328_clk_branches[] __initdata = {
->   	MMC(SCLK_SDMMC_DRV, "sdmmc_drv", "clk_sdmmc",
->   	    RK3328_SDMMC_CON0, 1),
->   	MMC(SCLK_SDMMC_SAMPLE, "sdmmc_sample", "clk_sdmmc",
-> -	    RK3328_SDMMC_CON1, 0),
-> +	    RK3328_SDMMC_CON1, 1),
->   
->   	MMC(SCLK_SDIO_DRV, "sdio_drv", "clk_sdio",
->   	    RK3328_SDIO_CON0, 1),
->   	MMC(SCLK_SDIO_SAMPLE, "sdio_sample", "clk_sdio",
-> -	    RK3328_SDIO_CON1, 0),
-> +	    RK3328_SDIO_CON1, 1),
->   
->   	MMC(SCLK_EMMC_DRV, "emmc_drv", "clk_emmc",
->   	    RK3328_EMMC_CON0, 1),
->   	MMC(SCLK_EMMC_SAMPLE, "emmc_sample", "clk_emmc",
-> -	    RK3328_EMMC_CON1, 0),
-> +	    RK3328_EMMC_CON1, 1),
->   
->   	MMC(SCLK_SDMMC_EXT_DRV, "sdmmc_ext_drv", "clk_sdmmc_ext",
->   	    RK3328_SDMMC_EXT_CON0, 1),
->   	MMC(SCLK_SDMMC_EXT_SAMPLE, "sdmmc_ext_sample", "clk_sdmmc_ext",
-> -	    RK3328_SDMMC_EXT_CON1, 0),
-> +	    RK3328_SDMMC_EXT_CON1, 1),
->   };
->   
->   static const char *const rk3328_critical_clocks[] __initconst = {
-> 
-
-
+Do you want this to go through clk tree? Or looking for acks/review
+tags?
