@@ -2,638 +2,120 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4701202485
-	for <lists+linux-clk@lfdr.de>; Sat, 20 Jun 2020 16:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61972024F2
+	for <lists+linux-clk@lfdr.de>; Sat, 20 Jun 2020 17:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728531AbgFTOtH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 20 Jun 2020 10:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
+        id S1726919AbgFTP5Q (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 20 Jun 2020 11:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728527AbgFTOtF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 20 Jun 2020 10:49:05 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567BEC06174E;
-        Sat, 20 Jun 2020 07:49:04 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id a6so10394610wrm.4;
-        Sat, 20 Jun 2020 07:49:04 -0700 (PDT)
+        with ESMTP id S1725957AbgFTP5I (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 20 Jun 2020 11:57:08 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC82C0613EF
+        for <linux-clk@vger.kernel.org>; Sat, 20 Jun 2020 08:57:07 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id d10so3489926pls.5
+        for <linux-clk@vger.kernel.org>; Sat, 20 Jun 2020 08:57:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CmNC2Bn3o5ZHDXHiQCU50tdsYyPVrsvYkHpZV/07Wbc=;
-        b=EeO10bvWF4DWwXsKNumh1NVGPR+ieOFU345TmMkTlan178HKMPpVNOhyZTRX9e2GZy
-         ZqCOBi9upR3nwo8zltO9o62iLrOi6EaA/zVcbPHiS6TgotzMbmzYUzCtcDt2mE9Md1w2
-         iv1Pb6iZhCJArbZzmW2Mk+QGLcfPTiIhBsjOIYrbHLlIAYqCOqgzFUt1pxFt6f7gHcPC
-         aIvpVjtblvcdXACQU7yHqIr5AMiDBRRWKFC4QLyeocgfkWXufNewhpNyZw/Yv2RKpDrR
-         cqGe6X4QYmBeE2XfL13NadxXMt936rrIlbFCY+PYOxXyfVugpAzDPgAYZyC/+JcYa3Tl
-         DGPg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9tYajToBSjCKrMeO3oPfRpy8eb8n4thx7RWSAT9gnU0=;
+        b=QDUi4+cS/+VkJarQJer8i54NB6wrYUApoWkctsr63KwWXWXArOZDidsHLokQDZp1dW
+         eZ4mUUVqPLdtc98QdwYojIxlVjsSvdT6uJdK2Pr6SfHfX+CS5ufDjNUbv4fBIhf1Kcxv
+         MQ/YY9T6qSNqLt4/98fJo5BCZXSyE37vzBS0w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CmNC2Bn3o5ZHDXHiQCU50tdsYyPVrsvYkHpZV/07Wbc=;
-        b=WMTKT+S3Vbu7ihqgUDWzD4LdkJvzA7O3AVJoIkW0J8DyhuO7TUTeRYV15Qnh5fAQrE
-         m5IKWgY5VwZhjZEoNEOTuDlec+fJqwbeK8ftVOyTuFD047c2RlnDUEUyuL/32I1Y4vBr
-         faEAyovGam2dVDTB6Pd275hBKqtYy1saHpR/65QC84bdwuDv/zLOXhtKt06FCn5bJx/J
-         dVPVDpaS3m06LeT1YAj+qW3srK60fa+yj623gjLT4XLdxMoE54l66mY9JQ6eC9pdhCK2
-         yjSzGOkpaoO2pXf4GEPbdUjdpZYAl5rvGjM3M5Q98wjlXKHs0fVkqQKzzZ/IuPXGZPR4
-         C+Aw==
-X-Gm-Message-State: AOAM532Kh657O9MurGKRxawDxVbD0g9RlOA4K+LauqfkIsASs6rSzEhz
-        bR8HbDymZ/a8Dmx9BF4/dlw=
-X-Google-Smtp-Source: ABdhPJxR2Lbrigrq+LKG7o7imoOlgy6vDMmUHbf3biel4jVv39a5gW7ZPNBKsATu3FsbvLzOmpkWNg==
-X-Received: by 2002:adf:f984:: with SMTP id f4mr7590983wrr.221.1592664542957;
-        Sat, 20 Jun 2020 07:49:02 -0700 (PDT)
-Received: from localhost.localdomain (abae138.neoplus.adsl.tpnet.pl. [83.6.168.138])
-        by smtp.googlemail.com with ESMTPSA id 63sm11928379wra.86.2020.06.20.07.49.01
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9tYajToBSjCKrMeO3oPfRpy8eb8n4thx7RWSAT9gnU0=;
+        b=NCYbDCFvRDV111fXZw8Jp9jfoqYSLql6lsPxfKgrr/Kw/KES4X6KBcnlN1W8uknxEw
+         mmuvumDjZ2YcMchdCB4ANkO8cpF8NMdG/WdFcOCQjFXHBnuXkbpNz91KZfeOZBLkZsRS
+         ej5lYnFhVv7XQtQPGmZFG70r8Q9mAdj9lMb2z6/5IINE9Fr1P9m4h9A8HWSC++9TPnPP
+         J8W87xcRk4nK18VofFbpAnyAGEXv/20NdcC4OX1dS4n/ko06EqAwSzadcZK6cfHdxeC2
+         xa66Scvx9WchJntI46oer3Su7Luluj2P+MQETlgUpnkhLsf6Ab31yrfhp7bkgWhsPQK+
+         RShg==
+X-Gm-Message-State: AOAM530Z+P6uY1tdQVBhnizMVuN9naWptv0sUCzY2U9co2ubKjmdHsyX
+        1ak0GpnJ5HHBgTrxla6+NaBrKA==
+X-Google-Smtp-Source: ABdhPJxL62JhXi8o+nSID6QHqBiLZ4YAHSAeaQKUwiACFjUcLS2k4S/MAlD8WL4T8tKBotrZuujIYg==
+X-Received: by 2002:a17:902:b78a:: with SMTP id e10mr12682612pls.201.1592668627259;
+        Sat, 20 Jun 2020 08:57:07 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y4sm8954278pfr.182.2020.06.20.08.57.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Jun 2020 07:49:02 -0700 (PDT)
-From:   Konrad Dybcio <konradybcio@gmail.com>
-To:     skrzynka@konradybcio.pl
-Cc:     Konrad Dybcio <konradybcio@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 21/21] arm64: dts: qcom: Move msm8994-smd-rpm contents to lg-bullhead.
-Date:   Sat, 20 Jun 2020 16:46:37 +0200
-Message-Id: <20200620144639.335093-22-konradybcio@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200620144639.335093-1-konradybcio@gmail.com>
-References: <20200620144639.335093-1-konradybcio@gmail.com>
+        Sat, 20 Jun 2020 08:57:06 -0700 (PDT)
+Date:   Sat, 20 Jun 2020 08:57:04 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Sedat Dilek <sedat.dilek@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Joe Perches <joe@perches.com>,
+        Andy Whitcroft <apw@canonical.com>, x86@kernel.org,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        b43-dev@lists.infradead.org, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mm@kvack.org,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>
+Subject: Re: [PATCH v2 00/16] Remove uninitialized_var() macro
+Message-ID: <202006200854.B2D8F21@keescook>
+References: <20200620033007.1444705-1-keescook@chromium.org>
+ <CA+icZUWpHRR7ukyepiUH1dR3r4GMi-s2crfwR5vTszdt1SUTQw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+icZUWpHRR7ukyepiUH1dR3r4GMi-s2crfwR5vTszdt1SUTQw@mail.gmail.com>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This was the only device using that dtsi, so no point
-keeping it separate AND with a confusing name (bullhead
-is based on msm8992 and the file contains regulator
-values for that specific board).
+On Sat, Jun 20, 2020 at 09:03:34AM +0200, Sedat Dilek wrote:
+> On Sat, Jun 20, 2020 at 5:30 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > v2:
+> > - more special-cased fixes
+> > - add reviews
+> > v1: https://lore.kernel.org/lkml/20200603233203.1695403-1-keescook@chromium.org
+> >
+> > Using uninitialized_var() is dangerous as it papers over real bugs[1]
+> > (or can in the future), and suppresses unrelated compiler warnings
+> > (e.g. "unused variable"). If the compiler thinks it is uninitialized,
+> > either simply initialize the variable or make compiler changes.
+> >
+> > As recommended[2] by[3] Linus[4], remove the macro.
+> >
+> > Most of the 300 uses don't cause any warnings on gcc 9.3.0, so they're in
+> > a single treewide commit in this series. A few others needed to actually
+> > get cleaned up, and I broke those out into individual patches.
+> >
+> > The tree is:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=kspp/uninit/macro
+> >
+> > -Kees
+> >
+> 
+> Hi Kees,
+> 
+> thanks for doing a v2 of your patchset.
+> 
+> As I saw Jason Yan providing some "uninitialized_var() macro" patches
+> to the MLs I pointen him to your tree "v1".
 
-Signed-off-by: Konrad Dybcio <konradybcio@gmail.com>
----
- .../dts/qcom/msm8992-bullhead-rev-101.dts     | 264 ++++++++++++++++-
- arch/arm64/boot/dts/qcom/msm8994-smd-rpm.dtsi | 268 ------------------
- 2 files changed, 263 insertions(+), 269 deletions(-)
- delete mode 100644 arch/arm64/boot/dts/qcom/msm8994-smd-rpm.dtsi
+Thanks!
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts b/arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts
-index 32670d5afdd6..893fc5b8fc34 100644
---- a/arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts
-@@ -47,4 +47,266 @@ ramoops@1ff00000 {
- 	};
- };
- 
--#include "msm8994-smd-rpm.dtsi"
-+&smd_rpm {
-+	rpm {
-+		rpm_requests {
-+			pm8994-regulators {
-+
-+				vdd_l1-supply = <&pm8994_s1>;
-+				vdd_l2_26_28-supply = <&pm8994_s3>;
-+				vdd_l3_11-supply = <&pm8994_s3>;
-+				vdd_l4_27_31-supply = <&pm8994_s3>;
-+				vdd_l5_7-supply = <&pm8994_s3>;
-+				vdd_l6_12_32-supply = <&pm8994_s5>;
-+				vdd_l8_16_30-supply = <&vreg_vph_pwr>;
-+				vdd_l9_10_18_22-supply = <&vreg_vph_pwr>;
-+				vdd_l13_19_23_24-supply = <&vreg_vph_pwr>;
-+				vdd_l14_15-supply = <&pm8994_s5>;
-+				vdd_l17_29-supply = <&vreg_vph_pwr>;
-+				vdd_l20_21-supply = <&vreg_vph_pwr>;
-+				vdd_l25-supply = <&pm8994_s5>;
-+				vdd_lvs1_2 = <&pm8994_s4>;
-+
-+				s1 {
-+					regulator-min-microvolt = <800000>;
-+					regulator-max-microvolt = <800000>;
-+				};
-+
-+				s2 {
-+					/* TODO */
-+				};
-+
-+				s3 {
-+					regulator-min-microvolt = <1300000>;
-+					regulator-max-microvolt = <1300000>;
-+				};
-+
-+				s4 {
-+					regulator-min-microvolt = <1800000>;
-+					regulator-max-microvolt = <1800000>;
-+					regulator-allow-set-load;
-+					regulator-system-load = <325000>;
-+				};
-+
-+				s5 {
-+					regulator-min-microvolt = <2150000>;
-+					regulator-max-microvolt = <2150000>;
-+				};
-+
-+				s7 {
-+					regulator-min-microvolt = <1000000>;
-+					regulator-max-microvolt = <1000000>;
-+				};
-+
-+				l1 {
-+					regulator-min-microvolt = <1000000>;
-+					regulator-max-microvolt = <1000000>;
-+				};
-+
-+				l2 {
-+					regulator-min-microvolt = <1250000>;
-+					regulator-max-microvolt = <1250000>;
-+				};
-+
-+				l3 {
-+					regulator-min-microvolt = <1200000>;
-+					regulator-max-microvolt = <1200000>;
-+				};
-+
-+				l4 {
-+					regulator-min-microvolt = <1225000>;
-+					regulator-max-microvolt = <1225000>;
-+				};
-+
-+				l5 {
-+					/* TODO */
-+				};
-+
-+				l6 {
-+					regulator-min-microvolt = <1800000>;
-+					regulator-max-microvolt = <1800000>;
-+				};
-+
-+				l7 {
-+					/* TODO */
-+				};
-+
-+				l8 {
-+					regulator-min-microvolt = <1800000>;
-+					regulator-max-microvolt = <1800000>;
-+				};
-+
-+				l9 {
-+					regulator-min-microvolt = <1800000>;
-+					regulator-max-microvolt = <1800000>;
-+				};
-+
-+				l10 {
-+					regulator-min-microvolt = <1800000>;
-+					regulator-max-microvolt = <1800000>;
-+					qcom,init-voltage = <1800000>;
-+				};
-+
-+				l11 {
-+					regulator-min-microvolt = <1200000>;
-+					regulator-max-microvolt = <1200000>;
-+					qcom,init-voltage = <1200000>;
-+				};
-+
-+				l12 {
-+					regulator-min-microvolt = <1800000>;
-+					regulator-max-microvolt = <1800000>;
-+					qcom,init-voltage = <1800000>;
-+					proxy-supply = <&pm8994_l12>;
-+					qcom,proxy-consumer-enable;
-+					qcom,proxy-consumer-current = <10000>;
-+					status = "okay";
-+				};
-+
-+				l13 {
-+					regulator-min-microvolt = <1800000>;
-+					regulator-max-microvolt = <2950000>;
-+					qcom,init-voltage = <2950000>;
-+					status = "okay";
-+				};
-+
-+				l14 {
-+					regulator-min-microvolt = <1200000>;
-+					regulator-max-microvolt = <1200000>;
-+					qcom,init-voltage = <1200000>;
-+					proxy-supply = <&pm8994_l14>;
-+					qcom,proxy-consumer-enable;
-+					qcom,proxy-consumer-current = <10000>;
-+					status = "okay";
-+				};
-+
-+				l15 {
-+					regulator-min-microvolt = <1800000>;
-+					regulator-max-microvolt = <1800000>;
-+					qcom,init-voltage = <1800000>;
-+					status = "okay";
-+				};
-+
-+				l16 {
-+					regulator-min-microvolt = <2700000>;
-+					regulator-max-microvolt = <2700000>;
-+					qcom,init-voltage = <2700000>;
-+					status = "okay";
-+				};
-+
-+				l17 {
-+					regulator-min-microvolt = <2700000>;
-+					regulator-max-microvolt = <2700000>;
-+					qcom,init-voltage = <2700000>;
-+					status = "okay";
-+				};
-+
-+				l18 {
-+					regulator-min-microvolt = <3000000>;
-+					regulator-max-microvolt = <3000000>;
-+					regulator-always-on;
-+					qcom,init-voltage = <3000000>;
-+					qcom,init-ldo-mode = <1>;
-+				};
-+
-+				l19 {
-+					regulator-min-microvolt = <1800000>;
-+					regulator-max-microvolt = <1800000>;
-+					qcom,init-voltage = <1800000>;
-+					status = "okay";
-+				};
-+
-+				l20 {
-+					regulator-min-microvolt = <2950000>;
-+					regulator-max-microvolt = <2950000>;
-+					regulator-always-on;
-+					regulator-boot-on;
-+					regulator-allow-set-load;
-+					regulator-system-load = <570000>;
-+				};
-+
-+				l21 {
-+					regulator-min-microvolt = <1800000>;
-+					regulator-max-microvolt = <1800000>;
-+					regulator-always-on;
-+					qcom,init-voltage = <1800000>;
-+				};
-+
-+				l22 {
-+					regulator-min-microvolt = <3100000>;
-+					regulator-max-microvolt = <3100000>;
-+					qcom,init-voltage = <3100000>;
-+				};
-+
-+				l23 {
-+					regulator-min-microvolt = <2800000>;
-+					regulator-max-microvolt = <2800000>;
-+					qcom,init-voltage = <2800000>;
-+				};
-+
-+				l24 {
-+					regulator-min-microvolt = <3075000>;
-+					regulator-max-microvolt = <3150000>;
-+					qcom,init-voltage = <3075000>;
-+				};
-+
-+				l25 {
-+					regulator-min-microvolt = <1800000>;
-+					regulator-max-microvolt = <1800000>;
-+					qcom,init-voltage = <1800000>;
-+				};
-+
-+				l26 {
-+					/* TODO: value from downstream
-+					regulator-min-microvolt = <987500>;
-+					fails to apply */
-+				};
-+
-+				l27 {
-+					regulator-min-microvolt = <1050000>;
-+					regulator-max-microvolt = <1050000>;
-+					qcom,init-voltage = <1050000>;
-+				};
-+
-+				l28 {
-+					regulator-min-microvolt = <1000000>;
-+					regulator-max-microvolt = <1000000>;
-+					qcom,init-voltage = <1000000>;
-+					proxy-supply = <&pm8994_l28>;
-+					qcom,proxy-consumer-enable;
-+					qcom,proxy-consumer-current = <10000>;
-+				};
-+
-+				l29 {
-+					/* TODO: Unsupported voltage range.
-+					regulator-min-microvolt = <2800000>;
-+					regulator-max-microvolt = <2800000>;
-+					qcom,init-voltage = <2800000>;
-+					*/
-+				};
-+
-+				l30 {
-+					/* TODO: get this verified
-+					regulator-min-microvolt = <1800000>;
-+					regulator-max-microvolt = <1800000>;
-+					qcom,init-voltage = <1800000>;
-+					*/
-+				};
-+
-+				l31 {
-+					regulator-min-microvolt = <1262500>;
-+					regulator-max-microvolt = <1262500>;
-+					qcom,init-voltage = <1262500>;
-+				};
-+
-+				l32 {
-+					/* TODO: get this verified
-+					regulator-min-microvolt = <1800000>;
-+					regulator-max-microvolt = <1800000>;
-+					qcom,init-voltage = <1800000>;
-+					*/
-+				};
-+			};
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/qcom/msm8994-smd-rpm.dtsi b/arch/arm64/boot/dts/qcom/msm8994-smd-rpm.dtsi
-deleted file mode 100644
-index 31e3eb6ab515..000000000000
---- a/arch/arm64/boot/dts/qcom/msm8994-smd-rpm.dtsi
-+++ /dev/null
-@@ -1,268 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/* Copyright (c) 2015, LGE Inc. All rights reserved.
-- * Copyright (c) 2016, The Linux Foundation. All rights reserved.
-- */
--
--&smd_rpm {
--	rpm {
--		rpm_requests {
--			pm8994-regulators {
--
--				vdd_l1-supply = <&pm8994_s1>;
--				vdd_l2_26_28-supply = <&pm8994_s3>;
--				vdd_l3_11-supply = <&pm8994_s3>;
--				vdd_l4_27_31-supply = <&pm8994_s3>;
--				vdd_l5_7-supply = <&pm8994_s3>;
--				vdd_l6_12_32-supply = <&pm8994_s5>;
--				vdd_l8_16_30-supply = <&vreg_vph_pwr>;
--				vdd_l9_10_18_22-supply = <&vreg_vph_pwr>;
--				vdd_l13_19_23_24-supply = <&vreg_vph_pwr>;
--				vdd_l14_15-supply = <&pm8994_s5>;
--				vdd_l17_29-supply = <&vreg_vph_pwr>;
--				vdd_l20_21-supply = <&vreg_vph_pwr>;
--				vdd_l25-supply = <&pm8994_s5>;
--				vdd_lvs1_2 = <&pm8994_s4>;
--
--				s1 {
--					regulator-min-microvolt = <800000>;
--					regulator-max-microvolt = <800000>;
--				};
--
--				s2 {
--					/* TODO */
--				};
--
--				s3 {
--					regulator-min-microvolt = <1300000>;
--					regulator-max-microvolt = <1300000>;
--				};
--
--				s4 {
--					regulator-min-microvolt = <1800000>;
--					regulator-max-microvolt = <1800000>;
--					regulator-allow-set-load;
--					regulator-system-load = <325000>;
--				};
--
--				s5 {
--					regulator-min-microvolt = <2150000>;
--					regulator-max-microvolt = <2150000>;
--				};
--
--				s7 {
--					regulator-min-microvolt = <1000000>;
--					regulator-max-microvolt = <1000000>;
--				};
--
--				l1 {
--					regulator-min-microvolt = <1000000>;
--					regulator-max-microvolt = <1000000>;
--				};
--
--				l2 {
--					regulator-min-microvolt = <1250000>;
--					regulator-max-microvolt = <1250000>;
--				};
--
--				l3 {
--					regulator-min-microvolt = <1200000>;
--					regulator-max-microvolt = <1200000>;
--				};
--
--				l4 {
--					regulator-min-microvolt = <1225000>;
--					regulator-max-microvolt = <1225000>;
--				};
--
--				l5 {
--					/* TODO */
--				};
--
--				l6 {
--					regulator-min-microvolt = <1800000>;
--					regulator-max-microvolt = <1800000>;
--				};
--
--				l7 {
--					/* TODO */
--				};
--
--				l8 {
--					regulator-min-microvolt = <1800000>;
--					regulator-max-microvolt = <1800000>;
--				};
--
--				l9 {
--					regulator-min-microvolt = <1800000>;
--					regulator-max-microvolt = <1800000>;
--				};
--
--				l10 {
--					regulator-min-microvolt = <1800000>;
--					regulator-max-microvolt = <1800000>;
--					qcom,init-voltage = <1800000>;
--				};
--
--				l11 {
--					regulator-min-microvolt = <1200000>;
--					regulator-max-microvolt = <1200000>;
--					qcom,init-voltage = <1200000>;
--				};
--
--				l12 {
--					regulator-min-microvolt = <1800000>;
--					regulator-max-microvolt = <1800000>;
--					qcom,init-voltage = <1800000>;
--					proxy-supply = <&pm8994_l12>;
--					qcom,proxy-consumer-enable;
--					qcom,proxy-consumer-current = <10000>;
--					status = "okay";
--				};
--
--				l13 {
--					regulator-min-microvolt = <1800000>;
--					regulator-max-microvolt = <2950000>;
--					qcom,init-voltage = <2950000>;
--					status = "okay";
--				};
--
--				l14 {
--					regulator-min-microvolt = <1200000>;
--					regulator-max-microvolt = <1200000>;
--					qcom,init-voltage = <1200000>;
--					proxy-supply = <&pm8994_l14>;
--					qcom,proxy-consumer-enable;
--					qcom,proxy-consumer-current = <10000>;
--					status = "okay";
--				};
--
--				l15 {
--					regulator-min-microvolt = <1800000>;
--					regulator-max-microvolt = <1800000>;
--					qcom,init-voltage = <1800000>;
--					status = "okay";
--				};
--
--				l16 {
--					regulator-min-microvolt = <2700000>;
--					regulator-max-microvolt = <2700000>;
--					qcom,init-voltage = <2700000>;
--					status = "okay";
--				};
--
--				l17 {
--					regulator-min-microvolt = <2700000>;
--					regulator-max-microvolt = <2700000>;
--					qcom,init-voltage = <2700000>;
--					status = "okay";
--				};
--
--				l18 {
--					regulator-min-microvolt = <3000000>;
--					regulator-max-microvolt = <3000000>;
--					regulator-always-on;
--					qcom,init-voltage = <3000000>;
--					qcom,init-ldo-mode = <1>;
--				};
--
--				l19 {
--					regulator-min-microvolt = <1800000>;
--					regulator-max-microvolt = <1800000>;
--					qcom,init-voltage = <1800000>;
--					status = "okay";
--				};
--
--				l20 {
--					regulator-min-microvolt = <2950000>;
--					regulator-max-microvolt = <2950000>;
--					regulator-always-on;
--					regulator-boot-on;
--					regulator-allow-set-load;
--					regulator-system-load = <570000>;
--				};
--
--				l21 {
--					regulator-min-microvolt = <1800000>;
--					regulator-max-microvolt = <1800000>;
--					regulator-always-on;
--					qcom,init-voltage = <1800000>;
--				};
--
--				l22 {
--					regulator-min-microvolt = <3100000>;
--					regulator-max-microvolt = <3100000>;
--					qcom,init-voltage = <3100000>;
--				};
--
--				l23 {
--					regulator-min-microvolt = <2800000>;
--					regulator-max-microvolt = <2800000>;
--					qcom,init-voltage = <2800000>;
--				};
--
--				l24 {
--					regulator-min-microvolt = <3075000>;
--					regulator-max-microvolt = <3150000>;
--					qcom,init-voltage = <3075000>;
--				};
--
--				l25 {
--					regulator-min-microvolt = <1800000>;
--					regulator-max-microvolt = <1800000>;
--					qcom,init-voltage = <1800000>;
--				};
--
--				l26 {
--					/* TODO: value from downstream
--					regulator-min-microvolt = <987500>;
--					fails to apply */
--				};
--
--				l27 {
--					regulator-min-microvolt = <1050000>;
--					regulator-max-microvolt = <1050000>;
--					qcom,init-voltage = <1050000>;
--				};
--
--				l28 {
--					regulator-min-microvolt = <1000000>;
--					regulator-max-microvolt = <1000000>;
--					qcom,init-voltage = <1000000>;
--					proxy-supply = <&pm8994_l28>;
--					qcom,proxy-consumer-enable;
--					qcom,proxy-consumer-current = <10000>;
--				};
--
--				l29 {
--					/* TODO: Unsupported voltage range.
--					regulator-min-microvolt = <2800000>;
--					regulator-max-microvolt = <2800000>;
--					qcom,init-voltage = <2800000>;
--					*/
--				};
--
--				l30 {
--					/* TODO: get this verified
--					regulator-min-microvolt = <1800000>;
--					regulator-max-microvolt = <1800000>;
--					qcom,init-voltage = <1800000>;
--					*/
--				};
--
--				l31 {
--					regulator-min-microvolt = <1262500>;
--					regulator-max-microvolt = <1262500>;
--					qcom,init-voltage = <1262500>;
--				};
--
--				l32 {
--					/* TODO: get this verified
--					regulator-min-microvolt = <1800000>;
--					regulator-max-microvolt = <1800000>;
--					qcom,init-voltage = <1800000>;
--					*/
--				};
--			};
--		};
--	};
--};
+> BTW, I have tested your "v1" against Linux v5.7 (see [1]) - just
+> yesterday with Linux v5.7.5-rc1.
+> 
+> Is it possible to have a v2 of this patchset on top od Linux v5.7 - if
+> you do not mind.
+
+Since it's only going to be for post-v5.8, I'm fine skipping the v5.7
+testing. Mainly I'm looking at v5.8 and linux-next.
+
+Thanks for looking at it!
+
 -- 
-2.27.0
-
+Kees Cook
