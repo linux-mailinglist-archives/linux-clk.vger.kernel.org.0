@@ -2,65 +2,139 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF9A202369
-	for <lists+linux-clk@lfdr.de>; Sat, 20 Jun 2020 13:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E05AD202440
+	for <lists+linux-clk@lfdr.de>; Sat, 20 Jun 2020 16:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727983AbgFTLo2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 20 Jun 2020 07:44:28 -0400
-Received: from rdslmr.btconnect.com ([62.239.164.79]:50937 "EHLO
-        mail.btconnect.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728046AbgFTLo1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 20 Jun 2020 07:44:27 -0400
-X-Greylist: delayed 449 seconds by postgrey-1.27 at vger.kernel.org; Sat, 20 Jun 2020 07:44:14 EDT
-Received: from mail.btconnect.com (rd11780omr11.iuser.iroot.adidom.com [10.187.89.172])
-        by rd11780slr11.dci.bt.com (MOS 4.4.8-GA)
-        with ESMTP id ARU41794;
-        Sat, 20 Jun 2020 12:36:02 +0100
-Received: (from localhost [127.0.0.1])
-        by rd11780omr11.dci.bt.com (MOS 4.4.8-GA)
-        id OQZ44616;
-        Sat, 20 Jun 2020 12:36:02 +0100 (BST)
-Received: from 156.96.58.242 (EHLO User) ([156.96.58.242])
-        by rd11780omr11.dci.bt.com
-        with ESMTP id OQZ44291 (AUTH IAN.ACFGROUP);
-        Sat, 20 Jun 2020 12:35:59 +0100 (BST)
-Reply-To: <mariaforlife2@gmail.com>
-From:   "Mrs Maria Talley" <IAN.ACFGROUP@btconnect.com>
-Subject: May the Peace of the Lord be with you
-Date:   Sat, 20 Jun 2020 07:35:56 -0400
+        id S1728210AbgFTOrz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 20 Jun 2020 10:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728217AbgFTOry (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 20 Jun 2020 10:47:54 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6472C06174E;
+        Sat, 20 Jun 2020 07:47:53 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id l26so10910902wme.3;
+        Sat, 20 Jun 2020 07:47:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N8jOrTg8zSJgPYru4awajjukDIxGwnSXepcjCCU9jaM=;
+        b=oTMFaBITUl8uK7XiinTEfCZiUEmv59lJt6w/qFpLtESVedXgoMFZ20cUtZ/tpnXrEx
+         mtF/VoHdorOsNfzCoU71HRijBVZiOlzIROT0rEB2RnIi6I4MTzxIThU/GDL9KMELFg3n
+         wtQ0/ziQ4/UmdaRrrN5JOcTvWGlUcTh+zIVQvwMFaxZ5Kx/r/AvXDob7QimXG0DMTm0C
+         PeUxzax0CMd8+Hwspe2d2WKZmL3JXtwsNesJneZLgMXav3zbO9j71BZ3Rbxsg1m9rbHP
+         zLl9V4dc+XQvJasuuNsoFsJeLxzFE9UXoZtondymPdrP9hqHxDESQnL0qsJtgCu1xr4Y
+         Ukyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=N8jOrTg8zSJgPYru4awajjukDIxGwnSXepcjCCU9jaM=;
+        b=pXJqhx4Svbu0FGBYLnHiSxeJs3cvwmKYusfM5iYvu22RMzWasqXcWmOyvEw9roXPG+
+         Z8fTyiEe3oYUBOxSuhC0K/wad1JonDKmY+V4+sN/jUrwctuNCZs7S2UlWu2KZ0P6/kID
+         feJP03qmQhfzCthOzkAMp8p7/lwFEH7m53zvD5PS2sjJvacJ7HJSyLBQCuoyB0aYHQ+q
+         XhxblkTDCrESvXlexRDyX5H3ZLTka7R2dIFYZJctElLRFyNegxNX29DG0gifujEaygf9
+         ZEn9RXzl1t0zAy2/sxF7keNoWNuZBozGMk0AJ8/qnpPzYNTP10h7wNmaJX3uGt0r5a7m
+         ndEw==
+X-Gm-Message-State: AOAM530jzEi8t4tcDIGfPiGoyfDrfuIEqNdqsolQOCRaVTS+wxWAMVzJ
+        IWeM05SCUEhnpo9seOLdvGU89q3FMxo=
+X-Google-Smtp-Source: ABdhPJyQttuLJ44l2HnKLjW9EtfdwFUtakh67NqEPJf7fqTUga2JSt9SCwbKgbLpm1F71HuXztMNtw==
+X-Received: by 2002:a05:600c:2116:: with SMTP id u22mr8747799wml.97.1592664471198;
+        Sat, 20 Jun 2020 07:47:51 -0700 (PDT)
+Received: from localhost.localdomain (abae138.neoplus.adsl.tpnet.pl. [83.6.168.138])
+        by smtp.googlemail.com with ESMTPSA id 63sm11928379wra.86.2020.06.20.07.47.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Jun 2020 07:47:50 -0700 (PDT)
+From:   Konrad Dybcio <konradybcio@gmail.com>
+To:     skrzynka@konradybcio.pl
+Cc:     Konrad Dybcio <konradybcio@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 00/21] MSM8994 peripheral enablement, DTS updates
+Date:   Sat, 20 Jun 2020 16:46:16 +0200
+Message-Id: <20200620144639.335093-1-konradybcio@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <202006201135.OQZ44291@rd11780omr11.dci.bt.com>
-X-Mirapoint-IP-Reputation: reputation=Bad-1,
-        source=Queried,
-        refid=tid=0001.0A782F92.5EEDF402.0007,
-        actions=TAG
-X-Junkmail: UCE(50)
-X-Junkmail-Status: score=50/50, host=rd11780omr11.dci.bt.com
-X-Junkmail-Signature-Raw: score=bulk(0),
-        refid=str=0001.0A782F23.5EEDF289.001F,ss=3,sh,re=0.000,recu=0.000,reip=0.000,cl=3,cld=1,fgs=0,
-        ip=156.96.58.242,
-        so=2016-11-06 16:00:04,
-        dmn=2013-03-21 17:37:32,
-        mode=multiengine
-X-Junkmail-IWF: false
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-May the Peace of the Lord be with you!
+Hi!
 
-Please this is an urgent solicitation for assistance, I'm Mrs Maria Talley from United States of America, but I lived in London for many years. I am 54 years old. I was diagnosed of cancer for about 2 years ago. This letter comes from a devastated, sorrowful and emotional laden soul that needs compassion from a kind and conscience driven person. I need someone who has a sincere compassionate heart of international humanitarian charity. There is some properties left by my late husband, which I sold, because the doctor had diagnosed me that I am in my last days, that I can not live anymore longer, so I have to sale all those properties that was left by my late husband.
+In this series I added support for various buses and peripherals
+such as I2C or SMD RPM. I also did some housekeeping when it comes
+to the DTS. This series also includes a new board (SoMC Kitakami
+Sumire / Xperia Z5).
 
-I have deposited the sum of $9.5 Million in a Bank in United States of America, which I sold from my properties and deposited it in New York City Bank in America. I want you to help me use this funds to help the less privilege, the motherless baby homes and hospitals in your country before I die. I want you to take 40 percent of the total money for your personal use, while 60% of the money will go to charity. I will appreciate your utmost confidentiality and trust in this matter to accomplish my heart desire, as I don't want anything that will jeopardize my last wish. If you are a good and honest person write back to me for more.
+I have a MMCC driver coming along with GCC updates/completion
+(almost ready, need to polish a few things) and I sincerely 
+hope somebody is going to write a 20nm DSI PLL driver (for 8992/4)
+as I have no clue how that works.
 
-Thanks and God bless you,
-Mrs Maria Talley
+Also, some Lumia (yes, Lumia!) device trees are coming soon(tm).
+
+The patchet depends on:
+- https://patchwork.kernel.org/patch/11584267/ (even though bullhead used
+that for a few years and the property never existed but nobody noticed)
+
+- https://patchwork.kernel.org/patch/11580845/ (no point duplicating it for 8994)
+
+
+Konrad Dybcio (21):
+  clk: qcom: smd: Add support for MSM8992/4 rpm clocks
+  arm64: dts: qcom: msm8994: Add SPMI PMIC arbiter device
+  arm64: dts: qcom: msm8994: Add a proper CPU map
+  arm64: dts: qcom: msm8994: Wrap clock nodes into clocks {}
+  arm64: dts: qcom: msm8994: Rename the smem node and remove its unit
+    address
+  arm64: dts: qcom: msm8994: Rename clock_gcc label to gcc
+  arm64: dts: qcom: msm8994: Add apcs node
+  arm64: dts: qcom: msm8994: Add pmu node
+  arm64: dts: qcom: msm8994: Add PSCI node
+  arm64: dts: qcom: msm8994: Add support for SMD RPM
+  arm64: dts: qcom: msm8994: Add SDHCI1 node
+  arm64: dts: qcom: msm8994: Remove qcom,msm-id and qcom-pmic-id
+    properties
+  arm64: dts: qcom: msm8994: Make comments C style
+  arm64: dts: qcom: msm8994: Add SCM node
+  arm64: dts: qcom: msm8994: Add BLSP2 UART2 node
+  arm64: dts: qcom: msm8994: Add I2C, SPI and BLSP DMA nodes
+  arm64: dts: qcom: Update msm8994 pin configuration
+  regulator: qcom_smd: Fix pmi8994 label
+  arm64: dts: qcom: angler: Add qcom,msm-id and pmic-id
+  arm64: dts: qcom: Add support for Sony Xperia Z5 (SoMC Sumire-RoW)
+  arm64: dts: qcom: Move msm8994-smd-rpm contents to lg-bullhead.
+
+ .../devicetree/bindings/clock/qcom,rpmcc.txt  |   2 +
+ arch/arm64/boot/dts/qcom/Makefile             |   1 +
+ .../dts/qcom/msm8992-bullhead-rev-101.dts     | 264 +++++++++-
+ .../boot/dts/qcom/msm8994-angler-rev-101.dts  |   2 +
+ arch/arm64/boot/dts/qcom/msm8994-pins.dtsi    | 272 +++++++++++
+ arch/arm64/boot/dts/qcom/msm8994-smd-rpm.dtsi | 268 -----------
+ .../msm8994-sony-xperia-kitakami-sumire.dts   | 410 ++++++++++++++++
+ arch/arm64/boot/dts/qcom/msm8994.dtsi         | 452 +++++++++++++++++-
+ drivers/clk/qcom/clk-smd-rpm.c                | 172 +++++++
+ drivers/regulator/qcom_smd-regulator.c        |   2 +-
+ include/dt-bindings/clock/qcom,rpmcc.h        |   4 +
+ 11 files changed, 1556 insertions(+), 293 deletions(-)
+ delete mode 100644 arch/arm64/boot/dts/qcom/msm8994-smd-rpm.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami-sumire.dts
+
+-- 
+2.27.0
+
