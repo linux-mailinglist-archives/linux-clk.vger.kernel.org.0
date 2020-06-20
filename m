@@ -2,51 +2,52 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB392020B9
-	for <lists+linux-clk@lfdr.de>; Sat, 20 Jun 2020 05:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA2C202082
+	for <lists+linux-clk@lfdr.de>; Sat, 20 Jun 2020 05:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387526AbgFTDcf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 19 Jun 2020 23:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
+        id S1733139AbgFTDbS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 19 Jun 2020 23:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733077AbgFTDbB (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 19 Jun 2020 23:31:01 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6F5C0619F2
-        for <linux-clk@vger.kernel.org>; Fri, 19 Jun 2020 20:30:25 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id z63so5387689pfb.1
-        for <linux-clk@vger.kernel.org>; Fri, 19 Jun 2020 20:30:25 -0700 (PDT)
+        with ESMTP id S1733144AbgFTDbL (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 19 Jun 2020 23:31:11 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB16C0610E7
+        for <linux-clk@vger.kernel.org>; Fri, 19 Jun 2020 20:30:26 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id k2so4994597pjs.2
+        for <linux-clk@vger.kernel.org>; Fri, 19 Jun 2020 20:30:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7ExlyNd4C6Vtqo5InL4xGzXnaPAWUSdxdUBoxlRz8EM=;
-        b=NXIjEZzmAlY5fdC/DwXct9GYDHogfeUCrjSkTO4JXjF9UTv+cR2dEUWt3FWlTNaAHp
-         ArVHLS7GaAaX0GRdppC6MVL4iulBAnXl0RDRkmjEpohR99AIp9TcfcZKNXy8KweQ5j+M
-         qKbddjlMm6r/UiOtSlPQhvc966Inhn9BIPgP4=
+        bh=I53/n5ydJ9yzbnxtmoDriMZB814XLzfic4sznaesD40=;
+        b=Rutn4YPkcmqXLdEaPjRwH0N9ohbI/CzpH9cf5y9vG4nYpAw1nQr5aBkVvJ5iC9ui6q
+         cLu5pHW/44+v6JlX39sxqMfNukxEy6S08EOmpnYgt90MBK4lvmz1Qm66oVfcHJZShxiQ
+         h7SFiaUV2yA5KII9Om+c9u+JdAg6xNa2K9JLA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7ExlyNd4C6Vtqo5InL4xGzXnaPAWUSdxdUBoxlRz8EM=;
-        b=JgiEsVSSzWTJUaAfTFunrY4JrnImo7yigpE9/G3W3fscRt66+LiriJsbLQQXGBieY3
-         25GgMriWhUHU5qYlwTkUrXzNEOjk5SwWTI4VXP00I0TSRwB59GSyjfNau7Hr72/z8zMm
-         WdGtZiB2zmqM8rhrMhb/tOtK2ZfZFa69wUhIJHsWRRT2kI78dQfrlah/PxKX6j23g9RP
-         EB3CpcC8WF0sa066y3WUwfJy3QRmbXDffxsFJUgI1WNDk9Xn6AB4rgXA/Y8GviQaSTiO
-         E7Rhme2plwtNOcgUD2ClJQAJYl4pKtUHF66+j3aXGe4B51IrGMX8BdLCxJ7cejA4GbEu
-         qd/Q==
-X-Gm-Message-State: AOAM5336bRRTCbGgKfWQO6o3Qgq3RINW0X/3zrQmw6N6Q7E0cg2JRH2u
-        yClSpYN1FOopilxb2A0WCIfZoA==
-X-Google-Smtp-Source: ABdhPJyAJ8Da6kpj1cpdp7acRpdjHPEasdxnBrzutMhIZjw6K4AKJtCbSzx12+H3IHWiTttzpZGpTg==
-X-Received: by 2002:a63:dd42:: with SMTP id g2mr5615212pgj.442.1592623825373;
-        Fri, 19 Jun 2020 20:30:25 -0700 (PDT)
+        bh=I53/n5ydJ9yzbnxtmoDriMZB814XLzfic4sznaesD40=;
+        b=faCfYa2KgJH4ocO6tVO2duv9TpLJlDeypwwY4T1wpnA3Dt34GfI2xHE5HlcyWO1FP6
+         WjtSKTAmae8uudcd6pgbm4fX8vsQWO9ildQRmbk+aQXhllqTv1mSDC7RpjIqmCdSk+AZ
+         rnirgmc6eHxkbj2vFgDav1GpcYkWtzHuNZ4P0DM6VClQjv+xibjLNbgCRou65Szs7/n2
+         xRchfQjXvjW9EJMYKX3DQbQI8Exd/CCUrsyo6rlrbQr+uhwAHXy5USW5eeOVR8YSX2bV
+         q5HW45005JSRTlfb4UsAIJTFHPtj0UmB665monpiGUGqAlN/YVN3FGm6iJG5SqtBTiGd
+         o5JA==
+X-Gm-Message-State: AOAM531X6i5kWrzyGHLROCVPs+inEsf0XCqCkPyOLlr2iMXCGj/WICsV
+        +WuZmVrjDn6BZGqYSyGMXoVz+A==
+X-Google-Smtp-Source: ABdhPJzDpg8kRLeVgrehMBlr+1UwoiUH6XXfWvLx404+vNnybEp9T2mmhskRjq6n4U4EQRsEK9B3AQ==
+X-Received: by 2002:a17:902:ff06:: with SMTP id f6mr10351618plj.22.1592623826055;
+        Fri, 19 Jun 2020 20:30:26 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n69sm7060385pjc.25.2020.06.19.20.30.20
+        by smtp.gmail.com with ESMTPSA id 17sm7373750pfn.19.2020.06.19.20.30.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 19 Jun 2020 20:30:20 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
+Cc:     Kees Cook <keescook@chromium.org>, Jason Yan <yanaijie@huawei.com>,
+        Chao Yu <yuchao0@huawei.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
         Alexander Potapenko <glider@google.com>,
@@ -58,9 +59,9 @@ Cc:     Kees Cook <keescook@chromium.org>,
         linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-spi@vger.kernel.org, linux-mm@kvack.org,
         clang-built-linux@googlegroups.com
-Subject: [PATCH v2 11/16] media: sur40: Remove uninitialized_var() usage
-Date:   Fri, 19 Jun 2020 20:30:02 -0700
-Message-Id: <20200620033007.1444705-12-keescook@chromium.org>
+Subject: [PATCH v2 12/16] f2fs: Eliminate usage of uninitialized_var() macro
+Date:   Fri, 19 Jun 2020 20:30:03 -0700
+Message-Id: <20200620033007.1444705-13-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200620033007.1444705-1-keescook@chromium.org>
 References: <20200620033007.1444705-1-keescook@chromium.org>
@@ -71,54 +72,56 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Using uninitialized_var() is dangerous as it papers over real bugs[1]
-(or can in the future), and suppresses unrelated compiler warnings (e.g.
-"unused variable"). If the compiler thinks it is uninitialized, either
-simply initialize the variable or make compiler changes. As a precursor
-to removing[2] this[3] macro[4], just remove this variable since it was
-actually unused:
+From: Jason Yan <yanaijie@huawei.com>
 
-drivers/input/touchscreen/sur40.c:459:6: warning: variable 'packet_id' set but not used [-Wunused-but-set-variable]
-  459 |  u32 packet_id;
-      |      ^~~~~~~~~
+This is an effort to eliminate the uninitialized_var() macro[1].
 
-However, in keeping with the documentation desires outlined in commit
-335abaea7a27 ("Input: sur40 - silence unnecessary noisy debug output"),
-comment out the assignment instead of removing it.
+The use of this macro is the wrong solution because it forces off ANY
+analysis by the compiler for a given variable. It even masks "unused
+variable" warnings.
 
-[1] https://lore.kernel.org/lkml/20200603174714.192027-1-glider@google.com/
-[2] https://lore.kernel.org/lkml/CA+55aFw+Vbj0i=1TGqCR5vQkCzWJ0QxK6CernOU6eedsudAixw@mail.gmail.com/
-[3] https://lore.kernel.org/lkml/CA+55aFwgbgqhbp1fkxvRKEpzyR5J8n1vKT1VZdz9knmPuXhOeg@mail.gmail.com/
-[4] https://lore.kernel.org/lkml/CA+55aFz2500WfbKXAx8s67wrm9=yVJu65TpLgN_ybYNv0VEOKA@mail.gmail.com/
+Quoted from Linus[2]:
 
-Fixes: 335abaea7a27 ("Input: sur40 - silence unnecessary noisy debug output")
+"It's a horrible thing to use, in that it adds extra cruft to the
+source code, and then shuts up a compiler warning (even the _reliable_
+warnings from gcc)."
+
+Fix it by remove this variable since it is not needed at all.
+
+[1] https://github.com/KSPP/linux/issues/81
+[2] https://lore.kernel.org/lkml/CA+55aFz2500WfbKXAx8s67wrm9=yVJu65TpLgN_ybYNv0VEOKA@mail.gmail.com/
+
+Suggested-by: Chao Yu <yuchao0@huawei.com>
+Signed-off-by: Jason Yan <yanaijie@huawei.com>
+Reviewed-by: Chao Yu <yuchao0@huawei.com>
+Link: https://lore.kernel.org/r/20200615085132.166470-1-yanaijie@huawei.com
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- drivers/input/touchscreen/sur40.c | 4 +---
+ fs/f2fs/data.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/input/touchscreen/sur40.c b/drivers/input/touchscreen/sur40.c
-index 34d31c7ec8ba..620cdd7d214a 100644
---- a/drivers/input/touchscreen/sur40.c
-+++ b/drivers/input/touchscreen/sur40.c
-@@ -456,8 +456,6 @@ static void sur40_poll(struct input_dev *input)
- {
- 	struct sur40_state *sur40 = input_get_drvdata(input);
- 	int result, bulk_read, need_blobs, packet_blobs, i;
--	u32 uninitialized_var(packet_id);
--
- 	struct sur40_header *header = &sur40->bulk_in_buffer->header;
- 	struct sur40_blob *inblob = &sur40->bulk_in_buffer->blobs[0];
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 326c63879ddc..3753ba06531b 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -2856,7 +2856,6 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+ 	};
+ #endif
+ 	int nr_pages;
+-	pgoff_t uninitialized_var(writeback_index);
+ 	pgoff_t index;
+ 	pgoff_t end;		/* Inclusive */
+ 	pgoff_t done_index;
+@@ -2875,8 +2874,7 @@ static int f2fs_write_cache_pages(struct address_space *mapping,
+ 		clear_inode_flag(mapping->host, FI_HOT_DATA);
  
-@@ -491,7 +489,7 @@ static void sur40_poll(struct input_dev *input)
- 		if (need_blobs == -1) {
- 			need_blobs = le16_to_cpu(header->count);
- 			dev_dbg(sur40->dev, "need %d blobs\n", need_blobs);
--			packet_id = le32_to_cpu(header->packet_id);
-+			/* packet_id = le32_to_cpu(header->packet_id); */
- 		}
- 
- 		/*
+ 	if (wbc->range_cyclic) {
+-		writeback_index = mapping->writeback_index; /* prev offset */
+-		index = writeback_index;
++		index = mapping->writeback_index; /* prev offset */
+ 		end = -1;
+ 	} else {
+ 		index = wbc->range_start >> PAGE_SHIFT;
 -- 
 2.25.1
 
