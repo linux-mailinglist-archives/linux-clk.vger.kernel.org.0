@@ -2,109 +2,93 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD03202EC2
-	for <lists+linux-clk@lfdr.de>; Mon, 22 Jun 2020 05:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B09BE202F3D
+	for <lists+linux-clk@lfdr.de>; Mon, 22 Jun 2020 06:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726714AbgFVDA3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 21 Jun 2020 23:00:29 -0400
-Received: from smtp2207-205.mail.aliyun.com ([121.197.207.205]:53166 "EHLO
-        smtp2207-205.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731220AbgFVDA1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 21 Jun 2020 23:00:27 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.2037645|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0497008-0.00175125-0.948548;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03294;MF=frank@allwinnertech.com;NM=1;PH=DS;RN=27;RT=27;SR=0;TI=SMTPD_---.HqMydez_1592794774;
-Received: from allwinnertech.com(mailfrom:frank@allwinnertech.com fp:SMTPD_---.HqMydez_1592794774)
-          by smtp.aliyun-inc.com(10.147.40.44);
-          Mon, 22 Jun 2020 11:00:21 +0800
-From:   Frank Lee <frank@allwinnertech.com>
-To:     robh+dt@kernel.org, mripard@kernel.org, wens@csie.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        srinivas.kandagatla@linaro.org, linus.walleij@linaro.org,
-        anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        p.zabel@pengutronix.de, clabbe@baylibre.com, icenowy@aosc.io,
-        megous@megous.com, karlp@tweak.net.au, bage@linutronix.de
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        huangshuosheng@allwinnertech.com, liyong@allwinnertech.com,
-        Frank Lee <frank@allwinnertech.com>
-Subject: [PATCH v2 11/11] arm64: allwinner: A100: add support for Allwinner Perf1 board
-Date:   Mon, 22 Jun 2020 10:59:07 +0800
-Message-Id: <20200622025907.32574-12-frank@allwinnertech.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20200622025907.32574-1-frank@allwinnertech.com>
-References: <20200622025907.32574-1-frank@allwinnertech.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        id S1726104AbgFVE2i (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 22 Jun 2020 00:28:38 -0400
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:15666 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725767AbgFVE2i (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 22 Jun 2020 00:28:38 -0400
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 21 Jun 2020 21:28:37 -0700
+Received: from sivaprak-linux.qualcomm.com ([10.201.3.202])
+  by ironmsg01-sd.qualcomm.com with ESMTP; 21 Jun 2020 21:28:33 -0700
+Received: by sivaprak-linux.qualcomm.com (Postfix, from userid 459349)
+        id D187021844; Mon, 22 Jun 2020 09:58:31 +0530 (IST)
+From:   Sivaprakash Murugesan <sivaprak@codeaurora.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        sivaprak@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V8 0/4] Add APSS clock controller support for IPQ6018
+Date:   Mon, 22 Jun 2020 09:58:08 +0530
+Message-Id: <1592800092-20533-1-git-send-email-sivaprak@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-A100 perf1 is an Allwinner A100-based SBC, with the following features:
+The CPU on Qualcomm's IPQ6018 devices are primarily fed by APSS PLL and XO,
+these are connected to a clock mux and enable block.
 
-- 1GiB DDR3 DRAM
-- AXP803 PMIC
-- 2 USB 2.0 ports
-- MicroSD slot and on-board eMMC module
-- on-board Nand flash
-- ···
+This patch series adds support for these clocks and inturn enables clocks
+required for CPU freq.
 
-Adds initial support for it, including the UART.
+[V8]
+ * In patch 1 changed compatible string from const to enum
+ * Since this change is minimal retained Review tag from Rob
+ * In patch 3 re added Ack from Rob
+[V7]
+ * Removed dts patch from this series, will send that separately
+ * Addressed Rob's minor comment on the binding
+ * Patch 1 depends on a53 pll bindings
+   https://lkml.org/lkml/2020/5/4/60
+[V6]
+ * Split mailbox driver from this series, mailbox changes will sent as a
+   separate series
+ * Addressed review comments from Stephen
+[V5]
+ * Addressed Bjorn comments on apss clk and dt-bindings
+ * Patch 2 depends on a53 pll dt-bindings
+   https://www.spinics.net/lists/linux-clk/msg48358.html  
+[V4]
+ * Re-written PLL found on IPQ platforms as a separate driver
+ * Addressed stephen's comments on apss clock controller and pll
+ * Addressed Rob's review comments on bindings
+ * moved a53 pll binding from this series as it is not applicable, will send
+   it separately.
+[V3]
+ * Fixed dt binding check error in patch2
+   dt-bindings: clock: Add YAML schemas for QCOM A53 PLL
+[V2]
+ * Restructred the patch series as there are two different HW blocks,
+   the mux and enable belongs to the apcs block and PLL has a separate HW
+   block.
+ * Converted qcom mailbox and qcom a53 pll documentation to yaml.
+ * Addressed review comments from Stephen, Rob and Sibi where it is applicable.
+ * Changed this cover letter to state the purpose of this patch series
 
-Signed-off-by: Frank Lee <frank@allwinnertech.com>
----
- arch/arm64/boot/dts/allwinner/Makefile             |  1 +
- .../dts/allwinner/sun50i-a100-allwinner-perf1.dts  | 27 ++++++++++++++++++++++
- 2 files changed, 28 insertions(+)
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
+Sivaprakash Murugesan (4):
+  dt-bindings: clock: add ipq6018 a53 pll compatible
+  clk: qcom: Add ipq apss pll driver
+  clk: qcom: Add DT bindings for ipq6018 apss clock controller
+  clk: qcom: Add ipq6018 apss clock controller
 
-diff --git a/arch/arm64/boot/dts/allwinner/Makefile b/arch/arm64/boot/dts/allwinner/Makefile
-index e4d3cd0..ab780db 100644
---- a/arch/arm64/boot/dts/allwinner/Makefile
-+++ b/arch/arm64/boot/dts/allwinner/Makefile
-@@ -14,6 +14,7 @@ dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-pinephone-1.1.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-pinetab.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-sopine-baseboard.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a64-teres-i.dtb
-+dtb-$(CONFIG_ARCH_SUNXI) += sun50i-a100-allwinner-perf1.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h5-bananapi-m2-plus.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h5-bananapi-m2-plus-v1.2.dtb
- dtb-$(CONFIG_ARCH_SUNXI) += sun50i-h5-emlid-neutis-n5-devboard.dtb
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts b/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
-new file mode 100644
-index 0000000..d03fa26
---- /dev/null
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-+/*
-+ * Copyright (c) 2020 Frank Lee <frank@allwinnertech.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include "sun50i-a100.dtsi"
-+
-+/{
-+	model = "Allwinner A100 Perf1";
-+	compatible = "allwinner,a100-perf1", "allwinner,sun50i-a100";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+};
-+
-+&uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_pb_pins>;
-+	status = "okay";
-+};
+ .../devicetree/bindings/clock/qcom,a53pll.yaml     |  18 ++++
+ drivers/clk/qcom/Kconfig                           |  19 ++++
+ drivers/clk/qcom/Makefile                          |   2 +
+ drivers/clk/qcom/apss-ipq-pll.c                    |  95 ++++++++++++++++++
+ drivers/clk/qcom/apss-ipq6018.c                    | 106 +++++++++++++++++++++
+ include/dt-bindings/clock/qcom,apss-ipq.h          |  12 +++
+ 6 files changed, 252 insertions(+)
+ create mode 100644 drivers/clk/qcom/apss-ipq-pll.c
+ create mode 100644 drivers/clk/qcom/apss-ipq6018.c
+ create mode 100644 include/dt-bindings/clock/qcom,apss-ipq.h
+
 -- 
-1.9.1
+2.7.4
 
