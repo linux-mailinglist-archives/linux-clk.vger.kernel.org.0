@@ -2,74 +2,49 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB172032F3
-	for <lists+linux-clk@lfdr.de>; Mon, 22 Jun 2020 11:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4702032FD
+	for <lists+linux-clk@lfdr.de>; Mon, 22 Jun 2020 11:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726079AbgFVJJh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 22 Jun 2020 05:09:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44344 "EHLO mail.kernel.org"
+        id S1726521AbgFVJLL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 22 Jun 2020 05:11:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44698 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725819AbgFVJJg (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 22 Jun 2020 05:09:36 -0400
-Received: from mail.kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726461AbgFVJLK (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 22 Jun 2020 05:11:10 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 35611206C1;
-        Mon, 22 Jun 2020 09:09:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 54CE4206D7;
+        Mon, 22 Jun 2020 09:11:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592816976;
-        bh=wDDMlkh+4teMI1eFK9BzyCTummSg866L5B556UYV8h0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=nzzUEeHuknhQltm0BhnFEpvYcFAt+Cnpm2tV7pT3BsG57/FrmigBOyqc67baITCZ6
-         TIpx6cqL7qiwTWSjOX0yE4y8C2WSLU1bNjjKxfKVMW+vEI4CUPtXCKINbMiMYP3S+L
-         LMi2khLzIrYX0DMIi0rctXDUmwmEw0AB8GEK40k8=
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH] clk: Clean up kernel-doc errors
-Date:   Mon, 22 Jun 2020 02:09:35 -0700
-Message-Id: <20200622090935.213833-1-sboyd@kernel.org>
-X-Mailer: git-send-email 2.27.0.111.gc72c7da667-goog
+        s=default; t=1592817070;
+        bh=XHEAm1XCUcU0Y541Al++PNKo3s1W8HKmzZkB9eV3fRs=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=OsWFc5e/Tn6FVpkw/tqVu2cpElX32mleWOidHcca9m+l3/7rHauUFpSn3OCCk1Qrc
+         +/pjPBt1sD6aumAmjvhO2uw3sGuDm6K9oDerrGdpsCrKPhmJTYwbaA1n5yXLe24mr4
+         fui6DYE3gArwzLckc9hHB+TYNC83EHOrsWqR/0J4=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200611021941.786-2-sarangmairal@gmail.com>
+References: <20200610151744.35478-1-sarangmairal@gmail.com> <20200611021941.786-1-sarangmairal@gmail.com> <20200611021941.786-2-sarangmairal@gmail.com>
+Subject: Re: [PATCH v2] clk: add function documentation for clk_hw_round_rate()
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Sarang Mairal <sarangmairal@gmail.com>
+To:     Sarang Mairal <sarangmairal@gmail.com>, linux-clk@vger.kernel.org,
+        mturquette@baylibre.com
+Date:   Mon, 22 Jun 2020 02:11:09 -0700
+Message-ID: <159281706955.62212.13116326715188984737@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Two things aren't documented causing kernel-doc to fail when checking
-the core clk.c file. Fix them so that this file is clean.
+Quoting Sarang Mairal (2020-06-10 19:19:41)
+> Information about usage and prerequisites for this API.
+>=20
+> Signed-off-by: Sarang Mairal <sarangmairal@gmail.com>
+> ---
 
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
----
- drivers/clk/clk.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 236923b25543..47c0ee9da462 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -4135,6 +4135,7 @@ static int devm_clk_hw_match(struct device *dev, void *res, void *data)
- 
- /**
-  * devm_clk_unregister - resource managed clk_unregister()
-+ * @dev: device that is unregistering the clock data
-  * @clk: clock to unregister
-  *
-  * Deallocate a clock allocated with devm_clk_register(). Normally
-@@ -4324,6 +4325,8 @@ static void clk_core_reparent_orphans(void)
-  * @node: Pointer to device tree node of clock provider
-  * @get: Get clock callback.  Returns NULL or a struct clk for the
-  *       given clock specifier
-+ * @get_hw: Get clk_hw callback.  Returns NULL, ERR_PTR or a
-+ *       struct clk_hw for the given clock specifier
-  * @data: context pointer to be passed into @get callback
-  */
- struct of_clk_provider {
-
-base-commit: b3a9e3b9622ae10064826dccb4f7a52bd88c7407
-prerequisite-patch-id: ef03ffb3ba4ad414ba2917d05b8804fc14f907c7
--- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-
+Applied to clk-next
