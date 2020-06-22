@@ -2,73 +2,79 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1542031AB
-	for <lists+linux-clk@lfdr.de>; Mon, 22 Jun 2020 10:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3D6203236
+	for <lists+linux-clk@lfdr.de>; Mon, 22 Jun 2020 10:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725816AbgFVIM3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 22 Jun 2020 04:12:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45024 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725616AbgFVIM3 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 22 Jun 2020 04:12:29 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BA715206D4;
-        Mon, 22 Jun 2020 08:12:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592813548;
-        bh=vd2wwS8aC8dxEcwhaYSYyvRKsvYQ04PvVkUEkJNwvUQ=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=X0VbN31PpZmQkK5suSc9O/3cllGmm1Zcp7XBSzAaC6Fe8d1YvLXmK73mc8zmJrhQL
-         xQNDSkQm781Laq/cnkPPRkRSLGRkPiVCPYLIQDoVj/8UCGrnl9j5jewhbASJCP7y+u
-         Ta0963WKojcvNqjvczZv33p4YEBnfrKGm8PpACjA=
-Content-Type: text/plain; charset="utf-8"
+        id S1726402AbgFVIi2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 22 Jun 2020 04:38:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725883AbgFVIi2 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 22 Jun 2020 04:38:28 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1149C061794;
+        Mon, 22 Jun 2020 01:38:27 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id e22so2278994edq.8;
+        Mon, 22 Jun 2020 01:38:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cUFbNHgo6IB5Sy3bImSkiGN8kcxHOUvCTIjR4hYNmSs=;
+        b=bfWp2zi+iSVUaRV5UZNbccpk4TXYBNwDZiBOkKQ6/Dc+VtX1X+9Gs5ceoLzrXq/PZ9
+         vXaYBUjdU16fUvGvH7DbVVvuUJmvD7Ir0nCACqiMv0Rxj+i+sxU2NStf4EtixbkFlOKy
+         QytxIaPtV/BZMpCFLSoO8YESWhVSKs0LgUsjH68AGN5fjOsvqNDd6cdj+em6FuyBw7fK
+         R/OfsV6tCgIXwW0sjEGfTlXo82vaUwPu2gcM6g28cM4z8vWVksdp8wg+VX/MeN11ejjL
+         xYB9q3o3AMQI45ocSeuP0niuxAkeWPNtbZ9pnjPp+PDfBBgjjP83pPPZ4wgeWhBfQDtR
+         oHFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cUFbNHgo6IB5Sy3bImSkiGN8kcxHOUvCTIjR4hYNmSs=;
+        b=ksqzriVrNrdsx9UZwov79LDOg5/c1SM5qxL4EzFOJNI+xUM+jdCgyV1O7VMVh2aTVJ
+         J5h8DKhZKMTFKVPAmiTnEeRbRSlBljSwAMdmeDpJtpfwNMAVQP4suKO3nJGHyiqzGLIR
+         MzvW1yVthjsxVti2O5+U42VB2P2QCfmc/J3rl0tHCk2WJN1h5KyhYxSU21PeYvoLo5Dq
+         EpDkHVa3TGlV8xUOYyNDaM5/zAcbA38cqDxe6sOsL9iEwWw8N9FVnSTFLPsX4AyTYqwf
+         Bxa8QUAYzUrmzdIyP3dITf98/IjfaIiVcBSsqkWU4goSS45Z2ScGqkuzhJLmVbKbGbW8
+         ultQ==
+X-Gm-Message-State: AOAM530yxiqhB+3MWEH4FV93TnL7utBXdBZkAZbr9gY+no/zl5pKySpp
+        G7QlZWUxaUGRrORjwa7hgP9UnPX7le7jtrNgL6A=
+X-Google-Smtp-Source: ABdhPJwPApeAEn5hum2A9icysOaHVQpVvzup0Zr3/5gcyJTD1N5sRC7gkUmnieQOj9zEqFa6NauS3YRK5ZO9HhRy3/c=
+X-Received: by 2002:a50:ec8f:: with SMTP id e15mr6447759edr.70.1592815106098;
+ Mon, 22 Jun 2020 01:38:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <e361b46511756070277ff10f94e1735bb69cc300.1592407030.git.cristian.ciocaltea@gmail.com>
-References: <cover.1592407030.git.cristian.ciocaltea@gmail.com> <e361b46511756070277ff10f94e1735bb69cc300.1592407030.git.cristian.ciocaltea@gmail.com>
-Subject: Re: [PATCH 09/11] clk: actions: Add Actions S500 SoC Reset Management Unit support
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-actions@lists.infradead.org,
+References: <20200622075749.21925-1-konradybcio@gmail.com> <20200622075749.21925-4-konradybcio@gmail.com>
+ <20200622080503.GQ128451@builder.lan>
+In-Reply-To: <20200622080503.GQ128451@builder.lan>
+From:   Konrad Dybcio <konradybcio@gmail.com>
+Date:   Mon, 22 Jun 2020 10:37:50 +0200
+Message-ID: <CAMS8qEWrnHc3CWrW-vzwxu+PR8FL9hcvCtBpS4oK9ZYXgGfLJg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/8] soc: qcom: socinfo: Add socinfo entry for SDM630
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     skrzynka@konradybcio.pl, Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-To:     afaerber@suse.de,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Date:   Mon, 22 Jun 2020 01:12:27 -0700
-Message-ID: <159281354799.62212.7256905433525537681@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-clk@vger.kernel.org, DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Cristian Ciocaltea (2020-06-17 09:48:09)
-> Add Reset Management Unit (RMU) support for Actions Semi S500 SoC.
->=20
-> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-> ---
->  drivers/clk/actions/owl-s500.c | 80 ++++++++++++++++++++++++++++++++++
->  1 file changed, 80 insertions(+)
->=20
-> diff --git a/drivers/clk/actions/owl-s500.c b/drivers/clk/actions/owl-s50=
-0.c
-> index 025a8f6d6482..3bce72301c65 100644
-> --- a/drivers/clk/actions/owl-s500.c
-> +++ b/drivers/clk/actions/owl-s500.c
-> @@ -10,6 +10,8 @@
->   *
->   * Copyright (c) 2018 LSI-TEC - Caninos Loucos
->   * Author: Edgar Bernardi Righi <edgar.righi@lsitec.org.br>
-> + *
-> + * Copyright (c) 2020 Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+Hi Bjorn,
 
-You should only add your copyright when you modify a large amount of the
-file. Adding 80 lines to a 500 line file doesn't count. Sorry.
+you said "Applied" - so should I omit this patch when sending a v3 of
+the series or keep it in there?
 
->   */
-> =20
->  #include <linux/clk-provider.h>
+Regards
+Konrad
