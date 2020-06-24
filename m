@@ -2,77 +2,115 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5A52076DF
-	for <lists+linux-clk@lfdr.de>; Wed, 24 Jun 2020 17:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9B1207A9D
+	for <lists+linux-clk@lfdr.de>; Wed, 24 Jun 2020 19:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404370AbgFXPJ4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 24 Jun 2020 11:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
+        id S2405645AbgFXRsC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 24 Jun 2020 13:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404289AbgFXPJz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 24 Jun 2020 11:09:55 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C4AC061573;
-        Wed, 24 Jun 2020 08:09:55 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id ga4so2779010ejb.11;
-        Wed, 24 Jun 2020 08:09:55 -0700 (PDT)
+        with ESMTP id S2405546AbgFXRsB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 24 Jun 2020 13:48:01 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D71C061573;
+        Wed, 24 Jun 2020 10:48:01 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id dr13so3328316ejc.3;
+        Wed, 24 Jun 2020 10:48:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xqA0JkwflkTobMLTCr0ZvM2/SSPlycQMaw9fn8Bg9K4=;
-        b=IZWCTTbvlGPqVMTEvL+RCNLvtkr9ymy95LhJvsvrwruvDDDqo5l0my86UnhHTO7gVt
-         6OEg0WbvFoNuzHtr6gEqwafjZjinhukdU+JqzI4ImfvTa7Gps/iP/e2iws9tbIi3OOtE
-         4mqR0BKXcSEDy/lhdwjZe8KzJVQSf0dbyeiG7eMCJ03oGo1APEmJSLM2S3gtoGxqMI//
-         im5+0Abzi5O0tB4sApp5nb1fWpXXNhNplFggfPfoIK75ZaRH6Bm7VxstsH8X+rM2Ia1y
-         M4xTfNbtNL/6fLaoyf5l6/N5XC5BHgrqnbJ3HT6X5JGg8OrvQTB/bdVWIJRvvPN7zWjj
-         dlTQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eopJXMOiBM4uNCSpUziq8KbuR5DEUMui+dpvP7Q2/5U=;
+        b=T+H6PpNIklJjcSSldaz48SjChF+gUaSl1gUlXDjWs7kfYEHeeLWiyKNmdltgu3PQP1
+         Gl31B77wgh/YLGK6v85qlgUyFRiQ/DYnMXbbxu5sosB4F4pV/AJnLzRDOa6OK7umNk7x
+         o926s1TstOFlKfmjwYPrsiy/pmv2oYUzMhorJe4YS72OWNf3pf1bfneYWQb5j8Fq/PzG
+         H88V3/ouLdM4yK6+hq10iilXPAkspkyRZ9trNalO+POoTk4EmCdACTMm9fSX4sOa1uUS
+         X5WbyxFrvsGil2xu1KuOA5WKRXqDE0EEoxeuFkMawcz6mp21fgMgJZtyhW6pD2bYgGMl
+         xH2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xqA0JkwflkTobMLTCr0ZvM2/SSPlycQMaw9fn8Bg9K4=;
-        b=N7xDPRnwwrbZwgHgzOIh8On7Q5kTK1DtsFuyzRHVSZfqlDAw6J7LzTC7vc5fY2Ievi
-         xWW8jvYAdSo5YkaDrCGrDh1+3OH/pglTZAxbbDMz9vVz5WP4yNy5Cf3KABav46ZT1mYo
-         8OSxHcGkHaDZphYGqDkyZoLVcwS8A0Gf/XTkMpsDYUf5gMtIFtAvqeRxflyMVsmwg6K8
-         8sUP1YOu7HPeYaJvilpQoQn843++CFvdwTs8ksEJoiDNVeymtd7aD0PZZ0pK9nOlyzG4
-         NVKsTz8+WGAGkgafXFt3LCNqVdYVhZKdUo48a3/rV+02eNsob6WFFQ+Vt/KFt4yNiasN
-         Bv5A==
-X-Gm-Message-State: AOAM5321Efv9wlELZ4ok9QNnjLWNS/D/6XOxcQnxG7OezMOwFr6+bjNs
-        tY0z7XgdHagYFSNbh1xG/k4D+gSBJlOgKRPwAc0=
-X-Google-Smtp-Source: ABdhPJwqURAScm61PUoBnTTiAvio3Dy0kQw/f3E/f1hDwhw+981uq2BMzaiXIVf+D/uy7kNOieVVEHrsxWb61i75Flw=
-X-Received: by 2002:a17:906:7002:: with SMTP id n2mr7502548ejj.340.1593011394401;
- Wed, 24 Jun 2020 08:09:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200623230018.303776-1-konradybcio@gmail.com>
-In-Reply-To: <20200623230018.303776-1-konradybcio@gmail.com>
-From:   Konrad Dybcio <konradybcio@gmail.com>
-Date:   Wed, 24 Jun 2020 17:09:18 +0200
-Message-ID: <CAMS8qEVHxnAwC9fK69Pb4MEMWVEa9N7ZdkQCkXwvqC-JfQEfRA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] clk: qcom: smd: Add support for MSM8992/4 rpm clocks
-To:     skrzynka@konradybcio.pl
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eopJXMOiBM4uNCSpUziq8KbuR5DEUMui+dpvP7Q2/5U=;
+        b=JTyeir1XPsV04KLyHdOdbGjgfzPlAUwcG2AXZU4uttuZOczT7+4CDnI4ZYhCFGzJ1q
+         +C7x47oiezxCEMSr4sn0q9fsM7cAq0zcVDLcR7w+YVYlpz1/O1PAlYDTgXEWUoFGWg8h
+         IAAFg6pEK5ExPSn/J2jRURSH6Ub/Te6lkR+bmZuJpzQRRzq0rk7aXoji8+N9ADnUN5TC
+         YSBwzsF0RUcFXt5JQQ012xaneY/OJnCy7McYxFZ+NvbaglEkTwn5Wx4S0rTPorc+aGJF
+         5pXBCLIrppR3fSMQ81+3Xc6YdJ80o9gyN7AT4kwawwOE6ppNQVrofPow/JzUjFfJy/Da
+         q/Kw==
+X-Gm-Message-State: AOAM532FAlc0opJeyL6QShIwjuxndisWrBb8LkvxFVXsPgzbAUS0P7F5
+        3B2fP1XzXFO5xRiWT8p4yYo=
+X-Google-Smtp-Source: ABdhPJyycI4VI3Jn5WxPZIcHDCmNYlNFbUBkNYbFZf32o5yzfQkcZzSBWqm65y70VWV3kRJBTqYndw==
+X-Received: by 2002:a17:906:3483:: with SMTP id g3mr25568317ejb.373.1593020880243;
+        Wed, 24 Jun 2020 10:48:00 -0700 (PDT)
+Received: from localhost.localdomain ([188.24.137.55])
+        by smtp.gmail.com with ESMTPSA id s14sm8044146edq.36.2020.06.24.10.47.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2020 10:47:59 -0700 (PDT)
+From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-clk@vger.kernel.org, DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-actions@lists.infradead.org
+Subject: [PATCH v2 0/6] Add RMU and DMAC/GPIO clock support for Actions Semi S500 SoCs
+Date:   Wed, 24 Jun 2020 20:47:51 +0300
+Message-Id: <cover.1592941257.git.cristian.ciocaltea@gmail.com>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-I should also note that for quite some time a hack [1]
-has been needed on some platforms for the RPMCC to register.
+This patch series is a stripped-down revision of the initial series
+"[PATCH 00/11] Add CMU/RMU/DMA support for Actions Semi S500 SoCs":
+https://lore.kernel.org/lkml/cover.1592407030.git.cristian.ciocaltea@gmail.com/
 
-This includes 8992/94, 8956/76 and possibly many more.
+At Stephen's request, I detached all DTS related work to keep the focus
+exclusively on the Actions S500 SoC clock driver changes:
 
-With that commit, RPMCC registers fine.
+ - Add support for some missing clocks: APB, DMAC, GPIO
+ - Add support for Reset Management Unit
 
-[1] https://github.com/kholk/kernel-upstream/commit/5df7bb6e337c0a41b2cc6477cddc718d622d7545
+The removed patches are subject to resubmission via a separate series:
 
-Regards
-Konrad
+ - arm: dts: owl-s500: Add Clock Management Unit
+ - arm: dts: owl-s500: Set UART clock refs from CMU
+ - arm: dts: owl-s500-roseapplepi: Use UART clock from CMU
+ - arm: dts: owl-s500: Add DMA controller
+ - arm: dts: owl-s500: Add Reset Controller support
+
+Regards,
+Cristi
+
+Changes in v1:
+ - Incorporate Stephen's review comments
+ - Remove DTS related patches
+ - Rebase remaining patches on v5.8-rc2
+ - Update cover letter, both subject and content, to reflect the new
+   scope
+
+Cristian Ciocaltea (6):
+  clk: actions: Fix h_clk for Actions S500 SoC
+  dt-bindings: clock: Add APB, DMAC, GPIO bindings for Actions S500 SoC
+  clk: actions: Add APB, DMAC, GPIO clock support for Actions S500 SoC
+  dt-bindings: reset: Add binding constants for Actions S500 RMU
+  clk: actions: Add Actions S500 SoC Reset Management Unit support
+  MAINTAINERS: Add reset binding entry for Actions Semi Owl SoCs
+
+ MAINTAINERS                                   |  1 +
+ drivers/clk/actions/owl-s500.c                | 89 ++++++++++++++++++-
+ include/dt-bindings/clock/actions,s500-cmu.h  | 77 ++++++++--------
+ .../dt-bindings/reset/actions,s500-reset.h    | 67 ++++++++++++++
+ 4 files changed, 196 insertions(+), 38 deletions(-)
+ create mode 100644 include/dt-bindings/reset/actions,s500-reset.h
+
+-- 
+2.27.0
+
