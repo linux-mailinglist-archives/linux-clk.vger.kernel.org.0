@@ -2,93 +2,59 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D0E207AAA
-	for <lists+linux-clk@lfdr.de>; Wed, 24 Jun 2020 19:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E43208DD5
+	for <lists+linux-clk@lfdr.de>; Thu, 25 Jun 2020 00:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405706AbgFXRsX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 24 Jun 2020 13:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405713AbgFXRsK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 24 Jun 2020 13:48:10 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A19C0613ED;
-        Wed, 24 Jun 2020 10:48:09 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id l12so3288761ejn.10;
-        Wed, 24 Jun 2020 10:48:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=aFckNX9NLOxkT9VVmqntFDU4vDqtUDB+vNvhonzHfkg=;
-        b=CDQat+FIQQkKqjt5EUTXOuYkZBmovwx8odIdBVkG09sJjX4aMQbEvW+klelcp1hFcT
-         KRRVimnTHIbGlfJWVBOJVuSAFnb/HgUsXEqrzUvlwYafGUq3egMpMP4TmSKUGYcHCE6o
-         Wm4buySsvUHutlK3p8GYHXeR0kfn41lfX4xN2GOsPRLauqAbIfcdAlj0z0Y31aul6Qjk
-         Tp7SDRwJAYuMJF1xIK9cuueeU0ZL0Bk3sxPij1TxsJzIYWT5fm0/rtF2pIkNIOL88Gl2
-         aGPvYooj4SkRT1o+qchvi6lfaDgSa5QfJltxlooST0RZ2N7RPBPYfh39D0dUWNwJ0ZNv
-         lN0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aFckNX9NLOxkT9VVmqntFDU4vDqtUDB+vNvhonzHfkg=;
-        b=X7Ta9jVnR/sytvKgQTQoLMSi37ebeHgmlF9ROTylzksLZis6kkRsFPQnHJMdZBaKMB
-         iCan+nw75sEtN43+VtHwmIYTYNyxQeBmAfhA65YoeIDvJjRY1SWVXGv8NE5F8VQnbxrS
-         41sFb/fTfytzqHZ2fk8xhd6wLtO2AkMN6P69mG87ax7k8XWCCzjgHS0dJcAbvex1bTQH
-         TsDYDwDU+5tfUkdSplxUxd3MRbaFLQbVCnR0m7UPddfJ+AbXk7UxwqVIfM6XTptHJpCt
-         FpmBVmO/IXgVNU4Hr0ytEykY55pXWbzrj3igXl5ftBNDefhZVLMmTF42qde6Rhmgxh4A
-         HqYQ==
-X-Gm-Message-State: AOAM533ygN90gMEOrx+sl/sNXbL/8TQdTbLspPXJEsPkxQtKY+nVytzk
-        PxbBaaa90AxLmkzRpu88Qc+uwJPE40s=
-X-Google-Smtp-Source: ABdhPJwATqcPo6q9bRMf+TLJtKkRF1/FTj/bQyatO2j85T/dipXkYm9bDA1SzjVywVfAzt10qh0V2g==
-X-Received: by 2002:a17:906:4056:: with SMTP id y22mr25343775ejj.304.1593020887757;
-        Wed, 24 Jun 2020 10:48:07 -0700 (PDT)
-Received: from localhost.localdomain ([188.24.137.55])
-        by smtp.gmail.com with ESMTPSA id s14sm8044146edq.36.2020.06.24.10.48.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2020 10:48:07 -0700 (PDT)
-From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-actions@lists.infradead.org
-Subject: [PATCH v2 6/6] MAINTAINERS: Add reset binding entry for Actions Semi Owl SoCs
-Date:   Wed, 24 Jun 2020 20:47:57 +0300
-Message-Id: <c7db5abf78656af8d5a4ff8d677a08e03713c1f3.1592941257.git.cristian.ciocaltea@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <cover.1592941257.git.cristian.ciocaltea@gmail.com>
-References: <cover.1592941257.git.cristian.ciocaltea@gmail.com>
+        id S2389097AbgFXWc5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 24 Jun 2020 18:32:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33030 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732806AbgFXWc5 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 24 Jun 2020 18:32:57 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0BCCC207E8;
+        Wed, 24 Jun 2020 22:32:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593037977;
+        bh=re+23lEtejlBL2hZKAV3cnX/dPCJsdHfzCswGg4aOxM=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=1t14PuOEhWUKiu8KZmKGnna5WDSKG3rdX2orLMxchl2Cl4eaNr1NeP05Cp+dQd/Nc
+         rdlkErZ3YS6jsWYtZNDjj+vGMiWu4ka7lCAEO3IZDGbQwWftkcvi5Y1CvhqwQwsO3/
+         6of0YcmCokfaN9zNY9k0UAh1oLasgN8yzYgiQqjM=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAMS8qEVHxnAwC9fK69Pb4MEMWVEa9N7ZdkQCkXwvqC-JfQEfRA@mail.gmail.com>
+References: <20200623230018.303776-1-konradybcio@gmail.com> <CAMS8qEVHxnAwC9fK69Pb4MEMWVEa9N7ZdkQCkXwvqC-JfQEfRA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] clk: qcom: smd: Add support for MSM8992/4 rpm clocks
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-clk@vger.kernel.org, DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+To:     Konrad Dybcio <konradybcio@gmail.com>, skrzynka@konradybcio.pl
+Date:   Wed, 24 Jun 2020 15:32:56 -0700
+Message-ID: <159303797640.62212.15039388585433005717@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add a reset binding entry to match all members of Actions Semi Owl SoCs.
+Quoting Konrad Dybcio (2020-06-24 08:09:18)
+> I should also note that for quite some time a hack [1]
+> has been needed on some platforms for the RPMCC to register.
+>=20
+> This includes 8992/94, 8956/76 and possibly many more.
+>=20
+> With that commit, RPMCC registers fine.
+>=20
 
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7b5ffd646c6b..e6285c13bab0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1533,6 +1533,7 @@ F:	drivers/mmc/host/owl-mmc.c
- F:	drivers/pinctrl/actions/*
- F:	drivers/soc/actions/
- F:	include/dt-bindings/power/owl-*
-+F:	include/dt-bindings/reset/actions,*-reset.h
- F:	include/linux/soc/actions/
- N:	owl
- 
--- 
-2.27.0
-
+What happens if that patch isn't applied? Does the system crash? Because
+I'd rather not merge a patch in clk tree that causes the system to fail
+to boot.
