@@ -2,84 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 055BF20B5D4
-	for <lists+linux-clk@lfdr.de>; Fri, 26 Jun 2020 18:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFB020B636
+	for <lists+linux-clk@lfdr.de>; Fri, 26 Jun 2020 18:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726891AbgFZQXn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 26 Jun 2020 12:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32774 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726832AbgFZQXm (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 26 Jun 2020 12:23:42 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F651C03E979
-        for <linux-clk@vger.kernel.org>; Fri, 26 Jun 2020 09:23:42 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jor8a-0004qp-H9; Fri, 26 Jun 2020 18:23:36 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1jor8Z-0005kS-Jq; Fri, 26 Jun 2020 18:23:35 +0200
-Date:   Fri, 26 Jun 2020 18:23:35 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Anson Huang <Anson.Huang@nxp.com>, linux-clk@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Remove redundant 'maxItems'
-Message-ID: <20200626162335.ddfc23czvknblmqx@pengutronix.de>
-References: <20200611194738.1480393-1-robh@kernel.org>
+        id S1727982AbgFZQtX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 26 Jun 2020 12:49:23 -0400
+Received: from out28-123.mail.aliyun.com ([115.124.28.123]:54003 "EHLO
+        out28-123.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726140AbgFZQtX (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 26 Jun 2020 12:49:23 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.7045184|0.7968284;CH=green;DM=|SPAM|false|;DS=CONTINUE|ham_system_inform|0.0798443-0.0411612-0.878994;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03310;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.HsyHo9F_1593190149;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.HsyHo9F_1593190149)
+          by smtp.aliyun-inc.com(10.147.41.137);
+          Sat, 27 Jun 2020 00:49:16 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     linux-clk@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, sboyd@kernel.org,
+        paul@crapouillou.net, mturquette@baylibre.com,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
+Subject: [PATCH 0/2] Add functions to operate USB PHY related clock.
+Date:   Sat, 27 Jun 2020 00:48:42 +0800
+Message-Id: <20200626164844.25436-1-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gcokhkvcs44oti6s"
-Content-Disposition: inline
-In-Reply-To: <20200611194738.1480393-1-robh@kernel.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+1.Add functions for enable and disable USB PHY in JZ4780.
+2.Add support for calculat REFCLK of USB PHY in X1000.
 
---gcokhkvcs44oti6s
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+周琰杰 (Zhou Yanjie) (2):
+  clk: JZ4780: Add functions for enable and disable USB PHY.
+  clk: X1000: Add support for calculat REFCLK of USB PHY.
 
-On Thu, Jun 11, 2020 at 01:47:38PM -0600, Rob Herring wrote:
-> There's no need to specify 'maxItems' with the same value as the number
-> of entries in 'items'. A meta-schema update will catch future cases.
+ drivers/clk/ingenic/jz4780-cgu.c | 124 +++++++++++++++++++++++++--------------
+ drivers/clk/ingenic/x1000-cgu.c  | 113 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 193 insertions(+), 44 deletions(-)
 
-Sounds reasonable,
+-- 
+2.11.0
 
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---gcokhkvcs44oti6s
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl72IQQACgkQwfwUeK3K
-7AkkTAf+P/Ix8I1Qk1/xQYx03skU0vfyzMw0MExu5t68JfypxlbIJ5xAmxuc6iUC
-85scAvE5q44rK35snt5WmCMjWf5F/afqu/ZOAY4XTp/M3Eb2S0vt9eMJ77myyRrQ
-re3PzISpIlToIUpR1370R5KoQoSDcmKrUHE7vo8Op72CilADbLlitOOp0DVNl+kU
-3q32VL9eUCLbSHTv528iAbzVr/OYNn1Hmq6jHVZBN3Y/kSY2ayep1jguHHtjv7Mi
-WcnKEkNgtQMJTcNQuhIqmfXLjjlN3kBy8taEKkuGsobWq1E2yFQUiBboD1poMXXe
-WlcAYJ4803KbT1JSUf/h1JAXT8Qbmw==
-=laHj
------END PGP SIGNATURE-----
-
---gcokhkvcs44oti6s--
