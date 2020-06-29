@@ -2,33 +2,33 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBCC20E1F9
-	for <lists+linux-clk@lfdr.de>; Mon, 29 Jun 2020 23:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0083A20E26C
+	for <lists+linux-clk@lfdr.de>; Tue, 30 Jun 2020 00:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390126AbgF2VBU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 29 Jun 2020 17:01:20 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:57627 "EHLO
+        id S2387445AbgF2VFJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 29 Jun 2020 17:05:09 -0400
+Received: from mout.kundenserver.de ([212.227.17.10]:34209 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390117AbgF2VBQ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Jun 2020 17:01:16 -0400
-Received: from mail-qk1-f180.google.com ([209.85.222.180]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MKsax-1jWq9I1guT-00LHp8; Mon, 29 Jun 2020 13:33:33 +0200
-Received: by mail-qk1-f180.google.com with SMTP id l6so14863002qkc.6;
-        Mon, 29 Jun 2020 04:33:33 -0700 (PDT)
-X-Gm-Message-State: AOAM5328dsWrDwEGKaYKF55sT8S/iBqgzomm53AU8WinhIgcfmtr0EpS
-        vo9u6IrVjdO5h7GYjOgm9H4DZvkmVz4uDOMJbZ4=
-X-Google-Smtp-Source: ABdhPJye1KWp3fw6Y9xHkgeRSfS3PyrD8nrjYY7J24blGVdz8f1gm/UtrzMRZEXgieMS3379QDGNnd1Ku5iv2TMFnu8=
-X-Received: by 2002:a37:b484:: with SMTP id d126mr14557185qkf.394.1593430412219;
- Mon, 29 Jun 2020 04:33:32 -0700 (PDT)
+        with ESMTP id S1731103AbgF2VFC (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Jun 2020 17:05:02 -0400
+Received: from mail-qk1-f176.google.com ([209.85.222.176]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1Mofst-1j0tDQ1GIb-00p4cK; Mon, 29 Jun 2020 13:37:25 +0200
+Received: by mail-qk1-f176.google.com with SMTP id l6so14871500qkc.6;
+        Mon, 29 Jun 2020 04:37:25 -0700 (PDT)
+X-Gm-Message-State: AOAM5316NKX+qTNj84k+pnnAbrw+5/y3z0doj76V5dvfxnvpdvWBZZxA
+        oPBAKeZOuefuW87vz3MvtjheK4d4eFGXVOZNWe4=
+X-Google-Smtp-Source: ABdhPJwGCaTaF/6lDsrwnIDXUL4eFvWm6Sxzf0vyht5U7St+DoN5wF2vfKmThITTZuTVI5ngfEi0EaDM8L8TwiPm6us=
+X-Received: by 2002:a37:a496:: with SMTP id n144mr14536437qke.286.1593430644096;
+ Mon, 29 Jun 2020 04:37:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <1593410042-10598-1-git-send-email-Anson.Huang@nxp.com> <1593410042-10598-3-git-send-email-Anson.Huang@nxp.com>
-In-Reply-To: <1593410042-10598-3-git-send-email-Anson.Huang@nxp.com>
+References: <1593410042-10598-1-git-send-email-Anson.Huang@nxp.com> <1593410042-10598-5-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <1593410042-10598-5-git-send-email-Anson.Huang@nxp.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 29 Jun 2020 13:33:16 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2ZL6_rV=2brNz=UDdji3mddF+1Nb6Ew+=n4j0-fNrCug@mail.gmail.com>
-Message-ID: <CAK8P3a2ZL6_rV=2brNz=UDdji3mddF+1Nb6Ew+=n4j0-fNrCug@mail.gmail.com>
-Subject: Re: [PATCH V3 02/10] init.h: Fix the __setup_param() macro for module build
+Date:   Mon, 29 Jun 2020 13:37:08 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2yXFbGxuSRoC5_dYBujnAtVoEMXe50V7QYjPYhqra7nA@mail.gmail.com>
+Message-ID: <CAK8P3a2yXFbGxuSRoC5_dYBujnAtVoEMXe50V7QYjPYhqra7nA@mail.gmail.com>
+Subject: Re: [PATCH V3 04/10] clk: imx: Support building SCU clock driver as module
 To:     Anson Huang <Anson.Huang@nxp.com>
 Cc:     Russell King - ARM Linux <linux@armlinux.org.uk>,
         Shawn Guo <shawnguo@kernel.org>,
@@ -50,40 +50,46 @@ Cc:     Russell King - ARM Linux <linux@armlinux.org.uk>,
         linux-clk <linux-clk@vger.kernel.org>,
         NXP Linux Team <Linux-imx@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:07GlrRMWmO5DvLo7yBHmrip+tsbslFabumF1hH9WCHW3OEHg9B0
- gXZwj36mzUSffIjIBWLCKPSYTHvew7iFkk3H7u/5Q5cBo92PcUzsX898z+7cbaRUnneb15d
- FKmxOB1TsQ+a7c5U88lgUCThx63kWVWf4edm7LRUJdjnzixuMM6pP4u0BJnZm9FqwX/4iPP
- dCB+AUSFttLsKuQdBdbZQ==
+X-Provags-ID: V03:K1:fFz7B6CKzVGMcNOoqhEQ+Q6zaYdSbNLhT5RYA3WT73gjqRLfv3G
+ x7gM7jqWl0DIDuUE2yeUfaY4Q6j4CH/U5slfRIMwAtxUWXQG9znYWhecwuWQAAt3obh02PH
+ nAVFs/46bBHnM6Wnkra55WG0vQlGd5xeRMOOtcD4b57A6Q0f2WZfsewPe2YNGRXOYbeUMbq
+ 4+1nzXnBh9Mn//puJkazg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cut6NnEb7eY=:n4VyG8vxiQxJPJxagmrYp5
- h+PjDDYquSdLoygHweSVsCjyOuu19SU8qs3MSxvWDPfnj/nGNd0ZJNro5Olzuio3sTxU5aknL
- r0oHQ9AZsXjIrK81NBWyNkrpZzS1z9ghGByQ4qzEEWaZOb2JkIt9IPvJDDnC02n5+hNQrJ0bN
- nfKxVRnJrnKBJS/TxPiO/m+79EMFMn7U3zBtEGXawjoggtaeJSCPxcfe1WC9KSO9De7C+hPZG
- +kX7tM5fnPOB++3/9GHVKYMZYOoV8CFwI9VJY4l1cYg5sNc4Rl4J6yPwXlMaFfSNkAWHo8tc+
- OMpGCnFj0AF6yvqi7I6mymoZvMhtc+uZ4v+BevKQCI6QhfLiEKpGaKLpv9aqyY5bkwNmDqNSx
- NJm6BvcWKISwMOdaVrxrseYYbKSr7BN1GpWBC4iZ1prgyYR52HxdjUcO8J6xd0HLf/CbfvvWZ
- nNOFxB4tYZEo3MN5+mLFT5nidNSYXezxZo7KC+p25ce+eYbw89NW9xUKR1NFtU58lYL8H3uC0
- KZ+7gsmNefLgmsgQ8BRtc1BEupHeM/svWp799ah8Yyhndf/dZLWj4NeYwRuOpXXTRQ4loWBK+
- TFKES6oDUKrRSLzaKlksTDi4RWCX+WvEiRz2p0W93DhReFzmx/ztMF5J2rVFS03p3BCCjeyen
- DUOnEp//GHZwe9gRgSXqVmAW4WtKpwyy85519E9jq3gpMgriAEp9adrM6ZbWi0k0H03CgAKJ2
- cG0BV147K7YZ8wa/BR/Hs/MfcpwYKH6in6ge0+dVdUn3FtcV202ubJJ4/+uF67mY6IHpfDxXU
- /HFMPTayINqZA+BvEe5O3MUxIRmu9nRhTtzIqQcGVfPN0kq9Is=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/dLsAqa9/LA=:J29ItYNPuOs7yVt7PmEaOm
+ 2v2y8akWwVq7bOTB2Vcf4yZ/oIoVEuk8+LJ8hrU0GB7yWvrX98hlqxZgHgLk6vc0FGYY6Qtqd
+ DvvNXvEVI4dFqtgax2DQ4HfCGWxl7/BIzD6ZNHXCL+iwMV4w46fGzneUKB+kG6vKVtrx3BDcY
+ s7hWyqTQIOEt9xiZKl7wT98Kw+LymsQwC8bhhy0nHMeou0VSjC/1LxzmyGDXp8khga3gSZDAd
+ 8xsbNvJDtvTy66DvQuNQjqt4FFchgUe3LqPGtPGW4ijDh9DR/WqN95ArmdQV7p1ngJ/tEeRPT
+ 0kGF5oevsi1jlBHmhfqaXtkCx33l6xYDfFLnUSGroQ6f+V1pthqD28lEwYdV7IxEtgpcCRATU
+ 9maTfhYMr0hf/mxSpXXjT9IZ3vGZlDEa5x8tRwoFh74SQxETdd+1OGUNC1O9sHSbG9N0uJYhE
+ hTz+DPwTWMNDA58pVwlGeyrhT1NVMSHf/o81B1u+iJIAwE22C6bNsHZy5JzaIpipkTd4MTyJM
+ 0UFmaTl0Vhie6wRyYgSkPlpFt1feGcyUkcK0viTTGG4AbxglJd4p3vhKI43BCcsH+0DE03k8s
+ EYvt5+aCpabCeS5Mjec+CxzFGsP9LT9P35VHD4aghfdY451Ua2rhA5djiNgLZFDZjj1LiLus2
+ ECJ1H0qq51Uq1qZ0AqO1yHUnU5UnmVKLuvJhZ1T9U4yRLydFpTZpibPcIXqeWRAf4MDaXwwYJ
+ J0Jv/l/XojF1cCaIo4YezUaifpf49tasTY9UapyhoddqJ3MMt6RYQuNbE8kLXRLmjVPJMo9NR
+ k6sKxMiz66ma7v98h2709HyGWpfxuA+9aQ7Bhw4KzQajkV45lg=
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 On Mon, Jun 29, 2020 at 8:06 AM Anson Huang <Anson.Huang@nxp.com> wrote:
->
-> Keep __setup_param() to use same parameters for both built in
-> and built as module, it can make the drivers which call it easier
-> when the drivers can be built in or built as module.
->
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 
-I wonder if we should instead drop the __setup() and __setup_param()
-definitions from the #else block here. This was clearly not used anywhere,
-and it sounds like any possible user is broken and should be changed to
-not use __setup() anyway.
+> --- a/drivers/clk/imx/Makefile
+> +++ b/drivers/clk/imx/Makefile
+> @@ -21,9 +21,9 @@ obj-$(CONFIG_MXC_CLK) += \
+>         clk-sscg-pll.o \
+>         clk-pll14xx.o
+>
+> -obj-$(CONFIG_MXC_CLK_SCU) += \
+> -       clk-scu.o \
+> -       clk-lpcg-scu.o
+> +mxc-clk-scu-objs += clk-lpcg-scu.o
+> +mxc-clk-scu-objs += clk-scu.o
+> +obj-$(CONFIG_MXC_CLK_SCU) += mxc-clk-scu.o
+
+It looks like the two modules are tightly connected, one is useless without the
+other. How about linking them into a combined module and dropping the
+export statement?
 
       Arnd
