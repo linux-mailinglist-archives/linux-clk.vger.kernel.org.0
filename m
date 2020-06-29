@@ -2,176 +2,159 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0764420DFA0
-	for <lists+linux-clk@lfdr.de>; Mon, 29 Jun 2020 23:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF00320E10B
+	for <lists+linux-clk@lfdr.de>; Mon, 29 Jun 2020 23:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731654AbgF2Uif (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 29 Jun 2020 16:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
+        id S2389787AbgF2Uvp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 29 Jun 2020 16:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731750AbgF2TOT (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Jun 2020 15:14:19 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C7CC08EE1D;
-        Mon, 29 Jun 2020 00:18:38 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id dm19so5657411edb.13;
-        Mon, 29 Jun 2020 00:18:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O2L4K4v92H9t7F+mwi5xNVx0XUcZw472JCsWZtGnGQg=;
-        b=gG+uJ082jLDUdML+mwynl+1BnqW67+3WT3dlTEU7LSjF3dQJ1baOXMA/xpnxCs+kPC
-         407nqkucDlhpMqpawv+0ZgWqPZfBW/IN0Cl1D9ud9Lw3XUuydZI4fQgi9xfm5Jd7In49
-         KEXleIlfAGleWY3tZdFVMr+DoYt0D7tYepeD5YAm/Fykm8JUXSMkReqO6wkEFTlBbdg1
-         Ft1gav4VEiE5ri/iRkV07YNlqtiPpzmbJyJDiZsN7BklaldpommqrTYE14rPtFRykspj
-         vWtSS2Bs3uWgo0QE75DskhHiAMqMt2UE6awKbWuqjhdHJtKMfBoDC5f8PD2rQI6BPfv9
-         bG1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O2L4K4v92H9t7F+mwi5xNVx0XUcZw472JCsWZtGnGQg=;
-        b=o9hMqn3sp7gl7MTmtwTL+1qHJ+TSnqD7/bcogxtSZVyssu1cPBu2rlwGnLvNPIAfqZ
-         G/Y+LM+WnVeOLqX7p7rVPvCxNHN7+ptPKQuswMusLzSiRrHQ7EObkDopGG2DapJcuFGM
-         wJgFx/a9LTXqsE1fr/mzaaxQHYQYJjoLiLBIVEUotiiAU3bQdP+oLywSwhGQ7QqqAUlB
-         6QJvQXYhhBV9KeE9DDT4IJqZimjjZTO0NBGwsCFHHBtFO5fXDoC7Jsew7wwG9tuEgTyf
-         UJAK2OhXeB4RAgG+wJd3PzDOjZX37FYLolERTMoPoRe4HNf/UqoxKiilHoAFkYivRdnU
-         e/Gg==
-X-Gm-Message-State: AOAM533OW4DE64iDrHczTV5Y8oOjWR60+JizHkG0itlakQDR5rpiIGtH
-        llOQFTtXghyNZYfrJ9K3tnAaBJ7nKAzQotP89Yo=
-X-Google-Smtp-Source: ABdhPJwpTY6tJjps0qhuQLdx+RnvLQZWXZ9Uet7dmPvC8dHpw3U52mZTR76cVBU11J99wSK/NOoEvpviomSJTWqF7RE=
-X-Received: by 2002:a50:9b0b:: with SMTP id o11mr16784048edi.22.1593415117387;
- Mon, 29 Jun 2020 00:18:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <1591687933-19495-1-git-send-email-Anson.Huang@nxp.com>
- <AM6PR04MB4966B94CFAE642E6AF5AEF79809B0@AM6PR04MB4966.eurprd04.prod.outlook.com>
- <159262367025.62212.11651547971712516448@swboyd.mtv.corp.google.com>
- <AM6PR04MB496690A045E0BFFF3D03AE0380940@AM6PR04MB4966.eurprd04.prod.outlook.com>
- <159290125202.62212.13172213909023205615@swboyd.mtv.corp.google.com>
- <AM6PR04MB49664A8400CA0B0F7321EDDE80940@AM6PR04MB4966.eurprd04.prod.outlook.com>
- <159296027133.62212.18074403520585879907@swboyd.mtv.corp.google.com>
- <AM6PR04MB4966BA60F25AE60ABA8F883180950@AM6PR04MB4966.eurprd04.prod.outlook.com>
- <DB3PR0402MB39167FB012D9BCB4A5081BEDF5950@DB3PR0402MB3916.eurprd04.prod.outlook.com>
- <AM6PR04MB496622897A67C4912715223A80950@AM6PR04MB4966.eurprd04.prod.outlook.com>
- <159303858063.62212.4991053028281879719@swboyd.mtv.corp.google.com>
-In-Reply-To: <159303858063.62212.4991053028281879719@swboyd.mtv.corp.google.com>
-From:   Dong Aisheng <dongas86@gmail.com>
-Date:   Mon, 29 Jun 2020 15:04:40 +0800
-Message-ID: <CAA+hA=RB3H_EqCMpCuide7WDqddaZu5=LmihU1pZaCPM8b8zng@mail.gmail.com>
-Subject: Re: [PATCH V2 3/9] clk: imx: Support building SCU clock driver as module
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Abel Vesa <abel.vesa@nxp.com>, Aisheng Dong <aisheng.dong@nxp.com>,
-        Andy Duan <fugang.duan@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
+        with ESMTP id S1731380AbgF2TN1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Jun 2020 15:13:27 -0400
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on0614.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe1e::614])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BC7C0A8887;
+        Mon, 29 Jun 2020 00:27:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BdzskCP1O1Ya3+TOD5k+Z5m9HDOBTWuXypY7zuqrcRfqtV9Km3hgPuZArw9rfHF4NRhUBeoas6oLstMlcLnOMF2UN5/l95lvp4dsCfDtNMIliDrMbbFW3Dr4870iGzkNr9Xy/hA6Ai9WyQJf9agL6HcFsq0GLG8vzUSfcgQg9tC2siykvkyZhXMurj/TgniHYtkKX7rgzirdpdzx+xLRHOAdtD6LKUVoFLl2LME6dlpVd2t0uRQMuHFr5tsCv1cDpI37vWYaccA1UF1BI119LvUWudFRN9tQ2LqFKonFWoCT/rJeH2vT4XdgAv5YtqtnqVWkIzG7UZCVlDU6uNM80Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vl43n8vUBg9NroiDqhOm5H6M5rILC5sL6ySOH2MnCgQ=;
+ b=CRbxY7rD9X8Soe+WxULWlhhBcQ/RNDPbd0MhyjcgRxSjTSYKikKHkxphVwD8dSEx2FTiETFAQFmTR1wpcXNxP3jyf7Vgzrph5QslAUAnxy3M8Jwiqve2NJWaRXaMgFmuDiLHUCTlRMsnpIN2fYNI+LfUr9TAXjz6xBtSZ2TT+fFTc8iOMVhUHTQ2LDNYPF62TExwqTi9g5mu8CDPAhihwqZEtvSZU2tGkQy1CYi8IHqcFnmo+kzbJCeCH2cBOsghFgkXSmMVCHudy0oEmuqe7UwXItH9fJ3+aASDt5BKaXjDDpWe5SKPaAJAn1qaib4tsOrZigGlV7EZRDb2V2yfFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vl43n8vUBg9NroiDqhOm5H6M5rILC5sL6ySOH2MnCgQ=;
+ b=H3weMcBlaTsrXuwOhSMj1DF3HYUHcJDLWIGbKn7TftI4TjJh/Tz25d1c2yG+PqQER6AosvBUKa4xqfPVlB+WmXEmiOvU/nQDvbDx1va2V+OnW1WgFPSXFC7GUZwDr9sVPrtmi6W3EX+5a47C2C55gX1vdvlL/CsVMG+8ejddMwk=
+Received: from AM6PR04MB4966.eurprd04.prod.outlook.com (2603:10a6:20b:2::14)
+ by AM6PR04MB4325.eurprd04.prod.outlook.com (2603:10a6:209:47::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.21; Mon, 29 Jun
+ 2020 07:27:49 +0000
+Received: from AM6PR04MB4966.eurprd04.prod.outlook.com
+ ([fe80::3c6c:a0e9:9a4e:c51d]) by AM6PR04MB4966.eurprd04.prod.outlook.com
+ ([fe80::3c6c:a0e9:9a4e:c51d%7]) with mapi id 15.20.3131.026; Mon, 29 Jun 2020
+ 07:27:49 +0000
+From:   Aisheng Dong <aisheng.dong@nxp.com>
+To:     Anson Huang <anson.huang@nxp.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "oleksandr.suvorov@toradex.com" <oleksandr.suvorov@toradex.com>,
+        Stefan Agner <stefan.agner@toradex.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, Peng Fan <peng.fan@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Andy Duan <fugang.duan@nxp.com>,
         Daniel Baluta <daniel.baluta@nxp.com>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Stefan Agner <stefan.agner@toradex.com>, allison@lohutok.net,
-        Arnd Bergmann <arnd@arndb.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        gregkh <gregkh@linuxfoundation.org>, info@metux.net,
-        Sascha Hauer <kernel@pengutronix.de>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        "yuehaibing@huawei.com" <yuehaibing@huawei.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Turquette <mturquette@baylibre.com>,
-        oleksandr.suvorov@toradex.com,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, yuehaibing@huawei.com,
-        dl-linux-imx <linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+CC:     dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH V3 03/10] ARM: imx: Select MXC_CLK for each SoC
+Thread-Topic: [PATCH V3 03/10] ARM: imx: Select MXC_CLK for each SoC
+Thread-Index: AQHWTdtf2ighwrlZYE2Io7rocJB2PqjvMbRA
+Date:   Mon, 29 Jun 2020 07:27:49 +0000
+Message-ID: <AM6PR04MB49662FB8227AEE678F55C116806E0@AM6PR04MB4966.eurprd04.prod.outlook.com>
+References: <1593410042-10598-1-git-send-email-Anson.Huang@nxp.com>
+ <1593410042-10598-4-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <1593410042-10598-4-git-send-email-Anson.Huang@nxp.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: nxp.com; dkim=none (message not signed)
+ header.d=none;nxp.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: a86544ff-7b99-49ee-080e-08d81bfded5f
+x-ms-traffictypediagnostic: AM6PR04MB4325:
+x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM6PR04MB432568CC44C2D05E918D521B806E0@AM6PR04MB4325.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4125;
+x-forefront-prvs: 044968D9E1
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ypQX2k/br1QBuPDkNLcLnxv+Ei5OG5kjdf6Qtqe8bqAN4qSqUkdVyUDyZAV2LVbN9oc5DkMF96KOUjKIpc3r9FTLQx6AIS3eQ9XRdlvMXB/snkG5/hsrP5tdUPEL2/fTeGXxe4/sHNETJ0K75Aj+CmaahVdYvgRaZ3nU3LFum9lDrGw7mwGM/cjN0+UVbEMvj589+gwYdLcF60/XznfsdwzMQcNE2ha/mYLuTFIKQX64oebKmVbZaocVrHK/mXdJYkLKN92skEytWsfaOeVcyJe4xZG3IuAFq/Z8KVkOhoUuCU59LjNcUzOHYNpvQVRBtKtCIUf1sYOGJTiO5yKqYi9x/7x53TngwlfJZvOiB1GIwWrCb0owze0t3G5G+GSs
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4966.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(136003)(346002)(39860400002)(366004)(376002)(26005)(71200400001)(33656002)(478600001)(316002)(44832011)(9686003)(2906002)(52536014)(55016002)(83380400001)(7416002)(6506007)(7696005)(76116006)(8936002)(5660300002)(8676002)(86362001)(4326008)(186003)(66476007)(66556008)(64756008)(66946007)(66446008)(110136005)(921003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 2M4kDWfrXxofwiUG+SG2M+MYdN4OK37xmT75D/WC51ZQkhe6FHN5cmD+KRFYupgrvCwXxsqGyD8RG1pE6GcFLY6pla1zBfvIuoZlK+PyY2TS9LQIosBap1z/KzS4B14RnpPZu50zl35IDPwov+xe8b68a4+y0xj/ZCx2gQT6m16OODOrFokBXolKyocc+RqoyT3SxtknEubnSDzrnOk6Xm8A6/F1hQ9CfcH3lm53b7gX9kQEeIgNyuUFRIBXi4/8qb7cfPRl7zcvUaPYIqa2/stuCBZaVNCB/dqNTOX/71NrBx0gF5gNLjQSU8Ef+K2as4MqfbTQgBOC3ARwejGbTJZCeamqKcc4N8XWUEPVbsHJgeoJtiN+2ISa9+mhOCpkS+ARShl+zJCS2fdjNLkjvw/MoXmCNas6w9gBr+w6y5O+5qil31RI8kLyZE/ABTaG3E0JSLtBJoeVn8IMeGU33SIKYY39BH16AbJwVpQvvCY=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4966.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a86544ff-7b99-49ee-080e-08d81bfded5f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2020 07:27:49.4979
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +V0Vd3+lXanMK9SbCmLdckkWcmmLmR3W2t3Ho7lINp4yby25bYYSJqVjT20WY9BArIV4YmtaSzkgcW2gj2A2HQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4325
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, Jun 25, 2020 at 6:43 AM Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Aisheng Dong (2020-06-23 19:59:09)
-> > > > > > -       bool
-> > > > > > -       def_bool ARCH_MXC
-> > > > > > +       tristate "IMX clock"
-> > > > > > +       depends on ARCH_MXC
-> > > > > >
-> > > > > > But user can still set MXC_CLK to be m, either via make menuconfig
-> > > > > > or
-> > > > > defconfig.
-> > > > >
-> > > > > Isn't that what we want?
-> > > >
-> > > > No, if user set MXC_CLK to m, the build will break for i.MX6&7.
-> > > >
-> > > > > Why does ARCH_MXC being enabled mandate that it is builtin? Is some
-> > > > > architecture level code calling into the clk driver?
-> > > >
-> > > >
-> > > > It's mainly because there's no Kconfig options for i.MX6 &7 clock drivers.
-> > > > It just reuses ARCH config CONFIG_SOC_XXX which can only be y.
-> > > > e.g.
-> > > > obj-$(CONFIG_SOC_IMX6Q)  += clk-imx6q.o
-> > > > obj-$(CONFIG_SOC_IMX6SL) += clk-imx6sl.o
-> > > > obj-$(CONFIG_SOC_IMX7ULP) += clk-imx7ulp.o
-> > > > obj-$(CONFIG_SOC_VF610)  += clk-vf610.o ..
-> > > >
-> > > > If setting MXC_CLK to m, the platform clock drivers will fail to build
-> > > > due to miss to find symbols defined in the common clock library by
-> > > > CONFIG_MXC_CLK.
-> > > > So we have to avoid users to be able to config MXC_CLK to m for i.MX6&7.
-> > > > Only depends on ARCH_MXC mean user still can set it to m.
-> > >
-> > > I think for i.MX6/7, although MXC_CLK is tristate, but it is selected by
-> > > ARCH_MXC which is always "y", so MXC_CLK can ONLY be "y" even it is explicitly
-> > > set to "m" in imx_v6_v7_defconfig file. So that means MXC_CLK can ONLY
-> > > support built-in for i.MX6/7 SoCs, and that is what we want?
-> > >
-> >
-> > Yes, I'm trying to explain to Stephen why we have to select MXC_CLK in ARCH_MXC
-> > And what issues we will met if not select it.
-> >
->
-> Why aren't there options to enable clk-imx6q and clk-imx6sl in the
-> clk/imx/Kconfig file? Those can be bool or tristate depending on if the
-> SoC drivers use CLK_OF_DECLARE or not and depend on the mxc-clk library
-> and SoC config we have in the makefile today.
-
-Yes, we can do that in clk/imx/Kconfig as follows theoretically.
-config CLK_IMX6Q
-        bool
-        def_bool ARCH_MXC && ARM
-        select MXC_CLK
-
-But we have totally 15 platforms that need to change.
-e.g.
-drivers/clk/imx/Makefile
-obj-$(CONFIG_SOC_IMX1)   += clk-imx1.o
-obj-$(CONFIG_SOC_IMX21)  += clk-imx21.o
-obj-$(CONFIG_SOC_IMX25)  += clk-imx25.o
-obj-$(CONFIG_SOC_IMX27)  += clk-imx27.o
-obj-$(CONFIG_SOC_IMX31)  += clk-imx31.o
-obj-$(CONFIG_SOC_IMX35)  += clk-imx35.o
-obj-$(CONFIG_SOC_IMX5)   += clk-imx5.o
-obj-$(CONFIG_SOC_IMX6Q)  += clk-imx6q.o
-obj-$(CONFIG_SOC_IMX6SL) += clk-imx6sl.o
-obj-$(CONFIG_SOC_IMX6SLL) += clk-imx6sll.o
-obj-$(CONFIG_SOC_IMX6SX) += clk-imx6sx.o
-obj-$(CONFIG_SOC_IMX6UL) += clk-imx6ul.o
-obj-$(CONFIG_SOC_IMX7D)  += clk-imx7d.o
-obj-$(CONFIG_SOC_IMX7ULP) += clk-imx7ulp.o
-obj-$(CONFIG_SOC_VF610)  += clk-vf610.o
-
-Not sure if it's really worth to do that.
-The easiest way to address this issue is just select it in
-arch/arm/mach-imx/Kconfig,
-then no need to change those 15 clock config options or just builtin
-clk libraries.
-
-Stephen,
-which one do you prefer?
-
-Regards
-Aisheng
+PiBGcm9tOiBBbnNvbiBIdWFuZyA8QW5zb24uSHVhbmdAbnhwLmNvbT4NCj4gU2VudDogTW9uZGF5
+LCBKdW5lIDI5LCAyMDIwIDE6NTQgUE0NCj4gDQo+IGkuTVggY29tbW9uIGNsb2NrIGRyaXZlcnMg
+bWF5IHN1cHBvcnQgbW9kdWxlIGJ1aWxkLCBzbyBpdCBpcyBOT1Qgc2VsZWN0ZWQgYnkNCj4gZGVm
+YXVsdCwgZm9yIEFSQ0hfTVhDIEFSTXY3IHBsYXRmb3JtcywgbmVlZCB0byBzZWxlY3QgaXQgbWFu
+dWFsbHkgaW4gZWFjaCBTb0MNCj4gdG8gbWFrZSBidWlsZCBwYXNzLg0KPiANCj4gU2lnbmVkLW9m
+Zi1ieTogQW5zb24gSHVhbmcgPEFuc29uLkh1YW5nQG54cC5jb20+DQo+IC0tLQ0KPiBDaGFuZ2Vz
+IHNpbmNlIFYyOg0KPiAJLSBtYW51YWxseSBzZWxlY3QgdGhlIE1YQ19DTEsgaW4gZWFjaCBTb0Mg
+aW5zdGVhZCBvZiBzZWxlY3RpbmcgaXQNCj4gCSAgZm9yIEFSQ0hfTVhDLg0KDQpBbnkgcmVhc29u
+IHRvIGRvIHRoaXM/DQoNClJlZ2FyZHMNCkFpc2hlbmcNCg0KPiAtLS0NCj4gIGFyY2gvYXJtL21h
+Y2gtaW14L0tjb25maWcgfCAxMSArKysrKysrKysrKw0KPiAgMSBmaWxlIGNoYW5nZWQsIDExIGlu
+c2VydGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9hcmNoL2FybS9tYWNoLWlteC9LY29uZmln
+IGIvYXJjaC9hcm0vbWFjaC1pbXgvS2NvbmZpZyBpbmRleA0KPiBlN2Q3YjkwLi5hNDY1YzBmIDEw
+MDY0NA0KPiAtLS0gYS9hcmNoL2FybS9tYWNoLWlteC9LY29uZmlnDQo+ICsrKyBiL2FyY2gvYXJt
+L21hY2gtaW14L0tjb25maWcNCj4gQEAgLTU4LDYgKzU4LDcgQEAgY29uZmlnIFNPQ19JTVgyMQ0K
+PiAgCXNlbGVjdCBDUFVfQVJNOTI2VA0KPiAgCXNlbGVjdCBJTVhfSEFWRV9JT01VWF9WMQ0KPiAg
+CXNlbGVjdCBNWENfQVZJQw0KPiArCXNlbGVjdCBNWENfQ0xLDQo+IA0KPiAgY29uZmlnIFNPQ19J
+TVgyNw0KPiAgCWJvb2wNCj4gQEAgLTY1LDE3ICs2NiwyMCBAQCBjb25maWcgU09DX0lNWDI3DQo+
+ICAJc2VsZWN0IElNWF9IQVZFX0lPTVVYX1YxDQo+ICAJc2VsZWN0IE1YQ19BVklDDQo+ICAJc2Vs
+ZWN0IFBJTkNUUkxfSU1YMjcNCj4gKwlzZWxlY3QgTVhDX0NMSw0KPiANCj4gIGNvbmZpZyBTT0Nf
+SU1YMzENCj4gIAlib29sDQo+ICAJc2VsZWN0IENQVV9WNg0KPiAgCXNlbGVjdCBNWENfQVZJQw0K
+PiArCXNlbGVjdCBNWENfQ0xLDQo+IA0KPiAgY29uZmlnIFNPQ19JTVgzNQ0KPiAgCWJvb2wNCj4g
+IAlzZWxlY3QgQVJDSF9NWENfSU9NVVhfVjMNCj4gIAlzZWxlY3QgTVhDX0FWSUMNCj4gIAlzZWxl
+Y3QgUElOQ1RSTF9JTVgzNQ0KPiArCXNlbGVjdCBNWENfQ0xLDQo+IA0KPiAgaWYgQVJDSF9NVUxU
+SV9WNQ0KPiANCj4gQEAgLTQxOSw2ICs0MjMsNyBAQCBjb25maWcgU09DX0lNWDENCj4gIAlzZWxl
+Y3QgQ1BVX0FSTTkyMFQNCj4gIAlzZWxlY3QgTVhDX0FWSUMNCj4gIAlzZWxlY3QgUElOQ1RSTF9J
+TVgxDQo+ICsJc2VsZWN0IE1YQ19DTEsNCj4gIAloZWxwDQo+ICAJICBUaGlzIGVuYWJsZXMgc3Vw
+cG9ydCBmb3IgRnJlZXNjYWxlIGkuTVgxIHByb2Nlc3Nvcg0KPiANCj4gQEAgLTQzMiw2ICs0Mzcs
+NyBAQCBjb25maWcgU09DX0lNWDI1DQo+ICAJc2VsZWN0IENQVV9BUk05MjZUDQo+ICAJc2VsZWN0
+IE1YQ19BVklDDQo+ICAJc2VsZWN0IFBJTkNUUkxfSU1YMjUNCj4gKwlzZWxlY3QgTVhDX0NMSw0K
+PiAgCWhlbHANCj4gIAkgIFRoaXMgZW5hYmxlcyBzdXBwb3J0IGZvciBGcmVlc2NhbGUgaS5NWDI1
+IHByb2Nlc3NvciAgZW5kaWYgQEAgLTQ0NCw2DQo+ICs0NTAsNyBAQCBjb25maWcgU09DX0lNWDUN
+Cj4gIAlib29sDQo+ICAJc2VsZWN0IEhBVkVfSU1YX1NSQw0KPiAgCXNlbGVjdCBNWENfVFpJQw0K
+PiArCXNlbGVjdCBNWENfQ0xLDQo+IA0KPiAgY29uZmlnCVNPQ19JTVg1MA0KPiAgCWJvb2wgImku
+TVg1MCBzdXBwb3J0Ig0KPiBAQCAtNDc3LDYgKzQ4NCw3IEBAIGNvbmZpZyBTT0NfSU1YNg0KPiAg
+CXNlbGVjdCBIQVZFX0lNWF9NTURDDQo+ICAJc2VsZWN0IEhBVkVfSU1YX1NSQw0KPiAgCXNlbGVj
+dCBNRkRfU1lTQ09ODQo+ICsJc2VsZWN0IE1YQ19DTEsNCj4gIAlzZWxlY3QgUEwzMTBfRVJSQVRB
+Xzc2OTQxOSBpZiBDQUNIRV9MMlgwDQo+IA0KPiAgY29uZmlnIFNPQ19JTVg2UQ0KPiBAQCAtNTYx
+LDYgKzU2OSw3IEBAIGNvbmZpZyBTT0NfSU1YN0RfQ000ICBjb25maWcgU09DX0lNWDdEDQo+ICAJ
+Ym9vbCAiaS5NWDcgRHVhbCBzdXBwb3J0Ig0KPiAgCXNlbGVjdCBQSU5DVFJMX0lNWDdEDQo+ICsJ
+c2VsZWN0IE1YQ19DTEsNCj4gIAlzZWxlY3QgU09DX0lNWDdEX0NBNyBpZiBBUkNIX01VTFRJX1Y3
+DQo+ICAJc2VsZWN0IFNPQ19JTVg3RF9DTTQgaWYgQVJNX1NJTkdMRV9BUk1WN00NCj4gIAlzZWxl
+Y3QgQVJNX0VSUkFUQV84MTQyMjAgaWYgQVJDSF9NVUxUSV9WNyBAQCAtNTcxLDYgKzU4MCw3IEBA
+DQo+IGNvbmZpZyBTT0NfSU1YN1VMUA0KPiAgCWJvb2wgImkuTVg3VUxQIHN1cHBvcnQiDQo+ICAJ
+c2VsZWN0IENMS1NSQ19JTVhfVFBNDQo+ICAJc2VsZWN0IFBJTkNUUkxfSU1YN1VMUA0KPiArCXNl
+bGVjdCBNWENfQ0xLDQo+ICAJc2VsZWN0IFNPQ19JTVg3RF9DQTcgaWYgQVJDSF9NVUxUSV9WNw0K
+PiAgCXNlbGVjdCBTT0NfSU1YN0RfQ000IGlmIEFSTV9TSU5HTEVfQVJNVjdNDQo+ICAJaGVscA0K
+PiBAQCAtNTgwLDYgKzU5MCw3IEBAIGNvbmZpZyBTT0NfVkY2MTANCj4gIAlib29sICJWeWJyaWQg
+RmFtaWx5IFZGNjEwIHN1cHBvcnQiDQo+ICAJc2VsZWN0IEFSTV9HSUMgaWYgQVJDSF9NVUxUSV9W
+Nw0KPiAgCXNlbGVjdCBQSU5DVFJMX1ZGNjEwDQo+ICsJc2VsZWN0IE1YQ19DTEsNCj4gDQo+ICAJ
+aGVscA0KPiAgCSAgVGhpcyBlbmFibGVzIHN1cHBvcnQgZm9yIEZyZWVzY2FsZSBWeWJyaWQgVkY2
+MTAgcHJvY2Vzc29yLg0KPiAtLQ0KPiAyLjcuNA0KDQo=
