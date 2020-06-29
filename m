@@ -2,168 +2,88 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC53C20DFC8
-	for <lists+linux-clk@lfdr.de>; Mon, 29 Jun 2020 23:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBCC20E1F9
+	for <lists+linux-clk@lfdr.de>; Mon, 29 Jun 2020 23:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732284AbgF2Uj4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 29 Jun 2020 16:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729438AbgF2TOO (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Jun 2020 15:14:14 -0400
-Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A33C00860E
-        for <linux-clk@vger.kernel.org>; Mon, 29 Jun 2020 03:24:27 -0700 (PDT)
-Received: by mail-vk1-xa41.google.com with SMTP id v26so600290vkn.2
-        for <linux-clk@vger.kernel.org>; Mon, 29 Jun 2020 03:24:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jXIzNUJKIGOWB+vmizHHKW6F1IB6+PeDc+RdNQZfG4E=;
-        b=H9p2ftgM6BDXXXU7ok8FHRr0sq4G6s1m37NDNFG1eDXJ2qFH1yJopBKuPGyReljBc2
-         kwUimi0R9cmeDvpOSRiQyQhHNeL/nurHP9Jh+UQbHEFANJyAEqzIRzvwW8/RZGiBJf0s
-         dBKMsE70llEhUl45joNctOxC5GYrj+/jp30sU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jXIzNUJKIGOWB+vmizHHKW6F1IB6+PeDc+RdNQZfG4E=;
-        b=qZbBpp4Y4JD8kLBMgT6I52wAA6v3+Zetxmd23Z4UjjSQU9sMWyJ0RmJZ/woZyHwt7+
-         /zERpV1dyop5TelGtksBDZAMazGLdaItFZZdjr7KIvU9q9dl11JR4A5qZ8eSXz7BjePW
-         0PhAb5jqy30RjUxLg6vtZ1MOH+aGaZHwMYGKa2ECuPTPmQpJGc+nbdt7oMa3BPma3KeW
-         VbqeYRXsWQ/5a6Qil1GlCGRcazSEPtfMHHdOXeuwcA8OqWtDZaR3abJrRTyHdM1JA4nP
-         /VZBY3BR7t+4Va5XfSaOsp1Hw5C5ftzAonQIKjTvRb0IM1KP80vFuGt/BGeeBbCAPhaq
-         u1Jg==
-X-Gm-Message-State: AOAM532ygMu6APLEYcVumZfj+SmlHoH3mivaNCDWCGNL5jHjPBhmJ1o6
-        qmSIZdZft3v0Cf/QSuYs5r9MkXqG+ERFeEcTNljlXg==
-X-Google-Smtp-Source: ABdhPJwbhBKd5emQSa+NeM2N/t2NxnVvt7PQYuLqxuOf9/8087m6YgWuvv1HZwoG38pvPAxhwYkyo0VJbv0pY52R32g=
-X-Received: by 2002:a1f:17c1:: with SMTP id 184mr9308345vkx.51.1593426266169;
- Mon, 29 Jun 2020 03:24:26 -0700 (PDT)
+        id S2390126AbgF2VBU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 29 Jun 2020 17:01:20 -0400
+Received: from mout.kundenserver.de ([217.72.192.75]:57627 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390117AbgF2VBQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Jun 2020 17:01:16 -0400
+Received: from mail-qk1-f180.google.com ([209.85.222.180]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MKsax-1jWq9I1guT-00LHp8; Mon, 29 Jun 2020 13:33:33 +0200
+Received: by mail-qk1-f180.google.com with SMTP id l6so14863002qkc.6;
+        Mon, 29 Jun 2020 04:33:33 -0700 (PDT)
+X-Gm-Message-State: AOAM5328dsWrDwEGKaYKF55sT8S/iBqgzomm53AU8WinhIgcfmtr0EpS
+        vo9u6IrVjdO5h7GYjOgm9H4DZvkmVz4uDOMJbZ4=
+X-Google-Smtp-Source: ABdhPJye1KWp3fw6Y9xHkgeRSfS3PyrD8nrjYY7J24blGVdz8f1gm/UtrzMRZEXgieMS3379QDGNnd1Ku5iv2TMFnu8=
+X-Received: by 2002:a37:b484:: with SMTP id d126mr14557185qkf.394.1593430412219;
+ Mon, 29 Jun 2020 04:33:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200616055223.119360-1-ikjn@chromium.org> <159293933210.62212.706350398043250620@swboyd.mtv.corp.google.com>
-In-Reply-To: <159293933210.62212.706350398043250620@swboyd.mtv.corp.google.com>
-From:   Ikjoon Jang <ikjn@chromium.org>
-Date:   Mon, 29 Jun 2020 18:24:15 +0800
-Message-ID: <CAATdQgA4aoGWtuWb6AWpzD-VSfPV5u7++0rUoQN-cjwA7UpcVA@mail.gmail.com>
-Subject: Re: [PATCH] clk: Provide future parent in clk notification
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org,
+References: <1593410042-10598-1-git-send-email-Anson.Huang@nxp.com> <1593410042-10598-3-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <1593410042-10598-3-git-send-email-Anson.Huang@nxp.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 29 Jun 2020 13:33:16 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2ZL6_rV=2brNz=UDdji3mddF+1Nb6Ew+=n4j0-fNrCug@mail.gmail.com>
+Message-ID: <CAK8P3a2ZL6_rV=2brNz=UDdji3mddF+1Nb6Ew+=n4j0-fNrCug@mail.gmail.com>
+Subject: Re: [PATCH V3 02/10] init.h: Fix the __setup_param() macro for module build
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org
+        Stephen Boyd <sboyd@kernel.org>, oleksandr.suvorov@toradex.com,
+        Stefan Agner <stefan.agner@toradex.com>,
+        Peng Fan <peng.fan@nxp.com>, Abel Vesa <abel.vesa@nxp.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Andy Duan <fugang.duan@nxp.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        NXP Linux Team <Linux-imx@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:07GlrRMWmO5DvLo7yBHmrip+tsbslFabumF1hH9WCHW3OEHg9B0
+ gXZwj36mzUSffIjIBWLCKPSYTHvew7iFkk3H7u/5Q5cBo92PcUzsX898z+7cbaRUnneb15d
+ FKmxOB1TsQ+a7c5U88lgUCThx63kWVWf4edm7LRUJdjnzixuMM6pP4u0BJnZm9FqwX/4iPP
+ dCB+AUSFttLsKuQdBdbZQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cut6NnEb7eY=:n4VyG8vxiQxJPJxagmrYp5
+ h+PjDDYquSdLoygHweSVsCjyOuu19SU8qs3MSxvWDPfnj/nGNd0ZJNro5Olzuio3sTxU5aknL
+ r0oHQ9AZsXjIrK81NBWyNkrpZzS1z9ghGByQ4qzEEWaZOb2JkIt9IPvJDDnC02n5+hNQrJ0bN
+ nfKxVRnJrnKBJS/TxPiO/m+79EMFMn7U3zBtEGXawjoggtaeJSCPxcfe1WC9KSO9De7C+hPZG
+ +kX7tM5fnPOB++3/9GHVKYMZYOoV8CFwI9VJY4l1cYg5sNc4Rl4J6yPwXlMaFfSNkAWHo8tc+
+ OMpGCnFj0AF6yvqi7I6mymoZvMhtc+uZ4v+BevKQCI6QhfLiEKpGaKLpv9aqyY5bkwNmDqNSx
+ NJm6BvcWKISwMOdaVrxrseYYbKSr7BN1GpWBC4iZ1prgyYR52HxdjUcO8J6xd0HLf/CbfvvWZ
+ nNOFxB4tYZEo3MN5+mLFT5nidNSYXezxZo7KC+p25ce+eYbw89NW9xUKR1NFtU58lYL8H3uC0
+ KZ+7gsmNefLgmsgQ8BRtc1BEupHeM/svWp799ah8Yyhndf/dZLWj4NeYwRuOpXXTRQ4loWBK+
+ TFKES6oDUKrRSLzaKlksTDi4RWCX+WvEiRz2p0W93DhReFzmx/ztMF5J2rVFS03p3BCCjeyen
+ DUOnEp//GHZwe9gRgSXqVmAW4WtKpwyy85519E9jq3gpMgriAEp9adrM6ZbWi0k0H03CgAKJ2
+ cG0BV147K7YZ8wa/BR/Hs/MfcpwYKH6in6ge0+dVdUn3FtcV202ubJJ4/+uF67mY6IHpfDxXU
+ /HFMPTayINqZA+BvEe5O3MUxIRmu9nRhTtzIqQcGVfPN0kq9Is=
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Jun 24, 2020 at 3:08 AM Stephen Boyd <sboyd@kernel.org> wrote:
+On Mon, Jun 29, 2020 at 8:06 AM Anson Huang <Anson.Huang@nxp.com> wrote:
 >
-> Quoting Ikjoon Jang (2020-06-15 22:52:23)
-> > Current clk notification handlers cannot know its new parent in
-> > PRE_RATE_CHANGE event. This patch simply adds parent clk to
-> > clk_notifier_data so the child clk is now able to know its future
-> > parent prior to reparenting.
+> Keep __setup_param() to use same parameters for both built in
+> and built as module, it can make the drivers which call it easier
+> when the drivers can be built in or built as module.
 >
-> Yes, but why is that important?
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 
-Basically I wondered if there are some cases needed to check more
-conditions other than
-clock rate (e.g. parent clock's internal properties).
+I wonder if we should instead drop the __setup() and __setup_param()
+definitions from the #else block here. This was clearly not used anywhere,
+and it sounds like any possible user is broken and should be changed to
+not use __setup() anyway.
 
-In my case,  now I'm trying to make a wrapper clock on a mux clock which has
-a rate adjustable PLL clock and a fixed temporary clock as its parents.
-
-clkPLL   clkTMP
-        \     /
-      clkMUX
-
-Current device driver is using three different clocks specified from
-the device tree
-and the driver handles clocks like this way to change operating clock speed.
-
-clk_set_parent(clkMUX, clkTMP);
-clk_set_rate(clkPLL, HZ);
-udelay(10);
-clk_set_parent(clkMUX, clkPLL);
-
-Now what I want to do is to supply only one clock to a device node,
-make the driver
-call clk_set_rate() only, and clkMUX 's notification handler does
-set_parent() things instead.
-So it's good to know that clkMUX's rate changing is not caused by
-clk_set_parent() and
-deny its rate changing when an inappropriate parent is set.
-
-Sorry for the long story for a simple reason, and maybe there could be
-a more plausible reason
-for this in near future?
-
->
-> >
-> > Change-Id: I099a784d5302a93951bdc6254d85f8df8c770462
->
-> Please remove these.
-
-Oops, thanks!
-
->
-> > Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
-> > ---
-> >  drivers/clk/clk.c   | 30 +++++++++++++++++-------------
-> >  include/linux/clk.h |  9 ++++++---
-> >  2 files changed, 23 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-> > index 3f588ed06ce3..62c4e7b50ae5 100644
-> > --- a/drivers/clk/clk.c
-> > +++ b/drivers/clk/clk.c
-> > @@ -1846,7 +1849,7 @@ static int __clk_set_parent(struct clk_core *core, struct clk_core *parent,
-> >   * take on the rate of its parent.
-> >   */
-> >  static int __clk_speculate_rates(struct clk_core *core,
-> > -                                unsigned long parent_rate)
-> > +                                struct clk_core *parent)
-> >  {
-> >         struct clk_core *child;
-> >         unsigned long new_rate;
-> > @@ -1854,11 +1857,12 @@ static int __clk_speculate_rates(struct clk_core *core,
-> >
-> >         lockdep_assert_held(&prepare_lock);
-> >
-> > -       new_rate = clk_recalc(core, parent_rate);
-> > +       new_rate = clk_recalc(core, parent ? parent->rate : 0);
-> >
-> >         /* abort rate change if a driver returns NOTIFY_BAD or NOTIFY_STOP */
-> >         if (core->notifier_count)
-> > -               ret = __clk_notify(core, PRE_RATE_CHANGE, core->rate, new_rate);
-> > +               ret = __clk_notify(core, parent, PRE_RATE_CHANGE,
-> > +                                  core->rate, new_rate);
-> >
-> >         if (ret & NOTIFY_STOP_MASK) {
-> >                 pr_debug("%s: clk notifier callback for clock %s aborted with error %d\n",
-> > @@ -1867,7 +1871,7 @@ static int __clk_speculate_rates(struct clk_core *core,
-> >         }
-> >
-> >         hlist_for_each_entry(child, &core->children, child_node) {
-> > -               ret = __clk_speculate_rates(child, new_rate);
-> > +               ret = __clk_speculate_rates(child, core);
->
-> How does this work? core->rate isn't assigned yet when we're speculating
-> rates down the tree to the leaves. So that clk_recalc() in the above
-> hunk would need to save the rate away, which is wrong because it isn't
-> changed yet, for this line to make sense.
->
-Yes, you're right, this was simply wrong..
-
-> Given that I had to read this for a few minutes to figure this out it
-> seems that trying to combine the parent and the rate as arguments is
-> actually more complicated than adding another parameter. Please just add
-> another argument.
->
-> >                 if (ret & NOTIFY_STOP_MASK)
-> >                         break;
-> >         }
-
-Agree,
-Thank you for the review.
+      Arnd
