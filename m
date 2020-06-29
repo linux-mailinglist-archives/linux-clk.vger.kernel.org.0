@@ -2,287 +2,321 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7CA20DD69
-	for <lists+linux-clk@lfdr.de>; Mon, 29 Jun 2020 23:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD0920DD39
+	for <lists+linux-clk@lfdr.de>; Mon, 29 Jun 2020 23:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728100AbgF2Svq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 29 Jun 2020 14:51:46 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:35733 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726831AbgF2Sva (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Jun 2020 14:51:30 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 14CE6580597;
-        Mon, 29 Jun 2020 11:21:17 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 29 Jun 2020 11:21:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=krUOveEdR6vT0SBK3qtfa5n706o
-        ryNuDtBLGwOel0Fo=; b=VEtU5b+EqJvRVoGcecDwOgK9INc1igaqGpNTrbyWjp7
-        t4GknrXv7tKctUi5JWrH2p6O6uYYIDpxpq2pM/8mTaxmakYjDGs2EQutbHreQYwd
-        fJv+kZaW3ewSRuY8FVsI1HEbFNUwl4erX42gfLwEeTg1ns00ICau45mAoNseOhbC
-        8kD0h8BGjs8fPp3YjhpxkYlwLEC/2n2D77Szii/1UwuSkmfTTqEGQnnsoyY3GpIl
-        EHBhoY9KmtyUnCsveKv0MW5JG2xy2qCB6TaqQxf0mcFwx0IB64WHhkgiQN6O0lpn
-        DT8q0Ta5pesXagJSN5DYMMpMFpbUCjfwZIr1JA4Z/0w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=krUOve
-        EdR6vT0SBK3qtfa5n706oryNuDtBLGwOel0Fo=; b=L6DQtBRbaLn4l3ffIzF0Bw
-        bJfxa6fVOnQh9qO0p0mJrmSfuq9FDhIP89CuSO4gemX0ANlp8rukEIP6+d25PuP6
-        a3QSGPxF/k+Xcx7uqFlMQ2P4OF4kTh9ELsXnA5re3hD2MOlpZgMYXre6ehH5kS4a
-        cCxOeIagn8x5pSEn1VwUNGpbyjjxxHPsAy6Hdca09MtGrRJpAf6loosOhXjVBlR3
-        Ny+o5D6hqOsFi534Rc4VwRjOE/iQBXI0yjAY/wmsvZwTjr3/tXfURRfYZhIh+Mk8
-        hd14z5Ml3RtHtEw0mRB/nAAy5xb04b4c9LOIvEKkmyqZj/VrfLGJuhd6ky+jhXhA
-        ==
-X-ME-Sender: <xms:6Qb6Xs5A65jiVMk-TBJ7E6MWYyS4QOEbvSnIUioCEO_-3JMTBBRYfA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudelledgudehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
-    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:6Qb6Xt7HQSIAah0eJg07s37QLKiq_njkDArZ0GZNou-AaxfXfxeVWA>
-    <xmx:6Qb6Xrflm2twAlFg4vyHYS5sN91S-uNRTR0cQNey4cTSqfSaVfk9JA>
-    <xmx:6Qb6XhKlWp2txSt5ptrbZvHChxtJtnYggh9FY3iKjY9qUnbEHvLN1w>
-    <xmx:7Qb6Xg7aRoYgPeksuOqXA0bw-zrOHrTGsRA0vVtbBGtdnNedV-Vj5g>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 83B73328005E;
-        Mon, 29 Jun 2020 11:21:13 -0400 (EDT)
-Date:   Mon, 29 Jun 2020 17:21:12 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Frank Lee <frank@allwinnertech.com>
-Cc:     robh+dt@kernel.org, wens@csie.org, mturquette@baylibre.com,
-        sboyd@kernel.org, srinivas.kandagatla@linaro.org,
-        linus.walleij@linaro.org, anarsoul@gmail.com,
-        tiny.windzz@gmail.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        p.zabel@pengutronix.de, clabbe@baylibre.com, icenowy@aosc.io,
-        megous@megous.com, karlp@tweak.net.au, bage@linutronix.de,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        huangshuosheng@allwinnertech.com, liyong@allwinnertech.com
-Subject: Re: [PATCH v2 09/11] arm64: allwinner: A100: add the basical
- Allwinner A100 DTSI file
-Message-ID: <20200629152112.fo3kgcztlutj66hc@gilmour.lan>
-References: <20200622025907.32574-1-frank@allwinnertech.com>
- <20200622025907.32574-10-frank@allwinnertech.com>
+        id S1727810AbgF2Shp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 29 Jun 2020 14:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727781AbgF2Sho (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Jun 2020 14:37:44 -0400
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D32C031422
+        for <linux-clk@vger.kernel.org>; Mon, 29 Jun 2020 10:21:04 -0700 (PDT)
+Received: by mail-qv1-xf41.google.com with SMTP id d12so8023807qvn.0
+        for <linux-clk@vger.kernel.org>; Mon, 29 Jun 2020 10:21:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=marek-ca.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=mgDv4Rf3fgP1WVv6wT9BRKGCzb8IU1E1hjosgtpH4Dg=;
+        b=PerDa+EExgJbsaTj4afcMBdTTpqB7QeEaZD7Hjt7JYv6Qwz67muPOQO5BIzuOSWQVG
+         8/YqWuk98PY5t3Q17+SOb5L3qXNf2VBjC69uLmDGtY40oTtwStlvh5yBcvATPKjjCM8W
+         JlUmUAsocndTuo1IbT/Xd2FvtQuTMXFAhwRRyfKOAZuv3kDYamSy9P3WZ3ASAwr+RJuu
+         D/aG1J39VqnFb2wPwmWpsy6f8kexXox62Thlgx6fXtqlsl40LcJQLneJj1rDJoJgt1vb
+         mJWtLaqMCsfSf64cBmyxm5Byo1hGE++XdiBK5CGUdsmcdSE1Zap96boQrBqbvwIY+0cN
+         30Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=mgDv4Rf3fgP1WVv6wT9BRKGCzb8IU1E1hjosgtpH4Dg=;
+        b=FF+XI0q66CsC5/w4vU6H+scPaNcEbff36g0PytvfJ925U2z/CZclVsKaafOwqQOslg
+         dqzkUu3IGqRbmjk5Feit7zWEBYCloQtE3aLl+WTEBiElne4SP7IXBGnFWVzWzPGxxI46
+         o/F31FmkU5dVvHSyVdSV9WhjQQdlOoQXuKJfldR930+e8IAcvS8EowJycb7t6/JSfhz5
+         +26UMyjb0NrACqQSmUqV4x0v3MFsIn+M2lS1ddNyWrclRGiMzoD8ZpQImiP6B30gVrC7
+         hiaEbVnfzNP4EtbbdLdo/91k5G4VfEpiZ/krMleaLd+lLE+q7268T1gD6jD4GZ9Da4Bj
+         jObQ==
+X-Gm-Message-State: AOAM5309rNMvfiGDocGanar2QSM/HvX41ssMHl9yr9ac0QfanfKqmYr1
+        joH1vbu59c8DuOJc10QS6fKwBA==
+X-Google-Smtp-Source: ABdhPJzl5MmbN0U4UGWGnJsUeRrfX6apXCSs4XkAmiWOobgEI+CQoODbWui3tUIKp2qdMHgm2rq9hw==
+X-Received: by 2002:a0c:8e8c:: with SMTP id x12mr16000233qvb.55.1593451263696;
+        Mon, 29 Jun 2020 10:21:03 -0700 (PDT)
+Received: from localhost.localdomain ([147.253.86.153])
+        by smtp.gmail.com with ESMTPSA id q5sm408363qtf.12.2020.06.29.10.21.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2020 10:21:03 -0700 (PDT)
+From:   Jonathan Marek <jonathan@marek.ca>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-clk@vger.kernel.org (open list:COMMON CLK FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2 03/13] clk: qcom: clk-alpha-pll: same regs and ops for trion and lucid
+Date:   Mon, 29 Jun 2020 13:20:33 -0400
+Message-Id: <20200629172049.30452-4-jonathan@marek.ca>
+X-Mailer: git-send-email 2.26.1
+In-Reply-To: <20200629172049.30452-1-jonathan@marek.ca>
+References: <20200629172049.30452-1-jonathan@marek.ca>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="lbejoaecuizw4km4"
-Content-Disposition: inline
-In-Reply-To: <20200622025907.32574-10-frank@allwinnertech.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Fixed ops were already identical, this adds support for non-fixed ops by
+sharing between trion and lucid.
 
---lbejoaecuizw4km4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This also changes the names for trion ops to be consistent with the rest.
 
-Hi,
+Note LUCID_PCAL_DONE is renamed to TRION_PCAL_DONE because it is wrong for
+lucid, LUCID_PCAL_DONE should be BIT(27). Next patch will address this.
 
-On Mon, Jun 22, 2020 at 10:59:05AM +0800, Frank Lee wrote:
-> Allwinner A100 is a new SoC with Cortex-A53 cores, this commit adds
-> the basical DTSI file of it, including the clock, i2c, pins, sid, ths,
-> and UART support.
->=20
-> Signed-off-by: Frank Lee <frank@allwinnertech.com>
-> ---
->  arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi | 337 +++++++++++++++++++=
-++++++
->  1 file changed, 337 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
->=20
-> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi b/arch/arm64/=
-boot/dts/allwinner/sun50i-a100.dtsi
-> new file mode 100644
-> index 0000000..5133897
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
-> @@ -0,0 +1,337 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
-> +/*
-> + * Copyright (c) 2020 Frank Lee <frank@allwinnertech.com>
-> + */
-> +
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/clock/sun50i-a100-ccu.h>
-> +#include <dt-bindings/clock/sun50i-a100-r-ccu.h>
-> +#include <dt-bindings/reset/sun50i-a100-ccu.h>
-> +#include <dt-bindings/reset/sun50i-a100-r-ccu.h>
-> +
-> +/ {
-> +	interrupt-parent =3D <&gic>;
-> +	#address-cells =3D <2>;
-> +	#size-cells =3D <2>;
-> +
-> +	cpus {
-> +		#address-cells =3D <1>;
-> +		#size-cells =3D <0>;
-> +
-> +		cpu0: cpu@0 {
-> +			compatible =3D "arm,armv8";
-> +			device_type =3D "cpu";
-> +			reg =3D <0x0>;
-> +			enable-method =3D "psci";
-> +		};
-> +
-> +		cpu@1 {
-> +			compatible =3D "arm,armv8";
-> +			device_type =3D "cpu";
-> +			reg =3D <0x1>;
-> +			enable-method =3D "psci";
-> +		};
-> +
-> +		cpu@2 {
-> +			compatible =3D "arm,armv8";
-> +			device_type =3D "cpu";
-> +			reg =3D <0x2>;
-> +			enable-method =3D "psci";
-> +		};
-> +
-> +		cpu@3 {
-> +			compatible =3D "arm,armv8";
-> +			device_type =3D "cpu";
-> +			reg =3D <0x3>;
-> +			enable-method =3D "psci";
-> +		};
-> +	};
-> +
-> +	psci {
-> +		compatible =3D "arm,psci-1.0";
-> +		method =3D "smc";
-> +	};
-> +
-> +	iosc: internal-osc-clk {
-> +		compatible =3D "fixed-clock";
-> +		clock-frequency =3D <16000000>;
-> +		clock-accuracy =3D <300000000>;
-> +		clock-output-names =3D "iosc";
-> +		#clock-cells =3D <0>;
-> +	};
-> +
-> +	dcxo24M: dcxo24M_clk {
+Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+---
+ drivers/clk/qcom/clk-alpha-pll.c | 58 ++++++++++----------------------
+ drivers/clk/qcom/clk-alpha-pll.h | 17 ++++++----
+ drivers/clk/qcom/gcc-sm8150.c    |  8 ++---
+ 3 files changed, 32 insertions(+), 51 deletions(-)
 
-You shouldn't have underscores in the node names.
+diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
+index 1325139173c9..be7ffeae21b1 100644
+--- a/drivers/clk/qcom/clk-alpha-pll.c
++++ b/drivers/clk/qcom/clk-alpha-pll.c
+@@ -101,21 +101,6 @@ const u8 clk_alpha_pll_regs[][PLL_OFF_MAX_REGS] = {
+ 		[PLL_OFF_FRAC] = 0x38,
+ 	},
+ 	[CLK_ALPHA_PLL_TYPE_TRION] = {
+-		[PLL_OFF_L_VAL] = 0x04,
+-		[PLL_OFF_CAL_L_VAL] = 0x08,
+-		[PLL_OFF_USER_CTL] = 0x0c,
+-		[PLL_OFF_USER_CTL_U] = 0x10,
+-		[PLL_OFF_USER_CTL_U1] = 0x14,
+-		[PLL_OFF_CONFIG_CTL] = 0x18,
+-		[PLL_OFF_CONFIG_CTL_U] = 0x1c,
+-		[PLL_OFF_CONFIG_CTL_U1] = 0x20,
+-		[PLL_OFF_TEST_CTL] = 0x24,
+-		[PLL_OFF_TEST_CTL_U] = 0x28,
+-		[PLL_OFF_STATUS] = 0x30,
+-		[PLL_OFF_OPMODE] = 0x38,
+-		[PLL_OFF_ALPHA_VAL] = 0x40,
+-	},
+-	[CLK_ALPHA_PLL_TYPE_LUCID] =  {
+ 		[PLL_OFF_L_VAL] = 0x04,
+ 		[PLL_OFF_CAL_L_VAL] = 0x08,
+ 		[PLL_OFF_USER_CTL] = 0x0c,
+@@ -154,9 +139,9 @@ EXPORT_SYMBOL_GPL(clk_alpha_pll_regs);
+ #define PLL_OUT_MASK		0x7
+ #define PLL_RATE_MARGIN		500
+ 
+-/* LUCID PLL specific settings and offsets */
+-#define LUCID_PLL_CAL_VAL	0x44
+-#define LUCID_PCAL_DONE		BIT(26)
++/* TRION PLL specific settings and offsets */
++#define TRION_PLL_CAL_VAL	0x44
++#define TRION_PCAL_DONE		BIT(26)
+ 
+ #define pll_alpha_width(p)					\
+ 		((PLL_ALPHA_VAL_U(p) - PLL_ALPHA_VAL(p) == 4) ?	\
+@@ -910,14 +895,14 @@ const struct clk_ops clk_alpha_pll_hwfsm_ops = {
+ };
+ EXPORT_SYMBOL_GPL(clk_alpha_pll_hwfsm_ops);
+ 
+-const struct clk_ops clk_trion_fixed_pll_ops = {
++const struct clk_ops clk_alpha_pll_fixed_trion_ops = {
+ 	.enable = clk_trion_pll_enable,
+ 	.disable = clk_trion_pll_disable,
+ 	.is_enabled = clk_trion_pll_is_enabled,
+ 	.recalc_rate = clk_trion_pll_recalc_rate,
+ 	.round_rate = clk_alpha_pll_round_rate,
+ };
+-EXPORT_SYMBOL_GPL(clk_trion_fixed_pll_ops);
++EXPORT_SYMBOL_GPL(clk_alpha_pll_fixed_trion_ops);
+ 
+ static unsigned long
+ clk_alpha_pll_postdiv_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+@@ -1337,12 +1322,12 @@ clk_trion_pll_postdiv_set_rate(struct clk_hw *hw, unsigned long rate,
+ 				  val << PLL_POST_DIV_SHIFT);
+ }
+ 
+-const struct clk_ops clk_trion_pll_postdiv_ops = {
++const struct clk_ops clk_alpha_pll_postdiv_trion_ops = {
+ 	.recalc_rate = clk_trion_pll_postdiv_recalc_rate,
+ 	.round_rate = clk_trion_pll_postdiv_round_rate,
+ 	.set_rate = clk_trion_pll_postdiv_set_rate,
+ };
+-EXPORT_SYMBOL_GPL(clk_trion_pll_postdiv_ops);
++EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_trion_ops);
+ 
+ static long clk_alpha_pll_postdiv_fabia_round_rate(struct clk_hw *hw,
+ 				unsigned long rate, unsigned long *prate)
+@@ -1397,13 +1382,13 @@ EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_fabia_ops);
+  * @regmap: register map
+  * @config: configuration to apply for pll
+  */
+-void clk_lucid_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
++void clk_trion_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
+ 			     const struct alpha_pll_config *config)
+ {
+ 	if (config->l)
+ 		regmap_write(regmap, PLL_L_VAL(pll), config->l);
+ 
+-	regmap_write(regmap, PLL_CAL_L_VAL(pll), LUCID_PLL_CAL_VAL);
++	regmap_write(regmap, PLL_CAL_L_VAL(pll), TRION_PLL_CAL_VAL);
+ 
+ 	if (config->alpha)
+ 		regmap_write(regmap, PLL_ALPHA_VAL(pll), config->alpha);
+@@ -1456,13 +1441,13 @@ void clk_lucid_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
+ 	/* Place the PLL in STANDBY mode */
+ 	regmap_update_bits(regmap, PLL_MODE(pll), PLL_RESET_N, PLL_RESET_N);
+ }
+-EXPORT_SYMBOL_GPL(clk_lucid_pll_configure);
++EXPORT_SYMBOL_GPL(clk_trion_pll_configure);
+ 
+ /*
+- * The Lucid PLL requires a power-on self-calibration which happens when the
++ * The TRION PLL requires a power-on self-calibration which happens when the
+  * PLL comes out of reset. Calibrate in case it is not completed.
+  */
+-static int alpha_pll_lucid_prepare(struct clk_hw *hw)
++static int alpha_pll_trion_prepare(struct clk_hw *hw)
+ {
+ 	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
+ 	u32 regval;
+@@ -1470,7 +1455,7 @@ static int alpha_pll_lucid_prepare(struct clk_hw *hw)
+ 
+ 	/* Return early if calibration is not needed. */
+ 	regmap_read(pll->clkr.regmap, PLL_STATUS(pll), &regval);
+-	if (regval & LUCID_PCAL_DONE)
++	if (regval & TRION_PCAL_DONE)
+ 		return 0;
+ 
+ 	/* On/off to calibrate */
+@@ -1481,7 +1466,7 @@ static int alpha_pll_lucid_prepare(struct clk_hw *hw)
+ 	return ret;
+ }
+ 
+-static int alpha_pll_lucid_set_rate(struct clk_hw *hw, unsigned long rate,
++static int alpha_pll_trion_set_rate(struct clk_hw *hw, unsigned long rate,
+ 				    unsigned long prate)
+ {
+ 	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
+@@ -1535,26 +1520,17 @@ static int alpha_pll_lucid_set_rate(struct clk_hw *hw, unsigned long rate,
+ 	return 0;
+ }
+ 
+-const struct clk_ops clk_alpha_pll_lucid_ops = {
+-	.prepare = alpha_pll_lucid_prepare,
++const struct clk_ops clk_alpha_pll_trion_ops = {
++	.prepare = alpha_pll_trion_prepare,
+ 	.enable = clk_trion_pll_enable,
+ 	.disable = clk_trion_pll_disable,
+ 	.is_enabled = clk_trion_pll_is_enabled,
+ 	.recalc_rate = clk_trion_pll_recalc_rate,
+ 	.round_rate = clk_alpha_pll_round_rate,
+-	.set_rate = alpha_pll_lucid_set_rate,
++	.set_rate = alpha_pll_trion_set_rate,
+ };
+ EXPORT_SYMBOL_GPL(clk_alpha_pll_lucid_ops);
+ 
+-const struct clk_ops clk_alpha_pll_fixed_lucid_ops = {
+-	.enable = clk_trion_pll_enable,
+-	.disable = clk_trion_pll_disable,
+-	.is_enabled = clk_trion_pll_is_enabled,
+-	.recalc_rate = clk_trion_pll_recalc_rate,
+-	.round_rate = clk_alpha_pll_round_rate,
+-};
+-EXPORT_SYMBOL_GPL(clk_alpha_pll_fixed_lucid_ops);
+-
+ const struct clk_ops clk_alpha_pll_postdiv_lucid_ops = {
+ 	.recalc_rate = clk_alpha_pll_postdiv_fabia_recalc_rate,
+ 	.round_rate = clk_alpha_pll_postdiv_fabia_round_rate,
+diff --git a/drivers/clk/qcom/clk-alpha-pll.h b/drivers/clk/qcom/clk-alpha-pll.h
+index 704674a153b6..67f1fd271931 100644
+--- a/drivers/clk/qcom/clk-alpha-pll.h
++++ b/drivers/clk/qcom/clk-alpha-pll.h
+@@ -14,7 +14,7 @@ enum {
+ 	CLK_ALPHA_PLL_TYPE_BRAMMO,
+ 	CLK_ALPHA_PLL_TYPE_FABIA,
+ 	CLK_ALPHA_PLL_TYPE_TRION,
+-	CLK_ALPHA_PLL_TYPE_LUCID,
++	CLK_ALPHA_PLL_TYPE_LUCID = CLK_ALPHA_PLL_TYPE_TRION,
+ 	CLK_ALPHA_PLL_TYPE_MAX,
+ };
+ 
+@@ -128,18 +128,23 @@ extern const struct clk_ops clk_alpha_pll_fabia_ops;
+ extern const struct clk_ops clk_alpha_pll_fixed_fabia_ops;
+ extern const struct clk_ops clk_alpha_pll_postdiv_fabia_ops;
+ 
+-extern const struct clk_ops clk_alpha_pll_lucid_ops;
+-extern const struct clk_ops clk_alpha_pll_fixed_lucid_ops;
++extern const struct clk_ops clk_alpha_pll_trion_ops;
++extern const struct clk_ops clk_alpha_pll_fixed_trion_ops;
++extern const struct clk_ops clk_alpha_pll_postdiv_trion_ops;
++
++#define clk_alpha_pll_lucid_ops clk_alpha_pll_trion_ops
++#define clk_alpha_pll_fixed_lucid_ops clk_alpha_pll_fixed_trion_ops
+ extern const struct clk_ops clk_alpha_pll_postdiv_lucid_ops;
+ 
+ void clk_alpha_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
+ 			     const struct alpha_pll_config *config);
+ void clk_fabia_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
+ 				const struct alpha_pll_config *config);
+-void clk_lucid_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
++void clk_trion_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
+ 			     const struct alpha_pll_config *config);
++#define clk_lucid_pll_configure(pll, regmap, config) \
++	clk_trion_pll_configure(pll, regmap, config)
++
+ 
+-extern const struct clk_ops clk_trion_fixed_pll_ops;
+-extern const struct clk_ops clk_trion_pll_postdiv_ops;
+ 
+ #endif
+diff --git a/drivers/clk/qcom/gcc-sm8150.c b/drivers/clk/qcom/gcc-sm8150.c
+index 55e9d6d75a0c..d7778def37da 100644
+--- a/drivers/clk/qcom/gcc-sm8150.c
++++ b/drivers/clk/qcom/gcc-sm8150.c
+@@ -53,7 +53,7 @@ static struct clk_alpha_pll gpll0 = {
+ 				.name = "bi_tcxo",
+ 			},
+ 			.num_parents = 1,
+-			.ops = &clk_trion_fixed_pll_ops,
++			.ops = &clk_alpha_pll_fixed_trion_ops,
+ 		},
+ 	},
+ };
+@@ -79,7 +79,7 @@ static struct clk_alpha_pll_postdiv gpll0_out_even = {
+ 			.hw = &gpll0.clkr.hw,
+ 		},
+ 		.num_parents = 1,
+-		.ops = &clk_trion_pll_postdiv_ops,
++		.ops = &clk_alpha_pll_postdiv_trion_ops,
+ 	},
+ };
+ 
+@@ -98,7 +98,7 @@ static struct clk_alpha_pll gpll7 = {
+ 				.name = "bi_tcxo",
+ 			},
+ 			.num_parents = 1,
+-			.ops = &clk_trion_fixed_pll_ops,
++			.ops = &clk_alpha_pll_fixed_trion_ops,
+ 		},
+ 	},
+ };
+@@ -118,7 +118,7 @@ static struct clk_alpha_pll gpll9 = {
+ 				.name = "bi_tcxo",
+ 			},
+ 			.num_parents = 1,
+-			.ops = &clk_trion_fixed_pll_ops,
++			.ops = &clk_alpha_pll_fixed_trion_ops,
+ 		},
+ 	},
+ };
+-- 
+2.26.1
 
-> +		compatible =3D "fixed-clock";
-> +		clock-frequency =3D <24000000>;
-> +		clock-output-names =3D "dcxo24M";
-> +		#clock-cells =3D <0>;
-> +	};
-> +
-> +	osc32k: osc32k_clk {
-
-Same thing here
-
-Also, ordering by node name here would be nice
-
-> +		compatible =3D "fixed-clock";
-> +		clock-frequency =3D <32768>;
-> +		clock-output-names =3D "osc32k";
-> +		#clock-cells =3D <0>;
-> +	};
-> +
-> +	timer {
-> +		compatible =3D "arm,armv8-timer";
-> +		interrupts =3D <GIC_PPI 13
-> +			(GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>,
-> +			     <GIC_PPI 14
-> +			(GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>,
-> +			     <GIC_PPI 11
-> +			(GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>,
-> +			     <GIC_PPI 10
-> +			(GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
-> +	};
-
-Does it suffer from the same time instability than the one in the A64?
-If so, you probably want to enable the workaround too.
-
-> +	soc: soc {
-
-Do you really need a label for that node?
-
-> +		compatible =3D "simple-bus";
-> +		#address-cells =3D <2>;
-> +		#size-cells =3D <2>;
-
-Why do you need cells with 2 items here? You don't seem to be using
-them.
-
-> +		r_i2c0: i2c@7081400 {
-> +			compatible =3D "allwinner,sun6i-a31-i2c";
-> +			reg =3D <0x0 0x07081400 0x0 0x400>;
-> +			interrupts =3D <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks =3D <&ccu CLK_BUS_I2C0>;
-> +			resets =3D <&ccu RST_BUS_I2C0>;
-> +			pinctrl-names =3D "default";
-> +			pinctrl-0 =3D <&r_i2c0_pins>;
-> +			status =3D "disabled";
-> +			#address-cells =3D <1>;
-> +			#size-cells =3D <0>;
-> +		};
-> +
-> +		r_i2c1: i2c@7081800 {
-> +			compatible =3D "allwinner,sun6i-a31-i2c";
-> +			reg =3D <0x0 0x07081800 0x0 0x400>;
-> +			interrupts =3D <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks =3D <&ccu CLK_BUS_I2C1>;
-> +			resets =3D <&ccu RST_BUS_I2C1>;
-> +			pinctrl-names =3D "default";
-> +			pinctrl-0 =3D <&r_i2c1_pins>;
-> +			status =3D "disabled";
-> +			#address-cells =3D <1>;
-> +			#size-cells =3D <0>;
-> +		};
-> +	};
-
-The clocks and resets phandles and IDs don't look right
-
-> +	thermal-zones {
-> +		cpu_thermal_zone {
-> +			polling-delay-passive =3D <0>;
-> +			polling-delay =3D <0>;
-> +			thermal-sensors =3D <&ths 0>;
-> +		};
-
-Please add a new line here
-
-> +		gpu_thermal_zone{
-
-You should have a space here    ^=20
-
-> +			polling-delay-passive =3D <0>;
-> +			polling-delay =3D <0>;
-> +			thermal-sensors =3D <&ths 1>;
-> +		};
-
-newline
-
-> +		ddr_thermal_zone{
-
-space                           ^=20
-
-Thanks!
-Maxime
-
---lbejoaecuizw4km4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXvoG6AAKCRDj7w1vZxhR
-xRRCAQCSyQ9nHql6TEykxi9l3Cj8dRiNVK0CnZJ3fTQSc1l2AAD/fJV1R7VkbxZi
-OFU2QxjJ1CZU81YE8OkmeFr/wMlCsw8=
-=kgim
------END PGP SIGNATURE-----
-
---lbejoaecuizw4km4--
