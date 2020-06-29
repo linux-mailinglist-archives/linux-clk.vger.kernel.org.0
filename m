@@ -2,97 +2,129 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 377F320E491
-	for <lists+linux-clk@lfdr.de>; Tue, 30 Jun 2020 00:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E349720E43A
+	for <lists+linux-clk@lfdr.de>; Tue, 30 Jun 2020 00:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726120AbgF2V0t (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 29 Jun 2020 17:26:49 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:46583 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729086AbgF2V0q (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Jun 2020 17:26:46 -0400
-Received: from mail-qk1-f181.google.com ([209.85.222.181]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MC2o9-1jfjxx1pxV-00CQW9; Mon, 29 Jun 2020 13:59:08 +0200
-Received: by mail-qk1-f181.google.com with SMTP id j80so14938409qke.0;
-        Mon, 29 Jun 2020 04:59:08 -0700 (PDT)
-X-Gm-Message-State: AOAM531dNoRFCGQ5gU+WKgIQezUtMEXHMxzuOjwCEaKgGIXbfLmJtxX5
-        IUlkRwyKWfCdVH0F294m9CILhcAT/AMHyZym1bw=
-X-Google-Smtp-Source: ABdhPJwiHIrS/zcyAzwtI//A/mP+kmmPqCmXXzVgsA8QR3TbrjAPEDgdefcDhM7ibQGaLfv1MsgnsXjRn6wnP1Y+ubE=
-X-Received: by 2002:a37:b484:: with SMTP id d126mr14639824qkf.394.1593431947272;
- Mon, 29 Jun 2020 04:59:07 -0700 (PDT)
+        id S2390852AbgF2VWp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 29 Jun 2020 17:22:45 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:58681 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729596AbgF2Sv1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Jun 2020 14:51:27 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 805C058035E;
+        Mon, 29 Jun 2020 11:07:50 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 29 Jun 2020 11:07:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=WE1PSDJ6UR5jIFS55riBxt9LPeJ
+        Xh4U7NigTPnNX65A=; b=l8oEpc8ou0b31MaSG3xJyMa7ni1mk3WLjAf0+QKHhjs
+        AVpZBfZIOMlIwpRfzUZ14GCy22hl/ny7wF6EPd/RmE10onf4Ip8tNfeqRwOPe/KF
+        gPA9Mojv1xbR1GKjCgVa8zHPvuXzX/L9FcWYOtdSddgGtn8h1eG9jBxj75YJbHTK
+        AANJop2cVs8dOOdN/3CdbzUDXLfYiXtQNsQYaSDjYw02qjx1HRJeF5WHzMmAyjXS
+        3KhOuwB1qhHBpETNlNr2Wcj3pOWH0N/xGG6lycaJauSm7B8zbUUSEZMMBd+GhU53
+        6JgTxPN4HoKR9TklVbYstBJUuXqO1J9mbgHbuVlFbiA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=WE1PSD
+        J6UR5jIFS55riBxt9LPeJXh4U7NigTPnNX65A=; b=jvAnAfyGaqUn/08ZHsSqLO
+        uW19B9zLVT4SoApSBBkRM437Kkyd5+RLGxYcTd9L/oNbS6MJbqab7VsM98DbsCWO
+        4d+n8RBYK/BF0fHr9iBnrIaiiVmQvnFV3zkFgHUJ5uXQbG6usHTFF8bzNilFUc7u
+        VHSM1KJiVUTLlVmNRTKoIFa+4KuOnlVlYMVDSkofqAXPutOIj/pnE21k7/gu3pBQ
+        daqivTY5w3AmuBudK+2x1qoXFuOwCBazHChG9faFssJKqFPAI7ckWQyHm9tFFwxU
+        pbbe+PLQsGexmH8opjSu/KNzsplx1vR5KknkeXSlJ597pWOeC+sjwaFee54Bzuew
+        ==
+X-ME-Sender: <xms:wwP6XqWvknOfJkcPQBXZIqW8UorMwaNBI5C1ODdyBwTlMY09xUHPxw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudelledguddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:wwP6XmkjVUmeiEdlJgUfigxWgJQVaqJmvthVxhwDQFDiMykoEnTrdA>
+    <xmx:wwP6XubBPGGFyYHtXHWC-1pZWDOV_FPhqmC25ASqd2-PXgI2_RfGwg>
+    <xmx:wwP6XhWf_nU3-9dDRfPGYtrX-iylRBw_6x4z_SVVOUOMQWduDd8qGA>
+    <xmx:xgP6XmWAWQwhFI3MhZjhHXi92Prz-GT5C9njmChD_WUolvvNS1KtFw>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 0E01A3280060;
+        Mon, 29 Jun 2020 11:07:47 -0400 (EDT)
+Date:   Mon, 29 Jun 2020 17:07:45 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Frank Lee <frank@allwinnertech.com>
+Cc:     robh+dt@kernel.org, wens@csie.org, mturquette@baylibre.com,
+        sboyd@kernel.org, srinivas.kandagatla@linaro.org,
+        linus.walleij@linaro.org, anarsoul@gmail.com,
+        tiny.windzz@gmail.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        p.zabel@pengutronix.de, clabbe@baylibre.com, icenowy@aosc.io,
+        megous@megous.com, karlp@tweak.net.au, bage@linutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        huangshuosheng@allwinnertech.com, liyong@allwinnertech.com
+Subject: Re: [PATCH v2 06/11] nvmem: sunxi-sid: add support for A100's SID
+ controller
+Message-ID: <20200629150745.ettjdggv55gfxs5s@gilmour.lan>
+References: <20200622025907.32574-1-frank@allwinnertech.com>
+ <20200622025907.32574-7-frank@allwinnertech.com>
 MIME-Version: 1.0
-References: <1593410042-10598-1-git-send-email-Anson.Huang@nxp.com>
- <1593410042-10598-11-git-send-email-Anson.Huang@nxp.com> <CAK8P3a1W4Wxj0o3dtcjGq0L5VQqsH0=ntego=jmH2Von97+H-w@mail.gmail.com>
- <DB3PR0402MB3916911E2321760C65AB3293F56E0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-In-Reply-To: <DB3PR0402MB3916911E2321760C65AB3293F56E0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 29 Jun 2020 13:58:51 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a28=41imeva5nG-fSx5dPG52Um8hkZ2_=y7soOZ8p5bnw@mail.gmail.com>
-Message-ID: <CAK8P3a28=41imeva5nG-fSx5dPG52Um8hkZ2_=y7soOZ8p5bnw@mail.gmail.com>
-Subject: Re: [PATCH V3 10/10] clk: imx8qxp: Support module build
-To:     Anson Huang <anson.huang@nxp.com>
-Cc:     Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "oleksandr.suvorov@toradex.com" <oleksandr.suvorov@toradex.com>,
-        Stefan Agner <stefan.agner@toradex.com>,
-        Peng Fan <peng.fan@nxp.com>, Abel Vesa <abel.vesa@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Andy Duan <fugang.duan@nxp.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:EfD4DhoPrgKqPKihKT5z/Cx/um5RnkYhhXBAEVqqcd5KXJV3mGk
- FnkR4upRdwIFx6cIM2dkWoYHi8Mzs9c2uM17g4sHi3Atxqxd/0HjtCqRpqcLu9cgbti82X7
- gp5hNsJzQl4KMoXR+XK3XjWtOUkU6vZ6U4bOFFumXRZM5kwEKi0WL8xPLdhxglCdXFp2cyk
- ugWKHpW6biMesJyQj9BAQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:u4BHHFgnkr8=:wAptT75sXjOiKxyrZxJdjS
- FXEkX3heeqNYUeRtxlLPUpOc0NpOAkHhNiQatb1kzFE5jnsV1nq8sglceXECtLLcqNgVk1RHR
- 7z3rnjKVRnCzG+HHN96RneHuF1vCC5m5dDSe6+bSwIy3OHCaKAd1Balf8HoYr6y37gd8zu8qV
- /W+wLpOZgq35rdH9q2dEXjMbmWUhHCSvwN+/vUwqLb0cXijBEhKE+mPaBLbSrmeGgQszplK8m
- pIPOF3IQ4/DwrdJIJ3thfE4j7+jBlKatupe/L9P6ZG6MPD+Z/1SBSL8j2FvbPEghz61U3eiKz
- el0GHwqCX5KE9qm8XXhM5cbqQlTKN7QkEf5pDhO/H0gv3d032DWuw1VDtzLZQZZfsNUa6Cbz9
- fbagBwP+JYYyyarp8un2MDtEK1UWgS9+3YScR9ivmW4Mp6CzvxFCJvDmQkNo9Bxl3SzFUZIv9
- Qe2zXFp5SmLpxDdDo/kR9Vo5tg7CBGbLrKrSKj5bA3nc4KuE0NErLgYWIZeJvS6I+yT6Uxut3
- VVONUXAkrzuzq1zZuKw9Tt0cWX7s/IshFsrbPLW4+q8Bz5zr9/7jfFsuCW/UiYLigGqH1jVzi
- GTKB3+lQJ/9NgDobeUrgldXQcZz6tFW6F6AiCoX5CMPosr7vYDX2FYTuMFTLbLMTSP22s164T
- +0mLUuNANnnVJ4xvdSjO7PgLAG7FTRSMHNdDxmRBUo2m6okyEu2G96vPbmvkeW1jamGRNW+Ws
- RfCtxp0zW/IhHrapv8JGHSE1LhquxCTIqLsNutgoIpoeLD1l899EwDK5pnrthXpUlcWb8LLq1
- vb4oTofPY43GsXCGc3G0RLG0auiDPm0xDNf/L0FpVkByOabe/M=
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="qt3qjbwfvcqzuc6s"
+Content-Disposition: inline
+In-Reply-To: <20200622025907.32574-7-frank@allwinnertech.com>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 1:43 PM Anson Huang <anson.huang@nxp.com> wrote:
-> > Subject: Re: [PATCH V3 10/10] clk: imx8qxp: Support module build
-> >
-> > On Mon, Jun 29, 2020 at 8:06 AM Anson Huang <Anson.Huang@nxp.com>
-> > wrote:
-> > >
-> > > Support building i.MX8QXP clock driver as module.
-> > >
-> > > Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> >
-> > I would just combine the per-soc patches into one, as they all have the same
-> > changelog text.
->
-> OK, I will merge those patches with same changelog text into one patch.
-> But for i.MX8QXP clock driver, as I need to add more changes about module author
-> etc., I will keep it as a separate patch.
 
-Ok, sounds good.
+--qt3qjbwfvcqzuc6s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-      Arnd
+On Mon, Jun 22, 2020 at 10:59:02AM +0800, Frank Lee wrote:
+> Add support for A100's SID controller.
+>=20
+> Signed-off-by: Frank Lee <frank@allwinnertech.com>
+> ---
+>  drivers/nvmem/sunxi_sid.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>=20
+> diff --git a/drivers/nvmem/sunxi_sid.c b/drivers/nvmem/sunxi_sid.c
+> index e26ef1b..8ac074b 100644
+> --- a/drivers/nvmem/sunxi_sid.c
+> +++ b/drivers/nvmem/sunxi_sid.c
+> @@ -189,6 +189,11 @@ static int sunxi_sid_probe(struct platform_device *p=
+dev)
+>  	.need_register_readout =3D true,
+>  };
+> =20
+> +static const struct sunxi_sid_cfg sun50i_a100_cfg =3D {
+> +	.value_offset =3D 0x200,
+> +	.size =3D 0x100,
+> +};
+> +
+
+It looks like it's the same tha nthe H3 / A64 then?
+
+If so, you can just reuse their compatible as fallback
+
+Maxime
+
+--qt3qjbwfvcqzuc6s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXvoDwQAKCRDj7w1vZxhR
+xR1+AQDUmJ2eKxkSAKY8N3oAYv2RkDrEZNTRivNZeW/rTDtt1gD/fIJbT8KdkTtN
+Oq4B49fJoiJYQc72b1d+sdbscb9XAw4=
+=7lp0
+-----END PGP SIGNATURE-----
+
+--qt3qjbwfvcqzuc6s--
