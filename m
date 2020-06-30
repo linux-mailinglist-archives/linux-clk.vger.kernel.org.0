@@ -2,79 +2,134 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F19C120E8B4
-	for <lists+linux-clk@lfdr.de>; Tue, 30 Jun 2020 01:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD27020EA3A
+	for <lists+linux-clk@lfdr.de>; Tue, 30 Jun 2020 02:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726068AbgF2WZT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 29 Jun 2020 18:25:19 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:46521 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726962AbgF2WZR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Jun 2020 18:25:17 -0400
-Received: by mail-io1-f67.google.com with SMTP id a12so18939676ion.13;
-        Mon, 29 Jun 2020 15:25:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0GaZbixLs4tdiexpjmK+wsDoVQ+ulRxV3n7j6s3bMUM=;
-        b=SDWG5qGkLfTamB37lLzs1KLfSBXl/JAxfj8ayGHior+Mu5ZFe11/9FmCVZTwezIwhQ
-         G+dzg2Ym0IT3DYgt4S6ZTIL/4nVkyCwsVlgU4Xb1tY651txpV60t9PlzzHxh9bzi6HVy
-         LGhmVFZjxlkwsGOnXa5q67kIItzz1Z6y8NPl/MPRSuLEdPVB0wy1qCi+MEU8hes4kVCS
-         8zQ3wiYNIOwbSP8EhKuxL3IoD9PvZcdxzDGuxCFaVmgi2bqJOn3z+N13HWKxcWRebPN3
-         8PiwY/Vq2GRbJh5o479RYpA23Y+JiEWzq5n9aMRqQoMSeVbhUv/NuILGUIOFbYvuFE+d
-         jEWw==
-X-Gm-Message-State: AOAM532ZOb/Bk8SJXRxMuw/XfTBSYOn/9J+J7bKtFys8EjC5660mzVKK
-        DbR8cUHSzyTt7HO+UZRx0w==
-X-Google-Smtp-Source: ABdhPJyCa6IC1Q0r9mfL04iJCZkfDwuIr8IDoWfJy5unmGOizFjyiU2kQ1Sv0NOU7j76tBdlpGPy7A==
-X-Received: by 2002:a02:cd28:: with SMTP id h8mr8069309jaq.40.1593469516683;
-        Mon, 29 Jun 2020 15:25:16 -0700 (PDT)
-Received: from xps15 ([64.188.179.255])
-        by smtp.gmail.com with ESMTPSA id x1sm656615ilh.29.2020.06.29.15.25.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 15:25:16 -0700 (PDT)
-Received: (nullmailer pid 3067288 invoked by uid 1000);
-        Mon, 29 Jun 2020 22:25:13 -0000
-Date:   Mon, 29 Jun 2020 16:25:13 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Anson Huang <Anson.Huang@nxp.com>
-Cc:     sboyd@kernel.org, mturquette@baylibre.com,
-        linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
-        Linux-imx@nxp.com, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        linux-clk@vger.kernel.org, robh+dt@kernel.org,
-        linux-mmc@vger.kernel.org, ulf.hansson@linaro.org,
-        aisheng.dong@nxp.com, devicetree@vger.kernel.org,
-        festevam@gmail.com, s.trumtrar@pengutronix.de,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V4 3/3] dt-bindings: clock: Correct example in i.MX8QXP
- LPCG binding
-Message-ID: <20200629222513.GA3067129@bogus>
-References: <1592450578-30140-1-git-send-email-Anson.Huang@nxp.com>
- <1592450578-30140-3-git-send-email-Anson.Huang@nxp.com>
+        id S1728410AbgF3AaY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 29 Jun 2020 20:30:24 -0400
+Received: from mail-bn7nam10on2040.outbound.protection.outlook.com ([40.107.92.40]:6188
+        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728258AbgF3AaW (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 29 Jun 2020 20:30:22 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DbKJMvszh3fU5uy7ehEFOh5EM6+W4vZ96797aUnc3JlLkYHcW756EwuMspA0B5Cun3nW0jrlhPYCBodofcYN6CNTqacOioW1icYs0l7hoG3bdqnZqTawATP8JzxX0RL7x2jwgNNzyaCh3Uj2B5beSDBevof8rp1Tlq7VnIwIr48apYTGXHBlS80X8bkY9AKeRyAaS8gG3WhfAxHKj+L9jkDDaVi0fSmGJHun1ryU7O3kjJzUwDQCgaYy+tFd+7QxdY8SPctlMUen+ghXhbx6lrHy2q1NoFB0XrGfp29hm23FydxMsQEX2p4jXI5qZrs83viHOOiDFhtKu+2Xz/EXXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K1DctMtyNABj1dyTAWmxhKD6HIXiLzU97ru2sSVURCw=;
+ b=CQ2fIx3hyKTxq17EXmhwPnXpJIqjPFfoBxKy9cJewsv1sG5jeVYNvHWD//ckNPdSn0HJnDRM/or/0/BQmo+d8/oWkSpzVUJG8JhAJ2QxeiTkcvCafmOEp0BqB1gdDPehYHgh+vAo+ZfFv3PpOFdpMR5dFj+7Jrt9xrrUH+VYkikSioM4M4SEJWpRzYwa56aHQwq04WmijYw5G2eDXjkrr2+latuKl42YZSMK1lZlTKXI5Bum1Cpg++tN9oi3gtFIQNZ5Us8di1FiHuASkbPF9sQgsBaQnCxygW9fVLvRImuF3rGzuDf6Hdqaa6STRERdvgdgDlTWZlEtHT6HtYPnxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.60.83) smtp.rcpttodomain=baylibre.com smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K1DctMtyNABj1dyTAWmxhKD6HIXiLzU97ru2sSVURCw=;
+ b=tWcv0R6Aao+7G2EHYMhgUQgj0Cv8pMILwz2lsdO3G10jxz/4oh3uGXsM/nuvZLqE0KOCVjFjksHCq5BJ3XJhTPuK2uzFbcWT7NpB0IWIrBeiBU4D6/RqIWaZODVU0gteIS8AX6GWMypKRu5kE+PW63BQ6SY2PEfUT8/vhGVQjBE=
+Received: from CY4PR04CA0046.namprd04.prod.outlook.com (2603:10b6:903:c6::32)
+ by DM6PR02MB4106.namprd02.prod.outlook.com (2603:10b6:5:9f::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.21; Tue, 30 Jun
+ 2020 00:30:19 +0000
+Received: from CY1NAM02FT029.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:903:c6:cafe::65) by CY4PR04CA0046.outlook.office365.com
+ (2603:10b6:903:c6::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.21 via Frontend
+ Transport; Tue, 30 Jun 2020 00:30:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; baylibre.com; dkim=none (message not signed)
+ header.d=none;baylibre.com; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ CY1NAM02FT029.mail.protection.outlook.com (10.152.75.143) with Microsoft SMTP
+ Server id 15.20.3131.20 via Frontend Transport; Tue, 30 Jun 2020 00:30:19
+ +0000
+Received: from [149.199.38.66] (port=58515 helo=xsj-pvapsmtp01)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
+        (envelope-from <amit.sunil.dhamne@xilinx.com>)
+        id 1jq48v-00054d-Px; Mon, 29 Jun 2020 17:28:57 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <amit.sunil.dhamne@xilinx.com>)
+        id 1jq4AF-0005bY-7l; Mon, 29 Jun 2020 17:30:19 -0700
+Received: from [10.18.5.8] (helo=xsjamitsuni51.xilinx.com)
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <amit.sunil.dhamne@xilinx.com>)
+        id 1jq4AC-0005YJ-44; Mon, 29 Jun 2020 17:30:16 -0700
+From:   Amit Sunil Dhamne <amit.sunil.dhamne@xilinx.com>
+To:     mturquette@baylibre.com, sboyd@codeaurora.org, sboyd@kernel.org,
+        michal.simek@xilinx.com, mark.rutland@arm.com,
+        linux-clk@vger.kernel.org
+Cc:     rajanv@xilinx.com, jollys@xilinx.com, tejasp@xilinx.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Amit Sunil Dhamne <amit.sunil.dhamne@xilinx.com>
+Subject: [PATCH 0/3] clk: zynqmp: Add firmware specific clock flags
+Date:   Mon, 29 Jun 2020 17:30:11 -0700
+Message-Id: <1593477014-18443-1-git-send-email-amit.sunil.dhamne@xilinx.com>
+X-Mailer: git-send-email 2.7.4
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFTY:;SFS:(39860400002)(376002)(136003)(396003)(346002)(46966005)(2616005)(336012)(316002)(2906002)(426003)(478600001)(81166007)(5660300002)(82740400003)(70586007)(70206006)(36756003)(47076004)(356005)(83380400001)(6666004)(8676002)(107886003)(9786002)(186003)(82310400002)(4326008)(26005)(8936002)(7696005);DIR:OUT;SFP:1101;
+X-MS-PublicTrafficType: Email
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1592450578-30140-3-git-send-email-Anson.Huang@nxp.com>
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 4891efb8-55ab-4b21-3620-08d81c8cc4c6
+X-MS-TrafficTypeDiagnostic: DM6PR02MB4106:
+X-Microsoft-Antispam-PRVS: <DM6PR02MB4106685346086BCF2D1FE70BA76F0@DM6PR02MB4106.namprd02.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
+X-Forefront-PRVS: 0450A714CB
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zFQEVBC2WaXjfxoFtbRAjDpb0Wtclat+Hii0fkToUvXt7+/tJqc3Bf0owtbMWj3ucw4L3VIIC+wh4ta4TGSFX9kOHrJuuEi2Hi5gkd5LFsQO45wX84LGZBV+0pCvyYolEUvZT9cBKCgpXR/Z+TkYERlsTICAilKTBk13uAmlvd0QnD5oQYEDCEsNzwZgkpvnGpD0rBKwOW3nd0FiIgHITuvJC/SMuu3AeLLjhn5tFLXbj95Go1Y5t+tkNSjxd+aeikPoa1aYKmbL27Z6dhawIyBsBs2r0eF9EJUr3nctDTe0y4Kj3s8B0kg2CqPOY5Ml4WzE/s98UWGCEc8Smc5aicchuB2Boe9vnB2qfTE6gvSzE2ghUbyY3uMR5tVajZk+MQgwryJ6YPFmjVWpf4d11w==
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2020 00:30:19.5138
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4891efb8-55ab-4b21-3620-08d81c8cc4c6
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-AuthSource: CY1NAM02FT029.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB4106
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, 18 Jun 2020 11:22:58 +0800, Anson Huang wrote:
-> In i.MX8QXP LPCG binding's example, "fsl,imx7d-usdhc" as fallback
-> compatible is incorrect, remove it to avoid below build error:
-> 
-> Documentation/devicetree/bindings/clock/imx8qxp-lpcg.example.dt.yaml:
-> mmc@5b010000: compatible: Additional items are not allowed ('fsl,imx7d-usdhc' was unexpected)
-> Documentation/devicetree/bindings/clock/imx8qxp-lpcg.example.dt.yaml:
-> mmc@5b010000: compatible: ['fsl,imx8qxp-usdhc', 'fsl,imx7d-usdhc'] is too long
-> 
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> ---
-> New patch, to fix build error when patch #1 is added.
-> ---
->  Documentation/devicetree/bindings/clock/imx8qxp-lpcg.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+This series adds supports for firmware specific flags. These include
+- Common Flags
+- Divider Flags
+- Mux Flags
 
-Applied, thanks!
+The intent is to remove firmware's dependency on CCF flag values by
+having firmware specific flags with independent values.
+
+Rajan Vaja (3):
+  clk: zynqmp: Use firmware specific common clock flags
+  clk: zynqmp: Use firmware specific divider clock flags
+  clk: zynqmp: Use firmware specific mux clock flags
+
+ drivers/clk/zynqmp/clk-mux-zynqmp.c | 14 ++++++++++++-
+ drivers/clk/zynqmp/clk-zynqmp.h     | 39 +++++++++++++++++++++++++++++++++=
+++++
+ drivers/clk/zynqmp/clkc.c           | 25 ++++++++++++++++++++++--
+ drivers/clk/zynqmp/divider.c        | 16 ++++++++++++++-
+ 4 files changed, 90 insertions(+), 4 deletions(-)
+
+--
+2.7.4
+
+This email and any attachments are intended for the sole use of the named r=
+ecipient(s) and contain(s) confidential information that may be proprietary=
+, privileged or copyrighted under applicable law. If you are not the intend=
+ed recipient, do not read, copy, or forward this email message or any attac=
+hments. Delete this email message and any attachments immediately.
