@@ -2,56 +2,56 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC0EA211BA0
-	for <lists+linux-clk@lfdr.de>; Thu,  2 Jul 2020 07:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF188211BB3
+	for <lists+linux-clk@lfdr.de>; Thu,  2 Jul 2020 07:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726015AbgGBFnQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 2 Jul 2020 01:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
+        id S1726017AbgGBFwO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 2 Jul 2020 01:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726010AbgGBFnP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 2 Jul 2020 01:43:15 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F79BC08C5C1;
-        Wed,  1 Jul 2020 22:43:15 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id n2so13260485edr.5;
-        Wed, 01 Jul 2020 22:43:15 -0700 (PDT)
+        with ESMTP id S1725774AbgGBFwN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 2 Jul 2020 01:52:13 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0B2C08C5C1;
+        Wed,  1 Jul 2020 22:52:13 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id p20so27705728ejd.13;
+        Wed, 01 Jul 2020 22:52:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Mtjw6ui/18TL1nfopaGxavsYfqOS3W2EnIEUiFfp6xw=;
-        b=mg2X3xJLj6ZYbXlN/J/8VDmx5fZmXiFAvQ2DK1MvHv+BTDx6X4UhPUWjziUEO43UBM
-         s6LFeprRxelk5RRbu+tGnKJuhgwJbZsZPp6BBQalAuijr2VOITxZ5iuhZrcs7q6U4PXT
-         zXGyVfHlUOjFXGjBr324/b3ZsDMLonyUXD+lHFeBDXAk3gPkN0nipBLOpOi3bwVpnHJ4
-         jz9uzOWfMAw1XDDBHUwL/RCdPxdKaqe+Qbpu+Lu7PS1yj9ojoTx2JHch1Ke/9q5XETku
-         ABmve3gTyQoxgBHNjW45447bqXKZ2MFreIrgz726G+e4FEX0EVP1zOYYcgf+FlRYjwxg
-         WX0g==
+        bh=PTX8G0FukGDGojl6rKgvGA2fV/um1+DnSL6BGGF5rTk=;
+        b=FquHVBuq7KCtLoqPVvMm9HrqdlxcjXKcG1/+uFCoy9V2e1Xg3bw0d7tBmfSyFAGcha
+         IgZIgf0l9wD2Joq5cTRKEesJYG7anNVjvVKeExREY9By5CJp7ImSJPFfaXLFBp2QG7kr
+         GfcmsNQbJeTmwzK7RPOonHY0aEpzJ3oy+6PpCWlQR9tOE0gkA4aLefcJWAmtGN0DZ/p9
+         0iG9N+XmuuBpFtbWok3DgwEfuMNhasYWjk+6ke3z1OwZh2CFg14Uh0A50qN5upQsO04R
+         JP6Kg95vi7KGsDdV02vBFfzdaqeQWMTYOb2EDR4Wx8hjOIP4w+GxVz5NKeacl1FmgeNQ
+         x0Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Mtjw6ui/18TL1nfopaGxavsYfqOS3W2EnIEUiFfp6xw=;
-        b=hVPzjpePRvWcaUZ4q9NQy44OStdTwPXoSmUiq2VKWz5EdZ0GmeWoBTg0Iths0Z1lg4
-         LNU3rkQ/H/1rDYphT3ZSf6ire8ziKVpTX09Koz6HcNNzNXyyqzmobk2wXmhUIznpcOZ+
-         1+K1ibVkojVwtb1KKdk0ZdlWrN1N3uKI7dq/OVV1yRRaph/uHY3HBO3dQNn5fZavN/69
-         ezt6h9uYZe4kcR959b1N+Wqhg0APPW4gyPEgyH9kkNNoFqErCAJNnh/t8YXopL1ecCeI
-         VlgRDRk6da/sWDJnN57Psvlw0KHKiPu0qUvWh80ThSpPakIGbvrcOqoK/Nih7w5So/yD
-         5GFg==
-X-Gm-Message-State: AOAM533RHAZUNu0E/t6cvOnF8kEpSPc9erTw89Obd8fGE80QzosFF3XE
-        cuesQLSkepl6XmD4cV8Hmb5VAtrEiuV436Kbzsw=
-X-Google-Smtp-Source: ABdhPJxVPRZ5soPcPEPtvHh/3w7o/dz7zDNB/VortJAz8xs6lV1ibpAjrf6VmCI9zBAn+j2H6ys31mbKowR/O9QG7tc=
-X-Received: by 2002:a50:f08c:: with SMTP id v12mr32253507edl.119.1593668594000;
- Wed, 01 Jul 2020 22:43:14 -0700 (PDT)
+        bh=PTX8G0FukGDGojl6rKgvGA2fV/um1+DnSL6BGGF5rTk=;
+        b=sz3AADI5Fmk3DzlphFAqu6pgihT2DygZFOX/gIjpKlLVJ+WiNaWBJ0fg97XY2ZJT3w
+         iBnMZolPnvXYFtCiIEzpd850a6KnnnpO5DeeqF+dP2pniOA6OxZK1tijWzrWKghYj612
+         DSLeHzOUveutbtVnxASlmTvfmFs5jmQjfLn+k6imlFnMnpr6fL7T2JDLH7IbI951QryI
+         hxLZBMnT9GOU6xVcUmytgH14T+74ptZpWOYRmbWv5LuYbAYWMiurNqLAIG9RwAmROnGV
+         hWI6cB2GyztX94Y3LuIkN7BsaOdYSNOt7wZdRxXAe6nU62BJU50ZIaezHgML13ar2t+X
+         iokw==
+X-Gm-Message-State: AOAM530imByHfxBfe440ANoVuius4lZoEHebstJ3OGmBwGCxXYu3RsJT
+        ovBI1VsZwIFRIojQTaZLM0Fi2ZB19hgK8p2WZZA=
+X-Google-Smtp-Source: ABdhPJwMXcuDstpkLDAVFtfvS+c1kcgVHNxhmQy/o9PberFQHvXcCp+0m6rAm/8+6AsWMhEswSifBPT5RBcN2f7BYoU=
+X-Received: by 2002:a17:906:e215:: with SMTP id gf21mr20475157ejb.310.1593669132029;
+ Wed, 01 Jul 2020 22:52:12 -0700 (PDT)
 MIME-Version: 1.0
 References: <1593656074-10092-1-git-send-email-Anson.Huang@nxp.com>
- <1593656074-10092-6-git-send-email-Anson.Huang@nxp.com> <CAA+hA=T1+F-oTfWdV22ztUT3Ru-dFPDzhC7aJsdj0R3yP4wzbA@mail.gmail.com>
- <DB3PR0402MB3916713CC9AF95251A3A2BFAF56D0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-In-Reply-To: <DB3PR0402MB3916713CC9AF95251A3A2BFAF56D0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+ <1593656074-10092-4-git-send-email-Anson.Huang@nxp.com> <CAA+hA=S0G7Na0ieEpPq3aN6GN1BEHtYp9vbF9x2tjmknDSVjZw@mail.gmail.com>
+ <DB3PR0402MB391610595D40C11CF26CD990F56D0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
+In-Reply-To: <DB3PR0402MB391610595D40C11CF26CD990F56D0@DB3PR0402MB3916.eurprd04.prod.outlook.com>
 From:   Dong Aisheng <dongas86@gmail.com>
-Date:   Thu, 2 Jul 2020 13:29:12 +0800
-Message-ID: <CAA+hA=RqvRVm9c635NXFQSeDekBPz9DU=eP4+LrBQpRR=-swZw@mail.gmail.com>
-Subject: Re: [PATCH V4 5/5] clk: imx8qxp: Support building i.MX8QXP clock
+Date:   Thu, 2 Jul 2020 13:38:10 +0800
+Message-ID: <CAA+hA=Rtkm_FpkoBvHNnB0TSeTrqXaRVwOzkywsL7QO6ec_K7Q@mail.gmail.com>
+Subject: Re: [PATCH V4 3/5] clk: imx: Support building i.MX common clock
  driver as module
 To:     Anson Huang <anson.huang@nxp.com>
 Cc:     Michael Turquette <mturquette@baylibre.com>,
@@ -78,52 +78,48 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, Jul 2, 2020 at 11:55 AM Anson Huang <anson.huang@nxp.com> wrote:
+On Thu, Jul 2, 2020 at 11:26 AM Anson Huang <anson.huang@nxp.com> wrote:
 [...]
-> > > +{
-> > > +       return platform_driver_register(&imx8qxp_lpcg_clk_driver);
-> > > +}
-> > > +device_initcall(imx8qxp_lpcg_clk_init);
+> > > @@ -143,16 +148,18 @@ void imx_cscmr1_fixup(u32 *val)
+> > >  static int imx_keep_uart_clocks;
+> > >  static struct clk ** const *imx_uart_clocks;
+> > >
+> > > -static int __init imx_keep_uart_clocks_param(char *str)
+> > > +static int __maybe_unused imx_keep_uart_clocks_param(char *str)
+> > >  {
+> > >         imx_keep_uart_clocks = 1;
+> > >
+> > >         return 0;
+> > >  }
+> > > +#ifndef MODULE
+> > >  __setup_param("earlycon", imx_keep_uart_earlycon,
+> > >               imx_keep_uart_clocks_param, 0);
+> > >  __setup_param("earlyprintk", imx_keep_uart_earlyprintk,
+> > >               imx_keep_uart_clocks_param, 0);
 > >
-> > Any reason to change to device_initcall which looks a bit strange?
-> > Is it because the following line?
-> > +obj-$(CONFIG_MXC_CLK_SCU) += clk-imx-scu.o clk-imx-lpcg-scu.o
-> > But it looks to me they're still two modules. Aren't they?
+> > I feel not only the __setup_param, the whole logic of keep_uart_clocks
+> > are not needed for Module case. Is it true?
 >
-> It is suggested by Arnd to NOT use builtin_platform_driver(), in order to support module
-> unload, although the clock driver normally does NOT support remove, but it is better to
-> follow the right way.
+> Yes, but the 'keep_uart_clocks' is false by default and the function imx_keep_uart_clocks_param()
+> already has '__maybe_unused', it does NOT impact anything if it is for module build, so I did NOT
+> add the #ifndef check for them, just to keep code easy and clean.
 >
 
-By expanding builtin_platform_driver() marcro, you will find your
-patch is exactly doing the same thing
-as buildin_platform_driver() which obivously is unneccesary.
+IMHO do not compile them is a more easy and clean way. Then users
+don't have to look into the code logic
+which is meaingless for Module case.
 
-#define builtin_platform_driver(__platform_driver) \
-        builtin_driver(__platform_driver, platform_driver_register)
-#define builtin_driver(__driver, __register, ...) \
-
-static int __init __driver##_init(void) \
-{ \
-        return __register(&(__driver) , ##__VA_ARGS__); \
-} \
-device_initcall(__driver##_init);
-
-If we want to support unload, we need a .remove() callback as current
-clocks are not allocated by devm_().
-If don't support,  we probably can use builtin_platform_driver() first
-and switch to module_platform_driver()
-in the future once the driver supports release resource properly.
+BTW, it really does not make any sense to only condionally compile
+__setup_parm() but left
+the param functions definition to be handled by __maybe_unnused.
+They're together part of code, aren't they?
 
 Regards
 Aisheng
 
-> The change in Makefile is just to link scu/lpcg library to i.MX8QXP clk driver, so that we can
-> get rid of exports and below 2 .ko are needed for all i.MX SoCs with SCU inside as per your
-> saying of i.MX8QXP clock driver can be extended for future SoCs with SCU.
->
-> clk-imx-lpcg-scu.ko
-> clk-imx-scu.ko
->
+Regards
+Aisheng
+
 > Thanks,
 > Anson
+>
