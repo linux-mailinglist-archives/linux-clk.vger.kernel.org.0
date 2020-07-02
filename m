@@ -2,137 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB332127DB
-	for <lists+linux-clk@lfdr.de>; Thu,  2 Jul 2020 17:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F45212836
+	for <lists+linux-clk@lfdr.de>; Thu,  2 Jul 2020 17:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730293AbgGBP1m (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 2 Jul 2020 11:27:42 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:55440 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730251AbgGBP1h (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 2 Jul 2020 11:27:37 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id CE0B01A0BEE;
-        Thu,  2 Jul 2020 17:27:34 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id CD1A91A0C3C;
-        Thu,  2 Jul 2020 17:27:24 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id DCEE840314;
-        Thu,  2 Jul 2020 23:27:12 +0800 (SGT)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        aisheng.dong@nxp.com, arnd@arndb.de, peng.fan@nxp.com,
-        abel.vesa@nxp.com, j.remmet@phytec.de, sfr@canb.auug.org.au,
-        georg.waibel@wiedemann-group.de, Georg.Waibel@wiedemann-group.com,
-        laurent.pinchart@ideasonboard.com, chen.fang@nxp.com,
-        fugang.duan@nxp.com, daniel.baluta@nxp.com, yuehaibing@huawei.com,
-        horia.geanta@nxp.com, andrew.smirnov@gmail.com,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH V5 6/6] clk: imx8qxp: Support building i.MX8QXP clock driver as module
-Date:   Thu,  2 Jul 2020 23:24:01 +0800
-Message-Id: <1593703441-16944-7-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1593703441-16944-1-git-send-email-Anson.Huang@nxp.com>
-References: <1593703441-16944-1-git-send-email-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1730258AbgGBPmY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 2 Jul 2020 11:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730224AbgGBPmU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 2 Jul 2020 11:42:20 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D64BC08C5DF
+        for <linux-clk@vger.kernel.org>; Thu,  2 Jul 2020 08:42:20 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id s14so11455152plq.6
+        for <linux-clk@vger.kernel.org>; Thu, 02 Jul 2020 08:42:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Kybd0zpVtDTcpe4L/HEboaUKNNgAnXPFcQy8ZwcEJuI=;
+        b=MwGxMiEp5/dtTA3ogef34O3PctcdhAV3Nj892QYS7iq/+bdlneIKDksIISF88MZTJs
+         551vB7jwtgzZZvtq6shJNSIVEPChNMunEoUB8LbEsFmwqHkuUWtxgcXHKQhYMgExY7+k
+         RjFrm4VGnLlBn/66+5Gz+fn0C9B0GHrDhf0l0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Kybd0zpVtDTcpe4L/HEboaUKNNgAnXPFcQy8ZwcEJuI=;
+        b=SyXtOdGV2dRDvXkbHZkgCrPCBYSK6NeortiqvW5gflVOf+Bjh8kKVGzc9WylaDBtTn
+         edrFkUqjnDoH23lXv15eFZOUiHXrmUeNg9S4pnveHhhT5f8eaPeTnfFDFMWPJpN4WMVL
+         8ryXvu9IrYkaA91S8Fek0A3dH9CZM1ppgT632censUhSi+U3zTm4YtFLJc0woMotoqrB
+         zcyLk1wysQXwhozH4aOLBb9eF1+gtLq+P3vxEDlqHo1saPZu0vmCadKm29Rx56BMpB+r
+         kvzv6Yk+SitxAoFAbT9pIbTeoYAOg9pfZSGGNrQlJgzOIFANOpEKpyDBG5YxiDSIqkym
+         4KvQ==
+X-Gm-Message-State: AOAM531UBaP8e7YuW0OrYWDr/zucWE1Qa0hQnb4ynecY0uDsL4UX3diC
+        Ib+hTq7UPJahfTCHV8sqCV9qag==
+X-Google-Smtp-Source: ABdhPJx/V021h2YOrPd2qoUZY3+ajz3Yf7zbLlvvx3ojyPgvvotTbq49bzs576UQiATe81OrpVMgog==
+X-Received: by 2002:a17:90a:7785:: with SMTP id v5mr35048412pjk.31.1593704539711;
+        Thu, 02 Jul 2020 08:42:19 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id l191sm9749876pfd.149.2020.07.02.08.42.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jul 2020 08:42:18 -0700 (PDT)
+Date:   Thu, 2 Jul 2020 08:42:17 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Joe Perches <joe@perches.com>,
+        Andy Whitcroft <apw@canonical.com>, x86@kernel.org,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        b43-dev@lists.infradead.org, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-mm@kvack.org,
+        clang-built-linux@googlegroups.com
+Subject: Re: [PATCH v2 08/16] spi: davinci: Remove uninitialized_var() usage
+Message-ID: <202007020839.545A571CA4@keescook>
+References: <20200620033007.1444705-1-keescook@chromium.org>
+ <20200620033007.1444705-9-keescook@chromium.org>
+ <20200701203920.GC3776@sirena.org.uk>
+ <202007020819.318824DA@keescook>
+ <20200702152335.GJ4483@sirena.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200702152335.GJ4483@sirena.org.uk>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Change configuration to "tristate", add module author, description and
-license to support building i.MX8QXP clock drivers as module.
+On Thu, Jul 02, 2020 at 04:23:35PM +0100, Mark Brown wrote:
+> On Thu, Jul 02, 2020 at 08:21:40AM -0700, Kees Cook wrote:
+> > On Wed, Jul 01, 2020 at 09:39:20PM +0100, Mark Brown wrote:
+> 
+> > > Please copy maintainers on patches :(
+> 
+> > Hi! Sorry about that; the CC list was giant, so I had opted for using
+> > subsystem mailing lists where possible.
+> 
+> If you're going to err in a direction there I'd err in the direction of
+> CCing the people not the list - I only saw this since I was looking for
+> something else, I don't normally see stuff in the mailing list folder.
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
----
-Changes since V4:
-	- keep using builtin_platform_driver();
-	- add COMPILE_TEST support.
----
- drivers/clk/imx/Kconfig            | 8 +++++---
- drivers/clk/imx/Makefile           | 9 ++++-----
- drivers/clk/imx/clk-imx8qxp-lpcg.c | 4 ++++
- drivers/clk/imx/clk-imx8qxp.c      | 4 ++++
- 4 files changed, 17 insertions(+), 8 deletions(-)
+Yeah, I've gotten conflicting feedback on treewide changes:
+- please CC me on only the one patch, I don't want to see everything else
+- please CC me on the whole series, I want the full context for the change
 
-diff --git a/drivers/clk/imx/Kconfig b/drivers/clk/imx/Kconfig
-index 4f4f86e..51be5e8 100644
---- a/drivers/clk/imx/Kconfig
-+++ b/drivers/clk/imx/Kconfig
-@@ -5,7 +5,8 @@ config MXC_CLK
- 	depends on ARCH_MXC || COMPILE_TEST
- 
- config MXC_CLK_SCU
--	bool
-+	tristate "IMX SCU clock"
-+	depends on ARCH_MXC || COMPILE_TEST
- 	depends on IMX_SCU
- 
- config CLK_IMX1
-@@ -106,8 +107,9 @@ config CLK_IMX8MQ
- 	    Build the driver for i.MX8MQ CCM Clock Driver
- 
- config CLK_IMX8QXP
--	bool "IMX8QXP SCU Clock"
--	depends on ARCH_MXC && IMX_SCU && ARM64
-+	tristate "IMX8QXP SCU Clock"
-+	depends on (ARCH_MXC && ARM64) || COMPILE_TEST
-+	depends on IMX_SCU
- 	select MXC_CLK_SCU
- 	help
- 	  Build the driver for IMX8QXP SCU based clocks.
-diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
-index 17f5d12..79e53f2 100644
---- a/drivers/clk/imx/Makefile
-+++ b/drivers/clk/imx/Makefile
-@@ -21,15 +21,14 @@ mxc-clk-objs += clk-pll14xx.o
- mxc-clk-objs += clk-sscg-pll.o
- obj-$(CONFIG_MXC_CLK) += mxc-clk.o
- 
--obj-$(CONFIG_MXC_CLK_SCU) += \
--	clk-scu.o \
--	clk-lpcg-scu.o
--
- obj-$(CONFIG_CLK_IMX8MM) += clk-imx8mm.o
- obj-$(CONFIG_CLK_IMX8MN) += clk-imx8mn.o
- obj-$(CONFIG_CLK_IMX8MP) += clk-imx8mp.o
- obj-$(CONFIG_CLK_IMX8MQ) += clk-imx8mq.o
--obj-$(CONFIG_CLK_IMX8QXP) += clk-imx8qxp.o clk-imx8qxp-lpcg.o
-+
-+obj-$(CONFIG_MXC_CLK_SCU) += clk-imx-scu.o clk-imx-lpcg-scu.o
-+clk-imx-scu-$(CONFIG_CLK_IMX8QXP) += clk-scu.o clk-imx8qxp.o
-+clk-imx-lpcg-scu-$(CONFIG_CLK_IMX8QXP) += clk-lpcg-scu.o clk-imx8qxp-lpcg.o
- 
- obj-$(CONFIG_CLK_IMX1)   += clk-imx1.o
- obj-$(CONFIG_CLK_IMX21)  += clk-imx21.o
-diff --git a/drivers/clk/imx/clk-imx8qxp-lpcg.c b/drivers/clk/imx/clk-imx8qxp-lpcg.c
-index 04c8ee3..e947a70 100644
---- a/drivers/clk/imx/clk-imx8qxp-lpcg.c
-+++ b/drivers/clk/imx/clk-imx8qxp-lpcg.c
-@@ -232,3 +232,7 @@ static struct platform_driver imx8qxp_lpcg_clk_driver = {
- };
- 
- builtin_platform_driver(imx8qxp_lpcg_clk_driver);
-+
-+MODULE_AUTHOR("Aisheng Dong <aisheng.dong@nxp.com>");
-+MODULE_DESCRIPTION("NXP i.MX8QXP LPCG clock driver");
-+MODULE_LICENSE("GPL v2");
-diff --git a/drivers/clk/imx/clk-imx8qxp.c b/drivers/clk/imx/clk-imx8qxp.c
-index 5e2903e..d650ca3 100644
---- a/drivers/clk/imx/clk-imx8qxp.c
-+++ b/drivers/clk/imx/clk-imx8qxp.c
-@@ -152,3 +152,7 @@ static struct platform_driver imx8qxp_clk_driver = {
- 	.probe = imx8qxp_clk_probe,
- };
- builtin_platform_driver(imx8qxp_clk_driver);
-+
-+MODULE_AUTHOR("Aisheng Dong <aisheng.dong@nxp.com>");
-+MODULE_DESCRIPTION("NXP i.MX8QXP clock driver");
-+MODULE_LICENSE("GPL v2");
+I opted toward "CC me on this series", but then I get stuck when the CC
+is giant. I think I may switch back to individual CCs for specific
+patches, and point people to lore if they want greater context. (lore
+didn't exist before...)
+
+Thanks for the poke to make me reconsider this workflow. :)
+
 -- 
-2.7.4
-
+Kees Cook
