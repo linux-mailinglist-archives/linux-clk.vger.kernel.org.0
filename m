@@ -2,124 +2,119 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 666E0213D77
-	for <lists+linux-clk@lfdr.de>; Fri,  3 Jul 2020 18:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FB2213E10
+	for <lists+linux-clk@lfdr.de>; Fri,  3 Jul 2020 19:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726379AbgGCQTe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 3 Jul 2020 12:19:34 -0400
-Received: from foss.arm.com ([217.140.110.172]:48966 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726178AbgGCQTe (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 3 Jul 2020 12:19:34 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9628531B;
-        Fri,  3 Jul 2020 09:19:33 -0700 (PDT)
-Received: from [10.57.21.32] (unknown [10.57.21.32])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1E8F13F73C;
-        Fri,  3 Jul 2020 09:19:31 -0700 (PDT)
-Subject: Re: [PATCH] clk: rockchip: use separate compatibles for rk3288w-cru
-To:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org
-Cc:     mylene.josserand@collabora.com, sboyd@kernel.org,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        mturquette@baylibre.com, linux-kernel@vger.kernel.org,
-        jagan@amarulasolutions.com, linux-clk@vger.kernel.org
-References: <20200703152825.245920-1-heiko@sntech.de>
- <00aaa4c4087b56cb4c2580e90f18c84055e105c9.camel@collabora.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <2e331af7-6565-5f88-4f12-94468a4214ce@arm.com>
-Date:   Fri, 3 Jul 2020 17:19:30 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726721AbgGCRFR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 3 Jul 2020 13:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726707AbgGCRFQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 3 Jul 2020 13:05:16 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBD0C061794;
+        Fri,  3 Jul 2020 10:05:16 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id dp18so34975207ejc.8;
+        Fri, 03 Jul 2020 10:05:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MuBPpVunJ0tNS4CUGWOLlzJqZ3YUKldK5LCG9zmjIAQ=;
+        b=r0rihSI5KUuKo7yEjRhmqvPlQUxh81S9BeaLhBJj7He0m+PBmADWA/YQ85s7llLbJV
+         Xj50nanM+KV5xK6IX7ANPTuWgKeNZ2t5PLanH/Nktk9uOQ2in9uK2a/r52lBwaDElaK6
+         Joyq9DktciJ7KiK4mxckUolOHEhPiTNyinqaWTMYZudn/40UHK3WErPHuz5AAnpJQ4vf
+         RIP5A+uJJS3uYrj4Rv0T4uxQQ/bTm647OnXNA23LZEDgym/EoZY890F40tjK9HCDLGPw
+         Rt/pRGZzqKflmYcIPKuhzCgs+qS8GKHMA1wyaFjF+6YdeU9BkdwIKRC7oIALtcRPwdz/
+         GERA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MuBPpVunJ0tNS4CUGWOLlzJqZ3YUKldK5LCG9zmjIAQ=;
+        b=OCkb3Wa39jMOAp9VR7pwJ03A7iu6y4MbEoSBTBICx7K698XPBOapSWyr7nqK5qvEU+
+         yGdqv3qqasw7pWEoA3toBISMFVS78+l/nimNxTip/OsnFpjvxMKtxSPbMxFWXK1INO32
+         mhovDug2Uot3/1o4iIajDRPBovS1YxH7yZNl08SjH5f4dusHyDyroBdiBGKydiyf3T6E
+         JYOPbrl1536igY+c6kGT6ee5FpMudmN2k4727m9+QDZb/dG+efQ0n9YWzScywThAyl0D
+         mAfkfinn2Tj69mfQTRQBkV4dPxSnX4PpVsCG1ET3D8YkHceldklibAjzqWA+d7VtfW2p
+         AXUQ==
+X-Gm-Message-State: AOAM531tsOUed+69XB9QcVtsiPgdfSHvncVuTqGL9I6q5TPmBC0JdsNC
+        Zdoh27b0544vnGyH/ArVW9E=
+X-Google-Smtp-Source: ABdhPJwp5W/Yeq1alxZu1RLmUQIVu27SvndMVqvf+PFt6UV4W51xfcVujxtkrCIVEaUU+wrjOdfoAQ==
+X-Received: by 2002:a17:906:314c:: with SMTP id e12mr30506048eje.500.1593795915167;
+        Fri, 03 Jul 2020 10:05:15 -0700 (PDT)
+Received: from localhost.localdomain ([188.24.137.55])
+        by smtp.gmail.com with ESMTPSA id dg8sm14342272edb.56.2020.07.03.10.05.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jul 2020 10:05:14 -0700 (PDT)
+From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-actions@lists.infradead.org
+Subject: [PATCH v3 0/6] Add RMU and DMAC/GPIO clock support for Actions Semi S500 SoCs
+Date:   Fri,  3 Jul 2020 20:05:06 +0300
+Message-Id: <cover.1593788312.git.cristian.ciocaltea@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <00aaa4c4087b56cb4c2580e90f18c84055e105c9.camel@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 2020-07-03 16:38, Ezequiel Garcia wrote:
-> On Fri, 2020-07-03 at 17:28 +0200, Heiko Stuebner wrote:
->> From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
->>
->> Commit 1627f683636d ("clk: rockchip: Handle clock tree for rk3288w variant")
->> added the check for rk3288w-specific clock-tree changes but in turn would
->> require a double-compatible due to re-using the main rockchip,rk3288-cru
->> compatible as entry point.
->>
->> The binding change actually describes the compatibles as one or the other
->> so adapt the code accordingly and add a real second entry-point for the
->> clock controller.
->>
->> Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
->> ---
->>   drivers/clk/rockchip/clk-rk3288.c | 15 +++++++++++++--
->>   1 file changed, 13 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/clk/rockchip/clk-rk3288.c b/drivers/clk/rockchip/clk-rk3288.c
->> index 204976e2d0cb..a39ca9809cc3 100644
->> --- a/drivers/clk/rockchip/clk-rk3288.c
->> +++ b/drivers/clk/rockchip/clk-rk3288.c
->> @@ -922,7 +922,7 @@ static struct syscore_ops rk3288_clk_syscore_ops = {
->>   	.resume = rk3288_clk_resume,
->>   };
->>   
->> -static void __init rk3288_clk_init(struct device_node *np)
->> +static void __init rk3288_common_init(struct device_node *np, bool is_w)
-> 
->  From an API standpoint, avoid boolean arguments
-> in favor of a simple enum.
+This patch series is a stripped-down revision of the initial series
+"[PATCH 00/11] Add CMU/RMU/DMA support for Actions Semi S500 SoCs":
+https://lore.kernel.org/lkml/cover.1592407030.git.cristian.ciocaltea@gmail.com/
 
-And if the enum's just a selector between different data, consider 
-simply passing the data directly ;)
+At Stephen's request, I detached all DTS related work to keep the focus
+exclusively on the Actions S500 SoC clock driver changes:
 
-Robin.
+ - Add support for some missing clocks: APB, DMAC, GPIO
+ - Add support for Reset Management Unit
 
-> 
-> This case is trivial, but I think it's useful to avoid
-> the anti pattern.
-> 
-> Thanks for quickly working on this :)
-> 
-> Ezequiel
-> 
->>   {
->>   	struct rockchip_clk_provider *ctx;
->>   
->> @@ -945,7 +945,7 @@ static void __init rk3288_clk_init(struct device_node *np)
->>   	rockchip_clk_register_branches(ctx, rk3288_clk_branches,
->>   				  ARRAY_SIZE(rk3288_clk_branches));
->>   
->> -	if (of_device_is_compatible(np, "rockchip,rk3288w-cru"))
->> +	if (is_w)
->>   		rockchip_clk_register_branches(ctx, rk3288w_hclkvio_branch,
->>   					       ARRAY_SIZE(rk3288w_hclkvio_branch));
->>   	else
->> @@ -970,4 +970,15 @@ static void __init rk3288_clk_init(struct device_node *np)
->>   
->>   	rockchip_clk_of_add_provider(np, ctx);
->>   }
->> +
->> +static void __init rk3288_clk_init(struct device_node *np)
->> +{
->> +	rk3288_common_init(np, false);
->> +}
->>   CLK_OF_DECLARE(rk3288_cru, "rockchip,rk3288-cru", rk3288_clk_init);
->> +
->> +static void __init rk3288w_clk_init(struct device_node *np)
->> +{
->> +	rk3288_common_init(np, true);
->> +}
->> +CLK_OF_DECLARE(rk3288w_cru, "rockchip,rk3288w-cru", rk3288w_clk_init);
-> 
-> 
-> 
-> _______________________________________________
-> Linux-rockchip mailing list
-> Linux-rockchip@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-rockchip
-> 
+The removed patches are subject to resubmission via a separate series:
+
+ - arm: dts: owl-s500: Add Clock Management Unit
+ - arm: dts: owl-s500: Set UART clock refs from CMU
+ - arm: dts: owl-s500-roseapplepi: Use UART clock from CMU
+ - arm: dts: owl-s500: Add DMA controller
+ - arm: dts: owl-s500: Add Reset Controller support
+
+Regards,
+Cristi
+
+Changes in v3:
+ - Incorporated feedback from Stephen and Mani
+ - Rebased on v5.8-rc3
+
+Changes in v2:
+ - Incorporated Stephen's review comments
+ - Removed DTS related patches
+ - Rebased remaining patches on v5.8-rc2
+ - Updated cover letter, both subject and content, to reflect the new
+   scope
+
+Cristian Ciocaltea (6):
+  clk: actions: Fix h_clk for Actions S500 SoC
+  dt-bindings: clock: Add APB, DMAC, GPIO bindings for Actions S500 SoC
+  clk: actions: Add APB, DMAC, GPIO clock support for Actions S500 SoC
+  dt-bindings: reset: Add binding constants for Actions S500 RMU
+  clk: actions: Add Actions S500 SoC Reset Management Unit support
+  MAINTAINERS: Add reset binding entry for Actions Semi Owl SoCs
+
+ MAINTAINERS                                   |  1 +
+ drivers/clk/actions/owl-s500.c                | 89 ++++++++++++++++++-
+ include/dt-bindings/clock/actions,s500-cmu.h  |  7 +-
+ .../dt-bindings/reset/actions,s500-reset.h    | 67 ++++++++++++++
+ 4 files changed, 162 insertions(+), 2 deletions(-)
+ create mode 100644 include/dt-bindings/reset/actions,s500-reset.h
+
+-- 
+2.27.0
+
