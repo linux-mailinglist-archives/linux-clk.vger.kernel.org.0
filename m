@@ -2,80 +2,125 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 720482136E7
-	for <lists+linux-clk@lfdr.de>; Fri,  3 Jul 2020 10:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 067742136D8
+	for <lists+linux-clk@lfdr.de>; Fri,  3 Jul 2020 10:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726616AbgGCI7M (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 3 Jul 2020 04:59:12 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:48185 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725786AbgGCI7M (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 3 Jul 2020 04:59:12 -0400
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 03 Jul 2020 01:59:11 -0700
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 03 Jul 2020 01:59:09 -0700
-Received: from gokulsri-linux.qualcomm.com ([10.201.2.207])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 03 Jul 2020 14:28:44 +0530
-Received: by gokulsri-linux.qualcomm.com (Postfix, from userid 432570)
-        id 6433821696; Fri,  3 Jul 2020 14:28:43 +0530 (IST)
-From:   Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
-To:     bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
-        sboyd@kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     agross@kernel.org, linux-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, govinds@codeaurora.org,
-        sricharan@codeaurora.org, gokulsri@codeaurora.org
-Subject: [v7 4/4] remoteproc: qcom: wcss: explicitly request exclusive reset control
-Date:   Fri,  3 Jul 2020 14:28:42 +0530
-Message-Id: <1593766722-28838-5-git-send-email-gokulsri@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1593766722-28838-1-git-send-email-gokulsri@codeaurora.org>
-References: <20190726092332.25202-1-govinds@codeaurora.org>
- <1593766722-28838-1-git-send-email-gokulsri@codeaurora.org>
+        id S1726488AbgGCI7A (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 3 Jul 2020 04:59:00 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:39501 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726482AbgGCI7A (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 3 Jul 2020 04:59:00 -0400
+X-Originating-IP: 86.202.118.225
+Received: from localhost (lfbn-lyo-1-23-225.w86-202.abo.wanadoo.fr [86.202.118.225])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id E9876E0012;
+        Fri,  3 Jul 2020 08:58:55 +0000 (UTC)
+Date:   Fri, 3 Jul 2020 10:58:55 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Stephen Boyd <sboyd@kernel.org>, kernel@pengutronix.de,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: at91: fix possible dead lock in new drivers
+Message-ID: <20200703085855.GD6538@piout.net>
+References: <20200703073236.23923-1-a.fatoum@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200703073236.23923-1-a.fatoum@pengutronix.de>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Govind Singh <govinds@codeaurora.org>
+On 03/07/2020 09:32:35+0200, Ahmad Fatoum wrote:
+> syscon_node_to_regmap() will make the created regmap get and enable the
+> first clock it can parse from the device tree. This clock is not needed to
+> access the registers and should not be enabled at that time.
+> 
+> Use device_node_to_regmap to resolve this as it looks up the regmap in
+> the same list but doesn't care about the clocks. This issue is detected
+> by lockdep when booting the sama5d3 with a device tree containing the
+> new clk bindings.
+> 
+> This fix already happened in 6956eb33abb5 ("clk: at91: fix possible
+> deadlock") for the drivers that had been migrated to the new clk binding
+> back then. This does the same for the new drivers as well.
+> 
+> Fixes: 01e2113de9a5 ("clk: at91: add sam9x60 pmc driver")
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
-Use request exclusive reset control for wcss reset controls.
+> ---
+> Only boot tested on the sama5d3.
+> ---
+>  drivers/clk/at91/at91sam9g45.c | 2 +-
+>  drivers/clk/at91/at91sam9n12.c | 2 +-
+>  drivers/clk/at91/sam9x60.c     | 2 +-
+>  drivers/clk/at91/sama5d3.c     | 2 +-
+>  4 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/clk/at91/at91sam9g45.c b/drivers/clk/at91/at91sam9g45.c
+> index 9873b583c260..fe9d391adeba 100644
+> --- a/drivers/clk/at91/at91sam9g45.c
+> +++ b/drivers/clk/at91/at91sam9g45.c
+> @@ -111,7 +111,7 @@ static void __init at91sam9g45_pmc_setup(struct device_node *np)
+>  		return;
+>  	mainxtal_name = of_clk_get_parent_name(np, i);
+>  
+> -	regmap = syscon_node_to_regmap(np);
+> +	regmap = device_node_to_regmap(np);
+>  	if (IS_ERR(regmap))
+>  		return;
+>  
+> diff --git a/drivers/clk/at91/at91sam9n12.c b/drivers/clk/at91/at91sam9n12.c
+> index 630dc5d87171..4aa97e672bd6 100644
+> --- a/drivers/clk/at91/at91sam9n12.c
+> +++ b/drivers/clk/at91/at91sam9n12.c
+> @@ -124,7 +124,7 @@ static void __init at91sam9n12_pmc_setup(struct device_node *np)
+>  		return;
+>  	mainxtal_name = of_clk_get_parent_name(np, i);
+>  
+> -	regmap = syscon_node_to_regmap(np);
+> +	regmap = device_node_to_regmap(np);
+>  	if (IS_ERR(regmap))
+>  		return;
+>  
+> diff --git a/drivers/clk/at91/sam9x60.c b/drivers/clk/at91/sam9x60.c
+> index 3e20aa68259f..2b4c67485eee 100644
+> --- a/drivers/clk/at91/sam9x60.c
+> +++ b/drivers/clk/at91/sam9x60.c
+> @@ -178,7 +178,7 @@ static void __init sam9x60_pmc_setup(struct device_node *np)
+>  		return;
+>  	mainxtal_name = of_clk_get_parent_name(np, i);
+>  
+> -	regmap = syscon_node_to_regmap(np);
+> +	regmap = device_node_to_regmap(np);
+>  	if (IS_ERR(regmap))
+>  		return;
+>  
+> diff --git a/drivers/clk/at91/sama5d3.c b/drivers/clk/at91/sama5d3.c
+> index 5e4e44dd4c37..5609b04e6565 100644
+> --- a/drivers/clk/at91/sama5d3.c
+> +++ b/drivers/clk/at91/sama5d3.c
+> @@ -121,7 +121,7 @@ static void __init sama5d3_pmc_setup(struct device_node *np)
+>  		return;
+>  	mainxtal_name = of_clk_get_parent_name(np, i);
+>  
+> -	regmap = syscon_node_to_regmap(np);
+> +	regmap = device_node_to_regmap(np);
+>  	if (IS_ERR(regmap))
+>  		return;
+>  
+> -- 
+> 2.27.0
+> 
 
-Signed-off-by: Govind Singh <govinds@codeaurora.org>
----
- drivers/remoteproc/qcom_q6v5_wcss.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/remoteproc/qcom_q6v5_wcss.c b/drivers/remoteproc/qcom_q6v5_wcss.c
-index 7c073c8..d5107c6 100644
---- a/drivers/remoteproc/qcom_q6v5_wcss.c
-+++ b/drivers/remoteproc/qcom_q6v5_wcss.c
-@@ -781,21 +781,21 @@ static int q6v5_wcss_init_reset(struct q6v5_wcss *wcss,
- 	struct device *dev = wcss->dev;
- 
- 	if (desc->aon_reset_required) {
--		wcss->wcss_aon_reset = devm_reset_control_get(dev, "wcss_aon_reset");
-+		wcss->wcss_aon_reset = devm_reset_control_get_exclusive(dev, "wcss_aon_reset");
- 		if (IS_ERR(wcss->wcss_aon_reset)) {
- 			dev_err(wcss->dev, "fail to acquire wcss_aon_reset\n");
- 			return PTR_ERR(wcss->wcss_aon_reset);
- 		}
- 	}
- 
--	wcss->wcss_reset = devm_reset_control_get(dev, "wcss_reset");
-+	wcss->wcss_reset = devm_reset_control_get_exclusive(dev, "wcss_reset");
- 	if (IS_ERR(wcss->wcss_reset)) {
- 		dev_err(wcss->dev, "unable to acquire wcss_reset\n");
- 		return PTR_ERR(wcss->wcss_reset);
- 	}
- 
- 	if (desc->wcss_q6_reset_required) {
--		wcss->wcss_q6_reset = devm_reset_control_get(dev, "wcss_q6_reset");
-+		wcss->wcss_q6_reset = devm_reset_control_get_exclusive(dev, "wcss_q6_reset");
- 		if (IS_ERR(wcss->wcss_q6_reset)) {
- 			dev_err(wcss->dev, "unable to acquire wcss_q6_reset\n");
- 			return PTR_ERR(wcss->wcss_q6_reset);
 -- 
-2.7.4
-
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
