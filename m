@@ -2,75 +2,77 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E67AD21350A
-	for <lists+linux-clk@lfdr.de>; Fri,  3 Jul 2020 09:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26FCC213638
+	for <lists+linux-clk@lfdr.de>; Fri,  3 Jul 2020 10:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725779AbgGCHeq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 3 Jul 2020 03:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725764AbgGCHeq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 3 Jul 2020 03:34:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBB1C08C5C1
-        for <linux-clk@vger.kernel.org>; Fri,  3 Jul 2020 00:34:45 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1jrGDc-0003cT-Da; Fri, 03 Jul 2020 09:34:44 +0200
-Subject: Re: [PATCH v2] clk: at91: add sama5d3 pmc driver
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Karl_Rudb=c3=a6k_Olsen?= <karl@micro-technic.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20200110223033.1261791-1-alexandre.belloni@bootlin.com>
- <37d11358-d3b5-10a1-72a3-93a03a6c1ea6@pengutronix.de>
- <20200622214759.GK131826@piout.net>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Message-ID: <043970b9-6cc6-e5c6-b5b1-e0f1a9799ae1@pengutronix.de>
-Date:   Fri, 3 Jul 2020 09:34:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
-MIME-Version: 1.0
-In-Reply-To: <20200622214759.GK131826@piout.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+        id S1726670AbgGCISy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 3 Jul 2020 04:18:54 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:63416 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726513AbgGCISy (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 3 Jul 2020 04:18:54 -0400
+X-Greylist: delayed 363 seconds by postgrey-1.27 at vger.kernel.org; Fri, 03 Jul 2020 04:18:48 EDT
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 03 Jul 2020 01:12:49 -0700
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 03 Jul 2020 01:12:47 -0700
+Received: from gokulsri-linux.qualcomm.com ([10.201.2.207])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 03 Jul 2020 13:42:21 +0530
+Received: by gokulsri-linux.qualcomm.com (Postfix, from userid 432570)
+        id CB56721691; Fri,  3 Jul 2020 13:42:19 +0530 (IST)
+From:   Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
+To:     bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
+        sboyd@kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     andy.gross@linaro.org, linux-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, govinds@codeaurora.org,
+        sricharan@codeaurora.org, gokulsri@codeaurora.org
+Subject: [v6 0/4] Add non PAS wcss Q6 support for QCS404
+Date:   Fri,  3 Jul 2020 13:42:15 +0530
+Message-Id: <1593763939-19096-1-git-send-email-gokulsri@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <20190726092332.25202-1-govinds@codeaurora.org>
+References: <20190726092332.25202-1-govinds@codeaurora.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello Alexandre,
+Changes since v5:
+ Rebased all the unmerged patches on top of linux-5.8-rc3
+ Added dt-binding for qcom,qcs404-wcss-pil
+ Removed typo
 
-On 6/22/20 11:47 PM, Alexandre Belloni wrote:
-> Hi,
-> 
-> On 22/06/2020 23:24:45+0200, Ahmad Fatoum wrote:
->>> +	regmap = syscon_node_to_regmap(np);
->>
->> Shouldn't this be device_node_to_regmap for the same reasons outlined in your
->> 6956eb33 ("clk: at91: fix possible deadlock") commit?
->>
->> Same question for at91sam9g45.c, sam9x60.c and at91sam9n12.c.
->>
-> 
-> Agreed, I guess you can send a patch fixing all the instances.
+Changes since v4:
+ removed QDSP6SS clock controls and moved to wcss rproc.
+ renamed wcsccc to q6sstopcc.
+ cleanup/refactoring.
 
-I just sent out a patch for those 4 files. I don't know if this issue is equally
-applicable to the dt-compat.c code, so I left that one as is.
+Changes since v3:
+ dt binding cleanup.
+ Fixed remoteproc recovery.
+ Added remoteproc dump support.
+ wcsscc cleanup/refactoring.
 
-Cheers,
-Ahmad
+Changes since v2:
+ Removed unused properties.
+ Refactored code to have common logic b/w ipq8074 and QCS404, wherever possible.
+ Added compatible example.
+ Removed wcss-protected bool.
+
+Changes since v1:
+  Corrected clock names as per comments in v1 patch.
+
+Govind Singh (4):
+  remoteproc: qcom: wcss: populate hardcoded param using driver data
+  dt-bindings: remoteproc: qcom: Add Q6V5 Modem PIL binding for QCS404
+  remoteproc: qcom: wcss: Add non pas wcss Q6 support for QCS404
+  remoteproc: qcom: wcss: explicitly request exclusive reset control
+
+ .../devicetree/bindings/remoteproc/qcom,q6v5.txt   |   9 +
+ drivers/remoteproc/qcom_q6v5_wcss.c                | 596 +++++++++++++++++++--
+ 2 files changed, 563 insertions(+), 42 deletions(-)
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.7.4
+
