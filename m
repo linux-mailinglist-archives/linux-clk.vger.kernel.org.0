@@ -2,198 +2,108 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3F021371B
-	for <lists+linux-clk@lfdr.de>; Fri,  3 Jul 2020 11:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A4F2139DD
+	for <lists+linux-clk@lfdr.de>; Fri,  3 Jul 2020 14:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726178AbgGCJDY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 3 Jul 2020 05:03:24 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:34633 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726352AbgGCJDX (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 3 Jul 2020 05:03:23 -0400
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 03 Jul 2020 02:03:19 -0700
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 03 Jul 2020 02:03:17 -0700
-Received: from gokulsri-linux.qualcomm.com ([10.201.2.207])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 03 Jul 2020 14:32:55 +0530
-Received: by gokulsri-linux.qualcomm.com (Postfix, from userid 432570)
-        id BAB5421825; Fri,  3 Jul 2020 14:32:53 +0530 (IST)
-From:   Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
-To:     gokulsri@codeaurora.org, sboyd@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, david.brown@linaro.org,
-        devicetree@vger.kernel.org, jassisinghbrar@gmail.com,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        mark.rutland@arm.com, mturquette@baylibre.com, ohad@wizery.com,
-        robh+dt@kernel.org, sricharan@codeaurora.org,
-        nprakash@codeaurora.org
-Subject: [PATCH V6 10/10] arm64: dts: qcom: Enable Q6v5 WCSS for ipq8074 SoC
-Date:   Fri,  3 Jul 2020 14:32:52 +0530
-Message-Id: <1593766972-29101-11-git-send-email-gokulsri@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1593766972-29101-1-git-send-email-gokulsri@codeaurora.org>
-References: <1593766972-29101-1-git-send-email-gokulsri@codeaurora.org>
+        id S1726258AbgGCMRh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 3 Jul 2020 08:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726236AbgGCMRh (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 3 Jul 2020 08:17:37 -0400
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6879C08C5DD
+        for <linux-clk@vger.kernel.org>; Fri,  3 Jul 2020 05:17:36 -0700 (PDT)
+Received: from ramsan ([IPv6:2a02:1810:ac12:ed20:e8cd:dde5:943b:dfd3])
+        by michel.telenet-ops.be with bizsmtp
+        id ycHZ220061UkkT806cHZg5; Fri, 03 Jul 2020 14:17:35 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1jrKdJ-0004hZ-0t; Fri, 03 Jul 2020 14:17:33 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1jrKdI-0001kT-U4; Fri, 03 Jul 2020 14:17:32 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [GIT PULL] clk: renesas: Updates for v5.9
+Date:   Fri,  3 Jul 2020 14:17:29 +0200
+Message-Id: <20200703121729.6678-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Enable remoteproc WCSS PIL driver with glink
-and ssr subdevices. Also configures shared memory
-and enables smp2p and mailboxes required for IPC.
+	Hi Mike, Stephen,
 
-Signed-off-by: Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
-Signed-off-by: Sricharan R <sricharan@codeaurora.org>
-Signed-off-by: Nikhil Prakash V <nprakash@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/ipq8074.dtsi | 121 ++++++++++++++++++++++++++++++++++
- 1 file changed, 121 insertions(+)
+The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c7407:
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index 8e273ec..e40f854 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -76,12 +76,66 @@
- 		method = "smc";
- 	};
- 
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		smem_region: memory@4ab00000 {
-+			no-map;
-+			reg = <0x0 0x4ab00000 0x0 0x00100000>;
-+		};
-+
-+		q6_region: memory@4b000000 {
-+			no-map;
-+			reg = <0x0 0x4b000000 0x0 0x05f00000>;
-+		};
-+	};
-+
- 	firmware {
- 		scm {
- 			compatible = "qcom,scm-ipq8074", "qcom,scm";
- 		};
- 	};
- 
-+	tcsr_mutex: hwlock@193d000 {
-+		compatible = "qcom,tcsr-mutex";
-+		syscon = <&tcsr_mutex_regs 0 0x80>;
-+		#hwlock-cells = <1>;
-+	};
-+
-+	smem {
-+		compatible = "qcom,smem";
-+		memory-region = <&smem_region>;
-+		hwlocks = <&tcsr_mutex 0>;
-+	};
-+
-+	wcss: smp2p-wcss {
-+		compatible = "qcom,smp2p";
-+		qcom,smem = <435>, <428>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <0 322 1>;
-+
-+		mboxes = <&apcs_glb 9>;
-+
-+		qcom,local-pid = <0>;
-+		qcom,remote-pid = <1>;
-+
-+		wcss_smp2p_out: master-kernel {
-+			qcom,entry-name = "master-kernel";
-+			qcom,smp2p-feature-ssr-ack;
-+			#qcom,smem-state-cells = <1>;
-+		};
-+
-+		wcss_smp2p_in: slave-kernel {
-+			qcom,entry-name = "slave-kernel";
-+
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
- 	soc: soc {
- 		#address-cells = <0x1>;
- 		#size-cells = <0x1>;
-@@ -498,5 +552,72 @@
- 				      "axi_m_sticky";
- 			status = "disabled";
- 		};
-+
-+		tcsr_q6: syscon@1945000 {
-+			compatible = "syscon";
-+			reg = <0x01945000 0xe000>;
-+		};
-+
-+		tcsr_mutex_regs: syscon@193d000 {
-+			compatible = "syscon";
-+			reg = <0x01905000 0x8000>;
-+		};
-+
-+		apcs_glb: mailbox@b111000 {
-+			compatible = "qcom,ipq8074-apcs-apps-global";
-+			reg = <0x0b111000 0x1000>;
-+
-+			#mbox-cells = <1>;
-+		};
-+
-+		q6v5_wcss: q6v5_wcss@cd00000 {
-+			compatible = "qcom,ipq8074-wcss-pil";
-+			reg = <0x0cd00000 0x4040>,
-+			      <0x004ab000 0x20>;
-+			reg-names = "qdsp6",
-+				    "rmb";
-+			qca,auto-restart;
-+			qca,extended-intc;
-+			interrupts-extended = <&intc 0 325 1>,
-+					      <&wcss_smp2p_in 0 0>,
-+					      <&wcss_smp2p_in 1 0>,
-+					      <&wcss_smp2p_in 2 0>,
-+					      <&wcss_smp2p_in 3 0>;
-+			interrupt-names = "wdog",
-+					  "fatal",
-+					  "ready",
-+					  "handover",
-+					  "stop-ack";
-+
-+			resets = <&gcc GCC_WCSSAON_RESET>,
-+				 <&gcc GCC_WCSS_BCR>,
-+				 <&gcc GCC_WCSS_Q6_BCR>;
-+
-+			reset-names = "wcss_aon_reset",
-+				      "wcss_reset",
-+				      "wcss_q6_reset";
-+
-+			clocks = <&gcc GCC_PRNG_AHB_CLK>;
-+			clock-names = "prng";
-+
-+			qcom,halt-regs = <&tcsr_q6 0xa000 0xd000 0x0>;
-+
-+			qcom,smem-states = <&wcss_smp2p_out 0>,
-+					   <&wcss_smp2p_out 1>;
-+			qcom,smem-state-names = "shutdown",
-+						"stop";
-+
-+			memory-region = <&q6_region>;
-+
-+			glink-edge {
-+				interrupts = <GIC_SPI 321 IRQ_TYPE_EDGE_RISING>;
-+				qcom,remote-pid = <1>;
-+				mboxes = <&apcs_glb 8>;
-+
-+				rpm_requests {
-+					qcom,glink-channels = "IPCRTR";
-+				};
-+			};
-+		};
- 	};
- };
--- 
-2.7.4
+  Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git tags/clk-renesas-for-v5.9-tag1
+
+for you to fetch changes up to 52bc5ea6edde35bc65ed6ecd7639534e78002c74:
+
+  clk: renesas: rzg2: Mark RWDT clocks as critical (2020-06-22 16:54:32 +0200)
+
+----------------------------------------------------------------
+clk: renesas: Updates for v5.9
+
+  - One more conversion of DT bindings to json-schema,
+  - Enhance critical clock handling to only consider clocks that were
+    enabled at boot time, and use it for watchdog clock handling on
+    R-Car Gen3 and RZ/G2 SoCs.
+
+Thanks for pulling!
+----------------------------------------------------------------
+Geert Uytterhoeven (1):
+      dt-bindings: clock: renesas: cpg: Convert to json-schema
+
+Ulrich Hecht (3):
+      clk: renesas: cpg-mssr: Mark clocks as critical only if on at boot
+      clk: renesas: rcar-gen3: Mark RWDT clocks as critical
+      clk: renesas: rzg2: Mark RWDT clocks as critical
+
+ .../bindings/clock/renesas,cpg-clocks.yaml         | 241 +++++++++++++++++++++
+ .../bindings/clock/renesas,r8a73a4-cpg-clocks.txt  |  33 ---
+ .../bindings/clock/renesas,r8a7740-cpg-clocks.txt  |  41 ----
+ .../bindings/clock/renesas,r8a7778-cpg-clocks.txt  |  47 ----
+ .../bindings/clock/renesas,r8a7779-cpg-clocks.txt  |  49 -----
+ .../bindings/clock/renesas,rz-cpg-clocks.txt       |  53 -----
+ .../bindings/clock/renesas,sh73a0-cpg-clocks.txt   |  35 ---
+ drivers/clk/renesas/r8a774a1-cpg-mssr.c            |   1 +
+ drivers/clk/renesas/r8a774b1-cpg-mssr.c            |   1 +
+ drivers/clk/renesas/r8a774c0-cpg-mssr.c            |   1 +
+ drivers/clk/renesas/r8a7795-cpg-mssr.c             |   2 +-
+ drivers/clk/renesas/r8a7796-cpg-mssr.c             |   2 +-
+ drivers/clk/renesas/r8a77965-cpg-mssr.c            |   1 +
+ drivers/clk/renesas/r8a77970-cpg-mssr.c            |   2 +-
+ drivers/clk/renesas/r8a77980-cpg-mssr.c            |   2 +-
+ drivers/clk/renesas/r8a77990-cpg-mssr.c            |   1 +
+ drivers/clk/renesas/r8a77995-cpg-mssr.c            |   2 +-
+ drivers/clk/renesas/renesas-cpg-mssr.c             |  17 +-
+ 18 files changed, 260 insertions(+), 271 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/renesas,cpg-clocks.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/renesas,r8a73a4-cpg-clocks.txt
+ delete mode 100644 Documentation/devicetree/bindings/clock/renesas,r8a7740-cpg-clocks.txt
+ delete mode 100644 Documentation/devicetree/bindings/clock/renesas,r8a7778-cpg-clocks.txt
+ delete mode 100644 Documentation/devicetree/bindings/clock/renesas,r8a7779-cpg-clocks.txt
+ delete mode 100644 Documentation/devicetree/bindings/clock/renesas,rz-cpg-clocks.txt
+ delete mode 100644 Documentation/devicetree/bindings/clock/renesas,sh73a0-cpg-clocks.txt
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
