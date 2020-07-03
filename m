@@ -2,125 +2,87 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 067742136D8
-	for <lists+linux-clk@lfdr.de>; Fri,  3 Jul 2020 10:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89397213702
+	for <lists+linux-clk@lfdr.de>; Fri,  3 Jul 2020 11:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726488AbgGCI7A (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 3 Jul 2020 04:59:00 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:39501 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726482AbgGCI7A (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 3 Jul 2020 04:59:00 -0400
-X-Originating-IP: 86.202.118.225
-Received: from localhost (lfbn-lyo-1-23-225.w86-202.abo.wanadoo.fr [86.202.118.225])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id E9876E0012;
-        Fri,  3 Jul 2020 08:58:55 +0000 (UTC)
-Date:   Fri, 3 Jul 2020 10:58:55 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Stephen Boyd <sboyd@kernel.org>, kernel@pengutronix.de,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: at91: fix possible dead lock in new drivers
-Message-ID: <20200703085855.GD6538@piout.net>
-References: <20200703073236.23923-1-a.fatoum@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200703073236.23923-1-a.fatoum@pengutronix.de>
+        id S1726184AbgGCJDP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 3 Jul 2020 05:03:15 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:53787 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726142AbgGCJDP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 3 Jul 2020 05:03:15 -0400
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 03 Jul 2020 02:03:15 -0700
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 03 Jul 2020 02:03:13 -0700
+Received: from gokulsri-linux.qualcomm.com ([10.201.2.207])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 03 Jul 2020 14:32:53 +0530
+Received: by gokulsri-linux.qualcomm.com (Postfix, from userid 432570)
+        id 8113E21691; Fri,  3 Jul 2020 14:32:52 +0530 (IST)
+From:   Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
+To:     gokulsri@codeaurora.org, sboyd@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, david.brown@linaro.org,
+        devicetree@vger.kernel.org, jassisinghbrar@gmail.com,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        mark.rutland@arm.com, mturquette@baylibre.com, ohad@wizery.com,
+        robh+dt@kernel.org, sricharan@codeaurora.org,
+        nprakash@codeaurora.org
+Subject: [PATCH V6 00/10] remoteproc: qcom: q6v5-wcss: Add support for secure pil
+Date:   Fri,  3 Jul 2020 14:32:42 +0530
+Message-Id: <1593766972-29101-1-git-send-email-gokulsri@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 03/07/2020 09:32:35+0200, Ahmad Fatoum wrote:
-> syscon_node_to_regmap() will make the created regmap get and enable the
-> first clock it can parse from the device tree. This clock is not needed to
-> access the registers and should not be enabled at that time.
-> 
-> Use device_node_to_regmap to resolve this as it looks up the regmap in
-> the same list but doesn't care about the clocks. This issue is detected
-> by lockdep when booting the sama5d3 with a device tree containing the
-> new clk bindings.
-> 
-> This fix already happened in 6956eb33abb5 ("clk: at91: fix possible
-> deadlock") for the drivers that had been migrated to the new clk binding
-> back then. This does the same for the new drivers as well.
-> 
-> Fixes: 01e2113de9a5 ("clk: at91: add sam9x60 pmc driver")
-> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+IPQ8074 needs support for secure pil as well.
+Also, currently only unified firmware is supported.
+IPQ8074 supports split firmware for q6 and m3, so
+adding support for that.
 
-> ---
-> Only boot tested on the sama5d3.
-> ---
->  drivers/clk/at91/at91sam9g45.c | 2 +-
->  drivers/clk/at91/at91sam9n12.c | 2 +-
->  drivers/clk/at91/sam9x60.c     | 2 +-
->  drivers/clk/at91/sama5d3.c     | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/clk/at91/at91sam9g45.c b/drivers/clk/at91/at91sam9g45.c
-> index 9873b583c260..fe9d391adeba 100644
-> --- a/drivers/clk/at91/at91sam9g45.c
-> +++ b/drivers/clk/at91/at91sam9g45.c
-> @@ -111,7 +111,7 @@ static void __init at91sam9g45_pmc_setup(struct device_node *np)
->  		return;
->  	mainxtal_name = of_clk_get_parent_name(np, i);
->  
-> -	regmap = syscon_node_to_regmap(np);
-> +	regmap = device_node_to_regmap(np);
->  	if (IS_ERR(regmap))
->  		return;
->  
-> diff --git a/drivers/clk/at91/at91sam9n12.c b/drivers/clk/at91/at91sam9n12.c
-> index 630dc5d87171..4aa97e672bd6 100644
-> --- a/drivers/clk/at91/at91sam9n12.c
-> +++ b/drivers/clk/at91/at91sam9n12.c
-> @@ -124,7 +124,7 @@ static void __init at91sam9n12_pmc_setup(struct device_node *np)
->  		return;
->  	mainxtal_name = of_clk_get_parent_name(np, i);
->  
-> -	regmap = syscon_node_to_regmap(np);
-> +	regmap = device_node_to_regmap(np);
->  	if (IS_ERR(regmap))
->  		return;
->  
-> diff --git a/drivers/clk/at91/sam9x60.c b/drivers/clk/at91/sam9x60.c
-> index 3e20aa68259f..2b4c67485eee 100644
-> --- a/drivers/clk/at91/sam9x60.c
-> +++ b/drivers/clk/at91/sam9x60.c
-> @@ -178,7 +178,7 @@ static void __init sam9x60_pmc_setup(struct device_node *np)
->  		return;
->  	mainxtal_name = of_clk_get_parent_name(np, i);
->  
-> -	regmap = syscon_node_to_regmap(np);
-> +	regmap = device_node_to_regmap(np);
->  	if (IS_ERR(regmap))
->  		return;
->  
-> diff --git a/drivers/clk/at91/sama5d3.c b/drivers/clk/at91/sama5d3.c
-> index 5e4e44dd4c37..5609b04e6565 100644
-> --- a/drivers/clk/at91/sama5d3.c
-> +++ b/drivers/clk/at91/sama5d3.c
-> @@ -121,7 +121,7 @@ static void __init sama5d3_pmc_setup(struct device_node *np)
->  		return;
->  	mainxtal_name = of_clk_get_parent_name(np, i);
->  
-> -	regmap = syscon_node_to_regmap(np);
-> +	regmap = device_node_to_regmap(np);
->  	if (IS_ERR(regmap))
->  		return;
->  
-> -- 
-> 2.27.0
-> 
+This series is based on Govind's
+"[v7] Add non PAS wcss Q6 support for QCS404"
+
+changes since v5:
+ - Rebased on top of linux-5.8-rc3
+
+changes since v4:
+ - Rebased patch 8
+
+changes since v3:
+ - In patch 10, Added release_firmware to free up
+   memory requested for m3 firmware.
+
+changes since v2:
+ - In patch 5, Added a driver data 'bcr_reset_required'
+   to select if bcr reset is required
+ - In patch 10, Removed syscon implementation and moved
+   to mailbox framework to access APCS IPC
+
+changes since v1:
+ - In patch 10, Addressed minor review comments.
+
+Gokul Sriram Palanisamy (10):
+  remoteproc: qcom: Add PRNG proxy clock
+  remoteproc: qcom: Add secure PIL support
+  remoteproc: qcom: Add support for split q6 + m3 wlan firmware
+  remoteproc: qcom: Add ssr subdevice identifier
+  remoteproc: qcom: Update regmap offsets for halt register
+  dt-bindings: clock: qcom: Add reset for WCSSAON
+  clk: qcom: Add WCSSAON reset
+  dt-bindings: firmware: qcom: Add compatible for IPQ8074 SoC
+  arm64: dts: Add support for scm on IPQ8074 SoCs
+  arm64: dts: qcom: Enable Q6v5 WCSS for ipq8074 SoC
+
+ .../devicetree/bindings/firmware/qcom,scm.txt      |   1 +
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi              | 127 +++++++++++++++++
+ drivers/clk/qcom/gcc-ipq8074.c                     |   1 +
+ drivers/remoteproc/qcom_q6v5_wcss.c                | 157 +++++++++++++++++----
+ include/dt-bindings/clock/qcom,gcc-ipq8074.h       |   1 +
+ 5 files changed, 258 insertions(+), 29 deletions(-)
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
+
