@@ -2,78 +2,78 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F6F2180E2
-	for <lists+linux-clk@lfdr.de>; Wed,  8 Jul 2020 09:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05324218170
+	for <lists+linux-clk@lfdr.de>; Wed,  8 Jul 2020 09:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730354AbgGHHUT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 8 Jul 2020 03:20:19 -0400
-Received: from smtp2207-205.mail.aliyun.com ([121.197.207.205]:56571 "EHLO
-        smtp2207-205.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730042AbgGHHUR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 8 Jul 2020 03:20:17 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1486837|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0598962-0.0031784-0.936925;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03267;MF=frank@allwinnertech.com;NM=1;PH=DS;RN=33;RT=33;SR=0;TI=SMTPD_---.I-8lwqE_1594192774;
-Received: from allwinnertech.com(mailfrom:frank@allwinnertech.com fp:SMTPD_---.I-8lwqE_1594192774)
-          by smtp.aliyun-inc.com(10.147.40.26);
-          Wed, 08 Jul 2020 15:20:09 +0800
-From:   Frank Lee <frank@allwinnertech.com>
-To:     robh+dt@kernel.org, mripard@kernel.org, wens@csie.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        gregory.clement@bootlin.com, tglx@linutronix.de,
-        jason@lakedaemon.net, maz@kernel.org,
-        srinivas.kandagatla@linaro.org, linus.walleij@linaro.org,
-        anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        lee.jones@linaro.org, p.zabel@pengutronix.de, clabbe@baylibre.com,
-        icenowy@aosc.io, megous@megous.com, stefan@olimex.com,
-        bage@linutronix.de
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org, huangshuosheng@allwinnertech.com,
-        liyong@allwinnertech.com, Frank Lee <frank@allwinnertech.com>
-Subject: [PATCH v3 10/16] mfd: axp20x: Allow the AXP803 to be probed by I2C
-Date:   Wed,  8 Jul 2020 15:19:36 +0800
-Message-Id: <20200708071942.22595-11-frank@allwinnertech.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20200708071942.22595-1-frank@allwinnertech.com>
-References: <20200708071942.22595-1-frank@allwinnertech.com>
+        id S1726542AbgGHHkv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 8 Jul 2020 03:40:51 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:54293 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726325AbgGHHkv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 8 Jul 2020 03:40:51 -0400
+Received: from [78.134.117.153] (port=41602 helo=melee.fritz.box)
+        by hostingweb31.netsons.net with esmtpa (Exim 4.93)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1jt4hD-0009Wd-QF; Wed, 08 Jul 2020 09:40:47 +0200
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+To:     linux-clk@vger.kernel.org
+Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Marek Vasut <marek.vasut@gmail.com>,
+        Adam Ford <aford173@gmail.com>
+Subject: [PATCH v2 1/4] dt-bindings: clk: versaclock5: fix 'idt' prefix typos
+Date:   Wed,  8 Jul 2020 09:40:32 +0200
+Message-Id: <20200708074035.31595-1-luca@lucaceresoli.net>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The AXP803 can be used both using the RSB proprietary bus, or a more
-traditional I2C bus.
+'idt' is misspelled 'itd' in a few places, fix it.
 
-Let's add that possibility.
-
-Signed-off-by: Frank Lee <frank@allwinnertech.com>
+Fixes: 34662f6e3084 ("dt: Add additional option bindings for IDT VersaClock")
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- drivers/mfd/axp20x-i2c.c | 2 ++
- 1 file changed, 2 insertions(+)
+ Documentation/devicetree/bindings/clock/idt,versaclock5.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mfd/axp20x-i2c.c b/drivers/mfd/axp20x-i2c.c
-index 14f9df7..446a7d0 100644
---- a/drivers/mfd/axp20x-i2c.c
-+++ b/drivers/mfd/axp20x-i2c.c
-@@ -63,6 +63,7 @@ static int axp20x_i2c_remove(struct i2c_client *i2c)
- 	{ .compatible = "x-powers,axp209", .data = (void *)AXP209_ID },
- 	{ .compatible = "x-powers,axp221", .data = (void *)AXP221_ID },
- 	{ .compatible = "x-powers,axp223", .data = (void *)AXP223_ID },
-+	{ .compatible = "x-powers,axp803", .data = (void *)AXP803_ID },
- 	{ .compatible = "x-powers,axp806", .data = (void *)AXP806_ID },
- 	{ },
- };
-@@ -74,6 +75,7 @@ static int axp20x_i2c_remove(struct i2c_client *i2c)
- 	{ "axp209", 0 },
- 	{ "axp221", 0 },
- 	{ "axp223", 0 },
-+	{ "axp803", 0 },
- 	{ "axp806", 0 },
- 	{ },
- };
+diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.txt b/Documentation/devicetree/bindings/clock/idt,versaclock5.txt
+index 6165b6ddb1a9..9656d4cf221c 100644
+--- a/Documentation/devicetree/bindings/clock/idt,versaclock5.txt
++++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.txt
+@@ -35,7 +35,7 @@ For all output ports, a corresponding, optional child node named OUT1,
+ OUT2, etc. can represent a each output, and the node can be used to
+ specify the following:
+ 
+-- itd,mode: can be one of the following:
++- idt,mode: can be one of the following:
+                  - VC5_LVPECL
+                  - VC5_CMOS
+                  - VC5_HCSL33
+@@ -106,7 +106,7 @@ i2c-master-node {
+ 		clock-names = "xin";
+ 
+ 		OUT1 {
+-			itd,mode = <VC5_CMOS>;
++			idt,mode = <VC5_CMOS>;
+ 			idt,voltage-microvolts = <1800000>;
+ 			idt,slew-percent = <80>;
+ 		};
 -- 
-1.9.1
+2.27.0
 
