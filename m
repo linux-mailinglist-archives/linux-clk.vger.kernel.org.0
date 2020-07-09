@@ -2,126 +2,101 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFBC21A4BC
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Jul 2020 18:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1703B21A536
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Jul 2020 18:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727825AbgGIQYw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 9 Jul 2020 12:24:52 -0400
-Received: from mail-dm6nam10on2086.outbound.protection.outlook.com ([40.107.93.86]:6104
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726357AbgGIQYv (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 9 Jul 2020 12:24:51 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DeLPyQZ5i1Q8m2y1SHm59hdGbuQfpf14w8/16HEiqGWkslNTPU80lCB8Miyb0hDJo9WAlIkZno9pBY0zLOeQEeErja1me9SoDeC7xuyPCsPBfHmjucVcwPLAg4kn2AB/6grXJNGvZil4CY61KOMVjbi5SxM25y0VnKuwKqRsP0T4adxHdGShzMi1MRS1QRNuex57thhjy8Tv7KNYytzt4+tsxWzYs3zMYZRTfma6FS1YL/pOtp17d01fiMkIY1N4tlNEPbWSzCZG+IgF3iUB9F0Zp1JRrgphHp5Sg0PmKpjGIw/kaEvnfwAp0j9Dgp3AbRJBgN1AWRiCngPJdKbvWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QYpBBbDo6UF76JNzCp8MwFolyW9bFYjODW/7lMrh8uM=;
- b=SBfhDq7C+9dw4o0t5NWlZ6DikihANV/AeT76n1A2GivShTD3cYG0PqGNeyJctcr12UtVJvxi/rceh2SyPqIrQnMtQvAdrrkuArkTQy5+1qxqgICHTMOc1IF4lA7hUw55VRKZlLI+HKZDzcIT8esY6ZqRB5y4dJPewSAC2c36BoP2FjzA2c6rwOIhTM/VpvVfVfqT/enc9wZ5VpLYUiloZ1O0oJawNoSg8kcyF0OWQ4QpIplye6GIianTKveHjHbYm95JBwivSe831AyZVmKqvzFEMPWo5KqEquO/9gsi1RURdfw5QixjUa4+gbExBwG/DJfuEXLPeyhMLoLNNQ46bg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.60.83) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
- not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QYpBBbDo6UF76JNzCp8MwFolyW9bFYjODW/7lMrh8uM=;
- b=sjUd5fxw0dDzjNUn5Qy1gW+CEkVrl3JquFFA6QDhDu+o2rWHOl5TpSd6JJtsnTSJHfMjkOHDe8csbv8rxPj0lP1nryXmtmuELSBxXokop31pMP3O8yM+fHvU8Xl7NDrih5OPHrJP/Cq/nsThilZc+kTCMULiJri4YIIyqE6aUIU=
-Received: from CY4PR15CA0004.namprd15.prod.outlook.com (2603:10b6:910:14::14)
- by BYAPR02MB5736.namprd02.prod.outlook.com (2603:10b6:a03:119::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.21; Thu, 9 Jul
- 2020 16:24:49 +0000
-Received: from CY1NAM02FT041.eop-nam02.prod.protection.outlook.com
- (2603:10b6:910:14:cafe::4e) by CY4PR15CA0004.outlook.office365.com
- (2603:10b6:910:14::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.22 via Frontend
- Transport; Thu, 9 Jul 2020 16:24:49 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
- smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- CY1NAM02FT041.mail.protection.outlook.com (10.152.74.156) with Microsoft SMTP
- Server id 15.20.3174.21 via Frontend Transport; Thu, 9 Jul 2020 16:24:48
- +0000
-Received: from [149.199.38.66] (port=51356 helo=xsj-pvapsmtp01)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
-        (envelope-from <shubhrajyoti.datta@xilinx.com>)
-        id 1jtZKL-0005qN-Le; Thu, 09 Jul 2020 09:23:13 -0700
-Received: from [127.0.0.1] (helo=localhost)
-        by xsj-pvapsmtp01 with smtp (Exim 4.63)
-        (envelope-from <shubhrajyoti.datta@xilinx.com>)
-        id 1jtZLs-0001kY-Au; Thu, 09 Jul 2020 09:24:48 -0700
-Received: from [10.140.6.59] (helo=xhdshubhraj40.xilinx.com)
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <shubhrajyoti.datta@xilinx.com>)
-        id 1jtZLk-0001iJ-46; Thu, 09 Jul 2020 09:24:40 -0700
-From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-To:     linux-clk@vger.kernel.org, git-dev@xilinx.com
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, michal.simek@xilinx.com,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-Subject: [PATCH 2/2] clk: zynqmp: Fix a memory leak
-Date:   Thu,  9 Jul 2020 21:54:33 +0530
-Message-Id: <1594311873-8683-2-git-send-email-shubhrajyoti.datta@xilinx.com>
-X-Mailer: git-send-email 2.1.1
-In-Reply-To: <1594311873-8683-1-git-send-email-shubhrajyoti.datta@xilinx.com>
-References: <1594311873-8683-1-git-send-email-shubhrajyoti.datta@xilinx.com>
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-User-Approved-Sender: Yes;Yes
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFTY:;SFS:(376002)(136003)(39860400002)(346002)(396003)(46966005)(36756003)(6666004)(478600001)(83380400001)(4744005)(5660300002)(70586007)(70206006)(81166007)(8936002)(82310400002)(44832011)(356005)(6636002)(2906002)(316002)(2616005)(336012)(82740400003)(26005)(9786002)(107886003)(186003)(4326008)(7696005)(47076004)(426003)(8676002);DIR:OUT;SFP:1101;
-X-MS-PublicTrafficType: Email
+        id S1728065AbgGIQxH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 9 Jul 2020 12:53:07 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:43534 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726339AbgGIQxG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 9 Jul 2020 12:53:06 -0400
+Received: by mail-il1-f193.google.com with SMTP id i18so2597463ilk.10;
+        Thu, 09 Jul 2020 09:53:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QGtnLn93cLTP51XtiHAgImeMicUFaKH6Di/Wzvj2c74=;
+        b=oSNLxOy0M8NZnfujoffuh3of8VypFHIuNRE33MxxXVHT7XKORSMkPSS3Fm8TDlnJlq
+         iporDYwG+6f6ywfXIvS53ORS3GioQd3zQddH1UeJKjADz0cqeL3FsATJCu34D4g7dXo7
+         ZOLM8Npc44Kt1w/sY3XhW3AI4XPNkNqZzhGRmBvpgu3oUrRuosVHdFLsS3FWwjuI1mH1
+         jv8F1TwGwuTsVB4lz2SMD0DjMW+tK+llNbW7psN8a1HLPaucNHfcPBBIKFFPKadD7Sa0
+         xEnIEFiHjbpU8VuB52GfbArXjStSp9PdbKBWVmJwo378BN4pCrcmegtTlecTVzEVkzNc
+         kWtw==
+X-Gm-Message-State: AOAM532Ngs0GdEWsr4XypUabH0FIxCpdURbvnas2Kc52xFA5i0mSt+T3
+        LYgYilQBc8+d/W2nsCDrXw0Fdw2Mdw==
+X-Google-Smtp-Source: ABdhPJwLatvtfpim77UnE4k3Fw8neGwQY9Y5yT7cf7NbhVzmfdTlq+t+Xv/AgKtyxAHMq4oobz0XSg==
+X-Received: by 2002:a92:cb10:: with SMTP id s16mr48806023ilo.192.1594313585538;
+        Thu, 09 Jul 2020 09:53:05 -0700 (PDT)
+Received: from xps15 ([64.188.179.254])
+        by smtp.gmail.com with ESMTPSA id o16sm2076043ilt.59.2020.07.09.09.53.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jul 2020 09:53:04 -0700 (PDT)
+Received: (nullmailer pid 507617 invoked by uid 1000);
+        Thu, 09 Jul 2020 16:52:42 -0000
+Date:   Thu, 9 Jul 2020 10:52:42 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Frank Lee <frank@allwinnertech.com>
+Cc:     gregory.clement@bootlin.com, megous@megous.com, anarsoul@gmail.com,
+        tiny.windzz@gmail.com, sboyd@kernel.org, jason@lakedaemon.net,
+        robh+dt@kernel.org, maz@kernel.org, wens@csie.org,
+        lee.jones@linaro.org, mripard@kernel.org,
+        amit.kucheria@verdurent.com, linux-i2c@vger.kernel.org,
+        icenowy@aosc.io, linux-gpio@vger.kernel.org,
+        srinivas.kandagatla@linaro.org, linux-pm@vger.kernel.org,
+        daniel.lezcano@linaro.org, liyong@allwinnertech.com,
+        huangshuosheng@allwinnertech.com, linus.walleij@linaro.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        bage@linutronix.de, linux-arm-kernel@lists.infradead.org,
+        mturquette@baylibre.com, rui.zhang@intel.com, tglx@linutronix.de,
+        clabbe@baylibre.com, linux-kernel@vger.kernel.org,
+        p.zabel@pengutronix.de, stefan@olimex.com
+Subject: Re: [PATCH v3 04/16] dt-bindings: pinctrl: sunxi: make gpio banks
+ supplies required
+Message-ID: <20200709165242.GA506534@bogus>
+References: <20200708071942.22595-1-frank@allwinnertech.com>
+ <20200708071942.22595-5-frank@allwinnertech.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 469667fc-418c-42e1-e977-08d824249982
-X-MS-TrafficTypeDiagnostic: BYAPR02MB5736:
-X-Microsoft-Antispam-PRVS: <BYAPR02MB5736FBEF0AC50CB03E1917FCAA640@BYAPR02MB5736.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:376;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PwPMF/qMBGnokHoVI/Gz7PY9akSP8Wnb4okCJgs4f5DrZaoBKtmpPe4d6oQg9ia9NXQIV5Z9m2h+M2UQL5z6SQBPa5NuC8cYW8Sm4OtO/kudbjM3bsjM8cgJan/+udp7/rzzSpUXZG3zp8F1FpI4sW5p9rw2vxeYLNIuAZ33KHcYcxb36sqjfuZojzYRW5itdsO0+IxAZkhuIS1enlkfjA5n319YRlt35m/4qUDqELiXw6G9eziciUbK8x6VSUIdKWCucTyP/68LGGO+8j0OOkP35J5MbVQctIa3M6V6lQq4ED3FHiHtggV+DPIVl6QSO5k45ehKjQrzQ0T295N2J6U8HwaGszVH4TA9Kt96lFAcPlRUbdhQ2kBFMc8bJkWUfmy1GwyZmj1O6RHxfYf9MQ==
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2020 16:24:48.5791
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 469667fc-418c-42e1-e977-08d824249982
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-AuthSource: CY1NAM02FT041.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB5736
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200708071942.22595-5-frank@allwinnertech.com>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Fix a memory leak of mux.
+On Wed, 08 Jul 2020 15:19:30 +0800, Frank Lee wrote:
+> Since we don't really have to care about the existing DT for boards,
+> it would be great to make the gpio banks supplies required.
+> 
+> Signed-off-by: Frank Lee <frank@allwinnertech.com>
+> ---
+>  .../devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml         | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
----
- drivers/clk/zynqmp/clk-mux-zynqmp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/zynqmp/clk-mux-zynqmp.c b/drivers/clk/zynqmp/clk-mux-zynqmp.c
-index 0619414..d3b8838 100644
---- a/drivers/clk/zynqmp/clk-mux-zynqmp.c
-+++ b/drivers/clk/zynqmp/clk-mux-zynqmp.c
-@@ -130,7 +130,7 @@ struct clk_hw *zynqmp_clk_register_mux(const char *name, u32 clk_id,
- 	hw = &mux->hw;
- 	ret = clk_hw_register(NULL, hw);
- 	if (ret) {
--		kfree(hw);
-+		kfree(mux);
- 		hw = ERR_PTR(ret);
- 	}
- 
--- 
-2.1.1
+My bot found errors running 'make dt_binding_check' on your patch:
+
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml: required:2: '^vcc-p[a-hlm]-supply$' does not match '^([a-zA-Z#][a-zA-Z0-9,+\\-._@]{0,63}|\\$nodename)$'
+Documentation/devicetree/bindings/Makefile:20: recipe for target 'Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.example.dts' failed
+make[1]: *** [Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml: ignoring, error in schema: required: 2
+warning: no schema found in file: ./Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml: ignoring, error in schema: required: 2
+warning: no schema found in file: ./Documentation/devicetree/bindings/pinctrl/allwinner,sun4i-a10-pinctrl.yaml
+Makefile:1347: recipe for target 'dt_binding_check' failed
+make: *** [dt_binding_check] Error 2
+
+
+See https://patchwork.ozlabs.org/patch/1325057
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
+
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
+Please check and re-submit.
 
