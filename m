@@ -2,88 +2,64 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEC8C21C110
-	for <lists+linux-clk@lfdr.de>; Sat, 11 Jul 2020 02:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0586221C115
+	for <lists+linux-clk@lfdr.de>; Sat, 11 Jul 2020 02:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726707AbgGKANZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 10 Jul 2020 20:13:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51360 "EHLO mail.kernel.org"
+        id S1726771AbgGKARc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 10 Jul 2020 20:17:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52356 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726588AbgGKANZ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 10 Jul 2020 20:13:25 -0400
+        id S1726588AbgGKAR3 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 10 Jul 2020 20:17:29 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CF4C6206D9;
-        Sat, 11 Jul 2020 00:13:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 60178206E2;
+        Sat, 11 Jul 2020 00:17:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594426404;
-        bh=6m9kYT0JvZIYNR3lBPNF7NPOZAwsUD5530ft8YHMF6c=;
+        s=default; t=1594426649;
+        bh=7vSxiKS5OYdz9XoO3u9H7c/r36NftYgfeZwnWvjaybk=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=wvd3lNQVeAlfVzRMFjyO5dIc73tuUfr32ECW+WWUMX3mesYiLgv0IAiRUcnkWygG3
-         tqRpR2fqwwDLvRy3j8Bxa+2ae7uT750g4fbhkJ8BIG+zpVwj7ez//sH5I6iPfLbMky
-         O5Z/VdfCbT0mW4SULaQj6eA3ubfc3dkZQeRpg6qw=
+        b=F7Zyjg/FI9VNUSAerBX1fi1Pk0nef9AcYF7T13c3ch2C5ogVfQ0Z8nDyoBYlVDjsp
+         In5BHe9zEig2yZwSEI4jlB2tZoau3WsXn1TJJJS0lev1jLE9oAoGc6+MG4oWu8mOEo
+         LM6GeStyq1/5sPeEJh8glLSK6irYCfe2JUJErZjE=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1593766185-16346-4-git-send-email-loic.poulain@linaro.org>
-References: <1593766185-16346-1-git-send-email-loic.poulain@linaro.org> <1593766185-16346-4-git-send-email-loic.poulain@linaro.org>
-Subject: Re: [PATCH v5 3/5] dt-bindings: clk: qcom: Add bindings for CPU clock for msm8996
+In-Reply-To: <20200703121729.6678-1-geert+renesas@glider.be>
+References: <20200703121729.6678-1-geert+renesas@glider.be>
+Subject: Re: [GIT PULL] clk: renesas: Updates for v5.9
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        amit.kucheria@linaro.org, Ilia Lin <ilialin@codeaurora.org>
-To:     Loic Poulain <loic.poulain@linaro.org>, bjorn.andersson@linaro.org
-Date:   Fri, 10 Jul 2020 17:13:24 -0700
-Message-ID: <159442640418.1987609.16468106693473840191@swboyd.mtv.corp.google.com>
+Cc:     linux-clk@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>
+Date:   Fri, 10 Jul 2020 17:17:28 -0700
+Message-ID: <159442664871.1987609.14062615853813880007@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Loic Poulain (2020-07-03 01:49:43)
-> From: Ilia Lin <ilialin@codeaurora.org>
+Quoting Geert Uytterhoeven (2020-07-03 05:17:29)
+>         Hi Mike, Stephen,
 >=20
-> Each of the CPU clusters (Power and Perf) on msm8996 are
-> clocked via 2 PLLs, a primary and alternate. There are also
-> 2 Mux'es, a primary and secondary all connected together
-> as shown below
+> The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c74=
+07:
 >=20
->                              +-------+
->               XO             |       |
->           +------------------>0      |
->                              |       |
->                    PLL/2     | SMUX  +----+
->                      +------->1      |    |
->                      |       |       |    |
->                      |       +-------+    |    +-------+
->                      |                    +---->0      |
->                      |                         |       |
-> +---------------+    |             +----------->1      | CPU clk
-> |Primary PLL    +----+ PLL_EARLY   |           |       +------>
-> |               +------+-----------+    +------>2 PMUX |
-> +---------------+      |                |      |       |
->                        |   +------+     |   +-->3      |
->                        +--^+  ACD +-----+   |  +-------+
-> +---------------+          +------+         |
-> |Alt PLL        |                           |
-> |               +---------------------------+
-> +---------------+         PLL_EARLY
+>   Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
 >=20
-> The primary PLL is what drives the CPU clk, except for times
-> when we are reprogramming the PLL itself (for rate changes) when
-> we temporarily switch to an alternate PLL. A subsequent patch adds
-> support to switch between primary and alternate PLL during rate
-> changes.
+> are available in the Git repository at:
 >=20
-> The primary PLL operates on a single VCO range, between 600MHz
-> and 3GHz. However the CPUs do support OPPs with frequencies
-> between 300MHz and 600MHz. In order to support running the CPUs
-> at those frequencies we end up having to lock the PLL at twice
-> the rate and drive the CPU clk via the PLL/2 output and SMUX.
+>   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git=
+ tags/clk-renesas-for-v5.9-tag1
 >=20
-> Signed-off-by: Ilia Lin <ilialin@codeaurora.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
+> for you to fetch changes up to 52bc5ea6edde35bc65ed6ecd7639534e78002c74:
+>=20
+>   clk: renesas: rzg2: Mark RWDT clocks as critical (2020-06-22 16:54:32 +=
+0200)
+>=20
+> ----------------------------------------------------------------
 
-Applied to clk-next
+Thanks. Pulled into clk-next
