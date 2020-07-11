@@ -2,53 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B66A21C536
-	for <lists+linux-clk@lfdr.de>; Sat, 11 Jul 2020 18:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E9F21C53B
+	for <lists+linux-clk@lfdr.de>; Sat, 11 Jul 2020 18:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728441AbgGKQ1A (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 11 Jul 2020 12:27:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33264 "EHLO mail.kernel.org"
+        id S1728441AbgGKQ2O (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 11 Jul 2020 12:28:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34932 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728412AbgGKQ1A (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sat, 11 Jul 2020 12:27:00 -0400
+        id S1728412AbgGKQ2N (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sat, 11 Jul 2020 12:28:13 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3EC81207D4;
-        Sat, 11 Jul 2020 16:27:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5876D207D4;
+        Sat, 11 Jul 2020 16:28:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594484820;
-        bh=QdgmgyHsnWWDRikFOV9j9mPiLF+83cg5Wvfr+sH5Lko=;
+        s=default; t=1594484893;
+        bh=0BMLFhcBsY3+UePEHe/YYHatzZGvCd3WYrfLrpclr0U=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=w/AS+ZTGMx7OcgcjAco9fdtofh9wBp2cwTzG22wFz37i3qsrhrhAp++/4JQjUIWrX
-         IHlAiTjXnZsEnNJL/4NaXIGIexggdDWHSCSpwG30E/QJfIMKT9iqVFDxL5rSUaHlKu
-         Bg2fGzM/Obu3PjTbDieHbM8zXyg/QUO5Lz3S0ypk=
+        b=exg2a4/a6171Ly8UcmnRQ8kBqGgrFUWdnWxhXwU00VI3eBF3r0+3OW55lr/7VFFdp
+         j59vSELLu97OOwjaoJVFeKnlP7juKziAH9INJnESVGl1qmpf7N2nzmlrvKo/eKs1T2
+         UHONcAVXr4FI9kMSisew60CFQCSb/s9koK2kNsS0=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1593588382-19049-3-git-send-email-wendell.lin@mediatek.com>
-References: <1593588382-19049-1-git-send-email-wendell.lin@mediatek.com> <1593588382-19049-3-git-send-email-wendell.lin@mediatek.com>
-Subject: Re: [PATCH 2/2] clk: mediatek: Add EXPORT_SYMBOL for kernel module support
+In-Reply-To: <20200630043214.1080961-1-davidgow@google.com>
+References: <20200630043214.1080961-1-davidgow@google.com>
+Subject: Re: [PATCH] clk: Specify IOMEM dependency for HSDK pll driver
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, wsd_upstream@mediatek.com
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>,
-        mtk01761 <wendell.lin@mediatek.com>
-Date:   Sat, 11 Jul 2020 09:26:59 -0700
-Message-ID: <159448481956.1987609.4970524569331045099@swboyd.mtv.corp.google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Gow <davidgow@google.com>
+To:     David Gow <davidgow@google.com>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Michael Turquette <mturquette@baylibre.com>
+Date:   Sat, 11 Jul 2020 09:28:12 -0700
+Message-ID: <159448489265.1987609.11760867517036236041@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Wendell Lin (2020-07-01 00:26:22)
-> Export common APIs from Mediatek clock driver.
+Quoting David Gow (2020-06-29 21:32:14)
+> The HSDK pll driver uses the devm_ioremap_resource function, but does
+> not specify a dependency on IOMEM in Kconfig. This causes a build
+> failure on architectures without IOMEM, for example, UML (notably with
+> make allyesconfig).
 >=20
-> Signed-off-by: Wendell Lin <wendell.lin@mediatek.com>
+> Fix this by making CONFIG_CLK_HSDK depend on CONFIG_IOMEM.
+>=20
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
 
-Is this needed for something? I'd prefer to see some sort of mediatek
-modular patches that included this patch in it before this is applied.
+Applied to clk-fixes
