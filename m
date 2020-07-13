@@ -2,52 +2,78 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCFF821D674
-	for <lists+linux-clk@lfdr.de>; Mon, 13 Jul 2020 15:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814AD21D6A3
+	for <lists+linux-clk@lfdr.de>; Mon, 13 Jul 2020 15:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729764AbgGMNAr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 13 Jul 2020 09:00:47 -0400
-Received: from foss.arm.com ([217.140.110.172]:33090 "EHLO foss.arm.com"
+        id S1729593AbgGMNWD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 13 Jul 2020 09:22:03 -0400
+Received: from foss.arm.com ([217.140.110.172]:34254 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726586AbgGMNAq (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 13 Jul 2020 09:00:46 -0400
+        id S1729564AbgGMNWD (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 13 Jul 2020 09:22:03 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F4EC31B;
-        Mon, 13 Jul 2020 06:00:46 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5526D3F887;
-        Mon, 13 Jul 2020 06:00:45 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A0D2130E;
+        Mon, 13 Jul 2020 06:22:02 -0700 (PDT)
+Received: from bogus (unknown [10.37.8.69])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 10A2F3F887;
+        Mon, 13 Jul 2020 06:22:00 -0700 (PDT)
+Date:   Mon, 13 Jul 2020 14:21:53 +0100
 From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Dien Pham <dien.pham.ry@renesas.com>,
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
         Michael Turquette <mturquette@baylibre.com>,
+        Dien Pham <dien.pham.ry@renesas.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] firmware: arm_scmi: Keep the discrete clock rates sorted
-Date:   Mon, 13 Jul 2020 14:00:43 +0100
-Message-Id: <159464497506.50199.14329174920996979052.b4-ty@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200709081705.46084-1-sudeep.holla@arm.com>
+Subject: Re: [PATCH v2 2/2] clk: scmi: Fix min and max rate when registering
+ clocks with discrete rates
+Message-ID: <20200713132153.GA30377@bogus>
 References: <20200709081705.46084-1-sudeep.holla@arm.com>
+ <20200709081705.46084-2-sudeep.holla@arm.com>
+ <159442504011.1987609.3990897866011325023@swboyd.mtv.corp.google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <159442504011.1987609.3990897866011325023@swboyd.mtv.corp.google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, 9 Jul 2020 09:17:04 +0100, Sudeep Holla wrote:
-> Instead of relying on the firmware to keep the clock rates sorted, let
-> us sort the list. This is not essential for clock layer but it helps
-> to find the min and max rates easily from the list.
+On Fri, Jul 10, 2020 at 04:50:40PM -0700, Stephen Boyd wrote:
+> Quoting Sudeep Holla (2020-07-09 01:17:05)
+> > Currently we are not initializing the scmi clock with discrete rates
+> > correctly. We fetch the min_rate and max_rate value only for clocks with
+> > ranges and ignore the ones with discrete rates. This will lead to wrong
+> > initialization of rate range when clock supports discrete rate.
+> > 
+> > Fix this by using the first and the last rate in the sorted list of the
+> > discrete clock rates while registering the clock.
+> > 
+> > Link: https://lore.kernel.org/r/20200708110725.18017-2-sudeep.holla@arm.com
+> > Fixes: 6d6a1d82eaef7 ("clk: add support for clocks provided by SCMI")
+> > Reported-by: Dien Pham <dien.pham.ry@renesas.com>
+> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> > ---
+> >  drivers/clk/clk-scmi.c | 22 +++++++++++++++++++---
+> >  1 file changed, 19 insertions(+), 3 deletions(-)
+> > 
+> > Hi Stephen,
+> > 
+> > If you are fine, I can take this via ARM SoC along with the change in
+> > firmware driver. However it is also fine if you want to merge this
+> > independently as there is no strict dependency. Let me know either way.
+> 
+> I don't mind either way. If you want to send it in along with the
+> firmware change then that's fine.
+>
 
-Applied to sudeep.holla/linux (for-next/scmi), thanks!
+OK I have now queued and will send it to arm-soc.
 
-[1/2] firmware: arm_scmi: Keep the discrete clock rates sorted
-      https://git.kernel.org/sudeep.holla/c/dccec73de9
-[2/2] clk: scmi: Fix min and max rate when registering clocks with discrete rates
-      https://git.kernel.org/sudeep.holla/c/fcd2e0deae
+> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 
---
+Thanks for the review.
+
+-- 
 Regards,
 Sudeep
-
