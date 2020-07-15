@@ -2,77 +2,100 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ACAD221753
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Jul 2020 23:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD292217ED
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Jul 2020 00:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbgGOVvB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Jul 2020 17:51:01 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:38658 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726356AbgGOVvB (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Jul 2020 17:51:01 -0400
-Received: by mail-il1-f193.google.com with SMTP id s21so3336497ilk.5;
-        Wed, 15 Jul 2020 14:51:00 -0700 (PDT)
+        id S1727096AbgGOWpe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Jul 2020 18:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726660AbgGOWpd (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Jul 2020 18:45:33 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48720C061755;
+        Wed, 15 Jul 2020 15:45:33 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id f18so4740047wrs.0;
+        Wed, 15 Jul 2020 15:45:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=la4qm6vspXOJfm9KXsdHliICfFa0lZg8lLjiPV4UsfU=;
+        b=OCHL4KJEJK9ziZzNh1qGADUHvDHQbBolLbT1SaZsUTAFKSLTzQMOPoaSrwV0wQDgzY
+         h7Vt+5UTHqfm9faomfb6XfLSxjXkr1IFLN862ngzq3/0/jXFqT5ndSaNwvaPFNipgOOs
+         axYreCkhm1/1Rc25buR2LmUOa4cdOJrUxcHccryKq4MtYVR74xNHQhNXAVAwzJvYNhlZ
+         R6WY7jNSH55bLUdRS9atC8D5/x6TJGwf5+6keE7MZjacghrCuNUkrsz8BOO4QH4c/PYC
+         Gl5+BoC9N5IhIl+uWAxrNd09Ev74MWYNJNQE/3z+j4fMI5Gbt4POvMIpaj6UpHPsfxeu
+         qNow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KBhS464+xTe8zxChlHKza9Sk8r7xT2QRaf6Ev4NHLb8=;
-        b=O+NBb3qdDmUvsaW3D34W59A3Zq2Lx247Zn8SGtlOfpbql9MqM1HxXVC5wsf5iB0gX9
-         OYMCZuF2mRo2xHGHl3+e7AtNvVpiP1KbyyIZds2GL4e6AV43zKgtSrnJNFcRBx88xGZE
-         rSYafq6czDFkXUATAS6IYsS1ETwBwbdie5o3bGNlGUh67YlMs9+4BZxiLKso6yPYketu
-         3qq6F4L3bAnYwcFcA2DqlU+Yd+OabHJCVVAfLpBY1BTXC+WuuDtokYE5UhTBZFpKXxxm
-         0r68JzzILTi6et9lWDIdFB8Tij2A2R56nA5zaVYNrYMT00/vzNbUT+rVjFCOJ7GB/BaD
-         cG0g==
-X-Gm-Message-State: AOAM5304c/bTu/24vMH27UMG44X8YC4xS+zyW/YZxt5hNGKwsIF7BjhE
-        8h9c/fgjLT/lyUwtWiE8sw==
-X-Google-Smtp-Source: ABdhPJwBGi+uuOaHqFueng9LtD6gz4CIY5Va7eyOPqpgOg3ZpGgOwXsgclNDCXLpVMhYg6g8qG0cVg==
-X-Received: by 2002:a92:5ecf:: with SMTP id f76mr1672287ilg.6.1594849860224;
-        Wed, 15 Jul 2020 14:51:00 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id w4sm1751016ioc.23.2020.07.15.14.50.58
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=la4qm6vspXOJfm9KXsdHliICfFa0lZg8lLjiPV4UsfU=;
+        b=kuv7uffZqQiWgAd1GK9CoNTUSsIR3aRa0C7KcVFIslqBEUoCgmU0uYALhABRvyCUtX
+         qyQLVtEQj83QkycY5Hc4V60n2NYnyPBGNcZBDlyzwxVf6x5Dshq4E2k36JUDRw49Hvj9
+         sOwHLQ8p3xgLzHFwi62qy8cNQevtPv3NcZOuMKrNT79ByMN9zc1gLYqmT0Om+QZbm8Kt
+         rt8YsF5qbmuTar5X0YU1ca8AjczDOt/XIlv+20A9yYT2vYs69I1moWUKTB/2XiIELCzl
+         Gwmtar4c++ErGNCEDwmFuO0aRWPKt3j2GGKuPq2SaxM1pTV8q0qQdhKXcT+fuhTlxwCe
+         gDEQ==
+X-Gm-Message-State: AOAM533Ph2wxcPOHIzPcWX2FvErxy9rmXVaBJ7XhV29GQfWo/fs70XEG
+        am9oKtunXzJ5Gb84eUQaTqA=
+X-Google-Smtp-Source: ABdhPJxWAWBMJDcpCZDM3vJwoFjC/Aa00uTi9xyZVOCAE++3I4d/cu3sCiWcekzqs4P5EZFsIgVsHg==
+X-Received: by 2002:adf:fd46:: with SMTP id h6mr1951616wrs.105.1594853131852;
+        Wed, 15 Jul 2020 15:45:31 -0700 (PDT)
+Received: from Ansuel-XPS.localdomain (host-87-7-31-173.retail.telecomitalia.it. [87.7.31.173])
+        by smtp.googlemail.com with ESMTPSA id b186sm5759898wme.1.2020.07.15.15.45.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2020 14:50:59 -0700 (PDT)
-Received: (nullmailer pid 879112 invoked by uid 1000);
-        Wed, 15 Jul 2020 21:50:57 -0000
-Date:   Wed, 15 Jul 2020 15:50:57 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sivaprakash Murugesan <sivaprak@codeaurora.org>
-Cc:     kishon@ti.com, linux-clk@vger.kernel.org, smuthayy@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org,
-        Selvam Sathappan Periakaruppan <speriaka@codeaurora.org>,
-        vkoul@kernel.org, varada@codeaurora.org, mturquette@baylibre.com,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        p.zabel@pengutronix.de, svarbanov@mm-sol.com, bhelgaas@google.com,
-        agross@kernel.org, lorenzo.pieralisi@arm.com,
-        bjorn.andersson@linaro.org, mgautam@codeaurora.org,
-        sboyd@kernel.org
-Subject: Re: [PATCH 2/9] dt-bindings: phy: qcom,qmp: Add dt-binding for
- ipq8074 gen3 pcie phy
-Message-ID: <20200715215057.GA879061@bogus>
-References: <1593940680-2363-1-git-send-email-sivaprak@codeaurora.org>
- <1593940680-2363-3-git-send-email-sivaprak@codeaurora.org>
+        Wed, 15 Jul 2020 15:45:30 -0700 (PDT)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH v3 0/7] Add support for ipq8064 tsens
+Date:   Thu, 16 Jul 2020 00:44:55 +0200
+Message-Id: <20200715224503.30462-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1593940680-2363-3-git-send-email-sivaprak@codeaurora.org>
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sun, 05 Jul 2020 14:47:53 +0530, Sivaprakash Murugesan wrote:
-> ipq8074 has two different phy blocks for two pcie ports, with pcie gen2
-> compatible already available, specify the pcie phy compatible
-> for gen3 pcie port.
-> 
-> Co-developed-by: Selvam Sathappan Periakaruppan <speriaka@codeaurora.org>
-> Signed-off-by: Selvam Sathappan Periakaruppan <speriaka@codeaurora.org>
-> Signed-off-by: Sivaprakash Murugesan <sivaprak@codeaurora.org>
-> ---
->  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Ipq8064 SoCs tsens driver is based on 8960 tsens driver. This patchset 
+expand the 8960 unused driver with interrupt support and set_trip point.
+Ipq8064 needs to be registered as a gcc child as the tsens regs on
+this platform are shared with the controller.
 
-Acked-by: Rob Herring <robh@kernel.org>
+v3:
+* Change driver to register as child instead of use phandle
+v2:
+* Fix dt-bindings problems
+
+Ansuel Smith (7):
+  ipq806x: gcc: add support for child probe
+  drivers: thermal: tsens: try load regmap from parent for 8960
+  drivers: thermal: tsens: add ipq8064 support
+  dt-bindings: thermal: tsens: document ipq8064 bindings
+  drivers: thermal: tsens: add interrupt support for 9860 driver
+  drivers: thermal: tsens: add support for custom set_trip function
+  drivers: thermal: tsens: add set_trip support for 8960
+
+ .../bindings/thermal/qcom-tsens.yaml          |  50 ++-
+ drivers/clk/qcom/gcc-ipq806x.c                |   2 +-
+ drivers/thermal/qcom/tsens-8960.c             | 286 +++++++++++++++++-
+ drivers/thermal/qcom/tsens.c                  |   7 +
+ drivers/thermal/qcom/tsens.h                  |   3 +
+ 5 files changed, 325 insertions(+), 23 deletions(-)
+
+-- 
+2.27.0
+
