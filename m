@@ -2,33 +2,33 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E321022192D
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Jul 2020 02:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE13221932
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Jul 2020 03:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727787AbgGPA6e (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Jul 2020 20:58:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36248 "EHLO mail.kernel.org"
+        id S1726785AbgGPBAS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Jul 2020 21:00:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36832 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727081AbgGPA6e (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 15 Jul 2020 20:58:34 -0400
+        id S1726776AbgGPBAS (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 15 Jul 2020 21:00:18 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0FE0A2075B;
-        Thu, 16 Jul 2020 00:58:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 270CF2077D;
+        Thu, 16 Jul 2020 01:00:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594861114;
-        bh=QPAU9cSsPiOln4ZyYl9Bz+nZM9azo2HlMovfqhj7nxw=;
+        s=default; t=1594861218;
+        bh=EfHJnarvNG/86632LUS98Ny1D7rHG3S4L10bIx8jeIM=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=BjDPe5R3MvmJuNlL55gsy5Dv4324vwcMU42lCGLaGSiPv8XM65YO60zR2v0iX25Yy
-         2DQhFk9DaOfxxi1ZDmcNjfiJNxGZmNhvuO65WId0s3H0MzCb9nhc8jNkIKIa0tLqnD
-         TWL8prGzq0xBp+6k4/q3MTpEHOdqrgvoxZomZVpU=
+        b=lB+dv5rAC/0qNlXHk7jlCeiwIc338r+YiPuKHNWs171PqWRZugcXjOEan6lXIi5Ld
+         iXZtgbGvrHWylJLyGvUJGXZ6MyjEZf5TOd82AWemam12Q3i2Dv0nyk8LHCdSRFS7ZK
+         h8rP8jMoTSH8036vDdZO9eGuZ6izaEdZsJghxXlk=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1594098579-25050-6-git-send-email-Anson.Huang@nxp.com>
-References: <1594098579-25050-1-git-send-email-Anson.Huang@nxp.com> <1594098579-25050-6-git-send-email-Anson.Huang@nxp.com>
-Subject: Re: [PATCH V6 5/6] clk: imx8qxp: Support building i.MX8QXP clock driver as module
+In-Reply-To: <1594098579-25050-7-git-send-email-Anson.Huang@nxp.com>
+References: <1594098579-25050-1-git-send-email-Anson.Huang@nxp.com> <1594098579-25050-7-git-send-email-Anson.Huang@nxp.com>
+Subject: Re: [PATCH V6 6/6] clk: imx6sl: Fix build warning reported by kernel test robot
 From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     Linux-imx@nxp.com
 To:     Anson Huang <Anson.Huang@nxp.com>,
@@ -42,19 +42,35 @@ To:     Anson Huang <Anson.Huang@nxp.com>,
         linux-kernel@vger.kernel.org, mturquette@baylibre.com,
         peng.fan@nxp.com, s.hauer@pengutronix.de, sfr@canb.auug.org.au,
         shawnguo@kernel.org, yuehaibing@huawei.com
-Date:   Wed, 15 Jul 2020 17:58:33 -0700
-Message-ID: <159486111346.1987609.15603970881342169219@swboyd.mtv.corp.google.com>
+Date:   Wed, 15 Jul 2020 18:00:17 -0700
+Message-ID: <159486121748.1987609.16422613903444902156@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Anson Huang (2020-07-06 22:09:38)
-> Change configuration to "tristate", add module author, description and
-> license to support building i.MX8QXP clock drivers as module.
+Quoting Anson Huang (2020-07-06 22:09:39)
+> Use readl_relaxed() instead of __raw_readl(), and use BIT(x)
+> instead of (1 << X) to fix below build warning reported by kernel
+> test robot:
+>=20
+> drivers/clk/imx/clk-imx6sl.c:149:49: warning: Shifting signed 32-bit
+> value by 31 bits is undefined behaviour [shiftTooManyBitsSigned]
+>      while (!(__raw_readl(anatop_base + PLL_ARM) & BM_PLL_ARM_LOCK))
 >=20
 > Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> Reported-by: kernel test robot <lkp@intel.com>
 > ---
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+The subject is poor. Please improve it so that it summarizes the change
+instead of the reaction to a warning from a robot.
+
+> New patch.
+> ---
+>  drivers/clk/imx/clk-imx6sl.c | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
+>=20
+
+This should come earlier in the series too so that the build warning
+doesn't come out before this patch is applied.
