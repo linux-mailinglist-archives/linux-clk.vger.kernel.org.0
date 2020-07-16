@@ -2,54 +2,70 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD8E221A80
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Jul 2020 05:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9987221BF5
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Jul 2020 07:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726776AbgGPDFE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Jul 2020 23:05:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39718 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726770AbgGPDFD (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 15 Jul 2020 23:05:03 -0400
-Subject: Re: [GIT PULL] clk fixes for v5.8-rc5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594868703;
-        bh=y+xTj8vCUp7ZPxPNeTUclSzLv4VwPgxHMV0iB8/ctB8=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=cxJKxBddXfwjDIwakIHvXiXTNBWMS2X5RSgCCNdvAAhuHHMoWsq1a+KYr5vvrrwgc
-         XNZFvbGxi8IYs0UQoE75AfXTK30QzLZVKsGEahRd80A99pksDb2cnrwRnWSiNNqMXo
-         yQgG2M4EmPR+algVoMkye1JkR9s/IEjTtBLVNTtk=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200716012221.2640243-1-sboyd@kernel.org>
-References: <20200716012221.2640243-1-sboyd@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200716012221.2640243-1-sboyd@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git
- tags/clk-fixes-for-linus
-X-PR-Tracked-Commit-Id: 1e7468bd9d30a21e059af477106dc5588ae52dff
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f8456690ba8eb18ea4714e68554e242a04f65cff
-Message-Id: <159486870344.19183.9720520100761121739.pr-tracker-bot@kernel.org>
-Date:   Thu, 16 Jul 2020 03:05:03 +0000
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S1726069AbgGPFdQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 16 Jul 2020 01:33:16 -0400
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:30429 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725844AbgGPFdQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Jul 2020 01:33:16 -0400
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Jul 2020 22:33:15 -0700
+Received: from kathirav-linux.qualcomm.com ([10.201.2.228])
+  by ironmsg01-sd.qualcomm.com with ESMTP; 15 Jul 2020 22:33:09 -0700
+Received: by kathirav-linux.qualcomm.com (Postfix, from userid 459349)
+        id 81F512181E; Thu, 16 Jul 2020 11:03:07 +0530 (IST)
+From:   Sivaprakash Murugesan <sivaprak@codeaurora.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Sivaprakash Murugesan <sivaprak@codeaurora.org>
+Subject: [PATCH] clk: qcom: ipq8074: Add correct index for PCIe clocks
+Date:   Thu, 16 Jul 2020 11:02:50 +0530
+Message-Id: <1594877570-9280-1-git-send-email-sivaprak@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The pull request you sent on Wed, 15 Jul 2020 18:22:21 -0700:
+The PCIe clocks GCC_PCIE0_AXI_S_BRIDGE_CLK, GCC_PCIE0_RCHNG_CLK_SRC,
+GCC_PCIE0_RCHNG_CLK are wrongly added to the gcc reset group.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
+Move them to the gcc clock group.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f8456690ba8eb18ea4714e68554e242a04f65cff
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Sivaprakash Murugesan <sivaprak@codeaurora.org>
+---
+ include/dt-bindings/clock/qcom,gcc-ipq8074.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thank you!
-
+diff --git a/include/dt-bindings/clock/qcom,gcc-ipq8074.h b/include/dt-bindings/clock/qcom,gcc-ipq8074.h
+index e3e018565add..8e2bec1c91bf 100644
+--- a/include/dt-bindings/clock/qcom,gcc-ipq8074.h
++++ b/include/dt-bindings/clock/qcom,gcc-ipq8074.h
+@@ -230,6 +230,9 @@
+ #define GCC_GP1_CLK				221
+ #define GCC_GP2_CLK				222
+ #define GCC_GP3_CLK				223
++#define GCC_PCIE0_AXI_S_BRIDGE_CLK		224
++#define GCC_PCIE0_RCHNG_CLK_SRC			225
++#define GCC_PCIE0_RCHNG_CLK			226
+ 
+ #define GCC_BLSP1_BCR				0
+ #define GCC_BLSP1_QUP1_BCR			1
+@@ -363,8 +366,5 @@
+ #define GCC_PCIE1_AHB_ARES			129
+ #define GCC_PCIE1_AXI_MASTER_STICKY_ARES	130
+ #define GCC_PCIE0_AXI_SLAVE_STICKY_ARES		131
+-#define GCC_PCIE0_AXI_S_BRIDGE_CLK		132
+-#define GCC_PCIE0_RCHNG_CLK_SRC			133
+-#define GCC_PCIE0_RCHNG_CLK			134
+ 
+ #endif
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.7.4
+
