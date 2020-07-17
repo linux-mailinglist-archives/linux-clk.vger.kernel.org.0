@@ -2,67 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A75902237DA
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Jul 2020 11:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1492237DE
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Jul 2020 11:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726221AbgGQJKI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 17 Jul 2020 05:10:08 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:54759 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725912AbgGQJKI (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 17 Jul 2020 05:10:08 -0400
-X-Originating-IP: 90.65.108.121
+        id S1726411AbgGQJKn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 17 Jul 2020 05:10:43 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:40853 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbgGQJKm (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 17 Jul 2020 05:10:42 -0400
 Received: from localhost (lfbn-lyo-1-1676-121.w90-65.abo.wanadoo.fr [90.65.108.121])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 87555E0019;
-        Fri, 17 Jul 2020 09:09:59 +0000 (UTC)
-Date:   Fri, 17 Jul 2020 11:09:59 +0200
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id EAC4F100007;
+        Fri, 17 Jul 2020 09:10:36 +0000 (UTC)
+Date:   Fri, 17 Jul 2020 11:10:36 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Claudiu Beznea <claudiu.beznea@microchip.com>
 Cc:     mturquette@baylibre.com, sboyd@kernel.org,
         nicolas.ferre@microchip.com, ludovic.desroches@microchip.com,
         bbrezillon@kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 01/19] clk: at91: clk-generated: continue if
- __clk_determine_rate() returns error
-Message-ID: <20200717090959.GI3428@piout.net>
+Subject: Re: [PATCH 02/19] clk: at91: clk-generated: check best_rate against
+ ranges
+Message-ID: <20200717091036.GJ3428@piout.net>
 References: <1594812267-6697-1-git-send-email-claudiu.beznea@microchip.com>
- <1594812267-6697-2-git-send-email-claudiu.beznea@microchip.com>
+ <1594812267-6697-3-git-send-email-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1594812267-6697-2-git-send-email-claudiu.beznea@microchip.com>
+In-Reply-To: <1594812267-6697-3-git-send-email-claudiu.beznea@microchip.com>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 15/07/2020 14:24:09+0300, Claudiu Beznea wrote:
-> __clk_determine_rate() may return error. Skip the current step
-> in case of error.
+On 15/07/2020 14:24:10+0300, Claudiu Beznea wrote:
+> Check best_rate against available clock ranges.
 > 
-> Fixes: 1a1a36d72e3d3 ("clk: at91: clk-generated: make gclk determine audio_pll rate")
+> Fixes: df70aeef6083 ("clk: at91: add generated clock driver")
 > Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 Reviewed-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
 > ---
->  drivers/clk/at91/clk-generated.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/clk/at91/clk-generated.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/clk/at91/clk-generated.c b/drivers/clk/at91/clk-generated.c
-> index 44a46dcc0518..995a13133cfb 100644
+> index 995a13133cfb..f8e557e0e1b8 100644
 > --- a/drivers/clk/at91/clk-generated.c
 > +++ b/drivers/clk/at91/clk-generated.c
-> @@ -170,7 +170,8 @@ static int clk_generated_determine_rate(struct clk_hw *hw,
+> @@ -185,8 +185,8 @@ static int clk_generated_determine_rate(struct clk_hw *hw,
+>  		 __clk_get_name((req->best_parent_hw)->clk),
+>  		 req->best_parent_rate);
 >  
->  	for (div = 1; div < GENERATED_MAX_DIV + 2; div++) {
->  		req_parent.rate = req->rate * div;
-> -		__clk_determine_rate(parent, &req_parent);
-> +		if (__clk_determine_rate(parent, &req_parent))
-> +			continue;
->  		clk_generated_best_diff(req, parent, req_parent.rate, div,
->  					&best_diff, &best_rate);
+> -	if (best_rate < 0)
+> -		return best_rate;
+> +	if (best_rate < 0 || (gck->range.max && best_rate > gck->range.max))
+> +		return -EINVAL;
 >  
+>  	req->rate = best_rate;
+>  	return 0;
 > -- 
 > 2.7.4
 > 
