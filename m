@@ -2,67 +2,68 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6CA2237F2
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Jul 2020 11:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621F6223809
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Jul 2020 11:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726200AbgGQJNa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 17 Jul 2020 05:13:30 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:36455 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725864AbgGQJNa (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 17 Jul 2020 05:13:30 -0400
-X-Originating-IP: 90.65.108.121
+        id S1726205AbgGQJSU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 17 Jul 2020 05:18:20 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:57631 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726233AbgGQJSU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 17 Jul 2020 05:18:20 -0400
 Received: from localhost (lfbn-lyo-1-1676-121.w90-65.abo.wanadoo.fr [90.65.108.121])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 922C0240017;
-        Fri, 17 Jul 2020 09:13:27 +0000 (UTC)
-Date:   Fri, 17 Jul 2020 11:13:27 +0200
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 8015C100030;
+        Fri, 17 Jul 2020 09:17:18 +0000 (UTC)
+Date:   Fri, 17 Jul 2020 11:17:18 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Claudiu Beznea <claudiu.beznea@microchip.com>
 Cc:     mturquette@baylibre.com, sboyd@kernel.org,
         nicolas.ferre@microchip.com, ludovic.desroches@microchip.com,
         bbrezillon@kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 05/19] clk: at91: sam9x60-pll: use logical or for range
- check
-Message-ID: <20200717091327.GM3428@piout.net>
+Subject: Re: [PATCH 08/19] clk: at91: sam9x60: fix main rc oscillator
+ frequency
+Message-ID: <20200717091718.GN3428@piout.net>
 References: <1594812267-6697-1-git-send-email-claudiu.beznea@microchip.com>
- <1594812267-6697-6-git-send-email-claudiu.beznea@microchip.com>
+ <1594812267-6697-9-git-send-email-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1594812267-6697-6-git-send-email-claudiu.beznea@microchip.com>
+In-Reply-To: <1594812267-6697-9-git-send-email-claudiu.beznea@microchip.com>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 15/07/2020 14:24:13+0300, Claudiu Beznea wrote:
-> Use logical or for range check. In case bestrate is not in
-> characteristics->output[0].min..characteristics->output[0].max
-> range we should return -ERANGE.
+On 15/07/2020 14:24:16+0300, Claudiu Beznea wrote:
+> Main RC oscillator frequency is 12MHz according to datasheet
+> (chapter 27.2).
 > 
-> Fixes: a436c2a447e59 ("clk: at91: add sam9x60 PLL driver")
+> Fixes: 01e2113de9a52 ("clk: at91: add sam9x60 pmc driver")
 > Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 Reviewed-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
+For the record I got that value from:
+https://github.com/linux4sam/linux-at91/blob/c5fcb086200dc3b2e4a2b306778c6c7283d95755/arch/arm/boot/dts/sam9x60.dtsi#L701
+
 > ---
->  drivers/clk/at91/clk-sam9x60-pll.c | 2 +-
+>  drivers/clk/at91/sam9x60.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/clk/at91/clk-sam9x60-pll.c b/drivers/clk/at91/clk-sam9x60-pll.c
-> index d3152c0afcbf..dfb91c190bd1 100644
-> --- a/drivers/clk/at91/clk-sam9x60-pll.c
-> +++ b/drivers/clk/at91/clk-sam9x60-pll.c
-> @@ -232,7 +232,7 @@ static long sam9x60_pll_get_best_div_mul(struct sam9x60_pll *pll,
->  	}
+> diff --git a/drivers/clk/at91/sam9x60.c b/drivers/clk/at91/sam9x60.c
+> index 633891b98d43..c8703d2a0886 100644
+> --- a/drivers/clk/at91/sam9x60.c
+> +++ b/drivers/clk/at91/sam9x60.c
+> @@ -189,7 +189,7 @@ static void __init sam9x60_pmc_setup(struct device_node *np)
+>  	if (!sam9x60_pmc)
+>  		return;
 >  
->  	/* Check if bestrate is a valid output rate  */
-> -	if (bestrate < characteristics->output[0].min &&
-> +	if (bestrate < characteristics->output[0].min ||
->  	    bestrate > characteristics->output[0].max)
->  		return -ERANGE;
->  
+> -	hw = at91_clk_register_main_rc_osc(regmap, "main_rc_osc", 24000000,
+> +	hw = at91_clk_register_main_rc_osc(regmap, "main_rc_osc", 12000000,
+>  					   50000000);
+>  	if (IS_ERR(hw))
+>  		goto err_free;
 > -- 
 > 2.7.4
 > 
