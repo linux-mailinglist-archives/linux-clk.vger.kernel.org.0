@@ -2,70 +2,67 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2D8227A1A
-	for <lists+linux-clk@lfdr.de>; Tue, 21 Jul 2020 10:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C16227A20
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Jul 2020 10:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726919AbgGUIDN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 21 Jul 2020 04:03:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37858 "EHLO mail.kernel.org"
+        id S1726749AbgGUIET (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 21 Jul 2020 04:04:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38344 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726614AbgGUIDN (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 21 Jul 2020 04:03:13 -0400
+        id S1726614AbgGUIET (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 21 Jul 2020 04:04:19 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 22A9820709;
-        Tue, 21 Jul 2020 08:03:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CF98B20709;
+        Tue, 21 Jul 2020 08:04:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595318593;
-        bh=z/wxKRVe4zSV5lMbhLHJfCHSnqOQj2tNSL1T150PKhk=;
+        s=default; t=1595318658;
+        bh=RDk4iY6iYqvSg+xGeXp7q0Oy+7kOsYkUs66LVpJVSoI=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=nvV+usdfxcP19KGtA8ccMCKug4ZuJ2GtKbWAyT69F/XmnSE3zaZ/0cIDirrWcwTGx
-         Y4is7tBqS/upQ+xEPeXIAmouc7VyIUW4hN2m+MsQI5nkS+UrnhnqeA9y3SBXEOzJfC
-         i/BTTgxQEtl3AC6GFgGlFbkPYf1UnN1uyG144aBQ=
+        b=d7pogMm7aLFzIlKa2BN0JQ5gO5DIYpaDnOvuV88wPKVhGhXMTS5zSbMFK8xoGKQI3
+         80XqZheQu1grctfZoRybXH+7GwcL8L3n0MuI4A/rxztdBJDP6W3RVOBL7VgGtDz/QO
+         tRuF3SqxowfWfdm6+9Cn0VfWd8fKVzKB+H20OZrU=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200720062516.GB20462@dragon>
-References: <20200720062516.GB20462@dragon>
-Subject: Re: [GIT PULL] i.MX clock changes for 5.9
+In-Reply-To: <cccfd007-1801-f289-2730-b831d9494a08@amd.com>
+References: <20200713010001.18976-1-akshu.agrawal@amd.com> <20200713010001.18976-2-akshu.agrawal@amd.com> <159486017478.1987609.16233541356940866738@swboyd.mtv.corp.google.com> <cccfd007-1801-f289-2730-b831d9494a08@amd.com>
+Subject: Re: [PATCH 2/5] clk: x86: Change name from ST to FCH
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Stefan Agner <stefan@agner.ch>, linux-imx@nxp.com,
-        kernel@pengutronix.de, Fabio Estevam <festevam@gmail.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-To:     Shawn Guo <shawnguo@kernel.org>
-Date:   Tue, 21 Jul 2020 01:03:12 -0700
-Message-ID: <159531859247.3847286.15799470044289847029@swboyd.mtv.corp.google.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Rahul Tanwar <rahul.tanwar@linux.intel.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     "Agrawal, Akshu" <aagrawal2@amd.com>, akshu.agrawal@amd.com
+Date:   Tue, 21 Jul 2020 01:04:18 -0700
+Message-ID: <159531865807.3847286.3414535445817803885@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Shawn Guo (2020-07-19 23:25:24)
-> Hi Stephen,
+Quoting Agrawal, Akshu (2020-07-19 21:59:02)
 >=20
-> This is a couple of i.MX clock patches I collected for 5.9.  Please pull
-> and keep it stable, as I also pull it into my DT branch to resolve
-> dependency.  Thanks!
+> On 7/16/2020 6:12 AM, Stephen Boyd wrote:
+> > Quoting Akshu Agrawal (2020-07-12 17:59:50)
+> >> diff --git a/drivers/clk/x86/clk-st.c b/drivers/clk/x86/clk-fch.c
+> >> similarity index 73%
+> >> rename from drivers/clk/x86/clk-st.c
+> >> rename to drivers/clk/x86/clk-fch.c
+> >> index 25d4b97aff9b..b252f0cf0628 100644
+> >> --- a/drivers/clk/x86/clk-st.c
+> >> +++ b/drivers/clk/x86/clk-fch.c
+> >> @@ -8,7 +8,7 @@
+> >>   #include <linux/clk.h>
+> >>   #include <linux/clkdev.h>
+> >>   #include <linux/clk-provider.h>
+> >> -#include <linux/platform_data/clk-st.h>
+> >> +#include <linux/platform_data/clk-fch.h>
+> > Is this file moved somewhere?
 >=20
-> Shawn
+> Renaming it from ST to FCH in previous patch of the series.
 >=20
->=20
-> The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c74=
-07:
->=20
->   Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
->=20
-> are available in the Git repository at:
->=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git tags/c=
-lk-imx-5.9
->=20
-> for you to fetch changes up to 018e4308349dbf32f4d971cbe72f4f3d6b1c217a:
->=20
->   clk: imx: vf610: add CAAM clock (2020-06-23 15:10:05 +0800)
->=20
-> ----------------------------------------------------------------
 
-Thanks. Pulled into clk-next
+So it won't compile if the first patch is applied and then this patch
+isn't? Please compile test each patch in succession.
