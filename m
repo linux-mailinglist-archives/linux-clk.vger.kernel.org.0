@@ -2,63 +2,68 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 423092279FC
-	for <lists+linux-clk@lfdr.de>; Tue, 21 Jul 2020 09:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55952227A14
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Jul 2020 10:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726932AbgGUH5s (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 21 Jul 2020 03:57:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35134 "EHLO mail.kernel.org"
+        id S1728638AbgGUIBi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 21 Jul 2020 04:01:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37080 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726614AbgGUH5r (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 21 Jul 2020 03:57:47 -0400
+        id S1728536AbgGUIBi (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 21 Jul 2020 04:01:38 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7924A208E4;
-        Tue, 21 Jul 2020 07:57:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EE5FA20709;
+        Tue, 21 Jul 2020 08:01:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595318267;
-        bh=pvNrWK/Ix8g9M9ei9fs+4+uAjBm4YdpanX1u3TPtoQk=;
+        s=default; t=1595318498;
+        bh=jSPRnH7eEP1x8Pe4KIb515ID/InrBkcmbzx8jgqPjO8=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=gJuJU13hrP62nM+Y0tYnDc2wuj7NkLGhlni3QsRpTXP1HZwXb8YBGv53Fi6Z4TrOi
-         aYZGcR3tLBNPYWAtj4p311uAe5qSBzQ3+MhximgZvh2K0bsxiJpqNf6txEMRtTXDzA
-         cwZmME+L+KsNQRDmPks5vgR31IygimQnNvh1FDQU=
+        b=e2P05u34HIAGFQWkicYhQ3GLDJlHwDZU3AJ03gInVljv+qlvVGcl7IfDRUzfyYEbX
+         kNcRw1jCgFUPgeMh9bc8qwaQFXlxX91NBlMOaDyjC99ZRselsouLmE44Gq5SNr941u
+         aPulq7zIZK+ZIbRP2IU3LZlK6hPV+6+O6L/My6a4=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200717100931.15885-1-geert+renesas@glider.be>
-References: <20200717100931.15885-1-geert+renesas@glider.be>
-Subject: Re: [GIT PULL] clk: renesas: Updates for v5.9 (take two)
+In-Reply-To: <1jr1tapis8.fsf@starbuckisacylon.baylibre.com>
+References: <1jr1tapis8.fsf@starbuckisacylon.baylibre.com>
+Subject: Re: [GIT PULL] clk: meson: updates for v5.9
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>
-Date:   Tue, 21 Jul 2020 00:57:46 -0700
-Message-ID: <159531826675.3847286.15574631250824369251@swboyd.mtv.corp.google.com>
+Cc:     linux-clk@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+To:     Jerome Brunet <jbrunet@baylibre.com>
+Date:   Tue, 21 Jul 2020 01:01:37 -0700
+Message-ID: <159531849724.3847286.18132175454334945320@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Geert Uytterhoeven (2020-07-17 03:09:31)
->         Hi Mike, Stephen,
+Quoting Jerome Brunet (2020-07-17 02:55:51)
+> Hi Stephen,
 >=20
-> The following changes since commit 52bc5ea6edde35bc65ed6ecd7639534e78002c=
-74:
+> Here are the amlogic clock changes for v5.9
+> Business as usual - Please pull.
 >=20
->   clk: renesas: rzg2: Mark RWDT clocks as critical (2020-06-22 16:54:32 +=
-0200)
+> Cheers
+> Jerome
+>=20
+> The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c74=
+07:
+>=20
+>   Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
 >=20
 > are available in the Git repository at:
 >=20
->   git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git=
- tags/clk-renesas-for-v5.9-tag2
+>   git://github.com/BayLibre/clk-meson.git tags/clk-meson-v5.9-1
 >=20
-> for you to fetch changes up to c8a53fa1d211936ddcabf82ff991c18672b3d63a:
+> for you to fetch changes up to 2568528f55356a2f20f80a18244d3e235cbd2cab:
 >=20
->   clk: renesas: cpg-mssr: Add r8a774e1 support (2020-07-13 10:36:33 +0200)
+>   clk: meson: meson8b: add the vclk2_en gate clock (2020-07-09 11:37:44 +=
+0200)
 >=20
 > ----------------------------------------------------------------
 
