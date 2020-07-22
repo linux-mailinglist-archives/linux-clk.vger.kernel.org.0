@@ -2,179 +2,152 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E52229169
-	for <lists+linux-clk@lfdr.de>; Wed, 22 Jul 2020 08:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9A322922C
+	for <lists+linux-clk@lfdr.de>; Wed, 22 Jul 2020 09:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730988AbgGVGzw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 22 Jul 2020 02:55:52 -0400
-Received: from mail-mw2nam12on2080.outbound.protection.outlook.com ([40.107.244.80]:33952
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728049AbgGVGzp (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 22 Jul 2020 02:55:45 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RWpsXV6rvd5L5gsml8aGSMUzTIay51XtX+QJNpttfgIZg/u6Oh4rMI7/JrD96l8Abnnd4gti5vzSoru6w8xx/t1COnKYZUrIByw+L5ItJ4OZeze3csQ15fUGh4Wxqf5zsXZBdJpDPrghhA4MJ4y8kBa3iFGosx/6A9NZrJCFCKFabY2FtkwEF5Co1NmUGkt8PsgeJ1mId0d4YPpk+2H+fbebS2Kpk4Kh8s+h99QN2Pn4TzkSkueNxz6Dn/xTcEKA4BTGCbyquZatnNVvYM9uYoq+cCa6POLoz8VPBWGvhsuWfj1YbMpy9KwNsxNLECd0PTBTRR0jZN0dLdXlO5BvjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dGrJeUW5L2amVzh3hcIbNcJh2OPrCFtHka13VmFnbJY=;
- b=aRvxXEKVOn3hjSabY+dBYaIt1+Lhku6GAnGD7ZpE1ObK872gYvXsF5mEx9idvJ4t8aBayUj9MRBBUcdWgxJw5RsEr7j/Q5BwiZtUP9sDIhFcc05Jjn9jGX500tWP48aK3lnuDXic8oOo8JDPv8soOfMhw01u7XaGnp+p+v/KGabdc8JXLIUQzlcH1EcMr26Kodo2lPwW+Rt94+wD667hbsCi1m2n0AMueVI8dxz9V3AP8zh+yh831jGYxsvQlG1KgjqXT6L4gJb8SxaIcBh7sB3SpHFaof8XkM7X5sy14BglSJbTjpuW0ZtldNwJSWblKdcusasjAss4JiRoUSCSOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.60.83) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
- not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dGrJeUW5L2amVzh3hcIbNcJh2OPrCFtHka13VmFnbJY=;
- b=cSdsJ8iULL+0IIyOp6XLDIHMpFn8LpsSAwoWDrpeHacRoP6lS25ZKNOajEIsRZkpGNRUyo0TqwZD0MgjqYNReMEJOVMUotWoxf7bY+lNJzkiBjfe82DI4KLmUbz7bNgNeEHvfIBcUVjMsK2QyegLbdS6xCJQ8Jpn7FdgFvGCjHQ=
-Received: from MN2PR01CA0042.prod.exchangelabs.com (2603:10b6:208:23f::11) by
- DM6PR02MB6714.namprd02.prod.outlook.com (2603:10b6:5:214::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3195.17; Wed, 22 Jul 2020 06:55:42 +0000
-Received: from BL2NAM02FT006.eop-nam02.prod.protection.outlook.com
- (2603:10b6:208:23f:cafe::a) by MN2PR01CA0042.outlook.office365.com
- (2603:10b6:208:23f::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.20 via Frontend
- Transport; Wed, 22 Jul 2020 06:55:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
- smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- BL2NAM02FT006.mail.protection.outlook.com (10.152.76.239) with Microsoft SMTP
- Server id 15.20.3216.10 via Frontend Transport; Wed, 22 Jul 2020 06:55:41
- +0000
-Received: from [149.199.38.66] (port=59649 helo=smtp.xilinx.com)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
-        (envelope-from <amit.sunil.dhamne@xilinx.com>)
-        id 1jy8dR-00024j-3n; Tue, 21 Jul 2020 23:53:49 -0700
-Received: from [127.0.0.1] (helo=localhost)
-        by xsj-pvapsmtp01 with smtp (Exim 4.63)
-        (envelope-from <amit.sunil.dhamne@xilinx.com>)
-        id 1jy8fF-00037V-90; Tue, 21 Jul 2020 23:55:41 -0700
-Received: from xsj-pvapsmtp01 (mailhost.xilinx.com [149.199.38.66])
-        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 06M6tZdj007795;
-        Tue, 21 Jul 2020 23:55:35 -0700
-Received: from [172.19.3.8] (helo=xsjamitsuni50.xilinx.com)
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <amit.sunil.dhamne@xilinx.com>)
-        id 1jy8f9-00036T-8C; Tue, 21 Jul 2020 23:55:35 -0700
-From:   Amit Sunil Dhamne <amit.sunil.dhamne@xilinx.com>
-To:     mturquette@baylibre.com, m.tretter@pengutronix.de,
-        sboyd@codeaurora.org, sboyd@kernel.org, michal.simek@xilinx.com,
-        mark.rutland@arm.com, linux-clk@vger.kernel.org
-Cc:     rajanv@xilinx.com, jollys@xilinx.com, tejasp@xilinx.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rajan Vaja <rajan.vaja@xilinx.com>,
-        Tejas Patel <tejas.patel@xilinx.com>,
-        Amit Sunil Dhamne <amit.sunil.dhamne@xilinx.com>
-Subject: [PATCH v2 3/3] clk: zynqmp: Use firmware specific mux clock flags
-Date:   Tue, 21 Jul 2020 23:55:32 -0700
-Message-Id: <1595400932-303612-4-git-send-email-amit.sunil.dhamne@xilinx.com>
+        id S1726404AbgGVHie (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 22 Jul 2020 03:38:34 -0400
+Received: from esa2.microchip.iphmx.com ([68.232.149.84]:23373 "EHLO
+        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726821AbgGVHie (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 22 Jul 2020 03:38:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1595403513; x=1626939513;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=nHp8k5w3QtQPtWSzCw0VnPwsZy9y/gV958fJNTqFCcs=;
+  b=l5K36Zwxa1fh/cmV64vq+ef6avel9wrRIhwoD3NUOI+W8GDiTLKYR4Wz
+   BZkln4Ur+L4NQxUmcS8eNCoW7CMLPD6NCXx6uBbEZkr4tWfBGpwdL+1WD
+   FCTj0wBR9lbE1EOEsllcsJOC+7FPcQ7enz1jmIyETNvTKXHOCPrGSHsQD
+   qwd1hXD5fPrXS0OttpM53aXwJRwraOUftge41KRPs2ek4SuqBT3ZTrPUq
+   pdO7zsixRUGwuT/8j+htKW3btDZI5lSxCS48qP/Knl/d7EZLs5lCU6j+7
+   PGacf4XVP2UpCr7JwtkTiMdhKkrA/x6zg55UGojQnNrBVz23GNGLwwUxn
+   w==;
+IronPort-SDR: 9cOQiqpjtiIEDroJ4fvdo19X6mUJKXuYuQhh4w21Ie504igDV+aGJuj299kX+hW3Fe7U3XlOuC
+ qXQlkpEepdwxQQn2dRTaL5Y0J76Q7YSMO9w5fnkYcWjajaXt0Ei+Ft0qb9rK9hPBp/tpuZ6XIi
+ 2HnXCfRDJVjj0edbMM/VQ0CYNUtwJZruIWBxpogyGDlp88ol8mxOqkyiV4BHJHIZYxTEQZ3XzR
+ NWDTydNDlyGhIxqVqaN69a4u0YjISrFshh7Wj+pnGVDe2ljevAXPCfna1XWmy9gl415TW3xrKy
+ GEQ=
+X-IronPort-AV: E=Sophos;i="5.75,381,1589266800"; 
+   d="scan'208";a="82772018"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Jul 2020 00:38:33 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 22 Jul 2020 00:38:33 -0700
+Received: from m18063-ThinkPad-T460p.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.1979.3 via Frontend Transport; Wed, 22 Jul 2020 00:38:29 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <ludovic.desroches@microchip.com>
+CC:     <bbrezillon@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Claudiu Beznea" <claudiu.beznea@microchip.com>
+Subject: [PATCH v2 00/18] clk: at91: add sama7g5 clock support
+Date:   Wed, 22 Jul 2020 10:38:08 +0300
+Message-ID: <1595403506-8209-1-git-send-email-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1595400932-303612-1-git-send-email-amit.sunil.dhamne@xilinx.com>
-References: <1595400932-303612-1-git-send-email-amit.sunil.dhamne@xilinx.com>
-X-RCIS-Action: ALLOW
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-User-Approved-Sender: Yes;Yes
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFTY:;SFS:(39850400004)(396003)(376002)(136003)(346002)(46966005)(8936002)(5660300002)(8676002)(9786002)(6666004)(426003)(356005)(316002)(70206006)(336012)(2616005)(83380400001)(54906003)(7696005)(47076004)(81166007)(2906002)(36756003)(4326008)(478600001)(70586007)(82740400003)(26005)(107886003)(186003)(82310400002);DIR:OUT;SFP:1101;
-X-MS-PublicTrafficType: Email
 MIME-Version: 1.0
 Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 7be4bd13-ca13-4e44-a596-08d82e0c3fb7
-X-MS-TrafficTypeDiagnostic: DM6PR02MB6714:
-X-Microsoft-Antispam-PRVS: <DM6PR02MB6714C47642D4E3252D8BEF6FA7790@DM6PR02MB6714.namprd02.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:415;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rnKkeypNtFqiuQm5SeBP1USzxIlOKrKH99Kad0WXSJyaF1EeF2R17LYcWI0Pt9+/BD/wfDe9bMEeFnOmlyjorH0jPi+Oy+GVHJ81iHWyg+nxpUE89KOVYRu+9TbODbSr/Z+09EIRPlrpehQFH2VWBgbkAKiMEaQ0dmSVoxfr8ins3CTGmX/1MKK66hU+k9KTwclH9GNlMuvw+Ql9/7uRW0B0B1lhnwjc0ag8Sg9OYvjNbrmdPKW3yE3lTSJ7woFcJ3Lu7daA2qJ8mqdds1AqrL/7eF1j6aE1N2tZ6ZGl5QMMsoox6D34fTWMmpilDLRCxYU0+1ASN03x5uTXHvTfkc/XtPqv78CqAY6OfsYUnpafXQ/+uyFVcYaPSJg1oHniKqTGQO6wBHT7ES0sH85hIA==
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2020 06:55:41.6290
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7be4bd13-ca13-4e44-a596-08d82e0c3fb7
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT006.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB6714
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Rajan Vaja <rajan.vaja@xilinx.com>
+Hi,
 
-Use ZynqMP specific mux clock flags instead of using CCF flags.
+This series adds clock support for SAMA7G5. The first patches in
+series, patches 1/19-9/19, contains some fixes (let me know if
+you want to send them as a separate series).
 
-Signed-off-by: Rajan Vaja <rajan.vaja@xilinx.com>
-Signed-off-by: Tejas Patel <tejas.patel@xilinx.com>
-Signed-off-by: Amit Sunil Dhamne <amit.sunil.dhamne@xilinx.com>
----
- drivers/clk/zynqmp/clk-mux-zynqmp.c | 14 +++++++++++++-
- drivers/clk/zynqmp/clk-zynqmp.h     |  8 ++++++++
- 2 files changed, 21 insertions(+), 1 deletion(-)
+For SAMA7G5 clock support some AT91 clock drivers needed changes
+because:
+1/ some of generated, master and peripheral clocks could have
+   changeable parents (being able to request frequency changes
+   from parent)
+2/ generated and programmable clocks parents needed a mux table
+   as the hardware parent index doesn't correspond with software
+   parent index
+3/ there are 4 new master clocks, MCK1..4 (compared with previous
+   AT91 architectures) which are controlled separately from MCK0
+4/ some of the PLLs have 2 outputs the internal block schema being
+   as follows:
 
-diff --git a/drivers/clk/zynqmp/clk-mux-zynqmp.c b/drivers/clk/zynqmp/clk-m=
-ux-zynqmp.c
-index 1dc17a0..10cf021 100644
---- a/drivers/clk/zynqmp/clk-mux-zynqmp.c
-+++ b/drivers/clk/zynqmp/clk-mux-zynqmp.c
-@@ -125,7 +125,19 @@ struct clk_hw *zynqmp_clk_register_mux(const char *nam=
-e, u32 clk_id,
+   +------+            +--------+
+   | FRAC |-----+----->| DIVPMC |--->
+   +------+     |      +--------+
+                |
+                |      +--------+
+                +----->|  DIVIO |--->
+                       +--------+
 
-        init.parent_names =3D parents;
-        init.num_parents =3D num_parents;
--       mux->flags =3D nodes->type_flag;
-+       mux->flags =3D 0;
-+       mux->flags |=3D (nodes->type_flag & ZYNQMP_CLK_MUX_INDEX_ONE) ?
-+                     CLK_MUX_INDEX_ONE : 0;
-+       mux->flags |=3D (nodes->type_flag & ZYNQMP_CLK_MUX_INDEX_BIT) ?
-+                     CLK_MUX_INDEX_BIT : 0;
-+       mux->flags |=3D (nodes->type_flag & ZYNQMP_CLK_MUX_HIWORD_MASK) ?
-+                     CLK_MUX_HIWORD_MASK : 0;
-+       mux->flags |=3D (nodes->type_flag & ZYNQMP_CLK_MUX_READ_ONLY) ?
-+                     CLK_MUX_READ_ONLY : 0;
-+       mux->flags |=3D (nodes->type_flag & ZYNQMP_CLK_MUX_ROUND_CLOSEST) ?
-+                     CLK_MUX_ROUND_CLOSEST : 0;
-+       mux->flags |=3D (nodes->type_flag & ZYNQMP_CLK_MUX_BIG_ENDIAN) ?
-+                     CLK_MUX_BIG_ENDIAN : 0;
-        mux->hw.init =3D &init;
-        mux->clk_id =3D clk_id;
+   For this, the clk-sam9x60-pll driver has been re-factored.
 
-diff --git a/drivers/clk/zynqmp/clk-zynqmp.h b/drivers/clk/zynqmp/clk-zynqm=
-p.h
-index ec33525..b1ac7e8 100644
---- a/drivers/clk/zynqmp/clk-zynqmp.h
-+++ b/drivers/clk/zynqmp/clk-zynqmp.h
-@@ -41,6 +41,14 @@
- #define ZYNQMP_CLK_DIVIDER_READ_ONLY           BIT(5)
- #define ZYNQMP_CLK_DIVIDER_MAX_AT_ZERO         BIT(6)
+Changes in v2:
+- collected Reviewed-by tags
+- squashed patches 4/19 and 7/19 from previous version
+- fixed typos in commit description of patch 6/19 from previous version
+- improve commit description on patch
+  "clk: at91: sckc: register slow_rc with accuracy option"
+- improve a bit commit description on patch
+  "clk: at91: replace conditional operator with double logical not"
+- use u64 type for fcore variable in
+  "clk: at91: sam9x60-pll: check fcore against ranges"
 
-+/* Type Flags for mux clock */
-+#define ZYNQMP_CLK_MUX_INDEX_ONE               BIT(0)
-+#define ZYNQMP_CLK_MUX_INDEX_BIT               BIT(1)
-+#define ZYNQMP_CLK_MUX_HIWORD_MASK             BIT(2)
-+#define ZYNQMP_CLK_MUX_READ_ONLY               BIT(3)
-+#define ZYNQMP_CLK_MUX_ROUND_CLOSEST           BIT(4)
-+#define ZYNQMP_CLK_MUX_BIG_ENDIAN              BIT(5)
-+
- enum topology_type {
-        TYPE_INVALID,
-        TYPE_MUX,
---
+Claudiu Beznea (18):
+  clk: at91: clk-generated: continue if __clk_determine_rate() returns
+    error
+  clk: at91: clk-generated: check best_rate against ranges
+  clk: at91: clk-sam9x60-pll: fix mul mask
+  clk: at91: sam9x60-pll: use logical or for range check
+  clk: at91: sam9x60-pll: check fcore against ranges
+  clk: at91: sam9x60-pll: use frac when setting frequency
+  clk: at91: sam9x60: fix main rc oscillator frequency
+  clk: at91: sckc: register slow_rc with accuracy option
+  clk: at91: replace conditional operator with double logical not
+  clk: at91: clk-generated: pass the id of changeable parent at
+    registration
+  clk: at91: clk-generated: add mux_table option
+  clk: at91: clk-master: add master clock support for SAMA7G5
+  clk: at91: clk-peripheral: add support for changeable parent rate
+  clk: at91: clk-programmable: add mux_table option
+  clk: at91: add macro for pll ids mask
+  clk: at91: clk-sam9x60-pll: re-factor to support plls with multiple
+    outputs
+  clk: at91: clk-utmi: add utmi support for sama7g5
+  clk: at91: sama7g5: add clock support for sama7g5
+
+ drivers/clk/at91/Makefile           |    1 +
+ drivers/clk/at91/at91rm9200.c       |    3 +-
+ drivers/clk/at91/at91sam9260.c      |    3 +-
+ drivers/clk/at91/at91sam9g45.c      |    3 +-
+ drivers/clk/at91/at91sam9n12.c      |    5 +-
+ drivers/clk/at91/at91sam9rl.c       |    3 +-
+ drivers/clk/at91/at91sam9x5.c       |    7 +-
+ drivers/clk/at91/clk-generated.c    |   44 +-
+ drivers/clk/at91/clk-main.c         |    6 +-
+ drivers/clk/at91/clk-master.c       |  310 +++++++++-
+ drivers/clk/at91/clk-peripheral.c   |  111 +++-
+ drivers/clk/at91/clk-programmable.c |   11 +-
+ drivers/clk/at91/clk-sam9x60-pll.c  |  547 ++++++++++++------
+ drivers/clk/at91/clk-system.c       |    4 +-
+ drivers/clk/at91/clk-utmi.c         |  103 +++-
+ drivers/clk/at91/dt-compat.c        |   25 +-
+ drivers/clk/at91/pmc.h              |   43 +-
+ drivers/clk/at91/sam9x60.c          |   64 ++-
+ drivers/clk/at91/sama5d2.c          |   41 +-
+ drivers/clk/at91/sama5d3.c          |    6 +-
+ drivers/clk/at91/sama5d4.c          |    7 +-
+ drivers/clk/at91/sama7g5.c          | 1059 +++++++++++++++++++++++++++++++++++
+ drivers/clk/at91/sckc.c             |    5 +-
+ include/linux/clk/at91_pmc.h        |    4 +
+ 24 files changed, 2140 insertions(+), 275 deletions(-)
+ create mode 100644 drivers/clk/at91/sama7g5.c
+
+-- 
 2.7.4
 
-This email and any attachments are intended for the sole use of the named r=
-ecipient(s) and contain(s) confidential information that may be proprietary=
-, privileged or copyrighted under applicable law. If you are not the intend=
-ed recipient, do not read, copy, or forward this email message or any attac=
-hments. Delete this email message and any attachments immediately.
