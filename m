@@ -2,107 +2,153 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22509229142
-	for <lists+linux-clk@lfdr.de>; Wed, 22 Jul 2020 08:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79FFA229167
+	for <lists+linux-clk@lfdr.de>; Wed, 22 Jul 2020 08:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728734AbgGVGuK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 22 Jul 2020 02:50:10 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:7646 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727922AbgGVGuK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 22 Jul 2020 02:50:10 -0400
-X-UUID: 5920cdbb1629478e95836c804a6b1bc6-20200722
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=xL2c15rMm6n2+VIEB3St5dv1LPcg+CbSCv0clpzLX0E=;
-        b=hFPE3BNubhi0y7W+oB6eZ/O5Zh3clLYHzaY8SOnESE3KvTYlI33/OYSEvUjdgFUX6Ikhqp6zIT7Dspg3vA0flQlMcRlYmuyhZNBtHXkEsQfZ52Z4oSihYAq4b4tNiX3Kv8T2FCtJ4MNip4ymIZItTuO4dpRgWl2llHHKRepN5ww=;
-X-UUID: 5920cdbb1629478e95836c804a6b1bc6-20200722
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <weiyi.lu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 66332343; Wed, 22 Jul 2020 14:50:05 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 22 Jul 2020 14:50:02 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 22 Jul 2020 14:50:03 +0800
-From:   Weiyi Lu <weiyi.lu@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>
-CC:     James Liao <jamesjj.liao@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <srv_heupstream@mediatek.com>, Weiyi Lu <weiyi.lu@mediatek.com>,
-        Wendell Lin <wendell.lin@mediatek.com>
-Subject: [PATCH 3/4] clk: mediatek: Add configurable enable control to mtk_pll_data
-Date:   Wed, 22 Jul 2020 14:50:00 +0800
-Message-ID: <1595400601-26220-4-git-send-email-weiyi.lu@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1595400601-26220-1-git-send-email-weiyi.lu@mediatek.com>
-References: <1595400601-26220-1-git-send-email-weiyi.lu@mediatek.com>
+        id S1730786AbgGVGzs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 22 Jul 2020 02:55:48 -0400
+Received: from mail-eopbgr690054.outbound.protection.outlook.com ([40.107.69.54]:39842
+        "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728649AbgGVGzp (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 22 Jul 2020 02:55:45 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F3z9YF2yZRcWHLf4OYKqe8PGEmdRChITP+2tQuKWWjJu2lk28fBfOo5R2Gm1rqUzSMGmd4b5l9f+UF3iYg6whu299kVKdfcPFyQoMOv47/BhFBJq/GAg7tKHG19qI+GgiWAmh5IGCPlPeRnC5nI2cP/tc+YVZSJ+V/iqVoFNnfovNqlDb0j5xeeIyTkyWsZ+fEU6ndAv6WPrzNsuP0FMThHEMNWts44OegHKt10wXUE4uhd4RDHkAv4RRB4G41An+G58TTe4gd6ebKa1rhGtyjwyE6QdRKtohQ6aqLKpZhSWGEUnuMr3CTFS7ONS5M8Wfs4dUdpKhRBeYbU/GSNOpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gCc5CuIftvyfYIfoK2Az/qH2MEobepBDVo1RzOxqP1s=;
+ b=GvLIdVMRn6hSeHlOPRvkj0LxcmzT92U6PagbI4cMrQ+Is5UufthMPW6/MeE3xBK8Gn7BEt1+TqgsZVTlBovIXjzKh30AqRSvBNe0X2XOrf2h8IAsFgoaZeZfs1+JAZimXyhXOCo4i/4tsYASBnsV8QcprAdwy0VHLb72mtA6DwkJa0cyC1lrzFEBM9hfBPyGuRR5XDnukNpwrYGV34UzxibyP2T6blIULW1jjXjFE5M7MYi7TJi0JE0K0gzXSsYiQ+BJISVvyVEmsoVRwPEYLXcjzEdS5NTp+SQnTnWTdNXILvfNkBkj6z9WlfmZZBCqfHDpxP3pyWmvNhcZx4gFkA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.60.83) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gCc5CuIftvyfYIfoK2Az/qH2MEobepBDVo1RzOxqP1s=;
+ b=mOyrefryUxXO+v1cHlEdCsn2X/J1bzKiVhEZaGXTboeM3AMDCfgBjnxebqc3Ona1+jcUA7jLh6wa1ogEubMkIZgSIurjdbdqQvhIZAZJKkRL52v2BdAraMmWOJ/wbPQ6arqLI0hvv2LxJLyfdDGR4F2dNjhAcoGsa1MOp6H9B+w=
+Received: from MN2PR08CA0022.namprd08.prod.outlook.com (2603:10b6:208:239::27)
+ by BN7PR02MB4994.namprd02.prod.outlook.com (2603:10b6:408:2a::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.17; Wed, 22 Jul
+ 2020 06:55:42 +0000
+Received: from BL2NAM02FT023.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:208:239:cafe::fb) by MN2PR08CA0022.outlook.office365.com
+ (2603:10b6:208:239::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.22 via Frontend
+ Transport; Wed, 22 Jul 2020 06:55:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ BL2NAM02FT023.mail.protection.outlook.com (10.152.77.72) with Microsoft SMTP
+ Server id 15.20.3216.10 via Frontend Transport; Wed, 22 Jul 2020 06:55:41
+ +0000
+Received: from [149.199.38.66] (port=59645 helo=smtp.xilinx.com)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
+        (envelope-from <amit.sunil.dhamne@xilinx.com>)
+        id 1jy8dR-00024g-0d; Tue, 21 Jul 2020 23:53:49 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <amit.sunil.dhamne@xilinx.com>)
+        id 1jy8fF-00037V-5w; Tue, 21 Jul 2020 23:55:41 -0700
+Received: from xsj-pvapsmtp01 (mailman.xilinx.com [149.199.38.66])
+        by xsj-smtp-dlp1.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 06M6tZIH011756;
+        Tue, 21 Jul 2020 23:55:35 -0700
+Received: from [172.19.3.8] (helo=xsjamitsuni50.xilinx.com)
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <amit.sunil.dhamne@xilinx.com>)
+        id 1jy8f9-00036T-3I; Tue, 21 Jul 2020 23:55:35 -0700
+From:   Amit Sunil Dhamne <amit.sunil.dhamne@xilinx.com>
+To:     mturquette@baylibre.com, m.tretter@pengutronix.de,
+        sboyd@codeaurora.org, sboyd@kernel.org, michal.simek@xilinx.com,
+        mark.rutland@arm.com, linux-clk@vger.kernel.org
+Cc:     rajanv@xilinx.com, jollys@xilinx.com, tejasp@xilinx.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Amit Sunil Dhamne <amit.sunil.dhamne@xilinx.com>
+Subject: [PATCH v2 0/3] clk: zynqmp: Add firmware specific clock flags
+Date:   Tue, 21 Jul 2020 23:55:29 -0700
+Message-Id: <1595400932-303612-1-git-send-email-amit.sunil.dhamne@xilinx.com>
+X-Mailer: git-send-email 2.7.4
+X-RCIS-Action: ALLOW
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFTY:;SFS:(39850400004)(376002)(136003)(396003)(346002)(46966005)(107886003)(8936002)(8676002)(5660300002)(186003)(426003)(47076004)(478600001)(9786002)(6666004)(81166007)(336012)(26005)(316002)(2616005)(70206006)(82310400002)(70586007)(36756003)(83380400001)(4326008)(7696005)(2906002)(356005)(82740400003);DIR:OUT;SFP:1101;
+X-MS-PublicTrafficType: Email
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: 8AB9C873B56F031AD0C2855AC0E93D53A97E5A87F77F9EDAA49315D4E812308E2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-MS-Office365-Filtering-Correlation-Id: 2442af36-44ac-44ac-5614-08d82e0c3fa9
+X-MS-TrafficTypeDiagnostic: BN7PR02MB4994:
+X-Microsoft-Antispam-PRVS: <BN7PR02MB4994381C683AC4FAD6C4EDA6A7790@BN7PR02MB4994.namprd02.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EDksFZcJ2ONGaM9pKpbSecEH2v6InCPwERwWgwm8Tii1ODgIlXCEe1QLQcnHyYJtumG+pLLt0ueo2N35slYIcwRqHO4Ev5p7sGp4G8dTi6mGbsAwlEdZvhHVMDWddtvjx+BefBi+haEltpjbgE+a2uVx+k77YOFCE9GF4tzApS6zso09bYec7Dox/VpO8FwYhUN06/A5tyfraZCxJ6NEvjNJTISdol/vfJo80XiCxkP6A1NG4jPDzRZGVet/VXtcSMVz4KUEGUlwS83oK8P6DqeWuVxQhEEFbu3GhT+fcsFgPKGSZZL9aT51Un3me8Zx20SFBFJueLooeFd98fpH9aXTD799LkihnU/ShXcCk0sB7izkqTw+e122QSxfUo42pwNIy1sRROJhX0hRmtAC0Q==
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2020 06:55:41.5352
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2442af36-44ac-44ac-5614-08d82e0c3fa9
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT023.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR02MB4994
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-SW4gYWxsIE1lZGlhVGVrIFBMTCBkZXNpZ24sIGJpdCAwIG9mIENPTjAgcmVnaXN0ZXIgaXMgYWx3
-YXlzDQp0aGUgZW5hYmxlIGJpdC4NCkhvd2V2ZXIsIHRoZXJlJ3MgYSBzcGVjaWFsIGNhc2Ugb2Yg
-dXNicGxsIG9uIE1UODE5Mi4NClRoZSBlbmFibGUgYml0IG9mIHVzYnBsbCBpcyBtb3ZlZCB0byBi
-aXQgMiBvZiBvdGhlciByZWdpc3Rlci4NCkFkZCBjb25maWd1cmFibGUgZW5fcmVnIGFuZCBiYXNl
-X2VuX2JpdCBmb3IgZW5hYmxlIGNvbnRyb2wgb3INCnVzaW5nIHRoZSBkZWZhdWx0IGlmIHdpdGhv
-dXQgc2V0dGluZyBpbiBwbGwgZGF0YS4NCg0KU2lnbmVkLW9mZi1ieTogV2VpeWkgTHUgPHdlaXlp
-Lmx1QG1lZGlhdGVrLmNvbT4NCi0tLQ0KIGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdGsuaCB8
-ICAyICsrDQogZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLXBsbC5jIHwgMjYgKysrKysrKysrKysr
-KysrKysrKysrKy0tLS0NCiAyIGZpbGVzIGNoYW5nZWQsIDI0IGluc2VydGlvbnMoKyksIDQgZGVs
-ZXRpb25zKC0pDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXRrLmgg
-Yi9kcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXRrLmgNCmluZGV4IGMzZDY3NTYuLjhiYjBiM2Qg
-MTAwNjQ0DQotLS0gYS9kcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXRrLmgNCisrKyBiL2RyaXZl
-cnMvY2xrL21lZGlhdGVrL2Nsay1tdGsuaA0KQEAgLTIzMyw2ICsyMzMsOCBAQCBzdHJ1Y3QgbXRr
-X3BsbF9kYXRhIHsNCiAJdWludDMyX3QgcGN3X2NoZ19yZWc7DQogCWNvbnN0IHN0cnVjdCBtdGtf
-cGxsX2Rpdl90YWJsZSAqZGl2X3RhYmxlOw0KIAljb25zdCBjaGFyICpwYXJlbnRfbmFtZTsNCisJ
-dWludDMyX3QgZW5fcmVnOw0KKwl1aW50OF90IGJhc2VfZW5fYml0Ow0KIH07DQogDQogdm9pZCBt
-dGtfY2xrX3JlZ2lzdGVyX3BsbHMoc3RydWN0IGRldmljZV9ub2RlICpub2RlLA0KZGlmZiAtLWdp
-dCBhL2RyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1wbGwuYyBiL2RyaXZlcnMvY2xrL21lZGlhdGVr
-L2Nsay1wbGwuYw0KaW5kZXggZjQ0MGYyY2QuLmI4Y2NkNDIgMTAwNjQ0DQotLS0gYS9kcml2ZXJz
-L2Nsay9tZWRpYXRlay9jbGstcGxsLmMNCisrKyBiL2RyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1w
-bGwuYw0KQEAgLTQ0LDYgKzQ0LDcgQEAgc3RydWN0IG10a19jbGtfcGxsIHsNCiAJdm9pZCBfX2lv
-bWVtCSp0dW5lcl9lbl9hZGRyOw0KIAl2b2lkIF9faW9tZW0JKnBjd19hZGRyOw0KIAl2b2lkIF9f
-aW9tZW0JKnBjd19jaGdfYWRkcjsNCisJdm9pZCBfX2lvbWVtCSplbl9hZGRyOw0KIAljb25zdCBz
-dHJ1Y3QgbXRrX3BsbF9kYXRhICpkYXRhOw0KIH07DQogDQpAQCAtNTYsNyArNTcsMTAgQEAgc3Rh
-dGljIGludCBtdGtfcGxsX2lzX3ByZXBhcmVkKHN0cnVjdCBjbGtfaHcgKmh3KQ0KIHsNCiAJc3Ry
-dWN0IG10a19jbGtfcGxsICpwbGwgPSB0b19tdGtfY2xrX3BsbChodyk7DQogDQotCXJldHVybiAo
-cmVhZGwocGxsLT5iYXNlX2FkZHIgKyBSRUdfQ09OMCkgJiBDT04wX0JBU0VfRU4pICE9IDA7DQor
-CWlmIChwbGwtPmVuX2FkZHIpDQorCQlyZXR1cm4gKHJlYWRsKHBsbC0+ZW5fYWRkcikgJiBCSVQo
-cGxsLT5kYXRhLT5iYXNlX2VuX2JpdCkpICE9IDA7DQorCWVsc2UNCisJCXJldHVybiAocmVhZGwo
-cGxsLT5iYXNlX2FkZHIgKyBSRUdfQ09OMCkgJiBDT04wX0JBU0VfRU4pICE9IDA7DQogfQ0KIA0K
-IHN0YXRpYyB1bnNpZ25lZCBsb25nIF9fbXRrX3BsbF9yZWNhbGNfcmF0ZShzdHJ1Y3QgbXRrX2Ns
-a19wbGwgKnBsbCwgdTMyIGZpbiwNCkBAIC0yNTEsNiArMjU1LDEyIEBAIHN0YXRpYyBpbnQgbXRr
-X3BsbF9wcmVwYXJlKHN0cnVjdCBjbGtfaHcgKmh3KQ0KIAlyIHw9IHBsbC0+ZGF0YS0+ZW5fbWFz
-azsNCiAJd3JpdGVsKHIsIHBsbC0+YmFzZV9hZGRyICsgUkVHX0NPTjApOw0KIA0KKwlpZiAocGxs
-LT5lbl9hZGRyKSB7DQorCQlyID0gcmVhZGwocGxsLT5lbl9hZGRyKTsNCisJCXIgfD0gQklUKHBs
-bC0+ZGF0YS0+YmFzZV9lbl9iaXQpOw0KKwkJd3JpdGVsKHIsIHBsbC0+ZW5fYWRkcik7DQorCX0N
-CisNCiAJX19tdGtfcGxsX3R1bmVyX2VuYWJsZShwbGwpOw0KIA0KIAl1ZGVsYXkoMjApOw0KQEAg
-LTI3Nyw5ICsyODcsMTUgQEAgc3RhdGljIHZvaWQgbXRrX3BsbF91bnByZXBhcmUoc3RydWN0IGNs
-a19odyAqaHcpDQogDQogCV9fbXRrX3BsbF90dW5lcl9kaXNhYmxlKHBsbCk7DQogDQotCXIgPSBy
-ZWFkbChwbGwtPmJhc2VfYWRkciArIFJFR19DT04wKTsNCi0JciAmPSB+Q09OMF9CQVNFX0VOOw0K
-LQl3cml0ZWwociwgcGxsLT5iYXNlX2FkZHIgKyBSRUdfQ09OMCk7DQorCWlmIChwbGwtPmVuX2Fk
-ZHIpIHsNCisJCXIgPSByZWFkbChwbGwtPmVuX2FkZHIpOw0KKwkJciAmPSB+QklUKHBsbC0+ZGF0
-YS0+YmFzZV9lbl9iaXQpOw0KKwkJd3JpdGVsKHIsIHBsbC0+ZW5fYWRkcik7DQorCX0gZWxzZSB7
-DQorCQlyID0gcmVhZGwocGxsLT5iYXNlX2FkZHIgKyBSRUdfQ09OMCk7DQorCQlyICY9IH5DT04w
-X0JBU0VfRU47DQorCQl3cml0ZWwociwgcGxsLT5iYXNlX2FkZHIgKyBSRUdfQ09OMCk7DQorCX0N
-CiANCiAJciA9IHJlYWRsKHBsbC0+cHdyX2FkZHIpIHwgQ09OMF9JU09fRU47DQogCXdyaXRlbChy
-LCBwbGwtPnB3cl9hZGRyKTsNCkBAIC0zMjEsNiArMzM3LDggQEAgc3RhdGljIHN0cnVjdCBjbGsg
-Km10a19jbGtfcmVnaXN0ZXJfcGxsKGNvbnN0IHN0cnVjdCBtdGtfcGxsX2RhdGEgKmRhdGEsDQog
-CQlwbGwtPnR1bmVyX2FkZHIgPSBiYXNlICsgZGF0YS0+dHVuZXJfcmVnOw0KIAlpZiAoZGF0YS0+
-dHVuZXJfZW5fcmVnKQ0KIAkJcGxsLT50dW5lcl9lbl9hZGRyID0gYmFzZSArIGRhdGEtPnR1bmVy
-X2VuX3JlZzsNCisJaWYgKGRhdGEtPmVuX3JlZykNCisJCXBsbC0+ZW5fYWRkciA9IGJhc2UgKyBk
-YXRhLT5lbl9yZWc7DQogCXBsbC0+aHcuaW5pdCA9ICZpbml0Ow0KIAlwbGwtPmRhdGEgPSBkYXRh
-Ow0KIA0KLS0gDQoxLjguMS4xLmRpcnR5DQo=
+This series adds supports for firmware specific flags. These include
+- Common Flags
+- Divider Flags
+- Mux Flags
 
+The intent is to remove firmware's dependency on CCF flag values by having
+firmware specific flags with independent values.
+
+Currently firmware is maintaining CCF specific flags and provides to
+CCF as it is. But CCF flag numbers may change and that shouldn't mean
+that the firmware needs to change. The firmware should have its own
+'flag number space' that is distinct from the common clk framework's
+'flag number space'. So use firmware specific clock flags in ZynqMP
+clock driver instead of CCF flags.
+
+Changes in v2:
+ - Add helper function to map zynqmp flags with CCF flags.
+ - Mapped zynqmp clock flags with CCF flags from
+   zynqmp_clk_register_*() functions instead of
+   __zynqmp_clock_get_topology() which is changing the flags to struct
+   clk_init_data instead of the struct clock_topology.
+
+Rajan Vaja (3):
+  clk: zynqmp: Use firmware specific common clock flags
+  clk: zynqmp: Use firmware specific divider clock flags
+  clk: zynqmp: Use firmware specific mux clock flags
+
+ drivers/clk/zynqmp/clk-gate-zynqmp.c |  4 +++-
+ drivers/clk/zynqmp/clk-mux-zynqmp.c  | 18 ++++++++++++++--
+ drivers/clk/zynqmp/clk-zynqmp.h      | 42 ++++++++++++++++++++++++++++++++=
+++++
+ drivers/clk/zynqmp/clkc.c            | 31 +++++++++++++++++++++++++-
+ drivers/clk/zynqmp/divider.c         | 21 +++++++++++++++---
+ drivers/clk/zynqmp/pll.c             |  4 +++-
+ 6 files changed, 112 insertions(+), 8 deletions(-)
+
+--
+2.7.4
+
+This email and any attachments are intended for the sole use of the named r=
+ecipient(s) and contain(s) confidential information that may be proprietary=
+, privileged or copyrighted under applicable law. If you are not the intend=
+ed recipient, do not read, copy, or forward this email message or any attac=
+hments. Delete this email message and any attachments immediately.
