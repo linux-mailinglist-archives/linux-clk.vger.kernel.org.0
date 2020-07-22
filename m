@@ -2,51 +2,182 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 637F6229277
-	for <lists+linux-clk@lfdr.de>; Wed, 22 Jul 2020 09:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06CF5229409
+	for <lists+linux-clk@lfdr.de>; Wed, 22 Jul 2020 10:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726349AbgGVHoq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 22 Jul 2020 03:44:46 -0400
-Received: from smtp.rcn.com ([69.168.97.78]:5728 "EHLO smtp.rcn.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726153AbgGVHoq (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 22 Jul 2020 03:44:46 -0400
-DKIM-Signature: v=1; a=rsa-sha1; d=rcn.com; s=20180516; c=relaxed/simple;
-        q=dns/txt; i=@rcn.com; t=1595403884;
-        h=From:Subject:Date:To:MIME-Version:Content-Type;
-        bh=gYURbzMLNGenanRwpLXWb3KYQ1s=;
-        b=jC4E+oDrfpoY75SmnTK/AdZNjTnHgkalYWqwq4QnQM/L+MEMVubSA/aqf6tl0EmJ
-        LngLmZ7i6RK91derIDDGxGgZQuKki2Z+gkVbiZWu/vJbBIQqbXOrgE1VcJR7ymFh
-        HhSdckBPisXV3LblgQJIFPJnp/VCGQYwE1sqVnZYZ9pMuAlOyL2OpmPBvcztiEVh
-        G2ZxxaA1cKKW1JpvLD+Iv4u9BkHoBJ9aHuzSIqQUEmy+jp7OpJXrAsXFoYdZLN3T
-        tnoDBcxD0HEGxYIUrWqcK9i+K8af8ulY/BvuhyOesE4cuHdTbfpW9oCTCL2XvrJn
-        lCB56F7URLfn+89i+4T77w==;
-X_CMAE_Category: , ,
-X-CNFS-Analysis: v=2.3 cv=Z5uS40ZA c=1 sm=1 tr=0 a=x1h0AhohGG/RTEN8nKxOCg==:117 a=KGjhK52YXX0A:10 a=FKkrIqjQGGEA:10 a=Jy-9je1fVqAA:10 a=IkcTkHD0fZMA:10 a=_RQrkK6FrEwA:10 a=kLLtSgz5BzgA:10 a=APmzlUFSW4UA:10 a=Z3FxSYGt3-YAQ3IygyYA:9 a=QEXdDO2ut3YA:10
-X-CM-Score: 0
-X-Scanned-by: Cloudmark Authority Engine
-X-Authed-Username: ZnJlZW1hbi5wYXRyaWNpYUByY24uY29t
-Authentication-Results: smtp01.rcn.cmh.synacor.com smtp.mail=freeman.patricia@rcn.com; spf=softfail; sender-id=softfail
-Authentication-Results: smtp01.rcn.cmh.synacor.com header.from=freeman.patricia@rcn.com; sender-id=softfail
-Received: from [10.33.66.7] ([10.33.66.7:36562] helo=md07.rcn.cmh.synacor.com)
-        by smtp.rcn.com (envelope-from <freeman.patricia@rcn.com>)
-        (ecelerity 3.6.25.56547 r(Core:3.6.25.0)) with ESMTP
-        id 09/39-10869-B6EE71F5; Wed, 22 Jul 2020 03:44:44 -0400
-Date:   Wed, 22 Jul 2020 03:44:43 -0400 (EDT)
-From:   shilpa pandey <freeman.patricia@rcn.com>
-Reply-To: shilpa pandey <taptisuresh@mediacombb.net>
-To:     shilpa pandey <taptisuresh@mediacombb.net>
-Message-ID: <1137814661.26404389.1595403883839.JavaMail.root@rcn.com>
-In-Reply-To: <1571693341.26391665.1595403394127.JavaMail.root@rcn.com>
-Subject: Re: SiiRR JiiI
+        id S1727000AbgGVIwM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 22 Jul 2020 04:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726147AbgGVIwM (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 22 Jul 2020 04:52:12 -0400
+Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D16C5C0619DC
+        for <linux-clk@vger.kernel.org>; Wed, 22 Jul 2020 01:52:11 -0700 (PDT)
+Received: by mail-vs1-xe44.google.com with SMTP id b77so725245vsd.8
+        for <linux-clk@vger.kernel.org>; Wed, 22 Jul 2020 01:52:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NEeWajGKm67++OZHvKQWCDftAm3bcAVKxtPrqi7rffw=;
+        b=QoY0E53KQa71Upiek8hls/OUvj0kY736e/ocwqNkm2YOTtdVNzipKoaZLp97GBkuXo
+         Doqx2dWTwA1k9lBGn/7NLerRytfAgT+mjd97SgYacmaoVsYhNezaIIUfQQy3+g+Idt8n
+         Bd3KVyo6HEsOuwP1t2w2N/rcxebaONBHw6EFk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NEeWajGKm67++OZHvKQWCDftAm3bcAVKxtPrqi7rffw=;
+        b=qps6wkFDvHxmKltoA/nsT6j/lcDBbv5UOlUd/9PZiD3mcxdKCHCSfrF0y7pC+3es5O
+         jDh1Si+X0diI8wO/6PAUxYk4dEHH6Q2/DyXfRbOU4WHz8oVPYbR3nySrNaD2+4rNzJIX
+         KYOVYPvVGGkIAEaEhoZPL/xCyOfY4hRyOkJCENN0hrn7CmHt6urZGFGv/bljiSk7qziu
+         Po4f0WDZekPyk6wIAv/zODrU8JSk3NXWmlE1vxJsmZlR84HQi5+c54x/fiu0Ift9FhBn
+         Yg9hzcSp12xUAq+5UMLt1QCb8yru9oz/dn1Ct+k8ns34gb2X1HsBtO8z5Ux+oWcXHNYM
+         sNPQ==
+X-Gm-Message-State: AOAM532LmUzRSgb7uCL90bMYCPnZwrZaqn4sIwetPmtzLN3n6ZotgK8S
+        7/aNF/o/KPrvsG2aErLMn6IY/AlNmfYwFKWGKgh7UA==
+X-Google-Smtp-Source: ABdhPJwu+0fS9ZykBs/N5sJKhnQyXgH73i6yXfke4Yx2a9+dxmIhOlX9pBc2nAbsMsa/h4RUUc2ZE+/z8zNUIiSYdSo=
+X-Received: by 2002:a67:e0c3:: with SMTP id m3mr24201706vsl.1.1595407930888;
+ Wed, 22 Jul 2020 01:52:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [173.234.158.184]
-X-Mailer: Zimbra 7.2.7_GA_2942 (zclient/7.2.7_GA_2942)
+References: <1595400601-26220-1-git-send-email-weiyi.lu@mediatek.com> <1595400601-26220-4-git-send-email-weiyi.lu@mediatek.com>
+In-Reply-To: <1595400601-26220-4-git-send-email-weiyi.lu@mediatek.com>
+From:   Nicolas Boichat <drinkcat@chromium.org>
+Date:   Wed, 22 Jul 2020 16:51:59 +0800
+Message-ID: <CANMq1KC5i8GU2zMxk+NvY5hF7Qvd-Jx-+pvY2cXfqzb=X-BWRQ@mail.gmail.com>
+Subject: Re: [PATCH 3/4] clk: mediatek: Add configurable enable control to mtk_pll_data
+To:     Weiyi Lu <weiyi.lu@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        James Liao <jamesjj.liao@mediatek.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>, linux-clk@vger.kernel.org,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Wendell Lin <wendell.lin@mediatek.com>,
+        Ikjoon Jang <ikjn@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-good afternoon sir jee
+On Wed, Jul 22, 2020 at 2:50 PM Weiyi Lu <weiyi.lu@mediatek.com> wrote:
+>
+> In all MediaTek PLL design, bit 0 of CON0 register is always
+> the enable bit.
+> However, there's a special case of usbpll on MT8192.
+> The enable bit of usbpll is moved to bit 2 of other register.
+> Add configurable en_reg and base_en_bit for enable control or
+> using the default if without setting in pll data.
+>
+> Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
+> ---
+>  drivers/clk/mediatek/clk-mtk.h |  2 ++
+>  drivers/clk/mediatek/clk-pll.c | 26 ++++++++++++++++++++++----
+>  2 files changed, 24 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/clk/mediatek/clk-mtk.h b/drivers/clk/mediatek/clk-mtk.h
+> index c3d6756..8bb0b3d 100644
+> --- a/drivers/clk/mediatek/clk-mtk.h
+> +++ b/drivers/clk/mediatek/clk-mtk.h
+> @@ -233,6 +233,8 @@ struct mtk_pll_data {
+>         uint32_t pcw_chg_reg;
+>         const struct mtk_pll_div_table *div_table;
+>         const char *parent_name;
+> +       uint32_t en_reg;
+> +       uint8_t base_en_bit;
+>  };
+>
+>  void mtk_clk_register_plls(struct device_node *node,
+> diff --git a/drivers/clk/mediatek/clk-pll.c b/drivers/clk/mediatek/clk-pll.c
+> index f440f2cd..b8ccd42 100644
+> --- a/drivers/clk/mediatek/clk-pll.c
+> +++ b/drivers/clk/mediatek/clk-pll.c
+> @@ -44,6 +44,7 @@ struct mtk_clk_pll {
+>         void __iomem    *tuner_en_addr;
+>         void __iomem    *pcw_addr;
+>         void __iomem    *pcw_chg_addr;
+> +       void __iomem    *en_addr;
+>         const struct mtk_pll_data *data;
+>  };
+>
+> @@ -56,7 +57,10 @@ static int mtk_pll_is_prepared(struct clk_hw *hw)
+>  {
+>         struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
+>
+> -       return (readl(pll->base_addr + REG_CON0) & CON0_BASE_EN) != 0;
+> +       if (pll->en_addr)
+> +               return (readl(pll->en_addr) & BIT(pll->data->base_en_bit)) != 0;
+> +       else
+> +               return (readl(pll->base_addr + REG_CON0) & CON0_BASE_EN) != 0;
+>  }
+>
+>  static unsigned long __mtk_pll_recalc_rate(struct mtk_clk_pll *pll, u32 fin,
+> @@ -251,6 +255,12 @@ static int mtk_pll_prepare(struct clk_hw *hw)
+>         r |= pll->data->en_mask;
+>         writel(r, pll->base_addr + REG_CON0);
+>
+
+This is not a new change, but I'm wondering if the asymmetry is
+intentional here, that is, prepare sets bit pll->data->en_mask of
+REG_CON0; unprepare clears CON0_BASE_EN of REG_CON0.
+
+With this patch, if pll->en_addr is set, you set both
+pll->data->en_mask _and_ pll->data->base_en_bit, and clear only
+pll->data->base_en_bit.
+
+> +       if (pll->en_addr) {
+> +               r = readl(pll->en_addr);
+> +               r |= BIT(pll->data->base_en_bit);
+> +               writel(r, pll->en_addr);
+> +       }
+> +
+>         __mtk_pll_tuner_enable(pll);
+>
+>         udelay(20);
+> @@ -277,9 +287,15 @@ static void mtk_pll_unprepare(struct clk_hw *hw)
+>
+>         __mtk_pll_tuner_disable(pll);
+>
+> -       r = readl(pll->base_addr + REG_CON0);
+> -       r &= ~CON0_BASE_EN;
+> -       writel(r, pll->base_addr + REG_CON0);
+> +       if (pll->en_addr) {
+> +               r = readl(pll->en_addr);
+> +               r &= ~BIT(pll->data->base_en_bit);
+> +               writel(r, pll->en_addr);
+> +       } else {
+> +               r = readl(pll->base_addr + REG_CON0);
+> +               r &= ~CON0_BASE_EN;
+> +               writel(r, pll->base_addr + REG_CON0);
+> +       }
+>
+>         r = readl(pll->pwr_addr) | CON0_ISO_EN;
+>         writel(r, pll->pwr_addr);
+> @@ -321,6 +337,8 @@ static struct clk *mtk_clk_register_pll(const struct mtk_pll_data *data,
+>                 pll->tuner_addr = base + data->tuner_reg;
+>         if (data->tuner_en_reg)
+>                 pll->tuner_en_addr = base + data->tuner_en_reg;
+> +       if (data->en_reg)
+> +               pll->en_addr = base + data->en_reg;
+
+If the answer to my question above holds (asymmetry is not
+intentional), this patch/the code could be simplified a lot if you
+also added a pll->en_bit member, and, here, did this:
+
+if (pll->en_reg) {
+   pll->en_addr = base + data->en_reg;
+   pll->end_bit = data->en_bit;
+} else {
+   pll->en_addr = pll->base_addr + REG_CON0;
+   pll->en_bit = CON0_BASE_EN;
+}
+
+>         pll->hw.init = &init;
+>         pll->data = data;
+>
+> --
+> 1.8.1.1.dirty
