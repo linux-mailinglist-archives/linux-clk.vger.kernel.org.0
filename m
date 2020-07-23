@@ -2,30 +2,30 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18C4822A9A6
-	for <lists+linux-clk@lfdr.de>; Thu, 23 Jul 2020 09:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D5322A9C8
+	for <lists+linux-clk@lfdr.de>; Thu, 23 Jul 2020 09:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727013AbgGWH0V (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 23 Jul 2020 03:26:21 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:36989 "EHLO
+        id S1726858AbgGWHl1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 23 Jul 2020 03:41:27 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:57428 "EHLO
         hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725857AbgGWH0V (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Jul 2020 03:26:21 -0400
-Received: from [78.134.114.177] (port=33342 helo=melee.dev.aim)
+        by vger.kernel.org with ESMTP id S1725846AbgGWHlZ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Jul 2020 03:41:25 -0400
+Received: from [78.134.114.177] (port=33386 helo=melee.dev.aim)
         by hostingweb31.netsons.net with esmtpa (Exim 4.93)
         (envelope-from <luca@lucaceresoli.net>)
-        id 1jyVcQ-0001EU-Pn; Thu, 23 Jul 2020 09:26:18 +0200
+        id 1jyVr0-0007WW-RA; Thu, 23 Jul 2020 09:41:22 +0200
 From:   Luca Ceresoli <luca@lucaceresoli.net>
 To:     linux-clk@vger.kernel.org
 Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
-        linux-kernel@vger.kernel.org,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Adam Ford <aford173@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>
-Subject: [PATCH v4] clk: vc5: use a dedicated struct to describe the output drivers
-Date:   Thu, 23 Jul 2020 09:26:03 +0200
-Message-Id: <20200723072603.1795-1-luca@lucaceresoli.net>
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Marek Vasut <marek.vasut@gmail.com>,
+        Adam Ford <aford173@gmail.com>
+Subject: [PATCH v4 0/3] dt-bindings: clk: versaclock5: change maintainer, convert to yaml, typo
+Date:   Thu, 23 Jul 2020 09:41:09 +0200
+Message-Id: <20200723074112.3159-1-luca@lucaceresoli.net>
 X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -44,128 +44,36 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Reusing the generic struct vc5_hw_data for all blocks is handy. However it
-implies we allocate space the div_int and div_frc fields even for the
-output drivers where they are unused, and the clk_output_cfg0 and
-clk_output_cfg0_mask fields for all components even though they are used
-only for the output drivers.
+This is a loosely-assorted series for versaclock5.
 
-Use a dedicated struct for the output drivers so that each block uses
-exactly the fields it needs, not more.
+Since v3 [0] I removed a patch to the driver code (sent separately [1]) and
+added a cover letter as requested by Stephen.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Patch 1 is a trivial typo fix in DT bindings (already approved by Rob).
 
----
+Patch 3 converts the DT bindings to yaml.
 
-Changes in v4:
- - slightly rephrase commit message
- - but split this patch from the original series
-   (https://lkml.org/lkml/2020/7/21/939) as it is orthogonal to the other
-   patches.
+And since in patch 3 I'm adding a new file which needs a maintainer I asked
+the current driver maintanier, Marek. He suggested I should take over
+maintainership as he does not plan to work on that driver for the
+foreseeable future, while I'm going to. And so here's patch 2 to change
+maintainer.
 
-Changes in v3: none.
----
- drivers/clk/clk-versaclock5.c | 24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
+[0] https://lkml.org/lkml/2020/7/21/939
+[1] https://lkml.org/lkml/2020/7/23/128
 
-diff --git a/drivers/clk/clk-versaclock5.c b/drivers/clk/clk-versaclock5.c
-index 9a5fb3834b9a..944c7c7c843f 100644
---- a/drivers/clk/clk-versaclock5.c
-+++ b/drivers/clk/clk-versaclock5.c
-@@ -167,6 +167,12 @@ struct vc5_hw_data {
- 	u32			div_int;
- 	u32			div_frc;
- 	unsigned int		num;
-+};
-+
-+struct vc5_out_data {
-+	struct clk_hw		hw;
-+	struct vc5_driver_data	*vc5;
-+	unsigned int		num;
- 	unsigned int		clk_output_cfg0;
- 	unsigned int		clk_output_cfg0_mask;
- };
-@@ -184,7 +190,7 @@ struct vc5_driver_data {
- 	struct clk_hw		clk_pfd;
- 	struct vc5_hw_data	clk_pll;
- 	struct vc5_hw_data	clk_fod[VC5_MAX_FOD_NUM];
--	struct vc5_hw_data	clk_out[VC5_MAX_CLK_OUT_NUM];
-+	struct vc5_out_data	clk_out[VC5_MAX_CLK_OUT_NUM];
- };
- 
- /*
-@@ -567,7 +573,7 @@ static const struct clk_ops vc5_fod_ops = {
- 
- static int vc5_clk_out_prepare(struct clk_hw *hw)
- {
--	struct vc5_hw_data *hwdata = container_of(hw, struct vc5_hw_data, hw);
-+	struct vc5_out_data *hwdata = container_of(hw, struct vc5_out_data, hw);
- 	struct vc5_driver_data *vc5 = hwdata->vc5;
- 	const u8 mask = VC5_OUT_DIV_CONTROL_SELB_NORM |
- 			VC5_OUT_DIV_CONTROL_SEL_EXT |
-@@ -609,7 +615,7 @@ static int vc5_clk_out_prepare(struct clk_hw *hw)
- 
- static void vc5_clk_out_unprepare(struct clk_hw *hw)
- {
--	struct vc5_hw_data *hwdata = container_of(hw, struct vc5_hw_data, hw);
-+	struct vc5_out_data *hwdata = container_of(hw, struct vc5_out_data, hw);
- 	struct vc5_driver_data *vc5 = hwdata->vc5;
- 
- 	/* Disable the clock buffer */
-@@ -619,7 +625,7 @@ static void vc5_clk_out_unprepare(struct clk_hw *hw)
- 
- static unsigned char vc5_clk_out_get_parent(struct clk_hw *hw)
- {
--	struct vc5_hw_data *hwdata = container_of(hw, struct vc5_hw_data, hw);
-+	struct vc5_out_data *hwdata = container_of(hw, struct vc5_out_data, hw);
- 	struct vc5_driver_data *vc5 = hwdata->vc5;
- 	const u8 mask = VC5_OUT_DIV_CONTROL_SELB_NORM |
- 			VC5_OUT_DIV_CONTROL_SEL_EXT |
-@@ -649,7 +655,7 @@ static unsigned char vc5_clk_out_get_parent(struct clk_hw *hw)
- 
- static int vc5_clk_out_set_parent(struct clk_hw *hw, u8 index)
- {
--	struct vc5_hw_data *hwdata = container_of(hw, struct vc5_hw_data, hw);
-+	struct vc5_out_data *hwdata = container_of(hw, struct vc5_out_data, hw);
- 	struct vc5_driver_data *vc5 = hwdata->vc5;
- 	const u8 mask = VC5_OUT_DIV_CONTROL_RESET |
- 			VC5_OUT_DIV_CONTROL_SELB_NORM |
-@@ -704,7 +710,7 @@ static int vc5_map_index_to_output(const enum vc5_model model,
- }
- 
- static int vc5_update_mode(struct device_node *np_output,
--			   struct vc5_hw_data *clk_out)
-+			   struct vc5_out_data *clk_out)
- {
- 	u32 value;
- 
-@@ -729,7 +735,7 @@ static int vc5_update_mode(struct device_node *np_output,
- }
- 
- static int vc5_update_power(struct device_node *np_output,
--			    struct vc5_hw_data *clk_out)
-+			    struct vc5_out_data *clk_out)
- {
- 	u32 value;
- 
-@@ -754,7 +760,7 @@ static int vc5_update_power(struct device_node *np_output,
- }
- 
- static int vc5_update_slew(struct device_node *np_output,
--			   struct vc5_hw_data *clk_out)
-+			   struct vc5_out_data *clk_out)
- {
- 	u32 value;
- 
-@@ -782,7 +788,7 @@ static int vc5_update_slew(struct device_node *np_output,
- }
- 
- static int vc5_get_output_config(struct i2c_client *client,
--				 struct vc5_hw_data *clk_out)
-+				 struct vc5_out_data *clk_out)
- {
- 	struct device_node *np_output;
- 	char *child_name;
+Luca Ceresoli (3):
+  dt-bindings: clk: versaclock5: fix 'idt' prefix typos
+  MAINTAINERS: take over IDT VersaClock 5 clock driver
+  dt-bindings: clk: versaclock5: convert to yaml
+
+ .../bindings/clock/idt,versaclock5.txt        | 125 --------------
+ .../bindings/clock/idt,versaclock5.yaml       | 154 ++++++++++++++++++
+ MAINTAINERS                                   |   3 +-
+ 3 files changed, 156 insertions(+), 126 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/idt,versaclock5.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+
 -- 
 2.27.0
 
