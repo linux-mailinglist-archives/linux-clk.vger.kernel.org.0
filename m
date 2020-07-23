@@ -2,375 +2,298 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCABF22A9C5
-	for <lists+linux-clk@lfdr.de>; Thu, 23 Jul 2020 09:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE4F22AA0E
+	for <lists+linux-clk@lfdr.de>; Thu, 23 Jul 2020 09:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726895AbgGWHl2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 23 Jul 2020 03:41:28 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:40534 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726737AbgGWHl1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Jul 2020 03:41:27 -0400
-Received: from [78.134.114.177] (port=33386 helo=melee.dev.aim)
-        by hostingweb31.netsons.net with esmtpa (Exim 4.93)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1jyVr1-0007WW-Ou; Thu, 23 Jul 2020 09:41:23 +0200
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-To:     linux-clk@vger.kernel.org
-Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Marek Vasut <marek.vasut@gmail.com>,
-        Adam Ford <aford173@gmail.com>
-Subject: [PATCH v4 3/3] dt-bindings: clk: versaclock5: convert to yaml
-Date:   Thu, 23 Jul 2020 09:41:12 +0200
-Message-Id: <20200723074112.3159-4-luca@lucaceresoli.net>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200723074112.3159-1-luca@lucaceresoli.net>
-References: <20200723074112.3159-1-luca@lucaceresoli.net>
+        id S1727073AbgGWHwD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 23 Jul 2020 03:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726982AbgGWHwC (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Jul 2020 03:52:02 -0400
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EA2C0619E2
+        for <linux-clk@vger.kernel.org>; Thu, 23 Jul 2020 00:52:02 -0700 (PDT)
+Received: by mail-ua1-x941.google.com with SMTP id c7so1523855uap.0
+        for <linux-clk@vger.kernel.org>; Thu, 23 Jul 2020 00:52:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=z9xX1l7Vei7TNjVZF3Wex9lJJLRz3b9T5V+7MzClC/Y=;
+        b=JOBHXil0Q8t2jmxCibCxIZZZYyuw3DVM0slT+REWTKAp/9AOQ28anOa7F6thdWR/py
+         j02RkMHNrIZ/nyuvSkrqhp6c9u3cR5DPfkzSDtjExGX7LXeXMzNohAGsnn8FoxLcWTme
+         hJF78GsoZ2pTvdTq15H07Cdr3Pnz3vIuCiuhY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=z9xX1l7Vei7TNjVZF3Wex9lJJLRz3b9T5V+7MzClC/Y=;
+        b=hFCeybl4hlhsimhh5oy3VV3ujvvEVUHd3QpxbbtOp/KEfWtMp/KzveUzGs1tAf+qrr
+         BtAxN4/DYI9bGr31bRLtUE31DZh+CzDMrnqlaEy54QbBhI/HxsO/dNVoYZP4zgxtHtOR
+         CtwzOsWv8TJNbDLHXO4iyTLq5FWAtLWA3jqz3qeGQsRkZ9OBKwaZ0fN8llX/tafmhgpo
+         NDz3HQfF6nXjZAdw8eboiTPzKkO2wXFEhxO9CtS+Nb6uwYyLoQcYn2hMGWbk9R4Rf5hJ
+         Swn9xDve0s9W+P7U4/ZEkTvxzoJsBEAnSjBeDPL2GYOpkyJXghdt5qO6ZwNHBGjHBMAX
+         uJQQ==
+X-Gm-Message-State: AOAM531g0Ui+ha2GqGMgzRwtRinm3PSAwBvmRJoPSTfvY90ue9CI3fos
+        zJ6LVyVYS2y+7V4hJJK3nxz/43XHaMK05fhgeGhx4Q==
+X-Google-Smtp-Source: ABdhPJyru1ZxhrdLhgiWdGjkN1uAYJkvsnqlPq22GsPf6iLqWQi/M/gwclh+4l2zaYJKdqz7KszdfCqLPWWLYu+GxC8=
+X-Received: by 2002:a9f:3113:: with SMTP id m19mr2930373uab.77.1595490721549;
+ Thu, 23 Jul 2020 00:52:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+References: <1595400601-26220-1-git-send-email-weiyi.lu@mediatek.com>
+ <1595400601-26220-4-git-send-email-weiyi.lu@mediatek.com> <CANMq1KC5i8GU2zMxk+NvY5hF7Qvd-Jx-+pvY2cXfqzb=X-BWRQ@mail.gmail.com>
+ <1595473043.5077.8.camel@mtksdaap41>
+In-Reply-To: <1595473043.5077.8.camel@mtksdaap41>
+From:   Nicolas Boichat <drinkcat@chromium.org>
+Date:   Thu, 23 Jul 2020 15:51:50 +0800
+Message-ID: <CANMq1KDzmeMcVQU=i89sa-B4EQbz6OxZP3tDasV-Q__qB_7_9g@mail.gmail.com>
+Subject: Re: [PATCH 3/4] clk: mediatek: Add configurable enable control to mtk_pll_data
+To:     Weiyi Lu <weiyi.lu@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        James Liao <jamesjj.liao@mediatek.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>, linux-clk@vger.kernel.org,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Wendell Lin <wendell.lin@mediatek.com>,
+        Ikjoon Jang <ikjn@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Convert to yaml the VersaClock bindings document. The mapping between
-clock specifier and physical pins cannot be described formally in yaml
-schema, then keep it verbatim in the description field.
+On Thu, Jul 23, 2020 at 10:57 AM Weiyi Lu <weiyi.lu@mediatek.com> wrote:
+>
+> On Wed, 2020-07-22 at 16:51 +0800, Nicolas Boichat wrote:
+> > On Wed, Jul 22, 2020 at 2:50 PM Weiyi Lu <weiyi.lu@mediatek.com> wrote:
+> > >
+> > > In all MediaTek PLL design, bit 0 of CON0 register is always
+> > > the enable bit.
+> > > However, there's a special case of usbpll on MT8192.
+> > > The enable bit of usbpll is moved to bit 2 of other register.
+> > > Add configurable en_reg and base_en_bit for enable control or
+> > > using the default if without setting in pll data.
+> > >
+> > > Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
+> > > ---
+> > >  drivers/clk/mediatek/clk-mtk.h |  2 ++
+> > >  drivers/clk/mediatek/clk-pll.c | 26 ++++++++++++++++++++++----
+> > >  2 files changed, 24 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/drivers/clk/mediatek/clk-mtk.h b/drivers/clk/mediatek/clk-mtk.h
+> > > index c3d6756..8bb0b3d 100644
+> > > --- a/drivers/clk/mediatek/clk-mtk.h
+> > > +++ b/drivers/clk/mediatek/clk-mtk.h
+> > > @@ -233,6 +233,8 @@ struct mtk_pll_data {
+> > >         uint32_t pcw_chg_reg;
+> > >         const struct mtk_pll_div_table *div_table;
+> > >         const char *parent_name;
+> > > +       uint32_t en_reg;
+> > > +       uint8_t base_en_bit;
+> > >  };
+> > >
+> > >  void mtk_clk_register_plls(struct device_node *node,
+> > > diff --git a/drivers/clk/mediatek/clk-pll.c b/drivers/clk/mediatek/clk-pll.c
+> > > index f440f2cd..b8ccd42 100644
+> > > --- a/drivers/clk/mediatek/clk-pll.c
+> > > +++ b/drivers/clk/mediatek/clk-pll.c
+> > > @@ -44,6 +44,7 @@ struct mtk_clk_pll {
+> > >         void __iomem    *tuner_en_addr;
+> > >         void __iomem    *pcw_addr;
+> > >         void __iomem    *pcw_chg_addr;
+> > > +       void __iomem    *en_addr;
+> > >         const struct mtk_pll_data *data;
+> > >  };
+> > >
+> > > @@ -56,7 +57,10 @@ static int mtk_pll_is_prepared(struct clk_hw *hw)
+> > >  {
+> > >         struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
+> > >
+> > > -       return (readl(pll->base_addr + REG_CON0) & CON0_BASE_EN) != 0;
+> > > +       if (pll->en_addr)
+> > > +               return (readl(pll->en_addr) & BIT(pll->data->base_en_bit)) != 0;
+> > > +       else
+> > > +               return (readl(pll->base_addr + REG_CON0) & CON0_BASE_EN) != 0;
+> > >  }
+> > >
+> > >  static unsigned long __mtk_pll_recalc_rate(struct mtk_clk_pll *pll, u32 fin,
+> > > @@ -251,6 +255,12 @@ static int mtk_pll_prepare(struct clk_hw *hw)
+> > >         r |= pll->data->en_mask;
+> > >         writel(r, pll->base_addr + REG_CON0);
+> > >
+> >
+> > This is not a new change, but I'm wondering if the asymmetry is
+> > intentional here, that is, prepare sets bit pll->data->en_mask of
+> > REG_CON0; unprepare clears CON0_BASE_EN of REG_CON0.
+> >
+> > With this patch, if pll->en_addr is set, you set both
+> > pll->data->en_mask _and_ pll->data->base_en_bit, and clear only
+> > pll->data->base_en_bit.
+> >
+>
+> Hi Nicolas,
+>
+> AFAIK, the asymmetry was intentional.
+> en_mask is actually a combination of divider enable mask and the pll
+> enable bit(CON0_BASE_EN).
+> Even without my patch, it still sets divider enable mask and en_bit, and
+> only clears en_bit.
+> You could see the pll_data in clk-mt8192.c of patch [4/4]
+> Take mainpll as an example,
+> the enable mask of mainpll is 0xff000001, where 0xff000000 is the
+> divider enable mask and 0x1 is the en_bit
+>
+> For usbpll in special case, usbpll doesn't have divider enable mask on
+> MT8192 so I give nothing(0x00000000) in the en_mask field.
+> However, the main reason why I don't skip setting the en_mask of MT8192
+> usbpll is that I'd just like to reserve the divider enable mask for any
+> special plls with divider enable mask in near future.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Argh, I see, it's a bit of a can of worms, with many special cases...
 
----
+So I played a bit with 3 examples.
 
-Changes in v4: none.
+Current situation looks like this:
 
-Changes in v3:
- - schema syntax fixes: use enum to constrain reg, don't use defines as
-   enums, drop type for standard unit suffix, fix syntax for clock-names
-   property (all suggested by Rob Herring)
----
- .../bindings/clock/idt,versaclock5.txt        | 125 --------------
- .../bindings/clock/idt,versaclock5.yaml       | 154 ++++++++++++++++++
- MAINTAINERS                                   |   1 +
- 3 files changed, 155 insertions(+), 125 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/clock/idt,versaclock5.txt
- create mode 100644 Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+8183 CLK_APMIXED_ARMPLL_LL
+  en_mask = 0x00000001
+  en_reg = 0
+  base_en_bit = 0
 
-diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.txt b/Documentation/devicetree/bindings/clock/idt,versaclock5.txt
-deleted file mode 100644
-index 9656d4cf221c..000000000000
---- a/Documentation/devicetree/bindings/clock/idt,versaclock5.txt
-+++ /dev/null
-@@ -1,125 +0,0 @@
--Binding for IDT VersaClock 5,6 programmable i2c clock generators.
--
--The IDT VersaClock 5 and VersaClock 6 are programmable i2c clock
--generators providing from 3 to 12 output clocks.
--
--==I2C device node==
--
--Required properties:
--- compatible:	shall be one of
--		"idt,5p49v5923"
--		"idt,5p49v5925"
--		"idt,5p49v5933"
--		"idt,5p49v5935"
--		"idt,5p49v6901"
--		"idt,5p49v6965"
--- reg:		i2c device address, shall be 0x68 or 0x6a.
--- #clock-cells:	from common clock binding; shall be set to 1.
--- clocks:	from common clock binding; list of parent clock handles,
--		- 5p49v5923 and
--		  5p49v5925 and
--		  5p49v6901: (required) either or both of XTAL or CLKIN
--					reference clock.
--		- 5p49v5933 and
--		- 5p49v5935: (optional) property not present (internal
--					Xtal used) or CLKIN reference
--					clock.
--- clock-names:	from common clock binding; clock input names, can be
--		- 5p49v5923 and
--		  5p49v5925 and
--		  5p49v6901: (required) either or both of "xin", "clkin".
--		- 5p49v5933 and
--		- 5p49v5935: (optional) property not present or "clkin".
--
--For all output ports, a corresponding, optional child node named OUT1,
--OUT2, etc. can represent a each output, and the node can be used to
--specify the following:
--
--- idt,mode: can be one of the following:
--                 - VC5_LVPECL
--                 - VC5_CMOS
--                 - VC5_HCSL33
--                 - VC5_LVDS
--                 - VC5_CMOS2
--                 - VC5_CMOSD
--                 - VC5_HCSL25
--
--- idt,voltage-microvolts:  can be one of the following
--                 - 1800000
--                 - 2500000
--                 - 3300000
---  idt,slew-percent: Percent of normal, can be one of
--                 - 80
--                 - 85
--                 - 90
--                 - 100
--
--==Mapping between clock specifier and physical pins==
--
--When referencing the provided clock in the DT using phandle and
--clock specifier, the following mapping applies:
--
--5P49V5923:
--	0 -- OUT0_SEL_I2CB
--	1 -- OUT1
--	2 -- OUT2
--
--5P49V5933:
--	0 -- OUT0_SEL_I2CB
--	1 -- OUT1
--	2 -- OUT4
--
--5P49V5925 and
--5P49V5935:
--	0 -- OUT0_SEL_I2CB
--	1 -- OUT1
--	2 -- OUT2
--	3 -- OUT3
--	4 -- OUT4
--
--5P49V6901:
--	0 -- OUT0_SEL_I2CB
--	1 -- OUT1
--	2 -- OUT2
--	3 -- OUT3
--	4 -- OUT4
--
--==Example==
--
--/* 25MHz reference crystal */
--ref25: ref25m {
--	compatible = "fixed-clock";
--	#clock-cells = <0>;
--	clock-frequency = <25000000>;
--};
--
--i2c-master-node {
--
--	/* IDT 5P49V5923 i2c clock generator */
--	vc5: clock-generator@6a {
--		compatible = "idt,5p49v5923";
--		reg = <0x6a>;
--		#clock-cells = <1>;
--
--		/* Connect XIN input to 25MHz reference */
--		clocks = <&ref25m>;
--		clock-names = "xin";
--
--		OUT1 {
--			idt,mode = <VC5_CMOS>;
--			idt,voltage-microvolts = <1800000>;
--			idt,slew-percent = <80>;
--		};
--		OUT2 {
--			...
--		};
--		...
--	};
--};
--
--/* Consumer referencing the 5P49V5923 pin OUT1 */
--consumer {
--	...
--	clocks = <&vc5 1>;
--	...
--}
-diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-new file mode 100644
-index 000000000000..3d4e1685cc55
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-@@ -0,0 +1,154 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/idt,versaclock5.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Binding for IDT VersaClock 5 and 6 programmable I2C clock generators
-+
-+description: |
-+  The IDT VersaClock 5 and VersaClock 6 are programmable I2C
-+  clock generators providing from 3 to 12 output clocks.
-+
-+  When referencing the provided clock in the DT using phandle and clock
-+  specifier, the following mapping applies:
-+
-+  - 5P49V5923:
-+    0 -- OUT0_SEL_I2CB
-+    1 -- OUT1
-+    2 -- OUT2
-+
-+  - 5P49V5933:
-+    0 -- OUT0_SEL_I2CB
-+    1 -- OUT1
-+    2 -- OUT4
-+
-+  - other parts:
-+    0 -- OUT0_SEL_I2CB
-+    1 -- OUT1
-+    2 -- OUT2
-+    3 -- OUT3
-+    4 -- OUT4
-+
-+maintainers:
-+  - Luca Ceresoli <luca@lucaceresoli.net>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - idt,5p49v5923
-+      - idt,5p49v5925
-+      - idt,5p49v5933
-+      - idt,5p49v5935
-+      - idt,5p49v6901
-+      - idt,5p49v6965
-+
-+  reg:
-+    description: I2C device address
-+    enum: [ 0x68, 0x6a ]
-+
-+  '#clock-cells':
-+    const: 1
-+
-+patternProperties:
-+  "^OUT[1-4]$":
-+    type: object
-+    description:
-+      Description of one of the outputs (OUT1..OUT4). See "Clock1 Output
-+      Configuration" in the Versaclock 5/6/6E Family Register Description
-+      and Programming Guide.
-+    properties:
-+      idt,mode:
-+        description:
-+          The output drive mode. Values defined in dt-bindings/clk/versaclock.h
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        minimum: 0
-+        maximum: 6
-+      idt,voltage-microvolt:
-+        description: The output drive voltage.
-+        enum: [ 1800000, 2500000, 3300000 ]
-+      idt,slew-percent:
-+        description: The Slew rate control for CMOS single-ended.
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        enum: [ 80, 85, 90, 100 ]
-+
-+required:
-+  - compatible
-+  - reg
-+  - '#clock-cells'
-+
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - idt,5p49v5933
-+            - idt,5p49v5935
-+    then:
-+      # Devices with builtin crystal + optional external input
-+      properties:
-+        clock-names:
-+          const: clkin
-+        clocks:
-+          maxItems: 1
-+    else:
-+      # Devices without builtin crystal
-+      properties:
-+        clock-names:
-+            minItems: 1
-+            maxItems: 2
-+            items:
-+              enum: [ xin, clkin ]
-+        clocks:
-+          minItems: 1
-+          maxItems: 2
-+      required:
-+        - clock-names
-+        - clocks
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clk/versaclock.h>
-+
-+    /* 25MHz reference crystal */
-+    ref25: ref25m {
-+        compatible = "fixed-clock";
-+        #clock-cells = <0>;
-+        clock-frequency = <25000000>;
-+    };
-+
-+    i2c@0 {
-+        reg = <0x0 0x100>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        /* IDT 5P49V5923 I2C clock generator */
-+        vc5: clock-generator@6a {
-+            compatible = "idt,5p49v5923";
-+            reg = <0x6a>;
-+            #clock-cells = <1>;
-+
-+            /* Connect XIN input to 25MHz reference */
-+            clocks = <&ref25m>;
-+            clock-names = "xin";
-+
-+            OUT1 {
-+                idt,drive-mode = <VC5_CMOSD>;
-+                idt,voltage-microvolts = <1800000>;
-+                idt,slew-percent = <80>;
-+            };
-+
-+            OUT4 {
-+                idt,drive-mode = <VC5_LVDS>;
-+            };
-+        };
-+    };
-+
-+    /* Consumer referencing the 5P49V5923 pin OUT1 */
-+    consumer {
-+        /* ... */
-+        clocks = <&vc5 1>;
-+        /* ... */
-+    };
-+
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8e323ffddea0..344564ae0134 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8327,6 +8327,7 @@ F:	drivers/input/misc/ideapad_slidebar.c
- IDT VersaClock 5 CLOCK DRIVER
- M:	Luca Ceresoli <luca@lucaceresoli.net>
- S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
- F:	drivers/clk/clk-versaclock5.c
- 
- IEEE 802.15.4 SUBSYSTEM
--- 
-2.27.0
+prepare: REG_CON0 |= en_mask
+unprepare: REG_CON0 &= ~CON0_BASE_EN (BIT(1))
 
+8192 CLK_APMIXED_UNIVPLL
+  en_mask = 0xff000001
+  en_reg = 0x039c
+  base_en_bit = 0
+
+prepare:
+  REG_CON0 |= en_mask
+  en_reg |= base_en_bit
+unprepare:
+  en_reg &= ~base_en_bit
+
+8192 CLK_APMIXED_USBPLL
+  en_mask = 0x00000000
+  en_reg = 0x03cc
+  base_en_bit = 2
+
+prepare:
+  REG_CON0 |= en_mask (0)
+  en_reg |= base_en_bit
+unprepare:
+  en_reg &= ~base_en_bit
+
+And I think the logic could still be simplified by _not_ putting
+CON0_BASE_EN in en_mask, and updating the CON0 in 2 steps: first all
+the bits that are not CON0_BASE_EN, then CON0_BASE_EN. Of course I
+assume that's it's fine to do so, but I have no idea.
+
+register_pll() {
+   if (!en_addr) {
+     en_reg = REG_CON0
+     base_en_bit = CON0_BASE_EN
+   }
+}
+
+prepare() {
+    REG_CON0 |= en_mask
+    en_reg |= base_en_bit
+}
+
+unprepare() {
+    en_reg &= ~base_en_bit
+}
+
+Then the new clock data:
+
+8183 CLK_APMIXED_ARMPLL_LL
+  en_mask = 0x00000000 (CON0_BASE_EN is implicit, but other bits could be set)
+  en_reg = 0
+  base_en_bit = 0
+
+prepare: {
+    REG_CON0 |= en_mask (0x00000000, here, we can skip, but other bits
+could be set)
+    en_reg |= base_en_bit (REG_CON0 |= CON0_BASE_EN)
+}
+unprepare: en_reg &= ~base_en_bit (REG_CON0 &= ~CON0_BASE_EN)
+
+8192 CLK_APMIXED_UNIVPLL
+  en_mask = 0xff000001 (Note the bit 1 is _not_ dropped here, as it
+needs to be set too)
+  en_reg = 0x039c
+  base_en_bit = 0
+(same as above)
+
+8192 CLK_APMIXED_USBPLL
+  en_mask = 0x00000000
+  en_reg = 0x03cc
+  base_en_bit = 2
+(same as above)
+
+Now, maybe this is also a bit overcomplicated. Maybe a simpler
+solution is just to add a comment in prepare that "r |=
+pll->data->en_mask;" is meant to include CON0_BASE_EN in most cases,
+and then the code could be ok as-is (just to make sure that the next
+person who looks at this code does not think there is a bug...).
+
+>
+> > > +       if (pll->en_addr) {
+> > > +               r = readl(pll->en_addr);
+> > > +               r |= BIT(pll->data->base_en_bit);
+> > > +               writel(r, pll->en_addr);
+> > > +       }
+> > > +
+> > >         __mtk_pll_tuner_enable(pll);
+> > >
+> > >         udelay(20);
+> > > @@ -277,9 +287,15 @@ static void mtk_pll_unprepare(struct clk_hw *hw)
+> > >
+> > >         __mtk_pll_tuner_disable(pll);
+> > >
+> > > -       r = readl(pll->base_addr + REG_CON0);
+> > > -       r &= ~CON0_BASE_EN;
+> > > -       writel(r, pll->base_addr + REG_CON0);
+> > > +       if (pll->en_addr) {
+> > > +               r = readl(pll->en_addr);
+> > > +               r &= ~BIT(pll->data->base_en_bit);
+> > > +               writel(r, pll->en_addr);
+> > > +       } else {
+> > > +               r = readl(pll->base_addr + REG_CON0);
+> > > +               r &= ~CON0_BASE_EN;
+> > > +               writel(r, pll->base_addr + REG_CON0);
+> > > +       }
+> > >
+> > >         r = readl(pll->pwr_addr) | CON0_ISO_EN;
+> > >         writel(r, pll->pwr_addr);
+> > > @@ -321,6 +337,8 @@ static struct clk *mtk_clk_register_pll(const struct mtk_pll_data *data,
+> > >                 pll->tuner_addr = base + data->tuner_reg;
+> > >         if (data->tuner_en_reg)
+> > >                 pll->tuner_en_addr = base + data->tuner_en_reg;
+> > > +       if (data->en_reg)
+> > > +               pll->en_addr = base + data->en_reg;
+> >
+> > If the answer to my question above holds (asymmetry is not
+> > intentional), this patch/the code could be simplified a lot if you
+> > also added a pll->en_bit member, and, here, did this:
+> >
+> > if (pll->en_reg) {
+> >    pll->en_addr = base + data->en_reg;
+> >    pll->end_bit = data->en_bit;
+> > } else {
+> >    pll->en_addr = pll->base_addr + REG_CON0;
+> >    pll->en_bit = CON0_BASE_EN;
+> > }
+> >
+> > >         pll->hw.init = &init;
+> > >         pll->data = data;
+> > >
+> > > --
+> > > 1.8.1.1.dirty
+>
