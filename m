@@ -2,55 +2,58 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA29522C167
-	for <lists+linux-clk@lfdr.de>; Fri, 24 Jul 2020 10:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4961B22C16F
+	for <lists+linux-clk@lfdr.de>; Fri, 24 Jul 2020 10:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726882AbgGXIww (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 24 Jul 2020 04:52:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37754 "EHLO mail.kernel.org"
+        id S1726979AbgGXIyZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 24 Jul 2020 04:54:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38500 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726554AbgGXIww (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 24 Jul 2020 04:52:52 -0400
+        id S1726554AbgGXIyZ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 24 Jul 2020 04:54:25 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ADBC5206EB;
-        Fri, 24 Jul 2020 08:52:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1C71F206EB;
+        Fri, 24 Jul 2020 08:54:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595580771;
-        bh=3XAOLRXH+A5spT3PUCVqth7VHfe4CGFX/QSU9CZHx44=;
+        s=default; t=1595580865;
+        bh=/fGW0+JU15vhNIXUrvegCqIk2PWvLtJXsj5+AUanRxs=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Rw7XkhQcY5FW6xbsyMZBXEUG/Ik1Wu+zCSg9CYpbtSNmDwm0krzyLmvfm5i2yl5jo
-         5YOFfvV5otirQ5ak3P6eveW2XcV8W/r9sTXHVcfdi2sLi9rVxLCVZZ5wSVb63iwkmr
-         1hJH1LLi0gKKVS/OR7VkFCnr/YzvNkMsQapjd1Q8=
+        b=NGattO6LHvbIPVFFrOfMgjO+rKge8MglszLaaDZ2pwcn8diJl7HV9UgPuZl2ExstL
+         ugM9iGiyk1DgBe+BhXkPCbjmdbRg+OktCSWFq9C2OmQu+haZHCrebg4e7TrmCZhBpu
+         ceQ/MqXFe61CGmDhCfhxULA3h1Pja+sEL8UQbdBQ=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200709135251.643-12-jonathan@marek.ca>
-References: <20200709135251.643-1-jonathan@marek.ca> <20200709135251.643-12-jonathan@marek.ca>
-Subject: Re: [PATCH v3 11/14] clk: qcom: Add graphics clock controller driver for SM8250
+In-Reply-To: <20200612225212.124301-1-ray.jui@broadcom.com>
+References: <20200612225212.124301-1-ray.jui@broadcom.com>
+Subject: Re: [PATCH] clk: iproc: round clock rate to the closest
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-To:     Jonathan Marek <jonathan@marek.ca>, linux-arm-msm@vger.kernel.org
-Date:   Fri, 24 Jul 2020 01:52:51 -0700
-Message-ID: <159558077103.3847286.2846749165672548492@swboyd.mtv.corp.google.com>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Lori Hikichi <lhikichi@broadcom.com>,
+        Ray Jui <ray.jui@broadcom.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Ray Jui <ray.jui@broadcom.com>
+Date:   Fri, 24 Jul 2020 01:54:24 -0700
+Message-ID: <159558086444.3847286.2352480301185397253@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Jonathan Marek (2020-07-09 06:52:42)
-> Add support for the graphics clock controller found on SM8250
-> based devices.
+Quoting Ray Jui (2020-06-12 15:52:12)
+> From: Lori Hikichi <lhikichi@broadcom.com>
 >=20
-> This is initially copied from the downstream kernel, but has
-> been modified to more closely match the upstream sc7180 driver.
+> Change from 'DIV_ROUND_UP' to 'DIV_ROUND_CLOSEST' when calculating the
+> clock divisor in the iProc ASIU clock driver to allow to get to the
+> closest clock rate.
 >=20
-> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+> Fixes: 5fe225c105fd ("clk: iproc: add initial common clock support")
+> Signed-off-by: Lori Hikichi <lhikichi@broadcom.com>
+> Signed-off-by: Ray Jui <ray.jui@broadcom.com>
 > ---
 
 Applied to clk-next
