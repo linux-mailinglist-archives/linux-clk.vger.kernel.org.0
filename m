@@ -2,27 +2,27 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BA022C21D
-	for <lists+linux-clk@lfdr.de>; Fri, 24 Jul 2020 11:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD4822C222
+	for <lists+linux-clk@lfdr.de>; Fri, 24 Jul 2020 11:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727992AbgGXJWF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 24 Jul 2020 05:22:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52480 "EHLO mail.kernel.org"
+        id S1727971AbgGXJW1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 24 Jul 2020 05:22:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52828 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726591AbgGXJWF (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 24 Jul 2020 05:22:05 -0400
+        id S1726572AbgGXJW1 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 24 Jul 2020 05:22:27 -0400
 Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BD40120674;
-        Fri, 24 Jul 2020 09:22:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3A67020674;
+        Fri, 24 Jul 2020 09:22:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595582524;
+        s=default; t=1595582547;
         bh=9tPh3btI6by0aK62uud8rAfohfOuysh731MEj7sejn8=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=V2ucr7CjXS/0+jmLsCeI3+/71CkycB9WHqP4FNwz5jGQEJqU8Q/inyqzInFt1dd7O
-         eQSreuY+JAPNJcCv8YBQl4voVVXQ6ri0fkGuf2g1C6vXFFZCl4jPqGGkcOvMkl4C3u
-         KszLrbwAAyKeSnU/4KD+zFmbZ/jqm/4iLjhQiwHs=
+        b=Pjvn025j6/ENiK40+wMztPDg32q8wY6dI+nKO4v1gssjy/U3OV0TmOUHkk9RgHOjQ
+         OOgueNOUtqY6JsqRlzGnoC0imUP5AuYBrmwQgXtSUiZwT1eeQ1u62Ic5YFk2wF6ffb
+         9LmD2e6H5Blzip/0kwtHywg1xiSZ2nf1W63v6ASM=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
@@ -36,8 +36,8 @@ Cc:     bbrezillon@kernel.org, linux-kernel@vger.kernel.org,
 To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
         alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
         mturquette@baylibre.com, nicolas.ferre@microchip.com
-Date:   Fri, 24 Jul 2020 02:22:04 -0700
-Message-ID: <159558252415.3847286.3699918620483470980@swboyd.mtv.corp.google.com>
+Date:   Fri, 24 Jul 2020 02:22:26 -0700
+Message-ID: <159558254661.3847286.7842791848340220486@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
