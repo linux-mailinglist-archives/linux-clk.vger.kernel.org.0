@@ -2,91 +2,82 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2BCA22F9B6
-	for <lists+linux-clk@lfdr.de>; Mon, 27 Jul 2020 21:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A28E522F9C6
+	for <lists+linux-clk@lfdr.de>; Mon, 27 Jul 2020 22:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729187AbgG0T7F (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 27 Jul 2020 15:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728810AbgG0T7E (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 Jul 2020 15:59:04 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CDDC061794;
-        Mon, 27 Jul 2020 12:59:04 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id dk23so6431917ejb.11;
-        Mon, 27 Jul 2020 12:59:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=djQ21RTJ93c9kqwB25zIQ/ST+ogHMsSV3nZHz/8ca38=;
-        b=heONYTvaIXjisXfWesNdZBH3HR8Goezr0M9/B4pi218SoZAhRizIbEnlpbiqZJYMa3
-         CymQT7ZTt7ccvP9R1yW4XYJ8IGQ/8EWsv9QTUTnNbBj7inBMYkRpsKQiO/fhVISer/Pq
-         0vYdTkQ2Qn829HoEkOgIN9H5M2pqiH+EgUH86glh+ZWkp3u7ZgS83Ma4NJuxLHsMv0XT
-         5URHnSmWVFfrEeMA03efn6TKDJetxsRmfy+VJcdXh3h6WYjImIxnOMfDwI8sXEU0c836
-         81anQIl0wlW5GrrZ7zpqqgJMiU5UyaCEmqUOFHnDHEu/yIyTXgsYKrdQhA8yOZSRXJIP
-         onpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=djQ21RTJ93c9kqwB25zIQ/ST+ogHMsSV3nZHz/8ca38=;
-        b=onfMpAknuaSm5IdeJn/2MMdRmGAyZ9PbJ6wcoI43QHrQVtSt3YREkb+sBT0DFto3SS
-         ES6AeDnufkQHbSIsmIBGPLkpAi120oh4hwkHgI4FsODFTcbJRi/KC5LZEjeKM9WQOLfx
-         yKU8sYq5KqcyA8dNtcI5O8m7NjghoFRA1udqX191AWgEx5ljJjuN60+ncvYn4EG7VwA3
-         +7TR6DTIigxJD3rgPMqtlIn8PLf9yJWn6Pf9z+uOqsStGye5CM80OBVw5FvKQ53IFV45
-         UcOxOBwPaHTABKYGLbl8iqfzlEhOz/Hz3PRx1n4dAN6TJg75IsLHRixvZNN2Vxxv6CsB
-         o69A==
-X-Gm-Message-State: AOAM532xzRfrS10GpVFCp9cEmAseV0fsAqUG1UMeF1yqt/Q6YgPhLz+e
-        pvr+6Zk507/2vs+sCNWsVlQJkRstfOF2luwEPUo=
-X-Google-Smtp-Source: ABdhPJwfVv71IAplhkO3yFPYokjDknujpfGl4Qc8owyxPo/klfQMtQ6qhz4AzI9gvxqd9KqcUezDTWMXq2Y5KwAMqsI=
-X-Received: by 2002:a17:906:365a:: with SMTP id r26mr18823220ejb.52.1595879943063;
- Mon, 27 Jul 2020 12:59:03 -0700 (PDT)
+        id S1727837AbgG0UDb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 27 Jul 2020 16:03:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45958 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726451AbgG0UDa (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 27 Jul 2020 16:03:30 -0400
+Received: from embeddedor (187-162-31-110.static.axtel.net [187.162.31.110])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 64C162072E;
+        Mon, 27 Jul 2020 20:03:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595880210;
+        bh=mXVi6dNmeTTHEGhLpBn9kwB25pFNfvrXx1UPzS1ISEs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=u5zsRUdq8hH6l+EscwKa4buoH5QG+mDT1k8i/sGMnD7kku/kLDrEXtG6bY8kaKuK0
+         5qtsMZ/zdjsmrPvu5ldzw5E4+62aa50oPpaun70v/58lftuGVWBgDuZRto8+1DCivB
+         j+0xpCAIvPKLDfeWaCgdy+P+heTw9N9yYNtGc2L0=
+Date:   Mon, 27 Jul 2020 15:09:22 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: [PATCH][next] clk: imx: Use fallthrough pseudo-keyword
+Message-ID: <20200727200922.GA2326@embeddedor>
 MIME-Version: 1.0
-References: <20200726111215.22361-1-konradybcio@gmail.com> <20200726111215.22361-2-konradybcio@gmail.com>
- <159587899589.1360974.4403082749390843157@swboyd.mtv.corp.google.com>
-In-Reply-To: <159587899589.1360974.4403082749390843157@swboyd.mtv.corp.google.com>
-From:   Konrad Dybcio <konradybcio@gmail.com>
-Date:   Mon, 27 Jul 2020 21:58:27 +0200
-Message-ID: <CAMS8qEXRJxKTqyiB9f7YeKr7_Mcik96BM=K5WLUf2fbALsAALQ@mail.gmail.com>
-Subject: Re: [PATCH 1/9] clk: qcom: gcc-sdm660: Add missing modem reset
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Martin Botka <martin.botka1@gmail.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jordan Crouse <jcrouse@codeaurora.org>,
-        zhengbin <zhengbin13@huawei.com>,
-        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Ben Dooks <ben.dooks@codethink.co.uk>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Harigovindan P <harigovi@codeaurora.org>,
-        Brian Masney <masneyb@onstation.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Xiaozhe Shi <xiaozhes@codeaurora.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        devic <etree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org, linux-clk@vger.kernel.org,
-        Shawn Guo <shawn.guo@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Fixes: f2a76a2955c0 (clk: qcom: Add Global Clock controller (GCC)
-driver for SDM660)
+Replace the existing /* fall through */ comments and its variants with
+the new pseudo-keyword macro fallthrough[1].
+
+[1] https://www.kernel.org/doc/html/v5.7/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
+
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/clk/imx/clk-pllv3.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clk/imx/clk-pllv3.c b/drivers/clk/imx/clk-pllv3.c
+index a7db93030e02..b20cdea3e9cc 100644
+--- a/drivers/clk/imx/clk-pllv3.c
++++ b/drivers/clk/imx/clk-pllv3.c
+@@ -433,7 +433,7 @@ struct clk_hw *imx_clk_hw_pllv3(enum imx_pllv3_type type, const char *name,
+ 		break;
+ 	case IMX_PLLV3_USB_VF610:
+ 		pll->div_shift = 1;
+-		/* fall through */
++		fallthrough;
+ 	case IMX_PLLV3_USB:
+ 		ops = &clk_pllv3_ops;
+ 		pll->powerup_set = true;
+@@ -441,7 +441,7 @@ struct clk_hw *imx_clk_hw_pllv3(enum imx_pllv3_type type, const char *name,
+ 	case IMX_PLLV3_AV_IMX7:
+ 		pll->num_offset = PLL_IMX7_NUM_OFFSET;
+ 		pll->denom_offset = PLL_IMX7_DENOM_OFFSET;
+-		/* fall through */
++		fallthrough;
+ 	case IMX_PLLV3_AV:
+ 		ops = &clk_pllv3_av_ops;
+ 		break;
+-- 
+2.27.0
+
