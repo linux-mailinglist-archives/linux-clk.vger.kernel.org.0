@@ -2,498 +2,215 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D28B522E81C
-	for <lists+linux-clk@lfdr.de>; Mon, 27 Jul 2020 10:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 271BF22E85A
+	for <lists+linux-clk@lfdr.de>; Mon, 27 Jul 2020 11:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727053AbgG0Im7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 27 Jul 2020 04:42:59 -0400
-Received: from esa4.microchip.iphmx.com ([68.232.154.123]:44405 "EHLO
-        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727804AbgG0Im7 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 Jul 2020 04:42:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1595839377; x=1627375377;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rCGT4N1yOPlxvY9suPfbdkB7M2NYTVLpQxsrCKbtlPs=;
-  b=dsxXANENGlOUbgYFMG0NpE3MEpJ+Q1D4PrAJKIJex0RwRVdxdvgH+qPa
-   BU8QeG7wG92VvkbnQ6UxMgWamz6hlGfumzQm1IaT1k/tjAwdj+7jEwnrM
-   c/ZjtX1arQeDl27sIBBmH/ukDKnBkAWIQEpP1h7FIqkt42ZoJTzQ3lXNM
-   bpMjpB7WAcjvivPDXISr/KeiPxqgvIUJ2osGuaeN9JSD+o1q905LxEpA/
-   vCOpxsKThPJnFnx2jx0Y3UuO4mZcB5yrNSvbLQY02LklsjqTM7NkmWysx
-   TLJgIjLPIwjdN0g6fe75I2lpvtHkNFF5ln2deIvJbHbu9z5rTj0wDOnm4
-   Q==;
-IronPort-SDR: LsgXvG6LbuYeONzwBFRI/v1P2AJ7VaSCN2dQ09JSKoa9OvFAByaVOImcftLvIMPudbvy5vqWpy
- CTf133/wEdz6FCVeHGeeUJNp5zJbep2WVAmBs1+SQGrKCrEvqbGhJxoDsIIyGiwh84qR8Zutgf
- J97r9bC6GXRikiPIQqUYVM3cdFW7W2g0Y4SOzwueNhUofSioSgtGGY3QwQKH9soJk9D8h1rgNb
- CGPM4QzWiPgbO8LJT9yJmTgW3Lb5utMFJGYI8DyTQfa9s7TmRPmeX7TeJGF4rFt/ydpwTOZgB0
- rR4=
-X-IronPort-AV: E=Sophos;i="5.75,402,1589266800"; 
-   d="scan'208";a="81360590"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 Jul 2020 01:42:56 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 27 Jul 2020 01:42:12 -0700
-Received: from soft-dev15.microsemi.net (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Mon, 27 Jul 2020 01:42:51 -0700
-From:   Lars Povlsen <lars.povlsen@microchip.com>
-To:     SoC Team <soc@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-CC:     Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Olof Johansson <olof@lixom.net>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH v4 10/10] arm64: dts: sparx5: Add i2c devices, i2c muxes
-Date:   Mon, 27 Jul 2020 10:42:11 +0200
-Message-ID: <20200727084211.6632-11-lars.povlsen@microchip.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200727084211.6632-1-lars.povlsen@microchip.com>
-References: <20200727084211.6632-1-lars.povlsen@microchip.com>
+        id S1727124AbgG0JE0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 27 Jul 2020 05:04:26 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:55703 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726222AbgG0JE0 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 Jul 2020 05:04:26 -0400
+X-UUID: 3686618d230a4e6e8a547b389d08f30c-20200727
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=IBn5xpH5cJeGPjS4mVMMUKqVoCrBnUo1UxRgWUpySx0=;
+        b=IHV7QDPAESgfEXtpFX7hkI9C9GnVNCHgbhgyZRzzfmhiiNpC4HWjf8IAeG7nuJmMdwv/BnghWRcylgVpAq3bdhezzer4Dwewo7rtaiQw4Ve9AbafoDxz+iGIiYnYYsQfWE/mb20qjLeKBARkhOLFxY29vUan8ZQ3FO11mk9hpSA=;
+X-UUID: 3686618d230a4e6e8a547b389d08f30c-20200727
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        (envelope-from <weiyi.lu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 411020366; Mon, 27 Jul 2020 17:04:15 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 27 Jul 2020 17:04:00 +0800
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 27 Jul 2020 17:04:01 +0800
+Message-ID: <1595840642.12203.4.camel@mtksdaap41>
+Subject: Re: [PATCH 3/4] clk: mediatek: Add configurable enable control to
+ mtk_pll_data
+From:   Weiyi Lu <weiyi.lu@mediatek.com>
+To:     Nicolas Boichat <drinkcat@chromium.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        James Liao <jamesjj.liao@mediatek.com>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Wendell Lin <wendell.lin@mediatek.com>,
+        Ikjoon Jang <ikjn@chromium.org>
+Date:   Mon, 27 Jul 2020 17:04:02 +0800
+In-Reply-To: <CANMq1KDzmeMcVQU=i89sa-B4EQbz6OxZP3tDasV-Q__qB_7_9g@mail.gmail.com>
+References: <1595400601-26220-1-git-send-email-weiyi.lu@mediatek.com>
+         <1595400601-26220-4-git-send-email-weiyi.lu@mediatek.com>
+         <CANMq1KC5i8GU2zMxk+NvY5hF7Qvd-Jx-+pvY2cXfqzb=X-BWRQ@mail.gmail.com>
+         <1595473043.5077.8.camel@mtksdaap41>
+         <CANMq1KDzmeMcVQU=i89sa-B4EQbz6OxZP3tDasV-Q__qB_7_9g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+X-TM-SNTS-SMTP: 9FD50798F87956F1E7AA59E7EB164F337BD8E584AF608234D7272EE39CC2E56D2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This patch adds i2c devices and muxes to the Sparx5 reference boards.
-
-Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
----
- arch/arm64/boot/dts/microchip/sparx5.dtsi     |  38 +++
- .../boot/dts/microchip/sparx5_pcb125.dts      |   4 +
- .../dts/microchip/sparx5_pcb134_board.dtsi    | 237 ++++++++++++++++++
- .../dts/microchip/sparx5_pcb135_board.dtsi    |  77 ++++++
- .../boot/dts/microchip/sparx5_pcb_common.dtsi |   4 +
- 5 files changed, 360 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/microchip/sparx5.dtsi b/arch/arm64/boot/dts/microchip/sparx5.dtsi
-index 161846caf9c94..cf712e80615da 100644
---- a/arch/arm64/boot/dts/microchip/sparx5.dtsi
-+++ b/arch/arm64/boot/dts/microchip/sparx5.dtsi
-@@ -170,6 +170,44 @@ uart2_pins: uart2-pins {
- 				pins = "GPIO_26", "GPIO_27";
- 				function = "uart2";
- 			};
-+
-+			i2c_pins: i2c-pins {
-+				pins = "GPIO_14", "GPIO_15";
-+				function = "twi";
-+			};
-+
-+			i2c2_pins: i2c2-pins {
-+				pins = "GPIO_28", "GPIO_29";
-+				function = "twi2";
-+			};
-+		};
-+
-+		i2c0: i2c@600101000 {
-+			compatible = "snps,designware-i2c";
-+			status = "disabled";
-+			pinctrl-0 = <&i2c_pins>;
-+			pinctrl-names = "default";
-+			reg = <0x6 0x00101000 0x100>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
-+			i2c-sda-hold-time-ns = <300>;
-+			clock-frequency = <100000>;
-+			clocks = <&ahb_clk>;
-+		};
-+
-+		i2c1: i2c@600103000 {
-+			compatible = "snps,designware-i2c";
-+			status = "disabled";
-+			pinctrl-0 = <&i2c2_pins>;
-+			pinctrl-names = "default";
-+			reg = <0x6 0x00103000 0x100>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
-+			i2c-sda-hold-time-ns = <300>;
-+			clock-frequency = <100000>;
-+			clocks = <&ahb_clk>;
- 		};
- 	};
- };
-diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb125.dts b/arch/arm64/boot/dts/microchip/sparx5_pcb125.dts
-index d7f985f7ee020..91ee5b6cfc37a 100644
---- a/arch/arm64/boot/dts/microchip/sparx5_pcb125.dts
-+++ b/arch/arm64/boot/dts/microchip/sparx5_pcb125.dts
-@@ -15,3 +15,7 @@ memory@0 {
- 		reg = <0x00000000 0x00000000 0x10000000>;
- 	};
- };
-+
-+&i2c1 {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi b/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
-index 9b2aec400101b..18a535a043686 100644
---- a/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
-+++ b/arch/arm64/boot/dts/microchip/sparx5_pcb134_board.dtsi
-@@ -7,9 +7,246 @@
- #include "sparx5_pcb_common.dtsi"
- 
- /{
-+	aliases {
-+	    i2c0   = &i2c0;
-+	    i2c100 = &i2c100;
-+	    i2c101 = &i2c101;
-+	    i2c102 = &i2c102;
-+	    i2c103 = &i2c103;
-+	    i2c104 = &i2c104;
-+	    i2c105 = &i2c105;
-+	    i2c106 = &i2c106;
-+	    i2c107 = &i2c107;
-+	    i2c108 = &i2c108;
-+	    i2c109 = &i2c109;
-+	    i2c110 = &i2c110;
-+	    i2c111 = &i2c111;
-+	    i2c112 = &i2c112;
-+	    i2c113 = &i2c113;
-+	    i2c114 = &i2c114;
-+	    i2c115 = &i2c115;
-+	    i2c116 = &i2c116;
-+	    i2c117 = &i2c117;
-+	    i2c118 = &i2c118;
-+	    i2c119 = &i2c119;
-+	};
-+
- 	gpio-restart {
- 		compatible = "gpio-restart";
- 		gpios = <&gpio 37 GPIO_ACTIVE_LOW>;
- 		priority = <200>;
- 	};
- };
-+
-+&gpio {
-+	i2cmux_pins_i: i2cmux-pins-i {
-+	       pins = "GPIO_16", "GPIO_17", "GPIO_18", "GPIO_19",
-+		      "GPIO_20", "GPIO_22", "GPIO_36", "GPIO_35",
-+		      "GPIO_50", "GPIO_51", "GPIO_56", "GPIO_57";
-+		function = "twi_scl_m";
-+		output-low;
-+	};
-+	i2cmux_0: i2cmux-0 {
-+		pins = "GPIO_16";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_1: i2cmux-1 {
-+		pins = "GPIO_17";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_2: i2cmux-2 {
-+		pins = "GPIO_18";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_3: i2cmux-3 {
-+		pins = "GPIO_19";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_4: i2cmux-4 {
-+		pins = "GPIO_20";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_5: i2cmux-5 {
-+		pins = "GPIO_22";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_6: i2cmux-6 {
-+		pins = "GPIO_36";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_7: i2cmux-7 {
-+		pins = "GPIO_35";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_8: i2cmux-8 {
-+		pins = "GPIO_50";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_9: i2cmux-9 {
-+		pins = "GPIO_51";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_10: i2cmux-10 {
-+		pins = "GPIO_56";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_11: i2cmux-11 {
-+		pins = "GPIO_57";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+};
-+
-+&axi {
-+	i2c0_imux: i2c0-imux@0 {
-+		compatible = "i2c-mux-pinctrl";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-parent = <&i2c0>;
-+	};
-+	i2c0_emux: i2c0-emux@0 {
-+		compatible = "i2c-mux-gpio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-parent = <&i2c0>;
-+	};
-+};
-+
-+&i2c0_imux {
-+	pinctrl-names =
-+		"i2c100", "i2c101", "i2c102", "i2c103",
-+		"i2c104", "i2c105", "i2c106", "i2c107",
-+		"i2c108", "i2c109", "i2c110", "i2c111", "idle";
-+	pinctrl-0 = <&i2cmux_0>;
-+	pinctrl-1 = <&i2cmux_1>;
-+	pinctrl-2 = <&i2cmux_2>;
-+	pinctrl-3 = <&i2cmux_3>;
-+	pinctrl-4 = <&i2cmux_4>;
-+	pinctrl-5 = <&i2cmux_5>;
-+	pinctrl-6 = <&i2cmux_6>;
-+	pinctrl-7 = <&i2cmux_7>;
-+	pinctrl-8 = <&i2cmux_8>;
-+	pinctrl-9 = <&i2cmux_9>;
-+	pinctrl-10 = <&i2cmux_10>;
-+	pinctrl-11 = <&i2cmux_11>;
-+	pinctrl-12 = <&i2cmux_pins_i>;
-+	i2c100: i2c_sfp1 {
-+		reg = <0x0>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c101: i2c_sfp2 {
-+		reg = <0x1>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c102: i2c_sfp3 {
-+		reg = <0x2>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c103: i2c_sfp4 {
-+		reg = <0x3>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c104: i2c_sfp5 {
-+		reg = <0x4>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c105: i2c_sfp6 {
-+		reg = <0x5>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c106: i2c_sfp7 {
-+		reg = <0x6>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c107: i2c_sfp8 {
-+		reg = <0x7>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c108: i2c_sfp9 {
-+		reg = <0x8>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c109: i2c_sfp10 {
-+		reg = <0x9>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c110: i2c_sfp11 {
-+		reg = <0xa>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c111: i2c_sfp12 {
-+		reg = <0xb>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+};
-+
-+&i2c0_emux {
-+	mux-gpios = <&gpio 55 GPIO_ACTIVE_HIGH
-+		     &gpio 60 GPIO_ACTIVE_HIGH
-+		     &gpio 61 GPIO_ACTIVE_HIGH
-+		     &gpio 54 GPIO_ACTIVE_HIGH>;
-+	idle-state = <0x8>;
-+	i2c112: i2c_sfp13 {
-+		reg = <0x0>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c113: i2c_sfp14 {
-+		reg = <0x1>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c114: i2c_sfp15 {
-+		reg = <0x2>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c115: i2c_sfp16 {
-+		reg = <0x3>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c116: i2c_sfp17 {
-+		reg = <0x4>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c117: i2c_sfp18 {
-+		reg = <0x5>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c118: i2c_sfp19 {
-+		reg = <0x6>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c119: i2c_sfp20 {
-+		reg = <0x7>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi b/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
-index 9b2aec400101b..d71f11a10b3d2 100644
---- a/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
-+++ b/arch/arm64/boot/dts/microchip/sparx5_pcb135_board.dtsi
-@@ -7,9 +7,86 @@
- #include "sparx5_pcb_common.dtsi"
- 
- /{
-+	aliases {
-+	    i2c0   = &i2c0;
-+	    i2c152 = &i2c152;
-+	    i2c153 = &i2c153;
-+	    i2c154 = &i2c154;
-+	    i2c155 = &i2c155;
-+	};
-+
- 	gpio-restart {
- 		compatible = "gpio-restart";
- 		gpios = <&gpio 37 GPIO_ACTIVE_LOW>;
- 		priority = <200>;
- 	};
- };
-+
-+&gpio {
-+	i2cmux_pins_i: i2cmux-pins-i {
-+	       pins = "GPIO_35", "GPIO_36",
-+		      "GPIO_50", "GPIO_51";
-+		function = "twi_scl_m";
-+		output-low;
-+	};
-+	i2cmux_s29: i2cmux-0 {
-+		pins = "GPIO_35";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_s30: i2cmux-1 {
-+		pins = "GPIO_36";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_s31: i2cmux-2 {
-+		pins = "GPIO_50";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+	i2cmux_s32: i2cmux-3 {
-+		pins = "GPIO_51";
-+		function = "twi_scl_m";
-+		output-high;
-+	};
-+};
-+
-+&axi {
-+	i2c0_imux: i2c0-imux@0 {
-+		compatible = "i2c-mux-pinctrl";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		i2c-parent = <&i2c0>;
-+	};
-+};
-+
-+&i2c0_imux {
-+	pinctrl-names =
-+		"i2c152", "i2c153", "i2c154", "i2c155",
-+		"idle";
-+	pinctrl-0 = <&i2cmux_s29>;
-+	pinctrl-1 = <&i2cmux_s30>;
-+	pinctrl-2 = <&i2cmux_s31>;
-+	pinctrl-3 = <&i2cmux_s32>;
-+	pinctrl-4 = <&i2cmux_pins_i>;
-+	i2c152: i2c_sfp1 {
-+		reg = <0x0>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c153: i2c_sfp2 {
-+		reg = <0x1>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c154: i2c_sfp3 {
-+		reg = <0x2>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+	i2c155: i2c_sfp4 {
-+		reg = <0x3>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi b/arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi
-index 1f99d0db1284f..9d1a082de3e29 100644
---- a/arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi
-+++ b/arch/arm64/boot/dts/microchip/sparx5_pcb_common.dtsi
-@@ -13,3 +13,7 @@ &uart0 {
- &uart1 {
- 	status = "okay";
- };
-+
-+&i2c0 {
-+	status = "okay";
-+};
--- 
-2.27.0
+T24gVGh1LCAyMDIwLTA3LTIzIGF0IDE1OjUxICswODAwLCBOaWNvbGFzIEJvaWNoYXQgd3JvdGU6
+DQo+IE9uIFRodSwgSnVsIDIzLCAyMDIwIGF0IDEwOjU3IEFNIFdlaXlpIEx1IDx3ZWl5aS5sdUBt
+ZWRpYXRlay5jb20+IHdyb3RlOg0KPiA+DQo+ID4gT24gV2VkLCAyMDIwLTA3LTIyIGF0IDE2OjUx
+ICswODAwLCBOaWNvbGFzIEJvaWNoYXQgd3JvdGU6DQo+ID4gPiBPbiBXZWQsIEp1bCAyMiwgMjAy
+MCBhdCAyOjUwIFBNIFdlaXlpIEx1IDx3ZWl5aS5sdUBtZWRpYXRlay5jb20+IHdyb3RlOg0KPiA+
+ID4gPg0KPiA+ID4gPiBJbiBhbGwgTWVkaWFUZWsgUExMIGRlc2lnbiwgYml0IDAgb2YgQ09OMCBy
+ZWdpc3RlciBpcyBhbHdheXMNCj4gPiA+ID4gdGhlIGVuYWJsZSBiaXQuDQo+ID4gPiA+IEhvd2V2
+ZXIsIHRoZXJlJ3MgYSBzcGVjaWFsIGNhc2Ugb2YgdXNicGxsIG9uIE1UODE5Mi4NCj4gPiA+ID4g
+VGhlIGVuYWJsZSBiaXQgb2YgdXNicGxsIGlzIG1vdmVkIHRvIGJpdCAyIG9mIG90aGVyIHJlZ2lz
+dGVyLg0KPiA+ID4gPiBBZGQgY29uZmlndXJhYmxlIGVuX3JlZyBhbmQgYmFzZV9lbl9iaXQgZm9y
+IGVuYWJsZSBjb250cm9sIG9yDQo+ID4gPiA+IHVzaW5nIHRoZSBkZWZhdWx0IGlmIHdpdGhvdXQg
+c2V0dGluZyBpbiBwbGwgZGF0YS4NCj4gPiA+ID4NCj4gPiA+ID4gU2lnbmVkLW9mZi1ieTogV2Vp
+eWkgTHUgPHdlaXlpLmx1QG1lZGlhdGVrLmNvbT4NCj4gPiA+ID4gLS0tDQo+ID4gPiA+ICBkcml2
+ZXJzL2Nsay9tZWRpYXRlay9jbGstbXRrLmggfCAgMiArKw0KPiA+ID4gPiAgZHJpdmVycy9jbGsv
+bWVkaWF0ZWsvY2xrLXBsbC5jIHwgMjYgKysrKysrKysrKysrKysrKysrKysrKy0tLS0NCj4gPiA+
+ID4gIDIgZmlsZXMgY2hhbmdlZCwgMjQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkNCj4g
+PiA+ID4NCj4gPiA+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdGsu
+aCBiL2RyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdGsuaA0KPiA+ID4gPiBpbmRleCBjM2Q2NzU2
+Li44YmIwYjNkIDEwMDY0NA0KPiA+ID4gPiAtLS0gYS9kcml2ZXJzL2Nsay9tZWRpYXRlay9jbGst
+bXRrLmgNCj4gPiA+ID4gKysrIGIvZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLW10ay5oDQo+ID4g
+PiA+IEBAIC0yMzMsNiArMjMzLDggQEAgc3RydWN0IG10a19wbGxfZGF0YSB7DQo+ID4gPiA+ICAg
+ICAgICAgdWludDMyX3QgcGN3X2NoZ19yZWc7DQo+ID4gPiA+ICAgICAgICAgY29uc3Qgc3RydWN0
+IG10a19wbGxfZGl2X3RhYmxlICpkaXZfdGFibGU7DQo+ID4gPiA+ICAgICAgICAgY29uc3QgY2hh
+ciAqcGFyZW50X25hbWU7DQo+ID4gPiA+ICsgICAgICAgdWludDMyX3QgZW5fcmVnOw0KPiA+ID4g
+PiArICAgICAgIHVpbnQ4X3QgYmFzZV9lbl9iaXQ7DQo+ID4gPiA+ICB9Ow0KPiA+ID4gPg0KPiA+
+ID4gPiAgdm9pZCBtdGtfY2xrX3JlZ2lzdGVyX3BsbHMoc3RydWN0IGRldmljZV9ub2RlICpub2Rl
+LA0KPiA+ID4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLXBsbC5jIGIv
+ZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLXBsbC5jDQo+ID4gPiA+IGluZGV4IGY0NDBmMmNkLi5i
+OGNjZDQyIDEwMDY0NA0KPiA+ID4gPiAtLS0gYS9kcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstcGxs
+LmMNCj4gPiA+ID4gKysrIGIvZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLXBsbC5jDQo+ID4gPiA+
+IEBAIC00NCw2ICs0NCw3IEBAIHN0cnVjdCBtdGtfY2xrX3BsbCB7DQo+ID4gPiA+ICAgICAgICAg
+dm9pZCBfX2lvbWVtICAgICp0dW5lcl9lbl9hZGRyOw0KPiA+ID4gPiAgICAgICAgIHZvaWQgX19p
+b21lbSAgICAqcGN3X2FkZHI7DQo+ID4gPiA+ICAgICAgICAgdm9pZCBfX2lvbWVtICAgICpwY3df
+Y2hnX2FkZHI7DQo+ID4gPiA+ICsgICAgICAgdm9pZCBfX2lvbWVtICAgICplbl9hZGRyOw0KPiA+
+ID4gPiAgICAgICAgIGNvbnN0IHN0cnVjdCBtdGtfcGxsX2RhdGEgKmRhdGE7DQo+ID4gPiA+ICB9
+Ow0KPiA+ID4gPg0KPiA+ID4gPiBAQCAtNTYsNyArNTcsMTAgQEAgc3RhdGljIGludCBtdGtfcGxs
+X2lzX3ByZXBhcmVkKHN0cnVjdCBjbGtfaHcgKmh3KQ0KPiA+ID4gPiAgew0KPiA+ID4gPiAgICAg
+ICAgIHN0cnVjdCBtdGtfY2xrX3BsbCAqcGxsID0gdG9fbXRrX2Nsa19wbGwoaHcpOw0KPiA+ID4g
+Pg0KPiA+ID4gPiAtICAgICAgIHJldHVybiAocmVhZGwocGxsLT5iYXNlX2FkZHIgKyBSRUdfQ09O
+MCkgJiBDT04wX0JBU0VfRU4pICE9IDA7DQo+ID4gPiA+ICsgICAgICAgaWYgKHBsbC0+ZW5fYWRk
+cikNCj4gPiA+ID4gKyAgICAgICAgICAgICAgIHJldHVybiAocmVhZGwocGxsLT5lbl9hZGRyKSAm
+IEJJVChwbGwtPmRhdGEtPmJhc2VfZW5fYml0KSkgIT0gMDsNCj4gPiA+ID4gKyAgICAgICBlbHNl
+DQo+ID4gPiA+ICsgICAgICAgICAgICAgICByZXR1cm4gKHJlYWRsKHBsbC0+YmFzZV9hZGRyICsg
+UkVHX0NPTjApICYgQ09OMF9CQVNFX0VOKSAhPSAwOw0KPiA+ID4gPiAgfQ0KPiA+ID4gPg0KPiA+
+ID4gPiAgc3RhdGljIHVuc2lnbmVkIGxvbmcgX19tdGtfcGxsX3JlY2FsY19yYXRlKHN0cnVjdCBt
+dGtfY2xrX3BsbCAqcGxsLCB1MzIgZmluLA0KPiA+ID4gPiBAQCAtMjUxLDYgKzI1NSwxMiBAQCBz
+dGF0aWMgaW50IG10a19wbGxfcHJlcGFyZShzdHJ1Y3QgY2xrX2h3ICpodykNCj4gPiA+ID4gICAg
+ICAgICByIHw9IHBsbC0+ZGF0YS0+ZW5fbWFzazsNCj4gPiA+ID4gICAgICAgICB3cml0ZWwociwg
+cGxsLT5iYXNlX2FkZHIgKyBSRUdfQ09OMCk7DQo+ID4gPiA+DQo+ID4gPg0KPiA+ID4gVGhpcyBp
+cyBub3QgYSBuZXcgY2hhbmdlLCBidXQgSSdtIHdvbmRlcmluZyBpZiB0aGUgYXN5bW1ldHJ5IGlz
+DQo+ID4gPiBpbnRlbnRpb25hbCBoZXJlLCB0aGF0IGlzLCBwcmVwYXJlIHNldHMgYml0IHBsbC0+
+ZGF0YS0+ZW5fbWFzayBvZg0KPiA+ID4gUkVHX0NPTjA7IHVucHJlcGFyZSBjbGVhcnMgQ09OMF9C
+QVNFX0VOIG9mIFJFR19DT04wLg0KPiA+ID4NCj4gPiA+IFdpdGggdGhpcyBwYXRjaCwgaWYgcGxs
+LT5lbl9hZGRyIGlzIHNldCwgeW91IHNldCBib3RoDQo+ID4gPiBwbGwtPmRhdGEtPmVuX21hc2sg
+X2FuZF8gcGxsLT5kYXRhLT5iYXNlX2VuX2JpdCwgYW5kIGNsZWFyIG9ubHkNCj4gPiA+IHBsbC0+
+ZGF0YS0+YmFzZV9lbl9iaXQuDQo+ID4gPg0KPiA+DQo+ID4gSGkgTmljb2xhcywNCj4gPg0KPiA+
+IEFGQUlLLCB0aGUgYXN5bW1ldHJ5IHdhcyBpbnRlbnRpb25hbC4NCj4gPiBlbl9tYXNrIGlzIGFj
+dHVhbGx5IGEgY29tYmluYXRpb24gb2YgZGl2aWRlciBlbmFibGUgbWFzayBhbmQgdGhlIHBsbA0K
+PiA+IGVuYWJsZSBiaXQoQ09OMF9CQVNFX0VOKS4NCj4gPiBFdmVuIHdpdGhvdXQgbXkgcGF0Y2gs
+IGl0IHN0aWxsIHNldHMgZGl2aWRlciBlbmFibGUgbWFzayBhbmQgZW5fYml0LCBhbmQNCj4gPiBv
+bmx5IGNsZWFycyBlbl9iaXQuDQo+ID4gWW91IGNvdWxkIHNlZSB0aGUgcGxsX2RhdGEgaW4gY2xr
+LW10ODE5Mi5jIG9mIHBhdGNoIFs0LzRdDQo+ID4gVGFrZSBtYWlucGxsIGFzIGFuIGV4YW1wbGUs
+DQo+ID4gdGhlIGVuYWJsZSBtYXNrIG9mIG1haW5wbGwgaXMgMHhmZjAwMDAwMSwgd2hlcmUgMHhm
+ZjAwMDAwMCBpcyB0aGUNCj4gPiBkaXZpZGVyIGVuYWJsZSBtYXNrIGFuZCAweDEgaXMgdGhlIGVu
+X2JpdA0KPiA+DQo+ID4gRm9yIHVzYnBsbCBpbiBzcGVjaWFsIGNhc2UsIHVzYnBsbCBkb2Vzbid0
+IGhhdmUgZGl2aWRlciBlbmFibGUgbWFzayBvbg0KPiA+IE1UODE5MiBzbyBJIGdpdmUgbm90aGlu
+ZygweDAwMDAwMDAwKSBpbiB0aGUgZW5fbWFzayBmaWVsZC4NCj4gPiBIb3dldmVyLCB0aGUgbWFp
+biByZWFzb24gd2h5IEkgZG9uJ3Qgc2tpcCBzZXR0aW5nIHRoZSBlbl9tYXNrIG9mIE1UODE5Mg0K
+PiA+IHVzYnBsbCBpcyB0aGF0IEknZCBqdXN0IGxpa2UgdG8gcmVzZXJ2ZSB0aGUgZGl2aWRlciBl
+bmFibGUgbWFzayBmb3IgYW55DQo+ID4gc3BlY2lhbCBwbGxzIHdpdGggZGl2aWRlciBlbmFibGUg
+bWFzayBpbiBuZWFyIGZ1dHVyZS4NCj4gDQo+IEFyZ2gsIEkgc2VlLCBpdCdzIGEgYml0IG9mIGEg
+Y2FuIG9mIHdvcm1zLCB3aXRoIG1hbnkgc3BlY2lhbCBjYXNlcy4uLg0KPiANCj4gU28gSSBwbGF5
+ZWQgYSBiaXQgd2l0aCAzIGV4YW1wbGVzLg0KPiANCj4gQ3VycmVudCBzaXR1YXRpb24gbG9va3Mg
+bGlrZSB0aGlzOg0KPiANCj4gODE4MyBDTEtfQVBNSVhFRF9BUk1QTExfTEwNCj4gICBlbl9tYXNr
+ID0gMHgwMDAwMDAwMQ0KPiAgIGVuX3JlZyA9IDANCj4gICBiYXNlX2VuX2JpdCA9IDANCj4gDQo+
+IHByZXBhcmU6IFJFR19DT04wIHw9IGVuX21hc2sNCj4gdW5wcmVwYXJlOiBSRUdfQ09OMCAmPSB+
+Q09OMF9CQVNFX0VOIChCSVQoMSkpDQo+IA0KPiA4MTkyIENMS19BUE1JWEVEX1VOSVZQTEwNCj4g
+ICBlbl9tYXNrID0gMHhmZjAwMDAwMQ0KPiAgIGVuX3JlZyA9IDB4MDM5Yw0KPiAgIGJhc2VfZW5f
+Yml0ID0gMA0KPiANCj4gcHJlcGFyZToNCj4gICBSRUdfQ09OMCB8PSBlbl9tYXNrDQo+ICAgZW5f
+cmVnIHw9IGJhc2VfZW5fYml0DQo+IHVucHJlcGFyZToNCj4gICBlbl9yZWcgJj0gfmJhc2VfZW5f
+Yml0DQo+IA0KPiA4MTkyIENMS19BUE1JWEVEX1VTQlBMTA0KPiAgIGVuX21hc2sgPSAweDAwMDAw
+MDAwDQo+ICAgZW5fcmVnID0gMHgwM2NjDQo+ICAgYmFzZV9lbl9iaXQgPSAyDQo+IA0KPiBwcmVw
+YXJlOg0KPiAgIFJFR19DT04wIHw9IGVuX21hc2sgKDApDQo+ICAgZW5fcmVnIHw9IGJhc2VfZW5f
+Yml0DQo+IHVucHJlcGFyZToNCj4gICBlbl9yZWcgJj0gfmJhc2VfZW5fYml0DQo+IA0KPiBBbmQg
+SSB0aGluayB0aGUgbG9naWMgY291bGQgc3RpbGwgYmUgc2ltcGxpZmllZCBieSBfbm90XyBwdXR0
+aW5nDQo+IENPTjBfQkFTRV9FTiBpbiBlbl9tYXNrLCBhbmQgdXBkYXRpbmcgdGhlIENPTjAgaW4g
+MiBzdGVwczogZmlyc3QgYWxsDQo+IHRoZSBiaXRzIHRoYXQgYXJlIG5vdCBDT04wX0JBU0VfRU4s
+IHRoZW4gQ09OMF9CQVNFX0VOLiBPZiBjb3Vyc2UgSQ0KPiBhc3N1bWUgdGhhdCdzIGl0J3MgZmlu
+ZSB0byBkbyBzbywgYnV0IEkgaGF2ZSBubyBpZGVhLg0KPiANCj4gcmVnaXN0ZXJfcGxsKCkgew0K
+PiAgICBpZiAoIWVuX2FkZHIpIHsNCj4gICAgICBlbl9yZWcgPSBSRUdfQ09OMA0KPiAgICAgIGJh
+c2VfZW5fYml0ID0gQ09OMF9CQVNFX0VODQo+ICAgIH0NCj4gfQ0KPiANCj4gcHJlcGFyZSgpIHsN
+Cj4gICAgIFJFR19DT04wIHw9IGVuX21hc2sNCj4gICAgIGVuX3JlZyB8PSBiYXNlX2VuX2JpdA0K
+PiB9DQo+IA0KPiB1bnByZXBhcmUoKSB7DQo+ICAgICBlbl9yZWcgJj0gfmJhc2VfZW5fYml0DQo+
+IH0NCj4gDQo+IFRoZW4gdGhlIG5ldyBjbG9jayBkYXRhOg0KPiANCj4gODE4MyBDTEtfQVBNSVhF
+RF9BUk1QTExfTEwNCj4gICBlbl9tYXNrID0gMHgwMDAwMDAwMCAoQ09OMF9CQVNFX0VOIGlzIGlt
+cGxpY2l0LCBidXQgb3RoZXIgYml0cyBjb3VsZCBiZSBzZXQpDQo+ICAgZW5fcmVnID0gMA0KPiAg
+IGJhc2VfZW5fYml0ID0gMA0KPiANCj4gcHJlcGFyZTogew0KPiAgICAgUkVHX0NPTjAgfD0gZW5f
+bWFzayAoMHgwMDAwMDAwMCwgaGVyZSwgd2UgY2FuIHNraXAsIGJ1dCBvdGhlciBiaXRzDQo+IGNv
+dWxkIGJlIHNldCkNCj4gICAgIGVuX3JlZyB8PSBiYXNlX2VuX2JpdCAoUkVHX0NPTjAgfD0gQ09O
+MF9CQVNFX0VOKQ0KPiB9DQo+IHVucHJlcGFyZTogZW5fcmVnICY9IH5iYXNlX2VuX2JpdCAoUkVH
+X0NPTjAgJj0gfkNPTjBfQkFTRV9FTikNCj4gDQo+IDgxOTIgQ0xLX0FQTUlYRURfVU5JVlBMTA0K
+PiAgIGVuX21hc2sgPSAweGZmMDAwMDAxIChOb3RlIHRoZSBiaXQgMSBpcyBfbm90XyBkcm9wcGVk
+IGhlcmUsIGFzIGl0DQo+IG5lZWRzIHRvIGJlIHNldCB0b28pDQo+ICAgZW5fcmVnID0gMHgwMzlj
+DQo+ICAgYmFzZV9lbl9iaXQgPSAwDQo+IChzYW1lIGFzIGFib3ZlKQ0KPiANCj4gODE5MiBDTEtf
+QVBNSVhFRF9VU0JQTEwNCj4gICBlbl9tYXNrID0gMHgwMDAwMDAwMA0KPiAgIGVuX3JlZyA9IDB4
+MDNjYw0KPiAgIGJhc2VfZW5fYml0ID0gMg0KPiAoc2FtZSBhcyBhYm92ZSkNCj4gDQo+IE5vdywg
+bWF5YmUgdGhpcyBpcyBhbHNvIGEgYml0IG92ZXJjb21wbGljYXRlZC4gTWF5YmUgYSBzaW1wbGVy
+DQo+IHNvbHV0aW9uIGlzIGp1c3QgdG8gYWRkIGEgY29tbWVudCBpbiBwcmVwYXJlIHRoYXQgInIg
+fD0NCj4gcGxsLT5kYXRhLT5lbl9tYXNrOyIgaXMgbWVhbnQgdG8gaW5jbHVkZSBDT04wX0JBU0Vf
+RU4gaW4gbW9zdCBjYXNlcywNCj4gYW5kIHRoZW4gdGhlIGNvZGUgY291bGQgYmUgb2sgYXMtaXMg
+KGp1c3QgdG8gbWFrZSBzdXJlIHRoYXQgdGhlIG5leHQNCj4gcGVyc29uIHdobyBsb29rcyBhdCB0
+aGlzIGNvZGUgZG9lcyBub3QgdGhpbmsgdGhlcmUgaXMgYSBidWcuLi4pLg0KPiANCg0KSGkgTmlj
+b2xhcywNCg0KSSB0aG91Z2h0IHRoZXNlIHN0aWxsIHRvbyBjb21wbGljYXRlZCBhbmQgSSBndWVz
+cyB0aGUgYXN5bW1ldHJpY2FsDQpwcm9ibGVtIGNvdWxkIGJlIGZpeGVkLg0KQW5kIHRoYXQgd2ls
+bCBtYWtlIHRoaXMgcGFydCBzaW1wbGVyIGp1c3QgbGlrZSB3aGF0IHlvdSBtZW50aW9uZWQgaW4N
+CnByZXZpb3VzIGNvbW1lbnQuDQpJJ2xsIGNvbmZpcm0gQVNBUCBhbmQgc2VuZCBhIG5ldyB2ZXJz
+aW9uIGlmIGl0IGlzIHBvc3NpYmxlIHRvIGJlIGZpeGVkLg0KDQo+ID4NCj4gPiA+ID4gKyAgICAg
+ICBpZiAocGxsLT5lbl9hZGRyKSB7DQo+ID4gPiA+ICsgICAgICAgICAgICAgICByID0gcmVhZGwo
+cGxsLT5lbl9hZGRyKTsNCj4gPiA+ID4gKyAgICAgICAgICAgICAgIHIgfD0gQklUKHBsbC0+ZGF0
+YS0+YmFzZV9lbl9iaXQpOw0KPiA+ID4gPiArICAgICAgICAgICAgICAgd3JpdGVsKHIsIHBsbC0+
+ZW5fYWRkcik7DQo+ID4gPiA+ICsgICAgICAgfQ0KPiA+ID4gPiArDQo+ID4gPiA+ICAgICAgICAg
+X19tdGtfcGxsX3R1bmVyX2VuYWJsZShwbGwpOw0KPiA+ID4gPg0KPiA+ID4gPiAgICAgICAgIHVk
+ZWxheSgyMCk7DQo+ID4gPiA+IEBAIC0yNzcsOSArMjg3LDE1IEBAIHN0YXRpYyB2b2lkIG10a19w
+bGxfdW5wcmVwYXJlKHN0cnVjdCBjbGtfaHcgKmh3KQ0KPiA+ID4gPg0KPiA+ID4gPiAgICAgICAg
+IF9fbXRrX3BsbF90dW5lcl9kaXNhYmxlKHBsbCk7DQo+ID4gPiA+DQo+ID4gPiA+IC0gICAgICAg
+ciA9IHJlYWRsKHBsbC0+YmFzZV9hZGRyICsgUkVHX0NPTjApOw0KPiA+ID4gPiAtICAgICAgIHIg
+Jj0gfkNPTjBfQkFTRV9FTjsNCj4gPiA+ID4gLSAgICAgICB3cml0ZWwociwgcGxsLT5iYXNlX2Fk
+ZHIgKyBSRUdfQ09OMCk7DQo+ID4gPiA+ICsgICAgICAgaWYgKHBsbC0+ZW5fYWRkcikgew0KPiA+
+ID4gPiArICAgICAgICAgICAgICAgciA9IHJlYWRsKHBsbC0+ZW5fYWRkcik7DQo+ID4gPiA+ICsg
+ICAgICAgICAgICAgICByICY9IH5CSVQocGxsLT5kYXRhLT5iYXNlX2VuX2JpdCk7DQo+ID4gPiA+
+ICsgICAgICAgICAgICAgICB3cml0ZWwociwgcGxsLT5lbl9hZGRyKTsNCj4gPiA+ID4gKyAgICAg
+ICB9IGVsc2Ugew0KPiA+ID4gPiArICAgICAgICAgICAgICAgciA9IHJlYWRsKHBsbC0+YmFzZV9h
+ZGRyICsgUkVHX0NPTjApOw0KPiA+ID4gPiArICAgICAgICAgICAgICAgciAmPSB+Q09OMF9CQVNF
+X0VOOw0KPiA+ID4gPiArICAgICAgICAgICAgICAgd3JpdGVsKHIsIHBsbC0+YmFzZV9hZGRyICsg
+UkVHX0NPTjApOw0KPiA+ID4gPiArICAgICAgIH0NCj4gPiA+ID4NCj4gPiA+ID4gICAgICAgICBy
+ID0gcmVhZGwocGxsLT5wd3JfYWRkcikgfCBDT04wX0lTT19FTjsNCj4gPiA+ID4gICAgICAgICB3
+cml0ZWwociwgcGxsLT5wd3JfYWRkcik7DQo+ID4gPiA+IEBAIC0zMjEsNiArMzM3LDggQEAgc3Rh
+dGljIHN0cnVjdCBjbGsgKm10a19jbGtfcmVnaXN0ZXJfcGxsKGNvbnN0IHN0cnVjdCBtdGtfcGxs
+X2RhdGEgKmRhdGEsDQo+ID4gPiA+ICAgICAgICAgICAgICAgICBwbGwtPnR1bmVyX2FkZHIgPSBi
+YXNlICsgZGF0YS0+dHVuZXJfcmVnOw0KPiA+ID4gPiAgICAgICAgIGlmIChkYXRhLT50dW5lcl9l
+bl9yZWcpDQo+ID4gPiA+ICAgICAgICAgICAgICAgICBwbGwtPnR1bmVyX2VuX2FkZHIgPSBiYXNl
+ICsgZGF0YS0+dHVuZXJfZW5fcmVnOw0KPiA+ID4gPiArICAgICAgIGlmIChkYXRhLT5lbl9yZWcp
+DQo+ID4gPiA+ICsgICAgICAgICAgICAgICBwbGwtPmVuX2FkZHIgPSBiYXNlICsgZGF0YS0+ZW5f
+cmVnOw0KPiA+ID4NCj4gPiA+IElmIHRoZSBhbnN3ZXIgdG8gbXkgcXVlc3Rpb24gYWJvdmUgaG9s
+ZHMgKGFzeW1tZXRyeSBpcyBub3QNCj4gPiA+IGludGVudGlvbmFsKSwgdGhpcyBwYXRjaC90aGUg
+Y29kZSBjb3VsZCBiZSBzaW1wbGlmaWVkIGEgbG90IGlmIHlvdQ0KPiA+ID4gYWxzbyBhZGRlZCBh
+IHBsbC0+ZW5fYml0IG1lbWJlciwgYW5kLCBoZXJlLCBkaWQgdGhpczoNCj4gPiA+DQo+ID4gPiBp
+ZiAocGxsLT5lbl9yZWcpIHsNCj4gPiA+ICAgIHBsbC0+ZW5fYWRkciA9IGJhc2UgKyBkYXRhLT5l
+bl9yZWc7DQo+ID4gPiAgICBwbGwtPmVuZF9iaXQgPSBkYXRhLT5lbl9iaXQ7DQo+ID4gPiB9IGVs
+c2Ugew0KPiA+ID4gICAgcGxsLT5lbl9hZGRyID0gcGxsLT5iYXNlX2FkZHIgKyBSRUdfQ09OMDsN
+Cj4gPiA+ICAgIHBsbC0+ZW5fYml0ID0gQ09OMF9CQVNFX0VOOw0KPiA+ID4gfQ0KPiA+ID4NCj4g
+PiA+ID4gICAgICAgICBwbGwtPmh3LmluaXQgPSAmaW5pdDsNCj4gPiA+ID4gICAgICAgICBwbGwt
+PmRhdGEgPSBkYXRhOw0KPiA+ID4gPg0KPiA+ID4gPiAtLQ0KPiA+ID4gPiAxLjguMS4xLmRpcnR5
+DQo+ID4NCg0K
 
