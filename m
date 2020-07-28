@@ -2,54 +2,63 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7E822FEE2
-	for <lists+linux-clk@lfdr.de>; Tue, 28 Jul 2020 03:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F8422FF0E
+	for <lists+linux-clk@lfdr.de>; Tue, 28 Jul 2020 03:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726313AbgG1BZ1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 27 Jul 2020 21:25:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34224 "EHLO mail.kernel.org"
+        id S1726272AbgG1Bqt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 27 Jul 2020 21:46:49 -0400
+Received: from crapouillou.net ([89.234.176.41]:51062 "EHLO crapouillou.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726247AbgG1BZ1 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 27 Jul 2020 21:25:27 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B01A220809;
-        Tue, 28 Jul 2020 01:25:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595899526;
-        bh=9uiYFObWP6iP+8WICpx1Fzt1ZrJo4Ih9DA64NR0QOug=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=xyVUKixG9Ga831lfABQCANz6vvcNRvfzZrlXAL/ADh0LdbkMQgqmZpGbbWxnQcxQa
-         753UMYDzP0IUsKvGrh1KP6vMw07TpDdEGrX8nkHNs5+4nZUQ/YGYouWjs9o7IP6E3L
-         7rp+Ui2BPtH3/av2aTKdNJJ8a9kSAJ4pHpyqgCII=
-Content-Type: text/plain; charset="utf-8"
+        id S1726265AbgG1Bqt (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 27 Jul 2020 21:46:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1595900807; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fId9MTw7EAQqIZV//F4HzgjDYjr3WRdR9GS7djBJRO4=;
+        b=jcfrnPdoGGkpEg4jX7ZzCFUqc6lR1BoV+kmA74KiqcVEYgUhWvW21torNmjmuhIzEvs/0G
+        TITpNHmbgrEklyOUoHFaPcGpnSsJ8cFDrySzIi3E7PvVTHGNKLTcZ0Q0J6eXBzL1YTsT9n
+        MAh0gJkLQieKt62eh54qEJkqL6chAW8=
+Date:   Tue, 28 Jul 2020 03:46:33 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v3 0/3] Add functions to operate USB PHY related clock.
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Zhou Yanjie <zhouyanjie@wanyeetech.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
+Message-Id: <LXO5EQ.MCOXM56RYF7P3@crapouillou.net>
+In-Reply-To: <159589916426.1360974.7420398609893038@swboyd.mtv.corp.google.com>
+References: <20200630163852.47267-1-zhouyanjie@wanyeetech.com>
+        <d4899cde-ac7c-e7a4-5819-59fcacbd3745@wanyeetech.com>
+        <159589916426.1360974.7420398609893038@swboyd.mtv.corp.google.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200610113837.27117-1-matthias.schiffer@ew.tq-group.com>
-References: <20200610113837.27117-1-matthias.schiffer@ew.tq-group.com>
-Subject: Re: [PATCH] clk: qoriq: add LS1021A core pll mux options
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Krummsdorf <michael.krummsdorf@tq-group.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        Michael Turquette <mturquette@baylibre.com>
-Date:   Mon, 27 Jul 2020 18:25:25 -0700
-Message-ID: <159589952570.1360974.12026401235468882356@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Matthias Schiffer (2020-06-10 04:38:37)
-> From: Michael Krummsdorf <michael.krummsdorf@tq-group.com>
->=20
-> This allows to clock the cores with 1 GHz, 500 MHz and 250 MHz.
->=20
-> Signed-off-by: Michael Krummsdorf <michael.krummsdorf@tq-group.com>
-> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-> ---
 
-Applied to clk-next
+
+Le lun. 27 juil. 2020 =E0 18:19, Stephen Boyd <sboyd@kernel.org> a=20
+=E9crit :
+> Quoting Zhou Yanjie (2020-07-24 21:01:38)
+>>  Gentle ping.
+>>=20
+>=20
+> I was hoping Paul would review but I guess not. I applied the patches=20
+> to
+> clk-next.
+
+I did receive the "gentle ping" and was going to review it soonish :(
+
+I said for v1 that I don't like how it comes out with magic Hz values...
+
+-Paul
+
+
