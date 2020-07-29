@@ -2,73 +2,91 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9E3231E00
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Jul 2020 14:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB0F231E48
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Jul 2020 14:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726509AbgG2MFe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 29 Jul 2020 08:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726341AbgG2MFe (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 29 Jul 2020 08:05:34 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33C2C061794;
-        Wed, 29 Jul 2020 05:05:33 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id o18so24045203eje.7;
-        Wed, 29 Jul 2020 05:05:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aXIt4Mo1PgFXWOsZfX3ouR5GPUAW+dMmhSUWqpQyOGI=;
-        b=nFNVnEBGH0cRd+8OujTalxexYKT9IDGLV+35DrquF2+E8/gVwiSbKOKAR+imJ5F34c
-         oZZ3X2mkmLZ/p9IASC7p1CcRac5xbPA47OVhZK0wtF4eE5Obpfj53A/FLXa11qn9Qqxh
-         AJdwh9yTM4A8S8TW4cPsf3CyazmLrpQYwZlqSEoLRSI+I/NI44FcKhrMC8YuZodL38dY
-         7LJWMavJQr3ofklvIKOUN69UIShyfBScLTotWlPPiti2hMjGffphQECuuo+cqZn7k+XX
-         cTsoZXezbU8yQXHfx8ZI/7z85mvHFDeFtdTZ9V1pb1wveFq6QJlkR8KvibwvAH5bLPQV
-         McbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aXIt4Mo1PgFXWOsZfX3ouR5GPUAW+dMmhSUWqpQyOGI=;
-        b=MQW8DsKn72m4SxVh+tF1Smazq1G7YU8feXfUvRyY/8O0H27iXDEmxIY4KWraTTVLjI
-         O7HT4U3q/z0CsfCokgC6zrL94TlChn23FkZuQcDviP91mEo3QW83GYdK8/8whfPRMnLw
-         RG9QwrPS8B8l94f1QuqskJ70KI29wsouYNH7puUxTJTF2Z3jsTu8HeSlHDqdpslSi+XK
-         jNSR0fKOLo1psfUXy13ZEAKB2TiFoI5BRgeGHwWkMjI0f4rXfnOSIGoUYFAOOo04S6R5
-         svs3kCZGVmBr+F8ZhI4OsphBPOUbO/eJ64vjQHgdcRcdJV1Raz7aKIXj90SdOspX2lFO
-         /1XQ==
-X-Gm-Message-State: AOAM532Pv6ob8m6Hz4CwVpRPdF1Y7g2FtmV7VQTLChcmWax3wZMScJug
-        DjD3x+OdsMqb6jmCzBL4pxiShStR1QtvMZkcaQY=
-X-Google-Smtp-Source: ABdhPJxDUZiAt21H/R28NZeZw1fPj51R6TGTfqIkYxZ8uBaYjAdiI0ZkUIeUMU9zi983V9myZE0BxnakEWXi2ot5YmA=
-X-Received: by 2002:a17:906:c143:: with SMTP id dp3mr454824ejc.504.1596024331419;
- Wed, 29 Jul 2020 05:05:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200729120057.35079-1-konradybcio@gmail.com> <20200729120057.35079-10-konradybcio@gmail.com>
-In-Reply-To: <20200729120057.35079-10-konradybcio@gmail.com>
-From:   Konrad Dybcio <konradybcio@gmail.com>
-Date:   Wed, 29 Jul 2020 14:04:55 +0200
-Message-ID: <CAMS8qEWr3ote5QmXxYDPvDNc_uhhNfPj4ehB4FQxs1HNsgtCYg@mail.gmail.com>
-Subject: Re: [PATCH v2 09/10] clk: qcom: gcc-msm8994: Fix up the driver and
- modernize it
-To:     Konrad Dybcio <konradybcio@gmail.com>
-Cc:     lauren.kelly@msn.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
+        id S1726480AbgG2MIV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 29 Jul 2020 08:08:21 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:37722 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726341AbgG2MIU (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 29 Jul 2020 08:08:20 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 8A9FF200FEA;
+        Wed, 29 Jul 2020 14:08:18 +0200 (CEST)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7A99A200FAB;
+        Wed, 29 Jul 2020 14:08:18 +0200 (CEST)
+Received: from fsr-ub1664-175.ea.freescale.net (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id D268D2032B;
+        Wed, 29 Jul 2020 14:08:17 +0200 (CEST)
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Anson Huang <anson.huang@nxp.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Fugang Duan <fugang.duan@nxp.com>
+Cc:     NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        Abel Vesa <abel.vesa@nxp.com>
+Subject: [PATCH 00/17] Add BLK_CTRL support for i.MX8MP
+Date:   Wed, 29 Jul 2020 15:07:46 +0300
+Message-Id: <1596024483-21482-1-git-send-email-abel.vesa@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Wouldn't be myself if I didn't forget that
+The BLK_CTRL according to HW design is basically the wrapper of the entire
+function specific group of IPs and holds GPRs that usually cannot be placed
+into one specific IP from that group. Some of these GPRs are used to control
+some clocks, other some resets, others some very specific function that does
+not fit into clocks or resets. Since the clocks are registered using the i.MX
+clock subsystem API, the driver is placed into the clock subsystem, but it
+also registers the resets. For the other functionalities that other GPRs might
+have, the syscon is used.
 
-Fixes: aec89f78cf01 (clk: qcom: Add support for msm8994 global clock controller)
+Abel Vesa (17):
+  dt-bindings: clocks: imx8mp: Rename audiomix ids clocks to
+    audio_blk_ctrl
+  dt-bindings: reset: imx8mp: Add audio blk_ctrl reset IDs
+  dt-bindings: clock: imx8mp: Add ids for the audio shared gate
+  dt-bindings: clock: imx8mp: Add media blk_ctrl clock IDs
+  dt-bindings: reset: imx8mp: Add media blk_ctrl reset IDs
+  dt-bindings: clock: imx8mp: Add hdmi blk_ctrl clock IDs
+  dt-bindings: reset: imx8mp: Add hdmi blk_ctrl reset IDs
+  clk: imx8mp: Add audio shared gate
+  arm64: dts: Remove imx-hdmimix-reset header file
+  Documentation: bindings: clk: Add bindings for i.MX BLK_CTRL
+  clk: imx: Add blk_ctrl combo driver
+  clk: imx8mp: Add audio blk_ctrl clocks and resets
+  clk: imx8mp: Add hdmi blk_ctrl clocks and resets
+  clk: imx8mp: Add media blk_ctrl clocks and resets
+  arm64: dts: imx8mp: Add audio_blk_ctrl node
+  arm64: dts: imx8mp: Add media_blk_ctrl node
+  arm64: dts: imx8mp: Add hdmi_blk_ctrl node
 
-Konrad
+ .../bindings/clock/fsl,imx-blk-ctrl.yaml           |  55 ++++
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi          |  44 +++
+ drivers/clk/imx/Makefile                           |   2 +-
+ drivers/clk/imx/clk-blk-ctrl.c                     | 330 +++++++++++++++++++++
+ drivers/clk/imx/clk-blk-ctrl.h                     |  81 +++++
+ drivers/clk/imx/clk-imx8mp.c                       | 281 +++++++++++++++++-
+ include/dt-bindings/clock/imx8mp-clock.h           | 200 +++++++++----
+ include/dt-bindings/reset/imx8mp-reset.h           |  45 +++
+ 8 files changed, 975 insertions(+), 63 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/fsl,imx-blk-ctrl.yaml
+ create mode 100644 drivers/clk/imx/clk-blk-ctrl.c
+ create mode 100644 drivers/clk/imx/clk-blk-ctrl.h
+
+-- 
+2.7.4
+
