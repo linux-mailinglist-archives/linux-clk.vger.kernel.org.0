@@ -2,33 +2,33 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC46231ACA
+	by mail.lfdr.de (Postfix) with ESMTP id ECA42231ACB
 	for <lists+linux-clk@lfdr.de>; Wed, 29 Jul 2020 10:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727987AbgG2IEv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 29 Jul 2020 04:04:51 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:52716 "EHLO inva021.nxp.com"
+        id S1727041AbgG2IEw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 29 Jul 2020 04:04:52 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:52738 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727041AbgG2IEv (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 29 Jul 2020 04:04:51 -0400
+        id S1727846AbgG2IEw (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 29 Jul 2020 04:04:52 -0400
 Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 63AF220015A;
-        Wed, 29 Jul 2020 10:04:49 +0200 (CEST)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 5DA1720014B;
+        Wed, 29 Jul 2020 10:04:50 +0200 (CEST)
 Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id A4735200126;
-        Wed, 29 Jul 2020 10:04:45 +0200 (CEST)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 9DCAF200E77;
+        Wed, 29 Jul 2020 10:04:46 +0200 (CEST)
 Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id ABA99402DF;
-        Wed, 29 Jul 2020 10:04:39 +0200 (CEST)
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 9C0A64031F;
+        Wed, 29 Jul 2020 10:04:40 +0200 (CEST)
 From:   Dong Aisheng <aisheng.dong@nxp.com>
 To:     linux-clk@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, sboyd@kernel.org,
         mturquette@baylibre.com, shawnguo@kernel.org,
         fabio.estevam@nxp.com, linux-imx@nxp.com, kernel@pengutronix.de,
         Dong Aisheng <aisheng.dong@nxp.com>
-Subject: [PATCH v7 09/11] clk: imx: lpcg: allow lpcg clk to take device pointer
-Date:   Wed, 29 Jul 2020 16:00:16 +0800
-Message-Id: <1596009618-25516-10-git-send-email-aisheng.dong@nxp.com>
+Subject: [PATCH v7 10/11] clk: imx: clk-imx8qxp-lpcg: add runtime pm support
+Date:   Wed, 29 Jul 2020 16:00:17 +0800
+Message-Id: <1596009618-25516-11-git-send-email-aisheng.dong@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1596009618-25516-1-git-send-email-aisheng.dong@nxp.com>
 References: <1596009618-25516-1-git-send-email-aisheng.dong@nxp.com>
@@ -38,85 +38,86 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Used to support runtime pm.
+add runtime pm support
 
 Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
 ---
 ChangeLog:
-v4->v7: no changes
+v5->v7:
+ * no changes
+v4->v5:
+ * minor err check fix
+v3->v4:
+ * disable rpm when error out
 v3: new patch
 ---
- drivers/clk/imx/clk-lpcg-scu.c |  8 ++++----
- drivers/clk/imx/clk-scu.h      | 24 ++++++++++++++++++++----
- 2 files changed, 24 insertions(+), 8 deletions(-)
+ drivers/clk/imx/clk-imx8qxp-lpcg.c | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clk/imx/clk-lpcg-scu.c b/drivers/clk/imx/clk-lpcg-scu.c
-index 897a4c3c02e2..2242e5047a0e 100644
---- a/drivers/clk/imx/clk-lpcg-scu.c
-+++ b/drivers/clk/imx/clk-lpcg-scu.c
-@@ -80,9 +80,9 @@ static const struct clk_ops clk_lpcg_scu_ops = {
- 	.disable = clk_lpcg_scu_disable,
- };
+diff --git a/drivers/clk/imx/clk-imx8qxp-lpcg.c b/drivers/clk/imx/clk-imx8qxp-lpcg.c
+index 1881d7f3ccec..3385de76f6c7 100644
+--- a/drivers/clk/imx/clk-imx8qxp-lpcg.c
++++ b/drivers/clk/imx/clk-imx8qxp-lpcg.c
+@@ -12,6 +12,7 @@
+ #include <linux/of_address.h>
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_runtime.h>
+ #include <linux/slab.h>
  
--struct clk_hw *imx_clk_lpcg_scu(const char *name, const char *parent_name,
--				unsigned long flags, void __iomem *reg,
--				u8 bit_idx, bool hw_gate)
-+struct clk_hw *__imx_clk_lpcg_scu(struct device *dev, const char *name,
-+				  const char *parent_name, unsigned long flags,
-+				  void __iomem *reg, u8 bit_idx, bool hw_gate)
- {
- 	struct clk_lpcg_scu *clk;
- 	struct clk_init_data init;
-@@ -106,7 +106,7 @@ struct clk_hw *imx_clk_lpcg_scu(const char *name, const char *parent_name,
- 	clk->hw.init = &init;
+ #include "clk-scu.h"
+@@ -239,6 +240,12 @@ static int imx_lpcg_parse_clks_from_dt(struct platform_device *pdev,
+ 		return -EINVAL;
+ 	}
  
- 	hw = &clk->hw;
--	ret = clk_hw_register(NULL, hw);
-+	ret = clk_hw_register(dev, hw);
- 	if (ret) {
- 		kfree(clk);
- 		hw = ERR_PTR(ret);
-diff --git a/drivers/clk/imx/clk-scu.h b/drivers/clk/imx/clk-scu.h
-index 6a879526b3d5..faee1ba5c4ee 100644
---- a/drivers/clk/imx/clk-scu.h
-+++ b/drivers/clk/imx/clk-scu.h
-@@ -25,6 +25,11 @@ struct clk_hw *__imx_clk_scu(struct device *dev, const char *name,
- 
- void imx_clk_scu_unregister(void);
- 
-+struct clk_hw *__imx_clk_lpcg_scu(struct device *dev, const char *name,
-+				  const char *parent_name, unsigned long flags,
-+				  void __iomem *reg, u8 bit_idx, bool hw_gate);
-+void imx_clk_lpcg_scu_unregister(struct clk_hw *hw);
++	pm_runtime_get_noresume(&pdev->dev);
++	pm_runtime_set_active(&pdev->dev);
++	pm_runtime_set_autosuspend_delay(&pdev->dev, 500);
++	pm_runtime_use_autosuspend(&pdev->dev);
++	pm_runtime_enable(&pdev->dev);
 +
- static inline struct clk_hw *imx_clk_scu(const char *name, u32 rsrc_id,
- 					 u8 clk_type, u8 clk_cells)
- {
-@@ -44,8 +49,19 @@ static inline struct clk_hw *imx_clk_scu2(const char *name, const char * const *
- 		return __imx_clk_scu(NULL, name, parents, num_parents, rsrc_id, clk_type);
+ 	for (i = 0; i < count; i++) {
+ 		idx = bit_offset[i] / 4;
+ 		if (idx > IMX_LPCG_MAX_CLKS) {
+@@ -248,9 +255,9 @@ static int imx_lpcg_parse_clks_from_dt(struct platform_device *pdev,
+ 			goto unreg;
+ 		}
+ 
+-		clk_hws[idx] = imx_clk_lpcg_scu(output_names[i],
+-						parent_names[i], 0, base,
+-						bit_offset[i], false);
++		clk_hws[idx] = imx_clk_lpcg_scu_dev(&pdev->dev, output_names[i],
++						    parent_names[i], 0, base,
++						    bit_offset[i], false);
+ 		if (IS_ERR(clk_hws[idx])) {
+ 			dev_warn(&pdev->dev, "failed to register clock %d\n",
+ 				 idx);
+@@ -261,8 +268,13 @@ static int imx_lpcg_parse_clks_from_dt(struct platform_device *pdev,
+ 
+ 	ret = devm_of_clk_add_hw_provider(&pdev->dev, imx_lpcg_of_clk_src_get,
+ 					  clk_data);
+-	if (!ret)
+-		return 0;
++	if (ret)
++		goto unreg;
++
++	pm_runtime_mark_last_busy(&pdev->dev);
++	pm_runtime_put_autosuspend(&pdev->dev);
++
++	return 0;
+ 
+ unreg:
+ 	while (--i >= 0) {
+@@ -271,6 +283,8 @@ static int imx_lpcg_parse_clks_from_dt(struct platform_device *pdev,
+ 			imx_clk_lpcg_scu_unregister(clk_hws[idx]);
+ 	}
+ 
++	pm_runtime_disable(&pdev->dev);
++
+ 	return ret;
  }
  
--struct clk_hw *imx_clk_lpcg_scu(const char *name, const char *parent_name,
--				unsigned long flags, void __iomem *reg,
--				u8 bit_idx, bool hw_gate);
--void imx_clk_lpcg_scu_unregister(struct clk_hw *hw);
-+static inline struct clk_hw *imx_clk_lpcg_scu_dev(struct device *dev, const char *name,
-+						  const char *parent_name, unsigned long flags,
-+						  void __iomem *reg, u8 bit_idx, bool hw_gate)
-+{
-+	return __imx_clk_lpcg_scu(dev, name, parent_name, flags, reg,
-+				  bit_idx, hw_gate);
-+}
-+
-+static inline struct clk_hw *imx_clk_lpcg_scu(const char *name, const char *parent_name,
-+					      unsigned long flags, void __iomem *reg,
-+					      u8 bit_idx, bool hw_gate)
-+{
-+	return __imx_clk_lpcg_scu(NULL, name, parent_name, flags, reg,
-+				  bit_idx, hw_gate);
-+}
- #endif
 -- 
 2.23.0
 
