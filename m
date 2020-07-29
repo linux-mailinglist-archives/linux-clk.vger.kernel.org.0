@@ -2,33 +2,33 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1AD231AC5
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Jul 2020 10:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4309C231AC6
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Jul 2020 10:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727983AbgG2IEt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        id S1727965AbgG2IEt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
         Wed, 29 Jul 2020 04:04:49 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:34466 "EHLO inva020.nxp.com"
+Received: from inva020.nxp.com ([92.121.34.13]:34490 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727965AbgG2IEs (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 29 Jul 2020 04:04:48 -0400
+        id S1727978AbgG2IEt (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 29 Jul 2020 04:04:49 -0400
 Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 733451A112E;
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A7A421A0F4B;
         Wed, 29 Jul 2020 10:04:47 +0200 (CEST)
 Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B35931A0F4B;
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B31D61A0F43;
         Wed, 29 Jul 2020 10:04:43 +0200 (CEST)
 Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id E8AA74031D;
-        Wed, 29 Jul 2020 10:04:34 +0200 (CEST)
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id E392140320;
+        Wed, 29 Jul 2020 10:04:35 +0200 (CEST)
 From:   Dong Aisheng <aisheng.dong@nxp.com>
 To:     linux-clk@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, sboyd@kernel.org,
         mturquette@baylibre.com, shawnguo@kernel.org,
         fabio.estevam@nxp.com, linux-imx@nxp.com, kernel@pengutronix.de,
         Dong Aisheng <aisheng.dong@nxp.com>
-Subject: [PATCH v7 04/11] clk: imx: scu: bypass cpu power domains
-Date:   Wed, 29 Jul 2020 16:00:11 +0800
-Message-Id: <1596009618-25516-5-git-send-email-aisheng.dong@nxp.com>
+Subject: [PATCH v7 05/11] clk: imx: scu: allow scu clk to take device pointer
+Date:   Wed, 29 Jul 2020 16:00:12 +0800
+Message-Id: <1596009618-25516-6-git-send-email-aisheng.dong@nxp.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1596009618-25516-1-git-send-email-aisheng.dong@nxp.com>
 References: <1596009618-25516-1-git-send-email-aisheng.dong@nxp.com>
@@ -38,37 +38,93 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Bypass cpu power domains which are owned by ATF.
+Used to support runtime pm.
 
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <kernel@pengutronix.de>
+Cc: Michael Turquette <mturquette@baylibre.com>
 Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
 ---
 ChangeLog:
-v6->v7:
+v4->v7:
  * no changes
-v5:
- * remove unnecessary ()
-v4: no changes
+v3->v4:
+ * add the missing dev poninter when call __imx_clk_scu in probe
 v3: new patch
 ---
- drivers/clk/imx/clk-scu.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/clk/imx/clk-scu.c | 9 +++++----
+ drivers/clk/imx/clk-scu.h | 9 +++++----
+ 2 files changed, 10 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/clk/imx/clk-scu.c b/drivers/clk/imx/clk-scu.c
-index e5837e7caa50..dae2529bf64e 100644
+index dae2529bf64e..a67cca0a32ad 100644
 --- a/drivers/clk/imx/clk-scu.c
 +++ b/drivers/clk/imx/clk-scu.c
-@@ -484,6 +484,10 @@ static int imx_clk_scu_attach_pd(struct device *dev, u32 rsrc_id)
- 		.args[0] = rsrc_id,
- 	};
+@@ -387,8 +387,9 @@ static const struct clk_ops clk_scu_cpu_ops = {
+ 	.unprepare = clk_scu_unprepare,
+ };
  
-+	if (rsrc_id == IMX_SC_R_A35 || rsrc_id == IMX_SC_R_A53 ||
-+	    rsrc_id == IMX_SC_R_A72)
-+		return 0;
-+
- 	return of_genpd_add_device(&genpdspec, dev);
+-struct clk_hw *__imx_clk_scu(const char *name, const char * const *parents,
+-			     int num_parents, u32 rsrc_id, u8 clk_type)
++struct clk_hw *__imx_clk_scu(struct device *dev, const char *name,
++			     const char * const *parents, int num_parents,
++			     u32 rsrc_id, u8 clk_type)
+ {
+ 	struct clk_init_data init;
+ 	struct clk_scu *clk;
+@@ -422,7 +423,7 @@ struct clk_hw *__imx_clk_scu(const char *name, const char * const *parents,
+ 	clk->hw.init = &init;
+ 
+ 	hw = &clk->hw;
+-	ret = clk_hw_register(NULL, hw);
++	ret = clk_hw_register(dev, hw);
+ 	if (ret) {
+ 		kfree(clk);
+ 		hw = ERR_PTR(ret);
+@@ -453,7 +454,7 @@ static int imx_clk_scu_probe(struct platform_device *pdev)
+ 	struct imx_scu_clk_node *clk = dev_get_platdata(dev);
+ 	struct clk_hw *hw;
+ 
+-	hw = __imx_clk_scu(clk->name, clk->parents, clk->num_parents,
++	hw = __imx_clk_scu(NULL, clk->name, clk->parents, clk->num_parents,
+ 			   clk->rsrc, clk->clk_type);
+ 	if (IS_ERR(hw))
+ 		return PTR_ERR(hw);
+diff --git a/drivers/clk/imx/clk-scu.h b/drivers/clk/imx/clk-scu.h
+index f7480898ea74..22976d64a96a 100644
+--- a/drivers/clk/imx/clk-scu.h
++++ b/drivers/clk/imx/clk-scu.h
+@@ -19,8 +19,9 @@ struct clk_hw *imx_clk_scu_alloc_dev(const char *name,
+ 				     const char * const *parents,
+ 				     int num_parents, u32 rsrc_id, u8 clk_type);
+ 
+-struct clk_hw *__imx_clk_scu(const char *name, const char * const *parents,
+-			     int num_parents, u32 rsrc_id, u8 clk_type);
++struct clk_hw *__imx_clk_scu(struct device *dev, const char *name,
++			     const char * const *parents, int num_parents,
++			     u32 rsrc_id, u8 clk_type);
+ 
+ void imx_clk_scu_unregister(void);
+ 
+@@ -30,7 +31,7 @@ static inline struct clk_hw *imx_clk_scu(const char *name, u32 rsrc_id,
+ 	if (clk_cells == 2)
+ 		return imx_clk_scu_alloc_dev(name, NULL, 0, rsrc_id, clk_type);
+ 	else
+-		return __imx_clk_scu(name, NULL, 0, rsrc_id, clk_type);
++		return __imx_clk_scu(NULL, name, NULL, 0, rsrc_id, clk_type);
  }
  
+ static inline struct clk_hw *imx_clk_scu2(const char *name, const char * const *parents,
+@@ -40,7 +41,7 @@ static inline struct clk_hw *imx_clk_scu2(const char *name, const char * const *
+ 	if (clk_cells == 2)
+ 		return imx_clk_scu_alloc_dev(name, parents, num_parents, rsrc_id, clk_type);
+ 	else
+-		return __imx_clk_scu(name, parents, num_parents, rsrc_id, clk_type);
++		return __imx_clk_scu(NULL, name, parents, num_parents, rsrc_id, clk_type);
+ }
+ 
+ struct clk_hw *imx_clk_lpcg_scu(const char *name, const char *parent_name,
 -- 
 2.23.0
 
