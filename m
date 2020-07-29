@@ -2,110 +2,220 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08159231B79
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Jul 2020 10:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2422231C23
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Jul 2020 11:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728000AbgG2Iow (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 29 Jul 2020 04:44:52 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:61277 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726707AbgG2Iov (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 29 Jul 2020 04:44:51 -0400
-X-UUID: 4668ce90530145b4923c48b6407d23c2-20200729
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=icLm6g1748z7DYcLHifdFYxCZ/ADR68roycANjVA/Jg=;
-        b=PqGRqO6W7K9DWfOZHSROsp1g3F04HXteXl7aZhZCZ5GFSQrPwpz1PTkwHLLHzgtKToUv3ikbp5HSfCjaIRXpPcHhlFpy2mvjDvAI1B2NKyU4BAHgtvokhTNgsRD2W3hTaagLWpaSQ8++uR9AODRkp954oIwUtu482KDlnym3K50=;
-X-UUID: 4668ce90530145b4923c48b6407d23c2-20200729
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw02.mediatek.com
-        (envelope-from <weiyi.lu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1210015455; Wed, 29 Jul 2020 16:44:46 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 29 Jul 2020 16:44:44 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 29 Jul 2020 16:44:46 +0800
-From:   Weiyi Lu <weiyi.lu@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>
-CC:     James Liao <jamesjj.liao@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <srv_heupstream@mediatek.com>, Weiyi Lu <weiyi.lu@mediatek.com>,
-        Wendell Lin <wendell.lin@mediatek.com>
-Subject: [PATCH v2 4/5] clk: mediatek: Add configurable enable control to mtk_pll_data
-Date:   Wed, 29 Jul 2020 16:44:36 +0800
-Message-ID: <1596012277-8448-5-git-send-email-weiyi.lu@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1596012277-8448-1-git-send-email-weiyi.lu@mediatek.com>
-References: <1596012277-8448-1-git-send-email-weiyi.lu@mediatek.com>
+        id S1727914AbgG2Jcx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 29 Jul 2020 05:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726536AbgG2Jcw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 29 Jul 2020 05:32:52 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D04C061794;
+        Wed, 29 Jul 2020 02:32:52 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id a65so7861337otc.8;
+        Wed, 29 Jul 2020 02:32:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OHhG5jxleK/NwjMdPfb9zjsQp7xv4ruX3ZHlREQ/R1E=;
+        b=nmLSAop2RYQFa35KUVOM2bkx8RGjiDGd+1v/AENuODxfInSpb26mCs/SjVwJQQnVtY
+         cGS0UE214SE4mLBt9tMzHb2FEFQwScLPSAcXRouJVT4b3rUIoHlitRpT/+zPgcefAsIU
+         NLsQpITaLj1WmaSSiktae8CjQe8qbIslEZrWgHQT+TQhoPACSUqggoUNl52EsQJM3jRR
+         25nN4oHhDF7Uy1DGDfb7oQuYgTkdgsC/+bq7rYrPvt5mQFGv96hOYlsvihO5+52XPQgU
+         FMxm+RswV/flgIa1qSVhUB8oTYgJXCH/8CIr9ppYcf0zor0kfHvsJluCoPmkdMZpdWAU
+         +qHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OHhG5jxleK/NwjMdPfb9zjsQp7xv4ruX3ZHlREQ/R1E=;
+        b=dHfRfeBSo2uZaW3xAuZhcdgYdQNIrwNVty+j9YUkC7GP2ErbbvjQlhm/pI5U6HTwJr
+         1RogRAzdAH04Q8nSbvDIPIO3WOL0BAecAlcmhVXToFaD3S4Bp2+QC/h6tOCU/jsGPrSR
+         lyRYmQrAJWyKOvnYn/yHEUqUJMMXdgVqM1XR2MWhNxk7YFDbHnQic8lRPDHvVku5Zl/X
+         dTS8kzhM4D7J6Rr5LKBKshbC383mLyyVMQIJMgwyJQaU+N/fTCZ293hBAgoC5CMjyEer
+         /GA152UFGz7a8pnOwQNEB65TfDvL4US+CqXwEzFzEFMaH9gxLu4pMYXyzHBULiwvSOfB
+         ivMA==
+X-Gm-Message-State: AOAM531qvLSk6ApE2lI+YrQ/6uo0+OPSoearVKiO2zC+z9NZI3J8kxCL
+        LGyB7Bj6j5p3Q4dyVtJeYG7GwkU984yWr//Ledw=
+X-Google-Smtp-Source: ABdhPJz+lDYyzS5yNdRSnrCl60tunB7jRkBS4DJ55b3j6mWjIyEdpCm8HqT7jQEXlNi/0E21pKrDEHxYKk+ZQhV6CEY=
+X-Received: by 2002:a9d:d57:: with SMTP id 81mr26959371oti.184.1596015171996;
+ Wed, 29 Jul 2020 02:32:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+References: <1596012277-8448-1-git-send-email-weiyi.lu@mediatek.com> <1596012277-8448-6-git-send-email-weiyi.lu@mediatek.com>
+In-Reply-To: <1596012277-8448-6-git-send-email-weiyi.lu@mediatek.com>
+From:   Enric Balletbo Serra <eballetbo@gmail.com>
+Date:   Wed, 29 Jul 2020 11:32:40 +0200
+Message-ID: <CAFqH_50_xi5WkokS3WmV2Z-yAK06bpXBMgTQomwmJHcQmfX9yw@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] clk: mediatek: Add MT8192 clock support
+To:     Weiyi Lu <weiyi.lu@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        James Liao <jamesjj.liao@mediatek.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>, linux-clk@vger.kernel.org,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        Wendell Lin <wendell.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-SW4gYWxsIE1lZGlhVGVrIFBMTCBkZXNpZ24sIGJpdDAgb2YgQ09OMCByZWdpc3RlciBpcyBhbHdh
-eXMNCnRoZSBlbmFibGUgYml0Lg0KSG93ZXZlciwgdGhlcmUncyBhIHNwZWNpYWwgY2FzZSBvZiB1
-c2JwbGwgb24gTVQ4MTkyLg0KVGhlIGVuYWJsZSBiaXQgb2YgdXNicGxsIGlzIG1vdmVkIHRvIGJp
-dDIgb2Ygb3RoZXIgcmVnaXN0ZXIuDQpBZGQgY29uZmlndXJhYmxlIGVuX3JlZyBhbmQgcGxsX2Vu
-X2JpdCBmb3IgZW5hYmxlIGNvbnRyb2wgb3INCmRlZmF1bHQgMCB3aGVyZSBwbGwgZGF0YSBhcmUg
-c3RhdGljIHZhcmlhYmxlcy4NCkhlbmNlLCBDT04wX0JBU0VfRU4gY291bGQgYWxzbyBiZSByZW1v
-dmVkLg0KQW5kIHRoZXJlIG1pZ2h0IGhhdmUgYW5vdGhlciBzcGVjaWFsIGNhc2Ugb24gb3RoZXIg
-Y2hpcHMsDQp0aGUgZW5hYmxlIGJpdCBpcyBzdGlsbCBvbiBDT04wIHJlZ2lzdGVyIGJ1dCBub3Qg
-YXQgYml0MC4NCg0KU2lnbmVkLW9mZi1ieTogV2VpeWkgTHUgPHdlaXlpLmx1QG1lZGlhdGVrLmNv
-bT4NCi0tLQ0KIGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdGsuaCB8ICAyICsrDQogZHJpdmVy
-cy9jbGsvbWVkaWF0ZWsvY2xrLXBsbC5jIHwgMTggKysrKysrKysrKystLS0tLS0tDQogMiBmaWxl
-cyBjaGFuZ2VkLCAxMyBpbnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0
-IGEvZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLW10ay5oIGIvZHJpdmVycy9jbGsvbWVkaWF0ZWsv
-Y2xrLW10ay5oDQppbmRleCBjM2Q2NzU2Li44MTBlYjk3IDEwMDY0NA0KLS0tIGEvZHJpdmVycy9j
-bGsvbWVkaWF0ZWsvY2xrLW10ay5oDQorKysgYi9kcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXRr
-LmgNCkBAIC0yMzMsNiArMjMzLDggQEAgc3RydWN0IG10a19wbGxfZGF0YSB7DQogCXVpbnQzMl90
-IHBjd19jaGdfcmVnOw0KIAljb25zdCBzdHJ1Y3QgbXRrX3BsbF9kaXZfdGFibGUgKmRpdl90YWJs
-ZTsNCiAJY29uc3QgY2hhciAqcGFyZW50X25hbWU7DQorCXVpbnQzMl90IGVuX3JlZzsNCisJdWlu
-dDhfdCBwbGxfZW5fYml0Ow0KIH07DQogDQogdm9pZCBtdGtfY2xrX3JlZ2lzdGVyX3BsbHMoc3Ry
-dWN0IGRldmljZV9ub2RlICpub2RlLA0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2xrL21lZGlhdGVr
-L2Nsay1wbGwuYyBiL2RyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1wbGwuYw0KaW5kZXggM2M3OWUx
-YS4uMTQzNGU5OSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1wbGwuYw0K
-KysrIGIvZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLXBsbC5jDQpAQCAtMTYsNyArMTYsNiBAQA0K
-ICNkZWZpbmUgUkVHX0NPTjAJCTANCiAjZGVmaW5lIFJFR19DT04xCQk0DQogDQotI2RlZmluZSBD
-T04wX0JBU0VfRU4JCUJJVCgwKQ0KICNkZWZpbmUgQ09OMF9QV1JfT04JCUJJVCgwKQ0KICNkZWZp
-bmUgQ09OMF9JU09fRU4JCUJJVCgxKQ0KICNkZWZpbmUgUENXX0NIR19NQVNLCQlCSVQoMzEpDQpA
-QCAtNDQsNiArNDMsNyBAQCBzdHJ1Y3QgbXRrX2Nsa19wbGwgew0KIAl2b2lkIF9faW9tZW0JKnR1
-bmVyX2VuX2FkZHI7DQogCXZvaWQgX19pb21lbQkqcGN3X2FkZHI7DQogCXZvaWQgX19pb21lbQkq
-cGN3X2NoZ19hZGRyOw0KKwl2b2lkIF9faW9tZW0JKmVuX2FkZHI7DQogCWNvbnN0IHN0cnVjdCBt
-dGtfcGxsX2RhdGEgKmRhdGE7DQogfTsNCiANCkBAIC01Niw3ICs1Niw3IEBAIHN0YXRpYyBpbnQg
-bXRrX3BsbF9pc19wcmVwYXJlZChzdHJ1Y3QgY2xrX2h3ICpodykNCiB7DQogCXN0cnVjdCBtdGtf
-Y2xrX3BsbCAqcGxsID0gdG9fbXRrX2Nsa19wbGwoaHcpOw0KIA0KLQlyZXR1cm4gKHJlYWRsKHBs
-bC0+YmFzZV9hZGRyICsgUkVHX0NPTjApICYgQ09OMF9CQVNFX0VOKSAhPSAwOw0KKwlyZXR1cm4g
-KHJlYWRsKHBsbC0+ZW5fYWRkcikgJiBCSVQocGxsLT5kYXRhLT5wbGxfZW5fYml0KSkgIT0gMDsN
-CiB9DQogDQogc3RhdGljIHVuc2lnbmVkIGxvbmcgX19tdGtfcGxsX3JlY2FsY19yYXRlKHN0cnVj
-dCBtdGtfY2xrX3BsbCAqcGxsLCB1MzIgZmluLA0KQEAgLTI0Nyw4ICsyNDcsOCBAQCBzdGF0aWMg
-aW50IG10a19wbGxfcHJlcGFyZShzdHJ1Y3QgY2xrX2h3ICpodykNCiAJd3JpdGVsKHIsIHBsbC0+
-cHdyX2FkZHIpOw0KIAl1ZGVsYXkoMSk7DQogDQotCXIgPSByZWFkbChwbGwtPmJhc2VfYWRkciAr
-IFJFR19DT04wKSB8IENPTjBfQkFTRV9FTjsNCi0Jd3JpdGVsKHIsIHBsbC0+YmFzZV9hZGRyICsg
-UkVHX0NPTjApOw0KKwlyID0gcmVhZGwocGxsLT5lbl9hZGRyKSB8IEJJVChwbGwtPmRhdGEtPnBs
-bF9lbl9iaXQpOw0KKwl3cml0ZWwociwgcGxsLT5lbl9hZGRyKTsNCiANCiAJciA9IHJlYWRsKHBs
-bC0+YmFzZV9hZGRyICsgUkVHX0NPTjApIHwgcGxsLT5kYXRhLT5lbl9tYXNrOw0KIAl3cml0ZWwo
-ciwgcGxsLT5iYXNlX2FkZHIgKyBSRUdfQ09OMCk7DQpAQCAtMjgzLDkgKzI4Myw5IEBAIHN0YXRp
-YyB2b2lkIG10a19wbGxfdW5wcmVwYXJlKHN0cnVjdCBjbGtfaHcgKmh3KQ0KIAlyICY9IH5wbGwt
-PmRhdGEtPmVuX21hc2s7DQogCXdyaXRlbChyLCBwbGwtPmJhc2VfYWRkciArIFJFR19DT04wKTsN
-CiANCi0JciA9IHJlYWRsKHBsbC0+YmFzZV9hZGRyICsgUkVHX0NPTjApOw0KLQlyICY9IH5DT04w
-X0JBU0VfRU47DQotCXdyaXRlbChyLCBwbGwtPmJhc2VfYWRkciArIFJFR19DT04wKTsNCisJciA9
-IHJlYWRsKHBsbC0+ZW5fYWRkcik7DQorCXIgJj0gfkJJVChwbGwtPmRhdGEtPnBsbF9lbl9iaXQp
-Ow0KKwl3cml0ZWwociwgcGxsLT5lbl9hZGRyKTsNCiANCiAJciA9IHJlYWRsKHBsbC0+cHdyX2Fk
-ZHIpIHwgQ09OMF9JU09fRU47DQogCXdyaXRlbChyLCBwbGwtPnB3cl9hZGRyKTsNCkBAIC0zMjcs
-NiArMzI3LDEwIEBAIHN0YXRpYyBzdHJ1Y3QgY2xrICptdGtfY2xrX3JlZ2lzdGVyX3BsbChjb25z
-dCBzdHJ1Y3QgbXRrX3BsbF9kYXRhICpkYXRhLA0KIAkJcGxsLT50dW5lcl9hZGRyID0gYmFzZSAr
-IGRhdGEtPnR1bmVyX3JlZzsNCiAJaWYgKGRhdGEtPnR1bmVyX2VuX3JlZykNCiAJCXBsbC0+dHVu
-ZXJfZW5fYWRkciA9IGJhc2UgKyBkYXRhLT50dW5lcl9lbl9yZWc7DQorCWlmIChkYXRhLT5lbl9y
-ZWcpDQorCQlwbGwtPmVuX2FkZHIgPSBiYXNlICsgZGF0YS0+ZW5fcmVnOw0KKwllbHNlDQorCQlw
-bGwtPmVuX2FkZHIgPSBwbGwtPmJhc2VfYWRkciArIFJFR19DT04wOw0KIAlwbGwtPmh3LmluaXQg
-PSAmaW5pdDsNCiAJcGxsLT5kYXRhID0gZGF0YTsNCiANCi0tIA0KMS44LjEuMS5kaXJ0eQ0K
+Hi Weiyi,
 
+Thank you for your patch. Some few comment below, I'll focus on
+clk-mt8192-mm file, but I think can apply to other files too.
+
+[snip]
+
+> diff --git a/drivers/clk/mediatek/clk-mt8192-mm.c b/drivers/clk/mediatek/clk-mt8192-mm.c
+> new file mode 100644
+> index 0000000..02eef24
+> --- /dev/null
+> +++ b/drivers/clk/mediatek/clk-mt8192-mm.c
+> @@ -0,0 +1,108 @@
+> +// SPDX-License-Identifier: GPL-2.0
+
+nit: Although is a valid license identifier for the kernel would be
+better to use the non-deprecated form by SPDX, GPL-2.0-only
+
+> +//
+> +// Copyright (c) 2020 MediaTek Inc.
+> +// Author: Weiyi Lu <weiyi.lu@mediatek.com>
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include "clk-mtk.h"
+> +#include "clk-gate.h"
+> +
+> +#include <dt-bindings/clock/mt8192-clk.h>
+> +
+> +static const struct mtk_gate_regs mm0_cg_regs = {
+> +       .set_ofs = 0x104,
+> +       .clr_ofs = 0x108,
+> +       .sta_ofs = 0x100,
+> +};
+> +
+> +static const struct mtk_gate_regs mm1_cg_regs = {
+> +       .set_ofs = 0x114,
+> +       .clr_ofs = 0x118,
+> +       .sta_ofs = 0x110,
+> +};
+> +
+> +static const struct mtk_gate_regs mm2_cg_regs = {
+> +       .set_ofs = 0x1a4,
+> +       .clr_ofs = 0x1a8,
+> +       .sta_ofs = 0x1a0,
+> +};
+> +
+> +#define GATE_MM0(_id, _name, _parent, _shift)                  \
+> +       GATE_MTK(_id, _name, _parent, &mm0_cg_regs, _shift,     \
+> +               &mtk_clk_gate_ops_setclr)
+
+nit: You can take advantage of the new line length limit, which is now
+100 characters.
+
+> +
+> +#define GATE_MM1(_id, _name, _parent, _shift)                  \
+> +       GATE_MTK(_id, _name, _parent, &mm1_cg_regs, _shift,     \
+> +               &mtk_clk_gate_ops_setclr)
+> +
+
+ditto
+
+> +#define GATE_MM2(_id, _name, _parent, _shift)                  \
+> +       GATE_MTK(_id, _name, _parent, &mm2_cg_regs, _shift,     \
+> +               &mtk_clk_gate_ops_setclr)
+> +
+
+ditto
+
+> +static const struct mtk_gate mm_clks[] = {
+> +       /* MM0 */
+> +       GATE_MM0(CLK_MM_DISP_MUTEX0, "mm_disp_mutex0", "disp_sel", 0),
+> +       GATE_MM0(CLK_MM_DISP_CONFIG, "mm_disp_config", "disp_sel", 1),
+> +       GATE_MM0(CLK_MM_DISP_OVL0, "mm_disp_ovl0", "disp_sel", 2),
+> +       GATE_MM0(CLK_MM_DISP_RDMA0, "mm_disp_rdma0", "disp_sel", 3),
+> +       GATE_MM0(CLK_MM_DISP_OVL0_2L, "mm_disp_ovl0_2l", "disp_sel", 4),
+> +       GATE_MM0(CLK_MM_DISP_WDMA0, "mm_disp_wdma0", "disp_sel", 5),
+> +       GATE_MM0(CLK_MM_DISP_UFBC_WDMA0, "mm_disp_ufbc_wdma0", "disp_sel", 6),
+> +       GATE_MM0(CLK_MM_DISP_RSZ0, "mm_disp_rsz0", "disp_sel", 7),
+> +       GATE_MM0(CLK_MM_DISP_AAL0, "mm_disp_aal0", "disp_sel", 8),
+> +       GATE_MM0(CLK_MM_DISP_CCORR0, "mm_disp_ccorr0", "disp_sel", 9),
+> +       GATE_MM0(CLK_MM_DISP_DITHER0, "mm_disp_dither0", "disp_sel", 10),
+> +       GATE_MM0(CLK_MM_SMI_INFRA, "mm_smi_infra", "disp_sel", 11),
+> +       GATE_MM0(CLK_MM_DISP_GAMMA0, "mm_disp_gamma0", "disp_sel", 12),
+> +       GATE_MM0(CLK_MM_DISP_POSTMASK0, "mm_disp_postmask0", "disp_sel", 13),
+> +       GATE_MM0(CLK_MM_DISP_DSC_WRAP0, "mm_disp_dsc_wrap0", "disp_sel", 14),
+> +       GATE_MM0(CLK_MM_DSI0, "mm_dsi0", "disp_sel", 15),
+> +       GATE_MM0(CLK_MM_DISP_COLOR0, "mm_disp_color0", "disp_sel", 16),
+> +       GATE_MM0(CLK_MM_SMI_COMMON, "mm_smi_common", "disp_sel", 17),
+> +       GATE_MM0(CLK_MM_DISP_FAKE_ENG0, "mm_disp_fake_eng0", "disp_sel", 18),
+> +       GATE_MM0(CLK_MM_DISP_FAKE_ENG1, "mm_disp_fake_eng1", "disp_sel", 19),
+> +       GATE_MM0(CLK_MM_MDP_TDSHP4, "mm_mdp_tdshp4", "disp_sel", 20),
+> +       GATE_MM0(CLK_MM_MDP_RSZ4, "mm_mdp_rsz4", "disp_sel", 21),
+> +       GATE_MM0(CLK_MM_MDP_AAL4, "mm_mdp_aal4", "disp_sel", 22),
+> +       GATE_MM0(CLK_MM_MDP_HDR4, "mm_mdp_hdr4", "disp_sel", 23),
+> +       GATE_MM0(CLK_MM_MDP_RDMA4, "mm_mdp_rdma4", "disp_sel", 24),
+> +       GATE_MM0(CLK_MM_MDP_COLOR4, "mm_mdp_color4", "disp_sel", 25),
+> +       GATE_MM0(CLK_MM_DISP_Y2R0, "mm_disp_y2r0", "disp_sel", 26),
+> +       GATE_MM0(CLK_MM_SMI_GALS, "mm_smi_gals", "disp_sel", 27),
+> +       GATE_MM0(CLK_MM_DISP_OVL2_2L, "mm_disp_ovl2_2l", "disp_sel", 28),
+> +       GATE_MM0(CLK_MM_DISP_RDMA4, "mm_disp_rdma4", "disp_sel", 29),
+> +       GATE_MM0(CLK_MM_DISP_DPI0, "mm_disp_dpi0", "disp_sel", 30),
+> +       /* MM1 */
+> +       GATE_MM1(CLK_MM_SMI_IOMMU, "mm_smi_iommu", "disp_sel", 0),
+> +       /* MM2 */
+> +       GATE_MM2(CLK_MM_DSI_DSI0, "mm_dsi_dsi0", "disp_sel", 0),
+> +       GATE_MM2(CLK_MM_DPI_DPI0, "mm_dpi_dpi0", "dpi_sel", 8),
+> +       GATE_MM2(CLK_MM_26MHZ, "mm_26mhz", "clk26m", 24),
+> +       GATE_MM2(CLK_MM_32KHZ, "mm_32khz", "clk32k", 25),
+> +};
+> +
+> +static int clk_mt8192_mm_probe(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct device_node *node = dev->parent->of_node;
+> +       struct clk_onecell_data *clk_data;
+> +
+> +       clk_data = mtk_alloc_clk_data(CLK_MM_NR_CLK);
+
+mtk_alloc_clk_data can return NULL
+
+           if (!clk_data)
+              return -ENOMEM;
+
+> +
+> +       mtk_clk_register_gates(node, mm_clks, ARRAY_SIZE(mm_clks),
+> +                       clk_data);
+> +
+
+The above function can fail, better check for error
+
+         if (ret)
+             return ret;
+
+> +       return of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
+> +}
+> +
+> +
+
+No need for double line spacing.
+
+> +static struct platform_driver clk_mt8192_mm_drv = {
+> +       .probe = clk_mt8192_mm_probe,
+> +       .driver = {
+> +               .name = "clk-mt8192-mm",
+> +       },
+> +};
+> +
+> +builtin_platform_driver(clk_mt8192_mm_drv);
+
+[snip]
