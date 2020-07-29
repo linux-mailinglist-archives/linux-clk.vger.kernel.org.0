@@ -2,269 +2,156 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B103231B17
-	for <lists+linux-clk@lfdr.de>; Wed, 29 Jul 2020 10:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FAE231B82
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Jul 2020 10:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728019AbgG2IVZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 29 Jul 2020 04:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59590 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726476AbgG2IVZ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 29 Jul 2020 04:21:25 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC395C061794;
-        Wed, 29 Jul 2020 01:21:24 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id bo3so766372ejb.11;
-        Wed, 29 Jul 2020 01:21:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KqA1sSRAqoMmHyUXGQDJ9R0gs8rOE6Bt39JWluAbiwQ=;
-        b=FSxKa6hWppCQgjLw0HUrH/yC0RwdyNb76TiEXJcyNYQlmMpgXvpdblzyHIqMrHjRBt
-         8zMECz77kaLRPFUKlln9aH27jU/y3EmhpKWSZ45rATgpsV1twAHgF/sdKoafFR1G03u+
-         QqETqjU91lncV59E99lZaXk5s7WN3XQraISFQeCmYMm+cqSgPxcaPBQO0WexMFTAL+s+
-         ROHZXjUr08vgGLEd7xJ4yeSMjarbVcTSNBkzXjrXq0qoJ9jd9SA1Lh0oHQzaKF7wTIWo
-         wsRtoyfoJv3wIWzBYGoxe2ERGppZ96kOTnX5YspTwT9Tq4HqXP36nLOTwoq4lxR+dvdM
-         JTpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KqA1sSRAqoMmHyUXGQDJ9R0gs8rOE6Bt39JWluAbiwQ=;
-        b=hjN+4Js9Nu30ap1jUD84iJ8/7pDV7Fxk3HiuPP5CQ6kIxFHan86vYmY0R2lXPSUCYc
-         fH2JCBuY0AITNc7E93FRI1pXoIyRwHvURhEZH3Q90mk0uYU3YSoPXfAGgNtZjtXBFBS2
-         X474NLrNPkuIpbg4FcF9tU/WqHaN0LvmIlmbrP5VosBQgHSiGVa0JIHmgdvWdlcmevlu
-         Mvte2SkXLy3ovu1QzNBTVHFWYcE+zSksb4730wDuTenEvDQXff0/p9sXGhZ+TIwTP6+A
-         H6JU00fJJt44FqcuGPRwUPKnQgawmFYExoVFKzsQ/N4X2n/Rhyek0sNgLd42smQvFLld
-         KAdQ==
-X-Gm-Message-State: AOAM533V3CB6X0wu+r23QukkmNKDnXVUA/YFfA32c7DStZsZnUcvJmO9
-        zrRY5+DG7OjJQMJKxnu9N6RyoFgbxxD46eyQl0M=
-X-Google-Smtp-Source: ABdhPJw/O7KiCS4DRgu+qkKGXRd/OHgNcuZ5h1KpU5b34LFKdVVbliJID4l6d4Kw1uw5pyHXW4aA3vPh02+YKJmKDZM=
-X-Received: by 2002:a17:906:78e:: with SMTP id l14mr4968502ejc.67.1596010883445;
- Wed, 29 Jul 2020 01:21:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <1596009618-25516-1-git-send-email-aisheng.dong@nxp.com> <1596009618-25516-3-git-send-email-aisheng.dong@nxp.com>
-In-Reply-To: <1596009618-25516-3-git-send-email-aisheng.dong@nxp.com>
-From:   Dong Aisheng <dongas86@gmail.com>
-Date:   Wed, 29 Jul 2020 16:06:56 +0800
-Message-ID: <CAA+hA=SXe8y4dZ7Bf9ciYAVz8eJ65v2TsF6BeKgpDVyGB_H1mQ@mail.gmail.com>
-Subject: Re: [PATCH v7 02/11] dt-bindings: clock: imx-lpcg: add support to
- parse clocks from device tree
-To:     Dong Aisheng <aisheng.dong@nxp.com>
-Cc:     linux-clk <linux-clk@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        id S1728031AbgG2Iox (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 29 Jul 2020 04:44:53 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:26375 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727112AbgG2Iox (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 29 Jul 2020 04:44:53 -0400
+X-UUID: 71039ec90310458b98df098df1767870-20200729
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=hedGltKMo4S0AeSBkYndMMTausqUfwf6tK8YcqmKXRg=;
+        b=jcyj0QrF1pt4ock8PeFN09oUsN1ndrQIyTVxW+JpJDlhARudReQoGFjEVExakyYIBRIv6M3Z8TackDZ9OS0DcxuuB74kjLVbH21ipGQ9vsnMZks7KOXQ/OG6436M4a+TBW2JygqwVbjWUtHG92oBbeTVTUG3ekoXSweAY2Sz80Y=;
+X-UUID: 71039ec90310458b98df098df1767870-20200729
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <weiyi.lu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1205728083; Wed, 29 Jul 2020 16:44:46 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 29 Jul 2020 16:44:43 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 29 Jul 2020 16:44:45 +0800
+From:   Weiyi Lu <weiyi.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>
+CC:     James Liao <jamesjj.liao@mediatek.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        devicetree <devicetree@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>, Weiyi Lu <weiyi.lu@mediatek.com>,
+        Wendell Lin <wendell.lin@mediatek.com>
+Subject: [PATCH v2 0/5] Mediatek MT8192 clock support  
+Date:   Wed, 29 Jul 2020 16:44:32 +0800
+Message-ID: <1596012277-8448-1-git-send-email-weiyi.lu@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
+MIME-Version: 1.0
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 9CE4D8E8E174BD6943C6B2B6AB7171B3C1681FC63B00A8C0C24F8618D1D30A012000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Rob, Stephen, Shawn,
+VGhpcyBzZXJpZXMgaXMgYmFzZWQgb24gdjUuOC1yYzENCg0KY2hhbmdlcyBzaW5jZSB2MToNCi0g
+Zml4IGFzeW1tZXRyaWNhbCBjb250cm9sIG9mIFBMTA0KLSBoYXZlIGVuX21hc2sgdXNlZCBhcyBk
+aXZpZGVyIGVuYWJsZSBtYXNrIG9uIGFsbCBNZWRpYVRlayBTb0MNCg0KV2VpeWkgTHUgKDUpOg0K
+ICBkdC1iaW5kaW5nczogQVJNOiBNZWRpYXRlazogRG9jdW1lbnQgYmluZGluZ3MgZm9yIE1UODE5
+Mg0KICBjbGs6IG1lZGlhdGVrOiBBZGQgZHQtYmluZGluZ3MgZm9yIE1UODE5MiBjbG9ja3MNCiAg
+Y2xrOiBtZWRpYXRlazogRml4IGFzeW1tZXRyaWNhbCBQTEwgZW5hYmxlIGFuZCBkaXNhYmxlIGNv
+bnRyb2wNCiAgY2xrOiBtZWRpYXRlazogQWRkIGNvbmZpZ3VyYWJsZSBlbmFibGUgY29udHJvbCB0
+byBtdGtfcGxsX2RhdGENCiAgY2xrOiBtZWRpYXRlazogQWRkIE1UODE5MiBjbG9jayBzdXBwb3J0
+DQoNCiAuLi4vYXJtL21lZGlhdGVrL21lZGlhdGVrLGFwbWl4ZWRzeXMudHh0ICAgICAgfCAgICAx
+ICsNCiAuLi4vYmluZGluZ3MvYXJtL21lZGlhdGVrL21lZGlhdGVrLGF1ZHN5cy50eHQgfCAgICAx
+ICsNCiAuLi4vYXJtL21lZGlhdGVrL21lZGlhdGVrLGNhbXN5cy1yYXcueWFtbCAgICAgfCAgIDQw
+ICsNCiAuLi4vYmluZGluZ3MvYXJtL21lZGlhdGVrL21lZGlhdGVrLGNhbXN5cy50eHQgfCAgICAx
+ICsNCiAuLi4vYmluZGluZ3MvYXJtL21lZGlhdGVrL21lZGlhdGVrLGltZ3N5cy50eHQgfCAgICAy
+ICsNCiAuLi4vYXJtL21lZGlhdGVrL21lZGlhdGVrLGltcF9paWNfd3JhcC55YW1sICAgfCAgIDQz
+ICsNCiAuLi4vYXJtL21lZGlhdGVrL21lZGlhdGVrLGluZnJhY2ZnLnR4dCAgICAgICAgfCAgICAx
+ICsNCiAuLi4vYmluZGluZ3MvYXJtL21lZGlhdGVrL21lZGlhdGVrLGlwZXN5cy50eHQgfCAgICAx
+ICsNCiAuLi4vYXJtL21lZGlhdGVrL21lZGlhdGVrLG1kcHN5cy55YW1sICAgICAgICAgfCAgIDM4
+ICsNCiAuLi4vYmluZGluZ3MvYXJtL21lZGlhdGVrL21lZGlhdGVrLG1mZ2NmZy50eHQgfCAgICAx
+ICsNCiAuLi4vYmluZGluZ3MvYXJtL21lZGlhdGVrL21lZGlhdGVrLG1tc3lzLnR4dCAgfCAgICAx
+ICsNCiAuLi4vYmluZGluZ3MvYXJtL21lZGlhdGVrL21lZGlhdGVrLG1zZGMueWFtbCAgfCAgIDM5
+ICsNCiAuLi4vYXJtL21lZGlhdGVrL21lZGlhdGVrLHBlcmljZmcueWFtbCAgICAgICAgfCAgICAx
+ICsNCiAuLi4vYXJtL21lZGlhdGVrL21lZGlhdGVrLHNjcC1hZHNwLnlhbWwgICAgICAgfCAgIDM4
+ICsNCiAuLi4vYXJtL21lZGlhdGVrL21lZGlhdGVrLHRvcGNrZ2VuLnR4dCAgICAgICAgfCAgICAx
+ICsNCiAuLi4vYXJtL21lZGlhdGVrL21lZGlhdGVrLHZkZWNzeXMtc29jLnlhbWwgICAgfCAgIDM4
+ICsNCiAuLi4vYXJtL21lZGlhdGVrL21lZGlhdGVrLHZkZWNzeXMudHh0ICAgICAgICAgfCAgICAx
+ICsNCiAuLi4vYXJtL21lZGlhdGVrL21lZGlhdGVrLHZlbmNzeXMudHh0ICAgICAgICAgfCAgICAx
+ICsNCiBkcml2ZXJzL2Nsay9tZWRpYXRlay9LY29uZmlnICAgICAgICAgICAgICAgICAgfCAgMTQ2
+ICsrDQogZHJpdmVycy9jbGsvbWVkaWF0ZWsvTWFrZWZpbGUgICAgICAgICAgICAgICAgIHwgICAy
+NCArDQogZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLW10MjcwMS5jICAgICAgICAgICAgIHwgICAy
+NiArLQ0KIGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDI3MTIuYyAgICAgICAgICAgICB8ICAg
+MzAgKy0NCiBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ2NzY1LmMgICAgICAgICAgICAgfCAg
+IDIwICstDQogZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLW10Njc3OS5jICAgICAgICAgICAgIHwg
+ICAyNCArLQ0KIGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDY3OTcuYyAgICAgICAgICAgICB8
+ICAgMjAgKy0NCiBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ3NjIyLmMgICAgICAgICAgICAg
+fCAgIDE4ICstDQogZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLW10NzYyOS5jICAgICAgICAgICAg
+IHwgICAxMiArLQ0KIGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDgxNzMuYyAgICAgICAgICAg
+ICB8ICAgNDIgKy0NCiBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ4MTgzLmMgICAgICAgICAg
+ICAgfCAgIDIyICstDQogZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLW10ODE5Mi1hdWQuYyAgICAg
+ICAgIHwgIDE1MCArKw0KIGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDgxOTItY2FtLmMgICAg
+ICAgICB8ICAgNjkgKw0KIGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDgxOTItY2FtX3Jhd2Eu
+YyAgICB8ICAgNTYgKw0KIGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDgxOTItY2FtX3Jhd2Iu
+YyAgICB8ICAgNTYgKw0KIGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDgxOTItY2FtX3Jhd2Mu
+YyAgICB8ICAgNTYgKw0KIGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDgxOTItaW1nLmMgICAg
+ICAgICB8ICAgNTcgKw0KIGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDgxOTItaW1nMi5jICAg
+ICAgICB8ICAgNTkgKw0KIC4uLi9jbGsvbWVkaWF0ZWsvY2xrLW10ODE5Mi1pbXBfaWljX3dyYXBf
+Yy5jICB8ICAgNjEgKw0KIC4uLi9jbGsvbWVkaWF0ZWsvY2xrLW10ODE5Mi1pbXBfaWljX3dyYXBf
+ZS5jICB8ICAgNTUgKw0KIC4uLi9jbGsvbWVkaWF0ZWsvY2xrLW10ODE5Mi1pbXBfaWljX3dyYXBf
+bi5jICB8ICAgNTcgKw0KIC4uLi9jbGsvbWVkaWF0ZWsvY2xrLW10ODE5Mi1pbXBfaWljX3dyYXBf
+cy5jICB8ICAgNTkgKw0KIC4uLi9jbGsvbWVkaWF0ZWsvY2xrLW10ODE5Mi1pbXBfaWljX3dyYXBf
+dy5jICB8ICAgNTUgKw0KIC4uLi9jbGsvbWVkaWF0ZWsvY2xrLW10ODE5Mi1pbXBfaWljX3dyYXBf
+d3MuYyB8ICAgNTkgKw0KIGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDgxOTItaXBlLmMgICAg
+ICAgICB8ICAgNjEgKw0KIGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDgxOTItbWRwLmMgICAg
+ICAgICB8ICAgODkgKw0KIGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDgxOTItbWZnLmMgICAg
+ICAgICB8ICAgNTQgKw0KIGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDgxOTItbW0uYyAgICAg
+ICAgICB8ICAxMDggKysNCiBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ4MTkyLW1zZGMuYyAg
+ICAgICAgfCAgIDU0ICsNCiBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ4MTkyLW1zZGNfdG9w
+LmMgICAgfCAgIDgzICsNCiBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ4MTkyLXNjcF9hZHNw
+LmMgICAgfCAgIDU1ICsNCiBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ4MTkyLXZkZWMuYyAg
+ICAgICAgfCAgIDgxICsNCiBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ4MTkyLXZkZWNfc29j
+LmMgICAgfCAgIDg2ICsNCiBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ4MTkyLXZlbmMuYyAg
+ICAgICAgfCAgIDU3ICsNCiBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ4MTkyLmMgICAgICAg
+ICAgICAgfCAxNTQ5ICsrKysrKysrKysrKysrKysrDQogZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xr
+LW10ay5oICAgICAgICAgICAgICAgIHwgICAgMiArDQogZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xr
+LW11eC5oICAgICAgICAgICAgICAgIHwgICAxNSArDQogZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xr
+LXBsbC5jICAgICAgICAgICAgICAgIHwgICAyMCArLQ0KIGluY2x1ZGUvZHQtYmluZGluZ3MvY2xv
+Y2svbXQ4MTkyLWNsay5oICAgICAgICB8ICA1OTMgKysrKysrKw0KIDU3IGZpbGVzIGNoYW5nZWQs
+IDQyODQgaW5zZXJ0aW9ucygrKSwgMTA1IGRlbGV0aW9ucygtKQ0KIGNyZWF0ZSBtb2RlIDEwMDY0
+NCBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL21lZGlhdGVrL21lZGlhdGVr
+LGNhbXN5cy1yYXcueWFtbA0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL2Rldmlj
+ZXRyZWUvYmluZGluZ3MvYXJtL21lZGlhdGVrL21lZGlhdGVrLGltcF9paWNfd3JhcC55YW1sDQog
+Y3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0v
+bWVkaWF0ZWsvbWVkaWF0ZWssbWRwc3lzLnlhbWwNCiBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1l
+bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2FybS9tZWRpYXRlay9tZWRpYXRlayxtc2RjLnlh
+bWwNCiBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdz
+L2FybS9tZWRpYXRlay9tZWRpYXRlayxzY3AtYWRzcC55YW1sDQogY3JlYXRlIG1vZGUgMTAwNjQ0
+IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0vbWVkaWF0ZWsvbWVkaWF0ZWss
+dmRlY3N5cy1zb2MueWFtbA0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2Nsay9tZWRpYXRl
+ay9jbGstbXQ4MTkyLWF1ZC5jDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvY2xrL21lZGlh
+dGVrL2Nsay1tdDgxOTItY2FtLmMNCiBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9jbGsvbWVk
+aWF0ZWsvY2xrLW10ODE5Mi1jYW1fcmF3YS5jDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMv
+Y2xrL21lZGlhdGVrL2Nsay1tdDgxOTItY2FtX3Jhd2IuYw0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBk
+cml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ4MTkyLWNhbV9yYXdjLmMNCiBjcmVhdGUgbW9kZSAx
+MDA2NDQgZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLW10ODE5Mi1pbWcuYw0KIGNyZWF0ZSBtb2Rl
+IDEwMDY0NCBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ4MTkyLWltZzIuYw0KIGNyZWF0ZSBt
+b2RlIDEwMDY0NCBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ4MTkyLWltcF9paWNfd3JhcF9j
+LmMNCiBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLW10ODE5Mi1p
+bXBfaWljX3dyYXBfZS5jDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvY2xrL21lZGlhdGVr
+L2Nsay1tdDgxOTItaW1wX2lpY193cmFwX24uYw0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJz
+L2Nsay9tZWRpYXRlay9jbGstbXQ4MTkyLWltcF9paWNfd3JhcF9zLmMNCiBjcmVhdGUgbW9kZSAx
+MDA2NDQgZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLW10ODE5Mi1pbXBfaWljX3dyYXBfdy5jDQog
+Y3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDgxOTItaW1wX2lp
+Y193cmFwX3dzLmMNCiBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xr
+LW10ODE5Mi1pcGUuYw0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2Nsay9tZWRpYXRlay9j
+bGstbXQ4MTkyLW1kcC5jDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvY2xrL21lZGlhdGVr
+L2Nsay1tdDgxOTItbWZnLmMNCiBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9jbGsvbWVkaWF0
+ZWsvY2xrLW10ODE5Mi1tbS5jDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvY2xrL21lZGlh
+dGVrL2Nsay1tdDgxOTItbXNkYy5jDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvY2xrL21l
+ZGlhdGVrL2Nsay1tdDgxOTItbXNkY190b3AuYw0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJz
+L2Nsay9tZWRpYXRlay9jbGstbXQ4MTkyLXNjcF9hZHNwLmMNCiBjcmVhdGUgbW9kZSAxMDA2NDQg
+ZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLW10ODE5Mi12ZGVjLmMNCiBjcmVhdGUgbW9kZSAxMDA2
+NDQgZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLW10ODE5Mi12ZGVjX3NvYy5jDQogY3JlYXRlIG1v
+ZGUgMTAwNjQ0IGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDgxOTItdmVuYy5jDQogY3JlYXRl
+IG1vZGUgMTAwNjQ0IGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDgxOTIuYw0KIGNyZWF0ZSBt
+b2RlIDEwMDY0NCBpbmNsdWRlL2R0LWJpbmRpbmdzL2Nsb2NrL210ODE5Mi1jbGsuaA0K
 
-On Wed, Jul 29, 2020 at 4:05 PM Dong Aisheng <aisheng.dong@nxp.com> wrote:
->
-> MX8QM and MX8QXP LPCG Clocks are mostly the same except they may reside
-> in different subsystems across CPUs and also vary a bit on the availability.
->
-> Same as SCU clock, we want to move the clock definition into device tree
-> which can fully decouple the dependency of Clock ID definition from device
-> tree and make us be able to write a fully generic lpcg clock driver.
->
-> And we can also use the existence of clock nodes in device tree to address
-> the device and clock availability differences across different SoCs.
->
-> Cc: Sascha Hauer <kernel@pengutronix.de>
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: devicetree@vger.kernel.org
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
-
-This patch has been reviewed before, however, i removed your tags due
-to the legacy binding
-file was removed and switched to json schema.
-So i updated this patch to json schema accordingly and need your
-kindly re-review.
-
-The former reviewed patch is here:
-https://patchwork.kernel.org/patch/11439079/
-
-Regards
-Aisheng
-
-> ---
-> ChangeLog:
-> v6->v7:
->  * No other changes except converting to json schema based on the former reviewed
->    patches due to the lagecy binding file was removed in latests kernel.
->    Because the format is different now, i removed the former R-b
->    and A-b tags and request a new review.
->    See original patch here:
->    https://patchwork.kernel.org/patch/11439079/
-> v4->v6:
->  * no changes
-> v3->v4:
->  * change bit-offset property to clock-indices
->  * use constant macro to define clock indinces
->  * drop hw-autogate property which is still not used by drivers
-> v2->v3:
->  * no changes
-> v1->v2:
->  * Update example
->  * Add power domain property
-> ---
->  .../bindings/clock/imx8qxp-lpcg.yaml          | 79 ++++++++++++++-----
->  include/dt-bindings/clock/imx8-lpcg.h         | 14 ++++
->  2 files changed, 74 insertions(+), 19 deletions(-)
->  create mode 100644 include/dt-bindings/clock/imx8-lpcg.h
->
-> diff --git a/Documentation/devicetree/bindings/clock/imx8qxp-lpcg.yaml b/Documentation/devicetree/bindings/clock/imx8qxp-lpcg.yaml
-> index 33f3010f48c3..e709e530e17a 100644
-> --- a/Documentation/devicetree/bindings/clock/imx8qxp-lpcg.yaml
-> +++ b/Documentation/devicetree/bindings/clock/imx8qxp-lpcg.yaml
-> @@ -21,27 +21,58 @@ description: |
->
->    The clock consumer should specify the desired clock by having the clock
->    ID in its "clocks" phandle cell. See the full list of clock IDs from:
-> -  include/dt-bindings/clock/imx8-clock.h
-> +  include/dt-bindings/clock/imx8-lpcg.h
->
->  properties:
->    compatible:
-> -    enum:
-> -      - fsl,imx8qxp-lpcg-adma
-> -      - fsl,imx8qxp-lpcg-conn
-> -      - fsl,imx8qxp-lpcg-dc
-> -      - fsl,imx8qxp-lpcg-dsp
-> -      - fsl,imx8qxp-lpcg-gpu
-> -      - fsl,imx8qxp-lpcg-hsio
-> -      - fsl,imx8qxp-lpcg-img
-> -      - fsl,imx8qxp-lpcg-lsio
-> -      - fsl,imx8qxp-lpcg-vpu
-> -
-> +    oneOf:
-> +      - const: fsl,imx8qxp-lpcg
-> +      - items:
-> +          - enum:
-> +            - fsl,imx8qm-lpcg
-> +          - const: fsl,imx8qxp-lpcg
-> +      - enum:
-> +        - fsl,imx8qxp-lpcg-adma
-> +        - fsl,imx8qxp-lpcg-conn
-> +        - fsl,imx8qxp-lpcg-dc
-> +        - fsl,imx8qxp-lpcg-dsp
-> +        - fsl,imx8qxp-lpcg-gpu
-> +        - fsl,imx8qxp-lpcg-hsio
-> +        - fsl,imx8qxp-lpcg-img
-> +        - fsl,imx8qxp-lpcg-lsio
-> +        - fsl,imx8qxp-lpcg-vpu
-> +        deprecated: true
->    reg:
->      maxItems: 1
->
->    '#clock-cells':
->      const: 1
->
-> +  clocks:
-> +    description: |
-> +      Input parent clocks phandle array for each clock
-> +    minItems: 1
-> +    maxItems: 8
-> +
-> +  clock-indices:
-> +    description: |
-> +      An integer array indicating the bit offset for each clock.
-> +      Refer to <include/dt-bindings/clock/imx8-lpcg.h> for the
-> +      supported LPCG clock indices.
-> +    minItems: 1
-> +    maxItems: 8
-> +
-> +  clock-output-names:
-> +    description: |
-> +      Shall be the corresponding names of the outputs.
-> +      NOTE this property must be specified in the same order
-> +      as the clock-indices property.
-> +    minItems: 1
-> +    maxItems: 8
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
->  required:
->    - compatible
->    - reg
-> @@ -51,23 +82,33 @@ additionalProperties: false
->
->  examples:
->    - |
-> -    #include <dt-bindings/clock/imx8-clock.h>
-> +    #include <dt-bindings/clock/imx8-lpcg.h>
->      #include <dt-bindings/firmware/imx/rsrc.h>
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
->
-> -    clock-controller@5b200000 {
-> -        compatible = "fsl,imx8qxp-lpcg-conn";
-> -        reg = <0x5b200000 0xb0000>;
-> +    sdhc0_lpcg: clock-controller@5b200000 {
-> +        compatible = "fsl,imx8qxp-lpcg";
-> +        reg = <0x5b200000 0x10000>;
->          #clock-cells = <1>;
-> +        clocks = <&sdhc0_clk IMX_SC_PM_CLK_PER>,
-> +                 <&conn_ipg_clk>,
-> +                 <&conn_axi_clk>;
-> +        clock-indices = <IMX_LPCG_CLK_0>,
-> +                        <IMX_LPCG_CLK_4>,
-> +                        <IMX_LPCG_CLK_5>;
-> +        clock-output-names = "sdhc0_lpcg_per_clk",
-> +                             "sdhc0_lpcg_ipg_clk",
-> +                             "sdhc0_lpcg_ahb_clk";
-> +        power-domains = <&pd IMX_SC_R_SDHC_0>;
->      };
->
->      mmc@5b010000 {
->          compatible = "fsl,imx8qxp-usdhc", "fsl,imx7d-usdhc";
->          interrupts = <GIC_SPI 232 IRQ_TYPE_LEVEL_HIGH>;
->          reg = <0x5b010000 0x10000>;
-> -        clocks = <&conn_lpcg IMX_CONN_LPCG_SDHC0_IPG_CLK>,
-> -                 <&conn_lpcg IMX_CONN_LPCG_SDHC0_PER_CLK>,
-> -                 <&conn_lpcg IMX_CONN_LPCG_SDHC0_HCLK>;
-> +        clocks = <&sdhc0_lpcg IMX_LPCG_CLK_4>,
-> +                 <&sdhc0_lpcg IMX_LPCG_CLK_0>,
-> +                 <&sdhc0_lpcg IMX_LPCG_CLK_5>;
->          clock-names = "ipg", "per", "ahb";
->          power-domains = <&pd IMX_SC_R_SDHC_0>;
->      };
-> diff --git a/include/dt-bindings/clock/imx8-lpcg.h b/include/dt-bindings/clock/imx8-lpcg.h
-> new file mode 100644
-> index 000000000000..d202715652c3
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/imx8-lpcg.h
-> @@ -0,0 +1,14 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
-> +/*
-> + * Copyright 2019-2020 NXP
-> + *   Dong Aisheng <aisheng.dong@nxp.com>
-> + */
-> +
-> +#define IMX_LPCG_CLK_0 0
-> +#define IMX_LPCG_CLK_1 4
-> +#define IMX_LPCG_CLK_2 8
-> +#define IMX_LPCG_CLK_3 12
-> +#define IMX_LPCG_CLK_4 16
-> +#define IMX_LPCG_CLK_5 20
-> +#define IMX_LPCG_CLK_6 24
-> +#define IMX_LPCG_CLK_7 28
-> --
-> 2.23.0
->
