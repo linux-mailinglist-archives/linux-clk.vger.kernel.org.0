@@ -2,134 +2,85 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0766723297F
-	for <lists+linux-clk@lfdr.de>; Thu, 30 Jul 2020 03:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58FE9232C78
+	for <lists+linux-clk@lfdr.de>; Thu, 30 Jul 2020 09:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728348AbgG3B1g (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 29 Jul 2020 21:27:36 -0400
-Received: from inva020.nxp.com ([92.121.34.13]:42752 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726287AbgG3B1f (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 29 Jul 2020 21:27:35 -0400
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id E3DDE1A0291;
-        Thu, 30 Jul 2020 03:27:32 +0200 (CEST)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 27E4C1A029B;
-        Thu, 30 Jul 2020 03:27:26 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 6F65640320;
-        Thu, 30 Jul 2020 03:27:13 +0200 (CEST)
-From:   Anson Huang <Anson.Huang@nxp.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        aisheng.dong@nxp.com, arnd@arndb.de, peng.fan@nxp.com,
-        abel.vesa@nxp.com, fugang.duan@nxp.com, daniel.baluta@nxp.com,
-        yuehaibing@huawei.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Linux-imx@nxp.com
-Subject: [PATCH V9 6/6] clk: imx8qxp: Support building i.MX8QXP clock driver as module
-Date:   Thu, 30 Jul 2020 09:22:54 +0800
-Message-Id: <1596072174-16358-7-git-send-email-Anson.Huang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1596072174-16358-1-git-send-email-Anson.Huang@nxp.com>
-References: <1596072174-16358-1-git-send-email-Anson.Huang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726899AbgG3HW6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 30 Jul 2020 03:22:58 -0400
+Received: from mout.kundenserver.de ([217.72.192.74]:34301 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726261AbgG3HW5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 30 Jul 2020 03:22:57 -0400
+Received: from mail-qt1-f174.google.com ([209.85.160.174]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MQMi7-1kNERt0L45-00MNCV; Thu, 30 Jul 2020 09:22:56 +0200
+Received: by mail-qt1-f174.google.com with SMTP id s23so19615039qtq.12;
+        Thu, 30 Jul 2020 00:22:53 -0700 (PDT)
+X-Gm-Message-State: AOAM530fhtgVFVvlfB1uelJE+JEgih2QNvxapO06tLFngmOEKUT/zDUC
+        QObTt4DApdgH4AyADhwZPkDqh6f3cvWac6seKuk=
+X-Google-Smtp-Source: ABdhPJzgEsAgdG9F1fxmndEJfU8TT+hsYPEgSAf0hp36PCR11SO9kvadSankG7qIurN5AdirVi451kJyBWRCSzEu5aI=
+X-Received: by 2002:aed:2946:: with SMTP id s64mr1685167qtd.204.1596093772891;
+ Thu, 30 Jul 2020 00:22:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <1596067120-1193-1-git-send-email-Anson.Huang@nxp.com> <1596067120-1193-2-git-send-email-Anson.Huang@nxp.com>
+In-Reply-To: <1596067120-1193-2-git-send-email-Anson.Huang@nxp.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Thu, 30 Jul 2020 09:22:37 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a000jKRMM9pm72mw5a1xV=NtOT6Z-H2EDS6=5165HMt5w@mail.gmail.com>
+Message-ID: <CAK8P3a000jKRMM9pm72mw5a1xV=NtOT6Z-H2EDS6=5165HMt5w@mail.gmail.com>
+Subject: Re: [PATCH V8 1/6] clk: imx6sl: Use BIT(x) to avoid shifting signed
+ 32-bit value by 31 bits
+To:     Anson Huang <Anson.Huang@nxp.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Abel Vesa <abel.vesa@nxp.com>,
+        Andy Duan <fugang.duan@nxp.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        NXP Linux Team <Linux-imx@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:lTCNq6hS062jBYwG/0GIfHXkumSjMFIvurIOIr1sjAjklefzOjg
+ /S9ZbtnvL1By5DV1PGooPwKuLutxGv1sdLPlSRA5T8qToxRu+RsGKj2glzxTq/2g31Akmkt
+ aVCZAU1r7Gh9aQNgxZIJ8LkWNqTS5NcOPBDMNdUHDVNey4sH4Kel/etwOclYf2oV19R+fRG
+ c6vk4IYKF1va9Gt04IItQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dbWKEXZ+pNs=:v9SopY0XoxPhD/hztbdTmI
+ U+3Ca5dH70Dxkw8EgjIa893dTsdwVW4D4u2N1E2WeAMy1WPwUN8hSywgSg9UHp3DE0Uvv06b5
+ v2wrPFl5Sv8MEVbVFxl9Y0CvnrhrVO/iELiqae1vq6kpGEfJ7k+GmfYsoLxmABDAdNYyntL8w
+ XO4UUX7AyyDHSgcP0qk95lyeO2JdfVo1FWVqz/LwHoWE8uF6ocRhDb3I8Hl/4T6bFYNkQRIlY
+ vQ5nzLkMN+827t0DI8tccP3/3Lc/OHpG6YWr+gva/WQj3y9Cqu6FwxcUSeMTWAcxiJvE6IrEM
+ INoA/0JexkpxUUBi36Qfy75UJYM1sDbH/qyVr93/0Kf8q7FNfrZ/GR0pl372JQam5CSFuOzsL
+ OUtG8+9GG3ZSU3YsEV3ntnIG/n8Au7RI9CvQm2BJHFaR6GaGBFyCLpQeUBJUKiFEDW94NVx0I
+ uFUNFEpyPEHCZfGxpzMqMgBZGuiXtvjKIg25fPJtfQqLGT86M/VIhxWMpJKo4UgPrhzpwA8xT
+ Nv3hw0MfQgn9149B3OJi9c0E+q5Vrxhm7fQT5lJGtdiQ+brZVsJ4Yn5ZiBKaRuTlCIK5Hvewg
+ irkrurjHCFcIeHN3ItM8I36twIxtc8Uzg/nvdjEBX2UJ3N2zm3rpn2pOYpk9GMqzrcpjPFl+n
+ s84uIEB75SuGRecYZ7JJB1X4pyYh63vlhj9u6hGQdAkVZzs1g7NWkYqJPcrb2ZFkOEfn5zxFU
+ QkwJ32TNYkxhb8gc6IjGLyGsNV34F1OJPqrSUMeINFT8lBFF08cF1vKOIVqXVrwaW1q13N0X5
+ 7ckmdDCUpl4y9PXNDOW5Sj8f43LSfSAbVpr2hlz/l9XvOFTmp1BRVCQ8ITl20SaZFhURKfW
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Change configuration to "tristate", add module author, description and
-license to support building i.MX8QXP clock drivers as module.
+On Thu, Jul 30, 2020 at 2:03 AM Anson Huang <Anson.Huang@nxp.com> wrote:
+>
+> Use readl_relaxed() instead of __raw_readl(), and use BIT(x)
+> instead of (1 << X) to fix below build warning reported by kernel
+> test robot:
+>
+> drivers/clk/imx/clk-imx6sl.c:149:49: warning: Shifting signed 32-bit
+> value by 31 bits is undefined behaviour [shiftTooManyBitsSigned]
+>      while (!(__raw_readl(anatop_base + PLL_ARM) & BM_PLL_ARM_LOCK))
+>
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+> Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
----
-no change.
----
- drivers/clk/imx/Kconfig            | 10 ++++++----
- drivers/clk/imx/Makefile           |  9 ++++-----
- drivers/clk/imx/clk-imx8qxp-lpcg.c |  4 ++++
- drivers/clk/imx/clk-imx8qxp.c      |  4 ++++
- 4 files changed, 18 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/clk/imx/Kconfig b/drivers/clk/imx/Kconfig
-index 3897712..e7defba 100644
---- a/drivers/clk/imx/Kconfig
-+++ b/drivers/clk/imx/Kconfig
-@@ -5,8 +5,9 @@ config MXC_CLK
- 	depends on ARCH_MXC || COMPILE_TEST
- 
- config MXC_CLK_SCU
--	bool
--	depends on IMX_SCU
-+	tristate "IMX SCU clock"
-+	depends on ARCH_MXC || COMPILE_TEST
-+	depends on IMX_SCU && HAVE_ARM_SMCCC
- 
- config CLK_IMX1
- 	def_bool SOC_IMX1
-@@ -97,8 +98,9 @@ config CLK_IMX8MQ
- 	    Build the driver for i.MX8MQ CCM Clock Driver
- 
- config CLK_IMX8QXP
--	bool "IMX8QXP SCU Clock"
--	depends on ARCH_MXC && IMX_SCU && ARM64
-+	tristate "IMX8QXP SCU Clock"
-+	depends on (ARCH_MXC && ARM64) || COMPILE_TEST
-+	depends on IMX_SCU && HAVE_ARM_SMCCC
- 	select MXC_CLK_SCU
- 	help
- 	  Build the driver for IMX8QXP SCU based clocks.
-diff --git a/drivers/clk/imx/Makefile b/drivers/clk/imx/Makefile
-index 17f5d12..79e53f2 100644
---- a/drivers/clk/imx/Makefile
-+++ b/drivers/clk/imx/Makefile
-@@ -21,15 +21,14 @@ mxc-clk-objs += clk-pll14xx.o
- mxc-clk-objs += clk-sscg-pll.o
- obj-$(CONFIG_MXC_CLK) += mxc-clk.o
- 
--obj-$(CONFIG_MXC_CLK_SCU) += \
--	clk-scu.o \
--	clk-lpcg-scu.o
--
- obj-$(CONFIG_CLK_IMX8MM) += clk-imx8mm.o
- obj-$(CONFIG_CLK_IMX8MN) += clk-imx8mn.o
- obj-$(CONFIG_CLK_IMX8MP) += clk-imx8mp.o
- obj-$(CONFIG_CLK_IMX8MQ) += clk-imx8mq.o
--obj-$(CONFIG_CLK_IMX8QXP) += clk-imx8qxp.o clk-imx8qxp-lpcg.o
-+
-+obj-$(CONFIG_MXC_CLK_SCU) += clk-imx-scu.o clk-imx-lpcg-scu.o
-+clk-imx-scu-$(CONFIG_CLK_IMX8QXP) += clk-scu.o clk-imx8qxp.o
-+clk-imx-lpcg-scu-$(CONFIG_CLK_IMX8QXP) += clk-lpcg-scu.o clk-imx8qxp-lpcg.o
- 
- obj-$(CONFIG_CLK_IMX1)   += clk-imx1.o
- obj-$(CONFIG_CLK_IMX21)  += clk-imx21.o
-diff --git a/drivers/clk/imx/clk-imx8qxp-lpcg.c b/drivers/clk/imx/clk-imx8qxp-lpcg.c
-index 04c8ee3..e947a70 100644
---- a/drivers/clk/imx/clk-imx8qxp-lpcg.c
-+++ b/drivers/clk/imx/clk-imx8qxp-lpcg.c
-@@ -232,3 +232,7 @@ static struct platform_driver imx8qxp_lpcg_clk_driver = {
- };
- 
- builtin_platform_driver(imx8qxp_lpcg_clk_driver);
-+
-+MODULE_AUTHOR("Aisheng Dong <aisheng.dong@nxp.com>");
-+MODULE_DESCRIPTION("NXP i.MX8QXP LPCG clock driver");
-+MODULE_LICENSE("GPL v2");
-diff --git a/drivers/clk/imx/clk-imx8qxp.c b/drivers/clk/imx/clk-imx8qxp.c
-index 5e2903e..d650ca3 100644
---- a/drivers/clk/imx/clk-imx8qxp.c
-+++ b/drivers/clk/imx/clk-imx8qxp.c
-@@ -152,3 +152,7 @@ static struct platform_driver imx8qxp_clk_driver = {
- 	.probe = imx8qxp_clk_probe,
- };
- builtin_platform_driver(imx8qxp_clk_driver);
-+
-+MODULE_AUTHOR("Aisheng Dong <aisheng.dong@nxp.com>");
-+MODULE_DESCRIPTION("NXP i.MX8QXP clock driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.7.4
-
+Acked-by: Arnd Bergmann <arnd@arndb.de>
