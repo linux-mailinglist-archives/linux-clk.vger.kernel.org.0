@@ -2,53 +2,74 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BF523F3D9
-	for <lists+linux-clk@lfdr.de>; Fri,  7 Aug 2020 22:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBAB23F47D
+	for <lists+linux-clk@lfdr.de>; Fri,  7 Aug 2020 23:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726733AbgHGUjM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 7 Aug 2020 16:39:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32900 "EHLO mail.kernel.org"
+        id S1726155AbgHGVmp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 7 Aug 2020 17:42:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43820 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725934AbgHGUjL (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 7 Aug 2020 16:39:11 -0400
-Subject: Re: [GIT PULL] clk changes for the merge window
+        id S1725970AbgHGVmp (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 7 Aug 2020 17:42:45 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AE0BA2086A;
+        Fri,  7 Aug 2020 21:42:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596832751;
-        bh=dRwTYsV8FqBTnauHQ5CpovYc7nJ4nSfcDQKup6cFQsc=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=lUXn5NCNuAYHAbO7LeM0dKgwJTJDWo0BZrmsbNNaeL6ame3O+dooyW5LFroEKPHqm
-         wilyOE91tzNVqn5qUesgA/wGMbLURRPojRTUvMyCjlphZXhyixApKkdAtU1/FANq8H
-         YH7J4En6g41MecWdftqOdESrURTX01SHNUPTyANs=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200807200219.463265-1-sboyd@kernel.org>
-References: <20200807200219.463265-1-sboyd@kernel.org>
-X-PR-Tracked-List-Id: <linux-clk.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200807200219.463265-1-sboyd@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-for-linus
-X-PR-Tracked-Commit-Id: 63e95849a774140ea0825f99be35765758bb7341
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 30185b69a2d533c4ba6ca926b8390ce7de495e29
-Message-Id: <159683275097.2860.2934164192765950481.pr-tracker-bot@kernel.org>
-Date:   Fri, 07 Aug 2020 20:39:10 +0000
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+        s=default; t=1596836564;
+        bh=amSzRwwB4oYiIBlYBqJnUvxcuZpXcMQU+1NE13Uhz/w=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=o3p7EbfjtrsPbqMjEVpHTChatxG2U+g+Y/76zMxBGYfXNq47yA5q1xAtEyNT7UUTA
+         AVnyg+xclHYJkn7eJbqYZFYEenzOPSzAbYIobeJ86YspziAZBtnBN382qb27VMzAcs
+         FykDgGgEcIVzWrR+yMzt3LPk7wQt6K6G9b8/UIBw=
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <13ac9aad-2377-472d-b2be-a762a21c2dac@codeaurora.org>
+References: <1595606878-2664-1-git-send-email-tdas@codeaurora.org> <1595606878-2664-5-git-send-email-tdas@codeaurora.org> <159665909245.1360974.10366839079633595523@swboyd.mtv.corp.google.com> <13ac9aad-2377-472d-b2be-a762a21c2dac@codeaurora.org>
+Subject: Re: [PATCH v5 4/4] clk: qcom: lpass: Add support for LPASS clock controller for SC7180
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     David Brown <david.brown@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        robh@kernel.org, robh+dt@kernel.org
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <tdas@codeaurora.org>
+Date:   Fri, 07 Aug 2020 14:42:43 -0700
+Message-ID: <159683656359.1360974.18078513144154056292@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The pull request you sent on Fri,  7 Aug 2020 13:02:19 -0700:
+Quoting Taniya Das (2020-08-05 22:23:05)
+> On 8/6/2020 1:54 AM, Stephen Boyd wrote:
+> >> +                               .hw =3D &core_clk_src.clkr.hw,
+> >> +                       },
+> >> +                       .num_parents =3D 1,
+> >> +                       .flags =3D CLK_SET_RATE_PARENT,
+> >> +                       .ops =3D &clk_branch2_ops,
+> >> +               },
+> >> +       },
+> >> +};
+> >> +
+> >> +static struct clk_regmap *lpass_core_cc_sc7180_clocks[] =3D {
+> >> +       [EXT_MCLK0_CLK_SRC] =3D &ext_mclk0_clk_src.clkr,
+> >> +       [LPAIF_PRI_CLK_SRC] =3D &lpaif_pri_clk_src.clkr,
+> >> +       [LPAIF_SEC_CLK_SRC] =3D &lpaif_sec_clk_src.clkr,
+> >> +       [CORE_CLK_SRC] =3D &core_clk_src.clkr,
+> >=20
+> > And all of these, can they have LPASS_ prefix on the defines? Seems
+> > like we're missing a namespace otherwise.
+> >=20
+>=20
+> These are generated as they are in the HW plan. Do you still think I=20
+> should update them?
+>=20
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-for-linus
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/30185b69a2d533c4ba6ca926b8390ce7de495e29
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+As long as there aren't going to be conflicts in the clk names I guess
+it's OK to do nothing here.
