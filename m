@@ -2,56 +2,82 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E43F242684
-	for <lists+linux-clk@lfdr.de>; Wed, 12 Aug 2020 10:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD6A24270E
+	for <lists+linux-clk@lfdr.de>; Wed, 12 Aug 2020 10:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726507AbgHLIB3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 12 Aug 2020 04:01:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39330 "EHLO mail.kernel.org"
+        id S1726946AbgHLI4b (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 12 Aug 2020 04:56:31 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:49026 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726479AbgHLIB3 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 12 Aug 2020 04:01:29 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 84EFC20768;
-        Wed, 12 Aug 2020 08:01:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597219288;
-        bh=Xr/8WQ4NV9CVHwHYVG4mEdreG4szPGq3UOfQhBPhNeI=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Krc/UNetVSV8lJEJTc5Ud0jyiUXXcE1ZM0CA3t+sJ7rb3Ncb3tZWPCvgd8aTuLcSU
-         WB3YJhS+p/o1rP7HRz/QnpIjDjhG4wDqoCmqITJg9qDQOUeVQoM1q2o8pTUygRHPWH
-         851l7J+ttPa40b72z5c/HfyXGWKE3VoZOJ1mWwdU=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1596583049-7305-1-git-send-email-Anson.Huang@nxp.com>
-References: <1596583049-7305-1-git-send-email-Anson.Huang@nxp.com>
-Subject: Re: [PATCH] clk: imx: Explicitly include bits.h
-From:   Stephen Boyd <sboyd@kernel.org>
+        id S1726572AbgHLI4b (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 12 Aug 2020 04:56:31 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id A63AA1A0CAE;
+        Wed, 12 Aug 2020 10:56:28 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id CB74F1A004F;
+        Wed, 12 Aug 2020 10:56:22 +0200 (CEST)
+Received: from 10.192.242.69 (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 52DD14024E;
+        Wed, 12 Aug 2020 10:56:15 +0200 (CEST)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, gregkh@linuxfoundation.org,
+        galak@codeaurora.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
 Cc:     Linux-imx@nxp.com
-To:     Anson Huang <Anson.Huang@nxp.com>, abel.vesa@nxp.com,
-        andrew.smirnov@gmail.com, festevam@gmail.com, horia.geanta@nxp.com,
-        j.remmet@phytec.de, kernel@pengutronix.de,
-        laurent.pinchart@ideasonboard.com,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
-        peng.fan@nxp.com, s.hauer@pengutronix.de, shawnguo@kernel.org,
-        yuehaibing@huawei.com
-Date:   Wed, 12 Aug 2020 01:01:27 -0700
-Message-ID: <159721928737.33733.15281221160982745981@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+Subject: [PATCH V2 1/5] dt-bindings: clock: Update i.MX28 example
+Date:   Wed, 12 Aug 2020 16:51:20 +0800
+Message-Id: <1597222284-32609-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Anson Huang (2020-08-04 16:17:29)
-> It is better to explicitly include the required header file rather
-> then get it through some recursive include.
->=20
-> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-> ---
+Update the i.MX28 clock example to align with MXS AUART binding doc to
+avoid below build error:
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+Documentation/devicetree/bindings/clock/imx28-clock.example.dt.yaml:
+  serial@8006a000: clocks: [[4294967295, 45]] is too short
+Documentation/devicetree/bindings/clock/imx28-clock.example.dt.yaml:
+  serial@8006a000: compatible: Additional items are not allowed
+  ('fsl,imx23-auart' was unexpected)
+Documentation/devicetree/bindings/clock/imx28-clock.example.dt.yaml:
+  serial@8006a000: compatible: ['fsl,imx28-auart', 'fsl,imx23-auart']
+  is too long
+Documentation/devicetree/bindings/clock/imx28-clock.example.dt.yaml:
+  serial@8006a000: 'dmas' is a required property
+Documentation/devicetree/bindings/clock/imx28-clock.example.dt.yaml:
+  serial@8006a000: 'dma-names' is a required property
+
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
+---
+new patch.
+---
+ Documentation/devicetree/bindings/clock/imx28-clock.yaml | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/clock/imx28-clock.yaml b/Documentation/devicetree/bindings/clock/imx28-clock.yaml
+index 72328d5..671b279 100644
+--- a/Documentation/devicetree/bindings/clock/imx28-clock.yaml
++++ b/Documentation/devicetree/bindings/clock/imx28-clock.yaml
+@@ -108,8 +108,10 @@ examples:
+     };
+ 
+     serial@8006a000 {
+-        compatible = "fsl,imx28-auart", "fsl,imx23-auart";
++        compatible = "fsl,imx28-auart";
+         reg = <0x8006a000 0x2000>;
+-        interrupts = <112 70 71>;
++        interrupts = <112>;
++        dmas = <&dma_apbx 8>, <&dma_apbx 9>;
++        dma-names = "rx", "tx";
+         clocks = <&clks 45>;
+     };
+-- 
+2.7.4
+
