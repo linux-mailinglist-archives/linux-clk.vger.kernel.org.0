@@ -2,53 +2,142 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 081A924659B
-	for <lists+linux-clk@lfdr.de>; Mon, 17 Aug 2020 13:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D18B5246843
+	for <lists+linux-clk@lfdr.de>; Mon, 17 Aug 2020 16:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726385AbgHQLmu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-clk@lfdr.de>); Mon, 17 Aug 2020 07:42:50 -0400
-Received: from correo.yucatan.gob.mx ([187.141.74.27]:13280 "EHLO
-        antispam.yucatan.gob.mx" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726151AbgHQLmu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Aug 2020 07:42:50 -0400
-Received: from correo.yucatan.gob.mx ([192.168.25.101])
-        by antispam.yucatan.gob.mx  with ESMTP id 07HBKVBI013797-07HBKVBL013797
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=CAFAIL);
-        Mon, 17 Aug 2020 06:20:31 -0500
-From:   Felipe Francisco Romero Ruiz <felipe.romero@yucatan.gob.mx>
-To:     "NO-REPLY@MICROSOFT.NET" <NO-REPLY@MICROSOFT.NET>
-Subject: =?koi8-r?B?78LSwdTJ1MUg187JzcHOycUsIN7UzyDTxcrewdMgzsXPwsjPxMnNzyDT0s/e?=
- =?koi8-r?B?zs8g0M/E1NfF0sTJ1Ngg18Hb1SDV3sXUztXAINrB0MnT2CDczMXL1NLPzs7P?=
- =?koi8-r?B?yiDQz97U2S4=?=
-Thread-Topic: =?koi8-r?B?78LSwdTJ1MUg187JzcHOycUsIN7UzyDTxcrewdMgzsXPwsjPxMnNzyDT0s/e?=
- =?koi8-r?B?zs8g0M/E1NfF0sTJ1Ngg18Hb1SDV3sXUztXAINrB0MnT2CDczMXL1NLPzs7P?=
- =?koi8-r?B?yiDQz97U2S4=?=
-Thread-Index: AdZ0iGqMvFdNFEUiRJ2DImpAtxqrKw==
-Date:   Mon, 17 Aug 2020 11:20:30 +0000
-Message-ID: <9B5224426D8A9A4F8725FFD78A10E7DA4D09DB2E@SRV-MAILBOX-02.gobierno1.yucatan.gob.mx>
-Accept-Language: es-ES, es-MX, en-US
-Content-Language: es-ES
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [196.171.2.106]
-Content-Type: text/plain; charset="koi8-r"
-Content-Transfer-Encoding: 8BIT
+        id S1728512AbgHQOVT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 17 Aug 2020 10:21:19 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:22833 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728465AbgHQOVT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 Aug 2020 10:21:19 -0400
+X-Greylist: delayed 541 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Aug 2020 10:21:18 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1597674077;
+        s=strato-dkim-0002; d=gerhold.net;
+        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=96QQ8PNl0xmiHcHVIu3R5ojOtvOFdSRuSRXLHkBwY8Y=;
+        b=QmLj9uA9bsPhVOcXCDtY2GlyEXwvd5F8USISOjtD1pXNwlKqr9X3MJIe2o0BnRAPzc
+        ZY8NsfzNWyHDCIAOiKDdIRMM7oiHJlTSFjF6hT/0U0S+p8BAKnJgKWA+TdyAJBYZ1mXw
+        rFUevfg+YhriOCttyd+SvdoDkiLhmIhyI8R779GnED8SVtMZj8Xg0R5M6L2rZwS0PBUH
+        BuycckhqQUUr5R0to/oJlpfkht403GtrUfitk2mgbYKbnCP/qkIc9x2fA2KHdzWfA/cx
+        L2JUIm73XhmmEjslvDOubrWF8DYeKE4aYXw7wtWmNT6VmomrjL0gD089mTrhR5II1gv8
+        85UQ==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVORvLd4SsytBXS7IYBkLahKxB526O1+69"
+X-RZG-CLASS-ID: mo00
+Received: from localhost.localdomain
+        by smtp.strato.de (RZmta 46.10.5 DYNA|AUTH)
+        with ESMTPSA id Y0939ew7HE9MH9j
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Mon, 17 Aug 2020 16:09:22 +0200 (CEST)
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Georgi Djakov <georgi.djakov@linaro.org>
+Subject: [PATCH] clk: qcom: smd: Disable unused clocks
+Date:   Mon, 17 Aug 2020 16:09:08 +0200
+Message-Id: <20200817140908.185976-1-stephan@gerhold.net>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-СРОЧНОЕ УВЕДОМЛЕНИЕ MICROSOFT[Color de fuente]
+At the moment, clk-smd-rpm forces all clocks on at probe time
+(for "handoff"). However, it does not make the clk core aware of that.
+This means that the clocks stay enabled forever if they are not used
+by anything.
 
+We can easily disable them again after bootup has been completed,
+by making the clk core aware of the state. This is implemented by
+returning the current state of the clock in is_prepared().
 
-Обратите внимание, что ваша учетная запись электронной почты нуждается в срочном подтверждении сейчас, чтобы выпустить около 20 ваших входящих сообщений, которые в настоящее время приостановлены. Нажмите кнопку подтверждения ниже, чтобы подтвердить свою учетную запись сейчас.
+Checking the SPMI clock registers reveals that this allows the RPM
+to disable unused BB/RF clocks. For example, on MSM8916 with all
+remote processors (except RPM) disabled, we get:
 
+ +--------------------------+------------+---------+--------+-------+
+ |                          | BOOTLOADER | HANDOFF | BEFORE | AFTER |
+ +--------------------------+------------+---------+--------+-------+
+ | BB_CLK1_STATUS1 (0x5108) |     ON*    |    ON   |   ON   |  ON*  |
+ | BB_CLK2_STATUS1 (0x5208) |     OFF    |    ON   |   ON   |  OFF  |
+ | RF_CLK1_STATUS1 (0x5408) |     OFF    |    ON   |   ON   |  OFF  |
+ | RF_CLK2_STATUS1 (0x5508) |     OFF    |    ON   |   ON   |  OFF  |
+ +--------------------------+------------+---------+--------+-------+
+  * BB_CLK1 seems to be always-on in RPM on MSM8916
 
-ПРОВЕРЬТЕ<https://67guiogj.wixsite.com/mysite>
+where:
+  - BOOTLOADER = clk-smd-rpm disabled entirely in device tree
+  - HANDOFF = temporarily after clk-smd-rpm was probed
+  - BEFORE/AFTER = after boot without/with the changes in this commit
 
+With this commit BB_CLK2/RF_CLK1/RF_CLK2 are disabled again when unused.
 
-Команда проверки Microsoft
+Cc: Georgi Djakov <georgi.djakov@linaro.org>
+Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+---
+Originally I reported this here:
+https://lore.kernel.org/linux-arm-msm/20200523120810.GA166540@gerhold.net/
 
+Overall I'm not entirely sure why we need to force all these clocks
+on at all... But the downstream driver also seems to do it and the RPM
+interface is barely documented, so I didn't feel comfortable changing it...
+---
+ drivers/clk/qcom/clk-smd-rpm.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Авторские права © 2020 Microsoft .Inc. Все права защищены.
+diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
+index 0e1dfa89489e..fa960cb794a8 100644
+--- a/drivers/clk/qcom/clk-smd-rpm.c
++++ b/drivers/clk/qcom/clk-smd-rpm.c
+@@ -171,6 +171,9 @@ static int clk_smd_rpm_handoff(struct clk_smd_rpm *r)
+ 	if (ret)
+ 		return ret;
+ 
++	/* During handoff we force all clocks on */
++	r->enabled = true;
++
+ 	return 0;
+ }
+ 
+@@ -300,6 +303,13 @@ static void clk_smd_rpm_unprepare(struct clk_hw *hw)
+ 	mutex_unlock(&rpm_smd_clk_lock);
+ }
+ 
++static int clk_smd_rpm_is_prepared(struct clk_hw *hw)
++{
++	struct clk_smd_rpm *r = to_clk_smd_rpm(hw);
++
++	return r->enabled;
++}
++
+ static int clk_smd_rpm_set_rate(struct clk_hw *hw, unsigned long rate,
+ 				unsigned long parent_rate)
+ {
+@@ -396,6 +406,7 @@ static int clk_smd_rpm_enable_scaling(struct qcom_smd_rpm *rpm)
+ static const struct clk_ops clk_smd_rpm_ops = {
+ 	.prepare	= clk_smd_rpm_prepare,
+ 	.unprepare	= clk_smd_rpm_unprepare,
++	.is_prepared	= clk_smd_rpm_is_prepared,
+ 	.set_rate	= clk_smd_rpm_set_rate,
+ 	.round_rate	= clk_smd_rpm_round_rate,
+ 	.recalc_rate	= clk_smd_rpm_recalc_rate,
+@@ -404,6 +415,7 @@ static const struct clk_ops clk_smd_rpm_ops = {
+ static const struct clk_ops clk_smd_rpm_branch_ops = {
+ 	.prepare	= clk_smd_rpm_prepare,
+ 	.unprepare	= clk_smd_rpm_unprepare,
++	.is_prepared	= clk_smd_rpm_is_prepared,
+ };
+ 
+ /* msm8916 */
+-- 
+2.28.0
+
