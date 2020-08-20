@@ -2,88 +2,46 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC1324AE3C
-	for <lists+linux-clk@lfdr.de>; Thu, 20 Aug 2020 07:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDAF24B85C
+	for <lists+linux-clk@lfdr.de>; Thu, 20 Aug 2020 13:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725910AbgHTFEP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 20 Aug 2020 01:04:15 -0400
-Received: from mga09.intel.com ([134.134.136.24]:45660 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725780AbgHTFEO (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 20 Aug 2020 01:04:14 -0400
-IronPort-SDR: LAI45mVG2xLY0ONW7CGjQsLhPLCGtL3dptEEGuQRbXqfRYMIXjsQuWJw9aLMCRtpIqNI+w5zZe
- UAFa2pXdSGIQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9718"; a="156307267"
-X-IronPort-AV: E=Sophos;i="5.76,332,1592895600"; 
-   d="scan'208";a="156307267"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2020 22:04:14 -0700
-IronPort-SDR: 5ew4P0zvnHwOu7lJzv+xOjVYlGdfsv79mm0uX03gaziLHUvawKN3Sx8MLKVZCyYgrqcDwdHdi1
- 5Fv9ZawvzNRg==
-X-IronPort-AV: E=Sophos;i="5.76,332,1592895600"; 
-   d="scan'208";a="441846299"
-Received: from shao2-debian.sh.intel.com (HELO [10.239.13.3]) ([10.239.13.3])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2020 22:04:11 -0700
-Subject: Re: [clk] a2499eff4b: BUG:kernel_NULL_pointer_dereference,address
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Lukasz Luba <lukasz.luba@arm.com>, 0day robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org
-References: <20200811084943.GC7488@shao2-debian>
- <159780681339.334488.10402512224012716827@swboyd.mtv.corp.google.com>
-From:   Rong Chen <rong.a.chen@intel.com>
-Message-ID: <be4c9098-98a2-e9c0-b787-57fa7d7da24f@intel.com>
-Date:   Thu, 20 Aug 2020 13:03:27 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1729126AbgHTLR5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 20 Aug 2020 07:17:57 -0400
+Received: from [125.140.134.231] ([125.140.134.231]:51952 "EHLO
+        WIN-DAONO245HJF" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730336AbgHTLRP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Aug 2020 07:17:15 -0400
+Received: from User ([154.127.53.23]) by WIN-DAONO245HJF with Microsoft SMTPSVC(8.5.9600.16384);
+         Thu, 20 Aug 2020 20:15:40 +0900
+Reply-To: <robertdankworth@aol.com>
+From:   "ROBERT DANKWORTH" <robertdankworth@aol.com>
+Subject: INVESTMENT
+Date:   Thu, 20 Aug 2020 04:15:42 -0700
 MIME-Version: 1.0
-In-Reply-To: <159780681339.334488.10402512224012716827@swboyd.mtv.corp.google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain;
+        charset="Windows-1251"
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <WIN-DAONO245HJFpPij00c36377@WIN-DAONO245HJF>
+X-OriginalArrivalTime: 20 Aug 2020 11:15:40.0639 (UTC) FILETIME=[3CF596F0:01D676E3]
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Good day,
 
+You were recommended by a mutual associate. I write you regarding an investment of bearer bonds I made on behalf of a client.
 
-On 8/19/20 11:13 AM, Stephen Boyd wrote:
-> Quoting kernel test robot (2020-08-11 01:49:44)
->> Greeting,
->>
->> FYI, we noticed the following commit (built with gcc-9):
->>
->> commit: a2499eff4b30a85d56e4466e6ca4746c72a347c6 ("[PATCH v2] clk: samsung: Keep top BPLL mux on Exynos542x enabled")
->> url: https://github.com/0day-ci/linux/commits/Marek-Szyprowski/clk-samsung-Keep-top-BPLL-mux-on-Exynos542x-enabled/20200807-213239
->> base: https://git.kernel.org/cgit/linux/kernel/git/clk/linux.git clk-next
->>
->> in testcase: trinity
->> with following parameters:
->>
->>          runtime: 300s
->>
->> test-description: Trinity is a linux system call fuzz tester.
->> test-url: http://codemonkey.org.uk/projects/trinity/
->>
->>
->> on test machine: qemu-system-i386 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
-> Cool robot. But this doesn't look related to the patch at all?
+      The investment was made in 2009 and has been under my management. The said investor is deceased. The window is now available to assign these bonds to any name or company of my choice. I have all the necessary information to achieve this within 10 banking days.
+   
+      The total value of the bond is 100million pounds sterling, in a million pound denominations.
+   
+        If you can handle this, do contact me at your earliest convenience via my email robertdankworth@aol.com
+So we can discuss the final details Thank you.
 
-Hi Stephen,
-
-Sorry for the inconvenience, you are right, we run more times
-on the parent commit and can reproduce the error too.
-
-Best Regards,
-Rong Chen
-
-
+Mr ROBERT DANKWORTH
