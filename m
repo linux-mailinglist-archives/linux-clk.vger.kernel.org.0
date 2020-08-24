@@ -2,78 +2,97 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8E824FB61
-	for <lists+linux-clk@lfdr.de>; Mon, 24 Aug 2020 12:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D54F324FB68
+	for <lists+linux-clk@lfdr.de>; Mon, 24 Aug 2020 12:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726347AbgHXK27 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 24 Aug 2020 06:28:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53140 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726241AbgHXK24 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 24 Aug 2020 06:28:56 -0400
-Received: from [192.168.0.50] (89-70-52-201.dynamic.chello.pl [89.70.52.201])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 175D520738;
-        Mon, 24 Aug 2020 10:28:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598264935;
-        bh=NDhUf/nP2mxoHfjf7T44MWooQOLOp+W6Th3UihAUPk4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=XggvhdR1Szz+C2VO8HTTOPRjAqIa/TDcdPlm3E0ODNfUDDzq80nm0vsPxh/bijYYz
-         0s9qhiZjWcMR+YLzOfBBWI4Jjc9ut5S6FXpd0bQ5R7pwiFvsAfRwKwYNcYYOh/if3v
-         0BQiTaxKX1ofkzOdDD6XfgBPzaHHWWIedzfyu5MQ=
-Subject: Re: [PATCH v2] clk: samsung: Keep top BPLL mux on Exynos542x enabled
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-samsung-soc@vger.kernel.org,
+        id S1726138AbgHXKb2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 24 Aug 2020 06:31:28 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:37055 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725968AbgHXKb2 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Aug 2020 06:31:28 -0400
+Received: by mail-wr1-f68.google.com with SMTP id y3so8118250wrl.4;
+        Mon, 24 Aug 2020 03:31:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=5xLQKYZI4cTxrUMmil7wS5imap+Bt2COqeo1cf8n/LM=;
+        b=N/UgocIsOgBmrL+mAZIkdG1IEfTi3ls1nm+wuQEw3txfQ/KVm/OVEjZMrhkSRVfSdQ
+         uiVXdVnwUfV6hlSa9zffsrHUuKblyuvzOQiv4MoPm8JaCZNr9YDNILQPk3knhnlpCeBH
+         J1XKSza5ykN+iHxeru1FTZKrC/uwei5lUUWWfjaJrqP1IS3GICMrUp9RPgvhvp2r78I/
+         9k3vNmua5n7d81qJf25DizkMCqBB0f4grw0WYYOy1K3T13LQsWsHSpObi/Pwdq1ujpVG
+         ZEf8EhTurnbWl7tJ70biN9ymvHTm2/EmtinfAMA4tQnPTrdt7bEzfrC1UYrcO3bMAMB3
+         NqvQ==
+X-Gm-Message-State: AOAM531/ZAQe9B9+RfdTtGTsBYZnuDvqL4yQgYPBlJb9Uw1jMQEXfQaV
+        Ls8u1i1Atd2aHqF5nhZtWL0=
+X-Google-Smtp-Source: ABdhPJyn5rnoR81LuJKvJbEUHHChIoVEuMpVbYFRx+shF6dp99Pu2+sob1nRK1HuIR1Wj5ZBPFj8GQ==
+X-Received: by 2002:adf:ec10:: with SMTP id x16mr5016091wrn.74.1598265086281;
+        Mon, 24 Aug 2020 03:31:26 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.216])
+        by smtp.googlemail.com with ESMTPSA id k15sm20428005wrp.43.2020.08.24.03.31.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 24 Aug 2020 03:31:25 -0700 (PDT)
+Date:   Mon, 24 Aug 2020 12:31:23 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Sylwester Nawrocki <snawrocki@kernel.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, linux-samsung-soc@vger.kernel.org,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
         Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Lukasz Luba <lukasz.luba@arm.com>
+Subject: Re: [PATCH v2] clk: samsung: Keep top BPLL mux on Exynos542x enabled
+Message-ID: <20200824103123.GD25860@kozik-lap>
 References: <CGME20200807133152eucas1p1d83611a984f5c5d875192d08e2f5711f@eucas1p1.samsung.com>
  <20200807133143.22748-1-m.szyprowski@samsung.com>
  <159780685238.334488.5802955284004610550@swboyd.mtv.corp.google.com>
  <f4c87130-25a0-2195-9caa-be805d207c34@kernel.org>
-From:   Sylwester Nawrocki <snawrocki@kernel.org>
-Message-ID: <fff07b05-f1f6-5333-a056-69ba6995ed4f@kernel.org>
-Date:   Mon, 24 Aug 2020 12:28:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ <fff07b05-f1f6-5333-a056-69ba6995ed4f@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <f4c87130-25a0-2195-9caa-be805d207c34@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <fff07b05-f1f6-5333-a056-69ba6995ed4f@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 8/23/20 12:12, Sylwester Nawrocki wrote:
-> On 8/19/20 05:14, Stephen Boyd wrote:
->> Quoting Marek Szyprowski (2020-08-07 06:31:43)
->>> BPLL clock must not be disabled because it is needed for proper DRAM
->>> operation. This is normally handled by respective memory devfreq driver,
->>> but when that driver is not yet probed or its probe has been deferred 
->>> the
->>> clock might got disabled what causes board hang. Fix this by calling
->>> clk_prepare_enable() directly from the clock provider driver.
->>>
->>> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
->>> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
->>> Tested-by: Lukasz Luba <lukasz.luba@arm.com>
->>> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
->>> ---
->>
->> Can I pick this up for clk-fixes?
+On Mon, Aug 24, 2020 at 12:28:51PM +0200, Sylwester Nawrocki wrote:
+> On 8/23/20 12:12, Sylwester Nawrocki wrote:
+> > On 8/19/20 05:14, Stephen Boyd wrote:
+> > > Quoting Marek Szyprowski (2020-08-07 06:31:43)
+> > > > BPLL clock must not be disabled because it is needed for proper DRAM
+> > > > operation. This is normally handled by respective memory devfreq driver,
+> > > > but when that driver is not yet probed or its probe has been
+> > > > deferred the
+> > > > clock might got disabled what causes board hang. Fix this by calling
+> > > > clk_prepare_enable() directly from the clock provider driver.
+> > > > 
+> > > > Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> > > > Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+> > > > Tested-by: Lukasz Luba <lukasz.luba@arm.com>
+> > > > Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > > > ---
+> > > 
+> > > Can I pick this up for clk-fixes?
+> > 
+> > Sure, thanks for taking care of this.
 > 
-> Sure, thanks for taking care of this.
+> OTOH, I planned to queue that patch for next merged window, together with a
+> patch that depends on that one, since the fix is not for an issue
+> introduced in the last merge window.
+> I guess it's better to avoid pulling (part of) the clk-fixes branch to
+> the clk/samsung tree for next merge window?
 
-OTOH, I planned to queue that patch for next merged window, together 
-with a patch that depends on that one, since the fix is not for an issue
-introduced in the last merge window.
-I guess it's better to avoid pulling (part of) the clk-fixes branch to
-the clk/samsung tree for next merge window?
+All current multi_v7 and some of exynos defconfig boots fail on Odroid
+XU3-family, starting from v5.9-rc1. On kernelci and my boot systems. If
+I understand correctly, this is a fix for this issue, so it should go as
+fast as possible to v5.9 cycle.
+
+Otherwise we cannot test anything. The current v5.9 RC is then simply broken.
+
+Best regards,
+Krzysztof
 
