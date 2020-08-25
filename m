@@ -2,95 +2,114 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FEFB25127E
-	for <lists+linux-clk@lfdr.de>; Tue, 25 Aug 2020 08:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C980B2512C5
+	for <lists+linux-clk@lfdr.de>; Tue, 25 Aug 2020 09:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729284AbgHYG72 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 25 Aug 2020 02:59:28 -0400
-Received: from esa1.microchip.iphmx.com ([68.232.147.91]:9439 "EHLO
-        esa1.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729282AbgHYG70 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 25 Aug 2020 02:59:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1598338766; x=1629874766;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=IQ3W6SU5sxrboBq5t8pIzes6VBRBmqD928/Ulc8ETT0=;
-  b=tD2s/s6Ma65qnmJthiLnoYUhxDTo4jzPkqZUaR4fIHUWwXlZD/MLfWIU
-   2sjR9DPHzRLUwUfn6D58+JEXaHrS3l3mfjGW/PmBTcBIbtGKoxGI9lv6S
-   FbRd/PAoolNHc/aUrh7VJtgdFSo/cuTyWTSsVkxEbzjnm9DNihCuh5Ex6
-   ac8D/j/DHb8BUxKEG9MAo4TMyl5FFfbW9oPvo7jP3UVUKn08rTDYkzPeo
-   yeV7h8zl5FDN8LfJiSoJJ/lk9hxGSq6AZfyATOKZj1yfDx0SRXTutFnQU
-   tx10kiY+2HqJL4nYtAFfaAdU4BE9M9ZQxE0YLZf13qkGexPhKCeuiD8oI
-   A==;
-IronPort-SDR: Dq93KiIJVzmKnFPK59vhOtHy2KkvpPDco0kUNkAaIL/iWvcUUNRl8gsW0w4g/UE3r1dNu7RNdx
- BC/5NqM5OldhJc5BSlfjIa2PO8gH+bf9ja3O0D/6uou6KPgoroEUCNDMPzHhp+A5hfoYh3QE8W
- hriWe/ytojaSY7X3vi+AuBxRmvAnIDXPJY2perHORI0BbmNhMkA0DawGuuNnjjIhoreho776iz
- sDgw2KFO6BNg2qfnA1ozcPfbWNHZQzNcIDgTpORUhQwb40Us0J/NxsZ+UZAP/CETOahUyQthy1
- gUk=
-X-IronPort-AV: E=Sophos;i="5.76,351,1592895600"; 
-   d="scan'208";a="93013773"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Aug 2020 23:59:25 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 24 Aug 2020 23:59:24 -0700
-Received: from m18063-ThinkPad-T460p.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Mon, 24 Aug 2020 23:59:22 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <ludovic.desroches@microchip.com>
-CC:     <bbrezillon@kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v2 3/3] clk: at91: clk-sam9x60-pll: remove unused variable
-Date:   Tue, 25 Aug 2020 09:59:11 +0300
-Message-ID: <1598338751-20607-4-git-send-email-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1598338751-20607-1-git-send-email-claudiu.beznea@microchip.com>
-References: <1598338751-20607-1-git-send-email-claudiu.beznea@microchip.com>
+        id S1729374AbgHYHKj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 25 Aug 2020 03:10:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38138 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729362AbgHYHKh (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 25 Aug 2020 03:10:37 -0400
+Received: from localhost (p54b333df.dip0.t-ipconnect.de [84.179.51.223])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C35662074D;
+        Tue, 25 Aug 2020 07:10:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598339436;
+        bh=FWfgAaWELOpnq9T2ZqffNJ7A9qnO3QfKuIy+OMg+Nkc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f3Wq0A6wK+XyCx0NdyaVbiOp2OMrI3KPwj1V3RQ/NOii/Sv8XJMYsbLmiBZPZxHLr
+         0oPOxmO4ZW2uxwUXqLpZCKZIApP5fRkbLXbO9bWzKlL5g/hG5Vx0qfVAI9CAKfOqMV
+         tmM358uBo/FCFQE7cpCl+yIXbi94y/ptPbOUqIoI=
+Date:   Tue, 25 Aug 2020 09:10:33 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-media@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
+Message-ID: <20200825071033.GB1861@ninjato>
+References: <20200812203618.2656699-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="JYK4vJDZwFMowpUq"
+Content-Disposition: inline
+In-Reply-To: <20200812203618.2656699-1-robh@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Fix variable set but not used compilation warning.
 
-Fixes: 43b1bb4a9b3e ("clk: at91: clk-sam9x60-pll: re-factor to support plls with multiple outputs")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- drivers/clk/at91/clk-sam9x60-pll.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+--JYK4vJDZwFMowpUq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/clk/at91/clk-sam9x60-pll.c b/drivers/clk/at91/clk-sam9x60-pll.c
-index b473298ef7e6..78f458a7b2ef 100644
---- a/drivers/clk/at91/clk-sam9x60-pll.c
-+++ b/drivers/clk/at91/clk-sam9x60-pll.c
-@@ -331,7 +331,7 @@ static long sam9x60_div_pll_compute_div(struct sam9x60_pll_core *core,
- 	struct clk_hw *parent = clk_hw_get_parent(&core->hw);
- 	unsigned long tmp_rate, tmp_parent_rate, tmp_diff;
- 	long best_diff = -1, best_rate = -EINVAL;
--	u32 divid, best_div;
-+	u32 divid;
- 
- 	if (!rate)
- 		return 0;
-@@ -352,7 +352,6 @@ static long sam9x60_div_pll_compute_div(struct sam9x60_pll_core *core,
- 			*parent_rate = tmp_parent_rate;
- 			best_rate = tmp_rate;
- 			best_diff = tmp_diff;
--			best_div = divid;
- 		}
- 
- 		if (!best_diff)
--- 
-2.7.4
+On Wed, Aug 12, 2020 at 02:36:18PM -0600, Rob Herring wrote:
+> Clean-up incorrect indentation, extra spaces, long lines, and missing
+> EOF newline in schema files. Most of the clean-ups are for list
+> indentation which should always be 2 spaces more than the preceding
+> keyword.
+>=20
+> Found with yamllint (which I plan to integrate into the checks).
+>=20
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-clk@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-spi@vger.kernel.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: linux-i2c@vger.kernel.org
+> Cc: linux-fbdev@vger.kernel.org
+> Cc: linux-iio@vger.kernel.org
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-mmc@vger.kernel.org
+> Cc: linux-mtd@lists.infradead.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-rtc@vger.kernel.org
+> Cc: linux-serial@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
+I trust you guys in figuring out the details, so for touching I2C:
+
+Acked-by: Wolfram Sang <wsa@kernel.org>
+
+
+--JYK4vJDZwFMowpUq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl9EuWkACgkQFA3kzBSg
+KbZbPA/+MqNMzGTVXT++2afD+v/Qkum1LRbeldro+e0ewQSps4tnW/eHg9RaemYr
+BwxfsOZA+EJp0lGOnRM5/vhPMoInlSEwJSBlxtjratUScfPiR7D4ljKXGaUQv4IV
+l9cXBZuOeLnSerxdYsuGrs8M0uqe4rAc3jt/FGD4rSgawNTN1HieFaQ0vq/0I5Gi
+pyJv09alaosBuqNYc37Gqm9Ddk6xEJb8lvwrVqeS2ZGMFmfJuFlsuLKhwdgen/og
+Wik6VZEjyUHJbyZgkcwMn6rTVTnopK7E0RYmdap35Bh6MAZ3auQ4eQU2tktY3L0G
++NL/ah9FAvmPH1RAR7KmXzZxVYX2ZoWm3AJVpCIvlc9toZI5NdOwdruT+KlTLHIY
+T0vs7B3wqsrD4pHputHdDtf9iSZDB0FiTi44yJjReI72Yb47gDXXK7tOcewvq33Y
+J9dv/HeT85ER8dZ3fCssLdOsIVSE5ZGaDGjP9M4hPo5ZqM5WlMcqW13gmBsEaY3W
+quFFx4pgOXFmnO+7fCb0OIoySeTtgCMNqSwekaNsrbK8dBsFhMx62IzUwwCwL8ST
+clLrMsK81BA4v5hiU1SXC5zAJJG1W0FEpGvIuQRa5YxW8goqwIJrEuvy8jWLhg1x
+kB4BNFdQdBMg8xw0GSHGDhOZhIxgC5t/fvrbiLmqazzmbfCE1i8=
+=71f2
+-----END PGP SIGNATURE-----
+
+--JYK4vJDZwFMowpUq--
