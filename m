@@ -2,132 +2,174 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF647255AE7
-	for <lists+linux-clk@lfdr.de>; Fri, 28 Aug 2020 15:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E05255B64
+	for <lists+linux-clk@lfdr.de>; Fri, 28 Aug 2020 15:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729548AbgH1NJs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 28 Aug 2020 09:09:48 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:53891 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729123AbgH1NHi (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 28 Aug 2020 09:07:38 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200828130715euoutp01e3888f240c41aa37cbf5447560de3719~vcHPTSZBS2267222672euoutp01t
-        for <linux-clk@vger.kernel.org>; Fri, 28 Aug 2020 13:07:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200828130715euoutp01e3888f240c41aa37cbf5447560de3719~vcHPTSZBS2267222672euoutp01t
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1598620035;
-        bh=NnSR6KpXMzjkk1wzGR33M6iWIlXpcOAe3kk+qj+qB+4=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=hGMCcT8PgBi3YIontvxdBk3nW7cA2o7WJu+mJWkHg1TXYiSvKP9HV3Y8jY3b/qHyB
-         5FSA81gW74Dktpa796sr621xl9a+vU2sd+QQUnm3kbqg6oSSpAyaqRW3CJ6NKyhiuv
-         7uvTDo/8+YJ8dJFWl2rKeTpVWmAQnv+Ta0yWBSnY=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200828130715eucas1p246140a05e1cd43922fbd9bef628d20af~vcHO8U_G00754707547eucas1p2q;
-        Fri, 28 Aug 2020 13:07:15 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 92.06.06456.381094F5; Fri, 28
-        Aug 2020 14:07:15 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200828130714eucas1p26b45e68ee12ca6c31b0ebe62bf699ba7~vcHOjg-7B1068210682eucas1p2P;
-        Fri, 28 Aug 2020 13:07:14 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200828130714eusmtrp13a412918e8e2928b42cccf3fe798a393~vcHOizK8z0481104811eusmtrp1V;
-        Fri, 28 Aug 2020 13:07:14 +0000 (GMT)
-X-AuditID: cbfec7f2-809ff70000001938-80-5f490183fdc7
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 79.CA.06314.281094F5; Fri, 28
-        Aug 2020 14:07:14 +0100 (BST)
-Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200828130714eusmtip14b2df8adfb89d3bb54984db5839e7ede~vcHOB5hcD1484014840eusmtip1h;
-        Fri, 28 Aug 2020 13:07:14 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: [PATCH] clk: meson: g12a: mark fclk_div2 as CLK_IGNORE_UNUSED
-Date:   Fri, 28 Aug 2020 15:07:07 +0200
-Message-Id: <20200828130707.9045-1-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkleLIzCtJLcpLzFFi42LZduzned1mRs94g2WvWS02zljPavHm0RFm
-        i5/tW5gsFszmtvjYc4/V4vKuOWwWa4/cZbc4tugki8WhvmiLf9c2sjhweby/0cru8XTCZHaP
-        Tas62Tw2L6n36NuyitHj8ya5ALYoLpuU1JzMstQifbsErow9K8+xFeziqOhd9Zm5gfEdWxcj
-        J4eEgIlE24HVQDYXh5DACkaJWdOmMEI4Xxgl5m66xwLhfGaUWPa6nwWmZem+e6wQieWMEjN6
-        JiG07D1yAayKTcBQouttF9gSEYEEid/f5jOBFDEL7GWSePToMiNIQljATaK7fyuYzSKgKjHj
-        zSOwBl4BG4mVWzpYIdbJS6zecIAZpFlC4DWbxJQP15ghEi4SV7ach7pJWOLV8S3sELaMxOnJ
-        PSwQDc2MEg/PrWWHcHoYJS43zWCEqLKWuHPuF9A6DqCbNCXW79KHCDtK3J28jwUkLCHAJ3Hj
-        rSBImBnInLRtOjNEmFeio00IolpNYtbxdXBrD164BFXiIXFzYyhIWEggVuLi0jvMExjlZiGs
-        WsDIuIpRPLW0ODc9tdgwL7Vcrzgxt7g0L10vOT93EyMwYZz+d/zTDsavl5IOMQpwMCrx8O7Y
-        5x4vxJpYVlyZe4hRgoNZSYTX6ezpOCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8xotexgoJpCeW
-        pGanphakFsFkmTg4pRoYfaP1lnvenrVVSvq5xirZLzprjiVXcO9jXpL5eeqMTaFGtxaG6ai1
-        t0fM85/49NbEiLOtcw+vfxI649tqxif7DsS6ajQ1rw+tEDfWmib0TUXua8TiYvuQkt/mm1oy
-        Gu8HJl3dclFwbZJE3g3fZQ4eWvJnzd8cNGCZ0/98bUf71P2m0gq80++IKrEUZyQaajEXFScC
-        ANRsgI4UAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrGLMWRmVeSWpSXmKPExsVy+t/xu7pNjJ7xBjtfqVlsnLGe1eLNoyPM
-        Fj/btzBZLJjNbfGx5x6rxeVdc9gs1h65y25xbNFJFotDfdEW/65tZHHg8nh/o5Xd4+mEyewe
-        m1Z1snlsXlLv0bdlFaPH501yAWxRejZF+aUlqQoZ+cUltkrRhhZGeoaWFnpGJpZ6hsbmsVZG
-        pkr6djYpqTmZZalF+nYJehl7Vp5jK9jFUdG76jNzA+M7ti5GTg4JAROJpfvusYLYQgJLGSXe
-        byiBiMtInJzWwAphC0v8udYFVM8FVPOJUeLYmnPsIAk2AUOJrrddYINEBJIklp/dCVbELHCQ
-        SWJC0wmwImEBN4nu/q2MIDaLgKrEjDePwBp4BWwkVm7pgNogL7F6wwHmCYw8CxgZVjGKpJYW
-        56bnFhvqFSfmFpfmpesl5+duYgSG6bZjPzfvYLy0MfgQowAHoxIP74597vFCrIllxZW5hxgl
-        OJiVRHidzp6OE+JNSaysSi3Kjy8qzUktPsRoCrR8IrOUaHI+MIbySuINTQ3NLSwNzY3Njc0s
-        lMR5OwQOxggJpCeWpGanphakFsH0MXFwSjUwTntbkL7QX7Ku/+MkZlNznVTurFmze83Y/p88
-        U3/p1e5nywXLJ3cWpPWxN/K8jE1/VOEVuORi1aEjpdNvOn28xmzYxSR3bKbwWgGGJ2d4nkn0
-        bL/nFDZZ9PGGpmMxh1/v/hx1Sl8qZPO85IzFf7v2ChvNSOvV2apQ8zZ3p0vUQ+G1oRkzYmw8
-        lViKMxINtZiLihMBIs7O42kCAAA=
-X-CMS-MailID: 20200828130714eucas1p26b45e68ee12ca6c31b0ebe62bf699ba7
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200828130714eucas1p26b45e68ee12ca6c31b0ebe62bf699ba7
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200828130714eucas1p26b45e68ee12ca6c31b0ebe62bf699ba7
-References: <CGME20200828130714eucas1p26b45e68ee12ca6c31b0ebe62bf699ba7@eucas1p2.samsung.com>
+        id S1729618AbgH1NnV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 28 Aug 2020 09:43:21 -0400
+Received: from mail-co1nam11on2085.outbound.protection.outlook.com ([40.107.220.85]:34272
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729550AbgH1NkN (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 28 Aug 2020 09:40:13 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XAtiOIapAHkyQZwq7tGDUIJRolYqwcvWeIU3G+piB3yxkI5tplqY3RsqHrZtLG7pWcVKmAZbgiWqUsiLyBpVtigA3uumxNLgPhhAahfM6mM+orii3CpzLItLLG0pgVnuI8hiQqFx9+XHU1enPdZqUKgzOpP/SNTjrFSs+fWQKB0hj1F0GevhICrUNFYrdjgq9cajrlWX5aubJ6i/ZeJ6xa91bsHCZQPKQTwfQdoF1MGbXe0nV+Sv7yy9aQKbTQU3ENafbc+sqGif/b0p9GGozYVwsWwvnKrTHelrgDJcqoJfJqOehw+0eCoxHj9/WyXSma0mjjnprupSd39tjnWsqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1CWNw/uFzzcTbbb546rFGvYtEV7r5RGaHTN4/9EQwNQ=;
+ b=BWA/BKnXL6mLIW4HcSC34Y8gZeV9M4PHUaATJBbmF5mafdGRdmIPhkVt01I1dD4akPswL1DCglx2YqvWq0BfpW73CVC8R6XxnNeFsfzybDv9AftVjjSwsb5/LCUNXYWPF9LN3jKenAgrrZ9r/T/pDA/Z7pXMpK26Xyuvj/rk9iA5RtvMkxBdBiNKSsmiaa7SFo/3l7us+4BFjBGIHtJcKkHblLSUal+rmA0j7fCkHUEdTLq6p6Fiop3K3lRpS0yVC/PaK74VFBc+jyQL25X+xkG6p8XqROB9NgdQ4HMpZFMB4fGSr8McRi/l/5ycvXhB8Sr7LF2f/YFDzkgFek721w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.60.83) smtp.rcpttodomain=baylibre.com smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1CWNw/uFzzcTbbb546rFGvYtEV7r5RGaHTN4/9EQwNQ=;
+ b=oiH5dcGw4YyeKFZB9aznFaA7vBV3clQqEGsKk0eciR60801eoCRV7mV0wOoNYBgbvUDlA7H5SLXuoUf5gpGfcFOJVuvMWUqjLU7qSv4yQDgSS2TRp7nRXnlSjcUjUCyZBHcTIEiMvSZ1kNMPG5SAB+MDDTqAaK2qq90HYTgsr0I=
+Received: from SA9PR11CA0018.namprd11.prod.outlook.com (2603:10b6:806:6e::23)
+ by BN6PR02MB2643.namprd02.prod.outlook.com (2603:10b6:404:5c::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.24; Fri, 28 Aug
+ 2020 13:40:03 +0000
+Received: from SN1NAM02FT018.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:6e:cafe::5a) by SA9PR11CA0018.outlook.office365.com
+ (2603:10b6:806:6e::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.19 via Frontend
+ Transport; Fri, 28 Aug 2020 13:40:02 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; baylibre.com; dkim=none (message not signed)
+ header.d=none;baylibre.com; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ SN1NAM02FT018.mail.protection.outlook.com (10.152.72.122) with Microsoft SMTP
+ Server id 15.20.3326.19 via Frontend Transport; Fri, 28 Aug 2020 13:40:02
+ +0000
+Received: from [149.199.38.66] (port=57271 helo=smtp.xilinx.com)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
+        (envelope-from <shubhrajyoti.datta@xilinx.com>)
+        id 1kBebI-0004sA-Bs; Fri, 28 Aug 2020 06:39:28 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by smtp.xilinx.com with smtp (Exim 4.63)
+        (envelope-from <shubhrajyoti.datta@xilinx.com>)
+        id 1kBebq-0005os-CT; Fri, 28 Aug 2020 06:40:02 -0700
+Received: from xsj-pvapsmtp01 (smtp-fallback.xilinx.com [149.199.38.66] (may be forged))
+        by xsj-smtp-dlp1.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 07SDe0EV028008;
+        Fri, 28 Aug 2020 06:40:00 -0700
+Received: from [10.140.6.59] (helo=xhdshubhraj40.xilinx.com)
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <shubhrajyoti.datta@xilinx.com>)
+        id 1kBebo-0005it-0V; Fri, 28 Aug 2020 06:40:00 -0700
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To:     linux-clk@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@driverdev.osuosl.org, sboyd@kernel.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Subject: [PATCH v6 0/8] clk: clk-wizard: clock-wizard: Driver updates
+Date:   Fri, 28 Aug 2020 19:09:48 +0530
+Message-Id: <1598621996-31040-1-git-send-email-shubhrajyoti.datta@xilinx.com>
+X-Mailer: git-send-email 2.1.1
+X-RCIS-Action: ALLOW
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 4e119a77-58c4-4d54-5b62-08d84b57ddc4
+X-MS-TrafficTypeDiagnostic: BN6PR02MB2643:
+X-Microsoft-Antispam-PRVS: <BN6PR02MB264396CAB12E575E1278416FAA520@BN6PR02MB2643.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:207;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zIhjjoO/trY2NVqXw0jtmRrui1tUvokzh5BCQh6ShmKvcha19aT3CCFdZuwgQ5HnAZkPo7NdisI3XvdSmPb/e+q0+Fs2rskLTMcv/lKYO79Ernx3hPPCJb71XtKj8Gq1eWlF6Pm/3kRdtiTjLM8lQqFcHSu+Oc4d2meIJzvQbjOT3FrB8tqIszu+FD/hdZc7Q0fJY7WK6KNlAxF4gkj2drclh/v9CcIcXBrMf5zKIt4qCPIPs2qYhsSd3xYW6lbcsg42MS44GwJD4blLYMHrQY80cIeuBXk//bXg8fGfqKuLnLO+E2r5ySI1w+SWudcKxAyWTCPcD7Q3+aHE65ySkrmP/2J6+2ZDj7nM3zkPovA5QnU4/XuNwzPg9ln5aw2olZFH5CiOfJ5VE1ZzR694TSY5S6J5Pxl2LRhDCQACGasN6A1f3qgT6Tul+DLru5fbmQfVYniFpPXzOvA5HjNzevXg+wNO4hQeR9cZwRlbTFZXr71kubiwsVlpRHsfIfyh
+X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFS:(39860400002)(136003)(396003)(346002)(376002)(46966005)(4326008)(356005)(336012)(2616005)(8936002)(44832011)(9786002)(82310400002)(6916009)(8676002)(70586007)(81166007)(107886003)(966005)(186003)(5660300002)(15650500001)(426003)(478600001)(36756003)(7696005)(26005)(70206006)(6666004)(47076004)(82740400003)(2906002)(316002)(83380400001)(42866002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2020 13:40:02.7696
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e119a77-58c4-4d54-5b62-08d84b57ddc4
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT018.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB2643
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add CLK_IGNORE_UNUSED flag to the "fclk_div2" clock to fix boot hang on
-the Hardkernel's Odroid N2 board (with bootloader booted from SD card and
-kernel loaded via FTFP).
+In the thread [1] Greg suggested that we move the driver
+to the clk from the staging.
+Add patches to address the concerns regarding the fractional and
+set rate support in the TODO.
 
-It looks that this clock is disabled by the generic unused clocks
-scanning code before it gets enabled by the meson-gx-mmc driver.
+The patch set does the following
+- Trivial fixes for kernel doc.
+- Move the driver to the clk folder
+- Add capability to set rate.
+- Add fractional support.
+- Add support for configurable outputs.
+- Make the output names unique so that multiple instances
+do not crib.
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
-Without this patch the only way to boot OdroidN2 board with mainline
-kernel is to append clk_ignore_unused kernel parameter. I've build the
-kernel from the default arm64's defconfig. The kernel is loaded via TFTP
-using vendor's u-boot.
----
- drivers/clk/clk.c        | 5 +++++
- drivers/clk/meson/g12a.c | 1 +
- 2 files changed, 6 insertions(+)
+Changes in the v3:
+Added the cover-letter.
+Add patches for rate setting and fractional support
+Add patches for warning.
+Remove the driver from staging as suggested
 
-diff --git a/drivers/clk/meson/g12a.c b/drivers/clk/meson/g12a.c
-index 9803d44bb157..4106b6231be4 100644
---- a/drivers/clk/meson/g12a.c
-+++ b/drivers/clk/meson/g12a.c
-@@ -298,6 +298,7 @@ static struct clk_regmap g12a_fclk_div2 = {
- 			&g12a_fclk_div2_div.hw
- 		},
- 		.num_parents = 1,
-+		.flags = CLK_IGNORE_UNUSED,
- 	},
- };
- 
+v4:
+Reorder the patches.
+Merge the CLK_IS_BASIC patch.
+Add the yaml form of binding document
+
+v5:
+Fix a mismerge
+
+v6:
+Fix the yaml warning
+use poll timedout
+
+[1] https://spinics.net/lists/linux-driver-devel/msg117326.html
+
+Shubhrajyoti Datta (8):
+  dt-bindings: add documentation of xilinx clocking wizard
+  clk: clock-wizard: Add the clockwizard to clk directory
+  clk: clock-wizard: Fix kernel-doc warning
+  clk: clock-wizard: Add support for dynamic reconfiguration
+  clk: clock-wizard: Add support for fractional support
+  clk: clock-wizard: Remove the hardcoding of the clock outputs
+  clk: clock-wizard: Update the fixed factor divisors
+  staging: clocking-wizard: Delete the driver from the staging
+
+ .../bindings/clock/xlnx,clocking-wizard.yaml       |  71 +++
+ drivers/clk/Kconfig                                |   9 +
+ drivers/clk/Makefile                               |   1 +
+ drivers/clk/clk-xlnx-clock-wizard.c                | 657 +++++++++++++++++++++
+ drivers/staging/Kconfig                            |   2 -
+ drivers/staging/Makefile                           |   1 -
+ drivers/staging/clocking-wizard/Kconfig            |  10 -
+ drivers/staging/clocking-wizard/Makefile           |   2 -
+ drivers/staging/clocking-wizard/TODO               |  12 -
+ .../clocking-wizard/clk-xlnx-clock-wizard.c        | 333 -----------
+ drivers/staging/clocking-wizard/dt-binding.txt     |  30 -
+ 11 files changed, 738 insertions(+), 390 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
+ create mode 100644 drivers/clk/clk-xlnx-clock-wizard.c
+ delete mode 100644 drivers/staging/clocking-wizard/Kconfig
+ delete mode 100644 drivers/staging/clocking-wizard/Makefile
+ delete mode 100644 drivers/staging/clocking-wizard/TODO
+ delete mode 100644 drivers/staging/clocking-wizard/clk-xlnx-clock-wizard.c
+ delete mode 100644 drivers/staging/clocking-wizard/dt-binding.txt
+
 -- 
-2.17.1
+2.1.1
 
