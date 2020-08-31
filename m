@@ -2,84 +2,50 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC52256D3E
-	for <lists+linux-clk@lfdr.de>; Sun, 30 Aug 2020 12:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C912571DD
+	for <lists+linux-clk@lfdr.de>; Mon, 31 Aug 2020 04:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728757AbgH3KHk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 30 Aug 2020 06:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725869AbgH3KHh (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 30 Aug 2020 06:07:37 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E217DC061573
-        for <linux-clk@vger.kernel.org>; Sun, 30 Aug 2020 03:07:35 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id z17so1909991lfi.12
-        for <linux-clk@vger.kernel.org>; Sun, 30 Aug 2020 03:07:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dNsRAqkpb7LZUriy3bYigquvN7E89ZUZ6a0Kz5iQgtM=;
-        b=CR3yBp4eF8gKwB94L2+Av9mspgjaQGAeGq8CagVhQyQcSS5sDkiA2Bjkxows0LNG2W
-         4VJM2kNR2Q0MBPpzOfSI76DXw5f7LvJXSGK8S/ZN6mk5H/JThx0Wul6RUWRMnN2ePUV8
-         wYqyQaOVOjcBHxXpGUR6QyvtTnW1WC0ajzsCqO2cAJ2xBGmAWFSlBtb9pocP+iO3dHFr
-         40a24lVcbeYwulKpH71uhXLpncipggPnqzjR66SE4NbEMtd71/V6df4WmmBgrdwnSjU9
-         nI6teYtkcGSIovCkUWdL8z2XWKmsrPX7+eij4chqEgYPUWlLhUil66KToCQKok5boyB+
-         WnZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dNsRAqkpb7LZUriy3bYigquvN7E89ZUZ6a0Kz5iQgtM=;
-        b=DWKwp2741YlRuoTYV4/qIaePtYkM21K9HhviReWZqek9j8aUN4gSmP27O+ZeH/tN6j
-         pri+E9Wc+0QsvrZZFd4NJJJWaMLJ4puCyYtOMIO8uHnWaM2a44ZTmMZAP3OOYW7bdKHv
-         T73H3qc5fhurzH20DhOx/Y6yl5VqFnV7D4Hb9JD8xrrXWDTVSDnwVxIK6Sk1hvaE1lxO
-         iZq+1vzJG2itr/bfntm7D5OR8VwsC8o/NCv3temiG9h+jzMR+og+PIagWzxoHxqy9QVo
-         NLU7SbC4Nt/VDoam1S0D2tYeqgTP64uulR+OviZtfOil+uxCzswMt5A/75sIrnufwsWy
-         IFow==
-X-Gm-Message-State: AOAM530La9umpu3ZNCONElrD4tcwbalupx4tRtlByjC0ucaAgCnfnebr
-        aYpZg3F1L47OF2xKNWpidJwCXzYCBvoFUhPcCxg+QQ==
-X-Google-Smtp-Source: ABdhPJys34Tj/H6BMuD4li7gNKtPjNXFTtG/dt6qc79bH1fBaaihFbrJhQPAbU6UvAQfixj/pjHIpIsLEhzSQ88UfoQ=
-X-Received: by 2002:ac2:4c05:: with SMTP id t5mr3290753lfq.89.1598782048574;
- Sun, 30 Aug 2020 03:07:28 -0700 (PDT)
+        id S1726940AbgHaC3W (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 30 Aug 2020 22:29:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57244 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726946AbgHaC3V (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 30 Aug 2020 22:29:21 -0400
+Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2FC8C2071B;
+        Mon, 31 Aug 2020 02:29:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598840960;
+        bh=5XXLwr3gA1xrG0V9krERl8EjNNilBSq5UBzxHEblVKY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g/o8vhL80wpTGvqkWVnze7gat3kTG3TUBKecOLplGzAm720sn57uV6Pbrq6zUy+D1
+         yuqMIUTMokUIIe6n25Kz+l/zyECt+AcR649/+OCcDlWLut93VMgb96y+jTaoB+W1OO
+         E71JJIw5rD2nrr2TBxH1wJYADCzdlMqZMrY6wl00=
+Date:   Mon, 31 Aug 2020 10:29:15 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Jacky Bai <ping.bai@nxp.com>
+Cc:     sboyd@kernel.org, mturquette@baylibre.com, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, robh+dt@kernel.org,
+        linux-imx@nxp.com, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 1/2] clk: imx: Correct the root clk of media ldb on imx8mp
+Message-ID: <20200831022914.GC4488@dragon>
+References: <1598254622-29340-1-git-send-email-ping.bai@nxp.com>
 MIME-Version: 1.0
-References: <20200829175704.GA10998@Kaladin>
-In-Reply-To: <20200829175704.GA10998@Kaladin>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 30 Aug 2020 12:07:17 +0200
-Message-ID: <CACRpkdZ+_eDPntPhfhF3bAP-afsVUaCfWowZL-otr8TcKdRP+w@mail.gmail.com>
-Subject: Re: [PATCH] clk: versatile: Add of_node_put() before return statement
-To:     Sumera Priyadarsini <sylphrenadin@gmail.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Julia Lawall <Julia.Lawall@lip6.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1598254622-29340-1-git-send-email-ping.bai@nxp.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sat, Aug 29, 2020 at 7:57 PM Sumera Priyadarsini
-<sylphrenadin@gmail.com> wrote:
+On Mon, Aug 24, 2020 at 03:37:01PM +0800, Jacky Bai wrote:
+> The root clock slice at 0xbf00 is media_ldb clock,
+> not csi_phy2_ref, so correct it.
+> 
+> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 
-> Every iteration of for_each_available_child_of_node() decrements
-> the reference count of the previous node, however when control is
-> transferred from the middle of the loop, as in the case of a return
-> or break or goto, there is no decrement thus ultimately resulting in
-> a memory leak.
->
-> Fix a potential memory leak in clk-impd1.c by inserting
-> of_node_put() before a return statement.
->
-> Issue found with Coccinelle.
->
-> Signed-off-by: Sumera Priyadarsini <sylphrenadin@gmail.com>
-
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+Applied both, thanks.
