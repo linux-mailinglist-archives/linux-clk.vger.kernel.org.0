@@ -2,140 +2,163 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B410F25AE19
-	for <lists+linux-clk@lfdr.de>; Wed,  2 Sep 2020 16:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FBED25AE3D
+	for <lists+linux-clk@lfdr.de>; Wed,  2 Sep 2020 17:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726380AbgIBO7Q (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 2 Sep 2020 10:59:16 -0400
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:59977 "EHLO
-        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726528AbgIBNwf (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 2 Sep 2020 09:52:35 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id 679675DD;
-        Wed,  2 Sep 2020 09:52:33 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 02 Sep 2020 09:52:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=uYl4BPHJHJwCu+IH/QSOVmLDopG
-        QR9pU8iqrt6n2QJ0=; b=XXkBZ0AU1gPtIpCT7UwgtStXIxC4oVjC5FcJH6iX5uu
-        wU8wjbZRK+1vICtZ/tqPMGhwhPvsfFVbDVuin0kFLguFYqVV50GOYS1zHOhHen3i
-        KeeHo1QhqbPDsysn7wll3hIotJ3Cd69FKxgIqtbZiAv8H7Jo/lo/wDHUs51Fhjl9
-        Fxy9ABtJ1odVwjWjiKsdTFMRZSER7IySA/+KejSIreeCxel/DIYZJrl5wO1a1XjI
-        wTEZSN5YjXCj98GWwBOo4QxYVOoU4rTGY5oHFSPX87u2PX5ER6llcTj63hVJ94Be
-        79kH65Z/JoTSk1DYXlsSCpgWMBQVshsyTTo1SRScd2w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=uYl4BP
-        HJHJwCu+IH/QSOVmLDopGQR9pU8iqrt6n2QJ0=; b=tWoJdaczodYmxy9J3bFBoX
-        buLaM3YefbPsTm0YESK7pU2fH2O4d9bhnx1mMLYb1e1MGPjUJw7DmKqkOSn3vAaH
-        cii0IYzDwoc2KYriGH/w0x0dFr+WoE6aqxDPL2QYIvF7Q/WVfWXoLhLsrrrsWxLn
-        lr2YERIwgcuvlIt832jKJXsjfJx7w0lDm5b+6+nCr5UJNKSznDikAtCKmUL479i/
-        fjkPOhVgHUdNr15aa//iCKtzrtFsRV7TfH4ysy0syrENwm/Y674NDOiM2pt2KOpX
-        Avh4zd2A2sjHztEX+71YVf57YMP608BpfL4z0JIavPbzsDUbBut785e9GvY7HTYQ
-        ==
-X-ME-Sender: <xms:n6NPX_qTozjzfe7fC4apLu9gBl2-reHQmCuC-doz2DB5lGMOkSgSGw>
-    <xme:n6NPX5q5BpOf_e2Ys3Ec66brJ63DJNPwSSkiJuqz4WccZWPmi824aRCXvQJL7t0rq
-    LjXYDTPN53sumIMlp0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudefledgjedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepuddvudfhkeekhefgffetffelgffftdehffduffegveetffehueeivddvjedv
-    gfevnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:n6NPX8O69UHTuexuOmoIizn2havGvGAJxVqtDwjneINQxnWDPV_KXg>
-    <xmx:n6NPXy4jE2Y_PBTupPEGBJBijeDTFyEWOj9ThEqavfUXNml4oOyjcQ>
-    <xmx:n6NPX-4SbTbPsnGqG7FfpQFxNJ0FpD68ZtoqHuh7YL63anamrGAenw>
-    <xmx:oaNPX9RvhgC5IuuXK-6wp4pu4tPY8NNdvcBQt_Nnj2BubG8zLBazXVNhzPg>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id B013D328005E;
-        Wed,  2 Sep 2020 09:52:31 -0400 (EDT)
-Date:   Wed, 2 Sep 2020 15:52:30 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Hoegeun Kwon <hoegeun.kwon@samsung.com>
-Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Eric Anholt <eric@anholt.net>, devicetree@vger.kernel.org,
-        Tim Gover <tim.gover@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        id S1727919AbgIBPEi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 2 Sep 2020 11:04:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41650 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727801AbgIBPEV (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 2 Sep 2020 11:04:21 -0400
+Received: from kozik-lap.mshome.net (unknown [194.230.155.106])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A2363214D8;
+        Wed,  2 Sep 2020 15:04:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599059060;
+        bh=qZbRz7vHhRuDtj+mxfFu/caG8U7KILHwDenzvK1SHbY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=eNX+dwL77fegbOMgYPi65jD3MevMqzWzD66pOUe/teuPLLkkOp08Y+AaJ6dIaUNbb
+         A6BjfJR8rh/kbmfihtaKPRZD7lSCBlCAv5SE4qDDhGMafSCk4QaprlcY1G26otG/FM
+         nPeBT9UTfjguJrQ6TNr1TE92NHwXQJFlXazVBBUA=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 00/78] drm/vc4: Support BCM2711 Display Pipeline
-Message-ID: <20200902135230.5hpvfjqsamot5zg6@gilmour.lan>
-References: <CGME20200709070649epcas1p13664bacc66a0f73443bf4d3e8940f933@epcas1p1.samsung.com>
- <cover.7a1aa1784976093af26cb31fd283cf5b3ed568bb.1594230107.git-series.maxime@cerno.tech>
- <1a39aedf-b708-e490-6acb-9a07e1b73300@samsung.com>
- <20200902133220.avp6dhfv2fhpiyf3@gilmour.lan>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="hfgqy6buhvjnpemx"
-Content-Disposition: inline
-In-Reply-To: <20200902133220.avp6dhfv2fhpiyf3@gilmour.lan>
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        David Lechner <david@lechnology.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH 05/10] clk: sunxi-ng: Simplify with dev_err_probe()
+Date:   Wed,  2 Sep 2020 17:03:43 +0200
+Message-Id: <20200902150348.14465-5-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200902150348.14465-1-krzk@kernel.org>
+References: <20200902150348.14465-1-krzk@kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Common pattern of handling deferred probe can be simplified with
+dev_err_probe().  Less code and the error value gets printed.
 
---hfgqy6buhvjnpemx
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ drivers/clk/sunxi-ng/ccu-sun8i-de2.c     | 28 ++++++++----------------
+ drivers/clk/sunxi-ng/ccu-sun9i-a80-de.c  | 19 +++++-----------
+ drivers/clk/sunxi-ng/ccu-sun9i-a80-usb.c |  9 +++-----
+ 3 files changed, 18 insertions(+), 38 deletions(-)
 
-On Wed, Sep 02, 2020 at 03:32:20PM +0200, Maxime Ripard wrote:
-> Hi Hoegeun
->=20
-> On Fri, Aug 21, 2020 at 04:18:34PM +0900, Hoegeun Kwon wrote:
-> > Hi Maxime,
-> >=20
-> > Thank you for your version 4 patch.
-> > I tested all 78 patches based on the next-20200708.
-> >=20
-> >=20
-> > Dual HDMI opearation does not work normally.
-> > flip_done timed out occurs and doesn't work.
-> > Could you check please it.
-> >=20
-> > [=A0 105.694541] [drm:drm_atomic_helper_wait_for_dependencies] *ERROR*=
-=20
-> > [CRTC:64:crtc-3] flip_done timed out
-> > [=A0 115.934994] [drm:drm_atomic_helper_wait_for_dependencies] *ERROR*=
-=20
-> > [CONNECTOR:32:HDMI-A-1] flip_done timed out
-> > [=A0 126.174545] [drm:drm_atomic_helper_wait_for_dependencies] *ERROR*=
-=20
-> > [PLANE:60:plane-3] flip_done timed out
->=20
-> Thanks for testing and reporting this. I've been looking into it, and it
-> seems that it's not just the dual output that's broken, but HDMI1
-> entirely (so even a single display connected to HDMI1 doesn't work).
->=20
-> Is it happening for you as well?
+diff --git a/drivers/clk/sunxi-ng/ccu-sun8i-de2.c b/drivers/clk/sunxi-ng/ccu-sun8i-de2.c
+index 524f33275bc7..0de024d3e466 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun8i-de2.c
++++ b/drivers/clk/sunxi-ng/ccu-sun8i-de2.c
+@@ -297,29 +297,19 @@ static int sunxi_de2_clk_probe(struct platform_device *pdev)
+ 		return PTR_ERR(reg);
+ 
+ 	bus_clk = devm_clk_get(&pdev->dev, "bus");
+-	if (IS_ERR(bus_clk)) {
+-		ret = PTR_ERR(bus_clk);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(&pdev->dev, "Couldn't get bus clk: %d\n", ret);
+-		return ret;
+-	}
++	if (IS_ERR(bus_clk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(bus_clk),
++				     "Couldn't get bus clk\n");
+ 
+ 	mod_clk = devm_clk_get(&pdev->dev, "mod");
+-	if (IS_ERR(mod_clk)) {
+-		ret = PTR_ERR(mod_clk);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(&pdev->dev, "Couldn't get mod clk: %d\n", ret);
+-		return ret;
+-	}
++	if (IS_ERR(mod_clk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(mod_clk),
++				     "Couldn't get mod clk\n");
+ 
+ 	rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+-	if (IS_ERR(rstc)) {
+-		ret = PTR_ERR(rstc);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(&pdev->dev,
+-				"Couldn't get reset control: %d\n", ret);
+-		return ret;
+-	}
++	if (IS_ERR(rstc))
++		return dev_err_probe(&pdev->dev, PTR_ERR(rstc),
++				     "Couldn't get reset control\n");
+ 
+ 	/* The clocks need to be enabled for us to access the registers */
+ 	ret = clk_prepare_enable(bus_clk);
+diff --git a/drivers/clk/sunxi-ng/ccu-sun9i-a80-de.c b/drivers/clk/sunxi-ng/ccu-sun9i-a80-de.c
+index 6616e8114f62..541c3d32b93e 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun9i-a80-de.c
++++ b/drivers/clk/sunxi-ng/ccu-sun9i-a80-de.c
+@@ -215,21 +215,14 @@ static int sun9i_a80_de_clk_probe(struct platform_device *pdev)
+ 		return PTR_ERR(reg);
+ 
+ 	bus_clk = devm_clk_get(&pdev->dev, "bus");
+-	if (IS_ERR(bus_clk)) {
+-		ret = PTR_ERR(bus_clk);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(&pdev->dev, "Couldn't get bus clk: %d\n", ret);
+-		return ret;
+-	}
++	if (IS_ERR(bus_clk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(bus_clk),
++				     "Couldn't get bus clk\n");
+ 
+ 	rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+-	if (IS_ERR(rstc)) {
+-		ret = PTR_ERR(rstc);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(&pdev->dev,
+-				"Couldn't get reset control: %d\n", ret);
+-		return ret;
+-	}
++	if (IS_ERR(rstc))
++		return dev_err_probe(&pdev->dev, PTR_ERR(rstc),
++				     "Couldn't get reset control\n");
+ 
+ 	/* The bus clock needs to be enabled for us to access the registers */
+ 	ret = clk_prepare_enable(bus_clk);
+diff --git a/drivers/clk/sunxi-ng/ccu-sun9i-a80-usb.c b/drivers/clk/sunxi-ng/ccu-sun9i-a80-usb.c
+index 4b4a507d04ed..f6a3989fea36 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun9i-a80-usb.c
++++ b/drivers/clk/sunxi-ng/ccu-sun9i-a80-usb.c
+@@ -103,12 +103,9 @@ static int sun9i_a80_usb_clk_probe(struct platform_device *pdev)
+ 		return PTR_ERR(reg);
+ 
+ 	bus_clk = devm_clk_get(&pdev->dev, "bus");
+-	if (IS_ERR(bus_clk)) {
+-		ret = PTR_ERR(bus_clk);
+-		if (ret != -EPROBE_DEFER)
+-			dev_err(&pdev->dev, "Couldn't get bus clk: %d\n", ret);
+-		return ret;
+-	}
++	if (IS_ERR(bus_clk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(bus_clk),
++				     "Couldn't get bus clk\n");
+ 
+ 	/* The bus clock needs to be enabled for us to access the registers */
+ 	ret = clk_prepare_enable(bus_clk);
+-- 
+2.17.1
 
-Nevermind, I had the DSI panel connected and it was interfering
-
-Maxime
-
-
---hfgqy6buhvjnpemx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX0+jngAKCRDj7w1vZxhR
-xVSHAQCnCDlA/SJLCP5PetU7Iyf4P2mZvBCHHAz/RyMCctXhaAEA+AQnVnAQhqZZ
-mmLYhcaotKt4KrJuuhWp61WNWd0RMwQ=
-=1Ln2
------END PGP SIGNATURE-----
-
---hfgqy6buhvjnpemx--
