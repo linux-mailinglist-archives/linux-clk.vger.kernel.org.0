@@ -2,67 +2,67 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC0825B3DA
-	for <lists+linux-clk@lfdr.de>; Wed,  2 Sep 2020 20:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC2B25B3D3
+	for <lists+linux-clk@lfdr.de>; Wed,  2 Sep 2020 20:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728149AbgIBSkW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 2 Sep 2020 14:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51180 "EHLO
+        id S1728142AbgIBSkF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 2 Sep 2020 14:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727892AbgIBSkI (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 2 Sep 2020 14:40:08 -0400
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F848C061260
-        for <linux-clk@vger.kernel.org>; Wed,  2 Sep 2020 11:40:05 -0700 (PDT)
-Received: by mail-qt1-x843.google.com with SMTP id v54so4376999qtj.7
-        for <linux-clk@vger.kernel.org>; Wed, 02 Sep 2020 11:40:05 -0700 (PDT)
+        with ESMTP id S1727892AbgIBSkD (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 2 Sep 2020 14:40:03 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300DFC061246
+        for <linux-clk@vger.kernel.org>; Wed,  2 Sep 2020 11:40:02 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id o5so623300qke.12
+        for <linux-clk@vger.kernel.org>; Wed, 02 Sep 2020 11:40:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=marek-ca.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tBOlsZGCw+mt5EsIw2747Rf4oR5khHD7yhV5uOZZJhk=;
-        b=SZk6h/IXcDfhZVTLKEv/8BckUYDoyZEmuvXW5KQ4cVlwRHO2r572YdoCrMpaEZIX0E
-         Aji/bkgsr4uO+y+/OIn1gyUmCmesgu/iDqX/sT9eocKSj0LEODXh86YCqdpsNv6tS3kP
-         eh2PZsYaWW+HzHOd/VETX512rpl5ekRBM/YDyzRlIWakOsiTCs3pPE/sYDbenHbgWRz4
-         f3rciFEcMJQnqTpp5qFRj4chA0Su4yRt4MiorepPuA7jbUJom7rPDgiiDYC5SbDd79SP
-         2Cd+m5YJeKvZx4KRfg2UDW7vLu/TclyyktuYeuLgziWehPVwclXNVoRX1I//OGBNOmeW
-         5FfQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=xZ0W2CvSOqgevHE21Wvc9Ii5sefbzh3TG/j8nJsk3zc=;
+        b=amGpMxv6FvcAg54gGJVlhJ2rkwaxD6yAwwrDqBRT8krp7t6DTO5eNbTLg3vELZMxf3
+         i5EFYxV2aMGDxbXZNoDC0RxPxo3kXTUJ2qqEk1X+CGK77nVItz4G9D55EsiBIKV0tQDV
+         cjuQ6+rd6wsXLqyiIL605ZocjnWmgTbGiWYGU2ZVkz9wONFpQLJR4r0YUeA1SCDo+WzC
+         X5/HEqAZS+sIHWEBYDv1b7MikqvYHYjR0cww3OOLRRrfUFXOsa5fuGhLfVVtgHII05Ni
+         KpU03yh8vfqr5g0UZn7DLMfYGq9UY9YlUZKY0NSR8Myh5zfqYSVsRjlKJhVZ0wUaT7KV
+         wD9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tBOlsZGCw+mt5EsIw2747Rf4oR5khHD7yhV5uOZZJhk=;
-        b=ZIF0MGp2kUHrSRP5P4BRUZyhGXd8sWa9R7t9YX7h8jnxBdBnxjx2/Z/EMWWvrPICat
-         lfOBL4UPn/IjQsMkk5Yd0cSUE58NxaqSE87+L7QQJS0YjCzxALEUWfajROTzjYNmjkJX
-         l+/UkDl5i11L12bomA2/wfY55rFquh0CGlz9c6Y8A5vBQ65WQOmwE0M58Qvh6pes82aX
-         dPozBE0EaLBwBlYYFhD0OI/OGnz2A66IGEKQMIZVTHlAfBiGak+Uxe9eEqDPhtnCq69u
-         k6bso/giTEYK3/QUl2kOpo3g66WoCaYreRKE3eY5v3DYZLDJMdWCw6LOSXvKEHTN/Mi6
-         nO6g==
-X-Gm-Message-State: AOAM532p9mZ49T1EkFinfdMmqCZNndMJY0F3chGWMmpVkZunxkFiEoeq
-        G5l302aeE/HODnP68q2hC65aKA==
-X-Google-Smtp-Source: ABdhPJxjcAxr3hNhmfI14xnbcbYlgvn+tDmDZQ7L5rX4/7HDgwMHHnw4aI1xgsxoZeWDEn9cH77qJg==
-X-Received: by 2002:aed:3b78:: with SMTP id q53mr8031576qte.195.1599072000158;
-        Wed, 02 Sep 2020 11:40:00 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=xZ0W2CvSOqgevHE21Wvc9Ii5sefbzh3TG/j8nJsk3zc=;
+        b=OyEqbp72SZKuK8JUI2tuxBOZEKjUMY++hjbIZGr/mkeOgXYt8KinMdMtWPTpnIpQJp
+         89VJ2lJWeYstiEbOPujxIPO4WV4BwkBtN8WpdApHiIYjGqUB/Po8apChJQ1M7iFYmati
+         g+IYKlTnVIZHJTr/tlcVZg8k3bsYeRYSg+e2YYDqsw48F6S9nB1Q/uHRZF8QxFSPgwqi
+         7+iz2BvbSxvgGe2YAP/+dHmphnIfMSk5K1SBATGEQQ92I7LqwaqWLxE5vcdXZp1X1ooP
+         8WVqtZ5INamCUyj97XrFvjfKqxXPWAyiZVCDDiLYiQzEMnE0ROqGY6+Yk5t4rQ+x5iwU
+         riyw==
+X-Gm-Message-State: AOAM531Ns8ldxRYNChw9RajozIXkl6oC/0lvCp3s5m8ygyJYlvEjCXv6
+        r1rQch13xfOnZiN2IJ/ID4GJXA==
+X-Google-Smtp-Source: ABdhPJxTU9b7WO883MKtpvazzxZ5+pb+oWzXy1zuPWo5OXWaGGxtczyZMtE99Y1PD5VxXfdH9gLNkA==
+X-Received: by 2002:a05:620a:78f:: with SMTP id 15mr2612760qka.340.1599072001235;
+        Wed, 02 Sep 2020 11:40:01 -0700 (PDT)
 Received: from localhost.localdomain ([147.253.86.153])
-        by smtp.gmail.com with ESMTPSA id s47sm208004qtb.13.2020.09.02.11.39.58
+        by smtp.gmail.com with ESMTPSA id s47sm208004qtb.13.2020.09.02.11.40.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Sep 2020 11:39:59 -0700 (PDT)
+        Wed, 02 Sep 2020 11:40:00 -0700 (PDT)
 From:   Jonathan Marek <jonathan@marek.ca>
 To:     linux-arm-msm@vger.kernel.org
 Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS),
-        linux-clk@vger.kernel.org (open list:COMMON CLK FRAMEWORK),
-        linux-kernel@vger.kernel.org (open list),
         Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>
-Subject: [PATCH 0/7] SM8150 and SM8250 dispcc drivers
-Date:   Wed,  2 Sep 2020 14:38:40 -0400
-Message-Id: <20200902183852.14510-1-jonathan@marek.ca>
+        Rob Herring <robh+dt@kernel.org>,
+        linux-clk@vger.kernel.org (open list:COMMON CLK FRAMEWORK),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/7] dt-bindings: clock: sdm845-dispcc: same name for dp_phy clocks as sc7180
+Date:   Wed,  2 Sep 2020 14:38:41 -0400
+Message-Id: <20200902183852.14510-2-jonathan@marek.ca>
 X-Mailer: git-send-email 2.26.1
+In-Reply-To: <20200902183852.14510-1-jonathan@marek.ca>
+References: <20200902183852.14510-1-jonathan@marek.ca>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
@@ -70,40 +70,32 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add display clock drivers required to get DSI and DP displays working on
-SM8150 and SM8250 SoCs.
+This makes it easier to combine dt bindings for sdm845/sc7180 dispcc.
 
-Derived from downstream drivers. Notable changes compared to downstream:
- - EDP clks removed (nothing uses these even in downstream it seems)
- - freq_tbl values for dp_link clk is in Hz and not kHz
+Note: nothing upstream provides these clocks and the sdm845 dispcc driver
+hasn't switched to using .fw_name for these clocks (these properties are
+ignored), so changing this shouldn't be a problem.
 
-Jonathan Marek (7):
-  dt-bindings: clock: sdm845-dispcc: same name for dp_phy clocks as
-    sc7180
-  arm64: dts: qcom: sdm845-dispcc: same name for dp_phy clocks as sc7180
-  dt-bindings: clock: combine qcom,sdm845-dispcc and qcom,sc7180-dispcc
-  dt-bindings: clock: Introduce QCOM SM8150 display clock bindings
-  dt-bindings: clock: Introduce QCOM SM8250 display clock bindings
-  clk: qcom: Add display clock controller driver for SM8150
-  clk: qcom: Add display clock controller driver for SM8250
+Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+---
+ .../devicetree/bindings/clock/qcom,sdm845-dispcc.yaml         | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- ...om,sdm845-dispcc.yaml => qcom,dispcc.yaml} |   26 +-
- .../bindings/clock/qcom,sc7180-dispcc.yaml    |   86 --
- arch/arm64/boot/dts/qcom/sdm845.dtsi          |    4 +-
- drivers/clk/qcom/Kconfig                      |   18 +
- drivers/clk/qcom/Makefile                     |    2 +
- drivers/clk/qcom/dispcc-sm8150.c              | 1152 +++++++++++++++++
- drivers/clk/qcom/dispcc-sm8250.c              | 1100 ++++++++++++++++
- .../dt-bindings/clock/qcom,dispcc-sm8150.h    |   69 +
- .../dt-bindings/clock/qcom,dispcc-sm8250.h    |   66 +
- 9 files changed, 2426 insertions(+), 97 deletions(-)
- rename Documentation/devicetree/bindings/clock/{qcom,sdm845-dispcc.yaml => qcom,dispcc.yaml} (78%)
- delete mode 100644 Documentation/devicetree/bindings/clock/qcom,sc7180-dispcc.yaml
- create mode 100644 drivers/clk/qcom/dispcc-sm8150.c
- create mode 100644 drivers/clk/qcom/dispcc-sm8250.c
- create mode 100644 include/dt-bindings/clock/qcom,dispcc-sm8150.h
- create mode 100644 include/dt-bindings/clock/qcom,dispcc-sm8250.h
-
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sdm845-dispcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sdm845-dispcc.yaml
+index 4a3be733d042..3825dd6e67e3 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sdm845-dispcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sdm845-dispcc.yaml
+@@ -43,8 +43,8 @@ properties:
+       - const: dsi0_phy_pll_out_dsiclk
+       - const: dsi1_phy_pll_out_byteclk
+       - const: dsi1_phy_pll_out_dsiclk
+-      - const: dp_link_clk_divsel_ten
+-      - const: dp_vco_divided_clk_src_mux
++      - const: dp_phy_pll_link_clk
++      - const: dp_phy_pll_vco_div_clk
+ 
+   '#clock-cells':
+     const: 1
 -- 
 2.26.1
 
