@@ -2,84 +2,178 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A21A625AF62
-	for <lists+linux-clk@lfdr.de>; Wed,  2 Sep 2020 17:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A92B25B03F
+	for <lists+linux-clk@lfdr.de>; Wed,  2 Sep 2020 17:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726755AbgIBPiN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 2 Sep 2020 11:38:13 -0400
-Received: from vern.gendns.com ([98.142.107.122]:41790 "EHLO vern.gendns.com"
+        id S1726726AbgIBPyY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 2 Sep 2020 11:54:24 -0400
+Received: from foss.arm.com ([217.140.110.172]:41322 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726140AbgIBPiD (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 2 Sep 2020 11:38:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=1WJCvpUbONxE9kBc4YJDae1soRkUcyCvXmPAxzsFTIo=; b=MD6fWbGWOUaGaH59wnHnjDcs4W
-        aNh3yHFBfOfrIqu1O+qlhQA8tqt7eolRdc5vC2HLpj5AnEYz11vh3TVCBddqu0O3IduFmhrvmS/Uc
-        61yc1cpEOG32hCV4zRBkkZu2DR6ulxgS5rOojmvtgenVcZ5JbdHSrD5usPYUVVpS5JnX29an3dNkO
-        oacsIpSs/3FrVxRkahDLiVsNAfwrQHRWcmfi5Ai7dNRi/2wpzyietRSHLRUhcZNG9XwxmxMR7kfb1
-        OE8tG2aC+1DuCrVNf4RvWjNFNd8c1iy+dxmgYDRFAIal0+Ka06utj44gp6ThyQVggk9pjKqxHMsvM
-        ThLNeGBg==;
-Received: from [2600:1700:4830:165f::19e] (port=47972)
-        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <david@lechnology.com>)
-        id 1kDUpj-0002Sa-Sx; Wed, 02 Sep 2020 11:38:00 -0400
-Subject: Re: [PATCH 10/10] clk: davinci: Simplify with dev_err_probe()
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org
-References: <20200902150348.14465-1-krzk@kernel.org>
- <20200902150348.14465-10-krzk@kernel.org>
-From:   David Lechner <david@lechnology.com>
-Message-ID: <c4ebd618-be71-c898-7adb-f88cf81195ac@lechnology.com>
-Date:   Wed, 2 Sep 2020 10:37:57 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726173AbgIBPyV (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 2 Sep 2020 11:54:21 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B6B6101E;
+        Wed,  2 Sep 2020 08:54:21 -0700 (PDT)
+Received: from [10.57.40.122] (unknown [10.57.40.122])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 503B43F66F;
+        Wed,  2 Sep 2020 08:54:19 -0700 (PDT)
+Subject: Re: [PATCH v1 1/6] clk: rockchip: Use clk_hw_register_composite
+ instead of clk_register_composite calls
+To:     Elaine Zhang <zhangqing@rock-chips.com>, heiko@sntech.de
+Cc:     huangtao@rock-chips.com, xf@rock-chips.com, sboyd@kernel.org,
+        mturquette@baylibre.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, kever.yang@rock-chips.com,
+        linux-rockchip@lists.infradead.org, xxx@rock-chips.com
+References: <20200902064847.18881-1-zhangqing@rock-chips.com>
+ <20200902064847.18881-2-zhangqing@rock-chips.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <862531c8-9d10-ae3e-e12a-f1ba0ed66d61@arm.com>
+Date:   Wed, 2 Sep 2020 16:54:18 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20200902150348.14465-10-krzk@kernel.org>
+In-Reply-To: <20200902064847.18881-2-zhangqing@rock-chips.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vern.gendns.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lechnology.com
-X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 9/2/20 10:03 AM, Krzysztof Kozlowski wrote:
-> Common pattern of handling deferred probe can be simplified with
-> dev_err_probe().  Less code and the error value gets printed.
+On 2020-09-02 07:48, Elaine Zhang wrote:
+> clk_hw_register_composite it's already exported.
+> Preparation for compilation of rK common clock drivers into modules.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
 > ---
+>   drivers/clk/rockchip/clk-half-divider.c | 12 +++++----
+>   drivers/clk/rockchip/clk.c              | 35 ++++++++++++++-----------
+>   2 files changed, 27 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/clk/rockchip/clk-half-divider.c b/drivers/clk/rockchip/clk-half-divider.c
+> index b333fc28c94b..35db0651ea1d 100644
+> --- a/drivers/clk/rockchip/clk-half-divider.c
+> +++ b/drivers/clk/rockchip/clk-half-divider.c
+> @@ -166,6 +166,7 @@ struct clk *rockchip_clk_register_halfdiv(const char *name,
+>   					  unsigned long flags,
+>   					  spinlock_t *lock)
+>   {
+> +	struct clk_hw *hw;
+>   	struct clk *clk;
+>   	struct clk_mux *mux = NULL;
+>   	struct clk_gate *gate = NULL;
+> @@ -212,12 +213,13 @@ struct clk *rockchip_clk_register_halfdiv(const char *name,
+>   		div_ops = &clk_half_divider_ops;
+>   	}
+>   
+> -	clk = clk_register_composite(NULL, name, parent_names, num_parents,
+> -				     mux ? &mux->hw : NULL, mux_ops,
+> -				     div ? &div->hw : NULL, div_ops,
+> -				     gate ? &gate->hw : NULL, gate_ops,
+> -				     flags);
+> +	hw = clk_hw_register_composite(NULL, name, parent_names, num_parents,
+> +				       mux ? &mux->hw : NULL, mux_ops,
+> +				       div ? &div->hw : NULL, div_ops,
+> +				       gate ? &gate->hw : NULL, gate_ops,
+> +				       flags);
+>   
+> +	clk = hw->clk;
+>   	return clk;
 
-Reviewed-by: David Lechner <david@lechnology.com>
+Nit: there's really no point keeping the "clk" variable here, you could 
+simply "return hw->clk" if registration succeeds - note that you also 
+need the rest of the logic from clk_register_composite() to check that 
+"hw" isn't an error value.
 
+>   err_div:
+>   	kfree(gate);
+> diff --git a/drivers/clk/rockchip/clk.c b/drivers/clk/rockchip/clk.c
+> index 546e810c3560..2cfebfb61814 100644
+> --- a/drivers/clk/rockchip/clk.c
+> +++ b/drivers/clk/rockchip/clk.c
+> @@ -43,6 +43,7 @@ static struct clk *rockchip_clk_register_branch(const char *name,
+>   		u8 gate_shift, u8 gate_flags, unsigned long flags,
+>   		spinlock_t *lock)
+>   {
+> +	struct clk_hw *hw;
+>   	struct clk *clk;
+>   	struct clk_mux *mux = NULL;
+>   	struct clk_gate *gate = NULL;
+> @@ -100,12 +101,12 @@ static struct clk *rockchip_clk_register_branch(const char *name,
+>   						: &clk_divider_ops;
+>   	}
+>   
+> -	clk = clk_register_composite(NULL, name, parent_names, num_parents,
+> -				     mux ? &mux->hw : NULL, mux_ops,
+> -				     div ? &div->hw : NULL, div_ops,
+> -				     gate ? &gate->hw : NULL, gate_ops,
+> -				     flags);
+> -
+> +	hw = clk_hw_register_composite(NULL, name, parent_names, num_parents,
+> +				       mux ? &mux->hw : NULL, mux_ops,
+> +				       div ? &div->hw : NULL, div_ops,
+> +				       gate ? &gate->hw : NULL, gate_ops,
+> +				       flags);
+> +	clk = hw->clk;
+>   	if (IS_ERR(clk)) {
+
+Similar to above, this is totally broken - you need to rework all the 
+error handling in terms of "hw" rather than "clk" - dereferencing an 
+ERR_PTR value does not yield another ERR_PTR value, it yields a crash ;)
+
+Robin.
+
+>   		ret = PTR_ERR(clk);
+>   		goto err_composite;
+> @@ -214,6 +215,7 @@ static struct clk *rockchip_clk_register_frac_branch(
+>   		unsigned long flags, struct rockchip_clk_branch *child,
+>   		spinlock_t *lock)
+>   {
+> +	struct clk_hw *hw;
+>   	struct rockchip_clk_frac *frac;
+>   	struct clk *clk;
+>   	struct clk_gate *gate = NULL;
+> @@ -255,11 +257,12 @@ static struct clk *rockchip_clk_register_frac_branch(
+>   	div->approximation = rockchip_fractional_approximation;
+>   	div_ops = &clk_fractional_divider_ops;
+>   
+> -	clk = clk_register_composite(NULL, name, parent_names, num_parents,
+> -				     NULL, NULL,
+> -				     &div->hw, div_ops,
+> -				     gate ? &gate->hw : NULL, gate_ops,
+> -				     flags | CLK_SET_RATE_UNGATE);
+> +	hw = clk_hw_register_composite(NULL, name, parent_names, num_parents,
+> +				       NULL, NULL,
+> +				       &div->hw, div_ops,
+> +				       gate ? &gate->hw : NULL, gate_ops,
+> +				       flags | CLK_SET_RATE_UNGATE);
+> +	clk = hw->clk;
+>   	if (IS_ERR(clk)) {
+>   		kfree(frac);
+>   		return clk;
+> @@ -320,6 +323,7 @@ static struct clk *rockchip_clk_register_factor_branch(const char *name,
+>   		int gate_offset, u8 gate_shift, u8 gate_flags,
+>   		unsigned long flags, spinlock_t *lock)
+>   {
+> +	struct clk_hw *hw;
+>   	struct clk *clk;
+>   	struct clk_gate *gate = NULL;
+>   	struct clk_fixed_factor *fix = NULL;
+> @@ -349,10 +353,11 @@ static struct clk *rockchip_clk_register_factor_branch(const char *name,
+>   	fix->mult = mult;
+>   	fix->div = div;
+>   
+> -	clk = clk_register_composite(NULL, name, parent_names, num_parents,
+> -				     NULL, NULL,
+> -				     &fix->hw, &clk_fixed_factor_ops,
+> -				     &gate->hw, &clk_gate_ops, flags);
+> +	hw = clk_hw_register_composite(NULL, name, parent_names, num_parents,
+> +				       NULL, NULL,
+> +				       &fix->hw, &clk_fixed_factor_ops,
+> +				       &gate->hw, &clk_gate_ops, flags);
+> +	clk = hw->clk;
+>   	if (IS_ERR(clk)) {
+>   		kfree(fix);
+>   		kfree(gate);
+> 
