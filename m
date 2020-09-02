@@ -2,88 +2,108 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4283B25B1CF
-	for <lists+linux-clk@lfdr.de>; Wed,  2 Sep 2020 18:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC0825B3DA
+	for <lists+linux-clk@lfdr.de>; Wed,  2 Sep 2020 20:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726426AbgIBQgG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 2 Sep 2020 12:36:06 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:35899 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726247AbgIBQgF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 2 Sep 2020 12:36:05 -0400
-X-Originating-IP: 90.66.108.79
-Received: from localhost (lfbn-lyo-1-1932-79.w90-66.abo.wanadoo.fr [90.66.108.79])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id C04D9C0003;
-        Wed,  2 Sep 2020 16:35:58 +0000 (UTC)
-Date:   Wed, 2 Sep 2020 18:35:58 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        David Lechner <david@lechnology.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Andy Gross <agross@kernel.org>,
+        id S1728149AbgIBSkW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 2 Sep 2020 14:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727892AbgIBSkI (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 2 Sep 2020 14:40:08 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F848C061260
+        for <linux-clk@vger.kernel.org>; Wed,  2 Sep 2020 11:40:05 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id v54so4376999qtj.7
+        for <linux-clk@vger.kernel.org>; Wed, 02 Sep 2020 11:40:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=marek-ca.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tBOlsZGCw+mt5EsIw2747Rf4oR5khHD7yhV5uOZZJhk=;
+        b=SZk6h/IXcDfhZVTLKEv/8BckUYDoyZEmuvXW5KQ4cVlwRHO2r572YdoCrMpaEZIX0E
+         Aji/bkgsr4uO+y+/OIn1gyUmCmesgu/iDqX/sT9eocKSj0LEODXh86YCqdpsNv6tS3kP
+         eh2PZsYaWW+HzHOd/VETX512rpl5ekRBM/YDyzRlIWakOsiTCs3pPE/sYDbenHbgWRz4
+         f3rciFEcMJQnqTpp5qFRj4chA0Su4yRt4MiorepPuA7jbUJom7rPDgiiDYC5SbDd79SP
+         2Cd+m5YJeKvZx4KRfg2UDW7vLu/TclyyktuYeuLgziWehPVwclXNVoRX1I//OGBNOmeW
+         5FfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tBOlsZGCw+mt5EsIw2747Rf4oR5khHD7yhV5uOZZJhk=;
+        b=ZIF0MGp2kUHrSRP5P4BRUZyhGXd8sWa9R7t9YX7h8jnxBdBnxjx2/Z/EMWWvrPICat
+         lfOBL4UPn/IjQsMkk5Yd0cSUE58NxaqSE87+L7QQJS0YjCzxALEUWfajROTzjYNmjkJX
+         l+/UkDl5i11L12bomA2/wfY55rFquh0CGlz9c6Y8A5vBQ65WQOmwE0M58Qvh6pes82aX
+         dPozBE0EaLBwBlYYFhD0OI/OGnz2A66IGEKQMIZVTHlAfBiGak+Uxe9eEqDPhtnCq69u
+         k6bso/giTEYK3/QUl2kOpo3g66WoCaYreRKE3eY5v3DYZLDJMdWCw6LOSXvKEHTN/Mi6
+         nO6g==
+X-Gm-Message-State: AOAM532p9mZ49T1EkFinfdMmqCZNndMJY0F3chGWMmpVkZunxkFiEoeq
+        G5l302aeE/HODnP68q2hC65aKA==
+X-Google-Smtp-Source: ABdhPJxjcAxr3hNhmfI14xnbcbYlgvn+tDmDZQ7L5rX4/7HDgwMHHnw4aI1xgsxoZeWDEn9cH77qJg==
+X-Received: by 2002:aed:3b78:: with SMTP id q53mr8031576qte.195.1599072000158;
+        Wed, 02 Sep 2020 11:40:00 -0700 (PDT)
+Received: from localhost.localdomain ([147.253.86.153])
+        by smtp.gmail.com with ESMTPSA id s47sm208004qtb.13.2020.09.02.11.39.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Sep 2020 11:39:59 -0700 (PDT)
+From:   Jonathan Marek <jonathan@marek.ca>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 01/10] clk: at91: Drop unused at91sam9g45_pcr_layout
-Message-ID: <20200902163558.GA4137028@piout.net>
-References: <20200902150348.14465-1-krzk@kernel.org>
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        linux-clk@vger.kernel.org (open list:COMMON CLK FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list),
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>
+Subject: [PATCH 0/7] SM8150 and SM8250 dispcc drivers
+Date:   Wed,  2 Sep 2020 14:38:40 -0400
+Message-Id: <20200902183852.14510-1-jonathan@marek.ca>
+X-Mailer: git-send-email 2.26.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200902150348.14465-1-krzk@kernel.org>
+Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 02/09/2020 17:03:39+0200, Krzysztof Kozlowski wrote:
-> The at91sam9g45_pcr_layout is not used so drop it to fix build warning:
-> 
->   drivers/clk/at91/at91sam9g45.c:49:36: warning:
->     'at91sam9g45_pcr_layout' defined but not used [-Wunused-const-variable=]
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Add display clock drivers required to get DSI and DP displays working on
+SM8150 and SM8250 SoCs.
 
-> ---
->  drivers/clk/at91/at91sam9g45.c | 7 -------
->  1 file changed, 7 deletions(-)
-> 
-> diff --git a/drivers/clk/at91/at91sam9g45.c b/drivers/clk/at91/at91sam9g45.c
-> index c88ee20bee31..cb4a406ed15d 100644
-> --- a/drivers/clk/at91/at91sam9g45.c
-> +++ b/drivers/clk/at91/at91sam9g45.c
-> @@ -46,13 +46,6 @@ static const struct {
->  	{ .n = "pck1",  .p = "prog1",    .id = 9 },
->  };
->  
-> -static const struct clk_pcr_layout at91sam9g45_pcr_layout = {
-> -	.offset = 0x10c,
-> -	.cmd = BIT(12),
-> -	.pid_mask = GENMASK(5, 0),
-> -	.div_mask = GENMASK(17, 16),
-> -};
-> -
->  struct pck {
->  	char *n;
->  	u8 id;
-> -- 
-> 2.17.1
-> 
+Derived from downstream drivers. Notable changes compared to downstream:
+ - EDP clks removed (nothing uses these even in downstream it seems)
+ - freq_tbl values for dp_link clk is in Hz and not kHz
+
+Jonathan Marek (7):
+  dt-bindings: clock: sdm845-dispcc: same name for dp_phy clocks as
+    sc7180
+  arm64: dts: qcom: sdm845-dispcc: same name for dp_phy clocks as sc7180
+  dt-bindings: clock: combine qcom,sdm845-dispcc and qcom,sc7180-dispcc
+  dt-bindings: clock: Introduce QCOM SM8150 display clock bindings
+  dt-bindings: clock: Introduce QCOM SM8250 display clock bindings
+  clk: qcom: Add display clock controller driver for SM8150
+  clk: qcom: Add display clock controller driver for SM8250
+
+ ...om,sdm845-dispcc.yaml => qcom,dispcc.yaml} |   26 +-
+ .../bindings/clock/qcom,sc7180-dispcc.yaml    |   86 --
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |    4 +-
+ drivers/clk/qcom/Kconfig                      |   18 +
+ drivers/clk/qcom/Makefile                     |    2 +
+ drivers/clk/qcom/dispcc-sm8150.c              | 1152 +++++++++++++++++
+ drivers/clk/qcom/dispcc-sm8250.c              | 1100 ++++++++++++++++
+ .../dt-bindings/clock/qcom,dispcc-sm8150.h    |   69 +
+ .../dt-bindings/clock/qcom,dispcc-sm8250.h    |   66 +
+ 9 files changed, 2426 insertions(+), 97 deletions(-)
+ rename Documentation/devicetree/bindings/clock/{qcom,sdm845-dispcc.yaml => qcom,dispcc.yaml} (78%)
+ delete mode 100644 Documentation/devicetree/bindings/clock/qcom,sc7180-dispcc.yaml
+ create mode 100644 drivers/clk/qcom/dispcc-sm8150.c
+ create mode 100644 drivers/clk/qcom/dispcc-sm8250.c
+ create mode 100644 include/dt-bindings/clock/qcom,dispcc-sm8150.h
+ create mode 100644 include/dt-bindings/clock/qcom,dispcc-sm8250.h
 
 -- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.1
+
