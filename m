@@ -2,153 +2,84 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8817225BED0
-	for <lists+linux-clk@lfdr.de>; Thu,  3 Sep 2020 12:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA3C25C142
+	for <lists+linux-clk@lfdr.de>; Thu,  3 Sep 2020 14:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726967AbgICKKD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 3 Sep 2020 06:10:03 -0400
-Received: from regular1.263xmail.com ([211.150.70.203]:54950 "EHLO
-        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726467AbgICKKD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 3 Sep 2020 06:10:03 -0400
-Received: from localhost (unknown [192.168.167.70])
-        by regular1.263xmail.com (Postfix) with ESMTP id B0BA9815;
-        Thu,  3 Sep 2020 18:03:19 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-SKE-CHECKED: 1
-X-ABS-CHECKED: 1
-Received: from [172.16.12.120] (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P24386T139658960819968S1599127397973724_;
-        Thu, 03 Sep 2020 18:03:18 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <ed2ffba5f5a9bb96ee8f8d7b5adea992>
-X-RL-SENDER: kever.yang@rock-chips.com
-X-SENDER: yk@rock-chips.com
-X-LOGIN-NAME: kever.yang@rock-chips.com
-X-FST-TO: huangtao@rock-chips.com
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-DNS-TYPE: 0
-X-System-Flag: 0
-Subject: Re: [PATCH v2 6/6] clk: rockchip: rk3399: Support module build
-To:     Elaine Zhang <zhangqing@rock-chips.com>, heiko@sntech.de
-Cc:     mturquette@baylibre.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org, xxx@rock-chips.com,
-        xf@rock-chips.com, huangtao@rock-chips.com
-References: <20200903063147.10237-1-zhangqing@rock-chips.com>
- <20200903063234.10639-1-zhangqing@rock-chips.com>
-From:   Kever Yang <kever.yang@rock-chips.com>
-Message-ID: <dbe40332-12d1-05b2-6ee9-083016003a2a@rock-chips.com>
-Date:   Thu, 3 Sep 2020 18:03:18 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728978AbgICMqq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 3 Sep 2020 08:46:46 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:39757 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728964AbgICMqG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 3 Sep 2020 08:46:06 -0400
+Received: by mail-oi1-f193.google.com with SMTP id r64so2974650oib.6;
+        Thu, 03 Sep 2020 05:45:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ml+p0f4/lZUonascXc6jcxVxCdORbfnV0c6JRtVN0WI=;
+        b=LzRU28HIrkxAkGLDjs76uVr4b+0TLwmDgfebuoIwmRATq6cQ/HKfpcSEsNjnyw2i1S
+         b9iIWk8/Qf6+3gNWDFaRCR8vHymet/vn1IorV5AA+QFxT3QH0IkGp/v7ThVa/tHG3S3w
+         QdN8wqBAp/0YRNcqmx73JKlnnA1mU8BrLzj/Kbtm8BCuaKf7P7N2wsRbpvfKliBChkHC
+         iNd4eX+r/It7H1G6wZY+qMS3s45+GSQLclW0aRoqlQNHaKXYeXbq4LMrjmUilgZI7hAl
+         xLakXTCqWHPd4RZCU1G9l871Z3bhNGWVbwPC3DutXI/9n/yjFu8s3ZDYVJOdVNZ2076r
+         pu4w==
+X-Gm-Message-State: AOAM533lkYUAia/gXXZWtqCny7LydH5gxP9+DuUjgDE7Gdbcgs5hxzAw
+        J+G+HcZ7gSRyYLqA73TzholfhfrQjZhJGf0iFQE6/6Bp
+X-Google-Smtp-Source: ABdhPJwZcz/ujowdJByh5kbHpCBfa3Mpr/OPyUnuyyZK6ceNjumcCEmczP0uPpBwRxXaF/qOFQ+eA/665+uKpJ+OxTA=
+X-Received: by 2002:aca:3402:: with SMTP id b2mr1797687oia.153.1599136958847;
+ Thu, 03 Sep 2020 05:42:38 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200903063234.10639-1-zhangqing@rock-chips.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <20200831180312.7453-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20200831180312.7453-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 3 Sep 2020 14:42:27 +0200
+Message-ID: <CAMuHMdXWxYgAZx7bCET-U2S9KUo2tAT2gqKn3W5LTTtH-oRS0Q@mail.gmail.com>
+Subject: Re: [PATCH v2] clk: renesas: r8a7742-cpg-mssr: Add clk entry for VSPR
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-
-On 2020/9/3 下午2:32, Elaine Zhang wrote:
-> support CLK_OF_DECLARE and builtin_platform_driver_probe
-> double clk init method.
-> add module author, description and license to support building
-> Soc Rk3399 clock driver as module.
+On Mon, Aug 31, 2020 at 8:03 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Add clock entry 130 for VSPR (VSP for Resizing) module, so that this module
+> can be used on R8A7742 (RZ/G1H) SoC.
 >
-> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+> Alongside rename clock entry "vsp1-sy" to "vsps" (VSP Standard), so that
+> VSP1 clock names are in sync.
+>
+> Note: The entry for VSPR clock was accidentally dropped from RZ/G manual
+> when all the information related to RT were removed.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 > ---
->   drivers/clk/rockchip/clk-rk3399.c | 55 +++++++++++++++++++++++++++++++
->   1 file changed, 55 insertions(+)
->
-> diff --git a/drivers/clk/rockchip/clk-rk3399.c b/drivers/clk/rockchip/clk-rk3399.c
-> index ce1d2446f142..40ff17aee5b6 100644
-> --- a/drivers/clk/rockchip/clk-rk3399.c
-> +++ b/drivers/clk/rockchip/clk-rk3399.c
-> @@ -5,9 +5,11 @@
->    */
->   
->   #include <linux/clk-provider.h>
-> +#include <linux/module.h>
->   #include <linux/io.h>
->   #include <linux/of.h>
->   #include <linux/of_address.h>
-> +#include <linux/of_device.h>
->   #include <linux/platform_device.h>
->   #include <linux/regmap.h>
->   #include <dt-bindings/clock/rk3399-cru.h>
-> @@ -1600,3 +1602,56 @@ static void __init rk3399_pmu_clk_init(struct device_node *np)
->   	rockchip_clk_of_add_provider(np, ctx);
->   }
->   CLK_OF_DECLARE(rk3399_cru_pmu, "rockchip,rk3399-pmucru", rk3399_pmu_clk_init);
-> +
-> +struct clk_rk3399_inits {
-> +		void (*inits)(struct device_node *np);
-> +};
-> +
-> +static const struct clk_rk3399_inits clk_rk3399_pmucru_init = {
-> +	.inits = rk3399_pmu_clk_init,
-> +};
-> +
-> +static const struct clk_rk3399_inits clk_rk3399_cru_init = {
-> +	.inits = rk3399_clk_init,
-> +};
-> +
-> +static const struct of_device_id clk_rk3399_match_table[] = {
-> +	{
-> +		.compatible = "rockchip,rk3399-cru",
-> +		.data = &clk_rk3399_cru_init,
-> +	},  {
-> +		.compatible = "rockchip,rk3399-pmucru",
-> +		.data = &clk_rk3399_pmucru_init,
-> +	},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, clk_rk3399_match_table);
-> +
-> +static int __init clk_rk3399_probe(struct platform_device *pdev)
-> +{
-> +	struct device_node *np = pdev->dev.of_node;
-> +	const struct of_device_id *match;
-> +	const struct clk_rk3399_inits *init_data;
-> +
-> +	match = of_match_device(clk_rk3399_match_table, &pdev->dev);
-> +	if (!match || !match->data)
-> +		return -EINVAL;
-> +
-> +	init_data = match->data;
-> +	if (init_data->inits)
-> +		init_data->inits(np);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver clk_rk3399_driver = {
-> +	.driver		= {
-> +		.name	= "clk-rk3399",
-> +		.of_match_table = clk_rk3399_match_table,
-> +	},
-> +};
-> +builtin_platform_driver_probe(clk_rk3399_driver, clk_rk3399_probe);
-> +
-> +MODULE_DESCRIPTION("Rockchip RK3399 Clock Driver");
-> +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform:clk-rk3399");
+> v1->v2
+> * Alongside renamed "vsp1-sy" to "vsps"
+> * Updated commit message
 
-This looks good to me, so
+Thanks for the update!
 
-Reviewed-by: Kever Yang <kever.yang@rock-chips.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in clk-renesas-for-v5.10.
 
-Thanks,
+Gr{oetje,eeting}s,
 
-- Kever
+                        Geert
 
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
