@@ -2,91 +2,78 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7761B25C67B
-	for <lists+linux-clk@lfdr.de>; Thu,  3 Sep 2020 18:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9288525C714
+	for <lists+linux-clk@lfdr.de>; Thu,  3 Sep 2020 18:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728419AbgICQQC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 3 Sep 2020 12:16:02 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:42084 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728401AbgICQQB (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 3 Sep 2020 12:16:01 -0400
-Received: by mail-io1-f67.google.com with SMTP id g13so3431484ioo.9;
-        Thu, 03 Sep 2020 09:16:01 -0700 (PDT)
+        id S1728358AbgICQkX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 3 Sep 2020 12:40:23 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:45341 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728145AbgICQkW (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 3 Sep 2020 12:40:22 -0400
+Received: by mail-io1-f68.google.com with SMTP id u126so3550520iod.12;
+        Thu, 03 Sep 2020 09:40:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=aRpXw0UbRTPbhJ/yLHPK1gcSS9wZa5nlQ57yNuPlD2w=;
-        b=OD62LRGU6l+PfbXUWMGjRWUIq2gJh4DmUDOP4M1fnCe0JH4ViL7DzW9Qx6zjFHVWnZ
-         2HXe3ZsQSCUYAbRNwlwGc5XIwU+ZiXftp8r29d5V58C60SKjNCh5nkflbymXvQ+Mxqxr
-         z7yDObr6wIFiBo2fCKqh8+ARlxlK3jhrD4gY75PaLO9tm1hj/59SZer1rpoJxMsExNrN
-         PMw23oTzEHqpyJr37vtUG26917zIUGd4JSFjJCzpvlpWyuwiVOUMnIU3SFEOc4XEzQPa
-         Pz9/FcBEEtCZPfTSOL8DpFHzT13Q11xPZ3HGQ31+TkRPQ8bzMLXSADGvjKhfEqusmCuz
-         h9dg==
-X-Gm-Message-State: AOAM531AXEw6SyXH5brY2uUTaCshcUmeLEMSwhNJgCS01Oz6i/r6t1FK
-        xbFarI2gh8qpIp5dNTLQBQ==
-X-Google-Smtp-Source: ABdhPJwdxVwN2yKmnkzzjPDJiU7NfowwP3seclbUfSK6U54i5UqJvI9YZhaeiy0N2DFoPmoY75/WBA==
-X-Received: by 2002:a05:6602:22d3:: with SMTP id e19mr3646125ioe.197.1599149760551;
-        Thu, 03 Sep 2020 09:16:00 -0700 (PDT)
+        bh=8sPTNyLMjAX2vzuFXiQYDjjubKf1msEl5Z2p+ZrZ6Lo=;
+        b=RxwyD3vB90lreMZb5R4zdoJoSB45C8dNzCoC8cnfYJdmK+j5G4bUQP8RCtjZIRawTN
+         5H8SngmeA2PN/6OaJnQgWMDkdmzz8hsdsawZ8YU8PCFgr1V2L/nl0SIxbkgR/bC4lKxU
+         PSdWWhnfT6lMOypSNsigV1LD8Ap7divPtUdv37VvmNgC4HUCwuGwH7dY5Xd7w9gHs4eU
+         DVoeD3PR6z23l3RDd7DsZzaWFb+4jfi2Qw4of464KKW/yCyTkv49sUtdRdtaB7YvtNGI
+         FRQUchcr87ITLEb5lgGXJgXNcSP80FaN50IR64m3HadFFGYu31zssSwhunlqXUXtrOl3
+         m9tg==
+X-Gm-Message-State: AOAM533Q/MpCGRl0QV8KmEXvFTipEuWIqD8cJQ6cKwH6iwxnf6B+9aKZ
+        Ki9bmAp0UH5J6u3KNpofgA==
+X-Google-Smtp-Source: ABdhPJy+YQ71xhPo9LDk5kKZzDhFUMEpp0nFRwbZF6cszIsV6tyvnefl2UlOOTqSdDoevgNCPnDj9g==
+X-Received: by 2002:a02:9986:: with SMTP id a6mr1953790jal.28.1599151221270;
+        Thu, 03 Sep 2020 09:40:21 -0700 (PDT)
 Received: from xps15 ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id l2sm1699320ilt.2.2020.09.03.09.15.59
+        by smtp.gmail.com with ESMTPSA id m3sm1777806ill.57.2020.09.03.09.40.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2020 09:16:00 -0700 (PDT)
-Received: (nullmailer pid 2878544 invoked by uid 1000);
-        Thu, 03 Sep 2020 16:15:59 -0000
-Date:   Thu, 3 Sep 2020 10:15:59 -0600
+        Thu, 03 Sep 2020 09:40:20 -0700 (PDT)
+Received: (nullmailer pid 2921054 invoked by uid 1000);
+        Thu, 03 Sep 2020 16:40:19 -0000
+Date:   Thu, 3 Sep 2020 10:40:19 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Jonathan Marek <jonathan@marek.ca>
-Cc:     linux-clk@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH 1/7] dt-bindings: clock: sdm845-dispcc: same name for
- dp_phy clocks as sc7180
-Message-ID: <20200903161559.GA2877650@bogus>
-References: <20200902183852.14510-1-jonathan@marek.ca>
- <20200902183852.14510-2-jonathan@marek.ca>
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Wolfram Sang <wolfram@the-dreams.de>,
+        Dong Aisheng <aisheng.dong@nxp.com>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH 3/7] dt-bindings: mailbox: fsl,mu: Use
+ unevaluatedProperties
+Message-ID: <20200903164019.GA2920343@bogus>
+References: <20200829111800.2786-1-krzk@kernel.org>
+ <20200829111800.2786-3-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200902183852.14510-2-jonathan@marek.ca>
+In-Reply-To: <20200829111800.2786-3-krzk@kernel.org>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, 02 Sep 2020 14:38:41 -0400, Jonathan Marek wrote:
-> This makes it easier to combine dt bindings for sdm845/sc7180 dispcc.
+On Sat, Aug 29, 2020 at 01:17:56PM +0200, Krzysztof Kozlowski wrote:
+> Additional properties actually might appear (e.g. power-domains) so use
+> unevaluatedProperties to fix dtbs_check warnings like:
 > 
-> Note: nothing upstream provides these clocks and the sdm845 dispcc driver
-> hasn't switched to using .fw_name for these clocks (these properties are
-> ignored), so changing this shouldn't be a problem.
+>   arch/arm64/boot/dts/freescale/imx8qxp-mek.dt.yaml:
+>     mailbox@5d280000: 'power-domains' does not match any of the regexes: 'pinctrl-[0-9]+'
 > 
-> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 > ---
->  .../devicetree/bindings/clock/qcom,sdm845-dispcc.yaml         | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
+>  Documentation/devicetree/bindings/mailbox/fsl,mu.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-My bot found errors running 'make dt_binding_check' on your patch:
-
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,sdm845-dispcc.example.dt.yaml: clock-controller@af00000: clock-names:7: 'dp_phy_pll_link_clk' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,sdm845-dispcc.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,sdm845-dispcc.example.dt.yaml: clock-controller@af00000: clock-names:8: 'dp_phy_pll_vco_div_clk' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,sdm845-dispcc.yaml
-
-
-See https://patchwork.ozlabs.org/patch/1356040
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
-
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-
-Please check and re-submit.
-
+NAK. See https://lore.kernel.org/r/CAL_JsqKPXJxsHPS34_TCf9bwgKxZNSV4mvQR-WKRnknQVtGGxQ@mail.gmail.com/
