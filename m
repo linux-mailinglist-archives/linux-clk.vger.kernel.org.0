@@ -2,136 +2,192 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DEF260F85
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Sep 2020 12:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F29260FA3
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Sep 2020 12:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726801AbgIHKTG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Sep 2020 06:19:06 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:47652 "EHLO inva021.nxp.com"
+        id S1729595AbgIHK0l (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Sep 2020 06:26:41 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:56194 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729285AbgIHKTB (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 8 Sep 2020 06:19:01 -0400
+        id S1729333AbgIHK0J (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 8 Sep 2020 06:26:09 -0400
 Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 8C889201599;
-        Tue,  8 Sep 2020 12:18:59 +0200 (CEST)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7333320021E;
+        Tue,  8 Sep 2020 12:26:06 +0200 (CEST)
 Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 41D7620158D;
-        Tue,  8 Sep 2020 12:18:59 +0200 (CEST)
-Received: from localhost (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 78C302036D;
-        Tue,  8 Sep 2020 12:18:58 +0200 (CEST)
-Date:   Tue, 8 Sep 2020 13:18:58 +0300
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 64A29201595;
+        Tue,  8 Sep 2020 12:26:06 +0200 (CEST)
+Received: from fsr-ub1664-175.ea.freescale.net (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 9677D2036D;
+        Tue,  8 Sep 2020 12:26:05 +0200 (CEST)
 From:   Abel Vesa <abel.vesa@nxp.com>
-To:     peng.fan@nxp.com
-Cc:     sboyd@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        festevam@gmail.com, kernel@pengutronix.de, linux-imx@nxp.com,
-        Anson.Huang@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        aisheng.dong@nxp.com
-Subject: Re: [PATCH] clk: imx: lpcg-scu: SW workaround for errata (e10858)
-Message-ID: <20200908101858.kiuzcnc6rolbbyma@fsr-ub1664-175>
-References: <1599556487-31364-1-git-send-email-peng.fan@nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1599556487-31364-1-git-send-email-peng.fan@nxp.com>
-User-Agent: NeoMutt/20180622
+To:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Anson Huang <anson.huang@nxp.com>,
+        Jacky Bai <ping.bai@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fugang Duan <fugang.duan@nxp.com>, devicetree@vger.kernel.org
+Cc:     NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk@vger.kernel.org, Abel Vesa <abel.vesa@nxp.com>
+Subject: [PATCH v3 01/14] dt-bindings: clocks: imx8mp: Rename audiomix ids clocks to audio_blk_ctl
+Date:   Tue,  8 Sep 2020 13:24:38 +0300
+Message-Id: <1599560691-3763-2-git-send-email-abel.vesa@nxp.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1599560691-3763-1-git-send-email-abel.vesa@nxp.com>
+References: <1599560691-3763-1-git-send-email-abel.vesa@nxp.com>
 X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 20-09-08 17:14:47, peng.fan@nxp.com wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Back-to-back LPCG writes can be ignored by the LPCG register due to
-> a HW bug. The writes need to be separated by at least 4 cycles of
-> the gated clock.
-> 
-> The workaround is implemented as follows:
-> 1. For clocks running greater than or equal to 24MHz, a read
-> followed by the write will provide sufficient delay.
-> 2. For clocks running below 24MHz, add a delay of 4 clock cylces
-> after the write to the LPCG register.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/clk/imx/clk-lpcg-scu.c | 31 +++++++++++++++++++++++++++++--
->  1 file changed, 29 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/clk/imx/clk-lpcg-scu.c b/drivers/clk/imx/clk-lpcg-scu.c
-> index 1f0e44f921ae..6ee9d2caedf2 100644
-> --- a/drivers/clk/imx/clk-lpcg-scu.c
-> +++ b/drivers/clk/imx/clk-lpcg-scu.c
-> @@ -6,6 +6,7 @@
->  
->  #include <linux/bits.h>
->  #include <linux/clk-provider.h>
-> +#include <linux/delay.h>
->  #include <linux/err.h>
->  #include <linux/io.h>
->  #include <linux/slab.h>
-> @@ -38,6 +39,31 @@ struct clk_lpcg_scu {
->  
->  #define to_clk_lpcg_scu(_hw) container_of(_hw, struct clk_lpcg_scu, hw)
->  
-> +/* e10858 -LPCG clock gating register synchronization errata */
-> +static void do_lpcg_workaround(u32 rate, void __iomem *reg, u32 val)
-> +{
-> +	writel(val, reg);
-> +
-> +	if (rate >= 24000000 || rate == 0) {
-> +		u32 reg1;
-> +
-> +		/*
-> +		 * The time taken to access the LPCG registers from the AP core
-> +		 * through the interconnect is longer than the minimum delay
-> +		 * of 4 clock cycles required by the errata.
-> +		 * Adding a readl will provide sufficient delay to prevent
-> +		 * back-to-back writes.
-> +		 */
-> +		reg1 = readl(reg);
-> +	} else {
-> +		/*
-> +		 * For clocks running below 24MHz, wait a minimum of
-> +		 * 4 clock cycles.
-> +		 */
-> +		ndelay(4 * (DIV_ROUND_UP(1000000000, rate)));
-> +	}
+In the reference manual the actual name is Audio BLK_CTL.
+Lets make it more obvious here by renaming from audiomix to audio_blk_ctl.
 
-Just to make sure this is totally understood, if the lpcg consumer
-needs to two enables/disables in less than 4 multiplied by the clock
-period, the second enable/disable will be delayed.
+Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
+---
+ include/dt-bindings/clock/imx8mp-clock.h | 120 +++++++++++++++----------------
+ 1 file changed, 60 insertions(+), 60 deletions(-)
 
-If we're fine with this, then here is my R-b.
+diff --git a/include/dt-bindings/clock/imx8mp-clock.h b/include/dt-bindings/clock/imx8mp-clock.h
+index e8d68fb..89c67b7 100644
+--- a/include/dt-bindings/clock/imx8mp-clock.h
++++ b/include/dt-bindings/clock/imx8mp-clock.h
+@@ -324,66 +324,66 @@
+ 
+ #define IMX8MP_CLK_END				313
+ 
+-#define IMX8MP_CLK_AUDIOMIX_SAI1_IPG		0
+-#define IMX8MP_CLK_AUDIOMIX_SAI1_MCLK1		1
+-#define IMX8MP_CLK_AUDIOMIX_SAI1_MCLK2		2
+-#define IMX8MP_CLK_AUDIOMIX_SAI1_MCLK3		3
+-#define IMX8MP_CLK_AUDIOMIX_SAI2_IPG		4
+-#define IMX8MP_CLK_AUDIOMIX_SAI2_MCLK1		5
+-#define IMX8MP_CLK_AUDIOMIX_SAI2_MCLK2		6
+-#define IMX8MP_CLK_AUDIOMIX_SAI2_MCLK3		7
+-#define IMX8MP_CLK_AUDIOMIX_SAI3_IPG		8
+-#define IMX8MP_CLK_AUDIOMIX_SAI3_MCLK1		9
+-#define IMX8MP_CLK_AUDIOMIX_SAI3_MCLK2		10
+-#define IMX8MP_CLK_AUDIOMIX_SAI3_MCLK3		11
+-#define IMX8MP_CLK_AUDIOMIX_SAI5_IPG		12
+-#define IMX8MP_CLK_AUDIOMIX_SAI5_MCLK1		13
+-#define IMX8MP_CLK_AUDIOMIX_SAI5_MCLK2		14
+-#define IMX8MP_CLK_AUDIOMIX_SAI5_MCLK3		15
+-#define IMX8MP_CLK_AUDIOMIX_SAI6_IPG		16
+-#define IMX8MP_CLK_AUDIOMIX_SAI6_MCLK1		17
+-#define IMX8MP_CLK_AUDIOMIX_SAI6_MCLK2		18
+-#define IMX8MP_CLK_AUDIOMIX_SAI6_MCLK3		19
+-#define IMX8MP_CLK_AUDIOMIX_SAI7_IPG		20
+-#define IMX8MP_CLK_AUDIOMIX_SAI7_MCLK1		21
+-#define IMX8MP_CLK_AUDIOMIX_SAI7_MCLK2		22
+-#define IMX8MP_CLK_AUDIOMIX_SAI7_MCLK3		23
+-#define IMX8MP_CLK_AUDIOMIX_ASRC_IPG		24
+-#define IMX8MP_CLK_AUDIOMIX_PDM_IPG		25
+-#define IMX8MP_CLK_AUDIOMIX_SDMA2_ROOT		26
+-#define IMX8MP_CLK_AUDIOMIX_SDMA3_ROOT		27
+-#define IMX8MP_CLK_AUDIOMIX_SPBA2_ROOT		28
+-#define IMX8MP_CLK_AUDIOMIX_DSP_ROOT		29
+-#define IMX8MP_CLK_AUDIOMIX_DSPDBG_ROOT		30
+-#define IMX8MP_CLK_AUDIOMIX_EARC_IPG		31
+-#define IMX8MP_CLK_AUDIOMIX_OCRAMA_IPG		32
+-#define IMX8MP_CLK_AUDIOMIX_AUD2HTX_IPG		33
+-#define IMX8MP_CLK_AUDIOMIX_EDMA_ROOT		34
+-#define IMX8MP_CLK_AUDIOMIX_AUDPLL_ROOT		35
+-#define IMX8MP_CLK_AUDIOMIX_MU2_ROOT		36
+-#define IMX8MP_CLK_AUDIOMIX_MU3_ROOT		37
+-#define IMX8MP_CLK_AUDIOMIX_EARC_PHY		38
+-#define IMX8MP_CLK_AUDIOMIX_PDM_ROOT		39
+-#define IMX8MP_CLK_AUDIOMIX_SAI1_MCLK1_SEL	40
+-#define IMX8MP_CLK_AUDIOMIX_SAI1_MCLK2_SEL	41
+-#define IMX8MP_CLK_AUDIOMIX_SAI2_MCLK1_SEL	42
+-#define IMX8MP_CLK_AUDIOMIX_SAI2_MCLK2_SEL	43
+-#define IMX8MP_CLK_AUDIOMIX_SAI3_MCLK1_SEL	44
+-#define IMX8MP_CLK_AUDIOMIX_SAI3_MCLK2_SEL	45
+-#define IMX8MP_CLK_AUDIOMIX_SAI4_MCLK1_SEL	46
+-#define IMX8MP_CLK_AUDIOMIX_SAI4_MCLK2_SEL	47
+-#define IMX8MP_CLK_AUDIOMIX_SAI5_MCLK1_SEL	48
+-#define IMX8MP_CLK_AUDIOMIX_SAI5_MCLK2_SEL	49
+-#define IMX8MP_CLK_AUDIOMIX_SAI6_MCLK1_SEL	50
+-#define IMX8MP_CLK_AUDIOMIX_SAI6_MCLK2_SEL	51
+-#define IMX8MP_CLK_AUDIOMIX_SAI7_MCLK1_SEL	52
+-#define IMX8MP_CLK_AUDIOMIX_SAI7_MCLK2_SEL	53
+-#define IMX8MP_CLK_AUDIOMIX_PDM_SEL		54
+-#define IMX8MP_CLK_AUDIOMIX_SAI_PLL_REF_SEL	55
+-#define IMX8MP_CLK_AUDIOMIX_SAI_PLL		56
+-#define IMX8MP_CLK_AUDIOMIX_SAI_PLL_BYPASS	57
+-#define IMX8MP_CLK_AUDIOMIX_SAI_PLL_OUT		58
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI1_IPG		0
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI1_MCLK1		1
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI1_MCLK2		2
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI1_MCLK3		3
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI2_IPG		4
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI2_MCLK1		5
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI2_MCLK2		6
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI2_MCLK3		7
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI3_IPG		8
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI3_MCLK1		9
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI3_MCLK2		10
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI3_MCLK3		11
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI5_IPG		12
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI5_MCLK1		13
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI5_MCLK2		14
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI5_MCLK3		15
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI6_IPG		16
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI6_MCLK1		17
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI6_MCLK2		18
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI6_MCLK3		19
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI7_IPG		20
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI7_MCLK1		21
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI7_MCLK2		22
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI7_MCLK3		23
++#define IMX8MP_CLK_AUDIO_BLK_CTL_ASRC_IPG		24
++#define IMX8MP_CLK_AUDIO_BLK_CTL_PDM_IPG		25
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SDMA2_ROOT		26
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SDMA3_ROOT		27
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SPBA2_ROOT		28
++#define IMX8MP_CLK_AUDIO_BLK_CTL_DSP_ROOT		29
++#define IMX8MP_CLK_AUDIO_BLK_CTL_DSPDBG_ROOT		30
++#define IMX8MP_CLK_AUDIO_BLK_CTL_EARC_IPG		31
++#define IMX8MP_CLK_AUDIO_BLK_CTL_OCRAMA_IPG		32
++#define IMX8MP_CLK_AUDIO_BLK_CTL_AUD2HTX_IPG		33
++#define IMX8MP_CLK_AUDIO_BLK_CTL_EDMA_ROOT		34
++#define IMX8MP_CLK_AUDIO_BLK_CTL_AUDPLL_ROOT		35
++#define IMX8MP_CLK_AUDIO_BLK_CTL_MU2_ROOT		36
++#define IMX8MP_CLK_AUDIO_BLK_CTL_MU3_ROOT		37
++#define IMX8MP_CLK_AUDIO_BLK_CTL_EARC_PHY		38
++#define IMX8MP_CLK_AUDIO_BLK_CTL_PDM_ROOT		39
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI1_MCLK1_SEL	40
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI1_MCLK2_SEL	41
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI2_MCLK1_SEL	42
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI2_MCLK2_SEL	43
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI3_MCLK1_SEL	44
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI3_MCLK2_SEL	45
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI4_MCLK1_SEL	46
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI4_MCLK2_SEL	47
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI5_MCLK1_SEL	48
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI5_MCLK2_SEL	49
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI6_MCLK1_SEL	50
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI6_MCLK2_SEL	51
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI7_MCLK1_SEL	52
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI7_MCLK2_SEL	53
++#define IMX8MP_CLK_AUDIO_BLK_CTL_PDM_SEL		54
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI_PLL_REF_SEL	55
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI_PLL		56
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI_PLL_BYPASS	57
++#define IMX8MP_CLK_AUDIO_BLK_CTL_SAI_PLL_OUT		58
+ 
+-#define IMX8MP_CLK_AUDIOMIX_END			59
++#define IMX8MP_CLK_AUDIO_BLK_CTL_END			59
+ 
+ #endif
+-- 
+2.7.4
 
-Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
-
-> +}
-> +
->  static int clk_lpcg_scu_enable(struct clk_hw *hw)
->  {
->  	struct clk_lpcg_scu *clk = to_clk_lpcg_scu(hw);
-> @@ -54,7 +80,8 @@ static int clk_lpcg_scu_enable(struct clk_hw *hw)
->  		val |= CLK_GATE_SCU_LPCG_HW_SEL;
->  
->  	reg |= val << clk->bit_idx;
-> -	writel(reg, clk->reg);
-> +
-> +	do_lpcg_workaround(clk_hw_get_rate(hw), clk->reg, reg);
->  
->  	spin_unlock_irqrestore(&imx_lpcg_scu_lock, flags);
->  
-> @@ -71,7 +98,7 @@ static void clk_lpcg_scu_disable(struct clk_hw *hw)
->  
->  	reg = readl_relaxed(clk->reg);
->  	reg &= ~(CLK_GATE_SCU_LPCG_MASK << clk->bit_idx);
-> -	writel(reg, clk->reg);
-> +	do_lpcg_workaround(clk_hw_get_rate(hw), clk->reg, reg);
->  
->  	spin_unlock_irqrestore(&imx_lpcg_scu_lock, flags);
->  }
-> -- 
-> 2.28.0
-> 
