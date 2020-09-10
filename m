@@ -2,196 +2,174 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 585D42637BD
-	for <lists+linux-clk@lfdr.de>; Wed,  9 Sep 2020 22:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F483263B3F
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Sep 2020 05:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730064AbgIIUpF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 9 Sep 2020 16:45:05 -0400
-Received: from mail-bn7nam10on2085.outbound.protection.outlook.com ([40.107.92.85]:52270
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729992AbgIIUpF (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 9 Sep 2020 16:45:05 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X8aI0AeZyNTpLM71m85C71Q6EcboDOhBCdwIXtW6xncEATeZtNCEn0uCuiW3vzeT0gqNlsGK6cwxinSiORIVGP78S7opL+eWLs8uqTG3FIEZkZ25MJ4LzOdY84ghYJSieatQKdKWnUV4daHpjKTGchoYwdZMd3kCXPvS7yIS+3L4Yh0cZK9ScKQYylMlbxfPQHDoOBvElbP9xv6AkZydfIYex4G1eppVrP6S+iw4lBFRrghvt66Iw1Adn7AGrF+kKzkBA7jdrkYVin30/fPg6+IpUXcGXPp4MbLoNCGN+bcn2l5RXz/J7NdWfvoGlbPOvl0ntxY7rM1nCgOrym55OQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x+2KOMwY5wmlKbRnYeS1i3/CewJ6egRkFbSWXAdbvWg=;
- b=U+zqj5bxoshgimCswGQYCAWNxICdRUirpM0vg8KfN6V9NAl9lM5ZRSi4ZhOu0nJrJZZ5eO5yufyOVWbBaYvH/41PpPWwEGOU0AzvwR/kGIpWBp718pU8sM0+h21GvxPrzlsrTLiLjCx3DqYRrXbvC9zwFb3RwvbmneR/Ei2oiiLC4ALxLmXoI5hjP64568ZJNnoCQTFgAX7L3L/2gTrC+S2xJCOoKDyMdJEehCXZKOQ82Wy3fJ2VRYkPc1Cc3C69Ffx1ZkxD/+KBIo9sqQiKvRAaXf5rL79y6kVgsbkM67MCIpIHxGg0cUy4+y2No77u0y7lyv2n63ja7D2SkTqcoA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.60.83) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
- not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x+2KOMwY5wmlKbRnYeS1i3/CewJ6egRkFbSWXAdbvWg=;
- b=a3QwWiSZZa0vVJUulOLVOux6o3cwJbXTDJ5pe70FzwFZ7DTGkPk72Kt1mKBOQCFP6qlc/lDc59NgAzePPKmFteeSMyjoSbUoYoOYjCdDFM/fO0T7Ls5AQeD5spXNjldiMru33S2urFdROcxwSIn1q/HjCg23hb5o9FJl9PbKPUA=
-Received: from MN2PR19CA0065.namprd19.prod.outlook.com (2603:10b6:208:19b::42)
- by DM5PR02MB3670.namprd02.prod.outlook.com (2603:10b6:4:b5::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Wed, 9 Sep
- 2020 20:45:01 +0000
-Received: from BL2NAM02FT046.eop-nam02.prod.protection.outlook.com
- (2603:10b6:208:19b:cafe::fd) by MN2PR19CA0065.outlook.office365.com
- (2603:10b6:208:19b::42) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16 via Frontend
- Transport; Wed, 9 Sep 2020 20:45:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
- smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
-Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
- BL2NAM02FT046.mail.protection.outlook.com (10.152.76.118) with Microsoft SMTP
- Server id 15.20.3348.17 via Frontend Transport; Wed, 9 Sep 2020 20:45:01
- +0000
-Received: from [149.199.38.66] (port=53391 helo=smtp.xilinx.com)
-        by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
-        (envelope-from <amit.sunil.dhamne@xilinx.com>)
-        id 1kG6xP-0001xX-Nj; Wed, 09 Sep 2020 13:44:43 -0700
-Received: from [127.0.0.1] (helo=localhost)
-        by smtp.xilinx.com with smtp (Exim 4.63)
-        (envelope-from <amit.sunil.dhamne@xilinx.com>)
-        id 1kG6xf-0007dx-V5; Wed, 09 Sep 2020 13:45:00 -0700
-Received: from xsj-pvapsmtp01 (smtp-fallback.xilinx.com [149.199.38.66] (may be forged))
-        by xsj-smtp-dlp2.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 089KisMZ028430;
-        Wed, 9 Sep 2020 13:44:54 -0700
-Received: from [10.18.5.8] (helo=xsjamitsuni51.xilinx.com)
-        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
-        (envelope-from <amit.sunil.dhamne@xilinx.com>)
-        id 1kG6xa-0007dJ-CQ; Wed, 09 Sep 2020 13:44:54 -0700
-From:   Amit Sunil Dhamne <amit.sunil.dhamne@xilinx.com>
-To:     mturquette@baylibre.com, m.tretter@pengutronix.de,
-        sboyd@kernel.org, michal.simek@xilinx.com, mark.rutland@arm.com,
-        linux-clk@vger.kernel.org
-Cc:     rajanv@xilinx.com, jollys@xilinx.com, tejasp@xilinx.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rajan Vaja <rajan.vaja@xilinx.com>,
-        Tejas Patel <tejas.patel@xilinx.com>,
-        Amit Sunil Dhamne <amit.sunil.dhamne@xilinx.com>
-Subject: [PATCH v4 3/3] clk: zynqmp: Use firmware specific mux clock flags
-Date:   Wed,  9 Sep 2020 13:44:48 -0700
-Message-Id: <1599684288-20917-4-git-send-email-amit.sunil.dhamne@xilinx.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1599684288-20917-1-git-send-email-amit.sunil.dhamne@xilinx.com>
-References: <1599684288-20917-1-git-send-email-amit.sunil.dhamne@xilinx.com>
-X-RCIS-Action: ALLOW
-X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
-X-TM-AS-User-Approved-Sender: Yes;Yes
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-PublicTrafficType: Email
+        id S1726883AbgIJDOS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 9 Sep 2020 23:14:18 -0400
+Received: from regular1.263xmail.com ([211.150.70.199]:44566 "EHLO
+        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726440AbgIJDOI (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 9 Sep 2020 23:14:08 -0400
+X-Greylist: delayed 394 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Sep 2020 23:14:05 EDT
+Received: from localhost (unknown [192.168.167.69])
+        by regular1.263xmail.com (Postfix) with ESMTP id 487AD104E;
+        Thu, 10 Sep 2020 11:07:19 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-ANTISPAM-LEVEL: 2
+X-SKE-CHECKED: 1
+X-ABS-CHECKED: 1
+Received: from [172.16.12.236] (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P25134T140525325764352S1599707237793667_;
+        Thu, 10 Sep 2020 11:07:18 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <9b78765c88d40245569064639cb03e69>
+X-RL-SENDER: zhangqing@rock-chips.com
+X-SENDER: zhangqing@rock-chips.com
+X-LOGIN-NAME: zhangqing@rock-chips.com
+X-FST-TO: kever.yang@rock-chips.com
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-DNS-TYPE: 0
+X-System-Flag: 0
+Subject: Re: [PATCH v3 6/6] clk: rockchip: rk3399: Support module build
+To:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, xxx@rock-chips.com,
+        xf@rock-chips.com, huangtao@rock-chips.com,
+        kever.yang@rock-chips.com
+References: <20200904074405.24439-1-zhangqing@rock-chips.com>
+ <20200904074505.24917-1-zhangqing@rock-chips.com> <3524790.GmC4BGDxql@diego>
+From:   "elaine.zhang" <zhangqing@rock-chips.com>
+Organization: rockchip
+Message-ID: <ad06ac8a-e7f9-382d-1cbc-01aea6256e5c@rock-chips.com>
+Date:   Thu, 10 Sep 2020 11:07:17 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 1c991082-c092-4d43-0d78-08d8550138dd
-X-MS-TrafficTypeDiagnostic: DM5PR02MB3670:
-X-Microsoft-Antispam-PRVS: <DM5PR02MB36706EF3078831490D72F137A7260@DM5PR02MB3670.namprd02.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:989;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: l798Zs6l7FTqI6g07g8hyEuRm7n2nkpS0zLg6jDhix4vbInwWohVgj0GbkEHxoWAXHErL98Z3n8e8/Pz/TGgTNQE1CtspvLJYatvaCM3Y4NHvEkYdF2gMBV092uYIZQ49VxZ0bKTBeegXPGJQVmGwa/WjbOVDH87obgvFDXrPEK7pOvSjJua9wZkUSBpzdM8t1N8efacGkS1VSKjYDTiWgi4e4oin51IhClyjIHIKth9HIHx+NXxse7q7lGymzBj67XiVh/HZa6NmkzjJgyBZNvgJYrLl68EVPaCygQ/eGH22TuuumGYFFLq2QO60cVL0takyrDZNF9Il7LsDRYSpI9lFp5HwM2U7MFRExGQuwBw86OIr9+0+cqnsjbXBgObI7C5F22P459iBRZIW7L0O2q2JVBfHlae2RLEU0pUdj8=
-X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFS:(136003)(39860400002)(346002)(376002)(396003)(46966005)(5660300002)(8936002)(70206006)(70586007)(6666004)(356005)(2906002)(7696005)(336012)(107886003)(81166007)(82740400003)(36756003)(26005)(426003)(4326008)(47076004)(186003)(2616005)(54906003)(8676002)(83380400001)(316002)(478600001)(9786002)(82310400003)(42866002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2020 20:45:01.0164
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c991082-c092-4d43-0d78-08d8550138dd
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
-X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT046.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB3670
+In-Reply-To: <3524790.GmC4BGDxql@diego>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Rajan Vaja <rajan.vaja@xilinx.com>
+hi,
 
-Use ZynqMP specific mux clock flags instead of using CCF flags.
+在 2020/9/7 上午6:49, Heiko Stübner 写道:
+> Am Freitag, 4. September 2020, 09:45:05 CEST schrieb Elaine Zhang:
+>> support CLK_OF_DECLARE and builtin_platform_driver_probe
+>> double clk init method.
+>> add module author, description and license to support building
+>> Soc Rk3399 clock driver as module.
+>>
+>> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+>> Reviewed-by: Kever Yang <kever.yang@rock-chips.com>
+>> ---
+>>   drivers/clk/rockchip/clk-rk3399.c | 55 +++++++++++++++++++++++++++++++
+>>   1 file changed, 55 insertions(+)
+>>
+>> diff --git a/drivers/clk/rockchip/clk-rk3399.c b/drivers/clk/rockchip/clk-rk3399.c
+>> index ce1d2446f142..40ff17aee5b6 100644
+>> --- a/drivers/clk/rockchip/clk-rk3399.c
+>> +++ b/drivers/clk/rockchip/clk-rk3399.c
+>> @@ -5,9 +5,11 @@
+>>    */
+>>   
+>>   #include <linux/clk-provider.h>
+>> +#include <linux/module.h>
+>>   #include <linux/io.h>
+>>   #include <linux/of.h>
+>>   #include <linux/of_address.h>
+>> +#include <linux/of_device.h>
+>>   #include <linux/platform_device.h>
+>>   #include <linux/regmap.h>
+>>   #include <dt-bindings/clock/rk3399-cru.h>
+>> @@ -1600,3 +1602,56 @@ static void __init rk3399_pmu_clk_init(struct device_node *np)
+>>   	rockchip_clk_of_add_provider(np, ctx);
+>>   }
+>>   CLK_OF_DECLARE(rk3399_cru_pmu, "rockchip,rk3399-pmucru", rk3399_pmu_clk_init);
+>> +
+>> +struct clk_rk3399_inits {
+>> +		void (*inits)(struct device_node *np);
+>> +};
+>> +
+>> +static const struct clk_rk3399_inits clk_rk3399_pmucru_init = {
+>> +	.inits = rk3399_pmu_clk_init,
+>> +};
+>> +
+>> +static const struct clk_rk3399_inits clk_rk3399_cru_init = {
+>> +	.inits = rk3399_clk_init,
+>> +};
+>> +
+>> +static const struct of_device_id clk_rk3399_match_table[] = {
+>> +	{
+>> +		.compatible = "rockchip,rk3399-cru",
+>> +		.data = &clk_rk3399_cru_init,
+>> +	},  {
+>> +		.compatible = "rockchip,rk3399-pmucru",
+>> +		.data = &clk_rk3399_pmucru_init,
+>> +	},
+>> +	{ }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, clk_rk3399_match_table);
+>> +
+>> +static int __init clk_rk3399_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device_node *np = pdev->dev.of_node;
+>> +	const struct of_device_id *match;
+>> +	const struct clk_rk3399_inits *init_data;
+>> +
+>> +	match = of_match_device(clk_rk3399_match_table, &pdev->dev);
+>> +	if (!match || !match->data)
+>> +		return -EINVAL;
+>> +
+>> +	init_data = match->data;
+>> +	if (init_data->inits)
+>> +		init_data->inits(np);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static struct platform_driver clk_rk3399_driver = {
+>> +	.driver		= {
+>> +		.name	= "clk-rk3399",
+>> +		.of_match_table = clk_rk3399_match_table,
+> I guess we probably want
+> 		.suppress_bind_attrs = true,
+OK, I will add it in the next version.
+>
+> here, because there is no unloading.
+> Also what happens when you try to rmmod the module?
+console:/ # lsmod | grep clk
 
-Signed-off-by: Rajan Vaja <rajan.vaja@xilinx.com>
-Signed-off-by: Tejas Patel <tejas.patel@xilinx.com>
-Signed-off-by: Amit Sunil Dhamne <amit.sunil.dhamne@xilinx.com>
----
- drivers/clk/zynqmp/clk-mux-zynqmp.c | 23 ++++++++++++++++++++++-
- drivers/clk/zynqmp/clk-zynqmp.h     |  8 ++++++++
- 2 files changed, 30 insertions(+), 1 deletion(-)
+clk_rk808              16384  0
+clk_rk3399             49152  0 [permanent]
+clk_rockchip           57344  32 rockchip_dmc,rockchip_opp_select,clk_rk3399
+rockchip_sip           24576  6 
+rk_vcodec,rockchip_pwm_remotectl,rockchip_bus,nvmem_rockchip_efuse,rockchip_pm_config,clk_rockchip
 
-diff --git a/drivers/clk/zynqmp/clk-mux-zynqmp.c b/drivers/clk/zynqmp/clk-m=
-ux-zynqmp.c
-index a49b1c5..4c28b4d 100644
---- a/drivers/clk/zynqmp/clk-mux-zynqmp.c
-+++ b/drivers/clk/zynqmp/clk-mux-zynqmp.c
-@@ -90,6 +90,27 @@ static const struct clk_ops zynqmp_clk_mux_ro_ops =3D {
-        .get_parent =3D zynqmp_clk_mux_get_parent,
- };
+console:/ # rmmod clk_rk3399
 
-+static inline unsigned long zynqmp_clk_map_mux_ccf_flags(
-+                                      const u32 zynqmp_type_flag)
-+{
-+       unsigned long ccf_flag =3D 0;
-+
-+       if (zynqmp_type_flag & ZYNQMP_CLK_MUX_INDEX_ONE)
-+               ccf_flag |=3D CLK_MUX_INDEX_ONE;
-+       if (zynqmp_type_flag & ZYNQMP_CLK_MUX_INDEX_BIT)
-+               ccf_flag |=3D CLK_MUX_INDEX_BIT;
-+       if (zynqmp_type_flag & ZYNQMP_CLK_MUX_HIWORD_MASK)
-+               ccf_flag |=3D CLK_MUX_HIWORD_MASK;
-+       if (zynqmp_type_flag & ZYNQMP_CLK_MUX_READ_ONLY)
-+               ccf_flag |=3D CLK_MUX_READ_ONLY;
-+       if (zynqmp_type_flag & ZYNQMP_CLK_MUX_ROUND_CLOSEST)
-+               ccf_flag |=3D CLK_MUX_ROUND_CLOSEST;
-+       if (zynqmp_type_flag & ZYNQMP_CLK_MUX_BIG_ENDIAN)
-+               ccf_flag |=3D CLK_MUX_BIG_ENDIAN;
-+
-+       return ccf_flag;
-+}
-+
- /**
-  * zynqmp_clk_register_mux() - Register a mux table with the clock
-  *                            framework
-@@ -125,7 +146,7 @@ struct clk_hw *zynqmp_clk_register_mux(const char *name=
-, u32 clk_id,
+rmmod: failed to unload clk_rk3399: Device or resource busy
 
-        init.parent_names =3D parents;
-        init.num_parents =3D num_parents;
--       mux->flags =3D nodes->type_flag;
-+       mux->flags =3D zynqmp_clk_map_mux_ccf_flags(nodes->type_flag);
-        mux->hw.init =3D &init;
-        mux->clk_id =3D clk_id;
+console:/ # rmmod -f clk_rk3399
 
-diff --git a/drivers/clk/zynqmp/clk-zynqmp.h b/drivers/clk/zynqmp/clk-zynqm=
-p.h
-index 9b2ff35e..87a2e12 100644
---- a/drivers/clk/zynqmp/clk-zynqmp.h
-+++ b/drivers/clk/zynqmp/clk-zynqmp.h
-@@ -41,6 +41,14 @@
- #define ZYNQMP_CLK_DIVIDER_READ_ONLY           BIT(5)
- #define ZYNQMP_CLK_DIVIDER_MAX_AT_ZERO         BIT(6)
+rmmod: failed to unload clk_rk3399: Device or resource busy
 
-+/* Type Flags for mux clock */
-+#define ZYNQMP_CLK_MUX_INDEX_ONE               BIT(0)
-+#define ZYNQMP_CLK_MUX_INDEX_BIT               BIT(1)
-+#define ZYNQMP_CLK_MUX_HIWORD_MASK             BIT(2)
-+#define ZYNQMP_CLK_MUX_READ_ONLY               BIT(3)
-+#define ZYNQMP_CLK_MUX_ROUND_CLOSEST           BIT(4)
-+#define ZYNQMP_CLK_MUX_BIG_ENDIAN              BIT(5)
-+
- enum topology_type {
-        TYPE_INVALID,
-        TYPE_MUX,
---
-2.7.4
 
-This email and any attachments are intended for the sole use of the named r=
-ecipient(s) and contain(s) confidential information that may be proprietary=
-, privileged or copyrighted under applicable law. If you are not the intend=
-ed recipient, do not read, copy, or forward this email message or any attac=
-hments. Delete this email message and any attachments immediately.
+The builtin_platform_driver_probe()  without the __exit parts.
+
+>
+> Heiko
+>
+>
+>
+>
+
+
