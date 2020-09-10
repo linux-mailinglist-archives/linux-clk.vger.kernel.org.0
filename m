@@ -2,105 +2,92 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 862FB264D38
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Sep 2020 20:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88E4F264E95
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Sep 2020 21:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726837AbgIJSfd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 10 Sep 2020 14:35:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52090 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726984AbgIJSeb (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 10 Sep 2020 14:34:31 -0400
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4A1BC2087C;
-        Thu, 10 Sep 2020 18:34:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599762869;
-        bh=SRgE3e+cWOee6V2K0Aw2EKLPOh+GtgrkQeeqC/WhKkI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=iRRR8DCEphKxCESUIOWKSYOGUMgScZXbeOeEcg0yOyRFJbnqmaYlOsiksuwiLjobQ
-         M4uyBus+mshUVHZZ3JgPrAGSIFrgxOqZoEzzZ37YKf8U3tBk8av9U+Y8144ibkRREk
-         PXnrMHTG6GY6MWdGQ00DeKQVPH9cYf3H7WrJDCZw=
-Received: by mail-ej1-f51.google.com with SMTP id z23so10139662ejr.13;
-        Thu, 10 Sep 2020 11:34:29 -0700 (PDT)
-X-Gm-Message-State: AOAM5309MZH2hu7qkldGTU7mIu6vR+EodTzY1BZTBk5+Pn51YJBCdv8c
-        7Oe/ExFWFSLC8z+1Ugwp+aJ3u3mdF3wKah6FmvI=
-X-Google-Smtp-Source: ABdhPJyqKY0eU5W2IUZveRSdHihYXkn66844ltcGWOZGAN2rPhOWdGk7NLfovjoBdKlH8jBLp9/fUyrxxJec5WeF4cE=
-X-Received: by 2002:a17:906:af53:: with SMTP id ly19mr9924685ejb.503.1599762867837;
- Thu, 10 Sep 2020 11:34:27 -0700 (PDT)
+        id S1726675AbgIJTT1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 10 Sep 2020 15:19:27 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7020 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731368AbgIJPy3 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 10 Sep 2020 11:54:29 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08AF2tjt169967;
+        Thu, 10 Sep 2020 11:18:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=8Mlftey53B/H6IK5E2iIO4KQDXor/nn1hnefl9i/DEI=;
+ b=nZV1c6SyU/XJM+SmfzYYQR45GhzOfmVxod/LNdlKa+UEedZzQp/XQHjkAKYw7IYLtcaC
+ XN8wgVcRxkiOOCHEOJUdbof1ywbgr6RR9gXlK7ST7JIZ9wh27Fev1XpyzykkqmNNx6EH
+ jKT43RXBgitOfZhzugXp9mYslQ3ww7H9OaU1x7Mph3GQeLTYadxWarB4SZhbTiMI3yfP
+ WKUUkMrnPsfYEpxaNhTE3XeOZ6Dfodum+2hzPN3HY7GCK1TK5C8dZLfIwDPuXdV8xQJ+
+ BmvLJPjBCI6xj7G1JauBrmYGBuPMDdCmcJGEXshrDeC6+jb8hCFTD3R4YnH+151rWzjF jw== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33fms8vt4y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Sep 2020 11:18:43 -0400
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08AFBvXo012745;
+        Thu, 10 Sep 2020 15:18:42 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma01dal.us.ibm.com with ESMTP id 33d46n59xc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Sep 2020 15:18:42 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08AFIfSB61407558
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Sep 2020 15:18:41 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A1C6A6E04C;
+        Thu, 10 Sep 2020 15:18:41 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0D9F36E04E;
+        Thu, 10 Sep 2020 15:18:40 +0000 (GMT)
+Received: from SHADE6A.ibmuc.com (unknown [9.211.140.115])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu, 10 Sep 2020 15:18:40 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-clk@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, linux-fsi@lists.ozlabs.org,
+        andrew@aj.id.au, joel@jms.id.au, robh+dt@kernel.org,
+        sboyd@kernel.org, mturquette@baylibre.com, alistair@popple.id.au,
+        jk@ozlabs.org
+Subject: [PATCH 0/4] clk: AST2600 and FSI: Add APLL to control FSI bus frequency
+Date:   Thu, 10 Sep 2020 10:18:36 -0500
+Message-Id: <20200910151840.25333-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20200904152404.20636-1-krzk@kernel.org> <20200904152404.20636-13-krzk@kernel.org>
- <CAL_Jsq+tGQhkqtQszOx7nvr1PR=YFz2p1=OnWQ8JxmSg4qNkHA@mail.gmail.com>
- <20200907060958.GA4525@kozik-lap> <CAL_JsqJZ=PxDxH-=GUUg7WadZrAKjYbtE0sQ8h9YDGOGx6Ykwg@mail.gmail.com>
-In-Reply-To: <CAL_JsqJZ=PxDxH-=GUUg7WadZrAKjYbtE0sQ8h9YDGOGx6Ykwg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Thu, 10 Sep 2020 20:34:15 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPdVDGhdD5hMuXBDBa6XiaYRAK86E2G1gpGZSqnMLiY+Lg@mail.gmail.com>
-Message-ID: <CAJKOXPdVDGhdD5hMuXBDBa6XiaYRAK86E2G1gpGZSqnMLiY+Lg@mail.gmail.com>
-Subject: Re: [PATCH v3 12/14] dt-bindings: mtd: gpmi-nand: Fix matching of
- clocks on different SoCs
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     linux-clk <linux-clk@vger.kernel.org>, devicetree@vger.kernel.org,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-10_04:2020-09-10,2020-09-10 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 priorityscore=1501 adultscore=0 phishscore=0
+ clxscore=1011 malwarescore=0 impostorscore=0 mlxlogscore=754
+ suspectscore=1 mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2009100135
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, 8 Sep 2020 at 18:51, Rob Herring <robh+dt@kernel.org> wrote:
->
-> On Mon, Sep 7, 2020 at 12:10 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> >
-> > On Fri, Sep 04, 2020 at 04:36:39PM -0600, Rob Herring wrote:
-> > > On Fri, Sep 4, 2020 at 9:25 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> > > >
-> > > > Driver requires different amount of clocks for different SoCs.  Describe
-> > > > these requirements properly to fix dtbs_check warnings like:
-> > > >
-> > > >     arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dt.yaml: nand-controller@33002000: clock-names:1: 'gpmi_apb' was expected
-> > > >
-> > > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > > >
-> > > > ---
-> > > >
-> > > > Changes since v1:
-> > > > 1. Do not require order of clocks (use pattern).
-> > >
-> > > To the extent that you can, you should fix the order in dts files
-> > > first. If we just adjust the schemas to match the dts files, then
-> > > what's the point?
-> >
-> > The DTSes do not have mixed order of clocks between each other, as fair
-> > as I remember. It was fix after Sasha Hauer comment that order is not
-> > necessarily good.
-> >
-> > We have the clock-names property, why enforcing the order?
->
-> Because DT/OpenFirmware has always had a defined order for property
-> values. '*-names' is just extra information.
+Add functionality to control the APLL clock on the AST2600. The APLL provides
+the clock for the FSI master on the AST2600. Then add a devicetree property to
+set the AST2600 FSI master bus frequency.
 
-Thanks for the explanation. There are few nonobvious requirements
-about writing schema which seems many (including me) miss. It might be
-a good topic for some conference. Too bad ELCE CFP ended some time
-ago. :)
+Eddie James (4):
+  dt-bindings: clock: Add AST2600 APLLdivN definition
+  clk: ast2600: Add functionality to the APLL clock
+  dt-bindings: fsi: Aspeed master: Add bus-frequency property
+  fsi: Aspeed master: Set bus frequency from devicetree
 
-Best regards,
-Krzysztof
+ .../bindings/fsi/fsi-master-aspeed.txt        |   1 +
+ drivers/clk/clk-ast2600.c                     | 177 ++++++++++++++++--
+ drivers/fsi/fsi-master-aspeed.c               |   5 +
+ include/dt-bindings/clock/ast2600-clock.h     |   1 +
+ 4 files changed, 172 insertions(+), 12 deletions(-)
+
+-- 
+2.26.2
+
