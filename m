@@ -2,77 +2,114 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DD0268B47
-	for <lists+linux-clk@lfdr.de>; Mon, 14 Sep 2020 14:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F854268B28
+	for <lists+linux-clk@lfdr.de>; Mon, 14 Sep 2020 14:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726527AbgINMlf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 14 Sep 2020 08:41:35 -0400
-Received: from mail-yb1-f196.google.com ([209.85.219.196]:45291 "EHLO
-        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726477AbgINMlD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Sep 2020 08:41:03 -0400
-Received: by mail-yb1-f196.google.com with SMTP id p81so11681225ybc.12;
-        Mon, 14 Sep 2020 05:41:03 -0700 (PDT)
+        id S1726550AbgINMjW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 14 Sep 2020 08:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726522AbgINMhv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Sep 2020 08:37:51 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6A3C061224
+        for <linux-clk@vger.kernel.org>; Mon, 14 Sep 2020 05:09:11 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id ay8so17274495edb.8
+        for <linux-clk@vger.kernel.org>; Mon, 14 Sep 2020 05:09:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=gxYQz48aGorfvze6exW0FuIKKJvVhs5z+cRnEenJUaY=;
+        b=kO2nQJXTmye6atcNNB0YbH9+aEGIju3u8E+w5020N5/THEYTo6GxrBUM4VqIiRZydn
+         F4JQnd2J3E2hm2d9Q4jc+x/vwMK+SXE6F9dCIH41kFE9EwORmzKPQCWVAj7lGQ9Dv1Cf
+         eswEjGpLtlJCtzXXGCJWTUCS12Fl8Xu7b/Pgl2YJI5SHXcYGGXYGNUggi78n05RojWc8
+         35XwRvaPMPsM6TU8XJX97o4Hj9dvVske5TK4eW6zSozjF3JXivA5k6PR4pwdICJjuzJt
+         22gltDaYP7hf+099nMN8tvYmIeqpnNdAPE1gri91NXETokBxy+CNE8F1lquZ3Lt+wB01
+         isyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pADP6qzUrYMCYvH+CFX4SosBM+qgginkcbgh+0+Vh8g=;
-        b=c/hGNLMrpQ+A40x0ZjivCwqgLxCXQuqGqUeM0NTV5AtN+U7k6U7ZohYrSE+J+uYLxQ
-         s/VhX1mr+dWJkYF7qmTqDNQjHuC7bx216qQ0UomTGDkxA3FeeX+UkninJSJmu1K8pHbU
-         yCbbVeMZ5EQ/96gTV5oJIvx1LJUNFyvsBsfmvk1RsJMgddFq+Kv11xLtcJx2DLDt17ZT
-         rIUxY3uvvB5seOLx5pX1oJNogz7y90bOxQHvrDBRAUt9i2DEOoGXYemGbLqy+PrqAgW1
-         GfGCE5gNuG+sBzX912jrfxk8rsj6Uk289Y6XQgGbgQhnp05tCNXiTHILZv5/Cc7Y6evx
-         8+tQ==
-X-Gm-Message-State: AOAM530ib5E0aqToGlBWVGEAI7qn618Q/0fSRGM2n0Gmj13M8yx+2hl6
-        KBaEoGb3Qg5LKxSJDDlp65tdMwC7/55wv26KdITGUmGvjxQ=
-X-Google-Smtp-Source: ABdhPJw0rS0SECxSrJqxyMZRelj1qSCZeHdheuNXeS8R7ywmxQAb0yM5b9d02qUFIk2ygT1exPjrqXF2qIaoEUmDriM=
-X-Received: by 2002:a9d:5a92:: with SMTP id w18mr8913041oth.145.1600085338477;
- Mon, 14 Sep 2020 05:08:58 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=gxYQz48aGorfvze6exW0FuIKKJvVhs5z+cRnEenJUaY=;
+        b=I02evhNFknLbnbuwN7sTwNtL3Y746tEpHINV/2b6864atsBMNIQ/Q+TgSReeG6bDid
+         GO86wwMll8MjuCTtbmsKrcft004pGuV+6WEVbZ5C/AwcXXGennX1jfgKe3JQhTlvFOiW
+         AAIcpi2c9vINELt0Ti8X2usLtcIwQTHEiAq/+Eoa0lEMOnLByEhREcshYAwCryjs8+QA
+         djmy+JRFkhyaZV4WBDC+7v/KIHEEZHtnUM7UumPRKkPjZCaVvXtxADPsZ2jATqi7taQC
+         NisQ61NCPiebcCksSfL8NM8HuGX+kNuKFIwrSHtkzTMdlSbmLSNwbI2Ma6cXjD11rwYD
+         Vx5Q==
+X-Gm-Message-State: AOAM531N9incXPsZaFE884gwTXgStIEh9Taylm1C7zQRZtp+4pnsYDe5
+        0fL0CQ7ZMdphTPsM9bfRy3pZIA0ThQvl4LOd4L4=
+X-Google-Smtp-Source: ABdhPJxW0CTETyrNZf6ODuwnnn4PLPE+wEsg0iEZvHD1GW1XDEQfez4h1Mn3w7XEzFoqRqT9ZXJ4ZIjenFqjFjIGNII=
+X-Received: by 2002:a05:6402:483:: with SMTP id k3mr17160634edv.24.1600085350172;
+ Mon, 14 Sep 2020 05:09:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200911101703.20521-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20200911101703.20521-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 14 Sep 2020 14:08:47 +0200
-Message-ID: <CAMuHMdWk+uenHO=4VFQSYdJRew5EWxGfNtamO_OTcdL0g+QZ4Q@mail.gmail.com>
-Subject: Re: [PATCH] clk: renesas: Kconfig: Update description for
- CLK_RCAR_GEN3_CPG config
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
+Received: by 2002:a17:906:6945:0:0:0:0 with HTTP; Mon, 14 Sep 2020 05:09:09
+ -0700 (PDT)
+Reply-To: mrsmegwilliam6@gmail.com
+From:   Ms Mary Mcniff <dhlcouriercompanymiami@gmail.com>
+Date:   Mon, 14 Sep 2020 05:09:09 -0700
+Message-ID: <CAG_OktrbFOQQ9JNRJHH6sLhRkvmUho5k=k68OgBVQzWiBP2-bw@mail.gmail.com>
+Subject: Your Respond ASAP
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, Sep 11, 2020 at 12:17 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> rcar-gen3-cpg driver is also used on Renesas RZ/G2 SoC's, update the same
-> to reflect the description for CLK_RCAR_GEN3_CPG config.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Chris Paterson <Chris.Paterson2@renesas.com>
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in clk-renesas for v5.10, as:
-
-    clk: renesas: rcar-gen3: Update description for RZ/G2
-
-    The rcar-gen3-cpg driver is also used on Renesas RZ/G2 SoC's, update the
-    description for the CLK_RCAR_GEN3_CPG config symbol to reflect this.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+From Chief Compliance Officer, Citigroup Inc CITIBANK
+388 Greenwich St, New York, 10013, United States United.
+PAYMENT CODE: FRB010
+Swift: PTBLBXXX
+==============================================
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Attention: Beneficiary,
+
+We write to inform you that Series of meetings have been held over the
+past 2 weeks with the Secretary General of United Nations,U.S
+Department of State and Dubai Union Organization this ended last
+week.And parcel is under our custody right now, It will deliver to you
+within 24 hours once you clear the charges which will cost you
+according to the BANKERS COURIER SERVICES that wish to deliver your
+ATM CARD card to
+you immediately.
+
+However, it is the pleasure of this office to inform you that your ATM
+CARD number; is 29741733 and it has been approved and upgraded in your
+favor .you call me for the pin code numbers. The ATM CARD value is us
+$10.5 Million only.
+
+Kindly contact the paying bank for the claim of your ATM visa card
+payment fund $10,500,000.00 through the below contact information;
+
+Contact Person:Mr Williams S Young
+Director of Financial Controller
+Bank Name: CITIBANK
+Bank address; 388 Greenwich St,
+New York City,10013, United States
+Email:mrsmegwilliam6@gmail.com
+
+Reconfirm the following information?
+
+(1)Your Full Name=============
+(2)Mobile Phone Number======
+(3)Current Home Address==== ====
+(4)Fax Number================
+(5)Passport/Drivers license ======
+
+Endeavor to keep me posted once you contacted the officer in charge
+through the above mentioned information.
+
+Your timely response is highly appreciated.To this end, you are
+required to forward your payment information as follows to enable us
+load your fund into the card with your information and deliver it to
+your door step. as the BANKERS COURIER SERVICES are in charge of the
+delivery services to your destination.
+
+Yours truly;
+
+Ms Mary Mcniff.
+Chief Compliance Officer, Citigroup Inc
+FEDERAL RESERVE SYSTEM.
+Email: marymcniff7@gmail.com.
