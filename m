@@ -2,121 +2,83 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F3826B7A6
-	for <lists+linux-clk@lfdr.de>; Wed, 16 Sep 2020 02:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1061E26B6CE
+	for <lists+linux-clk@lfdr.de>; Wed, 16 Sep 2020 02:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726757AbgIPA0t (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 15 Sep 2020 20:26:49 -0400
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:47999 "EHLO
-        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726796AbgIOOH7 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 15 Sep 2020 10:07:59 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 4C37BD38;
-        Tue, 15 Sep 2020 10:07:34 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 15 Sep 2020 10:07:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=ZsYljQnhriZe/ZshzGVfV61EVwP
-        l4CB2g24GkCXak0U=; b=Tr+gG+gfXYprfU0dwaniDlSxsm1cdZ/d+T1fGfamgbr
-        T3yrepvmZ2eqIVUZy2JYODBsflm/VbQs6xLHKusvgHBuKhjeQ4zCkIRD1v0tnlc1
-        Gul0bKe3SWvL5qr+qx9IwuPEM4yPJY5LUQYRp6KIqhLC5y1mluDt5Cg/q15tyDCs
-        WyXHn/YipkgZC0Qlt5OgfEsMg+hfoRs66KyXYn7KjA+2iiYLyyt5sFKdevfrsd/7
-        SYqUuF1Fdyh5ETomY3xt9DTrK5UNM/Bb1HP9Kp8yDfB7veUAiGN1XCTtjZqv9cEi
-        HL1o53ZJ+HZQDIek/2xlM+CmVS8ub+22Lb26jvWnpzw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=ZsYljQ
-        nhriZe/ZshzGVfV61EVwPl4CB2g24GkCXak0U=; b=hCbhARLGkK+x1BhaM8W9/X
-        g7kJu6dWkhLQAYgQ0N1q5Uf9wf03iE71V6snvEwnXbtj9ZI72749qGJigx+7TUKe
-        H9R8cwJ4B/TyrRLz1gA7eGl2R0kos1wqYrFKZ+GhKXfOqy0XsWXTwallDtl+P6Qn
-        yp/pHmegSJkXJnvZG3+xvSGB6x8Xq/i+zRyEaz51GveUPCYfeCWos6EhopsKvxgI
-        iXoer3I7aQ0d6PvFAJRmJVkCbvroY/1TXBBNzaqQklaMH3/2oRGZs9Pq0uU/qC5o
-        Jz24UozgLGkeuYp1NAQfxa/RsxZ2Rry95ceZRH6CNErC+zGAXGVXsgkhOtuwWMdg
-        ==
-X-ME-Sender: <xms:pMpgX1nNBhDOiBG6z-bNsxcpkp2C5VwxJYUEzURkT2QOeXz-LPJzVw>
-    <xme:pMpgXw2BZbPk5cRuCCSNj-SgoCy0yDlwvrLNRKsxRNkULJcunn0DAVGYW2l9NTdX3
-    pqUNTIKerfo6ZJoeY0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrtddtgdegvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpeevveefffduveeitdegtefhhfetueffteefffdvheevvdehteethedvleffgfej
-    vdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeeltddrkeelrdeikedrje
-    einecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgr
-    gihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:pMpgX7r4hcm-vqyGS__s1mmB5IJ7zW521wksGaESAjABZp7rNvBJ7g>
-    <xmx:pMpgX1lv3QernoOfTZNQvfcKzyEffLP1u4Q8eD3Dd4ca3VjiBRdUtA>
-    <xmx:pMpgXz0joltblLN4c9i1pzUvD1eUOF3Hyk_qGyq05Az0q89kJ4XW1g>
-    <xmx:pcpgX-Qqbl32c4r3Y75LFDJiTQh2saUkLYAKF56WW2-RlWQ-r3y7RA>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 80F82328005D;
-        Tue, 15 Sep 2020 10:07:32 -0400 (EDT)
-Date:   Tue, 15 Sep 2020 16:07:30 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Necip Fazil Yildiran <fazilyildiran@gmail.com>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        paul@pgazz.com, jeho@cs.utexas.edu
-Subject: Re: [PATCH] clk: bcm: fix kconfig dependency warning for
- CLK_BCM2711_DVP
-Message-ID: <20200915140730.37n4q6y5si3evdlx@gilmour.lan>
-References: <20200915103749.38126-1-fazilyildiran@gmail.com>
+        id S1727056AbgIPAL6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 15 Sep 2020 20:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33676 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726928AbgIOO0a (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 15 Sep 2020 10:26:30 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA54CC0611C0;
+        Tue, 15 Sep 2020 07:25:16 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id y17so3296434lfa.8;
+        Tue, 15 Sep 2020 07:25:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x2ena36266wspP5Tvq0z3LkWyHPiOIA4EJedY59v6W8=;
+        b=WAKxs8a8KXr9nguLjtBBb9lvjVcObesbz4bgZPIN6UV8LTMWJLG2hsQOUWcUjKJJOe
+         +ry+c/ulbt7UJhJOjZoNu2gCG3dw3XAlntnnCt3u6grclGsrY5bRvnhv40TBxclnXH6D
+         ffpP1PCig83WCd8UFDFgEAbHGq2we4MMKShlv40XIYwkARD+GpATv3PkTzlOZumFeM6Q
+         /Hjil6otG/utDTP/xseXKQ1eTNuvo5Zob1mOvG+71Wu0zozlgUw7r+sqsDi8efJK25W/
+         7JyKPdDhYQLeQ8puWbNqSHukcc7NAGsKbvwxmm164hbsgSbDlBQUKhYhM0Gm5Fm1s3xr
+         8BxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x2ena36266wspP5Tvq0z3LkWyHPiOIA4EJedY59v6W8=;
+        b=GiEqSvY0OWl4C+yvKO9BNly3pMOb7cdkafr0t9hYO3NvbaDrAyq+XqUgbPs8NawB9O
+         adHs67kPN2EWzfrDIF8OSObNU16Tg/qVNqgohVs8j6/xQ3t0niuWI1cOjQCXmTDqgVN/
+         4cOMv1IiEGGKQ+7gafoF66c3wSemwqmsxAK/ZE+ZNCzQ+lrUmgG+RNY8FVCwNJ3V+LU7
+         OaJ9qQ/b5XheiB/Jc4t5BuHWKS6Puw9A7GgjTP1IhBLl5ml/VgcwMfCKSpepb/zs6zrI
+         voszd/O1PYIp3L59LaNFObk+tQ/BZkuHtceZvX2QZFB/oTk1JDxs/S2rkYsCny5jPf4X
+         p4XQ==
+X-Gm-Message-State: AOAM532zB8LbZRBGbXraHA/EmV0/UG6djGqdL6OLr+RwMPOqM7FNL6tU
+        zgPnrHPVrwb6DEaT2LSHtSvC7/QxoUTy8fiq+II=
+X-Google-Smtp-Source: ABdhPJziiDvVv5TwjyT08hovVM0PLo9ow1i+dQdNZ+baakeZcwhIiYbCH+Y2gkFMgubUzmc05g4szm56woQ7TLPYUIo=
+X-Received: by 2002:a19:dcb:: with SMTP id 194mr6279863lfn.25.1600179913805;
+ Tue, 15 Sep 2020 07:25:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="pc36h5bdn5kiukmz"
-Content-Disposition: inline
-In-Reply-To: <20200915103749.38126-1-fazilyildiran@gmail.com>
+References: <20200915140141.42876-1-yuehaibing@huawei.com>
+In-Reply-To: <20200915140141.42876-1-yuehaibing@huawei.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Tue, 15 Sep 2020 11:25:02 -0300
+Message-ID: <CAOMZO5BOBqCoLgM=yHBKFdM3oXR91mDdRnJY1gOyGmQWiMq+Dg@mail.gmail.com>
+Subject: Re: [PATCH -next] clk: imx35: Make mx35_clocks_init static
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Hi YueHaibing,
 
---pc36h5bdn5kiukmz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Sep 15, 2020 at 11:02 AM YueHaibing <yuehaibing@huawei.com> wrote:
+>
+> Fix sparse warning:
+>
+> drivers/clk/imx/clk-imx35.c:251:12: warning:
+>  symbol 'mx35_clocks_init' was not declared. Should it be static?
 
-Hi,
+This is not the correct fix. mx35_clocks_init() was only used by imx35
+board files.
 
-On Tue, Sep 15, 2020 at 01:37:50PM +0300, Necip Fazil Yildiran wrote:
-> When CLK_BCM2711_DVP is enabled and RESET_CONTROLLER is disabled, it
-> results in the following Kbuild warning:
->=20
-> WARNING: unmet direct dependencies detected for RESET_SIMPLE
->   Depends on [n]: RESET_CONTROLLER [=3Dn]
->   Selected by [y]:
->   - CLK_BCM2711_DVP [=3Dy] && (ARCH_BCM2835 [=3Dn] || COMPILE_TEST [=3Dy]=
-) && COMMON_CLK [=3Dy]
->=20
-> The reason is that CLK_BCM2711_DVP selects RESET_SIMPLE without depending
-> on or selecting RESET_CONTROLLER while RESET_SIMPLE is subordinate to
-> RESET_CONTROLLER.
->=20
-> Honor the kconfig menu hierarchy to remove kconfig dependency warnings.
->=20
-> Fixes: 1bc95972715a ("clk: bcm: Add BCM2711 DVP driver")
-> Signed-off-by: Necip Fazil Yildiran <fazilyildiran@gmail.com>
+Now that imx35 board files are gone, this function can be removed.
 
-A similar patch has already been sent (and merged):
-https://lore.kernel.org/linux-clk/20200903082636.3844629-1-maxime@cerno.tec=
-h/
-
-Maxime
-
---pc36h5bdn5kiukmz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX2DKogAKCRDj7w1vZxhR
-xfrJAQCOeDmhakarLsbt+yINpOgCOufsbVA1745++DLY9IndcgD+PojGRoq3d+ha
-hJxZ7ac1zRI6a8uXokgmwIctEEWw1wM=
-=HnS8
------END PGP SIGNATURE-----
-
---pc36h5bdn5kiukmz--
+I will send a patch removing it.
