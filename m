@@ -2,78 +2,130 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F2D26B6B8
-	for <lists+linux-clk@lfdr.de>; Wed, 16 Sep 2020 02:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 383B826B8A5
+	for <lists+linux-clk@lfdr.de>; Wed, 16 Sep 2020 02:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726808AbgIOO1h (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 15 Sep 2020 10:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726902AbgIOO1c (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 15 Sep 2020 10:27:32 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E46C061788;
-        Tue, 15 Sep 2020 07:25:58 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id a22so2976974ljp.13;
-        Tue, 15 Sep 2020 07:25:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=14anG50Aa3WOKCmtLyBz8A0CHugiplkST/cPboXKO20=;
-        b=ppO4PXPU2DK3J8X3ntQTbX2pO+BRWkBQ0sY9sUuSo4UknnFzoc9Iuhf1QvxmWFwPIm
-         bL+uU6qEaM9TPGpnSL/GY1u1NkQMzmwtkmQJTOvEtACvkrs8uxexm8YKUZj8iXoD3yd+
-         PRFVeoNiiSEPP7B0csc2yYmrRohSGUkoVs8bB1zry3HhZvY8ic6znknNGZHlx1tOmL1j
-         SqVLqC/v2LtmCS8CNACBlS8hzGe3ltJC3tS+wpna73nJh6a9gZb4s2EZT60luYemPsGB
-         agXR7zVBY8LlNbBFuCKcXqa+3uX6OrgimFzg0tflxFbMWitX65PGetcLf0+H0rGwYmJe
-         r6qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=14anG50Aa3WOKCmtLyBz8A0CHugiplkST/cPboXKO20=;
-        b=Sva+x8u+ceKV7lizqg/82oK7InkwlvOSb5wapu00GBnE1HPS6VbRMaYKX7Ou3/3Gu5
-         G3UTsAE2H1oyUDFyBNEX59NjdPOyQC/ZoYdzLFvnFmokxJOwg9WrQ0g5/kmTaiMA++O5
-         pjI2Y9TiVV8uEC29Pcz/Mf39o7VMJGynyybFQ4/DoXPUn7unzAVkcWUZ17vP5mnb3Dlv
-         Lbjpk/CEW8XWkeLVYdon+IVDVs6rWeUYKqAjSWIfY6ekVN3Hcu5tjt9kzaSgseM6qRmE
-         m5Pa/fYsv2BSzbLXQDRISkV4o0GO2cYvEzlWn1LPzYqgZ5bMpXJj/ik9tKWM7e6OzRwJ
-         uQqA==
-X-Gm-Message-State: AOAM530K3ndp/4wiyTYglq/IDInotBLC6rRlNnwpvP1WKvzfDiKKbhB0
-        OpR8E8Mwc2lt7G9ucOcssbFQYKE6+mkwb5rUHHM=
-X-Google-Smtp-Source: ABdhPJwxKUdCS3KhkVYxorMdgJHuiGff3gEzF7vwbDWHM02+OPgDqkCFaTmRmbSE3ebg8qhoKb6tYsx0c/GnhW16k0Y=
-X-Received: by 2002:a2e:95c5:: with SMTP id y5mr7660302ljh.44.1600179956643;
- Tue, 15 Sep 2020 07:25:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200915140159.23184-1-yuehaibing@huawei.com>
-In-Reply-To: <20200915140159.23184-1-yuehaibing@huawei.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Tue, 15 Sep 2020 11:25:45 -0300
-Message-ID: <CAOMZO5AjsKZi7Z9KpY-53rj=DxAQkuWiRcUnVhTVP7dtRFSYew@mail.gmail.com>
-Subject: Re: [PATCH 3/3] clk: imx31: Make mx31_clocks_init static
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
+        id S1726362AbgIPAsT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 15 Sep 2020 20:48:19 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:45727 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726212AbgIOMgj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 15 Sep 2020 08:36:39 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200915123632euoutp0113a1ee30c226343c88867268ef9d64e0~09TjT6SVV1869718697euoutp01h
+        for <linux-clk@vger.kernel.org>; Tue, 15 Sep 2020 12:36:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200915123632euoutp0113a1ee30c226343c88867268ef9d64e0~09TjT6SVV1869718697euoutp01h
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1600173392;
+        bh=YXeEBDH26ndbGoz26DqDlDd0+j2jY+Bxwgwcd8YvyrQ=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=RSa7DGjpp2IKp2YEyG/dDsAeWMOHLiYST8uB4hPn78+6n68SbVW7n4fEKCu/560yk
+         9/CrEFp87Pd45kbHQ4pmhWNxArosFNwobUP24kJ2jiy2BdoDz2v/X+Iu0+wPMNorsN
+         JZYDmWDSf6Wg6dVC/1oCEnisHyzu814aONORfFA8=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200915123631eucas1p2628ee2a6f9f51c63b10e646897b8f241~09TjF-94T1311313113eucas1p2c;
+        Tue, 15 Sep 2020 12:36:31 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 61.EB.06456.F45B06F5; Tue, 15
+        Sep 2020 13:36:31 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200915123631eucas1p1d9652c48aa3f22e0e7d88c361c2280ab~09Titxi_c0941809418eucas1p1E;
+        Tue, 15 Sep 2020 12:36:31 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200915123631eusmtrp23b9b4cc3c316b6775438c55536f44ea4~09TitK84H1730817308eusmtrp2Z;
+        Tue, 15 Sep 2020 12:36:31 +0000 (GMT)
+X-AuditID: cbfec7f2-809ff70000001938-dd-5f60b54f6611
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id B1.46.06017.F45B06F5; Tue, 15
+        Sep 2020 13:36:31 +0100 (BST)
+Received: from [106.210.123.115] (unknown [106.210.123.115]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200915123630eusmtip2625a35ffc6edc295535fe7a989e88a60~09TiP0F7L3261832618eusmtip2O;
+        Tue, 15 Sep 2020 12:36:30 +0000 (GMT)
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
         linux-clk <linux-clk@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>
+Subject: [GIT PULL] clk/samsung fixes for v5.9
+Message-ID: <858cd4a0-af7c-2004-cce6-0763557bf45f@samsung.com>
+Date:   Tue, 15 Sep 2020 14:36:29 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        Thunderbird/68.12.0
+MIME-Version: 1.0
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAKsWRmVeSWpSXmKPExsWy7djP87r+WxPiDX7c1rbYOGM9q8X1L89Z
+        LT723GO1mHF+H5PFxVOuFv+ubWRxYPN4f6OV3WPTqk42j74tqxg9Pm+SC2CJ4rJJSc3JLEst
+        0rdL4MpYs1u3YA17Rdf+fvYGxslsXYycHBICJhJtF5eydzFycQgJrGCUeHDtBQuE84VRYuea
+        84wQzmdGid6J+1hhWrZ/OgvVspxRYvLmw0wQzkdGiaPtx9lBqtgEDCV6j/YxgtgiAkESd/rX
+        soEUMQscYpRYsus2M0hCWEBPounGW7AiXgE7iRUvL4JdxSKgKnHi2TUwW1QgTuLYqUcsEDWC
+        EidnPgGzmQXEJW49mc8EYctLbH87hxlkgYRAO7vEs3kvGCFudZE4fvg7E4QtLPHq+BZ2CFtG
+        4v/O+UwQDc2MEj27b7NDOBMYJe4fXwDVbS1x59wvoDM4gFZoSqzfpQ9iSgg4SrRMDocw+SRu
+        vBWEuIFPYtK26cwQYV6JjjYhiBkqEr9XTYe6QEqi+8l/FgjbQ+L15lbmCYyKs5B8NgvJZ7OQ
+        fDYL4YQFjCyrGMVTS4tz01OLDfNSy/WKE3OLS/PS9ZLzczcxAtPN6X/HP+1g/Hop6RCjAAej
+        Eg9vQnl8vBBrYllxZS4w9DmYlUR4nc6ejhPiTUmsrEotyo8vKs1JLT7EKM3BoiTOa7zoZayQ
+        QHpiSWp2ampBahFMlomDU6qB0Ubx9iZGj43R9kFVTDvexYskvJiwpXT9/IUV2++fvPL8vYub
+        TEzEpWo1u/4vuX8a19oLmXR+nzM7s/y/qpXzx0cCIonXODe+9pyeKrDXqjOC09hB/EGvGufD
+        h6vm/QzyzXWZOmXVWVM1bkUGwccZt6M2iAq4aZkkPHBZHrRn93WJmV9POLSvVmIpzkg01GIu
+        Kk4EAMTiQx8zAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJIsWRmVeSWpSXmKPExsVy+t/xe7r+WxPiDU5PE7PYOGM9q8X1L89Z
+        LT723GO1mHF+H5PFxVOuFv+ubWRxYPN4f6OV3WPTqk42j74tqxg9Pm+SC2CJ0rMpyi8tSVXI
+        yC8usVWKNrQw0jO0tNAzMrHUMzQ2j7UyMlXSt7NJSc3JLEst0rdL0MtYs1u3YA17Rdf+fvYG
+        xslsXYycHBICJhLbP51l72Lk4hASWMoo8aPhGZDDAZSQkpjfogRRIyzx51oXG0TNe0aJexc6
+        WEESbAKGEr1H+xhBbBGBIIlfe+6xghQxCxxilLjSso0ZJCEsoCfRdOMtWBGvgJ3EipcXwTaz
+        CKhKnHh2DcwWFYiTONPzgg2iRlDi5MwnLCA2s4C6xJ95l5ghbHGJW0/mM0HY8hLb385hnsAo
+        MAtJyywkLbOQtMxC0rKAkWUVo0hqaXFuem6xkV5xYm5xaV66XnJ+7iZGYLRsO/Zzyw7GrnfB
+        hxgFOBiVeHgTyuPjhVgTy4orc4Ge4mBWEuF1Ons6Tog3JbGyKrUoP76oNCe1+BCjKdBDE5ml
+        RJPzgZGcVxJvaGpobmFpaG5sbmxmoSTO2yFwMEZIID2xJDU7NbUgtQimj4mDU6qBcfXkNbFW
+        mp8X7klkuCc+M3mflq/Fi6zQiYW8bDsuLFZR6zJcr7yv+ocld/yXiVGn11z8v6za8/6Z+XYi
+        G5bn1DG+q71XfUtLft2exZW5TNq+H17XLv+3cJuLNNuXezvKMszFo3jjIvacSvgz88edKJk1
+        q8UNeZgkUkVyrB9Pmz/hdZjCnv55ekosxRmJhlrMRcWJAH1uW7ysAgAA
+X-CMS-MailID: 20200915123631eucas1p1d9652c48aa3f22e0e7d88c361c2280ab
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200915123631eucas1p1d9652c48aa3f22e0e7d88c361c2280ab
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200915123631eucas1p1d9652c48aa3f22e0e7d88c361c2280ab
+References: <CGME20200915123631eucas1p1d9652c48aa3f22e0e7d88c361c2280ab@eucas1p1.samsung.com>
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 11:02 AM YueHaibing <yuehaibing@huawei.com> wrote:
->
-> Fix sparse warning:
->
-> drivers/clk/imx/clk-imx31.c:135:12: warning:
->  symbol 'mx31_clocks_init' was not declared. Should it be static?
+Hi Stephen, Mike,
 
-Same as the other comment for mx35, This function should be removed.
+The following changes since commit 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5:
 
-I will send a patch removing it.
+  Linux 5.9-rc1 (2020-08-16 13:04:57 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/snawrocki/clk.git tags/v5.9-clk-samsung-fixes
+
+for you to fetch changes up to 0212a0483b0a36cc94cfab882b3edbb41fcfe1cd:
+
+  clk: samsung: Keep top BPLL mux on Exynos542x enabled (2020-09-15 13:56:51 +0200)
+
+----------------------------------------------------------------
+clk/samsung fixes:
+
+ - fix for a regression in v5.9-rc1 on Odroid XU3/XU4, i.e. booting
+   failure due to the DRAM controller root clock being disabled
+
+----------------------------------------------------------------
+Marek Szyprowski (1):
+      clk: samsung: Keep top BPLL mux on Exynos542x enabled
+
+ drivers/clk/samsung/clk-exynos5420.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+-- 
+Regards,
+Sylwester
