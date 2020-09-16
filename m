@@ -2,80 +2,62 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1050A26B98E
-	for <lists+linux-clk@lfdr.de>; Wed, 16 Sep 2020 03:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B0326BAEC
+	for <lists+linux-clk@lfdr.de>; Wed, 16 Sep 2020 05:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726061AbgIPB6K (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 15 Sep 2020 21:58:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48292 "EHLO mail.kernel.org"
+        id S1726550AbgIPDta (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 15 Sep 2020 23:49:30 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:40266 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726028AbgIPB6J (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 15 Sep 2020 21:58:09 -0400
-Received: from mail.kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 295D12087D;
-        Wed, 16 Sep 2020 01:58:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600221489;
-        bh=Rg81xqpyLSJsqQIYCQLlfYC0tHPrrN2Eh9YQQF6u6+A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Dk709+8guA/2Iht317EAtpnLe3Tm1x8fFtoTrh8Ffkru3PDSfeAwbgsu0aP8SQxqG
-         CFm4+qEcTk+0D6YJiDH7ga0isTrRAy8kRBrSbamiw8IdJBD+uH/qUHB5++VQFEDBh1
-         EmGUv58uhY4mgCRoHX5RaCyABVEnNiXn9V2ytbQk=
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] clk fixes for v5.9-rc5
-Date:   Tue, 15 Sep 2020 18:58:08 -0700
-Message-Id: <20200916015808.3287134-1-sboyd@kernel.org>
-X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726353AbgIPDsz (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 15 Sep 2020 23:48:55 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 038031A0BB2;
+        Wed, 16 Sep 2020 05:48:54 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 92AB41A0C11;
+        Wed, 16 Sep 2020 05:48:50 +0200 (CEST)
+Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id D6ADF409AD;
+        Wed, 16 Sep 2020 05:11:20 +0200 (CEST)
+From:   Qiang Zhao <qiang.zhao@nxp.com>
+To:     shawnguo@kernel.org, robh+dt@kernel.org, mturquette@baylibre.com
+Cc:     andy.tang@nxp.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        Zhao Qiang <qiang.zhao@nxp.com>
+Subject: [PATCH 1/2] clk: qoriq: modify MAX_PLL_DIV to 32
+Date:   Wed, 16 Sep 2020 11:03:10 +0800
+Message-Id: <20200916030311.17280-1-qiang.zhao@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The following changes since commit 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5:
+From: Zhao Qiang <qiang.zhao@nxp.com>
 
-  Linux 5.9-rc1 (2020-08-16 13:04:57 -0700)
+On LS2088A, Watchdog need clk divided by 32,
+so modify MAX_PLL_DIV to 32
 
-are available in the Git repository at:
+Signed-off-by: Zhao Qiang <qiang.zhao@nxp.com>
+---
+ drivers/clk/clk-qoriq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
-
-for you to fetch changes up to d2249bf25c565b6e310453962fef63f8d38677a6:
-
-  clk: qcom: lpass: Correct goto target in lpass_core_sc7180_probe() (2020-09-10 13:42:35 -0700)
-
-----------------------------------------------------------------
-A handful of clk driver fixes. Mostly they're for error paths or
-improper memory allocations sizes. Nothing as exciting as a wildfire.
-
-----------------------------------------------------------------
-Christophe JAILLET (1):
-      clk: davinci: Use the correct size when allocating memory
-
-Jing Xiangfeng (1):
-      clk: qcom: lpass: Correct goto target in lpass_core_sc7180_probe()
-
-Maxime Ripard (1):
-      clk: bcm: dvp: Select the reset framework
-
-Nathan Chancellor (1):
-      clk: rockchip: Fix initialization of mux_pll_src_4plls_p
-
-Sumera Priyadarsini (1):
-      clk: versatile: Add of_node_put() before return statement
-
- drivers/clk/bcm/Kconfig               | 1 +
- drivers/clk/davinci/pll.c             | 2 +-
- drivers/clk/qcom/lpasscorecc-sc7180.c | 7 ++++---
- drivers/clk/rockchip/clk-rk3228.c     | 2 +-
- drivers/clk/versatile/clk-impd1.c     | 4 +++-
- 5 files changed, 10 insertions(+), 6 deletions(-)
-
+diff --git a/drivers/clk/clk-qoriq.c b/drivers/clk/clk-qoriq.c
+index 5942e98..46101c6 100644
+--- a/drivers/clk/clk-qoriq.c
++++ b/drivers/clk/clk-qoriq.c
+@@ -31,7 +31,7 @@
+ #define CGA_PLL4	4	/* only on clockgen-1.0, which lacks CGB */
+ #define CGB_PLL1	4
+ #define CGB_PLL2	5
+-#define MAX_PLL_DIV	16
++#define MAX_PLL_DIV	32
+ 
+ struct clockgen_pll_div {
+ 	struct clk *clk;
 -- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+2.7.4
+
