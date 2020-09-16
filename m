@@ -2,27 +2,27 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4869826CB99
-	for <lists+linux-clk@lfdr.de>; Wed, 16 Sep 2020 22:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B331426CBDE
+	for <lists+linux-clk@lfdr.de>; Wed, 16 Sep 2020 22:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727209AbgIPUaS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 16 Sep 2020 16:30:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33730 "EHLO mail.kernel.org"
+        id S1728335AbgIPUgL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 16 Sep 2020 16:36:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60428 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726840AbgIPRM6 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 16 Sep 2020 13:12:58 -0400
+        id S1726847AbgIPRKa (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 16 Sep 2020 13:10:30 -0400
 Received: from kozik-lap.mshome.net (unknown [194.230.155.191])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D510222596;
-        Wed, 16 Sep 2020 16:17:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9595F227C3;
+        Wed, 16 Sep 2020 16:17:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600273084;
-        bh=rDklET3URHRDBZEvF6OLfVutgrEE+P7xngbDw3ovJPk=;
+        s=default; t=1600273071;
+        bh=LN9CdnpYig01xRkC8IS2l0nFAprnIaPmxff2deSsbdM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c2qzRyizp/VEct8ssgms7hbJXVwjVImM85Q7xFsmmmORaJJoUfwUgoBGEFqi0by2T
-         G5IZj2iDxNypoGC+dc+C7hgmzL2KBMi2fi4175i+oyaRfPHYbrPLSGxuuLOR8gaieR
-         ArI/ZIcqrnWAWOtZotaHfvbhZ+dh7bfZdpN9lSwo=
+        b=arZO1DSzyRhOIJzlgIdKnCqEdPq/+2oXH63V3zCRjt2uefr7rK8wu2FICE1m/evd4
+         PlqSMpOP/sMmTTnpdckGd2RTU2CZs6H8hQ2e0xrGUnH+VxSn5fabupSMTnPVjpODK1
+         n6acg/19rRfvPoRNDQbAwgcoHWP6hRI2xjgG86tg=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -34,47 +34,51 @@ To:     Michael Turquette <mturquette@baylibre.com>,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH 5/6] clk: si5341: drop unused 'err' variable
-Date:   Wed, 16 Sep 2020 18:17:39 +0200
-Message-Id: <20200916161740.14173-5-krzk@kernel.org>
+Subject: [PATCH 2/6] clk: fixed: add missing kerneldoc
+Date:   Wed, 16 Sep 2020 18:17:36 +0200
+Message-Id: <20200916161740.14173-2-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200916161740.14173-1-krzk@kernel.org>
 References: <20200916161740.14173-1-krzk@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 Sender: linux-clk-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-'err' is assigned but never read:
+Add missing kerneldoc to fix compile warnings like:
 
-  /drivers/clk/clk-si5341.c: In function ‘si5341_output_get_parent’:
-  drivers/clk/clk-si5341.c:886:6: warning: variable ‘err’ set but not used [-Wunused-but-set-variable]
+  drivers/clk/clk-fixed-factor.c:211: warning: Function parameter or member 'node' not described in 'of_fixed_factor_clk_setup'
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/clk/clk-si5341.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/clk/clk-fixed-factor.c | 1 +
+ drivers/clk/clk-fixed-rate.c   | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/drivers/clk/clk-si5341.c b/drivers/clk/clk-si5341.c
-index 3d7acab9d280..e0446e66fa64 100644
---- a/drivers/clk/clk-si5341.c
-+++ b/drivers/clk/clk-si5341.c
-@@ -883,11 +883,9 @@ static int si5341_output_set_parent(struct clk_hw *hw, u8 index)
- static u8 si5341_output_get_parent(struct clk_hw *hw)
+diff --git a/drivers/clk/clk-fixed-factor.c b/drivers/clk/clk-fixed-factor.c
+index 8b343e59dc61..910e6e74ae90 100644
+--- a/drivers/clk/clk-fixed-factor.c
++++ b/drivers/clk/clk-fixed-factor.c
+@@ -206,6 +206,7 @@ static struct clk_hw *_of_fixed_factor_clk_setup(struct device_node *node)
+ 
+ /**
+  * of_fixed_factor_clk_setup() - Setup function for simple fixed factor clock
++ * @node:	device node for the clock
+  */
+ void __init of_fixed_factor_clk_setup(struct device_node *node)
  {
- 	struct clk_si5341_output *output = to_clk_si5341_output(hw);
--	int err;
- 	u32 val;
+diff --git a/drivers/clk/clk-fixed-rate.c b/drivers/clk/clk-fixed-rate.c
+index 77499a27c8fb..45501637705c 100644
+--- a/drivers/clk/clk-fixed-rate.c
++++ b/drivers/clk/clk-fixed-rate.c
+@@ -168,6 +168,7 @@ static struct clk_hw *_of_fixed_clk_setup(struct device_node *node)
  
--	err = regmap_read(output->data->regmap,
--			SI5341_OUT_MUX_SEL(output), &val);
-+	regmap_read(output->data->regmap, SI5341_OUT_MUX_SEL(output), &val);
- 
- 	return val & 0x7;
- }
+ /**
+  * of_fixed_clk_setup() - Setup function for simple fixed rate clock
++ * @node:	device node for the clock
+  */
+ void __init of_fixed_clk_setup(struct device_node *node)
+ {
 -- 
 2.17.1
 
