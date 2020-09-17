@@ -2,114 +2,157 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C09E726CCCF
-	for <lists+linux-clk@lfdr.de>; Wed, 16 Sep 2020 22:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50CB026D8D2
+	for <lists+linux-clk@lfdr.de>; Thu, 17 Sep 2020 12:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727957AbgIPUtq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 16 Sep 2020 16:49:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34378 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726827AbgIPUtg (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 16 Sep 2020 16:49:36 -0400
-Received: from [10.0.0.30] (cpe-70-114-140-30.austin.res.rr.com [70.114.140.30])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 14CE7206BE;
-        Wed, 16 Sep 2020 20:49:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600289375;
-        bh=KParYTLLH5J9IJ3HJLgOl1sALXhET5Wd3H/RAGT5AU0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=dLv0aQIxzGfC2LtPyL//mPfq8mMrRNj0eEoUQvACnl5m/e15zRI30znyaN4vhQhtN
-         /r55Y7zcFYlfVCWAs75lr1RBzMVLcx/rGENCNU57h+D6zj6t/neFtleenO3MT8lWyh
-         PMgvaiRCN1kHV2RPdppoc8WwACDeVOfLPkW/+1K8=
-Subject: Re: [PATCH] clk: socfpga: stratix10: fix the divider for the
- emac_ptp_free_clk
-To:     sboyd@kernel.org
-Cc:     mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20200831202657.8224-1-dinguyen@kernel.org>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-Autocrypt: addr=dinguyen@kernel.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <b3618437-74d6-4c9a-3630-da07fea1c9fc@kernel.org>
-Date:   Wed, 16 Sep 2020 15:49:33 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726621AbgIQKW7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 17 Sep 2020 06:22:59 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:45787 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726595AbgIQKWz (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 17 Sep 2020 06:22:55 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200917101430euoutp02e87c2bc219a4fd1fe261ec734d874a29~1iqHrHaIm1523715237euoutp02S
+        for <linux-clk@vger.kernel.org>; Thu, 17 Sep 2020 10:14:30 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200917101430euoutp02e87c2bc219a4fd1fe261ec734d874a29~1iqHrHaIm1523715237euoutp02S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1600337670;
+        bh=8z0Q/zllco9taX8DhGAyt2E9g1QJtkv+J7GHxLWbFa4=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=gjeggAwdEFrG3xjxo0/ItWd+aDLmg151TLik934UCQynZMz0rEWcmIslJxegXqfM0
+         KX+0Qu3i7kx+N+ulBjlix5ntX9lCqjWPcm7kTwTOXQaU9LF8WK5rUKR/gwyt/hqccT
+         MN1xge6VD14a4jTDNaWb3CFy8E4hre1kp27W1oBM=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20200917101430eucas1p115b36c9a44d1aaf4e42c1d47b53844ce~1iqHdDa-i0221902219eucas1p1Z;
+        Thu, 17 Sep 2020 10:14:30 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id DD.D4.06456.607336F5; Thu, 17
+        Sep 2020 11:14:30 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20200917101429eucas1p20d6a56a9856cd0e1296496f650ae33cf~1iqHEsMVW0645206452eucas1p2p;
+        Thu, 17 Sep 2020 10:14:29 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200917101429eusmtrp1db6072aed6347d0942fe07718290909f~1iqHEBF3a0383903839eusmtrp1P;
+        Thu, 17 Sep 2020 10:14:29 +0000 (GMT)
+X-AuditID: cbfec7f2-809ff70000001938-76-5f6337060210
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 6F.BE.06017.507336F5; Thu, 17
+        Sep 2020 11:14:29 +0100 (BST)
+Received: from [106.210.123.115] (unknown [106.210.123.115]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200917101429eusmtip1c5764a956b50d084bfef5e98d28f2bbd~1iqGgMZfB1685116851eusmtip1A;
+        Thu, 17 Sep 2020 10:14:29 +0000 (GMT)
+Subject: Re: [PATCH v2 2/2] clk: samsung: exynos5420: Avoid __clk_lookup()
+ calls when enabling clocks
+To:     linux-clk@vger.kernel.org
+Cc:     tomasz.figa@gmail.com, cw00.choi@samsung.com, sboyd@kernel.org,
+        mturquette@baylibre.com, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, b.zolnierkie@samsung.com,
+        m.szyprowski@samsung.com
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+Message-ID: <534c401e-611e-4cb4-644d-8ed9d00ce36d@samsung.com>
+Date:   Thu, 17 Sep 2020 12:14:28 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <20200831202657.8224-1-dinguyen@kernel.org>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200811151251.31613-2-s.nawrocki@samsung.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Sender: linux-clk-owner@vger.kernel.org
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0gUURjt7szszkpr11XxQ3vQplGZmig4lthmBZtI+EcII3XVQcV1lR21
+        7JcSSj6zhLTFR4WRLZkPNi0jhSXXx6amlZpl4qMyS81HhFaa4yj575zznXPu98GlCXkt5UjH
+        aZNZnVatUYityAbzUreb2Ccq/EjtnA1TV1JDMQOLXyhmLu8jxbxuKhUzJT3NIqb6xbCE6e08
+        zaz015GMoekPUkpVs4OZEtVT/bBEVW/IFqsKjAakWqjfHUyFWvlFs5q4VFbn4R9hFfv5wbgo
+        aRJfMhqbReko0zoHSWnA3jCT3yLKQVa0HFcheJUxTAhkEUHlWyOZg+g1soBgfO9mYGWmc8Nz
+        H8Fse6VEIHMIbloWKT5gi2PAWBzHB+zwLhgyL4l5D4H7EZiuG8T8QIw9Ib+1APF+GfaHrF/7
+        eZnELmAun0c8tsdhYO4cI3kswzbQcWtiHUuxH7Rmv1v3ENgBhiYqRALeA43TpYSwqFkCPVOB
+        fD3gU5D/0EOQbWGqzSgR8E6wFOWR/GqAryDIe/ZeIpBCBCNtt5HgOgYfupfFfBGBD0JN00bR
+        CegrmqaEfmsYnLYRVrCGGw3FhCDL4GqWXHA7w29DsUjAjpA7sUoWIoV+y2H6Lcfotxyj///u
+        bUQakAObwiXEsJynlr3ozqkTuBRtjHtUYkI9WvtHlpW2+SfoZ1+kCWEaKbbLau0jw+WUOpVL
+        SzAhoAmFnSygyxIml0Wr0y6zusRwXYqG5UzIiSYVDjKvu18vyHGMOpmNZ9kkVrc5FdFSx3Sk
+        7GBPtvgXmw6fbXzJXvu06tb7PeKMzai2J3lpuLJlAIVoQs8f1YxW5XqlNlVRymDnN3GotDoj
+        qGzsh7f+QNJcisk/XRof8vxxoMIy1VW+PF4tD+IyXc45b2u7027cYe9TVl/1TWlQ/3XSuyjv
+        7Tte4esx6Vvi6mpfmE8vBzwaUZBcrNrzEKHj1P8AetigBEMDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrKIsWRmVeSWpSXmKPExsVy+t/xu7qs5snxBjPWWFlsnLGe1eL6l+es
+        Fh977rFaXN41h81ixvl9TBZrj9xlt7h4ytXi37WNLBardv1hdOD0eH+jld1j56y77B6bVnWy
+        efRtWcXo8XmTXABrlJ5NUX5pSapCRn5xia1StKGFkZ6hpYWekYmlnqGxeayVkamSvp1NSmpO
+        Zllqkb5dgl7Gs5WPmQpeCFRs2bKPqYGxla+LkZNDQsBE4t+7U8xdjFwcQgJLGSU2n97M1sXI
+        AZSQkpjfogRRIyzx51oXG0TNe0aJ1zcvsILUCAukS2yZnglSIyIgK3Hr2E+wGmaBa4wSy7dt
+        g2o4yChxd8FfVpAqNgFDid6jfYwgzbwCdhJt39VAwiwCqhLH5n1iBLFFBeIkzvS8YAOxeQUE
+        JU7OfMICYnMK2Egc7bwJVsMsoC7xZ94lZghbXOLWk/lMELa8xPa3c5gnMArNQtI+C0nLLCQt
+        s5C0LGBkWcUoklpanJueW2ykV5yYW1yal66XnJ+7iREYhduO/dyyg7HrXfAhRgEORiUe3g2i
+        SfFCrIllxZW5hxglOJiVRHidzp6OE+JNSaysSi3Kjy8qzUktPsRoCvTcRGYp0eR8YILIK4k3
+        NDU0t7A0NDc2NzazUBLn7RA4GCMkkJ5YkpqdmlqQWgTTx8TBKdXAuMckb7FXX1VU7IaHk499
+        93adueBOT9jXd1dXTLM868Kxhsv384fQUwtm1LXmTbY9IfrO0UZGSiAjZkFru6nnqhR7d1PZ
+        subAk6lvLnn0aTalL2i/229fzOn/JYmRef++b98Srj3ldT/+ST27zVV58R275vSfIhvexL3c
+        fI37htKtoqCIh8fjlViKMxINtZiLihMB+feusNgCAAA=
+X-CMS-MailID: 20200917101429eucas1p20d6a56a9856cd0e1296496f650ae33cf
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200811151304eucas1p2c113097f89229b51bb55329c38990830
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200811151304eucas1p2c113097f89229b51bb55329c38990830
+References: <20200811151251.31613-1-s.nawrocki@samsung.com>
+        <CGME20200811151304eucas1p2c113097f89229b51bb55329c38990830@eucas1p2.samsung.com>
+        <20200811151251.31613-2-s.nawrocki@samsung.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Ping?
-
-On 8/31/20 3:26 PM, Dinh Nguyen wrote:
-> The fixed divider the emac_ptp_free_clk should be 2, not 4.
+On 11.08.2020 17:12, Sylwester Nawrocki wrote:
+> This patch adds a clk ID to the mout_sw_aclk_g3d clk definition so related
+> clk pointer gets cached in the driver's private data and can be used
+> later instead of a __clk_lookup() call.
 > 
-> Fixes: 07afb8db7340 ("clk: socfpga: stratix10: add clock driver for
-> Stratix10 platform")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+> With that we have all clocks used in the clk_prepare_enable() calls in the
+> clk provider init callback cached in clk_data.hws[] and we can reference
+> the clk pointers directly rather than using __clk_lookup() with global names.
+> 
+> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
 > ---
->  drivers/clk/socfpga/clk-s10.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/clk/socfpga/clk-s10.c b/drivers/clk/socfpga/clk-s10.c
-> index c1dfc9b34e4e..661a8e9bfb9b 100644
-> --- a/drivers/clk/socfpga/clk-s10.c
-> +++ b/drivers/clk/socfpga/clk-s10.c
-> @@ -209,7 +209,7 @@ static const struct stratix10_perip_cnt_clock s10_main_perip_cnt_clks[] = {
->  	{ STRATIX10_EMAC_B_FREE_CLK, "emacb_free_clk", NULL, emacb_free_mux, ARRAY_SIZE(emacb_free_mux),
->  	  0, 0, 2, 0xB0, 1},
->  	{ STRATIX10_EMAC_PTP_FREE_CLK, "emac_ptp_free_clk", NULL, emac_ptp_free_mux,
-> -	  ARRAY_SIZE(emac_ptp_free_mux), 0, 0, 4, 0xB0, 2},
-> +	  ARRAY_SIZE(emac_ptp_free_mux), 0, 0, 2, 0xB0, 2},
->  	{ STRATIX10_GPIO_DB_FREE_CLK, "gpio_db_free_clk", NULL, gpio_db_free_mux,
->  	  ARRAY_SIZE(gpio_db_free_mux), 0, 0, 0, 0xB0, 3},
->  	{ STRATIX10_SDMMC_FREE_CLK, "sdmmc_free_clk", NULL, sdmmc_free_mux,
-> 
+> Changes for v2:
+>  - added missing part of the patch lost during rebase of the previous version
+
+Actually that conflict resolution was incorrect and I squashed 
+below patch as a correction.
+
+-----------------8<--------------------
+From 1594bdb8fd1ab85e994d638256d214adff4e9d40 Mon Sep 17 00:00:00 2001
+From: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Date: Thu, 17 Sep 2020 11:42:14 +0200
+Subject: [PATCH] clk: samsung: exynos5420: Fix assignment of hws
+
+Fix incorrect rebase conflict resolution.
+
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+---
+ drivers/clk/samsung/clk-exynos5420.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clk/samsung/clk-exynos5420.c b/drivers/clk/samsung/clk-exynos5420.c
+index ba4e0a4..3ccd4ea 100644
+--- a/drivers/clk/samsung/clk-exynos5420.c
++++ b/drivers/clk/samsung/clk-exynos5420.c
+@@ -1574,6 +1574,7 @@ static void __init exynos5x_clk_init(struct device_node *np,
+ 	exynos5x_soc = soc;
+ 
+ 	ctx = samsung_clk_init(np, reg_base, CLK_NR_CLKS);
++	hws = ctx->clk_data.hws;
+ 
+ 	samsung_clk_of_register_fixed_ext(ctx, exynos5x_fixed_rate_ext_clks,
+ 			ARRAY_SIZE(exynos5x_fixed_rate_ext_clks),
+@@ -1651,7 +1652,6 @@ static void __init exynos5x_clk_init(struct device_node *np,
+ 				     exynos5x_subcmus);
+ 	}
+ 
+-	hws = ctx->clk_data.hws;
+ 	/*
+ 	 * Keep top part of G3D clock path enabled permanently to ensure
+ 	 * that the internal busses get their clock regardless of the
+-- 
+2.7.4
+-----------------8<--------------------
