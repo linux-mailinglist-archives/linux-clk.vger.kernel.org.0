@@ -2,75 +2,92 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3343A26F395
-	for <lists+linux-clk@lfdr.de>; Fri, 18 Sep 2020 05:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8710826F971
+	for <lists+linux-clk@lfdr.de>; Fri, 18 Sep 2020 11:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727196AbgIRDHi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 17 Sep 2020 23:07:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50458 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727154AbgIRCDr (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:03:47 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 109D72344C;
-        Fri, 18 Sep 2020 02:03:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600394626;
-        bh=9B85iJUhVDSboa+F3wPLvnpFiPXBa38iJOK81UXFYgQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k8rcC15xkga+N+/8z0uttaYQSnBcbLs5Picv1AkZfW3XCO5v3FtAA5Vls7sU02xkS
-         GW+Jxs46MXYBbss48tJhnhQ2eYdNzAFsbbDGNFsenOdscDHitLHG2cSK/dRJsbGUGD
-         BuhHg9sKlTpsJltO9gj/fqPox4Gv5V2a+vWSkrNU=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dinh Nguyen <dinguyen@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 127/330] clk: stratix10: use do_div() for 64-bit calculation
-Date:   Thu, 17 Sep 2020 21:57:47 -0400
-Message-Id: <20200918020110.2063155-127-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200918020110.2063155-1-sashal@kernel.org>
-References: <20200918020110.2063155-1-sashal@kernel.org>
+        id S1726118AbgIRJj4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 18 Sep 2020 05:39:56 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:13300 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726109AbgIRJj4 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 18 Sep 2020 05:39:56 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 08A9883A1F34AC7756F9;
+        Fri, 18 Sep 2020 17:39:55 +0800 (CST)
+Received: from huawei.com (10.90.53.225) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Fri, 18 Sep 2020
+ 17:39:50 +0800
+From:   Qilong Zhang <zhangqilong3@huawei.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>
+CC:     <pdeschrijver@nvidia.com>, <pgaikwad@nvidia.com>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <linux-clk@vger.kernel.org>
+Subject: [PATCH -next] clk: tegra: clk-dfll: indicate correct error reason in tegra_dfll_register
+Date:   Fri, 18 Sep 2020 17:46:42 +0800
+Message-ID: <20200918094642.108070-1-zhangqilong3@huawei.com>
+X-Mailer: git-send-email 2.26.0.106.g9fadedd
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.225]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Dinh Nguyen <dinguyen@kernel.org>
+From: Zhang Qilong <zhangqilong3@huawei.com>
 
-[ Upstream commit cc26ed7be46c5f5fa45f3df8161ed7ca3c4d318c ]
+Calling devm_ioremap means getting devices resource have been
+successful. When remap operation failed, we should return '-ENOMEM'
+instead of '-ENODEV' to differentiate between getting resource and
+mapping memory for reminding callers. Moreover, it is not consistent
+with devm_kzalloc operation.
 
-do_div() macro to perform u64 division and guards against overflow if
-the result is too large for the unsigned long return type.
-
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-Link: https://lkml.kernel.org/r/20200114160726.19771-1-dinguyen@kernel.org
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
 ---
- drivers/clk/socfpga/clk-pll-s10.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/clk/tegra/clk-dfll.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clk/socfpga/clk-pll-s10.c b/drivers/clk/socfpga/clk-pll-s10.c
-index 4705eb544f01b..8d7b1d0c46643 100644
---- a/drivers/clk/socfpga/clk-pll-s10.c
-+++ b/drivers/clk/socfpga/clk-pll-s10.c
-@@ -39,7 +39,9 @@ static unsigned long clk_pll_recalc_rate(struct clk_hw *hwclk,
- 	/* read VCO1 reg for numerator and denominator */
- 	reg = readl(socfpgaclk->hw.reg);
- 	refdiv = (reg & SOCFPGA_PLL_REFDIV_MASK) >> SOCFPGA_PLL_REFDIV_SHIFT;
--	vco_freq = (unsigned long long)parent_rate / refdiv;
-+
-+	vco_freq = parent_rate;
-+	do_div(vco_freq, refdiv);
+diff --git a/drivers/clk/tegra/clk-dfll.c b/drivers/clk/tegra/clk-dfll.c
+index cfbaa90c7adb..6637b73be9f1 100644
+--- a/drivers/clk/tegra/clk-dfll.c
++++ b/drivers/clk/tegra/clk-dfll.c
+@@ -1993,7 +1993,7 @@ int tegra_dfll_register(struct platform_device *pdev,
+ 	td->base = devm_ioremap(td->dev, mem->start, resource_size(mem));
+ 	if (!td->base) {
+ 		dev_err(td->dev, "couldn't ioremap DFLL control registers\n");
+-		return -ENODEV;
++		return -ENOMEM;
+ 	}
  
- 	/* Read mdiv and fdiv from the fdbck register */
- 	reg = readl(socfpgaclk->hw.reg + 0x4);
+ 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+@@ -2005,7 +2005,7 @@ int tegra_dfll_register(struct platform_device *pdev,
+ 	td->i2c_base = devm_ioremap(td->dev, mem->start, resource_size(mem));
+ 	if (!td->i2c_base) {
+ 		dev_err(td->dev, "couldn't ioremap i2c_base resource\n");
+-		return -ENODEV;
++		return -ENOMEM;
+ 	}
+ 
+ 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 2);
+@@ -2019,7 +2019,7 @@ int tegra_dfll_register(struct platform_device *pdev,
+ 	if (!td->i2c_controller_base) {
+ 		dev_err(td->dev,
+ 			"couldn't ioremap i2c_controller_base resource\n");
+-		return -ENODEV;
++		return -ENOMEM;
+ 	}
+ 
+ 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 3);
+@@ -2032,7 +2032,7 @@ int tegra_dfll_register(struct platform_device *pdev,
+ 	if (!td->lut_base) {
+ 		dev_err(td->dev,
+ 			"couldn't ioremap lut_base resource\n");
+-		return -ENODEV;
++		return -ENOMEM;
+ 	}
+ 
+ 	ret = dfll_init_clks(td);
 -- 
-2.25.1
+2.17.1
 
