@@ -2,95 +2,161 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB8A27366A
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Sep 2020 01:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B018A273C27
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Sep 2020 09:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728827AbgIUXMV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 21 Sep 2020 19:12:21 -0400
-Received: from mail.rusoil.net ([188.128.114.25]:58282 "EHLO mail.rusoil.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728741AbgIUXMV (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 21 Sep 2020 19:12:21 -0400
-X-Greylist: delayed 421 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Sep 2020 19:12:11 EDT
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.rusoil.net (Postfix) with ESMTP id 9EF1840C07;
-        Tue, 22 Sep 2020 04:08:14 +0500 (YEKT)
-Received: from mail.rusoil.net ([127.0.0.1])
-        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id SVpSP78GR2pZ; Tue, 22 Sep 2020 04:08:14 +0500 (YEKT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.rusoil.net (Postfix) with ESMTP id 3D89E40D78;
-        Tue, 22 Sep 2020 04:08:13 +0500 (YEKT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rusoil.net 3D89E40D78
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rusoil.net;
-        s=maildkim; t=1600729693;
-        bh=6R3BgBYiA7fkqGiiNDuwPskBnpH9JXyNAW/l3ZEA+wY=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=Vnjy6nBVnSTcINEW6kER3ugTxQ4KBYKS36YiGFr6YA3B4INc+KiGVhbak8MS9Qjs4
-         d1hbAool1vpcT5tqzIahdEndE3qiAPgBOX6jsmCcvHSMZhz19GFDJ1aQySn107enqY
-         lwxWqbZRY2a+BQ8VxoJh3Rpje7MgA+/fhr9SupmU=
-X-Virus-Scanned: amavisd-new at mail.rusoil.net
-Received: from mail.rusoil.net ([127.0.0.1])
-        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id KLkCjnFIcNrK; Tue, 22 Sep 2020 04:08:12 +0500 (YEKT)
-Received: from mail.rusoil.net (mail.rusoil.net [172.16.7.34])
-        by mail.rusoil.net (Postfix) with ESMTP id 6147940C07;
-        Tue, 22 Sep 2020 04:08:10 +0500 (YEKT)
-Date:   Tue, 22 Sep 2020 04:08:09 +0500 (YEKT)
-From:   Blue Oak Mortgage and Loans <em@rusoil.net>
-Reply-To: Blue Oak Mortgage and Loans <info@bluelmtg.net>
-Message-ID: <2020026523.907101.1600729689731.JavaMail.zimbra@rusoil.net>
-Subject: Wir finanzieren Projekte und Unternehmen
+        id S1730065AbgIVHjn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 22 Sep 2020 03:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729954AbgIVHjn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 22 Sep 2020 03:39:43 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010F0C061755;
+        Tue, 22 Sep 2020 00:39:43 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id r7so21368484ejs.11;
+        Tue, 22 Sep 2020 00:39:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=iNB02nMhO/yY3S3WrdWHbEn36nrUty39nxVbBmybPc8=;
+        b=GH/1YIVb/RwRait0Z50dxTQFexs4w1fwnq6NzYFAXIJ87jgj9wJpzXNEvSd4LOKovJ
+         D4lu5Gign6siYcwqZvIfCT+f1ZChkeLrfFmLovZxEFk0/lQpV/bY6R/WZyMx/Fp25Idr
+         tzOXPPkGd/F8ywl+fHxlng9HSvmTv616eU8xqEkZmgCuEH9enGCbHimkXMEZPTz9TAJE
+         498A0cqRqxh1lZBWlRnmGtFE1ARCqMXqiWG7VFMLD/cNwzzXhltbDA21o1MU+gdom4o9
+         JXXnK8XUOtoZWnkprlHQUWYXcwGgIPH3PkZj1Vd3FYvCdcFVlvlHw1kUeH1QMVTMEa0H
+         l6EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=iNB02nMhO/yY3S3WrdWHbEn36nrUty39nxVbBmybPc8=;
+        b=LcFMM6UkliMWHifP4ga1BxSv5f19zsf181qtSNq3SiDWcDWHo3RWkcX2psWODR6Z7u
+         wlhEkf8wscw/jTKkytJ7g/V4XYiEPiurQV89e+y4Ewbw9UCwTRvALKrEMhA0Ms1kT0vj
+         DH/zPq62n/vMVoeRLW5OawuPnS1HqidGv8l46vVOkWEmzQ8rbjg5DRXwYg4fwdcgv/zw
+         A/trt5cVc1dMJKb1KTQgJUB4pHLlofqJRACEHjVCDhaFnHy3AF9fG/AqhCbPk85Vz/CD
+         dXn89rF7Sj7lPEYrHBOph/LbuT4VMCn3AnF347xPEYE2dan59UXriOBwhHmr6ZD4E/Uf
+         +k0g==
+X-Gm-Message-State: AOAM531xoCTkiESVcpV2CgASbLdLee5OU5jgYiZrFZ6LHTozqY+lKduD
+        +omoWb/bMj5/0w97C76d0hDGeuN5ZtA=
+X-Google-Smtp-Source: ABdhPJxNAQfwpUmcZcdaE8iolL+TMRo6yDI0pQHQslKRtbvdxivNTMXjNUpdr2kUR80nTK/gIVhMwg==
+X-Received: by 2002:a17:907:432b:: with SMTP id ob19mr3564676ejb.400.1600760381612;
+        Tue, 22 Sep 2020 00:39:41 -0700 (PDT)
+Received: from localhost (pd9e51aa4.dip0.t-ipconnect.de. [217.229.26.164])
+        by smtp.gmail.com with ESMTPSA id p12sm10784978ejb.42.2020.09.22.00.39.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2020 00:39:40 -0700 (PDT)
+Date:   Tue, 22 Sep 2020 09:39:39 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [GIT PULL] clk: tegra: Changes for v5.10-rc1
+Message-ID: <20200922073939.GA3994831@ulmo>
+References: <20200921121628.3954746-1-thierry.reding@gmail.com>
+ <20200921121842.GQ3950626@ulmo>
+ <160072205823.4188128.2973025738875931354@swboyd.mtv.corp.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [192.210.183.69]
-X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF79 (Win)/8.8.12_GA_3794)
-Thread-Index: IhGK+mMcCqn+S/Et9t28g8ApaUDaLg==
-Thread-Topic: Wir finanzieren Projekte und Unternehmen
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="YiEDa0DAkWCtVeE4"
+Content-Disposition: inline
+In-Reply-To: <160072205823.4188128.2973025738875931354@swboyd.mtv.corp.google.com>
+User-Agent: Mutt/1.14.6 (2020-07-11)
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 
+--YiEDa0DAkWCtVeE4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Dies ist ein Newsletter von Blue Oak Mortgage and Loans. Bitte melden Sie s=
-ich ab, wenn Sie keine E-Mail mehr von uns erhalten m=C3=B6chten.
+On Mon, Sep 21, 2020 at 02:00:58PM -0700, Stephen Boyd wrote:
+> Quoting Thierry Reding (2020-09-21 05:18:42)
+> > On Mon, Sep 21, 2020 at 02:16:28PM +0200, Thierry Reding wrote:
+> > > Hi Mike, Stephen,
+> > >=20
+> > > The following changes since commit 9123e3a74ec7b934a4a099e98af6a61c2f=
+80bbf5:
+> > >=20
+> > >   Linux 5.9-rc1 (2020-08-16 13:04:57 -0700)
+> > >=20
+> > > are available in the Git repository at:
+> > >=20
+> > >   git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/=
+for-5.10-clk
+> > >=20
+> > > for you to fetch changes up to 2f878d04218c8b26f6d0ab26955ca6b03848a1=
+ad:
+> > >=20
+> > >   clk: tegra: Fix missing prototype for tegra210_clk_register_emc() (=
+2020-09-21 14:09:10 +0200)
+> > >=20
+> > > Thanks,
+> > > Thierry
+> > >=20
+> > > ----------------------------------------------------------------
+> > > clk: tegra: Changes for v5.10-rc1
+> > >=20
+> > > This is a set of small fixes for the Tegra clock driver.
+> > >=20
+> > > ----------------------------------------------------------------
+> > > Thierry Reding (3):
+> > >       clk: tegra: Capitalization fixes
+> > >       clk: tegra: Always program PLL_E when enabled
+> > >       clk: tegra: Fix missing prototype for tegra210_clk_register_emc=
+()
+> > >=20
+> > >  drivers/clk/tegra/clk-pll.c          | 7 ++-----
+> > >  drivers/clk/tegra/clk-tegra210-emc.c | 2 ++
+> > >  2 files changed, 4 insertions(+), 5 deletions(-)
+> >=20
+> > I just realized after sending this out that this is all really tiny and
+> > minor fixes, so perhaps it makes sense to even apply this for v5.9?
+> >=20
+>=20
+> Is something critical? If so then it's OK to merge for v5.9, otherwise
+> I'd rather let it cook in -next for a while. Being small doesn't really
+> make a difference here. What matters is that it fixes some critical
+> problem, preferably introduced this merge window but if it's annoying
+> enough that rule can be broken.
 
+This is actually a subset of a set of patches that I had sitting on a
+for-5.9/clk branch but for which I forgot to send a pull request. This
+was pointed out to me on IRC yesterday. So this should already be soft-
+boiled.
 
-Eine kurze Einf=C3=BChrung.
+The first patch is just a tiny bit of cleanup, but the second patch
+fixes a real problem with SATA that can happen depending on how the
+bootloader has set up the PLL_E. The third patch fixes a build
+warning, which admittedly isn't critical, but certainly nice to have.
+Given that the latter two are the only known issues with the clock
+driver I think it would be nice to have them in v5.9, especially since
+that's going to be an LTS and we'll end up back-porting at least two of
+these patches to it anyway.
 
-Wir sind ein f=C3=BChrendes Finanzierungsunternehmen in Europa. Wir finanzi=
-eren Startups / etablierte Unternehmen, finanzieren Gro=C3=9Fprojekte (Bau,=
- Landwirtschaft, Immobilien und dergleichen) zu einem niedrigen Zinssatz vo=
-n 2% pro Jahr.
+Thierry
 
+--YiEDa0DAkWCtVeE4
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Darlehensverfahren
+-----BEGIN PGP SIGNATURE-----
 
-1. Sie m=C3=BCssen das Online-Bewerbungsformular ausf=C3=BCllen und eine or=
-dnungsgem=C3=A4=C3=9F unterschriebene Kopie an uns zur=C3=BCcksenden.
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9pqjkACgkQ3SOs138+
+s6GmJQ//fnWhzFOGe3z9wN686sMGqACLkOBLlADl3u8Im1ELojq8IB/swUUJdYen
+IMJZG6ZXRNPm0HWh7GWkzYYhsivbwvJpFtZUqgcGIvLb++iH8cMNR0RObN+iQ8Qs
+5RBs8hU8oRXXOsQXsJ7HzUziQNDRhCy2Kd47VHzWnbEbVaNSDgBdmFgd3livmh1v
+U2Igk8kWGWBZEnGArG2tRnYRWiHSfeu9UknTgjI4lPDi5diGDA1TI8QOOD8ZPo7V
+OeyP/5Fbz4RX7MutIPCx5l/hZZyIiDbsqcYz0q+atDGHdW7QtL5X5p9+xfpKX1IG
+sO9KuxPF7hW/sBK3OtnU/kW7S7rdpIlfNmwQ4CNvOAzoAZd5hi2Uicaj9G6KzICk
+S3KEE3EzgtXgA7JiF90zC5pnWgv010vJqB31tlTEUmJCFMlTWEX6j7DHC4MQ/7C0
+4H8cMo/6RRanD0Yp1hJuf3fqDnS+QH8lbsy6rLNHT9aGZIGHjvCaiPNFol1ek3ry
+udhM4JUhRQH8qAQWwuGovWnUV6z2uYZv/JLeIVMqH42cikLNkrIqj9OcOj3qYkhv
+P8MCBkmUb/jmkG7ZSLHwolgWTa7vQZkyTdZMcVxwWYkN+7SuOm8X7MHPjZlBSfBE
+fIIlsTGLn8InGIaeoupXPOf1ISQ07KgDYc1ZLNLuardKTikiZEw=
+=B6Rr
+-----END PGP SIGNATURE-----
 
-2. M=C3=B6glicherweise m=C3=BCssen Sie Finanzdokumente als unterst=C3=BCtze=
-nden Nachweis f=C3=BCr die F=C3=A4higkeit zur R=C3=BCckzahlung von Krediten=
- vorlegen.
-
-3. Wenn Ihr Darlehen genehmigt wurde, m=C3=BCssen Sie eine Versicherungsgar=
-antie f=C3=BCr die Darlehenssicherheit vorlegen. Wir empfehlen eine Versich=
-erungsgesellschaft. Sie sind allein verantwortlich f=C3=BCr die Zahlung und=
- den Erwerb der Anleihe, die als Sicherheit dienen. Die H=C3=B6he der Anlei=
-he h=C3=A4ngt von Ihrem Darlehensbetrag ab. Die Versicherungsgesellschaft w=
-ird Sie durch den Prozess f=C3=BChren. (F=C3=BCr Gro=C3=9Fprojekte)
-
-4. Ihr =C3=9Cberweisungsprozess wird eingeleitet, sobald die Versicherungsa=
-nleihe =C3=BCberpr=C3=BCft wurde. Ihr Darlehensr=C3=BCckzahlungsplan wird i=
-m NC-Darlehensvertragsformular aufgef=C3=BChrt.
-
-Wenn die Bedingungen Sie beruhigen, k=C3=B6nnen Sie uns =C3=BCber die Whats=
-App-Nummer / E-Mail kontaktieren und auch unsere Website besuchen, um weite=
-re Informationen zu erhalten. Wir freuen uns darauf, von Ihnen zu h=C3=B6re=
-n.
-
-WhatsApp: + 90-552-365-3483
-E-Mail: info@bluelmtg.net
+--YiEDa0DAkWCtVeE4--
