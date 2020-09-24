@@ -2,59 +2,75 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC3F2764D1
-	for <lists+linux-clk@lfdr.de>; Thu, 24 Sep 2020 01:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1140276555
+	for <lists+linux-clk@lfdr.de>; Thu, 24 Sep 2020 02:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726650AbgIWX7h (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 23 Sep 2020 19:59:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41562 "EHLO mail.kernel.org"
+        id S1726650AbgIXAom (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 23 Sep 2020 20:44:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58856 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726562AbgIWX7g (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 23 Sep 2020 19:59:36 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726466AbgIXAom (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 23 Sep 2020 20:44:42 -0400
+Received: from mail.kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5B1AA214F1;
-        Wed, 23 Sep 2020 23:59:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C6F142145D;
+        Thu, 24 Sep 2020 00:44:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600905576;
-        bh=P8bLkiASxkBQzjWWGDsNDLDOdgBjKhEVIc1PbwjgVEE=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=0aoH2b1z3M097Qabfw4OAP5v8kXH1OCN6tiHDyUO8KG602rao8m/VYDT+f3nnPICS
-         mucYfXUpBLszFnCNs/HjLf0aHcWzyrpGxV9nyK2p5aBhbtmNelFhdwx42iIWjM2qnP
-         C1+V/5A502sL2ubB5XND/IuMQ2YoNu1wdc45h5rU=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200922191641.2305144-1-sboyd@kernel.org>
-References: <20200922191641.2305144-1-sboyd@kernel.org>
-Subject: Re: [PATCH] clk: tegra: Drop !provider check in tegra210_clk_emc_set_rate()
+        s=default; t=1600908282;
+        bh=P/1iP0KEMhsJEBrZInw8qZDV8sgAY0xrFzWjGIvxAr0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ICy4UCTNRxzJpP3wZhQf83xcbhC8pF3VfYU86xRmkE2He/pRnWhp3qlICALcHnAZ2
+         wEFnQ4QnaG1x4xL3Aqo0mLivGyn16mZi9RWL8GDmmur5Xn5RStK21Hf+H2q2JNSHX+
+         XpOBHCDb/TgFNYJNyn7orZe4VhQ381sY3wxYk3ys=
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Joseph Lo <josephl@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
-Date:   Wed, 23 Sep 2020 16:59:35 -0700
-Message-ID: <160090557506.310579.8483856369527418212@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH] clk: rockchip: Initialize hw to error to avoid undefined behavior
+Date:   Wed, 23 Sep 2020 17:44:41 -0700
+Message-Id: <20200924004441.1476015-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.28.0.681.g6f77f65b4e-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Stephen Boyd (2020-09-22 12:16:41)
-> The provider variable is already dereferenced earlier in this function.
-> Drop the check for NULL as it is impossible.
->=20
-> Found with smatch
->=20
-> drivers/clk/tegra/clk-tegra210-emc.c:131 tegra210_clk_emc_set_rate() warn=
-: variable dereferenced before check 'provider' (see line 124)
->=20
-> Cc: Joseph Lo <josephl@nvidia.com>
-> Cc: Thierry Reding <treding@nvidia.com>
-> Fixes: 0ac65fc946d3 ("clk: tegra: Implement Tegra210 EMC clock")
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-> ---
+We can get down to this return value from ERR_CAST() without
+initializing hw. Set it to -ENOMEM so that we always return something
+sane.
 
-Applied to clk-next
+Fixes the following smatch warning:
+
+drivers/clk/rockchip/clk-half-divider.c:228 rockchip_clk_register_halfdiv() error: uninitialized symbol 'hw'.
+drivers/clk/rockchip/clk-half-divider.c:228 rockchip_clk_register_halfdiv() warn: passing zero to 'ERR_CAST'
+
+Cc: Elaine Zhang <zhangqing@rock-chips.com>
+Cc: Heiko Stuebner <heiko@sntech.de>
+Fixes: 956060a52795 ("clk: rockchip: add support for half divider")
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+---
+ drivers/clk/rockchip/clk-half-divider.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clk/rockchip/clk-half-divider.c b/drivers/clk/rockchip/clk-half-divider.c
+index e97fd3dfbae7..ccd5c270c213 100644
+--- a/drivers/clk/rockchip/clk-half-divider.c
++++ b/drivers/clk/rockchip/clk-half-divider.c
+@@ -166,7 +166,7 @@ struct clk *rockchip_clk_register_halfdiv(const char *name,
+ 					  unsigned long flags,
+ 					  spinlock_t *lock)
+ {
+-	struct clk_hw *hw;
++	struct clk_hw *hw = ERR_PTR(-ENOMEM);
+ 	struct clk_mux *mux = NULL;
+ 	struct clk_gate *gate = NULL;
+ 	struct clk_divider *div = NULL;
+
+base-commit: ca52a47af60f791b08a540a8e14d8f5751ee63e9
+-- 
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+
