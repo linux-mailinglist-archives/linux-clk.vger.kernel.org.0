@@ -2,145 +2,112 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78929276A77
-	for <lists+linux-clk@lfdr.de>; Thu, 24 Sep 2020 09:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C31276B8B
+	for <lists+linux-clk@lfdr.de>; Thu, 24 Sep 2020 10:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727093AbgIXHRL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 24 Sep 2020 03:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47466 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727030AbgIXHRL (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 24 Sep 2020 03:17:11 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC57C0613CE
-        for <linux-clk@vger.kernel.org>; Thu, 24 Sep 2020 00:17:11 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id m6so2616540wrn.0
-        for <linux-clk@vger.kernel.org>; Thu, 24 Sep 2020 00:17:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=OPLVPEdChKxnt9NK8AkHtNdtFbeM/QHeLq/U0ibWymE=;
-        b=GPFJuH/nuzsiQAUHAbzIjsViq2Fu29iOr4sq0HF8yVV2Mrvliikc4DWHn/+PM4jCQ+
-         9yxVI/wvabtOgrWIHlMp1XQpIRDXEkQ2xkqvmA1yjbHhpx85obr5hs1uz7+Q8xIYXZ78
-         +RhR7k6kOmSVnLf/wV9ZZS81ERj4BKH/O4eKz1GHtVFyWWJGgpLDOaF8C7+5A1TxvJk/
-         rrdnlAeriiMo3NnoVK0nocIBc05SaYj8GDvQyRz/A5bOWD8zdG0c8t93d4Nu+U+BceRt
-         bs3Alv7NN1ntZBSVcL20MIjlSIGuDk/dftnQjseiiUrUcjSCGO+Xm9+dfpA3+cE272Vl
-         SAgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=OPLVPEdChKxnt9NK8AkHtNdtFbeM/QHeLq/U0ibWymE=;
-        b=MdTSFJbD4LZ1oQpbZopxhk+vOfJzB/TiuaeiBxlFpxGg5WStVpqZ6hEB0aicWIlxMU
-         pVuVp0kB1HF454YEimrPHNQE4a00nntoOJzGtwJyQbboLFLKVzXfBMsXshpuJyOKB5de
-         sobkg+gPy4M4SCKGTJQmcF/XFAmHkqMBHbUX50xO2bXkgwE4++Fc7jDnkeDBH1HaMtIQ
-         hAzWNDV4WOCkppc4f1ewJ8bT3Cmeed27R+NR0GsNKrPJ3qpNZhrEKmXoXubC2EDSn4UB
-         27eMVa91TyjKe1clENY2dwXc9M1/opXHTOwjQFCbsB0o9DJ9xFpkPRHOLinYsjURVIKH
-         OjOw==
-X-Gm-Message-State: AOAM532Awc3V2zUvI0qzJH6lwZI99VtIvhWoDE0DSvZnPeEedTWK+FnA
-        7o35EL5UwROjTr45WvvCH7w=
-X-Google-Smtp-Source: ABdhPJwmX8eNc5ctJLapaEr+a3xzh+Z7tZ+7U88tlnWi3DqJTRbOH8pYFryYtJae596F03Nl+bVKRg==
-X-Received: by 2002:adf:ee01:: with SMTP id y1mr3626194wrn.2.1600931829949;
-        Thu, 24 Sep 2020 00:17:09 -0700 (PDT)
-Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id t15sm2400406wrp.20.2020.09.24.00.17.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2020 00:17:08 -0700 (PDT)
-Date:   Thu, 24 Sep 2020 09:17:06 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Qilong Zhang <zhangqilong3@huawei.com>, mturquette@baylibre.com,
-        pdeschrijver@nvidia.com, pgaikwad@nvidia.com, jonathanh@nvidia.com,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH -next] clk: tegra: clk-dfll: indicate correct error
- reason in tegra_dfll_register
-Message-ID: <20200924071706.GB2480300@ulmo>
-References: <20200918094642.108070-1-zhangqilong3@huawei.com>
- <160080466654.310579.9823605565645488149@swboyd.mtv.corp.google.com>
- <20200923081654.GC1110498@ulmo>
- <160090396030.310579.9633354457476529250@swboyd.mtv.corp.google.com>
+        id S1727151AbgIXIPV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 24 Sep 2020 04:15:21 -0400
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:48884 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727187AbgIXIPV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 24 Sep 2020 04:15:21 -0400
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08O6jNIc021669;
+        Thu, 24 Sep 2020 02:50:36 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com with ESMTP id 33r5u9b1sg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 24 Sep 2020 02:50:36 -0400
+Received: from SCSQMBX11.ad.analog.com (scsqmbx11.ad.analog.com [10.77.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 08O6oYwZ063828
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Thu, 24 Sep 2020 02:50:34 -0400
+Received: from SCSQCASHYB6.ad.analog.com (10.77.17.132) by
+ SCSQMBX11.ad.analog.com (10.77.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Wed, 23 Sep 2020 23:50:32 -0700
+Received: from SCSQMBX11.ad.analog.com (10.77.17.10) by
+ SCSQCASHYB6.ad.analog.com (10.77.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Wed, 23 Sep 2020 23:50:01 -0700
+Received: from zeus.spd.analog.com (10.66.68.11) by SCSQMBX11.ad.analog.com
+ (10.77.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
+ Transport; Wed, 23 Sep 2020 23:50:32 -0700
+Received: from saturn.ad.analog.com ([10.48.65.107])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 08O6oSlR022302;
+        Thu, 24 Sep 2020 02:50:29 -0400
+From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
+To:     <linux-clk@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>, <mdf@kernel.org>,
+        <ardeleanalex@gmail.com>, <mircea.caprioru@analog.com>,
+        <alexandru.ardelean@analog.com>
+Subject: [PATCH v3 0/6] clk: axi-clk-gen: misc updates to the driver
+Date:   Thu, 24 Sep 2020 09:50:06 +0300
+Message-ID: <20200924065012.59605-1-alexandru.ardelean@analog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="QKdGvSO+nmPlgiQ/"
-Content-Disposition: inline
-In-Reply-To: <160090396030.310579.9633354457476529250@swboyd.mtv.corp.google.com>
-User-Agent: Mutt/1.14.7 (2020-08-29)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRoutedOnPrem: True
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-24_02:2020-09-24,2020-09-24 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
+ impostorscore=0 mlxlogscore=992 suspectscore=0 clxscore=1011
+ malwarescore=0 mlxscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009240052
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+These patches synchronize the driver with the current state in the
+Analog Devices Linux tree:
+  https://github.com/analogdevicesinc/linux/
 
---QKdGvSO+nmPlgiQ/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+They have been in the tree for about 2-3, so they did receive some
+testing.
 
-On Wed, Sep 23, 2020 at 04:32:40PM -0700, Stephen Boyd wrote:
-> Quoting Thierry Reding (2020-09-23 01:16:54)
-> > On Tue, Sep 22, 2020 at 12:57:46PM -0700, Stephen Boyd wrote:
-> > > Quoting Qilong Zhang (2020-09-18 02:46:42)
-> > > > From: Zhang Qilong <zhangqilong3@huawei.com>
-> > > >=20
-> > > > Calling devm_ioremap means getting devices resource have been
-> > > > successful. When remap operation failed, we should return '-ENOMEM'
-> > > > instead of '-ENODEV' to differentiate between getting resource and
-> > > > mapping memory for reminding callers. Moreover, it is not consistent
-> > > > with devm_kzalloc operation.
-> > > >=20
-> > > > Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
-> > > > ---
-> > > >  drivers/clk/tegra/clk-dfll.c | 8 ++++----
-> > > >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > > >=20
-> > > > diff --git a/drivers/clk/tegra/clk-dfll.c b/drivers/clk/tegra/clk-d=
-fll.c
-> > > > index cfbaa90c7adb..6637b73be9f1 100644
-> > > > --- a/drivers/clk/tegra/clk-dfll.c
-> > > > +++ b/drivers/clk/tegra/clk-dfll.c
-> > > > @@ -1993,7 +1993,7 @@ int tegra_dfll_register(struct platform_devic=
-e *pdev,
-> > > >         td->base =3D devm_ioremap(td->dev, mem->start, resource_siz=
-e(mem));
-> > > >         if (!td->base) {
-> > > >                 dev_err(td->dev, "couldn't ioremap DFLL control reg=
-isters\n");
-> > > > -               return -ENODEV;
-> > > > +               return -ENOMEM;
-> > >=20
-> > > Can you remove the dev_err() lines too? They're pretty much useless.
-> >=20
-> > I find them somewhat useful because they indicate which particular
-> > resource wasn't properly mapped. If we get an -ENOMEM without the error
-> > message, we'll have to go and guess which one it is.
-> >=20
->=20
-> Doesn't that print the stacktrace when we run out of memory?
+Highlights are:
+* Add support for fractional dividers (Lars-Peter Clausen)
+* Enable support for ZynqMP (UltraScale) (Dragos Bogdan)
+* Support frequency limits for ZynqMP (Mathias Tausen)
+  - And continued by Mircea Caprioru, to read them from the IP cores
 
-slab allocator functions like kmalloc() and friends do, but I'm not
-aware of ioremap() doing so. Perhaps if it runs out of virtual memory
-for the mapping it would, but there are other reasons why this can fail.
+Changelog v2 -> v3:
+* for patch 'include: fpga: adi-axi-common.h: add definitions for supported FPGAs'
+  - fix whitespace found by checkpatch
+  - add 'Acked-by: Moritz Fischer <mdf@kernel.org>'
 
-Thierry
+Changelog v1 -> v2:
+- in patch 'include: fpga: adi-axi-common.h: add definitions for supported FPGAs'
+  * converted enums to #define
+  * added Intel FPGA definitions
+  * added Device-Package definitions
+  * added INTEL / XILINX in the define names
+ definitions according to:
+ https://github.com/analogdevicesinc/hdl/blob/4e438261aa319b1dda4c593c155218a93b1d869b/library/scripts/adi_intel_device_info_enc.tcl
+ https://github.com/analogdevicesinc/hdl/blob/4e438261aa319b1dda4c593c155218a93b1d869b/library/scripts/adi_xilinx_device_info_enc.tcl
 
---QKdGvSO+nmPlgiQ/
-Content-Type: application/pgp-signature; name="signature.asc"
+Dragos Bogdan (1):
+  clk: axi-clkgen: add support for ZynqMP (UltraScale)
 
------BEGIN PGP SIGNATURE-----
+Lars-Peter Clausen (2):
+  clk: axi-clkgen: Add support for fractional dividers
+  clk: axi-clkgen: Set power bits for fractional mode
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9sR/IACgkQ3SOs138+
-s6Hlvw//QQNMM9XWXKW09KKmy62pXv0awk01NQcUtlhFcST+h8eIJDIFfQmgLJqQ
-wvfgqg3S9j5acfND1AVa7dr5u+Y5gEzvLbNzHvjFUqh2w8H4+/t6Tpl5nygYBq9V
-8ikQigp+vj8xBFCwYJehaRraSFrjyjIi0E3GoR4b0FwiQoku9vx+BGF8e9ozW4OL
-fSJRZx9afQgzw05uEmL1zm8HTqzbDUZ6iVMJ3TD3SUCxjALa1gNM0TZtX5v6y4Ba
-OQInFZcisSP2q26mN1xjL5MCev2Inysh/3Ti0JszPQa1FjKKpoN8VRza4NLWbLPY
-TLAfjTnLmWhEnpNwfCx2c5bJBzEkFtAFD7waRbrGDTKjCXsllRygPsx0exO5rKLn
-iu3//pVfGPFAZA4t9F4iIZgvfrZQMeGW3AZuKdX7upv+6msog0b2tsGAAndJwppA
-trEyHb1y/0dMGYwj0wwxInU3oSKca3xJQtuNm7snLyJ23gaWfq+3RG5pVQX0CeTT
-h96DdTddRw1l4jkfYVa1GOwwduaJtMg1wCdOqEluxqXwfvHkCiXUEnp5qd2IaxDV
-QzXriI6fzFgNsC0h8IBGOg2x6dKQhLbffBr6dzEXSjdQMMqnSG6qzlwyExbKwWpb
-jb9ebWYo+LdWJpdf4AG3J7QIvl0Xmq5yYufbO3Zti+rX0Vzyd6M=
-=6DYc
------END PGP SIGNATURE-----
+Mathias Tausen (1):
+  clk: axi-clkgen: Respect ZYNQMP PFD/VCO frequency limits
 
---QKdGvSO+nmPlgiQ/--
+Mircea Caprioru (2):
+  include: fpga: adi-axi-common.h: add definitions for supported FPGAs
+  clk: axi-clkgen: Add support for FPGA info
+
+ drivers/clk/Kconfig                 |   2 +-
+ drivers/clk/clk-axi-clkgen.c        | 253 ++++++++++++++++++++++------
+ include/linux/fpga/adi-axi-common.h | 103 +++++++++++
+ 3 files changed, 302 insertions(+), 56 deletions(-)
+
+-- 
+2.25.1
+
