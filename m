@@ -2,32 +2,29 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3CA27A3D5
-	for <lists+linux-clk@lfdr.de>; Sun, 27 Sep 2020 22:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A065F27A3E0
+	for <lists+linux-clk@lfdr.de>; Sun, 27 Sep 2020 22:03:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726567AbgI0UCW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 27 Sep 2020 16:02:22 -0400
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:14476
+        id S1726722AbgI0UCf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 27 Sep 2020 16:02:35 -0400
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:14485
         "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726634AbgI0UCW (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 27 Sep 2020 16:02:22 -0400
-X-Greylist: delayed 428 seconds by postgrey-1.27 at vger.kernel.org; Sun, 27 Sep 2020 16:02:21 EDT
+        by vger.kernel.org with ESMTP id S1726697AbgI0UCd (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 27 Sep 2020 16:02:33 -0400
 X-IronPort-AV: E=Sophos;i="5.77,311,1596492000"; 
-   d="scan'208";a="360169487"
+   d="scan'208";a="360169497"
 Received: from palace.rsr.lip6.fr (HELO palace.lip6.fr) ([132.227.105.202])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/AES256-SHA256; 27 Sep 2020 21:55:11 +0200
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/AES256-SHA256; 27 Sep 2020 21:55:13 +0200
 From:   Julia Lawall <Julia.Lawall@inria.fr>
 To:     Michael Turquette <mturquette@baylibre.com>
 Cc:     =?UTF-8?q?Valdis=20Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
         Joe Perches <joe@perches.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         kernel-janitors@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 01/18] clk: uniphier: use semicolons rather than commas to separate statements
-Date:   Sun, 27 Sep 2020 21:12:11 +0200
-Message-Id: <1601233948-11629-2-git-send-email-Julia.Lawall@inria.fr>
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 09/18] clk: mvebu: ap80x-cpu: use semicolons rather than commas to separate statements
+Date:   Sun, 27 Sep 2020 21:12:19 +0200
+Message-Id: <1601233948-11629-10-git-send-email-Julia.Lawall@inria.fr>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1601233948-11629-1-git-send-email-Julia.Lawall@inria.fr>
 References: <1601233948-11629-1-git-send-email-Julia.Lawall@inria.fr>
@@ -50,34 +47,20 @@ e2
 Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/clk/uniphier/clk-uniphier-cpugear.c |    2 +-
- drivers/clk/uniphier/clk-uniphier-mux.c     |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/clk/mvebu/ap-cpu-clk.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/uniphier/clk-uniphier-cpugear.c b/drivers/clk/uniphier/clk-uniphier-cpugear.c
-index 1a33a08abf2f..a2f01a4da127 100644
---- a/drivers/clk/uniphier/clk-uniphier-cpugear.c
-+++ b/drivers/clk/uniphier/clk-uniphier-cpugear.c
-@@ -90,7 +90,7 @@ struct clk_hw *uniphier_clk_register_cpugear(struct device *dev,
- 	init.ops = &uniphier_clk_cpugear_ops;
- 	init.flags = CLK_SET_RATE_PARENT;
- 	init.parent_names = data->parent_names;
--	init.num_parents = data->num_parents,
-+	init.num_parents = data->num_parents;
+diff --git a/drivers/clk/mvebu/ap-cpu-clk.c b/drivers/clk/mvebu/ap-cpu-clk.c
+index 6b394302c76a..b4259b60dcfd 100644
+--- a/drivers/clk/mvebu/ap-cpu-clk.c
++++ b/drivers/clk/mvebu/ap-cpu-clk.c
+@@ -197,7 +197,7 @@ static int ap_cpu_clk_set_rate(struct clk_hw *hw, unsigned long rate,
  
- 	gear->regmap = regmap;
- 	gear->regbase = data->regbase;
-diff --git a/drivers/clk/uniphier/clk-uniphier-mux.c b/drivers/clk/uniphier/clk-uniphier-mux.c
-index c0f4631601e2..462c84321b2d 100644
---- a/drivers/clk/uniphier/clk-uniphier-mux.c
-+++ b/drivers/clk/uniphier/clk-uniphier-mux.c
-@@ -70,7 +70,7 @@ struct clk_hw *uniphier_clk_register_mux(struct device *dev,
- 	init.ops = &uniphier_clk_mux_ops;
- 	init.flags = CLK_SET_RATE_PARENT;
- 	init.parent_names = data->parent_names;
--	init.num_parents = data->num_parents,
-+	init.num_parents = data->num_parents;
- 
- 	mux->regmap = regmap;
- 	mux->reg = data->reg;
+ 	stable_bit = BIT(clk->pll_regs->ratio_state_offset +
+ 			 clk->cluster *
+-			 clk->pll_regs->ratio_state_cluster_offset),
++			 clk->pll_regs->ratio_state_cluster_offset);
+ 	ret = regmap_read_poll_timeout(clk->pll_cr_base,
+ 				       clk->pll_regs->ratio_state_reg, reg,
+ 				       reg & stable_bit, STATUS_POLL_PERIOD_US,
 
