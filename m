@@ -2,113 +2,98 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB4927A86D
-	for <lists+linux-clk@lfdr.de>; Mon, 28 Sep 2020 09:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A191127A9EB
+	for <lists+linux-clk@lfdr.de>; Mon, 28 Sep 2020 10:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725308AbgI1HTb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 28 Sep 2020 03:19:31 -0400
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:27867 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726589AbgI1HTb (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 28 Sep 2020 03:19:31 -0400
-X-Greylist: delayed 1059 seconds by postgrey-1.27 at vger.kernel.org; Mon, 28 Sep 2020 03:19:29 EDT
-Received: from twspam01.aspeedtech.com (localhost [127.0.0.2] (may be forged))
-        by twspam01.aspeedtech.com with ESMTP id 08S6gbpj009883
-        for <linux-clk@vger.kernel.org>; Mon, 28 Sep 2020 14:42:37 +0800 (GMT-8)
-        (envelope-from ryan_chen@aspeedtech.com)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 08S6fwmg009743;
-        Mon, 28 Sep 2020 14:41:58 +0800 (GMT-8)
-        (envelope-from ryan_chen@aspeedtech.com)
-Received: from localhost.localdomain (192.168.10.9) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 28 Sep
- 2020 15:01:13 +0800
-From:   Ryan Chen <ryan_chen@aspeedtech.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
-        <bmc-sw@aspeedtech.com>
-CC:     Ryan Chen <ryan_chen@aspeedtech.com>
-Subject: [PATCH 1/1] clk: aspeed: modify some default clks are critical
-Date:   Mon, 28 Sep 2020 15:01:08 +0800
-Message-ID: <20200928070108.14040-2-ryan_chen@aspeedtech.com>
+        id S1726497AbgI1IsA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 28 Sep 2020 04:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726328AbgI1IsA (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 28 Sep 2020 04:48:00 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942E8C0613CE
+        for <linux-clk@vger.kernel.org>; Mon, 28 Sep 2020 01:48:00 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id mn7so230906pjb.5
+        for <linux-clk@vger.kernel.org>; Mon, 28 Sep 2020 01:48:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=wY/Phh7haMCfrTDSqngzJDGR4pk8ZSUHFlVi1FrntNA=;
+        b=tW1BN7cydHn8bciyQaMKZ51ecy0MhjdVxSWTovppv/D74ZDTobDVJ2HUeOgH6w+c/j
+         U4S6rFlt/0Ym+XqpJ4b9S+ygvml27p3t1rLCUrAiAePqVGfvdgO85F/5H2m1GIpLqJJm
+         sK2jICuluuxBGOtDL5twBNxIQqclFgY9q/TyrzlRDxR1pwJEcxBzP0aWgtItW7RF8A7R
+         aTbasQaNJ2ffSJ6wudKkStpLWuBppzIf8gPBcpFF+ygNay8/5SGAGoQFSNQhUSs6quPh
+         cQSddtkGeY7gWkn6mE85GMYYvZLeNqifBIknRvD+C+1YpdIhJamerVYyxiAtrrH2Eei+
+         GM6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=wY/Phh7haMCfrTDSqngzJDGR4pk8ZSUHFlVi1FrntNA=;
+        b=q4CPR0CEqtBbE4mSg12ZPFa4iUzNd0W3cc6RjD47D/jF4gfmNMW3laqsc1oLZXcgPA
+         kwmZ4i2sRhtR5zI9ZaSmIFWQVz0wuHRAj4D+aoqeuvxMdzMwZuHhVPU/tNEFAWAKBdL8
+         oTeemyVLk9bIjtos3vMNnujPc9QGlNLGG7nswG827XqCt9emBWrpXPuZB7zr+hh6uYTL
+         9xpHq3goLNtyv8jRlYr3Ne2KceuthvSMM0IiswcaQ66e5Od2oFlLDCDko6XPWKgCSVQk
+         rTshjIqWJWJooXYASqUvM7FQZu88uZQufqtgzj2Pd2D2wWRP36bAjcHQHPqjoDR+SKMp
+         mUqg==
+X-Gm-Message-State: AOAM531MBYucAMNzoMIzERdBBrZOqw4Lp9tnLdskvbFAqUdEzIgKsM6u
+        PNKJdl3sLTzAD0LavdeHatSUew==
+X-Google-Smtp-Source: ABdhPJye6u3HOi8ZQVN02jipYNmuwO9krjvzCg+PZj+Fb/NHiBRugHZMXouOiOECLimIC0oDDjZmzA==
+X-Received: by 2002:a17:90a:9505:: with SMTP id t5mr380570pjo.121.1601282880163;
+        Mon, 28 Sep 2020 01:48:00 -0700 (PDT)
+Received: from localhost.localdomain (li519-153.members.linode.com. [66.175.222.153])
+        by smtp.gmail.com with ESMTPSA id u18sm623181pgk.18.2020.09.28.01.47.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Sep 2020 01:47:59 -0700 (PDT)
+From:   Jun Nie <jun.nie@linaro.org>
+To:     sboyd@codeaurora.org, mturquette@baylibre.com,
+        linux-clk@vger.kernel.org
+Cc:     shawn.guo@linaro.org, Jun Nie <jun.nie@linaro.org>
+Subject: [PATCH] clk: emit warning if fail to get parent clk
+Date:   Mon, 28 Sep 2020 16:47:44 +0800
+Message-Id: <20200928084744.32478-1-jun.nie@linaro.org>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200928070108.14040-1-ryan_chen@aspeedtech.com>
-References: <20200928070108.14040-1-ryan_chen@aspeedtech.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [192.168.10.9]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 08S6fwmg009743
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-In ASPEED SoC LCLK is LPC clock for all SuperIO device, UART1/UART2 are
-default for Host SuperIO UART device, eSPI clk for Host eSPI bus access
-eSPI slave channel, those clks can't be disable should keep default,
-otherwise will affect Host side access SuperIO and SPI slave device.
+Emit warning if fail to get parent clk to expose potential issue earlier.
+For example, clk_hw_get_rate() will return 0 for a clock without parent core
+while parent number is not zero. This cause opp always think it is switching
+frequency from 0 to some other frequency. Crash may happen if we switch
+from high frequency to low frequency and lower CPU voltage before clk rate
+switching.
 
-Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
+Signed-off-by: Jun Nie <jun.nie@linaro.org>
 ---
- drivers/clk/clk-aspeed.c  | 8 ++++----
- drivers/clk/clk-ast2600.c | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ drivers/clk/clk.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/clk/clk-aspeed.c b/drivers/clk/clk-aspeed.c
-index 411ff5fb2c07..d348c4fd3f9f 100644
---- a/drivers/clk/clk-aspeed.c
-+++ b/drivers/clk/clk-aspeed.c
-@@ -54,15 +54,15 @@ static const struct aspeed_gate_data aspeed_gates[] = {
- 	[ASPEED_CLK_GATE_DCLK] =	{  5, -1, "dclk-gate",		NULL,	CLK_IS_CRITICAL }, /* DAC */
- 	[ASPEED_CLK_GATE_REFCLK] =	{  6, -1, "refclk-gate",	"clkin", CLK_IS_CRITICAL },
- 	[ASPEED_CLK_GATE_USBPORT2CLK] =	{  7,  3, "usb-port2-gate",	NULL,	0 }, /* USB2.0 Host port 2 */
--	[ASPEED_CLK_GATE_LCLK] =	{  8,  5, "lclk-gate",		NULL,	0 }, /* LPC */
-+	[ASPEED_CLK_GATE_LCLK] =	{  8,  5, "lclk-gate",		NULL,	CLK_IS_CRITICAL }, /* LPC */
- 	[ASPEED_CLK_GATE_USBUHCICLK] =	{  9, 15, "usb-uhci-gate",	NULL,	0 }, /* USB1.1 (requires port 2 enabled) */
- 	[ASPEED_CLK_GATE_D1CLK] =	{ 10, 13, "d1clk-gate",		NULL,	0 }, /* GFX CRT */
- 	[ASPEED_CLK_GATE_YCLK] =	{ 13,  4, "yclk-gate",		NULL,	0 }, /* HAC */
- 	[ASPEED_CLK_GATE_USBPORT1CLK] = { 14, 14, "usb-port1-gate",	NULL,	0 }, /* USB2 hub/USB2 host port 1/USB1.1 dev */
--	[ASPEED_CLK_GATE_UART1CLK] =	{ 15, -1, "uart1clk-gate",	"uart",	0 }, /* UART1 */
--	[ASPEED_CLK_GATE_UART2CLK] =	{ 16, -1, "uart2clk-gate",	"uart",	0 }, /* UART2 */
-+	[ASPEED_CLK_GATE_UART1CLK] =	{ 15, -1, "uart1clk-gate",	"uart",	CLK_IS_CRITICAL }, /* UART1 */
-+	[ASPEED_CLK_GATE_UART2CLK] =	{ 16, -1, "uart2clk-gate",	"uart",	CLK_IS_CRITICAL }, /* UART2 */
- 	[ASPEED_CLK_GATE_UART5CLK] =	{ 17, -1, "uart5clk-gate",	"uart",	0 }, /* UART5 */
--	[ASPEED_CLK_GATE_ESPICLK] =	{ 19, -1, "espiclk-gate",	NULL,	0 }, /* eSPI */
-+	[ASPEED_CLK_GATE_ESPICLK] =	{ 19, -1, "espiclk-gate",	NULL,	CLK_IS_CRITICAL }, /* eSPI */
- 	[ASPEED_CLK_GATE_MAC1CLK] =	{ 20, 11, "mac1clk-gate",	"mac",	0 }, /* MAC1 */
- 	[ASPEED_CLK_GATE_MAC2CLK] =	{ 21, 12, "mac2clk-gate",	"mac",	0 }, /* MAC2 */
- 	[ASPEED_CLK_GATE_RSACLK] =	{ 24, -1, "rsaclk-gate",	NULL,	0 }, /* RSA */
-diff --git a/drivers/clk/clk-ast2600.c b/drivers/clk/clk-ast2600.c
-index bbacaccad554..6802a2d5bbe2 100644
---- a/drivers/clk/clk-ast2600.c
-+++ b/drivers/clk/clk-ast2600.c
-@@ -86,8 +86,8 @@ static const struct aspeed_gate_data aspeed_g6_gates[] = {
- 	/* Reserved 26 */
- 	[ASPEED_CLK_GATE_EMMCCLK]	= { 27, 16, "emmcclk-gate",	NULL,	 0 },	/* For card clk */
- 	/* Reserved 28/29/30 */
--	[ASPEED_CLK_GATE_LCLK]		= { 32, 32, "lclk-gate",	NULL,	 0 }, /* LPC */
--	[ASPEED_CLK_GATE_ESPICLK]	= { 33, -1, "espiclk-gate",	NULL,	 0 }, /* eSPI */
-+	[ASPEED_CLK_GATE_LCLK]		= { 32, 32, "lclk-gate",	NULL,	 CLK_IS_CRITICAL }, /* LPC */
-+	[ASPEED_CLK_GATE_ESPICLK]	= { 33, -1, "espiclk-gate",	NULL,	 CLK_IS_CRITICAL }, /* eSPI */
- 	[ASPEED_CLK_GATE_REF1CLK]	= { 34, -1, "ref1clk-gate",	"clkin", CLK_IS_CRITICAL },
- 	/* Reserved 35 */
- 	[ASPEED_CLK_GATE_SDCLK]		= { 36, 56, "sdclk-gate",	NULL,	 0 },	/* SDIO/SD */
-@@ -102,8 +102,8 @@ static const struct aspeed_gate_data aspeed_g6_gates[] = {
- 	[ASPEED_CLK_GATE_I3C5CLK]	= { 45,  45, "i3c5clk-gate",	NULL,	 0 },	/* I3C5 */
- 	[ASPEED_CLK_GATE_I3C6CLK]	= { 46,  46, "i3c6clk-gate",	NULL,	 0 },	/* I3C6 */
- 	[ASPEED_CLK_GATE_I3C7CLK]	= { 47,  47, "i3c7clk-gate",	NULL,	 0 },	/* I3C7 */
--	[ASPEED_CLK_GATE_UART1CLK]	= { 48,  -1, "uart1clk-gate",	"uart",	 0 },	/* UART1 */
--	[ASPEED_CLK_GATE_UART2CLK]	= { 49,  -1, "uart2clk-gate",	"uart",	 0 },	/* UART2 */
-+	[ASPEED_CLK_GATE_UART1CLK]	= { 48,  -1, "uart1clk-gate",	"uart",	 CLK_IS_CRITICAL },	/* UART1 */
-+	[ASPEED_CLK_GATE_UART2CLK]	= { 49,  -1, "uart2clk-gate",	"uart",	 CLK_IS_CRITICAL },	/* UART2 */
- 	[ASPEED_CLK_GATE_UART3CLK]	= { 50,  -1, "uart3clk-gate",	"uart",  0 },	/* UART3 */
- 	[ASPEED_CLK_GATE_UART4CLK]	= { 51,  -1, "uart4clk-gate",	"uart",	 0 },	/* UART4 */
- 	[ASPEED_CLK_GATE_MAC3CLK]	= { 52,  52, "mac3clk-gate",	"mac34", 0 },	/* MAC3 */
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 1a27e99ccb17..78b21b888e56 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -424,6 +424,7 @@ static void clk_core_fill_parent_index(struct clk_core *core, u8 index)
+ {
+ 	struct clk_parent_map *entry = &core->parents[index];
+ 	struct clk_core *parent = ERR_PTR(-ENOENT);
++	int emit_warn = 0;
+ 
+ 	if (entry->hw) {
+ 		parent = entry->hw->core;
+@@ -443,6 +444,12 @@ static void clk_core_fill_parent_index(struct clk_core *core, u8 index)
+ 	/* Only cache it if it's not an error */
+ 	if (!IS_ERR(parent))
+ 		entry->core = parent;
++	else if (parent != ERR_PTR(-EPROBE_DEFER))
++		emit_warn = 1;
++
++	if (emit_warn || (!parent && core->num_parents))
++		pr_warn("Fail to get indexed %d parent for clk %s.",
++			index, core->name);
+ }
+ 
+ static struct clk_core *clk_core_get_parent_by_index(struct clk_core *core,
 -- 
 2.17.1
 
