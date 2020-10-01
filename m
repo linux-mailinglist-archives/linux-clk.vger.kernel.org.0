@@ -2,46 +2,48 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE7327FBD2
-	for <lists+linux-clk@lfdr.de>; Thu,  1 Oct 2020 10:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE8E27FBFD
+	for <lists+linux-clk@lfdr.de>; Thu,  1 Oct 2020 10:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725975AbgJAIq3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 1 Oct 2020 04:46:29 -0400
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:65514 "EHLO
+        id S1731647AbgJAIzo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 1 Oct 2020 04:55:44 -0400
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:7926 "EHLO
         mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725894AbgJAIq3 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 1 Oct 2020 04:46:29 -0400
+        by vger.kernel.org with ESMTP id S1726647AbgJAIzn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 1 Oct 2020 04:55:43 -0400
 Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0918dUZJ028754;
-        Thu, 1 Oct 2020 04:46:15 -0400
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com with ESMTP id 33syg6ad4q-1
+        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0918nSbg004819;
+        Thu, 1 Oct 2020 04:55:29 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com with ESMTP id 33syg6adms-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Oct 2020 04:46:15 -0400
-Received: from SCSQMBX10.ad.analog.com (scsqmbx10.ad.analog.com [10.77.17.5])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 0918kDwA049569
+        Thu, 01 Oct 2020 04:55:29 -0400
+Received: from SCSQMBX11.ad.analog.com (scsqmbx11.ad.analog.com [10.77.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 0918tRJ1056104
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Thu, 1 Oct 2020 04:46:14 -0400
-Received: from SCSQMBX11.ad.analog.com (10.77.17.10) by
- SCSQMBX10.ad.analog.com (10.77.17.5) with Microsoft SMTP Server
+        Thu, 1 Oct 2020 04:55:27 -0400
+Received: from SCSQCASHYB7.ad.analog.com (10.77.17.133) by
+ SCSQMBX11.ad.analog.com (10.77.17.10) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Thu, 1 Oct 2020 01:46:04 -0700
-Received: from zeus.spd.analog.com (10.66.68.11) by SCSQMBX11.ad.analog.com
- (10.77.17.10) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
- Transport; Thu, 1 Oct 2020 01:46:04 -0700
+ 15.1.1779.2; Thu, 1 Oct 2020 01:55:17 -0700
+Received: from SCSQMBX10.ad.analog.com (10.77.17.5) by
+ SCSQCASHYB7.ad.analog.com (10.77.17.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1779.2; Thu, 1 Oct 2020 01:55:17 -0700
+Received: from zeus.spd.analog.com (10.66.68.11) by SCSQMBX10.ad.analog.com
+ (10.77.17.5) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
+ Transport; Thu, 1 Oct 2020 01:55:17 -0700
 Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 0918k9Nv015441;
-        Thu, 1 Oct 2020 04:46:09 -0400
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 0918tM1n016001;
+        Thu, 1 Oct 2020 04:55:23 -0400
 From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
-To:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <michael.hennerich@analog.com>, <lars@metafoo.de>,
-        <robh+dt@kernel.org>, <sboyd@kernel.org>,
-        <mturquette@baylibre.com>, <mdf@kernel.org>,
+To:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <lars@metafoo.de>, <sboyd@kernel.org>, <mturquette@baylibre.com>,
+        <mdf@kernel.org>,
         Alexandru Ardelean <alexandru.ardelean@analog.com>
-Subject: [PATCH] dt-bindings: clock: adi,axi-clkgen: convert old binding to yaml format
-Date:   Thu, 1 Oct 2020 11:50:35 +0300
-Message-ID: <20201001085035.82938-1-alexandru.ardelean@analog.com>
+Subject: [PATCH 1/2] clk: axi-clkgen: Add support for fractional dividers
+Date:   Thu, 1 Oct 2020 11:59:47 +0300
+Message-ID: <20201001085948.21412-1-alexandru.ardelean@analog.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -52,117 +54,318 @@ X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishsc
  priorityscore=1501 impostorscore=0 suspectscore=0 lowpriorityscore=0
  spamscore=0 bulkscore=0 mlxscore=0 clxscore=1015 mlxlogscore=999
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2010010076
+ engine=8.12.0-2006250000 definitions=main-2010010078
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This change converts the old binding for the AXI clkgen driver to a yaml
-format.
+From: Lars-Peter Clausen <lars@metafoo.de>
 
-As maintainers, added:
- - Lars-Peter Clausen <lars@metafoo.de> - as original author of driver &
-   binding
- - Michael Hennerich <michael.hennerich@analog.com> - as supporter of
-   Analog Devices drivers
+The axi-clkgen has (optional) fractional dividers on the output clock
+divider and feedback clock divider path. Utilizing the fractional dividers
+allows for a better resolution of the output clock, being able to
+synthesize more frequencies.
 
+Rework the driver support to support the fractional register fields, both
+for setting a new rate as well as reading back the current rate from the
+hardware.
+
+For setting the rate if no perfect divider settings were found in
+non-fractional mode try again in fractional mode and see if better settings
+can be found. This appears to be the recommended mode of operation.
+
+Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
 Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
 ---
- .../bindings/clock/adi,axi-clkgen.yaml        | 52 +++++++++++++++++++
- .../devicetree/bindings/clock/axi-clkgen.txt  | 25 ---------
- 2 files changed, 52 insertions(+), 25 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml
- delete mode 100644 Documentation/devicetree/bindings/clock/axi-clkgen.txt
 
-diff --git a/Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml b/Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml
-new file mode 100644
-index 000000000000..45497f370cb3
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/adi,axi-clkgen.yaml
-@@ -0,0 +1,52 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/adi,axi-clkgen.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+Series split away from [1]:
+  https://lore.kernel.org/linux-clk/20200929144417.89816-9-alexandru.ardelean@analog.com/T/#t
+
+After a review on that, it was concluded that dt-binding conversion to
+yaml format would be a good idea.
+The conversion went out via:
+  https://lore.kernel.org/linux-clk/20201001085035.82938-1-alexandru.ardelean@analog.com/T/#u
+
+It will be reviewed by Rob Herring when he can get to it.
+The first 2 patches from the series [1] are independent from dt-binding
+context.
+
+ drivers/clk/clk-axi-clkgen.c | 180 +++++++++++++++++++++++++----------
+ 1 file changed, 129 insertions(+), 51 deletions(-)
+
+diff --git a/drivers/clk/clk-axi-clkgen.c b/drivers/clk/clk-axi-clkgen.c
+index 96f351785b41..1df03cc6d089 100644
+--- a/drivers/clk/clk-axi-clkgen.c
++++ b/drivers/clk/clk-axi-clkgen.c
+@@ -27,8 +27,10 @@
+ 
+ #define AXI_CLKGEN_V2_DRP_STATUS_BUSY	BIT(16)
+ 
++#define MMCM_REG_CLKOUT5_2	0x07
+ #define MMCM_REG_CLKOUT0_1	0x08
+ #define MMCM_REG_CLKOUT0_2	0x09
++#define MMCM_REG_CLKOUT6_2	0x13
+ #define MMCM_REG_CLK_FB1	0x14
+ #define MMCM_REG_CLK_FB2	0x15
+ #define MMCM_REG_CLK_DIV	0x16
+@@ -40,6 +42,7 @@
+ 
+ #define MMCM_CLKOUT_NOCOUNT	BIT(6)
+ 
++#define MMCM_CLK_DIV_DIVIDE	BIT(11)
+ #define MMCM_CLK_DIV_NOCOUNT	BIT(12)
+ 
+ struct axi_clkgen {
+@@ -107,6 +110,8 @@ static void axi_clkgen_calc_params(unsigned long fin, unsigned long fout,
+ 	unsigned long d, d_min, d_max, _d_min, _d_max;
+ 	unsigned long m, m_min, m_max;
+ 	unsigned long f, dout, best_f, fvco;
++	unsigned long fract_shift = 0;
++	unsigned long fvco_min_fract, fvco_max_fract;
+ 
+ 	fin /= 1000;
+ 	fout /= 1000;
+@@ -119,42 +124,89 @@ static void axi_clkgen_calc_params(unsigned long fin, unsigned long fout,
+ 	d_min = max_t(unsigned long, DIV_ROUND_UP(fin, fpfd_max), 1);
+ 	d_max = min_t(unsigned long, fin / fpfd_min, 80);
+ 
+-	m_min = max_t(unsigned long, DIV_ROUND_UP(fvco_min, fin) * d_min, 1);
+-	m_max = min_t(unsigned long, fvco_max * d_max / fin, 64);
++again:
++	fvco_min_fract = fvco_min << fract_shift;
++	fvco_max_fract = fvco_max << fract_shift;
 +
-+title: Binding for Analog Devices AXI clkgen pcore clock generator
++	m_min = max_t(unsigned long, DIV_ROUND_UP(fvco_min_fract, fin) * d_min, 1);
++	m_max = min_t(unsigned long, fvco_max_fract * d_max / fin, 64 << fract_shift);
+ 
+ 	for (m = m_min; m <= m_max; m++) {
+-		_d_min = max(d_min, DIV_ROUND_UP(fin * m, fvco_max));
+-		_d_max = min(d_max, fin * m / fvco_min);
++		_d_min = max(d_min, DIV_ROUND_UP(fin * m, fvco_max_fract));
++		_d_max = min(d_max, fin * m / fvco_min_fract);
+ 
+ 		for (d = _d_min; d <= _d_max; d++) {
+ 			fvco = fin * m / d;
+ 
+ 			dout = DIV_ROUND_CLOSEST(fvco, fout);
+-			dout = clamp_t(unsigned long, dout, 1, 128);
++			dout = clamp_t(unsigned long, dout, 1, 128 << fract_shift);
+ 			f = fvco / dout;
+ 			if (abs(f - fout) < abs(best_f - fout)) {
+ 				best_f = f;
+ 				*best_d = d;
+-				*best_m = m;
+-				*best_dout = dout;
++				*best_m = m << (3 - fract_shift);
++				*best_dout = dout << (3 - fract_shift);
+ 				if (best_f == fout)
+ 					return;
+ 			}
+ 		}
+ 	}
 +
-+maintainers:
-+  - Lars-Peter Clausen <lars@metafoo.de>
-+  - Michael Hennerich <michael.hennerich@analog.com>
++	/* Lets see if we find a better setting in fractional mode */
++	if (fract_shift == 0) {
++		fract_shift = 3;
++		goto again;
++	}
+ }
+ 
+-static void axi_clkgen_calc_clk_params(unsigned int divider, unsigned int *low,
+-	unsigned int *high, unsigned int *edge, unsigned int *nocount)
++struct axi_clkgen_div_params {
++	unsigned int low;
++	unsigned int high;
++	unsigned int edge;
++	unsigned int nocount;
++	unsigned int frac_en;
++	unsigned int frac;
++	unsigned int frac_wf_f;
++	unsigned int frac_wf_r;
++	unsigned int frac_phase;
++};
 +
-+description: |
-+  The axi_clkgen IP core is a software programmable clock generator,
-+  that can be synthesized on various FPGA platforms.
++static void axi_clkgen_calc_clk_params(unsigned int divider,
++	unsigned int frac_divider, struct axi_clkgen_div_params *params)
+ {
+-	if (divider == 1)
+-		*nocount = 1;
+-	else
+-		*nocount = 0;
+ 
+-	*high = divider / 2;
+-	*edge = divider % 2;
+-	*low = divider - *high;
++	memset(params, 0x0, sizeof(*params));
 +
-+  Link: https://wiki.analog.com/resources/fpga/docs/axi_clkgen
++	if (divider == 1) {
++		params->nocount = 1;
++		return;
++	}
 +
-+properties:
-+  compatible:
-+    enum:
-+      - adi,axi-clkgen-2.00.a
++	if (frac_divider == 0) {
++		params->high = divider / 2;
++		params->edge = divider % 2;
++		params->low = divider - params->high;
++	} else {
++		params->frac_en = 1;
++		params->frac = frac_divider;
 +
-+  clocks:
-+    description:
-+      Phandle and clock specifier for the parent clock(s). This must either
-+      reference one clock if only the first clock input is connected or two
-+      if both clock inputs are connected. For the later case the clock
-+      connected to the first input must be specified first.
-+    minItems: 1
-+    maxItems: 2
++		params->high = divider / 2;
++		params->edge = divider % 2;
++		params->low = params->high;
 +
-+  '#clock-cells':
-+    const: 0
++		if (params->edge == 0) {
++			params->high--;
++			params->frac_wf_r = 1;
++		}
 +
-+  reg:
-+    maxItems: 1
++		if (params->edge == 0 || frac_divider == 1)
++			params->low--;
++		if (((params->edge == 0) ^ (frac_divider == 1)) ||
++			(divider == 2 && frac_divider == 1))
++			params->frac_wf_f = 1;
 +
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - '#clock-cells'
++		params->frac_phase = params->edge * 4 + frac_divider / 2;
++	}
+ }
+ 
+ static void axi_clkgen_write(struct axi_clkgen *axi_clkgen,
+@@ -246,15 +298,28 @@ static struct axi_clkgen *clk_hw_to_axi_clkgen(struct clk_hw *clk_hw)
+ 	return container_of(clk_hw, struct axi_clkgen, clk_hw);
+ }
+ 
++static void axi_clkgen_set_div(struct axi_clkgen *axi_clkgen,
++	unsigned int reg1, unsigned int reg2, unsigned int reg3,
++	struct axi_clkgen_div_params *params)
++{
++	axi_clkgen_mmcm_write(axi_clkgen, reg1,
++		(params->high << 6) | params->low, 0xefff);
++	axi_clkgen_mmcm_write(axi_clkgen, reg2,
++		(params->frac << 12) | (params->frac_en << 11) |
++		(params->frac_wf_r << 10) | (params->edge << 7) |
++		(params->nocount << 6), 0x7fff);
++	if (reg3 != 0) {
++		axi_clkgen_mmcm_write(axi_clkgen, reg3,
++			(params->frac_phase << 11) | (params->frac_wf_f << 10), 0x3c00);
++	}
++}
 +
-+examples:
-+  - |
-+    clock@ff000000 {
-+      compatible = "adi,axi-clkgen-2.00.a";
-+      #clock-cells = <0>;
-+      reg = <0xff000000 0x1000>;
-+      clocks = <&osc 1>;
-+    };
-diff --git a/Documentation/devicetree/bindings/clock/axi-clkgen.txt b/Documentation/devicetree/bindings/clock/axi-clkgen.txt
-deleted file mode 100644
-index aca94fe9416f..000000000000
---- a/Documentation/devicetree/bindings/clock/axi-clkgen.txt
-+++ /dev/null
-@@ -1,25 +0,0 @@
--Binding for the axi-clkgen clock generator
+ static int axi_clkgen_set_rate(struct clk_hw *clk_hw,
+ 	unsigned long rate, unsigned long parent_rate)
+ {
+ 	struct axi_clkgen *axi_clkgen = clk_hw_to_axi_clkgen(clk_hw);
+ 	unsigned int d, m, dout;
+-	unsigned int nocount;
+-	unsigned int high;
+-	unsigned int edge;
+-	unsigned int low;
++	struct axi_clkgen_div_params params;
+ 	uint32_t filter;
+ 	uint32_t lock;
+ 
+@@ -269,21 +334,18 @@ static int axi_clkgen_set_rate(struct clk_hw *clk_hw,
+ 	filter = axi_clkgen_lookup_filter(m - 1);
+ 	lock = axi_clkgen_lookup_lock(m - 1);
+ 
+-	axi_clkgen_calc_clk_params(dout, &low, &high, &edge, &nocount);
+-	axi_clkgen_mmcm_write(axi_clkgen, MMCM_REG_CLKOUT0_1,
+-		(high << 6) | low, 0xefff);
+-	axi_clkgen_mmcm_write(axi_clkgen, MMCM_REG_CLKOUT0_2,
+-		(edge << 7) | (nocount << 6), 0x03ff);
++	axi_clkgen_calc_clk_params(dout >> 3, dout & 0x7, &params);
++	axi_clkgen_set_div(axi_clkgen,  MMCM_REG_CLKOUT0_1, MMCM_REG_CLKOUT0_2,
++		MMCM_REG_CLKOUT5_2, &params);
+ 
+-	axi_clkgen_calc_clk_params(d, &low, &high, &edge, &nocount);
++	axi_clkgen_calc_clk_params(d, 0, &params);
+ 	axi_clkgen_mmcm_write(axi_clkgen, MMCM_REG_CLK_DIV,
+-		(edge << 13) | (nocount << 12) | (high << 6) | low, 0x3fff);
++		(params.edge << 13) | (params.nocount << 12) |
++		(params.high << 6) | params.low, 0x3fff);
+ 
+-	axi_clkgen_calc_clk_params(m, &low, &high, &edge, &nocount);
+-	axi_clkgen_mmcm_write(axi_clkgen, MMCM_REG_CLK_FB1,
+-		(high << 6) | low, 0xefff);
+-	axi_clkgen_mmcm_write(axi_clkgen, MMCM_REG_CLK_FB2,
+-		(edge << 7) | (nocount << 6), 0x03ff);
++	axi_clkgen_calc_clk_params(m >> 3, m & 0x7, &params);
++	axi_clkgen_set_div(axi_clkgen,  MMCM_REG_CLK_FB1, MMCM_REG_CLK_FB2,
++		MMCM_REG_CLKOUT6_2, &params);
+ 
+ 	axi_clkgen_mmcm_write(axi_clkgen, MMCM_REG_LOCK1, lock & 0x3ff, 0x3ff);
+ 	axi_clkgen_mmcm_write(axi_clkgen, MMCM_REG_LOCK2,
+@@ -313,35 +375,51 @@ static long axi_clkgen_round_rate(struct clk_hw *hw, unsigned long rate,
+ 	return min_t(unsigned long long, tmp, LONG_MAX);
+ }
+ 
++static unsigned int axi_clkgen_get_div(struct axi_clkgen *axi_clkgen,
++	unsigned int reg1, unsigned int reg2)
++{
++	unsigned int val1, val2;
++	unsigned int div;
++
++	axi_clkgen_mmcm_read(axi_clkgen, reg2, &val2);
++	if (val2 & MMCM_CLKOUT_NOCOUNT)
++		return 8;
++
++	axi_clkgen_mmcm_read(axi_clkgen, reg1, &val1);
++
++	div = (val1 & 0x3f) + ((val1 >> 6) & 0x3f);
++	div <<= 3;
++
++	if (val2 & MMCM_CLK_DIV_DIVIDE) {
++		if ((val2 & BIT(7)) && (val2 & 0x7000) != 0x1000)
++			div += 8;
++		else
++			div += 16;
++
++		div += (val2 >> 12) & 0x7;
++	}
++
++	return div;
++}
++
+ static unsigned long axi_clkgen_recalc_rate(struct clk_hw *clk_hw,
+ 	unsigned long parent_rate)
+ {
+ 	struct axi_clkgen *axi_clkgen = clk_hw_to_axi_clkgen(clk_hw);
+ 	unsigned int d, m, dout;
+-	unsigned int reg;
+ 	unsigned long long tmp;
++	unsigned int val;
+ 
+-	axi_clkgen_mmcm_read(axi_clkgen, MMCM_REG_CLKOUT0_2, &reg);
+-	if (reg & MMCM_CLKOUT_NOCOUNT) {
+-		dout = 1;
+-	} else {
+-		axi_clkgen_mmcm_read(axi_clkgen, MMCM_REG_CLKOUT0_1, &reg);
+-		dout = (reg & 0x3f) + ((reg >> 6) & 0x3f);
+-	}
++	dout = axi_clkgen_get_div(axi_clkgen, MMCM_REG_CLKOUT0_1,
++		MMCM_REG_CLKOUT0_2);
++	m = axi_clkgen_get_div(axi_clkgen, MMCM_REG_CLK_FB1,
++		MMCM_REG_CLK_FB2);
+ 
+-	axi_clkgen_mmcm_read(axi_clkgen, MMCM_REG_CLK_DIV, &reg);
+-	if (reg & MMCM_CLK_DIV_NOCOUNT)
++	axi_clkgen_mmcm_read(axi_clkgen, MMCM_REG_CLK_DIV, &val);
++	if (val & MMCM_CLK_DIV_NOCOUNT)
+ 		d = 1;
+ 	else
+-		d = (reg & 0x3f) + ((reg >> 6) & 0x3f);
 -
--This binding uses the common clock binding[1].
--
--[1] Documentation/devicetree/bindings/clock/clock-bindings.txt
--
--Required properties:
--- compatible : shall be "adi,axi-clkgen-1.00.a" or "adi,axi-clkgen-2.00.a".
--- #clock-cells : from common clock binding; Should always be set to 0.
--- reg : Address and length of the axi-clkgen register set.
--- clocks : Phandle and clock specifier for the parent clock(s). This must
--	either reference one clock if only the first clock input is connected or two
--	if both clock inputs are connected. For the later case the clock connected
--	to the first input must be specified first.
--
--Optional properties:
--- clock-output-names : From common clock binding.
--
--Example:
--	clock@ff000000 {
--		compatible = "adi,axi-clkgen";
--		#clock-cells = <0>;
--		reg = <0xff000000 0x1000>;
--		clocks = <&osc 1>;
--	};
+-	axi_clkgen_mmcm_read(axi_clkgen, MMCM_REG_CLK_FB2, &reg);
+-	if (reg & MMCM_CLKOUT_NOCOUNT) {
+-		m = 1;
+-	} else {
+-		axi_clkgen_mmcm_read(axi_clkgen, MMCM_REG_CLK_FB1, &reg);
+-		m = (reg & 0x3f) + ((reg >> 6) & 0x3f);
+-	}
++		d = (val & 0x3f) + ((val >> 6) & 0x3f);
+ 
+ 	if (d == 0 || dout == 0)
+ 		return 0;
 -- 
 2.17.1
 
