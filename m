@@ -2,95 +2,129 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4BF727FDFB
-	for <lists+linux-clk@lfdr.de>; Thu,  1 Oct 2020 13:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BCF5280117
+	for <lists+linux-clk@lfdr.de>; Thu,  1 Oct 2020 16:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731791AbgJALCv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 1 Oct 2020 07:02:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52772 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731131AbgJALCv (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 1 Oct 2020 07:02:51 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D93AE20B1F;
-        Thu,  1 Oct 2020 11:02:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601550170;
-        bh=xYiMC3INrKF34oEyrsmUUrqjbwI/zSijaQlQHN9HorA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KEei53PbBIIkdzQLDb/7K/52YSbflBQYn3bG/m713eKa8/9nV0fPPDI4yq6H+/fvV
-         xVqht4hR38nzz4Qgnh/AAp0mk+5WyFzIOOYfEFPMoUP75ral06RLc43LxHUnNG4hb1
-         tZZP4hijlYOR/icBsCoZV1jH7RB2VuKegMZKFfws=
-Date:   Thu, 1 Oct 2020 12:01:50 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     linux-iio@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-crypto@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-acpi@vger.kernel.org, David Lechner <david@lechnology.com>,
-        Valdis =?utf-8?Q?Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
-        kernel-janitors@vger.kernel.org, drbd-dev@lists.linbit.com,
-        openipmi-developer@lists.sourceforge.net,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-ide@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-wireless@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: Re: [PATCH 00/18] use semicolons rather than commas to separate
- statements
-Message-ID: <20201001110150.GA6715@sirena.org.uk>
-References: <1601233948-11629-1-git-send-email-Julia.Lawall@inria.fr>
- <160132172369.55460.9237357219623604216.b4-ty@kernel.org>
- <b1174f9be2ce65f6b5ebefcba0b48e792926abbc.camel@perches.com>
- <20200929113745.GB4799@sirena.org.uk>
- <db26d49401dc0bd6b9013a603a155f9827f404a4.camel@perches.com>
+        id S1732381AbgJAOPu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 1 Oct 2020 10:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732339AbgJAOPu (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 1 Oct 2020 10:15:50 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53EBC0613D0;
+        Thu,  1 Oct 2020 07:15:48 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id m6so5982277wrn.0;
+        Thu, 01 Oct 2020 07:15:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=BEVeioAblvOjShBbM1jBg6agZyVGfRoTs/GtPxjBCbI=;
+        b=oMhrCQWAOHqG6HxVMBmqVZPYxMru6FIXm3mJvAbc8rbL7tactK29OZk+GvNiM5PZk8
+         rF6p5qi0AyXKRjNx+f23OJ8VJ+FleD7gQP9lLRLq2Y4dXvx012uxiiO1b7fpiRntPsoI
+         PI0IvzVtjor7xv0a/TguOEJumonWGlfE65S4PwSOaNJs2XyLk4l1P2ZKGnjoloQnXwyz
+         6CDkgfu187Eq4Lf2dvoi1cHfzHjCKVZhmf5NrBoC9ZlJVUhX8aK9BA+/KWZFgHuk8Wxl
+         7frfWbzrA5r6wEJBfZ+pXNAGHzjb8U3WB0CfY06Dbqb+2MmXIltXnqleTmlcDnjvc9Mi
+         EFtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BEVeioAblvOjShBbM1jBg6agZyVGfRoTs/GtPxjBCbI=;
+        b=HbEo7gVGRlw2ugI3ZSZ3AWHARrqmWTTmInCljAwWrPb4rEdmRzMDF5udluFCZnoZ+U
+         mQNkfG3gdCx616tVTzvlUGT2/GQ/ttRe/rXtxQ/VuZPpjNYBWRsKNhIDanlIcWonJMWa
+         g1IVnq1DmYrnLFZ1ZQjonvwehEY3FnxSnR9fFCJSYaf/ERo8vrXkryWsjAAYDbHnuaCl
+         AI3Xe/urnrBk9TWFs9J6YEUafb3dkDtrK0gnPJNBLc7VCR4XOeGQmxJy8CbbR7Zq+LRz
+         arD8eqymjDgDxRAqb/4+AoGKfK3YUGzDSGrg/sfIMLAs1oTcawtZTOu+Bl5FqPD7OVu4
+         iH5A==
+X-Gm-Message-State: AOAM533dlyHIlXQz1c46N7XkXL4oVuk6GzYb0gju21XFub9y5Fle4dTD
+        DHBMGeQ1Fc5iMgNRX6rQntc=
+X-Google-Smtp-Source: ABdhPJwUjBFOW1XPUuWU4ekSqDncW2iPM/Z45iswZFbsIeOrE+yuHZU3Vu24DSJPTVO2+ih9PwthHw==
+X-Received: by 2002:adf:e4cf:: with SMTP id v15mr9174610wrm.174.1601561747382;
+        Thu, 01 Oct 2020 07:15:47 -0700 (PDT)
+Received: from ziggy.stardust ([213.195.119.110])
+        by smtp.gmail.com with ESMTPSA id v4sm96564wml.46.2020.10.01.07.15.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Oct 2020 07:15:45 -0700 (PDT)
+Subject: Re: [PATCH v3 7/9] clk: mediatek: Fix asymmetrical PLL enable and
+ disable control
+To:     Weiyi Lu <weiyi.lu@mediatek.com>, Rob Herring <robh@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>
+Cc:     James Liao <jamesjj.liao@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
+        srv_heupstream@mediatek.com, Wendell Lin <wendell.lin@mediatek.com>
+References: <1599103380-4155-1-git-send-email-weiyi.lu@mediatek.com>
+ <1599103380-4155-8-git-send-email-weiyi.lu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Message-ID: <516a5f5b-f5af-0362-a73e-97b3db7300aa@gmail.com>
+Date:   Thu, 1 Oct 2020 16:15:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CE+1k2dSO48ffgeK"
-Content-Disposition: inline
-In-Reply-To: <db26d49401dc0bd6b9013a603a155f9827f404a4.camel@perches.com>
-X-Cookie: Stay away from flying saucers today.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1599103380-4155-8-git-send-email-weiyi.lu@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 
---CE+1k2dSO48ffgeK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Wed, Sep 30, 2020 at 12:33:39PM -0700, Joe Perches wrote:
-> On Tue, 2020-09-29 at 12:37 +0100, Mark Brown wrote:
+On 03/09/2020 05:22, Weiyi Lu wrote:
+> The en_mask actually is a combination of divider enable mask
+> and pll enable bit(bit0).
+> Before this patch, we enabled both divider mask and bit0 in prepare(),
+> but only cleared the bit0 in unprepare().
+> Now, setting the enable register(CON0) in 2 steps: first divider mask,
+> then bit0 during prepare(), vice versa.
+> Hence, en_mask will only be used as divider enable mask.
+> Meanwhile, all the SoC PLL data are updated.
+> 
+> Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
+> ---
+>   drivers/clk/mediatek/clk-mt2701.c | 26 +++++++++++++-------------
+>   drivers/clk/mediatek/clk-mt2712.c | 30 +++++++++++++++---------------
+>   drivers/clk/mediatek/clk-mt6765.c | 20 ++++++++++----------
+>   drivers/clk/mediatek/clk-mt6779.c | 24 ++++++++++++------------
+>   drivers/clk/mediatek/clk-mt6797.c | 20 ++++++++++----------
+>   drivers/clk/mediatek/clk-mt7622.c | 18 +++++++++---------
+>   drivers/clk/mediatek/clk-mt7629.c | 12 ++++++------
+>   drivers/clk/mediatek/clk-mt8173.c | 28 ++++++++++++++--------------
+>   drivers/clk/mediatek/clk-mt8183.c | 22 +++++++++++-----------
+>   drivers/clk/mediatek/clk-pll.c    | 16 ++++++++++++----
+>   10 files changed, 112 insertions(+), 104 deletions(-)
+> 
+[...]
+>   
+> diff --git a/drivers/clk/mediatek/clk-pll.c b/drivers/clk/mediatek/clk-pll.c
+> index f440f2cd..e0b00bc 100644
+> --- a/drivers/clk/mediatek/clk-pll.c
+> +++ b/drivers/clk/mediatek/clk-pll.c
+> @@ -247,10 +247,14 @@ static int mtk_pll_prepare(struct clk_hw *hw)
+>   	writel(r, pll->pwr_addr);
+>   	udelay(1);
+>   
+> -	r = readl(pll->base_addr + REG_CON0);
+> -	r |= pll->data->en_mask;
+> +	r = readl(pll->base_addr + REG_CON0) | CON0_BASE_EN;
+>   	writel(r, pll->base_addr + REG_CON0);
+>   
+> +	if (pll->data->en_mask) {
+> +		r = readl(pll->base_addr + REG_CON0) | pll->data->en_mask;
+> +		writel(r, pll->base_addr + REG_CON0);
+> +	}
+> +
 
-> > Feel free to submit patches to b4.
+I think a better approach here would be to add a flag to mtk_pll_data instead of 
+changing all drivers in one big patch. This will allow you to add the driver 
+that needs to write the en_mask after writing CON0_BASE_EN more easily. And it 
+will later allow you to change the remaining driver one by one until all are 
+using the new flag.
 
-> Have you tried the existing option to send
-> thank you's on a specific ranges of patches?
-
-I am relying on b4 to identify which patches that I've downloaded are in
-the pushed branches.  Given that it explicitly lists the patches that
-are applied it appears to be doing an OK job here.
-
---CE+1k2dSO48ffgeK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl91tx4ACgkQJNaLcl1U
-h9D1IAf/a6Dh+mjW+LjpuCd+hkWCJa8iJTLmYSy9suf32mX9fM1T/gbOLQ1RJtu4
-ZQP0A5w52htIbRIWtYHrgtZQGXrq2SIm+peRmnKP0DXly+Fj0/G0zxg4lqxKzXtV
-+XpQjLbvcjF6JIV1ok5ScRg5HH8bfLJQvbGBbpmL9pvI+WniF4smB5bQRwd3qWEf
-MrBNI79S+kr1Cvjxnya+/TP7O4TtOQzzpB695ejEGvqxlTJQM5GGaZTLNJlBivOz
-ygXvOFlrffOajvN1K7URe41xznaDG4+c8pfziFXllSoEGp3yzANBNTtCGEvny0SY
-Nx0W3O8/sebfFJPHQ89w2atWG/nVEQ==
-=onQ8
------END PGP SIGNATURE-----
-
---CE+1k2dSO48ffgeK--
+Regards,
+Matthias
