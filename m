@@ -2,88 +2,61 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E3A286B9C
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Oct 2020 01:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F1B286C81
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Oct 2020 03:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728241AbgJGXxZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 7 Oct 2020 19:53:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40872 "EHLO mail.kernel.org"
+        id S1727307AbgJHByI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 7 Oct 2020 21:54:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50560 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727718AbgJGXxZ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 7 Oct 2020 19:53:25 -0400
+        id S1726323AbgJHByH (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 7 Oct 2020 21:54:07 -0400
 Received: from kernel.org (unknown [104.132.1.79])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A26E2206E7;
-        Wed,  7 Oct 2020 23:53:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 48551207C3;
+        Thu,  8 Oct 2020 01:54:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602114804;
-        bh=Ouup++k0KZa2jKp9tAE8O/4QEGO3ptvOonhqcI4wBE8=;
+        s=default; t=1602122047;
+        bh=lV3i+9ypzLKkJz3H47NnyJWPoQ8C3bvpjkcCNkKvoKY=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=r/NlsCdAAOzV7Wp6CM0qsomr8whtV4PF3r2w8D49lhreMQ70PJIASDXJBhpUGZq9k
-         +xYk9LPeEs9OxYoBsReVjzpLKjzKrxiZ4vUMrdKImQ4mJUmmoF+qPUDzodVNmnYUvJ
-         mI2DVoOGbGHXI7LGRzi8R3QbdQ/+trLZqPUKhfeQ=
+        b=reB3SrSx28A7TStUli82aUX7kqaxX8dn4Tyzi2zMW4h5WyU5q8Sb5G3rVUlrulvej
+         5xtI72kTaGPUPpqEVuyn7CTxcceuA4nthzbJ93gBCeu1A/MQtr9t3s1JEPDQuWuWpY
+         8HSCRDDRMib1C0z9vqfefCQkh0IBxsBo/y2OCPKE=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200928084744.32478-1-jun.nie@linaro.org>
-References: <20200928084744.32478-1-jun.nie@linaro.org>
-Subject: Re: [PATCH] clk: emit warning if fail to get parent clk
+In-Reply-To: <1j1rimjkr7.fsf@starbuckisacylon.baylibre.com>
+References: <1601233948-11629-1-git-send-email-Julia.Lawall@inria.fr> <1601233948-11629-11-git-send-email-Julia.Lawall@inria.fr> <1j1rimjkr7.fsf@starbuckisacylon.baylibre.com>
+Subject: Re: [PATCH 10/18] clk: meson: use semicolons rather than commas to separate statements
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     shawn.guo@linaro.org, Jun Nie <jun.nie@linaro.org>
-To:     Jun Nie <jun.nie@linaro.org>, linux-clk@vger.kernel.org,
-        mturquette@baylibre.com
-Date:   Wed, 07 Oct 2020 16:53:23 -0700
-Message-ID: <160211480321.310579.14554922934041815553@swboyd.mtv.corp.google.com>
+Cc:     Valdis =?utf-8?q?Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>,
+        Joe Perches <joe@perches.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        kernel-janitors@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Neil Armstrong <narmstrong@baylibre.com>
+Date:   Wed, 07 Oct 2020 18:54:05 -0700
+Message-ID: <160212204583.310579.15787381299278211019@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Jun Nie (2020-09-28 01:47:44)
-> Emit warning if fail to get parent clk to expose potential issue earlier.
-> For example, clk_hw_get_rate() will return 0 for a clock without parent c=
-ore
-> while parent number is not zero. This cause opp always think it is switch=
-ing
-> frequency from 0 to some other frequency. Crash may happen if we switch
-> from high frequency to low frequency and lower CPU voltage before clk rate
-> switching.
-
-Thanks for the background reasoning. It's good to know what the problem
-is. Is there any way to change OPP so it can handle this scenario
-better?
-
+Quoting Jerome Brunet (2020-09-28 02:47:24)
 >=20
-> Signed-off-by: Jun Nie <jun.nie@linaro.org>
-> ---
->  drivers/clk/clk.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+> On Sun 27 Sep 2020 at 21:12, Julia Lawall <Julia.Lawall@inria.fr> wrote:
 >=20
-> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-> index 1a27e99ccb17..78b21b888e56 100644
-> --- a/drivers/clk/clk.c
-> +++ b/drivers/clk/clk.c
-> @@ -424,6 +424,7 @@ static void clk_core_fill_parent_index(struct clk_cor=
-e *core, u8 index)
->  {
->         struct clk_parent_map *entry =3D &core->parents[index];
->         struct clk_core *parent =3D ERR_PTR(-ENOENT);
-> +       int emit_warn =3D 0;
-> =20
->         if (entry->hw) {
->                 parent =3D entry->hw->core;
-> @@ -443,6 +444,12 @@ static void clk_core_fill_parent_index(struct clk_co=
-re *core, u8 index)
->         /* Only cache it if it's not an error */
->         if (!IS_ERR(parent))
->                 entry->core =3D parent;
-> +       else if (parent !=3D ERR_PTR(-EPROBE_DEFER))
-> +               emit_warn =3D 1;
-> +
-> +       if (emit_warn || (!parent && core->num_parents))
-> +               pr_warn("Fail to get indexed %d parent for clk %s.",
-> +                       index, core->name);
+> Hi Stephen,
+>=20
+> Do you want to take all the clock related patches directly ?
+>=20
+>=20
 
-How do we know that this error isn't because the parent hasn't been
-probed yet?
+Sure that's fine.
