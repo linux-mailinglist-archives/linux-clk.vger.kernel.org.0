@@ -2,115 +2,140 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2564F28D3B4
-	for <lists+linux-clk@lfdr.de>; Tue, 13 Oct 2020 20:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D7D628DD62
+	for <lists+linux-clk@lfdr.de>; Wed, 14 Oct 2020 11:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731047AbgJMSdw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 13 Oct 2020 14:33:52 -0400
-Received: from z5.mailgun.us ([104.130.96.5]:55756 "EHLO z5.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729085AbgJMSdu (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 13 Oct 2020 14:33:50 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1602614030; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=UlQQZJMTNWAVSa+0hA2FXSLe0acOMZ4vnePW50VY0bY=; b=pm2vYlE7IGM358sRH1Z91fVf3+ei1qJyntLVwx6gHCNjRRt5C/pDBiKglahhbBtuCtzmDLVm
- yAQRd2pFYNsweHpfnDWxVORzg5Hw0ldzKwN59UIaxEaU9gE+6AGJ2KFxN0Byp2jdUp8SWEIc
- qN131Gq0vDtGjOEq7eAtm3GBg4o=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 5f85f309d6d00c7a9e1e2ed9 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 13 Oct 2020 18:33:45
- GMT
-Sender: tdas=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 736D4C433FF; Tue, 13 Oct 2020 18:33:45 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from tdas-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: tdas)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5D3C6C433F1;
-        Tue, 13 Oct 2020 18:33:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 5D3C6C433F1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=tdas@codeaurora.org
-From:   Taniya Das <tdas@codeaurora.org>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?q?Michael=20Turquette=20=C2=A0?= <mturquette@baylibre.com>
-Cc:     David Brown <david.brown@linaro.org>,
+        id S1726766AbgJNJYL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 14 Oct 2020 05:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731180AbgJNJV4 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 14 Oct 2020 05:21:56 -0400
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D6BC0613BD
+        for <linux-clk@vger.kernel.org>; Tue, 13 Oct 2020 15:27:08 -0700 (PDT)
+Received: by mail-vs1-xe41.google.com with SMTP id l6so955805vsr.7
+        for <linux-clk@vger.kernel.org>; Tue, 13 Oct 2020 15:27:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nEh8aWSBzrx6UT31IWc0LsTnrFS8ZDfHAx42jaS0Cjs=;
+        b=jvDdn/lroKNiUWKl5bN/qT1jMxMbc7sZcDAu3vbzKBJYEOQM00+YdWsySveShwX1qr
+         LTiDPBQG5xOZ/wML9iM6nzFQgC76cHZwJpg9OoaMQN3FhlVSj/quqpW7HMh0VMVa8ILu
+         VS8aq2hPsvuME+fGU5NMgPErb9Z5OJzMtD+Lk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nEh8aWSBzrx6UT31IWc0LsTnrFS8ZDfHAx42jaS0Cjs=;
+        b=L5dZ0AEv4GietbbM1L8r6DpcKHDDwi33rmljKKy8tk3yHSA8bLzFa2E0YWG0UnFTau
+         RsG70LfHJ+mZmFFrqzOsUfw8dS8setq46A8QJDGp8CDCc2Xt7IquM3Pf3KxaGjoaoPPj
+         9GVoyy0eBrWqGY8G/jef7LKA47mHRpKWvlcn/36lbqtvZEHyVuMsA7WOQin7uebFrxSk
+         RfLx2JNpUAejaSuibwsQA0gc1IOJGwV4EoI23+vX+/+R7aR/vvxbNItweQAf2Av4fx0H
+         +mngiYqROXVXOYU4NTniw7vrFQy8KebxMQfXNLDu/xt9Np/doPQzSACpNMgDPsLKmqMg
+         vDCg==
+X-Gm-Message-State: AOAM532H7Iz6NWpkIMuBTcdJnounTezmLqvIhLcxewX73ObKU6ytr5R+
+        1bB1I23puNJtC3DWoDEDUSrNhZSVVpJ8pw==
+X-Google-Smtp-Source: ABdhPJzmlGAS+/zfTb1WII62pAzCOWVkXEXGAXAHQYHK2MoOol6hUKJQo0bfJVuW4f0cXZ5ZUYocgg==
+X-Received: by 2002:a67:6504:: with SMTP id z4mr1944542vsb.48.1602628027566;
+        Tue, 13 Oct 2020 15:27:07 -0700 (PDT)
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com. [209.85.222.54])
+        by smtp.gmail.com with ESMTPSA id m125sm195010vkh.15.2020.10.13.15.27.06
+        for <linux-clk@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Oct 2020 15:27:06 -0700 (PDT)
+Received: by mail-ua1-f54.google.com with SMTP id x11so503689uav.1
+        for <linux-clk@vger.kernel.org>; Tue, 13 Oct 2020 15:27:06 -0700 (PDT)
+X-Received: by 2002:a9f:31ce:: with SMTP id w14mr1804071uad.104.1602628026293;
+ Tue, 13 Oct 2020 15:27:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <1602614008-2421-1-git-send-email-tdas@codeaurora.org> <1602614008-2421-2-git-send-email-tdas@codeaurora.org>
+In-Reply-To: <1602614008-2421-2-git-send-email-tdas@codeaurora.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 13 Oct 2020 15:26:54 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XOj-Vg36v8GtE1sjay0jCdCLgRMJtyN9ZYyZhsNkdVfg@mail.gmail.com>
+Message-ID: <CAD=FV=XOj-Vg36v8GtE1sjay0jCdCLgRMJtyN9ZYyZhsNkdVfg@mail.gmail.com>
+Subject: Re: [PATCH v0] clk: qcom: lpasscc: Re-configure the PLL in case lost
+To:     Taniya Das <tdas@codeaurora.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        David Brown <david.brown@linaro.org>,
         Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>
-Subject: [PATCH v0] clk: qcom: lpasscc: Re-configure the PLL in case lost
-Date:   Wed, 14 Oct 2020 00:03:28 +0530
-Message-Id: <1602614008-2421-2-git-send-email-tdas@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1602614008-2421-1-git-send-email-tdas@codeaurora.org>
-References: <1602614008-2421-1-git-send-email-tdas@codeaurora.org>
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-In the case where the PLL configuration is lost, then the pm runtime
-resume will reconfigure before usage.
+Hi,
 
-Fixes: edab812d802d ("clk: qcom: lpass: Add support for LPASS clock controller for SC7180")
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
----
- drivers/clk/qcom/lpasscorecc-sc7180.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+On Tue, Oct 13, 2020 at 11:33 AM Taniya Das <tdas@codeaurora.org> wrote:
+>
+> In the case where the PLL configuration is lost, then the pm runtime
+> resume will reconfigure before usage.
+>
+> Fixes: edab812d802d ("clk: qcom: lpass: Add support for LPASS clock controller for SC7180")
+> Signed-off-by: Taniya Das <tdas@codeaurora.org>
+> ---
+>  drivers/clk/qcom/lpasscorecc-sc7180.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+>
+> diff --git a/drivers/clk/qcom/lpasscorecc-sc7180.c b/drivers/clk/qcom/lpasscorecc-sc7180.c
+> index 228d08f..5804a93 100644
+> --- a/drivers/clk/qcom/lpasscorecc-sc7180.c
+> +++ b/drivers/clk/qcom/lpasscorecc-sc7180.c
+> @@ -356,6 +356,25 @@ static const struct qcom_cc_desc lpass_audio_hm_sc7180_desc = {
+>         .num_gdscs = ARRAY_SIZE(lpass_audio_hm_sc7180_gdscs),
+>  };
+>
+> +static int lpass_core_cc_pm_clk_resume(struct device *dev)
+> +{
+> +       struct regmap *regmap = dev_get_drvdata(dev);
+> +       int l_val;
 
-diff --git a/drivers/clk/qcom/lpasscorecc-sc7180.c b/drivers/clk/qcom/lpasscorecc-sc7180.c
-index 228d08f..5804a93 100644
---- a/drivers/clk/qcom/lpasscorecc-sc7180.c
-+++ b/drivers/clk/qcom/lpasscorecc-sc7180.c
-@@ -356,6 +356,25 @@ static const struct qcom_cc_desc lpass_audio_hm_sc7180_desc = {
- 	.num_gdscs = ARRAY_SIZE(lpass_audio_hm_sc7180_gdscs),
- };
+nit: technically "unsigned int" to match what regmap_read takes.
 
-+static int lpass_core_cc_pm_clk_resume(struct device *dev)
-+{
-+	struct regmap *regmap = dev_get_drvdata(dev);
-+	int l_val;
-+
-+	pm_clk_resume(dev);
-+
-+	/* Read PLL_L_VAL */
-+	regmap_read(regmap, 0x1004, &l_val);
-+	if (!l_val)
-+		clk_fabia_pll_configure(&lpass_lpaaudio_dig_pll, regmap,
-+				&lpass_lpaaudio_dig_pll_config);
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops lpass_core_pm_ops = {
-+	SET_RUNTIME_PM_OPS(pm_clk_suspend, lpass_core_cc_pm_clk_resume, NULL)
-+};
-+
- static int lpass_core_cc_sc7180_probe(struct platform_device *pdev)
- {
- 	const struct qcom_cc_desc *desc;
-@@ -386,6 +405,9 @@ static int lpass_core_cc_sc7180_probe(struct platform_device *pdev)
- 	clk_fabia_pll_configure(&lpass_lpaaudio_dig_pll, regmap,
- 				&lpass_lpaaudio_dig_pll_config);
+> +
+> +       pm_clk_resume(dev);
 
-+	pdev->dev.driver->pm = &lpass_core_pm_ops;
-+	dev_set_drvdata(&pdev->dev, regmap);
-+
- 	return qcom_cc_really_probe(pdev, &lpass_core_cc_sc7180_desc, regmap);
- }
+Even though pm_clk_resume() doesn't currently return any errors, it
+would be good form to check.  AKA:
 
---
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
-of the Code Aurora Forum, hosted by the  Linux Foundation.
+ret = pm_clk_resume(dev);
+if (ret)
+  return ret;
 
+
+> +       /* Read PLL_L_VAL */
+> +       regmap_read(regmap, 0x1004, &l_val);
+> +       if (!l_val)
+> +               clk_fabia_pll_configure(&lpass_lpaaudio_dig_pll, regmap,
+> +                               &lpass_lpaaudio_dig_pll_config);
+> +       return 0;
+> +}
+> +
+> +static const struct dev_pm_ops lpass_core_pm_ops = {
+> +       SET_RUNTIME_PM_OPS(pm_clk_suspend, lpass_core_cc_pm_clk_resume, NULL)
+> +};
+> +
+>  static int lpass_core_cc_sc7180_probe(struct platform_device *pdev)
+>  {
+>         const struct qcom_cc_desc *desc;
+> @@ -386,6 +405,9 @@ static int lpass_core_cc_sc7180_probe(struct platform_device *pdev)
+>         clk_fabia_pll_configure(&lpass_lpaaudio_dig_pll, regmap,
+>                                 &lpass_lpaaudio_dig_pll_config);
+>
+> +       pdev->dev.driver->pm = &lpass_core_pm_ops;
+> +       dev_set_drvdata(&pdev->dev, regmap);
+
+I'm kinda confused.  Why not just change "lpass_core_cc_pm_ops"?  Then
+you can get rid of the above two lines of code and get rid of the
+whole "lpass_core_pm_ops" structure?
+
+
+-Doug
