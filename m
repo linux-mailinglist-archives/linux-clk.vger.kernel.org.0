@@ -2,75 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C272928D6EC
-	for <lists+linux-clk@lfdr.de>; Wed, 14 Oct 2020 01:17:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2516428D703
+	for <lists+linux-clk@lfdr.de>; Wed, 14 Oct 2020 01:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727731AbgJMXR5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 13 Oct 2020 19:17:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48192 "EHLO mail.kernel.org"
+        id S2387736AbgJMXcu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 13 Oct 2020 19:32:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54298 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727344AbgJMXR5 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 13 Oct 2020 19:17:57 -0400
+        id S1726773AbgJMXct (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 13 Oct 2020 19:32:49 -0400
 Received: from kernel.org (unknown [104.132.1.79])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E8A7520B1F;
-        Tue, 13 Oct 2020 23:17:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2C50921D7B;
+        Tue, 13 Oct 2020 23:32:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602631077;
-        bh=UQ1kTWTCvomm7q0TZd9VPzHpHgnguOcIZu5JIN7IRpY=;
+        s=default; t=1602631969;
+        bh=JogoeWLSFzX4Avzq+rf0/Td6HukMkPftyoJlK2bZk8k=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=DFcN8qVOV4J2yI4znV6kmlilndnh2Ne6YdgO13yzegnqrxHEX1N40a2B2r1ZtCVu0
-         cBmQBzxX9ApPMcKW2Yygot3ZUIgCN5Io0+IqvUeEWBD31eENWsRuWbwYrPJeNPNmGF
-         c/SIgXvCS5TFk63eACfY14qL/LqPVkf8QcXTwA3Y=
+        b=TDpwI4pJRV8RYF/Ek3MQOf8UhsyZ8Iy0wFXhauf6nx02Du9bhLDpLrtOXhPp13oD4
+         WiktTviOLyoBNMdLl3KuCeyIkZxfEq4AweEuj1K8AJ6LQDBu2QtUJX4lxPDLOo++2x
+         EMuaNZLcfyTK1PZp6DKxf1UeeiXDj3OYcQieWdd0=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <O0S7HQ.34QHSNHJ7JWJ2@crapouillou.net>
-References: <20200915123818.13272-1-paul@crapouillou.net> <20200915123818.13272-3-paul@crapouillou.net> <20200924202237.GJ1223313@ravnborg.org> <O0S7HQ.34QHSNHJ7JWJ2@crapouillou.net>
-Subject: Re: [PATCH 2/3] drm/ingenic: Reset pixclock rate when parent clock rate changes
+In-Reply-To: <1600930506-394-1-git-send-email-wangqing@vivo.com>
+References: <1600930506-394-1-git-send-email-wangqing@vivo.com>
+Subject: Re: [PATCH] clk/qcom: fix spelling typo
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        od@zcrc.me, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Sam Ravnborg <sam@ravnborg.org>
-Date:   Tue, 13 Oct 2020 16:17:55 -0700
-Message-ID: <160263107570.310579.5439811142598502777@swboyd.mtv.corp.google.com>
+Cc:     Wang Qing <wangqing@vivo.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Wang Qing <wangqing@vivo.com>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 13 Oct 2020 16:32:47 -0700
+Message-ID: <160263196771.310579.16132118267794520801@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Paul Cercueil (2020-09-25 05:29:12)
-> >>  +static int ingenic_drm_update_pixclk(struct notifier_block *nb,
-> >>  +                                unsigned long action,
-> >>  +                                void *data)
-> >>  +{
-> >>  +   struct ingenic_drm *priv =3D drm_nb_get_priv(nb);
-> >>  +
-> >>  +   switch (action) {
-> >>  +   case PRE_RATE_CHANGE:
-> >>  +           mutex_lock(&priv->clk_mutex);
-> >>  +           priv->update_clk_rate =3D true;
-> >>  +           drm_crtc_wait_one_vblank(&priv->crtc);
-> >>  +           return NOTIFY_OK;
-> >>  +   default:
-> >>  +           mutex_unlock(&priv->clk_mutex);
-> > Any risk the POST_RATE_CHANGE or ABORT_RATE_CHANGE may go missing so=20
-> > we
-> > fail to unlock the mutex?
-> > I think not but wanted to make sure you had thought about it.
+Quoting Wang Qing (2020-09-23 23:55:04)
+> Modify the comment typo: "compliment" -> "complement".
 >=20
-> My assumption was that you always get POST_RATE_CHANGE or=20
-> ABORT_RATE_CHANGE. But I am not 100% sure about that.
->=20
-> Michael, Stephen: is it safe to assume that I will always get notified=20
-> with POST_RATE_CHANGE or ABORT_RATE_CHANGE, after I got notified with=20
-> PRE_RATE_CHANGE?
->=20
+> Signed-off-by: Wang Qing <wangqing@vivo.com>
+> ---
 
-I think one or the other will happen. Of course, the notifiers are sort
-of shunned so if you can avoid using notifiers entirely it would be
-better.
+Applied to clk-next
