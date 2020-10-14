@@ -2,94 +2,122 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3D228DC53
-	for <lists+linux-clk@lfdr.de>; Wed, 14 Oct 2020 11:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E12528D99D
+	for <lists+linux-clk@lfdr.de>; Wed, 14 Oct 2020 07:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728752AbgJNJEt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 14 Oct 2020 05:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727382AbgJNJEg (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 14 Oct 2020 05:04:36 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07B5C04585B;
-        Tue, 13 Oct 2020 22:28:13 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id o21so1544478qtp.2;
-        Tue, 13 Oct 2020 22:28:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kB//nqoMYrgFKVVbmCReUvvlCp/OH9pTFa1D0WvNeK8=;
-        b=Gl6vpxUKtK+nwjlLO+SvrSUeR2dC+PEV5wmiGiSO4POlCr4RCSIgQ3LSh9oI8d/GvE
-         3SCz5zqjFohPG3bpCgc3pDGJbq7kbxfM78TQRlzSzCwMCDAMEbi7r8gN5Lx7EeR9WFzp
-         ASIh0sC7J1hK0xf8PHJlMZ3xfkynkx3r+Txrk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kB//nqoMYrgFKVVbmCReUvvlCp/OH9pTFa1D0WvNeK8=;
-        b=U5oVH4eVCkdJEGqiktlNj6whxDVekGeblMKmTDVtzwKqiP6PnPYJVOGrncCcPuc0m0
-         W7FU8Cf/cE6L6mVIWhJaM90U7TOroh05mPCgABeR6iKoQ0foPQoSA4W+XRtDKkOkGt8v
-         wEPxx+9c8B8aEywKFgqEDFH0iMD4ckYBntGEQXYzQ3003OQT1sPp6VkdlRPNF97Z2fMI
-         gE1EQCI23EIiXxicJgt+xKDxPXoDY8AXnhXqGhAYLVyOVGuOlZb14i7sYycxYXDWhxUH
-         kJeBvt/vAPpWTcbnSl1n7hm0qmYv6kNzbZ4zLkXKzS4X8si7phpgQE5f8xpWj7vOaCv6
-         4M7Q==
-X-Gm-Message-State: AOAM5326xXarde5RpqrbPuLKPZaLWCoNcjZSTV1T/57HTtJazosN3KuF
-        hVE/YuDWIpMW3BpcPRf+d3BAchzN0n5cXoR1Fug=
-X-Google-Smtp-Source: ABdhPJw24gb5jxVKjUGFnb8ILFTaJiae+ZhEB+sYFIQ/Gi83c+wIbHiQ4g4hFhDiM1oYPQWMGp2dm2s2NPDIVlvVANQ=
-X-Received: by 2002:ac8:3674:: with SMTP id n49mr3177077qtb.385.1602653292820;
- Tue, 13 Oct 2020 22:28:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200928070108.14040-1-ryan_chen@aspeedtech.com>
- <20200928070108.14040-2-ryan_chen@aspeedtech.com> <160264382296.310579.9835482254268204873@swboyd.mtv.corp.google.com>
-In-Reply-To: <160264382296.310579.9835482254268204873@swboyd.mtv.corp.google.com>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 14 Oct 2020 05:28:00 +0000
-Message-ID: <CACPK8Xe-_hTey7hTJjG2-EcDsTN0qOw3bWBcrZZohEK3QOJuvg@mail.gmail.com>
-Subject: Re: [PATCH 1/1] clk: aspeed: modify some default clks are critical
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Andrew Jeffery <andrew@aj.id.au>,
+        id S2387449AbgJNFjN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 14 Oct 2020 01:39:13 -0400
+Received: from mail-eopbgr1320135.outbound.protection.outlook.com ([40.107.132.135]:47199
+        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387447AbgJNFjN (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 14 Oct 2020 01:39:13 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HKratqy8P/EbJA19rYhqeVS46HxcO9nK/TEMy57H7OsJjaFoPjO9ZImmz7ss5WlAN4nUs5eRqTZD7f/BTgNPnK5si5pzRj/EItGx4e3tiLYri6xAc/MF/z2fOB9mwvEuoXu1TWilBu4RG6QmTtSbqzF6KTXNC8dfDCs9qy7GqZigMOyFlnQNamiPxgkhgQq0Jbt+Tjj5+1qnvOzvfGt3dcCcuZVZl2Dl5bHV2mUkGmL+R+2jfiQhISXOb2f9YyhIhsY6vYe0ThGKngDz5t/jIVerzE9VZm8omKLK9bpWe2g07dYWhRqP9ZGcQRJA3GkoLbkCsXCgBPf9716xsQHyDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I9U3XdJ6VtGEk1fHBu0bLKR0mRyODxJrAQTLEOegahM=;
+ b=W8nSOZQ4VD4H3YiU2Zd6ZvcERh9KDUigm+sFgiTuMwg7Svq6gm9KVn9htnQ/w1o4TRt8l8znO9fY+x8HTW9exGMhoLlj5R0bM+ktTIh9RVr5l2Yip5GnSGUxmLFvY50OHyUedYub/A6lYQAbDZOLexGkgIAdQGOEkchxep4Do6GCsbfq1mATCQOyG13KoZKKbEHBFwuf4jRduD8GEcPTV+wNWrmkD1vHmVrCJTbivWk/92NG7bBWcvqk2LlUvp32iENURwit/pP55aiaKrxO2GSQPh+eVEbp6nKNTNlzq0fq0Kflf4IUQRSF05cVhtSP99HieSJGSOmSL2+5+cm+/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+Received: from HK0PR06MB3380.apcprd06.prod.outlook.com (2603:1096:203:82::18)
+ by HK0PR06MB3649.apcprd06.prod.outlook.com (2603:1096:203:b4::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.21; Wed, 14 Oct
+ 2020 05:39:08 +0000
+Received: from HK0PR06MB3380.apcprd06.prod.outlook.com
+ ([fe80::6def:b61:3beb:f3d5]) by HK0PR06MB3380.apcprd06.prod.outlook.com
+ ([fe80::6def:b61:3beb:f3d5%6]) with mapi id 15.20.3455.030; Wed, 14 Oct 2020
+ 05:39:08 +0000
+From:   Ryan Chen <ryan_chen@aspeedtech.com>
+To:     Joel Stanley <joel@jms.id.au>, Stephen Boyd <sboyd@kernel.org>
+CC:     Andrew Jeffery <andrew@aj.id.au>,
         Michael Turquette <mturquette@baylibre.com>,
-        Ryan Chen <ryan_chen@aspeedtech.com>,
-        BMC-SW <bmc-sw@aspeedtech.com>,
+        BMC-SW <BMC-SW@aspeedtech.com>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        linux-clk@vger.kernel.org,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: RE: [PATCH 1/1] clk: aspeed: modify some default clks are critical
+Thread-Topic: [PATCH 1/1] clk: aspeed: modify some default clks are critical
+Thread-Index: AQHWlWUpDwyjj9Eb9EeIGPpnHXDUp6mWfroAgAAsCwCAAAG5YA==
+Date:   Wed, 14 Oct 2020 05:39:08 +0000
+Message-ID: <HK0PR06MB33800F099D8191D0EC65A2E7F2050@HK0PR06MB3380.apcprd06.prod.outlook.com>
+References: <20200928070108.14040-1-ryan_chen@aspeedtech.com>
+ <20200928070108.14040-2-ryan_chen@aspeedtech.com>
+ <160264382296.310579.9835482254268204873@swboyd.mtv.corp.google.com>
+ <CACPK8Xe-_hTey7hTJjG2-EcDsTN0qOw3bWBcrZZohEK3QOJuvg@mail.gmail.com>
+In-Reply-To: <CACPK8Xe-_hTey7hTJjG2-EcDsTN0qOw3bWBcrZZohEK3QOJuvg@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: jms.id.au; dkim=none (message not signed)
+ header.d=none;jms.id.au; dmarc=none action=none header.from=aspeedtech.com;
+x-originating-ip: [211.20.114.70]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5543554b-012d-4737-aabd-08d8700378af
+x-ms-traffictypediagnostic: HK0PR06MB3649:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <HK0PR06MB3649A8FD9CEEA90E0A2A4F36F2050@HK0PR06MB3649.apcprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: wHCxSE6SpVU0S+DEuZlvdtIUFqTqYI8HH6qyl8KfF4AbQUnVhdS2f0r/bp29J4eaylZjjvLjfrd6UEvbzYWnfs4xUTbNFp6qX07hYHX04es+mPLhHFZelI9eEvZEZRMqO3vMqbvYAwZ0AOIB9d4CKttI+IHumlduECmV2aZsAIFv8E5j5sm+jwXCe8sLGUjAi/7pRcaySuweQYCivT+aIj0xzkRztpRa16/+Fg4B58uGMIJAvNYEpLWXvOqUh3q1COaod68/WcG/TSIkCBTaenMHelGF66nz+5ws/lPi5obXVd3yh0r3DL3h0FYa6S+fviQaYVtY6t+S8iirN1lcrQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3380.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(376002)(396003)(39830400003)(136003)(366004)(76116006)(64756008)(66446008)(478600001)(66946007)(2906002)(7696005)(4326008)(86362001)(52536014)(71200400001)(55016002)(26005)(83380400001)(186003)(33656002)(6506007)(53546011)(9686003)(55236004)(110136005)(54906003)(66556008)(8676002)(66476007)(316002)(8936002)(5660300002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: XlB7TMKDFQojIdCW+ja3hjhiFWuKei5OLNMF8YigzHin/MFB7oa7ckFEXwsiY5zjvbyomG3qSJ4yfr9Si8dotlyjWUTz4oPrU30t0cuHHYs1CskkAcevlaVOKuClN0K4KNAiZMsTlGuGmsjKccbm8vLssmEIE3MKy4jBLHvBZd9u2T2TQJN2wYUOuADKe67mOzbZ9JpXiYNYUb70j02kfY9vw9FZpR3+WI+TIEHUuap3iw0KwOUK9VAgT2JCkW+qijQ42tM5gBrkiPRYAZrjXR283/RGEL5cjkH9oG/URCnZ/P1CzjBk9ZF28Mpz9Xt+doDIxI+Kq7q4bfOB+LIvuPqAwUcOVkXsyETE9YUA+oODBOGBHJ5iVobqZTRAGWVFcBogvjoFl8FPsylj4ZSqoWKvGY5OaPdNgifzT2Tzw00VNbtnM+LKBW1VKme37YCfOT/+rSOyktaBTSCp/V1RN+GW1fUM7JvJB29zOgRhGZVJsNE6ftNiXXdlI1WbGHaSkuD8up2DXoUdVV7GnxNqQ2MnHNBbEzdao3N4l6zNEwuADe2uuoVYVm3Qm6l9iJO1IQu/pu6mDkqNcHPh2LtHe2sEtrYEL5Kw8ngWkYHkPwuh1qDH3QrtOTWrejJ2ZqRH51tcQn5lAu5zGUNicE/HEQ==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3380.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5543554b-012d-4737-aabd-08d8700378af
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Oct 2020 05:39:08.4536
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: IPinxIFdVlbD49n6CYz8kL9v98AQvk58IGedn5eYLlraRGHGq7IEyjslsuuU2QcJVjhaE3j40SQ2NAIdXyiKmJbcCDVLCWT1Irp1/c7aT3c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB3649
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, 14 Oct 2020 at 02:50, Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Ryan Chen (2020-09-28 00:01:08)
-> > In ASPEED SoC LCLK is LPC clock for all SuperIO device, UART1/UART2 are
-> > default for Host SuperIO UART device, eSPI clk for Host eSPI bus access
-> > eSPI slave channel, those clks can't be disable should keep default,
-> > otherwise will affect Host side access SuperIO and SPI slave device.
-> >
-> > Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
-> > ---
->
-> Is there resolution on this thread?
-
-Not yet.
-
-We have a system where the BMC (management controller) controls some
-clocks, but the peripherals that it's clocking are outside the BMC's
-control. In this case, the host processor us using some UARTs and what
-not independent of any code running on the BMC.
-
-Ryan wants to have them marked as critical so the BMC never powers them down.
-
-However, there are systems that don't use this part of the soc, so for
-those implementations they are not critical and Linux on the BMC can
-turn them off.
-
-Do you have any thoughts? Has anyone solved a similar problem already?
-
-Cheers,
-
-Joel
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBKb2VsIFN0YW5sZXkgPGpvZWxA
+am1zLmlkLmF1Pg0KPiBTZW50OiBXZWRuZXNkYXksIE9jdG9iZXIgMTQsIDIwMjAgMToyOCBQTQ0K
+PiBUbzogU3RlcGhlbiBCb3lkIDxzYm95ZEBrZXJuZWwub3JnPg0KPiBDYzogQW5kcmV3IEplZmZl
+cnkgPGFuZHJld0Bhai5pZC5hdT47IE1pY2hhZWwgVHVycXVldHRlDQo+IDxtdHVycXVldHRlQGJh
+eWxpYnJlLmNvbT47IFJ5YW4gQ2hlbiA8cnlhbl9jaGVuQGFzcGVlZHRlY2guY29tPjsNCj4gQk1D
+LVNXIDxCTUMtU1dAYXNwZWVkdGVjaC5jb20+OyBMaW51eCBBUk0NCj4gPGxpbnV4LWFybS1rZXJu
+ZWxAbGlzdHMuaW5mcmFkZWFkLm9yZz47IGxpbnV4LWFzcGVlZA0KPiA8bGludXgtYXNwZWVkQGxp
+c3RzLm96bGFicy5vcmc+OyBsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnOyBMaW51eCBLZXJuZWwN
+Cj4gTWFpbGluZyBMaXN0IDxsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnPg0KPiBTdWJqZWN0
+OiBSZTogW1BBVENIIDEvMV0gY2xrOiBhc3BlZWQ6IG1vZGlmeSBzb21lIGRlZmF1bHQgY2xrcyBh
+cmUgY3JpdGljYWwNCj4gDQo+IE9uIFdlZCwgMTQgT2N0IDIwMjAgYXQgMDI6NTAsIFN0ZXBoZW4g
+Qm95ZCA8c2JveWRAa2VybmVsLm9yZz4gd3JvdGU6DQo+ID4NCj4gPiBRdW90aW5nIFJ5YW4gQ2hl
+biAoMjAyMC0wOS0yOCAwMDowMTowOCkNCj4gPiA+IEluIEFTUEVFRCBTb0MgTENMSyBpcyBMUEMg
+Y2xvY2sgZm9yIGFsbCBTdXBlcklPIGRldmljZSwgVUFSVDEvVUFSVDINCj4gPiA+IGFyZSBkZWZh
+dWx0IGZvciBIb3N0IFN1cGVySU8gVUFSVCBkZXZpY2UsIGVTUEkgY2xrIGZvciBIb3N0IGVTUEkg
+YnVzDQo+ID4gPiBhY2Nlc3MgZVNQSSBzbGF2ZSBjaGFubmVsLCB0aG9zZSBjbGtzIGNhbid0IGJl
+IGRpc2FibGUgc2hvdWxkIGtlZXANCj4gPiA+IGRlZmF1bHQsIG90aGVyd2lzZSB3aWxsIGFmZmVj
+dCBIb3N0IHNpZGUgYWNjZXNzIFN1cGVySU8gYW5kIFNQSSBzbGF2ZSBkZXZpY2UuDQo+ID4gPg0K
+PiA+ID4gU2lnbmVkLW9mZi1ieTogUnlhbiBDaGVuIDxyeWFuX2NoZW5AYXNwZWVkdGVjaC5jb20+
+DQo+ID4gPiAtLS0NCj4gPg0KPiA+IElzIHRoZXJlIHJlc29sdXRpb24gb24gdGhpcyB0aHJlYWQ/
+DQo+IA0KPiBOb3QgeWV0Lg0KPiANCj4gV2UgaGF2ZSBhIHN5c3RlbSB3aGVyZSB0aGUgQk1DICht
+YW5hZ2VtZW50IGNvbnRyb2xsZXIpIGNvbnRyb2xzIHNvbWUNCj4gY2xvY2tzLCBidXQgdGhlIHBl
+cmlwaGVyYWxzIHRoYXQgaXQncyBjbG9ja2luZyBhcmUgb3V0c2lkZSB0aGUgQk1DJ3MgY29udHJv
+bC4gSW4NCj4gdGhpcyBjYXNlLCB0aGUgaG9zdCBwcm9jZXNzb3IgdXMgdXNpbmcgc29tZSBVQVJU
+cyBhbmQgd2hhdCBub3QgaW5kZXBlbmRlbnQgb2YNCj4gYW55IGNvZGUgcnVubmluZyBvbiB0aGUg
+Qk1DLg0KPiANCj4gUnlhbiB3YW50cyB0byBoYXZlIHRoZW0gbWFya2VkIGFzIGNyaXRpY2FsIHNv
+IHRoZSBCTUMgbmV2ZXIgcG93ZXJzIHRoZW0NCj4gZG93bi4NCj4gDQo+IEhvd2V2ZXIsIHRoZXJl
+IGFyZSBzeXN0ZW1zIHRoYXQgZG9uJ3QgdXNlIHRoaXMgcGFydCBvZiB0aGUgc29jLCBzbyBmb3Ig
+dGhvc2UNCj4gaW1wbGVtZW50YXRpb25zIHRoZXkgYXJlIG5vdCBjcml0aWNhbCBhbmQgTGludXgg
+b24gdGhlIEJNQyBjYW4gdHVybiB0aGVtIG9mZi4NCj4gDQpUYWtlIGFuIGV4YW1wbGUsIGNvbmZs
+aWN0IHRob3VnaHQgYWJvdXQgQVNQRUVEX0NMS19HQVRFX0JDTEsgaXMgQ0xLX0lTX0NSSVRJQ0FM
+IGluIGNsay1hc3QyNjAwLmMNCkluIG15IG9waW5pb24sIHRoZSBkcml2ZXIgc2hvdWxkIGtlZXAg
+dGhlIFNvQyBkZWZhdWx0IGNsayBzZXR0aW5nLiBJdCBpcyBvcmlnaW5hbCBjaGlwIGZlYXR1cmUu
+ICANCg0KPiBEbyB5b3UgaGF2ZSBhbnkgdGhvdWdodHM/IEhhcyBhbnlvbmUgc29sdmVkIGEgc2lt
+aWxhciBwcm9ibGVtIGFscmVhZHk/DQo+IA0K
