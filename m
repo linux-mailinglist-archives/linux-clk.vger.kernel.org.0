@@ -2,53 +2,94 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD1428D8D5
-	for <lists+linux-clk@lfdr.de>; Wed, 14 Oct 2020 05:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3D228DC53
+	for <lists+linux-clk@lfdr.de>; Wed, 14 Oct 2020 11:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728951AbgJNDGs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 13 Oct 2020 23:06:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44370 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728925AbgJNDGr (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 13 Oct 2020 23:06:47 -0400
-Received: from kernel.org (unknown [104.132.1.79])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6D82D21D7F;
-        Wed, 14 Oct 2020 03:06:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602644807;
-        bh=ql3qZCl3Fj8AB0GtsV48nH2+OfWWqFk1iAkSL1s+g94=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=MMmw+6DpWDygCk6V2qZPbgGKT5r5kQrW5DTBmVsDoCRTW3qYgMvEZcmZDWxdeoN4C
-         oPbxM699NXBQif8Xqp3N7+9XloJkQ6DtMEz3BMN4GvelCY2TzJ7Il6wODS9QQBs6dt
-         gzXgcYHa9uJSgYP6G1LeIzzqWtDL84o9HdYRmS2Y=
-Content-Type: text/plain; charset="utf-8"
+        id S1728752AbgJNJEt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 14 Oct 2020 05:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727382AbgJNJEg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 14 Oct 2020 05:04:36 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07B5C04585B;
+        Tue, 13 Oct 2020 22:28:13 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id o21so1544478qtp.2;
+        Tue, 13 Oct 2020 22:28:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kB//nqoMYrgFKVVbmCReUvvlCp/OH9pTFa1D0WvNeK8=;
+        b=Gl6vpxUKtK+nwjlLO+SvrSUeR2dC+PEV5wmiGiSO4POlCr4RCSIgQ3LSh9oI8d/GvE
+         3SCz5zqjFohPG3bpCgc3pDGJbq7kbxfM78TQRlzSzCwMCDAMEbi7r8gN5Lx7EeR9WFzp
+         ASIh0sC7J1hK0xf8PHJlMZ3xfkynkx3r+Txrk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kB//nqoMYrgFKVVbmCReUvvlCp/OH9pTFa1D0WvNeK8=;
+        b=U5oVH4eVCkdJEGqiktlNj6whxDVekGeblMKmTDVtzwKqiP6PnPYJVOGrncCcPuc0m0
+         W7FU8Cf/cE6L6mVIWhJaM90U7TOroh05mPCgABeR6iKoQ0foPQoSA4W+XRtDKkOkGt8v
+         wEPxx+9c8B8aEywKFgqEDFH0iMD4ckYBntGEQXYzQ3003OQT1sPp6VkdlRPNF97Z2fMI
+         gE1EQCI23EIiXxicJgt+xKDxPXoDY8AXnhXqGhAYLVyOVGuOlZb14i7sYycxYXDWhxUH
+         kJeBvt/vAPpWTcbnSl1n7hm0qmYv6kNzbZ4zLkXKzS4X8si7phpgQE5f8xpWj7vOaCv6
+         4M7Q==
+X-Gm-Message-State: AOAM5326xXarde5RpqrbPuLKPZaLWCoNcjZSTV1T/57HTtJazosN3KuF
+        hVE/YuDWIpMW3BpcPRf+d3BAchzN0n5cXoR1Fug=
+X-Google-Smtp-Source: ABdhPJw24gb5jxVKjUGFnb8ILFTaJiae+ZhEB+sYFIQ/Gi83c+wIbHiQ4g4hFhDiM1oYPQWMGp2dm2s2NPDIVlvVANQ=
+X-Received: by 2002:ac8:3674:: with SMTP id n49mr3177077qtb.385.1602653292820;
+ Tue, 13 Oct 2020 22:28:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200903015048.3091523-5-paul@crapouillou.net>
-References: <20200903015048.3091523-1-paul@crapouillou.net> <20200903015048.3091523-5-paul@crapouillou.net>
-Subject: Re: [PATCH 5/5] clk: ingenic: Respect CLK_SET_RATE_PARENT in .round_rate
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     od@zcrc.me, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Paul Cercueil <paul@crapouillou.net>
-Date:   Tue, 13 Oct 2020 20:06:46 -0700
-Message-ID: <160264480620.310579.9836141922826340588@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+References: <20200928070108.14040-1-ryan_chen@aspeedtech.com>
+ <20200928070108.14040-2-ryan_chen@aspeedtech.com> <160264382296.310579.9835482254268204873@swboyd.mtv.corp.google.com>
+In-Reply-To: <160264382296.310579.9835482254268204873@swboyd.mtv.corp.google.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 14 Oct 2020 05:28:00 +0000
+Message-ID: <CACPK8Xe-_hTey7hTJjG2-EcDsTN0qOw3bWBcrZZohEK3QOJuvg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] clk: aspeed: modify some default clks are critical
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Andrew Jeffery <andrew@aj.id.au>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Ryan Chen <ryan_chen@aspeedtech.com>,
+        BMC-SW <bmc-sw@aspeedtech.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        linux-clk@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Paul Cercueil (2020-09-02 18:50:48)
-> Clocks that don't have a divider are in our case all marked with the
-> CLK_SET_RATE_PARENT flag. In this case, the .round_rate implementation
-> should modify the value pointed to by parent_rate, in order to propagate
-> the rate change to the parent, as explained in the documentation of
-> clk_set_rate().
->=20
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
+On Wed, 14 Oct 2020 at 02:50, Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting Ryan Chen (2020-09-28 00:01:08)
+> > In ASPEED SoC LCLK is LPC clock for all SuperIO device, UART1/UART2 are
+> > default for Host SuperIO UART device, eSPI clk for Host eSPI bus access
+> > eSPI slave channel, those clks can't be disable should keep default,
+> > otherwise will affect Host side access SuperIO and SPI slave device.
+> >
+> > Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
+> > ---
+>
+> Is there resolution on this thread?
 
-Applied to clk-next
+Not yet.
+
+We have a system where the BMC (management controller) controls some
+clocks, but the peripherals that it's clocking are outside the BMC's
+control. In this case, the host processor us using some UARTs and what
+not independent of any code running on the BMC.
+
+Ryan wants to have them marked as critical so the BMC never powers them down.
+
+However, there are systems that don't use this part of the soc, so for
+those implementations they are not critical and Linux on the BMC can
+turn them off.
+
+Do you have any thoughts? Has anyone solved a similar problem already?
+
+Cheers,
+
+Joel
