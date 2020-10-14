@@ -2,74 +2,148 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF94C28E55A
-	for <lists+linux-clk@lfdr.de>; Wed, 14 Oct 2020 19:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA6828EA97
+	for <lists+linux-clk@lfdr.de>; Thu, 15 Oct 2020 03:59:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730099AbgJNR37 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 14 Oct 2020 13:29:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54150 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728813AbgJNR36 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 14 Oct 2020 13:29:58 -0400
-Received: from kernel.org (unknown [104.132.1.79])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CA07D21D7F;
-        Wed, 14 Oct 2020 17:29:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602696597;
-        bh=9437E/K9Qu+aoCzM51wOQqODMRawCtymxfccbkH8RAg=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=eks+5Kx4x2WnR4nUpLvMdfiVWyzWm5JoGDPo9Bq00dK+flYHLoHgfmbKE240fVYJV
-         sbwxEVQFAvy6fydc0i1sIQW1ykWt92bll4Or+qHXsJTEeQuqp2RCKX+gfiI+WJxfJL
-         jn4xKmR0TfVZWouJjCFRZyXN6xaybJyawk5JmxHA=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <153b313c-ff06-c91b-5adc-4cc3c5cd1a6f@linaro.org>
-References: <20201005225914.315852-1-dmitry.baryshkov@linaro.org> <20201005225914.315852-3-dmitry.baryshkov@linaro.org> <160264174883.310579.10321983404701479878@swboyd.mtv.corp.google.com> <153b313c-ff06-c91b-5adc-4cc3c5cd1a6f@linaro.org>
-Subject: Re: [PATCH v1 2/3] clk: qcom: gdsc: enable external switchable power domain
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
-To:     Andy Gross <agross@kernel.org>,
+        id S2389226AbgJOB7t (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 14 Oct 2020 21:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53932 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388969AbgJOB7j (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 14 Oct 2020 21:59:39 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE498C0613DE
+        for <linux-clk@vger.kernel.org>; Wed, 14 Oct 2020 14:13:30 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id hk7so499248pjb.2
+        for <linux-clk@vger.kernel.org>; Wed, 14 Oct 2020 14:13:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XXXVW8LaNsSK90nR0fVqNTLLxxo+uN8rx6WyyMCGIqU=;
+        b=QfFbFDAWvdwuJNtRGDEJ+4jQLfUu4dtYrqt375pRq+u0Dv2ZX2eDJlK45YLFadyX+m
+         hpWDEVApkwfktJTstvyeNq1QJX+M8OGBGETL2KOqGWC1sh2+yk4MBRtbyMSQZoxNFX/i
+         ZGPe0JO6EfJFxshk65T9Mxn+11MAkDIRtJTw0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XXXVW8LaNsSK90nR0fVqNTLLxxo+uN8rx6WyyMCGIqU=;
+        b=pi7k8ofFg7vTA6qbhQFQqBWcDl0zXnAx4aaPofn1CjDD0rkBC3jHXd5T28chNwKyxa
+         20J5ohn2/eMppwK7WQb1CN7YPduccEnsKqhv378vaZZmHpC8zLsoByMoGjQ4kHTWVkYa
+         pgDxU0OyQ5UGj1siO6YFaPcri16ueCbK723LTrMvDkjdbT/vyE1Yhc1s1Nb3DOzPjDrX
+         62ugix4aTSoAdoXIBOjKpvMCxm7NEo4AsPedLJVvmBILIXm0C4w7UIGJpx2YJ8dCuhv1
+         v/VX0XaKWIrHMslarGBfCzwbWkjJtAqqLhaM8aI+1i+Yi68Nz2s1PEM83BFeJsJKnQl4
+         deNg==
+X-Gm-Message-State: AOAM531mcPbYno/2ZHq2eNx92Pl9qbenW5N/2welUG9Mv8BcXBsuFTXY
+        fXHlF1FbjM1qPLsEyXSr3ol07w==
+X-Google-Smtp-Source: ABdhPJyWzB7PQNM2L2E7jMBzdy13qHYz2fsBChWv51asF/Dv9wMqyArFHgIaMI2T7Sc9RZwlGiO/5Q==
+X-Received: by 2002:a17:90b:1392:: with SMTP id hr18mr1017220pjb.182.1602710010286;
+        Wed, 14 Oct 2020 14:13:30 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:42b0:34ff:fe3d:58e6])
+        by smtp.gmail.com with ESMTPSA id p19sm517713pfn.204.2020.10.14.14.13.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2020 14:13:29 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Taniya Das <tdas@codeaurora.org>, linux-soc@vger.kernel.org,
+        David Brown <david.brown@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jonathan Marek <jonathan@marek.ca>,
         Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 14 Oct 2020 10:29:56 -0700
-Message-ID: <160269659638.884498.4031967462806977493@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/3] clk: qcom: lpasscc-sc7810: Use devm in probe
+Date:   Wed, 14 Oct 2020 14:05:21 -0700
+Message-Id: <20201014140507.v3.1.I4567b5e7e17bbb15ef063d447cb83fd43746cb18@changeid>
+X-Mailer: git-send-email 2.28.0.1011.ga647a8990f-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Dmitry Baryshkov (2020-10-14 02:44:31)
-> On 14/10/2020 05:15, Stephen Boyd wrote:
-> > Quoting Dmitry Baryshkov (2020-10-05 15:59:13)
-> >> On SM8250 MDSS_GDSC (and respective dispcc clocks) are children of MMCX
-> >> power domain. MMCX needs to be enabled to be able to access GDSC
-> >> registers and to enable display clocks. Use dev_pm/opp to enable
-> >> corresponding power domain.
-> >>
-> >> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> >> ---
-> >=20
-> > A general question is why is this done in the gdsc code instead of
-> > somewhere generic? It seems that genpds may need to change the
-> > performance state of other genpds. I vaguely recall that genpd supports
-> > connecting different power domains together so maybe this could all be
-> > handled in the genpd layer instead of here? Then a regulator could be
-> > put behind a genpd and similarly be connected to the gdsc and turned on
-> > before turning on the gdsc?
->=20
-> Basically because we need not only to enable the genpd, but also to set=20
-> performance state. This would mean creating a separate regulator driver=20
-> calling dev_pm_genpd_set_performance_state() from enable/disable paths.
-> Does that seem like a better solution to you?
+Let's convert the lpass clock control driver to use devm.  This is a
+few more lines of code, but it will be useful in a later patch which
+disentangles the two devices handled by this driver.
 
-It does sound like a better solution to me. Unfortunately we already
-have that generic code here in the gdsc file so lifting it up into the
-genpd layer is a bunch of work. It is certainly the end goal.
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+
+Changes in v3:
+- ("clk: qcom: lpasscc-sc7810: Use devm in probe") new for v3.
+
+ drivers/clk/qcom/lpasscorecc-sc7180.c | 38 +++++++++++++++------------
+ 1 file changed, 21 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/clk/qcom/lpasscorecc-sc7180.c b/drivers/clk/qcom/lpasscorecc-sc7180.c
+index 228d08f5d26f..abcf36006926 100644
+--- a/drivers/clk/qcom/lpasscorecc-sc7180.c
++++ b/drivers/clk/qcom/lpasscorecc-sc7180.c
+@@ -412,40 +412,44 @@ static const struct of_device_id lpass_core_cc_sc7180_match_table[] = {
+ };
+ MODULE_DEVICE_TABLE(of, lpass_core_cc_sc7180_match_table);
+ 
++static void lpass_pm_runtime_disable(void *data)
++{
++	pm_runtime_disable(data);
++}
++
++static void lapss_pm_clk_destroy(void *data)
++{
++	pm_clk_destroy(data);
++}
++
+ static int lpass_core_sc7180_probe(struct platform_device *pdev)
+ {
+ 	int (*clk_probe)(struct platform_device *p);
+ 	int ret;
+ 
+ 	pm_runtime_enable(&pdev->dev);
++	ret = devm_add_action_or_reset(&pdev->dev, lpass_pm_runtime_disable, &pdev->dev);
++	if (ret)
++		return ret;
++
+ 	ret = pm_clk_create(&pdev->dev);
+ 	if (ret)
+-		goto disable_pm_runtime;
++		return ret;
++	ret = devm_add_action_or_reset(&pdev->dev, lapss_pm_clk_destroy, &pdev->dev);
++	if (ret)
++		return ret;
+ 
+ 	ret = pm_clk_add(&pdev->dev, "iface");
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "failed to acquire iface clock\n");
+-		goto destroy_pm_clk;
++		return ret;
+ 	}
+ 
+-	ret = -EINVAL;
+ 	clk_probe = of_device_get_match_data(&pdev->dev);
+ 	if (!clk_probe)
+-		goto destroy_pm_clk;
+-
+-	ret = clk_probe(pdev);
+-	if (ret)
+-		goto destroy_pm_clk;
+-
+-	return 0;
+-
+-destroy_pm_clk:
+-	pm_clk_destroy(&pdev->dev);
+-
+-disable_pm_runtime:
+-	pm_runtime_disable(&pdev->dev);
++		return -EINVAL;
+ 
+-	return ret;
++	return clk_probe(pdev);
+ }
+ 
+ static const struct dev_pm_ops lpass_core_cc_pm_ops = {
+-- 
+2.28.0.1011.ga647a8990f-goog
+
