@@ -2,181 +2,121 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1146E2906ED
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Oct 2020 16:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A31290706
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Oct 2020 16:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408689AbgJPONJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 16 Oct 2020 10:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
+        id S2395461AbgJPORr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 16 Oct 2020 10:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408684AbgJPONI (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 16 Oct 2020 10:13:08 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC6BC0613DB
-        for <linux-clk@vger.kernel.org>; Fri, 16 Oct 2020 07:13:03 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id e2so3155291wme.1
-        for <linux-clk@vger.kernel.org>; Fri, 16 Oct 2020 07:13:03 -0700 (PDT)
+        with ESMTP id S2395420AbgJPORr (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 16 Oct 2020 10:17:47 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08180C061755;
+        Fri, 16 Oct 2020 07:17:46 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id k9so2034059qki.6;
+        Fri, 16 Oct 2020 07:17:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=csBLm3ebHLvfnJwPW+GEPGSRmaYpvOkO16WRyubpNjA=;
-        b=jCjzqcNL3iczaFS9JnMzZxi14XrBwh6PymeoF2RT1H0/QG7D8NXJrQlSFIICo6fCje
-         VSwaeZBsX7kgRyl/muJVSBdlOZLyv6SBkKHNvNJQgZJoPEYIMLUZ3PvI9N8XUAnOWl34
-         rr+V3YDkQJUo/JIKTJQm0nmWTv40JBy98of/EI0pHKaQ12Os/6Yy/3/NIZFTPiRUZeHZ
-         feUAitr8HCDmZ3MN1y/2/EV8HGpOTtSzQMeHev6ZtCefBcjOwK3mo68KlOZs9gpPvFSG
-         ZlvVi658Ux+XtMnfLUO5x9nBd+Ka3cZsCmx4MuAoBWIjfvKAr14p8bOsV6IckMsr4Bja
-         H1gQ==
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=y2N9Ts5N7CVt9wr/ePD+KSf8C8M4q1OtWt2aeh5wg8c=;
+        b=rS/jD8JMDzk/CgwwjSLV20MjwHgI1Uj3Et/bRjSP1Lw3GOCzh7bJun5b8O02chx2Mo
+         O9/r+jPj0iki9GZ6z4HDf6SMMZ0Vm8EYHkmncqiC2/tvwi+OBGLuL/CFF8KOU/PcTCHJ
+         8SsmxpfqgHWX68ROIVJkaxo+o6HwaSY4c6Zc5E3jNwk/c7CXVZ20kTtvXmdPa3rLWenW
+         5WbWN5x/oHDlOtuHYu6DpTfQ3PGSYA4nIBFtW71I6SJXydES3FnsmU8ryD4vWInWckju
+         2YxzyLhZp9YJ3tmuyB3SnuhLzYnQs+0ARCUQu1FnkFh29qUa/E6TgBvcWbui+cbR+oiO
+         AVHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=csBLm3ebHLvfnJwPW+GEPGSRmaYpvOkO16WRyubpNjA=;
-        b=iMjrlRweLmKEfATHuptfRlg8ViHzOE+0cmezec96i40QvTontvw7+wmHos1GriAcx7
-         xOnTbj03aMdNScZ6/V/XqEiwaD87uisHi/XEB9VQVwM3RjG7ELu1sKkXQCNGFuG+9gsq
-         055UbG/0OPW/dVxhNhmwe4WUDkl67M7Jb8azksW2LlVgVeghD/Cd9C22vuJphKIC+8n/
-         Ys/C2goz9l/Uw6ySjIMoYgZNS24Ed0sR0Cz51+Cpyxt37/ec19yo6XU2ib29VqLTk7ax
-         rv+GKuDLwf/8uwJHYJNZ5H/88DoGUCT3EzSWzbZZs2mh0RtHISF8u1v0ElS4Efm99ktV
-         iOsw==
-X-Gm-Message-State: AOAM532RUfUiZI8eabXHwU7vZpAXRujjEBn3fIAUd6ajNFMXVXrxIog0
-        LzmvlWj+xHLo2Q7RSdDtI2WoZw==
-X-Google-Smtp-Source: ABdhPJztJYMzw77XeJJ3pv8HapvOVXwLIeNdsf+UvYW+xSxEtrOnGrmLbSV0sKAdo4muyM3bs/vyow==
-X-Received: by 2002:a1c:c28a:: with SMTP id s132mr3958670wmf.67.1602857582631;
-        Fri, 16 Oct 2020 07:13:02 -0700 (PDT)
-Received: from srini-hackbox.lan (cpc86377-aztw32-2-0-cust226.18-1.cable.virginm.net. [92.233.226.227])
-        by smtp.gmail.com with ESMTPSA id p9sm2982284wma.12.2020.10.16.07.13.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2020 07:13:01 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     sboyd@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     bjorn.andersson@linaro.org, mturquette@baylibre.com,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v3 4/4] clk: qcom: Add support to LPASS AON_CC Glitch Free Mux clocks
-Date:   Fri, 16 Oct 2020 15:12:41 +0100
-Message-Id: <20201016141241.5839-5-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20201016141241.5839-1-srinivas.kandagatla@linaro.org>
-References: <20201016141241.5839-1-srinivas.kandagatla@linaro.org>
+        h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=y2N9Ts5N7CVt9wr/ePD+KSf8C8M4q1OtWt2aeh5wg8c=;
+        b=EnaIb0wYYXGCrnWH9ZBo/2yFJlPbIPBVzrvKulZ3tvGAnJchbieLImRBUBJrTMBb/0
+         MjnnNFMkUrESgkOo/oYBfHTMmBcDnljIj3/UtsMBXxSMxLyRZCSwt8ODAhtoN39dUEBx
+         46U2930V6k0R8wIw8uTZ0phVbkmwYtGdUD6iDJAnc5pssFOR+ICHrqB+LK6W1/uCbAqt
+         Sp7iw28VprA84FlIGs7SfK06tlzvd+xlnRkWhxWBaL40zysHmddsinExsTumrHIj07Ik
+         RHkb4mwjrySX6Ro0pDskHaLa9QFdGSasJ93+Q6UMqSlvjqBrR93UpyrrilFRe29zHIoX
+         3cZQ==
+X-Gm-Message-State: AOAM530aMMRgNc/I9izEjgIyS8ZEoSARAn3KNqQDdZf02SDF1WgULKR6
+        BNBnl0RJ5GwdRKOXWlG1Xro=
+X-Google-Smtp-Source: ABdhPJz5G8Tza/D8Encg3kY9Xb3jwdS2iwgKlNCDyfpMMg3WySO1kAPX0r7PHPGeDRZwfQmuPWrZRw==
+X-Received: by 2002:a05:620a:66d:: with SMTP id a13mr3973446qkh.301.1602857865155;
+        Fri, 16 Oct 2020 07:17:45 -0700 (PDT)
+Received: from [192.168.1.201] (pool-108-51-35-162.washdc.fios.verizon.net. [108.51.35.162])
+        by smtp.googlemail.com with ESMTPSA id n2sm1044448qtr.6.2020.10.16.07.17.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Oct 2020 07:17:44 -0700 (PDT)
+Subject: Re: [PATCH 0/4] clk: add driver for the SiFive FU740
+To:     Zong Li <zong.li@sifive.com>, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, mturquette@baylibre.com,
+        sboyd@kernel.org, yash.shah@sifive.com,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <cover.1602838910.git.zong.li@sifive.com>
+From:   Sean Anderson <seanga2@gmail.com>
+Autocrypt: addr=seanga2@gmail.com; prefer-encrypt=mutual; keydata=
+ mQENBFe74PkBCACoLC5Zq2gwrDcCkr+EPGsT14bsxrW07GiYzQhLCgwnPdEpgU95pXltbFhw
+ 46GfyffABWxHKO2x+3L1S6ZxC5AiKbYXo7lpnTBYjamPWYouz+VJEVjUx9aaSEByBah5kX6a
+ lKFZWNbXLAJh+dE1HFaMi3TQXXaInaREc+aO1F7fCa2zNE75ja+6ah8L4TPRFZ2HKQzve0/Y
+ GXtoRw97qmnm3U36vKWT/m2AiLF619F4T1mHvlfjyd9hrVwjH5h/2rFyroXVXBZHGA9Aj8eN
+ F2si35dWSZlIwXkNu9bXp0/pIu6FD0bI+BEkD5S7aH1G1iAcMFi5Qq2RNa041DfQSDDHABEB
+ AAG0K1NlYW4gR2FsbGFnaGVyIEFuZGVyc29uIDxzZWFuZ2EyQGdtYWlsLmNvbT6JAVcEEwEK
+ AEECGwMFCwkIBwIGFQgJCgsCBBYCAwECHgECF4ACGQEWIQSQYR1bzo1I0gPoYCg+6I/stKEQ
+ bgUCXT+S2AUJB2TlXwAKCRA+6I/stKEQbhNOB/9ooea0hU9Sgh7PBloU6CgaC5mlqPLB7NTp
+ +JkB+nh3Fqhk+qLZwzEynnuDLl6ESpVHIc0Ym1lyF4gT3DsrlGT1h0Gzw7vUwd1+ZfN0CuIx
+ Rn861U/dAUjvbtN5kMBqOI4/5ea+0r7MACcIVnKF/wMXBD8eypHsorT2sJTzwZ6DRCNP70C5
+ N1ahpqqNmXe0uLdP0pu55JCqhrGw2SinkRMdWyhSxT56uNwIVHGhLTqH7Q4t1N6G1EH626qa
+ SvIJsWlNpll6Y3AYLDw2/Spw/hqieS2PQ/Ky3rPZnvJt7/aSNYsKoFGX0yjkH67Uq8Lx0k1L
+ w8jpXnbEPQN3A2ZJCbeM
+Message-ID: <d0627c5b-1007-bca0-e6d6-0a3740eaf6a7@gmail.com>
+Date:   Fri, 16 Oct 2020 10:17:43 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1602838910.git.zong.li@sifive.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-LPASS Always ON Clock controller has one GFM mux to control VA
-and TX clocks to codec macro on LPASS.
-This patch adds support to this mux.
+On 10/16/20 5:18 AM, Zong Li wrote:
+> Add a driver for the SiFive FU740 PRCI IP block, which handles more
+> clocks than FU540. These patches also refactor the original
+> implementation by spliting the dependent-code of fu540 and fu740
+> respectively.
+> 
+> Zong Li (4):
+>   clk: sifive: Extract prci core to common base
 
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- drivers/clk/qcom/lpass-gfm-sm8250.c | 63 +++++++++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+I don't see this patch, and it isn't listed on the web archive. Was it
+not CC'd to this list?
 
-diff --git a/drivers/clk/qcom/lpass-gfm-sm8250.c b/drivers/clk/qcom/lpass-gfm-sm8250.c
-index 48a73dd97d0d..d366c7c2abc7 100644
---- a/drivers/clk/qcom/lpass-gfm-sm8250.c
-+++ b/drivers/clk/qcom/lpass-gfm-sm8250.c
-@@ -18,6 +18,7 @@
- #include <linux/platform_device.h>
- #include <linux/of_device.h>
- #include <dt-bindings/clock/qcom,sm8250-lpass-audiocc.h>
-+#include <dt-bindings/clock/qcom,sm8250-lpass-aoncc.h>
- 
- struct lpass_gfm {
- 	struct device *dev;
-@@ -65,6 +66,46 @@ static const struct clk_ops clk_gfm_ops = {
- 	.determine_rate = __clk_mux_determine_rate,
- };
- 
-+static struct clk_gfm lpass_gfm_va_mclk = {
-+	.mux_reg = 0x20000,
-+	.mux_mask = BIT(0),
-+	.hw.init = &(struct clk_init_data) {
-+		.name = "VA_MCLK",
-+		.ops = &clk_gfm_ops,
-+		.flags = CLK_SET_RATE_PARENT | CLK_OPS_PARENT_ENABLE,
-+		.num_parents = 2,
-+		.parent_data = (const struct clk_parent_data[]){
-+			{
-+				.index = 0,
-+				.fw_name = "LPASS_CLK_ID_TX_CORE_MCLK",
-+			}, {
-+				.index = 1,
-+				.fw_name = "LPASS_CLK_ID_VA_CORE_MCLK",
-+			},
-+		},
-+	},
-+};
-+
-+static struct clk_gfm lpass_gfm_tx_npl = {
-+	.mux_reg = 0x20000,
-+	.mux_mask = BIT(0),
-+	.hw.init = &(struct clk_init_data) {
-+		.name = "TX_NPL",
-+		.ops = &clk_gfm_ops,
-+		.flags = CLK_SET_RATE_PARENT | CLK_OPS_PARENT_ENABLE,
-+		.parent_data = (const struct clk_parent_data[]){
-+			{
-+				.index = 0,
-+				.fw_name = "LPASS_CLK_ID_TX_CORE_NPL_MCLK",
-+			}, {
-+				.index = 1,
-+				.fw_name = "LPASS_CLK_ID_VA_CORE_2X_MCLK",
-+			},
-+		},
-+		.num_parents = 2,
-+	},
-+};
-+
- static struct clk_gfm lpass_gfm_wsa_mclk = {
- 	.mux_reg = 0x220d8,
- 	.mux_mask = BIT(0),
-@@ -145,6 +186,19 @@ static struct clk_gfm lpass_gfm_rx_npl = {
- 	},
- };
- 
-+static struct clk_gfm *aoncc_gfm_clks[] = {
-+	[LPASS_CDC_VA_MCLK]		= &lpass_gfm_va_mclk,
-+	[LPASS_CDC_TX_NPL]		= &lpass_gfm_tx_npl,
-+};
-+
-+static struct clk_hw_onecell_data aoncc_hw_onecell_data = {
-+	.hws = {
-+		[LPASS_CDC_VA_MCLK]	= &lpass_gfm_va_mclk.hw,
-+		[LPASS_CDC_TX_NPL]	= &lpass_gfm_tx_npl.hw,
-+	},
-+	.num = ARRAY_SIZE(aoncc_gfm_clks),
-+};
-+
- static struct clk_gfm *audiocc_gfm_clks[] = {
- 	[LPASS_CDC_WSA_NPL]		= &lpass_gfm_wsa_npl,
- 	[LPASS_CDC_WSA_MCLK]		= &lpass_gfm_wsa_mclk,
-@@ -172,6 +226,11 @@ static struct lpass_gfm_data audiocc_data = {
- 	.gfm_clks = audiocc_gfm_clks,
- };
- 
-+static struct lpass_gfm_data aoncc_data = {
-+	.onecell_data = &aoncc_hw_onecell_data,
-+	.gfm_clks = aoncc_gfm_clks,
-+};
-+
- static int lpass_gfm_clk_driver_probe(struct platform_device *pdev)
- {
- 	const struct lpass_gfm_data *data;
-@@ -233,6 +292,10 @@ static int lpass_gfm_clk_driver_probe(struct platform_device *pdev)
- }
- 
- static const struct of_device_id lpass_gfm_clk_match_table[] = {
-+	{
-+		.compatible = "qcom,sm8250-lpass-aoncc",
-+		.data = &aoncc_data,
-+	},
- 	{
- 		.compatible = "qcom,sm8250-lpass-audiocc",
- 		.data = &audiocc_data,
--- 
-2.21.0
+	--Sean
+
+>   clk: sifive: Use common name for prci configuration
+>   clk: sifive: Add a driver for the SiFive FU740 PRCI IP block
+>   clk: sifive: Refactor __prci_clock array by using macro
+> 
+>  arch/riscv/Kconfig.socs                       |   2 +-
+>  drivers/clk/sifive/Kconfig                    |   8 +-
+>  drivers/clk/sifive/Makefile                   |   5 +-
+>  drivers/clk/sifive/fu540-prci.c               | 618 +-----------------
+>  drivers/clk/sifive/fu540-prci.h               |  21 +
+>  drivers/clk/sifive/fu740-prci.c               | 102 +++
+>  drivers/clk/sifive/fu740-prci.h               |  21 +
+>  drivers/clk/sifive/sifive-prci.c              | 529 +++++++++++++++
+>  drivers/clk/sifive/sifive-prci.h              | 297 +++++++++
+>  include/dt-bindings/clock/sifive-fu740-prci.h |  23 +
+>  10 files changed, 1032 insertions(+), 594 deletions(-)
+>  create mode 100644 drivers/clk/sifive/fu540-prci.h
+>  create mode 100644 drivers/clk/sifive/fu740-prci.c
+>  create mode 100644 drivers/clk/sifive/fu740-prci.h
+>  create mode 100644 drivers/clk/sifive/sifive-prci.c
+>  create mode 100644 drivers/clk/sifive/sifive-prci.h
+>  create mode 100644 include/dt-bindings/clock/sifive-fu740-prci.h
+> 
 
