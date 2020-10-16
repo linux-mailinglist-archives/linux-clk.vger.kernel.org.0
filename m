@@ -2,52 +2,78 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7AFF28F3CA
-	for <lists+linux-clk@lfdr.de>; Thu, 15 Oct 2020 15:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D478528FCA5
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Oct 2020 05:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387867AbgJONxR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 15 Oct 2020 09:53:17 -0400
-Received: from edge.kilargo.pl ([77.252.52.110]:24065 "EHLO edge.kilargo.pl"
+        id S2393987AbgJPDQa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 15 Oct 2020 23:16:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49596 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387851AbgJONxR (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 15 Oct 2020 09:53:17 -0400
-X-Greylist: delayed 593 seconds by postgrey-1.27 at vger.kernel.org; Thu, 15 Oct 2020 09:52:17 EDT
-Received: from mail.kilargo.pl (77.252.52.107) by edge.kilargo.pl
- (77.252.52.109) with Microsoft SMTP Server (TLS) id 8.3.485.1; Thu, 15 Oct
- 2020 15:41:37 +0200
-Received: from User (185.248.12.71) by MAIL.kilargo.pl (172.22.0.36) with
- Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 15 Oct 2020 14:54:49 +0200
-Reply-To: <kim.leang2011@yahoo.com>
-From:   Kim Leang <mechanik@kilargo.pl>
-Subject: Greeting! !!
-Date:   Thu, 15 Oct 2020 15:54:53 +0300
+        id S2393984AbgJPDQ3 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 15 Oct 2020 23:16:29 -0400
+Received: from kernel.org (unknown [104.132.1.79])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3ED4020789;
+        Fri, 16 Oct 2020 03:16:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602818189;
+        bh=GMH4QcLtf0P/Uy5xCC4w1mdakSGZ2iTT2OAbD7rN9e0=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=yc5/+rUuZqYdtk9InqD6V17aMM4o7IH3iFieECnB/44Fvl1vDPn0M6lbEGkvTDZXu
+         MonH3wlavWI3Mua/tC0E1EG7kHzm6J/S343oFyWr//scyqicW9s3z7hnpjWu4+TJns
+         eWC5j+1sFo+RWch76cRkf+UHyIvg4z0cNlLq7FRM=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-ID: <3fbd9a3dc5e04de19174c5184ffa4827@mail.kilargo.pl>
-To:     Undisclosed recipients:;
-X-Originating-IP: [185.248.12.71]
-X-ClientProxiedBy: mail.kilargo.pl (172.22.0.36) To MAIL.kilargo.pl
- (172.22.0.36)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A295AAB9B6B647163
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20201014171259.v4.3.Id0cc5d859e2422082a29a7909658932c857f5a81@changeid>
+References: <20201014171259.v4.1.I4567b5e7e17bbb15ef063d447cb83fd43746cb18@changeid> <20201014171259.v4.3.Id0cc5d859e2422082a29a7909658932c857f5a81@changeid>
+Subject: Re: [PATCH v4 3/3] clk: qcom: lpasscc-sc7180: Re-configure the PLL in case lost
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     David Brown <david.brown@linaro.org>, linux-soc@vger.kernel.org,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+To:     Douglas Anderson <dianders@chromium.org>,
+        Taniya Das <tdas@codeaurora.org>
+Date:   Thu, 15 Oct 2020 20:16:27 -0700
+Message-ID: <160281818774.884498.11509417433655580732@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Greeting!
+Quoting Douglas Anderson (2020-10-14 17:13:29)
+> From: Taniya Das <tdas@codeaurora.org>
+>=20
+> In the case where the PLL configuration is lost, then the pm runtime
+> resume will reconfigure before usage.
 
-I am contacting you to receive and share with me an abandoned fund ( $21,537.000.00 ) left in our bank by a deceased customer. I was going through the Internet search when I found your email address. My name is Mr. Kim Leang.
+Taniya, this commit needs a lot more describing than one sentence. I see
+that the PLL's L value is reset at boot, but only once. That seems to be
+because the bootloader I have doesn't set bit 11 for the RETAIN_FF bit
+on the lpass_core_hm_gdsc. Once the gdsc is turned off the first time,
+the PLL settings are lost and the L val is reset to 0. That makes sense
+because RETAIN_FF isn't set. This also means the other register writes
+during probe are lost during the first suspend of the lpass core clk
+controller. Then when the GDSC is turned on the next time for this clk
+controller  being runtime resumed we will set the retain bit and then
+configure the PLL again. BTW, I see that runtime PM is called for this
+clk controller for all the clk operations. Maybe there should be some
+auto suspend timeout so that we're not toggling the gdsc constantly?
 
-I want to utilize this opportunity and make use of this fund if I should present your name to the bank to stand as his business associate/ trustee for the fund to be released to you via Visa card for easy withdrawals in any VISA ATM machine anywhere in the World.
+I hacked up the GDSC code to set the bit at gdsc registration time and
+it seems to fix the problem I'm seeing (i.e. that the PLL is stuck,
+which should also be in the commit text here). When I try to set the bit
+in the bootloader though my kernel won't boot. I guess something is
+hanging the system if I enable the retain bit in the GDSC?
 
-The bank will also give you international online transfer options. With these you can transfer the funds without any risk.
-
-Should you be interested in working with me in this project? Please reply back and let's benefit from this golden opportunity.You are my first contact. I shall wait a few days and if I do not hear from you, I shall look for another person.
-
-Thanks and have a nice day,
-Mr. Kim Leang.
+>=20
+> Fixes: edab812d802d ("clk: qcom: lpass: Add support for LPASS clock contr=
+oller for SC7180")
+> Signed-off-by: Taniya Das <tdas@codeaurora.org>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
