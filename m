@@ -2,107 +2,77 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9DBD292644
-	for <lists+linux-clk@lfdr.de>; Mon, 19 Oct 2020 13:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 812722926F7
+	for <lists+linux-clk@lfdr.de>; Mon, 19 Oct 2020 14:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727796AbgJSLOn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 19 Oct 2020 07:14:43 -0400
-Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:47948 "EHLO
-        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726634AbgJSLOl (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 19 Oct 2020 07:14:41 -0400
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09JB0I1C019889;
-        Mon, 19 Oct 2020 07:14:27 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com with ESMTP id 347tf662u3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 19 Oct 2020 07:14:27 -0400
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 09JBEQrn032806
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Mon, 19 Oct 2020 07:14:26 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Mon, 19 Oct
- 2020 07:14:25 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.1.1779.2 via Frontend
- Transport; Mon, 19 Oct 2020 07:14:25 -0400
-Received: from localhost.localdomain ([10.48.65.12])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 09JBELeU005943;
-        Mon, 19 Oct 2020 07:14:23 -0400
-From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
-To:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>, <lars@metafoo.de>,
-        <mdf@kernel.org>, <ardeleanalex@gmail.com>,
-        Alexandru Ardelean <alexandru.ardelean@analog.com>
-Subject: [PATCH 2/2] clk: axi-clkgen: move the OF table at the bottom of the file
-Date:   Mon, 19 Oct 2020 14:18:09 +0300
-Message-ID: <20201019111809.56374-2-alexandru.ardelean@analog.com>
+        id S1726404AbgJSMGV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 19 Oct 2020 08:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726503AbgJSMGU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 19 Oct 2020 08:06:20 -0400
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91364C0613D6
+        for <linux-clk@vger.kernel.org>; Mon, 19 Oct 2020 05:06:19 -0700 (PDT)
+Received: from ramsan ([84.195.186.194])
+        by andre.telenet-ops.be with bizsmtp
+        id ho6G2300U4C55Sk01o6GBr; Mon, 19 Oct 2020 14:06:17 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1kUTvc-0000WJ-KH; Mon, 19 Oct 2020 14:06:16 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1kUTvc-0005m5-IE; Mon, 19 Oct 2020 14:06:16 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Ulrich Hecht <uli+renesas@fpond.eu>, linux-clk@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH/RFC 0/6] R-Car V3U GPIO support
+Date:   Mon, 19 Oct 2020 14:06:08 +0200
+Message-Id: <20201019120614.22149-1-geert+renesas@glider.be>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201019111809.56374-1-alexandru.ardelean@analog.com>
-References: <20201019111809.56374-1-alexandru.ardelean@analog.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-ADIRoutedOnPrem: True
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-19_02:2020-10-16,2020-10-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 bulkscore=0 phishscore=0 adultscore=0 clxscore=1015
- impostorscore=0 mlxlogscore=968 lowpriorityscore=0 malwarescore=0
- mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010190082
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The change is mostly cosmetic. No functional changes.
-Since the driver now uses device_get_match_data() to obtain the driver
-specific info, there is no need to define the OF table before the probe
-function.
+	Hi all,
 
-Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
----
- drivers/clk/clk-axi-clkgen.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+This RFC patch series adds support for the GPIO blocks on the R-Car V3U
+(r8a77990) SoC.  This includes clock (incl. some drive-by fixes), DT
+binding, driver, and DTS updates.
 
-diff --git a/drivers/clk/clk-axi-clkgen.c b/drivers/clk/clk-axi-clkgen.c
-index 963a62e9c728..ad86e031ba3e 100644
---- a/drivers/clk/clk-axi-clkgen.c
-+++ b/drivers/clk/clk-axi-clkgen.c
-@@ -496,15 +496,6 @@ static const struct clk_ops axi_clkgen_ops = {
- 	.get_parent = axi_clkgen_get_parent,
- };
- 
--static const struct of_device_id axi_clkgen_ids[] = {
--	{
--		.compatible = "adi,axi-clkgen-2.00.a",
--		.data = &axi_clkgen_zynq_default_limits,
--	},
--	{ },
--};
--MODULE_DEVICE_TABLE(of, axi_clkgen_ids);
--
- static int axi_clkgen_probe(struct platform_device *pdev)
- {
- 	const struct axi_clkgen_limits *dflt_limits;
-@@ -568,6 +559,15 @@ static int axi_clkgen_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct of_device_id axi_clkgen_ids[] = {
-+	{
-+		.compatible = "adi,axi-clkgen-2.00.a",
-+		.data = &axi_clkgen_zynq_default_limits,
-+	},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, axi_clkgen_ids);
-+
- static struct platform_driver axi_clkgen_driver = {
- 	.driver = {
- 		.name = "adi-axi-clkgen",
+Due to lack of hardware, this is compile-tested only.
+
+Thanks for your comments!
+
+Geert Uytterhoeven (5):
+  [RFC] clk: renesas: r8a779a0: Remove non-existent S2 clock
+  [RFC] clk: renesas: r8a779a0: Fix parent of CBFUSA clock
+  [RFC] clk: renesas: r8a779a0: Add PFC/GPIO clocks
+  [RFC] dt-bindings: gpio: rcar: Add r8a779a0 support
+  [RFC] arm64: dts: r8a779a0: Add GPIO nodes
+
+Phong Hoang (1):
+  [RFC] gpio: rcar: Add support for R-Car V3U
+
+ .../bindings/gpio/renesas,rcar-gpio.yaml      |   3 +
+ arch/arm64/boot/dts/renesas/r8a779a0.dtsi     | 140 ++++++++++++++++++
+ drivers/clk/renesas/r8a779a0-cpg-mssr.c       |   8 +-
+ drivers/gpio/gpio-rcar.c                      |  23 +++
+ 4 files changed, 172 insertions(+), 2 deletions(-)
+
 -- 
 2.17.1
 
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
