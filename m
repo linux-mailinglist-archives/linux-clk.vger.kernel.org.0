@@ -2,60 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD4D2950A3
-	for <lists+linux-clk@lfdr.de>; Wed, 21 Oct 2020 18:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF8E2950A6
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Oct 2020 18:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2444552AbgJUQV6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 21 Oct 2020 12:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
+        id S2444555AbgJUQWF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 21 Oct 2020 12:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2444551AbgJUQV5 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 21 Oct 2020 12:21:57 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A594C0613CF
-        for <linux-clk@vger.kernel.org>; Wed, 21 Oct 2020 09:21:57 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id z5so4089373ejw.7
-        for <linux-clk@vger.kernel.org>; Wed, 21 Oct 2020 09:21:57 -0700 (PDT)
+        with ESMTP id S2444557AbgJUQV7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 21 Oct 2020 12:21:59 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAE9C0613CE
+        for <linux-clk@vger.kernel.org>; Wed, 21 Oct 2020 09:21:59 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id o18so3193491edq.4
+        for <linux-clk@vger.kernel.org>; Wed, 21 Oct 2020 09:21:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=q55g9eud64WpGhGaDa2Dvtt/hAwehZmCVZltK6UXP+c=;
-        b=C8IiecTVGT1P3sYupPuqXGfRgdRRrllku4/9/WB8lckeu/jILHTWJy3B5zpSZyjidT
-         atUg8s0QUes2oxWPMwZaQgc7aW4jFqhIh/dS2Rv0A8FxIfwsIdqxc5Zcd3cS1nlHVP0X
-         +l5Q3URFShXC990ojgt4igfaCwLJjQqkxDZoR66LbHrjv6mO+6UndtcNzKWAP+at5sJ8
-         XJJT7hE4BAcPwZQ/7j/1+F84Cp7ISEpLXSHvhtfxd/e/OFeJwbuUxYpZJEs0YTIxNhjB
-         neNko+1u4H7RJzazj3QYvOE3w75o3HnCie8sXXcbAgtRd5XvPayvu7g3jZPCtB/L6dcG
-         KFGw==
+        bh=ctEEpwCu2m+UGEAQqLgzNXgXDvvkBbjRVfAgqCEvH10=;
+        b=BSaO1y3B/QG1IHhLPf2ECgY23OLMdpsc5MJlpyTNsmpSByjKefPgk+5uS1NlZ5eiJx
+         PLz4ji/K99ZCc6hmJWlCumLjBC44Yp4kqUsACqziNydzwLp6CtI4borrrwL7XCYAyXXI
+         VK+wsQ57JTIAS8KthOSHB3MPDyY1jkFBB+/QwJj/1esXgo0yAxHnn+uRy6+el3eJ/VA7
+         WlxIIZSPSOSMETDdlWYAttacfNvOYxY8HYMgQ/6FKevzalobdk7KyDSzW+TyY0UIPJBY
+         3RUSYsvA9HjWsRth0ERDulY9EcwdE1JYZardYOnMaU9FKCYwpO4APEKl5rF7DEit5ziN
+         RGaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=q55g9eud64WpGhGaDa2Dvtt/hAwehZmCVZltK6UXP+c=;
-        b=ZK98WaYrDQUt8UjwtTBgUdpLAV5tMSxaRKIHRKwj+NQJ7KyB2VqXlmuLRuNemX5OrT
-         cAhrecFR+RmtieLP3o/YRdMWolE5R1KrXJYKnxMuRLExCLIkRnaHSrGE1HTFuKGeUxmZ
-         jlNoeYxtuPnZNip1ECM8nvKKpGPDvvp8FDqjaAvEGhgIHeuvInjiW+cydkR6osIeOJdd
-         1TokFGNrzAaVxKFTRi/qdGBoasPtlOjFABxfi0a2OamN/nnXUuk9m9s0+K2MstUir9a+
-         qCzWW26YzvYq0+dmQzuawfTe4vUaas+q+MoDZJ6I/GFuxZdCLJPKpYy8Glp+CBP/V37V
-         tKlw==
-X-Gm-Message-State: AOAM533FXqGI7bMEtB6ZWw081RGbwV1bsT71HOyOAwPrxw/qcTeUYcO2
-        7elSwL8Fb5d0sevoPc0sS2OcG0yI+4bPeA==
-X-Google-Smtp-Source: ABdhPJz+G1dBjBjCpnBLdWHbW1tSyTbYS7kPkAsPqhbosb2z4K4f83WPnTBKLviiVvM6Z1MI0t69sg==
-X-Received: by 2002:a17:907:206e:: with SMTP id qp14mr4330789ejb.76.1603297316070;
-        Wed, 21 Oct 2020 09:21:56 -0700 (PDT)
+        bh=ctEEpwCu2m+UGEAQqLgzNXgXDvvkBbjRVfAgqCEvH10=;
+        b=FdDijKCvViSY0o9gtoB8tXXxUpcnVXRHxLMqxjV9AMVY7VF4p5OkX9dluzKXlWx0Iy
+         vG8KodfeMhMCKQKmyOw3RikBfikuhcWEjJz4mJkjCFoLj9B5Bo3T3LWnbqU/i5EXZqze
+         1l16MBjMnwqRAgb+W8f2WJqZQHRfajRYTztUpA4WlkI+Yl5orsuPZ74xyKrAhY4Tcthk
+         zSf2hEvUIvXnxL4dHR66iUZbdVfbuAkDzKtxigPjyhABnRtvbiGqGM1QwgVgi2g/fZ+1
+         70ZxCNp6HX76fZvLKXXFP+9qmkhDCWJc7qcUCTX6iWDGpLI7JZUGjnfes7lCDf3CZWI6
+         GEmg==
+X-Gm-Message-State: AOAM531CZNP1BIzvYdZ0Zzkkq2ogS01kOlq9chW94H7ZeMg4ablY7D/K
+        f1GfIROwcoIU+OQEivxfQ7kIhCpucNBh9A==
+X-Google-Smtp-Source: ABdhPJwc7T5NdEnRaXOwk0sP0IToOEippbCC/7KmSW9llV170+TKEo32IKW1qVilAaMAIS/Om3EhTg==
+X-Received: by 2002:aa7:c915:: with SMTP id b21mr3868779edt.25.1603297318129;
+        Wed, 21 Oct 2020 09:21:58 -0700 (PDT)
 Received: from starbuck.lan (82-65-169-74.subs.proxad.net. [82.65.169.74])
-        by smtp.googlemail.com with ESMTPSA id 11sm2566667ejy.19.2020.10.21.09.21.54
+        by smtp.googlemail.com with ESMTPSA id 11sm2566667ejy.19.2020.10.21.09.21.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2020 09:21:55 -0700 (PDT)
+        Wed, 21 Oct 2020 09:21:57 -0700 (PDT)
 From:   Jerome Brunet <jbrunet@baylibre.com>
 To:     Stephen Boyd <sboyd@kernel.org>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 Cc:     Jerome Brunet <jbrunet@baylibre.com>,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>
-Subject: [PATCH v2 2/3] clk: add api to get clk consumer from clk_hw
-Date:   Wed, 21 Oct 2020 18:21:46 +0200
-Message-Id: <20201021162147.563655-3-jbrunet@baylibre.com>
+Subject: [PATCH v2 3/3] clk: meson: g12: drop use of __clk_lookup()
+Date:   Wed, 21 Oct 2020 18:21:47 +0200
+Message-Id: <20201021162147.563655-4-jbrunet@baylibre.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20201021162147.563655-1-jbrunet@baylibre.com>
 References: <20201021162147.563655-1-jbrunet@baylibre.com>
@@ -65,118 +65,189 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-clk_register() is deprecated. Using 'clk' member of struct clk_hw is
-discouraged. With this constraint, it is difficult for driver to
-register clocks using the clk_hw API and then use the clock with
-the consumer API
+g12 clock controller used __clk_lookup() to get struct clk from a
+struct clk_hw. This type of hack is no longer required as CCF now provides
+the necessary functions to get this.
 
-This adds a simple helper, clk_hw_get_clk(), to get a struct clk from
-a struct clk_hw. Like other clk_get() variant, each call to this helper
-must be balanced with a call to clk_put(). To make life easier on the
-consumers, a memory managed version is provided as well.
-
-Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- drivers/clk/clk.c            | 61 ++++++++++++++++++++++++++++++++++++
- include/linux/clk-provider.h |  5 +++
- 2 files changed, 66 insertions(+)
+ drivers/clk/meson/g12a.c | 68 +++++++++++++++++++---------------------
+ 1 file changed, 32 insertions(+), 36 deletions(-)
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 88e5797bb6b4..d27153f26fa9 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -3667,6 +3667,24 @@ struct clk *clk_hw_create_clk(struct device *dev, struct clk_hw *hw,
- 	return clk;
- }
+diff --git a/drivers/clk/meson/g12a.c b/drivers/clk/meson/g12a.c
+index 28f976dbdd24..bbb75541dad9 100644
+--- a/drivers/clk/meson/g12a.c
++++ b/drivers/clk/meson/g12a.c
+@@ -5156,10 +5156,11 @@ static const struct reg_sequence g12a_init_regs[] = {
+ 	{ .reg = HHI_MPLL_CNTL0,	.def = 0x00000543 },
+ };
  
-+/**
-+ * clk_hw_get_clk: get clk consumer given an clk_hw
-+ * @hw: clk_hw associated with the clk being consumed
-+ * @con_id: connection ID string on device
-+ *
-+ * Returns: new clk consumer
-+ * This is the function to be used by providers which need
-+ * to get a consumer clk and act on the clock element
-+ * Calls to this function must be balanced with calls clk_put()
-+ */
-+struct clk *clk_hw_get_clk(struct clk_hw *hw, const char *con_id)
-+{
-+	struct device *dev = hw->core->dev;
+-static int meson_g12a_dvfs_setup_common(struct platform_device *pdev,
++#define DVFS_CON_ID "dvfs"
 +
-+	return clk_hw_create_clk(dev, hw, dev_name(dev), con_id);
-+}
-+EXPORT_SYMBOL(clk_hw_get_clk);
-+
- static int clk_cpy_name(const char **dst_p, const char *src, bool must_exist)
++static int meson_g12a_dvfs_setup_common(struct device *dev,
+ 					struct clk_hw **hws)
  {
- 	const char *dst;
-@@ -4187,6 +4205,49 @@ void devm_clk_hw_unregister(struct device *dev, struct clk_hw *hw)
- }
- EXPORT_SYMBOL_GPL(devm_clk_hw_unregister);
+-	const char *notifier_clk_name;
+ 	struct clk *notifier_clk;
+ 	struct clk_hw *xtal;
+ 	int ret;
+@@ -5168,21 +5169,21 @@ static int meson_g12a_dvfs_setup_common(struct platform_device *pdev,
  
-+static void devm_clk_release(struct device *dev, void *res)
-+{
-+	clk_put(*(struct clk **)res);
-+}
-+
-+/**
-+ * devm_clk_hw_get_clk: resource managed clk_hw_get_clk()
-+ * @dev: device that is registering this clock
-+ * @hw: clk_hw associated with the clk being consumed
-+ * @con_id: connection ID string on device
-+ *
-+ * Managed clk_hw_get_clk(). Clocks got with this function are
-+ * automatically clk_put() on driver detach. See clk_put()
-+ * for more information.
-+ */
-+struct clk *devm_clk_hw_get_clk(struct device *dev, struct clk_hw *hw,
-+				const char *con_id)
-+{
-+	struct clk *clk;
-+	struct clk **clkp;
-+
-+	/* This should not happen because it would mean we have drivers
-+	 * passing around clk_hw pointers instead of having the caller use
-+	 * proper clk_get() style APIs
-+	 */
-+	WARN_ON_ONCE(dev != hw->core->dev);
-+
-+	clkp = devres_alloc(devm_clk_release, sizeof(*clkp), GFP_KERNEL);
-+	if (!clkp)
-+		return ERR_PTR(-ENOMEM);
-+
-+	clk = clk_hw_get_clk(hw, con_id);
-+	if (!IS_ERR(clk)) {
-+		*clkp = clk;
-+		devres_add(dev, clkp);
-+	} else {
-+		devres_free(clkp);
-+	}
-+
-+	return clk;
-+}
-+EXPORT_SYMBOL_GPL(devm_clk_hw_get_clk);
-+
- /*
-  * clkdev helpers
-  */
-diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index 03a5de5f99f4..86b707520ec0 100644
---- a/include/linux/clk-provider.h
-+++ b/include/linux/clk-provider.h
-@@ -1088,6 +1088,11 @@ static inline struct clk_hw *__clk_get_hw(struct clk *clk)
- 	return (struct clk_hw *)clk;
- }
- #endif
-+
-+struct clk *clk_hw_get_clk(struct clk_hw *hw, const char *con_id);
-+struct clk *devm_clk_hw_get_clk(struct device *dev, struct clk_hw *hw,
-+				const char *con_id);
-+
- unsigned int clk_hw_get_num_parents(const struct clk_hw *hw);
- struct clk_hw *clk_hw_get_parent(const struct clk_hw *hw);
- struct clk_hw *clk_hw_get_parent_by_index(const struct clk_hw *hw,
+ 	/* Setup clock notifier for cpu_clk_postmux0 */
+ 	g12a_cpu_clk_postmux0_nb_data.xtal = xtal;
+-	notifier_clk_name = clk_hw_get_name(&g12a_cpu_clk_postmux0.hw);
+-	notifier_clk = __clk_lookup(notifier_clk_name);
++	notifier_clk = devm_clk_hw_get_clk(dev, &g12a_cpu_clk_postmux0.hw,
++					   DVFS_CON_ID);
+ 	ret = clk_notifier_register(notifier_clk,
+ 				    &g12a_cpu_clk_postmux0_nb_data.nb);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "failed to register the cpu_clk_postmux0 notifier\n");
++		dev_err(dev, "failed to register the cpu_clk_postmux0 notifier\n");
+ 		return ret;
+ 	}
+ 
+ 	/* Setup clock notifier for cpu_clk_dyn mux */
+-	notifier_clk_name = clk_hw_get_name(&g12a_cpu_clk_dyn.hw);
+-	notifier_clk = __clk_lookup(notifier_clk_name);
++	notifier_clk = devm_clk_hw_get_clk(dev, &g12a_cpu_clk_dyn.hw,
++					   DVFS_CON_ID);
+ 	ret = clk_notifier_register(notifier_clk, &g12a_cpu_clk_mux_nb);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "failed to register the cpu_clk_dyn notifier\n");
++		dev_err(dev, "failed to register the cpu_clk_dyn notifier\n");
+ 		return ret;
+ 	}
+ 
+@@ -5192,33 +5193,33 @@ static int meson_g12a_dvfs_setup_common(struct platform_device *pdev,
+ static int meson_g12b_dvfs_setup(struct platform_device *pdev)
+ {
+ 	struct clk_hw **hws = g12b_hw_onecell_data.hws;
+-	const char *notifier_clk_name;
++	struct device *dev = &pdev->dev;
+ 	struct clk *notifier_clk;
+ 	struct clk_hw *xtal;
+ 	int ret;
+ 
+-	ret = meson_g12a_dvfs_setup_common(pdev, hws);
++	ret = meson_g12a_dvfs_setup_common(dev, hws);
+ 	if (ret)
+ 		return ret;
+ 
+ 	xtal = clk_hw_get_parent_by_index(hws[CLKID_CPU_CLK_DYN1_SEL], 0);
+ 
+ 	/* Setup clock notifier for cpu_clk mux */
+-	notifier_clk_name = clk_hw_get_name(&g12b_cpu_clk.hw);
+-	notifier_clk = __clk_lookup(notifier_clk_name);
++	notifier_clk = devm_clk_hw_get_clk(dev, &g12b_cpu_clk.hw,
++					   DVFS_CON_ID);
+ 	ret = clk_notifier_register(notifier_clk, &g12a_cpu_clk_mux_nb);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "failed to register the cpu_clk notifier\n");
++		dev_err(dev, "failed to register the cpu_clk notifier\n");
+ 		return ret;
+ 	}
+ 
+ 	/* Setup clock notifier for sys1_pll */
+-	notifier_clk_name = clk_hw_get_name(&g12b_sys1_pll.hw);
+-	notifier_clk = __clk_lookup(notifier_clk_name);
++	notifier_clk = devm_clk_hw_get_clk(dev, &g12b_sys1_pll.hw,
++					   DVFS_CON_ID);
+ 	ret = clk_notifier_register(notifier_clk,
+ 				    &g12b_cpu_clk_sys1_pll_nb_data.nb);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "failed to register the sys1_pll notifier\n");
++		dev_err(dev, "failed to register the sys1_pll notifier\n");
+ 		return ret;
+ 	}
+ 
+@@ -5226,40 +5227,37 @@ static int meson_g12b_dvfs_setup(struct platform_device *pdev)
+ 
+ 	/* Setup clock notifier for cpub_clk_postmux0 */
+ 	g12b_cpub_clk_postmux0_nb_data.xtal = xtal;
+-	notifier_clk_name = clk_hw_get_name(&g12b_cpub_clk_postmux0.hw);
+-	notifier_clk = __clk_lookup(notifier_clk_name);
++	notifier_clk = devm_clk_hw_get_clk(dev, &g12b_cpub_clk_postmux0.hw,
++					   DVFS_CON_ID);
+ 	ret = clk_notifier_register(notifier_clk,
+ 				    &g12b_cpub_clk_postmux0_nb_data.nb);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "failed to register the cpub_clk_postmux0 notifier\n");
++		dev_err(dev, "failed to register the cpub_clk_postmux0 notifier\n");
+ 		return ret;
+ 	}
+ 
+ 	/* Setup clock notifier for cpub_clk_dyn mux */
+-	notifier_clk_name = clk_hw_get_name(&g12b_cpub_clk_dyn.hw);
+-	notifier_clk = __clk_lookup(notifier_clk_name);
++	notifier_clk = devm_clk_hw_get_clk(dev, &g12b_cpub_clk_dyn.hw, "dvfs");
+ 	ret = clk_notifier_register(notifier_clk, &g12a_cpu_clk_mux_nb);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "failed to register the cpub_clk_dyn notifier\n");
++		dev_err(dev, "failed to register the cpub_clk_dyn notifier\n");
+ 		return ret;
+ 	}
+ 
+ 	/* Setup clock notifier for cpub_clk mux */
+-	notifier_clk_name = clk_hw_get_name(&g12b_cpub_clk.hw);
+-	notifier_clk = __clk_lookup(notifier_clk_name);
++	notifier_clk = devm_clk_hw_get_clk(dev, &g12b_cpub_clk.hw, DVFS_CON_ID);
+ 	ret = clk_notifier_register(notifier_clk, &g12a_cpu_clk_mux_nb);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "failed to register the cpub_clk notifier\n");
++		dev_err(dev, "failed to register the cpub_clk notifier\n");
+ 		return ret;
+ 	}
+ 
+ 	/* Setup clock notifier for sys_pll */
+-	notifier_clk_name = clk_hw_get_name(&g12a_sys_pll.hw);
+-	notifier_clk = __clk_lookup(notifier_clk_name);
++	notifier_clk = devm_clk_hw_get_clk(dev, &g12a_sys_pll.hw, DVFS_CON_ID);
+ 	ret = clk_notifier_register(notifier_clk,
+ 				    &g12b_cpub_clk_sys_pll_nb_data.nb);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "failed to register the sys_pll notifier\n");
++		dev_err(dev, "failed to register the sys_pll notifier\n");
+ 		return ret;
+ 	}
+ 
+@@ -5269,29 +5267,27 @@ static int meson_g12b_dvfs_setup(struct platform_device *pdev)
+ static int meson_g12a_dvfs_setup(struct platform_device *pdev)
+ {
+ 	struct clk_hw **hws = g12a_hw_onecell_data.hws;
+-	const char *notifier_clk_name;
++	struct device *dev = &pdev->dev;
+ 	struct clk *notifier_clk;
+ 	int ret;
+ 
+-	ret = meson_g12a_dvfs_setup_common(pdev, hws);
++	ret = meson_g12a_dvfs_setup_common(dev, hws);
+ 	if (ret)
+ 		return ret;
+ 
+ 	/* Setup clock notifier for cpu_clk mux */
+-	notifier_clk_name = clk_hw_get_name(&g12a_cpu_clk.hw);
+-	notifier_clk = __clk_lookup(notifier_clk_name);
++	notifier_clk = devm_clk_hw_get_clk(dev, &g12a_cpu_clk.hw, DVFS_CON_ID);
+ 	ret = clk_notifier_register(notifier_clk, &g12a_cpu_clk_mux_nb);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "failed to register the cpu_clk notifier\n");
++		dev_err(dev, "failed to register the cpu_clk notifier\n");
+ 		return ret;
+ 	}
+ 
+ 	/* Setup clock notifier for sys_pll */
+-	notifier_clk_name = clk_hw_get_name(&g12a_sys_pll.hw);
+-	notifier_clk = __clk_lookup(notifier_clk_name);
++	notifier_clk = devm_clk_hw_get_clk(dev, &g12a_sys_pll.hw, DVFS_CON_ID);
+ 	ret = clk_notifier_register(notifier_clk, &g12a_sys_pll_nb_data.nb);
+ 	if (ret) {
+-		dev_err(&pdev->dev, "failed to register the sys_pll notifier\n");
++		dev_err(dev, "failed to register the sys_pll notifier\n");
+ 		return ret;
+ 	}
+ 
 -- 
 2.25.4
 
