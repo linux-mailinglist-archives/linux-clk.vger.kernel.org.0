@@ -2,112 +2,130 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B942960B4
-	for <lists+linux-clk@lfdr.de>; Thu, 22 Oct 2020 16:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D88D7296242
+	for <lists+linux-clk@lfdr.de>; Thu, 22 Oct 2020 18:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2900681AbgJVOJh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 22 Oct 2020 10:09:37 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:46485 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2900678AbgJVOJg (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 22 Oct 2020 10:09:36 -0400
-Received: by mail-ot1-f66.google.com with SMTP id m11so1567329otk.13;
-        Thu, 22 Oct 2020 07:09:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qWi7olx0i8jeUc5svHxbdLLoehMJAACFeJtvJPwksLs=;
-        b=TbKTaJNJyUE3xuyt9c+RFUDzi/fzDxpbvkg+Gd0HW4kDr+x/JtQEn1ATDy35BinY6I
-         OgQ7JHOTf1HShQmVWyQ3uQUbM9SKZWzUjhIdYy7PE5MPCLmVVSq4WByn7UhA/oRIELtI
-         z7lgGjdEg5IcDs7NGci8SYLzaFXawjNkVOISFfY7PwyVUUdp+ICIavHovIO/j3vO6BD/
-         H8aoEhGKH281K4TCvroGSi7VdLtfgWe4dGQ0DjCrOumnnZnGDMPcMZOLgEKe8m869m5F
-         9IKDCHb1UHeQ5Dvv2gqH9wxXyzD/9giJUvNN1p7PMxaciCQtDUzayA3pSTNC+pgkDOaN
-         rZHw==
-X-Gm-Message-State: AOAM533aBZYhgcy7dJau4Ii9f3Tg2BZ8vo2e+8I3jrm2BJiKjXRKJ3TE
-        gkEA9V0p8g+GQHADAEuiOdLe8BtTgy0kCr5kcvw=
-X-Google-Smtp-Source: ABdhPJyI/I2qD0HIY714dpAMocse+Wp7lpuhjH3pC+OK6EZ5BfvM4PxsL1QFGTV3yw9z+HQUyBUlrd1ttcwaiSXosyA=
-X-Received: by 2002:a05:6830:210a:: with SMTP id i10mr1979468otc.145.1603375775423;
- Thu, 22 Oct 2020 07:09:35 -0700 (PDT)
+        id S368857AbgJVP7I (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 22 Oct 2020 11:59:08 -0400
+Received: from mx2.suse.de ([195.135.220.15]:48442 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S368827AbgJVP7I (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 22 Oct 2020 11:59:08 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 89B97ADF5;
+        Thu, 22 Oct 2020 15:59:05 +0000 (UTC)
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     u.kleine-koenig@pengutronix.de, linux-kernel@vger.kernel.org
+Cc:     f.fainelli@gmail.com, linux-pwm@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        wahrenst@gmx.net, linux-input@vger.kernel.org,
+        dmitry.torokhov@gmail.com, gregkh@linuxfoundation.org,
+        devel@driverdev.osuosl.org, p.zabel@pengutronix.de,
+        linux-gpio@vger.kernel.org, linus.walleij@linaro.org,
+        linux-clk@vger.kernel.org, sboyd@kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Eric Anholt <eric@anholt.net>
+Subject: [PATCH v2 00/10] Raspberry Pi PoE HAT fan support
+Date:   Thu, 22 Oct 2020 17:58:47 +0200
+Message-Id: <20201022155858.20867-1-nsaenzjulienne@suse.de>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <20201016121709.8447-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20201016121709.8447-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20201016121709.8447-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 22 Oct 2020 16:09:24 +0200
-Message-ID: <CAMuHMdVPfoU_X3A4ioy9TeJHmovE5P=fDYpShsWTzFYXmZoiww@mail.gmail.com>
-Subject: Re: [PATCH 4/4] clk: renesas: r8a774c0: Add RPC clocks
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Prabhakar,
+The aim of this series is to add support to the fan found on RPi's PoE
+HAT. Some commentary on the design can be found below. But the imporant
+part to the people CC'd here not involved with PWM is that, in order to
+achieve this properly, we also have to fix the firmware interface the
+driver uses to communicate with the PWM bus (and many other low level
+functions). Specifically, we have to make sure the firmware interface
+isn't unbound while consumers are still up. So, patch #1 introduces
+reference counting in the firwmware interface driver and patches #2 to
+#7 update all firmware users. Patches #8 to #10 introduce the new PWM
+driver.
 
-On Fri, Oct 16, 2020 at 2:17 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Describe the RPCSRC internal clock and the RPC[D2] clocks derived from it,
-> as well as the RPC-IF module clock, in the RZ/G2E (R8A774C0) CPG/MSSR
-> driver.
->
-> Inspired by commit 94e3935b5756 ("clk: renesas: r8a77980: Add RPC clocks").
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+I sent everything as a single series as the final version of the PWM
+drivers depends on the firwmare fixes, but I'll be happy to split this
+into two separate series if you think it's better.
 
-Thanks for your patch!
+--- Original cover letter below ---
 
-> --- a/drivers/clk/renesas/r8a774c0-cpg-mssr.c
-> +++ b/drivers/clk/renesas/r8a774c0-cpg-mssr.c
-> @@ -73,6 +74,12 @@ static const struct cpg_core_clk r8a774c0_core_clks[] __initconst = {
->         DEF_FIXED(".s2",       CLK_S2,             CLK_PLL1,       4, 1),
->         DEF_FIXED(".s3",       CLK_S3,             CLK_PLL1,       6, 1),
->         DEF_FIXED(".sdsrc",    CLK_SDSRC,          CLK_PLL1,       2, 1),
-> +       DEF_BASE(".rpcsrc",    CLK_RPCSRC, CLK_TYPE_GEN3_RPCSRC, CLK_PLL1),
-> +
-> +       DEF_BASE("rpc",        R8A774C0_CLK_RPC, CLK_TYPE_GEN3_RPC,
-> +                CLK_RPCSRC),
-> +       DEF_BASE("rpcd2",      R8A774C0_CLK_RPCD2, CLK_TYPE_GEN3_RPCD2,
-> +                R8A774C0_CLK_RPC),
->
->         DEF_DIV6_RO(".r",      CLK_RINT,           CLK_EXTAL, CPG_RCKCR, 32),
->
+This series aims at adding support to RPi's official PoE HAT fan[1].
 
-> @@ -275,6 +283,10 @@ static int __init r8a774c0_cpg_mssr_init(struct device *dev)
->         return rcar_gen3_cpg_init(cpg_pll_config, 0, cpg_mode);
->  }
->
-> +static const struct clk_div_table cpg_rpcsrc_div_table[] = {
-> +       { 0, 5 }, { 1, 3 }, { 2, 8 }, {3, 2}, {0, 0},
-> +};
+The HW setup is the following:
 
-The above models RPCSRC as a clock generated by dividing PLL1 by either
-5, 3, 8, or 2.  This does not match the hardware user's manual, which
-states that RPCSRC is either PLL1 divided by 5 or 3, or PLL0 divided by
-8 or 2.
+| Raspberry Pi                               | PoE HAT                    |
+ arm core -> Mailbox -> RPi co-processor -> I2C -> Atmel MCU -> PWM -> FAN
 
-I think you need a new clock type (CLK_TYPE_GEN3E_RPCSRC, as it applies
-to RZ/G2E, and R-Car E3?), which registers a composite clock consisting
-of a mux and divider.  This is a bit similar to the RPC/RPCD2 clocks,
-which are composite clocks consisting of a divider and a gate.
+The arm cores have only access to the mailbox interface, as i2c0, even if
+physically accessible, is to be used solely by the co-processor
+(VideoCore 4/6).
 
-Note that R-Car D3 is similar, except that PLL0 is divided by 5 or 2, which
-means yet another clock type (and div_table).
+This series implements a PWM bus, and has pwm-fan sitting on top of it as per
+this discussion: https://lkml.org/lkml/2018/9/2/486. Although this design has a
+series of shortcomings:
 
-Gr{oetje,eeting}s,
+- It depends on a DT binding: it's not flexible if a new hat shows up with new
+  functionality, we're not 100% sure we'll be able to expand it without
+  breaking backwards compatibility. But without it we can't make use of DT
+  thermal-zones, which IMO is overkill.
 
-                        Geert
+- We're using pwm-fan, writing a hwmon driver would, again, give us more
+  flexibility, but it's not really needed at the moment.
+
+I personally think that it's not worth the effort, it's unlikely we'll get
+things right in advance. And ultimately, if the RPi people come up with
+something new, we can always write a new driver/bindings from scratch (as in
+not reusing previous code).
+
+That said, I'm more than happy to change things if there is a consensus that
+another design will do the trick.
+
+[1] https://www.raspberrypi.org/blog/introducing-power-over-ethernet-poe-hat/
+
+---
+
+Changes since v1:
+ - Address PWM driver changes
+ - Fix binding, now with 2 cells
+ - Add reference count to rpi_firmware_get()
+
+Nicolas Saenz Julienne (10):
+  firmware: raspberrypi: Introduce rpi_firmware_put()
+  clk: bcm: rpi: Release firmware handle on unbind
+  gpio: raspberrypi-exp: Release firmware handle on unbind
+  reset: raspberrypi: Release firmware handle on unbind
+  soc: bcm: raspberrypi-power: Release firmware handle on unbind
+  staging: vchiq: Release firmware handle on unbind
+  input: raspberrypi-ts: Release firmware handle when not needed
+  dt-bindings: pwm: Add binding for RPi firmware PWM bus
+  DO NOT MERGE: ARM: dts: Add RPi's official PoE hat support
+  pwm: Add Raspberry Pi Firmware based PWM bus
+
+ .../arm/bcm/raspberrypi,bcm2835-firmware.yaml |  20 ++
+ arch/arm/boot/dts/bcm2711-rpi-4-b.dts         |  54 +++++
+ drivers/clk/bcm/clk-raspberrypi.c             |   1 +
+ drivers/firmware/raspberrypi.c                |  30 ++-
+ drivers/gpio/gpio-raspberrypi-exp.c           |  14 +-
+ drivers/input/touchscreen/raspberrypi-ts.c    |   1 +
+ drivers/pwm/Kconfig                           |   9 +
+ drivers/pwm/Makefile                          |   1 +
+ drivers/pwm/pwm-raspberrypi.c                 | 221 ++++++++++++++++++
+ drivers/reset/reset-raspberrypi.c             |  13 +-
+ drivers/soc/bcm/raspberrypi-power.c           |  15 ++
+ .../interface/vchiq_arm/vchiq_arm.c           |   3 +
+ .../pwm/raspberrypi,firmware-pwm.h            |  13 ++
+ include/soc/bcm2835/raspberrypi-firmware.h    |   3 +
+ 14 files changed, 395 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/pwm/pwm-raspberrypi.c
+ create mode 100644 include/dt-bindings/pwm/raspberrypi,firmware-pwm.h
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.28.0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
