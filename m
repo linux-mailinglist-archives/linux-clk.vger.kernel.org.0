@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B4929702F
-	for <lists+linux-clk@lfdr.de>; Fri, 23 Oct 2020 15:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E063D297042
+	for <lists+linux-clk@lfdr.de>; Fri, 23 Oct 2020 15:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S464444AbgJWNTg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 23 Oct 2020 09:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
+        id S464456AbgJWNUE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 23 Oct 2020 09:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S464427AbgJWNTg (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 23 Oct 2020 09:19:36 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A023C0613D2
-        for <linux-clk@vger.kernel.org>; Fri, 23 Oct 2020 06:19:34 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id l28so2036619lfp.10
-        for <linux-clk@vger.kernel.org>; Fri, 23 Oct 2020 06:19:34 -0700 (PDT)
+        with ESMTP id S464449AbgJWNTi (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 23 Oct 2020 09:19:38 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5641C0613D5
+        for <linux-clk@vger.kernel.org>; Fri, 23 Oct 2020 06:19:36 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id m16so1531692ljo.6
+        for <linux-clk@vger.kernel.org>; Fri, 23 Oct 2020 06:19:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Qx8/8JORiXv27o7v4yO39cefNVmWr3jvO/t75+dTjdY=;
-        b=O4WPwwWWSIuLDEhXdfDmBZxgy/Nr8cebRFOYQJJ3+J7ISE6p/nk5iIPmM+zgUGewyg
-         MP+TKcbNJzxvYkZdJmi+FdBJeM/ohwuRIVdLf8LrSWXplvXpPRadHCw2JZXCZpcEPOoc
-         ktI1tJOQH+JKOXtvO3feIt7P2bPll32MDidUcJb505BLFpnjgDUa33neAJYZoa53c45T
-         kqa+EfmhCH7caOXvAZGJ7Qw4FmWTVm6526FmYGyJGTEFWc/G42qIzAZMYAXjhTfODJmH
-         MIDFtJ8ug/drLHsoQSPUpz3wU1UOM20Fl2O4s9U/JGwxHofMx6hOoCCDAN+8/A8C0K+j
-         2ZLA==
+        bh=AqOOQJkhUfvKoNHnpeyzoyANmDhc3aHrYoF+q2ExrGE=;
+        b=X9/k2IJLvlOHdTHBPXpgN4RmgFl3Oq62n61bxmVEhlMNmljFgL94Rd4cOvNlRLehAD
+         GIS4FbH9mh3Qvqh0/li1DbfMKSjAImGtgWKCqn7IKBgyGAChiOLr5kXnwDQjzgRyyWHr
+         CcATQGMj704tN98Lp+HEFgs1L3wG424ko9dpXlQurxVu42r4vqzwPvtkoa1X/BxpDqeI
+         651Cdtn6q/zdmRJNAXHxY9OJFX8uoc9xa3XLMxdCE1SMnvNn0OtlzNr1TVUPPIA3jd0R
+         G0PAvM53ysGj/72ELEYqo4xYNjgWPkduqv3fdkEiVjbB/JdCW+tZqtC4BTqyGkJMkYJ0
+         Da7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Qx8/8JORiXv27o7v4yO39cefNVmWr3jvO/t75+dTjdY=;
-        b=kECEc226VTVuQUHHu9q+BCXr8W3733nQtl9HvYMea03lBPyGOQcavM3QzGBdYS+/qY
-         t0iSwhHc0JNInK/EnE/GyKrsZqdOG/wBjF4mTtYGbNCv9+KP5F1UNhI2hU272xzTTMlW
-         cwhmVFGSO5GjamYcPqXSjqcrEhvq4kzoV3lUj3hq7Qcnh0UajUCJou/XV7z1aBYuuOL2
-         6RmCt7DwKonrWocvr2IqpW85weBVA6NEMXPzEmsSPN8O9NuA9z6gL0Tj/z5sztWOR0QJ
-         0s4KQshFEor5/k0hiDBS94Oc3uJPeTtVELjHLi4DWYE7Q7KiT1VbfrkcC7A4mPWe34Sm
-         qraQ==
-X-Gm-Message-State: AOAM530n33ujIQNnM8d8Q5sWzbUk+g65G/mZCh4+7xTod7Y0HwnkfJbi
-        FqPbUTWPtrmOOxsjw13XTtSjsA==
-X-Google-Smtp-Source: ABdhPJy869i54RJ9lJRegmrL7jXaydJIBnXbZK4NV5LGAXgaZbez6DNT7lcUk+T2TUqH4/5SWz+7/A==
-X-Received: by 2002:ac2:4ec8:: with SMTP id p8mr710093lfr.433.1603459172815;
-        Fri, 23 Oct 2020 06:19:32 -0700 (PDT)
+        bh=AqOOQJkhUfvKoNHnpeyzoyANmDhc3aHrYoF+q2ExrGE=;
+        b=ujpXqoVuk1s3hbGZuqAYvhZKCmMVTVoAY2DOpjCmiyY4mYku4ypUt2bon7I+8i6GyS
+         s9dpu9SZ5CW8NAmHtkcG91y4nH5KRoclmNXnKqkOrdd+TArFPkaNUr8ZnfqU4PF6Z9sg
+         5wiOG76h9ueWxzc66FD36Z951sTpL4AITf2oDUrfY+ZNdf/EoTirDcu6NekwxpETSwvj
+         5kxg4tAaTdyBWwClP4txgDu7kzHAeRZhp8elb3KIlCMlz78QAL/PXv1IbEThb0YILufN
+         UTTVSm+AC3081qhiabcb/F4O8QxEfSvkIuY3/FFEuq5td4chUnQIAkRZkZhGhTUZGbtj
+         BAsA==
+X-Gm-Message-State: AOAM533dWq/j/220+/g3U5hNNqxYwq+47saF1HWtu6/k2T2tzzgVNJ6u
+        IOKRvm/c4vSIdmpITRxQtYSOFg==
+X-Google-Smtp-Source: ABdhPJyKYcn13crHVHPIp5NgBoi1S4qmyj+ZQu0TvENFZQFgiwZs7aHHuN23fxPvwDp1+VVti3lVDg==
+X-Received: by 2002:a2e:b0e4:: with SMTP id h4mr816744ljl.119.1603459175157;
+        Fri, 23 Oct 2020 06:19:35 -0700 (PDT)
 Received: from eriador.lan ([188.162.64.195])
-        by smtp.gmail.com with ESMTPSA id o22sm161564ljg.122.2020.10.23.06.19.30
+        by smtp.gmail.com with ESMTPSA id o22sm161564ljg.122.2020.10.23.06.19.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Oct 2020 06:19:32 -0700 (PDT)
+        Fri, 23 Oct 2020 06:19:34 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -60,9 +60,9 @@ Cc:     linux-arm-msm@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
         devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/5] dt-bindings: regulator: fixed: provide bindings using power domain
-Date:   Fri, 23 Oct 2020 16:19:21 +0300
-Message-Id: <20201023131925.334864-2-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v2 2/5] regulator: fixed: support using power domain for enable/disable
+Date:   Fri, 23 Oct 2020 16:19:22 +0300
+Message-Id: <20201023131925.334864-3-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201023131925.334864-1-dmitry.baryshkov@linaro.org>
 References: <20201023131925.334864-1-dmitry.baryshkov@linaro.org>
@@ -72,90 +72,149 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Define bindings for fixed regulator using power domain performance state
-to enable/disable corresponding regulator.
+Adds possibility to choose the compatible "fixed-regulator-domain" for
+regulators which use power domain for enabling/disabling corresponding
+regulator.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- .../bindings/regulator/fixed-regulator.yaml   | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
+ drivers/regulator/fixed.c | 63 +++++++++++++++++++++++++++++++++++----
+ 1 file changed, 57 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml b/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml
-index 92211f2b3b0c..d3d0dc13dd8b 100644
---- a/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml
-@@ -26,12 +26,22 @@ if:
-         const: regulator-fixed-clock
-   required:
-     - clocks
-+else:
-+  if:
-+    properties:
-+      compatible:
-+        contains:
-+          const: regulator-fixed-domain
-+    required:
-+      - power-domains
-+      - required-opps
+diff --git a/drivers/regulator/fixed.c b/drivers/regulator/fixed.c
+index 3de7709bdcd4..02ad83153e19 100644
+--- a/drivers/regulator/fixed.c
++++ b/drivers/regulator/fixed.c
+@@ -18,6 +18,8 @@
+ #include <linux/mutex.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
++#include <linux/pm_domain.h>
++#include <linux/pm_opp.h>
+ #include <linux/regulator/driver.h>
+ #include <linux/regulator/fixed.h>
+ #include <linux/gpio/consumer.h>
+@@ -34,11 +36,13 @@ struct fixed_voltage_data {
+ 	struct regulator_dev *dev;
  
- properties:
-   compatible:
-     enum:
-       - regulator-fixed
-       - regulator-fixed-clock
-+      - regulator-fixed-domain
+ 	struct clk *enable_clock;
+-	unsigned int clk_enable_counter;
++	unsigned int enable_counter;
++	int performance_state;
+ };
  
-   regulator-name: true
+ struct fixed_dev_type {
+ 	bool has_enable_clock;
++	bool has_performance_state;
+ };
  
-@@ -46,6 +56,20 @@ properties:
-       is mandatory if compatible is chosen to regulator-fixed-clock.
-     maxItems: 1
+ static int reg_clock_enable(struct regulator_dev *rdev)
+@@ -50,7 +54,7 @@ static int reg_clock_enable(struct regulator_dev *rdev)
+ 	if (ret)
+ 		return ret;
  
-+  power-domains:
-+    description:
-+      Power domain to use for enable control. This binding is only
-+      available if the compatible is chosen to regulator-fixed-domain.
-+    maxItems: 1
+-	priv->clk_enable_counter++;
++	priv->enable_counter++;
+ 
+ 	return ret;
+ }
+@@ -60,16 +64,41 @@ static int reg_clock_disable(struct regulator_dev *rdev)
+ 	struct fixed_voltage_data *priv = rdev_get_drvdata(rdev);
+ 
+ 	clk_disable_unprepare(priv->enable_clock);
+-	priv->clk_enable_counter--;
++	priv->enable_counter--;
+ 
+ 	return 0;
+ }
+ 
+-static int reg_clock_is_enabled(struct regulator_dev *rdev)
++static int reg_domain_enable(struct regulator_dev *rdev)
+ {
+ 	struct fixed_voltage_data *priv = rdev_get_drvdata(rdev);
++	struct device *dev = rdev->dev.parent;
++	int ret;
 +
-+  required-opps:
-+    description:
-+      Performance state to use for enable control. This binding is only
-+      available if the compatible is chosen to regulator-fixed-domain. The
-+      power-domain binding is mandatory if compatible is chosen to
-+      regulator-fixed-domain.
-+    maxItems: 1
++	ret = dev_pm_genpd_set_performance_state(dev, priv->performance_state);
++	if (ret)
++		return ret;
+ 
+-	return priv->clk_enable_counter > 0;
++	priv->enable_counter++;
 +
-   startup-delay-us:
-     description: startup time in microseconds
-     $ref: /schemas/types.yaml#/definitions/uint32
-@@ -89,4 +113,27 @@ examples:
-       gpio-open-drain;
-       vin-supply = <&parent_reg>;
-     };
-+    reg_1v8_clk: regulator-1v8-clk {
-+      compatible = "regulator-fixed-clock";
-+      regulator-name = "1v8";
-+      regulator-min-microvolt = <1800000>;
-+      regulator-max-microvolt = <1800000>;
-+      clocks = <&clock1>;
-+      startup-delay-us = <70000>;
-+      enable-active-high;
-+      regulator-boot-on;
-+      vin-supply = <&parent_reg>;
-+    };
-+    reg_1v8_domain: regulator-1v8-domain {
-+      compatible = "regulator-fixed-domain";
-+      regulator-name = "1v8";
-+      regulator-min-microvolt = <1800000>;
-+      regulator-max-microvolt = <1800000>;
-+      power-domains = <&domain1>;
-+      required-opps = <&domain1_state1>;
-+      startup-delay-us = <70000>;
-+      enable-active-high;
-+      regulator-boot-on;
-+      vin-supply = <&parent_reg>;
-+    };
- ...
++	return ret;
++}
++
++static int reg_domain_disable(struct regulator_dev *rdev)
++{
++	struct fixed_voltage_data *priv = rdev_get_drvdata(rdev);
++	struct device *dev = rdev->dev.parent;
++
++	priv->enable_counter--;
++
++	return dev_pm_genpd_set_performance_state(dev, 0);
++}
++
++static int reg_is_enabled(struct regulator_dev *rdev)
++{
++	struct fixed_voltage_data *priv = rdev_get_drvdata(rdev);
++
++	return priv->enable_counter > 0;
+ }
+ 
+ 
+@@ -129,7 +158,13 @@ static const struct regulator_ops fixed_voltage_ops = {
+ static const struct regulator_ops fixed_voltage_clkenabled_ops = {
+ 	.enable = reg_clock_enable,
+ 	.disable = reg_clock_disable,
+-	.is_enabled = reg_clock_is_enabled,
++	.is_enabled = reg_is_enabled,
++};
++
++static const struct regulator_ops fixed_voltage_domain_ops = {
++	.enable = reg_domain_enable,
++	.disable = reg_domain_disable,
++	.is_enabled = reg_is_enabled,
+ };
+ 
+ static int reg_fixed_voltage_probe(struct platform_device *pdev)
+@@ -177,6 +212,14 @@ static int reg_fixed_voltage_probe(struct platform_device *pdev)
+ 			dev_err(dev, "Can't get enable-clock from devicetree\n");
+ 			return -ENOENT;
+ 		}
++	} else if (drvtype && drvtype->has_performance_state) {
++		drvdata->desc.ops = &fixed_voltage_domain_ops;
++
++		drvdata->performance_state = of_get_required_opp_performance_state(dev->of_node, 0);
++		if (drvdata->performance_state < 0) {
++			dev_err(dev, "Can't get performance state from devicetree\n");
++			return drvdata->performance_state;
++		}
+ 	} else {
+ 		drvdata->desc.ops = &fixed_voltage_ops;
+ 	}
+@@ -260,6 +303,10 @@ static const struct fixed_dev_type fixed_clkenable_data = {
+ 	.has_enable_clock = true,
+ };
+ 
++static const struct fixed_dev_type fixed_domain_data = {
++	.has_performance_state = true,
++};
++
+ static const struct of_device_id fixed_of_match[] = {
+ 	{
+ 		.compatible = "regulator-fixed",
+@@ -269,6 +316,10 @@ static const struct of_device_id fixed_of_match[] = {
+ 		.compatible = "regulator-fixed-clock",
+ 		.data = &fixed_clkenable_data,
+ 	},
++	{
++		.compatible = "regulator-fixed-domain",
++		.data = &fixed_domain_data,
++	},
+ 	{
+ 	},
+ };
 -- 
 2.28.0
 
