@@ -2,80 +2,92 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D202996FB
-	for <lists+linux-clk@lfdr.de>; Mon, 26 Oct 2020 20:33:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 567A2299B08
+	for <lists+linux-clk@lfdr.de>; Tue, 27 Oct 2020 00:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1793267AbgJZTdZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 26 Oct 2020 15:33:25 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:32838 "EHLO inva021.nxp.com"
+        id S2408401AbgJZXrY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 26 Oct 2020 19:47:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44376 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1793208AbgJZTdG (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 26 Oct 2020 15:33:06 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id C7EEA20089E;
-        Mon, 26 Oct 2020 20:33:04 +0100 (CET)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id BBE46201712;
-        Mon, 26 Oct 2020 20:33:04 +0100 (CET)
-Received: from fsr-ub1664-175.ea.freescale.net (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id F2EBC20308;
-        Mon, 26 Oct 2020 20:33:03 +0100 (CET)
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Mike Turquette <mturquette@baylibre.com>,
+        id S2408400AbgJZXrY (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 26 Oct 2020 19:47:24 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 34F4B20872;
+        Mon, 26 Oct 2020 23:47:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603756043;
+        bh=CCd/1eClEmV4GdkYGGj4s8i+deHWYDJGw3SoCtNf2O8=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=HEJKt+S9wdzTfdcyniRnE8GEYdxxMBjI4RH+tQDmKl+RC2dU/9SdSyui3E7dsz6Z0
+         mUBHYtTOGfwRwTWGDVW7XbDz2ng6Ck+gBlEW6x+HbAjKjoO5BvwnmitmzHiefY1Dvq
+         hM2QD+afILHXb5BCNVUFGshMpVbGIWJb5WqnBvVk=
+Date:   Mon, 26 Oct 2020 23:47:19 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
-        Adam Ford <aford173@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>
-Cc:     NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        Abel Vesa <abel.vesa@nxp.com>
-Subject: [PATCH v4 14/14] arm64: dts: imx8mp: Add hdmi_blk_ctl node
-Date:   Mon, 26 Oct 2020 21:32:30 +0200
-Message-Id: <1603740750-10385-15-git-send-email-abel.vesa@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1603740750-10385-1-git-send-email-abel.vesa@nxp.com>
-References: <1603740750-10385-1-git-send-email-abel.vesa@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jonathan Marek <jonathan@marek.ca>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20201023131925.334864-1-dmitry.baryshkov@linaro.org>
+References: <20201023131925.334864-1-dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v2 0/5]
+Message-Id: <160375603445.32304.15800152990447798405.b4-ty@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Some of the features of the hdmi_ctl will be used by some
-different drivers in a way those drivers will know best, so adding the
-syscon compatible we allow those to do just that. Only the resets
-and the clocks are registered bit the clk-blk-ctl driver.
+On Fri, 23 Oct 2020 16:19:20 +0300, Dmitry Baryshkov wrote:
+> On SM8250 MDSS_GDSC (and the rest of display clock controller) is
+> supplied power by MMCX power domain. Handle this link in GDSC code by
+> binding the power domain in dts file.
+> 
+> This patchset depends on [1]
+> 
+> Changes since v1:
+>  - Define fixed-regulator-domain regulator using power domain
+>    performance state for enabling/disabling.
+>  - Rework to use new fixed regulator type (fixed-regulator-domain)
+>    instead of controlling power domain directly from gdsc code.
+> 
+> [...]
 
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8mp.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+Applied to
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-index 291e135..378f31b 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-@@ -749,6 +749,13 @@
- 				#clock-cells = <1>;
- 				#reset-cells = <1>;
- 			};
-+
-+			hdmi_blk_ctl: clock-controller@32fc0000 {
-+				compatible = "fsl,imx8mp-hdmi-blk-ctl", "syscon";
-+				reg = <0x32fc0000 0x1000>;
-+				#clock-cells = <1>;
-+				#reset-cells = <1>;
-+			};
- 		};
- 
- 		aips5: bus@30c00000 {
--- 
-2.7.4
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
+Thanks!
+
+[1/2] regulator: fixed: provide bindings using power domain
+      commit: d4189bc55d5c40251abaa1f341796aac84ddfb10
+[2/2] regulator: fixed: support using power domain for enable/disable
+      commit: bf3a28cf42412c0a85631da94f198048bb37a8e5
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
