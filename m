@@ -2,156 +2,127 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA55298B76
-	for <lists+linux-clk@lfdr.de>; Mon, 26 Oct 2020 12:11:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C924A298B99
+	for <lists+linux-clk@lfdr.de>; Mon, 26 Oct 2020 12:17:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1773204AbgJZLLl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 26 Oct 2020 07:11:41 -0400
-Received: from muru.com ([72.249.23.125]:46626 "EHLO muru.com"
+        id S1772263AbgJZLRb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 26 Oct 2020 07:17:31 -0400
+Received: from foss.arm.com ([217.140.110.172]:35782 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1773189AbgJZLLd (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 26 Oct 2020 07:11:33 -0400
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id 68F4281A0;
-        Mon, 26 Oct 2020 11:11:34 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     linux-omap@vger.kernel.org
-Cc:     "Andrew F . Davis" <afd@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
-        Faiz Abbas <faiz_abbas@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Keerthy <j-keerthy@ti.com>, Nishanth Menon <nm@ti.com>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        Roger Quadros <rogerq@ti.com>, Suman Anna <s-anna@ti.com>,
-        Tero Kristo <t-kristo@ti.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH 9/9] remoteproc/wkup_m3: Use reset control driver if available
-Date:   Mon, 26 Oct 2020 13:10:49 +0200
-Message-Id: <20201026111049.54835-10-tony@atomide.com>
-X-Mailer: git-send-email 2.29.1
-In-Reply-To: <20201026111049.54835-1-tony@atomide.com>
-References: <20201026111049.54835-1-tony@atomide.com>
+        id S1771658AbgJZLR3 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 26 Oct 2020 07:17:29 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9FA69101E;
+        Mon, 26 Oct 2020 04:17:28 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.37])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9CF623F719;
+        Mon, 26 Oct 2020 04:17:27 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, heiko@sntech.de
+Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, zhangqing@rock-chips.com
+Subject: [PATCH] clk: rockchip: Add appropriate arch dependencies
+Date:   Mon, 26 Oct 2020 11:17:20 +0000
+Message-Id: <72abb0f794b8ed77e274e8ee21c22e0bd3223dfd.1603710913.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.28.0.dirty
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-In order to move wkup_m3 to probe without platform data, let's add
-support for using optional reset control driver if configured in the
-dts. With this change and the related dts change, we can start
-dropping the platform data for am335x.
+There's no point offering support for 32-bit platforms to users
+configuring a 64-bit kernel - and vice-versa - unless they are
+explicitly interested in compile-testing.
 
-And once wkup_m3 no longer needs platform data, we can simply drop the
-related legacy reset platform data callbacks from wkup_m3 driver later
-on after also am437x no longer depends on it.
-
-Cc: linux-remoteproc@vger.kernel.org
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Dave Gerlach <d-gerlach@ti.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Suman Anna <s-anna@ti.com>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 ---
+ drivers/clk/rockchip/Kconfig | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-Please review and ack if no issues. If you guys instead want to set up an
-immutable remoteproc branch with just this patch in it against v5.10-rc1
-that works too :)
-
----
- drivers/remoteproc/wkup_m3_rproc.c | 28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/remoteproc/wkup_m3_rproc.c b/drivers/remoteproc/wkup_m3_rproc.c
---- a/drivers/remoteproc/wkup_m3_rproc.c
-+++ b/drivers/remoteproc/wkup_m3_rproc.c
-@@ -17,6 +17,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/remoteproc.h>
-+#include <linux/reset.h>
+diff --git a/drivers/clk/rockchip/Kconfig b/drivers/clk/rockchip/Kconfig
+index 47cd6c5de837..effd05032e85 100644
+--- a/drivers/clk/rockchip/Kconfig
++++ b/drivers/clk/rockchip/Kconfig
+@@ -11,67 +11,77 @@ config COMMON_CLK_ROCKCHIP
+ if COMMON_CLK_ROCKCHIP
+ config CLK_PX30
+ 	bool "Rockchip PX30 clock controller support"
++	depends on (ARM64 || COMPILE_TEST)
+ 	default y
+ 	help
+ 	  Build the driver for PX30 Clock Driver.
  
- #include <linux/platform_data/wkup_m3.h>
+ config CLK_RV110X
+ 	bool "Rockchip RV110x clock controller support"
++	depends on (ARM || COMPILE_TEST)
+ 	default y
+ 	help
+ 	  Build the driver for RV110x Clock Driver.
  
-@@ -43,11 +44,13 @@ struct wkup_m3_mem {
-  * @rproc: rproc handle
-  * @pdev: pointer to platform device
-  * @mem: WkupM3 memory information
-+ * @rsts: reset control
-  */
- struct wkup_m3_rproc {
- 	struct rproc *rproc;
- 	struct platform_device *pdev;
- 	struct wkup_m3_mem mem[WKUPM3_MEM_MAX];
-+	struct reset_control *rsts;
- };
+ config CLK_RK3036
+ 	bool "Rockchip RK3036 clock controller support"
++	depends on (ARM || COMPILE_TEST)
+ 	default y
+ 	help
+ 	  Build the driver for RK3036 Clock Driver.
  
- static int wkup_m3_rproc_start(struct rproc *rproc)
-@@ -57,6 +60,9 @@ static int wkup_m3_rproc_start(struct rproc *rproc)
- 	struct device *dev = &pdev->dev;
- 	struct wkup_m3_platform_data *pdata = dev_get_platdata(dev);
+ config CLK_RK312X
+ 	bool "Rockchip RK312x clock controller support"
++	depends on (ARM || COMPILE_TEST)
+ 	default y
+ 	help
+ 	  Build the driver for RK312x Clock Driver.
  
-+	if (wkupm3->rsts)
-+		return reset_control_deassert(wkupm3->rsts);
-+
- 	if (pdata->deassert_reset(pdev, pdata->reset_name)) {
- 		dev_err(dev, "Unable to reset wkup_m3!\n");
- 		return -ENODEV;
-@@ -72,6 +78,9 @@ static int wkup_m3_rproc_stop(struct rproc *rproc)
- 	struct device *dev = &pdev->dev;
- 	struct wkup_m3_platform_data *pdata = dev_get_platdata(dev);
+ config CLK_RK3188
+ 	bool "Rockchip RK3188 clock controller support"
++	depends on (ARM || COMPILE_TEST)
+ 	default y
+ 	help
+ 	  Build the driver for RK3188 Clock Driver.
  
-+	if (wkupm3->rsts)
-+		return reset_control_assert(wkupm3->rsts);
-+
- 	if (pdata->assert_reset(pdev, pdata->reset_name)) {
- 		dev_err(dev, "Unable to assert reset of wkup_m3!\n");
- 		return -ENODEV;
-@@ -132,12 +141,6 @@ static int wkup_m3_rproc_probe(struct platform_device *pdev)
- 	int ret;
- 	int i;
+ config CLK_RK322X
+ 	bool "Rockchip RK322x clock controller support"
++	depends on (ARM || COMPILE_TEST)
+ 	default y
+ 	help
+ 	  Build the driver for RK322x Clock Driver.
  
--	if (!(pdata && pdata->deassert_reset && pdata->assert_reset &&
--	      pdata->reset_name)) {
--		dev_err(dev, "Platform data missing!\n");
--		return -ENODEV;
--	}
--
- 	ret = of_property_read_string(dev->of_node, "ti,pm-firmware",
- 				      &fw_name);
- 	if (ret) {
-@@ -165,6 +168,17 @@ static int wkup_m3_rproc_probe(struct platform_device *pdev)
- 	wkupm3->rproc = rproc;
- 	wkupm3->pdev = pdev;
+ config CLK_RK3288
+ 	bool "Rockchip RK3288 clock controller support"
+-	depends on ARM
++	depends on (ARM || COMPILE_TEST)
+ 	default y
+ 	help
+ 	  Build the driver for RK3288 Clock Driver.
  
-+	wkupm3->rsts = devm_reset_control_get_optional_shared(dev, "rstctrl");
-+	if (PTR_ERR_OR_ZERO(wkupm3->rsts)) {
-+		if (!(pdata && pdata->deassert_reset && pdata->assert_reset &&
-+		      pdata->reset_name)) {
-+			dev_err(dev, "Platform data missing!\n");
-+			ret = -ENODEV;
-+			goto err_put_rproc;
-+		}
-+		wkupm3->rsts = NULL;
-+	}
-+
- 	for (i = 0; i < ARRAY_SIZE(mem_names); i++) {
- 		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
- 						   mem_names[i]);
-@@ -173,7 +187,7 @@ static int wkup_m3_rproc_probe(struct platform_device *pdev)
- 			dev_err(&pdev->dev, "devm_ioremap_resource failed for resource %d\n",
- 				i);
- 			ret = PTR_ERR(wkupm3->mem[i].cpu_addr);
--			goto err;
-+			goto err_put_rproc;
- 		}
- 		wkupm3->mem[i].bus_addr = res->start;
- 		wkupm3->mem[i].size = resource_size(res);
+ config CLK_RK3308
+ 	bool "Rockchip RK3308 clock controller support"
++	depends on (ARM64 || COMPILE_TEST)
+ 	default y
+ 	help
+ 	  Build the driver for RK3308 Clock Driver.
+ 
+ config CLK_RK3328
+ 	bool "Rockchip RK3328 clock controller support"
++	depends on (ARM64 || COMPILE_TEST)
+ 	default y
+ 	help
+ 	  Build the driver for RK3328 Clock Driver.
+ 
+ config CLK_RK3368
+ 	bool "Rockchip RK3368 clock controller support"
++	depends on (ARM64 || COMPILE_TEST)
+ 	default y
+ 	help
+ 	  Build the driver for RK3368 Clock Driver.
+ 
+ config CLK_RK3399
+ 	tristate "Rockchip RK3399 clock controller support"
++	depends on (ARM64 || COMPILE_TEST)
+ 	default y
+ 	help
+ 	  Build the driver for RK3399 Clock Driver.
 -- 
-2.29.1
+2.28.0.dirty
+
