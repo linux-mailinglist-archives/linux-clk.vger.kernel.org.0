@@ -2,75 +2,132 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A012990CE
-	for <lists+linux-clk@lfdr.de>; Mon, 26 Oct 2020 16:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B553B299167
+	for <lists+linux-clk@lfdr.de>; Mon, 26 Oct 2020 16:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1783098AbgJZPQc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-clk@lfdr.de>); Mon, 26 Oct 2020 11:16:32 -0400
-Received: from mail-ej1-f67.google.com ([209.85.218.67]:38686 "EHLO
-        mail-ej1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404034AbgJZPQc (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Oct 2020 11:16:32 -0400
-Received: by mail-ej1-f67.google.com with SMTP id ce10so14116299ejc.5;
-        Mon, 26 Oct 2020 08:16:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ykn7mDr6IhgGPaHcJ3ODS02eBmjPYrOJE/dTqRU9Lm4=;
-        b=Icywda8CCtcospo/+MQz1jQ83jTDgkg4oHEpreSqxj13EQbRTl9IRYuDwhuZ4ivgM9
-         TkUjWYr0Ke0Ob6Wvl/YZlTsir8JCo7MqfTStRIOeCQgLLW8+PO0pO3s25AKfB/VTGtjt
-         s1bxGAoUr+94tyOahx+KQ+DNZOWiE+JlrigyH+tynswAeXRMQHEn/Kj9RtKslrQoOwQ0
-         cZ+NW7McivO3Mip85/BdtCZmKoWFTR3IpH/9LaNm4O/3QDxwpjg8oh3cajCu1ouxcjkN
-         c1OmUVcDetcFIu+w2cTf6fP8BWGLzLgxpye6FhSVr2z9IdMzedui5Ok4apPj4f5Mek9a
-         N4LQ==
-X-Gm-Message-State: AOAM532BiyWEtB/kPhDeKbQSlXXwK4bG1QpxHZomwiBaDhxxn9YrOqGj
-        2wUWADSiId2HQfsPH5wnE6k=
-X-Google-Smtp-Source: ABdhPJyFdl9tOTZ46nbpEA1jYNhgGin081i0VgSbLf/9INiPjEinm6ayfLrzWjebiXYrKUHhWfyciw==
-X-Received: by 2002:a17:906:430a:: with SMTP id j10mr15929122ejm.21.1603725389660;
-        Mon, 26 Oct 2020 08:16:29 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.184])
-        by smtp.googlemail.com with ESMTPSA id a19sm5354005edb.84.2020.10.26.08.16.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2020 08:16:27 -0700 (PDT)
-Date:   Mon, 26 Oct 2020 16:16:24 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     =?utf-8?B?UGF3ZcWC?= Chmiel <pawel.mikolaj.chmiel@gmail.com>
-Cc:     kgene@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        s.nawrocki@samsung.com, tomasz.figa@gmail.com,
-        cw00.choi@samsung.com, linux-samsung-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: exynos7: Mark aclk_fsys1_200 as critical
-Message-ID: <20201026151624.GB87050@kozik-lap>
-References: <20201024154346.9589-1-pawel.mikolaj.chmiel@gmail.com>
+        id S1784392AbgJZPtI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 26 Oct 2020 11:49:08 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:49623 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1772840AbgJZPtH (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Oct 2020 11:49:07 -0400
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=localhost)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1kX4ZF-00008N-Kq; Mon, 26 Oct 2020 16:37:53 +0100
+Message-ID: <c976125e45e2fe46afbee1735004668677383805.camel@pengutronix.de>
+Subject: Re: [RFC 0/3] clk: imx: Implement blk-ctl driver for i.MX8MN
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Abel Vesa <abel.vesa@nxp.com>, Adam Ford <aford173@gmail.com>
+Cc:     Marek Vasut <marex@denx.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>
+Date:   Mon, 26 Oct 2020 16:37:51 +0100
+In-Reply-To: <20201026145516.shmb55gaeh6u7oru@fsr-ub1664-175>
+References: <20201024162016.1003041-1-aford173@gmail.com>
+         <20201024202335.y3npwtgragpp5wcz@fsr-ub1664-175>
+         <CAHCN7xJiygvLStO56v4xSnOEqR_5fbYQHn5juA8YeDiWh2awbg@mail.gmail.com>
+         <20201025120509.r5kl76wo5mdmapo5@fsr-ub1664-175>
+         <3dadade8-6e77-e27f-d5a6-307de17a4dd0@denx.de>
+         <CAHCN7xLC-gKquDNS3ToQCff=g610PscQE+T4zfO=_05GpLyK4w@mail.gmail.com>
+         <20201026145516.shmb55gaeh6u7oru@fsr-ub1664-175>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20201024154346.9589-1-pawel.mikolaj.chmiel@gmail.com>
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sat, Oct 24, 2020 at 05:43:46PM +0200, Paweł Chmiel wrote:
-> This clock must be always enabled to allow access to any registers in
-> fsys1 CMU. Until proper solution based on runtime PM is applied
-> (similar to what was done for Exynos5433), mark that clock as critical
-> so it won't be disabled.
+Am Montag, den 26.10.2020, 16:55 +0200 schrieb Abel Vesa:
+> On 20-10-25 11:05:32, Adam Ford wrote:
+> > On Sun, Oct 25, 2020 at 7:19 AM Marek Vasut <marex@denx.de> wrote:
+> > > On 10/25/20 1:05 PM, Abel Vesa wrote:
+> > > 
+> > > [...]
+> > > 
+> > > > > Together, both the GPC and the clk-blk driver should be able to pull
+> > > > > the multimedia block out of reset.  Currently, the GPC can handle the
+> > > > > USB OTG and the GPU, but the LCDIF and MIPI DSI appear to be gated by
+> > > > > the clock block
+> > > > > 
+> > > > > My original patch RFC didn't include the imx8mn node, because it
+> > > > > hangs, but the node I added looks like:
+> > > > > 
+> > > > > media_blk_ctl: clock-controller@32e28000 {
+> > > > >      compatible = "fsl,imx8mn-media-blk-ctl", "syscon";
+> > > > >      reg = <0x32e28000 0x1000>;
+> > > > >      #clock-cells = <1>;
+> > > > >      #reset-cells = <1>;
+> > > > > };
+> > > > > 
+> > > > > I was hoping you might have some feedback on the 8mn clk-blk driver
+> > > > > since you did the 8mp clk-blk drive and they appear to be very
+> > > > > similar.
+> > > > > 
+> > > > 
+> > > > I'll do you one better still. I'll apply the patch in my tree and give it
+> > > > a test tomorrow morning.
+> > 
+> > I do have some more updates on how to get the system to not hang, and
+> > to enumerate more clocks.
+> > Looking at Marek's work on enabling clocks in the 8MM, he added a
+> > power-domain in dispmix_blk_ctl pointing to the dispmix in the GPC.
+> > By forcing the GPC driver to write 0x1fff  to 32e28004, 0x7f to
+> > 32e28000 and 0x30000 to 32e28008, the i.MX8MM can bring the display
+> > clocks out of reset.
+> > 
 > 
-> It was observed on Samsung Galaxy S6 device (based on Exynos7420), where
-> UFS module is probed before pmic used to power that device.
-> In this case defer probe was happening and that clock was disabled by
-> UFS driver, causing whole boot to hang on next CMU access.
+> Yeah, that makes sense. Basically, it was trying to disable unused clocks
+> (see clk_disable_unused) but in order to disable the clocks from the
+> media BLK_CTL (which I think should be renamed in display BLK_CTL) the
+> PD need to be on. Since you initially didn't give it any PD, it was trying
+> to blindly write/read the gate bit and therefore freeze.
 > 
-> Signed-off-by: Paweł Chmiel <pawel.mikolaj.chmiel@gmail.com>
-> ---
->  drivers/clk/samsung/clk-exynos7.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> > Unfortunately, the i.MX8MN needs to have 0x100 written to both
+> > 32e28000 and 32e28004, and the values written for the 8MM are not
+> > compatible.
+> > By forcing the GPC to write those values, I can get  lcdif_pixel_clk
+> > and the mipi_dsi_clkref  appearing on the Nano.
+> 
+> I'm trying to make a branch with all the patches for all i.MX8M so I
+> can keep track of it all. On this branch I've also applied the 
+> following patchset from Lucas Stach:
+> https://www.spinics.net/lists/arm-kernel/msg843007.html
+> but I'm getting the folowing errors:
+> 
+> [   16.690885] imx-pgc imx-pgc-domain.3: failed to power up ADB400
+> [   16.716839] imx-pgc imx-pgc-domain.3: failed to power up ADB400
+> [   16.730500] imx-pgc imx-pgc-domain.3: failed to power up ADB400
+> 
+> Lucas, any thoughts?
+> 
+> Maybe it's something related to 8MN.
 
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+The ADB is apparently clocked by one of the BLK_CTL clocks, so the ADB
+handshake ack will only work when the BLK_CTL clocks are enabled. So I
+guess the GPC driver should enable those clocks and assert the resets
+at the right time in the power-up sequencing. Unfortunately this means
+we can't properly put the BLK_CTL driver in the power-domain without
+having a cyclic dependency in the DT. I'm still thinking about how to
+solve this properly.
 
-Best regards,
-Krzysztof
+Regards,
+Lucas
+
