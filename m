@@ -2,178 +2,125 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C12298C9B
-	for <lists+linux-clk@lfdr.de>; Mon, 26 Oct 2020 13:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF61298D61
+	for <lists+linux-clk@lfdr.de>; Mon, 26 Oct 2020 14:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1774666AbgJZMCe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 26 Oct 2020 08:02:34 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:45511 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1774667AbgJZMCc (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Oct 2020 08:02:32 -0400
-Received: by mail-wr1-f68.google.com with SMTP id e17so12121958wru.12
-        for <linux-clk@vger.kernel.org>; Mon, 26 Oct 2020 05:02:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=csBLm3ebHLvfnJwPW+GEPGSRmaYpvOkO16WRyubpNjA=;
-        b=CQIAGolIi3P6jCUGq3bE7yNJUS8cGXQlkYbPeWnfSZI2Re9PMP2NGmoKpRJgos+56C
-         6XC5SlNv9I601RC7hw5EpUkYn/cbaXdMjzoFRbclzk4KqyBWe5jOPcIA/rr64wL8/llG
-         UtRhwTIXV9CQlqacrc0AblA4tObwYY6JtGNS7WPLPjH11QK4dqr9MqRXmYV+N3j0Vesn
-         9KXLbO5i5dL9c+My0IdBW3/HPanw8gG1BJOJrZtM1UK/OEPKY3ZFKpJsNC8arZm1P7nY
-         R3rucSgFx+N7KaWss5CcLr0/ygXTYWuADBACQXm2uPNUL92mR1P07GSXVFTZoug1ujHL
-         Ggng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=csBLm3ebHLvfnJwPW+GEPGSRmaYpvOkO16WRyubpNjA=;
-        b=ZJwyXK0eWaczsqis0Rv7rHegYPhegN8keLd2LDmWhK7Of+pCDuXh2N8MycQaQk/9Vh
-         cXC8DGZ4zm0kvaXy4M4V+Acs7Mh0rlf8TlIMq1l9/9KNXx/yUgODAV/CxhcUXsyjRikA
-         vrdvlqsnMcAKJKq/d0CNhihNarqLAR5kzi6Z1nINu7eVqL/zqKT4nGwwL4HzU/+1DuxX
-         Yzp3J2pCwx2JqSEcdmrAaJsBscySET1kNZ9Hgdpo/YziRX7dKC9wpCx7EXUySPnaHfS7
-         BxhE8CktAtuRXiqF+QdsZXB92GsbwBDOOM2hcbUGINNjhZJroP0a+pOPjt1Ahdyn724g
-         dp+g==
-X-Gm-Message-State: AOAM533srAimVzxFHfHyqeR+kqXcEE/OORn1xZD/tXdoZcIWiJXumEiD
-        VCNE0ASX6OsAaGYc1yvKpI72bw==
-X-Google-Smtp-Source: ABdhPJzvTiSwyyzXUeBSenhdhpVq0hdbhCKuhAOzN/jtLyXmbp+scZip35ykfHF+Y8xfNaFN4XkHgA==
-X-Received: by 2002:a5d:4282:: with SMTP id k2mr16794414wrq.270.1603713750422;
-        Mon, 26 Oct 2020 05:02:30 -0700 (PDT)
-Received: from srini-hackbox.lan (cpc86377-aztw32-2-0-cust226.18-1.cable.virginm.net. [92.233.226.227])
-        by smtp.gmail.com with ESMTPSA id i33sm23659337wri.79.2020.10.26.05.02.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2020 05:02:29 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     sboyd@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     bjorn.andersson@linaro.org, mturquette@baylibre.com,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [RESEND PATCH v3 4/4] clk: qcom: Add support to LPASS AON_CC Glitch Free Mux clocks
-Date:   Mon, 26 Oct 2020 12:02:21 +0000
-Message-Id: <20201026120221.18984-5-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20201026120221.18984-1-srinivas.kandagatla@linaro.org>
-References: <20201026120221.18984-1-srinivas.kandagatla@linaro.org>
+        id S1775999AbgJZNCu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 26 Oct 2020 09:02:50 -0400
+Received: from muru.com ([72.249.23.125]:46766 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1773755AbgJZNCt (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 26 Oct 2020 09:02:49 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id A69D980AA;
+        Mon, 26 Oct 2020 13:02:50 +0000 (UTC)
+Date:   Mon, 26 Oct 2020 15:02:38 +0200
+From:   Tony Lindgren <tony@atomide.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-omap@vger.kernel.org, "Andrew F . Davis" <afd@ti.com>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Faiz Abbas <faiz_abbas@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Keerthy <j-keerthy@ti.com>, Nishanth Menon <nm@ti.com>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        Roger Quadros <rogerq@ti.com>, Suman Anna <s-anna@ti.com>,
+        Tero Kristo <t-kristo@ti.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 9/9] remoteproc/wkup_m3: Use reset control driver if
+ available
+Message-ID: <20201026130238.GA5639@atomide.com>
+References: <20201026111049.54835-1-tony@atomide.com>
+ <20201026111049.54835-10-tony@atomide.com>
+ <c8ea80c2eb79f80539911f3563398957beedaa41.camel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c8ea80c2eb79f80539911f3563398957beedaa41.camel@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-LPASS Always ON Clock controller has one GFM mux to control VA
-and TX clocks to codec macro on LPASS.
-This patch adds support to this mux.
+Hi,
 
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- drivers/clk/qcom/lpass-gfm-sm8250.c | 63 +++++++++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+* Philipp Zabel <p.zabel@pengutronix.de> [201026 11:35]:
+> On Mon, 2020-10-26 at 13:10 +0200, Tony Lindgren wrote:
+> > @@ -57,6 +60,9 @@ static int wkup_m3_rproc_start(struct rproc *rproc)
+> >  	struct device *dev = &pdev->dev;
+> >  	struct wkup_m3_platform_data *pdata = dev_get_platdata(dev);
+> >  
+> > +	if (wkupm3->rsts)
+> 
+> No need for this check, reset_control_deassert() just returns 0 if the
+> rstc parameter is NULL.
+> 
+> > +		return reset_control_deassert(wkupm3->rsts);
+> > +
+> >  	if (pdata->deassert_reset(pdev, pdata->reset_name)) {
+> >  		dev_err(dev, "Unable to reset wkup_m3!\n");
+> >  		return -ENODEV;
+> > @@ -72,6 +78,9 @@ static int wkup_m3_rproc_stop(struct rproc *rproc)
+> >  	struct device *dev = &pdev->dev;
+> >  	struct wkup_m3_platform_data *pdata = dev_get_platdata(dev);
+> >  
+> > +	if (wkupm3->rsts)
+> 
+> Same as above.
 
-diff --git a/drivers/clk/qcom/lpass-gfm-sm8250.c b/drivers/clk/qcom/lpass-gfm-sm8250.c
-index 48a73dd97d0d..d366c7c2abc7 100644
---- a/drivers/clk/qcom/lpass-gfm-sm8250.c
-+++ b/drivers/clk/qcom/lpass-gfm-sm8250.c
-@@ -18,6 +18,7 @@
- #include <linux/platform_device.h>
- #include <linux/of_device.h>
- #include <dt-bindings/clock/qcom,sm8250-lpass-audiocc.h>
-+#include <dt-bindings/clock/qcom,sm8250-lpass-aoncc.h>
- 
- struct lpass_gfm {
- 	struct device *dev;
-@@ -65,6 +66,46 @@ static const struct clk_ops clk_gfm_ops = {
- 	.determine_rate = __clk_mux_determine_rate,
- };
- 
-+static struct clk_gfm lpass_gfm_va_mclk = {
-+	.mux_reg = 0x20000,
-+	.mux_mask = BIT(0),
-+	.hw.init = &(struct clk_init_data) {
-+		.name = "VA_MCLK",
-+		.ops = &clk_gfm_ops,
-+		.flags = CLK_SET_RATE_PARENT | CLK_OPS_PARENT_ENABLE,
-+		.num_parents = 2,
-+		.parent_data = (const struct clk_parent_data[]){
-+			{
-+				.index = 0,
-+				.fw_name = "LPASS_CLK_ID_TX_CORE_MCLK",
-+			}, {
-+				.index = 1,
-+				.fw_name = "LPASS_CLK_ID_VA_CORE_MCLK",
-+			},
-+		},
-+	},
-+};
-+
-+static struct clk_gfm lpass_gfm_tx_npl = {
-+	.mux_reg = 0x20000,
-+	.mux_mask = BIT(0),
-+	.hw.init = &(struct clk_init_data) {
-+		.name = "TX_NPL",
-+		.ops = &clk_gfm_ops,
-+		.flags = CLK_SET_RATE_PARENT | CLK_OPS_PARENT_ENABLE,
-+		.parent_data = (const struct clk_parent_data[]){
-+			{
-+				.index = 0,
-+				.fw_name = "LPASS_CLK_ID_TX_CORE_NPL_MCLK",
-+			}, {
-+				.index = 1,
-+				.fw_name = "LPASS_CLK_ID_VA_CORE_2X_MCLK",
-+			},
-+		},
-+		.num_parents = 2,
-+	},
-+};
-+
- static struct clk_gfm lpass_gfm_wsa_mclk = {
- 	.mux_reg = 0x220d8,
- 	.mux_mask = BIT(0),
-@@ -145,6 +186,19 @@ static struct clk_gfm lpass_gfm_rx_npl = {
- 	},
- };
- 
-+static struct clk_gfm *aoncc_gfm_clks[] = {
-+	[LPASS_CDC_VA_MCLK]		= &lpass_gfm_va_mclk,
-+	[LPASS_CDC_TX_NPL]		= &lpass_gfm_tx_npl,
-+};
-+
-+static struct clk_hw_onecell_data aoncc_hw_onecell_data = {
-+	.hws = {
-+		[LPASS_CDC_VA_MCLK]	= &lpass_gfm_va_mclk.hw,
-+		[LPASS_CDC_TX_NPL]	= &lpass_gfm_tx_npl.hw,
-+	},
-+	.num = ARRAY_SIZE(aoncc_gfm_clks),
-+};
-+
- static struct clk_gfm *audiocc_gfm_clks[] = {
- 	[LPASS_CDC_WSA_NPL]		= &lpass_gfm_wsa_npl,
- 	[LPASS_CDC_WSA_MCLK]		= &lpass_gfm_wsa_mclk,
-@@ -172,6 +226,11 @@ static struct lpass_gfm_data audiocc_data = {
- 	.gfm_clks = audiocc_gfm_clks,
- };
- 
-+static struct lpass_gfm_data aoncc_data = {
-+	.onecell_data = &aoncc_hw_onecell_data,
-+	.gfm_clks = aoncc_gfm_clks,
-+};
-+
- static int lpass_gfm_clk_driver_probe(struct platform_device *pdev)
- {
- 	const struct lpass_gfm_data *data;
-@@ -233,6 +292,10 @@ static int lpass_gfm_clk_driver_probe(struct platform_device *pdev)
- }
- 
- static const struct of_device_id lpass_gfm_clk_match_table[] = {
-+	{
-+		.compatible = "qcom,sm8250-lpass-aoncc",
-+		.data = &aoncc_data,
-+	},
- 	{
- 		.compatible = "qcom,sm8250-lpass-audiocc",
- 		.data = &audiocc_data,
--- 
-2.21.0
+OK great.
 
+> > +		return reset_control_assert(wkupm3->rsts);
+> > +
+> >  	if (pdata->assert_reset(pdev, pdata->reset_name)) {
+> >  		dev_err(dev, "Unable to assert reset of wkup_m3!\n");
+> >  		return -ENODEV;
+> > @@ -132,12 +141,6 @@ static int wkup_m3_rproc_probe(struct platform_device *pdev)
+> >  	int ret;
+> >  	int i;
+> >  
+> > -	if (!(pdata && pdata->deassert_reset && pdata->assert_reset &&
+> > -	      pdata->reset_name)) {
+> > -		dev_err(dev, "Platform data missing!\n");
+> > -		return -ENODEV;
+> > -	}
+> > -
+> >  	ret = of_property_read_string(dev->of_node, "ti,pm-firmware",
+> >  				      &fw_name);
+> >  	if (ret) {
+> > @@ -165,6 +168,17 @@ static int wkup_m3_rproc_probe(struct platform_device *pdev)
+> >  	wkupm3->rproc = rproc;
+> >  	wkupm3->pdev = pdev;
+> >  
+> > +	wkupm3->rsts = devm_reset_control_get_optional_shared(dev, "rstctrl");
+> > +	if (PTR_ERR_OR_ZERO(wkupm3->rsts)) {
+> 
+> Please properly return errors. rsts will be NULL if the optional rstctrl
+> reset is not specified:
+> 
+> 	if (IS_ERR(wkump3->rsts))
+> 		return PTR_ERR(wkump3->rsts);
+
+OK thanks will do.
+
+> 	if (!wkump3->rsts) {
+> > +		if (!(pdata && pdata->deassert_reset && pdata->assert_reset &&
+> > +		      pdata->reset_name)) {
+> > +			dev_err(dev, "Platform data missing!\n");
+> > +			ret = -ENODEV;
+> > +			goto err_put_rproc;
+> > +		}
+> > +		wkupm3->rsts = NULL;
+> 
+> I assume this will later be dropped with the platform data support?
+
+Yes once also am437x has been updated to probe with dts data only we
+can drop the custom callbacks.
+
+Regards,
+
+Tony
