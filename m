@@ -2,438 +2,223 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 459BC29D3C8
-	for <lists+linux-clk@lfdr.de>; Wed, 28 Oct 2020 22:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E37129D58C
+	for <lists+linux-clk@lfdr.de>; Wed, 28 Oct 2020 23:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725446AbgJ1Vqw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 28 Oct 2020 17:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727552AbgJ1Vqs (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 28 Oct 2020 17:46:48 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EDEC0613CF
-        for <linux-clk@vger.kernel.org>; Wed, 28 Oct 2020 14:46:48 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id c72so1112708oig.9
-        for <linux-clk@vger.kernel.org>; Wed, 28 Oct 2020 14:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=N1e+BCUO8+mC+KGj3wF6VbxXngF455cwAyIY2MXIsus=;
-        b=T4akp1adQjfEMeMUkRQLY2gIoJxbAqURtyQkMnoZfCD/A2ry20rAQC0MDR1mw/5eMn
-         AccPBVtonvLQBk3lGl43lz8z81JX091UHLJlF+mc/ifyPI8eTU0Z6+6jFh6Z22eHwe8r
-         RH8lRbc4rbm+pRSW14ipcj+IFRNGJGI51n4ew=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=N1e+BCUO8+mC+KGj3wF6VbxXngF455cwAyIY2MXIsus=;
-        b=bnjBM2b/iBFU7SpOl2ea3Ye5uqZ3tV6Damaxt8hMVuyuoVD9TrfExar90WY8Rpiw1a
-         /G2bofkvOJXyuN3U1K2rayeQhnXk1bSI4UnkNQ30eK+wRHeTvhGP7zTlrGWXNd3dGfzF
-         JFn1hzbl4jLtG4+wzoQYDxd2sDJl0R6Bk/tDUgPHQ5Lw6UPyfendpnF9OmvRtU4Il05g
-         pm58qFTEmMz/dEUo04ZFDqRoWS95alIs/BJKr5VJceCDAkCiYAHVLEHw+eLlzd/UXFyM
-         uffLhdrnrEeln9cpUij/wwpwPkZqKT28yNb67OauR1Qob9PdRk9FehTgaV9IMzLVV3E/
-         MeMQ==
-X-Gm-Message-State: AOAM532zdzroBMQB56LWkI8udn81m3vnbIBrO/2dV7I4IxF7lfYxA3Zs
-        HJ38KvSYHOop2c9hu4154a88pZMPCYh4WQ==
-X-Google-Smtp-Source: ABdhPJwnjQTcWIA/6CuB2hDSWT2aMZRnBt3BMZjtD+24pK9KNRbtUAqRrBQdIkPWLNxDdPMhYOmzkA==
-X-Received: by 2002:a17:90a:14a4:: with SMTP id k33mr6299169pja.236.1603885400385;
-        Wed, 28 Oct 2020 04:43:20 -0700 (PDT)
-Received: from localhost.localdomain ([2405:201:c809:c7a4:2d09:2940:d772:8d5])
-        by smtp.gmail.com with ESMTPSA id 10sm5350214pjt.50.2020.10.28.04.43.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 04:43:19 -0700 (PDT)
-From:   Jagan Teki <jagan@amarulasolutions.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
+        id S1729623AbgJ1WEy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 28 Oct 2020 18:04:54 -0400
+Received: from mail-eopbgr20064.outbound.protection.outlook.com ([40.107.2.64]:47759
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728414AbgJ1WBX (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:01:23 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Mqdo/apY19Idj11+WTFwvUE07yQu6y8l3c7cvH6xgPWn//Pvk5rjusiMyjbJvxcCbf5vvZIsb61mMeqX/Z6Kax6z6JcQ2YyDylPcbBH0IiBtSmA2LQT95mSSZnnUmlDAs6xBe4xU05/JGxFABEwgJSnwF420rX2yjPcd5gKb8S52E7hBe8FAfE3JKCYkhTNtMLQEJozVQvM7fLMy3Fcv5KISZBIHBMAi+NfTxDpiCxWWcvuQ8r9B001XlU3s9pRtT44x1vo2nBXM8a5uhmO8h5DXgWb6/BOoXSX6IQn5JHLmRvT+Vk5rOrfy8tuai/xaAOq+6JOeF/NrdT4y9hdrZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eb+XpipCnqaadX6iEykOH178TrYJObh9TA9L2ilQS5s=;
+ b=PKCZWRTnA/14n6UTl0rNjT02c0KNVuFuPJOnYmcqbMAw4Gzt47wOb3HTuq+besnoFTZJfdjC4VEsvZ8hXYVjz/crr6HxsSXtoCTx2nPzx9HBW8uKMPJkoG8YD7eWVX/7qYMZxAaKmxL83B8K5f+9gI0kCFErts9TRhXnAq5ZlmN4Qm9ofoId1IKDAgSOwy03X4Qxw7xnDs5XAA1doU6fRFrQW6ToJKn78PT04MC1N/QTBszS1fx2Y4SE9ikeko/hS+5vayoeLapjHU7pXogxgVzA/mpvS8o9PTmAX2F+i0QkhMPVPDeamcvXQSyuATGtZy3zxHMpErvcL9MyCw/lDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eb+XpipCnqaadX6iEykOH178TrYJObh9TA9L2ilQS5s=;
+ b=p2R0G+MMOmAxfg3sUc6SXZIFFE3uSFD33nPPpcl5fD7X2PYafFzAsugO6wP1HU0DClFNkFtG35ZAe4CtawNQFVfTEF6HqdAVRwE2LuNtTB9ROMa+q91eS+2BxloSLCValXyeSFMx+wFBqLViBwLJETli7bEk31/HuqsSBfGV3nc=
+Received: from DBBPR04MB7930.eurprd04.prod.outlook.com (20.182.190.140) by
+ DBAPR04MB7416.eurprd04.prod.outlook.com (20.181.181.214) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3477.24; Wed, 28 Oct 2020 01:28:33 +0000
+Received: from DBBPR04MB7930.eurprd04.prod.outlook.com
+ ([fe80::681b:7b29:32bf:d4f]) by DBBPR04MB7930.eurprd04.prod.outlook.com
+ ([fe80::681b:7b29:32bf:d4f%7]) with mapi id 15.20.3477.029; Wed, 28 Oct 2020
+ 01:28:33 +0000
+From:   Jacky Bai <ping.bai@nxp.com>
+To:     Abel Vesa <abel.vesa@nxp.com>, Lucas Stach <l.stach@pengutronix.de>
+CC:     Adam Ford <aford173@gmail.com>, Marek Vasut <marex@denx.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Stephen Boyd <sboyd@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     Kever Yang <kever.yang@rock-chips.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-amarula <linux-amarula@amarulasolutions.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Finley Xiao <finley.xiao@rock-chips.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>
-Subject: [PATCH v2] clk: rockchip: Limit input rate for fractional approximation
-Date:   Wed, 28 Oct 2020 17:12:59 +0530
-Message-Id: <20201028114259.219698-1-jagan@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
+        Fabio Estevam <festevam@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [RFC 0/3] clk: imx: Implement blk-ctl driver for i.MX8MN
+Thread-Topic: [RFC 0/3] clk: imx: Implement blk-ctl driver for i.MX8MN
+Thread-Index: AQHWqiGtoXq/x0MkwUy9f67NgUFbzamnMtWAgAALGICAAPv6gIAAA9AAgAA/WgCAAX6zAIAAC+WAgAEr4gCAAChOgIAA4L5g
+Date:   Wed, 28 Oct 2020 01:28:33 +0000
+Message-ID: <DBBPR04MB79308492BEA811389AC289D687170@DBBPR04MB7930.eurprd04.prod.outlook.com>
+References: <20201024162016.1003041-1-aford173@gmail.com>
+ <20201024202335.y3npwtgragpp5wcz@fsr-ub1664-175>
+ <CAHCN7xJiygvLStO56v4xSnOEqR_5fbYQHn5juA8YeDiWh2awbg@mail.gmail.com>
+ <20201025120509.r5kl76wo5mdmapo5@fsr-ub1664-175>
+ <3dadade8-6e77-e27f-d5a6-307de17a4dd0@denx.de>
+ <CAHCN7xLC-gKquDNS3ToQCff=g610PscQE+T4zfO=_05GpLyK4w@mail.gmail.com>
+ <20201026145516.shmb55gaeh6u7oru@fsr-ub1664-175>
+ <c976125e45e2fe46afbee1735004668677383805.camel@pengutronix.de>
+ <20201027093110.jaslelqecwudn22k@fsr-ub1664-175>
+ <20201027115525.gxt2oqavqulsqolo@fsr-ub1664-175>
+In-Reply-To: <20201027115525.gxt2oqavqulsqolo@fsr-ub1664-175>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: nxp.com; dkim=none (message not signed)
+ header.d=none;nxp.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 8bb76533-c087-4880-7afd-08d87ae0c921
+x-ms-traffictypediagnostic: DBAPR04MB7416:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DBAPR04MB7416B47DCD47CDBEE136A99487170@DBAPR04MB7416.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3NdFUIyRmAT3VL8ZAXCkWqH4gXzdvTHZ+yBr/iLmw7YB+B/0ly69+0iDNGKHR5JfjDLoaPoJFDvLOZh6C8m/UkZfaxGD+AhcRTZJ/6noUpRhte64hWdRGXOE11ieEJEKn0p5yq9jogE4EWjeUQjyjYsCOvHgU5HezspKPyI2IcZe5zAvg9hVLgeNoJTWhz2Iad3FMrs8Qf1mo6pAf97FxoUwzCNtliqQ/ftyQ10GvDM7+gijPTvLfwbXgaHRoWeZqMDXapgHa238PSS9BRXmkPLlp2P2RyJHjyYvDcj2qXSaKFTGsoSk0W1YBilLlyzvyW74dCkCp2HupDDCMh49Ef0/2ZCIrAblJAB0PljgwGnmQQEH8P3oF5mfTr/1ITZtftVsLmM1mqtjMfHSHLhg6A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7930.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(366004)(346002)(39860400002)(376002)(136003)(55016002)(2906002)(9686003)(478600001)(7696005)(15974865002)(5660300002)(54906003)(4326008)(966005)(53546011)(45080400002)(110136005)(52536014)(6506007)(83380400001)(66556008)(26005)(316002)(71200400001)(7416002)(76116006)(186003)(8936002)(86362001)(66946007)(8676002)(64756008)(66476007)(33656002)(66446008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: aDxcnq//5VzVk7iQBmn9bXgsNdN7/Sec9yIndfQE0zQCw1cJ6NswiAFXR2Il5wnZcm5JSiOGyzv03PMnZ5KSDSC7bWwEVCr1k7tDAO+Gv4IcY2BYXX2PBqG471XABLMEJxFuo31cWf+JaQRn0O3vh/0JzBM4y72iNp+5Gv6ILPkmRfQBGjnwxK55gGkeVpAP4WgwCNkNKuN7z46Vf6MAKgeuYU5ANsmSK8nc87cZuYWw2VowMi/Al8WTPjdiCdyt2o3+/PSPWULeux8bKQ8PIJe5NixLNkb7SgBSkrSFpVQOc3rC+HEjYRCy0JRendMMCGEpyLz8pc4/UZ1rGut9VwwA0+ijkJSVNYN5a8mspU41DR5eoxtor/94mSPUYppEowEPQubNTjqehS3eL6BCF4Z5EvmyPUnhvlTegt/hLpsvI9cFYYsIfPhIeKKn0WoAmsLig90qmguoOJbMzFL/fVTB2JKrgk4ZymSm8R3FglPB9PCk0i86mOazkNICbrS0b+3Jk+JGtShCpemS2PCWFgfhl6ZVRWfuW4eHnLgW6U9T7KJ2fx4zxZU7Wc7Ru3EkjcqcYjkUAH4qrvnNhSNgJOrt/HZ31dfD8/kL9ZeKbxocx3RzGFnuqUm5vnVUpcMXf2DYp/qYGX20BwI/S1leTw==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7930.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8bb76533-c087-4880-7afd-08d87ae0c921
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2020 01:28:33.7846
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cwDunVd6Dqc5tKU1XeRwevL/g6xjg7pLXvtbWfTEuvovulI35C6txV2I/Sx5GqFiULt2ew15f7pbKgmnrm974w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7416
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Fractional approximation in some rockchip families can be generated
-based on the fractional divider and the input clock frequency of
-fractional divider should be less than a specified value.
-.i.e:
-            |--\
----[GPLL]---|   \                                      |--\
----[CPLL]---|mux|--[GATE]--[DIV]-----------------------|   \
----[NPLL]---|   /                |                     |mux|--[GATE]--
-            |--/                 |--[GATE]--[FRACDIV]--|   /
-                                                       |--/
-
-The FRACDIV frequency is designed to be only 300M(Different SOC
-implementations are different).But the GPLL or CPLL may be 1200M.
-Must be added to limit to ensure that the design is not exceeded.
-
-This patch is trying to support this fractional approximation on
-PX30 platform with input limit rate of 600MHz.
-
-Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
-Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
----
-Changes for v2:
-- v2 version patch from previous patch
-https://patchwork.kernel.org/project/linux-arm-kernel/patch/20200831161436.134186-1-jagan@amarulasolutions.com/
-- support input limit rate for frac approx.
-
- drivers/clk/rockchip/clk-px30.c | 69 +++++++++++++++++----------------
- drivers/clk/rockchip/clk.c      | 31 ++++++++++++---
- drivers/clk/rockchip/clk.h      | 21 ++++++++++
- include/linux/clk-provider.h    |  2 +
- 4 files changed, 84 insertions(+), 39 deletions(-)
-
-diff --git a/drivers/clk/rockchip/clk-px30.c b/drivers/clk/rockchip/clk-px30.c
-index 6fb9c98b7d24..34e4c02d3cb1 100644
---- a/drivers/clk/rockchip/clk-px30.c
-+++ b/drivers/clk/rockchip/clk-px30.c
-@@ -13,6 +13,7 @@
- #include "clk.h"
- 
- #define PX30_GRF_SOC_STATUS0		0x480
-+#define PX30_FRAC_CLK_LIMIT		600000000
- 
- enum px30_plls {
- 	apll, dpll, cpll, npll, apll_b_h, apll_b_l,
-@@ -421,19 +422,19 @@ static struct rockchip_clk_branch px30_clk_branches[] __initdata = {
- 	COMPOSITE(0, "dclk_vopb_src", mux_cpll_npll_p, CLK_SET_RATE_PARENT | CLK_SET_RATE_NO_REPARENT,
- 			PX30_CLKSEL_CON(5), 11, 1, MFLAGS, 0, 8, DFLAGS,
- 			PX30_CLKGATE_CON(2), 2, GFLAGS),
--	COMPOSITE_FRACMUX(0, "dclk_vopb_frac", "dclk_vopb_src", CLK_SET_RATE_PARENT,
-+	COMPOSITE_FRACMUX_LIMIT(0, "dclk_vopb_frac", "dclk_vopb_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(6), 0,
- 			PX30_CLKGATE_CON(2), 3, GFLAGS,
--			&px30_dclk_vopb_fracmux),
-+			&px30_dclk_vopb_fracmux, PX30_FRAC_CLK_LIMIT),
- 	GATE(DCLK_VOPB, "dclk_vopb", "dclk_vopb_mux", CLK_SET_RATE_PARENT,
- 			PX30_CLKGATE_CON(2), 4, GFLAGS),
- 	COMPOSITE(0, "dclk_vopl_src", mux_npll_cpll_p, 0,
- 			PX30_CLKSEL_CON(8), 11, 1, MFLAGS, 0, 8, DFLAGS,
- 			PX30_CLKGATE_CON(2), 6, GFLAGS),
--	COMPOSITE_FRACMUX(0, "dclk_vopl_frac", "dclk_vopl_src", CLK_SET_RATE_PARENT,
-+	COMPOSITE_FRACMUX_LIMIT(0, "dclk_vopl_frac", "dclk_vopl_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(9), 0,
- 			PX30_CLKGATE_CON(2), 7, GFLAGS,
--			&px30_dclk_vopl_fracmux),
-+			&px30_dclk_vopl_fracmux, PX30_FRAC_CLK_LIMIT),
- 	GATE(DCLK_VOPL, "dclk_vopl", "dclk_vopl_mux", CLK_SET_RATE_PARENT,
- 			PX30_CLKGATE_CON(2), 8, GFLAGS),
- 
-@@ -588,20 +589,20 @@ static struct rockchip_clk_branch px30_clk_branches[] __initdata = {
- 	COMPOSITE(0, "clk_pdm_src", mux_gpll_xin24m_npll_p, 0,
- 			PX30_CLKSEL_CON(26), 8, 2, MFLAGS, 0, 7, DFLAGS,
- 			PX30_CLKGATE_CON(9), 9, GFLAGS),
--	COMPOSITE_FRACMUX(0, "clk_pdm_frac", "clk_pdm_src", CLK_SET_RATE_PARENT,
-+	COMPOSITE_FRACMUX_LIMIT(0, "clk_pdm_frac", "clk_pdm_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(27), 0,
- 			PX30_CLKGATE_CON(9), 10, GFLAGS,
--			&px30_pdm_fracmux),
-+			&px30_pdm_fracmux, PX30_FRAC_CLK_LIMIT),
- 	GATE(SCLK_PDM, "clk_pdm", "clk_pdm_mux", CLK_SET_RATE_PARENT,
- 			PX30_CLKGATE_CON(9), 11, GFLAGS),
- 
- 	COMPOSITE(0, "clk_i2s0_tx_src", mux_gpll_npll_p, 0,
- 			PX30_CLKSEL_CON(28), 8, 1, MFLAGS, 0, 7, DFLAGS,
- 			PX30_CLKGATE_CON(9), 12, GFLAGS),
--	COMPOSITE_FRACMUX(0, "clk_i2s0_tx_frac", "clk_i2s0_tx_src", CLK_SET_RATE_PARENT,
-+	COMPOSITE_FRACMUX_LIMIT(0, "clk_i2s0_tx_frac", "clk_i2s0_tx_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(29), 0,
- 			PX30_CLKGATE_CON(9), 13, GFLAGS,
--			&px30_i2s0_tx_fracmux),
-+			&px30_i2s0_tx_fracmux, PX30_FRAC_CLK_LIMIT),
- 	COMPOSITE_NODIV(SCLK_I2S0_TX, "clk_i2s0_tx", mux_i2s0_tx_rx_p, CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(28), 12, 1, MFLAGS,
- 			PX30_CLKGATE_CON(9), 14, GFLAGS),
-@@ -614,10 +615,10 @@ static struct rockchip_clk_branch px30_clk_branches[] __initdata = {
- 	COMPOSITE(0, "clk_i2s0_rx_src", mux_gpll_npll_p, 0,
- 			PX30_CLKSEL_CON(58), 8, 1, MFLAGS, 0, 7, DFLAGS,
- 			PX30_CLKGATE_CON(17), 0, GFLAGS),
--	COMPOSITE_FRACMUX(0, "clk_i2s0_rx_frac", "clk_i2s0_rx_src", CLK_SET_RATE_PARENT,
-+	COMPOSITE_FRACMUX_LIMIT(0, "clk_i2s0_rx_frac", "clk_i2s0_rx_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(59), 0,
- 			PX30_CLKGATE_CON(17), 1, GFLAGS,
--			&px30_i2s0_rx_fracmux),
-+			&px30_i2s0_rx_fracmux, PX30_FRAC_CLK_LIMIT),
- 	COMPOSITE_NODIV(SCLK_I2S0_RX, "clk_i2s0_rx", mux_i2s0_rx_tx_p, CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(58), 12, 1, MFLAGS,
- 			PX30_CLKGATE_CON(17), 2, GFLAGS),
-@@ -630,10 +631,10 @@ static struct rockchip_clk_branch px30_clk_branches[] __initdata = {
- 	COMPOSITE(0, "clk_i2s1_src", mux_gpll_npll_p, 0,
- 			PX30_CLKSEL_CON(30), 8, 1, MFLAGS, 0, 7, DFLAGS,
- 			PX30_CLKGATE_CON(10), 0, GFLAGS),
--	COMPOSITE_FRACMUX(0, "clk_i2s1_frac", "clk_i2s1_src", CLK_SET_RATE_PARENT,
-+	COMPOSITE_FRACMUX_LIMIT(0, "clk_i2s1_frac", "clk_i2s1_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(31), 0,
- 			PX30_CLKGATE_CON(10), 1, GFLAGS,
--			&px30_i2s1_fracmux),
-+			&px30_i2s1_fracmux, PX30_FRAC_CLK_LIMIT),
- 	GATE(SCLK_I2S1, "clk_i2s1", "clk_i2s1_mux", CLK_SET_RATE_PARENT,
- 			PX30_CLKGATE_CON(10), 2, GFLAGS),
- 	COMPOSITE_NODIV(0, "clk_i2s1_out_pre", mux_i2s1_out_p, 0,
-@@ -645,10 +646,10 @@ static struct rockchip_clk_branch px30_clk_branches[] __initdata = {
- 	COMPOSITE(0, "clk_i2s2_src", mux_gpll_npll_p, 0,
- 			PX30_CLKSEL_CON(32), 8, 1, MFLAGS, 0, 7, DFLAGS,
- 			PX30_CLKGATE_CON(10), 4, GFLAGS),
--	COMPOSITE_FRACMUX(0, "clk_i2s2_frac", "clk_i2s2_src", CLK_SET_RATE_PARENT,
-+	COMPOSITE_FRACMUX_LIMIT(0, "clk_i2s2_frac", "clk_i2s2_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(33), 0,
- 			PX30_CLKGATE_CON(10), 5, GFLAGS,
--			&px30_i2s2_fracmux),
-+			&px30_i2s2_fracmux, PX30_FRAC_CLK_LIMIT),
- 	GATE(SCLK_I2S2, "clk_i2s2", "clk_i2s2_mux", CLK_SET_RATE_PARENT,
- 			PX30_CLKGATE_CON(10), 6, GFLAGS),
- 	COMPOSITE_NODIV(0, "clk_i2s2_out_pre", mux_i2s2_out_p, 0,
-@@ -660,65 +661,65 @@ static struct rockchip_clk_branch px30_clk_branches[] __initdata = {
- 	COMPOSITE(SCLK_UART1_SRC, "clk_uart1_src", mux_uart_src_p, CLK_SET_RATE_NO_REPARENT,
- 			PX30_CLKSEL_CON(34), 14, 2, MFLAGS, 0, 5, DFLAGS,
- 			PX30_CLKGATE_CON(10), 12, GFLAGS),
--	COMPOSITE_NOMUX_HALFDIV(0, "clk_uart1_np5", "clk_uart1_src", 0,
-+	COMPOSITE_NOMUX_HALFDIV(0, "clk_uart1_np5", "clk_uart1_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(35), 0, 5, DFLAGS,
- 			PX30_CLKGATE_CON(10), 13, GFLAGS),
--	COMPOSITE_FRACMUX(0, "clk_uart1_frac", "clk_uart1_src", CLK_SET_RATE_PARENT,
-+	COMPOSITE_FRACMUX_LIMIT(0, "clk_uart1_frac", "clk_uart1_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(36), 0,
- 			PX30_CLKGATE_CON(10), 14, GFLAGS,
--			&px30_uart1_fracmux),
-+			&px30_uart1_fracmux, PX30_FRAC_CLK_LIMIT),
- 	GATE(SCLK_UART1, "clk_uart1", "clk_uart1_mux", CLK_SET_RATE_PARENT,
- 			PX30_CLKGATE_CON(10), 15, GFLAGS),
- 
- 	COMPOSITE(SCLK_UART2_SRC, "clk_uart2_src", mux_uart_src_p, 0,
- 			PX30_CLKSEL_CON(37), 14, 2, MFLAGS, 0, 5, DFLAGS,
- 			PX30_CLKGATE_CON(11), 0, GFLAGS),
--	COMPOSITE_NOMUX_HALFDIV(0, "clk_uart2_np5", "clk_uart2_src", 0,
-+	COMPOSITE_NOMUX_HALFDIV(0, "clk_uart2_np5", "clk_uart2_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(38), 0, 5, DFLAGS,
- 			PX30_CLKGATE_CON(11), 1, GFLAGS),
--	COMPOSITE_FRACMUX(0, "clk_uart2_frac", "clk_uart2_src", CLK_SET_RATE_PARENT,
-+	COMPOSITE_FRACMUX_LIMIT(0, "clk_uart2_frac", "clk_uart2_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(39), 0,
- 			PX30_CLKGATE_CON(11), 2, GFLAGS,
--			&px30_uart2_fracmux),
-+			&px30_uart2_fracmux, PX30_FRAC_CLK_LIMIT),
- 	GATE(SCLK_UART2, "clk_uart2", "clk_uart2_mux", CLK_SET_RATE_PARENT,
- 			PX30_CLKGATE_CON(11), 3, GFLAGS),
- 
- 	COMPOSITE(0, "clk_uart3_src", mux_uart_src_p, 0,
- 			PX30_CLKSEL_CON(40), 14, 2, MFLAGS, 0, 5, DFLAGS,
- 			PX30_CLKGATE_CON(11), 4, GFLAGS),
--	COMPOSITE_NOMUX_HALFDIV(0, "clk_uart3_np5", "clk_uart3_src", 0,
-+	COMPOSITE_NOMUX_HALFDIV(0, "clk_uart3_np5", "clk_uart3_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(41), 0, 5, DFLAGS,
- 			PX30_CLKGATE_CON(11), 5, GFLAGS),
--	COMPOSITE_FRACMUX(0, "clk_uart3_frac", "clk_uart3_src", CLK_SET_RATE_PARENT,
-+	COMPOSITE_FRACMUX_LIMIT(0, "clk_uart3_frac", "clk_uart3_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(42), 0,
- 			PX30_CLKGATE_CON(11), 6, GFLAGS,
--			&px30_uart3_fracmux),
-+			&px30_uart3_fracmux, PX30_FRAC_CLK_LIMIT),
- 	GATE(SCLK_UART3, "clk_uart3", "clk_uart3_mux", CLK_SET_RATE_PARENT,
- 			PX30_CLKGATE_CON(11), 7, GFLAGS),
- 
- 	COMPOSITE(0, "clk_uart4_src", mux_uart_src_p, 0,
- 			PX30_CLKSEL_CON(43), 14, 2, MFLAGS, 0, 5, DFLAGS,
- 			PX30_CLKGATE_CON(11), 8, GFLAGS),
--	COMPOSITE_NOMUX_HALFDIV(0, "clk_uart4_np5", "clk_uart4_src", 0,
-+	COMPOSITE_NOMUX_HALFDIV(0, "clk_uart4_np5", "clk_uart4_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(44), 0, 5, DFLAGS,
- 			PX30_CLKGATE_CON(11), 9, GFLAGS),
--	COMPOSITE_FRACMUX(0, "clk_uart4_frac", "clk_uart4_src", CLK_SET_RATE_PARENT,
-+	COMPOSITE_FRACMUX_LIMIT(0, "clk_uart4_frac", "clk_uart4_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(45), 0,
- 			PX30_CLKGATE_CON(11), 10, GFLAGS,
--			&px30_uart4_fracmux),
-+			&px30_uart4_fracmux, PX30_FRAC_CLK_LIMIT),
- 	GATE(SCLK_UART4, "clk_uart4", "clk_uart4_mux", CLK_SET_RATE_PARENT,
- 			PX30_CLKGATE_CON(11), 11, GFLAGS),
- 
- 	COMPOSITE(0, "clk_uart5_src", mux_uart_src_p, 0,
- 			PX30_CLKSEL_CON(46), 14, 2, MFLAGS, 0, 5, DFLAGS,
- 			PX30_CLKGATE_CON(11), 12, GFLAGS),
--	COMPOSITE_NOMUX_HALFDIV(0, "clk_uart5_np5", "clk_uart5_src", 0,
-+	COMPOSITE_NOMUX_HALFDIV(0, "clk_uart5_np5", "clk_uart5_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(47), 0, 5, DFLAGS,
- 			PX30_CLKGATE_CON(11), 13, GFLAGS),
--	COMPOSITE_FRACMUX(0, "clk_uart5_frac", "clk_uart5_src", CLK_SET_RATE_PARENT,
-+	COMPOSITE_FRACMUX_LIMIT(0, "clk_uart5_frac", "clk_uart5_src", CLK_SET_RATE_PARENT,
- 			PX30_CLKSEL_CON(48), 0,
- 			PX30_CLKGATE_CON(11), 14, GFLAGS,
--			&px30_uart5_fracmux),
-+			&px30_uart5_fracmux, PX30_FRAC_CLK_LIMIT),
- 	GATE(SCLK_UART5, "clk_uart5", "clk_uart5_mux", CLK_SET_RATE_PARENT,
- 			PX30_CLKGATE_CON(11), 15, GFLAGS),
- 
-@@ -915,10 +916,10 @@ static struct rockchip_clk_branch px30_clk_pmu_branches[] __initdata = {
- 	 * Clock-Architecture Diagram 2
- 	 */
- 
--	COMPOSITE_FRACMUX(0, "clk_rtc32k_frac", "xin24m", CLK_IGNORE_UNUSED,
-+	COMPOSITE_FRACMUX_LIMIT(0, "clk_rtc32k_frac", "xin24m", CLK_IGNORE_UNUSED,
- 			PX30_PMU_CLKSEL_CON(1), 0,
- 			PX30_PMU_CLKGATE_CON(0), 13, GFLAGS,
--			&px30_rtc32k_pmu_fracmux),
-+			&px30_rtc32k_pmu_fracmux, 0),
- 
- 	COMPOSITE_NOMUX(XIN24M_DIV, "xin24m_div", "xin24m", CLK_IGNORE_UNUSED,
- 			PX30_PMU_CLKSEL_CON(0), 8, 5, DFLAGS,
-@@ -934,13 +935,13 @@ static struct rockchip_clk_branch px30_clk_pmu_branches[] __initdata = {
- 	COMPOSITE(0, "clk_uart0_pmu_src", mux_uart_src_p, 0,
- 			PX30_PMU_CLKSEL_CON(3), 14, 2, MFLAGS, 0, 5, DFLAGS,
- 			PX30_PMU_CLKGATE_CON(1), 0, GFLAGS),
--	COMPOSITE_NOMUX_HALFDIV(0, "clk_uart0_np5", "clk_uart0_pmu_src", 0,
-+	COMPOSITE_NOMUX_HALFDIV(0, "clk_uart0_np5", "clk_uart0_pmu_src", CLK_SET_RATE_PARENT,
- 			PX30_PMU_CLKSEL_CON(4), 0, 5, DFLAGS,
- 			PX30_PMU_CLKGATE_CON(1), 1, GFLAGS),
--	COMPOSITE_FRACMUX(0, "clk_uart0_frac", "clk_uart0_pmu_src", CLK_SET_RATE_PARENT,
-+	COMPOSITE_FRACMUX_LIMIT(0, "clk_uart0_frac", "clk_uart0_pmu_src", CLK_SET_RATE_PARENT,
- 			PX30_PMU_CLKSEL_CON(5), 0,
- 			PX30_PMU_CLKGATE_CON(1), 2, GFLAGS,
--			&px30_uart0_pmu_fracmux),
-+			&px30_uart0_pmu_fracmux, PX30_FRAC_CLK_LIMIT),
- 	GATE(SCLK_UART0_PMU, "clk_uart0_pmu", "clk_uart0_pmu_mux", CLK_SET_RATE_PARENT,
- 			PX30_PMU_CLKGATE_CON(1), 3, GFLAGS),
- 
-diff --git a/drivers/clk/rockchip/clk.c b/drivers/clk/rockchip/clk.c
-index b443169dd408..9055725af6c5 100644
---- a/drivers/clk/rockchip/clk.c
-+++ b/drivers/clk/rockchip/clk.c
-@@ -182,12 +182,32 @@ static void rockchip_fractional_approximation(struct clk_hw *hw,
- 	unsigned long p_rate, p_parent_rate;
- 	struct clk_hw *p_parent;
- 	unsigned long scale;
-+	u32 div;
- 
- 	p_rate = clk_hw_get_rate(clk_hw_get_parent(hw));
--	if ((rate * 20 > p_rate) && (p_rate % rate != 0)) {
-+	if (((rate * 20 > p_rate) && (p_rate % rate != 0)) ||
-+	    (fd->max_prate && fd->max_prate < p_rate)) {
- 		p_parent = clk_hw_get_parent(clk_hw_get_parent(hw));
--		p_parent_rate = clk_hw_get_rate(p_parent);
--		*parent_rate = p_parent_rate;
-+		if (!p_parent) {
-+			*parent_rate = p_rate;
-+		} else {
-+			/* support fractional divider for one level parent clock */
-+			p_parent_rate = clk_hw_get_rate(p_parent);
-+			*parent_rate = p_parent_rate;
-+			if (fd->max_prate && p_parent_rate > fd->max_prate) {
-+				div = DIV_ROUND_UP(p_parent_rate,
-+						   fd->max_prate);
-+				*parent_rate = p_parent_rate / div;
-+			}
-+		}
-+
-+		if (*parent_rate < rate * 20) {
-+			pr_warn("%s p_rate(%ld) is low than rate(%ld)*20, use integer or half-div\n",
-+				clk_hw_get_name(hw), *parent_rate, rate);
-+			*m = 0;
-+			*n = 1;
-+			return;
-+		}
- 	}
- 
- 	/*
-@@ -210,7 +230,7 @@ static struct clk *rockchip_clk_register_frac_branch(
- 		void __iomem *base, int muxdiv_offset, u8 div_flags,
- 		int gate_offset, u8 gate_shift, u8 gate_flags,
- 		unsigned long flags, struct rockchip_clk_branch *child,
--		spinlock_t *lock)
-+		unsigned long max_prate, spinlock_t *lock)
- {
- 	struct clk_hw *hw;
- 	struct rockchip_clk_frac *frac;
-@@ -251,6 +271,7 @@ static struct clk *rockchip_clk_register_frac_branch(
- 	div->nmask = GENMASK(div->nwidth - 1, 0) << div->nshift;
- 	div->lock = lock;
- 	div->approximation = rockchip_fractional_approximation;
-+	div->max_prate = max_prate;
- 	div_ops = &clk_fractional_divider_ops;
- 
- 	hw = clk_hw_register_composite(NULL, name, parent_names, num_parents,
-@@ -488,7 +509,7 @@ void rockchip_clk_register_branches(struct rockchip_clk_provider *ctx,
- 				list->div_flags,
- 				list->gate_offset, list->gate_shift,
- 				list->gate_flags, flags, list->child,
--				&ctx->lock);
-+				list->max_prate, &ctx->lock);
- 			break;
- 		case branch_half_divider:
- 			clk = rockchip_clk_register_halfdiv(list->name,
-diff --git a/drivers/clk/rockchip/clk.h b/drivers/clk/rockchip/clk.h
-index 2271a84124b0..fb37e5919cf6 100644
---- a/drivers/clk/rockchip/clk.h
-+++ b/drivers/clk/rockchip/clk.h
-@@ -420,6 +420,7 @@ struct rockchip_clk_branch {
- 	u8				gate_shift;
- 	u8				gate_flags;
- 	struct rockchip_clk_branch	*child;
-+	unsigned long			max_prate;
- };
- 
- #define COMPOSITE(_id, cname, pnames, f, mo, ms, mw, mf, ds, dw,\
-@@ -594,6 +595,26 @@ struct rockchip_clk_branch {
- 		.child		= ch,				\
- 	}
- 
-+#define COMPOSITE_FRACMUX_LIMIT(_id, cname, pname, f, mo, df,	\
-+				go, gs, gf, ch, prate) \
-+	{							\
-+		.id		= _id,				\
-+		.branch_type	= branch_fraction_divider,	\
-+		.name		= cname,			\
-+		.parent_names	= (const char *[]){ pname },	\
-+		.num_parents	= 1,				\
-+		.flags		= f,				\
-+		.muxdiv_offset	= mo,				\
-+		.div_shift	= 16,				\
-+		.div_width	= 16,				\
-+		.div_flags	= df,				\
-+		.gate_offset	= go,				\
-+		.gate_shift	= gs,				\
-+		.gate_flags	= gf,				\
-+		.child		= ch,				\
-+		.max_prate	= prate,			\
-+	}
-+
- #define COMPOSITE_FRACMUX_NOGATE(_id, cname, pname, f, mo, df, ch) \
- 	{							\
- 		.id		= _id,				\
-diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index 03a5de5f99f4..b6b28a097526 100644
---- a/include/linux/clk-provider.h
-+++ b/include/linux/clk-provider.h
-@@ -924,6 +924,7 @@ void clk_hw_unregister_fixed_factor(struct clk_hw *hw);
-  * @mwidth:	width of the numerator bit field
-  * @nshift:	shift to the denominator bit field
-  * @nwidth:	width of the denominator bit field
-+ * @max_parent:	the maximum frequency of fractional divider parent clock
-  * @lock:	register lock
-  *
-  * Clock with adjustable fractional divider affecting its output frequency.
-@@ -947,6 +948,7 @@ struct clk_fractional_divider {
- 	u8		nwidth;
- 	u32		nmask;
- 	u8		flags;
-+	unsigned long	max_prate;
- 	void		(*approximation)(struct clk_hw *hw,
- 				unsigned long rate, unsigned long *parent_rate,
- 				unsigned long *m, unsigned long *n);
--- 
-2.25.1
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBBYmVsIFZlc2EgW21haWx0bzph
+YmVsLnZlc2FAbnhwLmNvbV0NCj4gU2VudDogVHVlc2RheSwgT2N0b2JlciAyNywgMjAyMCA3OjU1
+IFBNDQo+IFRvOiBMdWNhcyBTdGFjaCA8bC5zdGFjaEBwZW5ndXRyb25peC5kZT4NCj4gQ2M6IEFk
+YW0gRm9yZCA8YWZvcmQxNzNAZ21haWwuY29tPjsgTWFyZWsgVmFzdXQgPG1hcmV4QGRlbnguZGU+
+Ow0KPiBkZXZpY2V0cmVlIDxkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZz47IFNhc2NoYSBIYXVl
+cg0KPiA8cy5oYXVlckBwZW5ndXRyb25peC5kZT47IFBoaWxpcHAgWmFiZWwgPHAuemFiZWxAcGVu
+Z3V0cm9uaXguZGU+Ow0KPiBTdGVwaGVuIEJveWQgPHNib3lkQGtlcm5lbC5vcmc+OyBGYWJpbyBF
+c3RldmFtIDxmZXN0ZXZhbUBnbWFpbC5jb20+Ow0KPiBNaWNoYWVsIFR1cnF1ZXR0ZSA8bXR1cnF1
+ZXR0ZUBiYXlsaWJyZS5jb20+OyBMaW51eCBLZXJuZWwgTWFpbGluZyBMaXN0DQo+IDxsaW51eC1r
+ZXJuZWxAdmdlci5rZXJuZWwub3JnPjsgUm9iIEhlcnJpbmcgPHJvYmgrZHRAa2VybmVsLm9yZz47
+DQo+IGRsLWxpbnV4LWlteCA8bGludXgtaW14QG54cC5jb20+OyBQZW5ndXRyb25peCBLZXJuZWwg
+VGVhbQ0KPiA8a2VybmVsQHBlbmd1dHJvbml4LmRlPjsgU2hhd24gR3VvIDxzaGF3bmd1b0BrZXJu
+ZWwub3JnPjsgbGludXgtY2xrDQo+IDxsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnPjsgYXJtLXNv
+YyA8bGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnPg0KPiBTdWJqZWN0OiBSZTog
+W1JGQyAwLzNdIGNsazogaW14OiBJbXBsZW1lbnQgYmxrLWN0bCBkcml2ZXIgZm9yIGkuTVg4TU4N
+Cj4gDQo+IE9uIDIwLTEwLTI3IDExOjMxOjEwLCBBYmVsIFZlc2Egd3JvdGU6DQo+ID4gT24gMjAt
+MTAtMjYgMTY6Mzc6NTEsIEx1Y2FzIFN0YWNoIHdyb3RlOg0KPiA+ID4gQW0gTW9udGFnLCBkZW4g
+MjYuMTAuMjAyMCwgMTY6NTUgKzAyMDAgc2NocmllYiBBYmVsIFZlc2E6DQo+ID4gPiA+IE9uIDIw
+LTEwLTI1IDExOjA1OjMyLCBBZGFtIEZvcmQgd3JvdGU6DQo+ID4gPiA+ID4gT24gU3VuLCBPY3Qg
+MjUsIDIwMjAgYXQgNzoxOSBBTSBNYXJlayBWYXN1dCA8bWFyZXhAZGVueC5kZT4NCj4gd3JvdGU6
+DQo+ID4gPiA+ID4gPiBPbiAxMC8yNS8yMCAxOjA1IFBNLCBBYmVsIFZlc2Egd3JvdGU6DQo+ID4g
+PiA+ID4gPg0KPiA+ID4gPiA+ID4gWy4uLl0NCj4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+ID4g
+VG9nZXRoZXIsIGJvdGggdGhlIEdQQyBhbmQgdGhlIGNsay1ibGsgZHJpdmVyIHNob3VsZCBiZQ0K
+PiA+ID4gPiA+ID4gPiA+IGFibGUgdG8gcHVsbCB0aGUgbXVsdGltZWRpYSBibG9jayBvdXQgb2Yg
+cmVzZXQuDQo+ID4gPiA+ID4gPiA+ID4gQ3VycmVudGx5LCB0aGUgR1BDIGNhbiBoYW5kbGUgdGhl
+IFVTQiBPVEcgYW5kIHRoZSBHUFUsIGJ1dA0KPiA+ID4gPiA+ID4gPiA+IHRoZSBMQ0RJRiBhbmQg
+TUlQSSBEU0kgYXBwZWFyIHRvIGJlIGdhdGVkIGJ5IHRoZSBjbG9jaw0KPiA+ID4gPiA+ID4gPiA+
+IGJsb2NrDQo+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiBNeSBvcmlnaW5hbCBwYXRj
+aCBSRkMgZGlkbid0IGluY2x1ZGUgdGhlIGlteDhtbiBub2RlLA0KPiA+ID4gPiA+ID4gPiA+IGJl
+Y2F1c2UgaXQgaGFuZ3MsIGJ1dCB0aGUgbm9kZSBJIGFkZGVkIGxvb2tzIGxpa2U6DQo+ID4gPiA+
+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiBtZWRpYV9ibGtfY3RsOiBjbG9jay1jb250cm9sbGVy
+QDMyZTI4MDAwIHsNCj4gPiA+ID4gPiA+ID4gPiAgICAgIGNvbXBhdGlibGUgPSAiZnNsLGlteDht
+bi1tZWRpYS1ibGstY3RsIiwgInN5c2NvbiI7DQo+ID4gPiA+ID4gPiA+ID4gICAgICByZWcgPSA8
+MHgzMmUyODAwMCAweDEwMDA+Ow0KPiA+ID4gPiA+ID4gPiA+ICAgICAgI2Nsb2NrLWNlbGxzID0g
+PDE+Ow0KPiA+ID4gPiA+ID4gPiA+ICAgICAgI3Jlc2V0LWNlbGxzID0gPDE+Ow0KPiA+ID4gPiA+
+ID4gPiA+IH07DQo+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiBJIHdhcyBob3Bpbmcg
+eW91IG1pZ2h0IGhhdmUgc29tZSBmZWVkYmFjayBvbiB0aGUgOG1uDQo+ID4gPiA+ID4gPiA+ID4g
+Y2xrLWJsayBkcml2ZXIgc2luY2UgeW91IGRpZCB0aGUgOG1wIGNsay1ibGsgZHJpdmUgYW5kDQo+
+ID4gPiA+ID4gPiA+ID4gdGhleSBhcHBlYXIgdG8gYmUgdmVyeSBzaW1pbGFyLg0KPiA+ID4gPiA+
+ID4gPiA+DQo+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+IEknbGwgZG8geW91IG9uZSBiZXR0
+ZXIgc3RpbGwuIEknbGwgYXBwbHkgdGhlIHBhdGNoIGluIG15DQo+ID4gPiA+ID4gPiA+IHRyZWUg
+YW5kIGdpdmUgaXQgYSB0ZXN0IHRvbW9ycm93IG1vcm5pbmcuDQo+ID4gPiA+ID4NCj4gPiA+ID4g
+PiBJIGRvIGhhdmUgc29tZSBtb3JlIHVwZGF0ZXMgb24gaG93IHRvIGdldCB0aGUgc3lzdGVtIHRv
+IG5vdA0KPiA+ID4gPiA+IGhhbmcsIGFuZCB0byBlbnVtZXJhdGUgbW9yZSBjbG9ja3MuDQo+ID4g
+PiA+ID4gTG9va2luZyBhdCBNYXJlaydzIHdvcmsgb24gZW5hYmxpbmcgY2xvY2tzIGluIHRoZSA4
+TU0sIGhlIGFkZGVkDQo+ID4gPiA+ID4gYSBwb3dlci1kb21haW4gaW4gZGlzcG1peF9ibGtfY3Rs
+IHBvaW50aW5nIHRvIHRoZSBkaXNwbWl4IGluIHRoZSBHUEMuDQo+ID4gPiA+ID4gQnkgZm9yY2lu
+ZyB0aGUgR1BDIGRyaXZlciB0byB3cml0ZSAweDFmZmYgIHRvIDMyZTI4MDA0LCAweDdmIHRvDQo+
+ID4gPiA+ID4gMzJlMjgwMDAgYW5kIDB4MzAwMDAgdG8gMzJlMjgwMDgsIHRoZSBpLk1YOE1NIGNh
+biBicmluZyB0aGUNCj4gPiA+ID4gPiBkaXNwbGF5IGNsb2NrcyBvdXQgb2YgcmVzZXQuDQo+ID4g
+PiA+ID4NCj4gPiA+ID4NCj4gPiA+ID4gWWVhaCwgdGhhdCBtYWtlcyBzZW5zZS4gQmFzaWNhbGx5
+LCBpdCB3YXMgdHJ5aW5nIHRvIGRpc2FibGUgdW51c2VkDQo+ID4gPiA+IGNsb2NrcyAoc2VlIGNs
+a19kaXNhYmxlX3VudXNlZCkgYnV0IGluIG9yZGVyIHRvIGRpc2FibGUgdGhlIGNsb2Nrcw0KPiA+
+ID4gPiBmcm9tIHRoZSBtZWRpYSBCTEtfQ1RMICh3aGljaCBJIHRoaW5rIHNob3VsZCBiZSByZW5h
+bWVkIGluIGRpc3BsYXkNCj4gPiA+ID4gQkxLX0NUTCkgdGhlIFBEIG5lZWQgdG8gYmUgb24uIFNp
+bmNlIHlvdSBpbml0aWFsbHkgZGlkbid0IGdpdmUgaXQNCj4gPiA+ID4gYW55IFBELCBpdCB3YXMg
+dHJ5aW5nIHRvIGJsaW5kbHkgd3JpdGUvcmVhZCB0aGUgZ2F0ZSBiaXQgYW5kIHRoZXJlZm9yZQ0K
+PiBmcmVlemUuDQo+ID4gPiA+DQo+ID4gPiA+ID4gVW5mb3J0dW5hdGVseSwgdGhlIGkuTVg4TU4g
+bmVlZHMgdG8gaGF2ZSAweDEwMCB3cml0dGVuIHRvIGJvdGgNCj4gPiA+ID4gPiAzMmUyODAwMCBh
+bmQgMzJlMjgwMDQsIGFuZCB0aGUgdmFsdWVzIHdyaXR0ZW4gZm9yIHRoZSA4TU0gYXJlDQo+ID4g
+PiA+ID4gbm90IGNvbXBhdGlibGUuDQo+ID4gPiA+ID4gQnkgZm9yY2luZyB0aGUgR1BDIHRvIHdy
+aXRlIHRob3NlIHZhbHVlcywgSSBjYW4gZ2V0DQo+ID4gPiA+ID4gbGNkaWZfcGl4ZWxfY2xrIGFu
+ZCB0aGUgbWlwaV9kc2lfY2xrcmVmICBhcHBlYXJpbmcgb24gdGhlIE5hbm8uDQo+ID4gPiA+DQo+
+ID4gPiA+IEknbSB0cnlpbmcgdG8gbWFrZSBhIGJyYW5jaCB3aXRoIGFsbCB0aGUgcGF0Y2hlcyBm
+b3IgYWxsIGkuTVg4TSBzbw0KPiA+ID4gPiBJIGNhbiBrZWVwIHRyYWNrIG9mIGl0IGFsbC4gT24g
+dGhpcyBicmFuY2ggSSd2ZSBhbHNvIGFwcGxpZWQgdGhlDQo+ID4gPiA+IGZvbGxvd2luZyBwYXRj
+aHNldCBmcm9tIEx1Y2FzIFN0YWNoOg0KPiA+ID4gPiBodHRwczovL2V1cjAxLnNhZmVsaW5rcy5w
+cm90ZWN0aW9uLm91dGxvb2suY29tLz91cmw9aHR0cHMlM0ElMkYlMkYNCj4gPiA+ID4NCj4gd3d3
+LnNwaW5pY3MubmV0JTJGbGlzdHMlMkZhcm0ta2VybmVsJTJGbXNnODQzMDA3Lmh0bWwmYW1wO2Rh
+dGE9MDQlDQo+ID4gPiA+DQo+IDdDMDElN0NwaW5nLmJhaSU0MG54cC5jb20lN0MwYzU0NjIzMjk0
+MzM0YTA0YTAxMjA4ZDg3YTZmMzE2MyU3DQo+IEM2ODYNCj4gPiA+ID4NCj4gZWExZDNiYzJiNGM2
+ZmE5MmNkOTljNWMzMDE2MzUlN0MwJTdDMCU3QzYzNzM5Mzk2NTI4MjIxNTAxNCU3Qw0KPiBVbmtu
+bw0KPiA+ID4gPg0KPiB3biU3Q1RXRnBiR1pzYjNkOGV5SldJam9pTUM0d0xqQXdNREFpTENKUUlq
+b2lWMmx1TXpJaUxDSkJUaUk2SWsxaA0KPiBhDQo+ID4gPiA+DQo+IFd3aUxDSlhWQ0k2TW4wJTNE
+JTdDMTAwMCZhbXA7c2RhdGE9dkZiQm45NENQc1NoVjcyck9DdGJUY3o1dTANCj4gcWg3QXUNCj4g
+PiA+ID4gbzQ0U2IyJTJCaUJsckUlM0QmYW1wO3Jlc2VydmVkPTAgYnV0IEknbSBnZXR0aW5nIHRo
+ZSBmb2xvd2luZw0KPiA+ID4gPiBlcnJvcnM6DQo+ID4gPiA+DQo+ID4gPiA+IFsgICAxNi42OTA4
+ODVdIGlteC1wZ2MgaW14LXBnYy1kb21haW4uMzogZmFpbGVkIHRvIHBvd2VyIHVwIEFEQjQwMA0K
+PiA+ID4gPiBbICAgMTYuNzE2ODM5XSBpbXgtcGdjIGlteC1wZ2MtZG9tYWluLjM6IGZhaWxlZCB0
+byBwb3dlciB1cCBBREI0MDANCj4gPiA+ID4gWyAgIDE2LjczMDUwMF0gaW14LXBnYyBpbXgtcGdj
+LWRvbWFpbi4zOiBmYWlsZWQgdG8gcG93ZXIgdXAgQURCNDAwDQo+ID4gPiA+DQo+ID4gPiA+IEx1
+Y2FzLCBhbnkgdGhvdWdodHM/DQo+ID4gPiA+DQo+ID4gPiA+IE1heWJlIGl0J3Mgc29tZXRoaW5n
+IHJlbGF0ZWQgdG8gOE1OLg0KPiA+ID4NCj4gPiA+IFRoZSBBREIgaXMgYXBwYXJlbnRseSBjbG9j
+a2VkIGJ5IG9uZSBvZiB0aGUgQkxLX0NUTCBjbG9ja3MsIHNvIHRoZQ0KPiA+ID4gQURCIGhhbmRz
+aGFrZSBhY2sgd2lsbCBvbmx5IHdvcmsgd2hlbiB0aGUgQkxLX0NUTCBjbG9ja3MgYXJlDQo+ID4g
+PiBlbmFibGVkLiBTbyBJIGd1ZXNzIHRoZSBHUEMgZHJpdmVyIHNob3VsZCBlbmFibGUgdGhvc2Ug
+Y2xvY2tzIGFuZA0KPiA+ID4gYXNzZXJ0IHRoZSByZXNldHMgYXQgdGhlIHJpZ2h0IHRpbWUgaW4g
+dGhlIHBvd2VyLXVwIHNlcXVlbmNpbmcuDQo+ID4gPiBVbmZvcnR1bmF0ZWx5IHRoaXMgbWVhbnMg
+d2UgY2FuJ3QgcHJvcGVybHkgcHV0IHRoZSBCTEtfQ1RMIGRyaXZlciBpbg0KPiA+ID4gdGhlIHBv
+d2VyLWRvbWFpbiB3aXRob3V0IGhhdmluZyBhIGN5Y2xpYyBkZXBlbmRlbmN5IGluIHRoZSBEVC4g
+SSdtDQo+ID4gPiBzdGlsbCB0aGlua2luZyBhYm91dCBob3cgdG8gc29sdmUgdGhpcyBwcm9wZXJs
+eS4NCj4gPiA+DQo+ID4NCj4gPiBJIHJlbWVtYmVyIHdlIGhhZCBzb21ldGhpbmcgc2ltaWxhciBp
+biBvdXIgaW50ZXJuYWwgdHJlZSB3aXRoIHRoZQ0KPiA+IGJ1c19ibGtfY2xrIG9uIDhNUCwgd2hp
+Y2ggd2FzIGFkZGVkIGJ5IHRoZSBtZWRpYSBCTEtfQ1RMLiBXaGF0IEkgZGlkDQo+ID4gd2FzIHRv
+IGp1c3QgZHJvcCB0aGUgcmVnaXN0cmF0aW9uIG9mIHRoYXQgY2xvY2sgZW50aXJlbHkuIE15IHJh
+dGlvbmFsZQ0KPiA+IHdhcyB0aGF0IGlmIHRoZSBjbG9jayBpcyBwYXJ0IG9mIHRoZSBCTEtfQ1RM
+IGJ1dCBhbHNvIG5lZWRlZCBieSB0aGUNCj4gPiBCTEtfQ1RMIHRvIHdvcmssIEkgY2FuIGxlYXZl
+IGl0IGFsb25lICh0aGF0IGlzLCBlbmFibGVkIGJ5IGRlZmF1bHQpDQo+ID4gc2luY2Ugd2hlbiB0
+aGUgUEQgd2lsbCBiZSBwb3dlcmVkIG9mZiB0aGUgY2xvY2sgd2lsbCBnYXRlZCB0b28uIEkNCj4g
+PiBndWVzcyBhbm90aGVyIG9wdGlvbiB3b3VsZCBiZSB0byBtYXJrIGl0IGFzIGNyaXRpY2FsLCB0
+aGF0IHdheSwgaXQNCj4gPiB3aWxsIG5ldmVyIGJlIGRpc2FibGVkICh3aWxsIGJlIGxlZnQgYWxv
+bmUgYnkgdGhlIGNsa19kaXNhYmxlX3VudXNlZA0KPiA+IHRvbykgYnV0IGF0IHRoZSBzYW1lIHRp
+bWUgd2lsbCBiZSB2aXNpYmxlIGluIHRoZSBjbG9jayBoaWVyYXJjaHkuDQo+ID4NCj4gDQo+IERv
+IGlnbm9yZSBldnJ5dGhpbmcgSSBzYWlkIGFib3V0IHRoZSBidXNfYmxrX2N0bCwgdGhhdCBkaWQg
+d29yayBvbiBvdXIgdHJlZQ0KPiBzaW5jZSB0aGUgd2hvbGUgUEQgcG93ZXIgb24vb2ZmICJtYWdp
+YyIgaXMgZG9uZSBpbiBURi1BLg0KPiANCj4gU28gdGhlIHByb2JsZW0sIGFzIEkgdW5kZXJzdGFu
+ZCBpdCBub3csIGlzIHRoZSBmYWN0IHRoYXQgdGhlIGJsa19jdGwgZHJpdmVyIHdvbid0DQo+IHBy
+b2JlIGJlY2F1c2UgaXQgbmVlZHMgaXRzIFBELCBidXQgdGhlIFBEIGlzIG5vdCByZWdpc3RlcmVk
+IGJlY2F1c2UgdGhlDQo+IEFEQjQwMCBjYW4ndCBwb3dlciB1cCBzaW5jZSBpdCBuZWVkcyB0aGUg
+YnVzX2Jsa19jdGwgY2xvY2sgZW5hYmxlZCwgY2xvY2sNCj4gd2hpY2ggaXMgcmVnaXN0ZXJlZCBi
+eSB0aGUgYmxrX2N0bC4NCg0KMS4gRm9yIHNvbWUgTUlYJ3MgQkxLX0NUTCBHUFJzLCBpdCBjYW4g
+b25seSBiZSBhY2Nlc3NlZCB3aGVuIHRoZSBNSVggUEQgaXMgb24NCjIuIGZvciBzb21lIE1JWCdz
+IEFEQiBoYW5kc2hha2UsIG5lZWQgdG8gY29uZmlnIHNvbWUgQkxLX0NUTCBjbG9ja19lbiBiaXQg
+dG8gZW5hYmxlIHRoZSBNSVggaW50ZXJuYWwgYnVzIGNsb2NrLg0KDQpUaGF0J3Mgd2h5IEkgaGF2
+ZSBjb25jZXJuIG9uIGltcGxlbWVudGluZyBzdWNoIE1JWCBHUFIgYXMgY2xvY2sgJiByZXNldCBk
+cml2ZXIsIGFuZCBpbXBsZW1lbnRpbmcgR1BDIFBEIGluIGxpbnV4IGtlcm5lbC4NCkl0IHdpbGwg
+aW50cm9kdWNlIHNvbWUgY2hpY2tlbi1lZ2cgaXNzdWUgdGhhdCBub3QgZWFzeSB0byBoYW5kbGUg
+aW4gbGludXgga2VybmVsLg0KDQoNCkJSDQpKYWNreSBCYWkNCg0KPiANCj4gPiA+IFJlZ2FyZHMs
+DQo+ID4gPiBMdWNhcw0KPiA+ID4NCg==
