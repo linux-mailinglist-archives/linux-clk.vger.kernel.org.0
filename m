@@ -2,81 +2,78 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8EA229D7AF
-	for <lists+linux-clk@lfdr.de>; Wed, 28 Oct 2020 23:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB43E29D573
+	for <lists+linux-clk@lfdr.de>; Wed, 28 Oct 2020 23:02:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733036AbgJ1W0C (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 28 Oct 2020 18:26:02 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:58432 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732966AbgJ1WZo (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:25:44 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id B92F920160E;
-        Wed, 28 Oct 2020 13:59:38 +0100 (CET)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id AC273201601;
-        Wed, 28 Oct 2020 13:59:38 +0100 (CET)
-Received: from fsr-ub1664-175.ea.freescale.net (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 064A52030E;
-        Wed, 28 Oct 2020 13:59:37 +0100 (CET)
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>
-Cc:     NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        Abel Vesa <abel.vesa@nxp.com>
-Subject: [PATCH v2 5/5] clk: imx: gate2: Add locking in is_enabled op
-Date:   Wed, 28 Oct 2020 14:59:02 +0200
-Message-Id: <1603889942-27026-6-git-send-email-abel.vesa@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1603889942-27026-1-git-send-email-abel.vesa@nxp.com>
-References: <1603889942-27026-1-git-send-email-abel.vesa@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1729558AbgJ1WCm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 28 Oct 2020 18:02:42 -0400
+Received: from mail-ej1-f68.google.com ([209.85.218.68]:46545 "EHLO
+        mail-ej1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729557AbgJ1WCl (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 28 Oct 2020 18:02:41 -0400
+Received: by mail-ej1-f68.google.com with SMTP id t25so999278ejd.13;
+        Wed, 28 Oct 2020 15:02:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4gLV5jqZWEzx0kSjn0ZlymUAXJbYU1uMHL1QmYMs6LA=;
+        b=tOyvKkx5fXDVh0D91p75HxFMkGyqloOP+olWNATOeuM34+S65B6Tws9gmDMcZrIPUm
+         TupdtucY+YUg/kLIcAymQ/zvgQFCCCMN5z1qSxGxOWwAtuj4MhUDTTbYVKIJl+QMmfJj
+         ZUyfMHll0Wq86hWOzNNSMBJl7DbGZ/HutEn6h1EUgpQhq5AfaGoAQg2HDmi2QDu+K3ue
+         bF3Zo+diIrGmUbblTDD0VrMjHPVqWcP0JPITksBF02IvNGhXYN56M/cF5FLxWwdEEdqN
+         Jx/HonIGisKDmA5w4e4X0pH/WZbMUkqSNbvMJKpAeISEQCQAx67l+MgK9RRA17EOdZAK
+         4H/w==
+X-Gm-Message-State: AOAM532iKjfjtf4OP972YYSs7xD/g6l0Otn4kSsVj+XUf2Ryis3yZLWK
+        G1Cy0ARM7XswQaMVLbJNDxs=
+X-Google-Smtp-Source: ABdhPJzTVbBja1pgLqS76H5a7HJ4PpaZGt8w1wdce7Ox6yZdCWF/ZVkaaOZZrdWROtKTG3r7QsBafg==
+X-Received: by 2002:a17:906:c2d2:: with SMTP id ch18mr1159055ejb.446.1603922558697;
+        Wed, 28 Oct 2020 15:02:38 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.184])
+        by smtp.googlemail.com with ESMTPSA id oz18sm411058ejb.55.2020.10.28.15.02.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2020 15:02:37 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 23:02:35 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Kukjin Kim <kgene@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: Re: [PATCH 1/2] soc: samsung: exynos-pmu: instantiate clkout driver
+ as MFD
+Message-ID: <20201028220235.GA271157@kozik-lap>
+References: <20201001165646.32279-1-krzk@kernel.org>
+ <20201001165646.32279-2-krzk@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201001165646.32279-2-krzk@kernel.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Protect against enabling/disabling the gate while we're
-checking if it is enabled.
+On Thu, Oct 01, 2020 at 06:56:45PM +0200, Krzysztof Kozlowski wrote:
+> The Exynos clock output (clkout) driver uses same register address space
+> (Power Management Unit address space) as Exynos PMU driver and same set
+> of compatibles.  It was modeled as clock provider instantiated with
+> CLK_OF_DECLARE_DRIVE().
+> 
+> This however brings ordering problems and lack of probe deferral,
+> therefore clkout driver should be converted to a regular module and
+> instantiated as a child of PMU driver to be able to use existing
+> compatibles and address space.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+>  drivers/soc/samsung/exynos-pmu.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
----
- drivers/clk/imx/clk-gate2.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+Applied with all tags.
 
-diff --git a/drivers/clk/imx/clk-gate2.c b/drivers/clk/imx/clk-gate2.c
-index 7e4b5e8..480a184 100644
---- a/drivers/clk/imx/clk-gate2.c
-+++ b/drivers/clk/imx/clk-gate2.c
-@@ -101,9 +101,17 @@ static int clk_gate2_reg_is_enabled(void __iomem *reg, u8 bit_idx,
- static int clk_gate2_is_enabled(struct clk_hw *hw)
- {
- 	struct clk_gate2 *gate = to_clk_gate2(hw);
-+	unsigned long flags;
-+	int ret = 0;
- 
--	return clk_gate2_reg_is_enabled(gate->reg, gate->bit_idx,
-+	spin_lock_irqsave(gate->lock, flags);
-+
-+	ret = clk_gate2_reg_is_enabled(gate->reg, gate->bit_idx,
- 					gate->cgr_val, gate->cgr_mask);
-+
-+	spin_unlock_irqrestore(gate->lock, flags);
-+
-+	return ret;
- }
- 
- static void clk_gate2_disable_unused(struct clk_hw *hw)
--- 
-2.7.4
+Best regards,
+Krzysztof
 
