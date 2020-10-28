@@ -2,95 +2,128 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D67D729D8B2
-	for <lists+linux-clk@lfdr.de>; Wed, 28 Oct 2020 23:36:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9CB29DA45
+	for <lists+linux-clk@lfdr.de>; Thu, 29 Oct 2020 00:18:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388264AbgJ1Wft (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 28 Oct 2020 18:35:49 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:40470 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732560AbgJ1Wfr (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 28 Oct 2020 18:35:47 -0400
-Received: by mail-oi1-f195.google.com with SMTP id m128so1246919oig.7;
-        Wed, 28 Oct 2020 15:35:46 -0700 (PDT)
+        id S2388185AbgJ1XSo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 28 Oct 2020 19:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732512AbgJ1XSX (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 28 Oct 2020 19:18:23 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5372C0613D1;
+        Wed, 28 Oct 2020 16:18:23 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id x20so649712qkn.1;
+        Wed, 28 Oct 2020 16:18:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jms.id.au; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4MykbGw6bHee+sbWD2NGwMwnxeBN9iL5rF1OE9UjJ1Q=;
+        b=Tp4mM3D0AUMmouj4W6RXfvIIS810w5N6ZfCPO62M4OTOOqdefYTFMYQvkv8RZjTxbg
+         KAwVGVb9sPj2KNyn/uQFfuZFIpk3TCBmrRM/UUX++fbrobzL1xmClclUj417B+x7JZeD
+         zg0GOP0R5Nrw9atwCSZjMc4mbSbOk8lUN+0Ak=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=j40fXvYMK2w1uYoqbRN/p/K2nSLc7QBgd4j2HeymL48=;
-        b=rZxK11zR99v0qURJQX/GHzTQbEUlOkWtuiBfwl1SBRgwr7B11SPJiMCbDIeyFlosdt
-         P538eehxjTY+dtWzgXLGm/BsC+zxxj23tWAulV4goETwIHMzddLmby6pAuO9qCJDotM/
-         rZnvllcO/z1RvCbCFWvpshW+KfAdtbov9EgRCkDlb8T1rkArypoAHH7Xlz/mmKFwJVDO
-         MVZA6oLIOGd5Pgc+2wNtv6/nhqV36Hr31ehIPbZXwYWLkOZMNipj+huWgzkvDvRTAopR
-         ufLRRvBJ2lEXWiJLI5SxxVfPP1kRTec35wrpsJ2CQxFy2nY0H5MihgoZ36ecwkxk2Iva
-         Dvlw==
-X-Gm-Message-State: AOAM532Ak0cMegW5QRAq/PBQ/Gea6vZZLV8z4Tp4DfRrHUKxbrrr320Y
-        Yg4YAWo8ZEE3Wr4/sSgX0BFKdM/4qA==
-X-Google-Smtp-Source: ABdhPJwoDP3ZNhOt8k6d3nBfKIYb6o3ezWXIw7ASHIquqjVuovgMd+jq/KjXaIEjhCPeoDgQTQdHFw==
-X-Received: by 2002:aca:38c6:: with SMTP id f189mr5415873oia.27.1603893201354;
-        Wed, 28 Oct 2020 06:53:21 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id t5sm2145145oth.16.2020.10.28.06.53.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 06:53:20 -0700 (PDT)
-Received: (nullmailer pid 3927164 invoked by uid 1000);
-        Wed, 28 Oct 2020 13:53:19 -0000
-Date:   Wed, 28 Oct 2020 08:53:19 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, sboyd@kernel.org,
-        robh+dt@kernel.org, mturquette@baylibre.com,
-        devicetree@vger.kernel.org, bjorn.andersson@linaro.org
-Subject: Re: [RESEND PATCH v3 1/4] dt-bindings: clock: Add support for LPASS
- Audio Clock Controller
-Message-ID: <20201028135319.GA3926524@bogus>
-References: <20201026120221.18984-1-srinivas.kandagatla@linaro.org>
- <20201026120221.18984-2-srinivas.kandagatla@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4MykbGw6bHee+sbWD2NGwMwnxeBN9iL5rF1OE9UjJ1Q=;
+        b=ck5v4UJrQ5jSzCpDrDu319IfS2giBoHdjdP7/BYhdksvyyis6klJPyxRf03tNoOL5W
+         mexfWtojJ41qOQaibFUFPuamfFOkIMMr3wDzbq2g7Muad15nJyv+rQqTI0F8LTu8DdT1
+         1fThSy82iOGVrVaEQiBBLEYdhu5VlxocaYhAJ0rIKcEBSbgYkiFOFbDULJK0EimSDQ4C
+         Z/TMm2AXRz9X/S1MujQstEDJtBlup26F1viDkCQUMtQMLQMbTXHYXZWlzGu++ws4hUcO
+         B1Vkgbqq27F5WCFOhQ6UE8FEDXgbcAs5D20GxiSIKofEX2XxpKVOAH8/S/RBksZQEaLW
+         aB1Q==
+X-Gm-Message-State: AOAM531T4Qy5fdKtyeZWs2TVzKWPMl/gKyN2Mkz+/BMUn2r93fP6oo8Q
+        zOSfjzPHSFNue+oTVPrV5OjOChaLeyOWBZCLUMC7nxMDCmYAzw==
+X-Google-Smtp-Source: ABdhPJwwjgO8IqC8w+C79BxSvAYXYDw1GUHfrT/SZUU3zpmx1+2t9DpDIW5G3LtpRjVBq3ypIaEi6EQ8SBJWcM+Xai0=
+X-Received: by 2002:a05:620a:1303:: with SMTP id o3mr5769587qkj.66.1603859902807;
+ Tue, 27 Oct 2020 21:38:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201026120221.18984-2-srinivas.kandagatla@linaro.org>
+References: <20200928070108.14040-1-ryan_chen@aspeedtech.com>
+ <20200928070108.14040-2-ryan_chen@aspeedtech.com> <160264382296.310579.9835482254268204873@swboyd.mtv.corp.google.com>
+ <CACPK8Xe-_hTey7hTJjG2-EcDsTN0qOw3bWBcrZZohEK3QOJuvg@mail.gmail.com> <160269577311.884498.8429245140509326318@swboyd.mtv.corp.google.com>
+In-Reply-To: <160269577311.884498.8429245140509326318@swboyd.mtv.corp.google.com>
+From:   Joel Stanley <joel@jms.id.au>
+Date:   Wed, 28 Oct 2020 04:38:10 +0000
+Message-ID: <CACPK8XeGRq2XeJAjdQ=pT1oKk7-wk1==4Byfc50_6+-UijU12w@mail.gmail.com>
+Subject: Re: [PATCH 1/1] clk: aspeed: modify some default clks are critical
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Andrew Jeffery <andrew@aj.id.au>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Ryan Chen <ryan_chen@aspeedtech.com>,
+        BMC-SW <bmc-sw@aspeedtech.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
+        linux-clk@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, 26 Oct 2020 12:02:18 +0000, Srinivas Kandagatla wrote:
-> Audio Clock controller is a block inside LPASS which controls
-> 2 Glitch free muxes to LPASS codec Macros.
-> 
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  .../bindings/clock/qcom,audiocc-sm8250.yaml   | 58 +++++++++++++++++++
->  .../clock/qcom,sm8250-lpass-audiocc.h         | 13 +++++
->  2 files changed, 71 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,audiocc-sm8250.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,sm8250-lpass-audiocc.h
-> 
+Thanks for the response Stephen. Sorry it's taken me a while to get back to you.
 
+On Wed, 14 Oct 2020 at 17:16, Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting Joel Stanley (2020-10-13 22:28:00)
+> > On Wed, 14 Oct 2020 at 02:50, Stephen Boyd <sboyd@kernel.org> wrote:
+> > >
+> > > Quoting Ryan Chen (2020-09-28 00:01:08)
+> > > > In ASPEED SoC LCLK is LPC clock for all SuperIO device, UART1/UART2 are
+> > > > default for Host SuperIO UART device, eSPI clk for Host eSPI bus access
+> > > > eSPI slave channel, those clks can't be disable should keep default,
+> > > > otherwise will affect Host side access SuperIO and SPI slave device.
+> > > >
+> > > > Signed-off-by: Ryan Chen <ryan_chen@aspeedtech.com>
+> > > > ---
+> > >
+> > > Is there resolution on this thread?
+> >
+> > Not yet.
+> >
+> > We have a system where the BMC (management controller) controls some
+> > clocks, but the peripherals that it's clocking are outside the BMC's
+> > control. In this case, the host processor us using some UARTs and what
+> > not independent of any code running on the BMC.
+> >
+> > Ryan wants to have them marked as critical so the BMC never powers them down.
+> >
+> > However, there are systems that don't use this part of the soc, so for
+> > those implementations they are not critical and Linux on the BMC can
+> > turn them off.
+> >
+> > Do you have any thoughts? Has anyone solved a similar problem already?
+> >
+>
+> Is this critical clocks in DT? Where we want to have different DT for
+> different device configurations to indicate that some clks should be
+> marked critical so they're never turned off and other times they aren't
+> so they're turned off?
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Spot on.
 
-yamllint warnings/errors:
+> It also sounds sort of like the protected-clocks binding. Where you
+> don't want to touch certain clks depending on the usage configuration of
+> the SoC. There is a patch to make that generic that I haven't applied
+> because it looks wrong at first glance[1].
 
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/clock/qcom,audiocc-sm8250.example.dts:25.30-31 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:342: Documentation/devicetree/bindings/clock/qcom,audiocc-sm8250.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1366: dt_binding_check] Error 2
+That binding is exactly what I had in mind. I wasn't aware of it.
 
+The drawbacks outlined in the commit message do sound concerning. I
+take it we could avoid those drawbacks by having a driver-specific
+implementation of protected-clocks, like qcom does?
 
-See https://patchwork.ozlabs.org/patch/1387714
+> Maybe not registering those
+> clks to the framework on the configuration that Ryan has is good enough?
 
-The base for the patch is generally the last rc1. Any dependencies
-should be noted.
+I didn't quite follow here. Did you mean with protected-clocks, or
+using a different mechanism?
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Cheers,
 
-pip3 install dtschema --upgrade
+Joel
 
-Please check and re-submit.
-
+>
+> [1] https://lore.kernel.org/r/20200903040015.5627-2-samuel@sholland.org
