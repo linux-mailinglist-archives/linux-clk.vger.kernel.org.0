@@ -2,111 +2,196 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E48A29DAAD
-	for <lists+linux-clk@lfdr.de>; Thu, 29 Oct 2020 00:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E94E429DA3C
+	for <lists+linux-clk@lfdr.de>; Thu, 29 Oct 2020 00:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390419AbgJ1X21 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 28 Oct 2020 19:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390573AbgJ1X2U (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 28 Oct 2020 19:28:20 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41670C0613CF
-        for <linux-clk@vger.kernel.org>; Wed, 28 Oct 2020 16:28:19 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id t6so382132plq.11
-        for <linux-clk@vger.kernel.org>; Wed, 28 Oct 2020 16:28:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=aD/m2VgCYiafD5XJrexC8xG2hc+36DzQpHElqK1SRuE=;
-        b=v23DjL4BqoRVxPR9GiRf0kU1JhgymDI0xiYjXnCz4Q785C1+xKWhpKU6Km8WPOp58w
-         xGur69N7GeI8fwXXwA+kVV+RcFy4HsedaSVvKdI47qTsXih/LGVM3DGC0btx4VoxTYxJ
-         cLSx2YmlYZW9A8eUFhVGuOquAzmHZ8jND6vyejb2sKUqdSR/CFagLZUEYBVJKs/2kDc6
-         JGC5vPGT+PpvhNxJJFT4rYUlvHhjTjPn8MOkZc/uu565J5yhEcMDFCxPX6kKim6nGVzT
-         NCdS4ntm1tBymmjYUg6XJ53cjrMCeKuIT63npvN/BqgJ9tqRhjtf3+wNAzJBxOxVCa+y
-         0RXA==
+        id S2388017AbgJ1XRW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 28 Oct 2020 19:17:22 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:46883 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728511AbgJ1XRV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 28 Oct 2020 19:17:21 -0400
+Received: by mail-wr1-f67.google.com with SMTP id n6so775616wrm.13;
+        Wed, 28 Oct 2020 16:17:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=aD/m2VgCYiafD5XJrexC8xG2hc+36DzQpHElqK1SRuE=;
-        b=kw7Sj5sZhjF/ECQ2RpfeFmHb2cZiS/50ASazvkbnBiIZeSG5otWhKh+Y75GPnluXpF
-         BE1xk8Qi0QChFJfzx7d2d888EiRlox6I0/n5T7Uni++W/DqVBcsGHYIhdykQLE3xl9NM
-         9tMqGviM0tM4XyGmM5zCwKD3+uRc3+GuQBWeNa91Qs3d1G5LNLWZztX/1VSPwLBvvHRh
-         rjeA4E5h8vXyyM8hfHnzqVEHsZt9udcXABc6wVjTvNYpXPbigby5H9QMj9YaDzpcjM1E
-         5SfxYvVqQLi4s+meaYrboKdf8lE5ayJ5QRZfEmy1YTBedQH4f/31/AspWPD6bLVpHRcx
-         ACZQ==
-X-Gm-Message-State: AOAM533n32MR/ngNcA3cS+y9MR2L+GVAdGs6J7XXMTq+pqStl7jHmRBp
-        fAiF4/hPSmF6prvn82F/TvxhouhEzzNX
-X-Google-Smtp-Source: ABdhPJz8bqfzm3rNPe2a2hytHwPw1HH8gsns4sap2sQtA7nMk9rNUILQwS2zVPM5K3yckVKsL3p6JQ==
-X-Received: by 2002:aa7:911a:0:b029:155:8521:ba6c with SMTP id 26-20020aa7911a0000b02901558521ba6cmr5161777pfh.8.1603870995286;
-        Wed, 28 Oct 2020 00:43:15 -0700 (PDT)
-Received: from localhost.localdomain ([103.59.133.81])
-        by smtp.gmail.com with ESMTPSA id e7sm4289579pgj.19.2020.10.28.00.43.12
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0DnG4LJjdv6mAxFeMJR8DGf+NctXJFLBf9GwLy+AxJQ=;
+        b=o8dt85FiopWcGhXhpt25kIrlJBkT7xuHrqLVBo2fDOCuGnm7LJbaKxbp04x0/TQKC4
+         8JWvvjn3IUu4FSy/iWT85nQz4dMXhSOPL8187t64GzS9u0HARKocB4kGRZg5iokCfPPn
+         XQCCYmL0jZDdTNlWO23UEQM6ORn2hvyP66lc68+t5S9djlRhfphA2VHhCvDmCXvzoOmC
+         ZYMcNDVw0ZJw5A9B874xObT0KoE1tmf/YRaXl/6jRJrPMxcCaiPKaQzAyg4LJNOi6lNB
+         5ObO+rPjJqsZzC1BfcgXNsszs9e/w1f3lpepPjpmLbt6CjfEOC01A+JvQEredxLI3EHl
+         ctGw==
+X-Gm-Message-State: AOAM533RFgqbzdCd0F79yN4y6YolCk/UKzf8IDS2E9Mn/ntUkax3KcOe
+        43033a5xQlyAeF2N/IWaair532W+wEtnzWWE
+X-Google-Smtp-Source: ABdhPJzfpLMuUvtJrSFwIFWjAp/ycvj6HKNRVF8qRIcs0RQFe6tX1Ju0ziEFEpJPgFr+LJbS453aoA==
+X-Received: by 2002:a17:907:204c:: with SMTP id pg12mr6158094ejb.464.1603874307610;
+        Wed, 28 Oct 2020 01:38:27 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.184])
+        by smtp.googlemail.com with ESMTPSA id v6sm2525073ejj.112.2020.10.28.01.38.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 00:43:14 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     sboyd@kernel.org, mturquette@baylibre.com, robh+dt@kernel.org
-Cc:     bjorn.andersson@linaro.org, vkoul@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 4/4] clk: qcom: Add support for SDX55 RPMh clocks
-Date:   Wed, 28 Oct 2020 13:12:32 +0530
-Message-Id: <20201028074232.22922-5-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201028074232.22922-1-manivannan.sadhasivam@linaro.org>
-References: <20201028074232.22922-1-manivannan.sadhasivam@linaro.org>
+        Wed, 28 Oct 2020 01:38:26 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 09:38:24 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v5 1/4] dt-bindings: media: imx258: add bindings for
+ IMX258 sensor
+Message-ID: <20201028083824.GA32155@kozik-lap>
+References: <20201019170247.92002-1-krzk@kernel.org>
+ <20201020103833.GT13341@paasikivi.fi.intel.com>
+ <CAJKOXPdKHCQikYDLKDS2Y3NVyCjMYYH1pcxgaMoYgOK19vQCrQ@mail.gmail.com>
+ <20201020120058.GU13341@paasikivi.fi.intel.com>
+ <20201020122621.GA126891@kozik-lap>
+ <20201020124654.GX13341@paasikivi.fi.intel.com>
+ <20201020125852.GA128323@kozik-lap>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201020125852.GA128323@kozik-lap>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add support for clocks maintained by RPMh in SDX55 SoCs.
+On Tue, Oct 20, 2020 at 02:58:52PM +0200, Krzysztof Kozlowski wrote:
+> On Tue, Oct 20, 2020 at 03:46:54PM +0300, Sakari Ailus wrote:
+> > On Tue, Oct 20, 2020 at 02:26:21PM +0200, Krzysztof Kozlowski wrote:
+> > > On Tue, Oct 20, 2020 at 03:00:58PM +0300, Sakari Ailus wrote:
+> > > > Hi Krzysztof,
+> > > > 
+> > > > On Tue, Oct 20, 2020 at 12:54:09PM +0200, Krzysztof Kozlowski wrote:
+> > > > > On Tue, 20 Oct 2020 at 12:38, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
+> > > > > >
+> > > > > > Hi Krzysztof,
+> > > > > >
+> > > > > > On Mon, Oct 19, 2020 at 07:02:44PM +0200, Krzysztof Kozlowski wrote:
+> > > > > > > Add bindings for the IMX258 camera sensor.  The bindings, just like the
+> > > > > > > driver, are quite limited, e.g. do not support regulator supplies.
+> > > > > > >
+> > > > > > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > > > > > > Reviewed-by: Rob Herring <robh@kernel.org>
+> > > > > > >
+> > > > > > > ---
+> > > > > > >
+> > > > > > > Changes since v4:
+> > > > > > > 1. Add clock-lanes,
+> > > > > > > 2. Add Rob's review,
+> > > > > > > 3. Add one more example and extend existing one,
+> > > > > > > 4. Add common clock properties (assigned-*).
+> > > > > >
+> > > > > > Using the assigned-* clock properties may be workable for this driver at
+> > > > > > the moment. But using these properties does not guarantee the external
+> > > > > > clock frequency intended to be used on the hardware.
+> > > > > 
+> > > > > It guarantees it. The clock frequency will be as expected (except if
+> > > > > someone misconfigures the DTS).
+> > > > 
+> > > > Is that guaranteed?
+> > > > 
+> > > > I'm not saying no to the approach, but if we change how camera sensor DT
+> > > > bindings are defined, I'd prefer an informed decision is made on the
+> > > > matter.
+> > > > 
+> > > > > 
+> > > > > > Using other
+> > > > > > frequencies *is not* expected to work. That applies to this driver as well.
+> > > > > 
+> > > > > This is the binding which is HW description. According to HW datasheet
+> > > > > other frequencies from described range are accepted and expected to
+> > > > > work.
+> > > > 
+> > > > As per datasheet, yes, different external clock frequencies can be used.
+> > > > But the link frequency is still not independent of the external clock
+> > > > frequency.
+> > > > 
+> > > > The properties of the sensor's PLL tree determines what can be achieved
+> > > > given a certain external clock frequency. So picking a wrong external clock
+> > > > frequency quite possibly means that none of the designated link frequencies
+> > > > are available, rendering the sensor inoperable.
+> > > 
+> > > The driver then controls the HW and knows exactly what is needed. If
+> > > link frequency (which has its own DT property) requires some clock
+> > > frequency, the driver will configure the clock to that value. The same
+> > 
+> > Well it doesn't if it doesn't get that information from DT.
+> 
+> It will get it - via clk_get_rate(). You do not need DT for this.
+> 
+> > The frequency is usually a range, and looking at these bindings, it's from
+> > 6 MHz to 27 MHz. That'd be a lot of frequencies for a driver to try.
+> 
+> It does not have to try all of them. Assuming link frequency is fixed,
+> just use any matching (or hard-coded) input clock frequency. Since the
+> input clock frequency most likely will be set with assigned-clock-rates,
+> there will be no job to do for the driver at all. Unless the driver
+> wants to do something more, of course.
+> 
+> > 
+> > > going other direction. Driver has the knowledge about both its input
+> > > clock and link frequency, therefore it can make the best decision.
+> > 
+> > Again you're assuming a particular driver implementation.
+> 
+> Actually not, I am talking about bindings as far away from the driver
+> implementation as possible.  This is why some specific frequency *is
+> not* part of the bindings.
+> 
+> > 
+> > Typically only a few frequencies are really available on platforms, so a in
+> > practice a driver would not be able to get any requested frequency. I
+> > wouldn't start hard-coding every possible frequency to camera sensor
+> > drivers
+> 
+> If the driver cannot get requested frequency which it apparently
+> requires, there is nothing more to do. It's broken HW implementation.
+> The input clock must be matching requirements, regardless of what
+> property you put in DT.  You can add "clock-frequency" property, you can
+> even add "really-i-require-clock-frequency" but if the real HW input
+> clock does not have, it won't work.
+> 
+> IOW, adding "clock-frequency" property does not change the reality - the
+> board (HW) must provide given frequency so the entire system works.
+> 
+> > 
+> > > > > > This, instead of the clock-frequency property, effectively removes the
+> > > > > > ability to set the correct frequency from the driver, at least with current
+> > > > > > set of the used APIs.
+> > > > > 
+> > > > > It seems you confuse DT bindings with some specific driver
+> > > > > implementation. Bindings do not describe the driver behavior but the
+> > > > > HW. The ability to set the correct frequency from the driver is not
+> > > > > removed. It was never part of the bindings and never should. It is
+> > > > > part of the driver.
+> > > > > 
+> > > > > >
+> > > > > > I suppose you could add a function to set the assigned clock frequency and
+> > > > > > keep it, just as clk_set_rate_exclusive does?
+> > > 
+> > > I did not reply to this comment, so let me know. Of course, one could
+> > > add such functions. It's not a job for DT bindings, though.
+> > 
+> > I'm not suggesting to add it to DT binding patch. What I'm saying that with
+> > this approach is looks like it may well be needed.
+> 
+> New properties can always be added to DT. However existing properties
+> cannot be removed. Their meaning or values cannot be changed.
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/clk/qcom/clk-rpmh.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+Any more comments on the bindings or the patchset?
 
-diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-index e2c669b08aff..88d010178b59 100644
---- a/drivers/clk/qcom/clk-rpmh.c
-+++ b/drivers/clk/qcom/clk-rpmh.c
-@@ -432,6 +432,25 @@ static const struct clk_rpmh_desc clk_rpmh_sm8250 = {
- 	.num_clks = ARRAY_SIZE(sm8250_rpmh_clocks),
- };
- 
-+DEFINE_CLK_RPMH_VRM(sdx55, rf_clk1, rf_clk1_ao, "rfclkd1", 1);
-+DEFINE_CLK_RPMH_VRM(sdx55, rf_clk2, rf_clk2_ao, "rfclkd2", 1);
-+DEFINE_CLK_RPMH_BCM(sdx55, qpic_clk, "QP0");
-+
-+static struct clk_hw *sdx55_rpmh_clocks[] = {
-+	[RPMH_CXO_CLK]		= &sdm845_bi_tcxo.hw,
-+	[RPMH_CXO_CLK_A]	= &sdm845_bi_tcxo_ao.hw,
-+	[RPMH_RF_CLK1]		= &sdx55_rf_clk1.hw,
-+	[RPMH_RF_CLK1_A]	= &sdx55_rf_clk1_ao.hw,
-+	[RPMH_RF_CLK2]		= &sdx55_rf_clk2.hw,
-+	[RPMH_RF_CLK2_A]	= &sdx55_rf_clk2_ao.hw,
-+	[RPMH_QPIC_CLK]		= &sdx55_qpic_clk.hw,
-+};
-+
-+static const struct clk_rpmh_desc clk_rpmh_sdx55 = {
-+	.clks = sdx55_rpmh_clocks,
-+	.num_clks = ARRAY_SIZE(sdx55_rpmh_clocks),
-+};
-+
- static struct clk_hw *of_clk_rpmh_hw_get(struct of_phandle_args *clkspec,
- 					 void *data)
- {
-@@ -519,6 +538,7 @@ static const struct of_device_id clk_rpmh_match_table[] = {
- 	{ .compatible = "qcom,sdm845-rpmh-clk", .data = &clk_rpmh_sdm845},
- 	{ .compatible = "qcom,sm8150-rpmh-clk", .data = &clk_rpmh_sm8150},
- 	{ .compatible = "qcom,sm8250-rpmh-clk", .data = &clk_rpmh_sm8250},
-+	{ .compatible = "qcom,sdx55-rpmh-clk", .data = &clk_rpmh_sdx55},
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, clk_rpmh_match_table);
--- 
-2.17.1
+Best regards,
+Krzysztof
 
