@@ -2,266 +2,202 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D230829E6D1
-	for <lists+linux-clk@lfdr.de>; Thu, 29 Oct 2020 10:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D5F29E9BE
+	for <lists+linux-clk@lfdr.de>; Thu, 29 Oct 2020 11:56:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725904AbgJ2JFH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 29 Oct 2020 05:05:07 -0400
-Received: from z5.mailgun.us ([104.130.96.5]:59649 "EHLO z5.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726676AbgJ2JDD (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 29 Oct 2020 05:03:03 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1603962181; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=NdzsoEdcRVXFcGy0mrVKMSKtPLAju5oVn97JEaJidDY=; b=UFiG3bObOZHOK8m0zEzeKPAsvdxJS6logyC4yEXYgi2q6U4gQkJMQ+CLZdLUI/L6KbA04kqL
- koGCg1/0Yl2Z1wcIVMFVq03+YuRzZzQDoB/GtBSgu9uM/HsNSw5QpTcNq0DEFPsDHGqCpAL9
- 6+WXkORi4GlurE3o1SP6tGzy0wc=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
- 5f9a8545940cfd47f148cbe7 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 29 Oct 2020 09:03:01
- GMT
-Sender: tdas=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 4CEA0C433CB; Thu, 29 Oct 2020 09:03:01 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.2 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [192.168.0.106] (unknown [49.204.180.142])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: tdas)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 06DA6C43382;
-        Thu, 29 Oct 2020 09:02:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 06DA6C43382
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=tdas@codeaurora.org
-Subject: Re: [PATCH v5 2/2] clk: qcom: lpass-sc7180: Disentangle the two clock
- devices
-To:     Douglas Anderson <dianders@chromium.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     David Brown <david.brown@linaro.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-soc@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S1726078AbgJ2KzZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 29 Oct 2020 06:55:25 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:45820 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726025AbgJ2KzZ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 29 Oct 2020 06:55:25 -0400
+X-IronPort-AV: E=Sophos;i="5.77,429,1596466800"; 
+   d="scan'208";a="60942120"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 29 Oct 2020 19:55:23 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 596224279860;
+        Thu, 29 Oct 2020 19:55:21 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20201019154857.v5.1.I4567b5e7e17bbb15ef063d447cb83fd43746cb18@changeid>
- <20201019154857.v5.2.I75c409497d4dea9daefa53ec5f93824081c4ecbe@changeid>
-From:   Taniya Das <tdas@codeaurora.org>
-Message-ID: <eb8b7d12-30fa-4a29-9adb-e1ad171e7dce@codeaurora.org>
-Date:   Thu, 29 Oct 2020 14:32:54 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.3
-MIME-Version: 1.0
-In-Reply-To: <20201019154857.v5.2.I75c409497d4dea9daefa53ec5f93824081c4ecbe@changeid>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v2] clk: renesas: r8a774c0: Add RPC clocks
+Date:   Thu, 29 Oct 2020 10:55:15 +0000
+Message-Id: <20201029105515.16309-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Reviewed-by: Taniya Das <tdas@codeaurora.org>
+Describe the RPCSRC internal clock and the RPC[D2] clocks derived from it,
+as well as the RPC-IF module clock, in the RZ/G2E (R8A774C0) CPG/MSSR
+driver.
 
-On 10/20/2020 4:19 AM, Douglas Anderson wrote:
-> The sc7180 lpass clock driver manages two different devices.  These
-> two devices were tangled together, using one probe and a lookup to
-> figure out the real probe.  I think it's cleaner to really separate
-> the probe for these two devices since they're really different things,
-> just both managed by the same driver.
-> 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> 
-> Note: this is now a 2-patch cleanup series with no actual bugfixes
-> since the problem solved by patch #3 was better solved with:
-> 
-> https://lore.kernel.org/r/20201017020137.1251319-1-sboyd@kernel.org
-> 
-> Changes in v5:
-> - Two blank lines inserted before "return" statements.
-> 
-> Changes in v3:
-> - ("clk: qcom: lpass-sc7180: Disentangle the two clock devices") new for v3.
-> 
->   drivers/clk/qcom/lpasscorecc-sc7180.c | 103 ++++++++++++++++----------
->   1 file changed, 64 insertions(+), 39 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/lpasscorecc-sc7180.c b/drivers/clk/qcom/lpasscorecc-sc7180.c
-> index 2d15e33ec837..1a3925badd7c 100644
-> --- a/drivers/clk/qcom/lpasscorecc-sc7180.c
-> +++ b/drivers/clk/qcom/lpasscorecc-sc7180.c
-> @@ -366,12 +366,39 @@ static void lpass_pm_clk_destroy(void *data)
->   	pm_clk_destroy(data);
->   }
->   
-> +static int lpass_create_pm_clks(struct platform_device *pdev)
-> +{
-> +	int ret;
-> +
-> +	pm_runtime_enable(&pdev->dev);
-> +	ret = devm_add_action_or_reset(&pdev->dev, lpass_pm_runtime_disable, &pdev->dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = pm_clk_create(&pdev->dev);
-> +	if (ret)
-> +		return ret;
-> +	ret = devm_add_action_or_reset(&pdev->dev, lpass_pm_clk_destroy, &pdev->dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = pm_clk_add(&pdev->dev, "iface");
-> +	if (ret < 0)
-> +		dev_err(&pdev->dev, "failed to acquire iface clock\n");
-> +
-> +	return ret;
-> +}
-> +
->   static int lpass_core_cc_sc7180_probe(struct platform_device *pdev)
->   {
->   	const struct qcom_cc_desc *desc;
->   	struct regmap *regmap;
->   	int ret;
->   
-> +	ret = lpass_create_pm_clks(pdev);
-> +	if (ret)
-> +		return ret;
-> +
->   	lpass_core_cc_sc7180_regmap_config.name = "lpass_audio_cc";
->   	desc = &lpass_audio_hm_sc7180_desc;
->   	ret = qcom_cc_probe_by_index(pdev, 1, desc);
-> @@ -402,6 +429,11 @@ static int lpass_core_cc_sc7180_probe(struct platform_device *pdev)
->   static int lpass_hm_core_probe(struct platform_device *pdev)
->   {
->   	const struct qcom_cc_desc *desc;
-> +	int ret;
-> +
-> +	ret = lpass_create_pm_clks(pdev);
-> +	if (ret)
-> +		return ret;
->   
->   	lpass_core_cc_sc7180_regmap_config.name = "lpass_hm_core";
->   	desc = &lpass_core_hm_sc7180_desc;
-> @@ -409,55 +441,28 @@ static int lpass_hm_core_probe(struct platform_device *pdev)
->   	return qcom_cc_probe_by_index(pdev, 0, desc);
->   }
->   
-> -static const struct of_device_id lpass_core_cc_sc7180_match_table[] = {
-> +static const struct of_device_id lpass_hm_sc7180_match_table[] = {
->   	{
->   		.compatible = "qcom,sc7180-lpasshm",
-> -		.data = lpass_hm_core_probe,
->   	},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, lpass_hm_sc7180_match_table);
-> +
-> +static const struct of_device_id lpass_core_cc_sc7180_match_table[] = {
->   	{
->   		.compatible = "qcom,sc7180-lpasscorecc",
-> -		.data = lpass_core_cc_sc7180_probe,
->   	},
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(of, lpass_core_cc_sc7180_match_table);
->   
-> -static int lpass_core_sc7180_probe(struct platform_device *pdev)
-> -{
-> -	int (*clk_probe)(struct platform_device *p);
-> -	int ret;
-> -
-> -	pm_runtime_enable(&pdev->dev);
-> -	ret = devm_add_action_or_reset(&pdev->dev, lpass_pm_runtime_disable, &pdev->dev);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = pm_clk_create(&pdev->dev);
-> -	if (ret)
-> -		return ret;
-> -	ret = devm_add_action_or_reset(&pdev->dev, lpass_pm_clk_destroy, &pdev->dev);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = pm_clk_add(&pdev->dev, "iface");
-> -	if (ret < 0) {
-> -		dev_err(&pdev->dev, "failed to acquire iface clock\n");
-> -		return ret;
-> -	}
-> -
-> -	clk_probe = of_device_get_match_data(&pdev->dev);
-> -	if (!clk_probe)
-> -		return -EINVAL;
-> -
-> -	return clk_probe(pdev);
-> -}
-> -
->   static const struct dev_pm_ops lpass_core_cc_pm_ops = {
->   	SET_RUNTIME_PM_OPS(pm_clk_suspend, pm_clk_resume, NULL)
->   };
->   
->   static struct platform_driver lpass_core_cc_sc7180_driver = {
-> -	.probe = lpass_core_sc7180_probe,
-> +	.probe = lpass_core_cc_sc7180_probe,
->   	.driver = {
->   		.name = "lpass_core_cc-sc7180",
->   		.of_match_table = lpass_core_cc_sc7180_match_table,
-> @@ -465,17 +470,37 @@ static struct platform_driver lpass_core_cc_sc7180_driver = {
->   	},
->   };
->   
-> -static int __init lpass_core_cc_sc7180_init(void)
-> +static const struct dev_pm_ops lpass_hm_pm_ops = {
-> +	SET_RUNTIME_PM_OPS(pm_clk_suspend, pm_clk_resume, NULL)
-> +};
-> +
-> +static struct platform_driver lpass_hm_sc7180_driver = {
-> +	.probe = lpass_hm_core_probe,
-> +	.driver = {
-> +		.name = "lpass_hm-sc7180",
-> +		.of_match_table = lpass_hm_sc7180_match_table,
-> +		.pm = &lpass_hm_pm_ops,
-> +	},
-> +};
-> +
-> +static int __init lpass_sc7180_init(void)
->   {
-> -	return platform_driver_register(&lpass_core_cc_sc7180_driver);
-> +	int ret;
-> +
-> +	ret = platform_driver_register(&lpass_core_cc_sc7180_driver);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return platform_driver_register(&lpass_hm_sc7180_driver);
->   }
-> -subsys_initcall(lpass_core_cc_sc7180_init);
-> +subsys_initcall(lpass_sc7180_init);
->   
-> -static void __exit lpass_core_cc_sc7180_exit(void)
-> +static void __exit lpass_sc7180_exit(void)
->   {
-> +	platform_driver_unregister(&lpass_hm_sc7180_driver);
->   	platform_driver_unregister(&lpass_core_cc_sc7180_driver);
->   }
-> -module_exit(lpass_core_cc_sc7180_exit);
-> +module_exit(lpass_sc7180_exit);
->   
->   MODULE_DESCRIPTION("QTI LPASS_CORE_CC SC7180 Driver");
->   MODULE_LICENSE("GPL v2");
-> 
+Add new clk type CLK_TYPE_GEN3E3_RPCSRC to handle registering rpcsrc
+clock as the source for RPCSRC can be either PLL0/PLL1 and this depends
+on MD[1:4] pins where as compared to other R-Car Gen3 SoC's the RPCSRC
+clock source is always PLL1.
 
+MD[4] MD[3] MD[2] MD[1]
+  0     0     0    1     -> RPCSRC CLK source is PLL1
+  0     0     1    1     -> RPCSRC CLK source is PLL1
+  0     1     0    0     -> RPCSRC CLK source is PLL1
+  1     0     1    1     -> RPCSRC CLK source is PLL1
+  x     x     x    x     -> For any other values RPCSRC CLK source is PLL0
+
+R-Car Gen3 manual Rev.2.20 has in-correct information related to
+determining the clock source for RPCSRC.
+
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
+Hi All,
+
+This patch is part of series of [1], since rest of the patches have been
+acked I am just re-sending this single patch.
+
+v1->v2
+* Fixed divider table depending on the clk source
+* Introduced CLK_TYPE_GEN3E3_RPCSRC for E3/G2E.
+
+CLK output on g2e:
+
+.pll1                          3        6        0  1600000000          0     0  50000
+   .rpcsrc                     0        1        0   320000000          0     0  50000
+      rpc                      0        1        0    80000000          0     0  50000
+         rpcd2                 0        1        0    40000000          0     0  50000
+            rpc-if             0        1        0    40000000          0     0  50000
+
+[1] https://lkml.org/lkml/2020/10/16/470
+
+Cheers,
+Prabhakar
+---
+ drivers/clk/renesas/r8a774c0-cpg-mssr.c |  8 ++++++
+ drivers/clk/renesas/rcar-gen3-cpg.c     | 37 +++++++++++++++++++++++++
+ drivers/clk/renesas/rcar-gen3-cpg.h     |  1 +
+ 3 files changed, 46 insertions(+)
+
+diff --git a/drivers/clk/renesas/r8a774c0-cpg-mssr.c b/drivers/clk/renesas/r8a774c0-cpg-mssr.c
+index 9fc9fa9e531a..cccb20de4d4b 100644
+--- a/drivers/clk/renesas/r8a774c0-cpg-mssr.c
++++ b/drivers/clk/renesas/r8a774c0-cpg-mssr.c
+@@ -44,6 +44,7 @@ enum clk_ids {
+ 	CLK_S2,
+ 	CLK_S3,
+ 	CLK_SDSRC,
++	CLK_RPCSRC,
+ 	CLK_RINT,
+ 	CLK_OCO,
+ 
+@@ -73,6 +74,12 @@ static const struct cpg_core_clk r8a774c0_core_clks[] __initconst = {
+ 	DEF_FIXED(".s2",       CLK_S2,             CLK_PLL1,       4, 1),
+ 	DEF_FIXED(".s3",       CLK_S3,             CLK_PLL1,       6, 1),
+ 	DEF_FIXED(".sdsrc",    CLK_SDSRC,          CLK_PLL1,       2, 1),
++	DEF_BASE(".rpcsrc",    CLK_RPCSRC, CLK_TYPE_GEN3E3_RPCSRC, (CLK_PLL1 << 16) | CLK_PLL0),
++
++	DEF_BASE("rpc",		R8A774C0_CLK_RPC, CLK_TYPE_GEN3_RPC,
++		 CLK_RPCSRC),
++	DEF_BASE("rpcd2",	R8A774C0_CLK_RPCD2, CLK_TYPE_GEN3_RPCD2,
++		 R8A774C0_CLK_RPC),
+ 
+ 	DEF_DIV6_RO(".r",      CLK_RINT,           CLK_EXTAL, CPG_RCKCR, 32),
+ 
+@@ -199,6 +206,7 @@ static const struct mssr_mod_clk r8a774c0_mod_clks[] __initconst = {
+ 	DEF_MOD("can-fd",		 914,	R8A774C0_CLK_S3D2),
+ 	DEF_MOD("can-if1",		 915,	R8A774C0_CLK_S3D4),
+ 	DEF_MOD("can-if0",		 916,	R8A774C0_CLK_S3D4),
++	DEF_MOD("rpc-if",		 917,	R8A774C0_CLK_RPCD2),
+ 	DEF_MOD("i2c6",			 918,	R8A774C0_CLK_S3D2),
+ 	DEF_MOD("i2c5",			 919,	R8A774C0_CLK_S3D2),
+ 	DEF_MOD("i2c-dvfs",		 926,	R8A774C0_CLK_CP),
+diff --git a/drivers/clk/renesas/rcar-gen3-cpg.c b/drivers/clk/renesas/rcar-gen3-cpg.c
+index 488f8b3980c5..90a30416c9cf 100644
+--- a/drivers/clk/renesas/rcar-gen3-cpg.c
++++ b/drivers/clk/renesas/rcar-gen3-cpg.c
+@@ -441,6 +441,14 @@ static const struct clk_div_table cpg_rpcsrc_div_table[] = {
+ 	{ 2, 5 }, { 3, 6 }, { 0, 0 },
+ };
+ 
++static const struct clk_div_table cpg_rpcsrc_e3_pll0_div_table[] = {
++	{ 2, 8 }, { 0, 0 },
++};
++
++static const struct clk_div_table cpg_rpcsrc_e3_pll1_div_table[] = {
++	{ 0, 5 }, { 1, 3 }, { 3, 2 }, { 0, 0 },
++};
++
+ static const struct clk_div_table cpg_rpc_div_table[] = {
+ 	{ 1, 2 }, { 3, 4 }, { 5, 6 }, { 7, 8 }, { 0, 0 },
+ };
+@@ -515,6 +523,18 @@ static struct clk * __init cpg_rpcd2_clk_register(const char *name,
+ 	return clk;
+ }
+ 
++static int __init cpg_rpcsrc_e3_get_parent(u32 mode)
++{
++	unsigned int e3_rpcsrc = (mode & GENMASK(4, 1)) >> 1;
++	unsigned int pll1[] = { 0x1, 0x3, 0x4, 0xb, };
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(pll1); i++)
++		if (e3_rpcsrc == pll1[i])
++			return 1;
++
++	return 0;
++}
+ 
+ static const struct rcar_gen3_cpg_pll_config *cpg_pll_config __initdata;
+ static unsigned int cpg_clk_extalr __initdata;
+@@ -552,6 +572,7 @@ struct clk * __init rcar_gen3_cpg_clk_register(struct device *dev,
+ 	const struct clk *parent;
+ 	unsigned int mult = 1;
+ 	unsigned int div = 1;
++	int e3_rpcsrc_parent;
+ 	u32 value;
+ 
+ 	parent = clks[core->parent & 0xffff];	/* some types use high bits */
+@@ -696,6 +717,22 @@ struct clk * __init rcar_gen3_cpg_clk_register(struct device *dev,
+ 						  cpg_rpcsrc_div_table,
+ 						  &cpg_lock);
+ 
++	case CLK_TYPE_GEN3E3_RPCSRC:
++		e3_rpcsrc_parent = cpg_rpcsrc_e3_get_parent(cpg_mode);
++		if (e3_rpcsrc_parent) {
++			parent = clks[core->parent >> 16];
++			if (IS_ERR(parent))
++				return ERR_CAST(parent);
++		}
++
++		return clk_register_divider_table(NULL, core->name,
++						  __clk_get_name(parent), 0,
++						  base + CPG_RPCCKCR, 3, 2, 0,
++						  e3_rpcsrc_parent ?
++						  cpg_rpcsrc_e3_pll1_div_table :
++						  cpg_rpcsrc_e3_pll0_div_table,
++						  &cpg_lock);
++
+ 	case CLK_TYPE_GEN3_RPC:
+ 		return cpg_rpc_clk_register(core->name, base,
+ 					    __clk_get_name(parent), notifiers);
+diff --git a/drivers/clk/renesas/rcar-gen3-cpg.h b/drivers/clk/renesas/rcar-gen3-cpg.h
+index c4ac80cac6a0..74b95ab64046 100644
+--- a/drivers/clk/renesas/rcar-gen3-cpg.h
++++ b/drivers/clk/renesas/rcar-gen3-cpg.h
+@@ -24,6 +24,7 @@ enum rcar_gen3_clk_types {
+ 	CLK_TYPE_GEN3_OSC,	/* OSC EXTAL predivider and fixed divider */
+ 	CLK_TYPE_GEN3_RCKSEL,	/* Select parent/divider using RCKCR.CKSEL */
+ 	CLK_TYPE_GEN3_RPCSRC,
++	CLK_TYPE_GEN3E3_RPCSRC,
+ 	CLK_TYPE_GEN3_RPC,
+ 	CLK_TYPE_GEN3_RPCD2,
+ 
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation.
+2.25.1
 
---
