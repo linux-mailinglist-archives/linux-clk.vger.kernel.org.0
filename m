@@ -2,70 +2,82 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 161E42A06C8
-	for <lists+linux-clk@lfdr.de>; Fri, 30 Oct 2020 14:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F842A08A7
+	for <lists+linux-clk@lfdr.de>; Fri, 30 Oct 2020 15:58:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726101AbgJ3Nvr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 30 Oct 2020 09:51:47 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:34011 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725939AbgJ3Nvr (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 30 Oct 2020 09:51:47 -0400
-Received: by mail-oi1-f194.google.com with SMTP id l62so1047666oig.1;
-        Fri, 30 Oct 2020 06:51:45 -0700 (PDT)
+        id S1726906AbgJ3O6c (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 30 Oct 2020 10:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726827AbgJ3O6b (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 30 Oct 2020 10:58:31 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4917C0613DE
+        for <linux-clk@vger.kernel.org>; Fri, 30 Oct 2020 07:58:31 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id w1so5839288edv.11
+        for <linux-clk@vger.kernel.org>; Fri, 30 Oct 2020 07:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
+        b=cba/prsbSBmYoHoIyJJ/4nz72WNuXyuE8Im8hHokykrknu6T+ZGQ3oNaEZCnDQMKfK
+         7InrWK9/LAehftIUxFF07tvuUQ/41xDXt8c8cRINmlHgR1biRfbdW9zZPxVC6xa8zOlP
+         K6M6oRsBtl8MN1IVNiGcNelh1LOXBPRCedQHjpXjHdhTZUoXOfQ5ssal2G05i4dOSCvv
+         FIx5VhgkFc0MSmWonLWORS6bGxkDSNKyYqWmGabj1TsHCGlpIexLxPpAsXs6aOmBy4OY
+         u1xNW9W0JHHwE2pLQBvrBX9wQMtbUIk6CF2f6hu1cvsgwIaE0/cl0h377THHVavVg8oE
+         Ypbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fOp8wF+mYRdkZQyKm6YlHyZ6sSxqVonJHgcczPIIlJY=;
-        b=tmh9NoUYwZ/+E9WyGwoxj6eCxKghW0RvCAJitCHmI9rERF0+LtLAD7OMr4ckh5L0Sm
-         vzdJpUo8+naHMp4Mwzzyumg0NpUCbv9BgS81wCzBEyYVaAD066NDYAoXLwNz2xUBZSen
-         D6ZHKaofSlfrn3wDnI6vh5QJEEFYZqCpnibnKvHjhg2axB3AIipnF8hApz1lqqpQ5muY
-         8cghWtPMgqJ114Z/gxuiZ5koSHXgnQ6zYNEFKmKj9v6AdjFuolnokIyU9KzLDMe2fY7a
-         vLj3rqK3As6UbcMZVHUR85TZaFKv7XzGh3Z8QqbxKVYB/nxew3tay//pPrEgKPX6wbMC
-         XYNQ==
-X-Gm-Message-State: AOAM530DKEBQz4/tgqZy+bgxWxknPNrlnC/ViWmhHjviAvESyrtl6OZL
-        914eUL4ul1Cw4DpRUsRang==
-X-Google-Smtp-Source: ABdhPJxdgaqg6BQaRr0G41HPbiJrDzh3f7LxIXbiRhBt4PMiv0ZL3FCxwGlG1tJFIhobX0i4vIiZ6A==
-X-Received: by 2002:aca:ad48:: with SMTP id w69mr1793858oie.38.1604065904866;
-        Fri, 30 Oct 2020 06:51:44 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 104sm1390512otu.81.2020.10.30.06.51.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2020 06:51:44 -0700 (PDT)
-Received: (nullmailer pid 3745737 invoked by uid 1000);
-        Fri, 30 Oct 2020 13:51:43 -0000
-Date:   Fri, 30 Oct 2020 08:51:43 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     bjorn.andersson@linaro.org, devicetree@vger.kernel.org,
-        mturquette@baylibre.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        linux-clk@vger.kernel.org, sboyd@kernel.org
-Subject: Re: [RESEND PATCH v3 2/4] dt-bindings: clock: Add support for LPASS
- Always ON Controller
-Message-ID: <20201030135143.GA3745549@bogus>
-References: <20201026120221.18984-1-srinivas.kandagatla@linaro.org>
- <20201026120221.18984-3-srinivas.kandagatla@linaro.org>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=9fkQXWnoPSypfyxvIrXWSyd1r4Ua0eeDJczOBpIf/BU=;
+        b=L9u0b38CNMNVsLY2MVwZIN+w4gSkPsCOnhvVWMW9bDqRbSk5pHbaEjl/FPm2P/zY64
+         x6Wy0F1SVH1H+3RtSCmctC70yfHKJvZc+3+z98izCzN4IQUvyMmuAJdNqYhN0Q9XOiqe
+         HfGRWskJGUMVptImhU1eN3zFVvTOhuYPn3yKrPrIzWajM7IuZWAlMf3QEwGE2hw+nZI9
+         RpRI8C6Eux9Yv4ArtX9PpYsLc6Q6D2pGb6DoIUIpL688iPG/ZEXXh+X3DbMMTtd7HnPg
+         cQRLcBzwxEKngfJuDHzQqVBh6KyCbRjBBirgb4fWJhqoLQ6P4DxwgpBTKQDnbzXyMr+4
+         3RNg==
+X-Gm-Message-State: AOAM530JFQEetyLkqXnnkzp8nwIMESbqS9+S9VX5j2iA8QXIL+a03p/l
+        Z1qU52q4CJ44SM+ED/Pf2GHJOaJO04VhHZk2JA==
+X-Google-Smtp-Source: ABdhPJz2xsjxOvoK0J4Ck702AA6tUztWDi8Hr+jNkMDLFNqNVV9sSKYCidfmYBReGemdlea1AJeouFi1w4gUiDPqlYM=
+X-Received: by 2002:a50:9e82:: with SMTP id a2mr2760020edf.117.1604069910083;
+ Fri, 30 Oct 2020 07:58:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201026120221.18984-3-srinivas.kandagatla@linaro.org>
+Received: by 2002:a50:f14c:0:0:0:0:0 with HTTP; Fri, 30 Oct 2020 07:58:29
+ -0700 (PDT)
+Reply-To: li.anable85@gmail.com
+From:   Liliane Abel <k.griest04@gmail.com>
+Date:   Fri, 30 Oct 2020 15:58:29 +0100
+Message-ID: <CABAZL7kO5JQZMDhdiGK6i8XTXe8pbB5xWmsnDKzGXmDahQmacQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, 26 Oct 2020 12:02:19 +0000, Srinivas Kandagatla wrote:
-> Always ON Clock controller is a block inside LPASS which controls
-> 1 Glitch free muxes to LPASS codec Macros.
-> 
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  .../bindings/clock/qcom,aoncc-sm8250.yaml     | 58 +++++++++++++++++++
->  .../clock/qcom,sm8250-lpass-aoncc.h           | 11 ++++
->  2 files changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,aoncc-sm8250.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,sm8250-lpass-aoncc.h
-> 
+Dearest
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Greeting my dear, I am Liliane Abel by name, The only daughter of late
+Mr.Benson Abel. My father is one of the top Politician in our country
+and my mother is a farmers and cocoa merchant when they were both
+alive. After the death of my mother, long ago, my father was
+controlling their business until he was poisoned by his business
+associates which he suffered and died.
+
+Before the death of my father, He told me about (two million five
+hundred thousand united states dollars) which he deposited in the bank
+in Lome-Togo, It was the money he intended to transfer overseas for
+investment before he was poisoned. He also instructed me that I should
+seek for foreign partners in any country of my choice who will assist
+me transfer this money in overseas account where the money will be
+wisely invested.
+I am seeking for your kind assistance in the following ways:  (1) to
+provide a safe bank account into where the money will be transferred
+for investment. (2) To serve as a guardian of this fund since I am a
+girl of 19 years old. (3) To make arrangement for me to come over to
+your country to further my education. This is my reason for writing to
+you. Please if you are willing to assist me I will offer you 25% of
+the total money. Reply if  you are interested
+Best regards.
+Liliane Abel.
