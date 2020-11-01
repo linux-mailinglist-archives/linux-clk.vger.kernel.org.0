@@ -2,52 +2,58 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF702A1CCD
-	for <lists+linux-clk@lfdr.de>; Sun,  1 Nov 2020 10:19:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C304E2A1CDB
+	for <lists+linux-clk@lfdr.de>; Sun,  1 Nov 2020 10:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726118AbgKAJT5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 1 Nov 2020 04:19:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54232 "EHLO mail.kernel.org"
+        id S1726145AbgKAJ1O (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 1 Nov 2020 04:27:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59290 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725951AbgKAJTx (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 1 Nov 2020 04:19:53 -0500
+        id S1725951AbgKAJ1N (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 1 Nov 2020 04:27:13 -0500
 Received: from dragon (80.251.214.228.16clouds.com [80.251.214.228])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2FDF6207F7;
-        Sun,  1 Nov 2020 09:19:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 37EFE20706;
+        Sun,  1 Nov 2020 09:27:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604222392;
-        bh=0cz0N/T/rsg+3fv6C8LRYNPJTOKtFsw4AUUJWmA54Fo=;
+        s=default; t=1604222833;
+        bh=S148xYiDLkpqMjXcFmkJzuuhVelRZwJmOjteNJYXqKw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X+qwWLhwfwEweqpq4o0RqHkGe2+zhOT75WI+Zcoy/3qtEii+FL8I4UBp/O8hFWbFj
-         GRGwdPJf1JIxY4iq1gYDcLMoaTigDnKWK2uO3qJaN2jQhekoZzLIwu/tHqisUu7oR3
-         0FhYaefBcvVSEbHAYLsLNxiyGgK8khClr/G7W3c8=
-Date:   Sun, 1 Nov 2020 17:19:46 +0800
+        b=yOXZdPNQ8nzjrOJ1gSC+drld20Na0eN9i3SfWXg2wthRPYUH0p6oEG7DzIJ5w9xJk
+         H/NtfnU45L2bcZ6y6NKRFQn6nL3hB/MuIpsHuTcg+lEOgky2liAVvwm15BgDmemjQz
+         LKHyvDNB1r4VZU7xfZ90J/y1GdyAX9hGKzirxfsQ=
+Date:   Sun, 1 Nov 2020 17:27:06 +0800
 From:   Shawn Guo <shawnguo@kernel.org>
-To:     trix@redhat.com
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        Anson.Huang@nxp.com, abel.vesa@nxp.com, peng.fan@nxp.com,
-        leonard.crestez@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: imx: remove unneeded semicolon
-Message-ID: <20201101091945.GM31601@dragon>
-References: <20201027185756.1586607-1-trix@redhat.com>
+To:     Colin King <colin.king@canonical.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: imx: remove redundant assignment to pointer np
+Message-ID: <20201101092705.GO31601@dragon>
+References: <20201029224007.390762-1-colin.king@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201027185756.1586607-1-trix@redhat.com>
+In-Reply-To: <20201029224007.390762-1-colin.king@canonical.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 11:57:56AM -0700, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
+On Thu, Oct 29, 2020 at 10:40:07PM +0000, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
-> A semicolon is not needed after a switch statement.
+> Pointer np is being initialized with a value that is never read
+> and it is being updated with a value later on. The initialization
+> is redundant and can be removed.
 > 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> Addresses-Coverity: ("Unused value")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
 Applied, thanks.
