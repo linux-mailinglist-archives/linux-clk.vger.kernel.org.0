@@ -2,48 +2,90 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 058A92A1F1C
-	for <lists+linux-clk@lfdr.de>; Sun,  1 Nov 2020 16:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04BD82A20CF
+	for <lists+linux-clk@lfdr.de>; Sun,  1 Nov 2020 19:48:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726931AbgKAPdz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 1 Nov 2020 10:33:55 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:47652 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726637AbgKAPdz (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 1 Nov 2020 10:33:55 -0500
-Received: from p57b773f8.dip0.t-ipconnect.de ([87.183.115.248] helo=phil.fritz.box)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1kZFMZ-0003rS-NV; Sun, 01 Nov 2020 16:33:47 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Robin Murphy <robin.murphy@arm.com>, sboyd@kernel.org,
-        mturquette@baylibre.com
-Cc:     Heiko Stuebner <heiko@sntech.de>, linux-clk@vger.kernel.org,
-        zhangqing@rock-chips.com, linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] clk: rockchip: Add appropriate arch dependencies
-Date:   Sun,  1 Nov 2020 16:33:44 +0100
-Message-Id: <160424139255.1224767.12169508412175070171.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <72abb0f794b8ed77e274e8ee21c22e0bd3223dfd.1603710913.git.robin.murphy@arm.com>
-References: <72abb0f794b8ed77e274e8ee21c22e0bd3223dfd.1603710913.git.robin.murphy@arm.com>
+        id S1726995AbgKASsc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 1 Nov 2020 13:48:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726889AbgKASsc (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 1 Nov 2020 13:48:32 -0500
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38EFC0617A6;
+        Sun,  1 Nov 2020 10:48:31 -0800 (PST)
+Received: from apollo.fritz.box (unknown [IPv6:2a02:810c:c200:2e91:6257:18ff:fec4:ca34])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 0E18B22EDE;
+        Sun,  1 Nov 2020 19:48:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1604256509;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=QWuBDvG556P7DgFxAEfxlK29CFtxfxLBOH3cyEwiDWs=;
+        b=hsn85R6i3Tvv7DgWk7LrzbdV/K+WBvjafkVmOo0Jxfhvm4zNiYqrBIXERgs8hR/8Hov+HD
+        yoB9swCRB1rd0aw5hGfxiFD4UDaMJHY6bdkEP5stzKEouTPsngHqSJsi/HVsv/Fw+WU0Cv
+        5nV1q0GCdmmsWqsiuHTvMGtW4wUA8oY=
+From:   Michael Walle <michael@walle.cc>
+To:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH] clk: fsl-sai: fix memory leak
+Date:   Sun,  1 Nov 2020 19:48:18 +0100
+Message-Id: <20201101184818.2754-1-michael@walle.cc>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, 26 Oct 2020 11:17:20 +0000, Robin Murphy wrote:
-> There's no point offering support for 32-bit platforms to users
-> configuring a 64-bit kernel - and vice-versa - unless they are
-> explicitly interested in compile-testing.
+If the device is removed we don't unregister the composite clock. Fix
+that.
 
-Applied, thanks!
+Fixes: 9cd10205227c ("clk: fsl-sai: new driver")
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ drivers/clk/clk-fsl-sai.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-[1/1] clk: rockchip: Add appropriate arch dependencies
-      commit: 6e0781e092a150b040cc305fd1832730cf78580a
-
-Best regards,
+diff --git a/drivers/clk/clk-fsl-sai.c b/drivers/clk/clk-fsl-sai.c
+index 0221180a4dd7..1e81c8d8a6fd 100644
+--- a/drivers/clk/clk-fsl-sai.c
++++ b/drivers/clk/clk-fsl-sai.c
+@@ -68,9 +68,20 @@ static int fsl_sai_clk_probe(struct platform_device *pdev)
+ 	if (IS_ERR(hw))
+ 		return PTR_ERR(hw);
+ 
++	platform_set_drvdata(pdev, hw);
++
+ 	return devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, hw);
+ }
+ 
++static int fsl_sai_clk_remove(struct platform_device *pdev)
++{
++	struct clk_hw *hw = platform_get_drvdata(pdev);
++
++	clk_hw_unregister_composite(hw);
++
++	return 0;
++}
++
+ static const struct of_device_id of_fsl_sai_clk_ids[] = {
+ 	{ .compatible = "fsl,vf610-sai-clock" },
+ 	{ }
+@@ -79,6 +90,7 @@ MODULE_DEVICE_TABLE(of, of_fsl_sai_clk_ids);
+ 
+ static struct platform_driver fsl_sai_clk_driver = {
+ 	.probe = fsl_sai_clk_probe,
++	.remove = fsl_sai_clk_remove,
+ 	.driver		= {
+ 		.name	= "fsl-sai-clk",
+ 		.of_match_table = of_fsl_sai_clk_ids,
 -- 
-Heiko Stuebner <heiko@sntech.de>
+2.20.1
+
