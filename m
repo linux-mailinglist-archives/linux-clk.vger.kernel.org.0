@@ -2,27 +2,27 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BBD2A3605
-	for <lists+linux-clk@lfdr.de>; Mon,  2 Nov 2020 22:33:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3C42A3607
+	for <lists+linux-clk@lfdr.de>; Mon,  2 Nov 2020 22:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726246AbgKBVdK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 2 Nov 2020 16:33:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56602 "EHLO mail.kernel.org"
+        id S1725841AbgKBVdq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 2 Nov 2020 16:33:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57358 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725833AbgKBVdK (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 2 Nov 2020 16:33:10 -0500
+        id S1725833AbgKBVdq (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 2 Nov 2020 16:33:46 -0500
 Received: from kernel.org (unknown [104.132.1.79])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9CF61208A9;
-        Mon,  2 Nov 2020 21:33:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8EEE2208B6;
+        Mon,  2 Nov 2020 21:33:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604352789;
-        bh=q0GxEHGqosjt6x1owDiv1qpuVc+aUz4XwMh+N4FKJkY=;
+        s=default; t=1604352825;
+        bh=U1BkvZSwvx6lWjZUoBcs2be0FQU5WeuZX3Xt68Dyt+w=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=lHSWVktyhAhA31a3lOCbIw9L99praQeWGMKph1teOvqZuxtKsruKVhjr+8GuuK/yO
-         SXVFEenNTG+KLyL62qJ2Cwu3+dLoGHkiytR90sfT76k7sl2m5PKDqSCNhlvWPECr0m
-         mANht0IP5d6UfGCxoETslnk5EsG9R5CgnwN8TjSg=
+        b=HZVZS59yedvKVvVgWkP823Q8T0mnlsA+5xOCMT/YTvc9Bv4aig55zan8YMhcK2Cjy
+         +DfWihAgg9ein/iS8UuIQTXG3wpjdAp9xNwFDWn3AewFNtI4Mm4/j5zNpbmuzjsqIf
+         T/YlE2xhnGAmYYXCjNwF8Y8OKwAAyxb5YtS/b4aE=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
@@ -35,8 +35,8 @@ Cc:     linux-arm-kernel@lists.infradead.org, mturquette@baylibre.com,
         kernel@pengutronix.de, Dong Aisheng <aisheng.dong@nxp.com>,
         kernel test robot <lkp@intel.com>
 To:     Dong Aisheng <aisheng.dong@nxp.com>, linux-clk@vger.kernel.org
-Date:   Mon, 02 Nov 2020 13:33:08 -0800
-Message-ID: <160435278815.884498.2732985788967349377@swboyd.mtv.corp.google.com>
+Date:   Mon, 02 Nov 2020 13:33:44 -0800
+Message-ID: <160435282419.884498.14315761164677770440@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
@@ -91,4 +91,6 @@ d function [-Werror=3Dreturn-type]
 > Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
 > ---
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+Oh wait, I see this is upstream now.
+
+Applied to clk-fixes
