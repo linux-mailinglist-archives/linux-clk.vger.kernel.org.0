@@ -2,80 +2,71 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9522A43ED
-	for <lists+linux-clk@lfdr.de>; Tue,  3 Nov 2020 12:19:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C7D2A4415
+	for <lists+linux-clk@lfdr.de>; Tue,  3 Nov 2020 12:21:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728564AbgKCLTY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 3 Nov 2020 06:19:24 -0500
-Received: from inva021.nxp.com ([92.121.34.21]:41062 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728530AbgKCLTX (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 3 Nov 2020 06:19:23 -0500
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 196C420068E;
-        Tue,  3 Nov 2020 12:19:22 +0100 (CET)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 0CEA52002EB;
-        Tue,  3 Nov 2020 12:19:22 +0100 (CET)
-Received: from fsr-ub1664-175.ea.freescale.net (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 49E6D2033F;
-        Tue,  3 Nov 2020 12:19:21 +0100 (CET)
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Adam Ford <aford173@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>
-Cc:     NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        Abel Vesa <abel.vesa@nxp.com>
-Subject: [PATCH v5 14/14] arm64: dts: imx8mp: Add hdmi_blk_ctl node
-Date:   Tue,  3 Nov 2020 13:18:26 +0200
-Message-Id: <1604402306-5348-15-git-send-email-abel.vesa@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1604402306-5348-1-git-send-email-abel.vesa@nxp.com>
-References: <1604402306-5348-1-git-send-email-abel.vesa@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1728890AbgKCLUb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 3 Nov 2020 06:20:31 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7041 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728437AbgKCLUa (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 3 Nov 2020 06:20:30 -0500
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CQS4p3lZ5zhbPq;
+        Tue,  3 Nov 2020 19:20:26 +0800 (CST)
+Received: from linux-lmwb.huawei.com (10.175.103.112) by
+ DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
+ 14.3.487.0; Tue, 3 Nov 2020 19:20:22 +0800
+From:   Zou Wei <zou_wei@huawei.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
+        <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>
+CC:     <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Zou Wei <zou_wei@huawei.com>
+Subject: [PATCH -next] clk: imx: gate2: Remove unused variable ret
+Date:   Tue, 3 Nov 2020 19:32:14 +0800
+Message-ID: <1604403134-32814-1-git-send-email-zou_wei@huawei.com>
+X-Mailer: git-send-email 2.6.2
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.175.103.112]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Some of the features of the hdmi_ctl will be used by some
-different drivers in a way those drivers will know best, so adding the
-syscon compatible we allow those to do just that. Only the resets
-and the clocks are registered bit the clk-blk-ctl driver.
+This patch fixes below warning reported by coccicheck:
 
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+./clk-gate2.c:57:5-8: Unneeded variable: "ret". Return "0" on line 68
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Zou Wei <zou_wei@huawei.com>
 ---
- arch/arm64/boot/dts/freescale/imx8mp.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/clk/imx/clk-gate2.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-index 8e1a01f..f1c5a07d 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-@@ -756,6 +756,13 @@
- 				#clock-cells = <1>;
- 				#reset-cells = <1>;
- 			};
-+
-+			hdmi_blk_ctl: clock-controller@32fc0000 {
-+				compatible = "fsl,imx8mp-hdmi-blk-ctl", "syscon";
-+				reg = <0x32fc0000 0x1000>;
-+				#clock-cells = <1>;
-+				#reset-cells = <1>;
-+			};
- 		};
+diff --git a/drivers/clk/imx/clk-gate2.c b/drivers/clk/imx/clk-gate2.c
+index 480a184..f16c401 100644
+--- a/drivers/clk/imx/clk-gate2.c
++++ b/drivers/clk/imx/clk-gate2.c
+@@ -54,7 +54,6 @@ static int clk_gate2_enable(struct clk_hw *hw)
+ {
+ 	struct clk_gate2 *gate = to_clk_gate2(hw);
+ 	unsigned long flags;
+-	int ret = 0;
  
- 		aips5: bus@30c00000 {
+ 	spin_lock_irqsave(gate->lock, flags);
+ 
+@@ -65,7 +64,7 @@ static int clk_gate2_enable(struct clk_hw *hw)
+ out:
+ 	spin_unlock_irqrestore(gate->lock, flags);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static void clk_gate2_disable(struct clk_hw *hw)
 -- 
-2.7.4
+2.6.2
 
