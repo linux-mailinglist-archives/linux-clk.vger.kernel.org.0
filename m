@@ -2,126 +2,129 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2592B2A92AE
-	for <lists+linux-clk@lfdr.de>; Fri,  6 Nov 2020 10:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED232A92E5
+	for <lists+linux-clk@lfdr.de>; Fri,  6 Nov 2020 10:38:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726847AbgKFJ3Q (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 6 Nov 2020 04:29:16 -0500
-Received: from esa6.microchip.iphmx.com ([216.71.154.253]:35823 "EHLO
-        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726075AbgKFJ3P (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 6 Nov 2020 04:29:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1604654954; x=1636190954;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=gVkb/HduIodWBWgTTPTKx7ktzM9BdW4BzHHiUogCOBA=;
-  b=EMsYpC5W6prvu32KayMOM+I0Cip4suigBeLbESbwkhhqmb92Waz8iXth
-   3rucJ1Z2jCcbVaCGBMo7Bxmh5pJ3XTz8Dcm38kINcHvx1TT68jStIoGdr
-   e5L7HTC8f5xOyiAT9oOa0hTc6XwJ2acMOvipmdpfCibTq5YGyfafSwddx
-   X1t3CbQpvZPFSuiBYmt/NByPRxN+US5tG//dDsvRKBUulMzIGPyOglU7m
-   bDdjdLjjW2AotFdE6fUuMzBDknAWkSa1q+/fXnUYgsk6zfVk6eZr5f9sX
-   tu2yb/vGwMj9vGSgcDWHV9EnLZrU09wb4WRI9haC9mCEeVxbNKELu086R
-   w==;
-IronPort-SDR: brLV06t69z/RE5qkkjWcLaugPFrSLPf8vJKxAkexZDRP3U/bxqRbNv1ga8FZRPWgSQNsD14qrP
- B5Bym63fGrYRfNlbtDneQ2oOQq2rLNCy7g5ZSd8inOWibWlSr1LqyXprl1yaTjHVUgP+f7z5Ez
- E/CkyeGBe5mLZTQws0x03maNY/LHj6tTutkg1YeqrzNTRo+/+6FCvca8rshGZjDybrrpEQfbjk
- sHGJr4Dnn6PyilOQhJ/V7YigCcGynvW1II8OWEq0HWgMUVE3mpFI1K2oqEWg8Tlc24BNfVVsNg
- szg=
-X-IronPort-AV: E=Sophos;i="5.77,456,1596524400"; 
-   d="scan'208";a="32677829"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Nov 2020 02:29:11 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 6 Nov 2020 02:29:11 -0700
-Received: from m18063-ThinkPad-T460p.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Fri, 6 Nov 2020 02:29:06 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <ludovic.desroches@microchip.com>, <robh+dt@kernel.org>
-CC:     <eugen.hristev@microchip.com>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v3 11/11] clk: at91: sama7g5: register cpu clock
-Date:   Fri, 6 Nov 2020 11:28:04 +0200
-Message-ID: <1604654884-30339-12-git-send-email-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1604654884-30339-1-git-send-email-claudiu.beznea@microchip.com>
-References: <1604654884-30339-1-git-send-email-claudiu.beznea@microchip.com>
+        id S1726124AbgKFJif (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 6 Nov 2020 04:38:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57344 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725868AbgKFJif (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 6 Nov 2020 04:38:35 -0500
+Received: from localhost (unknown [122.179.17.95])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0FFCB208FE;
+        Fri,  6 Nov 2020 09:38:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604655513;
+        bh=X25UXPXttjy8TXg+mepAbodJpN8EbjzFhU0N6Tt/O5o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TIFgCQ8jrd8ROgegdhFxtkKtfNdnpln9XURXOm3SnikZPaBtFt/TCvVsOg7TtlP0O
+         GdYfDnQQuY1HF9MTYiXH2IgEzv5idkCzAgvtu6GfiP3WfnuVo1+bCgEU+eImapQjOI
+         uEdjn5I3wNU16iinGD04PC9nZBZ7V2qy61A4uAVU=
+Date:   Fri, 6 Nov 2020 15:08:19 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     sboyd@kernel.org, mturquette@baylibre.com, robh+dt@kernel.org,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Naveen Yadav <naveenky@codeaurora.org>
+Subject: Re: [PATCH v2 2/4] clk: qcom: Add SDX55 GCC support
+Message-ID: <20201106093819.GE2621@vkoul-mobl>
+References: <20201105104817.15715-1-manivannan.sadhasivam@linaro.org>
+ <20201105104817.15715-3-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201105104817.15715-3-manivannan.sadhasivam@linaro.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Register CPU clock as being the master clock prescaler. This would
-be used by DVFS. The block schema of SAMA7G5's PMC contains also a divider
-between master clock prescaler and CPU (PMC_CPU_RATIO.RATIO) but the
-frequencies supported by SAMA7G5 could be directly received from
-CPUPLL + master clock prescaler and the extra divider would do no work in
-case it would be enabled.
+On 05-11-20, 16:18, Manivannan Sadhasivam wrote:
+> From: Naveen Yadav <naveenky@codeaurora.org>
+> 
+> Add Global Clock Controller (GCC) support for SDX55 SoCs from Qualcomm.
+> 
+> Signed-off-by: Naveen Yadav <naveenky@codeaurora.org>
+> [mani: converted to parent_data, commented critical clocks, cleanups]
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  drivers/clk/qcom/Kconfig     |    7 +
+>  drivers/clk/qcom/Makefile    |    1 +
+>  drivers/clk/qcom/gcc-sdx55.c | 1626 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 1634 insertions(+)
+>  create mode 100644 drivers/clk/qcom/gcc-sdx55.c
+> 
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index 3a965bd326d5..7897a3947e6d 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -413,6 +413,13 @@ config SDM_LPASSCC_845
+>  	  Say Y if you want to use the LPASS branch clocks of the LPASS clock
+>  	  controller to reset the LPASS subsystem.
+>  
+> +config SDX_GCC_55
+> +	tristate "SDX55 Global Clock Controller"
+> +	help
+> +	  Support for the global clock controller on SDX55 devices.
+> +	  Say Y if you want to use peripheral devices such as UART,
+> +	  SPI, I2C, USB, SD/UFS, PCIe etc.
+> +
+>  config SM_DISPCC_8250
+>  	tristate "SM8150 and SM8250 Display Clock Controller"
+>  	depends on SM_GCC_8150 || SM_GCC_8250
+> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+> index 11ae86febe87..886b877e70c7 100644
+> --- a/drivers/clk/qcom/Makefile
+> +++ b/drivers/clk/qcom/Makefile
+> @@ -64,6 +64,7 @@ obj-$(CONFIG_SDM_GCC_845) += gcc-sdm845.o
+>  obj-$(CONFIG_SDM_GPUCC_845) += gpucc-sdm845.o
+>  obj-$(CONFIG_SDM_LPASSCC_845) += lpasscc-sdm845.o
+>  obj-$(CONFIG_SDM_VIDEOCC_845) += videocc-sdm845.o
+> +obj-$(CONFIG_SDX_GCC_55) += gcc-sdx55.o
+>  obj-$(CONFIG_SM_DISPCC_8250) += dispcc-sm8250.o
+>  obj-$(CONFIG_SM_GCC_8150) += gcc-sm8150.o
+>  obj-$(CONFIG_SM_GCC_8250) += gcc-sm8250.o
+> diff --git a/drivers/clk/qcom/gcc-sdx55.c b/drivers/clk/qcom/gcc-sdx55.c
+> new file mode 100644
+> index 000000000000..bf114165e24b
+> --- /dev/null
+> +++ b/drivers/clk/qcom/gcc-sdx55.c
+> @@ -0,0 +1,1626 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2018-2019, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2020, Linaro Ltd.
+> + */
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +
+> +#include <dt-bindings/clock/qcom,gcc-sdx55.h>
+> +
+> +#include "common.h"
+> +#include "clk-alpha-pll.h"
+> +#include "clk-branch.h"
+> +#include "clk-pll.h"
+> +#include "clk-rcg.h"
+> +#include "clk-regmap.h"
+> +#include "reset.h"
+> +
+> +enum {
+> +	P_BI_TCXO,
+> +	P_CORE_BI_PLL_TEST_SE,
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- drivers/clk/at91/sama7g5.c       | 13 ++++++-------
- include/dt-bindings/clock/at91.h |  1 +
- 2 files changed, 7 insertions(+), 7 deletions(-)
+This is for test and we removed this for upstream, so can you do that as
+well (not parent will decrease for clks below)
 
-diff --git a/drivers/clk/at91/sama7g5.c b/drivers/clk/at91/sama7g5.c
-index be32d9b88d89..40fceb7595d4 100644
---- a/drivers/clk/at91/sama7g5.c
-+++ b/drivers/clk/at91/sama7g5.c
-@@ -885,7 +885,7 @@ static void __init sama7g5_pmc_setup(struct device_node *np)
- 	if (IS_ERR(regmap))
- 		return;
- 
--	sama7g5_pmc = pmc_data_allocate(PMC_ETHPLL + 1,
-+	sama7g5_pmc = pmc_data_allocate(PMC_CPU + 1,
- 					nck(sama7g5_systemck),
- 					nck(sama7g5_periphck),
- 					nck(sama7g5_gck), 8);
-@@ -962,18 +962,17 @@ static void __init sama7g5_pmc_setup(struct device_node *np)
- 		}
- 	}
- 
--	parent_names[0] = md_slck_name;
--	parent_names[1] = "mainck";
--	parent_names[2] = "cpupll_divpmcck";
--	parent_names[3] = "syspll_divpmcck";
--	hw = at91_clk_register_master_pres(regmap, "mck0_pres", 4, parent_names,
-+	parent_names[0] = "cpupll_divpmcck";
-+	hw = at91_clk_register_master_pres(regmap, "cpuck", 1, parent_names,
- 					   &mck0_layout, &mck0_characteristics,
- 					   &pmc_mck0_lock,
- 					   CLK_SET_RATE_PARENT, 0);
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
--	hw = at91_clk_register_master_div(regmap, "mck0_div", "mck0_pres",
-+	sama7g5_pmc->chws[PMC_CPU] = hw;
-+
-+	hw = at91_clk_register_master_div(regmap, "mck0", "cpuck",
- 					  &mck0_layout, &mck0_characteristics,
- 					  &pmc_mck0_lock, 0);
- 	if (IS_ERR(hw))
-diff --git a/include/dt-bindings/clock/at91.h b/include/dt-bindings/clock/at91.h
-index fab313f62e8f..98e1b2ab6403 100644
---- a/include/dt-bindings/clock/at91.h
-+++ b/include/dt-bindings/clock/at91.h
-@@ -34,6 +34,7 @@
- #define PMC_AUDIOPMCPLL		(PMC_MAIN + 6)
- #define PMC_AUDIOIOPLL		(PMC_MAIN + 7)
- #define PMC_ETHPLL		(PMC_MAIN + 8)
-+#define PMC_CPU			(PMC_MAIN + 9)
- 
- #ifndef AT91_PMC_MOSCS
- #define AT91_PMC_MOSCS		0		/* MOSCS Flag */
+With that updated:
+
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
+
 -- 
-2.7.4
-
+~Vinod
