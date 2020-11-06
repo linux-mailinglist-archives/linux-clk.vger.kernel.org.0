@@ -2,97 +2,98 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B424C2A94B8
-	for <lists+linux-clk@lfdr.de>; Fri,  6 Nov 2020 11:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3790E2A9611
+	for <lists+linux-clk@lfdr.de>; Fri,  6 Nov 2020 13:16:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726960AbgKFKve (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 6 Nov 2020 05:51:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36910 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726832AbgKFKvd (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 6 Nov 2020 05:51:33 -0500
-Received: from localhost (otava-0257.koleje.cuni.cz [78.128.181.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8F19420724;
-        Fri,  6 Nov 2020 10:51:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604659893;
-        bh=VRH0OOsTmug4IluCYlUGvOuQXo2JVTTtYzsTQcMKftI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DR5GjgYnxgYfNUy4hxBJ+GkFu3TNlmpO0aaYPkTbPYlxY0rr4ihwrVMNDTN2Ds1lO
-         zjmit0mzO3nbNkk60AsmHKvxMhMqtY8XeVPwSkNIvGUwHsgdzGJviJ1Y0rhDaJqAXQ
-         KSHS80Rm+ob1CkN8BWqPmpBGJJSb7/AosGPxF6DQ=
-Date:   Fri, 6 Nov 2020 11:51:18 +0100
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Terry Zhou <bjzhou@marvell.com>,
-        Konstantin Porotchkin <kostap@marvell.com>
-Subject: Re: [PATCH] clk: mvebu: a3700: fix the XTAL MODE pin to MPP1_9
-Message-ID: <20201106115118.43eab492@kernel.org>
-In-Reply-To: <20201106100039.11385-1-pali@kernel.org>
-References: <20201106100039.11385-1-pali@kernel.org>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1727014AbgKFMQn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 6 Nov 2020 07:16:43 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:40494 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726317AbgKFMQn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 6 Nov 2020 07:16:43 -0500
+Received: by mail-ot1-f66.google.com with SMTP id 79so1027071otc.7;
+        Fri, 06 Nov 2020 04:16:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+xDAzLUg1c4ATFWXTeoRwJCCaKgy8LRS6wAzG60O47w=;
+        b=ZxT85t7P/JQRL4PmUhadUdBofRxWfA7uLrA2PoxAHpGWsv7avbzBUV155cqrOStLDR
+         KBGrII4v8l8cN3K/XMGZtdvq3GbgiYgkGzjDmA09yHVgzPNwfEosoeojzYawQE8VUsvn
+         v9hIhnzUc6j7LXdXl3+tns38ZpOi9UUmjkV1J2g38VStCxRixhjRkGYSAmprfAFGymVT
+         eJLMFj7Y0Jhgi4Xc2c7DYe3BxVnAzISiK8JKoqTQkO58WTvpL+ipSN2uu7WuzhmB9hdG
+         jfPE3agpycp3LxOXWkcOxMysBlXjHfKr9JAW1V3am26yNgZ8NDPAThF44IAEDNy6xTby
+         El1w==
+X-Gm-Message-State: AOAM533MLDaHt6XIdsPMW0rM5aExal6VtqAWLTJ1YtFdZTZ32uNHhF8P
+        POHm32trDJ9Z5aPhtAxUvL+DpoVIh4GpfqT/cgI=
+X-Google-Smtp-Source: ABdhPJwsCD7JJXjqS83wKh2AZm22ZIVZUyx+6LkKKzYyucmo+SZ5UmKV2U6I9aLbPMfL4719sAv0kSWGYWR5vCEm8/o=
+X-Received: by 2002:a05:6830:210a:: with SMTP id i10mr914074otc.145.1604665002287;
+ Fri, 06 Nov 2020 04:16:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <1602873815-1677-1-git-send-email-tdas@codeaurora.org>
+ <1602873815-1677-5-git-send-email-tdas@codeaurora.org> <160454346831.3965362.1176963402805166784@swboyd.mtv.corp.google.com>
+In-Reply-To: <160454346831.3965362.1176963402805166784@swboyd.mtv.corp.google.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 6 Nov 2020 13:16:31 +0100
+Message-ID: <CAMuHMdXL9ZdLQGtgZM3nqcQoBrUnjGaS5Hg3cB7zrW8WFGyOjg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/4] clk: qcom: camcc: Add camera clock controller
+ driver for SC7180
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <tdas@codeaurora.org>,
+        David Brown <david.brown@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Herring <robh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Also, this is how A3720 WTMI code and ATF determines XTAL clock rate.
-No reason for kernel to do it differently.
+On Thu, Nov 5, 2020 at 5:52 AM Stephen Boyd <sboyd@kernel.org> wrote:
+> Quoting Taniya Das (2020-10-16 11:43:35)
+> > Add support for the camera clock controller found on SC7180 based devices.
+> > This would allow camera drivers to probe and control their clocks.
+> >
+> > Signed-off-by: Taniya Das <tdas@codeaurora.org>
+> > ---
+>
+> Applied to clk-next with some minor fixups.
 
-Reviewed-by: Marek Beh=C3=BAn <kabel@kernel.org>
+On Fri, Nov 6, 2020 at 8:43 AM <noreply@ellerman.id.au> wrote:
+> FAILED linux-next/m68k-allmodconfig/m68k-gcc8 Fri Nov 06, 18:35
+>
+> http://kisskb.ellerman.id.au/kisskb/buildresult/14393224/
+>
+> Commit:   Add linux-next specific files for 20201106
+>           c34f157421f6905e6b4a79a312e9175dce2bc607
+> Compiler: m68k-linux-gcc (GCC) 8.1.0 / GNU ld (GNU Binutils) 2.30
+>
+> Possible errors
+> ---------------
+>
+> drivers/clk/qcom/camcc-sc7180.c:1672:8: error: implicit declaration of function 'pm_clk_runtime_resume'; did you mean 'pm_runtime_resume'? [-Werror=implicit-function-declaration]
+> drivers/clk/qcom/camcc-sc7180.c:1681:3: error: implicit declaration of function 'pm_clk_runtime_suspend'; did you mean 'pm_runtime_suspend'? [-Werror=implicit-function-declaration]
+> cc1: some warnings being treated as errors
+> make[4]: *** [scripts/Makefile.build:283: drivers/clk/qcom/camcc-sc7180.o] Error 1
+> make[3]: *** [scripts/Makefile.build:500: drivers/clk/qcom] Error 2
 
-On Fri,  6 Nov 2020 11:00:39 +0100
-Pali Roh=C3=A1r <pali@kernel.org> wrote:
+The pm_clk_runtime_*() functions are only available if CONFIG_PM=y.
+No dummies are provided for the CONFIG_PM=n case yet.
 
-> From: Terry Zhou <bjzhou@marvell.com>
->=20
-> There is an error in the current code that the XTAL MODE
-> pin was set to NB MPP1_31 which should be NB MPP1_9.
-> The latch register of NB MPP1_9 has different offset of 0x8.
->=20
-> Signed-off-by: Terry Zhou <bjzhou@marvell.com>
-> [pali: Fix pin name in commit message]
-> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
-> Fixes: 7ea8250406a6 ("clk: mvebu: Add the xtal clock for Armada 3700 SoC")
-> Cc: stable@vger.kernel.org
->=20
-> ---
-> This patch is present in Marvell SDK and also in Marvell's kernel fork:
-> https://github.com/MarvellEmbeddedProcessors/linux-marvell/commit/80d4cec=
-4cef8282e5ac3aaf98ce3e68fb299a134
->=20
-> Konstantin Porotchkin wrote on Github that Gregory Clement was notified
-> about this patch, but as this patch is still not in mainline kernel I'm
-> sending it again for review.
->=20
-> In original commit message (only in commit message, not code) was
-> specified MPP9 pin on South Bridge, but correct is North Bridge.
-> ---
->  drivers/clk/mvebu/armada-37xx-xtal.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/clk/mvebu/armada-37xx-xtal.c b/drivers/clk/mvebu/arm=
-ada-37xx-xtal.c
-> index e9e306d4e9af..41271351cf1f 100644
-> --- a/drivers/clk/mvebu/armada-37xx-xtal.c
-> +++ b/drivers/clk/mvebu/armada-37xx-xtal.c
-> @@ -13,8 +13,8 @@
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
-> =20
-> -#define NB_GPIO1_LATCH	0xC
-> -#define XTAL_MODE	    BIT(31)
-> +#define NB_GPIO1_LATCH	0x8
-> +#define XTAL_MODE	    BIT(9)
-> =20
->  static int armada_3700_xtal_clock_probe(struct platform_device *pdev)
->  {
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
