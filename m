@@ -2,114 +2,148 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DF62AADA8
-	for <lists+linux-clk@lfdr.de>; Sun,  8 Nov 2020 22:21:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A692AAF13
+	for <lists+linux-clk@lfdr.de>; Mon,  9 Nov 2020 03:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728038AbgKHVVr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 8 Nov 2020 16:21:47 -0500
-Received: from mail-eopbgr80054.outbound.protection.outlook.com ([40.107.8.54]:65088
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727910AbgKHVVq (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 8 Nov 2020 16:21:46 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YlpG/hzmMvT0mnI//ZlZ2V4q7W88QH8az508aaPTF3Bxp8JmEyTPJ38iN5E+o0ObQFX5aWIIx2tpPpxaPBDsG9iJClPfdobGHhOOqzbiEj26EiCjhNkuq0r/K19MXstgb81JSOur8kfk9f1R+w9VaZS76B/XjbiTyOEOh0l3069rSo1yekBYsRpn6fo1p37ayKkA4IsZbIQ0p0Z09kT3dnYSFbzhz0UuN30CtG/UetfXc8359CJTGRfpKA5BeDoqLJPqs2vpOct2LcI+xq8+0mYm8YcbEGCcm8QblbQJhFDZFjIc94Az8+rDWaKFS4USePhyTe0oVUQNPT7WlOVIpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y9kDwjD4nJ6zI/8fcCB1CYCEIVBvXaQzXrHHJCAIxE0=;
- b=d7i16izuT8fH4lmV5oct7iymmec9ZM5HZHQcK6LH78ruRtKzvdslVmIBQ3IYOsc5wbg9otRju8hwyxQDxwyuUrYPrwWpr3fh1kHJ3bgevg8/On1Mstf08+fkxjmSN7PPo8BnTEz4AHYpNcDP8xF49bxwz5jjOQ09fUXWSMsJxpYS3zfWQQWiIU4Tfn99lhdJuTOYeoLxB6cBvGCvk+jGKN9XZRg8KhZaqzsR9WbZB1wgK8RrGhcBV+ss5eI22hqva6B8XpRhR2O7mxt0vqY5Xa7/YhMwNw1UVFaPA/EZ5h70wXWWVZZj4BBfFeCn07hdnEB/xwX8TELS0CJ0blEr7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y9kDwjD4nJ6zI/8fcCB1CYCEIVBvXaQzXrHHJCAIxE0=;
- b=jEMHsT/t5rDV8dFyinBQr1z4nXmuk8ms9ANDReuu/EFQRvyxU1in0g39u4hF1SaLvk0+500j13uUa8tQpaOuoSgU5zQudSErtPTek8HYskyZb6302cmaAYVPJIl03vZoutDruFCP+DbEbFjhcOEdMEqCK2qkeN5FY7aUkdnHDJ8=
-Received: from AM6PR04MB5685.eurprd04.prod.outlook.com (2603:10a6:20b:a4::30)
- by AM6PR0402MB3944.eurprd04.prod.outlook.com (2603:10a6:209:1c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21; Sun, 8 Nov
- 2020 21:21:40 +0000
-Received: from AM6PR04MB5685.eurprd04.prod.outlook.com
- ([fe80::c62:742e:bcca:e226]) by AM6PR04MB5685.eurprd04.prod.outlook.com
- ([fe80::c62:742e:bcca:e226%4]) with mapi id 15.20.3499.032; Sun, 8 Nov 2020
- 21:21:40 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Leo Li <leoyang.li@nxp.com>,
-        "Y.b. Lu" <yangbo.lu@nxp.com>, Xiaowei Bao <xiaowei.bao@nxp.com>,
-        Ashish Kumar <ashish.kumar@nxp.com>
-Subject: Re: [RFC PATCH v3 9/9] arm64: dts: lx2160a: fix FlexSPI clock
-Thread-Topic: [RFC PATCH v3 9/9] arm64: dts: lx2160a: fix FlexSPI clock
-Thread-Index: AQHWtgAtKyW9G4asMEKhHnQyvrTE46m+vkqA
-Date:   Sun, 8 Nov 2020 21:21:40 +0000
-Message-ID: <20201108212139.ht22zdk27pyxv6wc@skbuf>
-References: <20201108185113.31377-1-michael@walle.cc>
- <20201108185113.31377-10-michael@walle.cc>
-In-Reply-To: <20201108185113.31377-10-michael@walle.cc>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: walle.cc; dkim=none (message not signed)
- header.d=none;walle.cc; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [188.25.2.177]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 7d417aa5-7061-4d27-d5b2-08d8842c48b9
-x-ms-traffictypediagnostic: AM6PR0402MB3944:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR0402MB3944C33A20355D5B01D3100FE0EB0@AM6PR0402MB3944.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: snMcSu8VojHihkLWOrl5KqN6udvri8DaRTx9OCTh2YDfbmRgZojr8LgoRmACdXTm2SPEuvrTiJ4RdoWTFH4XrqPotB8H3e+mHYPx+OPD1VPLfaU+n+LAYAVdeTcl5QkRoDWhJEK41bsY6kxX7fWvU5SkYuJtHOO8uzCrga5mH3Gkoa3lCy4dExuj09VRpfKL+hhHN8NdfH3KGG8J0PmnUVpu+GbZz6TXcvE+tM5Vw3M4yfw0pbJOUWVyrgHVpawdE9mk4lw9gJp9IvMi8vtlJDOOqb6BUTkJ/8eDH6AJVCvKLOXgwVpi1qsDM1Qy+9TxkQrhLDzeIO8TNA3B0lCrFg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB5685.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(366004)(39860400002)(346002)(136003)(396003)(376002)(5660300002)(6512007)(9686003)(6506007)(1076003)(6916009)(44832011)(91956017)(4744005)(66946007)(86362001)(66446008)(8936002)(186003)(76116006)(4326008)(8676002)(478600001)(71200400001)(83380400001)(64756008)(66556008)(316002)(2906002)(6486002)(54906003)(66476007)(33716001)(26005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: NQjvvAarKM1rcLGC2ov8h5K22WmVjd4smR97Di0RakqKHXAnn6beV6Oh83iFS0qE/CTrar7BtF/b6Fkkw+NFVRIZOrJV8G2vAigyWDC1jzIu4w+1065JcLhXbxX8zjWx88C1t9kjbngguE1agJDe5TFNg8wjUu9iGYAHL1Qnyvn4VOq5EyrdPO6gBg5eCv1ymizp0Nr1phYSyyYsktheQHlnJrKhIWW1aBg/mme16lahKpbiEWrnKqJGvUlz1LqhWCgpTmy49sWz/afrNiqCiZs3hCbq1VhQLIQiUaiiTQ81uDksTPu26SIqY/AVkJrnGpVOqkKC3svLr4Rgqo8MRZDvpQX/jurvR/6vtSlB7/NJiTyv7Lq+M0O0CMO982h7htmEn5pJbTsgVeJlpUL6t9cmmm374+hFR4KcrIlKvXoqtXORc/puwYL4tTQSiwjtRfpK+2KP0J0lXY7kAmhkxQJzB0XoOZS6T2eQbupBAdyULeDu1PU/PRv1DfPo7yS9iMwaiQLv2ckjWVcjzBcC8O47JBNCBm7HFMQ0WxjirQY9DeOp2sTfEmaoRHKfFotY/rB9knIpHMmrLCy5jgNdox/He7hL+REzChw4DIeTBVVk3zQ6M6qt/npNFF7gZuCTu60OW0l88PQ+s8cOTxed0A==
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <082F56944ED14142BB953CD58602C62A@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1729038AbgKICJM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 8 Nov 2020 21:09:12 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:58255 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728006AbgKICJL (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 8 Nov 2020 21:09:11 -0500
+X-UUID: 1dc9b631cafa45c2b36a927bb484fc75-20201109
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=8ybM21HPGnHRsJaEMX+fhVDh9NwKI7Uw2wQE7IqNyJA=;
+        b=gHNT3FxUCuEIniRe7+F5Ep8kX5126Ywp0JevEP0Ig63Da+xu4lP46nZWb9j/bi3t7EgT7KV3sgMPiHnsjGA29TEpNhuhS8/fZIPVBIfBH7Umyr38bk/3qByaEwxtHVG3B5AMb6fqTd+Y5F+NY8DEDpnM4gPtLLmsiZ+CpB4T4A8=;
+X-UUID: 1dc9b631cafa45c2b36a927bb484fc75-20201109
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <weiyi.lu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 671499912; Mon, 09 Nov 2020 10:03:52 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 9 Nov 2020 10:03:50 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 9 Nov 2020 10:03:51 +0800
+From:   Weiyi Lu <weiyi.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>, Weiyi Lu <weiyi.lu@mediatek.com>,
+        Yingjoe Chen <yingjoe.chen@mediatek.com>
+Subject: [PATCH v5 00/24] Mediatek MT8192 clock support
+Date:   Mon, 9 Nov 2020 10:03:25 +0800
+Message-ID: <1604887429-29445-1-git-send-email-weiyi.lu@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB5685.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d417aa5-7061-4d27-d5b2-08d8842c48b9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Nov 2020 21:21:40.5351
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZPsJVh2C/OmF59iwor23jfrKMNzSPDfVpA24ZuIpwZepRlVRLmx84DukoyTbnOwL1WmCdWeOSEd6ZeuEaT0tQw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0402MB3944
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sun, Nov 08, 2020 at 07:51:13PM +0100, Michael Walle wrote:
-> Now that we have a proper driver for the FlexSPI interface use it. This
-> will fix SCK frequency switching on Layerscape SoCs.
->=20
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
-> Thanks to Vladimir Oltean, this was partially tested on a LX2160A RDB. Bu=
-t
-> this patch is marked as RFC nonetheless, because there is too much
-> difference in the clock tree between LS1028A and LX2160A. It would be nic=
-e
-> if someone could test it and add a Tested-by.
+VGhpcyBzZXJpZXMgaXMgYmFzZWQgb24gdjUuMTAtcmMxIGFuZCBNVDgxOTIgZHRzIHY2WzFdLg0K
+DQpbMV0gaHR0cHM6Ly9wYXRjaHdvcmsua2VybmVsLm9yZy9wcm9qZWN0L2xpbnV4LW1lZGlhdGVr
+L3BhdGNoLzIwMjAxMDMwMDkyMjA3LjI2NDg4LTItc2VpeWEud2FuZ0BtZWRpYXRlay5jb20vDQoN
+CmNoYW5nZSBzaW5jZSB2NDoNCi0gbWVyZ2Ugc29tZSBzdWJzeXN0ZW0gaW50byBzYW1lIGRyaXZl
+cg0KLSBhZGQgYSBnZW5lcmljIHByb2JlIGZ1bmN0aW9uIHRvIHJlZHVjZSBkdXBsaWNhdGVkIGNv
+ZGUNCg0KY2hhbmdlcyBzaW5jZSB2MzoNCi0gYWRkIGNyaXRpY2FsIGNsb2Nrcw0KLSBzcGxpdCBs
+YXJnZSBwYXRjaGVzIGludG8gc21hbGwgb25lcw0KDQpjaGFuZ2VzIHNpbmNlIHYyOg0KLSB1cGRh
+dGUgYW5kIHNwbGl0IGR0LWJpbmRpbmcgZG9jdW1lbnRzIGJ5IGZ1bmN0aW9uYWxpdGllcw0KLSBh
+ZGQgZXJyb3IgY2hlY2tpbmcgaW4gcHJvYmUoKSBmdW5jdGlvbg0KLSBmaXggaW5jb3JyZWN0IGNs
+b2NrIHJlbGF0aW9uIGFuZCBhZGQgY3JpdGljYWwgY2xvY2tzDQotIHVwZGF0ZSBsaWNlbnNlIGlk
+ZW50aWZpZXIgYW5kIG1pbm9yIGZpeCBvZiBjb2Rpbmcgc3R5bGUNCg0KY2hhbmdlcyBzaW5jZSB2
+MToNCi0gZml4IGFzeW1tZXRyaWNhbCBjb250cm9sIG9mIFBMTA0KLSBoYXZlIGVuX21hc2sgdXNl
+ZCBhcyBkaXZpZGVyIGVuYWJsZSBtYXNrIG9uIGFsbCBNZWRpYVRlayBTb0MNCg0KV2VpeWkgTHUg
+KDI0KToNCiAgZHQtYmluZGluZ3M6IEFSTTogTWVkaWF0ZWs6IEFkZCBuZXcgZG9jdW1lbnQgYmlu
+ZGluZ3Mgb2YgaW1wIGkyYw0KICAgIHdyYXBwZXIgY29udHJvbGxlcg0KICBkdC1iaW5kaW5nczog
+QVJNOiBNZWRpYXRlazogQWRkIG5ldyBkb2N1bWVudCBiaW5kaW5ncyBvZiBtZHBzeXMNCiAgICBj
+b250cm9sbGVyDQogIGR0LWJpbmRpbmdzOiBBUk06IE1lZGlhdGVrOiBBZGQgbmV3IGRvY3VtZW50
+IGJpbmRpbmdzIG9mIG1zZGMNCiAgICBjb250cm9sbGVyDQogIGR0LWJpbmRpbmdzOiBBUk06IE1l
+ZGlhdGVrOiBBZGQgbmV3IGRvY3VtZW50IGJpbmRpbmdzIG9mIHNjcCBhZHNwDQogICAgY29udHJv
+bGxlcg0KICBkdC1iaW5kaW5nczogQVJNOiBNZWRpYXRlazogRG9jdW1lbnQgYmluZGluZ3Mgb2Yg
+TVQ4MTkyIGNsb2NrDQogICAgY29udHJvbGxlcnMNCiAgY2xrOiBtZWRpYXRlazogQWRkIGR0LWJp
+bmRpbmdzIG9mIE1UODE5MiBjbG9ja3MNCiAgY2xrOiBtZWRpYXRlazogRml4IGFzeW1tZXRyaWNh
+bCBQTEwgZW5hYmxlIGFuZCBkaXNhYmxlIGNvbnRyb2wNCiAgY2xrOiBtZWRpYXRlazogQWRkIGNv
+bmZpZ3VyYWJsZSBlbmFibGUgY29udHJvbCB0byBtdGtfcGxsX2RhdGENCiAgY2xrOiBtZWRpYXRl
+azogQWRkIG10a19jbGtfc2ltcGxlX3Byb2JlKCkgdG8gc2ltcGxpZnkgY2xvY2sgcHJvdmlkZXJz
+DQogIGNsazogbWVkaWF0ZWs6IEFkZCBNVDgxOTIgYmFzaWMgY2xvY2tzIHN1cHBvcnQNCiAgY2xr
+OiBtZWRpYXRlazogQWRkIE1UODE5MiBhdWRpbyBjbG9jayBzdXBwb3J0DQogIGNsazogbWVkaWF0
+ZWs6IEFkZCBNVDgxOTIgY2Ftc3lzIGNsb2NrIHN1cHBvcnQNCiAgY2xrOiBtZWRpYXRlazogQWRk
+IE1UODE5MiBpbWdzeXMgY2xvY2sgc3VwcG9ydA0KICBjbGs6IG1lZGlhdGVrOiBBZGQgTVQ4MTky
+IGltcCBpMmMgd3JhcHBlciBjbG9jayBzdXBwb3J0DQogIGNsazogbWVkaWF0ZWs6IEFkZCBNVDgx
+OTIgaXBlc3lzIGNsb2NrIHN1cHBvcnQNCiAgY2xrOiBtZWRpYXRlazogQWRkIE1UODE5MiBtZHBz
+eXMgY2xvY2sgc3VwcG9ydA0KICBjbGs6IG1lZGlhdGVrOiBBZGQgTVQ4MTkyIG1mZ2NmZyBjbG9j
+ayBzdXBwb3J0DQogIGNsazogbWVkaWF0ZWs6IEFkZCBNVDgxOTIgbW1zeXMgY2xvY2sgc3VwcG9y
+dA0KICBjbGs6IG1lZGlhdGVrOiBBZGQgTVQ4MTkyIG1zZGMgY2xvY2sgc3VwcG9ydA0KICBjbGs6
+IG1lZGlhdGVrOiBBZGQgTVQ4MTkyIHNjcCBhZHNwIGNsb2NrIHN1cHBvcnQNCiAgY2xrOiBtZWRp
+YXRlazogQWRkIE1UODE5MiB2ZGVjc3lzIGNsb2NrIHN1cHBvcnQNCiAgY2xrOiBtZWRpYXRlazog
+QWRkIE1UODE5MiB2ZW5jc3lzIGNsb2NrIHN1cHBvcnQNCiAgYXJtNjQ6IGR0czogbWVkaWF0ZWs6
+IEFkZCBtdDgxOTIgY2xvY2sgY29udHJvbGxlcnMNCiAgYXJtNjQ6IGR0czogbWVkaWF0ZWs6IENv
+cnJlY3QgVUFSVDAgYnVzIGNsb2NrIG9mIE1UODE5Mg0KDQogLi4uL2FybS9tZWRpYXRlay9tZWRp
+YXRlayxhcG1peGVkc3lzLnR4dCAgICAgIHwgICAgMSArDQogLi4uL2JpbmRpbmdzL2FybS9tZWRp
+YXRlay9tZWRpYXRlayxhdWRzeXMudHh0IHwgICAgMSArDQogLi4uL2JpbmRpbmdzL2FybS9tZWRp
+YXRlay9tZWRpYXRlayxjYW1zeXMudHh0IHwgICAyMiArDQogLi4uL2JpbmRpbmdzL2FybS9tZWRp
+YXRlay9tZWRpYXRlayxpbWdzeXMudHh0IHwgICAgMiArDQogLi4uL2FybS9tZWRpYXRlay9tZWRp
+YXRlayxpbXBfaWljX3dyYXAueWFtbCAgIHwgICA3OCArDQogLi4uL2FybS9tZWRpYXRlay9tZWRp
+YXRlayxpbmZyYWNmZy50eHQgICAgICAgIHwgICAgMSArDQogLi4uL2JpbmRpbmdzL2FybS9tZWRp
+YXRlay9tZWRpYXRlayxpcGVzeXMudHh0IHwgICAgMSArDQogLi4uL2FybS9tZWRpYXRlay9tZWRp
+YXRlayxtZHBzeXMueWFtbCAgICAgICAgIHwgICAzOCArDQogLi4uL2JpbmRpbmdzL2FybS9tZWRp
+YXRlay9tZWRpYXRlayxtZmdjZmcudHh0IHwgICAgMSArDQogLi4uL2JpbmRpbmdzL2FybS9tZWRp
+YXRlay9tZWRpYXRlayxtbXN5cy50eHQgIHwgICAgMSArDQogLi4uL2JpbmRpbmdzL2FybS9tZWRp
+YXRlay9tZWRpYXRlayxtc2RjLnlhbWwgIHwgICA0NiArDQogLi4uL2FybS9tZWRpYXRlay9tZWRp
+YXRlayxwZXJpY2ZnLnlhbWwgICAgICAgIHwgICAgMSArDQogLi4uL2FybS9tZWRpYXRlay9tZWRp
+YXRlayxzY3AtYWRzcC55YW1sICAgICAgIHwgICAzOCArDQogLi4uL2FybS9tZWRpYXRlay9tZWRp
+YXRlayx0b3Bja2dlbi50eHQgICAgICAgIHwgICAgMSArDQogLi4uL2FybS9tZWRpYXRlay9tZWRp
+YXRlayx2ZGVjc3lzLnR4dCAgICAgICAgIHwgICAgOCArDQogLi4uL2FybS9tZWRpYXRlay9tZWRp
+YXRlayx2ZW5jc3lzLnR4dCAgICAgICAgIHwgICAgMSArDQogYXJjaC9hcm02NC9ib290L2R0cy9t
+ZWRpYXRlay9tdDgxOTIuZHRzaSAgICAgIHwgIDE2NSArLQ0KIGRyaXZlcnMvY2xrL21lZGlhdGVr
+L0tjb25maWcgICAgICAgICAgICAgICAgICB8ICAgODAgKw0KIGRyaXZlcnMvY2xrL21lZGlhdGVr
+L01ha2VmaWxlICAgICAgICAgICAgICAgICB8ICAgMTMgKw0KIGRyaXZlcnMvY2xrL21lZGlhdGVr
+L2Nsay1tdDgxOTItYXVkLmMgICAgICAgICB8ICAxMTggKysNCiBkcml2ZXJzL2Nsay9tZWRpYXRl
+ay9jbGstbXQ4MTkyLWNhbS5jICAgICAgICAgfCAgMTA3ICsrDQogZHJpdmVycy9jbGsvbWVkaWF0
+ZWsvY2xrLW10ODE5Mi1pbWcuYyAgICAgICAgIHwgICA3MCArDQogLi4uL2Nsay9tZWRpYXRlay9j
+bGstbXQ4MTkyLWltcF9paWNfd3JhcC5jICAgIHwgIDExOSArKw0KIGRyaXZlcnMvY2xrL21lZGlh
+dGVrL2Nsay1tdDgxOTItaXBlLmMgICAgICAgICB8ICAgNTcgKw0KIGRyaXZlcnMvY2xrL21lZGlh
+dGVrL2Nsay1tdDgxOTItbWRwLmMgICAgICAgICB8ICAgODIgKw0KIGRyaXZlcnMvY2xrL21lZGlh
+dGVrL2Nsay1tdDgxOTItbWZnLmMgICAgICAgICB8ICAgNTAgKw0KIGRyaXZlcnMvY2xrL21lZGlh
+dGVrL2Nsay1tdDgxOTItbW0uYyAgICAgICAgICB8ICAxMDggKysNCiBkcml2ZXJzL2Nsay9tZWRp
+YXRlay9jbGstbXQ4MTkyLW1zZGMuYyAgICAgICAgfCAgIDg1ICsrDQogZHJpdmVycy9jbGsvbWVk
+aWF0ZWsvY2xrLW10ODE5Mi1zY3BfYWRzcC5jICAgIHwgICA1MCArDQogZHJpdmVycy9jbGsvbWVk
+aWF0ZWsvY2xrLW10ODE5Mi12ZGVjLmMgICAgICAgIHwgICA5NCArKw0KIGRyaXZlcnMvY2xrL21l
+ZGlhdGVrL2Nsay1tdDgxOTItdmVuYy5jICAgICAgICB8ICAgNTMgKw0KIGRyaXZlcnMvY2xrL21l
+ZGlhdGVrL2Nsay1tdDgxOTIuYyAgICAgICAgICAgICB8IDEzNTAgKysrKysrKysrKysrKysrKysN
+CiBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXRrLmMgICAgICAgICAgICAgICAgfCAgIDIzICsN
+CiBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXRrLmggICAgICAgICAgICAgICAgfCAgIDEwICsN
+CiBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXV4LmggICAgICAgICAgICAgICAgfCAgIDE1ICsN
+CiBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstcGxsLmMgICAgICAgICAgICAgICAgfCAgIDMxICst
+DQogaW5jbHVkZS9kdC1iaW5kaW5ncy9jbG9jay9tdDgxOTItY2xrLmggICAgICAgIHwgIDU5MiAr
+KysrKysrKw0KIDM3IGZpbGVzIGNoYW5nZWQsIDM1MDUgaW5zZXJ0aW9ucygrKSwgOCBkZWxldGlv
+bnMoLSkNCiBjcmVhdGUgbW9kZSAxMDA2NDQgRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
+bmdzL2FybS9tZWRpYXRlay9tZWRpYXRlayxpbXBfaWljX3dyYXAueWFtbA0KIGNyZWF0ZSBtb2Rl
+IDEwMDY0NCBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL21lZGlhdGVrL21l
+ZGlhdGVrLG1kcHN5cy55YW1sDQogY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2
+aWNldHJlZS9iaW5kaW5ncy9hcm0vbWVkaWF0ZWsvbWVkaWF0ZWssbXNkYy55YW1sDQogY3JlYXRl
+IG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9hcm0vbWVkaWF0
+ZWsvbWVkaWF0ZWssc2NwLWFkc3AueWFtbA0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2Ns
+ay9tZWRpYXRlay9jbGstbXQ4MTkyLWF1ZC5jDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMv
+Y2xrL21lZGlhdGVrL2Nsay1tdDgxOTItY2FtLmMNCiBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVy
+cy9jbGsvbWVkaWF0ZWsvY2xrLW10ODE5Mi1pbWcuYw0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2
+ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ4MTkyLWltcF9paWNfd3JhcC5jDQogY3JlYXRlIG1vZGUg
+MTAwNjQ0IGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDgxOTItaXBlLmMNCiBjcmVhdGUgbW9k
+ZSAxMDA2NDQgZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLW10ODE5Mi1tZHAuYw0KIGNyZWF0ZSBt
+b2RlIDEwMDY0NCBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ4MTkyLW1mZy5jDQogY3JlYXRl
+IG1vZGUgMTAwNjQ0IGRyaXZlcnMvY2xrL21lZGlhdGVrL2Nsay1tdDgxOTItbW0uYw0KIGNyZWF0
+ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ4MTkyLW1zZGMuYw0KIGNy
+ZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2Nsay9tZWRpYXRlay9jbGstbXQ4MTkyLXNjcF9hZHNw
+LmMNCiBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLW10ODE5Mi12
+ZGVjLmMNCiBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLW10ODE5
+Mi12ZW5jLmMNCiBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9jbGsvbWVkaWF0ZWsvY2xrLW10
+ODE5Mi5jDQogY3JlYXRlIG1vZGUgMTAwNjQ0IGluY2x1ZGUvZHQtYmluZGluZ3MvY2xvY2svbXQ4
+MTkyLWNsay5oDQo=
 
-You want someone to probe the SCK frequency? I expect that if frequency
-switching works on LS1028A, and the lx2160a_flexspi_divs table is
-correct (which, based on the documentation for FlexSPICR1[FlexSPI_CLK_DIV],
-it is), then it would work on LX2160A too?
-Is there a simple test that can be made in order to trivially determine
-whether the frequencies are correct?=
