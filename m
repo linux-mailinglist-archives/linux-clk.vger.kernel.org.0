@@ -2,112 +2,135 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D89BB2AB3D5
-	for <lists+linux-clk@lfdr.de>; Mon,  9 Nov 2020 10:43:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A852AB400
+	for <lists+linux-clk@lfdr.de>; Mon,  9 Nov 2020 10:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729121AbgKIJnH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 9 Nov 2020 04:43:07 -0500
-Received: from ssl.serverraum.org ([176.9.125.105]:39089 "EHLO
-        ssl.serverraum.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728802AbgKIJnG (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 Nov 2020 04:43:06 -0500
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 4A7CE22F2D;
-        Mon,  9 Nov 2020 10:43:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1604914983;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TISJX/0g0eTQvbb/iznKAoeAEUeQtZ4L3gDonZPa6fg=;
-        b=HGsjjCZPzp70oOWnoVY8PrIEv7hr8tj+nm0oJ/1dojWxsXcVt6k5hCgWmYJ+/AFRjB/7ZE
-        PCfR4oD41OaBZ45/z/uJvrZVZZYgLDRIhZox1LVKW5sEmwIXNz1he47uZv/z1Uas62R8Uo
-        8Qf37A0U3oSZij/OmMi+CTJq3yDTXXQ=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 09 Nov 2020 10:43:03 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        id S1729019AbgKIJvZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 9 Nov 2020 04:51:25 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:2365 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728866AbgKIJvZ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 Nov 2020 04:51:25 -0500
+Received: from dggeme755-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4CV5q50hkzz52T4;
+        Mon,  9 Nov 2020 17:51:13 +0800 (CST)
+Received: from [10.140.157.68] (10.140.157.68) by
+ dggeme755-chm.china.huawei.com (10.3.19.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Mon, 9 Nov 2020 17:51:22 +0800
+Subject: Re: [PATCH] clk: hisilicon: Fix the memory leak issues
+To:     Markus Elfring <Markus.Elfring@web.de>, <linux-clk@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Leo Li <leoyang.li@nxp.com>,
-        "Y.b. Lu" <yangbo.lu@nxp.com>, Xiaowei Bao <xiaowei.bao@nxp.com>,
-        Ashish Kumar <ashish.kumar@nxp.com>
-Subject: Re: [RFC PATCH v3 9/9] arm64: dts: lx2160a: fix FlexSPI clock
-In-Reply-To: <20201108212139.ht22zdk27pyxv6wc@skbuf>
-References: <20201108185113.31377-1-michael@walle.cc>
- <20201108185113.31377-10-michael@walle.cc>
- <20201108212139.ht22zdk27pyxv6wc@skbuf>
-User-Agent: Roundcube Webmail/1.4.9
-Message-ID: <0e165232e518c0f6c1b894311f00982a@walle.cc>
-X-Sender: michael@walle.cc
+        Stephen Boyd <sboyd@kernel.org>
+References: <20201106203525.9991-1-gengdongjiu@huawei.com>
+ <30b24944-1315-b6de-5290-28b9d7842610@web.de>
+From:   Dongjiu Geng <gengdongjiu@huawei.com>
+Message-ID: <b6aedf2a-ed8a-938d-7962-34fd5c314f55@huawei.com>
+Date:   Mon, 9 Nov 2020 17:51:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.6.0
+MIME-Version: 1.0
+In-Reply-To: <30b24944-1315-b6de-5290-28b9d7842610@web.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.140.157.68]
+X-ClientProxiedBy: dggeme704-chm.china.huawei.com (10.1.199.100) To
+ dggeme755-chm.china.huawei.com (10.3.19.101)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Am 2020-11-08 22:21, schrieb Vladimir Oltean:
-> On Sun, Nov 08, 2020 at 07:51:13PM +0100, Michael Walle wrote:
->> Now that we have a proper driver for the FlexSPI interface use it. 
->> This
->> will fix SCK frequency switching on Layerscape SoCs.
->> 
->> Signed-off-by: Michael Walle <michael@walle.cc>
->> ---
->> Thanks to Vladimir Oltean, this was partially tested on a LX2160A RDB. 
->> But
->> this patch is marked as RFC nonetheless, because there is too much
->> difference in the clock tree between LS1028A and LX2160A. It would be 
->> nice
->> if someone could test it and add a Tested-by.
+On 2020/11/8 21:55, Markus Elfring wrote:
+>> When return errors, …
 > 
-> You want someone to probe the SCK frequency?
+> I would find an other wording more appropriate for this change description.
+> 
+> 
+>> …, so fix this issue.
+> 
+> I suggest to replace this information by an other imperative wording
+> and the tag “Fixes”.
 
-No not really, just a thorough test.
+OK, done， I have submitted the version 2 patch
 
-> I expect that if frequency
-> switching works on LS1028A, and the lx2160a_flexspi_divs table is
-> correct (which, based on the documentation for 
-> FlexSPICR1[FlexSPI_CLK_DIV],
-> it is), then it would work on LX2160A too?
+> 
+> 
+> …
+>> +++ b/drivers/clk/hisilicon/clk-hi3620.c
+>> @@ -463,12 +463,16 @@ static void __init hi3620_mmc_clk_init(struct device_node *node)
+>>  	}
+>>
+>>  	clk_data = kzalloc(sizeof(*clk_data), GFP_KERNEL);
+>> -	if (WARN_ON(!clk_data))
+>> +	if (WARN_ON(!clk_data)) {
+>> +		iounmap(base);
+> 
+> Can a statement like “goto unmap_io;” make sense here?
+OK， I have changed it.
 
-The switching should work. Finding out wether it is correct can be 
-checked
-by reading the raw register value, i.e. 01E0_0900h. But the parent clock 
-is
-what is bothering me a little. Getting that wrong would lead to a wrong 
-SCK
-output frequency albeit the divider is set to a correct value.
+> 
+> 
+>>  		return;
+>> +	}
+>>
+>>  	clk_data->clks = kcalloc(num, sizeof(*clk_data->clks), GFP_KERNEL);
+>> -	if (!clk_data->clks)
+>> +	if (!clk_data->clks) {
+> 
+> How do you think about to add the function call “kfree(clk_data)” in this if branch?
+OK, I have changed it.
 
-> Is there a simple test that can be made in order to trivially determine
-> whether the frequencies are correct?
+> 
+> 
+> …
+>> +++ b/drivers/clk/hisilicon/clk.c
+> …
+>  	if (!base) {
+>  		pr_err("%s: failed to map clock registers\n", __func__);
+> -		goto err;
+> +		return NULL;
+> 
+> 
+>> @@ -69,8 +69,10 @@ struct hisi_clock_data *hisi_clk_init(struct device_node *np,
+>>  	}
+>>
+>>  	clk_data = kzalloc(sizeof(*clk_data), GFP_KERNEL);
+>> -	if (!clk_data)
+>> +	if (!clk_data) {
+>> +		iounmap(base);
+>>  		goto err;
+> 
+> Please use another jump target.
+OK, thanks, I have changed it.
 
-We already found out that there seems to be kind of a saturation with
-higher frequencies, i.e. octal SPI bus is capable of a much higher
-throughput but we only achieve 50MB/s. I'd have expected a much higher
-datarate (I mean it is advertised as high performance and it uses a 8 
-bit
-wide databus..). But anyway, it might make sense to go the other way, 
-i.e.
-find out the max datathroughput at lower frequencies and look if it 
-makes
-sense. Assuming no DDR, the throughput should be around your frequency. 
-For
-example, having 4 MHz should result in 4MB/s data throughput.
+> 
+> 
+>> @@ -82,6 +84,7 @@ struct hisi_clock_data *hisi_clk_init(struct device_node *np,
+>>  	of_clk_add_provider(np, of_clk_src_onecell_get, &clk_data->clk_data);
+>>  	return clk_data;
+>>  err_data:
+>> +	iounmap(base);
+>>  	kfree(clk_data);
+>>  err:
+>>  	return NULL;
+> 
+> I propose to apply the following code variant.
+OK, have modified.
 
-OTOH we already saw that after linux booted - with the current device 
-tree
-which has a setting of 50MHz max SCK frequency - the programmed divider 
-by
-my driver is the same as the former setting (0x13, div-by-32); so this 
-series
-doesn't change the SCK frequency.
-
--michael
+> 
+> 	return clk_data;
+> 
+> free_clk_data:
+> 	kfree(clk_data);
+> unmap_io:
+> 	iounmap(base);
+> 	return NULL;
+> 
+> 
+> Regards,
+> Markus
+> .
+> 
