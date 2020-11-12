@@ -2,28 +2,28 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB6F2B0328
-	for <lists+linux-clk@lfdr.de>; Thu, 12 Nov 2020 11:52:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 843EA2B0335
+	for <lists+linux-clk@lfdr.de>; Thu, 12 Nov 2020 11:57:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727147AbgKLKwm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 12 Nov 2020 05:52:42 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7522 "EHLO
+        id S1726061AbgKLK5t (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 12 Nov 2020 05:57:49 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:8072 "EHLO
         szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726776AbgKLKwl (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 12 Nov 2020 05:52:41 -0500
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CWz2J5ynkzhkZ3;
-        Thu, 12 Nov 2020 18:52:24 +0800 (CST)
-Received: from huawei.com (10.151.151.249) by DGGEMS404-HUB.china.huawei.com
- (10.3.19.204) with Microsoft SMTP Server id 14.3.487.0; Thu, 12 Nov 2020
- 18:52:26 +0800
+        with ESMTP id S1725966AbgKLK5t (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 12 Nov 2020 05:57:49 -0500
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CWz8F6KLnzLxDh;
+        Thu, 12 Nov 2020 18:57:33 +0800 (CST)
+Received: from huawei.com (10.151.151.249) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Thu, 12 Nov 2020
+ 18:57:40 +0800
 From:   Dongjiu Geng <gengdongjiu@huawei.com>
 To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
         <Markus.Elfring@web.de>, <linux-clk@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <gengdongjiu@huawei.com>
-Subject: [PATCH] clk: hisilicon: refine hi3620_mmc_clk_init() and fix memory leak issues
-Date:   Thu, 12 Nov 2020 19:17:00 +0000
-Message-ID: <20201112191700.48813-1-gengdongjiu@huawei.com>
+Subject: [PATCH V3] clk: hisilicon: refine hi3620_mmc_clk_init() and fix memory leak issues
+Date:   Thu, 12 Nov 2020 19:22:14 +0000
+Message-ID: <20201112192214.48926-1-gengdongjiu@huawei.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
