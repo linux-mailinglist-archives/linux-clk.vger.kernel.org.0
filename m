@@ -2,95 +2,120 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4ACE2B17E2
-	for <lists+linux-clk@lfdr.de>; Fri, 13 Nov 2020 10:11:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4185A2B1818
+	for <lists+linux-clk@lfdr.de>; Fri, 13 Nov 2020 10:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726297AbgKMJLO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 13 Nov 2020 04:11:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726303AbgKMJK5 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 13 Nov 2020 04:10:57 -0500
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DFBC0617A6;
-        Fri, 13 Nov 2020 01:10:57 -0800 (PST)
-Received: by mail-wr1-x443.google.com with SMTP id j7so8939718wrp.3;
-        Fri, 13 Nov 2020 01:10:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=g0CHHJRFLkJgpWDc0kWpwLPadBEpgRbUEt1rTCDH2OM=;
-        b=D4gyFtmnvMDTS1VEiZeY7wc2KHvHol8ijYHtMFfyx5VbwjErW66XQTz0w7lCQFArnK
-         XPxkxdBykxUHPdhUCQuboujhx2cbVUeHYe2V+ppviGv0yVlG5sYZNK6F1CLc1HmFdrQT
-         q8xD+UYA6Z+KNkkrbi2rYokMRdrKQ0GT5JdjSGXnlIeUMzd3HoYLPdycuULkuGEIC7Q1
-         Ffublk3nJFT9eWAExx9SzFMDZLw2ZkJlr/tsQUypphx9yw6lmVl13jvwC6LEAVM4WKLr
-         +MCxB0uHr+cNv32fwaPK/SFSvyKydc1HWFHyvCz8+2f4BufFCC518Rm95o+E4/GDBpUf
-         QiTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=g0CHHJRFLkJgpWDc0kWpwLPadBEpgRbUEt1rTCDH2OM=;
-        b=n4w1OJsDMQjeiN5XYgRelnrPTZBe8zhKjnSLH2agHTmr89ivKntvNwJgpSyI1IKn/N
-         reiywriJi/aOCZH96RXF1QeIr/M9swM2lKpfd0wjINX0uHQdPyKMooizOz4/SKfCeMqb
-         4L2y1is+CJVFhZaRuK6swKGXibcm+0bWwSH8+kaPdMVb/MiKU0hqg6uIMqr4WYHGKGHd
-         0fTHtpqco+qKQ8caYeG4n2NXzjgtxxWhzw4rDd+i0YC7lwyHoGsO9Yj9Lk3PsAdN+DPQ
-         xzlBRjZaKKtdp0coWqwMgXeOgK0ofN2c86Lmusk9OIuCz7qKdHLE2UkrpX9rH8xAtqIK
-         VI8g==
-X-Gm-Message-State: AOAM530vd8SCsQ6tP5iJFHuiUTIbRw0GHRB6Zfcl3JmgAd9u4/WSRhLz
-        tWirNG7bYf/WNC1aRVqv7rA=
-X-Google-Smtp-Source: ABdhPJyciHbl+LA+gvNXReZgkWMntgWiftBxUeKU2/A5fHAhGlcnRxlfHeTL61G7xGNH6ujrauQYzg==
-X-Received: by 2002:adf:84a6:: with SMTP id 35mr2167644wrg.18.1605258656126;
-        Fri, 13 Nov 2020 01:10:56 -0800 (PST)
-Received: from localhost.localdomain (245.red-79-158-78.dynamicip.rima-tde.net. [79.158.78.245])
-        by smtp.gmail.com with ESMTPSA id 15sm9266183wmg.1.2020.11.13.01.10.54
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 13 Nov 2020 01:10:55 -0800 (PST)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, robh+dt@kernel.org, tsbogend@alpha.franken.de,
-        john@phrozen.org, gregkh@linuxfoundation.org, gch981213@gmail.com,
-        hackpascal@gmail.com, jiaxun.yang@flygoat.com,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        devel@driverdev.osuosl.org, neil@brown.name
-Subject: [PATCH v2 5/5] MAINTAINERS: add MT7621 CLOCK maintainer
-Date:   Fri, 13 Nov 2020 10:10:46 +0100
-Message-Id: <20201113091046.30964-6-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201113091046.30964-1-sergio.paracuellos@gmail.com>
-References: <20201113091046.30964-1-sergio.paracuellos@gmail.com>
+        id S1726339AbgKMJVd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 13 Nov 2020 04:21:33 -0500
+Received: from mx2.suse.de ([195.135.220.15]:58080 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726176AbgKMJVc (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 13 Nov 2020 04:21:32 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 2523CAE92;
+        Fri, 13 Nov 2020 09:21:30 +0000 (UTC)
+Message-ID: <3af26701a12b0bcb55b8d422e2a18f06a8e94d4d.camel@suse.de>
+Subject: Re: [PATCH v4 02/11] firmware: raspberrypi: Introduce
+ devm_rpi_firmware_get()
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-pwm@vger.kernel.org,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        linux-devicetree <devicetree@vger.kernel.org>, wahrenst@gmx.net,
+        Linux Input <linux-input@vger.kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        devel@driverdev.osuosl.org, Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-rpi-kernel@lists.infradead.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 13 Nov 2020 10:21:28 +0100
+In-Reply-To: <CAMpxmJWZsqfkkTP99a_8mu+O4xHwNWDqHuvgt7Cs88bA-iMvQA@mail.gmail.com>
+References: <20201112163630.17177-1-nsaenzjulienne@suse.de>
+         <20201112163630.17177-3-nsaenzjulienne@suse.de>
+         <CAMpxmJWZsqfkkTP99a_8mu+O4xHwNWDqHuvgt7Cs88bA-iMvQA@mail.gmail.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-lVAZyxFfZVTn1rZzZexc"
+User-Agent: Evolution 3.36.5 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Adding myself as maintainer for mt7621 clock driver.
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+--=-lVAZyxFfZVTn1rZzZexc
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f1f088a29bc2..30822ad6837c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11142,6 +11142,12 @@ L:	linux-wireless@vger.kernel.org
- S:	Maintained
- F:	drivers/net/wireless/mediatek/mt7601u/
- 
-+MEDIATEK MT7621 CLOCK DRIVER
-+M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/mediatek,mt7621-clk.yaml
-+F:	drivers/clk/ralink/clk-mt7621.c
-+
- MEDIATEK MT7621/28/88 I2C DRIVER
- M:	Stefan Roese <sr@denx.de>
- L:	linux-i2c@vger.kernel.org
--- 
-2.25.1
+On Thu, 2020-11-12 at 18:25 +0100, Bartosz Golaszewski wrote:
+> On Thu, Nov 12, 2020 at 5:44 PM Nicolas Saenz Julienne
+> <nsaenzjulienne@suse.de> wrote:
+> > Itroduce devm_rpi_firmware_get(), it'll simplify the firmware handling
+> > for most consumers.
+> >=20
+> > Suggested-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> > ---
+> >=20
+> > Changes since v2:
+> > - Introduce devm_rpi_firmware_get()
+> >=20
+> >  drivers/firmware/raspberrypi.c             | 31 +++++++++++++++++++++-
+> >  include/soc/bcm2835/raspberrypi-firmware.h |  8 ++++++
+> >  2 files changed, 38 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/firmware/raspberrypi.c b/drivers/firmware/raspberr=
+ypi.c
+> > index 438e17074a97..4ab2dfdc82ad 100644
+> > --- a/drivers/firmware/raspberrypi.c
+> > +++ b/drivers/firmware/raspberrypi.c
+> > @@ -237,10 +237,17 @@ static void rpi_firmware_delete(struct kref *kref=
+)
+> >         kfree(fw);
+> >  }
+> >=20
+> > -void rpi_firmware_put(struct rpi_firmware *fw)
+> > +static void __rpi_firmware_put(void *data)
+> >  {
+>=20
+> The '__' prefix is very vague and usually used for unlocked variants
+> of functions. The casting to void * in rpi_firmware_put() is also
+> unneeded. I would much prefer that the devres release callback be
+> called devm_rpi_firmware_put() and that it call rpi_firmware_put()
+> which would then call kref_put().
+
+Yes, that's better. I'll change it.
+
+Regards,
+Nicolas
+
+
+--=-lVAZyxFfZVTn1rZzZexc
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl+uUBgACgkQlfZmHno8
+x/6lEgf/d59t0Td5W4xLTNBLofc0Vh4uZHeN9Gvi6L52ayUePt+6T8iYBizcBSD7
+gMFFnbzAziAWiKl7DSZjZTOaVNPohvZqyhssPCN/xAs2Xw4k/9iy8SfjtY0LyJ5S
+cY0As+Fny0/3v+hdAXAcl0O26eMFecffjVnEne56Iyy9pA1GAsjf2IU2XO6bE2sX
+qED6OKxz+B+3vVZOyHv4E10B0L1rIs64Tjrh0fUElpaT+d8jPJ2aog1LKEjPe+rD
+1QA4cwN8xmkiB6Tj97LK6q2yG2Cji9OHBP6QEw9orQHti/aKKhozLyw+stmIq/uF
+gGk9YGb3/9okyNRC33V9EFN+3zjzCg==
+=Sbj8
+-----END PGP SIGNATURE-----
+
+--=-lVAZyxFfZVTn1rZzZexc--
 
