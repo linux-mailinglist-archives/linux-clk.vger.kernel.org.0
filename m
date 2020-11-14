@@ -2,123 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2EE52B2D60
-	for <lists+linux-clk@lfdr.de>; Sat, 14 Nov 2020 14:41:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE49B2B2D7B
+	for <lists+linux-clk@lfdr.de>; Sat, 14 Nov 2020 14:53:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726844AbgKNNlg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 14 Nov 2020 08:41:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S1726908AbgKNNwo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 14 Nov 2020 08:52:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726495AbgKNNlf (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 14 Nov 2020 08:41:35 -0500
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0D1C0613D1;
-        Sat, 14 Nov 2020 05:41:35 -0800 (PST)
-Received: by mail-ej1-x642.google.com with SMTP id y17so12232456ejh.11;
-        Sat, 14 Nov 2020 05:41:35 -0800 (PST)
+        with ESMTP id S1726495AbgKNNwV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 14 Nov 2020 08:52:21 -0500
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B024C0617A6
+        for <linux-clk@vger.kernel.org>; Sat, 14 Nov 2020 05:52:20 -0800 (PST)
+Received: by mail-pg1-x544.google.com with SMTP id i13so9158115pgm.9
+        for <linux-clk@vger.kernel.org>; Sat, 14 Nov 2020 05:52:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=oCiHauMY/pbQZ8o5QcU4bw23qyqCEf72jnXhjHhGCU8=;
-        b=HQ3r1+UAbF1vLX/yrABgaISynyAIxVDSRJHXPrRcg+pNNpjXsjcmYCDe60r4A2uOxI
-         39Ftn8FFmhFnivyUIk/wKHp4WjjPrMrxfshblRMjyA7EtSq9FJeLhV6WPtNSizI1FOu3
-         tYW0pV7KPFVO9e7ldqpv+m6VqsRs9Rcuv8ob3x5AaWpQZfDIfH8J0oh/t+mWB2+mkpt2
-         mva/bLpxUxTJkqbSCA53R0e3LH1Y3/oL9Ud/Bwaw/KTkoze7ixobBQCsy7RTaRHakBXT
-         kobQCrKVUkS7g7TMgn2YYL5s8ZxZn9CqzyOvIa5F8fli/LSgEK2dicriiu/hoFCc4KGW
-         H3LA==
+        d=0x0f.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XwyLNKLBDuYh+S1CXSzktBr8nFzPgTD1/kheOU6L4+U=;
+        b=HaIUiw2QOb9sBu43gc9htmVnhXqSKwFXI8hZNLBdm7Bv+ggoF2BEKIcxPwyLm1kb+B
+         iD96/IbPqCdhaYGCCd1lIliHlez52aO4YmPcyPYCNUfZJW+Q08/pZki0ueQEiS4fURow
+         Ju4vwM2FJ1I1gMhDUso2UXcaKQX/vBNCEveCM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=oCiHauMY/pbQZ8o5QcU4bw23qyqCEf72jnXhjHhGCU8=;
-        b=WQDqJhcFFEihX31mTix4sHtIsM1SYk3Fup0JYyJYQj5ZxY4qvBXCjQ7L9S+wKvpBlE
-         vNfinmnKod1L3nysJNROjPVwrFd0SxpbuFEPULeHIPhLCsd+xaI/Kt9SrmL4Um3GfeIV
-         gj4MFt/Eqh956Kgeeok5cIe5c3eTCwyJPpelUoxP/KjdBVZ1Jcj6TbC7nrmmQvsuBYFP
-         ZjW1cMiTDYpFS+dHRDHYSpm5bKv/S/DlyTHKbXoCk4zTU3P8sGxF+Vg9Z2kd3OlN0DhL
-         qh9cjdcacT6QvtOrtKArjW0WFp4FEH+ScxF2Xp2nTBjHhSpjR2eSuckDLr9SlKtxSCfU
-         AiFg==
-X-Gm-Message-State: AOAM530m8aFPRCJ708+sIijyN9TFereuUJSrBxJKtL4kvrzFwtW4u91C
-        FLiDSjE9k8DoKKFw0XPCHYQ=
-X-Google-Smtp-Source: ABdhPJw45tu2V6Tj+ePi7yM5zSpKrIu1abxfh7y0HE3exy81Q5qjskb8dFZdJ8H/g3zx8oKAAn6uXg==
-X-Received: by 2002:a17:906:d784:: with SMTP id pj4mr6420803ejb.78.1605361293854;
-        Sat, 14 Nov 2020 05:41:33 -0800 (PST)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id l20sm6589314eja.40.2020.11.14.05.41.32
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 14 Nov 2020 05:41:33 -0800 (PST)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de
-Cc:     zhangqing@rock-chips.com, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] clk: rockchip: fix i2s gate bits on rk3066 and rk3188
-Date:   Sat, 14 Nov 2020 14:41:25 +0100
-Message-Id: <20201114134125.6169-2-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20201114134125.6169-1-jbx6244@gmail.com>
-References: <20201114134125.6169-1-jbx6244@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XwyLNKLBDuYh+S1CXSzktBr8nFzPgTD1/kheOU6L4+U=;
+        b=aR5BMXKOYq8BtXCj0gOb4OuD2SGhXAzK43x6Uht2rszOQeq1zKbgbiL08/T5Lzzikf
+         j6YWNXhRqslD4C/jSZ3/RjhzdbQa3kWyF+9vwazXSd9bSW+PyES3S+D/OI5ql6jYd9hg
+         eTsud85sQ4Et6290aqb1G+ia2/u0dkWKeLzsa6tcNy/7AcnCwaQCIuJafQIz91fhoeOs
+         vA7IETy5tR1iWdnnvvlitGGX5X1L8HHuqyk2NXfTMLtV6Ru1WxKcP0cS6cF1uf+sG1rU
+         wjuZOvJnNDGXK9bAVgq6AphpzzaDsu41W4KbJLF0Ed47Qd9EYmQOv0x3K637dgxwBRa1
+         XzKw==
+X-Gm-Message-State: AOAM5307csvjmp9k4ZFPwLiRhlG3UxKXoGch5aVg6lt+G/G8SDtMlRT/
+        Mynw+a27VREAVPKPuk2LGsqC6bc/O7s3IA==
+X-Google-Smtp-Source: ABdhPJw9EP67HuQ6JJdBN1Tbf3rKgx5WifKbz5KPceLjr+2b0yeL8JDoiHWpaTxbjAl985Lh55XdpA==
+X-Received: by 2002:a63:e04:: with SMTP id d4mr6043809pgl.101.1605361939416;
+        Sat, 14 Nov 2020 05:52:19 -0800 (PST)
+Received: from shiro.work (p1268123-ipngn200803sizuokaden.shizuoka.ocn.ne.jp. [118.13.124.123])
+        by smtp.googlemail.com with ESMTPSA id r205sm13008023pfr.25.2020.11.14.05.52.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Nov 2020 05:52:18 -0800 (PST)
+From:   Daniel Palmer <daniel@0x0f.com>
+To:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        w@1wt.eu, Daniel Palmer <daniel@0x0f.com>
+Subject: [PATCH 0/6] ARM: mstar: Basic MPLL support
+Date:   Sat, 14 Nov 2020 22:50:38 +0900
+Message-Id: <20201114135044.724385-1-daniel@0x0f.com>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The Rockchip PX2/RK3066 TRM under CRU_CLKGATE7_CON
-gives this info:
+This series adds support for the MPLL block that is present in
+MStar/SigmaStar ARMv7 SoCs.
 
-hclk_i2s_8ch_gate_en  bit 4 (dtsi: i2s0)
-hclk_i2s0_2ch_gate_en bit 2 (dtsi: i2s1)
-hclk_i2s1_2ch_gate_en bit 3 (dtsi: i2s2)
+This block is intended to be set and forgotten about before
+Linux is running so all it actually does it read the registers
+and calculate what the output frequencies should be.
 
-The Rockchip PX3/RK3188 TRM under CRU_CLKGATE7_CON
-gives this info:
+We only care about this block because there are upstream dividers,
+gates, muxes etc that need something between the input crystal
+and themselves to calculate their own rates.
 
-hclk_i2s_2ch_gate_en  bit 2 (dtsi: i2s0)
-hclk_i2s_8ch_gate_en  bit 4 (not used in rk3188.dtsi)
+I think this needs to be applied after the GPIO series[0] that
+is currently inflight.
 
-The bits got somehow mixed up in the clk-rk3188.c file.
-The labels in the dtsi files are not suppose to change.
-The sclk and hclk names should match for
-"trace_event=clk_disable,clk_enable",
-so remove GATE HCLK_I2S0 from the common clock tree and
-fix the bits in the rk3066 and rk3188 clock tree.
+0 - https://lore.kernel.org/linux-gpio/20201109121731.1537580-1-daniel@0x0f.com/
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- drivers/clk/rockchip/clk-rk3188.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Daniel Palmer (6):
+  dt-bindings: clk: mstar msc313 mpll binding header
+  dt-bindings: clk: mstar msc313 mpll binding description
+  clk: mstar: MStar/SigmaStar MPLL driver
+  ARM: mstar: Select MSTAR_MSC313_MPLL
+  ARM: mstar: Add the external clocks to the base dsti
+  ARM: mstar: Add mpll to base dtsi
 
-diff --git a/drivers/clk/rockchip/clk-rk3188.c b/drivers/clk/rockchip/clk-rk3188.c
-index db8c58813..0b76ad34d 100644
---- a/drivers/clk/rockchip/clk-rk3188.c
-+++ b/drivers/clk/rockchip/clk-rk3188.c
-@@ -449,7 +449,6 @@ static struct rockchip_clk_branch common_clk_branches[] __initdata = {
- 
- 	/* hclk_cpu gates */
- 	GATE(HCLK_ROM, "hclk_rom", "hclk_cpu", 0, RK2928_CLKGATE_CON(5), 6, GFLAGS),
--	GATE(HCLK_I2S0, "hclk_i2s0", "hclk_cpu", 0, RK2928_CLKGATE_CON(7), 2, GFLAGS),
- 	GATE(HCLK_SPDIF, "hclk_spdif", "hclk_cpu", 0, RK2928_CLKGATE_CON(7), 1, GFLAGS),
- 	GATE(0, "hclk_cpubus", "hclk_cpu", 0, RK2928_CLKGATE_CON(4), 8, GFLAGS),
- 	/* hclk_ahb2apb is part of a clk branch */
-@@ -634,8 +633,9 @@ static struct rockchip_clk_branch rk3066a_clk_branches[] __initdata = {
- 			RK2928_CLKGATE_CON(0), 12, GFLAGS,
- 			&rk3066a_i2s2_fracmux),
- 
--	GATE(HCLK_I2S1, "hclk_i2s1", "hclk_cpu", 0, RK2928_CLKGATE_CON(7), 3, GFLAGS),
--	GATE(HCLK_I2S2, "hclk_i2s2", "hclk_cpu", 0, RK2928_CLKGATE_CON(7), 4, GFLAGS),
-+	GATE(HCLK_I2S0, "hclk_i2s0", "hclk_cpu", 0, RK2928_CLKGATE_CON(7), 4, GFLAGS),
-+	GATE(HCLK_I2S1, "hclk_i2s1", "hclk_cpu", 0, RK2928_CLKGATE_CON(7), 2, GFLAGS),
-+	GATE(HCLK_I2S2, "hclk_i2s2", "hclk_cpu", 0, RK2928_CLKGATE_CON(7), 3, GFLAGS),
- 	GATE(HCLK_CIF1, "hclk_cif1", "hclk_cpu", 0, RK2928_CLKGATE_CON(6), 6, GFLAGS),
- 	GATE(HCLK_HDMI, "hclk_hdmi", "hclk_cpu", 0, RK2928_CLKGATE_CON(4), 14, GFLAGS),
- 
-@@ -728,6 +728,7 @@ static struct rockchip_clk_branch rk3188_clk_branches[] __initdata = {
- 			RK2928_CLKGATE_CON(0), 10, GFLAGS,
- 			&rk3188_i2s0_fracmux),
- 
-+	GATE(HCLK_I2S0, "hclk_i2s0", "hclk_cpu", 0, RK2928_CLKGATE_CON(7), 2, GFLAGS),
- 	GATE(0, "hclk_imem0", "hclk_cpu", 0, RK2928_CLKGATE_CON(4), 14, GFLAGS),
- 	GATE(0, "hclk_imem1", "hclk_cpu", 0, RK2928_CLKGATE_CON(4), 15, GFLAGS),
- 
+ .../bindings/clock/mstar,msc313-mpll.yaml     |  58 ++++++
+ MAINTAINERS                                   |   3 +
+ arch/arm/boot/dts/mstar-v7.dtsi               |  27 +++
+ arch/arm/mach-mstar/Kconfig                   |   1 +
+ drivers/clk/Kconfig                           |   1 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/mstar/Kconfig                     |   5 +
+ drivers/clk/mstar/Makefile                    |   6 +
+ drivers/clk/mstar/clk-msc313-mpll.c           | 177 ++++++++++++++++++
+ include/dt-bindings/clock/mstar-msc313-mpll.h |  19 ++
+ 10 files changed, 298 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/mstar,msc313-mpll.yaml
+ create mode 100644 drivers/clk/mstar/Kconfig
+ create mode 100644 drivers/clk/mstar/Makefile
+ create mode 100644 drivers/clk/mstar/clk-msc313-mpll.c
+ create mode 100644 include/dt-bindings/clock/mstar-msc313-mpll.h
+
 -- 
-2.11.0
+2.29.2
 
