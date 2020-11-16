@@ -2,266 +2,180 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8A32B3E1A
-	for <lists+linux-clk@lfdr.de>; Mon, 16 Nov 2020 08:56:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC332B3EC0
+	for <lists+linux-clk@lfdr.de>; Mon, 16 Nov 2020 09:36:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728074AbgKPHzn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 16 Nov 2020 02:55:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727875AbgKPHzm (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 16 Nov 2020 02:55:42 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FA8C0613D3
-        for <linux-clk@vger.kernel.org>; Sun, 15 Nov 2020 23:55:42 -0800 (PST)
-Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1keZMO-0007Yf-3o; Mon, 16 Nov 2020 08:55:40 +0100
-Received: from mtr by dude03.red.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mtr@dude03.red.stw.pengutronix.de>)
-        id 1keZMN-00Grbu-3v; Mon, 16 Nov 2020 08:55:35 +0100
-From:   Michael Tretter <m.tretter@pengutronix.de>
-To:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     rajanv@xilinx.com, tejasp@xilinx.com, dshah@xilinx.com,
-        rvisaval@xilinx.com, michals@xilinx.com, kernel@pengutronix.de,
-        robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        Michael Tretter <m.tretter@pengutronix.de>
-Date:   Mon, 16 Nov 2020 08:55:32 +0100
-Message-Id: <20201116075532.4019252-13-m.tretter@pengutronix.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201116075532.4019252-1-m.tretter@pengutronix.de>
-References: <20201116075532.4019252-1-m.tretter@pengutronix.de>
+        id S1726395AbgKPIeO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 16 Nov 2020 03:34:14 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:40114 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726219AbgKPIeN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 16 Nov 2020 03:34:13 -0500
+Received: by mail-oi1-f196.google.com with SMTP id m143so17972362oig.7;
+        Mon, 16 Nov 2020 00:34:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qygB+REaFsOOV9fGBhE+vHDIJeGIu419PsbJCw4QwlQ=;
+        b=drNJXX8/JEu/eMofli6tYi1krg/EmaKQhxfMJVbr4YEWhlotASABMf2aHn80YaP7q3
+         K/IWgWv1VMddJjYK2E0tmJN6oQL/BqTYjcGqTEmdztwH50u0MaiQvyljAVq4WVf1FQXE
+         TOWQosCOtLr54nqw3VO8vxOHUVQ0K/t4vXpk7sChk3cEvtXaUdzmy/rwQNk1mtDRvYWr
+         6LYg4i9UYbevTPCste9O4eGMt1jCMhux2f241Javh0AMXhK1JK4hqGWoDT1X7PK7ZIBb
+         umLDibMbm/dI0++fEU5983lZdTYRSOaFkeckPkPE6iw9Yd5FLcNlnyycUgUhnNeVO5TF
+         GVvA==
+X-Gm-Message-State: AOAM531aAjKBB+1eO2jAqvRiGjY05N/SPOqVkWHsLzoi1A/UGYZqTL0q
+        DNXLGqq48/BbQ/evL909awEDc1gu4XaYbyRVBuwLcH/yb9JpCg==
+X-Google-Smtp-Source: ABdhPJxtFw4iY9Add4/wu2RThyQC0S93hB21Syy+sYgaFi/lBZlEwzSW7jRbTOptUFfTos11/qps+LovaycKU30Hb0c=
+X-Received: by 2002:aca:4bc3:: with SMTP id y186mr8575370oia.153.1605515651319;
+ Mon, 16 Nov 2020 00:34:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::39
-X-SA-Exim-Mail-From: mtr@pengutronix.de
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
-        metis.ext.pengutronix.de
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.4 required=4.0 tests=AWL,BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.2
-Subject: [PATCH 12/12] soc: xilinx: vcu: use bitfields for register definition
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on metis.ext.pengutronix.de)
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+References: <20201110125609.30246-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20201110125609.30246-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 16 Nov 2020 09:33:59 +0100
+Message-ID: <CAMuHMdUky4OEvCLnDYr3C-PB+PKdSx3U5+dCfhiftDhf3RKmAQ@mail.gmail.com>
+Subject: Re: [PATCH v3] clk: renesas: r8a774c0: Add RPC clocks
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This makes the register accesses more readable and is closer to what is
-usually used in the kernel.
+Hi Prabhakar,
 
-Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
----
- drivers/soc/xilinx/xlnx_vcu.c | 115 ++++++++++------------------------
- 1 file changed, 34 insertions(+), 81 deletions(-)
+On Tue, Nov 10, 2020 at 1:56 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Describe the RPCSRC internal clock and the RPC[D2] clocks derived from it,
+> as well as the RPC-IF module clock, in the RZ/G2E (R8A774C0) CPG/MSSR
+> driver.
+>
+> Add new clk type CLK_TYPE_GEN3E3_RPCSRC to register rpcsrc as a fixed
+> clock on R-Car Gen3 E3 (and also RZ/G2E which is identical to E3 SoC),
+> parent and the divider is set based on the register value CPG_RPCCKCR[4:3]
+> (parent is cross verified against MD[4:1] pins) which has been set prior
+> to booting the kernel.
+>
+> MD[4] MD[3] MD[2] MD[1]
+>   0     0     0    1     -> RPCSRC CLK source is PLL1
+>   0     0     1    1     -> RPCSRC CLK source is PLL1
+>   0     1     0    0     -> RPCSRC CLK source is PLL1
+>   1     0     1    1     -> RPCSRC CLK source is PLL1
+>   x     x     x    x     -> For any other values RPCSRC CLK source is PLL0
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-diff --git a/drivers/soc/xilinx/xlnx_vcu.c b/drivers/soc/xilinx/xlnx_vcu.c
-index 519699fdc8b9..2a11b9e8d5fe 100644
---- a/drivers/soc/xilinx/xlnx_vcu.c
-+++ b/drivers/soc/xilinx/xlnx_vcu.c
-@@ -6,6 +6,7 @@
-  *
-  * Contacts   Dhaval Shah <dshah@xilinx.com>
-  */
-+#include <linux/bitfield.h>
- #include <linux/clk.h>
- #include <linux/clk-provider.h>
- #include <linux/device.h>
-@@ -20,41 +21,26 @@
- 
- #include <dt-bindings/clock/xlnx-vcu.h>
- 
--/* vcu slcr registers, bitmask and shift */
- #define VCU_PLL_CTRL			0x24
--#define VCU_PLL_CTRL_RESET_MASK		0x01
--#define VCU_PLL_CTRL_RESET_SHIFT	0
--#define VCU_PLL_CTRL_BYPASS_MASK	0x01
--#define VCU_PLL_CTRL_BYPASS_SHIFT	3
--#define VCU_PLL_CTRL_FBDIV_MASK		0x7f
--#define VCU_PLL_CTRL_FBDIV_SHIFT	8
--#define VCU_PLL_CTRL_POR_IN_MASK	0x01
--#define VCU_PLL_CTRL_POR_IN_SHIFT	1
--#define VCU_PLL_CTRL_PWR_POR_MASK	0x01
--#define VCU_PLL_CTRL_PWR_POR_SHIFT	2
--#define VCU_PLL_CTRL_CLKOUTDIV_MASK	0x03
--#define VCU_PLL_CTRL_CLKOUTDIV_SHIFT	16
--#define VCU_PLL_CTRL_DEFAULT		0
--#define VCU_PLL_DIV2			2
-+#define VCU_PLL_CTRL_RESET		BIT(0)
-+#define VCU_PLL_CTRL_POR_IN		BIT(1)
-+#define VCU_PLL_CTRL_PWR_POR		BIT(2)
-+#define VCU_PLL_CTRL_BYPASS		BIT(3)
-+#define VCU_PLL_CTRL_FBDIV		GENMASK(14, 8)
-+#define VCU_PLL_CTRL_CLKOUTDIV		GENMASK(18, 16)
- 
- #define VCU_PLL_CFG			0x28
--#define VCU_PLL_CFG_RES_MASK		0x0f
--#define VCU_PLL_CFG_RES_SHIFT		0
--#define VCU_PLL_CFG_CP_MASK		0x0f
--#define VCU_PLL_CFG_CP_SHIFT		5
--#define VCU_PLL_CFG_LFHF_MASK		0x03
--#define VCU_PLL_CFG_LFHF_SHIFT		10
--#define VCU_PLL_CFG_LOCK_CNT_MASK	0x03ff
--#define VCU_PLL_CFG_LOCK_CNT_SHIFT	13
--#define VCU_PLL_CFG_LOCK_DLY_MASK	0x7f
--#define VCU_PLL_CFG_LOCK_DLY_SHIFT	25
-+#define VCU_PLL_CFG_RES			GENMASK(3, 0)
-+#define VCU_PLL_CFG_CP			GENMASK(8, 5)
-+#define VCU_PLL_CFG_LFHF		GENMASK(12, 10)
-+#define VCU_PLL_CFG_LOCK_CNT		GENMASK(22, 13)
-+#define VCU_PLL_CFG_LOCK_DLY		GENMASK(31, 25)
- #define VCU_ENC_CORE_CTRL		0x30
- #define VCU_ENC_MCU_CTRL		0x34
- #define VCU_DEC_CORE_CTRL		0x38
- #define VCU_DEC_MCU_CTRL		0x3c
--
- #define VCU_PLL_STATUS			0x60
--#define VCU_PLL_STATUS_LOCK_STATUS_MASK	0x01
-+#define VCU_PLL_STATUS_LOCK_STATUS	BIT(0)
- 
- #define MHZ				1000000
- #define FVCO_MIN			(1500U * MHZ)
-@@ -234,25 +220,6 @@ static inline void xvcu_write(void __iomem *iomem, u32 offset, u32 value)
- 	iowrite32(value, iomem + offset);
- }
- 
--/**
-- * xvcu_write_field_reg - Write to the vcu reg field
-- * @iomem:	vcu reg space base address
-- * @offset:	vcu reg offset from base
-- * @field:	vcu reg field to write to
-- * @mask:	vcu reg mask
-- * @shift:	vcu reg number of bits to shift the bitfield
-- */
--static void xvcu_write_field_reg(void __iomem *iomem, int offset,
--				 u32 field, u32 mask, int shift)
--{
--	u32 val = xvcu_read(iomem, offset);
--
--	val &= ~(mask << shift);
--	val |= (field & mask) << shift;
--
--	xvcu_write(iomem, offset, val);
--}
--
- #define to_vcu_pll(_hw) container_of(_hw, struct vcu_pll, hw)
- 
- struct vcu_pll {
-@@ -271,7 +238,7 @@ static int xvcu_pll_wait_for_lock(struct vcu_pll *pll)
- 	timeout = jiffies + msecs_to_jiffies(2000);
- 	do {
- 		lock_status = xvcu_read(base, VCU_PLL_STATUS);
--		if (lock_status & VCU_PLL_STATUS_LOCK_STATUS_MASK)
-+		if (lock_status & VCU_PLL_STATUS_LOCK_STATUS)
- 			return 0;
- 	} while (!time_after(jiffies, timeout));
- 
-@@ -291,8 +258,7 @@ static struct clk_hw *xvcu_register_pll_post(struct device *dev,
- 	 * timing in the design.
- 	 */
- 	vcu_pll_ctrl = xvcu_read(reg_base, VCU_PLL_CTRL);
--	div = vcu_pll_ctrl >> VCU_PLL_CTRL_CLKOUTDIV_SHIFT;
--	div = div & VCU_PLL_CTRL_CLKOUTDIV_MASK;
-+	div = FIELD_GET(VCU_PLL_CTRL_CLKOUTDIV, vcu_pll_ctrl);
- 	if (div != 1)
- 		return ERR_PTR(-EINVAL);
- 
-@@ -324,16 +290,15 @@ static int xvcu_pll_set_div(struct vcu_pll *pll, int div)
- 		return -EINVAL;
- 
- 	vcu_pll_ctrl = xvcu_read(base, VCU_PLL_CTRL);
--	vcu_pll_ctrl &= ~(VCU_PLL_CTRL_FBDIV_MASK << VCU_PLL_CTRL_FBDIV_SHIFT);
--	vcu_pll_ctrl |= (cfg->fbdiv & VCU_PLL_CTRL_FBDIV_MASK) <<
--			 VCU_PLL_CTRL_FBDIV_SHIFT;
-+	vcu_pll_ctrl &= ~VCU_PLL_CTRL_FBDIV;
-+	vcu_pll_ctrl |= FIELD_PREP(VCU_PLL_CTRL_FBDIV, cfg->fbdiv);
- 	xvcu_write(base, VCU_PLL_CTRL, vcu_pll_ctrl);
- 
--	cfg_val = (cfg->res << VCU_PLL_CFG_RES_SHIFT) |
--		   (cfg->cp << VCU_PLL_CFG_CP_SHIFT) |
--		   (cfg->lfhf << VCU_PLL_CFG_LFHF_SHIFT) |
--		   (cfg->lock_cnt << VCU_PLL_CFG_LOCK_CNT_SHIFT) |
--		   (cfg->lock_dly << VCU_PLL_CFG_LOCK_DLY_SHIFT);
-+	cfg_val = FIELD_PREP(VCU_PLL_CFG_RES, cfg->res) |
-+		  FIELD_PREP(VCU_PLL_CFG_CP, cfg->cp) |
-+		  FIELD_PREP(VCU_PLL_CFG_LFHF, cfg->lfhf) |
-+		  FIELD_PREP(VCU_PLL_CFG_LOCK_CNT, cfg->lock_cnt) |
-+		  FIELD_PREP(VCU_PLL_CFG_LOCK_DLY, cfg->lock_dly);
- 	xvcu_write(base, VCU_PLL_CFG, cfg_val);
- 
- 	return 0;
-@@ -362,7 +327,7 @@ static unsigned long xvcu_pll_recalc_rate(struct clk_hw *hw,
- 	u32 vcu_pll_ctrl;
- 
- 	vcu_pll_ctrl = xvcu_read(base, VCU_PLL_CTRL);
--	div = (vcu_pll_ctrl >> VCU_PLL_CTRL_FBDIV_SHIFT) & VCU_PLL_CTRL_FBDIV_MASK;
-+	div = FIELD_GET(VCU_PLL_CTRL_FBDIV, vcu_pll_ctrl);
- 
- 	return div * parent_rate;
- }
-@@ -382,23 +347,14 @@ static int xvcu_pll_enable(struct clk_hw *hw)
- 	u32 vcu_pll_ctrl;
- 	int ret;
- 
--	xvcu_write_field_reg(base, VCU_PLL_CTRL,
--			     1, VCU_PLL_CTRL_BYPASS_MASK,
--			     VCU_PLL_CTRL_BYPASS_SHIFT);
--
- 	vcu_pll_ctrl = xvcu_read(base, VCU_PLL_CTRL);
--	vcu_pll_ctrl &= ~(VCU_PLL_CTRL_POR_IN_MASK <<
--			  VCU_PLL_CTRL_POR_IN_SHIFT);
--	vcu_pll_ctrl |= (VCU_PLL_CTRL_DEFAULT & VCU_PLL_CTRL_POR_IN_MASK) <<
--			 VCU_PLL_CTRL_POR_IN_SHIFT;
--	vcu_pll_ctrl &= ~(VCU_PLL_CTRL_PWR_POR_MASK <<
--			  VCU_PLL_CTRL_PWR_POR_SHIFT);
--	vcu_pll_ctrl |= (VCU_PLL_CTRL_DEFAULT & VCU_PLL_CTRL_PWR_POR_MASK) <<
--			 VCU_PLL_CTRL_PWR_POR_SHIFT;
-+	vcu_pll_ctrl |= VCU_PLL_CTRL_BYPASS;
- 	xvcu_write(base, VCU_PLL_CTRL, vcu_pll_ctrl);
- 
--	vcu_pll_ctrl &= ~(VCU_PLL_CTRL_RESET_MASK << VCU_PLL_CTRL_RESET_SHIFT);
--	vcu_pll_ctrl |= (0 & VCU_PLL_CTRL_RESET_MASK) << VCU_PLL_CTRL_RESET_SHIFT;
-+	vcu_pll_ctrl = xvcu_read(base, VCU_PLL_CTRL);
-+	vcu_pll_ctrl &= ~VCU_PLL_CTRL_POR_IN;
-+	vcu_pll_ctrl &= ~VCU_PLL_CTRL_PWR_POR;
-+	vcu_pll_ctrl &= ~VCU_PLL_CTRL_RESET;
- 	xvcu_write(base, VCU_PLL_CTRL, vcu_pll_ctrl);
- 
- 	ret = xvcu_pll_wait_for_lock(pll);
-@@ -407,9 +363,9 @@ static int xvcu_pll_enable(struct clk_hw *hw)
- 		goto err;
- 	}
- 
--	xvcu_write_field_reg(base, VCU_PLL_CTRL,
--			     0, VCU_PLL_CTRL_BYPASS_MASK,
--			     VCU_PLL_CTRL_BYPASS_SHIFT);
-+	vcu_pll_ctrl = xvcu_read(base, VCU_PLL_CTRL);
-+	vcu_pll_ctrl &= ~VCU_PLL_CTRL_BYPASS;
-+	xvcu_write(base, VCU_PLL_CTRL, vcu_pll_ctrl);
- 
- err:
- 	return ret;
-@@ -422,12 +378,9 @@ static void xvcu_pll_disable(struct clk_hw *hw)
- 	u32 vcu_pll_ctrl;
- 
- 	vcu_pll_ctrl = xvcu_read(base, VCU_PLL_CTRL);
--	vcu_pll_ctrl &= ~(VCU_PLL_CTRL_POR_IN_MASK << VCU_PLL_CTRL_POR_IN_SHIFT);
--	vcu_pll_ctrl |= (1 & VCU_PLL_CTRL_POR_IN_MASK) << VCU_PLL_CTRL_POR_IN_SHIFT;
--	vcu_pll_ctrl &= ~(VCU_PLL_CTRL_PWR_POR_MASK << VCU_PLL_CTRL_PWR_POR_SHIFT);
--	vcu_pll_ctrl |= (1 & VCU_PLL_CTRL_PWR_POR_MASK) << VCU_PLL_CTRL_PWR_POR_SHIFT;
--	vcu_pll_ctrl &= ~(VCU_PLL_CTRL_RESET_MASK << VCU_PLL_CTRL_RESET_SHIFT);
--	vcu_pll_ctrl |= (1 & VCU_PLL_CTRL_RESET_MASK) << VCU_PLL_CTRL_RESET_SHIFT;
-+	vcu_pll_ctrl |= VCU_PLL_CTRL_POR_IN;
-+	vcu_pll_ctrl |= VCU_PLL_CTRL_PWR_POR;
-+	vcu_pll_ctrl |= VCU_PLL_CTRL_RESET;
- 	xvcu_write(base, VCU_PLL_CTRL, vcu_pll_ctrl);
- }
- 
+Thanks for your patch!
+
+> ---
+> v2->v3
+> * Implemented as a fixed clock
+
+Sounds fine to me.  If we ever need to configure this clock from Linux,
+the driver can be changed.
+
+> --- a/drivers/clk/renesas/rcar-gen3-cpg.c
+> +++ b/drivers/clk/renesas/rcar-gen3-cpg.c
+> @@ -427,6 +427,19 @@ static struct clk * __init cpg_sd_clk_register(const char *name,
+>         return clk;
+>  }
+>
+> +static bool __init cpg_rpcsrc_e3_parent_is_pll0(u32 mode)
+> +{
+> +       unsigned int e3_rpcsrc = (mode & GENMASK(4, 1)) >> 1;
+> +       unsigned int pll1[] = { 0x1, 0x3, 0x4, 0xb, };
+> +       int i;
+> +
+> +       for (i = 0; i < ARRAY_SIZE(pll1); i++)
+> +               if (e3_rpcsrc == pll1[i])
+> +                       return false;
+
+Did you know gcc (version 9.3.0) generates smaller code for:
+
+        switch (e3_rpcsrc) {
+        case 0x1:
+        case 0x3:
+        case 0x4:
+        case 0xb:
+                return false;
+
+        default:
+                return true;
+        }
+
+?
+
+> @@ -696,6 +709,42 @@ struct clk * __init rcar_gen3_cpg_clk_register(struct device *dev,
+>                                                   cpg_rpcsrc_div_table,
+>                                                   &cpg_lock);
+>
+> +       case CLK_TYPE_GEN3E3_RPCSRC:
+> +               /*
+> +                * Register RPCSRC as fixed factor clock based on the
+> +                * MD[4:1] pins and CPG_RPCCKCR[4:3] register value for
+> +                * which has been set prior to booting the kernel.
+> +                */
+> +
+> +               value = (readl(base + CPG_RPCCKCR) & GENMASK(4, 3)) >> 3;
+> +               if (cpg_rpcsrc_e3_parent_is_pll0(cpg_mode)) {
+> +                       if (value != 2)
+> +                               return ERR_PTR(-EINVAL);
+> +               } else {
+> +                       if (value == 2)
+> +                               return ERR_PTR(-EINVAL);
+> +               }
+
+IMHO this cross-verification is not needed, and harmful: it prevents the
+boot loader from changing the configuration, which I think is a valid
+use case.
+
+> +
+> +               switch (value) {
+> +               case 0:
+> +                       div = 5;
+> +                       break;
+> +               case 1:
+> +                       div = 3;
+> +                       break;
+> +               case 2:
+> +                       parent = clks[core->parent >> 16];
+> +                       if (IS_ERR(parent))
+> +                               return ERR_CAST(parent);
+> +                       div = 8;
+
+R-Car D3 is very similar, but uses div = 5 instead of 8.
+Perhaps this value can be retrieved from cpg_core_clk.div?
+Of course, we can do that later, when D3 support is added.
+
+> +                       break;
+> +               case 3:
+> +               default:
+> +                       div = 2;
+> +                       break;
+> +               }
+> +               break;
+> +
+>         case CLK_TYPE_GEN3_RPC:
+>                 return cpg_rpc_clk_register(core->name, base,
+>                                             __clk_get_name(parent), notifiers);
+
+The rest looks good to me.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.20.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
