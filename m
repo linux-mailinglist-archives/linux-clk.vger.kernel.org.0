@@ -2,123 +2,88 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3772B43B5
-	for <lists+linux-clk@lfdr.de>; Mon, 16 Nov 2020 13:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A4A2B45B2
+	for <lists+linux-clk@lfdr.de>; Mon, 16 Nov 2020 15:20:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730107AbgKPM1E (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 16 Nov 2020 07:27:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730105AbgKPM1D (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 16 Nov 2020 07:27:03 -0500
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2A6C0613CF;
-        Mon, 16 Nov 2020 04:27:01 -0800 (PST)
-Received: by mail-ed1-x542.google.com with SMTP id t9so18503302edq.8;
-        Mon, 16 Nov 2020 04:27:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=mXd0/BioOUY4fbAfXivgHmV1JXCJNPj02bKxYT4teDw=;
-        b=aF8hjcXSWh9E6HYJxpooFJWzfO1PGXseh1vu93W4ZUf9JbyYgZDV+Dtb08e2hzOLZE
-         RvSkB6qzSlW4QYiDz4zAYNvvVltV9co3rCsJwUxHywMM5QWQuKrqJ+HVS5VVYUb6ZXdD
-         zP4dD+VCvNyL7UPPJ44fOtS1l/Ofc7dsRTxkiTifl7vsn1VQ6+pajohv0Gw2fGIqjAEH
-         c+robE9EUGVtf652RofdnwpDVJYuHIt4XsPEetOayyXMjsq/j66cEOYC0+IQNCjY+093
-         wRxlJ3BPw6T7nbOQvT3CnPHTaVv7oPtGCzxEsUjb6hqxcxMwmwCgCidQVKenl05jDLfh
-         yFlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=mXd0/BioOUY4fbAfXivgHmV1JXCJNPj02bKxYT4teDw=;
-        b=VOy1DcRGsXAKsrRVddoXIfzErHIErTHJ87RD61pjQykeSKLvkOC7bUYCpkb0K/dPeB
-         MGMgOdzdn2CeXbneJDHGsvsZ854MW50Qz+vDumMk3uOUDa6Vj42mEll/w3IfAQEaP6w4
-         kXG0q1R3TVJ6nGvDT+yrOzsGyscSENJurToEErf/uXofg2O8G7+WHL/4oLejXhM5fxV8
-         Q7RJMx4D4iQByn27suLw1k0J9lF2IXW7nzNQwlqYaeRZ+BqvWsHg+dFLoikpE3lmlBYS
-         QqvycEaux8qnblUTvyBakcoVECep3YJU4VcfeDNcyX5+AW4HLtlGpIPPyyP+ZfwUwwbU
-         NNXw==
-X-Gm-Message-State: AOAM531BaGqlaqtLm7UdFS2FAVlWa4G5vuR5Gt6kyD6DA62Bdti+yDFK
-        potXuiBZS8hHHrkOikX9aHc=
-X-Google-Smtp-Source: ABdhPJx2PP7o7ipSQcri+CX6ZywaZ+1Bgit2Zrm/xG3cmUz3vjVE46tKFKxIG83Uj+s7MT1QYxBczg==
-X-Received: by 2002:a05:6402:14cf:: with SMTP id f15mr15262633edx.18.1605529620686;
-        Mon, 16 Nov 2020 04:27:00 -0800 (PST)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id n22sm10704848edr.11.2020.11.16.04.26.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 16 Nov 2020 04:27:00 -0800 (PST)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de
-Cc:     zhangqing@rock-chips.com, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] clk: rockchip: fix i2s gate bits on rk3066 and rk3188
-Date:   Mon, 16 Nov 2020 13:26:51 +0100
-Message-Id: <20201116122651.4215-2-jbx6244@gmail.com>
+        id S1729955AbgKPOT5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 16 Nov 2020 09:19:57 -0500
+Received: from out28-170.mail.aliyun.com ([115.124.28.170]:59150 "EHLO
+        out28-170.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726321AbgKPOTv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 16 Nov 2020 09:19:51 -0500
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.08245762|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.22616-0.0193576-0.754482;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047211;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=18;RT=18;SR=0;TI=SMTPD_---.IxS0Otf_1605536372;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.IxS0Otf_1605536372)
+          by smtp.aliyun-inc.com(10.147.40.7);
+          Mon, 16 Nov 2020 22:19:44 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        kishon@ti.com, vkoul@kernel.org
+Cc:     linux-clk@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, paul@crapouillou.net
+Subject: [PATCH v9 0/3] Use the generic PHY framework for Ingenic USB PHY.
+Date:   Mon, 16 Nov 2020 22:19:03 +0800
+Message-Id: <20201116141906.11758-1-zhouyanjie@wanyeetech.com>
 X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20201116122651.4215-1-jbx6244@gmail.com>
-References: <20201116122651.4215-1-jbx6244@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The Rockchip PX2/RK3066 uses these bits in CRU_CLKGATE7_CON:
+v3->v4:
+Only add new generic-PHY driver, without removing the old one. Because the
+jz4740-musb driver is not ready to use the generic PHY framework. When the
+jz4740-musb driver is modified to use the generic PHY framework, the old
+jz4770-phy driver can be "retired".
 
-hclk_i2s_8ch_gate_en  bit 4 (dtsi: i2s0)
-hclk_i2s0_2ch_gate_en bit 2 (dtsi: i2s1)
-hclk_i2s1_2ch_gate_en bit 3 (dtsi: i2s2)
+v4->v5:
+1.Add an extra blank line between "devm_of_phy_provider_register" and "return".
+2.Remove unnecessary "phy_set_drvdata".
+3.Add Paul Cercueil's Reviewed-by.
 
-The Rockchip PX3/RK3188 uses this bit in CRU_CLKGATE7_CON:
+v5->v6:
+1.Revert the removal of "phy_set_drvdata" in v5, removing "phy_set_drvdata" will
+  cause a kernel panic on CI20.
+  Reported-by: H. Nikolaus Schaller <hns@goldelico.com>
+2.Rewrite the macro definitions, replace the original code with "FIELD_PREP()"
+  and "u32p_replace_bits()" according to Vinod Koul's suggestion.
 
-hclk_i2s_2ch_gate_en  bit 2 (dtsi: i2s0)
+v6->v7:
+1.Remove the stray tab character.
+2.Remove unnecessary "platform_set_drvdata".
+3.Remove the "dev" field in priv structure, and use &phy->dev instead.
 
-The bits got somehow mixed up in the clk-rk3188.c file.
-The labels in the dtsi files are not suppose to change.
-The sclk and hclk names should match for
-"trace_event=clk_disable,clk_enable",
-so remove GATE HCLK_I2S0 from the common clock tree and
-fix the bits in the rk3066 and rk3188 clock tree.
+v7->v8:
+Add support for Ingenic JZ4775 SoC and X2000 SoC.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
-Changed V3:
-  reword
----
- drivers/clk/rockchip/clk-rk3188.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+v8->v9:
+Correct the path errors in "ingenic,phy-usb.yaml" and "ingenic,cgu.yaml".
 
-diff --git a/drivers/clk/rockchip/clk-rk3188.c b/drivers/clk/rockchip/clk-rk3188.c
-index 81ecf348e..362d068a4 100644
---- a/drivers/clk/rockchip/clk-rk3188.c
-+++ b/drivers/clk/rockchip/clk-rk3188.c
-@@ -449,7 +449,6 @@ static struct rockchip_clk_branch common_clk_branches[] __initdata = {
- 
- 	/* hclk_cpu gates */
- 	GATE(HCLK_ROM, "hclk_rom", "hclk_cpu", 0, RK2928_CLKGATE_CON(5), 6, GFLAGS),
--	GATE(HCLK_I2S0, "hclk_i2s0", "hclk_cpu", 0, RK2928_CLKGATE_CON(7), 2, GFLAGS),
- 	GATE(HCLK_SPDIF, "hclk_spdif", "hclk_cpu", 0, RK2928_CLKGATE_CON(7), 1, GFLAGS),
- 	GATE(0, "hclk_cpubus", "hclk_cpu", 0, RK2928_CLKGATE_CON(4), 8, GFLAGS),
- 	/* hclk_ahb2apb is part of a clk branch */
-@@ -634,8 +633,9 @@ static struct rockchip_clk_branch rk3066a_clk_branches[] __initdata = {
- 			RK2928_CLKGATE_CON(0), 12, GFLAGS,
- 			&rk3066a_i2s2_fracmux),
- 
--	GATE(HCLK_I2S1, "hclk_i2s1", "hclk_cpu", 0, RK2928_CLKGATE_CON(7), 3, GFLAGS),
--	GATE(HCLK_I2S2, "hclk_i2s2", "hclk_cpu", 0, RK2928_CLKGATE_CON(7), 4, GFLAGS),
-+	GATE(HCLK_I2S0, "hclk_i2s0", "hclk_cpu", 0, RK2928_CLKGATE_CON(7), 4, GFLAGS),
-+	GATE(HCLK_I2S1, "hclk_i2s1", "hclk_cpu", 0, RK2928_CLKGATE_CON(7), 2, GFLAGS),
-+	GATE(HCLK_I2S2, "hclk_i2s2", "hclk_cpu", 0, RK2928_CLKGATE_CON(7), 3, GFLAGS),
- 	GATE(HCLK_CIF1, "hclk_cif1", "hclk_cpu", 0, RK2928_CLKGATE_CON(6), 6, GFLAGS),
- 	GATE(HCLK_HDMI, "hclk_hdmi", "hclk_cpu", 0, RK2928_CLKGATE_CON(4), 14, GFLAGS),
- 
-@@ -728,6 +728,7 @@ static struct rockchip_clk_branch rk3188_clk_branches[] __initdata = {
- 			RK2928_CLKGATE_CON(0), 10, GFLAGS,
- 			&rk3188_i2s0_fracmux),
- 
-+	GATE(HCLK_I2S0, "hclk_i2s0", "hclk_cpu", 0, RK2928_CLKGATE_CON(7), 2, GFLAGS),
- 	GATE(0, "hclk_imem0", "hclk_cpu", 0, RK2928_CLKGATE_CON(4), 14, GFLAGS),
- 	GATE(0, "hclk_imem1", "hclk_cpu", 0, RK2928_CLKGATE_CON(4), 15, GFLAGS),
- 
+周琰杰 (Zhou Yanjie) (3):
+  USB: PHY: JZ4770: Remove unnecessary function calls.
+  dt-bindings: USB: Add bindings for Ingenic JZ4775 and X2000.
+  PHY: Ingenic: Add USB PHY driver using generic PHY framework.
+
+ .../devicetree/bindings/clock/ingenic,cgu.yaml     |   2 +-
+ .../ingenic,phy-usb.yaml}                          |   4 +-
+ drivers/phy/Kconfig                                |   1 +
+ drivers/phy/Makefile                               |   1 +
+ drivers/phy/ingenic/Kconfig                        |  12 +
+ drivers/phy/ingenic/Makefile                       |   2 +
+ drivers/phy/ingenic/phy-ingenic-usb.c              | 412 +++++++++++++++++++++
+ drivers/usb/phy/phy-jz4770.c                       |   2 +-
+ 8 files changed, 433 insertions(+), 3 deletions(-)
+ rename Documentation/devicetree/bindings/{usb/ingenic,jz4770-phy.yaml => phy/ingenic,phy-usb.yaml} (89%)
+ create mode 100644 drivers/phy/ingenic/Kconfig
+ create mode 100644 drivers/phy/ingenic/Makefile
+ create mode 100644 drivers/phy/ingenic/phy-ingenic-usb.c
+
 -- 
 2.11.0
 
