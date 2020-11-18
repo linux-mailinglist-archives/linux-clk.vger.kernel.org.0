@@ -2,95 +2,94 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3BB2B7ED9
-	for <lists+linux-clk@lfdr.de>; Wed, 18 Nov 2020 15:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B3C2B7FA2
+	for <lists+linux-clk@lfdr.de>; Wed, 18 Nov 2020 15:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726686AbgKRN6l (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 18 Nov 2020 08:58:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
+        id S1726686AbgKROoL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 18 Nov 2020 09:44:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726630AbgKRN6k (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 18 Nov 2020 08:58:40 -0500
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4573DC0613D4;
-        Wed, 18 Nov 2020 05:58:39 -0800 (PST)
-Received: by mail-ej1-x643.google.com with SMTP id f23so2906574ejk.2;
-        Wed, 18 Nov 2020 05:58:39 -0800 (PST)
+        with ESMTP id S1726894AbgKROoK (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 18 Nov 2020 09:44:10 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F56C0613D6
+        for <linux-clk@vger.kernel.org>; Wed, 18 Nov 2020 06:44:10 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id r6so1155928pjd.1
+        for <linux-clk@vger.kernel.org>; Wed, 18 Nov 2020 06:44:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=MNzWsDtU39BR4iFEfSJQ9mnoYu92ToJLMEGgLWUUrPw=;
-        b=YxD4BW5cjmQdz4D/NWPOTYFDoj79erTso5jj6MSUrfUHf5OPHU//Y+UjP6rHQ8VYEi
-         vBjQQBNvcP9cw+uaMWj5PTsXnqGwi+kVyf/BQa0kDaY381yNAEK3VpqAAZ093jnk/LMK
-         uTtUZiMYKd8Yzkuafi0CZD6v8UN+ngYxLTCukSBE1wNJ/fl4NlZ4t+DWlUI+C/vjax69
-         nouAaB5P0vcCRk3Ub6qTmGOojyV8lhP+JClrNBmQxficjyoktGm12RqQIMnkW051Za3x
-         r2gagmHv/V2uVmIY3M0N9T9Dl9MIz3112FQOwMO59615Oe+Zq9Y611rb0gojGj2SwgSl
-         KrLQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wi1tklYoU+4Q/BdD+it/ualPtR5EztUZa56jdKuDyDs=;
+        b=TqMS4BiprOHGkvbm/xiKQnITqSoHYZ4NlIRjexMJPgoTxMgGkRIO4ZIkXsqT6jTAbf
+         9uCdIBAwl77/nhCg9xDQOrdS3cjiZkRQYE/oWWEfdlgG2TNLf2CgfhUwMdSlM4Q7XlNl
+         gtFXIK1an9xUvq1LQ9tXIVZFfb+rrXB50yllQ1J5kKFcIcc5nn0sAuk1BVCHZktzR75W
+         1sBd6t4dYif6KYW8R69NpBs6I1MmSz1Nng+dmMoIMuRWVp+R4lNqPGjCPYvplZDV5fy7
+         +2iiuOL6ERlQo6qcIMNYqafp/lZtIHQIrfDWNLUaT2uvjhAGNVv65Fys5u5WHpD3nYJn
+         VvpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=MNzWsDtU39BR4iFEfSJQ9mnoYu92ToJLMEGgLWUUrPw=;
-        b=a8NEHxjZyAZdDSI/gLvONpQ1johPu3qg+gwPdtOsuUyOUeh7g8bJ2tu4GfSTdcCT2H
-         06+qBL8ZPxau6xpHh+CLyLnl3YkwxT1B7d9d+3ep2WOVDqGeLLZKNpzA4KxoU5jMWwnJ
-         VuiVIjfazYtDvE+GPUd/VixUTOQJsMG2VY8ps+UE9YAg/Ac2x2bOW0EyU7fak1xvJ4SQ
-         zb7IkHmC2Jg+NVSmks+dEZcQ8NxoAncoC6YCVwn0lkdHqS1VsWE2hjwnIQq+drzGRlHX
-         UI7s5pC+aYmywNrJezcJBZa4/bVIL0efXSRLJan2v4I9zxwohc32ZtyoQUwbzWpe7d6T
-         YYbg==
-X-Gm-Message-State: AOAM531vC98TXot9YabHK5L5nfm6KBWjbHmnW7ejx3TLKiFAQ3O2e7yd
-        897W0aeKHZfgYEfzi4e8Wcw=
-X-Google-Smtp-Source: ABdhPJyl5SpYNZp2HUHCYYO8l+T0uxxnjSi9rjNGR0CciOkx5xPSCoFR3ksws8b0r8sM04dsBaG9wA==
-X-Received: by 2002:a17:906:374a:: with SMTP id e10mr14400381ejc.246.1605707918063;
-        Wed, 18 Nov 2020 05:58:38 -0800 (PST)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id cx6sm13721384edb.61.2020.11.18.05.58.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 18 Nov 2020 05:58:37 -0800 (PST)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de
-Cc:     hjc@rock-chips.com, robh+dt@kernel.org, airlied@linux.ie,
-        daniel@ffwll.ch, mturquette@baylibre.com, sboyd@kernel.org,
-        lgirdwood@gmail.com, broonie@kernel.org, linux-clk@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 7/7] ARM: dts: rockchip: enable hdmi_sound and i2s0 for rk3066a-mk808
-Date:   Wed, 18 Nov 2020 14:58:22 +0100
-Message-Id: <20201118135822.9582-8-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20201118135822.9582-1-jbx6244@gmail.com>
-References: <20201118135822.9582-1-jbx6244@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wi1tklYoU+4Q/BdD+it/ualPtR5EztUZa56jdKuDyDs=;
+        b=NwllsRyBtDE4yyTe3K87XuO8pOZwe5DPOERzrI8Q5MF5l6EyHzhfzZLq500e4rmnwG
+         NUz65ZvnFa9xp0QtaElJlJvss5wYV5WlTgEfZv5ydLuOL6AIWlGBD5RiSIYcVyH59p0N
+         N/HkjpuarElqEEidCw9rBcFn1m5iVtslZmND9ybUFhSIyrRc/a3B+XtIy9RpuQXzjtlS
+         2pJFrFyu1m0b4QALqTj9YXqM958bal7RXH7FVNJa5TZDXb3T3WrZACIua40gkupbf2y/
+         SNJeqXiJ//KIT/RzMrWEYRvZOihzuL+CV1T4WGtPZ2iycgAYNrDXvN0BttM3FMQZtJhd
+         XiNA==
+X-Gm-Message-State: AOAM533zFcQDQTHC7VLkrbR2bvWS1l2T6357sl45IJwzcRxiXw8bfZh9
+        MJodTO/c1hg3Q7pKHwCbMSkR
+X-Google-Smtp-Source: ABdhPJx3dbWXij883VJ/7IaBRRF9jyjwMBK0HE9oi+np7RYbL45jFvE/U6ijF9mdN63vfRKK9SEGaw==
+X-Received: by 2002:a17:90b:11d3:: with SMTP id gv19mr288958pjb.232.1605710650071;
+        Wed, 18 Nov 2020 06:44:10 -0800 (PST)
+Received: from thinkpad ([2409:4072:400:708e:ac67:2882:f617:a8ff])
+        by smtp.gmail.com with ESMTPSA id y5sm2833325pjr.50.2020.11.18.06.44.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2020 06:44:09 -0800 (PST)
+Date:   Wed, 18 Nov 2020 20:14:01 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, mturquette@baylibre.com,
+        robh+dt@kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Naveen Yadav <naveenky@codeaurora.org>
+Subject: Re: [PATCH v2 2/4] clk: qcom: Add SDX55 GCC support
+Message-ID: <20201118144401.GA8942@thinkpad>
+References: <20201105104817.15715-1-manivannan.sadhasivam@linaro.org>
+ <20201105104817.15715-3-manivannan.sadhasivam@linaro.org>
+ <20201106093819.GE2621@vkoul-mobl>
+ <160538612750.60232.17440819605514427384@swboyd.mtv.corp.google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <160538612750.60232.17440819605514427384@swboyd.mtv.corp.google.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Make some noise with mk808. Enable the hdmi_sound node and
-add i2s0 as sound source for hdmi.
+On Sat, Nov 14, 2020 at 12:35:27PM -0800, Stephen Boyd wrote:
+> Quoting Vinod Koul (2020-11-06 01:38:19)
+> > On 05-11-20, 16:18, Manivannan Sadhasivam wrote:
+> > > +#include "reset.h"
+> > > +
+> > > +enum {
+> > > +     P_BI_TCXO,
+> > > +     P_CORE_BI_PLL_TEST_SE,
+> > 
+> > This is for test and we removed this for upstream, so can you do that as
+> > well (not parent will decrease for clks below)
+> > 
+> > With that updated:
+> > 
+> > Reviewed-by: Vinod Koul <vkoul@kernel.org>
+> > 
+> 
+> I half understood that. Just an FYI that I'm waiting for this update.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- arch/arm/boot/dts/rk3066a-mk808.dts | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Looks like this change is not needed. Can you please consider merging
+this series?
 
-diff --git a/arch/arm/boot/dts/rk3066a-mk808.dts b/arch/arm/boot/dts/rk3066a-mk808.dts
-index eed9e60cf..5fe74c097 100644
---- a/arch/arm/boot/dts/rk3066a-mk808.dts
-+++ b/arch/arm/boot/dts/rk3066a-mk808.dts
-@@ -116,6 +116,14 @@
- 	};
- };
- 
-+&hdmi_sound {
-+	status = "okay";
-+};
-+
-+&i2s0 {
-+	status = "okay";
-+};
-+
- &mmc0 {
- 	bus-width = <4>;
- 	cap-mmc-highspeed;
--- 
-2.11.0
-
+Thanks,
+Mani
