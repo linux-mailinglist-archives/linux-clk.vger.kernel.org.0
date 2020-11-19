@@ -2,93 +2,201 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6F52B96F4
-	for <lists+linux-clk@lfdr.de>; Thu, 19 Nov 2020 16:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D60362B9862
+	for <lists+linux-clk@lfdr.de>; Thu, 19 Nov 2020 17:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728949AbgKSPwp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 19 Nov 2020 10:52:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728946AbgKSPwn (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Nov 2020 10:52:43 -0500
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D380C061A49
-        for <linux-clk@vger.kernel.org>; Thu, 19 Nov 2020 07:52:43 -0800 (PST)
-Received: by mail-qk1-x742.google.com with SMTP id u4so5746754qkk.10
-        for <linux-clk@vger.kernel.org>; Thu, 19 Nov 2020 07:52:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iS4PFF4afNVE7r1m6FFtegXe9ReuZEWdknfJDOJxxsY=;
-        b=ogRs7aHVgPAe9BFPnptBBpgxHJY2yTOCZkeVo9BIdOoGrIr47GvR7a4/SOKPKeXlz7
-         N9hh27I3m3pqEEFW4SA/IirxvRS7+Uve3ZuaoQin3LNcceQO08qYMn92+YDYjVTybV7j
-         bSIzxWcAQQJ1XcUKoeRemnMcO4PLgEUPDhV6TrTxNcyUW4Sx/hMjOXHvB5Q29nxFjdw9
-         h+VnR8oEuBh5FV6QRfbJQuDhtwaatGpvwneia6taGDiJAMjegXWq5/MEPLinlC2OvfIS
-         5r7gJNdpUtLi22yEuDSs6g9KfyI47VLO44gBTSnbRlonevCZrbfqQxE+doXbWaAEobcX
-         ThBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iS4PFF4afNVE7r1m6FFtegXe9ReuZEWdknfJDOJxxsY=;
-        b=V4euoc0udHtCpVawXfUg1yJ+MsezbaQ1qTqxhtY+yzJRb7afPFJep1YU0oDydfCcIZ
-         U5Xj46TFERmbZP4NSNSBFIX9/TtlLXwjObWIBue8QCwK5q4l+2vATM3EbO+IBbb3ROMU
-         nLsPkwcZkQrkf8z8gqfMNzOF3P0LiM2wfO0UimGg/NaDS6V711s9RJNKIvHsWoDf9UUC
-         11eGq0vX2wWNGyQB8z1GiirMbJEAPITQC6DrdyDOcZFyOKtKUYp+RxxKnDuJz/tCdqQK
-         nhp+URm3Bnl53o4NExReDdUeUOKtpaT90FY9eYCU0Xsocoq+HDg6vSNkrap/4Bj6jpH1
-         Y4Ag==
-X-Gm-Message-State: AOAM531bBBFdvVkOaO3cMcuZXEXeW9UosNf98WL1MqqUyckAQ6eqJus/
-        QC2azbsLfk3omUHxri0zanwBXw==
-X-Google-Smtp-Source: ABdhPJxHwH4v7FYWbrIIlnErpYmRYuzu4SdUpPCubL+H7hYfW1iAJvkBSx64ZORRUh7Hqwse028vQw==
-X-Received: by 2002:a37:e207:: with SMTP id g7mr11719107qki.44.1605801162795;
-        Thu, 19 Nov 2020 07:52:42 -0800 (PST)
-Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.googlemail.com with ESMTPSA id g70sm127290qke.8.2020.11.19.07.52.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2020 07:52:42 -0800 (PST)
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        robh+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com
-Cc:     linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: [Patch v2 6/6] dt-bindings: crypto: qcom-qce: Add v5.4 to binding
-Date:   Thu, 19 Nov 2020 10:52:33 -0500
-Message-Id: <20201119155233.3974286-7-thara.gopinath@linaro.org>
+        id S1728320AbgKSQpV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 19 Nov 2020 11:45:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55154 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728140AbgKSQpU (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 19 Nov 2020 11:45:20 -0500
+Received: from kozik-lap.mshome.net (adsl-84-226-167-205.adslplus.ch [84.226.167.205])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3FAC022227;
+        Thu, 19 Nov 2020 16:45:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605804319;
+        bh=mXY6R0JYv9mPZeaRTe3GbHETYhXc5gsUwqUBxsCHotA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ryg5g3W0Vx46s7wfUJ1y28FBctVJEX1idl4DHQUzFksXj1Cg8wwPCnCjJn9cfMsHl
+         2ShZRUX6zT+y2y3tQZbrG31mNPn96KZa4XXJ+hF7rHMAlr2KeRJYXjbRfei3Vewvs+
+         5MFAR2J07lASd9JAUR3+1YXzSyQwqGDeV4bbFeKo=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH] clk: samsung: allow compile testing of Exynos, S3C64xx and S5Pv210
+Date:   Thu, 19 Nov 2020 17:45:09 +0100
+Message-Id: <20201119164509.754851-1-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201119155233.3974286-1-thara.gopinath@linaro.org>
-References: <20201119155233.3974286-1-thara.gopinath@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add compatible string to support v5.4 crypto engine.
+So far all Exynos, S3C64xx and S5Pv210 clock units were selected by
+respective SOC/ARCH Kconfig option.  On a kernel built for selected
+SoCs, this allowed to build only limited set of matching clock drivers.
+However compile testing was not possible in such case as Makefile object
+depent on SOC/ARCH option.
 
-Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Add separate Kconfig options for each of them to be able to compile
+test.
+
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- Documentation/devicetree/bindings/crypto/qcom-qce.txt | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/clk/samsung/Kconfig  | 67 ++++++++++++++++++++++++++++++++++--
+ drivers/clk/samsung/Makefile | 22 ++++++------
+ include/linux/clk/samsung.h  |  4 +--
+ 3 files changed, 78 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/crypto/qcom-qce.txt b/Documentation/devicetree/bindings/crypto/qcom-qce.txt
-index fdd53b184ba8..ed1ede9c0acc 100644
---- a/Documentation/devicetree/bindings/crypto/qcom-qce.txt
-+++ b/Documentation/devicetree/bindings/crypto/qcom-qce.txt
-@@ -2,7 +2,9 @@ Qualcomm crypto engine driver
+diff --git a/drivers/clk/samsung/Kconfig b/drivers/clk/samsung/Kconfig
+index 7e9c186e57ef..0441c4f73ac9 100644
+--- a/drivers/clk/samsung/Kconfig
++++ b/drivers/clk/samsung/Kconfig
+@@ -2,10 +2,73 @@
+ # Recent Exynos platforms should just select COMMON_CLK_SAMSUNG:
+ config COMMON_CLK_SAMSUNG
+ 	bool "Samsung Exynos clock controller support" if COMPILE_TEST
+-	# Clocks on ARM64 SoCs (e.g. Exynos5433, Exynos7) are chosen by
+-	# EXYNOS_ARM64_COMMON_CLK to avoid building them on ARMv7:
++	select S3C64XX_COMMON_CLK if ARM && ARCH_S3C64XX
++	select S5PV210_COMMON_CLK if ARM && ARCH_S5PV210
++	select EXYNOS_3250_COMMON_CLK if ARM && SOC_EXYNOS3250
++	select EXYNOS_4_COMMON_CLK if ARM && ARCH_EXYNOS4
++	select EXYNOS_5250_COMMON_CLK if ARM && SOC_EXYNOS5250
++	select EXYNOS_5260_COMMON_CLK if ARM && SOC_EXYNOS5260
++	select EXYNOS_5410_COMMON_CLK if ARM && SOC_EXYNOS5410
++	select EXYNOS_5420_COMMON_CLK if ARM && SOC_EXYNOS5420
+ 	select EXYNOS_ARM64_COMMON_CLK if ARM64 && ARCH_EXYNOS
  
- Required properties:
++config S3C64XX_COMMON_CLK
++	bool "Samsung S3C64xx clock controller support" if COMPILE_TEST
++	depends on COMMON_CLK_SAMSUNG
++	help
++	  Support for the clock controller present on the Samsung S3C64xx SoCs.
++	  Choose Y here only if you build for this SoC.
++
++config S5PV210_COMMON_CLK
++	bool "Samsung S5Pv210 clock controller support" if COMPILE_TEST
++	depends on COMMON_CLK_SAMSUNG
++	help
++	  Support for the clock controller present on the Samsung S5Pv210 SoCs.
++	  Choose Y here only if you build for this SoC.
++
++config EXYNOS_3250_COMMON_CLK
++	bool "Samsung Exynos3250 clock controller support" if COMPILE_TEST
++	depends on COMMON_CLK_SAMSUNG
++	help
++	  Support for the clock controller present on the Samsung
++	  Exynos3250 SoCs. Choose Y here only if you build for this SoC.
++
++config EXYNOS_4_COMMON_CLK
++	bool "Samsung Exynos4 clock controller support" if COMPILE_TEST
++	depends on COMMON_CLK_SAMSUNG
++	help
++	  Support for the clock controller present on the Samsung
++	  Exynos4212 and Exynos4412 SoCs. Choose Y here only if you build for
++	  this SoC.
++
++config EXYNOS_5250_COMMON_CLK
++	bool "Samsung Exynos5250 clock controller support" if COMPILE_TEST
++	depends on COMMON_CLK_SAMSUNG
++	help
++	  Support for the clock controller present on the Samsung
++	  Exynos5250 SoCs. Choose Y here only if you build for this SoC.
++
++config EXYNOS_5260_COMMON_CLK
++	bool "Samsung Exynos5260 clock controller support" if COMPILE_TEST
++	depends on COMMON_CLK_SAMSUNG
++	help
++	  Support for the clock controller present on the Samsung
++	  Exynos5260 SoCs. Choose Y here only if you build for this SoC.
++
++config EXYNOS_5410_COMMON_CLK
++	bool "Samsung Exynos5410 clock controller support" if COMPILE_TEST
++	depends on COMMON_CLK_SAMSUNG
++	help
++	  Support for the clock controller present on the Samsung
++	  Exynos5410 SoCs. Choose Y here only if you build for this SoC.
++
++config EXYNOS_5420_COMMON_CLK
++	bool "Samsung Exynos5420 clock controller support" if COMPILE_TEST
++	depends on COMMON_CLK_SAMSUNG
++	help
++	  Support for the clock controller present on the Samsung
++	  Exynos5420 SoCs. Choose Y here only if you build for this SoC.
++
+ config EXYNOS_ARM64_COMMON_CLK
+ 	bool "Samsung Exynos ARMv8-family clock controller support" if COMPILE_TEST
+ 	depends on COMMON_CLK_SAMSUNG
+diff --git a/drivers/clk/samsung/Makefile b/drivers/clk/samsung/Makefile
+index 6891b087acff..028b2e27a37e 100644
+--- a/drivers/clk/samsung/Makefile
++++ b/drivers/clk/samsung/Makefile
+@@ -4,15 +4,15 @@
+ #
  
--- compatible  : should be "qcom,crypto-v5.1"
-+- compatible  : should be
-+		"qcom,crypto-v5.1" for ipq6018
-+		"qcom,crypto-v5.4" for sdm845
- - reg         : specifies base physical address and size of the registers map
- - clocks      : phandle to clock-controller plus clock-specifier pair
- - clock-names : "iface" clocks register interface
+ obj-$(CONFIG_COMMON_CLK)	+= clk.o clk-pll.o clk-cpu.o
+-obj-$(CONFIG_SOC_EXYNOS3250)	+= clk-exynos3250.o
+-obj-$(CONFIG_ARCH_EXYNOS4)	+= clk-exynos4.o
+-obj-$(CONFIG_ARCH_EXYNOS4)	+= clk-exynos4412-isp.o
+-obj-$(CONFIG_SOC_EXYNOS5250)	+= clk-exynos5250.o
+-obj-$(CONFIG_SOC_EXYNOS5250)	+= clk-exynos5-subcmu.o
+-obj-$(CONFIG_SOC_EXYNOS5260)	+= clk-exynos5260.o
+-obj-$(CONFIG_SOC_EXYNOS5410)	+= clk-exynos5410.o
+-obj-$(CONFIG_SOC_EXYNOS5420)	+= clk-exynos5420.o
+-obj-$(CONFIG_SOC_EXYNOS5420)	+= clk-exynos5-subcmu.o
++obj-$(CONFIG_EXYNOS_3250_COMMON_CLK)	+= clk-exynos3250.o
++obj-$(CONFIG_EXYNOS_4_COMMON_CLK)	+= clk-exynos4.o
++obj-$(CONFIG_EXYNOS_4_COMMON_CLK)	+= clk-exynos4412-isp.o
++obj-$(CONFIG_EXYNOS_5250_COMMON_CLK)	+= clk-exynos5250.o
++obj-$(CONFIG_EXYNOS_5250_COMMON_CLK)	+= clk-exynos5-subcmu.o
++obj-$(CONFIG_EXYNOS_5260_COMMON_CLK)	+= clk-exynos5260.o
++obj-$(CONFIG_EXYNOS_5410_COMMON_CLK)	+= clk-exynos5410.o
++obj-$(CONFIG_EXYNOS_5420_COMMON_CLK)	+= clk-exynos5420.o
++obj-$(CONFIG_EXYNOS_5420_COMMON_CLK)	+= clk-exynos5-subcmu.o
+ obj-$(CONFIG_EXYNOS_ARM64_COMMON_CLK)	+= clk-exynos5433.o
+ obj-$(CONFIG_EXYNOS_AUDSS_CLK_CON) += clk-exynos-audss.o
+ obj-$(CONFIG_EXYNOS_CLKOUT)	+= clk-exynos-clkout.o
+@@ -21,5 +21,5 @@ obj-$(CONFIG_S3C2410_COMMON_CLK)+= clk-s3c2410.o
+ obj-$(CONFIG_S3C2410_COMMON_DCLK)+= clk-s3c2410-dclk.o
+ obj-$(CONFIG_S3C2412_COMMON_CLK)+= clk-s3c2412.o
+ obj-$(CONFIG_S3C2443_COMMON_CLK)+= clk-s3c2443.o
+-obj-$(CONFIG_ARCH_S3C64XX)	+= clk-s3c64xx.o
+-obj-$(CONFIG_ARCH_S5PV210)	+= clk-s5pv210.o clk-s5pv210-audss.o
++obj-$(CONFIG_S3C64XX_COMMON_CLK)	+= clk-s3c64xx.o
++obj-$(CONFIG_S5PV210_COMMON_CLK)	+= clk-s5pv210.o clk-s5pv210-audss.o
+diff --git a/include/linux/clk/samsung.h b/include/linux/clk/samsung.h
+index 79097e365f7f..38b774001712 100644
+--- a/include/linux/clk/samsung.h
++++ b/include/linux/clk/samsung.h
+@@ -10,7 +10,7 @@
+ 
+ struct device_node;
+ 
+-#ifdef CONFIG_ARCH_S3C64XX
++#ifdef CONFIG_S3C64XX_COMMON_CLK
+ void s3c64xx_clk_init(struct device_node *np, unsigned long xtal_f,
+ 		      unsigned long xusbxti_f, bool s3c6400,
+ 		      void __iomem *base);
+@@ -19,7 +19,7 @@ static inline void s3c64xx_clk_init(struct device_node *np,
+ 				    unsigned long xtal_f,
+ 				    unsigned long xusbxti_f,
+ 				    bool s3c6400, void __iomem *base) { }
+-#endif /* CONFIG_ARCH_S3C64XX */
++#endif /* CONFIG_S3C64XX_COMMON_CLK */
+ 
+ #ifdef CONFIG_S3C2410_COMMON_CLK
+ void s3c2410_common_clk_init(struct device_node *np, unsigned long xti_f,
 -- 
 2.25.1
 
