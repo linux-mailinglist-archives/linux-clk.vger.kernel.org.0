@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6AD2B96FC
-	for <lists+linux-clk@lfdr.de>; Thu, 19 Nov 2020 16:54:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 288882B96F9
+	for <lists+linux-clk@lfdr.de>; Thu, 19 Nov 2020 16:54:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727620AbgKSPw4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 19 Nov 2020 10:52:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48602 "EHLO
+        id S1728629AbgKSPww (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 19 Nov 2020 10:52:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728912AbgKSPwk (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Nov 2020 10:52:40 -0500
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF09C061A4A
-        for <linux-clk@vger.kernel.org>; Thu, 19 Nov 2020 07:52:39 -0800 (PST)
-Received: by mail-qt1-x842.google.com with SMTP id v11so4619929qtq.12
-        for <linux-clk@vger.kernel.org>; Thu, 19 Nov 2020 07:52:39 -0800 (PST)
+        with ESMTP id S1728934AbgKSPwm (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Nov 2020 10:52:42 -0500
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B05C0613D4
+        for <linux-clk@vger.kernel.org>; Thu, 19 Nov 2020 07:52:41 -0800 (PST)
+Received: by mail-qk1-x744.google.com with SMTP id r7so5779701qkf.3
+        for <linux-clk@vger.kernel.org>; Thu, 19 Nov 2020 07:52:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WK7dbS/2WIcf7lppGbM/SVGTBQiYrXQBAamVJT++jdI=;
-        b=Ietn0vzuyHymF+fGLpMED5gPejOJx5P9PsMQ9QZfIf/wzyM1FEyilGjb3Dq1VORSyu
-         IcqI45ReNY1xEI/igFPRVwVYyhZ8mdbCKPvufR3ia25oIq2M9rB9vjloVAWzsd83//2P
-         XF1VGcmFA2KVWMgvGLfHGSaBBgn0NiLfpDBO9SnALlYew2c5xzQVv2I7bO+VFyj6pfGI
-         CZ6v49PaCRj2t4atGj5HcPptxxaunnlvtR5YnUF3Tl1QPDak7R/+0RafesR9OKED/aX5
-         92VThVXyQyW79fWALN/m0wrLttVwkmsh4dvP7mJ2vwlcTvfTbLIbXPqh4PRq2rQ/crr9
-         PlRw==
+        bh=B4eYZ8BtJ+Xv96s0vkBJN4bKwPI1mGpKSPj/atTPTao=;
+        b=X2CLndD6x4dO4Y8ww/vjWOI2kjcDiGOnEue+rJYwfeW/8WYoST1Vap22OCgDFC3xjg
+         IzQAsiROeT7WX47nc/cJida59ADdsovdlPvUj+nBmphV6LEUEVBb5pGMTKrT3zE/q4uR
+         F/ht3F6Aw7D8dryDdAVxYpwP6Zkvf680g47LLROF/o/o0stekOh0OZp5i0ebMRzmhKc7
+         jbdQBNTkYsUAtf5HT5mvOmhJMR27P771vcfiGXagX0YZATIeHO4Z60vxO8rGV1/ccYvK
+         qj6I1MCoBohQrYd1JzslnVrT0p7g+UPcZ74j5ag3oiGTQXUzfQpRzHeqfgIxAcSLICff
+         hdPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WK7dbS/2WIcf7lppGbM/SVGTBQiYrXQBAamVJT++jdI=;
-        b=Hraw3PSLkiW/ihwGvrcWPvgnA9D/ZNc9YLkrW/2inq/sTnfizV+oEMYx0RdhyfaDkY
-         thUjRG/TVc63Wnao6O/UU4V4xfzvwYpzzqBhW4Y27oFnE/wqoXRH5SSrSTWa4C+KRlY5
-         pYnY3xqUji5n5Gj98H4pYCU66FUkTE8HPUMOXIHIpzAyx+a9BPKziscJHAk1DsDoSq2j
-         Q2WpP8zFFCtm91gIX/EyVIEVKbVgLRaYCXlkFxR9p5yLRZRyaKhGHILQjByLUcZVdBRy
-         i1UsXRkWY3Rl+xv+efnUZK2njt15yrldIv4vgm01qNWDfDqOx/TUAswdZL0qW2UotI0o
-         WeSA==
-X-Gm-Message-State: AOAM531soczt24LyfSvaAZM18i8lTW3Q6QRN1gSXqAhOS8ezNtRRC3JY
-        YIIr7HTgiE3+CQXCDwrCmWqiBQ==
-X-Google-Smtp-Source: ABdhPJzf8dTp0eeFb0ZcGPAqgK0gpZPZnoFCsXJb4OzIL6xCMGCHwTQWbO9Cvc8LdVyi5IZuS3G6sg==
-X-Received: by 2002:ac8:ec8:: with SMTP id w8mr6998038qti.371.1605801159080;
-        Thu, 19 Nov 2020 07:52:39 -0800 (PST)
+        bh=B4eYZ8BtJ+Xv96s0vkBJN4bKwPI1mGpKSPj/atTPTao=;
+        b=YVmqhdSI4EKOhDxSGTgC8kv7iqHFWZ8ksS4INLSofKX0x22l7cM7JZcPU75QaK3WwK
+         +2hjHBHt0n5rg51IFP9c5fT/mMzHtMoMj3WVHLcxY5ViG5hZtaSI+T4+wYLzjhchOaZF
+         GsT/ar5BKmuH/JC1Ihg1GOKDKTaTcRkLIqDH9H3nl4+3bvFDNYS2WKtNkTdIcDlMP+Y0
+         asQP+o7WrxpmSikchjN2SpMtBAdCw9DACj2xLBEZZhDEyy+4qBnRyBls6ad/Ja/PsBB9
+         X11uh2g/LuBhR6dTYLc9YyWt6ief+UGYvh1W9IH7Du7tniFc6p6QlZu558F7J2Gdsgyh
+         35fg==
+X-Gm-Message-State: AOAM531S0GNwyfLdJ49laev83dkK9Vp2aKL6u0U4/vzDpq3lWROcu8dD
+        3dXGUCVz9K4MgbBLlBFVX4pHTg==
+X-Google-Smtp-Source: ABdhPJz7szSCWmAcq2earjWNlZVZJgPNsWShDopwk6UN17GSGSj07ZyEDiGS/UuVYTVdcx34nGO4mA==
+X-Received: by 2002:a05:620a:5f6:: with SMTP id z22mr11361053qkg.211.1605801160386;
+        Thu, 19 Nov 2020 07:52:40 -0800 (PST)
 Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.googlemail.com with ESMTPSA id g70sm127290qke.8.2020.11.19.07.52.37
+        by smtp.googlemail.com with ESMTPSA id g70sm127290qke.8.2020.11.19.07.52.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2020 07:52:38 -0800 (PST)
+        Thu, 19 Nov 2020 07:52:39 -0800 (PST)
 From:   Thara Gopinath <thara.gopinath@linaro.org>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         herbert@gondor.apana.org.au, davem@davemloft.net,
@@ -54,9 +54,9 @@ To:     agross@kernel.org, bjorn.andersson@linaro.org,
 Cc:     linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [Patch v2 3/6] drivers: crypto: qce: Enable support for crypto engine on sdm845.
-Date:   Thu, 19 Nov 2020 10:52:30 -0500
-Message-Id: <20201119155233.3974286-4-thara.gopinath@linaro.org>
+Subject: [Patch v2 4/6] drivers: crypto: qce: Fix SHA result buffer corruption issues.
+Date:   Thu, 19 Nov 2020 10:52:31 -0500
+Message-Id: <20201119155233.3974286-5-thara.gopinath@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201119155233.3974286-1-thara.gopinath@linaro.org>
 References: <20201119155233.3974286-1-thara.gopinath@linaro.org>
@@ -66,50 +66,31 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add support Qualcomm Crypto Engine accelerated encryption and
-authentication algorithms on sdm845.
+Partial hash was being copied into the final result buffer without the
+entire message block processed. Depending on how the end user processes
+this result buffer, errors vary from result buffer corruption to result
+buffer poisoing. Fix this issue by ensuring that only the final hash value
+is copied into the result buffer.
 
 Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
 ---
- drivers/crypto/qce/core.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ drivers/crypto/qce/sha.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/crypto/qce/core.c b/drivers/crypto/qce/core.c
-index ea616b7259ae..67c3ca13e55b 100644
---- a/drivers/crypto/qce/core.c
-+++ b/drivers/crypto/qce/core.c
-@@ -160,7 +160,21 @@ static int qce_check_version(struct qce_device *qce)
- 		return -ENODEV;
+diff --git a/drivers/crypto/qce/sha.c b/drivers/crypto/qce/sha.c
+index 87be96a0b0bb..61c418c12345 100644
+--- a/drivers/crypto/qce/sha.c
++++ b/drivers/crypto/qce/sha.c
+@@ -48,7 +48,7 @@ static void qce_ahash_done(void *data)
+ 	dma_unmap_sg(qce->dev, &rctx->result_sg, 1, DMA_FROM_DEVICE);
  
- 	qce->burst_size = QCE_BAM_BURST_SIZE;
--	qce->pipe_pair_id = 1;
-+
-+	/*
-+	 * Rx and tx pipes are treated as a pair inside CE.
-+	 * Pipe pair number depends on the actual BAM dma pipe
-+	 * that is used for transfers. The BAM dma pipes are passed
-+	 * from the device tree and used to derive the pipe pair
-+	 * id in the CE driver as follows.
-+	 * 	BAM dma pipes(rx, tx)		CE pipe pair id
-+	 *		0,1				0
-+	 *		2,3				1
-+	 *		4,5				2
-+	 *		6,7				3
-+	 *		...
-+	 */
-+	qce->pipe_pair_id = qce->dma.rxchan->chan_id >> 1;
+ 	memcpy(rctx->digest, result->auth_iv, digestsize);
+-	if (req->result)
++	if (req->result && rctx->last_blk)
+ 		memcpy(req->result, result->auth_iv, digestsize);
  
- 	dev_dbg(qce->dev, "Crypto device found, version %d.%d.%d\n",
- 		major, minor, step);
-@@ -261,6 +275,7 @@ static int qce_crypto_remove(struct platform_device *pdev)
- 
- static const struct of_device_id qce_crypto_of_match[] = {
- 	{ .compatible = "qcom,crypto-v5.1", },
-+	{ .compatible = "qcom,crypto-v5.4", },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, qce_crypto_of_match);
+ 	rctx->byte_count[0] = cpu_to_be32(result->auth_byte_count[0]);
 -- 
 2.25.1
 
