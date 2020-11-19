@@ -2,126 +2,95 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF532B969A
-	for <lists+linux-clk@lfdr.de>; Thu, 19 Nov 2020 16:44:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6D02B96E1
+	for <lists+linux-clk@lfdr.de>; Thu, 19 Nov 2020 16:54:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728545AbgKSPoT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 19 Nov 2020 10:44:19 -0500
-Received: from esa4.microchip.iphmx.com ([68.232.154.123]:9660 "EHLO
-        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728773AbgKSPoR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Nov 2020 10:44:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1605800657; x=1637336657;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=h/XRQsr7glEa2g/r6SVO2kTjj0kdJnjJ6hTe5rBjWKs=;
-  b=Snrb573r5ELwgrQ/i6jVX8Z2bkJ3S6rCf9vEIr5cmpcY/dM1ZPe3v9gw
-   drXgyBI6OOK+pCHbacMj+/KuYFyO1upPVIcWHbSmR0N2bYKrijDKRU/JZ
-   1fIY5GtA/3eR2c+OikrRl8kGjV0mKAo1xPFrCXch4qU8NAjOIy7AKeHFC
-   ETPQnr1+JXLXsUXyg3gjoMT6WVkJF4C0eH5LckXx9J5855tYX2qvz2QNd
-   I/YFQsLpz9D7Zav908eC35oAnIaZOMjEljMIrVtFQbQbhMGlXBzsy5K3m
-   Py/A6iIMiyogxX+8dH4DbQvvdc5AkCcLXE1lKQbTnr+iyeeMSNY5/t4jL
-   w==;
-IronPort-SDR: 10EusQblgNvR/4HD8Tf3Yc/p38Upish+mP/sG5/LeDQOQ9h6MVSWv/Yr2x1vU7hg6qsSQ82WHm
- YV6gPui2AGeDGBR1Wq7qwg9UQY5+/tjrnBjzUfG5mAHcElKGU9EpZsXQ+bxgemh5sr60TA1Jd/
- iEss/F7wUeVfYlIijz9mjsyxtaeACFHmfLG0rMzd1N01jP+XzbWZzDGNqKkWbLKpiRT+fGqzIE
- bmKK0b/vN5X/WqfNH7JEVuptSmu7VGyjqO3LUtyK4xmIqHdz5wLY/cVAeDWHNauVh3HWZ0Ja9y
- YAc=
-X-IronPort-AV: E=Sophos;i="5.77,490,1596524400"; 
-   d="scan'208";a="94245187"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Nov 2020 08:44:16 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 19 Nov 2020 08:44:16 -0700
-Received: from m18063-ThinkPad-T460p.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Thu, 19 Nov 2020 08:44:13 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <ludovic.desroches@microchip.com>, <robh+dt@kernel.org>
-CC:     <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v6 11/11] clk: at91: sama7g5: register cpu clock
-Date:   Thu, 19 Nov 2020 17:43:17 +0200
-Message-ID: <1605800597-16720-12-git-send-email-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1605800597-16720-1-git-send-email-claudiu.beznea@microchip.com>
-References: <1605800597-16720-1-git-send-email-claudiu.beznea@microchip.com>
+        id S1728873AbgKSPwi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 19 Nov 2020 10:52:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48568 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728850AbgKSPwg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Nov 2020 10:52:36 -0500
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20347C0613D4
+        for <linux-clk@vger.kernel.org>; Thu, 19 Nov 2020 07:52:36 -0800 (PST)
+Received: by mail-qt1-x843.google.com with SMTP id f15so1173662qto.13
+        for <linux-clk@vger.kernel.org>; Thu, 19 Nov 2020 07:52:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bvhfCLHTYs7l5lsgLwNrBMAcXk6yVVYBXG3jF5cS+kE=;
+        b=MjOP4uTZ8G2drLy+R/RvDTmkhN1lqBygMFznKx7ziyTeTkXMBCOuGlBlydlYEhLWX7
+         ngUt75ThmQcdsQuf23omAO99hc0OHT4DMkNHzyw35nmR0qg0s6at9GgiN+un8UB0ZKyt
+         CN4stsYDR09rcHDLMSmGEJrVrd4zlDh1e4KeQIIWdH5+qDmKUYeCd//oeo/cqgs6nsdt
+         j8qQee8N+1vo5OCO9WkAZ4udArOify2tn9Nx90pk4hRlDz5UHBL6bXfaCzizk8pLV5yO
+         Hp4BsToydhApUMbA8R8RMc5zkYXqh6w6yNqGjPM5FdTUNrV2PYxa4yX/hHiDjNfprfqw
+         Yggg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bvhfCLHTYs7l5lsgLwNrBMAcXk6yVVYBXG3jF5cS+kE=;
+        b=q/wsJgXmtAz+L9oo0UlOvr8KjO3haXpJ3SPrU7dBkYncRlwx7Bvkgf4g/PoICU7BXG
+         yH47xLTTtEf18epuHSMsgz+px1kGwAUx+jezh5lTIgBO3RL2CZ7qmVUzlCQPsPprUo/o
+         HequDqFKoGVePelE943D2P9T1NjlSjVTC8kq+GgCpxotJcVqjyMc88bvvsH2ULVn7zuS
+         4kwS1QxJOC9h8yptkQwymXHVC0T3zLq7sbC37N9/3gefF1TOzb11la7vbPUDai6bHzBg
+         dYJUk2Q/1NAMXHB0qjO37kbI6m02iTkhb/b+ujE//fWpx/osdXRRIOZQvHrscjGF7wx5
+         Odxw==
+X-Gm-Message-State: AOAM5300y6vtHYGqnKvh/EOawOcvZ2lmXYASCGU2pmhObLWz5qCYYr71
+        K1+559ubsa4jVyVQIWRSAUKDTg==
+X-Google-Smtp-Source: ABdhPJwnQTWrrSwIs3w5+5w6NPMKWMWsTkoh980avt1UnXUDjYSHhhrtOQyVDGTYO0PGKo4rz9f6pg==
+X-Received: by 2002:aed:2084:: with SMTP id 4mr10469682qtb.81.1605801155263;
+        Thu, 19 Nov 2020 07:52:35 -0800 (PST)
+Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.googlemail.com with ESMTPSA id g70sm127290qke.8.2020.11.19.07.52.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2020 07:52:34 -0800 (PST)
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        robh+dt@kernel.org, sboyd@kernel.org, mturquette@baylibre.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [Patch v2 0/6] Enable Qualcomm Crypto Engine on sdm845
+Date:   Thu, 19 Nov 2020 10:52:27 -0500
+Message-Id: <20201119155233.3974286-1-thara.gopinath@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Register CPU clock as being the master clock prescaler. This would
-be used by DVFS. The block schema of SAMA7G5's PMC contains also a divider
-between master clock prescaler and CPU (PMC_CPU_RATIO.RATIO) but the
-frequencies supported by SAMA7G5 could be directly received from
-CPUPLL + master clock prescaler and the extra divider would do no work in
-case it would be enabled.
+Qualcomm crypto engine supports hardware accelerated algorithms for
+encryption and authentication. Enable support for aes,des,3des encryption
+algorithms and sha1,sha256, hmac(sha1),hmac(sha256) authentication
+algorithms on sdm845.The patch series has been tested using the kernel
+crypto testing module tcrypto.ko.
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- drivers/clk/at91/sama7g5.c       | 13 ++++++-------
- include/dt-bindings/clock/at91.h |  1 +
- 2 files changed, 7 insertions(+), 7 deletions(-)
+v1->v2:
+- Rebased to linux-next v5.10-rc4.
+- Fixed subject line format in all patches as per Bjorn's feedback.
 
-diff --git a/drivers/clk/at91/sama7g5.c b/drivers/clk/at91/sama7g5.c
-index 927eb3b2b126..a6e20b35960e 100644
---- a/drivers/clk/at91/sama7g5.c
-+++ b/drivers/clk/at91/sama7g5.c
-@@ -904,7 +904,7 @@ static void __init sama7g5_pmc_setup(struct device_node *np)
- 	if (IS_ERR(regmap))
- 		return;
- 
--	sama7g5_pmc = pmc_data_allocate(PMC_ETHPLL + 1,
-+	sama7g5_pmc = pmc_data_allocate(PMC_CPU + 1,
- 					nck(sama7g5_systemck),
- 					nck(sama7g5_periphck),
- 					nck(sama7g5_gck), 8);
-@@ -981,18 +981,17 @@ static void __init sama7g5_pmc_setup(struct device_node *np)
- 		}
- 	}
- 
--	parent_names[0] = md_slck_name;
--	parent_names[1] = "mainck";
--	parent_names[2] = "cpupll_divpmcck";
--	parent_names[3] = "syspll_divpmcck";
--	hw = at91_clk_register_master_pres(regmap, "mck0_pres", 4, parent_names,
-+	parent_names[0] = "cpupll_divpmcck";
-+	hw = at91_clk_register_master_pres(regmap, "cpuck", 1, parent_names,
- 					   &mck0_layout, &mck0_characteristics,
- 					   &pmc_mck0_lock,
- 					   CLK_SET_RATE_PARENT, 0);
- 	if (IS_ERR(hw))
- 		goto err_free;
- 
--	hw = at91_clk_register_master_div(regmap, "mck0_div", "mck0_pres",
-+	sama7g5_pmc->chws[PMC_CPU] = hw;
-+
-+	hw = at91_clk_register_master_div(regmap, "mck0", "cpuck",
- 					  &mck0_layout, &mck0_characteristics,
- 					  &pmc_mck0_lock, 0);
- 	if (IS_ERR(hw))
-diff --git a/include/dt-bindings/clock/at91.h b/include/dt-bindings/clock/at91.h
-index fab313f62e8f..98e1b2ab6403 100644
---- a/include/dt-bindings/clock/at91.h
-+++ b/include/dt-bindings/clock/at91.h
-@@ -34,6 +34,7 @@
- #define PMC_AUDIOPMCPLL		(PMC_MAIN + 6)
- #define PMC_AUDIOIOPLL		(PMC_MAIN + 7)
- #define PMC_ETHPLL		(PMC_MAIN + 8)
-+#define PMC_CPU			(PMC_MAIN + 9)
- 
- #ifndef AT91_PMC_MOSCS
- #define AT91_PMC_MOSCS		0		/* MOSCS Flag */
+Thara Gopinath (6):
+  dt-binding:clock: Add entry for crypto engine RPMH clock resource
+  clk:qcom:rpmh: Add CE clock on sdm845.
+  drivers:crypto:qce: Enable support for crypto engine on sdm845.
+  drivers:crypto:qce: Fix SHA result buffer corruption issues.
+  dts:qcom:sdm845: Add dt entries to support crypto engine.
+  devicetree:bindings:crypto: Extend qcom-qce binding to add support for
+    crypto engine version 5.4
+
+ .../devicetree/bindings/crypto/qcom-qce.txt   |  4 ++-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          | 30 +++++++++++++++++++
+ drivers/clk/qcom/clk-rpmh.c                   |  2 ++
+ drivers/crypto/qce/core.c                     | 17 ++++++++++-
+ drivers/crypto/qce/sha.c                      |  2 +-
+ include/dt-bindings/clock/qcom,rpmh.h         |  1 +
+ 6 files changed, 53 insertions(+), 3 deletions(-)
+
 -- 
-2.7.4
+2.25.1
 
