@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9154E2B96EF
-	for <lists+linux-clk@lfdr.de>; Thu, 19 Nov 2020 16:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6F52B96F4
+	for <lists+linux-clk@lfdr.de>; Thu, 19 Nov 2020 16:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728882AbgKSPwn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 19 Nov 2020 10:52:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48620 "EHLO
+        id S1728949AbgKSPwp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 19 Nov 2020 10:52:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728937AbgKSPwn (ORCPT
+        with ESMTP id S1728946AbgKSPwn (ORCPT
         <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Nov 2020 10:52:43 -0500
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB45C061A49
-        for <linux-clk@vger.kernel.org>; Thu, 19 Nov 2020 07:52:42 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id k4so5728228qko.13
-        for <linux-clk@vger.kernel.org>; Thu, 19 Nov 2020 07:52:42 -0800 (PST)
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D380C061A49
+        for <linux-clk@vger.kernel.org>; Thu, 19 Nov 2020 07:52:43 -0800 (PST)
+Received: by mail-qk1-x742.google.com with SMTP id u4so5746754qkk.10
+        for <linux-clk@vger.kernel.org>; Thu, 19 Nov 2020 07:52:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ncm4tg3t1i7YF0Acj05l9+ZFtRqok/Gt9GCUMfnO+SI=;
-        b=Dwn1JI3IGVVrz9y1hJnMh9HlIiQF+/UE4yWOgcnTq+QHQ0LRgSEKDOa17UhFgxvw5W
-         sfrnXKLoLKvWfb3hD8atziUk3EsE1xbMU/Paxw0f04Jrx9FaVGupvJVC8PtlLpAz9mTT
-         YZNyEHaqD1c1sHi+lAHPsqQjYNB2C7hVqGlHXZ346pyCia0Td+Bn9V2H9gMwvS3F3cE+
-         /sXSXGVVWvDmDNU98wXz3r+hkVy1GpHWJZfSnFhTybRekpDX3GQiha9tvuFs2S1EoNH5
-         NtNal34ErNuxWUva/p0UbDHeDlh7hwO4BxyWAjjyqCuHOohH8T6OZelQaslPySs52tMO
-         kVFA==
+        bh=iS4PFF4afNVE7r1m6FFtegXe9ReuZEWdknfJDOJxxsY=;
+        b=ogRs7aHVgPAe9BFPnptBBpgxHJY2yTOCZkeVo9BIdOoGrIr47GvR7a4/SOKPKeXlz7
+         N9hh27I3m3pqEEFW4SA/IirxvRS7+Uve3ZuaoQin3LNcceQO08qYMn92+YDYjVTybV7j
+         bSIzxWcAQQJ1XcUKoeRemnMcO4PLgEUPDhV6TrTxNcyUW4Sx/hMjOXHvB5Q29nxFjdw9
+         h+VnR8oEuBh5FV6QRfbJQuDhtwaatGpvwneia6taGDiJAMjegXWq5/MEPLinlC2OvfIS
+         5r7gJNdpUtLi22yEuDSs6g9KfyI47VLO44gBTSnbRlonevCZrbfqQxE+doXbWaAEobcX
+         ThBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ncm4tg3t1i7YF0Acj05l9+ZFtRqok/Gt9GCUMfnO+SI=;
-        b=YFFS2x+Wb+FBZ/+iBtGy31eiuSOrXVEvqTXHRtdb1cPmL1ou3FjBKbA48vKMsfpqRh
-         MUciZ4omG5gnrlCTyHVodema9x6pBt4TFRYOvDcLTQfRqVryi+juS9nxMrNH/E5gCdGX
-         7Nzk+QhJRNQ5GU2O9JiLVsRv67A33ju8uXl2ovCl6C1Bf26n7bmvPiBxJANxU8urnCDD
-         3GDjj/4LaxrJFzlTxpt4T7BDUi6sWBfBF+AoXFkgv/8o7fh/Hy8RXhn5faC9eb6FkTli
-         6h4/7Ec2XRHSpSG4lL1PAEiu51MfUhXXkIRucWYFwDz1n1pJVLEbGbYe5sZbCIrO14kZ
-         TLNQ==
-X-Gm-Message-State: AOAM532UvCaJ74Ac+rNQB3wjW22RczW6oDWJg7NvGM8D/2U+r0+4AXqV
-        V68qd4++X4Peqy2mvMCBuTFLuQ==
-X-Google-Smtp-Source: ABdhPJzBzlC9keR57VmYhsWPTNkQgkbnigWXOFO/CWaItdZnYLjbu3+faOf09WY8SRnpqH5zJU98Ww==
-X-Received: by 2002:a05:620a:d41:: with SMTP id o1mr11295674qkl.338.1605801161839;
-        Thu, 19 Nov 2020 07:52:41 -0800 (PST)
+        bh=iS4PFF4afNVE7r1m6FFtegXe9ReuZEWdknfJDOJxxsY=;
+        b=V4euoc0udHtCpVawXfUg1yJ+MsezbaQ1qTqxhtY+yzJRb7afPFJep1YU0oDydfCcIZ
+         U5Xj46TFERmbZP4NSNSBFIX9/TtlLXwjObWIBue8QCwK5q4l+2vATM3EbO+IBbb3ROMU
+         nLsPkwcZkQrkf8z8gqfMNzOF3P0LiM2wfO0UimGg/NaDS6V711s9RJNKIvHsWoDf9UUC
+         11eGq0vX2wWNGyQB8z1GiirMbJEAPITQC6DrdyDOcZFyOKtKUYp+RxxKnDuJz/tCdqQK
+         nhp+URm3Bnl53o4NExReDdUeUOKtpaT90FY9eYCU0Xsocoq+HDg6vSNkrap/4Bj6jpH1
+         Y4Ag==
+X-Gm-Message-State: AOAM531bBBFdvVkOaO3cMcuZXEXeW9UosNf98WL1MqqUyckAQ6eqJus/
+        QC2azbsLfk3omUHxri0zanwBXw==
+X-Google-Smtp-Source: ABdhPJxHwH4v7FYWbrIIlnErpYmRYuzu4SdUpPCubL+H7hYfW1iAJvkBSx64ZORRUh7Hqwse028vQw==
+X-Received: by 2002:a37:e207:: with SMTP id g7mr11719107qki.44.1605801162795;
+        Thu, 19 Nov 2020 07:52:42 -0800 (PST)
 Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
-        by smtp.googlemail.com with ESMTPSA id g70sm127290qke.8.2020.11.19.07.52.40
+        by smtp.googlemail.com with ESMTPSA id g70sm127290qke.8.2020.11.19.07.52.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2020 07:52:41 -0800 (PST)
+        Thu, 19 Nov 2020 07:52:42 -0800 (PST)
 From:   Thara Gopinath <thara.gopinath@linaro.org>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         herbert@gondor.apana.org.au, davem@davemloft.net,
@@ -54,9 +54,9 @@ To:     agross@kernel.org, bjorn.andersson@linaro.org,
 Cc:     linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [Patch v2 5/6] dts: qcom: sdm845: Add dt entries to support crypto engine.
-Date:   Thu, 19 Nov 2020 10:52:32 -0500
-Message-Id: <20201119155233.3974286-6-thara.gopinath@linaro.org>
+Subject: [Patch v2 6/6] dt-bindings: crypto: qcom-qce: Add v5.4 to binding
+Date:   Thu, 19 Nov 2020 10:52:33 -0500
+Message-Id: <20201119155233.3974286-7-thara.gopinath@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201119155233.3974286-1-thara.gopinath@linaro.org>
 References: <20201119155233.3974286-1-thara.gopinath@linaro.org>
@@ -66,55 +66,29 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add crypto engine (CE) and CE BAM related nodes and definitions to
-"sdm845.dtsi".
+Add compatible string to support v5.4 crypto engine.
 
 Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 30 ++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ Documentation/devicetree/bindings/crypto/qcom-qce.txt | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 40e8c11f23ab..b5b2ea97681f 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -2138,6 +2138,36 @@ ufs_mem_phy_lanes: lanes@1d87400 {
- 			};
- 		};
+diff --git a/Documentation/devicetree/bindings/crypto/qcom-qce.txt b/Documentation/devicetree/bindings/crypto/qcom-qce.txt
+index fdd53b184ba8..ed1ede9c0acc 100644
+--- a/Documentation/devicetree/bindings/crypto/qcom-qce.txt
++++ b/Documentation/devicetree/bindings/crypto/qcom-qce.txt
+@@ -2,7 +2,9 @@ Qualcomm crypto engine driver
  
-+		cryptobam: dma@1dc4000 {
-+			compatible = "qcom,bam-v1.7.0";
-+			reg = <0 0x01dc4000 0 0x24000>;
-+			interrupts = <GIC_SPI 272 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&rpmhcc RPMH_CE_CLK>;
-+			clock-names = "bam_clk";
-+			#dma-cells = <1>;
-+			qcom,ee = <0>;
-+			qcom,controlled-remotely = <1>;
-+			iommus = <&apps_smmu 0x704 0x1>,
-+				 <&apps_smmu 0x706 0x1>,
-+				 <&apps_smmu 0x714 0x1>,
-+				 <&apps_smmu 0x716 0x1>;
-+		};
-+
-+		crypto: crypto@1dfa000 {
-+			compatible = "qcom,crypto-v5.4";
-+			reg = <0 0x01dfa000 0 0x6000>;
-+			clocks = <&gcc GCC_CE1_AHB_CLK>,
-+				 <&gcc GCC_CE1_AHB_CLK>,
-+				 <&rpmhcc RPMH_CE_CLK>;
-+			clock-names = "iface", "bus", "core";
-+			dmas = <&cryptobam 6>, <&cryptobam 7>;
-+			dma-names = "rx", "tx";
-+			iommus = <&apps_smmu 0x704 0x1>,
-+				 <&apps_smmu 0x706 0x1>,
-+				 <&apps_smmu 0x714 0x1>,
-+				 <&apps_smmu 0x716 0x1>;
-+		};
-+
- 		ipa: ipa@1e40000 {
- 			compatible = "qcom,sdm845-ipa";
+ Required properties:
  
+-- compatible  : should be "qcom,crypto-v5.1"
++- compatible  : should be
++		"qcom,crypto-v5.1" for ipq6018
++		"qcom,crypto-v5.4" for sdm845
+ - reg         : specifies base physical address and size of the registers map
+ - clocks      : phandle to clock-controller plus clock-specifier pair
+ - clock-names : "iface" clocks register interface
 -- 
 2.25.1
 
