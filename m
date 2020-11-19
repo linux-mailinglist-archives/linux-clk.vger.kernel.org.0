@@ -2,120 +2,90 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA572B8C5B
-	for <lists+linux-clk@lfdr.de>; Thu, 19 Nov 2020 08:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C00A92B8EF7
+	for <lists+linux-clk@lfdr.de>; Thu, 19 Nov 2020 10:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726490AbgKSH1t (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 19 Nov 2020 02:27:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
+        id S1727069AbgKSJc1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 19 Nov 2020 04:32:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726486AbgKSH1s (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Nov 2020 02:27:48 -0500
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB841C0617A7
-        for <linux-clk@vger.kernel.org>; Wed, 18 Nov 2020 23:27:48 -0800 (PST)
-Received: by mail-pg1-x542.google.com with SMTP id t21so3441907pgl.3
-        for <linux-clk@vger.kernel.org>; Wed, 18 Nov 2020 23:27:48 -0800 (PST)
+        with ESMTP id S1726599AbgKSJc1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 Nov 2020 04:32:27 -0500
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8D6C0613CF;
+        Thu, 19 Nov 2020 01:32:27 -0800 (PST)
+Received: by mail-il1-x143.google.com with SMTP id t13so4757867ilp.2;
+        Thu, 19 Nov 2020 01:32:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=u5W6INqg2Zpl99fZRNl1fAgbWBqyZfbuE4X8ZoNAf8o=;
-        b=i07saqU5+eNp08WFeDZuxfBIwgK2EE/UqyJVMmRevU8OXoD+b6rUppmRHE4GnszIjP
-         HXsPokwsXJ8+8J0PuajCtM+FbRlDdwuy6E4HFtRsBCCu1QzuaUe6m0tysKscJToq7Y5C
-         Hw2cwkMC1l4VmEaqvptS0dAOti4+EMYdGybSlsI8h+48AEickIPKzme69Ym7VdQps/uq
-         Kw0abvemofIVstOfMxHHgbS9NNFK2LJfvWvz9xZH6Oy15GcGQRcp3tZmHb/Chagn30Uo
-         Tmu0nFgu/hEPG6AcRc/ORXn6n5YB15Tf7OQeCSn4KVhT1+fi20o7g2eO18MLg6gn3qob
-         YI8g==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KNYi7k+SD7m8Q6dkb27HJ0eAGPSje9gd3Xmj2AuiEfo=;
+        b=a05oe/+RY1dw3WMRMmVe7SMqPBLJcalWI9jZ1o8ofqpMLY6y6RNxi3sNW5B1aQwuv1
+         2SYwdHkESFN72GFEtQnm8umwx9Uuu39WyCykmR8DkGf5w+vHnywzY5M6P4wldYEhdary
+         Fjh7M524CpZ4VTnT2gcBjxJsdh0e10WezDKUf5KikPMOTiLnU8UudCezsF5EFemV9nuy
+         wnlx4TIVPHE5yadPSTDYv0V8mtKE+cSvtXBSdRwoeKseq4a58ZjNbNOfF5gyf60EPQSE
+         QMWfoFRh9y2hYc7xR3mHSCwWhTbUNfEmzzaMbvPaX3qqXfZzeMzJnlCvDI8JPSh5fRP1
+         uP6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=u5W6INqg2Zpl99fZRNl1fAgbWBqyZfbuE4X8ZoNAf8o=;
-        b=tQFUjn9aFoeIZKXIDRHyAe6Yg1gzzD4Xgoawwdc1qZjGw2M1hFSbXbqeK/eQmwqHJg
-         Wycb4RiHzNOJwfDXK0cPB1kgVUO+zmwHgzIfdxwQgMB0TLDEzxrtroOf9E9lUZJYc63u
-         NznBl9pdQ5P+vp39V7F4kbtrHYn9EpBPB/Fkf4yawfr1MGFjGlpasND/OnQqzPXxqkNX
-         dhaJnHVS8a5FnufnArCmcX2G9dJv3GF4BSPouT1RZJKgd4qA9A+/uw2/OFV/agUKjXFz
-         zlXc+GbHDsR3bddkpoYIN4SRY6M9JSm4cnEFp4YlkGg0TkSWNhbFAwfBpvS50QtUMVhb
-         rDLg==
-X-Gm-Message-State: AOAM5319/iagQSaufjv6sConx3gj2Bf3xrPJV7HbYB2fWJCQH6er5Sxg
-        QJA4K2E/D4Up7hXVafV23Ultl4dZxFD/
-X-Google-Smtp-Source: ABdhPJxRM9PQHBXXdV5DkxBGYt5j2yngr3PZYdVthkQadxzerS6KDef4fkH7pUHSRCfTzqoz/pMDkg==
-X-Received: by 2002:a17:90a:de0c:: with SMTP id m12mr2362619pjv.224.1605770868240;
-        Wed, 18 Nov 2020 23:27:48 -0800 (PST)
-Received: from localhost.localdomain ([103.59.133.81])
-        by smtp.googlemail.com with ESMTPSA id a8sm26802923pfa.132.2020.11.18.23.27.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2020 23:27:47 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     sboyd@kernel.org, mturquette@baylibre.com, robh+dt@kernel.org
-Cc:     bjorn.andersson@linaro.org, vkoul@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3 4/4] clk: qcom: Add support for SDX55 RPMh clocks
-Date:   Thu, 19 Nov 2020 12:57:14 +0530
-Message-Id: <20201119072714.14460-5-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201119072714.14460-1-manivannan.sadhasivam@linaro.org>
-References: <20201119072714.14460-1-manivannan.sadhasivam@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KNYi7k+SD7m8Q6dkb27HJ0eAGPSje9gd3Xmj2AuiEfo=;
+        b=BSJyelEuEnxQZsKyMQ0i/qigHmLJQUulvGmJ2NQ/PBbPxZ4BUSOhJDgcMpDPBWORPL
+         GmsIBgNKi7j8Wyf8ljqVMNlbcqAuY527IN8GX6mOKCNOI5EX79J9lueebzVdxPBy4Akr
+         CYy5wUKf0nVOXtceNiGodHbtST4p7i0GyoP1UJgNpX5PSr8JMUg4ad/iVBfNsoAtTX9p
+         hJroV1eANyJnM8f0JkP/mAZzbb9SX3+UVLgwyjgCerqwpQk8AzRKMwnHKumthLOw93uJ
+         IFPYQoRarlkh7pFPL5immtgDrpT8Q7X+2vSbwKmVxCTm2kM0SuCRlipfssohcCaFdrPz
+         3suQ==
+X-Gm-Message-State: AOAM531N3HaZexnhlKv/FQo9Cs8jtMnE4Ue9W4RPx1mS96GbHZCpHEha
+        B215MTlHrf0yvRc7xRlQqj4euo/bNALaImutWx4=
+X-Google-Smtp-Source: ABdhPJyd3hCc/8+RvwRQKTE0igheO/eHL6J48ND6UrkSHz8YgNeJK2v6pndGgRunYTXpv7qCNQZhEr2EkjXIlBsXRgg=
+X-Received: by 2002:a92:7914:: with SMTP id u20mr20826952ilc.203.1605778346666;
+ Thu, 19 Nov 2020 01:32:26 -0800 (PST)
+MIME-Version: 1.0
+References: <20201113154632.24973-1-sergio.paracuellos@gmail.com> <20201113154632.24973-4-sergio.paracuellos@gmail.com>
+In-Reply-To: <20201113154632.24973-4-sergio.paracuellos@gmail.com>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Thu, 19 Nov 2020 17:32:16 +0800
+Message-ID: <CAJsYDVL1ZYc=OaCS7_NNu27aUKmpHp63nPuVq1V8xp8s6Vguxw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] clk: ralink: add clock driver for mt7621 SoC
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John Crispin <john@phrozen.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Weijie Gao <hackpascal@gmail.com>, jiaxun.yang@flygoat.com,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
+        NeilBrown <neil@brown.name>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add support for following clocks maintained by RPMh in SDX55 SoCs.
+Hi!
 
-* BI TCXO
-* RF_CLK1
-* RF_CLK1_AO
-* RF_CLK2
-* RF_CLK2_AO
-* QPIC (Qualcomm Technologies, Inc. Parallel Interface Controller)
+On Fri, Nov 13, 2020 at 11:46 PM Sergio Paracuellos
+<sergio.paracuellos@gmail.com> wrote:
+> [...]
+> diff --git a/drivers/clk/ralink/Makefile b/drivers/clk/ralink/Makefile
+> new file mode 100644
+> index 000000000000..cf6f9216379d
+> --- /dev/null
+> +++ b/drivers/clk/ralink/Makefile
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Reviewed-by: Vinod Koul <vkoul@kernel.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- drivers/clk/qcom/clk-rpmh.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+Why ralink? The clock design of mt7621 doesn't seem
+to be part of ralink legacy stuff, and ralink is already
+acquired by mediatek anyway.
+I think it should be put in drivers/clk/mediatek instead.
 
-diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-index e2c669b08aff..fb72db957721 100644
---- a/drivers/clk/qcom/clk-rpmh.c
-+++ b/drivers/clk/qcom/clk-rpmh.c
-@@ -432,6 +432,25 @@ static const struct clk_rpmh_desc clk_rpmh_sm8250 = {
- 	.num_clks = ARRAY_SIZE(sm8250_rpmh_clocks),
- };
- 
-+DEFINE_CLK_RPMH_VRM(sdx55, rf_clk1, rf_clk1_ao, "rfclkd1", 1);
-+DEFINE_CLK_RPMH_VRM(sdx55, rf_clk2, rf_clk2_ao, "rfclkd2", 1);
-+DEFINE_CLK_RPMH_BCM(sdx55, qpic_clk, "QP0");
-+
-+static struct clk_hw *sdx55_rpmh_clocks[] = {
-+	[RPMH_CXO_CLK]		= &sdm845_bi_tcxo.hw,
-+	[RPMH_CXO_CLK_A]	= &sdm845_bi_tcxo_ao.hw,
-+	[RPMH_RF_CLK1]		= &sdx55_rf_clk1.hw,
-+	[RPMH_RF_CLK1_A]	= &sdx55_rf_clk1_ao.hw,
-+	[RPMH_RF_CLK2]		= &sdx55_rf_clk2.hw,
-+	[RPMH_RF_CLK2_A]	= &sdx55_rf_clk2_ao.hw,
-+	[RPMH_QPIC_CLK]		= &sdx55_qpic_clk.hw,
-+};
-+
-+static const struct clk_rpmh_desc clk_rpmh_sdx55 = {
-+	.clks = sdx55_rpmh_clocks,
-+	.num_clks = ARRAY_SIZE(sdx55_rpmh_clocks),
-+};
-+
- static struct clk_hw *of_clk_rpmh_hw_get(struct of_phandle_args *clkspec,
- 					 void *data)
- {
-@@ -517,6 +536,7 @@ static int clk_rpmh_probe(struct platform_device *pdev)
- static const struct of_device_id clk_rpmh_match_table[] = {
- 	{ .compatible = "qcom,sc7180-rpmh-clk", .data = &clk_rpmh_sc7180},
- 	{ .compatible = "qcom,sdm845-rpmh-clk", .data = &clk_rpmh_sdm845},
-+	{ .compatible = "qcom,sdx55-rpmh-clk",  .data = &clk_rpmh_sdx55},
- 	{ .compatible = "qcom,sm8150-rpmh-clk", .data = &clk_rpmh_sm8150},
- 	{ .compatible = "qcom,sm8250-rpmh-clk", .data = &clk_rpmh_sm8250},
- 	{ }
 -- 
-2.17.1
-
+Regards,
+Chuanhong Guo
