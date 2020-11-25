@@ -2,124 +2,117 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B16B22C3D0A
-	for <lists+linux-clk@lfdr.de>; Wed, 25 Nov 2020 10:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C26222C3EC4
+	for <lists+linux-clk@lfdr.de>; Wed, 25 Nov 2020 12:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728174AbgKYJxU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 25 Nov 2020 04:53:20 -0500
-Received: from mail-eopbgr60051.outbound.protection.outlook.com ([40.107.6.51]:16344
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        id S1727219AbgKYLI6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 25 Nov 2020 06:08:58 -0500
+Received: from mail-am6eur05on2077.outbound.protection.outlook.com ([40.107.22.77]:13605
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728079AbgKYJxU (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 25 Nov 2020 04:53:20 -0500
+        id S1726034AbgKYLI5 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 25 Nov 2020 06:08:57 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zi50ff9vSccLIvHdS+5w/A2k4IbVSPyEkT2qk9rlZk7zWYJdgn3ZOQGPJs3SSutWhWsYI67jwdj0sR33fHUNpqMinfabfQkm6CT4/Sk3EXjCCiUJMvpIPMEJvPP5fAVz2QHZP1Iysfwh1eAcG37L2xUj2ePfYYIy3vCgs0NSv6u72GI85CUw/7t7tTcMKx7H99bVc4am+eCNTppCOn3Ks8WV0vAt1sbOndtLzvbCEFrc60es6Gi42C0AZPly11f7sAL5Qmd11hWQWAbpLdslgkFXO6DZ2FcATKfmHYlXKVBJbsdvcyCIrWdkWeGQQeyKnENrlrvW55+iwxdwQ2gEUQ==
+ b=OwiW4fS494uIoMd3Xo2L8p5nn0OGVX/3dWHtzLKHVlD5lsdM+KJgalVwa7UmYA8cCUsMtNC8zTG5/s6zEH9f7wPWkIk67JD6BJ2XjuFKWnx24O0+7bhR1O40GZmyxTa0xjjWqjffGtxZBxDdZx1JTIWMBKyBWMsHuD3cuNts8P9d2V97bUvlR6y8JQH64seuDyMIvGcruUc1R8hJrFB6ypTEsztlV4NfUheJA3QEUEA/sAs5hX9QOzjR4c51Gv/7JIJaWNJ6pFWVoRsh7orKAmrUv+x+kjU6M5KnI8aU2GxfGTW+DyoJfOTBjHTByw099y020a7TeMdfhZs0vMBkMg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8ocmDMPBUYRA9RwcLbbXAjoek/Z6II9uRWNUbtbJmoQ=;
- b=n/sh791so6+1wMtJ8t1cd/kCsBKQMdhCR+JkgBmsYKVNy0rdCejdZUsgJk5R//fqEY2w/sFy2tTF42zuFucVq6Qi2F0vqNFtIzyyzaESCpxkYlPvUqid7Wu+19JUFbVFG91civSQiYIB4FcIXARiaQQHtHgrhYrajXro6mRFdgA6nQIw17EWHWcuYC+xKhNIhikiBh0Lbokj1qywHKLFqPUNSo1E8eJLTmPVVSESGmxfrCiwqrH2kUFwXapp1vDDJPqgIwjZtZ+l4wBrnj0m1Nu4Gz805NJHhsj9aRnnpiYqYc03dNWyTR9wMU7lEE5fa22fkMUOObmRInkxZT9qvA==
+ bh=aOqDkOjzVVzJq0ttphMQEjdp/qhsEb9b8AnLTTn2hR4=;
+ b=j70G0hIdSJZqQgNImcy93C34O1HHp3oxhujFbnJiVq8CJQFPrwUFhh+PrLDUOWd+0a7plCT3jFGOuVknjqC4oX0TnTPuG7dFHhJTjG349iSOlIXstn+Sv7cQYBI6WpGEAf0xWH2LVKu02yN8Nd94dwhJCT/cIdVE40dxjlrtBF5vk7n+O5h5+bodCdJtxrsg1M1wcMEmj4QSA6NvmaZ8sH1cb9SjZfnrJPseYCbU/RfpEZxQszsN1L+yP7rtXKBeeh7zDcif61/lTWn6JknFJ0RWuna+ZPxFdKsO79DB9U7sdK4fKaJqj5zXsMhMaZKknI4e7Z/oGgLdX/5WvNM00w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8ocmDMPBUYRA9RwcLbbXAjoek/Z6II9uRWNUbtbJmoQ=;
- b=sk6pa+NfsoQAdE8ToIMnaTph76goR9GKXA2cFqC5d5v8fBUvoFxMEvuFReoexlUKouefe/tEbbyRqDxyXUcLKL3YoXUkmPSgN6DKc3etWHOhcpSfrfc5qUmvyWyhD8T1w2aXRhKdNgDBH7spzNDGWnIIiwri5JU08UQGNppgt70=
+ bh=aOqDkOjzVVzJq0ttphMQEjdp/qhsEb9b8AnLTTn2hR4=;
+ b=Q8w1f/Osr0SKxIgXpUSY/b2EJujQPQmD9lzI6xVVGa+yTjtqTOwV+pR6uoyBxrE+qaPHlvbMcH4WXwb5vZpARMyNAu92BGCFQhqvm5L2EINC/dH3AF0GQRa9C6n+Fj2Quo4k4gsioblFpyo3fzrwZJqnraGKyMblm32QoG63FXI=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=nxp.com;
 Received: from AM6PR04MB4966.eurprd04.prod.outlook.com (2603:10a6:20b:2::14)
- by AM6PR0402MB3560.eurprd04.prod.outlook.com (2603:10a6:209:8::23) with
+ by AM5PR04MB3252.eurprd04.prod.outlook.com (2603:10a6:206:6::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.22; Wed, 25 Nov
- 2020 09:53:06 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.29; Wed, 25 Nov
+ 2020 11:08:54 +0000
 Received: from AM6PR04MB4966.eurprd04.prod.outlook.com
  ([fe80::3cfc:a92e:75ad:ce4a]) by AM6PR04MB4966.eurprd04.prod.outlook.com
  ([fe80::3cfc:a92e:75ad:ce4a%3]) with mapi id 15.20.3564.029; Wed, 25 Nov 2020
- 09:53:06 +0000
-From:   Aisheng Dong <aisheng.dong@nxp.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-CC:     "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: RE: [RFC PATCH] clk: imx8qxp: Unbreak auto module building for
- MXC_CLK_SCU
-Thread-Topic: [RFC PATCH] clk: imx8qxp: Unbreak auto module building for
- MXC_CLK_SCU
-Thread-Index: AQHWwlvRlJUaj2nxKEiTYKb+tbM2jKnYKJLAgABf3YCAABL3kA==
-Date:   Wed, 25 Nov 2020 09:53:05 +0000
-Message-ID: <AM6PR04MB49665E5189ED5241B5471C3680FA0@AM6PR04MB4966.eurprd04.prod.outlook.com>
-References: <20201124121740.ytag7rm53umi2qvm@linutronix.de>
- <AM6PR04MB49665B30445C929ABF458D3E80FA0@AM6PR04MB4966.eurprd04.prod.outlook.com>
- <20201125084007.miwbxcln6tdkesgj@linutronix.de>
-In-Reply-To: <20201125084007.miwbxcln6tdkesgj@linutronix.de>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linutronix.de; dkim=none (message not signed)
- header.d=none;linutronix.de; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: ab1bcbd6-960f-4fbc-c6c3-08d89127e858
-x-ms-traffictypediagnostic: AM6PR0402MB3560:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR0402MB3560515AEC7C330DCF8887C480FA0@AM6PR0402MB3560.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: PPs+CejZl4Vg2dWZSKQN3p9T5sBkMfy6z72bCU6VV2nmiE8SRXADvzPRSVxUJd2y6W3ulWoMXhAfMXPR40dF07lrhcM+A2Is/F9OdWbI8/8rMWYxH3PQb0h2eChGX70EltXmJy4NjrTzoGFgQ96nzUJftlpg/2EzyM3GI0QQjp5gjV5mjxU1YbbnlNBRyqZxfdPn0+Uu5ZqVdB/DerOYflVM4HPgbHdFstWWd+LwjQVA8BtBybpwIKETRGT5OVu20gt5+Cq71IIWMnwP1gg+Tzkupu08qwEnl1p+aTWEYpWpYT3pljUZ1i1v6bSx4MEf+Y/aZxRkXkx2kQxZcL4oufwHJ6ql+JOMezqDrwrlmCpnHlW7v8IXHZEDHug7KOqw
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4966.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39860400002)(136003)(376002)(366004)(346002)(4001150100001)(86362001)(6916009)(26005)(186003)(55016002)(76116006)(9686003)(66476007)(5660300002)(66946007)(478600001)(66446008)(83380400001)(66556008)(52536014)(7416002)(64756008)(44832011)(316002)(8676002)(8936002)(54906003)(4326008)(53546011)(6506007)(71200400001)(7696005)(2906002)(33656002)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: YXiQnIdIjGgX5YA4WnI/XcgKbyF/Nj7N8HSxiFSl2+Z4MYm4Fj2eahTBbaAySxpXte4rkQfniF58SrAIICaO3MCZPbi89Afb+uFxR0tQPcOSFYzshuTg/RyElU7LO5ihDU0tfgu/nLH8d7me690Sun03qJrDPKSXj425Xc/CVYtehu7mbypg4x1Tpq/k1xUa3kUzqK+A4igAXlBfW57cJHDi1pjyA4HubleauUvU3u3G16KeEjJZcRwUQ710dAfcuLtAF+AGHEX8w2pujY529TLWWJPaEWxPicuqLEGe4g+nOA2eSA06+ETwCiTfo14AjVqt6oxF5BhRQeW0nkgNH6PygOQymaYmAu9FWZ7NcY/sUBblV95xSd+hra3K1ZaLliTJ44YJlj402wTVH01RnfxHJvPsr585VDKXsW9HoYw0F3i+jNnvhTYzZW6YhUbdIyrvytpWncMpFXo4pBmLuTwrPrZ01qksbYd3SwmAK5VGtL6f4MUlX7yRtTUY/GFnQhPElqmwRqL8lz2pvncT/hg+xRUHlZCjhGnCmLsGd5WkjzFtcSccBbdR1/kBs/U0VJ1O0s1I0pDj+SHti/NZqPgiU4fEY0Tg/iSEriBSlu0f6CO3mjgE2Gr2aWolPNv1k3FGhUzoAb/85O93WBvUQAVRHa0NKu4nLMOO0OwaHD/nL/2MxJPcsHLcFKOjiFnAUx1VCYRmr/tZxZdfHtqOXU009RTKELzYIs85hdKDpfqfPSF9436cf7wJVtbX1HwKFrXXZAoF52CC8b8b0O9OdUkz/ZfNPORzmNaFCUym7+/CThFME2SmkTkQs2QCE6yMLSkqZzeg+6AfKab/SqoKFQ74ErQ/FXEx73vi2mkaBlYuqaCzIMyIyfEs6bH9EmdbW0VsAUXyeJOj5f/p2vM6wg==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ 11:08:54 +0000
+From:   Dong Aisheng <aisheng.dong@nxp.com>
+To:     linux-clk@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
+        sudipm.mukherjee@gmail.com, sboyd@kernel.org, shawnguo@kernel.org,
+        dongas86@gmail.com, Dong Aisheng <aisheng.dong@nxp.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH 1/1] clk: imx: scu: fix MXC_CLK_SCU module build break
+Date:   Wed, 25 Nov 2020 18:50:37 +0800
+Message-Id: <20201125105037.22079-1-aisheng.dong@nxp.com>
+X-Mailer: git-send-email 2.23.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [119.31.174.66]
+X-ClientProxiedBy: MA1PR0101CA0018.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:21::28) To AM6PR04MB4966.eurprd04.prod.outlook.com
+ (2603:10a6:20b:2::14)
 MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from b29396-OptiPlex-7040.ap.freescale.net (119.31.174.66) by MA1PR0101CA0018.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:21::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3611.20 via Frontend Transport; Wed, 25 Nov 2020 11:08:50 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: df35afed-e49a-4a8b-a144-08d891327eef
+X-MS-TrafficTypeDiagnostic: AM5PR04MB3252:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM5PR04MB325238658E34F10E4C493EBF80FA0@AM5PR04MB3252.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1107;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NpHwpQkcW5sz+P9Ml432I220fVprfXSSNA10cq6dr02YBlZ4Rh8lzyThLSqbHUk2eu38wWAbFcDLtu1iTUJ6uo1g2isgRXOmRVP/jvkpSI7aPhd6SFBMOahSHZTo3uFq1zjqkeJimyj2exMHU4RkGEL5sYN6Z6zu39i3AYYHee84RsnZ5ni/adKwwOTqJnz8ee9s0pv2tnQJCOfu5NElWI6/7rtFloRdP4DymN1AHmX3ScNagh8z4j5gPHnokG51EzcY7WQ5X84XMLrsJ8T2dXbeW86gmKRfZ4Z+sTIRJH7T381XzSW2kRdZ12Oz6+0rnjNxHvRKWA6d/Iesy5xGuw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4966.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(136003)(376002)(366004)(346002)(186003)(66556008)(6512007)(16526019)(66476007)(316002)(66946007)(8676002)(26005)(4326008)(2906002)(5660300002)(1076003)(6916009)(478600001)(8936002)(86362001)(956004)(52116002)(36756003)(6506007)(2616005)(6666004)(54906003)(6486002)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: cNz5gdkL8UE6GZp2DSZIcSjWGY/ENxKoegcaoznRloNPsSW8zcfYeVWrkPNKSne1oSEoZTpWgfGjwdTzCUbZk4/7HoAnhngDLjwTOc35NzzczTJuLE6BC5ykoed3rkCq4jI6QVWSdjbuuCqVFD1un+CjK0LPGQFCtKoV7ITSBaVfcIOoZi609hODz+nmU/LTdDyuXvwiFe40ygKBT6UjZvymxXrPDi+tHWFBxq/etiZlwGmWaM/w7Nf+f1K3PirnQUG/TEOlYHPIfGjQv28cN3tmLNCVyrO+Rp8A8QFT2tSF0MWwKe7AFtNK9XHcIwfe0bVvoGcv5N81j/F9OPGLgMD2uT/rXVSs0XsOM5BYzcXMEBrIu91QIVALEgipqBRjiSfj4y2eJ79C+o82tqZcWyZG/yu5TiaRy5aHayIDh0XNE1ilxQWB0E9AgBCeztgDgvbgLaEAZMoBAtGenaGXxOXSA19g1BJjSOnFKv8chMq6S76OigG3hQ/R+M1PHGlIZPvr9uP/pD3mhe5EL8VhUKuAAJ9AhrocYaRftxdrJXAxljI+kT/8fpXNRcRx+FZ/+tsNeurfSwozI8jiaZvclXIwPhqHsYpr1kxyopjtFSw8sO7/0193YZnaghVIl3sP96xc3lTaH2DdnFzJccK/FruoNeaAIdM2WWtY6bvw26TJ7SFoETHcyokatq8zJyZ+dmTAWkTofrWw7VNLsc3JqJDG5ZGCIBOLc/SJHe67v2yo3xk46TrZn8b1ILXDH84HappA6MPrAnPGhzVcfd0NWfC8cKGHfNfp+y9S+V13wBrW+lO4Fupe7+tZXa0XxxDn4qXEyZ01vHKwxCMWFC2ZaM6HXVlXb8kOTnv1iy/9kcAEdvz4DF4PLsURgU7/PrY+oLxeqc2KKsKoTPEDI6QmKA==
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-Network-Message-Id: df35afed-e49a-4a8b-a144-08d891327eef
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4966.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab1bcbd6-960f-4fbc-c6c3-08d89127e858
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2020 09:53:05.9969
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2020 11:08:54.0369
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: u4yte/ZNdzjDV2e1duBuhRCPK/Mo5ECJUa1IMdEO329nuD1XjitVF6BG3Ai/e68zO02y3DRrwBIV89F8mYFUaA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0402MB3560
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DwNhAVz2nOtgqokyUVKlIjIK6Vr8G85DLiKeNfGrBmWuXKdXi7eoX2P+u3stEeyN27V03YtW3AypJOiw1rZXow==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR04MB3252
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-PiBGcm9tOiBTZWJhc3RpYW4gQW5kcnplaiBTaWV3aW9yIDxiaWdlYXN5QGxpbnV0cm9uaXguZGU+
-DQo+IFNlbnQ6IFdlZG5lc2RheSwgTm92ZW1iZXIgMjUsIDIwMjAgNDo0MCBQTQ0KPiANCj4gT24g
-MjAyMC0xMS0yNSAwNzoxNToyNCBbKzAwMDBdLCBBaXNoZW5nIERvbmcgd3JvdGU6DQo+ID4gSSB0
-aGluayB0aGUgc2ltcGxlc3Qgc29sdXRpb24gaXMgbWFrZSBNWENfQ0xLX1NDVSB0byBiZSBpbnZp
-c2libGUgdG8NCj4gPiB1c2VycyBhbmQgY2FuIG9ubHkgYmUgc2VsZWN0ZWQgYnkgQ0xLX0lNWDhR
-WFAgb3B0aW9uIGJlY2F1c2UgY3VycmVudGx5DQo+ID4gY2xrLXNjdS5vIGFuZCBjbGstaW14OHF4
-cC5vIGFyZSBidWlsdCB0b2dldGhlciwgaXQncyBtZWFuaW5nbGVzcyBhbmQNCj4gPiBidWdneSB0
-byBzZXBhcmF0ZSB0aGVtLiBMb25ndGVybWx5IHRoZXkgd2lsbCBiZSBjb21iaW5lZCBpbnRvIG9u
-ZSBkcml2ZXIgZmlsZS4NCj4gPg0KPiA+IEUuZw0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2Ns
-ay9pbXgvS2NvbmZpZyBiL2RyaXZlcnMvY2xrL2lteC9LY29uZmlnIGluZGV4DQo+ID4gM2IzOTNj
-YjA3Mjk1Li5kYmFjZGQ3MGFmMmUgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9jbGsvaW14L0tj
-b25maWcNCj4gPiArKysgYi9kcml2ZXJzL2Nsay9pbXgvS2NvbmZpZw0KPiA+IEBAIC01LDcgKzUs
-NyBAQCBjb25maWcgTVhDX0NMSw0KPiA+ICAgICAgICAgZGVwZW5kcyBvbiBBUkNIX01YQyB8fCBD
-T01QSUxFX1RFU1QNCj4gPg0KPiA+ICBjb25maWcgTVhDX0NMS19TQ1UNCj4gPiAtICAgICAgIHRy
-aXN0YXRlICJJTVggU0NVIGNsb2NrIg0KPiA+ICsgICAgICAgdHJpc3RhdGUNCj4gPiAgICAgICAg
-IGRlcGVuZHMgb24gQVJDSF9NWEMgfHwgQ09NUElMRV9URVNUDQo+ID4gICAgICAgICBkZXBlbmRz
-IG9uIElNWF9TQ1UgJiYgSEFWRV9BUk1fU01DQ0MNCj4gDQo+IFNvIGl0IHN0aWxsIGJlY29tZXMg
-YSBtb2R1bGUgaWYgaXQgZ2V0cyBzZWxlY3RlZCBieSBvbmUsIGxpa2UgQ0xLX0lNWDhRWFAuDQo+
-IA0KDQpZZXMsIGFzIE1YQ19DTEtfU0NVIGFuZCBDTEtfSU1YOFFYUCB3aWxsIGJlIGVuYWJsZWQg
-YXQgdGhlIHNhbWUgdGltZSBhbmQNCmNsay1zY3UubyBhbmQgY2xrLWlteDhxeHAubyBhcmUgY29t
-cGlsZWQgdG9nZXRoZXIgaW50byBvbmUgbW9kdWxlLA0KdGhlcmUgd2lsbCBiZSBubyBzdWNoIGlz
-c3VlcyByZXBvcnRlZCBpbiB0aGlzIGVtYWlsLg0KDQoNCj4gPiBTZWUgZml4ZXMgaGVyZToNCi4u
-Lg0KPiANCj4gV2hhdGV2ZXIgeW91IGRvLCBwbGVhc2UgbWFrZSBzdXJlIHRoZSBpc3N1ZSBpbiB2
-NS4xMCBnZXRzIGFsc28gYWRkcmVzc2VkLg0KDQpXaWxsIHlvdSBzZW5kIG91dCBhYm92ZSBwYXRj
-aCBpZiB5b3UncmUgb2s/DQpPciBJIHdpbGwgZG8gaXQgbm93IGlmIHlvdSBkb24ndCBtaW5kLg0K
-DQpSZWdhcmRzDQpBaXNoZW5nDQoNCj4gDQo+IFNlYmFzdGlhbg0K
+This issue can be reproduced by CONFIG_IMX_MBOX=m and CONFIG_MXC_CLK_SCU=m.
+It's caused by current Makefile can't support build clk-scu.o and
+clk-imx8qxp.o separately.
+"obj-$(CONFIG_MXC_CLK_SCU) += clk-imx-scu.o clk-imx-lpcg-scu.o
+clk-imx-scu-$(CONFIG_CLK_IMX8QXP) += clk-scu.o clk-imx8qxp.o"
+Only enable MXC_CLK_SCU while CLK_IMX8QXP not is meaningless and buggy.
+
+This patch makes MXC_CLK_SCU to be invisible to users and can only be
+selected by CLK_IMX8QXP option to ensure they're built together.
+
+Fixes: e0d0d4d86c766 ("clk: imx8qxp: Support building i.MX8QXP clock driver as module")
+Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
+---
+ drivers/clk/imx/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clk/imx/Kconfig b/drivers/clk/imx/Kconfig
+index 3b393cb07295..dbacdd70af2e 100644
+--- a/drivers/clk/imx/Kconfig
++++ b/drivers/clk/imx/Kconfig
+@@ -5,7 +5,7 @@ config MXC_CLK
+ 	depends on ARCH_MXC || COMPILE_TEST
+ 
+ config MXC_CLK_SCU
+-	tristate "IMX SCU clock"
++	tristate
+ 	depends on ARCH_MXC || COMPILE_TEST
+ 	depends on IMX_SCU && HAVE_ARM_SMCCC
+ 
+-- 
+2.23.0
+
