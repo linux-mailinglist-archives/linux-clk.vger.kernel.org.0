@@ -2,118 +2,281 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F31A22C541F
-	for <lists+linux-clk@lfdr.de>; Thu, 26 Nov 2020 13:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4939C2C56B1
+	for <lists+linux-clk@lfdr.de>; Thu, 26 Nov 2020 15:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389522AbgKZMlx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 26 Nov 2020 07:41:53 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:43182 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388958AbgKZMlt (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 26 Nov 2020 07:41:49 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id E63BF1A099E;
-        Thu, 26 Nov 2020 13:41:46 +0100 (CET)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id D73211A00EF;
-        Thu, 26 Nov 2020 13:41:46 +0100 (CET)
-Received: from fsr-ub1664-175.ea.freescale.net (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 63ED42026B;
-        Thu, 26 Nov 2020 13:41:46 +0100 (CET)
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Peng Fan <peng.fan@nxp.com>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>
-Cc:     NXP Linux Team <linux-imx@nxp.com>, linux-clk@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, Abel Vesa <abel.vesa@nxp.com>
-Subject: [PATCH v2 5/5] clk: imx8m: Use dram variant registration for dram clocks
-Date:   Thu, 26 Nov 2020 14:40:09 +0200
-Message-Id: <1606394409-12755-6-git-send-email-abel.vesa@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1606394409-12755-1-git-send-email-abel.vesa@nxp.com>
-References: <1606394409-12755-1-git-send-email-abel.vesa@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S2390072AbgKZOIp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 26 Nov 2020 09:08:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390054AbgKZOIo (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 26 Nov 2020 09:08:44 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBEC7C0613D4
+        for <linux-clk@vger.kernel.org>; Thu, 26 Nov 2020 06:08:43 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id 23so2273755wrc.8
+        for <linux-clk@vger.kernel.org>; Thu, 26 Nov 2020 06:08:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:autocrypt:organization:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Ms9P/9ZKnLKjnkdKQYxlUUE6MT7zPdWaPNv5jPaGoG4=;
+        b=qSpjWd6OpYkeGsGCjXKJgaLB7KeRMaNFOySuymYNhwVTesYIrZM/fSx+aXIztQwiuW
+         dLpxZDZxaB8+DbwroUIe20utOhmUdkJVtPHKcSVcSknBqEm26Pwz33NR/EXUMXGrDbOV
+         DohwMEa8qrGaRdXzp6UYs7dO3RhisxMZpXxRywEa0pXK3tWtI5jvyV3rMNQSbUcUiyK2
+         Dwl2HTNkAISL4xzGjpcOz+2D9IwtZLnCSqb+88d409zH92KvhO75f8KsiHQKfxcsfMc8
+         TN5bFgpMX605f7UucMmimZqEzlBvsxabRkwFiMfLSk6y4zmXtO0zM5eqKFwlg61XAffA
+         yAVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=Ms9P/9ZKnLKjnkdKQYxlUUE6MT7zPdWaPNv5jPaGoG4=;
+        b=OO/Gvn+UYoM9Rgh8RbdUx1OG6Wn2T0sDtaPfYCK4phrtGrluamecXubCslxC5pcvI6
+         2XzBatnNN55dO/Irx4TQXw6otJzzaGmOcChVPHRp01MRwed73Re7XB2JgwVQtpNA24Nu
+         qjjEEJfIPx5zVZwEHNbsc/ln/n3n83RqpKtX8Etqzr6AYtLzmQ0S2Wa0nvYvQUH1rwSE
+         c5Xw6X/5Ym9fvvrSFtNPbeKmpywtvl9JA4p2ZE1G12TfquxsquCL4TMUc+4D9IOi9we5
+         valu+SWRFleX+lbImKvFFf7wjjRpZw7nqkSOZ2R/2KvkJp4gB4M++7Y4wTnsqM0UMAKD
+         otoA==
+X-Gm-Message-State: AOAM531sdIdwZZAR/LymPm+LjsEJckMqNSKpvwbaB6Ji36Y3qjLcBdWl
+        bj5nX0iZvrp2PzvyM9EwIPLH9A==
+X-Google-Smtp-Source: ABdhPJx1vDuyttkLPwXL5ajrV4osa4VJuNgzabV9PhsGPka2KzdNYf0nghOIeYqEOWrHdshqQ8v8tQ==
+X-Received: by 2002:adf:b74d:: with SMTP id n13mr4106424wre.101.1606399722310;
+        Thu, 26 Nov 2020 06:08:42 -0800 (PST)
+Received: from ?IPv6:2a01:e35:2ec0:82b0:193b:ad82:52ad:936c? ([2a01:e35:2ec0:82b0:193b:ad82:52ad:936c])
+        by smtp.gmail.com with ESMTPSA id 9sm8416131wmo.34.2020.11.26.06.08.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Nov 2020 06:08:40 -0800 (PST)
+Subject: Re: [PATCH 2/2] clk: meson: g12a: add MIPI DSI Host Pixel Clock
+To:     Jerome Brunet <jbrunet@baylibre.com>
+Cc:     linux-clk@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20201123163811.353444-1-narmstrong@baylibre.com>
+ <20201123163811.353444-3-narmstrong@baylibre.com>
+ <1jlfep8hqu.fsf@starbuckisacylon.baylibre.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
+ 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
+ ZaTUOEkgIor5losDrePdPgE=
+Organization: Baylibre
+Message-ID: <ec838697-9f07-d0d8-6398-d9506bfba75f@baylibre.com>
+Date:   Thu, 26 Nov 2020 15:08:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <1jlfep8hqu.fsf@starbuckisacylon.baylibre.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Both dram_apb and dram_alt are controlled by EL3. Using the dram
-variant registration of the composite-8m clock, the mux and the
-divider will be read only. Do this for all i.MX8M platforms.
+On 25/11/2020 18:32, Jerome Brunet wrote:
+> 
+> On Mon 23 Nov 2020 at 17:38, Neil Armstrong <narmstrong@baylibre.com> wrote:
+> 
+>> This adds the MIPI DSI Host Pixel Clock, unlike AXG, the pixel clock can be different
+>> from the VPU ENCL output clock to feed the DSI Host controller with a different clock rate.
+>>
+>> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> 
+> Series looks good.
+> 2 minor comments below 
+> 
+>> ---
+>>  drivers/clk/meson/g12a.c | 72 ++++++++++++++++++++++++++++++++++++++++
+>>  drivers/clk/meson/g12a.h |  3 +-
+>>  2 files changed, 74 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/clk/meson/g12a.c b/drivers/clk/meson/g12a.c
+>> index 3cb8196c8e29..3dedf8408405 100644
+>> --- a/drivers/clk/meson/g12a.c
+>> +++ b/drivers/clk/meson/g12a.c
+>> @@ -3658,6 +3658,66 @@ static struct clk_regmap g12a_hdmi_tx = {
+>>  	},
+>>  };
+>>  
+>> +/* MIPI DSI Host Clocks */
+>> +
+>> +static const struct clk_hw *g12a_mipi_dsi_pxclk_parent_hws[] = {
+>> +	&g12a_vid_pll.hw,
+>> +	&g12a_gp0_pll.hw,
+>> +	&g12a_hifi_pll.hw,
+>> +	&g12a_mpll1.hw,
+>> +	&g12a_fclk_div2.hw,
+>> +	&g12a_fclk_div2p5.hw,
+>> +	&g12a_fclk_div3.hw,
+>> +	&g12a_fclk_div7.hw,
+>> +};
+>> +
+>> +static struct clk_regmap g12a_mipi_dsi_pxclk_sel = {
+>> +	.data = &(struct clk_regmap_mux_data){
+>> +		.offset = HHI_MIPIDSI_PHY_CLK_CNTL,
+>> +		.mask = 0x7,
+>> +		.shift = 12,
+>> +		.flags = CLK_MUX_ROUND_CLOSEST,
+>> +	},
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "mipi_dsi_pxclk_sel",
+>> +		.ops = &clk_regmap_mux_ops,
+>> +		.parent_hws = g12a_mipi_dsi_pxclk_parent_hws,
+>> +		.num_parents = ARRAY_SIZE(g12a_mipi_dsi_pxclk_parent_hws),
+>> +		.flags = CLK_SET_RATE_PARENT,
+> 
+> The id of the mux is exposed which seems to hint the mux will be
+> manually controller but CLK_SET_RATE_NO_REPARENT is not set. Is this on
+> purpose ?
 
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
----
- drivers/clk/imx/clk-imx8mm.c | 4 ++--
- drivers/clk/imx/clk-imx8mn.c | 4 ++--
- drivers/clk/imx/clk-imx8mp.c | 4 ++--
- drivers/clk/imx/clk-imx8mq.c | 4 ++--
- 4 files changed, 8 insertions(+), 8 deletions(-)
+You're right, it should be CLK_SET_RATE_NO_REPARENT here since we need to
+control the source of the clock.
 
-diff --git a/drivers/clk/imx/clk-imx8mm.c b/drivers/clk/imx/clk-imx8mm.c
-index 7c90586..f94f0a4 100644
---- a/drivers/clk/imx/clk-imx8mm.c
-+++ b/drivers/clk/imx/clk-imx8mm.c
-@@ -468,8 +468,8 @@ static int imx8mm_clocks_probe(struct platform_device *pdev)
- 	 * DRAM clocks are manipulated from TF-A outside clock framework.
- 	 * Mark with GET_RATE_NOCACHE to always read div value from hardware
- 	 */
--	hws[IMX8MM_CLK_DRAM_ALT] = __imx8m_clk_hw_composite("dram_alt", imx8mm_dram_alt_sels, base + 0xa000, CLK_GET_RATE_NOCACHE);
--	hws[IMX8MM_CLK_DRAM_APB] = __imx8m_clk_hw_composite("dram_apb", imx8mm_dram_apb_sels, base + 0xa080, CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
-+	hws[IMX8MM_CLK_DRAM_ALT] = imx8m_clk_hw_composite_dram("dram_alt", imx8mm_dram_alt_sels, base + 0xa000);
-+	hws[IMX8MM_CLK_DRAM_APB] = imx8m_clk_hw_composite_dram("dram_apb", imx8mm_dram_apb_sels, base + 0xa080);
- 
- 	/* IP */
- 	hws[IMX8MM_CLK_VPU_G1] = imx8m_clk_hw_composite("vpu_g1", imx8mm_vpu_g1_sels, base + 0xa100);
-diff --git a/drivers/clk/imx/clk-imx8mn.c b/drivers/clk/imx/clk-imx8mn.c
-index 3c21db9..eb90879 100644
---- a/drivers/clk/imx/clk-imx8mn.c
-+++ b/drivers/clk/imx/clk-imx8mn.c
-@@ -451,8 +451,8 @@ static int imx8mn_clocks_probe(struct platform_device *pdev)
- 	 * DRAM clocks are manipulated from TF-A outside clock framework.
- 	 * Mark with GET_RATE_NOCACHE to always read div value from hardware
- 	 */
--	hws[IMX8MN_CLK_DRAM_ALT] = __imx8m_clk_hw_composite("dram_alt", imx8mn_dram_alt_sels, base + 0xa000, CLK_GET_RATE_NOCACHE);
--	hws[IMX8MN_CLK_DRAM_APB] = __imx8m_clk_hw_composite("dram_apb", imx8mn_dram_apb_sels, base + 0xa080, CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
-+	hws[IMX8MN_CLK_DRAM_ALT] = imx8m_clk_hw_composite_dram("dram_alt", imx8mn_dram_alt_sels, base + 0xa000);
-+	hws[IMX8MN_CLK_DRAM_APB] = imx8m_clk_hw_composite_dram("dram_apb", imx8mn_dram_apb_sels, base + 0xa080);
- 
- 	hws[IMX8MN_CLK_DISP_PIXEL] = imx8m_clk_hw_composite("disp_pixel", imx8mn_disp_pixel_sels, base + 0xa500);
- 	hws[IMX8MN_CLK_SAI2] = imx8m_clk_hw_composite("sai2", imx8mn_sai2_sels, base + 0xa600);
-diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
-index 2f4e1d6..70d671c 100644
---- a/drivers/clk/imx/clk-imx8mp.c
-+++ b/drivers/clk/imx/clk-imx8mp.c
-@@ -579,8 +579,8 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
- 	hws[IMX8MP_CLK_IPG_ROOT] = imx_clk_hw_divider2("ipg_root", "ahb_root", ccm_base + 0x9080, 0, 1);
- 	hws[IMX8MP_CLK_IPG_AUDIO_ROOT] = imx_clk_hw_divider2("ipg_audio_root", "audio_ahb", ccm_base + 0x9180, 0, 1);
- 
--	hws[IMX8MP_CLK_DRAM_ALT] = imx8m_clk_hw_composite("dram_alt", imx8mp_dram_alt_sels, ccm_base + 0xa000);
--	hws[IMX8MP_CLK_DRAM_APB] = imx8m_clk_hw_composite_critical("dram_apb", imx8mp_dram_apb_sels, ccm_base + 0xa080);
-+	hws[IMX8MP_CLK_DRAM_ALT] = imx8m_clk_hw_composite_dram("dram_alt", imx8mp_dram_alt_sels, ccm_base + 0xa000);
-+	hws[IMX8MP_CLK_DRAM_APB] = imx8m_clk_hw_composite_dram("dram_apb", imx8mp_dram_apb_sels, ccm_base + 0xa080);
- 	hws[IMX8MP_CLK_VPU_G1] = imx8m_clk_hw_composite("vpu_g1", imx8mp_vpu_g1_sels, ccm_base + 0xa100);
- 	hws[IMX8MP_CLK_VPU_G2] = imx8m_clk_hw_composite("vpu_g2", imx8mp_vpu_g2_sels, ccm_base + 0xa180);
- 	hws[IMX8MP_CLK_CAN1] = imx8m_clk_hw_composite("can1", imx8mp_can1_sels, ccm_base + 0xa200);
-diff --git a/drivers/clk/imx/clk-imx8mq.c b/drivers/clk/imx/clk-imx8mq.c
-index 779ea69..a30642f 100644
---- a/drivers/clk/imx/clk-imx8mq.c
-+++ b/drivers/clk/imx/clk-imx8mq.c
-@@ -458,8 +458,8 @@ static int imx8mq_clocks_probe(struct platform_device *pdev)
- 	 * Mark with GET_RATE_NOCACHE to always read div value from hardware
- 	 */
- 	hws[IMX8MQ_CLK_DRAM_CORE] = imx_clk_hw_mux2_flags("dram_core_clk", base + 0x9800, 24, 1, imx8mq_dram_core_sels, ARRAY_SIZE(imx8mq_dram_core_sels), CLK_IS_CRITICAL);
--	hws[IMX8MQ_CLK_DRAM_ALT] = __imx8m_clk_hw_composite("dram_alt", imx8mq_dram_alt_sels, base + 0xa000, CLK_GET_RATE_NOCACHE);
--	hws[IMX8MQ_CLK_DRAM_APB] = __imx8m_clk_hw_composite("dram_apb", imx8mq_dram_apb_sels, base + 0xa080, CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
-+	hws[IMX8MQ_CLK_DRAM_ALT] = imx8m_clk_hw_composite_dram("dram_alt", imx8mq_dram_alt_sels, base + 0xa000);
-+	hws[IMX8MQ_CLK_DRAM_APB] = imx8m_clk_hw_composite_dram("dram_apb", imx8mq_dram_apb_sels, base + 0xa080);
- 
- 	/* IP */
- 	hws[IMX8MQ_CLK_VPU_G1] = imx8m_clk_hw_composite("vpu_g1", imx8mq_vpu_g1_sels, base + 0xa100);
--- 
-2.7.4
+> 
+>> +	},
+>> +};
+>> +
+>> +static struct clk_regmap g12a_mipi_dsi_pxclk_div = {
+>> +	.data = &(struct clk_regmap_div_data){
+>> +		.offset = HHI_MIPIDSI_PHY_CLK_CNTL,
+>> +		.shift = 0,
+>> +		.width = 7,
+>> +	},
+>> +	.hw.init = &(struct clk_init_data){
+>> +		.name = "mipi_dsi_pxclk_div",
+>> +		.ops = &clk_regmap_divider_ops,
+>> +		.parent_hws = (const struct clk_hw *[]) {
+>> +					&g12a_mipi_dsi_pxclk_sel.hw },
+> 
+> Alignment here is weird compared to the reset of the file
+
+ok
+
+> 
+>> +		.num_parents = 1,
+>> +		.flags = CLK_SET_RATE_PARENT,
+>> +	},
+>> +};
+>> +
+>> +static struct clk_regmap g12a_mipi_dsi_pxclk = {
+>> +	.data = &(struct clk_regmap_gate_data){
+>> +		.offset = HHI_MIPIDSI_PHY_CLK_CNTL,
+>> +		.bit_idx = 8,
+>> +	},
+>> +	.hw.init = &(struct clk_init_data) {
+>> +		.name = "mipi_dsi_pxclk",
+>> +		.ops = &clk_regmap_gate_ops,
+>> +		.parent_hws = (const struct clk_hw *[]) {
+>> +					&g12a_mipi_dsi_pxclk_div.hw },
+>> +		.num_parents = 1,
+>> +		.flags = CLK_SET_RATE_PARENT,
+>> +	},
+>> +};
+>> +
+>>  /* HDMI Clocks */
+>>  
+>>  static const struct clk_parent_data g12a_hdmi_parent_data[] = {
+>> @@ -4403,6 +4463,9 @@ static struct clk_hw_onecell_data g12a_hw_onecell_data = {
+>>  		[CLKID_SPICC1_SCLK_SEL]		= &g12a_spicc1_sclk_sel.hw,
+>>  		[CLKID_SPICC1_SCLK_DIV]		= &g12a_spicc1_sclk_div.hw,
+>>  		[CLKID_SPICC1_SCLK]		= &g12a_spicc1_sclk.hw,
+>> +		[CLKID_MIPI_DSI_PXCLK_SEL]	= &g12a_mipi_dsi_pxclk_sel.hw,
+>> +		[CLKID_MIPI_DSI_PXCLK_DIV]	= &g12a_mipi_dsi_pxclk_div.hw,
+>> +		[CLKID_MIPI_DSI_PXCLK]		= &g12a_mipi_dsi_pxclk.hw,
+>>  		[NR_CLKS]			= NULL,
+>>  	},
+>>  	.num = NR_CLKS,
+>> @@ -4658,6 +4721,9 @@ static struct clk_hw_onecell_data g12b_hw_onecell_data = {
+>>  		[CLKID_SPICC1_SCLK_SEL]		= &g12a_spicc1_sclk_sel.hw,
+>>  		[CLKID_SPICC1_SCLK_DIV]		= &g12a_spicc1_sclk_div.hw,
+>>  		[CLKID_SPICC1_SCLK]		= &g12a_spicc1_sclk.hw,
+>> +		[CLKID_MIPI_DSI_PXCLK_SEL]	= &g12a_mipi_dsi_pxclk_sel.hw,
+>> +		[CLKID_MIPI_DSI_PXCLK_DIV]	= &g12a_mipi_dsi_pxclk_div.hw,
+>> +		[CLKID_MIPI_DSI_PXCLK]		= &g12a_mipi_dsi_pxclk.hw,
+>>  		[NR_CLKS]			= NULL,
+>>  	},
+>>  	.num = NR_CLKS,
+>> @@ -4904,6 +4970,9 @@ static struct clk_hw_onecell_data sm1_hw_onecell_data = {
+>>  		[CLKID_NNA_CORE_CLK_SEL]	= &sm1_nna_core_clk_sel.hw,
+>>  		[CLKID_NNA_CORE_CLK_DIV]	= &sm1_nna_core_clk_div.hw,
+>>  		[CLKID_NNA_CORE_CLK]		= &sm1_nna_core_clk.hw,
+>> +		[CLKID_MIPI_DSI_PXCLK_SEL]	= &g12a_mipi_dsi_pxclk_sel.hw,
+>> +		[CLKID_MIPI_DSI_PXCLK_DIV]	= &g12a_mipi_dsi_pxclk_div.hw,
+>> +		[CLKID_MIPI_DSI_PXCLK]		= &g12a_mipi_dsi_pxclk.hw,
+>>  		[NR_CLKS]			= NULL,
+>>  	},
+>>  	.num = NR_CLKS,
+>> @@ -5151,6 +5220,9 @@ static struct clk_regmap *const g12a_clk_regmaps[] = {
+>>  	&sm1_nna_core_clk_sel,
+>>  	&sm1_nna_core_clk_div,
+>>  	&sm1_nna_core_clk,
+>> +	&g12a_mipi_dsi_pxclk_sel,
+>> +	&g12a_mipi_dsi_pxclk_div,
+>> +	&g12a_mipi_dsi_pxclk,
+>>  };
+>>  
+>>  static const struct reg_sequence g12a_init_regs[] = {
+>> diff --git a/drivers/clk/meson/g12a.h b/drivers/clk/meson/g12a.h
+>> index 69b6a69549c7..a97613df38b3 100644
+>> --- a/drivers/clk/meson/g12a.h
+>> +++ b/drivers/clk/meson/g12a.h
+>> @@ -264,8 +264,9 @@
+>>  #define CLKID_NNA_AXI_CLK_DIV			263
+>>  #define CLKID_NNA_CORE_CLK_SEL			265
+>>  #define CLKID_NNA_CORE_CLK_DIV			266
+>> +#define CLKID_MIPI_DSI_PXCLK_DIV		268
+>>  
+>> -#define NR_CLKS					268
+>> +#define NR_CLKS					271
+>>  
+>>  /* include the CLKIDs that have been made part of the DT binding */
+>>  #include <dt-bindings/clock/g12a-clkc.h>
+> 
 
