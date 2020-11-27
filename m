@@ -2,50 +2,83 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A40C32C6C37
-	for <lists+linux-clk@lfdr.de>; Fri, 27 Nov 2020 20:58:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 067D82C6C71
+	for <lists+linux-clk@lfdr.de>; Fri, 27 Nov 2020 21:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731014AbgK0T5x (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 27 Nov 2020 14:57:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35050 "EHLO mail.kernel.org"
+        id S1731307AbgK0UM4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 27 Nov 2020 15:12:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39562 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730653AbgK0T5J (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 27 Nov 2020 14:57:09 -0500
+        id S1732474AbgK0UMH (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 27 Nov 2020 15:12:07 -0500
 Received: from kernel.org (unknown [104.132.1.79])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8D9F9208B3;
-        Fri, 27 Nov 2020 19:56:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 59058206D9;
+        Fri, 27 Nov 2020 20:10:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606507008;
-        bh=hD40k2v78JS8MUejTYj7Rnup4W4KIqn/L63Q/BBpWx0=;
+        s=default; t=1606507851;
+        bh=XZK4Ium8QBFZyL2pO4Bad1qag9+adR3MRiJx1hMiA2E=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=bppiD1tl2IfBfd/S0pS5kJoI93oBhxGkdXrQ/F4bUT0hr5RkAqGvm52w3yYnlzMVQ
-         u/PqofDiI2tV0gN2fSoYn2RgEFEqXsqWrgorEakjRjhld+mr5LLjyyV7PIRrrdPZKC
-         JnH3U8NAVSA34TzND4TC0oT48JAF5Q9NdqypK3OE=
+        b=NWdOEYmyhdJ6mI86E67rwQqQO15TzORO23RXi5lGJ8WLlyqjoL8GgRN8C5kkM6I4U
+         MLaiVEDWyOz+D1UrDO91AeN15XBlmw7Cj2WLLk7zrK/Y+f0+H1LVbfTGQTIFFfvj8Q
+         vxV8G4M/vdDWg3fEvQpN+/kx2kwK2cfW1eXq9yOQ=
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20201127090551.50254-1-vulab@iscas.ac.cn>
-References: <20201127090551.50254-1-vulab@iscas.ac.cn>
-Subject: Re: [PATCH] clk: rockchip: Remove redundant null check before clk_prepare_enable
+In-Reply-To: <E796D737-E343-4EDB-BB34-CE6E0295CF3E@linaro.org>
+References: <20201119072714.14460-1-manivannan.sadhasivam@linaro.org> <20201119072714.14460-2-manivannan.sadhasivam@linaro.org> <160627045053.2717324.16519747693186632490@swboyd.mtv.corp.google.com> <E796D737-E343-4EDB-BB34-CE6E0295CF3E@linaro.org>
+Subject: Re: [PATCH v3 1/4] dt-bindings: clock: Add SDX55 GCC clock bindings
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-To:     Xu Wang <vulab@iscas.ac.cn>, heiko@sntech.de,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, mturquette@baylibre.com
-Date:   Fri, 27 Nov 2020 11:56:47 -0800
-Message-ID: <160650700726.2717324.52988673805116278@swboyd.mtv.corp.google.com>
+Cc:     bjorn.andersson@linaro.org, vkoul@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        mturquette@baylibre.com, robh+dt@kernel.org
+Date:   Fri, 27 Nov 2020 12:10:50 -0800
+Message-ID: <160650785008.2717324.9878053018301696255@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Xu Wang (2020-11-27 01:05:51)
-> Because clk_prepare_enable() already checked NULL clock parameter,
-> so the additional check is unnecessary, just remove it.
+Quoting Manivannan Sadhasivam (2020-11-24 19:49:24)
 >=20
-> Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
-> ---
+>=20
+> On 25 November 2020 7:44:10 AM IST, Stephen Boyd <sboyd@kernel.org> wrote:
+> >Quoting Manivannan Sadhasivam (2020-11-18 23:27:11)
+> >> diff --git
+> >a/Documentation/devicetree/bindings/clock/qcom,gcc-sdx55.yaml
+> >b/Documentation/devicetree/bindings/clock/qcom,gcc-sdx55.yaml
+> >> new file mode 100644
+> >> index 000000000000..9d8981817ae3
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sdx55.yaml
+> >> @@ -0,0 +1,73 @@
+> >[...]
+> >> +
+> >> +properties:
+> >> +  compatible:
+> >> +    const: qcom,gcc-sdx55
+> >> +
+> >> +  clocks:
+> >> +    items:
+> >[...]
+> >> +      - description: PLL test clock source
+> >> +
+> >> +  clock-names:
+> >> +    items:
+> >[...]
+> >> +      - const: core_bi_pll_test_se
+> >
+> >Is it optional? As far as I know this clk has never been implemented
+> >because it's a hardware validation thing and not used otherwise.
+>=20
+> It is implemented in drivers but not used as you said. But since it is th=
+e parent clk of PLLs I'm not sure we can make it optional.=20
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+We can leave it out completely if the bootloader code never uses it as a
+parent of the PLL. That scenario would be pretty weird and is why we
+removed it from the video clk controller in commit abc8f93f33e7 ("clk:
+qcom: Get rid of the test clock for videocc-sc7180"). I'm fine if you
+want to keep it, but I'm confused why you care so much :)
