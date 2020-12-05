@@ -2,126 +2,100 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40D4C2CFCBF
-	for <lists+linux-clk@lfdr.de>; Sat,  5 Dec 2020 19:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E8F2CFE1F
+	for <lists+linux-clk@lfdr.de>; Sat,  5 Dec 2020 20:21:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728341AbgLESTV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 5 Dec 2020 13:19:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728188AbgLESBB (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 5 Dec 2020 13:01:01 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2AEC061A54
-        for <linux-clk@vger.kernel.org>; Sat,  5 Dec 2020 10:00:20 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id 91so4544188wrj.7
-        for <linux-clk@vger.kernel.org>; Sat, 05 Dec 2020 10:00:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=user-agent:from:to:cc:subject:message-id:date:mime-version;
-        bh=PTXa6B/B0BNrbQJqk8SVfud/vMOBiyjb/emTUMto2ik=;
-        b=MPFfiBDQZxoubDp47KqhOPCsl0Uu0ERfIVCSN+PkGlf6uNfh324TLdfASYbZ/It3aY
-         UGAJtAI4+tkA8tViVrBNROjOxFZfeqB5FS34WHxbNS2r4Q1cDhVJu9rlzVPirDNZV/i8
-         60ARDDAW1ryo12WD+Xf+Im1RY5mIUczX72oXtDgjnBnAR2ov2Bnpvi7Ur9kayjpajUSi
-         z9l0YMrx3FQjr4OgCjaM/+TOodE80LNdzwt6SFqvUZDIAFnnxqVmsLF2XKswJa3QNmJj
-         kBykULaoWQcVioGIEXpTTc2n0Y8OjZU07jnfO4dtDPjOQQm+Ain57GxVWPlBoGC9stbg
-         P22A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:user-agent:from:to:cc:subject:message-id:date
-         :mime-version;
-        bh=PTXa6B/B0BNrbQJqk8SVfud/vMOBiyjb/emTUMto2ik=;
-        b=iiyLi5CHH238YOf5O1QXmXmbD00ELhmh8NIVhVtSrZBpw2zJagsx9C4q8Ofl0nt4UW
-         pmnxwOnSvbJiTlsUuz0Ie2UKp0bASzYK+jxQO5hmm6WZvy6juGEOLR629AWXpkSdIQrV
-         xo0YgzGVp8zl+LfQTtIWWoq8q3wbhD8cqfIfrQYE9FRrR8FdBbtx1IELyRXu6mCb2cjU
-         KUjZ8o7COo7B/bS9LsUonucWAtnKIJfF0IfVpDeHMEf1iYdVY072HU+hMJBkMJgWK3ce
-         L59axLRYKR31CI48FwDjbzlrSXurbQQTXqkfLhhqVt/kCsNiSIU8WfcfD7MKALDoPhyG
-         vcOA==
-X-Gm-Message-State: AOAM531DKKzuCRPNDSXX2QvlcgDkuMmaP9lXobA1MOD0M4NeUrJE57to
-        iofY4Srr9ktdsJPscY0DzWme+UAgnqVMWj0v
-X-Google-Smtp-Source: ABdhPJxDuNhmmBblFW6fyO7wkhOXA8WUFQ0W09dGX+p5ryihjGiJrwlmb4k0cJJijfX1nHIWVMrHRQ==
-X-Received: by 2002:a5d:4892:: with SMTP id g18mr11067256wrq.365.1607191219674;
-        Sat, 05 Dec 2020 10:00:19 -0800 (PST)
-Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
-        by smtp.gmail.com with ESMTPSA id h3sm21635wmm.4.2020.12.05.10.00.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Dec 2020 10:00:18 -0800 (PST)
-User-agent: mu4e 1.4.10; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-amlogic@lists.infradead.org
-Subject: [GIT PULL RESEND] clk: meson: amlogic updates for v5.11 
-Message-ID: <1j360kp1zh.fsf@starbuckisacylon.baylibre.com>
-Date:   Sat, 05 Dec 2020 19:00:18 +0100
+        id S1726868AbgLETTr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 5 Dec 2020 14:19:47 -0500
+Received: from asavdk4.altibox.net ([109.247.116.15]:53692 "EHLO
+        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726359AbgLETTa (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 5 Dec 2020 14:19:30 -0500
+Received: from ravnborg.org (unknown [188.228.123.71])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by asavdk4.altibox.net (Postfix) with ESMTPS id 694A6804C8;
+        Sat,  5 Dec 2020 20:18:37 +0100 (CET)
+Date:   Sat, 5 Dec 2020 20:18:35 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Ricardo Ribalda <ribalda@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        alsa-devel <alsa-devel@alsa-project.org>
+Subject: Re: [PATCH 1/1] dt-bindings: eliminate yamllint warnings
+Message-ID: <20201205191835.GC332836@ravnborg.org>
+References: <20201204024226.1222-1-thunder.leizhen@huawei.com>
+ <20201204024226.1222-2-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201204024226.1222-2-thunder.leizhen@huawei.com>
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=Itgwjo3g c=1 sm=1 tr=0
+        a=S6zTFyMACwkrwXSdXUNehg==:117 a=S6zTFyMACwkrwXSdXUNehg==:17
+        a=kj9zAlcOel0A:10 a=i0EeH86SAAAA:8 a=VwQbUJbxAAAA:8 a=IpJZQVW2AAAA:8
+        a=pGLkceISAAAA:8 a=8AirrxEcAAAA:8 a=KKAkSRfTAAAA:8 a=7gkXJVJtAAAA:8
+        a=QyXUC8HyAAAA:8 a=ds-h48H8TGFLVGBnORYA:9 a=CjuIK1q_8ugA:10
+        a=AjGcO6oz07-iQ99wixmX:22 a=IawgGOuG5U0WyFbmm1f5:22
+        a=ST-jHhOKWsTCqRlWije3:22 a=cvBusfyB2V15izCimMoJ:22
+        a=E9Po1WZjFZOl8hwRPBS3:22
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Stephen,
+On Fri, Dec 04, 2020 at 10:42:26AM +0800, Zhen Lei wrote:
+> All warnings are related only to "wrong indentation", except one:
+> Documentation/devicetree/bindings/media/i2c/mipi-ccs.yaml:4:1: \
+> [error] missing document start "---" (document-start)
+> 
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Shawn Guo <shawnguo@kernel.org>
+> Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+> Cc: Fabio Estevam <festevam@gmail.com>
+> Cc: NXP Linux Team <linux-imx@nxp.com>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Sumit Semwal <sumit.semwal@linaro.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Cc: Ricardo Ribalda <ribalda@kernel.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: Mark Brown <broonie@kernel.org>
 
-Here are the updates for amlogic clocks for v5.11. This is based on your
-clk-hw branch, instead of the usual rc1, since it depends on clk_hw
-stuff you've already applied.
-
-Hopefully I got it right this time ...
-
-Please Pull.
-Thx.
-
-Cheers
-Jerome
-
-The following changes since commit e6fb7aee486c7fbd4d94f4894feaa6f0424c1740:
-
-  clk: meson: g12: use devm variant to register notifiers (2020-11-14 12:58:31 -0800)
-
-are available in the Git repository at:
-
-  git://github.com/BayLibre/clk-meson.git tags/clk-meson-v5.11-1
-
-for you to fetch changes up to 88b9ae600138baff18c7f4c4870622584acc6111:
-
-  clk: meson: g12a: add MIPI DSI Host Pixel Clock (2020-11-26 15:25:20 +0100)
-
-----------------------------------------------------------------
-Amlogic clock changes for v5.11
-
-* Add MIPI DSI clocks for axg and g12
-* Make it possible to build controllers as modules
-* Fix Video PLL clock dependency
-
-----------------------------------------------------------------
-Jerome Brunet (2):
-      Merge branch 'v5.11/headers' into integ
-      Merge branch 'v5.11/headers' into v5.11/drivers
-
-Kevin Hilman (2):
-      clk: meson: Kconfig: fix dependency for G12A
-      clk: meson: enable building as modules
-
-Neil Armstrong (6):
-      dt-bindings: clk: axg-clkc: add Video Clocks
-      dt-bindings: clk: axg-clkc: add MIPI DSI Host clock binding
-      clk: meson: axg: add Video Clocks
-      clk: meson: axg: add MIPI DSI Host clock
-      dt-bindings: clk: g12a-clkc: add DSI Pixel clock bindings
-      clk: meson: g12a: add MIPI DSI Host Pixel Clock
-
- drivers/clk/meson/Kconfig             |   7 +-
- drivers/clk/meson/axg-aoclk.c         |   5 +-
- drivers/clk/meson/axg.c               | 824 +++++++++++++++++++++++++++++++++-
- drivers/clk/meson/axg.h               |  23 +-
- drivers/clk/meson/g12a-aoclk.c        |   5 +-
- drivers/clk/meson/g12a.c              |  79 +++-
- drivers/clk/meson/g12a.h              |   3 +-
- drivers/clk/meson/gxbb-aoclk.c        |   5 +-
- drivers/clk/meson/gxbb.c              |   5 +-
- drivers/clk/meson/meson-aoclk.c       |   4 +
- drivers/clk/meson/meson-eeclk.c       |   3 +
- include/dt-bindings/clock/axg-clkc.h  |  25 ++
- include/dt-bindings/clock/g12a-clkc.h |   2 +
- 13 files changed, 979 insertions(+), 11 deletions(-)
+For the bindings/display/* parts:
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
