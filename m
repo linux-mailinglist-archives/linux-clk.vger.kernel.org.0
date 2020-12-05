@@ -2,54 +2,72 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD0E2CF81D
-	for <lists+linux-clk@lfdr.de>; Sat,  5 Dec 2020 01:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 782562CF9CD
+	for <lists+linux-clk@lfdr.de>; Sat,  5 Dec 2020 06:42:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730874AbgLEAq6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 4 Dec 2020 19:46:58 -0500
-Received: from vsm-gw.hyogo-dai.ac.jp ([202.244.76.12]:49526 "EHLO
-        vsm-gw.hyogo-dai.ac.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726485AbgLEAq5 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 4 Dec 2020 19:46:57 -0500
-X-Greylist: delayed 14573 seconds by postgrey-1.27 at vger.kernel.org; Fri, 04 Dec 2020 19:46:41 EST
-Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [202.244.77.11])
-        by vsm-gw.hyogo-dai.ac.jp (Postfix) with ESMTP id 274A31A5589;
-        Sat,  5 Dec 2020 04:44:55 +0900 (JST)
-Received: from humans-kc.hyogo-dai.ac.jp (humans-kc.hyogo-dai.ac.jp [127.0.0.1])
-        by postfix.imss71 (Postfix) with ESMTP id E5C39838858;
-        Sat,  5 Dec 2020 04:44:54 +0900 (JST)
-Received: from hyogo-dai.ac.jp (unknown [202.244.77.11])
-        by humans-kc.hyogo-dai.ac.jp (Postfix) with SMTP id B84F6838260;
-        Sat,  5 Dec 2020 04:44:54 +0900 (JST)
+        id S1728266AbgLEFl5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 5 Dec 2020 00:41:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58654 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726247AbgLEFlz (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sat, 5 Dec 2020 00:41:55 -0500
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607146875;
+        bh=BwVWvt9ye7Jk3XfjRUdb103S0m5tQzkQt0ncHbWSo3Q=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=ZZDSHLrMV99D2VnkOq6BAZCUi9eWfOq6qeewSuFdWLQIy09cIhjlCJK1J8sij75EF
+         T23oPGXfsMbkhfmMqNfMFVis3SkEb4NZWqfsmiMT21NGTluogV7gSks/KGiqYxTY+4
+         NRnEqKYP51oKHWjrWxvQAL7MQIgE1dYWUc9QADSWN+4PKhoau2SC69vCl9cKVASuVq
+         o3mCWOppBRsUM1V4njp2LTWWKGPZmFFdEQGOayI5sS5LItVmIbWz17xJNTS1gydXcx
+         Bd653PV/YTbPWO5Rtd1/Qi0Ta7grsnu7/UGMFGR1GvGfpkhQpKW7xSvJc9lF4U6qH6
+         FSYXznxTSVL0Q==
 MIME-Version: 1.0
-Message-ID: <20201204194454.00002B21.0147@hyogo-dai.ac.jp>
-Date:   Sat, 05 Dec 2020 04:44:54 +0900
-From:   "Dr.Raymond" <tabata@hyogo-dai.ac.jp>
-To:     <infocarferr1@aim.com>
-Reply-To: <infocarfer@aim.com>
-Subject: I am Vice Chairman of Hang Seng Bank, Dr. Raymond Chien
-         Kuo Fung I have Important Matter to Discuss with you concerning
-         my late client. Died without a NEXT OF KIN. Send me your private
-         email for full details information. 
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MAILER: Active! mail
-X-TM-AS-MML: disable
-X-TM-AS-Product-Ver: IMSS-7.1.0.1808-8.2.0.1013-25446.007
-X-TM-AS-Result: No--4.326-5.0-31-10
-X-imss-scan-details: No--4.326-5.0-31-10
-X-TM-AS-User-Approved-Sender: No
-X-TMASE-MatchedRID: +T4Z3mpR0x5ITndh1lLRASsOycAMAhSTkCM77ifYafsBLhz6t76Ce/bj
-        Enpjm61/Gf23dqZJjE4Erxo5p8V1/E1+zyfzlN7y/sToY2qzpx7w5nZ/qYg41XEWw1TkKAjcYff
-        qdBtG2ocgOkCKsW/kbuunGEBqPil++coAzulIP8gMTyJMXCOBhj9BWL7GG0LsKrauXd3MZDUZaR
-        NzIP3XI5u3uLPgwbAMH5RdHnhWfwyq9gpuf+A6coDeeVSgzszVDx5n520Z3eZyT7DDRtYlKaWBy
-        ZE9nSaC/rhfyjvqkZu/pNa4BidtZEMMprcbiest
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20201203230756.1481397-1-arnd@kernel.org>
+References: <20201203230756.1481397-1-arnd@kernel.org>
+Subject: Re: [PATCH] clk: imx: fix build failure on i.MX SCU clk
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+To:     Anson Huang <Anson.Huang@nxp.com>, Arnd Bergmann <arnd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>
+Date:   Fri, 04 Dec 2020 21:41:13 -0800
+Message-ID: <160714687371.1580929.2544289342352742335@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-infocarfer@aim.com
+Quoting Arnd Bergmann (2020-12-03 15:07:52)
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> When CONFIG_MXC_CLK_SCU is enabled, but CONFIG_CLK_IMX8QXP is not,
+> the kernel fails to link with:
+>=20
+> aarch64-linux-ld: no input files
+> make[5]: *** [scripts/Makefile.build:434: drivers/clk/imx/clk-imx-scu.o] =
+Error 1
+> aarch64-linux-ld: no input files
+> make[5]: *** [scripts/Makefile.build:434: drivers/clk/imx/clk-imx-lpcg-sc=
+u.o] Error 1
+>=20
+> The only sensible configuration at the moment is to have both mean
+> the same thing, so make hide the first one to avoid broken
+> configurations.
+>=20
+> Fixes: e0d0d4d86c76 ("clk: imx8qxp: Support building i.MX8QXP clock drive=
+r as module")
+> Reported-by: Anders Roxell <anders.roxell@linaro.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-
-
+Dong sent something similar at
+https://lore.kernel.org/r/20201130084624.21113-1-aisheng.dong@nxp.com
