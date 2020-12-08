@@ -2,307 +2,127 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F2F2D23E0
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Dec 2020 07:48:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC8D2D241C
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Dec 2020 08:16:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727023AbgLHGsP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Dec 2020 01:48:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57582 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726069AbgLHGsO (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 8 Dec 2020 01:48:14 -0500
-From:   Vinod Koul <vkoul@kernel.org>
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vivek Aknurwar <viveka@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeevan Shriram <jshriram@codeaurora.org>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH v2 4/5] clk: qcom: clk-alpha-pll: Add support for Lucid 5LPE PLL
-Date:   Tue,  8 Dec 2020 12:17:01 +0530
-Message-Id: <20201208064702.3654324-5-vkoul@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20201208064702.3654324-1-vkoul@kernel.org>
-References: <20201208064702.3654324-1-vkoul@kernel.org>
+        id S1726588AbgLHHPT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Dec 2020 02:15:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725877AbgLHHPT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Dec 2020 02:15:19 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203ACC061749
+        for <linux-clk@vger.kernel.org>; Mon,  7 Dec 2020 23:14:39 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id d2so9159608pfq.5
+        for <linux-clk@vger.kernel.org>; Mon, 07 Dec 2020 23:14:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3qOlsloJgxQkZEy55JDorTCm1I5tHRxkFTRlp6EieeA=;
+        b=cDR/LIN65OUPo8a2wnb5yJ70LfqOZLtBPBOoVg4c6uOnZ2t0/tInUdpHMOmbTvVjaI
+         Vjvd9yBJv+VlVQghaLfPk5OX2gv8gySfFeB9EfaPqgUB7Rv2tGhYBa8unI4U7D2D3sqe
+         I8GfkolWWf32L6zlgAVfncXeW/k6B7001ZyTJi8GZBiEYkgDjBoq5DWL8mA3SeNvp7jG
+         RxNRSEVgAOTt9x3iLI1gXL434cWQDvty0Hcumq61d4ke+kEzhhiuhrN5bBIH5DdufpFt
+         2YALJWXOEYO2gp2KWc1fmYmw55De5H1kRYvJTbz0Pdh8uItsYzwacD3ahbGeUTZ+A8cy
+         vrvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3qOlsloJgxQkZEy55JDorTCm1I5tHRxkFTRlp6EieeA=;
+        b=Iq3YjVZYWOh4qbRx4GDFb7WrXugDiKV0jm9DQNyFNNKEtdllaYs8heAXm2LcNV79Ke
+         naGmOx1Hm7zMKFV6YPITE442qAoV4NpU2CrSV0VqBNh4v33yZtmSievfiycHzR9S0RmS
+         i1vDsl/5r0EFEftg1w5UmvYdPpBIeNzLxx9X4yFZsiAHXO0TmwMofprau9HbcfVWFtZo
+         XA+VV/k6DW7jRYqTsl8J7oE7fTbcwyu3bEA7Rj2qilgMl7QYKXvrQdDNLSv+JPowJxxY
+         Zx1J49xTmzDSZaPf4s9UJEskccvkbdNkdwbdJn92J8WfNs6H9sFYLO2JrBoCx9/mreHp
+         B0tw==
+X-Gm-Message-State: AOAM533Lbos0+HPtLXjRpupK7/Ak7mfnaGv0DiXS9Nou57JxAb4Jt5yx
+        ajd2LSolhJ41ZFdu4hsQxkRcBg==
+X-Google-Smtp-Source: ABdhPJxmZfF+CnAcve/pdIigoVV18lefAg/7CfvlDUYpdYDSaWxYPJidXa03T2kXUUGN1JSSBlGqDw==
+X-Received: by 2002:a63:561f:: with SMTP id k31mr21413333pgb.227.1607411678623;
+        Mon, 07 Dec 2020 23:14:38 -0800 (PST)
+Received: from hsinchu02.internal.sifive.com (114-34-229-221.HINET-IP.hinet.net. [114.34.229.221])
+        by smtp.gmail.com with ESMTPSA id gp17sm1801318pjb.0.2020.12.07.23.14.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Dec 2020 23:14:38 -0800 (PST)
+From:   Zong Li <zong.li@sifive.com>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com, sboyd@kernel.org,
+        schwab@linux-m68k.org, pragnesh.patel@openfive.com,
+        aou@eecs.berkeley.edu, mturquette@baylibre.com,
+        yash.shah@sifive.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc:     Zong Li <zong.li@sifive.com>
+Subject: [PATCH v6 0/5] clk: add driver for the SiFive FU740
+Date:   Tue,  8 Dec 2020 15:14:27 +0800
+Message-Id: <20201208071432.55583-1-zong.li@sifive.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Vivek Aknurwar <viveka@codeaurora.org>
+Add a driver for the SiFive FU740 PRCI IP block, which handles more
+clocks than FU540. These patches also refactor the original
+implementation by spliting the dependent-code of fu540 and fu740
+respectively.
 
-Lucid 5LPE is a slightly different Lucid PLL with different offsets and
-porgramming sequence so add support for these
+We also add a separate patch for DT binding documentation of FU740 PRCI:
+https://patchwork.kernel.org/project/linux-riscv/patch/20201126030043.67390-1-zong.li@sifive.com/
 
-Signed-off-by: Vivek Aknurwar <viveka@codeaurora.org>
-Signed-off-by: Jeevan Shriram <jshriram@codeaurora.org>
-[vkoul: rebase and tidy up for upstream]
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
- drivers/clk/qcom/clk-alpha-pll.c | 223 +++++++++++++++++++++++++++++++
- drivers/clk/qcom/clk-alpha-pll.h |   4 +
- 2 files changed, 227 insertions(+)
+Changed in v6:
+ - Modify the patch "Add clock enable and disable ops"
+   by Pragnesh. The changes as follows:
+   - Remove spin lock in enable and disable functions
+   - Call enable_bypass() before PLL output disable
 
-diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
-index 564431130a76..6a399663d564 100644
---- a/drivers/clk/qcom/clk-alpha-pll.c
-+++ b/drivers/clk/qcom/clk-alpha-pll.c
-@@ -146,6 +146,12 @@ EXPORT_SYMBOL_GPL(clk_alpha_pll_regs);
- /* LUCID PLL specific settings and offsets */
- #define LUCID_PCAL_DONE		BIT(27)
- 
-+/* LUCID 5LPE PLL specific settings and offsets */
-+#define LUCID_5LPE_PCAL_DONE		BIT(11)
-+#define LUCID_5LPE_ENABLE_VOTE_RUN	BIT(21)
-+#define LUCID_5LPE_PLL_LATCH_INPUT	BIT(14)
-+#define LUCID_5LPE_ALPHA_PLL_ACK_LATCH	BIT(13)
-+
- #define pll_alpha_width(p)					\
- 		((PLL_ALPHA_VAL_U(p) - PLL_ALPHA_VAL(p) == 4) ?	\
- 				 ALPHA_REG_BITWIDTH : ALPHA_REG_16BIT_WIDTH)
-@@ -1561,3 +1567,220 @@ const struct clk_ops clk_alpha_pll_postdiv_lucid_ops = {
- 	.set_rate = clk_alpha_pll_postdiv_fabia_set_rate,
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_lucid_ops);
-+
-+static int alpha_pll_lucid_5lpe_enable(struct clk_hw *hw)
-+{
-+	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
-+	u32 val;
-+	int ret;
-+
-+	ret = regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &val);
-+	if (ret)
-+		return ret;
-+
-+	/* If in FSM mode, just vote for it */
-+	if (val & LUCID_5LPE_ENABLE_VOTE_RUN) {
-+		ret = clk_enable_regmap(hw);
-+		if (ret)
-+			return ret;
-+		return wait_for_pll_enable_lock(pll);
-+	}
-+
-+	/* Check if PLL is already enabled */
-+	ret = trion_pll_is_enabled(pll, pll->clkr.regmap);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = regmap_update_bits(pll->clkr.regmap, PLL_MODE(pll), PLL_RESET_N, PLL_RESET_N);
-+	if (ret)
-+		return ret;
-+
-+	/* Set operation mode to RUN */
-+	regmap_write(pll->clkr.regmap, PLL_OPMODE(pll), PLL_RUN);
-+
-+	ret = wait_for_pll_enable_lock(pll);
-+	if (ret)
-+		return ret;
-+
-+	/* Enable the PLL outputs */
-+	ret = regmap_update_bits(pll->clkr.regmap, PLL_USER_CTL(pll), PLL_OUT_MASK, PLL_OUT_MASK);
-+	if (ret)
-+		return ret;
-+
-+	/* Enable the global PLL outputs */
-+	ret = regmap_update_bits(pll->clkr.regmap, PLL_MODE(pll), PLL_OUTCTRL, PLL_OUTCTRL);
-+	if (ret)
-+		return ret;
-+
-+	/* Ensure that the write above goes through before returning. */
-+	mb();
-+	return ret;
-+}
-+
-+static void alpha_pll_lucid_5lpe_disable(struct clk_hw *hw)
-+{
-+	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
-+	u32 val;
-+	int ret;
-+
-+	ret = regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &val);
-+	if (ret)
-+		return;
-+
-+	/* If in FSM mode, just unvote it */
-+	if (val & LUCID_5LPE_ENABLE_VOTE_RUN) {
-+		clk_disable_regmap(hw);
-+		return;
-+	}
-+
-+	/* Disable the global PLL output */
-+	ret = regmap_update_bits(pll->clkr.regmap, PLL_MODE(pll), PLL_OUTCTRL, 0);
-+	if (ret)
-+		return;
-+
-+	/* Disable the PLL outputs */
-+	ret = regmap_update_bits(pll->clkr.regmap, PLL_USER_CTL(pll), PLL_OUT_MASK, 0);
-+	if (ret)
-+		return;
-+
-+	/* Place the PLL mode in STANDBY */
-+	regmap_write(pll->clkr.regmap, PLL_OPMODE(pll), PLL_STANDBY);
-+}
-+
-+/*
-+ * The Lucid 5LPE PLL requires a power-on self-calibration which happens
-+ * when the PLL comes out of reset. Calibrate in case it is not completed.
-+ */
-+static int alpha_pll_lucid_5lpe_prepare(struct clk_hw *hw)
-+{
-+	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
-+	struct clk_hw *p;
-+	u32 regval;
-+	int ret;
-+
-+	/* Return early if calibration is not needed. */
-+	regmap_read(pll->clkr.regmap, PLL_MODE(pll), &regval);
-+	if (regval & LUCID_5LPE_PCAL_DONE)
-+		return 0;
-+
-+	p = clk_hw_get_parent(hw);
-+	if (!p)
-+		return -EINVAL;
-+
-+	ret = alpha_pll_lucid_5lpe_enable(hw);
-+	if (ret)
-+		return ret;
-+
-+	alpha_pll_lucid_5lpe_disable(hw);
-+
-+	return 0;
-+}
-+
-+static int alpha_pll_lucid_5lpe_set_rate(struct clk_hw *hw, unsigned long rate,
-+					 unsigned long prate)
-+{
-+	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
-+	unsigned long rrate;
-+	u32 regval, l;
-+	u64 a;
-+	int ret;
-+
-+	rrate = alpha_pll_round_rate(rate, prate, &l, &a, ALPHA_REG_16BIT_WIDTH);
-+
-+	/*
-+	 * Due to a limited number of bits for fractional rate programming, the
-+	 * rounded up rate could be marginally higher than the requested rate.
-+	 */
-+	if (rrate > (rate + PLL_RATE_MARGIN) || rrate < rate) {
-+		pr_err("Call set rate on the PLL with rounded rates!\n");
-+		return -EINVAL;
-+	}
-+
-+	regmap_write(pll->clkr.regmap, PLL_L_VAL(pll), l);
-+	regmap_write(pll->clkr.regmap, PLL_ALPHA_VAL(pll), a);
-+
-+	/* Latch the PLL input */
-+	ret = regmap_update_bits(pll->clkr.regmap, PLL_MODE(pll),
-+				 LUCID_5LPE_PLL_LATCH_INPUT, LUCID_5LPE_PLL_LATCH_INPUT);
-+	if (ret)
-+		return ret;
-+
-+	/* Wait for 2 reference cycles before checking the ACK bit. */
-+	udelay(1);
-+	regmap_read(pll->clkr.regmap, PLL_MODE(pll), &regval);
-+	if (!(regval & LUCID_5LPE_ALPHA_PLL_ACK_LATCH)) {
-+		pr_err("Lucid 5LPE PLL latch failed. Output may be unstable!\n");
-+		return -EINVAL;
-+	}
-+
-+	/* Return the latch input to 0 */
-+	ret = regmap_update_bits(pll->clkr.regmap, PLL_MODE(pll), LUCID_5LPE_PLL_LATCH_INPUT, 0);
-+	if (ret)
-+		return ret;
-+
-+	if (clk_hw_is_enabled(hw)) {
-+		ret = wait_for_pll_enable_lock(pll);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	/* Wait for PLL output to stabilize */
-+	udelay(100);
-+	return 0;
-+}
-+
-+static int clk_lucid_5lpe_pll_postdiv_set_rate(struct clk_hw *hw, unsigned long rate,
-+					       unsigned long parent_rate)
-+{
-+	struct clk_alpha_pll_postdiv *pll = to_clk_alpha_pll_postdiv(hw);
-+	int i, val = 0, div, ret;
-+
-+	/*
-+	 * If the PLL is in FSM mode, then treat set_rate callback as a
-+	 * no-operation.
-+	 */
-+	ret = regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &val);
-+	if (ret)
-+		return ret;
-+
-+	if (val & LUCID_5LPE_ENABLE_VOTE_RUN)
-+		return 0;
-+
-+	if (!pll->post_div_table) {
-+		pr_err("Missing the post_div_table for the PLL\n");
-+		return -EINVAL;
-+	}
-+
-+	div = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
-+	for (i = 0; i < pll->num_post_div; i++) {
-+		if (pll->post_div_table[i].div == div) {
-+			val = pll->post_div_table[i].val;
-+			break;
-+		}
-+	}
-+
-+	return regmap_update_bits(pll->clkr.regmap, PLL_USER_CTL(pll),
-+				(BIT(pll->width) - 1) << pll->post_div_shift,
-+				val << pll->post_div_shift);
-+}
-+
-+const struct clk_ops clk_alpha_pll_lucid_5lpe_ops = {
-+	.prepare = alpha_pll_lucid_5lpe_prepare,
-+	.enable = alpha_pll_lucid_5lpe_enable,
-+	.disable = alpha_pll_lucid_5lpe_disable,
-+	.set_rate = alpha_pll_lucid_5lpe_set_rate,
-+};
-+EXPORT_SYMBOL_GPL(clk_alpha_pll_lucid_5lpe_ops);
-+
-+const struct clk_ops clk_alpha_pll_fixed_lucid_5lpe_ops = {
-+	.enable = alpha_pll_lucid_5lpe_enable,
-+	.disable = alpha_pll_lucid_5lpe_disable,
-+};
-+EXPORT_SYMBOL_GPL(clk_alpha_pll_fixed_lucid_5lpe_ops);
-+
-+const struct clk_ops clk_alpha_pll_postdiv_lucid_5lpe_ops = {
-+	.recalc_rate = clk_alpha_pll_postdiv_fabia_recalc_rate,
-+	.round_rate = clk_alpha_pll_postdiv_fabia_round_rate,
-+	.set_rate = clk_lucid_5lpe_pll_postdiv_set_rate,
-+};
-+EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_lucid_5lpe_ops);
-diff --git a/drivers/clk/qcom/clk-alpha-pll.h b/drivers/clk/qcom/clk-alpha-pll.h
-index d3201b87c0cd..d983b1aab8c8 100644
---- a/drivers/clk/qcom/clk-alpha-pll.h
-+++ b/drivers/clk/qcom/clk-alpha-pll.h
-@@ -142,6 +142,10 @@ extern const struct clk_ops clk_alpha_pll_lucid_ops;
- #define clk_alpha_pll_fixed_lucid_ops clk_alpha_pll_fixed_trion_ops
- extern const struct clk_ops clk_alpha_pll_postdiv_lucid_ops;
- 
-+extern const struct clk_ops clk_alpha_pll_lucid_5lpe_ops;
-+extern const struct clk_ops clk_alpha_pll_fixed_lucid_5lpe_ops;
-+extern const struct clk_ops clk_alpha_pll_postdiv_lucid_5lpe_ops;
-+
- void clk_alpha_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
- 			     const struct alpha_pll_config *config);
- void clk_fabia_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
+Changed in v5:
+ - Fix copyright format
+ - Add a link of documentation in commit message
+ - Modify build dependency for sifive-prci.c
+ - Add enable and disable functions by Pragnesh Patel
+
+Changed in v4:
+ - Fix the wrong enable bit field shift for FU540 and FU740.
+
+Changed in v3:
+ - Fix the wrong enable bit field shift for FU740.
+
+Changed in v2:
+ - Remove the macro definition for __prci_clock_array.
+ - Indicate the functional changes in commit message.
+ - Using option -M and -C to create patches.
+ - Rebase code to kernel v5.10-rc3.
+
+Pragnesh Patel (1):
+  clk: sifive: Add clock enable and disable ops
+
+Zong Li (4):
+  clk: sifive: Extract prci core to common base
+  clk: sifive: Use common name for prci configuration
+  clk: sifive: Add a driver for the SiFive FU740 PRCI IP block
+  clk: sifive: Fix the wrong bit field shift
+
+ arch/riscv/Kconfig.socs                       |   2 +-
+ drivers/clk/sifive/Kconfig                    |   8 +-
+ drivers/clk/sifive/Makefile                   |   5 +-
+ drivers/clk/sifive/fu540-prci.c               | 585 +-----------------
+ drivers/clk/sifive/fu540-prci.h               |  21 +
+ drivers/clk/sifive/fu740-prci.c               | 120 ++++
+ drivers/clk/sifive/fu740-prci.h               |  21 +
+ drivers/clk/sifive/sifive-prci.c              | 571 +++++++++++++++++
+ drivers/clk/sifive/sifive-prci.h              | 299 +++++++++
+ include/dt-bindings/clock/sifive-fu740-prci.h |  23 +
+ 10 files changed, 1089 insertions(+), 566 deletions(-)
+ create mode 100644 drivers/clk/sifive/fu540-prci.h
+ create mode 100644 drivers/clk/sifive/fu740-prci.c
+ create mode 100644 drivers/clk/sifive/fu740-prci.h
+ create mode 100644 drivers/clk/sifive/sifive-prci.c
+ create mode 100644 drivers/clk/sifive/sifive-prci.h
+ create mode 100644 include/dt-bindings/clock/sifive-fu740-prci.h
+
 -- 
-2.26.2
+2.29.2
 
