@@ -2,350 +2,249 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7C02D2423
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Dec 2020 08:16:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA552D246C
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Dec 2020 08:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726984AbgLHHQD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Dec 2020 02:16:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726954AbgLHHQD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Dec 2020 02:16:03 -0500
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A42C0611C5
-        for <linux-clk@vger.kernel.org>; Mon,  7 Dec 2020 23:14:53 -0800 (PST)
-Received: by mail-pl1-x641.google.com with SMTP id t18so6530388plo.0
-        for <linux-clk@vger.kernel.org>; Mon, 07 Dec 2020 23:14:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IPh0U3g/jkVOR5mbuAZ/kzwYhbv/Sy7jDuin+8rMgks=;
-        b=mdTrqK+hMk6NPCs8NZJ9RZN5/rs1xdgq8NQqyKJlFomPeIZu2ku4m3EOrxMP2HJO7W
-         H2qfdC0ZJTlgnIHGDsc1tmr9Np+vGNB0UQNCBkQ6Tp/g3hdAV8xxMzDctza7wd78TAl5
-         6IhjLTfYyZ86/Hf8ytt4l2pwCEVQo9AP4gUjKtdYJjWV+16RV/uEY/LZzkKUN1TRUsf/
-         uuU9VhnCjyB9Y6h4zWUJk0Ju3q3OmfFkH9TRoSzVQst/U+Rs1lfxSiqp08Gipjx71VzX
-         MrS5ZfMnXPc/f85TuOMeMK/0KRCcLHdz98wIansja6z8bDWmaQPg7kYcfzYzsrlAWVK+
-         AI5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IPh0U3g/jkVOR5mbuAZ/kzwYhbv/Sy7jDuin+8rMgks=;
-        b=thzgJm+EiIVCB5BRPo6EIHbcFk9ApFbbslytPRyQPPSIa3Pwdjefe6X1QHYTFkwMO8
-         SxormlvMFPSoIll1lPGHslnFo7axkOl6X9Xelg8BDUQmvjflDckUfYaM3Z0vsl3C7shf
-         gwdf78bF3gzrN3CHEoylGlXzHvme1fKrELvAHdroD5rK4RsaywOiSWLVaTilrdqQlzFW
-         /p/lRE/vrA+zJD6SY2R5aO1z/aUGKzQyEvYIMwhIGPfO1H/ciIE/NnBC+MsHx2LWFlAv
-         HYbjExNaoyqkD/ZrmD5rIw+gvbRh4CrIi233fH9V9NwOs90qrg7EydWJU0zdccGHu5UA
-         EDng==
-X-Gm-Message-State: AOAM533euy01WD1zWR9NxuzzIpBh7JHjAcFngaf7x92hBTPoPN8E+A7u
-        r3EzkW+KZUw0jEDHrGezaR7gTw==
-X-Google-Smtp-Source: ABdhPJyVvlNuDFzFVI8ZmPfVF5u0Qj0uL1yw7s6z1fGwY17o1+VZOpSphU/XYXsTI+mKFLhtJvVQRA==
-X-Received: by 2002:a17:902:9894:b029:da:5698:7f7b with SMTP id s20-20020a1709029894b02900da56987f7bmr20366271plp.78.1607411693156;
-        Mon, 07 Dec 2020 23:14:53 -0800 (PST)
-Received: from hsinchu02.internal.sifive.com (114-34-229-221.HINET-IP.hinet.net. [114.34.229.221])
-        by smtp.gmail.com with ESMTPSA id gp17sm1801318pjb.0.2020.12.07.23.14.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Dec 2020 23:14:52 -0800 (PST)
-From:   Zong Li <zong.li@sifive.com>
-To:     paul.walmsley@sifive.com, palmer@dabbelt.com, sboyd@kernel.org,
-        schwab@linux-m68k.org, pragnesh.patel@openfive.com,
-        aou@eecs.berkeley.edu, mturquette@baylibre.com,
-        yash.shah@sifive.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     Pragnesh Patel <pragnesh.patel@sifive.com>,
-        Zong Li <zong.li@sifive.com>
-Subject: [PATCH v6 5/5] clk: sifive: Add clock enable and disable ops
-Date:   Tue,  8 Dec 2020 15:14:32 +0800
-Message-Id: <20201208071432.55583-6-zong.li@sifive.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201208071432.55583-1-zong.li@sifive.com>
-References: <20201208071432.55583-1-zong.li@sifive.com>
+        id S1727273AbgLHHfH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Dec 2020 02:35:07 -0500
+Received: from esa6.hgst.iphmx.com ([216.71.154.45]:58664 "EHLO
+        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726931AbgLHHfH (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Dec 2020 02:35:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1607412906; x=1638948906;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/uqgEb/NPBMNThUBI4i0Wk8STP6eDudez1y5NQ4iU10=;
+  b=bbfTetp79kOz1riFRZHIbQk68YQM01pycp1TC/EcQsMFDjUs1VHMyzyv
+   CPmYkZGDHc2JoNWzml/RgXOc75WDbst/27gFobUvwxaPdIsWBIpIjFX6k
+   D7YZttir2NoLJXF+ohxaOgkMbg56mvpA9XGJD4ovE94ebljPhbTaidJ88
+   2e0tkZ/cnL10w/Xy9Rg//VwEQVe8on/gDhRqZ9FC46/XvmFs775dX4GqU
+   zb1KZfMgbo0HO1ajQ4LAhTPxVhsLaK3PH+vfgRJ+mDz32ln5qnhpx5kLy
+   aDwGJWgnLXCDLANwVNiy+sPghHV1pbLpVUgZyA1ft+jXnP2QcujyLKo1C
+   w==;
+IronPort-SDR: LtEomZRKDD7HVwJODPW/xA3k5WeRfqi1kPiCIhTYG5PlYJ5Yeg0lIIV0+9IpE3br2dy0J12azA
+ OGcAWLzyBiVo1XvfYO3sdxaYaTHRyHYJgrOBHj7NIwcxCCRA7sjwTXFV+wksu5+etaB2HeiBdB
+ Oy0CQWzXIXxOgT/nLyrSGJCII4PSwX4QJnf/P4FSpgW4jqyGQHTnXI6JdUW7ey6KSHiAZWJjxj
+ 7rLYQkaC5rsoKWuAzFfgleOo48SzpggUR5vow5Vq87fxrNJ+K/ZasgfRd21nRHJjVLU/jUuiq9
+ 2B0=
+X-IronPort-AV: E=Sophos;i="5.78,401,1599494400"; 
+   d="scan'208";a="155876620"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 08 Dec 2020 15:34:01 +0800
+IronPort-SDR: 6fgyAOXgZuYr8fSL0Cg/mprqcDIj91g85dsyQFLJXetnPJFMtsW8IlbXN0ZAlf4l6gPhHjmC09
+ MbFgg7pNdehqK/YTBlas0lB6myE5kUflg=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2020 23:18:01 -0800
+IronPort-SDR: hcnL93hF7iNkjh6FPcVb0nDQjyhrg1OgD/B7ihK2M5I39Mv3BA+U7YFs/yTr/ZdEFWAqbXv4BH
+ 467CstusGiPA==
+WDCIronportException: Internal
+Received: from wdapacbjl0003.my.asia.wdc.com (HELO twashi.fujisawa.hgst.com) ([10.84.71.173])
+  by uls-op-cesaip02.wdc.com with ESMTP; 07 Dec 2020 23:33:59 -0800
+From:   Damien Le Moal <damien.lemoal@wdc.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        linux-clk@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Sean Anderson <seanga2@gmail.com>
+Subject: [PATCH v5 00/21] RISC-V Kendryte K210 support improvements
+Date:   Tue,  8 Dec 2020 16:33:34 +0900
+Message-Id: <20201208073355.40828-1-damien.lemoal@wdc.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Pragnesh Patel <pragnesh.patel@sifive.com>
+This series of patches improves support for boards based on the Canaan
+Kendryte K210 RISC-V dual core SoC. Minimal support for this SoC is
+already included in the kernel. These patches complete it, enabling
+support for most peripherals present on the SoC as well as introducing
+device trees for the various K210 boards available on the market today
+from SiPeed and Kendryte.
 
-Add new functions "sifive_prci_clock_enable(), sifive_prci_clock_disable()
-and sifive_clk_is_enabled()" to enable or disable the PRCI clock
+Pathes 1 to 4 are various fixes for riscv arch code and riscv
+dependent devices. Of note here is patch 3 which fix system calls
+execution in the no MMU case, and patch 4 which simplifies DTB builtin
+handling.
 
-Signed-off-by: Pragnesh Patel <pragnesh.patel@sifive.com>
-Tested-by: Zong Li <zong.li@sifive.com>
----
- drivers/clk/sifive/fu540-prci.c  |  6 +++
- drivers/clk/sifive/fu740-prci.c  |  9 ++++
- drivers/clk/sifive/sifive-prci.c | 77 ++++++++++++++++++++++++++++----
- drivers/clk/sifive/sifive-prci.h | 10 +++++
- 4 files changed, 93 insertions(+), 9 deletions(-)
+Patch 5 fixes naming of directories and configuration options to use the
+K210 SoC vendor name (Canaan) instead of its branding name (Kendryte).
 
-diff --git a/drivers/clk/sifive/fu540-prci.c b/drivers/clk/sifive/fu540-prci.c
-index 34dc4ea6a3af..3fbee1da9701 100644
---- a/drivers/clk/sifive/fu540-prci.c
-+++ b/drivers/clk/sifive/fu540-prci.c
-@@ -33,16 +33,19 @@
- 
- static struct __prci_wrpll_data __prci_corepll_data = {
- 	.cfg0_offs = PRCI_COREPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_COREPLLCFG1_OFFSET,
- 	.enable_bypass = sifive_prci_coreclksel_use_hfclk,
- 	.disable_bypass = sifive_prci_coreclksel_use_corepll,
- };
- 
- static struct __prci_wrpll_data __prci_ddrpll_data = {
- 	.cfg0_offs = PRCI_DDRPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_DDRPLLCFG1_OFFSET,
- };
- 
- static struct __prci_wrpll_data __prci_gemgxlpll_data = {
- 	.cfg0_offs = PRCI_GEMGXLPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_GEMGXLPLLCFG1_OFFSET,
- };
- 
- /* Linux clock framework integration */
-@@ -51,6 +54,9 @@ static const struct clk_ops sifive_fu540_prci_wrpll_clk_ops = {
- 	.set_rate = sifive_prci_wrpll_set_rate,
- 	.round_rate = sifive_prci_wrpll_round_rate,
- 	.recalc_rate = sifive_prci_wrpll_recalc_rate,
-+	.enable = sifive_prci_clock_enable,
-+	.disable = sifive_prci_clock_disable,
-+	.is_enabled = sifive_clk_is_enabled,
- };
- 
- static const struct clk_ops sifive_fu540_prci_wrpll_ro_clk_ops = {
-diff --git a/drivers/clk/sifive/fu740-prci.c b/drivers/clk/sifive/fu740-prci.c
-index 41ddd4431497..db8300223745 100644
---- a/drivers/clk/sifive/fu740-prci.c
-+++ b/drivers/clk/sifive/fu740-prci.c
-@@ -12,32 +12,38 @@
- 
- static struct __prci_wrpll_data __prci_corepll_data = {
- 	.cfg0_offs = PRCI_COREPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_COREPLLCFG1_OFFSET,
- 	.enable_bypass = sifive_prci_coreclksel_use_hfclk,
- 	.disable_bypass = sifive_prci_coreclksel_use_final_corepll,
- };
- 
- static struct __prci_wrpll_data __prci_ddrpll_data = {
- 	.cfg0_offs = PRCI_DDRPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_DDRPLLCFG1_OFFSET,
- };
- 
- static struct __prci_wrpll_data __prci_gemgxlpll_data = {
- 	.cfg0_offs = PRCI_GEMGXLPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_GEMGXLPLLCFG1_OFFSET,
- };
- 
- static struct __prci_wrpll_data __prci_dvfscorepll_data = {
- 	.cfg0_offs = PRCI_DVFSCOREPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_DVFSCOREPLLCFG1_OFFSET,
- 	.enable_bypass = sifive_prci_corepllsel_use_corepll,
- 	.disable_bypass = sifive_prci_corepllsel_use_dvfscorepll,
- };
- 
- static struct __prci_wrpll_data __prci_hfpclkpll_data = {
- 	.cfg0_offs = PRCI_HFPCLKPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_HFPCLKPLLCFG1_OFFSET,
- 	.enable_bypass = sifive_prci_hfpclkpllsel_use_hfclk,
- 	.disable_bypass = sifive_prci_hfpclkpllsel_use_hfpclkpll,
- };
- 
- static struct __prci_wrpll_data __prci_cltxpll_data = {
- 	.cfg0_offs = PRCI_CLTXPLLCFG0_OFFSET,
-+	.cfg1_offs = PRCI_CLTXPLLCFG1_OFFSET,
- };
- 
- /* Linux clock framework integration */
-@@ -46,6 +52,9 @@ static const struct clk_ops sifive_fu740_prci_wrpll_clk_ops = {
- 	.set_rate = sifive_prci_wrpll_set_rate,
- 	.round_rate = sifive_prci_wrpll_round_rate,
- 	.recalc_rate = sifive_prci_wrpll_recalc_rate,
-+	.enable = sifive_prci_clock_enable,
-+	.disable = sifive_prci_clock_disable,
-+	.is_enabled = sifive_clk_is_enabled,
- };
- 
- static const struct clk_ops sifive_fu740_prci_wrpll_ro_clk_ops = {
-diff --git a/drivers/clk/sifive/sifive-prci.c b/drivers/clk/sifive/sifive-prci.c
-index f4bab45509b3..4698dba0ac86 100644
---- a/drivers/clk/sifive/sifive-prci.c
-+++ b/drivers/clk/sifive/sifive-prci.c
-@@ -113,7 +113,7 @@ static u32 __prci_wrpll_pack(const struct wrpll_cfg *c)
- }
- 
- /**
-- * __prci_wrpll_read_cfg() - read the WRPLL configuration from the PRCI
-+ * __prci_wrpll_read_cfg0() - read the WRPLL configuration from the PRCI
-  * @pd: PRCI context
-  * @pwd: PRCI WRPLL metadata
-  *
-@@ -124,14 +124,14 @@ static u32 __prci_wrpll_pack(const struct wrpll_cfg *c)
-  * Context: Any context.  Caller must prevent the records pointed to by
-  *          @pd and @pwd from changing during execution.
-  */
--static void __prci_wrpll_read_cfg(struct __prci_data *pd,
--				  struct __prci_wrpll_data *pwd)
-+static void __prci_wrpll_read_cfg0(struct __prci_data *pd,
-+				   struct __prci_wrpll_data *pwd)
- {
- 	__prci_wrpll_unpack(&pwd->c, __prci_readl(pd, pwd->cfg0_offs));
- }
- 
- /**
-- * __prci_wrpll_write_cfg() - write WRPLL configuration into the PRCI
-+ * __prci_wrpll_write_cfg0() - write WRPLL configuration into the PRCI
-  * @pd: PRCI context
-  * @pwd: PRCI WRPLL metadata
-  * @c: WRPLL configuration record to write
-@@ -144,15 +144,29 @@ static void __prci_wrpll_read_cfg(struct __prci_data *pd,
-  * Context: Any context.  Caller must prevent the records pointed to by
-  *          @pd and @pwd from changing during execution.
-  */
--static void __prci_wrpll_write_cfg(struct __prci_data *pd,
--				   struct __prci_wrpll_data *pwd,
--				   struct wrpll_cfg *c)
-+static void __prci_wrpll_write_cfg0(struct __prci_data *pd,
-+				    struct __prci_wrpll_data *pwd,
-+				    struct wrpll_cfg *c)
- {
- 	__prci_writel(__prci_wrpll_pack(c), pwd->cfg0_offs, pd);
- 
- 	memcpy(&pwd->c, c, sizeof(*c));
- }
- 
-+/**
-+ * __prci_wrpll_write_cfg1() - write Clock enable/disable configuration
-+ * into the PRCI
-+ * @pd: PRCI context
-+ * @pwd: PRCI WRPLL metadata
-+ * @enable: Clock enable or disable value
-+ */
-+static void __prci_wrpll_write_cfg1(struct __prci_data *pd,
-+				    struct __prci_wrpll_data *pwd,
-+				    u32 enable)
-+{
-+	__prci_writel(enable, pwd->cfg1_offs, pd);
-+}
-+
- /*
-  * Linux clock framework integration
-  *
-@@ -199,16 +213,61 @@ int sifive_prci_wrpll_set_rate(struct clk_hw *hw,
- 	if (pwd->enable_bypass)
- 		pwd->enable_bypass(pd);
- 
--	__prci_wrpll_write_cfg(pd, pwd, &pwd->c);
-+	__prci_wrpll_write_cfg0(pd, pwd, &pwd->c);
- 
- 	udelay(wrpll_calc_max_lock_us(&pwd->c));
- 
-+	return 0;
-+}
-+
-+int sifive_clk_is_enabled(struct clk_hw *hw)
-+{
-+	struct __prci_clock *pc = clk_hw_to_prci_clock(hw);
-+	struct __prci_wrpll_data *pwd = pc->pwd;
-+	struct __prci_data *pd = pc->pd;
-+	u32 r;
-+
-+	r = __prci_readl(pd, pwd->cfg1_offs);
-+
-+	if (r & PRCI_COREPLLCFG1_CKE_MASK)
-+		return 1;
-+	else
-+		return 0;
-+}
-+
-+int sifive_prci_clock_enable(struct clk_hw *hw)
-+{
-+	struct __prci_clock *pc = clk_hw_to_prci_clock(hw);
-+	struct __prci_wrpll_data *pwd = pc->pwd;
-+	struct __prci_data *pd = pc->pd;
-+
-+	if (sifive_clk_is_enabled(hw))
-+		return 0;
-+
-+	__prci_wrpll_write_cfg1(pd, pwd, PRCI_COREPLLCFG1_CKE_MASK);
-+
- 	if (pwd->disable_bypass)
- 		pwd->disable_bypass(pd);
- 
- 	return 0;
- }
- 
-+void sifive_prci_clock_disable(struct clk_hw *hw)
-+{
-+	struct __prci_clock *pc = clk_hw_to_prci_clock(hw);
-+	struct __prci_wrpll_data *pwd = pc->pwd;
-+	struct __prci_data *pd = pc->pd;
-+	u32 r;
-+
-+	if (pwd->enable_bypass)
-+		pwd->enable_bypass(pd);
-+
-+	r = __prci_readl(pd, pwd->cfg1_offs);
-+	r &= ~PRCI_COREPLLCFG1_CKE_MASK;
-+
-+	__prci_wrpll_write_cfg1(pd, pwd, r);
-+}
-+
- /* TLCLKSEL clock integration */
- 
- unsigned long sifive_prci_tlclksel_recalc_rate(struct clk_hw *hw,
-@@ -425,7 +484,7 @@ static int __prci_register_clocks(struct device *dev, struct __prci_data *pd,
- 		pic->pd = pd;
- 
- 		if (pic->pwd)
--			__prci_wrpll_read_cfg(pd, pic->pwd);
-+			__prci_wrpll_read_cfg0(pd, pic->pwd);
- 
- 		r = devm_clk_hw_register(dev, &pic->hw);
- 		if (r) {
-diff --git a/drivers/clk/sifive/sifive-prci.h b/drivers/clk/sifive/sifive-prci.h
-index da7be9103d4d..0aee60552e19 100644
---- a/drivers/clk/sifive/sifive-prci.h
-+++ b/drivers/clk/sifive/sifive-prci.h
-@@ -40,6 +40,11 @@
- #define PRCI_COREPLLCFG0_LOCK_SHIFT	31
- #define PRCI_COREPLLCFG0_LOCK_MASK	(0x1 << PRCI_COREPLLCFG0_LOCK_SHIFT)
- 
-+/* COREPLLCFG1 */
-+#define PRCI_COREPLLCFG1_OFFSET		0x8
-+#define PRCI_COREPLLCFG1_CKE_SHIFT	31
-+#define PRCI_COREPLLCFG1_CKE_MASK	(0x1 << PRCI_COREPLLCFG1_CKE_SHIFT)
-+
- /* DDRPLLCFG0 */
- #define PRCI_DDRPLLCFG0_OFFSET		0xc
- #define PRCI_DDRPLLCFG0_DIVR_SHIFT	0
-@@ -220,6 +225,7 @@ struct __prci_data {
-  * @enable_bypass: fn ptr to code to bypass the WRPLL (if applicable; else NULL)
-  * @disable_bypass: fn ptr to code to not bypass the WRPLL (or NULL)
-  * @cfg0_offs: WRPLL CFG0 register offset (in bytes) from the PRCI base address
-+ * @cfg1_offs: WRPLL CFG1 register offset (in bytes) from the PRCI base address
-  *
-  * @enable_bypass and @disable_bypass are used for WRPLL instances
-  * that contain a separate external glitchless clock mux downstream
-@@ -230,6 +236,7 @@ struct __prci_wrpll_data {
- 	void (*enable_bypass)(struct __prci_data *pd);
- 	void (*disable_bypass)(struct __prci_data *pd);
- 	u8 cfg0_offs;
-+	u8 cfg1_offs;
- };
- 
- /**
-@@ -279,6 +286,9 @@ long sifive_prci_wrpll_round_rate(struct clk_hw *hw, unsigned long rate,
- 				  unsigned long *parent_rate);
- int sifive_prci_wrpll_set_rate(struct clk_hw *hw, unsigned long rate,
- 			       unsigned long parent_rate);
-+int sifive_clk_is_enabled(struct clk_hw *hw);
-+int sifive_prci_clock_enable(struct clk_hw *hw);
-+void sifive_prci_clock_disable(struct clk_hw *hw);
- unsigned long sifive_prci_wrpll_recalc_rate(struct clk_hw *hw,
- 					    unsigned long parent_rate);
- unsigned long sifive_prci_tlclksel_recalc_rate(struct clk_hw *hw,
+The following patches 6 to 10 document device tree bindings for the SoC
+drivers. The implementation of these drivers is provided in patches 11,
+12 and 13, respectively implementing the SoC clock driver, SOC pin
+function control and reset controller.
+
+Patches 14 to 19 update the existing K210 device tree and add new
+device tree files for several K210 based boards: MAIX Bit, MAIXDUINO,
+MAIX Dock and MAIX Go boards from SiPeed and the KD233 development
+board from Canaan.
+
+Finally the last two patches updates the k210 nommu defconfig to include
+the newly implemented drivers and provide a new default configuration
+file enabling SD card support.
+
+A lot of the work on the device tree and on the K210 drivers come from
+the work by Sean Anderson for the U-Boot project support of the K210
+SoC. Sean also helped with debugging many aspects of this series.
+
+A tree with all patches applied is available here:
+https://github.com/damien-lemoal/linux, k210-sysctl-v19 branch.
+A demonstration of this series used on a SiPeed MAIX Dock
+board together with an I2C servo controller can be seen here:
+https://damien-lemoal.github.io/linux-robot-arm/#example
+
+This tree was used to build userspace busybox environment image that is
+then copied onto an SD card formatted with ext2:
+https://github.com/damien-lemoal/buildroot
+Of note is that running this userspace environment requires a revert of
+commit 2217b982624680d19a80ebb4600d05c8586c4f96 introduced during the
+5.9 development cycle. Without this revert, execution of the init
+process fails. A problem with the riscv port of elf2flt is suspected but
+not confirmed. I am now starting to investigate this problem.
+
+Reviews and comments are as always much welcome.
+
+Changes from v4:
+* Simplified reset controller driver using of_xlate callback as
+  suggested by Philipp
+* Fixed compilation error when using other configs than one of the
+  nommu_k210 defconfigs.
+* Addressed most clock driver comments from Stephen.
+* Removed CONFIG_GPIO_SYSFS from defconfigs
+* Rebased on 5.10-rc7
+
+Changes from V3:
+* Add one entry per driver in MAINTAINERS file
+
+Changes from V2:
+* Add MAINTAINERS file entry for the SoC support, listing myself as
+  maintainer.
+* Removed use of postcore_initcall() for declaring the drivers, using
+  the regular builtin_platform_driver() instead.
+* Fixed fpio pinctrl driver bindings documentation as commented by
+  Geert: removed input-schmitt and added input-schmitt-disable, fixed
+  typo and added input-disable and output-disable.
+* Fixed device tree to have cs-gpios active low, as per the default, as
+  active high necessity was an artifact of the gpio level double
+  inversion bug fixed recently.
+* Removed CONFIG_VT from defconfigs to reduce the kernel image size as
+  suggested by Geert.
+
+Changes from v1:
+* Improved DT bindings documentation
+* SPI and GPIO patches removed from this series (and being processed
+  directly through the relevant subsystems directly)
+* Improved device trees
+* Various cleanup and improvments of the drivers
+
+Damien Le Moal (21):
+  riscv: Fix kernel time_init()
+  riscv: Fix sifive serial driver
+  riscv: Enable interrupts during syscalls with M-Mode
+  riscv: Fix builtin DTB handling
+  riscv: Use vendor name for K210 SoC support
+  dt-bindings: Add Canaan vendor prefix
+  dt-binding: clock: Document canaan,k210-clk bindings
+  dt-bindings: reset: Document canaan,k210-rst bindings
+  dt-bindings: pinctrl: Document canaan,k210-fpioa bindings
+  dt-binding: mfd: Document canaan,k210-sysctl bindings
+  riscv: Add Canaan Kendryte K210 clock driver
+  riscv: Add Canaan Kendryte K210 reset controller
+  riscv: Add Canaan Kendryte K210 FPIOA driver
+  riscv: Update Canaan Kendryte K210 device tree
+  riscv: Add SiPeed MAIX BiT board device tree
+  riscv: Add SiPeed MAIX DOCK board device tree
+  riscv: Add SiPeed MAIX GO board device tree
+  riscv: Add SiPeed MAIXDUINO board device tree
+  riscv: Add Kendryte KD233 board device tree
+  riscv: Update Canaan Kendryte K210 defconfig
+  riscv: Add Canaan Kendryte K210 SD card defconfig
+
+ .../bindings/clock/canaan,k210-clk.yaml       |   54 +
+ .../bindings/mfd/canaan,k210-sysctl.yaml      |  116 ++
+ .../bindings/pinctrl/canaan,k210-fpioa.yaml   |  171 +++
+ .../bindings/reset/canaan,k210-rst.yaml       |   40 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+ MAINTAINERS                                   |   23 +
+ arch/riscv/Kconfig.socs                       |   33 +-
+ arch/riscv/Makefile                           |    2 +-
+ arch/riscv/boot/dts/Makefile                  |    2 +-
+ arch/riscv/boot/dts/canaan/Makefile           |    5 +
+ arch/riscv/boot/dts/canaan/k210.dtsi          |  622 ++++++++++
+ arch/riscv/boot/dts/canaan/k210_generic.dts   |   46 +
+ arch/riscv/boot/dts/canaan/k210_kd233.dts     |  178 +++
+ arch/riscv/boot/dts/canaan/k210_maix_bit.dts  |  227 ++++
+ arch/riscv/boot/dts/canaan/k210_maix_dock.dts |  229 ++++
+ arch/riscv/boot/dts/canaan/k210_maix_go.dts   |  237 ++++
+ arch/riscv/boot/dts/canaan/k210_maixduino.dts |  201 ++++
+ arch/riscv/boot/dts/kendryte/Makefile         |    4 -
+ arch/riscv/boot/dts/kendryte/k210.dts         |   23 -
+ arch/riscv/boot/dts/kendryte/k210.dtsi        |  125 --
+ arch/riscv/configs/nommu_k210_defconfig       |   39 +-
+ .../riscv/configs/nommu_k210_sdcard_defconfig |   93 ++
+ arch/riscv/include/asm/soc.h                  |   38 -
+ arch/riscv/kernel/entry.S                     |    9 +
+ arch/riscv/kernel/soc.c                       |   27 -
+ arch/riscv/kernel/time.c                      |    3 +
+ arch/riscv/mm/init.c                          |    6 +-
+ drivers/clk/Kconfig                           |    8 +
+ drivers/clk/Makefile                          |    1 +
+ drivers/clk/clk-k210.c                        | 1005 +++++++++++++++++
+ drivers/pinctrl/Kconfig                       |   13 +
+ drivers/pinctrl/Makefile                      |    1 +
+ drivers/pinctrl/pinctrl-k210.c                |  984 ++++++++++++++++
+ drivers/reset/Kconfig                         |   10 +
+ drivers/reset/Makefile                        |    1 +
+ drivers/reset/reset-k210.c                    |  134 +++
+ drivers/soc/Kconfig                           |    2 +-
+ drivers/soc/Makefile                          |    2 +-
+ drivers/soc/canaan/Kconfig                    |   12 +
+ drivers/soc/canaan/Makefile                   |    3 +
+ drivers/soc/canaan/k210-sysctl.c              |   78 ++
+ drivers/soc/kendryte/Kconfig                  |   14 -
+ drivers/soc/kendryte/Makefile                 |    3 -
+ drivers/soc/kendryte/k210-sysctl.c            |  260 -----
+ drivers/tty/serial/sifive.c                   |    1 +
+ include/dt-bindings/clock/k210-clk.h          |   55 +-
+ include/dt-bindings/pinctrl/k210-fpioa.h      |  276 +++++
+ include/dt-bindings/reset/k210-rst.h          |   42 +
+ include/soc/canaan/k210-sysctl.h              |   43 +
+ 49 files changed, 4972 insertions(+), 531 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/canaan,k210-clk.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/canaan,k210-sysctl.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/canaan,k210-fpioa.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/canaan,k210-rst.yaml
+ create mode 100644 arch/riscv/boot/dts/canaan/Makefile
+ create mode 100644 arch/riscv/boot/dts/canaan/k210.dtsi
+ create mode 100644 arch/riscv/boot/dts/canaan/k210_generic.dts
+ create mode 100644 arch/riscv/boot/dts/canaan/k210_kd233.dts
+ create mode 100644 arch/riscv/boot/dts/canaan/k210_maix_bit.dts
+ create mode 100644 arch/riscv/boot/dts/canaan/k210_maix_dock.dts
+ create mode 100644 arch/riscv/boot/dts/canaan/k210_maix_go.dts
+ create mode 100644 arch/riscv/boot/dts/canaan/k210_maixduino.dts
+ delete mode 100644 arch/riscv/boot/dts/kendryte/Makefile
+ delete mode 100644 arch/riscv/boot/dts/kendryte/k210.dts
+ delete mode 100644 arch/riscv/boot/dts/kendryte/k210.dtsi
+ create mode 100644 arch/riscv/configs/nommu_k210_sdcard_defconfig
+ create mode 100644 drivers/clk/clk-k210.c
+ create mode 100644 drivers/pinctrl/pinctrl-k210.c
+ create mode 100644 drivers/reset/reset-k210.c
+ create mode 100644 drivers/soc/canaan/Kconfig
+ create mode 100644 drivers/soc/canaan/Makefile
+ create mode 100644 drivers/soc/canaan/k210-sysctl.c
+ delete mode 100644 drivers/soc/kendryte/Kconfig
+ delete mode 100644 drivers/soc/kendryte/Makefile
+ delete mode 100644 drivers/soc/kendryte/k210-sysctl.c
+ create mode 100644 include/dt-bindings/pinctrl/k210-fpioa.h
+ create mode 100644 include/dt-bindings/reset/k210-rst.h
+ create mode 100644 include/soc/canaan/k210-sysctl.h
+
 -- 
-2.29.2
+2.28.0
 
