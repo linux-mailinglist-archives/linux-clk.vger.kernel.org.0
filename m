@@ -2,50 +2,99 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D3D2D4FAA
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Dec 2020 01:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CCFF2D505A
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Dec 2020 02:28:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729011AbgLJAfT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 9 Dec 2020 19:35:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56098 "EHLO mail.kernel.org"
+        id S1732192AbgLJB1x (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 9 Dec 2020 20:27:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46546 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728963AbgLJAfQ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 9 Dec 2020 19:35:16 -0500
+        id S1728050AbgLJB1x (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 9 Dec 2020 20:27:53 -0500
 Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607560466;
-        bh=dGu8x7s/80OJUUCRF1FFqmK37Libi85qRHutPmZx3qA=;
+        s=k20201202; t=1607563632;
+        bh=4fquuoXgeXKGOmKHsZ5csbna5WzsqVOwtrr9OcdcGt4=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=CliVdxcHMRmOdigIpVGjYV/FRrBKyYGGfIZwP5bS3nnlDcvqs1iQ3pNlBufTxTOIK
-         YURYbZb9AA1IcTYrxgFnU0vPdosDipI0V631O+kS/bm08KvERv3Km4W6omzya/Ofo+
-         GI0lKXPpEmxw8+j7m9BGio71SnWSOCIXEJ0/d8uuiLRJys+fJssT1DCKcHcKoxNXuw
-         UC4Wh7zzqjRCGh3AzEQakm1RddjbaVAIz0aanx0JN5WwhmK1nO+EaG3NK1ivw8AQ9d
-         d95VcC5Vr2VLcxZAr1kyzg5Xs9Y4PAcAOyjlWVrh6ld2KvDmAjY0CYF7NRAe3Q0d1o
-         6GleiPyuT+EpQ==
+        b=QoEV6Wb73MTk6RVv03QGdhzC9QChshkqShWs7zHgdbgmb+S1UwE18CCDXqlr4dpCz
+         emhS1Fl2MmYt2dxaDR9EjWA1U55ohBQt0NqWkW46lDIJ7R2DROpwXL0FFg8O/iuYaj
+         lL/anVqdLkaRGlcyHwbr/QTmTyUrKnXTZmLTmpJ7EOAkCKsyRW6/pjEb+XFL2OG+jC
+         CibqOORASvbtc0PPBWsrOwYsxE8gnbYmhg+dXWDogsTlxkLoqAKKPzZ6nn4R+sbTdd
+         7dHuLYIxEHKnNsk+oFyn+Nop1xkGRVghGIJXdRGicuphQwt4st39a4Z16yNeAREPks
+         NrqiNOUnIIIJA==
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20201126072844.35370-7-manivannan.sadhasivam@linaro.org>
-References: <20201126072844.35370-1-manivannan.sadhasivam@linaro.org> <20201126072844.35370-7-manivannan.sadhasivam@linaro.org>
-Subject: Re: [RESEND PATCH v4 6/6] clk: qcom: Add GDSC support for SDX55 GCC
+In-Reply-To: <20201025224212.7790-1-digetx@gmail.com>
+References: <20201025224212.7790-1-digetx@gmail.com>
+Subject: Re: [PATCH v1] clk: tegra: Fix duplicated SE clock entry
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     bjorn.andersson@linaro.org, vkoul@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        mturquette@baylibre.com, robh+dt@kernel.org
-Date:   Wed, 09 Dec 2020 16:34:25 -0800
-Message-ID: <160756046559.1580929.6449738302849701410@swboyd.mtv.corp.google.com>
+Cc:     linux-tegra@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Date:   Wed, 09 Dec 2020 17:27:10 -0800
+Message-ID: <160756363099.1580929.2375956922093495697@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Manivannan Sadhasivam (2020-11-25 23:28:44)
-> Add GDSC support to control the power supply of power domains in SDX55
-> GCC.
+Quoting Dmitry Osipenko (2020-10-25 15:42:12)
+> The periph_clks[] array contains duplicated entry for Security Engine
+> clock which was meant to be defined for T210, but it wasn't added
+> properly. This patch corrects the T210 SE entry and fixes the following
+> error message on T114/T124: "Tegra clk 127: register failed with -17".
 >=20
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Fixes: dc37fec48314 ("clk: tegra: periph: Add new periph clks and muxes f=
+or Tegra210")
+> Tested-by Nicolas Chauvet <kwizart@gmail.com>
+> Reported-by Nicolas Chauvet <kwizart@gmail.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
 
-Applied to clk-next
+Looks correct. Should I pick this up Thierry?
+
+>  drivers/clk/tegra/clk-id.h           | 1 +
+>  drivers/clk/tegra/clk-tegra-periph.c | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/clk/tegra/clk-id.h b/drivers/clk/tegra/clk-id.h
+> index ff7da2d3e94d..24413812ec5b 100644
+> --- a/drivers/clk/tegra/clk-id.h
+> +++ b/drivers/clk/tegra/clk-id.h
+> @@ -227,6 +227,7 @@ enum clk_id {
+>         tegra_clk_sdmmc4,
+>         tegra_clk_sdmmc4_8,
+>         tegra_clk_se,
+> +       tegra_clk_se_10,
+>         tegra_clk_soc_therm,
+>         tegra_clk_soc_therm_8,
+>         tegra_clk_sor0,
+> diff --git a/drivers/clk/tegra/clk-tegra-periph.c b/drivers/clk/tegra/clk=
+-tegra-periph.c
+> index 2b2a3b81c16b..60cc34f90cb9 100644
+> --- a/drivers/clk/tegra/clk-tegra-periph.c
+> +++ b/drivers/clk/tegra/clk-tegra-periph.c
+> @@ -630,7 +630,7 @@ static struct tegra_periph_init_data periph_clks[] =
+=3D {
+>         INT8("host1x", mux_pllm_pllc2_c_c3_pllp_plla, CLK_SOURCE_HOST1X, =
+28, 0, tegra_clk_host1x_8),
+>         INT8("host1x", mux_pllc4_out1_pllc_pllc4_out2_pllp_clkm_plla_pllc=
+4_out0, CLK_SOURCE_HOST1X, 28, 0, tegra_clk_host1x_9),
+>         INT8("se", mux_pllp_pllc2_c_c3_pllm_clkm, CLK_SOURCE_SE, 127, TEG=
+RA_PERIPH_ON_APB, tegra_clk_se),
+> -       INT8("se", mux_pllp_pllc2_c_c3_clkm, CLK_SOURCE_SE, 127, TEGRA_PE=
+RIPH_ON_APB, tegra_clk_se),
+> +       INT8("se", mux_pllp_pllc2_c_c3_clkm, CLK_SOURCE_SE, 127, TEGRA_PE=
+RIPH_ON_APB, tegra_clk_se_10),
+>         INT8("2d", mux_pllm_pllc2_c_c3_pllp_plla, CLK_SOURCE_2D, 21, 0, t=
+egra_clk_gr2d_8),
+>         INT8("3d", mux_pllm_pllc2_c_c3_pllp_plla, CLK_SOURCE_3D, 24, 0, t=
+egra_clk_gr3d_8),
+>         INT8("vic03", mux_pllm_pllc_pllp_plla_pllc2_c3_clkm, CLK_SOURCE_V=
+IC03, 178, 0, tegra_clk_vic03),
