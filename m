@@ -2,15 +2,15 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2CB2D69CE
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Dec 2020 22:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 307D22D6A43
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Dec 2020 22:43:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404960AbgLJV16 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 10 Dec 2020 16:27:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38458 "EHLO mail.kernel.org"
+        id S2405030AbgLJVmo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 10 Dec 2020 16:42:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38414 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404942AbgLJV1k (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 10 Dec 2020 16:27:40 -0500
+        id S2404884AbgLJV1T (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 10 Dec 2020 16:27:19 -0500
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     Chanwoo Choi <cw00.choi@samsung.com>,
@@ -37,9 +37,9 @@ Cc:     Iskren Chernev <iskren.chernev@gmail.com>,
         Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
         Angus Ainslie <angus@akkea.ca>,
         Hans de Goede <hdegoede@redhat.com>
-Subject: [RFC 16/18] power: supply: max17042: Do not enforce (incorrect) interrupt trigger type
-Date:   Thu, 10 Dec 2020 22:25:32 +0100
-Message-Id: <20201210212534.216197-16-krzk@kernel.org>
+Subject: [PATCH 07/18] ARM: dts: exynos: correct PMIC interrupt trigger level on P4 Note family
+Date:   Thu, 10 Dec 2020 22:25:23 +0100
+Message-Id: <20201210212534.216197-7-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201210212534.216197-1-krzk@kernel.org>
 References: <20201210212534.216197-1-krzk@kernel.org>
@@ -49,43 +49,33 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Interrupt line can be configured on different hardware in different way,
-even inverted.  Therefore driver should not enforce specific trigger
-type - edge falling - but instead rely on Devicetree to configure it.
+The Maxim PMIC datasheets describe the interrupt line as active low
+with a requirement of acknowledge from the CPU.  Without specifying the
+interrupt type in Devicetree, kernel might apply some fixed
+configuration, not necessarily working for this hardware.
 
-The Maxim 17047/77693 datasheets describe the interrupt line as active
-low with a requirement of acknowledge from the CPU therefore the edge
-falling is not correct.
+Additionally, the interrupt line is shared so using level sensitive
+interrupt is here especially important to avoid races.
 
-The interrupt line is shared between PMIC and RTC driver, so using level
-sensitive interrupt is here especially important to avoid races.  With
-an edge configuration in case if first PMIC signals interrupt followed
-shortly after by the RTC, the interrupt might not be yet cleared/acked
-thus the second one would not be noticed.
-
+Fixes: f48b5050c301 ("ARM: dts: exynos: add Samsung's Exynos4412-based P4 Note boards")
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-
 ---
-
-This patch should wait till DTS changes are merged, as it relies on
-proper Devicetree.
----
- drivers/power/supply/max17042_battery.c | 2 +-
+ arch/arm/boot/dts/exynos4412-p4note.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-index 79d4b5988360..8117ecabe31c 100644
---- a/drivers/power/supply/max17042_battery.c
-+++ b/drivers/power/supply/max17042_battery.c
-@@ -1104,7 +1104,7 @@ static int max17042_probe(struct i2c_client *client,
- 	}
- 
- 	if (client->irq) {
--		unsigned int flags = IRQF_TRIGGER_FALLING | IRQF_ONESHOT;
-+		unsigned int flags = IRQF_ONESHOT;
- 
- 		/*
- 		 * On ACPI systems the IRQ may be handled by ACPI-event code,
+diff --git a/arch/arm/boot/dts/exynos4412-p4note.dtsi b/arch/arm/boot/dts/exynos4412-p4note.dtsi
+index 5fe371543cbb..9e750890edb8 100644
+--- a/arch/arm/boot/dts/exynos4412-p4note.dtsi
++++ b/arch/arm/boot/dts/exynos4412-p4note.dtsi
+@@ -322,7 +322,7 @@ &i2c_7 {
+ 	max77686: pmic@9 {
+ 		compatible = "maxim,max77686";
+ 		interrupt-parent = <&gpx0>;
+-		interrupts = <7 IRQ_TYPE_NONE>;
++		interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
+ 		pinctrl-0 = <&max77686_irq>;
+ 		pinctrl-names = "default";
+ 		reg = <0x09>;
 -- 
 2.25.1
 
