@@ -2,15 +2,15 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF302D6A19
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Dec 2020 22:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D5B2D6AAC
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Dec 2020 23:55:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404962AbgLJV2E (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 10 Dec 2020 16:28:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38460 "EHLO mail.kernel.org"
+        id S2404713AbgLJV0e (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 10 Dec 2020 16:26:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37928 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404944AbgLJV1l (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 10 Dec 2020 16:27:41 -0500
+        id S2390128AbgLJV01 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 10 Dec 2020 16:26:27 -0500
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     Chanwoo Choi <cw00.choi@samsung.com>,
@@ -37,63 +37,39 @@ Cc:     Iskren Chernev <iskren.chernev@gmail.com>,
         Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
         Angus Ainslie <angus@akkea.ca>,
         Hans de Goede <hdegoede@redhat.com>
-Subject: [RFC 18/18] power: supply: max17040: Do not enforce (incorrect) interrupt trigger type
-Date:   Thu, 10 Dec 2020 22:25:34 +0100
-Message-Id: <20201210212534.216197-18-krzk@kernel.org>
+Subject: [PATCH 01/18] ARM: dts: exynos: correct fuel gauge interrupt trigger level on GT-I9100
+Date:   Thu, 10 Dec 2020 22:25:17 +0100
+Message-Id: <20201210212534.216197-1-krzk@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201210212534.216197-1-krzk@kernel.org>
-References: <20201210212534.216197-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Interrupt line can be configured on different hardware in different way,
-even inverted.  Therefore driver should not enforce specific trigger
-type - edge falling - but instead rely on Devicetree to configure it.
+The Maxim fuel gauge datasheets describe the interrupt line as active
+low with a requirement of acknowledge from the CPU.  The falling edge
+interrupt will mostly work but it's not correct.
 
-The Maxim 14577/77836 datasheets describe the interrupt line as active
-low with a requirement of acknowledge from the CPU therefore the edge
-falling is not correct.
-
+Fixes: 8620cc2f99b7 ("ARM: dts: exynos: Add devicetree file for the Galaxy S2")
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-
 ---
+ arch/arm/boot/dts/exynos4210-i9100.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This patch should wait till DTS changes are merged, as it relies on
-proper Devicetree.
----
- .../devicetree/bindings/power/supply/max17040_battery.txt       | 2 +-
- drivers/power/supply/max17040_battery.c                         | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
-index c802f664b508..194eb9fe574d 100644
---- a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
-+++ b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
-@@ -39,7 +39,7 @@ Example:
- 		reg = <0x36>;
- 		maxim,alert-low-soc-level = <10>;
- 		interrupt-parent = <&gpio7>;
--		interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
-+		interrupts = <2 IRQ_TYPE_LEVEL_LOW>;
- 		wakeup-source;
- 	};
+diff --git a/arch/arm/boot/dts/exynos4210-i9100.dts b/arch/arm/boot/dts/exynos4210-i9100.dts
+index a0c3bab382ae..e56b64e237d3 100644
+--- a/arch/arm/boot/dts/exynos4210-i9100.dts
++++ b/arch/arm/boot/dts/exynos4210-i9100.dts
+@@ -136,7 +136,7 @@ battery@36 {
+ 			compatible = "maxim,max17042";
  
-diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
-index d956c67d5155..f737de0470de 100644
---- a/drivers/power/supply/max17040_battery.c
-+++ b/drivers/power/supply/max17040_battery.c
-@@ -367,7 +367,7 @@ static int max17040_enable_alert_irq(struct max17040_chip *chip)
+ 			interrupt-parent = <&gpx2>;
+-			interrupts = <3 IRQ_TYPE_EDGE_FALLING>;
++			interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
  
- 	flags = IRQF_TRIGGER_FALLING | IRQF_ONESHOT;
- 	ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
--					max17040_thread_handler, flags,
-+					max17040_thread_handler, IRQF_ONESHOT,
- 					chip->battery->desc->name, chip);
- 
- 	return ret;
+ 			pinctrl-0 = <&max17042_fuel_irq>;
+ 			pinctrl-names = "default";
 -- 
 2.25.1
 
