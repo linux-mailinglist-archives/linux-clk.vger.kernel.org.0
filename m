@@ -2,80 +2,96 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0A1A2D6AC1
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Dec 2020 23:55:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3952A2D6D3C
+	for <lists+linux-clk@lfdr.de>; Fri, 11 Dec 2020 02:22:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394134AbgLJVoV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 10 Dec 2020 16:44:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38412 "EHLO mail.kernel.org"
+        id S2404876AbgLKBVA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 10 Dec 2020 20:21:00 -0500
+Received: from foss.arm.com ([217.140.110.172]:49294 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404883AbgLJV1T (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 10 Dec 2020 16:27:19 -0500
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        id S2404734AbgLKBUl (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 10 Dec 2020 20:20:41 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 003A131B;
+        Thu, 10 Dec 2020 17:19:56 -0800 (PST)
+Received: from localhost.localdomain (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B7C953F66B;
+        Thu, 10 Dec 2020 17:19:53 -0800 (PST)
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>
+Cc:     Icenowy Zheng <icenowy@aosc.xyz>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>,
+        Shuosheng Huang <huangshuosheng@allwinnertech.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@googlegroups.com,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Cc:     Iskren Chernev <iskren.chernev@gmail.com>,
-        Matheus Castello <matheus@castello.eng.br>,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        Angus Ainslie <angus@akkea.ca>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH 06/18] ARM: dts: exynos: correct PMIC interrupt trigger level on Odroid X/U3 family
-Date:   Thu, 10 Dec 2020 22:25:22 +0100
-Message-Id: <20201210212534.216197-6-krzk@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201210212534.216197-1-krzk@kernel.org>
-References: <20201210212534.216197-1-krzk@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
+Subject: [PATCH v2 01/21] clk: sunxi-ng: h6: Fix clock divider range on some clocks
+Date:   Fri, 11 Dec 2020 01:19:14 +0000
+Message-Id: <20201211011934.6171-2-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.14.1
+In-Reply-To: <20201211011934.6171-1-andre.przywara@arm.com>
+References: <20201211011934.6171-1-andre.przywara@arm.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The Maxim PMIC datasheets describe the interrupt line as active low
-with a requirement of acknowledge from the CPU.  Without specifying the
-interrupt type in Devicetree, kernel might apply some fixed
-configuration, not necessarily working for this hardware.
+While comparing clocks between the H6 and H616, some of the M factor
+ranges were found to be wrong: the manual says they are only covering
+two bits [1:0], but our code had "5" in the number-of-bits field.
 
-Additionally, the interrupt line is shared so using level sensitive
-interrupt is here especially important to avoid races.
+By writing 0xff into that register in U-Boot and via FEL, it could be
+confirmed that bits [4:2] are indeed masked off, so the manual is right.
 
-Fixes: eea6653aae7b ("ARM: dts: Enable PMIC interrupts for exynos4412-odroid-common")
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+Change to number of bits in the affected clock's description.
+
+Fixes: 524353ea480b ("clk: sunxi-ng: add support for the Allwinner H6 CCU")
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Reviewed-by: Jernej Skrabec <jernej.skrabec@siol.net>
 ---
- arch/arm/boot/dts/exynos4412-odroid-common.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/sunxi-ng/ccu-sun50i-h6.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-index 2b20d9095d9f..eebe6a3952ce 100644
---- a/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-+++ b/arch/arm/boot/dts/exynos4412-odroid-common.dtsi
-@@ -278,7 +278,7 @@ usb3503: usb-hub@8 {
- 	max77686: pmic@9 {
- 		compatible = "maxim,max77686";
- 		interrupt-parent = <&gpx3>;
--		interrupts = <2 IRQ_TYPE_NONE>;
-+		interrupts = <2 IRQ_TYPE_LEVEL_LOW>;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&max77686_irq>;
- 		reg = <0x09>;
+diff --git a/drivers/clk/sunxi-ng/ccu-sun50i-h6.c b/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
+index f2497d0a4683..d0565d378ea2 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
++++ b/drivers/clk/sunxi-ng/ccu-sun50i-h6.c
+@@ -237,7 +237,7 @@ static const char * const psi_ahb1_ahb2_parents[] = { "osc24M", "osc32k",
+ static SUNXI_CCU_MP_WITH_MUX(psi_ahb1_ahb2_clk, "psi-ahb1-ahb2",
+ 			     psi_ahb1_ahb2_parents,
+ 			     0x510,
+-			     0, 5,	/* M */
++			     0, 2,	/* M */
+ 			     8, 2,	/* P */
+ 			     24, 2,	/* mux */
+ 			     0);
+@@ -246,19 +246,19 @@ static const char * const ahb3_apb1_apb2_parents[] = { "osc24M", "osc32k",
+ 						       "psi-ahb1-ahb2",
+ 						       "pll-periph0" };
+ static SUNXI_CCU_MP_WITH_MUX(ahb3_clk, "ahb3", ahb3_apb1_apb2_parents, 0x51c,
+-			     0, 5,	/* M */
++			     0, 2,	/* M */
+ 			     8, 2,	/* P */
+ 			     24, 2,	/* mux */
+ 			     0);
+ 
+ static SUNXI_CCU_MP_WITH_MUX(apb1_clk, "apb1", ahb3_apb1_apb2_parents, 0x520,
+-			     0, 5,	/* M */
++			     0, 2,	/* M */
+ 			     8, 2,	/* P */
+ 			     24, 2,	/* mux */
+ 			     0);
+ 
+ static SUNXI_CCU_MP_WITH_MUX(apb2_clk, "apb2", ahb3_apb1_apb2_parents, 0x524,
+-			     0, 5,	/* M */
++			     0, 2,	/* M */
+ 			     8, 2,	/* P */
+ 			     24, 2,	/* mux */
+ 			     0);
 -- 
-2.25.1
+2.17.5
 
