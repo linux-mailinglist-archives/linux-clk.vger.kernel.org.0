@@ -2,31 +2,31 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EA292D8BDA
-	for <lists+linux-clk@lfdr.de>; Sun, 13 Dec 2020 06:48:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0DD2D8BE2
+	for <lists+linux-clk@lfdr.de>; Sun, 13 Dec 2020 06:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730347AbgLMFsU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 13 Dec 2020 00:48:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46860 "EHLO mail.kernel.org"
+        id S1730187AbgLMFun (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 13 Dec 2020 00:50:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48320 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730275AbgLMFsU (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 13 Dec 2020 00:48:20 -0500
+        id S1729324AbgLMFun (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 13 Dec 2020 00:50:43 -0500
 Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607838459;
-        bh=emJscVaJcn5wfYYYNdfyVgZfAMxyUjS4Sx47UpFCBN4=;
+        s=k20201202; t=1607838602;
+        bh=Wg6PvRNApW3CNV+26RMZUrHSYGuBMV/HXJs4EOxoFQY=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=F8YZpDyZxJmiWjGhxVq9VgeErhrB0eJa0UZD4lnrAUFIaqBDZIBp3mUdHwk1eGsoR
-         uGHdR1nqQNjmwAct5XhepDBp7yKkB1LYSK3Tf7zpB4yeyrD1JulYGhDOl+95n4KQCz
-         pdFhf+ql+ZtyBk/L/nUDN8qgtGQU1gJE4Xke2m/1MwPPulhekZhV3QxqMEiW7zF3J+
-         Kga3LTCjZlOY9ME++UlfuOtuaiWmGZBgZv5nMhl07OjHkwK/uEIP8ZK5SrES5SYMaZ
-         5qU1cy1EebfS6+siwXdXDzZvB+miwJ8quid9vKuQJqD6TyUdwCVj12gCdvhpubg1TL
-         jT2t0mDlYW+mg==
+        b=hMToTDDjktOwDjGzzYlWOOzgx3Vft2Oo6RKoL3wOuLnTzYpcvZAVE76bjvBWi49DR
+         TCApg9IN+u+qtuzLfIxLOBmA+E4I7HK20hBt8PUVeZU5vYdscaFLNKH5A9UG22+YFm
+         EYKjPTzhNG2+HwWzgmKEj0H3T7Gp4Yg610Ape88tT0m0FvB4Ea1oQiW4aed1LjNcO0
+         20xEsXKP1IgVBwiaq0C8DcTljZ8TKVt4R+f1HfDGu2+TPZzAP6jQvdstMtdixZhz0/
+         BZbwfnLpifaDzZp/xLRHJ0hFhHToE67fgq9WZtNKRL6EnbWYKedwoOJWR/vX+jyq4q
+         D2vZ/2kvzYntA==
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20201116075532.4019252-13-m.tretter@pengutronix.de>
-References: <20201116075532.4019252-1-m.tretter@pengutronix.de> <20201116075532.4019252-13-m.tretter@pengutronix.de>
-Subject: Re: [PATCH 12/12] soc: xilinx: vcu: use bitfields for register definition
+In-Reply-To: <20201116075532.4019252-1-m.tretter@pengutronix.de>
+References: <20201116075532.4019252-1-m.tretter@pengutronix.de>
+Subject: Re: [PATCH 00/12] soc: xilinx: vcu: Convert driver to clock provider
 From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     rajanv@xilinx.com, tejasp@xilinx.com, dshah@xilinx.com,
         rvisaval@xilinx.com, michals@xilinx.com, kernel@pengutronix.de,
@@ -35,18 +35,29 @@ Cc:     rajanv@xilinx.com, tejasp@xilinx.com, dshah@xilinx.com,
 To:     Michael Tretter <m.tretter@pengutronix.de>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-clk@vger.kernel.org
-Date:   Sat, 12 Dec 2020 21:47:38 -0800
-Message-ID: <160783845805.1580929.2120756228823538685@swboyd.mtv.corp.google.com>
+Date:   Sat, 12 Dec 2020 21:50:00 -0800
+Message-ID: <160783860077.1580929.7577989890301235621@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Michael Tretter (2020-11-15 23:55:32)
-> This makes the register accesses more readable and is closer to what is
-> usually used in the kernel.
+Quoting Michael Tretter (2020-11-15 23:55:20)
+> Hello,
 >=20
-> Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
-> ---
+> the xlnx_vcu soc driver is actually a clock provider of a PLL and four ou=
+tput
+> clocks created from the PLL via dividers.
+>=20
+> This series reworks the xlnx_vcu driver to use the common clock framework=
+ to
+> enable other drivers to use the clocks. I originally posted a series to e=
+xpose
+> the output clocks as fixed clocks [0]. This series now implements the full
+> tree from the PLL to the output clocks. Therefore, I am sending a separate
+> series that focuses on the clocks, but it depends on v4 of the previous s=
+eries
+> [1].
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+After this series is this anything besides a clk provider? If it's only
+providing clks it would make sense to move the driver into drivers/clk/
