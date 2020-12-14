@@ -2,234 +2,90 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D48D02D9145
-	for <lists+linux-clk@lfdr.de>; Mon, 14 Dec 2020 01:06:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E612D924B
+	for <lists+linux-clk@lfdr.de>; Mon, 14 Dec 2020 05:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406940AbgLNAGg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 13 Dec 2020 19:06:36 -0500
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:48103 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727178AbgLNAGe (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 13 Dec 2020 19:06:34 -0500
-X-Greylist: delayed 639 seconds by postgrey-1.27 at vger.kernel.org; Sun, 13 Dec 2020 19:06:33 EST
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 3900758031E;
-        Sun, 13 Dec 2020 18:55:10 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute7.internal (MEProxy); Sun, 13 Dec 2020 18:55:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm1; bh=Me9oM9C7gnSn/
-        bA00pvi332g4ULeBtBRmI4/Jx5+WEQ=; b=gXa30+dBr8ufc2i05s4lmoVnr2ywy
-        KbppxPWMHR4+KAiurzY5e/tUw/g7Os5y206E0tNeoOTCT5S4hKmomdOoQSAZwnzL
-        KA2i2gTAkeToLGK5dNfElkSwEzvElLKZK7c65R3cDvULSRDFJ6OcuDPvcewYkmoz
-        bixlShUDlz6afyf2ff2rp8KQegIg2jpBd4jh3SARGweRm+I5yFTNjqBdW1iXGgPe
-        SG/LIBR0nVueB21Jp8d1Xlrj5Z4kNUIBSkh0o8us2UwHcYy+wXAQ2OHJuPeqAVQv
-        HyJP0D+bGSvyxm7bLBCI5/iCQrFl/f/ZKBp7l6n3b7pksYy2uWFjOJu1g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=Me9oM9C7gnSn/bA00pvi332g4ULeBtBRmI4/Jx5+WEQ=; b=mDwfNPpT
-        LNtriOV2SrX4lcB0j0r7z4dQZ/BmLbYQbJDRoimbu+L1aPw3L6cIcEu9wzosaljm
-        AgyK1gEk3V9zFZdXHaUy1p0C816+7nKYvGBzHurHwwfA628nkBreA+d//WGXbOFs
-        u8a8MmjHiPYmZSFDfMqB7aMCdj8wssPuPdo96I19lrJLEU3DCjtBxyjrdQLQxZPr
-        4f83iHUPxV5M5QHKwFatmhqK3snr6TzybYL33Wp7fzKr92LZV9cu+Q7ArAeDFqOi
-        wvhWRGlHc4k7Wh6ekTyQoXfVlpJJz1WMgSU/oo1m+rc4X7ERRsFdNSg6Yy7M8uA9
-        ZwWyZQH/OoZxRw==
-X-ME-Sender: <xms:3qnWX7M0ruqg3dxx2gUCfHe55I6qaseudMGEJRi2VqMW3MjoT-IfHw>
-    <xme:3qnWX7LQx2YgkQw4jfLOIflPa3fkAPpUt2E3KUMN1lUrrsCd2Q8t6VgS2MkrWMj1b
-    rvwohUIF-IVsPgPDQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudekiedgudektdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepudfhjeefvdfhgfefheetgffhieeigfefhefgvddvveefgeejheej
-    vdfgjeehueeinecukfhppeejtddrudefhedrudegkedrudehudenucevlhhushhtvghruf
-    hiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgr
-    nhgurdhorhhg
-X-ME-Proxy: <xmx:3qnWX7LFY-kwwbVukB4BRsZK8mBUFAoBrPwd_ClKvOVwyCpUPNMBsw>
-    <xmx:3qnWX15p9CHpn6VN-E39D-T4ridUKjjFDCfAzvV09oQEWDgT8ziKjQ>
-    <xmx:3qnWX1cxF-U8hUTSgwZ9D7aOf79EX34GekClvJ6ssoeUOVHDLo56JA>
-    <xmx:3qnWX1tviz8pX_qbDPqH6dDFkMnyivo_Xr6s3_WCKGOQ-0yytCk6bw>
-Received: from titanium.stl.sholland.net (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 8A12D1080057;
-        Sun, 13 Dec 2020 18:55:09 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Rob Herring <robh+dt@kernel.org>,
+        id S2438163AbgLNElQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 13 Dec 2020 23:41:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58868 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727148AbgLNElQ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 13 Dec 2020 23:41:16 -0500
+Date:   Mon, 14 Dec 2020 10:10:30 +0530
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1607920835;
+        bh=Lo6u48Day0mUO4h1+Mhp4AqyFlf4ohZTOz9CjtOwmFA=;
+        h=From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UkJR+Y16cxoSSnofwarCElwnxfN8ODoAh1tnzUrfssp05SRHZl7AhFkfZEudLbt5X
+         TdpZhGSUWbaOjjoBBvbXyvVeIr91XdPjzXUS9gkLSpDWNyc7N/ncYKuGH+Nn0lyD/t
+         U2kkbUeStLelyRiiAqcZxSqvSDCjMrfe2rgshTnJqZdNXcFBuDslE3fVLko3Jm+oed
+         RpDPLK26h19Pf8g3TzjHOotff0AUYbRUCztBkCZOwoDlcHSvyghl5JSYebWSbYGLVF
+         /LHkaUC9YAZhMzzvF8jW/fy3u6x2bE8fb0GWKyYP5F3X4G27dILFvfAKU81zVEANr5
+         R+uxYe4i75NrA==
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Taniya Das <tdas@codeaurora.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vivek Aknurwar <viveka@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@googlegroups.com,
-        Samuel Holland <samuel@sholland.org>
-Subject: [PATCH 4/4] arm64: dts: allwinner: h6: Use RSB for AXP805 PMIC connection
-Date:   Sun, 13 Dec 2020 17:55:06 -0600
-Message-Id: <20201213235506.25201-5-samuel@sholland.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20201213235506.25201-1-samuel@sholland.org>
-References: <20201213235506.25201-1-samuel@sholland.org>
+        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jeevan Shriram <jshriram@codeaurora.org>
+Subject: Re: [PATCH v2 5/5] clk: qcom: gcc: Add clock driver for SM8350
+Message-ID: <20201214044030.GD8403@vkoul-mobl>
+References: <20201208064702.3654324-1-vkoul@kernel.org>
+ <20201208064702.3654324-6-vkoul@kernel.org>
+ <160763302790.1580929.10258660966995584297@swboyd.mtv.corp.google.com>
+ <20201211054349.GS8403@vkoul-mobl>
+ <160767062876.1580929.14564723998233527816@swboyd.mtv.corp.google.com>
+ <a6cc3d1e-4a72-63be-bf1c-5d560ecef9aa@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a6cc3d1e-4a72-63be-bf1c-5d560ecef9aa@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On boards where the only peripheral connected to PL0/PL1 is an X-Powers
-PMIC, configure the connection to use the RSB bus rather than the I2C
-bus. Compared to the I2C controller that shares the pins, the RSB
-controller allows a higher bus frequency, and it is more CPU-efficient.
+Hi Taniya,
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
- .../dts/allwinner/sun50i-h6-beelink-gs1.dts   | 38 +++++++++----------
- .../dts/allwinner/sun50i-h6-orangepi-3.dts    | 14 +++----
- .../dts/allwinner/sun50i-h6-orangepi.dtsi     | 22 +++++------
- 3 files changed, 37 insertions(+), 37 deletions(-)
+On 13-12-20, 14:00, Taniya Das wrote:
+> 
+> 
+> On 12/11/2020 12:40 PM, Stephen Boyd wrote:
+> > Quoting Vinod Koul (2020-12-10 21:43:49)
+> > > On 10-12-20, 12:43, Stephen Boyd wrote:
+> > > > > +static struct clk_branch gcc_camera_ahb_clk = {
+> > > > > +       .halt_reg = 0x26004,
+> > > > > +       .halt_check = BRANCH_HALT_DELAY,
+> > > > > +       .hwcg_reg = 0x26004,
+> > > > > +       .hwcg_bit = 1,
+> > > > > +       .clkr = {
+> > > > > +               .enable_reg = 0x26004,
+> > > > > +               .enable_mask = BIT(0),
+> > > > > +               .hw.init = &(struct clk_init_data){
+> > > > > +                       .name = "gcc_camera_ahb_clk",
+> > > > > +                       .flags = CLK_IS_CRITICAL,
+> > > > 
+> > > > Why is it critical? Can we just enable it in driver probe and stop
+> > > > modeling it as a clk?
+> > > 
+> > > it does not have a parent we control, yeah it would make sense to do
+> > > that. Tanya do you folks agree ..?
+> > > 
+> > 
+> > Maybe it is needed for camera clk controller? Have to check other SoCs
+> > and see if they're using it.
+> > 
+> 
+> Yes, they would have to be left enabled.
+> 
+> Vinod, could you please move them to probe, similar to kona/sc7180 where all
+> the CRITICALs clocks are left enabled?
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts b/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts
-index 416e0fa76ba7..8a95abfc2ebb 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-beelink-gs1.dts
-@@ -158,12 +158,28 @@ &pio {
- 	vcc-pg-supply = <&reg_aldo1>;
- };
- 
--&r_i2c {
-+&r_ir {
-+	linux,rc-map-name = "rc-beelink-gs1";
-+	status = "okay";
-+};
-+
-+&r_pio {
-+	/*
-+	 * FIXME: We can't add that supply for now since it would
-+	 * create a circular dependency between pinctrl, the regulator
-+	 * and the RSB Bus.
-+	 *
-+	 * vcc-pl-supply = <&reg_aldo1>;
-+	 */
-+	vcc-pm-supply = <&reg_aldo1>;
-+};
-+
-+&r_rsb {
- 	status = "okay";
- 
--	axp805: pmic@36 {
-+	axp805: pmic@745 {
- 		compatible = "x-powers,axp805", "x-powers,axp806";
--		reg = <0x36>;
-+		reg = <0x745>;
- 		interrupt-parent = <&r_intc>;
- 		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
- 		interrupt-controller;
-@@ -281,22 +297,6 @@ sw {
- 	};
- };
- 
--&r_ir {
--	linux,rc-map-name = "rc-beelink-gs1";
--	status = "okay";
--};
--
--&r_pio {
--	/*
--	 * PL0 and PL1 are used for PMIC I2C
--	 * don't enable the pl-supply else
--	 * it will fail at boot
--	 *
--	 * vcc-pl-supply = <&reg_aldo1>;
--	 */
--	vcc-pm-supply = <&reg_aldo1>;
--};
--
- &rtc {
- 	clocks = <&ext_osc32k>;
- };
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-3.dts b/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-3.dts
-index 8a8d1a608e30..e86360ea022e 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-3.dts
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi-3.dts
-@@ -222,12 +222,16 @@ &pio {
- 	vcc-pg-supply = <&reg_vcc_wifi_io>;
- };
- 
--&r_i2c {
-+&r_ir {
-+	status = "okay";
-+};
-+
-+&r_rsb {
- 	status = "okay";
- 
--	axp805: pmic@36 {
-+	axp805: pmic@745 {
- 		compatible = "x-powers,axp805", "x-powers,axp806";
--		reg = <0x36>;
-+		reg = <0x745>;
- 		interrupt-parent = <&r_intc>;
- 		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
- 		interrupt-controller;
-@@ -339,10 +343,6 @@ sw {
- 	};
- };
- 
--&r_ir {
--	status = "okay";
--};
--
- &rtc {
- 	clocks = <&ext_osc32k>;
- };
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi.dtsi
-index 0d5f9aeb96d0..96635588e9a6 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-orangepi.dtsi
-@@ -128,12 +128,20 @@ &pio {
- 	vcc-pg-supply = <&reg_aldo1>;
- };
- 
--&r_i2c {
-+&r_ir {
-+	status = "okay";
-+};
-+
-+&r_pio {
-+	vcc-pm-supply = <&reg_bldo3>;
-+};
-+
-+&r_rsb {
- 	status = "okay";
- 
--	axp805: pmic@36 {
-+	axp805: pmic@745 {
- 		compatible = "x-powers,axp805", "x-powers,axp806";
--		reg = <0x36>;
-+		reg = <0x745>;
- 		interrupt-parent = <&r_intc>;
- 		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
- 		interrupt-controller;
-@@ -248,14 +256,6 @@ sw {
- 	};
- };
- 
--&r_ir {
--	status = "okay";
--};
--
--&r_pio {
--	vcc-pm-supply = <&reg_bldo3>;
--};
--
- &rtc {
- 	clocks = <&ext_osc32k>;
- };
+Thanks for the pointer, will do
+
+Thanks
 -- 
-2.26.2
-
+~Vinod
