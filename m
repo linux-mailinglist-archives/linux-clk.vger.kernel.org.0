@@ -2,68 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89FAA2DC2F5
-	for <lists+linux-clk@lfdr.de>; Wed, 16 Dec 2020 16:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 208E12DC7AF
+	for <lists+linux-clk@lfdr.de>; Wed, 16 Dec 2020 21:22:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726102AbgLPPVF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 16 Dec 2020 10:21:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725905AbgLPPVF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 16 Dec 2020 10:21:05 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C82C06179C;
-        Wed, 16 Dec 2020 07:20:24 -0800 (PST)
-Received: from localhost.localdomain (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2C23AAD5;
-        Wed, 16 Dec 2020 16:19:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1608131982;
-        bh=2dKnTd0ZB/SilOMHPNnfDszUl8UzX9cZXjBhR9ako4c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ye4T6F6hk1gKXWGX29CJXbd1aAt+9zxeJ0wiyzbcZQqv507IJftkj5QvLbEG4URJT
-         J7EVO32kLhncVNZAQ0ILeqwIVaBLD8azvVYXTQo25ab69hqxJKpOhbO4ZRD7yw+5GL
-         lKYvs/QLT8CBp8Rtyz8sDaFW9+/eWdU6CmF1TiWU=
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-To:     Geert Uytterhoeven <geert@glider.be>,
-        linux-renesas-soc@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Subject: [PATCH 3/3] clk: renesas: r8a779a0: Add VSPX clock support
-Date:   Wed, 16 Dec 2020 15:19:31 +0000
-Message-Id: <20201216151931.851547-4-kieran.bingham+renesas@ideasonboard.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201216151931.851547-1-kieran.bingham+renesas@ideasonboard.com>
-References: <20201216151931.851547-1-kieran.bingham+renesas@ideasonboard.com>
+        id S1728693AbgLPUVy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 16 Dec 2020 15:21:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37894 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728803AbgLPUVy (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 16 Dec 2020 15:21:54 -0500
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608150073;
+        bh=E6+S0iH7JA6VSioCcRQNsQtNX73hr73AJHCOek3qQ2U=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=i8ELWSJXsO/nvyD3rEMIkiZpJ4FaJ8R6rvUnukYchKNLenDvb7MAnP1Wc8X48UBhA
+         HKBT6liNXbsbYY4IFcH3+wQAJLe/JLdvH/4xkUb1k7eJWHIlveQJ6I5ZdMNPV5Mard
+         uiVgwDb0dc7XOWjgW5DfLCDNhsfjjIGSXiQjXsv9xp3Odu4xMx7gR6t00nElfk3wmu
+         Tq1br+HoRo1Ew2hispa81r9iNWU20hE47XMtSCKZbAu1ucGyxBQCYyVWeEF5eUDTIi
+         ZedmPDoyxPFIes1cmB5KZCRMOVrcDbw8IVWeS1Y9D3UAKiIvywrCQVx4PLhnDdTsnD
+         X93r0EneG75tw==
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20201209094916.17383-2-zong.li@sifive.com>
+References: <20201209094916.17383-1-zong.li@sifive.com> <20201209094916.17383-2-zong.li@sifive.com>
+Subject: Re: [PATCH v7 1/5] clk: sifive: Extract prci core to common base
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Zong Li <zong.li@sifive.com>,
+        Pragnesh Patel <Pragnesh.patel@sifive.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+To:     Zong Li <zong.li@sifive.com>, aou@eecs.berkeley.edu,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, mturquette@baylibre.com,
+        palmer@dabbelt.com, paul.walmsley@sifive.com,
+        pragnesh.patel@openfive.com, schwab@linux-m68k.org,
+        yash.shah@sifive.com
+Date:   Wed, 16 Dec 2020 12:21:12 -0800
+Message-ID: <160815007240.1580929.5097103153471981375@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add clocks for the VSPX.
+Quoting Zong Li (2020-12-09 01:49:12)
+> Extract common core of prci driver to an independent file, it could
+> allow other chips to reuse it. Separate SoCs-dependent code 'fu540'
+> from prci core, then we can easily add 'fu740' later.
+>=20
+> Almost these changes are code movement. The different is adding the
+> private data for each SoC use, so it needs to get match data in probe
+> callback function, then use the data for initialization.
+>=20
+> Signed-off-by: Zong Li <zong.li@sifive.com>
+> Reviewed-by: Pragnesh Patel <Pragnesh.patel@sifive.com>
+> Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
+> ---
 
-Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
----
- drivers/clk/renesas/r8a779a0-cpg-mssr.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/clk/renesas/r8a779a0-cpg-mssr.c b/drivers/clk/renesas/r8a779a0-cpg-mssr.c
-index 2ce31508db73..d7825adcb19d 100644
---- a/drivers/clk/renesas/r8a779a0-cpg-mssr.c
-+++ b/drivers/clk/renesas/r8a779a0-cpg-mssr.c
-@@ -192,6 +192,10 @@ static const struct mssr_mod_clk r8a779a0_mod_clks[] __initconst = {
- 	DEF_MOD("vin37",	829,	R8A779A0_CLK_S1D1),
- 	DEF_MOD("vspd0",	830,	R8A779A0_CLK_S3D1),
- 	DEF_MOD("vspd1",	831,	R8A779A0_CLK_S3D1),
-+	DEF_MOD("vspx0",	1028,	R8A779A0_CLK_S1D1),
-+	DEF_MOD("vspx1",	1029,	R8A779A0_CLK_S1D1),
-+	DEF_MOD("vspx2",	1030,	R8A779A0_CLK_S1D1),
-+	DEF_MOD("vspx3",	1031,	R8A779A0_CLK_S1D1),
- };
- 
- static spinlock_t cpg_lock;
--- 
-2.25.1
-
+Applied to clk-next
