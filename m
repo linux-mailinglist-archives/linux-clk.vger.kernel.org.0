@@ -2,85 +2,80 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE412DE849
-	for <lists+linux-clk@lfdr.de>; Fri, 18 Dec 2020 18:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EFA12DEA09
+	for <lists+linux-clk@lfdr.de>; Fri, 18 Dec 2020 21:14:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728088AbgLRRiU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 18 Dec 2020 12:38:20 -0500
-Received: from www.zeus03.de ([194.117.254.33]:35662 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730410AbgLRRiT (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 18 Dec 2020 12:38:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=MYzs9HdZf1z8X0
-        +WtacPHW/SiQSQbqLwBKoeknbWpHI=; b=hykiViAxqC2NNKDPZ6Tc6ZN276SUww
-        u4MdqPAzQsNJysHHEWG5l2RZbgp/GxlRg4nvX1p3jOp8RrHkTlYWg2jbzQvG6Ker
-        M6TQgdPs8YdZeHi7W7RPuVyD1sfPp93ARunCplVJM5l1n1uX+FMLMM5pNL5U/4S3
-        Yx5sLbUQ7hcqE=
-Received: (qmail 3906722 invoked from network); 18 Dec 2020 18:37:36 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Dec 2020 18:37:36 +0100
-X-UD-Smtp-Session: l3s3148p1@0t1skMC2aJggAwDPXwIpAOUwDQytQs2L
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        id S1726718AbgLRUOf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 18 Dec 2020 15:14:35 -0500
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:44009 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726697AbgLRUOe (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 18 Dec 2020 15:14:34 -0500
+Received: by mail-ot1-f51.google.com with SMTP id q25so3068238otn.10;
+        Fri, 18 Dec 2020 12:14:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g3RrY/5H2pNsMpu6ivf90VzQI9V5J/8AaKgeKCK7dbQ=;
+        b=YSQhqZ9YIDghOHfmWxXYxWXQwdbV2rdkCFx3AqQSnqnm+d7yBrbWmSNp14vFgnC+Ab
+         GZ1USHiviPy8j7Ots2wvKplRaWpa5KrM1rEgFgw4AnIdT0zFm90AutXtLUwKp/WgDd6y
+         PnKJhHQLxCV7w7sKfjYV2eEZOoCUfF6u0cw+DjlTSM3TSEJLac+km/RmGTq4GqdXxmHm
+         NbxqEuLE6gItIuVmq8CORD3qs6R56BUnUV9Sr6hKvlFWAIUh/ELVhwLFMBeEwSwnF7jP
+         81NQS7sJqyaoiVL1Zc47bP47Tn0uioIpOF+jMRoWF5jcbB3roX82yd7uO7EFdtsk6TN1
+         RhpA==
+X-Gm-Message-State: AOAM533OBslp2BtE/9wkA40NYXrqCOc/sRV2XLb1TzMoVYxO1fPpeCib
+        puYXRFZSSI8/xQ+4LuIILA==
+X-Google-Smtp-Source: ABdhPJyWxEs+KjRXMhcvoXJully+6tpRF+3fCMbOaLUN5jp5Oj0gdCDCFzDQrDoc79eGUooarLmJPQ==
+X-Received: by 2002:a9d:46f:: with SMTP id 102mr4185215otc.293.1608322433172;
+        Fri, 18 Dec 2020 12:13:53 -0800 (PST)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id u76sm451886oia.48.2020.12.18.12.13.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Dec 2020 12:13:52 -0800 (PST)
+Received: (nullmailer pid 2092213 invoked by uid 1000);
+        Fri, 18 Dec 2020 20:13:50 -0000
+Date:   Fri, 18 Dec 2020 14:13:50 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Fabio Estevam <festevam@gmail.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/5] clk: renesas: r8a779a0: Add RWDT clocks
-Date:   Fri, 18 Dec 2020 18:37:27 +0100
-Message-Id: <20201218173731.12839-3-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201218173731.12839-1-wsa+renesas@sang-engineering.com>
-References: <20201218173731.12839-1-wsa+renesas@sang-engineering.com>
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] dt-bindings: clock: imx8qxp-lpcg: eliminate yamllint
+ warnings
+Message-ID: <20201218201350.GA2089699@robh.at.kernel.org>
+References: <20201207045527.1607-1-thunder.leizhen@huawei.com>
+ <20201207045527.1607-2-thunder.leizhen@huawei.com>
+ <160820093389.1580929.3915867007740168331@swboyd.mtv.corp.google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <160820093389.1580929.3915867007740168331@swboyd.mtv.corp.google.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-And introduce critical clocks, too, because RWDT is one.
+On Thu, Dec 17, 2020 at 02:28:53AM -0800, Stephen Boyd wrote:
+> Quoting Zhen Lei (2020-12-06 20:55:27)
+> > Eliminate the following yamllint warnings:
+> > ./Documentation/devicetree/bindings/clock/imx8qxp-lpcg.yaml
+> > :32:13:[warning] wrong indentation: expected 14 but found 12 (indentation)
+> > :35:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+> > 
+> > Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> > ---
+> 
+> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/clk/renesas/r8a779a0-cpg-mssr.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+If I tagged it, I was expecting you to pick up. But I'm gathering up all 
+the fixes for what landed in Linus' tree, so I'll apply.
 
-diff --git a/drivers/clk/renesas/r8a779a0-cpg-mssr.c b/drivers/clk/renesas/r8a779a0-cpg-mssr.c
-index aa5389b04d74..bf9fdcdd7d85 100644
---- a/drivers/clk/renesas/r8a779a0-cpg-mssr.c
-+++ b/drivers/clk/renesas/r8a779a0-cpg-mssr.c
-@@ -188,6 +188,7 @@ static const struct mssr_mod_clk r8a779a0_mod_clks[] __initconst = {
- 	DEF_MOD("vin35",	827,	R8A779A0_CLK_S1D1),
- 	DEF_MOD("vin36",	828,	R8A779A0_CLK_S1D1),
- 	DEF_MOD("vin37",	829,	R8A779A0_CLK_S1D1),
-+	DEF_MOD("rwdt",		907,	R8A779A0_CLK_R),
- };
- 
- static spinlock_t cpg_lock;
-@@ -261,6 +262,10 @@ static struct clk * __init rcar_r8a779a0_cpg_clk_register(struct device *dev,
- 					 __clk_get_name(parent), 0, mult, div);
- }
- 
-+static const unsigned int r8a779a0_crit_mod_clks[] __initconst = {
-+	MOD_CLK_ID(907),	/* RWDT */
-+};
-+
- /*
-  * CPG Clock Data
-  */
-@@ -311,6 +316,10 @@ const struct cpg_mssr_info r8a779a0_cpg_mssr_info __initconst = {
- 	.num_mod_clks = ARRAY_SIZE(r8a779a0_mod_clks),
- 	.num_hw_mod_clks = 15 * 32,
- 
-+	/* Critical Module Clocks */
-+	.crit_mod_clks		= r8a779a0_crit_mod_clks,
-+	.num_crit_mod_clks	= ARRAY_SIZE(r8a779a0_crit_mod_clks),
-+
- 	/* Callbacks */
- 	.init = r8a779a0_cpg_mssr_init,
- 	.cpg_clk_register = rcar_r8a779a0_cpg_clk_register,
--- 
-2.29.2
-
+Rob
