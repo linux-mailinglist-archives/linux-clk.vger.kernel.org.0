@@ -2,109 +2,75 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0032DE381
-	for <lists+linux-clk@lfdr.de>; Fri, 18 Dec 2020 14:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 912EE2DE859
+	for <lists+linux-clk@lfdr.de>; Fri, 18 Dec 2020 18:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726177AbgLRNwS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 18 Dec 2020 08:52:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725885AbgLRNwR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 18 Dec 2020 08:52:17 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25989C0617A7;
-        Fri, 18 Dec 2020 05:51:37 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id h205so5601449lfd.5;
-        Fri, 18 Dec 2020 05:51:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ud+ydgJ9az3Hiu3dG94tCj+AH/qmY9t585UF2V6T/f4=;
-        b=YU3/c4y3sS1EheZWjrflGG0HpXjJJh+/DPVIl2CatwZ1345AQ4Ps9XE9KOttvWkWfB
-         peJI/hYVrD79Qiu/52g+nyfaJH2iQHi9fESs9e7PSVrJLQHc07zXPCiP3ITLCpVWAREv
-         qwx9cAfmpQTao8nPDvEfblvcaXemydgisPKlrfX9PihSCkXKt7/1dRn16B8ThPctm/CV
-         ZH9TO87G8fCVtoY3YnsNGa1q53+i9enUSbke6lKkziiXHDIDgowFL/nbnOhxBRVQBjvP
-         JCPfR7HU53ThAtkHaJ4/gZyc3fVHY+CWI8lg+84lqNnatqsSbuTO6NpiZ7ccnulU64Z/
-         2C0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ud+ydgJ9az3Hiu3dG94tCj+AH/qmY9t585UF2V6T/f4=;
-        b=lRDInVLcDNe+Hdd52RtIPM9wOfU2EG64lMYcYCK7tM4w+mFZoyo1w3KWDxk3DFmmE3
-         53X/qJSyYzWPyOKhfhDT9G/jtXFccQsReJESSL6T0ZWFwccJAPtKcqzeeeOLTBgQ6Vg8
-         S5sI12Rxxendj0lAPx9ZXJOXHXFNVe7snLJmiwFMTg0zOxIFE+yXy52lDKqBYNGWEvy4
-         oNTPj9UNk1pZsG3Xlu0dzkx6z2wUxtr6oqiGlE5p8K81C2bXfiARed9yK8jO2OiY4tAR
-         Eka6XFOMWV6B0rq4xYLwQ3GfWqNcyjHsKzUc6NCFgkh5UMRkmJwswllYTrByNT9+GnEo
-         nX0w==
-X-Gm-Message-State: AOAM531knDPYfEq9aFiDCXD4/nW3cwY31qgZ9GG8xt/G/J1G/w8/CVzC
-        BWkRwC6ZUCdej8JefMFf0Apt3tfNZyw=
-X-Google-Smtp-Source: ABdhPJwlBZ8Blm2A+JOtuSZuYrjATZyxdK51+2jHdPBCMrrfUZ3Pxpve0dGkaB8ZmDWkCYbAToxNUg==
-X-Received: by 2002:a2e:b896:: with SMTP id r22mr1801148ljp.442.1608299495548;
-        Fri, 18 Dec 2020 05:51:35 -0800 (PST)
-Received: from [192.168.2.145] (109-252-192-57.dynamic.spd-mgts.ru. [109.252.192.57])
-        by smtp.googlemail.com with ESMTPSA id i10sm934975lfd.202.2020.12.18.05.51.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Dec 2020 05:51:34 -0800 (PST)
-Subject: Re: [PATCH v2 00/48] Introduce core voltage scaling for NVIDIA
- Tegra20/30 SoCs
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20201217180638.22748-1-digetx@gmail.com>
- <20201218071455.vdeozvvnmkjtrejt@vireshk-i7>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <c0976db7-ae66-740c-d95f-501d81c99fa0@gmail.com>
-Date:   Fri, 18 Dec 2020 16:51:33 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.4.2
+        id S1728097AbgLRRib (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 18 Dec 2020 12:38:31 -0500
+Received: from www.zeus03.de ([194.117.254.33]:35630 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729854AbgLRRiT (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 18 Dec 2020 12:38:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=TGknKXM6Qe5ZJYWFCEHpNo135/r
+        ukfSQ0kDyG0JgwkA=; b=BJ6iOEdYqUKeqnbhrJluWZWEvjPnYIfGTutPlSfrA51
+        OjeaHjy59ii/kyEmSem58nEkB5FIiW1r/c6q4rvMWZZrCIxYyCU7tkRvANCKlb0r
+        9cpkbZlh7bIh/WWcCrQNneobkvJ3FwaU637gOLyCE7JMmLJTWbmt6Tzm4GHV6rjs
+        =
+Received: (qmail 3906654 invoked from network); 18 Dec 2020 18:37:35 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 18 Dec 2020 18:37:35 +0100
+X-UD-Smtp-Session: l3s3148p1@pU8fkMC2ZJggAwDPXwIpAOUwDQytQs2L
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH 0/5] v3u: add support for RWDT
+Date:   Fri, 18 Dec 2020 18:37:25 +0100
+Message-Id: <20201218173731.12839-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <20201218071455.vdeozvvnmkjtrejt@vireshk-i7>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-18.12.2020 10:14, Viresh Kumar пишет:
-> On 17-12-20, 21:05, Dmitry Osipenko wrote:
->> Introduce core voltage scaling for NVIDIA Tegra20/30 SoCs, which reduces
->> power consumption and heating of the Tegra chips. Tegra SoC has multiple
->> hardware units which belong to a core power domain of the SoC and share
->> the core voltage. The voltage must be selected in accordance to a minimum
->> requirement of every core hardware unit.
-> 
-> Please submit the OPP changes separately (alone), it will never get
-> merged this way. Send fixes at the top, any features you want later in
-> the series. It is fine for you to base your series of patches which
-> are under review, you just need to mention that in your cover letter
-> for your platform's patchset.
-> 
+Here is the series to enable the RWDT on V3U. I took the DTS patches
+from the BSP, the rest was developed on mainline tree. Note that
+currently, the bootloader does not unmask the RWDT reset for us. This is
+why patch #5 is needed if you want a reboot. We need to see if this is
+going to be added to the bootloader later. Also, while the normal
+watchdog trigger works flawlessly, the 'reboot' command will triger a
+OOPS. This is a known issue also present on other Gen3 SoCs and will
+be addressed seperately soon.
 
-Alright, although I haven't pretended that v2 patches should be merged
-right away since they are fundamentally different from v1, and thus, all
-patches need to be reviewed first.
+Other than that, patch #1 should go in via watchdog, the rest via
+Geert's various trees :)
 
-If the current OPP changes look good to you, then please give yours r-b
-to the patches. Thanks in advance!
+Looking forward to comments.
+
+Happy hacking and have a nice weekend!
+
+
+Hoang Vo (2):
+  arm64: dts: renesas: r8a779a0: Add RWDT node
+  arm64: dts: renesas: falcon: Enable watchdog timer
+
+Wolfram Sang (3):
+  dt-bindings: watchdog: renesas,wdt: add r8a779a0 (V3U) support
+  clk: renesas: r8a779a0: Add RWDT clocks
+  WIP soc: v3u: allow WDT reset
+
+ .../devicetree/bindings/watchdog/renesas,wdt.yaml      |  1 +
+ arch/arm64/boot/dts/renesas/r8a779a0-falcon.dts        |  5 +++++
+ arch/arm64/boot/dts/renesas/r8a779a0.dtsi              | 10 ++++++++++
+ drivers/clk/renesas/r8a779a0-cpg-mssr.c                |  9 +++++++++
+ drivers/soc/renesas/rcar-rst.c                         |  8 ++++++++
+ 5 files changed, 33 insertions(+)
+
+-- 
+2.29.2
+
