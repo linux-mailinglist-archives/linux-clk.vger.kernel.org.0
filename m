@@ -2,129 +2,147 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BEE2DEBA3
-	for <lists+linux-clk@lfdr.de>; Fri, 18 Dec 2020 23:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E733C2DEE47
+	for <lists+linux-clk@lfdr.de>; Sat, 19 Dec 2020 11:58:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726117AbgLRWd1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 18 Dec 2020 17:33:27 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47126 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725836AbgLRWd1 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 18 Dec 2020 17:33:27 -0500
-X-Gm-Message-State: AOAM531xGHH4uwPJQabwPyW9wqjpKqR3SpZTlqrH3stFxMKqpSGLXz2N
-        u6IIndsTmuJ6bCWvCJS90JKihhQyIVj9I75+HA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608330766;
-        bh=9fdx5WlqMP3pT3GHHMBYbo7LX62Ad+VX0C8DiUhWuF8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fjb93JuE7gZk/1mLUbBUqoWkM1ddVOz4+IKaYcWM09nDcxqP/P0tTObKXz49JA+DH
-         cm4Ohb7fnx7P+ohBgeU/TgWMfbThBgs+8NNwlzZoza+yOAvt7QKAkyL4wGFtj+/JQ3
-         hlBnN8b5RvwFaUuL9bEKapgt6DEiXTYn5Pyu+mGOCNB43jz3bxuc367jv1HffU/CQ4
-         ejwejW5MNsvPE5GP6q0QHrAE/HUN6SkBPnWVgKX8pyOZpoiOKC88gIX+7y0aaizQvs
-         qoxf+750lIQKl5jCFE+Mc6OWClXlCWjf4YzEa9qqZ0AOOWIiHQjmZkOYzd8ggorbaJ
-         0cYsIer0ckhZg==
-X-Google-Smtp-Source: ABdhPJzOETG31WDEzknD8yJ8gpRVCi3kctdvpVOk4NcK0WFHXzCWvcU10Xdus/e6nXonbdeA3CiKSpG+AcAQl4R0/g8=
-X-Received: by 2002:a17:906:1197:: with SMTP id n23mr6097055eja.359.1608330765040;
- Fri, 18 Dec 2020 14:32:45 -0800 (PST)
-MIME-Version: 1.0
-References: <20201216145231.1344317-1-geert+renesas@glider.be>
- <20201217235919.GA456454@robh.at.kernel.org> <CAMuHMdVO29He-KHDLp3S=2JyGwOT=tLcDCOw6MPqBvcBLdUCOw@mail.gmail.com>
-In-Reply-To: <CAMuHMdVO29He-KHDLp3S=2JyGwOT=tLcDCOw6MPqBvcBLdUCOw@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 18 Dec 2020 16:32:32 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLcjhRgkTh=SNEpbq-uuv3LixJ3ivSw+TQvPdCCEtFYNw@mail.gmail.com>
-Message-ID: <CAL_JsqLcjhRgkTh=SNEpbq-uuv3LixJ3ivSw+TQvPdCCEtFYNw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: clk: versaclock5: Miscellaneous fixes and improvements:
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
-        Adam Ford <aford173@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
+        id S1726479AbgLSK6G (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 19 Dec 2020 05:58:06 -0500
+Received: from mail-ej1-f53.google.com ([209.85.218.53]:34661 "EHLO
+        mail-ej1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726456AbgLSK6G (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 19 Dec 2020 05:58:06 -0500
+Received: by mail-ej1-f53.google.com with SMTP id g20so6920291ejb.1;
+        Sat, 19 Dec 2020 02:57:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EpBQBebW9DJ389TpaCDahYCkX51lISZZEMe47kdJ6lQ=;
+        b=IAsruEHJrg2v6P8e0bPaSWQU27WQGHNOQafpZafuRhsmkORmMtmgK0WOjeWIBR1nvA
+         XABh1JLTemUs1aKwRp3FqKge3xIKSgZo4efxOUWUswCbdcZSNM95c4+xraIPgYoYpEDe
+         b8DX+xelZ7CTjfn9iK7U7dZGNqI0U8ZofDamSbwiR+Y0aKxEFDPXnlUfnDfxbWCoidmK
+         3IYUfWytgf/O4LoBR6NTbPzYK2Gi9VniI2nZbPkN0ulBZIGUmoG29h4suHjHWNIXJC9L
+         Qqmdw4GLqHCP0R3rG7IMHMUkCY8uX+uZiWEUAGREbjqP7dBM6lTcUU2/hq4qoL9JlCQv
+         egbA==
+X-Gm-Message-State: AOAM530McxTATj0tA4JvZg130C7LGBPxRV+9LHbVHfFDbwNyPO11M7G/
+        T3BiPwMUZNvqA5oQwQKxzGk=
+X-Google-Smtp-Source: ABdhPJyWR/64ayreIal22iSj58nHkNVe6iV5yUrUJ5pe5qe42bhP84ft40zxoVfZe823dJe4zocuIg==
+X-Received: by 2002:a17:906:4ec7:: with SMTP id i7mr8055250ejv.252.1608375443178;
+        Sat, 19 Dec 2020 02:57:23 -0800 (PST)
+Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.googlemail.com with ESMTPSA id pk19sm6666596ejb.32.2020.12.19.02.57.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Dec 2020 02:57:22 -0800 (PST)
+Date:   Sat, 19 Dec 2020 11:57:20 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Michael Turquette <mturquette@baylibre.com>,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v2 07/48] dt-bindings: arm: tegra: Add binding for core
+ power domain
+Message-ID: <20201219105720.GA5323@kozik-lap>
+References: <20201217180638.22748-1-digetx@gmail.com>
+ <20201217180638.22748-8-digetx@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201217180638.22748-8-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, Dec 18, 2020 at 5:42 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Rob,
->
-> On Fri, Dec 18, 2020 at 12:59 AM Rob Herring <robh@kernel.org> wrote:
-> > On Wed, Dec 16, 2020 at 03:52:31PM +0100, Geert Uytterhoeven wrote:
-> > >   - Add reference to clock.yaml, and switch to unevaluatedProperties, to
-> > >     stop complaining about the presence of "assigned-clock-rates" and
-> > >     "assigned-clocks" in board DTS files,
-> > >   - Fix typo in "idt,voltage-microvolts" property name, to match example
-> > >     and driver code,
-> > >   - Add missing reference for "idt,voltage-microvolts",
-> > >   - Add missing "additionalProperties: false" for subnodes, to catch
-> > >     typos in properties,
-> > >   - There is no reason to wrap the (single) if condition in an allOf
-> > >     block,
-> >
-> > True, but more future proof with it and unnecessary churn IMO.
->
-> OK, I'll drop that part.
->
-> > >   - Fix obsolete property names in example.
-> > >
-> > > Fixes: 45c940184b501fc6 ("dt-bindings: clk: versaclock5: convert to yaml")
-> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > ---
-> > > Notes:
-> > >   1. The use of "idt,voltage-microvolts" (with trailing S) is a bit
-> > >      unfortunate, as Documentation/devicetree/bindings/property-units.txt
-> > >      suggests to not have the trailing edge.
-> > >      Can we still fix the driver and bindings?  While this entered
-> > >      uptstream in v5.9, there are no users in next-20201216.
-> > >
-> > >   2. Due to "clock-output-names" being part of
-> > >      dt-schema/schemas/clock/clock.yaml, the presence of this property
-> > >      does not trigger an error.  Adding "clock-output-names: false"
-> > >      can fix that.  But given this property is deprecated, except for
-> > >      very specific use cases, explicitly allowing it for those few use
-> > >      cases would be better.
-> > > ---
-> > >  .../bindings/clock/idt,versaclock5.yaml       | 53 ++++++++++---------
-> > >  1 file changed, 29 insertions(+), 24 deletions(-)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> > > index 2ac1131fd9222a86..14851e76f6342095 100644
-> > > --- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> > > +++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> > > @@ -33,6 +33,9 @@ description: |
-> > >  maintainers:
-> > >    - Luca Ceresoli <luca@lucaceresoli.net>
-> > >
-> > > +allOf:
-> > > +  - $ref: clock.yaml#
-> >
-> > No, that's not right. clock.yaml is already applied unconditionally.
->
-> But without that, it complains about unevaluatedProperties?
+On Thu, Dec 17, 2020 at 09:05:57PM +0300, Dmitry Osipenko wrote:
+> All NVIDIA Tegra SoCs have a core power domain where majority of hardware
+> blocks reside. Add binding for the core power domain.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  .../arm/tegra/nvidia,tegra20-core-domain.yaml | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-core-domain.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-core-domain.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-core-domain.yaml
+> new file mode 100644
+> index 000000000000..f3d8fd2d8371
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-core-domain.yaml
+> @@ -0,0 +1,48 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/tegra/nvidia,tegra20-core-domain.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NVIDIA Tegra Core Power Domain
+> +
+> +maintainers:
+> +  - Dmitry Osipenko <digetx@gmail.com>
+> +  - Jon Hunter <jonathanh@nvidia.com>
+> +  - Thierry Reding <thierry.reding@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nvidia,tegra20-core-domain
+> +      - nvidia,tegra30-core-domain
 
-By design. You can't have other properties outside your binding unless
-you have a $ref to other schemas. Also, note that there's not a single
-other ref to clock.yaml.
+The file should be in bindings/power.
+Include also the power-domain.yaml schema.
 
-> > You need to define assigned-clocks, etc. here just like 'clocks' and
-> > define how many entries. Or convince me they should be allowed on any
-> > node.
->
-> They are handled by of_clk_set_defaults(), which is applied to all
-> clock providers.
+> +
+> +  operating-points-v2:
+> +    description:
+> +      Should contain level, voltages and opp-supported-hw property.
+> +      The supported-hw is a bitfield indicating SoC speedo or process
+> +      ID mask.
+> +
+> +  "#power-domain-cells":
+> +    const: 0
+> +
+> +  power-supply:
+> +    description:
+> +      Phandle to voltage regulator connected to the SoC Core power rail.
+> +
+> +required:
+> +  - compatible
+> +  - operating-points-v2
+> +  - "#power-domain-cells"
+> +  - power-supply
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    core-domain {
 
-What does that Linux implementation detail have to do with the bindings?
+power-domain (to follow schema and devicetree spec)
 
-The only other exception we have is pinctrl properties. They often
-aren't that interesting unless you have more than one (maybe we should
-only automatically allow the single case). That's maybe true in the
-assigned-clocks case too. However the big difference I see is pinctrl
-properties are almost always present whereas assign-clocks is more the
-exception. So I think it's good to be explicit where they are used.
+Best regards,
+Krzysztof
 
-Rob
+
+> +        compatible = "nvidia,tegra20-core-domain";
+> +        operating-points-v2 = <&opp_table>;
+> +        power-supply = <&regulator>;
+> +        #power-domain-cells = <0>;
+> +    };
+> -- 
+> 2.29.2
+> 
