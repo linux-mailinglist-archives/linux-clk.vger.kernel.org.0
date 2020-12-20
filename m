@@ -2,165 +2,247 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F35DA2DF48B
-	for <lists+linux-clk@lfdr.de>; Sun, 20 Dec 2020 09:59:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9B02DF4C9
+	for <lists+linux-clk@lfdr.de>; Sun, 20 Dec 2020 10:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727439AbgLTI7f (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 20 Dec 2020 03:59:35 -0500
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:7457 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727420AbgLTI7e (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 20 Dec 2020 03:59:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1608454773; x=1639990773;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=XtBjsfRXjuEuGKKlufREJ/U9xFr1c//Y4LDb1m2YAys=;
-  b=jY3yULIKZu55UoMPScg+P3o4K9JMJAun88gIoRFy0EoP0chPhWooKnRe
-   FzVasdoAhjFJzGEjMv0YUstFuoA405ByIuWiJfo6i7caszfMzGT4xLKzY
-   +jczgBZ3SdHzyIusnw9equl3CP5CvU0meZdu4Qof9CJQxeZ5ptRqgJfny
-   OzrmQcftBrAk28Sl8uSWr4Lksj1IaPpHe/vIVz5l+b5uoOr2Z1UJAUd7J
-   xKWshmUMUPaWt2DmOab5nnjmycdH4++nUYnbPQPa/nNSg5epmlEagN6rL
-   4KL2F+BvoN9UCdF+TPGpt2qN+JCU5Eg09BN9RrLhKGcbYZjAz+VJUBoy5
-   w==;
-IronPort-SDR: wIi06JcBrL4CYMPt0NmMyKgNm9TwCN4vLCIUGuO7oZToz27N9Nmz+tMpkovt4sz37MQZUs8nvF
- YL6hKhdu60xa2Sw+e5qe01XlGnDrvtRifsVIMkwHNuQu5tyV4/8syjMjs0AePRllL2/X9uqatv
- VTrjanbr9zGxYnAG72/susVuWAtQ+cKvWgW+eXs2NVTbaC44J80EFyV3Mob8SgHQsYrCW51D+u
- pTGxu9/r4n3dnHvgHjAvnP75Mdw/e+FyYwZVZ1q0ijLPea8INqLbjmGtzIXSnLmG5fH894Hr9b
- rEM=
-X-IronPort-AV: E=Sophos;i="5.78,434,1599494400"; 
-   d="scan'208";a="265810487"
-Received: from mail-bn8nam11lp2168.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.168])
-  by ob1.hgst.iphmx.com with ESMTP; 20 Dec 2020 16:58:26 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Spm2rECXbFKLOPxV3aPwWpQaeHcn7OwDGEUeAHIWW1ai89yOR3yfAxwxcj+g6qGbOpBxV9KM6KzCveZW+yjOonX/88ftwZtdDcd10PR9n0LO1rjZq2hIJgTLhwpfhWMDtbyaEq6lPjS1dLHyPmwFDd+3SgaJ5gkP2SsBIJv3DhJC8YxFYvXYusoWVEbCaIrr/hRzT/vA4W6MSaFNQs2fHm2mbgc4d/fZi1nF6kIpiGwNqXBmkXIf0zcv9ToVfNjMqfBf8qJh6HEeHK+QZthteZ2bkT/bng07hAM8Ld22WeOoSjqzWfET10VRoIxlKiR6FluYIhqrR8TX4jZjThgftw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XtBjsfRXjuEuGKKlufREJ/U9xFr1c//Y4LDb1m2YAys=;
- b=NCbOVb8ZQDmfnr7dvH4eSxXX5Ye3cb9z5hs+Ba382OAHxs3uwX2YRsv6hYetN1mx9mCRJjYRjZbyMFzzApNDggTFXLvgyCoTMJrssFbinAfnfOfAJwlHyl3p77SWsp2zWYD9AFEsCFqRqh7+6pQ30B7FVGKyHlyKdVvJzx4YEXErSIdqZEdd1Nf64AoWgzMQ+MN9Ax4d3H9LYtx+lLXOJcnmhvCY/gVK66eWTTwH5MqJwe5Ykb8Au/+CCq58tw65R8xwjC1TNFVBfkfUdwON87qIhTc93mO8280+CrOSF90zmOik5KBUKNDnrAuKKny0o6oJ2nlo0FL9gqeRyAHf6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        id S1727442AbgLTJiR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 20 Dec 2020 04:38:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727211AbgLTJiP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 20 Dec 2020 04:38:15 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FEFC0613CF;
+        Sun, 20 Dec 2020 01:37:28 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id r4so7728776wmh.5;
+        Sun, 20 Dec 2020 01:37:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XtBjsfRXjuEuGKKlufREJ/U9xFr1c//Y4LDb1m2YAys=;
- b=rNGZ7W4VKHyScKL31GRPQ1ahmenPqf2FjAQ1WOiCZkiQc5HZmP/vc7nrEEeL9sFoj9aPMhB2lVXoYd93eEIREnArBD42nuylLixg169lCWv1QlKFQMCRVxjD2WwlnG9SHxTz9hXAiuikpFkYtD5XhQXoqg/Lzu0S3Hpn2k/W9L4=
-Received: from DM6PR04MB6527.namprd04.prod.outlook.com (2603:10b6:5:20e::9) by
- DM6PR04MB5067.namprd04.prod.outlook.com (2603:10b6:5:fe::20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3676.25; Sun, 20 Dec 2020 08:58:24 +0000
-Received: from DM6PR04MB6527.namprd04.prod.outlook.com
- ([fe80::80a1:12c6:f282:f22a]) by DM6PR04MB6527.namprd04.prod.outlook.com
- ([fe80::80a1:12c6:f282:f22a%4]) with mapi id 15.20.3676.025; Sun, 20 Dec 2020
- 08:58:24 +0000
-From:   Damien Le Moal <Damien.LeMoal@wdc.com>
-To:     "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-CC:     "seanga2@gmail.com" <seanga2@gmail.com>
-Subject: Re: [PATCH v10 09/23] dt-binding: clock: Document canaan,k210-clk
- bindings
-Thread-Topic: [PATCH v10 09/23] dt-binding: clock: Document canaan,k210-clk
- bindings
-Thread-Index: AQHW0VcKSUc5JWucbkupBqEzxYwjiqn/gQsAgAA40YA=
-Date:   Sun, 20 Dec 2020 08:58:24 +0000
-Message-ID: <66782ff9a9086468af7aeabd8292786c1d97eaaf.camel@wdc.com>
-References: <20201213135056.24446-1-damien.lemoal@wdc.com>
-         <20201213135056.24446-10-damien.lemoal@wdc.com>
-         <160819259979.1580929.9332027241734052085@swboyd.mtv.corp.google.com>
-         <CH2PR04MB65227B0B94F919406CB84C28E7C40@CH2PR04MB6522.namprd04.prod.outlook.com>
-         <160820021596.1580929.1686334340234415270@swboyd.mtv.corp.google.com>
-         <CH2PR04MB6522E9EC44FF8FFA5981107CE7C40@CH2PR04MB6522.namprd04.prod.outlook.com>
-         <160820216451.1580929.9401304620489565784@swboyd.mtv.corp.google.com>
-         <CH2PR04MB652284F1607FD2A29275693CE7C40@CH2PR04MB6522.namprd04.prod.outlook.com>
-         <160844250293.1580929.6654681087428087193@swboyd.mtv.corp.google.com>
-In-Reply-To: <160844250293.1580929.6654681087428087193@swboyd.mtv.corp.google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.38.2 (3.38.2-1.fc33) 
-authentication-results: lists.infradead.org; dkim=none (message not signed)
- header.d=none;lists.infradead.org; dmarc=none action=none
- header.from=wdc.com;
-x-originating-ip: [2400:2411:43c0:6000:8d3e:27aa:85c2:44b5]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 7d879904-98c0-4e8a-ac75-08d8a4c568d5
-x-ms-traffictypediagnostic: DM6PR04MB5067:
-x-microsoft-antispam-prvs: <DM6PR04MB5067C11364AA1252D4F3B874E7C10@DM6PR04MB5067.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EyOnO4DI5+OHvv3H8ilN6mhf2mL13yUPvhgrfVXrN7Wvn2aJPB5E7JERJZpPkSIZLfg0S8dWu/Oa6vmsbQc8RDHmm9fpTJ8KSdhW956gEX5LSUpljRiecMSqSWyG8vyCpVkL7hwuIu4rElnJ5Su7tlXaps2WNntsSoO+cgmzLKocc+paLWVe+fG8XRmj09X5FvIKLNPklZ3sbD+h4/Lkz7HM0THP+8JDoOK5fSsu8jzEPtZFdohgjKWLjktrAOl1Y7m4YsfYL3y1qAt9sFgcRwGSVtgX+8gqzMxgM+YDuiTjm+2/iTNTYCUs50y++G8lB0QN3R0bX6plUiK9l2VAHsynTqDJJRCWg1s5y4OaN0MCKGunqadG5xBG10VmL1C/LtNfJ0OmblsrBaGBnp1bkQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR04MB6527.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(366004)(39850400004)(376002)(396003)(136003)(66446008)(8676002)(4744005)(8936002)(53546011)(6506007)(7416002)(110136005)(186003)(4326008)(2616005)(6512007)(316002)(478600001)(5660300002)(36756003)(2906002)(4001150100001)(6486002)(86362001)(91956017)(64756008)(66556008)(66476007)(76116006)(66946007)(83380400001)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?utf-8?B?UlBjSU1xbjRZOVdGdkt3UlhkZHM0eDdneEh0NkNSQjBycy9yaUduRFNJSnVE?=
- =?utf-8?B?SUVIcmtnVkUvMnc5UDM4S3A0M0IvckxoQThGbkNEVURlelNRL2JKRmIzRi9M?=
- =?utf-8?B?ZGc0Z0cxS1dGczNDOVpDdko2WW95d3E3WUtMeEVnOVUrcWMzRDI0d2ZLQTN3?=
- =?utf-8?B?OE9IWU1pMkN2NWtkSHpEOE9WVDlFU2dsNGRNZVNyRG8wZElQMjNmdldHbitS?=
- =?utf-8?B?UEkvMWdERjIrSW1mMjA2MllFWElSbzhUUGpxNGMvdWhHOU5TSzRsM1gvY0dS?=
- =?utf-8?B?aG93azZaRHl1YWVEazR2d0xiQlhPdHM2ZUxENzg0WFpIdlF1Z2k0S21YOHhR?=
- =?utf-8?B?eHp1QlNqdXhUQXBoU0trb3lMTjFnKzJxZTVlNHFqSWM5emtNODNrZElHT21S?=
- =?utf-8?B?SUVOOEQ1N2xHMkxLOTE3NS9MZ2NIVHRCRkg1WkZXV0pXMEQvZ044WENGTm44?=
- =?utf-8?B?RTZueW9SSnVDcm52c254V2dqcTlHeXRYbjZVM2M1cklXTXp6M2RCcEZNcFRy?=
- =?utf-8?B?ekt6c2FTVjk0MysvL2NjazhvWklqc2NCUzd5R2ZKdDdYMy80L0YvbVVjNjBy?=
- =?utf-8?B?ejNGalVUYUdjV1hDUW1Ka3lZSzhBUHhUYXlnOFFyai9DNXYrQ2xuWm5HNzlk?=
- =?utf-8?B?QmxndVVzMUpHZ01NZU9XMVExZXF1S1o1TUg0SW5ld1pBSzFPdHJxTWgvNmpk?=
- =?utf-8?B?VVZGOEhNR0dLUHk1Vy9ycXhHbEpKcTBXcEQ0Y2NFR3pVNFhjbFY5VFVDVktv?=
- =?utf-8?B?ZFN5KzZiRi9uUFJFbVZqQy9oNXRoR2xCSE5nL2V5NEI1ZmNYSVkzdS9RVUZ3?=
- =?utf-8?B?UjRmVEJhSE9oSEtuQklvYmRiU2FPNXE1bFI0Um5TVzdZSGJSZHE4MHY3bCsy?=
- =?utf-8?B?WGdWOXRVN2pBUkVrekhlR3AxQXpsQVRaMXR1OTczZWwzNFVvS25lZ0hEemx1?=
- =?utf-8?B?UEZzSTdIMHJKazFNbWVZQ2lvTU5uUU1QelpGOHd2c2ZzMWdtandYQU5meCtM?=
- =?utf-8?B?bzllck1YZU1aY3kvQytOd1dKMVFmNzkrYW45VFVacDBmQ0NUaDBwUEZsRG93?=
- =?utf-8?B?cFhMYjk2SldjVHc0ekZzc2d4bVd2c09ZWXZPd2Y1UjAzUzROYVBWVWYvYkJM?=
- =?utf-8?B?U1ZzbG5ibWZyYlpGWVZ3OCtvTFB0bHdSUzE1dkFaMi9NOThkK1NLWFBxWElL?=
- =?utf-8?B?WkV4RE16MWxSUkQyc0dEdElvWWticUoyZElvd29jbkVNaExzTFJ6Um5lQi9S?=
- =?utf-8?B?b2tTeS8vNEhXNHA1R01sdUNTdVJlejBXbW9rSGF3NDZyS3ZVTVAxYXA0clpC?=
- =?utf-8?B?L1BOWkR5amtyKzhGdFN0UEIwYWhoc1MvTElaOHZtK0NIUWJsQ3d4MDJ6c2hC?=
- =?utf-8?B?Qi96RURGd1lxWkNVMXJxSUdzN2VOQ2dLMGxMWkYxTTZGNFYxN0NHTlJQa0FP?=
- =?utf-8?Q?ZS8TjaTr?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0673CEBBD92DA24185A54098E1AD15B8@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rDzeYmUsauvf9fFFKKtVnFTEM+b4VMq5GeF9eBkWImM=;
+        b=pyhv7Sn9tjilhg52ozeYvlEbfnQXB7Md49u4x4gq58cJy0ZsQHjhfSYvy8sUelLtQ/
+         gXNQcMp+4huhhcHxZxNdZhrsxZ0mWbvzmJ8WuopmJjtu4pn2Xjil4CoSjIlAaq3LwH4L
+         6rdkElJAdNZcUqweYPFtO5De1TrgHEFy0xi15Ap7/3kfWF61owa7ON3wNgrfvwWnQIKc
+         +Oq0QMdxJYWg/f88T/eTCFIxIMDhp/JhDhhWYSwo2NE+i1+w0qR4bSqm9+jDYxE34Zny
+         IoOWAz0STQdPDyF35BI2L8J+wS9MNC+qP4W/asOR30aWgWMndHhk/RZ+KPELqd7wHWoQ
+         Kn1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rDzeYmUsauvf9fFFKKtVnFTEM+b4VMq5GeF9eBkWImM=;
+        b=XeGLqFvGQyHunNGxAkTz2G/S2Nhn70XszYPIsME+DomWoS/t4fKVvipGTXIua+MNB5
+         cLRGlF9xge3fmFkt96PQU2aTlXx+l9j1hNk4LIE1OMeAP7L+cR5Rsql5nUgLB2DdatLi
+         Ofs05fTLTPPvFHNg9S7zq7mxajS0KKpuJpLxP2WTKouq9d1OSc+IxuLl98JcJBiRbFaE
+         W+nzpnHezhasqMMkSbYpIfDcIDgUnBL5GMVF9FkPXqG2Wl3l+hV7B+toeMk23qyk5kfc
+         enXoDlVBjzzjlCdoWBtMZM818Li+OGUx7tWbPcb+TKG/5Xnq2UO22vCSPTAs416UNQhn
+         3b+Q==
+X-Gm-Message-State: AOAM533bNI2NSAeyPEVTLPnJeiFkFRReX8TAvFVWFeoNwhBJ4LuMrx9F
+        pco/6GuwL0agoDUHYzRzVWc=
+X-Google-Smtp-Source: ABdhPJwKrxZGYd1yu/CEd45sjVLzp9yamuEkbkxhtmbD7Js8OkpT33isZdhhTppezUz9oAkgntGJRg==
+X-Received: by 2002:a1c:2003:: with SMTP id g3mr11488903wmg.136.1608457047037;
+        Sun, 20 Dec 2020 01:37:27 -0800 (PST)
+Received: from localhost.localdomain (188.red-81-44-87.dynamicip.rima-tde.net. [81.44.87.188])
+        by smtp.gmail.com with ESMTPSA id o8sm21288819wrm.17.2020.12.20.01.37.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 20 Dec 2020 01:37:26 -0800 (PST)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     sboyd@kernel.org
+Cc:     robh+dt@kernel.org, john@phrozen.org, tsbogend@alpha.franken.de,
+        gregkh@linuxfoundation.org, gch981213@gmail.com,
+        hackpascal@gmail.com, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, devel@driverdev.osuosl.org,
+        neil@brown.name
+Subject: [PATCH v5 0/6] MIPS: ralink: add CPU clock detection and clock driver for MT7621
+Date:   Sun, 20 Dec 2020 10:37:18 +0100
+Message-Id: <20201220093724.4906-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR04MB6527.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d879904-98c0-4e8a-ac75-08d8a4c568d5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Dec 2020 08:58:24.5917
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6R17piFvJAclMnC/M2V+OTSNIREdk219nYVs6DCCjWn1LFBWhrWHaQys1d4v5hr6u5gYSIrsj1ZoocUPA14DXA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB5067
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-T24gU2F0LCAyMDIwLTEyLTE5IGF0IDIxOjM1IC0wODAwLCBTdGVwaGVuIEJveWQgd3JvdGU6DQo+
-IFF1b3RpbmcgRGFtaWVuIExlIE1vYWwgKDIwMjAtMTItMTcgMDI6NTE6MjApDQo+ID4gT24gMjAy
-MC8xMi8xNyAxOTo0OSwgU3RlcGhlbiBCb3lkIHdyb3RlOg0KPiA+ID4gSSB3YXMgdGhpbmtpbmcg
-b2YganVzdCBhcHBseWluZyB0aGlzIERUIGJpbmRpbmcgcGF0Y2ggbm93IHNvIGl0IGdldHMNCj4g
-PiA+IG1lcmdlZCBpbnRvIHRoZSBuZXh0IC1yYzEuIFRoZW4gYW55b25lIGNhbiB1c2UgdGhlIGRl
-ZmluZXMgYmVjYXVzZQ0KPiA+ID4gdGhleSdyZSBpbiBMaW51cycgdHJlZSBhbmQgd2hlcmV2ZXIg
-dGhlIGR0cyBmaWxlIGVuZHMgdXAgY2FuIGp1c3QgYmFzZQ0KPiA+ID4gb24gLXJjMS4gSSBwcm9i
-YWJseSB3b24ndCBtZXJnZSB0aGUgY2xrIGRyaXZlciB1bnRpbCB2NS4xMiBnaXZlbiB0aGF0DQo+
-ID4gPiB0aGUgbWVyZ2Ugd2luZG93IGlzIG9wZW4uDQo+ID4gDQo+ID4gT0suIE1ha2VzIHNlbnNl
-LiBTZW5kaW5nIGp1c3QgdGhlIGNsayBiaW5kaW5nIHBhdGNoIHRoZW4sIHdpdGggdGhlIEsyMTBf
-Q0xLX0FDTEsNCj4gPiBjbG9jayBkZWZpbml0aW9uIGxlZnQgaW4uDQo+ID4gDQo+IA0KPiBEaWQg
-eW91IHNlbmQgaXQ/DQoNCkp1c3QgZGlkLiBNeSBhcG9sb2dpZXMgZm9yIHRoZSBkZWxheS4gQWxy
-ZWFkeSBpbiB2YWNhdGlvbiBtb2RlIDopDQoNCkhhcHB5IGhvbGlkYXlzICENCg0KLS0gDQpEYW1p
-ZW4gTGUgTW9hbA0KV2VzdGVybiBEaWdpdGFsDQo=
+This patchset ports CPU clock detection for MT7621 from OpenWrt
+and adds a complete clock plan for the mt7621 SOC.
+
+The documentation for this SOC only talks about two registers
+regarding to the clocks:
+* SYSC_REG_CPLL_CLKCFG0 - provides some information about boostrapped
+refclock. PLL and dividers used for CPU and some sort of BUS (AHB?).
+* SYSC_REG_CPLL_CLKCFG1 - a banch of gates to enable/disable clocks for
+all or some ip cores. 
+
+No documentation about a probably existent set of dividers for each ip
+core is included in the datasheets. So we cannot make anything better,
+AFAICT.
+
+Looking into driver code, and some openWRT patched there are
+another frequences which are used in some drivers (uart, sd...).
+According to all of this information the clock plan for this
+SoC is set as follows:
+ - Main top clock "xtal" from where all the rest of the world is
+   derived.
+ - CPU clock "cpu" derived from "xtal" frequencies and a bunch of
+   register reads and predividers.
+ - BUS clock "bus" derived from "cpu" and with (cpu / 4) MHz.
+ - Fixed clocks from "xtal":
+    * "50m": 50 MHz.
+    * "125m": 125 MHz.
+    * "150m": 150 MHz.
+    * "250m": 250 MHz.
+    * "270m": 270 MHz.
+
+We also have a buch of gate clocks with their parents:
+ - "hsdma": "150m"
+ - "fe": "250m"
+ - "sp_divtx": "270m"
+ - "timer": "50m"
+ - "pcm": "270m"
+ - "pio": "50m"
+ - "gdma": "bus"
+ - "nand": "125m"
+ - "i2c": "50m"
+ - "i2s": "270m"
+ - "spi": "bus"
+ - "uart1": "50m"
+ - "uart2": "50m"
+ - "uart3": "50m"
+ - "eth": "50m"
+ - "pcie0": "125m"
+ - "pcie1": "125m"
+ - "pcie2": "125m"
+ - "crypto": "250m"
+ - "shxc": "50m"
+
+There was a previous attempt of doing this here[0] but the author
+(Chuanhong Guo) did not wanted to make assumptions of a clock plan
+for the platform that time. It seems that now he has a better idea of
+how the clocks are dispossed for this SoC so he share code[1] where
+some frequencies and clock parents for the gates are coded from a
+real mediatek private clock plan.
+                                                
+I do really want this to be upstreamed so according to the comments
+in previous attempt[0] from Oleksij Rempel and the frequencies in
+code[1] I have tried to do this by myself.
+
+All of this patches have been tested in a GNUBee PC1 resulting in a
+working platform.
+
+Changes in v5:
+ - Avoid the use of syscon. All drivers of this platform are just using
+   platform operations defined in 'asm/mach-ralink/ralink_regs.h'. We also
+   need them for some PLL registers that are not in the sys control area.
+   Hence, since we must use this dependency avoid to define clock driver
+   as a child of the sysc node in the device tree and follow current
+   platform code style.
+ - Update bindings documentation to don't refer the syscon and make
+   remove 'clock-output-names' property from required ones.
+ - Use 'asm/mach-ralink/ralink_regs.h' platform read and write operations
+   instead of regmap from the syscon node.
+ - Remove 'mt7621_clk_provider' and directly declare 'clk_hw_onecell_data'
+   pointer in 'mt7621_clk_init' and pass from there into different register
+   functions. Remove pointers to 'mt7621_clk_provider' in the rest fo structs
+   used in this driver.
+ - Remove MHZ macro and just pass values directly in hertzs.
+ - Avoid 'CLK_IGNORE_UNUSED' flag for gates and add a new function called
+   'mt7621_prepare_enable_clocks' to prepare all of them to make clocks
+   referenced and don't affect current driver code.
+ - Remove COMPILE_TEST from Kconfig because of the use of especific arch
+   stuff.
+ - Fix commit message where a typo for "frequencies" word was present.
+ - Make use of parent_clk_data in 'CLK_BASE' macro.
+ - Remove MODULE_* macros from code since this is not a module.
+ - Remove not needed includes.
+ - Hardcode "xtal" as parent in FIXED macro.
+ - Change 'else if' clause into 'if' clause since a return statement was
+   being used in 'mt7621_xtal_recalc_rate'.
+
+ NOTES:
+   - Driver is still being declared using 'CLK_OF_DECLARE' for all the  
+     clocks. I have explored the possibility to make some of them available
+     afterwards using 'CLK_OF_DECLARE_DRIVER' for top clocks and the rest
+     using a platform driver. The resulting code was uglier since we only want
+     to use the same device tree node and the top clocks must be copied again
+     for the new platform register stuff to properly have a good hierarchy.
+     New globals needs to be introduced and in this particular case I don't
+     really see the benefits of doing in this way. I am totally ok to have all
+     the clocks registered at early stage since from other drivers perspective
+     we only really need to enable gates. So, I prefer to have them in that
+     way if it is not a real problem, of course.
+
+Changes in v4:
+ - Add Acked-by from Rob Herring for binding headers (PATCH 1/6).
+ - Convert bindings to not use syscon phandle and declare clock as
+   a child of the syscon node. Update device tree and binding doc
+   accordly.
+ - Make use of 'syscon_node_to_regmap' in driver code instead of
+   get this using the phandle function.
+ - Properly unregister clocks for the error path of the function
+   'mt7621_clk_init'.
+ - Include ARRAY_SIZE of fixed clocks in the 'count' to kzalloc
+   of 'clk_data'.
+ - Add new patch changing invalid vendor 'mtk' in favour of 'mediatek'
+   which is the one listed in 'vendor-prefixes.yaml'. Update mt7621 code
+   accordly. I have added this patch inside this series because clk
+   binding is referring syscon node and the string for that node was
+   with not listed vendor. Hence update and have all of this correct
+   in the same series.
+
+Changes in v3:
+ - Fix compilation warnings reported by kernel test robot because of
+   ignoring return values of 'of_clk_hw_register' in functions
+   'mt7621_register_top_clocks' and 'mt7621_gate_ops_init'.
+ - Fix dts file and binding documentation 'clock-output-names'.
+
+Changes in v2:
+ - Remove the following patches:
+   * dt: bindings: add mt7621-pll device tree binding documentation.
+   * MIPS: ralink: add clock device providing cpu/ahb/apb clock for mt7621.
+ - Move all relevant clock code to 'drivers/clk/ralink/clk-mt7621.c' and
+   unify there previous 'mt7621-pll' and 'mt7621-clk' into a unique driver
+   and binding 'mt7621-clk'.
+ - Driver is not a platform driver anymore and now make use of 'CLK_OF_DECLARE'
+   because we need clocks available in 'plat_time_init' before setting up
+   the timer for the GIC.
+ - Use new fixed clocks as parents for different gates and deriving from 'xtal'
+   using frequencies in[1].
+ - Adapt dts file and bindings header and documentation for new changes.
+ - Change MAINTAINERS file to only contains clk-mt7621.c code and
+   mediatek,mt7621-clk.yaml file.
+
+[0]: https://www.lkml.org/lkml/2019/7/23/1044
+[1]: https://github.com/981213/linux/commit/2eca1f045e4c3db18c941135464c0d7422ad8133
+
+Sergio Paracuellos (6):
+  dt-bindings: clock: add dt binding header for mt7621 clocks
+  dt: bindings: add mt7621-clk device tree binding documentation
+  clk: ralink: add clock driver for mt7621 SoC
+  staging: mt7621-dts: make use of new 'mt7621-clk'
+  staging: mt7621-dts: use valid vendor 'mediatek' instead of invalid
+    'mtk'
+  MAINTAINERS: add MT7621 CLOCK maintainer
+
+ .../bindings/clock/mediatek,mt7621-clk.yaml   |  52 +++
+ MAINTAINERS                                   |   6 +
+ arch/mips/ralink/mt7621.c                     |   6 +-
+ drivers/clk/Kconfig                           |   1 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/ralink/Kconfig                    |  14 +
+ drivers/clk/ralink/Makefile                   |   2 +
+ drivers/clk/ralink/clk-mt7621.c               | 411 ++++++++++++++++++
+ drivers/staging/mt7621-dts/gbpc1.dts          |  11 -
+ drivers/staging/mt7621-dts/mt7621.dtsi        |  85 ++--
+ include/dt-bindings/clock/mt7621-clk.h        |  41 ++
+ 11 files changed, 571 insertions(+), 59 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt7621-clk.yaml
+ create mode 100644 drivers/clk/ralink/Kconfig
+ create mode 100644 drivers/clk/ralink/Makefile
+ create mode 100644 drivers/clk/ralink/clk-mt7621.c
+ create mode 100644 include/dt-bindings/clock/mt7621-clk.h
+
+-- 
+2.25.1
+
