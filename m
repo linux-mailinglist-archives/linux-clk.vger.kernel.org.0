@@ -2,168 +2,78 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CE22DFD3D
-	for <lists+linux-clk@lfdr.de>; Mon, 21 Dec 2020 16:07:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 100B12DFD97
+	for <lists+linux-clk@lfdr.de>; Mon, 21 Dec 2020 16:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725826AbgLUPHW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 21 Dec 2020 10:07:22 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:42747 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725849AbgLUPHV (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 21 Dec 2020 10:07:21 -0500
-Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1krMlg-0007Vy-AE; Mon, 21 Dec 2020 16:06:36 +0100
-Received: from mtr by dude03.red.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1krMle-003Abg-VG; Mon, 21 Dec 2020 16:06:34 +0100
-From:   Michael Tretter <m.tretter@pengutronix.de>
-To:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Cc:     rajanv@xilinx.com, tejasp@xilinx.com, dshah@xilinx.com,
-        rvisaval@xilinx.com, michals@xilinx.com, kernel@pengutronix.de,
-        mturquette@baylibre.com, sboyd@kernel.org
-Subject: [PATCH v2 15/15] clk: xilinx: move xlnx_vcu clock driver from soc
-Date:   Mon, 21 Dec 2020 16:06:34 +0100
-Message-Id: <20201221150634.755673-16-m.tretter@pengutronix.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201221150634.755673-1-m.tretter@pengutronix.de>
-References: <20201221150634.755673-1-m.tretter@pengutronix.de>
+        id S1725780AbgLUPcs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 21 Dec 2020 10:32:48 -0500
+Received: from retiisi.eu ([95.216.213.190]:52220 "EHLO hillosipuli.retiisi.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725497AbgLUPcs (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 21 Dec 2020 10:32:48 -0500
+Received: from lanttu.localdomain (lanttu-e.localdomain [192.168.1.64])
+        by hillosipuli.retiisi.eu (Postfix) with ESMTP id E1FCB634C87;
+        Mon, 21 Dec 2020 17:29:57 +0200 (EET)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH 1/1] Documentation: media: Document clock handling in camera sensor drivers
+Date:   Mon, 21 Dec 2020 17:25:29 +0200
+Message-Id: <20201221152529.25417-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::39
-X-SA-Exim-Mail-From: mtr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The xlnx_vcu driver is actually a clock controller driver which provides
-clocks that can be used by a driver for the encoder/decoder units. There
-is no reason to keep this driver in soc. Move the driver to clk.
+Document pratices of handling clocks in camera sensor drivers on both DT
+and ACPI.
 
-NOTE: The register mapping actually contains registers for AXI
-performance monitoring, but these are not used by the driver.
-
-Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
-Changelog:
+ .../driver-api/media/camera-sensor.rst        | 20 ++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
-v2:
-- New patch
----
- drivers/clk/Kconfig                    |  1 +
- drivers/clk/Makefile                   |  1 +
- drivers/clk/xilinx/Kconfig             | 19 +++++++++++++++++++
- drivers/clk/xilinx/Makefile            |  2 ++
- drivers/{soc => clk}/xilinx/xlnx_vcu.c |  0
- drivers/soc/xilinx/Kconfig             | 17 -----------------
- drivers/soc/xilinx/Makefile            |  1 -
- 7 files changed, 23 insertions(+), 18 deletions(-)
- create mode 100644 drivers/clk/xilinx/Kconfig
- create mode 100644 drivers/clk/xilinx/Makefile
- rename drivers/{soc => clk}/xilinx/xlnx_vcu.c (100%)
-
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index c715d4681a0b..f4b13e7c84de 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -383,6 +383,7 @@ source "drivers/clk/tegra/Kconfig"
- source "drivers/clk/ti/Kconfig"
- source "drivers/clk/uniphier/Kconfig"
- source "drivers/clk/x86/Kconfig"
-+source "drivers/clk/xilinx/Kconfig"
- source "drivers/clk/zynqmp/Kconfig"
+diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
+index ffb0cad8137a..4e8e92fdd8b4 100644
+--- a/Documentation/driver-api/media/camera-sensor.rst
++++ b/Documentation/driver-api/media/camera-sensor.rst
+@@ -15,7 +15,7 @@ Camera sensors have an internal clock tree including a PLL and a number of
+ divisors. The clock tree is generally configured by the driver based on a few
+ input parameters that are specific to the hardware:: the external clock frequency
+ and the link frequency. The two parameters generally are obtained from system
+-firmware. No other frequencies should be used in any circumstances.
++firmware. **No other frequencies should be used in any circumstances.**
  
- endif
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index da8fcf147eb1..44477b84acef 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -121,6 +121,7 @@ obj-y					+= versatile/
- ifeq ($(CONFIG_COMMON_CLK), y)
- obj-$(CONFIG_X86)			+= x86/
- endif
-+obj-y					+= xilinx/
- obj-$(CONFIG_ARCH_ZX)			+= zte/
- obj-$(CONFIG_ARCH_ZYNQ)			+= zynq/
- obj-$(CONFIG_COMMON_CLK_ZYNQMP)         += zynqmp/
-diff --git a/drivers/clk/xilinx/Kconfig b/drivers/clk/xilinx/Kconfig
-new file mode 100644
-index 000000000000..5224114176ed
---- /dev/null
-+++ b/drivers/clk/xilinx/Kconfig
-@@ -0,0 +1,19 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+config XILINX_VCU
-+	tristate "Xilinx VCU logicoreIP Init"
-+	depends on HAS_IOMEM && COMMON_CLK
-+	select REGMAP_MMIO
-+	help
-+	  Provides the driver to enable and disable the isolation between the
-+	  processing system and programmable logic part by using the logicoreIP
-+	  register set. This driver also configures the frequency based on the
-+	  clock information from the logicoreIP register set.
-+
-+	  If you say yes here you get support for the logicoreIP.
-+
-+	  If unsure, say N.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called xlnx_vcu.
-+
-diff --git a/drivers/clk/xilinx/Makefile b/drivers/clk/xilinx/Makefile
-new file mode 100644
-index 000000000000..dee8fd51e303
---- /dev/null
-+++ b/drivers/clk/xilinx/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+obj-$(CONFIG_XILINX_VCU)	+= xlnx_vcu.o
-diff --git a/drivers/soc/xilinx/xlnx_vcu.c b/drivers/clk/xilinx/xlnx_vcu.c
-similarity index 100%
-rename from drivers/soc/xilinx/xlnx_vcu.c
-rename to drivers/clk/xilinx/xlnx_vcu.c
-diff --git a/drivers/soc/xilinx/Kconfig b/drivers/soc/xilinx/Kconfig
-index 9fe703772e5a..53af9115dc31 100644
---- a/drivers/soc/xilinx/Kconfig
-+++ b/drivers/soc/xilinx/Kconfig
-@@ -1,23 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- menu "Xilinx SoC drivers"
+ The reason why the clock frequencies are so important is that the clock signals
+ come out of the SoC, and in many cases a specific frequency is designed to be
+@@ -23,6 +23,24 @@ used in the system. Using another frequency may cause harmful effects
+ elsewhere. Therefore only the pre-determined frequencies are configurable by the
+ user.
  
--config XILINX_VCU
--	tristate "Xilinx VCU logicoreIP Init"
--	depends on HAS_IOMEM && COMMON_CLK
--	select REGMAP_MMIO
--	help
--	  Provides the driver to enable and disable the isolation between the
--	  processing system and programmable logic part by using the logicoreIP
--	  register set. This driver also configures the frequency based on the
--	  clock information from the logicoreIP register set.
--
--	  If you say yes here you get support for the logicoreIP.
--
--	  If unsure, say N.
--
--	  To compile this driver as a module, choose M here: the
--	  module will be called xlnx_vcu.
--
- config ZYNQMP_POWER
- 	bool "Enable Xilinx Zynq MPSoC Power Management driver"
- 	depends on PM && ZYNQMP_FIRMWARE
-diff --git a/drivers/soc/xilinx/Makefile b/drivers/soc/xilinx/Makefile
-index f66bfea5de17..9854e6f6086b 100644
---- a/drivers/soc/xilinx/Makefile
-+++ b/drivers/soc/xilinx/Makefile
-@@ -1,4 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
--obj-$(CONFIG_XILINX_VCU)	+= xlnx_vcu.o
- obj-$(CONFIG_ZYNQMP_POWER)	+= zynqmp_power.o
- obj-$(CONFIG_ZYNQMP_PM_DOMAINS) += zynqmp_pm_domains.o
++ACPI
++~~~~
++
++Read the "clock-frequency" _DSD property to denote the frequency. The driver can
++rely this frequency being used.
++
++Devicetree
++~~~~~~~~~~
++
++The currently preferred way to achieve this is using "assigned-clock-rates"
++property. See Documentation/devicetree/bindings/clock/clock-bindings.txt for
++more information.
++
++This approach has the drawback that there's no guarantee that the frequency
++hasn't been modified directly or indirectly by another driver, or supported by
++the board's clock tree to begin with. Changes to the Common Clock Framework API
++are required to ensure reliability.
++
+ Frame size
+ ----------
+ 
 -- 
-2.20.1
+2.29.2
 
