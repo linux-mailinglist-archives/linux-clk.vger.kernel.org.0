@@ -2,141 +2,120 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F03AB2E323D
-	for <lists+linux-clk@lfdr.de>; Sun, 27 Dec 2020 18:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D82BC2E347B
+	for <lists+linux-clk@lfdr.de>; Mon, 28 Dec 2020 07:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbgL0Rm6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 27 Dec 2020 12:42:58 -0500
-Received: from www.zeus03.de ([194.117.254.33]:46826 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726391AbgL0Rm6 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 27 Dec 2020 12:42:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=3CE4J0HHpKGylm
-        34QYPJITOnkbK/t0f9thaCmJ/Z/4s=; b=y+PYDR7ZFMGD4zaKL1ZgJhlngq5d3V
-        KFzMnsz8P59PAKj3mlKRuOUEYTYxtP4UsLkqc7c3bLJU4B0fTKJCqOg9d6kScj/j
-        JSsdITTfBvSFx27QNx3s8Ww9nHcA5jV0FIOcG53uuAqK6a9U0zL/UpdY2X0B7Pau
-        ghMOylg5FpKU8=
-Received: (qmail 1557123 invoked from network); 27 Dec 2020 18:42:15 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 27 Dec 2020 18:42:15 +0100
-X-UD-Smtp-Session: l3s3148p1@hsOMrXW3Vp5UhsuJ
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        id S1727864AbgL1GXk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 28 Dec 2020 01:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728003AbgL1GXj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 28 Dec 2020 01:23:39 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B604C061799
+        for <linux-clk@vger.kernel.org>; Sun, 27 Dec 2020 22:22:59 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id lj6so5450894pjb.0
+        for <linux-clk@vger.kernel.org>; Sun, 27 Dec 2020 22:22:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=bBQaI4eroTRmm0x4+2Q+qEFawwLNxWB2aEwv9ebwMhs=;
+        b=cPdP7kkh/2GQAzg0cOAkSgg+4Z/Q6YFPDrT8cPEIWgPQcde3qUGxURpjfO6E1bHDX5
+         X3avIcaIwpZe0l5RjuLs76tegwm2PWF2nIR/3NFqEyoyL7mMQKM38y/oXu8UPBoXDCBe
+         owAlPnx2QEhE97fGYccJS79yI+KQx2U4UXdsmGweTOUwrLsDu9pmHU4Huwoutx9pTsoP
+         8diXqSx2xAX1gQQbPKkftl20krrAxVSUChxQV7zKgsn7WSoMJGr4Sq7KmuEZCIbsqfdm
+         KKxISWBxSfoIxY6pIT71NfdMH7ym7iMSKRQNzxwpLFNAeRNw43wKsq5DXii3GeV4pWs7
+         Va4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=bBQaI4eroTRmm0x4+2Q+qEFawwLNxWB2aEwv9ebwMhs=;
+        b=h30f8LCXgMWwrQJ0U/D1u4nJIFemCLWV+Pv81wbNb6GogimQXAs078zUSaGgFdqVIU
+         Wa7DcWHYNHKpYBnsI7AZ7tp2HbnfcNIcTN0J15wmMTXaSPbg/cNKBdOqNj1eP/x1d0vj
+         uk7bZMS3wHrcz9GrrrdLa1f+kfbHfleU23+CQ1+ybClsfV6dHW9YUR7tsiJ1S4GNQesR
+         fd5Ey+dpEyg4jgg6XebiHpZ4jRoKhrDohR4adqK8vGiiT0w5wZrzCK4+gsv4TVpzJZBk
+         OYkNBnIJ0B/SG1N1BW96TsTpKqAxAZq7l/uBIZj99vQUpMCKIfxkG5SNCtfyfUdJnd6Z
+         wMSQ==
+X-Gm-Message-State: AOAM532gFJDOd0UxGb01mV8uz5eUeKdTMuGVZtl3NMwvWoNvd4JYpDgu
+        EVpQh+QBJH0AySwoPt8yymVOIg==
+X-Google-Smtp-Source: ABdhPJz34QQgPHpCVQubAmFzTB4NyEMYwCvkashDNlLU+9Me4PGHkK6SRqtiBSWyGNrVtvJ0I4RJeA==
+X-Received: by 2002:a17:902:7291:b029:dc:c69:e985 with SMTP id d17-20020a1709027291b02900dc0c69e985mr20695263pll.33.1609136577345;
+        Sun, 27 Dec 2020 22:22:57 -0800 (PST)
+Received: from localhost ([122.172.20.109])
+        by smtp.gmail.com with ESMTPSA id q70sm13313850pja.39.2020.12.27.22.22.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 27 Dec 2020 22:22:56 -0800 (PST)
+Date:   Mon, 28 Dec 2020 11:52:54 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Nicolas Chauvet <kwizart@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4/6] clk: renesas: r8a779a0: add SDHI support
-Date:   Sun, 27 Dec 2020 18:41:58 +0100
-Message-Id: <20201227174202.40834-5-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201227174202.40834-1-wsa+renesas@sang-engineering.com>
-References: <20201227174202.40834-1-wsa+renesas@sang-engineering.com>
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v2 11/48] opp: Add dev_pm_opp_find_level_ceil()
+Message-ID: <20201228062254.ui727ka2ftijov4m@vireshk-i7>
+References: <20201217180638.22748-1-digetx@gmail.com>
+ <20201217180638.22748-12-digetx@gmail.com>
+ <20201222064253.x7vsurh7q5k7qzb5@vireshk-i7>
+ <fd7b9f42-d0a7-45eb-2a17-d46779011c58@gmail.com>
+ <20201223041931.klnppy4fu3sdgtsz@vireshk-i7>
+ <f00e0c74-8d9a-d3d3-81bb-3ac25a74175d@gmail.com>
+ <20201224064339.zngidobhstnlu2a3@vireshk-i7>
+ <780db190-d93d-3bca-4819-790010f82c62@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <780db190-d93d-3bca-4819-790010f82c62@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-We use the shiny new CPG library for that.
+On 24-12-20, 16:00, Dmitry Osipenko wrote:
+> In a device driver I want to set PD to the lowest performance state by
+> removing the performance vote when dev_pm_opp_set_rate(dev, 0) is
+> invoked by the driver.
+> 
+> The OPP core already does this, but if OPP levels don't start from 0 in
+> a device-tree for PD, then it currently doesn't work since there is a
+> need to get a rounded-up performance state because
+> dev_pm_opp_set_voltage() takes OPP entry for the argument (patches 9 and
+> 28).
+> 
+> The PD powering off and performance-changes are separate from each other
+> in the GENPD core. The GENPD core automatically turns off domain when
+> all devices within the domain are suspended by system-suspend or RPM.
+> 
+> The performance state of a power domain is controlled solely by a device
+> driver. GENPD core only aggregates the performance requests, it doesn't
+> change the performance state of a domain by itself when device is
+> suspended or resumed, IIUC this is intentional. And I want to put domain
+> into lowest performance state when device is suspended.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
- drivers/clk/renesas/Kconfig             |  1 +
- drivers/clk/renesas/r8a779a0-cpg-mssr.c | 17 +++++++++++++++--
- 2 files changed, 16 insertions(+), 2 deletions(-)
+Right, so if you really want to just drop the performance vote, then with a
+value of 0 for the performance state the call will reach to your genpd's
+callback ->set_performance_state(). Just as dev_pm_opp_set_rate() accepts the
+frequency to be 0, I would expect dev_pm_opp_set_rate() to accept opp argument
+as NULL and in that case set voltage to 0 and do regulator_disable() as well.
+Won't that work better than going for the lowest voltage ?
 
-diff --git a/drivers/clk/renesas/Kconfig b/drivers/clk/renesas/Kconfig
-index 7e788fee6b9f..607e64a17d72 100644
---- a/drivers/clk/renesas/Kconfig
-+++ b/drivers/clk/renesas/Kconfig
-@@ -148,6 +148,7 @@ config CLK_R8A77995
- 
- config CLK_R8A779A0
- 	bool "R-Car V3U clock support" if COMPILE_TEST
-+	select CLK_RCAR_CPG_LIB
- 	select CLK_RENESAS_CPG_MSSR
- 
- config CLK_R9A06G032
-diff --git a/drivers/clk/renesas/r8a779a0-cpg-mssr.c b/drivers/clk/renesas/r8a779a0-cpg-mssr.c
-index 5be70a6a7904..d85c31a465e1 100644
---- a/drivers/clk/renesas/r8a779a0-cpg-mssr.c
-+++ b/drivers/clk/renesas/r8a779a0-cpg-mssr.c
-@@ -25,6 +25,7 @@
- 
- #include <dt-bindings/clock/r8a779a0-cpg-mssr.h>
- 
-+#include "rcar-cpg-lib.h"
- #include "renesas-cpg-mssr.h"
- 
- enum rcar_r8a779a0_clk_types {
-@@ -32,6 +33,7 @@ enum rcar_r8a779a0_clk_types {
- 	CLK_TYPE_R8A779A0_PLL1,
- 	CLK_TYPE_R8A779A0_PLL2X_3X,	/* PLL[23][01] */
- 	CLK_TYPE_R8A779A0_PLL5,
-+	CLK_TYPE_R8A779A0_SD,
- 	CLK_TYPE_R8A779A0_MDSEL,	/* Select parent/divider using mode pin */
- 	CLK_TYPE_R8A779A0_OSC,	/* OSC EXTAL predivider and fixed divider */
- };
-@@ -82,6 +84,9 @@ enum clk_ids {
- 	DEF_BASE(_name, _id, CLK_TYPE_R8A779A0_PLL2X_3X, CLK_MAIN, \
- 		 .offset = _offset)
- 
-+#define DEF_SD(_name, _id, _parent, _offset)   \
-+	DEF_BASE(_name, _id, CLK_TYPE_R8A779A0_SD, _parent, .offset = _offset)
-+
- #define DEF_MDSEL(_name, _id, _md, _parent0, _div0, _parent1, _div1) \
- 	DEF_BASE(_name, _id, CLK_TYPE_R8A779A0_MDSEL,	\
- 		 (_parent0) << 16 | (_parent1),		\
-@@ -113,6 +118,7 @@ static const struct cpg_core_clk r8a779a0_core_clks[] __initconst = {
- 	DEF_FIXED(".pll5_div4",		CLK_PLL5_DIV4,	CLK_PLL5_DIV2,	2, 1),
- 	DEF_FIXED(".s1",		CLK_S1,		CLK_PLL1_DIV2,	2, 1),
- 	DEF_FIXED(".s3",		CLK_S3,		CLK_PLL1_DIV2,	4, 1),
-+	DEF_FIXED(".sdsrc",		CLK_SDSRC,	CLK_PLL5_DIV4,	1, 1),
- 	DEF_RATE(".oco",		CLK_OCO,	32768),
- 
- 	/* Core Clock Outputs */
-@@ -139,6 +145,8 @@ static const struct cpg_core_clk r8a779a0_core_clks[] __initconst = {
- 	DEF_FIXED("cbfusa",	R8A779A0_CLK_CBFUSA,	CLK_EXTAL,	2, 1),
- 	DEF_FIXED("cp",		R8A779A0_CLK_CP,	CLK_EXTAL,	2, 1),
- 
-+	DEF_SD("sd0",		R8A779A0_CLK_SD0,	CLK_SDSRC,	0x870),
-+
- 	DEF_DIV6P1("mso",	R8A779A0_CLK_MSO,	CLK_PLL5_DIV4,	0x87c),
- 	DEF_DIV6P1("canfd",	R8A779A0_CLK_CANFD,	CLK_PLL5_DIV4,	0x878),
- 	DEF_DIV6P1("csi0",	R8A779A0_CLK_CSI0,	CLK_PLL5_DIV4,	0x880),
-@@ -169,6 +177,7 @@ static const struct mssr_mod_clk r8a779a0_mod_clks[] __initconst = {
- 	DEF_MOD("scif1",	703,	R8A779A0_CLK_S1D8),
- 	DEF_MOD("scif3",	704,	R8A779A0_CLK_S1D8),
- 	DEF_MOD("scif4",	705,	R8A779A0_CLK_S1D8),
-+	DEF_MOD("sdhi0",	706,	R8A779A0_CLK_SD0),
- 	DEF_MOD("vin00",	730,	R8A779A0_CLK_S1D1),
- 	DEF_MOD("vin01",	731,	R8A779A0_CLK_S1D1),
- 	DEF_MOD("vin02",	800,	R8A779A0_CLK_S1D1),
-@@ -208,8 +217,6 @@ static const struct mssr_mod_clk r8a779a0_mod_clks[] __initconst = {
- 	DEF_MOD("pfc3",		918,	R8A779A0_CLK_CP),
- };
- 
--static spinlock_t cpg_lock;
--
- static const struct rcar_r8a779a0_cpg_pll_config *cpg_pll_config __initdata;
- static unsigned int cpg_clk_extalr __initdata;
- static u32 cpg_mode __initdata;
-@@ -248,6 +255,12 @@ static struct clk * __init rcar_r8a779a0_cpg_clk_register(struct device *dev,
- 		div = cpg_pll_config->pll5_div;
- 		break;
- 
-+	case CLK_TYPE_R8A779A0_SD:
-+		return cpg_sd_clk_register(core->name, base, core->offset,
-+					   __clk_get_name(parent), notifiers,
-+					   false);
-+		break;
-+
- 	case CLK_TYPE_R8A779A0_MDSEL:
- 		/*
- 		 * Clock selectable between two parents and two fixed dividers
 -- 
-2.28.0
-
+viresh
