@@ -2,109 +2,93 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7A92E9485
-	for <lists+linux-clk@lfdr.de>; Mon,  4 Jan 2021 13:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC3D2E960D
+	for <lists+linux-clk@lfdr.de>; Mon,  4 Jan 2021 14:30:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726098AbhADMGA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 4 Jan 2021 07:06:00 -0500
-Received: from inva021.nxp.com ([92.121.34.21]:46640 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726026AbhADMGA (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 4 Jan 2021 07:06:00 -0500
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id BA36C201F31;
-        Mon,  4 Jan 2021 13:05:12 +0100 (CET)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id ACE1F200F26;
-        Mon,  4 Jan 2021 13:05:12 +0100 (CET)
-Received: from localhost (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 98FA820347;
-        Mon,  4 Jan 2021 13:05:12 +0100 (CET)
-Date:   Mon, 4 Jan 2021 14:05:12 +0200
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] Revert "clk: imx: fix composite peripheral flags"
-Message-ID: <20210104120512.gmi2zjz7dzhjussp@fsr-ub1664-175>
-References: <20201231142149.26062-1-martin.kepplinger@puri.sm>
- <CAOMZO5Bq5Qs90iZQTpouv5wW_xf0CQcP-i-+c-Jp-_Ftvhknnw@mail.gmail.com>
+        id S1726855AbhADNaQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 4 Jan 2021 08:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726666AbhADN3x (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 4 Jan 2021 08:29:53 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27912C061794;
+        Mon,  4 Jan 2021 05:29:13 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id t30so32196883wrb.0;
+        Mon, 04 Jan 2021 05:29:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RDDJAO12mWdz81SfN4SE3sY3sSE4phZfV6IOzBfLb7o=;
+        b=AyaxGkK9oSW0SK9rGSfs/YkEz0nbaZL+5Dwqi481jU7zFdo7XjalMR6LACJzF0XoyX
+         oo1MnoovVrTOpSQZ7R8ZKfGgMh4LuWrBMerzLzMMsueH8JzpoRl86ngySyP9L2KGFYXK
+         ayOyuYQDqd5fik7dZ8rth5yW1Qxd4sU5utVUjK+5z5eJzI7zCFbHbUM+InVT6XAl/bvo
+         RuAnvBo06ICfWVinxhaNREti7PGMLSBpstoEB5r/xxGNHuHScBHC7QJtROeQIuV9kB76
+         2WbadKjxcRFYqadH7JHItdR77FJDpv8J+m70xc/1WfuyfvyZAMnhoRgTQtiLChJeZfs1
+         oIyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=RDDJAO12mWdz81SfN4SE3sY3sSE4phZfV6IOzBfLb7o=;
+        b=qM7iA+XMgHW9mNsviqBmKLWmWODENjOiihYu79GBD7IlWkte+iISAWeytfvFrXnH3v
+         hvfAvz35sRwefVOu3OeQ5vXVmtN2VqcB+cUA2inCi525Zcg14pigfTyedO+oK8rrLm4p
+         to7Zki4/35VwTZOuUEqSNRqPVHbY7dR0hHJzIcNzppR32SfIqJal0JnIGp0WWX5MY683
+         sM2C/bIJ585g22x302il4LSi7070O92ZGOdTmD7fPGTGtNxsvalhPGuJCxytPafBUL+3
+         kuiyBmh5b4I4Q7Yf+DbhSGG1bUD9NFCnwzMylTOpfwq9B60mCQCdKk+vyFfFbEkatj7n
+         /9Hg==
+X-Gm-Message-State: AOAM532fybqUb1t+ul/M4pE6zOcRqy0Q662h0EcTPjsYAc2tH3iJ9lsG
+        5gfkND8v7at9Ff620anuOVQ=
+X-Google-Smtp-Source: ABdhPJz/siaI9EgHKtZAcRboER3/TG/xd8msE9THKkBWgr54MlNu7TX7+/jsGA0gUsDV15EpzqOcfA==
+X-Received: by 2002:a5d:674b:: with SMTP id l11mr83048697wrw.247.1609766951899;
+        Mon, 04 Jan 2021 05:29:11 -0800 (PST)
+Received: from localhost.localdomain (p200300f13724fd00428d5cfffeb99db8.dip0.t-ipconnect.de. [2003:f1:3724:fd00:428d:5cff:feb9:9db8])
+        by smtp.googlemail.com with ESMTPSA id c4sm99916521wrw.72.2021.01.04.05.29.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Jan 2021 05:29:11 -0800 (PST)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     jbrunet@baylibre.com, linux-amlogic@lists.infradead.org
+Cc:     mturquette@baylibre.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH 0/5] clk: meson8b: video clock tree updates
+Date:   Mon,  4 Jan 2021 14:28:01 +0100
+Message-Id: <20210104132806.720558-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOMZO5Bq5Qs90iZQTpouv5wW_xf0CQcP-i-+c-Jp-_Ftvhknnw@mail.gmail.com>
-User-Agent: NeoMutt/20180622
-X-Virus-Scanned: ClamAV using ClamSMTP
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 20-12-31 17:33:40, Fabio Estevam wrote:
-> Hi Martin,
-> 
-> On Thu, Dec 31, 2020 at 11:22 AM Martin Kepplinger
-> <martin.kepplinger@puri.sm> wrote:
-> >
-> > This reverts commit 936c383673b9e3007432f17140ac62de53d87db9.
-> >
-> > It breaks clock reparenting via devfreq on the imx8mq used in the
-> > Librem 5 phone. When switching dram frequency (which worked before)
-> > the system now hangs after this where the dram_apb clock cannot be
-> > set:
-> >
-> > [  129.391755] imx8m-ddrc-devfreq 3d400000.memory-controller: failed to
-> > set dram_apb parent: -16
-> > [  129.391959] imx8m-ddrc-devfreq 3d400000.memory-controller: ddrc
-> > failed freq switch to 25000000 from 800000000: error -16. now at 25000000
-> > [  129.406133] imx8m-ddrc-devfreq 3d400000.memory-controller: failed to
-> > update frequency from PM QoS (-16)
-> 
-> I am wondering whether IMX8MQ_CLK_DRAM_ALT should also be marked as
-> CLK_IS_CRITICAL.
-> 
+Hi Jerome,
 
-Hmm, the way the DRAM clocks are right registered right now is a real mess.
-The DRAM clocks on i.MX8M are changed in TF-A, but the kernel still needs to
-register them to keep track of the clock tree.
+this is a small set of updates for the video clocks. I have verified
+these patches to be able to generate the video clocks for 1080P, 720P
+and a few other video modes.
 
-Martin, I already have a patchset waiting to be shipped which doesn't 
-only fix the 8MQ, but all the 8M platforms. Unfortunately, I haven't had the time
-to work on that in the last couple of weeks but I intend to switch back to it soon.
+The main "mystery" is still how the rate doubling happens. However,
+that doesn't affect these patches as with this rate doubling the
+"hdmi_pll_lvds_out" (which is a parent of this tree) is doubled as
+well. That's why I am sending these patches because even with this
+unknown part about rate doubling they will still be valid once that
+unknown part has been figured out.
 
-Fabio, marking the DRAM clocks as critical will not allow the set_parent to be done,
-as CLK_IS_CRITICAL flag and set_parent do not go together. As of now the devfreq
-tries to reparent to be consistent with TF-A configuration.
 
-My approach here was to make the DRAM clocks read-only. This means adding some 
-stuff in the clock core subsystem too.
 
-> Could you please try the following change without the revert?
-> 
-> --- a/drivers/clk/imx/clk-imx8mq.c
-> +++ b/drivers/clk/imx/clk-imx8mq.c
-> @@ -458,7 +458,7 @@ static int imx8mq_clocks_probe(struct platform_device *pdev)
->          * Mark with GET_RATE_NOCACHE to always read div value from hardware
->          */
->         hws[IMX8MQ_CLK_DRAM_CORE] =
-> imx_clk_hw_mux2_flags("dram_core_clk", base + 0x9800, 24, 1,
-> imx8mq_dram_core_sels, ARRAY_SIZE(imx8mq_dram_core_sels),
-> CLK_IS_CRITICAL);
-> -       hws[IMX8MQ_CLK_DRAM_ALT] =
-> __imx8m_clk_hw_composite("dram_alt", imx8mq_dram_alt_sels, base +
-> 0xa000, CLK_GET_RATE_NOCACHE);
-> +       hws[IMX8MQ_CLK_DRAM_ALT] =
-> __imx8m_clk_hw_composite("dram_alt", imx8mq_dram_alt_sels, base +
-> 0xa000, CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
->         hws[IMX8MQ_CLK_DRAM_APB] =
-> __imx8m_clk_hw_composite("dram_apb", imx8mq_dram_apb_sels, base +
-> 0xa080, CLK_IS_CRITICAL | CLK_GET_RATE_NOCACHE);
-> 
-> Thanks
+Martin Blumenstingl (5):
+  clk: meson: meson8b: don't use MPLL1 as parent of vclk_in_sel
+  clk: meson: meson8b: define the rate range for the hdmi_pll_dco clock
+  clk: meson: meson8b: add the video clock divider tables
+  clk: meson: meson8b: add the HDMI PLL M/N parameters
+  clk: meson: meson8b: add the vid_pll_lvds_en gate clock
+
+ drivers/clk/meson/meson8b.c | 79 ++++++++++++++++++++++++++++++++++++-
+ drivers/clk/meson/meson8b.h |  3 +-
+ 2 files changed, 79 insertions(+), 3 deletions(-)
+
+-- 
+2.30.0
+
