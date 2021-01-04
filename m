@@ -2,280 +2,137 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2CA2E918A
-	for <lists+linux-clk@lfdr.de>; Mon,  4 Jan 2021 09:13:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CA702E91C4
+	for <lists+linux-clk@lfdr.de>; Mon,  4 Jan 2021 09:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726196AbhADINQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 4 Jan 2021 03:13:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726289AbhADINP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 4 Jan 2021 03:13:15 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5610C0617B9
-        for <linux-clk@vger.kernel.org>; Mon,  4 Jan 2021 00:12:04 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id m6so16018460pfm.6
-        for <linux-clk@vger.kernel.org>; Mon, 04 Jan 2021 00:12:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=uOArHEk74zxp/6R3wPGuqn1ZRRiW7s9F52OXIpe5TrE=;
-        b=FivOHfrboOpdeFtFAuYKXJVPL2wZyskFjtEDu8GWnsIjVE6dSwfH03r+nk+7Xtoa6F
-         6ZwclVjWES1UGDfajr7p08X6qcizFw+Ib0P8DHA3Taou3RMa58vj3+UPBpusFZJ+Lw5n
-         7zINpXJR/eyDjNjt9lC59pndDtNM5eAXNbmwh9qsGV/80jgmFH83kYY8QW4LSUstrLuR
-         nadTGVt2/D/pT0lrkGrAOGLWBSWCQ1kjAseIGkZhLpFudivTwyyFNgTXXa6fmHQDtUSa
-         JdRNnUTkCwe97d07XW/NvJZzo97/F5YKnAJuwpfpUyrRIpS9ExiMRldfwIyTRrpuZSqw
-         CsxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=uOArHEk74zxp/6R3wPGuqn1ZRRiW7s9F52OXIpe5TrE=;
-        b=eOi0ErzfEecH7d42r5X21rxesmieeOHUlrEnYhPabZr8NkhO456BjMM/rne34yWqOX
-         nYeojjX03RL3IQReHkrL0odm+xafgrjevLSUNQOhxDDUeHHy5pVZ8Uejf6P43rjjBsCX
-         SddzRDJrrToZXfeasizdCTcdGfUzXjLkQRMoicZ6B1zFzaEMD9RaiU2vLpwAbyKgF/o4
-         LK6LmqlXFnf8+AZYVbd47NuIDiHdJV0aJmvI7+RlH6DH2q+MmtY9sa07HsMLvL9xFRo5
-         s0VwGtkBO3qTGE9JnV9z3iVgzAcp5Lunnaz/ktwwGXWa5PDleD/UEFaDzpo4Zplvi6hy
-         iC+Q==
-X-Gm-Message-State: AOAM530FTTcC4LnwWT2ds9xb975ZvFoh3+TEH4JNht4gZDvTG7bi0Utv
-        x/QmzPC4fgzT9EIU6XIX3QCy
-X-Google-Smtp-Source: ABdhPJxE3BqIJsJ8naQa/DIb8BS95/0zYLM4AFPVp6E3ZKDMwBqc7aVLk3bBVyovMIoie2bt7o/XUA==
-X-Received: by 2002:a63:5924:: with SMTP id n36mr58899261pgb.9.1609747924240;
-        Mon, 04 Jan 2021 00:12:04 -0800 (PST)
-Received: from localhost.localdomain ([103.77.37.160])
-        by smtp.gmail.com with ESMTPSA id n7sm55051339pfn.141.2021.01.04.00.11.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jan 2021 00:12:03 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        jassisinghbrar@gmail.com
-Cc:     viresh.kumar@linaro.org, ulf.hansson@linaro.org,
-        bjorn.andersson@linaro.org, agross@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 5/5] clk: qcom: Add SDX55 APCS clock controller support
-Date:   Mon,  4 Jan 2021 13:41:25 +0530
-Message-Id: <20210104081125.147300-6-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210104081125.147300-1-manivannan.sadhasivam@linaro.org>
-References: <20210104081125.147300-1-manivannan.sadhasivam@linaro.org>
+        id S1726306AbhADIcc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 4 Jan 2021 03:32:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36192 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726258AbhADIcb (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 4 Jan 2021 03:32:31 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C3C9A20798;
+        Mon,  4 Jan 2021 08:31:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1609749110;
+        bh=/l4LNgcZQuQKp8LjOcoiZ+3D5i2u+KxinFDst/ZT+Xw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bH9nLgUy6rQaKDLX1sw1beUf9Aq83lpTkkF5ADT9W2qKlL12x7qcISW2nja3aqI1Y
+         WzpG1HIteKGSrWtfL4/MJWWFZPBQZigPtLn7owPGJgh1SKwM/Z0NWd4326bSyG2UVp
+         cbtkAJ/BJ+ksAQAWS715qAMvFPntnXind4CHexEHnKoDA38+VGZGUq5N3KFvPcQKRJ
+         umggJKKxXJrxQebYyCNBK4D1yb/2Cva4LLilwnlwEgsxwCT0/1TdV5UeDY3sdvXAvG
+         TRTNprpXnycMUQpKcKL+L1jkCD7tuLfQvRYX6/z0/rd93m1CzYF32NtvmESwNcScE6
+         VCK/MmB55ljqQ==
+Received: by wens.tw (Postfix, from userid 1000)
+        id A190F5F823; Mon,  4 Jan 2021 16:31:48 +0800 (CST)
+Date:   Mon, 4 Jan 2021 16:31:48 +0800
+From:   Chen-Yu Tsai <wens@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andre Przywara <andre.przywara@arm.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@googlegroups.com
+Subject: Re: [linux-sunxi] [PATCH v2 0/4] Allwinner H6 RSB support
+Message-ID: <X/LSdICpXl6vT65y@wens.csie.org>
+References: <20210103100007.32867-1-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210103100007.32867-1-samuel@sholland.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add a driver for the SDX55 APCS clock controller. It is part of the APCS
-hardware block, which among other things implements also a combined mux
-and half integer divider functionality. The APCS clock controller has 3
-parent clocks:
+Hi,
 
-1. Board XO
-2. Fixed rate GPLL0
-3. A7 PLL
+On Sun, Jan 03, 2021 at 04:00:03AM -0600, Samuel Holland wrote:
+> The Allwinner H6 SoC contains an RSB controller. It is almost completely
+> undocumented, so it was missed when doing the initial SoC bringup.
+> 
+> This series adds the clock/reset, pin configuration, and device tree
+> node needed to use the RSB controller. Since RSB is faster, simpler, and
+> generally more reliable than the I2C controller IP in the SoC, switch to
+> using it where possible.
+> 
+> This was tested on an Orange Pi 3 and a Pine H64 model B. This series
+> does not switch the Pine H64 to use RSB, as doing so would prevent
+> accessing the external RTC that shares the I2C bus.
+> 
+> Changes v1->v2:
+>   - Put the new values at the end of the DT binding headers
+> 
+> Samuel Holland (4):
+>   clk: sunxi-ng: h6-r: Add R_APB2_RSB clock and reset
+>   pinctrl: sunxi: h6-r: Add s_rsb pin functions
+>   arm64: dts: allwinner: h6: Add RSB controller node
+>   arm64: dts: allwinner: h6: Use RSB for AXP805 PMIC connection
 
-The source and the divider can be set both at the same time.
+I queued up patches 1, 3, and 4 locally for v5.12. Obviously this won't
+work unless the pinctrl patch is also queued up, so they won't be pushed
+out until that happens.
 
-This is required for enabling CPU frequency scaling on SDX55-based
-platforms.
+Regarding patch 3, I replaced the clock and reset macros with raw
+numbers to get rid of cross-tree dependencies. The following fix
+will be posted for v5.12 later on during its RC cycle.
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/clk/qcom/Kconfig      |   9 ++
- drivers/clk/qcom/Makefile     |   1 +
- drivers/clk/qcom/apcs-sdx55.c | 149 ++++++++++++++++++++++++++++++++++
- 3 files changed, 159 insertions(+)
- create mode 100644 drivers/clk/qcom/apcs-sdx55.c
+------------------------ >8 ------------------------
 
-diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-index d6f4aee4427a..2c67fdfae913 100644
---- a/drivers/clk/qcom/Kconfig
-+++ b/drivers/clk/qcom/Kconfig
-@@ -45,6 +45,15 @@ config QCOM_CLK_APCS_MSM8916
- 	  Say Y if you want to support CPU frequency scaling on devices
- 	  such as msm8916.
- 
-+config QCOM_CLK_APCS_SDX55
-+	tristate "SDX55 APCS Clock Controller"
-+	depends on QCOM_APCS_IPC || COMPILE_TEST
-+	help
-+	  Support for the APCS Clock Controller on SDX55 platform. The
-+	  APCS is managing the mux and divider which feeds the CPUs.
-+	  Say Y if you want to support CPU frequency scaling on devices
-+	  such as SDX55.
-+
- config QCOM_CLK_APCC_MSM8996
- 	tristate "MSM8996 CPU Clock Controller"
- 	select QCOM_KRYO_L2_ACCESSORS
-diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-index e7e0ac382176..a9271f40916c 100644
---- a/drivers/clk/qcom/Makefile
-+++ b/drivers/clk/qcom/Makefile
-@@ -46,6 +46,7 @@ obj-$(CONFIG_MSM_MMCC_8998) += mmcc-msm8998.o
- obj-$(CONFIG_QCOM_A53PLL) += a53-pll.o
- obj-$(CONFIG_QCOM_A7PLL) += a7-pll.o
- obj-$(CONFIG_QCOM_CLK_APCS_MSM8916) += apcs-msm8916.o
-+obj-$(CONFIG_QCOM_CLK_APCS_SDX55) += apcs-sdx55.o
- obj-$(CONFIG_QCOM_CLK_APCC_MSM8996) += clk-cpu-8996.o
- obj-$(CONFIG_QCOM_CLK_RPM) += clk-rpm.o
- obj-$(CONFIG_QCOM_CLK_RPMH) += clk-rpmh.o
-diff --git a/drivers/clk/qcom/apcs-sdx55.c b/drivers/clk/qcom/apcs-sdx55.c
-new file mode 100644
-index 000000000000..14413c957d83
---- /dev/null
-+++ b/drivers/clk/qcom/apcs-sdx55.c
-@@ -0,0 +1,149 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Qualcomm SDX55 APCS clock controller driver
-+ *
-+ * Copyright (c) 2020, Linaro Limited
-+ * Author: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/clk-provider.h>
-+#include <linux/cpu.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+
-+#include "clk-regmap.h"
-+#include "clk-regmap-mux-div.h"
-+#include "common.h"
-+
-+static const u32 apcs_mux_clk_parent_map[] = { 0, 1, 5 };
-+
-+static const struct clk_parent_data pdata[] = {
-+	{ .fw_name = "ref", .name = "bi_tcxo", },
-+	{ .fw_name = "aux", .name = "gpll0", },
-+	{ .fw_name = "pll", .name = "a7pll", },
-+};
-+
-+/*
-+ * We use the notifier function for switching to a temporary safe configuration
-+ * (mux and divider), while the A7 PLL is reconfigured.
-+ */
-+static int a7cc_notifier_cb(struct notifier_block *nb, unsigned long event,
-+			    void *data)
-+{
-+	int ret = 0;
-+	struct clk_regmap_mux_div *md = container_of(nb,
-+						     struct clk_regmap_mux_div,
-+						     clk_nb);
-+	if (event == PRE_RATE_CHANGE)
-+		/* set the mux and divider to safe frequency (400mhz) */
-+		ret = mux_div_set_src_div(md, 1, 2);
-+
-+	return notifier_from_errno(ret);
-+}
-+
-+static int qcom_apcs_sdx55_clk_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device *parent = dev->parent;
-+	struct device *cpu_dev;
-+	struct clk_regmap_mux_div *a7cc;
-+	struct regmap *regmap;
-+	struct clk_init_data init = { };
-+	int ret = -ENODEV;
-+
-+	regmap = dev_get_regmap(parent, NULL);
-+	if (!regmap) {
-+		dev_err(dev, "Failed to get parent regmap: %d\n", ret);
-+		return ret;
-+	}
-+
-+	a7cc = devm_kzalloc(dev, sizeof(*a7cc), GFP_KERNEL);
-+	if (!a7cc)
-+		return -ENOMEM;
-+
-+	init.name = "a7mux";
-+	init.parent_data = pdata;
-+	init.num_parents = ARRAY_SIZE(pdata);
-+	init.ops = &clk_regmap_mux_div_ops;
-+
-+	a7cc->clkr.hw.init = &init;
-+	a7cc->clkr.regmap = regmap;
-+	a7cc->reg_offset = 0x8;
-+	a7cc->hid_width = 5;
-+	a7cc->hid_shift = 0;
-+	a7cc->src_width = 3;
-+	a7cc->src_shift = 8;
-+	a7cc->parent_map = apcs_mux_clk_parent_map;
-+
-+	a7cc->pclk = devm_clk_get(parent, "pll");
-+	if (IS_ERR(a7cc->pclk)) {
-+		ret = PTR_ERR(a7cc->pclk);
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(dev, "Failed to get PLL clk: %d\n", ret);
-+		return ret;
-+	}
-+
-+	a7cc->clk_nb.notifier_call = a7cc_notifier_cb;
-+	ret = clk_notifier_register(a7cc->pclk, &a7cc->clk_nb);
-+	if (ret) {
-+		dev_err(dev, "Failed to register clock notifier: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = devm_clk_register_regmap(dev, &a7cc->clkr);
-+	if (ret) {
-+		dev_err(dev, "Failed to register regmap clock: %d\n", ret);
-+		goto err;
-+	}
-+
-+	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get,
-+					  &a7cc->clkr.hw);
-+	if (ret) {
-+		dev_err(dev, "Failed to add clock provider: %d\n", ret);
-+		goto err;
-+	}
-+
-+	platform_set_drvdata(pdev, a7cc);
-+
-+	/*
-+	 * Attach the power domain to cpudev. There seems to be no better place
-+	 * to do this, so do it here.
-+	 */
-+	cpu_dev = get_cpu_device(0);
-+	dev_pm_domain_attach(cpu_dev, true);
-+
-+	return 0;
-+
-+err:
-+	clk_notifier_unregister(a7cc->pclk, &a7cc->clk_nb);
-+	return ret;
-+}
-+
-+static int qcom_apcs_sdx55_clk_remove(struct platform_device *pdev)
-+{
-+	struct device *cpu_dev = get_cpu_device(0);
-+	struct clk_regmap_mux_div *a7cc = platform_get_drvdata(pdev);
-+
-+	clk_notifier_unregister(a7cc->pclk, &a7cc->clk_nb);
-+	dev_pm_domain_detach(cpu_dev, true);
-+
-+	return 0;
-+}
-+
-+static struct platform_driver qcom_apcs_sdx55_clk_driver = {
-+	.probe = qcom_apcs_sdx55_clk_probe,
-+	.remove = qcom_apcs_sdx55_clk_remove,
-+	.driver = {
-+		.name = "qcom-sdx55-acps-clk",
-+	},
-+};
-+module_platform_driver(qcom_apcs_sdx55_clk_driver);
-+
-+MODULE_AUTHOR("Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>");
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("Qualcomm SDX55 APCS clock driver");
--- 
-2.25.1
+commit 0b4781666adc5e19c4d4fb4a2bff33883181cc39
+Author: Chen-Yu Tsai <wens@csie.org>
+Date:   Mon Jan 4 16:19:17 2021 +0800
 
+    arm64: dts: allwinner: h6: Switch to macros for RSB clock/reset indices
+    
+    The macros for the clock and reset indices for the RSB hardware block
+    were replaced with raw numbers when the RSB controller node was added.
+    This was done to avoid cross-tree dependencies.
+    
+    Now that both the clk and DT changes have been merged, we can switch
+    back to using the macros.
+    
+    Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+index d897697849d6..b043beea8e6e 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+@@ -988,9 +988,9 @@ r_rsb: rsb@7083000 {
+ 			compatible = "allwinner,sun8i-a23-rsb";
+ 			reg = <0x07083000 0x400>;
+ 			interrupts = <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>;
+-			clocks = <&r_ccu 13>;
++			clocks = <&r_ccu CLK_R_APB2_RSB>;
+ 			clock-frequency = <3000000>;
+-			resets = <&r_ccu 7>;
++			resets = <&r_ccu RST_R_APB2_RSB>;
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&r_rsb_pins>;
+ 			status = "disabled";
+------------------------ >8 ------------------------
+
+> 
+>  .../dts/allwinner/sun50i-h6-beelink-gs1.dts   | 38 +++++++++----------
+>  .../dts/allwinner/sun50i-h6-orangepi-3.dts    | 14 +++----
+>  .../dts/allwinner/sun50i-h6-orangepi.dtsi     | 22 +++++------
+>  arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  | 19 ++++++++++
+>  drivers/clk/sunxi-ng/ccu-sun50i-h6-r.c        |  5 +++
+>  drivers/clk/sunxi-ng/ccu-sun50i-h6-r.h        |  2 +-
+>  drivers/pinctrl/sunxi/pinctrl-sun50i-h6-r.c   |  2 +
+>  include/dt-bindings/clock/sun50i-h6-r-ccu.h   |  2 +
+>  include/dt-bindings/reset/sun50i-h6-r-ccu.h   |  1 +
+>  9 files changed, 67 insertions(+), 38 deletions(-)
+> 
+> -- 
+> 2.26.2
+> 
+> -- 
+> You received this message because you are subscribed to the Google Groups "linux-sunxi" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to linux-sunxi+unsubscribe@googlegroups.com.
+> To view this discussion on the web, visit https://groups.google.com/d/msgid/linux-sunxi/20210103100007.32867-1-samuel%40sholland.org.
