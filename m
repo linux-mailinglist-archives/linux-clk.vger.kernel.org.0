@@ -2,162 +2,155 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D469D2ECD8F
-	for <lists+linux-clk@lfdr.de>; Thu,  7 Jan 2021 11:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5782ECDC5
+	for <lists+linux-clk@lfdr.de>; Thu,  7 Jan 2021 11:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726436AbhAGKLK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 7 Jan 2021 05:11:10 -0500
-Received: from mail-eopbgr760045.outbound.protection.outlook.com ([40.107.76.45]:61771
-        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726313AbhAGKLK (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 7 Jan 2021 05:11:10 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XX6CwEV52ZjxmilgwLjAadVY00fxYOqc4cbatH2kC/JYvstT81dwn/Q+JBQRr+XzmVn5zO35XiwM0PjD5iMqX4kS+lQm7XinuwBhMqkWZ9ShEsUgsK/AnulkBYiG+V5dosk5zS5lKM9Q7bnE1uJVGRhQhKlUXD/F7wIM7ifHGwGHQBU3TaGxxrpzpKSCvSDrFeUH58hwRhsepetxNbcN+hNsLa5LG+7iyBAxE1CN3kH++utZvkuhTK8AbL3tM7tYFNBwSoELYO2w8zbalPnCdpox7GvHVIa6yrbbSLGO1qrXsUTrV42rzxxxp5joyaabDisqH9K2dv4cHllAkWGChw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xq5TmQnX69fF9CFCW6YvhFKyUHBI7ETJ/73jmn1a92A=;
- b=gtlWVs0EpEdhgALFxQ1rpBk39yeYzAOZzhKTctzVAjETADauJnb6D3S3r7VE6M7bCRC+UzolQZmguwhBLP2uCI9SRDiv6Zuf5r+EdNqPqMeYvVxk/7xDdBlzzlfBTNu6YWxovS3ofAg9TTUt4UnCxGNFKGoaCLd8Liv1zMOUu72SXSp6a2n31rCJYZyTzFkpdqHKSr8x/SGe5+Efty8W19MwTCCj/GZw7eonJu105clv6kUNkfEoZWFDJ5Hsj0h8BE94ZqKlM9+ieFcoFKu82v3JnKX//ZYqsB2WnTn+xX8zA4gb2qz3jfbxjFd6MLGcrzVzfSff6T4TXt4i7hV9Tg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
- dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
- not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xq5TmQnX69fF9CFCW6YvhFKyUHBI7ETJ/73jmn1a92A=;
- b=J04hxb2OG1xaB58A0IINQvaHIP5eqDLi6ufNbikjdY1Dr+8NBHkuw+3grytrVbgNPZfB1EIViwYMiIc79rYauzSa87lrLNItb2x8I/CiFlAaMk2Ji9IG7kmpjsdr9DPD/Jejmb1NlNrRzEwGDxyUdN5FT8wrtHTH+WL6cyvUPb4=
-Received: from MN2PR08CA0012.namprd08.prod.outlook.com (2603:10b6:208:239::17)
- by CH2PR02MB6373.namprd02.prod.outlook.com (2603:10b6:610:7::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.6; Thu, 7 Jan
- 2021 10:10:21 +0000
-Received: from BL2NAM02FT056.eop-nam02.prod.protection.outlook.com
- (2603:10b6:208:239:cafe::64) by MN2PR08CA0012.outlook.office365.com
- (2603:10b6:208:239::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.6 via Frontend
- Transport; Thu, 7 Jan 2021 10:10:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BL2NAM02FT056.mail.protection.outlook.com (10.152.77.221) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3742.6 via Frontend Transport; Thu, 7 Jan 2021 10:10:20 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Thu, 7 Jan 2021 02:10:17 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.1913.5 via Frontend Transport; Thu, 7 Jan 2021 02:10:17 -0800
-Envelope-to: rvisaval@xilinx.com,
- dshah@xilinx.com,
- tejasp@xilinx.com,
- rajanv@xilinx.com,
- sboyd@kernel.org,
- mturquette@baylibre.com,
- kernel@pengutronix.de,
- linux-clk@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- m.tretter@pengutronix.de
-Received: from [172.30.17.109] (port=44708)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1kxSFE-0004KT-UA; Thu, 07 Jan 2021 02:10:17 -0800
-Subject: Re: [PATCH v2 00/15] soc: xilinx: vcu: Convert driver to clock
- provider
-To:     Michael Tretter <m.tretter@pengutronix.de>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>
-CC:     <rajanv@xilinx.com>, <tejasp@xilinx.com>, <dshah@xilinx.com>,
-        <rvisaval@xilinx.com>, <kernel@pengutronix.de>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>
-References: <20201221150634.755673-1-m.tretter@pengutronix.de>
-From:   Michal Simek <michal.simek@xilinx.com>
-Message-ID: <192e181d-c092-a647-7a50-c172291b944f@xilinx.com>
-Date:   Thu, 7 Jan 2021 11:10:13 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        id S1726830AbhAGK2Y (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 7 Jan 2021 05:28:24 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:47183 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726541AbhAGK2Y (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Jan 2021 05:28:24 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id CDBB3581F10;
+        Thu,  7 Jan 2021 05:27:17 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 07 Jan 2021 05:27:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        to:cc:references:from:subject:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=X
+        gj/I97/wjHFqvQLCUga9SEfpGNGvWYOpUvSqDwlGKw=; b=lsPbzT8iNHeD6MyzN
+        VMOCR86cJmbWeaiEbAHmcEh2PkJ3dQOKNszI94re5RhvY5Dw0Cbdp+K1ivQ7Ywho
+        FxWKDlFiR8BlLw7w0UEXWnELmeYu47TUidpMpAzMfxRVSuT7PmM9i+Gsn9YUZiTn
+        QpJXd6yzq4cKWkT/FgXCcvj7WoWYGSB8BjnZJyUxweYTbaPK2QJDuV3YcGipqtd1
+        uW6ZWP8vu6ZEaYG52MxoZVXMa/O8XQpvBtkL68+bX5ywBaoAKaKiHwwWiSisdQa6
+        NaZMue5N8C9CQFJ3f4OG9MYG6TLEeFqkbUdpSiK5u/52G5JGR0E7CsFvUso20d92
+        +P9Lg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=Xgj/I97/wjHFqvQLCUga9SEfpGNGvWYOpUvSqDwlG
+        Kw=; b=IinqHH8Hp+zXWXTXPhaFNDMR4nZeR9qqmwb4zxGJ+Xndfw+JlT5DqAY/c
+        fFLPTKbjhSFfjFUvrQoqc6fwJ836+CWPwWG8+AHjl2DW8nozQ8OnYM+ZVnqtI47+
+        B2CGOB59NgVII7quW7m9n4msX554Ndo3TdVo+RXsq1eNCwiGpdtNdkllsTHXidY8
+        85vwOJUEC3uCJusVhrf8GhqHPy8hW/TV5OJzXOKBOWl7P6GDzIu6XdUxF/uFsqcz
+        sUUnRgVaSJxMdW+b+meyZsAUJf9uR76HyLq+UgdVROx4ZJ9soYRuHjotYgw8X3XI
+        G7sJ4fMyX1E3vTn/97IBenwIoRwZw==
+X-ME-Sender: <xms:BOL2XwvLpbuwfmF0DYaN4nYaEAWt2Kj6gktHcwCPjsAErUBCMyesOw>
+    <xme:BOL2X9dxHdoNEl8aWh7ZNkHk-jKLT9v8I63-5hF3ZTfoSYntQUOmbM6ZRRcn_p6TA
+    YoQhtHmS2-hN-Sabw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrvdegvddgudeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepvfhfhffukffffgggjggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepfeduhfegiefhffefleefhfffjeeuueehleeitefhkeehleehkeef
+    heejvdegvdeunecuffhomhgrihhnpehtrhhushhtvggufhhirhhmfigrrhgvrdhorhhgne
+    cukfhppeejtddrudefhedrudegkedrudehudenucevlhhushhtvghrufhiiigvpedtnecu
+    rfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:BOL2X7z6ZK77f05GWuSSInyjxz675s1tNvu6dVzjd50AMLojkOYPaw>
+    <xmx:BOL2XzMWd2ytUQG_-SdNE_rnI8o6mzUbChBB8zolwatPGvhSO4Xovg>
+    <xmx:BOL2Xw8K7hlpj82EkXeunQ0CTM-VUyxQXVO0_pYkRViDKIEOx0cjbw>
+    <xmx:BeL2X7VWPM30rSlOZIuNCHHXYdYS3OddI433Et9vC6Ac4XFn2Yi0rg>
+Received: from [70.135.148.151] (70-135-148-151.lightspeed.stlsmo.sbcglobal.net [70.135.148.151])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 9C6B8108005F;
+        Thu,  7 Jan 2021 05:27:15 -0500 (EST)
+To:     Chen-Yu Tsai <wens@csie.org>, Maxime Ripard <maxime@cerno.tech>
+Cc:     =?UTF-8?Q?Andr=c3=a9_Przywara?= <andre.przywara@arm.com>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-sunxi <linux-sunxi@googlegroups.com>
+References: <20210103100007.32867-1-samuel@sholland.org>
+ <20210103100007.32867-5-samuel@sholland.org>
+ <a6c2eac4-7e98-ecb4-ee8a-d67a7f1b6871@arm.com>
+ <20210106110643.agq3mjyhgvg3w4i6@gilmour>
+ <CAGb2v64mcLogZax8vVJJxG9feBzmGc8VyazTvp7XkBAoLXw9JA@mail.gmail.com>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH v2 4/4] arm64: dts: allwinner: h6: Use RSB for AXP805 PMIC
+ connection
+Message-ID: <bc95a8d2-ebec-489c-10af-fd5a80ea1276@sholland.org>
+Date:   Thu, 7 Jan 2021 04:27:14 -0600
+User-Agent: Mozilla/5.0 (X11; Linux ppc64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-In-Reply-To: <20201221150634.755673-1-m.tretter@pengutronix.de>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <CAGb2v64mcLogZax8vVJJxG9feBzmGc8VyazTvp7XkBAoLXw9JA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6ec71176-3415-4557-98db-08d8b2f47109
-X-MS-TrafficTypeDiagnostic: CH2PR02MB6373:
-X-Microsoft-Antispam-PRVS: <CH2PR02MB6373A1DCDC2B6382137A8B57C6AF0@CH2PR02MB6373.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aBHTeqQeYifKS3+LynzsvrDYWJOQKLM0IjYP+7J66v2kk/sAMLac/kIedSPMPpAb/H9EfccTeALBn3RDPIrRUijfMCdmJoBsLj0BFV30AKd6QFdtw1aNe3BZWAbokJcB1xqKrDdpvb3e9BnwkGcBx+FLrr5yPdedukLepiumSvD13t+X/cxDeaWFznW3bUHvvCUVPbBNrIz/Fl//AfKM33h8/LfMpf6lrGDZy0DGqTrOGeRwDGckmDeYU8Qk5sWENjMtgM9WCMsROa+xMs5Da9hocW1qMmD3xGBbClhkTXjl7u7qDzgU57mXvBNNIlbxM1+mHE9/V3S2GasXWI19z56DD2SFLC6HcqTUxBGLKCZ5NdTaUL4vF5xdpM8QEfrf/8qcQ4b4de79ZUpm1t+fIPcwnWlSy3ks1AFIKUgoBVpP2BdMLQ0ODXMMwWyV0JPOIHr/xvXF5zuTdgEaZpbQW38sq6yQa4gNEzvG9oeUEsah8fQxEyCwmRSTNx5ADr4sVGF8teZHWUNtxqX18Yj4KUiOJTKJPmSW4O5AFP4RInuE/72YEd6nkDH9AtO4PVE6L5FbKgwSlZGsb1ieohT+bOxMKyDLQpgL6EwXSkDdzpzgnYfUdfUiIcaRkro8ZZGbutqOW05dyOoTHuCWcJz/CA==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(396003)(346002)(39860400002)(136003)(376002)(46966006)(82310400003)(34070700002)(7636003)(36756003)(82740400003)(356005)(8676002)(5660300002)(4326008)(83380400001)(47076005)(36906005)(966005)(478600001)(316002)(31686004)(54906003)(70206006)(70586007)(6666004)(110136005)(44832011)(31696002)(9786002)(336012)(2906002)(426003)(8936002)(26005)(2616005)(186003)(50156003)(2101003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2021 10:10:20.9744
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ec71176-3415-4557-98db-08d8b2f47109
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT056.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6373
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi,
+On 1/6/21 5:38 AM, Chen-Yu Tsai wrote:
+> On Wed, Jan 6, 2021 at 7:06 PM Maxime Ripard <maxime@cerno.tech> wrote:
+>>
+>> On Mon, Jan 04, 2021 at 10:54:19AM +0000, André Przywara wrote:
+>>> On 03/01/2021 10:00, Samuel Holland wrote:
+>>>> On boards where the only peripheral connected to PL0/PL1 is an X-Powers
+>>>> PMIC, configure the connection to use the RSB bus rather than the I2C
+>>>> bus. Compared to the I2C controller that shares the pins, the RSB
+>>>> controller allows a higher bus frequency, and it is more CPU-efficient.
+>>>
+>>> But is it really necessary to change the DTs for those boards in this
+>>> way? It means those newer DTs now become incompatible with older
+>>> kernels, and I don't know if those reasons above really justify this.
+>>>
+>>> I understand that we officially don't care about "newer DTs on older
+>>> kernels", but do we really need to break this deliberately, for no
+>>> pressing reasons?
+>>>
+>>> P.S. I am fine with supporting RSB on H6, and even using it on new DTs,
+>>> just want to avoid breaking existing ones.
+>>
+>> Doing so would also introduce some inconsistencies, one more thing to
+>> consider during reviews, and would require more testing effort.
+>>
+>> I'm not sure that stretching our - already fairly sparse - resources
+>> thin would be very wise here, especially for something that we don't
+>> have to do and for a setup that isn't really used that much.
+> 
+> As soon as some software component starts running RSB, (which I assume
+> is what Samuel is planning to do in Crust?), there's a chance that it
+> doesn't switch the chip back to I2C. And then Linux won't be able to
+> access it.
 
-On 21. 12. 20 16:06, Michael Tretter wrote:
-> Hello,
-> 
-> the xlnx_vcu soc driver is actually a clock provider of a PLL and four output
-> clocks created from the PLL via dividers.
-> 
-> This is v2 of the series to transform the driver into a proper clock provider
-> driver.
-> 
-> The main changes compared to v1 are:
-> 
-> Get rid of the "dummy" clock and remove the manual switching of the mux in the
-> output clocks. The driver now uses the pll_ref as a bypass clock. As this is
-> not documented, I am not sure if this is actually the case, but without
-> another signal for an external clock to the ip core, this seems plausible and
-> avoids changes to the device tree binding. The reparenting happens
-> automatically when setting a rate on the output clocks.
-> 
-> Add a few patches to cleanup checkpatch warnings on the driver itself.
-> 
-> Move the entire driver from drivers/soc to drivers/clk, because the driver is
-> now actually only clock provider driver.
-> 
-> A more detailed changelog is attached to the respective patches.
-> 
-> The series is based on the zynqmp/soc-next branch in the Xilinx downstream
-> repository [0] which should be merged to mainline soon.
-> 
-> Michael
-> 
-> [0] https://github.com/Xilinx/linux-xlnx/tree/zynqmp/soc-next
+Crust can handle either way via a config option, which currently
+defaults to I2C for H6. It must use the same selection as Linux, not
+only because of the PMIC mode, but also because of the pinctrl.
 
-Series looks good to me but not clock expert.
+TF-A is already converted to use RSB[1], and it does switch the PMIC
+back to I2C before handing off to U-Boot[2]. So new TF-A + old Linux is
+fine. However, Linux currently does not switch the PMIC back. So the
+most likely problem from this patch is that, with new Linux + old TF-A,
+TF-A will be unable to power down the board or access regulators after
+an SoC reset.
 
-Stephen: Please let me know if you want me to take it via my tree.
-If yes please ack that 15/15.
+I expect there will be a TF-A release between now and when 5.12 hits
+stable, but people tend not upgrade their U-Boot/TF-A very often.
 
-For the whole series please add
-Acked-by: Michal Simek <michal.simek@xilinx.com>
-when that minor kerneldoc issue in 9/15 is fixed.
+We could solve this by having the Linux RSB driver switch all child
+devices back to I2C in .shutdown, or by dropping this patch and only
+using RSB for new boards (which would also address Andre's concern).
 
-Thanks,
-Michal
+Cheers,
+Samuel
 
+[1]: https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/7576
+[2]: https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/7575
+
+> So I'm for keeping things consistent and converting all users to RSB.
+> 
+> 
+> ChenYu
+> 
 
