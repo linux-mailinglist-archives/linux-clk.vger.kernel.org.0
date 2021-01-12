@@ -2,55 +2,56 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F31752F2FDF
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Jan 2021 14:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F5E2F3002
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Jan 2021 14:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404945AbhALM7U (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 12 Jan 2021 07:59:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
+        id S1726900AbhALNBX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 12 Jan 2021 08:01:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405890AbhALM7N (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 12 Jan 2021 07:59:13 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AB9C06179F;
-        Tue, 12 Jan 2021 04:58:32 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id q1so3698641ion.8;
-        Tue, 12 Jan 2021 04:58:32 -0800 (PST)
+        with ESMTP id S1726780AbhALNBW (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 12 Jan 2021 08:01:22 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC42C061575;
+        Tue, 12 Jan 2021 05:00:42 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id d9so3724169iob.6;
+        Tue, 12 Jan 2021 05:00:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=YafB9M+qZnE/nt5PVl5uoiIhZtLdagUggJ2HZtBPpoo=;
-        b=slCZ1s0niVvQypVbz6PlWneerrA/X0C+iZjWZftfHUan8VIXBhN8ehLo/qgdsRFZJx
-         ybWaaR6WLdsMs7sD7wGuw1P6NzvBoQx/lgR0TelTOekUkpcwWDjszTZDOk8KkifKQx0q
-         yX0Gd4tzs8LqrCKfrLLReUcSRThmEeHGvye5GvBOxASEZNO2J+n78vQo68bVMYN1tDAs
-         4xMGF8mVeLooTNV9jGaJD3Yp8V24Q2Q5t31V6QDa8RCr/dVSAOLGoc3Zqx/0qC54Bqzr
-         NwQ4letDqwcRCLivmrimf1f7iM3c6AWOQoMBtUR/HmqGKw9JQr3MDwQzXfcPPnpglX5I
-         Q5dw==
+        bh=Bl6G1rAuVb/adOj0Od9vL1lMatTSfI2ajKlBHjpw74Y=;
+        b=i4/OO+X/N2LqDVoD/jUzcozf+EvAiReaJZr5ICPWBOpNFleYALweAck7rcfG2NxIs7
+         2englFESSMpZ6PFu5aS2ADPGCn9ndkqC8dfrKUr88qZiJeES4MV7s8SLpdpmdETnP5IR
+         6YjpCWXl6mUWgBTQvI6VaPMGu040n2dZ9BgLjPTCVENHAAPvj3dEB4dVK9ChWO2wgndx
+         Pc1rx8lUB/BM1pock/z3EdMURVFH149yiBw+IBpq41j5KSTSG64dTDb01Tt58/GYAOBO
+         FdhNgiQsazyihjhW/rlAlWuo1ExObV54m6S2E2AMdVRvjM+e0llFMreb77i85dAL4CYs
+         SbGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YafB9M+qZnE/nt5PVl5uoiIhZtLdagUggJ2HZtBPpoo=;
-        b=RrhAmKobaD7N9DohTIik0u7KeTONtjADzWe6Ym5sgPwZvG+H+Cv79hlZFlT/nzUVsm
-         N358R/Ma30BahV6S9jdN7MEfmv+guGAcX/TM0pPBuph4SblD/j9NKzRrX+XQLbnZMAOs
-         8ydCw14oTVORR61ZIGI3ODAh4ysya8aD1hvHGWt50wFM+yiYiwGohA0kMak0EjYICC5m
-         N0qUcrmk4GTGg2g+gdMxHtBwXGTp+VbFctjPQGReuNDR22Y77/SFq91fti4VkIorW0QZ
-         Mva+/xnwfx8xGenjdmKdclRpnQPaRhmBHYZ4fqlr5Y4Y/hN5NkQX0oVtPv5DOMrj/rPF
-         +pAw==
-X-Gm-Message-State: AOAM532vsPmalKH9+UQZ5Gwrqzi3Fjv9eRtPf6ZF4DAtDPYCBVx2UiiC
-        +CGgR1BxeRA8SFo1xWXpvyk=
-X-Google-Smtp-Source: ABdhPJywbjxLymotcPdnGX1DpYbIDcHERYl02nM8jXctCbtODKNlYwNeIxmbXGzxtI9IP7oPYtY32A==
-X-Received: by 2002:a05:6e02:1a0c:: with SMTP id s12mr3918732ild.14.1610456312090;
-        Tue, 12 Jan 2021 04:58:32 -0800 (PST)
+        bh=Bl6G1rAuVb/adOj0Od9vL1lMatTSfI2ajKlBHjpw74Y=;
+        b=OB3gkmrY9TlCxbiueVOB7ZBXKcmC0PZIoFfpbjBh8COu82s81q4yCWYc5LZPZusURI
+         qkv33kkG8zk6K1WN7X30K9/xsHgsO8mf7WRgsNC9vQJWAdch6p4Dp+YFne6ZIIWvF8an
+         kfcd+9CAi0EJUp7g8RKzyumGJRDavyRMoZFpZqoGT8F70YktZAmPXN6hx+WVNNxCNA/e
+         k2cZOp5kpJDhxgBXf7Brwuva+W+YyqVzIXO0eI01JOS9IqRS31zw62/6HNCSUNt9wwiM
+         WGqzqnsdpXcT02aJqxFehUKk1WnAcx9j3amwB+0ftYHFh/pY4SLtQFPdHA2azA8YhWPo
+         9dhg==
+X-Gm-Message-State: AOAM531PrwNuOYSknLKCVlU43c2s/gi6tALoUBm4heBuD8Zaw9iyJkuQ
+        Pyd8I2eomzFZfj9hJTwMMMI=
+X-Google-Smtp-Source: ABdhPJx2M5LbtmFtPAAXjJ5AseYWFasODAQS6NYgRqyuHb72NP/iLxCMNlDew00AMwFldJQUdkJ6zA==
+X-Received: by 2002:a92:c104:: with SMTP id p4mr3814264ile.228.1610456441534;
+        Tue, 12 Jan 2021 05:00:41 -0800 (PST)
 Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id u8sm1864246iom.22.2021.01.12.04.58.30
+        by smtp.gmail.com with ESMTPSA id j12sm2801519ili.48.2021.01.12.05.00.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jan 2021 04:58:30 -0800 (PST)
-Date:   Tue, 12 Jan 2021 13:58:28 +0100
+        Tue, 12 Jan 2021 05:00:40 -0800 (PST)
+Date:   Tue, 12 Jan 2021 14:00:37 +0100
 From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Peter Geis <pgwipeout@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Peter De Schrijver <pdeschrijver@nvidia.com>,
         Prashant Gaikwad <pgaikwad@nvidia.com>,
@@ -60,62 +61,98 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         Sameer Pujar <spujar@nvidia.com>,
         Mohan Kumar <mkumard@nvidia.com>, linux-clk@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, Ion Agorria <ion@agorria.com>
-Subject: Re: [PATCH v2 1/2] clk: tegra30: Add hda clock default rates to
- clock driver
-Message-ID: <X/2c9BiqgURAJWCa@ulmo>
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2 0/2] fix tegra-hda on tegra30 devices
+Message-ID: <X/2ddbamUzXECZDT@ulmo>
 References: <20210108135913.2421585-1-pgwipeout@gmail.com>
- <20210108135913.2421585-2-pgwipeout@gmail.com>
+ <s5hv9c2sgxd.wl-tiwai@suse.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="x2yLJCQXx9a7mg5I"
+        protocol="application/pgp-signature"; boundary="drqTfn9TqBQMdij7"
 Content-Disposition: inline
-In-Reply-To: <20210108135913.2421585-2-pgwipeout@gmail.com>
+In-Reply-To: <s5hv9c2sgxd.wl-tiwai@suse.de>
 User-Agent: Mutt/2.0.3 (a51f058f) (2020-12-04)
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 
---x2yLJCQXx9a7mg5I
+--drqTfn9TqBQMdij7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 08, 2021 at 01:59:12PM +0000, Peter Geis wrote:
-> Current implementation defaults the hda clocks to clk_m. This causes hda
-> to run too slow to operate correctly. Fix this by defaulting to pll_p and
-> setting the frequency to the correct rate.
+On Tue, Jan 12, 2021 at 09:22:38AM +0100, Takashi Iwai wrote:
+> On Fri, 08 Jan 2021 14:59:11 +0100,
+> Peter Geis wrote:
+> >=20
+> > The following patches fix tegra-hda on legacy tegra devices.
+> > Two issues were discovered preventing tegra-hda from functioning:
+> > -The hda clocks on tegra30 were assigned to clk_m and running at too low
+> > of a rate to function.
+> > -The tegra-hda encounters an input/output error when opening a stream.
+> >=20
+> > Since the only mainline device that used tegra-hda until recently was t=
+he
+> > t124, it is unknown exactly when this was broken. Fortunately a recent
+> > patch was submitted that fixed the issue only on t194 devices. We can
+> > apply it to the tegra30-hda device to resolve the issue across the boar=
+d.
+> > Note that downstream devices used the spdif device instead of hda for h=
+dmi
+> > audio. The spdif device lacks a driver on mainline.
+> >=20
+> > -Checkpatch seems to have issues finding [1], but git show has no issue.
+> > [1] commit 60019d8c650d ("ALSA: hda/tegra: workaround playback failure =
+on
+> > Tegra194")
+> >=20
+> > Changelog:
+> >=20
+> > v2:
+> > -Added ack and reviewed-by from Jon
+> > -Updated fix to apply to tegra30-hda vice universally (Thanks Jon)
+> > -Updated commit to include comments from hardware team (Thanks Sameer)
+> > -Cleaned up commit messages
+> >=20
+> > Peter Geis (2):
+> >   clk: tegra30: Add hda clock default rates to clock driver
+> >   ALSA: hda/tegra: fix tegra-hda on tegra30 soc
 >=20
-> This matches upstream t124 and downstream t30.
+> Shall I apply both patches via sound git tree?
 >=20
-> Acked-by: Jon Hunter <jonathanh@nvidia.com>
-> Tested-by: Ion Agorria <ion@agorria.com>
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> ---
->  drivers/clk/tegra/clk-tegra30.c | 2 ++
->  1 file changed, 2 insertions(+)
+> Or, if you want to take through clk tree, let me know.  In that case,
+> feel free to take my ack:
+> Acked-by: Takashi Iwai <tiwai@suse.de>
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+There doesn't seem to be a build-time (or even runtime) dependency
+between the two patches and they fix two independent issues, so they
+could also go in separately.
 
---x2yLJCQXx9a7mg5I
+I'm fine either way. From a Tegra perspective, the Tegra30 clock driver
+is very low activity, so I don't expect any conflicts with between this
+and some other patches that might go in through the clock tree.
+
+Thierry
+
+--drqTfn9TqBQMdij7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl/9nPQACgkQ3SOs138+
-s6FBPg/9EWWt+2cctRc+UkfJQ3+RYU8Wa7yl7XGS885r3BmnOC87IdRB0/sdjlAc
-SUHqd2YbuCfOnfHmC9u5uKXlQTKKffNQSgE4QFM+81tXAU5E3RShLqsTAlYylOJb
-COXR1sOfBFas9jYQ714tLnfvc10YLYdEzKYBVRXMu2g9u4sN4fWo+cUGR7cklBaB
-WbZlRlzcRx7VUmcfwt2DGQzisg1CdyPat9OcQFwZAFT60Laa0zOYsiSRDTAD/JVj
-5XxRJQb52tjEw3pRBfOsVBs7R4W2aY+SDrXTlcGSRonbMi2Tx0DhzyEniVafdDOw
-u4cMVfqmsC6c9o2RjQmmzFdbDlsYJFS0dU2S4Zc2W3MarCrmEeI98qGMj4dRyV7H
-9RjrwQ++sEtvdSwsRHIrn7dIDr4/F2tjSSXfV8g2BxChnqFtVh/c9jg5ZDNwXAto
-25ejdqF2PlCnqLi+v3RpBzkSsoC+d1bTcGjJ9o2jBSHvwjjI3qWb9EMpEb4uuZ8O
-1MYFNCANnx1Xw+1GMmUfYKBiiajrnPbFME/8Cbb3oeI3s9Yjit2jhR6Kl87k6bfN
-OOW7RcO+Ljv57Ta+XYDVIg6aTsmcr9gXC48XYbnSkPeWmarbSNIawdIQvPemjDmu
-vLB1K5a3KfO7hwe5iw44yoi7bdqcUS5shDov/SAheN/cavRE6iI=
-=kKkO
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl/9nXUACgkQ3SOs138+
+s6GqTg/+OADUywchD2A60VkcQ2urUoARq6t0hydg25Ly37rjRWhl92PWQ9V3YULd
+HZAA38q+/PzszkSs0ivCRKPV9QPz/YjOjpJgR3XX0GSOCxXMzxcni4GKQ5p06BsG
+hCadEe1K+YXSznQn1hX6hjuuPWjSs2ZijMM/yTILil0fAd5P4LTxkbuGgxwFPXPf
+/g2j/KY1IYwPotwYuOdn9eakJJaHTZJAV3pO6eDiJ+WYC4u0tPZLiCtozSSPxCAF
+IZJZuBzFiMgurxjTMIlQW82Mn0R7Bpr9ERlAGIVGaPMKOugajQV/lg9223SHPlei
+4tnGIU6Ven7HhFQYWxvzV32GFiuNorsSDMbCAqObPglo30Qt0jSW+DDEn9ymb9rg
+owNjg8+7+uckLTRggIWoMv5eG2gh+inGOE31uNx5umn0U72JVAqjjM2YgCA5+nB4
+G8lHQXFsEM4phFj+SwH1mT1u8xBeEQ5FB++hHZGX6Q3UQe4XN8w2JRAwroGRsupS
+oan0d5kY0aSxzRxqXRbAFFt6SmkV+1vH1Qt0NrjAji9k9jEw/8kHcgeEEG52mHZe
+c4ykdSeLwM40vCLLjAH5frO0mCGwy87y7epP8fq9t2mAFhnE6te1JZZh2d66mH7k
+y3qIffocs2VEyxyMnK+EPceKMMDCg09LerCkt7ON2gde9ymVANk=
+=csJX
 -----END PGP SIGNATURE-----
 
---x2yLJCQXx9a7mg5I--
+--drqTfn9TqBQMdij7--
