@@ -2,107 +2,92 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A0D2F4F3F
-	for <lists+linux-clk@lfdr.de>; Wed, 13 Jan 2021 16:55:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B209A2F5270
+	for <lists+linux-clk@lfdr.de>; Wed, 13 Jan 2021 19:39:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726003AbhAMPxg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 13 Jan 2021 10:53:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37914 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725773AbhAMPxg (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 13 Jan 2021 10:53:36 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8F878233F8;
-        Wed, 13 Jan 2021 15:52:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610553174;
-        bh=xbCpQynJtv/c55NX+YOjuFWAG2HeEEWgKuhf0zK0ffg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lR78CUqETcnfsQ1fd4c/egZBAwNk1XRmy6o5GOX+ehUY6xcHjWJQ34/jc2x0IKWGp
-         VNs9bT5I3hqAARaiQru5wl4ybdqwydzpMcQ5sIoOFSASCLk+v/Udt23IhY8pgnqLDJ
-         qXFpMmz/5bAmnvXjHyqJz3PlFYZPpTLTu9ZNco5zQmHj+RaedmTdReMIqyzxj/NtWT
-         x7nEi9HDeVCBWYQrTMX6SaeDXOnpj33LXd/pKK8smm2jvleUOA55mOMPkW2iHDmIXu
-         Wp3rVv90s2BFw3ktQHAHSGr1lUbW4LDQzAhyBuD0Aj8cuBz7jimpyXBMF3+m1rTe/v
-         0fgc9IMqWoRAw==
-Received: by mail-ej1-f49.google.com with SMTP id 6so3766638ejz.5;
-        Wed, 13 Jan 2021 07:52:54 -0800 (PST)
-X-Gm-Message-State: AOAM533dfVsXOrOPIdHWFu3rm5jjtercHIP/ooTMSFsIE2oxdNOVk0du
-        xVVQ4btelms0cK8xA5uBQlJ1GapRHwBXhm02jQ==
-X-Google-Smtp-Source: ABdhPJzHoWcjN3cGo3TDvAIn07gWPu3Y5jJntVZNEw+dl8Csotad2ziZxBVxesABVdLkBRtWOY7vZe+PTyzkafubnNE=
-X-Received: by 2002:a17:906:25c4:: with SMTP id n4mr1844111ejb.359.1610553173207;
- Wed, 13 Jan 2021 07:52:53 -0800 (PST)
+        id S1728527AbhAMSjR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 13 Jan 2021 13:39:17 -0500
+Received: from relay02.th.seeweb.it ([5.144.164.163]:36127 "EHLO
+        relay02.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728488AbhAMSjR (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 13 Jan 2021 13:39:17 -0500
+Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 3368620072;
+        Wed, 13 Jan 2021 19:38:19 +0100 (CET)
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+To:     agross@kernel.org
+Cc:     bjorn.andersson@linaro.org, mturquette@baylibre.com,
+        robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Subject: [PATCH v2 0/9] SDM630/660 GCC/MMCC/GPUCC clock controllers
+Date:   Wed, 13 Jan 2021 19:38:08 +0100
+Message-Id: <20210113183817.447866-1-angelogioacchino.delregno@somainline.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <cover.1610110144.git.matti.vaittinen@fi.rohmeurope.com>
- <a91eb6288331bb80b30534a31049cde508307fc0.1610110144.git.matti.vaittinen@fi.rohmeurope.com>
- <20210113135201.GA2328369@robh.at.kernel.org> <629dbc81badc9facea538733bfa8ddc0842b1df7.camel@fi.rohmeurope.com>
-In-Reply-To: <629dbc81badc9facea538733bfa8ddc0842b1df7.camel@fi.rohmeurope.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 13 Jan 2021 09:52:41 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+N8dw82O-K6O53iogisgK2QZ=TEf7UCbBEbQGi9w4W9Q@mail.gmail.com>
-Message-ID: <CAL_Jsq+N8dw82O-K6O53iogisgK2QZ=TEf7UCbBEbQGi9w4W9Q@mail.gmail.com>
-Subject: Re: [PATCH 04/15] dt_bindings: bd71828: Add clock output mode
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-power <linux-power@fi.rohmeurope.com>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Jan 13, 2021 at 8:52 AM Matti Vaittinen
-<matti.vaittinen@fi.rohmeurope.com> wrote:
->
->
-> On Wed, 2021-01-13 at 07:52 -0600, Rob Herring wrote:
-> > On Fri, Jan 08, 2021 at 03:34:16PM +0200, Matti Vaittinen wrote:
-> > > The BD71828 allows configuring the clk32kout pin mode to CMOS or
-> > > open-drain. Add device-tree property for specifying the preferred
-> > > mode.
-> > >
-> > > Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-> > > ---
-> > >  .../devicetree/bindings/mfd/rohm,bd71828-pmic.yaml         | 7
-> > > +++++++
-> > >  1 file changed, 7 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd71828-
-> > > pmic.yaml b/Documentation/devicetree/bindings/mfd/rohm,bd71828-
-> > > pmic.yaml
-> > > index 3a6a1a26e2b3..cba085836bc0 100644
-> > > --- a/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
-> > > +++ b/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
-> > > @@ -44,6 +44,13 @@ properties:
-> > >    clock-output-names:
-> > >      const: bd71828-32k-out
-> > >
-> > > +  rohm,clkout-mode:
-> > > +    description: clk32kout mode. Can be set to "open-drain" or
-> > > "cmos".
-> > > +    $ref: "/schemas/types.yaml#/definitions/string"
-> > > +    enum:
-> > > +      - open-drain
-> > > +      - cmos
-> > > +
-> >
-> > I think a boolean or tristate ((0/1/not present) if you need 'leave
-> > default') would be better.
->
-> I was thinking of boolean but I hit the exact problem of leaving the
-> default. (Booleans are so tempting for a lazy coder like me :] ) Do you
-> mean uint with allowed values of 0/1 with the tristated?
+This patch series brings up the MultiMedia Clock Controller (MMCC)
+and the GPU Clock Controller (GPUCC), plus includes some fixes for
+the SDM660 GCC, which are necessary for correct functionality of
+the clocks from the two new drivers, without causing lockups.
 
-Yes.
+There is also a change in the RCG2 GFX3D, which generalizes the
+gfx3d pingpong handling functions, in order to be able to reuse
+them for more than just one specific SoC (MSM8996), bringing no
+functional changes to the aforementioned SoC, which got a MMCC
+driver gfx3d clock fix for the generalization... obviously.
 
-> I can sure do
-> that - but wouldn't open-drain / cmos be more descriptive?
+This patch series has been tested against the following devices:
+ - Sony Xperia XA2 Ultra (SDM630 Nile Discovery)
+ - Sony Xperia 10        (SDM630 Ganges Kirin)
+ - Sony Xperia 10 Plus   (SDM636 Ganges Mermaid)
 
-You'd get at least half by naming it 'rohm,clkout-open-drain'. I think
-anyone that knows what open-drain means will know what !open-drain
-implies.
+AngeloGioacchino Del Regno (8):
+  clk: qcom: gcc-sdm660: Mark MMSS NoC CFG AHB clock as critical
+  clk: qcom: gcc-sdm660: Mark GPU CFG AHB clock as critical
+  dt-bindings: clock: Add support for the SDM630 and SDM660 mmcc
+  clk: qcom: rcg2: Stop hardcoding gfx3d pingpong parent numbers
+  clk: qcom: mmcc-msm8996: Migrate gfx3d clock to clk_rcg2_gfx3d
+  clk: qcom: gdsc: Implement NO_RET_PERIPH flag
+  clk: qcom: Add SDM660 GPU Clock Controller (GPUCC) driver
+  dt-bindings: clock: Add QCOM SDM630 and SDM660 graphics clock bindings
 
-Rob
+Martin Botka (1):
+  clk: qcom: Add SDM660 Multimedia Clock Controller (MMCC) driver
+
+ .../bindings/clock/qcom,gpucc-sdm660.yaml     |   76 +
+ .../devicetree/bindings/clock/qcom,mmcc.yaml  |    2 +
+ drivers/clk/qcom/Kconfig                      |   18 +
+ drivers/clk/qcom/Makefile                     |    2 +
+ drivers/clk/qcom/clk-rcg.h                    |    9 +
+ drivers/clk/qcom/clk-rcg2.c                   |   56 +-
+ drivers/clk/qcom/gcc-sdm660.c                 |    7 +
+ drivers/clk/qcom/gdsc.c                       |   10 +-
+ drivers/clk/qcom/gdsc.h                       |    3 +-
+ drivers/clk/qcom/gpucc-sdm660.c               |  349 ++
+ drivers/clk/qcom/mmcc-msm8996.c               |   29 +-
+ drivers/clk/qcom/mmcc-sdm660.c                | 2864 +++++++++++++++++
+ include/dt-bindings/clock/qcom,gpucc-sdm660.h |   28 +
+ include/dt-bindings/clock/qcom,mmcc-sdm660.h  |  162 +
+ 14 files changed, 3581 insertions(+), 34 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,gpucc-sdm660.yaml
+ create mode 100644 drivers/clk/qcom/gpucc-sdm660.c
+ create mode 100644 drivers/clk/qcom/mmcc-sdm660.c
+ create mode 100644 include/dt-bindings/clock/qcom,gpucc-sdm660.h
+ create mode 100644 include/dt-bindings/clock/qcom,mmcc-sdm660.h
+
+-- 
+2.29.2
+
