@@ -2,125 +2,134 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6DC2F7F4D
-	for <lists+linux-clk@lfdr.de>; Fri, 15 Jan 2021 16:18:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2172F800F
+	for <lists+linux-clk@lfdr.de>; Fri, 15 Jan 2021 16:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727335AbhAOPSD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 15 Jan 2021 10:18:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
+        id S1732291AbhAOPw7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 15 Jan 2021 10:52:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726030AbhAOPSC (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 15 Jan 2021 10:18:02 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F00C061757;
-        Fri, 15 Jan 2021 07:17:22 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id a9so6181698wrt.5;
-        Fri, 15 Jan 2021 07:17:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Rn8B8MuwQWnHgwFQsAJAfdLGa99uP8DpkyAhVSsSfbk=;
-        b=E2T3IAbHP6omiSvK4BCmnPErJZQtT8mFjhg9kk0r8EzmhqXpMKoCC1diosA11ESjvv
-         Fq6kG1YaRM+kt/xC3HFuRUepB/lzb5XNH32UmksJtVPO3QtSNTYTRKxP7iXRsC6zOCGa
-         k8fFoxEKrA8IIxo+FvpaV29hZnCQRLKnmElgZQZTuMiGSfpij51pu4p5uWNOZlY5/9Tw
-         l3o0uB8Szm99NAuOFlnsaOZJBS5ZVGY0ouVNhAXBV+mSpJ5mRzjndDX7MYaLWtYcUw/D
-         O1p3eVbbu5N2L2dV6UsRAY52V/TDtAb1Jh6qD5rsX673qKHzg2vhfXK4kXi12qCqazlB
-         D7LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Rn8B8MuwQWnHgwFQsAJAfdLGa99uP8DpkyAhVSsSfbk=;
-        b=qUmcoh6i85FvS2X0z3tFeedUCun9zME8XkislaH0coACRxXIMCMOJye1gZqW8GEDSV
-         XddhILK4NJ44/Qq6ZVMfCXdOfn9NaQxy7TRfGnW3URqP0g1FoAug8he9znlX0h40QE72
-         Hc/qInYzbHFVPILWxkTz6ptGdhtZBfaM3S2G6D8WJZDKIdm7xoOYdIbfQF0X53HRV6xk
-         aMRgxeiSqLyYUrMAKAgMKoZNJIxwd9XGNbR14b1iG9MLaqvxVok+LQAlaHNIev6VHJC6
-         PtBF8W9NyM9FRvqw8bLAU7++qZ/B1yxypA2wX++UhQPg2MwqZbfvIvnUsakypH6XIzxP
-         ycIA==
-X-Gm-Message-State: AOAM531LvORS5lFvPcmPC4buDyMYoDzWO0l/plHNZxkxzpCGmOLtBPss
-        pJIcaKTrzsLD4ybpg1T6OrIBHCwxUCA=
-X-Google-Smtp-Source: ABdhPJxG1MfvfUBsrVny1rN9Q4NK+drXL1XNjSIiahS4cwsYT6H43DunZ0iFiSP9HjUNj0UGJ7ojJA==
-X-Received: by 2002:a5d:68ce:: with SMTP id p14mr13594764wrw.386.1610723840990;
-        Fri, 15 Jan 2021 07:17:20 -0800 (PST)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id o14sm12994184wmc.28.2021.01.15.07.17.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Jan 2021 07:17:19 -0800 (PST)
-Date:   Fri, 15 Jan 2021 16:17:18 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        with ESMTP id S1732145AbhAOPw7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 15 Jan 2021 10:52:59 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B79C061798
+        for <linux-clk@vger.kernel.org>; Fri, 15 Jan 2021 07:51:43 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1l0RNt-0003NK-0o; Fri, 15 Jan 2021 16:51:33 +0100
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1l0RNr-0008LH-RE; Fri, 15 Jan 2021 16:51:31 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-tegra@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] clk: tegra: Fix refcounting of gate clocks
-Message-ID: <YAGx/vLxbz61Ccfy@ulmo>
-References: <20210112122724.1712-1-digetx@gmail.com>
- <20210112122724.1712-3-digetx@gmail.com>
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>
+Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        soc@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH v2 0/7] Remove ARM platform efm32
+Date:   Fri, 15 Jan 2021 16:51:23 +0100
+Message-Id: <20210115155130.185010-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="nE3Hy/EvnDZdy3nP"
-Content-Disposition: inline
-In-Reply-To: <20210112122724.1712-3-digetx@gmail.com>
-User-Agent: Mutt/2.0.4 (26f41dd1) (2020-12-30)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+From: Uwe Kleine-König <uwe@kleine-koenig.org>
 
---nE3Hy/EvnDZdy3nP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-On Tue, Jan 12, 2021 at 03:27:21PM +0300, Dmitry Osipenko wrote:
-> The refcounting of the gate clocks has a bug causing the enable_refcnt
-> to underflow when unused clocks are disabled. This happens because clk
-> provider erroneously bumps the refcount if clock is enabled at a boot
-> time, which it shouldn't be doing, and it does this only for the gate
-> clocks, while peripheral clocks are using the same gate ops and the
-> peripheral clocks are missing the initial bump. Hence the refcount of
-> the peripheral clocks is 0 when unused clocks are disabled and then the
-> counter is decremented further by the gate ops, causing the integer
-> underflow.
->=20
-> Fix this problem by removing the erroneous bump and by implementing the
-> disable_unused() callback, which disables the unused gates properly.
->=20
-> The visible effect of the bug is such that the unused clocks are never
-> gated if a loaded kernel module grabs the unused clocks and starts to use
-> them. In practice this shouldn't cause any real problems for the drivers
-> and boards supported by the kernel today.
->=20
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/clk/tegra/clk-periph-gate.c | 72 +++++++++++++++++++----------
->  drivers/clk/tegra/clk-periph.c      | 11 +++++
->  2 files changed, 58 insertions(+), 25 deletions(-)
+compared to v1 (Message-Id:
+20210114151630.128830-1-u.kleine-koenig@pengutronix.de) I did the following changes:
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+ - add "serial" to the summary line of the patch removing the serial
+   driver
+ - actually remove the serial driver in the patch that claims to do this
+   instead of patch 1.
 
---nE3Hy/EvnDZdy3nP
-Content-Type: application/pgp-signature; name="signature.asc"
+On irc Arnd signalled to want to merge the first patch. As there are no
+hard interdependencies between these, I think the best approach is for the
+individual maintainers to pick up the patches they are responsible for.
 
------BEGIN PGP SIGNATURE-----
+Thanks and best regards,
+Uwe
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmABsf4ACgkQ3SOs138+
-s6ECxA//RfZCHoNJPDi3/f3A/5AMK2y6gZ60LAyfi7b3R8gmG4V6qvVhlbNglqSj
-VuiBxeyAe+9tXd3bd8emWyi+nPvvf/bH6wOyZ44vlwTGmFwYDgci9D1h3Pz79DG4
-9FOl0ve1stOk7rdvc7RdvAv2FulsoBG+CDMSo7xnsMpMKhMLpcjPJ72owhUgzEww
-lXe9IDiqBKkzysvVpd8HJ06G/NW7ulfc/GOgUt9htQXVIDf0RByCvNGKbN27U93F
-Gjsk1Z1OR2s5KGwFxW4ZeCdWW0ZDDtSxBc4SAyk7X3cPBDgnhKkl1nAqgA1etJi7
-1FvIZTiUBDAION/3k8+aHu4xn0LrfF7ENDa6rPIp+72xQKxYvsfF4y/A/zQitKfm
-4Q08Hc8c6LdMXhcimsj0gIiQ6Jinyhq4SDiuChSH1gqHAr/Vv0gRy222hlSbWMYQ
-Xcjee83nm/fTRGN77BUKSHk7/u8O5viRPvwwfGDnp56ZJUnmRqMlLXgx/hpomaeU
-BSucw23k4VMxGxajn4w091MkjXH0yjQpO6r7hm4+Yb/Y4UrC0dP/qNDh5av3FB26
-YJGesQWHvrXM5HaIPsesK2T4gT70T66CgtZGmRD4OIUzuUvGKBR/hUmCEifrJ/IJ
-v49hoqb5DAAPR9Bn//z90SUsdDvIUxcg/o8Li/41c5H61Y9pyWU=
-=B5fn
------END PGP SIGNATURE-----
+Uwe Kleine-König (7):
+  ARM: drop efm32 platform
+  clk: Drop unused efm32gg driver
+  clocksource: Drop unused efm32 timer code
+  spi: Drop unused efm32 bus driver
+  i2c: Drop unused efm32 bus driver
+  tty: serial: Drop unused efm32 serial driver
+  MAINTAINERS: Remove deleted platform efm32
 
---nE3Hy/EvnDZdy3nP--
+ MAINTAINERS                              |   7 -
+ arch/arm/Kconfig                         |  10 +-
+ arch/arm/Kconfig.debug                   |  17 -
+ arch/arm/Makefile                        |   1 -
+ arch/arm/boot/dts/Makefile               |   2 -
+ arch/arm/boot/dts/efm32gg-dk3750.dts     |  88 ---
+ arch/arm/boot/dts/efm32gg.dtsi           | 177 -----
+ arch/arm/configs/efm32_defconfig         |  98 ---
+ arch/arm/include/debug/efm32.S           |  45 --
+ arch/arm/mach-efm32/Makefile             |   2 -
+ arch/arm/mach-efm32/Makefile.boot        |   4 -
+ arch/arm/mach-efm32/dtmachine.c          |  16 -
+ arch/arm/mm/Kconfig                      |   1 -
+ drivers/clk/Makefile                     |   1 -
+ drivers/clk/clk-efm32gg.c                |  84 ---
+ drivers/clocksource/Kconfig              |   9 -
+ drivers/clocksource/Makefile             |   1 -
+ drivers/clocksource/timer-efm32.c        | 278 --------
+ drivers/i2c/busses/Kconfig               |   7 -
+ drivers/i2c/busses/Makefile              |   1 -
+ drivers/i2c/busses/i2c-efm32.c           | 469 -------------
+ drivers/spi/Kconfig                      |   7 -
+ drivers/spi/Makefile                     |   1 -
+ drivers/spi/spi-efm32.c                  | 462 ------------
+ drivers/tty/serial/Kconfig               |  13 -
+ drivers/tty/serial/Makefile              |   1 -
+ drivers/tty/serial/efm32-uart.c          | 852 -----------------------
+ include/linux/platform_data/efm32-spi.h  |  15 -
+ include/linux/platform_data/efm32-uart.h |  19 -
+ include/uapi/linux/serial_core.h         |   3 -
+ 30 files changed, 1 insertion(+), 2690 deletions(-)
+ delete mode 100644 arch/arm/boot/dts/efm32gg-dk3750.dts
+ delete mode 100644 arch/arm/boot/dts/efm32gg.dtsi
+ delete mode 100644 arch/arm/configs/efm32_defconfig
+ delete mode 100644 arch/arm/include/debug/efm32.S
+ delete mode 100644 arch/arm/mach-efm32/Makefile
+ delete mode 100644 arch/arm/mach-efm32/Makefile.boot
+ delete mode 100644 arch/arm/mach-efm32/dtmachine.c
+ delete mode 100644 drivers/clk/clk-efm32gg.c
+ delete mode 100644 drivers/clocksource/timer-efm32.c
+ delete mode 100644 drivers/i2c/busses/i2c-efm32.c
+ delete mode 100644 drivers/spi/spi-efm32.c
+ delete mode 100644 drivers/tty/serial/efm32-uart.c
+ delete mode 100644 include/linux/platform_data/efm32-spi.h
+ delete mode 100644 include/linux/platform_data/efm32-uart.h
+
+
+base-commit: 5c8fe583cce542aa0b84adc939ce85293de36e5e
+-- 
+2.29.2
+
