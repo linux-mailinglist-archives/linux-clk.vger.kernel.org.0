@@ -2,271 +2,254 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFAD2FC2D5
-	for <lists+linux-clk@lfdr.de>; Tue, 19 Jan 2021 22:57:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DAE2FC4D8
+	for <lists+linux-clk@lfdr.de>; Wed, 20 Jan 2021 00:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728231AbhASVzN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 19 Jan 2021 16:55:13 -0500
-Received: from m-r2.th.seeweb.it ([5.144.164.171]:54955 "EHLO
-        m-r2.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727866AbhASVzB (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 19 Jan 2021 16:55:01 -0500
-Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id D7D363EF47;
-        Tue, 19 Jan 2021 22:54:14 +0100 (CET)
-Subject: Re: [PATCH v4 3/5] clk: qcom: clk-alpha-pll: Add support for Lucid
- 5LPE PLL
-To:     Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vivek Aknurwar <viveka@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
+        id S1727011AbhASXgt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 19 Jan 2021 18:36:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2395252AbhASOMS (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 19 Jan 2021 09:12:18 -0500
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E0EC061573;
+        Tue, 19 Jan 2021 06:11:36 -0800 (PST)
+Received: by mail-qk1-x733.google.com with SMTP id 186so21886548qkj.3;
+        Tue, 19 Jan 2021 06:11:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=b+3EAfMUK2Pd7hJPkoCdOK/Ss+UF/oaJmaMm82ocHYc=;
+        b=C4css+jaIhLmEq33qcko+uudGSe+gQi1YpfP0252UaK9yIxIiGGpLT3KY37JFBUS+L
+         GhG2Vg+k7yA92I95EQLcOupImuvbjb259HPoPxhVLYIchOjVcLfumTk+LWSWbCJFrgUI
+         fjrXfwugYJ762j/zT31GoVMKMq9kBW7s2Q0q22U/cD+Yxqf+Wb8ykuYOyxGogziACv87
+         NSzVSNifnonQlMo9Eq7GOfo/KIHWH3Gx3au/S8hj95kCjGyynTlTVo9G7XUOoqrKEjMw
+         Jp1i4O+6KKTKjGdBHZ50WjFv5M4prJOCobooRrH6Np8/h1nS67dzCfwplCmDP1X9oT4m
+         DoHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=b+3EAfMUK2Pd7hJPkoCdOK/Ss+UF/oaJmaMm82ocHYc=;
+        b=OaibLML/mERyFukuBqzzJETtPhRO7m3Jy2VDYSPOPwqZI3o8RSr0X9Vp1tKLAYgZVO
+         T8hBOl8OWn1P2XjJ8IHtwKjDdizcu8Gbr7emz+xgigFpDtlQG9oOI/AYqVAoNC6T4IJR
+         beAUsD3tpGEPi3s4JnIgqFYsC7BNUUBmgtphjXRT80xUWAorG7lYyp63qhVafxvIn479
+         H4yfvXaiXAxuixW0Z6bwhsepA1BeeelC48OH2yGqocwtY0a5KN91IeAKBn8py03U0929
+         9zGWrw83qy2Ob5nG6kZ5L8Rut7ZMt81ZvsJwMdVB442Fl5uRU6jL7FqcawSTDbiLl6yG
+         gQpA==
+X-Gm-Message-State: AOAM53050EC7ZW8Er7cz8+NcNKLOxMrA8evchRsTMId3JHFPwGpfl2C9
+        j8o6/8u/hmoLre54rSzwdIk=
+X-Google-Smtp-Source: ABdhPJxghCLXpIaUsfyXQ0vaKeMdJYRxuVeBnwJMfdxeoM2m2AdjY3rphj1Zi0OeeHq8wu8dyHCDBw==
+X-Received: by 2002:a05:620a:15e3:: with SMTP id p3mr4436366qkm.397.1611065495687;
+        Tue, 19 Jan 2021 06:11:35 -0800 (PST)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id r190sm13139819qka.54.2021.01.19.06.11.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jan 2021 06:11:34 -0800 (PST)
+Date:   Tue, 19 Jan 2021 15:11:31 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     JC Kuo <jckuo@nvidia.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeevan Shriram <jshriram@codeaurora.org>
-References: <20210118044321.2571775-1-vkoul@kernel.org>
- <20210118044321.2571775-4-vkoul@kernel.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Message-ID: <894afe9b-8534-3a57-efc8-d517aab617fe@somainline.org>
-Date:   Tue, 19 Jan 2021 22:54:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     gregkh@linuxfoundation.org, robh@kernel.org, jonathanh@nvidia.com,
+        kishon@ti.com, linux-tegra@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, nkristam@nvidia.com,
+        Thierry Reding <treding@nvidia.com>, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v6 01/15] clk: tegra: Add PLLE HW power sequencer control
+Message-ID: <YAbok9mDA82mkIRi@ulmo>
+References: <20210119085546.725005-1-jckuo@nvidia.com>
+ <20210119085546.725005-2-jckuo@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <20210118044321.2571775-4-vkoul@kernel.org>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="kglYWkkBvx+6liW+"
+Content-Disposition: inline
+In-Reply-To: <20210119085546.725005-2-jckuo@nvidia.com>
+User-Agent: Mutt/2.0.4 (26f41dd1) (2020-12-30)
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Il 18/01/21 05:43, Vinod Koul ha scritto:
-> From: Vivek Aknurwar <viveka@codeaurora.org>
-> 
-> Lucid 5LPE is a slightly different Lucid PLL with different offsets and
-> porgramming sequence so add support for these
-> 
-> Signed-off-by: Vivek Aknurwar <viveka@codeaurora.org>
-> Signed-off-by: Jeevan Shriram <jshriram@codeaurora.org>
-> [vkoul: rebase and tidy up for upstream]
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+
+--kglYWkkBvx+6liW+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Jan 19, 2021 at 04:55:32PM +0800, JC Kuo wrote:
+> PLLE has a hardware power sequencer logic which is a state machine
+> that can power on/off PLLE without any software intervention. The
+> sequencer has two inputs, one from XUSB UPHY PLL and the other from
+> SATA UPHY PLL. PLLE provides reference clock to XUSB and SATA UPHY
+> PLLs. When both of the downstream PLLs are powered-off, PLLE hardware
+> power sequencer will automatically power off PLLE for power saving.
+>=20
+> XUSB and SATA UPHY PLLs also have their own hardware power sequencer
+> logic. XUSB UPHY PLL is shared between XUSB SuperSpeed ports and PCIE
+> controllers. The XUSB UPHY PLL hardware power sequencer has inputs
+> from XUSB and PCIE. When all of the XUSB SuperSpeed ports and PCIE
+> controllers are in low power state, XUSB UPHY PLL hardware power
+> sequencer automatically power off PLL and flags idle to PLLE hardware
+> power sequencer. Similar applies to SATA UPHY PLL.
+>=20
+> PLLE hardware power sequencer has to be enabled after both downstream
+> sequencers are enabled.
+>=20
+> This commit adds two helper functions:
+> 1. tegra210_plle_hw_sequence_start() for XUSB PADCTL driver to enable
+>    PLLE hardware sequencer at proper time.
+>=20
+> 2. tegra210_plle_hw_sequence_is_enabled() for XUSB PADCTL driver to
+>    check whether PLLE hardware sequencer has been enabled or not.
+>=20
+> Signed-off-by: JC Kuo <jckuo@nvidia.com>
+> Acked-by: Thierry Reding <treding@nvidia.com>
 > ---
->   drivers/clk/qcom/clk-alpha-pll.c | 173 +++++++++++++++++++++++++++++++
->   drivers/clk/qcom/clk-alpha-pll.h |   4 +
->   2 files changed, 177 insertions(+)
-> 
-> diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
-> index a30ea7b09224..f9c48da21bd1 100644
-> --- a/drivers/clk/qcom/clk-alpha-pll.c
-> +++ b/drivers/clk/qcom/clk-alpha-pll.c
-> @@ -156,6 +156,12 @@ EXPORT_SYMBOL_GPL(clk_alpha_pll_regs);
->   /* LUCID PLL specific settings and offsets */
->   #define LUCID_PCAL_DONE		BIT(27)
->   
-> +/* LUCID 5LPE PLL specific settings and offsets */
-> +#define LUCID_5LPE_PCAL_DONE		BIT(11)
-> +#define LUCID_5LPE_ALPHA_PLL_ACK_LATCH	BIT(13)
-> +#define LUCID_5LPE_PLL_LATCH_INPUT	BIT(14)
-> +#define LUCID_5LPE_ENABLE_VOTE_RUN	BIT(21)
+> v6:
+>    no change
+> v5: no change
+> v4:
+>    update copyright strings
+> v3:
+>    rename 'val' with 'value
+>=20
+>  drivers/clk/tegra/clk-tegra210.c | 53 +++++++++++++++++++++++++++++++-
+>  include/linux/clk/tegra.h        |  4 ++-
+>  2 files changed, 55 insertions(+), 2 deletions(-)
+
+Michael, Stephen,
+
+we need these custom APIs to pass control of the hardware PLL sequencer
+to the UPHY driver. Do you have any objections to this? Subsequent
+patches in this series depend on these symbols, so it'd be great if you
+could give an Acked-by on this and patch 2 (I'll Cc you on that right
+away) so that they can go in via either the PHY or USB trees.
+
+Thanks,
+Thierry
+
+> diff --git a/drivers/clk/tegra/clk-tegra210.c b/drivers/clk/tegra/clk-teg=
+ra210.c
+> index 68cbb98af567..b9099012dc7b 100644
+> --- a/drivers/clk/tegra/clk-tegra210.c
+> +++ b/drivers/clk/tegra/clk-tegra210.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * Copyright (c) 2012-2014 NVIDIA CORPORATION.  All rights reserved.
+> + * Copyright (c) 2012-2020 NVIDIA CORPORATION.  All rights reserved.
+>   */
+> =20
+>  #include <linux/io.h>
+> @@ -403,6 +403,14 @@ static unsigned long tegra210_input_freq[] =3D {
+>  #define PLLRE_BASE_DEFAULT_MASK		0x1c000000
+>  #define PLLRE_MISC0_WRITE_MASK		0x67ffffff
+> =20
+> +/* PLLE */
+> +#define PLLE_MISC_IDDQ_SW_CTRL		(1 << 14)
+> +#define PLLE_AUX_USE_LOCKDET		(1 << 3)
+> +#define PLLE_AUX_SS_SEQ_INCLUDE		(1 << 31)
+> +#define PLLE_AUX_ENABLE_SWCTL		(1 << 4)
+> +#define PLLE_AUX_SS_SWCTL		(1 << 6)
+> +#define PLLE_AUX_SEQ_ENABLE		(1 << 24)
 > +
->   #define pll_alpha_width(p)					\
->   		((PLL_ALPHA_VAL_U(p) - PLL_ALPHA_VAL(p) == 4) ?	\
->   				 ALPHA_REG_BITWIDTH : ALPHA_REG_16BIT_WIDTH)
-> @@ -1604,3 +1610,170 @@ const struct clk_ops clk_alpha_pll_agera_ops = {
->   	.set_rate = clk_alpha_pll_agera_set_rate,
->   };
->   EXPORT_SYMBOL_GPL(clk_alpha_pll_agera_ops);
-> +
-> +static int alpha_pll_lucid_5lpe_enable(struct clk_hw *hw)
+>  /* PLLX */
+>  #define PLLX_USE_DYN_RAMP		1
+>  #define PLLX_BASE_LOCK			(1 << 27)
+> @@ -489,6 +497,49 @@ static unsigned long tegra210_input_freq[] =3D {
+>  #define PLLU_MISC0_WRITE_MASK		0xbfffffff
+>  #define PLLU_MISC1_WRITE_MASK		0x00000007
+> =20
+> +bool tegra210_plle_hw_sequence_is_enabled(void)
 > +{
-> +	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
-> +	u32 val;
-> +	int ret;
+> +	u32 value;
 > +
-> +	ret = regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &val);
-> +	if (ret)
-> +		return ret;
+> +	value =3D readl_relaxed(clk_base + PLLE_AUX);
+> +	if (value & PLLE_AUX_SEQ_ENABLE)
+> +		return true;
 > +
-> +	/* If in FSM mode, just vote for it */
-> +	if (val & LUCID_5LPE_ENABLE_VOTE_RUN) {
-> +		ret = clk_enable_regmap(hw);
-> +		if (ret)
-> +			return ret;
-> +		return wait_for_pll_enable_lock(pll);
-> +	}
-> +
-> +	/* Check if PLL is already enabled, return if enabled */
-> +	ret = trion_pll_is_enabled(pll, pll->clkr.regmap);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = regmap_update_bits(pll->clkr.regmap, PLL_MODE(pll), PLL_RESET_N, PLL_RESET_N);
-> +	if (ret)
-> +		return ret;
-> +
-> +	regmap_write(pll->clkr.regmap, PLL_OPMODE(pll), PLL_RUN);
-> +
-> +	ret = wait_for_pll_enable_lock(pll);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Enable the PLL outputs */
-> +	ret = regmap_update_bits(pll->clkr.regmap, PLL_USER_CTL(pll), PLL_OUT_MASK, PLL_OUT_MASK);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Enable the global PLL outputs */
-> +	return regmap_update_bits(pll->clkr.regmap, PLL_MODE(pll), PLL_OUTCTRL, PLL_OUTCTRL);
+> +	return false;
 > +}
+> +EXPORT_SYMBOL_GPL(tegra210_plle_hw_sequence_is_enabled);
 > +
-> +static void alpha_pll_lucid_5lpe_disable(struct clk_hw *hw)
+> +int tegra210_plle_hw_sequence_start(void)
 > +{
-> +	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
-> +	u32 val;
-> +	int ret;
+> +	u32 value;
 > +
-> +	ret = regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &val);
-> +	if (ret)
-> +		return;
-> +
-> +	/* If in FSM mode, just unvote it */
-> +	if (val & LUCID_5LPE_ENABLE_VOTE_RUN) {
-> +		clk_disable_regmap(hw);
-> +		return;
-> +	}
-> +
-> +	/* Disable the global PLL output */
-> +	ret = regmap_update_bits(pll->clkr.regmap, PLL_MODE(pll), PLL_OUTCTRL, 0);
-> +	if (ret)
-> +		return;
-> +
-> +	/* Disable the PLL outputs */
-> +	ret = regmap_update_bits(pll->clkr.regmap, PLL_USER_CTL(pll), PLL_OUT_MASK, 0);
-> +	if (ret)
-> +		return;
-> +
-> +	/* Place the PLL mode in STANDBY */
-> +	regmap_write(pll->clkr.regmap, PLL_OPMODE(pll), PLL_STANDBY);
-> +}
-> +
-> +/*
-> + * The Lucid 5LPE PLL requires a power-on self-calibration which happens
-> + * when the PLL comes out of reset. Calibrate in case it is not completed.
-> + */
-> +static int alpha_pll_lucid_5lpe_prepare(struct clk_hw *hw)
-> +{
-> +	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
-> +	struct clk_hw *p;
-> +	u32 val;
-> +	int ret;
-> +
-> +	/* Return early if calibration is not needed. */
-> +	regmap_read(pll->clkr.regmap, PLL_MODE(pll), &val);
-> +	if (val & LUCID_5LPE_PCAL_DONE)
+> +	if (tegra210_plle_hw_sequence_is_enabled())
 > +		return 0;
 > +
-> +	p = clk_hw_get_parent(hw);
-> +	if (!p)
-> +		return -EINVAL;
+> +	/* skip if PLLE is not enabled yet */
+> +	value =3D readl_relaxed(clk_base + PLLE_MISC0);
+> +	if (!(value & PLLE_MISC_LOCK))
+> +		return -EIO;
 > +
-> +	ret = alpha_pll_lucid_5lpe_enable(hw);
-> +	if (ret)
-> +		return ret;
+> +	value &=3D ~PLLE_MISC_IDDQ_SW_CTRL;
+> +	writel_relaxed(value, clk_base + PLLE_MISC0);
 > +
-> +	alpha_pll_lucid_5lpe_disable(hw);
+> +	value =3D readl_relaxed(clk_base + PLLE_AUX);
+> +	value |=3D (PLLE_AUX_USE_LOCKDET | PLLE_AUX_SS_SEQ_INCLUDE);
+> +	value &=3D ~(PLLE_AUX_ENABLE_SWCTL | PLLE_AUX_SS_SWCTL);
+> +	writel_relaxed(value, clk_base + PLLE_AUX);
+> +
+> +	fence_udelay(1, clk_base);
+> +
+> +	value |=3D PLLE_AUX_SEQ_ENABLE;
+> +	writel_relaxed(value, clk_base + PLLE_AUX);
+> +
+> +	fence_udelay(1, clk_base);
 > +
 > +	return 0;
 > +}
+> +EXPORT_SYMBOL_GPL(tegra210_plle_hw_sequence_start);
 > +
-> +static int alpha_pll_lucid_5lpe_set_rate(struct clk_hw *hw, unsigned long rate,
-> +					 unsigned long prate)
-> +{
-> +	return __alpha_pll_trion_set_rate(hw, rate, prate,
-> +					  LUCID_5LPE_PLL_LATCH_INPUT,
-> +					  LUCID_5LPE_ALPHA_PLL_ACK_LATCH);
-> +}
-> +
-> +static int clk_lucid_5lpe_pll_postdiv_set_rate(struct clk_hw *hw, unsigned long rate,
-> +					       unsigned long parent_rate)
-> +{
-> +	struct clk_alpha_pll_postdiv *pll = to_clk_alpha_pll_postdiv(hw);
-> +	int i, val = 0, div, ret;
-> +	u32 mask;
-> +
-> +	/*
-> +	 * If the PLL is in FSM mode, then treat set_rate callback as a
-> +	 * no-operation.
-> +	 */
-> +	ret = regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (val & LUCID_5LPE_ENABLE_VOTE_RUN)
-> +		return 0;
-> +
-> +	div = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
-> +	for (i = 0; i < pll->num_post_div; i++) {
-> +		if (pll->post_div_table[i].div == div) {
-> +			val = pll->post_div_table[i].val;
-> +			break;
-> +		}
-> +	}
-> +
-> +	mask = GENMASK(pll->width + pll->post_div_shift - 1, pll->post_div_shift);
-> +	return regmap_update_bits(pll->clkr.regmap, PLL_USER_CTL(pll),
-> +				  mask, val << pll->post_div_shift);
-> +}
-> +
-> +const struct clk_ops clk_alpha_pll_lucid_5lpe_ops = {
-> +	.prepare = alpha_pll_lucid_5lpe_prepare,
-> +	.enable = alpha_pll_lucid_5lpe_enable,
-> +	.disable = alpha_pll_lucid_5lpe_disable,
-> +	.is_enabled = clk_trion_pll_is_enabled,
-> +	.recalc_rate = clk_trion_pll_recalc_rate,
-> +	.round_rate = clk_alpha_pll_round_rate,
-> +	.set_rate = alpha_pll_lucid_5lpe_set_rate,
-> +};
-> +EXPORT_SYMBOL(clk_alpha_pll_lucid_5lpe_ops);
-> +
-> +const struct clk_ops clk_alpha_pll_fixed_lucid_5lpe_ops = {
-> +	.enable = alpha_pll_lucid_5lpe_enable,
-> +	.disable = alpha_pll_lucid_5lpe_disable,
-> +	.is_enabled = clk_trion_pll_is_enabled,
-> +	.recalc_rate = clk_trion_pll_recalc_rate,
-> +	.round_rate = clk_alpha_pll_round_rate,
-> +};
-> +EXPORT_SYMBOL(clk_alpha_pll_fixed_lucid_5lpe_ops);
-> +
-> +const struct clk_ops clk_alpha_pll_postdiv_lucid_5lpe_ops = {
-> +	.recalc_rate = clk_alpha_pll_postdiv_fabia_recalc_rate,
-> +	.round_rate = clk_alpha_pll_postdiv_fabia_round_rate,
-> +	.set_rate = clk_lucid_5lpe_pll_postdiv_set_rate,
-> +};
-> +EXPORT_SYMBOL(clk_alpha_pll_postdiv_lucid_5lpe_ops);
-> diff --git a/drivers/clk/qcom/clk-alpha-pll.h b/drivers/clk/qcom/clk-alpha-pll.h
-> index 0ea30d2f3da1..6943e933be0f 100644
-> --- a/drivers/clk/qcom/clk-alpha-pll.h
-> +++ b/drivers/clk/qcom/clk-alpha-pll.h
-> @@ -144,6 +144,10 @@ extern const struct clk_ops clk_alpha_pll_lucid_ops;
->   extern const struct clk_ops clk_alpha_pll_postdiv_lucid_ops;
->   extern const struct clk_ops clk_alpha_pll_agera_ops;
->   
-> +extern const struct clk_ops clk_alpha_pll_lucid_5lpe_ops;
-> +extern const struct clk_ops clk_alpha_pll_fixed_lucid_5lpe_ops;
-> +extern const struct clk_ops clk_alpha_pll_postdiv_lucid_5lpe_ops;
-> +
->   void clk_alpha_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
->   			     const struct alpha_pll_config *config);
->   void clk_fabia_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
-> 
+>  void tegra210_xusb_pll_hw_control_enable(void)
+>  {
+>  	u32 val;
+> diff --git a/include/linux/clk/tegra.h b/include/linux/clk/tegra.h
+> index eb016fc9cc0b..f7ff722a03dd 100644
+> --- a/include/linux/clk/tegra.h
+> +++ b/include/linux/clk/tegra.h
+> @@ -1,6 +1,6 @@
+>  /* SPDX-License-Identifier: GPL-2.0-only */
+>  /*
+> - * Copyright (c) 2012, NVIDIA CORPORATION.  All rights reserved.
+> + * Copyright (c) 2012-2020, NVIDIA CORPORATION.  All rights reserved.
+>   */
+> =20
+>  #ifndef __LINUX_CLK_TEGRA_H_
+> @@ -123,6 +123,8 @@ static inline void tegra_cpu_clock_resume(void)
+>  }
+>  #endif
+> =20
+> +extern int tegra210_plle_hw_sequence_start(void);
+> +extern bool tegra210_plle_hw_sequence_is_enabled(void);
+>  extern void tegra210_xusb_pll_hw_control_enable(void);
+>  extern void tegra210_xusb_pll_hw_sequence_start(void);
+>  extern void tegra210_sata_pll_hw_control_enable(void);
+> --=20
+> 2.25.1
+>=20
 
-Thanks for following my suggestion!
+--kglYWkkBvx+6liW+
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Reviewed-by: AngeloGioacchino Del Regno 
-<angelogioacchino.delregno@somainline.org>
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmAG6JMACgkQ3SOs138+
+s6FLew/+KMCIRNB//9pQHITt5igYM24Ugdmk+mYiuwFw1GM+AWRzH4PApSTMBwq1
++NQfOomTyXwkpwm1yvFxahKkYmS+nA3Mz2bYYKjHzZVIkbLpMRlj0J9hxdMsQ4DV
+aQH9UerGOY8++pbEEhMedXhx6UIGYAvGgOzbZ7Y2AnPonyQU4t0oUbpIvo6yYq8o
+OxXmAp1WRaJ+PF3gCZes2GZspt5Ujh7A77I6gsR+QohZnD0uAE/zGKn0cIemLi+z
+6UMooT+WBiM/R48LSlnd3+HmvxihQiwuaSCN4/35hM+pmZ8DJbvHYvmCGrY0bTQI
+U4xjp8SFVccHtUzj2SPW3vx9bOmmCcj7GHFm+1v97kchOIl4fKWHxeSpm6LVh84g
+uXVcsx3FlT5S311nt3M5nv+JUaNba8VjsZ8fNufc1CA+HEZdwSp5+PJ4z1z3ACLw
+xcv/qOugrfwmhJlsM5d3O7lfXhGMaPsjO1yRG/tXnd15/FC18eqnOxn/DD6z5ixv
+FWjg8edAwOiDgp+3QXR2X1qssko0NQG5qux0XNgq5EVHz7Bih4Jt6QQ+gvPnQcOf
+7KMRP+6lSNTHBWZ+laONGZuc83wH+EDklKwuiTEYq5HI3JTzIAkl14ZwpPwW+H6C
+AxxherBD+cn7puE5HVF2VjTMOalGO/LRfnASlp9+yM4fTjSW0M0=
+=4KoJ
+-----END PGP SIGNATURE-----
+
+--kglYWkkBvx+6liW+--
