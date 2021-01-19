@@ -2,152 +2,271 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA9D2FC231
-	for <lists+linux-clk@lfdr.de>; Tue, 19 Jan 2021 22:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FFAD2FC2D5
+	for <lists+linux-clk@lfdr.de>; Tue, 19 Jan 2021 22:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728715AbhASVXf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 19 Jan 2021 16:23:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729391AbhASVXa (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 19 Jan 2021 16:23:30 -0500
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9094C061573
-        for <linux-clk@vger.kernel.org>; Tue, 19 Jan 2021 13:22:47 -0800 (PST)
-Received: by mail-qv1-xf2d.google.com with SMTP id h1so9884231qvy.12
-        for <linux-clk@vger.kernel.org>; Tue, 19 Jan 2021 13:22:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :mime-version;
-        bh=QoR15X76Wa8utojDFzghU0XUanvjdtOD0JtOJepg2zQ=;
-        b=iPJY1moesz74BGlcRCZu6JplYli8oRPYxZQBKc+pWMMbglhVWCtRcav6p7QbWlmfum
-         y9W2MoQitiRxq4vuw0hSckO056h6CHdVtyShAQ+wz+tlHDIjKqUAffiYs3CsV0+376MY
-         i8hyuUkqVPwmKiEluATsxtURE48Sqj8WPxQSqwJZhULp4yCG1KlkbEwseTV8eWdQSal0
-         yPhyyGwa1jxr7yCWBYKuryrDiBQ3BMIyUfykY6LKVg2m6kQdX/mCUhgPfYAb/XNq/IH6
-         Xy529AmwgQW8E7Mrhw1tcFJgcBLgkfVWq+KicOk4/kvAkAggZFcFNAGg7mehzP4iYq/5
-         z5yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:mime-version;
-        bh=QoR15X76Wa8utojDFzghU0XUanvjdtOD0JtOJepg2zQ=;
-        b=Lp06Qzf0PdN/TN2rzZzD8JgfTa2klV+JT1LzT2tNINCtfV5WesUqITwMv76niSYzMZ
-         LzEzjRbQClyErukmRNUn+DKaVABteeJS+ehaek4HE31kSsYrXEtwsxJmOKfFQuOW6abK
-         GAtgdlUr4iFHWO1dEsj3tta3AcaoIpzd2XQQVlVffcbwvQJNRYg7ahN9B5KcXW5rsr1L
-         968So3UNguYRL89gFnhen3jP7jw3xvTa05TKS6/4vOIG8XR20JparXzU++leAmL0A3MX
-         iRXeTcmMOTi7fLOBL8pwXyse1LdYAr+ZnX6tXOd/FNef7zo4+30vadGNWAbW2FuLuM6v
-         AEBA==
-X-Gm-Message-State: AOAM530dcQoxwm1/hH1HTBGcxLFqHUj94jEwd5OrFGPcs0Ss/I2Troyp
-        Vw7P7+Z0a4diXpcYuVp/ny48t1BWXUkRoszJ
-X-Google-Smtp-Source: ABdhPJy7oZ+C+6qSYY0OzIqs85mSSUlDrZJnwr/XBhiMfYxFs6zMdfwcY0MyqSmEu4dZm/GSpAD4lQ==
-X-Received: by 2002:ad4:4431:: with SMTP id e17mr6465871qvt.21.1611091367227;
-        Tue, 19 Jan 2021 13:22:47 -0800 (PST)
-Received: from xanadu.home (modemcable076.50-203-24.mc.videotron.ca. [24.203.50.76])
-        by smtp.gmail.com with ESMTPSA id l38sm3459069qte.88.2021.01.19.13.22.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 13:22:46 -0800 (PST)
-Date:   Tue, 19 Jan 2021 16:22:45 -0500 (EST)
-From:   Nicolas Pitre <npitre@baylibre.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-cc:     Kevin Hilman <khilman@baylibre.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1728231AbhASVzN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 19 Jan 2021 16:55:13 -0500
+Received: from m-r2.th.seeweb.it ([5.144.164.171]:54955 "EHLO
+        m-r2.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727866AbhASVzB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 19 Jan 2021 16:55:01 -0500
+Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id D7D363EF47;
+        Tue, 19 Jan 2021 22:54:14 +0100 (CET)
+Subject: Re: [PATCH v4 3/5] clk: qcom: clk-alpha-pll: Add support for Lucid
+ 5LPE PLL
+To:     Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vivek Aknurwar <viveka@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] PM / clk: make PM clock layer compatible with clocks
- that must sleep
-In-Reply-To: <CAMuHMdX8T+tO-sT_tgrgEi-D0z2ac7k4Atg13arHN5bA84HqTA@mail.gmail.com>
-Message-ID: <s41o2qs1-49or-rnr4-s370-2444r1055@onlyvoer.pbz>
-References: <17nqrn25-rp5s-4652-o5o1-72p2oprqpq90@onlyvoer.pbz> <7him7sydd6.fsf@baylibre.com> <CAMuHMdX8T+tO-sT_tgrgEi-D0z2ac7k4Atg13arHN5bA84HqTA@mail.gmail.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jeevan Shriram <jshriram@codeaurora.org>
+References: <20210118044321.2571775-1-vkoul@kernel.org>
+ <20210118044321.2571775-4-vkoul@kernel.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Message-ID: <894afe9b-8534-3a57-efc8-d517aab617fe@somainline.org>
+Date:   Tue, 19 Jan 2021 22:54:14 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20210118044321.2571775-4-vkoul@kernel.org>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, 19 Jan 2021, Geert Uytterhoeven wrote:
+Il 18/01/21 05:43, Vinod Koul ha scritto:
+> From: Vivek Aknurwar <viveka@codeaurora.org>
+> 
+> Lucid 5LPE is a slightly different Lucid PLL with different offsets and
+> porgramming sequence so add support for these
+> 
+> Signed-off-by: Vivek Aknurwar <viveka@codeaurora.org>
+> Signed-off-by: Jeevan Shriram <jshriram@codeaurora.org>
+> [vkoul: rebase and tidy up for upstream]
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>   drivers/clk/qcom/clk-alpha-pll.c | 173 +++++++++++++++++++++++++++++++
+>   drivers/clk/qcom/clk-alpha-pll.h |   4 +
+>   2 files changed, 177 insertions(+)
+> 
+> diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
+> index a30ea7b09224..f9c48da21bd1 100644
+> --- a/drivers/clk/qcom/clk-alpha-pll.c
+> +++ b/drivers/clk/qcom/clk-alpha-pll.c
+> @@ -156,6 +156,12 @@ EXPORT_SYMBOL_GPL(clk_alpha_pll_regs);
+>   /* LUCID PLL specific settings and offsets */
+>   #define LUCID_PCAL_DONE		BIT(27)
+>   
+> +/* LUCID 5LPE PLL specific settings and offsets */
+> +#define LUCID_5LPE_PCAL_DONE		BIT(11)
+> +#define LUCID_5LPE_ALPHA_PLL_ACK_LATCH	BIT(13)
+> +#define LUCID_5LPE_PLL_LATCH_INPUT	BIT(14)
+> +#define LUCID_5LPE_ENABLE_VOTE_RUN	BIT(21)
+> +
+>   #define pll_alpha_width(p)					\
+>   		((PLL_ALPHA_VAL_U(p) - PLL_ALPHA_VAL(p) == 4) ?	\
+>   				 ALPHA_REG_BITWIDTH : ALPHA_REG_16BIT_WIDTH)
+> @@ -1604,3 +1610,170 @@ const struct clk_ops clk_alpha_pll_agera_ops = {
+>   	.set_rate = clk_alpha_pll_agera_set_rate,
+>   };
+>   EXPORT_SYMBOL_GPL(clk_alpha_pll_agera_ops);
+> +
+> +static int alpha_pll_lucid_5lpe_enable(struct clk_hw *hw)
+> +{
+> +	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
+> +	u32 val;
+> +	int ret;
+> +
+> +	ret = regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* If in FSM mode, just vote for it */
+> +	if (val & LUCID_5LPE_ENABLE_VOTE_RUN) {
+> +		ret = clk_enable_regmap(hw);
+> +		if (ret)
+> +			return ret;
+> +		return wait_for_pll_enable_lock(pll);
+> +	}
+> +
+> +	/* Check if PLL is already enabled, return if enabled */
+> +	ret = trion_pll_is_enabled(pll, pll->clkr.regmap);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = regmap_update_bits(pll->clkr.regmap, PLL_MODE(pll), PLL_RESET_N, PLL_RESET_N);
+> +	if (ret)
+> +		return ret;
+> +
+> +	regmap_write(pll->clkr.regmap, PLL_OPMODE(pll), PLL_RUN);
+> +
+> +	ret = wait_for_pll_enable_lock(pll);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Enable the PLL outputs */
+> +	ret = regmap_update_bits(pll->clkr.regmap, PLL_USER_CTL(pll), PLL_OUT_MASK, PLL_OUT_MASK);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Enable the global PLL outputs */
+> +	return regmap_update_bits(pll->clkr.regmap, PLL_MODE(pll), PLL_OUTCTRL, PLL_OUTCTRL);
+> +}
+> +
+> +static void alpha_pll_lucid_5lpe_disable(struct clk_hw *hw)
+> +{
+> +	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
+> +	u32 val;
+> +	int ret;
+> +
+> +	ret = regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &val);
+> +	if (ret)
+> +		return;
+> +
+> +	/* If in FSM mode, just unvote it */
+> +	if (val & LUCID_5LPE_ENABLE_VOTE_RUN) {
+> +		clk_disable_regmap(hw);
+> +		return;
+> +	}
+> +
+> +	/* Disable the global PLL output */
+> +	ret = regmap_update_bits(pll->clkr.regmap, PLL_MODE(pll), PLL_OUTCTRL, 0);
+> +	if (ret)
+> +		return;
+> +
+> +	/* Disable the PLL outputs */
+> +	ret = regmap_update_bits(pll->clkr.regmap, PLL_USER_CTL(pll), PLL_OUT_MASK, 0);
+> +	if (ret)
+> +		return;
+> +
+> +	/* Place the PLL mode in STANDBY */
+> +	regmap_write(pll->clkr.regmap, PLL_OPMODE(pll), PLL_STANDBY);
+> +}
+> +
+> +/*
+> + * The Lucid 5LPE PLL requires a power-on self-calibration which happens
+> + * when the PLL comes out of reset. Calibrate in case it is not completed.
+> + */
+> +static int alpha_pll_lucid_5lpe_prepare(struct clk_hw *hw)
+> +{
+> +	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
+> +	struct clk_hw *p;
+> +	u32 val;
+> +	int ret;
+> +
+> +	/* Return early if calibration is not needed. */
+> +	regmap_read(pll->clkr.regmap, PLL_MODE(pll), &val);
+> +	if (val & LUCID_5LPE_PCAL_DONE)
+> +		return 0;
+> +
+> +	p = clk_hw_get_parent(hw);
+> +	if (!p)
+> +		return -EINVAL;
+> +
+> +	ret = alpha_pll_lucid_5lpe_enable(hw);
+> +	if (ret)
+> +		return ret;
+> +
+> +	alpha_pll_lucid_5lpe_disable(hw);
+> +
+> +	return 0;
+> +}
+> +
+> +static int alpha_pll_lucid_5lpe_set_rate(struct clk_hw *hw, unsigned long rate,
+> +					 unsigned long prate)
+> +{
+> +	return __alpha_pll_trion_set_rate(hw, rate, prate,
+> +					  LUCID_5LPE_PLL_LATCH_INPUT,
+> +					  LUCID_5LPE_ALPHA_PLL_ACK_LATCH);
+> +}
+> +
+> +static int clk_lucid_5lpe_pll_postdiv_set_rate(struct clk_hw *hw, unsigned long rate,
+> +					       unsigned long parent_rate)
+> +{
+> +	struct clk_alpha_pll_postdiv *pll = to_clk_alpha_pll_postdiv(hw);
+> +	int i, val = 0, div, ret;
+> +	u32 mask;
+> +
+> +	/*
+> +	 * If the PLL is in FSM mode, then treat set_rate callback as a
+> +	 * no-operation.
+> +	 */
+> +	ret = regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (val & LUCID_5LPE_ENABLE_VOTE_RUN)
+> +		return 0;
+> +
+> +	div = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
+> +	for (i = 0; i < pll->num_post_div; i++) {
+> +		if (pll->post_div_table[i].div == div) {
+> +			val = pll->post_div_table[i].val;
+> +			break;
+> +		}
+> +	}
+> +
+> +	mask = GENMASK(pll->width + pll->post_div_shift - 1, pll->post_div_shift);
+> +	return regmap_update_bits(pll->clkr.regmap, PLL_USER_CTL(pll),
+> +				  mask, val << pll->post_div_shift);
+> +}
+> +
+> +const struct clk_ops clk_alpha_pll_lucid_5lpe_ops = {
+> +	.prepare = alpha_pll_lucid_5lpe_prepare,
+> +	.enable = alpha_pll_lucid_5lpe_enable,
+> +	.disable = alpha_pll_lucid_5lpe_disable,
+> +	.is_enabled = clk_trion_pll_is_enabled,
+> +	.recalc_rate = clk_trion_pll_recalc_rate,
+> +	.round_rate = clk_alpha_pll_round_rate,
+> +	.set_rate = alpha_pll_lucid_5lpe_set_rate,
+> +};
+> +EXPORT_SYMBOL(clk_alpha_pll_lucid_5lpe_ops);
+> +
+> +const struct clk_ops clk_alpha_pll_fixed_lucid_5lpe_ops = {
+> +	.enable = alpha_pll_lucid_5lpe_enable,
+> +	.disable = alpha_pll_lucid_5lpe_disable,
+> +	.is_enabled = clk_trion_pll_is_enabled,
+> +	.recalc_rate = clk_trion_pll_recalc_rate,
+> +	.round_rate = clk_alpha_pll_round_rate,
+> +};
+> +EXPORT_SYMBOL(clk_alpha_pll_fixed_lucid_5lpe_ops);
+> +
+> +const struct clk_ops clk_alpha_pll_postdiv_lucid_5lpe_ops = {
+> +	.recalc_rate = clk_alpha_pll_postdiv_fabia_recalc_rate,
+> +	.round_rate = clk_alpha_pll_postdiv_fabia_round_rate,
+> +	.set_rate = clk_lucid_5lpe_pll_postdiv_set_rate,
+> +};
+> +EXPORT_SYMBOL(clk_alpha_pll_postdiv_lucid_5lpe_ops);
+> diff --git a/drivers/clk/qcom/clk-alpha-pll.h b/drivers/clk/qcom/clk-alpha-pll.h
+> index 0ea30d2f3da1..6943e933be0f 100644
+> --- a/drivers/clk/qcom/clk-alpha-pll.h
+> +++ b/drivers/clk/qcom/clk-alpha-pll.h
+> @@ -144,6 +144,10 @@ extern const struct clk_ops clk_alpha_pll_lucid_ops;
+>   extern const struct clk_ops clk_alpha_pll_postdiv_lucid_ops;
+>   extern const struct clk_ops clk_alpha_pll_agera_ops;
+>   
+> +extern const struct clk_ops clk_alpha_pll_lucid_5lpe_ops;
+> +extern const struct clk_ops clk_alpha_pll_fixed_lucid_5lpe_ops;
+> +extern const struct clk_ops clk_alpha_pll_postdiv_lucid_5lpe_ops;
+> +
+>   void clk_alpha_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
+>   			     const struct alpha_pll_config *config);
+>   void clk_fabia_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
+> 
 
-> Hi Kevin, Nicolas,
-> 
-> On Tue, Jan 19, 2021 at 7:45 PM Kevin Hilman <khilman@baylibre.com> wrote:
-> > [ + Geert.. renesas SoCs are the primary user of PM clk ]
-> 
-> Thanks!
-> 
-> > Nicolas Pitre <npitre@baylibre.com> writes:
-> > > The clock API splits its interface into sleepable ant atomic contexts:
-> > >
-> > > - clk_prepare/clk_unprepare for stuff that might sleep
-> > >
-> > > - clk_enable_clk_disable for anything that may be done in atomic context
-> > >
-> > > The code handling runtime PM for clocks only calls clk_disable() on
-> > > suspend requests, and clk_enable on resume requests. This means that
-> > > runtime PM with clock providers that only have the prepare/unprepare
-> > > methods implemented is basically useless.
-> > >
-> > > Many clock implementations can't accommodate atomic contexts. This is
-> > > often the case when communication with the clock happens through another
-> > > subsystem like I2C or SCMI.
-> > >
-> > > Let's make the clock PM code useful with such clocks by safely invoking
-> > > clk_prepare/clk_unprepare upon resume/suspend requests. Of course, when
-> > > such clocks are registered with the PM layer then pm_runtime_irq_safe()
-> > > can't be used, and neither pm_runtime_suspend() nor pm_runtime_resume()
-> > > may be invoked in atomic context.
-> > >
-> > > For clocks that do implement the enable and disable methods then
-> > > everything just works as before.
-> > >
-> > > Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
-> 
-> Thanks for your patch!
-> 
-> > > --- a/drivers/base/power/clock_ops.c
-> > > +++ b/drivers/base/power/clock_ops.c
-> 
-> > > +/**
-> > > + * pm_clk_op_lock - ensure exclusive access for performing clock operations.
-> > > + * @psd: pm_subsys_data instance corresponding to the PM clock entry list
-> > > + *    and clk_op_might_sleep count being used.
-> > > + * @flags: stored irq flags.
-> > > + * @fn: string for the caller function's name.
-> > > + *
-> > > + * This is used by pm_clk_suspend() and pm_clk_resume() to guard
-> > > + * against concurrent modifications to the clock entry list and the
-> > > + * clock_op_might_sleep count. If clock_op_might_sleep is != 0 then
-> > > + * only the mutex can be locked and those functions can only be used in
-> > > + * non atomic context. If clock_op_might_sleep == 0 then these functions
-> > > + * may be used in any context and only the spinlock can be locked.
-> > > + * Returns -EINVAL if called in atomic context when clock ops might sleep.
-> > > + */
-> > > +static int pm_clk_op_lock(struct pm_subsys_data *psd, unsigned long *flags,
-> > > +                       const char *fn)
-> > > +{
-> > > +     bool atomic_context = in_atomic() || irqs_disabled();
-> 
-> Is this safe? Cfr.
-> https://lore.kernel.org/dri-devel/20200914204209.256266093@linutronix.de/
+Thanks for following my suggestion!
 
-I noticed this topic is a mess. This is why I'm not relying on 
-in_atomic() alone as it turned out not to be sufficient in all cases 
-during testing.
-
-What's there now is safe at least in the context from which it is called 
-i.e. the runtime pm core code. If not then hopefully the might_sleep() 
-that follows will catch misuses.
-
-It should be noted that we assume an atomic context by default. However, 
-if you rely on clocks that must sleep then you must not invoke runtime 
-pm facilities in atomic context from your driver in the first place. The 
-atomic_context variable above is there only used further down as a 
-validation check to catch programming mistakes and not an operational 
-parameter.
-
-
-Nicolas
+Reviewed-by: AngeloGioacchino Del Regno 
+<angelogioacchino.delregno@somainline.org>
