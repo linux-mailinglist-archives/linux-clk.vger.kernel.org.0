@@ -2,60 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3653E2FCE5F
+	by mail.lfdr.de (Postfix) with ESMTP id A3BB12FCE60
 	for <lists+linux-clk@lfdr.de>; Wed, 20 Jan 2021 11:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733278AbhATKi7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 20 Jan 2021 05:38:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
+        id S1733285AbhATKjE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 20 Jan 2021 05:39:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730336AbhATJdm (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 20 Jan 2021 04:33:42 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D836FC0617B9
-        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:31:02 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id c128so2191295wme.2
-        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:31:02 -0800 (PST)
+        with ESMTP id S1731434AbhATJdt (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 20 Jan 2021 04:33:49 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE5CC0617BC
+        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:31:04 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id c128so2191357wme.2
+        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:31:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ZlxWqB97396Z/1CTd7JjSdXD/AayRN7t/x5G26LknOw=;
-        b=YW8CLG2amwNwESLYt8j2slhiMdqoBHjc3t9MBSkQGbtJ9tiNc/C38kXcKSQxORb6XD
-         jq4X2o/AdyIonvu+iNGV0nPBkc1+GHus2lYFwxJM01UE5MObgcw009+epNk4rDV11iRl
-         LfSxGbrNKChJjsjW6RyPy6+dak4PfdI40njSOTW0+DCMFmws1ZpwY4PEivLAyq5MdwSU
-         XvUXuDZGKOFTUxsQL9WFRUNeXaDtt+cKWDMXoNJyZ0joRQm+BAhXi0m/lRoDv1u9wtnu
-         bb+QLTB6b6bvECBYjOMlFgXQNs4ccybT4j/WJFSCTgiEChqlFK4ZGkTLs6+nrqMYf77G
-         CiRQ==
+        bh=/Cp1gEYyuPZEPQHMnMAoPqNAjf4Uu2nrDn0l3qFFYNM=;
+        b=XRKGU3TuNzHBFC89BWDjqJ5hAyo+4Yh8pfCnFFMEk7w7e4CVLgSauiD1D6ChJQkPmO
+         XTsrqY1MYX+iiXxGZrIXRoFcXloPdKljvImfh+b7XxVUh7beWUSWZocuCwtvoHJxgn2K
+         BJbzeTi8alM1pwdtJc7LWh2w1RZIMNsOe77PsGs/DhKhTgC1/UIGkTrqmmKs8FMwkgUp
+         oD8mMqaEDLQSNnkKfEgR0Q6JH5EH1Q0Imywfe1H09s+XD8BzVkJfaToNDwHqcqicaVuI
+         e8RUQw9j6a7dJvRkC5espSYy6T14Tapa9gwdsfcgt194sRgXGrh0VDW20BfrjolTpAja
+         O9kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ZlxWqB97396Z/1CTd7JjSdXD/AayRN7t/x5G26LknOw=;
-        b=eYr62rCAzd/PBlwUSvhftfwhKwdVpvBENTL0pTnVAUozgZASpOwjGhet/ZQmUe2JBL
-         28SVUjjjeWMbN7R2HCntLkzcrlgET/LcTeWM9D6gBHXdQAUfjU3IFRRw7zodaP1xQegJ
-         pL0ecvE4jKuUoojwnK5MsDpKquOnPagIXMzaazQytd3kppEGhB38QvjKseJrHyf+En5V
-         9wvTO9QHsC8/9pHT2DFtO1wOrKJd46DnrWoX5JDO4DvKum0O4X+uANQZd6e5toAQaxbn
-         qKXzsa5a83Lw6zwLRS/4HooYlnwmVIoXbLC64EPbDTfo17klReqArpL5OM5GUu1peX1v
-         EWvQ==
-X-Gm-Message-State: AOAM531S/7a4o7rA3pyWP8i6e7UBbqzlNq5Iise7jVkilH8s9rBLzJPn
-        txDDGc9Vv9g/kQgh7eEAlvm6/w==
-X-Google-Smtp-Source: ABdhPJz3CMwq3lUrKSRc8gEuNGfqALvjLL4ApeskT3BX/9cQHX/dTMIgwY2+r417x7R6omOj+oJ3HQ==
-X-Received: by 2002:a7b:cb09:: with SMTP id u9mr3483431wmj.61.1611135061623;
-        Wed, 20 Jan 2021 01:31:01 -0800 (PST)
+        bh=/Cp1gEYyuPZEPQHMnMAoPqNAjf4Uu2nrDn0l3qFFYNM=;
+        b=RGKqERsjcF/wPe1Fz9W89A9l6VvIF3+2obghgz1v4HHu0VdO0eRCB1tWjN2hB7ISIR
+         riBJwtbLPyGKzXfZ2BcFPJ5BQ3l8QXgtx2q0gJ4jgmg798M/94jvMcmI+VcqcmPyxBdV
+         wZHyxi/pFEQALD/fzG7pAw9xcZuTlWJh3xznlknFvwZ2i9zmQnzlBTafE86jWgXLPfNw
+         IulYE3qUNghjxR2X8HpkyKP+uQWT2Win7QIyo/+iDlMTYgj2hwTmkqcCv0qjFXL8eMQR
+         qAAgzJLCMFt+m9SKagBBPCZLWzWbts79YLwilGaBoTDqaSwxTI6Stxq21dHdDSFdydn5
+         yskw==
+X-Gm-Message-State: AOAM530uGjkm6x/2HNG6iyxEn+jbQIgkuB9gWK7i31npAK1C77k18S7h
+        xZ20FVwX7R99shJYWOSRfdyFnw==
+X-Google-Smtp-Source: ABdhPJxZxWzaToEk27ecZGkXhe+6U5z7Ot3JGsAIEg9K+DV3FjCF6F8iccxzNz/LgqouJZmYDGeo4g==
+X-Received: by 2002:a7b:ca4d:: with SMTP id m13mr3570290wml.28.1611135062782;
+        Wed, 20 Jan 2021 01:31:02 -0800 (PST)
 Received: from dell.default ([91.110.221.158])
-        by smtp.gmail.com with ESMTPSA id z130sm2889201wmb.33.2021.01.20.01.31.00
+        by smtp.gmail.com with ESMTPSA id z130sm2889201wmb.33.2021.01.20.01.31.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 01:31:01 -0800 (PST)
+        Wed, 20 Jan 2021 01:31:02 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org, Tero Kristo <kristo@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>, linux-omap@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH 15/20] clk: ti: dpll: Fix misnaming of '_register_dpll()'s 'user' parameter
-Date:   Wed, 20 Jan 2021 09:30:35 +0000
-Message-Id: <20210120093040.1719407-16-lee.jones@linaro.org>
+Subject: [PATCH 16/20] clk: ti: gate: Fix possible doc-rot in 'omap36xx_gate_clk_enable_with_hsdiv_restore'
+Date:   Wed, 20 Jan 2021 09:30:36 +0000
+Message-Id: <20210120093040.1719407-17-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210120093040.1719407-1-lee.jones@linaro.org>
 References: <20210120093040.1719407-1-lee.jones@linaro.org>
@@ -67,8 +67,8 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/clk/ti/dpll.c:163: warning: Function parameter or member 'user' not described in '_register_dpll'
- drivers/clk/ti/dpll.c:163: warning: Excess function parameter 'hw' description in '_register_dpll'
+ drivers/clk/ti/gate.c:67: warning: Function parameter or member 'hw' not described in 'omap36xx_gate_clk_enable_with_hsdiv_restore'
+ drivers/clk/ti/gate.c:67: warning: Excess function parameter 'clk' description in 'omap36xx_gate_clk_enable_with_hsdiv_restore'
 
 Cc: Tero Kristo <kristo@kernel.org>
 Cc: Michael Turquette <mturquette@baylibre.com>
@@ -77,22 +77,22 @@ Cc: linux-omap@vger.kernel.org
 Cc: linux-clk@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/clk/ti/dpll.c | 2 +-
+ drivers/clk/ti/gate.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/ti/dpll.c b/drivers/clk/ti/dpll.c
-index 247510e306e2a..d6f1ac5b53e14 100644
---- a/drivers/clk/ti/dpll.c
-+++ b/drivers/clk/ti/dpll.c
-@@ -151,7 +151,7 @@ static const struct clk_ops dpll_x2_ck_ops = {
- 
+diff --git a/drivers/clk/ti/gate.c b/drivers/clk/ti/gate.c
+index 42389558418c5..b1d0fdb40a75a 100644
+--- a/drivers/clk/ti/gate.c
++++ b/drivers/clk/ti/gate.c
+@@ -55,7 +55,7 @@ static const struct clk_ops omap_gate_clk_hsdiv_restore_ops = {
  /**
-  * _register_dpll - low level registration of a DPLL clock
-- * @hw: hardware clock definition for the clock
-+ * @user: pointer to the hardware clock definition for the clock
-  * @node: device node for the clock
+  * omap36xx_gate_clk_enable_with_hsdiv_restore - enable clocks suffering
+  *         from HSDivider PWRDN problem Implements Errata ID: i556.
+- * @clk: DPLL output struct clk
++ * @hw: DPLL output struct clk_hw
   *
-  * Finalizes DPLL registration process. In case a failure (clk-ref or
+  * 3630 only: dpll3_m3_ck, dpll4_m2_ck, dpll4_m3_ck, dpll4_m4_ck,
+  * dpll4_m5_ck & dpll4_m6_ck dividers gets loaded with reset
 -- 
 2.25.1
 
