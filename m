@@ -2,75 +2,194 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A9F2FD64D
-	for <lists+linux-clk@lfdr.de>; Wed, 20 Jan 2021 18:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 807882FD6F2
+	for <lists+linux-clk@lfdr.de>; Wed, 20 Jan 2021 18:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731979AbhATPwo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 20 Jan 2021 10:52:44 -0500
-Received: from mail-ot1-f46.google.com ([209.85.210.46]:37970 "EHLO
-        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391084AbhATPvB (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 20 Jan 2021 10:51:01 -0500
-Received: by mail-ot1-f46.google.com with SMTP id 34so12946502otd.5;
-        Wed, 20 Jan 2021 07:50:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=d1RIdVWUE4TQGWQdWOMOdBMzSo28XMRtLOv3LQVvbYY=;
-        b=qwpc6KR2Mbs2hnNQymugjuOwxvGWW4BeTujV0I8qubQ7wVd9w2pqGzmHzXW0RXF5Ie
-         RXxuTKy5dhSX5rpwC67Jotl6fCHqRjwtNUrKwH2djsv1vq4IOUnHDkcF8vN3bgUPyGeF
-         Oz13yXgUzXRsUu1vCdxVhWz5xPnZEGQ/i8cLDXHZ9l9QUrqZPcfE6Lk2tPabyNr4AUOT
-         UFba8tBc0XRx8ns60CXYA7JnPnqF+p+1C6ru3/V30mDXq1B3QGk5upt7QNQ5ieavuODu
-         YR8DoloL3MKIE7DIK4NAItPbE5GkUOQw5gVglRsT5+yEVEpD2NQPixhJI33xnReTJ4Di
-         vf/g==
-X-Gm-Message-State: AOAM532d2yNKU0EOmJuJvGhCNMH6TW9J6LiuHynhUyDMnx3f2Yw4bSal
-        eEI8uh9mJ1uSsvDzVItS1w==
-X-Google-Smtp-Source: ABdhPJza+e1g6BqmYZCEdNrw4PdYHbZpUkkQnnQYFNep0IagbifZCgUs/DzozVcOsfQc40GCknXmSQ==
-X-Received: by 2002:a05:6830:1ad4:: with SMTP id r20mr7218321otc.354.1611157820437;
-        Wed, 20 Jan 2021 07:50:20 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id x12sm423724oic.51.2021.01.20.07.50.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 07:50:19 -0800 (PST)
-Received: (nullmailer pid 214205 invoked by uid 1000);
-        Wed, 20 Jan 2021 15:50:18 -0000
-Date:   Wed, 20 Jan 2021 09:50:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     bjorn.andersson@linaro.org, sboyd@kernel.org,
-        jassisinghbrar@gmail.com, viresh.kumar@linaro.org,
-        linux-clk@vger.kernel.org, mturquette@baylibre.com,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        agross@kernel.org, ulf.hansson@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 3/5] dt-bindings: clock: Add Qualcomm A7 PLL binding
-Message-ID: <20210120155018.GA213895@robh.at.kernel.org>
-References: <20210118041156.50016-1-manivannan.sadhasivam@linaro.org>
- <20210118041156.50016-4-manivannan.sadhasivam@linaro.org>
+        id S1732767AbhATOIe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 20 Jan 2021 09:08:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52728 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732809AbhATNLV (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 20 Jan 2021 08:11:21 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8B74623139;
+        Wed, 20 Jan 2021 13:10:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611148238;
+        bh=/n5jpX+Dga0L4p7HwpIfjYOcjPdDWZ/CVpwJlDNpSAg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fsCHHXHNopSEqcUuWJtVqPqqbKUWcWdm4uLEhBdMfs7dWH/zXXsn9LOVtPCDFGup4
+         LqQqS1TCKnLWwZ1lsztvdxQMTDkoMx5/ZeOQlo/s+3iZ/Xqxwwt+vBnBDyc+aXfjqG
+         o1kTtHYggstYj425ZIeb27S6DcSNQoNHzTCzzoZQ6qvrzxmtT7yCOpa+GHV7/WM4lq
+         lt64Uz7a5o7yRN3h2I1yuwNB4Hst1cAafobzcwx/Z2ni42OaXMCx0hRjB4UEY7mvBX
+         d741IsKW/R+ej6rGwqJY3uPTaX9lJpzWmZtAKUk/N/6YiDR4IaYNiHOW7dKaf0AUSE
+         EVgD6BNPYm5Kg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        Mans Rullgard <mans@mansr.com>
+Subject: [PATCH 1/4] clk: remove tango4 driver
+Date:   Wed, 20 Jan 2021 14:10:23 +0100
+Message-Id: <20210120131026.1721788-2-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210120131026.1721788-1-arnd@kernel.org>
+References: <20210120131026.1721788-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210118041156.50016-4-manivannan.sadhasivam@linaro.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, 18 Jan 2021 09:41:54 +0530, Manivannan Sadhasivam wrote:
-> Add devicetree YAML binding for Cortex A7 PLL clock in Qualcomm
-> platforms like SDX55.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  .../devicetree/bindings/clock/qcom,a7pll.yaml | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,a7pll.yaml
-> 
+From: Arnd Bergmann <arnd@arndb.de>
 
+The tango platform is getting removed, so the driver is no
+longer needed.
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+Cc: Marc Gonzalez <marc.w.gonzalez@free.fr>
+Cc: Mans Rullgard <mans@mansr.com>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ .../bindings/clock/tango4-clock.txt           | 23 -----
+ drivers/clk/Makefile                          |  1 -
+ drivers/clk/clk-tango4.c                      | 85 -------------------
+ 3 files changed, 109 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/tango4-clock.txt
+ delete mode 100644 drivers/clk/clk-tango4.c
 
-If a tag was not added on purpose, please state why and what changed.
+diff --git a/Documentation/devicetree/bindings/clock/tango4-clock.txt b/Documentation/devicetree/bindings/clock/tango4-clock.txt
+deleted file mode 100644
+index 19c580a7bda2..000000000000
+--- a/Documentation/devicetree/bindings/clock/tango4-clock.txt
++++ /dev/null
+@@ -1,23 +0,0 @@
+-* Sigma Designs Tango4 Clock Generator
+-
+-The Tango4 clock generator outputs cpu_clk and sys_clk (the latter is used
+-for RAM and various peripheral devices). The clock binding described here
+-is applicable to all Tango4 SoCs.
+-
+-Required Properties:
+-
+-- compatible: should be "sigma,tango4-clkgen".
+-- reg: physical base address of the device and length of memory mapped region.
+-- clocks: phandle of the input clock (crystal oscillator).
+-- clock-output-names: should be "cpuclk" and "sysclk".
+-- #clock-cells: should be set to 1.
+-
+-Example:
+-
+-	clkgen: clkgen@10000 {
+-		compatible = "sigma,tango4-clkgen";
+-		reg = <0x10000 0x40>;
+-		clocks = <&xtal>;
+-		clock-output-names = "cpuclk", "sysclk";
+-		#clock-cells = <1>;
+-	};
+diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+index dbdc590e7de3..adf05704336e 100644
+--- a/drivers/clk/Makefile
++++ b/drivers/clk/Makefile
+@@ -63,7 +63,6 @@ obj-$(CONFIG_COMMON_CLK_SI570)		+= clk-si570.o
+ obj-$(CONFIG_COMMON_CLK_STM32F)		+= clk-stm32f4.o
+ obj-$(CONFIG_COMMON_CLK_STM32H7)	+= clk-stm32h7.o
+ obj-$(CONFIG_COMMON_CLK_STM32MP157)	+= clk-stm32mp1.o
+-obj-$(CONFIG_ARCH_TANGO)		+= clk-tango4.o
+ obj-$(CONFIG_CLK_TWL6040)		+= clk-twl6040.o
+ obj-$(CONFIG_ARCH_U300)			+= clk-u300.o
+ obj-$(CONFIG_ARCH_VT8500)		+= clk-vt8500.o
+diff --git a/drivers/clk/clk-tango4.c b/drivers/clk/clk-tango4.c
+deleted file mode 100644
+index fe12a43f7a40..000000000000
+--- a/drivers/clk/clk-tango4.c
++++ /dev/null
+@@ -1,85 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-#include <linux/kernel.h>
+-#include <linux/clk-provider.h>
+-#include <linux/of_address.h>
+-#include <linux/init.h>
+-#include <linux/io.h>
+-
+-#define CLK_COUNT 4 /* cpu_clk, sys_clk, usb_clk, sdio_clk */
+-static struct clk *clks[CLK_COUNT];
+-static struct clk_onecell_data clk_data = { clks, CLK_COUNT };
+-
+-#define SYSCLK_DIV	0x20
+-#define CPUCLK_DIV	0x24
+-#define DIV_BYPASS	BIT(23)
+-
+-/*** CLKGEN_PLL ***/
+-#define extract_pll_n(val)	((val >>  0) & ((1u << 7) - 1))
+-#define extract_pll_k(val)	((val >> 13) & ((1u << 3) - 1))
+-#define extract_pll_m(val)	((val >> 16) & ((1u << 3) - 1))
+-#define extract_pll_isel(val)	((val >> 24) & ((1u << 3) - 1))
+-
+-static void __init make_pll(int idx, const char *parent, void __iomem *base)
+-{
+-	char name[8];
+-	u32 val, mul, div;
+-
+-	sprintf(name, "pll%d", idx);
+-	val = readl(base + idx * 8);
+-	mul =  extract_pll_n(val) + 1;
+-	div = (extract_pll_m(val) + 1) << extract_pll_k(val);
+-	clk_register_fixed_factor(NULL, name, parent, 0, mul, div);
+-	if (extract_pll_isel(val) != 1)
+-		panic("%s: input not set to XTAL_IN\n", name);
+-}
+-
+-static void __init make_cd(int idx, void __iomem *base)
+-{
+-	char name[8];
+-	u32 val, mul, div;
+-
+-	sprintf(name, "cd%d", idx);
+-	val = readl(base + idx * 8);
+-	mul =  1 << 27;
+-	div = (2 << 27) + val;
+-	clk_register_fixed_factor(NULL, name, "pll2", 0, mul, div);
+-	if (val > 0xf0000000)
+-		panic("%s: unsupported divider %x\n", name, val);
+-}
+-
+-static void __init tango4_clkgen_setup(struct device_node *np)
+-{
+-	struct clk **pp = clk_data.clks;
+-	void __iomem *base = of_iomap(np, 0);
+-	const char *parent = of_clk_get_parent_name(np, 0);
+-
+-	if (!base)
+-		panic("%pOFn: invalid address\n", np);
+-
+-	if (readl(base + CPUCLK_DIV) & DIV_BYPASS)
+-		panic("%pOFn: unsupported cpuclk setup\n", np);
+-
+-	if (readl(base + SYSCLK_DIV) & DIV_BYPASS)
+-		panic("%pOFn: unsupported sysclk setup\n", np);
+-
+-	writel(0x100, base + CPUCLK_DIV); /* disable frequency ramping */
+-
+-	make_pll(0, parent, base);
+-	make_pll(1, parent, base);
+-	make_pll(2, parent, base);
+-	make_cd(2, base + 0x80);
+-	make_cd(6, base + 0x80);
+-
+-	pp[0] = clk_register_divider(NULL, "cpu_clk", "pll0", 0,
+-			base + CPUCLK_DIV, 8, 8, CLK_DIVIDER_ONE_BASED, NULL);
+-	pp[1] = clk_register_fixed_factor(NULL, "sys_clk", "pll1", 0, 1, 4);
+-	pp[2] = clk_register_fixed_factor(NULL,  "usb_clk", "cd2", 0, 1, 2);
+-	pp[3] = clk_register_fixed_factor(NULL, "sdio_clk", "cd6", 0, 1, 2);
+-
+-	if (IS_ERR(pp[0]) || IS_ERR(pp[1]) || IS_ERR(pp[2]) || IS_ERR(pp[3]))
+-		panic("%pOFn: clk registration failed\n", np);
+-
+-	if (of_clk_add_provider(np, of_clk_src_onecell_get, &clk_data))
+-		panic("%pOFn: clk provider registration failed\n", np);
+-}
+-CLK_OF_DECLARE(tango4_clkgen, "sigma,tango4-clkgen", tango4_clkgen_setup);
+-- 
+2.29.2
 
