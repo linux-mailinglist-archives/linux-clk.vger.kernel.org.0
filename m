@@ -2,59 +2,59 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9C92FCE83
-	for <lists+linux-clk@lfdr.de>; Wed, 20 Jan 2021 11:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 060A22FCE7A
+	for <lists+linux-clk@lfdr.de>; Wed, 20 Jan 2021 11:55:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732999AbhATKdJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 20 Jan 2021 05:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
+        id S1733122AbhATKgR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 20 Jan 2021 05:36:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731403AbhATJcA (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 20 Jan 2021 04:32:00 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75356C06179C
-        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:30:53 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id y17so22374429wrr.10
-        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:30:53 -0800 (PST)
+        with ESMTP id S1729869AbhATJc1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 20 Jan 2021 04:32:27 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E7CEC06179F
+        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:30:54 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id v184so2192024wma.1
+        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:30:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3zpDeTOsD2P7WN1NPJVgpjl7R+7fXK52sr/TrTLf7sk=;
-        b=TZckWmIVkN9la2W25N7ghd/3t5LriuUBnVMaMg75aBQ2i9AcMnOJKMgCqJ+1HMhWVW
-         DubqCpSoYLpwIzbGp/DbqA44ErDaScHCrx60lKcgaI3/lQ+djsTnXDHLTCzJhXgfhNN5
-         2ruy4joVgMK6TIjwr5DUGhfwda3+XJayRxso4n/0lf/J8+ab9/Di8+8r7PGoyhA6YH9l
-         m7+Hr9Gn4giYDEWpSAKIZ1XmXi+EetNXS9dnTJtpZFtJa5BLFR+Zxf7ToPGNfzGDhGNU
-         deDlXxIITd4AlTUYXjWjnLIOPuDZXG8Vw/rKPCCjhekXmbFoj1WXi5pJHGO4CXR4VoXQ
-         kYgg==
+        bh=2s0WTD1P6C9PUp9361FQ7s9ERQBew8D3q3YSn9pwKqI=;
+        b=EwiGDSqWbaqynOyMryHhUvnCtaaJBgXO4kzsWemCVeNRpdGUDQf9Jk2+67lSJ5WOOq
+         dHypUe5DQleFurSr+O7+zbe1lB1oNoXnunzN/lvTRvfVJt+2CQ511YUX3ng7QJuoY8Ht
+         GuzRzc5T4JZUXEbLmivtfef95Gwe5rSspNIBtWgTfDYRtGkgzV9QK3gsindIkrEoXOob
+         oMEqIhnbJ82vsdncXYrrCDNVcIfVsjLaTAiy/DPQD/MxvwW++ugIy7VGUI3mnQ9mPL/v
+         6z5A25iPAdo93UurZqrDgDwvvqEZwrRhby28nwA0N98tQA0XHVRJOc/XIjQUW2VVabx9
+         7Mnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3zpDeTOsD2P7WN1NPJVgpjl7R+7fXK52sr/TrTLf7sk=;
-        b=G0bI2XVoWeDaIUt7IrQdOojtuwzmJ8GIShYBqc8YliQG+ezxzdwQUdWlNLrExNUFWu
-         kICtxpft9XkNE5cTr/Eb4DZgObtT7TzjB73Ks04f4pZGlKD4FF+CMeo7a7RCyM74Ao5l
-         CBZRKC8TTPJmZD/9ZoS7bemy6KBuh8GvL6QZDhiRJ5RmuooOvZE/NqjLmftTF9+gv1S2
-         JIZYq62q333zW/RatHeAurkneP8Ges19TdNSXEem71kHuu+7YgJO9AgV/4azKKrQ4Ds8
-         u2/Y4jWz8fJ17+pSuYSj8j7DHikk4pb9yiS0SmKBTQb6sNNhmuH3eAU18fHE+UbG68C0
-         btyw==
-X-Gm-Message-State: AOAM530teb4oN1UJWm6BWFKZAmluLJ4/FPC/sQCcDGrYUi1aaZE9ZvCJ
-        N9xhU0Kr15Fs1N8DFL/VLlMfzw==
-X-Google-Smtp-Source: ABdhPJyd+2c72Z2W8MYn9ewofWd/BnR52BttYOgrM7aSaNTdNRx3Nyr23GgWLZxJ67da2cldjYhcsA==
-X-Received: by 2002:a5d:6902:: with SMTP id t2mr8274810wru.214.1611135052283;
-        Wed, 20 Jan 2021 01:30:52 -0800 (PST)
+        bh=2s0WTD1P6C9PUp9361FQ7s9ERQBew8D3q3YSn9pwKqI=;
+        b=Y2kqxtIkScmd5gZL4K2Z7kWxqdUwZg/8JfMHSmDzMNE2oYPBWkdr0GT3fF5RY+hkNj
+         MBWNFgWiEM49bdcxSfkwUcr4WnE9+vx+P7h5HUATPB+ASqTcNIKTAqMe/szony71ItNg
+         adGQNaXgLPJDLMINKrosVtQACJpuwlgroyYUF6/7rCu8sBpCitS/lyC63mFY+aZ0TzUN
+         hxbi0PCNa7MF9f4mg30cpNF8bSmpQKFjTqeixtTkGXkGATJQW7vyP7PloO6pRn/PFXuj
+         6D7xH5GWljB6eYSS968Xvblfu43Jx3BARBR6xZOrgu7IDKkLUWnbB+VrVISMbSlBklEC
+         MfXA==
+X-Gm-Message-State: AOAM530zsVeSlG8OBT0Ox+0qQX76TLb9tFmjXsIAu9DOK9iB/c92t7gr
+        lm7mzVAHI6lmg/0u3jQP683vGRy4qoRlVNK+
+X-Google-Smtp-Source: ABdhPJxaoyGMT0Wu5KmcpicqSgm3Rl9iH+ncRNwslwS1hSErnZ9AZR+Byl6PVvDX9k3baTtfBnUHVw==
+X-Received: by 2002:a7b:c24c:: with SMTP id b12mr3374861wmj.167.1611135053433;
+        Wed, 20 Jan 2021 01:30:53 -0800 (PST)
 Received: from dell.default ([91.110.221.158])
-        by smtp.gmail.com with ESMTPSA id z130sm2889201wmb.33.2021.01.20.01.30.51
+        by smtp.gmail.com with ESMTPSA id z130sm2889201wmb.33.2021.01.20.01.30.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 01:30:51 -0800 (PST)
+        Wed, 20 Jan 2021 01:30:52 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH 07/20] clk: socfpga: clk-pll: Remove unused variable 'rc'
-Date:   Wed, 20 Jan 2021 09:30:27 +0000
-Message-Id: <20210120093040.1719407-8-lee.jones@linaro.org>
+Subject: [PATCH 08/20] clk: socfpga: clk-pll-a10: Remove set but unused variable 'rc'
+Date:   Wed, 20 Jan 2021 09:30:28 +0000
+Message-Id: <20210120093040.1719407-9-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210120093040.1719407-1-lee.jones@linaro.org>
 References: <20210120093040.1719407-1-lee.jones@linaro.org>
@@ -67,8 +67,8 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/clk/socfpga/clk-pll.c: In function ‘__socfpga_pll_init’:
- drivers/clk/socfpga/clk-pll.c:83:6: warning: variable ‘rc’ set but not used [-Wunused-but-set-variable]
+ drivers/clk/socfpga/clk-pll-a10.c: In function ‘__socfpga_pll_init’:
+ drivers/clk/socfpga/clk-pll-a10.c:76:6: warning: variable ‘rc’ set but not used [-Wunused-but-set-variable]
 
 Cc: Dinh Nguyen <dinguyen@kernel.org>
 Cc: Michael Turquette <mturquette@baylibre.com>
@@ -76,22 +76,22 @@ Cc: Stephen Boyd <sboyd@kernel.org>
 Cc: linux-clk@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/clk/socfpga/clk-pll.c | 3 +--
+ drivers/clk/socfpga/clk-pll-a10.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/clk/socfpga/clk-pll.c b/drivers/clk/socfpga/clk-pll.c
-index e5fb786843f39..3cf99df7d0056 100644
---- a/drivers/clk/socfpga/clk-pll.c
-+++ b/drivers/clk/socfpga/clk-pll.c
-@@ -80,7 +80,6 @@ static __init struct clk *__socfpga_pll_init(struct device_node *node,
- 	const char *parent_name[SOCFPGA_MAX_PARENTS];
+diff --git a/drivers/clk/socfpga/clk-pll-a10.c b/drivers/clk/socfpga/clk-pll-a10.c
+index db54f7d806a09..3338f054fe98c 100644
+--- a/drivers/clk/socfpga/clk-pll-a10.c
++++ b/drivers/clk/socfpga/clk-pll-a10.c
+@@ -73,7 +73,6 @@ static struct clk * __init __socfpga_pll_init(struct device_node *node,
+ 	const char *parent_name[SOCFGPA_MAX_PARENTS];
  	struct clk_init_data init;
  	struct device_node *clkmgr_np;
 -	int rc;
+ 	int i = 0;
  
  	of_property_read_u32(node, "reg", &reg);
- 
-@@ -111,7 +110,7 @@ static __init struct clk *__socfpga_pll_init(struct device_node *node,
+@@ -108,7 +107,7 @@ static struct clk * __init __socfpga_pll_init(struct device_node *node,
  		kfree(pll_clk);
  		return NULL;
  	}
