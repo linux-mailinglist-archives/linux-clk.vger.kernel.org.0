@@ -2,104 +2,113 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A64F2FD618
-	for <lists+linux-clk@lfdr.de>; Wed, 20 Jan 2021 17:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 931FF2FD64C
+	for <lists+linux-clk@lfdr.de>; Wed, 20 Jan 2021 18:02:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731887AbhATQmy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 20 Jan 2021 11:42:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
+        id S1728981AbhATPw1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 20 Jan 2021 10:52:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391718AbhATQmV (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 20 Jan 2021 11:42:21 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E56C061757;
-        Wed, 20 Jan 2021 08:41:41 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id q1so48078177ion.8;
-        Wed, 20 Jan 2021 08:41:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=d1ptfx9MBkjEmmJ18l5zZfZj5ndiNTQD02M7SBmrC80=;
-        b=b54lhfe/lR/z5qUzeKX6jAB8CXmKK7J8XsyATY7LYJLUJ+hbnsi4nskN4GOMGvddz9
-         3LFPqe18YuJ4jo8UTLv5uogW3Gog6mWhN7eysHGi/jEvyoB+5XdzM0Gbv5ngZiHsZjpo
-         3UlUxXOBP2XiQF50Vnz4ssffWGnLhCHikV8F3ml1zMQNy33SsRXtcJRDyPjdYUm0C4E+
-         ep7zxspAMQik7ADES/LMwbCmI1i4ZsKX4f0JKKfIcyarYFxgok7KjZKQA8KFIxgH+MEc
-         yXiydONZo2juDScLcvkI6Tc5LDc7MQqhngRXdLVjBQH/msQsMeAl94j20CDksec6MHkG
-         BuxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=d1ptfx9MBkjEmmJ18l5zZfZj5ndiNTQD02M7SBmrC80=;
-        b=EqElRwIAM6fbM7QONyvSR3l416AzA1n+9zEAJLQReMrYc4SRD9aC5HVveOUxeZkyxw
-         SfEyJBcschFDel0EuQKasAPYjHOgRNa2gNl7zWdQuDWkoN9R/tR0IwLRZf4HxYbIaxHH
-         4/7hQteKwP30QuAaSPoRHq2PLR+R46at0aNdFCkvtPxAzTMW6g5pGkaP2JuQ5WZfFKka
-         bylZ4ncDSMxpYG+lY+0riXOZ89SvDE6zf0gewtr0hvIkoOAALkrBnOOwPvi30J2QxUr7
-         POpR/ZmCc8Hz+56ZpyU/EzSsLdCAaAGR8RCTObl4QQjP2vD+y1zfw85/j19VMrCPdyR/
-         TwmA==
-X-Gm-Message-State: AOAM531BcjG0NukWAfcarielkf8gUJ0nKYYFw9LlwXNuXXHrAkPQDePY
-        cebTbrxcJD8dDgVSqnmkynz+evxlx4HOPiTav3uUO0Zl46o=
-X-Google-Smtp-Source: ABdhPJwjkfC7vxSYl+elSTXavI2EkbX9fRHxRQYsNVMDnePcYgrd7W8c2kUHMf5xk7qsxsjJKAGToNoQ9/fW0Kdwwqo=
-X-Received: by 2002:a02:7fd5:: with SMTP id r204mr8622208jac.74.1611160900259;
- Wed, 20 Jan 2021 08:41:40 -0800 (PST)
-MIME-Version: 1.0
-References: <20210119212109.1064786-1-aford173@gmail.com> <9dab169a-e551-7ba1-7fe2-d00e80978388@lucaceresoli.net>
-In-Reply-To: <9dab169a-e551-7ba1-7fe2-d00e80978388@lucaceresoli.net>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Wed, 20 Jan 2021 10:41:29 -0600
-Message-ID: <CAHCN7xKERYbGvhdX38bzb5Qa75wTUMSkDoLQy4E1BZQYz9wNkA@mail.gmail.com>
-Subject: Re: [PATCH V2 1/2] dt-bindings: clk: versaclock5: Add optional load
- capacitance property
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     linux-clk <linux-clk@vger.kernel.org>,
+        with ESMTP id S2390967AbhATPuw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 20 Jan 2021 10:50:52 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3CEC061757
+        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 07:50:12 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1l2FkA-0004PH-K3; Wed, 20 Jan 2021 16:50:02 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1l2Fk9-0005Fx-LJ; Wed, 20 Jan 2021 16:50:01 +0100
+Date:   Wed, 20 Jan 2021 16:50:01 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Abel Vesa <abel.vesa@nxp.com>
+Cc:     Adam Ford <aford173@gmail.com>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
         Adam Ford-BE <aford@beaconembedded.com>,
+        Aisheng Dong <aisheng.dong@nxp.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH V3] clk: imx: Fix reparenting of UARTs not associated
+ with sdout
+Message-ID: <20210120155001.GD19063@pengutronix.de>
+References: <20210115182909.314756-1-aford173@gmail.com>
+ <20210118125204.hxsanoohwvdtdvym@fsr-ub1664-175>
+ <CAHCN7x+CXUuPN7upiv3D+REOU4d_=i30no+SkRzUjWY58o=uUQ@mail.gmail.com>
+ <20210120144454.f6b72lnasw4q3bde@fsr-ub1664-175>
+ <20210120151305.GC19063@pengutronix.de>
+ <20210120152813.x2pbs5vprevkly23@fsr-ub1664-175>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210120152813.x2pbs5vprevkly23@fsr-ub1664-175>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 16:48:32 up 49 days,  4:15, 92 users,  load average: 0.30, 0.38,
+ 0.23
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 10:35 AM Luca Ceresoli <luca@lucaceresoli.net> wrote:
->
-> Hi Adam,
->
-> On 19/01/21 22:21, Adam Ford wrote:
-> > There are two registers which can set the load capacitance for
-> > XTAL1 and XTAL2. These are optional registers when using an
-> > external crystal.  Since XTAL1 and XTAL2 will set to the same value,
-> > update the binding to support a single property called
-> > xtal-load-femtofarads.
-> >
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > ---
-> > V2:  No Change
-> >
-> > diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> > index 2ac1131fd922..c268debe5b8d 100644
-> > --- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> > +++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> > @@ -59,6 +59,12 @@ properties:
-> >      minItems: 1
-> >      maxItems: 2
-> >
-> > +  idt,xtal-load-femtofarads:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
->
-> "Vendor specific properties having a standard unit suffix don't need a
-> type." -- Documentation/devicetree/bindings/example-schema.yaml
->
+On Wed, Jan 20, 2021 at 05:28:13PM +0200, Abel Vesa wrote:
+> On 21-01-20 16:13:05, Sascha Hauer wrote:
+> > Hi Abel,
+> > 
+> > On Wed, Jan 20, 2021 at 04:44:54PM +0200, Abel Vesa wrote:
+> > > On 21-01-18 08:00:43, Adam Ford wrote:
+> > > > On Mon, Jan 18, 2021 at 6:52 AM Abel Vesa <abel.vesa@nxp.com> wrote:
+> 
+> ...
+> 
+> > > > 
+> > > > >
+> > > > > TBH, I'm against the idea of having to call consumer API from a clock provider driver.
+> > > > > I'm still investigating a way of moving the uart clock control calls in drivers/serial/imx,
+> > > > > where they belong.
+> > > > 
+> > > > That makes sense.
+> > > > 
+> > > 
+> > > Just a thought. The uart clock used for console remains on from u-boot,
+> > > so maybe it's enough to just add the CLK_IGNORE_UNUSED flag to all the
+> > > uart root clocks and remove the prepare/enable calls for uart clocks 
+> > > for good. I don't really have a way to test it right now, but maybe
+> > > you could give it a try.
+> > 
+> > That would mean that UART clocks will never be disabled, regardless of
+> > whether they are used for console or not. That doesn't sound very
+> > appealing.
+> 
+> AFAIK, the only uart clock that is enabled by u-boot is the one used for
+> the console. Later on, when the serial driver probes, it will enable it itself.
+> 
+> Unless I'm missing something, this is exactly what we need.
 
-I tried to remove the "$ref: /schemas/types.yaml#/definitions/uint32"
-but when I ran the test to make the yaml files, it threw an error, so
-I put it back.
+It might enable it, but with CLK_IGNORE_UNUSED the clock won't be
+disabled again when a port is closed after usage
 
-adam
-> Overall looks good.
->
-> --
-> Luca
+Sascha
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
