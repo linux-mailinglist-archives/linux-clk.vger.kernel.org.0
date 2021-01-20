@@ -2,104 +2,114 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D852FCE65
-	for <lists+linux-clk@lfdr.de>; Wed, 20 Jan 2021 11:55:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4F52FCE63
+	for <lists+linux-clk@lfdr.de>; Wed, 20 Jan 2021 11:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387419AbhATKjw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 20 Jan 2021 05:39:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
+        id S1733306AbhATKjh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 20 Jan 2021 05:39:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731456AbhATJdw (ORCPT
+        with ESMTP id S1731453AbhATJdw (ORCPT
         <rfc822;linux-clk@vger.kernel.org>); Wed, 20 Jan 2021 04:33:52 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1E1C061383
-        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:31:06 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id y17so22375144wrr.10
-        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:31:06 -0800 (PST)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6712EC061384
+        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:31:07 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id a1so1065272wrq.6
+        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:31:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=lmw0jyVjQb9zgrucTAXa+ls8bVgxcyDhXKzVAXRUfbE=;
-        b=X9QF3Lr3lN7dfe1V82tisU0Bi6WFV+lr/xGNcVA4sl/jAxKUPqQBTGZJ2/jLXg7T5b
-         S/Wsl6ARdue2rFAIO53TtgxLTt0/tvL/mAFPCwzo273AewD2Bmx4M4awO0lzBZLk3x8P
-         0S1nH5aC2xTSXqrQV4en+BElaoK7xnX+4e/oy01MQHPAmGCN0xDx+76dfwN8dSfzvGQv
-         EMuOV/1x/ihvrAfJe7z8HDDGWusTxMr7qGr9+TZYxrHJayz+guwpPoyhniyX4oLdNnwD
-         gfZIlLtL2hsJQkt4WZaEOI0bE+jPDZ/O/Jvj6iLZHsBZrvSDvNmurFnL6z7T8PGDVG7k
-         xzaw==
+        bh=a0eH26ZUBg4+GW3DVSJr3IUvZueqhdMA0PLfT85K6+E=;
+        b=MjDM98OLBbyugGi5z9i8y3gcFvSTFvaDlzZxfuqFRWUxgSzmGg2bkwE84t92uYf3f6
+         1YC5KMlqojalOqRujF0SHuZGdDwHrCiGwDMcBAg0Aj/mKmm/3KW0wRqSG/CC9X+EgW6V
+         wgBJQjilcc/l3PCDgB58vftVv7zWvgFr+YarUsf0Ylf28g3UaeElmEhXEv4l+r2sPzlH
+         xIhcd2qZxZ+ASJDUzSESYgjgs2SeT8Q/Y0JIbk9y2cI8JYvdm75jFkVj2RfMVFYjKxv7
+         yDdPDIKrgozZvxl92hv7PGPi/lDZ9Bot2HwlsvP2CgSD5yzzRUqe3so1F0IZOk55caqh
+         bJsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=lmw0jyVjQb9zgrucTAXa+ls8bVgxcyDhXKzVAXRUfbE=;
-        b=Te0fkM83m7Urx2JIoPvnqfmA3zulJPcyHmGs/DVfITdG61reLmR0+cxpIEZ2CEKKwG
-         yHyqHAmqDs0Xw8WF69Bm5yk77SBhG9jEHr6ETm7a1SdXdl3U2WHnwjYZoKc68ToM77Si
-         iwiHMvhCUMj17INVmg+LYhV7XqZEwVidXqrxW5xeq+dwPF1PHNFATsjFlhTF5PNeLz7h
-         KAfyh/lYbcbxlM+nsG3pyewhfWjgE9Dm2P2R9TNlLHCOIvn/23dByxvO8KsB/0FUg8Er
-         dBeMGSshBPE8mUp8H6GcLsbagGpVrE+xqfy2K1PANt9dT8s/rFKneAI3GBHj/rUGRxgB
-         uvzw==
-X-Gm-Message-State: AOAM531Pd/AX09Y1/J65SkQ1ID9HUBDxAYbTW+rPf04U2VvtBoGylSTn
-        asv23wdMATLdwzVNtcYNX8NaiA==
-X-Google-Smtp-Source: ABdhPJw5BbnjDe6qfRdwflh1jGaOVIlPHk1+fbLgvVnuE3BkdewXjP9WY4nGwSoTihOU+7wFYSYr2A==
-X-Received: by 2002:adf:f403:: with SMTP id g3mr2435594wro.212.1611135065099;
-        Wed, 20 Jan 2021 01:31:05 -0800 (PST)
+        bh=a0eH26ZUBg4+GW3DVSJr3IUvZueqhdMA0PLfT85K6+E=;
+        b=QL4eZ4ZIupxgTOksyf5K09LfjfEdGz3d70F01hbhnmv4VTlJp0NYBBTUyuuBMA+A15
+         rygAf4BlCj8aP1xv21yczkNp6w2D1OTPf/hIfpBTI2XTUXHAUD/rVDf9aNuKTTs5y5M9
+         AE75NSqc8uwL0GVK3KvlWRhLNsFRVHAdtK5iVHjYqMOk9jPRXWQ7OWgg9Cn4FwqMlMVF
+         KuqYq4ym1U/LBkJ/T8Zr+lY57LknBMWrDxhs1Xq/RjeNLKL7gHLT563IktNtYE6WmWsL
+         xWXBYCkF1nD4sJ1SwnVgY9jcSK6k8vHvos8IcQugrMJ94jN9sHl+oNEDNWqiQzxvXet4
+         wvRQ==
+X-Gm-Message-State: AOAM530NagXeidFCGJfdjqPFUwShy9H9rhSf8DEPYWm0+cuM8W6J9sY9
+        D9bTebYI3sRedAshlw6sOaJsWw==
+X-Google-Smtp-Source: ABdhPJx3ZjCpUjZVjx48wSf2aRSX7D5zkaVbcdktQcNjUP6AbBni3d5m+dVFFlpKQcmNFhyVo9XKgA==
+X-Received: by 2002:a05:6000:1542:: with SMTP id 2mr8360962wry.356.1611135066213;
+        Wed, 20 Jan 2021 01:31:06 -0800 (PST)
 Received: from dell.default ([91.110.221.158])
-        by smtp.gmail.com with ESMTPSA id z130sm2889201wmb.33.2021.01.20.01.31.04
+        by smtp.gmail.com with ESMTPSA id z130sm2889201wmb.33.2021.01.20.01.31.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 01:31:04 -0800 (PST)
+        Wed, 20 Jan 2021 01:31:05 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Emilio=20L=C3=B3pez?= <emilio@elopez.com.ar>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 18/20] clk: sunxi: clk-mod0: Demote non-conformant kernel-doc header
-Date:   Wed, 20 Jan 2021 09:30:38 +0000
-Message-Id: <20210120093040.1719407-19-lee.jones@linaro.org>
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
+Subject: [PATCH 19/20] clk: versatile: clk-icst: Fix worthy struct documentation block
+Date:   Wed, 20 Jan 2021 09:30:39 +0000
+Message-Id: <20210120093040.1719407-20-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210120093040.1719407-1-lee.jones@linaro.org>
 References: <20210120093040.1719407-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Also demote non-worthy header to standard comment block.
+
 Fixes the following W=1 kernel build warning(s):
 
- drivers/clk/sunxi/clk-mod0.c:24: warning: Function parameter or member 'req' not described in 'sun4i_a10_get_mod0_factors'
+ drivers/clk/versatile/clk-icst.c:53: warning: Function parameter or member 'map' not described in 'clk_icst'
+ drivers/clk/versatile/clk-icst.c:53: warning: Function parameter or member 'vcoreg_off' not described in 'clk_icst'
+ drivers/clk/versatile/clk-icst.c:53: warning: Function parameter or member 'lockreg_off' not described in 'clk_icst'
+ drivers/clk/versatile/clk-icst.c:435: warning: cannot understand function prototype: 'const struct icst_params icst525_apcp_cm_params = '
 
-Cc: "Emilio López" <emilio@elopez.com.ar>
+Cc: Linus Walleij <linus.walleij@linaro.org>
 Cc: Michael Turquette <mturquette@baylibre.com>
 Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Chen-Yu Tsai <wens@csie.org>
-Cc: Jernej Skrabec <jernej.skrabec@siol.net>
-Cc: linux-clk@vger.kernel.org
 Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-clk@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/clk/sunxi/clk-mod0.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/versatile/clk-icst.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clk/sunxi/clk-mod0.c b/drivers/clk/sunxi/clk-mod0.c
-index 0cca91e075a53..f9d715ec99087 100644
---- a/drivers/clk/sunxi/clk-mod0.c
-+++ b/drivers/clk/sunxi/clk-mod0.c
-@@ -14,7 +14,7 @@
- 
- #include "clk-factors.h"
+diff --git a/drivers/clk/versatile/clk-icst.c b/drivers/clk/versatile/clk-icst.c
+index 692be2fd9261a..fdd6aa3cb1fc8 100644
+--- a/drivers/clk/versatile/clk-icst.c
++++ b/drivers/clk/versatile/clk-icst.c
+@@ -36,8 +36,9 @@
+ /**
+  * struct clk_icst - ICST VCO clock wrapper
+  * @hw: corresponding clock hardware entry
+- * @vcoreg: VCO register address
+- * @lockreg: VCO lock register address
++ * @map: register map
++ * @vcoreg_off: VCO register address
++ * @lockreg_off: VCO lock register address
+  * @params: parameters for this ICST instance
+  * @rate: current rate
+  * @ctype: the type of control register for the ICST
+@@ -428,7 +429,7 @@ static const struct icst_params icst307_params = {
+ 	.idx2s		= icst307_idx2s,
+ };
  
 -/**
 +/*
-  * sun4i_a10_get_mod0_factors() - calculates m, n factors for MOD0-style clocks
-  * MOD0 rate is calculated as follows
-  * rate = (parent_rate >> p) / (m + 1);
+  * The core modules on the Integrator/AP and Integrator/CP have
+  * especially crippled ICST525 control.
+  */
 -- 
 2.25.1
 
