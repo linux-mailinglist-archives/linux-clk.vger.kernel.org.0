@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8C42FCE62
-	for <lists+linux-clk@lfdr.de>; Wed, 20 Jan 2021 11:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D852FCE65
+	for <lists+linux-clk@lfdr.de>; Wed, 20 Jan 2021 11:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733300AbhATKjc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 20 Jan 2021 05:39:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
+        id S2387419AbhATKjw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 20 Jan 2021 05:39:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731437AbhATJdt (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 20 Jan 2021 04:33:49 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EBDC061381
-        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:31:05 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id m2so2198801wmm.1
-        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:31:05 -0800 (PST)
+        with ESMTP id S1731456AbhATJdw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 20 Jan 2021 04:33:52 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1E1C061383
+        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:31:06 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id y17so22375144wrr.10
+        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:31:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=b1bl3qDXqs2QWsHtpCw1hYF8Czg/cncqDgLkvEY/iUQ=;
-        b=UluTl24PAc0woLh+QvL0QkYieyL8otdwZgyoUVCvs/WZzW56EfbtkrYY1dCNvDJp3w
-         FzBe6w4ufIzbE7dIKpZDo7lVaZq04Rc/mEi6Ct4dw1B6TE+BZ/Il1dYj6+m9zjHnNY6s
-         qPojgNZy5RlZL/rDlV3G0nrrPChfb3o1/RU/nzUwVdRbOtFuuJDMgT6LMubMqA+iu59+
-         0LaI13OVJu5D16VmdGHmWDpb2Oyge/w/gqde8+P2Xtm4IXN4FfwUGvWzBUCg3TJte2PG
-         Dtbe24gAgK8QrwZ91tRZfCd0FTMUnsKwqoHRyrpuEPK+iL3mxIfFCzXajyGBYapubtFI
-         M+Ww==
+        bh=lmw0jyVjQb9zgrucTAXa+ls8bVgxcyDhXKzVAXRUfbE=;
+        b=X9QF3Lr3lN7dfe1V82tisU0Bi6WFV+lr/xGNcVA4sl/jAxKUPqQBTGZJ2/jLXg7T5b
+         S/Wsl6ARdue2rFAIO53TtgxLTt0/tvL/mAFPCwzo273AewD2Bmx4M4awO0lzBZLk3x8P
+         0S1nH5aC2xTSXqrQV4en+BElaoK7xnX+4e/oy01MQHPAmGCN0xDx+76dfwN8dSfzvGQv
+         EMuOV/1x/ihvrAfJe7z8HDDGWusTxMr7qGr9+TZYxrHJayz+guwpPoyhniyX4oLdNnwD
+         gfZIlLtL2hsJQkt4WZaEOI0bE+jPDZ/O/Jvj6iLZHsBZrvSDvNmurFnL6z7T8PGDVG7k
+         xzaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=b1bl3qDXqs2QWsHtpCw1hYF8Czg/cncqDgLkvEY/iUQ=;
-        b=fg1cgmBmy226Q4fK070bFJPzkTlvaGppPZYhg2MGOeSSrgQWzTZffWkz3Gy7tT+dUB
-         1OaZFkTPJNeo1XBxBKMr5TSpB6W1nM7qzZ3KBf2NAFlandTEwI8xhbc1kJfimxbBkLYk
-         DMgZLzt8D3AtFzes2UUrY1Pgn87gebFcEIIm98S8uj+wQ0wfo+TtpZZN5omddOC4hxIQ
-         FMXOsdPEscUoug1jqERCPC/h+wqFNrSod/CnkxBDxfMX5BT6wTIXCP4ieuaiw8ibeEg8
-         hSw1nahThxx4Fstmq6UXJLc/PjtTv1IsTkhzmuqj+6tC0qpqJ8kIw0i02dFnk+fAPX6q
-         c0hQ==
-X-Gm-Message-State: AOAM530D0lDBo+KwwO/CtbZzqYRuRq/vSYvrvMPUXXCUCwL88E8++Dvb
-        8y+u0Z147KAVBl3OTRaVjsQFRw==
-X-Google-Smtp-Source: ABdhPJzhia3eL7yODrhkrLrPZukKCx6m5jAT0hXZEPPdZjxL5Q87B2VVnH1Y3E2ycOLMSqlFt8W/GQ==
-X-Received: by 2002:a1c:2802:: with SMTP id o2mr3494011wmo.68.1611135063932;
-        Wed, 20 Jan 2021 01:31:03 -0800 (PST)
+        bh=lmw0jyVjQb9zgrucTAXa+ls8bVgxcyDhXKzVAXRUfbE=;
+        b=Te0fkM83m7Urx2JIoPvnqfmA3zulJPcyHmGs/DVfITdG61reLmR0+cxpIEZ2CEKKwG
+         yHyqHAmqDs0Xw8WF69Bm5yk77SBhG9jEHr6ETm7a1SdXdl3U2WHnwjYZoKc68ToM77Si
+         iwiHMvhCUMj17INVmg+LYhV7XqZEwVidXqrxW5xeq+dwPF1PHNFATsjFlhTF5PNeLz7h
+         KAfyh/lYbcbxlM+nsG3pyewhfWjgE9Dm2P2R9TNlLHCOIvn/23dByxvO8KsB/0FUg8Er
+         dBeMGSshBPE8mUp8H6GcLsbagGpVrE+xqfy2K1PANt9dT8s/rFKneAI3GBHj/rUGRxgB
+         uvzw==
+X-Gm-Message-State: AOAM531Pd/AX09Y1/J65SkQ1ID9HUBDxAYbTW+rPf04U2VvtBoGylSTn
+        asv23wdMATLdwzVNtcYNX8NaiA==
+X-Google-Smtp-Source: ABdhPJw5BbnjDe6qfRdwflh1jGaOVIlPHk1+fbLgvVnuE3BkdewXjP9WY4nGwSoTihOU+7wFYSYr2A==
+X-Received: by 2002:adf:f403:: with SMTP id g3mr2435594wro.212.1611135065099;
+        Wed, 20 Jan 2021 01:31:05 -0800 (PST)
 Received: from dell.default ([91.110.221.158])
-        by smtp.gmail.com with ESMTPSA id z130sm2889201wmb.33.2021.01.20.01.31.02
+        by smtp.gmail.com with ESMTPSA id z130sm2889201wmb.33.2021.01.20.01.31.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 01:31:03 -0800 (PST)
+        Wed, 20 Jan 2021 01:31:04 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -56,11 +56,10 @@ Cc:     linux-kernel@vger.kernel.org,
         Maxime Ripard <mripard@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 17/20] clk: sunxi: clk-a10-ve: Demote obvious kernel-doc abuse
-Date:   Wed, 20 Jan 2021 09:30:37 +0000
-Message-Id: <20210120093040.1719407-18-lee.jones@linaro.org>
+Subject: [PATCH 18/20] clk: sunxi: clk-mod0: Demote non-conformant kernel-doc header
+Date:   Wed, 20 Jan 2021 09:30:38 +0000
+Message-Id: <20210120093040.1719407-19-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210120093040.1719407-1-lee.jones@linaro.org>
 References: <20210120093040.1719407-1-lee.jones@linaro.org>
@@ -73,7 +72,7 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/clk/sunxi/clk-a10-ve.c:27: warning: cannot understand function prototype: 'struct ve_reset_data '
+ drivers/clk/sunxi/clk-mod0.c:24: warning: Function parameter or member 'req' not described in 'sun4i_a10_get_mod0_factors'
 
 Cc: "Emilio López" <emilio@elopez.com.ar>
 Cc: Michael Turquette <mturquette@baylibre.com>
@@ -81,27 +80,26 @@ Cc: Stephen Boyd <sboyd@kernel.org>
 Cc: Maxime Ripard <mripard@kernel.org>
 Cc: Chen-Yu Tsai <wens@csie.org>
 Cc: Jernej Skrabec <jernej.skrabec@siol.net>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
 Cc: linux-clk@vger.kernel.org
 Cc: linux-arm-kernel@lists.infradead.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/clk/sunxi/clk-a10-ve.c | 2 +-
+ drivers/clk/sunxi/clk-mod0.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/sunxi/clk-a10-ve.c b/drivers/clk/sunxi/clk-a10-ve.c
-index cb5daa4b37db7..65810937a13a1 100644
---- a/drivers/clk/sunxi/clk-a10-ve.c
-+++ b/drivers/clk/sunxi/clk-a10-ve.c
-@@ -20,7 +20,7 @@ static DEFINE_SPINLOCK(ve_lock);
- #define SUN4I_VE_DIVIDER_WIDTH	3
- #define SUN4I_VE_RESET		0
+diff --git a/drivers/clk/sunxi/clk-mod0.c b/drivers/clk/sunxi/clk-mod0.c
+index 0cca91e075a53..f9d715ec99087 100644
+--- a/drivers/clk/sunxi/clk-mod0.c
++++ b/drivers/clk/sunxi/clk-mod0.c
+@@ -14,7 +14,7 @@
+ 
+ #include "clk-factors.h"
  
 -/**
 +/*
-  * sunxi_ve_reset... - reset bit in ve clk registers handling
-  */
- 
+  * sun4i_a10_get_mod0_factors() - calculates m, n factors for MOD0-style clocks
+  * MOD0 rate is calculated as follows
+  * rate = (parent_rate >> p) / (m + 1);
 -- 
 2.25.1
 
