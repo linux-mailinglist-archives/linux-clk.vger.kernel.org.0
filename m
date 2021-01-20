@@ -2,100 +2,81 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B05A02FCE8D
-	for <lists+linux-clk@lfdr.de>; Wed, 20 Jan 2021 12:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D25962FD09F
+	for <lists+linux-clk@lfdr.de>; Wed, 20 Jan 2021 13:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732270AbhATKcg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 20 Jan 2021 05:32:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731386AbhATJb5 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 20 Jan 2021 04:31:57 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA30C061798
-        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:30:51 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id v15so18719072wrx.4
-        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:30:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6/9ceGuP2+USnecXvRgfX3tvKaOryov7Wtt62UymmUI=;
-        b=zsUrflxnAFc3IYIoSFc8k7W7CGDz3d03oEmgRPfbTwW3ESR2Dd1HAIRTyGM1OLiVfI
-         p6Y1uTIvaMxcPEMqPh/evVtCuoHbIvzxPeqSXptIr5Uo0WtScNxE0Z0ZdUGqOFpBGGhZ
-         wTEXcO0uGLIFXtnwB4uVdwmzd7P36XWmOSE6JIfEZ4Bc9pE73igQ9hrjpMG0FJ9lIS2Q
-         iMiLtWwNDQMYvpJDyDcGYWR7BtFEacGsBhnedZBrcm30nNzCCvl+4v6IXQ02v5ia8t+C
-         4YEMjg5866/ByZseWyjDneNiGU6Qc/TBPm8wlm3Qf1xdt0vr0dM81wLvPl6sAejuOB+F
-         /CMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6/9ceGuP2+USnecXvRgfX3tvKaOryov7Wtt62UymmUI=;
-        b=Bu7MJw9897SSCO5EnPM3Vvu9Tu4fbeUOAftmkuZnv25XYc6hyuZIz6V5LXX1fan0D+
-         OkZCXcrCQU8U9x+QYwI9xSP0hT6qcqGQLM/iyQ6QNHB2kcFjDDSzBE+k+fAPhLf4ijPc
-         mh2TdyG8q+fUUNtn4ScMSsz1SuDn/gJZ9onOdImXYQ5NLTQZ/jFPVWwfl9Hw+GZP7lOR
-         kLF8piammT7hTVvdLS1lOT0+O7WuNMyMrFU2qb8vwS9R611BwyxKNCBBFCJnPLWeFkYT
-         aew2w3FyoxpB8Rerdtaxh12t6agho1I1R1yxvBfLKknDcVUHCukNhxqQoTBvTj3VJBLn
-         IXHw==
-X-Gm-Message-State: AOAM5329A4tJvAgVV2LXGcy8qeu0Apow/Ped3kT9OM77cxTH8hwUPxUk
-        JlXa81XiRr2xSL2a2dCtP4+VEA==
-X-Google-Smtp-Source: ABdhPJxWJSx1DGb1ljzPDImV+Hf4w4rCdj0LPOUIBwdeWFk2edG0+I7aroI98jI1pCvoDF6IEzLT1g==
-X-Received: by 2002:adf:ded0:: with SMTP id i16mr2314632wrn.264.1611135049958;
-        Wed, 20 Jan 2021 01:30:49 -0800 (PST)
-Received: from dell.default ([91.110.221.158])
-        by smtp.gmail.com with ESMTPSA id z130sm2889201wmb.33.2021.01.20.01.30.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 01:30:49 -0800 (PST)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
+        id S1727482AbhATMql (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 20 Jan 2021 07:46:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33822 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389117AbhATL2B (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 20 Jan 2021 06:28:01 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7F68223139;
+        Wed, 20 Jan 2021 11:27:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611142040;
+        bh=G76tEIH2ivMQClDbf7FjN9pj8GGj3UtTkAM5KfFYxIc=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=McYn1U5MTjyOI/whkPYPUYsWwE2uPxa/hefKZqjO+X96i6ZvaPaaxTRtw+3G6VIp3
+         M9qH67PMFXXsYS2m609KYHu+v5EMvT43by0bKZsd7Xu8M4/ddNtlELE7BGo+5GJuwk
+         zXYe4aqN4cQOzKcAQJc1FIz9opQFvlz9ol2L2GhpfZ5bRNITZDdZt7RePuL48f/ysX
+         fPPBef9h0piBs0JrnoEPdBeJL09xRDJCWcBRkIjbPtZLXlTpm7xaQAwOqQPrncRn6E
+         zOL/eS6CgjXuJk06PPtDkr8BZJ4EK+mcpVb0cTEdMrjVOzh6rKY/T++MMS6+uoIHMe
+         fht1qU6xDZhrw==
+Subject: Re: [PATCH 13/20] clk: ti: clockdomain: Fix description for
+ 'omap2_init_clk_clkdm's hw param
+To:     Lee Jones <lee.jones@linaro.org>
 Cc:     linux-kernel@vger.kernel.org,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 05/20] clk: bcm: clk-iproc-pll: Demote kernel-doc abuse
-Date:   Wed, 20 Jan 2021 09:30:25 +0000
-Message-Id: <20210120093040.1719407-6-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210120093040.1719407-1-lee.jones@linaro.org>
+        Stephen Boyd <sboyd@kernel.org>, linux-omap@vger.kernel.org,
+        linux-clk@vger.kernel.org
 References: <20210120093040.1719407-1-lee.jones@linaro.org>
+ <20210120093040.1719407-14-lee.jones@linaro.org>
+From:   Tero Kristo <kristo@kernel.org>
+Message-ID: <a844693d-b2a5-ba17-fff3-541040e0e574@kernel.org>
+Date:   Wed, 20 Jan 2021 13:27:16 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210120093040.1719407-14-lee.jones@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Fixes the following W=1 kernel build warning(s):
+On 20/01/2021 11:30, Lee Jones wrote:
+> Fixes the following W=1 kernel build warning(s):
+> 
+>   drivers/clk/ti/clockdomain.c:107: warning: Function parameter or member 'hw' not described in 'omap2_init_clk_clkdm'
+>   drivers/clk/ti/clockdomain.c:107: warning: Excess function parameter 'clk' description in 'omap2_init_clk_clkdm'
+> 
+> Cc: Tero Kristo <kristo@kernel.org>
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-omap@vger.kernel.org
+> Cc: linux-clk@vger.kernel.org
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
 
- drivers/clk/bcm/clk-iproc-pll.c:712: warning: Function parameter or member 'pll' not described in 'iproc_pll_sw_cfg'
+Reviewed-by: Tero Kristo <kristo@kernel.org>
 
-Cc: Michael Turquette <mturquette@baylibre.com>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Ray Jui <rjui@broadcom.com>
-Cc: Scott Branden <sbranden@broadcom.com>
-Cc: bcm-kernel-feedback-list@broadcom.com
-Cc: linux-clk@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/clk/bcm/clk-iproc-pll.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/clk/bcm/clk-iproc-pll.c b/drivers/clk/bcm/clk-iproc-pll.c
-index 274441e2ddb28..33da30f99c79b 100644
---- a/drivers/clk/bcm/clk-iproc-pll.c
-+++ b/drivers/clk/bcm/clk-iproc-pll.c
-@@ -704,7 +704,7 @@ static const struct clk_ops iproc_clk_ops = {
- 	.set_rate = iproc_clk_set_rate,
- };
- 
--/**
-+/*
-  * Some PLLs require the PLL SW override bit to be set before changes can be
-  * applied to the PLL
-  */
--- 
-2.25.1
+> ---
+>   drivers/clk/ti/clockdomain.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/ti/clockdomain.c b/drivers/clk/ti/clockdomain.c
+> index 700b7f44f6716..74831b2752b3b 100644
+> --- a/drivers/clk/ti/clockdomain.c
+> +++ b/drivers/clk/ti/clockdomain.c
+> @@ -97,7 +97,7 @@ void omap2_clkops_disable_clkdm(struct clk_hw *hw)
+>   
+>   /**
+>    * omap2_init_clk_clkdm - look up a clockdomain name, store pointer in clk
+> - * @clk: OMAP clock struct ptr to use
+> + * @hw: Pointer to clk_hw_omap used to obtain OMAP clock struct ptr to use
+>    *
+>    * Convert a clockdomain name stored in a struct clk 'clk' into a
+>    * clockdomain pointer, and save it into the struct clk.  Intended to be
+> 
 
