@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D30B92FCE52
-	for <lists+linux-clk@lfdr.de>; Wed, 20 Jan 2021 11:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8472FCE80
+	for <lists+linux-clk@lfdr.de>; Wed, 20 Jan 2021 11:55:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730406AbhATKbU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 20 Jan 2021 05:31:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45462 "EHLO
+        id S1733032AbhATKdp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 20 Jan 2021 05:33:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731369AbhATJb1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 20 Jan 2021 04:31:27 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47D8C061575
-        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:30:46 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id v184so2191679wma.1
-        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:30:46 -0800 (PST)
+        with ESMTP id S1731410AbhATJcN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 20 Jan 2021 04:32:13 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21B3C061793
+        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:30:48 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id g10so3992667wrx.1
+        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 01:30:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bN1EA9Jtu/mSRFpfLqJ4hYJd1C2lXhS1XjJCl6CFg1g=;
-        b=zFYfx91XPKACjv/flqRWziV33Y4m/EmmyZgP+idh0JI5dCaeislX7SISmaLy2s4VR7
-         TIc1ogI7o6CjxnsWalSTE5E/3mDU/Dt9phL15/9AbLNEQW72xnXogiNhgutU8MmGoO93
-         Jv4du5hB7Px9HKxcCnEB1RVI476qeKJqLJo8S6/DiBQJ72je2SmV2umD81hzKuyPpm7k
-         LbS+mWh5mZyQUje328YOPnyARiClql6txorS+c+WVnuF4iSZJCSE7JIz3KQJRmL5wwsC
-         hmSNKVZDLydPhFLGljT+Jfv+sefoEExI+oL65ad3J1xNjCFPK4zzlSzB7xU349ywBE/U
-         7msQ==
+        bh=yKuuR4wyj2fWlRIK+EKlFxHaqO4Ik4r36A/blNvBUws=;
+        b=DIvBQakzIghVLP5ZRiLIIk76X0nPl+XMwv0GEsSui7fhaPObPa2RRoeC5vLmI46t+9
+         0J8F7W9pM9FtV7GG39c9ZhJuoXJOnXKDFEtfBnHUm1Zu86NWbje0uoE96V8beoCS736d
+         0EcIrfgUlc1tdGBM8Iqhu6n7qhw8UmEAYEee6oboUVo9LNL5jjHtJcwRM4OtpOw5cBzM
+         4f9IJYsbGIYrHf8ab3zTb8IZP3jKVeDxoZVxhuYve4it/wHpstW+l/njlAZUdGuF/bgL
+         NpVn4KuGqXcoC3KPlwRhsG6tdeTtP3yzZEdcX0m8QvqtLwBMp0JaPj/1s0M77Eze8x6T
+         1DLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bN1EA9Jtu/mSRFpfLqJ4hYJd1C2lXhS1XjJCl6CFg1g=;
-        b=RH2mI0jMBU4zFb4KeCrFsutqYR5j8A0A9LtEtkAGvmsQNXtOSbyLKsYJDmrBT9yV33
-         HtXsHwU0SN7OhpXT6fFFXQLNxSshcicRBJ8LL6yB1sVejGrPg2weaKdloPKk6bx0NdzM
-         WgwRD8P9HqiImMmwQ1k7WDmXKJYm9NSwaQjMKmdGT1nqvbJ1ruhmN11DMxzxO9Axr/du
-         lLPhuNmtzbD36iSXzSp5KhGnlcv3uafusY7se1js9rYH7kxXctZAnAGEzEN+0NCJqBPj
-         C+gZJr1c6fzc4/ZhSmh2PckCtHMaUA4VGoyKfCUvSytW2xHZSax42RmQ+7uCknrpAhF8
-         g4nQ==
-X-Gm-Message-State: AOAM530GNtXl93tYlV+oSWx1nothiyMafAk2Zn52G2Its7WLvSQyU5rS
-        kWs0YKHIf4Rm1f+kmkPMeeix9w==
-X-Google-Smtp-Source: ABdhPJy0QU7f/Vsm0leMTTjzvUhzClwhW+2h4hj2Ui406VthDvXgvODPTyr3pTl1F0dkQzpvKhwYUg==
-X-Received: by 2002:a1c:9d8b:: with SMTP id g133mr3413636wme.44.1611135045419;
-        Wed, 20 Jan 2021 01:30:45 -0800 (PST)
+        bh=yKuuR4wyj2fWlRIK+EKlFxHaqO4Ik4r36A/blNvBUws=;
+        b=t9QMzWH1RPaNKZF8Bugo6AV1rprP58NkAdthMlzTqDBUwZ+yXwgSuLOVegA+Ew/8dz
+         uurFezS78JSPPtZdILeJHVYvlDhODkxGxndIh0ysOPXTLFnfThgbVMbVCmRXyGC0aP6f
+         X+Ubnsy9VWxqkPOXnRuthTFAIbUnhgKOqWxhhkEjqEqsF/ZTWpCEMpEjfMpFesT3nDDh
+         W/v7L/k3FuPZG1N50Y0X3kDA5d9qExT1NaOaamZqTY3Q1JADj0UH8pbfYseFfjYwc4vR
+         QJjFJFApRcxwxeJ8+Ft59AvPPeasSbegfSZSRyyx1f3fuchSqqdXPioKbRH7kvUwDXlT
+         GgfQ==
+X-Gm-Message-State: AOAM531rWlykeyQZ4lrKP7OALAHlfPCZHbR5xh4bMFgZGQOGyYXjdAjr
+        utj85QdnkRjPTQZ6MzP340h67A==
+X-Google-Smtp-Source: ABdhPJzkANdQfSHYBemOqLUzk1mQilYRQs50FdyxtrCmZ5LECdlrx9Qh+/KOY40JABAEyKPBigBseg==
+X-Received: by 2002:adf:e54a:: with SMTP id z10mr8481420wrm.1.1611135047757;
+        Wed, 20 Jan 2021 01:30:47 -0800 (PST)
 Received: from dell.default ([91.110.221.158])
-        by smtp.gmail.com with ESMTPSA id z130sm2889201wmb.33.2021.01.20.01.30.44
+        by smtp.gmail.com with ESMTPSA id z130sm2889201wmb.33.2021.01.20.01.30.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 01:30:44 -0800 (PST)
+        Wed, 20 Jan 2021 01:30:47 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -54,12 +54,11 @@ Cc:     linux-kernel@vger.kernel.org,
         Stephen Boyd <sboyd@kernel.org>,
         Heiko Stuebner <heiko@sntech.de>,
         Xing Zheng <zhengxing@rock-chips.com>,
-        Thomas Abraham <thomas.ab@samsung.com>,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org
-Subject: [PATCH 01/20] clk: rockchip: clk: Demote non-conformant kernel-doc headers
-Date:   Wed, 20 Jan 2021 09:30:21 +0000
-Message-Id: <20210120093040.1719407-2-lee.jones@linaro.org>
+Subject: [PATCH 03/20] clk: rockchip: clk-pll: Demote kernel-doc abuses to standard comment blocks
+Date:   Wed, 20 Jan 2021 09:30:23 +0000
+Message-Id: <20210120093040.1719407-4-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210120093040.1719407-1-lee.jones@linaro.org>
 References: <20210120093040.1719407-1-lee.jones@linaro.org>
@@ -71,65 +70,53 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'name' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'parent_names' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'num_parents' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'base' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'muxdiv_offset' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'mux_shift' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'mux_width' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'mux_flags' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'div_offset' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'div_shift' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'div_width' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'div_flags' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'div_table' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'gate_offset' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'gate_shift' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'gate_flags' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'flags' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:45: warning: Function parameter or member 'lock' not described in 'rockchip_clk_register_branch'
- drivers/clk/rockchip/clk.c:180: warning: Function parameter or member 'hw' not described in 'rockchip_fractional_approximation'
- drivers/clk/rockchip/clk.c:180: warning: Function parameter or member 'rate' not described in 'rockchip_fractional_approximation'
- drivers/clk/rockchip/clk.c:180: warning: Function parameter or member 'parent_rate' not described in 'rockchip_fractional_approximation'
- drivers/clk/rockchip/clk.c:180: warning: Function parameter or member 'm' not described in 'rockchip_fractional_approximation'
- drivers/clk/rockchip/clk.c:180: warning: Function parameter or member 'n' not described in 'rockchip_fractional_approximation'
+ drivers/clk/rockchip/clk-pll.c:104: warning: Function parameter or member 'i' not described in 'RK3036_PLLCON'
+ drivers/clk/rockchip/clk-pll.c:365: warning: Function parameter or member 'nr' not described in 'RK3066_PLL_RESET_DELAY'
+ drivers/clk/rockchip/clk-pll.c:584: warning: Function parameter or member 'i' not described in 'RK3399_PLLCON'
 
 Cc: Michael Turquette <mturquette@baylibre.com>
 Cc: Stephen Boyd <sboyd@kernel.org>
 Cc: Heiko Stuebner <heiko@sntech.de>
 Cc: Xing Zheng <zhengxing@rock-chips.com>
-Cc: Thomas Abraham <thomas.ab@samsung.com>
 Cc: linux-clk@vger.kernel.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-rockchip@lists.infradead.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/clk/rockchip/clk.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/clk/rockchip/clk-pll.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clk/rockchip/clk.c b/drivers/clk/rockchip/clk.c
-index 336481bc6cc72..049e5e0b64f62 100644
---- a/drivers/clk/rockchip/clk.c
-+++ b/drivers/clk/rockchip/clk.c
-@@ -24,7 +24,7 @@
- #include <linux/rational.h>
- #include "clk.h"
- 
--/**
-+/*
-  * Register a clock branch.
-  * Most clock branches have a form like
-  *
-@@ -170,7 +170,7 @@ static int rockchip_clk_frac_notifier_cb(struct notifier_block *nb,
- 	return notifier_from_errno(ret);
+diff --git a/drivers/clk/rockchip/clk-pll.c b/drivers/clk/rockchip/clk-pll.c
+index 4c6c9167ef509..fe937bcdb4876 100644
+--- a/drivers/clk/rockchip/clk-pll.c
++++ b/drivers/clk/rockchip/clk-pll.c
+@@ -97,7 +97,7 @@ static int rockchip_pll_wait_lock(struct rockchip_clk_pll *pll)
+ 	return ret;
  }
  
 -/**
 +/*
-  * fractional divider must set that denominator is 20 times larger than
-  * numerator to generate precise clock frequency.
+  * PLL used in RK3036
   */
+ 
+@@ -358,7 +358,7 @@ static const struct clk_ops rockchip_rk3036_pll_clk_ops = {
+ 	.init = rockchip_rk3036_pll_init,
+ };
+ 
+-/**
++/*
+  * PLL used in RK3066, RK3188 and RK3288
+  */
+ 
+@@ -577,7 +577,7 @@ static const struct clk_ops rockchip_rk3066_pll_clk_ops = {
+ 	.init = rockchip_rk3066_pll_init,
+ };
+ 
+-/**
++/*
+  * PLL used in RK3399
+  */
+ 
 -- 
 2.25.1
 
