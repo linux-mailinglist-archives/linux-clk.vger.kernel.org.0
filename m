@@ -2,198 +2,70 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8258E2FE703
-	for <lists+linux-clk@lfdr.de>; Thu, 21 Jan 2021 11:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2CF2FE728
+	for <lists+linux-clk@lfdr.de>; Thu, 21 Jan 2021 11:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729040AbhAUKCA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 21 Jan 2021 05:02:00 -0500
-Received: from www.zeus03.de ([194.117.254.33]:44340 "EHLO mail.zeus03.de"
+        id S1728538AbhAUKJC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 21 Jan 2021 05:09:02 -0500
+Received: from www.zeus03.de ([194.117.254.33]:48410 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728577AbhAUJzj (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 21 Jan 2021 04:55:39 -0500
+        id S1728996AbhAUKH2 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 21 Jan 2021 05:07:28 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=FLvrNhEFOaBZWr
-        oWf+MtuiP5O/4Ahy/43lbgaXcLF8Y=; b=Pk/Ow5PQvTf0jjYN2qXZs/IqDW4t3q
-        kP7Bht6jRoe26/8ZK0xuxAQKyHE26DwKkwoKjRXWE2r5Yi+7KiOTDWlWcL/d8wpw
-        80nQSrDHHs4IX7Fev1n3DTp6izUHzPekrAhuB/vUn80tTK5R1202fqRpi+ClN+vt
-        Ocw3Ov+iQY1wg=
-Received: (qmail 1784069 invoked from network); 21 Jan 2021 10:54:28 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Jan 2021 10:54:28 +0100
-X-UD-Smtp-Session: l3s3148p1@DnS8Dma5nr4gAwDPXyX1ACWcscxtZ2TX
+        :mime-version:content-transfer-encoding; s=k1; bh=ZikhHhx/+77hpm
+        9dWRye8k/r5po7bFIMz3jw9cGrF70=; b=JZvy0Gmqi9tXbKzWHWlfUV3YcPmWkw
+        v6fv5+u0V4bIQLIw+3GREvOMHU5K0caW/BdRAfPI5r/7a4NVNTpR0AY4JuKibiNM
+        nb9Aid1AhMDu1WjMc/cuup9aKhTTTHO9oy/FGx5D6GeVjfg6l2SCjt2rs7+XWNSm
+        S7wPSddLAzZeI=
+Received: (qmail 1790479 invoked from network); 21 Jan 2021 11:06:27 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Jan 2021 11:06:27 +0100
+X-UD-Smtp-Session: l3s3148p1@dGqUOWa5tL4gAwDPXyX1ACWcscxtZ2TX
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-renesas-soc@vger.kernel.org
-Cc:     linux-clk@vger.kernel.org,
-        Koji Matsuoka <koji.matsuoka.xm@renesas.com>,
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH V2 2/4] arm64: dts: renesas: Add I2C to R8A779A0
-Date:   Thu, 21 Jan 2021 10:54:18 +0100
-Message-Id: <20210121095420.5023-3-wsa+renesas@sang-engineering.com>
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 2/5] clk: renesas: r8a779a0: add clocks for RAVB
+Date:   Thu, 21 Jan 2021 11:06:16 +0100
+Message-Id: <20210121100619.5653-3-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210121095420.5023-1-wsa+renesas@sang-engineering.com>
-References: <20210121095420.5023-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20210121100619.5653-1-wsa+renesas@sang-engineering.com>
+References: <20210121100619.5653-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Koji Matsuoka <koji.matsuoka.xm@renesas.com>
-
-Add I2C devicetree description to V3U
-
-Signed-off-by: Koji Matsuoka <koji.matsuoka.xm@renesas.com>
-[wsa: rebased and double checked]
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
 
-Changes since v1: none
+Change since v1:
+* use S3D2 as parent clock
 
- arch/arm64/boot/dts/renesas/r8a779a0.dtsi | 122 ++++++++++++++++++++++
- 1 file changed, 122 insertions(+)
+ drivers/clk/renesas/r8a779a0-cpg-mssr.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-index 25c722302de6..1d953a892309 100644
---- a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
-@@ -14,6 +14,16 @@ / {
- 	#address-cells = <2>;
- 	#size-cells = <2>;
+diff --git a/drivers/clk/renesas/r8a779a0-cpg-mssr.c b/drivers/clk/renesas/r8a779a0-cpg-mssr.c
+index f7391ea5c2e2..79e6c6571144 100644
+--- a/drivers/clk/renesas/r8a779a0-cpg-mssr.c
++++ b/drivers/clk/renesas/r8a779a0-cpg-mssr.c
+@@ -156,6 +156,12 @@ static const struct cpg_core_clk r8a779a0_core_clks[] __initconst = {
+ };
  
-+	aliases {
-+		i2c0 = &i2c0;
-+		i2c1 = &i2c1;
-+		i2c2 = &i2c2;
-+		i2c3 = &i2c3;
-+		i2c4 = &i2c4;
-+		i2c5 = &i2c5;
-+		i2c6 = &i2c6;
-+	};
-+
- 	cpus {
- 		#address-cells = <1>;
- 		#size-cells = <0>;
-@@ -250,6 +260,118 @@ sysc: system-controller@e6180000 {
- 			#power-domain-cells = <1>;
- 		};
- 
-+		i2c0: i2c@e6500000 {
-+			compatible = "renesas,i2c-r8a779a0",
-+				     "renesas,rcar-gen3-i2c";
-+			reg = <0 0xe6500000 0 0x40>;
-+			interrupts = <GIC_SPI 238 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 518>;
-+			power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
-+			resets = <&cpg 518>;
-+			dmas = <&dmac1 0x91>, <&dmac1 0x90>;
-+			dma-names = "tx", "rx";
-+			i2c-scl-internal-delay-ns = <110>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c1: i2c@e6508000 {
-+			compatible = "renesas,i2c-r8a779a0",
-+				     "renesas,rcar-gen3-i2c";
-+			reg = <0 0xe6508000 0 0x40>;
-+			interrupts = <GIC_SPI 239 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 519>;
-+			power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
-+			resets = <&cpg 519>;
-+			dmas = <&dmac1 0x93>, <&dmac1 0x92>;
-+			dma-names = "tx", "rx";
-+			i2c-scl-internal-delay-ns = <110>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c2: i2c@e6510000 {
-+			compatible = "renesas,i2c-r8a779a0",
-+				     "renesas,rcar-gen3-i2c";
-+			reg = <0 0xe6510000 0 0x40>;
-+			interrupts = <GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 520>;
-+			power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
-+			resets = <&cpg 520>;
-+			dmas = <&dmac1 0x95>, <&dmac1 0x94>;
-+			dma-names = "tx", "rx";
-+			i2c-scl-internal-delay-ns = <110>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c3: i2c@e66d0000 {
-+			compatible = "renesas,i2c-r8a779a0",
-+				     "renesas,rcar-gen3-i2c";
-+			reg = <0 0xe66d0000 0 0x40>;
-+			interrupts = <GIC_SPI 241 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 521>;
-+			power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
-+			resets = <&cpg 521>;
-+			dmas = <&dmac1 0x97>, <&dmac1 0x96>;
-+			dma-names = "tx", "rx";
-+			i2c-scl-internal-delay-ns = <110>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c4: i2c@e66d8000 {
-+			compatible = "renesas,i2c-r8a779a0",
-+				     "renesas,rcar-gen3-i2c";
-+			reg = <0 0xe66d8000 0 0x40>;
-+			interrupts = <GIC_SPI 242 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 522>;
-+			power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
-+			resets = <&cpg 522>;
-+			dmas = <&dmac1 0x99>, <&dmac1 0x98>;
-+			dma-names = "tx", "rx";
-+			i2c-scl-internal-delay-ns = <110>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c5: i2c@e66e0000 {
-+			compatible = "renesas,i2c-r8a779a0",
-+				     "renesas,rcar-gen3-i2c";
-+			reg = <0 0xe66e0000 0 0x40>;
-+			interrupts = <GIC_SPI 243 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 523>;
-+			power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
-+			resets = <&cpg 523>;
-+			dmas = <&dmac1 0x9b>, <&dmac1 0x9a>;
-+			dma-names = "tx", "rx";
-+			i2c-scl-internal-delay-ns = <110>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c6: i2c@e66e8000 {
-+			compatible = "renesas,i2c-r8a779a0",
-+				     "renesas,rcar-gen3-i2c";
-+			reg = <0 0xe66e8000 0 0x40>;
-+			interrupts = <GIC_SPI 244 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 524>;
-+			power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
-+			resets = <&cpg 524>;
-+			dmas = <&dmac1 0x9d>, <&dmac1 0x9c>;
-+			dma-names = "tx", "rx";
-+			i2c-scl-internal-delay-ns = <110>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
- 		scif0: serial@e6e60000 {
- 			compatible = "renesas,scif-r8a779a0",
- 				     "renesas,rcar-gen3-scif", "renesas,scif";
+ static const struct mssr_mod_clk r8a779a0_mod_clks[] __initconst = {
++	DEF_MOD("avb0",		211,	R8A779A0_CLK_S3D2),
++	DEF_MOD("avb1",		212,	R8A779A0_CLK_S3D2),
++	DEF_MOD("avb2",		213,	R8A779A0_CLK_S3D2),
++	DEF_MOD("avb3",		214,	R8A779A0_CLK_S3D2),
++	DEF_MOD("avb4",		215,	R8A779A0_CLK_S3D2),
++	DEF_MOD("avb5",		216,	R8A779A0_CLK_S3D2),
+ 	DEF_MOD("csi40",	331,	R8A779A0_CLK_CSI0),
+ 	DEF_MOD("csi41",	400,	R8A779A0_CLK_CSI0),
+ 	DEF_MOD("csi42",	401,	R8A779A0_CLK_CSI0),
 -- 
 2.29.2
 
