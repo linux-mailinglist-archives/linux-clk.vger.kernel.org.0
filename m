@@ -2,199 +2,88 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9442FDDEC
-	for <lists+linux-clk@lfdr.de>; Thu, 21 Jan 2021 01:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C3F2FE073
+	for <lists+linux-clk@lfdr.de>; Thu, 21 Jan 2021 05:15:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731271AbhAUAaH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 20 Jan 2021 19:30:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403903AbhATXV2 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 20 Jan 2021 18:21:28 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB210C0617A5
-        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 14:40:43 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id 34so14161960otd.5
-        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 14:40:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=N0ikIRODAHgwzg5TM1HT6ZnRLm2FIQf9CYmGIK25T6w=;
-        b=KQ1jsn/I1essLHW70M6MBpsmFwLFQqgLosGVhpaT0uLA7nnt4bFyYsMBk1OD4xgO5b
-         SRRqFj69QI/ZFyhj67466muPotunnkZyun6hz6ZKTGDcmgq6VvpVY2men6KmNHAohxYI
-         N+BYsRt5LoEdcfOjz6uEqyRaX+QSwdpMbqXCxuzahixkY1w7J/3R+d9Qt2s53G7Wxsmx
-         w920G2Krt8tW3DyiJynyoiVVLdoilo/d1AqDM4qmm2iwel3M7tLYpV0ajN+dlgBK/LCL
-         VHRtDpCof7DIPofChpCJ76N2z9Gq3JxzXixLND72mulltdMeLgWqsiFKdPVeUWom0c59
-         FJVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=N0ikIRODAHgwzg5TM1HT6ZnRLm2FIQf9CYmGIK25T6w=;
-        b=nP0/r9/DBurfWnubmPQo3JzO8QSY3Q2oTc/+4sq7hgB7Xma5cy7Mc5zIDtkPb2o/mt
-         7BTcLPQm/Tz/YFt2iHnfJV3tC44bmoYe/wQrLZOx3xq6OKk7GmL9T6Cdi+ohMxFo4T6F
-         J4jYbLy+OIqhaLxMyUqBHV3U0+WzSGfZ5k92xibxyXBvZ85nutQvnoR89kBkzWsg3+hS
-         vByx2awjKjkLXeY1LcCFJG+gGfenCG6iQqcWcayG6X14GknjkzQ8rurDYkR9eLSGLfhD
-         wZ5hs5Q0iQ0+KJYOVxQcYmm1t0wH1ZooTne3UW7i+Na/pqc8jIBaPAqyoE0lAWlyYF3l
-         D7YA==
-X-Gm-Message-State: AOAM530a8M2NUInwv+d0WpGxZOPfXNmhAWqtxLDI0faFMoUqJ12wjEfo
-        VYQDAvuWbvXP+Yb43Bw/gmHl5g==
-X-Google-Smtp-Source: ABdhPJwsr2cgr0QT6mIy0RJN43jymeoZ6Wl/xM4K83iEZuDe4nI45HO3piUIMase3XvmXirjIqH5Dg==
-X-Received: by 2002:a9d:7304:: with SMTP id e4mr8490305otk.228.1611182443270;
-        Wed, 20 Jan 2021 14:40:43 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id n11sm681000oij.37.2021.01.20.14.40.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 14:40:42 -0800 (PST)
-Date:   Wed, 20 Jan 2021 16:40:40 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Taniya Das <tdas@codeaurora.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette ? <mturquette@baylibre.com>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V1] clk: qcom: gcc-sc7180: Mark the MM XO clocks to be
- always ON
-Message-ID: <YAixaN6fta27XDnO@builder.lan>
-References: <1611128871-5898-1-git-send-email-tdas@codeaurora.org>
+        id S1727216AbhAUEPN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 20 Jan 2021 23:15:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39710 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728833AbhAUENE (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 20 Jan 2021 23:13:04 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6E073238E4;
+        Thu, 21 Jan 2021 04:11:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611202311;
+        bh=i0o5BOTuobkVm+Oy4OCU51ghTjJgBql7EKiATSN3E0M=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=OYXMbM0RVabxirrEwy/tHCTU4KlXXGViQbMh+li0zjDuWUoEh1mr23enbikIAIpxW
+         DIPOHVnHtkwVwyeLDcl8g8RP2YgX6wUXsjH68bBTwmKvAWBHBFLgtCGeYGvb8WxPTv
+         rHGB4qOEGDmwh0jCTe4haw46lFy90ijoA4M6ow4zlOfIIHcTJA14wH1zEnAqazL7n1
+         X1Nn1az4G3DLtJwB8zK70EoUmra0D7anMbiw8Q6RvZ9zuqkacIhM2uWYt0ywYJ/hVo
+         J0ESg+jdZus5BcG5wbCqKlQ3ECm7egmYRrwbEN97QihniwCVD7KhSnmvuAHUiW+Sid
+         TrI+6b5ozKbSw==
+Subject: Re: [PATCH 07/20] clk: socfpga: clk-pll: Remove unused variable 'rc'
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
+References: <20210120093040.1719407-1-lee.jones@linaro.org>
+ <20210120093040.1719407-8-lee.jones@linaro.org>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+Message-ID: <3d6c8a56-0fdb-f116-95ff-29526400fc14@kernel.org>
+Date:   Wed, 20 Jan 2021 22:11:49 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1611128871-5898-1-git-send-email-tdas@codeaurora.org>
+In-Reply-To: <20210120093040.1719407-8-lee.jones@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed 20 Jan 01:47 CST 2021, Taniya Das wrote:
 
-> There are intermittent GDSC power-up failures observed for titan top
-> gdsc, which requires the XO clock. Thus mark all the MM XO clocks always
-> enabled from probe.
+
+On 1/20/21 3:30 AM, Lee Jones wrote:
+> Fixes the following W=1 kernel build warning(s):
 > 
-
-But if this is the reason for keeping all these {ahb,xo}_clks critical
-(or upstream just a bunch of hard coded regmap_update_bits()) why don't
-we properly describe them as dependencies for the clock controller/gdsc?
-I.e. by the use of pm_clk_add()?
-
-Regards,
-Bjorn
-
-> Fixes: 8d4025943e13 ("clk: qcom: camcc-sc7180: Use runtime PM ops instead of clk ones")
-> Signed-off-by: Taniya Das <tdas@codeaurora.org>
+>   drivers/clk/socfpga/clk-pll.c: In function ‘__socfpga_pll_init’:
+>   drivers/clk/socfpga/clk-pll.c:83:6: warning: variable ‘rc’ set but not used [-Wunused-but-set-variable]
+> 
+> Cc: Dinh Nguyen <dinguyen@kernel.org>
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
 > ---
->  drivers/clk/qcom/gcc-sc7180.c | 47 ++++---------------------------------------
->  1 file changed, 4 insertions(+), 43 deletions(-)
+>   drivers/clk/socfpga/clk-pll.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/drivers/clk/qcom/gcc-sc7180.c b/drivers/clk/qcom/gcc-sc7180.c
-> index b05901b..88e896a 100644
-> --- a/drivers/clk/qcom/gcc-sc7180.c
-> +++ b/drivers/clk/qcom/gcc-sc7180.c
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /*
-> - * Copyright (c) 2019-2020, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2019-2021, The Linux Foundation. All rights reserved.
->   */
+> diff --git a/drivers/clk/socfpga/clk-pll.c b/drivers/clk/socfpga/clk-pll.c
+> index e5fb786843f39..3cf99df7d0056 100644
+> --- a/drivers/clk/socfpga/clk-pll.c
+> +++ b/drivers/clk/socfpga/clk-pll.c
+> @@ -80,7 +80,6 @@ static __init struct clk *__socfpga_pll_init(struct device_node *node,
+>   	const char *parent_name[SOCFPGA_MAX_PARENTS];
+>   	struct clk_init_data init;
+>   	struct device_node *clkmgr_np;
+> -	int rc;
+>   
+>   	of_property_read_u32(node, "reg", &reg);
+>   
+> @@ -111,7 +110,7 @@ static __init struct clk *__socfpga_pll_init(struct device_node *node,
+>   		kfree(pll_clk);
+>   		return NULL;
+>   	}
+> -	rc = of_clk_add_provider(node, of_clk_src_simple_get, clk);
+> +	of_clk_add_provider(node, of_clk_src_simple_get, clk);
+>   	return clk;
+>   }
+>   
 > 
->  #include <linux/clk-provider.h>
-> @@ -919,19 +919,6 @@ static struct clk_branch gcc_camera_throttle_hf_axi_clk = {
->  	},
->  };
-> 
-> -static struct clk_branch gcc_camera_xo_clk = {
-> -	.halt_reg = 0xb02c,
-> -	.halt_check = BRANCH_HALT,
-> -	.clkr = {
-> -		.enable_reg = 0xb02c,
-> -		.enable_mask = BIT(0),
-> -		.hw.init = &(struct clk_init_data){
-> -			.name = "gcc_camera_xo_clk",
-> -			.ops = &clk_branch2_ops,
-> -		},
-> -	},
-> -};
-> -
->  static struct clk_branch gcc_ce1_ahb_clk = {
->  	.halt_reg = 0x4100c,
->  	.halt_check = BRANCH_HALT_VOTED,
-> @@ -1096,19 +1083,6 @@ static struct clk_branch gcc_disp_throttle_hf_axi_clk = {
->  	},
->  };
-> 
-> -static struct clk_branch gcc_disp_xo_clk = {
-> -	.halt_reg = 0xb030,
-> -	.halt_check = BRANCH_HALT,
-> -	.clkr = {
-> -		.enable_reg = 0xb030,
-> -		.enable_mask = BIT(0),
-> -		.hw.init = &(struct clk_init_data){
-> -			.name = "gcc_disp_xo_clk",
-> -			.ops = &clk_branch2_ops,
-> -		},
-> -	},
-> -};
-> -
->  static struct clk_branch gcc_gp1_clk = {
->  	.halt_reg = 0x64000,
->  	.halt_check = BRANCH_HALT,
-> @@ -2159,19 +2133,6 @@ static struct clk_branch gcc_video_throttle_axi_clk = {
->  	},
->  };
-> 
-> -static struct clk_branch gcc_video_xo_clk = {
-> -	.halt_reg = 0xb028,
-> -	.halt_check = BRANCH_HALT,
-> -	.clkr = {
-> -		.enable_reg = 0xb028,
-> -		.enable_mask = BIT(0),
-> -		.hw.init = &(struct clk_init_data){
-> -			.name = "gcc_video_xo_clk",
-> -			.ops = &clk_branch2_ops,
-> -		},
-> -	},
-> -};
-> -
->  static struct clk_branch gcc_mss_cfg_ahb_clk = {
->  	.halt_reg = 0x8a000,
->  	.halt_check = BRANCH_HALT,
-> @@ -2304,7 +2265,6 @@ static struct clk_regmap *gcc_sc7180_clocks[] = {
->  	[GCC_BOOT_ROM_AHB_CLK] = &gcc_boot_rom_ahb_clk.clkr,
->  	[GCC_CAMERA_HF_AXI_CLK] = &gcc_camera_hf_axi_clk.clkr,
->  	[GCC_CAMERA_THROTTLE_HF_AXI_CLK] = &gcc_camera_throttle_hf_axi_clk.clkr,
-> -	[GCC_CAMERA_XO_CLK] = &gcc_camera_xo_clk.clkr,
->  	[GCC_CE1_AHB_CLK] = &gcc_ce1_ahb_clk.clkr,
->  	[GCC_CE1_AXI_CLK] = &gcc_ce1_axi_clk.clkr,
->  	[GCC_CE1_CLK] = &gcc_ce1_clk.clkr,
-> @@ -2317,7 +2277,6 @@ static struct clk_regmap *gcc_sc7180_clocks[] = {
->  	[GCC_DISP_GPLL0_DIV_CLK_SRC] = &gcc_disp_gpll0_div_clk_src.clkr,
->  	[GCC_DISP_HF_AXI_CLK] = &gcc_disp_hf_axi_clk.clkr,
->  	[GCC_DISP_THROTTLE_HF_AXI_CLK] = &gcc_disp_throttle_hf_axi_clk.clkr,
-> -	[GCC_DISP_XO_CLK] = &gcc_disp_xo_clk.clkr,
->  	[GCC_GP1_CLK] = &gcc_gp1_clk.clkr,
->  	[GCC_GP1_CLK_SRC] = &gcc_gp1_clk_src.clkr,
->  	[GCC_GP2_CLK] = &gcc_gp2_clk.clkr,
-> @@ -2413,7 +2372,6 @@ static struct clk_regmap *gcc_sc7180_clocks[] = {
->  	[GCC_VIDEO_AXI_CLK] = &gcc_video_axi_clk.clkr,
->  	[GCC_VIDEO_GPLL0_DIV_CLK_SRC] = &gcc_video_gpll0_div_clk_src.clkr,
->  	[GCC_VIDEO_THROTTLE_AXI_CLK] = &gcc_video_throttle_axi_clk.clkr,
-> -	[GCC_VIDEO_XO_CLK] = &gcc_video_xo_clk.clkr,
->  	[GPLL0] = &gpll0.clkr,
->  	[GPLL0_OUT_EVEN] = &gpll0_out_even.clkr,
->  	[GPLL6] = &gpll6.clkr,
-> @@ -2510,6 +2468,9 @@ static int gcc_sc7180_probe(struct platform_device *pdev)
->  	regmap_update_bits(regmap, 0x0b004, BIT(0), BIT(0));
->  	regmap_update_bits(regmap, 0x0b008, BIT(0), BIT(0));
->  	regmap_update_bits(regmap, 0x0b00c, BIT(0), BIT(0));
-> +	regmap_update_bits(regmap, 0x0b02c, BIT(0), BIT(0));
-> +	regmap_update_bits(regmap, 0x0b028, BIT(0), BIT(0));
-> +	regmap_update_bits(regmap, 0x0b030, BIT(0), BIT(0));
->  	regmap_update_bits(regmap, 0x71004, BIT(0), BIT(0));
-> 
->  	ret = qcom_cc_register_rcg_dfs(regmap, gcc_dfs_clocks,
-> --
-> Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
-> of the Code Aurora Forum, hosted by the  Linux Foundation.
-> 
+
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+
+
