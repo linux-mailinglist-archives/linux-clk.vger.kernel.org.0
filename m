@@ -2,142 +2,68 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9132FE601
-	for <lists+linux-clk@lfdr.de>; Thu, 21 Jan 2021 10:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9831B2FE6DA
+	for <lists+linux-clk@lfdr.de>; Thu, 21 Jan 2021 10:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728381AbhAUJMg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 21 Jan 2021 04:12:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728418AbhAUJMF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 21 Jan 2021 04:12:05 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7516AC061794
-        for <linux-clk@vger.kernel.org>; Thu, 21 Jan 2021 01:11:15 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id s11so1567628edd.5
-        for <linux-clk@vger.kernel.org>; Thu, 21 Jan 2021 01:11:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WLXeWIIoAu3UvtfUefXR9qcSia3PjDVI/Fbc5zrav74=;
-        b=L0WyjqaHw0/lRmseCIJJbm0McdMQpzOm/7kVIAnPv9TUdDWiA0dMSeUtNdBHKJD+3t
-         r0JwbHmd5Z23dT9lioDVG2jgdlTOM1lnbmB4M7fNcvygWoRf8krfXnzPP0Bcz/z8YG9p
-         FoDZz5hLYSFh1bTyeIepXRlh+VS5k0TBAaqcd4YWIaptS0i7CTeFPH8AveyFs/enFj1P
-         OHCA72zAkf80LvVLIQqekwMPMD+DUJbmTNB00ALDKuauYkRB+TNZyk05sSSRqMcNgHrZ
-         C2u//DcTUii2Oca69dD2DvQW8RLLX0XHRjaWUJsF6j0FEFs8BxSteQAwpCOBtdqdti64
-         qMCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WLXeWIIoAu3UvtfUefXR9qcSia3PjDVI/Fbc5zrav74=;
-        b=D/AU/+u9Y/PWgvJ2WqjUmt8byf/qrxRNdJwNSE4Tjzlnv9Y2V15YQw7PzJILGcjaJJ
-         FetvnYDKHKk625WmtL8IZMeWvX5v8xYq9uwWxbevVH1Wbm77CLFUgI607C06kxtPcmGr
-         1RThJHoqYOn2SdoBKJp2XGxwoZAjQ63eGKYe3+UoFMAJ2QV9gZGfETVbZli5NZXtitjs
-         b4bkQB652NqojWstGIJz7SV7bPOeQ8NDLNN6UE8WHjfLEs+6+Fbi3UjoebZsVnB1Ck0t
-         iWgZMbMLz+cmA/quGdGgSyZbxwEtuV+45o5Wvmmxv4zansprKxhyTU3JxPBFbyt6jST2
-         h+Xw==
-X-Gm-Message-State: AOAM533W9KOmhR32K7CFur8sDjixAjg0vmfU4ax0+Tby27JpH/yi3TN1
-        HjhbL4kB0QAlvDQ1loVp4MB8udiXryZs3Q7D24KTs2z6fuIjQf2I
-X-Google-Smtp-Source: ABdhPJzCxyeIcXGOlc4+TBm6gMHiw/i/Y7fx9SBhhCx7//bBXwiSd+CK8jbzA4TdALgfZUw3o+e89xwXFxeHzE+WiQA=
-X-Received: by 2002:aa7:c384:: with SMTP id k4mr10130943edq.23.1611220274094;
- Thu, 21 Jan 2021 01:11:14 -0800 (PST)
+        id S1728538AbhAUJ4l (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 21 Jan 2021 04:56:41 -0500
+Received: from www.zeus03.de ([194.117.254.33]:44332 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728480AbhAUJzj (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 21 Jan 2021 04:55:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=k1; bh=ihXbxxWEwFQOe2
+        v9NI1W3swgmIUC6tcmkshQgzdRQ8Q=; b=XnC4QuK42ydelBi/GWTKQMc84sFPtJ
+        0cvZrlBT/HEjD5vJtp6xUlJxt8jeJpDyXiaGAmyKMBLSjXJkSsAJy78y3peLQAN5
+        +BUPsqWaT8jZpVrXOTKxqy4vmMNIv2qbhTwK3FjpPa+CJjmlnNp92gjdiQ2Glgjx
+        V4LHDWWgUGuNE=
+Received: (qmail 1784043 invoked from network); 21 Jan 2021 10:54:28 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Jan 2021 10:54:28 +0100
+X-UD-Smtp-Session: l3s3148p1@OMW1Dma5nL4gAwDPXyX1ACWcscxtZ2TX
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     linux-clk@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH V2 1/4] clk: renesas: r8a779a0: add clocks for I2C
+Date:   Thu, 21 Jan 2021 10:54:17 +0100
+Message-Id: <20210121095420.5023-2-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210121095420.5023-1-wsa+renesas@sang-engineering.com>
+References: <20210121095420.5023-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-References: <17nqrn25-rp5s-4652-o5o1-72p2oprqpq90@onlyvoer.pbz>
-In-Reply-To: <17nqrn25-rp5s-4652-o5o1-72p2oprqpq90@onlyvoer.pbz>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 21 Jan 2021 14:41:02 +0530
-Message-ID: <CA+G9fYsyXsNSXGy6BWZ6mgpAP=+7r6Xy9jQ2xxb9mXyHdRoBCg@mail.gmail.com>
-Subject: Re: [PATCH] PM / clk: make PM clock layer compatible with clocks that
- must sleep
-To:     Nicolas Pitre <npitre@baylibre.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Nicolas,
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-On Tue, 5 Jan 2021 at 08:48, Nicolas Pitre <npitre@baylibre.com> wrote:
->
-> The clock API splits its interface into sleepable ant atomic contexts:
->
-> - clk_prepare/clk_unprepare for stuff that might sleep
->
-> - clk_enable_clk_disable for anything that may be done in atomic context
->
+Changes since v1:
+* use S1D4 as parent clock as described in the datasheet
 
-<trim>
+ drivers/clk/renesas/r8a779a0-cpg-mssr.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
->
-> Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
->
-> diff --git a/drivers/base/power/clock_ops.c b/drivers/base/power/clock_ops.c
-> index ced6863a16..a62fb0f9b1 100644
-> --- a/drivers/base/power/clock_ops.c
-> +++ b/drivers/base/power/clock_ops.c
-
-<trim>
-
-> @@ -64,17 +166,20 @@ static void pm_clk_acquire(struct device *dev, struct pm_clock_entry *ce)
->                 ce->clk = clk_get(dev, ce->con_id);
->         if (IS_ERR(ce->clk)) {
->                 ce->status = PCE_STATUS_ERROR;
-> +               return;
-> +       } else if (clk_is_enabled_when_prepared(ce->clk)) {
-
-arm-linux-gnueabihf-ld: drivers/base/power/clock_ops.o: in function
-`pm_clk_acquire':
-drivers/base/power/clock_ops.c:170: undefined reference to
-`clk_is_enabled_when_prepared'
-
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-
-This build error was noticed on arm architecture on linux next 20210121 tag.
-Following builds failed.
- - arm (omap1_defconfig) with clang-10 - FAILED
- - arm (omap1_defconfig) with clang-11 - FAILED
-
- - arm (omap1_defconfig) with gcc-8 - FAILED
- - arm (omap1_defconfig) with gcc-9 - FAILED
- - arm (omap1_defconfig) with gcc-10 - FAILED
-
-Steps to reproduce:
----------------------------
-1)
-
-# TuxMake is a command line tool and Python library that provides
-# portable and repeatable Linux kernel builds across a variety of
-# architectures, toolchains, kernel configurations, and make targets.
-#
-# TuxMake supports the concept of runtimes.
-# See https://docs.tuxmake.org/runtimes/, for that to work it requires
-# that you install podman or docker on your system.
-#
-# To install tuxmake on your system globally:
-# sudo pip3 install -U tuxmake
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-
-tuxmake --runtime docker --target-arch arm --toolchain gcc-8 --kconfig
-omap1_defconfig
-
-2)
-tuxbuild build --git-repo
-https://gitlab.com/Linaro/lkft/mirrors/next/linux-next --git-sha
-bc085f8fc88fc16796c9f2364e2bfb3fef305cad --target-arch arm --toolchain
-gcc-8 --kconfig omap1_defconfig
-
+diff --git a/drivers/clk/renesas/r8a779a0-cpg-mssr.c b/drivers/clk/renesas/r8a779a0-cpg-mssr.c
+index ef45b7c10074..613f7b499cfc 100644
+--- a/drivers/clk/renesas/r8a779a0-cpg-mssr.c
++++ b/drivers/clk/renesas/r8a779a0-cpg-mssr.c
+@@ -166,6 +166,13 @@ static const struct mssr_mod_clk r8a779a0_mod_clks[] __initconst = {
+ 	DEF_MOD("hscif1",	515,	R8A779A0_CLK_S1D2),
+ 	DEF_MOD("hscif2",	516,	R8A779A0_CLK_S1D2),
+ 	DEF_MOD("hscif3",	517,	R8A779A0_CLK_S1D2),
++	DEF_MOD("i2c0",		518,	R8A779A0_CLK_S1D4),
++	DEF_MOD("i2c1",		519,	R8A779A0_CLK_S1D4),
++	DEF_MOD("i2c2",		520,	R8A779A0_CLK_S1D4),
++	DEF_MOD("i2c3",		521,	R8A779A0_CLK_S1D4),
++	DEF_MOD("i2c4",		522,	R8A779A0_CLK_S1D4),
++	DEF_MOD("i2c5",		523,	R8A779A0_CLK_S1D4),
++	DEF_MOD("i2c6",		524,	R8A779A0_CLK_S1D4),
+ 	DEF_MOD("msi0",		618,	R8A779A0_CLK_MSO),
+ 	DEF_MOD("msi1",		619,	R8A779A0_CLK_MSO),
+ 	DEF_MOD("msi2",		620,	R8A779A0_CLK_MSO),
 -- 
-Linaro LKFT
-https://lkft.linaro.org
+2.29.2
+
