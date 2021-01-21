@@ -2,44 +2,44 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E27B72FE969
-	for <lists+linux-clk@lfdr.de>; Thu, 21 Jan 2021 12:57:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4262FE941
+	for <lists+linux-clk@lfdr.de>; Thu, 21 Jan 2021 12:50:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730752AbhAULsu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 21 Jan 2021 06:48:50 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:36685 "EHLO
+        id S1727794AbhAULVH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 21 Jan 2021 06:21:07 -0500
+Received: from esa.microchip.iphmx.com ([68.232.153.233]:29496 "EHLO
         esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730101AbhAULUx (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 21 Jan 2021 06:20:53 -0500
+        with ESMTP id S1729212AbhAULVC (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 21 Jan 2021 06:21:02 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1611228052; x=1642764052;
+  t=1611228061; x=1642764061;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=Fdf9OnTBFgfQBR84ixjFKpX80iSmhJBN+KwWlQeFgOU=;
-  b=YV7tkdA06AiCDEPhUMb/sVafnQdN3+sCxsmN3s+FuAEs7+yCgZHvUiBQ
-   jfUMkzGif9f6Y208eQDTZEylV67nmc/hWH/XKnPVJ2aeTb32osBE/qn6n
-   m+my7xQrqzFiZLZ9x46wDd46D19YTeUQvKrJSgEHD5Xgp7cB+abFIY+AD
-   6GaCbPEvKZfw7DaIdXJz70R4t5bElmleEgReKNLbbN59TY/71yPRxL3yo
-   AcqHZddxf18Ekixduy9kKSN6SRHDzMfb4b5w65m8lA2pBQA77x0NF4OKy
-   l90/GkM/MsFvpm+6MhoMqCBXttEnXPiOXIDLeZ/5SUVjDKLYvnbq5v4wA
-   Q==;
-IronPort-SDR: r6WU6ibkMNbBfCpZhZtX+GAGihYWO1yOhpLoHsBgtkVst0gZ8osLtidtRW9vKvC8gaiSjVEibJ
- bEQpscDtGKkEdYdXBWF8kASXtpyT0qO6Q1rKosm3I3oimwe7aJF3fQETFcFGCoBdGXv2ugsya6
- CNzp++KD7UIl6mN3uhGn1+BWT8yys9onN70ff6U4TgaEeev5j0nbg93R4TXGwN4hQvRTiFvDhp
- E6JpgVWw5oCLN9xfmcZ9q9clqgh1aMtW78uA+Qa2D672k7ht0QI0NBa+dILoxa7Qzi9nkiKAus
- C0k=
+  bh=+HTxGAkCV0WT1pcWMEmXKDBRx9F0hP1mynITGKMddEU=;
+  b=VjXpXRq9iQo6ck2qqEuqt7g7x36+eCAweoSoT6wBewzZm3aNR0SsfI9U
+   wO42w2Z1QXR9FeLA2OniICs3J7PpHoxMxkhKb8wuKhTQqZ09ZOEIlVidw
+   DbJMOj6is7KKk7vyBqcCvviucVMp7tHGQ8N+INr3vn/WexlLzpQUetCt6
+   c3Hanl65R81tGBjR03OJOtIJy9xqfETo1Y0TUBbh5i6ie9TipuxxwRVmB
+   pcWLAQGk0zpCL3hM7BL0fZMrQbPNioutO3xVxEkFJyKNnqyMh+EUww3TJ
+   0iCoZ/KDWmHpYiJTeA2ZfYWKGgIidAUhxF52gE2O4LmnL6V9+V0QRdmna
+   A==;
+IronPort-SDR: BC6NOqj3oodixFeokFIQXkjDOfI4gMLjwK4mTUYBg+ubm/X61scZ4D8zDF2HlYy/S9YlPtU/ab
+ cRh8w7x4IS5jK9o0zB7sXiTgEUnUHGzuevxc83nJDvIVeJULZbBhyQh/ahu2aEfHz5N1bjhKAN
+ EeTog4B5+Y76MwiQpmcRRqM/MjSu5dvaVaFtkL3+uiNGORLIXBVQI+vyUXKXdeELJ9kja/U0lh
+ HtqFhDXuUJjT5r1LKyG8z2MRha4XOhlyd8+siEP+7sMdCZ1gHz++v7PQn0iCHhPZ/Dn1Xh0po/
+ eTo=
 X-IronPort-AV: E=Sophos;i="5.79,363,1602572400"; 
-   d="scan'208";a="100892437"
+   d="scan'208";a="106762282"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Jan 2021 04:19:35 -0700
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Jan 2021 04:19:45 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 21 Jan 2021 04:19:35 -0700
+ 15.1.1979.3; Thu, 21 Jan 2021 04:19:44 -0700
 Received: from m18063-ThinkPad-T460p.microchip.com (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Thu, 21 Jan 2021 04:19:31 -0700
+ 15.1.1979.3 via Frontend Transport; Thu, 21 Jan 2021 04:19:41 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
         <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
@@ -48,9 +48,9 @@ CC:     <viresh.kumar@linaro.org>, <linux-clk@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH 2/5] clk: at91: pmc: execute suspend/resume only for backup mode
-Date:   Thu, 21 Jan 2021 13:19:08 +0200
-Message-ID: <1611227951-4590-3-git-send-email-claudiu.beznea@microchip.com>
+Subject: [PATCH 4/5] clk: at91: clk-master: add register definition for sama7g5's master clock
+Date:   Thu, 21 Jan 2021 13:19:10 +0200
+Message-ID: <1611227951-4590-5-git-send-email-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1611227951-4590-1-git-send-email-claudiu.beznea@microchip.com>
 References: <1611227951-4590-1-git-send-email-claudiu.beznea@microchip.com>
@@ -60,117 +60,150 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Before going to backup mode architecture specific PM code sets the first
-word in securam (and it will be cleared in a subsequent commit for the rest
-of power saving modes). Thus take this into account when
-suspending/resuming clocks. This will avoid executing unnecessary
-instructions when suspending to non backup modes. Since the clear of the
-1st word in securam will be done in a subsequent commit the current commit
-will not broke the current behavior since up to this moment the
-suspend/resume were executed for all AT91 PM modes. The difference now
-is that the suspend/resume for clocks will be executed for the rest of
-AT91 PM modes just after the 1st enter/exit to/from backup mode.
-Also this commit changed the postcore_initcall() with subsys_initcall()
-to be able to execute of_find_compatible_node() since this was not
-available at the moment of postcore_initcall(). This should not alter
-the tcb_clksrc since the changes are related to clocks suspend/resume
-procedure that will be executed at the user space request, thus long
-ago after postcore_initcall().
+Add register definitions for SAMA7G5's master clock. These would be
+also used by architecture specific power saving code. With this, update
+also clk-master.c.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- drivers/clk/at91/pmc.c | 48 +++++++++++++++++++++++++++++++++++++++---------
- 1 file changed, 39 insertions(+), 9 deletions(-)
+ drivers/clk/at91/clk-master.c | 51 ++++++++++++++++++++-----------------------
+ include/linux/clk/at91_pmc.h  | 26 ++++++++++++++++++++++
+ 2 files changed, 50 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/clk/at91/pmc.c b/drivers/clk/at91/pmc.c
-index 77b57c9f5dcb..c226d33cd899 100644
---- a/drivers/clk/at91/pmc.c
-+++ b/drivers/clk/at91/pmc.c
-@@ -8,6 +8,8 @@
- #include <linux/clkdev.h>
- #include <linux/clk/at91_pmc.h>
- #include <linux/of.h>
-+#include <linux/of_address.h>
-+#include <linux/of_platform.h>
- #include <linux/mfd/syscon.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
-@@ -110,13 +112,35 @@ struct pmc_data *pmc_data_allocate(unsigned int ncore, unsigned int nsystem,
- }
+diff --git a/drivers/clk/at91/clk-master.c b/drivers/clk/at91/clk-master.c
+index 6f1fb2eb2a8d..a6a393bb1def 100644
+--- a/drivers/clk/at91/clk-master.c
++++ b/drivers/clk/at91/clk-master.c
+@@ -17,15 +17,7 @@
+ #define MASTER_DIV_SHIFT	8
+ #define MASTER_DIV_MASK		0x7
  
- #ifdef CONFIG_PM
-+
-+/* Address in SECURAM that say if we suspend to backup mode. */
-+static void __iomem *at91_pmc_backup_suspend;
-+
- static int at91_pmc_suspend(void)
- {
-+	unsigned int backup;
-+
-+	if (!at91_pmc_backup_suspend)
-+		return 0;
-+
-+	backup = *(unsigned int *)at91_pmc_backup_suspend;
-+	if (!backup)
-+		return 0;
-+
- 	return clk_save_context();
- }
- 
- static void at91_pmc_resume(void)
- {
-+	unsigned int backup;
-+
-+	if (!at91_pmc_backup_suspend)
-+		return;
-+
-+	backup = *(unsigned int *)at91_pmc_backup_suspend;
-+	if (!backup)
-+		return;
-+
- 	clk_restore_context();
- }
- 
-@@ -125,24 +149,30 @@ static struct syscore_ops pmc_syscore_ops = {
- 	.resume = at91_pmc_resume,
- };
- 
--static const struct of_device_id sama5d2_pmc_dt_ids[] = {
--	{ .compatible = "atmel,sama5d2-pmc" },
--	{ /* sentinel */ }
--};
+-#define PMC_MCR			0x30
+-#define PMC_MCR_ID_MSK		GENMASK(3, 0)
+-#define PMC_MCR_CMD		BIT(7)
+-#define PMC_MCR_DIV		GENMASK(10, 8)
+-#define PMC_MCR_CSS		GENMASK(20, 16)
+ #define PMC_MCR_CSS_SHIFT	(16)
+-#define PMC_MCR_EN		BIT(28)
 -
- static int __init pmc_register_ops(void)
- {
-+	struct platform_device *pdev;
- 	struct device_node *np;
+-#define PMC_MCR_ID(x)		((x) & PMC_MCR_ID_MSK)
  
--	np = of_find_matching_node(NULL, sama5d2_pmc_dt_ids);
-+	np = of_find_compatible_node(NULL, NULL, "atmel,sama5d2-securam");
- 	if (!np)
--		return 0;
-+		return -ENODEV;
-+
-+	pdev = of_find_device_by_node(np);
- 	of_node_put(np);
-+	if (!pdev)
-+		return -ENODEV;
-+
-+	at91_pmc_backup_suspend = of_iomap(np, 0);
-+	if (!at91_pmc_backup_suspend) {
-+		pr_warn("%s(): unable to map securam\n", __func__);
-+		return -ENOMEM;
-+	}
+ #define MASTER_MAX_ID		4
  
- 	register_syscore_ops(&pmc_syscore_ops);
+@@ -685,17 +677,20 @@ static void clk_sama7g5_master_set(struct clk_master *master,
  
- 	return 0;
+ 	spin_lock_irqsave(master->lock, flags);
+ 
+-	regmap_write(master->regmap, PMC_MCR, PMC_MCR_ID(master->id));
+-	regmap_read(master->regmap, PMC_MCR, &val);
+-	regmap_update_bits(master->regmap, PMC_MCR,
+-			   (status ? PMC_MCR_EN : 0) | PMC_MCR_CSS | PMC_MCR_DIV |
+-			   PMC_MCR_CMD | PMC_MCR_ID_MSK,
+-			   (status ? PMC_MCR_EN : 0) |
++	regmap_write(master->regmap, AT91_PMC_MCR_V2,
++		     AT91_PMC_MCR_V2_ID(master->id));
++	regmap_read(master->regmap, AT91_PMC_MCR_V2, &val);
++	regmap_update_bits(master->regmap, AT91_PMC_MCR_V2,
++			   (status ? AT91_PMC_MCR_V2_EN : 0) |
++			   AT91_PMC_MCR_V2_CSS | AT91_PMC_MCR_V2_DIV |
++			   AT91_PMC_MCR_V2_CMD | AT91_PMC_MCR_V2_ID_MSK,
++			   (status ? AT91_PMC_MCR_V2_EN : 0) |
+ 			   (master->parent << PMC_MCR_CSS_SHIFT) |
+ 			   (master->div << MASTER_DIV_SHIFT) |
+-			   PMC_MCR_CMD | PMC_MCR_ID(master->id));
++			   AT91_PMC_MCR_V2_CMD |
++			   AT91_PMC_MCR_V2_ID(master->id));
+ 
+-	cparent = (val & PMC_MCR_CSS) >> PMC_MCR_CSS_SHIFT;
++	cparent = (val & AT91_PMC_MCR_V2_CSS) >> PMC_MCR_CSS_SHIFT;
+ 
+ 	/* Wait here only if parent is being changed. */
+ 	while ((cparent != master->parent) && !clk_master_ready(master))
+@@ -720,10 +715,12 @@ static void clk_sama7g5_master_disable(struct clk_hw *hw)
+ 
+ 	spin_lock_irqsave(master->lock, flags);
+ 
+-	regmap_write(master->regmap, PMC_MCR, master->id);
+-	regmap_update_bits(master->regmap, PMC_MCR,
+-			   PMC_MCR_EN | PMC_MCR_CMD | PMC_MCR_ID_MSK,
+-			   PMC_MCR_CMD | PMC_MCR_ID(master->id));
++	regmap_write(master->regmap, AT91_PMC_MCR_V2, master->id);
++	regmap_update_bits(master->regmap, AT91_PMC_MCR_V2,
++			   AT91_PMC_MCR_V2_EN | AT91_PMC_MCR_V2_CMD |
++			   AT91_PMC_MCR_V2_ID_MSK,
++			   AT91_PMC_MCR_V2_CMD |
++			   AT91_PMC_MCR_V2_ID(master->id));
+ 
+ 	spin_unlock_irqrestore(master->lock, flags);
  }
--/* This has to happen before arch_initcall because of the tcb_clksrc driver */
--postcore_initcall(pmc_register_ops);
+@@ -736,12 +733,12 @@ static int clk_sama7g5_master_is_enabled(struct clk_hw *hw)
+ 
+ 	spin_lock_irqsave(master->lock, flags);
+ 
+-	regmap_write(master->regmap, PMC_MCR, master->id);
+-	regmap_read(master->regmap, PMC_MCR, &val);
++	regmap_write(master->regmap, AT91_PMC_MCR_V2, master->id);
++	regmap_read(master->regmap, AT91_PMC_MCR_V2, &val);
+ 
+ 	spin_unlock_irqrestore(master->lock, flags);
+ 
+-	return !!(val & PMC_MCR_EN);
++	return !!(val & AT91_PMC_MCR_V2_EN);
+ }
+ 
+ static int clk_sama7g5_master_set_rate(struct clk_hw *hw, unsigned long rate,
+@@ -837,10 +834,10 @@ at91_clk_sama7g5_register_master(struct regmap *regmap,
+ 	master->mux_table = mux_table;
+ 
+ 	spin_lock_irqsave(master->lock, flags);
+-	regmap_write(master->regmap, PMC_MCR, master->id);
+-	regmap_read(master->regmap, PMC_MCR, &val);
+-	master->parent = (val & PMC_MCR_CSS) >> PMC_MCR_CSS_SHIFT;
+-	master->div = (val & PMC_MCR_DIV) >> MASTER_DIV_SHIFT;
++	regmap_write(master->regmap, AT91_PMC_MCR_V2, master->id);
++	regmap_read(master->regmap, AT91_PMC_MCR_V2, &val);
++	master->parent = (val & AT91_PMC_MCR_V2_CSS) >> PMC_MCR_CSS_SHIFT;
++	master->div = (val & AT91_PMC_MCR_V2_DIV) >> MASTER_DIV_SHIFT;
+ 	spin_unlock_irqrestore(master->lock, flags);
+ 
+ 	hw = &master->hw;
+diff --git a/include/linux/clk/at91_pmc.h b/include/linux/clk/at91_pmc.h
+index a4f82e836a7c..ccb3f034bfa9 100644
+--- a/include/linux/clk/at91_pmc.h
++++ b/include/linux/clk/at91_pmc.h
+@@ -137,6 +137,32 @@
+ #define			AT91_PMC_PLLADIV2_ON		(1 << 12)
+ #define		AT91_PMC_H32MXDIV	BIT(24)
+ 
++#define	AT91_PMC_MCR_V2		0x30				/* Master Clock Register [SAMA7G5 only] */
++#define		AT91_PMC_MCR_V2_ID_MSK	(0xF)
++#define			AT91_PMC_MCR_V2_ID(_id)		((_id) & AT91_PMC_MCR_V2_ID_MSK)
++#define		AT91_PMC_MCR_V2_CMD	(1 << 7)
++#define		AT91_PMC_MCR_V2_DIV	(7 << 8)
++#define			AT91_PMC_MCR_V2_DIV1		(0 << 8)
++#define			AT91_PMC_MCR_V2_DIV2		(1 << 8)
++#define			AT91_PMC_MCR_V2_DIV4		(2 << 8)
++#define			AT91_PMC_MCR_V2_DIV8		(3 << 8)
++#define			AT91_PMC_MCR_V2_DIV16		(4 << 8)
++#define			AT91_PMC_MCR_V2_DIV32		(5 << 8)
++#define			AT91_PMC_MCR_V2_DIV64		(6 << 8)
++#define			AT91_PMC_MCR_V2_DIV3		(7 << 8)
++#define		AT91_PMC_MCR_V2_CSS	(0x1F << 16)
++#define			AT91_PMC_MCR_V2_CSS_MD_SLCK	(0 << 16)
++#define			AT91_PMC_MCR_V2_CSS_TD_SLCK	(1 << 16)
++#define			AT91_PMC_MCR_V2_CSS_MAINCK	(2 << 16)
++#define			AT91_PMC_MCR_V2_CSS_MCK0	(3 << 16)
++#define			AT91_PMC_MCR_V2_CSS_SYSPLL	(5 << 16)
++#define			AT91_PMC_MCR_V2_CSS_DDRPLL	(6 << 16)
++#define			AT91_PMC_MCR_V2_CSS_IMGPLL	(7 << 16)
++#define			AT91_PMC_MCR_V2_CSS_BAUDPLL	(8 << 16)
++#define			AT91_PMC_MCR_V2_CSS_AUDIOPLL	(9 << 16)
++#define			AT91_PMC_MCR_V2_CSS_ETHPLL	(10 << 16)
++#define		AT91_PMC_MCR_V2_EN	(1 << 28)
 +
-+subsys_initcall(pmc_register_ops);
- #endif
+ #define AT91_PMC_XTALF		0x34			/* Main XTAL Frequency Register [SAMA7G5 only] */
+ 
+ #define	AT91_PMC_USB		0x38			/* USB Clock Register [some SAM9 only] */
 -- 
 2.7.4
 
