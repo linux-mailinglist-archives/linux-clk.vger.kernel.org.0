@@ -2,33 +2,33 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0611B2FE3BE
-	for <lists+linux-clk@lfdr.de>; Thu, 21 Jan 2021 08:19:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5864F2FE3BB
+	for <lists+linux-clk@lfdr.de>; Thu, 21 Jan 2021 08:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727158AbhAUHTK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 21 Jan 2021 02:19:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
+        id S1726304AbhAUHSt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 21 Jan 2021 02:18:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727290AbhAUHSe (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 21 Jan 2021 02:18:34 -0500
+        with ESMTP id S1727164AbhAUHST (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 21 Jan 2021 02:18:19 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7A5C061798
-        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 23:17:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B01C061786
+        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 23:17:02 -0800 (PST)
 Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1l2UDE-0006UC-BV; Thu, 21 Jan 2021 08:17:00 +0100
+        id 1l2UDE-0006UE-C5; Thu, 21 Jan 2021 08:17:00 +0100
 Received: from mtr by dude03.red.stw.pengutronix.de with local (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1l2UDD-00597M-6G; Thu, 21 Jan 2021 08:16:59 +0100
+        id 1l2UDD-00597X-6j; Thu, 21 Jan 2021 08:16:59 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
 Cc:     m.mtretter@pengutronix.de, michals@xilinx.com,
         kernel@pengutronix.de, mturquette@baylibre.com, sboyd@kernel.org
-Subject: [PATCH v3 02/15] clk: divider: fix initialization with parent_hw
-Date:   Thu, 21 Jan 2021 08:16:46 +0100
-Message-Id: <20210121071659.1226489-3-m.tretter@pengutronix.de>
+Subject: [PATCH v3 03/15] soc: xilinx: vcu: drop coreclk from struct xlnx_vcu
+Date:   Thu, 21 Jan 2021 08:16:47 +0100
+Message-Id: <20210121071659.1226489-4-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210121071659.1226489-1-m.tretter@pengutronix.de>
 References: <20210121071659.1226489-1-m.tretter@pengutronix.de>
@@ -42,48 +42,54 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-If a driver registers a divider clock with a parent_hw instead of the
-parent_name, the parent_hw is ignored and the clock does not have a
-parent.
+The coreclk field is newer read after being written to xlnx_vcu. Remove
+the coreclk field from the xlnx_vcu and use a function local variable
+instead.
 
-Fix this by initializing the parents the same way they are initialized
-for clock gates.
-
-Fixes: ff258817137a ("clk: divider: Add support for specifying parents via DT/pointers")
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 Acked-by: Michal Simek <michal.simek@xilinx.com>
 ---
 Changelog:
 
 v3: none
-
-v2:
-- Add fixes tag
+v2: none
 ---
- drivers/clk/clk-divider.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/soc/xilinx/xlnx_vcu.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clk/clk-divider.c b/drivers/clk/clk-divider.c
-index c499799693cc..344997203f0e 100644
---- a/drivers/clk/clk-divider.c
-+++ b/drivers/clk/clk-divider.c
-@@ -494,8 +494,13 @@ struct clk_hw *__clk_hw_register_divider(struct device *dev,
- 	else
- 		init.ops = &clk_divider_ops;
- 	init.flags = flags;
--	init.parent_names = (parent_name ? &parent_name: NULL);
--	init.num_parents = (parent_name ? 1 : 0);
-+	init.parent_names = parent_name ? &parent_name : NULL;
-+	init.parent_hws = parent_hw ? &parent_hw : NULL;
-+	init.parent_data = parent_data;
-+	if (parent_name || parent_hw || parent_data)
-+		init.num_parents = 1;
-+	else
-+		init.num_parents = 0;
+diff --git a/drivers/soc/xilinx/xlnx_vcu.c b/drivers/soc/xilinx/xlnx_vcu.c
+index 14daad4efc58..7da9643820a8 100644
+--- a/drivers/soc/xilinx/xlnx_vcu.c
++++ b/drivers/soc/xilinx/xlnx_vcu.c
+@@ -73,7 +73,6 @@
+  * @aclk: axi clock source
+  * @logicore_reg_ba: logicore reg base address
+  * @vcu_slcr_ba: vcu_slcr Register base address
+- * @coreclk: core clock frequency
+  */
+ struct xvcu_device {
+ 	struct device *dev;
+@@ -81,7 +80,6 @@ struct xvcu_device {
+ 	struct clk *aclk;
+ 	struct regmap *logicore_reg_ba;
+ 	void __iomem *vcu_slcr_ba;
+-	u32 coreclk;
+ };
  
- 	/* struct clk_divider assignments */
- 	div->reg = reg;
+ static struct regmap_config vcu_settings_regmap_config = {
+@@ -358,10 +356,10 @@ static int xvcu_set_vcu_pll_info(struct xvcu_device *xvcu)
+ 		return -EINVAL;
+ 	}
+ 
+-	xvcu->coreclk = pll_clk / divisor_core;
++	coreclk = pll_clk / divisor_core;
+ 	mcuclk = pll_clk / divisor_mcu;
+ 	dev_dbg(xvcu->dev, "Actual Ref clock freq is %uHz\n", refclk);
+-	dev_dbg(xvcu->dev, "Actual Core clock freq is %uHz\n", xvcu->coreclk);
++	dev_dbg(xvcu->dev, "Actual Core clock freq is %uHz\n", coreclk);
+ 	dev_dbg(xvcu->dev, "Actual Mcu clock freq is %uHz\n", mcuclk);
+ 
+ 	vcu_pll_ctrl &= ~(VCU_PLL_CTRL_FBDIV_MASK << VCU_PLL_CTRL_FBDIV_SHIFT);
 -- 
 2.20.1
 
