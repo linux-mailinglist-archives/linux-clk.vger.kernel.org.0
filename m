@@ -2,33 +2,33 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2A42FE3B8
-	for <lists+linux-clk@lfdr.de>; Thu, 21 Jan 2021 08:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0611B2FE3BE
+	for <lists+linux-clk@lfdr.de>; Thu, 21 Jan 2021 08:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725878AbhAUHSn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 21 Jan 2021 02:18:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
+        id S1727158AbhAUHTK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 21 Jan 2021 02:19:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726199AbhAUHSI (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 21 Jan 2021 02:18:08 -0500
+        with ESMTP id S1727290AbhAUHSe (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 21 Jan 2021 02:18:34 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46BFC0613D6
-        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 23:17:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7A5C061798
+        for <linux-clk@vger.kernel.org>; Wed, 20 Jan 2021 23:17:03 -0800 (PST)
 Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1l2UDE-0006UB-BY; Thu, 21 Jan 2021 08:17:00 +0100
+        id 1l2UDE-0006UC-BV; Thu, 21 Jan 2021 08:17:00 +0100
 Received: from mtr by dude03.red.stw.pengutronix.de with local (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1l2UDD-00597B-5i; Thu, 21 Jan 2021 08:16:59 +0100
+        id 1l2UDD-00597M-6G; Thu, 21 Jan 2021 08:16:59 +0100
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
 Cc:     m.mtretter@pengutronix.de, michals@xilinx.com,
         kernel@pengutronix.de, mturquette@baylibre.com, sboyd@kernel.org
-Subject: [PATCH v3 01/15] ARM: dts: vcu: define indexes for output clocks
-Date:   Thu, 21 Jan 2021 08:16:45 +0100
-Message-Id: <20210121071659.1226489-2-m.tretter@pengutronix.de>
+Subject: [PATCH v3 02/15] clk: divider: fix initialization with parent_hw
+Date:   Thu, 21 Jan 2021 08:16:46 +0100
+Message-Id: <20210121071659.1226489-3-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210121071659.1226489-1-m.tretter@pengutronix.de>
 References: <20210121071659.1226489-1-m.tretter@pengutronix.de>
@@ -42,12 +42,16 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The VCU System-Level Control has 4 output clocks. Define indexes for
-these clocks to allow to reference them in the device tree.
+If a driver registers a divider clock with a parent_hw instead of the
+parent_name, the parent_hw is ignored and the clock does not have a
+parent.
 
+Fix this by initializing the parents the same way they are initialized
+for clock gates.
+
+Fixes: ff258817137a ("clk: divider: Add support for specifying parents via DT/pointers")
 Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
-Acked-by: Rob Herring <robh@kernel.org>
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 Acked-by: Michal Simek <michal.simek@xilinx.com>
 ---
 Changelog:
@@ -55,33 +59,31 @@ Changelog:
 v3: none
 
 v2:
-- Add "vcu" to commit subject
+- Add fixes tag
 ---
- include/dt-bindings/clock/xlnx-vcu.h | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
- create mode 100644 include/dt-bindings/clock/xlnx-vcu.h
+ drivers/clk/clk-divider.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/include/dt-bindings/clock/xlnx-vcu.h b/include/dt-bindings/clock/xlnx-vcu.h
-new file mode 100644
-index 000000000000..1ed76b9563b6
---- /dev/null
-+++ b/include/dt-bindings/clock/xlnx-vcu.h
-@@ -0,0 +1,15 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2020 Pengutronix, Michael Tretter <kernel@pengutronix.de>
-+ */
-+
-+#ifndef _DT_BINDINGS_CLOCK_XLNX_VCU_H
-+#define _DT_BINDINGS_CLOCK_XLNX_VCU_H
-+
-+#define CLK_XVCU_ENC_CORE		0
-+#define CLK_XVCU_ENC_MCU		1
-+#define CLK_XVCU_DEC_CORE		2
-+#define CLK_XVCU_DEC_MCU		3
-+#define CLK_XVCU_NUM_CLOCKS		4
-+
-+#endif /* _DT_BINDINGS_CLOCK_XLNX_VCU_H */
+diff --git a/drivers/clk/clk-divider.c b/drivers/clk/clk-divider.c
+index c499799693cc..344997203f0e 100644
+--- a/drivers/clk/clk-divider.c
++++ b/drivers/clk/clk-divider.c
+@@ -494,8 +494,13 @@ struct clk_hw *__clk_hw_register_divider(struct device *dev,
+ 	else
+ 		init.ops = &clk_divider_ops;
+ 	init.flags = flags;
+-	init.parent_names = (parent_name ? &parent_name: NULL);
+-	init.num_parents = (parent_name ? 1 : 0);
++	init.parent_names = parent_name ? &parent_name : NULL;
++	init.parent_hws = parent_hw ? &parent_hw : NULL;
++	init.parent_data = parent_data;
++	if (parent_name || parent_hw || parent_data)
++		init.num_parents = 1;
++	else
++		init.num_parents = 0;
+ 
+ 	/* struct clk_divider assignments */
+ 	div->reg = reg;
 -- 
 2.20.1
 
