@@ -2,32 +2,32 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9831B2FE6DA
-	for <lists+linux-clk@lfdr.de>; Thu, 21 Jan 2021 10:57:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AAF02FE6D2
+	for <lists+linux-clk@lfdr.de>; Thu, 21 Jan 2021 10:56:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728538AbhAUJ4l (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 21 Jan 2021 04:56:41 -0500
-Received: from www.zeus03.de ([194.117.254.33]:44332 "EHLO mail.zeus03.de"
+        id S1728665AbhAUJzn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 21 Jan 2021 04:55:43 -0500
+Received: from www.zeus03.de ([194.117.254.33]:44354 "EHLO mail.zeus03.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728480AbhAUJzj (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        id S1728652AbhAUJzj (ORCPT <rfc822;linux-clk@vger.kernel.org>);
         Thu, 21 Jan 2021 04:55:39 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=ihXbxxWEwFQOe2
-        v9NI1W3swgmIUC6tcmkshQgzdRQ8Q=; b=XnC4QuK42ydelBi/GWTKQMc84sFPtJ
-        0cvZrlBT/HEjD5vJtp6xUlJxt8jeJpDyXiaGAmyKMBLSjXJkSsAJy78y3peLQAN5
-        +BUPsqWaT8jZpVrXOTKxqy4vmMNIv2qbhTwK3FjpPa+CJjmlnNp92gjdiQ2Glgjx
-        V4LHDWWgUGuNE=
-Received: (qmail 1784043 invoked from network); 21 Jan 2021 10:54:28 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Jan 2021 10:54:28 +0100
-X-UD-Smtp-Session: l3s3148p1@OMW1Dma5nL4gAwDPXyX1ACWcscxtZ2TX
+        :mime-version:content-transfer-encoding; s=k1; bh=S23/6IH6mMP1gG
+        7Mi/iePoE9Y/66Unwh+87/OWIr8Do=; b=JjepgR1VmYKcwGhNw9U76a2lOokGzK
+        fqa94h7Vd4Z1sp14EgAvPY91dlbj7/BDZrp4IqbM6y5P3Bj0yuGOuW4MhMrtANSt
+        WNEeLAKGwLqF7Wc/CmGsd5ibS5wbDO2XGkSGT7F2XkZPQZCvuInvAZkzSuruJ2cv
+        6tP3Iuw37oluU=
+Received: (qmail 1784098 invoked from network); 21 Jan 2021 10:54:29 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 21 Jan 2021 10:54:29 +0100
+X-UD-Smtp-Session: l3s3148p1@8Y/DDma5oL4gAwDPXyX1ACWcscxtZ2TX
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-renesas-soc@vger.kernel.org
 Cc:     linux-clk@vger.kernel.org,
         Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: [PATCH V2 1/4] clk: renesas: r8a779a0: add clocks for I2C
-Date:   Thu, 21 Jan 2021 10:54:17 +0100
-Message-Id: <20210121095420.5023-2-wsa+renesas@sang-engineering.com>
+Subject: [PATCH V2 3/4] arm64: dts: renesas: Add I2C0,1,6 support for falcon board
+Date:   Thu, 21 Jan 2021 10:54:19 +0100
+Message-Id: <20210121095420.5023-4-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210121095420.5023-1-wsa+renesas@sang-engineering.com>
 References: <20210121095420.5023-1-wsa+renesas@sang-engineering.com>
@@ -41,29 +41,64 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
 
 Changes since v1:
-* use S1D4 as parent clock as described in the datasheet
+* enabled busses 0,1,6 (the ones with devices attached)
+* moved to falcon-cpu.dtsi
 
- drivers/clk/renesas/r8a779a0-cpg-mssr.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ .../boot/dts/renesas/r8a779a0-falcon-cpu.dtsi | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/drivers/clk/renesas/r8a779a0-cpg-mssr.c b/drivers/clk/renesas/r8a779a0-cpg-mssr.c
-index ef45b7c10074..613f7b499cfc 100644
---- a/drivers/clk/renesas/r8a779a0-cpg-mssr.c
-+++ b/drivers/clk/renesas/r8a779a0-cpg-mssr.c
-@@ -166,6 +166,13 @@ static const struct mssr_mod_clk r8a779a0_mod_clks[] __initconst = {
- 	DEF_MOD("hscif1",	515,	R8A779A0_CLK_S1D2),
- 	DEF_MOD("hscif2",	516,	R8A779A0_CLK_S1D2),
- 	DEF_MOD("hscif3",	517,	R8A779A0_CLK_S1D2),
-+	DEF_MOD("i2c0",		518,	R8A779A0_CLK_S1D4),
-+	DEF_MOD("i2c1",		519,	R8A779A0_CLK_S1D4),
-+	DEF_MOD("i2c2",		520,	R8A779A0_CLK_S1D4),
-+	DEF_MOD("i2c3",		521,	R8A779A0_CLK_S1D4),
-+	DEF_MOD("i2c4",		522,	R8A779A0_CLK_S1D4),
-+	DEF_MOD("i2c5",		523,	R8A779A0_CLK_S1D4),
-+	DEF_MOD("i2c6",		524,	R8A779A0_CLK_S1D4),
- 	DEF_MOD("msi0",		618,	R8A779A0_CLK_MSO),
- 	DEF_MOD("msi1",		619,	R8A779A0_CLK_MSO),
- 	DEF_MOD("msi2",		620,	R8A779A0_CLK_MSO),
+diff --git a/arch/arm64/boot/dts/renesas/r8a779a0-falcon-cpu.dtsi b/arch/arm64/boot/dts/renesas/r8a779a0-falcon-cpu.dtsi
+index 4ba269a4cec8..90aa1395a49f 100644
+--- a/arch/arm64/boot/dts/renesas/r8a779a0-falcon-cpu.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a779a0-falcon-cpu.dtsi
+@@ -41,6 +41,47 @@ &extalr_clk {
+ 	clock-frequency = <32768>;
+ };
+ 
++&i2c0 {
++	pinctrl-0 = <&i2c0_pins>;
++	pinctrl-names = "default";
++
++	status = "okay";
++	clock-frequency = <400000>;
++};
++
++&i2c1 {
++	pinctrl-0 = <&i2c1_pins>;
++	pinctrl-names = "default";
++
++	status = "okay";
++	clock-frequency = <400000>;
++};
++
++&i2c6 {
++	pinctrl-0 = <&i2c6_pins>;
++	pinctrl-names = "default";
++
++	status = "okay";
++	clock-frequency = <400000>;
++};
++
++&pfc {
++	i2c0_pins: i2c0 {
++		groups = "i2c0";
++		function = "i2c0";
++	};
++
++	i2c1_pins: i2c1 {
++		groups = "i2c1";
++		function = "i2c1";
++	};
++
++	i2c6_pins: i2c6 {
++		groups = "i2c6";
++		function = "i2c6";
++	};
++};
++
+ &scif0 {
+ 	status = "okay";
+ };
 -- 
 2.29.2
 
