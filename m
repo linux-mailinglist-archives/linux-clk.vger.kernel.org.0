@@ -2,66 +2,64 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 626D3303E37
-	for <lists+linux-clk@lfdr.de>; Tue, 26 Jan 2021 14:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2071303E2C
+	for <lists+linux-clk@lfdr.de>; Tue, 26 Jan 2021 14:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390185AbhAZNLF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 26 Jan 2021 08:11:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51112 "EHLO
+        id S2392005AbhAZNJZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 26 Jan 2021 08:09:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391943AbhAZMsh (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 26 Jan 2021 07:48:37 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB5AC0698E0
-        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 04:46:01 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id u14so2627550wmq.4
-        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 04:46:01 -0800 (PST)
+        with ESMTP id S2391954AbhAZMsj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 26 Jan 2021 07:48:39 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E387C0698E4
+        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 04:46:02 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id 190so2361623wmz.0
+        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 04:46:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4mll2lpwENE608kX1kOhep+FnuspDxHBBTIWjYWHVv4=;
-        b=pN4lfLmmVBgLX1q2BKk4RyuM8nfGi0iSK2p5oFzqbwR48oc2/k0GoyukN3ekRynO06
-         FKaAaAsWyotTSplcMwQPMAZVfJizyGQiOJBMk0yYcAymhgu9N2ZSbUSh6qjy288ou0pc
-         HqtayVh1cyMBIbzfiBYPHmvVjr9IdO/PtWWdjNpPkVFE2CynLfawGQEBle+vluHgUEPi
-         XIkSyDlNFtRmGLri4EMRNLpm0jF2EqbuLb6EDwAkGFdlQ5TAMlRTr4lVHYp6w+0UpvW3
-         IMv+nTm9wowh7LVp4WikScVxnNSItGlVg6V+ACms+OKjBP2oRnEDQeXLGZ596/KJomrY
-         KMoQ==
+        bh=xV2037MpTqxIYdYf/qlhhyKpbo5/pnSBSbkbi3/w7zA=;
+        b=XK+B8cmZJgvGTEGTRyLc3SO5a5c8b6otv/2xECAiu13SXrH30DrwqdXR6kt+X7RnC9
+         mogCYkgvzIYiEwqc4jUJkT3zYOG8jFC+BBQrV+7WfPifcQ2CrWIQ3YvZNqTniAufzvoK
+         sTT5bXKzKJYLFMD10sEpqkTtp2823oAWVPKnTntVI5Xs7P44i4lckxe5khhY0Gn9Znwx
+         gxjA8TLk/p9L0pzr9bO9mcwBB89TliY8bzv5nsArobkn0D8yzUm50cEIfN0BBU+qvoyj
+         VXj+oywUaId30W8IvPoE0BycccyrJ/JJlcvP/6bq+xihpWzCHJbmwEtwsIZrlAFMqLV9
+         9gtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4mll2lpwENE608kX1kOhep+FnuspDxHBBTIWjYWHVv4=;
-        b=uXtjdF4myhZ2G15fKwAHRd9izH4ZrLEo6FNOdZ2bRO3rJNMeTais6qRRMNff9L9U2/
-         oyBz3RoDC2GRSx2KSwAPQs1NwaL5nemOxQDe7/Cl9AEPuz9ZZQv/tbjdsTlEM80RjJST
-         k3RM0PApBCmVFkvNWMQIAyF19taZkHnbFHFW2J5DokgunI27ixbuAhygFpriW0mqsuwn
-         I6qcble70RgbesMHoGKHsZLFlaLaY/WdsIiXgJIvRBPtai8GpotJovMJs+eltWrIUDjL
-         6uNvkCub2PbNKC6aDj8HNNIIT9RPdyMNGXY3vm2He7IA/pnIHPhL0WkA1aiYMtqYFTzI
-         Simw==
-X-Gm-Message-State: AOAM533uG0IGS6crIS/2wE9r6ia7jnmApQOzwuRx3Bn3T5If/RdFyByc
-        Gptl6eEOvxyZZc/AS2sJ+4ooTQ==
-X-Google-Smtp-Source: ABdhPJwsLKoq02G2opNkx2KyZBjwCJrT1QWUMlzjgyZlIH/qv0W5suRHKqypiyBgXWhP7zNqj62Grg==
-X-Received: by 2002:a05:600c:1911:: with SMTP id j17mr4552481wmq.63.1611665159968;
-        Tue, 26 Jan 2021 04:45:59 -0800 (PST)
+        bh=xV2037MpTqxIYdYf/qlhhyKpbo5/pnSBSbkbi3/w7zA=;
+        b=TpjcBBnRiFHeDOa59GESu5PcQipe+frDxGuAuQU/sY1Fe5JA92R106dREOdZXEhGg/
+         faiOCovD++/3SXgANOhqT989k6LXMzIPzQUnnPUlj3q4NkQYDZnSbNQaVznmlZeLMjTR
+         TIqeQJL7/UmUhqs2XjQCkODUleUR33gN7t4bcZAm81hMDBf1zZll9Uy3B56gpCWsO1SO
+         eLs95MOZT2sixWfMTzcP/vg+yLGQAtSInoF0dvKUIZZw22XgZtd8UKe+g1BzdQs510aD
+         E7XtSJ05d15nJRLa8qOatsrVDew0cCqAmVRgGlWw7jtoEvDlHtqeNku2LO/APA9AAJ+d
+         k/TA==
+X-Gm-Message-State: AOAM532itvreNIJWpRkMl30T9QwU1H4mdE7QvCIN/oUYhO1C3gCWQUpa
+        PAFJqse2If84O28/2f5pARUsOQ==
+X-Google-Smtp-Source: ABdhPJwX07IygCoQj1H2udFoApgRu91g3BVErGPZlgNSmDRMkZC8ho3Prm3d11PVxLh1npT9oweq3g==
+X-Received: by 2002:a05:600c:24f:: with SMTP id 15mr4559872wmj.78.1611665161131;
+        Tue, 26 Jan 2021 04:46:01 -0800 (PST)
 Received: from dell.default ([91.110.221.188])
-        by smtp.gmail.com with ESMTPSA id i131sm3263073wmi.25.2021.01.26.04.45.58
+        by smtp.gmail.com with ESMTPSA id i131sm3263073wmi.25.2021.01.26.04.46.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jan 2021 04:45:59 -0800 (PST)
+        Tue, 26 Jan 2021 04:46:00 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+Cc:     linux-kernel@vger.kernel.org,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>, Jan Kotas <jank@cadence.com>,
         linux-clk@vger.kernel.org
-Subject: [PATCH 13/21] clk: qcom: gcc-ipq4019: Remove unused variable 'ret'
-Date:   Tue, 26 Jan 2021 12:45:32 +0000
-Message-Id: <20210126124540.3320214-14-lee.jones@linaro.org>
+Subject: [PATCH 14/21] clk: clk-fixed-mmio: Demote obvious kernel-doc abuse
+Date:   Tue, 26 Jan 2021 12:45:33 +0000
+Message-Id: <20210126124540.3320214-15-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210126124540.3320214-1-lee.jones@linaro.org>
 References: <20210126124540.3320214-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
@@ -69,44 +67,30 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/clk/qcom/gcc-ipq4019.c: In function ‘clk_cpu_div_set_rate’:
- drivers/clk/qcom/gcc-ipq4019.c:1279:6: warning: variable ‘ret’ set but not used [-Wunused-but-set-variable]
+ drivers/clk/clk-fixed-mmio.c:62: warning: Function parameter or member 'pdev' not described in 'of_fixed_mmio_clk_probe'
 
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc: Michael Turquette <mturquette@baylibre.com>
 Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org
+Cc: Jan Kotas <jank@cadence.com>
 Cc: linux-clk@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/clk/qcom/gcc-ipq4019.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/clk/clk-fixed-mmio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/qcom/gcc-ipq4019.c b/drivers/clk/qcom/gcc-ipq4019.c
-index ef5137fd50f3f..8abad4032de71 100644
---- a/drivers/clk/qcom/gcc-ipq4019.c
-+++ b/drivers/clk/qcom/gcc-ipq4019.c
-@@ -1276,16 +1276,15 @@ static int clk_cpu_div_set_rate(struct clk_hw *hw, unsigned long rate,
- 	struct clk_fepll *pll = to_clk_fepll(hw);
- 	const struct freq_tbl *f;
- 	u32 mask;
--	int ret;
+diff --git a/drivers/clk/clk-fixed-mmio.c b/drivers/clk/clk-fixed-mmio.c
+index 51f26619b6a23..5225d17d6b3f3 100644
+--- a/drivers/clk/clk-fixed-mmio.c
++++ b/drivers/clk/clk-fixed-mmio.c
+@@ -55,7 +55,7 @@ static void __init of_fixed_mmio_clk_setup(struct device_node *node)
+ }
+ CLK_OF_DECLARE(fixed_mmio_clk, "fixed-mmio-clock", of_fixed_mmio_clk_setup);
  
- 	f = qcom_find_freq(pll->freq_tbl, rate);
- 	if (!f)
- 		return -EINVAL;
- 
- 	mask = (BIT(pll->cdiv.width) - 1) << pll->cdiv.shift;
--	ret = regmap_update_bits(pll->cdiv.clkr.regmap,
--				 pll->cdiv.reg, mask,
--				 f->pre_div << pll->cdiv.shift);
-+	regmap_update_bits(pll->cdiv.clkr.regmap,
-+			   pll->cdiv.reg, mask,
-+			   f->pre_div << pll->cdiv.shift);
- 	/*
- 	 * There is no status bit which can be checked for successful CPU
- 	 * divider update operation so using delay for the same.
+-/**
++/*
+  * This is not executed when of_fixed_mmio_clk_setup succeeded.
+  */
+ static int of_fixed_mmio_clk_probe(struct platform_device *pdev)
 -- 
 2.25.1
 
