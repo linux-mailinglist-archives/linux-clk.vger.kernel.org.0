@@ -2,69 +2,64 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DF1303E42
-	for <lists+linux-clk@lfdr.de>; Tue, 26 Jan 2021 14:12:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4AD303E1F
+	for <lists+linux-clk@lfdr.de>; Tue, 26 Jan 2021 14:08:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391907AbhAZNMZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 26 Jan 2021 08:12:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
+        id S2391976AbhAZNHo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 26 Jan 2021 08:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391803AbhAZMrw (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 26 Jan 2021 07:47:52 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B17C0698D1
-        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 04:45:54 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id 190so2361301wmz.0
-        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 04:45:54 -0800 (PST)
+        with ESMTP id S2391971AbhAZMs7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 26 Jan 2021 07:48:59 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33AFC0698D9
+        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 04:45:57 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id d16so15643367wro.11
+        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 04:45:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=N8T1u34dorC88muTgROvb30sAlojxHjcjn3S8eWKchI=;
-        b=oMD6xl4SFT0eTU53M3uPErJ4+nTXkWKXmdZubrAueDfO34/ooNIHmfH7T8dREJUgm1
-         OlkGDp/8inaEAuBHE+132rS8QA22d841x8psc4+RlNgkNEDarvxXe47YPeV3ZfW+HANT
-         YCCbXQAyAanjmvkhnvi5ks2A8p0MW5er65CsVWB8lysY23+FhQjF3lSI8N21KSNspYuF
-         IHM/o+AKe4GzK5us1spd0tVVMCypmikMFco+py/5KcYlhwi670zXSjinTjHjU34mUK3a
-         ovNcky78HGkVG8r6Tat6mr0Kiy4zkp3Em916tKSp+5On/sB3u38Gns489lMoZxC1GJ9k
-         lw/g==
+        bh=iORMEqJhCnrh6wIXXy7N9zvOdfWOGFh+mnFrMk+Wc4I=;
+        b=Ut1+hsKMp53ICFgNhpIw0ZooAhqTLBGxRB1GLTU+ou42L9Dcz2FMt2o95jvhCa5CJf
+         ZdlD9DBP1nU2IMrEQ9ly3HLM8tv74yCFWf3FpjdMVG0AGTNgKqPii/2dhd0ZSTMWHSke
+         SfKwvE+l7fcjMACW9iCx/76oeGNAriPw3VvxzsJlySd9/zOTfQUIsd5T5jPfqnf+CfEn
+         PEdLuEobbG2jPX0Gf/vBfIPoyJk2F6FLkDxVjXkK5SOztcfDLiR2N+b/QRpWjYsMV3c2
+         o3wVGKiDJsO/jHItbpGtc7Eet8TetxgNijbinf81a/1UNccJcvd1b63IVx6aw38fnnvk
+         54kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=N8T1u34dorC88muTgROvb30sAlojxHjcjn3S8eWKchI=;
-        b=ZeHHzdPZpaJeNJbwpALXUQ5TExo4EUTU97JhfXslbfURHjAlq/T5Lqf5qBafuYhok4
-         uFMeY2r4GRzoFV+ZnBpRo1HXdcwGDzvDiSHqFWzVn1W9ozLaAJSLLdVRa6W/GMT9ijtx
-         xL/PLSclWwzQC1wDUif4RAO+0iWcQwxqpicmtlNjZqgYj2K4fDLXuHLE1MiCdmqkonuY
-         V0ch77sJk9UvyTSnk3OcdsfLxkmLWJpOmSYTot7q0ufjyPjzMUvSI7BqKtdjIBW+iFil
-         f3jldR0dhv05TlePqG2ed6itUsvMisbmfEyx5Bx/jip8Psitjpruj1rhOYCp0Bq9LDGe
-         SGlQ==
-X-Gm-Message-State: AOAM531qiCVqXjESxlhCsvQzbyA+qS4XhVlw6KmLLoHCDzk1qVHsXjqX
-        fCVJs4eLDajrB4MXxwaFf3i+/A==
-X-Google-Smtp-Source: ABdhPJwQJjhHhz6+8aVdRCxnSCzGI7zL38pJJEIEPZSfK1LrkdeGVtS3fjzmGZYKF25DJn0g2cu2Dg==
-X-Received: by 2002:a1c:b78b:: with SMTP id h133mr4566691wmf.151.1611665153187;
-        Tue, 26 Jan 2021 04:45:53 -0800 (PST)
+        bh=iORMEqJhCnrh6wIXXy7N9zvOdfWOGFh+mnFrMk+Wc4I=;
+        b=bkhmlft4gcIsnGTmIzCdwKQteY6KjRmbkdkfzUdHgM7FLhpApjm2rn4q71Ui0lywCf
+         EArzroMB1CX+8Ya3c6qCvY1jbyKGmGxfzdN86LysumC+OkAcyAorFKOyP/v8a6OjJ5Ke
+         MIOs7sA0O4rkybKucNLZZQoAoF12aFUCqulAVNcoypCIJ/8S7PG2w/ZY6mxYML4ln9N0
+         bdepNVxHQ1KAiV6SeJwx1In23UGRzjUM05+ZXIRDoYkear/Jw3I5l/SR8T1Up476+R68
+         PrJ7aaTt0GsENY2d6wKKbkLNLK7UrkYTFR71gDYNtRsB1DwxzDb8qo6aI9/xpYms6+sW
+         G7gQ==
+X-Gm-Message-State: AOAM531IgpJrXVA5D14YQr4uYqYA5PfgNOHzTnRMmreguGjZZ58I+Ftf
+        c5PfoaWyShm0aAUbNg3ypFsZsQ==
+X-Google-Smtp-Source: ABdhPJw2nx2B0oh6rm7aHoz4WYg84KTipml2Niimp8U30RwYdhTXFbsI0bCANZV1kpnLUvqsibBRAw==
+X-Received: by 2002:a5d:6c6b:: with SMTP id r11mr5998536wrz.38.1611665156576;
+        Tue, 26 Jan 2021 04:45:56 -0800 (PST)
 Received: from dell.default ([91.110.221.188])
-        by smtp.gmail.com with ESMTPSA id i131sm3263073wmi.25.2021.01.26.04.45.52
+        by smtp.gmail.com with ESMTPSA id i131sm3263073wmi.25.2021.01.26.04.45.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jan 2021 04:45:52 -0800 (PST)
+        Tue, 26 Jan 2021 04:45:55 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
+Cc:     linux-kernel@vger.kernel.org, Tero Kristo <kristo@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH 07/21] clk: tegra: clk-tegra30: Remove unused variable 'reg'
-Date:   Tue, 26 Jan 2021 12:45:26 +0000
-Message-Id: <20210126124540.3320214-8-lee.jones@linaro.org>
+        Stephen Boyd <sboyd@kernel.org>, linux-omap@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH 10/21] clk: ti: dpll44xx: Fix some potential doc-rot
+Date:   Tue, 26 Jan 2021 12:45:29 +0000
+Message-Id: <20210126124540.3320214-11-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210126124540.3320214-1-lee.jones@linaro.org>
 References: <20210126124540.3320214-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
@@ -72,40 +67,48 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/clk/tegra/clk-tegra30.c: In function ‘tegra30_enable_cpu_clock’:
- drivers/clk/tegra/clk-tegra30.c:1107:15: warning: variable ‘reg’ set but not used [-Wunused-but-set-variable]
+ drivers/clk/ti/dpll44xx.c:114: warning: Function parameter or member 'hw' not described in 'omap4_dpll_regm4xen_recalc'
+ drivers/clk/ti/dpll44xx.c:114: warning: Function parameter or member 'parent_rate' not described in 'omap4_dpll_regm4xen_recalc'
+ drivers/clk/ti/dpll44xx.c:114: warning: Excess function parameter 'clk' description in 'omap4_dpll_regm4xen_recalc'
+ drivers/clk/ti/dpll44xx.c:150: warning: Function parameter or member 'hw' not described in 'omap4_dpll_regm4xen_round_rate'
+ drivers/clk/ti/dpll44xx.c:150: warning: Function parameter or member 'parent_rate' not described in 'omap4_dpll_regm4xen_round_rate'
+ drivers/clk/ti/dpll44xx.c:150: warning: Excess function parameter 'clk' description in 'omap4_dpll_regm4xen_round_rate'
 
-Cc: Peter De Schrijver <pdeschrijver@nvidia.com>
-Cc: Prashant Gaikwad <pgaikwad@nvidia.com>
+Cc: Tero Kristo <kristo@kernel.org>
 Cc: Michael Turquette <mturquette@baylibre.com>
 Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Thierry Reding <thierry.reding@gmail.com>
-Cc: Jonathan Hunter <jonathanh@nvidia.com>
+Cc: linux-omap@vger.kernel.org
 Cc: linux-clk@vger.kernel.org
-Cc: linux-tegra@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/clk/tegra/clk-tegra30.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/clk/ti/dpll44xx.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/tegra/clk-tegra30.c b/drivers/clk/tegra/clk-tegra30.c
-index 9cf249c344d9e..16dbf83d2f62a 100644
---- a/drivers/clk/tegra/clk-tegra30.c
-+++ b/drivers/clk/tegra/clk-tegra30.c
-@@ -1104,12 +1104,9 @@ static void tegra30_cpu_out_of_reset(u32 cpu)
+diff --git a/drivers/clk/ti/dpll44xx.c b/drivers/clk/ti/dpll44xx.c
+index 89c3ed1a24b82..3fc2cab69a3fe 100644
+--- a/drivers/clk/ti/dpll44xx.c
++++ b/drivers/clk/ti/dpll44xx.c
+@@ -102,7 +102,8 @@ static void omap4_dpll_lpmode_recalc(struct dpll_data *dd)
  
- static void tegra30_enable_cpu_clock(u32 cpu)
- {
--	unsigned int reg;
--
- 	writel(CPU_CLOCK(cpu),
- 	       clk_base + TEGRA30_CLK_RST_CONTROLLER_CLK_CPU_CMPLX_CLR);
--	reg = readl(clk_base +
--		    TEGRA30_CLK_RST_CONTROLLER_CLK_CPU_CMPLX_CLR);
-+	readl(clk_base + TEGRA30_CLK_RST_CONTROLLER_CLK_CPU_CMPLX_CLR);
- }
+ /**
+  * omap4_dpll_regm4xen_recalc - compute DPLL rate, considering REGM4XEN bit
+- * @clk: struct clk * of the DPLL to compute the rate for
++ * @hw: pointer to the clock to compute the rate for
++ * @parent_rate: clock rate of the DPLL parent
+  *
+  * Compute the output rate for the OMAP4 DPLL represented by @clk.
+  * Takes the REGM4XEN bit into consideration, which is needed for the
+@@ -134,8 +135,9 @@ unsigned long omap4_dpll_regm4xen_recalc(struct clk_hw *hw,
  
- static void tegra30_disable_cpu_clock(u32 cpu)
+ /**
+  * omap4_dpll_regm4xen_round_rate - round DPLL rate, considering REGM4XEN bit
+- * @clk: struct clk * of the DPLL to round a rate for
++ * @hw: struct hw_clk containing the struct clk * of the DPLL to round a rate for
+  * @target_rate: the desired rate of the DPLL
++ * @parent_rate: clock rate of the DPLL parent
+  *
+  * Compute the rate that would be programmed into the DPLL hardware
+  * for @clk if set_rate() were to be provided with the rate
 -- 
 2.25.1
 
