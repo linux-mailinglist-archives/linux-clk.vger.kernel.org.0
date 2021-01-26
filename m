@@ -2,156 +2,225 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E10E4303DBA
-	for <lists+linux-clk@lfdr.de>; Tue, 26 Jan 2021 13:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD8E303E7A
+	for <lists+linux-clk@lfdr.de>; Tue, 26 Jan 2021 14:22:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392442AbhAZMxB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 26 Jan 2021 07:53:01 -0500
-Received: from mail-bn8nam12on2040.outbound.protection.outlook.com ([40.107.237.40]:60356
-        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2392339AbhAZMwz (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 26 Jan 2021 07:52:55 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TQ6p/x4FxOkH0KQ+cM3V+3Vu+2QXfPi3cqrQ9Tduq8C82DaObB3IPKzGCqKLIxc3wztFormN48VYpOMqXCiDj79AXDdITiyKLTT2Dt/pWtb0O19g0SAnjEzNCVFMlY9NZBCw25QL5Ua/IM62rH8B/jU4PIuAmqx14q+RBOZpBQAZ1O7qjrQlm7A3MVAUgGiVDBVF5Xrg1ZiylltDs9H8JITlecB9yuaQJye8oa72QRNuBDnNK6OW+24MLWbbDMphwzY6JNIaGS4OqwMf0dCJgwVpFb0cv8g28V1Aj7ftZpXd6Ukq3cUlHjeN5Kv1YrxBx1BEoIn+b3sXGnF1XzMO+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GmNKu4NpZqDDvtl41HW1oi4HWRLIx3E0dD/E/K7oe7o=;
- b=Ikf7BXM/hXxJ6LQPhEcrGtMmLj9HrwDOLS8TKbnUvud4vqAQcgpmW95JW78JiDOfiul2EGjPuWJJjUZD7xDdmkoWyvc3gMvd0bL9DYgAx1vk5oKzH00Mz+9G6JSP4vpXbNoNjK64HrsfhCK472BwESu0ReMdc81ppywu+fY/oAQnjBBJH9eSi48KRd6ZBtJjq4GeS5qMnyV9xpvSvVCLcCZcTUQ5HEflLOWocIyEf9yFDiShW8iKQ3+xGx2t2jVxEfHU63drj14l2byq+nKbpjCYgrDjdE0dOzmVLtWXzMPR6HQ8XDD3QhJ16Iq8N3GV9kNpPs9OkUW4drIJ2jumyw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=lists.infradead.org
- smtp.mailfrom=xilinx.com; dmarc=bestguesspass action=none
- header.from=xilinx.com; dkim=none (message not signed); arc=none
+        id S2403845AbhAZNPP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 26 Jan 2021 08:15:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391826AbhAZMrE (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 26 Jan 2021 07:47:04 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D00C0698C0
+        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 04:45:46 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id c127so2614797wmf.5
+        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 04:45:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GmNKu4NpZqDDvtl41HW1oi4HWRLIx3E0dD/E/K7oe7o=;
- b=LLMFlBFBGccwC0kMpT6MvguQSgXaKDDDVfRVItjqqFW/3Dmr1tNta28jxviKXpbVsPol7muOS/6xIvcrg9yPhYn7TRsDMH8AiC3WXpCYwOLt4SDQigZrjsdWhvgAIFov2UpWsT1/ut/DH+JU6s8XpHw+38f2otroH1kXlhhqbrQ=
-Received: from BL0PR0102CA0042.prod.exchangelabs.com (2603:10b6:208:25::19) by
- DM6PR02MB5850.namprd02.prod.outlook.com (2603:10b6:5:17f::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3784.16; Tue, 26 Jan 2021 12:52:01 +0000
-Received: from BL2NAM02FT034.eop-nam02.prod.protection.outlook.com
- (2603:10b6:208:25:cafe::cb) by BL0PR0102CA0042.outlook.office365.com
- (2603:10b6:208:25::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.16 via Frontend
- Transport; Tue, 26 Jan 2021 12:52:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; lists.infradead.org; dkim=none (message not signed)
- header.d=none;lists.infradead.org; dmarc=bestguesspass action=none
- header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BL2NAM02FT034.mail.protection.outlook.com (10.152.77.161) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.3784.12 via Frontend Transport; Tue, 26 Jan 2021 12:52:00 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1913.5; Tue, 26 Jan 2021 04:52:00 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.1913.5 via Frontend Transport; Tue, 26 Jan 2021 04:52:00 -0800
-Envelope-to: rajan.vaja@xilinx.com,
- michal.simek@xilinx.com,
- linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org,
- sboyd@kernel.org,
- mturquette@baylibre.com,
- linux-kernel@vger.kernel.org,
- lee.jones@linaro.org
-Received: from [172.30.17.109] (port=55072)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <michal.simek@xilinx.com>)
-        id 1l4Np9-0005QF-UT; Tue, 26 Jan 2021 04:52:00 -0800
-Subject: Re: [PATCH 21/21] clk: zynqmp: divider: Add missing description for
- 'max_div'
-To:     Lee Jones <lee.jones@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>,
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HgDoxTkqCtX7qRFLVzIhqucftM+usnXCOOEJb4UlRps=;
+        b=HKlil30JX5XDC2QgJygSa3PW1ij81XFJmGM9hvEgd+MqWPBopjh8B4oKb5p6/RTl/h
+         YaGgR5dCEbp9kTHydbkyFjb9taaxXD4hQuvNkEZyQd/3V8QHbJVES2Xv/l9Q5W1MLlZ1
+         o+5ldum3NNByprXng2exIICoLcvAOXxilOuG+GHw3raMicPEoV3QrdN0yfNBo+YaINvH
+         8HW3ThaNd08HbLqjlaREB1k7zDeEt9pK1xx1Rxx1oRQqR6bahgrEmXEy0hlSW3RtU/at
+         Ge0jATWRVhoSL7UT+EGH0cF0itZkbmoSLDC0gsIOe/xdljbJ/Xk8x7RBWBUCsNGtTAI+
+         inBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HgDoxTkqCtX7qRFLVzIhqucftM+usnXCOOEJb4UlRps=;
+        b=Qd2px0OUf+lOtmdn43u3cMJMWHj+jP3fiyinMdLNZXJZkD+QOXeAH/n+6xcMMPHptk
+         EExQhBteY9vqMtQsSAPcAGL9ltkbbPmObkG8LYHFtyl0O/bzJAKdxSRRmKXAIA+RAtJX
+         PFu7WqvjnSSUT/YPFZmQJ28hJJLhX5lu/VowT32kMdIu7Z/3vDkYomI99KfHHjQBQCMO
+         OeyHoC/VJdcVa+M6rHy1VE3yjkeKVwktd3Se/wqZuOGcJSulYm1KXL9c6x5j3q/DnBFV
+         Qb6FarDYHlBsybj38x7FxB+4da9kiRffaNJP/6MoglsjcKiOqidGA/2W+FJuaQSBum8d
+         S8FQ==
+X-Gm-Message-State: AOAM533VW+yZ9JZ9CbcNuLxhen1gLeXQjgyS6rFXm8BJWJ9Ozc2icQFH
+        6H44rI+LGSmm5dH6jn6wJ9NK1g==
+X-Google-Smtp-Source: ABdhPJw3EEAAvcpTE1X6uWF7W1nwVVyQMNjGyt1XrFtc8unQRk9L1XWmIU+HRd62tLEG3E2YvY6hIA==
+X-Received: by 2002:a1c:398b:: with SMTP id g133mr4437355wma.35.1611665144908;
+        Tue, 26 Jan 2021 04:45:44 -0800 (PST)
+Received: from dell.default ([91.110.221.188])
+        by smtp.gmail.com with ESMTPSA id i131sm3263073wmi.25.2021.01.26.04.45.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Jan 2021 04:45:43 -0800 (PST)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Boris BREZILLON <boris.brezillon@free-electrons.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        =?UTF-8?q?Emilio=20L=C3=B3pez?= <emilio@elopez.com.ar>,
+        Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jan Kotas <jank@cadence.com>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, Loc Ho <lho@apm.com>,
+        Maxime Ripard <mripard@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
         Michal Simek <michal.simek@xilinx.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Nuvoton Technologies <tali.perry@nuvoton.com>,
+        NXP Linux Team <linux-imx@nxp.com>, openbmc@lists.ozlabs.org,
+        Patrick Venture <venture@google.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
         Rajan Vaja <rajan.vaja@xilinx.com>,
-        <linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-References: <20210126124540.3320214-1-lee.jones@linaro.org>
- <20210126124540.3320214-22-lee.jones@linaro.org>
-From:   Michal Simek <michal.simek@xilinx.com>
-Message-ID: <bceb3499-4b74-5773-961d-84c66835e13a@xilinx.com>
-Date:   Tue, 26 Jan 2021 13:51:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Rajeev Kumar <rajeev-dlh.kumar@st.com>,
+        Richard Woodruff <r-woodruff2@ti.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        =?UTF-8?q?S=C3=B6ren=20Brinkmann?= <soren.brinkmann@xilinx.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Viresh Kumar <vireshk@kernel.org>
+Subject: [PATCH 00/21] [Set 2] Rid W=1 warnings from Clock
+Date:   Tue, 26 Jan 2021 12:45:19 +0000
+Message-Id: <20210126124540.3320214-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20210126124540.3320214-22-lee.jones@linaro.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7b245c55-ddf1-4993-2cde-08d8c1f92c7f
-X-MS-TrafficTypeDiagnostic: DM6PR02MB5850:
-X-Microsoft-Antispam-PRVS: <DM6PR02MB585049BF6E17BE400D4AAF03C6BC9@DM6PR02MB5850.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vU64l/dQ5c2M6vn5Fc+Oo7hX+Rz2CVUFEUDTq14Pp+OUN3bxKyDLLRu5X9VcHjXiQMza3Mem54urD3bvQZPD3jKzHh4MG6KmoaJo/SsPAaL2GY0RthsBJ58hrHW7mr8wX/9W0iZ45sa1bVbXgynah9Nb0Bi1937GeiEFr+ijQOpMYtDtCV+DwY01mqj/gehAJXj79DQjlWSneWgOVRer5mtGyzYhUPuj+2Nm0KLZOXuDvBKjruZr7VqZzwoPeUZcgwthELBs+RkCq6KKPcw2RakNHA5OxVKitpgXI1C5SZTfj4SGAm6wq6AsHxnsJ6G6rX6VbMUXTV39aokIdrCzK/f0zknoJXI+RQ1Av5yXn7qZpo654y/PNT4gVmY0zBv6wvfLUz0kRtX5y+s6jY2zE54pqWxHK+yum1pW5ihvEdPu1D69JwC4XHUMWQpaFTCy7es5+A6252fX9HTnFAMZ+pgoxRm0Pk8m4Uk+Dd67nA6q2xWI2fdUUfmZMy6QlDDsTLAvGwILo7LlxDaBu+g0isd8mP90pxonHQdr6eSo8c43ulidvBL1VOf0bqkBH8ED89+GSQNqja3uNNugMEnJisFJRfB330zLb6OSJjacZzCVrB8w+IExjn9LMrbfk1SDjVYoHiHpLSmNG6VctHry/Q==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(39860400002)(376002)(346002)(136003)(396003)(46966006)(2906002)(8676002)(478600001)(7636003)(6916009)(36906005)(4326008)(5660300002)(53546011)(316002)(70206006)(356005)(186003)(9786002)(8936002)(70586007)(82310400003)(31696002)(26005)(36756003)(47076005)(31686004)(82740400003)(54906003)(44832011)(426003)(2616005)(83380400001)(336012)(6666004)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2021 12:52:00.9065
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b245c55-ddf1-4993-2cde-08d8c1f92c7f
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT034.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB5850
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+This set is part of a larger effort attempting to clean-up W=1
+kernel builds, which are currently overwhelmingly riddled with
+niggly little warnings.
 
+This is the last set.  Clock is clean after this.
 
-On 1/26/21 1:45 PM, Lee Jones wrote:
-> Fixes the following W=1 kernel build warning(s):
-> 
->  drivers/clk/zynqmp/divider.c:46: warning: Function parameter or member 'max_div' not described in 'zynqmp_clk_divider'
-> 
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Michal Simek <michal.simek@xilinx.com>
-> Cc: Rajan Vaja <rajan.vaja@xilinx.com>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> ---
->  drivers/clk/zynqmp/divider.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/clk/zynqmp/divider.c b/drivers/clk/zynqmp/divider.c
-> index 66da02b83d393..e9bf7958b8218 100644
-> --- a/drivers/clk/zynqmp/divider.c
-> +++ b/drivers/clk/zynqmp/divider.c
-> @@ -35,6 +35,7 @@
->   * @is_frac:	The divider is a fractional divider
->   * @clk_id:	Id of clock
->   * @div_type:	divisor type (TYPE_DIV1 or TYPE_DIV2)
-> + * @max_div:	maximum supported divisor (fetched from firmware)
->   */
->  struct zynqmp_clk_divider {
->  	struct clk_hw hw;
-> 
+Lee Jones (21):
+  clk: zynq: pll: Fix kernel-doc formatting in 'clk_register_zynq_pll's
+    header
+  clk: ti: clkt_dpll: Fix some kernel-doc misdemeanours
+  clk: ti: dpll3xxx: Fix some kernel-doc headers and promote other
+    worthy ones
+  clk: qcom: clk-regmap: Provide missing description for
+    'devm_clk_register_regmap()'s dev param
+  clk: sunxi: clk-sun9i-core: Demote non-conformant kernel-doc headers
+  clk: sunxi: clk-usb: Demote obvious kernel-doc abuse
+  clk: tegra: clk-tegra30: Remove unused variable 'reg'
+  clk: clkdev: Ignore suggestion to use gnu_printf() as it's not
+    appropriate here
+  clk: tegra: cvb: Provide missing description for
+    'tegra_cvb_add_opp_table()'s align param
+  clk: ti: dpll44xx: Fix some potential doc-rot
+  clk: renesas: renesas-cpg-mssr: Fix formatting issues for
+    'smstpcr_saved's documentation
+  clk: sunxi: clk-sun6i-ar100: Demote non-conformant kernel-doc header
+  clk: qcom: gcc-ipq4019: Remove unused variable 'ret'
+  clk: clk-fixed-mmio: Demote obvious kernel-doc abuse
+  clk: clk-npcm7xx: Remove unused static const tables 'npcm7xx_gates'
+    and 'npcm7xx_divs_fx'
+  clk: qcom: mmcc-msm8974: Remove unused static const tables
+    'mmcc_xo_mmpll0_1_2_gpll0{map}'
+  clk: clk-xgene: Add description for 'mask' and fix formatting for
+    'flags'
+  clk: qcom: clk-rpm: Remove a bunch of superfluous code
+  clk: spear: Move prototype to accessible header
+  clk: imx: Move 'imx6sl_set_wait_clk()'s prototype out to accessible
+    header
+  clk: zynqmp: divider: Add missing description for 'max_div'
 
-In our soc tree we have
- * @max_div:    Maximum divisor value allowed
+ arch/arm/mach-imx/common.h             |   1 -
+ arch/arm/mach-imx/cpuidle-imx6sl.c     |   1 +
+ arch/arm/mach-imx/pm-imx6.c            |   1 +
+ arch/arm/mach-spear/generic.h          |  12 ---
+ arch/arm/mach-spear/spear13xx.c        |   1 +
+ drivers/clk/clk-fixed-mmio.c           |   2 +-
+ drivers/clk/clk-npcm7xx.c              | 108 -------------------------
+ drivers/clk/clk-xgene.c                |   5 +-
+ drivers/clk/clkdev.c                   |   7 ++
+ drivers/clk/imx/clk-imx6sl.c           |   1 +
+ drivers/clk/qcom/clk-regmap.c          |   1 +
+ drivers/clk/qcom/clk-rpm.c             |  63 ---------------
+ drivers/clk/qcom/gcc-ipq4019.c         |   7 +-
+ drivers/clk/qcom/mmcc-msm8974.c        |  16 ----
+ drivers/clk/renesas/renesas-cpg-mssr.c |   4 +-
+ drivers/clk/spear/spear1310_clock.c    |   1 +
+ drivers/clk/spear/spear1340_clock.c    |   1 +
+ drivers/clk/sunxi/clk-sun6i-ar100.c    |   2 +-
+ drivers/clk/sunxi/clk-sun9i-core.c     |   8 +-
+ drivers/clk/sunxi/clk-usb.c            |   2 +-
+ drivers/clk/tegra/clk-tegra30.c        |   5 +-
+ drivers/clk/tegra/cvb.c                |   1 +
+ drivers/clk/ti/clkt_dpll.c             |   3 +-
+ drivers/clk/ti/dpll3xxx.c              |  20 ++---
+ drivers/clk/ti/dpll44xx.c              |   6 +-
+ drivers/clk/zynq/pll.c                 |  12 +--
+ drivers/clk/zynqmp/divider.c           |   1 +
+ include/linux/clk/imx.h                |  15 ++++
+ include/linux/clk/spear.h              |  23 ++++++
+ 29 files changed, 92 insertions(+), 238 deletions(-)
+ create mode 100644 include/linux/clk/imx.h
+ create mode 100644 include/linux/clk/spear.h
 
-But your description should be also fine. Rajan please reply if I am
-wrong. Otherwise:
-Acked-by: Michal Simek <michal.simek@xilinx.com>
+Cc: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc: Andy Gross <agross@kernel.org>
+Cc: Avi Fishman <avifishman70@gmail.com>
+Cc: Benjamin Fair <benjaminfair@google.com>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Boris BREZILLON <boris.brezillon@free-electrons.com>
+Cc: Chen-Yu Tsai <wens@csie.org>
+Cc: "Emilio López" <emilio@elopez.com.ar>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Jan Kotas <jank@cadence.com>
+Cc: Jernej Skrabec <jernej.skrabec@siol.net>
+Cc: Jonathan Hunter <jonathanh@nvidia.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-clk@vger.kernel.org
+Cc: linux-omap@vger.kernel.org
+Cc: linux-renesas-soc@vger.kernel.org
+Cc: linux-tegra@vger.kernel.org
+Cc: Loc Ho <lho@apm.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: Michal Simek <michal.simek@xilinx.com>
+Cc: Nancy Yuen <yuenn@google.com>
+Cc: Nuvoton Technologies <tali.perry@nuvoton.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: openbmc@lists.ozlabs.org
+Cc: Patrick Venture <venture@google.com>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Peter De Schrijver <pdeschrijver@nvidia.com>
+Cc: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Prashant Gaikwad <pgaikwad@nvidia.com>
+Cc: Rajan Vaja <rajan.vaja@xilinx.com>
+Cc: Rajeev Kumar <rajeev-dlh.kumar@st.com>
+Cc: Richard Woodruff <r-woodruff2@ti.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Shiraz Hashim <shiraz.linux.kernel@gmail.com>
+Cc: "Sören Brinkmann" <soren.brinkmann@xilinx.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Tali Perry <tali.perry1@gmail.com>
+Cc: Tero Kristo <kristo@kernel.org>
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Tomer Maimon <tmaimon77@gmail.com>
+Cc: Viresh Kumar <vireshk@kernel.org>
+-- 
+2.25.1
 
-Thanks,
-Michal
