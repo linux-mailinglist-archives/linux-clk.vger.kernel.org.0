@@ -2,66 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37DB8303E22
-	for <lists+linux-clk@lfdr.de>; Tue, 26 Jan 2021 14:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED52303E1D
+	for <lists+linux-clk@lfdr.de>; Tue, 26 Jan 2021 14:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392339AbhAZNIW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 26 Jan 2021 08:08:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
+        id S2391999AbhAZNHU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 26 Jan 2021 08:07:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391964AbhAZMsz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 26 Jan 2021 07:48:55 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457CAC03542F
-        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 04:46:07 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id i9so2664420wmq.1
-        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 04:46:07 -0800 (PST)
+        with ESMTP id S2391983AbhAZMtB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 26 Jan 2021 07:49:01 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D9DC035435
+        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 04:46:10 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id a9so16317559wrt.5
+        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 04:46:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ACuhHqUyAOgeit1pJS1MxY6/38vCSWpT3UKaTx8+/JY=;
-        b=fM8B1mFx2eVpjNGE3vhWFZC0WnRAysxKHxe+DAlNp0M68o88FbxPu79MK7N6KiE2w6
-         9Xz6u4qdahy0LI9WhaFK/lyoXeoeyTIRv3jDEuQ+1axa99t2wwYOv3R4ZYP7Nf33NHcF
-         h/ifupziL/bRk8bMH6nIbZRqrxAaPuu8HhFAWxW4P1w0jDAp4QjTtN/sMy8BVDVsBKeJ
-         5XqZMH2ZHCMbswWDflwfuj2IwwEkK5sK41ABrUURUYOQM0CqIeNKuZ/QR+TlG/5OyQY4
-         UAK2fLKyhInTzveMOSTFN0HX58oaY6FSzzY0nRCsLMpkwG8QaNeop7L+F9Ub+d7NkC/G
-         +g1Q==
+        bh=hwOEDN9pFoMRn0bPIH5AwWEBMRWoq5VkGdsYNSR9FGE=;
+        b=cZz01X+VWuBj+9uDKkkXPXM9//fkRR9GHvUotrvnK/n1yjzEnawXB+dGxsS7z9inSF
+         WgG0hLmw8aPkRHv2dpc44VQiBduw1TiWcMJP3SJBGYIs7h3MQ441bXddZcUs0LI6hr+L
+         /jOxSZcoUciHMHscXa1VxI9h9IsFwA20YgG3ApzWADK/Ks5WmuiVESxKQrjI52wsgxjz
+         /+D/Uk6PjuvauamZ7S6/332je+0L8ICB5iLI8emZUdBKZzxo4fsE1pKTt8BMHnxKtKdt
+         Vf9+KwYyK135SHqf8I6fWJkHsF3QmX7LsVpgIIIYzcLiQ0ay4mUcrqpt4n/KLGDWeH/L
+         qfCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ACuhHqUyAOgeit1pJS1MxY6/38vCSWpT3UKaTx8+/JY=;
-        b=ublD+m8Lb0h/lQy72hzIV2a2CdZzKbIzOfvSrlYIxtV2EK/nzUarEH8eGkDXCtQyZs
-         fkcXFdob0nB5s5V6H71fHLSLnBPNw1k5T3EHHSznVYJ40DRyWPlozCKMil3ksvk2THcs
-         KVkCzM4T0EKa1GhuLIWXDGzJWL1tB8cfPmVCV78yzvitJ3yogNlflshwffsSiy/5AfjE
-         MlE1H3unSrLNAGg+/+bwVrgR5OtTL9jz5ArsMAknwKQsUg49b665+s72sn6RzFct6mRr
-         LJqqautGEz/oI/UiFa/BaazfLe338spAKOOoFkdMRH8k0hDBTEyoTOrdGDvsGel5uDJw
-         999A==
-X-Gm-Message-State: AOAM532ioqiEMEqoY77IZYJulT+vuCFTJB3a5sxBcVcfsKYmf1qKsW8q
-        td4DCMYLD/vuEiAIglCtAWC18g==
-X-Google-Smtp-Source: ABdhPJwZRlj953gT/ow/PoTz03HbJCu8kx7ksSmJH59sdocGmJhel18R3yS87cxTtuQ5kIlJ9yN83w==
-X-Received: by 2002:a1c:f706:: with SMTP id v6mr4569286wmh.85.1611665166044;
-        Tue, 26 Jan 2021 04:46:06 -0800 (PST)
+        bh=hwOEDN9pFoMRn0bPIH5AwWEBMRWoq5VkGdsYNSR9FGE=;
+        b=K1A3IXEafR0YSxKmlbBQoyVCSFtdLDZDGQdwfizILY60K5CoU2yK2W1ff5QLSNv4Re
+         bcHKL4ywrlXv5+EhRccJpk7ZG9Zz5nPi+mJ3NzFl9PRK5xmbTDFuVBBuAmOaDeZ6ov88
+         n6QOJZiSQvbgdcGxAriUYztcKw7I2ies3Bqdl4r8/d25ygsG3ctsjcbmxImmDTyV2UkN
+         s4CBp5h2sGi7SqZbaAGyDuB+9ymXvsrK+16Kbw6he7u/a2wv6s4soKZU3Siw+PjMdP0s
+         CvXe/jj0Xxp7YjiAIGjQPVGE62t/7V+CFDTZphWfg0BzDDuOtywME4Sd3zdxeU9Ouso0
+         8pyA==
+X-Gm-Message-State: AOAM532MTiUO4B2VXCbgGbKBIaATxWCg7Qqiw7EDrbsL15kb/nLiwDxj
+        nzZtoaKjXWpCQdagZpFg80c7zQ==
+X-Google-Smtp-Source: ABdhPJzSQDfP81pbHTeNqSO7T6XdRtI37YTtqJ1RLv7NXMg826rJtq9xTgY1rh1yu6cBbuWypkDCeg==
+X-Received: by 2002:a5d:6347:: with SMTP id b7mr5805047wrw.233.1611665169480;
+        Tue, 26 Jan 2021 04:46:09 -0800 (PST)
 Received: from dell.default ([91.110.221.188])
-        by smtp.gmail.com with ESMTPSA id i131sm3263073wmi.25.2021.01.26.04.46.05
+        by smtp.gmail.com with ESMTPSA id i131sm3263073wmi.25.2021.01.26.04.46.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jan 2021 04:46:05 -0800 (PST)
+        Tue, 26 Jan 2021 04:46:08 -0800 (PST)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+Cc:     linux-kernel@vger.kernel.org,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: [PATCH 18/21] clk: qcom: clk-rpm: Remove a bunch of superfluous code
-Date:   Tue, 26 Jan 2021 12:45:37 +0000
-Message-Id: <20210126124540.3320214-19-lee.jones@linaro.org>
+        Stephen Boyd <sboyd@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Rajan Vaja <rajan.vaja@xilinx.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 21/21] clk: zynqmp: divider: Add missing description for 'max_div'
+Date:   Tue, 26 Jan 2021 12:45:40 +0000
+Message-Id: <20210126124540.3320214-22-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210126124540.3320214-1-lee.jones@linaro.org>
 References: <20210126124540.3320214-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
@@ -69,100 +69,31 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/clk/qcom/clk-rpm.c:453:29: warning: ‘clk_rpm_branch_ops’ defined but not used [-Wunused-const-variable=]
+ drivers/clk/zynqmp/divider.c:46: warning: Function parameter or member 'max_div' not described in 'zynqmp_clk_divider'
 
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc: Michael Turquette <mturquette@baylibre.com>
 Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org
+Cc: Michal Simek <michal.simek@xilinx.com>
+Cc: Rajan Vaja <rajan.vaja@xilinx.com>
 Cc: linux-clk@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/clk/qcom/clk-rpm.c | 63 --------------------------------------
- 1 file changed, 63 deletions(-)
+ drivers/clk/zynqmp/divider.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/qcom/clk-rpm.c b/drivers/clk/qcom/clk-rpm.c
-index f71d228fd6bd5..a18811c380187 100644
---- a/drivers/clk/qcom/clk-rpm.c
-+++ b/drivers/clk/qcom/clk-rpm.c
-@@ -73,62 +73,6 @@
- 		},							      \
- 	}
- 
--#define DEFINE_CLK_RPM_PXO_BRANCH(_platform, _name, _active, r_id, r)	      \
--	static struct clk_rpm _platform##_##_active;			      \
--	static struct clk_rpm _platform##_##_name = {			      \
--		.rpm_clk_id = (r_id),					      \
--		.active_only = true,					      \
--		.peer = &_platform##_##_active,				      \
--		.rate = (r),						      \
--		.branch = true,						      \
--		.hw.init = &(struct clk_init_data){			      \
--			.ops = &clk_rpm_branch_ops,			      \
--			.name = #_name,					      \
--			.parent_names = (const char *[]){ "pxo_board" },      \
--			.num_parents = 1,				      \
--		},							      \
--	};								      \
--	static struct clk_rpm _platform##_##_active = {			      \
--		.rpm_clk_id = (r_id),					      \
--		.peer = &_platform##_##_name,				      \
--		.rate = (r),						      \
--		.branch = true,						      \
--		.hw.init = &(struct clk_init_data){			      \
--			.ops = &clk_rpm_branch_ops,			      \
--			.name = #_active,				      \
--			.parent_names = (const char *[]){ "pxo_board" },      \
--			.num_parents = 1,				      \
--		},							      \
--	}
--
--#define DEFINE_CLK_RPM_CXO_BRANCH(_platform, _name, _active, r_id, r)	      \
--	static struct clk_rpm _platform##_##_active;			      \
--	static struct clk_rpm _platform##_##_name = {			      \
--		.rpm_clk_id = (r_id),					      \
--		.peer = &_platform##_##_active,				      \
--		.rate = (r),						      \
--		.branch = true,						      \
--		.hw.init = &(struct clk_init_data){			      \
--			.ops = &clk_rpm_branch_ops,			      \
--			.name = #_name,					      \
--			.parent_names = (const char *[]){ "cxo_board" },      \
--			.num_parents = 1,				      \
--		},							      \
--	};								      \
--	static struct clk_rpm _platform##_##_active = {			      \
--		.rpm_clk_id = (r_id),					      \
--		.active_only = true,					      \
--		.peer = &_platform##_##_name,				      \
--		.rate = (r),						      \
--		.branch = true,						      \
--		.hw.init = &(struct clk_init_data){			      \
--			.ops = &clk_rpm_branch_ops,			      \
--			.name = #_active,				      \
--			.parent_names = (const char *[]){ "cxo_board" },      \
--			.num_parents = 1,				      \
--		},							      \
--	}
--
- #define to_clk_rpm(_hw) container_of(_hw, struct clk_rpm, hw)
- 
- struct rpm_cc;
-@@ -450,13 +394,6 @@ static const struct clk_ops clk_rpm_ops = {
- 	.recalc_rate	= clk_rpm_recalc_rate,
- };
- 
--static const struct clk_ops clk_rpm_branch_ops = {
--	.prepare	= clk_rpm_prepare,
--	.unprepare	= clk_rpm_unprepare,
--	.round_rate	= clk_rpm_round_rate,
--	.recalc_rate	= clk_rpm_recalc_rate,
--};
--
- /* MSM8660/APQ8060 */
- DEFINE_CLK_RPM(msm8660, afab_clk, afab_a_clk, QCOM_RPM_APPS_FABRIC_CLK);
- DEFINE_CLK_RPM(msm8660, sfab_clk, sfab_a_clk, QCOM_RPM_SYS_FABRIC_CLK);
+diff --git a/drivers/clk/zynqmp/divider.c b/drivers/clk/zynqmp/divider.c
+index 66da02b83d393..e9bf7958b8218 100644
+--- a/drivers/clk/zynqmp/divider.c
++++ b/drivers/clk/zynqmp/divider.c
+@@ -35,6 +35,7 @@
+  * @is_frac:	The divider is a fractional divider
+  * @clk_id:	Id of clock
+  * @div_type:	divisor type (TYPE_DIV1 or TYPE_DIV2)
++ * @max_div:	maximum supported divisor (fetched from firmware)
+  */
+ struct zynqmp_clk_divider {
+ 	struct clk_hw hw;
 -- 
 2.25.1
 
