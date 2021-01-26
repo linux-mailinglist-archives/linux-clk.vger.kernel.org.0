@@ -2,174 +2,175 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 903BD303FA8
-	for <lists+linux-clk@lfdr.de>; Tue, 26 Jan 2021 15:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57AE6303FE1
+	for <lists+linux-clk@lfdr.de>; Tue, 26 Jan 2021 15:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405685AbhAZOFd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 26 Jan 2021 09:05:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405572AbhAZOEs (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 26 Jan 2021 09:04:48 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8B2C061A31
-        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 06:04:08 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id v1so16227517ott.10
-        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 06:04:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=MsK4CaeZUuQbxzldo8dFAj7Ip1Nra/4PEZy0IWNDwKA=;
-        b=oJDgbuOkCoz6zAvL2MLojuABQE1LnOHQsv8Sr8dJJkZmRIJW4fT+lBOiWCHwFxgyXl
-         f5SppIvh70EKm2GeJyfWlQ5OA7825I/pCJhXVsP0EmZKDWarGYzCLE4YFS4n44X63N27
-         CuzTTDKuisrWcbigIqWkS1qeGfiDC76d2VkFbKyVzkzUgTqKWz8lqCKQ0drBWS9ehbTi
-         ixyXptqL0Wa8G7XtYbpibYb3mZr2LJbpj5/Uxwy2/qnrdXTXSg77XIk7N1xvgWp6euQ4
-         jEXzA2BR8T82RcTsXX0Gr8l2vemy9hL5H7+O+sZKFrEyDvKrYauu0QHcsbcqMQXMc7Qd
-         vaYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=MsK4CaeZUuQbxzldo8dFAj7Ip1Nra/4PEZy0IWNDwKA=;
-        b=BzeJzo9q4z48+LSmvzpRwrkzBUKD+YbaWjUN4AVDe7tihGM3+90A8w0/MKByKtL1tJ
-         RrXyLr0XKz2desMmr3syLnIpGKWeYW5SCj5Xl1Mes0zrCjlYV3b7p2qiuemhSM9hbykQ
-         tiBSOLYGX2nO75ztWID0Cx5i/h/OzEt9yutoh0AyUbKsZhkvNSHiGX4i8huLjeyJPit7
-         W7iSntGrMItBgL9eED7eW4WwLl4CAuFXowskzmYErk8HdyTch78z79G1q0LQpY8eIDFZ
-         bGhrjqZ0UgZ4/bFTUV4oq25amtLRrF30V7zhhq+UGNSc72vJsx13YK1z1NH1WJz9JqJ1
-         ZnSQ==
-X-Gm-Message-State: AOAM532C6E35WDQ0UD9/9DnDcXwAdiwZpR3VwJCSDRAiwnGKB7n3e64n
-        Y8YgFiTnrCfvSo48UxDjkiPkdA==
-X-Google-Smtp-Source: ABdhPJxX8nY7QjrZBeaPXb5VbSrI1X+GKXGhNuDRRN1eLhvoaMkZFItzLc7hvWzb53yTMa8LtnmSMQ==
-X-Received: by 2002:a9d:6c90:: with SMTP id c16mr4106448otr.177.1611669846924;
-        Tue, 26 Jan 2021 06:04:06 -0800 (PST)
-Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id 186sm3853267ood.6.2021.01.26.06.04.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jan 2021 06:04:06 -0800 (PST)
-Date:   Tue, 26 Jan 2021 08:04:04 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH 18/21] clk: qcom: clk-rpm: Remove a bunch of superfluous
- code
-Message-ID: <20210126140404.GF1241218@yoga>
-References: <20210126124540.3320214-1-lee.jones@linaro.org>
- <20210126124540.3320214-19-lee.jones@linaro.org>
+        id S2405731AbhAZOM4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 26 Jan 2021 09:12:56 -0500
+Received: from relay05.th.seeweb.it ([5.144.164.166]:44613 "EHLO
+        relay05.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405603AbhAZOMz (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 26 Jan 2021 09:12:55 -0500
+Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 8105C3F277;
+        Tue, 26 Jan 2021 15:11:53 +0100 (CET)
+Subject: Re: [PATCH v2 3/9] clk: qcom: Add SDM660 Multimedia Clock Controller
+ (MMCC) driver
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>, agross@kernel.org
+Cc:     bjorn.andersson@linaro.org, mturquette@baylibre.com,
+        robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org
+References: <20210113183817.447866-1-angelogioacchino.delregno@somainline.org>
+ <20210113183817.447866-4-angelogioacchino.delregno@somainline.org>
+ <2453cbae-bd30-416c-4432-9b27754670e1@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Message-ID: <6ba8ac3c-d33b-3ab2-5855-f99d431b397a@somainline.org>
+Date:   Tue, 26 Jan 2021 15:11:53 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=windows-1252
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210126124540.3320214-19-lee.jones@linaro.org>
+In-Reply-To: <2453cbae-bd30-416c-4432-9b27754670e1@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue 26 Jan 06:45 CST 2021, Lee Jones wrote:
+Il 26/01/21 14:39, Stanimir Varbanov ha scritto:
+> 
+> 
+> On 1/13/21 8:38 PM, AngeloGioacchino Del Regno wrote:
+>> From: Martin Botka <martin.botka@somainline.org>
+>>
+>> Add a driver for the multimedia clock controller found on SDM660
+>> based devices. This should allow most multimedia device drivers
+>> to probe and control their clocks.
+>>
+>> Signed-off-by: Martin Botka <martin.botka@somainline.org>
+>> Co-developed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>> [angelogioacchino.delregno@somainline.org: Cleaned up SDM630 clock fixups]
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+>> ---
+>>   drivers/clk/qcom/Kconfig                     |    9 +
+>>   drivers/clk/qcom/Makefile                    |    1 +
+>>   drivers/clk/qcom/mmcc-sdm660.c               | 2864 ++++++++++++++++++
+>>   include/dt-bindings/clock/qcom,mmcc-sdm660.h |  162 +
+>>   4 files changed, 3036 insertions(+)
+>>   create mode 100644 drivers/clk/qcom/mmcc-sdm660.c
+>>   create mode 100644 include/dt-bindings/clock/qcom,mmcc-sdm660.h
+>>
+>> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+>> index d32bb12cd8d0..eb9746e84556 100644
+>> --- a/drivers/clk/qcom/Kconfig
+>> +++ b/drivers/clk/qcom/Kconfig
+>> @@ -366,6 +366,15 @@ config SDM_GCC_660
+>>   	  Say Y if you want to use peripheral devices such as UART, SPI,
+>>   	  i2C, USB, UFS, SDDC, PCIe, etc.
+>>   
+>> +config SDM_MMCC_660
+>> +	tristate "SDM660 Multimedia Clock Controller"
+>> +	select SDM_GCC_660
+>> +	select QCOM_GDSC
+>> +	help
+>> +	  Support for the multimedia clock controller on SDM660 devices.
+>> +	  Say Y if you want to support multimedia devices such as display,
+>> +	  graphics, video encode/decode, camera, etc.
+>> +
+>>   config QCS_TURING_404
+>>   	tristate "QCS404 Turing Clock Controller"
+>>   	help
+>> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+>> index 9e5e0e3cb7b4..bfa8350f088d 100644
+>> --- a/drivers/clk/qcom/Makefile
+>> +++ b/drivers/clk/qcom/Makefile
+>> @@ -62,6 +62,7 @@ obj-$(CONFIG_SC_VIDEOCC_7180) += videocc-sc7180.o
+>>   obj-$(CONFIG_SDM_CAMCC_845) += camcc-sdm845.o
+>>   obj-$(CONFIG_SDM_DISPCC_845) += dispcc-sdm845.o
+>>   obj-$(CONFIG_SDM_GCC_660) += gcc-sdm660.o
+>> +obj-$(CONFIG_SDM_MMCC_660) += mmcc-sdm660.o
+>>   obj-$(CONFIG_SDM_GCC_845) += gcc-sdm845.o
+>>   obj-$(CONFIG_SDM_GPUCC_845) += gpucc-sdm845.o
+>>   obj-$(CONFIG_SDM_LPASSCC_845) += lpasscc-sdm845.o
+>> diff --git a/drivers/clk/qcom/mmcc-sdm660.c b/drivers/clk/qcom/mmcc-sdm660.c
+>> new file mode 100644
+>> index 000000000000..d268e1c89f57
+>> --- /dev/null
+>> +++ b/drivers/clk/qcom/mmcc-sdm660.c
+>> @@ -0,0 +1,2864 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
+>> + * Copyright (c) 2020, Martin Botka <martin.botka@somainline.org>
+>> + * Copyright (c) 2020, Konrad Dybcio <konrad.dybcio@somainline.org>
+>> + */
+>> +
+>> +#include <linux/kernel.h>
+>> +#include <linux/bitops.h>
+>> +#include <linux/err.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/clk-provider.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/reset-controller.h>
+>> +#include <linux/clk.h>
+>> +
+>> +
+>> +#include <dt-bindings/clock/qcom,mmcc-sdm660.h>
+>> +
+>> +#include "common.h"
+>> +#include "clk-regmap.h"
+>> +#include "clk-regmap-divider.h"
+>> +#include "clk-alpha-pll.h"
+>> +#include "clk-rcg.h"
+>> +#include "clk-branch.h"
+>> +#include "reset.h"
+>> +#include "gdsc.h"
+>> +
+> 
+> <cut>
+> 
+>> +
+>> +static struct gdsc venus_gdsc = {
+>> +	.gdscr = 0x1024,
+>> +	.pd = {
+>> +		.name = "venus",
+>> +	},
+>> +	.pwrsts = PWRSTS_OFF_ON,
+>> +};
+>> +
+>> +static struct gdsc venus_core0_gdsc = {
+>> +	.gdscr = 0x1040,
+>> +	.pd = {
+>> +		.name = "venus_core0",
+>> +	},
+>> +	.parent = &venus_gdsc.pd,
+>> +	.pwrsts = PWRSTS_OFF_ON,
+> 
+> I think this gdsc should be under hw control?
+> 
+> +	.flags = HW_CTRL,
+> 
 
-> Fixes the following W=1 kernel build warning(s):
-> 
->  drivers/clk/qcom/clk-rpm.c:453:29: warning: ‘clk_rpm_branch_ops’ defined but not used [-Wunused-const-variable=]
-> 
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: linux-arm-msm@vger.kernel.org
-> Cc: linux-clk@vger.kernel.org
+Feels strange, eh? Was the same for me, but then noupe, there is no
+hw control for this GDSC downstream, nor a hw_ctrl address for it, so
+on this SoC it shouldn't be under hw control.
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Besides that, testing also agrees with this (enc/dec works)...
 
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> ---
->  drivers/clk/qcom/clk-rpm.c | 63 --------------------------------------
->  1 file changed, 63 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/clk-rpm.c b/drivers/clk/qcom/clk-rpm.c
-> index f71d228fd6bd5..a18811c380187 100644
-> --- a/drivers/clk/qcom/clk-rpm.c
-> +++ b/drivers/clk/qcom/clk-rpm.c
-> @@ -73,62 +73,6 @@
->  		},							      \
->  	}
->  
-> -#define DEFINE_CLK_RPM_PXO_BRANCH(_platform, _name, _active, r_id, r)	      \
-> -	static struct clk_rpm _platform##_##_active;			      \
-> -	static struct clk_rpm _platform##_##_name = {			      \
-> -		.rpm_clk_id = (r_id),					      \
-> -		.active_only = true,					      \
-> -		.peer = &_platform##_##_active,				      \
-> -		.rate = (r),						      \
-> -		.branch = true,						      \
-> -		.hw.init = &(struct clk_init_data){			      \
-> -			.ops = &clk_rpm_branch_ops,			      \
-> -			.name = #_name,					      \
-> -			.parent_names = (const char *[]){ "pxo_board" },      \
-> -			.num_parents = 1,				      \
-> -		},							      \
-> -	};								      \
-> -	static struct clk_rpm _platform##_##_active = {			      \
-> -		.rpm_clk_id = (r_id),					      \
-> -		.peer = &_platform##_##_name,				      \
-> -		.rate = (r),						      \
-> -		.branch = true,						      \
-> -		.hw.init = &(struct clk_init_data){			      \
-> -			.ops = &clk_rpm_branch_ops,			      \
-> -			.name = #_active,				      \
-> -			.parent_names = (const char *[]){ "pxo_board" },      \
-> -			.num_parents = 1,				      \
-> -		},							      \
-> -	}
-> -
-> -#define DEFINE_CLK_RPM_CXO_BRANCH(_platform, _name, _active, r_id, r)	      \
-> -	static struct clk_rpm _platform##_##_active;			      \
-> -	static struct clk_rpm _platform##_##_name = {			      \
-> -		.rpm_clk_id = (r_id),					      \
-> -		.peer = &_platform##_##_active,				      \
-> -		.rate = (r),						      \
-> -		.branch = true,						      \
-> -		.hw.init = &(struct clk_init_data){			      \
-> -			.ops = &clk_rpm_branch_ops,			      \
-> -			.name = #_name,					      \
-> -			.parent_names = (const char *[]){ "cxo_board" },      \
-> -			.num_parents = 1,				      \
-> -		},							      \
-> -	};								      \
-> -	static struct clk_rpm _platform##_##_active = {			      \
-> -		.rpm_clk_id = (r_id),					      \
-> -		.active_only = true,					      \
-> -		.peer = &_platform##_##_name,				      \
-> -		.rate = (r),						      \
-> -		.branch = true,						      \
-> -		.hw.init = &(struct clk_init_data){			      \
-> -			.ops = &clk_rpm_branch_ops,			      \
-> -			.name = #_active,				      \
-> -			.parent_names = (const char *[]){ "cxo_board" },      \
-> -			.num_parents = 1,				      \
-> -		},							      \
-> -	}
-> -
->  #define to_clk_rpm(_hw) container_of(_hw, struct clk_rpm, hw)
->  
->  struct rpm_cc;
-> @@ -450,13 +394,6 @@ static const struct clk_ops clk_rpm_ops = {
->  	.recalc_rate	= clk_rpm_recalc_rate,
->  };
->  
-> -static const struct clk_ops clk_rpm_branch_ops = {
-> -	.prepare	= clk_rpm_prepare,
-> -	.unprepare	= clk_rpm_unprepare,
-> -	.round_rate	= clk_rpm_round_rate,
-> -	.recalc_rate	= clk_rpm_recalc_rate,
-> -};
-> -
->  /* MSM8660/APQ8060 */
->  DEFINE_CLK_RPM(msm8660, afab_clk, afab_a_clk, QCOM_RPM_APPS_FABRIC_CLK);
->  DEFINE_CLK_RPM(msm8660, sfab_clk, sfab_a_clk, QCOM_RPM_SYS_FABRIC_CLK);
-> -- 
-> 2.25.1
-> 
+P.S.: Thanks for the review!
+-- Angelo
+
+>> +};
+>> +
+
