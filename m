@@ -2,149 +2,187 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 714E130450F
-	for <lists+linux-clk@lfdr.de>; Tue, 26 Jan 2021 18:23:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C0E3046B6
+	for <lists+linux-clk@lfdr.de>; Tue, 26 Jan 2021 19:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391173AbhAZRV6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 26 Jan 2021 12:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730071AbhAZQzp (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 26 Jan 2021 11:55:45 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA40CC061D7C
-        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 08:55:03 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id m13so2781494wro.12
-        for <linux-clk@vger.kernel.org>; Tue, 26 Jan 2021 08:55:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Pz9VQ30QT10sFw3p7SZr4MIFLqcoCuT1kYq7h28FsoI=;
-        b=PF0FfcRGHglmCRgXuhLv5V1KBb8LlfSc3KAIlPQ/rh0Pq029vtQUANKknIBlFKkoQK
-         uW4frSXDkMIALok8IKL0uGGBplX2TRvQcsK0P8HWaVgYKCGiuUiZ5GzI0UOubmXUPeuP
-         XoYoGZYrNic0DwuI/PpwwPIO1ATfShqgB0Q4bb736c1j1gDDawNQRZjUy2y9AQhUXg4W
-         KIeNqRUaFa10mOyCe6/DlckWBwYeMTUVVCGXMuoQai+kuqu+xDifUcnAyoxP3tJwAp1T
-         mnFcCHVXCw2qZN7IeSZeLwAHBb2rJQOUasJgY5zSKhhzyDpFL13Tcoq6o7FTPvCnoAuR
-         F3hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Pz9VQ30QT10sFw3p7SZr4MIFLqcoCuT1kYq7h28FsoI=;
-        b=jKkpEg/YapSm/+YmDZOWnOnNnA8zsJw28Vs4/NxDKf86dSmBERu6ZINQCJxQ+Dwj4M
-         bEzs+Lth9yQkPRJbtKiQTri1iTX8CW2/FauHOHwkH9E6bqe/WHg4/293Nt5/E+NCvv+E
-         Lnf9xQQE9jQ+eMG67i8LJ5x8bFM1KFTqn0olrYpwcJbcw1bohav/5/jaP+0kN5Rz4LT0
-         oc+zUG8RIZTA6EXgf77E92APLq/F/VViEq0b8PwIrYy72kUBURTscOoMta/PYvXlqaTQ
-         Nt7uC0PE1PS3o8dN5OwVxs3vCvR+YItkCdhPKLkdxfYblWLrnlmaQ6e0AHkGHUkPNJN5
-         XdrA==
-X-Gm-Message-State: AOAM530RLPMfikFixG38dOP8RCBWcM6QtaESe+AO77TW1EcKE76Du5iL
-        fkqOe7cA22CoEHmWmCvys7ZNzA==
-X-Google-Smtp-Source: ABdhPJyvxvmA12WazvbTYMP2H4ciS5tTRJgRMbY8wWi/qHjALlszPnI8tbrCaHHbiMBaczjXXJr/mA==
-X-Received: by 2002:adf:f18a:: with SMTP id h10mr6951758wro.299.1611680102365;
-        Tue, 26 Jan 2021 08:55:02 -0800 (PST)
-Received: from dell ([91.110.221.188])
-        by smtp.gmail.com with ESMTPSA id x128sm4428288wmb.29.2021.01.26.08.55.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Jan 2021 08:55:01 -0800 (PST)
-Date:   Tue, 26 Jan 2021 16:54:59 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     linux-kernel@vger.kernel.org,
-        Emilio =?iso-8859-1?Q?L=F3pez?= <emilio@elopez.com.ar>,
+        id S1728846AbhAZRUn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 26 Jan 2021 12:20:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43878 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729094AbhAZIAO (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 26 Jan 2021 03:00:14 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 419AC206D7;
+        Tue, 26 Jan 2021 07:59:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611647974;
+        bh=ndO0PMKXJOqvpOvK3ZfF6AN3TVTIqf62iPD8PKPIV64=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Nfa38lZYBYPy3CRuYp5nri0FGpaDkLPA0mMhc2zNJAAR/oTwAlu388u7agEK2/ZQj
+         iOaPKSv4RKXM+f62m//GrWChQtRXA2qNV1KvxE1M6h752qq0G7l3KzzKx5ar3pSgJg
+         zrw/QTXEfAjfn7eocwlP34P9iPkxN+infrtdfJOh6Dvhgm3/gxEYc6GRozPcnSOtUc
+         e6RJcKV9WQvkjz99JKbFxq/11a5f8QgWiP7J6wdECOHg7UAE0V+EKbW/n/UYFyiK/g
+         kitr/0ux0fe3koWJxE271FwtJO8clhldffSDWc+Bk9/kqKVuRB74LorFDplsyixq+b
+         Jkyg74UKbUp7Q==
+Date:   Tue, 26 Jan 2021 13:29:29 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Vivek Aknurwar <viveka@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Boris BREZILLON <boris.brezillon@free-electrons.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 12/21] clk: sunxi: clk-sun6i-ar100: Demote non-conformant
- kernel-doc header
-Message-ID: <20210126165459.GG4903@dell>
-References: <20210126124540.3320214-1-lee.jones@linaro.org>
- <20210126124540.3320214-13-lee.jones@linaro.org>
- <20210126155430.llxijnwf5i4z3end@gilmour>
+        Rob Herring <robh+dt@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jeevan Shriram <jshriram@codeaurora.org>
+Subject: Re: [PATCH v4 3/5] clk: qcom: clk-alpha-pll: Add support for Lucid
+ 5LPE PLL
+Message-ID: <20210126075929.GM2771@vkoul-mobl>
+References: <20210118044321.2571775-1-vkoul@kernel.org>
+ <20210118044321.2571775-4-vkoul@kernel.org>
+ <YA79UPODso3cmMFU@builder.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210126155430.llxijnwf5i4z3end@gilmour>
+In-Reply-To: <YA79UPODso3cmMFU@builder.lan>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, 26 Jan 2021, Maxime Ripard wrote:
-
-> On Tue, Jan 26, 2021 at 12:45:31PM +0000, Lee Jones wrote:
-> > Fixes the following W=1 kernel build warning(s):
-> > 
-> >  drivers/clk/sunxi/clk-sun6i-ar100.c:26: warning: Function parameter or member 'req' not described in 'sun6i_get_ar100_factors'
-> > 
-> > Cc: "Emilio López" <emilio@elopez.com.ar>
-> > Cc: Michael Turquette <mturquette@baylibre.com>
-> > Cc: Stephen Boyd <sboyd@kernel.org>
-> > Cc: Maxime Ripard <mripard@kernel.org>
-> > Cc: Chen-Yu Tsai <wens@csie.org>
-> > Cc: Jernej Skrabec <jernej.skrabec@siol.net>
-> > Cc: Boris BREZILLON <boris.brezillon@free-electrons.com>
-> > Cc: linux-clk@vger.kernel.org
-> > Cc: linux-arm-kernel@lists.infradead.org
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > ---
-> >  drivers/clk/sunxi/clk-sun6i-ar100.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/clk/sunxi/clk-sun6i-ar100.c b/drivers/clk/sunxi/clk-sun6i-ar100.c
-> > index e1b7d0929cf7f..54babc2b4b9ee 100644
-> > --- a/drivers/clk/sunxi/clk-sun6i-ar100.c
-> > +++ b/drivers/clk/sunxi/clk-sun6i-ar100.c
-> > @@ -16,7 +16,7 @@
-> >  
-> >  #include "clk-factors.h"
-> >  
-> > -/**
-> > +/*
-> >   * sun6i_get_ar100_factors - Calculates factors p, m for AR100
-> >   *
-> >   * AR100 rate is calculated as follows
+On 25-01-21, 11:18, Bjorn Andersson wrote:
+> On Sun 17 Jan 22:43 CST 2021, Vinod Koul wrote:
 > 
-> This is the sixth patch doing the exact same thing over the files in
-> that folder you sent. Please fix all the occurences at once
+> > From: Vivek Aknurwar <viveka@codeaurora.org>
+> > 
+> > Lucid 5LPE is a slightly different Lucid PLL with different offsets and
+> > porgramming sequence so add support for these
+> > 
+> > Signed-off-by: Vivek Aknurwar <viveka@codeaurora.org>
+> > Signed-off-by: Jeevan Shriram <jshriram@codeaurora.org>
+> > [vkoul: rebase and tidy up for upstream]
+> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > ---
+> >  drivers/clk/qcom/clk-alpha-pll.c | 173 +++++++++++++++++++++++++++++++
+> >  drivers/clk/qcom/clk-alpha-pll.h |   4 +
+> >  2 files changed, 177 insertions(+)
+> > 
+> > diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
+> > index a30ea7b09224..f9c48da21bd1 100644
+> > --- a/drivers/clk/qcom/clk-alpha-pll.c
+> > +++ b/drivers/clk/qcom/clk-alpha-pll.c
+> > @@ -156,6 +156,12 @@ EXPORT_SYMBOL_GPL(clk_alpha_pll_regs);
+> >  /* LUCID PLL specific settings and offsets */
+> >  #define LUCID_PCAL_DONE		BIT(27)
+> >  
+> > +/* LUCID 5LPE PLL specific settings and offsets */
+> > +#define LUCID_5LPE_PCAL_DONE		BIT(11)
+> > +#define LUCID_5LPE_ALPHA_PLL_ACK_LATCH	BIT(13)
+> > +#define LUCID_5LPE_PLL_LATCH_INPUT	BIT(14)
+> > +#define LUCID_5LPE_ENABLE_VOTE_RUN	BIT(21)
+> > +
+> >  #define pll_alpha_width(p)					\
+> >  		((PLL_ALPHA_VAL_U(p) - PLL_ALPHA_VAL(p) == 4) ?	\
+> >  				 ALPHA_REG_BITWIDTH : ALPHA_REG_16BIT_WIDTH)
+> > @@ -1604,3 +1610,170 @@ const struct clk_ops clk_alpha_pll_agera_ops = {
+> >  	.set_rate = clk_alpha_pll_agera_set_rate,
+> >  };
+> >  EXPORT_SYMBOL_GPL(clk_alpha_pll_agera_ops);
+> > +
+> > +static int alpha_pll_lucid_5lpe_enable(struct clk_hw *hw)
+> > +{
+> > +	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
+> > +	u32 val;
+> > +	int ret;
+> > +
+> > +	ret = regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &val);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	/* If in FSM mode, just vote for it */
+> > +	if (val & LUCID_5LPE_ENABLE_VOTE_RUN) {
+> > +		ret = clk_enable_regmap(hw);
+> > +		if (ret)
+> > +			return ret;
+> > +		return wait_for_pll_enable_lock(pll);
+> > +	}
+> > +
+> > +	/* Check if PLL is already enabled, return if enabled */
+> > +	ret = trion_pll_is_enabled(pll, pll->clkr.regmap);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	ret = regmap_update_bits(pll->clkr.regmap, PLL_MODE(pll), PLL_RESET_N, PLL_RESET_N);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	regmap_write(pll->clkr.regmap, PLL_OPMODE(pll), PLL_RUN);
+> > +
+> > +	ret = wait_for_pll_enable_lock(pll);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	/* Enable the PLL outputs */
+> > +	ret = regmap_update_bits(pll->clkr.regmap, PLL_USER_CTL(pll), PLL_OUT_MASK, PLL_OUT_MASK);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	/* Enable the global PLL outputs */
+> > +	return regmap_update_bits(pll->clkr.regmap, PLL_MODE(pll), PLL_OUTCTRL, PLL_OUTCTRL);
+> > +}
+> > +
+> > +static void alpha_pll_lucid_5lpe_disable(struct clk_hw *hw)
+> > +{
+> > +	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
+> > +	u32 val;
+> > +	int ret;
+> > +
+> > +	ret = regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &val);
+> > +	if (ret)
+> > +		return;
+> > +
+> > +	/* If in FSM mode, just unvote it */
+> > +	if (val & LUCID_5LPE_ENABLE_VOTE_RUN) {
+> > +		clk_disable_regmap(hw);
+> > +		return;
+> > +	}
+> > +
+> > +	/* Disable the global PLL output */
+> > +	ret = regmap_update_bits(pll->clkr.regmap, PLL_MODE(pll), PLL_OUTCTRL, 0);
+> > +	if (ret)
+> > +		return;
+> > +
+> > +	/* Disable the PLL outputs */
+> > +	ret = regmap_update_bits(pll->clkr.regmap, PLL_USER_CTL(pll), PLL_OUT_MASK, 0);
+> > +	if (ret)
+> > +		return;
+> > +
+> > +	/* Place the PLL mode in STANDBY */
+> > +	regmap_write(pll->clkr.regmap, PLL_OPMODE(pll), PLL_STANDBY);
+> > +}
+> > +
+> > +/*
+> > + * The Lucid 5LPE PLL requires a power-on self-calibration which happens
+> > + * when the PLL comes out of reset. Calibrate in case it is not completed.
+> > + */
+> > +static int alpha_pll_lucid_5lpe_prepare(struct clk_hw *hw)
+> > +{
+> > +	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
+> > +	struct clk_hw *p;
+> > +	u32 val;
+> > +	int ret;
+> > +
+> > +	/* Return early if calibration is not needed. */
+> > +	regmap_read(pll->clkr.regmap, PLL_MODE(pll), &val);
+> 
+> I doubt this will ever fail, but static analysis tools would complain
+> about val possibly being uninitialized after this.
+> 
+> And the return value is checked in the other functions.
 
-No.  That would make the whole clean-up process 10x harder than it
-already is
-
-Before starting this endeavour there were 18,000+ warnings spread over
-100's of files and 10's of subsystems that needed addressing (only a
-couple thousand left now thankfully).  Some issues vastly different,
-some duplicated (much too much copy/pasting going which made things
-very frustrating at times).
-
-Anyway, in order to work though them all gracefully and in a sensible
-time-frame I had to come up with a workable plan.  Each subsystem is
-compiled separately and a script attempts to take out duplicate
-warnings and takes me through the build-log one file at a time.  Once
-all of the warnings are fixed in a source-file, it moves on to the
-next file.  The method is clean and allows me to handle this
-gargantuan task in bite-sized chunks.
-
-Going though and pairing up similar changes is unsustainable for a
-task like this.  It would add a lot of additional overhead and would
-slow down the rate of acceptance since source files tend to have
-different reviewers/maintainers - some working faster to review
-patches than others, leading to excessive lag times waiting for that
-one reviewer who takes weeks to review.  Having each file addressed
-in a separate patch also helps revertability and bisectability.  Not
-such a big problem with the documentation patches, but still.
-
-Admittedly doing it this way *can* look a bit odd in *some* patch-sets
-when they hit the MLs - particularly clock it seems, where there
-hasn't even been a vague attempt to document any of the parameters in
-the kernel-doc headers - however the alternative would mean nothing
-would get done!
+Yes agreed, will update this. Somehow I dont this my checked W=1
+complained about this, maybe some others would..
 
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+~Vinod
