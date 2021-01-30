@@ -2,25 +2,25 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE3C3092A8
-	for <lists+linux-clk@lfdr.de>; Sat, 30 Jan 2021 09:59:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9025E309294
+	for <lists+linux-clk@lfdr.de>; Sat, 30 Jan 2021 09:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233814AbhA3I44 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 30 Jan 2021 03:56:56 -0500
+        id S230013AbhA3FaO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 30 Jan 2021 00:30:14 -0500
 Received: from alexa-out.qualcomm.com ([129.46.98.28]:16935 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233843AbhA3FaD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 30 Jan 2021 00:30:03 -0500
+        with ESMTP id S233833AbhA3F1m (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 30 Jan 2021 00:27:42 -0500
 Received: from ironmsg07-lv.qualcomm.com (HELO ironmsg07-lv.qulacomm.com) ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 29 Jan 2021 21:20:32 -0800
+  by alexa-out.qualcomm.com with ESMTP; 29 Jan 2021 21:20:29 -0800
 X-QCInternal: smtphost
 Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qulacomm.com with ESMTP/TLS/AES256-SHA; 29 Jan 2021 21:20:29 -0800
+  by ironmsg07-lv.qulacomm.com with ESMTP/TLS/AES256-SHA; 29 Jan 2021 21:20:27 -0800
 X-QCInternal: smtphost
 Received: from gokulsri-linux.qualcomm.com ([10.201.2.207])
   by ironmsg02-blr.qualcomm.com with ESMTP; 30 Jan 2021 10:49:49 +0530
 Received: by gokulsri-linux.qualcomm.com (Postfix, from userid 432570)
-        id E759621A07; Sat, 30 Jan 2021 10:49:49 +0530 (IST)
+        id AC19320F4B; Sat, 30 Jan 2021 10:49:49 +0530 (IST)
 From:   Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
 To:     sboyd@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
         david.brown@linaro.org, devicetree@vger.kernel.org,
@@ -30,9 +30,9 @@ To:     sboyd@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
         mturquette@baylibre.com, ohad@wizery.com, robh+dt@kernel.org,
         govinds@codeaurora.org, sricharan@codeaurora.org,
         gokulsri@codeaurora.org
-Subject: [PATCH v9 1/4] remoteproc: qcom: wcss: populate hardcoded param using driver data
-Date:   Sat, 30 Jan 2021 10:49:46 +0530
-Message-Id: <1611983989-10125-2-git-send-email-gokulsri@codeaurora.org>
+Subject: [PATCH v9 2/4] dt-bindings: remoteproc: qcom: Add Q6V5 Modem PIL binding for QCS404
+Date:   Sat, 30 Jan 2021 10:49:47 +0530
+Message-Id: <1611983989-10125-3-git-send-email-gokulsri@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1611983989-10125-1-git-send-email-gokulsri@codeaurora.org>
 References: <1611983989-10125-1-git-send-email-gokulsri@codeaurora.org>
@@ -42,104 +42,62 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 From: Govind Singh <govinds@codeaurora.org>
 
-Q6 based WiFi fw loading is supported across
-different targets, ex: IPQ8074/QCS404. In order to
-support different fw names/pas id etc, populate
-hardcoded param using driver data.
+Add a new modem compatible string for Qualcomm QCS404 SoCs
 
 Signed-off-by: Govind Singh <govinds@codeaurora.org>
 Signed-off-by: Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
- drivers/remoteproc/qcom_q6v5_wcss.c | 29 ++++++++++++++++++++++++-----
- 1 file changed, 24 insertions(+), 5 deletions(-)
+ .../devicetree/bindings/remoteproc/qcom,q6v5.txt          | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/drivers/remoteproc/qcom_q6v5_wcss.c b/drivers/remoteproc/qcom_q6v5_wcss.c
-index 78ebe11..d2e1416 100644
---- a/drivers/remoteproc/qcom_q6v5_wcss.c
-+++ b/drivers/remoteproc/qcom_q6v5_wcss.c
-@@ -71,6 +71,11 @@
- #define TCSR_WCSS_CLK_MASK	0x1F
- #define TCSR_WCSS_CLK_ENABLE	0x14
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,q6v5.txt b/Documentation/devicetree/bindings/remoteproc/qcom,q6v5.txt
+index 7ccd553..69c49c7 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,q6v5.txt
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,q6v5.txt
+@@ -9,6 +9,7 @@ on the Qualcomm Hexagon core.
+ 	Definition: must be one of:
+ 		    "qcom,q6v5-pil",
+ 		    "qcom,ipq8074-wcss-pil"
++		    "qcom,qcs404-wcss-pil"
+ 		    "qcom,msm8916-mss-pil",
+ 		    "qcom,msm8974-mss-pil"
+ 		    "qcom,msm8996-mss-pil"
+@@ -39,6 +40,7 @@ on the Qualcomm Hexagon core.
+ 		    string:
+ 	qcom,q6v5-pil:
+ 	qcom,ipq8074-wcss-pil:
++	qcom,qcs404-wcss-pil:
+ 	qcom,msm8916-mss-pil:
+ 	qcom,msm8974-mss-pil:
+ 		    must be "wdog", "fatal", "ready", "handover", "stop-ack"
+@@ -67,6 +69,11 @@ on the Qualcomm Hexagon core.
+ 	Definition: The clocks needed depend on the compatible string:
+ 	qcom,ipq8074-wcss-pil:
+ 		    no clock names required
++	qcom,qcs404-wcss-pil:
++		    must be "xo", "gcc_abhs_cbcr", "gcc_abhs_cbcr",
++		    "gcc_axim_cbcr", "lcc_ahbfabric_cbc", "tcsr_lcc_cbc",
++		    "lcc_abhs_cbc", "lcc_tcm_slave_cbc", "lcc_abhm_cbc",
++		    "lcc_axim_cbc", "lcc_bcr_sleep"
+ 	qcom,q6v5-pil:
+ 	qcom,msm8916-mss-pil:
+ 	qcom,msm8974-mss-pil:
+@@ -133,6 +140,14 @@ For the compatible string below the following supplies are required:
+ 		    booting of the Hexagon core
  
-+struct wcss_data {
-+	const char *firmware_name;
-+	unsigned int crash_reason_smem;
-+};
+ For the compatible string below the following supplies are required:
++  "qcom,qcs404-wcss-pil"
++- cx-supply:
++	Usage: required
++	Value type: <phandle>
++	Definition: reference to the regulators to be held on behalf of the
++		    booting of the Hexagon core
 +
- struct q6v5_wcss {
- 	struct device *dev;
- 
-@@ -93,6 +98,8 @@ struct q6v5_wcss {
- 	void *mem_region;
- 	size_t mem_size;
- 
-+	unsigned int crash_reason_smem;
-+
- 	struct qcom_rproc_glink glink_subdev;
- 	struct qcom_rproc_ssr ssr_subdev;
- };
-@@ -438,7 +445,7 @@ static int q6v5_wcss_load(struct rproc *rproc, const struct firmware *fw)
- 	return ret;
- }
- 
--static const struct rproc_ops q6v5_wcss_ops = {
-+static const struct rproc_ops q6v5_wcss_ipq8074_ops = {
- 	.start = q6v5_wcss_start,
- 	.stop = q6v5_wcss_stop,
- 	.da_to_va = q6v5_wcss_da_to_va,
-@@ -538,12 +545,17 @@ static int q6v5_alloc_memory_region(struct q6v5_wcss *wcss)
- 
- static int q6v5_wcss_probe(struct platform_device *pdev)
- {
-+	const struct wcss_data *desc;
- 	struct q6v5_wcss *wcss;
- 	struct rproc *rproc;
- 	int ret;
- 
--	rproc = rproc_alloc(&pdev->dev, pdev->name, &q6v5_wcss_ops,
--			    "IPQ8074/q6_fw.mdt", sizeof(*wcss));
-+	desc = device_get_match_data(&pdev->dev);
-+	if (!desc)
-+		return -EINVAL;
-+
-+	rproc = rproc_alloc(&pdev->dev, pdev->name, &q6v5_wcss_ipq8074_ops,
-+			    desc->firmware_name, sizeof(*wcss));
- 	if (!rproc) {
- 		dev_err(&pdev->dev, "failed to allocate rproc\n");
- 		return -ENOMEM;
-@@ -551,6 +563,7 @@ static int q6v5_wcss_probe(struct platform_device *pdev)
- 
- 	wcss = rproc->priv;
- 	wcss->dev = &pdev->dev;
-+	wcss->crash_reason_smem = desc->crash_reason_smem;
- 
- 	ret = q6v5_wcss_init_mmio(wcss, pdev);
- 	if (ret)
-@@ -564,7 +577,8 @@ static int q6v5_wcss_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto free_rproc;
- 
--	ret = qcom_q6v5_init(&wcss->q6v5, pdev, rproc, WCSS_CRASH_REASON, NULL);
-+	ret = qcom_q6v5_init(&wcss->q6v5, pdev, rproc, desc->crash_reason_smem,
-+			     NULL);
- 	if (ret)
- 		goto free_rproc;
- 
-@@ -595,8 +609,13 @@ static int q6v5_wcss_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct wcss_data wcss_ipq8074_res_init = {
-+	.firmware_name = "IPQ8074/q6_fw.mdt",
-+	.crash_reason_smem = WCSS_CRASH_REASON,
-+};
-+
- static const struct of_device_id q6v5_wcss_of_match[] = {
--	{ .compatible = "qcom,ipq8074-wcss-pil" },
-+	{ .compatible = "qcom,ipq8074-wcss-pil", .data = &wcss_ipq8074_res_init },
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, q6v5_wcss_of_match);
++For the compatible string below the following supplies are required:
+   "qcom,msm8996-mss-pil"
+ - pll-supply:
+ 	Usage: required
 -- 
 2.7.4
 
