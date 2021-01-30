@@ -2,25 +2,25 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9025E309294
-	for <lists+linux-clk@lfdr.de>; Sat, 30 Jan 2021 09:51:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7EF43092AC
+	for <lists+linux-clk@lfdr.de>; Sat, 30 Jan 2021 09:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbhA3FaO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 30 Jan 2021 00:30:14 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:16935 "EHLO
+        id S234387AbhA3I45 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 30 Jan 2021 03:56:57 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:20533 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233833AbhA3F1m (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 30 Jan 2021 00:27:42 -0500
-Received: from ironmsg07-lv.qualcomm.com (HELO ironmsg07-lv.qulacomm.com) ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 29 Jan 2021 21:20:29 -0800
+        with ESMTP id S230168AbhA3F3n (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 30 Jan 2021 00:29:43 -0500
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 29 Jan 2021 21:20:30 -0800
 X-QCInternal: smtphost
 Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qulacomm.com with ESMTP/TLS/AES256-SHA; 29 Jan 2021 21:20:27 -0800
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 29 Jan 2021 21:20:28 -0800
 X-QCInternal: smtphost
 Received: from gokulsri-linux.qualcomm.com ([10.201.2.207])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 30 Jan 2021 10:49:49 +0530
+  by ironmsg02-blr.qualcomm.com with ESMTP; 30 Jan 2021 10:50:13 +0530
 Received: by gokulsri-linux.qualcomm.com (Postfix, from userid 432570)
-        id AC19320F4B; Sat, 30 Jan 2021 10:49:49 +0530 (IST)
+        id 5D1EB219E7; Sat, 30 Jan 2021 10:50:13 +0530 (IST)
 From:   Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
 To:     sboyd@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
         david.brown@linaro.org, devicetree@vger.kernel.org,
@@ -28,76 +28,68 @@ To:     sboyd@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-remoteproc@vger.kernel.org, mark.rutland@arm.com,
         mturquette@baylibre.com, ohad@wizery.com, robh+dt@kernel.org,
-        govinds@codeaurora.org, sricharan@codeaurora.org,
-        gokulsri@codeaurora.org
-Subject: [PATCH v9 2/4] dt-bindings: remoteproc: qcom: Add Q6V5 Modem PIL binding for QCS404
-Date:   Sat, 30 Jan 2021 10:49:47 +0530
-Message-Id: <1611983989-10125-3-git-send-email-gokulsri@codeaurora.org>
+        sricharan@codeaurora.org, gokulsri@codeaurora.org
+Subject: [PATCH v8 0/9] remoteproc: qcom: q6v5-wcss: Add support for secure pil
+Date:   Sat, 30 Jan 2021 10:50:04 +0530
+Message-Id: <1611984013-10201-1-git-send-email-gokulsri@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1611983989-10125-1-git-send-email-gokulsri@codeaurora.org>
-References: <1611983989-10125-1-git-send-email-gokulsri@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Govind Singh <govinds@codeaurora.org>
+IPQ8074 needs support for secure pil as well.
+Also, currently only unified firmware is supported.
+IPQ8074 supports split firmware for q6 and m3, so
+adding support for that.
 
-Add a new modem compatible string for Qualcomm QCS404 SoCs
+This series is based on Govind's
+"[v9] Add non PAS wcss Q6 support for QCS404"
 
-Signed-off-by: Govind Singh <govinds@codeaurora.org>
-Signed-off-by: Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
-Acked-by: Rob Herring <robh@kernel.org>
----
- .../devicetree/bindings/remoteproc/qcom,q6v5.txt          | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+changes since v8:
+ - Rebased on top of linux-5.11-rc5
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,q6v5.txt b/Documentation/devicetree/bindings/remoteproc/qcom,q6v5.txt
-index 7ccd553..69c49c7 100644
---- a/Documentation/devicetree/bindings/remoteproc/qcom,q6v5.txt
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,q6v5.txt
-@@ -9,6 +9,7 @@ on the Qualcomm Hexagon core.
- 	Definition: must be one of:
- 		    "qcom,q6v5-pil",
- 		    "qcom,ipq8074-wcss-pil"
-+		    "qcom,qcs404-wcss-pil"
- 		    "qcom,msm8916-mss-pil",
- 		    "qcom,msm8974-mss-pil"
- 		    "qcom,msm8996-mss-pil"
-@@ -39,6 +40,7 @@ on the Qualcomm Hexagon core.
- 		    string:
- 	qcom,q6v5-pil:
- 	qcom,ipq8074-wcss-pil:
-+	qcom,qcs404-wcss-pil:
- 	qcom,msm8916-mss-pil:
- 	qcom,msm8974-mss-pil:
- 		    must be "wdog", "fatal", "ready", "handover", "stop-ack"
-@@ -67,6 +69,11 @@ on the Qualcomm Hexagon core.
- 	Definition: The clocks needed depend on the compatible string:
- 	qcom,ipq8074-wcss-pil:
- 		    no clock names required
-+	qcom,qcs404-wcss-pil:
-+		    must be "xo", "gcc_abhs_cbcr", "gcc_abhs_cbcr",
-+		    "gcc_axim_cbcr", "lcc_ahbfabric_cbc", "tcsr_lcc_cbc",
-+		    "lcc_abhs_cbc", "lcc_tcm_slave_cbc", "lcc_abhm_cbc",
-+		    "lcc_axim_cbc", "lcc_bcr_sleep"
- 	qcom,q6v5-pil:
- 	qcom,msm8916-mss-pil:
- 	qcom,msm8974-mss-pil:
-@@ -133,6 +140,14 @@ For the compatible string below the following supplies are required:
- 		    booting of the Hexagon core
- 
- For the compatible string below the following supplies are required:
-+  "qcom,qcs404-wcss-pil"
-+- cx-supply:
-+	Usage: required
-+	Value type: <phandle>
-+	Definition: reference to the regulators to be held on behalf of the
-+		    booting of the Hexagon core
-+
-+For the compatible string below the following supplies are required:
-   "qcom,msm8996-mss-pil"
- - pll-supply:
- 	Usage: required
+changes since v7:
+ - Rebased on top of linux-5.9-rc2
+
+changes since v6:
+ - Rebased on top of the above mentioned dependant patch series
+
+changes since v5:
+ - Rebased on top of linux-5.8-rc3
+
+changes since v4:
+ - Rebased patch 8
+
+changes since v3:
+ - In patch 10, Added release_firmware to free up
+   memory requested for m3 firmware.
+
+changes since v2:
+ - In patch 5, Added a driver data 'bcr_reset_required'
+   to select if bcr reset is required
+ - In patch 10, Removed syscon implementation and moved
+   to mailbox framework to access APCS IPC
+
+changes since v1:
+ - In patch 10, Addressed minor review comments.
+
+Gokul Sriram Palanisamy (9):
+  remoteproc: qcom: Add PRNG proxy clock
+  remoteproc: qcom: Add secure PIL support
+  remoteproc: qcom: Add support for split q6 + m3 wlan firmware
+  remoteproc: qcom: Add ssr subdevice identifier
+  remoteproc: qcom: Update regmap offsets for halt register
+  dt-bindings: clock: qcom: Add reset for WCSSAON
+  clk: qcom: Add WCSSAON reset
+  arm64: dts: Add support for scm on IPQ8074 SoCs
+  arm64: dts: qcom: Enable Q6v5 WCSS for ipq8074 SoC
+
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi        | 127 +++++++++++++++++++++
+ drivers/clk/qcom/gcc-ipq8074.c               |   1 +
+ drivers/remoteproc/qcom_q6v5_wcss.c          | 162 +++++++++++++++++++++------
+ include/dt-bindings/clock/qcom,gcc-ipq8074.h |   1 +
+ 4 files changed, 259 insertions(+), 32 deletions(-)
+
 -- 
 2.7.4
 
