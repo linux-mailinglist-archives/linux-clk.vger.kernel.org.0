@@ -2,112 +2,95 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C9C3099A1
-	for <lists+linux-clk@lfdr.de>; Sun, 31 Jan 2021 02:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C332F309CB8
+	for <lists+linux-clk@lfdr.de>; Sun, 31 Jan 2021 15:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbhAaBbM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 30 Jan 2021 20:31:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37752 "EHLO
+        id S231874AbhAaOP2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 31 Jan 2021 09:15:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbhAaBbL (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 30 Jan 2021 20:31:11 -0500
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBBFC061573
-        for <linux-clk@vger.kernel.org>; Sat, 30 Jan 2021 17:30:16 -0800 (PST)
-Received: from localhost.localdomain (abaf219.neoplus.adsl.tpnet.pl [83.6.169.219])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 139BD3F284;
-        Sun, 31 Jan 2021 02:30:14 +0100 (CET)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: qcom: smd-rpm: Add mdm9607 clocks
-Date:   Sun, 31 Jan 2021 02:30:09 +0100
-Message-Id: <20210131013009.54177-1-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.30.0
+        with ESMTP id S231944AbhAaN36 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 31 Jan 2021 08:29:58 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC88FC06178C;
+        Sun, 31 Jan 2021 05:27:51 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id i9so10903145wmq.1;
+        Sun, 31 Jan 2021 05:27:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=w0AjcOnxN+fVVGn+tV+gduZDAkpbNXFgkp5E/FuYeRA=;
+        b=V8jquRuFkG92B9NiAwvbKnipL0o12U9sc71/MrVsazR4kIQpND2V1ynYJUBUVT34rn
+         g6mu+VW/V+b2wfEzqe8iP0iH4Yb5M9HGHkol7uQltaD43phRWV3eX9QvgvFT7XgH6sqC
+         Ez3iCZFnXlIjCG4tOyVhUrXYEM5ufBR+w+etUo+IrqH+Lm4owWuyEUE/tcDZCGl2uY73
+         GIxDWbVLhhftxPsiaHxDxsz9mGKI9m0pSG9WHbi5osdiFHJ8JIPzPvQt90Ui7fjq8JfN
+         Zt6JsejLXEc1a76amPGTXXhB3cnA0loV5zYEBH1x+mkEI/Frkb4rziXBbs+pLxauu5Bw
+         Ep8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=w0AjcOnxN+fVVGn+tV+gduZDAkpbNXFgkp5E/FuYeRA=;
+        b=Ltl7P9NRGbazVF7i32Ob9tD5cPlw9oa7vlwdboSz8DgSpiuwJiyohFQuhMuUIPp/nP
+         Df+OozA08QNBV52Q+RGhth1Dcmz7BnL5YvOLBn60xu78KiOIldozS/aTeUMalHkDfQti
+         HzxLRCa0DZ6QaQ3CoaQP5+sSrZ03SeYMYEXgJ9O5n/BcNcKkFf4S4WZLbejR0PYXBFF5
+         bwj2TwaWdr0aZNKUv31sAFhb8zZT3Vw4fOXdlJPaEwwDRyxAlDDfJZBHqQF8i6OmDzXo
+         DLV1Vc5WLQ2JoM7D/TC8zgv89wiWksYddkymH7aQsbAybxvhxd5z/Gso1UT6mpM5Gfqb
+         qo1g==
+X-Gm-Message-State: AOAM532Rnlf1Rz5cH+L+GVxRvsoYRj5wKCpPlV9xlZ3Kmr3i2/4Oj49Z
+        ZuQ9u3ol50xoeu8shj6fPrk=
+X-Google-Smtp-Source: ABdhPJws8CH4DaeoGzSOwTNOe8P0bjHH0XBzbGAG8etRS+DruKxNIPlbIz5lZhPG5dZwQr1wpu1Uvw==
+X-Received: by 2002:a1c:2501:: with SMTP id l1mr11061166wml.41.1612099670275;
+        Sun, 31 Jan 2021 05:27:50 -0800 (PST)
+Received: from ziggy.stardust ([213.195.126.134])
+        by smtp.gmail.com with ESMTPSA id b11sm22538263wrp.60.2021.01.31.05.27.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 31 Jan 2021 05:27:49 -0800 (PST)
+Subject: Re: [PATCH 0/2] Add MediaTek MT8192 clock provider device nodes
+To:     Weiyi Lu <weiyi.lu@mediatek.com>, Rob Herring <robh@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-clk@vger.kernel.org, srv_heupstream@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <1608644414-17793-1-git-send-email-weiyi.lu@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Message-ID: <4536e0a3-8e64-d2b0-df83-33705d10359a@gmail.com>
+Date:   Sun, 31 Jan 2021 14:27:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1608644414-17793-1-git-send-email-weiyi.lu@mediatek.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add support for RPM-managed clocks on the MDM9607 platform.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
- .../devicetree/bindings/clock/qcom,rpmcc.txt  |  1 +
- drivers/clk/qcom/clk-smd-rpm.c                | 32 +++++++++++++++++++
- 2 files changed, 33 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,rpmcc.txt b/Documentation/devicetree/bindings/clock/qcom,rpmcc.txt
-index b44a0622fb3a..5ac207d4b8ab 100644
---- a/Documentation/devicetree/bindings/clock/qcom,rpmcc.txt
-+++ b/Documentation/devicetree/bindings/clock/qcom,rpmcc.txt
-@@ -10,6 +10,7 @@ Required properties :
- - compatible : shall contain only one of the following. The generic
-                compatible "qcom,rpmcc" should be also included.
- 
-+			"qcom,rpmcc-mdm9607", "qcom,rpmcc"
- 			"qcom,rpmcc-msm8660", "qcom,rpmcc"
- 			"qcom,rpmcc-apq8060", "qcom,rpmcc"
- 			"qcom,rpmcc-msm8916", "qcom,rpmcc"
-diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-index 0e1dfa89489e..ceea50bae8f8 100644
---- a/drivers/clk/qcom/clk-smd-rpm.c
-+++ b/drivers/clk/qcom/clk-smd-rpm.c
-@@ -406,6 +406,37 @@ static const struct clk_ops clk_smd_rpm_branch_ops = {
- 	.unprepare	= clk_smd_rpm_unprepare,
- };
- 
-+/* mdm9607 */
-+DEFINE_CLK_SMD_RPM_BRANCH(mdm9607, xo_clk_src, xo_a_clk_src, QCOM_SMD_RPM_MISC_CLK, 0,
-+								19200000);
-+DEFINE_CLK_SMD_RPM(mdm9607, pcnoc_clk, pcnoc_a_clk, QCOM_SMD_RPM_BUS_CLK, 0);
-+DEFINE_CLK_SMD_RPM(mdm9607, bimc_clk, bimc_a_clk, QCOM_SMD_RPM_MEM_CLK, 0);
-+DEFINE_CLK_SMD_RPM(mdm9607, qpic_clk, qpic_a_clk, QCOM_SMD_RPM_QPIC_CLK, 0);
-+DEFINE_CLK_SMD_RPM_QDSS(mdm9607, qdss_clk, qdss_a_clk, QCOM_SMD_RPM_MISC_CLK, 1);
-+DEFINE_CLK_SMD_RPM_XO_BUFFER(mdm9607, bb_clk1, bb_clk1_a, 1);
-+DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(mdm9607, bb_clk1_pin, bb_clk1_a_pin, 1);
-+static struct clk_smd_rpm *mdm9607_clks[] = {
-+	[RPM_SMD_XO_CLK_SRC]	= &mdm9607_xo_clk_src,
-+	[RPM_SMD_XO_A_CLK_SRC]	= &mdm9607_xo_a_clk_src,
-+	[RPM_SMD_PCNOC_CLK]		= &mdm9607_pcnoc_clk,
-+	[RPM_SMD_PCNOC_A_CLK]		= &mdm9607_pcnoc_a_clk,
-+	[RPM_SMD_BIMC_CLK]		= &mdm9607_bimc_clk,
-+	[RPM_SMD_BIMC_A_CLK]		= &mdm9607_bimc_a_clk,
-+	[RPM_SMD_QPIC_CLK]		= &mdm9607_qpic_clk,
-+	[RPM_SMD_QPIC_CLK_A]		= &mdm9607_qpic_a_clk,
-+	[RPM_SMD_QDSS_CLK]		= &mdm9607_qdss_clk,
-+	[RPM_SMD_QDSS_A_CLK]		= &mdm9607_qdss_a_clk,
-+	[RPM_SMD_BB_CLK1]		= &mdm9607_bb_clk1,
-+	[RPM_SMD_BB_CLK1_A]		= &mdm9607_bb_clk1_a,
-+	[RPM_SMD_BB_CLK1_PIN]		= &mdm9607_bb_clk1_pin,
-+	[RPM_SMD_BB_CLK1_A_PIN]		= &mdm9607_bb_clk1_a_pin,
-+};
-+
-+static const struct rpm_smd_clk_desc rpm_clk_mdm9607 = {
-+	.clks = mdm9607_clks,
-+	.num_clks = ARRAY_SIZE(mdm9607_clks),
-+};
-+
- /* msm8916 */
- DEFINE_CLK_SMD_RPM(msm8916, pcnoc_clk, pcnoc_a_clk, QCOM_SMD_RPM_BUS_CLK, 0);
- DEFINE_CLK_SMD_RPM(msm8916, snoc_clk, snoc_a_clk, QCOM_SMD_RPM_BUS_CLK, 1);
-@@ -1060,6 +1091,7 @@ static const struct rpm_smd_clk_desc rpm_clk_sdm660 = {
- };
- 
- static const struct of_device_id rpm_smd_clk_match_table[] = {
-+	{ .compatible = "qcom,rpmcc-mdm9607", .data = &rpm_clk_mdm9607 },
- 	{ .compatible = "qcom,rpmcc-msm8916", .data = &rpm_clk_msm8916 },
- 	{ .compatible = "qcom,rpmcc-msm8936", .data = &rpm_clk_msm8936 },
- 	{ .compatible = "qcom,rpmcc-msm8974", .data = &rpm_clk_msm8974 },
--- 
-2.30.0
+On 22/12/2020 14:40, Weiyi Lu wrote:
+> This series is based on v5.10-rc1, MT8192 dts v6[1] and
+> MT8192 clock v6 series[2].
+> 
+> [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=373899
+> [2] https://patchwork.kernel.org/project/linux-mediatek/list/?series=405295
+> 
 
+[1] is already mainline. You could add this patch as a new one to [2]. But
+please try to improve the series, before sending just a new version with this
+patch added.
+
+Regards,
+Matthias
+
+> Weiyi Lu (2):
+>   arm64: dts: mediatek: Add mt8192 clock controllers
+>   arm64: dts: mediatek: Correct UART0 bus clock of MT8192
+> 
+>  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 165 ++++++++++++++++++++++-
+>  1 file changed, 164 insertions(+), 1 deletion(-)
+> 
