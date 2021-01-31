@@ -2,67 +2,67 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C332F309CB8
-	for <lists+linux-clk@lfdr.de>; Sun, 31 Jan 2021 15:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C10309D64
+	for <lists+linux-clk@lfdr.de>; Sun, 31 Jan 2021 16:24:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbhAaOP2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 31 Jan 2021 09:15:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49280 "EHLO
+        id S231867AbhAaOPZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 31 Jan 2021 09:15:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231944AbhAaN36 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 31 Jan 2021 08:29:58 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC88FC06178C;
-        Sun, 31 Jan 2021 05:27:51 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id i9so10903145wmq.1;
-        Sun, 31 Jan 2021 05:27:51 -0800 (PST)
+        with ESMTP id S231874AbhAaN2r (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 31 Jan 2021 08:28:47 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88DCC06178A
+        for <linux-clk@vger.kernel.org>; Sun, 31 Jan 2021 05:25:23 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id y187so10894765wmd.3
+        for <linux-clk@vger.kernel.org>; Sun, 31 Jan 2021 05:25:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=w0AjcOnxN+fVVGn+tV+gduZDAkpbNXFgkp5E/FuYeRA=;
-        b=V8jquRuFkG92B9NiAwvbKnipL0o12U9sc71/MrVsazR4kIQpND2V1ynYJUBUVT34rn
-         g6mu+VW/V+b2wfEzqe8iP0iH4Yb5M9HGHkol7uQltaD43phRWV3eX9QvgvFT7XgH6sqC
-         Ez3iCZFnXlIjCG4tOyVhUrXYEM5ufBR+w+etUo+IrqH+Lm4owWuyEUE/tcDZCGl2uY73
-         GIxDWbVLhhftxPsiaHxDxsz9mGKI9m0pSG9WHbi5osdiFHJ8JIPzPvQt90Ui7fjq8JfN
-         Zt6JsejLXEc1a76amPGTXXhB3cnA0loV5zYEBH1x+mkEI/Frkb4rziXBbs+pLxauu5Bw
-         Ep8w==
+        bh=uQW6zI3kIl4btIs4IkhNoP62juO8z7Dh2Bp1bXM6dNo=;
+        b=c1GaODdxNmpvlW856t5VMf73wiUd+a2QSX8K2Wwb72uMjJK5fzkE668Hp0Pdtbzm9D
+         QZPlSSMj7toEaFsIe6q4tIdqmKDpfK+p1HTB5KiDaczout4TOnA0c6ScSjY+X8zURnhZ
+         u42okppAvnXYXQx2ZqJhcFt/MupRWmTA2gsMWGacqiWiu3pNYB/UK5xl4OgfDPaeTrbd
+         WZa4G1EoiF4CDcmsDH/007oVEGtzgGoVKlB/0tvESzKYdrCVwcUGWiK6SgdGyrqktrgP
+         OWZzOM68YkpJTOCdhNh5H8giAvxImTOMhXtqvi+eQS+Z8K34Uo7/F2YBQsShDPA8JX1L
+         cb5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=w0AjcOnxN+fVVGn+tV+gduZDAkpbNXFgkp5E/FuYeRA=;
-        b=Ltl7P9NRGbazVF7i32Ob9tD5cPlw9oa7vlwdboSz8DgSpiuwJiyohFQuhMuUIPp/nP
-         Df+OozA08QNBV52Q+RGhth1Dcmz7BnL5YvOLBn60xu78KiOIldozS/aTeUMalHkDfQti
-         HzxLRCa0DZ6QaQ3CoaQP5+sSrZ03SeYMYEXgJ9O5n/BcNcKkFf4S4WZLbejR0PYXBFF5
-         bwj2TwaWdr0aZNKUv31sAFhb8zZT3Vw4fOXdlJPaEwwDRyxAlDDfJZBHqQF8i6OmDzXo
-         DLV1Vc5WLQ2JoM7D/TC8zgv89wiWksYddkymH7aQsbAybxvhxd5z/Gso1UT6mpM5Gfqb
-         qo1g==
-X-Gm-Message-State: AOAM532Rnlf1Rz5cH+L+GVxRvsoYRj5wKCpPlV9xlZ3Kmr3i2/4Oj49Z
-        ZuQ9u3ol50xoeu8shj6fPrk=
-X-Google-Smtp-Source: ABdhPJws8CH4DaeoGzSOwTNOe8P0bjHH0XBzbGAG8etRS+DruKxNIPlbIz5lZhPG5dZwQr1wpu1Uvw==
-X-Received: by 2002:a1c:2501:: with SMTP id l1mr11061166wml.41.1612099670275;
-        Sun, 31 Jan 2021 05:27:50 -0800 (PST)
+        bh=uQW6zI3kIl4btIs4IkhNoP62juO8z7Dh2Bp1bXM6dNo=;
+        b=dra6oSR+QYdn5qpqk6SCdUwo5mZqxuH+/JJTlm5xv+34Y0rYirWDAuJj47IyoWkXep
+         DyCNl0ZD+KcX4U9jzkvy3LcrR6yxtKmiL75H/gbu/J8/3P1oxIBVINHU/ceYYx+Jknya
+         QkkI7ayowt+hGC98fT+ZLRuy9Jex4QqUsIMASZzOh2gmGeJq8hlQXduXhXeachkxE++G
+         IxofNiS/uE8znoqVA2yt1OmqwIpzbugr4gsPsHHJq3WRQU78RGcEE8OQHfYxD+y2BDae
+         Ru13dHhSXe5KpMCayXWAXofWfvfYnGuAN7o1/Jl5MYjyP9xZKTE3z6B4WYce4EFuEZtY
+         rVuA==
+X-Gm-Message-State: AOAM5314jbCgqXcdXECQO21m4VoBlHPbLvYFklj19JK4AR1Xv5y0LkwF
+        WEewuazDsGsT80rQF/5QeZ4CzSCNmXBnRw==
+X-Google-Smtp-Source: ABdhPJxnLsv4VhLXKNJh1hR/+ox28D7tGWVevho3V4V2qY31AjlWOXpLahbvuRiqtRF/268pj72XXQ==
+X-Received: by 2002:a7b:ca4c:: with SMTP id m12mr11332151wml.115.1612099522713;
+        Sun, 31 Jan 2021 05:25:22 -0800 (PST)
 Received: from ziggy.stardust ([213.195.126.134])
-        by smtp.gmail.com with ESMTPSA id b11sm22538263wrp.60.2021.01.31.05.27.49
+        by smtp.gmail.com with ESMTPSA id d3sm25982908wrp.79.2021.01.31.05.25.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 31 Jan 2021 05:27:49 -0800 (PST)
-Subject: Re: [PATCH 0/2] Add MediaTek MT8192 clock provider device nodes
-To:     Weiyi Lu <weiyi.lu@mediatek.com>, Rob Herring <robh@kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-clk@vger.kernel.org, srv_heupstream@mediatek.com,
+        Sun, 31 Jan 2021 05:25:22 -0800 (PST)
+Subject: Re: [PATCH] clk: mediatek: Remove unused MT8192 mcupm clock
+To:     Tinghan Shen <tinghan.shen@mediatek.com>, drinkcat@chromium.org,
+        sboyd@kernel.org
+Cc:     linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
+        weiyi.lu@mediatek.com,
         Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <1608644414-17793-1-git-send-email-weiyi.lu@mediatek.com>
+References: <20201222053502.27872-1-tinghan.shen@mediatek.com>
 From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <4536e0a3-8e64-d2b0-df83-33705d10359a@gmail.com>
-Date:   Sun, 31 Jan 2021 14:27:48 +0100
+Message-ID: <09a1ff48-5341-52ff-715d-3a0d6a914e4c@gmail.com>
+Date:   Sun, 31 Jan 2021 14:25:21 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.1
 MIME-Version: 1.0
-In-Reply-To: <1608644414-17793-1-git-send-email-weiyi.lu@mediatek.com>
+In-Reply-To: <20201222053502.27872-1-tinghan.shen@mediatek.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -72,25 +72,59 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 
 
-On 22/12/2020 14:40, Weiyi Lu wrote:
-> This series is based on v5.10-rc1, MT8192 dts v6[1] and
-> MT8192 clock v6 series[2].
+On 22/12/2020 06:35, Tinghan Shen wrote:
+> From: "TingHan Shen" <tinghan.shen@mediatek.com>
 > 
-> [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=373899
-> [2] https://patchwork.kernel.org/project/linux-mediatek/list/?series=405295
+> Remove unused MT8192 mcupm clock
 > 
+> Signed-off-by: TingHan Shen <tinghan.shen@mediatek.com>
+> ---
+> This patch depends on series "Mediatek MT8192 clock support"[1].
+> 
+> [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=379955
 
-[1] is already mainline. You could add this patch as a new one to [2]. But
-please try to improve the series, before sending just a new version with this
-patch added.
+This series is not upstream, so it should be fixed in the very same series and
+not as a follow up patch. From what I see, this is alread done in v6.
 
-Regards,
+Thanks!
 Matthias
 
-> Weiyi Lu (2):
->   arm64: dts: mediatek: Add mt8192 clock controllers
->   arm64: dts: mediatek: Correct UART0 bus clock of MT8192
+> ---
+>  drivers/clk/mediatek/clk-mt8192.c | 9 ---------
+>  1 file changed, 9 deletions(-)
 > 
->  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 165 ++++++++++++++++++++++-
->  1 file changed, 164 insertions(+), 1 deletion(-)
+> diff --git a/drivers/clk/mediatek/clk-mt8192.c b/drivers/clk/mediatek/clk-mt8192.c
+> index 673dc60182f5..80df1903bd58 100644
+> --- a/drivers/clk/mediatek/clk-mt8192.c
+> +++ b/drivers/clk/mediatek/clk-mt8192.c
+> @@ -649,12 +649,6 @@ static const char * const aes_msdcfde_parents[] = {
+>  	"univpll_d6"
+>  };
+>  
+> -static const char * const mcupm_parents[] = {
+> -	"clk26m",
+> -	"mainpll_d6_d4",
+> -	"mainpll_d6_d2"
+> -};
+> -
+>  static const char * const sflash_parents[] = {
+>  	"clk26m",
+>  	"mainpll_d7_d8",
+> @@ -856,8 +850,6 @@ static const struct mtk_mux top_mtk_muxes[] = {
+>  	MUX_GATE_CLR_SET_UPD(CLK_TOP_AES_MSDCFDE_SEL, "aes_msdcfde_sel",
+>  		aes_msdcfde_parents, 0x100, 0x104, 0x108, 24, 3, 31, 0x00c, 1),
+>  	/* CLK_CFG_16 */
+> -	MUX_GATE_CLR_SET_UPD(CLK_TOP_MCUPM_SEL, "mcupm_sel",
+> -		mcupm_parents, 0x110, 0x114, 0x118, 0, 2, 7, 0x00c, 2),
+>  	MUX_GATE_CLR_SET_UPD(CLK_TOP_SFLASH_SEL, "sflash_sel",
+>  		sflash_parents, 0x110, 0x114, 0x118, 8, 2, 15, 0x00c, 3),
+>  };
+> @@ -983,7 +975,6 @@ static const struct mtk_gate infra_clks[] = {
+>  	GATE_INFRA0(CLK_INFRA_SCPSYS, "infra_scpsys", "scp_sel", 4),
+>  	GATE_INFRA0(CLK_INFRA_SEJ, "infra_sej", "axi_sel", 5),
+>  	GATE_INFRA0(CLK_INFRA_APXGPT, "infra_apxgpt", "axi_sel", 6),
+> -	GATE_INFRA0(CLK_INFRA_MCUPM, "infra_mcupm", "mcupm_sel", 7),
+>  	GATE_INFRA0(CLK_INFRA_GCE, "infra_gce", "axi_sel", 8),
+>  	GATE_INFRA0(CLK_INFRA_GCE2, "infra_gce2", "axi_sel", 9),
+>  	GATE_INFRA0(CLK_INFRA_THERM, "infra_therm", "axi_sel", 10),
 > 
