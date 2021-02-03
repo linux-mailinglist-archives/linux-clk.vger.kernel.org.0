@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9268330D93A
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Feb 2021 12:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F32930D93B
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Feb 2021 12:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233972AbhBCLyn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 3 Feb 2021 06:54:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
+        id S234292AbhBCLzB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 3 Feb 2021 06:55:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234245AbhBCLyn (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 3 Feb 2021 06:54:43 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00A6C061788
-        for <linux-clk@vger.kernel.org>; Wed,  3 Feb 2021 03:54:02 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id l12so4139821wmq.2
-        for <linux-clk@vger.kernel.org>; Wed, 03 Feb 2021 03:54:02 -0800 (PST)
+        with ESMTP id S234210AbhBCLzA (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 3 Feb 2021 06:55:00 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7ACDC06178B
+        for <linux-clk@vger.kernel.org>; Wed,  3 Feb 2021 03:54:04 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id c4so21180933wru.9
+        for <linux-clk@vger.kernel.org>; Wed, 03 Feb 2021 03:54:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=SIR8kxlA4Jty9/otffAphB5/jPhHJK1wsDSo+IREMHg=;
-        b=EnNbMPrtPs5H2UUx49Sg0I/uRydYGDdAHwFonstivpkERfuMVMx6bSclLV2BaYMeLW
-         AXfvBdzZ8KvvBIuA742bgQAPQxv8RwVDfkGHGcMbnnKMDERHqo1VNmsyPcq+uSN3k3dw
-         HQgDVo4QwDm6t2horfC8FUrxYc6olh7DiO7iQIuNMPba7UVpZpv8I89NCtmUifJfIEsE
-         Z2onMLVtsQBg1JKJpPj6zCJjDK7l6SHYk298mkb5bHu4balMF5DeeKrpHYrJ1yaAEucV
-         PkaAJ5gyEqft4I9ZsyOTk+SHJk/scn9QT7muA0vRNeAQf34sWB/1hId0gyRki21hH6XT
-         BiGQ==
+        bh=Jf1oKzKtxHAKQjrR3pGFqCZX0fsUjZbCoIA88THXekk=;
+        b=Shk0cV6btl9gr5pEyJZtgYebo+d5vN5RwINBxKhE7wmLymPrvjDAKRhnqQ6wHZybeb
+         +NrWJuMCuAGgcMLMRIhYk0ViYNLprGtVxyAvHS+PPbWJds5Ki2O7YVmqCSK4en/Vq7Xo
+         ZQkf2QRAbL8R2D9Dakvtbtx56cDg/Qx3dZFpB4mO85tEHe6DxcHDqJ/vUvv+Z5/awBLQ
+         LmHWx/zKMSHJSoI5aM4lZHOVJzpKRrtZfcgIeaiuCXvlqkEcY4/i2UIoZGJrc0bUFHSQ
+         FCmi4W7WZT/Ja+ZHhFmgiVXldusxX502U7YYl4CCqLy+53zSjPXtqXEaZhIJ0GjdJMbz
+         HesA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=SIR8kxlA4Jty9/otffAphB5/jPhHJK1wsDSo+IREMHg=;
-        b=bUpS9/Csustal6etXjccA4I9sLW/8DHpd5V/0Qb13BpOltKd4MiPGBdAfzFple9ap1
-         20ur876B+RMRSPAYQRpHPYTR9iYtzBIgwGQbEy8qQsyAIvXNA81YFDesXM0nl++rlLMm
-         pIqOvjmjhgSpIHaX1J5gYm0emw+JXbmrAG8PKSUBaRdmjYNi0XANP+88Qc4uPc9QJvMb
-         CbB2x5/faoXfN8mGNk0ny0LJj3Cg7ra46qaAKrmQyWAaRrc3v/gikB5afcWIl4FEzyGe
-         DUL4CXyEfHugQQ7PHPQa1QFAT0A0y/l29n2Nr4fdw1UMQ7mijoKMcdPyYlO+5DhbX9UK
-         fCNA==
-X-Gm-Message-State: AOAM533uoMNfReNBbqGlgJmKie6su6tfK3+JmToW2c+xyUUvRvNf2+zN
-        aVn9bRApT8I/Na18+CkoI+oPy/mNlLFylQ==
-X-Google-Smtp-Source: ABdhPJzbdHUE/lkH5CariWVk3SbLNS+6oY4OoCIeUhTdL8TIk0I7aM9knVC2EmRo1KV8VM7cBJqKTA==
-X-Received: by 2002:a1c:ab57:: with SMTP id u84mr2545153wme.115.1612353241240;
-        Wed, 03 Feb 2021 03:54:01 -0800 (PST)
+        bh=Jf1oKzKtxHAKQjrR3pGFqCZX0fsUjZbCoIA88THXekk=;
+        b=oyqU8TbPsUHYzufido4BHnR8eGIdgmCugZ12UXb4Ashc/OMnWUfLVrU/wTs32YMvDV
+         iTVNeMzcZg8rJl4i+jUezZ4HTaEILrG8WuJVL9gR5AeqYQHZ4BVu4rhDe88I/czUyLCD
+         TpCnK9robxsA42cYasVeF6pPkuumg/VQpYWfegt04Bkmn2HNVRviDdyqvwwXKT/JuJnP
+         LoijqZsT0Kw0sMV6xhqndi3OxcXH04ZbQczj4GWux2awMNd28seZgkkYPTn4kSsIq1Y7
+         +Zdf5f5Up1k3Kmc78eiGIbxizl0Sb+hUTKKYoP6MuBE52l5OBYjQZStOQHuRyiYeUN6j
+         Yxtw==
+X-Gm-Message-State: AOAM530QNX8DZdR9n34C2xdfbjqKk32GMCnHkonO3EnUvqi9FQLXGlaK
+        BF0lCaHT7f7Y8y1F2bg+sm59DZPc+2bMeQ==
+X-Google-Smtp-Source: ABdhPJyHSSkRWTMSPrSItAmTMJjB8yCJKvK6Do48JrGtA7VjTEVlfcZWmuMEM1BlJHeyIcJO/1Qnng==
+X-Received: by 2002:adf:f8c1:: with SMTP id f1mr3110968wrq.76.1612353243293;
+        Wed, 03 Feb 2021 03:54:03 -0800 (PST)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id 35sm3687362wrn.42.2021.02.03.03.54.00
+        by smtp.gmail.com with ESMTPSA id 35sm3687362wrn.42.2021.02.03.03.54.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Feb 2021 03:54:00 -0800 (PST)
+        Wed, 03 Feb 2021 03:54:02 -0800 (PST)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         mturquette@baylibre.com, sboyd@kernel.org,
@@ -54,9 +54,9 @@ To:     linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
 Cc:     bryan.odonoghue@linaro.org, jonathan@marek.ca,
         dikshita@codeaurora.org, dmitry.baryshkov@linaro.org,
         stanimir.varbanov@linaro.org
-Subject: [PATCH 1/4] dt-bindings: clock: Add missing SM8250 videoc clock indices
-Date:   Wed,  3 Feb 2021 11:54:53 +0000
-Message-Id: <20210203115456.1072975-2-bryan.odonoghue@linaro.org>
+Subject: [PATCH 2/4] clk: qcom: videocc: Add sm8250 VIDEO_CC_MVS0_DIV_CLK_SRC
+Date:   Wed,  3 Feb 2021 11:54:54 +0000
+Message-Id: <20210203115456.1072975-3-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210203115456.1072975-1-bryan.odonoghue@linaro.org>
 References: <20210203115456.1072975-1-bryan.odonoghue@linaro.org>
@@ -66,28 +66,49 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Two indexes need to be added to videocc-sm8250.h for venus to function
-properly. Rather than adding the missing indexes when used we add them
-separately here to keep checkpatch.pl happy.
+This patch adds the missing video_cc_mvs0_div_clk_src entry to
+videocc-sm8250 replicating in upstream the explicit entry for this clock in
+downstream.
 
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- include/dt-bindings/clock/qcom,videocc-sm8250.h | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/clk/qcom/videocc-sm8250.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/include/dt-bindings/clock/qcom,videocc-sm8250.h b/include/dt-bindings/clock/qcom,videocc-sm8250.h
-index 2b2b3867af25..8d321ac3b1fa 100644
---- a/include/dt-bindings/clock/qcom,videocc-sm8250.h
-+++ b/include/dt-bindings/clock/qcom,videocc-sm8250.h
-@@ -16,6 +16,8 @@
- #define VIDEO_CC_MVS1C_DIV2_DIV_CLK_SRC	6
- #define VIDEO_CC_PLL0			7
- #define VIDEO_CC_PLL1			8
-+#define VIDEO_CC_MVS0_DIV_CLK_SRC	9
-+#define VIDEO_CC_MVS0_CLK		10
+diff --git a/drivers/clk/qcom/videocc-sm8250.c b/drivers/clk/qcom/videocc-sm8250.c
+index 2797c61f5938..cc84963ced40 100644
+--- a/drivers/clk/qcom/videocc-sm8250.c
++++ b/drivers/clk/qcom/videocc-sm8250.c
+@@ -169,6 +169,21 @@ static struct clk_regmap_div video_cc_mvs0c_div2_div_clk_src = {
+ 	},
+ };
  
- /* VIDEO_CC resets */
- #define VIDEO_CC_CVP_INTERFACE_BCR	0
++static struct clk_regmap_div video_cc_mvs0_div_clk_src = {
++	.reg = 0xd54,
++	.shift = 0,
++	.width = 2,
++	.clkr.hw.init = &(struct clk_init_data) {
++		.name = "video_cc_mvs0_div_clk_src",
++		.parent_data = &(const struct clk_parent_data){
++			.hw = &video_cc_mvs0_clk_src.clkr.hw,
++		},
++		.num_parents = 1,
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_regmap_div_ro_ops,
++	},
++};
++
+ static struct clk_regmap_div video_cc_mvs1c_div2_div_clk_src = {
+ 	.reg = 0xcf4,
+ 	.shift = 0,
+@@ -276,6 +291,7 @@ static struct gdsc mvs1_gdsc = {
+ 
+ static struct clk_regmap *video_cc_sm8250_clocks[] = {
+ 	[VIDEO_CC_MVS0_CLK_SRC] = &video_cc_mvs0_clk_src.clkr,
++	[VIDEO_CC_MVS0_DIV_CLK_SRC] = &video_cc_mvs0_div_clk_src.clkr,
+ 	[VIDEO_CC_MVS0C_CLK] = &video_cc_mvs0c_clk.clkr,
+ 	[VIDEO_CC_MVS0C_DIV2_DIV_CLK_SRC] = &video_cc_mvs0c_div2_div_clk_src.clkr,
+ 	[VIDEO_CC_MVS1_CLK_SRC] = &video_cc_mvs1_clk_src.clkr,
 -- 
 2.29.2
 
