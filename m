@@ -2,88 +2,94 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1407730F6FD
-	for <lists+linux-clk@lfdr.de>; Thu,  4 Feb 2021 17:00:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743EE30F7D5
+	for <lists+linux-clk@lfdr.de>; Thu,  4 Feb 2021 17:30:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237670AbhBDP6s (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 4 Feb 2021 10:58:48 -0500
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:40629 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237661AbhBDP6l (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 4 Feb 2021 10:58:41 -0500
-Received: by mail-oi1-f176.google.com with SMTP id k142so4173563oib.7;
-        Thu, 04 Feb 2021 07:58:26 -0800 (PST)
+        id S237980AbhBDQ1T (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 4 Feb 2021 11:27:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236811AbhBDPBr (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 4 Feb 2021 10:01:47 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93409C061797
+        for <linux-clk@vger.kernel.org>; Thu,  4 Feb 2021 07:00:07 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id l12so3406144wmq.2
+        for <linux-clk@vger.kernel.org>; Thu, 04 Feb 2021 07:00:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=2V2m5rFMMubWGXq76HAlBgLUJ0bO/2ibl98uXVHvBnk=;
+        b=Vr6z69kNemvb4ISPZBfKLFUvl7Qwz9RTvkne0fGh90hcug60aw+RJQuYrgq9ZovLXn
+         1kFySmYTQ0+lRYNFTX7UIKMOrjVFJKNHye498apgZBy7sloGZAHkkX36IiUxQ2szXOIY
+         QQrfxwI1cdOBne1unSBK4yk02VwFGPUIDL7nu3Yg17lgu2WPIc/MNnVnsJFGuz9wNeT4
+         PDSXbxo9y7TLzZbrJ4m+qTzkrf8UCdbvk/49z75iLn6u8MZp/EqiKEvC7rmB5J7V/57q
+         CM1LiL67on67xfLp3BSdLHuZNMv9ETOO+T1dp/5ykfQi/W/RSceGwH2xtT7ONRhIs0Wm
+         N3eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1JoS7ZOVE9Ml5mvNzoRFgSFxVIiKASQvqvy7j1NPt3U=;
-        b=nhJIsssXK15CqsjxpbwmXr1f3u85DTfzZvbQk1YqZuuI1tD8nhHdWeMprjH4nZvf08
-         VqYxFD7m/2ZF3ehF5mVIlCsNJklxf4ezsmSx0PN3VHmNRsIyWR2Ifut+N1h7EU176w3o
-         xqKSHmmryoJNY6g1MWZUWkv9rs2oZF5PtlCtiOHMT5lEyazz/nD0JomiAL/wIuf1JknR
-         Ef0fdhz33cKyDVK+GaL/VUxYeRaDRbRRfY90UJ2B4CtbEpl8J8KxBW1UScY3r3xeAfQH
-         jA+TjeFotmwTWJgCXxZUSuJun1DD2sp9iSc3K89G4laINUNT/A5t9Gtw0D2cJpDoySdY
-         LAww==
-X-Gm-Message-State: AOAM533PBrQISRPBe3A3CFO/ZREB2LhIea2M37KQW/eG7frrmhrMigAH
-        6HEUOSIlpw7yz7OP4kNMhA==
-X-Google-Smtp-Source: ABdhPJwsBZ5X+etCKN8Abu4ufC5JowP7grlS3OIUacD2jRxRHv/O619GgCksaoDNro8ZLT90PYGmBA==
-X-Received: by 2002:aca:c310:: with SMTP id t16mr29076oif.151.1612454280855;
-        Thu, 04 Feb 2021 07:58:00 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id w140sm319379oia.32.2021.02.04.07.57.59
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=2V2m5rFMMubWGXq76HAlBgLUJ0bO/2ibl98uXVHvBnk=;
+        b=K6+XEvfULeJN2E9puq1FLAgQxhHFnpjJw41MopX0mgQTG/zJlnQRrDLkInrr6oDqge
+         dG1w5g8qcpSYCbmBV5YKnFbJslSFL9D3EV407OpPtKsOX6H/CafJ4snm9aabtZwOhwU4
+         xlTGOF6A2OITGiWFyIlP+6oZAoFxyFGioc2twKoHhbGrB46pLN0EDL9W4yqyxZ+ClRMy
+         DMiXRPI7tewzOSTH1POiJnwKJDgs5rdV19mDZiBNTCBW1uF2PIBSTc4YKRznYrEFTobP
+         D77hSCzs+wfkAKiHK3GmD4wM60RrI348ytthA4y65s5Y12jp48Aj/Nqjqj39ORLgakWN
+         u2ww==
+X-Gm-Message-State: AOAM5314BUZ4U71XRJVx1VeLi7erkrTwgUApJ/gsK5OAQ8n7yNbmVXE9
+        yBpeX2jX9XHn85pzo3ckIi8Mm6ubs2H1UQ==
+X-Google-Smtp-Source: ABdhPJySjxV1EgJQJ74M32YnITdnmrBITFlqYSxQ32+AwO33LuKPe8/3Im3vp2sh77jSlmWetIvHUw==
+X-Received: by 2002:a1c:a957:: with SMTP id s84mr7753547wme.166.1612450805830;
+        Thu, 04 Feb 2021 07:00:05 -0800 (PST)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id c11sm8312664wrs.28.2021.02.04.07.00.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Feb 2021 07:58:00 -0800 (PST)
-Received: (nullmailer pid 519407 invoked by uid 1000);
-        Thu, 04 Feb 2021 15:57:59 -0000
-Date:   Thu, 4 Feb 2021 09:57:59 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
-        Adam Ford <aford173@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v3] dt-bindings: clk: versaclock5: Miscellaneous fixes
- and improvements:
-Message-ID: <20210204155759.GA519221@robh.at.kernel.org>
-References: <20210126163955.1933893-1-geert+renesas@glider.be>
+        Thu, 04 Feb 2021 07:00:05 -0800 (PST)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org, agross@kernel.org
+Cc:     bryan.odonoghue@linaro.org, jonathan@marek.ca,
+        dikshita@codeaurora.org, dmitry.baryshkov@linaro.org,
+        stanimir.varbanov@linaro.org
+Subject: [PATCH v2 1/4] dt-bindings: clock: Add missing SM8250 videoc clock indices
+Date:   Thu,  4 Feb 2021 15:01:17 +0000
+Message-Id: <20210204150120.1521959-2-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210204150120.1521959-1-bryan.odonoghue@linaro.org>
+References: <20210204150120.1521959-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210126163955.1933893-1-geert+renesas@glider.be>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, 26 Jan 2021 17:39:55 +0100, Geert Uytterhoeven wrote:
->   - Remove unneeded reference for "idt,slew-percent", as vendor specific
->     properties having a standard unit suffix don't need a type,
->   - Add missing "additionalProperties: false" for subnodes, to catch
->     typos in properties,
->   - Fix property names in example.
-> 
-> Fixes: 45c940184b501fc6 ("dt-bindings: clk: versaclock5: convert to yaml")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> This depends on "[PATCH dt-schema 0/2] dt-schema: Add percentage"
-> https://lore.kernel.org/r/20210126162756.1932692-1-geert+renesas@glider.be
-> 
-> v3:
->   - Drop references for "idt,voltage-microvolt" and "idt,slew-percent",
-> 
-> v2:
->   - Settle on "idt,voltage-microvolt", cfr. commit 4b003f5fcadfa2d0
->     ('clk: vc5: Use "idt,voltage-microvolt" instead of
->     "idt,voltage-microvolts"'),
->   - Drop reference to clock.yaml, which is already applied
->     unconditionally,
->   - Drop removal of allOf around if condition, as it is unnecessary
->     churn.
-> ---
->  .../devicetree/bindings/clock/idt,versaclock5.yaml       | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
+Two indexes need to be added to videocc-sm8250.h for venus to function
+properly. Rather than adding the missing indexes when used we add them
+separately here to keep checkpatch.pl happy.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Tested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+ include/dt-bindings/clock/qcom,videocc-sm8250.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/dt-bindings/clock/qcom,videocc-sm8250.h b/include/dt-bindings/clock/qcom,videocc-sm8250.h
+index 2b2b3867af25..8d321ac3b1fa 100644
+--- a/include/dt-bindings/clock/qcom,videocc-sm8250.h
++++ b/include/dt-bindings/clock/qcom,videocc-sm8250.h
+@@ -16,6 +16,8 @@
+ #define VIDEO_CC_MVS1C_DIV2_DIV_CLK_SRC	6
+ #define VIDEO_CC_PLL0			7
+ #define VIDEO_CC_PLL1			8
++#define VIDEO_CC_MVS0_DIV_CLK_SRC	9
++#define VIDEO_CC_MVS0_CLK		10
+ 
+ /* VIDEO_CC resets */
+ #define VIDEO_CC_CVP_INTERFACE_BCR	0
+-- 
+2.29.2
+
