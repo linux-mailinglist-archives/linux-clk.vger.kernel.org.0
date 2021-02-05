@@ -2,53 +2,64 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5419A31137C
-	for <lists+linux-clk@lfdr.de>; Fri,  5 Feb 2021 22:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3103114E8
+	for <lists+linux-clk@lfdr.de>; Fri,  5 Feb 2021 23:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232952AbhBEV1S convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-clk@lfdr.de>); Fri, 5 Feb 2021 16:27:18 -0500
-Received: from mail-lf1-f54.google.com ([209.85.167.54]:35453 "EHLO
-        mail-lf1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233029AbhBEPBb (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 5 Feb 2021 10:01:31 -0500
-Received: by mail-lf1-f54.google.com with SMTP id u25so10780449lfc.2
-        for <linux-clk@vger.kernel.org>; Fri, 05 Feb 2021 08:40:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=A18d3pB/vKIfoZwd9hT2XkXbAHUUomY9AFW5el5Iv+w=;
-        b=a0BoIw9Y/7NHgNCy4Oz3Q9/D10OeoYlLLvtCgSZPRwRMuXrBgLQAxQJRz7tPKUzpVJ
-         mIgMknVi4JVeEuYzd5QkXqZPfiin3UIFMIhjFOSvahEjxJfhhaAEWon7LNRpOU8Gtabs
-         HRBDxjoALRSKprd5j8GLkBsUSbAcf1OIWVReVe8+kqwyWNVTmFBeu4Jfr8XMJoRsm8Wx
-         AD9c6+KYAjHbgtvC01ejZTiA7lQd6qabkjFJa2AMZjtzAsrR3hyETdEW8HKu/CIUfD0u
-         Cr/4UFfyOjVleZNTBHo/+Kfq/D0lV65+wn9GobYzPbaMjGRfGOd/UEDlZFkL0akUh9q4
-         8vmg==
-X-Gm-Message-State: AOAM531EyQ9cqwezbQB5vRhwkCePo+vfMjxb6WkrEvfE9o6qwcPEd02v
-        aPNaqFp1hjlMWOZWxrLSRbvGOahOeJcmZg==
-X-Google-Smtp-Source: ABdhPJyJHuWobwgoL1MVjyLwpreKdIlLFs3kDud9Hy1JbAj2dVTgtBspGivH7qAPt9N2dG2YBGTC+A==
-X-Received: by 2002:a2e:3317:: with SMTP id d23mr3247853ljc.199.1612542515444;
-        Fri, 05 Feb 2021 08:28:35 -0800 (PST)
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com. [209.85.208.179])
-        by smtp.gmail.com with ESMTPSA id o8sm1036010lft.213.2021.02.05.08.28.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Feb 2021 08:28:35 -0800 (PST)
-Received: by mail-lj1-f179.google.com with SMTP id a25so8497193ljn.0;
-        Fri, 05 Feb 2021 08:28:34 -0800 (PST)
-X-Received: by 2002:a2e:9d04:: with SMTP id t4mr3147625lji.56.1612542514337;
- Fri, 05 Feb 2021 08:28:34 -0800 (PST)
-MIME-Version: 1.0
-References: <20210204184710.1880895-1-jernej.skrabec@siol.net>
- <CAGb2v64qww4pFwMVrY5UpHOQtM43Q0VPx=3PwJGbB5Oh0qnx=w@mail.gmail.com>
- <20210205160130.ccp7jfcaa5hgyekb@gilmour> <2156838.FvJGUiYDvf@kista>
-In-Reply-To: <2156838.FvJGUiYDvf@kista>
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Sat, 6 Feb 2021 00:28:23 +0800
-X-Gmail-Original-Message-ID: <CAGb2v65cZ7DXzcPzt8ER1ucwhbhTOc0-mCCye3eK-ZgP3a6ivA@mail.gmail.com>
-Message-ID: <CAGb2v65cZ7DXzcPzt8ER1ucwhbhTOc0-mCCye3eK-ZgP3a6ivA@mail.gmail.com>
-Subject: Re: Re: [PATCH 2/5] drm/sun4i: tcon: set sync polarity for tcon1 channel
-To:     =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@siol.net>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
+        id S232133AbhBEWSE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 5 Feb 2021 17:18:04 -0500
+Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:56141 "EHLO
+        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232708AbhBEOeB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 5 Feb 2021 09:34:01 -0500
+X-Greylist: delayed 595 seconds by postgrey-1.27 at vger.kernel.org; Fri, 05 Feb 2021 09:34:01 EST
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id CA236A62;
+        Fri,  5 Feb 2021 11:01:35 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 05 Feb 2021 11:01:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:content-transfer-encoding:in-reply-to; s=fm2; bh=Z
+        Ug4YBs2NZzkbzAyFNlphluvR52IfC1jIWmo0WKohOw=; b=nxRBtTKEPua4sw3Z8
+        I0u/zm1He1XiJfi2ef2lobVAa2QN6TgPTXwIYOg20BQHcix0353FjZlSEYd8MsTQ
+        /iMk/ZOHCsGgBc0SHiIzrherfhIqwAwYo3rml5oMY66SgWEfSnYSZqarq0w0gunN
+        PhOyW+dQ0P/ViGhWpGfw34cKymNsCpdZQoy1iRTNCJlcD5SyCqt6uo+czNjnxNB+
+        ikUA5vd2ErUwsGqyleyuqynKoJOZNWGuYbJJcynWP/ER9ifWYq4RfcStecbrzApF
+        m3pmFZ6HOWgbDPD40qrRqtQpIEbNLUXUNCB28Frl9SwIH5ASMy0YffKPqtDadVoe
+        9HSlQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; bh=ZUg4YBs2NZzkbzAyFNlphluvR52IfC1jIWmo0WKoh
+        Ow=; b=hRplnt8x9ng0QnsOvO3i9NBNgMtWLVSZe60hMQH0bSWl0L+JVAN/QDvwT
+        lmaMsbuEOqOYGd/0yIHIQPR6ICh0LLQrS/U+KhnrgRk5J8Iexnv7XsBNLpcm5MbJ
+        rCke763Yu3tyZLGrRLH+xIavxaXOWl2Jg6xwRWqWJtL8kFqxD95c4LfQrHohdsvW
+        p3lwjBE/+yNLwVu5HNYXFcZtf279iKGR1nrf2dLdI16n2VJepaiQFexELUMIukI3
+        hTIg7oS2ZC8xjsFIoLv6yyDTihP38gJpS7BUR6GuHvq7QwOVXmvxx5fCeYwpw7vl
+        Bl2O6/JJ5olR8CY/tEH8nfMzw710A==
+X-ME-Sender: <xms:22sdYH6uVesoFeifE_6Eim4_m8mI1wJQHMNhWcFuU9UujeO0fs8h7w>
+    <xme:22sdYM0A3rY-jZ89sLUxMJv7mFvqrt_XMp7bInrQNQ7bXeCTRyvJEHHw7-tcQi1wX
+    rD47nzU1NvDRYuN5BA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrgeeigdejtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepgfejtedtjefggfffvdetuedthedtheegheeuteekfeeghfdtteejkeeludeg
+    vddunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:22sdYLV6X3XqZNzrMwJ2n4Hy0dSUqRdjoh64JvXReh8gYEOnnw5dXg>
+    <xmx:22sdYP7JbJikZS5zxnmcJbqM_T7xUVyS_dw46CZ5EvDC_4XtWN0_WA>
+    <xmx:22sdYKI-8yxGdsM6Sc9unBBUGB2DpORZJw9RS2R5szP48uOZ2Y50rQ>
+    <xmx:32sdYBnFqP1GOh1T62GmxtqopTP3B251EHdToE5EUEUmlkBEbQk6rXL-23o>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 9105624005D;
+        Fri,  5 Feb 2021 11:01:31 -0500 (EST)
+Date:   Fri, 5 Feb 2021 17:01:30 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Chen-Yu Tsai <wens@csie.org>
+Cc:     Jernej Skrabec <jernej.skrabec@siol.net>,
         Mike Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         David Airlie <airlied@linux.ie>,
@@ -59,74 +70,69 @@ Cc:     Maxime Ripard <maxime@cerno.tech>,
         dri-devel <dri-devel@lists.freedesktop.org>,
         linux-sunxi <linux-sunxi@googlegroups.com>,
         Andre Heider <a.heider@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Subject: Re: [PATCH 2/5] drm/sun4i: tcon: set sync polarity for tcon1 channel
+Message-ID: <20210205160130.ccp7jfcaa5hgyekb@gilmour>
+References: <20210204184710.1880895-1-jernej.skrabec@siol.net>
+ <20210204184710.1880895-3-jernej.skrabec@siol.net>
+ <CAGb2v64qww4pFwMVrY5UpHOQtM43Q0VPx=3PwJGbB5Oh0qnx=w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAGb2v64qww4pFwMVrY5UpHOQtM43Q0VPx=3PwJGbB5Oh0qnx=w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sat, Feb 6, 2021 at 12:21 AM Jernej Škrabec <jernej.skrabec@siol.net> wrote:
->
-> Dne petek, 05. februar 2021 ob 17:01:30 CET je Maxime Ripard napisal(a):
-> > On Fri, Feb 05, 2021 at 11:21:22AM +0800, Chen-Yu Tsai wrote:
-> > > On Fri, Feb 5, 2021 at 2:48 AM Jernej Skrabec <jernej.skrabec@siol.net>
-> wrote:
-> > > >
-> > > > Channel 1 has polarity bits for vsync and hsync signals but driver never
-> > > > sets them. It turns out that with pre-HDMI2 controllers seemingly there
-> > > > is no issue if polarity is not set. However, with HDMI2 controllers
-> > > > (H6) there often comes to de-synchronization due to phase shift. This
-> > > > causes flickering screen. It's safe to assume that similar issues might
-> > > > happen also with pre-HDMI2 controllers.
-> > > >
-> > > > Solve issue with setting vsync and hsync polarity. Note that display
-> > > > stacks with tcon top have polarity bits actually in tcon0 polarity
-> > > > register.
-> > > >
-> > > > Fixes: 9026e0d122ac ("drm: Add Allwinner A10 Display Engine support")
-> > > > Tested-by: Andre Heider <a.heider@gmail.com>
-> > > > Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
-> > > > ---
-> > > >  drivers/gpu/drm/sun4i/sun4i_tcon.c | 24 ++++++++++++++++++++++++
-> > > >  drivers/gpu/drm/sun4i/sun4i_tcon.h |  5 +++++
-> > > >  2 files changed, 29 insertions(+)
-> > > >
-> > > > diff --git a/drivers/gpu/drm/sun4i/sun4i_tcon.c b/drivers/gpu/drm/sun4i/
-> sun4i_tcon.c
-> > > > index 6b9af4c08cd6..0d132dae58c0 100644
-> > > > --- a/drivers/gpu/drm/sun4i/sun4i_tcon.c
-> > > > +++ b/drivers/gpu/drm/sun4i/sun4i_tcon.c
-> > > > @@ -672,6 +672,29 @@ static void sun4i_tcon1_mode_set(struct sun4i_tcon
-> *tcon,
-> > > >                      SUN4I_TCON1_BASIC5_V_SYNC(vsync) |
-> > > >                      SUN4I_TCON1_BASIC5_H_SYNC(hsync));
-> > > >
-> > > > +       /* Setup the polarity of sync signals */
-> > > > +       if (tcon->quirks->polarity_in_ch0) {
-> > > > +               val = 0;
-> > > > +
-> > > > +               if (mode->flags & DRM_MODE_FLAG_PHSYNC)
-> > > > +                       val |= SUN4I_TCON0_IO_POL_HSYNC_POSITIVE;
-> > > > +
-> > > > +               if (mode->flags & DRM_MODE_FLAG_PVSYNC)
-> > > > +                       val |= SUN4I_TCON0_IO_POL_VSYNC_POSITIVE;
-> > > > +
-> > > > +               regmap_write(tcon->regs, SUN4I_TCON0_IO_POL_REG, val);
-> > > > +       } else {
-> > > > +               val = SUN4I_TCON1_IO_POL_UNKNOWN;
-> > >
-> > > I think a comment for the origin of this is warranted.
+On Fri, Feb 05, 2021 at 11:21:22AM +0800, Chen-Yu Tsai wrote:
+> On Fri, Feb 5, 2021 at 2:48 AM Jernej Skrabec <jernej.skrabec@siol.net> w=
+rote:
 > >
-> > If it's anything like TCON0, it's the pixel clock polarity
->
-> Hard to say, DW HDMI controller has "data enable" polarity along hsync and
-> vsync. It could be either or none of those.
->
-> What should I write in comment? BSP drivers and documentation use only generic
-> names like io2_inv.
+> > Channel 1 has polarity bits for vsync and hsync signals but driver never
+> > sets them. It turns out that with pre-HDMI2 controllers seemingly there
+> > is no issue if polarity is not set. However, with HDMI2 controllers
+> > (H6) there often comes to de-synchronization due to phase shift. This
+> > causes flickering screen. It's safe to assume that similar issues might
+> > happen also with pre-HDMI2 controllers.
+> >
+> > Solve issue with setting vsync and hsync polarity. Note that display
+> > stacks with tcon top have polarity bits actually in tcon0 polarity
+> > register.
+> >
+> > Fixes: 9026e0d122ac ("drm: Add Allwinner A10 Display Engine support")
+> > Tested-by: Andre Heider <a.heider@gmail.com>
+> > Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
+> > ---
+> >  drivers/gpu/drm/sun4i/sun4i_tcon.c | 24 ++++++++++++++++++++++++
+> >  drivers/gpu/drm/sun4i/sun4i_tcon.h |  5 +++++
+> >  2 files changed, 29 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/sun4i/sun4i_tcon.c b/drivers/gpu/drm/sun4i=
+/sun4i_tcon.c
+> > index 6b9af4c08cd6..0d132dae58c0 100644
+> > --- a/drivers/gpu/drm/sun4i/sun4i_tcon.c
+> > +++ b/drivers/gpu/drm/sun4i/sun4i_tcon.c
+> > @@ -672,6 +672,29 @@ static void sun4i_tcon1_mode_set(struct sun4i_tcon=
+ *tcon,
+> >                      SUN4I_TCON1_BASIC5_V_SYNC(vsync) |
+> >                      SUN4I_TCON1_BASIC5_H_SYNC(hsync));
+> >
+> > +       /* Setup the polarity of sync signals */
+> > +       if (tcon->quirks->polarity_in_ch0) {
+> > +               val =3D 0;
+> > +
+> > +               if (mode->flags & DRM_MODE_FLAG_PHSYNC)
+> > +                       val |=3D SUN4I_TCON0_IO_POL_HSYNC_POSITIVE;
+> > +
+> > +               if (mode->flags & DRM_MODE_FLAG_PVSYNC)
+> > +                       val |=3D SUN4I_TCON0_IO_POL_VSYNC_POSITIVE;
+> > +
+> > +               regmap_write(tcon->regs, SUN4I_TCON0_IO_POL_REG, val);
+> > +       } else {
+> > +               val =3D SUN4I_TCON1_IO_POL_UNKNOWN;
+>=20
+> I think a comment for the origin of this is warranted.
 
-Just say that we don't know exactly what it is, but it is required for things
-to work properly? Would be interesting to know what happens if you don't set
-this bit, but do set VSYNC/HSYNC polarity properly.
+If it's anything like TCON0, it's the pixel clock polarity
 
-ChenYu
+Maxime
