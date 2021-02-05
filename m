@@ -2,57 +2,56 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84261311844
-	for <lists+linux-clk@lfdr.de>; Sat,  6 Feb 2021 03:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0F4311881
+	for <lists+linux-clk@lfdr.de>; Sat,  6 Feb 2021 03:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbhBFCco (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 5 Feb 2021 21:32:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
+        id S230448AbhBFCjX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 5 Feb 2021 21:39:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbhBFCcP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 5 Feb 2021 21:32:15 -0500
+        with ESMTP id S230497AbhBFCey (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 5 Feb 2021 21:34:54 -0500
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD8EC0698DD
-        for <linux-clk@vger.kernel.org>; Fri,  5 Feb 2021 14:26:52 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id m7so8664868ybm.19
-        for <linux-clk@vger.kernel.org>; Fri, 05 Feb 2021 14:26:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E5CC0698E5
+        for <linux-clk@vger.kernel.org>; Fri,  5 Feb 2021 14:26:54 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id w4so8772753ybc.7
+        for <linux-clk@vger.kernel.org>; Fri, 05 Feb 2021 14:26:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=223PDDzeAXN7fiB0Z3sv31/CUo0CMPx1p1AufcopYWI=;
-        b=SFHQmMRc/ic1nmrT5IMiYstkL++tDL7Z3c9ojJSjDDxJdd2i0nznkXSFR68OUU+aVL
-         37l+IB6klV569hlqPafHkvF6+7WsET3whuds9yrB7AV+RdCxsQ77OXj4J7Tcyq8/Ykby
-         AlApFXR5yrG/7Vz11J14XoDvvGtfu1xCPL8V4LNO83ZHxI6bzavvye1rrEa6QHHFK9ZC
-         VbK5aLF05CCF+bWVcucqMPqSUnnHjKES2+MRdskFBHbYTLhsN1Fzt8tWmeiWWfnkvi6G
-         ubCkpqgDZw/sb8byBLZrzDfglYOud2eHQ2Bdkq3sgX+3NHRqCEOzx+TOG8IfoQk25pne
-         myDA==
+        bh=j8xLJ/gRsabqXmVqApH6UU1AJY7QICocc5XvPOoh2CA=;
+        b=E5sFvJO7MoqTQ5HU1iZRDkvKf3YEJnMxgLBzB4Bdzzu+OwTihKotepF9+vecFbKNIx
+         RMScWAE2zE8rfvaCnxQasMRx1b2r+VjvXf9v4q+HNHmXZS+zJmKBYlJ1jOnNKPkYLUUx
+         +9C9RV4z0aszLyrKr2OQQUAT3XhAqGUElzBIGIsskZIGV69KYaqaW83ucTaO/doqcRq5
+         aA1hFJJYjJVvodQlIzs4Yf6qBGi+RWhj71EWMUCnJT+YB8Jg9U54RCqfkCTP8s/4Q2lH
+         nfjbItiLvc4Ce0s3du8UwLa5Sd+7cG0N/EYOX2N9Kz9ci0pHOQ3JMNDAeaGfizIIj8Tt
+         OyuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=223PDDzeAXN7fiB0Z3sv31/CUo0CMPx1p1AufcopYWI=;
-        b=A0EnNlVTiSkl7H9VUEta3qUPvAepFvYwvm88M7ZVrSYK/BVLTBItp0eLpZuBAkA4RG
-         QdGuPuHoEq39+iP5uOJMNoKztBeEf8JP+r3cYcS8JS4FuWHvKE2WU4xnKY+tw4wc4bhS
-         oCXyiE2se99bVdnZzxDMLwwBEs3SPl5V1Ocm/UPwrxWVZVYtd716+YH3XIezpARFVy05
-         E3fnVjRgYX57ZdEB9AxNSiIDmz0b8Cn10CaweURSwYekDPcU//ebHjWAH38Z3Vwey41V
-         OICWfjDcu1iGC225zS6M2dT6pl1bqqHJyCjsIxsxFLj69CrvdJtOWmeHp0gXL4lr+5IC
-         CTrg==
-X-Gm-Message-State: AOAM5318Hn6W55KfwJDrkNMP1HOD/EEatRQH7+8ikHgJnikNJrPHEMUJ
-        4CkbwTOBO7g6x1IE2BaVqdsiV7y4KDUQJ88=
-X-Google-Smtp-Source: ABdhPJxrL9cH3mLaTtg3wJ/fW0QIFeUS4+4EDQLIPatw4HQvuGDNDATg7OIEzUZWu1cx19SOt5U8lpPfcWDatIE=
+        bh=j8xLJ/gRsabqXmVqApH6UU1AJY7QICocc5XvPOoh2CA=;
+        b=mRmr1uaPwzNmg5ZGDSh1TxMNTxYEof1vOf/DiljmQURHCl1KLfZo6aqxAkd5tdGhWI
+         0IIb74LszDK5466gKas9kZoQowai9iLiw8uQ0XkVfI4g8VvO9cS5OutmkivAW9UZ6gb2
+         iI3Tr8pGaWLnevBPpa3F7/jv7N+Mvwyk9MpmrC4vsEGSgNlnih4YU1z5iuNNEiGCnIDq
+         S6AlazePaEvkND+6hUBbcIR942Lgap/RESK78JpxE2J+Y6Mzo23Q14dXS+Y/qqxLfyes
+         o8Y8ZguHXTwsvCMVSTOxsHhsZdAuPZoJjqPHOS6YZmUCgPz14gTTcZ96BuXjqxAPjLSD
+         ylxw==
+X-Gm-Message-State: AOAM5318gAFM6Yh9egpMcndM+/FCu/StMJ7cQBn6CyDr7z5q3NEWCBJP
+        1Af+hl+FNa4m8HCyFzcBDUTWTDBlSimyCeo=
+X-Google-Smtp-Source: ABdhPJwaxJzPZ4XSeGkT3P5EprKNXkjzOOR8qEj+Bd02rhMYgGuOOcL7rRwb/dvXftOqDNpM24CwbGcGHu5s6VY=
 Sender: "saravanak via sendgmr" <saravanak@saravanak.san.corp.google.com>
 X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:6d36:b798:55d7:f5c5])
- (user=saravanak job=sendgmr) by 2002:a25:2693:: with SMTP id
- m141mr9430134ybm.104.1612564011451; Fri, 05 Feb 2021 14:26:51 -0800 (PST)
-Date:   Fri,  5 Feb 2021 14:26:37 -0800
+ (user=saravanak job=sendgmr) by 2002:a25:d648:: with SMTP id
+ n69mr8876885ybg.462.1612564014028; Fri, 05 Feb 2021 14:26:54 -0800 (PST)
+Date:   Fri,  5 Feb 2021 14:26:38 -0800
 In-Reply-To: <20210205222644.2357303-1-saravanak@google.com>
-Message-Id: <20210205222644.2357303-2-saravanak@google.com>
+Message-Id: <20210205222644.2357303-3-saravanak@google.com>
 Mime-Version: 1.0
 References: <20210205222644.2357303-1-saravanak@google.com>
 X-Mailer: git-send-email 2.30.0.478.g8a0d178c01-goog
-Subject: [PATCH v4 1/8] driver core: fw_devlink: Detect supplier devices that
- will never be added
+Subject: [PATCH v4 2/8] of: property: Don't add links to absent suppliers
 From:   Saravana Kannan <saravanak@google.com>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -79,100 +78,30 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-During the initial parsing of firmware by fw_devlink, fw_devlink might
-infer that some supplier firmware nodes would get populated as devices.
-But the inference is not always correct. This patch tries to logically
-detect and fix such mistakes as boot progresses or more devices probe.
-
-fw_devlink makes a fundamental assumption that once a device binds to a
-driver, it will populate (i.e: add as struct devices) all the child
-firmware nodes that could be populated as devices (if they aren't
-populated already).
-
-So, whenever a device probes, we check all its child firmware nodes. If
-a child firmware node has a corresponding device populated, we don't
-modify the child node or its descendants. However, if a child firmware
-node has not been populated as a device, we delete all the fwnode links
-where the child node or its descendants are suppliers. This ensures that
-no other device is blocked on a firmware node that will never be
-populated as a device. We also mark such fwnodes as NOT_DEVICE, so that
-no new fwnode links are created with these nodes as suppliers.
+If driver core marks a firmware node as not a device, don't add fwnode
+links where it's a supplier.
 
 Fixes: e590474768f1 ("driver core: Set fw_devlink=on by default")
 Signed-off-by: Saravana Kannan <saravanak@google.com>
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 ---
- drivers/base/core.c    | 31 ++++++++++++++++++++++++++++---
- include/linux/fwnode.h |  2 ++
- 2 files changed, 30 insertions(+), 3 deletions(-)
+ drivers/of/property.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 484a942884ba..c95b1daabac7 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -148,6 +148,21 @@ void fwnode_links_purge(struct fwnode_handle *fwnode)
- 	fwnode_links_purge_consumers(fwnode);
- }
- 
-+static void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode)
-+{
-+	struct fwnode_handle *child;
-+
-+	/* Don't purge consumer links of an added child */
-+	if (fwnode->dev)
-+		return;
-+
-+	fwnode->flags |= FWNODE_FLAG_NOT_DEVICE;
-+	fwnode_links_purge_consumers(fwnode);
-+
-+	fwnode_for_each_available_child_node(fwnode, child)
-+		fw_devlink_purge_absent_suppliers(child);
-+}
-+
- #ifdef CONFIG_SRCU
- static DEFINE_MUTEX(device_links_lock);
- DEFINE_STATIC_SRCU(device_links_srcu);
-@@ -1154,12 +1169,22 @@ void device_links_driver_bound(struct device *dev)
- 	LIST_HEAD(sync_list);
- 
- 	/*
--	 * If a device probes successfully, it's expected to have created all
-+	 * If a device binds successfully, it's expected to have created all
- 	 * the device links it needs to or make new device links as it needs
--	 * them. So, it no longer needs to wait on any suppliers.
-+	 * them. So, fw_devlink no longer needs to create device links to any
-+	 * of the device's suppliers.
-+	 *
-+	 * Also, if a child firmware node of this bound device is not added as
-+	 * a device by now, assume it is never going to be added and make sure
-+	 * other devices don't defer probe indefinitely by waiting for such a
-+	 * child device.
+diff --git a/drivers/of/property.c b/drivers/of/property.c
+index 6287c6d60bb7..53d163c8d39b 100644
+--- a/drivers/of/property.c
++++ b/drivers/of/property.c
+@@ -1103,7 +1103,9 @@ static int of_link_to_phandle(struct device_node *con_np,
+ 	 * created for them.
  	 */
--	if (dev->fwnode && dev->fwnode->dev == dev)
-+	if (dev->fwnode && dev->fwnode->dev == dev) {
-+		struct fwnode_handle *child;
- 		fwnode_links_purge_suppliers(dev->fwnode);
-+		fwnode_for_each_available_child_node(dev->fwnode, child)
-+			fw_devlink_purge_absent_suppliers(child);
-+	}
- 	device_remove_file(dev, &dev_attr_waiting_for_supplier);
- 
- 	device_links_write_lock();
-diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
-index fde4ad97564c..21082f11473f 100644
---- a/include/linux/fwnode.h
-+++ b/include/linux/fwnode.h
-@@ -19,8 +19,10 @@ struct device;
-  * fwnode link flags
-  *
-  * LINKS_ADDED: The fwnode has already be parsed to add fwnode links.
-+ * NOT_DEVICE: The fwnode will never be populated as a struct device.
-  */
- #define FWNODE_FLAG_LINKS_ADDED		BIT(0)
-+#define FWNODE_FLAG_NOT_DEVICE		BIT(1)
- 
- struct fwnode_handle {
- 	struct fwnode_handle *secondary;
+ 	sup_dev = get_dev_from_fwnode(&sup_np->fwnode);
+-	if (!sup_dev && of_node_check_flag(sup_np, OF_POPULATED)) {
++	if (!sup_dev &&
++	    (of_node_check_flag(sup_np, OF_POPULATED) ||
++	     sup_np->fwnode.flags & FWNODE_FLAG_NOT_DEVICE)) {
+ 		pr_debug("Not linking %pOFP to %pOFP - No struct device\n",
+ 			 con_np, sup_np);
+ 		of_node_put(sup_np);
 -- 
 2.30.0.478.g8a0d178c01-goog
 
