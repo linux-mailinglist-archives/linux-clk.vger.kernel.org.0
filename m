@@ -2,64 +2,107 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E85311232
-	for <lists+linux-clk@lfdr.de>; Fri,  5 Feb 2021 21:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6421311285
+	for <lists+linux-clk@lfdr.de>; Fri,  5 Feb 2021 21:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233604AbhBEShd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 5 Feb 2021 13:37:33 -0500
-Received: from [20.39.40.203] ([20.39.40.203]:54986 "EHLO optinix.in"
-        rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org with ESMTP
-        id S233003AbhBEPJb (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 5 Feb 2021 10:09:31 -0500
-dkim-signature: v=1; a=rsa-sha256; d=digitalsol.in; s=dkim;
-        c=relaxed/relaxed; q=dns/txt; h=From:Reply-To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=wK2neTcOXNiSQ+RBxrnFed+mRrGUU/ndLGEgvo8IMCc=;
-        b=UQEHlnVg5XQbvsB12U1Ol3bhaQI9w8E6XPoWFxWLZmrTEAjZvoQaEbrphRRSyBGIIWdRriBN1NgjJnIHHuwrDk7Jiepk7hcecgKlubZ8Cbf+eyLm3How+vKdkYfuxbESucRjBUGhM3uNAIEl+djc5YuHgus55Al0uLGG/w84VCgbq4C5haAYakmS1vYlSgFchzN2F++luNM29v8DFhI75uaDxJSrLZjsc+U9sEzNpAaOCR9pw2OgdpmsaX
-        RpEWSooLH5k7s+lJH9RwsRzupCIBYaSMrEgafQL+30fpkHM9MFjkLmthx4Z1XqGeg54bjdS4mLhUgJrpa/zvXopT6v+g==
-Received: from User (Unknown [52.231.31.5])
-        by optinix.in with ESMTP
-        ; Mon, 1 Feb 2021 08:49:51 +0000
-Message-ID: <7494048F-E4B5-4167-8C98-9021CA321467@optinix.in>
-Reply-To: <ms.reem@yandex.com>
-From:   "Ms. Reem" <support@digitalsol.in>
-Subject: Re:read
-Date:   Mon, 1 Feb 2021 08:49:50 -0000
+        id S229693AbhBESuD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 5 Feb 2021 13:50:03 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45588 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233086AbhBEPEk (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 5 Feb 2021 10:04:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7681664DA8;
+        Fri,  5 Feb 2021 16:22:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1612542152;
+        bh=2FOXgrVvrtQQwxzm4Wfix8cnVUh7IkUdTTu1De+bjtU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KfFDSzcVzjJbQYJ7meo6+XLjz46z89rptPO7r0cjN61WrYRyEN3XrG1sLfkaa43Ud
+         ExG/AI741QCRdc2A3z0dnPK65OJTg2MFRTlWFMlkLM7X9XtAOfKjQzqhv0OqXyG8pr
+         tgMWAaKQ8D5iEAfl3J+c1jPNT7ZfVcyr1oRM+yq0=
+Date:   Fri, 5 Feb 2021 17:22:29 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     kishon@ti.com, mturquette@baylibre.com, sboyd@kernel.org,
+        JC Kuo <jckuo@nvidia.com>, robh@kernel.org,
+        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, nkristam@nvidia.com,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v7 00/14] Tegra XHCI controller ELPG support
+Message-ID: <YB1wxazg/QpRSJz6@kroah.com>
+References: <20210120073414.69208-1-jckuo@nvidia.com>
+ <YB1vGTt0ufzsYBgo@ulmo>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YB1vGTt0ufzsYBgo@ulmo>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello,
+On Fri, Feb 05, 2021 at 05:15:21PM +0100, Thierry Reding wrote:
+> On Wed, Jan 20, 2021 at 03:34:00PM +0800, JC Kuo wrote:
+> > Tegra XHCI controler can be placed in ELPG (Engine Level PowerGated)
+> > state for power saving when all of the connected USB devices are in
+> > suspended state. This patch series includes clk, phy and pmc changes
+> > that are required for properly place controller in ELPG and bring
+> > controller out of ELPG.
+> > 
+> > JC Kuo (14):
+> >   clk: tegra: Add PLLE HW power sequencer control
+> >   clk: tegra: Don't enable PLLE HW sequencer at init
+> >   phy: tegra: xusb: Move usb3 port init for Tegra210
+> >   phy: tegra: xusb: Rearrange UPHY init on Tegra210
+> >   phy: tegra: xusb: Add Tegra210 lane_iddq operation
+> >   phy: tegra: xusb: Add sleepwalk and suspend/resume
+> >   soc/tegra: pmc: Provide USB sleepwalk register map
+> >   arm64: tegra210: XUSB PADCTL add "nvidia,pmc" prop
+> >   dt-bindings: phy: tegra-xusb: Add nvidia,pmc prop
+> >   phy: tegra: xusb: Add wake/sleepwalk for Tegra210
+> >   phy: tegra: xusb: Tegra210 host mode VBUS control
+> >   phy: tegra: xusb: Add wake/sleepwalk for Tegra186
+> >   usb: host: xhci-tegra: Unlink power domain devices
+> >   xhci: tegra: Enable ELPG for runtime/system PM
+> > 
+> >  .../phy/nvidia,tegra124-xusb-padctl.txt       |    1 +
+> >  arch/arm64/boot/dts/nvidia/tegra210.dtsi      |    1 +
+> >  drivers/clk/tegra/clk-pll.c                   |   12 -
+> >  drivers/clk/tegra/clk-tegra210.c              |   53 +-
+> >  drivers/phy/tegra/xusb-tegra186.c             |  558 ++++-
+> >  drivers/phy/tegra/xusb-tegra210.c             | 1889 +++++++++++++----
+> >  drivers/phy/tegra/xusb.c                      |   92 +-
+> >  drivers/phy/tegra/xusb.h                      |   22 +-
+> >  drivers/soc/tegra/pmc.c                       |   94 +
+> >  drivers/usb/host/xhci-tegra.c                 |  613 ++++--
+> >  include/linux/clk/tegra.h                     |    4 +-
+> >  include/linux/phy/tegra/xusb.h                |   10 +-
+> >  12 files changed, 2784 insertions(+), 565 deletions(-)
+> > 
+> > v5 "phy: tegra: xusb: tegra210: Do not reset UPHY PLL" is moved
+> > into v6 "phy: tegra: xusb: Rearrange UPHY init on Tegra210"
+> 
+> Mike, Stephen,
+> 
+> could you guys take a look at the two clk patches here and give an
+> Acked-by? There's build-time dependencies throughout the series, so it'd
+> be good if they can all go through either the PHY or USB trees.
+> 
+> Kishon, Greg,
+> 
+> any comments on these patches? Unfortunately, the USB patches in this
+> series have a build-time dependency on the PHY patches, so this should
+> all go through one tree. Since this all culminates in the XHCI driver,
+> merging this through the USB tree might be best, provided that Kishon
+> provides his Acked-by on the PHY patches.
+> 
+> Alternatively, I can create a set of branches with the correct
+> dependencies and send out pull requests for the three subsystems if
+> that's preferrable.
 
-My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
-and Petroleum" also "Minister of State for International Cooperation"
-in UAE. I write to you on behalf of my other "three (3) colleagues"
-who has approved me to solicit for your "partnership in claiming of
-{us$47=Million}" from a Financial Home in Cambodia on their behalf and
-for our "Mutual Benefits".
+I have no objection for the usb patches to go through your tree as they
+are hardware-specific.
 
-The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
-deal with Cambodian/Vietnam Government within 2013/2014, however, we
-don't want our government to know about the fund. If this proposal
-interests you, let me know, by sending me an email and I will send to
-you detailed information on how this business would be successfully
-transacted. Be informed that nobody knows about the secret of this
-fund except us, and we know how to carry out the entire transaction.
-So I am compelled to ask, that you will stand on our behalf and
-receive this fund into any account that is solely controlled by you.
+thanks,
 
-We will compensate you with 15% of the total amount involved as
-gratification for being our partner in this transaction. Reply to:
-ms.reem@yandex.com
-
-Regards,
-Ms. Reem.
-
+greg k-h
