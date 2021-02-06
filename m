@@ -2,56 +2,69 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C72311A97
-	for <lists+linux-clk@lfdr.de>; Sat,  6 Feb 2021 05:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66EFB311E18
+	for <lists+linux-clk@lfdr.de>; Sat,  6 Feb 2021 15:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbhBFD75 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 5 Feb 2021 22:59:57 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:47342 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231876AbhBFD61 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 5 Feb 2021 22:58:27 -0500
-Received: from p508fdf7d.dip0.t-ipconnect.de ([80.143.223.125] helo=phil.fritz.box)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1l8B78-00052x-Dn; Sat, 06 Feb 2021 01:06:14 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-clk@vger.kernel.org, robh+dt@kernel.org, sboyd@kernel.org,
-        Heiko Stuebner <heiko.stuebner@theobroma-systems.com>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mturquette@baylibre.com
-Subject: Re: [PATCH 1/5] clk: rockchip: add clock ids for PCLK_DPHYRX and PCLK_DPHYTX0 on rk3368
-Date:   Sat,  6 Feb 2021 01:06:12 +0100
-Message-Id: <161256995504.1897877.6561871784286411999.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210205110502.1850669-1-heiko@sntech.de>
-References: <20210205110502.1850669-1-heiko@sntech.de>
+        id S229808AbhBFO4b (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 6 Feb 2021 09:56:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230098AbhBFO41 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 6 Feb 2021 09:56:27 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A23C061793
+        for <linux-clk@vger.kernel.org>; Sat,  6 Feb 2021 06:55:27 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id a9so17669544ejr.2
+        for <linux-clk@vger.kernel.org>; Sat, 06 Feb 2021 06:55:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
+        b=pH4HPozQqV9KFhmJi4ejr7uhXwGKo1eiMrsOL5wzQtBzaz1Dc23ClTW3PwppguNuBX
+         8zRtYXMbiy4s0UDHIqxgK5weemlNbs5zp9N4EAmdC8m5pX7TBVW92FEAWNGvIm/gDj72
+         +PXcQYkBHm+ogJVyUnABCqkpUGWYxKmIQINw5bNQOaeIfHEwFh7V9b67bGVyWjRUIewh
+         nV1Gae/ZFfyNZ8Zkg9JTgJQZ5pLgknhH/1G5Xf6Hmy0KQJHLGShL+3WiOf6BIbkF+srw
+         O7NZigDzwVmXZeZLgdonz3IxHpP7rkH47qFM4eZvEzJ/RbPDNzPSBUQySG2eCYIgOVoq
+         QIqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=sY4fgq/DSyThalwU7QX+pWYKs/8sGH7ZznMUn5qQ1EY=;
+        b=H9uU1HFYByEPQw4seFWGHKuTvR+N+1Xn8up+9WpiF9hCVezB08Wsd6RhVXoVUXllCj
+         uVcVC2F/kG4EUxG5/5rkTspit8AAGayJp4RihCejcb2DWke5cadrKSnULGRcXDLkywdm
+         H3ujf6h03fPxJG4GlPBEEgio9R71zeiCw65AIsnYegekoglUSbUa/WcJ+xkDk4pibblM
+         02fNBpButjE+UulJp79H0zE9WAuSafO0tv7NA4vrmy1wcJn0GmoSffEhbKYckt5LmNOs
+         GIPgNUnQMD0X3Df5rMulOFhgGmM3YrEeph/pFY2mbQY/ZcyUwhqG8mrEPqJT/tyikrPJ
+         o2LQ==
+X-Gm-Message-State: AOAM531kZr+J1ebF7345+eVV/1z0FkSynrOJRqz64g0LBuS798MFL4l5
+        PQrex6PSQ7VBStIKibD/fbTpUrbJySw1hGU6iz4=
+X-Google-Smtp-Source: ABdhPJwHU6txPxzzBy8IWp7Ku3rDq1bEw0HUp8r3leXrGTAHG2vbKmnpDthJEiUtX7neXJxaVqL8r5g7DwG6Kdcef3k=
+X-Received: by 2002:a17:906:5659:: with SMTP id v25mr9403850ejr.8.1612623326665;
+ Sat, 06 Feb 2021 06:55:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a17:906:25d0:0:0:0:0 with HTTP; Sat, 6 Feb 2021 06:55:26
+ -0800 (PST)
+Reply-To: lawyer.nba@gmail.com
+From:   Barrister Daven Bango <stephennbada9@gmail.com>
+Date:   Sat, 6 Feb 2021 15:55:26 +0100
+Message-ID: <CAGSHw-DWoS9pVOTJHrH-gLzXAO-xFO0WbCFx1uMqoCPnh_wpZQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, 5 Feb 2021 12:04:58 +0100, Heiko Stuebner wrote:
-> Needed by the mipi dphys.
-> The naming follows the clock names in the manual.
+--=20
+Korisnik fonda =C4=8Destitanja, Va=C5=A1a sredstva za naknadu od 850.000,00
+ameri=C4=8Dkih dolara odobrila je Me=C4=91unarodna monetarna organizacija (=
+MMF)
+u suradnji s (FBI) nakon mnogo istraga. =C4=8Cekamo da se obratimo za
+dodatne informacije
 
-Applied, thanks!
-
-[1/5] clk: rockchip: add clock ids for PCLK_DPHYRX and PCLK_DPHYTX0 on rk3368
-      commit: 0be10b6f68b217876665031f643e571a5661fc9c
-[2/5] clk: rockchip: use clock ids for PCLK_DPHYRX and PCLK_DPHYTX0 on rk3368
-      commit: fabb841c5b16721298cfe649b569a4fa40af28a6
-[3/5] clk: rockchip: add clock id for SCLK_VIP_OUT on rk3368
-      commit: 686458aa752362f86d881d7fa4576c9f175b2d9b
-[4/5] clk: rockchip: use clock id for SCLK_VIP_OUT on rk3368
-      commit: ed2243e0038b8afdd7726d117da34ee4577e11ad
-[5/5] clk: rockchip: fix DPHY gate locations on rk3368
-      commit: 4bc23b3c83c9a3fc0a7dd8f2f11f451aa92c85cd
-
-Best regards,
--- 
-Heiko Stuebner <heiko@sntech.de>
+Advokat: Daven Bango
+Telefon: +22891667276
+(URED MMF-a LOME TOGO)
