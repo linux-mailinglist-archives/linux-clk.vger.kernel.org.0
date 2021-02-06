@@ -2,146 +2,144 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C57311A0F
-	for <lists+linux-clk@lfdr.de>; Sat,  6 Feb 2021 04:29:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8577B311981
+	for <lists+linux-clk@lfdr.de>; Sat,  6 Feb 2021 04:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbhBFD3A (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 5 Feb 2021 22:29:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43872 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232518AbhBFDV4 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 5 Feb 2021 22:21:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6B28764F9D;
-        Sat,  6 Feb 2021 01:25:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612574755;
-        bh=/OO95ptKWwAfPKnln79sj7p50JlIFunorcpU1Za6txs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pGgQmtxfWDXFXdKv2lSHbQ8Hffg6ZF3khCddSyZagHNacjnJaiAhbckTqDOXSlJJw
-         smcT7P+JGZSL/MjDF4Cr8Rs6HfFWATUw/sTBGhUPRRRpjDs3haoC8wG9ic1njvO/iK
-         rA1Cyzbi+mBzO9SFOe5WFmN5JDg7RgiYb53u4NFEFWBc78kD1AKiH1wec60VpnljyX
-         5yAvAzFuWeaQAaZ5McL28B12bYT5mLA0y/C30Ug7IchPcpGuxmaACHs+AUk24p6dwI
-         S3tKhxddOqP8c9w+NOQxMKcPulyOZs43cf5XSh7rqi9xUyn0TiyVcGfr8ZD7n7HFTi
-         xaZJjX6p2Okig==
-Date:   Sat, 6 Feb 2021 02:25:51 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Joel Stanley <joel@jms.id.au>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Vincent Cheng <vincent.cheng.xh@renesas.com>,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        iommu@lists.linux-foundation.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: Fix undocumented compatible strings in
- examples
-Message-ID: <20210206012551.GB3847@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>, Andrew Jeffery <andrew@aj.id.au>,
-        Joel Stanley <joel@jms.id.au>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Vincent Cheng <vincent.cheng.xh@renesas.com>,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        iommu@lists.linux-foundation.org, linux-watchdog@vger.kernel.org
-References: <20210202205544.24812-1-robh@kernel.org>
+        id S231633AbhBFDIe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 5 Feb 2021 22:08:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231166AbhBFDAD (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 5 Feb 2021 22:00:03 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445E6C061BC3
+        for <linux-clk@vger.kernel.org>; Fri,  5 Feb 2021 18:45:58 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id m76so8737778ybf.0
+        for <linux-clk@vger.kernel.org>; Fri, 05 Feb 2021 18:45:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oeZT1Ar4/x7iejk6TCKZJw9nmldyPb7Q9CQuMN8dXaw=;
+        b=AFhS6ATY/Y9NYutPrE19KVJ8QEJaF2PGTuOgrz9Gy3OYD8T3nfEM6tCPc4DQDe+cmT
+         gGbLVifQsQtzUiF3X4dGA4SNwVI3LH7qwxl1vZhz3YR9Cp0qiGY/3jeh+rr5qm3r6IY7
+         7hxHxK00mdEOHcIzgnBPiTqPV6L0vljvrfDvcDix7+8XPR81Lvup9F+WfsCimBB6dz24
+         J+btxbs8E6J54C44KCAuZnUKGV86hdX+MuPzB7x2eyZrfnvisXKRD/0QNEtfhqDIpVGA
+         Umt5XZHpqcC8bLOtBUQYJkjuYUyDhcO+rJXg9bilCjQKjRIdxzmsD4JoNfGKr5VvY1w/
+         v/NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oeZT1Ar4/x7iejk6TCKZJw9nmldyPb7Q9CQuMN8dXaw=;
+        b=qR7yR7tyfUjoC+5pxhaKX9W7TP9d2RtFiymD/dI7sG0iAMJu0yUR+F2FhHjlcfzs9c
+         yDZFsmGiDA60650ef2enEPY+xtV+TexinpA9enpVjnHIo1YTiyhIKbpIrWJJwE+OH0jp
+         F+jTXDkKhDchBaOcMMuEeh6AfCSwYMWSbsEG7ES5At8oftAkLWsMTQLsOAZixCF2yHOv
+         xctwpJoWPpjRKMdHOR2OkXuYJeVDkX+VDKFbohfzEVimJFvm47815myHxbbpWBnWpLsv
+         YBz5to95crRZmL84VcAXh5Tvny+ADhmyQA4Wn3ggJpvomDnoMLHK6uG67p/kmL/Hntkn
+         kTgA==
+X-Gm-Message-State: AOAM5335syL9H1IwBIUoyb3lSWt5N1kFeXcraFqDGHR/qCbPWplUlJ/N
+        U6NaLEoq9coWEHO/SfMUATL/tWaMOdpvqQJyVaK+IA==
+X-Google-Smtp-Source: ABdhPJy11Z5i7gStQAF/aV2cWsIZWC4t0l/3YBj3YIJdn7KvpZm4nPNRQyA7a/+WGcaogoso5SndN/JmnOvk57r9ybc=
+X-Received: by 2002:a25:af0b:: with SMTP id a11mr4263580ybh.228.1612579557241;
+ Fri, 05 Feb 2021 18:45:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZfOjI3PrQbgiZnxM"
-Content-Disposition: inline
-In-Reply-To: <20210202205544.24812-1-robh@kernel.org>
+References: <20210205222644.2357303-1-saravanak@google.com>
+In-Reply-To: <20210205222644.2357303-1-saravanak@google.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Fri, 5 Feb 2021 18:45:21 -0800
+Message-ID: <CAGETcx_f7BEbkOFtw_6_4fMcgGOWkujbqXhDbDcNstOxgvcPfA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/8] Make fw_devlink=on more forgiving
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Len Brown <lenb@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On Fri, Feb 5, 2021 at 2:26 PM Saravana Kannan <saravanak@google.com> wrote:
+>
+> There are a lot of devices/drivers where they never have a struct device
+> created for them or the driver initializes the hardware without ever
+> binding to the struct device.
+>
+> This series is intended to avoid any boot regressions due to such
+> devices/drivers when fw_devlink=on and also address the handling of
+> optional suppliers.
+>
+> Patch 1 and 2 addresses the issue of firmware nodes that look like
+> they'll have struct devices created for them, but will never actually
+> have struct devices added for them. For example, DT nodes with a
+> compatible property that don't have devices added for them.
+>
+> Patch 3 and 4 allow for handling optional DT bindings.
+>
+> Patch 5 sets up a generic API to handle drivers that never bind with
+> their devices.
+>
+> Patch 6 through 8 update different frameworks to use the new API.
+>
+> Thanks,
+> Saravana
+>
 
---ZfOjI3PrQbgiZnxM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Forgot to add version history:
 
-On Tue, Feb 02, 2021 at 02:55:42PM -0600, Rob Herring wrote:
-> Running 'dt-validate -m' will flag any compatible strings missing a schem=
-a.
-> Fix all the errors found in DT binding examples. Most of these are just
-> typos.
->=20
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Daniel Palmer <daniel@thingy.jp>
-> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> Cc: Avi Fishman <avifishman70@gmail.com>
-> Cc: Tomer Maimon <tmaimon77@gmail.com>
-> Cc: Tali Perry <tali.perry1@gmail.com>
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Andrew Jeffery <andrew@aj.id.au>
-> Cc: Joel Stanley <joel@jms.id.au>
-> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> Cc: Vincent Cheng <vincent.cheng.xh@renesas.com>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-crypto@vger.kernel.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-i2c@vger.kernel.org
-> Cc: iommu@lists.linux-foundation.org
-> Cc: linux-watchdog@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+v1 -> v2:
+Patch 1: Added a flag to fwnodes that aren't devices.
+Patch 3: New patch to ise the flag set in patch 1 to not create bad links.
 
-Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
+v2 -> v3:
+- Patch 1: Added Rafael's Ack
+- New patches 3 and 4
 
+v3 -> v4:
+- No changes to patches 1-4.
+- New patches 5-8.
 
---ZfOjI3PrQbgiZnxM
-Content-Type: application/pgp-signature; name="signature.asc"
+-Saravana
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmAd8B4ACgkQFA3kzBSg
-KbbdSRAAtkrymAGNS5LGn321fm8TqaN3fodZIhNLfeeWULr/eImrk2RJCYzunjC6
-Nb8wJvEywJuB1E4YzkiFTgWxKVeLmFnUFodUSlufnefhzGl4Q+2udtIlUr3CqBaM
-K7b7RS452nISpyzJHTBfdWr4VwEUOHqmrYXG3jLExytI6Enrun7qqY6hu7WwXUIT
-tZ7CUUP30kMy3K1ahkItDx0SGBRf5hWrG+KAzSj9cyZKHFBaIv3WKV/bUMC6OC+Y
-h83LhJP40pBTFZWlk+jwchtr4ZWNF6GG9vuIcXWI35Y9tYUDsX0fWnRj3LSMdp8u
-QMK0sZFo4oIejPXH61NxPWZ6IHVcy21veXay4ZXApxNjsuwyitBb7/aRrJDEoJsr
-MlS6IMR7MXnujHlxwoJ+3sSIvPhRyeWgTC1pmp4qL2LwImDHrooS3pJANxAl7Ws6
-+RKt3Mkf0w5k5r2HiukAHI7Lywkwb74sit3LU3D6awsZicpRT9c/tNlGnTNsl6Hu
-+Mu9JP+//QSe+eRhOsXCnwMl8eEutYWvPadijYg87IbPxat3uDuiQz5E7S5dMTSR
-UerC7itsB9z9Hpb8zDdQAboNPdw04c+kfWn53Mu7cxhvxhzYyf+jZsu8tMIG60Bb
-LheRj95DOtU9bnIaQ8NdiBy3k9LESOW9ULADetyHoQZLM5Qb7Zk=
-=d/1y
------END PGP SIGNATURE-----
-
---ZfOjI3PrQbgiZnxM--
+> Saravana Kannan (8):
+>   driver core: fw_devlink: Detect supplier devices that will never be
+>     added
+>   of: property: Don't add links to absent suppliers
+>   driver core: Add fw_devlink.strict kernel param
+>   of: property: Add fw_devlink support for optional properties
+>   driver core: fw_devlink: Handle suppliers that don't use driver core
+>   irqdomain: Mark fwnodes when their irqdomain is added/removed
+>   PM: domains: Mark fwnodes when their powerdomain is added/removed
+>   clk: Mark fwnodes when their clock provider is added/removed
+>
+>  .../admin-guide/kernel-parameters.txt         |  5 ++
+>  drivers/base/core.c                           | 58 ++++++++++++++++++-
+>  drivers/base/power/domain.c                   |  2 +
+>  drivers/clk/clk.c                             |  3 +
+>  drivers/of/property.c                         | 16 +++--
+>  include/linux/fwnode.h                        | 20 ++++++-
+>  kernel/irq/irqdomain.c                        |  2 +
+>  7 files changed, 98 insertions(+), 8 deletions(-)
+>
+> --
+> 2.30.0.478.g8a0d178c01-goog
+>
