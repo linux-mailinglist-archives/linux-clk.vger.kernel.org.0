@@ -2,78 +2,75 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E41143155A6
-	for <lists+linux-clk@lfdr.de>; Tue,  9 Feb 2021 19:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3702315641
+	for <lists+linux-clk@lfdr.de>; Tue,  9 Feb 2021 19:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233319AbhBISHr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 9 Feb 2021 13:07:47 -0500
-Received: from mail-oo1-f45.google.com ([209.85.161.45]:34143 "EHLO
-        mail-oo1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233092AbhBIR47 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 9 Feb 2021 12:56:59 -0500
-Received: by mail-oo1-f45.google.com with SMTP id x23so4463139oop.1;
-        Tue, 09 Feb 2021 09:56:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vBG1WNZ+VYDg58Hj0p0C8XiVqBI5eXydWO/NFf/WXAw=;
-        b=fABRR1tikxdvOZTDSRUQLYcn2A/OKITUgcpLOHPwS+Rq4O2heGSNv6yG+ro9w7/JrI
-         Y3xrNz9KyGZlvV4pMzTZzgj51UFd5oWSyRSLpsid13FcVrrj/9ltDorlll4+1LRYGIlo
-         4lhLozOhYAj6aCpPxAJSU8QaeFCHm50YU7c9GLBIv7l4QEbslc7UzpaBNaHq5CbjevCF
-         MAhdB6+ERWbFVAWDFaMubLtdbZ14dZCvLiqUMm4yoH8DiPwoGAgLSf/QM4hXvIo62Xsq
-         6mu8ADP1FHZ8EHnB3ZjbVmejarOrUDmuItakAVgsg6QHIQtUXbZJJwzqbVWSauccJ2Uf
-         h0jw==
-X-Gm-Message-State: AOAM531Fu4p51zqKacB8q7ryDKMnVQdkN3vxSsF2o7DubSr+2SJgVHer
-        91SUHerob7hyC8sR2Nxzdw==
-X-Google-Smtp-Source: ABdhPJwDyWG7JxVSQrPKKUjAO9gUPF8tm8MuPSOj8dj3+6IQC3cBmate/FqH6XfP1vsC+kwAHHQdBA==
-X-Received: by 2002:a4a:c489:: with SMTP id f9mr16497336ooq.49.1612893377147;
-        Tue, 09 Feb 2021 09:56:17 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id a63sm4498903otc.75.2021.02.09.09.56.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Feb 2021 09:56:15 -0800 (PST)
-Received: (nullmailer pid 4039705 invoked by uid 1000);
-        Tue, 09 Feb 2021 17:56:14 -0000
-Date:   Tue, 9 Feb 2021 11:56:14 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     gabriel.fernandez@foss.st.com
-Cc:     Stephen Boyd <sboyd@kernel.org>, marex@denx.de,
-        Etienne Carriere <etienne.carriere@st.com>,
-        devicetree@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-clk@vger.kernel.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>
-Subject: Re: [PATCH v2 13/14] dt-bindings: clock: stm32mp1 new compatible for
- secure rcc
-Message-ID: <20210209175614.GA4039647@robh.at.kernel.org>
-References: <20210126090120.19900-1-gabriel.fernandez@foss.st.com>
- <20210126090120.19900-14-gabriel.fernandez@foss.st.com>
+        id S233011AbhBISpq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 9 Feb 2021 13:45:46 -0500
+Received: from mailoutvs33.siol.net ([185.57.226.224]:49800 "EHLO
+        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233407AbhBISbu (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 9 Feb 2021 13:31:50 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.siol.net (Zimbra) with ESMTP id 2AAB0523182;
+        Tue,  9 Feb 2021 18:59:09 +0100 (CET)
+X-Virus-Scanned: amavisd-new at psrvmta12.zcs-production.pri
+Received: from mail.siol.net ([127.0.0.1])
+        by localhost (psrvmta12.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id iCj0Jj0GTsju; Tue,  9 Feb 2021 18:59:08 +0100 (CET)
+Received: from mail.siol.net (localhost [127.0.0.1])
+        by mail.siol.net (Zimbra) with ESMTPS id D8FAA522FAE;
+        Tue,  9 Feb 2021 18:59:08 +0100 (CET)
+Received: from kista.localdomain (cpe-86-58-58-53.static.triera.net [86.58.58.53])
+        (Authenticated sender: 031275009)
+        by mail.siol.net (Zimbra) with ESMTPSA id A5EF85233C8;
+        Tue,  9 Feb 2021 18:59:05 +0100 (CET)
+From:   Jernej Skrabec <jernej.skrabec@siol.net>
+To:     mripard@kernel.org, wens@csie.org
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, airlied@linux.ie,
+        daniel@ffwll.ch, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-sunxi@googlegroups.com,
+        Andre Heider <a.heider@gmail.com>
+Subject: [PATCH v3 1/5] clk: sunxi-ng: mp: fix parent rate change flag check
+Date:   Tue,  9 Feb 2021 18:58:56 +0100
+Message-Id: <20210209175900.7092-2-jernej.skrabec@siol.net>
+X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20210209175900.7092-1-jernej.skrabec@siol.net>
+References: <20210209175900.7092-1-jernej.skrabec@siol.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210126090120.19900-14-gabriel.fernandez@foss.st.com>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, 26 Jan 2021 10:01:19 +0100, gabriel.fernandez@foss.st.com wrote:
-> From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
-> 
-> Introduce new compatible string "st,stm32mp1-rcc-secure" for
-> stm32mp1 clock driver when the device is configured with RCC
-> security support hardened.
-> 
-> Signed-off-by: Etienne Carriere <etienne.carriere@st.com>
-> Signed-off-by: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
-> ---
->  .../devicetree/bindings/clock/st,stm32mp1-rcc.yaml          | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
+CLK_SET_RATE_PARENT flag is checked on parent clock instead of current
+one. Fix that.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Fixes: 3f790433c3cb ("clk: sunxi-ng: Adjust MP clock parent rate when all=
+owed")
+Reviewed-by: Chen-Yu Tsai <wens@csie.org>
+Tested-by: Andre Heider <a.heider@gmail.com>
+Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
+---
+ drivers/clk/sunxi-ng/ccu_mp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clk/sunxi-ng/ccu_mp.c b/drivers/clk/sunxi-ng/ccu_mp.=
+c
+index fa4ecb915590..9d3a76604d94 100644
+--- a/drivers/clk/sunxi-ng/ccu_mp.c
++++ b/drivers/clk/sunxi-ng/ccu_mp.c
+@@ -108,7 +108,7 @@ static unsigned long ccu_mp_round_rate(struct ccu_mux=
+_internal *mux,
+ 	max_m =3D cmp->m.max ?: 1 << cmp->m.width;
+ 	max_p =3D cmp->p.max ?: 1 << ((1 << cmp->p.width) - 1);
+=20
+-	if (!(clk_hw_get_flags(hw) & CLK_SET_RATE_PARENT)) {
++	if (!clk_hw_can_set_rate_parent(&cmp->common.hw)) {
+ 		ccu_mp_find_best(*parent_rate, rate, max_m, max_p, &m, &p);
+ 		rate =3D *parent_rate / p / m;
+ 	} else {
+--=20
+2.30.0
+
