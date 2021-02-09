@@ -2,64 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 919413149AB
-	for <lists+linux-clk@lfdr.de>; Tue,  9 Feb 2021 08:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7523149B5
+	for <lists+linux-clk@lfdr.de>; Tue,  9 Feb 2021 08:49:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbhBIHr5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 9 Feb 2021 02:47:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37410 "EHLO mail.kernel.org"
+        id S229690AbhBIHtG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 9 Feb 2021 02:49:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37532 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229464AbhBIHr4 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 9 Feb 2021 02:47:56 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3EA0A64DAD;
-        Tue,  9 Feb 2021 07:47:16 +0000 (UTC)
+        id S229719AbhBIHtD (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 9 Feb 2021 02:49:03 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 580CD64E5A;
+        Tue,  9 Feb 2021 07:48:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612856836;
-        bh=F22jfFy9W8oMUmsbBd5rEjgo8FcPzu5fWH8d+uvExto=;
+        s=k20201202; t=1612856903;
+        bh=1fq/TENi8SJjEX/nDofCITIDuTH/sOz+32o4Y1IOg6c=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=X1TeLjv/DpMG9iI/wnak/vJu3odgdTETbzOp/lO3340oyZcyIARHd1Sp6CplwyPGY
-         gMolQ7oKa5oc39yze9j70lMSIdX8Oi7iqIN1TeBRuj1fHvi39/+LN+B7oqtd9fGABl
-         ABjp2Jcvf+oRToTq0mrG4gixhJ4bCJV1JS4PlrnvQBVkHGiBj4/whmbQt3cG4QJA5R
-         td2P2u3WgcmB4aIKLGarQKtCBqcfj54pOH5FDST8D6P7A3zLuwIUgjp1UDgvUIJfOr
-         NagsmNgJb+bFLu7+LrVRtR5XIzyg/mNO3uKTLNRxSw05cny9R5RjObyoTmPjM0NtGL
-         IXvRMhWnjQqMA==
+        b=W6M1ecOZZ4bqo+PlUqLYmMrCA0TowDQaHqJmrmP1H4Q6gtY/d9e7La/XWCxKXexI2
+         odzjy0g5w6DhyG0DMYB96zzAYE+vC0dFtpW8fgKsyoZzbSKuIbvRWoj7qkYZ5XCPHp
+         urWS7uEkGG7QDae5wMv3kPBC8rUMcXCQVGDTvLqQ+7sSBOz+G0BSuje8lYY3usE8rD
+         komA2h7WlZMo6K0yXhTegp05j5gBN4YwJuqKd/qWoF8vOQwt5oPBVLippKhPIHwsvC
+         vytBoOECdGTswIDj2m6eg+KimVcCzbX5bxrYu4i9kw8BWOngWiYe6ov/Ol26Zr33lX
+         nWb5Fjmd0ya2w==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20210203105423.682960-1-enric.balletbo@collabora.com>
-References: <20210203105423.682960-1-enric.balletbo@collabora.com>
-Subject: Re: [PATCH] clk: mediatek: Select all the MT8183 clocks by default
+In-Reply-To: <20210131170428.3290-1-pawel.mikolaj.chmiel@gmail.com>
+References: <20210131170428.3290-1-pawel.mikolaj.chmiel@gmail.com>
+Subject: Re: [PATCH v3] clk: exynos7: Keep aclk_fsys1_200 enabled
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     matthias.bgg@gmail.com, drinkcat@chromium.org, hsinyi@chromium.org,
-        Collabora Kernel ML <kernel@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Mars Cheng <mars.cheng@mediatek.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Owen Chen <owen.chen@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 08 Feb 2021 23:47:14 -0800
-Message-ID: <161285683488.418021.7723049164920384151@swboyd.mtv.corp.google.com>
+Cc:     s.nawrocki@samsung.com, tomasz.figa@gmail.com,
+        cw00.choi@samsung.com, linux-samsung-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, <pawel.mikolaj.chmiel@gmail.com>
+To:     <pawel.mikolaj.chmiel@gmail.com>, kgene@kernel.org,
+        krzk@kernel.org, mturquette@baylibre.com
+Date:   Mon, 08 Feb 2021 23:48:21 -0800
+Message-ID: <161285690197.418021.15554726449883492168@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Enric Balletbo i Serra (2021-02-03 02:54:23)
-> If MT8183 SoC support is enabled, almost all machines will use topckgen,
-> apmixedsys, infracfg, mcucfg and subsystem clocks, so it feels wrong to
-> require each one to select that symbols manually.
+Quoting (2021-01-31 09:04:28)
+> This clock must be always enabled to allow access to any registers in
+> fsys1 CMU. Until proper solution based on runtime PM is applied
+> (similar to what was done for Exynos5433), fix this by calling
+> clk_prepare_enable() directly from clock provider driver.
 >=20
-> Instead, enable it whenever COMMON_CLK_MT8183_* is disabled as
-> a simplification. This would add few KB in the kernel image size but
-> will make the life a bit easier to the users, anyway you'll need to proba=
-bly
-> enable all of them if you want to have proper support for that SoC.
+> It was observed on Samsung Galaxy S6 device (based on Exynos7420), where
+> UFS module is probed before pmic used to power that device.
+> In this case defer probe was happening and that clock was disabled by
+> UFS driver, causing whole boot to hang on next CMU access.
 >=20
-> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-> ---
 
-Applied to clk-next
+Does this need a Fixes tag?
