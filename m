@@ -2,61 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E963193BD
-	for <lists+linux-clk@lfdr.de>; Thu, 11 Feb 2021 21:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 418E33193C2
+	for <lists+linux-clk@lfdr.de>; Thu, 11 Feb 2021 21:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbhBKT6z (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 11 Feb 2021 14:58:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39588 "EHLO mail.kernel.org"
+        id S231209AbhBKT7q (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 11 Feb 2021 14:59:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39880 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231831AbhBKT6l (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 11 Feb 2021 14:58:41 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7466964E45;
-        Thu, 11 Feb 2021 19:58:00 +0000 (UTC)
+        id S230013AbhBKT7d (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 11 Feb 2021 14:59:33 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B9F8764E74;
+        Thu, 11 Feb 2021 19:58:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1613073480;
-        bh=/pbNpyXDb0jqpcEb3u6TTNE3eNDCccMUm7t1J9KoAow=;
+        s=k20201202; t=1613073532;
+        bh=yqabmSw3ky4+SnSU9gnfBJ4L6nA5dwv7h9Ao3lfzpnw=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=k5AbIwHDSXKv9Tqm0J+zMW9BDaWprHCzi1vSh5p4CRyP2nD9UbXk+al84PjdKeYBc
-         sagwY8o8Te9IQuZtQ4FFz/9yZsr331iBsLeo6XszTfJ+PfZydZsyw0bJPl4FMjcgJF
-         huc9v7xrhwmxXl0uKj4EXXGhd6yIjA8s+0b3nEY5y1o+guR0Kj3cnhlmwakYgnpSxG
-         nuWnQIiX/5KOgXgoEiCN1k/NOWfQlLyE0Zp1iFaGyQ20J5jFoXWZHHmsUkLmZ4+g2x
-         OULZyrh1dhZk9SKTuSUIz+zDw6C+ceuEdAhDRqqNKA9sXrYSxAw65Hshx/ODIFyFLu
-         DFnIseLht0T3Q==
+        b=WTxgI/dxE8hvLy0kEAhHdK+g1IIpj5QGJhK4BAVQ6uLruQl2IUJEbEUS87iyDSe5u
+         j4ArlxgUYMfFGzs08UuiiMj9TXkk9kaX/rIKX5xMLwOw5MsU9rGKFjk87RfX2WVAW/
+         8a5No6cGQCn3tRoNF4md4MN7hgpQmXJ0zlhoTIapI7iMfMbCuJysqQJQ4HukWAdX1D
+         XjF9WScr9JGi+EZHgLkz+oON5f+h2dzZi+ngOfcTAeimAow+SzVn+XpzZMwohGMm6p
+         xxV32x66LnU/xlnPLnMZmraC+q/L4qlyaIPk2WqVN+Ic1mVlf7oUvyPAG1Ne5XGfYU
+         kCHtuK20+uKrg==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20210126124540.3320214-19-lee.jones@linaro.org>
-References: <20210126124540.3320214-1-lee.jones@linaro.org> <20210126124540.3320214-19-lee.jones@linaro.org>
-Subject: Re: [PATCH 18/21] clk: qcom: clk-rpm: Remove a bunch of superfluous code
+In-Reply-To: <20210126124540.3320214-22-lee.jones@linaro.org>
+References: <20210126124540.3320214-1-lee.jones@linaro.org> <20210126124540.3320214-22-lee.jones@linaro.org>
+Subject: Re: [PATCH 21/21] clk: zynqmp: divider: Add missing description for 'max_div'
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+Cc:     linux-kernel@vger.kernel.org,
         Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
+        Michal Simek <michal.simek@xilinx.com>,
+        Rajan Vaja <rajan.vaja@xilinx.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
 To:     lee.jones@linaro.org
-Date:   Thu, 11 Feb 2021 11:57:59 -0800
-Message-ID: <161307347910.1254594.10795099538356191352@swboyd.mtv.corp.google.com>
+Date:   Thu, 11 Feb 2021 11:58:51 -0800
+Message-ID: <161307353161.1254594.3642417051770254144@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Lee Jones (2021-01-26 04:45:37)
+Quoting Lee Jones (2021-01-26 04:45:40)
 > Fixes the following W=3D1 kernel build warning(s):
 >=20
->  drivers/clk/qcom/clk-rpm.c:453:29: warning: =E2=80=98clk_rpm_branch_ops=
-=E2=80=99 defined but not used [-Wunused-const-variable=3D]
+>  drivers/clk/zynqmp/divider.c:46: warning: Function parameter or member '=
+max_div' not described in 'zynqmp_clk_divider'
 >=20
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
 > Cc: Michael Turquette <mturquette@baylibre.com>
 > Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: linux-arm-msm@vger.kernel.org
+> Cc: Michal Simek <michal.simek@xilinx.com>
+> Cc: Rajan Vaja <rajan.vaja@xilinx.com>
 > Cc: linux-clk@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
 > Signed-off-by: Lee Jones <lee.jones@linaro.org>
 > ---
-
-This has been rejected before but OK
 
 Applied to clk-next
