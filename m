@@ -2,149 +2,123 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 005CD31E932
-	for <lists+linux-clk@lfdr.de>; Thu, 18 Feb 2021 12:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C44A731E934
+	for <lists+linux-clk@lfdr.de>; Thu, 18 Feb 2021 12:50:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbhBRLfY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 18 Feb 2021 06:35:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38866 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232004AbhBRJbz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 18 Feb 2021 04:31:55 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75566C061788
-        for <linux-clk@vger.kernel.org>; Thu, 18 Feb 2021 01:31:14 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id t15so2063606wrx.13
-        for <linux-clk@vger.kernel.org>; Thu, 18 Feb 2021 01:31:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=VaSKa4DdnHoyZyCFHmPaCow3KCxH2Ne1C09ADbZ1yus=;
-        b=dRsXTrRzk7Wc31VNcTbJfc4NgGYL0oYa4TrPkTQZMezCPZJix76Gti85Vp4Yt4U+uY
-         qvfk2XL5qC9qgVqCHKJ9gGyJh/v2yDaSoxO5sAkmaNzasrphNDslGJIOOjdGbKAz1QQK
-         4xghW/rirIb3npghDbJJSNGXUipsbkyVznUa4nXfrFhP8ZjY8c+Ngpd8ML3l765bhShk
-         uP8iWjoRLeekT1gz2uN5nT6zKWr0JErbR50lvlx6YtfOcFshe+PTQqtahpMP8imSEncX
-         8m2OjhT/DZN+hMQTXLqi/ott3uA8MLN18PbnxALj4/JHkwpwuvmJoM83JRMCZM5wrFlR
-         rwmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=VaSKa4DdnHoyZyCFHmPaCow3KCxH2Ne1C09ADbZ1yus=;
-        b=JNjXU92m9t4GFhi68uBkSDYVIceFDh4oeA2z2NWuEuMcGEXMYqgalUZBGR+jKY/d3y
-         I6JiQ1JoH/H+wtDch0IuICSHf33F/XEAMSXpFoKyl2EWUGVvUgWVd1NcjWz3v6V8sj0d
-         Wunm7mAH8et3t51B6ShN1lgAlZI3W2IsanEXwoyBIbf8ktpvdBxzI8E3k7oU2aWvPVc1
-         P5hAYE0ywxqAgNlR9wR1S1oLOKP23cNgF1ivz6p7IamA9ZFnJCwCDZObs56CkU5n+UPQ
-         kCQnNnwfeUFBlLE3oMJx+huo0TArsd4ld/JxTECdtkx9cQxtSRO+Au8J91Tnsc0UO1rr
-         YgwA==
-X-Gm-Message-State: AOAM5327b/lQCaOltuX94npy9ZZm9h3HQZ4415yNXBC9n2/vl01D2xhv
-        Yp/xLe3a62Rbd5Pd/U1cIK9wGA==
-X-Google-Smtp-Source: ABdhPJxE8kmixkGOJBaQqpcOpvjiGzXrQRnCSlhlsVN/0EM3RqJlhWDEhhKX5MEo/csg0r4Y/dUISA==
-X-Received: by 2002:adf:d1ce:: with SMTP id b14mr3340189wrd.329.1613640671985;
-        Thu, 18 Feb 2021 01:31:11 -0800 (PST)
-Received: from dell ([91.110.221.153])
-        by smtp.gmail.com with ESMTPSA id m24sm8233954wml.36.2021.02.18.01.31.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Feb 2021 01:31:11 -0800 (PST)
-Date:   Thu, 18 Feb 2021 09:31:08 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Stephen Boyd <sboyd@kernel.org>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        id S230382AbhBRLhs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 18 Feb 2021 06:37:48 -0500
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:50345 "EHLO
+        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231136AbhBRJ5O (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 18 Feb 2021 04:57:14 -0500
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 4980EA03;
+        Thu, 18 Feb 2021 04:44:30 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute7.internal (MEProxy); Thu, 18 Feb 2021 04:44:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=w1PoDIWgQW7Pnc0d8x/oY9HL+TO
+        PZO54gO2/oq7o+rQ=; b=EyI4CFiU4mlhBprcx8r716cStAFgBWzqok0PrdoEyx8
+        LzD/J5WNqQYE3VWtoP+8UX262+NbavYIluaWCsxYrA3/rSc9xOWJM6mq8JdOdrWp
+        3Q+SSPUclYSU91yVPIaKgFyxAzV0gQGB7EYoQZML8Wc4eTHfdB8qcJAb2tzfL+6/
+        1ceQCkfBoPoNtTHItD23iF9cPOYLjV28TD6yIt2Z3ME0xGmUy+ZhkAH3/WIr8sKY
+        OjMgjK1C7YQpXjliK4FHabVT3Z3QC8G0PJmjBzaxoB+WF9sngwI0FRCF8j73phnS
+        Fy8Bdjcf8WaZxR4iH/PIFPu4A2uMPZrpFUWsT8wotSg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=w1PoDI
+        WgQW7Pnc0d8x/oY9HL+TOPZO54gO2/oq7o+rQ=; b=ZQZ02BTNn0hNhuccSdihMC
+        Xde8dIT9OII00Dmt4DWX5actuQVzmr876B2AKkEutfm2t5msHhseCBqyeMoqGvHZ
+        ZzVf779e2GzJUra0auic9eUSDJ3RPzUtSnM504Ng3oWuXiKVysGn/eHiDjUDgkkZ
+        8DBBzXHKAiUK1T2DdlsdQzomiBj1S+b/Zoo7cLd/2xo0Qd8zt2P6Ll9kL6CStehD
+        VJeBVUlW7F6Rt3EEIj7xTdiAdcG/hsU1CxloOWa2+UD+C5+7AT7d+MoOxGqEOg8L
+        Ku+XyOhJFoboyk1U56S7/kYHnUqE7Jzt1OWSPiqUqwZ+qH7piQpgxUidZVwCNtXw
+        ==
+X-ME-Sender: <xms:_DYuYM3dw9COK_ZlwmpFNjKqtX2hEAVJQsNPDMUCfr0upztkF95-MQ>
+    <xme:_DYuYJEJypcSvv9UZD_nStioKy7wLf0yKbESF1SmhxDMaI4sfUkBWiw1PtCUPr0cU
+    3NpK_rE5643zfUwivw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrjeeggddthecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeeutdfgjeeuudehvefgvedvtedtudelfffgffekledtffekgedukeejueevieeg
+    udenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:_DYuYOTZvx0nSDlA1RngPNFQKbjPb6ppzTSdfYVBZFOp6SuBslAEqw>
+    <xmx:_DYuYICTxz9S6q9FHzuKUNvciyLeqxRYS6QV_xIqtNNNG9D3_ZbvYg>
+    <xmx:_DYuYG26KTLXz7qTLTKTerSOjqNPBoPFUSFRi3qglonev8wfe3yv8g>
+    <xmx:_TYuYKCUQ-HdIWI6xmCzEzJbm5MYzlDWyWhiQvWRFOLWCic-600ocg>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 9F85C108005B;
+        Thu, 18 Feb 2021 04:44:28 -0500 (EST)
+Date:   Thu, 18 Feb 2021 10:44:26 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Icenowy Zheng <icenowy@aosc.io>
+Cc:     Tobias Schramm <t.schramm@manjaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rajeev Kumar <rajeev-dlh.kumar@st.com>,
-        Jan Kotas <jank@cadence.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Fabio Estevam <festevam@gmail.com>, linux-clk@vger.kernel.org,
-        Boris BREZILLON <boris.brezillon@free-electrons.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Emilio =?iso-8859-1?Q?L=F3pez?= <emilio@elopez.com.ar>,
-        Viresh Kumar <vireshk@kernel.org>, openbmc@lists.ozlabs.org,
-        Michal Simek <michal.simek@xilinx.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Nancy Yuen <yuenn@google.com>, Chen-Yu Tsai <wens@csie.org>,
-        Andy Gross <agross@kernel.org>, Loc Ho <lho@apm.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Richard Woodruff <r-woodruff2@ti.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-msm@vger.kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        linux-tegra@vger.kernel.org, linux-omap@vger.kernel.org,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        =?iso-8859-1?Q?S=F6ren?= Brinkmann <soren.brinkmann@xilinx.com>,
+        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@siol.net>,
-        Tero Kristo <kristo@kernel.org>,
-        Rajan Vaja <rajan.vaja@xilinx.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Nuvoton Technologies <tali.perry@nuvoton.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH 00/21] [Set 2] Rid W=1 warnings from Clock
-Message-ID: <20210218093108.GA62231@dell>
-References: <161316754567.1254594.9542583200097699504@swboyd.mtv.corp.google.com>
- <20210212223739.GE179940@dell>
- <161317480301.1254594.16648868282165823277@swboyd.mtv.corp.google.com>
- <YCf4kkMsX+Ymgy6N@lunn.ch>
- <161333644244.1254594.4498059850307971318@swboyd.mtv.corp.google.com>
- <YCmUOHTtc+j4eLkO@lunn.ch>
- <20210215084952.GF179940@dell>
- <20210215094509.0b1f0bbf@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20210216082046.GA4803@dell>
- <20210217100830.50db2195@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clk: sunxi-ng: v3s: add support for variable rate audio
+ pll output
+Message-ID: <20210218094426.fc5pxmz463fivm2w@gilmour>
+References: <20210212135725.283877-1-t.schramm@manjaro.org>
+ <20210218075835.o43tyarpimrcwbvk@gilmour>
+ <C1E55B65-370F-4875-B7D6-7CD7A82A91DD@aosc.io>
+ <914aeb08-0534-48aa-2c2e-4e87d4360e29@manjaro.org>
+ <2BA0A0C7-DA37-486B-B12F-C485F1000F8E@aosc.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="4ctgxoqjsojtrgad"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210217100830.50db2195@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <2BA0A0C7-DA37-486B-B12F-C485F1000F8E@aosc.io>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, 17 Feb 2021, Jakub Kicinski wrote:
 
-> On Tue, 16 Feb 2021 08:20:46 +0000 Lee Jones wrote:
-> > On Mon, 15 Feb 2021, Jakub Kicinski wrote:
-> > > On Mon, 15 Feb 2021 08:49:52 +0000 Lee Jones wrote:  
-> > > > Yes, please share.  
-> > > 
-> > > https://github.com/kuba-moo/nipa  
-> > 
-> > Thanks for this.
-> > 
-> > Oh, I see.  So you conduct tests locally, then post them up in a
-> > section called 'Checks' using the provided API.  
-> 
-> For some definition of "locally" - NIPA runs on a rented VM.
+--4ctgxoqjsojtrgad
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Right.  Infrastructure that you control vs by Patchwork.
+On Thu, Feb 18, 2021 at 05:21:16PM +0800, Icenowy Zheng wrote:
+>=20
+>=20
+> =E4=BA=8E 2021=E5=B9=B42=E6=9C=8818=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=88=
+5:18:39, Tobias Schramm <t.schramm@manjaro.org> =E5=86=99=E5=88=B0:
+> >Hi Icenowy,
+> >
+> > > We have introducee SDM-based accurate audio PLL on several
+> >> other SoCs. Some people is quite sensitive about audio-related
+> >things.
+> > >
+> >While it is possible to support 24MHz * 128 / 25 / 5 =3D 24.576MHz
+> >without=20
+> >delta sigma modulation, matching 22.5792MHz is indeed not possible. I=20
+> >read you'd prefer me to use SDM like the other SoCs though? Shall I
+> >send=20
+> >a v2 utilizing SDM?
+>=20
+> Yes, I think so.
 
-> > I assume that Patchwork does not alert the user when something has
-> > gone awry?  Is this something Nipa does?
-> 
-> The way we run it on netdev is maintainer-centric, IOW we see 
-> the failures in patchwork and complain to people manually.
-> The netdev mailing list gets too many messages as is, if NIPA 
-> responded with results automatically (which is not that hard
-> technically) my concern is that people would be more likely to
-> send untested patches to the mailing list and rely on the bot.
+Yes I'd rather have consistency about how we deal with this across all SoCs
 
-That makes sense.  Thank you for the explanation.
+Maxime
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+--4ctgxoqjsojtrgad
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYC42+gAKCRDj7w1vZxhR
+xZxBAP9dKCA17V+qSvm042nyhkVHUunMyflINeOwh3yCYdyhqQD+MzDg43jXOhct
+NAH7moms0HCKwcFJeE70q/AIlXGyUAg=
+=sjsw
+-----END PGP SIGNATURE-----
+
+--4ctgxoqjsojtrgad--
