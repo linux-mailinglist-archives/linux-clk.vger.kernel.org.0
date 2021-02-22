@@ -2,131 +2,100 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66295321F80
-	for <lists+linux-clk@lfdr.de>; Mon, 22 Feb 2021 20:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F655322056
+	for <lists+linux-clk@lfdr.de>; Mon, 22 Feb 2021 20:43:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbhBVS7g (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 22 Feb 2021 13:59:36 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:38775 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbhBVS7N (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 22 Feb 2021 13:59:13 -0500
-Received: by mail-oi1-f169.google.com with SMTP id h17so15075156oih.5;
-        Mon, 22 Feb 2021 10:58:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=k/Tr83e07kUDjV2mdPt8HHeG/axFkBtTveNJhvZFiaM=;
-        b=G4sJeLm1HKv0GiTd5ifD6QdcYrwirgnsohbMLQvHV87hIPaNQcBNgfsnPkYQwr86NE
-         Im8xaXErK09hz0bhYM6go6jm5ThCW85Gn5bT3iBVWoynG414dtr8k8tswfq34/BC+WR1
-         Sfj9lxtWC+/HEmCICCWRu0H8iCNywmhnMKRHFQVXKMZoDwccpbJcMc2AlZjXrdBtYl7f
-         MYii0/uUMxY73iKEpo9dvUOSQBNS2BJDwfwbITNMYaCnoVeZkBOJcOMVRFur140RIHk9
-         S8+0PTMbdy9xcEDaotppR3+V36DjCZJZUwLKtWCZwDVSx0M8Z2fEU+7de/iuTZXL/WMo
-         ee/w==
-X-Gm-Message-State: AOAM533MFhDVFM1Jo1Ul/mpg76ZZBFfz5a3xQQGziBGHq7QXbrZZ/qvM
-        JjO2qx5x186Hf50TORAqFTaWJfVDEw==
-X-Google-Smtp-Source: ABdhPJyItZocFcAaxt6taWYSRmGgSdWuWQwBBzMn5CanndOkqsRyk0swI5gSgKdbA3SNu9pvCqilZw==
-X-Received: by 2002:aca:b389:: with SMTP id c131mr16869006oif.99.1614020311162;
-        Mon, 22 Feb 2021 10:58:31 -0800 (PST)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id a25sm2210235oos.6.2021.02.22.10.58.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Feb 2021 10:58:30 -0800 (PST)
-Received: (nullmailer pid 1828596 invoked by uid 1000);
-        Mon, 22 Feb 2021 18:58:29 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Liam Beguin <liambeguin@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20210221194427.1184208-2-liambeguin@gmail.com>
-References: <20210221194427.1184208-1-liambeguin@gmail.com> <20210221194427.1184208-2-liambeguin@gmail.com>
-Subject: Re: [PATCH v2 1/2] clk: add support for the lmk04832
-Date:   Mon, 22 Feb 2021 12:58:29 -0600
-Message-Id: <1614020309.337925.1828595.nullmailer@robh.at.kernel.org>
+        id S233092AbhBVTnA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 22 Feb 2021 14:43:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54720 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232963AbhBVTm7 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 22 Feb 2021 14:42:59 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B302A64E31;
+        Mon, 22 Feb 2021 19:42:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614022938;
+        bh=2P/frDeCW8JTaaEDaSByJHY8gufOSsfYYCYfWdxiliM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=abMh/mOmtWtVl+TIrppLJ6TnbxgQNtb+Blsm8U8HjhRK95RKB0WpCWcPEOQypLEs2
+         sOkveT2/mec6BAlJ+ayxsADKdyyT5v2NRok5H9vPtt4iF7xe9KXXCKNTeTGhY3ztUD
+         eSAuoNFm/Dky/m90osSAOY0cp9cGJ9ufIN7BzvakR9isjJxh2bPtaeR87xYZ7MGGY/
+         Q2USAm9SzepEW6rBi8ZBJr5dO6XKrtkEYbyqBLrV992fNj/0KP9TTlf561Zi41bEXX
+         soLxI2NiO01stu2mKXfoGGaHvo7nmV8UPEg0XTc6z8LtFkkNSKyii0YYpOpIvKKiDt
+         KknppqcxIkRmw==
+Received: by pali.im (Postfix)
+        id 35A07C9A; Mon, 22 Feb 2021 20:42:16 +0100 (CET)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Gregory Clement <gregory.clement@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Cc:     =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Tomasz Maciej Nowak <tmn505@gmail.com>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Andre Heider <a.heider@gmail.com>,
+        Vladimir Vid <vladimir.vid@sartura.hr>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        =?UTF-8?q?G=C3=A9rald=20Kerma?= <gerald@gk2.net>,
+        Konstantin Porotchkin <kostap@marvell.com>
+Subject: [PATCH mvebu v3 00/10] Armada 37xx: Fix cpufreq changing base CPU speed to 800 MHz from 1000 MHz
+Date:   Mon, 22 Feb 2021 20:41:48 +0100
+Message-Id: <20210222194158.12342-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210114124032.12765-1-pali@kernel.org>
+References: <20210114124032.12765-1-pali@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sun, 21 Feb 2021 14:44:26 -0500, Liam Beguin wrote:
-> From: Liam Beguin <lvb@xiphos.com>
-> 
-> The LMK04832 is an ultra-high performance clock conditioner with JEDEC
-> JESD204B support and is also pin compatible with the LMK0482x family of
-> devices.
-> 
-> Signed-off-by: Liam Beguin <lvb@xiphos.com>
-> ---
->  .../bindings/clock/ti,lmk04832.yaml           |  201 +++
->  drivers/clk/Kconfig                           |    7 +
->  drivers/clk/Makefile                          |    1 +
->  drivers/clk/clk-lmk04832.c                    | 1286 +++++++++++++++++
->  4 files changed, 1495 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/ti,lmk04832.yaml
->  create mode 100644 drivers/clk/clk-lmk04832.c
-> 
+Hello!
 
-My bot found errors running 'make dt_binding_check' on your patch:
+This is third version of patches for Armada 37xx cpufreq driver which
+fix CPU scaling with 1 GHz base frequency.
 
-yamllint warnings/errors:
+The only change in this third version is modified patch 04/10 with fixes
+for 1.2 GHz variant of Espressobin. Minimal CPU voltage in L1 load for
+1.2 GHz variant was increased to 1.155V.
 
-dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/clock/ti,lmk04832.example.dts'
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-extract-example", line 45, in <module>
-    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 343, in load
-    return constructor.get_single_data()
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 111, in get_single_data
-    node = self.composer.get_single_node()
-  File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
-  File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
-  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
-  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
-  File "_ruamel_yaml.pyx", line 773, in _ruamel_yaml.CParser._compose_node
-  File "_ruamel_yaml.pyx", line 852, in _ruamel_yaml.CParser._compose_sequence_node
-  File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
-ruamel.yaml.parser.ParserError: while parsing a block collection
-  in "<unicode string>", line 149, column 3
-did not find expected '-' indicator
-  in "<unicode string>", line 200, column 3
-make[1]: *** [Documentation/devicetree/bindings/Makefile:20: Documentation/devicetree/bindings/clock/ti,lmk04832.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-Traceback (most recent call last):
-  File "/usr/bin/yamllint", line 11, in <module>
-    load_entry_point('yamllint==1.20.0', 'console_scripts', 'yamllint')()
-  File "/usr/lib/python3/dist-packages/yamllint/cli.py", line 184, in run
-    prob_level = show_problems(problems, file, args_format=args.format,
-  File "/usr/lib/python3/dist-packages/yamllint/cli.py", line 91, in show_problems
-    for problem in problems:
-  File "/usr/lib/python3/dist-packages/yamllint/linter.py", line 200, in _run
-    for problem in get_cosmetic_problems(buffer, conf, filepath):
-  File "/usr/lib/python3/dist-packages/yamllint/linter.py", line 137, in get_cosmetic_problems
-    for problem in rule.check(rule_conf,
-  File "/usr/lib/python3/dist-packages/yamllint/rules/indentation.py", line 570, in check
-    for problem in _check(conf, token, prev, next, nextnext, context):
-  File "/usr/lib/python3/dist-packages/yamllint/rules/indentation.py", line 336, in _check
-    'wrong indentation: expected %d but found %d' %
-TypeError: %d format: a number is required, not NoneType
-./Documentation/devicetree/bindings/clock/ti,lmk04832.yaml:  while parsing a block collection
-  in "<unicode string>", line 149, column 3
-did not find expected '-' indicator
-  in "<unicode string>", line 200, column 3
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/ti,lmk04832.yaml: ignoring, error parsing file
-warning: no schema found in file: ./Documentation/devicetree/bindings/clock/ti,lmk04832.yaml
-make: *** [Makefile:1370: dt_binding_check] Error 2
+Patches are now rebased on top of the kernel version 5.11 with all
+collected Acked-by/Tested-by lines and are available also in my git
+tree in branch a3720-cpufreq-issues:
 
-See https://patchwork.ozlabs.org/patch/1442868
+https://git.kernel.org/pub/scm/linux/kernel/git/pali/linux.git/log/?h=a3720-cpufreq-issues
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+If you have other Armada 3720 boards with 1.2 GHz CPU, including
+Espressobin V7, let us know if it is working fine for you.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Marek & Pali
 
-pip3 install dtschema --upgrade
+Marek Behún (3):
+  arm64: dts: marvell: armada-37xx: add syscon compatible to NB clk node
+  cpufreq: armada-37xx: Fix setting TBG parent for load levels
+  clk: mvebu: armada-37xx-periph: remove .set_parent method for CPU PM
+    clock
 
-Please check and re-submit.
+Pali Rohár (7):
+  cpufreq: armada-37xx: Fix the AVS value for load L1
+  clk: mvebu: armada-37xx-periph: Fix switching CPU freq from 250 Mhz to
+    1 GHz
+  clk: mvebu: armada-37xx-periph: Fix workaround for switching from L1
+    to L0
+  cpufreq: armada-37xx: Fix driver cleanup when registration failed
+  cpufreq: armada-37xx: Fix determining base CPU frequency
+  cpufreq: armada-37xx: Remove cur_frequency variable
+  cpufreq: armada-37xx: Fix module unloading
+
+ arch/arm64/boot/dts/marvell/armada-37xx.dtsi |   3 +-
+ drivers/clk/mvebu/armada-37xx-periph.c       |  83 +++++++-------
+ drivers/cpufreq/armada-37xx-cpufreq.c        | 111 +++++++++++++++----
+ 3 files changed, 135 insertions(+), 62 deletions(-)
+
+-- 
+2.20.1
 
