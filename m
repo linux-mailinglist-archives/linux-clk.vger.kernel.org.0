@@ -2,29 +2,29 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CB9322060
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5CC322061
 	for <lists+linux-clk@lfdr.de>; Mon, 22 Feb 2021 20:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233313AbhBVTnq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 22 Feb 2021 14:43:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55064 "EHLO mail.kernel.org"
+        id S233317AbhBVTnr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 22 Feb 2021 14:43:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55068 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233269AbhBVTnk (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        id S233277AbhBVTnk (ORCPT <rfc822;linux-clk@vger.kernel.org>);
         Mon, 22 Feb 2021 14:43:40 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DA23664E6B;
-        Mon, 22 Feb 2021 19:42:20 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0767864E5B;
+        Mon, 22 Feb 2021 19:42:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1614022941;
-        bh=oWt7ErhnmfnnXaBPbupsHdZENFTiCLpTVx1ck7Qsfpw=;
+        bh=6ZRXacZwBMTVavJ32wJarmiD2obBpZ5uNUZXITH4fqY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gPMLgU/nLUABrP69uQotuxSpiaaahvz5H9FohqsR0NYr+7/wJ6s+BMEjLXLpU5eB9
-         E4VDt+V6G9yBgqC96/f0IWcDiHe74FeIV7+0n/lJuS88DhFi+Pa4FsvFlKjNU1Nlm0
-         U9clGFkod049ji/fmSpp82MYExRWbrnJct9tNtPMb31uQB2gkB6o6k//XksimwDUUI
-         6UaSPqgp1q2B1lcDMGgqX5MlfR/iCTqRuO1WFwWbQah8YY0KSqClZFfRlWetIdAKIq
-         yNdOua3MKl7bCmCAT+9uqxFrOJK/DrE+0VsKj5MwYUf1FVT1dxCepo1Xn+VmPNK7Hl
-         S0hiPUKZN+bCA==
+        b=uLwCgJ+ntkkya8r77vm4W3u0cr6CaygbZb4Ul/vCX657VyHj94QoR7AJakjf0TXLQ
+         12ckfewl+fj3CO+BOvNFrQJrqZp7GcwfLp6xgwQhKVBqG2CNjQODr7qdwoVy1sb9Zy
+         N69DjvXzv/u374VUXPc7uHzEvV1lLDZR3l785ISFzulotECQEaaObNX79i7nnxCF5t
+         sWCH8HyB0U0B9GeT9XESbYC+U747NWGQNTWmzLcrmiubL0mRrlO+T5l2o1VF+YQk9V
+         Q4LC0ZXdiidf2KeL3sS2f8qmS2ul5y0y2GeH+e3E+KGxOlXeZpnathlpp7jK8Ul0Ra
+         W+WXx21wkQ6EQ==
 Received: by pali.im (Postfix)
-        id 24DAD1034; Mon, 22 Feb 2021 20:42:18 +0100 (CET)
+        id 4CB4310B4; Mon, 22 Feb 2021 20:42:18 +0100 (CET)
 From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
 To:     Gregory Clement <gregory.clement@bootlin.com>,
         Andrew Lunn <andrew@lunn.ch>,
@@ -41,9 +41,9 @@ Cc:     =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
         Russell King <rmk+kernel@armlinux.org.uk>,
         =?UTF-8?q?G=C3=A9rald=20Kerma?= <gerald@gk2.net>,
         Konstantin Porotchkin <kostap@marvell.com>
-Subject: [PATCH mvebu v3 07/10] cpufreq: armada-37xx: Fix driver cleanup when registration failed
-Date:   Mon, 22 Feb 2021 20:41:55 +0100
-Message-Id: <20210222194158.12342-8-pali@kernel.org>
+Subject: [PATCH mvebu v3 08/10] cpufreq: armada-37xx: Fix determining base CPU frequency
+Date:   Mon, 22 Feb 2021 20:41:56 +0100
+Message-Id: <20210222194158.12342-9-pali@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20210222194158.12342-1-pali@kernel.org>
 References: <20210114124032.12765-1-pali@kernel.org>
@@ -55,36 +55,41 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Commit 8db82563451f ("cpufreq: armada-37xx: fix frequency calculation for
-opp") changed calculation of frequency passed to the dev_pm_opp_add()
-function call. But the code for dev_pm_opp_remove() function call was not
-updated, so the driver cleanup phase does not work when registration fails.
+When current CPU load is not L0 then loading armada-37xx-cpufreq.ko driver
+fails with following error:
 
-This fixes the issue by using the same frequency in both calls.
+    # modprobe armada-37xx-cpufreq
+    [  502.702097] Unsupported CPU frequency 250 MHz
+
+This issue was partially fixed by commit 8db82563451f ("cpufreq:
+armada-37xx: fix frequency calculation for opp"), but only for calculating
+CPU frequency for opp.
+
+Fix this also for determination of base CPU frequency.
 
 Signed-off-by: Pali Rohár <pali@kernel.org>
 Tested-by: Tomasz Maciej Nowak <tmn505@gmail.com>
 Tested-by: Anders Trier Olesen <anders.trier.olesen@gmail.com>
 Tested-by: Philip Soares <philips@netisense.com>
-Fixes: 8db82563451f ("cpufreq: armada-37xx: fix frequency calculation for opp")
-Cc: stable@vger.kernel.org
+Fixes: 92ce45fb875d ("cpufreq: Add DVFS support for Armada 37xx")
+Cc: stable@vger.kernel.org # 8db82563451f ("cpufreq: armada-37xx: fix frequency calculation for opp")
 ---
  drivers/cpufreq/armada-37xx-cpufreq.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/cpufreq/armada-37xx-cpufreq.c b/drivers/cpufreq/armada-37xx-cpufreq.c
-index c7683d447b11..1ab2113daef5 100644
+index 1ab2113daef5..e4782f562e7a 100644
 --- a/drivers/cpufreq/armada-37xx-cpufreq.c
 +++ b/drivers/cpufreq/armada-37xx-cpufreq.c
-@@ -521,7 +521,7 @@ static int __init armada37xx_cpufreq_driver_init(void)
- remove_opp:
- 	/* clean-up the already added opp before leaving */
- 	while (load_lvl-- > ARMADA_37XX_DVFS_LOAD_0) {
--		freq = cur_frequency / dvfs->divider[load_lvl];
-+		freq = base_frequency / dvfs->divider[load_lvl];
- 		dev_pm_opp_remove(cpu_dev, freq);
+@@ -469,7 +469,7 @@ static int __init armada37xx_cpufreq_driver_init(void)
+ 		return -EINVAL;
  	}
  
+-	dvfs = armada_37xx_cpu_freq_info_get(cur_frequency);
++	dvfs = armada_37xx_cpu_freq_info_get(base_frequency);
+ 	if (!dvfs) {
+ 		clk_put(clk);
+ 		return -EINVAL;
 -- 
 2.20.1
 
