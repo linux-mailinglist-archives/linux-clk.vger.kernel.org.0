@@ -2,18 +2,18 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33534322835
-	for <lists+linux-clk@lfdr.de>; Tue, 23 Feb 2021 10:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95755322837
+	for <lists+linux-clk@lfdr.de>; Tue, 23 Feb 2021 10:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbhBWJ60 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 23 Feb 2021 04:58:26 -0500
-Received: from lucky1.263xmail.com ([211.157.147.135]:60118 "EHLO
+        id S231320AbhBWJ63 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 23 Feb 2021 04:58:29 -0500
+Received: from lucky1.263xmail.com ([211.157.147.131]:49966 "EHLO
         lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232041AbhBWJ4V (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 23 Feb 2021 04:56:21 -0500
+        with ESMTP id S232056AbhBWJ42 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 23 Feb 2021 04:56:28 -0500
 Received: from localhost (unknown [192.168.167.130])
-        by lucky1.263xmail.com (Postfix) with ESMTP id B2488A7361;
-        Tue, 23 Feb 2021 17:53:56 +0800 (CST)
+        by lucky1.263xmail.com (Postfix) with ESMTP id 2824CB8878;
+        Tue, 23 Feb 2021 17:53:59 +0800 (CST)
 X-MAIL-GRAY: 0
 X-MAIL-DELIVERY: 1
 X-ADDR-CHECKED4: 1
@@ -21,9 +21,9 @@ X-ANTISPAM-LEVEL: 2
 X-ABS-CHECKED: 0
 Received: from localhost.localdomain (unknown [58.22.7.114])
         by smtp.263.net (postfix) whith ESMTP id P21323T140439055234816S1614074035264055_;
-        Tue, 23 Feb 2021 17:53:57 +0800 (CST)
+        Tue, 23 Feb 2021 17:53:59 +0800 (CST)
 X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <a34d75881c57d64c6536b0a15fa6bede>
+X-UNIQUE-TAG: <4ce57b2d39e1c22797ef4b8f76607591>
 X-RL-SENDER: zhangqing@rock-chips.com
 X-SENDER: zhangqing@rock-chips.com
 X-LOGIN-NAME: zhangqing@rock-chips.com
@@ -38,9 +38,9 @@ Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         cl@rock-chips.com, huangtao@rock-chips.com,
         kever.yang@rock-chips.com, tony.xie@rock-chips.com,
         finley.xiao@rock-chips.com, Elaine Zhang <zhangqing@rock-chips.com>
-Subject: [PATCH v1 1/4] dt-bindings: add bindings for rk3568 clock controller
-Date:   Tue, 23 Feb 2021 17:53:49 +0800
-Message-Id: <20210223095352.11544-2-zhangqing@rock-chips.com>
+Subject: [PATCH v1 3/4] clk: rockchip: support more core div setting
+Date:   Tue, 23 Feb 2021 17:53:51 +0800
+Message-Id: <20210223095352.11544-4-zhangqing@rock-chips.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210223095352.11544-1-zhangqing@rock-chips.com>
 References: <20210223095352.11544-1-zhangqing@rock-chips.com>
@@ -48,87 +48,100 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add devicetree bindings for Rockchip cru which found on
-Rockchip SoCs.
+A55 supports each core to work at different frequencies, and each core
+has an independent divider control.
 
 Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
 ---
- .../bindings/clock/rockchip,rk3568-cru.txt    | 66 +++++++++++++++++++
- 1 file changed, 66 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3568-cru.txt
+ drivers/clk/rockchip/clk-cpu.c | 25 +++++++++++++++++++++++++
+ drivers/clk/rockchip/clk.h     | 17 ++++++++++++++++-
+ 2 files changed, 41 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3568-cru.txt b/Documentation/devicetree/bindings/clock/rockchip,rk3568-cru.txt
-new file mode 100644
-index 000000000000..b1119aecb7c7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/rockchip,rk3568-cru.txt
-@@ -0,0 +1,66 @@
-+* Rockchip RK3568 Clock and Reset Unit
+diff --git a/drivers/clk/rockchip/clk-cpu.c b/drivers/clk/rockchip/clk-cpu.c
+index fa9027fb1920..cac06f4f7573 100644
+--- a/drivers/clk/rockchip/clk-cpu.c
++++ b/drivers/clk/rockchip/clk-cpu.c
+@@ -164,6 +164,18 @@ static int rockchip_cpuclk_pre_rate_change(struct rockchip_cpuclk *cpuclk,
+ 				     reg_data->mux_core_mask,
+ 				     reg_data->mux_core_shift),
+ 		       cpuclk->reg_base + reg_data->core_reg);
++		if (reg_data->core1_reg)
++			writel(HIWORD_UPDATE(alt_div, reg_data->div_core1_mask,
++					     reg_data->div_core1_shift),
++			       cpuclk->reg_base + reg_data->core1_reg);
++		if (reg_data->core2_reg)
++			writel(HIWORD_UPDATE(alt_div, reg_data->div_core2_mask,
++					     reg_data->div_core2_shift),
++			       cpuclk->reg_base + reg_data->core2_reg);
++		if (reg_data->core3_reg)
++			writel(HIWORD_UPDATE(alt_div, reg_data->div_core3_mask,
++					     reg_data->div_core3_shift),
++			       cpuclk->reg_base + reg_data->core3_reg);
+ 	} else {
+ 		/* select alternate parent */
+ 		writel(HIWORD_UPDATE(reg_data->mux_core_alt,
+@@ -209,6 +221,19 @@ static int rockchip_cpuclk_post_rate_change(struct rockchip_cpuclk *cpuclk,
+ 				reg_data->mux_core_shift),
+ 	       cpuclk->reg_base + reg_data->core_reg);
+ 
++	if (reg_data->core1_reg)
++		writel(HIWORD_UPDATE(0, reg_data->div_core1_mask,
++				     reg_data->div_core1_shift),
++		       cpuclk->reg_base + reg_data->core1_reg);
++	if (reg_data->core2_reg)
++		writel(HIWORD_UPDATE(0, reg_data->div_core2_mask,
++				     reg_data->div_core2_shift),
++		       cpuclk->reg_base + reg_data->core2_reg);
++	if (reg_data->core3_reg)
++		writel(HIWORD_UPDATE(0, reg_data->div_core3_mask,
++				     reg_data->div_core3_shift),
++		       cpuclk->reg_base + reg_data->core3_reg);
 +
-+The RK3568 clock controller generates and supplies clock to various
-+controllers within the SoC and also implements a reset controller for SoC
-+peripherals.
-+
-+Required Properties:
-+
-+- compatible: PMU for CRU should be "rockchip,rk3568-pmucru"
-+- compatible: CRU should be "rockchip,rk3568-cru"
-+- reg: physical base address of the controller and length of memory mapped
-+  region.
-+- #clock-cells: should be 1.
-+- #reset-cells: should be 1.
-+
-+Optional Properties:
-+
-+- rockchip,grf: phandle to the syscon managing the "general register files"
-+  If missing, pll rates are not changeable, due to the missing pll lock status.
-+
-+Each clock is assigned an identifier and client nodes can use this identifier
-+to specify the clock which they consume. All available clocks are defined as
-+preprocessor macros in the dt-bindings/clock/rk3568-cru.h headers and can be
-+used in device tree sources. Similar macros exist for the reset sources in
-+these files.
-+
-+External clocks:
-+
-+There are several clocks that are generated outside the SoC. It is expected
-+that they are defined using standard clock bindings with following
-+clock-output-names:
-+ - "xin24m" - crystal input - required,
-+ - "xin32k" - rtc clock - optional,
-+ - "i2sx_mclkin" - external I2S clock - optional,
-+ - "xin_osc0_usbphyx_g" - external USBPHY clock - optional,
-+ - "xin_osc0_mipidsiphyx_g" - external MIPIDSIPHY clock - optional,
-+
-+Example: Clock controller node:
-+
-+	pmucru: clock-controller@fdd00000 {
-+		compatible = "rockchip,rK3568-pmucru";
-+		reg = <0x0 0xfdd00000 0x0 0x1000>;
-+		#clock-cells = <1>;
-+		#reset-cells = <1>;
-+	};
-+
-+	cru: clock-controller@fdd20000 {
-+		compatible = "rockchip,rK3568-cru";
-+		reg = <0x0 0xfdd20000 0x0 0x1000>;
-+		rockchip,grf = <&grf>;
-+		#clock-cells = <1>;
-+		#reset-cells = <1>;
-+	};
-+
-+Example: UART controller node that consumes the clock generated by the clock
-+  controller:
-+
-+	uart1: serial@fe650000 {
-+		compatible = "rockchip,rK3568-uart", "snps,dw-apb-uart";
-+		reg = <0x0 0xfe650000 0x0 0x100>;
-+		interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH>;
-+		reg-shift = <2>;
-+		reg-io-width = <4>;
-+		clocks = <&cru SCLK_UART1>, <&cru PCLK_UART1>;
-+		clock-names = "baudclk", "apb_pclk";
-+	};
+ 	if (ndata->old_rate > ndata->new_rate)
+ 		rockchip_cpuclk_set_dividers(cpuclk, rate);
+ 
+diff --git a/drivers/clk/rockchip/clk.h b/drivers/clk/rockchip/clk.h
+index 2271a84124b0..b46c93fd0cb5 100644
+--- a/drivers/clk/rockchip/clk.h
++++ b/drivers/clk/rockchip/clk.h
+@@ -322,7 +322,7 @@ struct rockchip_cpuclk_clksel {
+ 	u32 val;
+ };
+ 
+-#define ROCKCHIP_CPUCLK_NUM_DIVIDERS	2
++#define ROCKCHIP_CPUCLK_NUM_DIVIDERS	5
+ struct rockchip_cpuclk_rate_table {
+ 	unsigned long prate;
+ 	struct rockchip_cpuclk_clksel divs[ROCKCHIP_CPUCLK_NUM_DIVIDERS];
+@@ -333,6 +333,12 @@ struct rockchip_cpuclk_rate_table {
+  * @core_reg:		register offset of the core settings register
+  * @div_core_shift:	core divider offset used to divide the pll value
+  * @div_core_mask:	core divider mask
++ * @div_core1_shift:	core1 divider offset used to divide the pll value
++ * @div_core1_mask:	core1 divider mask
++ * @div_core2_shift:	core2 divider offset used to divide the pll value
++ * @div_core2_mask:	core2 divider mask
++ * @div_core3_shift:	core3 divider offset used to divide the pll value
++ * @div_core3_mask:	core3 divider mask
+  * @mux_core_alt:	mux value to select alternate parent
+  * @mux_core_main:	mux value to select main parent of core
+  * @mux_core_shift:	offset of the core multiplexer
+@@ -342,6 +348,15 @@ struct rockchip_cpuclk_reg_data {
+ 	int		core_reg;
+ 	u8		div_core_shift;
+ 	u32		div_core_mask;
++	int		core1_reg;
++	u8		div_core1_shift;
++	u32		div_core1_mask;
++	int		core2_reg;
++	u8		div_core2_shift;
++	u32		div_core2_mask;
++	int		core3_reg;
++	u8		div_core3_shift;
++	u32		div_core3_mask;
+ 	u8		mux_core_alt;
+ 	u8		mux_core_main;
+ 	u8		mux_core_shift;
 -- 
 2.17.1
 
