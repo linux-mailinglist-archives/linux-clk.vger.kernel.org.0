@@ -2,63 +2,61 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 694A3324014
-	for <lists+linux-clk@lfdr.de>; Wed, 24 Feb 2021 16:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 667BC324015
+	for <lists+linux-clk@lfdr.de>; Wed, 24 Feb 2021 16:25:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236074AbhBXOgj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 24 Feb 2021 09:36:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50976 "EHLO
+        id S237039AbhBXOgz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 24 Feb 2021 09:36:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233674AbhBXOJb (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 24 Feb 2021 09:09:31 -0500
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81810C061574;
-        Wed, 24 Feb 2021 06:08:46 -0800 (PST)
-Received: by mail-il1-x130.google.com with SMTP id k2so1811958ili.4;
-        Wed, 24 Feb 2021 06:08:46 -0800 (PST)
+        with ESMTP id S234689AbhBXOLA (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 24 Feb 2021 09:11:00 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B61C06174A;
+        Wed, 24 Feb 2021 06:10:20 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id f6so2082286iop.11;
+        Wed, 24 Feb 2021 06:10:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=jNaEKn9zeLo3x8GDDbdt2CN0E33ynjcZ7g3+diTTT+4=;
-        b=VuTTJPwsYv2FPYRCUbQnVScmdCqugayLZPd93PigzcEsIHLcdvNijcXCTNJ5j3pBj3
-         xE+mC/dwivlsZKtG4f/DrcIiK9zliW2LgZCsIjBcu7iBNuPPnnycMNJMEV4NsAw6K8GB
-         /e3gS30CXg6nD+BEWNJozU87aB5Zz5aOejOwTZXCFU3x3QjwT4F5LEiLdcmNIX7pL74A
-         i5/phUejfMZu02h8sRpp746fL9o8QANOQlgtiRksRe4/5L7aaT9x09UueoWmitvW5vqm
-         UB4aA9aZ/Gg2ktVwdcJljSkGiws1i7/iaXjQjhQ7UvER8AwEinG18VAEEU1JONfKbdvb
-         rcXQ==
+        bh=3D1Nudqra57iFYZkCqfpmz5q0clF1aW4HbVFHLjnaxY=;
+        b=EQ+9OxZiTAskxOz0HKXsoxtLBm2lGyksYANT3XCa7/nDtfckkPDWWruBrE8Bcsgg31
+         rl1NeWUzYWdtpYi+CWtgkJXAMs9ASVJQAZoIe5xqdRghB+X5XVTWcrhaBTtSaimR5gy+
+         Kyy/L5OulfCkOh+QNOfGEbd+E/kB7WVfp1ezapWcsNgWUKedG9grXuQZhdHibFlMo8q4
+         K2v05+5fmgqsCwP+U5rXcPiFCrUL8Rcm/I1uDQEccAM3f94sqwNoK+O/wc0pEFRmPRiN
+         Dh3KL52q9oTQpi8REfuOfASzbEcc9yVMWDIhDpWPcoTpC6G8I2ia3j56056RMZpV5Fvf
+         dN0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jNaEKn9zeLo3x8GDDbdt2CN0E33ynjcZ7g3+diTTT+4=;
-        b=oN9+XdgKYuOiny7QE3DL37QgIfRLKjKrLaIYsbHUB5N6rP9WKGVBrk7v3muCJ7tyCJ
-         6LRMbsdsqNZMuu7fmLqMAQ9D6YyqmeQZcLBlPAnYzLJcPg1CMpzRjO3H5uwFFE+nU/nb
-         rx345iAdVZj3uHYHGdgC5Y38kr2Ex2hCJ2jJdErzBn2tKg40SYEP75DTzY/kcggPZNNi
-         IWZjM3oYSPpyrfbVBbiXHJXFiVBiBNTD9Y0T+LCVg/gocTq9cPcM5wmlGRyLpQffaKTC
-         nW/izx1bQQHLed+YjjW5GKDZBrDmWJTYEKlxF61R0Ro9zsza584lNiEbeGNz4jQyVKru
-         yoCA==
-X-Gm-Message-State: AOAM531hvqXc07bMmx75Q8vaxvM2OCBBkaECsdE6/YKqPJYz0w+ygN8r
-        /20834lgtOV+qRqxcofo/EZiDCMG/bwWV1i6Tvg=
-X-Google-Smtp-Source: ABdhPJwn0YlLrAmBf+AXSs7ioPhYEib1AVHCtQRw8npWuIIoXLXJjyO9S47XAfYQ0+TJt7Bvpv7frUDgpm2y9hIHyuE=
-X-Received: by 2002:a05:6e02:20ee:: with SMTP id q14mr22741071ilv.259.1614175725835;
- Wed, 24 Feb 2021 06:08:45 -0800 (PST)
+        bh=3D1Nudqra57iFYZkCqfpmz5q0clF1aW4HbVFHLjnaxY=;
+        b=GIm9Yl899J/wGGFiLtKXjv7losrejj1L/goERzc87REdYfN8RAM5A36tDp5H+tEcYB
+         lNy74FYxMZhtD8w5Ww9GXk7t/JizTNo5WdRtaJ+5Jp4zjzWoJvk3QuvEDKYo4epFiEdQ
+         uJGLObK56F270IlM7TEOEooeSJORlCvGvWh2qVsBedwVscMfqPvRe73brU+zdEUbsLzS
+         Szlp/7gTfm7VdFxzHMRLhtuSJcHf9xAe1nKVbrnjhEG6ilgnblUXpQW6VimL4Q0EovJQ
+         DK3OyV3tQuwTI/qNfmE0W0bHF9RHTW+//TqpzjjSGh1GKBLnq9TW9XIdP6nIdB2avYcO
+         9Erg==
+X-Gm-Message-State: AOAM532D66fUWQEzHYAXaou8UOoJuhhLGjXZPGTHBTx1x/zHagJog8Fl
+        pK8txsyYuNnLp7/diLoh2/+M8/nCkOnbhUqeAZrVH520
+X-Google-Smtp-Source: ABdhPJzkVX6pcV17+6LbmSXRjVa/Z6jJDmMS+AyFdrrLr2g5CFJHPCLSAYmjJYj+yw4MZDtRAyMZOviOo40kz5Z7N88=
+X-Received: by 2002:a05:6602:2e93:: with SMTP id m19mr14230470iow.122.1614175819665;
+ Wed, 24 Feb 2021 06:10:19 -0800 (PST)
 MIME-Version: 1.0
 References: <1613623791-4598-1-git-send-email-shubhrajyoti.datta@xilinx.com>
- <1613623791-4598-7-git-send-email-shubhrajyoti.datta@xilinx.com>
- <20210218093715.7fdc27ee@xps13> <161369795774.1254594.6203789110347055936@swboyd.mtv.corp.google.com>
- <CAKfKVtHVRT-8-yCwAt8+8RkS5Mi7v2RHSFg8wMNw75VkmUa+tQ@mail.gmail.com> <161404211975.1254594.9689445473737784408@swboyd.mtv.corp.google.com>
-In-Reply-To: <161404211975.1254594.9689445473737784408@swboyd.mtv.corp.google.com>
+ <1613623791-4598-2-git-send-email-shubhrajyoti.datta@xilinx.com>
+ <20210218092804.6c78c99c@xps13> <161369785558.1254594.14662342386099652001@swboyd.mtv.corp.google.com>
+In-Reply-To: <161369785558.1254594.14662342386099652001@swboyd.mtv.corp.google.com>
 From:   Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
-Date:   Wed, 24 Feb 2021 19:38:34 +0530
-Message-ID: <CAKfKVtFzerZBSM1XkdPxdv8HR-w7vod11Mew-06pFBfJSc6AsA@mail.gmail.com>
-Subject: Re: [PATCH v9 6/7] clk: clock-wizard: Remove the hardcoding of the
- clock outputs
+Date:   Wed, 24 Feb 2021 19:40:08 +0530
+Message-ID: <CAKfKVtH1rSc4d8MMZCegMNG8shNxgXfu6qTd9WxuaGGFMEJ6CA@mail.gmail.com>
+Subject: Re: [PATCH v9 1/7] dt-bindings: add documentation of xilinx clocking wizard
 To:     Stephen Boyd <sboyd@kernel.org>
 Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
         linux-clk@vger.kernel.org,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
         Mike Turquette <mturquette@baylibre.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -67,60 +65,85 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, Feb 23, 2021 at 6:32 AM Stephen Boyd <sboyd@kernel.org> wrote:
+On Fri, Feb 19, 2021 at 6:54 AM Stephen Boyd <sboyd@kernel.org> wrote:
 >
-> Quoting Shubhrajyoti Datta (2021-02-21 22:47:26)
-> > Hi Stephen,
+> Quoting Miquel Raynal (2021-02-18 00:28:04)
+> > Hi Shubhrajyoti,
 > >
-> > On Fri, Feb 19, 2021 at 6:55 AM Stephen Boyd <sboyd@kernel.org> wrote:
-> > >
-> > > Quoting Miquel Raynal (2021-02-18 00:37:15)
-> > > > Hi Shubhrajyoti,
-> > > >
-> > > > Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com> wrote on Thu, 18 Feb
-> > > > 2021 10:19:50 +0530:
-> > > >
-> > > > > The number of output clocks are configurable in the hardware.
-> > > > > Currently the driver registers the maximum number of outputs.
-> > > > > Fix the same by registering only the outputs that are there.
-> > > > >
-> > > > > Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-> > > > > ---
-> > > > > v4:
-> > > > > Assign output in this patch
-> > > > >
-> > > > >  drivers/clk/clk-xlnx-clock-wizard.c | 6 ++++--
-> > > > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/clk/clk-xlnx-clock-wizard.c b/drivers/clk/clk-xlnx-clock-wizard.c
-> > > > > index ed3b0ef..d403a74 100644
-> > > > > --- a/drivers/clk/clk-xlnx-clock-wizard.c
-> > > > > +++ b/drivers/clk/clk-xlnx-clock-wizard.c
-> > > > > @@ -473,6 +473,7 @@ static int clk_wzrd_probe(struct platform_device *pdev)
-> > > > >       unsigned long rate;
-> > > > >       const char *clk_name;
-> > > > >       struct clk_wzrd *clk_wzrd;
-> > > > > +     int outputs;
-> > > > >       struct device_node *np = pdev->dev.of_node;
-> > > > >
-> > > > >       clk_wzrd = devm_kzalloc(&pdev->dev, sizeof(*clk_wzrd), GFP_KERNEL);
-> > > > > @@ -541,6 +542,7 @@ static int clk_wzrd_probe(struct platform_device *pdev)
-> > > > >               goto err_disable_clk;
-> > > > >       }
-> > > > >
-> > > > > +     outputs = of_property_count_strings(np, "clock-output-names");
-> > > >
-> > > > A check on outputs validity is probably welcome.
-> > > >
-> > > > Also I usually prefer noutputs or nb_outputs for such variable name,
-> > > > which implies a number rather than an array, but this is personal taste.
-> > >
-> > > Ideally we get rid of clock-output-names and generate them at runtime
-> > > instead based on some combination of device name and something else.
+> > Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com> wrote on Thu, 18 Feb
+> > 2021 10:19:45 +0530:
 > >
-> > Makes sense. However it may break the current binding.
-> > Do you think that shoud be okay?
+> > > Add the devicetree binding for the xilinx clocking wizard.
+> > >
+> > > Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> > > ---
+> > > v6:
+> > > Fix a yaml warning
+> > > v7:
+> > > Add vendor prefix speed-grade
+> > > v8:
+> > > Fix the warnings
+> > > v9:
+> > > Fix the warnings
+> > >
+> > >  .../bindings/clock/xlnx,clocking-wizard.yaml       | 65 ++++++++++++++++++++++
+> > >  1 file changed, 65 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml b/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
+> > > new file mode 100644
+> > > index 0000000..d209140
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
+> > > @@ -0,0 +1,65 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: "http://devicetree.org/schemas/clock/xlnx,clocking-wizard.yaml#"
+> > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> > > +
+> > > +title: Xilinx clocking wizard
+> > > +
+> > > +maintainers:
+> > > +  - Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> > > +
+> > > +description:
+> > > +  The clocking wizard is a soft ip clocking block of Xilinx versal. It
+> > > +  reads required input clock frequencies from the devicetree and acts as clock
+> > > +  clock output.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: xlnx,clocking-wizard
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  "#clock-cells":
+> > > +    const: 1
+> > > +
+> > > +  clocks:
+> > > +    items:
+> > > +      - description: clock input
+> > > +      - description: axi clock
+> > > +
+> > > +  clock-names:
+> > > +    items:
+> > > +      - const: clk_in1
+> > > +      - const: s_axi_aclk
+> > > +
+> > > +  clock-output-names: true
+> > > +
+> > > +  xlnx,speed-grade:
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    enum: [1, 2, 3]
+> > > +    description:
+> > > +      Speed grade of the device.
+> >
+> > A bit of explanation of what this describes would be welcome.
+> >
+> > Don't forget that binding are not tied to any driver implementation,
+> > these are supposed to be hardware description properties.
 >
-> I think it is OK given that the current binding is for the staging tree.
-> The assumption is those bindings aren't stable.
-Updated it in next version.
+> Would opp tables work for this?
+This is the parameter is for speed of the fabric.
