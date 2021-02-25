@@ -2,144 +2,208 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02ACF32495F
-	for <lists+linux-clk@lfdr.de>; Thu, 25 Feb 2021 04:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA7B324BFA
+	for <lists+linux-clk@lfdr.de>; Thu, 25 Feb 2021 09:25:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235890AbhBYDXu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 24 Feb 2021 22:23:50 -0500
-Received: from mail-eopbgr40063.outbound.protection.outlook.com ([40.107.4.63]:28622
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        id S235748AbhBYIYU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 25 Feb 2021 03:24:20 -0500
+Received: from mail-db8eur05on2118.outbound.protection.outlook.com ([40.107.20.118]:40928
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232723AbhBYDXu (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 24 Feb 2021 22:23:50 -0500
+        id S235745AbhBYIYR (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 25 Feb 2021 03:24:17 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FWu0i/zb40KEGYua7u6obAeZSTiBv8+YQmdILuZQQwGkao9aY2rDl9/UupRN3f5MZP3Uo8ihqGKBjp/leUV4KhkNft+0EsU/Vqpj/NRJ470+z5f/mRWGVZ1ej4EjxCYB/+7IkAIDlYQBfI/rE6XyhgkgcS0oIUHe/bhchXN13zfMi09xgbssMeu+AgSK8Cpvn1Ng5YTdomoogYLetDslFwcF4tisTF7oS2jpjbWmYLrJl8XI/wgC7vBHieOFYpzOngsDflLlBOzq37csinQ4OUe0nXH34Ik5A6Px9WWsg8b+3zzKeKtKYOLuqKbL+9BQuhEVXhfsYo0T1frjtDzVXQ==
+ b=lJkfIQOXeEZMybnaN4ZwLebNIkSxcvjC6NNEKeBbayqOyE7Qnlem+MWmVIgyHp1x4f74E4aZ/EBF+oJrVlKRsFiNm36WwuIr8Mv4SB865+BQFafq9EaoIykDlB4pJ2nDRzux0sOcoxxUZe5AeHva1YzURt7rf5ZpMzH25GCEM9OxLAdHMqAJ+bDvUvKyDuar0Isf7RxzfmFhbsggpLNvcfJ0G25tzG3YBi2+/qQldV/Rrra5kAWuW7O2+57RLq676icDeIX2vkO7rGmtWiJWUco0v0iKgDETJz80qu+9xgeYGWRV+6i2K03PmHVkBvrwES+ogMJA39JyDzja0mBO0g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Lck6ZS8A2U9T+PdekfnW8U8SUFXIjFDjy5TRKWl5XXM=;
- b=Nzx3oAP37m5yDM9ysjXNKZhHtCxA3ZZSex+xI0lFrwrO5D/rlCvtYh2a5LpgVc26ju5f2nM8agH/4iedG0LKIt5lPSZvdKSKCD6N59XEy6xOB/FwvMkCzNXWBLKASsXnSY9x5fcfHVgpiRNjr643jFe2Pan1Pe9juNX3JcHk6sD7MpoaPChZUQHouThM6Qa42Kr0zubh9bi3aioIiyr09EhhU3q7fpdpLsdvrf57WAwvCrb0V6c9Y6BIp0Fe85JYIDNq03jIZtLe30ou9OTjnqptp0qTsgX0tNtogCSscrm2LIfXMC1iYCI+95Yu8jf4/HQ1UA4FZQAwUNBGStAWDw==
+ bh=MMedY1oLRo/jDf0B1R4vsWg91QRQr3MNg71pOTjoLNc=;
+ b=cbXJyS1MzD3j3ikVRBAFrlu2KGDwyx7Ebim4eI4J9RpzcRY2MDfxsD1yvqkedeUEU5x/N9Oi7sIVCkT+I4CIix2c3rIRFKAFIQP11agnAvfIR3CwprvPK9CgEaMnVBwqnCUfDbaEjS45yI2cnELYtpkVc9QBVQEAtLyawipO0hgNHk1d4tCADRzD0UEqwMbWFwwCK8DcA2z6dE9HRT+TEqL0Dm4zEFP5v2JF3S6ZLwzBSuvfwy8sIFlCAPn1Sr3w8W2yxBNk+wmqmKGz+Zcwdyc4NSUKbGrk2YFbe0VKBSKItRUNytGrMdtxes4GsoSxdCh6wPYS7NdzO5gqJYAlDw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
+ smtp.mailfrom=kontron.de; dmarc=pass action=none header.from=kontron.de;
+ dkim=pass header.d=kontron.de; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mysnt.onmicrosoft.com;
+ s=selector2-mysnt-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Lck6ZS8A2U9T+PdekfnW8U8SUFXIjFDjy5TRKWl5XXM=;
- b=Qi1BDqQY1ZozV6lnsm0giqNX6Map9psX3K/S2ZqwFTWZWYVgM7YzaVpHpgNmSiASoYVrSxWho34v9QOd6PlAUk7kKq13TPQ01QiGLvW1KRN5XtztaEJG+qRATVEErlupGAgsaZ762r1e/SIVwCp4pNDFcYENjffg03p3CE17NC0=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=oss.nxp.com;
-Received: from DB6PR0402MB2760.eurprd04.prod.outlook.com (2603:10a6:4:a1::14)
- by DBAPR04MB7222.eurprd04.prod.outlook.com (2603:10a6:10:1af::18) with
+ bh=MMedY1oLRo/jDf0B1R4vsWg91QRQr3MNg71pOTjoLNc=;
+ b=Q+Bu4mH145XFboB/bN8zfO4ZihMYL7atrUnwRNgVFoiE2qjlNlXYS6rSvHUebA0GftkDsdj/hbUcuIGVx4qlYXcerUxxoB4YfWxQHyI5qJQz9CRW67bb7qxPT24DcQzoCFDu2Tkw3y1G4XeLAwhFK2Dn2ZKeEL04+H/KKtHnSho=
+Authentication-Results: pengutronix.de; dkim=none (message not signed)
+ header.d=none;pengutronix.de; dmarc=none action=none header.from=kontron.de;
+Received: from AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:157::14)
+ by AM0PR10MB3588.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:15e::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.20; Thu, 25 Feb
- 2021 03:22:59 +0000
-Received: from DB6PR0402MB2760.eurprd04.prod.outlook.com
- ([fe80::d58c:d479:d094:43d0]) by DB6PR0402MB2760.eurprd04.prod.outlook.com
- ([fe80::d58c:d479:d094:43d0%9]) with mapi id 15.20.3846.043; Thu, 25 Feb 2021
- 03:22:59 +0000
-From:   peng.fan@oss.nxp.com
-To:     sboyd@kernel.org, robh+dt@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        ulf.hansson@linaro.org, adrian.hunter@intel.com,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V3 5/5] mmc: sdhci-esdhc-imx: validate pinctrl before use it
-Date:   Thu, 25 Feb 2021 11:10:04 +0800
-Message-Id: <1614222604-27066-6-git-send-email-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1614222604-27066-1-git-send-email-peng.fan@oss.nxp.com>
-References: <1614222604-27066-1-git-send-email-peng.fan@oss.nxp.com>
-Content-Type: text/plain
-X-Originating-IP: [119.31.174.66]
-X-ClientProxiedBy: SGAP274CA0007.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::19)
- To DB6PR0402MB2760.eurprd04.prod.outlook.com (2603:10a6:4:a1::14)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.19; Thu, 25 Feb
+ 2021 08:23:27 +0000
+Received: from AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::a907:416:cdde:9538]) by AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::a907:416:cdde:9538%3]) with mapi id 15.20.3868.033; Thu, 25 Feb 2021
+ 08:23:27 +0000
+Subject: Re: [PATCH v5 10/14] clk: imx: Add generic blk-ctl driver
+To:     Abel Vesa <abel.vesa@nxp.com>, Dong Aisheng <dongas86@gmail.com>
+Cc:     Dong Aisheng <aisheng.dong@nxp.com>, Rob Herring <robh@kernel.org>,
+        Peng Fan <peng.fan@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
+        Anson Huang <anson.huang@nxp.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Fabio Estevam <fabio.estevam@nxp.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Adam Ford <aford173@gmail.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Lucas Stach <l.stach@pengutronix.de>
+References: <1604402306-5348-1-git-send-email-abel.vesa@nxp.com>
+ <1604402306-5348-11-git-send-email-abel.vesa@nxp.com>
+ <CAA+hA=TfyW6Ya9adcQFd1=-sJyoCgMyaENmGumtV1ZYar1Ud2g@mail.gmail.com>
+ <20201117144828.omlwhu5y7cwsf5ci@fsr-ub1664-175>
+From:   Frieder Schrempf <frieder.schrempf@kontron.de>
+Message-ID: <6ecf593d-bee6-b0c1-718f-edcee90650ad@kontron.de>
+Date:   Thu, 25 Feb 2021 09:23:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+In-Reply-To: <20201117144828.omlwhu5y7cwsf5ci@fsr-ub1664-175>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [89.247.38.166]
+X-ClientProxiedBy: AM5PR0201CA0015.eurprd02.prod.outlook.com
+ (2603:10a6:203:3d::25) To AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:157::14)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (119.31.174.66) by SGAP274CA0007.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3890.19 via Frontend Transport; Thu, 25 Feb 2021 03:22:55 +0000
+Received: from [192.168.10.27] (89.247.38.166) by AM5PR0201CA0015.eurprd02.prod.outlook.com (2603:10a6:203:3d::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.20 via Frontend Transport; Thu, 25 Feb 2021 08:23:26 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: f408410d-0c89-4925-92b8-08d8d93ca6cf
-X-MS-TrafficTypeDiagnostic: DBAPR04MB7222:
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DBAPR04MB7222285E2EE003B18C9AB8A9C99E9@DBAPR04MB7222.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:546;
+X-MS-Office365-Filtering-Correlation-Id: b3137311-5d43-4053-a741-08d8d966a049
+X-MS-TrafficTypeDiagnostic: AM0PR10MB3588:
+X-Microsoft-Antispam-PRVS: <AM0PR10MB35886099EF29EE6A66FD6598E99E9@AM0PR10MB3588.EURPRD10.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WNvVANhwfWvA3vTXVH/e9+IIOctca6BZ9rNhErMK1S8tq+XrweGG9Dc9nCqlJb73iNXHHK6fB0/jvjYtFmrmzlWa9Pwm/Bz3KUbcdOyNsrGjarDY8lB3vWWj/6gwxiXblmafGPaTWaJzw7cYgzR2UDksEtdTa0ux+NirVxq2t0DudXv0TVA8Mr1zOgg5sq0MD5zqVKu8e6t/bx0S0ZjUdbhYkT2CJhtG4NUDUaKokW7ljAy7uw9d+k5oZsqDdHmTCDO0DaYhNKVjh5uZmBwqMZXpd8z5gYTY4p/I2CMomPgy8SEAQGXXnn0DqRytceVMwYN2vjlGze2ZjC4mq7whkWqtmXsnH1tg3RRvT/dEGEnI10aOKgzA6Nkes4WfD7njm0USP3NcpkTgrtDBhN7R/kp/CGHezsYzPDIEHhW95K/vTaDfoF4OIhswIvbBPecIJ0+TqzmLLoDK59nYQA85UNMPC5WZEFjSaKW93lcTnFHATE6wmOnn9sSPvCpFD6CtnsINydHgDPPcprXTSbXuSCql7SY4fTdBkKExehuR4n7C75ubF9tseIj8WqB6serpbNRCQzde/76yyjRSOYWvhg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0402MB2760.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(376002)(39860400002)(366004)(396003)(26005)(6486002)(5660300002)(66556008)(66946007)(66476007)(478600001)(86362001)(7416002)(956004)(6506007)(2906002)(6512007)(2616005)(6666004)(9686003)(83380400001)(16526019)(8676002)(69590400012)(4326008)(316002)(186003)(52116002)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?SPGrzSHYtxpOYXFVSfTyy66FHRj2o6w1AckK8GddO5z9yrG6rmlPqGcUBLVL?=
- =?us-ascii?Q?ezlwdu4QQiKNGP897BsVZqH/Ed3+JLk+7HLRZYYEypP6kxcgxv7xSZRCF5FR?=
- =?us-ascii?Q?wrOY5knBcOKPlGbH2m55+jn2zhzC+9p6zSHv73JA622NGxM5EWr6dt/ibMVV?=
- =?us-ascii?Q?vRcIxHvulPu3Y6oww+LxwJ8TLA+1ygeEfey5Usdh1CMGrh/lDA3/THaDUblC?=
- =?us-ascii?Q?3iXJxpXM6n03p/C3Gn2Y+/moVvmbQ4YNWFU9XXOctaNb5sBhjnUFzUSn8/9o?=
- =?us-ascii?Q?mWZuB72YPzByQAk6krZnRkorrpng8zTOmKJUqFFagoma08PZCi+BiAXfIFiC?=
- =?us-ascii?Q?B4mqzzCr3lCBnXevDYVBaC+O/DxbRbqAWvSC14yMUcL2kcPapddeXoM/dC4M?=
- =?us-ascii?Q?Bl0oOgvZEoF/QiGR5MxBXq/CUWnJL6miCcdDYqtbLQxLWJ2PXlg96DigA1y3?=
- =?us-ascii?Q?WF90A8ooC5SzCiJ0gENyRNPUZxN7G+5VFXjsBFYxyedg9O4HyVEfHOapk8w1?=
- =?us-ascii?Q?TPnWS3Pa+yHP3RaqAkcI8mEGoVqYJoH7TegP3laaeVem3OBeMDZwDNDyb/Os?=
- =?us-ascii?Q?M+Ht7iDh2q5zgtikyZogYigLoCFy4p6zbSSbCmimRXFe7nn3YtgUQi5QqHE7?=
- =?us-ascii?Q?B5ugDOxhM3PZRDFHh2o5G78lSWCZMvkU8DI5Cpm2ELajC02NvjgkHv8Nvxk+?=
- =?us-ascii?Q?JSh/4gYmJhRXbfryOMf+pNn6Clpv5g5sqJ5K0E69k8mdlonaBtnchQq36dfM?=
- =?us-ascii?Q?Jbj6xUxwKjk4eded56FOTsaSL/l3uipU/xAB9b+TIPfydXxtHGyo8IaBh0p4?=
- =?us-ascii?Q?OEivjRbxIG+cRXuvK1Is6EXTFuLPrO/ifUc96/QIVpIn5ZqgfjsZ+neYDHw+?=
- =?us-ascii?Q?cDljirM0nOS5sbddehYrnFQaBrhx7triJiEJPTk1NqHVnU9iFeRnkPO/tCrh?=
- =?us-ascii?Q?HL25nrHjlvW1swCzxxsarpmrGnSqV2URJ87yPuZDxDmVLCkbUvDTlnrIeXgZ?=
- =?us-ascii?Q?RoKkX3WxdhClWJDYcVtaEistmvSQYUKDBlsFp2C53Qlv+p7F5uf5bXavtHeM?=
- =?us-ascii?Q?bkA5YfF3tPVzQ74s1aRsadHtVdlBGFZd69I5ID2hCF2OJxWxtbHRg+HTpwjN?=
- =?us-ascii?Q?CSdKAB1PJb5UU315qZR8KMqGLLfwSwvUF+0vfPwhB0OUFGDI5lDVOqVl8McO?=
- =?us-ascii?Q?YwMQyRs0XGM+JUY1KMSCA6MLf+nWH/YsaFfuj14Rm8DlpIoZDKxlJm0LHRCI?=
- =?us-ascii?Q?02zZoUvksZTHzf31zlbOJe7IHN+5AJNaW3WImdCCkIFuk4Ij8cbKDjOQtpmC?=
- =?us-ascii?Q?VZxRwQ+qNqfcWfDZcElAu7l4?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f408410d-0c89-4925-92b8-08d8d93ca6cf
-X-MS-Exchange-CrossTenant-AuthSource: DB6PR0402MB2760.eurprd04.prod.outlook.com
+X-Microsoft-Antispam-Message-Info: jWCwI81VyA9JNyZP0i37N2I/OpWecohDr+kSpYEuCpzOyWbgz8HAcrhUJXsj5deB6Pj5jQCvaltB2xk/5PmoP6SPzPNAXmvRr0A2fvwN50iRjDvBAbJOMhbBDGaimsTOWLRpv2GCaBX/TTcOqdr1+LO38dsl1HtYR0UgD/ZSTKI8Y/+FynrGBLJS4WSDbXiHeW42GfGsvY+tftaMDUL3UtJTFSWX2C1Ku3Mnc+vhnR0M4yPy+zcwd+oKQRRhOm539zKG4OT3rF7hZmmh4somclBHEDX6G9kX0otG4IdXHATw/Am3OEHAk8WbhZMW39oDRhOmjTiemyKldoNaUfbgC6eFppHXx4o/cRZGBG77qQsL3AWQ3rcrdP92wH744kAFKo0ONp8/4bhf5Sa+poz3HiFrDPJUaowKx8Adbno4PUMBoWPzRBO9QrnOqBSNdX0lRT/8HuBL76VAtYR9INUTXA025LqUkZUKUordPJA3kXxBQPXjnID7bUm5cHqSC7nIdr1cSKijpoghKWHl3UzINQBHHBG0xZgnkSgdF6L6WQEBGaq5SCIO5DO4rG7aq1jf0a0rxVFdac8IuGWIHYn3eWLFONgvQ2wbQvGcH9uJe2x7u1NgE+c21qBme9eIixsV
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(396003)(376002)(136003)(346002)(39860400002)(366004)(66946007)(8676002)(186003)(26005)(16526019)(31696002)(86362001)(5660300002)(66476007)(66556008)(31686004)(53546011)(52116002)(956004)(83380400001)(54906003)(8936002)(2616005)(110136005)(44832011)(16576012)(36756003)(7416002)(316002)(2906002)(6486002)(478600001)(4326008)(41533002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?R0RjRkN6Ti9XWkpwTnpibGswQzNPRDFFUjg2Yjd1MEZwOU5NOXRmY1ljVmVR?=
+ =?utf-8?B?K0pXczlZSUR5TUxPSTgzelRFSXh1K3YrRTJPcTlKZlI5ZFdLSjBsY1Y1cU5o?=
+ =?utf-8?B?djB6N2d3bzZqUjRoRHRGSkpyU1JGT3NFbC9IVEJSRW9wRUl3TU1WYk9Bdy9F?=
+ =?utf-8?B?SjVsMWFreC82V1RQRis5eENWWFM1cnd5ZWlRMWFrSFFNcXgrL0tyQlRJZ0kr?=
+ =?utf-8?B?b0crckpFdkUzL0JBKzhmVlpYam5VVUVSczhEWGVHdUNZbzIzNy9OWmlDY05E?=
+ =?utf-8?B?algzZmpDOGVCdjFWSnZodEZUZGNQczVTS2hoaE1zemFKUktWYTg5R3hNbG54?=
+ =?utf-8?B?N25xbVBZZkNuTjJGUkxmU2E5RlJjWW9MeE5PRGs5blg1YjZsVDVublFPL0g1?=
+ =?utf-8?B?NjNrOEpCMDlNeVcrS1VWNHoxbFZ4VmtTNG92TWErall1eGFaVEs0aDhDTU96?=
+ =?utf-8?B?b2hBNm5KeWVVS0VYaG0wQms3TVM3SnRJeDNxbktkQUE5dDVVOSs2aFJTOWtG?=
+ =?utf-8?B?YU9nYTk4MDdIUjMzdGY2bXVJWG1ra1loeks4cHJabVdnS1MzYU9oaVlkeE93?=
+ =?utf-8?B?emUycENRRzlnMHFGWklJaDdTWFNYR2J6ODYxNTJLVmlENTZUWmdXdlJtbXR4?=
+ =?utf-8?B?azhrVGs2RHA2cHllTitzWFQvcVdIb05xL1ZjQzZZWVBZNHA0QyswQStIcTh1?=
+ =?utf-8?B?RUFncWY4c1lreVFyNnE4UlFhK3M0clFWdnhqT3Y2aU5qVjZ4dmRocnU4b212?=
+ =?utf-8?B?MTVYTlZoWGpjMGtWNmtsamxza3J6eHZwK2VJYWxWcEFISDVlWnNlamM2ME1w?=
+ =?utf-8?B?OFJvVUVQQ0RrRFpqanZ2VjJLTXRQL3RnTzBHZ0xFa25UeTdkam5Fbk1wdUt2?=
+ =?utf-8?B?M1NRYlhyZ2NocXI3Y1Y0bjdYbEhqMDZDbGpneWZIblFPMjhTbnNUNTk0R25Z?=
+ =?utf-8?B?U1hrbFQ5OFR6TGgrcnd2UEFiWTZSeTZZaXhlenhsQmdlZXh1UGRMZUZnQzR6?=
+ =?utf-8?B?R3dmMVJ3Zk03WTQ4eUlwYTVLSWdCdXRQRVdQZmFQc256QlNRdUtvT2pid25K?=
+ =?utf-8?B?ZWkzYVJZSVNTQ210ZXVYR1RvWmk5OVpmcGtMTUorN0xKUmNJaFhDUHpTZzho?=
+ =?utf-8?B?RmZUVlpwVzJBVG5MeXcwd3VQd3dOaUxjcjhDZll0UzRmSEVYNmw0ZkFsa1dQ?=
+ =?utf-8?B?aStKODFUVFZrOFJyQTI2NWtUYVUwdEdDTy9VdWU3TnBqOTZxTEtGZ3NtVG83?=
+ =?utf-8?B?YXFKOGt5QXZEeTJwSEM5Sythd3NYc2FLTklYS25YK2ttN3doMXpIekUvOGlQ?=
+ =?utf-8?B?YzJucWpJTjRjdVJKZGVtdXFhcUM3SXEzWEErMzdnN21UT01ucXZXUjlYOXlw?=
+ =?utf-8?B?UVlqVHVpaTBXR0E3eTVVRWtQbDgyb3AySElKYml0OHh1N3pvY2pYWkE5Vkoz?=
+ =?utf-8?B?aGJ2bElLZUFKcERJeGhwZzJxWlBOeWNVaGl5TlFpSWpOVzJCYnpKbWZjTlg1?=
+ =?utf-8?B?dFpScUNiRE1yeERUQVYrUk9ISG91aEg4c2dDZlVoNlFXVDYvS0o1UDhJSjNQ?=
+ =?utf-8?B?YUZxYjQ4ZWZaS2c0cDd2cDZxYkJEM1FhOTdCWmRObE03UWV2V0haMkg2MGt1?=
+ =?utf-8?B?M3F5dmVXdTVTUjZRRUp3TnRIUmJjOUNHWUNHLzIvNXlXVVN1azNxVmk5ampo?=
+ =?utf-8?B?cjI4ZzdUK0NpT0dmUktCQk94SWxmbGZrclYxNHBiOThjYVc3bDBTRGpDT3RL?=
+ =?utf-8?Q?rd638KcWKucOGNOyjIyMge79pN93GqWEF1Ap80m?=
+X-OriginatorOrg: kontron.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3137311-5d43-4053-a741-08d8d966a049
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR10MB2963.EURPRD10.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2021 03:22:59.6659
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2021 08:23:27.4596
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Id: 8c9d3c97-3fd9-41c8-a2b1-646f3942daf1
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: srLEI1leelfHm0DpJBd0oAWo12FUorhLW++ZzNpobwY4S6b4EYeM8YH/eozEZAQqMIQykXSVJXvq4HCkJdSptA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7222
+X-MS-Exchange-CrossTenant-UserPrincipalName: XGSCx8G+MhmNILOtu6+vTtIOxasLg4y3kaJ/dOzXmXQGy2qpomxLOsxWr9oJwHFz8o++6VvrFKLkTEqg0t4729ibnC1JQYW9z2yKnMIr3XE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR10MB3588
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+Hi Abel,
 
-When imx_data->pinctrl is not a valid pointer, pinctrl_lookup_state
-will trigger kernel panic.
+On 17.11.20 15:48, Abel Vesa wrote:
+> On 20-11-11 17:13:25, Dong Aisheng wrote:
+>> On Tue, Nov 3, 2020 at 7:22 PM Abel Vesa <abel.vesa@nxp.com> wrote:
+>> ...
+>>> +static int imx_blk_ctl_reset_set(struct reset_controller_dev *rcdev,
+>>> +                                 unsigned long id, bool assert)
+>>> +{
+>>> +       struct imx_blk_ctl_drvdata *drvdata = container_of(rcdev,
+>>> +                       struct imx_blk_ctl_drvdata, rcdev);
+>>> +       unsigned int offset = drvdata->rst_hws[id].offset;
+>>> +       unsigned int shift = drvdata->rst_hws[id].shift;
+>>> +       unsigned int mask = drvdata->rst_hws[id].mask;
+>>> +       void __iomem *reg_addr = drvdata->base + offset;
+>>> +       unsigned long flags;
+>>> +       u32 reg;
+>>> +
+>>> +       if (!assert && !test_bit(1, &drvdata->rst_hws[id].asserted))
+>>> +               return -ENODEV;
+>>
+>> What if consumers call deassert first in probe which seems common in kernel?
+>> It seems will fail.
+>> e.g.
+>> probe() {
+>>      reset_control_get()
+>>      reset_control_deassert()
+>> }
+>>
+>> Regards
+>> Aisheng
+>>
+> 
+> OK, I'm trying to explain here how I know the resets are supposed to be working
+> and how the BLK_CTL IP is working.
+> 
+> 
+> First of, the BLK_CTL bits (resets and clocks) all have the HW init (default) values
+> as 0. Basically, after the blk_ctl PD is powered on, the resets are deasserted and
+> clocks are gated by default. Since the blk_ctl is not the parent of any of the
+> consumers in devicetree (the reg maps are entirely different anyway), there is no
+> way of ordering the runtime callbacks between the consumer and the blk_ctl. So we
+> might end up having the runtime resume callback after the one from EARC (consumer),
+> for example, which will basically overwrite the value written by EARC driver with
+> whatever was saved on suspend.
+> 
+> Now, about the usage of the reset bits. AFAICT, it would make more sense to assert
+> the reset, then enable the clock, then deassert. This way, you're keeping the
+> EARC (consumer) in reset (with the clocks on) until you eventually release it out of
+> reset by deasserting. This is how the runtime resume should deal with the reset
+> and the clock. As for the runtime suspend, the reset can be entirely ignored as long
+> as you're disabling the clock.
+> 
+> This last part will allow the blk_ctl to make the following assumption:
+> if all the clocks are disabled and none of the reset bits are asserted, I can power off.
+> 
+> Now, I know there are drivers outthere that do assert on suspend, but as long as the
+> clocks are disabled, the assert will have no impact. But maybe in their case the reset
+> controller cannot power down itself.
+> 
+> As for the safekeeping of the register, I'll just drop it due to the following arguments:
+> 1. all the clocks are gated by default
+> 2. all resets are deasserted by default
+> 3. when blk_ctl goes down, all the consumers go down. (all have the same PD)
+> 
+>  From 1 and 2 results the IP will not be running and from 3 results the HW state
+> of every IP becomes HW init state.
 
-When we boot Dual OS on Jailhouse hypervisor, we let the 1st Linux to
-configure pinmux ready for the 2nd OS, so the 2nd OS not have pinctrl
-settings.
+Are there any plans to continue this work? As BLK-CTL it is not only 
+relevant for the i.MX8MP, but also for i.MX8MM and i.MX8MN, it would be 
+nice to get this ready in order to prepare for proper graphics/display 
+support.
 
-Similar to this commit b62eee9f804e ("mmc: sdhci-esdhc-imx: no fail when no pinctrl available").
-
-Reviewed-by: Bough Chen <haobo.chen@nxp.com>
-Reviewed-by: Alice Guo <alice.guo@nxp.com>
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/mmc/host/sdhci-esdhc-imx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/mmc/host/sdhci-esdhc-imx.c b/drivers/mmc/host/sdhci-esdhc-imx.c
-index a20459744d21..94327988da91 100644
---- a/drivers/mmc/host/sdhci-esdhc-imx.c
-+++ b/drivers/mmc/host/sdhci-esdhc-imx.c
-@@ -1488,7 +1488,7 @@ sdhci_esdhc_imx_probe_dt(struct platform_device *pdev,
- 
- 	mmc_of_parse_voltage(np, &host->ocr_mask);
- 
--	if (esdhc_is_usdhc(imx_data)) {
-+	if (esdhc_is_usdhc(imx_data) && !IS_ERR(imx_data->pinctrl)) {
- 		imx_data->pins_100mhz = pinctrl_lookup_state(imx_data->pinctrl,
- 						ESDHC_PINCTRL_STATE_100MHZ);
- 		imx_data->pins_200mhz = pinctrl_lookup_state(imx_data->pinctrl,
--- 
-2.30.0
-
+Thanks
+Frieder
