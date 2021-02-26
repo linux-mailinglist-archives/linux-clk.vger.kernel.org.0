@@ -2,141 +2,64 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3B93263E7
-	for <lists+linux-clk@lfdr.de>; Fri, 26 Feb 2021 15:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EF2832642A
+	for <lists+linux-clk@lfdr.de>; Fri, 26 Feb 2021 15:36:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbhBZOP6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 26 Feb 2021 09:15:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbhBZOPn (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 26 Feb 2021 09:15:43 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33CE3C06178B
-        for <linux-clk@vger.kernel.org>; Fri, 26 Feb 2021 06:14:18 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id g3so11107401edb.11
-        for <linux-clk@vger.kernel.org>; Fri, 26 Feb 2021 06:14:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fiQu2oPApg5uagXMeqvolPXEApCItlWJFjBIgQNcT+U=;
-        b=J5pKGpp119dXassFAQHDedxcYd25QkctzzdK/xuhuJiTm3yxPt1cK8uG+fpwUUdGy+
-         IiimOncJrA+KsZtTxqnEaWqkr/ahi005229VXf7F+d02ok7m5USrYAvviwADS1Fxzuay
-         2l1WLWwav6JcD1uEa0BWutnySL0uDe5xzN7BU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fiQu2oPApg5uagXMeqvolPXEApCItlWJFjBIgQNcT+U=;
-        b=dmBKtmn05Ig+LlwZTPMwh82X7TRP56AN7ocKvcNbc7gDc2VNJeGFeqoJu4TzPNr5/0
-         a8/3AjWhRd6oM885rCllsycvUcoS9VJwFI6uBzdx0oxrFEUciElKA1qxQG9xy5+FHaoq
-         Mum9JDumW85HsJ2AGs9YO558Y4IAx/dBn24qJPC/jU1yFx1ryu2H9Uqz51w6P1TU1Nuf
-         KZgPV6ol8Yqvytjw5klINU1dR1Bjv1Aa//pqS3SjVr5pTeI0kCc411AxRUGJlL9te7o7
-         QoKSXhNFAwY8e1glBcWLeMQ5NAmo2texNASd24/V5ysBoIEA0F2PBQgKdZhluXk09BIt
-         1woQ==
-X-Gm-Message-State: AOAM531/AzU2gPfOVkQkQ92DdsVst8lWTceJ5DUoYh5Zrnc5gH6ldFGq
-        j/0IjDpY36KX0awnsGu4RtJU2Q==
-X-Google-Smtp-Source: ABdhPJw/Q9UFfy0SlSake+cTOwjAruZIS7wv4RgEF5dEECeCFkfD0F584h7BRA9fzQUyQlAlUYBC7w==
-X-Received: by 2002:aa7:d451:: with SMTP id q17mr3483756edr.381.1614348856948;
-        Fri, 26 Feb 2021 06:14:16 -0800 (PST)
-Received: from prevas-ravi.prevas.se ([80.208.71.141])
-        by smtp.gmail.com with ESMTPSA id g3sm5316838ejz.91.2021.02.26.06.14.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Feb 2021 06:14:16 -0800 (PST)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-clk@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: [PATCH 2/2] drivers: misc: add ripple counter driver
-Date:   Fri, 26 Feb 2021 15:14:11 +0100
-Message-Id: <20210226141411.2517368-3-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210226141411.2517368-1-linux@rasmusvillemoes.dk>
-References: <20210226141411.2517368-1-linux@rasmusvillemoes.dk>
+        id S230140AbhBZOgb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 26 Feb 2021 09:36:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44140 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230135AbhBZOgS (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 26 Feb 2021 09:36:18 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AD65764EDB;
+        Fri, 26 Feb 2021 14:35:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614350137;
+        bh=7Q5YSSyWvZlb8YOjfo3KFfirCkHhDHuR0+GAQ4CSwbs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NHOXrNdgDF2voWjHb0k1T9BR590bhpwBW3jSQ/dqLG3vH1w6+T+v64IlcGOJ5X96h
+         J43aMk+wpy1L5fRN3gjfdek9UJQuIYWhKY3DDBpBO89cRs94U66C2byGI+ln19Ve85
+         dE9SqdCensk6MNqFQ3m7NUUw4QVXLMrumIktgFZ1mLoNPV1qfxta0yZVJG+twpnsx1
+         9NqYSd8rtsng8H7CjAKa61PNaZEIjq4YaIoIJuffefP/5RxtA9VqL9XM35J/msk+r2
+         G6o6k1NAOd7f8oPLfWwWFe+xlhtOPcB1CowVz3t4L2FYv7ZvW0HEdZyftMJ7VUPMhG
+         EKb3QQMhFnfDg==
+Received: by mail-oo1-f48.google.com with SMTP id e17so2218478oow.4;
+        Fri, 26 Feb 2021 06:35:37 -0800 (PST)
+X-Gm-Message-State: AOAM533UAhmRVtAPR74YrxatYN+kLoF6+NMPEVU8XqC+f24+gIjJrFWS
+        Po65dN4qcGbGs7XbK3tfiM5wwXs7WS9AS7cFQWw=
+X-Google-Smtp-Source: ABdhPJxZGg2YGR/zkHxqO3K1tre6ZEsBdiOU+Tgtf23gLBabVr1WWxnuAgW6aRA3lAgOOzjq2lU72rnK4gS9aPvi/dc=
+X-Received: by 2002:a4a:8ed2:: with SMTP id c18mr2499032ool.66.1614350136914;
+ Fri, 26 Feb 2021 06:35:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210226141411.2517368-1-linux@rasmusvillemoes.dk>
+In-Reply-To: <20210226141411.2517368-1-linux@rasmusvillemoes.dk>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Fri, 26 Feb 2021 15:35:20 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2=nZ3bbeguXjbFrhz0nWeUOcLM7mRudhPDrcb+jZ4VvQ@mail.gmail.com>
+Message-ID: <CAK8P3a2=nZ3bbeguXjbFrhz0nWeUOcLM7mRudhPDrcb+jZ4VvQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] add ripple counter dt binding and driver
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-clk <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The only purpose of this driver is to serve as a consumer of the input
-clock, to prevent it from being disabled by clk_disable_unused().
+On Fri, Feb 26, 2021 at 3:14 PM Rasmus Villemoes
+<linux@rasmusvillemoes.dk> wrote:
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- drivers/misc/Kconfig      |  7 +++++++
- drivers/misc/Makefile     |  1 +
- drivers/misc/ripple-ctr.c | 31 +++++++++++++++++++++++++++++++
- 3 files changed, 39 insertions(+)
- create mode 100644 drivers/misc/ripple-ctr.c
+>
+> So I'm thinking that the proper way to handle this is to be able to
+> represent that ripple counter as a clock consumer in DT and have a
+> driver do the clk_prepare_enable(), even if that driver doesn't and
+> can't do anything else. But I'm certainly open to other suggestions.
 
-diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index f532c59bb59b..44b0b6ce42df 100644
---- a/drivers/misc/Kconfig
-+++ b/drivers/misc/Kconfig
-@@ -445,6 +445,13 @@ config HISI_HIKEY_USB
- 	  switching between the dual-role USB-C port and the USB-A host ports
- 	  using only one USB controller.
- 
-+config RIPPLE_CTR
-+	tristate "Trivial ripple counter driver"
-+	help
-+	  This provides a stub driver for a ripple counter, whose
-+	  only purpose is to request and enable the clock source
-+	  driving the counter.
-+
- source "drivers/misc/c2port/Kconfig"
- source "drivers/misc/eeprom/Kconfig"
- source "drivers/misc/cb710/Kconfig"
-diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-index 99b6f15a3c70..d560163068a9 100644
---- a/drivers/misc/Makefile
-+++ b/drivers/misc/Makefile
-@@ -56,3 +56,4 @@ obj-$(CONFIG_HABANA_AI)		+= habanalabs/
- obj-$(CONFIG_UACCE)		+= uacce/
- obj-$(CONFIG_XILINX_SDFEC)	+= xilinx_sdfec.o
- obj-$(CONFIG_HISI_HIKEY_USB)	+= hisi_hikey_usb.o
-+obj-$(CONFIG_RIPPLE_CTR)	+= ripple-ctr.o
-diff --git a/drivers/misc/ripple-ctr.c b/drivers/misc/ripple-ctr.c
-new file mode 100644
-index 000000000000..f086eaf335df
---- /dev/null
-+++ b/drivers/misc/ripple-ctr.c
-@@ -0,0 +1,31 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+#include <linux/clk.h>
-+#include <linux/err.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+
-+static int ripple_ctr_probe(struct platform_device *pdev)
-+{
-+	struct clk *clk;
-+
-+	clk = devm_clk_get(&pdev->dev, NULL);
-+	if (IS_ERR(clk))
-+		return PTR_ERR(clk);
-+	return clk_prepare_enable(clk);
-+}
-+
-+static const struct of_device_id ripple_ctr_ids[] = {
-+	{ .compatible = "linux,ripple-counter", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, ripple_ctr_ids);
-+
-+static struct platform_driver ripple_ctr_driver = {
-+	.driver	= {
-+		.name		= "ripple-counter",
-+		.of_match_table	= ripple_ctr_ids,
-+	},
-+	.probe	= ripple_ctr_probe,
-+};
-+module_platform_driver(ripple_ctr_driver);
--- 
-2.29.2
+How about adding support for the optional clock to the gpio_wdt driver,
+would that work?
 
+      Arnd
