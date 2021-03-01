@@ -2,85 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60356327B0E
-	for <lists+linux-clk@lfdr.de>; Mon,  1 Mar 2021 10:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF558327CDD
+	for <lists+linux-clk@lfdr.de>; Mon,  1 Mar 2021 12:09:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234126AbhCAJqP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 1 Mar 2021 04:46:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49874 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234104AbhCAJpq (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 1 Mar 2021 04:45:46 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7292E601FE;
-        Mon,  1 Mar 2021 09:45:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614591905;
-        bh=+kVuRMmJFA3NeZk2H02s5z77HTpE92uBU8CQsiK21zs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LgMxrB4SnOanZzGeiI5celQIQV1vl6N9orOE5JGd/h5qiYvPQpkj/nr3ASZKtGnBj
-         cHO72uDzTQ0VVPkY6iUDCCPGDK1bEKT7rSXxZQ78tbrROe/sk1Tpxu3Jks8k2kHUBK
-         DWxtB6VmJWbtNoGI/q6E86+bd5PoUb8fLTuiPR6HFVVR6i7W7Yxw7iQC4FnSPmR5Eq
-         ggL8W6JNfRZT1rSlwtSXZnx5K6mVJx0gR5GFJwQ8JN+1Q/ADEyIBqVxA9StpE5o32Q
-         BZKximWs7IaSZjwOMFW5MEdd5sc9Pd7ZycWru39dYcFCby/rhegy1Y6j+FL7t0NaSf
-         2ksqojn0V+gnw==
-Received: by mail-ot1-f53.google.com with SMTP id h22so15858265otr.6;
-        Mon, 01 Mar 2021 01:45:05 -0800 (PST)
-X-Gm-Message-State: AOAM532E0dezNLa9zQCM9HAACx11SdCp86sH+6zjVXxmlTjL4cKrGQgJ
-        mQbO4kNc6BdcDxj7mRTplq1SHP//g8FweEbYzig=
-X-Google-Smtp-Source: ABdhPJxqvjLn6W5eFEMQcS7P3mahZ0tKYSfy6AiKZY4imuyX6VCPZwA1wKdoKFwqWARtFs6NqMB/I+f4BREMDuCxYOU=
-X-Received: by 2002:a9d:6b8b:: with SMTP id b11mr12801036otq.210.1614591904691;
- Mon, 01 Mar 2021 01:45:04 -0800 (PST)
+        id S233527AbhCALJY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 1 Mar 2021 06:09:24 -0500
+Received: from antares.kleine-koenig.org ([94.130.110.236]:51084 "EHLO
+        antares.kleine-koenig.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233514AbhCALJV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 1 Mar 2021 06:09:21 -0500
+Received: by antares.kleine-koenig.org (Postfix, from userid 1000)
+        id 4F7E9B1A294; Mon,  1 Mar 2021 12:08:35 +0100 (CET)
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-pwm@vger.kernel.org, linux-clk@vger.kernel.org,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] clk: provide new devm helpers for prepared and enabled clocks
+Date:   Mon,  1 Mar 2021 12:08:18 +0100
+Message-Id: <20210301110821.1445756-1-uwe@kleine-koenig.org>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-References: <20210226141411.2517368-1-linux@rasmusvillemoes.dk>
- <CAK8P3a2=nZ3bbeguXjbFrhz0nWeUOcLM7mRudhPDrcb+jZ4VvQ@mail.gmail.com>
- <e5fd7ce3-3ba6-e5de-1cbc-fa31bd46942c@rasmusvillemoes.dk> <2208f466-e509-6bbe-0358-34effb965610@roeck-us.net>
- <285d739a-b343-c411-5461-0fe1f44177a5@rasmusvillemoes.dk>
-In-Reply-To: <285d739a-b343-c411-5461-0fe1f44177a5@rasmusvillemoes.dk>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Mon, 1 Mar 2021 10:44:48 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0tTQKZ6=55yCQx=60iBt1L6RZzzSvSJMmfKYUkgiWjrQ@mail.gmail.com>
-Message-ID: <CAK8P3a0tTQKZ6=55yCQx=60iBt1L6RZzzSvSJMmfKYUkgiWjrQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] add ripple counter dt binding and driver
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, Mar 1, 2021 at 9:34 AM Rasmus Villemoes
-<linux@rasmusvillemoes.dk> wrote:
-> On 26/02/2021 20.53, Guenter Roeck wrote:
-> >
-> > Sorry, I am missing something. If the watchdog is controlled by the clock,
-> > it is a consumer of that clock.
->
-> But that's just it, the watchdog chip is _not_ a consumer of the clock -
-> I don't think I've ever seen a gpio_wdt that is not internally clocked,
-> but even if they exist, that's not the case for this board.
->
->  What else does "consumer" mean ? And why
-> > not just add optional clock support to the gpio_wdt driver ?
->
-> Because, the consumer is a piece of electronics sitting _between_ the
-> watchdog chip's reset output and the SOCs reset pin, namely the ripple
-> counter that implements a 64 ms delay from the watchdog fires till the
-> actual reset. (The watchdog's reset is also routed directly to an
-> interrupt; so software gets a 64 ms warning that a hard reset is imminent).
+Hello,
 
-I think it's  a question of how you look at what the gpio_wdt device is.
-While physical gpio chip is not a consumer of the clock, I agree with
-Guenter that the conceptual device is: The functionality of the watchdog
-in this case is provided by the combination of the external chip with the
-ripple counter. I think it is therefore appropriate to have the gpio_wdt
-and the driver refer to the clock as part of the watchdog.
+compared to the (implicit) v1 sent with Message-Id:
+20201013082132.661993-1-u.kleine-koenig@pengutronix.de) I rebased
+(trivially) to v5.12-rc1, fixed a bug and split the first patch in two
+to make the series easier to review.
 
-        Arnd
+I also stripped down the demo patch to a single driver.
+
+Thanks for considering
+Uwe
+
+Uwe Kleine-König (3):
+  clk: generalize devm_clk_get() a bit
+  clk: Provide new devm_clk_helpers for prepared and enabled clocks
+  pwm: atmel: Simplify using devm_clk_get_prepared()
+
+ drivers/clk/clk-devres.c | 106 +++++++++++++++++++++++++++++++--------
+ drivers/pwm/pwm-atmel.c  |  15 +-----
+ include/linux/clk.h      |  87 +++++++++++++++++++++++++++++++-
+ 3 files changed, 173 insertions(+), 35 deletions(-)
+
+
+base-commit: fe07bfda2fb9cdef8a4d4008a409bb02f35f1bd8
+-- 
+2.30.0
+
