@@ -2,90 +2,99 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E51B3271BF
-	for <lists+linux-clk@lfdr.de>; Sun, 28 Feb 2021 10:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E5F3277C1
+	for <lists+linux-clk@lfdr.de>; Mon,  1 Mar 2021 07:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbhB1Je1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 28 Feb 2021 04:34:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbhB1JeY (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 28 Feb 2021 04:34:24 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FFCC06174A;
-        Sun, 28 Feb 2021 01:33:44 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id b21so9150575pgk.7;
-        Sun, 28 Feb 2021 01:33:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CQcNXul42OdjZ/11X+dsEbe6I5ZkvgAlKEhd5f4JttI=;
-        b=YseBDxj1XmfQfRHJIiRpyFyEQaAdJ1XSqsmj/a3cNrAH4rTo05OqSEqN709gYJZ7nj
-         CL8zUmadfUm/18uH9fwD6EiJ9wxI9Wey8/+vTEkO62Y245p88m1WSQNwUy1fHQtvlY98
-         vaARp4jdXcxYHuVpfJcqLhw266NtjaJzK4ohEQD8T3B47414tJaU4KcWeayRc/Ru9aq1
-         sl7XFi6RFKKuZCJKAs/opsBVTYTZce1MlhkMiMTWRM1rx8D+bpoyVB8c/8423919doqb
-         nq/R0st/DzAX8fB2Ff60aEgD4UtjOCMG2P5MfyxFKJROPsTQ7GMrGJnizh6y2rGijJSA
-         S9bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CQcNXul42OdjZ/11X+dsEbe6I5ZkvgAlKEhd5f4JttI=;
-        b=D3ryjpc6vDKtIGWrnwup5puN0LkrQEbUbFuUdqog0VBX2H3bJWoTZAIepZzmUgDj59
-         9APoU6N6Ycs1b1sffzI48bDewYA4T1SDOqPSs42BVAN/5oX04f9kICblxXv93Wr5QGhU
-         6iQVrfPzPhQ3TY0/ro8XVhb/TCwWrdrPHxtChqE3zhrNJfG32dcait05uAw5ANXRNb/M
-         CPegHA/976FbEFwHJnz4W7GtPQ7o8s0C0z6uALX/owTaSYy7vrCwDXDxyiMgFDkv0ndQ
-         m8n4atwW5XaNjGhzSgrGeNKF/0sfXBRuph+IkIMizWKZT85TqVnCdRnV8j2f444Wn47T
-         lpKQ==
-X-Gm-Message-State: AOAM531jtQ5yl0RjxtsyyxdRzgja8ogo5oVujLuOhOKvDpE2Tqcmqmox
-        Xi14iCKCR/wkydnZ0cF2q1v4mxS4s8F2qfbYjms=
-X-Google-Smtp-Source: ABdhPJwxr7BtwuTnM0O+LoVoUmW80xOoplvQc9dCHbDauAAnMHRzRq8Hjjo0tErujsvqMSbphiXZXNKmnSyMu9aq6lI=
-X-Received: by 2002:a65:5ac9:: with SMTP id d9mr9365056pgt.74.1614504824125;
- Sun, 28 Feb 2021 01:33:44 -0800 (PST)
-MIME-Version: 1.0
-References: <20210226141411.2517368-1-linux@rasmusvillemoes.dk>
- <20210226141411.2517368-3-linux@rasmusvillemoes.dk> <CAHp75Vc8S2E0vWFcqK-jO9Nhd-Us_7t-aWNj-7k+fWDcqR1XkQ@mail.gmail.com>
- <CAHp75VfNHkJp-SMacKdaSuy3gDECs=u4BNMNe2KjYkrDiwb8jg@mail.gmail.com>
-In-Reply-To: <CAHp75VfNHkJp-SMacKdaSuy3gDECs=u4BNMNe2KjYkrDiwb8jg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 28 Feb 2021 11:33:28 +0200
-Message-ID: <CAHp75Vdrsr8zJzuovUEd6RtSHOmdASrQa1--A6HBVmj8mx8+Kw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drivers: misc: add ripple counter driver
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S232105AbhCAGug (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 1 Mar 2021 01:50:36 -0500
+Received: from lucky1.263xmail.com ([211.157.147.132]:36764 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232087AbhCAGu3 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 1 Mar 2021 01:50:29 -0500
+Received: from localhost (unknown [192.168.167.70])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 5BF44F28BC;
+        Mon,  1 Mar 2021 14:47:53 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P31655T140708449044224S1614581271100343_;
+        Mon, 01 Mar 2021 14:47:52 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <d8ba457f321385b8562c37570316750f>
+X-RL-SENDER: zhangqing@rock-chips.com
+X-SENDER: zhangqing@rock-chips.com
+X-LOGIN-NAME: zhangqing@rock-chips.com
+X-FST-TO: mturquette@baylibre.com
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   Elaine Zhang <zhangqing@rock-chips.com>
+To:     mturquette@baylibre.com, robh+dt@kernel.org, sboyd@kernel.org,
+        heiko@sntech.de
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        cl@rock-chips.com, huangtao@rock-chips.com,
+        kever.yang@rock-chips.com, tony.xie@rock-chips.com,
+        finley.xiao@rock-chips.com, Elaine Zhang <zhangqing@rock-chips.com>
+Subject: [PATCH v3 0/4] clk: rockchip: add clock controller for rk3568
+Date:   Mon,  1 Mar 2021 14:47:45 +0800
+Message-Id: <20210301064749.10392-1-zhangqing@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sun, Feb 28, 2021 at 11:29 AM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Sun, Feb 28, 2021 at 11:07 AM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Friday, February 26, 2021, Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
-> >>
-> >> The only purpose of this driver is to serve as a consumer of the input
-> >> clock, to prevent it from being disabled by clk_disable_unused().
-> >
-> > We have a clock API to do the same (something like marking it used or so) why do you need a driver?
->
-> Example:
-> https://elixir.bootlin.com/linux/latest/source/drivers/platform/x86/pmc_atom.c#L365
->
-> If it's a DT based platform I think you can make it somehow work thru DT.
+Add the clock tree definition for the new rk3568 SoC.
 
-Okay, briefly looking at the state of affairs [1] seems like you need
-to hack it into clock provider.
+Change in V3:
+[PATCH v3 1/4]: Fix some code styles.
+[PATCH v3 2/4]: No change.
+[PATCH v3 3/4]: No change.
+[PATCH v3 4/4]: No change.
 
-[1]: https://elixir.bootlin.com/linux/latest/C/ident/CLK_IS_CRITICAL
+Change in V2:
+[PATCH v2 1/4]: Convert rockchip,rk3568-cru.txt to YAML,
+                And update commit message.
+[PATCH v2 2/4]: No change.
+[PATCH v2 3/4]: Use arrays to support more core independent div
+settings.
+[PATCH v2 4/4]: Adapter [PATCH v2 3/4] changes.
+
+Elaine Zhang (4):
+  dt-binding: clock: Document rockchip,rk3568-cru bindings
+  clk: rockchip: add dt-binding header for rk3568
+  clk: rockchip: support more core div setting
+  clk: rockchip: add clock controller for rk3568
+
+ .../bindings/clock/rockchip,rk3568-cru.yaml   |   60 +
+ drivers/clk/rockchip/Kconfig                  |    7 +
+ drivers/clk/rockchip/Makefile                 |    1 +
+ drivers/clk/rockchip/clk-cpu.c                |   53 +-
+ drivers/clk/rockchip/clk-px30.c               |    7 +-
+ drivers/clk/rockchip/clk-rk3036.c             |    7 +-
+ drivers/clk/rockchip/clk-rk3128.c             |    7 +-
+ drivers/clk/rockchip/clk-rk3188.c             |    7 +-
+ drivers/clk/rockchip/clk-rk3228.c             |    7 +-
+ drivers/clk/rockchip/clk-rk3288.c             |    7 +-
+ drivers/clk/rockchip/clk-rk3308.c             |    7 +-
+ drivers/clk/rockchip/clk-rk3328.c             |    7 +-
+ drivers/clk/rockchip/clk-rk3368.c             |   14 +-
+ drivers/clk/rockchip/clk-rk3399.c             |   14 +-
+ drivers/clk/rockchip/clk-rk3568.c             | 1726 +++++++++++++++++
+ drivers/clk/rockchip/clk-rv1108.c             |    7 +-
+ drivers/clk/rockchip/clk.h                    |   54 +-
+ include/dt-bindings/clock/rk3568-cru.h        |  926 +++++++++
+ 18 files changed, 2843 insertions(+), 75 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3568-cru.yaml
+ create mode 100644 drivers/clk/rockchip/clk-rk3568.c
+ create mode 100644 include/dt-bindings/clock/rk3568-cru.h
 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.17.1
+
+
+
