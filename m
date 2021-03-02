@@ -2,39 +2,39 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2182F32B3FA
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Mar 2021 05:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB2232B3FC
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Mar 2021 05:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350420AbhCCEK6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 2 Mar 2021 23:10:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40260 "EHLO mail.kernel.org"
+        id S1352697AbhCCELg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 2 Mar 2021 23:11:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44856 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244730AbhCBMC5 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 2 Mar 2021 07:02:57 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 838BE64F2D;
-        Tue,  2 Mar 2021 11:56:08 +0000 (UTC)
+        id S1443553AbhCBMLd (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 2 Mar 2021 07:11:33 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DE7EE64F62;
+        Tue,  2 Mar 2021 11:57:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614686169;
+        s=k20201202; t=1614686234;
         bh=vopivRZMCYdSGdIVT75/EUSZHcJpdNCmqrcBNRYkY2E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FIZKPjatggsaG/yk39phWy6xovpvJX0BF/BDuN2v3CYi7uD09ytnTcI/o7CZICNVK
-         JTDuxuaVXrBcH7GuZ+PwgqCtGutcQlPrBygn6c6HcKQJHozz9euxIstwaAyjrT2WzX
-         3YYPqmVI5qJjYsnzkUAhoAS6l0fj/TUwiT2ctxOT6fBypVIlG8wdb2XlVpe832jHiA
-         tiy/uSvjVKYe3BLxS8hqcbcKlNfEAipBKTCzRVxbCeMqhO9MhrTxhTQIe8URaH23KG
-         4ZY26dC1/R104p98pA/caypZEO31qBZGzZxasWfVcntLkBqh6ug5ln8TQqOBK2uDUV
-         AD3W7kAARi7xA==
+        b=eHOEaGWELZg4zu/6xkHnJiP1h454JqzKkMhNnShPg2l5vicWkgCXUQHGh+MkeMx0e
+         +AVGaIyElCVPfN5IxFpn8XzyWX3cAZJqM8EkbX1lHuAUjmh3Iv6n+HNEuNj2cRA8rw
+         ZUte+OLPiFfgZtgpDqY1gnocnimufL4gD9goQewBvXoT+hE0rUP/IiwGXL948lwzvk
+         ybZ4GzoxzrI9caTP7gFwKHnJrOOqfw3bWt67oU8hbUvA7p6wYtpwRwOOiaPEmWaIdJ
+         JOMqm/xdhs6gOnmOVQ3NNClKSZZq56ytB9Gaq1Cepb0yafxgLFYVrFQWc7awgGj0hz
+         YX8bolhBfCTFQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.11 26/52] clk: qcom: gdsc: Implement NO_RET_PERIPH flag
-Date:   Tue,  2 Mar 2021 06:55:07 -0500
-Message-Id: <20210302115534.61800-26-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 22/47] clk: qcom: gdsc: Implement NO_RET_PERIPH flag
+Date:   Tue,  2 Mar 2021 06:56:21 -0500
+Message-Id: <20210302115646.62291-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210302115534.61800-1-sashal@kernel.org>
-References: <20210302115534.61800-1-sashal@kernel.org>
+In-Reply-To: <20210302115646.62291-1-sashal@kernel.org>
+References: <20210302115646.62291-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
