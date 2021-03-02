@@ -2,70 +2,162 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6828432B410
+	by mail.lfdr.de (Postfix) with ESMTP id E432532B411
 	for <lists+linux-clk@lfdr.de>; Wed,  3 Mar 2021 05:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352806AbhCCEPy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 2 Mar 2021 23:15:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59428 "EHLO mail.kernel.org"
+        id S1352808AbhCCEP7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 2 Mar 2021 23:15:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37284 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2360942AbhCBXIU (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 2 Mar 2021 18:08:20 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5EE5B64F2C;
-        Tue,  2 Mar 2021 23:07:31 +0000 (UTC)
+        id S2361094AbhCBXTk (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 2 Mar 2021 18:19:40 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0067A64F2C;
+        Tue,  2 Mar 2021 23:18:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614726451;
-        bh=BERs5+nWLGWtZeXXlST+aHvroH1cPR1tvq5CIw51nMc=;
+        s=k20201202; t=1614727140;
+        bh=Anexr7Llvf84ZS8OZ4LRFE0gk0oQZ9aE+DtC8CM24i4=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=FpD/UYXOk3L757YtN8QFSyP0tmpYOo5ufZWcaq68JAdpw/SvbrlFQzEO6kThj/DjG
-         qknGKR5xbqjO6G7zfoEreHhtYqNqRgcX/MHlTBXY9hdgD9c5CiP/kFAB2KUDOQ33XR
-         dnRPMLxc7E9pBjgV5ZAESRb/+aPjLDqZ2f8qpzqqy5U/fbRCcvFstRc/4wpSUYUds6
-         SjYowLp+JQEOtEx+ak3c2gM89HfX3Utl2nNgVjUNlGMpe5hGRQhpyZLaxjhu50sFTu
-         tovFMwh9tZXieXJDV0RyhoFjtDlrSrodSVOG396vveEnvv545OvIJ62vzxIFVY8JLN
-         xacf5hTH8aEQg==
+        b=qvX9L6IZS8mnwkSyzhftMe254C7ycVXPjr3n6DJ66RsT63OCU3PnVvJ3tU7Nj45rc
+         A30zpHx6jvS+avlnyrdUEz774gV+7BAb2fx3C6SG96A8YAbnCDapsW74UzgpqJrwJt
+         9+xXKQozeJ9QWtdUMiQqujf1aU+mRZuql5akKKur2Qmx/iiF8SkidhRdakDMt3AkIQ
+         7BWRY/eKKmOGRZHWaept6iECYJXfIMLz2qf2G7mSoXHlpYkAxDSMMN3GwPkYcnCvV6
+         J8VH1q6BJ6TNKPO+SaH5PvUSKiuky9DCIUmr4tCma4vlWO++53srvijHAAJ4/QQKky
+         DiA1OwBxzsBsQ==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAKfKVtH1rSc4d8MMZCegMNG8shNxgXfu6qTd9WxuaGGFMEJ6CA@mail.gmail.com>
-References: <1613623791-4598-1-git-send-email-shubhrajyoti.datta@xilinx.com> <1613623791-4598-2-git-send-email-shubhrajyoti.datta@xilinx.com> <20210218092804.6c78c99c@xps13> <161369785558.1254594.14662342386099652001@swboyd.mtv.corp.google.com> <CAKfKVtH1rSc4d8MMZCegMNG8shNxgXfu6qTd9WxuaGGFMEJ6CA@mail.gmail.com>
-Subject: Re: [PATCH v9 1/7] dt-bindings: add documentation of xilinx clocking wizard
+In-Reply-To: <20210225155909.1853812-2-maxime@cerno.tech>
+References: <20210225155909.1853812-1-maxime@cerno.tech> <20210225155909.1853812-2-maxime@cerno.tech>
+Subject: Re: [PATCH 1/8] clk: Add range accessors
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
-        linux-clk@vger.kernel.org, open list:
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>,
+Cc:     Phil Elwell <phil@raspberrypi.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Tim Gover <tim.gover@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <maxime@cerno.tech>,
         Mike Turquette <mturquette@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, ;
-Illegal-Object: Syntax error in Cc: address found on vger.kernel.org:
-        Cc:     ;
-                        ^-missing semicolon to end mail group, extraneous tokens in mailbox, missing end of mailbox
-To:     Shubhrajyoti Datta <shubhrajyoti.datta@gmail.com>
-Date:   Tue, 02 Mar 2021 15:07:29 -0800
-Message-ID: <161472644984.1478170.5535993198933302108@swboyd.mtv.corp.google.com>
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-clk@vger.kernel.org
+Date:   Tue, 02 Mar 2021 15:18:58 -0800
+Message-ID: <161472713858.1478170.9594904338107431350@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Shubhrajyoti Datta (2021-02-24 06:10:08)
-> On Fri, Feb 19, 2021 at 6:54 AM Stephen Boyd <sboyd@kernel.org> wrote:
-> >
-> > > > +
-> > > > +  xlnx,speed-grade:
-> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > > +    enum: [1, 2, 3]
-> > > > +    description:
-> > > > +      Speed grade of the device.
-> > >
-> > > A bit of explanation of what this describes would be welcome.
-> > >
-> > > Don't forget that binding are not tied to any driver implementation,
-> > > these are supposed to be hardware description properties.
-> >
-> > Would opp tables work for this?
-> This is the parameter is for speed of the fabric.
+Quoting Maxime Ripard (2021-02-25 07:59:02)
+> Some devices might need to access the current available range of a clock
+> to discover their capabilities. Let's add those accessors.
 
-Ok. Yes or no? Is it configuring the speed of the fabric? Sounds like
-assigned-clock-rates or assigned-interconnect-bandwidth or something
-like that.
+This needs more than two sentences to describe what's required.
+
+>=20
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>  drivers/clk/clk.c   | 30 ++++++++++++++++++++++++++++++
+>  include/linux/clk.h | 16 ++++++++++++++++
+>  2 files changed, 46 insertions(+)
+>=20
+> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> index 8c1d04db990d..b7307d4f090d 100644
+> --- a/drivers/clk/clk.c
+> +++ b/drivers/clk/clk.c
+> @@ -2407,6 +2407,36 @@ int clk_set_max_rate(struct clk *clk, unsigned lon=
+g rate)
+>  }
+>  EXPORT_SYMBOL_GPL(clk_set_max_rate);
+> =20
+> +long clk_get_min_rate(struct clk *clk)
+
+I need to read the rest of the patches but I don't see the justification
+for this sort of API vs. having the consumer constrain the clk frequency
+that it wants. Is the code that's setting the min/max constraints not
+the same as the code that's calling this API? Would an OPP table better
+serve this so the device knows what frequencies are valid?s Please
+provide the use case/justification in the commit text.
+
+Why two functions instead of one function to get both min and max?
+
+> +{
+> +       unsigned long min_rate, max_rate;
+> +
+> +       if (!clk)
+> +               return 0;
+> +
+> +       clk_prepare_lock();
+
+Please add a comment indicating why we grab the lock. Yes
+clk_core_get_boundaries() has a lock held assertion, but I don't know
+why we care about the lock here besides that we don't want the consumers
+to change while we calculate the boundaries as it may be some inaccurate
+number.
+
+> +       clk_core_get_boundaries(clk->core, &min_rate, &max_rate);
+> +       clk_prepare_unlock();
+> +
+> +       return min_rate;
+> +}
+> +EXPORT_SYMBOL_GPL(clk_get_min_rate);
+> +
+> +long clk_get_max_rate(struct clk *clk)
+> +{
+> +       unsigned long min_rate, max_rate;
+> +
+> +       if (!clk)
+> +               return 0;
+
+ULONG_MAX?
+
+> +
+> +       clk_prepare_lock();
+> +       clk_core_get_boundaries(clk->core, &min_rate, &max_rate);
+> +       clk_prepare_unlock();
+> +
+> +       return max_rate;
+> +}
+> +EXPORT_SYMBOL_GPL(clk_get_max_rate);
+> +
+>  /**
+>   * clk_get_parent - return the parent of a clk
+>   * @clk: the clk whose parent gets returned
+> diff --git a/include/linux/clk.h b/include/linux/clk.h
+> index 31ff1bf1b79f..6f0c00ddf3ac 100644
+> --- a/include/linux/clk.h
+> +++ b/include/linux/clk.h
+> @@ -709,6 +709,22 @@ int clk_set_min_rate(struct clk *clk, unsigned long =
+rate);
+>   */
+>  int clk_set_max_rate(struct clk *clk, unsigned long rate);
+> =20
+> +/**
+> + * clk_get_min_rate - get the minimum clock rate for a clock source
+> + * @clk: clock source
+> +  *
+> + * Returns the minimum rate or negative errno.
+
+Hmm?
+
+> + */
+> +long clk_get_min_rate(struct clk *clk);
+
+Why long instead of unsigned long? Error values don't seem to be
+returned.
+
+> +
+> +/**
+> + * clk_get_max_rate - get the maximum clock rate for a clock source
+> + * @clk: clock source
+> +  *
+> + * Returns the maximum rate or negative errno.
+> + */
+> +long clk_get_max_rate(struct clk *clk);
+> +
+>  /**
+>   * clk_set_parent - set the parent clock source for this clock
+>   * @clk: clock source
+> --
