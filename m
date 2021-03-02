@@ -2,100 +2,118 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0419832B409
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Mar 2021 05:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2182F32B3FA
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Mar 2021 05:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352740AbhCCEPL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 2 Mar 2021 23:15:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1580311AbhCBSBl (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 2 Mar 2021 13:01:41 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A1DC0617AA;
-        Tue,  2 Mar 2021 03:51:46 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id k9so10901744lfo.12;
-        Tue, 02 Mar 2021 03:51:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Aptp5NmMT0c2/gtpHM3jND6fOADz+c+cCW4tHwby9/0=;
-        b=CX7XQ3GoFscwZMGxuAprdkK2a4Ju5XArGZ24+JTaHoSZbDUMIX3tylUM85HR+lIYwy
-         7EZLUdpKL34vby84vZXUo4i7EGGsd/Iq66dzQZNVvqPW3FTYpJFpRe3mrz+DKuSLzirC
-         bEO+uBMbnnDiWPe42HL2721BLautywGKFN/DIqogn1BrjQmKG5VLYUXmEB7KKhkOhTeN
-         Lp9n6BksMGi27Vei5UegQzsmt/OFS1A0gdbrarFEYhTm8jgAY5vTXf9Q6NpkeOlfs6RA
-         umCVj6yOSH4emp6nwUDu4zrEJGXWWZXH1+I+AaBNY6JpYIHxTnRXj05wadUrjWLaAgnw
-         ZgOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Aptp5NmMT0c2/gtpHM3jND6fOADz+c+cCW4tHwby9/0=;
-        b=ZsMZHFr3yQhmPzdbxzHEJZvEWh7DB5CVF7bDmRaYllKxl852GX8pntlp+hm9nth9tH
-         PzLdjOhLLlncflCAQC7UYbaOGvd0bGW94FSvhrSCuEcOl/4KhUhgb8efDdwxq4ocdKoC
-         kPDsQJcBlWMcl7kKYaBzKl7HBRtsRUi5IxysC0i+FQQ1+y9ZjCe+CbTUgHvTuWcZ2Gum
-         kqnFtSsMXEMS33GRoglMWfrXdArx2RhrNU+TCKC8MiE3UskK+4T6KlThzfXN9ED3uErk
-         J2mvkzjGWKNtvchRPNuvpRHmLaQ1Op46sM6Y7p2Bq+Oe4ijtfwWjAa090V7gm6fFQasi
-         pgJA==
-X-Gm-Message-State: AOAM53101k1kGkzj5Qbb65R2M0qZxwIg+Jxf0dw+TO8Rf/TaTJVMqb7q
-        jj4Isoo9PdZs3tG8i7VvwIk=
-X-Google-Smtp-Source: ABdhPJwUa/fs69l5VobYIqUc2szq+QvQXNGsM9mxk1A52i95jEswLEFCVUXMJqqtPYq9V8LLFOrgFA==
-X-Received: by 2002:a19:c3c3:: with SMTP id t186mr11924940lff.596.1614685904824;
-        Tue, 02 Mar 2021 03:51:44 -0800 (PST)
-Received: from localhost.localdomain (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
-        by smtp.gmail.com with ESMTPSA id f4sm2720151lja.69.2021.03.02.03.51.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Mar 2021 03:51:44 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-tegra@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 6/6] clk: tegra: Don't allow zero clock rate for PLLs
-Date:   Tue,  2 Mar 2021 14:51:17 +0300
-Message-Id: <20210302115117.9375-7-digetx@gmail.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210302115117.9375-1-digetx@gmail.com>
-References: <20210302115117.9375-1-digetx@gmail.com>
+        id S1350420AbhCCEK6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 2 Mar 2021 23:10:58 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40260 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244730AbhCBMC5 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 2 Mar 2021 07:02:57 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 838BE64F2D;
+        Tue,  2 Mar 2021 11:56:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1614686169;
+        bh=vopivRZMCYdSGdIVT75/EUSZHcJpdNCmqrcBNRYkY2E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=FIZKPjatggsaG/yk39phWy6xovpvJX0BF/BDuN2v3CYi7uD09ytnTcI/o7CZICNVK
+         JTDuxuaVXrBcH7GuZ+PwgqCtGutcQlPrBygn6c6HcKQJHozz9euxIstwaAyjrT2WzX
+         3YYPqmVI5qJjYsnzkUAhoAS6l0fj/TUwiT2ctxOT6fBypVIlG8wdb2XlVpe832jHiA
+         tiy/uSvjVKYe3BLxS8hqcbcKlNfEAipBKTCzRVxbCeMqhO9MhrTxhTQIe8URaH23KG
+         4ZY26dC1/R104p98pA/caypZEO31qBZGzZxasWfVcntLkBqh6ug5ln8TQqOBK2uDUV
+         AD3W7kAARi7xA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.11 26/52] clk: qcom: gdsc: Implement NO_RET_PERIPH flag
+Date:   Tue,  2 Mar 2021 06:55:07 -0500
+Message-Id: <20210302115534.61800-26-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.1
+In-Reply-To: <20210302115534.61800-1-sashal@kernel.org>
+References: <20210302115534.61800-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Zero clock rate doesn't make sense for PLLs and tegra-clk driver enters
-into infinite loop on trying to calculate PLL parameters for zero rate.
-Make code to error out if requested rate is zero.
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 
-Originally this trouble was found by Robert Yang while he was trying to
-bring up upstream kernel on Samsung Galaxy Tab, which happened due to a
-bug in Tegra DRM driver that erroneously sets PLL rate to zero. This
-issues came over again recently during of kernel bring up on ASUS TF700T.
+[ Upstream commit 785c02eb35009a4be6dbc68f4f7d916e90b7177d ]
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+In some rare occasions, we want to only set the RETAIN_MEM bit, but
+not the RETAIN_PERIPH one: this is seen on at least SDM630/636/660's
+GPU-GX GDSC, where unsetting and setting back the RETAIN_PERIPH bit
+will generate chaos and panics during GPU suspend time (mainly, the
+chaos is unaligned access).
+
+For this reason, introduce a new NO_RET_PERIPH flag to the GDSC
+driver to address this corner case.
+
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+Link: https://lore.kernel.org/r/20210113183817.447866-8-angelogioacchino.delregno@somainline.org
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/tegra/clk-pll.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/clk/qcom/gdsc.c | 10 ++++++++--
+ drivers/clk/qcom/gdsc.h |  3 ++-
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clk/tegra/clk-pll.c b/drivers/clk/tegra/clk-pll.c
-index d709ecb7d8d7..af7d4941042e 100644
---- a/drivers/clk/tegra/clk-pll.c
-+++ b/drivers/clk/tegra/clk-pll.c
-@@ -558,6 +558,9 @@ static int _calc_rate(struct clk_hw *hw, struct tegra_clk_pll_freq_table *cfg,
- 	u32 p_div = 0;
- 	int ret;
- 
-+	if (!rate)
-+		return -EINVAL;
+diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+index af26e0695b86..51ed640e527b 100644
+--- a/drivers/clk/qcom/gdsc.c
++++ b/drivers/clk/qcom/gdsc.c
+@@ -183,7 +183,10 @@ static inline int gdsc_assert_reset(struct gdsc *sc)
+ static inline void gdsc_force_mem_on(struct gdsc *sc)
+ {
+ 	int i;
+-	u32 mask = RETAIN_MEM | RETAIN_PERIPH;
++	u32 mask = RETAIN_MEM;
 +
- 	switch (parent_rate) {
- 	case 12000000:
- 	case 26000000:
++	if (!(sc->flags & NO_RET_PERIPH))
++		mask |= RETAIN_PERIPH;
+ 
+ 	for (i = 0; i < sc->cxc_count; i++)
+ 		regmap_update_bits(sc->regmap, sc->cxcs[i], mask, mask);
+@@ -192,7 +195,10 @@ static inline void gdsc_force_mem_on(struct gdsc *sc)
+ static inline void gdsc_clear_mem_on(struct gdsc *sc)
+ {
+ 	int i;
+-	u32 mask = RETAIN_MEM | RETAIN_PERIPH;
++	u32 mask = RETAIN_MEM;
++
++	if (!(sc->flags & NO_RET_PERIPH))
++		mask |= RETAIN_PERIPH;
+ 
+ 	for (i = 0; i < sc->cxc_count; i++)
+ 		regmap_update_bits(sc->regmap, sc->cxcs[i], mask, 0);
+diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
+index bd537438c793..5bb396b344d1 100644
+--- a/drivers/clk/qcom/gdsc.h
++++ b/drivers/clk/qcom/gdsc.h
+@@ -42,7 +42,7 @@ struct gdsc {
+ #define PWRSTS_ON		BIT(2)
+ #define PWRSTS_OFF_ON		(PWRSTS_OFF | PWRSTS_ON)
+ #define PWRSTS_RET_ON		(PWRSTS_RET | PWRSTS_ON)
+-	const u8			flags;
++	const u16			flags;
+ #define VOTABLE		BIT(0)
+ #define CLAMP_IO	BIT(1)
+ #define HW_CTRL		BIT(2)
+@@ -51,6 +51,7 @@ struct gdsc {
+ #define POLL_CFG_GDSCR	BIT(5)
+ #define ALWAYS_ON	BIT(6)
+ #define RETAIN_FF_ENABLE	BIT(7)
++#define NO_RET_PERIPH	BIT(8)
+ 	struct reset_controller_dev	*rcdev;
+ 	unsigned int			*resets;
+ 	unsigned int			reset_count;
 -- 
-2.29.2
+2.30.1
 
