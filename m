@@ -2,118 +2,183 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB2232B3FC
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Mar 2021 05:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2891C32B402
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Mar 2021 05:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352697AbhCCELg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 2 Mar 2021 23:11:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44856 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1443553AbhCBMLd (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 2 Mar 2021 07:11:33 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DE7EE64F62;
-        Tue,  2 Mar 2021 11:57:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1614686234;
-        bh=vopivRZMCYdSGdIVT75/EUSZHcJpdNCmqrcBNRYkY2E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eHOEaGWELZg4zu/6xkHnJiP1h454JqzKkMhNnShPg2l5vicWkgCXUQHGh+MkeMx0e
-         +AVGaIyElCVPfN5IxFpn8XzyWX3cAZJqM8EkbX1lHuAUjmh3Iv6n+HNEuNj2cRA8rw
-         ZUte+OLPiFfgZtgpDqY1gnocnimufL4gD9goQewBvXoT+hE0rUP/IiwGXL948lwzvk
-         ybZ4GzoxzrI9caTP7gFwKHnJrOOqfw3bWt67oU8hbUvA7p6wYtpwRwOOiaPEmWaIdJ
-         JOMqm/xdhs6gOnmOVQ3NNClKSZZq56ytB9Gaq1Cepb0yafxgLFYVrFQWc7awgGj0hz
-         YX8bolhBfCTFQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 22/47] clk: qcom: gdsc: Implement NO_RET_PERIPH flag
-Date:   Tue,  2 Mar 2021 06:56:21 -0500
-Message-Id: <20210302115646.62291-22-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210302115646.62291-1-sashal@kernel.org>
-References: <20210302115646.62291-1-sashal@kernel.org>
+        id S1352712AbhCCEMe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 2 Mar 2021 23:12:34 -0500
+Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:39375 "EHLO
+        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351033AbhCBND4 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 2 Mar 2021 08:03:56 -0500
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.west.internal (Postfix) with ESMTP id 5D13C1567;
+        Tue,  2 Mar 2021 08:01:59 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 02 Mar 2021 08:02:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=ajDOHIs7PrsnoOxDSoNdPYVxAY+
+        jGqYKSXGZSoMAoRM=; b=r8jcLXVDyx/+/6LiwyQgTxxjTq0oJkkTzirgS68iMg9
+        gsrYMUCJJaGrM5akndwR938myEUx+Xkon6uPwHSJ96c+mSqyWI/4GzjstU9mcEIW
+        xDTqmE7etct+XEFzhV7WkkSJsbCQE/m/EU9NrkPa2/UVkGJKoVQOftSonhLTF/iN
+        YOIr9avODjpx4o+cV7ViDDyYX9LkEI/uO+35gdYwCgi15YJJs3z3bc9VI296sYGL
+        LuiuxrE7Uo6ZndAlMlWZsovPlME1ZbdTuUmAZycYiaGxxGi94iOP+aYnMGlBkr2P
+        aDk3SAj0RdCLtEMNRQVB4gDWhi9yQBN2jxf3e4ZQsvw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=ajDOHI
+        s7PrsnoOxDSoNdPYVxAY+jGqYKSXGZSoMAoRM=; b=cwPU1gclDgj/CDz8VOE+mm
+        gomqjZoPYg4xzDh0W9IUrqPIO9K4LWUjzSJQ1HhiSotbv4XQyhDuBQdXYIWgEymt
+        dCU+r9QkGH2OTPCDFkN+7hJqSBsuZH1SZZ1IwT+cgCQ2ith4RnkFNju/qC02phuw
+        TPraM0oOL6RBwbXFNtCvD0JJdbpyjRT7B1Qo0NovhL51o0jEUWAE1k7+fBCVjCaD
+        JMjUQ90+QCQsioK6m9pTAJ8FfycsQLKsig0RIsx2wwU/QMV1nYqCXJ5nfqwfjhvn
+        Xc3xdu+HKDK5Tiz7iJaD25mPFXTp3ga5UsofYO3sX3YcXhSQOUSNuM3fcIISJaXg
+        ==
+X-ME-Sender: <xms:RTc-YA0jcz6mMAJFvqwMTkPp1lAWKTYOUVz9l5GIQ0_Bu7uNcuokbA>
+    <xme:RTc-YPaFFzxNAWdx341D28NdGxpOrdDa2JEgABHFQX7dF1u3OkLyVXKwrLFQVSnoC
+    IbnwUSwu6NHXdGKedQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledruddttddggeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:RTc-YIDAu2bSMXZfpSRBjAxXb3Ts_uR4j4rv0is9GXjYAcVMFJRNdQ>
+    <xmx:RTc-YB_utZTy1PX4cU5cVmpG_zJuG87UcWxKhrnYcqdWASCTOerXhA>
+    <xmx:RTc-YI9FeGAfBbrO6yNmrtKhPeLZQBHW17OZ4bR1Yw3Jna9QmHlMaA>
+    <xmx:Rjc-YJQgJYgjtSeXPIRycB9m_YUgGjQ8l7xoFuMSo2TucfKDqxyjk4B-U7A>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 1B7E5108005F;
+        Tue,  2 Mar 2021 08:01:57 -0500 (EST)
+Date:   Tue, 2 Mar 2021 14:01:54 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Tim Gover <tim.gover@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>
+Subject: Re: [PATCH 4/8] drm/vc4: hdmi: Check and warn if we can't reach
+ 4kp60 frequencies
+Message-ID: <20210302130154.o4ljnzqjr3gfsvpn@gilmour>
+References: <20210225155909.1853812-1-maxime@cerno.tech>
+ <20210225155909.1853812-5-maxime@cerno.tech>
+ <CAPY8ntDwQG1Ax8wgc2zZMKZgXk2+efBtFFiu7YF=_RX4Y4YUiA@mail.gmail.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="pfy2jknigh37joze"
+Content-Disposition: inline
+In-Reply-To: <CAPY8ntDwQG1Ax8wgc2zZMKZgXk2+efBtFFiu7YF=_RX4Y4YUiA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 
-[ Upstream commit 785c02eb35009a4be6dbc68f4f7d916e90b7177d ]
+--pfy2jknigh37joze
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In some rare occasions, we want to only set the RETAIN_MEM bit, but
-not the RETAIN_PERIPH one: this is seen on at least SDM630/636/660's
-GPU-GX GDSC, where unsetting and setting back the RETAIN_PERIPH bit
-will generate chaos and panics during GPU suspend time (mainly, the
-chaos is unaligned access).
+Hi Dave,
 
-For this reason, introduce a new NO_RET_PERIPH flag to the GDSC
-driver to address this corner case.
+Thanks for your review
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-Link: https://lore.kernel.org/r/20210113183817.447866-8-angelogioacchino.delregno@somainline.org
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/clk/qcom/gdsc.c | 10 ++++++++--
- drivers/clk/qcom/gdsc.h |  3 ++-
- 2 files changed, 10 insertions(+), 3 deletions(-)
+On Thu, Feb 25, 2021 at 04:38:37PM +0000, Dave Stevenson wrote:
+> On Thu, 25 Feb 2021 at 15:59, Maxime Ripard <maxime@cerno.tech> wrote:
+> >
+> > In order to reach the frequencies needed to output at 594MHz, the
+> > firmware needs to be configured with the appropriate parameters in the
+> > config.txt file (enable_hdmi_4kp60 and force_turbo).
+>=20
+> force_turbo isn't the right way to go about this as it permanently
+> bumps all the clocks up, even if running the display at VGA.
 
-diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-index af26e0695b86..51ed640e527b 100644
---- a/drivers/clk/qcom/gdsc.c
-+++ b/drivers/clk/qcom/gdsc.c
-@@ -183,7 +183,10 @@ static inline int gdsc_assert_reset(struct gdsc *sc)
- static inline void gdsc_force_mem_on(struct gdsc *sc)
- {
- 	int i;
--	u32 mask = RETAIN_MEM | RETAIN_PERIPH;
-+	u32 mask = RETAIN_MEM;
-+
-+	if (!(sc->flags & NO_RET_PERIPH))
-+		mask |= RETAIN_PERIPH;
- 
- 	for (i = 0; i < sc->cxc_count; i++)
- 		regmap_update_bits(sc->regmap, sc->cxcs[i], mask, mask);
-@@ -192,7 +195,10 @@ static inline void gdsc_force_mem_on(struct gdsc *sc)
- static inline void gdsc_clear_mem_on(struct gdsc *sc)
- {
- 	int i;
--	u32 mask = RETAIN_MEM | RETAIN_PERIPH;
-+	u32 mask = RETAIN_MEM;
-+
-+	if (!(sc->flags & NO_RET_PERIPH))
-+		mask |= RETAIN_PERIPH;
- 
- 	for (i = 0; i < sc->cxc_count; i++)
- 		regmap_update_bits(sc->regmap, sc->cxcs[i], mask, 0);
-diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
-index bd537438c793..5bb396b344d1 100644
---- a/drivers/clk/qcom/gdsc.h
-+++ b/drivers/clk/qcom/gdsc.h
-@@ -42,7 +42,7 @@ struct gdsc {
- #define PWRSTS_ON		BIT(2)
- #define PWRSTS_OFF_ON		(PWRSTS_OFF | PWRSTS_ON)
- #define PWRSTS_RET_ON		(PWRSTS_RET | PWRSTS_ON)
--	const u8			flags;
-+	const u16			flags;
- #define VOTABLE		BIT(0)
- #define CLAMP_IO	BIT(1)
- #define HW_CTRL		BIT(2)
-@@ -51,6 +51,7 @@ struct gdsc {
- #define POLL_CFG_GDSCR	BIT(5)
- #define ALWAYS_ON	BIT(6)
- #define RETAIN_FF_ENABLE	BIT(7)
-+#define NO_RET_PERIPH	BIT(8)
- 	struct reset_controller_dev	*rcdev;
- 	unsigned int			*resets;
- 	unsigned int			reset_count;
--- 
-2.30.1
+so enable_hdmi_4kp60 is enough?=20
 
+> > Let's detect it at bind time, warn the user if we can't, and filter out
+> > the relevant modes.
+> >
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> > ---
+> >  drivers/gpu/drm/vc4/vc4_hdmi.c | 17 +++++++++++++++++
+> >  drivers/gpu/drm/vc4/vc4_hdmi.h |  8 ++++++++
+> >  2 files changed, 25 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_h=
+dmi.c
+> > index b5bc742993a4..f05f6da286f7 100644
+> > --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > @@ -953,6 +953,9 @@ static int vc4_hdmi_encoder_atomic_check(struct drm=
+_encoder *encoder,
+> >         if (pixel_rate > vc4_hdmi->variant->max_pixel_clock)
+> >                 return -EINVAL;
+> >
+> > +       if (vc4_hdmi->disable_4kp60 && (pixel_rate > HDMI_14_MAX_TMDS_C=
+LK))
+> > +               return -EINVAL;
+> > +
+> >         vc4_state->pixel_rate =3D pixel_rate;
+> >
+> >         return 0;
+> > @@ -972,6 +975,9 @@ vc4_hdmi_encoder_mode_valid(struct drm_encoder *enc=
+oder,
+> >         if ((mode->clock * 1000) > vc4_hdmi->variant->max_pixel_clock)
+> >                 return MODE_CLOCK_HIGH;
+> >
+> > +       if (vc4_hdmi->disable_4kp60 && ((mode->clock * 1000) > HDMI_14_=
+MAX_TMDS_CLK))
+> > +               return MODE_CLOCK_HIGH;
+> > +
+> >         return MODE_OK;
+> >  }
+> >
+> > @@ -1986,6 +1992,17 @@ static int vc4_hdmi_bind(struct device *dev, str=
+uct device *master, void *data)
+> >         vc4_hdmi->disable_wifi_frequencies =3D
+> >                 of_property_read_bool(dev->of_node, "wifi-2.4ghz-coexis=
+tence");
+> >
+> > +       if (variant->max_pixel_clock =3D=3D 600000000) {
+> > +               struct vc4_dev *vc4 =3D to_vc4_dev(drm);
+> > +               long max_rate =3D clk_get_max_rate(vc4->hvs->core_clk);
+> > +
+> > +               if (max_rate < 550000000) {
+> > +                       drm_warn(drm, "The core clock cannot reach freq=
+uencies high enough to support 4k @ 60Hz.");
+> > +                       drm_warn(drm, "Please change your config.txt fi=
+le to add hdmi_enable_4kp60 and force_turbo");
+>=20
+> Do we really want to warn in bind? Again you could have a VGA
+> resolution monitor attached but that would trigger this warning.
+> Can we warn (once) on processing the mode list and filtering out a clk
+> > HDMI_14_MAX_TMDS_CLK mode instead?
+
+That's a good idea indeed, I'll rework the patch to do that
+
+Thanks!
+Maxime
+
+--pfy2jknigh37joze
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYD43PgAKCRDj7w1vZxhR
+xTtWAP9LTHGG7mo4fggf8SM/6+jsgVXJgR7cCKemv7ULWQ3vsgD7BaullL1UcINv
+aZAFP1OVZefQVOPQymGXoSnlMzK3mAI=
+=vbIl
+-----END PGP SIGNATURE-----
+
+--pfy2jknigh37joze--
