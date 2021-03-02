@@ -2,103 +2,106 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D51932B370
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Mar 2021 05:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 164D132B3A1
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Mar 2021 05:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343911AbhCCDxo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 2 Mar 2021 22:53:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45512 "EHLO
+        id S235968AbhCCEJM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 2 Mar 2021 23:09:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349606AbhCBKmx (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 2 Mar 2021 05:42:53 -0500
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB96C061797
-        for <linux-clk@vger.kernel.org>; Tue,  2 Mar 2021 02:39:55 -0800 (PST)
-Received: by mail-ua1-x929.google.com with SMTP id m15so6617194uah.7
-        for <linux-clk@vger.kernel.org>; Tue, 02 Mar 2021 02:39:55 -0800 (PST)
+        with ESMTP id S1349645AbhCBLAY (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 2 Mar 2021 06:00:24 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6374DC06178A
+        for <linux-clk@vger.kernel.org>; Tue,  2 Mar 2021 02:59:28 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id b15so1699717pjb.0
+        for <linux-clk@vger.kernel.org>; Tue, 02 Mar 2021 02:59:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H0hmZCFeDNqAbXx5GUKcKo1fxTItQnWIdXjqLdnPSeQ=;
-        b=ImnDxZzQiN6+xQO0jDbYudZZ5bZAsbEITwar8lWZPd7fQ83yGWzCBnHvplZ0wWJ0ow
-         P25AE9GJP4NQvMp4y3IIKvqAn/tQAkoIN31eb42woz6/xzDWE2L1co7qfEYN95VwpD+9
-         n1EU4ETEtPCqhAH7MKBpDAXSsDYch2NkH6D959mXvnxfWVqsqe3mOcihO4BGcGIqAkc5
-         lR7Fzh3YY10hQo0Z2VbA3GZqewqkRDAINWI7MU64FHTbamGCHdfwqRx/PXeNK9zNPlMh
-         ygL953xVMYIz2asSrEiNZ75UNlZx3cjUi1iWP7o2oTGUGsTznPqLLjLUwMhqnffhYKd6
-         pctw==
+        d=sifive.com; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bxei/8aDMCYKqmTkktTk9ZHLkhHxr5aG3PN4M0TW8C4=;
+        b=O5WIbc61G3ZDHjgS4F7URCW/4/U7Isq2Mu3Wvdscu+y5vjL7ou79cWwbkvEnMvSgxq
+         1hzCTP07F89/w9x4GCJYWoM72kALz0iJfAWEJmmpHI0lFed1eRkp2DDe9YzHvtaTIZOl
+         vOuYG5dMQg0TLfE7crXbgi98xIBLaAl2GJmy+UMx5vYLZ4Yz4T1h7SzQoa+RNw3iqJ1U
+         ssCHXncGsytBp7FBr2Py8/qa53OWNBYf5gFCJ1LdXz6IkNZBloB4hKeCMspdquSxmZxc
+         0Zp6zzcH9fJwVtBv1DoVoVh6h+AmcHOMV/EoCxHt4CgJuGoF+r2+VN0EhKGaRyOBJSu9
+         yyDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H0hmZCFeDNqAbXx5GUKcKo1fxTItQnWIdXjqLdnPSeQ=;
-        b=ludqgvAkIEN2eKHfwBYg2uTo8Ciit0lXPLTJDRasJ1StSYlj/hVxIvhjo7SwHdfVha
-         3+iSaP8VCK/exLpBhvebuUPBZ2mWobeFt8tkQvBFb2uZzToLypj4beF6T4rTFhMlP+DU
-         U8iXfT6CJzBTBI0xUGkGT5Jyw0YtcjcwglViMOQxa77/zOHJuir7McI2oi2ZW/a5D/xU
-         MyyhalPbzzoboHl5bg317Axi3/xQgm2AFyERjFK1yJBCDyyNy/k5JPp+Qsrprselyjm9
-         eCe2lJZLlVIXa2Yc5ysHGuHtruJzbQ3I5lbAVBBKKX16VRh33PRUrycKWlO1rOnA/5wt
-         sMow==
-X-Gm-Message-State: AOAM531mS2TR1raLgF10WSmT9eQ9WMsFNMkSslCsr9w3S2i7QrDsvreX
-        ABYWBu5wK/c6zk5TItfxJaD2Q9SfPv/qvIuSNIp+sHfLYFM=
-X-Google-Smtp-Source: ABdhPJx5zWar9vzmGNaDwjkCHaFzZgByiXdLPVKbwNxLcirxr8ZsQUC7izpDBiTOw7BnhXrSEGYIkB5n9j8rL06nuYw=
-X-Received: by 2002:ab0:1581:: with SMTP id i1mr10807661uae.15.1614681594298;
- Tue, 02 Mar 2021 02:39:54 -0800 (PST)
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bxei/8aDMCYKqmTkktTk9ZHLkhHxr5aG3PN4M0TW8C4=;
+        b=HtZBlKDvFhEfJSrttU+8UeE9Bu6OQy/r7LcLHdY+cErx8i4VZsPxftcYfURIChDOVH
+         JnLCb4w0aKuZ7xqrKo8tToOC9hBNqFxHPxoFjyMO15m3HlYu2QkOtCsTsPVnfhlK6kiq
+         TN3WOf6WBBGBXWqdY1mC9zJgZNPdqYv/tWXHMmZipO7IwVoxcGwb+ADCKW4OOAbLfZRB
+         O7NW4XKR9pcPUzesxHfT2Nky/Jn0bCniFL5k9zqfnbVLE7jJhaaX5clqq1UmvNRMBG93
+         g29NJsjFF+b5FpFWf3ng0BAOfYUhCg0wJhHxIYc+PZ6rGqCVmtxkaIPI6/pStpg8fCb6
+         jC4Q==
+X-Gm-Message-State: AOAM533Bs3FkkoPC95VI/s8WRf61A4eiAU1X1gMUsqMKAgdatAjGDOk7
+        AybkuSjSMayiKUlwz2NkQZZpug==
+X-Google-Smtp-Source: ABdhPJwIhIDCZFAmjDINOMpTIcq157qIxL63LYhmKeq117MzPFuyqWv2PhA0oDZBd4g793JCy1+/lQ==
+X-Received: by 2002:a17:90a:5d09:: with SMTP id s9mr3715808pji.172.1614682767885;
+        Tue, 02 Mar 2021 02:59:27 -0800 (PST)
+Received: from hsinchu02.internal.sifive.com (114-34-229-221.HINET-IP.hinet.net. [114.34.229.221])
+        by smtp.gmail.com with ESMTPSA id t26sm19500451pfq.208.2021.03.02.02.59.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Mar 2021 02:59:27 -0800 (PST)
+From:   Greentime Hu <greentime.hu@sifive.com>
+To:     greentime.hu@sifive.com, paul.walmsley@sifive.com, hes@sifive.com,
+        erik.danie@sifive.com, zong.li@sifive.com, bhelgaas@google.com,
+        robh+dt@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        lorenzo.pieralisi@arm.com, p.zabel@pengutronix.de,
+        alex.dewar90@gmail.com, khilman@baylibre.com,
+        hayashi.kunihiko@socionext.com, vidyas@nvidia.com,
+        jh80.chung@samsung.com, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [RFC PATCH 0/6] Add SiFive FU740 PCIe host controller driver support
+Date:   Tue,  2 Mar 2021 18:59:11 +0800
+Message-Id: <cover.1614681831.git.greentime.hu@sifive.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-References: <1614222604-27066-1-git-send-email-peng.fan@oss.nxp.com>
-In-Reply-To: <1614222604-27066-1-git-send-email-peng.fan@oss.nxp.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 2 Mar 2021 11:39:15 +0100
-Message-ID: <CAPDyKFq3J=Shzgxp8XsdZqdZcOZ-n5WJ+mWejXM1-Qp8PgjBNA@mail.gmail.com>
-Subject: Re: [PATCH V3 0/5] imx esdhc dt/driver update
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Peng Fan <peng.fan@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, 25 Feb 2021 at 04:22, <peng.fan@oss.nxp.com> wrote:
->
-> From: Peng Fan <peng.fan@nxp.com>
->
-> V3:
->  Patch 1, drop unneeded pinctrl-0/1/2
->  Patch 2 is new to avoid break dt bindings check
-> V2:
->  patch 1, 2, 3 is new
->  patch 4 is not changed
->  https://patchwork.kernel.org/project/linux-arm-kernel/cover/1611198593-16287-1-git-send-email-peng.fan@nxp.com/
->
-> Peng Fan (5):
->   dt-bindings: mmc: fsl-imx-esdhc: add pinctrl bindings
->   dt-bindings: clock: imx8qxp-lpcg: correct the example clock-names
->   arm64: dts: imx8qxp: correct usdhc clock-names sequence
->   dt-bindings: mmc: fsl-imx-esdhc: add clock bindings
->   mmc: sdhci-esdhc-imx: validate pinctrl before use it
->
->  .../bindings/clock/imx8qxp-lpcg.yaml          |  6 +++---
->  .../bindings/mmc/fsl-imx-esdhc.yaml           | 20 +++++++++++++++++++
->  arch/arm64/boot/dts/freescale/imx8qxp.dtsi    | 18 ++++++++---------
->  drivers/mmc/host/sdhci-esdhc-imx.c            |  2 +-
->  4 files changed, 33 insertions(+), 13 deletions(-)
->
-> --
-> 2.30.0
->
+This patchset includes SiFive FU740 PCIe host controller driver. We also
+add pcie_aux clock and pcie_power_on_reset controller to prci driver for
+PCIe driver to use it.
 
-Applied patch 1, 4 and 5, thanks!
+This is tested with e1000e: Intel(R) PRO/1000 Network Card and SP M.2 PCIe
+Gen 3 SSD in SiFive Unmatched.
 
-Kind regards
-Uffe
+Greentime Hu (5):
+  clk: sifive: Add pcie_aux clock in prci driver for PCIe driver
+  clk: sifive: Use reset-simple in prci driver for PCIe driver
+  MAINTAINERS: Add maintainers for SiFive FU740 PCIe driver
+  dt-bindings: PCI: Add SiFive FU740 PCIe host controller
+  riscv: dts: Add PCIe support for the SiFive FU740-C000 SoC
+
+Paul Walmsley (1):
+  PCI: designware: Add SiFive FU740 PCIe host controller driver
+
+ .../bindings/pci/sifive,fu740-pcie.yaml       | 119 +++++
+ MAINTAINERS                                   |   8 +
+ arch/riscv/boot/dts/sifive/fu740-c000.dtsi    |  34 ++
+ drivers/clk/sifive/Kconfig                    |   2 +
+ drivers/clk/sifive/fu740-prci.c               |  11 +
+ drivers/clk/sifive/fu740-prci.h               |   2 +-
+ drivers/clk/sifive/sifive-prci.c              |  55 +++
+ drivers/clk/sifive/sifive-prci.h              |  13 +
+ drivers/pci/controller/dwc/Kconfig            |   9 +
+ drivers/pci/controller/dwc/Makefile           |   1 +
+ drivers/pci/controller/dwc/pcie-fu740.c       | 455 ++++++++++++++++++
+ drivers/reset/Kconfig                         |   3 +-
+ include/dt-bindings/clock/sifive-fu740-prci.h |   1 +
+ 13 files changed, 711 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
+ create mode 100644 drivers/pci/controller/dwc/pcie-fu740.c
+
+-- 
+2.30.0
+
