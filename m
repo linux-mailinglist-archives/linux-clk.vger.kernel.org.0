@@ -2,208 +2,167 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD4C32C5D8
-	for <lists+linux-clk@lfdr.de>; Thu,  4 Mar 2021 02:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3197032C5D5
+	for <lists+linux-clk@lfdr.de>; Thu,  4 Mar 2021 02:00:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384052AbhCDAY1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 3 Mar 2021 19:24:27 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:45012 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232960AbhCCMKq (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 3 Mar 2021 07:10:46 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id BE6F21A0B19;
-        Wed,  3 Mar 2021 09:31:19 +0100 (CET)
-Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B01B61A0B38;
-        Wed,  3 Mar 2021 09:31:19 +0100 (CET)
-Received: from localhost (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
-        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 9B5AC20308;
-        Wed,  3 Mar 2021 09:31:19 +0100 (CET)
-Date:   Wed, 3 Mar 2021 10:31:19 +0200
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V3] clk: imx: Fix reparenting of UARTs not associated
- with sdout
-Message-ID: <20210303083119.wadme5a7j4zf7vuz@fsr-ub1664-175>
-References: <20210120151305.GC19063@pengutronix.de>
- <20210120152813.x2pbs5vprevkly23@fsr-ub1664-175>
- <20210120155001.GD19063@pengutronix.de>
- <20210120161421.h3yng57m3fetwwih@fsr-ub1664-175>
- <20210121095617.GI19063@pengutronix.de>
- <20210121102450.lisl3mzqczdsmzda@fsr-ub1664-175>
- <CAHCN7x+eMHncRya3KWm5g=stzVf0fzNojS5mFxwvGW-sVoLsYQ@mail.gmail.com>
- <CAHCN7xLc6dnkA5Fw4cC1_nDG3KrrR4AffUzy-8gG4UKLn-rhzQ@mail.gmail.com>
- <20210215130620.3la4bexamozzcvjx@fsr-ub1664-175>
- <CAHCN7xK1rWkDK6JE6MvN1UoV0b3Z5dQjeWZDNgnZHRwD1XkuZQ@mail.gmail.com>
+        id S1384042AbhCDAY0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 3 Mar 2021 19:24:26 -0500
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:47047 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1842905AbhCCKWT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 3 Mar 2021 05:22:19 -0500
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 983A25805E2;
+        Wed,  3 Mar 2021 03:45:33 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Wed, 03 Mar 2021 03:45:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=g2WN8dh9S6beHjsSfHM2t9eCL2x
+        4c0kK7t6liU13tYM=; b=eJs4935jICw/rcWK+7HalLsR4zOfpHiucCbNB2QOj/f
+        uA/oipkrR1a+uBm2tqcvXMHfbEECQhnXRo3gwcLLNLdnlLPTZAmr3g6amSfOKUy4
+        xIDmyxOlo4XelIJYsCdb5i01gsV0QC15FPoPctfxdvHI2KHs8QBDVnYgOyVNknFn
+        arUzvz/y6UA3gXk6SASobQhfwAAOMtwehkX+a+kVlqYVmpNPmxa1CeJEz6fpx9Ay
+        xjRngQN3JmL9nXzl0jMEKCr+nG9kvzP3sYgpnh5/TZ+Fp+YZfQ+1ik54m6j+9DiU
+        mS3Rh6c/VcCkrmtTtYRXCwBN8wX6D8pF7BVS1Sf1ZAw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=g2WN8d
+        h9S6beHjsSfHM2t9eCL2x4c0kK7t6liU13tYM=; b=Y7vOGwgxXZ5RcMxAKp0Wx9
+        PIfUqcWVyAZu7i0Gbali2dQJzzpZfVITW4ffqpyRHIrS6ditpr4NpPifdqpWNrRq
+        525oQ29ZDAncM9rGFuHxL/dvkzi9/kIruSrl3RZoFov8Gpv/x2PkCnku5EwsHSaM
+        W1wCsovs5om4Rn8PYPFbL/Fg/j930em6R+Qn63i/tEvdIPxttyEmDlwdit1wO699
+        jURhBeNkrM+cdpvD/LZrnD7UzZ1OUxkLN7nN9Rid+z5r0+6n2mmtzRYWtiqf3exq
+        gnTRl0UdHN+EkFgxpzOX9S49ynEoZx5QnbRn3gZTQjwMdeXmz1XEo1kTg1vOL7aw
+        ==
+X-ME-Sender: <xms:qkw_YGyhckhaMB7y0oyD5OMHA_Z9NamONJOy0AOK0gW7E48FIfOYaw>
+    <xme:qkw_YEQuiMlZP7eMdVvHbkx6R4vdbgWSpdvTEoCJ7g6ivuFugGd4PHemk2R-UbLCW
+    K8a0swHRMttqFO0UIs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledruddtuddgudduiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheei
+    heegudenucfkphepledtrdekledrieekrdejieenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:qkw_YBtMsi-0DaaAElAA4t7HGRV7Jvur5O-OI2jQfisKx8JfV1sLRw>
+    <xmx:qkw_YOueU7PVyv3bRF5Z_jOcPG-bGGGfNAQlDbaNsmFEt-RsSwzghw>
+    <xmx:qkw_YPy4sIeMeFbg6lzobTOtrkA3Uubr7ZjbwU_aIIRb27A5tWBjUQ>
+    <xmx:rUw_YApjbEVu4SVmyZq6wglhpApObVBZHIatXnUCFh6nt9O80mlLZw>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 04D9124005C;
+        Wed,  3 Mar 2021 03:45:29 -0500 (EST)
+Date:   Wed, 3 Mar 2021 09:45:27 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org, linux-clk@vger.kernel.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Tim Gover <tim.gover@raspberrypi.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>
+Subject: Re: [PATCH 1/8] clk: Add range accessors
+Message-ID: <20210303084527.rziaoiqsr7r4bhcv@gilmour>
+References: <20210225155909.1853812-1-maxime@cerno.tech>
+ <20210225155909.1853812-2-maxime@cerno.tech>
+ <161472713858.1478170.9594904338107431350@swboyd.mtv.corp.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="nriz3ja25tqexae2"
 Content-Disposition: inline
-In-Reply-To: <CAHCN7xK1rWkDK6JE6MvN1UoV0b3Z5dQjeWZDNgnZHRwD1XkuZQ@mail.gmail.com>
-User-Agent: NeoMutt/20180622
-X-Virus-Scanned: ClamAV using ClamSMTP
+In-Reply-To: <161472713858.1478170.9594904338107431350@swboyd.mtv.corp.google.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 21-03-02 13:03:04, Adam Ford wrote:
-> On Mon, Feb 15, 2021 at 7:06 AM Abel Vesa <abel.vesa@nxp.com> wrote:
-> >
-> > On 21-02-13 08:44:28, Adam Ford wrote:
-> > > On Wed, Feb 3, 2021 at 3:22 PM Adam Ford <aford173@gmail.com> wrote:
-> > > >
-> > > > On Thu, Jan 21, 2021 at 4:24 AM Abel Vesa <abel.vesa@nxp.com> wrote:
-> > > > >
-> > > > > On 21-01-21 10:56:17, Sascha Hauer wrote:
-> > > > > > On Wed, Jan 20, 2021 at 06:14:21PM +0200, Abel Vesa wrote:
-> > > > > > > On 21-01-20 16:50:01, Sascha Hauer wrote:
-> > > > > > > > On Wed, Jan 20, 2021 at 05:28:13PM +0200, Abel Vesa wrote:
-> > > > > > > > > On 21-01-20 16:13:05, Sascha Hauer wrote:
-> > > > > > > > > > Hi Abel,
-> > > > > > > > > >
-> > > > > > > > > > On Wed, Jan 20, 2021 at 04:44:54PM +0200, Abel Vesa wrote:
-> > > > > > > > > > > On 21-01-18 08:00:43, Adam Ford wrote:
-> > > > > > > > > > > > On Mon, Jan 18, 2021 at 6:52 AM Abel Vesa <abel.vesa@nxp.com> wrote:
-> > > > > > > > >
-> > > > > > > > > ...
-> > > > > > > > >
-> > > > > > > > > > > >
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > TBH, I'm against the idea of having to call consumer API from a clock provider driver.
-> > > > > > > > > > > > > I'm still investigating a way of moving the uart clock control calls in drivers/serial/imx,
-> > > > > > > > > > > > > where they belong.
-> > > > > > > > > > > >
-> > > > > > > > > > > > That makes sense.
-> > > > > > > > > > > >
-> > > > > > > > > > >
-> > > > > > > > > > > Just a thought. The uart clock used for console remains on from u-boot,
-> > > > > > > > > > > so maybe it's enough to just add the CLK_IGNORE_UNUSED flag to all the
-> > > > > > > > > > > uart root clocks and remove the prepare/enable calls for uart clocks
-> > > > > > > > > > > for good. I don't really have a way to test it right now, but maybe
-> > > > > > > > > > > you could give it a try.
-> > > > > > > > > >
-> > > > > > > > > > That would mean that UART clocks will never be disabled, regardless of
-> > > > > > > > > > whether they are used for console or not. That doesn't sound very
-> > > > > > > > > > appealing.
-> > > > > > > > >
-> > > > > > > > > AFAIK, the only uart clock that is enabled by u-boot is the one used for
-> > > > > > > > > the console. Later on, when the serial driver probes, it will enable it itself.
-> > > > > > > > >
-> > > > > > > > > Unless I'm missing something, this is exactly what we need.
-> > > > > > > >
-> > > > > > > > It might enable it, but with CLK_IGNORE_UNUSED the clock won't be
-> > > > > > > > disabled again when a port is closed after usage
-> > > > > > >
-> > > > > > > OK, tell me what I'm getting wrong in the following scenario:
-> > > > > > >
-> > > > > > > U-boot leaves the console uart clock enabled. All the other ones are disabled.
-> > > > > > >
-> > > > > > > Kernel i.MX clk driver registers the uart clocks with flag CLK_IGNORE_UNUSED.
-> > > > > >
-> > > > > > I was wrong at that point. I originally thought the kernel will never
-> > > > > > disable these clocks, but in fact it only leaves them enabled during the
-> > > > > > clk_disable_unused call.
-> > > > > >
-> > > > > > However, when CLK_IGNORE_UNUSED becomes relevant it's too late already.
-> > > > > > I just chatted with Lucas and he told me what the original problem was
-> > > > > > that his patch solved.
-> > > > > >
-> > > > > > The problem comes when an unrelated device and the earlycon UART have
-> > > > > > the same parent clocks. The parent clock is enabled, but it's reference
-> > > > > > count is zero. Now when the unrelated device probes and toggles its
-> > > > > > clocks then the shared parent clock will be disabled due to the
-> > > > > > reference count being zero. Next time earlycon prints a character the
-> > > > > > system hangs because the UART gates are still enabled, but their parent
-> > > > > > clocks no longer are.
-> > > > > >
-> > > > >
-> > > > > Hmm, that is indeed a problem. That's why I think there should be some
-> > > > > kind of NOCACHE flag for almost all the types of clocks. For example,
-> > > > > in this case, it makes sense for the core to check the bit in the register
-> > > > > and then disable the parent based on that instead of relying on the refcount.
-> > > > > Anyway, that's something that needs to be added in the CCF.
-> > > > >
-> > > > > > Overall I think Lucas' patches are still valid and relevant and with
-> > > > > > Adams patches we even no longer have to enable all UART clocks, but
-> > > > > > only the ones which are actually needed.
-> > > > >
-> > > > > Yeah, for now, I think we can go with Adam's patches. But longterm, I would
-> > > > > like to remove the special case of the uart clocks we have right now in all
-> > > > > the i.MX clock drivers.
-> > >
-> > > I looked around at other serial drivers, and I found nothing like this
-> > > function for enabling all UART clocks.  There are generic functions
-> > > for registering consoles, earlycon etc, and the serial driver fetches
-> > > the per and igp clocks from the device tree, so I attempted to simply
-> > > remove imx_register_uart_clocks().  I booted an i.MX8M Nano from a
-> > > fully-powered off state, and my serial console came up just fine.
-> >
-> > Just because it works, doesn't mean it is safe. To put it simply, the
-> > risk of some  driver disabling a clock that is parent of the uart clock
-> > would render the earlycon broken.
-> >
-> > >
-> > > I checked the clk_summary, and the clock parents are set correctly and
-> > > the respective clock rates appear to be correct (ie, the console is
-> > > working at the desired baud rate, and Bluetooth is happy)
-> > >
-> > > Since I don't fully understand the serial driver and the clock
-> > > dependencies, I don't want to just simply remove the function without
-> > > discussing it, because I don't know the ramifications.  However, when
-> > > testing on the i.MX8M Nano, things look OK.
-> > > I also tested suspend-resume and the console UART appears to return
-> > > and the Bluetooth UART set to 4Mbps works just fine too.
-> > >
-> > > I'd like to post a V4 which just removes imx_register_uart_clocks and
-> > > the corresponding calls to it.  I don't know enough about the older
-> > > 32-bit i.MX SoC's, but I have build-tested it, and I can generate a
-> > > patch. Are there any objections and/or concerns?
-> > >
-> >
-> > Please don't remove the imx_register_uart_clocks for now. As much as I
-> > would like it gone, the way the earlycon could end up broken is
-> > so ugly that it would make it a real pain to debug it later on.
-> 
-> I won't do a V4, but where do we go from here?  I have a V3 that was
-> waiting for reviews, but there were some concerns.  We currently
-> cannot re-parent the UART's on iMX8MM or iMX8MN.  Should I resend V3,
-> or are there fixes/changes requested to V3?
-> 
 
-The v3 is fine. No need to resend.
+--nriz3ja25tqexae2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
+Hi Stephen,
 
-> adam
-> >
-> > > adam
-> > > > >
-> > > >
-> > > > Is the patch I submitted good enough for someone's acked-by or
-> > > > reviewed-by, or are there changes I need to implement?
-> > > >
-> > > > adam
-> > > >
-> > > > > >
-> > > > > > Sascha
-> > > > > >
-> > > > > >
-> > > > > > --
-> > > > > > Pengutronix e.K.                           |                             |
-> > > > > > Steuerwalder Str. 21                       | https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.pengutronix.de%2F&amp;data=04%7C01%7Cabel.vesa%40nxp.com%7C900fb6f7dfdf49776eb208d8ddadd7b7%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637503086023262296%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=ulZnxvilARLN03%2BEr%2BTKmVOPxRTukN%2FDg3oPY8UJ2AU%3D&amp;reserved=0  |
-> > > > > > 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-> > > > > > Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+On Tue, Mar 02, 2021 at 03:18:58PM -0800, Stephen Boyd wrote:
+> Quoting Maxime Ripard (2021-02-25 07:59:02)
+> > Some devices might need to access the current available range of a clock
+> > to discover their capabilities. Let's add those accessors.
+>=20
+> This needs more than two sentences to describe what's required.
+>=20
+> >=20
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> > ---
+> >  drivers/clk/clk.c   | 30 ++++++++++++++++++++++++++++++
+> >  include/linux/clk.h | 16 ++++++++++++++++
+> >  2 files changed, 46 insertions(+)
+> >=20
+> > diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> > index 8c1d04db990d..b7307d4f090d 100644
+> > --- a/drivers/clk/clk.c
+> > +++ b/drivers/clk/clk.c
+> > @@ -2407,6 +2407,36 @@ int clk_set_max_rate(struct clk *clk, unsigned l=
+ong rate)
+> >  }
+> >  EXPORT_SYMBOL_GPL(clk_set_max_rate);
+> > =20
+> > +long clk_get_min_rate(struct clk *clk)
+>=20
+> I need to read the rest of the patches but I don't see the justification
+> for this sort of API vs. having the consumer constrain the clk frequency
+> that it wants. Is the code that's setting the min/max constraints not
+> the same as the code that's calling this API? Would an OPP table better
+> serve this so the device knows what frequencies are valid?s Please
+> provide the use case/justification in the commit text.
+
+The patch that uses it is the patch 4
+
+The issue I'm trying to solve is that all the RaspberryPi have a
+configuration file for the firmware, and the firmware is in charge of
+the clocks communicating through a mailbox interface.
+
+By default, one of the main clocks in the system can only reach 500MHz,
+and that's the range reported by the firmware when queried. However, in
+order to support display modes with a fairly high bandwidth such as 4k
+at 60Hz, that clock needs to be raised to at least 550MHz, and the
+firmware configuration has a special parameter for that one. Setting
+that parameter will increase the range of the clock to have proper
+boundaries for that display mode.
+
+If a user doesn't enable it and tries to use those display modes, the
+display will be completely blank.
+
+There's no way to query the firmware configuration directly, so we can
+instead query the range of the clock and see if the firmware enables us
+to use those modes, warn the user and ignore the modes that wouldn't
+work. That's what those accessors are here for
+
+> Why two functions instead of one function to get both min and max?
+
+Since we have clk_set_min_rate and clk_set_max_rate, it made sense to me
+to mirror that, but I'd be happy to change if you think otherwise
+
+I'll address your other commenst
+
+Maxime
+
+--nriz3ja25tqexae2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYD9MpwAKCRDj7w1vZxhR
+xXFkAQC+xeNLEteW4viT0I9EgT4GDnxl6LNXLtMjY6QR4lk6OQD/WOWVAnP4FkZy
+khC5H7aQZrwFRz+De7C2IE6KukldgAQ=
+=2EUg
+-----END PGP SIGNATURE-----
+
+--nriz3ja25tqexae2--
