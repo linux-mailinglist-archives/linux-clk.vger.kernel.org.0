@@ -2,87 +2,118 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DCC32C5DE
+	by mail.lfdr.de (Postfix) with ESMTP id EAE1132C5E0
 	for <lists+linux-clk@lfdr.de>; Thu,  4 Mar 2021 02:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385333AbhCDAYr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 3 Mar 2021 19:24:47 -0500
-Received: from mail-ed1-f42.google.com ([209.85.208.42]:33531 "EHLO
-        mail-ed1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244018AbhCCSmb (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 3 Mar 2021 13:42:31 -0500
-Received: by mail-ed1-f42.google.com with SMTP id c6so31446669ede.0;
-        Wed, 03 Mar 2021 10:41:12 -0800 (PST)
+        id S1385340AbhCDAYs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 3 Mar 2021 19:24:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352892AbhCDACj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 3 Mar 2021 19:02:39 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F283C061762;
+        Wed,  3 Mar 2021 15:14:41 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id w3so5633134oti.8;
+        Wed, 03 Mar 2021 15:14:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=i+wsmGB3nPUNErG75HhRRgO2R+I8z7au1VtRNGbI3kU=;
-        b=USTmclFUCtO+GoKg8ArxNL9oWlx7aRioRC08snJnSxPNBZqPhGsyaFh1iSPCry7Fi7
-         0vOKdY/jK6CYzS9xj9d1PFkaNoJh9fYBcqWvQka0+BcgcS1pfj4mnTevIwoGWT9zzheu
-         YGQWdXy3bvvkQsPJNEOBRIZ5P5xzHgp+mTbuss+WlBX9Xhk1ATXZxby71E+G9aoF2NhQ
-         XHXjXrhZBgrRi2PdeHgnmjuCVuzW2WmoQXH5ubR6/G+UraDr/YaErGLj6kbJQTK5/5Cr
-         VvMF87ZEeAmLek1cEAux26YYSxNtoGSWPinIWFI+ei88vDBMWEr/jgWcM88pZ3n5+2mo
-         bzUg==
-X-Gm-Message-State: AOAM532HsOujRyieeXaH9xP4Z3LWfCO5ko90HSgFiMJnSqtuKxWxqU9w
-        n0EFDX8c2ZS/yFHyEnLH+l/D6NMWzCs=
-X-Google-Smtp-Source: ABdhPJzXlIPSof8TuEU/xmd9uwKvcnqjSaqVZ9KBEX0z0xFsdcZ3JuEcemsbVzh06mpoU6nkjncGFQ==
-X-Received: by 2002:adf:c40b:: with SMTP id v11mr28144512wrf.320.1614795584154;
-        Wed, 03 Mar 2021 10:19:44 -0800 (PST)
-Received: from kozik-lap (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.googlemail.com with ESMTPSA id m14sm6511797wmi.27.2021.03.03.10.19.42
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=yXVmeSl5oOevxfQxlrfETF+M/MDbt5WdR8xryqID+Tw=;
+        b=oQU6nvWULZkiQX21JwzS3zUmIYS3Y9QNCASf3m+dbAZvX/CHjqhP8KRZfTWDfhnAWV
+         6MX6kco8J5FPyk4LsWA6XmXRHcebMLr5+0NHuNb5Izcp0v0A0PUKWk6IeA2ut87StRuk
+         DGF/o4AeGViZlsUmVatRWsWPyBSv9Aq29RiU9FDoD4LiRMtLZh4JfUy7EQB9PNUXqREK
+         a3mCEQOVPG5uVx8I+iLI1FoodnlVVWiIxQMwnlGOpYbatbXQNRJzDsEZ3fnj0gEykX2Q
+         4/e+nZu/ejmb9SoYUno4hnAvH9rw6iH8sMWUafxtzMxI+pg5hkbWd+FECszvbzOGhKfG
+         U2gw==
+X-Gm-Message-State: AOAM531N9BaDDfnXAIx7d3ZsdAN1iJqeZzhRjyjPJsWG9xu/r3UUXVJF
+        o3H7DiTLdNTA87u7jNwgVw==
+X-Google-Smtp-Source: ABdhPJwrBA/11mAg/pOkn/zbVpAwEHWyNgvNOkMVN9xeD9R31M6hU7b8jv46jT4ggUwLalDuSU1VGQ==
+X-Received: by 2002:a9d:20c3:: with SMTP id x61mr1194688ota.311.1614813280679;
+        Wed, 03 Mar 2021 15:14:40 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id f193sm1879302oig.8.2021.03.03.15.14.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 10:19:43 -0800 (PST)
-Date:   Wed, 3 Mar 2021 19:19:41 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-rtc@vger.kernel.org
-Cc:     Iskren Chernev <iskren.chernev@gmail.com>,
-        Matheus Castello <matheus@castello.eng.br>,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        Angus Ainslie <angus@akkea.ca>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH 01/18] ARM: dts: exynos: correct fuel gauge interrupt
- trigger level on GT-I9100
-Message-ID: <20210303181941.yercebdxswdetf3q@kozik-lap>
-References: <20201210212534.216197-1-krzk@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201210212534.216197-1-krzk@kernel.org>
+        Wed, 03 Mar 2021 15:14:39 -0800 (PST)
+Received: (nullmailer pid 846313 invoked by uid 1000);
+        Wed, 03 Mar 2021 23:14:36 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Greentime Hu <greentime.hu@sifive.com>
+Cc:     bhelgaas@google.com, hes@sifive.com, p.zabel@pengutronix.de,
+        khilman@baylibre.com, vidyas@nvidia.com,
+        linux-riscv@lists.infradead.org, jh80.chung@samsung.com,
+        lorenzo.pieralisi@arm.com, alex.dewar90@gmail.com,
+        sboyd@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zong.li@sifive.com, paul.walmsley@sifive.com,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        erik.danie@sifive.com, robh+dt@kernel.org, mturquette@baylibre.com,
+        hayashi.kunihiko@socionext.com
+In-Reply-To: <4e63c5515f9755d0cf4cd65ab70048554d917d89.1614681831.git.greentime.hu@sifive.com>
+References: <cover.1614681831.git.greentime.hu@sifive.com> <4e63c5515f9755d0cf4cd65ab70048554d917d89.1614681831.git.greentime.hu@sifive.com>
+Subject: Re: [RFC PATCH 4/6] dt-bindings: PCI: Add SiFive FU740 PCIe host controller
+Date:   Wed, 03 Mar 2021 17:14:36 -0600
+Message-Id: <1614813276.374609.846312.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 10:25:17PM +0100, Krzysztof Kozlowski wrote:
-> The Maxim fuel gauge datasheets describe the interrupt line as active
-> low with a requirement of acknowledge from the CPU.  The falling edge
-> interrupt will mostly work but it's not correct.
+On Tue, 02 Mar 2021 18:59:15 +0800, Greentime Hu wrote:
+> Add PCIe host controller DT bindings of SiFive FU740.
 > 
-> Fixes: 8620cc2f99b7 ("ARM: dts: exynos: Add devicetree file for the Galaxy S2")
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
 > ---
->  arch/arm/boot/dts/exynos4210-i9100.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../bindings/pci/sifive,fu740-pcie.yaml       | 119 ++++++++++++++++++
+>  1 file changed, 119 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
 > 
 
-Applied 1-10 (Exynos and S5P dts patches).
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Best regards,
-Krzysztof
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml:114:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
+
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/pci/sifive,fu740-pcie.example.dts'
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-extract-example", line 45, in <module>
+    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 343, in load
+    return constructor.get_single_data()
+  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 111, in get_single_data
+    node = self.composer.get_single_node()
+  File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
+  File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
+  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
+  File "_ruamel_yaml.pyx", line 773, in _ruamel_yaml.CParser._compose_node
+  File "_ruamel_yaml.pyx", line 848, in _ruamel_yaml.CParser._compose_sequence_node
+  File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
+ruamel.yaml.scanner.ScannerError: while scanning a block scalar
+  in "<unicode string>", line 88, column 5
+found a tab character where an indentation space is expected
+  in "<unicode string>", line 114, column 1
+make[1]: *** [Documentation/devicetree/bindings/Makefile:20: Documentation/devicetree/bindings/pci/sifive,fu740-pcie.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml:  while scanning a block scalar
+  in "<unicode string>", line 88, column 5
+found a tab character where an indentation space is expected
+  in "<unicode string>", line 114, column 1
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml: ignoring, error parsing file
+warning: no schema found in file: ./Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
+make: *** [Makefile:1380: dt_binding_check] Error 2
+
+See https://patchwork.ozlabs.org/patch/1446288
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
