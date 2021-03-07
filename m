@@ -2,49 +2,68 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFE53301D8
-	for <lists+linux-clk@lfdr.de>; Sun,  7 Mar 2021 15:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A9B3301EC
+	for <lists+linux-clk@lfdr.de>; Sun,  7 Mar 2021 15:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbhCGOGu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 7 Mar 2021 09:06:50 -0500
-Received: from aposti.net ([89.234.176.197]:50206 "EHLO aposti.net"
+        id S229768AbhCGOSX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 7 Mar 2021 09:18:23 -0500
+Received: from aposti.net ([89.234.176.197]:51610 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230486AbhCGOGg (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 7 Mar 2021 09:06:36 -0500
+        id S230184AbhCGOSO (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 7 Mar 2021 09:18:14 -0500
 From:   Paul Cercueil <paul@crapouillou.net>
-To:     Russell King <linux@armlinux.org.uk>
-Cc:     od@zcrc.me, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH] clk: Fix doc of clk_get_parent
-Date:   Sun,  7 Mar 2021 14:06:26 +0000
-Message-Id: <20210307140626.22699-1-paul@crapouillou.net>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Cc:     od@zcrc.me, linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 0/6] clk: Ingenic JZ4760(B) support
+Date:   Sun,  7 Mar 2021 14:17:53 +0000
+Message-Id: <20210307141759.30426-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On error, or when the passed parameter is NULL, the return value is NULL
-and not a PTR_ERR()-encoded value.
+Hi,
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- include/linux/clk.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Here are a set of patches to add support for the Ingenic JZ4760(B) SoCs.
 
-diff --git a/include/linux/clk.h b/include/linux/clk.h
-index 266e8de3cb51..96031b5f6933 100644
---- a/include/linux/clk.h
-+++ b/include/linux/clk.h
-@@ -745,7 +745,7 @@ int clk_set_parent(struct clk *clk, struct clk *parent);
-  * @clk: clock source
-  *
-  * Returns struct clk corresponding to parent clock source, or
-- * valid IS_ERR() condition containing errno.
-+ * NULL on error.
-  */
- struct clk *clk_get_parent(struct clk *clk);
- 
+One thing to note is that the ingenic,jz4760-tcu is undocumented for now,
+as I will update the TCU documentation in a different patchset.
+
+Zhou: the CGU code now supports overriding the PLL M/N/OD calc
+algorithm, please tell me if it works for you.
+
+Cheers,
+-Paul
+
+Paul Cercueil (6):
+  dt-bindings: clock: ingenic: Add ingenic,jz4760{,b}-cgu compatibles
+  clk: Support bypassing dividers
+  clk: ingenic: Read bypass register only when there is one
+  clk: ingenic: Remove pll_info.no_bypass_bit
+  clk: ingenic: Support overriding PLLs M/N/OD calc algorithm
+  clk: ingenic: Add support for the JZ4760
+
+ .../bindings/clock/ingenic,cgu.yaml           |   4 +
+ drivers/clk/ingenic/Kconfig                   |  10 +
+ drivers/clk/ingenic/Makefile                  |   1 +
+ drivers/clk/ingenic/cgu.c                     |  92 ++--
+ drivers/clk/ingenic/cgu.h                     |  12 +-
+ drivers/clk/ingenic/jz4725b-cgu.c             |  12 +-
+ drivers/clk/ingenic/jz4740-cgu.c              |  12 +-
+ drivers/clk/ingenic/jz4760-cgu.c              | 433 ++++++++++++++++++
+ drivers/clk/ingenic/jz4770-cgu.c              |  15 +-
+ drivers/clk/ingenic/tcu.c                     |   2 +
+ include/dt-bindings/clock/jz4760-cgu.h        |  54 +++
+ 11 files changed, 591 insertions(+), 56 deletions(-)
+ create mode 100644 drivers/clk/ingenic/jz4760-cgu.c
+ create mode 100644 include/dt-bindings/clock/jz4760-cgu.h
+
 -- 
 2.30.1
 
