@@ -2,63 +2,61 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0176F3302CF
-	for <lists+linux-clk@lfdr.de>; Sun,  7 Mar 2021 16:59:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 693AB330328
+	for <lists+linux-clk@lfdr.de>; Sun,  7 Mar 2021 18:08:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232311AbhCGP6i convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-clk@lfdr.de>); Sun, 7 Mar 2021 10:58:38 -0500
-Received: from aposti.net ([89.234.176.197]:34520 "EHLO aposti.net"
+        id S231395AbhCGRIV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 7 Mar 2021 12:08:21 -0500
+Received: from aposti.net ([89.234.176.197]:40118 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231228AbhCGP6X (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 7 Mar 2021 10:58:23 -0500
-Date:   Sun, 07 Mar 2021 15:58:11 +0000
+        id S232535AbhCGRHz (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 7 Mar 2021 12:07:55 -0500
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH] clk: Fix doc of clk_get_parent
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     od@zcrc.me, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <ZCWLPQ.PR2X1S4YNGGC1@crapouillou.net>
-In-Reply-To: <20210307143013.GE1463@shell.armlinux.org.uk>
-References: <20210307140626.22699-1-paul@crapouillou.net>
-        <20210307142701.GD1463@shell.armlinux.org.uk>
-        <J8SLPQ.MXUB9SDIPWN13@crapouillou.net>
-        <20210307143013.GE1463@shell.armlinux.org.uk>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     od@zcrc.me, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 0/2] mmc: jz4740: Support PLL frequency changes
+Date:   Sun,  7 Mar 2021 17:07:40 +0000
+Message-Id: <20210307170742.70949-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Hi,
 
+This set of two patches enables the MMC driver to cope with the main PLL
+updating its rate, typically when the CPU frequency is being updated.
 
-Le dim. 7 mars 2021 à 14:30, Russell King - ARM Linux admin 
-<linux@armlinux.org.uk> a écrit :
-> On Sun, Mar 07, 2021 at 02:29:07PM +0000, Paul Cercueil wrote:
->>  Hi,
->> 
->>  Le dim. 7 mars 2021 à 14:27, Russell King - ARM Linux admin
->>  <linux@armlinux.org.uk> a écrit :
->>  > On Sun, Mar 07, 2021 at 02:06:26PM +0000, Paul Cercueil wrote:
->>  > >  On error, or when the passed parameter is NULL, the return 
->> value is
->>  > > NULL
->>  > >  and not a PTR_ERR()-encoded value.
->>  >
->>  > No, the documentation is accurate. The CCF is just an 
->> implementation
->>  > of the API, the file you are modifying is the definitive API
->>  > documentation.
->> 
->>  Well, then the code has to be fixed, because right now it returns 
->> NULL on
->>  error, since the 2.6 days.
-> 
-> And you consider NULL to be an error? A NULL clock isn't defined to be
-> an error by the API.
+The first patch introduces clk_get_first_to_set_rate(), which will allow
+the MMC driver to get a pointer to the clock that will effectively be
+modified when calling clk_set_rate(); this is required to avoid a
+chicken-and-egg situation with the clock notifier.
 
-Fair enough. Ignore my patch then.
+If accepted, this function will be reused in a few more drivers which
+need to perform the same operation.
+
+The patch to the MMC driver adds a atomic/mutex couple so that the
+frequency change will happen when we know that the controller is not in
+use.
 
 Cheers,
 -Paul
 
+Paul Cercueil (2):
+  clk: Add clk_get_first_to_set_rate
+  mmc: jz4740: Add support for monitoring PLL clock rate changes
+
+ drivers/clk/clk.c             |  9 +++++
+ drivers/mmc/host/jz4740_mmc.c | 70 ++++++++++++++++++++++++++++++++++-
+ include/linux/clk.h           | 16 ++++++++
+ 3 files changed, 94 insertions(+), 1 deletion(-)
+
+-- 
+2.30.1
 
