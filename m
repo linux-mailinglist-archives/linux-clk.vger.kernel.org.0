@@ -2,145 +2,92 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBA6331475
-	for <lists+linux-clk@lfdr.de>; Mon,  8 Mar 2021 18:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF90331496
+	for <lists+linux-clk@lfdr.de>; Mon,  8 Mar 2021 18:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbhCHRTJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 8 Mar 2021 12:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37212 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbhCHRSm (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 8 Mar 2021 12:18:42 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE85C06174A;
-        Mon,  8 Mar 2021 09:18:42 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id jt13so21975008ejb.0;
-        Mon, 08 Mar 2021 09:18:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zzFrV0h6kVmKH1KeRdOBV+T1cKCv+zoyF5GXtMVqnnc=;
-        b=ZQyoED8Al2WlCMa63tJ2iUBGTkn6FbGYK99zvJRff783x9xVm/8yW0VLVTLrguXtOj
-         sQOF0DJQeyPfA2PRg3yl4xbLZ5Oxbfd+wNinbTmeJZmXcslYuy+OALUth8VQXtDSRDnM
-         br/qBffboudOn0i9xgaDQ768B9hcGHn0v7S62dkPTGrE8Et3A36y6kv7v3kFk0GSlW7o
-         T+xgU4FBEX8IiNpvzV91jzTS8GjcL+gYJFRIi13K7OwhW6WByGjw/ExM/NZkT67F2463
-         tE8nXy52o+yspmVfIXWEcZpZfl7Rv6cMrthIl5YsXFruLoi1Fm+9A9vUAld6dPNHYHFo
-         HhuQ==
+        id S230341AbhCHRWR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 8 Mar 2021 12:22:17 -0500
+Received: from mail-il1-f177.google.com ([209.85.166.177]:33477 "EHLO
+        mail-il1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230342AbhCHRV4 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 8 Mar 2021 12:21:56 -0500
+Received: by mail-il1-f177.google.com with SMTP id e2so9566129ilu.0;
+        Mon, 08 Mar 2021 09:21:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zzFrV0h6kVmKH1KeRdOBV+T1cKCv+zoyF5GXtMVqnnc=;
-        b=k8uN95pH2jr2zBPHwdvS40ZiLojsrljJGM5bCXJYTGX8b2WEtT6iNpmOa5qRjhOeWo
-         DGzRrSiyJxjKL0aNoYmeoLikyZUDlZ2EJWaHIvTL/8V6rrPIpSKhVa5OrtfnRncqqPdo
-         l+GDxOvSO+Vj9awSUT4D2AJ5GLWaI91TdI2meFiuUxmFr2vZiwZYsWthCYnaspWPFGnX
-         EcwXRwMo2pVmX3PSw/AeWIZsjtVdXDKWLqZLK0jY0M4v62JjBwpD9/2zY9hdf7s7xdVT
-         SmwYV+dfbIrE2eIcg4brqdxACvSwS6EUXRzVLQhk2LsGB2FBchoaOpqYMNzFEnqflEV/
-         bEPA==
-X-Gm-Message-State: AOAM533NZmkNZ6EPKnf44rsZ5m3sB+4iT2RMCosfAC/7t6W95m8+R3K7
-        q+AddWuBmtv0Ogfy8E3ecA4=
-X-Google-Smtp-Source: ABdhPJx3YyHgQFJnJBXBqefgst1l9luX/FPnqHCg0y1wY3vUhcY2J78XRbFsb9ys29+/mYuMKaUN2g==
-X-Received: by 2002:a17:906:1746:: with SMTP id d6mr16488844eje.36.1615223920915;
-        Mon, 08 Mar 2021 09:18:40 -0800 (PST)
-Received: from localhost.localdomain ([81.18.95.223])
-        by smtp.gmail.com with ESMTPSA id r5sm7457714eds.49.2021.03.08.09.18.39
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=I9C+IFyr33dAu9Kqcftozrt07hiCQ7Ix1pjgeavX26Q=;
+        b=jc4Qst6TASQDMFtitz0DtEa0TVZELxFZBzI/prz4sMwlhzZICJ65nzM8XzfxCxErx5
+         83l2A2ico26yIENBAFzQxHYJNIXUwB/a1Qi2+4QvcGqxVAufD2uwzqEXRmtn/50cGKdG
+         N2QBDIiT8g/cSJ7wYmJiERkcMhAt9CuW+NbFRFbTDWzt8gbi79uN61VdSnQoTZ+7cEO0
+         TPE/U49jPm8wh+PF61eCLC2+TTyO6v/saP4oj2EiKJ4Xs/lfcAiQYmNinQG05yJ1dU64
+         FrJehEWCFN48kFNnvCJDpY61lR0TmwhmkTiJ2ME/9b8A1GCV2VXjka9eVgcx1sJpSPAD
+         NTtQ==
+X-Gm-Message-State: AOAM532xcmVwndcuPyhn+dqHSkwXDKbsjALK4MNQRx9CgGHXeeQ8fw+8
+        Q4yOcfMnu9xXJPqgfiUr7VzJ6WMdhg==
+X-Google-Smtp-Source: ABdhPJzSGdpR3ERyKpm3ixPrSK/LkiqVL91XK7jo+nbZKT9ATyTGtIJ4/k8iwQSs/INijl6TegVgUQ==
+X-Received: by 2002:a92:c641:: with SMTP id 1mr22296948ill.94.1615224115555;
+        Mon, 08 Mar 2021 09:21:55 -0800 (PST)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id w13sm6392957ilg.48.2021.03.08.09.21.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Mar 2021 09:18:40 -0800 (PST)
-From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-To:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Edgar Bernardi Righi <edgar.righi@lsitec.org.br>
-Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH 6/6] clk: actions: Add NIC and ETHERNET clock support for Actions S500 SoC
-Date:   Mon,  8 Mar 2021 19:18:31 +0200
-Message-Id: <ddafbffafe48fc55bed050728e2ce2610c934e7b.1615221459.git.cristian.ciocaltea@gmail.com>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <cover.1615221459.git.cristian.ciocaltea@gmail.com>
-References: <cover.1615221459.git.cristian.ciocaltea@gmail.com>
+        Mon, 08 Mar 2021 09:21:54 -0800 (PST)
+Received: (nullmailer pid 2655238 invoked by uid 1000);
+        Mon, 08 Mar 2021 17:21:53 -0000
+Date:   Mon, 8 Mar 2021 10:21:53 -0700
+From:   Rob Herring <robh@kernel.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: misc: add binding for generic ripple
+ counter
+Message-ID: <20210308172153.GA2505339@robh.at.kernel.org>
+References: <20210226141411.2517368-1-linux@rasmusvillemoes.dk>
+ <20210226141411.2517368-2-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210226141411.2517368-2-linux@rasmusvillemoes.dk>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add support for the missing NIC and ETHERNET clocks in the Actions Semi
-Owl S500 SoC clock driver.
+On Fri, Feb 26, 2021 at 03:14:10PM +0100, Rasmus Villemoes wrote:
+> While a ripple counter can not usually be interfaced with (directly)
+> from software, it may still be a crucial component in a board
+> layout. To prevent its input clock from being disabled by the clock
+> core because it apparently has no consumer, one needs to be able to
+> represent that consumer in DT.
 
-Additionally, change APB clock parent from AHB to the newly added NIC.
+I'm okay with this as it is describing h/w, but we already 
+'protected-clocks' property which should work.
 
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
----
- drivers/clk/actions/owl-s500.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+> 
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> ---
+>  Documentation/devicetree/bindings/misc/ripple-ctr.txt | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/misc/ripple-ctr.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/misc/ripple-ctr.txt b/Documentation/devicetree/bindings/misc/ripple-ctr.txt
+> new file mode 100644
+> index 000000000000..1497d3a237a7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/misc/ripple-ctr.txt
+> @@ -0,0 +1,8 @@
+> +Generic ripple counter
+> +
+> +A ripple counter is a simple component that can for example be used to
+> +delay propagation of a signal.
+> +
+> +Required properties:
+> +- compatible: Must be "linux,ripple-ctr".
 
-diff --git a/drivers/clk/actions/owl-s500.c b/drivers/clk/actions/owl-s500.c
-index b9e434173b4f..0ccc9619b302 100644
---- a/drivers/clk/actions/owl-s500.c
-+++ b/drivers/clk/actions/owl-s500.c
-@@ -112,6 +112,7 @@ static const char * const bisp_clk_mux_p[] = { "display_pll_clk", "dev_clk" };
- static const char * const sensor_clk_mux_p[] = { "hosc", "bisp_clk" };
- static const char * const sd_clk_mux_p[] = { "dev_clk", "nand_pll_clk" };
- static const char * const pwm_clk_mux_p[] = { "losc", "hosc" };
-+static const char * const nic_clk_mux_p[] = { "dev_clk", "display_pll_clk", "nand_pll_clk", "ddr_pll_clk" };
- static const char * const ahbprediv_clk_mux_p[] = { "dev_clk", "display_pll_clk", "nand_pll_clk", "ddr_pll_clk" };
- static const char * const uart_clk_mux_p[] = { "hosc", "dev_pll_clk" };
- static const char * const de_clk_mux_p[] = { "display_pll_clk", "dev_clk" };
-@@ -197,7 +198,7 @@ static OWL_GATE(hdmi_clk, "hdmi_clk", "hosc", CMU_DEVCLKEN1, 3, 0, 0);
- 
- /* divider clocks */
- static OWL_DIVIDER(h_clk, "h_clk", "ahbprediv_clk", CMU_BUSCLK1, 2, 2, h_div_table, 0, 0);
--static OWL_DIVIDER(apb_clk, "apb_clk", "ahb_clk", CMU_BUSCLK1, 14, 2, NULL, 0, 0);
-+static OWL_DIVIDER(apb_clk, "apb_clk", "nic_clk", CMU_BUSCLK1, 14, 2, NULL, 0, 0);
- static OWL_DIVIDER(rmii_ref_clk, "rmii_ref_clk", "ethernet_pll_clk", CMU_ETHERNETPLL, 1, 1, rmii_ref_div_table, 0, 0);
- 
- /* factor clocks */
-@@ -205,6 +206,12 @@ static OWL_FACTOR(de1_clk, "de_clk1", "de_clk", CMU_DECLK, 0, 4, de_factor_table
- static OWL_FACTOR(de2_clk, "de_clk2", "de_clk", CMU_DECLK, 4, 4, de_factor_table, 0, 0);
- 
- /* composite clocks */
-+static OWL_COMP_DIV(nic_clk, "nic_clk", nic_clk_mux_p,
-+			OWL_MUX_HW(CMU_BUSCLK1, 4, 3),
-+			{ 0 },
-+			OWL_DIVIDER_HW(CMU_BUSCLK1, 16, 2, 0, NULL),
-+			0);
-+
- static OWL_COMP_DIV(ahbprediv_clk, "ahbprediv_clk", ahbprediv_clk_mux_p,
- 			OWL_MUX_HW(CMU_BUSCLK1, 8, 3),
- 			{ 0 },
-@@ -320,6 +327,10 @@ static OWL_COMP_FIXED_FACTOR(i2c3_clk, "i2c3_clk", "ethernet_pll_clk",
- 			OWL_GATE_HW(CMU_DEVCLKEN1, 31, 0),
- 			1, 5, 0);
- 
-+static OWL_COMP_FIXED_FACTOR(ethernet_clk, "ethernet_clk", "ethernet_pll_clk",
-+			OWL_GATE_HW(CMU_DEVCLKEN1, 22, 0),
-+			1, 20, 0);
-+
- static OWL_COMP_DIV(uart0_clk, "uart0_clk", uart_clk_mux_p,
- 			OWL_MUX_HW(CMU_UART0CLK, 16, 1),
- 			OWL_GATE_HW(CMU_DEVCLKEN1, 6, 0),
-@@ -454,6 +465,8 @@ static struct owl_clk_common *s500_clks[] = {
- 	&apb_clk.common,
- 	&dmac_clk.common,
- 	&gpio_clk.common,
-+	&nic_clk.common,
-+	&ethernet_clk.common,
- };
- 
- static struct clk_hw_onecell_data s500_hw_clks = {
-@@ -513,6 +526,8 @@ static struct clk_hw_onecell_data s500_hw_clks = {
- 		[CLK_APB]		= &apb_clk.common.hw,
- 		[CLK_DMAC]		= &dmac_clk.common.hw,
- 		[CLK_GPIO]		= &gpio_clk.common.hw,
-+		[CLK_NIC]		= &nic_clk.common.hw,
-+		[CLK_ETHERNET]		= &ethernet_clk.common.hw,
- 	},
- 	.num = CLK_NR_CLKS,
- };
--- 
-2.30.1
+Nothing linux specific about this.
 
+> +- clocks: Input clock specifier. Refer to common clock bindings.
+> -- 
+> 2.29.2
+> 
