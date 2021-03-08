@@ -2,126 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2643315E2
-	for <lists+linux-clk@lfdr.de>; Mon,  8 Mar 2021 19:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F041C331810
+	for <lists+linux-clk@lfdr.de>; Mon,  8 Mar 2021 21:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbhCHSYJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 8 Mar 2021 13:24:09 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:36039 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbhCHSXz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 8 Mar 2021 13:23:55 -0500
-Received: from mail-wr1-f72.google.com ([209.85.221.72])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lJKXq-0004Cq-CI
-        for linux-clk@vger.kernel.org; Mon, 08 Mar 2021 18:23:54 +0000
-Received: by mail-wr1-f72.google.com with SMTP id h5so5175878wrr.17
-        for <linux-clk@vger.kernel.org>; Mon, 08 Mar 2021 10:23:54 -0800 (PST)
+        id S231646AbhCHUDB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 8 Mar 2021 15:03:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231584AbhCHUCd (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 8 Mar 2021 15:02:33 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB12C061760
+        for <linux-clk@vger.kernel.org>; Mon,  8 Mar 2021 12:02:32 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id b7so16574841edz.8
+        for <linux-clk@vger.kernel.org>; Mon, 08 Mar 2021 12:02:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=3t+/FGTFmIQyffd5lnhNae0bF0FU3qV628NjTAJ6fqE=;
+        b=gfrGxsctj7ZgdCnjBxZzvzOU616fh/vzNa6UCLMa0GN0zjbz5QSFtF6qTKVMimAaoI
+         QhKxVI51bWGOap7MLvgcUlqAIi4le1i+TDXZDDSs1NALQfBw6biPjSEzE79xNFPda7fe
+         IQYUh3fImXPDcH/e/yq2x1VfZ0L0zDngwciu8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PzhmjnnDaBAM6gz8zOmUYx1vx5KSpg9Ds20f5pFImQQ=;
-        b=sUk9Fot41iUFL/zH1RPXFw7kqnLebJH6hspShxOyRkIw7ON9cuVdFZQK4mWrMpU93h
-         5KEenuoJMZkhR4A96SkIldUY46uD1Zc6qm3MpbAtji/jzPAXnSIKofUanm6DgHb7vG2/
-         G1d5PLV74XOtu6lIct2dYw+LgqPDZal/3UH/yxTU8bxgm0SawVO9fxoQBxfquCoccnCl
-         CQH3VnjgnDhP24gBip26DWwAGlDW9aNRPycq/w+lJiJHKY3tWMDp+1R7yp1JBluqgPvL
-         lZItvxAMJjYmvOYmQOI9W866UXRYt/zfDcyyakMHuMKhzTF2lskjkBQnacTJ01UsQnU6
-         fJUQ==
-X-Gm-Message-State: AOAM532njlBDj5Eyo3X69Af+LZ/KcLHC+eh0qGb3bgFp0pAUeNdeoDcR
-        wFFT9WQE3CHpdam71v4AkdQ+TPyEuDlxC6VxOVaO59E2s6KQlY37l8XfPu46Ia2LpsOJmDIeCPN
-        6EMQbT8sBVZrtYL/jlQHDpdYKHYvqMexvtyhCug==
-X-Received: by 2002:a5d:67cf:: with SMTP id n15mr23826949wrw.95.1615227834162;
-        Mon, 08 Mar 2021 10:23:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx6by2i2b5cJeyKFWf+JvioS4ol4PlyvgX86myQjOefknz3S/le/EI3WF/MNfYVqwAjsZrJTg==
-X-Received: by 2002:a5d:67cf:: with SMTP id n15mr23826942wrw.95.1615227834053;
-        Mon, 08 Mar 2021 10:23:54 -0800 (PST)
-Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
-        by smtp.gmail.com with ESMTPSA id f22sm158207wmb.31.2021.03.08.10.23.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Mar 2021 10:23:53 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH 3/3] clk: socfpga: allow compile testing of Stratix 10 / Agilex clocks
-Date:   Mon,  8 Mar 2021 19:23:39 +0100
-Message-Id: <20210308182339.379775-4-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210308182339.379775-1-krzysztof.kozlowski@canonical.com>
-References: <20210308182339.379775-1-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3t+/FGTFmIQyffd5lnhNae0bF0FU3qV628NjTAJ6fqE=;
+        b=Hi2Fg2L7mTu56XeHmQKctHknEGgQ3058HcsgapsomyT/RKKw5DRT9Gp5BLE/niQUce
+         KTWQiR3DqgMU+1FcbO5ZodPj2vZc+oJd2PzZP3OuyvBhtPHHc/xMYMo5ibLraERev659
+         t3weMyEznX4HMRQzJciEIL1efAbrM2c5nRqsnMHKQ1G7bj1Lnzfa1DDauLsqjnCaoaQS
+         oQhMQi5oWYTGlwQrVr9sYO7pPOGLQTfBRcT1h1UrteiEXhIV5dZbGMkjSv2dmkipLSxC
+         V25ol+EunTNyUoQKoarWX1iAmUtHviSS2yAv9GDlJTcosIhpFFDrCjfDo6/njVplJcMA
+         rNHg==
+X-Gm-Message-State: AOAM530zdRAY0/H6iAbq3uY1G1LfFZxBtsBE2jxz7OTZ1QuF0TwWOv/O
+        bBZ3urFZvgraYJqt2KuzNjv9gA==
+X-Google-Smtp-Source: ABdhPJz/N2WXkp/XWbteDUOpmfs9kTJ7J7qctEPtW6OeYiZrs1L3DFi1SC7Cg9aRy5AoqQKH3np2jA==
+X-Received: by 2002:a05:6402:b2d:: with SMTP id bo13mr292159edb.120.1615233751171;
+        Mon, 08 Mar 2021 12:02:31 -0800 (PST)
+Received: from [192.168.1.149] ([80.208.71.141])
+        by smtp.gmail.com with ESMTPSA id jj16sm7158657ejc.19.2021.03.08.12.02.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Mar 2021 12:02:30 -0800 (PST)
+Subject: Re: [PATCH 1/2] dt-bindings: misc: add binding for generic ripple
+ counter
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-clk@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20210226141411.2517368-1-linux@rasmusvillemoes.dk>
+ <20210226141411.2517368-2-linux@rasmusvillemoes.dk>
+ <20210308172153.GA2505339@robh.at.kernel.org>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <12be138b-631a-4f82-aae9-6bbdc7bc2bcf@rasmusvillemoes.dk>
+Date:   Mon, 8 Mar 2021 21:02:29 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210308172153.GA2505339@robh.at.kernel.org>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The Stratix 10 / Agilex / N5X clocks do not use anything other than OF
-or COMMON_CLK so they should be compile testable on most of the
-platforms.
+On 08/03/2021 18.21, Rob Herring wrote:
+> On Fri, Feb 26, 2021 at 03:14:10PM +0100, Rasmus Villemoes wrote:
+>> While a ripple counter can not usually be interfaced with (directly)
+>> from software, it may still be a crucial component in a board
+>> layout. To prevent its input clock from being disabled by the clock
+>> core because it apparently has no consumer, one needs to be able to
+>> represent that consumer in DT.
+> 
+> I'm okay with this as it is describing h/w, but we already 
+> 'protected-clocks' property which should work.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- drivers/clk/Makefile        |  5 +----
- drivers/clk/socfpga/Kconfig | 22 ++++++++++++++++------
- 2 files changed, 17 insertions(+), 10 deletions(-)
+Hm. Unless
+https://lore.kernel.org/lkml/20200903040015.5627-2-samuel@sholland.org/
+gets merged, I don't see how this would work out-of-the-box.
 
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index 12e46b12e587..9b582b3fca34 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -104,10 +104,7 @@ obj-y					+= renesas/
- obj-$(CONFIG_ARCH_ROCKCHIP)		+= rockchip/
- obj-$(CONFIG_COMMON_CLK_SAMSUNG)	+= samsung/
- obj-$(CONFIG_CLK_SIFIVE)		+= sifive/
--obj-$(CONFIG_ARCH_SOCFPGA)		+= socfpga/
--obj-$(CONFIG_ARCH_AGILEX)		+= socfpga/
--obj-$(CONFIG_ARCH_N5X)			+= socfpga/
--obj-$(CONFIG_ARCH_STRATIX10)		+= socfpga/
-+obj-y					+= socfpga/
- obj-$(CONFIG_PLAT_SPEAR)		+= spear/
- obj-y					+= sprd/
- obj-$(CONFIG_ARCH_STI)			+= st/
-diff --git a/drivers/clk/socfpga/Kconfig b/drivers/clk/socfpga/Kconfig
-index 4922cc35f4cc..de7b3137e215 100644
---- a/drivers/clk/socfpga/Kconfig
-+++ b/drivers/clk/socfpga/Kconfig
-@@ -1,13 +1,23 @@
- # SPDX-License-Identifier: GPL-2.0
-+config COMMON_CLK_SOCFPGA
-+	bool "Intel SoCFPGA family clock support" if COMPILE_TEST
-+	depends on ARCH_AGILEX || ARCH_N5X || ARCH_SOCFPGA || ARCH_STRATIX10 || COMPILE_TEST
-+	default y if ARCH_AGILEX || ARCH_N5X || ARCH_SOCFPGA || ARCH_STRATIX10
-+	help
-+	  Support for the clock controllers present on Intel SoCFPGA and eASIC
-+          devices like Stratix 10, Agilex and N5X eASIC.
-+
-+if COMMON_CLK_SOCFPGA
-+
- config COMMON_CLK_STRATIX10
--	bool
--	# Intel Stratix / Agilex / N5X clock controller support
-+	bool "Intel Stratix / Agilex / N5X clock controller support" if COMPILE_TEST
- 	default y if ARCH_AGILEX || ARCH_N5X || ARCH_STRATIX10
--	depends on ARCH_AGILEX || ARCH_N5X || ARCH_STRATIX10
-+	depends on ARCH_AGILEX || ARCH_N5X || ARCH_STRATIX10 || COMPILE_TEST
- 
- config COMMON_CLK_AGILEX
--	bool
--	# Intel Agilex / N5X clock controller support
-+	bool "Intel Agilex / N5X clock controller support" if COMPILE_TEST
- 	default y if ARCH_AGILEX || ARCH_N5X
--	depends on ARCH_AGILEX || ARCH_N5X
-+	depends on ARCH_AGILEX || ARCH_N5X || COMPILE_TEST
- 	select COMMON_CLK_STRATIX10
-+
-+endif # COMMON_CLK_SOCFPGA
--- 
-2.25.1
+Note that I sent a completely different v2, which made the gpio-wdt the
+clock consumer based on feedback from Guenter and Arnd, but that v2
+isn't suitable for our case because it post-poned handling of the
+watchdog till after i2c is ready, which is too late. Somewhat similar to
+https://lore.kernel.org/lkml/20210222171247.97609-2-sebastian.reichel@collabora.com/
+it seems.
 
+>> +
+>> +Required properties:
+>> +- compatible: Must be "linux,ripple-ctr".
+> 
+> Nothing linux specific about this.
+
+True, but I was following the lead of the existing gpio-wdt binding. Is
+there some other "vendor" name one can and should use for completely
+generic and simple components like these? "generic"?
+
+Rasmus
