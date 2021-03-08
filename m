@@ -2,71 +2,88 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 932DB3314D8
-	for <lists+linux-clk@lfdr.de>; Mon,  8 Mar 2021 18:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0EB53315DF
+	for <lists+linux-clk@lfdr.de>; Mon,  8 Mar 2021 19:24:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbhCHR2p (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 8 Mar 2021 12:28:45 -0500
-Received: from mail-io1-f54.google.com ([209.85.166.54]:39341 "EHLO
-        mail-io1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbhCHR2c (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 8 Mar 2021 12:28:32 -0500
-Received: by mail-io1-f54.google.com with SMTP id o9so10791421iow.6;
-        Mon, 08 Mar 2021 09:28:32 -0800 (PST)
+        id S229730AbhCHSYH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 8 Mar 2021 13:24:07 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:36020 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230050AbhCHSXw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 8 Mar 2021 13:23:52 -0500
+Received: from mail-wr1-f69.google.com ([209.85.221.69])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <krzysztof.kozlowski@canonical.com>)
+        id 1lJKXn-0004BY-LE
+        for linux-clk@vger.kernel.org; Mon, 08 Mar 2021 18:23:51 +0000
+Received: by mail-wr1-f69.google.com with SMTP id h21so5142509wrc.19
+        for <linux-clk@vger.kernel.org>; Mon, 08 Mar 2021 10:23:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fws5MonGu3/ugwq9UdenhDT89R0PYuNDK5UhBQCoBJM=;
-        b=SH8LGVHJHVv/epe9nfZ2indrOYHhK917+G1FVQRE22GacgQ6qXksQWw0qm/Y12SZnV
-         m5LSfNhsKiXPS94lahN3eOxwK5nkp7H+Ks+jiYMaPwJzeby9SYuPKgYqSFjs7Et8t2Ae
-         mnHPBm6tvpKZc6GTmgrb11LGrq/GhTCfEsIGP/9gYivnT9VFBlRfEmnULDdPkCCjWeXb
-         vL/3+tdaV0Pt0xNoRpCojhP8Ho5xPAhr5ZIO7rcKMQYu6E18OJrFuMMYmxnva4d5sbl4
-         JGRT5pXU9oYg7sahuU8eMspgXZQUTAtEzLXfJ9K6dlAMW/nVdyxmB7KORJ8Yj5qUJtg2
-         OZkw==
-X-Gm-Message-State: AOAM530uZWe5I4v9mq2irVQ8G6FmAlBts73DhV6k53+4EIXNUL/9VH+v
-        v7Q0m+N7BOJtxTw+z9+b9LtB5vsJAA==
-X-Google-Smtp-Source: ABdhPJyS+nur54q9MG9oIinTctfWUfF+pR/TVr6q+ykJUS8fdebTkaBQHkqp6/2E7igSyd/swhT75w==
-X-Received: by 2002:a05:6638:238c:: with SMTP id q12mr24925610jat.114.1615224511898;
-        Mon, 08 Mar 2021 09:28:31 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id h23sm6189744ila.15.2021.03.08.09.28.29
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KX2v5j7I3zXLrg0qNAwZaGK6w9v9AXVKox7isWJgC+U=;
+        b=GRFYlxwrxJmBuDb6a0CyzV8s2L1FsaYJyezW0ap8yt7uLSQNS8lqQtZC3E8ZgsH+1t
+         OmjMLqnZnoA6CG2Pcq+C0D9wjVz2GrQobi5l8NGGRobIdxvwHVBMYy1jb3nPm4zRJ8O8
+         wLdDdLFrBCfReZnXDemuL8OZb5/GWyqMPQ97EsVsCbqhr6pZWoco0GgcI2063p2fGpae
+         pwHDFdsrlZMEOp9ghwqMHyrFTuKn5aT5H8F2e4IehAUKSUlvBkrAo13uxgPWaNX5nmZv
+         hIo4eXBm2cYTFulnqmxVMI3c8Wu9Ex00ugrb0qMpvR90bUDStZ7CotNb9Sh5wHJvR73V
+         R1xA==
+X-Gm-Message-State: AOAM532bNcpXFcFH9ZZF7kJJsCrDhwkPHB1lYGXA0PbY9mJQrMM/5HGY
+        rELDfdciVbS9CKd2VSYth23pqR1cAVvnhMY+uf8GgFHKlHz24vypFYfC2oOgAm23yfz8m1XuIfw
+        Gy2aDM1KfDla+NtPFFp0ymAwIJy6Jrg4BaACQbA==
+X-Received: by 2002:a1c:cc04:: with SMTP id h4mr108813wmb.142.1615227831052;
+        Mon, 08 Mar 2021 10:23:51 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzqgyApwcs5u2d3ykSYzyi7V9lCv6GKyln79Ae5GSas5Vc6LGu56wJ/JTtqVwCRsWeddWuSUw==
+X-Received: by 2002:a1c:cc04:: with SMTP id h4mr108796wmb.142.1615227830933;
+        Mon, 08 Mar 2021 10:23:50 -0800 (PST)
+Received: from localhost.localdomain (adsl-84-226-167-205.adslplus.ch. [84.226.167.205])
+        by smtp.gmail.com with ESMTPSA id f22sm158207wmb.31.2021.03.08.10.23.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Mar 2021 09:28:31 -0800 (PST)
-Received: (nullmailer pid 2664795 invoked by uid 1000);
-        Mon, 08 Mar 2021 17:28:28 -0000
-Date:   Mon, 8 Mar 2021 10:28:28 -0700
-From:   Rob Herring <robh@kernel.org>
-To:     Elaine Zhang <zhangqing@rock-chips.com>
-Cc:     huangtao@rock-chips.com, finley.xiao@rock-chips.com,
-        linux-arm-kernel@lists.infradead.org, mturquette@baylibre.com,
-        heiko@sntech.de, sboyd@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        tony.xie@rock-chips.com, kever.yang@rock-chips.com,
-        cl@rock-chips.com
-Subject: Re: [PATCH v3 2/4] clk: rockchip: add dt-binding header for rk3568
-Message-ID: <20210308172828.GA2664738@robh.at.kernel.org>
-References: <20210301064749.10392-1-zhangqing@rock-chips.com>
- <20210301064749.10392-3-zhangqing@rock-chips.com>
+        Mon, 08 Mar 2021 10:23:50 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [RFT 0/3] clk: socfpga: minor cleanups and compile testing
+Date:   Mon,  8 Mar 2021 19:23:36 +0100
+Message-Id: <20210308182339.379775-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210301064749.10392-3-zhangqing@rock-chips.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, 01 Mar 2021 14:47:47 +0800, Elaine Zhang wrote:
-> Add the dt-bindings header for the rk3568, that gets shared between
-> the clock controller and the clock references in the dts.
-> Add softreset ID for rk3568.
-> 
-> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
-> ---
->  include/dt-bindings/clock/rk3568-cru.h | 926 +++++++++++++++++++++++++
->  1 file changed, 926 insertions(+)
->  create mode 100644 include/dt-bindings/clock/rk3568-cru.h
-> 
+Hi,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+A fix, cleanup and finally compile testing for SoCFPGA clock drivers.
+I don't expect any functional impact, however please test on real
+hardware.
+
+I tested compile builds on few configuratins, so I hope kbuild 0-day
+will check more options (please give it few days on the lists).
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (3):
+  clk: socfpga: allow building N5X clocks with ARCH_N5X
+  clk: socfpga: drop duplicated lines in Makefile
+  clk: socfpga: allow compile testing of Stratix 10 / Agilex clocks
+
+ drivers/clk/Kconfig          |  1 +
+ drivers/clk/Makefile         |  4 +---
+ drivers/clk/socfpga/Kconfig  | 23 +++++++++++++++++++++++
+ drivers/clk/socfpga/Makefile |  5 ++---
+ 4 files changed, 27 insertions(+), 6 deletions(-)
+ create mode 100644 drivers/clk/socfpga/Kconfig
+
+-- 
+2.25.1
+
