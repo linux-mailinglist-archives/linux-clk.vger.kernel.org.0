@@ -2,56 +2,56 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 552D2339614
-	for <lists+linux-clk@lfdr.de>; Fri, 12 Mar 2021 19:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D394833960D
+	for <lists+linux-clk@lfdr.de>; Fri, 12 Mar 2021 19:18:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232862AbhCLSR6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 12 Mar 2021 13:17:58 -0500
-Received: from mx0c-0054df01.pphosted.com ([67.231.159.91]:45757 "EHLO
+        id S232583AbhCLSR7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 12 Mar 2021 13:17:59 -0500
+Received: from mx0c-0054df01.pphosted.com ([67.231.159.91]:52790 "EHLO
         mx0c-0054df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232602AbhCLSRt (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 12 Mar 2021 13:17:49 -0500
+        by vger.kernel.org with ESMTP id S232603AbhCLSRu (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 12 Mar 2021 13:17:50 -0500
 Received: from pps.filterd (m0208999.ppops.net [127.0.0.1])
-        by mx0c-0054df01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12CIBom3018929;
-        Fri, 12 Mar 2021 13:17:43 -0500
-Received: from can01-to1-obe.outbound.protection.outlook.com (mail-to1can01lp2057.outbound.protection.outlook.com [104.47.61.57])
-        by mx0c-0054df01.pphosted.com with ESMTP id 376besa3kc-2
+        by mx0c-0054df01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12CIBq92018951;
+        Fri, 12 Mar 2021 13:17:45 -0500
+Received: from can01-qb1-obe.outbound.protection.outlook.com (mail-qb1can01lp2058.outbound.protection.outlook.com [104.47.60.58])
+        by mx0c-0054df01.pphosted.com with ESMTP id 376besa3kd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Mar 2021 13:17:43 -0500
+        Fri, 12 Mar 2021 13:17:45 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iC7H8VPQ4b9Oh+bALbcdlwz0QYgeRF4o21Z1t0W+sh0ZkxK/w1x/HcF4kjcJKvaf3PRnHi4kdC53/D3+/nubdz+mJ5cCgfDWMnwlK11VUrdSVGA83CPDKJsNmO7XwWUbGQWoRKL1O5LOQjycr6ptQ8PtacUnvN290rU3tkizf92EGN+nQn4CDTxKshmM12kKrzzNjLzhh5zOLB6aSc3bd3u6QZ6iONu8d9TiCy2Hhn/WegyOOEfr4S4txYFLVopYZLFDPsBW+ADKDYub/0mnWP0A3KzTHlZkRrY/c4CVHw/YlYRgzKLj52qH7fm2Au2P3cMwYnOpkJzFDn+HNRC+uQ==
+ b=XXDLmuqKVtUgmzvjT0/CWrRmUWp4lQle4zOWmXEP9+64nF3zPUuJARx64tRb9rVXTcZjGfMjdKP5PEkz9S12dvdtM6priMomaWjlA4UKJDDmb3b2ySdVjS2IDTTWFlojrvLxtvtLo78eSumjjVV+f16aja4oChN4wDGOohs82POfab31ABuTqypyvDLPw8A/L0ub7VAZONG9o0T5o3g0vnGzWORihNOO0Qg7NAeLwaDjQ8BoWQ3HGY9AI0LneNE9NZ0jr4UUW/XNRgUEyT6wwFMme31IkyMowWgNhCI7EPW0PCqTZm9a6rK6EgxeXUgGX7eYh+IqazZz4HRErmBVow==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vx4j3QhKkPc4qgBW8L+J/EEFbL7uoAIZCm+ICqFashE=;
- b=CPGZBDzVdlsNcuW8t3q5+wslZAyh50VkeAfQFS0OGLUSoxGc/H9hKuuCGBTxEUNfhCBJXjPeT9rnonXjvJ4AvCbdNHUsZw2FlORp5jqt/p/5EuvEAf2RGgXfW1bd/RzPYPwHVkYkOfRXgTd1fazQtKllSnMkKEMuu7FWecbiWerOeyc5jO/QP9OUG2+2srGO4q/eqoc46P/3OxWLo6E0qObcr93zymCoBGcau/gcTXNXCVTAnuT8c9AROtOodOPaAJ2sKWXTg9NR8F36Ycl8pWQ8CxChZU9P4Lt4XKD/7rbSU6C5BjEvH7rLKHXSJNjYUfnxJJaMvHaI6BmjCK82GA==
+ bh=5M/wdsb3W/mqkD7bMBikg5jCY8Ip2YnH014mUcQveE4=;
+ b=FftNb3iMgQW3tSSPqRXmU7TMj7lP3XoGFHIYfW7yomY3x9UGPP+XFyByOwHQpxusEEHK+6ZrAGgzCroh/XHxPDXN9sEuvkO8Iiq6IkGM7mqhAcLYhyajwijMV220FWiJ8yJhPuwFQ5jM/vzjQtCgZaBHojyFx8Wlm7QaM8NcZRa2KVJgYeOib89IrgNmxIZoLI/EOhw3r+ANkL4xeGvobsOSnUv/4Tt7MHzBoDzfADGQml3rnmofJcoI4Qgc7Deso3O/nLvqw2zYzKSp511TtPTacDRklkZrA4jwXuzT6/s41R3uOpDpowMlfLu7wZp70AN0ON/fYudHerYkMCbr6g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=calian.com; dmarc=pass action=none header.from=calian.com;
  dkim=pass header.d=calian.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=calian.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vx4j3QhKkPc4qgBW8L+J/EEFbL7uoAIZCm+ICqFashE=;
- b=4k41D7Fr0j1D7ooD25BvaNwXlFvCQSnc9LTjvcqw6B73V0TPQBKLYCdgoYLGLbYWBZJ80UcgMahCFp+YN7rG3HWuW1NC80fu97SL/ZTLbiKv8bCiz1L3ORe69/6F00x49Lox+Rzexxb3aAcD7whOuZvsV5Nnh3pL1zjJqdPm1PA=
+ bh=5M/wdsb3W/mqkD7bMBikg5jCY8Ip2YnH014mUcQveE4=;
+ b=q9NdCZp2NRbDeK3jr7DFCBYChs5ECwoPu0ZAYFu0oBk2AFA5Wjd+PQ3RaoAcgiXmYZF67xqU1OYud5xo3QAB2defb3s8j3rKW4pl7oq1C6ryGwIfuQwAt/h+A3mT7OqgePmQcSXykBGz027C/ivWYCw51yXO853SJ0mtHDkr0HA=
 Authentication-Results: baylibre.com; dkim=none (message not signed)
  header.d=none;baylibre.com; dmarc=none action=none header.from=calian.com;
 Received: from YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:f::20)
  by YT1PR01MB4439.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:42::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.2; Fri, 12 Mar
- 2021 18:17:42 +0000
+ 2021 18:17:43 +0000
 Received: from YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM
  ([fe80::90d4:4d5b:b4c2:fdeb]) by YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM
  ([fe80::90d4:4d5b:b4c2:fdeb%7]) with mapi id 15.20.3912.031; Fri, 12 Mar 2021
- 18:17:42 +0000
+ 18:17:43 +0000
 From:   Robert Hancock <robert.hancock@calian.com>
 To:     mturquette@baylibre.com, sboyd@kernel.org
 Cc:     mike.looijmans@topic.nl, devicetree@vger.kernel.org,
         linux-clk@vger.kernel.org,
         Robert Hancock <robert.hancock@calian.com>
-Subject: [PATCH v2 3/9] clk: si5341: Avoid divide errors due to bogus register contents
-Date:   Fri, 12 Mar 2021 12:17:04 -0600
-Message-Id: <20210312181710.3998978-4-robert.hancock@calian.com>
+Subject: [PATCH v2 4/9] clk: si5341: Check for input clock presence and PLL lock on startup
+Date:   Fri, 12 Mar 2021 12:17:05 -0600
+Message-Id: <20210312181710.3998978-5-robert.hancock@calian.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210312181710.3998978-1-robert.hancock@calian.com>
 References: <20210312181710.3998978-1-robert.hancock@calian.com>
@@ -63,50 +63,50 @@ X-ClientProxiedBy: MW3PR05CA0012.namprd05.prod.outlook.com
  (2603:10b6:b01:f::20)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (204.83.154.189) by MW3PR05CA0012.namprd05.prod.outlook.com (2603:10b6:303:2b::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.10 via Frontend Transport; Fri, 12 Mar 2021 18:17:41 +0000
+Received: from localhost.localdomain (204.83.154.189) by MW3PR05CA0012.namprd05.prod.outlook.com (2603:10b6:303:2b::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.10 via Frontend Transport; Fri, 12 Mar 2021 18:17:42 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8d8f3cff-d722-4090-cbd3-08d8e58320b1
+X-MS-Office365-Filtering-Correlation-Id: 508e3471-f51e-4d78-5821-08d8e5832156
 X-MS-TrafficTypeDiagnostic: YT1PR01MB4439:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <YT1PR01MB4439D4DB16E816D9761BFEEEEC6F9@YT1PR01MB4439.CANPRD01.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-Microsoft-Antispam-PRVS: <YT1PR01MB4439AF2597678E55D1B5B036EC6F9@YT1PR01MB4439.CANPRD01.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tlRAwPpoi6P9exp6WeLWO+XphitEbxFFiJR/obqovnhrstc16Fj36f4fcOOD4o1YzhuJRjm4e3ejhjpm76+ZOyeuD1VI+LrYLxkZZQz0W2UMhQlOTLNpXPccb+y0fuCKNJKBXVIscaCytFof9izg8uhQ2COvZhkf7tp1sdJvzkj7+gfW1lwML72pvZHZvGkfUh9ozfLvbEmc/8ZxpXC+3NA8q+//yq7lhiJb3HlhxlkT/an7DAAyU8+ygOHmOoTUpq99T5iOHYtpoxO6uz7hA9lYmxxNgkOc7tjnu/CT991fTmuB1jke1P7ehnzzLywVjEIggJZWzm4byavclGUU2pWyq55ys05DYFQkRJXPfOoyoHD3damtbiNZdrrdlqltMcaXasdc8SgzQf1urMH5f5RfLYTJgKvFzJ4w3aGDWaUnNg+GOXBPLrlx2T8fC/UOLZpUJo3gBtM+beuX/Op+Ru/Pb0rw7HxVz5igLDkUTUVkaN3K7klQwHw/FRQFdfju/HAODy0S5AvtavM1+937FwnvXAPq0uXlgUoum3J2rOEW+OKYwGISDoI54H8i1um3jaMZHCLNgavpBMsvS3Y8lQ==
+X-Microsoft-Antispam-Message-Info: ebE9cRaHd/FP9phPtAaBfVGX/jVYMhHywgEzgxJ5kaIoOvUwh5rc/9EhFF6vTKr5TqtmGmL9SloDi9DzUU5phTqqYKAmQLDPeCkVZ6TRYvH69EqCtw4eBYk1XL/v44+kJwpeo7QmH/ChOpHxZPIkn3xFJh47XoyuYq4by6VLfXjVFrmIOvQ+hra5po4WeALmdEbgg3sSLRupPf1A171AgXEZ1mLhE5A2K+AFAcZtRiovS6dGd7w8yUs8eQGTjY3ahz3HGE+bwwzUFobi4TtqAauG20hlaWd+lzY9KDBbKN2mk7RSpvM9lJ+uzm2j5varhrYxRowJKknOoq73CN1pcg6M0i6EomRgw6l6CRz55wjr9SvuHD/jxbpIShgLzGDxHZb2P257zD/ff1TF0K8uCamhVwtm4aFlKYQXM+Spw+fA0avj+qIGh+HSl0ITxs9Au+suvaflIEYjFm/k2wVziBAsTMRlNaFxZ+vrnPoc8OBEGQ+Y21S7oTBs53LaW+e4VhNVkasmuoRCQB6ka+JOhAeTpzjwhEKoqPwOWbS/bpz5P5uMFnfjWiByxBUxKrxg6u7TctfyT1j4lvnZgnZtDw==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(346002)(39850400004)(396003)(366004)(2616005)(8936002)(44832011)(8676002)(69590400012)(956004)(26005)(107886003)(16526019)(4326008)(36756003)(186003)(6486002)(2906002)(6666004)(83380400001)(86362001)(316002)(5660300002)(6506007)(478600001)(6512007)(66946007)(66556008)(66476007)(52116002)(1076003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?XxZJM9bkD3aBY/xePdKZk3e9ErdY5MsNAx7+U4NXONolEY9xhUR6/ovNYaHX?=
- =?us-ascii?Q?9ESrbx5JjrW28Y2GottvVT1YDJgBGqfzapvdt6veQcGJXtnsFwi4zICl5W+l?=
- =?us-ascii?Q?FqP/zgF61SZr0cOMib/W64TuOftPqcQ8nzrHGerNuaojIaQjQa6kFraiBqyW?=
- =?us-ascii?Q?xXISZmg+uQC2aihlq3qft6U7M6dRxE85ILOCOGy3+sdJ++3n2F2yIwYSr6kl?=
- =?us-ascii?Q?yhcFASCGZZfspR0tt6IZz/O19+jI8vKlBP7oyFx3vyFbCmK3Xo2UhtZG3Hfp?=
- =?us-ascii?Q?f5C8//PpHqxj4GdV5RvAFUCpMf3u0Lckot+NvPJUDec812L2/I8iYTsXudKL?=
- =?us-ascii?Q?Y/W0J2d1j161W8tGVcM4lw1z6USMLVuqUulkBAvXTIS+9a7zw1nsBo7VbsK9?=
- =?us-ascii?Q?dC6Ju5EIKmgcapbhZE1FU/+NapvCR2Tbh3q0OSoya6HI8vdlL7EaRx+TTnqf?=
- =?us-ascii?Q?hPDkGAS9rA1WMi3S+aSkNxKVLHb2FQ8s2uVmf8oPCw2k4vX5zbhbMhgjT7BA?=
- =?us-ascii?Q?kMwS2pIcylkADXfyyuBtpGX51OkFNht8cflsvmfTA6EUmJY+G7gFRLJBN6aG?=
- =?us-ascii?Q?yZCoZH4Yy4UFXnjiYjWCSDTGYRb3mRrxSnyr1HXspvBNJpbBI/8t1ylCdHgL?=
- =?us-ascii?Q?UViTgqEGA1Sdvoa8CLXotg75sA153BG5mwt4cwJ0/o4ERqRBswFoXMYHDTjb?=
- =?us-ascii?Q?FNXbfrIpj81OAEqYDwXYsVMsSXaSxb2e+StBeho7G1zoWi0cTp25EqnDLvyE?=
- =?us-ascii?Q?C3bQniztrw2UXJQVevWqUj8hPYQcI1T0tGer+LaM6tV6AlGsEsHV9PVxVrgi?=
- =?us-ascii?Q?YraeW09OdU9AHu3GmbU7YiZ2X6EC33Kv/dwUD9DRMDw25pgk5SMyyymZN/pF?=
- =?us-ascii?Q?mkFfMD+54ExZ2b0ZP+xp3nnys3ycyZ3HvFw2c2pA3UxgBYljJv0x1m4KZzLM?=
- =?us-ascii?Q?0vjKEWAzRaxeMdVRNZmP84C3+QPiDUJ0As008VdS8kizxyWRLC/cA7Y+G1Jv?=
- =?us-ascii?Q?ULKILEXfAhxPxvnSmjC2/+2zMcphA29pLFazH+DZSB22IIo7rNUrwoK8FPFA?=
- =?us-ascii?Q?E5z+kmG1fesUb7wc3nB81zIjLx9H+M6GS8VT5UHALyZCxbPrwVW9ysBV2sbn?=
- =?us-ascii?Q?BuBuVxLZ/ATjImtslbmk0QB7YmY1Q20OkI2WYqXCAgiIxQ4vm09XSZoZtRHu?=
- =?us-ascii?Q?JtBGvebJweAQygCI7ePqInRLsCz8lAIVbzMxuPyBvIFhRtcLp4Ba9Oj9XMma?=
- =?us-ascii?Q?xSGXjUgFkvAEDGyoNGmdR96XL8igIQXlbi0lxU8itP6E5bLjW4lKE8FZtxuE?=
- =?us-ascii?Q?xI6leq8f2N8H/xJ+aoVrHQWx?=
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?w0E7NoBEVR5veqVe3+oG5iLApcE6vavzKffnNBVkNXLO3DUZzQjoCEmmNaOe?=
+ =?us-ascii?Q?rgrukNd29GFTkMc/25oPLj8OpsY/4UXeo5M8caL4gJEF57Z23AJQLjb5D0pt?=
+ =?us-ascii?Q?7NTj0En7caq7am/eZM7PWVkS+fzNDkfo5PArnGajk3XaxujOpm9foUJirwtr?=
+ =?us-ascii?Q?ayOsbVmoSCVEZHSk10g0Lsic92BSEcBrW+mDOylmxZnmsJme1kCfUpe6LBSX?=
+ =?us-ascii?Q?ZsAPc4/Ykn4Stu6xLP+UJAM2Re4YTpFUlbBRd2pBgckyv/2k3PWdmsaWcGd/?=
+ =?us-ascii?Q?GUeNrAG4QE1cD/ArX4bx9SYga+L0KQx9Vy0G2nS6utFD2jgTX1hzmS/VSm+V?=
+ =?us-ascii?Q?4v+/s6TvEPkOxbArs005EHHNHxLlNLs64yNb5wNOgLZK0UmRHwApRj3jtUpp?=
+ =?us-ascii?Q?cpLGSmJfF3DgclBZ4VqiRYkMYta8O8+5irIzs67QlaNwqOPsJuO0BTsvdvMw?=
+ =?us-ascii?Q?LEWqkvTKFaw5nEbJaonM0rJNIWkF5J+9izqXbGZGxMLHPedR6UlOYxcc3U7L?=
+ =?us-ascii?Q?AbIbIou1sYUuxU8Gm/spyON4hnMfDzYkPhHywLJs4TUwQKnLoa7goqRpkMSo?=
+ =?us-ascii?Q?lLwD8pV6qHfpfiZOzT0IE9N+mVCQvgbhP5qln4FQlsTYniEbngw1lAIu7vh+?=
+ =?us-ascii?Q?vvW3wMA+ztYY93IC4k1Qu3BjPxI9T5p3ZphjaA9AWGI8LwxvQHePi1kZT1Fk?=
+ =?us-ascii?Q?iUx/JdNYoqcCDBM+4B7ie/+iYSyb5nr5H6f6CfFTCSBKrDY2YnORgbf8+P8F?=
+ =?us-ascii?Q?srEIrJKjVbPDof4LoVRiaL+Gcr00Qf+Ln32z2ARqM7+aJqecMhqUuw6A4uXm?=
+ =?us-ascii?Q?6R3LXR2Ez73xakyghAEzI0Bn0GYkc8PKvbt2ZX7xJSdt5C414ZA9Too8/iqA?=
+ =?us-ascii?Q?Q7WrZ4PnPzcPOrXyi1Bnu0ncWL4c3JrXo574oBGqmzXQIPUWIUvjzm5nf0Fb?=
+ =?us-ascii?Q?uGP9F84OgqiBowVGBIg13amKBZHms6cRk4++zG7JZdWVW2h432yqlxFFYipe?=
+ =?us-ascii?Q?NEDPYHHqLvh1Nx2blC1kgR3naUU6MNQ9LZp0tg1LxtK81fnB1AbmPcmI5bqh?=
+ =?us-ascii?Q?HLzfVZqOY4BV8w9hBBTVz1OrMy5kl6hVOG+RMzimBtOiIje8G2qc413N++qZ?=
+ =?us-ascii?Q?I5hrmHmpx65b9WiVJTkYgl/337xhw5GF2K+HX8huxRQIVR1dwzW4aWHwd1dz?=
+ =?us-ascii?Q?dsaZ3d0SWEohfycKMu2INwLhKgmzCp9yr2C4XlNM4OE2J6ERwyBx38x7Wmue?=
+ =?us-ascii?Q?jupJPQOrhy6MJe2kt5OzTdbLYjT7oxB5zhF2hA0u6OIkwZZbN0M/6Gq8L9eZ?=
+ =?us-ascii?Q?Bl3gLh07dJ/nP/0r6/tQBYzs?=
 X-OriginatorOrg: calian.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d8f3cff-d722-4090-cbd3-08d8e58320b1
+X-MS-Exchange-CrossTenant-Network-Message-Id: 508e3471-f51e-4d78-5821-08d8e5832156
 X-MS-Exchange-CrossTenant-AuthSource: YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2021 18:17:42.6533
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2021 18:17:43.8027
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 23b57807-562f-49ad-92c4-3bb0f07a1fdf
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JJzAgsSrXAZvB3xiXVo9TOIWrkoJ1+Msd8dIcm56R/TsB5ruM6JM57fYSKMjC0ZYRSPVWtnCr7tI0s1RO6iXByBzdQNZnPFrOey08ZdjOes=
+X-MS-Exchange-CrossTenant-UserPrincipalName: ExlDSS6hGsSnpaGUG3Mzow7K2AoM492zNrOD+LG6S54o6ei4ToBulUn5sILRLzXcugdMezQRdt7NaPzJ1moUdBJscDUDt9eHkIs0vFJQFOY=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT1PR01MB4439
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-03-12_09:2021-03-12,2021-03-12 signatures=0
@@ -119,61 +119,73 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-If the Si5341 is being initially programmed and has no stored NVM
-configuration, some of the register contents may contain unexpected
-values, such as zeros, which could cause divide by zero errors during
-driver initialization. Trap errors caused by zero registers or zero clock
-rates which could result in divide errors later in the code.
+After initializing the device, wait for it to report that the input
+clock is present and the PLL has locked before declaring success.
 
 Fixes: 3044a860fd ("clk: Add Si5341/Si5340 driver")
 Signed-off-by: Robert Hancock <robert.hancock@calian.com>
 ---
- drivers/clk/clk-si5341.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/clk/clk-si5341.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
 diff --git a/drivers/clk/clk-si5341.c b/drivers/clk/clk-si5341.c
-index b8a960e927bc..ac1ccec2b681 100644
+index ac1ccec2b681..da40b90c2aa8 100644
 --- a/drivers/clk/clk-si5341.c
 +++ b/drivers/clk/clk-si5341.c
-@@ -624,6 +624,9 @@ static unsigned long si5341_synth_clk_recalc_rate(struct clk_hw *hw,
- 			SI5341_SYNTH_N_NUM(synth->index), &n_num, &n_den);
- 	if (err < 0)
- 		return err;
-+	/* Check for bogus/uninitialized settings */
-+	if (!n_num || !n_den)
-+		return 0;
+@@ -92,6 +92,9 @@ struct clk_si5341_output_config {
+ #define SI5341_PN_BASE		0x0002
+ #define SI5341_DEVICE_REV	0x0005
+ #define SI5341_STATUS		0x000C
++#define SI5341_LOS		0x000D
++#define SI5341_STATUS_STICKY	0x0011
++#define SI5341_LOS_STICKY	0x0012
+ #define SI5341_SOFT_RST		0x001C
+ #define SI5341_IN_SEL		0x0021
+ #define SI5341_DEVICE_READY	0x00FE
+@@ -99,6 +102,12 @@ struct clk_si5341_output_config {
+ #define SI5341_IN_EN		0x0949
+ #define SI5341_INX_TO_PFD_EN	0x094A
  
- 	/*
- 	 * n_num and n_den are shifted left as much as possible, so to prevent
-@@ -807,6 +810,9 @@ static long si5341_output_clk_round_rate(struct clk_hw *hw, unsigned long rate,
- {
- 	unsigned long r;
- 
-+	if (!rate)
-+		return 0;
++/* Status bits */
++#define SI5341_STATUS_SYSINCAL	BIT(0)
++#define SI5341_STATUS_LOSXAXB	BIT(1)
++#define SI5341_STATUS_LOSREF	BIT(2)
++#define SI5341_STATUS_LOL	BIT(3)
 +
- 	r = *parent_rate >> 1;
+ /* Input selection */
+ #define SI5341_IN_SEL_MASK	0x06
+ #define SI5341_IN_SEL_SHIFT	1
+@@ -1416,6 +1425,7 @@ static int si5341_probe(struct i2c_client *client,
+ 	unsigned int i;
+ 	struct clk_si5341_output_config config[SI5341_MAX_NUM_OUTPUTS];
+ 	bool initialization_required;
++	u32 status;
  
- 	/* If rate is an even divisor, no changes to parent required */
-@@ -835,11 +841,16 @@ static int si5341_output_clk_set_rate(struct clk_hw *hw, unsigned long rate,
- 		unsigned long parent_rate)
- {
- 	struct clk_si5341_output *output = to_clk_si5341_output(hw);
--	/* Frequency divider is (r_div + 1) * 2 */
--	u32 r_div = (parent_rate / rate) >> 1;
-+	u32 r_div;
- 	int err;
- 	u8 r[3];
+ 	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+@@ -1583,6 +1593,22 @@ static int si5341_probe(struct i2c_client *client,
+ 			return err;
+ 	}
  
-+	if (!rate)
-+		return -EINVAL;
++	/* wait for device to report input clock present and PLL lock */
++	err = regmap_read_poll_timeout(data->regmap, SI5341_STATUS, status,
++		!(status & (SI5341_STATUS_LOSREF | SI5341_STATUS_LOL)),
++	       10000, 250000);
++	if (err) {
++		dev_err(&client->dev, "Error waiting for input clock or PLL lock\n");
++		return err;
++	}
 +
-+	/* Frequency divider is (r_div + 1) * 2 */
-+	r_div = (parent_rate / rate) >> 1;
++	/* clear sticky alarm bits from initialization */
++	err = regmap_write(data->regmap, SI5341_STATUS_STICKY, 0);
++	if (err) {
++		dev_err(&client->dev, "unable to clear sticky status\n");
++		return err;
++	}
 +
- 	if (r_div <= 1)
- 		r_div = 0;
- 	else if (r_div >= BIT(24))
+ 	/* Free the names, clk framework makes copies */
+ 	for (i = 0; i < data->num_synth; ++i)
+ 		 devm_kfree(&client->dev, (void *)synth_clock_names[i]);
 -- 
 2.27.0
 
