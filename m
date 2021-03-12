@@ -2,56 +2,56 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D394833960D
-	for <lists+linux-clk@lfdr.de>; Fri, 12 Mar 2021 19:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A81339615
+	for <lists+linux-clk@lfdr.de>; Fri, 12 Mar 2021 19:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232583AbhCLSR7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        id S232917AbhCLSR7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
         Fri, 12 Mar 2021 13:17:59 -0500
-Received: from mx0c-0054df01.pphosted.com ([67.231.159.91]:52790 "EHLO
+Received: from mx0c-0054df01.pphosted.com ([67.231.159.91]:46159 "EHLO
         mx0c-0054df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232603AbhCLSRu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 12 Mar 2021 13:17:50 -0500
+        by vger.kernel.org with ESMTP id S232627AbhCLSRv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 12 Mar 2021 13:17:51 -0500
 Received: from pps.filterd (m0208999.ppops.net [127.0.0.1])
-        by mx0c-0054df01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12CIBq92018951;
-        Fri, 12 Mar 2021 13:17:45 -0500
+        by mx0c-0054df01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12CIBq93018951;
+        Fri, 12 Mar 2021 13:17:46 -0500
 Received: from can01-qb1-obe.outbound.protection.outlook.com (mail-qb1can01lp2058.outbound.protection.outlook.com [104.47.60.58])
-        by mx0c-0054df01.pphosted.com with ESMTP id 376besa3kd-1
+        by mx0c-0054df01.pphosted.com with ESMTP id 376besa3kd-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 12 Mar 2021 13:17:45 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XXDLmuqKVtUgmzvjT0/CWrRmUWp4lQle4zOWmXEP9+64nF3zPUuJARx64tRb9rVXTcZjGfMjdKP5PEkz9S12dvdtM6priMomaWjlA4UKJDDmb3b2ySdVjS2IDTTWFlojrvLxtvtLo78eSumjjVV+f16aja4oChN4wDGOohs82POfab31ABuTqypyvDLPw8A/L0ub7VAZONG9o0T5o3g0vnGzWORihNOO0Qg7NAeLwaDjQ8BoWQ3HGY9AI0LneNE9NZ0jr4UUW/XNRgUEyT6wwFMme31IkyMowWgNhCI7EPW0PCqTZm9a6rK6EgxeXUgGX7eYh+IqazZz4HRErmBVow==
+ b=ZIbqJCBdJiYMr0Ifce+mhepQNTPSRgjWsVCLAUwp4mwTcruAduuEpFlleGJMuZmV19rsrBN69hcLafVAH8z/xYM0K6PrhGVIZ8tkDsWoYNNqwW70DT8hFWqljglpThv5bCLEpIJc/1WoGGIQHTVd7HAirPB5kQjGien8FrvIEVOL0RSrKVvO/KN+Ejs+Z5F5c32bgmNVB1a15kc5AH5pegi+MsBQ+XJFpgpNwuaMs/qTvWypxQUykqPqgf0jRdYMdiTnXIOTT9V/GwOv6l7IN1EkFjVDIwNA9c8HI6a1IVuOFnf/WvJ68zKhh9km3GUVFfImrexY1dmeYIAnsVgVCQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5M/wdsb3W/mqkD7bMBikg5jCY8Ip2YnH014mUcQveE4=;
- b=FftNb3iMgQW3tSSPqRXmU7TMj7lP3XoGFHIYfW7yomY3x9UGPP+XFyByOwHQpxusEEHK+6ZrAGgzCroh/XHxPDXN9sEuvkO8Iiq6IkGM7mqhAcLYhyajwijMV220FWiJ8yJhPuwFQ5jM/vzjQtCgZaBHojyFx8Wlm7QaM8NcZRa2KVJgYeOib89IrgNmxIZoLI/EOhw3r+ANkL4xeGvobsOSnUv/4Tt7MHzBoDzfADGQml3rnmofJcoI4Qgc7Deso3O/nLvqw2zYzKSp511TtPTacDRklkZrA4jwXuzT6/s41R3uOpDpowMlfLu7wZp70AN0ON/fYudHerYkMCbr6g==
+ bh=blLvoNM8Ox52kNXwQqqZCFCIqhsWBEdzVRv5nHs+CB4=;
+ b=I2wjsENzxTWVGKKjSClIBHFyIfgV8KqCsi1qYnf9mng/iJwunN0YUFrjwPxWz3NZFQI3vPIDlFum7qZfiMznreXs2y60zQQYkYVAVi6s81PkSYb/6aHXWTu3mOxhxRHNsAEmFxQbKg1cVpeu1+44czICkb5/QC9mVEHdI0Vv4VpHa+EkqoXSJxLPd3MEH5PqP1ALFDM/ePIWehmfo8wbDuOhMYfAR7ect8AoxMlNHmpsZdixP1Di6wH3b1XOm/taShbWGi8cTBZZKVlmeenPV/7YCbFcsAVMJc7X1nGuBPNBHLo0HM7o+HTkLYRdAkVCEcYeKNWaacmdvbORxJ7FRA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=calian.com; dmarc=pass action=none header.from=calian.com;
  dkim=pass header.d=calian.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=calian.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5M/wdsb3W/mqkD7bMBikg5jCY8Ip2YnH014mUcQveE4=;
- b=q9NdCZp2NRbDeK3jr7DFCBYChs5ECwoPu0ZAYFu0oBk2AFA5Wjd+PQ3RaoAcgiXmYZF67xqU1OYud5xo3QAB2defb3s8j3rKW4pl7oq1C6ryGwIfuQwAt/h+A3mT7OqgePmQcSXykBGz027C/ivWYCw51yXO853SJ0mtHDkr0HA=
+ bh=blLvoNM8Ox52kNXwQqqZCFCIqhsWBEdzVRv5nHs+CB4=;
+ b=wNMAnbc6M1p4MHkPAL4jVZTdsf4awIPWaUMoj8c7/JrmzVmojV++7P7MyEmPSREnW+O/8SnOTe5vH9EBwQUN5iPPjPUb+1ZrkvpVXb3I1RkdMvzGf5nR9EyjcLKldnmCEYyORWqAY1D9jcLfgey0Nz9k7q4JT08drBu/j2wT9Zw=
 Authentication-Results: baylibre.com; dkim=none (message not signed)
  header.d=none;baylibre.com; dmarc=none action=none header.from=calian.com;
 Received: from YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:f::20)
  by YT1PR01MB4439.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:42::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3912.2; Fri, 12 Mar
- 2021 18:17:43 +0000
+ 2021 18:17:45 +0000
 Received: from YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM
  ([fe80::90d4:4d5b:b4c2:fdeb]) by YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM
  ([fe80::90d4:4d5b:b4c2:fdeb%7]) with mapi id 15.20.3912.031; Fri, 12 Mar 2021
- 18:17:43 +0000
+ 18:17:45 +0000
 From:   Robert Hancock <robert.hancock@calian.com>
 To:     mturquette@baylibre.com, sboyd@kernel.org
 Cc:     mike.looijmans@topic.nl, devicetree@vger.kernel.org,
         linux-clk@vger.kernel.org,
         Robert Hancock <robert.hancock@calian.com>
-Subject: [PATCH v2 4/9] clk: si5341: Check for input clock presence and PLL lock on startup
-Date:   Fri, 12 Mar 2021 12:17:05 -0600
-Message-Id: <20210312181710.3998978-5-robert.hancock@calian.com>
+Subject: [PATCH v2 5/9] clk: si5341: Update initialization magic
+Date:   Fri, 12 Mar 2021 12:17:06 -0600
+Message-Id: <20210312181710.3998978-6-robert.hancock@calian.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20210312181710.3998978-1-robert.hancock@calian.com>
 References: <20210312181710.3998978-1-robert.hancock@calian.com>
@@ -63,54 +63,54 @@ X-ClientProxiedBy: MW3PR05CA0012.namprd05.prod.outlook.com
  (2603:10b6:b01:f::20)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (204.83.154.189) by MW3PR05CA0012.namprd05.prod.outlook.com (2603:10b6:303:2b::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.10 via Frontend Transport; Fri, 12 Mar 2021 18:17:42 +0000
+Received: from localhost.localdomain (204.83.154.189) by MW3PR05CA0012.namprd05.prod.outlook.com (2603:10b6:303:2b::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3955.10 via Frontend Transport; Fri, 12 Mar 2021 18:17:44 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 508e3471-f51e-4d78-5821-08d8e5832156
+X-MS-Office365-Filtering-Correlation-Id: b058d807-974e-404f-dcc7-08d8e5832229
 X-MS-TrafficTypeDiagnostic: YT1PR01MB4439:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <YT1PR01MB4439AF2597678E55D1B5B036EC6F9@YT1PR01MB4439.CANPRD01.PROD.OUTLOOK.COM>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
+X-Microsoft-Antispam-PRVS: <YT1PR01MB443901E25C0BF340191884E3EC6F9@YT1PR01MB4439.CANPRD01.PROD.OUTLOOK.COM>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ebE9cRaHd/FP9phPtAaBfVGX/jVYMhHywgEzgxJ5kaIoOvUwh5rc/9EhFF6vTKr5TqtmGmL9SloDi9DzUU5phTqqYKAmQLDPeCkVZ6TRYvH69EqCtw4eBYk1XL/v44+kJwpeo7QmH/ChOpHxZPIkn3xFJh47XoyuYq4by6VLfXjVFrmIOvQ+hra5po4WeALmdEbgg3sSLRupPf1A171AgXEZ1mLhE5A2K+AFAcZtRiovS6dGd7w8yUs8eQGTjY3ahz3HGE+bwwzUFobi4TtqAauG20hlaWd+lzY9KDBbKN2mk7RSpvM9lJ+uzm2j5varhrYxRowJKknOoq73CN1pcg6M0i6EomRgw6l6CRz55wjr9SvuHD/jxbpIShgLzGDxHZb2P257zD/ff1TF0K8uCamhVwtm4aFlKYQXM+Spw+fA0avj+qIGh+HSl0ITxs9Au+suvaflIEYjFm/k2wVziBAsTMRlNaFxZ+vrnPoc8OBEGQ+Y21S7oTBs53LaW+e4VhNVkasmuoRCQB6ka+JOhAeTpzjwhEKoqPwOWbS/bpz5P5uMFnfjWiByxBUxKrxg6u7TctfyT1j4lvnZgnZtDw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(346002)(39850400004)(396003)(366004)(2616005)(8936002)(44832011)(8676002)(69590400012)(956004)(26005)(107886003)(16526019)(4326008)(36756003)(186003)(6486002)(2906002)(6666004)(83380400001)(86362001)(316002)(5660300002)(6506007)(478600001)(6512007)(66946007)(66556008)(66476007)(52116002)(1076003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?w0E7NoBEVR5veqVe3+oG5iLApcE6vavzKffnNBVkNXLO3DUZzQjoCEmmNaOe?=
- =?us-ascii?Q?rgrukNd29GFTkMc/25oPLj8OpsY/4UXeo5M8caL4gJEF57Z23AJQLjb5D0pt?=
- =?us-ascii?Q?7NTj0En7caq7am/eZM7PWVkS+fzNDkfo5PArnGajk3XaxujOpm9foUJirwtr?=
- =?us-ascii?Q?ayOsbVmoSCVEZHSk10g0Lsic92BSEcBrW+mDOylmxZnmsJme1kCfUpe6LBSX?=
- =?us-ascii?Q?ZsAPc4/Ykn4Stu6xLP+UJAM2Re4YTpFUlbBRd2pBgckyv/2k3PWdmsaWcGd/?=
- =?us-ascii?Q?GUeNrAG4QE1cD/ArX4bx9SYga+L0KQx9Vy0G2nS6utFD2jgTX1hzmS/VSm+V?=
- =?us-ascii?Q?4v+/s6TvEPkOxbArs005EHHNHxLlNLs64yNb5wNOgLZK0UmRHwApRj3jtUpp?=
- =?us-ascii?Q?cpLGSmJfF3DgclBZ4VqiRYkMYta8O8+5irIzs67QlaNwqOPsJuO0BTsvdvMw?=
- =?us-ascii?Q?LEWqkvTKFaw5nEbJaonM0rJNIWkF5J+9izqXbGZGxMLHPedR6UlOYxcc3U7L?=
- =?us-ascii?Q?AbIbIou1sYUuxU8Gm/spyON4hnMfDzYkPhHywLJs4TUwQKnLoa7goqRpkMSo?=
- =?us-ascii?Q?lLwD8pV6qHfpfiZOzT0IE9N+mVCQvgbhP5qln4FQlsTYniEbngw1lAIu7vh+?=
- =?us-ascii?Q?vvW3wMA+ztYY93IC4k1Qu3BjPxI9T5p3ZphjaA9AWGI8LwxvQHePi1kZT1Fk?=
- =?us-ascii?Q?iUx/JdNYoqcCDBM+4B7ie/+iYSyb5nr5H6f6CfFTCSBKrDY2YnORgbf8+P8F?=
- =?us-ascii?Q?srEIrJKjVbPDof4LoVRiaL+Gcr00Qf+Ln32z2ARqM7+aJqecMhqUuw6A4uXm?=
- =?us-ascii?Q?6R3LXR2Ez73xakyghAEzI0Bn0GYkc8PKvbt2ZX7xJSdt5C414ZA9Too8/iqA?=
- =?us-ascii?Q?Q7WrZ4PnPzcPOrXyi1Bnu0ncWL4c3JrXo574oBGqmzXQIPUWIUvjzm5nf0Fb?=
- =?us-ascii?Q?uGP9F84OgqiBowVGBIg13amKBZHms6cRk4++zG7JZdWVW2h432yqlxFFYipe?=
- =?us-ascii?Q?NEDPYHHqLvh1Nx2blC1kgR3naUU6MNQ9LZp0tg1LxtK81fnB1AbmPcmI5bqh?=
- =?us-ascii?Q?HLzfVZqOY4BV8w9hBBTVz1OrMy5kl6hVOG+RMzimBtOiIje8G2qc413N++qZ?=
- =?us-ascii?Q?I5hrmHmpx65b9WiVJTkYgl/337xhw5GF2K+HX8huxRQIVR1dwzW4aWHwd1dz?=
- =?us-ascii?Q?dsaZ3d0SWEohfycKMu2INwLhKgmzCp9yr2C4XlNM4OE2J6ERwyBx38x7Wmue?=
- =?us-ascii?Q?jupJPQOrhy6MJe2kt5OzTdbLYjT7oxB5zhF2hA0u6OIkwZZbN0M/6Gq8L9eZ?=
- =?us-ascii?Q?Bl3gLh07dJ/nP/0r6/tQBYzs?=
+X-Microsoft-Antispam-Message-Info: pxjmVq+k+jc3MkjVqdHkB2xY4HAsNfdsx7jxE8su1GWRr0/e3irC1Z5I7NTQ5RSzUsVZTm1FKnH+yfw4z3qh0F6HCTX/yyW+dRq3IxTauaFlFH7LyV/tWSJzzNo3mIZJphQXKUjO+uuSWw/GflLuXsEitd2eoC0gzCdCNfjkUg9n732odM8zIWB+Dh6vzpJUaF8Tib/7Po6wmEmJdUY9DKmMpvRQ11tVDZRHp6AU2BpmWX7QTUWOaaNAgn55lzs8vzsOFDYha2PDztlW/MSIIpP5p5f+sPAdILDT0yuB18gQ5HLoIRdQHCdAEIHgehwwLd5f9HmjAbDCeeq2pwvKuRcyhIaLjCmBO0UeVZf2wBX4vxS0ifWKVENjbBXRG0+Icfh49OjTkgBIqHoJHZgRNJlgxybTJLyJrRaHS9cr40Napr0b3SHKq8Kefix5yndGMCmJilNeyf/DGENM+tlY7PXG2idyzjHrxMJPDITfL1WdVoQzQpxSEKpH5qqTSR1aRp2ZB4RSxMEFF4KJ9YC1wWZna9I5ZCBta3RZsv8lxchuBFyQj8r72ts+xQxXaJ+k91llUN31kYPA4gelIcgxeg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(346002)(39850400004)(396003)(366004)(2616005)(8936002)(44832011)(8676002)(69590400012)(956004)(26005)(107886003)(16526019)(4326008)(36756003)(186003)(6486002)(2906002)(6666004)(83380400001)(86362001)(316002)(5660300002)(6506007)(478600001)(15650500001)(6512007)(66946007)(66556008)(66476007)(52116002)(1076003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?s7NvBR+mHbJM/zJkAI6uRTM7T1Wn0Y0/B/pgAgpsv29D01YzINqNugVfPbzx?=
+ =?us-ascii?Q?uLCxtFZ4v3koQ3nhS7UKutOZDd3JPW2w09lLvO8OP7ocgBQXE9pYpOwC0NVZ?=
+ =?us-ascii?Q?NAHeq56dlyHoZZnq2VmfqhRwloGAc2nfDgjeqwK+Q4iUt4A3TJDb0eIguLbd?=
+ =?us-ascii?Q?Si2CzDEDx7iHcdWXTaoDuHn5HCofie/bioZQcZAlUc9iDgYmmqLP7+D7Cwqb?=
+ =?us-ascii?Q?a5Bw+7rowG6je8bg6XHEyyZgThW9SU3namZDzeC37pIQyTVVILElqzIHoZfi?=
+ =?us-ascii?Q?uyoL1L2M8+a/8S9VnylyAkuurYektM2r5NnEck4k+78yR5Z19D3FsTKhhBTm?=
+ =?us-ascii?Q?ulUwTL0AcB0nnj0p1OrPYYhcHNTTlubE8CO6IvQ46nqENaalHQN+B9spmrT8?=
+ =?us-ascii?Q?Os4vwA1AkjQIIphZX9S3paVTWQmrq6OpY5f2AeTOqJBxJiaSwzwzbCuktNT+?=
+ =?us-ascii?Q?aiHebOc2/GIqXj55RQEHsGavosWuDsDn0+N9pviQ3u24GEYF2bbMYowDnG3a?=
+ =?us-ascii?Q?A/9idcKrMG1rtM+TdALV+nm3B+wuHOY08p4EQue1AMT3RhmufnUvz/PpczHL?=
+ =?us-ascii?Q?CbJ6bTAFQsRVwxqDEY4KSjF4nU24qNAaNKRaigqtQvHOn3I6OBQ6ixZP9wqj?=
+ =?us-ascii?Q?/KJEa5uRinF0UyWgtf+8Uld68IKvW2q/Jle1Jemm/HDrIMUIzCBgcYj4r/bm?=
+ =?us-ascii?Q?MedqJRT5Y7IoBVFhk+3PdXUw4stEZaG2iZoaKf/yWd7LjCtQ+0XccIHwpb+o?=
+ =?us-ascii?Q?UVtRt81isiFdB6GOuvVRijoozPBSNuB27BOoPeoAOD0V84ID1MgXR/bykU8P?=
+ =?us-ascii?Q?+nTlQYBf0AJT9mo7DBMc0enLVG8Bf7gKqnIdIGCcPR3CSz5vVPq2mPsDd9tO?=
+ =?us-ascii?Q?V385ouocpJ6KkfPziNJfyoIfIehXo+3mwVAYweQH9fSYUip/ImdzFK52aCTl?=
+ =?us-ascii?Q?bawRRYnzyXkdum0MgxeYZQTJhDrVcOuTl64pgRJbSUkCyDw9uGjS98MNQTsY?=
+ =?us-ascii?Q?WCy0ABPjWhw34SPSOKVft+oabOY6kj+/uKkCBx/+eZ/gGeLoXKTI5xt7QUbW?=
+ =?us-ascii?Q?Whz9v6HKBjSBuYJMaC5HQ7ol8JBzXJw7G068drX/exhLNpjtmO42ntGHGhah?=
+ =?us-ascii?Q?phmUPXKaSqXdQvU424W2r856ZZohBJNhHLTZG433DlQvoh7ScDnP/MFoRmFW?=
+ =?us-ascii?Q?AGIjgwvPzL4jA5mFIPrk8d0YainLjjajoG2VvGr2n307GFIV/eqCBd5qGGoE?=
+ =?us-ascii?Q?6LLSdKpSqXvjaY/p41oX7Tix29l5DG0dntrbAF3WpJZz/zB7N06xsQqgVKyq?=
+ =?us-ascii?Q?pk17DD+6etWx9scNudTK0XOC?=
 X-OriginatorOrg: calian.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 508e3471-f51e-4d78-5821-08d8e5832156
+X-MS-Exchange-CrossTenant-Network-Message-Id: b058d807-974e-404f-dcc7-08d8e5832229
 X-MS-Exchange-CrossTenant-AuthSource: YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2021 18:17:43.8027
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2021 18:17:45.1279
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 23b57807-562f-49ad-92c4-3bb0f07a1fdf
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ExlDSS6hGsSnpaGUG3Mzow7K2AoM492zNrOD+LG6S54o6ei4ToBulUn5sILRLzXcugdMezQRdt7NaPzJ1moUdBJscDUDt9eHkIs0vFJQFOY=
+X-MS-Exchange-CrossTenant-UserPrincipalName: jz7YX+f47eYpRw3WthZYMqy2fkA2Il1mzuqeHoRYTJcxizqs5UVTCqNJ8/VhlmkaU0GLOEXZDBBvFl/PIEVD/EwTmC5tNH/hT2NrKdCxRhY=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT1PR01MB4439
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
  definitions=2021-03-12_09:2021-03-12,2021-03-12 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=883 phishscore=0
  priorityscore=1501 adultscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0
  malwarescore=0 mlxscore=0 suspectscore=0 clxscore=1015 impostorscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
@@ -119,73 +119,39 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-After initializing the device, wait for it to report that the input
-clock is present and the PLL has locked before declaring success.
+Update the default register settings to include the VCO_RESET_CALCODE
+settings (set by the SiLabs ClockBuilder software but not described in
+the datasheet). Also update part of the initialization sequence to match
+ClockBuilder and the datasheet.
 
 Fixes: 3044a860fd ("clk: Add Si5341/Si5340 driver")
 Signed-off-by: Robert Hancock <robert.hancock@calian.com>
 ---
- drivers/clk/clk-si5341.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ drivers/clk/clk-si5341.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/clk/clk-si5341.c b/drivers/clk/clk-si5341.c
-index ac1ccec2b681..da40b90c2aa8 100644
+index da40b90c2aa8..eb22f4fdbc6b 100644
 --- a/drivers/clk/clk-si5341.c
 +++ b/drivers/clk/clk-si5341.c
-@@ -92,6 +92,9 @@ struct clk_si5341_output_config {
- #define SI5341_PN_BASE		0x0002
- #define SI5341_DEVICE_REV	0x0005
- #define SI5341_STATUS		0x000C
-+#define SI5341_LOS		0x000D
-+#define SI5341_STATUS_STICKY	0x0011
-+#define SI5341_LOS_STICKY	0x0012
- #define SI5341_SOFT_RST		0x001C
- #define SI5341_IN_SEL		0x0021
- #define SI5341_DEVICE_READY	0x00FE
-@@ -99,6 +102,12 @@ struct clk_si5341_output_config {
- #define SI5341_IN_EN		0x0949
- #define SI5341_INX_TO_PFD_EN	0x094A
+@@ -350,6 +350,8 @@ static const struct si5341_reg_default si5341_reg_defaults[] = {
+ 	{ 0x094A, 0x00 }, /* INx_TO_PFD_EN (disabled) */
+ 	{ 0x0A02, 0x00 }, /* Not in datasheet */
+ 	{ 0x0B44, 0x0F }, /* PDIV_ENB (datasheet does not mention what it is) */
++	{ 0x0B57, 0x10 }, /* VCO_RESET_CALCODE (not described in datasheet) */
++	{ 0x0B58, 0x05 }, /* VCO_RESET_CALCODE (not described in datasheet) */
+ };
  
-+/* Status bits */
-+#define SI5341_STATUS_SYSINCAL	BIT(0)
-+#define SI5341_STATUS_LOSXAXB	BIT(1)
-+#define SI5341_STATUS_LOSREF	BIT(2)
-+#define SI5341_STATUS_LOL	BIT(3)
-+
- /* Input selection */
- #define SI5341_IN_SEL_MASK	0x06
- #define SI5341_IN_SEL_SHIFT	1
-@@ -1416,6 +1425,7 @@ static int si5341_probe(struct i2c_client *client,
- 	unsigned int i;
- 	struct clk_si5341_output_config config[SI5341_MAX_NUM_OUTPUTS];
- 	bool initialization_required;
-+	u32 status;
+ /* Read and interpret a 44-bit followed by a 32-bit value in the regmap */
+@@ -1104,7 +1106,7 @@ static const struct si5341_reg_default si5341_preamble[] = {
+ 	{ 0x0B25, 0x00 },
+ 	{ 0x0502, 0x01 },
+ 	{ 0x0505, 0x03 },
+-	{ 0x0957, 0x1F },
++	{ 0x0957, 0x17 },
+ 	{ 0x0B4E, 0x1A },
+ };
  
- 	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
- 	if (!data)
-@@ -1583,6 +1593,22 @@ static int si5341_probe(struct i2c_client *client,
- 			return err;
- 	}
- 
-+	/* wait for device to report input clock present and PLL lock */
-+	err = regmap_read_poll_timeout(data->regmap, SI5341_STATUS, status,
-+		!(status & (SI5341_STATUS_LOSREF | SI5341_STATUS_LOL)),
-+	       10000, 250000);
-+	if (err) {
-+		dev_err(&client->dev, "Error waiting for input clock or PLL lock\n");
-+		return err;
-+	}
-+
-+	/* clear sticky alarm bits from initialization */
-+	err = regmap_write(data->regmap, SI5341_STATUS_STICKY, 0);
-+	if (err) {
-+		dev_err(&client->dev, "unable to clear sticky status\n");
-+		return err;
-+	}
-+
- 	/* Free the names, clk framework makes copies */
- 	for (i = 0; i < data->num_synth; ++i)
- 		 devm_kfree(&client->dev, (void *)synth_clock_names[i]);
 -- 
 2.27.0
 
