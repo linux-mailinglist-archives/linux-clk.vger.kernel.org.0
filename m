@@ -2,88 +2,95 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A7B33C30E
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Mar 2021 18:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6FA33C662
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Mar 2021 20:08:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235038AbhCOQ7q (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 15 Mar 2021 12:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
+        id S232934AbhCOTHh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 15 Mar 2021 15:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234781AbhCOQ7W (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Mar 2021 12:59:22 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFA2C06175F
-        for <linux-clk@vger.kernel.org>; Mon, 15 Mar 2021 09:59:20 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id d3so57915119lfg.10
-        for <linux-clk@vger.kernel.org>; Mon, 15 Mar 2021 09:59:20 -0700 (PDT)
+        with ESMTP id S231683AbhCOTHO (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Mar 2021 15:07:14 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B7EC06174A;
+        Mon, 15 Mar 2021 12:07:13 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id x4so51889237lfu.7;
+        Mon, 15 Mar 2021 12:07:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=nn1W9Wc+k1CJYE8WxkSJGXK0N+qf/mcCb4Whw81sCBc=;
-        b=eLaM2VJC2VPxWCmJI4pRm7gIwsdtcXVX+gwqcmG5feM136k/MJaMOmGBB2kdOk6Af4
-         OdHMopIeKZg49h5cW6vGbxvuQTW/SkQ9HuA/ev1jJcl0AAurwCe0DNziSPl1EC93VQ1C
-         ZhL/pBGs4yClRQ+yNSuJ3e3yxg7nGxyN7EkaEc9UnMX6RUqxH4o2rsWq+1OyBGhsQ60t
-         mlr/pvPbTkbXwuQ72wwZySMbV7eKPbN/RoefzS3gvRqxUNqqkiwACUnwYhkfp8NF4XOV
-         usiuSlIdkRdT/XFr8JMUz5dBUV3A2ubIZJBv5AzJJikhHdudGeMH2zRoSMkB+ojxPFvS
-         VkOg==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xsFFCIyjjCBLlr6/kBgfTXRD6Bn3TD7vxXln3l8CVcQ=;
+        b=fDGwln/YTfSURcV/aXRx6x29A9JqqK05F3Vdgy7UrCF/YH8kZckPhBuHM7PdDK1lec
+         QmVgndOxSByzGW3elmk9BZu8ncispWco/9QtIu5Y99mqFU5nA0R8YnhAcxNiOx2mVelk
+         EFM9dsrplt9ByNEbNtQaKB9kRL9vs2RWr9wncXgl//yIN+nPSwu6jV58nz4jwIJIoqTy
+         4FDaZ0q586oCHZU1xnAqOrm9H9Bo85XiVFVazDQ2r2r1D/EKThNas0WjsQx4sljOiZQH
+         fT020bfhVGYC/LtmHNiqFmInW0KU8qMmazA7bTk7P/k8+M/EF9EmI2cuWqdcXTz5eFlr
+         b0+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=nn1W9Wc+k1CJYE8WxkSJGXK0N+qf/mcCb4Whw81sCBc=;
-        b=tY7bFjZ+3K+8ger+5VusdMJsTk5PIqh/1VTXDe8BRGuraAYTJAm45BhZ/EQ6V8y1AU
-         Erz7gXnMtid5iq0gUMD2hLTubNAHnxRvcejuZwlbqlvsZJMwWsTNFHn4ELRtlUNeROiP
-         Ftdss4DvXC4Pz8fSSsjRVhwx0XvgF0JPVXI+73HrnDPTzM5ApJ59ra5ekwIGCCWMOvBd
-         wncsZy3749ylDL+9FLNtdfvfwWtU7SzRm1r179EeRiEBUAvT5W0Y3Xns5NZNpwcppNzp
-         YvpfIVvVWfGGAbnpBEnx71kXxWyErIseckR0uZHBjxHi2SNKE9UaBiThgbbLcAb7fgAM
-         Kl3w==
-X-Gm-Message-State: AOAM533GWFhU85APFQE+K85OrVMJmIbJZUR6s/TEinhOT/2gP7Svd+xi
-        GFisrWzBAkJG/a6xIVDTLVmTvSfYtCpxyp0V9jw=
-X-Google-Smtp-Source: ABdhPJz7/gfpeD06O79Pnw07FE/mA8Ji4e09y71x9+hvfgu2S8MD9xmK2/Q/AOYN3ItI3qPG23+Pfv2arGi/0+HLTes=
-X-Received: by 2002:a05:6512:370f:: with SMTP id z15mr8619417lfr.562.1615827559310;
- Mon, 15 Mar 2021 09:59:19 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xsFFCIyjjCBLlr6/kBgfTXRD6Bn3TD7vxXln3l8CVcQ=;
+        b=EQJUffj+VfWvc4hQPj76YPXU+ntOq0wRuZ8HokZ4rjiZeHoDTBPQz6u9xtI6h9n4QL
+         KO24L6X2HCy/rQbnNokeGN6k7iwwR6tTTnZ8WpOOZ02PYW4KNxj5V7CRpksmzFdkXzHV
+         +qPse3bkxsXXfwgvlzWWlYDtNGjSFpzXJQru1GsHjR4Vfqy84rBGpQXqunETeOULWgkK
+         HISNBSF3MhDEDSDmM8ffMHcNhSdw8lJ1F9n8SytEEDZIULIuHdNAQeHylWWHu1OHhRxW
+         1xxl66OdsXR5x7a8ddFCVzBkFyhkW233o6jwanMHOLG4QE1HaLjw3apWFrHnk02gu04N
+         G4/A==
+X-Gm-Message-State: AOAM533TKe8yzL44LMyoyUjdL1MiQOT3iieA+iDgfHYUpcvekuGUBN/D
+        y+MvfG+s8FQeq9MtTf2OELqz5/RrMMk=
+X-Google-Smtp-Source: ABdhPJzh8OG03R8LFHK+Dhi6+n3HkZmtUuPJOJvkb2HhD60gazlMLhqPnStaMxEQXKQBnW2PTE/Msw==
+X-Received: by 2002:a19:b47:: with SMTP id 68mr8368793lfl.343.1615835232287;
+        Mon, 15 Mar 2021 12:07:12 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-193-52.dynamic.spd-mgts.ru. [109.252.193.52])
+        by smtp.googlemail.com with ESMTPSA id q14sm2984362ljj.132.2021.03.15.12.07.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Mar 2021 12:07:11 -0700 (PDT)
+Subject: Re: [PATCH v4 7/7] dt-bindings: clock: tegra: Convert to schema
+To:     Rob Herring <robh@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-tegra@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20210312163632.8861-1-digetx@gmail.com>
+ <20210312163632.8861-8-digetx@gmail.com>
+ <20210315155310.GA926230@robh.at.kernel.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <3aae4fb3-6b45-24ea-df2d-63746ec2afda@gmail.com>
+Date:   Mon, 15 Mar 2021 22:07:11 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Received: by 2002:a05:651c:1382:0:0:0:0 with HTTP; Mon, 15 Mar 2021 09:59:18
- -0700 (PDT)
-Reply-To: ezbtg22@gmail.com
-From:   "Mrs.Glenn" <mrganuserge@gmail.com>
-Date:   Mon, 15 Mar 2021 09:59:18 -0700
-Message-ID: <CA+Wfa7YG6kanV1cpekUWYP2FGpSSSKYxaq+gNSZdX+nSoPjTrA@mail.gmail.com>
-Subject: From Mrs.Glenn
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210315155310.GA926230@robh.at.kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
--- 
-Dear Beloved,
+15.03.2021 18:53, Rob Herring пишет:
+> On Fri, Mar 12, 2021 at 07:36:32PM +0300, Dmitry Osipenko wrote:
+>> Convert NVIDIA Tegra clock bindings to schema.
+>>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  .../bindings/clock/nvidia,tegra-car.yaml      | 118 ++++++++++++++++++
+>>  .../bindings/clock/nvidia,tegra114-car.txt    |  63 ----------
+>>  .../bindings/clock/nvidia,tegra124-car.txt    | 107 ----------------
+> 
+> Seems like this one is a bit different and should remain a separate 
+> binding?
 
-I am Mrs Elizabet Glenn from Israel. I am a missionary but right now
-in a hospital bed in Israel. I am 59 years and childless; my husband
-is dead. I was diagnosed with terminal cancer. And my doctor just
-predicted that I have but very limited time to live due to damages in
-my system and as a result of that I decided to dispose my 10.5 million
-US dollars to a God-fearing one for the continuation of charitable
-work. This is why I located you.My guess about you may not be accurate
-because I came across your contact at the humanitarian calendar event
-of the year but I believe in God who  divinely directed me to you for
-this solemn proposal of charitable work. I wholeheartedly wish to
-bequeath my fortune to you as a God-fearing person for the
-continuation of charitable work anywhere around the world.
-
-I shall be going in for a surgery operations soonest and desire this
-money to be transferred to you as I do not wish to leave this money in
-the bank because bankers might misuse it for their own interest after
-my death. As soon as I receive your quick reply assuring me that you
-will utilize the money as I instructed you for the benefit of the less
-privilege, I shall give you more details and also instruct my bank to
-release the money to you for the charity project. I hope you receive
-this mail in good health.
-
-Because I don t know what will be my situation in next minute,
-
-I am waiting for your reply.
-
-Yours sincerely,
-Mrs Elizabet Glenn.
+The T124 binding has optional EMC (external memory controller) clocks
+that aren't used by other SoCs. The T124 also shouldn't need these
+clocks, but that's how the binding happened to be defined historically.
+Since the optional properties have no effect on a non-T124 SoCs, I
+thought that it should be better to unify all the bindings, rather than
+partially duplicate them with out any real benefit.
