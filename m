@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C24F33F35E
-	for <lists+linux-clk@lfdr.de>; Wed, 17 Mar 2021 15:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B44A33F36A
+	for <lists+linux-clk@lfdr.de>; Wed, 17 Mar 2021 15:41:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232288AbhCQOlC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        id S232207AbhCQOlC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
         Wed, 17 Mar 2021 10:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232207AbhCQOkw (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 17 Mar 2021 10:40:52 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56963C06175F
-        for <linux-clk@vger.kernel.org>; Wed, 17 Mar 2021 07:40:52 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id k9so3297162lfo.12
-        for <linux-clk@vger.kernel.org>; Wed, 17 Mar 2021 07:40:52 -0700 (PDT)
+        with ESMTP id S232069AbhCQOky (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 17 Mar 2021 10:40:54 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0637C06174A
+        for <linux-clk@vger.kernel.org>; Wed, 17 Mar 2021 07:40:53 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id s13so2603141lfb.2
+        for <linux-clk@vger.kernel.org>; Wed, 17 Mar 2021 07:40:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VZ0geH6BqMBlmbQ30iyES93D0PKaLEePFxddTMOy9xQ=;
-        b=no1y5QTnePloWF6Kf5NJI+KW4hcc8iSa7md8U/h+236ztkxrCWmLM76BfogRg1Ve16
-         ic8UeNY3CQvCIj7LBtJihb+1OVqWASBOHdzCyKDLDy2js/EZ90sO55MK70CNPfwgfQ0a
-         L2Ye9KT0n0j0ihVSz+W9IqJqF/4X+TVYMGXigMPr7xBd603Q3UKwoLSy1ZnSjHuDVLX3
-         wB6Ft/pYSwnaePxzAXT2IVJjEc4Pd7OaiabwwFxAGW3m7GcKKh/1U4ti1HXk8/Lz0stZ
-         FzhGd5BZYHT9Drn7Av/GitUBhlueIZEfh1k7Yi53NqZX4V+p+Ljn4mSKTUE5WiRPZfgn
-         zoPQ==
+        bh=UAQa/+HPZGb9w4gbaD2aOLSU7WxeXPAw6Cdwe97w/Q4=;
+        b=eXP/TledxAPTdTLVmvjWNrnuZ/q0OFDG8H8Gqxj0LKAqVsIpvu5tTqTIgswDK3CeS0
+         JWDh9i/7xcJi3WcsKO/Tlly97uR125Ij5vcDkA3bTqdgv2HHcVGvyDYlKZLOC4thwk7Q
+         UpKymK7LwNVk9U2XQM4tBKconFpeO8znWGb7iTxgc/lPPDH7U8LYareV88zndg+UAwnv
+         UYCxmNTVmvb5F9KfQ7LCvpGlyFyQJLBSwVuI39YvhjVqPqnth0tmnMlKFhiDMqllriGY
+         j1cbGp/4XM/2T1BmXPbL5nDwPsyjsvEIgqjoTkZ0f3KIDIW+nQShkGozV3lXxoT6Fr4W
+         3Q2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VZ0geH6BqMBlmbQ30iyES93D0PKaLEePFxddTMOy9xQ=;
-        b=qZ2DLlH5xlhwVDBSa451QHhHgOjyzdzwhghYcbVX5BhvqyyLiQQ7ZlmucvNA0ksdPJ
-         dWrryshIZMJ3mYsb4B4Van2QD2rDEXQ3C2tMvX8EeADy+iIucWhDKbyu9QtwI6Uc6Ue7
-         KhCYfr/+hJjZPI286nNyp4DRfEdkgp5Ywb5plsnlRgs2Pl8WrXuCf5srYkq4GjMxJxMu
-         iLVhTxOB+IcgiS9xW3NbxMk9DOQB/u+PZcbghSJm4hBMWHip5Ippsv/krqu5EKXaJrZQ
-         0dySZvCvF7Y7Xi8Fd0dcEtOSjLtrBNug0Nj2zoRTn0tJaCnBr06UUcLc7SdcenoFPJd/
-         BfJA==
-X-Gm-Message-State: AOAM533dYVafR8pQIgKbVTBFt8DCUSeAvu8SdXEzQFmMwnFHWtxTXARp
-        oMjtoB10ls0eFpoy9UuvUtsbqQ==
-X-Google-Smtp-Source: ABdhPJw5jus2v3pxW594CEk+SrRrg9htGKBQ1CbmXj1XxLuT4EdAEgnqIByVfE0lXaRf41wydng6qw==
-X-Received: by 2002:a19:44:: with SMTP id 65mr2673123lfa.104.1615992050905;
-        Wed, 17 Mar 2021 07:40:50 -0700 (PDT)
+        bh=UAQa/+HPZGb9w4gbaD2aOLSU7WxeXPAw6Cdwe97w/Q4=;
+        b=SZZYrYkSOMiS0S1XFBNgWTCiWDqBPoBQk783IIoRdHSVYkZJ062MkgEPsZ1dqudgNa
+         zZrxTOb5cJ+69FAY1m2DmgxFhZPiauFnpyuDn42qZcbcpEmr+LcKnc/Pnr6BS7kmJ18n
+         lTd2pGLw00usiH+EFX14htr1Xf+3gI2n0ttQL7oLmWh4P8kyT/B9+wh4L7+SQihUl+rG
+         MGgmkK4iO8gIhAX4ncCEhMIMfyMEnYrNiYUMr+nxPHWe7ERMvICyqTtJhGy1QfoSXahk
+         dRrQ4JNiVVfM3mbfOL5H1G83uZmEarJRboOTe77L+esh746ZmyYqV9fkiYIhvgnR3ZdT
+         20Bg==
+X-Gm-Message-State: AOAM533jhj5h7yav20gE9K9MP7NLs2gkZYQKPN6fvH1+vr1++2fs9dsI
+        ujXix/f5yDZq1UB6YSIs+Ex52w==
+X-Google-Smtp-Source: ABdhPJw4euHwBGmi07h52o4jzm1u82sY8Mak58T89zORmZtairSuAVrS4Ctn8CvJZPTrJNViVGwA8A==
+X-Received: by 2002:ac2:5e6a:: with SMTP id a10mr2559303lfr.181.1615992052285;
+        Wed, 17 Mar 2021 07:40:52 -0700 (PDT)
 Received: from eriador.lan ([37.153.55.125])
         by smtp.gmail.com with ESMTPSA id q8sm1484309lfc.223.2021.03.17.07.40.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Mar 2021 07:40:50 -0700 (PDT)
+        Wed, 17 Mar 2021 07:40:51 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
         Jonathan Marek <jonathan@marek.ca>,
@@ -55,9 +55,9 @@ Cc:     Stephen Boyd <sboyd@kernel.org>, David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
         dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
         linux-clk@vger.kernel.org
-Subject: [PATCH v1 09/26] arm64: dts: qcom: sm8250: assign DSI clock source parents
-Date:   Wed, 17 Mar 2021 17:40:22 +0300
-Message-Id: <20210317144039.556409-10-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v1 10/26] arm64: dts: qcom: sdm845: assign DSI clock source parents
+Date:   Wed, 17 Mar 2021 17:40:23 +0300
+Message-Id: <20210317144039.556409-11-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210317144039.556409-1-dmitry.baryshkov@linaro.org>
 References: <20210317144039.556409-1-dmitry.baryshkov@linaro.org>
@@ -71,32 +71,32 @@ Assign DSI clock source parents to DSI PHY clocks.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 6 ++++++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index 947e1accae3a..b6ed94497e8a 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2445,6 +2445,9 @@ dsi0: dsi@ae94000 {
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index 454f794af547..2166549382c1 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -4113,6 +4113,9 @@ dsi0: dsi@ae94000 {
+ 					      "core",
  					      "iface",
  					      "bus";
- 
 +				assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE0_CLK_SRC>, <&dispcc DISP_CC_MDSS_PCLK0_CLK_SRC>;
 +				assigned-clock-parents = <&dsi0_phy 0>, <&dsi0_phy 1>;
 +
  				operating-points-v2 = <&dsi_opp_table>;
- 				power-domains = <&rpmhpd SM8250_MMCX>;
+ 				power-domains = <&rpmhpd SDM845_CX>;
  
-@@ -2512,6 +2515,9 @@ dsi1: dsi@ae96000 {
+@@ -4179,6 +4182,9 @@ dsi1: dsi@ae96000 {
+ 					      "core",
  					      "iface",
  					      "bus";
- 
 +				assigned-clocks = <&dispcc DISP_CC_MDSS_BYTE1_CLK_SRC>, <&dispcc DISP_CC_MDSS_PCLK1_CLK_SRC>;
 +				assigned-clock-parents = <&dsi1_phy 0>, <&dsi1_phy 1>;
 +
  				operating-points-v2 = <&dsi_opp_table>;
- 				power-domains = <&rpmhpd SM8250_MMCX>;
+ 				power-domains = <&rpmhpd SDM845_CX>;
  
 -- 
 2.30.2
