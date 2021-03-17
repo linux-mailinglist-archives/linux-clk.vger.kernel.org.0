@@ -2,50 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A76F533E640
-	for <lists+linux-clk@lfdr.de>; Wed, 17 Mar 2021 02:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4266833E649
+	for <lists+linux-clk@lfdr.de>; Wed, 17 Mar 2021 02:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbhCQBgx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 16 Mar 2021 21:36:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59866 "EHLO mail.kernel.org"
+        id S229756AbhCQBjd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 16 Mar 2021 21:39:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60414 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230217AbhCQBgk (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 16 Mar 2021 21:36:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EF29D64F99;
-        Wed, 17 Mar 2021 01:36:39 +0000 (UTC)
+        id S229624AbhCQBjG (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 16 Mar 2021 21:39:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 50CA364F3C;
+        Wed, 17 Mar 2021 01:39:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615945000;
-        bh=Sc97qhhpJZEboCOxPhj04eeJ/fGLVXl1L3DyhupBQJc=;
+        s=k20201202; t=1615945146;
+        bh=qGnc9fuxsfjUHSlaUCeiyxDxXEohk8ay31RvtAPRkDE=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=jVb6urGcVHcBQTAoM/5siv6wYgCE6Aapy2KqcHi1yL0d+PWtdhuBBEMJ+lgnesdFd
-         lhvkzm3NAp7n/FE2EtFy94ZQYZSD5tZJ/EaSZ1jCmkMA/oY0lk8PwOtW9DZzdYlXz3
-         7NWFmPrQOQNHhQMbz8zIPMzUBxSaJ5E9vJ4RmPEwVObR/kgDUuIFh7ka/A5xiahnku
-         +J5cY/aw4R44WkEVyGEX6wreKRYyMaEazOU3JgGgCW/KNPkpO7/+z3uwZrJARzyb9n
-         QFD2thYFoybH41pW9ehFo9iRQWGXe11TXkD68yUAlRBGogkkuPFBoU6J/gZYUroPgI
-         /AwOFa9XCrrGw==
+        b=BqUhghEP2W5tHnWYYQg5SbChqqx5dyGv498DX9lWX8BHg8Zzoa2d4PY0n6qfztG5o
+         QpXB9KzVv4zfQ8xWT3PyKoSCvTbfgeaDjm4GcBAvEQ1EUyHr/IWRQN+KEem/QFdggm
+         IVlH84OwRUBQa0Pizb0sl3IJXe3Ygfh7DCVIiGPTyBH4HC4bRj64OlC8jcDw5ltriz
+         9Klv5aaSVydz6aBEnMr26G1/RYnxEp6BeUnuGMV02XpX5VnOLsS/nVanXPYQRLLYGw
+         bvQD9XkRwSVMF+BuaWAtLVJ4U9S3oYs9ByoISEGHR6V+IeDSiclY8w1eQYI/zK7S7h
+         rc3GkWx5QFNhg==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20210315112502.343699-2-heiko@sntech.de>
-References: <20210315112502.343699-1-heiko@sntech.de> <20210315112502.343699-2-heiko@sntech.de>
-Subject: Re: [PATCH 2/2] clk: rockchip: drop MODULE_ALIAS from rk3399 clock controller
+In-Reply-To: <20210315085608.16010-2-zhangqing@rock-chips.com>
+References: <20210315085608.16010-1-zhangqing@rock-chips.com> <20210315085608.16010-2-zhangqing@rock-chips.com>
+Subject: Re: [PATCH v5 1/4] dt-binding: clock: Document rockchip,rk3568-cru bindings
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, zhangqing@rock-chips.com,
-        mturquette@baylibre.com, linux-rockchip@lists.infradead.org
-To:     heiko@sntech.de
-Date:   Tue, 16 Mar 2021 18:36:38 -0700
-Message-ID: <161594499885.1478170.3779535512987411515@swboyd.mtv.corp.google.com>
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        cl@rock-chips.com, huangtao@rock-chips.com,
+        kever.yang@rock-chips.com, tony.xie@rock-chips.com,
+        finley.xiao@rock-chips.com, Elaine Zhang <zhangqing@rock-chips.com>
+To:     Elaine Zhang <zhangqing@rock-chips.com>, heiko@sntech.de,
+        mturquette@baylibre.com, robh+dt@kernel.org
+Date:   Tue, 16 Mar 2021 18:39:05 -0700
+Message-ID: <161594514504.1478170.12364418555385947548@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Heiko Stuebner (2021-03-15 04:25:02)
-> As suggested by Stephen during the rk3568 clock review, the MOUDLE_ALIAS
-> doesn't serve any meaningful purpose, so drop it from the rk3399 as well.
+Quoting Elaine Zhang (2021-03-15 01:56:05)
+> Document the device tree bindings of the rockchip Rk3568 SoC
+> clock driver in Documentation/devicetree/bindings/clock/rockchip,rk3568-c=
+ru.yaml.
 >=20
-> Suggested-by: Stephen Boyd <sboyd@kernel.org>
-> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+> Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
+> Reviewed-by: Kever Yang <kever.yang@rock-chips.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > ---
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Acked-by: Stephen Boyd <sboyd@kernel.org>
