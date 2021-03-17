@@ -2,40 +2,41 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E00F933F6D9
-	for <lists+linux-clk@lfdr.de>; Wed, 17 Mar 2021 18:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D36B33F715
+	for <lists+linux-clk@lfdr.de>; Wed, 17 Mar 2021 18:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbhCQR3v (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 17 Mar 2021 13:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
+        id S231809AbhCQRdH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 17 Mar 2021 13:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbhCQR3o (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 17 Mar 2021 13:29:44 -0400
+        with ESMTP id S231465AbhCQRc6 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 17 Mar 2021 13:32:58 -0400
 Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1234::107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8F8C06174A;
-        Wed, 17 Mar 2021 10:29:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D21C06174A;
+        Wed, 17 Mar 2021 10:32:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
         In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
         Reply-To:Cc:Content-ID:Content-Description;
-        bh=h6wmvZ5/Ar4UF46iz5n8VsbXtUi4o8sV5lh4Ai33jNQ=; b=iDDeeyXu3Tn1neZGuy32K1ipHS
-        8U04LLjT1iGKqsVeGexkEp9FIsV+iJk3KCIuXUMGdsN/Xdh4v43ZHy+oJ0G4g+179NtX/64F1U4pe
-        DGj5C3emW2YQmbhfS/sKeviNcthEYO3zc87L7ME75BzWj8RmnJXYo50vxKIOq9rQLAC5MlFdPA9WQ
-        G+xbP0+nS1WOMKh+HWLR1FTLiF0bdsRiOq+BTHFSZhZvp671auWV3sHOlvHXeVnVR5OcSTIOaqpMt
-        KPGVFoF+8JcX5r8TvAiNyoa/9QfJAVm727aR0tYjpXyIpkewLHuEPIDm1hTmIR/KbXEeLrgTICFwo
-        qNl74hmQ==;
+        bh=M2U69fnHtSDeQy8UM59zhzg/Vai3uTHHXB9W3I5zXPg=; b=gBs8YaMxW+u/Tsz1jBGmoQpZsZ
+        jPW07LUYgAwo3GS74aRF+JVVxN2JW7QMAeBUcVDI0EHjNfP+jbHaORzfLlgNviDrVBSrXhKeu3qpf
+        ZMm2Gw7QXAf1hO7JKLnhEiFvncqd6lXeJa9qaYQLjYVXDIj+kjlc9h6QaxOnD2R6Rdjo/roAjiBNj
+        DAyNTSC/isoGJoji7buiqtrej7vcHGo4DPh77d0SeJHIlCMUrJSyE+sTKLhxrJucrHeWIEtlkdSyh
+        VAVZ117uCMZmTh3w32DiTfc1To3BcP0W4UuoBuTIAYpikXzpMKPCbXutWMKvBMKJ9BaKObQKUuheK
+        peq9IHwA==;
 Received: from [2601:1c0:6280:3f0::9757]
         by merlin.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lMZzJ-001fRs-U9; Wed, 17 Mar 2021 17:29:42 +0000
+        id 1lMa2Q-001fTl-TX; Wed, 17 Mar 2021 17:32:56 +0000
 Subject: Re: [PATCH] devicetree: bindings: clock: Minor typo fix in the file
  armada3700-tbg-clock.txt
 To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>, mturquette@baylibre.com,
-        sboyd@kernel.org, dt@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+        sboyd@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
 References: <20210317100840.2449462-1-unixbhaskar@gmail.com>
 From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <1003e9ad-eb2b-70d6-76f1-c72ee59ebccd@infradead.org>
-Date:   Wed, 17 Mar 2021 10:29:39 -0700
+Message-ID: <546989ea-c6b2-42e4-46b2-d7de5d208728@infradead.org>
+Date:   Wed, 17 Mar 2021 10:32:51 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.0
 MIME-Version: 1.0
@@ -53,7 +54,14 @@ On 3/17/21 3:08 AM, Bhaskar Chowdhury wrote:
 > 
 > Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Bhaskar,
+
+Did you send this one to "robh+dt@kernel.org"?
+AFAICT, it was sent to "dt@kernel.org", which bounces.
+
+If you used "robh+dt@kernel.org", it appears that 'get send-email' has a problem with that.
+
+thanks.
 
 > ---
 >  .../devicetree/bindings/clock/armada3700-tbg-clock.txt          | 2 +-
