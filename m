@@ -2,140 +2,89 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D2F340810
-	for <lists+linux-clk@lfdr.de>; Thu, 18 Mar 2021 15:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0351D340BF0
+	for <lists+linux-clk@lfdr.de>; Thu, 18 Mar 2021 18:35:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbhCROob (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 18 Mar 2021 10:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbhCROoU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 18 Mar 2021 10:44:20 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7A5C06174A
-        for <linux-clk@vger.kernel.org>; Thu, 18 Mar 2021 07:44:19 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1lMtsl-0006HQ-CO; Thu, 18 Mar 2021 15:44:15 +0100
-Received: from mtr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mtr@pengutronix.de>)
-        id 1lMtsk-00064n-R6; Thu, 18 Mar 2021 15:44:14 +0100
-Date:   Thu, 18 Mar 2021 15:44:14 +0100
-From:   Michael Tretter <m.tretter@pengutronix.de>
-To:     Colin Ian King <colin.king@canonical.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
+        id S230164AbhCRRfL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 18 Mar 2021 13:35:11 -0400
+Received: from smtp-17.italiaonline.it ([213.209.10.17]:56013 "EHLO libero.it"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229524AbhCRRfL (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 18 Mar 2021 13:35:11 -0400
+Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it
+ ([87.20.116.197])
+        by smtp-17.iol.local with ESMTPA
+        id MwPulsZ9jtpGHMwQ6lfgb1; Thu, 18 Mar 2021 18:27:00 +0100
+x-libjamoibt: 1601
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
+        t=1616088420; bh=yj+a1jaz0T1SShJsQxra1ks1sG+DRrSV4DLGd8lOu9s=;
+        h=From;
+        b=leBrLWXb2shmeRi3o/q/Gbfouyxfd/RERHWK0EvtA4VNnA585MFZXpgn3xtGMBd7z
+         EuGXoPYLB8Cm88zee+MYAexhkyqD6FpJSU5NDfdpvnhCfmYOnRup4JeITuEM067U3O
+         GIBI7KZW1IwWBAJpMdthU8Uc1HZb359Edy5FkGLJek0FY5vBPqk7vIxzHEUXq8evQd
+         TMuiIklElrCzP00VjY/fmAFsFjE79wch1z8jZalQHWtcMOLarNI0nJWbVuIMI8s8e+
+         GfmyE4LSz0FoOqSW4gWo0XhDHtwZlLtNqvLAEGPtEQ2xdcNb/eHQ3vPmP7BZjnDNow
+         5TI1XlgzilW6w==
+X-CNFS-Analysis: v=2.4 cv=Q7IXX66a c=1 sm=1 tr=0 ts=60538d64 cx=a_exe
+ a=AVqmXbCQpuNSdJmApS5GbQ==:117 a=AVqmXbCQpuNSdJmApS5GbQ==:17
+ a=IkcTkHD0fZMA:10 a=wWb8P1eRJa4rfLIeBvsA:9 a=QEXdDO2ut3YA:10
+From:   Dario Binacchi <dariobin@libero.it>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dario Binacchi <dariobin@libero.it>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Lee Jones <lee.jones@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] soc: xilinx: vcu: remove deadcode on null divider
- check
-Message-ID: <20210318144414.GQ12621@pengutronix.de>
-References: <20210210184938.146124-1-colin.king@canonical.com>
- <161301409895.1254594.6980739457487251623@swboyd.mtv.corp.google.com>
- <20210211073906.GC30300@pengutronix.de>
- <161307031421.1254594.40010291545314425@swboyd.mtv.corp.google.com>
- <eef269e5-e16d-90ef-d765-8f50d7e2176a@canonical.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Tony Lindgren <tony@atomide.com>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-omap@vger.kernel.org
+Subject: [PATCH v2 0/4] clk: ti: add am33xx spread spectrum clock support
+Date:   Thu, 18 Mar 2021 18:26:22 +0100
+Message-Id: <20210318172627.12173-1-dariobin@libero.it>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <eef269e5-e16d-90ef-d765-8f50d7e2176a@canonical.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 15:03:16 up 28 days, 17:27, 89 users,  load average: 0.47, 0.29,
- 0.15
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mtr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfDK4Q7A05zj30Dnd5wsWaqgHe2FaIszhcG0sF0Nc6Q2eaRdpepRVILGMtNqciN7iPltx6QEa+aL18eJ1LLW0hvl3LKRp8Jz3ACW0OisqPVpUYNY8Fg2y
+ APwmtA/n5STDvlked/NvnlpO5tsgYKGKkhrS9gHb3EGicLVyC/4DeYdHv66wBPgy1itn+qI35Fqk+Z+lfSleL0u3u5XXmLkpIEk43PfMW1D0kteAyWpKuAI5
+ zpSynDDQQ9Cc6Swrk46h9wWqyg56gaavXjbzo5OZgpWDKDe9bTcLoCUblflNl1Dygmt276gECpWL7KkfWMhxSaBB3OstVNOhb7F7q0q2eImkoNbRSpe5xsac
+ nFvLvw/nzssLFXddqPtVW2mYNVPvud5JGQjEcoPu7dFnCXZQB6Az1cbYdUQqBlW3QCDmvcgUj9/VWwx9qVoQ2IHv9t2RYN9G1NiCNavzrDJ7ezzutdQzkMlV
+ ewdVPsn5I1Y8eBkqPjUACPc2NWQH9seHMgVcgV7kf2lhtvIXlqQkWO9APTnMvKgWJNrKvNkbWUbR6emjQEagjywkAfCsv+eDbkeKqolEMzfNd9iw4DLDU7w8
+ +TAwA+PLHhTLySidEW1CqNwtsdHk7rSw+8ujnYLxpiVSSQ==
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, 18 Mar 2021 12:48:06 +0000, Colin Ian King wrote:
-> On 11/02/2021 19:05, Stephen Boyd wrote:
-> > Quoting Michael Tretter (2021-02-10 23:39:06)
-> >> On Wed, 10 Feb 2021 19:28:18 -0800, Stephen Boyd wrote:
-> >>> Quoting Colin King (2021-02-10 10:49:38)
-> >>>> From: Colin Ian King <colin.king@canonical.com>
-> >>>>
-> >>>> The pointer 'divider' has previously been null checked followed by
-> >>>> a return, hence the subsequent null check is redundant deadcode
-> >>>> that can be removed.  Clean up the code and remove it.
-> >>>>
-> >>>> Fixes: 9c789deea206 ("soc: xilinx: vcu: implement clock provider for output clocks")
-> >>>> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> >>>> ---
-> >>>>  drivers/clk/xilinx/xlnx_vcu.c | 3 ---
-> >>>>  1 file changed, 3 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/clk/xilinx/xlnx_vcu.c b/drivers/clk/xilinx/xlnx_vcu.c
-> >>>> index d66b1315114e..607936d7a413 100644
-> >>>> --- a/drivers/clk/xilinx/xlnx_vcu.c
-> >>>> +++ b/drivers/clk/xilinx/xlnx_vcu.c
-> >>>> @@ -512,9 +512,6 @@ static void xvcu_clk_hw_unregister_leaf(struct clk_hw *hw)
-> >>>>  
-> >>>>         mux = clk_hw_get_parent(divider);
-> >>>>         clk_hw_unregister_mux(mux);
-> >>>> -       if (!divider)
-> >>>> -               return;
-> >>>> -
-> >>>
-> >>> This code is pretty confusing. Waiting for m.tretter@pengutronix.de to
-> >>> reply
-> >>
-> >> Can you elaborate what you find confusing about this code. I would gladly try
-> >> to clarify and improve the code.
-> > 
-> > The fact that pointers are being checked and then bailing out of the
-> > function early, vs. doing something if the pointer is non-NULL.
-> > 
-> >>
-> >> What happens here is that the driver registers a mux -> divider -> gate chain
-> >> for each output clock, but only stores the gate clock. When unregistering the
-> >> clocks, the driver starts at the gate and walks up to the mux while
-> >> unregistering the clocks.
-> >>
-> 
-> OK, so I think I understand this better, should the order of
-> unregisteration be as follows:
-> 
-> diff --git a/drivers/clk/xilinx/xlnx_vcu.c b/drivers/clk/xilinx/xlnx_vcu.c
-> index d66b1315114e..66bac8421460 100644
-> --- a/drivers/clk/xilinx/xlnx_vcu.c
-> +++ b/drivers/clk/xilinx/xlnx_vcu.c
-> @@ -511,11 +511,11 @@ static void xvcu_clk_hw_unregister_leaf(struct
-> clk_hw *hw)
->                 return;
-> 
->         mux = clk_hw_get_parent(divider);
-> -       clk_hw_unregister_mux(mux);
-> -       if (!divider)
-> +       clk_hw_unregister_mux(divider);
 
-The order is correct, but this must be:
+As reported by the TI spruh73x RM, MPU and LCD modules support spread
+spectrum clocking (SSC) on their output clocks. SSC is used to spread
+the spectral peaking of the clock to reduce any electromagnetic
+interference (EMI) that may be caused due to the clock’s fundamental
+or any of its harmonics.
+The series allows you to enable and adjust the spread spectrum clocking
+for all am33xx PLLs for which it is supported.
 
-	clk_hw_unregister_divider(divider);
 
-> +       if (!mux)
->                 return;
-> 
-> -       clk_hw_unregister_divider(divider);
-> +       clk_hw_unregister_divider(mux);
-> 
+Changes in v2:
+- Remove SSC registers from dpll_core_ck@490 node (SSC is not supported)
+- Add SSC registers to dpll_mpu_ck@488 node.
+- Move the DT changes to the previous patch in the series.
 
-	clk_hw_unregister_mux(mux);
+Dario Binacchi (4):
+  clk: ti: fix typo in routine description
+  dt-bindings: ti: dpll: add spread spectrum support
+  ARM: dts: am33xx-clocks: add spread spectrum support
+  clk: ti: add am33xx spread spectrum clock support
 
-Taking the confusion expressed by Stephen into account, I rewrote the entire
-function to clarify what is happening in this function. Please take a look
-that patch [0] and tell me, if it is now easier to understand.
+ .../devicetree/bindings/clock/ti/dpll.txt     | 20 +++++
+ arch/arm/boot/dts/am33xx-clocks.dtsi          |  4 +-
+ drivers/clk/ti/dpll.c                         | 41 +++++++++
+ drivers/clk/ti/dpll3xxx.c                     | 87 ++++++++++++++++++-
+ include/linux/clk/ti.h                        | 24 +++++
+ 5 files changed, 173 insertions(+), 3 deletions(-)
 
-[0] 20210318144230.3438009-1-m.tretter@pengutronix.de
+-- 
+2.17.1
 
-Michael
