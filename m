@@ -2,68 +2,96 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 663C234348F
-	for <lists+linux-clk@lfdr.de>; Sun, 21 Mar 2021 21:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EDBC3434E2
+	for <lists+linux-clk@lfdr.de>; Sun, 21 Mar 2021 21:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbhCUUPA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 21 Mar 2021 16:15:00 -0400
-Received: from gloria.sntech.de ([185.11.138.130]:43654 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230511AbhCUUOm (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 21 Mar 2021 16:14:42 -0400
-Received: from p508fc3a3.dip0.t-ipconnect.de ([80.143.195.163] helo=phil.fritz.box)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1lO4T8-0007Oi-VT; Sun, 21 Mar 2021 21:14:39 +0100
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     sboyd@kernel.org, Elaine Zhang <zhangqing@rock-chips.com>,
-        robh+dt@kernel.org, mturquette@baylibre.com
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        kever.yang@rock-chips.com, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cl@rock-chips.com,
-        tony.xie@rock-chips.com, finley.xiao@rock-chips.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 0/4] clk: rockchip: add clock controller for rk3568
-Date:   Sun, 21 Mar 2021 21:14:35 +0100
-Message-Id: <161635763247.767241.10092028864316275030.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210315085608.16010-1-zhangqing@rock-chips.com>
-References: <20210315085608.16010-1-zhangqing@rock-chips.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        id S231330AbhCUUuD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 21 Mar 2021 16:50:03 -0400
+Received: from st43p00im-ztbu10073601.me.com ([17.58.63.184]:38870 "EHLO
+        st43p00im-ztbu10073601.me.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231243AbhCUUuA (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 21 Mar 2021 16:50:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1616359281; bh=qY6FTSszBRKz4aJ0W3Dgs+oDjbP86ZelEG349qN5Hzc=;
+        h=From:To:Subject:Date:Message-Id;
+        b=MOJPk/zykVImzZJBzwfeph88tafwBNXdt401DC2IAntYyOqrNB934Otlu+CSx959n
+         1Ik8zh3oBQE9n33jN6HSzKKoBt4wReA4XzcKcGWgw9NWKKlICh05gxNtst61RjKOJ2
+         KdxPZL/ztQbGBwsdB1r2KlsTMeC2pcjwxpzN+uqETQPWF35IFCs0/XJ4bXcKWHav2l
+         /BjdnXQ9JyCwsr2KsB9iFHYNxUdWAKGkpuSaOUPiwoF7IbTpu5pv50z7/7T3bCW/06
+         vta+3576iEiRBaBODT0gFNXWHe9qrmTPHOcjMM5cW/cn42crWpSQLggYaRMmHOEwPx
+         MVDBpokm9rB0Q==
+Received: from localhost (101.220.150.77.rev.sfr.net [77.150.220.101])
+        by st43p00im-ztbu10073601.me.com (Postfix) with ESMTPSA id 3BDA582033E;
+        Sun, 21 Mar 2021 20:41:17 +0000 (UTC)
+From:   Alain Volmat <avolmat@me.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Patrice Chotard <patrice.chotard@st.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Alain Volmat <avolmat@me.com>
+Subject: [PATCH 00/16] clk: st: embed clock outputs within drivers
+Date:   Sun, 21 Mar 2021 21:40:22 +0100
+Message-Id: <20210321204038.14417-1-avolmat@me.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
+ =?UTF-8?Q?2903e8d5c8f:6.0.369,18.0.761,17.0.607.475.0000000_definitions?=
+ =?UTF-8?Q?=3D2021-03-21=5F05:2021-03-19=5F02,2021-03-21=5F05,2020-04-07?=
+ =?UTF-8?Q?=5F01_signatures=3D0?=
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 mlxlogscore=877
+ adultscore=0 malwarescore=0 phishscore=0 suspectscore=0 spamscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2103210166
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, 15 Mar 2021 16:56:04 +0800, Elaine Zhang wrote:
-> Add the clock tree definition for the new rk3568 SoC.
-> 
-> Change in V5:
-> [PATCH v5 1/4]: No change.
-> [PATCH v5 2/4]: No change.
-> [PATCH v5 3/4]: fix up the warning:
-> 		>> drivers/clk/rockchip/clk-rk3188.c:187:67: warning:
-> 		>> missing braces around initializer [-Wmissing-braces]
-> 		187 | static const struct rockchip_cpuclk_reg_data
-> 		rk3188_cpuclk_data = {
-> [PATCH v5 4/4]: No change.
-> 
-> [...]
+Most of ST clock drivers used by STi platform are updated in
+order to introduce clock outputs informations within each drivers
+and thus allow to avoid having to rely on clock-output-names properties
+within DT clock nodes.
+For that purpose, drivers are updated to allow handling both modes
+(with or without clock-output-names).
+Once all DT will have been updated, the legacy mode could be removed
+from the drivers.
+This will also allow, once all STi DT will be corrected, to remove the
+of_clk_detect_critical API from clk core code since STi clock drivers
+are the only drivers using this API.
 
-Applied, thanks!
+This serie also contains modifications within STi DTS in order to use
+the newly introduced compatible and remove clock-output-names
+properties.
 
-[1/4] dt-binding: clock: Document rockchip, rk3568-cru bindings
-      commit: 0cd74eec54a3ec34416bab6cc640a88230472078
-[2/4] clk: rockchip: add dt-binding header for rk3568
-      commit: 0865517926660309b796bd9bd5ba6671704733bc
-[3/4] clk: rockchip: support more core div setting
-      commit: a3561e77cf3ca0937227ba13744d84fc46e5eb4b
-[4/4] clk: rockchip: add clock controller for rk3568
-      commit: cf911d89c4c5e225a2a2cfadf1364838154b2202
+Alain Volmat (16):
+  clk: st: clkgen-pll: remove used variable of struct clkgen_pll
+  clk: st: flexgen: embed soc clock outputs within compatible data
+  dt-bindings: clock: st: flexgen: add new introduced compatible
+  clk: st: clkgen-pll: embed soc clock outputs within compatible data
+  dt-bindings: clock: st: clkgen-pll: add new introduced compatible
+  clk: st: clkgen-fsyn: embed soc clock outputs within compatible data
+  dt-bindings: clock: st: clkgen-fsyn: add new introduced compatible
+  ARM: dts: sti: update flexgen compatible within stih418-clock
+  ARM: dts: sti: update flexgen compatible within stih407-clock
+  ARM: dts: sti: update flexgen compatible within stih410-clock
+  ARM: dts: sti: update clkgen-pll entries in stih407-clock
+  ARM: dts: sti: update clkgen-pll entries in stih410-clock
+  ARM: dts: sti: update clkgen-pll entries in stih418-clock
+  ARM: dts: sti: update clkgen-fsyn entries in stih407-clock
+  ARM: dts: sti: update clkgen-fsyn entries in stih410-clock
+  ARM: dts: sti: update clkgen-fsyn entries in stih418-clock
 
-Best regards,
+ .../bindings/clock/st/st,clkgen-pll.txt       |   3 +
+ .../bindings/clock/st/st,flexgen.txt          |  10 +
+ .../bindings/clock/st/st,quadfs.txt           |   3 +
+ arch/arm/boot/dts/stih407-clock.dtsi          | 128 +------
+ arch/arm/boot/dts/stih410-clock.dtsi          | 138 +------
+ arch/arm/boot/dts/stih418-clock.dtsi          | 136 +------
+ drivers/clk/st/clk-flexgen.c                  | 344 +++++++++++++++++-
+ drivers/clk/st/clkgen-fsyn.c                  | 113 +++++-
+ drivers/clk/st/clkgen-pll.c                   | 121 +++++-
+ 9 files changed, 588 insertions(+), 408 deletions(-)
+
 -- 
-Heiko Stuebner <heiko@sntech.de>
+2.17.1
+
