@@ -2,103 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C928A343353
-	for <lists+linux-clk@lfdr.de>; Sun, 21 Mar 2021 17:06:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5BC343491
+	for <lists+linux-clk@lfdr.de>; Sun, 21 Mar 2021 21:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbhCUQFX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 21 Mar 2021 12:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbhCUQFX (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 21 Mar 2021 12:05:23 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0CAC061574;
-        Sun, 21 Mar 2021 09:05:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Type:MIME-Version:References:
-        Message-ID:In-Reply-To:Subject:cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bRZkMDyVjEHYQP3aS4EHghK5KTFY9dCEonp0Ggkl0WM=; b=I4tVtOwMges9O1MI9txjFLx9mD
-        F/fxTJGlxxEtOLPsLOChvC5Cp5Ey7c+zdT9h90Oh/NfUPfQ99N4MbtQwHtSvB2SVv5YzBTCNdONBM
-        tL1NBrLwU1BkxJN58FlX3BHA3d02x/IQ0stGwjYPCzI4WcocIUVNUPc/FpP+yw+wx8JqmBMeyLcS0
-        wbYQTHd+wyAMzMjbHvZfQHkpoPXyLZLnmT76+oWzXmwgQtDpZuEBPVdVhuoT9u//Pry4OMD3D1kda
-        Oo3tUQcNyk7UBy8fhN+qW40q1qw6eeyVpTjnNhdQdR8gk9i58pZGg2IQtmNTl++6fJ7dc9EqN6JkM
-        JUyXCy2Q==;
-Received: from rdunlap (helo=localhost)
-        by bombadil.infradead.org with local-esmtp (Exim 4.94 #2 (Red Hat Linux))
-        id 1lO0Zo-002OLF-QV; Sun, 21 Mar 2021 16:05:17 +0000
-Date:   Sun, 21 Mar 2021 09:05:16 -0700 (PDT)
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>
-cc:     renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: renesas: Couple of spelling fixes
-In-Reply-To: <20210321075813.9471-1-unixbhaskar@gmail.com>
-Message-ID: <53201147-ac5a-c5a1-b6c0-240d9423c61@infradead.org>
-References: <20210321075813.9471-1-unixbhaskar@gmail.com>
+        id S230525AbhCUUPA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 21 Mar 2021 16:15:00 -0400
+Received: from gloria.sntech.de ([185.11.138.130]:43662 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230512AbhCUUOq (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 21 Mar 2021 16:14:46 -0400
+Received: from p508fc3a3.dip0.t-ipconnect.de ([80.143.195.163] helo=phil.fritz.box)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1lO4T7-0007Oi-L3; Sun, 21 Mar 2021 21:14:37 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     linux-rockchip@lists.infradead.org, sboyd@kernel.org,
+        zhangqing@rock-chips.com, linux-clk@vger.kernel.org,
+        mturquette@baylibre.com
+Subject: Re: [PATCH 1/2] clk: rockchip: drop parenthesis from ARM || COMPILE_TEST depends
+Date:   Sun, 21 Mar 2021 21:14:30 +0100
+Message-Id: <161635763247.767241.6758144246841811873.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20210315112502.343699-1-heiko@sntech.de>
+References: <20210315112502.343699-1-heiko@sntech.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-646709E3 
-X-CRM114-CacheID: sfid-20210321_090516_880398_011AC1A0 
-X-CRM114-Status: GOOD (  15.01  )
-X-Spam-Score: -0.0 (/)
-X-Spam-Report: Spam detection software, running on the system "bombadil.infradead.org",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- Content preview:  On Sun, 21 Mar 2021, Bhaskar Chowdhury wrote: > > s/suposed/supposed/
-    > s/concurent/concurrent/ > > Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
-    Acked-by: Randy Dunlap <rdunlap@infradead.org> 
- Content analysis details:   (-0.0 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -0.0 NO_RELAYS              Informational: message was not relayed via SMTP
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On Mon, 15 Mar 2021 12:25:01 +0100, Heiko Stuebner wrote:
+> As suggested by Stephen in the series adding the rk3568 clock controller
+> the depends works just as well without the parenthesis around the depends.
+> 
+> So to make everything look the same, drop them from existing entries too.
 
+Applied, thanks!
 
-On Sun, 21 Mar 2021, Bhaskar Chowdhury wrote:
+[1/2] clk: rockchip: drop parenthesis from ARM || COMPILE_TEST depends
+      commit: e8c51b90f22031bf3f24d1f06d23bafac250bb62
+[2/2] clk: rockchip: drop MODULE_ALIAS from rk3399 clock controller
+      commit: 40f29839d8bef5aecaa772afa8e5f2ff8434b49f
 
->
-> s/suposed/supposed/
-> s/concurent/concurrent/
->
-> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
-
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-
-
-> ---
-> drivers/clk/renesas/r9a06g032-clocks.c | 4 ++--
-> 1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/clk/renesas/r9a06g032-clocks.c b/drivers/clk/renesas/r9a06g032-clocks.c
-> index 892e91b92f2c..1fe166e7f8bd 100644
-> --- a/drivers/clk/renesas/r9a06g032-clocks.c
-> +++ b/drivers/clk/renesas/r9a06g032-clocks.c
-> @@ -279,7 +279,7 @@ static const struct r9a06g032_clkdesc r9a06g032_clocks[] = {
-> 	/*
-> 	 * These are not hardware clocks, but are needed to handle the special
-> 	 * case where we have a 'selector bit' that doesn't just change the
-> -	 * parent for a clock, but also the gate it's suposed to use.
-> +	 * parent for a clock, but also the gate it's supposed to use.
-> 	 */
-> 	{
-> 		.index = R9A06G032_UART_GROUP_012,
-> @@ -311,7 +311,7 @@ static const struct r9a06g032_clkdesc r9a06g032_clocks[] = {
->
-> struct r9a06g032_priv {
-> 	struct clk_onecell_data data;
-> -	spinlock_t lock; /* protects concurent access to gates */
-> +	spinlock_t lock; /* protects concurrent access to gates */
-> 	void __iomem *reg;
-> };
->
-> --
-> 2.30.1
->
->
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
