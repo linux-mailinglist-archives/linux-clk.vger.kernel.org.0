@@ -2,127 +2,88 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7CEA3434DC
-	for <lists+linux-clk@lfdr.de>; Sun, 21 Mar 2021 21:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1B03437F7
+	for <lists+linux-clk@lfdr.de>; Mon, 22 Mar 2021 05:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbhCUUuD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 21 Mar 2021 16:50:03 -0400
-Received: from st43p00im-ztbu10073601.me.com ([17.58.63.184]:38895 "EHLO
-        st43p00im-ztbu10073601.me.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231340AbhCUUuA (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 21 Mar 2021 16:50:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1616359336; bh=juyzAcWja1peAtly+ZqfcunSjhvziQOQK78108njBZM=;
-        h=From:To:Subject:Date:Message-Id;
-        b=KXmRqMls5SuqqpWBNn2JviOebbVuvvEY29ZWXY3jjMWZRwFLUetyZOHQdB9FFOjq0
-         eeLkMHSFHjGbgB5jXc9eKANS6EscrdZ/kejb5KAtcRKXw1FQWKrjQiJyRCRlMHHY1X
-         iy2kpCZkvnJ/n9h3MtAvwdtBdnoML3Xw5gSffyZt/dDddSZfI9zct/dqhaoVjVioUM
-         wZMjDUWb5RbsEDulOQYQd3i62TU2D2Nd5IKk30tGbf/S1Z1HT7A4x8hNe8qs1K98J5
-         S6GKK4fNIawCBUn8UCg7+DYf3XaKxvQYAsqH1jF0xx2fahsUbUmORica6gcH9T9BKX
-         o0efjrpZsfKZg==
-Received: from localhost (101.220.150.77.rev.sfr.net [77.150.220.101])
-        by st43p00im-ztbu10073601.me.com (Postfix) with ESMTPSA id 17000820404;
-        Sun, 21 Mar 2021 20:42:15 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Patrice Chotard <patrice.chotard@st.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Alain Volmat <avolmat@me.com>
-Subject: [PATCH 16/16] ARM: dts: sti: update clkgen-fsyn entries in stih418-clock
-Date:   Sun, 21 Mar 2021 21:40:38 +0100
-Message-Id: <20210321204038.14417-17-avolmat@me.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210321204038.14417-1-avolmat@me.com>
-References: <20210321204038.14417-1-avolmat@me.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-21_05:2021-03-19,2021-03-21 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 clxscore=1015 mlxscore=0
- mlxlogscore=987 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-2006250000 definitions=main-2103210167
+        id S229786AbhCVEnU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 22 Mar 2021 00:43:20 -0400
+Received: from mo-csw1514.securemx.jp ([210.130.202.153]:48372 "EHLO
+        mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229450AbhCVEnP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 22 Mar 2021 00:43:15 -0400
+Received: by mo-csw.securemx.jp (mx-mo-csw1514) id 12M4gsfw029748; Mon, 22 Mar 2021 13:42:54 +0900
+X-Iguazu-Qid: 34tMLenJeM2VHXetBB
+X-Iguazu-QSIG: v=2; s=0; t=1616388174; q=34tMLenJeM2VHXetBB; m=tR39HLXPVglgs/Xr76KtlOnT+HfxcxQyifM+8UiNHfk=
+Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
+        by relay.securemx.jp (mx-mr1511) id 12M4grei010402
+        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 22 Mar 2021 13:42:53 +0900
+Received: from enc01.toshiba.co.jp (enc01.toshiba.co.jp [106.186.93.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by imx2-a.toshiba.co.jp (Postfix) with ESMTPS id 9590010009C;
+        Mon, 22 Mar 2021 13:42:53 +0900 (JST)
+Received: from hop001.toshiba.co.jp ([133.199.164.63])
+        by enc01.toshiba.co.jp  with ESMTP id 12M4grQi018182;
+        Mon, 22 Mar 2021 13:42:53 +0900
+From:   Punit Agrawal <punit1.agrawal@toshiba.co.jp>
+To:     Michal Simek <michal.simek@xilinx.com>
+Cc:     <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] clk: zynqmp: Enable the driver if ZYNQMP_FIRMWARE is selected
+References: <20210316090540.973014-1-punit1.agrawal@toshiba.co.jp>
+        <10d60612-2ee4-2fac-888e-6a2262f39469@xilinx.com>
+Date:   Mon, 22 Mar 2021 13:42:52 +0900
+In-Reply-To: <10d60612-2ee4-2fac-888e-6a2262f39469@xilinx.com> (Michal Simek's
+        message of "Wed, 17 Mar 2021 16:12:43 +0100")
+X-TSB-HOP: ON
+Message-ID: <87r1k7sss3.fsf@kokedama.swc.toshiba.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The clkgen-fsyn driver now embed the clock names (assuming the
-right compatible is used). Remove all clock-output-names property
-and update when necessary the compatible.
+Hi Michal,
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
----
- arch/arm/boot/dts/stih418-clock.dtsi | 26 +++-----------------------
- 1 file changed, 3 insertions(+), 23 deletions(-)
+Michal Simek <michal.simek@xilinx.com> writes:
 
-diff --git a/arch/arm/boot/dts/stih418-clock.dtsi b/arch/arm/boot/dts/stih418-clock.dtsi
-index d628e656458d..e84c476b83ed 100644
---- a/arch/arm/boot/dts/stih418-clock.dtsi
-+++ b/arch/arm/boot/dts/stih418-clock.dtsi
-@@ -94,11 +94,6 @@
- 			reg = <0x9103000 0x1000>;
- 
- 			clocks = <&clk_sysin>;
--
--			clock-output-names = "clk-s-c0-fs0-ch0",
--					     "clk-s-c0-fs0-ch1",
--					     "clk-s-c0-fs0-ch2",
--					     "clk-s-c0-fs0-ch3";
- 		};
- 
- 		clk_s_c0: clockgen-c@9103000 {
-@@ -150,15 +145,10 @@
- 
- 		clk_s_d0_quadfs: clk-s-d0-quadfs@9104000 {
- 			#clock-cells = <1>;
--			compatible = "st,quadfs";
-+			compatible = "st,quadfs-d0";
- 			reg = <0x9104000 0x1000>;
- 
- 			clocks = <&clk_sysin>;
--
--			clock-output-names = "clk-s-d0-fs0-ch0",
--					     "clk-s-d0-fs0-ch1",
--					     "clk-s-d0-fs0-ch2",
--					     "clk-s-d0-fs0-ch3";
- 		};
- 
- 		clockgen-d0@9104000 {
-@@ -179,15 +169,10 @@
- 
- 		clk_s_d2_quadfs: clk-s-d2-quadfs@9106000 {
- 			#clock-cells = <1>;
--			compatible = "st,quadfs";
-+			compatible = "st,quadfs-d2";
- 			reg = <0x9106000 0x1000>;
- 
- 			clocks = <&clk_sysin>;
--
--			clock-output-names = "clk-s-d2-fs0-ch0",
--					     "clk-s-d2-fs0-ch1",
--					     "clk-s-d2-fs0-ch2",
--					     "clk-s-d2-fs0-ch3";
- 		};
- 
- 		clockgen-d2@9106000 {
-@@ -210,15 +195,10 @@
- 
- 		clk_s_d3_quadfs: clk-s-d3-quadfs@9107000 {
- 			#clock-cells = <1>;
--			compatible = "st,quadfs";
-+			compatible = "st,quadfs-d3";
- 			reg = <0x9107000 0x1000>;
- 
- 			clocks = <&clk_sysin>;
--
--			clock-output-names = "clk-s-d3-fs0-ch0",
--					     "clk-s-d3-fs0-ch1",
--					     "clk-s-d3-fs0-ch2",
--					     "clk-s-d3-fs0-ch3";
- 		};
- 
- 		clockgen-d3@9107000 {
--- 
-2.17.1
+> On 3/16/21 10:05 AM, Punit Agrawal wrote:
+>> When booting the kernel on zynqmp based platforms such as Ultra96v2,
+>> peripheral drivers such as that for the sdcard depend on the presense
+>> of clocks.
+>> 
+>> Enable the clock driver if it's dependencies are compiled to avoid
+>> building an unbootable kernel.
+>> 
+>> Signed-off-by: Punit Agrawal <punit1.agrawal@toshiba.co.jp>
+>> ---
+>>  drivers/clk/zynqmp/Kconfig | 1 +
+>>  1 file changed, 1 insertion(+)
+>> 
+>> diff --git a/drivers/clk/zynqmp/Kconfig b/drivers/clk/zynqmp/Kconfig
+>> index 17086059be8b..14e4f5c55525 100644
+>> --- a/drivers/clk/zynqmp/Kconfig
+>> +++ b/drivers/clk/zynqmp/Kconfig
+>> @@ -4,6 +4,7 @@ config COMMON_CLK_ZYNQMP
+>>  	bool "Support for Xilinx ZynqMP Ultrascale+ clock controllers"
+>>  	depends on ARCH_ZYNQMP || COMPILE_TEST
+>>  	depends on ZYNQMP_FIRMWARE
+>> +	default ZYNQMP_FIRMWARE
+>>  	help
+>>  	  Support for the Zynqmp Ultrascale clock controller.
+>>  	  It has a dependency on the PMU firmware.
+>> 
+>
+> I am fine with it but I think we should fix also that depends on
+> ARCH_ZYNQMP. ZYNQMP_FIRMWARE already depends on ARCH_ZYNQMP that's why
+> it is redundant here.
+
+Sure - let me send an update converting the depends to a default.
+
+Thanks,
+Punit
+
+[...]
 
