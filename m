@@ -2,80 +2,69 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AC33455FA
-	for <lists+linux-clk@lfdr.de>; Tue, 23 Mar 2021 04:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF44345B7A
+	for <lists+linux-clk@lfdr.de>; Tue, 23 Mar 2021 10:58:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbhCWDMD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 22 Mar 2021 23:12:03 -0400
-Received: from m12-12.163.com ([220.181.12.12]:52146 "EHLO m12-12.163.com"
+        id S230097AbhCWJ6R (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 23 Mar 2021 05:58:17 -0400
+Received: from m12-13.163.com ([220.181.12.13]:36324 "EHLO m12-13.163.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229548AbhCWDLi (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 22 Mar 2021 23:11:38 -0400
+        id S229639AbhCWJ5n (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 23 Mar 2021 05:57:43 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=US+lAK9tXx3ZQu8YlR
-        j1VnBBEaM3fbPCi1jDiKVVnfk=; b=JM6QntIdZsuKW6pU0JyeYAoLfLchezT0gn
-        uqU+lPFj+SnB/1zUJE9+7wToQYtV6NLOLAeSFxIxeinHS1cAyArRJgy4/oQ37D0e
-        R+koqtcovn4LzE+JhtZG/6xe1GKvo0gKrzCtII27UrJOOh8VxjPsltlVhbBTElXX
-        wvmI7QdF8=
+        s=s110527; h=From:Subject:Date:Message-Id; bh=LP3PtY05qoq7MHAofL
+        2YGDC7WPTkoWtnZxuEgxWNOHM=; b=iowCw/rrDjyinriryH7O+baKez7tqD8enq
+        Ts/6Ghc5ziwgWOEDP9V+J2n/zZ9TlADyUFYj6N0dIAenyqmJYm4J0ta6yzdfrOux
+        vLNqwKB3+vJBdunMY5E6BdkDphmWDKLgmHNXDQAIY9yGO1cgTOnxQS0zoi9bh6VJ
+        +i5Q4sCgs=
 Received: from bf-rmnj-02.ccdomain.com (unknown [218.94.48.178])
-        by smtp8 (Coremail) with SMTP id DMCowAAHD48xXFlgvk9CWA--.5103S2;
-        Tue, 23 Mar 2021 11:10:56 +0800 (CST)
+        by smtp9 (Coremail) with SMTP id DcCowAB33k4kl1lg8gZQCg--.11268S2;
+        Tue, 23 Mar 2021 15:22:19 +0800 (CST)
 From:   Jian Dong <dj0227@163.com>
-To:     abel.vesa@nxp.com, mturquette@baylibre.com, sboyd@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        huyue2@yulong.com, Jian Dong <dongjian@yulong.com>
-Subject: [PATCH]  clk: imx: reference preceded by free
-Date:   Tue, 23 Mar 2021 11:10:34 +0800
-Message-Id: <1616469034-9691-1-git-send-email-dj0227@163.com>
+To:     david@lechnology.com, nsekhar@ti.com, mturquette@baylibre.com,
+        sboyd@kernel.org
+Cc:     linux-clk@vger.kernel.org, huyue2@yulong.com,
+        Jian Dong <dongjian@yulong.com>
+Subject: [PATCH] clk: davinci: fix regmap use PTR_ERR after initial
+Date:   Tue, 23 Mar 2021 15:22:06 +0800
+Message-Id: <1616484126-131947-1-git-send-email-dj0227@163.com>
 X-Mailer: git-send-email 1.9.1
-X-CM-TRANSID: DMCowAAHD48xXFlgvk9CWA--.5103S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKry7Jryxur1DXr43ur18AFb_yoWDZwb_CF
-        18Wrn7XrWvyr43AF15ur1xZrZ0vFnxZFsavF12qry3K39xZr15Jr1Fvw4fKw45Cry8ArWD
-        Cw1DGrWq9FZ8GjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUn5GYJUUUUU==
+X-CM-TRANSID: DcCowAB33k4kl1lg8gZQCg--.11268S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7JF15Wr4rAFW8ZF48GrWDCFg_yoWftFb_Cr
+        18XFsFgr10gF1UAr4rGFWxZFZYyF4a9F9I9F4SqrsIq34UZF1avFykXwnrCw45Wry2qr9r
+        Ga42gr4ak3WUJjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU0oa0PUUUUU==
 X-Originating-IP: [218.94.48.178]
-X-CM-SenderInfo: dgmqjjqx6rljoofrz/1tbiEABe3V8YFUAYNgAAsv
+X-CM-SenderInfo: dgmqjjqx6rljoofrz/1tbiqAte3Vc7UAq0cQAAsT
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 From: Jian Dong <dongjian@yulong.com>
 
- when register failed, clk will be freed, it will generate dangling pointer
- problem in later reference. it should return directly.
+fixes coccicheck ERROR:
+
+drivers/clk/davinci/da8xx-cfgchip.c:768:18-25: ERROR:
+PTR_ERR applied after initialization to constant on line 746
 
 Signed-off-by: Jian Dong <dongjian@yulong.com>
 ---
- drivers/clk/imx/clk-lpcg-scu.c | 1 +
- drivers/clk/imx/clk-scu.c      | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/clk/davinci/da8xx-cfgchip.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/imx/clk-lpcg-scu.c b/drivers/clk/imx/clk-lpcg-scu.c
-index 77be763..dd5abd0 100644
---- a/drivers/clk/imx/clk-lpcg-scu.c
-+++ b/drivers/clk/imx/clk-lpcg-scu.c
-@@ -114,6 +114,7 @@ struct clk_hw *__imx_clk_lpcg_scu(struct device *dev, const char *name,
- 	if (ret) {
- 		kfree(clk);
- 		hw = ERR_PTR(ret);
-+		return hw;
- 	}
+diff --git a/drivers/clk/davinci/da8xx-cfgchip.c b/drivers/clk/davinci/da8xx-cfgchip.c
+index 77d1827..f57ba1b 100644
+--- a/drivers/clk/davinci/da8xx-cfgchip.c
++++ b/drivers/clk/davinci/da8xx-cfgchip.c
+@@ -743,7 +743,7 @@ static int da8xx_cfgchip_probe(struct platform_device *pdev)
+ 	struct da8xx_cfgchip_clk_platform_data *pdata = dev->platform_data;
+ 	const struct of_device_id *of_id;
+ 	da8xx_cfgchip_init clk_init = NULL;
+-	struct regmap *regmap = NULL;
++	struct regmap *regmap;
  
- 	if (dev)
-diff --git a/drivers/clk/imx/clk-scu.c b/drivers/clk/imx/clk-scu.c
-index 1f5518b7..f89b4da 100644
---- a/drivers/clk/imx/clk-scu.c
-+++ b/drivers/clk/imx/clk-scu.c
-@@ -426,6 +426,7 @@ struct clk_hw *__imx_clk_scu(struct device *dev, const char *name,
- 	if (ret) {
- 		kfree(clk);
- 		hw = ERR_PTR(ret);
-+		return hw;
- 	}
- 
- 	if (dev)
+ 	of_id = of_match_device(da8xx_cfgchip_of_match, dev);
+ 	if (of_id) {
 -- 
 1.9.1
 
