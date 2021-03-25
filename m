@@ -2,60 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7743F348EA2
-	for <lists+linux-clk@lfdr.de>; Thu, 25 Mar 2021 12:12:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 508C0348EA9
+	for <lists+linux-clk@lfdr.de>; Thu, 25 Mar 2021 12:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbhCYLM0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 25 Mar 2021 07:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36230 "EHLO
+        id S230156AbhCYLMa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 25 Mar 2021 07:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbhCYLLx (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 25 Mar 2021 07:11:53 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C69C06175F
+        with ESMTP id S229734AbhCYLLy (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 25 Mar 2021 07:11:54 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40B6C061763
         for <linux-clk@vger.kernel.org>; Thu, 25 Mar 2021 04:11:52 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id o126so1975087lfa.0
+Received: by mail-lf1-x133.google.com with SMTP id q29so1923548lfb.4
         for <linux-clk@vger.kernel.org>; Thu, 25 Mar 2021 04:11:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ompL+1ESkwIQ3JYCBOzQVLg5EbIrKfFGt5UNdwB9BnE=;
-        b=hs9teXZEtIGL+cI04QxqH76lI2tolC5L6VTmabcYqdW7E2G/L/y4RDAQ5jD6G9ntNt
-         5gq0KFRCPkkgR9QDkSVkAhj4r7Bb7UqPvwj0b7oNgMiiGnWe/QulA/wMDgVOK7G6avNV
-         QtN9/MkjGxdCwQGtJeS6yzfnL87tkY0dHCjdeoSqfLE5JA5h/of+MSJkLMYH6kQt1Ia1
-         U3brCX3xAJ2fcCr1dVCf9LKpC9RtVsmHmgLMz8TGtRHkYdC+zJREGbEoNnXkRNlJEiGK
-         E0/EY4sX2G+Syfsl8wqo5Ykv2GYxNDlm7IZDfRyHCjsoPDAA/SZL7F6edg2XzksRyuQj
-         g4eQ==
+        bh=iyvnBZlTNurXEyCrPSOLE64/hPUHT0EpxducBu8pG7s=;
+        b=vj4HF4WPq83nTWgkeiGisKU0N3svXeU0b2L+kM/Dsaky/K3b80bp5oDM2wHXN0Qi5P
+         jUcRn/VJLXRxhlY19jgfxzZ2ptkM38wY1TGg6v187djmLMR2ZVV91CfS9bzR0zHp4Eif
+         pEUVSXwdPnNK/bqqJGabc8jgoTUou78SavrWsCGJbRd4QCuyMDP2S1ofz6DEbzaHGGSj
+         dC4L65FjIYQeMNwAAo91uJv1tvXc32VvAjifH/4KAr+d8+667JPn39ifnOjBle/6f98Y
+         lz2SjQ0JE3jxFb0DbEb9Rm7hH76OiSPpnxNGfBDvzpUrtHt3Iw0dUx6/Er/SytCkPvrm
+         zcxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ompL+1ESkwIQ3JYCBOzQVLg5EbIrKfFGt5UNdwB9BnE=;
-        b=KQ1y6Prntuk9JHgAbzrV/HWivay5OznkolcYUFaKcm8gGEzqCUGwqSKuC9GRP3jFNq
-         l5unD0f6wbB/3s7lULN5Q51XxZMR+03QXl480KPc2tEpxDQPGNLMbUEdjk/muxbkA97m
-         tu7nLe1VIvvOXV+wTXmaS890MQ1vMU6CndvLtWNEL3WOVWir/VRV4FxD4Yx6Ys0xXVly
-         g83VUZ1HUyB5ej0eYLcoKPXE2wil6ulZxx1bKR5waM+i11zAyVzFmkj2IfPCZbakHumw
-         fqWYUZl5eOXXCgC95cG9m6mG14rPkF4UGiC8rXYow1i9a7xFUYg8w8YS8F/xdzTdcxsL
-         7bXA==
-X-Gm-Message-State: AOAM531ldxxX35Yv3ID2wDY705NKorBvENfgpbMw0aLDtLmCzpa7RZzJ
-        ltDNP9Q/j3oaaOyIoDbJYNDH7Q==
-X-Google-Smtp-Source: ABdhPJwxhvqE9iL/EsXxGt/q5BG1lzgY0Ujxe2wgUDB1FVOsIXTzteMOvr2RAlZjL38p1aId3Vyx+A==
-X-Received: by 2002:ac2:46ee:: with SMTP id q14mr4718751lfo.303.1616670710844;
-        Thu, 25 Mar 2021 04:11:50 -0700 (PDT)
+        bh=iyvnBZlTNurXEyCrPSOLE64/hPUHT0EpxducBu8pG7s=;
+        b=AUBYFdqvGepicClNG5TLYDrpWYqll9zCizR+N4t5nVMvZRHpSzGbX5JhslyrgtoJCZ
+         6SztUQqnbO0KEXT0HpERa9jOMfeOJOR8D6NdAGXpLBtqNlSDeWxK1QI2H982vQxUrun8
+         6Y0MWLRPiKYZLFMnxQvrtNZNrY3IFiwDcpi0P262+MnpGM0kir4p4zCINfangmGrUvAL
+         9ZFPI56gp5RG8atSbU1wiEAZI1Yc+gb92X8V+v4a/laDYXaUZ+5g6HaItRDwVzbuzfQT
+         UCWlI9IKk22+8GpqmyWIgFXn0uuXZLQyG8zXnSFH2gQvSBedQbinYIuqlZ5LibzQngr6
+         q6Lw==
+X-Gm-Message-State: AOAM5318Otop9b8rIXlNb1SPpCofkTrbGqjuU5hQ2UBqDPuubggNTlDG
+        Zs1Ow9Kg3NYaFaYxzdoexXf2rg==
+X-Google-Smtp-Source: ABdhPJyrIdu+tHoIKq/e7mIfgGeC0T9HSqxRAafs2bnkhj2FL9iJz7wjtDm+QqlttWrfuD/iYlYuJw==
+X-Received: by 2002:a05:6512:3a83:: with SMTP id q3mr4738587lfu.460.1616670711552;
+        Thu, 25 Mar 2021 04:11:51 -0700 (PDT)
 Received: from eriador.lan ([37.153.55.125])
         by smtp.gmail.com with ESMTPSA id t22sm715191ljj.94.2021.03.25.04.11.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Mar 2021 04:11:50 -0700 (PDT)
+        Thu, 25 Mar 2021 04:11:51 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>
 Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v1 05/15] clk: qcom: gpucc-sm8250: drop unused enum entries
-Date:   Thu, 25 Mar 2021 14:11:34 +0300
-Message-Id: <20210325111144.2852594-6-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v1 06/15] clk: qcom: videocc-sc7180: drop unused enum entries
+Date:   Thu, 25 Mar 2021 14:11:35 +0300
+Message-Id: <20210325111144.2852594-7-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210325111144.2852594-1-dmitry.baryshkov@linaro.org>
 References: <20210325111144.2852594-1-dmitry.baryshkov@linaro.org>
@@ -69,21 +69,22 @@ Drop unused enum entries from the list of parent enums.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/clk/qcom/gpucc-sm8250.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/clk/qcom/videocc-sc7180.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/clk/qcom/gpucc-sm8250.c b/drivers/clk/qcom/gpucc-sm8250.c
-index 3fa7d1f9ff98..67c136a77efb 100644
---- a/drivers/clk/qcom/gpucc-sm8250.c
-+++ b/drivers/clk/qcom/gpucc-sm8250.c
-@@ -26,7 +26,6 @@
+diff --git a/drivers/clk/qcom/videocc-sc7180.c b/drivers/clk/qcom/videocc-sc7180.c
+index 276e5ecd4840..f5d04791a3cd 100644
+--- a/drivers/clk/qcom/videocc-sc7180.c
++++ b/drivers/clk/qcom/videocc-sc7180.c
+@@ -19,8 +19,6 @@
  
  enum {
  	P_BI_TCXO,
+-	P_CHIP_SLEEP_CLK,
 -	P_CORE_BI_PLL_TEST_SE,
- 	P_GPLL0_OUT_MAIN,
- 	P_GPLL0_OUT_MAIN_DIV,
- 	P_GPU_CC_PLL0_OUT_MAIN,
+ 	P_VIDEO_PLL0_OUT_EVEN,
+ 	P_VIDEO_PLL0_OUT_MAIN,
+ 	P_VIDEO_PLL0_OUT_ODD,
 -- 
 2.30.2
 
