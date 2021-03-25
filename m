@@ -2,47 +2,47 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4874348EAF
+	by mail.lfdr.de (Postfix) with ESMTP id 87FCA348EAE
 	for <lists+linux-clk@lfdr.de>; Thu, 25 Mar 2021 12:13:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbhCYLMh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 25 Mar 2021 07:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
+        id S229626AbhCYLMf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 25 Mar 2021 07:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbhCYLL4 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 25 Mar 2021 07:11:56 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E98C06174A
+        with ESMTP id S230100AbhCYLL5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 25 Mar 2021 07:11:57 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E52C061760
         for <linux-clk@vger.kernel.org>; Thu, 25 Mar 2021 04:11:56 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id u10so2579013lju.7
+Received: by mail-lj1-x22d.google.com with SMTP id u4so2578338ljo.6
         for <linux-clk@vger.kernel.org>; Thu, 25 Mar 2021 04:11:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=PdrYj3VEfoKs37S4vt+lSgqRqm7gvPJV0IcgSzyglyQ=;
-        b=oEj0Zs4IxYPZwOzPGZ+eGsE4Zonq3bbdebNNsWcZ2BzijNnQNiP4wULqi35ZLrMZZO
-         /YrYqQvgrLUSw2EI/hxtCunTsmPLZbRhICiJB6AvFdiqoMrFasqXygk7u7Wou9La/kV0
-         7BBCS/rm5iGlcHPb4Vvyns9986uiCNAztE66944+yVzUVxSoNEM8MDG42JOIQRskQvaZ
-         Pq/z6TFgyhn3cxGTjr7t5xZ64q8Z4NF1SeJzpfefwmceY6Em9G8B78ip9UfywLaUcBNz
-         7drAw/5NjZpURicfEikxdeDw77JRNxE391GHkh+tw1nKpTLdwOA3QGsz8nFeoiQ71QD5
-         x9Vg==
+        bh=WRdbjkyuvxdjQ/ZLpYlbOrxHP3k+OVVlBOCYuojvEgw=;
+        b=DU8Dbv/1l/ZYTrO8WKwANiosj4AhHkr5ZiS9d49RG8g+uY5MR7aild8kH46zVqsTKu
+         xDQ+tWPjFs9B6mNm3lVEByxa74L7FWLkcFzpeejZ4gNx4EwyPCDgoibLcV0Qjui5RN3X
+         5UBOHVIQeSaT0AJM6MYXF3I7HGYQMc0Lz5ahLZXhbBPGhaoJTXWtp673zRpls4/Yu9Cz
+         F/aR6nNPqVnvE4+HbQET2MnQkdSQ2AII1ZeNw1KtJUf9vzql+h+kZeSn78sxPF8u0+5d
+         tfP7Zid9ei/wJiZjVYbBpBicJ810KIOQTT8xlnz3Y0I/J7NPF2Nrt90bE6LrkE1JSHrz
+         VzPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=PdrYj3VEfoKs37S4vt+lSgqRqm7gvPJV0IcgSzyglyQ=;
-        b=CUGTDOUgL6oJc2dKypXse3i25vzArnYcUnaKa+ieBtRoq1wwIQRpVHEIAtu08n0m0H
-         aCgvP1oBoFC3lHmiyVRI5BYZ48Y/NQs1ndvIuysDrpPF2XnD4LXwoZgKOjBo++t6yRxS
-         1VFD8M9R6bBHpuum00YPkVsjuJWHoZ0ZgaG6Ga702A1bB0+ZBXj2KlRmV2s1gQkAYUw5
-         tHmLijNtU5Diz/ZLEs5MC1MO4YhOetAabaKCZeLDfU5/84LKaHieobLUsSbxFegjSCtz
-         55oxJIFMFvSI5UmXUnGaDKrJd83I3oES3WMK+Ay2w8OicXHpGAFyive4bkFJaAeEdyKb
-         7h8g==
-X-Gm-Message-State: AOAM5322Y6dNfw7F9uqR/F1NIxuEnXaw4LI829Lwu0rykYSuy6zy5sWO
-        8B+CliciNs3lxIzLvdZbbe3Nvw==
-X-Google-Smtp-Source: ABdhPJzU9MYuP0h2wIB0XmeX6qEZMlG73fkwmeiQ3uPHFZ1vfXNlNlJaEpz0hbmmAz3s/FiFXscdbg==
-X-Received: by 2002:a2e:b17b:: with SMTP id a27mr5383545ljm.62.1616670714640;
-        Thu, 25 Mar 2021 04:11:54 -0700 (PDT)
+        bh=WRdbjkyuvxdjQ/ZLpYlbOrxHP3k+OVVlBOCYuojvEgw=;
+        b=r3U0cvZX9QCf/vEwykvmui6xqOKGWLl1q9eFEzHej/XF63ZZmzJ4VcImmdGCvg5Dow
+         YZV4LQjX6V+4yBFACxbOirI+EvjO8EEB/gxVJrPXnriCRdX2r2c0fCauBOOIpCw0pnLf
+         U3/Soq7vie/9quSyJKo1nkMOsSyYAdT5sO/gXmkNggChSTLZ3QNH2qeRjTSDLVcaAj3M
+         GBsOzr4BASFFau9yBr1BmPTSwL5YiZdrX8IGOyYF4Uwub3iYJN6TZkwOm7QK9MNzHRkK
+         9dP1ZGyRE8tuLSVbTXhnuxbyGp8AmJ5a6YyTR27TDcn1wFmg3No+z45qmEigz8cdHQs6
+         6p/Q==
+X-Gm-Message-State: AOAM533meT+XOXFR0UjbHyzwKDNEqQ5X2GyvYAwkYU+rqApXEPJGTvqw
+        pvB3pH1M+QzjnkM56O//PtyJdw==
+X-Google-Smtp-Source: ABdhPJwxhtQtdENBk6/Dgyn2ME9STSxc+oX16qDyVYa6DGrwtM+BNm2hBuQO4hhXE1BjyFM3XEV8FA==
+X-Received: by 2002:a2e:87d5:: with SMTP id v21mr5146623ljj.195.1616670715340;
+        Thu, 25 Mar 2021 04:11:55 -0700 (PDT)
 Received: from eriador.lan ([37.153.55.125])
         by smtp.gmail.com with ESMTPSA id t22sm715191ljj.94.2021.03.25.04.11.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
@@ -52,10 +52,11 @@ To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v1 10/15] clk: qcom: gpucc-sdm845: convert to parent data
-Date:   Thu, 25 Mar 2021 14:11:39 +0300
-Message-Id: <20210325111144.2852594-11-dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>
+Subject: [PATCH v1 11/15] clk: qcom: gpucc-sdm845: get rid of the test clock
+Date:   Thu, 25 Mar 2021 14:11:40 +0300
+Message-Id: <20210325111144.2852594-12-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210325111144.2852594-1-dmitry.baryshkov@linaro.org>
 References: <20210325111144.2852594-1-dmitry.baryshkov@linaro.org>
@@ -65,95 +66,52 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Convert the clock driver to specify parent data rather than parent
-names, to actually bind using 'clock-names' specified in the DTS rather
-than global clock names.
+The test clock isn't in the bindings and apparently it's not used by
+anyone upstream.  Remove it.
 
+Suggested-by: Stephen Boyd <swboyd@chromium.org>
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/clk/qcom/gpucc-sdm845.c | 42 +++++++++++++++++----------------
- 1 file changed, 22 insertions(+), 20 deletions(-)
+ drivers/clk/qcom/gpucc-sdm845.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
 diff --git a/drivers/clk/qcom/gpucc-sdm845.c b/drivers/clk/qcom/gpucc-sdm845.c
-index 5663698b306b..2d637b113ac8 100644
+index 2d637b113ac8..6f53c6b4c6ed 100644
 --- a/drivers/clk/qcom/gpucc-sdm845.c
 +++ b/drivers/clk/qcom/gpucc-sdm845.c
-@@ -35,22 +35,6 @@ enum {
- 	P_GPU_CC_PLL1_OUT_ODD,
- };
+@@ -27,7 +27,6 @@
  
--static const struct parent_map gpu_cc_parent_map_0[] = {
--	{ P_BI_TCXO, 0 },
--	{ P_GPU_CC_PLL1_OUT_MAIN, 3 },
--	{ P_GPLL0_OUT_MAIN, 5 },
--	{ P_GPLL0_OUT_MAIN_DIV, 6 },
+ enum {
+ 	P_BI_TCXO,
+-	P_CORE_BI_PLL_TEST_SE,
+ 	P_GPLL0_OUT_MAIN,
+ 	P_GPLL0_OUT_MAIN_DIV,
+ 	P_GPU_CC_PLL1_OUT_EVEN,
+@@ -60,7 +59,6 @@ static const struct parent_map gpu_cc_parent_map_0[] = {
+ 	{ P_GPU_CC_PLL1_OUT_MAIN, 3 },
+ 	{ P_GPLL0_OUT_MAIN, 5 },
+ 	{ P_GPLL0_OUT_MAIN_DIV, 6 },
 -	{ P_CORE_BI_PLL_TEST_SE, 7 },
--};
--
--static const char * const gpu_cc_parent_names_0[] = {
--	"bi_tcxo",
--	"gpu_cc_pll1",
--	"gcc_gpu_gpll0_clk_src",
--	"gcc_gpu_gpll0_div_clk_src",
--	"core_bi_pll_test_se",
--};
--
- static const struct alpha_pll_config gpu_cc_pll1_config = {
- 	.l = 0x1a,
- 	.alpha = 0xaab,
-@@ -62,13 +46,31 @@ static struct clk_alpha_pll gpu_cc_pll1 = {
- 	.clkr = {
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gpu_cc_pll1",
--			.parent_names = (const char *[]){ "bi_tcxo" },
-+			.parent_data = &(const struct clk_parent_data){
-+				.fw_name = "bi_tcxo", .name = "bi_tcxo",
-+			},
- 			.num_parents = 1,
- 			.ops = &clk_alpha_pll_fabia_ops,
- 		},
- 	},
  };
  
-+static const struct parent_map gpu_cc_parent_map_0[] = {
-+	{ P_BI_TCXO, 0 },
-+	{ P_GPU_CC_PLL1_OUT_MAIN, 3 },
-+	{ P_GPLL0_OUT_MAIN, 5 },
-+	{ P_GPLL0_OUT_MAIN_DIV, 6 },
-+	{ P_CORE_BI_PLL_TEST_SE, 7 },
-+};
-+
-+static const struct clk_parent_data gpu_cc_parent_data_0[] = {
-+	{ .fw_name = "bi_tcxo", .name = "bi_tcxo" },
-+	{ .hw = &gpu_cc_pll1.clkr.hw },
-+	{ .fw_name = "gcc_gpu_gpll0_clk_src", .name = "gcc_gpu_gpll0_clk_src" },
-+	{ .fw_name = "gcc_gpu_gpll0_div_clk_src", .name = "gcc_gpu_gpll0_div_clk_src" },
-+	{ .fw_name = "core_bi_pll_test_se", .name = "core_bi_pll_test_se" },
-+};
-+
+ static const struct clk_parent_data gpu_cc_parent_data_0[] = {
+@@ -68,7 +66,6 @@ static const struct clk_parent_data gpu_cc_parent_data_0[] = {
+ 	{ .hw = &gpu_cc_pll1.clkr.hw },
+ 	{ .fw_name = "gcc_gpu_gpll0_clk_src", .name = "gcc_gpu_gpll0_clk_src" },
+ 	{ .fw_name = "gcc_gpu_gpll0_div_clk_src", .name = "gcc_gpu_gpll0_div_clk_src" },
+-	{ .fw_name = "core_bi_pll_test_se", .name = "core_bi_pll_test_se" },
+ };
+ 
  static const struct freq_tbl ftbl_gpu_cc_gmu_clk_src[] = {
- 	F(19200000, P_BI_TCXO, 1, 0, 0),
- 	F(200000000, P_GPLL0_OUT_MAIN_DIV, 1.5, 0, 0),
-@@ -84,7 +86,7 @@ static struct clk_rcg2 gpu_cc_gmu_clk_src = {
- 	.freq_tbl = ftbl_gpu_cc_gmu_clk_src,
+@@ -87,7 +84,7 @@ static struct clk_rcg2 gpu_cc_gmu_clk_src = {
  	.clkr.hw.init = &(struct clk_init_data){
  		.name = "gpu_cc_gmu_clk_src",
--		.parent_names = gpu_cc_parent_names_0,
-+		.parent_data = gpu_cc_parent_data_0,
- 		.num_parents = 5,
+ 		.parent_data = gpu_cc_parent_data_0,
+-		.num_parents = 5,
++		.num_parents = 4,
  		.ops = &clk_rcg2_shared_ops,
  	},
-@@ -98,8 +100,8 @@ static struct clk_branch gpu_cc_cx_gmu_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gpu_cc_cx_gmu_clk",
--			.parent_names = (const char *[]){
--				"gpu_cc_gmu_clk_src",
-+			.parent_data = &(const struct clk_parent_data){
-+				.hw = &gpu_cc_gmu_clk_src.clkr.hw,
- 			},
- 			.num_parents = 1,
- 			.flags = CLK_SET_RATE_PARENT,
+ };
 -- 
 2.30.2
 
