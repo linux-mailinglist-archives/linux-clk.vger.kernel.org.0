@@ -2,98 +2,95 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A4B34D30B
-	for <lists+linux-clk@lfdr.de>; Mon, 29 Mar 2021 17:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A29A34D557
+	for <lists+linux-clk@lfdr.de>; Mon, 29 Mar 2021 18:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbhC2PAc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-clk@lfdr.de>); Mon, 29 Mar 2021 11:00:32 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:33369 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbhC2PAP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Mar 2021 11:00:15 -0400
-Received: from localhost (91-175-115-186.subs.proxad.net [91.175.115.186])
-        (Authenticated sender: gregory.clement@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id C8E37240018;
-        Mon, 29 Mar 2021 15:00:12 +0000 (UTC)
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
+        id S230362AbhC2QpT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 29 Mar 2021 12:45:19 -0400
+Received: from smtp-17.italiaonline.it ([213.209.10.17]:38634 "EHLO libero.it"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231138AbhC2QpH (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 29 Mar 2021 12:45:07 -0400
+Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it
+ ([87.20.116.197])
+        by smtp-17.iol.local with ESMTPA
+        id Quy8lKyqctpGHQuyEliOkJ; Mon, 29 Mar 2021 18:42:33 +0200
+x-libjamoibt: 1601
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
+        t=1617036153; bh=BrNKkRQtWd5xquv9TwU2ha5NNM/KSP7ccLi3tRmSmNo=;
+        h=From;
+        b=X6V3ykASzNscbC0iUVXp9q9q+Y4fNLeRRvcXrndrWb123fjybiBY5SNzbfz9Y1YpV
+         4sqEbhrd8O41ofW4xZhZnvZfERCszHD8brEcjzXtiZsBcaXn5SBTg/JxZmisDewzb1
+         8/8dPqBEPgN21KQukPNHE8zq81dvMdsHzJ1ZDoufAbTYjp/7CChBWeXH8Sv60iIRwp
+         uNoypeC98cUPkd11b9iuTUEjqrZKI9jJIRFMQxv4tWbEpi+MBJDjfxIIs4jAxXSwUJ
+         V2r+N9AGW7MsEQHQXYVtxiJjV961TLU3NlwZlKedAjl1rFJ1TGQ/A0wwGyYxGsDg8f
+         Lz+NInesBXSeQ==
+X-CNFS-Analysis: v=2.4 cv=Q7IXX66a c=1 sm=1 tr=0 ts=60620379 cx=a_exe
+ a=AVqmXbCQpuNSdJmApS5GbQ==:117 a=AVqmXbCQpuNSdJmApS5GbQ==:17
+ a=IkcTkHD0fZMA:10 a=wWb8P1eRJa4rfLIeBvsA:9 a=QEXdDO2ut3YA:10
+ a=fCgQI5UlmZDRPDxm0A3o:22
+From:   Dario Binacchi <dariobin@libero.it>
+To:     linux-kernel@vger.kernel.org
+Cc:     Grygorii Strashko <grygorii.strashko@ti.com>,
+        Dario Binacchi <dariobin@libero.it>,
+        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Lee Jones <lee.jones@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Tomasz Maciej Nowak <tmn505@gmail.com>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Andre Heider <a.heider@gmail.com>,
-        Vladimir Vid <vladimir.vid@sartura.hr>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        =?utf-8?Q?G=C3=A9rald?= Kerma <gerald@gk2.net>,
-        Konstantin Porotchkin <kostap@marvell.com>
-Subject: Re: [PATCH mvebu v2 09/10] cpufreq: armada-37xx: Remove
- cur_frequency variable
-In-Reply-To: <20210114124032.12765-10-pali@kernel.org>
-References: <20210114124032.12765-1-pali@kernel.org>
- <20210114124032.12765-10-pali@kernel.org>
-Date:   Mon, 29 Mar 2021 17:00:12 +0200
-Message-ID: <87mtumdmyr.fsf@BL-laptop>
+        Tero Kristo <kristo@kernel.org>,
+        Tony Lindgren <tony@atomide.com>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-omap@vger.kernel.org
+Subject: [PATCH v3 0/4] clk: ti: add am33xx spread spectrum clock support
+Date:   Mon, 29 Mar 2021 18:42:17 +0200
+Message-Id: <20210329164222.26794-1-dariobin@libero.it>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfIn27ZCUTmtRp+5x956SWoq43721p+yw9pLk/daDddlqNQ/gz0EePul9ixgUr+xfaol7JtaGqlt16lM+6lUrob04UJPZ1187PdtRMIG9GhvLriHyJWcj
+ vOaA0ECpRQE5zy06Uo1ctYjWpibCahNpI1C177MEuGwHbSKCtevpGCrT5Lg92dLHOw6YGVU9l995kCO9/oLD7tQItD2ArOvLm2VOr5kA1V3WNtXRmfHImbD2
+ LYzYI9knJxkEUQizaVC6DgHwFIHIIkrXBVOc1KR9hrYMkdf5kR+GU/FO9ujMdMSs7yU5pAGIoFotkfKEv6iW6/EYcWeXf4h5J83fQhu7wOxXjiBU6F/SBQWb
+ AtaSNsCZwlsVSRHe6IGY4Jh4beNn3OfZnzjBWbi8CBi1UjUzZe6EPQsPtgg4t72BXxIHE80B7UIlLM4BGw2GMPWlhHYAocy2m1HYvouRRI0dnxPw8rWzTE7b
+ y79QESQJOKoYedTmHipmpznZ6r8NqfkIv09VHixSw07fdSAAawMzq3yB+EvBiF6wdoWjENuu18gaLCHm5iyLjydekC5sDezDkPFyaiK84P2UqGAGK9Xq3hfO
+ p6NiE5ihyjPEnBXwMQ1b5u7faJ231nU9oiM+62QLTw8zyw==
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Pali Rohár <pali@kernel.org> writes:
 
-> Variable cur_frequency in armada37xx_cpufreq_driver_init() is unused.
->
-> Signed-off-by: Pali Rohár <pali@kernel.org>
+As reported by the TI spruh73x RM, MPU and LCD modules support spread
+spectrum clocking (SSC) on their output clocks. SSC is used to spread
+the spectral peaking of the clock to reduce any electromagnetic
+interference (EMI) that may be caused due to the clock’s fundamental
+or any of its harmonics.
+The series allows you to enable and adjust the spread spectrum clocking
+for all am33xx PLLs for which it is supported.
 
-Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 
-Thanks,
+Changes in v3:
+- Add '-hz' suffix to "ti,ssc-modfreq" binding.
+- Add Tony Lindgren acked tag.
+- Use "ti,ssc-modfreq-hz" binding instead of "ti,ssc-modfreq".
 
-Gregory
+Changes in v2:
+- Remove SSC registers from dpll_core_ck@490 node (SSC is not supported)
+- Add SSC registers to dpll_mpu_ck@488 node.
+- Move the DT changes to the previous patch in the series.
 
-> ---
->  drivers/cpufreq/armada-37xx-cpufreq.c | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
->
-> diff --git a/drivers/cpufreq/armada-37xx-cpufreq.c b/drivers/cpufreq/armada-37xx-cpufreq.c
-> index f08281fc525c..f13646d143de 100644
-> --- a/drivers/cpufreq/armada-37xx-cpufreq.c
-> +++ b/drivers/cpufreq/armada-37xx-cpufreq.c
-> @@ -389,7 +389,7 @@ static int __init armada37xx_cpufreq_driver_init(void)
->  	struct armada_37xx_dvfs *dvfs;
->  	struct platform_device *pdev;
->  	unsigned long freq;
-> -	unsigned int cur_frequency, base_frequency;
-> +	unsigned int base_frequency;
->  	struct regmap *nb_clk_base, *nb_pm_base, *avs_base;
->  	struct device *cpu_dev;
->  	int load_lvl, ret;
-> @@ -450,14 +450,6 @@ static int __init armada37xx_cpufreq_driver_init(void)
->  		return -EINVAL;
->  	}
->  
-> -	/* Get nominal (current) CPU frequency */
-> -	cur_frequency = clk_get_rate(clk);
-> -	if (!cur_frequency) {
-> -		dev_err(cpu_dev, "Failed to get clock rate for CPU\n");
-> -		clk_put(clk);
-> -		return -EINVAL;
-> -	}
-> -
->  	dvfs = armada_37xx_cpu_freq_info_get(base_frequency);
->  	if (!dvfs) {
->  		clk_put(clk);
-> -- 
-> 2.20.1
->
+Dario Binacchi (4):
+  clk: ti: fix typo in routine description
+  dt-bindings: ti: dpll: add spread spectrum support
+  ARM: dts: am33xx-clocks: add spread spectrum support
+  clk: ti: add am33xx spread spectrum clock support
+
+ .../devicetree/bindings/clock/ti/dpll.txt     | 20 +++++
+ arch/arm/boot/dts/am33xx-clocks.dtsi          |  4 +-
+ drivers/clk/ti/dpll.c                         | 42 +++++++++
+ drivers/clk/ti/dpll3xxx.c                     | 87 ++++++++++++++++++-
+ include/linux/clk/ti.h                        | 24 +++++
+ 5 files changed, 174 insertions(+), 3 deletions(-)
 
 -- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+2.17.1
+
