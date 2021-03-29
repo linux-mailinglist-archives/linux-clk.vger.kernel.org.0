@@ -2,62 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7F034BDE9
-	for <lists+linux-clk@lfdr.de>; Sun, 28 Mar 2021 20:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E765934C0B0
+	for <lists+linux-clk@lfdr.de>; Mon, 29 Mar 2021 02:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbhC1SHa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 28 Mar 2021 14:07:30 -0400
-Received: from mail.hanoi.gov.vn ([113.160.32.33]:31610 "EHLO
-        mx01.hanoi.gov.vn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbhC1SHR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 28 Mar 2021 14:07:17 -0400
-X-Greylist: delayed 474 seconds by postgrey-1.27 at vger.kernel.org; Sun, 28 Mar 2021 14:07:01 EDT
-Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 30259EC3D8;
-        Mon, 29 Mar 2021 00:57:51 +0700 (+07)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hanoi.gov.vn;
-        s=default; t=1616954272;
-        bh=FuW10Z6fSdeNlf/0u/BQ1jcwkjYBw0uHUPQgn0LGo7I=; h=Date:From:To;
-        b=R9blPfqJCHUsZAyZxsyyryS61fl4krmBjYKWM6eGGwB8ZdbTBVPL1mmKOmZXMqNlA
-         7CEqA0MXgUAy+X4oK/wthh4vC9Xoov1Ce8tjf/qJvnL7KGsGNVg9ic0krGeHrdNzGM
-         5cIEKsz0emmHL/izbEfCtadst3HYllOJWdonlm5o=
-X-IMSS-DKIM-Authentication-Result: mx01.hanoi.gov.vn; sigcount=0
-Received: from mx01.hanoi.gov.vn (localhost [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 50FCBEC3DD;
-        Mon, 29 Mar 2021 00:57:49 +0700 (+07)
-Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
-        by mx01.hanoi.gov.vn (Postfix) with ESMTPS;
-        Mon, 29 Mar 2021 00:57:49 +0700 (+07)
-Received: from mail.hanoi.gov.vn (localhost [127.0.0.1])
-        by mail.hanoi.gov.vn (Postfix) with ESMTPS id 02AFC7F41B42;
-        Mon, 29 Mar 2021 00:57:44 +0700 (+07)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.hanoi.gov.vn (Postfix) with ESMTP id 08FE47F41B5D;
-        Mon, 29 Mar 2021 00:57:41 +0700 (+07)
-Received: from mail.hanoi.gov.vn ([127.0.0.1])
-        by localhost (mail.hanoi.gov.vn [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 1D3oZsOAVsx3; Mon, 29 Mar 2021 00:57:36 +0700 (+07)
-Received: from mail.hanoi.gov.vn (mail.hanoi.gov.vn [10.1.1.25])
-        by mail.hanoi.gov.vn (Postfix) with ESMTP id 478CE7F41B59;
-        Mon, 29 Mar 2021 00:57:33 +0700 (+07)
-Date:   Mon, 29 Mar 2021 00:57:33 +0700 (ICT)
-From:   Mackenzie Scott <ttptqd_thanhoai@hanoi.gov.vn>
-Reply-To: Mackenzie Scott <propack@propck.net>
-Message-ID: <354204758.25920932.1616954253215.JavaMail.zimbra@hanoi.gov.vn>
-Subject: Congratulations ($ 100,800,000.00)
+        id S230248AbhC2AvR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 28 Mar 2021 20:51:17 -0400
+Received: from mga03.intel.com ([134.134.136.65]:4032 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231643AbhC2AvE (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 28 Mar 2021 20:51:04 -0400
+IronPort-SDR: 2DHVheUurMvLjwBU8OHPE6coY4UsMT/KTymeQTIZojbJQzUPevBEY5IYtpN0SG1rbswS/ZflJD
+ RBRURisp5+Jw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9937"; a="191483948"
+X-IronPort-AV: E=Sophos;i="5.81,285,1610438400"; 
+   d="scan'208";a="191483948"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2021 17:51:02 -0700
+IronPort-SDR: 40zU5ISxmkGYAJuyQdJsEfIVD3hYBfGegW7OUK5gd9dlmpnibhAoz9jbRNN8qqvXiD1PYxBKOM
+ 53qDfXEvBYow==
+X-IronPort-AV: E=Sophos;i="5.81,285,1610438400"; 
+   d="scan'208";a="410824156"
+Received: from shao2-debian.sh.intel.com (HELO localhost) ([10.239.13.11])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2021 17:50:59 -0700
+Date:   Mon, 29 Mar 2021 08:50:09 +0800
+From:   kernel test robot <rong.a.chen@intel.com>
+To:     Bartosz Dudziak <bartosz.dudziak@snejp.pl>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Bartosz Dudziak <bartosz.dudziak@snejp.pl>
+Subject: Re: [PATCH 5/5] arm: dts: qcom: Add initial DTS file for Samsung
+ Galaxy S III Neo phone
+Message-ID: <20210329005009.GI4176174@shao2-debian>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [185.107.80.217]
-X-Mailer: Zimbra 8.8.15_GA_3894 (zclient/8.8.15_GA_3894)
-Thread-Index: ao/APhyKX+JH1nE2Rn/kAmnh2LEgkw==
-Thread-Topic: Congratulations ($ 100,800,000.00)
-To:     undisclosed-recipients:;
-X-TM-AS-GCONF: 00
+Content-Disposition: inline
+In-Reply-To: <20210326145816.9758-6-bartosz.dudziak@snejp.pl>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Hi Bartosz,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on clk/clk-next]
+[also build test WARNING on robh/for-next v5.12-rc4 next-20210326]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Bartosz-Dudziak/Samsung-Galaxy-S-III-Neo-Initial-DTS/20210326-230134
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+:::::: branch date: 24 hours ago
+:::::: commit date: 24 hours ago
+compiler: arm-linux-gnueabi-gcc (GCC) 9.3.0
+reproduce: make ARCH=arm dtbs_check
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-Hello,i&#39;m Mackenzie Scott,Ex-wife of Amazon founder i&#39;m donating $4 billion to charities,individuals,universities across the Globe from my divorce funds,i&#39;m donating part of it to provide immediate support to people suffering economically during the COVID-19 pandemic,i have a donation worth $100,800,000.00 Dollars for you,you can contact me for more information if you&#39;re interested.
+dtcheck warnings: (new ones prefixed by >>)
+>> arch/arm/boot/dts/qcom-msm8226-samsung-s3ve3g.dt.yaml: /: memory: False schema does not allow {'device_type': ['memory'], 'reg': [[0, 0]]}
+   	From schema: /usr/local/lib/python3.9/dist-packages/dtschema/schemas/root-node.yaml
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
