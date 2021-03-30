@@ -2,75 +2,73 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D530F34F27F
-	for <lists+linux-clk@lfdr.de>; Tue, 30 Mar 2021 22:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E04134F42B
+	for <lists+linux-clk@lfdr.de>; Wed, 31 Mar 2021 00:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232684AbhC3Uwi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 30 Mar 2021 16:52:38 -0400
-Received: from st43p00im-ztbu10063701.me.com ([17.58.63.178]:56488 "EHLO
-        st43p00im-ztbu10063701.me.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232661AbhC3Uwb (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 30 Mar 2021 16:52:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1617137549; bh=D4dih7IDfleZeM1jkz2mIoV9uzt0mlpafIv8IABeh0E=;
-        h=From:To:Subject:Date:Message-Id;
-        b=ovzsUzFw534t7A4Noz29IwkdjyUQTn2qpX36nXkA3UlTZBAqYfcBQXpUb16qj802A
-         BuY62HOe0s5UkhIgfaeB+jGzN6l8dsi91CnaNF6zdJ6BLTkDASA0TGu3fj1C7CkJ8I
-         O8BaQNBsSrv4fwZ+J3nRIUtYtd4FxQn2HuAdeN9pFfIU1rqlSa7CcbFX5wZaOypsLr
-         psnRoWdyZ+32jYbPHjMHH1fsODvebL9YF06jKN39Im1EbvC4PCh6C2b32ckh0KrRPS
-         fmrzFJuE1BzulHbHmnKiPP4AmRYC0xykG+QBZRE/S3szohx3/0nupMbNdJRjOmGnOe
-         iNaPCHK7mp0LA==
-Received: from localhost (101.220.150.77.rev.sfr.net [77.150.220.101])
-        by st43p00im-ztbu10063701.me.com (Postfix) with ESMTPSA id 2C2D99A0182;
-        Tue, 30 Mar 2021 20:52:27 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Alain Volmat <avolmat@me.com>
-Subject: [PATCH v3 7/7] dt-bindings: clock: st: clkgen-fsyn: add new introduced compatible
-Date:   Tue, 30 Mar 2021 22:51:25 +0200
-Message-Id: <20210330205125.25708-8-avolmat@me.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210330205125.25708-1-avolmat@me.com>
-References: <20210330205125.25708-1-avolmat@me.com>
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.369,18.0.761,17.0.607.475.0000000_definitions?=
- =?UTF-8?Q?=3D2021-03-30=5F12:2021-03-30=5F01,2021-03-30=5F12,2020-04-07?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
- phishscore=0 mlxscore=0 adultscore=0 malwarescore=0 spamscore=0
- clxscore=1015 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2103300152
+        id S232307AbhC3WWQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 30 Mar 2021 18:22:16 -0400
+Received: from mail-ot1-f46.google.com ([209.85.210.46]:44556 "EHLO
+        mail-ot1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232910AbhC3WWE (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 30 Mar 2021 18:22:04 -0400
+Received: by mail-ot1-f46.google.com with SMTP id y19-20020a0568301d93b02901b9f88a238eso17055229oti.11;
+        Tue, 30 Mar 2021 15:22:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6zE7eJ2fq/h+F919KpIJBmhEbaiUg8/PKDecbu+g1Qo=;
+        b=QWBF2RrMQx/X4i/jvsSZCZ4L+P9rCQejElbtfOseHzqxc+PUGvqjcee7h5aeUMAJyT
+         Uu75CwBBoKfizFKHCswqi7z0DLDDzXOW8fRftXwCFQUPxZKPn0/yXJuPoqX470mXqESZ
+         1EQa1oLtBu4pQwsZxoQ/FY1Z43gtGHGxvEQdUA0cE2eLXLsIzyisyOZmv5UNFPwcciOs
+         OEzi6P0dG5zTBArUlEMZOM8SS157zMXr9h3DLdsAtrRAtyybN0jFvOjzvltDJoN/NPn2
+         KdkSAZUYAzuyGjfjrABHA/PEkiM9QpcMWuE5j9Gz+TCxhQboXYc0ku23cAFD2cfKFcwG
+         4Ztg==
+X-Gm-Message-State: AOAM533f1HpsXA42Hk7fCVqx0J2qim83PgDwWoqvfsV0Pk8xJj7THBUU
+        R1gmSDsfowsa/f6Ua2W4MQ==
+X-Google-Smtp-Source: ABdhPJxxh7Vv32YkMChIM4ids4ZCy2CnNS4R0YBJbzedDc+MeQB/Sq7p3Op7wydFkRethpl2DIl3KQ==
+X-Received: by 2002:a9d:798a:: with SMTP id h10mr105741otm.170.1617142923563;
+        Tue, 30 Mar 2021 15:22:03 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id g5sm81958oiy.24.2021.03.30.15.22.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Mar 2021 15:22:03 -0700 (PDT)
+Received: (nullmailer pid 819184 invoked by uid 1000);
+        Tue, 30 Mar 2021 22:22:01 -0000
+Date:   Tue, 30 Mar 2021 17:22:01 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dario Binacchi <dariobin@libero.it>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v3 2/4] dt-bindings: ti: dpll: add spread spectrum support
+Message-ID: <20210330222201.GA819152@robh.at.kernel.org>
+References: <20210329164222.26794-1-dariobin@libero.it>
+ <20210329164222.26794-3-dariobin@libero.it>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210329164222.26794-3-dariobin@libero.it>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-New compatible are added, supporting various kind of clkgen-fsyn
-used for STiH407, STiH410 and STiH418
+On Mon, 29 Mar 2021 18:42:19 +0200, Dario Binacchi wrote:
+> DT bindings for enabling and adjusting spread spectrum clocking have
+> been added.
+> 
+> Signed-off-by: Dario Binacchi <dariobin@libero.it>
+> 
+> ---
+> 
+> Changes in v3:
+> - Add '-hz' suffix to "ti,ssc-modfreq" binding.
+> 
+>  .../devicetree/bindings/clock/ti/dpll.txt     | 20 +++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
----
- Documentation/devicetree/bindings/clock/st/st,quadfs.txt | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/clock/st/st,quadfs.txt b/Documentation/devicetree/bindings/clock/st/st,quadfs.txt
-index d93d49342e60..c4ba2adb0b4f 100644
---- a/Documentation/devicetree/bindings/clock/st/st,quadfs.txt
-+++ b/Documentation/devicetree/bindings/clock/st/st,quadfs.txt
-@@ -12,6 +12,9 @@ This binding uses the common clock binding[1].
- Required properties:
- - compatible : shall be:
-   "st,quadfs"
-+  "st,quadfs-d0"
-+  "st,quadfs-d2"
-+  "st,quadfs-d3"
-   "st,quadfs-pll"
- 
- 
--- 
-2.17.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
