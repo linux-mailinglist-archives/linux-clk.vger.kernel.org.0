@@ -2,129 +2,106 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF5134FCBA
-	for <lists+linux-clk@lfdr.de>; Wed, 31 Mar 2021 11:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D62134FE8E
+	for <lists+linux-clk@lfdr.de>; Wed, 31 Mar 2021 12:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234731AbhCaJ05 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 31 Mar 2021 05:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S234987AbhCaK57 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 31 Mar 2021 06:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234726AbhCaJ0k (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 31 Mar 2021 05:26:40 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B9AC06175F
-        for <linux-clk@vger.kernel.org>; Wed, 31 Mar 2021 02:26:40 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id kr3-20020a17090b4903b02900c096fc01deso906393pjb.4
-        for <linux-clk@vger.kernel.org>; Wed, 31 Mar 2021 02:26:40 -0700 (PDT)
+        with ESMTP id S235090AbhCaK5j (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 31 Mar 2021 06:57:39 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4972FC06174A
+        for <linux-clk@vger.kernel.org>; Wed, 31 Mar 2021 03:57:38 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 12so18103267lfq.13
+        for <linux-clk@vger.kernel.org>; Wed, 31 Mar 2021 03:57:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=yP7PEulAPK6UHzRxTLeSHifkookZOtRjzWBAZ0O/gdc=;
-        b=LOw7EcVTffm/NjdpGaGKUcEGQ77gQ9JBGdonP44rzUgXmMgCpaNUUehuHZr1fxV1UH
-         3BBm56IlXAYsVcHNKpUz4rfO9dQS24nWfBTjUsvikelk59OREv70zUWGBbH2weoPqb1v
-         fe5f2NqgE0tBYaHEv53mPjfxC0q//a/k26g7ERe1p40gF7ZDAu55vDVITOsHtel4i7gk
-         t193rAIOVpfvOXumSpeM5SWmZTcuFe8Ui9c0OnT1wU6EWF4zKZPgVgDWc6s3/YmvsIVs
-         DSj7O3ADkHdwvuty7xC835x7GQzPyJUO+6tIJue0z3CAXUBR/aUoKr6JELz2lo+C+iNH
-         gfZw==
+        bh=8MkWJRDgLEB9kWyZ5s8Q9VLg7igUl49cjQjKv9VhOQs=;
+        b=T2l1mkshCl6YEr2sg1PpgXbvvm/1CotkrF/GcTGYx7oF8cy3+4seZQ7q+wc3xZmSgg
+         O57t6sdxREYa5YWhKrfD2ZxjaF/BBfa51oC9m9HXrwZfBaKaHH3p93e+F3jHQiKp4WJS
+         sEIrO8xpUNxiYnzaZ52ZRZHSaG2jHw2r+xMzTHMeC4UEr8sIGCijKNwQPaFNyiJheU/Y
+         wBaOCSJlnyoP9HW7F2L5eCzOwLx1bIDeNJvL4djxZBN4AomdnakpYFv1ZHfSDy7mPssz
+         8M+BZvmQjysRNTSOMsvPcQRO/V5mFfk18EYIMHpFx4NfBIWPcaZNFP//z4fmkA3cA1VO
+         YeQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yP7PEulAPK6UHzRxTLeSHifkookZOtRjzWBAZ0O/gdc=;
-        b=aHa+0xRvD4yQlr5d5+iU+f3E3LemMtW6uGouLHmTBEuc5rIzaw41LMuPT/BswflWSS
-         jjALnqdE2KuPImYR00buDTu7BuGy3PMyc0lmKzOr2fkr95kFmAPEwbeG8PSkrvIKDYHK
-         3gvWRd/OVc+8UwMREeG+WESOemO2dyIcTTjg8EUlbLztiH39VgUBljPNxWEX6S+zSkI5
-         j0G/Jd3bmuDdpQnmDu/1q3EXnGsTC5KEbTGxNTRLncCL50Kwt9t/C5r2o4q2SLK6nuK1
-         FqSky6zuZfqKBfWlzVeM8kSeOby0PhKOQ56k1bJYMXHF8z5FuPWunj3OJXrXEl4VLo9n
-         k8zw==
-X-Gm-Message-State: AOAM532lfilLewBsMVl+1wm78IfFsF0/5O1eHRKZMcX5Z+K4F5P+waF7
-        DHacdCKonzn82ncyK4Lzy3rwHQ==
-X-Google-Smtp-Source: ABdhPJyOcOzTnUY5eHiAJ1S0x1EGTnxPs4BI8SbPuOMDe+Jv2va6wUKiS7UneRWEWjd/DWnW7Vlmhw==
-X-Received: by 2002:a17:90b:1987:: with SMTP id mv7mr2512728pjb.152.1617182799984;
-        Wed, 31 Mar 2021 02:26:39 -0700 (PDT)
-Received: from hsinchu02.internal.sifive.com (114-34-229-221.HINET-IP.hinet.net. [114.34.229.221])
-        by smtp.gmail.com with ESMTPSA id 143sm1726505pfx.144.2021.03.31.02.26.36
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8MkWJRDgLEB9kWyZ5s8Q9VLg7igUl49cjQjKv9VhOQs=;
+        b=U/mQ6Bqq6H8FLxUQK1aeSJ3XsEb1ciqHhw4JwGTf426gzRJywFleCnGX9Linpy6oGx
+         rICIkS1d7n8O0iZxsLWqoG6sX7Zk1aj2mc8PKk0p66hS78EomgCaqfRQFPrd5sEg8gOZ
+         cmsVDmDMyTiS0Bg7vDy3mMLuYzn3DwxyBX6nMX3fD1Nn72MXikTm475vFXecggr+xRqT
+         bniycQDZcF51LLa4W0pnPMwt0/7+HQ19cXTLaoXX8N2A/oZV/29URZSkEvhVWhhLi05q
+         JvuKxYbD7ED0FgBU6ek5iDaiKYI+RqkWxJJCucXXhHDBZwyUAoN0gn+J83biLlF9SQKe
+         uoPw==
+X-Gm-Message-State: AOAM531CG/Z1JeCKOR1JZQddom41u8nuFuMDBs3fr/5awXac+ltPnNfB
+        UZWuYIXEL6nN4eRMp0PPmfnRgg==
+X-Google-Smtp-Source: ABdhPJzinUMr68L3H0gNll59ZE9d2mkq7SzhhgLoSGMm3q7hf8wIK1TFkvYKx2COry8hY5RNKVo9Bw==
+X-Received: by 2002:ac2:4e43:: with SMTP id f3mr1830598lfr.206.1617188256679;
+        Wed, 31 Mar 2021 03:57:36 -0700 (PDT)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id h3sm184359ljc.67.2021.03.31.03.57.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Mar 2021 02:26:39 -0700 (PDT)
-From:   Greentime Hu <greentime.hu@sifive.com>
-To:     greentime.hu@sifive.com, paul.walmsley@sifive.com, hes@sifive.com,
-        erik.danie@sifive.com, zong.li@sifive.com, bhelgaas@google.com,
-        robh+dt@kernel.org, aou@eecs.berkeley.edu, mturquette@baylibre.com,
-        sboyd@kernel.org, lorenzo.pieralisi@arm.com,
-        p.zabel@pengutronix.de, alex.dewar90@gmail.com,
-        khilman@baylibre.com, hayashi.kunihiko@socionext.com,
-        vidyas@nvidia.com, jh80.chung@samsung.com,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, helgaas@kernel.org
-Subject: [PATCH v3 6/6] riscv: dts: Add PCIe support for the SiFive FU740-C000 SoC
-Date:   Wed, 31 Mar 2021 17:26:05 +0800
-Message-Id: <20210331092605.105909-7-greentime.hu@sifive.com>
+        Wed, 31 Mar 2021 03:57:36 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH v4 00/24] drm/msm/dsi: refactor MSM DSI PHY/PLL drivers
+Date:   Wed, 31 Mar 2021 13:57:11 +0300
+Message-Id: <20210331105735.3690009-1-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210331092605.105909-1-greentime.hu@sifive.com>
-References: <20210331092605.105909-1-greentime.hu@sifive.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
----
- arch/riscv/boot/dts/sifive/fu740-c000.dtsi | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+Restructure MSM DSI PHY drivers. What started as an attempt to grok the
+overcomplicated PHY drivers, has lead up to the idea of merging PHY and
+PLL code, reducing abstractions, code duplication, dropping dead code,
+etc.
 
-diff --git a/arch/riscv/boot/dts/sifive/fu740-c000.dtsi b/arch/riscv/boot/dts/sifive/fu740-c000.dtsi
-index d1bb22b11920..b2317c8e3a80 100644
---- a/arch/riscv/boot/dts/sifive/fu740-c000.dtsi
-+++ b/arch/riscv/boot/dts/sifive/fu740-c000.dtsi
-@@ -158,6 +158,7 @@ prci: clock-controller@10000000 {
- 			reg = <0x0 0x10000000 0x0 0x1000>;
- 			clocks = <&hfclk>, <&rtcclk>;
- 			#clock-cells = <1>;
-+			#reset-cells = <1>;
- 		};
- 		uart0: serial@10010000 {
- 			compatible = "sifive,fu740-c000-uart", "sifive,uart0";
-@@ -288,5 +289,37 @@ gpio: gpio@10060000 {
- 			clocks = <&prci PRCI_CLK_PCLK>;
- 			status = "disabled";
- 		};
-+		pcie@e00000000 {
-+			compatible = "sifive,fu740-pcie";
-+			#address-cells = <3>;
-+			#size-cells = <2>;
-+			#interrupt-cells = <1>;
-+			reg = <0xe 0x00000000 0x0 0x80000000>,
-+			      <0xd 0xf0000000 0x0 0x10000000>,
-+			      <0x0 0x100d0000 0x0 0x1000>;
-+			reg-names = "dbi", "config", "mgmt";
-+			device_type = "pci";
-+			dma-coherent;
-+			bus-range = <0x0 0xff>;
-+			ranges = <0x81000000  0x0 0x60080000  0x0 0x60080000 0x0 0x10000>,      /* I/O */
-+				 <0x82000000  0x0 0x60090000  0x0 0x60090000 0x0 0xff70000>,    /* mem */
-+				 <0x82000000  0x0 0x70000000  0x0 0x70000000 0x0 0x1000000>,    /* mem */
-+				 <0xc3000000 0x20 0x00000000 0x20 0x00000000 0x20 0x00000000>;  /* mem prefetchable */
-+			num-lanes = <0x8>;
-+			interrupts = <56>, <57>, <58>, <59>, <60>, <61>, <62>, <63>, <64>;
-+			interrupt-names = "msi", "inta", "intb", "intc", "intd";
-+			interrupt-parent = <&plic0>;
-+			interrupt-map-mask = <0x0 0x0 0x0 0x7>;
-+			interrupt-map = <0x0 0x0 0x0 0x1 &plic0 57>,
-+					<0x0 0x0 0x0 0x2 &plic0 58>,
-+					<0x0 0x0 0x0 0x3 &plic0 59>,
-+					<0x0 0x0 0x0 0x4 &plic0 60>;
-+			clock-names = "pcie_aux";
-+			clocks = <&prci PRCI_CLK_PCIE_AUX>;
-+			pwren-gpios = <&gpio 5 0>;
-+			reset-gpios = <&gpio 8 0>;
-+			resets = <&prci 4>;
-+			status = "okay";
-+		};
- 	};
- };
--- 
-2.30.2
+The patches were mainly tested on RB5 (sm8250, 7nm) and DB410c (apq8016,
+28nm-lp) and lightly tested on RB3 (sdm845, 10nm).
+
+This patchet depends on the patch "clk: fixed: add devm helper for
+clk_hw_register_fixed_factor()", which was merged in 5.12-rc1:
+https://lore.kernel.org/r/20210211052206.2955988-4-daniel@0x0f.com
+
+
+Changes since v3:
+ - Rename save_state/restore_state functions/callbacks
+ - Still mention DSI_1 when determining settings for slave PHYs in 14nm
+   and 28nm drivers.
+ - Stop including the external dependency merged upstream long ago. It
+   is properly mentioned in the patchset description.
+
+Changes since v2:
+ - Drop the 'stop setting clock parents manually' patch for now together
+   with the dtsi changes. Unlike the rest of patchset it provides
+   functional changes and might require additional discussion.
+   The patchset will be resubmitted later.
+
+Changes since v1:
+ - Rebase on top of msm/msm-next
+ - Reorder patches to follow logical sequence
+ - Add sc7180 clocks assignment
+ - Drop sm8250 clocks assignment, as respective file is not updated in
+   msm/msm-next
+
+Changes since RFC:
+ - Reorder patches to move global clock patches in the beginning and
+   dtsi patches where they are required.
+ - remove msm_dsi_phy_set_src_pll() and guess src_pll_id using PHY usecase.
+
 
