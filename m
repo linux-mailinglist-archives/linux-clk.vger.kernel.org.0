@@ -2,283 +2,229 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79BE135042D
-	for <lists+linux-clk@lfdr.de>; Wed, 31 Mar 2021 18:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D103504F4
+	for <lists+linux-clk@lfdr.de>; Wed, 31 Mar 2021 18:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbhCaQI7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 31 Mar 2021 12:08:59 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:57208 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S233727AbhCaQIp (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 31 Mar 2021 12:08:45 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 12VG3Pdb009583;
-        Wed, 31 Mar 2021 18:08:35 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=oKoyF9170/Sw3fRKhbwfHK7hcm7iCrqivE11drJszh4=;
- b=eaEuOfKW5QWqD2NBf+ON1hwMhH6KpMM5PHzYV98IVh1xWzQ5zjU/qUeuARRdOqtXRewX
- JYUugI/6FjQbOqs/aH+mdlAyzLAqmsT4z0840FvLy6xrmRqkbsIpyh4V940OONIE31Sl
- GDFryBlzI4EHbhLLfa/DVCj3gtTsRKPpd9UtmZmOu18zOl1UrVALO3Rz+vjVJJPEM81b
- bhamGZmsgS9daXwyj43papb8QAbJJmfehg+03sWHCHQNaUuEBXuDnr//WYbsM8RO8cSK
- UhLcGfkOB2+Z0SMVDxlRIqA9BLPSkKXmqNBH34xQSupXpqIKbwIWhh1V5+zgddaK0qfe uw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 37maamwtj8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 Mar 2021 18:08:35 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EB66D10002A;
-        Wed, 31 Mar 2021 18:08:34 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D9D3F21CA7E;
-        Wed, 31 Mar 2021 18:08:34 +0200 (CEST)
-Received: from lmecxl0573.lme.st.com (10.75.127.50) by SFHDAG2NODE3.st.com
- (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 31 Mar
- 2021 18:08:34 +0200
-Subject: Re: [PATCH v3 6/7] clk: st: clkgen-fsyn: embed soc clock outputs
- within compatible data
-To:     Alain Volmat <avolmat@me.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Lee Jones <lee.jones@linaro.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20210330205125.25708-1-avolmat@me.com>
- <20210330205125.25708-7-avolmat@me.com>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-Message-ID: <f2bbb7a2-a36e-5357-feb3-487d0b43989a@foss.st.com>
-Date:   Wed, 31 Mar 2021 18:08:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20210330205125.25708-7-avolmat@me.com>
+        id S233747AbhCaQqU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 31 Mar 2021 12:46:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57686 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229787AbhCaQqC (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 31 Mar 2021 12:46:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D51616101E;
+        Wed, 31 Mar 2021 16:46:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617209162;
+        bh=6VJa2G/8GiZyhJFRNepPg4qOIIoUKn5WU2RVV8tZ0d8=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=dG9Id/uVZ0TNV6Xim0Hgo6iG1zBMrjUxpxzQSj/qCQYdbmmzhe7eDpkJO39gk0c7S
+         0x01LNT72fiHGIjgOwO2aAS5agWm8eknhZNoPIjCf5uNpmFe5ifSzGrZnN5QAcooqs
+         402GsLmg2v2Kjn9e8i9thIbPGdnnAwr1VJHA7DcUi6qgMcAkCm9DisJyKta50Nox/P
+         5s3BNONFQmd13fg2zqFtLuT8elrqz36JWSpCdHKm0i08EFQdZVWtRliMBhhUmWT+vh
+         KxDHrp9KweGloqGBtdKSu6QC/V96ioL6ULc1x0CsFYmzrK+JUDYiliWkrAhkMga+a6
+         3JzdRpmeUhBbw==
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-31_08:2021-03-31,2021-03-31 signatures=0
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210331155822.3648-1-lb@semihalf.com>
+References: <20210317160545.14309-1-lb@semihalf.com> <20210331155822.3648-1-lb@semihalf.com>
+Subject: Re: [PATCH v3] clk: fix invalid usage of a list_for_each_entry cursor
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, upstream@semihalf.com
+To:     Lukasz Bartosik <lb@semihalf.com>,
+        Michael Turquette <mturquette@baylibre.com>
+Date:   Wed, 31 Mar 2021 09:46:00 -0700
+Message-ID: <161720916025.2260335.304063957155907384@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Alain
-
-On 3/30/21 10:51 PM, Alain Volmat wrote:
-> In order to avoid relying on the old style description via the DT
-> clock-output-names, add compatible data describing the flexgen
-> outputs clocks for all STiH407/STiH410 and STiH418 SOCs.
-> 
-> In order to ease transition between the two methods, this commit
-> introduce the new compatible without removing the old method.
-> Once DTs will be fixed, the method relying on DT clock-output-names
-> will be removed from this driver as well as old compatibles.
-> 
-> Signed-off-by: Alain Volmat <avolmat@me.com>
+Quoting Lukasz Bartosik (2021-03-31 08:58:22)
+> Fix invalid usage of a list_for_each_entry cursor. When
+> list is empty or if the list is completely traversed (without
+> breaking from the loop on one of the entries) then the list
+> cursor does not point to a valid entry and therefore should
+> not be used.
+>=20
+> The issue was dicovered when running 5.12-rc1 kernel on x86_64
+> with KASAN enabled:
+> BUG: KASAN: global-out-of-bounds in clk_notifier_register+0xab/0x230
+> Read of size 8 at addr ffffffffa0d10588 by task swapper/0/1
+>=20
+> CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.12.0-rc1 #1
+> Hardware name: Google Caroline/Caroline,
+> BIOS Google_Caroline.7820.430.0 07/20/2018
+> Call Trace:
+>  dump_stack+0xee/0x15c
+>  print_address_description+0x1e/0x2dc
+>  kasan_report+0x188/0x1ce
+>  ? clk_notifier_register+0xab/0x230
+>  ? clk_prepare_lock+0x15/0x7b
+>  ? clk_notifier_register+0xab/0x230
+>  clk_notifier_register+0xab/0x230
+>  dw8250_probe+0xc01/0x10d4
+> ...
+> Memory state around the buggy address:
+>  ffffffffa0d10480: 00 00 00 00 00 03 f9 f9 f9 f9 f9 f9 00 00 00 00
+>  ffffffffa0d10500: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 f9 f9
+> >ffffffffa0d10580: f9 f9 f9 f9 00 00 00 00 00 00 00 00 00 00 00 00
+>                       ^
+>  ffffffffa0d10600: 00 00 00 00 00 00 f9 f9 f9 f9 f9 f9 00 00 00 00
+>  ffffffffa0d10680: 00 00 00 00 00 00 00 00 f9 f9 f9 f9 00 00 00 00
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>=20
+> Fixes: b2476490ef11 ("clk: introduce the common clock framework")
+> Reported-by: Lukasz Majczak <lma@semihalf.com>
+> Signed-off-by: Lukasz Bartosik <lb@semihalf.com>
 > ---
-> v2: clk-s-c0-fs0-ch0 do not need to be CLK_IS_CRITICAL
-> 
->  drivers/clk/st/clkgen-fsyn.c | 113 +++++++++++++++++++++++++++++++----
->  1 file changed, 101 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/clk/st/clkgen-fsyn.c b/drivers/clk/st/clkgen-fsyn.c
-> index dd6062e043e0..164285d6be97 100644
-> --- a/drivers/clk/st/clkgen-fsyn.c
-> +++ b/drivers/clk/st/clkgen-fsyn.c
-> @@ -66,6 +66,16 @@ struct clkgen_quadfs_data {
->  			unsigned long *);
->  };
->  
-> +struct clkgen_clk_out {
-> +	const char *name;
-> +	unsigned long flags;
-> +};
-> +
-> +struct clkgen_quadfs_data_clks {
-> +	struct clkgen_quadfs_data *data;
-> +	const struct clkgen_clk_out *outputs;
-> +};
-> +
->  static const struct clk_ops st_quadfs_pll_c32_ops;
->  
->  static int clk_fs660c32_dig_get_params(unsigned long input,
-> @@ -115,6 +125,18 @@ static const struct clkgen_quadfs_data st_fs660c32_C = {
->  	.get_rate	= clk_fs660c32_dig_get_rate,
->  };
->  
-> +static const struct clkgen_clk_out st_fs660c32_C_clks[] = {
-> +	{ .name = "clk-s-c0-fs0-ch0",	},
-> +	{ .name = "clk-s-c0-fs0-ch1",	},
-> +	{ .name = "clk-s-c0-fs0-ch2",	},
-> +	{ .name = "clk-s-c0-fs0-ch3",	},
-> +};
-> +
-> +static const struct clkgen_quadfs_data_clks st_fs660c32_C_data = {
-> +	.data	= (struct clkgen_quadfs_data *)&st_fs660c32_C,
-> +	.outputs	= st_fs660c32_C_clks,
-> +};
-> +
->  static const struct clkgen_quadfs_data st_fs660c32_D = {
->  	.nrst_present = true,
->  	.nrst	= { CLKGEN_FIELD(0x2a0, 0x1, 0),
-> @@ -156,6 +178,46 @@ static const struct clkgen_quadfs_data st_fs660c32_D = {
->  	.get_params	= clk_fs660c32_dig_get_params,
->  	.get_rate	= clk_fs660c32_dig_get_rate,};
->  
-> +static const struct clkgen_quadfs_data_clks st_fs660c32_D_data = {
-> +	.data	= (struct clkgen_quadfs_data *)&st_fs660c32_D,
-> +};
-> +
-> +static const struct clkgen_clk_out st_fs660c32_D0_clks[] = {
-> +	{ .name = "clk-s-d0-fs0-ch0",	},
-> +	{ .name = "clk-s-d0-fs0-ch1",	},
-> +	{ .name = "clk-s-d0-fs0-ch2",	},
-> +	{ .name = "clk-s-d0-fs0-ch3",	},
-> +};
-> +
-> +static const struct clkgen_quadfs_data_clks st_fs660c32_D0_data = {
-> +	.data	= (struct clkgen_quadfs_data *)&st_fs660c32_D,
-> +	.outputs	= st_fs660c32_D0_clks,
-> +};
-> +
-> +static const struct clkgen_clk_out st_fs660c32_D2_clks[] = {
-> +	{ .name = "clk-s-d2-fs0-ch0",	},
-> +	{ .name = "clk-s-d2-fs0-ch1",	},
-> +	{ .name = "clk-s-d2-fs0-ch2",	},
-> +	{ .name = "clk-s-d2-fs0-ch3",	},
-> +};
-> +
-> +static const struct clkgen_quadfs_data_clks st_fs660c32_D2_data = {
-> +	.data	= (struct clkgen_quadfs_data *)&st_fs660c32_D,
-> +	.outputs	= st_fs660c32_D2_clks,
-> +};
-> +
-> +static const struct clkgen_clk_out st_fs660c32_D3_clks[] = {
-> +	{ .name = "clk-s-d3-fs0-ch0",	},
-> +	{ .name = "clk-s-d3-fs0-ch1",	},
-> +	{ .name = "clk-s-d3-fs0-ch2",	},
-> +	{ .name = "clk-s-d3-fs0-ch3",	},
-> +};
-> +
-> +static const struct clkgen_quadfs_data_clks st_fs660c32_D3_data = {
-> +	.data	= (struct clkgen_quadfs_data *)&st_fs660c32_D,
-> +	.outputs	= st_fs660c32_D3_clks,
-> +};
-> +
->  /**
->   * DOC: A Frequency Synthesizer that multiples its input clock by a fixed factor
->   *
-> @@ -857,7 +919,7 @@ static struct clk * __init st_clk_register_quadfs_fsynth(
->  
->  static void __init st_of_create_quadfs_fsynths(
->  		struct device_node *np, const char *pll_name,
-> -		struct clkgen_quadfs_data *quadfs, void __iomem *reg,
-> +		struct clkgen_quadfs_data_clks *quadfs, void __iomem *reg,
->  		spinlock_t *lock)
->  {
->  	struct clk_onecell_data *clk_data;
-> @@ -881,9 +943,15 @@ static void __init st_of_create_quadfs_fsynths(
->  		const char *clk_name;
->  		unsigned long flags = 0;
->  
-> -		if (of_property_read_string_index(np, "clock-output-names",
-> -						  fschan, &clk_name)) {
-> -			break;
-> +		if (quadfs->outputs) {
-> +			clk_name = quadfs->outputs[fschan].name;
-> +			flags = quadfs->outputs[fschan].flags;
-> +		} else {
-> +			if (of_property_read_string_index(np,
-> +							"clock-output-names",
-> +							fschan, &clk_name))
-> +				break;
-> +			of_clk_detect_critical(np, fschan, &flags);
->  		}
->  
->  		/*
-> @@ -892,10 +960,8 @@ static void __init st_of_create_quadfs_fsynths(
->  		if (*clk_name == '\0')
->  			continue;
->  
-> -		of_clk_detect_critical(np, fschan, &flags);
-> -
->  		clk = st_clk_register_quadfs_fsynth(clk_name, pll_name,
-> -						    quadfs, reg, fschan,
-> +						    quadfs->data, reg, fschan,
->  						    flags, lock);
->  
->  		/*
-> @@ -915,7 +981,7 @@ static void __init st_of_create_quadfs_fsynths(
->  }
->  
->  static void __init st_of_quadfs_setup(struct device_node *np,
-> -		struct clkgen_quadfs_data *data)
-> +		struct clkgen_quadfs_data_clks *datac)
->  {
->  	struct clk *clk;
->  	const char *pll_name, *clk_parent_name;
-> @@ -940,7 +1006,7 @@ static void __init st_of_quadfs_setup(struct device_node *np,
->  
->  	spin_lock_init(lock);
->  
-> -	clk = st_clk_register_quadfs_pll(pll_name, clk_parent_name, data,
-> +	clk = st_clk_register_quadfs_pll(pll_name, clk_parent_name, datac->data,
->  			reg, lock);
->  	if (IS_ERR(clk))
->  		goto err_exit;
-> @@ -950,7 +1016,7 @@ static void __init st_of_quadfs_setup(struct device_node *np,
->  			__clk_get_name(clk_get_parent(clk)),
->  			(unsigned int)clk_get_rate(clk));
->  
-> -	st_of_create_quadfs_fsynths(np, pll_name, data, reg, lock);
-> +	st_of_create_quadfs_fsynths(np, pll_name, datac, reg, lock);
->  
->  err_exit:
->  	kfree(pll_name); /* No longer need local copy of the PLL name */
-> @@ -958,12 +1024,35 @@ static void __init st_of_quadfs_setup(struct device_node *np,
->  
->  static void __init st_of_quadfs660C_setup(struct device_node *np)
->  {
-> -	st_of_quadfs_setup(np, (struct clkgen_quadfs_data *) &st_fs660c32_C);
-> +	st_of_quadfs_setup(np,
-> +		(struct clkgen_quadfs_data_clks *) &st_fs660c32_C_data);
->  }
->  CLK_OF_DECLARE(quadfs660C, "st,quadfs-pll", st_of_quadfs660C_setup);
->  
->  static void __init st_of_quadfs660D_setup(struct device_node *np)
->  {
-> -	st_of_quadfs_setup(np, (struct clkgen_quadfs_data *) &st_fs660c32_D);
-> +	st_of_quadfs_setup(np,
-> +		(struct clkgen_quadfs_data_clks *) &st_fs660c32_D_data);
->  }
->  CLK_OF_DECLARE(quadfs660D, "st,quadfs", st_of_quadfs660D_setup);
-> +
-> +static void __init st_of_quadfs660D0_setup(struct device_node *np)
-> +{
-> +	st_of_quadfs_setup(np,
-> +		(struct clkgen_quadfs_data_clks *) &st_fs660c32_D0_data);
-> +}
-> +CLK_OF_DECLARE(quadfs660D0, "st,quadfs-d0", st_of_quadfs660D0_setup);
-> +
-> +static void __init st_of_quadfs660D2_setup(struct device_node *np)
-> +{
-> +	st_of_quadfs_setup(np,
-> +		(struct clkgen_quadfs_data_clks *) &st_fs660c32_D2_data);
-> +}
-> +CLK_OF_DECLARE(quadfs660D2, "st,quadfs-d2", st_of_quadfs660D2_setup);
-> +
-> +static void __init st_of_quadfs660D3_setup(struct device_node *np)
-> +{
-> +	st_of_quadfs_setup(np,
-> +		(struct clkgen_quadfs_data_clks *) &st_fs660c32_D3_data);
-> +}
-> +CLK_OF_DECLARE(quadfs660D3, "st,quadfs-d3", st_of_quadfs660D3_setup);
-> 
 
-Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Please stop sending these as replies to previous versions.
 
-Thanks
+>  drivers/clk/clk.c | 41 ++++++++++++++++++++---------------------
+>  1 file changed, 20 insertions(+), 21 deletions(-)
+>=20
+> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> index d181c6d31d22..742cb8611ad4 100644
+> --- a/drivers/clk/clk.c
+> +++ b/drivers/clk/clk.c
+> @@ -4345,20 +4345,19 @@ int clk_notifier_register(struct clk *clk, struct=
+ notifier_block *nb)
+>         /* search the list of notifiers for this clk */
+>         list_for_each_entry(cn, &clk_notifier_list, node)
+>                 if (cn->clk =3D=3D clk)
+> -                       break;
+> +                       goto found;
+> =20
+>         /* if clk wasn't in the notifier list, allocate new clk_notifier =
+*/
+> -       if (cn->clk !=3D clk) {
+> -               cn =3D kzalloc(sizeof(*cn), GFP_KERNEL);
+> -               if (!cn)
+> -                       goto out;
+> +       cn =3D kzalloc(sizeof(*cn), GFP_KERNEL);
+> +       if (!cn)
+> +               goto out;
+> =20
+> -               cn->clk =3D clk;
+> -               srcu_init_notifier_head(&cn->notifier_head);
+> +       cn->clk =3D clk;
+> +       srcu_init_notifier_head(&cn->notifier_head);
+> =20
+> -               list_add(&cn->node, &clk_notifier_list);
+> -       }
+> +       list_add(&cn->node, &clk_notifier_list);
+> =20
+> +found:
+>         ret =3D srcu_notifier_chain_register(&cn->notifier_head, nb);
+> =20
+>         clk->core->notifier_count++;
+
+This part looks good.
+
+> @@ -4393,24 +4392,24 @@ int clk_notifier_unregister(struct clk *clk, stru=
+ct notifier_block *nb)
+> =20
+>         list_for_each_entry(cn, &clk_notifier_list, node)
+>                 if (cn->clk =3D=3D clk)
+> -                       break;
+> +                       goto found;
+> =20
+> -       if (cn->clk =3D=3D clk) {
+> -               ret =3D srcu_notifier_chain_unregister(&cn->notifier_head=
+, nb);
+> +       ret =3D -ENOENT;
+> +       goto out;
+> =20
+> -               clk->core->notifier_count--;
+> +found:
+> +       ret =3D srcu_notifier_chain_unregister(&cn->notifier_head, nb);
+
+But then this part looks awful!
+
+> =20
+> -               /* XXX the notifier code should handle this better */
+> -               if (!cn->notifier_head.head) {
+> -                       srcu_cleanup_notifier_head(&cn->notifier_head);
+> -                       list_del(&cn->node);
+> -                       kfree(cn);
+> -               }
+> +       clk->core->notifier_count--;
+> =20
+> -       } else {
+> -               ret =3D -ENOENT;
+> +       /* XXX the notifier code should handle this better */
+> +       if (!cn->notifier_head.head) {
+> +               srcu_cleanup_notifier_head(&cn->notifier_head);
+> +               list_del(&cn->node);
+> +               kfree(cn);
+>         }
+> =20
+> +out:
+>         clk_prepare_unlock();
+> =20
+>         return ret;
+
+Can we do this? Also, please split this part to a different patch that
+we don't need to send back to stable trees. Presumably drivers aren't
+calling the unregister function on an empty list or one that doesn't
+contain the clk they're interested in because something should be
+registered already by the register function.
+
+Of course, the kernel-doc comment is also incorrect.  We need to get rid
+of this notifier code. Sigh.
+
+---8<---
+
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 5052541a0986..f73b8bbe7ec3 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -4395,32 +4395,28 @@ EXPORT_SYMBOL_GPL(clk_notifier_register);
+  */
+ int clk_notifier_unregister(struct clk *clk, struct notifier_block *nb)
+ {
+-	struct clk_notifier *cn =3D NULL;
+-	int ret =3D -EINVAL;
++	struct clk_notifier *cn;
++	int ret =3D -ENOENT;
+=20
+ 	if (!clk || !nb)
+ 		return -EINVAL;
+=20
+ 	clk_prepare_lock();
+=20
+-	list_for_each_entry(cn, &clk_notifier_list, node)
+-		if (cn->clk =3D=3D clk)
+-			break;
+-
+-	if (cn->clk =3D=3D clk) {
+-		ret =3D srcu_notifier_chain_unregister(&cn->notifier_head, nb);
++	list_for_each_entry(cn, &clk_notifier_list, node) {
++		if (cn->clk =3D=3D clk) {
++			ret =3D srcu_notifier_chain_unregister(&cn->notifier_head, nb);
+=20
+-		clk->core->notifier_count--;
++			clk->core->notifier_count--;
+=20
+-		/* XXX the notifier code should handle this better */
+-		if (!cn->notifier_head.head) {
+-			srcu_cleanup_notifier_head(&cn->notifier_head);
+-			list_del(&cn->node);
+-			kfree(cn);
++			/* XXX the notifier code should handle this better */
++			if (!cn->notifier_head.head) {
++				srcu_cleanup_notifier_head(&cn->notifier_head);
++				list_del(&cn->node);
++				kfree(cn);
++			}
++			break;
+ 		}
+-
+-	} else {
+-		ret =3D -ENOENT;
+ 	}
+=20
+ 	clk_prepare_unlock();
