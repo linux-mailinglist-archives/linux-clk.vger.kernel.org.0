@@ -2,53 +2,71 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0480034F685
-	for <lists+linux-clk@lfdr.de>; Wed, 31 Mar 2021 04:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D10134F6A7
+	for <lists+linux-clk@lfdr.de>; Wed, 31 Mar 2021 04:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233268AbhCaCRl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 30 Mar 2021 22:17:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54532 "EHLO mail.kernel.org"
+        id S233305AbhCaCbe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 30 Mar 2021 22:31:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57508 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233258AbhCaCRl (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 30 Mar 2021 22:17:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AC12F617C9;
-        Wed, 31 Mar 2021 02:17:40 +0000 (UTC)
+        id S233083AbhCaCbU (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 30 Mar 2021 22:31:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A3166619B9;
+        Wed, 31 Mar 2021 02:31:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617157060;
-        bh=zkICwrrTeBiiLJ9V0FzAwANVNmAM7UQ4w7wCc5b4x/o=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=qCr432Um8dBOw+48bQSTDx2e90LrdqooiQyo34yEl6DfxvjvXg4IuKo0NhlUNvStI
-         fx5D/f1mh9E+aTFmSjxLp6FJMQ+Nuo3aKMdTZZKd+9Yizb0bNeLAefTUMLf2PKbcUP
-         N6BphAPpfUMYlUzonG3LkOcMAT38NTOXuwhdyWs6UryWQabAcDJsWwU3mbjQFIlhp4
-         Dwt8Ji1MUMCTi3qaP4jMBj/cjH39gzUDMfxU47McXwUB9C9kYLr6/CTBWXgj89b4VF
-         BTI6v4HYHnM6SP67NbgMlaNJzPcljzZqNqu7zyCvTMHjAxWBAJpeOUCdCHm24iKIhw
-         hR+EgDgrRAsLw==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1615796268-9011-2-git-send-email-hongxing.zhu@nxp.com>
-References: <1615796268-9011-1-git-send-email-hongxing.zhu@nxp.com> <1615796268-9011-2-git-send-email-hongxing.zhu@nxp.com>
-Subject: Re: [PATCH] clk: imx8mq: Correct the pcie1 sels
+        s=k20201202; t=1617157879;
+        bh=fr13jTOQEWe1BB0JMB/cNEz9x5WZAAbZqCR5j2GX1m0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=R/pCgZ8WPOlxQWTvidf1zPG2w7Xo1+qbDub7Uettbm5NxSS0LHlM7txki7YvU/ZCB
+         g2q+ACbnpKPe6SjVOcbqVvUxwgzTZJVwZpqNQAKk5FdZunHg4nqqeYOH8j1uAvJ/rK
+         AOzmw+jzO+/EYSih5ihwMM8XyEbrpwCuB72Asdeq0T4z0k+phxiSDJM3ZDBDhWWTGz
+         XxSwtJ47iPsG1yJ80ivWRcYJb0cMMPq5mjlPIipzafNg6Gg/s+mD65Yer/42HCnaGt
+         yiqdh1prJ5mGsVaPBSXs/QMTPNDKdN4HwDRDb/vfuPkfRxnwdE7UNtI4KFs7y8K1p0
+         7l/3eT8YS4GYw==
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Richard Zhu <hongxing.zhu@nxp.com>
-To:     Richard Zhu <hongxing.zhu@nxp.com>, abel.vesa@nxp.com,
-        ping.bai@nxp.com, shawnguo@kernel.org
-Date:   Tue, 30 Mar 2021 19:17:39 -0700
-Message-ID: <161715705952.2260335.14485382500737180840@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH] clk: socfpga: Fix code formatting
+Date:   Tue, 30 Mar 2021 19:31:19 -0700
+Message-Id: <20210331023119.3294893-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.31.0.291.g576ba9dcdaf-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Richard Zhu (2021-03-15 01:17:48)
-> - The sys2_pll_50m should be one of the clock sels of PCIE_AUX clock.
-> Change the sys2_pll_500m to sys2_pll_50m.
-> - Correct one mis-spell of the imx8mq_pcie1_ctrl_sels definition, from
-> "sys2_pll_250m" to "sys2_pll_333m".
->=20
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> ---
+This function's parameters are oddly formatted. Looks like a newline was
+missed or something. Fix it.
 
-Any Fixes tag?
+Cc: Dinh Nguyen <dinguyen@kernel.org>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+---
+ drivers/clk/socfpga/clk-agilex.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/clk/socfpga/clk-agilex.c b/drivers/clk/socfpga/clk-agilex.c
+index 319c69112bcf..92a6d740a799 100644
+--- a/drivers/clk/socfpga/clk-agilex.c
++++ b/drivers/clk/socfpga/clk-agilex.c
+@@ -358,7 +358,8 @@ static int agilex_clk_register_cnt_perip(const struct stratix10_perip_cnt_clock
+ 	return 0;
+ }
+ 
+-static int agilex_clk_register_gate(const struct stratix10_gate_clock *clks,					    int nums, struct stratix10_clock_data *data)
++static int agilex_clk_register_gate(const struct stratix10_gate_clock *clks,
++				    int nums, struct stratix10_clock_data *data)
+ {
+ 	struct clk_hw *hw_clk;
+ 	void __iomem *base = data->base;
+
+base-commit: a38fd8748464831584a19438cbb3082b5a2dab15
+prerequisite-patch-id: fce221f21ba697e24c6f788aab40747cf585e1c5
+prerequisite-patch-id: 6cd0378ea67b2c20eb96aed596d1de6badeae3a1
+prerequisite-patch-id: 81e6e7354fd55f958a781498448d0556ad5037ef
+-- 
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+
