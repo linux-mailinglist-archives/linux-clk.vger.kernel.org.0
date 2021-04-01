@@ -2,37 +2,37 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A5A35177E
-	for <lists+linux-clk@lfdr.de>; Thu,  1 Apr 2021 19:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27412351773
+	for <lists+linux-clk@lfdr.de>; Thu,  1 Apr 2021 19:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234678AbhDARmS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 1 Apr 2021 13:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
+        id S235115AbhDARmQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 1 Apr 2021 13:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234673AbhDARjG (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 1 Apr 2021 13:39:06 -0400
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AA7C05BD29
+        with ESMTP id S234629AbhDARia (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 1 Apr 2021 13:38:30 -0400
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82288C05BD26
         for <linux-clk@vger.kernel.org>; Thu,  1 Apr 2021 06:01:43 -0700 (PDT)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:7c3c:adbc:7a1a:b85f])
-        by baptiste.telenet-ops.be with bizsmtp
-        id nR1h240034A7w6i01R1haJ; Thu, 01 Apr 2021 15:01:41 +0200
+        by xavier.telenet-ops.be with bizsmtp
+        id nR1g2400M4A7w6i01R1gp7; Thu, 01 Apr 2021 15:01:40 +0200
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1lRwxA-00CBkG-La; Thu, 01 Apr 2021 15:01:40 +0200
+        id 1lRwxA-00CBkH-5F; Thu, 01 Apr 2021 15:01:40 +0200
 Received: from geert by rox.of.borg with local (Exim 4.93)
         (envelope-from <geert@linux-m68k.org>)
-        id 1lRwx9-003mtQ-MW; Thu, 01 Apr 2021 15:01:39 +0200
+        id 1lRwx9-003mtV-Nj; Thu, 01 Apr 2021 15:01:39 +0200
 From:   Geert Uytterhoeven <geert+renesas@glider.be>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 4/5] clk: renesas: div6: Consider all parents for requested rate
-Date:   Thu,  1 Apr 2021 15:01:37 +0200
-Message-Id: <60e639692b462f99e0b6ab868c3675b3d97dbdb0.1617281699.git.geert+renesas@glider.be>
+Subject: [PATCH 5/5] clk: renesas: div6: Implement range checking
+Date:   Thu,  1 Apr 2021 15:01:38 +0200
+Message-Id: <35ceb262c71f1b2e9864a39bde9dafd78b2981f4.1617281699.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1617281699.git.geert+renesas@glider.be>
 References: <cover.1617281699.git.geert+renesas@glider.be>
@@ -42,64 +42,43 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Currently the .determine_rate() callback considers only the current
-parent clock, limiting the range of achievable clock rates on DIV6
-clocks with multiple parents, as found on SH/R-Mobile SoCs.
-
-Extend the callback to consider all available parent clocks.
+Consider the minimum and maximum clock rates imposed by clock users when
+calculating the most appropriate clock rate in the .determine_rate()
+callback.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/clk/renesas/clk-div6.c | 35 +++++++++++++++++++++++++++++++---
- 1 file changed, 32 insertions(+), 3 deletions(-)
+ drivers/clk/renesas/clk-div6.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/clk/renesas/clk-div6.c b/drivers/clk/renesas/clk-div6.c
-index 3af65ef5690e3d84..a9ac2a83c1d0daa0 100644
+index a9ac2a83c1d0daa0..3abd6e5400aded6a 100644
 --- a/drivers/clk/renesas/clk-div6.c
 +++ b/drivers/clk/renesas/clk-div6.c
-@@ -103,10 +103,39 @@ static unsigned int cpg_div6_clock_calc_div(unsigned long rate,
- static int cpg_div6_clock_determine_rate(struct clk_hw *hw,
- 					 struct clk_rate_request *req)
- {
--	unsigned int div = cpg_div6_clock_calc_div(req->rate,
--						   req->best_parent_rate);
-+	unsigned long prate, calc_rate, diff, best_rate, best_prate;
-+	unsigned int num_parents = clk_hw_get_num_parents(hw);
-+	struct clk_hw *parent, *best_parent = NULL;
-+	unsigned long min_diff = ULONG_MAX;
-+	unsigned int i, div;
-+
-+	for (i = 0; i < num_parents; i++) {
-+		parent = clk_hw_get_parent_by_index(hw, i);
-+		if (!parent)
+@@ -106,8 +106,8 @@ static int cpg_div6_clock_determine_rate(struct clk_hw *hw,
+ 	unsigned long prate, calc_rate, diff, best_rate, best_prate;
+ 	unsigned int num_parents = clk_hw_get_num_parents(hw);
+ 	struct clk_hw *parent, *best_parent = NULL;
++	unsigned int i, min_div, max_div, div;
+ 	unsigned long min_diff = ULONG_MAX;
+-	unsigned int i, div;
+ 
+ 	for (i = 0; i < num_parents; i++) {
+ 		parent = clk_hw_get_parent_by_index(hw, i);
+@@ -118,7 +118,13 @@ static int cpg_div6_clock_determine_rate(struct clk_hw *hw,
+ 		if (!prate)
+ 			continue;
+ 
++		min_div = max(DIV_ROUND_UP(prate, req->max_rate), 1UL);
++		max_div = req->min_rate ? min(prate / req->min_rate, 64UL) : 64;
++		if (max_div < min_div)
 +			continue;
 +
-+		prate = clk_hw_get_rate(parent);
-+		if (!prate)
-+			continue;
-+
-+		div = cpg_div6_clock_calc_div(req->rate, prate);
-+		calc_rate = prate / div;
-+		diff = calc_rate > req->rate ? calc_rate - req->rate
-+					     : req->rate - calc_rate;
-+		if (diff < min_diff) {
-+			best_rate = calc_rate;
-+			best_parent = parent;
-+			best_prate = prate;
-+			min_diff = diff;
-+		}
-+	}
-+
-+	if (!best_parent)
-+		return -EINVAL;
- 
--	req->rate = req->best_parent_rate / div;
-+	req->best_parent_rate = best_prate;
-+	req->best_parent_hw = best_parent;
-+	req->rate = best_rate;
- 	return 0;
- }
- 
+ 		div = cpg_div6_clock_calc_div(req->rate, prate);
++		div = clamp(div, min_div, max_div);
+ 		calc_rate = prate / div;
+ 		diff = calc_rate > req->rate ? calc_rate - req->rate
+ 					     : req->rate - calc_rate;
 -- 
 2.25.1
 
