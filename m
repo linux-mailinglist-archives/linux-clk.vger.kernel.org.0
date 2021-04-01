@@ -2,75 +2,136 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3FA351438
-	for <lists+linux-clk@lfdr.de>; Thu,  1 Apr 2021 13:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29DC35177A
+	for <lists+linux-clk@lfdr.de>; Thu,  1 Apr 2021 19:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234089AbhDALI2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 1 Apr 2021 07:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
+        id S234630AbhDARmR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 1 Apr 2021 13:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233553AbhDALHc (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 1 Apr 2021 07:07:32 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1232EC061788
-        for <linux-clk@vger.kernel.org>; Thu,  1 Apr 2021 04:07:31 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id o19so810699qvu.0
-        for <linux-clk@vger.kernel.org>; Thu, 01 Apr 2021 04:07:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5hr4EJfC6Dy4LxB2ks0ND142hkf8rNwvgR5bFJx1My8=;
-        b=IwfvFudKaG7ulKrhClM3/mRjUThVsffOd8fFnuhBPUkS35EDofF6DoNmO2uJl0ZJe5
-         w9rFM1Svm6WR0jHPftrVEjfPU1eMR2oS0EwmA/dpM000mgQHQyWSWOa00XbSoRkoTy9a
-         AmV8tA/1UITRcKRQzP+3RAU311ay+sDi2dTLI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5hr4EJfC6Dy4LxB2ks0ND142hkf8rNwvgR5bFJx1My8=;
-        b=EkzzcCezjTCwkJSgvIYItacfNwbiAct3hqwS7rjVU/gptHDu5P/Mk587JUpo++UsTP
-         Awrwy+CCw4VnYq+8HpyVj0xk+Bx1r9zdGhbHyvyAh2laI2yC+W7dCqHVcGf31kFKcREP
-         6qM95MY81mPdBMIwuxDlpCpOOyZ8eZVuHUSI6o6RgRl7Wco3XD3dMcRnSQKDTEk5mosq
-         UgvWawIsVfX9frnMqnbUcpq1Kl5MOe1uZG1jQLQGymSGQ/0jVV2ctDdqMU5PyLDMzF68
-         bPt4xOd1cNnLfDmSlGK7zmthbcQ1CyLMyXtc+Sp69mz/gH57Uriendz8ZixSZoS5TB2v
-         5zPA==
-X-Gm-Message-State: AOAM533FZ+SgBvIdrdEHHjoOXjnG3BA2ZNd5JM93/eg/lI7iVy9CLZLM
-        d4XOd3C4M+QQEJ6m5BlXhDRO6lKzwHssHLlygRsW4g==
-X-Google-Smtp-Source: ABdhPJxPeLgGNYuUVol7wcn3UD700JCejRwjzkrn+bZT/fTLQdwdf0L0H88XiIRNF+6k69uJk/9V3D5PfwQ6HMp9Q6E=
-X-Received: by 2002:ad4:56e1:: with SMTP id cr1mr7615297qvb.25.1617275251088;
- Thu, 01 Apr 2021 04:07:31 -0700 (PDT)
+        with ESMTP id S234671AbhDARjG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 1 Apr 2021 13:39:06 -0400
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D360C05BD2B
+        for <linux-clk@vger.kernel.org>; Thu,  1 Apr 2021 06:01:43 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:7c3c:adbc:7a1a:b85f])
+        by baptiste.telenet-ops.be with bizsmtp
+        id nR1g2400K4A7w6i01R1ga2; Thu, 01 Apr 2021 15:01:40 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1lRwxA-00CBkE-5P; Thu, 01 Apr 2021 15:01:40 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1lRwx9-003mtF-KP; Thu, 01 Apr 2021 15:01:39 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 2/5] clk: renesas: div6: Simplify src mask handling
+Date:   Thu,  1 Apr 2021 15:01:35 +0200
+Message-Id: <5f05a5110d222ce5a113e683fe2aa726f4100b73.1617281699.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1617281699.git.geert+renesas@glider.be>
+References: <cover.1617281699.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-References: <20210223061830.1913700-1-daniel@0x0f.com> <20210223061830.1913700-2-daniel@0x0f.com>
- <1614108850.540354.4116103.nullmailer@robh.at.kernel.org> <CAFr9PX=h2JPdAwjYS2849ufH=wnxSti2Dj60fbq4bg8b8=xy_g@mail.gmail.com>
- <CAK8P3a1L62YT1WUxmmfLNmvERo7DbeVwfCHCxuKvxs7Uap+iXg@mail.gmail.com>
-In-Reply-To: <CAK8P3a1L62YT1WUxmmfLNmvERo7DbeVwfCHCxuKvxs7Uap+iXg@mail.gmail.com>
-From:   Daniel Palmer <daniel@0x0f.com>
-Date:   Thu, 1 Apr 2021 20:07:20 +0900
-Message-ID: <CAFr9PXmT-FUUu-yMBWCe52KDHUSF2+Zhr8wk-NdC+cW+_8prKw@mail.gmail.com>
-Subject: Re: [PATCH 1/8] dt-bindings: clk: mstar msc313 cpupll binding description
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Rob Herring <robh@kernel.org>, SoC Team <soc@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Willy Tarreau <w@1wt.eu>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Arnd,
+Simplify the handling of the register bits to select the parent clock,
+by storing a bitmask instead of separate shift and width values.
 
-On Thu, 1 Apr 2021 at 20:04, Arnd Bergmann <arnd@arndb.de> wrote:
-> I found this is still in patchwork as not merged, and I have not
-> seen a replacement. Marking all eight patches as 'changes requested' now,
-> please resend.
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/clk/renesas/clk-div6.c | 31 +++++++++++--------------------
+ 1 file changed, 11 insertions(+), 20 deletions(-)
 
-Understood. I will resend.
+diff --git a/drivers/clk/renesas/clk-div6.c b/drivers/clk/renesas/clk-div6.c
+index a3c4fbeb7b0d2ec0..2920bec49bce0eb8 100644
+--- a/drivers/clk/renesas/clk-div6.c
++++ b/drivers/clk/renesas/clk-div6.c
+@@ -28,8 +28,7 @@
+  * @hw: handle between common and hardware-specific interfaces
+  * @reg: IO-remapped register
+  * @div: divisor value (1-64)
+- * @src_shift: Shift to access the register bits to select the parent clock
+- * @src_width: Number of register bits to select the parent clock (may be 0)
++ * @src_mask: Bitmask covering the register bits to select the parent clock
+  * @nb: Notifier block to save/restore clock state for system resume
+  * @parents: Array to map from valid parent clocks indices to hardware indices
+  */
+@@ -37,8 +36,7 @@ struct div6_clock {
+ 	struct clk_hw hw;
+ 	void __iomem *reg;
+ 	unsigned int div;
+-	u32 src_shift;
+-	u32 src_width;
++	u32 src_mask;
+ 	struct notifier_block nb;
+ 	u8 parents[];
+ };
+@@ -133,11 +131,11 @@ static u8 cpg_div6_clock_get_parent(struct clk_hw *hw)
+ 	unsigned int i;
+ 	u8 hw_index;
+ 
+-	if (clock->src_width == 0)
++	if (clock->src_mask == 0)
+ 		return 0;
+ 
+-	hw_index = (readl(clock->reg) >> clock->src_shift) &
+-		   (BIT(clock->src_width) - 1);
++	hw_index = (readl(clock->reg) & clock->src_mask) >>
++		   __ffs(clock->src_mask);
+ 	for (i = 0; i < clk_hw_get_num_parents(hw); i++) {
+ 		if (clock->parents[i] == hw_index)
+ 			return i;
+@@ -151,18 +149,13 @@ static u8 cpg_div6_clock_get_parent(struct clk_hw *hw)
+ static int cpg_div6_clock_set_parent(struct clk_hw *hw, u8 index)
+ {
+ 	struct div6_clock *clock = to_div6_clock(hw);
+-	u8 hw_index;
+-	u32 mask;
++	u32 src;
+ 
+ 	if (index >= clk_hw_get_num_parents(hw))
+ 		return -EINVAL;
+ 
+-	mask = ~((BIT(clock->src_width) - 1) << clock->src_shift);
+-	hw_index = clock->parents[index];
+-
+-	writel((readl(clock->reg) & mask) | (hw_index << clock->src_shift),
+-	       clock->reg);
+-
++	src = clock->parents[index] << __ffs(clock->src_mask);
++	writel((readl(clock->reg) & ~clock->src_mask) | src, clock->reg);
+ 	return 0;
+ }
+ 
+@@ -236,17 +229,15 @@ struct clk * __init cpg_div6_register(const char *name,
+ 	switch (num_parents) {
+ 	case 1:
+ 		/* fixed parent clock */
+-		clock->src_shift = clock->src_width = 0;
++		clock->src_mask = 0;
+ 		break;
+ 	case 4:
+ 		/* clock with EXSRC bits 6-7 */
+-		clock->src_shift = 6;
+-		clock->src_width = 2;
++		clock->src_mask = GENMASK(7, 6);
+ 		break;
+ 	case 8:
+ 		/* VCLK with EXSRC bits 12-14 */
+-		clock->src_shift = 12;
+-		clock->src_width = 3;
++		clock->src_mask = GENMASK(14, 12);
+ 		break;
+ 	default:
+ 		pr_err("%s: invalid number of parents for DIV6 clock %s\n",
+-- 
+2.25.1
 
-Thanks,
-
-Daniel
