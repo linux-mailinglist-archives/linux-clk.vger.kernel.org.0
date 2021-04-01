@@ -2,73 +2,59 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7436350811
-	for <lists+linux-clk@lfdr.de>; Wed, 31 Mar 2021 22:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32CF5350C01
+	for <lists+linux-clk@lfdr.de>; Thu,  1 Apr 2021 03:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236657AbhCaURe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 31 Mar 2021 16:17:34 -0400
-Received: from st43p00im-ztdg10071801.me.com ([17.58.63.171]:53169 "EHLO
-        st43p00im-ztdg10071801.me.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236639AbhCaURV (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 31 Mar 2021 16:17:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1617221840; bh=D4dih7IDfleZeM1jkz2mIoV9uzt0mlpafIv8IABeh0E=;
-        h=From:To:Subject:Date:Message-Id;
-        b=T2mR7WQ4Gx0/6kxxDvhUB4cyNhmFYBSxIgxN3ICnSS2R1wwrZZMlnKvB2VUfuLONG
-         qKQEEPTubQKA8A5BzIOzdLSxtjPyovV1KK6lojSPe+7s5N3PhFmozNSzO4NiRS3Sx5
-         1Y7v5GqIx6IdF1UzI2VZEgap2qigjKdOJbU3r2CxToJI5ppykLpRUN1BIgr2mu+noc
-         0LFpsiyCZXOH8haFUBfyt6DqLSma1XVkhTZ4ZvxBg9bZatLvgXpHEWyQk37JhXHolx
-         zgBMZflQRGGLR+tUX30lIWOo8gekIN7tbgEmsjVFDLvxg9+w+tl+cY+MT5zxU4Bjuh
-         MgoamUcRfRuUA==
-Received: from localhost (101.220.150.77.rev.sfr.net [77.150.220.101])
-        by st43p00im-ztdg10071801.me.com (Postfix) with ESMTPSA id 6BAF9540116;
-        Wed, 31 Mar 2021 20:17:19 +0000 (UTC)
-From:   Alain Volmat <avolmat@me.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Alain Volmat <avolmat@me.com>
-Subject: [PATCH v4 7/7] dt-bindings: clock: st: clkgen-fsyn: add new introduced compatible
-Date:   Wed, 31 Mar 2021 22:16:32 +0200
-Message-Id: <20210331201632.24530-8-avolmat@me.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210331201632.24530-1-avolmat@me.com>
-References: <20210331201632.24530-1-avolmat@me.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-03-31_10:2021-03-31,2021-03-31 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 clxscore=1015 mlxscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-2006250000 definitions=main-2103310141
+        id S230385AbhDABih (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 31 Mar 2021 21:38:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47276 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229497AbhDABiX (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 31 Mar 2021 21:38:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 35DEF61001;
+        Thu,  1 Apr 2021 01:38:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1617241103;
+        bh=lXPrmLD8cR13af0zzzzRyCkEh9/F2LOtjr4TPKAihQs=;
+        h=In-Reply-To:References:Subject:From:To:Date:From;
+        b=r0YN/a+crPqLnr9k3CcPd18eCft+dH+aFjTQw+bB1hAk8yooWEG22xb511q2/z8nl
+         rmWlrMwEFb/Ndd0BxBdLQelYlaDLtTWNhfC1LPfAKYwxOBL6Xn44dUD8rugmbfbADu
+         udLSYfBDbawC9QLg61U3wJcF6T9iXx8KNfUfX2+1BKdi5lrJy+3/CGp9p5Annu73nf
+         q51hNsYQGadMTZSayypg5fjojDLbB6Z6+ya8DzL5uKFdSU7sWYHxww08AxUmrPAza9
+         WqIeitQ7nNkNBIZ62d8UugpefyNHcMUfOxo76tIVxYJN9fgwlzPt1N7UE5WCObX+ZK
+         sC3apKlqudenQ==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210331092605.105909-2-greentime.hu@sifive.com>
+References: <20210331092605.105909-1-greentime.hu@sifive.com> <20210331092605.105909-2-greentime.hu@sifive.com>
+Subject: Re: [PATCH v3 1/6] clk: sifive: Add pcie_aux clock in prci driver for PCIe driver
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     alex.dewar90@gmail.com, aou@eecs.berkeley.edu, bhelgaas@google.com,
+        devicetree@vger.kernel.org, erik.danie@sifive.com,
+        greentime.hu@sifive.com, hayashi.kunihiko@socionext.com,
+        helgaas@kernel.org, hes@sifive.com, jh80.chung@samsung.com,
+        khilman@baylibre.com, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-riscv@lists.infradead.org, lorenzo.pieralisi@arm.com,
+        mturquette@baylibre.com, p.zabel@pengutronix.de,
+        paul.walmsley@sifive.com, robh+dt@kernel.org, vidyas@nvidia.com,
+        zong.li@sifive.com
+Date:   Wed, 31 Mar 2021 18:38:21 -0700
+Message-ID: <161724110197.2260335.12311143415074941643@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-New compatible are added, supporting various kind of clkgen-fsyn
-used for STiH407, STiH410 and STiH418
+Quoting Greentime Hu (2021-03-31 02:26:00)
+> We add pcie_aux clock in this patch so that pcie driver can use
+> clk_prepare_enable() and clk_disable_unprepare() to enable and disable
+> pcie_aux clock.
+>=20
+> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
+> ---
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
----
- Documentation/devicetree/bindings/clock/st/st,quadfs.txt | 3 +++
- 1 file changed, 3 insertions(+)
+With robot fix
 
-diff --git a/Documentation/devicetree/bindings/clock/st/st,quadfs.txt b/Documentation/devicetree/bindings/clock/st/st,quadfs.txt
-index d93d49342e60..c4ba2adb0b4f 100644
---- a/Documentation/devicetree/bindings/clock/st/st,quadfs.txt
-+++ b/Documentation/devicetree/bindings/clock/st/st,quadfs.txt
-@@ -12,6 +12,9 @@ This binding uses the common clock binding[1].
- Required properties:
- - compatible : shall be:
-   "st,quadfs"
-+  "st,quadfs-d0"
-+  "st,quadfs-d2"
-+  "st,quadfs-d3"
-   "st,quadfs-pll"
- 
- 
--- 
-2.17.1
-
+Acked-by: Stephen Boyd <sboyd@kernel.org>
