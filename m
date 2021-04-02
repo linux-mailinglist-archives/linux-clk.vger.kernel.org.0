@@ -2,119 +2,91 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4354A35255D
+	by mail.lfdr.de (Postfix) with ESMTP id E578035255F
 	for <lists+linux-clk@lfdr.de>; Fri,  2 Apr 2021 04:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233786AbhDBCVP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        id S234133AbhDBCVP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
         Thu, 1 Apr 2021 22:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233870AbhDBCVO (ORCPT
+        with ESMTP id S234050AbhDBCVO (ORCPT
         <rfc822;linux-clk@vger.kernel.org>); Thu, 1 Apr 2021 22:21:14 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74840C061788
-        for <linux-clk@vger.kernel.org>; Thu,  1 Apr 2021 19:21:12 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id s17so4274568ljc.5
-        for <linux-clk@vger.kernel.org>; Thu, 01 Apr 2021 19:21:12 -0700 (PDT)
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8ECC06178A
+        for <linux-clk@vger.kernel.org>; Thu,  1 Apr 2021 19:21:13 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id g8so5615195lfv.12
+        for <linux-clk@vger.kernel.org>; Thu, 01 Apr 2021 19:21:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=L925LIwX/AEyuqnRbSRg5dcDMuoq/xRmNPVHzWMF0Yc=;
-        b=NsriI1TT2YsTF0Z9rxrUGCPsIHq+cuxPYpd0NSHqqPJI2IcBXhAX4g/uFEBop/W5xK
-         mN/HKiTH4QJr564Jrv0Xy4zyoxjE0QwGWAaJ6myML3aikVjDqY4lM5YtfhpB+dYeRG8C
-         gv31lY8ZFhcCvRCHfURkHSXTMtcR2j1ZAHjQa2czJAOvRMyfIs6GdE19wmISsCvUJEwh
-         l5fWFXOvOGb0OlY0+i2JIs/Q3SvtQlRg0OA7aDmH3F9aF2WSzCKmYXvSCfostoZfpWwf
-         N1wp/k9Ow25A1ATX+14XYJ5JnrmpH8ugVqW7giIH0WP6lrtwux+Z8Fj33lkEuog7Hb+B
-         C+Kw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=9ueam1eNKHbBDz7SDl8uIB8BD9gz/4AOee4PPPewcoM=;
+        b=pQImnG8wfibvkznJfZRoZO6JB4v4xEPuJRO188rlmdOQO3zFAE4He/zrPmXmpFaLPe
+         QjVjeBqRaGRwVyTaSxIXWzLOTC1QWVbzTo4mbqN6uVYVqq37sYWZLRHfurHYaegavBIT
+         +jTT0H0Y2dH6iz65pbuJfovmiKca+lYHQI+Vg5Ug2tHNe0vftYoYkw0U09kvZYyJrMRb
+         eqYgeXstSZ/tcN2SGOXrjnfY9NXzcR72V6yQ88XvoJxnEp/OINWgFzUKZ2q/Tn5iSgD6
+         VL3U3SpBxFd2EwVIBpCWoKIYkmdfBzGinXYZgYY6qkRQxZITBuCdy6zbK8kUpCcbxyRI
+         SBmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=L925LIwX/AEyuqnRbSRg5dcDMuoq/xRmNPVHzWMF0Yc=;
-        b=tZOxHtP9SlXDSWOt/3cbEWxEdXlay2f1DII9sMgBSlre7QF4+IbB/Z+rV6tEjWDa0V
-         eDDxz9NFKt2BPyNIuLysYhdmUo3EfXTAPQp1dUxRJf1oCBMgx+8PBmlLJKI/m4ANoHto
-         UUzjDOlEDb1kDiiV1fCENaSTBFIXDDnKkXggbwhf6yy21SnoGk21ofi6jukyYVrbBLuz
-         Z3fTFYF+xPdOiMoY9t5o+5INXJkIyemJUZxqclZYUuVApHD+IwKeQPAauEAbAG8iFiHp
-         8pCGNt4ZQXFDTeVQX0zofNfbZ17fBdfobZ9O30hErccD+fXURrIP91zM1vwYxz3b09aa
-         ktuQ==
-X-Gm-Message-State: AOAM531SSmtnNLy0vtsDiXhirGY/H0SyzIxNCdLKCZd73TASzGXQwhZw
-        nQJz/YFKrQeQg6ZizsE0mPv2jQ==
-X-Google-Smtp-Source: ABdhPJyjS7IA5ZX7+ZwTZMBZG1bjjbO1CAJI7xfVUgMCc7jbUZ9nASs17OoBShUA5ruz5hOdFFTM4A==
-X-Received: by 2002:a2e:9143:: with SMTP id q3mr7158320ljg.378.1617330070773;
-        Thu, 01 Apr 2021 19:21:10 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=9ueam1eNKHbBDz7SDl8uIB8BD9gz/4AOee4PPPewcoM=;
+        b=qyIJSwHdqLXrw3IzQAcxSHUrNvVTWzGtLR4uY6ONrYlo+cSh3pYTU7ylKO4fJ94IS5
+         4UIBYXrDBm9MAGluams9IsufYdwdeLzYKZJN+gvJt19L9xfDabSEEhjXC0EBoCKInlVD
+         VYDXSYzY74pHbc3duGQzsKv21aNE6wUl8lA0+dpz17HXm21Oq+trLsS/ejmGat1UJwMd
+         bIQu/0yw7UlMPJM2sGq1vI74vIie0pI7yVDXLCjSYPvVq2eG/e1vsLidGRk5AkB0iA4p
+         QAy+yCx+vuClZlGfZw7pc5l/4WYt8pDDhcR/PSIxd5BUCFen+MYFoJmkI/3nZpgWtMDy
+         dFEg==
+X-Gm-Message-State: AOAM5306jT/d3IpEyqb9etw1g8s7GYzA1LfsdCElYmff0JEsyXjyoEOo
+        hpjEDE2cw43gA/z2UaQMKYSIwSqiKTreXQ==
+X-Google-Smtp-Source: ABdhPJxBI/kKFW1uWghOpZIZxmBA6h8bm5S+JTEwaYy2M54HCRxdDjR+ueALCNQH3JuKcgZ4Xtzbbw==
+X-Received: by 2002:ac2:5221:: with SMTP id i1mr7478306lfl.160.1617330071604;
+        Thu, 01 Apr 2021 19:21:11 -0700 (PDT)
 Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id x74sm713634lff.145.2021.04.01.19.21.09
+        by smtp.gmail.com with ESMTPSA id x74sm713634lff.145.2021.04.01.19.21.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Apr 2021 19:21:10 -0700 (PDT)
+        Thu, 01 Apr 2021 19:21:11 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v2 00/16] clk: qcom: cleanup sm8250/sdm845/sc7180 clock drivers
-Date:   Fri,  2 Apr 2021 05:20:52 +0300
-Message-Id: <20210402022108.4183114-1-dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Taniya Das <tdas@codeaurora.org>
+Subject: [PATCH v2 01/16] clk: qcom: dispcc-sc7180: drop unused enum entries
+Date:   Fri,  2 Apr 2021 05:20:53 +0300
+Message-Id: <20210402022108.4183114-2-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210402022108.4183114-1-dmitry.baryshkov@linaro.org>
+References: <20210402022108.4183114-1-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Cleanup several Qualcomm clock drivers by removing unused entries from
-parents map, removing test clock, etc.
+Drop unused enum entries from the list of parent enums.
 
-Changes since v1:
- - Remove unused entries from gpucc-sc7180, gpucc-sdm845, videocc-sc7180
-   and videocc-sm8150 drivers
- - Restore video_pll0_out_odd/_even entries in videocc-sdm845 driver as
-   requested by Taniya Das.
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Taniya Das <tdas@codeaurora.org>
+---
+ drivers/clk/qcom/dispcc-sc7180.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-The following changes since commit a38fd8748464831584a19438cbb3082b5a2dab15:
-
-  Linux 5.12-rc2 (2021-03-05 17:33:41 -0800)
-
-are available in the Git repository at:
-
-  https://git.linaro.org/people/dmitry.baryshkov/kernel.git qcom-clk-cleanup
-
-for you to fetch changes up to abb5f4ee34095483b5cc16d6b2f6eb683e69a78e:
-
-  clk: qcom: videocc-sdm845: get rid of the test clock (2021-04-02 05:03:06 +0300)
-
-----------------------------------------------------------------
-Dmitry Baryshkov (16):
-      clk: qcom: dispcc-sc7180: drop unused enum entries
-      clk: qcom: dispcc-sm8250: drop unused enum entries
-      clk: qcom: gcc-sm8250: drop unused enum entries
-      clk: qcom: gpucc-sc7180: drop unused enum entries
-      clk: qcom: gpucc-sdm845: drop unused enum entries
-      clk: qcom: gpucc-sm8150: drop unused enum entries
-      clk: qcom: gpucc-sm8250: drop unused enum entries
-      clk: qcom: videocc-sc7180: drop unused enum entries
-      clk: qcom: videocc-sm8150: drop unused enum entries
-      clk: qcom: videocc-sm8250: drop unused enum entries
-      clk: qcom: dispcc-sdm845: convert to parent data
-      clk: qcom: gpucc-sdm845: convert to parent data
-      clk: qcom: videocc-sdm845: convert to parent data
-      clk: qcom: gpucc-sdm845: get rid of the test clock
-      clk: qcom: dispcc-sdm845: get rid of the test clock
-      clk: qcom: videocc-sdm845: get rid of the test clock
-
- drivers/clk/qcom/dispcc-sc7180.c  |   2 -
- drivers/clk/qcom/dispcc-sdm845.c  | 217 ++++++++++++++++++--------------------
- drivers/clk/qcom/dispcc-sm8250.c  |   8 --
- drivers/clk/qcom/gcc-sm8250.c     |   1 -
- drivers/clk/qcom/gpucc-sc7180.c   |   3 -
- drivers/clk/qcom/gpucc-sdm845.c   |  45 ++++----
- drivers/clk/qcom/gpucc-sm8150.c   |   1 -
- drivers/clk/qcom/gpucc-sm8250.c   |   1 -
- drivers/clk/qcom/videocc-sc7180.c |   4 -
- drivers/clk/qcom/videocc-sdm845.c |  51 +++++----
- drivers/clk/qcom/videocc-sm8150.c |   4 -
- drivers/clk/qcom/videocc-sm8250.c |   2 -
- 12 files changed, 150 insertions(+), 189 deletions(-)
-
+diff --git a/drivers/clk/qcom/dispcc-sc7180.c b/drivers/clk/qcom/dispcc-sc7180.c
+index f487515701e3..3334bf9cfb94 100644
+--- a/drivers/clk/qcom/dispcc-sc7180.c
++++ b/drivers/clk/qcom/dispcc-sc7180.c
+@@ -19,8 +19,6 @@
+ 
+ enum {
+ 	P_BI_TCXO,
+-	P_CHIP_SLEEP_CLK,
+-	P_CORE_BI_PLL_TEST_SE,
+ 	P_DISP_CC_PLL0_OUT_EVEN,
+ 	P_DISP_CC_PLL0_OUT_MAIN,
+ 	P_DP_PHY_PLL_LINK_CLK,
+-- 
+2.30.2
 
