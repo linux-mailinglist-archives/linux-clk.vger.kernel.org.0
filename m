@@ -2,47 +2,47 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 596BF353089
+	by mail.lfdr.de (Postfix) with ESMTP id 0002635308B
 	for <lists+linux-clk@lfdr.de>; Fri,  2 Apr 2021 22:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235513AbhDBU6Z (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 2 Apr 2021 16:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
+        id S235567AbhDBU60 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 2 Apr 2021 16:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235523AbhDBU6U (ORCPT
+        with ESMTP id S235279AbhDBU6U (ORCPT
         <rfc822;linux-clk@vger.kernel.org>); Fri, 2 Apr 2021 16:58:20 -0400
 Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCD2C06178C
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA307C0617A7
         for <linux-clk@vger.kernel.org>; Fri,  2 Apr 2021 13:58:18 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id s17so6712743ljc.5
+Received: by mail-lj1-x233.google.com with SMTP id u20so6666450lja.13
         for <linux-clk@vger.kernel.org>; Fri, 02 Apr 2021 13:58:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4rfoVHAT7dOrwGC4eft9E0a4rQB1P3qx5SzpVkr4yy8=;
-        b=ZgWYNeOei8dR6f2gYFy20WGechPXfBjKkoGbcG7SY7P8SDBmEZByXdUntVBQDlfxbe
-         7kNDA1XpVY68u9ABX6npo2O7rEmeS5onbGsulnlNU/YGjdU+b4ctkT8BldfXKBzay0Gt
-         9biv6C8OqPEBlqWUhzKOlNNjE8IDE/+px8LYYJr5s4ilJsgOBUt409AlP41w0QiALjyU
-         uG0wjjHAaWiyKecdGLjAq5dSEE0bzWY44uDcdsCIEzHOp+ZV6/I/SwnFgVEWUGzkAkbP
-         RG1m3V4F4oNaMzozEFD/+tbPbVIxiP3hP9v6bkKJJsgIOPSUMZkqYHCmTCiEZjjtxrsi
-         lgrQ==
+        bh=h9JY7IrTHCDLMbAo3dIfcTpZXH88SFqfgnI8RYiC/oc=;
+        b=usmHbpGLs8w2Ajl975+5yfUrX765ZpmJA35RjhBNFNEXDBpx0GwCfipO4lhuxjtLxU
+         49cNbvOMT7IW+OBIMlg3H2cMSGwiKqqbS4kYQutigF3SZnXndwzWy6J7qRxU+RWulwmG
+         /i6gsf/oXkzZsMkVldk7B1aqleoXixQzI1xfrBzmLRQil3gkh+PXbLZwc0ED5Ygk9tfb
+         Y9/QlHf0yQq3/io0jl0zzoyRYIq1zGZC3E1jJSVJD1T88b139S06U05aFcvqQp0oX3WE
+         Yi9OFGfXNko7WQ8Z+7dWKFgjmiw8CyjfCvFMxrSmRmK5cZS+jjhcZEM7XhqpeUEp0gzA
+         CYEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4rfoVHAT7dOrwGC4eft9E0a4rQB1P3qx5SzpVkr4yy8=;
-        b=PADtrWtceu4TZy46jsCXjN9ODjBj2IY7CbbbPG/qAtCYYEowAuQsA6NzkjOPd8Bdjb
-         SZYUXX2T65ndjd0FxLzx8kYQrrt4bQEcWAgHHPAHY1EmALKNzrMRtDB69PiCZNNEp6mR
-         8lr7VAVPIvP2S+7am5/AekVMjvsWjvxLpEDO7/FpYDwHRYadoI3WEmHqn7ubL70Dr4QA
-         EgHB2rCPnKSJzyhgX1ONxUlr8XYahNHWrnKMV3PuT5LyUe4u4OHeeN8k/z1FIHO/4Wtl
-         Bf3p8oHyy6VUiJkkiPJDHTh/HGqJMulhbmP1MSEhUFM7ldGAqw01MnGze1paILqfMFn4
-         4GGQ==
-X-Gm-Message-State: AOAM530BymAEhuPe4V7GEXtAD8H4g7t0wYd/00+Hq1jdzHSw7tkBPzvj
-        9dpeZAsUt9KjMa8qndSp9XnYmg==
-X-Google-Smtp-Source: ABdhPJxc9iuezwkpqtS/5Bqyjohb9O/rNetA3zN2XzGTzIiPUODWZCf/O/Xd8DiXZSa7wPYZCHClWw==
-X-Received: by 2002:a2e:9715:: with SMTP id r21mr9314254lji.224.1617397096654;
-        Fri, 02 Apr 2021 13:58:16 -0700 (PDT)
+        bh=h9JY7IrTHCDLMbAo3dIfcTpZXH88SFqfgnI8RYiC/oc=;
+        b=m6XB4vmdva2FFLHjrZvKblhjMyncf3jHCCn+YZ+flcGhWdlN/64ljL9oIa1QpYDnTv
+         obwUaHt88sCVX8R39yAf5LfQFYTgdVPLGfi9eMmjdq8BgNf2s5+/7tKTTVHxyHlKfThU
+         ipa07mEUlm4pBQThySupdWwgKIIYXlPOH0906KJYt07roxqG+bLE5WnKXJiJTUo6Q7mr
+         T42wDZkPRD8uQz6BO4P/Vs7Uo5E7g0ybfqSpS0iq3haBqaLm31Cjyoyh37/VHbrVmPhY
+         YDm9BCngG30wJfhm9A2scQYkYjzZeB8X0sDcoUvt+tSCY8uHhdCFGXus794FJjaSaej9
+         gWQg==
+X-Gm-Message-State: AOAM530eR3OstWdHK9NGcscpmK/T2vZOFHkWmb1aeCC9raHwGpiqzitb
+        pKeY7sY+E4zenS8oGenrR7uvMg==
+X-Google-Smtp-Source: ABdhPJwYStG/VEymZrM4GZgAbWSvR8QKlanYDnRBEqyT8Bc4NAnfkVspVa0lOQF/eofHBZSFJGYrSA==
+X-Received: by 2002:a2e:9758:: with SMTP id f24mr9037292ljj.404.1617397097351;
+        Fri, 02 Apr 2021 13:58:17 -0700 (PDT)
 Received: from eriador.lan ([37.153.55.125])
         by smtp.gmail.com with ESMTPSA id b17sm959076lfi.57.2021.04.02.13.58.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
@@ -52,10 +52,11 @@ To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v3 13/16] clk: qcom: videocc-sdm845: convert to parent data
-Date:   Fri,  2 Apr 2021 23:58:01 +0300
-Message-Id: <20210402205804.96507-14-dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>
+Subject: [PATCH v3 14/16] clk: qcom: gpucc-sdm845: get rid of the test clock
+Date:   Fri,  2 Apr 2021 23:58:02 +0300
+Message-Id: <20210402205804.96507-15-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210402205804.96507-1-dmitry.baryshkov@linaro.org>
 References: <20210402205804.96507-1-dmitry.baryshkov@linaro.org>
@@ -65,124 +66,52 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Convert the clock driver to specify parent data rather than parent
-names, to actually bind using 'clock-names' specified in the DTS rather
-than global clock names.
+The test clock isn't in the bindings and apparently it's not used by
+anyone upstream.  Remove it.
 
+Suggested-by: Stephen Boyd <swboyd@chromium.org>
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/clk/qcom/videocc-sdm845.c | 56 ++++++++++++++++---------------
- 1 file changed, 29 insertions(+), 27 deletions(-)
+ drivers/clk/qcom/gpucc-sdm845.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/clk/qcom/videocc-sdm845.c b/drivers/clk/qcom/videocc-sdm845.c
-index 5d6a7724a194..ac808ed859f9 100644
---- a/drivers/clk/qcom/videocc-sdm845.c
-+++ b/drivers/clk/qcom/videocc-sdm845.c
-@@ -21,25 +21,9 @@
+diff --git a/drivers/clk/qcom/gpucc-sdm845.c b/drivers/clk/qcom/gpucc-sdm845.c
+index 44039fd2abf2..621ad03fe154 100644
+--- a/drivers/clk/qcom/gpucc-sdm845.c
++++ b/drivers/clk/qcom/gpucc-sdm845.c
+@@ -27,7 +27,6 @@
+ 
  enum {
  	P_BI_TCXO,
- 	P_CORE_BI_PLL_TEST_SE,
--	P_VIDEO_PLL0_OUT_EVEN,
- 	P_VIDEO_PLL0_OUT_MAIN,
--	P_VIDEO_PLL0_OUT_ODD,
--};
--
--static const struct parent_map video_cc_parent_map_0[] = {
--	{ P_BI_TCXO, 0 },
--	{ P_VIDEO_PLL0_OUT_MAIN, 1 },
--	{ P_VIDEO_PLL0_OUT_EVEN, 2 },
--	{ P_VIDEO_PLL0_OUT_ODD, 3 },
--	{ P_CORE_BI_PLL_TEST_SE, 4 },
--};
--
--static const char * const video_cc_parent_names_0[] = {
--	"bi_tcxo",
--	"video_pll0",
--	"video_pll0_out_even",
--	"video_pll0_out_odd",
--	"core_bi_pll_test_se",
-+	/* P_VIDEO_PLL0_OUT_EVEN,
-+	P_VIDEO_PLL0_OUT_ODD, */
+-	P_CORE_BI_PLL_TEST_SE,
+ 	P_GPLL0_OUT_MAIN,
+ 	P_GPLL0_OUT_MAIN_DIV,
+ 	P_GPU_CC_PLL1_OUT_MAIN,
+@@ -58,7 +57,6 @@ static const struct parent_map gpu_cc_parent_map_0[] = {
+ 	{ P_GPU_CC_PLL1_OUT_MAIN, 3 },
+ 	{ P_GPLL0_OUT_MAIN, 5 },
+ 	{ P_GPLL0_OUT_MAIN_DIV, 6 },
+-	{ P_CORE_BI_PLL_TEST_SE, 7 },
  };
  
- static const struct alpha_pll_config video_pll0_config = {
-@@ -53,13 +37,31 @@ static struct clk_alpha_pll video_pll0 = {
- 	.clkr = {
- 		.hw.init = &(struct clk_init_data){
- 			.name = "video_pll0",
--			.parent_names = (const char *[]){ "bi_tcxo" },
-+			.parent_data = &(const struct clk_parent_data){
-+				.fw_name = "bi_tcxo", .name = "bi_tcxo",
-+			},
- 			.num_parents = 1,
- 			.ops = &clk_alpha_pll_fabia_ops,
- 		},
- 	},
+ static const struct clk_parent_data gpu_cc_parent_data_0[] = {
+@@ -66,7 +64,6 @@ static const struct clk_parent_data gpu_cc_parent_data_0[] = {
+ 	{ .hw = &gpu_cc_pll1.clkr.hw },
+ 	{ .fw_name = "gcc_gpu_gpll0_clk_src", .name = "gcc_gpu_gpll0_clk_src" },
+ 	{ .fw_name = "gcc_gpu_gpll0_div_clk_src", .name = "gcc_gpu_gpll0_div_clk_src" },
+-	{ .fw_name = "core_bi_pll_test_se", .name = "core_bi_pll_test_se" },
  };
  
-+static const struct parent_map video_cc_parent_map_0[] = {
-+	{ P_BI_TCXO, 0 },
-+	{ P_VIDEO_PLL0_OUT_MAIN, 1 },
-+	/* { P_VIDEO_PLL0_OUT_EVEN, 2 },
-+	{ P_VIDEO_PLL0_OUT_ODD, 3 }, */
-+	{ P_CORE_BI_PLL_TEST_SE, 4 },
-+};
-+
-+static const struct clk_parent_data video_cc_parent_data_0[] = {
-+	{ .fw_name = "bi_tcxo", .name = "bi_tcxo" },
-+	{ .hw = &video_pll0.clkr.hw },
-+	/* { .name = "video_pll0_out_even" },
-+	{ .name = "video_pll0_out_odd" }, */
-+	{ .fw_name = "core_bi_pll_test_se", .name = "core_bi_pll_test_se" },
-+};
-+
- static const struct freq_tbl ftbl_video_cc_venus_clk_src[] = {
- 	F(100000000, P_VIDEO_PLL0_OUT_MAIN, 4, 0, 0),
- 	F(200000000, P_VIDEO_PLL0_OUT_MAIN, 2, 0, 0),
-@@ -78,8 +80,8 @@ static struct clk_rcg2 video_cc_venus_clk_src = {
- 	.freq_tbl = ftbl_video_cc_venus_clk_src,
+ static const struct freq_tbl ftbl_gpu_cc_gmu_clk_src[] = {
+@@ -85,7 +82,7 @@ static struct clk_rcg2 gpu_cc_gmu_clk_src = {
  	.clkr.hw.init = &(struct clk_init_data){
- 		.name = "video_cc_venus_clk_src",
--		.parent_names = video_cc_parent_names_0,
+ 		.name = "gpu_cc_gmu_clk_src",
+ 		.parent_data = gpu_cc_parent_data_0,
 -		.num_parents = 5,
-+		.parent_data = video_cc_parent_data_0,
-+		.num_parents = 3,
- 		.flags = CLK_SET_RATE_PARENT,
++		.num_parents = 4,
  		.ops = &clk_rcg2_shared_ops,
  	},
-@@ -158,8 +160,8 @@ static struct clk_branch video_cc_vcodec0_core_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "video_cc_vcodec0_core_clk",
--			.parent_names = (const char *[]){
--				"video_cc_venus_clk_src",
-+			.parent_data = &(const struct clk_parent_data){
-+				.hw = &video_cc_venus_clk_src.clkr.hw,
- 			},
- 			.num_parents = 1,
- 			.flags = CLK_SET_RATE_PARENT,
-@@ -189,8 +191,8 @@ static struct clk_branch video_cc_vcodec1_core_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "video_cc_vcodec1_core_clk",
--			.parent_names = (const char *[]){
--				"video_cc_venus_clk_src",
-+			.parent_data = &(const struct clk_parent_data){
-+				.hw = &video_cc_venus_clk_src.clkr.hw,
- 			},
- 			.num_parents = 1,
- 			.flags = CLK_SET_RATE_PARENT,
-@@ -233,8 +235,8 @@ static struct clk_branch video_cc_venus_ctl_core_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "video_cc_venus_ctl_core_clk",
--			.parent_names = (const char *[]){
--				"video_cc_venus_clk_src",
-+			.parent_data = &(const struct clk_parent_data){
-+				.hw = &video_cc_venus_clk_src.clkr.hw,
- 			},
- 			.num_parents = 1,
- 			.flags = CLK_SET_RATE_PARENT,
+ };
 -- 
 2.30.2
 
