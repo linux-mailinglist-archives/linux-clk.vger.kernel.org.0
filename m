@@ -2,116 +2,189 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70EC635308C
-	for <lists+linux-clk@lfdr.de>; Fri,  2 Apr 2021 22:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0395835319A
+	for <lists+linux-clk@lfdr.de>; Sat,  3 Apr 2021 01:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235593AbhDBU60 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 2 Apr 2021 16:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45814 "EHLO
+        id S234161AbhDBXju (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 2 Apr 2021 19:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235590AbhDBU6Y (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 2 Apr 2021 16:58:24 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFF5C0617A9
-        for <linux-clk@vger.kernel.org>; Fri,  2 Apr 2021 13:58:20 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id s17so6712812ljc.5
-        for <linux-clk@vger.kernel.org>; Fri, 02 Apr 2021 13:58:20 -0700 (PDT)
+        with ESMTP id S235241AbhDBXjt (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 2 Apr 2021 19:39:49 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E581C061788
+        for <linux-clk@vger.kernel.org>; Fri,  2 Apr 2021 16:39:47 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id s17so6970060ljc.5
+        for <linux-clk@vger.kernel.org>; Fri, 02 Apr 2021 16:39:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=u9guUMYwi/Hs6Fk7xZietB3RPyJNWsBhDz/fvMQWt14=;
-        b=gspVYbeWSBhiaLTWjyhi7MAkh6LTJfl/cZdUsfnz0r0rhiXblPdbdx0jTrVp+u4lJb
-         O5qoi4FI0mq4j0EfrdG057m18mBfTCy7QfNJjRr1+rAM187xtFSqkvOWQysbwBvUsjH/
-         fu0rwypLXetQCADaHzD8ZgwOSZo86YD0JHafziXO9Uz1hNeONQHq4LkJJD0hio94s2h5
-         0IJX+Ys9fRv1H/efTbFQfrT1hZTPU0LJEwAKBTpyTPFjona5BaezrnhxdC66fYD+AzuD
-         F1k/6a9zb3OOAveZDMZhbd+bJw4FrW7bSSU0YAFJAzp/3H/lafPK7SUK0UWt/VHKUveS
-         M0dw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MqUyCQ8bApydwGreXPqVnRLc78HVU/m7ATGYH5tMkXg=;
+        b=CRV4wVaJgKNwAGzfnLsbhXrf3/5B0OdKHc/t5G3+AztIgYdXNASnYWvk+zZfNGxRA9
+         Pv3AmSbcvzkl8tFQUWb1fhhEniE/TIVl21lJ7WLosk/JLXrqpdE/oztF/LaPRaCITXHO
+         hKbPduoy7VoYEuR4SEla8ygjeKA1lsgnWvd+IvjkZHUZ8SldAjFxZtxA8spcO5pIWbsb
+         iWAPMoMF8zQZT98wHDWdwa4RXmuJTR7paQ4WYc+ar6VpVO07AQsFFzwQqDGPBQHwYNzS
+         iEcvmlaCMndVJDmRxlhKTZ4sdLqL1EYLaZB0TZgHtiqN4fLO85rb20ATEac39z6lcHl1
+         qmkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=u9guUMYwi/Hs6Fk7xZietB3RPyJNWsBhDz/fvMQWt14=;
-        b=c4Pk0rrcN2RDQaQ5GoL4xvwArg4r///2cJuk5lU8O5JvrfFhuqC0leqZeJJvfGCrog
-         nDuhmbVIz0yt6+8T0Kzi+IGGpSAuSh16IZWpjDWV8tgUpKOH0lP5HdgX1koeoUffu6Mc
-         UubAu7lmKbdAmhgCZKUS6oNrj9aHn5AnyKwxvrlr/uaQ7Riij6YhUqmV9cACyvinSObB
-         cDyGKAJDy+9Xvdbjvw1cz09pMCOeoLThLL7s/ZvZA5pBsGxf3ukkZx2RhQj6P7rZWakm
-         sY1mnWB4fHDw9WthCkb6XqKuRwrdsXWCsALv+L1sreR21hhD5vrNeCa0MykuTNZRClQd
-         S5wA==
-X-Gm-Message-State: AOAM5339wCjGe1G93GSqKE1QBweqZCEVS7CLudSxzjbT32sU9SzwInph
-        LSB40dUVJeXpzdiSl9zGwSI6Gw==
-X-Google-Smtp-Source: ABdhPJyZZKsT1pC0cUWhxRuq3LTGgK8FO2ILKn6pWSg5R1Rs6w8mwp579pUn6CrOWhR/bvguiY70hA==
-X-Received: by 2002:a05:651c:339:: with SMTP id b25mr9244325ljp.406.1617397098845;
-        Fri, 02 Apr 2021 13:58:18 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MqUyCQ8bApydwGreXPqVnRLc78HVU/m7ATGYH5tMkXg=;
+        b=JaJkJmyAZifTFdDLgzRLu8DeSMjcBj014B/CWAA+Y+pihZNMfzUsBkdsDvUPBAUFWm
+         1Ye48Vkh/0ztO1/8AIOR/Qmbdxi6GeRS1B+yU1M479kux24KzbWApQxdAfJ9Y/ahU/LK
+         vvSCFJMapzpFS7FHQe7JlZOW2D3CgWYYVRnQ+4O5QSJKREu8PiGK+55kP33vUYitqFL+
+         hVDn95MtJyko1zWn4DNItZq8e1SUWjchobVgjqYIyzT7dZ0xdCvE26Pw9w9E23XU6QWH
+         dSGwvjfporBUX8mXXcFSbbU1uJkUoyZkD6vitoN+ryxqzTO86psab9TpsFNKUDYBxaEW
+         2WDA==
+X-Gm-Message-State: AOAM530Y04O+MtRj1D1RQbF27meh2phWq4teYtHpLicDTODMe2l0pGAD
+        kSCPr26lG8CsKe7T6i3vsg6oVg==
+X-Google-Smtp-Source: ABdhPJyFSpdNKrhaXLogMPPh4tFDp1fdxd0HOYG9LhFrVBtCNJ2uEagmXOd8XtRqY7ZnA7sT00/0PA==
+X-Received: by 2002:a2e:9b14:: with SMTP id u20mr9483055lji.463.1617406786121;
+        Fri, 02 Apr 2021 16:39:46 -0700 (PDT)
 Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id b17sm959076lfi.57.2021.04.02.13.58.18
+        by smtp.gmail.com with ESMTPSA id w30sm1013134lfq.210.2021.04.02.16.39.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Apr 2021 13:58:18 -0700 (PDT)
+        Fri, 02 Apr 2021 16:39:45 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: [PATCH v3 16/16] clk: qcom: videocc-sdm845: get rid of the test clock
-Date:   Fri,  2 Apr 2021 23:58:04 +0300
-Message-Id: <20210402205804.96507-17-dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH v1 1/4] dt-bindings: clock: separate SDM845 GCC clock bindings
+Date:   Sat,  3 Apr 2021 02:39:41 +0300
+Message-Id: <20210402233944.273275-1-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210402205804.96507-1-dmitry.baryshkov@linaro.org>
-References: <20210402205804.96507-1-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The test clock isn't in the bindings and apparently it's not used by
-anyone upstream.  Remove it.
+Separate qcom,gcc-sdm845 clock bindings, adding required clocks and
+clock-names properties.
 
-Suggested-by: Stephen Boyd <swboyd@chromium.org>
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/clk/qcom/videocc-sdm845.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ .../bindings/clock/qcom,gcc-sdm845.yaml       | 84 +++++++++++++++++++
+ .../devicetree/bindings/clock/qcom,gcc.yaml   |  2 -
+ 2 files changed, 84 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
 
-diff --git a/drivers/clk/qcom/videocc-sdm845.c b/drivers/clk/qcom/videocc-sdm845.c
-index ac808ed859f9..1c917cd60c6f 100644
---- a/drivers/clk/qcom/videocc-sdm845.c
-+++ b/drivers/clk/qcom/videocc-sdm845.c
-@@ -20,7 +20,6 @@
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+new file mode 100644
+index 000000000000..4808fa7a6b8c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+@@ -0,0 +1,84 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/qcom,gcc-sdm845.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Global Clock & Reset Controller Binding
++
++maintainers:
++  - Stephen Boyd <sboyd@kernel.org>
++  - Taniya Das <tdas@codeaurora.org>
++
++description: |
++  Qualcomm global clock control module which supports the clocks, resets and
++  power domains on SDM845
++
++  See also:
++  - dt-bindings/clock/qcom,gcc-sdm845.h
++
++properties:
++  compatible:
++    const: qcom,gcc-sdm845
++
++  clocks:
++    items:
++      - description: Board XO source
++      - description: Board active XO source
++      - description: Sleep clock source
++      - description: PCIE 0 Pipe clock source (Optional clock)
++      - description: PCIE 1 Pipe clock source (Optional clock)
++    minItems: 3
++    maxItems: 5
++
++  clock-names:
++    items:
++      - const: bi_tcxo
++      - const: bi_tcxo_ao
++      - const: sleep_clk
++      - const: pcie_0_pipe_clk # Optional clock
++      - const: pcie_1_pipe_clk # Optional clock
++    minItems: 3
++    maxItems: 5
++
++  '#clock-cells':
++    const: 1
++
++  '#reset-cells':
++    const: 1
++
++  '#power-domain-cells':
++    const: 1
++
++  reg:
++    maxItems: 1
++
++  protected-clocks:
++    description:
++      Protected clock specifier list as per common clock binding.
++
++required:
++  - compatible
++  - reg
++  - '#clock-cells'
++  - '#reset-cells'
++  - '#power-domain-cells'
++
++additionalProperties: false
++
++examples:
++  # Example for GCC for MSM8960:
++  - |
++    #include <dt-bindings/clock/qcom,rpmh.h>
++    clock-controller@100000 {
++      compatible = "qcom,gcc-sdm845";
++      reg = <0x100000 0x1f0000>;
++      clocks = <&rpmhcc RPMH_CXO_CLK>,
++               <&rpmhcc RPMH_CXO_CLK_A>,
++               <&sleep_clk>;
++      clock-names = "bi_tcxo", "bi_tcxo_ao", "sleep_clk";
++      #clock-cells = <1>;
++      #reset-cells = <1>;
++      #power-domain-cells = <1>;
++    };
++...
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+index ee0467fb5e31..490edad25830 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+@@ -32,7 +32,6 @@ description: |
+   - dt-bindings/clock/qcom,gcc-mdm9615.h
+   - dt-bindings/reset/qcom,gcc-mdm9615.h
+   - dt-bindings/clock/qcom,gcc-sdm660.h  (qcom,gcc-sdm630 and qcom,gcc-sdm660)
+-  - dt-bindings/clock/qcom,gcc-sdm845.h
  
- enum {
- 	P_BI_TCXO,
--	P_CORE_BI_PLL_TEST_SE,
- 	P_VIDEO_PLL0_OUT_MAIN,
- 	/* P_VIDEO_PLL0_OUT_EVEN,
- 	P_VIDEO_PLL0_OUT_ODD, */
-@@ -51,7 +50,6 @@ static const struct parent_map video_cc_parent_map_0[] = {
- 	{ P_VIDEO_PLL0_OUT_MAIN, 1 },
- 	/* { P_VIDEO_PLL0_OUT_EVEN, 2 },
- 	{ P_VIDEO_PLL0_OUT_ODD, 3 }, */
--	{ P_CORE_BI_PLL_TEST_SE, 4 },
- };
+ properties:
+   compatible:
+@@ -52,7 +51,6 @@ properties:
+       - qcom,gcc-mdm9615
+       - qcom,gcc-sdm630
+       - qcom,gcc-sdm660
+-      - qcom,gcc-sdm845
  
- static const struct clk_parent_data video_cc_parent_data_0[] = {
-@@ -59,7 +57,6 @@ static const struct clk_parent_data video_cc_parent_data_0[] = {
- 	{ .hw = &video_pll0.clkr.hw },
- 	/* { .name = "video_pll0_out_even" },
- 	{ .name = "video_pll0_out_odd" }, */
--	{ .fw_name = "core_bi_pll_test_se", .name = "core_bi_pll_test_se" },
- };
- 
- static const struct freq_tbl ftbl_video_cc_venus_clk_src[] = {
-@@ -81,7 +78,7 @@ static struct clk_rcg2 video_cc_venus_clk_src = {
- 	.clkr.hw.init = &(struct clk_init_data){
- 		.name = "video_cc_venus_clk_src",
- 		.parent_data = video_cc_parent_data_0,
--		.num_parents = 3,
-+		.num_parents = 2,
- 		.flags = CLK_SET_RATE_PARENT,
- 		.ops = &clk_rcg2_shared_ops,
- 	},
+   '#clock-cells':
+     const: 1
 -- 
 2.30.2
 
