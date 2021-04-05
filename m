@@ -2,47 +2,47 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 132653548BB
+	by mail.lfdr.de (Postfix) with ESMTP id DAE463548BD
 	for <lists+linux-clk@lfdr.de>; Tue,  6 Apr 2021 00:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237722AbhDEWr7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        id S236097AbhDEWr7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
         Mon, 5 Apr 2021 18:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36076 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236097AbhDEWr5 (ORCPT
+        with ESMTP id S242844AbhDEWr5 (ORCPT
         <rfc822;linux-clk@vger.kernel.org>); Mon, 5 Apr 2021 18:47:57 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E71DC061788
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B533FC0617AA
         for <linux-clk@vger.kernel.org>; Mon,  5 Apr 2021 15:47:50 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id v140so1867821lfa.4
+Received: by mail-lf1-x134.google.com with SMTP id v15so19657880lfq.5
         for <linux-clk@vger.kernel.org>; Mon, 05 Apr 2021 15:47:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=kMkSpD3OcWTd6f37s3IGkgZFUGHa0Z/7pX7Q5b4doiI=;
-        b=NNMB1AsJvbhXX2sZZK5f+e9Zei02x+RZ5Al3PuhsHIleGLw5uqy4trGtpE6ddoNZR5
-         jVVeYSwMjeiHayP1qBvEXKb1ceVlLCacGqB5A0+M4Restz4Bg3IGZXZQJN7GkSV7vD7f
-         nJW74ogaj30FeBW6Fp0syMepcD9NZodtvdO4cMkabaZX5cPlokit0kYk/1KoDqfTmq7O
-         Yeb5seMfH3+Wei8or4bxak0x80Wyeh9UM5Y3EQY10sf0G+Rjni++xxspUjLqfiIDreF1
-         YAftgAnsh2v9Ksdh6bBW2SMKO9TwwkulfTFLA5SxdMyHSxFD5U7RQ9Lf8X5QiNx9bt1I
-         ZwGg==
+        bh=LaVGcGxnlvWl/N60TSPqkBXVPvOJpnJu23KDJt8v/cE=;
+        b=wYP1Rg42CeLV8hV3/H3qsHkbdEui8ow21fPTRg1YJqrgCisoVCs6KJrUasHx55b5NI
+         I21tZC4h5v3au2qXjHAuK8XVdQuXp2N2fDNdn2e+Wy02bbd0qgXAOQypkQpMJBVLQSw7
+         7geu6bp8vESxFRzAQtHiKpkeBXw3JaOgJrxVFucIXSrIhjD386KGsA/YldMORD9oHadR
+         U9DFa+p+lD58n701bh13jrgSSdzXWPI2oJD8UV53t0yNUI0AQBEiQ4qB7CEkS0hgW3iu
+         XLJ7ZOgp5+nfekUksk6lM1dtdAtqRWeCDio3teL8AbbDNqmKw0su11KmIz3AmkNVruZ+
+         hR7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kMkSpD3OcWTd6f37s3IGkgZFUGHa0Z/7pX7Q5b4doiI=;
-        b=HPltBcwX30RwGilexWAvg04pEVqB52jm33xSCakjIrBQfXcwQFxJzNcBYCSdbA9Y+S
-         F8EP2nts54JV2PdTiWfUUwMwadXuFiIHi0ztcD76/n67SGj5/PKSO0yW9jyP7GOTARdA
-         JwJ1mWiZX9o+ArnULBkXkuQmlgg9lOsQZtN3I4d3nW1jjixf3K3l+Wt46cZIB+5t0Okk
-         vcm0JGoJnO8/lMWJNOB4bZiurVifygGm3QAUJFwAuw8yHJpVdY4oCizcT4GsXmaaOOny
-         3APec5/0mpsotGMYfzacZJm7YG4qW4gCwqkFT0DGB+crgvzgiWiopgyHj9TsdpIxtuCg
-         ICoA==
-X-Gm-Message-State: AOAM530S5s3WXtT6gIgv4NdO0JVkPOhhflY7NzPA35WT/xVs6jNS/3Gv
-        GeuLyVTdAAuZfSCgmG7BKhDfQw==
-X-Google-Smtp-Source: ABdhPJyFGrljJZuPaDjS6lZx2bWAO1iEV6FR2bIa9jDUtcxlo9VQ4yaeN1HlYSbtwehv3kaB45XRNQ==
-X-Received: by 2002:a05:6512:3aa:: with SMTP id v10mr19384898lfp.308.1617662868701;
-        Mon, 05 Apr 2021 15:47:48 -0700 (PDT)
+        bh=LaVGcGxnlvWl/N60TSPqkBXVPvOJpnJu23KDJt8v/cE=;
+        b=TcCCXO25453IfrK0V5B5EekhhrLQ4Yn4A/+ClAP81Ech2ueOo6nV91s57UAZvqfEwg
+         boBNP9UB+b9LY/NNe1xalAP8VXKkMndsnvqoMOE91gWXhp7wyXLZS+fst4D1FnfzZ8cm
+         ALuBJT+MBbCn9mw3/g4yh0PJgqPXAQubpG3QQd8l4Yyy/kJYPdkuc8i3uFRxUlNJZwRo
+         NLh87tPHE4Kp6VRd93sUGosftY11j+QKwWMuKWaoCm94T/cTVES0awriieMsvKhco9I9
+         0tD3Vv/M47oHybj/V0y/KsIjg0qcV1E9/5iTPK8szyNBRrcN4tHU8x0sgDfRf7chqgQA
+         Y/GA==
+X-Gm-Message-State: AOAM533Ebdwn5mwWPytece4YItFRpOecTRj8MlVvhyRHYprbVwgW+VZA
+        hKzcchJlmPofggVxL2DZXboeUg==
+X-Google-Smtp-Source: ABdhPJx08woCFqYotvYKIyfZfrbOktho2R292oUhNXmgxFX/3rSl8uheNbCswGGh4hBOFLXuK2GCPw==
+X-Received: by 2002:a05:6512:2090:: with SMTP id t16mr19935365lfr.514.1617662869315;
+        Mon, 05 Apr 2021 15:47:49 -0700 (PDT)
 Received: from eriador.lan ([37.153.55.125])
         by smtp.gmail.com with ESMTPSA id 130sm213748lfg.263.2021.04.05.15.47.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
@@ -53,9 +53,9 @@ To:     Andy Gross <agross@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>
 Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v4 05/33] clk: qcom: gpucc-sdm845: drop unused enum entries
-Date:   Tue,  6 Apr 2021 01:47:15 +0300
-Message-Id: <20210405224743.590029-6-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v4 06/33] clk: qcom: gpucc-sm8150: drop unused enum entries
+Date:   Tue,  6 Apr 2021 01:47:16 +0300
+Message-Id: <20210405224743.590029-7-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210405224743.590029-1-dmitry.baryshkov@linaro.org>
 References: <20210405224743.590029-1-dmitry.baryshkov@linaro.org>
@@ -69,23 +69,21 @@ Drop unused enum entries from the list of parent enums.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/clk/qcom/gpucc-sdm845.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/clk/qcom/gpucc-sm8150.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/clk/qcom/gpucc-sdm845.c b/drivers/clk/qcom/gpucc-sdm845.c
-index 5663698b306b..2d7dc89915e8 100644
---- a/drivers/clk/qcom/gpucc-sdm845.c
-+++ b/drivers/clk/qcom/gpucc-sdm845.c
-@@ -30,9 +30,7 @@ enum {
- 	P_CORE_BI_PLL_TEST_SE,
+diff --git a/drivers/clk/qcom/gpucc-sm8150.c b/drivers/clk/qcom/gpucc-sm8150.c
+index 27c40754b2c7..2b952f561537 100644
+--- a/drivers/clk/qcom/gpucc-sm8150.c
++++ b/drivers/clk/qcom/gpucc-sm8150.c
+@@ -21,7 +21,6 @@
+ 
+ enum {
+ 	P_BI_TCXO,
+-	P_CORE_BI_PLL_TEST_SE,
  	P_GPLL0_OUT_MAIN,
  	P_GPLL0_OUT_MAIN_DIV,
--	P_GPU_CC_PLL1_OUT_EVEN,
  	P_GPU_CC_PLL1_OUT_MAIN,
--	P_GPU_CC_PLL1_OUT_ODD,
- };
- 
- static const struct parent_map gpu_cc_parent_map_0[] = {
 -- 
 2.30.2
 
