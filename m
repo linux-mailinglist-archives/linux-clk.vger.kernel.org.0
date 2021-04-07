@@ -2,117 +2,143 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B2DD355F5C
-	for <lists+linux-clk@lfdr.de>; Wed,  7 Apr 2021 01:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C9F356076
+	for <lists+linux-clk@lfdr.de>; Wed,  7 Apr 2021 02:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242900AbhDFXT1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 6 Apr 2021 19:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46462 "EHLO
+        id S233758AbhDGAx7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 6 Apr 2021 20:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245064AbhDFXTZ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 6 Apr 2021 19:19:25 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CF5C0613D7
-        for <linux-clk@vger.kernel.org>; Tue,  6 Apr 2021 16:19:15 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id j18so1569452lfg.5
-        for <linux-clk@vger.kernel.org>; Tue, 06 Apr 2021 16:19:15 -0700 (PDT)
+        with ESMTP id S233710AbhDGAx7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 6 Apr 2021 20:53:59 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653DBC06174A;
+        Tue,  6 Apr 2021 17:53:50 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id j1so4807681qvp.6;
+        Tue, 06 Apr 2021 17:53:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=AmYo6XqX++v95q1RyeTSve0yN0GdRgCTRXoSLrb50KY=;
-        b=K9wFHrdtGCPomu0gWmIBmd5bbDUVz4j6Mxi5Pyah2VUcJRvwqotCpIihgEgf0gw2yK
-         3NkbUl4cMiGA+ZPlAFJXpJ6SqpsISBJNywa3pH9N3rImp9YH+1pBhy5UGJfX4qCYih40
-         9nmo5dmSXHvpOd7Bi/Lv1koNVritNxDbB8Wo1dP4GjDJpwt1AiE/vRfA/zDr59SPxzgx
-         T7wfbZXAjoUxPkOUW46m7uverZBS1gl0vP93TZaX/VJqMEP606NewOWE14BD6DR39c86
-         o33v0TKPJYBCccZ0VKEgfBikUeWiEc20zqObLapzD6AWgH5HmfnNqEApq6AFU07oUSvt
-         THdA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ptyh8gw1w6IyWNTHb0zoce3G579rmfx+lHr+X9LynKU=;
+        b=dxeLbpQY8xWtuTVjUHbi9KZZ2EjeEMvn4N9JABpTB6ITX20+F58k0+V1sSBnxxm2e9
+         nzV/H6/BsZ3VSzFuojmSqBiy4s13fcNPQN3NCCDmhYpFkHISGCGwHyAqhgMOW4He/qop
+         FkfUqF57n/e75lsxeA82pZKC6mGM3zU86GJhJ1BID6K9KiGv7pKbHSu16dRJBHWKMLoy
+         kMpaF2C40Eq9u3t9ToWPttJKM+a8Tc0Y++5A+nsZmLJEClzTK1g6KgE9GSQbzYb3ODhA
+         w4M21mwRB0xvE2hOFEMw4J/nJHnihaP5cm8hp2xfFe6Eq/FsAIXK9G2X00RPVhuDosK4
+         CelA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=AmYo6XqX++v95q1RyeTSve0yN0GdRgCTRXoSLrb50KY=;
-        b=jTE3VY/Ni5Z3+3/qFQrfKzR7oJueNsFh1fde1NaYJ4Ji+bXoyhA7UFPxcR2CtZS68a
-         xJ7Nyg1eDC0ZyiNYOX5/2qpGWmcrKT8/dVARzqXZu3AUZfLTZiXGK9UJkeJD0VDoP/N5
-         UJxN8baGwId1CpzEoAhAO3fPRsiArRcysi80yyu0Sg2nQ8zTgP9/fcUfXvkYiLEko90m
-         v1K7FzTic8UiKC26O1QDUZ+Am2sbMP6+aIbZ2dSAWpicXs+IrpmP3ZHGfd3XrW+BxSSL
-         HWClRD0PPw/M+4Prn6KJPrHJ3t2o7wUItnNH8O8g4WJL0LKx5oeKscj+gRIE/IlxZUS4
-         P/Ag==
-X-Gm-Message-State: AOAM533KyesH6U8mqB8kixOz9Ib0iqATlYDWrSUZEyKz5OPGyICLAQ7X
-        g+YQ+61nE8QrFLnrBvNFQTd1ow==
-X-Google-Smtp-Source: ABdhPJwIEnReP04XmwMtjnPC0ylokTrU9GuBGCC1yDbdLzEVIunZ2Ptedm1mmuAxgedD3MK8ARayCA==
-X-Received: by 2002:a05:6512:3698:: with SMTP id d24mr357154lfs.217.1617751154337;
-        Tue, 06 Apr 2021 16:19:14 -0700 (PDT)
-Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id u16sm2366565lja.48.2021.04.06.16.19.13
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ptyh8gw1w6IyWNTHb0zoce3G579rmfx+lHr+X9LynKU=;
+        b=PE8gZ8Li7CZX0J80Gjdi6AGzADeEVwt7MmtSuaJzWf9zhEfMQRoA/QxirNrM9hIgNV
+         Ki5o1azqWYx/OnCiXZSpGd+eGiMmlQQgwyMbVXcmm3JP5ROfjXZVdTt3/54S4HVnVCgu
+         ojDcMZ6/AJ4tmDsHPF9VvydR6OBvUdiywbNALMU1KpGONpCDeqAbqjD4nIlXVgZz8IDB
+         Z+y5mecjECUfihKCPKit0AK1xgH9mBP2bg34AHZstv45T5D3UsbLstVKPtvE9Icb/1HD
+         gw5oWIqHNyVDpjvbZZO5gQndBpwpNQlwg9gpl4z/lGwzyrVmnYh/UijDJxhUj4Nuqa2R
+         Eerw==
+X-Gm-Message-State: AOAM530UrI23nSLP+1gSAAxCqSvB4uG2YoOvPumU0TWuBzODFyyKukPy
+        kxd/aMVXpp6zsWlSN/wjE1GX1Rv0HiLvd6LX
+X-Google-Smtp-Source: ABdhPJwUwUXhxpD8fvgfn6wtoT4cX6GsKssjRqgTbDzrekmOn4/GLVvfB4kxHg5U432Be8ed6s4ywA==
+X-Received: by 2002:a0c:f604:: with SMTP id r4mr951247qvm.3.1617756828588;
+        Tue, 06 Apr 2021 17:53:48 -0700 (PDT)
+Received: from shaak.xiphos.ca (198-48-202-89.cpe.pppoe.ca. [198.48.202.89])
+        by smtp.gmail.com with ESMTPSA id l9sm15776728qtv.65.2021.04.06.17.53.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Apr 2021 16:19:14 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: [PATCH v2 4/4] arm64: dts: qcom: sdm845: add required clocks on the gcc
-Date:   Wed,  7 Apr 2021 02:19:09 +0300
-Message-Id: <20210406231909.3035267-5-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210406231909.3035267-1-dmitry.baryshkov@linaro.org>
-References: <20210406231909.3035267-1-dmitry.baryshkov@linaro.org>
+        Tue, 06 Apr 2021 17:53:48 -0700 (PDT)
+From:   Liam Beguin <liambeguin@gmail.com>
+To:     liambeguin@gmail.com, mturquette@baylibre.com, sboyd@kernel.org
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org
+Subject: [PATCH v4 0/3] add support for the lmk04832
+Date:   Tue,  6 Apr 2021 20:53:27 -0400
+Message-Id: <20210407005330.2890430-1-liambeguin@gmail.com>
+X-Mailer: git-send-email 2.30.1.489.g328c10930387
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Specify input clocks to the SDM845's Global Clock Controller as required
-by the bindings.
+From: Liam Beguin <lvb@xiphos.com>
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Hi,
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 454f794af547..86f717d5bfb6 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -1061,6 +1061,16 @@ soc: soc@0 {
- 		gcc: clock-controller@100000 {
- 			compatible = "qcom,gcc-sdm845";
- 			reg = <0 0x00100000 0 0x1f0000>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK_A>,
-+				 <&sleep_clk>,
-+				 <&pcie0_lane>,
-+				 <&pcie1_lane>;
-+			clock-names = "bi_tcxo",
-+				      "bi_tcxo_ao",
-+				      "sleep_clk",
-+				      "pcie_0_pipe_clk",
-+				      "pcie_1_pipe_clk";
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
- 			#power-domain-cells = <1>;
-@@ -2062,6 +2072,7 @@ pcie0_lane: lanes@1c06200 {
- 				clocks = <&gcc GCC_PCIE_0_PIPE_CLK>;
- 				clock-names = "pipe0";
+The LMK04832 is an ultra-high performance clock conditioner with JEDEC
+JESD204B support and is also pin compatible with the LMK0482x family of
+devices.
+
+This driver adds initial support to configure the LMK04832 clocks using
+the clock framework.
+
+This has been tested on a system using JESD204B subclass 1.
+
+At the moment, the VCO rate has to be set manually from the devicetree
+and a dclk (or sclk) rate change isn't propagated to the VCO
+automatically.
+
+Changes since v1:
+- add yaml devicetree documentation,
+- add links to datasheet,
+- use {u8,u16,u32} instead of Uint_ variants,
+- drop redundant debugfs code,
+- use a pointer to device_info instead of struct copy,
+- add of_device_id table,
+- add support for SYSREF digital delay and JESD204B subclass 1
+
+Changes since v2:
+- fix dt-bindings documentation, apologies for the broken build
+- fix property vendor prefixes
+- split dt-bindings into a separate patch
+
+Changes since v3:
+- add missing properties in dt-bindings
+
+Thanks for your time,
+Liam
+
+Liam Beguin (3):
+  clk: add support for the lmk04832
+  clk: lmk04832: add support for digital delay
+  dt-bindings: clock: add ti,lmk04832 bindings
+
+ .../bindings/clock/ti,lmk04832.yaml           |  209 +++
+ drivers/clk/Kconfig                           |    7 +
+ drivers/clk/Makefile                          |    1 +
+ drivers/clk/clk-lmk04832.c                    | 1595 +++++++++++++++++
+ 4 files changed, 1812 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/ti,lmk04832.yaml
+ create mode 100644 drivers/clk/clk-lmk04832.c
+
+Interdiff against v3:
+diff --git a/Documentation/devicetree/bindings/clock/ti,lmk04832.yaml b/Documentation/devicetree/bindings/clock/ti,lmk04832.yaml
+index c0d9ab650e80..a9f8b9b720fc 100644
+--- a/Documentation/devicetree/bindings/clock/ti,lmk04832.yaml
++++ b/Documentation/devicetree/bindings/clock/ti,lmk04832.yaml
+@@ -23,9 +23,20 @@ properties:
+   reg:
+     maxItems: 1
  
-+				#clock-cells = <0>;
- 				#phy-cells = <0>;
- 				clock-output-names = "pcie_0_pipe_clk";
- 			};
-@@ -2170,6 +2181,7 @@ pcie1_lane: lanes@1c06200 {
- 				clocks = <&gcc GCC_PCIE_1_PIPE_CLK>;
- 				clock-names = "pipe0";
++  '#address-cells':
++    const: 1
++
++  '#size-cells':
++    const: 0
++
+   '#clock-cells':
+     const: 1
  
-+				#clock-cells = <0>;
- 				#phy-cells = <0>;
- 				clock-output-names = "pcie_1_pipe_clk";
- 			};
++  spi-max-frequency:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Maximum SPI clocking speed of the device in Hz.
++
+   clocks:
+     items:
+       - description: PLL2 reference clock.
+
+base-commit: f40ddce88593482919761f74910f42f4b84c004b
 -- 
-2.30.2
+2.30.1.489.g328c10930387
 
