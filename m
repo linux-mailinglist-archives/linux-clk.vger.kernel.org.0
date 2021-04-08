@@ -2,79 +2,163 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD7D357911
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Apr 2021 02:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1CE035791A
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Apr 2021 02:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbhDHAb0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 7 Apr 2021 20:31:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44070 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229484AbhDHAbZ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 7 Apr 2021 20:31:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4875D61181;
-        Thu,  8 Apr 2021 00:31:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617841875;
-        bh=5YsPqezv793TcVBfx0Cfk1xGz66mtLLY0VP7pyv6NKw=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=s9zrAn3EZME/CD+fBbOlgTZzD10vZs4NmNekX35wp0zGTrEu3wiNBQ1KvD//G8S8v
-         zXbwz7/HSz9s+gw19p6/PjDw4HyCRBc3JnqLwImO2qHxr2BOds0V712iWEZL85CiBY
-         96ZmdfaG/LYe9RJqVi0MQySKGdOx0tSHnKb6Jb1gz9H8Ergdhg39Ajd720Z5p8RdLl
-         zbGJeJ1meBqmSR7q0vB7cQ3A/tE+WNw1oqcxFgAd0vfFKgChrIjGtPqBdNvJqvI7Ou
-         fUnCjrYqOiRvf0ebHaHqNCCHeDmzA1RYBck8UM5tuY4A5L4Dl9QLoCb6mCVUhZTbLE
-         LG8MpS28IUnAQ==
-Content-Type: text/plain; charset="utf-8"
+        id S229484AbhDHAib (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 7 Apr 2021 20:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229869AbhDHAia (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 7 Apr 2021 20:38:30 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609CFC061760
+        for <linux-clk@vger.kernel.org>; Wed,  7 Apr 2021 17:38:18 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id h3so70971qvr.10
+        for <linux-clk@vger.kernel.org>; Wed, 07 Apr 2021 17:38:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1nGUzu4qNZTPndpk9QEmw4K0zNMWrS/U4pG62W10g1I=;
+        b=nkZSHP4l9vkbT6OFbkhcUSkSi3iE0RJe0wUnONM4I7k6c8hnwA/snwYo769mjjyZ6m
+         qOb+d/ay4X1DMvBgEgdFElXPIzf5+BeNSLpNLdcRmR9E2uve9LNDDaO4G+kCdcNHPad5
+         cV9WzJFmz5KWtl6GEjxxyhzLH/dkM8uRxDnl714+AKgYige+qrSxmwYBM0m/KGvqWoEG
+         mJavs1Qhh6VNgjgkipSpY+2zuCmi/lQ/t98k/vyMK8SAyy/VZo3HrGjjGkKDGnxElvbx
+         A3+LafR71R1l937Fw8sBdeTI10vQnshSWSaIdX0Fx0lPYa7ntmLOPBkssDcJTykqi4EN
+         kV4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1nGUzu4qNZTPndpk9QEmw4K0zNMWrS/U4pG62W10g1I=;
+        b=lG3NrzBuj3ly0HXdM3c2GRPgV/ES70840xzXHfPJsdZ/L8sE9J80Fj6jARPt6dVxiY
+         nkWoW/13Q8OOirRXSTM13iamxvAE6oehI8patyu9iaXeERQ+z7b0jTGAjBbxG5F/sEs0
+         sfRLz4fQhgInh9YJtgzxgSRuhyGFGeQLBSkXgP0TnAmCi3ONAVDryolYVR6nwirSdKRh
+         haumiq3WP6Cff3Vboh0wNI1m/zOi2p+7gl/T/0OVZdiSrcYiagdz+ULmzttO6W+oHz+T
+         /BDXIMCYq+N9MU3mJPkdvPptIm4nYxClSLCePoli2egb5LrJQwkPo6j0822lL/kYgZAh
+         QixQ==
+X-Gm-Message-State: AOAM533KqzbySKqeMUsaiOEPDB1Mm50TFnLDoo1mCkPLbBJTIkclCGBX
+        QO3my7WUfV+aiUQYSaL8uQYPLd8EA5guoIoFQrk3tQ==
+X-Google-Smtp-Source: ABdhPJydECt459zvSvLS5niFVsoae50GE1E1nTcJk7wCRDz5EeTeguSHV3SqZ83xSq1VRanzQmjWYibeJWA9pxkZ/8o=
+X-Received: by 2002:a05:6214:1870:: with SMTP id eh16mr6073598qvb.23.1617842297591;
+ Wed, 07 Apr 2021 17:38:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <alpine.DEB.2.22.394.2104072100410.11549@hadrien>
-References: <alpine.DEB.2.22.394.2104072100410.11549@hadrien>
-Subject: Re: [PATCH] clk: fix for_each_child.cocci warnings
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        kbuild-all@lists.01.org
-To:     Julia Lawall <julia.lawall@inria.fr>,
-        Liam Beguin <liambeguin@gmail.com>, mturquette@baylibre.com
-Date:   Wed, 07 Apr 2021 17:31:13 -0700
-Message-ID: <161784187378.3790633.2593540922159647609@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+References: <20210406231909.3035267-1-dmitry.baryshkov@linaro.org>
+ <20210406231909.3035267-2-dmitry.baryshkov@linaro.org> <161784119850.3790633.17698180700358661431@swboyd.mtv.corp.google.com>
+In-Reply-To: <161784119850.3790633.17698180700358661431@swboyd.mtv.corp.google.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 8 Apr 2021 03:38:06 +0300
+Message-ID: <CAA8EJpqVJgj0eBm5m91MNqiBZg0y1v=iMAuLpW8H-i3ut8-q0A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: clock: separate SDM845 GCC clock bindings
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Julia Lawall (2021-04-07 12:02:32)
-> From: kernel test robot <lkp@intel.com>
->=20
-> For_each_child_of_node should have of_node_put() before goto.
->=20
-> Generated by: scripts/coccinelle/iterators/for_each_child.cocci
->=20
-> CC: Liam Beguin <lvb@xiphos.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
-> ---
+Hello,
 
-Is this a fix for a patch on the list?
-
->=20
-> url:    https://github.com/0day-ci/linux/commits/Liam-Beguin/add-support-=
-for-the-lmk04832/20210407-085408
-> base:   f40ddce88593482919761f74910f42f4b84c004b
-> :::::: branch date: 9 hours ago
-> :::::: commit date: 9 hours ago
->=20
->  clk-lmk04832.c |    1 +
->  1 file changed, 1 insertion(+)
->=20
-> --- a/drivers/clk/clk-lmk04832.c
-> +++ b/drivers/clk/clk-lmk04832.c
-> @@ -1159,6 +1159,7 @@ static int lmk04832_probe(struct spi_dev
->                 if (ret) {
->                         dev_err(lmk->dev, "missing reg property in child:=
- %s\n",
->                                 child->full_name);
-> +                       of_node_put(child);
->                         goto err_disable_oscin;
->                 }
+On Thu, 8 Apr 2021 at 03:20, Stephen Boyd <sboyd@kernel.org> wrote:
 >
+> Quoting Dmitry Baryshkov (2021-04-06 16:19:06)
+> > Separate qcom,gcc-sdm845 clock bindings, adding required clocks and
+> > clock-names properties.
+>
+> Yes, but why?
+
+Why separate or why add required clocks? Consider the rest of
+bindings, where qcom,gcc.yaml defines older bindings, which do not use
+clocks/clock-names and for newer bindings we have one file per binding
+(qcom,gcc-apq8064.yaml, qcom,gcc-qcs404.yaml, qcom,gcc-sdx55.yaml,
+qcom,gcc-sm8150.yaml, etc).
+
+Do you suggest merging all of them back into a single yaml file?
+
+>
+> >
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+> >  .../bindings/clock/qcom,gcc-sdm845.yaml       | 84 +++++++++++++++++++
+> >  .../devicetree/bindings/clock/qcom,gcc.yaml   |  2 -
+> >  2 files changed, 84 insertions(+), 2 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+> > new file mode 100644
+> > index 000000000000..4808fa7a6b8c
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+> > @@ -0,0 +1,84 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/clock/qcom,gcc-sdm845.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Qualcomm Global Clock & Reset Controller Binding
+> > +
+> > +maintainers:
+> > +  - Stephen Boyd <sboyd@kernel.org>
+> > +  - Taniya Das <tdas@codeaurora.org>
+> > +
+> > +description: |
+> > +  Qualcomm global clock control module which supports the clocks, resets and
+> > +  power domains on SDM845
+> > +
+> > +  See also:
+> > +  - dt-bindings/clock/qcom,gcc-sdm845.h
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: qcom,gcc-sdm845
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: Board XO source
+> > +      - description: Board active XO source
+> > +      - description: Sleep clock source
+> > +      - description: PCIE 0 Pipe clock source (Optional clock)
+> > +      - description: PCIE 1 Pipe clock source (Optional clock)
+>
+> Can we make them not optional?
+
+Sure,
+
+>
+> > +    minItems: 3
+> > +    maxItems: 5
+>
+> And remove this? Because in reality the clks are always going there so
+> we can put a <0> element in the clocks array if we don't care to
+> actually specify it.
+
+Fine with me.
+
+>
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: bi_tcxo
+> > +      - const: bi_tcxo_ao
+> > +      - const: sleep_clk
+> > +      - const: pcie_0_pipe_clk # Optional clock
+> > +      - const: pcie_1_pipe_clk # Optional clock
+> > +    minItems: 3
+> > +    maxItems: 5
+> > +
+
+
+
+-- 
+With best wishes
+Dmitry
