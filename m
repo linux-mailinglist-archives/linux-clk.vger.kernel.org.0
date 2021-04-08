@@ -2,78 +2,61 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FA7D357918
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Apr 2021 02:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B753357950
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Apr 2021 03:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbhDHAiX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 7 Apr 2021 20:38:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44470 "EHLO mail.kernel.org"
+        id S229497AbhDHBJo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 7 Apr 2021 21:09:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47672 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229484AbhDHAiW (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 7 Apr 2021 20:38:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6A6D761130;
-        Thu,  8 Apr 2021 00:38:12 +0000 (UTC)
+        id S229937AbhDHBJk (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 7 Apr 2021 21:09:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 99E6361168;
+        Thu,  8 Apr 2021 01:09:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1617842292;
-        bh=TSCqDSbsCRDRSxtG+nNsrnrXL8+DHlTFEIjwcS8G4i4=;
+        s=k20201202; t=1617844169;
+        bh=lA8glmgaGsO4MbyBGlJMT4oTR+BuyM1kHzdhwEeHn6A=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=gqLcKnc2KtoBOyqyFUCHKlcGoT/Ff1VugVnGo64igZhwRVI6NBYfnG4931FnhtdBm
-         ukyJ+rFR7BJX0akjnPvdsYzJVNbYuboteHf1gwakJ0ly7HDGF5/2I9VCnr2hKiSMmx
-         ED/ij27XjdBiK44BNDLTicFBGKR+aBBD2KjSREAoTzGJAC+N82i5KQXkpTt5buy3VY
-         VlzJZcxLdkdSp1xTlLOw90RaEDWxpXsd0oxlmPl8HvoXTUWxwc7/udEy2e26EL4L8O
-         Rudt+gHtwC/Gr4/IzcwaqEYyCLnht+yG8EbsH2fbbvrmrXAdiTk0yG/B7ChT2J/gey
-         pY2XaJTRa4LSQ==
+        b=HUvmZ2abFQ9nuM94bTp0xg6A3UizOD+3PE2UUImBH6kKMnAV5XcK7f85deCBZ0BV5
+         hKpi4BSiV1Z2uKxtGxtI/J8mpywmTGIbaAIJ0NGwps2JbkWLdX14sIUoKFu8MhImlu
+         cGh3P9yI2lg2VIfWSWm31ODGA0SGXQkThcCxE3AS/ftEye3Sy6sxpga5xlfJ4joHjU
+         UZnHH7BeFdPJO8/+CFLW131L7dWg6ipnEaXKU6btx5N/ri2mODQKJ3cplSPPQVnLgZ
+         ZsXBFzqyVfhj3NDKFdD4UefY2n1Hsw18Kx/E+nfzHKm0NHp+LFq+4U1nn02yKJtWZS
+         f1iQ8ALDd5lmQ==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20210328113102.jk3os7p56kq43yve@pali>
-References: <20210114124032.12765-1-pali@kernel.org> <20210222194158.12342-1-pali@kernel.org> <20210301192024.tgvp6f5zscbknepo@pali> <87a6r8ka6x.fsf@BL-laptop> <20210328113102.jk3os7p56kq43yve@pali>
-Subject: Re: [PATCH mvebu v3 00/10] Armada 37xx: Fix cpufreq changing base CPU speed to 800 MHz from 1000 MHz
+In-Reply-To: <20210406154015.602779-1-quanyang.wang@windriver.com>
+References: <20210406154015.602779-1-quanyang.wang@windriver.com>
+Subject: Re: [V2][PATCH] clk: zynqmp: move zynqmp_pll_set_mode out of round_rate callback
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jolly Shah <jolly.shah@xilinx.com>,
+        Rajan Vaja <rajan.vaja@xilinx.com>,
+        Quanyang Wang <quanyang.wang@windriver.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Marek =?utf-8?q?Beh=C3=BAn?= <kabel@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Tomasz Maciej Nowak <tmn505@gmail.com>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Andre Heider <a.heider@gmail.com>,
-        Vladimir Vid <vladimir.vid@sartura.hr>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        =?utf-8?q?G=C3=A9rald?= Kerma <gerald@gk2.net>,
-        Konstantin Porotchkin <kostap@marvell.com>
-To:     Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Pali =?utf-8?q?Roh=C3=A1r?= <pali@kernel.org>
-Date:   Wed, 07 Apr 2021 17:38:11 -0700
-Message-ID: <161784229111.3790633.14149077702883618937@swboyd.mtv.corp.google.com>
+        Michal Simek <michal.simek@xilinx.com>,
+        quanyang.wang@windriver.com
+Date:   Wed, 07 Apr 2021 18:09:28 -0700
+Message-ID: <161784416839.3790633.9475983970404006080@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Pali Roh=C3=A1r (2021-03-28 04:31:02)
-> On Friday 12 March 2021 10:12:06 Gregory CLEMENT wrote:
-> > Hello Pali,
-> >=20
-> > > Hello Gregory!
-> > >
-> > > Patches are the for almost two months and more people have tested the=
-m.
-> > > They are marked with Fixed/CC-stable tags, they should go also into
-> > > stable trees as they are fixing CPU scaling and instability issues.
-> > >
-> > > Are there any issues with these patches? If not, could you please mer=
-ge
-> > > them for upcoming Linux version?
-> >=20
-> > Actually I am not the maintainer of the clk and cpufreq subsystems, so
-> > the only thing I can apply is the device tree relative patch.
-> >=20
-> > Gregory
+Quoting quanyang.wang@windriver.com (2021-04-06 08:40:15)
+> From: Quanyang Wang <quanyang.wang@windriver.com>
 >=20
-> Hello Gregory! Could you please at least review this patches, so other
-> maintainers could merge them?
+> The round_rate callback should only perform rate calculation and not
+> involve calling zynqmp_pll_set_mode to change the pll mode. So let's
+> move zynqmp_pll_set_mode out of round_rate and to set_rate callback.
+>=20
+> Fixes: 3fde0e16d016 ("drivers: clk: Add ZynqMP clock driver")
+> Reported-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Quanyang Wang <quanyang.wang@windriver.com>
+> ---
 
-Maybe it can merge through cpufreq tree? I've already acked the clk
-driver patches I believe.
+Applied to clk-next
