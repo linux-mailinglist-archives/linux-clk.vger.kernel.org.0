@@ -2,123 +2,122 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C14B360203
-	for <lists+linux-clk@lfdr.de>; Thu, 15 Apr 2021 07:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9C0360375
+	for <lists+linux-clk@lfdr.de>; Thu, 15 Apr 2021 09:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbhDOFxZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 15 Apr 2021 01:53:25 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:59545 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230447AbhDOFxX (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 15 Apr 2021 01:53:23 -0400
-X-UUID: 5a4badabbefd4641bf4f78e72aae2150-20210415
-X-UUID: 5a4badabbefd4641bf4f78e72aae2150-20210415
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <flora.fu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1876903005; Thu, 15 Apr 2021 13:52:58 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 15 Apr 2021 13:52:55 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 15 Apr 2021 13:52:54 +0800
-From:   Flora Fu <flora.fu@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        id S231358AbhDOHeR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 15 Apr 2021 03:34:17 -0400
+Received: from spam.zju.edu.cn ([61.164.42.155]:20708 "EHLO zju.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230090AbhDOHeR (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 15 Apr 2021 03:34:17 -0400
+Received: from localhost.localdomain (unknown [10.192.139.175])
+        by mail-app3 (Coremail) with SMTP id cC_KCgD3LtRT7Hdgs8YnAQ--.20029S4;
+        Thu, 15 Apr 2021 15:33:44 +0800 (CST)
+From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
+To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-CC:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Flora Fu <flora.fu@mediatek.com>,
-        Pi-Cheng Chen <pi-cheng.chen@mediatek.com>,
-        Chiawen Lee <chiawen.lee@mediatek.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <srv_heupstream@mediatek.com>
-Subject: [PATCH v2 7/7] arm64: dts: mt8192: Add APU power domain node
-Date:   Thu, 15 Apr 2021 13:52:40 +0800
-Message-ID: <1618465960-3013-8-git-send-email-flora.fu@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1618465960-3013-1-git-send-email-flora.fu@mediatek.com>
-References: <1618465960-3013-1-git-send-email-flora.fu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 9D8029BC1D72AC5253A108D378D8BE10E10239E313A5DFE914921084B05E37CD2000:8
-X-MTK:  N
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] [v3] clk: renesas: rcar-usb2-clock-sel: Fix error handling in rcar_usb2_clock_sel_probe
+Date:   Thu, 15 Apr 2021 15:33:38 +0800
+Message-Id: <20210415073338.22287-1-dinghao.liu@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgD3LtRT7Hdgs8YnAQ--.20029S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7KF4fJr17KFykCFyDKry7GFg_yoW8Kr4Dpw
+        18Xa4ftF4jgrZ2ganxtFsrZFyYka43tayjqFZ2gw18u3ZxC3W8Xr1rJFySgasYqrWkA3W3
+        X3y2gr4xCFs0vFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkq1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxF
+        aVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgwNBlZdtTXCvwAMs-
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add APU power domain node to MT8192.
+The error handling paths after pm_runtime_get_sync() has no
+refcount decrement, which leads to refcount leak.
 
-Signed-off-by: Flora Fu <flora.fu@mediatek.com>
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
 ---
-Note:
-This patch depends on MT8192 clock[1] and PMIC[2] patches which haven't yet been accepted.
-[1] https://patchwork.kernel.org/project/linux-mediatek/patch/20210324104110.13383-7-chun-jie.chen@mediatek.com/
-[2] https://patchwork.kernel.org/project/linux-mediatek/patch/1617188527-3392-9-git-send-email-hsin-hsiung.wang@mediatek.com/
----
- arch/arm64/boot/dts/mediatek/mt8192-evb.dts |  7 ++++++
- arch/arm64/boot/dts/mediatek/mt8192.dtsi    | 28 +++++++++++++++++++++
- 2 files changed, 35 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192-evb.dts b/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-index 1769f3a9b510..688c97c46d44 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8192-evb.dts
-@@ -65,3 +65,10 @@
- &mt6359_vrf12_ldo_reg {
- 	regulator-always-on;
- };
-+
-+&apuspm {
-+	vsram-supply = <&mt6359_vsram_md_ldo_reg>;
-+	apu_top: power-domain@0 {
-+		domain-supply = <&mt6359_vproc1_buck_reg>;
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-index 561025d2ebab..90436757386e 100644
---- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
-@@ -1033,6 +1033,34 @@
- 			#clock-cells = <1>;
- 		};
+Changelog:
+
+v2: - Move the position of pm_runtime_enable,_get_sync().
+      Use devm_clk_register() to simplify error handling.
+
+v2: - Use devm_clk_hw_register() instead of devm_clk_register().
+---
+ drivers/clk/renesas/rcar-usb2-clock-sel.c | 23 +++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/clk/renesas/rcar-usb2-clock-sel.c b/drivers/clk/renesas/rcar-usb2-clock-sel.c
+index 3abafd78f7c8..a6f82a5a6335 100644
+--- a/drivers/clk/renesas/rcar-usb2-clock-sel.c
++++ b/drivers/clk/renesas/rcar-usb2-clock-sel.c
+@@ -131,7 +131,6 @@ static int rcar_usb2_clock_sel_remove(struct platform_device *pdev)
+ 	struct usb2_clock_sel_priv *priv = platform_get_drvdata(pdev);
  
-+		apuspm: power-domain@190f0000 {
-+			compatible = "mediatek,mt8192-apu-pm", "syscon";
-+			reg = <0 0x190f0000 0 0x1000>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			#power-domain-cells = <1>;
-+			mediatek,scpsys = <&scpsys>;
-+			mediatek,apu-conn = <&apu_conn>;
-+			mediatek,apu-vcore = <&apu_vcore>;
+ 	of_clk_del_provider(dev->of_node);
+-	clk_hw_unregister(&priv->hw);
+ 	pm_runtime_put(dev);
+ 	pm_runtime_disable(dev);
+ 
+@@ -164,9 +163,6 @@ static int rcar_usb2_clock_sel_probe(struct platform_device *pdev)
+ 	if (IS_ERR(priv->rsts))
+ 		return PTR_ERR(priv->rsts);
+ 
+-	pm_runtime_enable(dev);
+-	pm_runtime_get_sync(dev);
+-
+ 	clk = devm_clk_get(dev, "usb_extal");
+ 	if (!IS_ERR(clk) && !clk_prepare_enable(clk)) {
+ 		priv->extal = !!clk_get_rate(clk);
+@@ -183,6 +179,8 @@ static int rcar_usb2_clock_sel_probe(struct platform_device *pdev)
+ 		return -ENOENT;
+ 	}
+ 
++	pm_runtime_enable(dev);
++	pm_runtime_get_sync(dev);
+ 	platform_set_drvdata(pdev, priv);
+ 	dev_set_drvdata(dev, priv);
+ 
+@@ -193,11 +191,20 @@ static int rcar_usb2_clock_sel_probe(struct platform_device *pdev)
+ 	init.num_parents = 0;
+ 	priv->hw.init = &init;
+ 
+-	clk = clk_register(NULL, &priv->hw);
+-	if (IS_ERR(clk))
+-		return PTR_ERR(clk);
++	ret = devm_clk_hw_register(NULL, &priv->hw);
++	if (ret)
++		goto pm_put;
 +
-+			apu_top: power-domain@0 {
-+				reg = <0>;
-+				#power-domain-cells = <0>;
-+				clocks = <&topckgen CLK_TOP_DSP_SEL>,
-+					 <&topckgen CLK_TOP_IPU_IF_SEL>,
-+					 <&clk26m>,
-+					 <&topckgen CLK_TOP_UNIVPLL_D6_D2>;
-+				clock-names = "clk_top_conn",
-+					      "clk_top_ipu_if",
-+					      "clk_off",
-+					      "clk_on_default";
-+				assigned-clocks = <&topckgen CLK_TOP_DSP_SEL>,
-+						  <&topckgen CLK_TOP_IPU_IF_SEL>;
-+				assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D6_D2>,
-+							 <&topckgen CLK_TOP_UNIVPLL_D6_D2>;
-+			};
-+		};
++	ret = of_clk_add_hw_provider(np, of_clk_hw_simple_get, &priv->hw);
++	if (ret)
++		goto pm_put;
 +
- 		larb13: larb@1a001000 {
- 			compatible = "mediatek,mt8192-smi-larb";
- 			reg = <0 0x1a001000 0 0x1000>;
++	return 0;
+ 
+-	return of_clk_add_hw_provider(np, of_clk_hw_simple_get, &priv->hw);
++pm_put:
++	pm_runtime_put(dev);
++	pm_runtime_disable(dev);
++	return ret;
+ }
+ 
+ static const struct dev_pm_ops rcar_usb2_clock_sel_pm_ops = {
 -- 
-2.18.0
+2.17.1
 
