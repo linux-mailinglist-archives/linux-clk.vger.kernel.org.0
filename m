@@ -2,307 +2,182 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE353619E9
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Apr 2021 08:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E613619F9
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Apr 2021 08:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239119AbhDPGiB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 16 Apr 2021 02:38:01 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:38612 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238460AbhDPGiA (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 16 Apr 2021 02:38:00 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 13G6bN9o125771;
-        Fri, 16 Apr 2021 01:37:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1618555043;
-        bh=+Sup0ypjxIcvc4NEFGB6h7kW3aLLqy5KxhpOtjnaQ+I=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=GKyQfdWCCiFSRojiYJbjhrHFOkuTIbTlk6B/A4jVlQB1ecfNWMR0hILIrkPJx0a90
-         MjFa2/YQ9zAZSNYVH2X7tUt5k4ape4YgWr66SWHNG/uprccepxQcmpTPSx26Pnu2b5
-         8g2f+V2pIH3HFf/bkdWq40UdPaIso2RFYQI+ZRXY=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 13G6bNvv073145
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 16 Apr 2021 01:37:23 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 16
- Apr 2021 01:37:23 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Fri, 16 Apr 2021 01:37:23 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 13G6bN65015701;
-        Fri, 16 Apr 2021 01:37:23 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>
-CC:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH 4/4] dt-bindings: arm: keystone: Convert ti,sci to json schema
-Date:   Fri, 16 Apr 2021 01:37:21 -0500
-Message-ID: <20210416063721.20538-5-nm@ti.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20210416063721.20538-1-nm@ti.com>
-References: <20210416063721.20538-1-nm@ti.com>
+        id S234899AbhDPGpE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 16 Apr 2021 02:45:04 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:34158 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229555AbhDPGpE (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 16 Apr 2021 02:45:04 -0400
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13G6Un5R011986;
+        Fri, 16 Apr 2021 08:44:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=FvMeBX596NIdXPa0F+obOEjYGkVgzPgUCaQLWURxgsw=;
+ b=ZozWyeQTjkFh/Iwv4ha7v7UjN6OCndCD+Dk/0xuFrJUuIH9RoFvOCIJf+XpzX5Wxaqr0
+ 1IVVLqYoRkxLyXzZNNTNcuwhuYEKCrHBNHQLvs69YbbCnF8F6lwqiD6G0DaTQ7LiSi71
+ vDiD9JZeYTrlXDyRAP359Iv/3qSlTOvGTBGPCRIkfFDqwSN3zsXG1vp+ZOUFpqrP02u8
+ aOi6q4jXA8Ecyeqq2Z6esKI9zhhgcf62vB9uzKzVt92YTWRRbEk7kbq0vg+NYG3xpwEs
+ JNpI6RFeAi3JmU0WYxkdcFhqBg+5ERGL9UD2d8N79CESLDe2TrR4YpE9nSTLvS3TgcJ/ JQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 37xes0yv79-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Apr 2021 08:44:27 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9501810002A;
+        Fri, 16 Apr 2021 08:44:26 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 86CFA21969E;
+        Fri, 16 Apr 2021 08:44:26 +0200 (CEST)
+Received: from lmecxl0572.lme.st.com (10.75.127.47) by SFHDAG2NODE3.st.com
+ (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 16 Apr
+ 2021 08:44:25 +0200
+Subject: Re: [PATCH 1/7] clk: stm32mp1: Split ETHCK_K into separate MUX and
+ GATE clock
+To:     Marek Vasut <marex@denx.de>, <linux-arm-kernel@lists.infradead.org>
+CC:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Patrick Delaunay <patrick.delaunay@foss.st.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        <linux-clk@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20210408185731.135511-1-marex@denx.de>
+ <20210408185731.135511-2-marex@denx.de>
+ <2b10f5d9-54cb-ce83-b7aa-f4ec8e67c001@foss.st.com>
+ <92dd5798-8f5a-66e4-06bc-e3beb16690f5@denx.de>
+From:   "gabriel.fernandez@foss.st.com" <gabriel.fernandez@foss.st.com>
+Message-ID: <d168aed8-aebd-1bee-aa72-3a3601718cad@foss.st.com>
+Date:   Fri, 16 Apr 2021 08:44:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <92dd5798-8f5a-66e4-06bc-e3beb16690f5@denx.de>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG3NODE1.st.com (10.75.127.7) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-15_11:2021-04-15,2021-04-15 signatures=0
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Convert the ti,sci to json schema for better checks and documentation.
+Hi Marek
 
-NOTE: This change does introduce a stricter naming convention for
-TI-SCI controller nodes.
+On 4/14/21 4:04 PM, Marek Vasut wrote:
+> On 4/14/21 3:03 PM, gabriel.fernandez@foss.st.com wrote:
+>> Hi Marek,
+> 
+> Hello Gabriel,
+> 
+>> Thanks for the patchset
+>>
+>> On 4/8/21 8:57 PM, Marek Vasut wrote:
+>>> The ETHCK_K are modeled as composite clock of MUX and GATE, however per
+>>> STM32MP1 Reference Manual RM0436 Rev 3, Page 574, Figure 83. Peripheral
+>>> clock distribution for Ethernet, ETHPTPDIV divider is attached past the
+>>> ETHCK_K mux, and ETH_CLK/eth_clk_fb clock are output past ETHCKEN gate.
+>>> Therefore, in case ETH_CLK/eth_clk_fb are not in use AND PTP clock are
+>>> in use, ETHCKEN gate can be turned off. Current driver does not permit
+>>> that, fix it.
+>>
+>> I don"t understand, it's already the case.
+>>
+>> ETHCK_K it's a composite with a MUX and a GATE.
+> 
+> But ETHCK_K is _not_ a composite clock, look at the Figure 83 in the 
+> datasheet again and schematic below.
+> 
+>> ETHPTP_K (ETHPTPDIV) it's a composite with the same MUX and a DIV (no 
+>> gate)
+> 
+> But ETHPTP_K shouldn't control any mux, it is only a divider.
+> 
+>> If you use only ETHPTPDIV,  ETHCKEN gate can be turned off.
+> 
+> Look, this is what you have today:
+> 
+>             .------------ ETHCK_K -----------.
+>             |_______               _______   |
+> pll4_p_ck--|M_ETHCK\             |G_ETHCK\  |
+>             | MUX    |------+-----| GATE   |-------------[x] ETH_CLK
+> pll3_q_ck--|_______/       |     |_______/                  eth_clk_fb
+>             |               |
+>             |               '--(ETHCKSELR[7:4] divider)--[x] clk_ptp_ref
+>             |                                          |
+>             '------------ ETHPTP_K --------------------'
+> 
+> And this is what you should have, to avoid having two composite clock 
+> which control the same mux using the same register bit, i.e. what this 
+> patch implements:
+> 
+>             .- ck_ker_eth -.  .--- ETHCK_K --.
+>             |_______       |  |    _______   |
+> pll4_p_ck--|M_ETHCK\      |  |   |G_ETHCK\  |
+>             | MUX    |------+-----| GATE   |-------------[x] ETH_CLK
+> pll3_q_ck--|_______/       |     |_______/                  eth_clk_fb
+>                             |
+>                             '--(ETHCKSELR[7:4] divider)--[x] clk_ptp_ref
+>                              |                         |
+>                              '---- ETHPTP_K -----------'
+> 
 
-NOTE: we do have false positive checkpatch warning with this patch:
-"DT binding docs and includes should be a separate patch"
+These 2 solutions are valid. I made the choice to implement the first 
+one to be able to change parent with the kernel clock of the IP (no need 
+to add an intermediate binding). It's the same principle for all kernel 
+of this soc.
+I can ask to Alexandre to comeback of this principle, but i 'm not 
+favorable.
 
-Signed-off-by: Nishanth Menon <nm@ti.com>
----
- .../bindings/arm/keystone/ti,sci.txt          |  86 ------------
- .../bindings/arm/keystone/ti,sci.yaml         | 129 ++++++++++++++++++
- 2 files changed, 129 insertions(+), 86 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/keystone/ti,sci.txt
- create mode 100644 Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
-
-diff --git a/Documentation/devicetree/bindings/arm/keystone/ti,sci.txt b/Documentation/devicetree/bindings/arm/keystone/ti,sci.txt
-deleted file mode 100644
-index 6f0cd31c1520..000000000000
---- a/Documentation/devicetree/bindings/arm/keystone/ti,sci.txt
-+++ /dev/null
-@@ -1,86 +0,0 @@
--Texas Instruments System Control Interface (TI-SCI) Message Protocol
----------------------------------------------------------------------
--
--Texas Instrument's processors including those belonging to Keystone generation
--of processors have separate hardware entity which is now responsible for the
--management of the System on Chip (SoC) system. These include various system
--level functions as well.
--
--An example of such an SoC is K2G, which contains the system control hardware
--block called Power Management Micro Controller (PMMC). This hardware block is
--initialized early into boot process and provides services to Operating Systems
--on multiple processors including ones running Linux.
--
--See http://processors.wiki.ti.com/index.php/TISCI for protocol definition.
--
--TI-SCI controller Device Node:
--=============================
--
--The TI-SCI node describes the Texas Instrument's System Controller entity node.
--This parent node may optionally have additional children nodes which describe
--specific functionality such as clocks, power domain, reset or additional
--functionality as may be required for the SoC. This hierarchy also describes the
--relationship between the TI-SCI parent node to the child node.
--
--Required properties:
---------------------
--- compatible:	should be "ti,k2g-sci" for TI 66AK2G SoC
--		should be "ti,am654-sci" for for TI AM654 SoC
--- mbox-names:
--	"rx" - Mailbox corresponding to receive path
--	"tx" - Mailbox corresponding to transmit path
--
--- mboxes: Mailboxes corresponding to the mbox-names. Each value of the mboxes
--	  property should contain a phandle to the mailbox controller device
--	  node and an args specifier that will be the phandle to the intended
--	  sub-mailbox child node to be used for communication.
--
--See Documentation/devicetree/bindings/mailbox/mailbox.txt for more details
--about the generic mailbox controller and client driver bindings. Also see
--Documentation/devicetree/bindings/mailbox/ti,message-manager.txt for typical
--controller that is used to communicate with this System controllers.
--
--Optional Properties:
---------------------
--- reg-names:
--	debug_messages - Map the Debug message region
--- reg:  register space corresponding to the debug_messages
--- ti,system-reboot-controller: If system reboot can be triggered by SoC reboot
--- ti,host-id: Integer value corresponding to the host ID assigned by Firmware
--	for identification of host processing entities such as virtual
--	machines
--
--Example (K2G):
---------------
--	pmmc: pmmc {
--		compatible = "ti,k2g-sci";
--		ti,host-id = <2>;
--		mbox-names = "rx", "tx";
--		mboxes= <&msgmgr &msgmgr_proxy_pmmc_rx>,
--			<&msgmgr &msgmgr_proxy_pmmc_tx>;
--		reg-names = "debug_messages";
--		reg = <0x02921800 0x800>;
--	};
--
--
--TI-SCI Client Device Node:
--=========================
--
--Client nodes are maintained as children of the relevant TI-SCI device node.
--
--Example (K2G):
---------------
--	pmmc: pmmc {
--		compatible = "ti,k2g-sci";
--		...
--
--		my_clk_node: clk_node {
--			...
--			...
--		};
--
--		my_pd_node: pd_node {
--			...
--			...
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml b/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
-new file mode 100644
-index 000000000000..3e835ad84dc2
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
-@@ -0,0 +1,129 @@
-+# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/keystone/ti,sci.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: TI-SCI controller device node bindings
-+
-+maintainers:
-+  - Nishanth Menon <nm@ti.com>
-+
-+allOf:
-+  - $ref: /schemas/mbox/mbox-consumer.yaml#
-+
-+description: |
-+  Texas Instrument's processors including those belonging to Keystone generation
-+  of processors have separate hardware entity which is now responsible for the
-+  management of the System on Chip (SoC) system. These include various system
-+  level functions as well.
-+
-+  An example of such an SoC is K2G, which contains the system control hardware
-+  block called Power Management Micro Controller (PMMC). This hardware block is
-+  initialized early into boot process and provides services to Operating Systems
-+  on multiple processors including ones running Linux.
-+
-+  See http://processors.wiki.ti.com/index.php/TISCI for protocol definition.
-+
-+  The TI-SCI node describes the Texas Instrument's System Controller entity node.
-+  This parent node may optionally have additional children nodes which describe
-+  specific functionality such as clocks, power domain, reset or additional
-+  functionality as may be required for the SoC. This hierarchy also describes the
-+  relationship between the TI-SCI parent node to the child node.
-+
-+properties:
-+  $nodename:
-+    pattern: "^system-controller@[0-9a-f]+$"
-+
-+  compatible:
-+    oneOf:
-+      - description: System controller on TI 66AK2G SoC and other K3 SoCs
-+        items:
-+          - const: ti,k2g-sci
-+      - description: System controller on TI AM654 SoC
-+        items:
-+          - const: ti,am654-sci
-+
-+  reg-names:
-+    description: |
-+      Specifies the debug messages memory mapped region that is optionally
-+      made available from TI-SCI controller.
-+      - const: debug_messages
-+
-+  reg:
-+    minItems: 1
-+
-+  mbox-names:
-+    description: |
-+      Specifies the mailboxes used to communicate with TI-SCI Controller
-+      made available from TI-SCI controller.
-+    items:
-+      - const: rx
-+      - const: tx
-+
-+  mboxes:
-+    minItems: 2
-+
-+  ti,system-reboot-controller:
-+    description: Determines If system reboot can be triggered by SoC reboot
-+    type: boolean
-+
-+  ti,host-id:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Value corresponding to the host ID assigned by Firmware
-+      for identification of host processing entities such as virtual machines.
-+
-+required:
-+  - compatible
-+  - mbox-names
-+  - mboxes
-+
-+additionalProperties: false
-+
-+patternProperties:
-+  # All other properties should be a power, clock or reset controller
-+  "^(power-controller|clock-controller|reset-controller)$":
-+    type: object
-+    oneOf:
-+      - $ref: /schemas/soc/ti/sci-pm-domain.yaml#
-+      - $ref: /schemas/clock/ti,sci-clk.yaml#
-+      - $ref: /schemas/reset/ti,sci-reset.yaml#
-+
-+examples:
-+  - |
-+    pmmc: system-controller@2921800 {
-+      compatible = "ti,k2g-sci";
-+      ti,system-reboot-controller;
-+      mbox-names = "rx", "tx";
-+      mboxes= <&msgmgr 5 2>,
-+              <&msgmgr 0 0>;
-+      reg-names = "debug_messages";
-+      reg = <0x02921800 0x800>;
-+    };
-+
-+  - |
-+    dmsc: system-controller@44083000 {
-+      compatible = "ti,k2g-sci";
-+      ti,host-id = <12>;
-+      mbox-names = "rx", "tx";
-+      mboxes= <&secure_proxy_main 11>,
-+              <&secure_proxy_main 13>;
-+      reg-names = "debug_messages";
-+      reg = <0x44083000 0x1000>;
-+
-+      k3_pds: power-controller {
-+        compatible = "ti,sci-pm-domain";
-+        #power-domain-cells = <2>;
-+      };
-+
-+      k3_clks: clock-controller {
-+        compatible = "ti,k2g-sci-clk";
-+        #clock-cells = <2>;
-+      };
-+
-+      k3_reset: reset-controller {
-+        compatible = "ti,sci-reset";
-+        #reset-cells = <2>;
-+      };
-+    };
--- 
-2.31.0
-
+>>> This patch converts ETHCK_K from composite clock into a ETHCKEN gate,
+>>> ETHPTP_K from composite clock into ETHPTPDIV divider, and adds another
+>>> NO_ID clock "ck_ker_eth" which models the ETHSRC mux and is parent clock
+>>> to both ETHCK_K and ETHPTP_K. Therefore, all references to ETHCK_K and
+>>> ETHPTP_K remain functional as before.
+>>>
+>>> [1] STM32MP1 Reference Manual RM0436 Rev 3, Page 574,
+>>>      Figure 83. Peripheral clock distribution for Ethernet
+>>> https://www.st.com/resource/en/reference_manual/dm00327659-stm32mp157-advanced-armbased-32bit-mpus-stmicroelectronics.pdf 
+>>>
+> 
+> [...]
+> 
+>>> diff --git a/drivers/clk/clk-stm32mp1.c b/drivers/clk/clk-stm32mp1.c
+>>> index a875649df8b8..a7c7f544ee5d 100644
+>>> --- a/drivers/clk/clk-stm32mp1.c
+>>> +++ b/drivers/clk/clk-stm32mp1.c
+>>> @@ -1949,7 +1949,6 @@ static const struct clock_config 
+>>> stm32mp1_clock_cfg[] = {
+>>>       KCLK(DSI_K, "dsi_k", dsi_src, 0, G_DSI, M_DSI),
+>>>       KCLK(ADFSDM_K, "adfsdm_k", sai_src, 0, G_ADFSDM, M_SAI1),
+>>>       KCLK(USBO_K, "usbo_k", usbo_src, 0, G_USBO, M_USBO),
+>>> -    KCLK(ETHCK_K, "ethck_k", eth_src, 0, G_ETHCK, M_ETHCK),
+>>>       /* Particulary Kernel Clocks (no mux or no gate) */
+>>>       MGATE_MP1(DFSDM_K, "dfsdm_k", "ck_mcu", 0, G_DFSDM),
+>>> @@ -1958,11 +1957,16 @@ static const struct clock_config 
+>>> stm32mp1_clock_cfg[] = {
+>>>       MGATE_MP1(GPU_K, "gpu_k", "pll2_q", 0, G_GPU),
+>>>       MGATE_MP1(DAC12_K, "dac12_k", "ck_lsi", 0, G_DAC12),
+>>> -    COMPOSITE(ETHPTP_K, "ethptp_k", eth_src, CLK_OPS_PARENT_ENABLE |
+>>> +    COMPOSITE(NO_ID, "ck_ker_eth", eth_src, CLK_OPS_PARENT_ENABLE |
+>>>             CLK_SET_RATE_NO_REPARENT,
+>>>             _NO_GATE,
+>>>             _MMUX(M_ETHCK),
+>>> -          _DIV(RCC_ETHCKSELR, 4, 4, 0, NULL)),
+>>> +          _NO_DIV),
+>>> +
+>>> +    MGATE_MP1(ETHCK_K, "ethck_k", "ck_ker_eth", 0, G_ETHCK),
+>> assigned parent with ETHCK_K will not work
+>>> +
+>>> +    DIV(ETHPTP_K, "ethptp_k", "ck_ker_eth", CLK_OPS_PARENT_ENABLE |
+>>
+>> CLK_OPS_PARENT_ENABLE flags not useful with a divider.
+> 
+> How so ?
