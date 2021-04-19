@@ -2,324 +2,148 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C92363632
-	for <lists+linux-clk@lfdr.de>; Sun, 18 Apr 2021 16:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CA1363960
+	for <lists+linux-clk@lfdr.de>; Mon, 19 Apr 2021 04:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231708AbhDRO5i (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 18 Apr 2021 10:57:38 -0400
-Received: from smtp-35-i2.italiaonline.it ([213.209.12.35]:55783 "EHLO
-        libero.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230038AbhDRO5i (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sun, 18 Apr 2021 10:57:38 -0400
-Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it
- ([95.244.94.151])
-        by smtp-35.iol.local with ESMTPA
-        id Y8r3lCRdYpK9wY8rEla5X5; Sun, 18 Apr 2021 16:57:08 +0200
-x-libjamoibt: 1601
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
-        t=1618757828; bh=dONJfsHtBWoiRzjCteaPdBqlICJacrJyJEqM8ng8pXc=;
-        h=From;
-        b=z/cCHaC16i75m2CR4PrQEjJuAiXjEmFpR+Ha5GM3gvh5Wa76vPsxQFltyjAQrSV6D
-         EHEjsvcVNOIVAmI+x5/11ud3eNQ8ZkiK9R5J4HTK9FokZuo+eQ7MCYsYbcaUTP4PPa
-         Y9alh1zISqI5nT5Gad18h1ivAi+K48kovj3jCVQMfqCeNqQXkMJ4/fDs+stgUg6wuX
-         /1TeegvKAZmwIxj6djnHFPcV793Mp50ZApOIZbI0vjCkR8P8pjj9WTR/fNRbl8O5Bk
-         Aocac6ONYkJs2a8XWRSSXi5zp77M2kvl5n6ihsOprG+10/n40O/DSfV6qW0+bSFuUt
-         vixbZdycbkFtQ==
-X-CNFS-Analysis: v=2.4 cv=A9ipg4aG c=1 sm=1 tr=0 ts=607c48c4 cx=a_exe
- a=ugxisoNCKEotYwafST++Mw==:117 a=ugxisoNCKEotYwafST++Mw==:17
- a=IkcTkHD0fZMA:10 a=o_rbLAqdoS-kjYQczG8A:9 a=QEXdDO2ut3YA:10
-From:   Dario Binacchi <dariobin@libero.it>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dario Binacchi <dariobin@libero.it>,
-        Tero Kristo <kristo@kernel.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: [PATCH v5 5/5] clk: ti: add am33xx/am43xx spread spectrum clock support
-Date:   Sun, 18 Apr 2021 16:56:55 +0200
-Message-Id: <20210418145655.10415-6-dariobin@libero.it>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210418145655.10415-1-dariobin@libero.it>
-References: <20210418145655.10415-1-dariobin@libero.it>
+        id S232186AbhDSCZV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 18 Apr 2021 22:25:21 -0400
+Received: from mail-eopbgr00060.outbound.protection.outlook.com ([40.107.0.60]:29855
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232038AbhDSCZU (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 18 Apr 2021 22:25:20 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hPEZ6qIG3/WCyehLUXkJBSd1YJdWKGHgNXdkFX9X3nj19NyPEmkYpYKGLH/ufwKERdwQUTddIZdTawTakyqgIbvVDhv8lDcRp6pWprhtzZa2RC7lYs5LBgcwUNkv2FG9nOQRN8zluaKKLZ8n4dIHHyFwcDQgzQkND0Xr8o6LjFGNV3EyJXZrNGmYa9BGoJ1HSLMKTkQfLQeWHBH+3WwxrhDHCynUhjOPAG8CpFSCzbYDFMdPK/d5NIHFuDOiJyyI5mVtsiD9QMchRQbignR0nYkEbgSmBPKbxpFS2rsUu1jVhvlH7M0Zhfmzr+UOAHmIVE6W1MfV4eGqSicGaraW+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LOAyo8gG9+jtERLGCpyUk14rQOVIBUab7gOJdwN3fk0=;
+ b=MfcprJCu8bmCx0/J5hw7aKrCWnYok5U8w1ciA46Cm8bIGLJSF0oTm1CcYHSwcuenf7gCjjRdxZn2eiErT1EiffYtzOl8NiyPslO+GGfEHneOf16h+HjtWh6myLg7KKUA9zlvbxSs/LPD4mkYO5ik52IrPExHa4TfqZc1PxQO7daUqsOWyz5GgpB1VH7690iQ+Oz5wkTA0J5RVl3I+3nCID+B603zA/NTyNqf33Q7lFuNXdkRIr72LH8JxJubEcbcHXyaBmUKXHwciyh/b4Hk+5UyykIjhg0O8xE0O362L8RFLz4ANePfcRe5YxQIQacokh+SePbKkKa6xds7gZ3tIA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LOAyo8gG9+jtERLGCpyUk14rQOVIBUab7gOJdwN3fk0=;
+ b=Eu7OK6y+kZcslUmoPW5G3ZVxw6nHlrNoY7ZVe+Avk7S56qFMmImBlmsPw85Uq0nmYNPHNQ7a4Dwp/gQP3Ul8hJLduCIwWM2sPfPqinIPVb1FS0NcV2pzoZsmTfHq6w8YyoyDnLhHoKuFvV7NzWr6N3TA0NBz9Ad9E/RHLc5lAVw=
+Received: from DBBPR04MB7930.eurprd04.prod.outlook.com (2603:10a6:10:1ea::12)
+ by DB8PR04MB7051.eurprd04.prod.outlook.com (2603:10a6:10:fd::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.16; Mon, 19 Apr
+ 2021 02:24:49 +0000
+Received: from DBBPR04MB7930.eurprd04.prod.outlook.com
+ ([fe80::ddbd:8680:c613:2274]) by DBBPR04MB7930.eurprd04.prod.outlook.com
+ ([fe80::ddbd:8680:c613:2274%5]) with mapi id 15.20.4042.024; Mon, 19 Apr 2021
+ 02:24:49 +0000
+From:   Jacky Bai <ping.bai@nxp.com>
+To:     Stephen Boyd <sboyd@kernel.org>, Abel Vesa <abel.vesa@nxp.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>
+CC:     "festevam@gmail.com" <festevam@gmail.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH 2/2] clk: imx: Remove the audio ipg clock from imx8mp
+Thread-Topic: [PATCH 2/2] clk: imx: Remove the audio ipg clock from imx8mp
+Thread-Index: AQHXMpITkC36jFb0q0iRH4Y1wPq1m6q300CAgANMzQA=
+Date:   Mon, 19 Apr 2021 02:24:49 +0000
+Message-ID: <DBBPR04MB79305165186FB9BEE4273F6987499@DBBPR04MB7930.eurprd04.prod.outlook.com>
+References: <20210416073703.1037718-1-ping.bai@nxp.com>
+ <20210416073703.1037718-2-ping.bai@nxp.com>
+ <161861742323.46595.18103968329383725805@swboyd.mtv.corp.google.com>
+In-Reply-To: <161861742323.46595.18103968329383725805@swboyd.mtv.corp.google.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [92.121.68.129]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 58ea80b2-f80e-4011-f948-08d902da4e8a
+x-ms-traffictypediagnostic: DB8PR04MB7051:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB8PR04MB7051B6D38D5FACF8C698C94587499@DB8PR04MB7051.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5516;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: sV4R/n1F5U3rhDYW5jKVGsweP3m5kqxdfYmqtBlnu8TINmFbaWrv6fVdMG2C0oNloAhhGQFsGxlct3xGniYKddra2Q/bd0nkC6/O/dwPe9/8gY5Qo8B556zZE5QsyZUGU8/49jn9VXjPHHxWdQmwYNP8DFbpnDSwrT30G8WAlkAWe9hQx3YOYClIqGGCm3SVWlApKylCUzftp9sqPC1iCxZp2Bloo3zg4b+c1MYri8FXqxYIlIhW+qmfDil7YRNgJPSKY0euC7EhCsguxbPk3XFiiPN7vG0PUKpqC/wsgqd4Ec+I2h3/MkAusH6eCHZ2OCu/oz9u6sN/mlc+oswNF9MVbyefROUaTkx7kJdZPZUExSVTzyqeFJMTj292cF57BC1EORqZIfkQwUN7eeYjNjM7KAhY3QX05k1AO2aMqdJk+ZMrWBeUQ4xlFs+GwpD/dXldq08Via6SwMElGOvBJum0IoGZ/fE8dnkiXkMdlwkUfkY+s3iMsgrReC9DNa05W9gM/wy67GvdphWPoEdAo3QGyoMDlRzynV5MyTqZo/dTPZlTKBsbS0cwuJ2pjqzP3GfMF0jC1cSyRglq/ML/51sOHiKhXj3ZLha/WU36cHmR5jr2SYkop8uQQbeu1N73YU5N0xrhBU6RM9r0G0RhzA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR04MB7930.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39860400002)(376002)(136003)(366004)(346002)(53546011)(4326008)(83380400001)(71200400001)(6506007)(5660300002)(316002)(54906003)(7696005)(8936002)(66476007)(33656002)(76116006)(26005)(66446008)(110136005)(66556008)(64756008)(52536014)(66946007)(122000001)(55016002)(186003)(86362001)(9686003)(8676002)(38100700002)(478600001)(2906002)(32563001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?SzR0VzFjRWtXUWRoZWkzTmRNZmlhUThOajlFOHVuY3JTNEtIc2hvaElBOUl4?=
+ =?utf-8?B?Y0JwejBGeVFDR2NJQWNyWnA5KzA4cHU4QzRYcm8yVzNnbEhDTkxWTEJuRjhh?=
+ =?utf-8?B?dzA4Nk5UaitrM1F0VG9JUW5ucTlMSUROQjBDbkdsak53NUY1UVpJbUNZMUhp?=
+ =?utf-8?B?MEhGY01aQTJsQWo0V014Yy95bURTcEJJNkVSTW8xVUMzVkZRYjFFQ3BLQm5h?=
+ =?utf-8?B?MTBUV01EckpzVWI2MTQvaTBMYXNSSTJqSGNQcklQR0ZSWmpIb3F3ZThycnZp?=
+ =?utf-8?B?eHpsUmk4Z3ZlVGJiRUdYcWhkckxIQ1FDcklSYUdUUTY1VG1oTy9CL0Y2VVFP?=
+ =?utf-8?B?MVlHbER2bkswWFVoY1ZJTGhnUUN2ZjljQmZZeXduT0pqdUd2blFaaldaNVRn?=
+ =?utf-8?B?bHBSVzlsQ29VWUd1VkhHT2hJNTM5aks4a0t6TlF6NjlqemNnbVFEQVJNNkgz?=
+ =?utf-8?B?cVp1M0JqTjFhV0NKK1NhZmM5eUplRnNoaUI0b0tFZVVkL2MzWEpLcDhvU3R2?=
+ =?utf-8?B?bnRMVUo0Y2JFc3g2ZmIzTmUyQWRtMWlOenNiaEhQUUZrNmZBT0RLU3JGUndU?=
+ =?utf-8?B?dHFkV1pnaExYUmE5SXJDUHV1YnlqSHVSOUhDQUcxaFRDVk03RXZmenEzKzE0?=
+ =?utf-8?B?T0dYbzJtblZxVkxuc2JRWjBOS2pxT1lySDluaTRFbE9OZWxGRXd4ckhRK0hy?=
+ =?utf-8?B?emhkMDk5ZUhFTmFnc3plaEpESXgwdDJsak5leUZzalQ5bUI4M09FcGVRTDhh?=
+ =?utf-8?B?R2JKRlByL2d1SkU0Ty9Mb2lnUWdSWEZ2Ty9KSVZhYzVZbWd4djJwYlgwcWNC?=
+ =?utf-8?B?b0FjSlFYbzhiTjUrWWd0TlpWaUkya2lZTStoY0NCdTdxZUlkRklPTFQrTWpP?=
+ =?utf-8?B?eTRjZTVGNkJoMmltN3QxeGptUTRnQm05ODJUWGFaR3ZNNGFuOTZwNkJWbjRp?=
+ =?utf-8?B?QlVPK0RhWWpmUWw1WU5ZanZWamhjVitkNTZqQzFMaE5MUXpYWElyMTM5U3NE?=
+ =?utf-8?B?RGlHNkN3b29ITTI2aVN2TktlaDNsbHVQQ3lGL0FRYXlabXhoeTN0U0ZkU2dZ?=
+ =?utf-8?B?SjBUaVN5M2kxZlQ0VG5sYk4yajNERHRCRjArUlN0RjFrRTNSTXEzaWhkdUY4?=
+ =?utf-8?B?VmdMa2F4cXBWNENVSzZTUUFaTHZmejNwMmxTQ1VEWTFqeEtXdldQYkxBeWY2?=
+ =?utf-8?B?ZXNqbkFOWWNkOXY5VDVPbFlJZmFlcGJaL3lSNm8zcnhHaHJoV0k0TitrZDlj?=
+ =?utf-8?B?c0N1ZjkvbWVONyt0Ti9VQmNuUDNJOFo3YVZNVWd0WWhMenBjU3p3M3hoZmEw?=
+ =?utf-8?B?RnJjK2xhaVZBY2tkakxmQnZrY05SeFh6NkRTcE54WUVrU1M3cXErbERjTElB?=
+ =?utf-8?B?RmEyOXJaY3IyWFdtN3ZhejdlS1dhNEFoMWlqQzVtci9LS3htNThtMUNPOFhZ?=
+ =?utf-8?B?bWRnREZCWXVqTmpETTA0c3hiekJ1OWVDNTY2akFwVXpnd0NpMVZSWFhqNEEw?=
+ =?utf-8?B?UUpRSmJwVGVNT1U0OUpxcDB2dDdOQjVJUmpsOUR4QmtzMzlOSDg4L3doRnhv?=
+ =?utf-8?B?VzdoK3hNUlJ3bWEzbkhvcUNiaWlNYnVTdTJtMzVjNUoxZ2ExdzZtTUQrZDFE?=
+ =?utf-8?B?dEFNUTlmakt4UUtwY2ppYXVsek1jRDRrSUtEK3F3ZHp4WkpTSDRYeXdQY01L?=
+ =?utf-8?B?RmdFenNYQlBwR3hCcUxJZ0lxZCttT2JJRlNLSnhhMnFQS3NZQ1lPeWNhNWJ5?=
+ =?utf-8?Q?JUqAcSBuGByUMVktHCUl9J3JWwJbpmFgg0a5k1X?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfEEDn3jitYUQGbECNbNKfE4AK0GKfoesZKzqjpXT9CKmPBYOCHHkKYqW9TUuAnkjV3+TqTFTaz1+7FuYK0OL1zzpIf+Adf05KNVuv5//iErIudu/qogs
- ZMSMzCeRM238bMKWDhjYXRV7tBKa4j+BmtjUz0KGu5s4VYUI8lf1Qs+74HXw+kbRef4CrA3z7zTGG1Mw+Fp2sfHZlciH4n3redz+zni9+tlJy5N+wtthJe5i
- p7awBDxeJ8tAyquot8JoFme3+z/uvoeQ61fBSoUrDhwKax2ZAQaI98k8nkBp3hrVMnVAAGODKvsnt9xcqIbkGYqi2Tp8QMayGuArpxb2c/wPbIgPCWIMg1B/
- zo3PfJgOqcS0tB4/fSvepO6HjaJnj6VBjUqPlgK6UzSUXoSDG3IfeDKWwf4eA9pArJAcYiaOh1JSoSqLiEQw2KYMDcwiRRPsMFJYwvRUrKtzl5jrrupw6xxs
- PTKPXb+AjBB7XBZ0qgaGPjIuKjHtiPr6f1F+6w==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR04MB7930.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 58ea80b2-f80e-4011-f948-08d902da4e8a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Apr 2021 02:24:49.2287
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 38BoWB8NWoaIioHK02dJPRWIKliC3cL9ZKFnMGDqQZM4/PZ9S5V2ajmOQzr7dkNoHxQ1R94WrtknJ2uclr1bJg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7051
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The patch enables spread spectrum clocking (SSC) for MPU and LCD PLLs.
-As reported by the TI spruh73x/spruhl7x RM, SSC is only supported for
-the DISP/LCD and MPU PLLs on am33xx/am43xx. SSC is not supported for
-DDR, PER, and CORE PLLs.
-
-Calculating the required values and setting the registers accordingly
-was taken from the set_mpu_spreadspectrum routine contained in the
-arch/arm/mach-omap2/am33xx/clock_am33xx.c file of the u-boot project.
-
-In locked condition, DPLL output clock = CLKINP *[M/N]. In case of
-SSC enabled, the reference manual explains that there is a restriction
-of range of M values. Since the omap2_dpll_round_rate routine attempts
-to select the minimum possible N, the value of M obtained is not
-guaranteed to be within the range required. With the new "ti,min-div"
-parameter it is possible to increase N and consequently M to satisfy the
-constraint imposed by SSC.
-
-Signed-off-by: Dario Binacchi <dariobin@libero.it>
-
----
-
-Changes in v5:
-- Remove ssc_ack_mask field from dpll_data structure. It was not used.
-- Change ssc_downspread type from u8 to bool in dpll_data structure.
-
-Changes in v4:
-- Update commit message.
-
-Changes in v3:
-- Use "ti,ssc-modfreq-hz" binding instead of "ti,ssc-modfreq".
-
-Changes in v2:
-- Move the DT changes to the previous patch in the series.
-
- drivers/clk/ti/dpll.c     | 39 ++++++++++++++++++
- drivers/clk/ti/dpll3xxx.c | 85 +++++++++++++++++++++++++++++++++++++++
- include/linux/clk/ti.h    | 22 ++++++++++
- 3 files changed, 146 insertions(+)
-
-diff --git a/drivers/clk/ti/dpll.c b/drivers/clk/ti/dpll.c
-index d6f1ac5b53e1..e9f9aee936ae 100644
---- a/drivers/clk/ti/dpll.c
-+++ b/drivers/clk/ti/dpll.c
-@@ -290,7 +290,9 @@ static void __init of_ti_dpll_setup(struct device_node *node,
- 	struct clk_init_data *init = NULL;
- 	const char **parent_names = NULL;
- 	struct dpll_data *dd = NULL;
-+	int ssc_clk_index;
- 	u8 dpll_mode = 0;
-+	u32 min_div;
- 
- 	dd = kmemdup(ddt, sizeof(*dd), GFP_KERNEL);
- 	clk_hw = kzalloc(sizeof(*clk_hw), GFP_KERNEL);
-@@ -345,6 +347,27 @@ static void __init of_ti_dpll_setup(struct device_node *node,
- 	if (dd->autoidle_mask) {
- 		if (ti_clk_get_reg_addr(node, 3, &dd->autoidle_reg))
- 			goto cleanup;
-+
-+		ssc_clk_index = 4;
-+	} else {
-+		ssc_clk_index = 3;
-+	}
-+
-+	if (dd->ssc_deltam_int_mask && dd->ssc_deltam_frac_mask &&
-+	    dd->ssc_modfreq_mant_mask && dd->ssc_modfreq_exp_mask) {
-+		if (ti_clk_get_reg_addr(node, ssc_clk_index++,
-+					&dd->ssc_deltam_reg))
-+			goto cleanup;
-+
-+		if (ti_clk_get_reg_addr(node, ssc_clk_index++,
-+					&dd->ssc_modfreq_reg))
-+			goto cleanup;
-+
-+		of_property_read_u32(node, "ti,ssc-modfreq-hz",
-+				     &dd->ssc_modfreq);
-+		of_property_read_u32(node, "ti,ssc-deltam", &dd->ssc_deltam);
-+		dd->ssc_downspread =
-+			of_property_read_bool(node, "ti,ssc-downspread");
- 	}
- 
- 	if (of_property_read_bool(node, "ti,low-power-stop"))
-@@ -356,6 +379,10 @@ static void __init of_ti_dpll_setup(struct device_node *node,
- 	if (of_property_read_bool(node, "ti,lock"))
- 		dpll_mode |= 1 << DPLL_LOCKED;
- 
-+	if (!of_property_read_u32(node, "ti,min-div", &min_div) &&
-+	    min_div > dd->min_divider)
-+		dd->min_divider = min_div;
-+
- 	if (dpll_mode)
- 		dd->modes = dpll_mode;
- 
-@@ -585,8 +612,14 @@ static void __init of_ti_am3_no_gate_dpll_setup(struct device_node *node)
- 	const struct dpll_data dd = {
- 		.idlest_mask = 0x1,
- 		.enable_mask = 0x7,
-+		.ssc_enable_mask = 0x1 << 12,
-+		.ssc_downspread_mask = 0x1 << 14,
- 		.mult_mask = 0x7ff << 8,
- 		.div1_mask = 0x7f,
-+		.ssc_deltam_int_mask = 0x3 << 18,
-+		.ssc_deltam_frac_mask = 0x3ffff,
-+		.ssc_modfreq_mant_mask = 0x7f,
-+		.ssc_modfreq_exp_mask = 0x7 << 8,
- 		.max_multiplier = 2047,
- 		.max_divider = 128,
- 		.min_divider = 1,
-@@ -645,8 +678,14 @@ static void __init of_ti_am3_dpll_setup(struct device_node *node)
- 	const struct dpll_data dd = {
- 		.idlest_mask = 0x1,
- 		.enable_mask = 0x7,
-+		.ssc_enable_mask = 0x1 << 12,
-+		.ssc_downspread_mask = 0x1 << 14,
- 		.mult_mask = 0x7ff << 8,
- 		.div1_mask = 0x7f,
-+		.ssc_deltam_int_mask = 0x3 << 18,
-+		.ssc_deltam_frac_mask = 0x3ffff,
-+		.ssc_modfreq_mant_mask = 0x7f,
-+		.ssc_modfreq_exp_mask = 0x7 << 8,
- 		.max_multiplier = 2047,
- 		.max_divider = 128,
- 		.min_divider = 1,
-diff --git a/drivers/clk/ti/dpll3xxx.c b/drivers/clk/ti/dpll3xxx.c
-index 94d5b5fe9a2b..e32b3515f9e7 100644
---- a/drivers/clk/ti/dpll3xxx.c
-+++ b/drivers/clk/ti/dpll3xxx.c
-@@ -291,6 +291,88 @@ static void _lookup_sddiv(struct clk_hw_omap *clk, u8 *sd_div, u16 m, u8 n)
- 	*sd_div = sd;
- }
- 
-+/**
-+ * omap3_noncore_dpll_ssc_program - set spread-spectrum clocking registers
-+ * @clk:	struct clk * of DPLL to set
-+ *
-+ * Enable the DPLL spread spectrum clocking if frequency modulation and
-+ * frequency spreading have been set, otherwise disable it.
-+ */
-+static void omap3_noncore_dpll_ssc_program(struct clk_hw_omap *clk)
-+{
-+	struct dpll_data *dd = clk->dpll_data;
-+	unsigned long ref_rate;
-+	u32 v, ctrl, mod_freq_divider, exponent, mantissa;
-+	u32 deltam_step, deltam_ceil;
-+
-+	ctrl = ti_clk_ll_ops->clk_readl(&dd->control_reg);
-+
-+	if (dd->ssc_modfreq && dd->ssc_deltam) {
-+		ctrl |= dd->ssc_enable_mask;
-+
-+		if (dd->ssc_downspread)
-+			ctrl |= dd->ssc_downspread_mask;
-+		else
-+			ctrl &= ~dd->ssc_downspread_mask;
-+
-+		ref_rate = clk_hw_get_rate(dd->clk_ref);
-+		mod_freq_divider =
-+		    (ref_rate / dd->last_rounded_n) / (4 * dd->ssc_modfreq);
-+		if (dd->ssc_modfreq > (ref_rate / 70))
-+			pr_warn("clock: SSC modulation frequency of DPLL %s greater than %ld\n",
-+				__clk_get_name(clk->hw.clk), ref_rate / 70);
-+
-+		exponent = 0;
-+		mantissa = mod_freq_divider;
-+		while ((mantissa > 127) && (exponent < 7)) {
-+			exponent++;
-+			mantissa /= 2;
-+		}
-+		if (mantissa > 127)
-+			mantissa = 127;
-+
-+		v = ti_clk_ll_ops->clk_readl(&dd->ssc_modfreq_reg);
-+		v &= ~(dd->ssc_modfreq_mant_mask | dd->ssc_modfreq_exp_mask);
-+		v |= mantissa << __ffs(dd->ssc_modfreq_mant_mask);
-+		v |= exponent << __ffs(dd->ssc_modfreq_exp_mask);
-+		ti_clk_ll_ops->clk_writel(v, &dd->ssc_modfreq_reg);
-+
-+		deltam_step = dd->last_rounded_m * dd->ssc_deltam;
-+		deltam_step /= 10;
-+		if (dd->ssc_downspread)
-+			deltam_step /= 2;
-+
-+		deltam_step <<= __ffs(dd->ssc_deltam_int_mask);
-+		deltam_step /= 100;
-+		deltam_step /= mod_freq_divider;
-+		if (deltam_step > 0xFFFFF)
-+			deltam_step = 0xFFFFF;
-+
-+		deltam_ceil = (deltam_step & dd->ssc_deltam_int_mask) >>
-+		    __ffs(dd->ssc_deltam_int_mask);
-+		if (deltam_step & dd->ssc_deltam_frac_mask)
-+			deltam_ceil++;
-+
-+		if ((dd->ssc_downspread &&
-+		     ((dd->last_rounded_m - (2 * deltam_ceil)) < 20 ||
-+		      dd->last_rounded_m > 2045)) ||
-+		    ((dd->last_rounded_m - deltam_ceil) < 20 ||
-+		     (dd->last_rounded_m + deltam_ceil) > 2045))
-+			pr_warn("clock: SSC multiplier of DPLL %s is out of range\n",
-+				__clk_get_name(clk->hw.clk));
-+
-+		v = ti_clk_ll_ops->clk_readl(&dd->ssc_deltam_reg);
-+		v &= ~(dd->ssc_deltam_int_mask | dd->ssc_deltam_frac_mask);
-+		v |= deltam_step << __ffs(dd->ssc_deltam_int_mask |
-+					  dd->ssc_deltam_frac_mask);
-+		ti_clk_ll_ops->clk_writel(v, &dd->ssc_deltam_reg);
-+	} else {
-+		ctrl &= ~dd->ssc_enable_mask;
-+	}
-+
-+	ti_clk_ll_ops->clk_writel(ctrl, &dd->control_reg);
-+}
-+
- /**
-  * omap3_noncore_dpll_program - set non-core DPLL M,N values directly
-  * @clk:	struct clk * of DPLL to set
-@@ -390,6 +472,9 @@ static int omap3_noncore_dpll_program(struct clk_hw_omap *clk, u16 freqsel)
- 		ti_clk_ll_ops->clk_writel(v, &dd->control_reg);
- 	}
- 
-+	if (dd->ssc_enable_mask)
-+		omap3_noncore_dpll_ssc_program(clk);
-+
- 	/* We let the clock framework set the other output dividers later */
- 
- 	/* REVISIT: Set ramp-up delay? */
-diff --git a/include/linux/clk/ti.h b/include/linux/clk/ti.h
-index c62f6fa6763d..3486f20a3753 100644
---- a/include/linux/clk/ti.h
-+++ b/include/linux/clk/ti.h
-@@ -63,6 +63,17 @@ struct clk_omap_reg {
-  * @auto_recal_bit: bitshift of the driftguard enable bit in @control_reg
-  * @recal_en_bit: bitshift of the PRM_IRQENABLE_* bit for recalibration IRQs
-  * @recal_st_bit: bitshift of the PRM_IRQSTATUS_* bit for recalibration IRQs
-+ * @ssc_deltam_reg: register containing the DPLL SSC frequency spreading
-+ * @ssc_modfreq_reg: register containing the DPLL SSC modulation frequency
-+ * @ssc_modfreq_mant_mask: mask of the mantissa component in @ssc_modfreq_reg
-+ * @ssc_modfreq_exp_mask: mask of the exponent component in @ssc_modfreq_reg
-+ * @ssc_enable_mask: mask of the DPLL SSC enable bit in @control_reg
-+ * @ssc_downspread_mask: mask of the DPLL SSC low frequency only bit in
-+ *                       @control_reg
-+ * @ssc_modfreq: the DPLL SSC frequency modulation in kHz
-+ * @ssc_deltam: the DPLL SSC frequency spreading in permille (10th of percent)
-+ * @ssc_downspread: require the only low frequency spread of the DPLL in SSC
-+ *                   mode
-  * @flags: DPLL type/features (see below)
-  *
-  * Possible values for @flags:
-@@ -110,6 +121,17 @@ struct dpll_data {
- 	u8			auto_recal_bit;
- 	u8			recal_en_bit;
- 	u8			recal_st_bit;
-+	struct clk_omap_reg	ssc_deltam_reg;
-+	struct clk_omap_reg	ssc_modfreq_reg;
-+	u32			ssc_deltam_int_mask;
-+	u32			ssc_deltam_frac_mask;
-+	u32			ssc_modfreq_mant_mask;
-+	u32			ssc_modfreq_exp_mask;
-+	u32                     ssc_enable_mask;
-+	u32                     ssc_downspread_mask;
-+	u32                     ssc_modfreq;
-+	u32                     ssc_deltam;
-+	bool                    ssc_downspread;
- 	u8			flags;
- };
- 
--- 
-2.17.1
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBTdGVwaGVuIEJveWQgW21haWx0
+bzpzYm95ZEBrZXJuZWwub3JnXQ0KPiBTZW50OiBTYXR1cmRheSwgQXByaWwgMTcsIDIwMjEgNzo1
+NyBBTQ0KPiBUbzogSmFja3kgQmFpIDxwaW5nLmJhaUBueHAuY29tPjsgQWJlbCBWZXNhIDxhYmVs
+LnZlc2FAbnhwLmNvbT47DQo+IHJvYmgrZHRAa2VybmVsLm9yZzsgcy5oYXVlckBwZW5ndXRyb25p
+eC5kZTsgc2hhd25ndW9Aa2VybmVsLm9yZw0KPiBDYzogZmVzdGV2YW1AZ21haWwuY29tOyBkZXZp
+Y2V0cmVlQHZnZXIua2VybmVsLm9yZzsNCj4gbGludXgtY2xrQHZnZXIua2VybmVsLm9yZzsgZGwt
+bGludXgtaW14IDxsaW51eC1pbXhAbnhwLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCAyLzJd
+IGNsazogaW14OiBSZW1vdmUgdGhlIGF1ZGlvIGlwZyBjbG9jayBmcm9tIGlteDhtcA0KPiANCj4g
+UXVvdGluZyBKYWNreSBCYWkgKDIwMjEtMDQtMTYgMDA6Mzc6MDMpDQo+ID4gZGlmZiAtLWdpdCBh
+L2luY2x1ZGUvZHQtYmluZGluZ3MvY2xvY2svaW14OG1wLWNsb2NrLmgNCj4gPiBiL2luY2x1ZGUv
+ZHQtYmluZGluZ3MvY2xvY2svaW14OG1wLWNsb2NrLmgNCj4gPiBpbmRleCA0MzkyN2ExYjllOTQu
+LjIzNWM3YTAwZDM3OSAxMDA2NDQNCj4gPiAtLS0gYS9pbmNsdWRlL2R0LWJpbmRpbmdzL2Nsb2Nr
+L2lteDhtcC1jbG9jay5oDQo+ID4gKysrIGIvaW5jbHVkZS9kdC1iaW5kaW5ncy9jbG9jay9pbXg4
+bXAtY2xvY2suaA0KPiA+IEBAIC0xMTcsNyArMTE3LDYgQEANCj4gPiAgI2RlZmluZSBJTVg4TVBf
+Q0xLX0FVRElPX0FIQiAgICAgICAgICAgICAgICAgICAxMDgNCj4gPiAgI2RlZmluZSBJTVg4TVBf
+Q0xLX01JUElfRFNJX0VTQ19SWCAgICAgICAgICAgICAxMDkNCj4gPiAgI2RlZmluZSBJTVg4TVBf
+Q0xLX0lQR19ST09UICAgICAgICAgICAgICAgICAgICAxMTANCj4gPiAtI2RlZmluZSBJTVg4TVBf
+Q0xLX0lQR19BVURJT19ST09UICAgICAgICAgICAgICAxMTENCj4gDQo+IE1heWJlIGp1c3QgYWRk
+IGEgY29tbWVudCBzYXlpbmcgaXQgaXNuJ3QgdGhlcmU/IE9yIHJlbW92ZSBpdCBpbiB0aHJlZSBt
+b250aHMNCj4gdGltZSBvbmNlIERUUyBubyBsb25nZXIgcmVmZXJlbmNlcyBpdD8NCj4gDQoNCk9r
+LCB3aWxsIHJlc29sdmUgdGhpcyBjb21tZW50cyBpbiBWMi4gSSBjYW4gYWRkIHNvbWUgY29tbWVu
+dHMgYW5kIGtlZXAgaXQgaGVyZSBmb3IgYSB3aGlsZS4NCg0KPiBSZW1vdmluZyB0aGlzIGhlcmUg
+bWVhbnMgdGhhdCBpdCBoYXMgdG8gbWVyZ2Ugd2hlbmV2ZXIgdGhlIERUUyBkb2Vzbid0DQo+IHJl
+ZmVyZW5jZSBpdCBhbnltb3JlIHdoaWNoIGNhdXNlcyBhIGNyb3NzIHRyZWUgZGVwZW5kZW5jeS4N
+Cg0KUmlnaHQsIHRoaXMgZGVsZXRlIHdpbGwgbGVhZCB0byB0aGUgZGVwZW5kZW5jeSB3aXRoIHRo
+ZSBkdHMgdHJlZSBmb3Igbm93Lg0KDQpCUg0KSmFja3kgQmFpDQoNCj4gDQo+ID4gICNkZWZpbmUg
+SU1YOE1QX0NMS19EUkFNX0FMVCAgICAgICAgICAgICAgICAgICAgMTEyDQo+ID4gICNkZWZpbmUg
+SU1YOE1QX0NMS19EUkFNX0FQQiAgICAgICAgICAgICAgICAgICAgMTEzDQo+ID4gICNkZWZpbmUg
+SU1YOE1QX0NMS19WUFVfRzEgICAgICAgICAgICAgICAgICAgICAgMTE0DQo=
