@@ -2,135 +2,110 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60354363E95
-	for <lists+linux-clk@lfdr.de>; Mon, 19 Apr 2021 11:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4141E363ECF
+	for <lists+linux-clk@lfdr.de>; Mon, 19 Apr 2021 11:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238567AbhDSJen (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 19 Apr 2021 05:34:43 -0400
-Received: from gw.atmark-techno.com ([13.115.124.170]:37268 "EHLO
-        gw.atmark-techno.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238546AbhDSJel (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 19 Apr 2021 05:34:41 -0400
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-        by gw.atmark-techno.com (Postfix) with ESMTPS id D0D29804A6
-        for <linux-clk@vger.kernel.org>; Mon, 19 Apr 2021 18:34:08 +0900 (JST)
-Received: by mail-pj1-f69.google.com with SMTP id u5-20020a17090a3fc5b029014e545d9a6eso15089342pjm.2
-        for <linux-clk@vger.kernel.org>; Mon, 19 Apr 2021 02:34:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f9v+Sm8mKFEbQyXi/sN2tJHr2LOa9v0CsJoz/H5l6cU=;
-        b=f++DCMrzJuOlmZb+d9+QF4wVaLVBB2GbdJWRsq3OgaK4jsz9MQv+q1RaOalmwFEyL6
-         Mcx0ahuOf0koxwqvT8Qmnl1fHLh86Qx9PPDXI7A94+DKFrPrJgYRGH4su/O6wwdRTQbl
-         QM4LAUTta9pEoKVvdGj7FmUaDCsw549BJQhhFMs3gIS6HyHQSaCkr79RngHGoeetMAcW
-         NzL18Yhh/US0vi6cCuTgnncsq959lMgMIhPDvVcdnYVahwoUDIlNcpdVhzFn9Yi0cOh/
-         u7gv2PZGTYoiBOK8nvkY8D/9CgNGwhdagVVTfdLX6tWkmlAo+d5HJb0+blge289DGoxc
-         Zn+Q==
-X-Gm-Message-State: AOAM530enP3/qIhh5PHuYUSBXbW3Tz76lE6bJu0DyHWXrE2hVYkD43Pq
-        Ij4UtQ3dFC65M0KGMlE0hFd4eBhM9AFwY317zq2ImOXwjyH/YXVfRhm52iI5YlhUw+JqgPK5ruH
-        uajb4S/vcS1dNxIfSAbSsfiJe
-X-Received: by 2002:a63:1665:: with SMTP id 37mr11208880pgw.31.1618824837068;
-        Mon, 19 Apr 2021 02:33:57 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw3BVfHB/Iu3InVzb+YLUkuY7/BfcYMlC0sOGsbJiks+G4SQp5aPsproxuobb7vRE8Qif9k+g==
-X-Received: by 2002:a63:1665:: with SMTP id 37mr11208853pgw.31.1618824836841;
-        Mon, 19 Apr 2021 02:33:56 -0700 (PDT)
-Received: from pc-0115 (103.131.189.35.bc.googleusercontent.com. [35.189.131.103])
-        by smtp.gmail.com with ESMTPSA id x18sm10982637pjn.51.2021.04.19.02.33.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Apr 2021 02:33:56 -0700 (PDT)
-Received: from martinet by pc-0115 with local (Exim 4.94)
-        (envelope-from <martinet@pc-0115>)
-        id 1lYQHy-002k7D-3h; Mon, 19 Apr 2021 18:33:54 +0900
-Date:   Mon, 19 Apr 2021 18:33:44 +0900
-From:   Dominique MARTINET <dominique.martinet@atmark-techno.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     "Alice Guo (OSS)" <alice.guo@oss.nxp.com>,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        horia.geanta@nxp.com, aymen.sghaier@nxp.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net, tony@atomide.com,
-        geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
-        vkoul@kernel.org, peter.ujfalusi@gmail.com, a.hajda@samsung.com,
-        narmstrong@baylibre.com, robert.foss@linaro.org, airlied@linux.ie,
-        daniel@ffwll.ch, khilman@baylibre.com, tomba@kernel.org,
-        jyri.sarha@iki.fi, joro@8bytes.org, will@kernel.org,
-        mchehab@kernel.org, ulf.hansson@linaro.org,
-        adrian.hunter@intel.com, kishon@ti.com, kuba@kernel.org,
-        linus.walleij@linaro.org, Roy.Pledge@nxp.com, leoyang.li@nxp.com,
-        ssantosh@kernel.org, matthias.bgg@gmail.com, edubezval@gmail.com,
-        j-keerthy@ti.com, balbi@kernel.org, linux@prisktech.co.nz,
-        stern@rowland.harvard.edu, wim@linux-watchdog.org,
-        linux@roeck-us.net, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-staging@lists.linux.dev,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [RFC v1 PATCH 3/3] driver: update all the code that use
- soc_device_match
-Message-ID: <YH1OeFy+SepIYYG0@atmark-techno.com>
-References: <20210419042722.27554-1-alice.guo@oss.nxp.com>
- <20210419042722.27554-4-alice.guo@oss.nxp.com>
- <YH0O907dfGY9jQRZ@atmark-techno.com>
- <CAMuHMdVY1SLZ0K30T2pimyrR6Mm=VoSTO=L-xxCy2Bj7_kostw@mail.gmail.com>
+        id S238373AbhDSJkE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 19 Apr 2021 05:40:04 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:21724 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S238616AbhDSJj4 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 19 Apr 2021 05:39:56 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13J9RIHb027890;
+        Mon, 19 Apr 2021 11:39:06 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=wOdBXreJaHkgnJPvNm4hYfpoNn+S6pHPol0liOPRIiU=;
+ b=Uo86N0X7eVrHf8AswCNPqmebR9xfEdJiaO01eE/irTjjKYtuoChcMetJeoL4+GbUGy45
+ P47id3ekrxFkBRVngLJhG9yogUgxx/0m5lBf5GhI/E9qyc8o7UQgCZ6HvBKt1CR+A9Jx
+ EyNovc7lG60qvCKNsiRn3BxhuMFecw5mKy8gwM5VjpZVKC+OPZlxPgtzCfm0XWQOemQ2
+ umkvGvyKP0HEtYTJimuH41y+Hg/4tWidRR2G1jPYpYjuMrvvrDA+sXrtZzjePKa3YgVq
+ hWiAlPIRzOZOT9UBDd909dNz9IgIUrd+30eYWXNTo3iMdUMgyeld69qtJk+Dy+nfUcrR tQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 380s8c3bfy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Apr 2021 11:39:06 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 155E410002A;
+        Mon, 19 Apr 2021 11:39:06 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DEF9820A07F;
+        Mon, 19 Apr 2021 11:39:05 +0200 (CEST)
+Received: from localhost (10.75.127.49) by SFHDAG2NODE3.st.com (10.75.127.6)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 19 Apr 2021 11:39:05
+ +0200
+From:   <gabriel.fernandez@foss.st.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Etienne Carriere <etienne.carriere@st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        <marex@denx.de>
+CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 00/11] Introduce STM32MP1 RCC in secured mode
+Date:   Mon, 19 Apr 2021 11:38:41 +0200
+Message-ID: <20210419093852.14978-1-gabriel.fernandez@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdVY1SLZ0K30T2pimyrR6Mm=VoSTO=L-xxCy2Bj7_kostw@mail.gmail.com>
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-19_05:2021-04-16,2021-04-19 signatures=0
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 
-Geert Uytterhoeven wrote on Mon, Apr 19, 2021 at 11:03:24AM +0200:
-> > This is going to need quite some more work to be acceptable, in my
-> > opinion, but I think it should be possible.
-> 
-> In general, this is very hard to do, IMHO. Some drivers may be used on
-> multiple platforms, some of them registering an SoC device, some of
-> them not registering an SoC device.  So there is no way to know the
-> difference between "SoC device not registered, intentionally", and
-> "SoC device not yet registered".
+Platform STM32MP1 can be used in configuration where some clocks and
+IP resets can relate as secure resources.
+These resources are moved from a RCC clock/reset handle to a SCMI
+clock/reset_domain handle.
 
-Hm, good point, I was probably a bit too optimistic if there are devices
-which don't register any soc yet have drivers which want one; I don't
-see how to make the difference indeed... And that does mean we can't
-just defer all the time.
+The RCC clock driver is now dependent of the SCMI driver, then we have
+to manage now the probe defering.
 
-> soc_device_match() should only be used as a last resort, to identify
-> systems that cannot be identified otherwise.  Typically this is used for
-> quirks, which should only be enabled on a very specific subset of
-> systems.  IMHO such systems should make sure soc_device_match()
-> is available early, by registering their SoC device early.
+v2 -> v3:
+  - use determine_rate op instead of round_rate for ck_rtc
+  - remove DT patches from patchset to keek Kernel device tree as there are in basic boot.
+     We will applied scmi clock phandle thanks dtbo in U-boot.
+v1 -> v2:
+  - fix yamllint warnings.
 
-I definitely agree there, my suggestion to defer was only because I know
-of no other way to influence the ordering of drivers loading reliably
-and gave up on soc being init'd early.
+Gabriel Fernandez (11):
+  clk: stm32mp1: merge 'clk-hsi-div' and 'ck_hsi' into one clock
+  clk: stm32mp1: merge 'ck_hse_rtc' and 'ck_rtc' into one clock
+  clk: stm32mp1: remove intermediate pll clocks
+  clk: stm32mp1: convert to module driver
+  clk: stm32mp1: move RCC reset controller into RCC clock driver
+  reset: stm32mp1: remove stm32mp1 reset
+  dt-bindings: clock: add IDs for SCMI clocks on stm32mp15
+  dt-bindings: reset: add IDs for SCMI reset domains on stm32mp15
+  dt-bindings: reset: add MCU HOLD BOOT ID for SCMI reset domains on
+    stm32mp15
+  dt-bindings: clock: stm32mp1 new compatible for secure rcc
+  clk: stm32mp1: new compatible for secure RCC support
 
-In this particular case the problem is that since 7d981405d0fd ("soc:
-imx8m: change to use platform driver") the soc probe tries to use the
-nvmem driver for ocotp fuses for imx8m devices, which isn't ready yet.
-So soc loading gets pushed back to the end of the list because it gets
-defered and other drivers relying on soc_device_match get confused
-because they wrongly think a device doesn't match a quirk when it
-actually does.
+ .../bindings/clock/st,stm32mp1-rcc.yaml       |   6 +-
+ drivers/clk/Kconfig                           |  10 +
+ drivers/clk/clk-stm32mp1.c                    | 500 +++++++++++++++---
+ drivers/reset/Kconfig                         |   6 -
+ drivers/reset/Makefile                        |   1 -
+ drivers/reset/reset-stm32mp1.c                | 115 ----
+ include/dt-bindings/clock/stm32mp1-clks.h     |  27 +
+ include/dt-bindings/reset/stm32mp1-resets.h   |  15 +
+ 8 files changed, 469 insertions(+), 211 deletions(-)
+ delete mode 100644 drivers/reset/reset-stm32mp1.c
 
-If there is a way to ensure the nvmem driver gets loaded before the soc,
-that would also solve the problem nicely, and avoid the need to mess
-with all the ~50 drivers which use it.
-
-
-Is there a way to control in what order drivers get loaded? Something in
-the dtb perhaps?
-
-
-Thanks,
 -- 
-Dominique
+2.17.1
+
