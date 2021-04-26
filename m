@@ -2,112 +2,112 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C655536AFAD
-	for <lists+linux-clk@lfdr.de>; Mon, 26 Apr 2021 10:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B7036B4A5
+	for <lists+linux-clk@lfdr.de>; Mon, 26 Apr 2021 16:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231821AbhDZIX1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 26 Apr 2021 04:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
+        id S233765AbhDZOSc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 26 Apr 2021 10:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbhDZIX1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Apr 2021 04:23:27 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E61C061574;
-        Mon, 26 Apr 2021 01:22:46 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id p17so652113pjz.3;
-        Mon, 26 Apr 2021 01:22:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QyVyK6NZHpEBoT8Dh2MKzH5N2Nwh3NVtxSsAuNCzreA=;
-        b=KD3qCBndmR4TwscZh6X8h9DgEAtH4PeoOnCG66VNlrk9P8UZI2Wu534oU7Il/pPHoL
-         VaNY2DQm3mFGNdd7E283OoMWcZqkWK4ClEy7VkVAHkeIlRvh6OjhJ03Z5EXVb5PBXnwB
-         pRFCTC39slumj5QwwlUz2acSkPvTHzfl6w6JHhIdnsvXTos3ate2ezbBSeJYP3VAV+1j
-         Uir5d2VHRMt3FJCC7t9C1itOtQZjAKLApWzF2OkevEfqobWt7zw3Hd2wVRR+mm7uU8CJ
-         /yTatM2g7CMp4q9fcgkJtb+6TYehVM9Wh/MXUXYNG+GklvnD7ZRUYlw4f00r27XcdpZa
-         629Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QyVyK6NZHpEBoT8Dh2MKzH5N2Nwh3NVtxSsAuNCzreA=;
-        b=VsXTCQWb2QRcQLiWSH6DryysV8V1zYFTsn1i8ffVC1dq58yM18D1AYGK7h2nwj36xS
-         nfJZKQnPhC3qiRZRPdJLxcZrL3i9jW77GVzEo43GhKWABuR+paM2ckssrw+krL7a5+cL
-         4cFe0tNwsSI01pqOw8Pkxcbnq0gAD+mIcpRvGt2uRT9D76qG6VgGD6RXGmi2lRAVYZ1H
-         CqjUXdGbXtOZ7ZfBMq/FAUkmsM11vN3jQ8jP2GrmsyethN/ZxOp4WYHLzziMxXyMLq6F
-         7P5LA+V0wCqMJgvd8vXqU2VUhmQu/CjwZyTXeIP1owY//ilRhy3UHtz7ecBoDOCTefSv
-         MiyA==
-X-Gm-Message-State: AOAM533d3CR4yx1cW5UKEBNF+YavX3qW449zi/IEYbUtkM4CVCOiZt0y
-        qX3GP5bz6AtBW0LiY4ykTnYV1EGRtaitdyOvDKzmtIdu8RA=
-X-Google-Smtp-Source: ABdhPJwnKOwW7l0uVAF5Dr0g52/3HxdSbXZgt63VQpp1yw1IjB+8ND2NP69oqvTiPDS/He6DkF0ABUV1dBmqzZsSp2M=
-X-Received: by 2002:a17:902:a406:b029:e6:78c4:71c8 with SMTP id
- p6-20020a170902a406b02900e678c471c8mr17196879plq.17.1619425365521; Mon, 26
- Apr 2021 01:22:45 -0700 (PDT)
+        with ESMTP id S233755AbhDZOSb (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Apr 2021 10:18:31 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCAEC061756
+        for <linux-clk@vger.kernel.org>; Mon, 26 Apr 2021 07:17:49 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lb23K-0002KB-Ie; Mon, 26 Apr 2021 16:17:34 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lb23I-0005nU-Px; Mon, 26 Apr 2021 16:17:32 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [PATCH v6 0/6] clk: provide new devm helpers for prepared and enabled clocks
+Date:   Mon, 26 Apr 2021 16:17:24 +0200
+Message-Id: <20210426141730.2826832-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <202103162301.oomY9NwI-lkp@intel.com> <ac51550d-c72e-4a85-ed0e-a4cddbf495be@infradead.org>
-In-Reply-To: <ac51550d-c72e-4a85-ed0e-a4cddbf495be@infradead.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 26 Apr 2021 11:22:29 +0300
-Message-ID: <CAHp75VdZ6v7zV4_4YJ-rXAE2_ZLZw04AHib1yGPiwYS_JYYGOg@mail.gmail.com>
-Subject: Re: ingenic-adc.c:undefined reference to `clk_get_parent'
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, Apr 26, 2021 at 8:43 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> [add linux-clk + maintainers]
->
-> On 3/16/21 8:54 AM, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   1a4431a5db2bf800c647ee0ed87f2727b8d6c29c
-> > commit: a07a4fe5ff460e99293c0d682421920d54e31d7f iio:adc:ingenic: drop of_match_ptr protection and include mod_devicetable.h
-> > date:   8 months ago
-> > config: mips-randconfig-p001-20210316 (attached as .config)
-> > compiler: mips-linux-gcc (GCC) 9.3.0
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a07a4fe5ff460e99293c0d682421920d54e31d7f
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout a07a4fe5ff460e99293c0d682421920d54e31d7f
-> >         # save the attached .config to linux build tree
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=mips
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> >    mips-linux-ld: drivers/iio/adc/ingenic-adc.o: in function `jz4770_adc_init_clk_div':
-> >>> ingenic-adc.c:(.text+0x8c): undefined reference to `clk_get_parent'
-> >    mips-linux-ld: drivers/iio/adc/ingenic-adc.o: in function `jz4725b_adc_init_clk_div':
-> >    ingenic-adc.c:(.text+0x164): undefined reference to `clk_get_parent'
->
-> Hi,
->
-> My guess (analysis) suggests that this problem is due to
-> a difference in when clk_get_parent() is available between
-> <linux/clk.h> where it depends on CONFIG_HAVE_CLK and
-> drivers/clk/clk.c, which is built iff CONFIG_COMMON_CLK.
->
-> Any comments/suggestions?
+Hello,
 
-I haven't looked into it, but IIRC MIPS has its own clock API
-implementation (or I mixed it with another arch?) and that's the root
-of many issues like this around the kernel.
+compared to v5 sent last week this series only fixes two typos in the
+commit logs.
 
+The range-diff is
+1:  0f2fe65a9c9c ! 1:  38f213c5eeff rtc: at91sma9: Simplify using devm_clk_get_enabled()
+    @@ Metadata
+     Author: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+     
+      ## Commit message ##
+    -    rtc: at91sma9: Simplify using devm_clk_get_enabled()
+    +    rtc: at91sam9: Simplify using devm_clk_get_enabled()
+     
+         devm_clk_get_enabled() returns the clk already (prepared and) enabled
+         and the automatically called cleanup cares for disabling (and
+2:  3f11b70e7427 ! 2:  b9cebea08a73 i2c: imx: Simplify using devm_clk_get_enableded()
+    @@ Metadata
+     Author: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+     
+      ## Commit message ##
+    -    i2c: imx: Simplify using devm_clk_get_enableded()
+    +    i2c: imx: Simplify using devm_clk_get_enabled()
+     
+         devm_clk_get_enabled() returns the clk already (prepared and) enabled
+         and the automatically called cleanup cares for disabling (and
+3:  6c357913e391 = 3:  8167605ad349 spi: davinci: Simplify using devm_clk_get_enabled()
+4:  71b3db526357 < -:  ------------ pwm: Clarify documentation about pwm_get_state()
+
+Other than that the state is still unchanged: This is a series which
+allows several cleanups (as can be seen from patches 2 to 6) and I
+didn't get any feedback from the clock maintainers since v1 that I sent
+in October.
+
+Best regards
+Uwe
+
+Uwe Kleine-König (6):
+  clk: generalize devm_clk_get() a bit
+  clk: Provide new devm_clk_helpers for prepared and enabled clocks
+  pwm: atmel: Simplify using devm_clk_get_prepared()
+  rtc: at91sam9: Simplify using devm_clk_get_enabled()
+  i2c: imx: Simplify using devm_clk_get_enabled()
+  spi: davinci: Simplify using devm_clk_get_enabled()
+
+ drivers/clk/clk-devres.c     | 96 ++++++++++++++++++++++++++++++------
+ drivers/i2c/busses/i2c-imx.c | 12 +----
+ drivers/pwm/pwm-atmel.c      | 15 +-----
+ drivers/rtc/rtc-at91sam9.c   | 22 ++-------
+ drivers/spi/spi-davinci.c    | 11 +----
+ include/linux/clk.h          | 87 +++++++++++++++++++++++++++++++-
+ 6 files changed, 176 insertions(+), 67 deletions(-)
+
+
+base-commit: a38fd8748464831584a19438cbb3082b5a2dab15
 -- 
-With Best Regards,
-Andy Shevchenko
+2.30.2
+
