@@ -2,107 +2,102 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C35436B49D
-	for <lists+linux-clk@lfdr.de>; Mon, 26 Apr 2021 16:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 979EF36B632
+	for <lists+linux-clk@lfdr.de>; Mon, 26 Apr 2021 17:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233573AbhDZOSV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 26 Apr 2021 10:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbhDZOSU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Apr 2021 10:18:20 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4074C061756
-        for <linux-clk@vger.kernel.org>; Mon, 26 Apr 2021 07:17:38 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lb23L-0002L7-5b; Mon, 26 Apr 2021 16:17:35 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lb23K-0005np-RB; Mon, 26 Apr 2021 16:17:34 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        linux-spi@vger.kernel.org
-Subject: [PATCH v6 6/6] spi: davinci: Simplify using devm_clk_get_enabled()
-Date:   Mon, 26 Apr 2021 16:17:30 +0200
-Message-Id: <20210426141730.2826832-7-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210426141730.2826832-1-u.kleine-koenig@pengutronix.de>
-References: <20210426141730.2826832-1-u.kleine-koenig@pengutronix.de>
+        id S233971AbhDZPz6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 26 Apr 2021 11:55:58 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:53078 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233829AbhDZPz6 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Apr 2021 11:55:58 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 13QFt6mh122076;
+        Mon, 26 Apr 2021 10:55:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1619452506;
+        bh=J4jxh7+jB7x/KGB+qTcnBnMfZHCBkbpPdUuOvHr6Hnc=;
+        h=From:To:CC:Subject:Date;
+        b=gk6aphIaK9pOSsztWoJBKH074sVA6V85v++/6lXaqUzrvsmydsu8OGiqtWGhnh0mv
+         Z/VPwIViGdUdf9wNn7pwT/GY+OiezMeIJ0WIYIIjjv6PaLKuC36moPtAVpAQsjIjt5
+         /yA8dMkcmw+xE2kT4rpKOKjdtYwWgIFt/pQjiYn8=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 13QFt5em117314
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 26 Apr 2021 10:55:06 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 26
+ Apr 2021 10:55:05 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Mon, 26 Apr 2021 10:55:05 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 13QFt5CO089440;
+        Mon, 26 Apr 2021 10:55:05 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Tero Kristo <kristo@kernel.org>
+CC:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, Nishanth Menon <nm@ti.com>
+Subject: [PATCH V2 0/4] dt-bindings: soc/arm: Convert pending ti, sci* bindings to json format
+Date:   Mon, 26 Apr 2021 10:54:53 -0500
+Message-ID: <20210426155457.21221-1-nm@ti.com>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-devm_clk_get_enabled() returns the clk already (prepared and) enabled
-and the automatically called cleanup cares for disabling (and
-unpreparing). So simplify .probe() and .remove() accordingly.
+Hi,
 
-Acked-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/spi/spi-davinci.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+V2 of the series posted in [1] to convert the remaining ti,sci bindings
+to json schema format. V2 is mostly review comments being incorporated -
+details in each of the patches and in applicable patches, I have picked
+up Rob's and Tero's reviewed bys.
 
-diff --git a/drivers/spi/spi-davinci.c b/drivers/spi/spi-davinci.c
-index 7453a1dbbc06..63ee918ecdb0 100644
---- a/drivers/spi/spi-davinci.c
-+++ b/drivers/spi/spi-davinci.c
-@@ -936,14 +936,11 @@ static int davinci_spi_probe(struct platform_device *pdev)
- 
- 	dspi->bitbang.master = master;
- 
--	dspi->clk = devm_clk_get(&pdev->dev, NULL);
-+	dspi->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(dspi->clk)) {
- 		ret = -ENODEV;
- 		goto free_master;
- 	}
--	ret = clk_prepare_enable(dspi->clk);
--	if (ret)
--		goto free_master;
- 
- 	master->use_gpio_descriptors = true;
- 	master->dev.of_node = pdev->dev.of_node;
-@@ -968,7 +965,7 @@ static int davinci_spi_probe(struct platform_device *pdev)
- 
- 	ret = davinci_spi_request_dma(dspi);
- 	if (ret == -EPROBE_DEFER) {
--		goto free_clk;
-+		goto free_master;
- 	} else if (ret) {
- 		dev_info(&pdev->dev, "DMA is not supported (%d)\n", ret);
- 		dspi->dma_rx = NULL;
-@@ -1012,8 +1009,6 @@ static int davinci_spi_probe(struct platform_device *pdev)
- 		dma_release_channel(dspi->dma_rx);
- 		dma_release_channel(dspi->dma_tx);
- 	}
--free_clk:
--	clk_disable_unprepare(dspi->clk);
- free_master:
- 	spi_master_put(master);
- err:
-@@ -1039,8 +1034,6 @@ static int davinci_spi_remove(struct platform_device *pdev)
- 
- 	spi_bitbang_stop(&dspi->bitbang);
- 
--	clk_disable_unprepare(dspi->clk);
--
- 	if (dspi->dma_rx) {
- 		dma_release_channel(dspi->dma_rx);
- 		dma_release_channel(dspi->dma_tx);
+There are also dts fixups that this series exposes, which is good, but
+I chose to hold them back for now pending binding review at least. The
+complete series is available in [2] if folks are curious - to be posted
+once v5.13-rc1 is available for fixes.
+
+[1] https://lore.kernel.org/linux-arm-kernel/20210416063721.20538-1-nm@ti.com/
+[2] https://github.com/nmenon/linux-2.6-playground/commits/yaml/tisci
+
+Nishanth Menon (4):
+  dt-bindings: reset: Convert ti,sci-reset to json schema
+  dt-bindings: clock: Convert ti,sci-clk to json schema
+  dt-bindings: soc: ti: Convert ti,sci-pm-domain to json schema
+  dt-bindings: arm: keystone: Convert ti,sci to json schema
+
+ .../bindings/arm/keystone/ti,sci.txt          |  86 ------------
+ .../bindings/arm/keystone/ti,sci.yaml         | 129 ++++++++++++++++++
+ .../devicetree/bindings/clock/ti,sci-clk.txt  |  36 -----
+ .../devicetree/bindings/clock/ti,sci-clk.yaml |  49 +++++++
+ .../bindings/reset/ti,sci-reset.txt           |  62 ---------
+ .../bindings/reset/ti,sci-reset.yaml          |  51 +++++++
+ .../bindings/soc/ti/sci-pm-domain.txt         |  65 ---------
+ .../bindings/soc/ti/sci-pm-domain.yaml        |  59 ++++++++
+ 8 files changed, 288 insertions(+), 249 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/keystone/ti,sci.txt
+ create mode 100644 Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/ti,sci-clk.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/ti,sci-clk.yaml
+ delete mode 100644 Documentation/devicetree/bindings/reset/ti,sci-reset.txt
+ create mode 100644 Documentation/devicetree/bindings/reset/ti,sci-reset.yaml
+ delete mode 100644 Documentation/devicetree/bindings/soc/ti/sci-pm-domain.txt
+ create mode 100644 Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml
+
+Regards,
+Nishanth Menon
 -- 
-2.30.2
+2.31.0
 
