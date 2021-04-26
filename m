@@ -2,39 +2,42 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CAF36B4A1
-	for <lists+linux-clk@lfdr.de>; Mon, 26 Apr 2021 16:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA1736B49B
+	for <lists+linux-clk@lfdr.de>; Mon, 26 Apr 2021 16:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233720AbhDZOS2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 26 Apr 2021 10:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
+        id S233471AbhDZOSU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 26 Apr 2021 10:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbhDZOS0 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Apr 2021 10:18:26 -0400
+        with ESMTP id S231862AbhDZOST (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 26 Apr 2021 10:18:19 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6ACC061756
-        for <linux-clk@vger.kernel.org>; Mon, 26 Apr 2021 07:17:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013DEC061574
+        for <linux-clk@vger.kernel.org>; Mon, 26 Apr 2021 07:17:37 -0700 (PDT)
 Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1lb23K-0002KF-LM; Mon, 26 Apr 2021 16:17:34 +0200
+        id 1lb23L-0002KR-Dc; Mon, 26 Apr 2021 16:17:35 +0200
 Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1lb23K-0005nh-A0; Mon, 26 Apr 2021 16:17:34 +0200
+        id 1lb23K-0005nm-Ib; Mon, 26 Apr 2021 16:17:34 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
 Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v6 4/6] rtc: at91sam9: Simplify using devm_clk_get_enabled()
-Date:   Mon, 26 Apr 2021 16:17:28 +0200
-Message-Id: <20210426141730.2826832-5-u.kleine-koenig@pengutronix.de>
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Wolfram Sang <wsa@kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [PATCH v6 5/6] i2c: imx: Simplify using devm_clk_get_enabled()
+Date:   Mon, 26 Apr 2021 16:17:29 +0200
+Message-Id: <20210426141730.2826832-6-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210426141730.2826832-1-u.kleine-koenig@pengutronix.de>
 References: <20210426141730.2826832-1-u.kleine-koenig@pengutronix.de>
@@ -53,79 +56,52 @@ devm_clk_get_enabled() returns the clk already (prepared and) enabled
 and the automatically called cleanup cares for disabling (and
 unpreparing). So simplify .probe() and .remove() accordingly.
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Acked-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/rtc/rtc-at91sam9.c | 22 ++++------------------
- 1 file changed, 4 insertions(+), 18 deletions(-)
+ drivers/i2c/busses/i2c-imx.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/rtc/rtc-at91sam9.c b/drivers/rtc/rtc-at91sam9.c
-index 2216be429ab7..b52e7bd26303 100644
---- a/drivers/rtc/rtc-at91sam9.c
-+++ b/drivers/rtc/rtc-at91sam9.c
-@@ -374,21 +374,14 @@ static int at91_rtc_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 	}
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index b80fdc1f0092..d6594358cf83 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -1405,16 +1405,10 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 	ACPI_COMPANION_SET(&i2c_imx->adapter.dev, ACPI_COMPANION(&pdev->dev));
  
--	rtc->sclk = devm_clk_get(&pdev->dev, NULL);
-+	rtc->sclk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(rtc->sclk))
- 		return PTR_ERR(rtc->sclk);
- 
--	ret = clk_prepare_enable(rtc->sclk);
+ 	/* Get I2C clock */
+-	i2c_imx->clk = devm_clk_get(&pdev->dev, NULL);
++	i2c_imx->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(i2c_imx->clk))
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(i2c_imx->clk),
+-				     "can't get I2C clock\n");
+-
+-	ret = clk_prepare_enable(i2c_imx->clk);
 -	if (ret) {
--		dev_err(&pdev->dev, "Could not enable slow clock\n");
+-		dev_err(&pdev->dev, "can't enable I2C clock, ret=%d\n", ret);
 -		return ret;
 -	}
--
- 	sclk_rate = clk_get_rate(rtc->sclk);
- 	if (!sclk_rate || sclk_rate > AT91_RTT_RTPRES) {
- 		dev_err(&pdev->dev, "Invalid slow clock rate\n");
--		ret = -EINVAL;
--		goto err_clk;
-+		return -EINVAL;
- 	}
++				     "can't get prepared I2C clock\n");
  
- 	mr = rtt_readl(rtc, MR);
-@@ -406,7 +399,7 @@ static int at91_rtc_probe(struct platform_device *pdev)
- 	rtc->rtcdev = devm_rtc_allocate_device(&pdev->dev);
- 	if (IS_ERR(rtc->rtcdev)) {
- 		ret = PTR_ERR(rtc->rtcdev);
--		goto err_clk;
-+		return ret;
- 	}
- 
- 	rtc->rtcdev->ops = &at91_rtc_ops;
-@@ -418,7 +411,7 @@ static int at91_rtc_probe(struct platform_device *pdev)
- 			       dev_name(&rtc->rtcdev->dev), rtc);
- 	if (ret) {
- 		dev_dbg(&pdev->dev, "can't share IRQ %d?\n", rtc->irq);
--		goto err_clk;
-+		return ret;
- 	}
- 
- 	/* NOTE:  sam9260 rev A silicon has a ROM bug which resets the
-@@ -432,11 +425,6 @@ static int at91_rtc_probe(struct platform_device *pdev)
- 			 dev_name(&rtc->rtcdev->dev));
- 
- 	return devm_rtc_register_device(rtc->rtcdev);
--
--err_clk:
--	clk_disable_unprepare(rtc->sclk);
--
--	return ret;
+ 	/* Init queue */
+ 	init_waitqueue_head(&i2c_imx->queue);
+@@ -1487,7 +1481,6 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_set_suspended(&pdev->dev);
+ 	pm_runtime_dont_use_autosuspend(&pdev->dev);
+-	clk_disable_unprepare(i2c_imx->clk);
+ 	return ret;
  }
  
- /*
-@@ -450,8 +438,6 @@ static int at91_rtc_remove(struct platform_device *pdev)
- 	/* disable all interrupts */
- 	rtt_writel(rtc, MR, mr & ~(AT91_RTT_ALMIEN | AT91_RTT_RTTINCIEN));
+@@ -1517,7 +1510,6 @@ static int i2c_imx_remove(struct platform_device *pdev)
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq >= 0)
+ 		free_irq(irq, i2c_imx);
+-	clk_disable_unprepare(i2c_imx->clk);
  
--	clk_disable_unprepare(rtc->sclk);
--
- 	return 0;
- }
- 
+ 	pm_runtime_put_noidle(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
 -- 
 2.30.2
 
