@@ -2,78 +2,102 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58F7C36C1DD
-	for <lists+linux-clk@lfdr.de>; Tue, 27 Apr 2021 11:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E400136C20E
+	for <lists+linux-clk@lfdr.de>; Tue, 27 Apr 2021 11:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232896AbhD0JjR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 27 Apr 2021 05:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231148AbhD0JjP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 27 Apr 2021 05:39:15 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709B9C061574;
-        Tue, 27 Apr 2021 02:38:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=afn9nmNIxFRLwOFFN/FYrwOWDcs+ca/WH39CVLuFbjM=; b=yZ5ojcOkFduIjmE9ZnzvAvK0J
-        H8uzQfiUMbyvjJaqtQxj50/4uIuE3eYJjaTNY0gIua3S+Aseml8cF0RFzNCz/ElR6ayWeIdGApqcH
-        5N6YnIwFVzTNizm5GCsYTTM161K92GM2aw/X/hie0kGp4ssnVvC2bakszXr/GyRVXOThAXTg2rW5K
-        jK1zlwy2T578+wPHBGEhqbgQeE1TtSUsOHpQ5z/VLlcXSO0BHGo2MLK5Gu8a1stOuXsYgFJTfGeBq
-        QA3N/T326+vHVypbMKVMUNKc1/PDopDj4AWku1f4hUOzlbF783zCe7g7SdAyZR5gWGAMHYskNRfQL
-        965B93FPQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:52786)
-        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1lbKAU-00015G-1L; Tue, 27 Apr 2021 10:38:10 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1lbKAT-0004WA-Op; Tue, 27 Apr 2021 10:38:09 +0100
-Date:   Tue, 27 Apr 2021 10:38:09 +0100
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH] clk: <linux/clk.h>: correct clk_get_parent()
- documentation
-Message-ID: <20210427093809.GU1463@shell.armlinux.org.uk>
-References: <20210427031342.5333-1-rdunlap@infradead.org>
+        id S235299AbhD0JtZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 27 Apr 2021 05:49:25 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:20117 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235254AbhD0JtY (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 27 Apr 2021 05:49:24 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1619516921; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=8AsmZyBIhvhaE3uaf1AcLPrkdQJjpoWFs7gTSVdvoi0=; b=hWvZ+xfWRhBOTpIhso6iM9iNAhASRMyzJxBdv7vh2MwR0svayzVh+V2HpZE9TBSPKMysw4zL
+ GvRjcOZy16hLs69A1lsobxZJAJ0Tz96YXS1407NMQ7rgw28T8v5cW6I7QZOIBVHm/U3BON2g
+ BHGeZPzmN9E18gMYqldHS5goWy8=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 6087ddea2cc44d3aeac4ddfa (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 27 Apr 2021 09:48:26
+ GMT
+Sender: tdas=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B28D0C4338A; Tue, 27 Apr 2021 09:48:26 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [192.168.0.102] (unknown [49.204.181.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: tdas)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 666EDC433D3;
+        Tue, 27 Apr 2021 09:48:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 666EDC433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=tdas@codeaurora.org
+Subject: Re: [PATCH v1 4/6] clk: qcom: Add graphics clock controller driver
+ for SC7280
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh@kernel.org, robh+dt@kernel.org
+References: <1615944142-12171-1-git-send-email-tdas@codeaurora.org>
+ <1615944142-12171-5-git-send-email-tdas@codeaurora.org>
+ <161786654585.3790633.12597782416303763853@swboyd.mtv.corp.google.com>
+From:   Taniya Das <tdas@codeaurora.org>
+Message-ID: <575a9235-7753-d589-2173-050a16063b71@codeaurora.org>
+Date:   Tue, 27 Apr 2021 15:18:20 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210427031342.5333-1-rdunlap@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-Sender: Russell King - ARM Linux admin <linux@armlinux.org.uk>
+In-Reply-To: <161786654585.3790633.12597782416303763853@swboyd.mtv.corp.google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, Apr 26, 2021 at 08:13:42PM -0700, Randy Dunlap wrote:
-> Make the kernel-doc return value agree with both the stub implementation
-> in <linux/clk.h> and the non-stub function in drivers/clk/clk.c.
+Hello Stephen,
+
+Thank you for your review.
+
+On 4/8/2021 12:52 PM, Stephen Boyd wrote:
+> Quoting Taniya Das (2021-03-16 18:22:20)
+>> +static struct clk_regmap_div gpu_cc_hub_ahb_div_clk_src = {
+>> +       .reg = 0x11c0,
+>> +       .shift = 0,
+>> +       .width = 4,
+>> +       .clkr.hw.init = &(struct clk_init_data) {
+>> +               .name = "gpu_cc_hub_ahb_div_clk_src",
+>> +               .parent_data = &(const struct clk_parent_data){
+>> +                       .hw = &gpu_cc_hub_clk_src.clkr.hw,
 > 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: linux-clk@vger.kernel.org
-> ---
-> There are several drivers that call clk_get_parent() and use its
-> return value as though it returns an ERR_PTR(). I am working on a
-> patch series to fix those.
+> Can you follow what Dmitry has done and use .hws instead of
+> clk_parent_data when the whole array is clk_hw pointers?
+> 
 
-The whole premise of the CLK API is that:
+Will update them in the next patch.
 
-- clk values that IS_ERR() returns true are errors
-- clk values that IS_ERR() returns false are valid
-
-and that is that - nice, simple, easy to understand. So the
-documentation is correct. If clk_get_parent() needs to return an
-error, it does so by returning an error-pointer, not by returning
-NULL.
+>> +               },
+>> +               .num_parents = 1,
+>> +               .flags = CLK_SET_RATE_PARENT,
+>> +               .ops = &clk_regmap_div_ro_ops,
+>> +       },
+>> +};
+>> +
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation.
+
+--
