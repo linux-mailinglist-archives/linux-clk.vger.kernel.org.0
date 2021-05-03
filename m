@@ -2,69 +2,78 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08933371C01
-	for <lists+linux-clk@lfdr.de>; Mon,  3 May 2021 18:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B414371D60
+	for <lists+linux-clk@lfdr.de>; Mon,  3 May 2021 19:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233171AbhECQvC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 3 May 2021 12:51:02 -0400
-Received: from mail-oi1-f171.google.com ([209.85.167.171]:42663 "EHLO
-        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbhECQsP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 3 May 2021 12:48:15 -0400
-Received: by mail-oi1-f171.google.com with SMTP id v24so5972457oiv.9;
-        Mon, 03 May 2021 09:47:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FZniUUahTWZ1gHJuDlztknakv+Y1D1uukL0qFU35ff0=;
-        b=kmQku92mXOphBsSi1HVZasWRcoqvGT8+h/x+7d9PxG4/BSgaFdC3AwzglEgttZ1MfZ
-         uO6QZKygRVd5fmt9w/F+WDWHgLgHCVJu19RaZe/dcObHsxreDrMcLjtdCH4Fwoe/vN2c
-         3VUjalZWnvbmWP5BA5J35V41uDm9rsIeB/zVDfL2wlJkiF+ZtCXumCZXqyQYKuKTY8Mw
-         wA3DeX3qyUGWcTTo8Zg0Cqbdya+pKb6fhRvCHj0oaVSnihZh/9AbpqoNG3VFkENIpaHC
-         KX13OFSQeNQc0xpX49PyWD13Yzaz7q0mo5zw9hTN70VJOjrOHQAMgcb8iptfU5J1yP/i
-         4Dsg==
-X-Gm-Message-State: AOAM5313xRIxJSr7hwf/TFxJn1H09bn2qa2hQ+jGWJI12e9MeIq4MAI5
-        /uibsIhJaehwaKmesjEMBg==
-X-Google-Smtp-Source: ABdhPJxknYuxl9mXk7CK9WkA6mZSKILDuCUBdJXCfPYTG+JezGHjq3O4OMuQDQOr6o20c+a3hRN6jA==
-X-Received: by 2002:aca:bc42:: with SMTP id m63mr20900017oif.96.1620060442141;
-        Mon, 03 May 2021 09:47:22 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id h2sm50440oop.47.2021.05.03.09.47.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 May 2021 09:47:21 -0700 (PDT)
-Received: (nullmailer pid 1987723 invoked by uid 1000);
-        Mon, 03 May 2021 16:47:21 -0000
-Date:   Mon, 3 May 2021 11:47:21 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dong Aisheng <aisheng.dong@nxp.com>
-Cc:     linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
-        kernel@pengutronix.de, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, dongas86@gmail.com, shawnguo@kernel.org,
-        abel.vesa@nxp.com, sboyd@kernel.org
-Subject: Re: [PATCH 2/6] dt-bindings: arm: imx: scu: drop deprecated legacy
- clock binding
-Message-ID: <20210503164721.GA1987669@robh.at.kernel.org>
-References: <20210423033334.3317992-1-aisheng.dong@nxp.com>
- <20210423033334.3317992-2-aisheng.dong@nxp.com>
+        id S234734AbhECQ6t (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 3 May 2021 12:58:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44506 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235370AbhECQ4U (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 3 May 2021 12:56:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 92F4F613C6;
+        Mon,  3 May 2021 16:43:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620060220;
+        bh=zkpyHWDMow+yanN2rf0LhKYSxQoSglRoOdF3EPPw7a0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=E87OrCx4exdjzQsbR8wV6r8rb18dNVleO2Qb5kglkAzNgge8MrNR02RwSJgsdEmZt
+         KWXY4RVhRhKZAQohYgGN0MA6q0Mafyy9jFGHqi0yMbyLeLHt7h7OtNfA8+OsE+KSgj
+         Sp2qfYnSH+LZs1685UI/CZoAuLVz4CbAfWtd5IQWEX6zVtoWLfEz/slp4zrHqAu7fB
+         dMQSDY/+ckdBahA2SJG1lAWXWG0EtdasIX+zBGWU2koYylPB7ailuwt+R1VCRQ0YxZ
+         U9rFdSSfT8mpFlkF9X/sWXcibLVyZ8WmcwqDriFoziBXMmyCSm15m72c7WSqfeQsJs
+         jrAbIBXrtQO0w==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Colin Ian King <colin.king@canonical.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 07/16] clk: socfpga: arria10: Fix memory leak of socfpga_clk on error return
+Date:   Mon,  3 May 2021 12:43:20 -0400
+Message-Id: <20210503164329.2854739-7-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210503164329.2854739-1-sashal@kernel.org>
+References: <20210503164329.2854739-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210423033334.3317992-2-aisheng.dong@nxp.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, 23 Apr 2021 11:33:30 +0800, Dong Aisheng wrote:
-> The legacy clock binding are not maintained anymore. It has only
-> a very preliminary supported clocks during initial upstream and
-> meaningless for users. So drop it from binding doc now.
-> 
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
-> ---
->  Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
+From: Colin Ian King <colin.king@canonical.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+[ Upstream commit 657d4d1934f75a2d978c3cf2086495eaa542e7a9 ]
+
+There is an error return path that is not kfree'ing socfpga_clk leading
+to a memory leak. Fix this by adding in the missing kfree call.
+
+Addresses-Coverity: ("Resource leak")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Link: https://lore.kernel.org/r/20210406170115.430990-1-colin.king@canonical.com
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/clk/socfpga/clk-gate-a10.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/clk/socfpga/clk-gate-a10.c b/drivers/clk/socfpga/clk-gate-a10.c
+index 1cebf253e8fd..48e371035a63 100644
+--- a/drivers/clk/socfpga/clk-gate-a10.c
++++ b/drivers/clk/socfpga/clk-gate-a10.c
+@@ -158,6 +158,7 @@ static void __init __socfpga_gate_init(struct device_node *node,
+ 		if (IS_ERR(socfpga_clk->sys_mgr_base_addr)) {
+ 			pr_err("%s: failed to find altr,sys-mgr regmap!\n",
+ 					__func__);
++			kfree(socfpga_clk);
+ 			return;
+ 		}
+ 	}
+-- 
+2.30.2
+
