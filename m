@@ -2,120 +2,85 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCC537780D
-	for <lists+linux-clk@lfdr.de>; Sun,  9 May 2021 21:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97A0F377C2E
+	for <lists+linux-clk@lfdr.de>; Mon, 10 May 2021 08:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbhEITWA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 9 May 2021 15:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
+        id S230116AbhEJGSz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 10 May 2021 02:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbhEITV7 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 9 May 2021 15:21:59 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC36C061573
-        for <linux-clk@vger.kernel.org>; Sun,  9 May 2021 12:20:55 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id l6so13921094oii.1
-        for <linux-clk@vger.kernel.org>; Sun, 09 May 2021 12:20:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4GPX6YCdFT0eI9OqiRM8BpJFmnkJ48nTNs5bVOXcOto=;
-        b=W3oEm+Oqv8jLV7JX4eRdNWLtaUGnm18j3ZTtBh3ytvRUvWqMMuZkuTsalW6FwJM1O7
-         zUy9IpQYFCCLsR5UA1avToB85nZYis468um1kgBb/SwY5TG/CIlZ1bzK034KroZdFLqS
-         0s2UClL6u5efDdXqywqT3Zh4/b2E4cYf2DJXU/jtyB8Rf0ngt9FJ7sdYfzTz2aBVTgvb
-         vXOD4O0mCV5xLFLNWHc82ZV2MArtTu7PbWHYjBdlnr4rnjLUEkWRtkTVS87WNLE1vnJu
-         9GRBQp9f7nbi32VxANmKrUXkFGiEIxHnDooT79iM5V1J4eh6t4UYcI9Epnt7xanmWzMh
-         wX2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4GPX6YCdFT0eI9OqiRM8BpJFmnkJ48nTNs5bVOXcOto=;
-        b=qapkFZWjWId38gRzRvDfjbEobMSFqL9Im6pQN008jKyuVzSMX3tv+Mi2AqHPyY9qP+
-         44pgKalFwArGFFcczKRKjRe+SK0vBMzLwZomt4y8WRy1Q4LH8EhQJG202L+vWkECuNoA
-         SZhi3yWzPmI3TIxeiXzHfaITq3j26LOkzy9dSBhpA7IKqa71GT3PwAwXmWsKztSR7m1N
-         51JrWML6RepdA7qilUvWgJ2hmSNOdIjGHXJARHi6MleWxmEVB4i82PbwiZmS+7cVpUrR
-         nEI18bCZ+H/Vqka2T+q6xgT7Kj6mznFGNIsIkcjGyza+ONVqW2cPMF0wQua12M+5Bcv0
-         IxOg==
-X-Gm-Message-State: AOAM530nnnybZBWIxzuR8uGf7WVM/iGQrp4nEpexrDfoLkJrp5lZu7Uc
-        h3OzEwftIKrTVQ8LgLtBmBnT8CEoSJt1/bavpgcTvA==
-X-Google-Smtp-Source: ABdhPJw6+UCBlq3IWslbkvJg6hDx8LHViB9kozY6+DNTnjWO3Xjnwmrth+lDZWe6PVj3aw2O9mJQcyzhFO5f962x7fo=
-X-Received: by 2002:aca:3dc3:: with SMTP id k186mr23871986oia.126.1620588054621;
- Sun, 09 May 2021 12:20:54 -0700 (PDT)
+        with ESMTP id S230123AbhEJGSv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 10 May 2021 02:18:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C2FC061763
+        for <linux-clk@vger.kernel.org>; Sun,  9 May 2021 23:17:45 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lfzEU-0007Z9-So; Mon, 10 May 2021 08:17:34 +0200
+Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1lfzET-0004Zw-F8; Mon, 10 May 2021 08:17:33 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        linux-spi@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [PATCH v6 RESEND 0/6] clk: provide new devm helpers for prepared and enabled clocks
+Date:   Mon, 10 May 2021 08:17:18 +0200
+Message-Id: <20210510061724.940447-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20210505213731.538612-1-bhupesh.sharma@linaro.org>
- <20210505213731.538612-15-bhupesh.sharma@linaro.org> <YJfqk/0Whr2Qfxjb@vkoul-mobl.Dlink>
-In-Reply-To: <YJfqk/0Whr2Qfxjb@vkoul-mobl.Dlink>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Mon, 10 May 2021 00:50:43 +0530
-Message-ID: <CAH=2Ntw6MfqLvxzx44TqgF21frwkeJnUmkeH2+zx0L+MfLdG=A@mail.gmail.com>
-Subject: Re: [PATCH v2 14/17] dma: qcom: bam_dma: Create a new header file for
- BAM DMA driver
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        dmaengine@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Vinod,
+Hello,
 
-Thanks for the review.
+this is just a resend as I didn't get any feedback in the two weeks
+since the original v6 submission. Would be nice to hear something back,
+I'm trying for more than half a year now to get feedback. :-\
 
-On Sun, 9 May 2021 at 19:28, Vinod Koul <vkoul@kernel.org> wrote:
->
-> On 06-05-21, 03:07, Bhupesh Sharma wrote:
-> > Create a new header file for BAM DMA driver to make sure
-> > that it can be included in the follow-up patch to defer probing
-> > drivers which require BAM DMA driver to be first probed successfully.
-> >
-> > Cc: Thara Gopinath <thara.gopinath@linaro.org>
-> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: Andy Gross <agross@kernel.org>
-> > Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> > Cc: David S. Miller <davem@davemloft.net>
-> > Cc: Stephen Boyd <sboyd@kernel.org>
-> > Cc: Michael Turquette <mturquette@baylibre.com>
-> > Cc: Vinod Koul <vkoul@kernel.org>
-> > Cc: dmaengine@vger.kernel.org
-> > Cc: linux-clk@vger.kernel.org
-> > Cc: linux-crypto@vger.kernel.org
-> > Cc: devicetree@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: bhupesh.linux@gmail.com
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  drivers/dma/qcom/bam_dma.c | 283 +-----------------------------------
-> >  include/soc/qcom/bam_dma.h | 290 +++++++++++++++++++++++++++++++++++++
->
-> 1. Please use -M with move patches...
+Best regards
+Uwe
 
-Oops, will do.
+Uwe Kleine-König (6):
+  clk: generalize devm_clk_get() a bit
+  clk: Provide new devm_clk_helpers for prepared and enabled clocks
+  pwm: atmel: Simplify using devm_clk_get_prepared()
+  rtc: at91sam9: Simplify using devm_clk_get_enabled()
+  i2c: imx: Simplify using devm_clk_get_enabled()
+  spi: davinci: Simplify using devm_clk_get_enabled()
 
-> 2. susbsytem is dmaengine
->
-> 3. Why move..? These things are internal to the driver and I dont think
-> it is wise for clients to use everything here... If the client needs to
-> know defer probe, it should request a channel and check the status
-> returned for EPROBE_DEFER
+ drivers/clk/clk-devres.c     | 96 ++++++++++++++++++++++++++++++------
+ drivers/i2c/busses/i2c-imx.c | 12 +----
+ drivers/pwm/pwm-atmel.c      | 15 +-----
+ drivers/rtc/rtc-at91sam9.c   | 22 ++-------
+ drivers/spi/spi-davinci.c    | 11 +----
+ include/linux/clk.h          | 87 +++++++++++++++++++++++++++++++-
+ 6 files changed, 176 insertions(+), 67 deletions(-)
 
-Yes, the main intent is to defer the probe of the calling client driver in
-case the BAM DMA is not probed() yet.
 
-Sure, I will make the suggested change in v3,
+base-commit: a38fd8748464831584a19438cbb3082b5a2dab15
+-- 
+2.30.2
 
-Regards,
-Bhupesh
