@@ -2,108 +2,90 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F44377C21
-	for <lists+linux-clk@lfdr.de>; Mon, 10 May 2021 08:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB6B377EBF
+	for <lists+linux-clk@lfdr.de>; Mon, 10 May 2021 10:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbhEJGSv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 10 May 2021 02:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbhEJGSo (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 10 May 2021 02:18:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F364C06175F
-        for <linux-clk@vger.kernel.org>; Sun,  9 May 2021 23:17:39 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lfzEV-0007ZF-1Z; Mon, 10 May 2021 08:17:35 +0200
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1lfzEU-0004aE-MQ; Mon, 10 May 2021 08:17:34 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-spi@vger.kernel.org
-Subject: [PATCH v6 RESEND 6/6] spi: davinci: Simplify using devm_clk_get_enabled()
-Date:   Mon, 10 May 2021 08:17:24 +0200
-Message-Id: <20210510061724.940447-7-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210510061724.940447-1-u.kleine-koenig@pengutronix.de>
-References: <20210510061724.940447-1-u.kleine-koenig@pengutronix.de>
+        id S230170AbhEJIzs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 10 May 2021 04:55:48 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:55500 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230050AbhEJIzr (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 10 May 2021 04:55:47 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 6EF7F2041D1;
+        Mon, 10 May 2021 10:54:42 +0200 (CEST)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 6217D2041D0;
+        Mon, 10 May 2021 10:54:42 +0200 (CEST)
+Received: from localhost (fsr-ub1664-175.ea.freescale.net [10.171.82.40])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 4DF6B203B6;
+        Mon, 10 May 2021 10:54:42 +0200 (CEST)
+Date:   Mon, 10 May 2021 11:54:42 +0300
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     Lucas Stach <l.stach@pengutronix.de>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kernel@pengutronix.de, patchwork-lst@pengutronix.de
+Subject: Re: [PATCH] clk: imx8mq: prevent sys1_pll_266m gating
+Message-ID: <20210510085442.wn4vz2fgstym4rrj@fsr-ub1664-175>
+References: <20210507171028.157728-1-l.stach@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210507171028.157728-1-l.stach@pengutronix.de>
+User-Agent: NeoMutt/20180622
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-devm_clk_get_enabled() returns the clk already (prepared and) enabled
-and the automatically called cleanup cares for disabling (and
-unpreparing). So simplify .probe() and .remove() accordingly.
+On 21-05-07 19:10:28, Lucas Stach wrote:
+> Gating sys1_pll_266m while the usdhc_nand_bus clock is still active (due
+> to being enabled in to bootloader) leads to spurious failures of the
+> uSDHC module.
+> 
+> b04383b6a558 ("clk: imx8mq: Define gates for pll1/2 fixed dividers")
+> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> ---
+> We probably need some solution to keep parent clocks active on the i.MX8M clock
+> architecture, as long as any consumers are active, as the reference manual
+> states that disabling a parent clock may lead to undefined behavior. This needs
+> more work in the clock framework and/or driver. This patch fixes the obvious
+> regression until we have such a solution.
 
-Acked-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/spi/spi-davinci.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+I believe the solution here should be a core clock flag that forces
+the core to read the gate bit value from register. The problem with this approach
+is the clock core doesn't check if the child clocks are enabled when
+disabling the parent clock, instead it relies on cached enabled count of the parent.
+Basically, the CCF, as of now, isn't able to cope with clocks that can be
+enabled/disabled from outside. This should be improved at some point.
 
-diff --git a/drivers/spi/spi-davinci.c b/drivers/spi/spi-davinci.c
-index 7453a1dbbc06..63ee918ecdb0 100644
---- a/drivers/spi/spi-davinci.c
-+++ b/drivers/spi/spi-davinci.c
-@@ -936,14 +936,11 @@ static int davinci_spi_probe(struct platform_device *pdev)
- 
- 	dspi->bitbang.master = master;
- 
--	dspi->clk = devm_clk_get(&pdev->dev, NULL);
-+	dspi->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(dspi->clk)) {
- 		ret = -ENODEV;
- 		goto free_master;
- 	}
--	ret = clk_prepare_enable(dspi->clk);
--	if (ret)
--		goto free_master;
- 
- 	master->use_gpio_descriptors = true;
- 	master->dev.of_node = pdev->dev.of_node;
-@@ -968,7 +965,7 @@ static int davinci_spi_probe(struct platform_device *pdev)
- 
- 	ret = davinci_spi_request_dma(dspi);
- 	if (ret == -EPROBE_DEFER) {
--		goto free_clk;
-+		goto free_master;
- 	} else if (ret) {
- 		dev_info(&pdev->dev, "DMA is not supported (%d)\n", ret);
- 		dspi->dma_rx = NULL;
-@@ -1012,8 +1009,6 @@ static int davinci_spi_probe(struct platform_device *pdev)
- 		dma_release_channel(dspi->dma_rx);
- 		dma_release_channel(dspi->dma_tx);
- 	}
--free_clk:
--	clk_disable_unprepare(dspi->clk);
- free_master:
- 	spi_master_put(master);
- err:
-@@ -1039,8 +1034,6 @@ static int davinci_spi_remove(struct platform_device *pdev)
- 
- 	spi_bitbang_stop(&dspi->bitbang);
- 
--	clk_disable_unprepare(dspi->clk);
--
- 	if (dspi->dma_rx) {
- 		dma_release_channel(dspi->dma_rx);
- 		dma_release_channel(dspi->dma_tx);
--- 
-2.30.2
-
+> ---
+>  drivers/clk/imx/clk-imx8mq.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/clk/imx/clk-imx8mq.c b/drivers/clk/imx/clk-imx8mq.c
+> index 4dd4ae9d022b..fce983add1fc 100644
+> --- a/drivers/clk/imx/clk-imx8mq.c
+> +++ b/drivers/clk/imx/clk-imx8mq.c
+> @@ -372,7 +372,6 @@ static int imx8mq_clocks_probe(struct platform_device *pdev)
+>  	hws[IMX8MQ_SYS1_PLL_133M_CG] = imx_clk_hw_gate("sys1_pll_133m_cg", "sys1_pll_out", base + 0x30, 15);
+>  	hws[IMX8MQ_SYS1_PLL_160M_CG] = imx_clk_hw_gate("sys1_pll_160m_cg", "sys1_pll_out", base + 0x30, 17);
+>  	hws[IMX8MQ_SYS1_PLL_200M_CG] = imx_clk_hw_gate("sys1_pll_200m_cg", "sys1_pll_out", base + 0x30, 19);
+> -	hws[IMX8MQ_SYS1_PLL_266M_CG] = imx_clk_hw_gate("sys1_pll_266m_cg", "sys1_pll_out", base + 0x30, 21);
+>  	hws[IMX8MQ_SYS1_PLL_400M_CG] = imx_clk_hw_gate("sys1_pll_400m_cg", "sys1_pll_out", base + 0x30, 23);
+>  	hws[IMX8MQ_SYS1_PLL_800M_CG] = imx_clk_hw_gate("sys1_pll_800m_cg", "sys1_pll_out", base + 0x30, 25);
+>  
+> @@ -382,7 +381,7 @@ static int imx8mq_clocks_probe(struct platform_device *pdev)
+>  	hws[IMX8MQ_SYS1_PLL_133M] = imx_clk_hw_fixed_factor("sys1_pll_133m", "sys1_pll_133m_cg", 1, 6);
+>  	hws[IMX8MQ_SYS1_PLL_160M] = imx_clk_hw_fixed_factor("sys1_pll_160m", "sys1_pll_160m_cg", 1, 5);
+>  	hws[IMX8MQ_SYS1_PLL_200M] = imx_clk_hw_fixed_factor("sys1_pll_200m", "sys1_pll_200m_cg", 1, 4);
+> -	hws[IMX8MQ_SYS1_PLL_266M] = imx_clk_hw_fixed_factor("sys1_pll_266m", "sys1_pll_266m_cg", 1, 3);
+> +	hws[IMX8MQ_SYS1_PLL_266M] = imx_clk_hw_fixed_factor("sys1_pll_266m", "sys1_pll_out", 1, 3);
+>  	hws[IMX8MQ_SYS1_PLL_400M] = imx_clk_hw_fixed_factor("sys1_pll_400m", "sys1_pll_400m_cg", 1, 2);
+>  	hws[IMX8MQ_SYS1_PLL_800M] = imx_clk_hw_fixed_factor("sys1_pll_800m", "sys1_pll_800m_cg", 1, 1);
+>  
+> -- 
+> 2.29.2
+> 
