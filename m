@@ -2,68 +2,101 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 038DF37BF66
-	for <lists+linux-clk@lfdr.de>; Wed, 12 May 2021 16:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F5637EE73
+	for <lists+linux-clk@lfdr.de>; Thu, 13 May 2021 00:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbhELOKS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 12 May 2021 10:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbhELOKS (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 12 May 2021 10:10:18 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9F7C061574
-        for <linux-clk@vger.kernel.org>; Wed, 12 May 2021 07:09:09 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id b19-20020a05600c06d3b029014258a636e8so3120637wmn.2
-        for <linux-clk@vger.kernel.org>; Wed, 12 May 2021 07:09:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=z2/BDB/+E3nnW3X5HumSOrkgCJEajj4Tlm+ddtU6tAk=;
-        b=aHN2JlRDZyJlPZ8q1sHio6W/0Um0XG0FKV83U/8nDaV3K8AqQmrKWkKXf3bcPTF6JJ
-         9LLWa5QgfTr/t7vTTzDTrdOd4ciU6bRoaIfpTHDD2oP9dE2CjuydbLi3TQg1mLWudyfh
-         JVTimWlANUUhnJHQU64/bH/OhWhqQ05f+WaJ0hPFMe74NjmUTT+6CocCiktfjYThbwpr
-         p7Rb9uWvSOj0rcBfFQCc4HqWNP9Z8iRxd4A4v4daPgWL3RS+Ct7s3HImlrCSbU9keBMA
-         MvRcLQPfhwHBdq54OlSJMrNqIqJvw0ctCNbPuIboJB3AdZCWREPPkrt0JmVx2nz5b0p/
-         IF2Q==
+        id S239213AbhELVn2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 12 May 2021 17:43:28 -0400
+Received: from mail-ot1-f44.google.com ([209.85.210.44]:43654 "EHLO
+        mail-ot1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1385242AbhELUHs (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 12 May 2021 16:07:48 -0400
+Received: by mail-ot1-f44.google.com with SMTP id u19-20020a0568302493b02902d61b0d29adso20889892ots.10;
+        Wed, 12 May 2021 13:06:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=z2/BDB/+E3nnW3X5HumSOrkgCJEajj4Tlm+ddtU6tAk=;
-        b=tB/WqlWAvYubwRuIDvWdDcFs1wVOPo7veDh0fmHPUDHNF65yD0zPAvDfIfCrAhsboS
-         CDpdkZw1mvvOcNdRa3+5isxqSTHj6AGXppXRsxoebu8rGFl428C+IRmlsdk1/aQ2GR2G
-         1yG81StlQexU9vGy1hurDgMuR4j7ai7WGPktEaXcyatCJOLWlRyPHeKVBjBOraAwakuS
-         FJhIJI+VsfhMT0OQ1Ja8jjxGrViEWOwdX/t5LJUxk0JuUCITzgTMutmF/H/Q9s1u54rT
-         Xo8JJ/fbvMEt1yvBGkRYOffTmtkQ0kRkmGdBAB/7Hi14EtwwYmOqkuKkqJ1s23d94Hjd
-         3+hg==
-X-Gm-Message-State: AOAM530BKndNJoTp6lFYEDd5BWx0sHheJDdmnv1aoZ3OCpLB9RW0TDxW
-        uBR7a00riTuBchkIamlLv1bqAFsp5Da3YR+qciw=
-X-Google-Smtp-Source: ABdhPJyx9nYvlvlq7XxsejZxrKZltsFekLc5w2NKCzOHdpnCSslqIrQBY3/UbhLuIpVeg0EDFQ104ulkdP+Nmc+j5Xw=
-X-Received: by 2002:a05:600c:3798:: with SMTP id o24mr12242424wmr.12.1620828548290;
- Wed, 12 May 2021 07:09:08 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a5d:5256:0:0:0:0:0 with HTTP; Wed, 12 May 2021 07:09:07
- -0700 (PDT)
-Reply-To: d_nelson47@yahoo.com
-From:   Sommy Nelson <sommynelson441@gmail.com>
-Date:   Wed, 12 May 2021 14:09:07 +0000
-Message-ID: <CANxCy=T5cd=H_skkTG3Az2TpO8bhLjqCq6ck6rZTj8Y+4F2sYg@mail.gmail.com>
-Subject: Good day
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=y75a+npHzYnAcEOmEtDKotRbA7WzUvRLx11YfyY+WUU=;
+        b=fOnNwwkQoz1aeXd1g78+C/sgX6prwYfmni/oxUbPW+c3nKuFAvgYzEzQ9JxLXSLdAw
+         1/NmdkTp7oO31UDiwl8cB72LBJeiisD4wQQFHgR0CyARAFWfTCEaAjl7GaSBDjAtRnGD
+         CpRrONmloydX2rCi24i3FK/3VeIKIRjdyKlMwiRJrOVyHp2QVHb4wV4W3LOFIaFj+cxd
+         289i41PI5zikr3TNZqoD5SWDSkTxK2gjOQN9G4zz6HHl9K0qgYEeCGMzCFWo6cwVnTjJ
+         YT84I7CdJ1qRPzbm+Z/NnUAX5yZwB+nSrYORhLME/Yg4EAVAdC4/o0miMYHrl/VT8E+j
+         L6NA==
+X-Gm-Message-State: AOAM532NqUXylFHyZdnOHkLOGSfY6+gDyDBs8O8J/VAXt4kw+9NZkOky
+        T5AgKLZg2IAbVturXbiQCw==
+X-Google-Smtp-Source: ABdhPJxoDGfKmXXaK6iKVaWIMgHWAwaXQ+vvdi96PtmRwBpqWzU3YEAOkWPn3koqCfhG8RemFU1aVw==
+X-Received: by 2002:a9d:614b:: with SMTP id c11mr32075996otk.59.1620849998823;
+        Wed, 12 May 2021 13:06:38 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id q1sm192057otc.21.2021.05.12.13.06.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 May 2021 13:06:38 -0700 (PDT)
+Received: (nullmailer pid 2020688 invoked by uid 1000);
+        Tue, 11 May 2021 13:40:20 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-clk@vger.kernel.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        =?utf-8?b?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+In-Reply-To: <20210510231737.30313-9-digetx@gmail.com>
+References: <20210510231737.30313-1-digetx@gmail.com> <20210510231737.30313-9-digetx@gmail.com>
+Subject: Re: [PATCH v7 8/8] dt-bindings: clock: tegra: Convert to schema
+Date:   Tue, 11 May 2021 08:40:20 -0500
+Message-Id: <1620740420.957803.2020687.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Good day
+On Tue, 11 May 2021 02:17:37 +0300, Dmitry Osipenko wrote:
+> Convert NVIDIA Tegra clock bindings to schema.
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  .../bindings/clock/nvidia,tegra114-car.txt    |  63 ----------
+>  .../bindings/clock/nvidia,tegra124-car.txt    | 107 ----------------
+>  .../bindings/clock/nvidia,tegra124-car.yaml   | 115 ++++++++++++++++++
+>  .../bindings/clock/nvidia,tegra20-car.txt     |  63 ----------
+>  .../bindings/clock/nvidia,tegra20-car.yaml    |  69 +++++++++++
+>  .../bindings/clock/nvidia,tegra210-car.txt    |  56 ---------
+>  .../bindings/clock/nvidia,tegra30-car.txt     |  63 ----------
+>  7 files changed, 184 insertions(+), 352 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/clock/nvidia,tegra114-car.txt
+>  delete mode 100644 Documentation/devicetree/bindings/clock/nvidia,tegra124-car.txt
+>  create mode 100644 Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/clock/nvidia,tegra20-car.txt
+>  create mode 100644 Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/clock/nvidia,tegra210-car.txt
+>  delete mode 100644 Documentation/devicetree/bindings/clock/nvidia,tegra30-car.txt
+> 
 
-I am Barrister Sommy Nelson,
-My reason for contacting you is to introduce you to the bank as the
-next of kin to the amount of (US $ 13.500.000.00) left by my late
-client.
-I will explain in more details when I hear from you.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Thanks for your co-operation,
+yamllint warnings/errors:
 
-Barrister Sommy Nelson Esq
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/clock/nvidia,tegra20-car.example.dt.yaml:0:0: /example-0/usb-controller@c5004000: failed to match any schema with compatible: ['nvidia,tegra20-ehci']
+Documentation/devicetree/bindings/clock/nvidia,tegra124-car.example.dt.yaml:0:0: /example-0/usb-controller@c5004000: failed to match any schema with compatible: ['nvidia,tegra20-ehci']
+
+See https://patchwork.ozlabs.org/patch/1476773
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
