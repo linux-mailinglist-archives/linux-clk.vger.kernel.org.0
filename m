@@ -2,134 +2,68 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E9437AA94
-	for <lists+linux-clk@lfdr.de>; Tue, 11 May 2021 17:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 038DF37BF66
+	for <lists+linux-clk@lfdr.de>; Wed, 12 May 2021 16:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231812AbhEKPYm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 11 May 2021 11:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
+        id S230401AbhELOKS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 12 May 2021 10:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbhEKPYf (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 11 May 2021 11:24:35 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22584C061574;
-        Tue, 11 May 2021 08:23:27 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id h4so29287296lfv.0;
-        Tue, 11 May 2021 08:23:27 -0700 (PDT)
+        with ESMTP id S230018AbhELOKS (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 12 May 2021 10:10:18 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9F7C061574
+        for <linux-clk@vger.kernel.org>; Wed, 12 May 2021 07:09:09 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id b19-20020a05600c06d3b029014258a636e8so3120637wmn.2
+        for <linux-clk@vger.kernel.org>; Wed, 12 May 2021 07:09:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ADKRjjG+U6Cx+ubrJWYRmb4HSWDPh6DbS/6I/KaMcho=;
-        b=YHLePLdx2gwPUhEfq8XHinUFEUh6dL/DkYPtmtXq4EiSYAFDlZxmH890syxHI9UQ81
-         BDfUwOAlkdOmM76fZODHkf+ovx9/G7EVcZRzDt4ylC4PhppjPoa48vcInW8HtOvedrP+
-         AGXvmg5hjd4NNqZqhHG2iQNwKscF4/iAB25mrHNHQMRirU1kXlb+OhpVa7GWR2VYFFi0
-         qsIRl9v9E8bSiCXESOoiZ43GawZm5AQLFdDYLkGDRweUsEnFhM2Ip99SwwYuhV/qrpja
-         rhX03dMsLjniXnh1jfX6eSK43LWWbENyYjF3xUixMCDyLQJGr/N4DMGvLsuhohrSbzJU
-         rmWQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=z2/BDB/+E3nnW3X5HumSOrkgCJEajj4Tlm+ddtU6tAk=;
+        b=aHN2JlRDZyJlPZ8q1sHio6W/0Um0XG0FKV83U/8nDaV3K8AqQmrKWkKXf3bcPTF6JJ
+         9LLWa5QgfTr/t7vTTzDTrdOd4ciU6bRoaIfpTHDD2oP9dE2CjuydbLi3TQg1mLWudyfh
+         JVTimWlANUUhnJHQU64/bH/OhWhqQ05f+WaJ0hPFMe74NjmUTT+6CocCiktfjYThbwpr
+         p7Rb9uWvSOj0rcBfFQCc4HqWNP9Z8iRxd4A4v4daPgWL3RS+Ct7s3HImlrCSbU9keBMA
+         MvRcLQPfhwHBdq54OlSJMrNqIqJvw0ctCNbPuIboJB3AdZCWREPPkrt0JmVx2nz5b0p/
+         IF2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ADKRjjG+U6Cx+ubrJWYRmb4HSWDPh6DbS/6I/KaMcho=;
-        b=mDA+rOiGEMC/PUyV3kMNE8opDCbWTRPKNj/YY4v4+M3tko97uUHuE9Ww7IgrX4aeq5
-         8H6iCto+FngMbtlfywIlNrT026wqfgprLqxHXRc6USKd7ypMHQAnVSuCV14cmDAUvfVW
-         f6fZX3WKa4WMv4eGyGSfsgWoQTPmQkEHqdPMkO2i7SdEUM7h+X3tYcFrTgePVwBM7bY9
-         sSMhLnxGtOwtb4oh+E7QfHzAAeiXZ9Pl7tv1ZW/R3lnS1P4kFRAOjHOjzh9hEROsQ4rV
-         ZvtTH+b0PGCYHz0MFpYtOU23ypHUY4CFSFESZyeyQn6PYPk/vfevm5IMXabrSmOSXo0+
-         OaLQ==
-X-Gm-Message-State: AOAM533vs5eLdsHWBF6s8xfuBOxD33RGM7oPyOp8bQTSu1NjSl88BWeJ
-        RPHMaDi8Vey7u54SRBJpqz7pwbpH2SU=
-X-Google-Smtp-Source: ABdhPJz2Qpvhj9Yo/qa3WG+mUOgsviecIss7RAxZ9bmKuZfDVgwGavhNzYBNq/KK0x89lJcBnuWUEw==
-X-Received: by 2002:a05:6512:acc:: with SMTP id n12mr20637115lfu.408.1620746605520;
-        Tue, 11 May 2021 08:23:25 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-193-91.dynamic.spd-mgts.ru. [109.252.193.91])
-        by smtp.googlemail.com with ESMTPSA id k25sm148208lji.61.2021.05.11.08.23.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 May 2021 08:23:25 -0700 (PDT)
-Subject: Re: [PATCH v7 6/8] clk: tegra: cclk: Handle thermal DIV2 CPU
- frequency throttling
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-tegra@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20210510231737.30313-1-digetx@gmail.com>
- <20210510231737.30313-7-digetx@gmail.com>
- <20210511144139.GB4413@qmqm.qmqm.pl>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <04bc9e16-be7e-cf18-9fff-436dd063bf10@gmail.com>
-Date:   Tue, 11 May 2021 18:23:24 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=z2/BDB/+E3nnW3X5HumSOrkgCJEajj4Tlm+ddtU6tAk=;
+        b=tB/WqlWAvYubwRuIDvWdDcFs1wVOPo7veDh0fmHPUDHNF65yD0zPAvDfIfCrAhsboS
+         CDpdkZw1mvvOcNdRa3+5isxqSTHj6AGXppXRsxoebu8rGFl428C+IRmlsdk1/aQ2GR2G
+         1yG81StlQexU9vGy1hurDgMuR4j7ai7WGPktEaXcyatCJOLWlRyPHeKVBjBOraAwakuS
+         FJhIJI+VsfhMT0OQ1Ja8jjxGrViEWOwdX/t5LJUxk0JuUCITzgTMutmF/H/Q9s1u54rT
+         Xo8JJ/fbvMEt1yvBGkRYOffTmtkQ0kRkmGdBAB/7Hi14EtwwYmOqkuKkqJ1s23d94Hjd
+         3+hg==
+X-Gm-Message-State: AOAM530BKndNJoTp6lFYEDd5BWx0sHheJDdmnv1aoZ3OCpLB9RW0TDxW
+        uBR7a00riTuBchkIamlLv1bqAFsp5Da3YR+qciw=
+X-Google-Smtp-Source: ABdhPJyx9nYvlvlq7XxsejZxrKZltsFekLc5w2NKCzOHdpnCSslqIrQBY3/UbhLuIpVeg0EDFQ104ulkdP+Nmc+j5Xw=
+X-Received: by 2002:a05:600c:3798:: with SMTP id o24mr12242424wmr.12.1620828548290;
+ Wed, 12 May 2021 07:09:08 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210511144139.GB4413@qmqm.qmqm.pl>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a5d:5256:0:0:0:0:0 with HTTP; Wed, 12 May 2021 07:09:07
+ -0700 (PDT)
+Reply-To: d_nelson47@yahoo.com
+From:   Sommy Nelson <sommynelson441@gmail.com>
+Date:   Wed, 12 May 2021 14:09:07 +0000
+Message-ID: <CANxCy=T5cd=H_skkTG3Az2TpO8bhLjqCq6ck6rZTj8Y+4F2sYg@mail.gmail.com>
+Subject: Good day
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-11.05.2021 17:41, Michał Mirosław пишет:
-> On Tue, May 11, 2021 at 02:17:35AM +0300, Dmitry Osipenko wrote:
->> Check whether thermal DIV2 throttle is active in order to report
->> the CPU frequency properly. This very useful for userspace tools
->> like cpufreq-info which show actual frequency asserted from hardware.
->>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/clk/tegra/clk-tegra-super-cclk.c | 16 ++++++++++++++--
->>  drivers/clk/tegra/clk-tegra30.c          |  2 +-
->>  2 files changed, 15 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/clk/tegra/clk-tegra-super-cclk.c b/drivers/clk/tegra/clk-tegra-super-cclk.c
->> index a03119c30456..f75822b71d0e 100644
->> --- a/drivers/clk/tegra/clk-tegra-super-cclk.c
->> +++ b/drivers/clk/tegra/clk-tegra-super-cclk.c
->> @@ -25,6 +25,8 @@
->>  
->>  #define SUPER_CDIV_ENB		BIT(31)
->>  
->> +#define TSENSOR_SLOWDOWN	BIT(23)
->> +
->>  static struct tegra_clk_super_mux *cclk_super;
->>  static bool cclk_on_pllx;
->>  
->> @@ -47,10 +49,20 @@ static int cclk_super_set_rate(struct clk_hw *hw, unsigned long rate,
->>  static unsigned long cclk_super_recalc_rate(struct clk_hw *hw,
->>  					    unsigned long parent_rate)
->>  {
->> +	struct tegra_clk_super_mux *super = to_clk_super_mux(hw);
->> +	u32 val = readl_relaxed(super->reg);
->> +	unsigned int div2;
->> +
->> +	/* check whether thermal throttling is active */
->> +	if (val & TSENSOR_SLOWDOWN)
->> +		div2 = 2;
->> +	else
->> +		div2 = 1;
->> +
->>  	if (cclk_super_get_parent(hw) == PLLX_INDEX)
->> -		return parent_rate;
->> +		return parent_rate / div2;
->>  
->> -	return tegra_clk_super_ops.recalc_rate(hw, parent_rate);
->> +	return tegra_clk_super_ops.recalc_rate(hw, parent_rate) / div2;
->>  }
-> 
-> Could you check if the compiler can optimize out the division? I know this
-> is a slow path, but nevertheless the 'shr' version would be the same amount
-> of source code.
+Good day
 
-Hello Michał,
+I am Barrister Sommy Nelson,
+My reason for contacting you is to introduce you to the bank as the
+next of kin to the amount of (US $ 13.500.000.00) left by my late
+client.
+I will explain in more details when I hear from you.
 
-GCC can't optimize that division. I'll wait for more comments and then
-update this patch in v8 with yours suggestion. Thank you for taking a
-look at the patches.
+Thanks for your co-operation,
+
+Barrister Sommy Nelson Esq
