@@ -2,134 +2,102 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5813810AD
-	for <lists+linux-clk@lfdr.de>; Fri, 14 May 2021 21:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 256E7381FA8
+	for <lists+linux-clk@lfdr.de>; Sun, 16 May 2021 18:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232971AbhENTZ4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 14 May 2021 15:25:56 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:44942 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234252AbhENTZ0 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 14 May 2021 15:25:26 -0400
-X-IronPort-AV: E=Sophos;i="5.82,300,1613401200"; 
-   d="scan'208";a="81343922"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 15 May 2021 04:24:12 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 00C7E4010906;
-        Sat, 15 May 2021 04:24:08 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
+        id S229681AbhEPQOa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 16 May 2021 12:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229632AbhEPQOa (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 16 May 2021 12:14:30 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4B2C061573;
+        Sun, 16 May 2021 09:13:14 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id a2so5205932lfc.9;
+        Sun, 16 May 2021 09:13:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pWep6XUk/Htmx+rnveDkd22peEfK9wvjv1AZWbCkH+M=;
+        b=kCK7YH686pYuZum++8eix84r6KtRQ98Z0FBVDbN726azCmqsaaSnlzoUSTneoLrWvs
+         YQajR8rtLX+Vb9RdHmxA6KWVNKR2e13+L1C0c7NkFS0wFlrnYa/CooXTM+WytZTLfwvR
+         OsHJfd8dEhcerJ7IQ5y/z+yJ0YaFQr3bSFmX6r57i0UEZ3G8UPJ4jDer7Rnd0SbIqqAw
+         Ayo0if8PDb5pn2GrlnSxDi684p92i8JBKmGt+Vd9Bu6qUrBR/NSk0WjCZ4btM4n5FbE/
+         l7r2KotdzAkvjENjlkTQq5vpq92kzU+wg3MXdCUs5vjiB+FGSLtznpeJTC6ia6XCw5UP
+         VcwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pWep6XUk/Htmx+rnveDkd22peEfK9wvjv1AZWbCkH+M=;
+        b=juh9P5ghr11CNctWlIbqi7SrKyrYGmJiX/ir/ZDMrsAQLhE5IG24hhnkxXeNXjnVJF
+         UPjx490jod5olreuzw83b2xzP8J5beaExtGk6KhjR5ebx7Eil+Mt+Skr0MB0nIulxWrG
+         viBtIepOZnnauoWSmYmpWhOp+xQCrwIYJQNG7UzzDrxUG4bu9Af30L1PhDM8mM6JJPEI
+         7iv4V26/OZXHMchRLWrDTKkRWEBtqOLU4dyUzc78Uv0zBqwwGfR/YSzw4yKo5VK/zXqy
+         21IQRBsZ8KQTwhylHZBmzX7/YzXpNQ50JpAKEuQNvNlKu1FGktaWWtpImxeawbke/eW4
+         IyWQ==
+X-Gm-Message-State: AOAM533MZSTlerY5You0HPVS8kL9yr4ESa158OcL1IJXCObKHMHfCx1p
+        QBL1HAe+ETcBuFHU6zmTS9rGVuI4qz8=
+X-Google-Smtp-Source: ABdhPJz1G5vvYZiKX51lLpNn7oKqqYtcLScTYwJptzC39703VKV+MlHaxiMfZ/v1CzdI1kmaMenBMA==
+X-Received: by 2002:a05:6512:1031:: with SMTP id r17mr38621304lfr.583.1621181593394;
+        Sun, 16 May 2021 09:13:13 -0700 (PDT)
+Received: from localhost.localdomain (109-252-193-91.dynamic.spd-mgts.ru. [109.252.193.91])
+        by smtp.gmail.com with ESMTPSA id d27sm1712547lfq.290.2021.05.16.09.13.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 May 2021 09:13:13 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: [PATCH 16/16] arm64: dts: renesas: Add initial device tree for RZ/G2L SMARC EVK
-Date:   Fri, 14 May 2021 20:22:18 +0100
-Message-Id: <20210514192218.13022-17-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210514192218.13022-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20210514192218.13022-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Nathan Chancellor <nathan@kernel.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH v2 0/4] Enable compile-testing of Tegra memory drivers
+Date:   Sun, 16 May 2021 19:12:10 +0300
+Message-Id: <20210516161214.4693-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add basic support for RZ/G2L SMARC EVK (based on R9A07G044L2):
-- memory
-- External input clock
-- SCIF
+This series enables compile-testing for all of NVIDIA Tegra memory
+drivers.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
- arch/arm64/boot/dts/renesas/Makefile          |  2 ++
- arch/arm64/boot/dts/renesas/g2l-smarc.dtsi    | 27 +++++++++++++++++++
- .../boot/dts/renesas/r9a07g044l2-smarc.dts    | 21 +++++++++++++++
- 3 files changed, 50 insertions(+)
- create mode 100644 arch/arm64/boot/dts/renesas/g2l-smarc.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts
+Changelog:
 
-diff --git a/arch/arm64/boot/dts/renesas/Makefile b/arch/arm64/boot/dts/renesas/Makefile
-index f2de2fa0c8b8..74daf49f1c56 100644
---- a/arch/arm64/boot/dts/renesas/Makefile
-+++ b/arch/arm64/boot/dts/renesas/Makefile
-@@ -62,3 +62,5 @@ dtb-$(CONFIG_ARCH_R8A77990) += r8a77990-ebisu.dtb
- dtb-$(CONFIG_ARCH_R8A77995) += r8a77995-draak.dtb
- 
- dtb-$(CONFIG_ARCH_R8A779A0) += r8a779a0-falcon.dtb
-+
-+dtb-$(CONFIG_ARCH_R9A07G044L) += r9a07g044l2-smarc.dtb
-diff --git a/arch/arm64/boot/dts/renesas/g2l-smarc.dtsi b/arch/arm64/boot/dts/renesas/g2l-smarc.dtsi
-new file mode 100644
-index 000000000000..9b95d73fb798
---- /dev/null
-+++ b/arch/arm64/boot/dts/renesas/g2l-smarc.dtsi
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree Source for the RZ/G2L SMARC EVK common parts
-+ *
-+ * Copyright (C) 2021 Renesas Electronics Corp.
-+ */
-+
-+#include <dt-bindings/gpio/gpio.h>
-+
-+/ {
-+	aliases {
-+		serial0 = &scif0;
-+	};
-+
-+	chosen {
-+		bootargs = "ignore_loglevel";
-+		stdout-path = "serial0:115200n8";
-+	};
-+};
-+
-+&extal_clk {
-+	clock-frequency = <24000000>;
-+};
-+
-+&scif0 {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts b/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts
-new file mode 100644
-index 000000000000..9ebd406445bc
---- /dev/null
-+++ b/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc.dts
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree Source for the RZ/G2L SMARC EVK board
-+ *
-+ * Copyright (C) 2021 Renesas Electronics Corp.
-+ */
-+
-+/dts-v1/;
-+#include "r9a07g044l2.dtsi"
-+#include "g2l-smarc.dtsi"
-+
-+/ {
-+	model = "Renesas SMARC EVK based on r9a07g044l2";
-+	compatible = "renesas,smarc-r9a07g044l2", "renesas,r9a07g044l2", "renesas,r9a07g044";
-+
-+	memory@48000000 {
-+		device_type = "memory";
-+		/* first 128MB is reserved for secure area. */
-+		reg = <0x0 0x48000000 0x0 0x78000000>;
-+	};
-+};
+v2: - Added patch which should fix compilation warning of tegra124-emc driver
+      on 64bit platforms that was reported by kernel build robot. Thanks
+      to Nathan Chancellor for the suggested fix.
+
+        memory: tegra124: Fix compilation warnings on 64bit platforms
+
+    - Added missing stubs to the tegra-clk header in another new patch. This
+      was also reported by kernel build robot for v1.
+
+        clk: tegra: Add stubs needed for compile-testing
+
+    - The memory/tegra/Kconfig now uses `if TEGRA_MC`, which was suggested
+      by Krzysztof Kozlowski to v1. This makes Tegra Kconfig to look consistent
+      with the Exynos Kconfig.
+
+Dmitry Osipenko (4):
+  soc/tegra: fuse: Add missing stubs
+  clk: tegra: Add stubs needed for compile-testing
+  memory: tegra124-emc: Fix compilation warnings on 64bit platforms
+  memory: tegra: Enable compile testing for all drivers
+
+ drivers/memory/tegra/Kconfig        | 16 ++++++++++------
+ drivers/memory/tegra/tegra124-emc.c |  4 ++--
+ include/linux/clk/tegra.h           | 28 ++++++++++++++++++++++++----
+ include/soc/tegra/fuse.h            | 20 +++++++++++++++++---
+ 4 files changed, 53 insertions(+), 15 deletions(-)
+
 -- 
-2.17.1
+2.30.2
 
