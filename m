@@ -2,78 +2,105 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01AB9382C4C
-	for <lists+linux-clk@lfdr.de>; Mon, 17 May 2021 14:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E76D8382D89
+	for <lists+linux-clk@lfdr.de>; Mon, 17 May 2021 15:35:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234891AbhEQMiN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 17 May 2021 08:38:13 -0400
-Received: from mail.bugwerft.de ([46.23.86.59]:40682 "EHLO mail.bugwerft.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229734AbhEQMiM (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 17 May 2021 08:38:12 -0400
-X-Greylist: delayed 442 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 May 2021 08:38:12 EDT
-Received: from hq-00021.Speedport_W_724V_01011603_07_002 (p200300d83f181dcec1913e3a7e010a83.dip0.t-ipconnect.de [IPv6:2003:d8:3f18:1dce:c191:3e3a:7e01:a83])
-        by mail.bugwerft.de (Postfix) with ESMTPSA id 860744E2F05;
-        Mon, 17 May 2021 12:29:34 +0000 (UTC)
-From:   Daniel Mack <daniel@zonque.org>
-To:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     robh+dt@kernel.org, kuninori.morimoto.gx@renesas.com,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        Daniel Mack <daniel@zonque.org>
-Subject: [PATCH 3/3] clk: cs2000-cp: Make aux output function controllable
-Date:   Mon, 17 May 2021 14:29:26 +0200
-Message-Id: <20210517122926.3263455-3-daniel@zonque.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210517122926.3263455-1-daniel@zonque.org>
-References: <20210517122926.3263455-1-daniel@zonque.org>
+        id S237377AbhEQNhI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 17 May 2021 09:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56996 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237379AbhEQNhH (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 May 2021 09:37:07 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EF4C061756;
+        Mon, 17 May 2021 06:35:50 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id v6so7280082ljj.5;
+        Mon, 17 May 2021 06:35:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WQqDABHDGgDQCU0WnTFwCSsQA9jF51qzAZtjkZ18AOU=;
+        b=I1RXfaR+fQaCMswosSWi6tpGukzhRb3nEIRrgwDshVD4JWgGPCaYncHyUcfiGgpTYv
+         q8+LYoXpZ4yUAJdPJgbAxMAx0Xompgtm5vMgehYbmlEdmBPghejbOxbr1iO9JTrznqdQ
+         FRDLcCYbmyeis2gIfFsnoM06Vb4a4meVjfQ9kz24/DlNHeSlugf6YMpg7O6VS8DIjcLU
+         oLce8CT73ZVcZMdAisEVg6rID4detd8vdc1giOQUDmDTZArfjJeFyrZt/0/l+c9djIiZ
+         mOJLullq7A1zmTyNWeJnbos7uQPPgldvpBRugOfsSSvdCronpcATZjBfntWkAIyLv9yt
+         MTKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WQqDABHDGgDQCU0WnTFwCSsQA9jF51qzAZtjkZ18AOU=;
+        b=PndERzeBVDFftRGNhF/KLCSizDrgp0wxfb1gMLfXCcsV1HB2HmHhn1tah7IRFmY5KE
+         PkYxaJSw6KfG5lO0zES67OY5LGd6j0g5jqqkzsHqeJ93kSL4mCtBnJtFsuwzfZoBLJ3F
+         IBmfLK3pbVkV4EOrzfAYBJp3+YaeR9WNsAVsDNJDEOJxrEovJNO295/qP6ohoFcfJueJ
+         gzxuGckLLNeIUkaRMIDJlXnvHW4AaLFC0+S9drJQOVOH4apRJfwB26lfDLtodxdm8Ywt
+         JYzXnNmMHLHvi+znjacnGWGJNXxAuajnjU+s6ennYJ4HtGlBGcRlE4bxytcdx3i3vmbI
+         DzTA==
+X-Gm-Message-State: AOAM531tcWK8kXr8FfLQfsjGdUarqnVI+TH5Bj6Iy02qALJJXVnINvet
+        bbmmiOQ906AB+YFon7NI6wfNlfgFJ0I=
+X-Google-Smtp-Source: ABdhPJxLvlETmFTqcDLi1Mn2/MUIK3cxp4Q7EAzvHXI+H41aZhEIHklSeJOjZvMqbABjHI51UQb9IA==
+X-Received: by 2002:a2e:b4b1:: with SMTP id q17mr41060196ljm.40.1621258548300;
+        Mon, 17 May 2021 06:35:48 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-193-91.dynamic.spd-mgts.ru. [109.252.193.91])
+        by smtp.googlemail.com with ESMTPSA id a9sm145819ljb.73.2021.05.17.06.35.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 May 2021 06:35:47 -0700 (PDT)
+Subject: Re: [PATCH v2 3/4] memory: tegra124-emc: Fix compilation warnings on
+ 64bit platforms
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Mikko Perttunen <mperttunen@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20210516161214.4693-1-digetx@gmail.com>
+ <20210516161214.4693-4-digetx@gmail.com>
+ <936cfc7d-737e-a582-ea60-ad2ba5b4ca72@canonical.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <1d80ee0f-de4c-24d0-154f-20841874bf20@gmail.com>
+Date:   Mon, 17 May 2021 16:35:47 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <936cfc7d-737e-a582-ea60-ad2ba5b4ca72@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The aux output pin can be configured to output either of the two clock
-inputs, the generated clock or the pll lock status. Allow access to
-this feature through a new optional device-tree property.
+17.05.2021 14:28, Krzysztof Kozlowski пишет:
+> On 16/05/2021 12:12, Dmitry Osipenko wrote:
+>> Fix compilation warning on 64bit platforms caused by implicit promotion
+>> of 32bit signed integer to a 64bit unsigned value which happens after
+>> enabling compile-testing of the driver.
+>>
+>> Suggested-by: Nathan Chancellor <nathan@kernel.org>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  drivers/memory/tegra/tegra124-emc.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/memory/tegra/tegra124-emc.c b/drivers/memory/tegra/tegra124-emc.c
+>> index 5699d909abc2..c9eb948cf4df 100644
+>> --- a/drivers/memory/tegra/tegra124-emc.c
+>> +++ b/drivers/memory/tegra/tegra124-emc.c
+>> @@ -272,8 +272,8 @@
+>>  #define EMC_PUTERM_ADJ				0x574
+>>  
+>>  #define DRAM_DEV_SEL_ALL			0
+>> -#define DRAM_DEV_SEL_0				(2 << 30)
+>> -#define DRAM_DEV_SEL_1				(1 << 30)
+>> +#define DRAM_DEV_SEL_0				(2u << 30)
+>> +#define DRAM_DEV_SEL_1				(1u << 30)
+> 
+> Why not using BIT()? This would make even this 2<<30 less awkard...
 
-Signed-off-by: Daniel Mack <daniel@zonque.org>
----
- drivers/clk/clk-cs2000-cp.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/drivers/clk/clk-cs2000-cp.c b/drivers/clk/clk-cs2000-cp.c
-index 92bc4aca0f95..db7290621cef 100644
---- a/drivers/clk/clk-cs2000-cp.c
-+++ b/drivers/clk/clk-cs2000-cp.c
-@@ -39,6 +39,8 @@
- /* DEVICE_CFG1 */
- #define RSEL(x)		(((x) & 0x3) << 3)
- #define RSEL_MASK	RSEL(0x3)
-+#define AUXOUTSRC(x)	(((x) & 0x3) << 1)
-+#define AUXOUTSRC_MASK	AUXOUTSRC(0x3)
- #define ENDEV1		(0x1)
- 
- /* DEVICE_CFG2 */
-@@ -421,12 +423,19 @@ static int cs2000_clk_register(struct cs2000_priv *priv)
- 	struct clk_init_data init;
- 	const char *name = np->name;
- 	static const char *parent_names[CLK_MAX];
-+	u32 aux_out = 0;
- 	int ch = 0; /* it uses ch0 only at this point */
- 	int rate;
- 	int ret;
- 
- 	of_property_read_string(np, "clock-output-names", &name);
- 
-+	of_property_read_u32(np, "cirrus,aux-output-source", &aux_out);
-+	ret = cs2000_bset(priv, DEVICE_CFG1,
-+			  AUXOUTSRC_MASK, AUXOUTSRC(aux_out));
-+	if (ret < 0)
-+		return ret;
-+
- 	/*
- 	 * set default rate as 1/1.
- 	 * otherwise .set_rate which setup ratio
--- 
-2.31.1
-
+The bitfield 31:30 is a enum, 3 is a wrong value. Formally it's
+incorrect to use the BIT() macro here.
