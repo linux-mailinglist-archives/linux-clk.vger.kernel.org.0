@@ -2,142 +2,112 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A70382C4E
-	for <lists+linux-clk@lfdr.de>; Mon, 17 May 2021 14:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2B4382C4A
+	for <lists+linux-clk@lfdr.de>; Mon, 17 May 2021 14:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235330AbhEQMiN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 17 May 2021 08:38:13 -0400
-Received: from mail.bugwerft.de ([46.23.86.59]:40684 "EHLO mail.bugwerft.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231732AbhEQMiN (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 17 May 2021 08:38:13 -0400
+        id S235245AbhEQMiM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 17 May 2021 08:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234891AbhEQMiM (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 17 May 2021 08:38:12 -0400
+X-Greylist: delayed 438 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 17 May 2021 05:36:55 PDT
+Received: from mail.bugwerft.de (mail.bugwerft.de [IPv6:2a03:6000:1011::59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A57AC061573;
+        Mon, 17 May 2021 05:36:55 -0700 (PDT)
 Received: from hq-00021.Speedport_W_724V_01011603_07_002 (p200300d83f181dcec1913e3a7e010a83.dip0.t-ipconnect.de [IPv6:2003:d8:3f18:1dce:c191:3e3a:7e01:a83])
-        by mail.bugwerft.de (Postfix) with ESMTPSA id A9BAB4E2F00;
-        Mon, 17 May 2021 12:29:33 +0000 (UTC)
+        by mail.bugwerft.de (Postfix) with ESMTPSA id 2004E4E2F04;
+        Mon, 17 May 2021 12:29:34 +0000 (UTC)
 From:   Daniel Mack <daniel@zonque.org>
 To:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     robh+dt@kernel.org, kuninori.morimoto.gx@renesas.com,
         mturquette@baylibre.com, sboyd@kernel.org,
         Daniel Mack <daniel@zonque.org>
-Subject: [PATCH 1/3] dt-bindings: clock: convert cs2000-cp bindings to yaml
-Date:   Mon, 17 May 2021 14:29:24 +0200
-Message-Id: <20210517122926.3263455-1-daniel@zonque.org>
+Subject: [PATCH 2/3] dt-bindings: clk: cs2000-cp: Document aux-output-source
+Date:   Mon, 17 May 2021 14:29:25 +0200
+Message-Id: <20210517122926.3263455-2-daniel@zonque.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20210517122926.3263455-1-daniel@zonque.org>
+References: <20210517122926.3263455-1-daniel@zonque.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The original author of the file was added as maintainer.
+This new optional property can be used to control the function of the
+auxiliary output pin. Introduce a new dt-bindings include file that
+contains the numerical values.
 
 Signed-off-by: Daniel Mack <daniel@zonque.org>
-Cc: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 ---
- .../bindings/clock/cirrus,cs2000-cp.yaml      | 64 +++++++++++++++++++
- .../devicetree/bindings/clock/cs2000-cp.txt   | 22 -------
- 2 files changed, 64 insertions(+), 22 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
- delete mode 100644 Documentation/devicetree/bindings/clock/cs2000-cp.txt
+ .../bindings/clock/cirrus,cs2000-cp.yaml          | 15 ++++++++++++++-
+ include/dt-bindings/clock/cirrus,cs2000-cp.h      | 14 ++++++++++++++
+ 2 files changed, 28 insertions(+), 1 deletion(-)
+ create mode 100644 include/dt-bindings/clock/cirrus,cs2000-cp.h
 
 diff --git a/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml b/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
-new file mode 100644
-index 000000000000..3af81087e5f9
---- /dev/null
+index 3af81087e5f9..d20ed0aabcb0 100644
+--- a/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
 +++ b/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
-@@ -0,0 +1,64 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/cirrus,cs2000-cp.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Binding CIRRUS LOGIC Fractional-N Clock Synthesizer & Clock Multiplier
-+
-+maintainers:
-+  - Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-+
-+description: |
-+  The CS2000-CP is an extremely versatile system clocking device that
-+  utilizes a programmable phase lock loop.
-+
-+  Link: https://www.cirrus.com/products/cs2000/
-+
-+properties:
-+  compatible:
+@@ -38,6 +38,16 @@ properties:
+       The chip select number on the I2C bus
+     maxItems: 1
+ 
++  cirrus,aux-output-source:
++    description:
++      Specfies the function of the auxililary clock output pin
++    $ref: /schemas/types.yaml#/definitions/uint32
 +    enum:
-+      - cirrus,cs2000-cp
++      - 0 # CS2000CP_AUX_OUTPUT_REF_CLK:  ref_clk input
++      - 1 # CS2000CP_AUX_OUTPUT_CLK_IN:   clk_in input
++      - 2 # CS2000CP_AUX_OUTPUT_CLK_OUT:  clk_out output
++      - 3 # CS2000CP_AUX_OUTPUT_PLL_LOCK: pll lock status
 +
-+  clocks:
-+    description:
-+      Common clock binding for CLK_IN, XTI/REF_CLK
-+    minItems: 2
-+    maxItems: 2
+ required:
+   - compatible
+   - reg
+@@ -45,10 +55,12 @@ required:
+   - clock-names
+   - '#clock-cells'
+ 
+-additionalProperties: false
++additionalProperties: true
+ 
+ examples:
+   - |
++    #include <dt-bindings/clock/cirrus,cs2000-cp.h>
 +
-+  clock-names:
-+    minItems: 2
-+    maxItems: 2
+     i2c@0 {
+       reg = <0x0 0x100>;
+       #address-cells = <1>;
+@@ -60,5 +72,6 @@ examples:
+         reg = <0x4f>;
+         clocks = <&rcar_sound 0>, <&x12_clk>;
+         clock-names = "clk_in", "ref_clk";
++        cirrus,aux-output-source = <CS2000CP_AUX_OUTPUT_CLK_OUT>;
+       };
+     };
+diff --git a/include/dt-bindings/clock/cirrus,cs2000-cp.h b/include/dt-bindings/clock/cirrus,cs2000-cp.h
+new file mode 100644
+index 000000000000..b9b13cfc8fbd
+--- /dev/null
++++ b/include/dt-bindings/clock/cirrus,cs2000-cp.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2021 Daniel Mack
++ */
 +
-+  '#clock-cells':
-+    const: 0
++#ifndef __DT_BINDINGS_CS2000CP_CLK_H
++#define __DT_BINDINGS_CS2000CP_CLK_H
 +
-+  reg:
-+    description:
-+      The chip select number on the I2C bus
-+    maxItems: 1
++#define CS2000CP_AUX_OUTPUT_REF_CLK	0
++#define CS2000CP_AUX_OUTPUT_CLK_IN	1
++#define CS2000CP_AUX_OUTPUT_CLK_OUT	2
++#define CS2000CP_AUX_OUTPUT_PLL_LOCK	3
 +
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - '#clock-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c@0 {
-+      reg = <0x0 0x100>;
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      cs2000: clk_multiplier@4f {
-+        #clock-cells = <0>;
-+        compatible = "cirrus,cs2000-cp";
-+        reg = <0x4f>;
-+        clocks = <&rcar_sound 0>, <&x12_clk>;
-+        clock-names = "clk_in", "ref_clk";
-+      };
-+    };
-diff --git a/Documentation/devicetree/bindings/clock/cs2000-cp.txt b/Documentation/devicetree/bindings/clock/cs2000-cp.txt
-deleted file mode 100644
-index 54e6df0bee8a..000000000000
---- a/Documentation/devicetree/bindings/clock/cs2000-cp.txt
-+++ /dev/null
-@@ -1,22 +0,0 @@
--CIRRUS LOGIC Fractional-N Clock Synthesizer & Clock Multiplier
--
--Required properties:
--
--- compatible:		"cirrus,cs2000-cp"
--- reg:			The chip select number on the I2C bus
--- clocks:		common clock binding for CLK_IN, XTI/REF_CLK
--- clock-names:		CLK_IN : clk_in, XTI/REF_CLK : ref_clk
--- #clock-cells:		must be <0>
--
--Example:
--
--&i2c2 {
--	...
--	cs2000: clk_multiplier@4f {
--		#clock-cells = <0>;
--		compatible = "cirrus,cs2000-cp";
--		reg = <0x4f>;
--		clocks = <&rcar_sound 0>, <&x12_clk>;
--		clock-names = "clk_in", "ref_clk";
--	};
--};
++#endif /* __DT_BINDINGS_CS2000CP_CLK_H */
 -- 
 2.31.1
 
