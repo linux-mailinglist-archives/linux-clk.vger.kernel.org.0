@@ -2,77 +2,118 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7F9387CF6
-	for <lists+linux-clk@lfdr.de>; Tue, 18 May 2021 17:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCF8387F01
+	for <lists+linux-clk@lfdr.de>; Tue, 18 May 2021 19:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350493AbhERP6N (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 18 May 2021 11:58:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60662 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350480AbhERP6N (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 18 May 2021 11:58:13 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 618AC60725;
-        Tue, 18 May 2021 15:56:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621353415;
-        bh=OokC8+bnxFyFbf/GDIqIQeRgogXRic6z9luyu193nn8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NSzQ7FoPd5T2GA0WI1QgC6PGR821TZrlCFmpayA/Yw4D9x5gwjLsS65qR+YQNyZIz
-         lHerHfR7bORG8hCk460VKYPtMp0KEThg+Sw7k3mPUvgcnW4usRWYtAKWpVZRpUzae9
-         tsbEknOqrvaFpMTySh6GVpxFdIsRZoL0K2CvXzbbIV4LcNzRnpvz7kMiUAPz6nDGiZ
-         TctYxrYlv3eMg5JMgHHQbFbE6b3V59X8zj5yRrel/EjzFFHau6S1ba/5MaA3qkgbr8
-         /qv4x7aTu5YGLET9x4p9O0ziUAPLObjFJMI85RtCf+k+QNFCNIU8RGVYSJguGtecsA
-         wO4icOtwsSpMw==
-Date:   Tue, 18 May 2021 21:26:50 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Jonathan Marek <jonathan@marek.ca>
-Cc:     linux-arm-msm@vger.kernel.org, robert.foss@linaro.org,
-        andrey.konovalov@linaro.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/3] clk: qcom: clk-alpha-pll: add support for zonda pll
-Message-ID: <YKPjwvMh3sj56sOG@vkoul-mobl.Dlink>
-References: <20210513175258.5842-1-jonathan@marek.ca>
- <20210513175258.5842-2-jonathan@marek.ca>
- <YKOltGEDEY1WXQN6@vkoul-mobl.Dlink>
- <abc662f3-8c36-862d-4d50-3628d3a02ee2@marek.ca>
+        id S1351125AbhERRxT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 18 May 2021 13:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237923AbhERRxT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 18 May 2021 13:53:19 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82BDC061573;
+        Tue, 18 May 2021 10:51:59 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id et19so8875517ejc.4;
+        Tue, 18 May 2021 10:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lsP0X9SD53wNifUOWr66qcQ19cCdk8WhX9LQttz6sIY=;
+        b=FdWvFUcLxCoxgP1buQNZhEGSzhIHgFkHCRHBfPdFYJ1OIehb32ub9sZjPb1nr0s8uX
+         3l0bc+a5rMbDhXeDqIRf91Bpe5v7182nqMGTofj1RWsKVFjCjUVqogm+CyzFoDksUoBe
+         x0onZULmcG2mrCjtztIaSthMQtRVJHuyOYnpTe8dhfONXB3kNEJtpxAx3uMWF5deQJe1
+         hiZFJi9bXkkN4vj8/owdWxTH3PHXo4kDsEZBO1kadVrkeE8pTsbx5iPRgJPAgbnSTf3y
+         g2GVT5EfyUol13i4LDS7pr0s77k1ic3BwiUUaM48XVUgPV77sR0po7hd8yuZietlfD9f
+         1fmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lsP0X9SD53wNifUOWr66qcQ19cCdk8WhX9LQttz6sIY=;
+        b=keEa9E4mGZ2hxGbDuOXvFBcdWWeB8M0dXfAgA63maVJvwmUAdQ1U8dGICRZkAb7zzX
+         SXSHkYsVyT2aNn3uWStWzwJROnaZXPzrbHA6tLPza29JjGOv1kSD/zuVRdfhhy5Ouhbt
+         vX9kD4i52TYUcZIZSL1M7H1nk1HH4rDGBZhci/pjA3dIWUOy/Hwzvs5G/L2s2X0EnmCa
+         PxyGZxLgRS8tFYP0JX7xnM6DLYBq+zD5tEjn2sGGeMVGU8+UGbVNof5+UeB0SgzDwIUu
+         ksAnK9U9wnUSSdvrI2sR2WO+q3QFgGqnOpXL+eiUWWIkJ1Cch4W44Cuut0PIREOAoqat
+         GlYw==
+X-Gm-Message-State: AOAM533UxHwXxjN9SF/7uykFP9yu2/Z2/o1BB8r11t/jE0F0VA5moMf9
+        sfS+lWXxFefXyZWIK/I9OMY=
+X-Google-Smtp-Source: ABdhPJyAQTCsHL5sZsq0vnHwyze01i0vgx3SISlC7frKJMr+wLWxjjDHrqUF/e9gI5X/3/uvDL6eBA==
+X-Received: by 2002:a17:906:3419:: with SMTP id c25mr7139419ejb.96.1621360318465;
+        Tue, 18 May 2021 10:51:58 -0700 (PDT)
+Received: from localhost.localdomain (dh207-99-66.xnet.hr. [88.207.99.66])
+        by smtp.googlemail.com with ESMTPSA id w14sm13511513edj.6.2021.05.18.10.51.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 May 2021 10:51:57 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, speriaka@codeaurora.org,
+        sivaprak@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH] clk: qcom: ipq8074: fix PCI-E clock oops
+Date:   Tue, 18 May 2021 19:51:53 +0200
+Message-Id: <20210518175153.3176764-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <abc662f3-8c36-862d-4d50-3628d3a02ee2@marek.ca>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 18-05-21, 09:06, Jonathan Marek wrote:
-> On 5/18/21 7:32 AM, Vinod Koul wrote:
+Fix PCI-E clock related kernel oops that are causes by missing
+parent_names.
 
-> > > +static unsigned long
-> > > +clk_zonda_pll_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-> > > +{
-> > > +	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
-> > > +	u32 l, frac;
-> > > +
-> > > +	regmap_read(pll->clkr.regmap, PLL_L_VAL(pll), &l);
-> > > +	regmap_read(pll->clkr.regmap, PLL_ALPHA_VAL(pll), &frac);
-> > > +
-> > > +	return alpha_pll_calc_rate(parent_rate, l, frac, ALPHA_BITWIDTH);
-> > > +}
-> > 
-> > sounds like you could use clk_trion_pll_recalc_rate() instead
-> > 
-> 
-> I had this thought as well, but alpha_width in clk_trion_pll_recalc()_rate
-> is 16, here ALPHA_BITWIDTH is 32, so I just copied this from downstream.
-> 
-> I think changing pll_alpha_width() to return the right value for zonda will
-> work and allow sharing the function, if you think that's a good idea?
+Without the use of parent_names kernel will panic on
+clk_core_get_parent_by_index() due to a NULL pointer.
 
-Yes I thinking pll_alpha_width() should do the trick here
+Without this earlycon is needed to even catch the OOPS as it will reset
+the board before serial is initialized.
 
-Thanks
+Fixes: f0cfcf1ade20 ("clk: qcom: ipq8074: Add missing clocks for pcie")
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+ drivers/clk/qcom/gcc-ipq8074.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
+index 0c619ed35c82..8d8b1717a203 100644
+--- a/drivers/clk/qcom/gcc-ipq8074.c
++++ b/drivers/clk/qcom/gcc-ipq8074.c
+@@ -4357,8 +4357,7 @@ static struct clk_rcg2 pcie0_rchng_clk_src = {
+ 	.parent_map = gcc_xo_gpll0_map,
+ 	.clkr.hw.init = &(struct clk_init_data){
+ 		.name = "pcie0_rchng_clk_src",
+-		.parent_hws = (const struct clk_hw *[]) {
+-				&gpll0.clkr.hw },
++		.parent_names = gcc_xo_gpll0,
+ 		.num_parents = 2,
+ 		.ops = &clk_rcg2_ops,
+ 	},
+@@ -4372,8 +4371,8 @@ static struct clk_branch gcc_pcie0_rchng_clk = {
+ 		.enable_mask = BIT(1),
+ 		.hw.init = &(struct clk_init_data){
+ 			.name = "gcc_pcie0_rchng_clk",
+-			.parent_hws = (const struct clk_hw *[]){
+-				&pcie0_rchng_clk_src.clkr.hw,
++			.parent_names = (const char *[]){
++				"pcie0_rchng_clk_src",
+ 			},
+ 			.num_parents = 1,
+ 			.flags = CLK_SET_RATE_PARENT,
+@@ -4390,8 +4389,8 @@ static struct clk_branch gcc_pcie0_axi_s_bridge_clk = {
+ 		.enable_mask = BIT(0),
+ 		.hw.init = &(struct clk_init_data){
+ 			.name = "gcc_pcie0_axi_s_bridge_clk",
+-			.parent_hws = (const struct clk_hw *[]){
+-				&pcie0_axi_clk_src.clkr.hw,
++			.parent_names = (const char *[]){
++				"pcie0_axi_clk_src"
+ 			},
+ 			.num_parents = 1,
+ 			.flags = CLK_SET_RATE_PARENT,
 -- 
-~Vinod
+2.31.1
+
