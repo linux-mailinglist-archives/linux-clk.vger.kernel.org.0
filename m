@@ -2,59 +2,82 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0E038BA5F
-	for <lists+linux-clk@lfdr.de>; Fri, 21 May 2021 01:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9583938BA70
+	for <lists+linux-clk@lfdr.de>; Fri, 21 May 2021 01:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233892AbhETX2u (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 20 May 2021 19:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
+        id S234138AbhETXhn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 20 May 2021 19:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233032AbhETX2u (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 May 2021 19:28:50 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABFAC061574
-        for <linux-clk@vger.kernel.org>; Thu, 20 May 2021 16:27:27 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id z13so26968232lft.1
-        for <linux-clk@vger.kernel.org>; Thu, 20 May 2021 16:27:26 -0700 (PDT)
+        with ESMTP id S234225AbhETXhn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 May 2021 19:37:43 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2216AC061761
+        for <linux-clk@vger.kernel.org>; Thu, 20 May 2021 16:36:20 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id e2so15528516ljk.4
+        for <linux-clk@vger.kernel.org>; Thu, 20 May 2021 16:36:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Lh5fa84YpKhbYLJycn+R0GLuDTb0BFKekG0FTGqx/RM=;
-        b=utQ0I56liLpvFj7hXka/u6TT8ihz6qVhQ/mzQpohlSDDgKIVOMTA7e76RP2QxYGkYS
-         qpPeiPWQb5KU68gPBqDb6qkpssYG4HZECG4L2ic4UJh+xyE+x9/1m1qQOfToaJ6/tlB4
-         LPAG6nFfyJ59zKouTa692AjZAffMLuPoFkQZu578fX/Mii8m9srvOLw/mjz5mvp9SAIb
-         ETPLrMlsP2ieX5bW36A75bDZjEYZfS9vWctfaVMEKsZnTwvHN1c+9ZiO4nMn+pTZWrum
-         D5GQe2Ee/IHmELhdZhpegaVyAdKntwky62qbfbf1SD5JTJ/o7Qy4EmHs3/VodRFmAf/k
-         aQuA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uiEYhj/hJUSD/IDU7Y0eQJGcwJ9in+XbFu7eZe0F0iA=;
+        b=bCiqxklQUSu5WbC8cR0qbg43ubrwUlEo+xRP/SPjrzU8k7Sk/7u4MDrwPDTxTrorx0
+         jB/aGOgr0DTvdY+i9cqOzEDDnr6QOLRBYZbLYO07a7zr5FhAaFIljYHosfG0/Fp1oTd+
+         6f13yW40uvztfICfWMkp6B1huQAXz7k1FNT1067ApXqdFHbd74T7tyTxBIbJrf5je598
+         UUnqk2cDJbI/dm2iggSb+OiNdqi/Whmvvpnb2sNMb4iiBUERoQQihcmt7Os9PX4BurxO
+         ldIDpTMQK22BqM61QwJZs8sxOIR+Og6C2TgeotgXyrwiUhMUaUpGpXiIBobEjwzd1tFl
+         rSEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Lh5fa84YpKhbYLJycn+R0GLuDTb0BFKekG0FTGqx/RM=;
-        b=ho1IQU9CbcDBoM8gRecqTLKYrNZx3lPSpeYZFIBxQpN5eUR278AYefAXyNacMNjxpz
-         wgN8VYKmnsAhCjYgza+9lAPR7f/PlcChc7rcctkARnD+UU+rzZnbXxA+mp2BmjTu/n8P
-         tp/BAVcWPWYgE34HY6NRSwIsgcAigZVJHPtx0yZ5q/5Q5yDaeKX2vyns2wX2oCACPIPP
-         sEfywJZ5RL+QoiqzRxXcLtYwb76CaijGtrBfEcxs9nEEGfRrkqheCHOntVtNy4RQrm6W
-         UtzAuL6Cxnnx5UPijItPDOOI+H1m/2jkqbEqVkEWzbxfuhe+8b1AhSpdan1OGDRfCRFv
-         L0Aw==
-X-Gm-Message-State: AOAM532CmoQWvDdOk+qjl31OMF+4UXbf8Ajs3R+prY0XGl7mN0y+JYSg
-        13s27c8YbXCF18LMneEMDIsLmpz35hMKSvX0GTA=
-X-Google-Smtp-Source: ABdhPJxGHN2Jq0Q0wKlrBFH7UojxgeH/WPdTKHN5vwCkS+oAEDcaTzw/p+okq3xGrhG9CBDcFnEMm8vEJjG/F8SqpHY=
-X-Received: by 2002:a19:7e8f:: with SMTP id z137mr4723959lfc.466.1621553245413;
- Thu, 20 May 2021 16:27:25 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uiEYhj/hJUSD/IDU7Y0eQJGcwJ9in+XbFu7eZe0F0iA=;
+        b=rQHuyivH7WdMZ1d1fy5P1HqgOw0kOpfwvzwKPBZ3s213PGIFVPsU3KGAOdBoJHry9O
+         0y0ikixa+8XsDuHusUyQt4XRwlxiWPRksO/u3J7898w6kwkOU+dMNKKxN2wRZC2mCR34
+         hfJf0AWbIr/B39FrKM55yL5F9IBwc1LEYEw00BTysuMg/liMSxgr5U1sYQXOTQqnn8dC
+         +Z7LMDspN23hG10BEeJeAPhrQl/lSjZs220gj/mKHqOQoxJQqgjDp3Ft9sbTQEor4MT8
+         Yi6soAdt3RNTwUIZrW6Aztx8a/RzjqhHB7cw1n2kSecNN9/aZ1Ce0I16zBYNJHNftoHN
+         mdkQ==
+X-Gm-Message-State: AOAM533S+SEHJk54yeefTV42ZyjcFm66qh8iwjAHC0ig/XrnCjkTuyqt
+        x4j6rIcZTt7mfH1VZSzD7PTHLCOK4T0N+Tfgx1f1Xw==
+X-Google-Smtp-Source: ABdhPJylu8m2f30rIC/TH4AdN7RIzUYo0nBAHSBJEWQsjgqKV/fZKjWZcZqM/jwKsFKS52g6UOmCZxr0U3BasgOtyPs=
+X-Received: by 2002:a2e:1319:: with SMTP id 25mr4604039ljt.200.1621553778519;
+ Thu, 20 May 2021 16:36:18 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a2e:80d2:0:0:0:0:0 with HTTP; Thu, 20 May 2021 16:27:24
- -0700 (PDT)
-Reply-To: gueij@yahoo.com
-From:   Joan <isaacsegbenu487@gmail.com>
-Date:   Thu, 20 May 2021 23:27:24 +0000
-Message-ID: <CAAPO9yJ+JfYi8urAWLjpfqM8g2YrWpCS3+wosO9VB95ACUYeGg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
+References: <20210520161702.3746174-1-lee.jones@linaro.org>
+In-Reply-To: <20210520161702.3746174-1-lee.jones@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 21 May 2021 01:36:07 +0200
+Message-ID: <CACRpkdZgpFL4ALGr16hua-uSnM-5SrOZ1KGMkzTEDrZmwh_1=w@mail.gmail.com>
+Subject: Re: [RESEND 1/1] clk: versatile: remove dependency on ARCH_*
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Peter Collingbourne <pcc@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
--- 
-Odotan edelleen vastaustasi viimeiseen viestiini.
+On Thu, May 20, 2021 at 6:17 PM Lee Jones <lee.jones@linaro.org> wrote:
+
+> From: Peter Collingbourne <pcc@google.com>
+>
+> It is now possible to build a modular kernel for vexpress by
+> not setting CONFIG_ARCH_VEXPRESS=y and instead setting =m on the
+> drivers that it normally implies. This is with the exception of
+> CLK_VEXPRESS_OSC which is currently hidden behind a dependency on
+> one of several ARCH_* variables. Remove that dependency so that
+> CLK_VEXPRESS_OSC may be enabled without it.
+>
+> Signed-off-by: Peter Collingbourne <pcc@google.com>
+> Link: https://linux-review.googlesource.com/id/I435a21e2e5f6187db54f4ef2079b60028ab2ea69
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij
