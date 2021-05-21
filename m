@@ -2,49 +2,49 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D97C638CFC0
-	for <lists+linux-clk@lfdr.de>; Fri, 21 May 2021 23:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61EB238CFDD
+	for <lists+linux-clk@lfdr.de>; Fri, 21 May 2021 23:25:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbhEUVVL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 21 May 2021 17:21:11 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:56384 "EHLO
+        id S229526AbhEUV05 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 21 May 2021 17:26:57 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:56571 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbhEUVVK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 21 May 2021 17:21:10 -0400
-Received: from mail-vs1-f72.google.com ([209.85.217.72])
+        with ESMTP id S229503AbhEUV0z (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 21 May 2021 17:26:55 -0400
+Received: from mail-vs1-f70.google.com ([209.85.217.70])
         by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.93)
         (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lkCYc-0000m5-64
-        for linux-clk@vger.kernel.org; Fri, 21 May 2021 21:19:46 +0000
-Received: by mail-vs1-f72.google.com with SMTP id f20-20020a67d8940000b029022a675e6e86so7421710vsj.2
-        for <linux-clk@vger.kernel.org>; Fri, 21 May 2021 14:19:46 -0700 (PDT)
+        id 1lkCbZ-00015J-6O
+        for linux-clk@vger.kernel.org; Fri, 21 May 2021 21:22:49 +0000
+Received: by mail-vs1-f70.google.com with SMTP id s22-20020a67c3960000b02902364d2f502bso6629470vsj.13
+        for <linux-clk@vger.kernel.org>; Fri, 21 May 2021 14:22:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=6XBMA+HgnOtwY23bMWATi+tkzjIBgQg4ublZMIjdwFo=;
-        b=lsPGu7LyScLXvGdzvtlNXwBpffsAjIs0Ua5PNzFZahREDGr34wpUZZzpUPaLihBWeX
-         ttnEchoBVzH4MmVLhUTjwerHETii3bf+QVvDwxB/pDJU5q6z7ArAWYuuS65v4GvLwwPo
-         XA/1zFY4SxMzqebFV5anG5ni0rxi5y3lbVX9P6+dcTf9DTAFWnSb/hpKw6kWX+ExwKsO
-         Pn3h295pJLamqw7bXPMFbi8o6sZV61QFwZ4KoP046Pkpt4KGzVCooV8VCiEZjN9RotGM
-         9FQBgDHVxf+Av6To6Gf04d2/opzxo06oqJlbQLNRVFKOr+YRH7YmAlGHrkgdVqFaVf7D
-         b3tg==
-X-Gm-Message-State: AOAM533rLItSRM73V41g5SKINKOCmke+Rlea0Y/a83CE/k928VsrTBSM
-        fkuKpW88E0dlFaBj+Rq1a+pUt3f8yj1Yx5R1OgWLYuKsWi9nICP7mNu6avdrUMWhKKxJHZX7O1b
-        5M2yIvYhUtsQ89bGarLnyX+LfDxAni7bAsyNBSw==
-X-Received: by 2002:a05:6122:885:: with SMTP id 5mr12803012vkf.5.1621631984637;
-        Fri, 21 May 2021 14:19:44 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxhv1QL8qHnMj7beq1hVR/DBdqFRV/8WccGKOBWL6eMnDKVdIK/gtYPulvL1hnnq+STEvvfRQ==
-X-Received: by 2002:a05:6122:885:: with SMTP id 5mr12802995vkf.5.1621631984486;
-        Fri, 21 May 2021 14:19:44 -0700 (PDT)
+        bh=jSKiGkFsHm8qeUwaLdynXEY7fptjk7YiH8pCxN+OTOM=;
+        b=k386B4QGWfKHX+SUqWZl/AEzR3MXYa6lkjJjKn2P2DGmoPFySKJzGpk3T0L+iYmUY6
+         iVXU2Yb2QgSYpNM5ewu+WgaviL8n+Am1gbV/ourhhxf1Y93K5sDCbQH7go8Skmt6bQA/
+         Inov4vChBYt82YfdoKRdg3FXMVvNl+G93kXd5p14yJx7aThWNcVnI4d5GCiSuKHe+LQ+
+         PLfjPCnruDBWOzBbCBYe76cfA4epOkI8ku7bpZsgp7yLEnWbAzjFZB1F40Hb+BX9BNDg
+         yVu8Db6Abn8XFMnI85jiNmqZMVW9RpUILfCaWH7qttAf/PZt86fdl5ZrOAp6CJ5vyMkb
+         XDYw==
+X-Gm-Message-State: AOAM533PsVwObWF8/l0ZuYKF5fLuLGMTwj5HdzcbmR1QSCn2u/WeOasz
+        9wrIP5sujn9YvqVtgj4b07cMhj6HsrbZwDUhXpuHnwPU43p2sC6923aTW45LpUkphT+oOFpzLfM
+        T3VDV1LHwbBrrbDkqpMDp6wMaPgXJiBP0NlLJmg==
+X-Received: by 2002:ab0:63d4:: with SMTP id i20mr11750982uap.21.1621632167734;
+        Fri, 21 May 2021 14:22:47 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzvQ2l1U8szglgOD1N+hyDpgNDWEMA/0qq5+dQBkcYT64fZxhNQR94GbFgCi0ec6pzhy1FOKA==
+X-Received: by 2002:ab0:63d4:: with SMTP id i20mr11750968uap.21.1621632167595;
+        Fri, 21 May 2021 14:22:47 -0700 (PDT)
 Received: from [192.168.1.4] ([45.237.48.5])
-        by smtp.gmail.com with ESMTPSA id t2sm100467vkk.17.2021.05.21.14.19.42
+        by smtp.gmail.com with ESMTPSA id 39sm798548uaq.5.2021.05.21.14.22.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 May 2021 14:19:43 -0700 (PDT)
-Subject: Re: [PATCH v1 07/13] memory: tegra: Fix compilation warnings on 64bit
- platforms
+        Fri, 21 May 2021 14:22:47 -0700 (PDT)
+Subject: Re: [PATCH v1 09/13] memory: tegra20-emc: Use
+ devm_tegra_core_dev_init_opp_table()
 To:     Dmitry Osipenko <digetx@gmail.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -65,14 +65,14 @@ Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>,
         linux-clk@vger.kernel.org
 References: <20210520230751.26848-1-digetx@gmail.com>
- <20210520230751.26848-8-digetx@gmail.com>
+ <20210520230751.26848-10-digetx@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <28c84274-b9a9-86a5-5b39-5aa07a87626e@canonical.com>
-Date:   Fri, 21 May 2021 17:19:42 -0400
+Message-ID: <f24704bf-c9aa-1552-659f-a3eff9086ecc@canonical.com>
+Date:   Fri, 21 May 2021 17:22:45 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210520230751.26848-8-digetx@gmail.com>
+In-Reply-To: <20210520230751.26848-10-digetx@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -81,23 +81,20 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 On 20/05/2021 19:07, Dmitry Osipenko wrote:
-> Fix compilation warning on 64bit platforms caused by implicit promotion
-> of 32bit signed integer to a 64bit unsigned value which happens after
-> enabling compile-testing of the EMC drivers.
+> Use common devm_tegra_core_dev_init_opp_table() helper for the OPP table
+> initialization.
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
+> Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  drivers/memory/tegra/tegra124-emc.c | 4 ++--
->  drivers/memory/tegra/tegra30-emc.c  | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  drivers/memory/tegra/tegra20-emc.c | 48 +++---------------------------
+>  1 file changed, 4 insertions(+), 44 deletions(-)
 > 
 
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-Let me know if I should take the memory part.
 
 Best regards,
 Krzysztof
