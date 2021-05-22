@@ -2,99 +2,109 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5768B38CFD6
-	for <lists+linux-clk@lfdr.de>; Fri, 21 May 2021 23:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8777E38D637
+	for <lists+linux-clk@lfdr.de>; Sat, 22 May 2021 16:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbhEUVYp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 21 May 2021 17:24:45 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:56528 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbhEUVYi (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 21 May 2021 17:24:38 -0400
-Received: from mail-ua1-f72.google.com ([209.85.222.72])
-        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <krzysztof.kozlowski@canonical.com>)
-        id 1lkCbw-00019O-Sr
-        for linux-clk@vger.kernel.org; Fri, 21 May 2021 21:23:13 +0000
-Received: by mail-ua1-f72.google.com with SMTP id o4-20020ab037640000b0290218107a4549so1714208uat.14
-        for <linux-clk@vger.kernel.org>; Fri, 21 May 2021 14:23:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fROMD6BYmf3h06oRhpwPZGf5qSe1v9Tji/Vc0NCzaJs=;
-        b=WKqwc0E8gbMUYWxJTebykkzz1ClTlVlrb9LxLDmyRLKC4uhd86lYGHhTEXfyhtbvpM
-         wNlA1k5XjqTnqtnx/cURhjA6737aMJJ8at3I+ebFzxEgE6+E1rZWNf1zxErMj32G0ULF
-         ZrRvPyI+3wHM78QLvx7UP6UaOLXAmHxuJ0t6CFRgBt+isEf14BAcXikRzPSJmgjX91Xu
-         EGRSUKaMQuc6lN8izu1j7B1w1UkByUNkcScJfgLEli55DQ+Y4Q+gUK53/OmRCNKrk6Od
-         25mAbrPzGFul/202/t8tTbjcIv17It+f1Pks3Dshc9ebBv0ELYV6r9zfP/cR2G2q7ism
-         23dg==
-X-Gm-Message-State: AOAM530PGvTRvnBwnpql+zlcGw1QiDw+TaQMgItIqEX0f46CuoMc1nRY
-        HZhQwmwHRRpr5WaCVfjM9S7/IElerRhQG86wAIIxI/WRI1QO8T9Ka3L95O8pcAixgc2NytVM4al
-        4dJe5a0TygYUK1EfhaMIxVbpv+NFQNTE8BA49kg==
-X-Received: by 2002:a67:2c57:: with SMTP id s84mr13304960vss.32.1621632191789;
-        Fri, 21 May 2021 14:23:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzAkzP0vI6cvbwXWhDnOK8BKrtLOqAAl/3T8yacV2iIbe5gMjJbANDaWCWgPJfJiZWzKX/R1Q==
-X-Received: by 2002:a67:2c57:: with SMTP id s84mr13304943vss.32.1621632191648;
-        Fri, 21 May 2021 14:23:11 -0700 (PDT)
-Received: from [192.168.1.4] ([45.237.48.5])
-        by smtp.gmail.com with ESMTPSA id r12sm825043uao.6.2021.05.21.14.23.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 May 2021 14:23:11 -0700 (PDT)
-Subject: Re: [PATCH v1 10/13] memory: tegra30-emc: Use
- devm_tegra_core_dev_init_opp_table()
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        =?UTF-8?Q?Nikola_Milosavljevi=c4=87?= <mnidza@outlook.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Paul Fertser <fercerpav@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
+        id S231150AbhEVO6U (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 22 May 2021 10:58:20 -0400
+Received: from antares.kleine-koenig.org ([94.130.110.236]:53592 "EHLO
+        antares.kleine-koenig.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231145AbhEVO6T (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 22 May 2021 10:58:19 -0400
+Received: from antares.kleine-koenig.org (localhost [127.0.0.1])
+        by antares.kleine-koenig.org (Postfix) with ESMTP id 340FEBA731A;
+        Sat, 22 May 2021 16:56:53 +0200 (CEST)
+Received: from antares.kleine-koenig.org ([94.130.110.236])
+        by antares.kleine-koenig.org (antares.kleine-koenig.org [94.130.110.236]) (amavisd-new, port 10024)
+        with ESMTP id 0W5ZC5VCjR6Y; Sat, 22 May 2021 16:56:51 +0200 (CEST)
+Received: from taurus.defre.kleine-koenig.org (unknown [IPv6:2a02:8071:b5c8:7b00:dbda:c056:f5db:7aa3])
+        by antares.kleine-koenig.org (Postfix) with ESMTPSA;
+        Sat, 22 May 2021 16:56:51 +0200 (CEST)
+Subject: Re: [PATCH] clk: qcom: Simplify usage of dev_err_probe()
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
         linux-clk@vger.kernel.org
-References: <20210520230751.26848-1-digetx@gmail.com>
- <20210520230751.26848-11-digetx@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <670d0d27-867a-7a1a-db58-692429ec30d6@canonical.com>
-Date:   Fri, 21 May 2021 17:23:09 -0400
+References: <20210427164522.2886825-1-uwe@kleine-koenig.org>
+ <20210427165612.GH1908499@yoga>
+From:   =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>
+Message-ID: <6137d093-7b63-aead-e94d-548b70c34b7c@kleine-koenig.org>
+Date:   Sat, 22 May 2021 16:56:46 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-In-Reply-To: <20210520230751.26848-11-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20210427165612.GH1908499@yoga>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="0MBJHBZwzPGENCIYSjuON4oJ54LNvT0gB"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 20/05/2021 19:07, Dmitry Osipenko wrote:
-> Use common devm_tegra_core_dev_init_opp_table() helper for the OPP table
-> initialization.
-> 
-> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/memory/tegra/tegra30-emc.c | 48 +++---------------------------
->  1 file changed, 4 insertions(+), 44 deletions(-)
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--0MBJHBZwzPGENCIYSjuON4oJ54LNvT0gB
+Content-Type: multipart/mixed; boundary="Ga9Xhj853vmYjKG2VhxJRCmmvNLO3fTnL";
+ protected-headers="v1"
+From: =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>
+To: Bjorn Andersson <bjorn.andersson@linaro.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>
+Cc: Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+ linux-clk@vger.kernel.org
+Message-ID: <6137d093-7b63-aead-e94d-548b70c34b7c@kleine-koenig.org>
+Subject: Re: [PATCH] clk: qcom: Simplify usage of dev_err_probe()
+References: <20210427164522.2886825-1-uwe@kleine-koenig.org>
+ <20210427165612.GH1908499@yoga>
+In-Reply-To: <20210427165612.GH1908499@yoga>
+
+--Ga9Xhj853vmYjKG2VhxJRCmmvNLO3fTnL
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+On 4/27/21 6:56 PM, Bjorn Andersson wrote:
+> On Tue 27 Apr 11:45 CDT 2021, Uwe Kleine-K?nig wrote:
+
+@Bjorn Andersson: Your MUA is broken, it misquotes the =C3=B6 in my name =
+(in=20
+the mail and the To header).
+
+>> dev_err_probe() returns the error code passed as second parameter. Als=
+o if
+>> the error code is -EPROBE_DEFER dev_err_probe() is silent, so there is=20
+no
+>> need to check for this value before calling dev_err_probe().
+>>
+>=20
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+thanks.
+
+This patch is nearly a month old now. Is drivers/clk still maintained?
+
+Best regards
+Uwe
 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+--Ga9Xhj853vmYjKG2VhxJRCmmvNLO3fTnL--
 
+--0MBJHBZwzPGENCIYSjuON4oJ54LNvT0gB
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Best regards,
-Krzysztof
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmCpG64ACgkQwfwUeK3K
+7AkGUQgAnLol06BKwtGCxgtikEEwwXgUC2F4MoktyUyRAlG+bBPqRsYBbnbvagOL
+gxK7X+jn+bk/22F2Sf75GOzsH7pP88FkVAdp3sZgQ1Y+nsy1B2PzB0pGYi8qWtZS
+6qOckKRN4KRZQpVtHiYO9mIZ1cDtSRru7XQ6TnKpdso/JpVe2qV+kan+NJd71d2l
+YDNaPYlvV/JsTZAGMU8Pg8oOkhQwgkCOKrU8aaorrAcNiXqtYhSgVumMlVjlhm0c
+mUOsz9ul6Kj61+anD9KpmPPI6SUqZaVVkicGHxnTlZaeXnx+ls/Lqv8xn7na3kqE
+igi5SrKFm3GuxIWzJcFnFyyUraKyXw==
+=aCV9
+-----END PGP SIGNATURE-----
+
+--0MBJHBZwzPGENCIYSjuON4oJ54LNvT0gB--
