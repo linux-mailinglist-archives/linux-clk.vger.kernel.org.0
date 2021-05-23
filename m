@@ -2,109 +2,129 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8777E38D637
-	for <lists+linux-clk@lfdr.de>; Sat, 22 May 2021 16:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF2038DCE8
+	for <lists+linux-clk@lfdr.de>; Sun, 23 May 2021 22:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbhEVO6U (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 22 May 2021 10:58:20 -0400
-Received: from antares.kleine-koenig.org ([94.130.110.236]:53592 "EHLO
-        antares.kleine-koenig.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbhEVO6T (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 22 May 2021 10:58:19 -0400
-Received: from antares.kleine-koenig.org (localhost [127.0.0.1])
-        by antares.kleine-koenig.org (Postfix) with ESMTP id 340FEBA731A;
-        Sat, 22 May 2021 16:56:53 +0200 (CEST)
-Received: from antares.kleine-koenig.org ([94.130.110.236])
-        by antares.kleine-koenig.org (antares.kleine-koenig.org [94.130.110.236]) (amavisd-new, port 10024)
-        with ESMTP id 0W5ZC5VCjR6Y; Sat, 22 May 2021 16:56:51 +0200 (CEST)
-Received: from taurus.defre.kleine-koenig.org (unknown [IPv6:2a02:8071:b5c8:7b00:dbda:c056:f5db:7aa3])
-        by antares.kleine-koenig.org (Postfix) with ESMTPSA;
-        Sat, 22 May 2021 16:56:51 +0200 (CEST)
-Subject: Re: [PATCH] clk: qcom: Simplify usage of dev_err_probe()
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S232047AbhEWUk2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 23 May 2021 16:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232035AbhEWUk1 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 23 May 2021 16:40:27 -0400
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B224AC061574;
+        Sun, 23 May 2021 13:39:00 -0700 (PDT)
+Received: from TimeMachine.localdomain (bband-dyn255.178-41-232.t-com.sk [178.41.232.255])
+        by m-r1.th.seeweb.it (Postfix) with ESMTPA id 2B9421F6AF;
+        Sun, 23 May 2021 22:32:09 +0200 (CEST)
+From:   Martin Botka <martin.botka@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        konrad.dybcio@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org,
+        Martin Botka <martin.botka@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20210427164522.2886825-1-uwe@kleine-koenig.org>
- <20210427165612.GH1908499@yoga>
-From:   =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>
-Message-ID: <6137d093-7b63-aead-e94d-548b70c34b7c@kleine-koenig.org>
-Date:   Sat, 22 May 2021 16:56:46 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 01/2] dt-bindings: clk: qcom: gcc-sm6125: Document SM6125 GCC driver
+Date:   Sun, 23 May 2021 22:31:59 +0200
+Message-Id: <20210523203202.691900-1-martin.botka@somainline.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20210427165612.GH1908499@yoga>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="0MBJHBZwzPGENCIYSjuON4oJ54LNvT0gB"
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---0MBJHBZwzPGENCIYSjuON4oJ54LNvT0gB
-Content-Type: multipart/mixed; boundary="Ga9Xhj853vmYjKG2VhxJRCmmvNLO3fTnL";
- protected-headers="v1"
-From: =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <uwe@kleine-koenig.org>
-To: Bjorn Andersson <bjorn.andersson@linaro.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>
-Cc: Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
- linux-clk@vger.kernel.org
-Message-ID: <6137d093-7b63-aead-e94d-548b70c34b7c@kleine-koenig.org>
-Subject: Re: [PATCH] clk: qcom: Simplify usage of dev_err_probe()
-References: <20210427164522.2886825-1-uwe@kleine-koenig.org>
- <20210427165612.GH1908499@yoga>
-In-Reply-To: <20210427165612.GH1908499@yoga>
+Signed-off-by: Martin Botka <martin.botka@somainline.org>
+---
+ .../bindings/clock/qcom,gcc-sm6125.yaml       | 72 +++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sm6125.yaml
 
---Ga9Xhj853vmYjKG2VhxJRCmmvNLO3fTnL
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sm6125.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sm6125.yaml
+new file mode 100644
+index 000000000000..f7198370a1b9
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sm6125.yaml
+@@ -0,0 +1,72 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/qcom,gcc-sm6125.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Global Clock & Reset Controller Binding for SM6125
++
++maintainers:
++  - Konrad Dybcio <konrad.dybcio@somainline.org>
++
++description: |
++  Qualcomm global clock control module which supports the clocks, resets and
++  power domains on SM6125.
++
++  See also:
++  - dt-bindings/clock/qcom,gcc-sm6125.h
++
++properties:
++  compatible:
++    const: qcom,gcc-sm6125
++
++  clocks:
++    items:
++      - description: Board XO source
++      - description: Sleep clock source
++
++  clock-names:
++    items:
++      - const: bi_tcxo
++      - const: sleep_clk
++
++  '#clock-cells':
++    const: 1
++
++  '#reset-cells':
++    const: 1
++
++  '#power-domain-cells':
++    const: 1
++
++  reg:
++    maxItems: 1
++
++  protected-clocks:
++    description:
++      Protected clock specifier list as per common clock binding.
++
++required:
++  - compatible
++  - clocks
++  - clock-names
++  - reg
++  - '#clock-cells'
++  - '#reset-cells'
++  - '#power-domain-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,rpmh.h>
++    clock-controller@1400000 {
++    compatible = "qcom,gcc-sm6125";
++      reg = <0x01400000 0x1f0000>;
++      #clock-cells = <1>;
++      #reset-cells = <1>;
++      #power-domain-cells = <1>;
++      clock-names = "bi_tcxo", "sleep_clk";
++      clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>, <&sleep_clk>;
++    };
++...
+-- 
+2.31.1
 
-Hello,
-
-On 4/27/21 6:56 PM, Bjorn Andersson wrote:
-> On Tue 27 Apr 11:45 CDT 2021, Uwe Kleine-K?nig wrote:
-
-@Bjorn Andersson: Your MUA is broken, it misquotes the =C3=B6 in my name =
-(in=20
-the mail and the To header).
-
->> dev_err_probe() returns the error code passed as second parameter. Als=
-o if
->> the error code is -EPROBE_DEFER dev_err_probe() is silent, so there is=20
-no
->> need to check for this value before calling dev_err_probe().
->>
->=20
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-thanks.
-
-This patch is nearly a month old now. Is drivers/clk still maintained?
-
-Best regards
-Uwe
-
-
---Ga9Xhj853vmYjKG2VhxJRCmmvNLO3fTnL--
-
---0MBJHBZwzPGENCIYSjuON4oJ54LNvT0gB
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmCpG64ACgkQwfwUeK3K
-7AkGUQgAnLol06BKwtGCxgtikEEwwXgUC2F4MoktyUyRAlG+bBPqRsYBbnbvagOL
-gxK7X+jn+bk/22F2Sf75GOzsH7pP88FkVAdp3sZgQ1Y+nsy1B2PzB0pGYi8qWtZS
-6qOckKRN4KRZQpVtHiYO9mIZ1cDtSRru7XQ6TnKpdso/JpVe2qV+kan+NJd71d2l
-YDNaPYlvV/JsTZAGMU8Pg8oOkhQwgkCOKrU8aaorrAcNiXqtYhSgVumMlVjlhm0c
-mUOsz9ul6Kj61+anD9KpmPPI6SUqZaVVkicGHxnTlZaeXnx+ls/Lqv8xn7na3kqE
-igi5SrKFm3GuxIWzJcFnFyyUraKyXw==
-=aCV9
------END PGP SIGNATURE-----
-
---0MBJHBZwzPGENCIYSjuON4oJ54LNvT0gB--
