@@ -2,125 +2,148 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D051838E5F1
-	for <lists+linux-clk@lfdr.de>; Mon, 24 May 2021 13:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D18738E8FC
+	for <lists+linux-clk@lfdr.de>; Mon, 24 May 2021 16:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232476AbhEXL7T (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 24 May 2021 07:59:19 -0400
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:44701 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232110AbhEXL7S (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 May 2021 07:59:18 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 72FDE5C0054;
-        Mon, 24 May 2021 07:57:50 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Mon, 24 May 2021 07:57:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=B529eywUmsR9JY3AcBFsjJlGcRP
-        HY45DQE7bzyzTCZE=; b=Gvo1WFDSk4JVECXX4xz0uR4964zfHSzzK+CPdWJ/9rp
-        KNJgy8jEttsQConKjtmfTjNYN97e2IZ6sWkVMuuJuxeoJvMxLmne7pAlYaW+61XD
-        TdsOq4DcQBVN/iFqNS2vQZ/xhlIXJAOr+l+EeJEeJyja82xFtKL2EcAThz//4vcY
-        D1CTahLU/Ix7CX58gudibB/otx4naGtErahE8sQOzvtoIfKSu1YuOGrzsggHmLh1
-        OQCU4dZFYsEMLSnQvdBAXZY8Vd+F/mgSMmrKLzPoWpOEZZ4FKv0vRAiR44T0ublH
-        nTxFDLMJw2GN/KsHkMNeg4qG+zHyy19Sz8dvYfrBKcQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=B529ey
-        wUmsR9JY3AcBFsjJlGcRPHY45DQE7bzyzTCZE=; b=r9YY7HYEPhLJGKReZe8hqK
-        6jaGqem1mqRyycpkyf8tv5RcDvbePNPXqebSuhb5G4sv7xdkW16rltqGuFOuSSOX
-        ljCYwnIGQns3LbAlUHXpu9FwCyvHbOpKnaNJLC3t7GPGfwqKSX2E0ycR+gMRYY5M
-        JFT7IEYFOr4VroQ8y4itji22occbG6dT3GTlsHHX23PfiCJYeLUTJwpKTEDmSQCk
-        dM0zpMe+/uV18VK7J+ttCnFda4fV6W0kCIs7VJvlLWwlra7LvZBPas8ix70cX1ZY
-        GibV5IixRj99tctnpOOTjQDpRVu2/1QnNcC31stEEbsLYl6hCm7YrezynwgxjZyg
-        ==
-X-ME-Sender: <xms:vJSrYCFltTNSWLEvXZpuoWBQtcyumqjnUZ61_RNjr1ia5kalxCEUQg>
-    <xme:vJSrYDXReR2553hORjr7sj2zXlIVOTxv4gSzYWaJS7HkAkzYkG8_JVy0IEZAdKxmR
-    2N95483tIocx7ASmA8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdejledggeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
-    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:vJSrYMIJEMlx79njkJiInd1DWyP9iHRjIR7KLxSHy_D9wz5P4uLrXw>
-    <xmx:vJSrYMHfU4RGHfiu8TubRjC8oQr_E7BIIHBDIBi4SEiyQhwCZ7Gyeg>
-    <xmx:vJSrYIVv7ZLHrOaCKIjeIsAC_fM2Uv4f0HyAxtW-cfqoaUg9JtpCQQ>
-    <xmx:vpSrYKJUOmr7bQKgO52pbx5mHWAQNDVxJjmXD06g8LbNAI8GcaPO2A>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA;
-        Mon, 24 May 2021 07:57:48 -0400 (EDT)
-Date:   Mon, 24 May 2021 13:57:47 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Tobias Schramm <t.schramm@manjaro.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: sunxi-ng: v3s: fix incorrect postdivider on
- pll-audio
-Message-ID: <20210524115747.2vv3kigu7wcrgpmj@gilmour>
-References: <20210513131315.2059451-1-t.schramm@manjaro.org>
+        id S233042AbhEXOqp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 24 May 2021 10:46:45 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:55115 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232921AbhEXOqn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 May 2021 10:46:43 -0400
+X-UUID: 0fef0fa0a5454da5bef29b84a8bd535d-20210524
+X-UUID: 0fef0fa0a5454da5bef29b84a8bd535d-20210524
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <chun-jie.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1925523394; Mon, 24 May 2021 20:29:11 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs06n2.mediatek.inc (172.21.101.130) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 24 May 2021 20:29:10 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 24 May 2021 20:29:10 +0800
+From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Weiyi Lu <weiyi.lu@mediatek.com>,
+        "chun-jie . chen" <chun-jie.chen@mediatek.com>
+Subject: [PATCH v9 01/22] dt-bindings: ARM: Mediatek: Add new document bindings of imp i2c wrapper controller
+Date:   Mon, 24 May 2021 20:20:32 +0800
+Message-ID: <20210524122053.17155-2-chun-jie.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20210524122053.17155-1-chun-jie.chen@mediatek.com>
+References: <20210524122053.17155-1-chun-jie.chen@mediatek.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3klzeylg2lfcluf4"
-Content-Disposition: inline
-In-Reply-To: <20210513131315.2059451-1-t.schramm@manjaro.org>
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+This patch adds the new binding documentation of imp i2c wrapper controller
+for Mediatek MT8192.
 
---3klzeylg2lfcluf4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
+Signed-off-by: chun-jie.chen <chun-jie.chen@mediatek.com>
+---
+ .../arm/mediatek/mediatek,imp_iic_wrap.yaml   | 80 +++++++++++++++++++
+ 1 file changed, 80 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,imp_iic_wrap.yaml
 
-On Thu, May 13, 2021 at 03:13:15PM +0200, Tobias Schramm wrote:
-> Commit 46060be6d840 ("clk: sunxi-ng: v3s: use sigma-delta modulation for =
-audio-pll")
-> changed the audio pll on the Allwinner V3s and V3 SoCs to use
-> sigma-delta modulation. In the process the declaration of fixed postdivid=
-er
-> providing "pll-audio" was adjusted to provide the desired clock rates from
-> the now sigma-delta modulated pll.
-> However, while the divider used for calculations by the clock framework
-> was adjusted the actual divider programmed into the hardware in
-> sun8i_v3_v3s_ccu_init was left at "divide by four". This broke the
-> "pll-audio" clock, now only providing quater the expected clock rate.
-> It would in general be desirable to program the postdivider for
-> "pll-audio" to four, such that a broader range of frequencies were
-> available on the pll outputs. But the clock for the integrated codec
-> "ac-dig" does not feature a mux that allows to select from all pll outputs
-> as it is just a simple clock gate connected to "pll-audio". Thus we need
-> to set the postdivider to one to be able to provide the 22.5792MHz and
-> 24.576MHz rates required by the internal sun4i codec.
->=20
-> This patches fixes the incorrect clock rate by forcing the postdivider to
-> one in sun8i_v3_v3s_ccu_init.
->=20
-> Fixes: 46060be6d840 ("clk: sunxi-ng: v3s: use sigma-delta modulation for =
-audio-pll")
-> Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,imp_iic_wrap.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,imp_iic_wrap.yaml
+new file mode 100644
+index 000000000000..fb6cb9e60ee2
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,imp_iic_wrap.yaml
+@@ -0,0 +1,80 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/mediatek/mediatek,imp_iic_wrap.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MediaTek IMP I2C Wrapper Controller
++
++maintainers:
++  - Chun-Jie Chen <chun-jie.chen@mediatek.com>
++
++description:
++  The Mediatek imp i2c wrapper controller provides functional configurations and clocks to the system.
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - mediatek,mt8192-imp_iic_wrap_c
++          - mediatek,mt8192-imp_iic_wrap_e
++          - mediatek,mt8192-imp_iic_wrap_s
++          - mediatek,mt8192-imp_iic_wrap_ws
++          - mediatek,mt8192-imp_iic_wrap_w
++          - mediatek,mt8192-imp_iic_wrap_n
++      - const: syscon
++
++  reg:
++    maxItems: 1
++
++  '#clock-cells':
++    const: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    imp_iic_wrap_c: syscon@11007000 {
++        compatible = "mediatek,mt8192-imp_iic_wrap_c", "syscon";
++        reg = <0x11007000 0x1000>;
++        #clock-cells = <1>;
++    };
++
++  - |
++    imp_iic_wrap_e: syscon@11cb1000 {
++        compatible = "mediatek,mt8192-imp_iic_wrap_e", "syscon";
++        reg = <0x11cb1000 0x1000>;
++        #clock-cells = <1>;
++    };
++
++  - |
++    imp_iic_wrap_s: syscon@11d03000 {
++        compatible = "mediatek,mt8192-imp_iic_wrap_s", "syscon";
++        reg = <0x11d03000 0x1000>;
++        #clock-cells = <1>;
++    };
++
++  - |
++    imp_iic_wrap_ws: syscon@11d23000 {
++        compatible = "mediatek,mt8192-imp_iic_wrap_ws", "syscon";
++        reg = <0x11d23000 0x1000>;
++        #clock-cells = <1>;
++    };
++
++  - |
++    imp_iic_wrap_w: syscon@11e01000 {
++        compatible = "mediatek,mt8192-imp_iic_wrap_w", "syscon";
++        reg = <0x11e01000 0x1000>;
++        #clock-cells = <1>;
++    };
++
++  - |
++    imp_iic_wrap_n: syscon@11f02000 {
++        compatible = "mediatek,mt8192-imp_iic_wrap_n", "syscon";
++        reg = <0x11f02000 0x1000>;
++        #clock-cells = <1>;
++    };
+-- 
+2.18.0
 
-Applied, thanks
-Maxime
-
---3klzeylg2lfcluf4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYKuUuwAKCRDj7w1vZxhR
-xfLuAQDbALcSH3I9sN3aT7SM2BKzG79hN9v5u7zkilw8NofhGAEA1n9Sx3Vp0Z4M
-/DY6a26+9XAGkK7BByoqG2qVMCw7RQQ=
-=CHIg
------END PGP SIGNATURE-----
-
---3klzeylg2lfcluf4--
