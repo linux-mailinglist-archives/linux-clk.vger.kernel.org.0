@@ -2,150 +2,144 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 097A838E8F7
-	for <lists+linux-clk@lfdr.de>; Mon, 24 May 2021 16:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E77E38E6BF
+	for <lists+linux-clk@lfdr.de>; Mon, 24 May 2021 14:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbhEXOqm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 24 May 2021 10:46:42 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:55115 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232662AbhEXOql (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 May 2021 10:46:41 -0400
-X-UUID: 0d76a5e7403f487fafdcd2b897cb7264-20210524
-X-UUID: 0d76a5e7403f487fafdcd2b897cb7264-20210524
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <chun-jie.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1337484028; Mon, 24 May 2021 20:29:15 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 24 May 2021 20:29:13 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 24 May 2021 20:29:13 +0800
-From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        id S232401AbhEXMkw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 24 May 2021 08:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232700AbhEXMkv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 May 2021 08:40:51 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4253FC061574;
+        Mon, 24 May 2021 05:39:23 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id i9so40451808lfe.13;
+        Mon, 24 May 2021 05:39:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=13zcyWdsm4gpffNG5ZgDMwvczQG34AV4139pdXe/s/0=;
+        b=Ukzs1lpffefInt+Tc3rj13rbWCFBfbLYbuOBDb1j5YTp/JNEMJrM+0BS9pYYP38s9n
+         7HnDgswflfy/VLz9qqAzPEQ99K+h8Qw9BP4SNjW8CFWmWgh5JMUSDfFAJeK+RZdsaGGL
+         E/Dufo5c9cUI5wYk5ZS925uvNbuEl/D0DVzT9JJnHjAK1LG65AMdNhVEY5bjp2L2ZkJx
+         xTyf1oVqYbmYguDJ4dsI4rGt5dv+nSIZOdciE20NRNrrOmtUf9V4AfSlhip/ALqlXDCi
+         a3xqCn7eZwwF4XtCyKGnbWeeDVyinyJ8tey0f34ksGlX16trBozo1SFW0R8FUHxTuMe2
+         gCpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=13zcyWdsm4gpffNG5ZgDMwvczQG34AV4139pdXe/s/0=;
+        b=JPtwYE8hRhKABXJqAdQPEmS/j++lk9UmOM98vt2+exheyVdkYJyhD3XKbkieLeMkqL
+         /UHrG5P34T7pgyKMjm7tYUro2k/bNz5UjhoS0FeZtZeMRMrF+PUZDhp2E6Nexp93rb1f
+         DVVmp2GE0TIukOoJtXuZoF9czCz2kJ3gmg+tGP5aQRuWZb6Hg8CDqHeWhOmUvWH6SkVx
+         VUVniWHnHdYwP0nz2h3s4ZhLVBgyW5KMY2K4TIG2Uf6Qck41AbhHhcSAyEpiIIVdieG9
+         2wkXGhDq7EseZM03ePl8uRyWjf6rPdDGtFegsHRW6OgBREFluVHCx3ZKSM7UvuOhJlug
+         9OfQ==
+X-Gm-Message-State: AOAM533KhURQfuH5gHNIe/ch3AcEg24inlOXm8PTgtQ+2smqFB8dpza0
+        JZsPVjBoZ88+S3e9qraZZZD7vr48hSM=
+X-Google-Smtp-Source: ABdhPJyhCOFQn/Z1pKRmtZeJWu1d4dSY2QLiSj+ONw56eIR3cGKanVoF3Tn/DOinhtQ09s5N7gDupw==
+X-Received: by 2002:a05:6512:128c:: with SMTP id u12mr10567429lfs.160.1621859961442;
+        Mon, 24 May 2021 05:39:21 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-193-110.dynamic.spd-mgts.ru. [109.252.193.110])
+        by smtp.googlemail.com with ESMTPSA id p21sm1409745lfg.97.2021.05.24.05.39.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 May 2021 05:39:21 -0700 (PDT)
+Subject: Re: [PATCH v1] kbuild: Disable compile testing if HAVE_LEGACY_CLK
+ enabled
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>,
-        "chun-jie . chen" <chun-jie.chen@mediatek.com>
-Subject: [PATCH v9 22/22] clk: mediatek: Add MT8192 vencsys clock support
-Date:   Mon, 24 May 2021 20:20:53 +0800
-Message-ID: <20210524122053.17155-23-chun-jie.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210524122053.17155-1-chun-jie.chen@mediatek.com>
-References: <20210524122053.17155-1-chun-jie.chen@mediatek.com>
+        Tony Lindgren <tony@atomide.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Paul Burton <paul.burton@mips.com>,
+        John Crispin <john@phrozen.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:TI ETHERNET SWITCH DRIVER (CPSW)" 
+        <linux-omap@vger.kernel.org>
+References: <20210523232556.15017-1-digetx@gmail.com>
+ <CAMuHMdWqNngrDQOut1r5aD1Nk5BMXEV4m8+OBix4DXOV6OSpNg@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <8b6af8c0-6f01-193f-1eb4-4e230871f0cd@gmail.com>
+Date:   Mon, 24 May 2021 15:39:20 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+In-Reply-To: <CAMuHMdWqNngrDQOut1r5aD1Nk5BMXEV4m8+OBix4DXOV6OSpNg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add MT8192 vencsys clock provider
+24.05.2021 11:54, Geert Uytterhoeven пишет:
+> Hi Dmitry,
+> 
+> On Mon, May 24, 2021 at 1:26 AM Dmitry Osipenko <digetx@gmail.com> wrote:
+>> There are couple older platforms that can't be compile-tested because they
+>> partially implement CLK API. It causes build failure of kernel drivers due
+>> to the missing symbols of the unimplemented part of CLK API.
+>>
+>> These platforms are: ARM EP93XX, ARM OMAP1, m68k ColdFire, MIPS AR7,
+>>                      MIPS Ralink.
+>>
+>> Disable compile-testing for HAVE_LEGACY_CLK=y.
+>>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> 
+> Thanks for your patch!
+> 
+>> --- a/init/Kconfig
+>> +++ b/init/Kconfig
+>> @@ -131,7 +131,7 @@ config INIT_ENV_ARG_LIMIT
+>>
+>>  config COMPILE_TEST
+>>         bool "Compile also drivers which will not load"
+>> -       depends on HAS_IOMEM
+>> +       depends on HAS_IOMEM && !HAVE_LEGACY_CLK
+> 
+> That sounds a bit drastic to me.  Usually we just try to implement the
+> missing functionality, or provide stubs.
+> Which functions are missing?
 
-Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
-Signed-off-by: chun-jie.chen <chun-jie.chen@mediatek.com>
----
- drivers/clk/mediatek/Kconfig           |  6 +++
- drivers/clk/mediatek/Makefile          |  1 +
- drivers/clk/mediatek/clk-mt8192-venc.c | 53 ++++++++++++++++++++++++++
- 3 files changed, 60 insertions(+)
- create mode 100644 drivers/clk/mediatek/clk-mt8192-venc.c
+Everything that belongs to CONFIG_COMMON_CLK needs stubs.
 
-diff --git a/drivers/clk/mediatek/Kconfig b/drivers/clk/mediatek/Kconfig
-index 31779f2c5c83..576babd86f98 100644
---- a/drivers/clk/mediatek/Kconfig
-+++ b/drivers/clk/mediatek/Kconfig
-@@ -574,6 +574,12 @@ config COMMON_CLK_MT8192_VDECSYS
- 	help
- 	  This driver supports MediaTek MT8192 vdecsys and vdecsys_soc clocks.
- 
-+config COMMON_CLK_MT8192_VENCSYS
-+	bool "Clock driver for MediaTek MT8192 vencsys"
-+	depends on COMMON_CLK_MT8192
-+	help
-+	  This driver supports MediaTek MT8192 vencsys clocks.
-+
- config COMMON_CLK_MT8516
- 	bool "Clock driver for MediaTek MT8516"
- 	depends on ARCH_MEDIATEK || COMPILE_TEST
-diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
-index 887dd6bcf7f2..15bc045f0b71 100644
---- a/drivers/clk/mediatek/Makefile
-+++ b/drivers/clk/mediatek/Makefile
-@@ -79,5 +79,6 @@ obj-$(CONFIG_COMMON_CLK_MT8192_MMSYS) += clk-mt8192-mm.o
- obj-$(CONFIG_COMMON_CLK_MT8192_MSDC) += clk-mt8192-msdc.o
- obj-$(CONFIG_COMMON_CLK_MT8192_SCP_ADSP) += clk-mt8192-scp_adsp.o
- obj-$(CONFIG_COMMON_CLK_MT8192_VDECSYS) += clk-mt8192-vdec.o
-+obj-$(CONFIG_COMMON_CLK_MT8192_VENCSYS) += clk-mt8192-venc.o
- obj-$(CONFIG_COMMON_CLK_MT8516) += clk-mt8516.o
- obj-$(CONFIG_COMMON_CLK_MT8516_AUDSYS) += clk-mt8516-aud.o
-diff --git a/drivers/clk/mediatek/clk-mt8192-venc.c b/drivers/clk/mediatek/clk-mt8192-venc.c
-new file mode 100644
-index 000000000000..ce220c5334c0
---- /dev/null
-+++ b/drivers/clk/mediatek/clk-mt8192-venc.c
-@@ -0,0 +1,53 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+//
-+// Copyright (c) 2020 MediaTek Inc.
-+// Author: Weiyi Lu <weiyi.lu@mediatek.com>
-+
-+#include <linux/clk-provider.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+
-+#include "clk-mtk.h"
-+#include "clk-gate.h"
-+
-+#include <dt-bindings/clock/mt8192-clk.h>
-+
-+static const struct mtk_gate_regs venc_cg_regs = {
-+	.set_ofs = 0x4,
-+	.clr_ofs = 0x8,
-+	.sta_ofs = 0x0,
-+};
-+
-+#define GATE_VENC(_id, _name, _parent, _shift)	\
-+	GATE_MTK(_id, _name, _parent, &venc_cg_regs, _shift, &mtk_clk_gate_ops_setclr_inv)
-+
-+static const struct mtk_gate venc_clks[] = {
-+	GATE_VENC(CLK_VENC_SET0_LARB, "venc_set0_larb", "venc_sel", 0),
-+	GATE_VENC(CLK_VENC_SET1_VENC, "venc_set1_venc", "venc_sel", 4),
-+	GATE_VENC(CLK_VENC_SET2_JPGENC, "venc_set2_jpgenc", "venc_sel", 8),
-+	GATE_VENC(CLK_VENC_SET5_GALS, "venc_set5_gals", "venc_sel", 28),
-+};
-+
-+static const struct mtk_clk_desc venc_desc = {
-+	.clks = venc_clks,
-+	.num_clks = ARRAY_SIZE(venc_clks),
-+};
-+
-+static const struct of_device_id of_match_clk_mt8192_venc[] = {
-+	{
-+		.compatible = "mediatek,mt8192-vencsys",
-+		.data = &venc_desc,
-+	}, {
-+		/* sentinel */
-+	}
-+};
-+
-+static struct platform_driver clk_mt8192_venc_drv = {
-+	.probe = mtk_clk_simple_probe,
-+	.driver = {
-+		.name = "clk-mt8192-venc",
-+		.of_match_table = of_match_clk_mt8192_venc,
-+	},
-+};
-+
-+builtin_platform_driver(clk_mt8192_venc_drv);
--- 
-2.18.0
+That is everything under CONFIG_HAVE_CLK [1], excluding functions
+belonging to clk-devres.o and clk-bulk.o [2]. The HAVE_LEGACY_CLK
+selects HAVE_CLK, but the COMMON_CLK is under HAVE_CLK too.
 
+[1]
+https://elixir.bootlin.com/linux/v5.13-rc3/source/include/linux/clk.h#L786
+[2]
+https://elixir.bootlin.com/linux/v5.13-rc3/source/drivers/clk/Makefile#L3
+
+This problem is repeated over and over again for the past years. Some
+maintainers are adding "depends on COMMON_CLK" for COMPILE_TEST of each
+driver, but this doesn't solve the root of the problem, and thus, it's
+constantly reoccurring.
+
+Recently Krzysztof Kozlowski added couple more clk stubs for MIPS, but
+still lots of stubs are missing. Some platforms don't have any stubs at
+all and apparently nobody cares to fix them.
+
+There 3 possible solutions:
+
+1. Factor out COMMON_CLK from HAVE_LEGACY_CLK, if this is possible
+2. Build stubs universally, maybe using weak functions.
+3. Disable compile-testing for HAVE_LEGACY_CLK
+
+The third option is the simplest. If anyone will care to fix those
+legacy platforms properly, then compile-testing could be re-enabled for
+them. This is my proposal.
