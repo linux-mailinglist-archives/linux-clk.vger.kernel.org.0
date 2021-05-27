@@ -2,77 +2,67 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E013922C5
-	for <lists+linux-clk@lfdr.de>; Thu, 27 May 2021 00:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2CCA392705
+	for <lists+linux-clk@lfdr.de>; Thu, 27 May 2021 07:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234529AbhEZWfH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 26 May 2021 18:35:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52080 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234278AbhEZWfH (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 26 May 2021 18:35:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 64D34613CA;
-        Wed, 26 May 2021 22:33:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622068415;
-        bh=Lgc2ApRO4m7E7FHqU9DmoWY4keZyJY0T6HyK7vuHDkY=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=HtKesleSte7hB3z0+wNl6epd0GgeKEzh3Q+gRZ88dSKbgwsZkREsndbQBhD8c8UBN
-         Rh/cySddD1WwD3/zF4TPhVH1pYINGzrmFUme74BKeYU4swxEV4T8p5hGZqxwvr1sCf
-         Lw4K8nb0N3JvbJsFCN+Z3ynvC+SiwSgNrY6ARuBmfG6nbAW0wjjiyl6SITlQSphAW/
-         cL38SowC1CrVp1QVjjMfAjr0+x1d7m+rFBJtCMFD3Jjnbk+l9c1GNuLJClUjP+S056
-         vMq4fP1Wh16PhszXQtyzCgEfzwJ5XyPtk5b/LecS4YuDk0ug7XEVch9N6kTHMgtTMg
-         /5yxyj1YXss7w==
-Content-Type: text/plain; charset="utf-8"
+        id S233353AbhE0Fze (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 27 May 2021 01:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232773AbhE0Fze (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 27 May 2021 01:55:34 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF5EC061574
+        for <linux-clk@vger.kernel.org>; Wed, 26 May 2021 22:54:01 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id 82so3547942qki.8
+        for <linux-clk@vger.kernel.org>; Wed, 26 May 2021 22:54:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=MhaWH0xm/odULRUgpRN30Lg5qdDn6Ee/GPJGPBWoxIc=;
+        b=B42LA4/ix8grj8RnLrfPN4hUG62K25cE0pL6HcqMpB25WBsXNJWOrWMdQNZZNl+GuY
+         juq7Lt7joeNUQ3BJi/gmBeL8k3U5VAa+5tAMtQcI3K+wH53h6+PjWqBkTZPDRbq8XWuj
+         otw3veHyede5Y9TSdMRVjujPNCR2JaRIYHRQ+HMYw1PNEl/EM/uur5EEsYCG4qVIIYgj
+         DrOoIig9MMcMGLjxokSODfRRczl+Hcu8kluR4Y6HnfT8zKZMPBRxEzBJ7g4gGotN81zb
+         uulUuBABYeum4bBmcS5ULWLWIKrgODnjAk5LiPj05/kd4+rsZ4rnLgi/2Xk7Nl60mVE+
+         BRAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=MhaWH0xm/odULRUgpRN30Lg5qdDn6Ee/GPJGPBWoxIc=;
+        b=AKXw20ALThdTxq6dyxPTr5Pd3PNRleSuOEggW7LZnLgn9xXTFQ7H76T+wkS6phipBe
+         x/DEywAkBQ9yKVQpN7I+jXSFCK1zac2YjpxPB8n+9F8qQQpFojOHNZzhyK9gIEiPVj/y
+         BfN+hKTHYsZYQ0EAtLLK7oGsLToDbdEEHF1lRRmpEtoZ0K/6ig0d8eOXYQEl7nGo1J1H
+         9kd5YjxHmqRsAf1mK5LKR9/L2un20xQxWA8UQjxJ7LtBQ0zpXbQyi/vzyx3+LHGTMpA2
+         3FUeQArmSccJpJuq0G3TCYN7eIrahJnWYRjFckBAOEiv4yVkTjAVSn0SPou4p5Nej9OO
+         d2zg==
+X-Gm-Message-State: AOAM530aryaRZlddrDOA8Zpz0TvA7diLVH6QO63a4IrPhoclliIPJzsj
+        aqUrVjpu0ag0rcEN88UB3zYMqOfEbdsI/hrsfnE=
+X-Google-Smtp-Source: ABdhPJzYcb6qIGrdjI3OgfELYaYOa/Z48jmoSkBfLq05Ve/t0WTpJACAo0dKxSY2ttBRoRjQLvwn2litUT8AMX9jF2s=
+X-Received: by 2002:a37:a309:: with SMTP id m9mr1905253qke.126.1622094840677;
+ Wed, 26 May 2021 22:54:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20210526172036.183223-3-krzysztof.kozlowski@canonical.com>
-References: <20210526172036.183223-1-krzysztof.kozlowski@canonical.com> <20210526172036.183223-3-krzysztof.kozlowski@canonical.com>
-Subject: Re: [PATCH v2 2/7] mfd: max77686: Do not enforce (incorrect) interrupt trigger type
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh@kernel.org>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Date:   Wed, 26 May 2021 15:33:34 -0700
-Message-ID: <162206841417.4130789.13945208806958598688@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+Received: by 2002:a05:6214:202f:0:0:0:0 with HTTP; Wed, 26 May 2021 22:53:59
+ -0700 (PDT)
+Reply-To: isabella.ferreira@yandex.com
+From:   "Isabella.Ferreira" <gendavidrodriguez500@gmail.com>
+Date:   Thu, 27 May 2021 06:53:59 +0100
+Message-ID: <CAC8P1aj2C84x4L5HCP8uk0BLE2nJJc=Xq57-QOtZD-Gh_bEnvw@mail.gmail.com>
+Subject: Greetings,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Krzysztof Kozlowski (2021-05-26 10:20:31)
-> From: Krzysztof Kozlowski <krzk@kernel.org>
->=20
-> Interrupt line can be configured on different hardware in different way,
-> even inverted.  Therefore driver should not enforce specific trigger
-> type - edge falling - but instead rely on Devicetree to configure it.
->=20
-> The Maxim 77686 datasheet describes the interrupt line as active low
-> with a requirement of acknowledge from the CPU therefore the edge
-> falling is not correct.
->=20
-> The interrupt line is shared between PMIC and RTC driver, so using level
-> sensitive interrupt is here especially important to avoid races.  With
-> an edge configuration in case if first PMIC signals interrupt followed
-> shortly after by the RTC, the interrupt might not be yet cleared/acked
-> thus the second one would not be noticed.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> Acked-by: Rob Herring <robh@kernel.org>
->=20
-> ---
+Greetings,
 
-Acked-by: Stephen Boyd <sboyd@kernel.org> # clock binding
+I wonder why you continue neglecting my emails. Please, acknowledge
+the receipt of this message in reference to the subject above as I
+intend to send to you the details of the mail. Sometimes, try to check
+your spam box because most of these correspondences fall out sometimes
+in SPAM folder.
+
+Best regards,
+Isabella
