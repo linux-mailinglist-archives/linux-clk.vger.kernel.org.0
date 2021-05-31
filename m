@@ -2,33 +2,33 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE46396738
-	for <lists+linux-clk@lfdr.de>; Mon, 31 May 2021 19:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C26C39673B
+	for <lists+linux-clk@lfdr.de>; Mon, 31 May 2021 19:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232842AbhEaRiO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 31 May 2021 13:38:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42624 "EHLO mail.kernel.org"
+        id S233276AbhEaRiR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 31 May 2021 13:38:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42628 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233184AbhEaRh5 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        id S233271AbhEaRh5 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
         Mon, 31 May 2021 13:37:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0013E6127C;
-        Mon, 31 May 2021 17:36:02 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 323D461285;
+        Mon, 31 May 2021 17:36:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622482563;
-        bh=CqS/REIRdXuu3G6qnyJfdGMwzUbALygTwd2BA259Hq0=;
+        s=k20201202; t=1622482564;
+        bh=LuPsBIFhxgd/n8nHsszgAmLqq7folE7IErl+jaDcRN8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EMAv46lnGGkJqvYvtXUUiVYJ2fYx920xCoViqZg+boge0kHzJ4xbX4HpL37a7Crl4
-         tsLx2IgEBOFNwMGR2uiBRoTMuiBk28IqppefHmlSWz9WiSuQDQF3CB2hq8jsEys6Rv
-         /Ojvt9XM8u9sZtTGjX52nWjWc010lbL6GYCWIgXSwkox65BEz3zGtZ7rDlN6MMl7CY
-         Z1evyX04QYCe1n+4nYKFByvA2PFVx3AgmgfbNFRcqjmwwDiFiWwaqZkJWax+tQOW+s
-         fEQeiARoxOWLLGTp//eWg8vztabzT57gJKvz3D+vS46j22JlUwsTx1odeNTsNPv7Qw
-         c6QCoy+lefqeg==
+        b=irRA9xPCYi1dYhMgMdKAWdz2kuDpfBS4m/ORrdhswdJPt2yGUtAgNAPLjnmF6fsQa
+         bRXXdUBFg9Hwr5fB2u5cg22LI1Nw6JwfH1271lEFxDJhM/YJtUzp+ES+uMUMxIhI75
+         45weX9Kp0RoEULGmEkXwjuaxmvvk2qvG/smNatXYzFqpnHpeF4zHOxaS4EGYsvd/6y
+         O2oKUNp/LbG4AAeK4NEIUqUvz7lUyd2utZjuI7YHJVEAo2CpgjggmHKYI4Fv2+elku
+         u4aFirCoVIPK5BFnSBmbfdBUSIc6Ko2gN51lsiTY06osgnMOmGGmeLKhnMOflHgbxC
+         DSCdJeTlQ09Hg==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-clk@vger.kernel.org
 Cc:     Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 6/7] clkdev: remove CONFIG_CLKDEV_LOOKUP
-Date:   Mon, 31 May 2021 19:34:28 +0200
-Message-Id: <20210531173429.2467403-7-arnd@kernel.org>
+Subject: [PATCH 7/7] clkdev: remove unused clkdev_alloc() interfaces
+Date:   Mon, 31 May 2021 19:34:29 +0200
+Message-Id: <20210531173429.2467403-8-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20210531173429.2467403-1-arnd@kernel.org>
 References: <20210531173429.2467403-1-arnd@kernel.org>
@@ -40,291 +40,75 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-This option is now synonymous with CONFIG_HAVE_CLK, so use
-the latter globally. Any out-of-tree platform ports that
-still use a private clk_get()/clk_put() implementation should
-move to CONFIG_COMMON_CLK.
+The last user of clkdev_alloc() and clkdev_hw_alloc() was
+removed last year, so everything now calls clkdev_create()
+and clkdev_hw_create() instead.
 
+Removing the unused functions lets the compiler optimize
+the remaining ones slightly better.
+
+Fixes: e5006671acc7 ("clk: versatile: Drop the legacy IM-PD1 clock code")
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/Kconfig              |  2 --
- arch/m68k/Kconfig.cpu         |  1 -
- arch/mips/Kconfig             |  3 ---
- arch/mips/pic32/Kconfig       |  1 -
- arch/sh/Kconfig               |  1 -
- drivers/clk/Kconfig           |  6 +-----
- drivers/clk/Makefile          |  3 +--
- drivers/clocksource/Kconfig   |  6 +++---
- drivers/mmc/host/Kconfig      |  4 ++--
- drivers/staging/board/Kconfig |  2 +-
- sound/soc/dwc/Kconfig         |  2 +-
- sound/soc/rockchip/Kconfig    | 14 +++++++-------
- 12 files changed, 16 insertions(+), 29 deletions(-)
+ drivers/clk/clkdev.c   | 28 ----------------------------
+ include/linux/clkdev.h |  5 -----
+ 2 files changed, 33 deletions(-)
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 24804f11302d..809317b5a6c6 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -353,7 +353,6 @@ config ARCH_EP93XX
- 	select ARM_VIC
- 	select GENERIC_IRQ_MULTI_HANDLER
- 	select AUTO_ZRELADDR
--	select CLKDEV_LOOKUP
- 	select CLKSRC_MMIO
- 	select CPU_ARM920T
- 	select GPIOLIB
-@@ -504,7 +503,6 @@ config ARCH_OMAP1
- 	bool "TI OMAP1"
- 	depends on MMU
- 	select ARCH_OMAP
--	select CLKDEV_LOOKUP
- 	select CLKSRC_MMIO
- 	select GENERIC_IRQ_CHIP
- 	select GENERIC_IRQ_MULTI_HANDLER
-diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
-index e54167a64cbf..f4d23977d2a5 100644
---- a/arch/m68k/Kconfig.cpu
-+++ b/arch/m68k/Kconfig.cpu
-@@ -29,7 +29,6 @@ config COLDFIRE
- 	select CPU_HAS_NO_MULDIV64
- 	select GENERIC_CSUM
- 	select GPIOLIB
--	select CLKDEV_LOOKUP
- 	select HAVE_LEGACY_CLK
+diff --git a/drivers/clk/clkdev.c b/drivers/clk/clkdev.c
+index 0f2e3fcf0f19..67f601a41023 100644
+--- a/drivers/clk/clkdev.c
++++ b/drivers/clk/clkdev.c
+@@ -190,34 +190,6 @@ vclkdev_create(struct clk_hw *hw, const char *con_id, const char *dev_fmt,
+ 	return cl;
+ }
  
- endchoice
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 8fe6b30de7dd..96ab1a2a9357 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -332,7 +332,6 @@ config BCM63XX
- 	select SWAP_IO_SPACE
- 	select GPIOLIB
- 	select MIPS_L1_CACHE_SHIFT_4
--	select CLKDEV_LOOKUP
- 	select HAVE_LEGACY_CLK
- 	help
- 	  Support for BCM63XX based boards
-@@ -446,7 +445,6 @@ config LANTIQ
- 	select GPIOLIB
- 	select SWAP_IO_SPACE
- 	select BOOT_RAW
--	select CLKDEV_LOOKUP
- 	select HAVE_LEGACY_CLK
- 	select USE_OF
- 	select PINCTRL
-@@ -643,7 +641,6 @@ config RALINK
- 	select SYS_SUPPORTS_MIPS16
- 	select SYS_SUPPORTS_ZBOOT
- 	select SYS_HAS_EARLY_PRINTK
--	select CLKDEV_LOOKUP
- 	select ARCH_HAS_RESET_CONTROLLER
- 	select RESET_CONTROLLER
- 
-diff --git a/arch/mips/pic32/Kconfig b/arch/mips/pic32/Kconfig
-index 7acbb50c1dcd..bb6ab1f3e80d 100644
---- a/arch/mips/pic32/Kconfig
-+++ b/arch/mips/pic32/Kconfig
-@@ -17,7 +17,6 @@ config PIC32MZDA
- 	select SYS_SUPPORTS_LITTLE_ENDIAN
- 	select GPIOLIB
- 	select COMMON_CLK
--	select CLKDEV_LOOKUP
- 	select LIBFDT
- 	select USE_OF
- 	select PINCTRL
-diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-index 68129537e350..45a0549421cd 100644
---- a/arch/sh/Kconfig
-+++ b/arch/sh/Kconfig
-@@ -14,7 +14,6 @@ config SUPERH
- 	select ARCH_HIBERNATION_POSSIBLE if MMU
- 	select ARCH_MIGHT_HAVE_PC_PARPORT
- 	select ARCH_WANT_IPC_PARSE_VERSION
--	select CLKDEV_LOOKUP
- 	select CPU_NO_EFFICIENT_FFS
- 	select DMA_DECLARE_COHERENT
- 	select GENERIC_ATOMIC64
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index e80918be8e9c..ed1364ac376b 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -6,10 +6,6 @@ config HAVE_CLK
- 	  The <linux/clk.h> calls support software clock gating and
- 	  thus are a key power management tool on many systems.
- 
--config CLKDEV_LOOKUP
--	bool
--	select HAVE_CLK
+-struct clk_lookup * __ref
+-clkdev_alloc(struct clk *clk, const char *con_id, const char *dev_fmt, ...)
+-{
+-	struct clk_lookup *cl;
+-	va_list ap;
 -
- config HAVE_CLK_PREPARE
- 	bool
+-	va_start(ap, dev_fmt);
+-	cl = vclkdev_alloc(__clk_get_hw(clk), con_id, dev_fmt, ap);
+-	va_end(ap);
+-
+-	return cl;
+-}
+-EXPORT_SYMBOL(clkdev_alloc);
+-
+-struct clk_lookup *
+-clkdev_hw_alloc(struct clk_hw *hw, const char *con_id, const char *dev_fmt, ...)
+-{
+-	struct clk_lookup *cl;
+-	va_list ap;
+-
+-	va_start(ap, dev_fmt);
+-	cl = vclkdev_alloc(hw, con_id, dev_fmt, ap);
+-	va_end(ap);
+-
+-	return cl;
+-}
+-EXPORT_SYMBOL(clkdev_hw_alloc);
+-
+ /**
+  * clkdev_create - allocate and add a clkdev lookup structure
+  * @clk: struct clk to associate with all clk_lookups
+diff --git a/include/linux/clkdev.h b/include/linux/clkdev.h
+index fd06b2780a22..8a8423eb8e9a 100644
+--- a/include/linux/clkdev.h
++++ b/include/linux/clkdev.h
+@@ -30,11 +30,6 @@ struct clk_lookup {
+ 		.clk = c,	\
+ 	}
  
-@@ -26,7 +22,7 @@ menuconfig COMMON_CLK
- 	bool "Common Clock Framework"
- 	depends on !HAVE_LEGACY_CLK
- 	select HAVE_CLK_PREPARE
--	select CLKDEV_LOOKUP
-+	select HAVE_CLK
- 	select SRCU
- 	select RATIONAL
- 	help
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index 5f06879d7fe9..5341c37b62dc 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -1,7 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- # common clock types
--obj-$(CONFIG_HAVE_CLK)		+= clk-devres.o clk-bulk.o
--obj-$(CONFIG_CLKDEV_LOOKUP)	+= clkdev.o
-+obj-$(CONFIG_HAVE_CLK)		+= clk-devres.o clk-bulk.o clkdev.o
- obj-$(CONFIG_COMMON_CLK)	+= clk.o
- obj-$(CONFIG_COMMON_CLK)	+= clk-divider.o
- obj-$(CONFIG_COMMON_CLK)	+= clk-fixed-factor.o
-diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-index 39aa21d01e05..938087347927 100644
---- a/drivers/clocksource/Kconfig
-+++ b/drivers/clocksource/Kconfig
-@@ -360,7 +360,7 @@ config ARM_GLOBAL_TIMER
+-struct clk_lookup *clkdev_alloc(struct clk *clk, const char *con_id,
+-	const char *dev_fmt, ...) __printf(3, 4);
+-struct clk_lookup *clkdev_hw_alloc(struct clk_hw *hw, const char *con_id,
+-	const char *dev_fmt, ...) __printf(3, 4);
+-
+ void clkdev_add(struct clk_lookup *cl);
+ void clkdev_drop(struct clk_lookup *cl);
  
- config ARM_TIMER_SP804
- 	bool "Support for Dual Timer SP804 module" if COMPILE_TEST
--	depends on GENERIC_SCHED_CLOCK && CLKDEV_LOOKUP
-+	depends on GENERIC_SCHED_CLOCK && HAVE_CLK
- 	select CLKSRC_MMIO
- 	select TIMER_OF if OF
- 
-@@ -570,12 +570,12 @@ config H8300_TPU
- 
- config CLKSRC_IMX_GPT
- 	bool "Clocksource using i.MX GPT" if COMPILE_TEST
--	depends on (ARM || ARM64) && CLKDEV_LOOKUP
-+	depends on (ARM || ARM64) && HAVE_CLK
- 	select CLKSRC_MMIO
- 
- config CLKSRC_IMX_TPM
- 	bool "Clocksource using i.MX TPM" if COMPILE_TEST
--	depends on (ARM || ARM64) && CLKDEV_LOOKUP
-+	depends on (ARM || ARM64) && HAVE_CLK
- 	select CLKSRC_MMIO
- 	select TIMER_OF
- 	help
-diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-index a4d4c757eea0..4f1468a79126 100644
---- a/drivers/mmc/host/Kconfig
-+++ b/drivers/mmc/host/Kconfig
-@@ -329,7 +329,7 @@ config MMC_SDHCI_S3C
- 
- config MMC_SDHCI_PXAV3
- 	tristate "Marvell MMP2 SD Host Controller support (PXAV3)"
--	depends on CLKDEV_LOOKUP
-+	depends on HAVE_CLK
- 	depends on MMC_SDHCI_PLTFM
- 	depends on ARCH_BERLIN || ARCH_MMP || ARCH_MVEBU || COMPILE_TEST
- 	default CPU_MMP2
-@@ -342,7 +342,7 @@ config MMC_SDHCI_PXAV3
- 
- config MMC_SDHCI_PXAV2
- 	tristate "Marvell PXA9XX SD Host Controller support (PXAV2)"
--	depends on CLKDEV_LOOKUP
-+	depends on HAVE_CLK
- 	depends on MMC_SDHCI_PLTFM
- 	depends on ARCH_MMP || COMPILE_TEST
- 	default CPU_PXA910
-diff --git a/drivers/staging/board/Kconfig b/drivers/staging/board/Kconfig
-index 64c77970eee8..b49216768ef6 100644
---- a/drivers/staging/board/Kconfig
-+++ b/drivers/staging/board/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- config STAGING_BOARD
- 	bool "Staging Board Support"
--	depends on OF_ADDRESS && OF_IRQ && CLKDEV_LOOKUP
-+	depends on OF_ADDRESS && OF_IRQ && HAVE_CLK
- 	help
- 	  Staging board base is to support continuous upstream
- 	  in-tree development and integration of platform devices.
-diff --git a/sound/soc/dwc/Kconfig b/sound/soc/dwc/Kconfig
-index 0cd1a15f40aa..71a58f7ac13a 100644
---- a/sound/soc/dwc/Kconfig
-+++ b/sound/soc/dwc/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config SND_DESIGNWARE_I2S
- 	tristate "Synopsys I2S Device Driver"
--	depends on CLKDEV_LOOKUP
-+	depends on HAVE_CLK
- 	select SND_SOC_GENERIC_DMAENGINE_PCM
- 	help
- 	 Say Y or M if you want to add support for I2S driver for
-diff --git a/sound/soc/rockchip/Kconfig b/sound/soc/rockchip/Kconfig
-index d610b553ea3b..053097b73e28 100644
---- a/sound/soc/rockchip/Kconfig
-+++ b/sound/soc/rockchip/Kconfig
-@@ -9,7 +9,7 @@ config SND_SOC_ROCKCHIP
- 
- config SND_SOC_ROCKCHIP_I2S
- 	tristate "Rockchip I2S Device Driver"
--	depends on CLKDEV_LOOKUP && SND_SOC_ROCKCHIP
-+	depends on HAVE_CLK && SND_SOC_ROCKCHIP
- 	select SND_SOC_GENERIC_DMAENGINE_PCM
- 	help
- 	  Say Y or M if you want to add support for I2S driver for
-@@ -18,7 +18,7 @@ config SND_SOC_ROCKCHIP_I2S
- 
- config SND_SOC_ROCKCHIP_PDM
- 	tristate "Rockchip PDM Controller Driver"
--	depends on CLKDEV_LOOKUP && SND_SOC_ROCKCHIP
-+	depends on HAVE_CLK && SND_SOC_ROCKCHIP
- 	select SND_SOC_GENERIC_DMAENGINE_PCM
- 	select RATIONAL
- 	help
-@@ -28,7 +28,7 @@ config SND_SOC_ROCKCHIP_PDM
- 
- config SND_SOC_ROCKCHIP_SPDIF
- 	tristate "Rockchip SPDIF Device Driver"
--	depends on CLKDEV_LOOKUP && SND_SOC_ROCKCHIP
-+	depends on HAVE_CLK && SND_SOC_ROCKCHIP
- 	select SND_SOC_GENERIC_DMAENGINE_PCM
- 	help
- 	  Say Y or M if you want to add support for SPDIF driver for
-@@ -36,7 +36,7 @@ config SND_SOC_ROCKCHIP_SPDIF
- 
- config SND_SOC_ROCKCHIP_MAX98090
- 	tristate "ASoC support for Rockchip boards using a MAX98090 codec"
--	depends on SND_SOC_ROCKCHIP && I2C && GPIOLIB && CLKDEV_LOOKUP
-+	depends on SND_SOC_ROCKCHIP && I2C && GPIOLIB && HAVE_CLK
- 	select SND_SOC_ROCKCHIP_I2S
- 	select SND_SOC_MAX98090
- 	select SND_SOC_TS3A227E
-@@ -47,7 +47,7 @@ config SND_SOC_ROCKCHIP_MAX98090
- 
- config SND_SOC_ROCKCHIP_RT5645
- 	tristate "ASoC support for Rockchip boards using a RT5645/RT5650 codec"
--	depends on SND_SOC_ROCKCHIP && I2C && GPIOLIB && CLKDEV_LOOKUP
-+	depends on SND_SOC_ROCKCHIP && I2C && GPIOLIB && HAVE_CLK
- 	select SND_SOC_ROCKCHIP_I2S
- 	select SND_SOC_RT5645
- 	help
-@@ -56,7 +56,7 @@ config SND_SOC_ROCKCHIP_RT5645
- 
- config SND_SOC_RK3288_HDMI_ANALOG
- 	tristate "ASoC support multiple codecs for Rockchip RK3288 boards"
--	depends on SND_SOC_ROCKCHIP && I2C && GPIOLIB && CLKDEV_LOOKUP
-+	depends on SND_SOC_ROCKCHIP && I2C && GPIOLIB && HAVE_CLK
- 	select SND_SOC_ROCKCHIP_I2S
- 	select SND_SOC_HDMI_CODEC
- 	select SND_SOC_ES8328_I2C
-@@ -68,7 +68,7 @@ config SND_SOC_RK3288_HDMI_ANALOG
- 
- config SND_SOC_RK3399_GRU_SOUND
- 	tristate "ASoC support multiple codecs for Rockchip RK3399 GRU boards"
--	depends on SND_SOC_ROCKCHIP && I2C && GPIOLIB && CLKDEV_LOOKUP && SPI
-+	depends on SND_SOC_ROCKCHIP && I2C && GPIOLIB && HAVE_CLK && SPI
- 	select SND_SOC_ROCKCHIP_I2S
- 	select SND_SOC_MAX98357A
- 	select SND_SOC_RT5514
 -- 
 2.29.2
 
