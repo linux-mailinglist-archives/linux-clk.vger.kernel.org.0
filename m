@@ -2,76 +2,98 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B6A396CD2
-	for <lists+linux-clk@lfdr.de>; Tue,  1 Jun 2021 07:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6C1396FC8
+	for <lists+linux-clk@lfdr.de>; Tue,  1 Jun 2021 11:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232789AbhFAFcn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 1 Jun 2021 01:32:43 -0400
-Received: from mo-csw1514.securemx.jp ([210.130.202.153]:42184 "EHLO
-        mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232744AbhFAFcn (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 1 Jun 2021 01:32:43 -0400
-Received: by mo-csw.securemx.jp (mx-mo-csw1514) id 1515Unv3021389; Tue, 1 Jun 2021 14:30:49 +0900
-X-Iguazu-Qid: 34tKOQR7Jx8HZepPvF
-X-Iguazu-QSIG: v=2; s=0; t=1622525448; q=34tKOQR7Jx8HZepPvF; m=/fEaRDidXZyoAZy1z8DDch/yNMGf2PRJ9OVynpWkct4=
-Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
-        by relay.securemx.jp (mx-mr1510) id 1515UlVl009135
-        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 1 Jun 2021 14:30:48 +0900
-Received: from enc01.toshiba.co.jp (enc01.toshiba.co.jp [106.186.93.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by imx2-a.toshiba.co.jp (Postfix) with ESMTPS id 39A541000C2;
-        Tue,  1 Jun 2021 14:30:47 +0900 (JST)
-Received: from hop001.toshiba.co.jp ([133.199.164.63])
-        by enc01.toshiba.co.jp  with ESMTP id 1515UkeD008244;
-        Tue, 1 Jun 2021 14:30:46 +0900
-From:   Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, punit1.agrawal@toshiba.co.jp,
-        yuji2.ishikawa@toshiba.co.jp, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Subject: [PATCH v2 4/4] MAINTAINERS: Add entries for Toshiba Visconti PLL and clock controller
-Date:   Tue,  1 Jun 2021 14:30:37 +0900
-X-TSB-HOP: ON
-Message-Id: <20210601053037.233573-5-nobuhiro1.iwamatsu@toshiba.co.jp>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210601053037.233573-1-nobuhiro1.iwamatsu@toshiba.co.jp>
-References: <20210601053037.233573-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+        id S233653AbhFAJEV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 1 Jun 2021 05:04:21 -0400
+Received: from mail-vs1-f43.google.com ([209.85.217.43]:44784 "EHLO
+        mail-vs1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233657AbhFAJEU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 1 Jun 2021 05:04:20 -0400
+Received: by mail-vs1-f43.google.com with SMTP id i29so7331909vsr.11;
+        Tue, 01 Jun 2021 02:02:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EHcm9jYCYkNsG8BECBdpWu+jr0Tw+FYnyVu5lIqPjG8=;
+        b=jqYnaPpVv1GMDd9bVIZdRJxaGUqDfV8IgSmhF6p5ax36SHeLJqM2rQ9MYBjX2sUi6h
+         FD9GIICZPP0+XnFRUiLSZGF9tC0bzgJlKhDxzGCVVdApghgmjPBB0JSXzMTplToqoAkq
+         QjQJ5k7UgWBQ3wuqahn42I68zHoZvBIkV8r/1m42VafZ6YukwbxSt7FmzVHnZavMT2uB
+         G9OIN9X4/5nXpyOzXgM1Oq7Uzm0mU9sLOmcB6yjnmGTbWL44wQFe48ed06tn9bIEaVAC
+         EO8O4EfDxU0gqRcQ9KL9xQlB0MUbFFZtEQ9oUt471jS9oszrBdA8rJC7q7dQ4PDi6xhC
+         P+Xg==
+X-Gm-Message-State: AOAM530KbfWXC2RnbEbFTMHRBOmIAcP4hVMK/xv4/jYeQdTP6hdoN2y6
+        JBvqqQaoOnkI4/inmTsqc8mNffqWQ1OXLoFdq48=
+X-Google-Smtp-Source: ABdhPJyZ21UVoefNYSXOVpP73WjDYTbPgjKQxsKz3oVlb9cWbWFg4HtkPdIzotLfRBwQmggKZ2rNQzwp99WVojmMtR4=
+X-Received: by 2002:a05:6102:392:: with SMTP id m18mr17157052vsq.40.1622538157370;
+ Tue, 01 Jun 2021 02:02:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210531184749.2475868-1-arnd@kernel.org> <20210531184749.2475868-5-arnd@kernel.org>
+In-Reply-To: <20210531184749.2475868-5-arnd@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 1 Jun 2021 11:02:25 +0200
+Message-ID: <CAMuHMdXFcohr2y8oR3VaddmDXjZx97o8jRJvfoppuHMrL=4xEg@mail.gmail.com>
+Subject: Re: [PATCH 4/7] m68k: coldfire: use clkdev_lookup on most coldfire
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-clk <linux-clk@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Florian Fainelli <florian@openwrt.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        John Crispin <john@phrozen.org>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add entries for Toshiba Visconti PLL and clock controller binding and driver.
+Hi Arnd,
 
-Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
----
- MAINTAINERS | 3 +++
- 1 file changed, 3 insertions(+)
+On Mon, May 31, 2021 at 8:49 PM Arnd Bergmann <arnd@kernel.org> wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Coldfire is now the only target that implements the clk_get()/clk_put()
+> helpers itself rather than using the common implementation.
+>
+> Most coldfire variants only have two distinct clocks and use the clk
+> code purely for lookup. Change those over to use clkdev_lookup instead
+> but leave the custom clk interface for those two clocks.
+>
+> Also leave the four SoCs that have gated clocks.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bd7aff0c120f..7260de6d050d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2661,11 +2661,14 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Supported
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/iwamatsu/linux-visconti.git
- F:	Documentation/devicetree/bindings/arm/toshiba.yaml
-+F:	Documentation/devicetree/bindings/clock/toshiba,tmpv7708-pipllct.yaml
-+F:	Documentation/devicetree/bindings/clock/toshiba,tmpv7708-pismu.yaml
- F:	Documentation/devicetree/bindings/net/toshiba,visconti-dwmac.yaml
- F:	Documentation/devicetree/bindings/gpio/toshiba,gpio-visconti.yaml
- F:	Documentation/devicetree/bindings/pinctrl/toshiba,tmpv7700-pinctrl.yaml
- F:	Documentation/devicetree/bindings/watchdog/toshiba,visconti-wdt.yaml
- F:	arch/arm64/boot/dts/toshiba/
-+F:	drivers/clk/visconti/
- F:	drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
- F:	drivers/gpio/gpio-visconti.c
- F:	drivers/pinctrl/visconti/
--- 
-2.31.1
+Thanks for your patch!
 
+> --- a/arch/m68k/coldfire/m527x.c
+> +++ b/arch/m68k/coldfire/m527x.c
+
+> @@ -97,7 +86,7 @@ static void __init m527x_i2c_init(void)
+>         /*  set PAR_SCL to SCL and PAR_SDA to SDA */
+>         par = readw(MCFGPIO_PAR_FECI2C);
+>         par |= 0x0f;
+> -       writew(par, MCFGPIO_PAR_FECI2C);
+> +       wm527x_clk_lookupritew(par, MCFGPIO_PAR_FECI2C);
+
+As reported by the kernel test robot, this fails to compile.
+Should probably just stay "write".
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
