@@ -2,95 +2,149 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC745398433
-	for <lists+linux-clk@lfdr.de>; Wed,  2 Jun 2021 10:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A953984DC
+	for <lists+linux-clk@lfdr.de>; Wed,  2 Jun 2021 11:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232629AbhFBIf2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 2 Jun 2021 04:35:28 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:3345 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232654AbhFBIf1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 2 Jun 2021 04:35:27 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Fw2Hb2Ktfz19S5d;
-        Wed,  2 Jun 2021 16:28:59 +0800 (CST)
-Received: from dggema762-chm.china.huawei.com (10.1.198.204) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2176.2; Wed, 2 Jun 2021 16:33:41 +0800
-Received: from huawei.com (10.175.127.227) by dggema762-chm.china.huawei.com
- (10.1.198.204) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Wed, 2 Jun
- 2021 16:33:41 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <dinguyen@kernel.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>
-CC:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yukuai3@huawei.com>, <yi.zhang@huawei.com>
-Subject: [PATCH V2] clk: socfpga: err out if of_clk_add_provider() failed in __socfpga_pll_init()
-Date:   Wed, 2 Jun 2021 16:42:59 +0800
-Message-ID: <20210602084259.1267768-1-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <162262008540.4130789.916741380026683860@swboyd.mtv.corp.google.com>
-References: <162262008540.4130789.916741380026683860@swboyd.mtv.corp.google.com>
+        id S230258AbhFBJGy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 2 Jun 2021 05:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230145AbhFBJGx (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 2 Jun 2021 05:06:53 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0BBC06174A;
+        Wed,  2 Jun 2021 02:05:09 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id g18so5813edq.8;
+        Wed, 02 Jun 2021 02:05:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=UPjJ+Xb/IPe8pQPzEHkVZDRwhuI4BNPAjDSbmUBiWK0=;
+        b=C48RQJmJAtd4uOk6nkxwpndWiwOB3NmwUxkeVK5Bd0WOJWVcR6FpsM7agf1QworTJm
+         kkhTyUzQYf7AeZb9SOLYfnb7EfC+rs9+pu65ZYtigfxM5gf57wPJBia5JF58ADC/0MfP
+         dzkU0vnbXb2A4NILKkGFg0QoCpggjQ39LzpMDQKTGWQb47IPTAzrSGxod1kOiU+XlRfi
+         e9PFEOYnn/iFY0uMvRGor+kvyZwVKbjRSmZf/PzHCSB9VsNx+fWIDV895dZivDqcyxv9
+         4xXDORvnAUE/EGWxXvc/o8jZui5sLse6oNNw0LnfXEn5qf0VT/TLl65Q0Zh0+GrCgyDL
+         +YPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=UPjJ+Xb/IPe8pQPzEHkVZDRwhuI4BNPAjDSbmUBiWK0=;
+        b=lgK0X5pxwQ6rES5+MfMPz9HlIaIvkPFT60dEHDjY+fkQUmiKHrm4llRFwRWVHF67SC
+         d1zWNoP0+FsGTZZOPGOP8GPuPRQdeEBTGLKvOfjgUCZ9kirPTOgCT5rz/DvZlq/dPckB
+         NrKdhD6mdtGMB4R8mWztWniFaTwKOOWaAvHHzhpnjxdsM7g1A96VvEtZTmcBNzhIk88C
+         kp6GMLxJgvUlexscoXdiNtVrxTekwIBunjwM2qFiL4SyzZuYwprrN8W65RUhozVG0kSl
+         ok/CMPTpvKgZjJgO6bU/hdb4YuhpiqUEWoEXCqHhPFHN/pbl6BJYZJE+a3Nak6gahrO5
+         X4yg==
+X-Gm-Message-State: AOAM531JMI5hLDVI798v7m45WTFKAT0j6fdOaArGtZhAiq8vFrb3TYp4
+        WFq6FYYDsfV9l1pwbMDBwzY=
+X-Google-Smtp-Source: ABdhPJxJE/zSSZ+HLNiWD6Xj7xK3sL+zpdcPs/dmbEViW4cvOWW82ieaLYXQN4ylGZnxlj7x98bl5w==
+X-Received: by 2002:a05:6402:1111:: with SMTP id u17mr37633778edv.87.1622624708541;
+        Wed, 02 Jun 2021 02:05:08 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id y9sm887281edc.46.2021.06.02.02.05.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Jun 2021 02:05:06 -0700 (PDT)
+Date:   Wed, 2 Jun 2021 11:06:42 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, jonathanh@nvidia.com
+Subject: Re: [PATCH -next] clk: tegra: tegra124-emc: fix missing
+ clk_disable_unprepare() on error in emc_set_timing()
+Message-ID: <YLdKIqyqaOwlXw9v@orome.fritz.box>
+References: <20210518044247.605370-1-yangyingliang@huawei.com>
+ <162262068754.4130789.12258910664512101759@swboyd.mtv.corp.google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggema762-chm.china.huawei.com (10.1.198.204)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="xNOpmisMFYQeyVNT"
+Content-Disposition: inline
+In-Reply-To: <162262068754.4130789.12258910664512101759@swboyd.mtv.corp.google.com>
+User-Agent: Mutt/2.0.6 (98f8cb83) (2021-03-06)
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-__socfpga_pll_init() should fail if of_clk_add_provider() failed.
-remove 'rc' in the meantime to avoid gcc
-'-Wunused-but-set-variable' warning.
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
-changes in V2:
- - remove 'rc' and use err' instead of 'rc'
- - err out if of_clk_add_provider() failed
+--xNOpmisMFYQeyVNT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- drivers/clk/socfpga/clk-pll.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+On Wed, Jun 02, 2021 at 12:58:07AM -0700, Stephen Boyd wrote:
+> Why does the subject have -next in it?
+>=20
+> Quoting Yang Yingliang (2021-05-17 21:42:47)
+> > After calling clk_prepare_enable(), clk_disable_unprepare() need
+> > be called when prepare_timing_change() failed.
+> >=20
+> > Fixes: 2db04f16b589 ("clk: tegra: Add EMC clock driver")
+>=20
+> And then the Fixes tag is for a patch that was merged in v4.10?
 
-diff --git a/drivers/clk/socfpga/clk-pll.c b/drivers/clk/socfpga/clk-pll.c
-index dcb573d44034..5a9eec2eca80 100644
---- a/drivers/clk/socfpga/clk-pll.c
-+++ b/drivers/clk/socfpga/clk-pll.c
-@@ -80,7 +80,6 @@ static __init struct clk_hw *__socfpga_pll_init(struct device_node *node,
- 	const char *parent_name[SOCFPGA_MAX_PARENTS];
- 	struct clk_init_data init;
- 	struct device_node *clkmgr_np;
--	int rc;
- 	int err;
- 
- 	of_property_read_u32(node, "reg", &reg);
-@@ -110,12 +109,16 @@ static __init struct clk_hw *__socfpga_pll_init(struct device_node *node,
- 	hw_clk = &pll_clk->hw.hw;
- 
- 	err = clk_hw_register(NULL, hw_clk);
--	if (err) {
--		kfree(pll_clk);
--		return ERR_PTR(err);
--	}
--	rc = of_clk_add_provider(node, of_clk_src_simple_get, hw_clk);
-+	if (err)
-+		goto err_out;
-+	err = of_clk_add_provider(node, of_clk_src_simple_get, hw_clk);
-+	if (err)
-+		goto err_out;
- 	return hw_clk;
-+
-+err_out:
-+	kfree(pll_clk);
-+	return ERR_PTR(err);
- }
- 
- void __init socfpga_pll_init(struct device_node *node)
--- 
-2.31.1
+To be honest, I'm not sure it's worth backporting this. The probability
+of this happening is very small and the worst that will happen is that
+the parent clock may stay enabled even if it doesn't have to. However,
+the parent clock for these is one of pll_p, pll_c or pll_m, all of which
+are usually sourced from other peripherals.
 
+Yes, it's nice to fix this, but I don't think it warrants a backport, so
+I think I'll just drop the Fixes tag.
+
+> > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> > ---
+> >  drivers/clk/tegra/clk-tegra124-emc.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/clk/tegra/clk-tegra124-emc.c b/drivers/clk/tegra/c=
+lk-tegra124-emc.c
+> > index bdf6f4a51617..74c1d894cca8 100644
+> > --- a/drivers/clk/tegra/clk-tegra124-emc.c
+> > +++ b/drivers/clk/tegra/clk-tegra124-emc.c
+> > @@ -249,8 +249,10 @@ static int emc_set_timing(struct tegra_clk_emc *te=
+gra,
+> >         div =3D timing->parent_rate / (timing->rate / 2) - 2;
+> > =20
+> >         err =3D tegra->prepare_timing_change(emc, timing->rate);
+> > -       if (err)
+> > +       if (err) {
+> > +               clk_disable_unprepare(timing->parent);
+> >                 return err;
+> > +       }
+> > =20
+> >         spin_lock_irqsave(tegra->lock, flags);
+> > =20
+>=20
+> Looks correct to me. I assume Thierry will pick it up for the next merge
+> window.
+
+Yes, I can do that. I've got a couple of minor fixes queued already, so
+this will fit right in.
+
+Thierry
+
+--xNOpmisMFYQeyVNT
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmC3SiAACgkQ3SOs138+
+s6GKpxAAuesuCLZB+eIUpak/TE7XduGdf2+ojeeewKxlhqLuAhklZUqfOu2UU/r6
+uSB98Rbq21cjwHrkdPxgGfV1FoGZqm4VpY3cBEABWOTmgZQJhsOOPsQPX72RF8b8
+ogjXli1BznABlN9LYDbf80NJnirFq7Z67e837/ormYq69Wz0Vm9RjGI6gATxB2CP
+FJRrg831A/RBxaadhVJAm8dXbHp7Q3hk+Mg79GBcGcQEfm/ebr1RknVBeXqOPXHL
+/stQRUlQiHxphM9J5VionfJYZegaHBdHN+zWfoCFbdxYPVH9F6t7f9PG3nKTaDvR
+nQKyT6o4f+SB8jfAhvQ9q/coVY6VLzj/FxtZqMcUgwpabnY3NV4tkqxRfdg+IJYD
+wttTBeOgoYCRgCBaiOT6RE/s6eBeGAkEDS7/CZrikDvfD9Ky/pVptdyZ4cWiqkB+
+ysKn5Y24W5NEKoh6e1ZtJkItOLrtuwLaQxdw6/6ku7t4uuYeF4co0t90xehQuxVq
+QImfmpVY5Al19fmlSpdRd9l7G06MaMgRKWjs97n5ZXnTqiasH5iKew0EyYMpUx2U
+AK8vzkNegtwC6xt9apskwxW/PiVGpfdbarVIGvMDXuyA62kD+txDKaeiyze2XJZp
+42WYOEWZDG08UPBndnOmPXs9pg6+iE1Ewv1H1C+l9Uw5ufLPo78=
+=tsva
+-----END PGP SIGNATURE-----
+
+--xNOpmisMFYQeyVNT--
