@@ -2,126 +2,156 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC0639FA32
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Jun 2021 17:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 288FC39FA66
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Jun 2021 17:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbhFHPVa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Jun 2021 11:21:30 -0400
-Received: from mail-lf1-f48.google.com ([209.85.167.48]:33595 "EHLO
-        mail-lf1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbhFHPV3 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Jun 2021 11:21:29 -0400
-Received: by mail-lf1-f48.google.com with SMTP id t7so25567274lff.0;
-        Tue, 08 Jun 2021 08:19:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+ZQdXFWpJEUYm2HPd1TCaErdT12gtevimcDp8YdzDY4=;
-        b=DFEB8wDt/p44yutjfofgv6kWLwjFVGzDUweIAXNcva3bPS4NzmE3CrMUhi5gdBtN3j
-         M8+EORdTcFHID9lHno6kDtRRPjom9BEIFrwRbiyo8RDXD8xRIc4/hWfSssq4M9PY3B7K
-         B8FSh8mmeLeNzt2Su9FXOGsJYtimo9pR9J8d3Z4lqeKkgOe/B4LGIaVwjE8AXjevjrBU
-         08r9Gcb7ELphDeJsGUaS0l0Qw6/Y/tZLXMsvWnkG3sjJqxxradOvmyAdJQbKd4HFWVnS
-         16UHLPE1ww6IrNjcr3EfLfL0QRNeGDgxX3/6sU18Aoo/KYe3G3kyZNLXgDALk8fPYzn8
-         k58g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+ZQdXFWpJEUYm2HPd1TCaErdT12gtevimcDp8YdzDY4=;
-        b=X8UbsM5WaVfUq31w4EEnHYdajBTiGFiVSLyn0oYtAZMJEICputgUg/v0pEmRmXhXn2
-         DKzXyDEZnV/ONWMmTYfJOPHHu/p/tI8hYEG6QNfuE7WmNGOVn0kfTwqacGE/0IR8bO72
-         3SLoV5pswqqCIe04lnYY1F4XViSksf1bfrn6JhMW5x9oBGkJsldR+0ElYfl9Bps1BEHc
-         uravlSy8BhUV5K7Pjp4n6mAWPkloasqiVIwnuIUZ/rvOl25QfMd6MO0hOsZWSsZa71Bt
-         HduQ20nfKwP4cmj+ow3NWq+fjs4UJwSHoFP6++M68E9+395BWsPbh25jlngGwsyK9ywb
-         LHKQ==
-X-Gm-Message-State: AOAM530Y+A7q+stmjaTVS1tBeqwf3VleoGYHwRwQ9RPUOnfo4Hqy75O4
-        R9KhgE+zGD098z7EAmQW3Yg2Qu17HfY=
-X-Google-Smtp-Source: ABdhPJw43kpao7o3/u2SJFT6tQ9eJmDDDd6oDB9e5wQ933ARQOu4BWLkd7hkFiT6ABEfEQVidYDxqA==
-X-Received: by 2002:a05:6512:310d:: with SMTP id n13mr15804450lfb.165.1623165514306;
-        Tue, 08 Jun 2021 08:18:34 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-21-60.dynamic.spd-mgts.ru. [94.29.21.60])
-        by smtp.googlemail.com with ESMTPSA id h24sm2107455lfp.60.2021.06.08.08.18.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Jun 2021 08:18:33 -0700 (PDT)
-Subject: Re: [PATCH v6 08/14] memory: tegra: Enable compile testing for all
- drivers
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        =?UTF-8?Q?Nikola_Milosavljevi=c4=87?= <mnidza@outlook.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Nicolas Chauvet <kwizart@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matt Merhar <mattmerhar@protonmail.com>,
-        Paul Fertser <fercerpav@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-clk@vger.kernel.org
-References: <20210601023119.22044-1-digetx@gmail.com>
- <20210601023119.22044-9-digetx@gmail.com>
- <41899ef4-bb16-6c3a-035c-1e840a993bec@canonical.com>
- <YL4gwxWopKT7LomG@orome.fritz.box>
- <a1f20257-f041-966e-c37e-5c81c4cf94d9@gmail.com>
- <YL4rBYkWHpeit66m@orome.fritz.box>
- <e4896499-e593-aa5d-9b74-c5a3725e334d@canonical.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <7595e6f2-327e-b80c-5e64-ccdec4700ddf@gmail.com>
-Date:   Tue, 8 Jun 2021 18:18:32 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S232056AbhFHP0H (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Jun 2021 11:26:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46282 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231934AbhFHPZ7 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 8 Jun 2021 11:25:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4FE1361108;
+        Tue,  8 Jun 2021 15:24:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623165846;
+        bh=n0cuHdEnBZUYW5KoLbhUKaES1lTb5eTER3NCQ2J6Kiw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hrDy6QCCLVT/diEm7qbNC76WFH2eKrYJmog6zqI8Bdudt71ZlX6qsapzdsfqQ6032
+         XHhqRAR78pJlWwwaYd7a+hjAqXwjvyxJNC2MioEt/DSR0BdPsFOXPsukbJjmwharjQ
+         opc4xuLeIlJt6o3xMOAMJqpNMCkuDcKqYKT+7GtjsEPROCsiJqjcedzJht4IJ633Qs
+         LRBWv6T2ubJ1cnN1e+zD3YG1IWCslyfMEmQOAG4Qe+M6IY4WSFWq4V1oOgRNv9PdUE
+         Bm7+EQY0L89idUqPo9RFR0kXYHLhDEeltfTcTuOqPj2oeatgOGXawmEJcswJ0MW1pU
+         VxeSjQIc+bDXQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
+        Florian Fainelli <florian@openwrt.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        John Crispin <john@phrozen.org>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL v2] clk: clean up legacy clock interfaces
+Date:   Tue,  8 Jun 2021 17:22:07 +0200
+Message-Id: <20210608152214.1231666-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-In-Reply-To: <e4896499-e593-aa5d-9b74-c5a3725e334d@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-07.06.2021 17:42, Krzysztof Kozlowski пишет:
-> On 07/06/2021 16:19, Thierry Reding wrote:
->> On Mon, Jun 07, 2021 at 05:01:02PM +0300, Dmitry Osipenko wrote:
->>> 07.06.2021 16:36, Thierry Reding пишет:
->>>>> /bin/ld: warning: orphan section `__reservedmem_of_table' from `drivers/memory/tegra/tegra210-emc-table.o' being placed in section `__reservedmem_of_table'
->>>>> /bin/ld: drivers/memory/tegra/mc.o: in function `tegra_mc_probe':
->>>>> mc.c:(.text+0x87a): undefined reference to `reset_controller_register'
->>>>> make[1]: *** [/home/buildbot/worker/builddir/build/Makefile:1191: vmlinux] Error 1
->>> ...
->>>
->>>> Not sure what to do about that orphaned __reservedmem_of_table section.
->>>> Maybe all we need to do is to select OF_RESERVED_MEM from
->>>> TEGRA210_EMC_TABLE?
->>>
->>> Select won't work easily, but the dependency for TEGRA210_EMC should.
->>
->> Select works if I also select OF_EARLY_FLATTREE. That's slightly odd
->> because typically that's something that the platform would select, but
->> there's precedent for doing this in drivers/clk/x86/Kconfig, so I think
->> it'd be fine.
->>
->> The attached patch resolves both of the above issues for me.
->>
->> Krzysztof: do you want to squash that into the problematic patch or do
->> you want me to send this as a follow-up patch for you to apply? I guess
->> the latter since you've already sent out the PR for Will and ARM SoC?
-> 
-> Follow up, please, but I am not sure about selecting reset controller.
-> From the tegra/mc.c code I see it can be optional - if "reset_ops" is
-> provided. Therefore I think:
-> 1. Reset controller should provide proper stubs. This will fix building
-> of mc.c when reset controller is not chosen (regardless of point #2 below).
-> 
-> 2. Specific drivers should depend on it. Selecting user-visible symbols
-> is rather discourage because might lead to circular dependencies.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Thierry, should I send the patches or you're willing to do it?
+The following changes since commit 8124c8a6b35386f73523d27eacb71b5364a68c4c:
 
+  Linux 5.13-rc4 (2021-05-30 11:58:25 -1000)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git tags/clkdev-cleanup
+
+for you to fetch changes up to 84587cb0f9ed09b9b7f787276ef05beda4ae0ba8:
+
+  clkdev: remove unused clkdev_alloc() interfaces (2021-06-02 12:31:10 +0200)
+
+---
+clk: clean up legacy clock interfaces
+
+A recent discussion about legacy clk interface users revealed
+that there are only two platforms remaining that provide their own
+clk_get()/clk_put() implementations, MIPS ar7 and and m68k coldfire.
+
+I managed to rework both of these to just use the normal clkdev code,
+and fold CONFIG_CLKDEV_LOOKUP into CONFIG_HAVE_CLK as it is now shared
+among all users.
+
+As I noticed that the ar7 clock implementation and the ralink version
+are rather trivial, I ended up converting those to use the common-clk
+interfaces as well, though this is unrelated to the other changes.
+
+Link: https://lore.kernel.org/linux-clk/20210531184749.2475868-1-arnd@kernel.org/
+Link: https://lore.kernel.org/lkml/CAK8P3a2XsrfUJQQAfnGknh8HiA-D9L_wmEoAgXU89KqagE31NQ@mail.gmail.com/
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+
+Stephen offered to merge these through the clk tree. I was waiting
+for an Ack/Nack from the MIPS/ar7/ralink maintainers but got no further
+reply, so sending this as a pull request now.
+
+Please pull or apply, assuming there are no further concerns.
+
+     Arnd
+
+Changes since v1:
+ - fix two typos on coldfire
+ - remove duplicate #include
+ - rebased to v5.13-rc1 to avoid backmerge
+
+Arnd Bergmann (7):
+  mips: ar7: convert to clkdev_lookup
+  mips: ar7: convert to CONFIG_COMMON_CLK
+  mips: ralink: convert to CONFIG_COMMON_CLK
+  m68k: coldfire: use clkdev_lookup on most coldfire
+  m68k: coldfire: remove private clk_get/clk_put
+  clkdev: remove CONFIG_CLKDEV_LOOKUP
+  clkdev: remove unused clkdev_alloc() interfaces
+
+ arch/arm/Kconfig                     |   2 -
+ arch/m68k/coldfire/clk.c             |  21 -----
+ arch/m68k/coldfire/m5206.c           |  25 +++---
+ arch/m68k/coldfire/m520x.c           |  51 +++++------
+ arch/m68k/coldfire/m523x.c           |  42 ++++-----
+ arch/m68k/coldfire/m5249.c           |  33 +++----
+ arch/m68k/coldfire/m525x.c           |  33 +++----
+ arch/m68k/coldfire/m5272.c           |  35 +++-----
+ arch/m68k/coldfire/m527x.c           |  44 ++++------
+ arch/m68k/coldfire/m528x.c           |  42 ++++-----
+ arch/m68k/coldfire/m5307.c           |  27 +++---
+ arch/m68k/coldfire/m53xx.c           |  78 ++++++++---------
+ arch/m68k/coldfire/m5407.c           |  25 +++---
+ arch/m68k/coldfire/m5441x.c          | 126 +++++++++++++--------------
+ arch/m68k/coldfire/m54xx.c           |  33 +++----
+ arch/m68k/include/asm/mcfclk.h       |   5 --
+ arch/mips/Kconfig                    |   6 +-
+ arch/mips/ar7/clock.c                | 113 ++++++------------------
+ arch/mips/include/asm/mach-ar7/ar7.h |   4 -
+ arch/mips/pic32/Kconfig              |   1 -
+ arch/mips/ralink/Kconfig             |   5 --
+ arch/mips/ralink/clk.c               |  64 +-------------
+ arch/sh/Kconfig                      |   1 -
+ drivers/clk/Kconfig                  |   6 +-
+ drivers/clk/Makefile                 |   3 +-
+ drivers/clk/clkdev.c                 |  28 ------
+ drivers/clocksource/Kconfig          |   6 +-
+ drivers/mmc/host/Kconfig             |   4 +-
+ drivers/staging/board/Kconfig        |   2 +-
+ include/linux/clkdev.h               |   5 --
+ sound/soc/dwc/Kconfig                |   2 +-
+ sound/soc/rockchip/Kconfig           |  14 +--
+ 32 files changed, 318 insertions(+), 568 deletions(-)
+
+-- 
+2.29.2
+
+Cc: Dmitry Osipenko <digetx@gmail.com>
+Cc: Florian Fainelli <florian@openwrt.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Greg Ungerer <gerg@linux-m68k.org>
+Cc: John Crispin <john@phrozen.org>
+Cc: Jonas Gorski <jonas.gorski@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc: Michael Turquette <mturquette@baylibre.com>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-m68k@lists.linux-m68k.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
