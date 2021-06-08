@@ -2,125 +2,84 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBD239FA81
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Jun 2021 17:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE0139FA59
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Jun 2021 17:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbhFHP0x (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Jun 2021 11:26:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46846 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232377AbhFHP0V (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 8 Jun 2021 11:26:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0515661375;
-        Tue,  8 Jun 2021 15:24:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623165868;
-        bh=4Os6CR4tEQ00n/+2ln1euX1FtJH9pwevnbQbOo/vINM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QBybnYoZUFQmFgdTBQZ1+Xj2jOEoeDuMQSl5ErbezuCF1LzuDqZO0PbEF/4M1rycD
-         BnXfKG3sGlXrEeKExw7ybE817h6Hch48h5wFmiMqXoJELfJggBxT4NPmVPLk8InU7F
-         giN8bYjg0tevnICTD3eS1EfquCEUNjOptagPmROl7e+q7SFWLZVvlRIFZH8M2hn2rD
-         6VqlatJ8u1sQkN0vJC6YOY8RwtSBSU8PZVAITEEhO7RTc0iwKErXCPiGx1XwpyTQod
-         nqG6aIx5azCAAZJcwXyPO2280eDax4ssABxH/rv9gxlMdT24bqokdBwq/61ftFNII+
-         JbuX3PK+NlwSQ==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Dmitry Osipenko <digetx@gmail.com>,
-        Florian Fainelli <florian@openwrt.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        John Crispin <john@phrozen.org>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/7] clkdev: remove unused clkdev_alloc() interfaces
-Date:   Tue,  8 Jun 2021 17:22:14 +0200
-Message-Id: <20210608152214.1231666-8-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210608152214.1231666-1-arnd@kernel.org>
-References: <20210608152214.1231666-1-arnd@kernel.org>
+        id S231691AbhFHPZz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Jun 2021 11:25:55 -0400
+Received: from mail-vs1-f54.google.com ([209.85.217.54]:40943 "EHLO
+        mail-vs1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231830AbhFHPZi (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Jun 2021 11:25:38 -0400
+Received: by mail-vs1-f54.google.com with SMTP id b1so9339230vsh.7;
+        Tue, 08 Jun 2021 08:23:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eLtAXNvdTwsCQkdXR6zInVT34PWj9yNdT1iQLsuVGcU=;
+        b=UiCRGtg3unQzaRelZEzj3xSjbjycJyTyBZ4hIlX6TZSl3jc4ZnHrIVw3nbVs0R2adQ
+         Xzde7XqYwu89ob5rCcNV4VRFMf9JCFwTntZyBj/oGJn2v3dQDw/jFWCCO4MOk3zpQxLq
+         aywuOGo5dJBTld7TY3ndYD4M67/aTPkurcVEDaZbP0jc2rN72SAkf1Qg2525ecWzL51r
+         6yUorskANEzYS8ewicTIi3CUFTylBrdMZbe6nTc7gPXcFAHhcW5cjsxYaiNpp81xslKh
+         fFY1FEoUtl6fTpuvzQG8RmFlQHW9tCnHfcvIfGfcX7nG8L1Qk7AG2rgFGr8MCjxuTee6
+         /Hgw==
+X-Gm-Message-State: AOAM531FCOBF40wypyacxeqizDFH1tuakBiqcYAq/xSpCCMb0QjWWt38
+        bBqrum06eSLyYm1XcQ5wrNARSHM6GWZ1BZ7kEZ8=
+X-Google-Smtp-Source: ABdhPJy2G4x1+3g6k8M7MspEWuFkyDUzrUpWcbY6zb6G+KomiRlPbUGVcJ3aH/+CUrzg5TDctjse8O/AD7JNA2Dmw7o=
+X-Received: by 2002:a05:6102:c4c:: with SMTP id y12mr759222vss.18.1623165824596;
+ Tue, 08 Jun 2021 08:23:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20210603221758.10305-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20210603221758.10305-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20210603221758.10305-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 8 Jun 2021 17:23:33 +0200
+Message-ID: <CAMuHMdUHEmGarOrvTjR4wzUPK+tzh0bx9Vy2o=3LthAh2BvXxQ@mail.gmail.com>
+Subject: Re: [PATCH v2 01/12] dt-bindings: arm: renesas: Document Renesas
+ RZ/G2UL SoC
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Fri, Jun 4, 2021 at 12:18 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Add device tree bindings documentation for Renesas RZ/G2UL SoC.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Reviewed-by: Chris Paterson <Chris.Paterson2@renesas.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-The last user of clkdev_alloc() and clkdev_hw_alloc() was
-removed last year, so everything now calls clkdev_create()
-and clkdev_hw_create() instead.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Removing the unused functions lets the compiler optimize
-the remaining ones slightly better.
+Gr{oetje,eeting}s,
 
-Fixes: e5006671acc7 ("clk: versatile: Drop the legacy IM-PD1 clock code")
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/clk/clkdev.c   | 28 ----------------------------
- include/linux/clkdev.h |  5 -----
- 2 files changed, 33 deletions(-)
+                        Geert
 
-diff --git a/drivers/clk/clkdev.c b/drivers/clk/clkdev.c
-index 0f2e3fcf0f19..67f601a41023 100644
---- a/drivers/clk/clkdev.c
-+++ b/drivers/clk/clkdev.c
-@@ -190,34 +190,6 @@ vclkdev_create(struct clk_hw *hw, const char *con_id, const char *dev_fmt,
- 	return cl;
- }
- 
--struct clk_lookup * __ref
--clkdev_alloc(struct clk *clk, const char *con_id, const char *dev_fmt, ...)
--{
--	struct clk_lookup *cl;
--	va_list ap;
--
--	va_start(ap, dev_fmt);
--	cl = vclkdev_alloc(__clk_get_hw(clk), con_id, dev_fmt, ap);
--	va_end(ap);
--
--	return cl;
--}
--EXPORT_SYMBOL(clkdev_alloc);
--
--struct clk_lookup *
--clkdev_hw_alloc(struct clk_hw *hw, const char *con_id, const char *dev_fmt, ...)
--{
--	struct clk_lookup *cl;
--	va_list ap;
--
--	va_start(ap, dev_fmt);
--	cl = vclkdev_alloc(hw, con_id, dev_fmt, ap);
--	va_end(ap);
--
--	return cl;
--}
--EXPORT_SYMBOL(clkdev_hw_alloc);
--
- /**
-  * clkdev_create - allocate and add a clkdev lookup structure
-  * @clk: struct clk to associate with all clk_lookups
-diff --git a/include/linux/clkdev.h b/include/linux/clkdev.h
-index fd06b2780a22..8a8423eb8e9a 100644
---- a/include/linux/clkdev.h
-+++ b/include/linux/clkdev.h
-@@ -30,11 +30,6 @@ struct clk_lookup {
- 		.clk = c,	\
- 	}
- 
--struct clk_lookup *clkdev_alloc(struct clk *clk, const char *con_id,
--	const char *dev_fmt, ...) __printf(3, 4);
--struct clk_lookup *clkdev_hw_alloc(struct clk_hw *hw, const char *con_id,
--	const char *dev_fmt, ...) __printf(3, 4);
--
- void clkdev_add(struct clk_lookup *cl);
- void clkdev_drop(struct clk_lookup *cl);
- 
--- 
-2.29.2
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
