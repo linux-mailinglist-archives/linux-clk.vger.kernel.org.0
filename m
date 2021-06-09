@@ -2,91 +2,71 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB773A1AAE
-	for <lists+linux-clk@lfdr.de>; Wed,  9 Jun 2021 18:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1EE3A1B52
+	for <lists+linux-clk@lfdr.de>; Wed,  9 Jun 2021 18:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236669AbhFIQSq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 9 Jun 2021 12:18:46 -0400
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:37631 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbhFIQSq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 9 Jun 2021 12:18:46 -0400
-Received: by mail-oi1-f172.google.com with SMTP id h9so25623557oih.4;
-        Wed, 09 Jun 2021 09:16:51 -0700 (PDT)
+        id S230340AbhFIQ4X (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 9 Jun 2021 12:56:23 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:35338 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230215AbhFIQ4X (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 9 Jun 2021 12:56:23 -0400
+Received: by mail-wr1-f68.google.com with SMTP id m18so26272951wrv.2
+        for <linux-clk@vger.kernel.org>; Wed, 09 Jun 2021 09:54:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=2swGjjTT+ne1ecjdK+1vwaNqzFVQynzg6kTiJN213+s=;
+        b=AyMdgJgfoCxR2Nm/HI+4gQ5Oip8EEvOUt3GowSCJuT+YP8CeFahQ+t8odswAYONKsl
+         JdBQw88ks37N2gw7h4CoFA9FtXGhOxlLVc2pz9WOY+4RVBOU78Zxl2fy4HU0KHgsUCYY
+         crCq7qobyWcSUycufKyMrpETo8tesJneUWTzIsywoOKYKvheAW691h8sQMzyVp4RgQZC
+         hW1hlmSYw1IIZf5mI2hsXrxkmoEFBJfLFbi8sieCTNIJjJ4Bw22v8W/idi+S7HZqMQlc
+         tgnVAgGoaCP+wqPw9tlLDWw+lXmUn/bdWNmDHNgsc+ZKNzgmlBHPFY+lL4iE69adK3qG
+         Ptiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=mWk3u4y9PCnukQNdZz3+rIhPiKsxMQw70OyupJtz0A0=;
-        b=QCHQI3oCvg2Aq3YBOd5udu9TtsPFNhDoZQmfr/4U7wbfBCpSZClGJkHXN5CRXeEa1v
-         jVkwhGZj/vhT7sUW0X6gCCgeUVlbzr1V58oOzu4A7j9eDBlapRITNnyQl3L/cR/WdElF
-         k7D1mZAc6NN9YX4hDuTS1MAUpGq9hTxfvb9wftO7FraPYSUEEPemZf1596jWgrFOyQfZ
-         UJy68yYskyBwcd2bHOZXqm3guRov64Lau6C3tiJusILhGB4qe29YLx95l0Ekq4Lg6xw4
-         YurmJcR/ojbwJ2a/oKtbiQIb6YDM9+0MQWvfpi1wp10fbNGxvTAAtus1S0Xje63D2eLh
-         r1kg==
-X-Gm-Message-State: AOAM531m23DM/R8fsh3GpwRQD+/EZvHrugaUIufIH+or28hmyEOkYfc2
-        yA1Za0+XBHWE0jmFvHKGNwVXXNiyew==
-X-Google-Smtp-Source: ABdhPJzLntfzoFvge8MQtjBfDnp9NEYq1S2avbXpztqhS6+KyPh6p4egqutlpMkKSGIOmteq7KSW8g==
-X-Received: by 2002:aca:33d4:: with SMTP id z203mr7013522oiz.51.1623255411326;
-        Wed, 09 Jun 2021 09:16:51 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 21sm90962otd.21.2021.06.09.09.16.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jun 2021 09:16:50 -0700 (PDT)
-Received: (nullmailer pid 3763300 invoked by uid 1000);
-        Wed, 09 Jun 2021 16:16:43 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     martin.botka@somainline.org, Taniya Das <tdas@codeaurora.org>,
-        linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        marijn.suijten@somainline.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        jamipkettunen@somainline.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        angelogioacchino.delregno@somainline.org
-In-Reply-To: <20210609145523.467090-1-konrad.dybcio@somainline.org>
-References: <20210609145523.467090-1-konrad.dybcio@somainline.org>
-Subject: Re: [PATCH v2 1/9] dt-bindings: clk: qcom: Add bindings for MSM8994 GCC driver
-Date:   Wed, 09 Jun 2021 11:16:43 -0500
-Message-Id: <1623255403.638061.3763299.nullmailer@robh.at.kernel.org>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=2swGjjTT+ne1ecjdK+1vwaNqzFVQynzg6kTiJN213+s=;
+        b=ILwZSk2LBjhvTQ1491GvE/090Wgw/nv6SiADVy8Myqc2N8kET8fwXSGueIAb8u8MCn
+         qfD2Rspoj2tgFj62gyB/mmwpwY9KraQ8MwOEMOsBN71m0jxqMeu1rTn6GI7lhRu5CZBa
+         FgJCFcJIU6/nuzd0SgBSPfS23NhDiwWgB9iEKpfYL64OZJmiPW+T93sEFiWRq8LOgKlp
+         cWiDj6w0aYQ2++ERvWB9KbGrCxGVgo+Z/l+LYZhSXWX4nWTwYk9CZK8d5ZieyHvN8B6z
+         wbnRyeDyjUphvxCpWhomsBD4AqdEwk8aCfih3pAszzEGlnRxtQsyysXXv4mr0EY2LuAe
+         g6KA==
+X-Gm-Message-State: AOAM532qiLTMjJtydlIMe+NEe5sntkSs9qQyPkgfs8uBLrOwo1O4wRRi
+        GYiWm6nLcIO5E1c2Yo+yey5dMaL1yt+cE46cNMM=
+X-Google-Smtp-Source: ABdhPJwM+wWNSvf/ZwtAF7K8K5IAQlnMJbRRQ5lXMMZyO3KU5AjOz6VweWLTAcp8uJvWhywyvOeKBlMGSO57NGhAOCo=
+X-Received: by 2002:a5d:67cf:: with SMTP id n15mr822079wrw.228.1623257607685;
+ Wed, 09 Jun 2021 09:53:27 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:6000:1012:0:0:0:0 with HTTP; Wed, 9 Jun 2021 09:53:26
+ -0700 (PDT)
+Reply-To: lisa.wilams@yahoo.com
+From:   Lisa Williams <anu028028@gmail.com>
+Date:   Wed, 9 Jun 2021 16:53:26 +0000
+Message-ID: <CALHQrd8G7p9bFexCGKsfTcRyda3ZU1dZkSVcguu4wGVDKG5KDw@mail.gmail.com>
+Subject: Hi Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, 09 Jun 2021 16:55:13 +0200, Konrad Dybcio wrote:
-> Add documentation for the MSM8994 GCC driver.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
->  .../bindings/clock/qcom,gcc-msm8994.yaml      | 72 +++++++++++++++++++
->  1 file changed, 72 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-msm8994.yaml
-> 
+-- 
+Hi Dear,
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+How are you doing hope you are fine and OK?
 
-yamllint warnings/errors:
+I was just going through the Internet search when I found your email
+address, I want to make a new and special friend, so I decided to
+contact you to see how we can make it work out if we can. Please I
+wish you will have the desire with me so that we can get to know each
+other better and see what happens in future.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc-msm8994.example.dt.yaml: clock-controller@300000: 'clock-names', 'clocks' do not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
-\ndoc reference errors (make refcheckdocs):
+My name is Lisa Williams, I am an American, but presently am in
+France, I will be glad to see your reply for us to know each other
+better to exchange pictures and details about us.
 
-See https://patchwork.ozlabs.org/patch/1489930
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Yours
+Lisa
