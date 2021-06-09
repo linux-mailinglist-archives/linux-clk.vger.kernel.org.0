@@ -2,40 +2,40 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 865D33A1597
-	for <lists+linux-clk@lfdr.de>; Wed,  9 Jun 2021 15:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7ED3A1652
+	for <lists+linux-clk@lfdr.de>; Wed,  9 Jun 2021 15:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234114AbhFINaX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 9 Jun 2021 09:30:23 -0400
-Received: from flippie-beckerswealth-sa.xyz ([62.173.147.2]:57980 "EHLO
-        host.flippie-beckerswealth-sa.xyz" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233302AbhFINaX (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 9 Jun 2021 09:30:23 -0400
-Received: from flippie-beckerswealth-sa.xyz (ec2-3-131-99-163.us-east-2.compute.amazonaws.com [3.131.99.163])
-        by host.flippie-beckerswealth-sa.xyz (Postfix) with ESMTPA id 691DB30CF3A5
-        for <linux-clk@vger.kernel.org>; Wed,  9 Jun 2021 15:10:27 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippie-beckerswealth-sa.xyz 691DB30CF3A5
+        id S233476AbhFIOBV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 9 Jun 2021 10:01:21 -0400
+Received: from flippie-beckerswealthsa.xyz ([62.173.138.170]:54448 "EHLO
+        host.flippie-beckerswealthsa.xyz" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235810AbhFIOBU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 9 Jun 2021 10:01:20 -0400
+Received: from flippie-beckerswealthsa.xyz (ec2-18-118-29-154.us-east-2.compute.amazonaws.com [18.118.29.154])
+        by host.flippie-beckerswealthsa.xyz (Postfix) with ESMTPA id 0D3D430C3EAA
+        for <linux-clk@vger.kernel.org>; Wed,  9 Jun 2021 15:09:32 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippie-beckerswealthsa.xyz 0D3D430C3EAA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flippie-beckerswealth-sa.xyz; s=default; t=1623240627;
+        d=flippie-beckerswealthsa.xyz; s=default; t=1623240573;
         bh=h0ivQLrZuUWuyEKz/TWb+FP9AASpHhVqOsJtRcwKQV4=;
         h=Reply-To:From:To:Subject:Date:From;
-        b=Lc8Hcrm+apq2bIfTp78ihVsP9/YE41IyTM8YdLYi9TybTnAY3GdrYTabRSu7HVUNj
-         7fqB1DBFemU1JBNLEAMnX8RReVKrbCAHQts3oICDV2smEeBnadjp5EGUOTNfbLZqY2
-         ZXZ+GQPGBeQpnfGxuNP1aDcxv0jV+hkTrnA25c10=
-DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippie-beckerswealth-sa.xyz 691DB30CF3A5
+        b=gn1bNNSIivV2lEBzCKNhiwiW1oRnTz9NXgYt/pevWj3HMQCwo+RJN/su/Wf1FoqBf
+         PBLwjoQtlQ84PXMwV3Noog+TQRS680hDdbF9TLJZAuWyGIpGrJu3cQLZMealnvQygG
+         k92TqysvohS5Qjl1xwQWbiyIdbJ+gqYDc4cb0onQ=
+DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippie-beckerswealthsa.xyz 0D3D430C3EAA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flippie-beckerswealth-sa.xyz; s=default; t=1623240627;
+        d=flippie-beckerswealthsa.xyz; s=default; t=1623240573;
         bh=h0ivQLrZuUWuyEKz/TWb+FP9AASpHhVqOsJtRcwKQV4=;
         h=Reply-To:From:To:Subject:Date:From;
-        b=Lc8Hcrm+apq2bIfTp78ihVsP9/YE41IyTM8YdLYi9TybTnAY3GdrYTabRSu7HVUNj
-         7fqB1DBFemU1JBNLEAMnX8RReVKrbCAHQts3oICDV2smEeBnadjp5EGUOTNfbLZqY2
-         ZXZ+GQPGBeQpnfGxuNP1aDcxv0jV+hkTrnA25c10=
+        b=gn1bNNSIivV2lEBzCKNhiwiW1oRnTz9NXgYt/pevWj3HMQCwo+RJN/su/Wf1FoqBf
+         PBLwjoQtlQ84PXMwV3Noog+TQRS680hDdbF9TLJZAuWyGIpGrJu3cQLZMealnvQygG
+         k92TqysvohS5Qjl1xwQWbiyIdbJ+gqYDc4cb0onQ=
 Reply-To: jmasuku40@flippiebeckerwealthservices.com
-From:   Jotham Masuku <jmasuku40@flippie-beckerswealth-sa.xyz>
+From:   Jotham Masuku <jmasuku40@flippie-beckerswealthsa.xyz>
 To:     linux-clk@vger.kernel.org
-Subject: Proposal
-Date:   09 Jun 2021 12:10:27 +0000
-Message-ID: <20210609121027.02060D2FC4D09AC8@flippie-beckerswealth-sa.xyz>
+Subject: Projects
+Date:   09 Jun 2021 12:09:31 +0000
+Message-ID: <20210609120931.F53FC521CE13CDC9@flippie-beckerswealthsa.xyz>
 Mime-Version: 1.0
 Content-Type: text/plain;
         charset="utf-8"
