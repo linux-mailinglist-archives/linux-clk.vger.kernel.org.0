@@ -2,470 +2,166 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9C83A1605
-	for <lists+linux-clk@lfdr.de>; Wed,  9 Jun 2021 15:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 477CF3A1690
+	for <lists+linux-clk@lfdr.de>; Wed,  9 Jun 2021 16:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236728AbhFINuc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 9 Jun 2021 09:50:32 -0400
-Received: from mail-il1-f176.google.com ([209.85.166.176]:35393 "EHLO
-        mail-il1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236681AbhFINuY (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 9 Jun 2021 09:50:24 -0400
-Received: by mail-il1-f176.google.com with SMTP id b9so26124035ilr.2;
-        Wed, 09 Jun 2021 06:48:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=eruFhy9bpU7rssWE5GVZ5Ej3a+Y7eBNzd5+Xogl2YdI=;
-        b=Ze1ZfbVqIknxKLvBxkijbKNyznvnWsXu81HVKhhmwUwCFmLteGX2kcrdqGaa7PucLs
-         lBxv8ib75gJNudXbb2pV8kxJ86lDBjH+YiVa3Aj4jl/c9izD1Zixptof2W5y1trE3EfN
-         e2C2r/2iUzkaeALUvtY+JlGf2rbsVnIPrbLeJQlU2ifQxxFMyuDp9bDnfnutzwGmZPcs
-         locc+jaUsZMDrxq1IZV0i5M22bYVLTn+rGT7xqfkvevCA3/pNTQ+y+6iWOSw3qFxehU0
-         5B3XnY3SWfK4ogWH2UViv+eQKo4QXnj3SEy9F/suaMv6AtdZoRBuCowkw4M6QRZ0RS74
-         I9IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eruFhy9bpU7rssWE5GVZ5Ej3a+Y7eBNzd5+Xogl2YdI=;
-        b=dTxXGrwRZIx+yj7x/jn2a21UeH0oZ9v8aIE7zkr0ePfofgi4/Wdad26pFxX7JVFBkW
-         3wi0r9KzDZcB7siy+yKpu+aWCAzdA9gfvhKZK6V317aZbGZEo18LEPYBPEo+x8Q66eYP
-         VVywfSITQrJlUc4MDvalZj3L85g/Yvj29tRV3J9ogDqVliWdGOs88LmrTg4xTpZLQqQS
-         UJotrOTEOuT0BwaqwniPCmCWhr+yj6W65GvDK31SEwVeoWlveW7XfOCZFeHV8GVZyeTp
-         CIcckwH2YY2ZSnOjXHDll/ORtgofwHQ19zuCO1bhpUh4Lb+ORr7aiZcxMVlKm5gaG44B
-         yvVg==
-X-Gm-Message-State: AOAM531shum0vbMGPRokWxSOFOXa3iuMOBUPS9gBJJEHZ9DtvurocD0t
-        swBgFbn5AG5DLw7yvZFOwLCoQsJCWRe9lnHSsak=
-X-Google-Smtp-Source: ABdhPJxRq04GKZNSYkCynsE03bjhP4bEQNBLYO73PIXBpp+RIIZziPxmxWDfGux26cW8rOp30naXD8L/8/mEytvB298=
-X-Received: by 2002:a6b:f914:: with SMTP id j20mr11732134iog.127.1623246438666;
- Wed, 09 Jun 2021 06:47:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <1621508727-24486-1-git-send-email-dillon.minfei@gmail.com>
-In-Reply-To: <1621508727-24486-1-git-send-email-dillon.minfei@gmail.com>
-From:   Dillon Min <dillon.minfei@gmail.com>
-Date:   Wed, 9 Jun 2021 21:46:42 +0800
-Message-ID: <CAL9mu0LB-YNsGJPOWRg-c0eUXHsRX-oCzUpO9S-ix40aJAJEfA@mail.gmail.com>
-Subject: Re: [PATCH 0/7] Add support for DMA2D of STMicroelectronics STM32 SoC series
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        mchehab+huawei@kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        ezequiel@collabora.com, gnurou@gmail.com,
-        Pi-Hsun Shih <pihsun@chromium.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Patrice CHOTARD <patrice.chotard@foss.st.com>,
-        hugues.fruchet@foss.st.com,
-        linux-media <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S237431AbhFIOGo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 9 Jun 2021 10:06:44 -0400
+Received: from lucky1.263xmail.com ([211.157.147.131]:57862 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237411AbhFIOGn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 9 Jun 2021 10:06:43 -0400
+Received: from localhost (unknown [192.168.167.235])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 025F7BA65D;
+        Wed,  9 Jun 2021 22:04:16 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P31748T140095042557696S1623247454096580_;
+        Wed, 09 Jun 2021 22:04:15 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <82e25209f8b36796740026f8a43b6468>
+X-RL-SENDER: jon.lin@rock-chips.com
+X-SENDER: jon.lin@rock-chips.com
+X-LOGIN-NAME: jon.lin@rock-chips.com
+X-FST-TO: linux-spi@vger.kernel.org
+X-RCPT-COUNT: 19
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   Jon Lin <jon.lin@rock-chips.com>
+To:     linux-spi@vger.kernel.org
+Cc:     jon.lin@rock-chips.com, broonie@kernel.org, robh+dt@kernel.org,
+        heiko@sntech.de, jbx6244@gmail.com, hjc@rock-chips.com,
+        yifeng.zhao@rock-chips.com, sugar.zhang@rock-chips.com,
+        linux-rockchip@lists.infradead.org, linux-mtd@lists.infradead.org,
+        p.yadav@ti.com, macroalpha82@gmail.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH v7 0/9] Add Rockchip SFC(serial flash controller) support
+Date:   Wed,  9 Jun 2021 22:04:03 +0800
+Message-Id: <20210609140412.16058-1-jon.lin@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi,
 
-Just a gentle ping.
 
-Thanks
+Changes in v7:
+- Fix up the sclk_sfc parent error in rk3036
+- Unify to "rockchip,sfc" compatible id because all the feature update
+  will have a new IP version, so the driver is used for the SFC IP in
+  all SoCs
+- Change to use node "sfc" to name the SFC pinctrl group
+- Add subnode reg property check
+- Add rockchip_sfc_adjust_op_size to workaround in CMD + DUMMY case
+- Limit max_iosize to 32KB
 
-Best Regards
-Dillon
+Changes in v6:
+- Add support in device trees for rv1126(Declared in series 5 but not
+  submitted)
+- Change to use "clk_sfc" "hclk_sfc" as clock lable, since it does not
+  affect interpretation and has been widely used
+- Support sfc tx_dual, tx_quad(Declared in series 5 but not submitted)
+- Simplify the code, such as remove "rockchip_sfc_register_all"(Declared
+  in series 5 but not submitted)
+- Support SFC ver4 ver5(Declared in series 5 but not submitted)
+- Add author Chris Morgan and Jon Lin to spi-rockchip-sfc.c
+- Change to use devm_spi_alloc_master and spi_unregister_master
 
-On Thu, May 20, 2021 at 7:05 PM <dillon.minfei@gmail.com> wrote:
->
-> From: Dillon Min <dillon.minfei@gmail.com>
->
-> This patchset introduces a basic support for DMA2D Interface
-> of STMicroelectronics STM32 SoC series.
->
-> This first basic support implements R2M, M2M, M2M_PFC
-> M2M_BLEND support will be added later on.
->
-> This has been tested on STM32469-DISCO board.
->
-> The commit based on kernel(master): c3d0e3fd41b7f0f5d5d5b6022ab7e813f04ea727
->
-> Note for v4l2-compliance tool on nu-mmu platform:
-> I add two change based on v4l-utils since commit:
-> f0c7e3d71eaf4182bae7eb3ee0e43b4eeb047ea9
->
-> - change fork() to vfork() in v4l2-test-controls.cpp
->   since no-mmu platform don't include fork().
->
-> - bypass VIDIOC_QUERYCAP nullptr check
->   I'm not sure if this is the bug from my cross compile tool
->   which created by buildroot. user area's nullptr can't be
->   detected by kernel side, i was try to add access_ok()
->   in v4l2-ioctl.c, but no help
->
->   If this case must be fixed, i will continue to debug it.
->   the error log:
->   ...
->   fail: v4l2-compliance.cpp(623): doioctl(node, VIDIOC_QUERYCAP, nullptr) !=
->   EFAULT
->   ..
->
-> My changes on v4l2-compliance:
->
-> diff --git a/utils/v4l2-compliance/v4l2-compliance.cpp
-> b/utils/v4l2-compliance/v4l2-compliance.cpp
-> index 90a5036..a25fe4f 100644
-> --- a/utils/v4l2-compliance/v4l2-compliance.cpp
-> +++ b/utils/v4l2-compliance/v4l2-compliance.cpp
-> @@ -620,7 +620,7 @@ static int testCap(struct node *node)
->
->         memset(&vcap, 0xff, sizeof(vcap));
->         // Must always be there
-> -       fail_on_test(doioctl(node, VIDIOC_QUERYCAP, nullptr) != EFAULT);
-> +       //fail_on_test(doioctl(node, VIDIOC_QUERYCAP, nullptr) != EFAULT);
->         fail_on_test(doioctl(node, VIDIOC_QUERYCAP, &vcap));
->         fail_on_test(check_ustring(vcap.driver, sizeof(vcap.driver)));
->         fail_on_test(check_ustring(vcap.card, sizeof(vcap.card)));
->
-> with v4l2-compliance test log (with above modification):
-> since the stm32f469-disco ram limitation, there are 25 failed on
-> dma_alloc_coherent()
->
-> Really appreciate if someone can help to test this patch on the STM32429I-EVAL
-> evaluation board (https://www.st.com/en/evaluation-tools/stm32429i-eval.html)
-> 8M x 32-bit SDRAM, 1M x 16-bit SRAM and 8M x 16-bit NOR Flash
->
-> / # free
->             total       used       free     shared    buffers     cached
-> Mem:        15604       6104       9500     0         0           2488
-> -/+ buffers/cache:      3616       11988
->
->
->
->
-> / # v4l2-compliance -s -f -d /dev/video0 &
-> [1] 45 v4l2-compliance -s -f -d /dev/video0
-> / # v4l2-compliance 1.21.0-4782, 32 bits, 32-bit time_t
-> v4l2-compliance SHA: f0c7e3d71eaf 2021-05-06 10:57:09
->
-> Compliance test for stm-dma2d device /dev/video0:
->
-> Driver Info:
->         Driver name      : stm-dma2d
->         Card type        : stm-dma2d
->         Bus info         : platform:stm-dma2d
->         Driver version   : 5.13.0
->         Capabilities     : 0x84208000
->                 Video Memory-to-Memory
->                 Streaming
->                 Extended Pix Format
->                 Device Capabilities
->         Device Caps      : 0x04208000
->                 Video Memory-to-Memory
->                 Streaming
->                 Extended Pix Format
->
-> Required ioctls:
->         test VIDIOC_QUERYCAP: OK
->         test invalid ioctls: OK
->
-> Allow for multiple opens:
->         test second /dev/video0 open: OK
->         test VIDIOC_QUERYCAP: OK
->         test VIDIOC_G/S_PRIORITY: OK
->         test for unlimited opens: OK
->
-> Debug ioctls:
->         test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
->         test VIDIOC_LOG_STATUS: OK (Not Supported)
->
-> Input ioctls:
->         test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
->         test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
->         test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
->         test VIDIOC_ENUMAUDIO: OK (Not Supported)
->         test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
->         test VIDIOC_G/S_AUDIO: OK (Not Supported)
->         Inputs: 0 Audio Inputs: 0 Tuners: 0
->
-> Output ioctls:
->         test VIDIOC_G/S_MODULATOR: OK (Not Supported)
->         test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
->         test VIDIOC_ENUMAUDOUT: OK (Not Supported)
->         test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
->         test VIDIOC_G/S_AUDOUT: OK (Not Supported)
->         Outputs: 0 Audio Outputs: 0 Modulators: 0
->
-> Input/Output configuration ioctls:
->         test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
->         test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
->         test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
->         test VIDIOC_G/S_EDID: OK (Not Supported)
->
-> Control ioctls:
->         test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
->         test VIDIOC_QUERYCTRL: OK
->         test VIDIOC_G/S_CTRL: OK
->         test VIDIOC_G/S/TRY_EXT_CTRLS: OK
->         test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
->         test VIDIOC[G/S_JP  143.242702] stm-dma2d 4002b000.dma2d: Format not supported: , use the default.
-> EGCOMP: OK (Not Supported)
->         St[ndard Controls: 2 Private Contro s: 2
->
-> Fo m1t ioctls:
->         test VIDIOC_4NUM_FMT/FRAMESIZES/FRAMEINTERV3LS: O.0m
->         test VIDIOC_G5S_PARM: 3K (Not 555] stm-dma2d 4002b000.dma2d: Format not supported: , use the default.
-> Supported)
->         test VIDIOC_G_FBUF: OK (Not Supported)
->  143.280786] stm-dma2d 4002b000.dma2d: Format not supported: , use the default.
->         test VIDIOC_TRY_FMT: OK
-> [  143.293759] stm-dma2d 4002b000.dma2d: Format not supported: , use the default.
->         test VIDIOC_S_FMT: OK
->         test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
->         test Cropping: OK (Not Supported)
->         test Composing: OK (Not Supported)
->         test Scaling: OK
->
-> Codec ioctls:
->         test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
->         test VIDIOC_G_ENC_INDEX: OK (Not Supported)
->         test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
->
-> Buffer ioctls:
->         test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
->         test VIDIOC_EXPBUF: OK
->         test Requests: OK (Not Supported)
->
-> Test input 0:
->
-> Streaming ioctls:
->         test read/write: OK (Not Supported)
->         test blocking wait: OK
->         Video Capture: Captured 58 buffers
->         test MMAP (no poll): OK
->         Video Capture: Captured 58 buffers
->         test MMAP (select): OK
->         Video Capture: Captured 58 buffers
->         test MMAP (epoll): OK
->         test USERPTR (no poll): OK (Not Supported)
->         test USERPTR (select): OK (Not Supported)
->         test DMABUF: Cannot test, specify --expbuf-device
->
-> Stream using all formats:
->         Video Capture: Captured 8 buffers
->         BA24 (32-bit ARGB 8-8-8-8) 1x1 -> BA24 (32-bit ARGB 8-8-8-8) 1x1: OK
->         Video Capture: Captured 8 buffers
->         BA24 (32-bit ARGB 8-8-8-8) 1x1 -> RGB3 (24-bit RGB 8-8-8) 1x1: OK
->         Video Capture: Captured 8 buffers
->         BA24 (32-bit ARGB 8-8-8-8) 1x1 -> RGBP (16-bit RGB 5-6-5) 1x1: OK
->         Video Capture: Captured 8 buffers
->         BA24 (32-bit ARGB 8-8-8-8) 1x1 -> AR15 (16-bit ARGB 1-5-5-5) 1x1: OK
->         Video Capture: Captured 8 buffers
->         BA24 (32-bit ARGB 8-8-8-8) 1x1 -[ AR12 (16-bit ARGB 4-4-4-4) 1x1: OK
->   146.963829] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size -323584 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         BA24 (32-bit ARGB 8-8-8-8) 16383x6[535 -> BA 4 (32-bit ARGB 8-8-8 8) 11383x65545: FAIL
-> 6.985202] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size -323584 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         BA24 (32[bit ARGB 8-8-8-8) 16383x65 35 1> RGB3 (24-bit RGB48-8-8) 16383x65535: FAI7
-> .008713] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size -323584 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         BA24 (32-bit ARG[ 8-8-8-8) 163 3x6 535 -> RGBP (16-bit RGB 5-6-5) 16383x65535: FAIL
-> 147.033896] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size -323584 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         BA24 (32-[it ARGB 8- -8-8) 16383x65535 -> AR15 (16-bit ARGB  -5-515) 16383x65535: FAIL
-> 47.058256] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size -323584 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         BA24 (32-bit ARGB 8-8-8-8) 16383x65535 -> AR12 (16-bit ARGB 4-4-4-4) 16383x65535: FAIL
->         Video Capture: Captured 8 buffers
->         BA24 (32-bit ARGB 8-8-8-8) 240x320 -> BA24 (32-bit ARGB 8-8-8-8) 240x320: OK
->         Video Capture: Captured 8 buffers
->         BA24 (32-bit ARGB 8-8-8-8) 240x320 -> RGB3 (24-bit RGB 8-8-8) 240x320: OK
->         Video Capture: Captured 8 buffers
->         BA24 (32-bit ARGB 8-8-8-8) 240x320 -> RGBP (16-bit RGB 5-6-5) 240x320: OK
->         Video Capture: Captured 8 buffers
->         BA24 (32-bit ARGB 8-8-8-8) 240x320 -> AR15 (16-bit ARGB 1-5-5-5) 240x320: OK
->         Video Capture: Captured 8 buffers
->         BA24 (32-bit ARGB 8-8-8-8) 240x320 -> AR12 (16-bit ARGB 4-4-4-4) 240x320: OK
->         Video Capture: Captured 8 buffers
->         RGB3 (24-bit RGB 8-8-8) 1x1 -> BA24 (32-bit ARGB 8-8-8-8) 1x1: OK
->         Video Capture: Captured 8 buffers
->         RGB3 (24-bit RGB 8-8-8) 1x1 -> RGB3 (24-bit RGB 8-8-8) 1x1: OK
->         Video Capture: Captured 8 buffers
->         RGB3 (24-bit RGB 8-8-8) 1x1 -> RGBP (16-bit RGB 5-6-5) 1x1: OK
->         Video Capture: Captured 8 buffers
->         RGB3 (24-bit RGB 8-8-8) 1x1 -> AR15 (16-bit ARGB 1-5-5-5) 1x1: OK
->         Video Capture: Captured 8 buffers
->         RGB3 (24-bit RGB 8-8-8) 1x1 -> AR12 (16-bit ARGB 4-4-4-4) 1[1:  K
-> 148.406686] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size -1073983488 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         RGB3 (24-bit RGB 8-8-8) 1[383x 5 35 -1 BA24 (32-b4t ARGB 888-8-8) 16383x65.35: FAIL
-> 28566] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size -1073983488 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         RGB3 (24-bit RGB 8-8-8) 16383x65535[-> RGB3 (24 bit RGB 8-8-8) 16383 65535: FAIL
-> 148.453973] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size -1073983488 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         RGB3 (24-bit RGB 8-8-8) 16383x65535 [> RGBP (16-bit RGB 5-6-5) 16383x65535: FAIL
->  148.477828] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size -1073983488 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         RGB3 (24-bit RGB 8[8-8) 16383x 5535 -> AR 5 (16-bit ARGB 1-514-58 16383x65535: FAIL
-> .503495] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size -1073983488 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         RGB3 (24-bit RGB 8-8-8) 16383x65535 -> AR12 (16-bit ARGB 4-4-4-4) 16383x65535: FAIL
->         Video Capture: Captured 8 buffers
->         RGB3 (24-bit RGB 8-8-8) 240x320 -> BA24 (32-bit ARGB 8-8-8-8) 240x320: OK
->         Video Capture: Captured 8 buffers
->         RGB3 (24-bit RGB 8-8-8) 240x320 -> RGB3 (24-bit RGB 8-8-8) 240x320: OK
->         Video Capture: Captured 8 buffers
->         RGB3 (24-bit RGB 8-8-8) 240x320 -> RGBP (16-bit RGB 5-6-5) 240x320: OK
->         Video Capture: Captured 8 buffers
->         RGB3 (24-bit RGB 8-8-8) 240x320 -> AR15 (16-bit ARGB 1-5-5-5) 240x320: OK
->         Video Capture: Captured 8 buffers
->         RGB3 (24-bit RGB 8-8-8) 240x320 -> AR12 (16-bit ARGB 4-4-4-4) 240x320: OK
->         Video Capture: Captured 8 buffers
->         RGBP (16-bit RGB 5-6-5) 1x1 -> BA24 (32-bit ARGB 8-8-8-8) 1x1: OK
->         Video Capture: Captured 8 buffers
->         RGBP (16-bit RGB 5-6-5) 1x1 -> RGB3 (24-bit RGB 8-8-8) 1x1: OK
->         Video Capture: Captured 8 buffers
->         RGBP (16-bit RGB 5-6-5) 1x1 -> RGBP (16-bit RGB 5-6-5) 1x1: OK
->         Video Capture: Captured 8 buffers
->         RGBP (16-bit RGB 5-6-5) 1x1 -> AR15 (16-bit ARGB 1-5-5-5) 1x1: OK
->         Video Capture: Captured 8 buffers
->  149.725823] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size 2147323904 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         RGBP (16-bit RGB 5-6-5) 1[383x65535 -> BA24 (32-bi  ARGB 8 8-8-8) 16383x65535: FAIL
-> 49.746860] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size 2147323904 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         RGBP (16-bit RGB 5-[-5) 16383x65535 -> RGB3 (24-b t RGB 8-8-8) 16383x65535: FAIL
-> 49.772555] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size 2147323904 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         RGBP (16-bit R[B 5-6-5  1638 x65535 -> RGBP1(16-bit 4GB 596-5. 16383x67535: FAIL
-> 330] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size 2147323904 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         RGBP (16-bit RGB 5-6-5) 16383x65535 ->[AR15 (1 -bit AR B 1-5-5-5) 11383x65535: 9IL
-> .821301] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size 2147323904 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         RGBP (16-bit RGB 5-6-5) 16383x65535 -> AR12 (16-bit ARGB 4-4-4-4) 16383x65535: FAIL
->         Video Capture: Captured 8 buffers
->         RGBP (16-bit RGB 5-6-5) 240x320 -> BA24 (32-bit ARGB 8-8-8-8) 240x320: OK
->         Video Capture: Captured 8 buffers
->         RGBP (16-bit RGB 5-6-5) 240x320 -> RGB3 (24-bit RGB 8-8-8) 240x320: OK
->         Video Capture: Captured 8 buffers
->         RGBP (16-bit RGB 5-6-5) 240x320 -> RGBP (16-bit RGB 5-6-5) 240x320: OK
->         Video Capture: Captured 8 buffers
->         RGBP (16-bit RGB 5-6-5) 240x320 -> AR15 (16-bit ARGB 1-5-5-5) 240x320: OK
->         Video Capture: Captured 8 buffers
->         RGBP (16-bit RGB 5-6-5) 240x320 -> AR12 (16-bit ARGB 4-4-4-4) 240x320: OK
->         Video Capture: Captured 8 buffers
->         AR15 (16-bit ARGB 1-5-5-5) 1x1 -> BA24 (32-bit ARGB 8-8-8-8) 1x1: OK
->         Video Capture: Captured 8 buffers
->         AR15 (16-bit ARGB 1-5-5-5) 1x1 -> RGB3 (24-bit RGB 8-8-8) 1x1: OK
->         Video Capture: Captured 8 buffers
->         AR15 (16-bit ARGB 1-5-5-5) 1x1 -> RGBP (16-bit RGB 5-6-5) 1x1: OK
->         Video Capture: Captured 8 buffers
->         AR15 (16-bit ARGB 1-5-5-5) 1x1 -> AR15 (16-bit ARGB 1-5-5-5) 1x1: OK
->         Video Capture: Captured 8 buffers
->         AR15 (16-bit ARGB 1-5-5-5) 1x1 -[ AR1  (16-bit ARGB 4-4-4-4) 1x15 O0
-> .956666] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size 2147323904 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         AR15 (16-bit ARGB 1-[-5-5) 16 83x65535 -> BA24 (32-bit ARGB 8 8-8-8) 16383x15535: FAIL
-> 50.977546] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size 2147323904 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         AR15 (16-bit AR[B 1-5-5-5) 16383x65535 -> R B3 ( 4-b1t RGB 8-8-8) 16383x65535:5FAIL
-> 1.003061] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size 2147323904 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         AR15 (16-bit ARGB 1-5-5[5) 16383x65535 -> RGBP (16-bit RGB 5-6-5) 16383x65535: FAIL
->  151.027900] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size 2147323904 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         AR15 (16-bit ARGB 1-5[5-5) 16383x65535 -> AR15 (16- it ARGB 1-5-5-5) 16383x65 15: F5IL
-> 1.053781] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size 2147323904 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         AR15 (16-bit ARGB 1-5-5-5) 16383x65535 -> AR12 (16-bit ARGB 4-4-4-4) 16383x65535: FAIL
->         Video Capture: Captured 8 buffers
->         AR15 (16-bit ARGB 1-5-5-5) 240x320 -> BA24 (32-bit ARGB 8-8-8-8) 240x320: OK
->         Video Capture: Captured 8 buffers
->         AR15 (16-bit ARGB 1-5-5-5) 240x320 -> RGB3 (24-bit RGB 8-8-8) 240x320: OK
->         Video Capture: Captured 8 buffers
->         AR15 (16-bit ARGB 1-5-5-5) 240x320 -> RGBP (16-bit RGB 5-6-5) 240x320: OK
->         Video Capture: Captured 8 buffers
->         AR15 (16-bit ARGB 1-5-5-5) 240x320 -> AR15 (16-bit ARGB 1-5-5-5) 240x320: OK
->         Video Capture: Captured 8 buffers
->         AR15 (16-bit ARGB 1-5-5-5) 240x320 -> AR12 (16-bit ARGB 4-4-4-4) 240x320: OK
->         Video Capture: Captured 8 buffers
->         AR12 (16-bit ARGB 4-4-4-4) 1x1 -> BA24 (32-bit ARGB 8-8-8-8) 1x1: OK
->         Video Capture: Captured 8 buffers
->         AR12 (16-bit ARGB 4-4-4-4) 1x1 -> RGB3 (24-bit RGB 8-8-8) 1x1: OK
->         Video Capture: Captured 8 buffers
->         AR12 (16-bit ARGB 4-4-4-4) 1x1 -> RGBP (16-bit RGB 5-6-5) 1x1: OK
->         Video Capture: Captured 8 buffers
->         AR12 (16-bit ARGB 4-4-4-4) 1x1 -> AR15 (16-bit ARGB 1-5-5-5) 1x1: OK
->         Video Capture: Captured 8 buffers
->         AR12 (16-bit ARGB 4-4-4-4) 1x1 -> AR12 (16-bit A[GB 4-4-4 4) 1x1: OK
-> 152.187325] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size 2147323904 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         AR12 (16-[ t A GB 4-4-4-4) 16383x65135 -> BA24 (32-bit ARGB 8-8-8-8) 16383x6553552.21;31mFAIL0[0m
-> 8867] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size 2147323904 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         AR12 (16-bit ARGB 4-4[4-4  16383x6553  -> RGB3 (24-bit RGB18-8-8) 16383x65535: FAIL
-> 52.234355] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size 2147323904 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         AR12 (16-bit ARGB 4-4-4-4) 16383x65535 -> RGBP (16-bit RGB 5-6-5) 16383x65535: [ 1; 1mFAIL
-> 152.258077] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size 2147323904 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         AR12 (16-bit ARGB 4-4-4[4) 16383x65535 ->  R15 (16-bit ARGB 1-5-5-5) 16383x65535: FAIL
->  152.284054] stm-dma2d 4002b000.dma2d: dma_alloc_coherent of size 2147323904 failed
->                 fail: v4l2-test-buffers.cpp(1300): q.reqbufs(node, 2)
->         AR12 (16-bit ARGB 4-4-4-4) 16383x65535 -> AR12 (16-bit ARGB 4-4-4-4) 16383x65535: FAIL
->         Video Capture: Captured 8 buffers
->         AR12 (16-bit ARGB 4-4-4-4) 240x320 -> BA24 (32-bit ARGB 8-8-8-8) 240x320: OK
->         Video Capture: Captured 8 buffers
->         AR12 (16-bit ARGB 4-4-4-4) 240x320 -> RGB3 (24-bit RGB 8-8-8) 240x320: OK
->         Video Capture: Captured 8 buffers
->         AR12 (16-bit ARGB 4-4-4-4) 240x320 -> RGBP (16-bit RGB 5-6-5) 240x320: OK
->         Video Capture: Captured 8 buffers
->         AR12 (16-bit ARGB 4-4-4-4) 240x320 -> AR15 (16-bit ARGB 1-5-5-5) 240x320: OK
->         Video Capture: Captured 8 buffers
->         AR12 (16-bit ARGB 4-4-4-4) 240x320 -> AR12 (16-bit ARGB 4-4-4-4) 240x320: OK
-> Total for stm-dma2d device /dev/video0: 127, Succeeded: 102, Failed: 25, Warnings: 0
->
-> [1] Done                   v4l2-compliance -s -f -d /dev/video0
-> *** BLURB HERE ***
->
-> Dillon Min (7):
->   media: admin-guide: add stm32-dma2d description
->   media: dt-bindings: media: add document for STM32 DMA2d bindings
->   clk: stm32: Fix ltdc's clock turn off by clk_disable_unused() after
->     kernel startup
->   ARM: dts: stm32: Enable DMA2D support on STM32F429 MCU
->   ARM: dts: stm32: Enable DMA2D on STM32F469-DISCO board
->   media: v4l2-mem2mem: add v4l2_m2m_get_unmapped_area for no-mmu
->     platform
->   media: stm32-dma2d: STM32 DMA2D driver
->
->  .../admin-guide/media/platform-cardlist.rst        |   1 +
->  .../devicetree/bindings/media/st,stm32-dma2d.yaml  |  71 ++
->  arch/arm/boot/dts/stm32f429.dtsi                   |  10 +
->  arch/arm/boot/dts/stm32f469-disco.dts              |   4 +
->  drivers/clk/clk-stm32f4.c                          |   7 +-
->  drivers/media/platform/Kconfig                     |   9 +
->  drivers/media/platform/Makefile                    |   1 +
->  drivers/media/platform/stm32/Makefile              |   2 +
->  drivers/media/platform/stm32/dma2d/dma2d-hw.c      | 143 ++++
->  drivers/media/platform/stm32/dma2d/dma2d-regs.h    | 114 +++
->  drivers/media/platform/stm32/dma2d/dma2d.c         | 791 +++++++++++++++++++++
->  drivers/media/platform/stm32/dma2d/dma2d.h         | 132 ++++
->  drivers/media/v4l2-core/v4l2-mem2mem.c             |  20 +
->  include/media/v4l2-mem2mem.h                       |   4 +
->  14 files changed, 1305 insertions(+), 4 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/media/st,stm32-dma2d.yaml
->  create mode 100644 drivers/media/platform/stm32/dma2d/dma2d-hw.c
->  create mode 100644 drivers/media/platform/stm32/dma2d/dma2d-regs.h
->  create mode 100644 drivers/media/platform/stm32/dma2d/dma2d.c
->  create mode 100644 drivers/media/platform/stm32/dma2d/dma2d.h
->
-> --
-> 2.7.4
->
+Changes in v5:
+- Add support in device trees for rv1126
+- Support sfc tx_dual, tx_quad
+- Simplify the code, such as remove "rockchip_sfc_register_all"
+- Support SFC ver4 ver5
+
+Changes in v4:
+- Changing patch back to an "RFC". An engineer from Rockchip
+  reached out to me to let me know they are working on this patch for
+  upstream, I am submitting this v4 for the community to see however
+  I expect Jon Lin (jon.lin@rock-chips.com) will submit new patches
+  soon and these are the ones we should pursue for mainlining. Jon's
+  patch series should include support for more hardware than this
+  series.
+- Clean up documentation more and ensure it is correct per
+  make dt_binding_check.
+- Add support in device trees for rk3036, rk3308, and rv1108.
+- Add ahb clock (hclk_sfc) support for rk3036.
+- Change rockchip_sfc_wait_fifo_ready() to use a switch statement.
+- Change IRQ code to only mark IRQ as handled if it handles the
+  specific IRQ (DMA transfer finish) it is supposed to handle.
+
+Changes in v3:
+- Changed the name of the clocks to sfc/ahb (from clk-sfc/clk-hsfc).
+- Changed the compatible string from rockchip,sfc to
+  rockchip,rk3036-sfc. A quick glance at the datasheets suggests this
+  driver should work for the PX30, RK180x, RK3036, RK312x, RK3308 and
+  RV1108 SoCs, and possibly more. However, I am currently only able
+  to test this on a PX30 (an RK3326). The technical reference manuals
+  appear to list the same registers for each device.
+- Corrected devicetree documentation for formatting and to note these
+  changes.
+- Replaced the maintainer with Heiko Stuebner and myself, as we will
+  take ownership of this going forward.
+- Noted that the device (per the reference manual) supports 4 CS, but
+  I am only able to test a single CS (CS 0).
+- Reordered patches to comply with upstream rules.
+
+Changes in v2:
+- Reimplemented driver using spi-mem subsystem.
+- Removed power management code as I couldn't get it working properly.
+- Added device tree bindings for Odroid Go Advance.
+
+Changes in v1:
+hanges made in this new series versus the v8 of the old series:
+- Added function to read spi-rx-bus-width from device tree, in the
+  event that the SPI chip supports 4x mode but only has 2 pins
+  wired (such as the Odroid Go Advance).
+- Changed device tree documentation from txt to yaml format.
+- Made "reset" message a dev_dbg from a dev_info.
+- Changed read and write fifo functions to remove redundant checks.
+- Changed the write and read from relaxed to non-relaxed when
+  starting the DMA transfer or reading the DMA IRQ.
+- Changed from dma_coerce_mask_and_coherent to just
+  dma_set_mask_and_coherent.
+- Changed name of get_if_type to rockchip_sfc_get_if_type.
+
+Chris Morgan (8):
+  dt-bindings: rockchip-sfc: Bindings for Rockchip serial flash
+    controller
+  spi: rockchip-sfc: add rockchip serial flash controller
+  arm64: dts: rockchip: Add SFC to PX30
+  clk: rockchip: Add support for hclk_sfc on rk3036
+  arm: dts: rockchip: Add SFC to RK3036
+  arm: dts: rockchip: Add SFC to RV1108
+  arm64: dts: rockchip: Add SFC to RK3308
+  arm64: dts: rockchip: Enable SFC for Odroid Go Advance
+
+Jon Lin (1):
+  clk: rockchip: rk3036: fix up the sclk_sfc parent error
+
+ .../devicetree/bindings/spi/rockchip-sfc.yaml |  88 +++
+ arch/arm/boot/dts/rk3036.dtsi                 |  42 ++
+ arch/arm/boot/dts/rv1108.dtsi                 |  37 +
+ arch/arm64/boot/dts/rockchip/px30.dtsi        |  38 +
+ arch/arm64/boot/dts/rockchip/rk3308.dtsi      |  37 +
+ .../boot/dts/rockchip/rk3326-odroid-go2.dts   |  16 +
+ drivers/clk/rockchip/clk-rk3036.c             |   5 +-
+ drivers/spi/Kconfig                           |   9 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-rockchip-sfc.c                | 676 ++++++++++++++++++
+ include/dt-bindings/clock/rk3036-cru.h        |   1 +
+ 11 files changed, 948 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/rockchip-sfc.yaml
+ create mode 100644 drivers/spi/spi-rockchip-sfc.c
+
+-- 
+2.17.1
+
+
+
