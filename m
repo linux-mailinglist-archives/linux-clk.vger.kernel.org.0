@@ -2,29 +2,26 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7C03ABC5E
-	for <lists+linux-clk@lfdr.de>; Thu, 17 Jun 2021 21:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E2D3ABC5B
+	for <lists+linux-clk@lfdr.de>; Thu, 17 Jun 2021 21:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233141AbhFQTLf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 17 Jun 2021 15:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42586 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbhFQTLa (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 17 Jun 2021 15:11:30 -0400
-Received: from mail.bugwerft.de (mail.bugwerft.de [IPv6:2a03:6000:1011::59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11E3CC061574;
-        Thu, 17 Jun 2021 12:09:21 -0700 (PDT)
+        id S233036AbhFQTLa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 17 Jun 2021 15:11:30 -0400
+Received: from mail.bugwerft.de ([46.23.86.59]:37026 "EHLO mail.bugwerft.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231379AbhFQTL3 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 17 Jun 2021 15:11:29 -0400
 Received: from hq-00021.fritz.box (p57bc9ba2.dip0.t-ipconnect.de [87.188.155.162])
-        by mail.bugwerft.de (Postfix) with ESMTPSA id 111A34C0879;
+        by mail.bugwerft.de (Postfix) with ESMTPSA id 8315C4C087A;
         Thu, 17 Jun 2021 19:09:19 +0000 (UTC)
 From:   Daniel Mack <daniel@zonque.org>
 To:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     robh+dt@kernel.org, kuninori.morimoto.gx@renesas.com,
         mturquette@baylibre.com, sboyd@kernel.org,
         Daniel Mack <daniel@zonque.org>
-Subject: [PATCH v3 2/9] dt-bindings: clock: cs2000-cp: Document aux-output-source
-Date:   Thu, 17 Jun 2021 21:09:05 +0200
-Message-Id: <20210617190912.262809-3-daniel@zonque.org>
+Subject: [PATCH v3 3/9] dt-bindings: clock: cs2000-cp: make clk_in optional
+Date:   Thu, 17 Jun 2021 21:09:06 +0200
+Message-Id: <20210617190912.262809-4-daniel@zonque.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210617190912.262809-1-daniel@zonque.org>
 References: <20210617190912.262809-1-daniel@zonque.org>
@@ -34,75 +31,49 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This new optional property can be used to control the function of the
-auxiliary output pin. Introduce a new dt-bindings include file that
-contains the numerical values.
+CLK_IN is only used in dynamic mode and is hence optional.
+
+Re-order the clocks so REF_CLK is specified first.
 
 Signed-off-by: Daniel Mack <daniel@zonque.org>
 ---
- .../bindings/clock/cirrus,cs2000-cp.yaml           | 14 ++++++++++++++
- include/dt-bindings/clock/cirrus,cs2000-cp.h       | 14 ++++++++++++++
- 2 files changed, 28 insertions(+)
- create mode 100644 include/dt-bindings/clock/cirrus,cs2000-cp.h
+ .../devicetree/bindings/clock/cirrus,cs2000-cp.yaml   | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml b/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
-index 379a8bab49ca..79b90500f6ac 100644
+index 79b90500f6ac..68efed8e5033 100644
 --- a/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
 +++ b/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
-@@ -37,6 +37,17 @@ properties:
-   reg:
-     maxItems: 1
+@@ -22,14 +22,15 @@ properties:
  
-+  cirrus,aux-output-source:
-+    description:
-+      Specifies the function of the auxiliary clock output pin
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum:
-+      - 0 # CS2000CP_AUX_OUTPUT_REF_CLK:  ref_clk input
-+      - 1 # CS2000CP_AUX_OUTPUT_CLK_IN:   clk_in input
-+      - 2 # CS2000CP_AUX_OUTPUT_CLK_OUT:  clk_out output
-+      - 3 # CS2000CP_AUX_OUTPUT_PLL_LOCK: pll lock status
-+    default: 0
-+
- required:
-   - compatible
-   - reg
-@@ -48,6 +59,8 @@ additionalProperties: false
+   clocks:
+     description:
+-      Common clock binding for CLK_IN, XTI/REF_CLK
+-    minItems: 2
++      Common clock binding for XTI/REF_CLK, CLK_IN.
++      CLK_IN is optional and only used in dynamic mode.
++    minItems: 1
+     maxItems: 2
  
- examples:
-   - |
-+    #include <dt-bindings/clock/cirrus,cs2000-cp.h>
-+
-     i2c@0 {
-       reg = <0x0 0x100>;
-       #address-cells = <1>;
-@@ -59,5 +72,6 @@ examples:
+   clock-names:
+     items:
+-      - const: clk_in
+       - const: ref_clk
++      - const: clk_in
+ 
+   '#clock-cells':
+     const: 0
+@@ -70,8 +71,8 @@ examples:
+         #clock-cells = <0>;
+         compatible = "cirrus,cs2000-cp";
          reg = <0x4f>;
-         clocks = <&rcar_sound 0>, <&x12_clk>;
-         clock-names = "clk_in", "ref_clk";
-+        cirrus,aux-output-source = <CS2000CP_AUX_OUTPUT_CLK_OUT>;
+-        clocks = <&rcar_sound 0>, <&x12_clk>;
+-        clock-names = "clk_in", "ref_clk";
++        clocks = <&x12_clk>, <&rcar_sound 0>;
++        clock-names = "ref_clk", "clk_in";
+         cirrus,aux-output-source = <CS2000CP_AUX_OUTPUT_CLK_OUT>;
        };
      };
-diff --git a/include/dt-bindings/clock/cirrus,cs2000-cp.h b/include/dt-bindings/clock/cirrus,cs2000-cp.h
-new file mode 100644
-index 000000000000..fe3ac71750a8
---- /dev/null
-+++ b/include/dt-bindings/clock/cirrus,cs2000-cp.h
-@@ -0,0 +1,14 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-+/*
-+ * Copyright (C) 2021 Daniel Mack
-+ */
-+
-+#ifndef __DT_BINDINGS_CS2000CP_CLK_H
-+#define __DT_BINDINGS_CS2000CP_CLK_H
-+
-+#define CS2000CP_AUX_OUTPUT_REF_CLK	0
-+#define CS2000CP_AUX_OUTPUT_CLK_IN	1
-+#define CS2000CP_AUX_OUTPUT_CLK_OUT	2
-+#define CS2000CP_AUX_OUTPUT_PLL_LOCK	3
-+
-+#endif /* __DT_BINDINGS_CS2000CP_CLK_H */
 -- 
 2.31.1
 
