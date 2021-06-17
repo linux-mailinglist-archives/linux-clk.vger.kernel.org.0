@@ -2,249 +2,85 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EEB13ABCB4
-	for <lists+linux-clk@lfdr.de>; Thu, 17 Jun 2021 21:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB3823ABCF4
+	for <lists+linux-clk@lfdr.de>; Thu, 17 Jun 2021 21:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbhFQT3u (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 17 Jun 2021 15:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46654 "EHLO
+        id S232079AbhFQTja (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 17 Jun 2021 15:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231396AbhFQT3t (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 17 Jun 2021 15:29:49 -0400
-Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A97C061760
-        for <linux-clk@vger.kernel.org>; Thu, 17 Jun 2021 12:27:37 -0700 (PDT)
-Received: from localhost.localdomain (83.6.168.10.neoplus.adsl.tpnet.pl [83.6.168.10])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id A02143F619;
-        Thu, 17 Jun 2021 21:27:34 +0200 (CEST)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
+        with ESMTP id S231480AbhFQTj3 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 17 Jun 2021 15:39:29 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B22C061574
+        for <linux-clk@vger.kernel.org>; Thu, 17 Jun 2021 12:37:16 -0700 (PDT)
+Received: from [192.168.1.101] (83.6.168.10.neoplus.adsl.tpnet.pl [83.6.168.10])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 4D5B11F977;
+        Thu, 17 Jun 2021 21:37:13 +0200 (CEST)
+Subject: Re: [RFC v1 06/11] clk: qcom: Add display clock controller driver for
+ SM8350
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Jeffrey Hugo <jhugo@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
         Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] clk: qcom: mmcc-msm8994: Add MSM8992 support
-Date:   Thu, 17 Jun 2021 21:27:25 +0200
-Message-Id: <20210617192725.126743-3-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210617192725.126743-1-konrad.dybcio@somainline.org>
-References: <20210617192725.126743-1-konrad.dybcio@somainline.org>
+        MSM <linux-arm-msm@vger.kernel.org>,
+        "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Vinod Koul <vinod.koul@linaro.org>
+References: <20210616141107.291430-1-robert.foss@linaro.org>
+ <20210616141107.291430-7-robert.foss@linaro.org>
+ <ca6ff020-cd13-e242-ab74-085958e9fc82@somainline.org>
+ <CAG3jFysRuF=xkTaPK3efDW20cQ3hXLqqsT7J5YVgYvO1dmFOvA@mail.gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+Message-ID: <243ab835-bc91-6cc6-a9ce-7be6763dc89e@somainline.org>
+Date:   Thu, 17 Jun 2021 21:37:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+In-Reply-To: <CAG3jFysRuF=xkTaPK3efDW20cQ3hXLqqsT7J5YVgYvO1dmFOvA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-MSM8992 features less clocks & GDSCS and has different
-freq tables for some of them.
+>>> +
+>>> +static struct pll_vco vco_table[] = {
+>>> +     { 249600000, 1750000000, 0 },
+>>> +};
+>>> +
+>>> +static const struct alpha_pll_config disp_cc_pll0_config = {
+>>> +     .l = 0x47,
+>> Is the ".cal_l = 0x44," part from downstream not necessary?
+> Yes it is. I went back and forth about  'cal_l', but in the end the
+> only value it is ever set to is 0x44, which is also what the default
+> value is. So there is no need for representing it explicitly at the
+> moment.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
- drivers/clk/qcom/mmcc-msm8994.c | 126 ++++++++++++++++++++++++++++++++
- 1 file changed, 126 insertions(+)
+Interesting, maybe it'll be required for next SoCs..
 
-diff --git a/drivers/clk/qcom/mmcc-msm8994.c b/drivers/clk/qcom/mmcc-msm8994.c
-index 7f65c0e61908..69f683e949d0 100644
---- a/drivers/clk/qcom/mmcc-msm8994.c
-+++ b/drivers/clk/qcom/mmcc-msm8994.c
-@@ -329,6 +329,14 @@ static const struct freq_tbl ftbl_axi_clk_src[] = {
- 	{ }
- };
- 
-+static const struct freq_tbl ftbl_axi_clk_src_8992[] = {
-+	F(75000000, P_GPLL0, 8, 0, 0),
-+	F(150000000, P_GPLL0, 4, 0, 0),
-+	F(300000000, P_GPLL0, 2, 0, 0),
-+	F(404000000, P_MMPLL1, 2, 0, 0),
-+	{ }
-+};
-+
- static struct clk_rcg2 axi_clk_src = {
- 	.cmd_rcgr = 0x5040,
- 	.hid_width = 5,
-@@ -349,6 +357,12 @@ static const struct freq_tbl ftbl_csi0_1_2_3_clk_src[] = {
- 	{ }
- };
- 
-+static const struct freq_tbl ftbl_csi0_1_2_3_clk_src_8992[] = {
-+	F(100000000, P_GPLL0, 6, 0, 0),
-+	F(266670000, P_MMPLL0, 3, 0, 0),
-+	{ }
-+};
-+
- static struct clk_rcg2 csi0_clk_src = {
- 	.cmd_rcgr = 0x3090,
- 	.hid_width = 5,
-@@ -375,6 +389,16 @@ static const struct freq_tbl ftbl_vcodec0_clk_src[] = {
- 	{ }
- };
- 
-+static const struct freq_tbl ftbl_vcodec0_clk_src_8992[] = {
-+	F(66670000, P_GPLL0, 9, 0, 0),
-+	F(100000000, P_GPLL0, 6, 0, 0),
-+	F(133330000, P_GPLL0, 4.5, 0, 0),
-+	F(200000000, P_MMPLL0, 4, 0, 0),
-+	F(320000000, P_MMPLL0, 2.5, 0, 0),
-+	F(510000000, P_MMPLL3, 2, 0, 0),
-+	{ }
-+};
-+
- static struct clk_rcg2 vcodec0_clk_src = {
- 	.cmd_rcgr = 0x1000,
- 	.mnd_width = 8,
-@@ -440,6 +464,16 @@ static const struct freq_tbl ftbl_vfe0_clk_src[] = {
- 	{ }
- };
- 
-+static const struct freq_tbl ftbl_vfe0_1_clk_src_8992[] = {
-+	F(80000000, P_GPLL0, 7.5, 0, 0),
-+	F(100000000, P_GPLL0, 6, 0, 0),
-+	F(200000000, P_GPLL0, 3, 0, 0),
-+	F(320000000, P_MMPLL0, 2.5, 0, 0),
-+	F(480000000, P_MMPLL4, 2, 0, 0),
-+	F(600000000, P_GPLL0, 1, 0, 0),
-+	{ }
-+};
-+
- static struct clk_rcg2 vfe0_clk_src = {
- 	.cmd_rcgr = 0x3600,
- 	.hid_width = 5,
-@@ -486,6 +520,15 @@ static const struct freq_tbl ftbl_cpp_clk_src[] = {
- 	{ }
- };
- 
-+static const struct freq_tbl ftbl_cpp_clk_src_8992[] = {
-+	F(100000000, P_GPLL0, 6, 0, 0),
-+	F(200000000, P_GPLL0, 3, 0, 0),
-+	F(320000000, P_MMPLL0, 2.5, 0, 0),
-+	F(480000000, P_MMPLL4, 2, 0, 0),
-+	F(640000000, P_MMPLL4, 1.5, 0, 0),
-+	{ }
-+};
-+
- static struct clk_rcg2 cpp_clk_src = {
- 	.cmd_rcgr = 0x3640,
- 	.hid_width = 5,
-@@ -601,6 +644,17 @@ static const struct freq_tbl ftbl_mdp_clk_src[] = {
- 	{ }
- };
- 
-+static const struct freq_tbl ftbl_mdp_clk_src_8992[] = {
-+	F(85710000, P_GPLL0, 7, 0, 0),
-+	F(171430000, P_GPLL0, 3.5, 0, 0),
-+	F(200000000, P_GPLL0, 3, 0, 0),
-+	F(240000000, P_GPLL0, 2.5, 0, 0),
-+	F(266670000, P_MMPLL0, 3, 0, 0),
-+	F(320000000, P_MMPLL0, 2.5, 0, 0),
-+	F(400000000, P_MMPLL0, 2, 0, 0),
-+	{ }
-+};
-+
- static struct clk_rcg2 mdp_clk_src = {
- 	.cmd_rcgr = 0x2040,
- 	.hid_width = 5,
-@@ -654,6 +708,16 @@ static const struct freq_tbl ftbl_ocmemnoc_clk_src[] = {
- 	{ }
- };
- 
-+static const struct freq_tbl ftbl_ocmemnoc_clk_src_8992[] = {
-+	F(19200000, P_XO, 1, 0, 0),
-+	F(75000000, P_GPLL0, 8, 0, 0),
-+	F(100000000, P_GPLL0, 6, 0, 0),
-+	F(150000000, P_GPLL0, 4, 0, 0),
-+	F(320000000, P_MMPLL0, 2.5, 0, 0),
-+	F(400000000, P_MMPLL0, 2, 0, 0),
-+	{ }
-+};
-+
- static struct clk_rcg2 ocmemnoc_clk_src = {
- 	.cmd_rcgr = 0x5090,
- 	.hid_width = 5,
-@@ -767,6 +831,35 @@ static const struct freq_tbl ftbl_mclk0_1_2_3_clk_src[] = {
- 	{ }
- };
- 
-+static const struct freq_tbl ftbl_mclk0_clk_src_8992[] = {
-+	F(4800000, P_XO, 4, 0, 0),
-+	F(6000000, P_MMPLL4, 10, 1, 16),
-+	F(8000000, P_MMPLL4, 10, 1, 12),
-+	F(9600000, P_XO, 2, 0, 0),
-+	F(12000000, P_MMPLL4, 10, 1, 8),
-+	F(16000000, P_MMPLL4, 10, 1, 6),
-+	F(19200000, P_XO, 1, 0, 0),
-+	F(24000000, P_MMPLL4, 10, 1, 4),
-+	F(32000000, P_MMPLL4, 10, 1, 3),
-+	F(48000000, P_MMPLL4, 10, 1, 2),
-+	F(64000000, P_MMPLL4, 15, 0, 0),
-+	{ }
-+};
-+
-+static const struct freq_tbl ftbl_mclk1_2_3_clk_src_8992[] = {
-+	F(4800000, P_XO, 4, 0, 0),
-+	F(6000000, P_MMPLL4, 10, 1, 16),
-+	F(8000000, P_MMPLL4, 10, 1, 12),
-+	F(9600000, P_XO, 2, 0, 0),
-+	F(16000000, P_MMPLL4, 10, 1, 6),
-+	F(19200000, P_XO, 1, 0, 0),
-+	F(24000000, P_MMPLL4, 10, 1, 4),
-+	F(32000000, P_MMPLL4, 10, 1, 3),
-+	F(48000000, P_MMPLL4, 10, 1, 2),
-+	F(64000000, P_MMPLL4, 15, 0, 0),
-+	{ }
-+};
-+
- static struct clk_rcg2 mclk0_clk_src = {
- 	.cmd_rcgr = 0x3360,
- 	.mnd_width = 8,
-@@ -2468,6 +2561,39 @@ static int mmcc_msm8994_probe(struct platform_device *pdev)
- {
- 	struct regmap *regmap;
- 
-+	if (of_device_is_compatible(pdev->dev.of_node, "qcom,mmcc-msm8992")) {
-+		/* MSM8992 features less clocks and some have different freq tables */
-+		mmcc_msm8994_desc.clks[CAMSS_JPEG_JPEG1_CLK] = 0;
-+		mmcc_msm8994_desc.clks[CAMSS_JPEG_JPEG2_CLK] = 0;
-+		mmcc_msm8994_desc.clks[FD_CORE_CLK_SRC] = 0;
-+		mmcc_msm8994_desc.clks[FD_CORE_CLK] = 0;
-+		mmcc_msm8994_desc.clks[FD_CORE_UAR_CLK] = 0;
-+		mmcc_msm8994_desc.clks[FD_AXI_CLK] = 0;
-+		mmcc_msm8994_desc.clks[FD_AHB_CLK] = 0;
-+		mmcc_msm8994_desc.clks[JPEG1_CLK_SRC] = 0;
-+		mmcc_msm8994_desc.clks[JPEG2_CLK_SRC] = 0;
-+		mmcc_msm8994_desc.clks[VENUS0_CORE2_VCODEC_CLK] = 0;
-+
-+		mmcc_msm8994_desc.gdscs[FD_GDSC] = 0;
-+		mmcc_msm8994_desc.gdscs[VENUS_CORE2_GDSC] = 0;
-+
-+		axi_clk_src.freq_tbl = ftbl_axi_clk_src_8992;
-+		cpp_clk_src.freq_tbl = ftbl_cpp_clk_src_8992;
-+		csi0_clk_src.freq_tbl = ftbl_csi0_1_2_3_clk_src_8992;
-+		csi1_clk_src.freq_tbl = ftbl_csi0_1_2_3_clk_src_8992;
-+		csi2_clk_src.freq_tbl = ftbl_csi0_1_2_3_clk_src_8992;
-+		csi3_clk_src.freq_tbl = ftbl_csi0_1_2_3_clk_src_8992;
-+		mclk0_clk_src.freq_tbl = ftbl_mclk0_clk_src_8992;
-+		mclk1_clk_src.freq_tbl = ftbl_mclk1_2_3_clk_src_8992;
-+		mclk2_clk_src.freq_tbl = ftbl_mclk1_2_3_clk_src_8992;
-+		mclk3_clk_src.freq_tbl = ftbl_mclk1_2_3_clk_src_8992;
-+		mdp_clk_src.freq_tbl = ftbl_mdp_clk_src_8992;
-+		ocmemnoc_clk_src.freq_tbl = ftbl_ocmemnoc_clk_src_8992;
-+		vcodec0_clk_src.freq_tbl = ftbl_vcodec0_clk_src_8992;
-+		vfe0_clk_src.freq_tbl = ftbl_vfe0_1_clk_src_8992;
-+		vfe1_clk_src.freq_tbl = ftbl_vfe0_1_clk_src_8992;
-+	}
-+
- 	regmap = qcom_cc_map(pdev, &mmcc_msm8994_desc);
- 	if (IS_ERR(regmap))
- 		return PTR_ERR(regmap);
--- 
-2.32.0
+
+
+>>> +};
+>>> +
+>>> +static const struct alpha_pll_config disp_cc_pll1_config = {
+>>> +     .l = 0x1F,
+>> Ditto
+> Sorry, ditto what?
+
+Aah, sorry I cut out a ".cal_l  = 0x44" line while adding my comments..
+
+
+
+Konrad
 
