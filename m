@@ -2,26 +2,26 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46ECC3ABC5D
-	for <lists+linux-clk@lfdr.de>; Thu, 17 Jun 2021 21:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1633ABC66
+	for <lists+linux-clk@lfdr.de>; Thu, 17 Jun 2021 21:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233130AbhFQTLe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 17 Jun 2021 15:11:34 -0400
-Received: from mail.bugwerft.de ([46.23.86.59]:37028 "EHLO mail.bugwerft.de"
+        id S233104AbhFQTLh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 17 Jun 2021 15:11:37 -0400
+Received: from mail.bugwerft.de ([46.23.86.59]:37030 "EHLO mail.bugwerft.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231807AbhFQTLa (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 17 Jun 2021 15:11:30 -0400
+        id S232671AbhFQTLb (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 17 Jun 2021 15:11:31 -0400
 Received: from hq-00021.fritz.box (p57bc9ba2.dip0.t-ipconnect.de [87.188.155.162])
-        by mail.bugwerft.de (Postfix) with ESMTPSA id E0A0D4C1579;
-        Thu, 17 Jun 2021 19:09:19 +0000 (UTC)
+        by mail.bugwerft.de (Postfix) with ESMTPSA id 4D08B4C20B2;
+        Thu, 17 Jun 2021 19:09:20 +0000 (UTC)
 From:   Daniel Mack <daniel@zonque.org>
 To:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     robh+dt@kernel.org, kuninori.morimoto.gx@renesas.com,
         mturquette@baylibre.com, sboyd@kernel.org,
         Daniel Mack <daniel@zonque.org>
-Subject: [PATCH v3 4/9] dt-bindings: clock: cs2000-cp: document cirrus,clock-skip flag
-Date:   Thu, 17 Jun 2021 21:09:07 +0200
-Message-Id: <20210617190912.262809-5-daniel@zonque.org>
+Subject: [PATCH v3 5/9] clk: cs2000-cp: Make aux output function controllable
+Date:   Thu, 17 Jun 2021 21:09:08 +0200
+Message-Id: <20210617190912.262809-6-daniel@zonque.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210617190912.262809-1-daniel@zonque.org>
 References: <20210617190912.262809-1-daniel@zonque.org>
@@ -31,28 +31,48 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+The aux output pin can be configured to output either of the two clock
+inputs, the generated clock or the pll lock status. Allow access to
+this feature through a new optional device-tree property.
+
 Signed-off-by: Daniel Mack <daniel@zonque.org>
 ---
- .../devicetree/bindings/clock/cirrus,cs2000-cp.yaml         | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/clk/clk-cs2000-cp.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml b/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
-index 68efed8e5033..8ad090372988 100644
---- a/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
-+++ b/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
-@@ -49,6 +49,12 @@ properties:
-       - 3 # CS2000CP_AUX_OUTPUT_PLL_LOCK: pll lock status
-     default: 0
+diff --git a/drivers/clk/clk-cs2000-cp.c b/drivers/clk/clk-cs2000-cp.c
+index 92bc4aca0f95..db7290621cef 100644
+--- a/drivers/clk/clk-cs2000-cp.c
++++ b/drivers/clk/clk-cs2000-cp.c
+@@ -39,6 +39,8 @@
+ /* DEVICE_CFG1 */
+ #define RSEL(x)		(((x) & 0x3) << 3)
+ #define RSEL_MASK	RSEL(0x3)
++#define AUXOUTSRC(x)	(((x) & 0x3) << 1)
++#define AUXOUTSRC_MASK	AUXOUTSRC(0x3)
+ #define ENDEV1		(0x1)
  
-+  cirrus,clock-skip:
-+    description:
-+      This mode allows the PLL to maintain lock even when CLK_IN
-+      has missing pulses for up to 20 ms.
-+    $ref: /schemas/types.yaml#/definitions/flag
+ /* DEVICE_CFG2 */
+@@ -421,12 +423,19 @@ static int cs2000_clk_register(struct cs2000_priv *priv)
+ 	struct clk_init_data init;
+ 	const char *name = np->name;
+ 	static const char *parent_names[CLK_MAX];
++	u32 aux_out = 0;
+ 	int ch = 0; /* it uses ch0 only at this point */
+ 	int rate;
+ 	int ret;
+ 
+ 	of_property_read_string(np, "clock-output-names", &name);
+ 
++	of_property_read_u32(np, "cirrus,aux-output-source", &aux_out);
++	ret = cs2000_bset(priv, DEVICE_CFG1,
++			  AUXOUTSRC_MASK, AUXOUTSRC(aux_out));
++	if (ret < 0)
++		return ret;
 +
- required:
-   - compatible
-   - reg
+ 	/*
+ 	 * set default rate as 1/1.
+ 	 * otherwise .set_rate which setup ratio
 -- 
 2.31.1
 
