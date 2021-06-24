@@ -2,62 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E014D3B345D
-	for <lists+linux-clk@lfdr.de>; Thu, 24 Jun 2021 19:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E292C3B3673
+	for <lists+linux-clk@lfdr.de>; Thu, 24 Jun 2021 21:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbhFXRLv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 24 Jun 2021 13:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52696 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232273AbhFXRLo (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 24 Jun 2021 13:11:44 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832B3C0617AD
-        for <linux-clk@vger.kernel.org>; Thu, 24 Jun 2021 10:09:22 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id i12so7044068ila.13
-        for <linux-clk@vger.kernel.org>; Thu, 24 Jun 2021 10:09:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:to;
-        bh=ANhbTggsY3NFhRZExKMwUmb3VzJqye8XLvWVXSvNBkQ=;
-        b=p95plxgcKdT8+TUJCmcKdAyJL6L8C+j3muAeTI6tbvEOMwKUFZvBH22Z3GEGxdnUZH
-         d9XkDasjcz/bUj2n1PkWxPPQL/Sxtf1a7ckN43IkWwU4a9v6DYeOi9Tg8DPYHl700hH/
-         xlmv54Ir2NUVB8zwaX1UsxTzP5GUW3mdywmszCeflzWKbXzDgkMNhx+qVsi3FklHnD5x
-         fSDWvxz3POXOJ/0yZM+F2G99rPMTFJK+bPA5TWYu0VJpvpEjmQwRSgXLB6dx+kXpC0Uz
-         JX+JhI0lSB7VkwJTdkbApCrUx6TGzp99N5mAm/d0lil4hmexz93RFAPSpMzmwkjNchKB
-         rXTQ==
+        id S232481AbhFXTDH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 24 Jun 2021 15:03:07 -0400
+Received: from mail-io1-f54.google.com ([209.85.166.54]:41933 "EHLO
+        mail-io1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229464AbhFXTDH (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 24 Jun 2021 15:03:07 -0400
+Received: by mail-io1-f54.google.com with SMTP id i189so9577154ioa.8;
+        Thu, 24 Jun 2021 12:00:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:to;
-        bh=ANhbTggsY3NFhRZExKMwUmb3VzJqye8XLvWVXSvNBkQ=;
-        b=jhq79e2aenBu9mLPn1pGq/WgDOFMrPBDcVpvaLSQaL/eaD4LdnWuV4cEyLdw3Nv0K9
-         XkFUvTJlU2zpH/khLgHrAz2anrQYX8gJVYxX704achntQp9amkWrII+jOqihscIhpBEF
-         hEbfG4pyde7stU2otG99iRo747QrjrJ0MxncKOHkV1UPyZXrnSK1wK/pcKEQh1zrwhUj
-         RxQU5oy8xln8hfQ51bLC68NMiLdGP8L7j+vq+FnlTr6udnOCeU+pOCH+nvUA4G3Xyphs
-         slBpvFUp7S2ghs8Cka7jVR2dnwE55Ai00wwRcJJmpCf/rVg3H7PYNf6OTC0/kJf8EMAy
-         sBzQ==
-X-Gm-Message-State: AOAM531emLuIKOY4aB8nM7VwHb3ai6uBB+MjJ1uGbCqwJcCOoYrj4JJS
-        8E67ExQdR4HNBB5lAcu7tEqwBV2T3n3y4GE1WMA=
-X-Google-Smtp-Source: ABdhPJzkYUuO368jts0QgMQyJe9SHzg0U698qd8KdfojEfYsXnHtwMfPGxVHmw7fwQ64+IhHRhAEJH5nusdeW4BWzcA=
-X-Received: by 2002:a05:6e02:524:: with SMTP id h4mr4098121ils.255.1624554560853;
- Thu, 24 Jun 2021 10:09:20 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ZHZcSl+Guo3A0OrRHLgNwuNNClqAUIEzAWDeV6zDBmk=;
+        b=SaGrmYTu5OWAHL+Cs+OdUmgUksEI24onb5nodAVeaDpPTibLxyipL3TfMwvUGDEKd1
+         hhRtfErxzKSYpA0Js8/fyCfPf4X4JbNyVoNJrLADJSOErJId5TxcEOdXonBOMWmLP3sB
+         0uIYb09tt0zmLEQa4Ebqc+oZrWDIK7cuKYl3/btlNrwoA0aOSjPlI6+fosiUKJfYkK8O
+         iAe/d0wt0pwIpPaPEol3ESSPnn0e90HVIt/2xjfSrzr/R32p3tdq2pDB1tYdB0p5GWvh
+         Lpw1eXtDWB3rU64KNQGMf9az1XJ3OukTXMycsVxpRgh2aZooPPdcT7bgjmQjaP75uG3L
+         BlZg==
+X-Gm-Message-State: AOAM530mCheMN/TyklA3KIA2ajCqIz53jxtsTcEOiFCaXFM7QwwHaMDJ
+        mfbm5Z5kNKcwyn0DhgjLaA==
+X-Google-Smtp-Source: ABdhPJwptZl0dxHJRiEiwRYoF2dskkv7QQG/ROjfj2h9FwMHBWV0BmFqhNAaIwFQyYw19Rf80IV0Kg==
+X-Received: by 2002:a6b:d001:: with SMTP id x1mr5146231ioa.171.1624561246872;
+        Thu, 24 Jun 2021 12:00:46 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id 17sm1418742iog.20.2021.06.24.12.00.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Jun 2021 12:00:45 -0700 (PDT)
+Received: (nullmailer pid 1812831 invoked by uid 1000);
+        Thu, 24 Jun 2021 19:00:41 -0000
+Date:   Thu, 24 Jun 2021 13:00:41 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Xing Zheng <zhengxing@rock-chips.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-rockchip@lists.infradead.org,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: clk: Convert rockchip,rk3399-cru to DT
+ schema
+Message-ID: <20210624190041.GA1812802@robh.at.kernel.org>
+References: <20210610175613.167601-1-nfraprado@collabora.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6638:3aa:0:0:0:0 with HTTP; Thu, 24 Jun 2021 10:09:20
- -0700 (PDT)
-Reply-To: tutywoolgar021@gmail.com
-In-Reply-To: <CADB47+4Wa3T59Vq_==GTXEfHrX5x-2vQFxaTBO0dTdyAweCVpw@mail.gmail.com>
-References: <CADB47+4Wa3T59Vq_==GTXEfHrX5x-2vQFxaTBO0dTdyAweCVpw@mail.gmail.com>
-From:   tuty woolgar <faridaamadoubas@gmail.com>
-Date:   Thu, 24 Jun 2021 17:09:20 +0000
-Message-ID: <CADB47+607zNBfYFb4bj0nUhuuYgAdwT=G_wJ9-EeV0ESHe56Jg@mail.gmail.com>
-Subject: greetings,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210610175613.167601-1-nfraprado@collabora.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-My greetings to you my friend i hope you are fine and good please respond
-back to me thanks,
+On Thu, 10 Jun 2021 14:56:13 -0300, Nícolas F. R. A. Prado wrote:
+> Convert the rockchip,rk3399-cru binding to DT schema format.
+> Tested with
+> ARCH=arm64 make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/clock/rockchip,rk3399-cru.yaml
+> ARCH=arm64 make dtbs_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/clock/rockchip,rk3399-cru.yaml
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+> 
+> One caveat is that this node expects certain external clocks, mainly 'xin24m'.
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
