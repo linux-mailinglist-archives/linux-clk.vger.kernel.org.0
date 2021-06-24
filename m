@@ -2,85 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B743D3B70B4
-	for <lists+linux-clk@lfdr.de>; Tue, 29 Jun 2021 12:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 435873B7282
+	for <lists+linux-clk@lfdr.de>; Tue, 29 Jun 2021 14:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233026AbhF2KcZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 29 Jun 2021 06:32:25 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:34477 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232772AbhF2KcY (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 29 Jun 2021 06:32:24 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <colin.king@canonical.com>)
-        id 1lyB08-0000Lx-BV; Tue, 29 Jun 2021 10:29:56 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] clk: lmk04832: Fix spelling mistakes in dev_err messages and comments
-Date:   Tue, 29 Jun 2021 11:29:56 +0100
-Message-Id: <20210629102956.17901-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.31.1
+        id S233187AbhF2Myv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-clk@lfdr.de>); Tue, 29 Jun 2021 08:54:51 -0400
+Received: from [218.75.92.58] ([218.75.92.58]:65264 "EHLO WIN-VTPUBHNS72V"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234103AbhF2MyZ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 29 Jun 2021 08:54:25 -0400
+Received: from [192.168.43.47] (Unknown [197.210.85.75])
+        by WIN-VTPUBHNS72V with ESMTPA
+        ; Thu, 24 Jun 2021 20:46:38 +0800
+Message-ID: <693C61F0-3F82-4F6E-A61C-79C044C527DC@WIN-VTPUBHNS72V>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: URGENT ATTENTION
+To:     Recipients <wjjt@wjjt.cn>
+From:   "Andres Auchincloss" <wjjt@wjjt.cn>
+Date:   Thu, 24 Jun 2021 14:46:13 +0200
+Reply-To: andresauchincloss926@gmail.com
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Hi,
 
-There are handful of spelling mistakes in two dev_err error messages
-and comments. Fix them.
+I will like to use this opportunity to wish you a productive time in 2021 and also confide in you to finalize this transaction of mutual benefits. It may seem strange to you, but it is real. This is a transaction that has no risk at all, due process shall be followed and it shall be carried out under the ambit of the financial laws. Being the Chief Financial Officer, BP Plc. I want to trust and put in your care Eighteen Million British Pounds Sterling, The funds were acquired from an over-invoiced payment from a past contract executed in one of my departments.
 
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/clk/clk-lmk04832.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+I can't successfully achieve this transaction without presenting you as foreign contractor who will provide a bank account to receive the funds.
 
-diff --git a/drivers/clk/clk-lmk04832.c b/drivers/clk/clk-lmk04832.c
-index 0cd76e626c3d..274c1004e938 100644
---- a/drivers/clk/clk-lmk04832.c
-+++ b/drivers/clk/clk-lmk04832.c
-@@ -519,7 +519,7 @@ static long lmk04832_vco_round_rate(struct clk_hw *hw, unsigned long rate,
- 
- 	vco_rate = lmk04832_calc_pll2_params(*prate, rate, &n, &p, &r);
- 	if (vco_rate < 0) {
--		dev_err(lmk->dev, "PLL2 parmeters out of range\n");
-+		dev_err(lmk->dev, "PLL2 parameters out of range\n");
- 		return vco_rate;
- 	}
- 
-@@ -550,7 +550,7 @@ static int lmk04832_vco_set_rate(struct clk_hw *hw, unsigned long rate,
- 
- 	vco_rate = lmk04832_calc_pll2_params(prate, rate, &n, &p, &r);
- 	if (vco_rate < 0) {
--		dev_err(lmk->dev, "failed to determine PLL2 parmeters\n");
-+		dev_err(lmk->dev, "failed to determine PLL2 parameters\n");
- 		return vco_rate;
- 	}
- 
-@@ -573,7 +573,7 @@ static int lmk04832_vco_set_rate(struct clk_hw *hw, unsigned long rate,
- 
- 	/*
- 	 * PLL2_N registers must be programmed after other PLL2 dividers are
--	 * programed to ensure proper VCO frequency calibration
-+	 * programmed to ensure proper VCO frequency calibration
- 	 */
- 	ret = regmap_write(lmk->regmap, LMK04832_REG_PLL2_N_0,
- 			   FIELD_GET(0x030000, n));
-@@ -1120,7 +1120,7 @@ static int lmk04832_dclk_set_rate(struct clk_hw *hw, unsigned long rate,
- 		return -EINVAL;
- 	}
- 
--	/* Enable Duty Cycle Corretion */
-+	/* Enable Duty Cycle Correction */
- 	if (dclk_div == 1) {
- 		ret = regmap_update_bits(lmk->regmap,
- 					 LMK04832_REG_CLKOUT_CTRL3(dclk->id),
--- 
-2.31.1
+Documentation for the claim of the funds will be legally processed and documented, so I will need your full cooperation on this matter for our mutual benefits. We will discuss details if you are interested to work with me to secure this funds. I will appreciate your prompt response in every bit of our communication. Stay Blessed and Stay Safe.
+
+
+
+Best Regards
+
+
+
+
+Tel: +1 (587) 770-0485
+Andres .B. Auchincloss
+Chief financial officerBP Petroleum p.l.c.
+
+
+
+
+                                  Copyright ©? 1996-2021
 
