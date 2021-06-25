@@ -2,60 +2,112 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8A73B4AB1
-	for <lists+linux-clk@lfdr.de>; Sat, 26 Jun 2021 00:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07493B4AC5
+	for <lists+linux-clk@lfdr.de>; Sat, 26 Jun 2021 00:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbhFYWrB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 25 Jun 2021 18:47:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34558 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229816AbhFYWrA (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 25 Jun 2021 18:47:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AE3D361942;
-        Fri, 25 Jun 2021 22:44:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624661078;
-        bh=MhhKjdtEyP6HKkMxYA8rEKdABGIn2lGWQrzheH0guDM=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=hk7zp+7B+r23LLcTAUbuIGWhEqRFCTvfPcoLMnRyMBeiwMKea1A/FtqkRvm4TBV7r
-         Iu50yYqAOSNUrEVUehzDShTdIzkUH48Fh5/AS87kCxAX8fWx9n5Pf3kpq/+A+PV0xk
-         dMGM/kK5p5PCZOHhhfbqvyZI+M5v5MDeflDBPZPz1gb3RJHO786YGCqIWPsV8BxqRL
-         qHxiBql+ghLPpniKISgisvzIAOcqy/reYHO+OAq03cG/ZISvqh2NJs+4lr36eVGezH
-         OrqUsVGg12AhjVQl216Sizo2O5n0rRirJpaeZgflClqe1ZIGMhEOkfK5bNUUwAR11s
-         XvsMTCKQ65DAQ==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <46310530171886c6ccf4046518e07510274a506c.1623308843.git.geert+renesas@glider.be>
-References: <46310530171886c6ccf4046518e07510274a506c.1623308843.git.geert+renesas@glider.be>
-Subject: Re: [PATCH v6] dt-bindings: clk: versaclock5: Miscellaneous fixes and improvements:
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Adam Ford <aford173@gmail.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh@kernel.org>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
+        id S229864AbhFYW5r (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 25 Jun 2021 18:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229776AbhFYW5q (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 25 Jun 2021 18:57:46 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CA2C061574
+        for <linux-clk@vger.kernel.org>; Fri, 25 Jun 2021 15:55:24 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id d21-20020a9d72d50000b02904604cda7e66so9236204otk.7
+        for <linux-clk@vger.kernel.org>; Fri, 25 Jun 2021 15:55:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=luOPyFo3L01zOr2qtu2eBJWxs2yeN+/Vdrodh5iollo=;
+        b=mJh25ztmvFCyH/W7nUNGj+2z4f2AS5pMEcCtLdpkIz3FZUmG28wxqomX9SpHT3Mt87
+         fW5Sf/kTK9V2CIKz5rbS1vfkZTnk/NY/g3uuKHSHc2M7VjnU+Ui6LSWuSQTc/5jANbJm
+         VHx3dNIxXVrQaHzmJVxdwM2WqhGR7TnDke6YXw/9Og6Uggsd1QPOtTaf+eE4ARfWkwR+
+         HTl/F6SLnoAbsOYJTy7PYIvqwIywJD2cAZ1GzU3lJuV3IMwt8GWBWwVeIlHAH+giF/w9
+         Oa2ZrLoCcb1BpKXb1/l147l2tkaEUTsHH880jRo33dmA0gEHZBNUb7MlTl1GZGPEjkOU
+         kRbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=luOPyFo3L01zOr2qtu2eBJWxs2yeN+/Vdrodh5iollo=;
+        b=nqE2kknx5o8BN7VaumSISB/ogLUGEVsmOhfU1NulsI/wLxw/k/ED8lqeg5oA4ySQ5x
+         eeb9HlIm1EMplvSZ7NutkhsI02KI1MZ0PnL2AtQdT2tt3ZcP0TOxt/U7t5mWegtOApyo
+         WLSN7CoVEYmWsEwgOXUD4PGzChtuviccvtKDYfLksZRuRIyeuRccQOssIo6BC1UOGM+r
+         PmaXpJqk9fwm9rntZ+7Rmo/vM1/m/rvlqL17HJbCIVIYwHlHlfdcgFiG7PKcjySFQYmv
+         rDjocdnt90rsEL9mY7M4Am3RZhZJ6Lh9YxZX6U53PT1FFDxsASQcRk9kz//XBUtfDkFJ
+         cyGw==
+X-Gm-Message-State: AOAM533mRA4meOOQpnyFjW8Ola2IBteNcYPQ8Oqk/tBvulK0ueCxC651
+        2Cx6B3xBoF0Mr3h4f7pU0u5pBQ==
+X-Google-Smtp-Source: ABdhPJwiJynOzvN6yh3Vh7xbiLJtDZrSq3jgQsBh55iOSBxetLaVl9zxb1FS3c7rwCCJBapHH8IC+g==
+X-Received: by 2002:a9d:c23:: with SMTP id 32mr11451076otr.182.1624661724139;
+        Fri, 25 Jun 2021 15:55:24 -0700 (PDT)
+Received: from localhost.localdomain (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id w11sm1516557oov.19.2021.06.25.15.55.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Jun 2021 15:55:23 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 25 Jun 2021 15:44:37 -0700
-Message-ID: <162466107751.3259633.17069845339624475647@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        dmitry.baryshkov@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH] clk: qcom: gdsc: Ensure regulator init state matches GDSC state
+Date:   Fri, 25 Jun 2021 15:54:14 -0700
+Message-Id: <20210625225414.1318338-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.29.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Geert Uytterhoeven (2021-06-10 00:09:40)
->   - Add missing "additionalProperties: false" for subnodes, to catch
->     typos in properties,
->   - Fix property names in example.
->=20
-> Fixes: 45c940184b501fc6 ("dt-bindings: clk: versaclock5: convert to yaml")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Acked-by: Stephen Boyd <sboyd@kernel.org>
-> ---
+As GDSCs are registered and found to be already enabled
+gdsc_toggle_logic() will be invoked for votable GDSCs and ensure that
+the vote is matching the hardware state. Part of this the related
+regulator will be enabled.
 
-Actually looks like Rob picked something similar up, so dropped it.
+But for non-votable GDSCs the regulator and GDSC status will be out of
+sync and as the GDSC is later disabled regulator_disable() will face an
+unbalanced enable-count, or something might turn off the supply under
+the feet of the GDSC.
+
+So ensure that the regulator is enabled even for non-votable GDSCs.
+
+Cc: stable@vger.kernel.org
+Fixes: 37416e554961 ("clk: qcom: gdsc: Handle GDSC regulator supplies")
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ drivers/clk/qcom/gdsc.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+index 51ed640e527b..f7e7759cdb90 100644
+--- a/drivers/clk/qcom/gdsc.c
++++ b/drivers/clk/qcom/gdsc.c
+@@ -359,10 +359,17 @@ static int gdsc_init(struct gdsc *sc)
+ 
+ 	/*
+ 	 * Votable GDSCs can be ON due to Vote from other masters.
+-	 * If a Votable GDSC is ON, make sure we have a Vote.
++	 * If a Votable GDSC is ON, make sure we have a Vote. If
++	 * non-votable, ensure that the supply is kept enabled (as
++	 * is done by gdsc_enable).
+ 	 */
+-	if ((sc->flags & VOTABLE) && on)
++	if ((sc->flags & VOTABLE) && on) {
+ 		gdsc_enable(&sc->pd);
++	} else if (on) {
++		ret = regulator_enable(sc->rsupply);
++		if (ret < 0)
++			return ret;
++	}
+ 
+ 	/*
+ 	 * Make sure the retain bit is set if the GDSC is already on, otherwise
+-- 
+2.29.2
+
