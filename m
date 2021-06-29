@@ -2,881 +2,192 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0663B75B3
-	for <lists+linux-clk@lfdr.de>; Tue, 29 Jun 2021 17:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0363B75D7
+	for <lists+linux-clk@lfdr.de>; Tue, 29 Jun 2021 17:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235037AbhF2PlN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 29 Jun 2021 11:41:13 -0400
-Received: from out28-124.mail.aliyun.com ([115.124.28.124]:60091 "EHLO
-        out28-124.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235012AbhF2PlK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 29 Jun 2021 11:41:10 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0312234-0.000388246-0.968388;FP=11969572167465047208|3|2|8|0|-1|-1|-1;HT=ay29a033018047212;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.KZtCVfJ_1624981102;
-Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KZtCVfJ_1624981102)
-          by smtp.aliyun-inc.com(10.147.44.118);
-          Tue, 29 Jun 2021 23:38:39 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org
-Cc:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        paul@crapouillou.net, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
-        sernia.zhou@foxmail.com
-Subject: [PATCH v6 11/11] clk: Ingenic: Add CGU driver for X2000.
-Date:   Tue, 29 Jun 2021 23:38:22 +0800
-Message-Id: <1624981102-26248-12-git-send-email-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1624981102-26248-1-git-send-email-zhouyanjie@wanyeetech.com>
-References: <1624981102-26248-1-git-send-email-zhouyanjie@wanyeetech.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        id S233814AbhF2PvO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 29 Jun 2021 11:51:14 -0400
+Received: from mail-eopbgr00063.outbound.protection.outlook.com ([40.107.0.63]:37315
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232428AbhF2PvN (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 29 Jun 2021 11:51:13 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bLTpbibtQVL0E5yknTwbynnr426QCotxCaFXX2FfdFFqu3FsVdxfp4N8cc0uVTWsXUO7CvOvCyXLgFI384KumI/nUd8AC2VrKGb/LNSpCrMm0AG3n48zyALdEMfurCvK0sMfVg8SgzPzniZ4ihm1miDtvE21AGrUlEkHluRoC5OWTCc+JkmoRJKAE3ThHKDginn1Wva7AkMpLiFMOTZp/rNBgyyQyKf3vPqRygGcu68UU0017+3ZJ7LK+3bZw6G+fQzEYiVkIb9vbuULgqt5L9bJJNl3jbXKNBBDDx/kqs0euwGsUpxKnga7VQCVCBQeTcX0QFj2UCBKoHUoU1DbpQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sreuYVVbQ85q6pxSBEaAlVJZ9zA3jqVMLexO0/qOIY4=;
+ b=TSiXitfR8R+pIMTi6bkfJ/7dphMczzKBo8F0v88kkHwlBm4S1J1XvM+SIHHEyHGXdmCiT5I/h0X6tReeo11bVgpPORUvKtfLF67VO4L5DY7ksW1kB6YVXd8hfEK2toam66vjC8W9NwtV6HGdnAd97xMmde3c5LDWf5BUoOSxfv9VMehVenYYspxakN189FeYRa+IBqj8tYpuGDnwRmuSo51j18N9W62LoHGVuI/KPakaTDaqOIigrkQsY6rhda4mTpU7CAGaaeo/P92/4gBnHnfC0p+UdkXw1StDM2Tg0XdBWREVFIq61tlgDTAx76DBv+0ljF94Rn62Z1rIPkyI9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=secospa.onmicrosoft.com; s=selector2-secospa-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sreuYVVbQ85q6pxSBEaAlVJZ9zA3jqVMLexO0/qOIY4=;
+ b=Tfc23QzjJ56wb2vyBrA2SxUZfo8/TPfee0vnmLPCZj7+ZTcCdwMk6NKce42rljwwKGD14O8v1wGrsW0+MxusR+pQmFZDtahWf4R4KilGC6IFsGGTGmYqQN0TNuZ6MkNNJGbS3zaxfl+d0GjMxiheybMmMFcA6U1Ojx7TBcuGS98=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
+ by DB8PR03MB6028.eurprd03.prod.outlook.com (2603:10a6:10:ee::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4264.23; Tue, 29 Jun
+ 2021 15:48:39 +0000
+Received: from DB7PR03MB4523.eurprd03.prod.outlook.com
+ ([fe80::40d5:3554:c709:6b1b]) by DB7PR03MB4523.eurprd03.prod.outlook.com
+ ([fe80::40d5:3554:c709:6b1b%5]) with mapi id 15.20.4264.026; Tue, 29 Jun 2021
+ 15:48:39 +0000
+From:   Sean Anderson <sean.anderson@seco.com>
+To:     linux-clk@vger.kernel.org, Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Adam Ford <aford173@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
+Subject: [PATCH v3 1/2] dt-bindings: clk: vc5: Add properties for configuring the SD/OE pin
+Date:   Tue, 29 Jun 2021 11:47:39 -0400
+Message-Id: <20210629154740.3091884-1-sean.anderson@seco.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [50.195.82.171]
+X-ClientProxiedBy: BL1PR13CA0334.namprd13.prod.outlook.com
+ (2603:10b6:208:2c6::9) To DB7PR03MB4523.eurprd03.prod.outlook.com
+ (2603:10a6:10:19::27)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from plantagenet.inhand.com (50.195.82.171) by BL1PR13CA0334.namprd13.prod.outlook.com (2603:10b6:208:2c6::9) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.12 via Frontend Transport; Tue, 29 Jun 2021 15:48:38 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4891c730-8b55-4fd5-4afa-08d93b155cfe
+X-MS-TrafficTypeDiagnostic: DB8PR03MB6028:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DB8PR03MB602815A34BA6D5C59542063596029@DB8PR03MB6028.eurprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2zo7PspAxGDcV+dDrUYepjB8gMUxw2REljSOlDXk6yTxef2OMA+r11cfB0q+En0dr8rud8zZ4BRrwo3cIBFfUdXtgfae3icmbXNBoWLbohJL0flDfwj/QumR7SCjaC0pAt0UHW9nzh7sn7TuvrfkC364RTrWx2Q/tAcNCJQ1oIdzUU3FHDjxS3y5vO4JZShWz05qv3SKp9RdwZykCrHcQQVuJ5U4HRefD5BEC4NxbwxPekq3Zd+kH9BWYIH3gfXnCu7fwHYBvn2lnb0ITM7NBj9zzqtzeR7k3T9QkLOS8O7fVGgrr5FyK1IdX/I8LvyEz8ZMEKKUEiICAu7kVjeRQziS/pwS3fdxTpgajE+TKyiX8W6WIw0KwqL96z9FjMylRWn9VZfJw35R5PMibcLRjhsWDEE/Q7VrAV4xuhd/iIZVFofMzAEvx/b4d/L8v3xnrms9R5aID8E7R5Ajte/Vgh1VskivWXjPzgmG2OrEAO/ZvEu4SyQp9GgiWTpJSyxLcO+9q88mTunglxTRID+B0TnvdFQ9QbUdCpNtZYIv90qBcQhMwArXm0uvmsawpygEGNDnAATHOzJEeexk2Rwh168DGYVafGyqbmF1X6Hke1qkiptZ0G0dUlM4c/SReimjdOh4gyryPsv76x2FEKlbeDvOqAiQCiJYYH4sEp1Wt6dVBV9cT1eyqrMx0nXtacomuUmVw6ca6aeYNVB4gIDhHw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(39830400003)(346002)(396003)(136003)(366004)(376002)(86362001)(83380400001)(478600001)(16526019)(4326008)(26005)(2906002)(52116002)(186003)(38100700002)(38350700002)(6506007)(6916009)(956004)(44832011)(1076003)(36756003)(6512007)(54906003)(6486002)(2616005)(66556008)(66476007)(66946007)(8936002)(316002)(5660300002)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oe6zFkiMa9lzpaP0OGRk3FR0VIcWnNEJefTjRTeT5R3d42jkJYBIx0l6o/jb?=
+ =?us-ascii?Q?tZayfpj3TFduaD1noGzHlFFJHlOvepM7cBA7N3yV6KJSaPsUPPl/YNVzO8bG?=
+ =?us-ascii?Q?Vf3U24t3cyl+I9WV3vhAAUwcLdrp1ABzBGCC8TdkMQCOSvT2gQnfrBFjJYWa?=
+ =?us-ascii?Q?PaB6WojvPT5GXxdn3wA2HNfVv+C+sXc2sEy63+cwEkD5KVZEMRWmJPPi2fBx?=
+ =?us-ascii?Q?qbkHfknjRnJC+P9QlaCDXqoy4rKcLmtSnXp9c4pTUG0eYaZ2Yc7CTLhzenLk?=
+ =?us-ascii?Q?SjFKMcG1hcUugBIRbe9nLdvokVWfWO3CkXCu5bmwuqzGa1GhXRPZli8SWu3W?=
+ =?us-ascii?Q?NHhguIton+xDSocfS0M9X8wViO/+OKcDZ2ffTiD/YZkVfL7+93WTwihis4a5?=
+ =?us-ascii?Q?U6JuErPYDuobl4EXMoSqJgPndGu3sqVxxXUkSAHKpWEZKLhwSjAtDB+DXzX9?=
+ =?us-ascii?Q?Ukfbey+1qLIaiDAyNpnWNpBqSA7hbW9BjMaKPXrr7uQfMlUeYMeatXPRx0V8?=
+ =?us-ascii?Q?L8JSvJ+OpW0T/NFB6ZpXuSLefduxlSc+bpvWiaQLi29qEKLFBUc+DXvCxs7y?=
+ =?us-ascii?Q?pUzrrSqaQxWvWTLUJkoIVj+abI0G0d7Y8ePp2W8WyRHz0X22EYrn37oPf5gx?=
+ =?us-ascii?Q?6wj46IFNcTFmvrzkNS5ylf/8wk207gKcW+ABYeXFrGR/Q6QihAJGXp10DYpO?=
+ =?us-ascii?Q?B/td6pySkGstUzoPQsH7ZGVYjLSP4n1XYiDFThpFriuchCMHXOunHdGDKfll?=
+ =?us-ascii?Q?dQtSRpeoHYCu6tceUzv2bBBUFt7MmfCAM5mjx6CyIzInz2XZAXs9v2u6bUgW?=
+ =?us-ascii?Q?JJo0VAWlYMFwr3Se5JJTy+hxIYdiGsiPzVSajB7lWZrO+9KZDpkxw7q2XRHV?=
+ =?us-ascii?Q?Yc4RWbLfZVusvUL9PrnxPGwHNMzDDxW3xxAbA+JqAElfYrRP55CMrpjfwTVy?=
+ =?us-ascii?Q?dA77kt2kNZpl5EQLNKREM+373i0xdA0hdamDdpeMhJySiOFWatjSSWM3JGlv?=
+ =?us-ascii?Q?EKaFb6dIFuwbLofEetxIHBcbDTfb/Pv0R0whPrTGDP7a1sbAKGN26HRVghj/?=
+ =?us-ascii?Q?0y4DLWEgr6K2/ngL6xwkq9hQsrXfXHCO2+aINz44B0l30gbIE5S5HALy5viH?=
+ =?us-ascii?Q?l4Fnth+YtDZF4eIsMiP5VlnCVuSfFVgiwRgYpaH+gZYMQabkVIKrCPSuMlFq?=
+ =?us-ascii?Q?IdFKHEyhomoanM4MJrFsytMts6ZA5f+w6l8RC8ccQn38+nnOMWwPIWG7F1+n?=
+ =?us-ascii?Q?Y/CdcvtDyjy2W1MOn+WZ4TQAhGoclFaDRC5JXRBsLmgE8Th6289AiSYDROen?=
+ =?us-ascii?Q?STIiq0CiYnbMWaR3ZTM2xiJ5?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4891c730-8b55-4fd5-4afa-08d93b155cfe
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4523.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jun 2021 15:48:39.1456
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jKr8gNX3SpMS3BuPi+7TL/DI7al9Pugou05FAplJF+UTmUuf1MBCWTDMM4EpDeHJNBc1HGY98a2XShLO4C3cKw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR03MB6028
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add support for the clocks provided by the CGU in the Ingenic X2000
-SoC, making use of the cgu code to do the heavy lifting.
+These properties allow configuring the SD/OE pin as described in the
+datasheet.
 
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
 
-Notes:
-    v5:
-    New patch.
-    
-    v5->v6:
-    No change.
+Changes in v3:
+- Add idt,disable-shutdown and idt,output-enable-active-low to allow for
+  a default of not changing the SP/SH bits at all.
 
- drivers/clk/ingenic/Kconfig     |  10 +
- drivers/clk/ingenic/Makefile    |   1 +
- drivers/clk/ingenic/x2000-cgu.c | 784 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 795 insertions(+)
- create mode 100644 drivers/clk/ingenic/x2000-cgu.c
+Changes in v2:
+- Rename idt,sd-active-high to idt,output-enable-active-high
+- Add idt,enable-shutdown
 
-diff --git a/drivers/clk/ingenic/Kconfig b/drivers/clk/ingenic/Kconfig
-index 7fda7bb..f5dd2f2 100644
---- a/drivers/clk/ingenic/Kconfig
-+++ b/drivers/clk/ingenic/Kconfig
-@@ -85,6 +85,16 @@ config INGENIC_CGU_X1830
+ .../bindings/clock/idt,versaclock5.yaml       | 44 +++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+index 28675b0b80f1..51f0f78cc3f4 100644
+--- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
++++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+@@ -30,6 +30,22 @@ description: |
+     3 -- OUT3
+     4 -- OUT4
  
- 	  If building for a X1830 SoC, you want to say Y here.
++  The idt,(en|dis)able-shutdown and idt,output-enable-active-(high|low)
++  properties control the SH (en_global_shutdown) and SP bits of the
++  Primary Source and Shutdown Register, respectively. Their behavior is
++  summarized by the following table:
++
++  SH SP Output when the SD/OE pin is Low/High
++  == == =====================================
++   0  0 Active/Inactive
++   0  1 Inactive/Active
++   1  0 Active/Shutdown
++   1  1 Inactive/Shutdown
++
++  If no properties related to these bits are specified, then they will
++  be left in their default state. This may be useful if the SH and SP
++  bits are set to a default value using the OTP memory.
++
+ maintainers:
+   - Luca Ceresoli <luca@lucaceresoli.net>
  
-+config INGENIC_CGU_X2000
-+	bool "Ingenic X2000 CGU driver"
-+	default MACH_X2000
-+	select INGENIC_CGU_COMMON
-+	help
-+	  Support the clocks provided by the CGU hardware on Ingenic X2000
-+	  and compatible SoCs.
-+
-+	  If building for a X2000 SoC, you want to say Y here.
-+
- config INGENIC_TCU_CLK
- 	bool "Ingenic JZ47xx TCU clocks driver"
- 	default MACH_INGENIC
-diff --git a/drivers/clk/ingenic/Makefile b/drivers/clk/ingenic/Makefile
-index aed8da4..de265ae 100644
---- a/drivers/clk/ingenic/Makefile
-+++ b/drivers/clk/ingenic/Makefile
-@@ -8,4 +8,5 @@ obj-$(CONFIG_INGENIC_CGU_JZ4775)	+= jz4775-cgu.o
- obj-$(CONFIG_INGENIC_CGU_JZ4780)	+= jz4780-cgu.o
- obj-$(CONFIG_INGENIC_CGU_X1000)		+= x1000-cgu.o
- obj-$(CONFIG_INGENIC_CGU_X1830)		+= x1830-cgu.o
-+obj-$(CONFIG_INGENIC_CGU_X2000)		+= x2000-cgu.o
- obj-$(CONFIG_INGENIC_TCU_CLK)		+= tcu.o
-diff --git a/drivers/clk/ingenic/x2000-cgu.c b/drivers/clk/ingenic/x2000-cgu.c
-new file mode 100644
-index 00000000..2487267
---- /dev/null
-+++ b/drivers/clk/ingenic/x2000-cgu.c
-@@ -0,0 +1,784 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * X2000 SoC CGU driver
-+ * Copyright (C) 2020 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-+ */
-+
-+#include <linux/clk-provider.h>
-+#include <linux/delay.h>
-+#include <linux/io.h>
-+#include <linux/of.h>
-+
-+#include <dt-bindings/clock/x2000-cgu.h>
-+
-+#include "cgu.h"
-+#include "pm.h"
-+
-+/* CGU register offsets */
-+#define CGU_REG_CPCCR			0x00
-+#define CGU_REG_LCR				0x04
-+#define CGU_REG_CPPCR			0x0c
-+#define CGU_REG_CPAPCR			0x10
-+#define CGU_REG_CPMPCR			0x14
-+#define CGU_REG_CPEPCR			0x18
-+#define CGU_REG_CLKGR0			0x20
-+#define CGU_REG_OPCR			0x24
-+#define CGU_REG_CLKGR1			0x28
-+#define CGU_REG_DDRCDR			0x2c
-+#define CGU_REG_ISPCDR			0x30
-+#define CGU_REG_CPSPR			0x34
-+#define CGU_REG_CPSPPR			0x38
-+#define CGU_REG_USBPCR			0x3c
-+#define CGU_REG_USBRDT			0x40
-+#define CGU_REG_USBVBFIL		0x44
-+#define CGU_REG_USBPCR1			0x48
-+#define CGU_REG_MACPTPCDR		0x4c
-+#define CGU_REG_RSACDR			0x50
-+#define CGU_REG_MACCDR			0x54
-+#define CGU_REG_MAC0TXCDR		0x58
-+#define CGU_REG_SSICDR			0x5c
-+#define CGU_REG_I2S0CDR			0x60
-+#define CGU_REG_LPCDR			0x64
-+#define CGU_REG_MSC0CDR			0x68
-+#define CGU_REG_PWMCDR			0x6c
-+#define CGU_REG_I2S0CDR1		0x70
-+#define CGU_REG_SFCCDR			0x74
-+#define CGU_REG_CIMCDR			0x78
-+#define CGU_REG_I2S1CDR			0x7c
-+#define CGU_REG_I2S1CDR1		0x80
-+#define CGU_REG_I2S2CDR			0x84
-+#define CGU_REG_I2S2CDR1		0x88
-+#define CGU_REG_I2S3CDR			0x8c
-+#define CGU_REG_PSWC0ST			0x90
-+#define CGU_REG_PSWC1ST			0x94
-+#define CGU_REG_PSWC2ST			0x98
-+#define CGU_REG_PSWC3ST			0x9c
-+#define CGU_REG_I2S3CDR1		0xa0
-+#define CGU_REG_MSC1CDR			0xa4
-+#define CGU_REG_MSC2CDR			0xa8
-+#define CGU_REG_AUDIOCR			0xac
-+#define CGU_REG_CMP_INTR		0xb0
-+#define CGU_REG_CMP_INTRE		0xb4
-+#define CGU_REG_CMP_SFTINT		0xbc
-+#define CGU_REG_SRBC			0xc4
-+#define CGU_REG_SLBC			0xc8
-+#define CGU_REG_SLPC			0xcc
-+#define CGU_REG_DRCG			0xd0
-+#define CGU_REG_CPCSR			0xd4
-+#define CGU_REG_MAC1TXCDR		0xdc
-+#define CGU_REG_MAC0PHYC		0xe4
-+#define CGU_REG_MAC1PHYC		0xe8
-+#define CGU_REG_MESTSEL			0xec
-+#define CGU_REG_MEMPD0			0xf8
-+#define CGU_REG_MEMPD1			0xfc
-+
-+/* bits within the OPCR register */
-+#define OPCR_GATE_USBPHYCLK		BIT(23)
-+#define OPCR_SPENDN				BIT(7)
-+
-+/* bits within the I2SCDR register */
-+#define I2SCDR_I2PCS_SHIFT		30
-+#define I2SCDR_I2PCS_MASK		(0x1 << I2SCDR_I2PCS_SHIFT)
-+#define I2SCDR_I2SDIV_M_SHIFT	20
-+#define I2SCDR_I2SDIV_M_MASK	(0x1ff << I2SCDR_I2SDIV_M_SHIFT)
-+#define I2SCDR_I2SDIV_N_SHIFT	0
-+#define I2SCDR_I2SDIV_N_MASK	(0xfffff << I2SCDR_I2SDIV_N_SHIFT)
-+#define I2SCDR_CE_I2S			BIT(29)
-+
-+/* bits within the CLKGR1 register */
-+#define CLKGR1_I2S0				BIT(8)
-+#define CLKGR1_I2S1				BIT(9)
-+#define CLKGR1_I2S2				BIT(10)
-+#define CLKGR1_I2S3				BIT(11)
-+
-+static struct ingenic_cgu *cgu;
-+
-+static void x2000_i2s_calc_m_n(const struct ingenic_cgu_pll_info *pll_info,
-+		       unsigned long rate, unsigned long parent_rate,
-+		       unsigned int *pm, unsigned int *pn, unsigned int *pod)
-+{
-+	unsigned int delta, m, n;
-+	u64 curr_delta, curr_m, curr_n;
-+
-+	if ((parent_rate % rate == 0) && ((parent_rate / rate) > 1)) {
-+		m = 1;
-+		n = parent_rate / rate;
-+		goto out;
-+	}
-+
-+	delta = rate;
-+
-+	/*
-+	 * The length of M is 9 bits, its value must be between 1 and 511.
-+	 * The length of N is 20 bits, its value must be between 2 and 1048575,
-+	 * and must not be less than 2 times of the value of M.
-+	 */
-+	for (curr_m = 511; curr_m >= 1; curr_m--) {
-+		curr_n = parent_rate * curr_m;
-+		curr_delta = do_div(curr_n, rate);
-+
-+		if (curr_n < 2 * curr_m || curr_n > 1048575)
-+			continue;
-+
-+		if (curr_delta == 0)
-+			break;
-+
-+		if (curr_delta < delta) {
-+			m = curr_m;
-+			n = curr_n;
-+			delta = curr_delta;
-+		}
-+	}
-+
-+out:
-+	*pm = m;
-+	*pn = n;
-+
-+	/*
-+	 * The I2S PLL does not have OD bits, so set the *pod to 1 to ensure
-+	 * that the ingenic_pll_calc() in cgu.c can run properly.
-+	 */
-+	*pod = 1;
-+}
-+
-+static int x2000_usb_phy_enable(struct clk_hw *hw)
-+{
-+	void __iomem *reg_opcr	= cgu->base + CGU_REG_OPCR;
-+
-+	writel((readl(reg_opcr) | OPCR_SPENDN) & ~OPCR_GATE_USBPHYCLK, reg_opcr);
-+
-+	return 0;
-+}
-+
-+static void x2000_usb_phy_disable(struct clk_hw *hw)
-+{
-+	void __iomem *reg_opcr	= cgu->base + CGU_REG_OPCR;
-+
-+	writel((readl(reg_opcr) & ~OPCR_SPENDN) | OPCR_GATE_USBPHYCLK, reg_opcr);
-+}
-+
-+static int x2000_usb_phy_is_enabled(struct clk_hw *hw)
-+{
-+	void __iomem *reg_opcr	= cgu->base + CGU_REG_OPCR;
-+
-+	return !!(readl(reg_opcr) & OPCR_SPENDN);
-+}
-+
-+static const struct clk_ops x2000_otg_phy_ops = {
-+	.enable		= x2000_usb_phy_enable,
-+	.disable	= x2000_usb_phy_disable,
-+	.is_enabled	= x2000_usb_phy_is_enabled,
-+};
-+
-+static const s8 pll_od_encoding[64] = {
-+	 -1, 0x1,  -1, 0x2,  -1,  -1,  -1, 0x3,
-+	 -1,  -1,  -1,  -1,  -1,  -1,  -1, 0x4,
-+	 -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
-+	 -1,  -1,  -1,  -1,  -1,  -1,  -1, 0x5,
-+	 -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
-+	 -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
-+	 -1,  -1,  -1,  -1,  -1,  -1,  -1,  -1,
-+	 -1,  -1,  -1,  -1,  -1,  -1,  -1, 0x6,
-+};
-+
-+static const struct ingenic_cgu_clk_info x2000_cgu_clocks[] = {
-+
-+	/* External clocks */
-+
-+	[X2000_CLK_EXCLK] = { "ext", CGU_CLK_EXT },
-+	[X2000_CLK_RTCLK] = { "rtc", CGU_CLK_EXT },
-+
-+	/* PLLs */
-+
-+	[X2000_CLK_APLL] = {
-+		"apll", CGU_CLK_PLL,
-+		.parents = { X2000_CLK_EXCLK, -1, -1, -1 },
-+		.pll = {
-+			.reg = CGU_REG_CPAPCR,
-+			.rate_multiplier = 2,
-+			.m_shift = 20,
-+			.m_bits = 9,
-+			.m_offset = 1,
-+			.n_shift = 14,
-+			.n_bits = 6,
-+			.n_offset = 1,
-+			.od_shift = 11,
-+			.od_bits = 3,
-+			.od_max = 64,
-+			.od_encoding = pll_od_encoding,
-+			.bypass_reg = CGU_REG_CPPCR,
-+			.bypass_bit = 30,
-+			.enable_bit = 0,
-+			.stable_bit = 3,
-+		},
-+	},
-+
-+	[X2000_CLK_MPLL] = {
-+		"mpll", CGU_CLK_PLL,
-+		.parents = { X2000_CLK_EXCLK, -1, -1, -1 },
-+		.pll = {
-+			.reg = CGU_REG_CPMPCR,
-+			.rate_multiplier = 2,
-+			.m_shift = 20,
-+			.m_bits = 10,
-+			.m_offset = 1,
-+			.n_shift = 14,
-+			.n_bits = 6,
-+			.n_offset = 1,
-+			.od_shift = 11,
-+			.od_bits = 3,
-+			.od_max = 64,
-+			.od_encoding = pll_od_encoding,
-+			.bypass_reg = CGU_REG_CPPCR,
-+			.bypass_bit = 28,
-+			.enable_bit = 0,
-+			.stable_bit = 3,
-+		},
-+	},
-+
-+	[X2000_CLK_EPLL] = {
-+		"epll", CGU_CLK_PLL,
-+		.parents = { X2000_CLK_EXCLK, -1, -1, -1 },
-+		.pll = {
-+			.reg = CGU_REG_CPEPCR,
-+			.rate_multiplier = 2,
-+			.m_shift = 20,
-+			.m_bits = 10,
-+			.m_offset = 1,
-+			.n_shift = 14,
-+			.n_bits = 6,
-+			.n_offset = 1,
-+			.od_shift = 11,
-+			.od_bits = 3,
-+			.od_max = 64,
-+			.od_encoding = pll_od_encoding,
-+			.bypass_reg = CGU_REG_CPPCR,
-+			.bypass_bit = 26,
-+			.enable_bit = 0,
-+			.stable_bit = 3,
-+		},
-+	},
-+
-+	[X2000_CLK_I2S0] = {
-+		"i2s0", CGU_CLK_PLL,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_EPLL, -1, -1 },
-+		.pll = {
-+			.reg = CGU_REG_I2S0CDR,
-+			.rate_multiplier = 1,
-+			.mux_shift = 30,
-+			.mux_bits = 1,
-+			.m_shift = 20,
-+			.m_bits = 9,
-+			.m_offset = 0,
-+			.n_shift = 0,
-+			.n_bits = 20,
-+			.n_offset = 0,
-+			.bypass_bit = -1,
-+			.enable_bit = 29,
-+			.stable_bit = -1,
-+			.calc_m_n_od = x2000_i2s_calc_m_n,
-+		},
-+	},
-+
-+	[X2000_CLK_I2S1] = {
-+		"i2s1", CGU_CLK_PLL,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_EPLL, -1, -1 },
-+		.pll = {
-+			.reg = CGU_REG_I2S1CDR,
-+			.rate_multiplier = 1,
-+			.mux_shift = 30,
-+			.mux_bits = 1,
-+			.m_shift = 20,
-+			.m_bits = 9,
-+			.m_offset = 0,
-+			.n_shift = 0,
-+			.n_bits = 20,
-+			.n_offset = 0,
-+			.bypass_bit = -1,
-+			.enable_bit = 29,
-+			.stable_bit = -1,
-+			.calc_m_n_od = x2000_i2s_calc_m_n,
-+		},
-+	},
-+
-+	[X2000_CLK_I2S2] = {
-+		"i2s2", CGU_CLK_PLL,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_EPLL, -1, -1 },
-+		.pll = {
-+			.reg = CGU_REG_I2S2CDR,
-+			.rate_multiplier = 1,
-+			.mux_shift = 30,
-+			.mux_bits = 1,
-+			.m_shift = 20,
-+			.m_bits = 9,
-+			.m_offset = 0,
-+			.n_shift = 0,
-+			.n_bits = 20,
-+			.n_offset = 0,
-+			.bypass_bit = -1,
-+			.enable_bit = 29,
-+			.stable_bit = -1,
-+			.calc_m_n_od = x2000_i2s_calc_m_n,
-+		},
-+	},
-+
-+	[X2000_CLK_I2S3] = {
-+		"i2s3", CGU_CLK_PLL,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_EPLL, -1, -1 },
-+		.pll = {
-+			.reg = CGU_REG_I2S3CDR,
-+			.rate_multiplier = 1,
-+			.mux_shift = 30,
-+			.mux_bits = 1,
-+			.m_shift = 20,
-+			.m_bits = 9,
-+			.m_offset = 0,
-+			.n_shift = 0,
-+			.n_bits = 20,
-+			.n_offset = 0,
-+			.bypass_bit = -1,
-+			.enable_bit = 29,
-+			.stable_bit = -1,
-+			.calc_m_n_od = x2000_i2s_calc_m_n,
-+		},
-+	},
-+
-+	/* Custom (SoC-specific) OTG PHY */
-+
-+	[X2000_CLK_OTGPHY] = {
-+		"otg_phy", CGU_CLK_CUSTOM,
-+		.parents = { X2000_CLK_EXCLK, -1, -1, -1 },
-+		.custom = { &x2000_otg_phy_ops },
-+	},
-+
-+	/* Muxes & dividers */
-+
-+	[X2000_CLK_SCLKA] = {
-+		"sclk_a", CGU_CLK_MUX,
-+		.parents = { -1, X2000_CLK_EXCLK, X2000_CLK_APLL, -1 },
-+		.mux = { CGU_REG_CPCCR, 30, 2 },
-+	},
-+
-+	[X2000_CLK_CPUMUX] = {
-+		"cpu_mux", CGU_CLK_MUX,
-+		.parents = { -1, X2000_CLK_SCLKA, X2000_CLK_MPLL, -1 },
-+		.mux = { CGU_REG_CPCCR, 28, 2 },
-+	},
-+
-+	[X2000_CLK_CPU] = {
-+		"cpu", CGU_CLK_DIV,
-+		.parents = { X2000_CLK_CPUMUX },
-+		.div = { CGU_REG_CPCCR, 0, 1, 4, 22, -1, -1 },
-+	},
-+
-+	[X2000_CLK_L2CACHE] = {
-+		"l2cache", CGU_CLK_DIV,
-+		.parents = { X2000_CLK_CPUMUX },
-+		.div = { CGU_REG_CPCCR, 4, 1, 4, 22, -1, -1 },
-+	},
-+
-+	[X2000_CLK_AHB0] = {
-+		"ahb0", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { -1, X2000_CLK_SCLKA, X2000_CLK_MPLL, -1 },
-+		.mux = { CGU_REG_CPCCR, 26, 2 },
-+		.div = { CGU_REG_CPCCR, 8, 1, 4, 21, -1, -1 },
-+		.gate = { CGU_REG_CLKGR0, 29 },
-+	},
-+
-+	[X2000_CLK_AHB2PMUX] = {
-+		"ahb2_apb_mux", CGU_CLK_MUX,
-+		.parents = { -1, X2000_CLK_SCLKA, X2000_CLK_MPLL, -1 },
-+		.mux = { CGU_REG_CPCCR, 24, 2 },
-+	},
-+
-+	[X2000_CLK_AHB2] = {
-+		"ahb2", CGU_CLK_DIV,
-+		.parents = { X2000_CLK_AHB2PMUX },
-+		.div = { CGU_REG_CPCCR, 12, 1, 4, 20, -1, -1 },
-+	},
-+
-+	[X2000_CLK_PCLK] = {
-+		"pclk", CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { X2000_CLK_AHB2PMUX },
-+		.div = { CGU_REG_CPCCR, 16, 1, 4, 20, -1, -1 },
-+		.gate = { CGU_REG_CLKGR0, 28 },
-+	},
-+
-+	[X2000_CLK_DDR] = {
-+		"ddr", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { -1, X2000_CLK_SCLKA, X2000_CLK_MPLL, -1 },
-+		.mux = { CGU_REG_DDRCDR, 30, 2 },
-+		.div = { CGU_REG_DDRCDR, 0, 1, 4, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR0, 31 },
-+	},
-+
-+	[X2000_CLK_ISP] = {
-+		"isp", CGU_CLK_MUX | CGU_CLK_DIV,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
-+		.mux = { CGU_REG_ISPCDR, 30, 2 },
-+		.div = { CGU_REG_ISPCDR, 0, 1, 4, 29, 28, 27 },
-+	},
-+
-+	[X2000_CLK_MACPTP] = {
-+		"mac_ptp", CGU_CLK_MUX | CGU_CLK_DIV,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
-+		.mux = { CGU_REG_MACPTPCDR, 30, 2 },
-+		.div = { CGU_REG_MACPTPCDR, 0, 1, 8, 29, 28, 27 },
-+	},
-+
-+	[X2000_CLK_MACPHY] = {
-+		"mac_phy", CGU_CLK_MUX | CGU_CLK_DIV,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
-+		.mux = { CGU_REG_MACCDR, 30, 2 },
-+		.div = { CGU_REG_MACCDR, 0, 1, 8, 29, 28, 27 },
-+	},
-+
-+	[X2000_CLK_MAC0TX] = {
-+		"mac0_tx", CGU_CLK_MUX | CGU_CLK_DIV,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
-+		.mux = { CGU_REG_MAC0TXCDR, 30, 2 },
-+		.div = { CGU_REG_MAC0TXCDR, 0, 1, 8, 29, 28, 27 },
-+	},
-+
-+	[X2000_CLK_MAC1TX] = {
-+		"mac1_tx", CGU_CLK_MUX | CGU_CLK_DIV,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
-+		.mux = { CGU_REG_MAC1TXCDR, 30, 2 },
-+		.div = { CGU_REG_MAC1TXCDR, 0, 1, 8, 29, 28, 27 },
-+	},
-+
-+	[X2000_CLK_RSA] = {
-+		"rsa", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EXCLK, -1 },
-+		.mux = { CGU_REG_LPCDR, 30, 2 },
-+		.div = { CGU_REG_LPCDR, 0, 1, 4, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR0, 25 },
-+	},
-+
-+	[X2000_CLK_SSIPLL] = {
-+		"ssi_pll", CGU_CLK_MUX | CGU_CLK_DIV,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
-+		.mux = { CGU_REG_SSICDR, 30, 2 },
-+		.div = { CGU_REG_SSICDR, 0, 1, 8, 29, 28, 27 },
-+	},
-+
-+	[X2000_CLK_LCD] = {
-+		"lcd", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EXCLK, -1 },
-+		.mux = { CGU_REG_LPCDR, 30, 2 },
-+		.div = { CGU_REG_LPCDR, 0, 1, 8, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR0, 23 },
-+	},
-+
-+	[X2000_CLK_MSC0] = {
-+		"msc0", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EXCLK, -1 },
-+		.mux = { CGU_REG_MSC0CDR, 30, 2 },
-+		.div = { CGU_REG_MSC0CDR, 0, 2, 8, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR0, 4 },
-+	},
-+
-+	[X2000_CLK_MSC1] = {
-+		"msc1", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EXCLK, -1 },
-+		.mux = { CGU_REG_MSC1CDR, 30, 2 },
-+		.div = { CGU_REG_MSC1CDR, 0, 2, 8, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR0, 5 },
-+	},
-+
-+	[X2000_CLK_MSC2] = {
-+		"msc2", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EXCLK, -1 },
-+		.mux = { CGU_REG_MSC2CDR, 30, 2 },
-+		.div = { CGU_REG_MSC2CDR, 0, 2, 8, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR1, 25 },
-+	},
-+
-+	[X2000_CLK_PWM] = {
-+		"pwm", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
-+		.mux = { CGU_REG_PWMCDR, 30, 2 },
-+		.div = { CGU_REG_PWMCDR, 0, 1, 4, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR1, 5 },
-+	},
-+
-+	[X2000_CLK_SFC] = {
-+		"sfc", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
-+		.mux = { CGU_REG_SFCCDR, 30, 2 },
-+		.div = { CGU_REG_SFCCDR, 0, 1, 8, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR0, 2 },
-+	},
-+
-+	[X2000_CLK_CIM] = {
-+		"cim", CGU_CLK_MUX | CGU_CLK_DIV | CGU_CLK_GATE,
-+		.parents = { X2000_CLK_SCLKA, X2000_CLK_MPLL, X2000_CLK_EPLL, -1 },
-+		.mux = { CGU_REG_CIMCDR, 30, 2 },
-+		.div = { CGU_REG_CIMCDR, 0, 1, 8, 29, 28, 27 },
-+		.gate = { CGU_REG_CLKGR0, 22 },
-+	},
-+
-+	[X2000_CLK_DMIC_EXCLK] = {
-+		"dmic_exclk", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_AUDIOCR, 31 },
-+	},
-+
-+	[X2000_CLK_DMIC] = {
-+		"dmic", CGU_CLK_MUX | CGU_CLK_GATE,
-+		.parents = { X2000_CLK_DMIC_EXCLK, X2000_CLK_I2S3 },
-+		.mux = { CGU_REG_AUDIOCR, 0, 1},
-+		.gate = { CGU_REG_CLKGR1, 13 },
-+	},
-+
-+	[X2000_CLK_EXCLK_DIV512] = {
-+		"exclk_div512", CGU_CLK_FIXDIV,
-+		.parents = { X2000_CLK_EXCLK },
-+		.fixdiv = { 512 },
-+	},
-+
-+	[X2000_CLK_RTC] = {
-+		"rtc_ercs", CGU_CLK_MUX | CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK_DIV512, X2000_CLK_RTCLK },
-+		.mux = { CGU_REG_OPCR, 2, 1},
-+		.gate = { CGU_REG_CLKGR0, 27 },
-+	},
-+
-+	/* Gate-only clocks */
-+
-+	[X2000_CLK_EMC] = {
-+		"emc", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_AHB2 },
-+		.gate = { CGU_REG_CLKGR0, 0 },
-+	},
-+
-+	[X2000_CLK_EFUSE] = {
-+		"efuse", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_AHB2 },
-+		.gate = { CGU_REG_CLKGR0, 1 },
-+	},
-+
-+	[X2000_CLK_OTG] = {
-+		"otg", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR0, 3 },
-+	},
-+
-+	[X2000_CLK_SCC] = {
-+		"scc", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR0, 6 },
-+	},
-+
-+	[X2000_CLK_I2C0] = {
-+		"i2c0", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_PCLK },
-+		.gate = { CGU_REG_CLKGR0, 7 },
-+	},
-+
-+	[X2000_CLK_I2C1] = {
-+		"i2c1", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_PCLK },
-+		.gate = { CGU_REG_CLKGR0, 8 },
-+	},
-+
-+	[X2000_CLK_I2C2] = {
-+		"i2c2", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_PCLK },
-+		.gate = { CGU_REG_CLKGR0, 9 },
-+	},
-+
-+	[X2000_CLK_I2C3] = {
-+		"i2c3", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_PCLK },
-+		.gate = { CGU_REG_CLKGR0, 10 },
-+	},
-+
-+	[X2000_CLK_SADC] = {
-+		"sadc", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR0, 13 },
-+	},
-+
-+	[X2000_CLK_UART0] = {
-+		"uart0", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR0, 14 },
-+	},
-+
-+	[X2000_CLK_UART1] = {
-+		"uart1", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR0, 15 },
-+	},
-+
-+	[X2000_CLK_UART2] = {
-+		"uart2", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR0, 16 },
-+	},
-+
-+	[X2000_CLK_DTRNG] = {
-+		"dtrng", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_PCLK },
-+		.gate = { CGU_REG_CLKGR0, 17 },
-+	},
-+
-+	[X2000_CLK_TCU] = {
-+		"tcu", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR0, 18 },
-+	},
-+
-+	[X2000_CLK_SSI0] = {
-+		"ssi0", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_SSIPLL },
-+		.gate = { CGU_REG_CLKGR0, 19 },
-+	},
-+
-+	[X2000_CLK_OST] = {
-+		"ost", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR0, 20 },
-+	},
-+
-+	[X2000_CLK_PDMA] = {
-+		"pdma", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR0, 21 },
-+	},
-+
-+	[X2000_CLK_SSI1] = {
-+		"ssi1", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_SSIPLL },
-+		.gate = { CGU_REG_CLKGR0, 26 },
-+	},
-+
-+	[X2000_CLK_I2C4] = {
-+		"i2c4", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_PCLK },
-+		.gate = { CGU_REG_CLKGR1, 0 },
-+	},
-+
-+	[X2000_CLK_I2C5] = {
-+		"i2c5", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_PCLK },
-+		.gate = { CGU_REG_CLKGR1, 1 },
-+	},
-+
-+	[X2000_CLK_ISP0] = {
-+		"isp0", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_ISP },
-+		.gate = { CGU_REG_CLKGR1, 2 },
-+	},
-+
-+	[X2000_CLK_ISP1] = {
-+		"isp1", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_ISP },
-+		.gate = { CGU_REG_CLKGR1, 3 },
-+	},
-+
-+	[X2000_CLK_HASH] = {
-+		"hash", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_AHB2 },
-+		.gate = { CGU_REG_CLKGR1, 6 },
-+	},
-+
-+	[X2000_CLK_UART3] = {
-+		"uart3", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR1, 16 },
-+	},
-+
-+	[X2000_CLK_UART4] = {
-+		"uart4", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR1, 17 },
-+	},
-+
-+	[X2000_CLK_UART5] = {
-+		"uart5", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR1, 18 },
-+	},
-+
-+	[X2000_CLK_UART6] = {
-+		"uart6", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR1, 19 },
-+	},
-+
-+	[X2000_CLK_UART7] = {
-+		"uart7", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR1, 20 },
-+	},
-+
-+	[X2000_CLK_UART8] = {
-+		"uart8", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR1, 21 },
-+	},
-+
-+	[X2000_CLK_UART9] = {
-+		"uart9", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_EXCLK },
-+		.gate = { CGU_REG_CLKGR1, 22 },
-+	},
-+
-+	[X2000_CLK_MAC0] = {
-+		"mac0", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_AHB2 },
-+		.gate = { CGU_REG_CLKGR1, 23 },
-+	},
-+
-+	[X2000_CLK_MAC1] = {
-+		"mac1", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_AHB2 },
-+		.gate = { CGU_REG_CLKGR1, 24 },
-+	},
-+
-+	[X2000_CLK_INTC] = {
-+		"intc", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_AHB2 },
-+		.gate = { CGU_REG_CLKGR1, 26 },
-+	},
-+
-+	[X2000_CLK_CSI] = {
-+		"csi", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_AHB0 },
-+		.gate = { CGU_REG_CLKGR1, 28 },
-+	},
-+
-+	[X2000_CLK_DSI] = {
-+		"dsi", CGU_CLK_GATE,
-+		.parents = { X2000_CLK_AHB0 },
-+		.gate = { CGU_REG_CLKGR1, 29 },
-+	},
-+};
-+
-+static void __init x2000_cgu_init(struct device_node *np)
-+{
-+	int retval;
-+
-+	cgu = ingenic_cgu_new(x2000_cgu_clocks,
-+			      ARRAY_SIZE(x2000_cgu_clocks), np);
-+	if (!cgu) {
-+		pr_err("%s: failed to initialise CGU\n", __func__);
-+		return;
-+	}
-+
-+	retval = ingenic_cgu_register_clocks(cgu);
-+	if (retval) {
-+		pr_err("%s: failed to register CGU Clocks\n", __func__);
-+		return;
-+	}
-+
-+	ingenic_cgu_register_syscore_ops(cgu);
-+}
-+
-+/*
-+ * CGU has some children devices, this is useful for probing children devices
-+ * in the case where the device node is compatible with "simple-mfd".
-+ */
-+CLK_OF_DECLARE_DRIVER(x2000_cgu, "ingenic,x2000-cgu", x2000_cgu_init);
+@@ -64,6 +80,34 @@ properties:
+     maximum: 22760
+     description: Optional load capacitor for XTAL1 and XTAL2
+ 
++  idt,enable-shutdown:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: |
++      Enable the shutdown function when the SD/OE pin is high. This
++      corresponds to setting the SH bit of the Primary Source and
++      Shutdown Register.
++
++  idt,disable-shutdown:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: |
++      Disable the shutdown function for the SD/OE pin. This corresponds
++      to clearing the SH bit of the Primary Source and Shutdown
++      Register.
++
++  idt,output-enable-active-high:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: |
++      This enables output when the SD/OE pin is high, and disables
++      output when the SD/OE pin is low. This corresponds to setting the
++      SP bit of the Primary Source and Shutdown Register.
++
++  idt,output-enable-active-low:
++    $ref: /schemas/types.yaml#/definitions/flag
++    description: |
++      This disables output when the SD/OE pin is high, and enables
++      output when the SD/OE pin is low. This corresponds to clearing the
++      SP bit of the Primary Source and Shutdown Register.
++
+ patternProperties:
+   "^OUT[1-4]$":
+     type: object
 -- 
-2.7.4
+2.25.1
 
