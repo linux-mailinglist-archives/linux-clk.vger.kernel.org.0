@@ -2,55 +2,128 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A4B03B7963
-	for <lists+linux-clk@lfdr.de>; Tue, 29 Jun 2021 22:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664013B7974
+	for <lists+linux-clk@lfdr.de>; Tue, 29 Jun 2021 22:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234149AbhF2UcX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 29 Jun 2021 16:32:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46226 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234073AbhF2UcW (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 29 Jun 2021 16:32:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9EF9E6112D;
-        Tue, 29 Jun 2021 20:29:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624998594;
-        bh=D1rp/lGnkLgAHhHFva4aywCJx1yghtTcJ6Lp6xqWW5M=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=KSbDla3TMNAgxfWkXUEbn/ZQ1zKf7vLdeZBMdzmZ3rQxYeWWP09j57E2Omx6utCsb
-         Ht5r0QVHY1sq55byXpwJPupguba06hBecLAEDHlq2r3T7Cp6EgX2D5Bc29ObD51kvN
-         wrF3ESZy1RWvfO6rf4SLsgaIif4Bu/viSVE9yIgV0YKPCdHWoBj4z5Dp1nmXdZQZOt
-         4mooRQT/klm+QNORYaRpGJLmBHgf+jJEhEsnNyy0M7PjYHL2LyQuChMbCnCU8AWWUL
-         x0RozhKLP7QSGUe+qq3g9b12gN/PThVrLZUf5qTJz3bpXYW8cI/fW0ljqyKVELUjzq
-         74SYeRYnL39kA==
-Content-Type: text/plain; charset="utf-8"
+        id S235414AbhF2Ulw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 29 Jun 2021 16:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235316AbhF2Ulv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 29 Jun 2021 16:41:51 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6665C061766
+        for <linux-clk@vger.kernel.org>; Tue, 29 Jun 2021 13:39:22 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id u25so17190965ljj.11
+        for <linux-clk@vger.kernel.org>; Tue, 29 Jun 2021 13:39:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/0DsRwiemWRcUIuwueb9Y8X2gyBHPUAig9IO+tLNZso=;
+        b=DtQ968WYHX1WBnYz8tnoM7YDFgGL1mPoNpZYeuTd/coFfF3UD6xShQ2+4GR5W8m3ci
+         XKjN3E0SxbtkK0ra/p03svxawz81nGTNFt5MLG0HjQjhsQlRjWrJ1DwLk2uTKQ0dBF/Z
+         KqAZKBuWNfKBMUApUwtMZzla6xmeaJNNs/zobnrrhLWPq89ZWtTmf9Wctc9iBmxtNelI
+         dOxj+RKU9XtYYC5hWixwF43MOQRn7qeDXyQ22Crk/8lq0LGEPrIqQJR9y2AlO4OyRYVj
+         e4JYuxrDbVN8Jd94NbHPzfvYXHQFZnnh5vF1jCqsvzrt2W+cx5Ogby9+fHNejo1ZGJvg
+         DoNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/0DsRwiemWRcUIuwueb9Y8X2gyBHPUAig9IO+tLNZso=;
+        b=qDG48MGb5kZN36XuKieQVMP5Kc1VGt5w+Z1JkQX0l/W48GXRDOYbXsc9Z44/UqDW9a
+         vqsiSKbuTxh3mSDKFkMc8dCicBYEPkimv5B/wo4AHEKvXLJtaNw3cLOYKwQXUqoJFd2s
+         ywvHhbsnmX1jeDJSPhhmToZcQ/8deUDKFSci5JVdKePuXBFtDxn6UnIjHbtwWS2C2Nx8
+         9mKvggip+CLBs4aj/01isoMqOcgTSi8TCPccrCWy6usPidBAKERG/OPupV7+4jiWKD4G
+         ytp4Li+VJIp6e5X/mo5v5+J7RnmZPo75wj7ytf/Vj5YISvJOb7Snqq/7AyzxXCNgIcSL
+         7w3w==
+X-Gm-Message-State: AOAM530o0MnH5VUiEFWmiP6tKILc2YK5U/Z5O+6fc1CqRX0dSZ/vPcz0
+        Hv3NGlWNziEUBmv6xwtirNJ8/Q==
+X-Google-Smtp-Source: ABdhPJwMltQWIOc8puXrbBwyzGioF+Q0aXsF3Ul6Zxxt4IjH5Ynko0ec5cXz2G4lhXGsCJBjbgEKyQ==
+X-Received: by 2002:a2e:a786:: with SMTP id c6mr5298466ljf.96.1624999161108;
+        Tue, 29 Jun 2021 13:39:21 -0700 (PDT)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id bp34sm1716902lfb.125.2021.06.29.13.39.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Jun 2021 13:39:20 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH 1/2] clk: qcom: fix error_path in gdsc_register
+Date:   Tue, 29 Jun 2021 23:39:18 +0300
+Message-Id: <20210629203919.2956918-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20210629154740.3091884-1-sean.anderson@seco.com>
-References: <20210629154740.3091884-1-sean.anderson@seco.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: clk: vc5: Add properties for configuring the SD/OE pin
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Adam Ford <aford173@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-To:     Luca Ceresoli <luca@lucaceresoli.net>,
-        Sean Anderson <sean.anderson@seco.com>,
-        linux-clk@vger.kernel.org
-Date:   Tue, 29 Jun 2021 13:29:53 -0700
-Message-ID: <162499859339.3331010.531653044301227066@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Sean Anderson (2021-06-29 08:47:39)
-> These properties allow configuring the SD/OE pin as described in the
-> datasheet.
->=20
-> Signed-off-by: Sean Anderson <sean.anderson@seco.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> ---
+Properly handle and cleanup errors in gdsc_register() instead of just
+returning an error and leaving some of resources registered/hanging in
+the system.
 
-I dropped v2 from clk-next and this will be punted to the next release.
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+ drivers/clk/qcom/gdsc.c | 32 ++++++++++++++++++++++++++++----
+ 1 file changed, 28 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+index 51ed640e527b..241186d9d08c 100644
+--- a/drivers/clk/qcom/gdsc.c
++++ b/drivers/clk/qcom/gdsc.c
+@@ -429,7 +429,7 @@ int gdsc_register(struct gdsc_desc *desc,
+ 		scs[i]->rcdev = rcdev;
+ 		ret = gdsc_init(scs[i]);
+ 		if (ret)
+-			return ret;
++			goto err_init;
+ 		data->domains[i] = &scs[i]->pd;
+ 	}
+ 
+@@ -437,11 +437,35 @@ int gdsc_register(struct gdsc_desc *desc,
+ 	for (i = 0; i < num; i++) {
+ 		if (!scs[i])
+ 			continue;
+-		if (scs[i]->parent)
+-			pm_genpd_add_subdomain(scs[i]->parent, &scs[i]->pd);
++		if (scs[i]->parent) {
++			ret = pm_genpd_add_subdomain(scs[i]->parent, &scs[i]->pd);
++			if (ret)
++				goto err_subdomain;
++		}
+ 	}
+ 
+-	return of_genpd_add_provider_onecell(dev->of_node, data);
++	ret = of_genpd_add_provider_onecell(dev->of_node, data);
++	if (!ret)
++		return 0;
++
++err_subdomain:
++	i--;
++	for (; i >= 0; i--) {
++		if (!scs[i] || !scs[i]->parent)
++			continue;
++		pm_genpd_remove_subdomain(scs[i]->parent, &scs[i]->pd);
++	}
++	i = num;
++
++err_init:
++	i--;
++	for (; i >= 0; i--) {
++		if (!scs[i])
++			continue;
++		pm_genpd_remove(&scs[i]->pd);
++	}
++
++	return ret;
+ }
+ 
+ void gdsc_unregister(struct gdsc_desc *desc)
+-- 
+2.30.2
+
