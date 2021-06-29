@@ -2,118 +2,65 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F093B6E5F
-	for <lists+linux-clk@lfdr.de>; Tue, 29 Jun 2021 08:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D40613B7091
+	for <lists+linux-clk@lfdr.de>; Tue, 29 Jun 2021 12:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbhF2Gpg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 29 Jun 2021 02:45:36 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:45364 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231881AbhF2Gpg (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 29 Jun 2021 02:45:36 -0400
-X-UUID: 60b45a9c5ce24780a13c88c11ba77ba2-20210629
-X-UUID: 60b45a9c5ce24780a13c88c11ba77ba2-20210629
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 69736824; Tue, 29 Jun 2021 14:43:04 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 29 Jun 2021 14:43:02 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 29 Jun 2021 14:43:02 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
+        id S233062AbhF2K1O (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 29 Jun 2021 06:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233045AbhF2K1N (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 29 Jun 2021 06:27:13 -0400
+Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2636C061767;
+        Tue, 29 Jun 2021 03:24:43 -0700 (PDT)
+Received: from localhost.localdomain (bband-dyn27.178-40-203.t-com.sk [178.40.203.27])
+        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 7A92B3EBA6;
+        Tue, 29 Jun 2021 12:24:38 +0200 (CEST)
+From:   Martin Botka <martin.botka@somainline.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        konrad.dybcio@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        paul.bouchara@somainline.org,
+        Martin Botka <martin.botka@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Fabien Parent <fparent@baylibre.com>
-CC:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <wsd_upstream@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>
-Subject: [PATCH] clk: mediatek: make COMMON_CLK_MT8167* depend on COMMON_CLK_MT8167
-Date:   Tue, 29 Jun 2021 14:43:01 +0800
-Message-ID: <20210629064301.1406-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH v2 0/3] RPMCC for SM6125
+Date:   Tue, 29 Jun 2021 12:24:01 +0200
+Message-Id: <20210629102405.192053-1-martin.botka@somainline.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-I found that COMMON_CLK_MT8167* do not depend on COMMON_CLK_MT8167,
-so it is possible to config:
+This patch series adds support for the
+RPMCC found in SM6125 SoC.
 
-CONFIG_COMMON_CLK_MT8167=n
-CONFIG_COMMON_CLK_MT8167_*=y
+In this resend i didnt include 2 patches
+that were already merged.
 
-Although it does not cause build breaks with such configuration,
-I think it is more clear to make COMMON_CLK_MT8167* depend on
-COMMON_CLK_MT8167.
+Changes in v2:
+Add commit description to all the patches
 
-Signed-off-by: Miles Chen <miles.chen@mediatek.com>
----
- drivers/clk/mediatek/Kconfig | 25 ++++++++++---------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
+Martin Botka (3):
+  rpmcc: Add sm6125 compatible
+  dt-bindings: clk: qcom: smd-rpm: Document SM6125 compatible
+  rpmcc: Add support for SM6125
 
-diff --git a/drivers/clk/mediatek/Kconfig b/drivers/clk/mediatek/Kconfig
-index 886e2d9fced5..ce6d59e4ca82 100644
---- a/drivers/clk/mediatek/Kconfig
-+++ b/drivers/clk/mediatek/Kconfig
-@@ -362,41 +362,36 @@ config COMMON_CLK_MT8167
- 
- config COMMON_CLK_MT8167_AUDSYS
- 	bool "Clock driver for MediaTek MT8167 audsys"
--	depends on (ARCH_MEDIATEK && ARM64) || COMPILE_TEST
--	select COMMON_CLK_MEDIATEK
--	default ARCH_MEDIATEK
-+	depends on COMMON_CLK_MT8167
-+	default COMMON_CLK_MT8167
- 	help
- 	  This driver supports MediaTek MT8167 audsys clocks.
- 
- config COMMON_CLK_MT8167_IMGSYS
- 	bool "Clock driver for MediaTek MT8167 imgsys"
--	depends on (ARCH_MEDIATEK && ARM64) || COMPILE_TEST
--	select COMMON_CLK_MEDIATEK
--	default ARCH_MEDIATEK
-+	depends on COMMON_CLK_MT8167
-+	default COMMON_CLK_MT8167
- 	help
- 	  This driver supports MediaTek MT8167 imgsys clocks.
- 
- config COMMON_CLK_MT8167_MFGCFG
- 	bool "Clock driver for MediaTek MT8167 mfgcfg"
--	depends on (ARCH_MEDIATEK && ARM64) || COMPILE_TEST
--	select COMMON_CLK_MEDIATEK
--	default ARCH_MEDIATEK
-+	depends on COMMON_CLK_MT8167
-+	default COMMON_CLK_MT8167
- 	help
- 	  This driver supports MediaTek MT8167 mfgcfg clocks.
- 
- config COMMON_CLK_MT8167_MMSYS
- 	bool "Clock driver for MediaTek MT8167 mmsys"
--	depends on (ARCH_MEDIATEK && ARM64) || COMPILE_TEST
--	select COMMON_CLK_MEDIATEK
--	default ARCH_MEDIATEK
-+	depends on COMMON_CLK_MT8167
-+	default COMMON_CLK_MT8167
- 	help
- 	  This driver supports MediaTek MT8167 mmsys clocks.
- 
- config COMMON_CLK_MT8167_VDECSYS
- 	bool "Clock driver for MediaTek MT8167 vdecsys"
--	depends on (ARCH_MEDIATEK && ARM64) || COMPILE_TEST
--	select COMMON_CLK_MEDIATEK
--	default ARCH_MEDIATEK
-+	depends on COMMON_CLK_MT8167
-+	default COMMON_CLK_MT8167
- 	help
- 	  This driver supports MediaTek MT8167 vdecsys clocks.
- 
+ .../devicetree/bindings/clock/qcom,rpmcc.txt  |  1 +
+ drivers/clk/qcom/clk-smd-rpm.c                | 56 +++++++++++++++++++
+ include/linux/soc/qcom/smd-rpm.h              |  1 +
+ 3 files changed, 58 insertions(+)
+
 -- 
-2.18.0
+2.32.0
 
