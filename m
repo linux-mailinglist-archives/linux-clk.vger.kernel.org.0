@@ -2,54 +2,55 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 691E53B9615
-	for <lists+linux-clk@lfdr.de>; Thu,  1 Jul 2021 20:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 055B43B9617
+	for <lists+linux-clk@lfdr.de>; Thu,  1 Jul 2021 20:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234024AbhGASXC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 1 Jul 2021 14:23:02 -0400
+        id S234026AbhGASXE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 1 Jul 2021 14:23:04 -0400
 Received: from mail-eopbgr50044.outbound.protection.outlook.com ([40.107.5.44]:36422
         "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233194AbhGASXC (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 1 Jul 2021 14:23:02 -0400
+        id S234013AbhGASXD (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 1 Jul 2021 14:23:03 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aqKMg3bYsdXQh6RaiEBhvIi3gZCIWqV2gnNejBpOAcqwQt57prX/3X0BhFNpETDNYaVZSfwtzi439Y/yfYte6vsQJVQP5+1cEGZW4F6WK06G+rDOKjpL/IyZ8YJcN/9DJfjOYqmf3ka6X6RQbXdDpEk+PgUN/VsChjehjoF0PXjl0SBCI5MKb37Zax09SYXeFN/xmGWSx0O3zkRPGr+bCoh+RE+vG5hYEdGwO4YURBqGPtinPVl32L79C4Was2r7kbaS93lNAc+VCvTjWLuhgsWtFZRQX0ay8hialldjRO9aaVGK29xvKxcJUAdTl8E8n5X/RP7Gg9HUKPPCUIXsUg==
+ b=fsN0grxf0czI48T83ydl6E//r2PqmWujQMMNL+8azFlHSPD/5koourObFCcshaekh1M4nbBgTk6gGXI1coq+Gc74MXDc+I4MwLjcgC2N7TJcj07KAfgjuaGzNkV8xgV2+Ek/yN26ip/ytcWE8PJxcBLsvNEsG3zUabADcoW/OhbIYx+DjPd26dH5enr9yCnedx2tSqGGWA2kgpdhLwA/Flc5AKP8I1LaKzCFxkp5qR45RVYjt/aJm9CUJ7aGtI4kdMxDR845LTI6bVm68LEGT7hyZUcnqCXWZ+M44JjRSFYTqwkKi2N2aVv3hUBe1lhH/3eawLIDHf8CUStgqT9TZw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+/fdGw+I48A3a5vXdIqYVwB7RdS7rs0RNhLyj+MStKQ=;
- b=FXpMmMODm2drFYM+ml1yGBka4ySc6TGLfpByM7g89CurtgO24Un4lZ00FlYbZfbH88fu7jx7a69oUALyYpjDPYR3mNEVwaHUKDlDYKfZP8XFB2/QvQVBYieb/ci0mKK8BpQsdEY2en1use6/W4eWUpPgy7cXMPZ8zFapYS39GPJ1UNrgftWp9GfbUDLlSBLRpoP031Daj0t/NyBPYnIy/g+StGqaU2eKVHtFxkx9Jfa2IWNOv8Qg7ObzPM4xTGCf20dCNTWTyqrKXqChQDuPntgeM+3ZX6ymosjI/4LXKXokAk78G/wTUUEkJdzU3XGPurOOsZrCswfhezu487G6wg==
+ bh=JoQj6GgYHYKaxdpi7eqrNAi/E6Qvynqb6Iursx5froY=;
+ b=M60DBEdS1/F6PsHJ+mEWFzauIHHrnoHJ/W3fjFej8KxFii9y0cGRYz/g3B0UduiRk1jYKqtkVn0k47HjLm/vg9OGsmFnT7fbYfp30wUaaSfPpm4hdSFDfLsbIIeGAT4E7dtHQtpfJsfcQjVxIhjWH87WVytRrnP/0SoytLjVfG2BGic/cZRK1itOotX4RoCTJIfpZ/q47Iyk62iUMS3WktkjMUxk4dzziHU/HUpvjdNAak1d+ouuUJu6VQ0aaY0+tKWlh7IuJpYwXI56Di7t8gbmpoyiJxdzTrTJYfWxJz5UOetYvaXp4xPLcv6P1y8CiNHpjAu0Uma/8cKWFFlVTg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
  dkim=pass header.d=seco.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=secospa.onmicrosoft.com; s=selector2-secospa-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+/fdGw+I48A3a5vXdIqYVwB7RdS7rs0RNhLyj+MStKQ=;
- b=gEd9rhauq2YpYRNsdfi2y62D3wHrWpdmlAn3liXuwDykFvAXCL02mv55nNb+gMQi0qRniLzesWs5pQ8edHuNxQHtdbYQhyZ/Ws8SiQBRaGsedETxG1QYgMzoajmfWVJpxBzqZh+RdV0N32jITKPRhEMSKNZvNsO3uqenSFJ7MQI=
+ bh=JoQj6GgYHYKaxdpi7eqrNAi/E6Qvynqb6Iursx5froY=;
+ b=ga0zCjwaTvBOobYajl2bTY6al0dzZObWQn1pWEftRoPRzIcxt9HEI6QFhzMI9Kgp2KFHUr0+U/4CYgLn5xPrM0B3pmeMa4x637P4Cnejd1k4kgEQQZFWd5EVhccEzwPYYpPrISWfk5Fv6GwA885HZTOi5SdNaT6vBD+YTF6GyUA=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=seco.com;
 Received: from DB7PR03MB4523.eurprd03.prod.outlook.com (2603:10a6:10:19::27)
  by DB7PR03MB4618.eurprd03.prod.outlook.com (2603:10a6:10:18::28) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.22; Thu, 1 Jul
- 2021 18:20:28 +0000
+ 2021 18:20:29 +0000
 Received: from DB7PR03MB4523.eurprd03.prod.outlook.com
  ([fe80::40d5:3554:c709:6b1b]) by DB7PR03MB4523.eurprd03.prod.outlook.com
  ([fe80::40d5:3554:c709:6b1b%5]) with mapi id 15.20.4264.026; Thu, 1 Jul 2021
- 18:20:28 +0000
+ 18:20:29 +0000
 From:   Sean Anderson <sean.anderson@seco.com>
 To:     linux-clk@vger.kernel.org, Luca Ceresoli <luca@lucaceresoli.net>
 Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Adam Ford <aford173@gmail.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Subject: [PATCH v4 1/3] dt-bindings: clk: vc5: Add properties for configuring the SD/OE pin
-Date:   Thu,  1 Jul 2021 14:20:10 -0400
-Message-Id: <20210701182012.3421679-1-sean.anderson@seco.com>
+        Sean Anderson <sean.anderson@seco.com>
+Subject: [PATCH v4 2/3] clk: vc5: Use dev_err_probe
+Date:   Thu,  1 Jul 2021 14:20:11 -0400
+Message-Id: <20210701182012.3421679-2-sean.anderson@seco.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210701182012.3421679-1-sean.anderson@seco.com>
+References: <20210701182012.3421679-1-sean.anderson@seco.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-Originating-IP: [50.195.82.171]
@@ -58,175 +59,118 @@ X-ClientProxiedBy: MN2PR11CA0018.namprd11.prod.outlook.com
  (2603:10a6:10:19::27)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from plantagenet.inhand.com (50.195.82.171) by MN2PR11CA0018.namprd11.prod.outlook.com (2603:10b6:208:23b::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.23 via Frontend Transport; Thu, 1 Jul 2021 18:20:27 +0000
+Received: from plantagenet.inhand.com (50.195.82.171) by MN2PR11CA0018.namprd11.prod.outlook.com (2603:10b6:208:23b::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.23 via Frontend Transport; Thu, 1 Jul 2021 18:20:28 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 713928f4-959d-4018-e48b-08d93cbce750
+X-MS-Office365-Filtering-Correlation-Id: 4a25229e-ac1d-4406-2985-08d93cbce815
 X-MS-TrafficTypeDiagnostic: DB7PR03MB4618:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DB7PR03MB4618F0F344CAE7D51083A2D996009@DB7PR03MB4618.eurprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-Microsoft-Antispam-PRVS: <DB7PR03MB46184664FD22FAC2B7259DF196009@DB7PR03MB4618.eurprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:293;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Tq0/3UVBXrSosXiECw4gi7ZGcSTlg8eW4fzP4qgGmRZ8xq82QaxjfxPD5beNqPU6oys14iNAvXH9uq7BjJUAFZ4WEEl31RuwzeCG+vFUDfLSP6DwP+Lq53SLGNdf0USr7RrIibJsmvC4vXjHa8CPdCU2ntfs3JiLioYpnflyjIE30nufK1fE/9RTTERMFcmOGU/4TiuMacM6IyOifGaFaa5voZgWiJMt9AeuxzbHdzzWQEN/MR4EJDdCp67MtAx+I+ilk3IYrLPpcMHkO8nAGhEaGlNWeZ2Ka0Fa2QOOgJaqU5nNoq//UVOD6cGux5HaEH7mSwWTBSUpqK3tfR7XKE3ZGbCklClawmhg4xOTFpYgYSwCcjgk3Ntk807Kam6/HzyFEQXx6aaxyqGeq22nSw1XAMyRlWBWVqwn1bc5f5oYFv6/rj18y21sjytjh4Qt4oXTHWVouE7rLWlJ782LB/T3j8qz53wAPuimObthfHXAp+XYHmpi7VbL2xQ5hpEoIu6+RLqKYULfGpSPv4nKAYTDHjzfIX/XAe7l5mdS1OhFZq307w0Oqic25qJ7ziTwCCxD+tEWRuKwI0zlTyR7nkVNJkost7bOtTzrA+7M/5c5E8PfOWjFon0pn5k84mW23DL6YLxkan87+vX8DxwczTEixCaHzG09JhPlBOWI+cjmqphBdchcDWL4CTdogcPftzMZV/sodIqpSLwiDevzxQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(39840400004)(136003)(366004)(396003)(376002)(54906003)(6486002)(6666004)(316002)(8676002)(66556008)(38350700002)(83380400001)(956004)(6506007)(66476007)(186003)(26005)(66946007)(16526019)(2616005)(478600001)(38100700002)(4326008)(86362001)(2906002)(8936002)(1076003)(6916009)(5660300002)(6512007)(44832011)(52116002)(36756003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: XKZgr2Qv9MvojaXVi1gYfHdE4K682PPJYr8OE3i1J5xtuzCNF+/ttuHIWcLmxZ9KyREP3KjQ4K0m362GcZ8MNlIKvSsqplt8WztCkmf/11VX/sUyhygsBj+HjoHrpy3jn7CsRIZndwlENWD/6cgvEzw+bM0vgbIyS/9b6Q8b2GHg0PeMxsqDSS6aEy1UTL5lE+LD4MH0eu5Hx5l4uMM+FPhRscEXHAtvNGR7XSXp1BroUodiT+t3ViIqDfAucoah26lU0uoeeRLFXDDhCST7w8wyFoLRX5yhMYj0EuPn2nVi1UaA29M+6TNqK4zuxlJPYmISWVn14phOeAu/r7P8XIGM9Eh8YlypEFPbmMEEVHWqR3ERCNbGyUzeCEh/N3ZteIk5EUQr2Yl23z8jcrL99Lbm5gmYT/Hpzn1yB+ctrX2ebG/pYKLfzYLH1z2yVjq5MtrYq5HVrUnJwk2261hV1TM/L+F6hO1dALYQmNFDjMxBE0RWiNSEiGfYOoNkz41LyddVaesGd096mKFRsdGZBbK6qOsJ4Q4PB8dI5VO+cQha96ZlmbUGLun3fcQKELvCsSXPOWnZuelknCeCg8eMODItF4Cca3qRLyvMb6O+5T2BVYW8uw1Lk/LPc3NAUiyx6NDFYqYSOZrsaNrWifutuGA/c7UHgJ3zJawmd+tqhbTUL1ykLsmtf9FKP6hw3bfyKj4t62gZ/FBAkAyqVYfVuA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4523.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(39840400004)(136003)(366004)(396003)(376002)(54906003)(6486002)(6666004)(316002)(8676002)(66556008)(38350700002)(83380400001)(956004)(6506007)(66476007)(186003)(26005)(66946007)(16526019)(2616005)(478600001)(38100700002)(4326008)(86362001)(2906002)(8936002)(1076003)(6916009)(5660300002)(6512007)(44832011)(52116002)(36756003)(107886003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?I4RAQqSogTJltsC4ergi5Yg/fozA0v/kN6RsYfCriJV5f/1Ah5MSXtvUwENh?=
- =?us-ascii?Q?ZKabU2FpbI8tnH5a1MZxSpwFecIa7T2uqtJCQpu5RoyYK+36Y7SfK4n250oY?=
- =?us-ascii?Q?Vg7SoM7GGr2zOWVK8k8hQDq+F03uwEQHToupM3LgLlj1pnv4gbYeZyXp2uyJ?=
- =?us-ascii?Q?sMI/P55On2K3C9k9r3lCLAVxNC2s/zdtE7u2H+pSIxttXHyvwFWdR2usREkN?=
- =?us-ascii?Q?wAOwTjPemTHhYp6ZkG3pMeIlHek9uNea0t6JjH1wuAIKV4GjtoDI3grhM6p5?=
- =?us-ascii?Q?kbtPAlEjjhDSJxOSe61mBxxmJGM8SFBA7ko4ZAJmDlEvc6XgPukbb3txcdP+?=
- =?us-ascii?Q?edpd9P6lHG5Duf9PehznajvjhtkziNDi6LaaH4ihjarxL3KOXdR6+VNNTiwC?=
- =?us-ascii?Q?0BpvUoQwMYLa8q0BjhtTAH1pFD+2VtuWvdVzmiCiggYdtcXFC/smCUnFQC78?=
- =?us-ascii?Q?6+SK+f2uy0dILu2s7F0G+2iiwJH0np5g6O6N8dZ3HrkMZkRCZrTvaHS3GN3T?=
- =?us-ascii?Q?uP71YMq/XRUDNsUZLPiDzSXMzCRBgoQoafhNQm2LveUOpULacLlJ/V7lopdh?=
- =?us-ascii?Q?2Y0U5y+rIL3iNOpmJqntaRSXbxG53nrBmpLEr+dt7UdFTQNSdB8Zr2rA6d3V?=
- =?us-ascii?Q?NN8YdiXrBXMrIO1VRTKClKS7eZdot6YUdBfkcQnXKdmYJXyr8cZWCezUlKF0?=
- =?us-ascii?Q?4TxG2Qso/V0XZwSemgF3E1rer0tZGgy7xnPhL5QLVK4oFwOZii2IzHFEEy6/?=
- =?us-ascii?Q?hPuUvBq/hKe+h7Ks6Eb0+h/idOqfySj08EFikXeUlxQE8d/n7uAXL3mN4fAT?=
- =?us-ascii?Q?zRZS1xVThRZLbMvzSsF0+UIAHwVhEOZe1j2NgGggkPrCq+T9qJGYru9YxpJe?=
- =?us-ascii?Q?XITEEo6US4lWrjcR8NDvVCbPCHPW6FNY7UBU3AKoYUgQ+nXNzGSb00Cattxc?=
- =?us-ascii?Q?lpA8pHkOdfVqsb6/ufCyx8X9SZVtqaFwI3A7ZqGAdr3mC0Opnih6QZF1mpzF?=
- =?us-ascii?Q?vxv0anaNVyxN09+VHxcNca0GewUZ/Lx/9nPDoiKrYRSa0fw1D80f2Rkk1PUu?=
- =?us-ascii?Q?i6XQfesgEWEDyS4sTaMhs2yhzIHuyswRi56uBjh/iMxV23Tfy6zIqsOEwPmn?=
- =?us-ascii?Q?atqXjGJejMCWtwCLQKJ/YJLMPz9S19S90uuNKFI/ufHVQ87mI8KTWQzKl7HG?=
- =?us-ascii?Q?kyuUQnnIIBc1xrmn4DGRehNGIMYu5mm/iZX3GzngEGazEzMbU6H0s3yhMhdx?=
- =?us-ascii?Q?6qgqTD4kRCwxcxlxYPnJkDFTKzHxqvh8yq0yeT2Api2yAByFVdLJHX9zk/AC?=
- =?us-ascii?Q?kzrVanMvYqU7NnsptTfPRUZu?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bdn4to/2o7Yy32jWiYwbLprLb/K6zUivU1eT5sQ9oGmZhuON0hBBpDn959C7?=
+ =?us-ascii?Q?UZB+MJIeOzL4cLf7uD6lyGFG1aJG1dsRuTckCpLAkE5X0j4C3tSCSCVbVrQu?=
+ =?us-ascii?Q?FfgAPDiktqhIp7RuiKa9EjWXThksLaWRhmFkgmbsOTNWuxsbZWCM2brxWB+w?=
+ =?us-ascii?Q?1It87MlR+ezPno0GtgYPUq8VfFK9oRT7uhEoCWPEId809Lkhe6uzWMSRBpRs?=
+ =?us-ascii?Q?UXar+/OVGzuvevoGufCE5qfWvBPoBCC6O88suKfnJlr7Vq7TVOEXQ58+vVQ8?=
+ =?us-ascii?Q?COM1sIsh0KqwIoUR/u2wOttbvsrwgZKuwBEbMt15r2J4F99J16BzRStcP7pe?=
+ =?us-ascii?Q?X57r991F54PERp2wX5Xab9dxaJieghUwu+CiEYT8kf1BSYryYRZQjlTf1Q8Q?=
+ =?us-ascii?Q?VDN+EsctNizZ8aT25jBl/0I/sNj250edsQrk69TDbYp9SWC7eZsC+MWlZhxa?=
+ =?us-ascii?Q?kFTG9c4IVTf6QexiOpRIMTDiQmFtprEqMW8MBU99NII/pHtLYPEXAAS2Qqjh?=
+ =?us-ascii?Q?T2CMF1s4sfO0uSwlXnrijpNR8SQbZddf7rh2zoxQEBeYlQQ8vz4OChJS/Uoq?=
+ =?us-ascii?Q?pzHsOS3eXz1q+7biWrKqUIjkFvh9Q59eHiipgmQDVVpXccPd8kj7VLyrTGGX?=
+ =?us-ascii?Q?lmkaVtk5oLLf7tcWWisCm4JKk7vf1Cqvef+gw+2MV03TgQtPvdHmI3wNEn58?=
+ =?us-ascii?Q?0G3TOwkmbEMQ55Ja6hxcZZC9B5rcOEzImcNyp2eSSPrnLucL1aVq1vzRkwpe?=
+ =?us-ascii?Q?YHZ4lsnRbQWayK2UuNmBASOdZzuaXGw6IZdaC0SwID8RcVzs8iQc+gZQrKmP?=
+ =?us-ascii?Q?kpCYPZo47E+CtA2Ewmiq+AQu6eeVq/NvkI0G+wMh+8vH4Qep/lbMYgo2tMi9?=
+ =?us-ascii?Q?+oRYllsB7ZkhDt46VuCPvc2j77e0tJgWYMFiNYeDFsx78PthKqIf2iCYHYmF?=
+ =?us-ascii?Q?uNJqBvkQ4LVpR5XryfghiDNgx2PYtLFqWq4n2fLHNvFBBFKVYtwBqfXeiZmD?=
+ =?us-ascii?Q?ztYetyabQErjP0PRwkST+OgegJF0Nb+kY9aEY982AnjeOVVqGdIoeLypXNvX?=
+ =?us-ascii?Q?2/W1OWYm2prJkOgzpSjLTtIopzTIjKpwaeBJbzeqnE+E/ALQh6aPfKbLFopH?=
+ =?us-ascii?Q?Lr6maY2gWi2XxFlIoNVYc/zmiDrLG4rJ1UtzIR6gNi89KlH3EzzLvjInh5gi?=
+ =?us-ascii?Q?GX2nDhspoTkRrGDKsRlYqLO8XCp3U6/Cva+6Cp+pD7tECBAFwC/RFWQrsMZS?=
+ =?us-ascii?Q?fe82gPMGt85O7uuIOK2nKTwuamraJPW/KK+hLe+h82qDtw4ullKa9fHqojI0?=
+ =?us-ascii?Q?zBFZiflNTVGuuiveT1/Wf+Mx?=
 X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 713928f4-959d-4018-e48b-08d93cbce750
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a25229e-ac1d-4406-2985-08d93cbce815
 X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4523.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2021 18:20:28.3341
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2021 18:20:29.6394
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NPDPg9g8JNdinI+2v3Q5dcLnd4DPG1mtp9gpaQOXp7UjP0+pRhfuU4H2qbJt1fZNduCOvWWDBsInZOqotWE+PQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZEacw/gOTbtdyol+QVMO1sF9Bn37m892uEPUNjFiLTdpcv1jpNQMyqfwDDA0eZk5TZJDIQsaBjzlG3JQL+5E6A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR03MB4618
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-These properties allow configuring the SD/OE pin as described in the
-datasheet.
+Convert uses of dev_err + return to dev_err_probe.
 
 Signed-off-by: Sean Anderson <sean.anderson@seco.com>
 ---
 
 Changes in v4:
-- Specify that bindings should specify these properties, but don't make
-  any guarantees about the driver's behavior when they are not present.
-- Clarify description of idt,(en|dis)able-shutdown properties.
-- Make opposing properties mutually exclusive.
-- Add these properties to the example.
+- New
 
-Changes in v3:
-- Add idt,disable-shutdown and idt,output-enable-active-low to allow for
-  a default of not changing the SP/SH bits at all.
+ drivers/clk/clk-versaclock5.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-Changes in v2:
-- Rename idt,sd-active-high to idt,output-enable-active-high
-- Add idt,enable-shutdown
-
- .../bindings/clock/idt,versaclock5.yaml       | 63 +++++++++++++++++++
- 1 file changed, 63 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-index 28675b0b80f1..2631a175612b 100644
---- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-+++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-@@ -30,6 +30,21 @@ description: |
-     3 -- OUT3
-     4 -- OUT4
+diff --git a/drivers/clk/clk-versaclock5.c b/drivers/clk/clk-versaclock5.c
+index 344cd6c61188..bfbb51191c8d 100644
+--- a/drivers/clk/clk-versaclock5.c
++++ b/drivers/clk/clk-versaclock5.c
+@@ -909,10 +909,9 @@ static int vc5_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 		return -EPROBE_DEFER;
  
-+  The idt,(en|dis)able-shutdown and idt,output-enable-active-(high|low)
-+  properties control the SH (en_global_shutdown) and SP bits of the
-+  Primary Source and Shutdown Register, respectively. Their behavior is
-+  summarized by the following table:
-+
-+  SH SP Output when the SD/OE pin is Low/High
-+  == == =====================================
-+   0  0 Active/Inactive
-+   0  1 Inactive/Active
-+   1  0 Active/Shutdown
-+   1  1 Inactive/Shutdown
-+
-+  One of idt,(en|dis)able-shutdown and one of
-+  idt,output-enable-active-(high|low) should be specified.
-+
- maintainers:
-   - Luca Ceresoli <luca@lucaceresoli.net>
+ 	vc5->regmap = devm_regmap_init_i2c(client, &vc5_regmap_config);
+-	if (IS_ERR(vc5->regmap)) {
+-		dev_err(&client->dev, "failed to allocate register map\n");
+-		return PTR_ERR(vc5->regmap);
+-	}
++	if (IS_ERR(vc5->regmap))
++		return dev_err_probe(&client->dev, PTR_ERR(vc5->regmap),
++				     "failed to allocate register map\n");
  
-@@ -64,6 +79,34 @@ properties:
-     maximum: 22760
-     description: Optional load capacitor for XTAL1 and XTAL2
+ 	/* Register clock input mux */
+ 	memset(&init, 0, sizeof(init));
+@@ -936,10 +935,9 @@ static int vc5_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 		    __clk_get_name(vc5->pin_clkin);
+ 	}
  
-+  idt,enable-shutdown:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description: |
-+      Enable the shutdown functionality. The chip will be shut down if
-+      the SD/OE pin is driven high. This corresponds to setting the SH
-+      bit of the Primary Source and Shutdown Register.
-+
-+  idt,disable-shutdown:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description: |
-+      Disable the shutdown functionality. The chip will never be shut
-+      down based on the value of the SD/OE pin. This corresponds to
-+      clearing the SH bit of the Primary Source and Shutdown Register.
-+
-+  idt,output-enable-active-high:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description: |
-+      This enables output when the SD/OE pin is high, and disables
-+      output when the SD/OE pin is low. This corresponds to setting the
-+      SP bit of the Primary Source and Shutdown Register.
-+
-+  idt,output-enable-active-low:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description: |
-+      This disables output when the SD/OE pin is high, and enables
-+      output when the SD/OE pin is low. This corresponds to clearing the
-+      SP bit of the Primary Source and Shutdown Register.
-+
- patternProperties:
-   "^OUT[1-4]$":
-     type: object
-@@ -109,6 +152,22 @@ allOf:
-       required:
-         - clock-names
-         - clocks
-+  - if:
-+      true
-+    then:
-+      oneOf:
-+        - required:
-+            - idt,enable-shutdown
-+        - required:
-+            - idt,disable-shutdown
-+  - if:
-+      true
-+    then:
-+      oneOf:
-+        - required:
-+            - idt,output-enable-active-high
-+        - required:
-+            - idt,output-enable-active-low
+-	if (!init.num_parents) {
+-		dev_err(&client->dev, "no input clock specified!\n");
+-		return -EINVAL;
+-	}
++	if (!init.num_parents)
++		return dev_err_probe(&client->dev, -EINVAL,
++				     "no input clock specified!\n");
  
- additionalProperties: false
+ 	/* Configure Optional Loading Capacitance for external XTAL */
+ 	if (!(vc5->chip_info->flags & VC5_HAS_INTERNAL_XTAL)) {
+@@ -1078,14 +1076,16 @@ static int vc5_probe(struct i2c_client *client, const struct i2c_device_id *id)
  
-@@ -138,6 +197,10 @@ examples:
-             clocks = <&ref25m>;
-             clock-names = "xin";
+ 	ret = of_clk_add_hw_provider(client->dev.of_node, vc5_of_clk_get, vc5);
+ 	if (ret) {
+-		dev_err(&client->dev, "unable to add clk provider\n");
++		dev_err_probe(&client->dev, ret,
++			      "unable to add clk provider\n");
+ 		goto err_clk;
+ 	}
  
-+            /* Set the SD/OE pin's settings */
-+            idt,disable-shutdown;
-+            idt,output-enable-active-low;
-+
-             OUT1 {
-                 idt,drive-mode = <VC5_CMOSD>;
-                 idt,voltage-microvolts = <1800000>;
+ 	return 0;
+ 
+ err_clk_register:
+-	dev_err(&client->dev, "unable to register %s\n", init.name);
++	dev_err_probe(&client->dev, ret,
++		      "unable to register %s\n", init.name);
+ 	kfree(init.name); /* clock framework made a copy of the name */
+ err_clk:
+ 	if (vc5->chip_info->flags & VC5_HAS_INTERNAL_XTAL)
 -- 
 2.25.1
 
