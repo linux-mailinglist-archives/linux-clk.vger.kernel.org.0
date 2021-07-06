@@ -2,39 +2,39 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C52243BD0DF
-	for <lists+linux-clk@lfdr.de>; Tue,  6 Jul 2021 13:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 927B93BD13B
+	for <lists+linux-clk@lfdr.de>; Tue,  6 Jul 2021 13:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237791AbhGFLhW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 6 Jul 2021 07:37:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47606 "EHLO mail.kernel.org"
+        id S237797AbhGFLhX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 6 Jul 2021 07:37:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47556 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237344AbhGFLgG (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 6 Jul 2021 07:36:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 72C7A61EFC;
-        Tue,  6 Jul 2021 11:27:01 +0000 (UTC)
+        id S237497AbhGFLgL (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 6 Jul 2021 07:36:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 305C161DD2;
+        Tue,  6 Jul 2021 11:28:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625570822;
-        bh=6fxvkolb4LQvw1c/ZtbEpDhH5Y7OIb8tJ40UCw5uHgw=;
+        s=k20201202; t=1625570890;
+        bh=VRiB4e/oV2wd/QVms/CEJTexIoeWeKX66K3/aNZKRQ8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LGdC85hFi3TwTH9htvR0ONxn+h0HH6v8LrrmVuRCiSJ5rXlLt/GE9eJ7JQP7XmhdT
-         /kMzpQ4OmsUSOgZsnooqBWReZVE+OuJFHr5IS71nEC3oF+Z6oA5ni8KdmbeLqqLAsl
-         4G4jJNHtsTl0o5a6zUdaH/+kP9qiYDtXG60liE9e1L8O3wKR8xpzWU90F2iQF2xvNT
-         bY6Eb75UozmTVfE8c34NZDSEFOV8o+3PkM0hMeC7EZWKFKs4NRUoTQ4HSya4N2ggNE
-         hfQC7sw6qtBh+BNqhbvWJ7v9KwEqmiz0dbVocVhvABSmqkX7Bw5QK4B4J6VRdbbF4Y
-         YGMOmK3ufav3Q==
+        b=adtABtafbgZEQVPRZLBNbg6K/Eve4fejj8kSrVPkOSk7l55kCxSA+vY4zSCvpLBPa
+         ODKUphKqZ9GIjAqZANxhlptN1ZVvm1vp93lGIB2n3qzBYFT2kKaro/2LOcA+weiI45
+         y0uneUcgfxbXvPUTZWRufUQw/dqa4TnXgTu54F66sa3BzeBUtzZNRwQFr4tmIePcIN
+         Fsrzh+mJfmeRGqVBxhn6dTJYpuT0Y4TT5KhGUIldN+l2UpqnX/1SfJyKJBwjEX0T2Q
+         +5avFq2mCE9JFCyg1fjmxppHn3wT30CxD5rqT5HcZT4/VwqmTWsRt8sd2tv9i3sn99
+         W66Ikji5qaYqQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 18/55] clk: tegra: Ensure that PLLU configuration is applied properly
-Date:   Tue,  6 Jul 2021 07:26:01 -0400
-Message-Id: <20210706112638.2065023-18-sashal@kernel.org>
+Cc:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 16/45] clk: renesas: r8a77995: Add ZA2 clock
+Date:   Tue,  6 Jul 2021 07:27:20 -0400
+Message-Id: <20210706112749.2065541-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210706112638.2065023-1-sashal@kernel.org>
-References: <20210706112638.2065023-1-sashal@kernel.org>
+In-Reply-To: <20210706112749.2065541-1-sashal@kernel.org>
+References: <20210706112749.2065541-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,51 +43,36 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Dmitry Osipenko <digetx@gmail.com>
+From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
 
-[ Upstream commit a7196048cd5168096c2c4f44a3939d7a6dcd06b9 ]
+[ Upstream commit 790c06cc5df263cdaff748670cc65958c81b0951 ]
 
-The PLLU (USB) consists of the PLL configuration itself and configuration
-of the PLLU outputs. The PLLU programming is inconsistent on T30 vs T114,
-where T114 immediately bails out if PLLU is enabled and T30 re-enables
-a potentially already enabled PLL (left after bootloader) and then fully
-reprograms it, which could be unsafe to do. The correct way should be to
-skip enabling of the PLL if it's already enabled and then apply
-configuration to the outputs. This patch doesn't fix any known problems,
-it's a minor improvement.
+R-Car D3 ZA2 clock is from PLL0D3 or S0,
+and it can be controlled by ZA2CKCR.
+It is needed for R-Car Sound, but is not used so far.
+Using default settings is very enough at this point.
+This patch adds it by DEF_FIXED().
 
-Acked-by: Thierry Reding <treding@nvidia.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Thierry Reding <treding@nvidia.com>
+Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Link: https://lore.kernel.org/r/87pmxclrmy.wl-kuninori.morimoto.gx@renesas.com
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/tegra/clk-pll.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/clk/renesas/r8a77995-cpg-mssr.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/tegra/clk-pll.c b/drivers/clk/tegra/clk-pll.c
-index dc87866233b9..ed3b725ff102 100644
---- a/drivers/clk/tegra/clk-pll.c
-+++ b/drivers/clk/tegra/clk-pll.c
-@@ -1091,7 +1091,8 @@ static int clk_pllu_enable(struct clk_hw *hw)
- 	if (pll->lock)
- 		spin_lock_irqsave(pll->lock, flags);
+diff --git a/drivers/clk/renesas/r8a77995-cpg-mssr.c b/drivers/clk/renesas/r8a77995-cpg-mssr.c
+index 8434d5530fb1..4a3633ebcc6b 100644
+--- a/drivers/clk/renesas/r8a77995-cpg-mssr.c
++++ b/drivers/clk/renesas/r8a77995-cpg-mssr.c
+@@ -73,6 +73,7 @@ static const struct cpg_core_clk r8a77995_core_clks[] __initconst = {
+ 	DEF_FIXED(".sdsrc",    CLK_SDSRC,          CLK_PLL1,       2, 1),
  
--	_clk_pll_enable(hw);
-+	if (!clk_pll_is_enabled(hw))
-+		_clk_pll_enable(hw);
- 
- 	ret = clk_pll_wait_for_lock(pll);
- 	if (ret < 0)
-@@ -1708,7 +1709,8 @@ static int clk_pllu_tegra114_enable(struct clk_hw *hw)
- 	if (pll->lock)
- 		spin_lock_irqsave(pll->lock, flags);
- 
--	_clk_pll_enable(hw);
-+	if (!clk_pll_is_enabled(hw))
-+		_clk_pll_enable(hw);
- 
- 	ret = clk_pll_wait_for_lock(pll);
- 	if (ret < 0)
+ 	/* Core Clock Outputs */
++	DEF_FIXED("za2",       R8A77995_CLK_ZA2,   CLK_PLL0D3,     2, 1),
+ 	DEF_FIXED("z2",        R8A77995_CLK_Z2,    CLK_PLL0D3,     1, 1),
+ 	DEF_FIXED("ztr",       R8A77995_CLK_ZTR,   CLK_PLL1,       6, 1),
+ 	DEF_FIXED("zt",        R8A77995_CLK_ZT,    CLK_PLL1,       4, 1),
 -- 
 2.30.2
 
