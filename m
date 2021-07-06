@@ -2,39 +2,39 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFB83BD0EB
-	for <lists+linux-clk@lfdr.de>; Tue,  6 Jul 2021 13:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6813BD638
+	for <lists+linux-clk@lfdr.de>; Tue,  6 Jul 2021 14:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237815AbhGFLhZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 6 Jul 2021 07:37:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47598 "EHLO mail.kernel.org"
+        id S237188AbhGFMcF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 6 Jul 2021 08:32:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42614 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237639AbhGFLgU (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 6 Jul 2021 07:36:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B2A1361F05;
-        Tue,  6 Jul 2021 11:29:02 +0000 (UTC)
+        id S235941AbhGFLaf (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 6 Jul 2021 07:30:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C825D61DF7;
+        Tue,  6 Jul 2021 11:22:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625570943;
-        bh=5i7m6YX8SA5KT6nhg8VE7TWcYW8SL3Nb60FoMy3MKc0=;
+        s=k20201202; t=1625570539;
+        bh=l98UumLjQANUw6mZMLJC464/eEz4GzVb3MFkIc5GbkI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GmLewHrEGRrdRDEcJURYWZSLhdr2DjGl5+lBjltGfcLqnQ7DVPR7YUkCmL5gl/q+k
-         MKRi/u7RI9PjY8qgQNZebHInxNI8IVI4gbgjNX4I0twh8ejPZmm3J9/OXVGchzfPfu
-         VIr+PDAikSnB0qs9+gi3Pt/HlsDgjbCH117GPoYz591askH1bxOMunvweCWuBcBl6U
-         mphu2teODYHOdUa4T62qS819wJTwIS+rXiogqgSzmgI3p9aVJ5usTx3CQmnEdgXPl3
-         g2p5ScqFkACaW2DCQ5+cByJ7c/ScdBr8xyqlm6ODa8410jHabechO6y5C+73tvRkRk
-         htbq3UywLHeUQ==
+        b=dRNCK/mm82Cha1VWWvcO3Wny2RPuvzHOsNj7LG5FYLm9YKBw/gU8tcB2f0xGTxQzk
+         7y7g+doBrXOwnn+MIfvY6FNfDIFM+k60Rbaao/sxtFXA3xA68H7s30W3ED6xzRUah7
+         dwUhRrAJQo5bjNPPx/8FUPWczHTbHM1Glg4EgGu9ZjY3zARKsuSYk4QRhFvAsbbG3o
+         aW4Moy5U4ppDijixkaKbKj8kbx+OCR9YVPlDPJ3Eo9WXq+IbXk8vl7ddl2gCyLnBcb
+         3n5wQOFzyzqN9UTrDjQKLpXmuoyXag6d5shHTA5Tjq7tF1bWkRKVWwJvE6SSGrFOvB
+         lAUNg8JwTU2Zw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 12/35] clk: tegra: Ensure that PLLU configuration is applied properly
-Date:   Tue,  6 Jul 2021 07:28:24 -0400
-Message-Id: <20210706112848.2066036-12-sashal@kernel.org>
+Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 011/137] clk: renesas: rcar-usb2-clock-sel: Fix error handling in .probe()
+Date:   Tue,  6 Jul 2021 07:19:57 -0400
+Message-Id: <20210706112203.2062605-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210706112848.2066036-1-sashal@kernel.org>
-References: <20210706112848.2066036-1-sashal@kernel.org>
+In-Reply-To: <20210706112203.2062605-1-sashal@kernel.org>
+References: <20210706112203.2062605-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,51 +43,81 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Dmitry Osipenko <digetx@gmail.com>
+From: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-[ Upstream commit a7196048cd5168096c2c4f44a3939d7a6dcd06b9 ]
+[ Upstream commit a20a40a8bbc2cf4b29d7248ea31e974e9103dd7f ]
 
-The PLLU (USB) consists of the PLL configuration itself and configuration
-of the PLLU outputs. The PLLU programming is inconsistent on T30 vs T114,
-where T114 immediately bails out if PLLU is enabled and T30 re-enables
-a potentially already enabled PLL (left after bootloader) and then fully
-reprograms it, which could be unsafe to do. The correct way should be to
-skip enabling of the PLL if it's already enabled and then apply
-configuration to the outputs. This patch doesn't fix any known problems,
-it's a minor improvement.
+The error handling paths after pm_runtime_get_sync() have no refcount
+decrement, which leads to refcount leak.
 
-Acked-by: Thierry Reding <treding@nvidia.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Thierry Reding <treding@nvidia.com>
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Link: https://lore.kernel.org/r/20210415073338.22287-1-dinghao.liu@zju.edu.cn
+[geert: Remove now unused variable priv]
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/tegra/clk-pll.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/clk/renesas/rcar-usb2-clock-sel.c | 24 ++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/clk/tegra/clk-pll.c b/drivers/clk/tegra/clk-pll.c
-index 1ab36a355daf..789efad791a3 100644
---- a/drivers/clk/tegra/clk-pll.c
-+++ b/drivers/clk/tegra/clk-pll.c
-@@ -1085,7 +1085,8 @@ static int clk_pllu_enable(struct clk_hw *hw)
- 	if (pll->lock)
- 		spin_lock_irqsave(pll->lock, flags);
+diff --git a/drivers/clk/renesas/rcar-usb2-clock-sel.c b/drivers/clk/renesas/rcar-usb2-clock-sel.c
+index d4c02986c34e..0ccc6e709a38 100644
+--- a/drivers/clk/renesas/rcar-usb2-clock-sel.c
++++ b/drivers/clk/renesas/rcar-usb2-clock-sel.c
+@@ -128,10 +128,8 @@ static int rcar_usb2_clock_sel_resume(struct device *dev)
+ static int rcar_usb2_clock_sel_remove(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+-	struct usb2_clock_sel_priv *priv = platform_get_drvdata(pdev);
  
--	_clk_pll_enable(hw);
-+	if (!clk_pll_is_enabled(hw))
-+		_clk_pll_enable(hw);
+ 	of_clk_del_provider(dev->of_node);
+-	clk_hw_unregister(&priv->hw);
+ 	pm_runtime_put(dev);
+ 	pm_runtime_disable(dev);
  
- 	ret = clk_pll_wait_for_lock(pll);
- 	if (ret < 0)
-@@ -1702,7 +1703,8 @@ static int clk_pllu_tegra114_enable(struct clk_hw *hw)
- 	if (pll->lock)
- 		spin_lock_irqsave(pll->lock, flags);
+@@ -164,9 +162,6 @@ static int rcar_usb2_clock_sel_probe(struct platform_device *pdev)
+ 	if (IS_ERR(priv->rsts))
+ 		return PTR_ERR(priv->rsts);
  
--	_clk_pll_enable(hw);
-+	if (!clk_pll_is_enabled(hw))
-+		_clk_pll_enable(hw);
+-	pm_runtime_enable(dev);
+-	pm_runtime_get_sync(dev);
+-
+ 	clk = devm_clk_get(dev, "usb_extal");
+ 	if (!IS_ERR(clk) && !clk_prepare_enable(clk)) {
+ 		priv->extal = !!clk_get_rate(clk);
+@@ -183,6 +178,8 @@ static int rcar_usb2_clock_sel_probe(struct platform_device *pdev)
+ 		return -ENOENT;
+ 	}
  
- 	ret = clk_pll_wait_for_lock(pll);
- 	if (ret < 0)
++	pm_runtime_enable(dev);
++	pm_runtime_get_sync(dev);
+ 	platform_set_drvdata(pdev, priv);
+ 	dev_set_drvdata(dev, priv);
+ 
+@@ -193,11 +190,20 @@ static int rcar_usb2_clock_sel_probe(struct platform_device *pdev)
+ 	init.num_parents = 0;
+ 	priv->hw.init = &init;
+ 
+-	clk = clk_register(NULL, &priv->hw);
+-	if (IS_ERR(clk))
+-		return PTR_ERR(clk);
++	ret = devm_clk_hw_register(NULL, &priv->hw);
++	if (ret)
++		goto pm_put;
++
++	ret = of_clk_add_hw_provider(np, of_clk_hw_simple_get, &priv->hw);
++	if (ret)
++		goto pm_put;
++
++	return 0;
+ 
+-	return of_clk_add_hw_provider(np, of_clk_hw_simple_get, &priv->hw);
++pm_put:
++	pm_runtime_put(dev);
++	pm_runtime_disable(dev);
++	return ret;
+ }
+ 
+ static const struct dev_pm_ops rcar_usb2_clock_sel_pm_ops = {
 -- 
 2.30.2
 
