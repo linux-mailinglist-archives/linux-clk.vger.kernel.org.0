@@ -2,225 +2,250 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BC23BE24E
-	for <lists+linux-clk@lfdr.de>; Wed,  7 Jul 2021 07:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4C23BE4E4
+	for <lists+linux-clk@lfdr.de>; Wed,  7 Jul 2021 11:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbhGGFGr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 7 Jul 2021 01:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbhGGFGr (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 7 Jul 2021 01:06:47 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E7EC061574
-        for <linux-clk@vger.kernel.org>; Tue,  6 Jul 2021 22:04:02 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id 65so47449oie.11
-        for <linux-clk@vger.kernel.org>; Tue, 06 Jul 2021 22:04:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZwJ6LzMYt92aA7ipQ1QaHUSOYNKd4HK3usxDJ6K7NKM=;
-        b=PGN9NdUnXnCAdb8kuPDg2/8BBx3g2U09UWEkOuU3CoaeWRP2zV9wavZF+QlJHnjCWK
-         7HLqF4HNg71I5OGbiu9dLgiu0i8/zjXgOATD3gf8YD8G1vSsat8s7UKoIEq9A1fOAO54
-         Sm9M8PbYlkiVOXEC1yQCaW1UpO7ZSUpZ7KDt55DFT03M5jLcvy5pYR4bfU3pMhIb0w/W
-         oMTlA97aDAUjTs93SdusWlCB6Uu16surdUd/MIut0z56PbmGlAcy6d8yJYMEDMfpbdp0
-         OLv6VJt/T1SyHT9HgxNmgjuSE9LolYJDGSyq3QylDdCsqSEbvRPpWRjGfsRF2+PhKjSY
-         cM+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZwJ6LzMYt92aA7ipQ1QaHUSOYNKd4HK3usxDJ6K7NKM=;
-        b=jiqvstto0FbpxKWTSAThXbKTTFrRTS3yprUHt3el9syo2fw3liYimvH92moSB1RgS8
-         +AOccmDZyujERKJONYq3cR6fn9ngVPpnKkS0xbMCLf8gzWdg8i+dw3aoYpoUwGHIkzk2
-         XUWz/QpJZGuLtzHwTs4wX7nBROVkXVT6G8bRQYUpiTORtImR1E5ehmxrzqB3XlKRjIaS
-         eGBMPSuQ/Ckn+KYZs3ZD2noBKVgdWzCNreGa0KW6O8NfV3ZUSUhZtVIWDoCnseVz526d
-         5Zre45dPmJDc0qfrf4kehdgpfAJHwt6vd0/P//qmf510azhVK3lGAzi8zlGB0Oy4VIBj
-         T14A==
-X-Gm-Message-State: AOAM530FcdckitWxR+a4ow+uh8s4s5XHgb8omNF/mg1xVo2fBjr+FxAD
-        h0h2nUZbJVRdeDHEUajC671Vvw==
-X-Google-Smtp-Source: ABdhPJyX3o3IfKJMEmv3UDHct1fG27sWu3pT+IFd99WMQOQwlG2vBE3hZFGg3IT7WSO/FOJ7DDmq7w==
-X-Received: by 2002:aca:4b43:: with SMTP id y64mr2905391oia.176.1625634241482;
-        Tue, 06 Jul 2021 22:04:01 -0700 (PDT)
-Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id r186sm3899058oia.6.2021.07.06.22.03.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jul 2021 22:04:00 -0700 (PDT)
-Date:   Wed, 7 Jul 2021 00:03:58 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/6] dt-bindings: clock: qcom,dispcc-sm8x50: add mmcx
- power domain
-Message-ID: <YOU1vv4zSWfe0P7Y@yoga>
-References: <20210630133149.3204290-1-dmitry.baryshkov@linaro.org>
- <20210630133149.3204290-2-dmitry.baryshkov@linaro.org>
- <CAPDyKFpXD3rCmp53LFFYky_xQv9ucofvTezG5qWyDZt427chNQ@mail.gmail.com>
- <CAA8EJpob=TpXiJozac-5sKJzE71ddWRFDj7D2-F=W=a2mgKvxA@mail.gmail.com>
- <CAPDyKFq-vwMchLFb3JvK7B9ZQ9=z-TXzGHUij6CocTR+VmAOqQ@mail.gmail.com>
- <YN4W7vd3Yep+DX3N@yoga>
- <CAPDyKFrPyu6dT_+G3-ivPTLGS0G1kd9Tph_Pi2VP7ycEn3R5AQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFrPyu6dT_+G3-ivPTLGS0G1kd9Tph_Pi2VP7ycEn3R5AQ@mail.gmail.com>
+        id S231256AbhGGJDX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 7 Jul 2021 05:03:23 -0400
+Received: from lucky1.263xmail.com ([211.157.147.131]:36066 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231195AbhGGJDX (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 7 Jul 2021 05:03:23 -0400
+Received: from localhost (unknown [192.168.167.16])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 36435C19B5;
+        Wed,  7 Jul 2021 17:00:32 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-SKE-CHECKED: 1
+X-ANTISPAM-LEVEL: 2
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P12363T139710634645248S1625648429145477_;
+        Wed, 07 Jul 2021 17:00:32 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <8ad643c8e148d11b3bba93535af69ae9>
+X-RL-SENDER: jon.lin@rock-chips.com
+X-SENDER: jon.lin@rock-chips.com
+X-LOGIN-NAME: jon.lin@rock-chips.com
+X-FST-TO: linux-spi@vger.kernel.org
+X-RCPT-COUNT: 20
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   Jon Lin <jon.lin@rock-chips.com>
+To:     linux-spi@vger.kernel.org
+Cc:     jon.lin@rock-chips.com, broonie@kernel.org, robh+dt@kernel.org,
+        heiko@sntech.de, jbx6244@gmail.com, hjc@rock-chips.com,
+        yifeng.zhao@rock-chips.com, sugar.zhang@rock-chips.com,
+        linux-rockchip@lists.infradead.org, linux-mtd@lists.infradead.org,
+        p.yadav@ti.com, macroalpha82@gmail.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org, Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH v11 01/10] dt-bindings: rockchip-sfc: Bindings for Rockchip serial flash controller
+Date:   Wed,  7 Jul 2021 17:00:18 +0800
+Message-Id: <20210707090027.32608-2-jon.lin@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210707090027.32608-1-jon.lin@rock-chips.com>
+References: <20210707090027.32608-1-jon.lin@rock-chips.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue 06 Jul 02:23 CDT 2021, Ulf Hansson wrote:
+From: Chris Morgan <macromorgan@hotmail.com>
 
-> On Thu, 1 Jul 2021 at 21:26, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
-> >
-> > On Thu 01 Jul 11:58 CDT 2021, Ulf Hansson wrote:
-> >
-> > > On Thu, 1 Jul 2021 at 18:39, Dmitry Baryshkov
-> > > <dmitry.baryshkov@linaro.org> wrote:
-> > > >
-> > > > On Thu, 1 Jul 2021 at 19:17, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > > >
-> > > > > On Wed, 30 Jun 2021 at 15:31, Dmitry Baryshkov
-> > > > > <dmitry.baryshkov@linaro.org> wrote:
-> > > > > >
-> > > > > > On sm8250 dispcc requires MMCX power domain to be powered up before
-> > > > > > clock controller's registers become available. For now sm8250 was using
-> > > > > > external regulator driven by the power domain to describe this
-> > > > > > relationship. Switch into specifying power-domain and required opp-state
-> > > > > > directly.
-> > > > > >
-> > > > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > > > > ---
-> > > > > >  .../bindings/clock/qcom,dispcc-sm8x50.yaml    | 19 +++++++++++++++++++
-> > > > > >  1 file changed, 19 insertions(+)
-> > > > > >
-> > > > > > diff --git a/Documentation/devicetree/bindings/clock/qcom,dispcc-sm8x50.yaml b/Documentation/devicetree/bindings/clock/qcom,dispcc-sm8x50.yaml
-> > > > > > index 0cdf53f41f84..48d86fb34fa7 100644
-> > > > > > --- a/Documentation/devicetree/bindings/clock/qcom,dispcc-sm8x50.yaml
-> > > > > > +++ b/Documentation/devicetree/bindings/clock/qcom,dispcc-sm8x50.yaml
-> > > > > > @@ -55,6 +55,16 @@ properties:
-> > > > > >    reg:
-> > > > > >      maxItems: 1
-> > > > > >
-> > > > > > +  power-domains:
-> > > > > > +    description:
-> > > > > > +      A phandle and PM domain specifier for the MMCX power domain.
-> > > > > > +    maxItems: 1
-> > > > > > +
-> > > > >
-> > > > > Should you perhaps state that this is a parent domain? Or it isn't?
-> > > > >
-> > > > > Related to this and because this is a power domain provider, you
-> > > > > should probably reference the common power-domain bindings somewhere
-> > > > > here. Along the lines of this:
-> > > > >
-> > > > > - $ref: power-domain.yaml#
-> > > > >
-> > > > > As an example, you could have a look at
-> > > > > Documentation/devicetree/bindings/power/pd-samsung.yaml.
-> > > >
-> > > > I'll take a look.
-> > > >
-> > > > >
-> > > > > > +  required-opps:
-> > > > > > +    description:
-> > > > > > +      Performance state to use for MMCX to enable register access.
-> > > > > > +    maxItems: 1
-> > > > >
-> > > > > According to the previous discussions, I was under the assumption that
-> > > > > this property belongs to a consumer node rather than in the provider
-> > > > > node, no?
-> > > >
-> > > > It is both a consumer and a provider. It consumes SM8250_MMCX from
-> > > > rpmhpd and provides MMSC_GDSC.
-> > >
-> > > That sounds a bit weird to me.
-> > >
-> >
-> > dispcc is a hardware block powered by MMCX, so it is a consumer of it
-> > and needs to control MMCX.
-> 
-> Right, that sounds reasonable.
-> 
-> >
-> > > In my view and per the common power domain bindings (as pointed to
-> > > above): If a power domain provider is a consumer of another power
-> > > domain, that per definition means that there is a parent domain
-> > > specified.
-> > >
-> >
-> > And in addition to needing MMCX to access the dispcc, the exposed
-> > power-domain "MDSS_GDSC" is powered by the same MMCX and as such
-> > MDSS_GDSC should be a subdomain of MMCX.
-> 
-> What do you mean by "exposed"? It sounds like you are saying that
-> "MDSS_GDSC" is an artificial power domain, no?
-> 
-> If that's the case, more exactly, why is it like this?
-> 
-> My apologies if I bother you with details, but as a maintainer of
-> genpd, it is very useful to me to have the complete picture.
-> 
+Add bindings for the Rockchip serial flash controller. New device
+specific parameter of rockchip,sfc-no-dma included in documentation.
 
-The display hardware blocks are powered by the MDSS_GDSC power-domain,
-which is a subdomain to the MMCX power domain.
+Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
+---
 
-MDSS_GDSC is controlled by registers in the display clock controller
-block, which is also powered by the MMCX power domain.
+Changes in v11: None
+Changes in v10: None
+Changes in v9: None
+Changes in v8:
+- Fix indent 4 to 2 in yaml
 
-Lastly the MMCX power domain is controlled through the RPMh, using the
-rpmhpd driver.
+Changes in v7:
+- Fix up the sclk_sfc parent error in rk3036
+- Unify to "rockchip,sfc" compatible id because all the feature update
+  will have a new IP version, so the driver is used for the SFC IP in
+  all SoCs
+- Change to use node "sfc" to name the SFC pinctrl group
+- Add subnode reg property check
+- Add rockchip_sfc_adjust_op_size to workaround in CMD + DUMMY case
+- Limit max_iosize to 32KB
+
+Changes in v6:
+- Add support in device trees for rv1126(Declared in series 5 but not
+  submitted)
+- Change to use "clk_sfc" "hclk_sfc" as clock lable, since it does not
+  affect interpretation and has been widely used
+- Support sfc tx_dual, tx_quad(Declared in series 5 but not submitted)
+- Simplify the code, such as remove "rockchip_sfc_register_all"(Declared
+  in series 5 but not submitted)
+- Support SFC ver4 ver5(Declared in series 5 but not submitted)
+- Add author Chris Morgan and Jon Lin to spi-rockchip-sfc.c
+- Change to use devm_spi_alloc_master and spi_unregister_master
+
+Changes in v5:
+- Add support in device trees for rv1126
+- Support sfc tx_dual, tx_quad
+- Simplify the code, such as remove "rockchip_sfc_register_all"
+- Support SFC ver4 ver5
+
+Changes in v4:
+- Changing patch back to an "RFC". An engineer from Rockchip
+  reached out to me to let me know they are working on this patch for
+  upstream, I am submitting this v4 for the community to see however
+  I expect Jon Lin (jon.lin@rock-chips.com) will submit new patches
+  soon and these are the ones we should pursue for mainlining. Jon's
+  patch series should include support for more hardware than this
+  series.
+- Clean up documentation more and ensure it is correct per
+  make dt_binding_check.
+- Add support in device trees for rk3036, rk3308, and rv1108.
+- Add ahb clock (hclk_sfc) support for rk3036.
+- Change rockchip_sfc_wait_fifo_ready() to use a switch statement.
+- Change IRQ code to only mark IRQ as handled if it handles the
+  specific IRQ (DMA transfer finish) it is supposed to handle.
+
+Changes in v3:
+- Changed the name of the clocks to sfc/ahb (from clk-sfc/clk-hsfc).
+- Changed the compatible string from rockchip,sfc to
+  rockchip,rk3036-sfc. A quick glance at the datasheets suggests this
+  driver should work for the PX30, RK180x, RK3036, RK312x, RK3308 and
+  RV1108 SoCs, and possibly more. However, I am currently only able
+  to test this on a PX30 (an RK3326). The technical reference manuals
+  appear to list the same registers for each device.
+- Corrected devicetree documentation for formatting and to note these
+  changes.
+- Replaced the maintainer with Heiko Stuebner and myself, as we will
+  take ownership of this going forward.
+- Noted that the device (per the reference manual) supports 4 CS, but
+  I am only able to test a single CS (CS 0).
+- Reordered patches to comply with upstream rules.
+
+Changes in v2:
+- Reimplemented driver using spi-mem subsystem.
+- Removed power management code as I couldn't get it working properly.
+- Added device tree bindings for Odroid Go Advance.
+
+Changes in v1:
+hanges made in this new series versus the v8 of the old series:
+- Added function to read spi-rx-bus-width from device tree, in the
+  event that the SPI chip supports 4x mode but only has 2 pins
+  wired (such as the Odroid Go Advance).
+- Changed device tree documentation from txt to yaml format.
+- Made "reset" message a dev_dbg from a dev_info.
+- Changed read and write fifo functions to remove redundant checks.
+- Changed the write and read from relaxed to non-relaxed when
+  starting the DMA transfer or reading the DMA IRQ.
+- Changed from dma_coerce_mask_and_coherent to just
+  dma_set_mask_and_coherent.
+- Changed name of get_if_type to rockchip_sfc_get_if_type.
+
+ .../devicetree/bindings/spi/rockchip-sfc.yaml | 88 +++++++++++++++++++
+ 1 file changed, 88 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/spi/rockchip-sfc.yaml
+
+diff --git a/Documentation/devicetree/bindings/spi/rockchip-sfc.yaml b/Documentation/devicetree/bindings/spi/rockchip-sfc.yaml
+new file mode 100644
+index 000000000000..162993a97290
+--- /dev/null
++++ b/Documentation/devicetree/bindings/spi/rockchip-sfc.yaml
+@@ -0,0 +1,88 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/spi/rockchip-sfc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip Serial Flash Controller (SFC)
++
++maintainers:
++  - Heiko Stuebner <heiko@sntech.de>
++  - Chris Morgan <macromorgan@hotmail.com>
++
++allOf:
++  - $ref: spi-controller.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - const: rockchip,sfc
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Bus Clock
++      - description: Module Clock
++
++  clock-names:
++    items:
++      - const: clk_sfc
++      - const: hclk_sfc
++
++  power-domains:
++    maxItems: 1
++
++  rockchip,sfc-no-dma:
++    description: Disable DMA and utilize FIFO mode only
++    type: boolean
++
++patternProperties:
++  "^flash@[0-3]$":
++    type: object
++    properties:
++      reg:
++        minimum: 0
++        maximum: 3
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/px30-cru.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/power/px30-power.h>
++
++    sfc: spi@ff3a0000 {
++        compatible = "rockchip,sfc";
++        reg = <0xff3a0000 0x4000>;
++        interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&cru SCLK_SFC>, <&cru HCLK_SFC>;
++        clock-names = "clk_sfc", "hclk_sfc";
++        pinctrl-0 = <&sfc_clk &sfc_cs &sfc_bus2>;
++        pinctrl-names = "default";
++        power-domains = <&power PX30_PD_MMC_NAND>;
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        flash@0 {
++            compatible = "jedec,spi-nor";
++            reg = <0>;
++            spi-max-frequency = <108000000>;
++            spi-rx-bus-width = <2>;
++            spi-tx-bus-width = <2>;
++        };
++    };
++
++...
+-- 
+2.17.1
 
 
 
-As such, specifying MMCX as the power-domain for the dispcc block and
-making the dispcc driver use that same power-domain as parent for the
-MDSS_GDSC seems to accurately depict these relationships.
-
-Regards,
-Bjorn
-
-> >
-> >
-> > But what I was trying to say yesterday is that the power-domain property
-> > should be sufficient and that we shouldn't need to drive MMCX to a
-> > particular performance_state in order to access the registers.
-> >
-> > Then as clients make votes on clock rates that requires higher
-> > performance_state, they would describe this in their opp-tables etc.
-> >
-> >
-> > But without any performance_state requests, pd->corner will in
-> > rpmhpd_power_on() be 0 and as such powering on the power-domain won't
-> > actually do anything. Similarly dev_pm_genpd_set_performance_state(dev,
-> > 0) on an active power-domain from rpmhpd will turn it off.
-> 
-> Yes, I noticed the patches you posted. Thanks for helping out here!
-> 
-> >
-> >
-> > So the reason why Dmitry is adding the required-opps to the binding is
-> > to get rpmhpd to actually tell the hardware to turn on the power domain.
-> > And I don't think this is in accordance with the framework's
-> > expectations.
-> 
-> I agree!
-> 
-> >
-> > Regards,
-> > Bjorn
-> 
-> Kind regards
-> Uffe
