@@ -2,108 +2,152 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C623BF346
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Jul 2021 03:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D028C3BF42A
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Jul 2021 05:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbhGHBJg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 7 Jul 2021 21:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbhGHBJf (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 7 Jul 2021 21:09:35 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86E0C06175F
-        for <linux-clk@vger.kernel.org>; Wed,  7 Jul 2021 18:06:53 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id a8so5263966wrp.5
-        for <linux-clk@vger.kernel.org>; Wed, 07 Jul 2021 18:06:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=L18azrwFyoptGIEYIWz4nD01VfhinXc3JMH8ke/EdqU=;
-        b=zSlPWvWxFWwStd4svDYpSPO9zLKhhIY5gWm22oVhQLDexG7e2eDmlQa2OWAJPlcUO3
-         Ym8U3mixkQVLfYIUPj8YO8yhx9wEc6OvaEEKFF/eGQZj5id4H7/yJ9ZUpZsmpePKYH9w
-         tax5mgo3+mLWYy6dInoslXduTgWFX1J3RgLsV2C3Jw5IgK8wV4s+mbXovaSiGc1GKl8E
-         /4vq4/Goo8WjfGf9B4StmqcOkPT7taoYKeqeoEjsBOs6wYRaUyK367IIt0fJSUOmnGKe
-         RKB9G3eyF0D7K/Qh3r4nkaum4uovIicNGL/98jZDoSsEzYbzUC9SujdVxmqpRFhE5F5z
-         S2ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=L18azrwFyoptGIEYIWz4nD01VfhinXc3JMH8ke/EdqU=;
-        b=EWJ8TwThfUSBw+PqCbi4gDkwd8Bn3dxMtqiSNwbpjcYAv+Xu7NQTCYZFd8ldLBCiev
-         gzTOrM4Q+d7h1s2RKb61LAyo87F2tppKbFsV6sHmG+JJZigKUg1NroOackzKVcWq2GdN
-         NKnbxAYU13nGv+/Zp8UrlrS6/CWR9zL386PzqDtoyeuJWq7oA1P6XAZM4u9gRfwqyHPQ
-         V82EpbaLcgsGTOafihGAILQQGqFLbJecPARv5iAH0CywQx5ljdmxuBxgr28nBQn4C6iJ
-         A/frKMZJshQqR0mi+JLlQXh4WK4SXvlGUINhvx6VCz8aSXRrtzhqpSi/1QUlFW30O+h/
-         ecSw==
-X-Gm-Message-State: AOAM5309q5b0DvqeTqWPJTCjUyzZ0Wsd+kLnVvXHAEXUstpQRlcfpn5k
-        K3GdHkUr/P+J8+Oq5dQe7AE4Vw==
-X-Google-Smtp-Source: ABdhPJzg50KqYsEHqX3lE3nbmxnrv+KURkb3on0jHu8a+ew9DdZx8yJ6m/SWiyxWjjXbpBAyOUr6iA==
-X-Received: by 2002:adf:f346:: with SMTP id e6mr13838777wrp.28.1625706412517;
-        Wed, 07 Jul 2021 18:06:52 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id g3sm537368wrv.64.2021.07.07.18.06.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jul 2021 18:06:52 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Cc:     dmitry.baryshkov@linaro.org, jonathan@marek.ca,
-        robert.foss@linaro.org, bryan.odonoghue@linaro.org
-Subject: [PATCH 2/2] arm64: dts: qcom: sm8250: Add camcc DT node
-Date:   Thu,  8 Jul 2021 02:08:39 +0100
-Message-Id: <20210708010839.692242-3-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210708010839.692242-1-bryan.odonoghue@linaro.org>
-References: <20210708010839.692242-1-bryan.odonoghue@linaro.org>
+        id S230304AbhGHDEA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 7 Jul 2021 23:04:00 -0400
+Received: from mail-db8eur05on2064.outbound.protection.outlook.com ([40.107.20.64]:22621
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230387AbhGHDEA (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 7 Jul 2021 23:04:00 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Sq57MHOeWfoEJUMfKMNdYGQj79p7VE9kslsDa06QUde4nDnH9HdLYVHZaGn93ND/NAFB2Gm66aZbg+n5s/iNj6Er+pUTHTsjpdbAXGTdkIq7s0Dcan4xwMJOamoQ6xdbucr9KYelRZXZUXEgWl7qWez10RHoPjCKGrh0lMvWEwUIReKYmVL1FkIuXVbkqXFiOwlvxbevQpyfguKxPopk4gaD19hNfYGIEkqMjK3AotWav/cEbKBxPeAVM9zo+fKFMylfC5O5l+2vhyxy7OoSxnzW+BLF5CahWKuXlW3atw8XJlR/JRHNiOMwtppzbjxfmjRKMzDmkb28WpSSyIu4bg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PS0+dzpmrJxeeMuiWXj3oRA+xYuCCdg2E4OFAQUDXKw=;
+ b=BbmZMEywxqJ9F0kADhsEM/V/HB0W1b/sZVTemGgxKkZnpDt4pe1TEvSS0vowxV/+BX/5UKiqRGvrypOPrWhrBWTCiao/5hzvhE9+tJjrDAq4+Xllfcgrjn6EqwTFynb8tcyYTpVxzDcJfFc1Qw4Kx0jsWV9XiCSV3S+TSTMgLpyEOBa6WOKganfltZaxvcDQGjbuS5Zkx7VT21NitM02TOYSEqGYxyvr88tJjAMJ0vKtMaa8NkW4IsStqCGQ/iMwvAUvx9bYJhI+fega4utxQSDUhUBdNbxTLZ+YRQpQO4+VrILcYCUEyQyNf4mbxl2vDKm5to8i7MH29N9TIR8B7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PS0+dzpmrJxeeMuiWXj3oRA+xYuCCdg2E4OFAQUDXKw=;
+ b=WJzCbVS9ijGg1mN4rdZAeRXIemW8D+UWn/OOwwNVxwsMw5Lu1OM2Ur5749Ro6Py7GWyJvpGffAVXegIdqsu8Mt3QdLy8Lv2BsJb22ER04WDw+jOVe94G8BY//tEs7lYd+/qurPNola5c5yIF0yiX6KMh9hsEgmSkjP0zGUIdDpY=
+Received: from DB6PR0402MB2760.eurprd04.prod.outlook.com (2603:10a6:4:a1::14)
+ by DBBPR04MB7884.eurprd04.prod.outlook.com (2603:10a6:10:1f2::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.23; Thu, 8 Jul
+ 2021 03:01:16 +0000
+Received: from DB6PR0402MB2760.eurprd04.prod.outlook.com
+ ([fe80::c445:d742:eb76:86dd]) by DB6PR0402MB2760.eurprd04.prod.outlook.com
+ ([fe80::c445:d742:eb76:86dd%9]) with mapi id 15.20.4287.033; Thu, 8 Jul 2021
+ 03:01:15 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>
+CC:     "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: RE: [PATCH] clk: not calculate new rate for protected clks
+Thread-Topic: [PATCH] clk: not calculate new rate for protected clks
+Thread-Index: AQHXVgSxg8DzlmcuR0ixKMBWM65yqas4nvwQ
+Date:   Thu, 8 Jul 2021 03:01:15 +0000
+Message-ID: <DB6PR0402MB27601F676286D00AE50B144988199@DB6PR0402MB2760.eurprd04.prod.outlook.com>
+References: <20210531103957.21886-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20210531103957.21886-1-peng.fan@oss.nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: oss.nxp.com; dkim=none (message not signed)
+ header.d=none;oss.nxp.com; dmarc=none action=none header.from=oss.nxp.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1fd0224f-b774-4128-9330-08d941bca6e9
+x-ms-traffictypediagnostic: DBBPR04MB7884:
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DBBPR04MB78842356F64B736A87DF464BC9199@DBBPR04MB7884.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3383;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: dWRgxvJqfBVQOxYe2GPMxKHHENfLedMT8I4RPeS/VeDg7JgIAKxZx9xM77O0Tt5kzlOpnbDSJYrwKVRAMBkmwOOLNCC5ilcllnttfznl5rSZ6B3oQ9DMn2YmkDCfYxrAwLN1cY7muLj/aMH68E16OoeJazVs8UeBt3p28tWCG8cZ+M6YKFiTqyOjuAWEOlh2dWe8G1By4Ltq+YWl1PhPCxzeQy/JsNwi3UASH79p+J1wRxTFcSqVpbU8wV9YSu9Ke1/ZELl8N7KiqHwy643L2Vn6Idx9ANLFGHTSZDJKgDXjf2IGf6FUq0TAq+UC4+psuL2Q8VW1JnxfQbJJYJNQ6lVCJDwXd0kS6YI6oBs1aetr5ot4PGGUmYYlplpub5/+qjk8QgFdb3V1Twdt6DHu0ltX7SlJcRZ/7cIf1bKWv/NvF6zPYjn7IUnpBBx2RVWpY4eCly95JU8xBQUR7o9RhrYJdxb+xFaMC2ypbnoAN6wnxr6vzH162jCVNj9UcqyTWdyBskGiMzSG8gELqeHK243rfrt6yDtVjkYa7Noy6mGCDWjEEtJ8GeTAax4LjYruAQ2+eoNfnKwbr5vy0J2rqKNXI2NmlfDBjzVBL1/yuRctuc8TGIT6CvAW/vvzFdNy+Di08f1I4pyLTkOrR7wL/A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0402MB2760.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(366004)(376002)(346002)(136003)(39860400002)(6506007)(55016002)(33656002)(4744005)(9686003)(2906002)(4326008)(64756008)(71200400001)(316002)(122000001)(478600001)(66446008)(110136005)(52536014)(7696005)(8676002)(26005)(38100700002)(66556008)(66946007)(76116006)(83380400001)(66476007)(5660300002)(54906003)(8936002)(86362001)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?bL1u2Lnxz8HOk+87jYpf1WAydV0G/cR2KPJzx1FB1ei/4EoNK2os84SvZHCR?=
+ =?us-ascii?Q?Br4Mg70ZsaY2ermX6ZK6nkUnwja/LfZrnkb07jyp+doQFk7AFxkel64JGsln?=
+ =?us-ascii?Q?ZKXElrRxjjXZ8W+3M8K6SaL1VC0zMr0SqsnmZz/Pqz1Ww91N4yR2zXl3q1/k?=
+ =?us-ascii?Q?4X9l4mm6AYSSYqQi5iR7c4VRdB8C0afu0loJlGPHhuSfBz4Xav+aiG/JhkZY?=
+ =?us-ascii?Q?1Syn9s294lr404DvGdIfqfQbw4Jf2v7+P0/eyOcIFqtprTRCnxgtuNmEIRAC?=
+ =?us-ascii?Q?UTvPIn1u3cQtF7mmawEGZTB3IEJbfVAz9r58JilI3RtSBEsInD+xweKBLCUl?=
+ =?us-ascii?Q?x4PUJ3V46UamHO6RGwT/ZLQ4rN7gU8o2H/fEUEY+cbmDRjirbxzc3dqO7P5Z?=
+ =?us-ascii?Q?Jh91LkWLTKTecmh7ecOEFoP2FExAkl1LXDZ7KSiYxOi+E7rnScMqle4pVMWe?=
+ =?us-ascii?Q?jqMzLjDZgyzr3VYcg/06yBdMZi9Ev6MReie7tAfBfLr1oRkBypsXiTZ1VMgr?=
+ =?us-ascii?Q?Ux+YXTtsgQBkWA4iNFiA65YLz6MQNq2KHkwNUVWi9TXz5upFHvGqDz0+BW5N?=
+ =?us-ascii?Q?xTN1/0iVqXo402N6NeRKmwEY10g4DlxLCEDL545pcjgQ5F2L4F0lv0XUyMaY?=
+ =?us-ascii?Q?CgJBxJXsKu/GKhtOHC4d4kETq9RX8HOKF2+I2ePMCCE7gw/BYIwny0tO1J4P?=
+ =?us-ascii?Q?VjwjfA3ZV+L/kdmHakZ3dUE/zC1gm4cLqCckeTggRyUD4+ts1MlY8T6+UMdA?=
+ =?us-ascii?Q?BxqWngO2TUl3kBVWspwfBPnfMFin9/1+IaUq6477Y/UmVWXHP/AndGz5n6Fw?=
+ =?us-ascii?Q?DjnEUpAR8nm7i9wcZvXQ138kwiR30uB0fZmg4NoNr/Zoe+tLbbQKZ6p8xIfp?=
+ =?us-ascii?Q?iUl5m/dj/1LsOTAf/Piz0gv0vsGdGGra5DZ2zd1g4CAIfwhJ7unEhs0FN2ay?=
+ =?us-ascii?Q?XEJUXzNJPDrqr7WuKTl9W4D6PuVAYjoO0uBmuz1IH/5ciEErYnFYYGDzI17v?=
+ =?us-ascii?Q?Ezm2GYapXg79BdIfvQk4nEgSBsgpBkGswiJp98ZUnILHQbtcvzFJRRONpju9?=
+ =?us-ascii?Q?Jn9qdV0Rivz8HeMGAuBxmtHMa3ohvgwE+6Un5qSIizmzGy8ZHdru1rNNTbxV?=
+ =?us-ascii?Q?tWB+TmBa5EdwO9jhRsbMHXa1gfjwLaE5sxudKA/vQrn2qHvpQm/FwKxY7Uv2?=
+ =?us-ascii?Q?f6O2eHoETFOjFUJnS2QeE2odOwsPG4aZC7odtQ60xGIsCr2reZA+xR0Ezj6C?=
+ =?us-ascii?Q?cP2/ZgmOkK4O3HsLzbnCHMtatnKqWGOOp4ZI1GTRHHYdYBOOgTAfEA8EzSQ2?=
+ =?us-ascii?Q?d4pG2gOBcK4nvS04KcABT1G+?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB6PR0402MB2760.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1fd0224f-b774-4128-9330-08d941bca6e9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jul 2021 03:01:15.8678
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uYcRbUwg9qIuakhoGDZrY4emA48U7lm+o6p98wsxDUOklZfpWwbreP2n9jbAI7esrbPwuH9DcozbybaTnLP6fA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7884
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the camcc DT node for the Camera Clock Controller on sm8250.
+> Subject: [PATCH] clk: not calculate new rate for protected clks
 
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+Gentle ping...
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index 4c0de12aaba6..7ac6ae50779c 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -18,6 +18,7 @@
- #include <dt-bindings/sound/qcom,q6afe.h>
- #include <dt-bindings/thermal/thermal.h>
- #include <dt-bindings/clock/qcom,videocc-sm8250.h>
-+#include <dt-bindings/clock/qcom,camcc-sm8250.h>
- 
- / {
- 	interrupt-parent = <&intc>;
-@@ -2369,6 +2370,19 @@ videocc: clock-controller@abf0000 {
- 			#power-domain-cells = <1>;
- 		};
- 
-+		clock_camcc: clock-controller@ad00000 {
-+			compatible = "qcom,sm8250-camcc";
-+			reg = <0 0x0ad00000 0 0x10000>;
-+			clocks = <&gcc GCC_VIDEO_AHB_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK_A>;
-+			clock-names = "iface", "bi_tcxo", "bi_tcxo_ao";
-+			mmcx-supply = <&mmcx_reg>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		mdss: mdss@ae00000 {
- 			compatible = "qcom,sdm845-mdss";
- 			reg = <0 0x0ae00000 0 0x1000>;
--- 
-2.30.1
+Thanks,
+Peng.
+
+>=20
+> From: Peng Fan <peng.fan@nxp.com>
+>=20
+> If the protect_count of the parent clk is not 0, we not calculate new rat=
+es for
+> parent. Otherwise, the common clk framework may configure other child clk=
+s
+> that is under using.
+>=20
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/clk/clk.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c index
+> 65508eb89ec9..8ac121838e13 100644
+> --- a/drivers/clk/clk.c
+> +++ b/drivers/clk/clk.c
+> @@ -2002,7 +2002,7 @@ static struct clk_core *clk_calc_new_rates(struct
+> clk_core *core,
+>  	}
+>=20
+>  	if ((core->flags & CLK_SET_RATE_PARENT) && parent &&
+> -	    best_parent_rate !=3D parent->rate)
+> +	    best_parent_rate !=3D parent->rate &&
+> +!clk_core_rate_is_protected(parent))
+>  		top =3D clk_calc_new_rates(parent, best_parent_rate);
+>=20
+>  out:
+> --
+> 2.30.0
 
