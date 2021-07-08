@@ -2,46 +2,90 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A71923C145C
-	for <lists+linux-clk@lfdr.de>; Thu,  8 Jul 2021 15:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61FAD3C14EF
+	for <lists+linux-clk@lfdr.de>; Thu,  8 Jul 2021 16:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbhGHNkO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 8 Jul 2021 09:40:14 -0400
-Received: from mx-n01.wc2.phx1.stabletransit.com ([207.246.242.247]:40846 "HELO
-        mx-n01.wc2.phx1.stabletransit.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with SMTP id S231698AbhGHNkN (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 8 Jul 2021 09:40:13 -0400
-X-Greylist: delayed 300 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Jul 2021 09:40:13 EDT
-Received: by mx-n01.wc2.phx1.stabletransit.com (Postfix, from userid 114)
-        id 709F161F1E; Thu,  8 Jul 2021 08:32:30 -0500 (CDT)
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
-        mx-n01.wc2.phx1.stabletransit.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.6 required=6.0 tests=BAYES_50,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SUBJ_ALL_CAPS,
-        T_FILL_THIS_FORM_SHORT,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.2
-X-Spam-Virus: No
-Received: from php-v027.wc2.phx1.stabletransit.com (unknown [10.40.206.156])
-        by mx-n01.wc2.phx1.stabletransit.com (Postfix) with ESMTP id E1EE861816
-        for <linux-clk@vger.kernel.org>; Thu,  8 Jul 2021 08:32:29 -0500 (CDT)
-Received: from digilu (uid 2914979)
-        (envelope-from mabeljohnson@citromail.hu)
-        id 1ff60
-        by php-v027.wc2.phx1.stabletransit.com (DragonFly Mail Agent v0.11);
-        Thu, 08 Jul 2021 08:32:29 -0500
-To:     linux-clk@vger.kernel.org
-Subject: WORK OF GOD.
-X-PHP-Originating-Script: 2914979:class.engine.php(12) : runtime-created function
-Date:   Thu, 8 Jul 2021 08:32:29 -0500
-From:   MARY JOHNSON <mabeljohnson@citromail.hu>
-Reply-To: mj224294@gmail.com
-Message-ID: <e70b2733b6236934bf3de4c1ffc14374@jackieleestudio.com>
+        id S231905AbhGHOSX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-clk@lfdr.de>); Thu, 8 Jul 2021 10:18:23 -0400
+Received: from mslow1.mail.gandi.net ([217.70.178.240]:60291 "EHLO
+        mslow1.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229592AbhGHOSX (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 8 Jul 2021 10:18:23 -0400
+Received: from relay6-d.mail.gandi.net (unknown [217.70.183.198])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 37B69C46A2;
+        Thu,  8 Jul 2021 14:13:58 +0000 (UTC)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id DEEA2C000A;
+        Thu,  8 Jul 2021 14:13:34 +0000 (UTC)
+Date:   Thu, 8 Jul 2021 16:13:34 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] clk: at91: fix count of periph clocks passed to
+ pmc_data_allocate
+Message-ID: <20210708161334.039d09fb@fixe.home>
+In-Reply-To: <YMB8RYhCY4WVQXg+@piout.net>
+References: <20210609080145.44226-1-clement.leger@bootlin.com>
+        <YMB8RYhCY4WVQXg+@piout.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-I am Mrs. Mary Johnson,78years,an aging widow suffering from cancer, I am on admission at a hospital.I would like to willfully entrust the rest of my monetary assets to you, Kindly reply back with your full Name, cellphone, address, to enable me to send you a letter of authorization to contact my bank first inland bank nigeria plc so that they can transfer my funds to your account for the purpose of helping the poor as indicated on my WILL.
+Hi,
+
+Le Wed, 9 Jun 2021 10:31:01 +0200,
+Alexandre Belloni <alexandre.belloni@bootlin.com> a écrit :
+
+> hi,
+> 
+> Subject should have been:
+> clk: at91: sama5d2: fix count of periph clocks passed to
+> pmc_data_allocate
+> 
+
+This patch can actually be discarded since it won't fix allocation at
+all but will just allocate more data than needed since nck already
+returns the max .id field of the periph array.
+
+> 
+> 
+> On 09/06/2021 10:01:44+0200, Clément Léger wrote:
+> > When allocating clk_hw structure, only the periph32 clocks are
+> > considered. Since sama5d2_periphck are also added to the phws there
+> > is currently an out of bound write. Fix this by adding the count of
+> > periphck to periph32ck.
+> > 
+> > Signed-off-by: Clément Léger <clement.leger@bootlin.com>  
+> Fixes: a2038077de9a ("clk: at91: add sama5d2 PMC driver")
+> 
+> > ---
+> >  drivers/clk/at91/sama5d2.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/clk/at91/sama5d2.c b/drivers/clk/at91/sama5d2.c
+> > index 3d1f78176c3e..663b73a032ee 100644
+> > --- a/drivers/clk/at91/sama5d2.c
+> > +++ b/drivers/clk/at91/sama5d2.c
+> > @@ -170,7 +170,7 @@ static void __init sama5d2_pmc_setup(struct
+> > device_node *np) 
+> >  	sama5d2_pmc = pmc_data_allocate(PMC_AUDIOPLLCK + 1,
+> >  					nck(sama5d2_systemck),
+> > -					nck(sama5d2_periph32ck),
+> > +					nck(sama5d2_periphck) +
+> > nck(sama5d2_periph32ck), nck(sama5d2_gck), 3);
+> >  	if (!sama5d2_pmc)
+> >  		return;
+> > -- 
+> > 2.32.0
+> >   
+> 
 
