@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 313F23C1E66
+	by mail.lfdr.de (Postfix) with ESMTP id E6E443C1E68
 	for <lists+linux-clk@lfdr.de>; Fri,  9 Jul 2021 06:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbhGIEee (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 9 Jul 2021 00:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
+        id S231260AbhGIEej (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 9 Jul 2021 00:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbhGIEe2 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 9 Jul 2021 00:34:28 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FD5C0613DC
-        for <linux-clk@vger.kernel.org>; Thu,  8 Jul 2021 21:31:45 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id c28so20135387lfp.11
-        for <linux-clk@vger.kernel.org>; Thu, 08 Jul 2021 21:31:45 -0700 (PDT)
+        with ESMTP id S231271AbhGIEea (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 9 Jul 2021 00:34:30 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80119C061574
+        for <linux-clk@vger.kernel.org>; Thu,  8 Jul 2021 21:31:46 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id s18so5932159ljg.7
+        for <linux-clk@vger.kernel.org>; Thu, 08 Jul 2021 21:31:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=f0ldkE5j34OXHAqh3I/xyyl0k1n40wAos/+0qzuAEic=;
-        b=evja71V+pcmqd6EmSv+Kg5ZvqKs56bvDZjR9SCjtxVgotJ6idANj1ATscxqed8yhrH
-         BqZTpJzJV8b2/mRGTTUw/C87V0Ub/9ljyKAib/5HmOck6HhDX9xbtcYfIDoh6B/YRcFO
-         FvHhKQEyAUsy4q66QaZtOlUhXFfULRgLI0Yh1LDLF19WJqfLFoD0DGuokdd5v0YC1Yw6
-         nACS2JKBe1KaPMWI2WkDogCGf5h7LS/kMaTVUidb/nitQziDHKrtzOHhImfuus0axEJE
-         ViuhFR3ovCswl+VA/6QiXst+hy99HD96ktL4Qv7YVQa/qw+Dof8NNthKI1nTf9NqFV3+
-         XJTQ==
+        bh=OW6r9Ztak14Z94NLN85hpavnPWferFff+9qy6SUKk4g=;
+        b=UvGi1B+es3fCaDxmJpGeewLmLB8C2VxxdjqqEEtrzFv0O0YZAolKlF756ouyrJpI2/
+         fY58oGEn7/X9Y0nAPmv0ScmYyuXiAwRTIXpbMMSsy3KmpFYPdYDg1hs/Xmv6cEngQ00W
+         gDrrrmODv6Sg1V7A1keQiN0XEBDXoTVvhSdXjWAvgBpuEOwDF2XdumPevBMFw29rfxHS
+         r3xkD6To+3liLwf4z+QeiiT/BX8mVtxJyeZ2BdpS6cOgLwozikH84JZ1KCpHwGlc+HkM
+         E5RZgZz7GZHGYnGfg8jPZwzKoepOd9ankKqCplBpO6fTlLs7AzIrDIjbJJsEY7xQVP86
+         SHBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=f0ldkE5j34OXHAqh3I/xyyl0k1n40wAos/+0qzuAEic=;
-        b=kmELbFbqn7USJHp4JRU4biIa/IEsu9cnrB2lfunr70emaUiAvpQJ70Xzss6rCBLnwy
-         2H/PXSOaUNTq5CKm/kq/QkfWECPyj4xoCC5lemCNZuFCbwgScUcGvoP6qb6KJErV3cDa
-         VcUDATLdX8nRkF0tFfBgsor5MTfKTdU49RZARD0fAQVB+aUW5BbJcnxpWBpr7DP4k88w
-         ARqINYXHmFnBbMYEZRdp5OFc2yXsw+5DtlzoT4ecLUB4jvRhpWQsQaAprfWncyogOU/X
-         OteJ4+Hx6reWH5cpdtkR6P+RLp8wwawQ6hrFzZ/pPaXOeno3zO4sqWLEhTppp4XPFw5t
-         YK8A==
-X-Gm-Message-State: AOAM532n2RuWP1rI8U7mj5wvL6OwEEAvs8E18we3nWPdM3b9MSrzoq+L
-        1biBwATB8uCJssEoXW6LYhEeBdtwbEFpgQ==
-X-Google-Smtp-Source: ABdhPJwZptgyRZPC0nRqYzgnhWBWhgKSY6kj6YkrVEHm0vPEIBEUMmZjkoNbraIyVlKA+ynzcecnJg==
-X-Received: by 2002:a19:408c:: with SMTP id n134mr26254126lfa.329.1625805103973;
-        Thu, 08 Jul 2021 21:31:43 -0700 (PDT)
+        bh=OW6r9Ztak14Z94NLN85hpavnPWferFff+9qy6SUKk4g=;
+        b=JJMz3Oaf4Y+VkJxkdD5TjubFuvT5tLalhA8Q9cd2m5197Lkp87QgrvhUTMCQy2mLe7
+         QrHeUI95/kCYYOMatsqjF6NDtTYy1dDizV3dWxcYStQJvmpz71YPfV27dI45oYPPFavB
+         ZpUOoLM3Q79Nbw+tWbNTeTIn1N8uBDyFP0Ubs4TsQ/kiJi6Jd65IY0O0fsT9uoKv8Twb
+         tlMc3WiYzDYgOC4DZlMdodp+r1O+tdM0AlEgd5yY0cA1Bq54I8cpxntz79QfZwUPnyn3
+         BXgL4f3rvq3ShRJ85qnFolyxH8LplymdFqjwwOPskH7fet0So+qbGp60W7JFW4CDvtJE
+         Oh5A==
+X-Gm-Message-State: AOAM533+UA95jZzOhQKiAOvZs0yjFTBbyO0HOBlguR/3WYe/T9CJWQp/
+        6eAs0qeQ3f+zAw3Aw9YYZeB6yw==
+X-Google-Smtp-Source: ABdhPJyY7ngGsTRiOotvZgAIDUFql0+KdrxnztkmsKdBzpgq9oLFTrwe/YXta5EHMcKPW9w4HgfmDA==
+X-Received: by 2002:a2e:9b46:: with SMTP id o6mr21455694ljj.501.1625805104909;
+        Thu, 08 Jul 2021 21:31:44 -0700 (PDT)
 Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id h1sm13028lft.174.2021.07.08.21.31.43
+        by smtp.gmail.com with ESMTPSA id h1sm13028lft.174.2021.07.08.21.31.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jul 2021 21:31:43 -0700 (PDT)
+        Thu, 08 Jul 2021 21:31:44 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -61,9 +61,9 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         Mark Brown <broonie@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH v2 6/7] clk: qcom: dispcc-sm8250: stop using mmcx regulator
-Date:   Fri,  9 Jul 2021 07:31:35 +0300
-Message-Id: <20210709043136.533205-7-dmitry.baryshkov@linaro.org>
+Subject: [RESEND PATCH v2 7/7] clk: qcom: videocc-sm8250: stop using mmcx regulator
+Date:   Fri,  9 Jul 2021 07:31:36 +0300
+Message-Id: <20210709043136.533205-8-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210709043136.533205-1-dmitry.baryshkov@linaro.org>
 References: <20210709043136.533205-1-dmitry.baryshkov@linaro.org>
@@ -75,25 +75,49 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 Now as the common qcom clock controller code has been taught about power
 domains, stop mentioning mmcx supply as a way to power up the clock
-controller's gdsc.
+controller's gdscs.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/clk/qcom/dispcc-sm8250.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/clk/qcom/videocc-sm8250.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/clk/qcom/dispcc-sm8250.c b/drivers/clk/qcom/dispcc-sm8250.c
-index de09cd5c209f..dfbfe64b12f6 100644
---- a/drivers/clk/qcom/dispcc-sm8250.c
-+++ b/drivers/clk/qcom/dispcc-sm8250.c
-@@ -955,7 +955,6 @@ static struct gdsc mdss_gdsc = {
+diff --git a/drivers/clk/qcom/videocc-sm8250.c b/drivers/clk/qcom/videocc-sm8250.c
+index 7b435a1c2c4b..eedef85d90e5 100644
+--- a/drivers/clk/qcom/videocc-sm8250.c
++++ b/drivers/clk/qcom/videocc-sm8250.c
+@@ -276,7 +276,6 @@ static struct gdsc mvs0c_gdsc = {
  	},
+ 	.flags = 0,
  	.pwrsts = PWRSTS_OFF_ON,
- 	.flags = HW_CTRL,
 -	.supply = "mmcx",
  };
  
- static struct clk_regmap *disp_cc_sm8250_clocks[] = {
+ static struct gdsc mvs1c_gdsc = {
+@@ -286,7 +285,6 @@ static struct gdsc mvs1c_gdsc = {
+ 	},
+ 	.flags = 0,
+ 	.pwrsts = PWRSTS_OFF_ON,
+-	.supply = "mmcx",
+ };
+ 
+ static struct gdsc mvs0_gdsc = {
+@@ -296,7 +294,6 @@ static struct gdsc mvs0_gdsc = {
+ 	},
+ 	.flags = HW_CTRL,
+ 	.pwrsts = PWRSTS_OFF_ON,
+-	.supply = "mmcx",
+ };
+ 
+ static struct gdsc mvs1_gdsc = {
+@@ -306,7 +303,6 @@ static struct gdsc mvs1_gdsc = {
+ 	},
+ 	.flags = HW_CTRL,
+ 	.pwrsts = PWRSTS_OFF_ON,
+-	.supply = "mmcx",
+ };
+ 
+ static struct clk_regmap *video_cc_sm8250_clocks[] = {
 -- 
 2.30.2
 
