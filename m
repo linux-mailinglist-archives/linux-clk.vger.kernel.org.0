@@ -2,122 +2,109 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A363C1D1D
-	for <lists+linux-clk@lfdr.de>; Fri,  9 Jul 2021 03:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A163C1D45
+	for <lists+linux-clk@lfdr.de>; Fri,  9 Jul 2021 04:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbhGIBdu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 8 Jul 2021 21:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
+        id S230262AbhGICQZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 8 Jul 2021 22:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbhGIBdi (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 8 Jul 2021 21:33:38 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDC8C061760
-        for <linux-clk@vger.kernel.org>; Thu,  8 Jul 2021 18:30:54 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id z9so5394042ljm.2
-        for <linux-clk@vger.kernel.org>; Thu, 08 Jul 2021 18:30:54 -0700 (PDT)
+        with ESMTP id S229875AbhGICQY (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 8 Jul 2021 22:16:24 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B011C061760
+        for <linux-clk@vger.kernel.org>; Thu,  8 Jul 2021 19:13:42 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id q10so7297909pfj.12
+        for <linux-clk@vger.kernel.org>; Thu, 08 Jul 2021 19:13:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=OW6r9Ztak14Z94NLN85hpavnPWferFff+9qy6SUKk4g=;
-        b=JC+1co9x/j+ssxCI+b1ed91TSXIs9SSXm9M04kPMKTty2jG2kt3NTohLWEdszrJp4d
-         OWjYXBEqxswxPVRdX5oD8bvjermQG4xTqOsvtdmnRPRuUsqAxSGxhpxhzso8xFWxnasP
-         Sqb7IkQzYU1yYKlpoCpIIaVj8QnuzQOtDu3+ABjl0d6FRKmhGHyk3IAJphS0InJR3csZ
-         ZXrhWEXgym+/thivB1uxBvE97x5RoP3GK7VzLL3rZ3229L9G9zmcjqxFRfW5sDhUmmHz
-         fbM5C10WwxdB2P3KgcQAPKrB9l9R8YMjwQtO69myRBsg5nKrbkPDS+7FzuyPRGmFmOnT
-         9BIg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=x6ANBpfcs5e16JKI1zhKSQnwm3SbozaLix0FKrdBRWc=;
+        b=dmYFQ0i2n5eI3mcXKrnPL7JzNSGiM1LKb6WIYTdQK2BE/UU/Cpi4LW+7gBJas2XHSA
+         ySUHka2jezNdy1ewG3zQkT4eeJkHaH1PyTYkx249iXuvrIi9cfUt5Q87BJuhCKbCYPda
+         oAhyPnf/B0VdaWlzwflzBgvjBh4f8bTgZqy8DCe4E497BAXckHjgIZmeS+d2aoHonnP/
+         Y+6DXrOACd/UupoUaUJbT6v3PWSuQaAxDjN1ziaqLp42YHrZqxRNkwY61ljia+VURyxa
+         ppfHvGl0AROCISeeg2i2KU5ERLINCyrNTeBMonqsbn1So5Hsg9CWs/42aUAQOK+G37Wp
+         ZeXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=OW6r9Ztak14Z94NLN85hpavnPWferFff+9qy6SUKk4g=;
-        b=ljQBlgP5iCBFPOJabEt1wyOhi6Kk92QvAqwp8kmRY/sErEg/KOzM3cUtZ29Gf6BgkZ
-         ok3M6PWOttKJh5QndG5b+zzeeF/NaZW+LjAYDc0LsSBVS18IdGhpapzwjUyYMrTxWiba
-         6GDGpoGsYzwEqOi7wq5NijDzbp5oCMPmFOORgZMFUsLwhT6ecDbolEeetexUbNfYO4CG
-         uC+0WHl6X5Fu/49FVDOjNrsI4M7le8YDZM9ViYwRgbQrRs2DKSR8AYjTvx9BvyK8AWa+
-         5MIftChD5tycwQsnnfSW4fYQa4b1OGLX1t+aOShEdkZzJ8tpLKozwvZ0CE91gqA5vawb
-         vXBA==
-X-Gm-Message-State: AOAM533VlxWNbT67JeRxjGO95LZmUn90DC7I/uQlBvhU1XdZ8KM+CbJp
-        B9WtqD4z9zmLrtjEmjEPta1kaw==
-X-Google-Smtp-Source: ABdhPJx6WXDWhJBZKd7QHCOxQwuu4v3iDZQQH1YLUxtdkVc6jIf8iadLgiyW6VaFmzWYsqE9wRVDQA==
-X-Received: by 2002:a05:651c:1798:: with SMTP id bn24mr26944102ljb.72.1625794253278;
-        Thu, 08 Jul 2021 18:30:53 -0700 (PDT)
-Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id u16sm405637ljj.113.2021.07.08.18.30.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jul 2021 18:30:52 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=x6ANBpfcs5e16JKI1zhKSQnwm3SbozaLix0FKrdBRWc=;
+        b=PDbVTzYxW0ZJJ1WN8+Ehfz3EW5uOLJItml+MJ6SC6TRjjpho2bJQg4krDihTRD8+tH
+         7IbXuQZcTbf2npFdg09pPnPAu26jtTFO+mU+X8tz/vW5x6Ldf4zCxZKpPgLxzSCyfxKV
+         2Dbuu7leYYY45Fhc2mQUt4mRHJuqQZl0wF3TyPdvRQZeFV2BpCkE1JsnhQ691RNft/h4
+         OY+NJKAdI6UJaTo+N9cvan1Zh0Rdk3BXJfiJxSDouKdOXbqihgv5omSp5GbDg81SZlh6
+         DzM/OVlhOUaamHH7cDyCa2TB4CPoqNIbavB0dUVfKdQpXMCehamBENLvfWWbb8NpZ91c
+         7jig==
+X-Gm-Message-State: AOAM531BCrGNNTDuUP4sIiTJ/pMqzT8W8rwbLg4fvNNlw8Ni+/Mj6uuC
+        pCfmZJuu/uf0MyJRRloR4gv3Cw==
+X-Google-Smtp-Source: ABdhPJyuTZgBJssNq7sXQcZFG629hsjUt77VS20Jf2WjGzdT2+3q9kvRlJ6kA+7ZpJX/caEufpW1Hw==
+X-Received: by 2002:a63:f64d:: with SMTP id u13mr35344162pgj.156.1625796821537;
+        Thu, 08 Jul 2021 19:13:41 -0700 (PDT)
+Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id m34sm4573560pgb.85.2021.07.08.19.13.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 08 Jul 2021 19:13:41 -0700 (PDT)
+Date:   Fri, 9 Jul 2021 10:13:35 +0800
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Vincent Knecht <vincent.knecht@mailoo.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/7] clk: qcom: videocc-sm8250: stop using mmcx regulator
-Date:   Fri,  9 Jul 2021 04:30:43 +0300
-Message-Id: <20210709013043.495233-8-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210709013043.495233-1-dmitry.baryshkov@linaro.org>
-References: <20210709013043.495233-1-dmitry.baryshkov@linaro.org>
+        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
+        Benjamin Li <benl@squareup.com>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] Add MSM8939 APCS/A53PLL clock support
+Message-ID: <20210709021334.GB11342@dragon>
+References: <20210704024032.11559-1-shawn.guo@linaro.org>
+ <c780e9df1b2f1eef6af1c9a10662f5a1952a1fae.camel@mailoo.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <c780e9df1b2f1eef6af1c9a10662f5a1952a1fae.camel@mailoo.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Now as the common qcom clock controller code has been taught about power
-domains, stop mentioning mmcx supply as a way to power up the clock
-controller's gdscs.
+On Wed, Jul 07, 2021 at 11:34:19PM +0200, Vincent Knecht wrote:
+> Le dimanche 04 juillet 2021 à 10:40 +0800, Shawn Guo a écrit :
+> > This series adds MSM8939 APCS/A53PLL clock support.  Most outstanding
+> > thing about MSM8939 is that it integrates 3 APCS instances, for Cluster0
+> > (little cores), Cluster1 (big cores) and CCI (Cache Coherent Interconnect)
+> > respectively.
+> > 
+> > Changes for v2:
+> > - Reword the commit log of first patch as suggested by Stephen.
+> > - Drop 'clock-output-names' bindings and use @unit-address to get unique
+> >   a53pll/mux clock names.
+> > - Use 'operating-points-v2' bindings to pass frequency table via OPP, so
+> >   that we can use one single compatible for all 3 MSM8939 a53pll.
+> > 
+> > Shawn Guo (4):
+> >   clk: qcom: apcs-msm8916: Flag a53mux instead of a53pll as critical
+> >   clk: qcom: a53pll/mux: Use unique clock name
+> >   dt-bindings: clock: Update qcom,a53pll bindings for MSM8939 support
+> >   clk: qcom: a53-pll: Add MSM8939 a53pll support
+> > 
+> >  .../bindings/clock/qcom,a53pll.yaml           |  3 +
+> >  drivers/clk/qcom/a53-pll.c                    | 68 ++++++++++++++++++-
+> >  drivers/clk/qcom/apcs-msm8916.c               | 10 ++-
+> >  3 files changed, 76 insertions(+), 5 deletions(-)
+> 
+> Hello,
+> 
+> would you have a msm8939 dtsi/dts reference file working with all recent
+> contributions for this SoC ?
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/clk/qcom/videocc-sm8250.c | 4 ----
- 1 file changed, 4 deletions(-)
+Yes, the dts will be posted once it's ready for public review.
 
-diff --git a/drivers/clk/qcom/videocc-sm8250.c b/drivers/clk/qcom/videocc-sm8250.c
-index 7b435a1c2c4b..eedef85d90e5 100644
---- a/drivers/clk/qcom/videocc-sm8250.c
-+++ b/drivers/clk/qcom/videocc-sm8250.c
-@@ -276,7 +276,6 @@ static struct gdsc mvs0c_gdsc = {
- 	},
- 	.flags = 0,
- 	.pwrsts = PWRSTS_OFF_ON,
--	.supply = "mmcx",
- };
- 
- static struct gdsc mvs1c_gdsc = {
-@@ -286,7 +285,6 @@ static struct gdsc mvs1c_gdsc = {
- 	},
- 	.flags = 0,
- 	.pwrsts = PWRSTS_OFF_ON,
--	.supply = "mmcx",
- };
- 
- static struct gdsc mvs0_gdsc = {
-@@ -296,7 +294,6 @@ static struct gdsc mvs0_gdsc = {
- 	},
- 	.flags = HW_CTRL,
- 	.pwrsts = PWRSTS_OFF_ON,
--	.supply = "mmcx",
- };
- 
- static struct gdsc mvs1_gdsc = {
-@@ -306,7 +303,6 @@ static struct gdsc mvs1_gdsc = {
- 	},
- 	.flags = HW_CTRL,
- 	.pwrsts = PWRSTS_OFF_ON,
--	.supply = "mmcx",
- };
- 
- static struct clk_regmap *video_cc_sm8250_clocks[] = {
--- 
-2.30.2
+Shawn
 
+> We the msm8939-focused PostmarketOS gang would be happy to boot our devices
+> and test patches but we're not able to boot anything more recent that 5.9...
