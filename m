@@ -2,439 +2,231 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1163C72ED
-	for <lists+linux-clk@lfdr.de>; Tue, 13 Jul 2021 17:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1264F3C7702
+	for <lists+linux-clk@lfdr.de>; Tue, 13 Jul 2021 21:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237030AbhGMPQu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 13 Jul 2021 11:16:50 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:47636 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237011AbhGMPQu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 13 Jul 2021 11:16:50 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1626189240; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=LpJuPfxEn2AHfQ2FJiJrwppZ2E3fpcb7nTfF/jVmuyg=; b=O9TikP+cyX51teIEyIEjQV2UD6a28CxY8J6XvD3RR0w/qswfsGRznMTiOcSfsCDLB3DbjHlo
- s4iXgERWMZCs0cSmcOH6S6KSsCHS/9OUG9YD/vh9vJBbD0kSKR4MBx+OYPykZYBsg50PxC2W
- XuJZi9j8C0HFSfDip5Z6LxW3B+o=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 60edad8806ea41c941b32cf7 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 13 Jul 2021 15:13:12
- GMT
-Sender: tdas=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 1EC02C4323A; Tue, 13 Jul 2021 15:13:12 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from tdas-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: tdas)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id D759AC43217;
-        Tue, 13 Jul 2021 15:13:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org D759AC43217
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=tdas@codeaurora.org
-From:   Taniya Das <tdas@codeaurora.org>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?q?Michael=20Turquette=20=C2=A0?= <mturquette@baylibre.com>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh@kernel.org, robh+dt@kernel.org,
-        Taniya Das <tdas@codeaurora.org>
-Subject: [PATCH v3 7/7] clk: qcom: Add video clock controller driver for SC7280
-Date:   Tue, 13 Jul 2021 20:42:23 +0530
-Message-Id: <1626189143-12957-8-git-send-email-tdas@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1626189143-12957-1-git-send-email-tdas@codeaurora.org>
-References: <1626189143-12957-1-git-send-email-tdas@codeaurora.org>
+        id S234394AbhGMThv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 13 Jul 2021 15:37:51 -0400
+Received: from mail-io1-f54.google.com ([209.85.166.54]:41929 "EHLO
+        mail-io1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230376AbhGMThu (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 13 Jul 2021 15:37:50 -0400
+Received: by mail-io1-f54.google.com with SMTP id b1so28702271ioz.8;
+        Tue, 13 Jul 2021 12:34:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eXNbiOfz2OADKu5/Fro0uEc8qfMv6oN+akM7nAMsoNs=;
+        b=R5rmT8ovYq4T9/0xGqehGSjL2Tkr709x7kPP68DY1EqMpoNcw7BgNbAxp3J5ngszVn
+         8W2efjOTgRrAoEobCI4hFcCFO1t6kHHLpLzIwK5Py/VyfSuOkW9EVZtUbAp8ugV2Vl+m
+         tWL5L08czLP5JTQJNz5EJOFJdUX1ILP9izXYPs1ITg+zCiX8ecKGJhuH+EfwBpIwv1sD
+         +dMWDupVjw367iIJPFtdi4dcygoHlxIUwqDQpes3LTzBXQL+tObiKdlMHhZ7N4xzi7b+
+         KvKV1o+lGhKQaIK0mCqdbdGpD9TOIT48Ao9yBowHgfn3kCKRDzmIovBHuH4CxeJ91Wvx
+         mZjQ==
+X-Gm-Message-State: AOAM530Hw1faVojnBObdZAsNQxX4C/QjEdeFFb6DAgf2KMfWFseJBrC1
+        klLKwSIRkKIE4fjYpyvEaHETiT9BRQ==
+X-Google-Smtp-Source: ABdhPJzw9lbjwb1pdT4tIxapva2T9ilTykdW85tANNfljZrD6J0J6zkjV6l4axi9xOmTnyTsjbnCSg==
+X-Received: by 2002:a5d:928f:: with SMTP id s15mr4391019iom.142.1626204898597;
+        Tue, 13 Jul 2021 12:34:58 -0700 (PDT)
+Received: from xps15.herring.priv ([64.188.179.248])
+        by smtp.googlemail.com with ESMTPSA id k13sm4640772ilv.18.2021.07.13.12.34.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jul 2021 12:34:57 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-clk@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] dt-bindings: More dropping redundant minItems/maxItems
+Date:   Tue, 13 Jul 2021 13:34:53 -0600
+Message-Id: <20210713193453.690290-1-robh@kernel.org>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add support for the video clock controller found on SC7280
-based devices. This would allow video drivers to probe and
-control their clocks.
+Another round of removing redundant minItems/maxItems from new schema in
+the recent merge window.
 
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
+If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
+same size as the list is redundant and can be dropped. Note that is DT
+schema specific behavior and not standard json-schema behavior. The tooling
+will fixup the final schema adding any unspecified minItems/maxItems.
+
+This condition is partially checked with the meta-schema already, but
+only if both 'minItems' and 'maxItems' are equal to the 'items' length.
+An improved meta-schema is pending.
+
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Joerg Roedel <joro@8bytes.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Vignesh Raghavendra <vigneshr@ti.com>
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
+Cc: Brian Norris <computersforpeace@gmail.com>
+Cc: Kamal Dasu <kdasu.kdev@gmail.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Sebastian Siewior <bigeasy@linutronix.de>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: linux-clk@vger.kernel.org
+Cc: iommu@lists.linux-foundation.org
+Cc: linux-mtd@lists.infradead.org
+Cc: linux-rtc@vger.kernel.org
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/clk/qcom/Kconfig          |   8 +
- drivers/clk/qcom/Makefile         |   1 +
- drivers/clk/qcom/videocc-sc7280.c | 325 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 334 insertions(+)
- create mode 100644 drivers/clk/qcom/videocc-sc7280.c
+ .../devicetree/bindings/clock/brcm,iproc-clocks.yaml      | 1 -
+ .../devicetree/bindings/iommu/rockchip,iommu.yaml         | 2 --
+ .../bindings/memory-controllers/arm,pl353-smc.yaml        | 1 -
+ Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml  | 8 --------
+ .../devicetree/bindings/rtc/faraday,ftrtc010.yaml         | 1 -
+ Documentation/devicetree/bindings/usb/nxp,isp1760.yaml    | 2 --
+ 6 files changed, 15 deletions(-)
 
-diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-index 80b2b6b..85b090a 100644
---- a/drivers/clk/qcom/Kconfig
-+++ b/drivers/clk/qcom/Kconfig
-@@ -410,6 +410,14 @@ config SC_VIDEOCC_7180
- 	  Say Y if you want to support video devices and functionality such as
- 	  video encode and decode.
-
-+config SC_VIDEOCC_7280
-+	tristate "SC7280 Video Clock Controller"
-+	select SC_GCC_7280
-+	help
-+	  Support for the video clock controller on SC7280 devices.
-+	  Say Y if you want to support video devices and functionality such as
-+	  video encode and decode.
-+
- config SDM_CAMCC_845
- 	tristate "SDM845 Camera Clock Controller"
- 	select SDM_GCC_845
-diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-index 9d5f9db..27cefe5 100644
---- a/drivers/clk/qcom/Makefile
-+++ b/drivers/clk/qcom/Makefile
-@@ -66,6 +66,7 @@ obj-$(CONFIG_SC_GPUCC_7280) += gpucc-sc7280.o
- obj-$(CONFIG_SC_LPASS_CORECC_7180) += lpasscorecc-sc7180.o
- obj-$(CONFIG_SC_MSS_7180) += mss-sc7180.o
- obj-$(CONFIG_SC_VIDEOCC_7180) += videocc-sc7180.o
-+obj-$(CONFIG_SC_VIDEOCC_7280) += videocc-sc7280.o
- obj-$(CONFIG_SDM_CAMCC_845) += camcc-sdm845.o
- obj-$(CONFIG_SDM_DISPCC_845) += dispcc-sdm845.o
- obj-$(CONFIG_SDM_GCC_660) += gcc-sdm660.o
-diff --git a/drivers/clk/qcom/videocc-sc7280.c b/drivers/clk/qcom/videocc-sc7280.c
-new file mode 100644
-index 0000000..615695d
---- /dev/null
-+++ b/drivers/clk/qcom/videocc-sc7280.c
-@@ -0,0 +1,325 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ */
-+
-+#include <linux/clk-provider.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+#include <dt-bindings/clock/qcom,videocc-sc7280.h>
-+
-+#include "clk-alpha-pll.h"
-+#include "clk-branch.h"
-+#include "clk-rcg.h"
-+#include "common.h"
-+#include "reset.h"
-+#include "gdsc.h"
-+
-+enum {
-+	P_BI_TCXO,
-+	P_SLEEP_CLK,
-+	P_VIDEO_PLL0_OUT_EVEN,
-+};
-+
-+static const struct pll_vco lucid_vco[] = {
-+	{ 249600000, 2000000000, 0 },
-+};
-+
-+/* 400MHz Configuration */
-+static const struct alpha_pll_config video_pll0_config = {
-+	.l = 0x14,
-+	.alpha = 0xD555,
-+	.config_ctl_val = 0x20485699,
-+	.config_ctl_hi_val = 0x00002261,
-+	.config_ctl_hi1_val = 0x329A299C,
-+	.user_ctl_val = 0x00000001,
-+	.user_ctl_hi_val = 0x00000805,
-+	.user_ctl_hi1_val = 0x00000000,
-+};
-+
-+static struct clk_alpha_pll video_pll0 = {
-+	.offset = 0x0,
-+	.vco_table = lucid_vco,
-+	.num_vco = ARRAY_SIZE(lucid_vco),
-+	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID],
-+	.clkr = {
-+		.hw.init = &(struct clk_init_data){
-+			.name = "video_pll0",
-+			.parent_data = &(const struct clk_parent_data){
-+				.fw_name = "bi_tcxo",
-+			},
-+			.num_parents = 1,
-+			.ops = &clk_alpha_pll_lucid_ops,
-+		},
-+	},
-+};
-+
-+static const struct parent_map video_cc_parent_map_0[] = {
-+	{ P_BI_TCXO, 0 },
-+	{ P_VIDEO_PLL0_OUT_EVEN, 3 },
-+};
-+
-+static const struct clk_parent_data video_cc_parent_data_0[] = {
-+	{ .fw_name = "bi_tcxo" },
-+	{ .hw = &video_pll0.clkr.hw },
-+};
-+
-+static const struct parent_map video_cc_parent_map_1[] = {
-+	{ P_SLEEP_CLK, 0 },
-+};
-+
-+static const struct clk_parent_data video_cc_parent_data_1[] = {
-+	{ .fw_name = "sleep_clk" },
-+};
-+
-+static const struct freq_tbl ftbl_video_cc_iris_clk_src[] = {
-+	F(133333333, P_VIDEO_PLL0_OUT_EVEN, 3, 0, 0),
-+	F(240000000, P_VIDEO_PLL0_OUT_EVEN, 2, 0, 0),
-+	F(335000000, P_VIDEO_PLL0_OUT_EVEN, 2, 0, 0),
-+	F(424000000, P_VIDEO_PLL0_OUT_EVEN, 2, 0, 0),
-+	F(460000000, P_VIDEO_PLL0_OUT_EVEN, 2, 0, 0),
-+	{ }
-+};
-+
-+static struct clk_rcg2 video_cc_iris_clk_src = {
-+	.cmd_rcgr = 0x1000,
-+	.mnd_width = 0,
-+	.hid_width = 5,
-+	.parent_map = video_cc_parent_map_0,
-+	.freq_tbl = ftbl_video_cc_iris_clk_src,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "video_cc_iris_clk_src",
-+		.parent_data = video_cc_parent_data_0,
-+		.num_parents = ARRAY_SIZE(video_cc_parent_data_0),
-+		.flags = CLK_SET_RATE_PARENT,
-+		.ops = &clk_rcg2_shared_ops,
-+	},
-+};
-+
-+static const struct freq_tbl ftbl_video_cc_sleep_clk_src[] = {
-+	F(32000, P_SLEEP_CLK, 1, 0, 0),
-+	{ }
-+};
-+
-+static struct clk_rcg2 video_cc_sleep_clk_src = {
-+	.cmd_rcgr = 0x701c,
-+	.mnd_width = 0,
-+	.hid_width = 5,
-+	.parent_map = video_cc_parent_map_1,
-+	.freq_tbl = ftbl_video_cc_sleep_clk_src,
-+	.clkr.hw.init = &(struct clk_init_data){
-+		.name = "video_cc_sleep_clk_src",
-+		.parent_data = video_cc_parent_data_1,
-+		.num_parents = ARRAY_SIZE(video_cc_parent_data_1),
-+		.ops = &clk_rcg2_ops,
-+	},
-+};
-+
-+static struct clk_branch video_cc_iris_ahb_clk = {
-+	.halt_reg = 0x5004,
-+	.halt_check = BRANCH_HALT_VOTED,
-+	.clkr = {
-+		.enable_reg = 0x5004,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "video_cc_iris_ahb_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&video_cc_iris_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch video_cc_mvs0_axi_clk = {
-+	.halt_reg = 0x800c,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x800c,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "video_cc_mvs0_axi_clk",
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch video_cc_mvs0_core_clk = {
-+	.halt_reg = 0x3010,
-+	.halt_check = BRANCH_HALT_VOTED,
-+	.hwcg_reg = 0x3010,
-+	.hwcg_bit = 1,
-+	.clkr = {
-+		.enable_reg = 0x3010,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "video_cc_mvs0_core_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&video_cc_iris_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch video_cc_mvsc_core_clk = {
-+	.halt_reg = 0x2014,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x2014,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "video_cc_mvsc_core_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&video_cc_iris_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch video_cc_mvsc_ctl_axi_clk = {
-+	.halt_reg = 0x8004,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x8004,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "video_cc_mvsc_ctl_axi_clk",
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch video_cc_sleep_clk = {
-+	.halt_reg = 0x7034,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x7034,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "video_cc_sleep_clk",
-+			.parent_hws = (const struct clk_hw*[]){
-+				&video_cc_sleep_clk_src.clkr.hw,
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct clk_branch video_cc_venus_ahb_clk = {
-+	.halt_reg = 0x801c,
-+	.halt_check = BRANCH_HALT,
-+	.clkr = {
-+		.enable_reg = 0x801c,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(struct clk_init_data){
-+			.name = "video_cc_venus_ahb_clk",
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
-+
-+static struct gdsc mvs0_gdsc = {
-+	.gdscr = 0x3004,
-+	.pd = {
-+		.name = "mvs0_gdsc",
-+	},
-+	.pwrsts = PWRSTS_OFF_ON,
-+	.flags = HW_CTRL | RETAIN_FF_ENABLE,
-+};
-+
-+static struct gdsc mvsc_gdsc = {
-+	.gdscr = 0x2004,
-+	.pd = {
-+		.name = "mvsc_gdsc",
-+	},
-+	.flags = RETAIN_FF_ENABLE,
-+	.pwrsts = PWRSTS_OFF_ON,
-+};
-+
-+static struct clk_regmap *video_cc_sc7280_clocks[] = {
-+	[VIDEO_CC_IRIS_AHB_CLK] = &video_cc_iris_ahb_clk.clkr,
-+	[VIDEO_CC_IRIS_CLK_SRC] = &video_cc_iris_clk_src.clkr,
-+	[VIDEO_CC_MVS0_AXI_CLK] = &video_cc_mvs0_axi_clk.clkr,
-+	[VIDEO_CC_MVS0_CORE_CLK] = &video_cc_mvs0_core_clk.clkr,
-+	[VIDEO_CC_MVSC_CORE_CLK] = &video_cc_mvsc_core_clk.clkr,
-+	[VIDEO_CC_MVSC_CTL_AXI_CLK] = &video_cc_mvsc_ctl_axi_clk.clkr,
-+	[VIDEO_CC_SLEEP_CLK] = &video_cc_sleep_clk.clkr,
-+	[VIDEO_CC_SLEEP_CLK_SRC] = &video_cc_sleep_clk_src.clkr,
-+	[VIDEO_CC_VENUS_AHB_CLK] = &video_cc_venus_ahb_clk.clkr,
-+	[VIDEO_PLL0] = &video_pll0.clkr,
-+};
-+
-+static struct gdsc *video_cc_sc7280_gdscs[] = {
-+	[MVS0_GDSC] = &mvs0_gdsc,
-+	[MVSC_GDSC] = &mvsc_gdsc,
-+};
-+
-+static const struct regmap_config video_cc_sc7280_regmap_config = {
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+	.max_register = 0xb000,
-+	.fast_io = true,
-+};
-+
-+static const struct qcom_cc_desc video_cc_sc7280_desc = {
-+	.config = &video_cc_sc7280_regmap_config,
-+	.clks = video_cc_sc7280_clocks,
-+	.num_clks = ARRAY_SIZE(video_cc_sc7280_clocks),
-+	.gdscs = video_cc_sc7280_gdscs,
-+	.num_gdscs = ARRAY_SIZE(video_cc_sc7280_gdscs),
-+};
-+
-+static const struct of_device_id video_cc_sc7280_match_table[] = {
-+	{ .compatible = "qcom,sc7280-videocc" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, video_cc_sc7280_match_table);
-+
-+static int video_cc_sc7280_probe(struct platform_device *pdev)
-+{
-+	struct regmap *regmap;
-+
-+	regmap = qcom_cc_map(pdev, &video_cc_sc7280_desc);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
-+
-+	clk_lucid_pll_configure(&video_pll0, regmap, &video_pll0_config);
-+
-+	return qcom_cc_really_probe(pdev, &video_cc_sc7280_desc, regmap);
-+}
-+
-+static struct platform_driver video_cc_sc7280_driver = {
-+	.probe = video_cc_sc7280_probe,
-+	.driver = {
-+		.name = "video_cc-sc7280",
-+		.of_match_table = video_cc_sc7280_match_table,
-+	},
-+};
-+
-+static int __init video_cc_sc7280_init(void)
-+{
-+	return platform_driver_register(&video_cc_sc7280_driver);
-+}
-+subsys_initcall(video_cc_sc7280_init);
-+
-+static void __exit video_cc_sc7280_exit(void)
-+{
-+	platform_driver_unregister(&video_cc_sc7280_driver);
-+}
-+module_exit(video_cc_sc7280_exit);
-+
-+MODULE_DESCRIPTION("QTI VIDEO_CC sc7280 Driver");
-+MODULE_LICENSE("GPL v2");
---
-Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
-of the Code Aurora Forum, hosted by the  Linux Foundation.
+diff --git a/Documentation/devicetree/bindings/clock/brcm,iproc-clocks.yaml b/Documentation/devicetree/bindings/clock/brcm,iproc-clocks.yaml
+index 8dc7b404ee12..1174c9aa9934 100644
+--- a/Documentation/devicetree/bindings/clock/brcm,iproc-clocks.yaml
++++ b/Documentation/devicetree/bindings/clock/brcm,iproc-clocks.yaml
+@@ -50,7 +50,6 @@ properties:
+ 
+   reg:
+     minItems: 1
+-    maxItems: 3
+     items:
+       - description: base register
+       - description: power register
+diff --git a/Documentation/devicetree/bindings/iommu/rockchip,iommu.yaml b/Documentation/devicetree/bindings/iommu/rockchip,iommu.yaml
+index d2e28a9e3545..ba9124f721f1 100644
+--- a/Documentation/devicetree/bindings/iommu/rockchip,iommu.yaml
++++ b/Documentation/devicetree/bindings/iommu/rockchip,iommu.yaml
+@@ -28,14 +28,12 @@ properties:
+       - description: configuration registers for MMU instance 0
+       - description: configuration registers for MMU instance 1
+     minItems: 1
+-    maxItems: 2
+ 
+   interrupts:
+     items:
+       - description: interruption for MMU instance 0
+       - description: interruption for MMU instance 1
+     minItems: 1
+-    maxItems: 2
+ 
+   clocks:
+     items:
+diff --git a/Documentation/devicetree/bindings/memory-controllers/arm,pl353-smc.yaml b/Documentation/devicetree/bindings/memory-controllers/arm,pl353-smc.yaml
+index 7a63c85ef8c5..01c9acf9275d 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/arm,pl353-smc.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/arm,pl353-smc.yaml
+@@ -57,7 +57,6 @@ properties:
+ 
+   ranges:
+     minItems: 1
+-    maxItems: 3
+     description: |
+       Memory bus areas for interacting with the devices. Reflects
+       the memory layout with four integer values following:
+diff --git a/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml b/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
+index e5f1a33332a5..dd5a64969e37 100644
+--- a/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
++++ b/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
+@@ -84,7 +84,6 @@ properties:
+ 
+   interrupts:
+     minItems: 1
+-    maxItems: 3
+     items:
+       - description: NAND CTLRDY interrupt
+       - description: FLASH_DMA_DONE if flash DMA is available
+@@ -92,7 +91,6 @@ properties:
+ 
+   interrupt-names:
+     minItems: 1
+-    maxItems: 3
+     items:
+       - const: nand_ctlrdy
+       - const: flash_dma_done
+@@ -148,8 +146,6 @@ allOf:
+     then:
+       properties:
+         reg-names:
+-          minItems: 2
+-          maxItems: 2
+           items:
+             - const: nand
+             - const: nand-int-base
+@@ -161,8 +157,6 @@ allOf:
+     then:
+       properties:
+         reg-names:
+-          minItems: 3
+-          maxItems: 3
+           items:
+             - const: nand
+             - const: nand-int-base
+@@ -175,8 +169,6 @@ allOf:
+     then:
+       properties:
+         reg-names:
+-          minItems: 3
+-          maxItems: 3
+           items:
+             - const: nand
+             - const: iproc-idm
+diff --git a/Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml b/Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml
+index 657c13b62b67..056d42daae06 100644
+--- a/Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml
++++ b/Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml
+@@ -30,7 +30,6 @@ properties:
+     maxItems: 1
+ 
+   clocks:
+-    minItems: 2
+     items:
+       - description: PCLK clocks
+       - description: EXTCLK clocks. Faraday calls it CLK1HZ and says the clock
+diff --git a/Documentation/devicetree/bindings/usb/nxp,isp1760.yaml b/Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
+index a88f99adfe8e..f238848ad094 100644
+--- a/Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
++++ b/Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
+@@ -25,14 +25,12 @@ properties:
+ 
+   interrupts:
+     minItems: 1
+-    maxItems: 2
+     items:
+       - description: Host controller interrupt
+       - description: Device controller interrupt in isp1761
+ 
+   interrupt-names:
+     minItems: 1
+-    maxItems: 2
+     items:
+       - const: host
+       - const: peripheral
+-- 
+2.27.0
 
