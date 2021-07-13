@@ -2,195 +2,192 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A473C68C7
-	for <lists+linux-clk@lfdr.de>; Tue, 13 Jul 2021 05:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163D73C6E0B
+	for <lists+linux-clk@lfdr.de>; Tue, 13 Jul 2021 11:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbhGMDEH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 12 Jul 2021 23:04:07 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:15251 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbhGMDEE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 12 Jul 2021 23:04:04 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1626145275; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=HB7jBeoN0dr1qnyamHbemyhTM6XR1B1zi7zhzexijIU=; b=QMaW7ydjJMqFKirt2ClT+VE+b+2V0GcjiU4Yc+ZzqCk7fXC/gk5CkWavyoVksfoCCeebbSoF
- aFHgKB+dD/hfn793nYglLawEq4mIwWIJr6vUHXVf/LQXdgPFZnksARdc67RFmvh4gR8tgy1X
- ktIXRIJrhIr7IsRktzj4Sz3sG6U=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 60ed01de5e3e57240b0816ce (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 13 Jul 2021 03:00:46
- GMT
-Sender: tdas=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id A4F52C433F1; Tue, 13 Jul 2021 03:00:45 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.4 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.0.100] (unknown [49.204.181.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: tdas)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 09413C433D3;
-        Tue, 13 Jul 2021 03:00:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 09413C433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=tdas@codeaurora.org
-Subject: Re: [PATCH v2 6/6] clk: qcom: Add video clock controller driver for
- SC7280
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh@kernel.org, robh+dt@kernel.org
-References: <1619519590-3019-1-git-send-email-tdas@codeaurora.org>
- <1619519590-3019-7-git-send-email-tdas@codeaurora.org>
- <162261760498.4130789.12499425999582046146@swboyd.mtv.corp.google.com>
-From:   Taniya Das <tdas@codeaurora.org>
-Message-ID: <bd275558-5280-23d5-33b6-88746588e336@codeaurora.org>
-Date:   Tue, 13 Jul 2021 08:30:39 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <162261760498.4130789.12499425999582046146@swboyd.mtv.corp.google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S235659AbhGMJ6y (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 13 Jul 2021 05:58:54 -0400
+Received: from lucky1.263xmail.com ([211.157.147.133]:39072 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235262AbhGMJ6y (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 13 Jul 2021 05:58:54 -0400
+Received: from localhost (unknown [192.168.167.235])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 7D70DD5922;
+        Tue, 13 Jul 2021 17:56:01 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-SKE-CHECKED: 1
+X-ANTISPAM-LEVEL: 2
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P5175T139828399277824S1626169498245605_;
+        Tue, 13 Jul 2021 17:45:02 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <d061d9a40845f9d12767ecb241b51c06>
+X-RL-SENDER: jon.lin@rock-chips.com
+X-SENDER: jon.lin@rock-chips.com
+X-LOGIN-NAME: jon.lin@rock-chips.com
+X-FST-TO: linux-spi@vger.kernel.org
+X-RCPT-COUNT: 19
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-System-Flag: 0
+From:   Jon Lin <jon.lin@rock-chips.com>
+To:     linux-spi@vger.kernel.org
+Cc:     jon.lin@rock-chips.com, broonie@kernel.org, robh+dt@kernel.org,
+        heiko@sntech.de, jbx6244@gmail.com, hjc@rock-chips.com,
+        yifeng.zhao@rock-chips.com, sugar.zhang@rock-chips.com,
+        linux-rockchip@lists.infradead.org, linux-mtd@lists.infradead.org,
+        p.yadav@ti.com, macroalpha82@gmail.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH v12 00/10] Add Rockchip SFC(serial flash controller) support
+Date:   Tue, 13 Jul 2021 17:44:46 +0800
+Message-Id: <20210713094456.23288-1-jon.lin@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello Stephen,
 
-Thanks for your review.
 
-On 6/2/2021 12:36 PM, Stephen Boyd wrote:
-> Quoting Taniya Das (2021-04-27 03:33:10)
->> diff --git a/drivers/clk/qcom/videocc-sc7280.c b/drivers/clk/qcom/videocc-sc7280.c
->> new file mode 100644
->> index 0000000..3387154
->> --- /dev/null
->> +++ b/drivers/clk/qcom/videocc-sc7280.c
->> @@ -0,0 +1,372 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
->> + */
->> +
->> +#include <linux/clk-provider.h>
->> +#include <linux/module.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/regmap.h>
->> +
->> +#include <dt-bindings/clock/qcom,videocc-sc7280.h>
->> +
->> +#include "clk-alpha-pll.h"
->> +#include "clk-branch.h"
->> +#include "clk-rcg.h"
->> +#include "common.h"
->> +#include "reset.h"
->> +#include "gdsc.h"
->> +
->> +enum {
->> +       P_BI_TCXO,
->> +       P_SLEEP_CLK,
->> +       P_VIDEO_PLL0_OUT_EVEN,
->> +};
->> +
->> +static struct pll_vco lucid_vco[] = {
-> 
-> const?
-> 
+Changes in v12:
+- Remove useless oneOf lable
+- Add sfc controller discription
+- Remove the limitation of SFC_MIN_SPEED_HZ
+- Add IRQ_NONE method for irq handler
+- Add SPI_MASTER_HALF_DUPLEX flags
+- Add sfc interrupt mask bits and status register initial progress
 
-Yes, next patch will have this updated.
+Changes in v11:
+- The tx is set to 1 for Odroid Go Advance device
 
->> +       { 249600000, 2000000000, 0 },
->> +};
->> +
-> [...]
->> +
->> +static const struct parent_map video_cc_parent_map_0[] = {
->> +       { P_BI_TCXO, 0 },
->> +       { P_VIDEO_PLL0_OUT_EVEN, 3 },
->> +};
->> +
->> +static const struct clk_parent_data video_cc_parent_data_0[] = {
->> +       { .fw_name = "bi_tcxo" },
->> +       { .hw = &video_pll0.clkr.hw },
->> +};
->> +
->> +static const struct parent_map video_cc_parent_map_1[] = {
->> +       { P_SLEEP_CLK, 0 },
->> +};
->> +
->> +static const struct clk_parent_data video_cc_parent_data_1[] = {
->> +       { .fw_name = "sleep_clk" },
->> +};
->> +
->> +static const struct parent_map video_cc_parent_map_2[] = {
->> +       { P_BI_TCXO, 0 },
->> +};
->> +
->> +static const struct clk_parent_data video_cc_parent_data_2_ao[] = {
->> +       { .fw_name = "bi_tcxo_ao" },
-> 
-> This is new. Why would we want the video clk parent state to turn off
-> when the CPU is off? Does the video engine keep XO enabled for itself?
-> Can you please add some comment into the code explaining why it's ok to
-> use the ao clk here?
-> 
+Changes in v10:
+- Fix dma transfer logic
 
-This clock is from HW design is enabled, thus our generation scripts 
-have marked it to _ao. But I will be removing this in the next patch as 
-it is not required to be modelled.
+Changes in v9:
+- Separate DMA IRQ setting and wait_completion from DMA fifo transfer
+  function to make dma_status_poll be possible(Which I will implement
+  in u-boot)
+- Add SFC Kconfig detail comment
+- Separate FDT binding docs and includes from rk3036 sfc_hclk patch
+- Separate FDT binding docs and includes from rk3036 sfc_hclk patch
 
->> +};
->> +
->> +static const struct freq_tbl ftbl_video_cc_iris_clk_src[] = {
->> +       F(133333333, P_VIDEO_PLL0_OUT_EVEN, 3, 0, 0),
->> +       F(240000000, P_VIDEO_PLL0_OUT_EVEN, 2, 0, 0),
->> +       F(335000000, P_VIDEO_PLL0_OUT_EVEN, 2, 0, 0),
->> +       F(424000000, P_VIDEO_PLL0_OUT_EVEN, 2, 0, 0),
->> +       F(460000000, P_VIDEO_PLL0_OUT_EVEN, 2, 0, 0),
->> +       { }
->> +};
-> [...]
->> +
->> +static struct clk_branch video_cc_xo_clk = {
->> +       .halt_reg = 0x7018,
->> +       .halt_check = BRANCH_HALT,
->> +       .clkr = {
->> +               .enable_reg = 0x7018,
->> +               .enable_mask = BIT(0),
->> +               .hw.init = &(struct clk_init_data){
->> +                       .name = "video_cc_xo_clk",
->> +                       .parent_hws = (const struct clk_hw*[]){
->> +                               &video_cc_xo_clk_src.clkr.hw,
->> +                       },
->> +                       .num_parents = 1,
->> +                       .flags = CLK_IS_CRITICAL | CLK_SET_RATE_PARENT,
-> 
-> Please add a comment why it is critical.
-> 
+Changes in v8:
+- Fix indent 4 to 2 in yaml
 
-Next patch will remove this clock. As it is already enabled from HW, 
-will not model the clock to not disable it from SW.
+Changes in v7:
+- Fix up the sclk_sfc parent error in rk3036
+- Unify to "rockchip,sfc" compatible id because all the feature update
+  will have a new IP version, so the driver is used for the SFC IP in
+  all SoCs
+- Change to use node "sfc" to name the SFC pinctrl group
+- Add subnode reg property check
+- Add rockchip_sfc_adjust_op_size to workaround in CMD + DUMMY case
+- Limit max_iosize to 32KB
 
->> +                       .ops = &clk_branch2_ops,
->> +               },
->> +       },
->> +};
->> +
+Changes in v6:
+- Add support in device trees for rv1126(Declared in series 5 but not
+  submitted)
+- Change to use "clk_sfc" "hclk_sfc" as clock lable, since it does not
+  affect interpretation and has been widely used
+- Support sfc tx_dual, tx_quad(Declared in series 5 but not submitted)
+- Simplify the code, such as remove "rockchip_sfc_register_all"(Declared
+  in series 5 but not submitted)
+- Support SFC ver4 ver5(Declared in series 5 but not submitted)
+- Add author Chris Morgan and Jon Lin to spi-rockchip-sfc.c
+- Change to use devm_spi_alloc_master and spi_unregister_master
+
+Changes in v5:
+- Add support in device trees for rv1126
+- Support sfc tx_dual, tx_quad
+- Simplify the code, such as remove "rockchip_sfc_register_all"
+- Support SFC ver4 ver5
+
+Changes in v4:
+- Changing patch back to an "RFC". An engineer from Rockchip
+  reached out to me to let me know they are working on this patch for
+  upstream, I am submitting this v4 for the community to see however
+  I expect Jon Lin (jon.lin@rock-chips.com) will submit new patches
+  soon and these are the ones we should pursue for mainlining. Jon's
+  patch series should include support for more hardware than this
+  series.
+- Clean up documentation more and ensure it is correct per
+  make dt_binding_check.
+- Add support in device trees for rk3036, rk3308, and rv1108.
+- Add ahb clock (hclk_sfc) support for rk3036.
+- Change rockchip_sfc_wait_fifo_ready() to use a switch statement.
+- Change IRQ code to only mark IRQ as handled if it handles the
+  specific IRQ (DMA transfer finish) it is supposed to handle.
+
+Changes in v3:
+- Changed the name of the clocks to sfc/ahb (from clk-sfc/clk-hsfc).
+- Changed the compatible string from rockchip,sfc to
+  rockchip,rk3036-sfc. A quick glance at the datasheets suggests this
+  driver should work for the PX30, RK180x, RK3036, RK312x, RK3308 and
+  RV1108 SoCs, and possibly more. However, I am currently only able
+  to test this on a PX30 (an RK3326). The technical reference manuals
+  appear to list the same registers for each device.
+- Corrected devicetree documentation for formatting and to note these
+  changes.
+- Replaced the maintainer with Heiko Stuebner and myself, as we will
+  take ownership of this going forward.
+- Noted that the device (per the reference manual) supports 4 CS, but
+  I am only able to test a single CS (CS 0).
+- Reordered patches to comply with upstream rules.
+
+Changes in v2:
+- Reimplemented driver using spi-mem subsystem.
+- Removed power management code as I couldn't get it working properly.
+- Added device tree bindings for Odroid Go Advance.
+
+Changes in v1:
+hanges made in this new series versus the v8 of the old series:
+- Added function to read spi-rx-bus-width from device tree, in the
+  event that the SPI chip supports 4x mode but only has 2 pins
+  wired (such as the Odroid Go Advance).
+- Changed device tree documentation from txt to yaml format.
+- Made "reset" message a dev_dbg from a dev_info.
+- Changed read and write fifo functions to remove redundant checks.
+- Changed the write and read from relaxed to non-relaxed when
+  starting the DMA transfer or reading the DMA IRQ.
+- Changed from dma_coerce_mask_and_coherent to just
+  dma_set_mask_and_coherent.
+- Changed name of get_if_type to rockchip_sfc_get_if_type.
+
+Chris Morgan (8):
+  dt-bindings: rockchip-sfc: Bindings for Rockchip serial flash
+    controller
+  spi: rockchip-sfc: add rockchip serial flash controller
+  arm64: dts: rockchip: Add SFC to PX30
+  clk: rockchip:  add dt-binding for hclk_sfc on rk3036
+  arm: dts: rockchip: Add SFC to RK3036
+  arm: dts: rockchip: Add SFC to RV1108
+  arm64: dts: rockchip: Add SFC to RK3308
+  arm64: dts: rockchip: Enable SFC for Odroid Go Advance
+
+Jon Lin (2):
+  clk: rockchip: rk3036: fix up the sclk_sfc parent error
+  clk: rockchip: Add support for hclk_sfc on rk3036
+
+ .../devicetree/bindings/spi/rockchip-sfc.yaml |  91 +++
+ arch/arm/boot/dts/rk3036.dtsi                 |  42 ++
+ arch/arm/boot/dts/rv1108.dtsi                 |  37 +
+ arch/arm64/boot/dts/rockchip/px30.dtsi        |  38 +
+ arch/arm64/boot/dts/rockchip/rk3308.dtsi      |  37 +
+ .../boot/dts/rockchip/rk3326-odroid-go2.dts   |  16 +
+ drivers/clk/rockchip/clk-rk3036.c             |   5 +-
+ drivers/spi/Kconfig                           |  12 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-rockchip-sfc.c                | 682 ++++++++++++++++++
+ include/dt-bindings/clock/rk3036-cru.h        |   1 +
+ 11 files changed, 960 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/spi/rockchip-sfc.yaml
+ create mode 100644 drivers/spi/spi-rockchip-sfc.c
 
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation.
+2.17.1
 
---
+
+
