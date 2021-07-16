@@ -2,113 +2,138 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2923CB7E6
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Jul 2021 15:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07293CBA9C
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Jul 2021 18:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240001AbhGPNhX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 16 Jul 2021 09:37:23 -0400
-Received: from mga18.intel.com ([134.134.136.126]:56332 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239996AbhGPNhV (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 16 Jul 2021 09:37:21 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10046"; a="197993394"
-X-IronPort-AV: E=Sophos;i="5.84,245,1620716400"; 
-   d="scan'208";a="197993394"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2021 06:34:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,245,1620716400"; 
-   d="scan'208";a="429191754"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 16 Jul 2021 06:34:23 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 4C00A2CB; Fri, 16 Jul 2021 16:34:51 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Liu Ying <victor.liu@nxp.com>
-Subject: [PATCH v2 3/3] clk: fractional-divider: Document the arithmetics used behind the code
-Date:   Fri, 16 Jul 2021 16:34:48 +0300
-Message-Id: <20210716133448.24890-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210716133448.24890-1-andriy.shevchenko@linux.intel.com>
-References: <20210716133448.24890-1-andriy.shevchenko@linux.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S229545AbhGPQkK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 16 Jul 2021 12:40:10 -0400
+Received: from smtp-33.italiaonline.it ([213.209.10.33]:56200 "EHLO libero.it"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229534AbhGPQkK (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 16 Jul 2021 12:40:10 -0400
+Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it ([79.54.92.92])
+        by smtp-33.iol.local with ESMTPA
+        id 4QpnmKGx8S6GM4QpsmO3AZ; Fri, 16 Jul 2021 18:37:13 +0200
+x-libjamoibt: 1601
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
+        t=1626453433; bh=b1AOLJtPfVADgUal1s0AlJOIZO8zgx8Ko6/esPl3A8g=;
+        h=From;
+        b=anVN9WSxSaYI63mR+0y0sM1bgfiKoxU3qBaCO9+fZQ3foKdlmhZW3MiLpJvZp0EoF
+         ECrRIGkfvOyo9oalvB0UsNrH+898tudc2T6XfwrBDAUfN3vkD0auxhKes/Rln7z/vs
+         sC16S3WZEhvhP69Op1zduO//7c5aVyoAqxvq/Zty3yUfWO5yBl5N4APrl2gahYxwBu
+         cS5s0JssHaudjojFjiAdgEV3QfzzKTozMR9gYi964lNwwRlOZejGu6zlL2EI79rI09
+         9MOX2qPlrCJC6UuKVSPDyDh8QJUKXguJ3LaeUYgwQrNGQJEOBLNsFOWNi1kb9z/tSE
+         xzS1dlMmOp4TQ==
+X-CNFS-Analysis: v=2.4 cv=AcF0o1bG c=1 sm=1 tr=0 ts=60f1b5b9 cx=a_exe
+ a=eKwsI+FXzXP/Nc4oRbpalQ==:117 a=eKwsI+FXzXP/Nc4oRbpalQ==:17 a=VwQbUJbxAAAA:8
+ a=wSIzyl8AIrrWyGTfDxQA:9 a=AjGcO6oz07-iQ99wixmX:22
+From:   Dario Binacchi <dariobin@libero.it>
+To:     linux-clk@vger.kernel.org
+Cc:     Dario Binacchi <dariobin@libero.it>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH v3] clk: stm32f4: fix post divisor setup for I2S/SAI PLLs
+Date:   Fri, 16 Jul 2021 18:37:05 +0200
+Message-Id: <20210716163705.17604-1-dariobin@libero.it>
+X-Mailer: git-send-email 2.17.1
+X-CMAE-Envelope: MS4xfJxbT8k/rZDUZkIZXuZWj34PEjbhLofZCmyd+fVDszIgxppuniAz5txJibFr+oZgoioUPgFeXqmmqBQYE6rd3je3s6ppBzhuZyl5erphtXEEdAYlbqx+
+ eEca0JLZ5Cg5plMg1CBE2yBIZura+YuW4Kp1Do0LjCXMf10msyIuMlD43QIHR3AONAd6dqynYlcCigj/Dz92FzCGVj+Wja1PyiVFVpeVNj0nBqHgcWady+6L
+ 2ZzN3XXTTG+cqionmQJJmCl/q4v9SohQVuYi1cyhKUtvW7RzP9jTE4QHSx/1oMNF9bTgBzDSdXPJWLs3jFu3fDW0K9BGLm42aOGtKECtfOv7Gb2fMiPA8vPB
+ 97bDyAGua/h25E2WrNHTXdNKUAzLWNOFqUelE040aOS0ZY0yt7j1BdRfvQD17QIm+hmKWXQSdJLR39YbXaURvUvqwsgXW0x3omfHgvEJI5NfJe+9T2hLtMwU
+ rLkWwmOn5KKUGVjwAorFISz9TRLRI/aNNQuIwjPjaiE5Y8GJQA2/RC+N5Uco55iXYpGDCBTgFiF7poYjExdaUWxHEdkJV6vh9hb9Gg/DNl8yWF7vg8n5P/NF
+ DUA/nVnui3WrxtpDExGpIriB
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-It appears that some code lines raise the question why they are needed
-and how they are participated in the calculus of the resulting values.
+Enabling the framebuffer leads to a system hang. Running, as a debug
+hack, the store_pan() function in drivers/video/fbdev/core/fbsysfs.c
+without taking the console_lock, allows to see the crash backtrace on
+the serial line.
 
-Document this in a form of the top comment in the module file.
+~ # echo 0 0 > /sys/class/graphics/fb0/pan
 
-Reported-by: Liu Ying <victor.liu@nxp.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+[    9.719414] Unhandled exception: IPSR = 00000005 LR = fffffff1
+[    9.726937] CPU: 0 PID: 49 Comm: sh Not tainted 5.13.0-rc5 #9
+[    9.733008] Hardware name: STM32 (Device Tree Support)
+[    9.738296] PC is at clk_gate_is_enabled+0x0/0x28
+[    9.743426] LR is at stm32f4_pll_div_set_rate+0xf/0x38
+[    9.748857] pc : [<0011e4be>]    lr : [<0011f9e3>]    psr: 0100000b
+[    9.755373] sp : 00bc7be0  ip : 00000000  fp : 001f3ac4
+[    9.760812] r10: 002610d0  r9 : 01efe920  r8 : 00540560
+[    9.766269] r7 : 02e7ddb0  r6 : 0173eed8  r5 : 00000000  r4 : 004027c0
+[    9.773081] r3 : 0011e4bf  r2 : 02e7ddb0  r1 : 0173eed8  r0 : 1d3267b8
+[    9.779911] xPSR: 0100000b
+[    9.782719] CPU: 0 PID: 49 Comm: sh Not tainted 5.13.0-rc5 #9
+[    9.788791] Hardware name: STM32 (Device Tree Support)
+[    9.794120] [<0000afa1>] (unwind_backtrace) from [<0000a33f>] (show_stack+0xb/0xc)
+[    9.802421] [<0000a33f>] (show_stack) from [<0000a8df>] (__invalid_entry+0x4b/0x4c)
+
+The `pll_num' field in the post_div_data configuration contained a wrong
+value which also referenced an uninitialized hardware clock when
+clk_register_pll_div() was called.
+
+Fixes: 517633ef630e ("clk: stm32f4: Add post divisor for I2S & SAI PLLs")
+Signed-off-by: Dario Binacchi <dariobin@libero.it>
+
 ---
-v2: renamed variables in formulas to follow the code, added floor()
- drivers/clk/clk-fractional-divider.c | 34 +++++++++++++++++++++++++++-
- 1 file changed, 33 insertions(+), 1 deletion(-)
+I added Gabriel Fernandez's 'Reviewed-by' tag as requested by himself
+15 days ago at https://lore.kernel.org/patchwork/patch/1450964/.
 
-diff --git a/drivers/clk/clk-fractional-divider.c b/drivers/clk/clk-fractional-divider.c
-index 5f4b6a8aef67..7f7f688f8de5 100644
---- a/drivers/clk/clk-fractional-divider.c
-+++ b/drivers/clk/clk-fractional-divider.c
-@@ -3,8 +3,38 @@
-  * Copyright (C) 2014 Intel Corporation
-  *
-  * Adjustable fractional divider clock implementation.
-- * Output rate = (m / n) * parent_rate.
-  * Uses rational best approximation algorithm.
-+ *
-+ * Output is calculated as
-+ *
-+ *	rate = (m / n) * parent_rate				(1)
-+ *
-+ * This is useful when on die we have a prescaler block which asks for
-+ * m (numerator) and n (denominator) values to be provided to satisfy
-+ * the (1) as much as possible.
-+ *
-+ * Since m and n have the limitation by a range, e.g.
-+ *
-+ *	n >= 1, n < N_width, where N_width = 2^nwidth		(2)
-+ *
-+ * for some cases the output may be saturated. Hence, from (1) and (2),
-+ * assuming the worst case when m = 1, the inequality
-+ *
-+ *	floor(log2(parent_rate / rate)) <= nwidth		(3)
-+ *
-+ * may be derived. Thus, in cases when
-+ *
-+ *	(parent_rate / rate) >> N_width				(4)
-+ *
-+ * we scale up the rate by 2^scale, where
-+ *
-+ *	scale = floor(log2(parent_rate / rate)) - nwidth	(5)
-+ *
-+ * and assume that the IP, that needs m and n, has also its own
-+ * prescaler, which is capable to divide by 2^scale. In this way
-+ * we get the denominator to satisfy the desired range (2) and
-+ * at the same time much much better result of m and n than simple
-+ * saturated values.
-  */
+Changes in v3:
+- Add Gabriel Fernandez 'Reviewed-by' tag.
+
+Changes in v2:
+- Change  'u8 pll_num' from 'stm32f4_pll_post_div_data' structure into
+  'int pll_idx'.
+
+ drivers/clk/clk-stm32f4.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/clk/clk-stm32f4.c b/drivers/clk/clk-stm32f4.c
+index 18117ce5ff85..5c75e3d906c2 100644
+--- a/drivers/clk/clk-stm32f4.c
++++ b/drivers/clk/clk-stm32f4.c
+@@ -526,7 +526,7 @@ struct stm32f4_pll {
  
- #include <linux/clk-provider.h>
-@@ -81,6 +111,8 @@ void clk_fractional_divider_general_approximation(struct clk_hw *hw,
- 	 * Get rate closer to *parent_rate to guarantee there is no overflow
- 	 * for m and n. In the result it will be the nearest rate left shifted
- 	 * by (scale - fd->nwidth) bits.
-+	 *
-+	 * For the detailed explanation see the top comment in this file.
- 	 */
- 	if (!(fd->flags & CLK_FRAC_DIVIDER_NO_PRESCALER)) {
- 		unsigned long scale = fls_long(*parent_rate / rate - 1);
+ struct stm32f4_pll_post_div_data {
+ 	int idx;
+-	u8 pll_num;
++	int pll_idx;
+ 	const char *name;
+ 	const char *parent;
+ 	u8 flag;
+@@ -557,13 +557,13 @@ static const struct clk_div_table post_divr_table[] = {
+ 
+ #define MAX_POST_DIV 3
+ static const struct stm32f4_pll_post_div_data  post_div_data[MAX_POST_DIV] = {
+-	{ CLK_I2SQ_PDIV, PLL_I2S, "plli2s-q-div", "plli2s-q",
++	{ CLK_I2SQ_PDIV, PLL_VCO_I2S, "plli2s-q-div", "plli2s-q",
+ 		CLK_SET_RATE_PARENT, STM32F4_RCC_DCKCFGR, 0, 5, 0, NULL},
+ 
+-	{ CLK_SAIQ_PDIV, PLL_SAI, "pllsai-q-div", "pllsai-q",
++	{ CLK_SAIQ_PDIV, PLL_VCO_SAI, "pllsai-q-div", "pllsai-q",
+ 		CLK_SET_RATE_PARENT, STM32F4_RCC_DCKCFGR, 8, 5, 0, NULL },
+ 
+-	{ NO_IDX, PLL_SAI, "pllsai-r-div", "pllsai-r", CLK_SET_RATE_PARENT,
++	{ NO_IDX, PLL_VCO_SAI, "pllsai-r-div", "pllsai-r", CLK_SET_RATE_PARENT,
+ 		STM32F4_RCC_DCKCFGR, 16, 2, 0, post_divr_table },
+ };
+ 
+@@ -1774,7 +1774,7 @@ static void __init stm32f4_rcc_init(struct device_node *np)
+ 				post_div->width,
+ 				post_div->flag_div,
+ 				post_div->div_table,
+-				clks[post_div->pll_num],
++				clks[post_div->pll_idx],
+ 				&stm32f4_clk_lock);
+ 
+ 		if (post_div->idx != NO_IDX)
 -- 
-2.30.2
+2.17.1
 
