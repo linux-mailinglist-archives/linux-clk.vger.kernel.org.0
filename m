@@ -2,121 +2,155 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAC23CB7CE
-	for <lists+linux-clk@lfdr.de>; Fri, 16 Jul 2021 15:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B9A3CB7E9
+	for <lists+linux-clk@lfdr.de>; Fri, 16 Jul 2021 15:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239577AbhGPNWs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 16 Jul 2021 09:22:48 -0400
-Received: from mga11.intel.com ([192.55.52.93]:12143 "EHLO mga11.intel.com"
+        id S240067AbhGPNhZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 16 Jul 2021 09:37:25 -0400
+Received: from mga12.intel.com ([192.55.52.136]:44138 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232804AbhGPNWs (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 16 Jul 2021 09:22:48 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10046"; a="207704388"
+        id S239996AbhGPNhY (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Fri, 16 Jul 2021 09:37:24 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10046"; a="190410235"
 X-IronPort-AV: E=Sophos;i="5.84,245,1620716400"; 
-   d="scan'208";a="207704388"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2021 06:19:52 -0700
+   d="scan'208";a="190410235"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2021 06:34:26 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,245,1620716400"; 
-   d="scan'208";a="494935556"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2021 06:19:49 -0700
-Received: from andy by smile with local (Exim 4.94.2)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1m4Nkk-00EEoF-L8; Fri, 16 Jul 2021 16:19:42 +0300
-Date:   Fri, 16 Jul 2021 16:19:42 +0300
+   d="scan'208";a="431208956"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 16 Jul 2021 06:34:23 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 3467F262; Fri, 16 Jul 2021 16:34:50 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Liu Ying <victor.liu@nxp.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
         Elaine Zhang <zhangqing@rock-chips.com>,
         Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Jacky Bai <ping.bai@nxp.com>
-Subject: Re: [PATCH v1 2/3] clk: fractional-divider: Introduce NO_PRESCALER
- flag
-Message-ID: <YPGHbvaCv/x/JlgH@smile.fi.intel.com>
-References: <20210715120752.29174-1-andriy.shevchenko@linux.intel.com>
- <20210715120752.29174-2-andriy.shevchenko@linux.intel.com>
- <7941107fda10f075395870528f0e52d42e502d92.camel@nxp.com>
+        linux-rockchip@lists.infradead.org
+Cc:     Michael Turquette <mturquette@baylibre.com>
+Subject: [PATCH v2 1/3] clk: fractional-divider: Export approximation algo to the CCF users
+Date:   Fri, 16 Jul 2021 16:34:46 +0300
+Message-Id: <20210716133448.24890-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7941107fda10f075395870528f0e52d42e502d92.camel@nxp.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, Jul 16, 2021 at 10:43:57AM +0800, Liu Ying wrote:
-> On Thu, 2021-07-15 at 15:07 +0300, Andy Shevchenko wrote:
-> > The newly introduced flag, when set, makes the flow to skip
-> > the assumption that the caller will use an additional 2^scale
-> > prescaler to get the desired clock rate.
-> 
-> Now, I start to be aware of the reason why the "left shifting" is
-> needed but still not 100% sure that details are all right. IIUC, you
-> are considering a potential HW prescaler here, while I thought the HW
-> model is just a fractional divider(M/N) and the driver is fully
-> agnostic to the potential HW prescaler.
+At least one user currently duplicates some functions that are provided
+by fractional divider module. Let's export approximation algo and replace
+the open-coded variant.
 
-It's not AFAICS. Otherwise we will get saturated values which is much worse
-then shifted left frequency. Anyway, this driver appeared first for the hardware
-that has it for all users, so currently the assumption stays.
+As a bonus the exported function will get better documentation in place.
 
-...
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v2: fixed compilation error (LKP), successfully compile-tested on x86
+ drivers/clk/clk-fractional-divider.c | 11 +++++++----
+ drivers/clk/clk-fractional-divider.h |  9 +++++++++
+ drivers/clk/rockchip/clk.c           | 17 +++--------------
+ 3 files changed, 19 insertions(+), 18 deletions(-)
+ create mode 100644 drivers/clk/clk-fractional-divider.h
 
-> >  	scale = fls_long(*parent_rate / rate - 1);
-> > -	if (scale > fd->nwidth)
-> > +	if (scale > fd->nwidth && !(fd->flags & CLK_FRAC_DIVIDER_NO_PRESCALER))
-> >  		rate <<= scale - fd->nwidth;
-> 
-> First of all, check the CLK_FRAC_DIVIDER_NO_PRESCALER flag for the
-> entire above snippet of code?
-
-OK.
-
-> Second and more important, it seems that it would be good to decouple
-> the prescaler knowledge from this fractional divider clk driver so as
-> to make it simple(Output rate = (m / n) * parent_rate).  This way, the
-> CLK_FRAC_DIVIDER_NO_PRESCALER flag is not even needed at the first
-> place, which means rational_best_approximation() just _directly_
-> offer best_{numerator,denominator} for all cases.
-
-Feel free to submit a patch, just give a good test to avoid breakage of almost
-all users of this driver.
-
-> Further more, is it
-> possilbe for rational_best_approximation() to make sure there is no
-> risk of overflow for best_{numerator,denominator}, since
-> max_{numerator,denominator} are already handed over to
-> rational_best_approximation()?
-
-How? It can not be satisfied for all possible inputs.
-
-> Overflowed/unreasonable
-> best_{numerator,denominator} don't sound like the "best" offered value.
-
-I don't follow here. If you got saturated values it means that your input is
-not convergent. In practice it means that we will supply quite a bad value to
-the caller.
-
-> If that's impossible, then audit best_{numerator,denominator} after
-> calling rational_best_approximation()?
-
-And? I do not understand what you will do if you get the values of m and n
-as m = 1, n = 2^nlim - 1.
-
-> Make sense?
-
-Not really. I probably miss your point, sorry.
-
-So, I will submit v2 with addressed first comment and LKP noticed compiler
-error.
-
+diff --git a/drivers/clk/clk-fractional-divider.c b/drivers/clk/clk-fractional-divider.c
+index b1e556f20911..535d299af646 100644
+--- a/drivers/clk/clk-fractional-divider.c
++++ b/drivers/clk/clk-fractional-divider.c
+@@ -14,6 +14,8 @@
+ #include <linux/slab.h>
+ #include <linux/rational.h>
+ 
++#include "clk-fractional-divider.h"
++
+ static inline u32 clk_fd_readl(struct clk_fractional_divider *fd)
+ {
+ 	if (fd->flags & CLK_FRAC_DIVIDER_BIG_ENDIAN)
+@@ -68,9 +70,10 @@ static unsigned long clk_fd_recalc_rate(struct clk_hw *hw,
+ 	return ret;
+ }
+ 
+-static void clk_fd_general_approximation(struct clk_hw *hw, unsigned long rate,
+-					 unsigned long *parent_rate,
+-					 unsigned long *m, unsigned long *n)
++void clk_fractional_divider_general_approximation(struct clk_hw *hw,
++						  unsigned long rate,
++						  unsigned long *parent_rate,
++						  unsigned long *m, unsigned long *n)
+ {
+ 	struct clk_fractional_divider *fd = to_clk_fd(hw);
+ 	unsigned long scale;
+@@ -102,7 +105,7 @@ static long clk_fd_round_rate(struct clk_hw *hw, unsigned long rate,
+ 	if (fd->approximation)
+ 		fd->approximation(hw, rate, parent_rate, &m, &n);
+ 	else
+-		clk_fd_general_approximation(hw, rate, parent_rate, &m, &n);
++		clk_fractional_divider_general_approximation(hw, rate, parent_rate, &m, &n);
+ 
+ 	ret = (u64)*parent_rate * m;
+ 	do_div(ret, n);
+diff --git a/drivers/clk/clk-fractional-divider.h b/drivers/clk/clk-fractional-divider.h
+new file mode 100644
+index 000000000000..4fa359a12ef4
+--- /dev/null
++++ b/drivers/clk/clk-fractional-divider.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++struct clk_hw;
++
++void clk_fractional_divider_general_approximation(struct clk_hw *hw,
++						  unsigned long rate,
++						  unsigned long *parent_rate,
++						  unsigned long *m,
++						  unsigned long *n);
+diff --git a/drivers/clk/rockchip/clk.c b/drivers/clk/rockchip/clk.c
+index 049e5e0b64f6..b7be7e11b0df 100644
+--- a/drivers/clk/rockchip/clk.c
++++ b/drivers/clk/rockchip/clk.c
+@@ -22,6 +22,8 @@
+ #include <linux/regmap.h>
+ #include <linux/reboot.h>
+ #include <linux/rational.h>
++
++#include "../clk-fractional-divider.h"
+ #include "clk.h"
+ 
+ /*
+@@ -178,10 +180,8 @@ static void rockchip_fractional_approximation(struct clk_hw *hw,
+ 		unsigned long rate, unsigned long *parent_rate,
+ 		unsigned long *m, unsigned long *n)
+ {
+-	struct clk_fractional_divider *fd = to_clk_fd(hw);
+ 	unsigned long p_rate, p_parent_rate;
+ 	struct clk_hw *p_parent;
+-	unsigned long scale;
+ 
+ 	p_rate = clk_hw_get_rate(clk_hw_get_parent(hw));
+ 	if ((rate * 20 > p_rate) && (p_rate % rate != 0)) {
+@@ -190,18 +190,7 @@ static void rockchip_fractional_approximation(struct clk_hw *hw,
+ 		*parent_rate = p_parent_rate;
+ 	}
+ 
+-	/*
+-	 * Get rate closer to *parent_rate to guarantee there is no overflow
+-	 * for m and n. In the result it will be the nearest rate left shifted
+-	 * by (scale - fd->nwidth) bits.
+-	 */
+-	scale = fls_long(*parent_rate / rate - 1);
+-	if (scale > fd->nwidth)
+-		rate <<= scale - fd->nwidth;
+-
+-	rational_best_approximation(rate, *parent_rate,
+-			GENMASK(fd->mwidth - 1, 0), GENMASK(fd->nwidth - 1, 0),
+-			m, n);
++	clk_fractional_divider_general_approximation(hw, rate, parent_rate, m, n);
+ }
+ 
+ static struct clk *rockchip_clk_register_frac_branch(
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.30.2
 
