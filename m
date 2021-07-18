@@ -2,123 +2,145 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CEAB3CC898
-	for <lists+linux-clk@lfdr.de>; Sun, 18 Jul 2021 12:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 693C73CC969
+	for <lists+linux-clk@lfdr.de>; Sun, 18 Jul 2021 15:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233142AbhGRKwX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 18 Jul 2021 06:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233250AbhGRKwR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 18 Jul 2021 06:52:17 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625D4C0613E6
-        for <linux-clk@vger.kernel.org>; Sun, 18 Jul 2021 03:49:16 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id g22so12368466lfu.0
-        for <linux-clk@vger.kernel.org>; Sun, 18 Jul 2021 03:49:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Dd9ei2GjQiFjh9R1NgRmYWUwg7rsPR4hERBwm4wpjv0=;
-        b=m7dK3rl7blk+8UA/hKxKhQOYMPdH3NxlSmNnG/o1aJEhXEUlncPQuZKivbsbSFsd6D
-         3i21AAMkCywCkVBzFWjOAv/d6Z+UDg82Z67QAhvpgJtzh0LcxglFAY9ZrBRrQ8Al6d8l
-         lMQf+xWLEFiq96qDgAQPKVXhvqYLYe3nkO04nG49x/8iNM8x9LOo0LdZgU7iW9o/PdXg
-         3ucl5q2Sryk4BpUbVP99WB8wcvbyb9Bx+L+AF/axWZZXqEQtAavjhflpKRkmLUluLJjB
-         oqrA7G4uMYhngaGUONxfgVAVFnMRQ2sZnRSjZ7o3VcXH2T90XIyy28jrmDw769Z+hdgK
-         NvoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Dd9ei2GjQiFjh9R1NgRmYWUwg7rsPR4hERBwm4wpjv0=;
-        b=dWQuX7c0gH0DLh3dres7We3RTFTvRwFa4fUPGf8KsiO4rmGxse2vd5mwE0uSJxFTe3
-         gNwbijPg1KvsXRi+6vbTAZwv7UcS1aTfYar1/lcwWgfvQwW/hM6SZTLkZolns7QSJN+E
-         Z8neMvFAhlDdM8YUgqSOXURwj/SuyU+Slra8P/vYtl8KTAbxxfeIFduwi6sNjLtHNBqp
-         Rldz058hreiYO6SBPbT8IyqilCZgnudgP08Z5ZWg6VT4Lh+52W1p2U2FX+liWl28PFZw
-         FqgHFM1TC/BPUAzSOLeCgmmpWTazrijRPWLfx/hulgQ3amPgdrP0KpcejytuWdyUDweO
-         CMfA==
-X-Gm-Message-State: AOAM530bt2ZUnd5A7I/GNWuXf+kUq2MvBZd2coK61tQt9sJLYJmesxDH
-        NItwY79TZ/NVwa1cP2+Yz8X2Lg==
-X-Google-Smtp-Source: ABdhPJw9tTR2amz089wkuVxYZzBd42218zETpGO9Z5ykKpcbYkr4c1GBjVvi8xaDTDShfKRsEqLNwg==
-X-Received: by 2002:a19:c1d2:: with SMTP id r201mr14921339lff.148.1626605354671;
-        Sun, 18 Jul 2021 03:49:14 -0700 (PDT)
-Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id y22sm1039528lfh.154.2021.07.18.03.49.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Jul 2021 03:49:14 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        id S230461AbhGROAH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 18 Jul 2021 10:00:07 -0400
+Received: from smtp-34.italiaonline.it ([213.209.10.34]:47849 "EHLO libero.it"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230307AbhGROAH (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 18 Jul 2021 10:00:07 -0400
+Received: from passgat-Modern-14-A10M.homenet.telecomitalia.it
+ ([79.45.45.231])
+        by smtp-34.iol.local with ESMTPA
+        id 57Hym0FThLCum57I2mIAvx; Sun, 18 Jul 2021 15:57:07 +0200
+x-libjamoibt: 1601
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=libero.it; s=s2021;
+        t=1626616627; bh=rOfM+3SnDUoi4Zw7AQaIgYut2m3EXateesuCvJ04ulU=;
+        h=From;
+        b=JrnyqGMhY4RO+0YzAjovFlnHMyqriWq3eUn8pOak0yBMk9GgJCqTwUjA/6OLd+NHK
+         U0bQHXqK+msbDgUjlcsCHFm812Xicq42VfkwifuyfNC4eI6QW3PCqNT2in4mlbBudB
+         Kz014GqJjZfayD2j0LPbL4cGh4OuxgyUQMWDSvyTtq3JKjozwYblduys3UNYXA3kwc
+         S6yWJ8yBIxTbT6IDl4ez00l0hgAY+hKYBxx4gMyGiGapcr5iy3Vo+FAI6TaNZztJQt
+         8ZDd205s12ngVELTnq0iTn84a/U14wF9VZEuSIlJcEu7hpEsveKHDcRatMgvFC6TQ6
+         U1ZJVrBJrSrYw==
+X-CNFS-Analysis: v=2.4 cv=a8D1SWeF c=1 sm=1 tr=0 ts=60f43333 cx=a_exe
+ a=TX8r+oJM0yLPAmPh5WrBoQ==:117 a=TX8r+oJM0yLPAmPh5WrBoQ==:17 a=8b9GpE9nAAAA:8
+ a=VwQbUJbxAAAA:8 a=wSIzyl8AIrrWyGTfDxQA:9 a=T3LWEMljR5ZiDmsYVIUa:22
+ a=AjGcO6oz07-iQ99wixmX:22
+From:   Dario Binacchi <dariobin@libero.it>
+To:     linux-clk@vger.kernel.org
+Cc:     Dario Binacchi <dariobin@libero.it>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 9/9] clk: qcom: videocc-sm8250: stop using mmcx regulator
-Date:   Sun, 18 Jul 2021 13:49:01 +0300
-Message-Id: <20210718104901.454843-10-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210718104901.454843-1-dmitry.baryshkov@linaro.org>
-References: <20210718104901.454843-1-dmitry.baryshkov@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH v4] clk: stm32f4: fix post divisor setup for I2S/SAI PLLs
+Date:   Sun, 18 Jul 2021 15:57:00 +0200
+Message-Id: <20210718135700.27247-1-dariobin@libero.it>
+X-Mailer: git-send-email 2.17.1
+X-CMAE-Envelope: MS4xfNdcUJVaPcCs2XhTQXQRRi4T1vSjJGkxrKaH2JDps0CgcRK7Q9xaRlwEOZudmAeMlX5cm38tkXi5bMbmGsCxY7Tj8G0GutHOCKFzK//aYXqbp6v6TyZ+
+ 0/aVFhsZHmYYbaA6buzm+Et5WRSx6AyVOA5kiGg7FPTcHWI1RcBSunm/krObAZGP4HyBU3jThxziNkuDrK2dQg8aCXI64iC+JK3Lz80MOW+H9bwapI6wjZMu
+ yC0o5C3HnZ+fpQ4tKm6+yTdYhJR0oYN5skye/fldQP6Q2P7p7RbNHR9biYJS4wob5n2VUzALpHWMljEfF1ytNLy5g+ZKVCWJSc85+yP3bp7s0+yMQhpQkKIh
+ VZqB/RfZRco2/sAZgNuBPvsXxNognotXOimzkGwuHokVTVqUGfgwrK93Vu47sxXpAVFyZI0GWk79ziW/SgtfctHx0Jm2QSK3tuQt/iGkQ3CSJLProBJth6oj
+ UHyp5uvQrYNG5/u4FstZWizFm0EaSlztYpB+WvVhF+MeRMExj+pEhPM/SesmvFMh5K+7fkyh+KZ/SC3D+31//a/n9bwJUYPsk7aNP9Ytx7ilz0wSuWzbEn7n
+ HOVkiEanhMdCEaCU5c2cqHjp
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Now as the common qcom clock controller code has been taught about power
-domains, stop mentioning mmcx supply as a way to power up the clock
-controller's gdscs.
+Enabling the framebuffer leads to a system hang. Running, as a debug
+hack, the store_pan() function in drivers/video/fbdev/core/fbsysfs.c
+without taking the console_lock, allows to see the crash backtrace on
+the serial line.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+~ # echo 0 0 > /sys/class/graphics/fb0/pan
+
+[    9.719414] Unhandled exception: IPSR = 00000005 LR = fffffff1
+[    9.726937] CPU: 0 PID: 49 Comm: sh Not tainted 5.13.0-rc5 #9
+[    9.733008] Hardware name: STM32 (Device Tree Support)
+[    9.738296] PC is at clk_gate_is_enabled+0x0/0x28
+[    9.743426] LR is at stm32f4_pll_div_set_rate+0xf/0x38
+[    9.748857] pc : [<0011e4be>]    lr : [<0011f9e3>]    psr: 0100000b
+[    9.755373] sp : 00bc7be0  ip : 00000000  fp : 001f3ac4
+[    9.760812] r10: 002610d0  r9 : 01efe920  r8 : 00540560
+[    9.766269] r7 : 02e7ddb0  r6 : 0173eed8  r5 : 00000000  r4 : 004027c0
+[    9.773081] r3 : 0011e4bf  r2 : 02e7ddb0  r1 : 0173eed8  r0 : 1d3267b8
+[    9.779911] xPSR: 0100000b
+[    9.782719] CPU: 0 PID: 49 Comm: sh Not tainted 5.13.0-rc5 #9
+[    9.788791] Hardware name: STM32 (Device Tree Support)
+[    9.794120] [<0000afa1>] (unwind_backtrace) from [<0000a33f>] (show_stack+0xb/0xc)
+[    9.802421] [<0000a33f>] (show_stack) from [<0000a8df>] (__invalid_entry+0x4b/0x4c)
+
+The `pll_num' field in the post_div_data configuration contained a wrong
+value which also referenced an uninitialized hardware clock when
+clk_register_pll_div() was called.
+
+Fixes: 517633ef630e ("clk: stm32f4: Add post divisor for I2S & SAI PLLs")
+Signed-off-by: Dario Binacchi <dariobin@libero.it>
+Reviewed-by: Gabriel Fernandez <gabriel.fernandez@st.com>
+
 ---
- drivers/clk/qcom/videocc-sm8250.c | 4 ----
- 1 file changed, 4 deletions(-)
+I added Gabriel Fernandez's 'Reviewed-by' tag as requested by himself
+15 days ago at https://lore.kernel.org/patchwork/patch/1450964/.
 
-diff --git a/drivers/clk/qcom/videocc-sm8250.c b/drivers/clk/qcom/videocc-sm8250.c
-index d996b76f4e30..ad46c4014a40 100644
---- a/drivers/clk/qcom/videocc-sm8250.c
-+++ b/drivers/clk/qcom/videocc-sm8250.c
-@@ -277,7 +277,6 @@ static struct gdsc mvs0c_gdsc = {
- 	},
- 	.flags = 0,
- 	.pwrsts = PWRSTS_OFF_ON,
--	.supply = "mmcx",
+Changes in v4:
+- Really add Gabriel Fernandez 'Reviewed-by' tag. In version 3 I forgot
+  to add the tag.
+
+Changes in v3:
+- Add Gabriel Fernandez 'Reviewed-by' tag.
+
+Changes in v2:
+- Change  'u8 pll_num' from 'stm32f4_pll_post_div_data' structure into
+  'int pll_idx'.
+
+ drivers/clk/clk-stm32f4.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/clk/clk-stm32f4.c b/drivers/clk/clk-stm32f4.c
+index 18117ce5ff85..5c75e3d906c2 100644
+--- a/drivers/clk/clk-stm32f4.c
++++ b/drivers/clk/clk-stm32f4.c
+@@ -526,7 +526,7 @@ struct stm32f4_pll {
+ 
+ struct stm32f4_pll_post_div_data {
+ 	int idx;
+-	u8 pll_num;
++	int pll_idx;
+ 	const char *name;
+ 	const char *parent;
+ 	u8 flag;
+@@ -557,13 +557,13 @@ static const struct clk_div_table post_divr_table[] = {
+ 
+ #define MAX_POST_DIV 3
+ static const struct stm32f4_pll_post_div_data  post_div_data[MAX_POST_DIV] = {
+-	{ CLK_I2SQ_PDIV, PLL_I2S, "plli2s-q-div", "plli2s-q",
++	{ CLK_I2SQ_PDIV, PLL_VCO_I2S, "plli2s-q-div", "plli2s-q",
+ 		CLK_SET_RATE_PARENT, STM32F4_RCC_DCKCFGR, 0, 5, 0, NULL},
+ 
+-	{ CLK_SAIQ_PDIV, PLL_SAI, "pllsai-q-div", "pllsai-q",
++	{ CLK_SAIQ_PDIV, PLL_VCO_SAI, "pllsai-q-div", "pllsai-q",
+ 		CLK_SET_RATE_PARENT, STM32F4_RCC_DCKCFGR, 8, 5, 0, NULL },
+ 
+-	{ NO_IDX, PLL_SAI, "pllsai-r-div", "pllsai-r", CLK_SET_RATE_PARENT,
++	{ NO_IDX, PLL_VCO_SAI, "pllsai-r-div", "pllsai-r", CLK_SET_RATE_PARENT,
+ 		STM32F4_RCC_DCKCFGR, 16, 2, 0, post_divr_table },
  };
  
- static struct gdsc mvs1c_gdsc = {
-@@ -287,7 +286,6 @@ static struct gdsc mvs1c_gdsc = {
- 	},
- 	.flags = 0,
- 	.pwrsts = PWRSTS_OFF_ON,
--	.supply = "mmcx",
- };
+@@ -1774,7 +1774,7 @@ static void __init stm32f4_rcc_init(struct device_node *np)
+ 				post_div->width,
+ 				post_div->flag_div,
+ 				post_div->div_table,
+-				clks[post_div->pll_num],
++				clks[post_div->pll_idx],
+ 				&stm32f4_clk_lock);
  
- static struct gdsc mvs0_gdsc = {
-@@ -297,7 +295,6 @@ static struct gdsc mvs0_gdsc = {
- 	},
- 	.flags = HW_CTRL,
- 	.pwrsts = PWRSTS_OFF_ON,
--	.supply = "mmcx",
- };
- 
- static struct gdsc mvs1_gdsc = {
-@@ -307,7 +304,6 @@ static struct gdsc mvs1_gdsc = {
- 	},
- 	.flags = HW_CTRL,
- 	.pwrsts = PWRSTS_OFF_ON,
--	.supply = "mmcx",
- };
- 
- static struct clk_regmap *video_cc_sm8250_clocks[] = {
+ 		if (post_div->idx != NO_IDX)
 -- 
-2.30.2
+2.17.1
 
