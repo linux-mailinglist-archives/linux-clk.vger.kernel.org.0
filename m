@@ -2,57 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D733CF80E
-	for <lists+linux-clk@lfdr.de>; Tue, 20 Jul 2021 12:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEC93CFAFF
+	for <lists+linux-clk@lfdr.de>; Tue, 20 Jul 2021 15:45:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237046AbhGTKAI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 20 Jul 2021 06:00:08 -0400
-Received: from mail-vs1-f41.google.com ([209.85.217.41]:42647 "EHLO
-        mail-vs1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237156AbhGTJ7M (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 20 Jul 2021 05:59:12 -0400
-Received: by mail-vs1-f41.google.com with SMTP id u7so10964636vst.9;
-        Tue, 20 Jul 2021 03:39:50 -0700 (PDT)
+        id S238477AbhGTNFA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 20 Jul 2021 09:05:00 -0400
+Received: from mail-ua1-f43.google.com ([209.85.222.43]:33375 "EHLO
+        mail-ua1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238724AbhGTNDQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 20 Jul 2021 09:03:16 -0400
+Received: by mail-ua1-f43.google.com with SMTP id d2so8096365uan.0;
+        Tue, 20 Jul 2021 06:42:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=CVIxBg628PAwDy/vo0ZmoulomT3dP+R815FPvXclsao=;
-        b=i6zUi2zFGiUf758QvKHeDisW1Yyhw8CN/CJeKYrd1gxzicxiqWeoIpQQSXUbBwL702
-         wQd5LLrVzZRIybhYHhVv4cfTcSRD09oaOs9m22Vmj8IAQ4xpPqXYj4xDtbV+Nno/3i+q
-         Tm+tx+deC0mReIw8gokcWX5DJ36vsc2Q+4f7fQopIrKGl+SFuNRIIu9T+fBsIRGYe8QI
-         iOmlzjv/A2OsTf9H2FeClZI7UVzajvBlDPV9urbtURS56mSJKJ4VrJ3dLCW+MfxYl74t
-         fyEl0LSpFC4DO7fiPV2Y8U2d205T6xahLIZYBOynfg5j1XYzeQG4pI5y1B1ouY3nAji7
-         jWbw==
-X-Gm-Message-State: AOAM533jWVJe/VpoKp/7CZ3xy2Xfbgovf6Izbu5UmnZutSm/t1wgIgaI
-        RU4vuVXDll3pjPlxw7CGvhvk1eS+Oh+6FKaTGZc=
-X-Google-Smtp-Source: ABdhPJwdSimcy72NVuCQcZHymT6OXIFKfyNe/sBA/FR+wAEOfy6VNjuVPwJUkNefHXoUgy46bedfu9+7qODNk6hj3Zc=
-X-Received: by 2002:a05:6102:2828:: with SMTP id ba8mr28494942vsb.18.1626777589760;
- Tue, 20 Jul 2021 03:39:49 -0700 (PDT)
+        bh=E38sRFpfg4Nl0TXtXxQVL6c3M9xpf/OZLQC/AmFnhX0=;
+        b=dqQPL7GHgGkeYBs26JfHFUN+3BqbjRqvvbC4ldBJCMhMMBGpKeXw+NSDKoGAhVNGQ6
+         JpJSKPCQyDi+qL81hIl8GQ2mGBSQOOxzNsVd6T3z5jbbmNHzbf/vT8uWKj/C6p9/mGyV
+         /Ers3PdKcpedqzS5aoCY29saSiyDjrJ/Bz26r3xplfHdkr0WGhGeUEGh9wz3F9g5553E
+         stoTRwBTfiulgIDggbG4BkuBl7j8IUYnjHVGTT0AGCuoCvBFwHxXZoaWB/SMO/TOCVV3
+         izOz9BwF+i9XbzuzSJjFfkslZquHfWPjiN2N786O6Kynl9/qjtaYMiKkMIYMZmiXMv18
+         hHAA==
+X-Gm-Message-State: AOAM531W3ocV5OJdFAYhrSvkm3DDbduozXM9xa/glRx0sE0+LDirx3T9
+        Kb/mPYvLDoRElLDI4qxyEoN6CISt0xuUk41aIEI=
+X-Google-Smtp-Source: ABdhPJwCPd8kUzwD4M0vusPzxjBGVt7Tt8dDccfy425PNDwzZ7QrhhWXBCo5/qJmiDl2wf2MHdf6UYSUh7yINyuR0AM=
+X-Received: by 2002:ab0:5a2e:: with SMTP id l43mr31027655uad.4.1626788572878;
+ Tue, 20 Jul 2021 06:42:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210719143811.2135-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20210719143811.2135-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20210719143811.2135-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20210712194422.12405-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20210712194422.12405-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20210712194422.12405-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 20 Jul 2021 12:39:38 +0200
-Message-ID: <CAMuHMdXQKmG-pdnh+M27CDMfTYrC7eq1kdyAb5P5Pgyc22vs+g@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] clk: renesas: r9a07g044-cpg: Add entry for fixed
- clock P0_DIV2
+Date:   Tue, 20 Jul 2021 15:42:41 +0200
+Message-ID: <CAMuHMdVGN+6AiEtkAiHso5=FVsQYSbd0xD3LULsdbMPsXPkc+Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] dt-bindings: pinctrl: renesas,rzg2l-pinctrl: Add
+ DT bindings for RZ/G2L pinctrl
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
-        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-can@vger.kernel.org, netdev <netdev@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -60,16 +56,50 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, Jul 19, 2021 at 4:40 PM Lad Prabhakar
+Hi Prabhakar,
+
+On Mon, Jul 12, 2021 at 9:44 PM Lad Prabhakar
 <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add entry for fixed core clock P0_DIV2 and assign LAST_DT_CORE_CLK
-> to R9A07G044_CLK_P0_DIV2.
+> Add device tree binding documentation and header file for Renesas
+> RZ/G2L pinctrl.
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
+Thanks for your patch!
+
+> --- /dev/null
+> +++ b/include/dt-bindings/pinctrl/rzg2l-pinctrl.h
+> @@ -0,0 +1,23 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +/*
+> + * This header provides constants for Renesas RZ/G2L family pinctrl bindings.
+> + *
+> + * Copyright (C) 2021 Renesas Electronics Corp.
+> + *
+> + */
+> +
+> +#ifndef __DT_BINDINGS_RZG2L_PINCTRL_H
+> +#define __DT_BINDINGS_RZG2L_PINCTRL_H
+> +
+> +#define RZG2L_PINS_PER_PORT    8
+> +
+> +/*
+> + * Create the pin index from its bank and position numbers and store in
+> + * the upper 16 bits the alternate function identifier
+> + */
+> +#define RZG2L_PORT_PINMUX(b, p, f)     ((b) * RZG2L_PINS_PER_PORT + (p) | ((f) << 16))
+> +
+> +/* Convert a port and pin label to its global pin index */
+> + #define RZG2L_GPIO(port, pin) ((port) * RZG2L_PINS_PER_PORT + (pin))
+
+I know this was copied from RZ/A2, but some consistency in the naming
+(b or bank vs. port, p vs. pin) would be nice to have.
+
+> +
+> +#endif /* __DT_BINDINGS_RZG2L_PINCTRL_H */
+
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-clk-for-v5.15.
 
 Gr{oetje,eeting}s,
 
