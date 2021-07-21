@@ -2,432 +2,129 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAD93D0546
-	for <lists+linux-clk@lfdr.de>; Wed, 21 Jul 2021 01:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F5E3D06E6
+	for <lists+linux-clk@lfdr.de>; Wed, 21 Jul 2021 05:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233710AbhGTWn0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 20 Jul 2021 18:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233502AbhGTWnZ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 20 Jul 2021 18:43:25 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1FCC061574
-        for <linux-clk@vger.kernel.org>; Tue, 20 Jul 2021 16:24:02 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id u14so632385ljh.0
-        for <linux-clk@vger.kernel.org>; Tue, 20 Jul 2021 16:24:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0kQDaqFcYW3b2imb6INbuWrCKtxadtdr+mp8y1LZu6E=;
-        b=uFY0qu3sapiCxHv48QNNd2Zou2A9gzTJ8oQYKudbWEbVtd1Zy5y0xHahScSWZBBEE6
-         aGaXESp4GJ9Zusn9zqPdizxVFCVGT2+mKQy0ryD9zRztUdBoYM9vnnzIjruO4Wvtsz53
-         +S7tq97UseZttSKCpNZJhh7mD9z8d33fq5yyZZV0uHqzSvs7dWET4KzQJm3wixA/RmKC
-         rPvxTUdtxGb2G3mGfRq6E9Z2gFnNUOVi1MNM23wvlJ3XzT9Qu9uAw0Gu1avT0v8HN8ES
-         FATMcNCVhMAvu5OpbztWWGwC85igI0insBIh/Kudohl2VZIt9NGUp8wOf9RJV9XKtt8i
-         b16Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0kQDaqFcYW3b2imb6INbuWrCKtxadtdr+mp8y1LZu6E=;
-        b=ahc364QaWHwNz/Om4xjE/lI8GsVNKUJtWLjPGeMbDFJVRYteyB+bljNnzYqFkcLnIS
-         L7mhs4S+IdJtY8hWoeZl930ofmXHviSGTfyuZzhqTFyypL+Blegay5kbclJu7PftkAYw
-         Gp84YyJuaJQMD+yMGk3gVyqa46LDc/ZhebTaK2GY5+UyZ3lBUt0PFu+tjOBnJrVdcRDd
-         SO9QgSzlaGcCWPS1yxlPUUUpOErrcbw7rQ9nJIl20vdFqDhy1vbuQHRF51+1oQLoQLFt
-         gr3BW0D4eswVqxoL2v0X2s60QnOLygEho4fpWnmXqHDL4q5+8y9QHZvZyUhNFlkvbnUO
-         d+dQ==
-X-Gm-Message-State: AOAM5307+tynAygUjYTatZR2PgVCTIueEIvb/l8Xx715KcZEWiWNIJ8v
-        wblT23RR5JpK/LOWxz8SWi92sw==
-X-Google-Smtp-Source: ABdhPJy/Bty6lgybRbgYzmo8kMGwkE0Hk2DR94+cD/CkZg9D2fuH4Z4WhBNMPN9Ml+PpvRooGxUiag==
-X-Received: by 2002:a05:651c:891:: with SMTP id d17mr21825536ljq.24.1626823440994;
-        Tue, 20 Jul 2021 16:24:00 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id t19sm654901lfr.204.2021.07.20.16.24.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jul 2021 16:24:00 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [PATCH 2/2 v2] clk: ux500: Add driver for the reset portions of PRCC
-Date:   Wed, 21 Jul 2021 01:18:37 +0200
-Message-Id: <20210720231837.1576130-2-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210720231837.1576130-1-linus.walleij@linaro.org>
-References: <20210720231837.1576130-1-linus.walleij@linaro.org>
+        id S231359AbhGUCV3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 20 Jul 2021 22:21:29 -0400
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:35791 "EHLO
+        wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230451AbhGUCVW (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 20 Jul 2021 22:21:22 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.west.internal (Postfix) with ESMTP id 830012B004FC;
+        Tue, 20 Jul 2021 23:01:54 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 20 Jul 2021 23:01:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm2; bh=GohC1Xd2UWQStJhSae6I3++vzG
+        AiFbgghmNjmKdy6j0=; b=WkXI/MCbn1fdpcTgR+wb7KadJo2Vm9HCph5shcJ5fw
+        LYRDLfRigLkGW0a0D0eca5+Io5zoJ+3AcC+MFGyAhfR580IPuGevvY+cCdjxUeH3
+        upWSTgr1WxW1Bi7FuN7NuHWCGaNTTfzAAuGjP9uHLvHwoXYgLtL8eyfw6x0RKQr3
+        HwjDppjmKqICiVBQtS/FUzGnQpzUH2rtQhEE6vLV46mDZC3Qfqr5dl3f4jFl2BLp
+        7s1G41F1pKrT22dEqdDOb9wjED8koMRZMYO3U7yrJ1Z3MDIrSxAgEjDBAQAQy7Om
+        hOUcsg4TfyB59O4hW+4o1/bEnEo4yUViVUQOMkiZOrJA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=GohC1Xd2UWQStJhSa
+        e6I3++vzGAiFbgghmNjmKdy6j0=; b=d1SIOQXhNs3X+miPCQAPoOp2/pnho2Uy1
+        pYjs9EtfY5f/oVC3b+pZ8LjDAoLHZd8yx1S2JbTPGJFEc+CeLidtYfYFlIena/Rs
+        /8RVhnvd2gS0GAyhrUmbTEopQhKfeLS4k+FA0iuxTHiPcm28OVGA0gSjBFD2ALCI
+        /RQCxalysJMESF6nAdXfJBLRRjAlPLUNHqU1MINCmYUvfuRbUvki0ADsg6AGURga
+        6jdBvAUPbq4E+c3+hXT5kobyO/QpwI+j60qdu1CAfgirEjivU6Ld1PjmwwS6Gw/w
+        WFfsSkcCFjpssqJ6P1zhmsdHnwzEUh9+j5tlb1oUb/kPRbkgbHXoQ==
+X-ME-Sender: <xms:II73YGW0qEDVTEvZ2GJHRq1-sRxJyYBvZVvXVk6dLNFF2d8ADMJzrA>
+    <xme:II73YCmp-UQ2Boiz39sGD21Sd4vdp37WhODwXIde9Zi4BtD0WVxZwMHKCtj770zIg
+    yxsykfd9mer8ar6Cm8>
+X-ME-Received: <xmr:II73YKY0dCPWU2gOMNBRy-WqIBuOScgs8xiFvT4FKQIhQirKFYBJ5g0vtHjmtPlOflyilZ3nj_8S>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrfeefgdehiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffoggfgsedtkeertdertd
+    dtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhl
+    hihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfejtdektdeuhedtieefteekve
+    ffteejteefgeekveegffetvddugfeliefhtddunecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrth
+    drtghomh
+X-ME-Proxy: <xmx:II73YNX6skF8MxyWwDXkQV8EfMmJxDsAl5ACgjkilBL17nw0xtUh9g>
+    <xmx:II73YAnvL_WmV8ybFDoPOz9DzLNbUG6BmiEPVdTrtFfD1qn1kszHJw>
+    <xmx:II73YCd5XSHw6t3T1ojDmj_xC_0U4jFhgLbZQAONJHr3z8p704WP6A>
+    <xmx:Io73YJdVhOEQzb6RKtplBhWoAxZeJyLLIUAKuJusIX0M5ja15XCCsfTCXhc>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 20 Jul 2021 23:01:48 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     tsbogend@alpha.franken.de, mturquette@baylibre.com,
+        daniel.lezcano@linaro.org, linus.walleij@linaro.org,
+        vkoul@kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH v3 0/9] MIPS: Migrate pistachio to generic kernel
+Date:   Wed, 21 Jul 2021 11:01:25 +0800
+Message-Id: <20210721030134.10562-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The Ux500 PRCC (peripheral reset and clock controller) can also
-control reset of the IP blocks, not just clocks. As the PRCC is probed
-as a clock controller and we have other platforms implementing combined
-clock and reset controllers, follow this pattern and implement the PRCC
-rest controller as part of the clock driver.
+I'm lucky enough to get a Creator CI40 board from dusts.
+This patchset move it to gerneic kernel to reduce maintenance burden.
+It have been tested with SD Card boot.
 
-The reset controller needs to be selected from the machine as Ux500 has
-traditionally selected its mandatory subsystem prerequisites from there.
+--
+v2: Minor fixes
+v3: Typo fixes and 0day testbot warning fix (Thanks to Sergei!)
 
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
-ChangeLog v1->v2:
-- Rebase on v5.14-rc1
-- Cc Philipp Zabel
----
- arch/arm/mach-ux500/Kconfig      |   1 +
- drivers/clk/ux500/Makefile       |   3 +
- drivers/clk/ux500/prcc.h         |  36 +++++++
- drivers/clk/ux500/reset-prcc.c   | 159 +++++++++++++++++++++++++++++++
- drivers/clk/ux500/reset-prcc.h   |  22 +++++
- drivers/clk/ux500/u8500_of_clk.c |  32 ++++---
- 6 files changed, 240 insertions(+), 13 deletions(-)
- create mode 100644 drivers/clk/ux500/prcc.h
- create mode 100644 drivers/clk/ux500/reset-prcc.c
- create mode 100644 drivers/clk/ux500/reset-prcc.h
+Jiaxun Yang (9):
+  MIPS: generic: Allow generating FIT image for Marduk board
+  MIPS: DTS: Pistachio add missing cpc and cdmm
+  clk: pistachio: Make it selectable for generic MIPS kernel
+  clocksource/drivers/pistachio: Make it selectable for MIPS
+  phy: pistachio-usb: Depend on MIPS || COMPILE_TEST
+  pinctrl: pistachio: Make it as an option
+  MIPS: config: generic: Add config for Marduk board
+  MIPS: Retire MACH_PISTACHIO
+  MIPS: Make a alias for pistachio_defconfig
 
-diff --git a/arch/arm/mach-ux500/Kconfig b/arch/arm/mach-ux500/Kconfig
-index c1086ebe0050..24ed7f4a87a4 100644
---- a/arch/arm/mach-ux500/Kconfig
-+++ b/arch/arm/mach-ux500/Kconfig
-@@ -29,6 +29,7 @@ menuconfig ARCH_U8500
- 	select REGULATOR_DB8500_PRCMU
- 	select REGULATOR_FIXED_VOLTAGE
- 	select SOC_BUS
-+	select RESET_CONTROLLER
- 	help
- 	  Support for ST-Ericsson's Ux500 architecture
- 
-diff --git a/drivers/clk/ux500/Makefile b/drivers/clk/ux500/Makefile
-index 53fd29002401..c29b83df403e 100644
---- a/drivers/clk/ux500/Makefile
-+++ b/drivers/clk/ux500/Makefile
-@@ -8,6 +8,9 @@ obj-y += clk-prcc.o
- obj-y += clk-prcmu.o
- obj-y += clk-sysctrl.o
- 
-+# Reset control
-+obj-y += reset-prcc.o
-+
- # Clock definitions
- obj-y += u8500_of_clk.o
- 
-diff --git a/drivers/clk/ux500/prcc.h b/drivers/clk/ux500/prcc.h
-new file mode 100644
-index 000000000000..bf978cace563
---- /dev/null
-+++ b/drivers/clk/ux500/prcc.h
-@@ -0,0 +1,36 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef __PRCC_H
-+#define __PRCC_H
-+
-+#define PRCC_NUM_PERIPH_CLUSTERS 6
-+#define PRCC_PERIPHS_PER_CLUSTER 32
-+
-+/* CLKRST4 is missing making it hard to index things */
-+enum clkrst_index {
-+	CLKRST1_INDEX = 0,
-+	CLKRST2_INDEX,
-+	CLKRST3_INDEX,
-+	CLKRST5_INDEX,
-+	CLKRST6_INDEX,
-+	CLKRST_MAX,
-+};
-+
-+static inline int prcc_num_to_index(unsigned int num)
-+{
-+	switch (num) {
-+	case 1:
-+		return CLKRST1_INDEX;
-+	case 2:
-+		return CLKRST2_INDEX;
-+	case 3:
-+		return CLKRST3_INDEX;
-+	case 5:
-+		return CLKRST5_INDEX;
-+	case 6:
-+		return CLKRST6_INDEX;
-+	}
-+	return -EINVAL;
-+}
-+
-+#endif
-diff --git a/drivers/clk/ux500/reset-prcc.c b/drivers/clk/ux500/reset-prcc.c
-new file mode 100644
-index 000000000000..91f9f1942fd9
---- /dev/null
-+++ b/drivers/clk/ux500/reset-prcc.c
-@@ -0,0 +1,159 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <linux/of.h>
-+#include <linux/of_address.h>
-+#include <linux/slab.h>
-+#include <linux/io.h>
-+#include <linux/err.h>
-+#include <linux/types.h>
-+#include <linux/reset-controller.h>
-+#include <linux/bits.h>
-+#include <linux/delay.h>
-+
-+#include "prcc.h"
-+#include "reset-prcc.h"
-+
-+#define to_u8500_prcc_reset(p) container_of((p), struct u8500_prcc_reset, rcdev)
-+
-+/* This macro flattens the 2-dimensional PRCC numberspace */
-+#define PRCC_RESET_LINE(prcc_num, bit) \
-+	((prcc_num * PRCC_PERIPHS_PER_CLUSTER) + bit)
-+
-+/*
-+ * Reset registers in each PRCC - the reset lines are active low
-+ * so what you need to do is write a bit for the peripheral you
-+ * want to put into reset into the CLEAR register, this will assert
-+ * the reset by pulling the line low. SET take the device out of
-+ * reset. The status reflects the actual state of the line.
-+ */
-+#define PRCC_K_SOFTRST_SET		0x018
-+#define PRCC_K_SOFTRST_CLEAR		0x01c
-+#define PRCC_K_RST_STATUS		0x020
-+
-+static void __iomem *u8500_prcc_reset_base(struct u8500_prcc_reset *ur,
-+					   unsigned long id)
-+{
-+	unsigned int prcc_num, index;
-+
-+	prcc_num = id / PRCC_PERIPHS_PER_CLUSTER;
-+	index = prcc_num_to_index(prcc_num);
-+
-+	if (index > ARRAY_SIZE(ur->base))
-+		return NULL;
-+
-+	return ur->base[index];
-+}
-+
-+static int u8500_prcc_reset(struct reset_controller_dev *rcdev,
-+			    unsigned long id)
-+{
-+	struct u8500_prcc_reset *ur = to_u8500_prcc_reset(rcdev);
-+	void __iomem *base = u8500_prcc_reset_base(ur, id);
-+	unsigned int bit = id % PRCC_PERIPHS_PER_CLUSTER;
-+
-+	pr_debug("PRCC cycle reset id %lu, bit %d\n", id, bit);
-+
-+	/* Assert reset and then release it */
-+	writel(BIT(bit), base + PRCC_K_SOFTRST_CLEAR);
-+	udelay(1);
-+	writel(BIT(bit), base + PRCC_K_SOFTRST_SET);
-+	udelay(1);
-+
-+	return 0;
-+}
-+
-+static int u8500_prcc_reset_assert(struct reset_controller_dev *rcdev,
-+				   unsigned long id)
-+{
-+	struct u8500_prcc_reset *ur = to_u8500_prcc_reset(rcdev);
-+	void __iomem *base = u8500_prcc_reset_base(ur, id);
-+	unsigned int bit = id % PRCC_PERIPHS_PER_CLUSTER;
-+
-+	pr_debug("PRCC assert reset id %lu, bit %d\n", id, bit);
-+	writel(BIT(bit), base + PRCC_K_SOFTRST_CLEAR);
-+
-+	return 0;
-+}
-+
-+static int u8500_prcc_reset_deassert(struct reset_controller_dev *rcdev,
-+				     unsigned long id)
-+{
-+	struct u8500_prcc_reset *ur = to_u8500_prcc_reset(rcdev);
-+	void __iomem *base = u8500_prcc_reset_base(ur, id);
-+	unsigned int bit = id % PRCC_PERIPHS_PER_CLUSTER;
-+
-+	pr_debug("PRCC deassert reset id %lu, bit %d\n", id, bit);
-+	writel(BIT(bit), base + PRCC_K_SOFTRST_SET);
-+
-+	return 0;
-+}
-+
-+static int u8500_prcc_reset_status(struct reset_controller_dev *rcdev,
-+				   unsigned long id)
-+{
-+	struct u8500_prcc_reset *ur = to_u8500_prcc_reset(rcdev);
-+	void __iomem *base = u8500_prcc_reset_base(ur, id);
-+	unsigned int bit = id % PRCC_PERIPHS_PER_CLUSTER;
-+	u32 val;
-+
-+	pr_debug("PRCC check status on reset line id %lu, bit %d\n", id, bit);
-+	val = readl(base + PRCC_K_RST_STATUS);
-+
-+	/* Active low so return the inverse value of the bit */
-+	return !(val & BIT(bit));
-+}
-+
-+static const struct reset_control_ops u8500_prcc_reset_ops = {
-+	.reset = u8500_prcc_reset,
-+	.assert = u8500_prcc_reset_assert,
-+	.deassert = u8500_prcc_reset_deassert,
-+	.status = u8500_prcc_reset_status,
-+};
-+
-+static int u8500_prcc_reset_xlate(struct reset_controller_dev *rcdev,
-+				  const struct of_phandle_args *reset_spec)
-+{
-+	unsigned int prcc_num, bit;
-+
-+	if (reset_spec->args_count != 2)
-+		return -EINVAL;
-+
-+	prcc_num = reset_spec->args[0];
-+	bit = reset_spec->args[1];
-+
-+	if (prcc_num != 1 && prcc_num != 2 && prcc_num != 3 &&
-+	    prcc_num != 5 && prcc_num != 6) {
-+		pr_err("%s: invalid PRCC %d\n", __func__, prcc_num);
-+		return -EINVAL;
-+	}
-+
-+	pr_debug("located reset line %d at PRCC %d bit %d\n",
-+		 PRCC_RESET_LINE(prcc_num, bit), prcc_num, bit);
-+
-+	return PRCC_RESET_LINE(prcc_num, bit);
-+}
-+
-+void u8500_prcc_reset_init(struct device_node *np, struct u8500_prcc_reset *ur)
-+{
-+	struct reset_controller_dev *rcdev = &ur->rcdev;
-+	int ret;
-+	int i;
-+
-+	for (i = 0; i < CLKRST_MAX; i++) {
-+		ur->base[i] = ioremap(ur->phy_base[i], SZ_4K);
-+		if (!ur->base[i])
-+			pr_err("PRCC failed to remap for reset base %d (%08x)\n",
-+			       i, ur->phy_base[i]);
-+	}
-+
-+	rcdev->owner = THIS_MODULE;
-+	rcdev->nr_resets = 256; /* Only used with simple xlate */
-+	rcdev->ops = &u8500_prcc_reset_ops;
-+	rcdev->of_node = np;
-+	rcdev->of_reset_n_cells = 2;
-+	rcdev->of_xlate = u8500_prcc_reset_xlate;
-+
-+	ret = reset_controller_register(rcdev);
-+	if (ret)
-+		pr_err("PRCC failed to register reset controller\n");
-+}
-diff --git a/drivers/clk/ux500/reset-prcc.h b/drivers/clk/ux500/reset-prcc.h
-new file mode 100644
-index 000000000000..8bdc6df23d14
---- /dev/null
-+++ b/drivers/clk/ux500/reset-prcc.h
-@@ -0,0 +1,22 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+
-+#ifndef __RESET_PRCC_H
-+#define __RESET_PRCC_H
-+
-+#include <linux/reset-controller.h>
-+#include <linux/io.h>
-+
-+/**
-+ * struct u8500_prcc_reset - U8500 PRCC reset controller state
-+ * @rcdev: reset controller device
-+ * @bases: the PRCC bases
-+ */
-+struct u8500_prcc_reset {
-+	struct reset_controller_dev rcdev;
-+	u32 phy_base[CLKRST_MAX];
-+	void __iomem *base[CLKRST_MAX];
-+};
-+
-+void u8500_prcc_reset_init(struct device_node *np, struct u8500_prcc_reset *ur);
-+
-+#endif
-diff --git a/drivers/clk/ux500/u8500_of_clk.c b/drivers/clk/ux500/u8500_of_clk.c
-index 0aedd42fad52..330d45ab27a9 100644
---- a/drivers/clk/ux500/u8500_of_clk.c
-+++ b/drivers/clk/ux500/u8500_of_clk.c
-@@ -10,10 +10,10 @@
- #include <linux/of_address.h>
- #include <linux/clk-provider.h>
- #include <linux/mfd/dbx500-prcmu.h>
--#include "clk.h"
- 
--#define PRCC_NUM_PERIPH_CLUSTERS 6
--#define PRCC_PERIPHS_PER_CLUSTER 32
-+#include "clk.h"
-+#include "prcc.h"
-+#include "reset-prcc.h"
- 
- static struct clk *prcmu_clk[PRCMU_NUM_CLKS];
- static struct clk *prcc_pclk[(PRCC_NUM_PERIPH_CLUSTERS + 1) * PRCC_PERIPHS_PER_CLUSTER];
-@@ -46,16 +46,6 @@ static struct clk *ux500_twocell_get(struct of_phandle_args *clkspec,
- 	return PRCC_SHOW(clk_data, base, bit);
- }
- 
--/* CLKRST4 is missing making it hard to index things */
--enum clkrst_index {
--	CLKRST1_INDEX = 0,
--	CLKRST2_INDEX,
--	CLKRST3_INDEX,
--	CLKRST5_INDEX,
--	CLKRST6_INDEX,
--	CLKRST_MAX,
--};
--
- static void u8500_clk_init(struct device_node *np)
- {
- 	struct prcmu_fw_version *fw_version;
-@@ -63,8 +53,20 @@ static void u8500_clk_init(struct device_node *np)
- 	const char *sgaclk_parent = NULL;
- 	struct clk *clk, *rtc_clk, *twd_clk;
- 	u32 bases[CLKRST_MAX];
-+	struct u8500_prcc_reset *rstc;
- 	int i;
- 
-+	/*
-+	 * We allocate the reset controller here so that we can fill in the
-+	 * base addresses properly and pass to the reset controller init
-+	 * function later on.
-+	 */
-+	rstc = kzalloc(sizeof(*rstc), GFP_KERNEL);
-+	if (!rstc) {
-+		pr_err("could not allocate reset controller\n");
-+		return;
-+	}
-+
- 	for (i = 0; i < ARRAY_SIZE(bases); i++) {
- 		struct resource r;
- 
-@@ -73,6 +75,7 @@ static void u8500_clk_init(struct device_node *np)
- 			pr_err("failed to get CLKRST %d base address\n",
- 			       i + 1);
- 		bases[i] = r.start;
-+		rstc->phy_base[i] = r.start;
- 	}
- 
- 	/* Clock sources */
-@@ -562,6 +565,9 @@ static void u8500_clk_init(struct device_node *np)
- 
- 		if (of_node_name_eq(child, "smp-twd-clock"))
- 			of_clk_add_provider(child, of_clk_src_simple_get, twd_clk);
-+
-+		if (of_node_name_eq(child, "prcc-reset-controller"))
-+			u8500_prcc_reset_init(child, rstc);
- 	}
- }
- CLK_OF_DECLARE(u8500_clks, "stericsson,u8500-clks", u8500_clk_init);
+ arch/mips/Kbuild.platforms                    |   1 -
+ arch/mips/Kconfig                             |  29 --
+ arch/mips/Makefile                            |   3 +
+ arch/mips/boot/dts/Makefile                   |   2 +-
+ arch/mips/boot/dts/img/Makefile               |   3 +-
+ arch/mips/boot/dts/img/pistachio.dtsi         |  10 +
+ arch/mips/configs/generic/board-marduk.config |  53 +++
+ arch/mips/configs/pistachio_defconfig         | 316 ------------------
+ arch/mips/generic/Kconfig                     |   6 +
+ arch/mips/generic/Platform                    |   1 +
+ arch/mips/generic/board-marduk.its.S          |  22 ++
+ arch/mips/pistachio/Kconfig                   |  14 -
+ arch/mips/pistachio/Makefile                  |   2 -
+ arch/mips/pistachio/Platform                  |   6 -
+ arch/mips/pistachio/init.c                    | 125 -------
+ arch/mips/pistachio/irq.c                     |  24 --
+ arch/mips/pistachio/time.c                    |  55 ---
+ drivers/clk/Kconfig                           |   1 +
+ drivers/clk/Makefile                          |   2 +-
+ drivers/clk/pistachio/Kconfig                 |   8 +
+ drivers/clocksource/Kconfig                   |   3 +-
+ drivers/phy/Kconfig                           |   2 +-
+ drivers/pinctrl/Kconfig                       |   5 +-
+ 23 files changed, 114 insertions(+), 579 deletions(-)
+ create mode 100644 arch/mips/configs/generic/board-marduk.config
+ delete mode 100644 arch/mips/configs/pistachio_defconfig
+ create mode 100644 arch/mips/generic/board-marduk.its.S
+ delete mode 100644 arch/mips/pistachio/Kconfig
+ delete mode 100644 arch/mips/pistachio/Makefile
+ delete mode 100644 arch/mips/pistachio/Platform
+ delete mode 100644 arch/mips/pistachio/init.c
+ delete mode 100644 arch/mips/pistachio/irq.c
+ delete mode 100644 arch/mips/pistachio/time.c
+ create mode 100644 drivers/clk/pistachio/Kconfig
+
 -- 
-2.31.1
+2.32.0
 
