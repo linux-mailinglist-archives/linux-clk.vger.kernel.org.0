@@ -2,88 +2,97 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A21F3D2ED1
-	for <lists+linux-clk@lfdr.de>; Thu, 22 Jul 2021 23:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD7E3D2F6B
+	for <lists+linux-clk@lfdr.de>; Thu, 22 Jul 2021 23:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231815AbhGVU3o (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 22 Jul 2021 16:29:44 -0400
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:63516 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231728AbhGVU3n (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 22 Jul 2021 16:29:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1626988218; x=1658524218;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=X4PdMYX/ugSdG6GejQ+DhzfKGmUBYMauIFwvJsZaDBU=;
-  b=n6XUGWbxxQN7QVRNObSACCRFFCjH0ipkfqRQRvh0vVL0xR9RYGdza3NY
-   3rzSxEVYSpEpM3QtvaXCPSHfg4FSkl1K5lSHa0Lz1nYyDibsMSkbX57Zj
-   ZSeIVOOofGcmIzdkj2Ai2exbF/4m1Qi0pegQh85dsMJvGtmHbcBA/wXtW
-   Y=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 22 Jul 2021 14:10:18 -0700
-X-QCInternal: smtphost
-Received: from nasanexm03e.na.qualcomm.com ([10.85.0.48])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/AES256-SHA; 22 Jul 2021 14:10:17 -0700
-Received: from vamslank1-linux.qualcomm.com (10.80.80.8) by
- nasanexm03e.na.qualcomm.com (10.85.0.48) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Thu, 22 Jul 2021 14:10:17 -0700
-From:   <quic_vamslank@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <tglx@linutronix.de>, <maz@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        "Vamsi krishna Lanka" <quic_vamslank@quicinc.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
-        Kozlowski <krzk@kernel.org>, "Vinod Koul" <vkoul@kernel.org>
-Subject: [PATCH v2 6/6] dt-bindings: clock: Introduce pdc bindings for SDX65
-Date:   Thu, 22 Jul 2021 14:09:43 -0700
-Message-ID: <c9ac6fa07e81cb79c1eb8f2760a040eb0c72f0a6.1626986805.git.quic_vamslank@quicinc.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <cover.1626986805.git.quic_vamslank@quicinc.com>
-References: <cover.1626986805.git.quic_vamslank@quicinc.com>
+        id S231613AbhGVVRM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 22 Jul 2021 17:17:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49724 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231336AbhGVVRL (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 22 Jul 2021 17:17:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3C3FE60EB4;
+        Thu, 22 Jul 2021 21:57:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626991066;
+        bh=jxHLi9bM6Hq+3vf5t//DlAv09jjPbBHB2nQxogyaotI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HuiSFsbPNO4Ffxt3+mAvxMTMoqe8AB3wjCAbc8L9bjtP/7VLqTomE1tbVss2cTk9C
+         gCKzDk9iIErDPnc6i8+BAaA3ELCWYEYO7EsrsUn24BbteMEygIYJL4noaUsJY4wYkn
+         qf8NO1SxTmEEh1Pq6PoxFm3DI5Q+y1nj0llY3dEfkWcWNB1BCWnIndCKy4eG3Dv2Ad
+         W48MtT5N/QT03aPxC/Ds/vMsAoHLr+EhDrOJV7iB83XdqdumbmS4rMOAcquJBxyimh
+         7wRId4g7kklBZqE4VFXI1G24pBNqE4EdqZbD9zScKK/egZ2HwtuMep9WPFAyTD+yS8
+         9bCVvQp2ul+yA==
+Received: by pali.im (Postfix)
+        id 9ECB3805; Thu, 22 Jul 2021 23:57:43 +0200 (CEST)
+Date:   Thu, 22 Jul 2021 23:57:43 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Vladimir Vid <vladimir.vid@sartura.hr>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Willy Tarreau <w@1wt.eu>
+Subject: Re: [PATCH v3 1/5] math64: New DIV_U64_ROUND_CLOSEST helper
+Message-ID: <20210722215743.gtwccvokecvoocmm@pali>
+References: <20210624224909.6350-1-pali@kernel.org>
+ <20210717123829.5201-1-pali@kernel.org>
+ <20210717123829.5201-2-pali@kernel.org>
+ <CAHp75VeCC3cYu3RZPxuRN4iaM+vxp2rX+E4z+ZxzRGM8oHaMkw@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanexm03e.na.qualcomm.com (10.85.0.48)
+In-Reply-To: <CAHp75VeCC3cYu3RZPxuRN4iaM+vxp2rX+E4z+ZxzRGM8oHaMkw@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Vamsi krishna Lanka <quic_vamslank@quicinc.com>
+On Monday 19 July 2021 15:47:07 Andy Shevchenko wrote:
+> On Sat, Jul 17, 2021 at 3:39 PM Pali Rohár <pali@kernel.org> wrote:
+> >
+> > Provide DIV_U64_ROUND_CLOSEST helper which uses div_u64 to perform
+> > division rounded to the closest integer using unsigned 64bit
+> > dividend and unsigned 32bit divisor.
+> 
+> ...
+> 
+> > +/*
+> > + * DIV_U64_ROUND_CLOSEST - unsigned 64bit divide with 32bit divisor rounded to nearest integer
+> 
+> > + * @dividend: unsigned 64bit dividend
+> 
+> Here you insist users to provide a u64 (or compatible) type.
+> 
+> > + * @divisor: unsigned 32bit divisor
+> > + *
+> > + * Divide unsigned 64bit dividend by unsigned 32bit divisor
+> > + * and round to closest integer.
+> > + *
+> > + * Return: dividend / divisor rounded to nearest integer
+> > + */
+> > +#define DIV_U64_ROUND_CLOSEST(dividend, divisor)       \
+> 
+> > +       ({ u32 _tmp = (divisor); div_u64((u64)(dividend) + _tmp / 2, _tmp); })
+> 
+> Here is the casting to u64. Why? (Yes, I have read v1 discussion and I
+> just want to continue it here).
 
-Add compatible for SDX65 pdc.
+See also Willy's response: https://lore.kernel.org/lkml/20210625155008.GB16901@1wt.eu/
 
-To: Rob Herring <robh+dt@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Kozlowski <krzk@kernel.org>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- .../devicetree/bindings/interrupt-controller/qcom,pdc.txt        | 1 +
- 1 file changed, 1 insertion(+)
+Macro does not enforce type as opposite to function.
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
-index e9afb48182c7..7bdbffb572dc 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
-+++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
-@@ -22,6 +22,7 @@ Properties:
- 		    - "qcom,sdm845-pdc": For SDM845
- 		    - "qcom,sdm8250-pdc": For SM8250
- 		    - "qcom,sdm8350-pdc": For SM8350
-+		    - "qcom,sdx65-pdc": For SDX65
- 
- - reg:
- 	Usage: required
--- 
-2.32.0
+There is no compile time check for correct type and neither compile time
+warning if smaller typed value is passed.
 
+And e.g. passing constant with explicit ULL suffix or casting external
+constant to 64bit type is impractical.
