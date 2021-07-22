@@ -2,120 +2,127 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 372E93D2316
-	for <lists+linux-clk@lfdr.de>; Thu, 22 Jul 2021 14:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47EC93D2554
+	for <lists+linux-clk@lfdr.de>; Thu, 22 Jul 2021 16:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbhGVL0s (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 22 Jul 2021 07:26:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51756 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231712AbhGVL0m (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 22 Jul 2021 07:26:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A82961351;
-        Thu, 22 Jul 2021 12:07:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626955637;
-        bh=gbtgRtJwBuii+M7tkqsl84TqgCIZq8mhcmte2Lzn+MU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ddt3vm77y1mLIvPkDSMVMzHyNoET2snL4RU4Xto4FuWRjolDWsCffbkdPaix+t87x
-         VrBh0KcRxla7FaXm83dqk7zUmfbENHuAlalGxA4vy9G9YDNwFOJCRK8DZ3l8lh2nZM
-         EBSbiHSvZ9qVwsegoGfKYFxtJvOrILOfdvMkUvlLQB1Y+vYP+Zqa4A+6w9dtYMT9TJ
-         Xt10Af4cb7dIQGTNzpEAEG1RfrgdueAJGQ2BzsLqn5/EfSzGUwjGKY5Ezi6pswSHbj
-         8uKg4F0zihD6S+NknM29cXmlN53cVl2Vm+QDSB4jsDuRQCwhKeiswcmqIFNywTqKCm
-         h3Uo0EbuQfJ5w==
-Date:   Thu, 22 Jul 2021 14:07:13 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Stephen Boyd <sboyd@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-pwm@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        linux-spi@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PULL] Add variants of devm_clk_get for prepared and enabled
- clocks enabled clocks
-Message-ID: <YPlfcbkxiBmB+vw1@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-pwm@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        linux-spi@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>, kernel@pengutronix.de,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20210510174142.986250-1-u.kleine-koenig@pengutronix.de>
- <20210609202123.u5rmw7al4x3rrvun@pengutronix.de>
- <20210625171434.3xusxpxjprcdqa47@pengutronix.de>
- <20210705080144.zfbzkm7l3gmnh6st@pengutronix.de>
- <20210722060654.nudpdtemosi64nlb@pengutronix.de>
- <YPkg0wtYIoHKpTUW@kunai>
- <20210722081817.2tsjzof4gvldq6ka@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HJmKiO7YWMeyy5Jn"
-Content-Disposition: inline
-In-Reply-To: <20210722081817.2tsjzof4gvldq6ka@pengutronix.de>
+        id S232341AbhGVNeB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 22 Jul 2021 09:34:01 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:5527 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232326AbhGVNdh (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 22 Jul 2021 09:33:37 -0400
+X-IronPort-AV: E=Sophos;i="5.84,261,1620658800"; 
+   d="scan'208";a="88414738"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 22 Jul 2021 23:14:06 +0900
+Received: from localhost.localdomain (unknown [10.226.92.164])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 454B7401224B;
+        Thu, 22 Jul 2021 23:14:03 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH net-next 02/18] drivers: clk: renesas: rzg2l-cpg: Add support to handle MUX clocks
+Date:   Thu, 22 Jul 2021 15:13:35 +0100
+Message-Id: <20210722141351.13668-3-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210722141351.13668-1-biju.das.jz@bp.renesas.com>
+References: <20210722141351.13668-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Add support to handle mux clocks inorder to select a clock source
+from multiple sources.
 
---HJmKiO7YWMeyy5Jn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/clk/renesas/rzg2l-cpg.c | 24 ++++++++++++++++++++++++
+ drivers/clk/renesas/rzg2l-cpg.h |  9 +++++++++
+ 2 files changed, 33 insertions(+)
 
+diff --git a/drivers/clk/renesas/rzg2l-cpg.c b/drivers/clk/renesas/rzg2l-cpg.c
+index 3b3b2c3347f3..491b10da5766 100644
+--- a/drivers/clk/renesas/rzg2l-cpg.c
++++ b/drivers/clk/renesas/rzg2l-cpg.c
+@@ -130,6 +130,27 @@ rzg2l_cpg_div_clk_register(const struct cpg_core_clk *core,
+ 	return clk_hw->clk;
+ }
+ 
++static struct clk * __init
++rzg2l_cpg_mux_clk_register(const struct cpg_core_clk *core,
++			   void __iomem *base,
++			   struct rzg2l_cpg_priv *priv)
++{
++	const struct clk_hw *clk_hw;
++
++	clk_hw = devm_clk_hw_register_mux(priv->dev, core->name,
++					  core->parent_names, core->num_parents,
++					  core->flag,
++					  base + GET_REG_OFFSET(core->conf),
++					  GET_SHIFT(core->conf),
++					  GET_WIDTH(core->conf),
++					  core->mux_flags, &priv->rmw_lock);
++
++	if (IS_ERR(clk_hw))
++		return ERR_CAST(clk_hw);
++
++	return clk_hw->clk;
++}
++
+ struct pll_clk {
+ 	struct clk_hw hw;
+ 	unsigned int conf;
+@@ -288,6 +309,9 @@ rzg2l_cpg_register_core_clk(const struct cpg_core_clk *core,
+ 		clk = rzg2l_cpg_div_clk_register(core, priv->clks,
+ 						 priv->base, priv);
+ 		break;
++	case CLK_TYPE_MUX:
++		clk = rzg2l_cpg_mux_clk_register(core, priv->base, priv);
++		break;
+ 	default:
+ 		goto fail;
+ 	}
+diff --git a/drivers/clk/renesas/rzg2l-cpg.h b/drivers/clk/renesas/rzg2l-cpg.h
+index 63695280ce8b..148db5de253b 100644
+--- a/drivers/clk/renesas/rzg2l-cpg.h
++++ b/drivers/clk/renesas/rzg2l-cpg.h
+@@ -43,6 +43,7 @@ struct cpg_core_clk {
+ 	const struct clk_div_table *dtable;
+ 	const char * const *parent_names;
+ 	int flag;
++	int mux_flags;
+ 	int num_parents;
+ };
+ 
+@@ -54,6 +55,9 @@ enum clk_types {
+ 
+ 	/* Clock with divider */
+ 	CLK_TYPE_DIV,
++
++	/* Clock with clock source selector */
++	CLK_TYPE_MUX,
+ };
+ 
+ #define DEF_TYPE(_name, _id, _type...) \
+@@ -69,6 +73,11 @@ enum clk_types {
+ #define DEF_DIV(_name, _id, _parent, _conf, _dtable, _flag) \
+ 	DEF_TYPE(_name, _id, CLK_TYPE_DIV, .conf = _conf, \
+ 		 .parent = _parent, .dtable = _dtable, .flag = _flag)
++#define DEF_MUX(_name, _id, _conf, _parent_names, _num_parents, _flag, \
++		_mux_flags) \
++	DEF_TYPE(_name, _id, CLK_TYPE_MUX, .conf = _conf, \
++		 .parent_names = _parent_names, .num_parents = _num_parents, \
++		 .flag = _flag, .mux_flags = _mux_flags)
+ 
+ /**
+  * struct rzg2l_mod_clk - Module Clocks definitions
+-- 
+2.17.1
 
-> > What about adding gkh to the list explaining the situation to him?
->=20
-> Greg doesn't like devm_ stuff.
->=20
-> I already asked Arnd who doesn't want to interfere and akpm who didn't
-> react either up to now.
-
-Wow, okay, that is frustrating.
-
-
---HJmKiO7YWMeyy5Jn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmD5X20ACgkQFA3kzBSg
-KbZ9fg/+IRGhv497cb9AjUOAaqwkvEXqBc1EjRWR9pNzZOWyt7pj/mR/lEHb0xW7
-EVNmU6w1ZFv4l3zRKsIYlEXggrIk/vuFsMvYpARpFRFY8v7tU4pwCBDjTFe4aSTH
-lTWbeySPepEbAFfkX0V05vlCFyl/5yXMoP5y5qmuQrRrsJ9Usu6wr00YtcA0ImSh
-lkqxiOudsmiEF8l3UbxyX10o6CYYGZnKpuADEl9SMj9dRF7GHicNHKsW9jQklRig
-b9cjnZJH2SNzM6wzP2IK2OplmLoP7KFCPbkfPfC6jvCDVZ97/9FMu78y4IN2B1bx
-mWXSY6VWPNmV3yl7Xl1SwbyL7StWZleneeQcsQkX9V80g3b//eqkqDziz/Db8MPf
-hIqkvbj5OAX9jWb8DQBNTE12bvHKXiq5L377FdD4WPgt2xj8zDHwBM7t9HQyIUUZ
-jzDgNDGRye3H+FGr4rfmjUU4y5U+pN3f0hgWshTc6Hk4pmf7fGek03/W/bSlo3e2
-c4VcVDDs90DZN6guC6fZKWoPSl1AMTTsRavsU3V2IxykCUFSPJzfxlJZ3xOkjPhX
-ajN8x4uy3fZj8EsITgszI08QhCavDH4XHvouiBhQKzHmT4iDsQRgeGuHaVRyzCr/
-DOf97Ewe7ukTIHFB7uRSaPua/Y0nPXpeNyqWeR/cJZA4PmFDUaY=
-=qGuf
------END PGP SIGNATURE-----
-
---HJmKiO7YWMeyy5Jn--
