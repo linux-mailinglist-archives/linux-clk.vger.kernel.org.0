@@ -2,86 +2,99 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D468B3D8B9E
-	for <lists+linux-clk@lfdr.de>; Wed, 28 Jul 2021 12:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E313D9070
+	for <lists+linux-clk@lfdr.de>; Wed, 28 Jul 2021 16:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231907AbhG1KVM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 28 Jul 2021 06:21:12 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:44146 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229574AbhG1KVL (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 28 Jul 2021 06:21:11 -0400
-X-UUID: a6123fab58ef4b71af91edc86908cd1a-20210728
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=pOtzGqpNSphuXXqUkv0xXxPPYQqKavCRJjR/ns5nsaE=;
-        b=Tk67lpeXIABoys/9Twvsix2+Lwo8zk+DjnM/l9dkiKzn2GuVvg+PCvD0fUfprX9MtTgXBrY2FFTB7U8E/ud0vAkzBL/K03r4+meFtJiYyMpCXUJi3cYC20NOeKfKpbnB+6tma5f6fnJ/4NYiNLvL+ufbbgXZ0lHYQYP2aoF8e+w=;
-X-UUID: a6123fab58ef4b71af91edc86908cd1a-20210728
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <chun-jie.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 202140126; Wed, 28 Jul 2021 18:21:05 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 28 Jul 2021 18:21:04 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 28 Jul 2021 18:21:04 +0800
-Message-ID: <fd1a7b95ea63296e350aa04dce1dbb4f8c84092c.camel@mediatek.com>
-Subject: Re: [v14 02/21] dt-bindings: ARM: Mediatek: Add mmsys document
- binding for MT8192
-From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
-To:     Enric Balletbo Serra <eballetbo@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 28 Jul 2021 18:21:04 +0800
-In-Reply-To: <CAFqH_51D0A_Oht785cxvWjuNFYgLL25-qX1QEpLhWBARtTgVMA@mail.gmail.com>
-References: <20210726105719.15793-1-chun-jie.chen@mediatek.com>
-         <20210726105719.15793-3-chun-jie.chen@mediatek.com>
-         <162740843452.2368309.13157283201271440368@swboyd.mtv.corp.google.com>
-         <CAFqH_51D0A_Oht785cxvWjuNFYgLL25-qX1QEpLhWBARtTgVMA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S236626AbhG1OZK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 28 Jul 2021 10:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235389AbhG1OYx (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 28 Jul 2021 10:24:53 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28532C061764
+        for <linux-clk@vger.kernel.org>; Wed, 28 Jul 2021 07:24:52 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id a26so4262282lfr.11
+        for <linux-clk@vger.kernel.org>; Wed, 28 Jul 2021 07:24:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xUxyuUpAzGtx/RioOCJoivmaYXnb4C+vrnKsIL1DHAw=;
+        b=PxzYQZcLaU1zSXsJ6lVXBja/2GtDB13jiNJrAD8UJBUFlW1JfyWiNMtDJ/CLwiBNWM
+         ywKav7AzihGTjK8ruc+s4jCAI7XwvMUnEa1+Y1fz2y0CCD4FAOeu0aMQs4dRYITdmeEY
+         hBduZctUHCPbWmzv02lfqnryQw/H23Fu9G4xtsKEm3yFaVmh+Adu2N49s5aVNJXQnRnz
+         yXLxil5rtKGyIQkVFP4z6CyUJh0TdWBA+nobd/J/vz3FFRLEyPBOobXOk/mjUc/+MFfR
+         h5G6SRQYLinMKPnObS1jB3M9ibJNkrqECY8i7H7johpt2cRSHN/69r0ddwj9Tu2vnlh/
+         106w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xUxyuUpAzGtx/RioOCJoivmaYXnb4C+vrnKsIL1DHAw=;
+        b=f4OzM/ElMWhZC7qmZh8K65xQyeUIeNC4iEwYMO+vB5AZUlXWJ+uSjEYMZjYubiAARS
+         4VpBn6wq/VvsWkpltog0igYhE/9Y3agVueQ43d76/os2NuXQ/AMcgsgq/z8tR8FzsXkx
+         Ae6Tv+alBk06jfMsyNh3zHCO/WDWHXPsuHpRzzzf09+/lSDXWUTlGTFzPwpWDAwbAkau
+         8ydev707RHqh68TRt/PLHbsk57c7EBa8BM9nsO5z8MmRvmq/jVaDaPEAY/9erYlUSsEM
+         LTN7zikAZXOJgoGLulP+KIYAJ4EsHRvnesJX0Fnk3AddTm//jVVAjlUVQ3wOIUk4caA0
+         Bmcg==
+X-Gm-Message-State: AOAM530SQId9qU+pJFm8hYJZTQUsJNRbnOf/PGe5hbTcOE3AZ1SdiIoG
+        Xx4zWzO9Muh7Ado5gelYuJ3dFw==
+X-Google-Smtp-Source: ABdhPJwA/ZK36+alcmFKQQIYE+YXlPER8b2QVo/BQ7dEpH72qj/dhS3lmJyQ670rMkfIazbGbuclfg==
+X-Received: by 2002:a19:4893:: with SMTP id v141mr15974595lfa.199.1627482290559;
+        Wed, 28 Jul 2021 07:24:50 -0700 (PDT)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id h4sm15610lft.184.2021.07.28.07.24.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jul 2021 07:24:50 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v2 0/5] PM: add two devres helpers and use them in qcom cc
+Date:   Wed, 28 Jul 2021 17:24:40 +0300
+Message-Id: <20210728142445.774158-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-T24gV2VkLCAyMDIxLTA3LTI4IGF0IDEwOjQ3ICswMjAwLCBFbnJpYyBCYWxsZXRibyBTZXJyYSB3
-cm90ZToNCj4gSGkgQ2h1bi1KaWUgYW5kIFN0ZXBoZW4sDQo+IA0KPiBNaXNzYXRnZSBkZSBTdGVw
-aGVuIEJveWQgPHNib3lkQGtlcm5lbC5vcmc+IGRlbCBkaWEgZHQuLCAyNyBkZSBqdWwuDQo+IDIw
-MjEgYSBsZXMgMTk6NTQ6DQo+ID4gDQo+ID4gUXVvdGluZyBDaHVuLUppZSBDaGVuICgyMDIxLTA3
-LTI2IDAzOjU3OjAwKQ0KPiA+ID4gVGhpcyBwYXRjaCBhZGRzIHRoZSBtbXN5cyBkb2N1bWVudCBi
-aW5kaW5nIGZvciBNVDgxOTIgU29DLg0KPiA+ID4gDQo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBDaHVu
-LUppZSBDaGVuIDxjaHVuLWppZS5jaGVuQG1lZGlhdGVrLmNvbT4NCj4gPiA+IFJldmlld2VkLWJ5
-OiBDaHVuLUt1YW5nIEh1IDxjaHVua3VhbmcuaHVAa2VybmVsLm9yZz4NCj4gPiA+IFJldmlld2Vk
-LWJ5OiBNYXR0aGlhcyBCcnVnZ2VyIDxtYXR0aGlhcy5iZ2dAZ21haWwuY29tPg0KPiA+ID4gQWNr
-ZWQtYnk6IFJvYiBIZXJyaW5nIDxyb2JoQGtlcm5lbC5vcmc+DQo+ID4gPiAtLS0NCj4gPiANCj4g
-PiBBcHBsaWVkIHRvIGNsay1uZXh0DQo+ID4gDQo+IA0KPiBUaGlzIHdpbGwgY29uZmxpY3QgaW4g
-bGludXgtbmV4dCBhcyB0aGUgYmluZGluZyB3YXMgYWxyZWFkeSBjb252ZXJ0ZWQNCj4gdG8geWFt
-bC4gU2VlDQo+IA0KPiANCmh0dHBzOi8vdXJsZGVmZW5zZS5jb20vdjMvX19odHRwczovL2dpdC5r
-ZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9uZXh0L2xpbnV4LW5leHQuZ2l0L2Nv
-bW1pdC9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvYXJtL21lZGlhdGVrL21lZGlh
-dGVrLG1tc3lzLnlhbWw/aWQ9NjNlMTEyNWU2YmI4ZWFlM2NkMjAyOTJmNmExMGVlNDIxZGQ1NzRh
-ZV9fOyEhQ1RSTktBOXdNZzBBUmJ3ITFsOUl5dXp6eWRVSm1HYUVSUExjYUwycFNkemJ1QlN0TVI0
-X2pxVzFhVnlWd0JHZFVVX2cyMmp5RGhxYkNseDREYU5UJA0KPiAgDQo+IA0KPiBUaGFua3MsDQo+
-ICAgRW5yaWMNCj4gDQoNCkkgd2lsbCByZXNlbmQgbW1zeXMgYmluZGluZyBkb2N1bWVudCBzaW5n
-bHkgYmFzZWQgb24gWzFdLg0KDQpbMV0gDQpodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3By
-b2plY3QvbGludXgtbWVkaWF0ZWsvbGlzdC8/c2VyaWVzPTQ4NTE2NQ0KDQoNCkJlc3QgUmVnYXJk
-cywNCkNodW4tSmllDQoNCj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXw0KPiA+IExpbnV4LW1lZGlhdGVrIG1haWxpbmcgbGlzdA0KPiA+IExpbnV4LW1l
-ZGlhdGVrQGxpc3RzLmluZnJhZGVhZC5vcmcNCj4gPiANCmh0dHBzOi8vdXJsZGVmZW5zZS5jb20v
-djMvX19odHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xpbnV4LW1l
-ZGlhdGVrX187ISFDVFJOS0E5d01nMEFSYnchMWw5SXl1enp5ZFVKbUdhRVJQTGNhTDJwU2R6YnVC
-U3RNUjRfanFXMWFWeVZ3QkdkVVVfZzIyanlEaHFiQ3BLWWxxNkkkDQo+ID4gIA0K
+Qualcomm clock controller code (and most probably other drivers) would
+benefit from having devres helpers for pm_runtime_enable() and
+pm_clk_create(). Add those two helpers.
+
+Modify Qualcomm clock controller code to use new helpers and separate
+common pm code into common.c.
+
+----------------------------------------------------------------
+Dmitry Baryshkov (5):
+      PM: runtime: add devm_pm_runtime_enable helper
+      PM: clk: add devm_pm_clk_create helper
+      clk: qcom: use devm_pm_runtime_enable and devm_pm_clk_create
+      clk: qcom: use common code for qcom_cc_probe_by_index
+      clk: qcom: move pm_clk functionality into common code
+
+ drivers/base/power/clock_ops.c        | 17 +++++++++++
+ drivers/base/power/runtime.c          | 17 +++++++++++
+ drivers/clk/qcom/camcc-sc7180.c       | 39 +++++++++----------------
+ drivers/clk/qcom/common.c             | 55 ++++++++++++++++++++++++++++-------
+ drivers/clk/qcom/common.h             | 17 +++++++++++
+ drivers/clk/qcom/lpass-gfm-sm8250.c   | 21 ++++++-------
+ drivers/clk/qcom/lpasscorecc-sc7180.c | 55 +++++++++--------------------------
+ drivers/clk/qcom/mss-sc7180.c         | 45 ++++++----------------------
+ drivers/clk/qcom/q6sstop-qcs404.c     | 40 +++++++------------------
+ drivers/clk/qcom/turingcc-qcs404.c    | 45 ++++++----------------------
+ include/linux/pm_clock.h              |  5 ++++
+ include/linux/pm_runtime.h            |  4 +++
+ 12 files changed, 169 insertions(+), 191 deletions(-)
+
 
