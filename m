@@ -2,93 +2,94 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 262363DD75B
-	for <lists+linux-clk@lfdr.de>; Mon,  2 Aug 2021 15:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 127023DDB57
+	for <lists+linux-clk@lfdr.de>; Mon,  2 Aug 2021 16:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234039AbhHBNkH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 2 Aug 2021 09:40:07 -0400
-Received: from mail-il1-f179.google.com ([209.85.166.179]:43686 "EHLO
-        mail-il1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234032AbhHBNkF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 2 Aug 2021 09:40:05 -0400
-Received: by mail-il1-f179.google.com with SMTP id x7so13111533ilh.10;
-        Mon, 02 Aug 2021 06:39:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=TENNApnA3pRK87RRsfp5wpxG2YcnGhsJlA20WbVifLk=;
-        b=HswowOqsvG5bejucUm8i5rR1YCKkLAOALcRD/UyxWYWC0C+qwwrScFgG6BjiLmdR3X
-         j58yRYfI78iLnIRZbZoZbil39ORVlTz2qKWdzb2NKiJIF4jFMwmSF0Pa13/XVFtZHLSX
-         X67h7TrjzEMB7AwuK4RM4VqIHClHiUnLVCA9MWxPA/LTNuIL/UQxCgt4exyru4gvEMbS
-         j+KiRm6wHq+c6xQcWYBgxd+mWxL3YeNSoUwnZD+Q18wLMMJeDceHMH5eBZp2HMG+3gcs
-         td29jC0BqQVseq0WodkearWjjZY2YYhUGdLWHDrUDHCkfT6j+z94zB5ui3p+2h6KeBrp
-         6Tmw==
-X-Gm-Message-State: AOAM533mnS140ohCI+HTaPtFd2mzKlwRs4ENUJv9EO0CstVDPCeePr90
-        Wf5aHIWZmnnDrshaApxPFw==
-X-Google-Smtp-Source: ABdhPJzfosP56bJdNxD4Ijzp2ZlTM+40hrVsN+FY9mSl/e1GMizabh/TW6EXI++5V3KCEafHRE7mkw==
-X-Received: by 2002:a05:6e02:1bcc:: with SMTP id x12mr1141093ilv.275.1627911594639;
-        Mon, 02 Aug 2021 06:39:54 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id q7sm7459028iow.12.2021.08.02.06.39.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Aug 2021 06:39:54 -0700 (PDT)
-Received: (nullmailer pid 918766 invoked by uid 1000);
-        Mon, 02 Aug 2021 13:39:43 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Iskren Chernev <iskren.chernev@gmail.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
+        id S234313AbhHBOqC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 2 Aug 2021 10:46:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48720 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234199AbhHBOqC (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 2 Aug 2021 10:46:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6D3D560F58;
+        Mon,  2 Aug 2021 14:45:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627915552;
+        bh=sJP3kplkYoVIAiDtyEQqNFB2bgle50xC0DmUOkFui78=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SoeHworG2RS8PpgNkijH3TP21diEkcUYY5UYpkL+k1kahjno/E53sU1kub3EByT81
+         HG128DxfQh+asQruzHZW18TPgSTUVD3JkjK1WqbHkf3PFLVvbOtwbw7+/PtEOS2SXI
+         jTI7ECxuAvwpydR1uS6jbN2fONOB5OO5d/heAY1tiseNvMAVIC60CeCgdyGmUeMxIk
+         zLki39bw57/uLvgRttCeuCgOXyo1Ts/fGbF9+QPU2oncmYpKkj7VsSxZwZxXk1b/uQ
+         B+eZ0uzOSzshiUSC49gwkj8/gn86ACxhTEq/OkU22UshnFECOhcJ5g3hrkLqjxBbh2
+         H2g6p/HXuTn4w==
+Received: by pali.im (Postfix)
+        id BBD95B98; Mon,  2 Aug 2021 16:45:50 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-In-Reply-To: <20210801103448.3329333-2-iskren.chernev@gmail.com>
-References: <20210801103448.3329333-1-iskren.chernev@gmail.com> <20210801103448.3329333-2-iskren.chernev@gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: clk: qcom: gcc-sm6115: Document SM6115 GCC
-Date:   Mon, 02 Aug 2021 07:39:43 -0600
-Message-Id: <1627911583.087441.918765.nullmailer@robh.at.kernel.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Vladimir Vid <vladimir.vid@sartura.hr>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v4 0/6] serial: mvebu-uart: Support for higher baudrates
+Date:   Mon,  2 Aug 2021 16:45:23 +0200
+Message-Id: <20210802144529.1520-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210624224909.6350-1-pali@kernel.org>
+References: <20210624224909.6350-1-pali@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sun, 01 Aug 2021 13:34:47 +0300, Iskren Chernev wrote:
-> Add device tree bindings for global clock controller on SM6115 and
-> SM4250 SoCs (pin and software compatible).
-> 
-> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
-> ---
->  .../bindings/clock/qcom,gcc-sm6115.yaml       |  74 +++++++
->  include/dt-bindings/clock/qcom,gcc-sm6115.h   | 201 ++++++++++++++++++
->  2 files changed, 275 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sm6115.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,gcc-sm6115.h
-> 
+This patch series add support for baudrates higher than 230400 on
+Marvell Armada 37xx boards.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Please review these patches as they touch both Device Tree bindings and
+mvebu-uart.c driver.
 
-yamllint warnings/errors:
+Changes in v4:
+* converted armada3700-uart-clock documentation to YAML
+* split documentation changes into two commits:
+  - first which adds clock documentation
+  - second which updates UART documentation
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc-sm6115.example.dt.yaml: clock-controller@1400000: clocks: [[4294967295, 0], [4294967295]] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc-sm6115.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc-sm6115.example.dt.yaml: clock-controller@1400000: clock-names: ['bi_tcxo', 'sleep_clk'] is too short
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc-sm6115.yaml
-\ndoc reference errors (make refcheckdocs):
+Changes in v3:
+v3 is rebased on top of Linus master branch and all already applied patches
+were dropped. There are no changes in patches itself since v2.
 
-See https://patchwork.ozlabs.org/patch/1512028
+Pali Rohár (6):
+  math64: New DIV_U64_ROUND_CLOSEST helper
+  serial: mvebu-uart: implement UART clock driver for configuring UART
+    base clock
+  dt-bindings: mvebu-uart: document DT bindings for
+    marvell,armada-3700-uart-clock
+  dt-bindings: mvebu-uart: update information about UART clock
+  arm64: dts: marvell: armada-37xx: add device node for UART clock and
+    use it
+  serial: mvebu-uart: implement support for baudrates higher than 230400
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+ .../bindings/clock/armada3700-uart-clock.yaml |  49 ++
+ .../devicetree/bindings/serial/mvebu-uart.txt |   9 +-
+ .../arm64/boot/dts/marvell/armada-3720-db.dts |   4 +
+ .../dts/marvell/armada-3720-espressobin.dtsi  |   4 +
+ .../dts/marvell/armada-3720-turris-mox.dts    |   4 +
+ .../boot/dts/marvell/armada-3720-uDPU.dts     |   4 +
+ arch/arm64/boot/dts/marvell/armada-37xx.dtsi  |  15 +-
+ drivers/tty/serial/Kconfig                    |   1 +
+ drivers/tty/serial/mvebu-uart.c               | 592 +++++++++++++++++-
+ include/linux/math64.h                        |  13 +
+ 10 files changed, 674 insertions(+), 21 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/armada3700-uart-clock.yaml
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+-- 
+2.20.1
 
