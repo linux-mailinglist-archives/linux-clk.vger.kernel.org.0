@@ -2,74 +2,100 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DDA93DCF40
-	for <lists+linux-clk@lfdr.de>; Mon,  2 Aug 2021 06:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D3B3DD183
+	for <lists+linux-clk@lfdr.de>; Mon,  2 Aug 2021 09:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbhHBEYN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 2 Aug 2021 00:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
+        id S232537AbhHBHrx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 2 Aug 2021 03:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbhHBEYM (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 2 Aug 2021 00:24:12 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8218C0617A2
-        for <linux-clk@vger.kernel.org>; Sun,  1 Aug 2021 21:23:58 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id ec13so22149616edb.0
-        for <linux-clk@vger.kernel.org>; Sun, 01 Aug 2021 21:23:58 -0700 (PDT)
+        with ESMTP id S232520AbhHBHrx (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 2 Aug 2021 03:47:53 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34423C0613D5
+        for <linux-clk@vger.kernel.org>; Mon,  2 Aug 2021 00:47:44 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id j2so20275914wrx.9
+        for <linux-clk@vger.kernel.org>; Mon, 02 Aug 2021 00:47:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=czeOQMYeZau4ejaBbgDdCuklRCyHoHRlo6xUfJcAj3bciaGtFBitiUib5a5MwOumE9
-         w7/Jn7bBNsLcP1+CHZ7cIXH8h+QOe2ioJtROZD2bqhS/lqEvaNcrldVE+LZBhK9CNKw9
-         GasUZeZx/Kcocc9jX4O3VqyeOrpbJXFle0t9OXPFTLvjA0ffc0WpqgkYu8CQSXrFRLzD
-         Yc8UR7mKpLCqpwn4ZFojN5x09EwrnOTDpyVyuL9REZStwkguR4uL/4srDE+vjWW4JCu8
-         Sy5z9ei3l3c7g9TC5s6E8Wj1tuL0hGAP5lkkVvlHQCNnMoccEAC8Z+koQ2tbRnEruEUY
-         O8Aw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=iUhecmtOEFBOc/n8Ox/w9VyUCPFMQi2/vzz/bstOM4g=;
+        b=ixzKpGkfHnM1TJkRFBHUhQdH/W4ackddH1I+yYxn6v7vZE1JIiGfQwWrRWv0uEg990
+         teA+I9WXVILBiVqIHA5fSk3QPncnNuNdCqbRGcSMqMCMfyQudam2r3GtIkcZxXk8jT7b
+         MNTkYQjQBs8aDMO0xSAy1X6xGkgWYik0x1eVoa0UkftQkVjn6klKNp04f4vthyUwnK7P
+         XxL5umd+7jlis8eDau67azw/ljb7Q48NqKqEolijNF4UAqwPv9uU7P+ZldQV+X/3HAgg
+         i36flnHC+WM1vL04Ri/jfqDUCMcDS93n7ICsvfsV8w4zmv6V0ztwds/m5rNPs5u1VuhI
+         xVEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=JbMtpdZj7sghISs4e5T5yryQDvERMuYalazmdQP0RcA=;
-        b=kAGxp45ityxAnb9OwetteDwMPgFBFEp+oqVb2OM2ZE8rMddWtCTmtD/drgQuKPrzpm
-         8GAGpcwHxrzp+3JnDfecDzoxReswXQhTYriaF+FuBcVhz4N8UFHO+r3P9/8/waJp44uF
-         Ew8Ys83TmxeF0WYpaLt8EdljUYjx08uXflkKQFR6kgveWMqlsZQtILtEkvmrPu1oXv+y
-         sI8ZcUcedOI/n2L29C9y55ETUBPF7VN1pzW4i89HnD+qklQo3BdQx4BuoGcYa1RqNM3s
-         M4LWM68ku2UQvEDXV5jh+s5NjJGNXieDsA66qItKtmqlDSWfm9fXPTHXzFLYZG5Rg5E2
-         i7JA==
-X-Gm-Message-State: AOAM5303p6SXiIg4EBApmP2Wh5WPIouwfque3MhdocVjhepv9R5fh3Pu
-        hN21hrBX7UcTj7DFwYC3LiAzKUqDj7h8E42mEI0=
-X-Google-Smtp-Source: ABdhPJxItSnYdNOJr/eCcDJG9Ed81FEJCtux30e3VMRN30hf/TzQyuXNRWDf+H2IgaMscJY+xnmH/x8e0HLuRnwx6WI=
-X-Received: by 2002:a50:d70a:: with SMTP id t10mr16749153edi.253.1627878237019;
- Sun, 01 Aug 2021 21:23:57 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=iUhecmtOEFBOc/n8Ox/w9VyUCPFMQi2/vzz/bstOM4g=;
+        b=l1v7ExQ8msEtz41G52zhnrxnz5xAN86L4V8E2/TeKCia87i3FT0Wt3uN5D8EL+pf6M
+         O7UHl+I0cGJe285itRiVJSrDAS89klOQsCuH9aGSRr0BIVRubcvLs0Edee6GLzyqeVAH
+         NCF73bRjEwtbQVx5t6i96sTekwKgkQ9uNbpr3tTPjZcVJW3Y90M+hjs0wXmOBJWODLp6
+         ap0Jo1RAi2UtkBTb6DUr9ygxB/a8jS2nIFtToGy3u9L1HsqoxlYqfEJNRetpHBOG90sN
+         DsjY3Psn1j1hugKWLtEVVCmsHxoghyEaXvsijRFL3BaFpYMHmav7EvAuaRzVTWqyvKmz
+         qpkA==
+X-Gm-Message-State: AOAM530LELi3ABALyzCzuIETMTWx2kjV5TnlMTFYTXAlSumLoVokt2Dx
+        Jd7SYHBP0DuxBl47uskBe+SadA==
+X-Google-Smtp-Source: ABdhPJw971iLzA6b1H5TxMDnRNFA5vYa4ieLVAtaXNg8xx2Cc3YPcHZRCRQrUKzvmPuLhmWy2FqsXA==
+X-Received: by 2002:a05:6000:12c3:: with SMTP id l3mr15805272wrx.314.1627890462858;
+        Mon, 02 Aug 2021 00:47:42 -0700 (PDT)
+Received: from google.com ([109.180.115.228])
+        by smtp.gmail.com with ESMTPSA id q17sm10214086wre.3.2021.08.02.00.47.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Aug 2021 00:47:42 -0700 (PDT)
+Date:   Mon, 2 Aug 2021 08:47:40 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        phone-devel@vger.kernel.org
+Subject: Re: [PATCH 2/2] mfd: db8500-prcmu: Handle missing FW variant
+Message-ID: <YQejHNP1AzFHZ6gK@google.com>
+References: <20210801233314.3150754-1-linus.walleij@linaro.org>
+ <20210801233314.3150754-2-linus.walleij@linaro.org>
 MIME-Version: 1.0
-Received: by 2002:a17:907:d0b:0:0:0:0 with HTTP; Sun, 1 Aug 2021 21:23:56
- -0700 (PDT)
-Reply-To: ablahikazabl67@gmail.com
-From:   Abdoulahi Kazim <drwilliamcuthbert@gmail.com>
-Date:   Mon, 2 Aug 2021 05:23:56 +0100
-Message-ID: <CAKwBCXvLzgfEHCKMKUxki4k1yYap9oH1ox=muoK9koBZXish5g@mail.gmail.com>
-Subject: More Authentic Information
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210801233314.3150754-2-linus.walleij@linaro.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On Mon, 02 Aug 2021, Linus Walleij wrote:
+
+> There was an "unknown" firmware variant turning up in the wild
+> causing problems in the clock driver. Add this missing variant
+> and clarify that varian 11 and 15 are Samsung variants, as this
+> is now very well known from released products.
+> 
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: phone-devel@vger.kernel.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> Clock maintainers: could you please ACK this so Lee can take
+> this into the MFD tree? The chances of merge collisions are
+> zero, this code changes very seldom.
+> ---
+>  drivers/clk/ux500/u8500_of_clk.c | 3 ++-
+
+>  drivers/mfd/db8500-prcmu.c       | 6 ++++--
+>  include/linux/mfd/dbx500-prcmu.h | 3 ++-
+
+Acked-by: Lee Jones <lee.jones@linaro.org>
+
+>  3 files changed, 8 insertions(+), 4 deletions(-)
+
 -- 
-Dear Partner,
-
-I am soliciting your partnership to relocate $12.5 Million to your
-country for investment on my behalf and you will be entitled to 30% of
-the sum once the transaction is successful made.
-
-Please indicate your genuine interest if you are capable so that i
-will send you the authentic details and documents of the transaction
-in awareness with some of my fellow Directors in the bank.
-
-If you are interested, here is my private Email address:
-(ablahikazabl67@gmail.com)
-For more authentic and legit information.
-
-
-Regards :  Abdoulahi Kazim
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
