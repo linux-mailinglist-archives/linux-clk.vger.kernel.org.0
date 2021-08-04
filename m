@@ -2,86 +2,140 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2855A3DFD39
-	for <lists+linux-clk@lfdr.de>; Wed,  4 Aug 2021 10:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0E23DFDE4
+	for <lists+linux-clk@lfdr.de>; Wed,  4 Aug 2021 11:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235701AbhHDIrc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 4 Aug 2021 04:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235690AbhHDIrb (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 Aug 2021 04:47:31 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA86C061798
-        for <linux-clk@vger.kernel.org>; Wed,  4 Aug 2021 01:47:19 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id e5so2263261pld.6
-        for <linux-clk@vger.kernel.org>; Wed, 04 Aug 2021 01:47:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=InXh0ZewDnVE3/EXE/5G6vr9J7FYgjjlp8cmjVMqfuE=;
-        b=Fz917nsuQs2+mXnhOwh0eg0lyWwiqrXaG43Ph5sz6S723Hee3bPd51BqJZTVBr+7yD
-         UFUSEv2ukB7t3YueyEaPXTLQ+HTq/mQgTiNgXKGN+98w3deh4LnWEHIlFTk1Xr8WHkbc
-         xGu24cNwKBD3nTRzTbWzqqTS0b+99HADJPeORXk8lY9jzk8DZo03lMsljcNID5eANEoz
-         LXP0gglJDYae9YeM2cbxYByeJj1o6A3SPKaEc1YvARCCem8DffQv3QDNmBDDunTy6ci1
-         p2OIqloqZfPSXpKZQxKPiPwAds/dnfVRYvBANfuSPtuWLpa7koNTKunilpbzv6mYvcD4
-         wv8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=InXh0ZewDnVE3/EXE/5G6vr9J7FYgjjlp8cmjVMqfuE=;
-        b=KsUSN1B2nor0cw2UeA7Y61/NQRUYUTgwStgA+nfkhl21VdfA8jEuFt+7eVCEzh7djH
-         E1/CXBt6XODfUimEpkYC4SzWXL7cxjknryTk3lQp3ileiaWbpwVyvpSnFNah798qKeGu
-         JGdZqeY1lWOsPPzW+RC6tdfp59saBpPncYgtK5QrnnITkNukxwyP/5kyjxrsHe/MKgCg
-         HjN+EAJDQc+D5pguO3Azi9Xd/2TmZKYMFXsJ8Vp9gPxuOh2eurmuWSmYX0z42O0AHQbj
-         fnUvGi5SjaPyVnEo4XPqThjEbJHXrKSUKjDpyROL7ZA25OSKJtVelVirJksJaKPJD5kN
-         M1XQ==
-X-Gm-Message-State: AOAM533hjHIhTSLsf6dUFIn7zA0KLIGO0tuJ1BNjBKWLSkOwaxI4Nvxg
-        Xn5cj9oE1JlqXWf6fSSXQwIIYQ==
-X-Google-Smtp-Source: ABdhPJwEsFY1wRk2/RgSw7iviymykJUOEEzK4eAELGehCHzGMl7FI1bYiaYze6O0ALeZtuQCryLOig==
-X-Received: by 2002:a65:5846:: with SMTP id s6mr211661pgr.162.1628066839309;
-        Wed, 04 Aug 2021 01:47:19 -0700 (PDT)
-Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id c2sm1242741pfi.80.2021.08.04.01.47.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 04 Aug 2021 01:47:19 -0700 (PDT)
-Date:   Wed, 4 Aug 2021 16:47:13 +0800
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sivaprakash Murugesan <sivaprak@codeaurora.org>,
-        Benjamin Li <benl@squareup.com>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Add MSM8939 APCS/A53PLL clock support
-Message-ID: <20210804084712.GA31145@dragon>
-References: <20210704024032.11559-1-shawn.guo@linaro.org>
+        id S236466AbhHDJXS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 4 Aug 2021 05:23:18 -0400
+Received: from mo-csw1514.securemx.jp ([210.130.202.153]:49114 "EHLO
+        mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236335AbhHDJXR (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 Aug 2021 05:23:17 -0400
+Received: by mo-csw.securemx.jp (mx-mo-csw1514) id 1749MnUk003666; Wed, 4 Aug 2021 18:22:49 +0900
+X-Iguazu-Qid: 34tr8rsmplAFb8DW5K
+X-Iguazu-QSIG: v=2; s=0; t=1628068969; q=34tr8rsmplAFb8DW5K; m=3WCU0AJIjs6jEOfrFboTTCoKRWn+QnzA6S4cxWAXIlQ=
+Received: from imx12-a.toshiba.co.jp (imx12-a.toshiba.co.jp [61.202.160.135])
+        by relay.securemx.jp (mx-mr1510) id 1749MlDJ008934
+        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 4 Aug 2021 18:22:48 +0900
+Received: from enc02.toshiba.co.jp (enc02.toshiba.co.jp [61.202.160.51])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by imx12-a.toshiba.co.jp (Postfix) with ESMTPS id 88195100114;
+        Wed,  4 Aug 2021 18:22:47 +0900 (JST)
+Received: from hop101.toshiba.co.jp ([133.199.85.107])
+        by enc02.toshiba.co.jp  with ESMTP id 1749MlD7014994;
+        Wed, 4 Aug 2021 18:22:47 +0900
+From:   Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        punit1.agrawal@toshiba.co.jp, yuji2.ishikawa@toshiba.co.jp,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Subject: [PATCH v4 0/4] clk: visconti: Add support common clock driver and reset driver
+Date:   Wed,  4 Aug 2021 18:22:40 +0900
+X-TSB-HOP: ON
+Message-Id: <20210804092244.390376-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210704024032.11559-1-shawn.guo@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sun, Jul 04, 2021 at 10:40:28AM +0800, Shawn Guo wrote:
-> This series adds MSM8939 APCS/A53PLL clock support.  Most outstanding
-> thing about MSM8939 is that it integrates 3 APCS instances, for Cluster0
-> (little cores), Cluster1 (big cores) and CCI (Cache Coherent Interconnect)
-> respectively.
-> 
-> Changes for v2:
-> - Reword the commit log of first patch as suggested by Stephen.
-> - Drop 'clock-output-names' bindings and use @unit-address to get unique
->   a53pll/mux clock names.
-> - Use 'operating-points-v2' bindings to pass frequency table via OPP, so
->   that we can use one single compatible for all 3 MSM8939 a53pll.
+Hi,
 
-Hi Stephen,
+This series is PLL, clock and reset driver for Toshiba's ARM SoC, Visconti[0].
+Since the clock driver and reset driver are provided as one function, they are
+provided in cooperation with the clock driver.
 
-Any comments on this version?
+This provides DT binding documentation, device driver, MAINTAINER files.
 
-Shawn
+Best regards,
+  Nobuhiro
+
+[0]:
+https://toshiba.semicon-storage.com/ap-en/semiconductor/product/image-recognition-processors-visconti.html
+
+  clk: visconti: Add support common clock driver and reset driver
+    v3 -> v4:
+       - Remove osc2 clock's code. Move to DT.
+    v2 -> v3:
+       - Fix return value in visconti_register_pll().
+       - Remove initialization of flags used by spin_lock_irqsave().
+       - - Change function name from *7708* to *770x*.
+       - Fix some coding style.
+    v1 -> v2:
+       - Fix warning with W=1
+
+  dt-bindings: clock: Add DT bindings for PLL of Toshiba Visconti TMPV7708 SoC
+    v3 -> v4:
+       - Fix node name to clock-controller.
+       - Remove osc2-clk-frequency, and this defines to DT as fixed-clock.
+       - Add clocks.
+    v2 -> v3:
+       - Change file name.
+    v1 -> v2:
+       - Update subject.
+
+  dt-bindings: clock: Add DT bindings for SMU of Toshiba Visconti TMPV7708 SoC
+    v3 -> v4:
+      - Move reset dt-binding header file.
+      - Move clock dt-binding header file.
+      - Change dt-binding header's License to 'GPL-2.0-only OR BSD-2-Clause'
+      - Fix node name to clock-controller.
+    v2 -> v3:
+       - Change file name.
+    v1 -> v2:
+       - Update subject.
+
+  MAINTAINERS: Add entries for Toshiba Visconti PLL and clock controller
+    v3 -> v4:
+       - no update.
+    v2 -> v3:
+       - Change path of DT binding files.
+    v1 -> v2:
+       - no update.
+
+Nobuhiro Iwamatsu (4):
+  dt-bindings: clock: Add DT bindings for PLL of Toshiba Visconti TMPV770x SoC
+  dt-bindings: clock: Add DT bindings for SMU of Toshiba Visconti TMPV770x SoC
+  clk: visconti: Add support common clock driver and reset driver
+  MAINTAINERS: Add entries for Toshiba Visconti PLL and clock controller
+
+ .../clock/toshiba,tmpv770x-pipllct.yaml       |  57 +++
+ .../clock/toshiba,tmpv770x-pismu.yaml         |  50 +++
+ MAINTAINERS                                   |   3 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/visconti/Makefile                 |   5 +
+ drivers/clk/visconti/clkc-tmpv770x.c          | 232 +++++++++++
+ drivers/clk/visconti/clkc.c                   | 220 +++++++++++
+ drivers/clk/visconti/clkc.h                   |  75 ++++
+ drivers/clk/visconti/pll-tmpv770x.c           |  85 ++++
+ drivers/clk/visconti/pll.c                    | 369 ++++++++++++++++++
+ drivers/clk/visconti/pll.h                    |  63 +++
+ drivers/clk/visconti/reset.c                  | 111 ++++++
+ drivers/clk/visconti/reset.h                  |  35 ++
+ include/dt-bindings/clock/toshiba,tmpv770x.h  | 181 +++++++++
+ include/dt-bindings/reset/toshiba,tmpv770x.h  |  41 ++
+ 15 files changed, 1528 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/toshiba,tmpv770x-pipllct.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/toshiba,tmpv770x-pismu.yaml
+ create mode 100644 drivers/clk/visconti/Makefile
+ create mode 100644 drivers/clk/visconti/clkc-tmpv770x.c
+ create mode 100644 drivers/clk/visconti/clkc.c
+ create mode 100644 drivers/clk/visconti/clkc.h
+ create mode 100644 drivers/clk/visconti/pll-tmpv770x.c
+ create mode 100644 drivers/clk/visconti/pll.c
+ create mode 100644 drivers/clk/visconti/pll.h
+ create mode 100644 drivers/clk/visconti/reset.c
+ create mode 100644 drivers/clk/visconti/reset.h
+ create mode 100644 include/dt-bindings/clock/toshiba,tmpv770x.h
+ create mode 100644 include/dt-bindings/reset/toshiba,tmpv770x.h
+
+-- 
+2.32.0
+
+
