@@ -2,120 +2,70 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE01F3E2B54
-	for <lists+linux-clk@lfdr.de>; Fri,  6 Aug 2021 15:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFE43E2C27
+	for <lists+linux-clk@lfdr.de>; Fri,  6 Aug 2021 16:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344019AbhHFN2T (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 6 Aug 2021 09:28:19 -0400
-Received: from mail-oo1-f45.google.com ([209.85.161.45]:38850 "EHLO
-        mail-oo1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244222AbhHFN2T (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 6 Aug 2021 09:28:19 -0400
-Received: by mail-oo1-f45.google.com with SMTP id y23-20020a4a62570000b029028727ffa408so227737oog.5;
-        Fri, 06 Aug 2021 06:28:03 -0700 (PDT)
+        id S236820AbhHFOLE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 6 Aug 2021 10:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237142AbhHFOLB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 6 Aug 2021 10:11:01 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4699CC0617A2
+        for <linux-clk@vger.kernel.org>; Fri,  6 Aug 2021 07:10:43 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id y34so18153214lfa.8
+        for <linux-clk@vger.kernel.org>; Fri, 06 Aug 2021 07:10:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/oMubRmlLM5EZ/UdY6Fj3wsfS2kyoMzN9ASXgZ3xneY=;
+        b=q3xyYt1HrVQnyL1KZndhIFKim0Z6RZXWCajZa6+jKaUt/xPBmWrU2b2TpwIqgxHoY3
+         6sUeXJPoUC3zz+xqx5Y/7bh16ON7BcCcP2liy5jl/yv+hyxVGmxIcBCDJXoapuOO0RIl
+         REN9Zv+ClhtVVEMybVDTEUTnyt+YraWqvgNO4CiPEvSNbjJp0ymaQzc4FwPALfOqM4La
+         f+KzIMXFoGuca5XlZdCXXnnqi+xUiOGsem/cV9JUjNFonSZWOzEGazowyEr2eG3dp5DR
+         pLBa7cN2FmOkeXw/dSFAaB7k29Eu0Yivashc8iQbXHlro4ZoI7aiyRP21+G8wGDlMmu6
+         HPDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EwaYK5QiZh6IiR8aTLx1BO+CiD1SZPRY4ebE2HYvd5w=;
-        b=rXw6Xn6KVZk1RG46K0OljhAN5g0F9XEQRw4NBzN1xaohumgOV53BgZaoLbuCAQl5NY
-         nN1YW/Q8YUDK/m+UxkfTWs/WbJFLzbMh0H2cBgIVczWc6SvGk61Buo71/9EzH1Qo2A6G
-         g/qQGcDjsMU4U0qKI5awhLw8mf341L0ifaXPh+KUhKQ/Ou1tpanBtFOU03NMv8nY9h7s
-         pb4tjFJ5ww8CcMLdk3hkoIZ7vk3LjdSdYbfNCGNbgb3lB4nXYTpyDICR8zJoVs0UC051
-         Ul5USHh9SUCLLVGd3gxJi/2Ow6fpmX8zIVVtyVBnXVYtAGgMKa7aMvoB0rnjShX5FFfv
-         YBYw==
-X-Gm-Message-State: AOAM533nu467rQlEQvGVdgi69q/ioKmXUCMxMrvYbYSdXhzzrDIEHLXd
-        K3GTs+YqfWCrec7TK3m/iPql4qgTgr3KLqtCOh8=
-X-Google-Smtp-Source: ABdhPJw8ttVHgV+Oa1vdqUFxeArJcAXGBlUr5m9E2BY5sUKwfIHc7iA/RV3QbuZaxEP4hiE/yJfn+K/21JgqJ/gxR0c=
-X-Received: by 2002:a4a:5dc6:: with SMTP id w189mr6803193ooa.1.1628256482887;
- Fri, 06 Aug 2021 06:28:02 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/oMubRmlLM5EZ/UdY6Fj3wsfS2kyoMzN9ASXgZ3xneY=;
+        b=Mm/4Vl4JvjCS2ZscGp4ErY1oKrT9PuFvr3NW18l0bxEhYzT8Hf7K1kIO/zHr6cyT1S
+         Bgv7qCDLWC8yJI4BV+3WZEtzzGDv6hrprFCODsYNqC9bdc27ewAUJI/1ODnj2Ry/C45a
+         HZLLtYwLfAh4IDtvCWx95V5NPr5HYPzPVqNMHhN5CKsD7MIGK1YHr89rUIJjFpeOIS7x
+         FunRvl9ySil0UQ8zpNA1refWVNXcFI7fHMyqZhDVxLCEFE+4YQEiRZmpGp9KcYPDMHUI
+         6UU1npuIOCI/oKqNDOz85EnoGvwdyzaK5ghAQY8Y9EOyBjN8qVlawc8yRPi+iQqWgKSa
+         gMLQ==
+X-Gm-Message-State: AOAM533geP6+qV5tN35ZsYahbvMZjOEBhC4JB3FXeqTuOoJYyySfsgx/
+        8FvEbJTST1W5lKL+ruiUqqZHMZOm5GqDXr0Nn7eRg0op66hXLsZsxw==
+X-Google-Smtp-Source: ABdhPJx229jhz+o+nQwdgIkoqR5HwLh3S4+JGHt0eG+5fB4X3WTmNmInTj1ZpuXDIVm9CYEhhFZzLyuZYbLrplGdX6A=
+X-Received: by 2002:a05:6402:3094:: with SMTP id de20mr13526197edb.272.1628259031175;
+ Fri, 06 Aug 2021 07:10:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210731195034.979084-1-dmitry.baryshkov@linaro.org>
- <20210731195034.979084-2-dmitry.baryshkov@linaro.org> <CAJZ5v0gWD8WSQU4oPMSdZFM9VpNpc4TAFJ=_wQLB60XFxw-Ciw@mail.gmail.com>
- <CAA8EJpq5DB2a=C+eo_S7QgVMzpm=mvUcC4DkWwGoKQ1g8trmgA@mail.gmail.com>
-In-Reply-To: <CAA8EJpq5DB2a=C+eo_S7QgVMzpm=mvUcC4DkWwGoKQ1g8trmgA@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 6 Aug 2021 15:27:51 +0200
-Message-ID: <CAJZ5v0gOZkXp3X3hNTAtyuFoBA2xUMX274qv=yaj0jYD8XRgBw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] PM: runtime: add devm_pm_runtime_enable helper
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Received: by 2002:a54:26cf:0:0:0:0:0 with HTTP; Fri, 6 Aug 2021 07:10:30 -0700 (PDT)
+Reply-To: mrmaxwellwatford@gmail.com
+From:   Maxwell Watford <orchowskiruthi@gmail.com>
+Date:   Fri, 6 Aug 2021 14:10:30 +0000
+Message-ID: <CA+q9Q6OJB6Z0+y=5_3MBDNGkAUG9rVxg7bZVma38uDOvJ+sOGw@mail.gmail.com>
+Subject: i need your reply
+To:     orchowskiruthi@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Aug 4, 2021 at 11:03 PM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Wed, 4 Aug 2021 at 21:07, Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Sat, Jul 31, 2021 at 9:50 PM Dmitry Baryshkov
-> > <dmitry.baryshkov@linaro.org> wrote:
-> > >
-> > > A typical code pattern for pm_runtime_enable() call is to call it in the
-> > > _probe function and to call pm_runtime_disable() both from _probe error
-> > > path and from _remove function. For some drivers the whole remove
-> > > function would consist of the call to pm_remove_disable().
-> > >
-> > > Add helper function to replace this bolierplate piece of code. Calling
-> > > devm_pm_runtime_enable() removes the need for calling
-> > > pm_runtime_disable() both in the probe()'s error path and in the
-> > > remove() function.
-> > >
-> > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > ---
-> > >  drivers/base/power/runtime.c | 17 +++++++++++++++++
-> > >  include/linux/pm_runtime.h   |  4 ++++
-> > >  2 files changed, 21 insertions(+)
-> > >
-> > > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> > > index 8a66eaf731e4..ec94049442b9 100644
-> > > --- a/drivers/base/power/runtime.c
-> > > +++ b/drivers/base/power/runtime.c
-> > > @@ -1447,6 +1447,23 @@ void pm_runtime_enable(struct device *dev)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(pm_runtime_enable);
-> > >
-> > > +static void pm_runtime_disable_action(void *data)
-> > > +{
-> > > +       pm_runtime_disable(data);
-> > > +}
-> > > +
-> > > +/**
-> > > + * devm_pm_runtime_enable - devres-enabled version of pm_runtime_enable.
-> > > + * @dev: Device to handle.
-> > > + */
-> > > +int devm_pm_runtime_enable(struct device *dev)
-> > > +{
-> > > +       pm_runtime_enable(dev);
-> > > +
-> > > +       return devm_add_action_or_reset(dev, pm_runtime_disable_action, dev);
-> >
-> > When exactly is pm_runtime_disable_action() going to run by this rule?
-> >  When the device goes away or when the driver is unbound from it?
->
-> When the driver is unbound (either because probe() returns an error or
-> because __device_release_driver() is being called).
-> This corresponds to a typical call to pm_runtime_disable() from the
-> probe()'s error path or in the remove() callback.
+Greetings,
 
-OK, so
+We are writing to you from Ecowas Finance Controller Office Lome Togo,
+because we have received a file from the Ministry of Finance Lome-
+Togo, concerning an Inherited Fund bearing your name on it, And after
+our verifications, we found out that the funds belong to you.
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+It has been awarded and I will like to guide you to claim the funds.
+Please contact me at my private email address
+(mrmaxwellwatford@gmail.com) for more information and directive
 
-for the PM-runtime framework changes in this series (patches [1-2/3])
-and please feel free to route them in through whatever tree is most
-suitable (or let me know if you want me to pick them up).
+I am looking forward to your urgent reply,
+Best regards
+Mr Maxwell Watford
