@@ -2,89 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF763E4631
-	for <lists+linux-clk@lfdr.de>; Mon,  9 Aug 2021 15:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FF83E4708
+	for <lists+linux-clk@lfdr.de>; Mon,  9 Aug 2021 16:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235159AbhHINLN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 9 Aug 2021 09:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234207AbhHINLN (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 Aug 2021 09:11:13 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5925CC061798
-        for <linux-clk@vger.kernel.org>; Mon,  9 Aug 2021 06:10:52 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id a4so2201111ilj.12
-        for <linux-clk@vger.kernel.org>; Mon, 09 Aug 2021 06:10:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=7Xq9jb2sUMv3xaNw7Q5Cgt7yCkc3M0xn16Wn4AtIDKI=;
-        b=jlylg0ChOm7Bqigcudc7UV5pOzeOyy73qpe7dRwkvLZASCgxG+YqA/uIP0tFXCQPP7
-         kn46unASBl3ZL+AdOUvIWCllW+a8uXh8jPc2yFlwJRMsSHUOvEAjcS+3NQ+S15vzHaj7
-         uoqdbtLDJf1sYkVNOqHDnaXbFvYqjbH8qW1ISuDnOga8bi8ETLH1tYzO0JDPp7vQEoaP
-         xwSv2QfYO2QzIZUU4mtRQwA39uEaD0pO9klL+84MWaFA1x86vx1+Pc6AeEE8Bro9LUJ6
-         n1s9ooRBkWhLvmbvlKhs7etmC9dhIkPbo0xIPH0dhHU8U/4WEBSeeH68iGPEi3Aq0XG6
-         oUhw==
+        id S233420AbhHIOAq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 9 Aug 2021 10:00:46 -0400
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:52828
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234538AbhHIOAp (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 Aug 2021 10:00:45 -0400
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPS id 92BBF3F34C
+        for <linux-clk@vger.kernel.org>; Mon,  9 Aug 2021 14:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1628517624;
+        bh=PXrJ+BbgGTXejs85MxNsHQpcGJv4nzL8+I3ykkzFz/Y=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=UItA6TtFhztj5GcV5g8jP6Do8rXQoP2xe090xFv9d+pRvdhlN2fH4eOaOKK9gyo5W
+         9mtp1wbjLKnCdZ5uKP7PtODpDDCPC9jvwfWzLc8cXvoywfKnF/esAiq6QuTSxe3e1C
+         ouv83DiPthm3Rq5Calrk0OkFsPW3ca7b04MrYpW7cKLCdCzMYJmlI3ay7JtLyg3HrP
+         uXGsraL8FMV7ojHf7YakFLvfxGsKT1GLIhfBJlplpMUXRbb3dly0GsYamVfm3t3VwM
+         oBkZgYz1NzJOf1Z22folkEQMq5Q7+ITaw6XiYEWdeWuxLb/trelGmIPckejjIkJwkO
+         lwZh/DPKJYsYw==
+Received: by mail-ed1-f71.google.com with SMTP id y22-20020a0564023596b02903bd9452ad5cso8894685edc.20
+        for <linux-clk@vger.kernel.org>; Mon, 09 Aug 2021 07:00:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=7Xq9jb2sUMv3xaNw7Q5Cgt7yCkc3M0xn16Wn4AtIDKI=;
-        b=mBR/7rqvOqaMUMmWXKyzy6cyURtOYq+dwIBFj92OlPV89waWs4TJhkeKdmStS2yI6G
-         fFB93oOdvOlZtYSYfeWAWnPzgBuxeDw+1QgXRu+CpFxGYzOOFJ46KYjGCR/txptL17dg
-         6svgNr89x11We67w2EjFY2h6f/9C6oz7jouY8+Y1btvDeHwJarVFZhRRekrGxGBSsXs3
-         Gv9vDpgO+wTo9ENuPtkkHaKnmMv8Vq85eBMc6jDkfN4PwOoT1CTtCdOPkvNhAVnDUKRZ
-         PYuoZVAELbsC0WJAq86uNFM0AKHuK2U9sgFc2psLOhztYK+B3sLeKDa0rAIwN5B0KCb1
-         7dbA==
-X-Gm-Message-State: AOAM530htev+o3/bdYVVQK7yeuEbOeIAYYVycjLgvSaU9fXqInbPv6mX
-        iJRNzIiRjn2EOIeMfzywXqFCz1nnhdt9luNnnQ==
-X-Google-Smtp-Source: ABdhPJzu2C9U3/vuJ5mLU5+P4INYs7dnpAFXgC2RTOgt7mjgdv2X1uNSuJyrpOX//gn1taZQ74gIh+ynT5N7ptjnIb4=
-X-Received: by 2002:a92:d84a:: with SMTP id h10mr261549ilq.55.1628514651815;
- Mon, 09 Aug 2021 06:10:51 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PXrJ+BbgGTXejs85MxNsHQpcGJv4nzL8+I3ykkzFz/Y=;
+        b=TNxW4oc40X9oRIerT5sl0Kk779Vh+H0AC8E8HTjJcsuUJagpPN5vCx/ugxnr2HIhPl
+         dLFjP7Yw18dkeA8DCEYSxjZDvQcjR9dsvySJ3kGzviWHGIIetkOUnu2DL7p//8Dn2NoU
+         Tb1+lYR3kOBTSsgUhVwvhIfWZzShM0o2zECsIHVvy1BUNE92dfkt1ZjfR9Bimsb/EsDs
+         I0fljfMlg2uHwtSFoBV13ahP4lFIl7XAi5rffGoovUORn1mONG6gRYrI9fVXI6w5CI/m
+         /oEul+CN4QKVTpbj6wy+BuOlHUVAl+87gXO18war7W0C9CKTjui4CDusA/Te8YlT1V18
+         2U3w==
+X-Gm-Message-State: AOAM5316sTm5ODlxGoEBu3nLVzou0HWDSdVDX2LulnLYCPadB/QvCKBT
+        oV+7/iZu/m/1E5XJmQyaysxVjXvbYv9zPqKJF0XvWCLOaFz7X8laEx6Ty3qCokALqH+RUvedfXo
+        Apod3srHY13ROCX2iSK5VHWzRZtmsIUInHDfzCQ==
+X-Received: by 2002:aa7:c6d0:: with SMTP id b16mr30047987eds.257.1628517624123;
+        Mon, 09 Aug 2021 07:00:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy733K83FCEVxUSDiFu+sAff4YqEjYwxphl7rHUYA+ge65yYWoTdLNweov2T/r4nxposORUTw==
+X-Received: by 2002:aa7:c6d0:: with SMTP id b16mr30047953eds.257.1628517623881;
+        Mon, 09 Aug 2021 07:00:23 -0700 (PDT)
+Received: from localhost.localdomain ([86.32.42.198])
+        by smtp.gmail.com with ESMTPSA id b17sm7909686edd.27.2021.08.09.07.00.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Aug 2021 07:00:23 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/3] dt-bindings: clock: samsung: convert AudSS to dtschema
+Date:   Mon,  9 Aug 2021 15:59:39 +0200
+Message-Id: <20210809135942.100744-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Received: by 2002:a4f:fadb:0:0:0:0:0 with HTTP; Mon, 9 Aug 2021 06:10:51 -0700 (PDT)
-Reply-To: nicolasbilly@yandex.com
-From:   Nicolas Billy <kwaanya1@gmail.com>
-Date:   Mon, 9 Aug 2021 13:10:51 +0000
-Message-ID: <CA+04VFQ+Evf09siu2cDXKLqEttgfc9O7Oc+cVThb3TnwxzAacQ@mail.gmail.com>
-Subject: Donations
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Attention: Beneficiary,
+Hi,
 
-This is to officially inform you that we have been having meetings for
-the past weeks now which ended Two days ago with Mr. John W. Ashe,
-President of the 68th session of the UN General Assembly, Mr. David
-R.Malpass. the World Bank President and Hon. Mrs. Christine Laggard
-(IMF) Director General, in the meeting we talked about how to
-compensate Scam victim's people and all the people that were affected
-the most by this Coronavirus pandemic.
+Rebased on on previous series:
+https://lore.kernel.org/linux-samsung-soc/20210809120544.56596-1-krzysztof.kozlowski@canonical.com/T/#t
+It affects only the maintainers file change (context-dependency).
 
-Your email address was successfully selected for this donation with others.
+Best regards,
+Krzysztof
 
-The United Nations have agreed to compensate you with the sum of
-($150,000.00) One hundred and fifty thousand United States Dollars. We
-have arranged your payment through WORLD ATM MASTERCARD which is the
-latest instruction from the World Bank Group.
 
-For the collection of your WORLD ATM MASTERCARD contact our
-representative Rev. David Wood, send to him your contact address where
-you want your MASTERCARD to be sent to you, like
+Krzysztof Kozlowski (3):
+  dt-bindings: clock: samsung: convert Exynos AudSS to dtschema
+  dt-bindings: clock: samsung: convert S5Pv210 AudSS to dtschema
+  MAINTAINERS: clock: include S3C and S5P in Samsung SoC clock entry
 
-1. Your Full Name: .........
-2. Your Country and Your Delivery Home Address: ........
-3. Your Telephone: ..............
+ .../bindings/clock/clk-exynos-audss.txt       | 103 ------------------
+ .../bindings/clock/clk-s5pv210-audss.txt      |  53 ---------
+ .../clock/samsung,exynos-audss-clock.yaml     |  79 ++++++++++++++
+ .../clock/samsung,s5pv210-audss-clock.yaml    |  75 +++++++++++++
+ MAINTAINERS                                   |   3 +
+ 5 files changed, 157 insertions(+), 156 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/clk-exynos-audss.txt
+ delete mode 100644 Documentation/devicetree/bindings/clock/clk-s5pv210-audss.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/samsung,exynos-audss-clock.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/samsung,s5pv210-audss-clock.yaml
 
-His e-mail address: (ddavidwood1@yandex.com) He is a Canadian (UN)
-representative Agent.
+-- 
+2.30.2
 
-Thanks.
-Tel: 1 513 452 4352.
-Mr. Michael M=C3=B8ller Director-General of the United Nations Office
