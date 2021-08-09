@@ -2,240 +2,89 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E82E3E4640
-	for <lists+linux-clk@lfdr.de>; Mon,  9 Aug 2021 15:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF763E4631
+	for <lists+linux-clk@lfdr.de>; Mon,  9 Aug 2021 15:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235370AbhHINLt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 9 Aug 2021 09:11:49 -0400
-Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:49038
-        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235344AbhHINLs (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 Aug 2021 09:11:48 -0400
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPS id 2365840672
-        for <linux-clk@vger.kernel.org>; Mon,  9 Aug 2021 13:11:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1628514687;
-        bh=Q3Bw+lxFxrrX2xzHWCqOWv7XU5mwkZpCcX6GjIggRT8=;
-        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=su5grzLWD7qQF82PPWDsY3TFl0u1D0r6P9KWtcwIS/SKY/E1D9XEpdsan2rXHNAmf
-         yw3IACfennnoECdkCJ47sHWOTjFIzG94VMSqLB6ke6YxLVXmVejqHj4HpIRzOR5ADA
-         Fi7QIcnWydi8vdxqOhtqXbtUGJjuB/xkXO8M2wLxn3prRYImCChB0VtcYuIySPheDr
-         /MczywsGJ+anfNFmzoKNdHfQlYjkpWZb4P7Doueze+0JLo0USsSxfUj3gyFsBODJq6
-         GlI+gmfSzsR/GKBTRmvT4bCUSqjHaAVdmTThJK1y+Tf6sAOiy3QSEyGwULcdE1813B
-         vi5WOYCyLfjwQ==
-Received: by mail-ed1-f71.google.com with SMTP id u4-20020a50eac40000b02903bddc52675eso8677363edp.4
-        for <linux-clk@vger.kernel.org>; Mon, 09 Aug 2021 06:11:27 -0700 (PDT)
+        id S235159AbhHINLN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 9 Aug 2021 09:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234207AbhHINLN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 Aug 2021 09:11:13 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5925CC061798
+        for <linux-clk@vger.kernel.org>; Mon,  9 Aug 2021 06:10:52 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id a4so2201111ilj.12
+        for <linux-clk@vger.kernel.org>; Mon, 09 Aug 2021 06:10:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=7Xq9jb2sUMv3xaNw7Q5Cgt7yCkc3M0xn16Wn4AtIDKI=;
+        b=jlylg0ChOm7Bqigcudc7UV5pOzeOyy73qpe7dRwkvLZASCgxG+YqA/uIP0tFXCQPP7
+         kn46unASBl3ZL+AdOUvIWCllW+a8uXh8jPc2yFlwJRMsSHUOvEAjcS+3NQ+S15vzHaj7
+         uoqdbtLDJf1sYkVNOqHDnaXbFvYqjbH8qW1ISuDnOga8bi8ETLH1tYzO0JDPp7vQEoaP
+         xwSv2QfYO2QzIZUU4mtRQwA39uEaD0pO9klL+84MWaFA1x86vx1+Pc6AeEE8Bro9LUJ6
+         n1s9ooRBkWhLvmbvlKhs7etmC9dhIkPbo0xIPH0dhHU8U/4WEBSeeH68iGPEi3Aq0XG6
+         oUhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Q3Bw+lxFxrrX2xzHWCqOWv7XU5mwkZpCcX6GjIggRT8=;
-        b=AHoEPWulfFAXMye/Q5oc455AvSgwXkFoM+BunB+P2KAYvGzYswWJ3grpL77HyZsKn+
-         +seDdzVQtcD+JAWYVo+pzl95PUCSQzkC3VTPDtKym2brSENlG4e5ng9ID1PAIyGFI3B5
-         XOgHNPHKDm2el6sLGoMrEZqtRUxHT+EIfW1+DUb3Magdygqr3wEBTEuah8rcwZJ9j3vv
-         4S7uGOMreQV3VZBgk5Yr0G9VkfXUrnfqII8rhP2naylmthvDDb3vmk9KfveUeRXfr8E4
-         CZqSUbyRa7lvqAdx8Zx7c3py+LGOaP00Mx1QU+sFpGeIezZxZPveL/5+PrAppi4T+tT5
-         9YVA==
-X-Gm-Message-State: AOAM531pf9bZDTtXnCI5oVsyvfLfW1CHp4WtmjSjHgKheKDsPcgCo6dO
-        KtEy5wFAbTm26KSDY9zrBXVvDtQJ90O1N2jUsZuNza4O1d4oUpmKkoGEYrrGrh9Z5Vlm48sFjKK
-        jz4WiX+HgjbGU0VJhzCw+3HSu9A3K8402XwP6xw==
-X-Received: by 2002:a17:906:22db:: with SMTP id q27mr23111082eja.185.1628514686844;
-        Mon, 09 Aug 2021 06:11:26 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJybSchna5koo5BSMcwlS2b99488zRmUUchDhwHgpuhhR9riU1kR8tGvPwqqboVfzr6VMzyE/w==
-X-Received: by 2002:a17:906:22db:: with SMTP id q27mr23111047eja.185.1628514686658;
-        Mon, 09 Aug 2021 06:11:26 -0700 (PDT)
-Received: from localhost.localdomain ([86.32.42.198])
-        by smtp.gmail.com with ESMTPSA id cf16sm8023425edb.92.2021.08.09.06.11.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Aug 2021 06:11:26 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: clock: samsung: convert Exynos4 to dtschema
-Date:   Mon,  9 Aug 2021 15:09:35 +0200
-Message-Id: <20210809130935.80565-3-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210809130935.80565-1-krzysztof.kozlowski@canonical.com>
-References: <20210809130935.80565-1-krzysztof.kozlowski@canonical.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=7Xq9jb2sUMv3xaNw7Q5Cgt7yCkc3M0xn16Wn4AtIDKI=;
+        b=mBR/7rqvOqaMUMmWXKyzy6cyURtOYq+dwIBFj92OlPV89waWs4TJhkeKdmStS2yI6G
+         fFB93oOdvOlZtYSYfeWAWnPzgBuxeDw+1QgXRu+CpFxGYzOOFJ46KYjGCR/txptL17dg
+         6svgNr89x11We67w2EjFY2h6f/9C6oz7jouY8+Y1btvDeHwJarVFZhRRekrGxGBSsXs3
+         Gv9vDpgO+wTo9ENuPtkkHaKnmMv8Vq85eBMc6jDkfN4PwOoT1CTtCdOPkvNhAVnDUKRZ
+         PYuoZVAELbsC0WJAq86uNFM0AKHuK2U9sgFc2psLOhztYK+B3sLeKDa0rAIwN5B0KCb1
+         7dbA==
+X-Gm-Message-State: AOAM530htev+o3/bdYVVQK7yeuEbOeIAYYVycjLgvSaU9fXqInbPv6mX
+        iJRNzIiRjn2EOIeMfzywXqFCz1nnhdt9luNnnQ==
+X-Google-Smtp-Source: ABdhPJzu2C9U3/vuJ5mLU5+P4INYs7dnpAFXgC2RTOgt7mjgdv2X1uNSuJyrpOX//gn1taZQ74gIh+ynT5N7ptjnIb4=
+X-Received: by 2002:a92:d84a:: with SMTP id h10mr261549ilq.55.1628514651815;
+ Mon, 09 Aug 2021 06:10:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a4f:fadb:0:0:0:0:0 with HTTP; Mon, 9 Aug 2021 06:10:51 -0700 (PDT)
+Reply-To: nicolasbilly@yandex.com
+From:   Nicolas Billy <kwaanya1@gmail.com>
+Date:   Mon, 9 Aug 2021 13:10:51 +0000
+Message-ID: <CA+04VFQ+Evf09siu2cDXKLqEttgfc9O7Oc+cVThb3TnwxzAacQ@mail.gmail.com>
+Subject: Donations
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Merge Exynos4210 and Exynos4412 clock controller bindings to existing DT
-schema.
+Attention: Beneficiary,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
----
- .../bindings/clock/exynos4-clock.txt          | 86 -------------------
- .../bindings/clock/samsung,exynos-clock.yaml  | 29 ++++++-
- 2 files changed, 28 insertions(+), 87 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/clock/exynos4-clock.txt
+This is to officially inform you that we have been having meetings for
+the past weeks now which ended Two days ago with Mr. John W. Ashe,
+President of the 68th session of the UN General Assembly, Mr. David
+R.Malpass. the World Bank President and Hon. Mrs. Christine Laggard
+(IMF) Director General, in the meeting we talked about how to
+compensate Scam victim's people and all the people that were affected
+the most by this Coronavirus pandemic.
 
-diff --git a/Documentation/devicetree/bindings/clock/exynos4-clock.txt b/Documentation/devicetree/bindings/clock/exynos4-clock.txt
-deleted file mode 100644
-index 17bb11365354..000000000000
---- a/Documentation/devicetree/bindings/clock/exynos4-clock.txt
-+++ /dev/null
-@@ -1,86 +0,0 @@
--* Samsung Exynos4 Clock Controller
--
--The Exynos4 clock controller generates and supplies clock to various controllers
--within the Exynos4 SoC. The clock binding described here is applicable to all
--SoC's in the Exynos4 family.
--
--Required Properties:
--
--- compatible: should be one of the following.
--  - "samsung,exynos4210-clock" - controller compatible with Exynos4210 SoC.
--  - "samsung,exynos4412-clock" - controller compatible with Exynos4412 SoC.
--
--- reg: physical base address of the controller and length of memory mapped
--  region.
--
--- #clock-cells: should be 1.
--
--Each clock is assigned an identifier and client nodes can use this identifier
--to specify the clock which they consume.
--
--All available clocks are defined as preprocessor macros in
--dt-bindings/clock/exynos4.h header and can be used in device
--tree sources.
--
--Example 1: An example of a clock controller node is listed below.
--
--	clock: clock-controller@10030000 {
--		compatible = "samsung,exynos4210-clock";
--		reg = <0x10030000 0x20000>;
--		#clock-cells = <1>;
--	};
--
--Example 2: UART controller node that consumes the clock generated by the clock
--	   controller. Refer to the standard clock bindings for information
--	   about 'clocks' and 'clock-names' property.
--
--	serial@13820000 {
--		compatible = "samsung,exynos4210-uart";
--		reg = <0x13820000 0x100>;
--		interrupts = <0 54 0>;
--		clocks = <&clock CLK_UART2>, <&clock CLK_SCLK_UART2>;
--		clock-names = "uart", "clk_uart_baud0";
--	};
--
--Exynos4412 SoC contains some additional clocks for FIMC-ISP (Camera ISP)
--subsystem. Registers for those clocks are located in the ISP power domain.
--Because those registers are also located in a different memory region than
--the main clock controller, a separate clock controller has to be defined for
--handling them.
--
--Required Properties:
--
--- compatible: should be "samsung,exynos4412-isp-clock".
--
--- reg: physical base address of the ISP clock controller and length of memory
--  mapped region.
--
--- #clock-cells: should be 1.
--
--- clocks: list of the clock controller input clock identifiers,
--  from common clock bindings, should point to CLK_ACLK200 and
--  CLK_ACLK400_MCUISP clocks from the main clock controller.
--
--- clock-names: list of the clock controller input clock names,
--  as described in clock-bindings.txt, should be "aclk200" and
--  "aclk400_mcuisp".
--
--- power-domains: a phandle to ISP power domain node as described by
--  generic PM domain bindings.
--
--Example 3: The clock controllers bindings for Exynos4412 SoCs.
--
--	clock: clock-controller@10030000 {
--		compatible = "samsung,exynos4412-clock";
--		reg = <0x10030000 0x18000>;
--		#clock-cells = <1>;
--	};
--
--	isp_clock: clock-controller@10048000 {
--		compatible = "samsung,exynos4412-isp-clock";
--		reg = <0x10048000 0x1000>;
--		#clock-cells = <1>;
--		power-domains = <&pd_isp>;
--		clocks = <&clock CLK_ACLK200>, <&clock CLK_ACLK400_MCUISP>;
--		clock-names = "aclk200", "aclk400_mcuisp";
--	};
-diff --git a/Documentation/devicetree/bindings/clock/samsung,exynos-clock.yaml b/Documentation/devicetree/bindings/clock/samsung,exynos-clock.yaml
-index c7b07fcd3fa1..ea73201f259b 100644
---- a/Documentation/devicetree/bindings/clock/samsung,exynos-clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/samsung,exynos-clock.yaml
-@@ -23,6 +23,9 @@ properties:
-           - samsung,exynos3250-cmu
-           - samsung,exynos3250-cmu-dmc
-           - samsung,exynos3250-cmu-isp
-+          - samsung,exynos4210-clock
-+          - samsung,exynos4412-clock
-+          - samsung,exynos4412-isp-clock
-           - samsung,exynos5250-clock
-           - samsung,exynos5420-clock
-           - samsung,exynos5800-clock
-@@ -35,11 +38,18 @@ properties:
-   assigned-clocks: true
-   assigned-clock-parents: true
-   assigned-clock-rates: true
--  clocks: true
-+  clocks:
-+    description: |
-+      For samsung,exynos4412-isp-clock, the input clocks should be CLK_ACLK200
-+      and CLK_ACLK400_MCUISP from the main clock controller.
-+
-+  clock-names: true
- 
-   "#clock-cells":
-     const: 1
- 
-+  power-domains: true
-+
-   reg:
-     maxItems: 1
- 
-@@ -50,6 +60,23 @@ required:
- 
- additionalProperties: false
- 
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: samsung,exynos4412-isp-clock
-+    then:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: aclk200
-+            - const: aclk400_mcuisp
-+      required:
-+        - clocks
-+        - clock-names
-+        - power-domains
-+
- examples:
-   - |
-     #include <dt-bindings/clock/exynos5250.h>
--- 
-2.30.2
+Your email address was successfully selected for this donation with others.
 
+The United Nations have agreed to compensate you with the sum of
+($150,000.00) One hundred and fifty thousand United States Dollars. We
+have arranged your payment through WORLD ATM MASTERCARD which is the
+latest instruction from the World Bank Group.
+
+For the collection of your WORLD ATM MASTERCARD contact our
+representative Rev. David Wood, send to him your contact address where
+you want your MASTERCARD to be sent to you, like
+
+1. Your Full Name: .........
+2. Your Country and Your Delivery Home Address: ........
+3. Your Telephone: ..............
+
+His e-mail address: (ddavidwood1@yandex.com) He is a Canadian (UN)
+representative Agent.
+
+Thanks.
+Tel: 1 513 452 4352.
+Mr. Michael M=C3=B8ller Director-General of the United Nations Office
