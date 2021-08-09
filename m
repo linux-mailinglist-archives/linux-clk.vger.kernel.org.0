@@ -2,144 +2,296 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACDB3E4249
-	for <lists+linux-clk@lfdr.de>; Mon,  9 Aug 2021 11:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B1F3E4412
+	for <lists+linux-clk@lfdr.de>; Mon,  9 Aug 2021 12:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234276AbhHIJQ0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 9 Aug 2021 05:16:26 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:39043 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234154AbhHIJQZ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 Aug 2021 05:16:25 -0400
-X-Greylist: delayed 366 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Aug 2021 05:16:24 EDT
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id D1O3mzM1v4SnAD1O6mlikF; Mon, 09 Aug 2021 11:16:03 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1628500563; bh=zeXxdLM8LzjWjZQIvOD7a0FLojdqnvKW9IdZzgJWrAE=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=FapdsSWgrEHvWVXcUaMD3fLqqLg/hvsZq5zGHbQ6h9GYNLDWLnL7UQg6autDQ3EDa
-         c9KOVGv7Jj3I9lqNCNjvkoMASuNgqtx5BTCRzLdS3zd8ZZfBOWkI5wIstJByDEiyeK
-         W4WHF41/bE4AfYMVB08J14Fokwn5rK7tXTGM5r1UefyCjW35YFCSLZZF0MqKyf++9f
-         +Gk0xxdVG12yjwX6Dlu40Hdu44C6fJKHXuhU+BZyjJMnWN44sjG4adPrVzUmuVB1rV
-         2iLqCnrFXrNYeH+dP7W1D41PVx3LMgpm9RsDGH0ecMQxJADmba723sJhqPbAuaue2q
-         ggyxDaFLgZWZA==
-Subject: Re: [PATCH v2 7/9] media: docs: add doc for the stm32 dma2d driver
-To:     dillon.minfei@gmail.com, mchehab@kernel.org,
-        mchehab+huawei@kernel.org, ezequiel@collabora.com,
-        gnurou@gmail.com, pihsun@chromium.org, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org
-Cc:     patrice.chotard@foss.st.com, hugues.fruchet@foss.st.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <1626341068-20253-1-git-send-email-dillon.minfei@gmail.com>
- <1626341068-20253-18-git-send-email-dillon.minfei@gmail.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <7131ee03-fc81-cb9b-665f-80e4ce8435ab@xs4all.nl>
-Date:   Mon, 9 Aug 2021 11:15:59 +0200
+        id S234645AbhHIKo1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 9 Aug 2021 06:44:27 -0400
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:40464
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234760AbhHIKoK (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 Aug 2021 06:44:10 -0400
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPS id C09F940644
+        for <linux-clk@vger.kernel.org>; Mon,  9 Aug 2021 10:43:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1628505828;
+        bh=IPLYHYrcTvcr3N2BS3b/UySmy02vL1KdV7I/69UXWUI=;
+        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+         In-Reply-To:Content-Type;
+        b=mb3QVl7ZcyzEUYqR2DA5Utjjeby6UpguiUlvmXtU/3dmJc0k9WSFDdE3JMAd9cKrv
+         Z5MFri35LVV52DpVPuHEMX2mwaEQvTWkvfkLZvWPJDMSCwDBow6IR1aKI8oVymgN6C
+         seUI3AOLIlIioVUOaXXz+HWaxNykkMc1/6/YWJPcP3/STn/loyx2P8amSI+OKUuGoD
+         z1jdH0LjbERf8CjuvUULRYmHPa5ray9CJii7a275LAc2oFkebE693chBwxHPhA/Owe
+         QgUCQ9pjtkdn2NRqz69/RMQMvQZYvVi9sdQcDagbH0LST/8S93h2gWe1oUuCArr6Bc
+         wmaJCImw+SlyA==
+Received: by mail-ed1-f70.google.com with SMTP id g3-20020a0564024243b02903be33db5ae6so4547374edb.18
+        for <linux-clk@vger.kernel.org>; Mon, 09 Aug 2021 03:43:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IPLYHYrcTvcr3N2BS3b/UySmy02vL1KdV7I/69UXWUI=;
+        b=Rhq3hfUSGNG1iIANCltp6V21fnRqaagQvpn5gbmln13w4wwgEoEodSRGC2l3+7GnaC
+         mN08WF9CeNkwPKPLCl3qmfb2Gby3LIn17h5n1R1N+HzML7UoIvehuq2XheJfXCusVn+T
+         BuYcIdyRWZBUolKnYvfJjzG3H+imMQevXVOonq4RygKOuw3hZFzc5vyVS26miofmSst/
+         EGrI97zwt2okhJbd83wqh/IIaENqmQCaknvP8QfzPhH/aqNyj8VCaymC6Rk/Sp3q5vIy
+         bxW0qpgHXrrgJiwcj0Oemd0wZlGJbVcP9MgQWe0zdXK6ehwz7Ow0wtK6cH+FLXJWSsgF
+         CVEw==
+X-Gm-Message-State: AOAM531fibdRs33dv//J9Wf9wJYAW5lNll1+14OWHhC+8ugIeEnE7kDL
+        LfnhUw7PFRA4ng3+Fs5gfgIn4Gp+WgmSNs8CGkbmgnKAnvUQwkG0Lj2MWRIamGi9zgXD8b0Xr2s
+        PlTpwow4MZEsRGJWWZG2x8nMHBIGs1MVfyns74Q==
+X-Received: by 2002:a17:906:49d5:: with SMTP id w21mr21635338ejv.30.1628505817755;
+        Mon, 09 Aug 2021 03:43:37 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxeNB2nOwNQ2RTsxvcfdbkUiLXo+n7KqpIXPP7gExD6iWzJv6eNEGkp2pebUUGDoXYkBD+WHg==
+X-Received: by 2002:a17:906:49d5:: with SMTP id w21mr21635314ejv.30.1628505817517;
+        Mon, 09 Aug 2021 03:43:37 -0700 (PDT)
+Received: from [192.168.8.102] ([86.32.42.198])
+        by smtp.gmail.com with ESMTPSA id g23sm5798803ejm.26.2021.08.09.03.43.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Aug 2021 03:43:37 -0700 (PDT)
+Subject: Re: [PATCH v2 2/8] pinctrl: samsung: Add Exynos850 SoC specific data
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        =?UTF-8?Q?Pawe=c5=82_Chmiel?= <pawel.mikolaj.chmiel@gmail.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Charles Keepax <ckeepax@opensource.wolfsonmicro.com>,
+        Ryu Euiyoul <ryu.real@samsung.com>,
+        Tom Gall <tom.gall@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-serial@vger.kernel.org
+References: <20210806152146.16107-1-semen.protsenko@linaro.org>
+ <20210806152146.16107-3-semen.protsenko@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Message-ID: <407ee65f-6004-5173-9fcc-99023c85db4e@canonical.com>
+Date:   Mon, 9 Aug 2021 12:43:34 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.11.0
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <1626341068-20253-18-git-send-email-dillon.minfei@gmail.com>
+In-Reply-To: <20210806152146.16107-3-semen.protsenko@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfJjZzB2AcxlqBOUwWHqo+yH9Eb+LcfXJCeRn5OWwp8nCYrdlYMKifMmC4EkG+ffRU7MQVVBJkTHcRYBIefuRsbR/v06kAj+qoKsR1Yk9azbC0u4s0VO3
- szFefb8rEZl3GtO+BsoiKigu/A/vsezQYHEbGTEWeN+JFSeB55VFdakD0lbXbqqX7xZ2woNpfY/SnlREfmD1AihMgrcw05feLS7rZEH8GweBLJFZyRh7627x
- zRCJOAdPjrt3nYBAo/PZcXiLT73kIfxa/2ad9gB/697IxNKtA2YTmlWTa5AFqxxNHudUm83nE+7oPB3mIpSD6AdZHmBrI3DxR8zBRhFAyaJ1pqyvuSIpzPdE
- L8purSweoZn32sKjaflhXWbBS15YXyO2eHFJEQ8ZPXfKES1Wv5yWZpQduu7tij8+Ri8NWWnVmS+vZe6lEtAd2zNSBu5f+ijoqPE1z8NSAFC6qVyOrOtkhUwn
- AzaP5ArBmDVtZh++6aXXemDmzGGDZydf+398v7JGwEd4sgbMoqnDfYktQHpgo5pN97sc5NNOlyKtZKyLM8wItAPpRo6l/ktkLAv9n/mXIfcBnE43cIscD04C
- oGn93fHZZpE1DgcxPlwRUh5ADx+i3RZvXVahJMDrSbyACph/229gIaOAgfPXs3qmAU/dha1z6AQ5IUh8gI3jQZiv+ySBfjZEmHouf1lCL2WqrnXteWB2qt5W
- XilwGk1qmW1kJWvFBx8OmCM+wWuoIVB+Y4rOzSEsIXZHkUNCe2c3zRzu0UJnvilAExL+SSwIb+i9TGTAKeQN+WLiUMawpbWpm1VQS13D/PQ1rtZtBQ4L9fPD
- +oFoVBlxolO75yY0i9oUtdBxFoyFmnlWqYziIfLWYQAljxj54aeKjgDqlNSHlQ==
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 15/07/2021 11:24, dillon.minfei@gmail.com wrote:
-> From: Dillon Min <dillon.minfei@gmail.com>
+On 06/08/2021 17:21, Sam Protsenko wrote:
+> Add Samsung Exynos850 SoC specific data to enable pinctrl support for
+> all platforms based on Exynos850.
 > 
-> add stm32-uapi.rst for stm32's dma2d driver, explain the details of ioctl
-> V4L2_CID_DMA2D_R2M_MODE, V4L2_CID_DMA2D_R2M_COLOR.
-> 
-> Signed-off-by: Dillon Min <dillon.minfei@gmail.com>
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 > ---
-> v2: introduce the stm32-uapi.rst to explain the detail of dma2d's ioctl.
+> Changes in v2:
+>   - Removed .suspend/.resume callbacks, as retention registers are not
+>     implemented yet for Exynos850
+>   - Removed .eint_gpio_init for AUD domain, as there are no external
+>     interrupts available for that domain
 > 
->  .../userspace-api/media/drivers/index.rst          |  1 +
->  .../userspace-api/media/drivers/stm32-uapi.rst     | 22 ++++++++++++++++++++++
->  2 files changed, 23 insertions(+)
->  create mode 100644 Documentation/userspace-api/media/drivers/stm32-uapi.rst
+>  .../pinctrl/samsung/pinctrl-exynos-arm64.c    | 116 ++++++++++++++++++
+>  drivers/pinctrl/samsung/pinctrl-exynos.h      |  29 +++++
+>  drivers/pinctrl/samsung/pinctrl-samsung.c     |   2 +
+>  drivers/pinctrl/samsung/pinctrl-samsung.h     |   1 +
+>  4 files changed, 148 insertions(+)
 > 
-> diff --git a/Documentation/userspace-api/media/drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
-> index 12e3c512d718..ce42915d48f4 100644
-> --- a/Documentation/userspace-api/media/drivers/index.rst
-> +++ b/Documentation/userspace-api/media/drivers/index.rst
-> @@ -38,4 +38,5 @@ For more details see the file COPYING in the source distribution of Linux.
->  	max2175
->  	meye-uapi
->  	omap3isp-uapi
-> +	stm32-uapi
->  	uvcvideo
-> diff --git a/Documentation/userspace-api/media/drivers/stm32-uapi.rst b/Documentation/userspace-api/media/drivers/stm32-uapi.rst
-> new file mode 100644
-> index 000000000000..d7a4f717387d
-> --- /dev/null
-> +++ b/Documentation/userspace-api/media/drivers/stm32-uapi.rst
-> @@ -0,0 +1,22 @@
-> +.. SPDX-License-Identifier: GPL-2.0
+> diff --git a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+> index b6e56422a700..3157bdf0233c 100644
+> --- a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+> +++ b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
+> @@ -40,6 +40,24 @@ static const struct samsung_pin_bank_type exynos5433_bank_type_alive = {
+>  	.reg_offset = { 0x00, 0x04, 0x08, 0x0c, },
+>  };
+>  
+> +/*
+> + * Bank type for non-alive type. Bit fields:
+> + * CON: 4, DAT: 1, PUD: 4, DRV: 4, CONPDN: 2, PUDPDN: 4
+> + */
+> +static struct samsung_pin_bank_type exynos850_bank_type_off  = {
+> +	.fld_width = { 4, 1, 4, 4, 2, 4, },
+> +	.reg_offset = { 0x00, 0x04, 0x08, 0x0c, 0x10, 0x14, },
+> +};
 > +
-> +STM32 Chrom-Art 2D Graphics Accelerator unit (DMA2D) driver
-> +================================================
+> +/*
+> + * Bank type for alive type. Bit fields:
+> + * CON: 4, DAT: 1, PUD: 4, DRV: 4
+> + */
+> +static struct samsung_pin_bank_type exynos850_bank_type_alive = {
+
+I missed that part last time - this and one before should be const.
+
+> +	.fld_width = { 4, 1, 4, 4, },
+> +	.reg_offset = { 0x00, 0x04, 0x08, 0x0c, },
+> +};
 > +
-> +The DMA2D driver implements the following driver-specific controls:
+>  /* Pad retention control code for accessing PMU regmap */
+>  static atomic_t exynos_shared_retention_refcnt;
+>  
+> @@ -422,3 +440,101 @@ const struct samsung_pinctrl_of_match_data exynos7_of_data __initconst = {
+>  	.ctrl		= exynos7_pin_ctrl,
+>  	.num_ctrl	= ARRAY_SIZE(exynos7_pin_ctrl),
+>  };
 > +
-> +``V4L2_CID_DMA2D_R2M_MODE``
+> +/* pin banks of exynos850 pin-controller 0 (ALIVE) */
+> +static struct samsung_pin_bank_data exynos850_pin_banks0[] = {
 
-Please mention the control type as well.
+All these as well - initconst - unless they are somehow different than
+rest of such structures?
 
-> +-------------------------
-> +    Enable/Disable the Register-To-Memory mode, filling a part or the
-> +    whole of a destination image with a specific color.
+> +	/* Must start with EINTG banks, ordered by EINT group number. */
+> +	EXYNOS9_PIN_BANK_EINTW(8, 0x000, "gpa0", 0x00),
+> +	EXYNOS9_PIN_BANK_EINTW(8, 0x020, "gpa1", 0x04),
+> +	EXYNOS9_PIN_BANK_EINTW(8, 0x040, "gpa2", 0x08),
+> +	EXYNOS9_PIN_BANK_EINTW(8, 0x060, "gpa3", 0x0c),
+> +	EXYNOS9_PIN_BANK_EINTW(4, 0x080, "gpa4", 0x10),
+> +	EXYNOS9_PIN_BANK_EINTN(3, 0x0A0, "gpq0"),
+> +};
 > +
-> +    1 for enable, 0 for disable.
+> +/* pin banks of exynos850 pin-controller 1 (CMGP) */
+> +static struct samsung_pin_bank_data exynos850_pin_banks1[] = {
+> +	/* Must start with EINTG banks, ordered by EINT group number. */
+> +	EXYNOS9_PIN_BANK_EINTW(1, 0x000, "gpm0", 0x00),
+> +	EXYNOS9_PIN_BANK_EINTW(1, 0x020, "gpm1", 0x04),
+> +	EXYNOS9_PIN_BANK_EINTW(1, 0x040, "gpm2", 0x08),
+> +	EXYNOS9_PIN_BANK_EINTW(1, 0x060, "gpm3", 0x0C),
+> +	EXYNOS9_PIN_BANK_EINTW(1, 0x080, "gpm4", 0x10),
+> +	EXYNOS9_PIN_BANK_EINTW(1, 0x0A0, "gpm5", 0x14),
+> +	EXYNOS9_PIN_BANK_EINTW(1, 0x0C0, "gpm6", 0x18),
+> +	EXYNOS9_PIN_BANK_EINTW(1, 0x0E0, "gpm7", 0x1C),
+> +};
 > +
-> +``V4L2_CID_DMA2D_R2M_COLOR``
-
-Ditto.
-
-> +-------------------------------
-> +    Set the color to fill a part or the whole of a destination image.
-> +    only used under Register-To-Memory mode, to set the DMA2D_OCOLR register
-> +    (RED, GREEN, BLUE) which is:
-
-Here you mention RGB only,
-
+> +/* pin banks of exynos850 pin-controller 2 (AUD) */
+> +static struct samsung_pin_bank_data exynos850_pin_banks2[] = {
+> +	/* Must start with EINTG banks, ordered by EINT group number. */
+> +	EXYNOS9_PIN_BANK_EINTG(5, 0x000, "gpb0", 0x00),
+> +	EXYNOS9_PIN_BANK_EINTG(5, 0x020, "gpb1", 0x04),
+> +};
 > +
-> +    31 .. 24    23 .. 16  15 .. 8     7 .. 0
-> +    ALPHA[7:0]  RED[7:0]  GREEN[7:0]  BLUE[7:0]
+> +/* pin banks of exynos850 pin-controller 3 (HSI) */
+> +static struct samsung_pin_bank_data exynos850_pin_banks3[] = {
+> +	/* Must start with EINTG banks, ordered by EINT group number. */
+> +	EXYNOS9_PIN_BANK_EINTG(6, 0x000, "gpf2", 0x00),
+> +};
+> +
+> +/* pin banks of exynos850 pin-controller 4 (CORE) */
+> +static struct samsung_pin_bank_data exynos850_pin_banks4[] = {
+> +	/* Must start with EINTG banks, ordered by EINT group number. */
+> +	EXYNOS9_PIN_BANK_EINTG(4, 0x000, "gpf0", 0x00),
+> +	EXYNOS9_PIN_BANK_EINTG(8, 0x020, "gpf1", 0x04),
+> +};
+> +
+> +/* pin banks of exynos850 pin-controller 5 (PERI) */
+> +static struct samsung_pin_bank_data exynos850_pin_banks5[] = {
+> +	/* Must start with EINTG banks, ordered by EINT group number. */
+> +	EXYNOS9_PIN_BANK_EINTG(2, 0x000, "gpg0", 0x00),
+> +	EXYNOS9_PIN_BANK_EINTG(6, 0x020, "gpp0", 0x04),
+> +	EXYNOS9_PIN_BANK_EINTG(4, 0x040, "gpp1", 0x08),
+> +	EXYNOS9_PIN_BANK_EINTG(4, 0x060, "gpp2", 0x0C),
+> +	EXYNOS9_PIN_BANK_EINTG(8, 0x080, "gpg1", 0x10),
+> +	EXYNOS9_PIN_BANK_EINTG(8, 0x0A0, "gpg2", 0x14),
+> +	EXYNOS9_PIN_BANK_EINTG(1, 0x0C0, "gpg3", 0x18),
+> +	EXYNOS9_PIN_BANK_EINTG(3, 0x0E0, "gpc0", 0x1C),
+> +	EXYNOS9_PIN_BANK_EINTG(6, 0x100, "gpc1", 0x20),
+> +};
+> +
+> +static const struct samsung_pin_ctrl exynos850_pin_ctrl[] __initconst = {
+> +	{
+> +		/* pin-controller instance 0 ALIVE data */
+> +		.pin_banks	= exynos850_pin_banks0,
+> +		.nr_banks	= ARRAY_SIZE(exynos850_pin_banks0),
+> +		.eint_gpio_init = exynos_eint_gpio_init,
+> +		.eint_wkup_init = exynos_eint_wkup_init,
+> +	}, {
+> +		/* pin-controller instance 1 CMGP data */
+> +		.pin_banks	= exynos850_pin_banks1,
+> +		.nr_banks	= ARRAY_SIZE(exynos850_pin_banks1),
+> +		.eint_gpio_init = exynos_eint_gpio_init,
+> +		.eint_wkup_init = exynos_eint_wkup_init,
+> +	}, {
+> +		/* pin-controller instance 2 AUD data */
+> +		.pin_banks	= exynos850_pin_banks2,
+> +		.nr_banks	= ARRAY_SIZE(exynos850_pin_banks2),
+> +	}, {
+> +		/* pin-controller instance 3 HSI data */
+> +		.pin_banks	= exynos850_pin_banks3,
+> +		.nr_banks	= ARRAY_SIZE(exynos850_pin_banks3),
+> +		.eint_gpio_init = exynos_eint_gpio_init,
+> +	}, {
+> +		/* pin-controller instance 4 CORE data */
+> +		.pin_banks	= exynos850_pin_banks4,
+> +		.nr_banks	= ARRAY_SIZE(exynos850_pin_banks4),
+> +		.eint_gpio_init = exynos_eint_gpio_init,
+> +	}, {
+> +		/* pin-controller instance 5 PERI data */
+> +		.pin_banks	= exynos850_pin_banks5,
+> +		.nr_banks	= ARRAY_SIZE(exynos850_pin_banks5),
+> +		.eint_gpio_init = exynos_eint_gpio_init,
+> +	},
+> +};
+> +
+> +const struct samsung_pinctrl_of_match_data exynos850_of_data __initconst = {
+> +	.ctrl		= exynos850_pin_ctrl,
+> +	.num_ctrl	= ARRAY_SIZE(exynos850_pin_ctrl),
+> +};
+> diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.h b/drivers/pinctrl/samsung/pinctrl-exynos.h
+> index da1ec13697e7..595086f2d5dd 100644
+> --- a/drivers/pinctrl/samsung/pinctrl-exynos.h
+> +++ b/drivers/pinctrl/samsung/pinctrl-exynos.h
+> @@ -108,6 +108,35 @@
+>  		.pctl_res_idx   = pctl_idx,			\
+>  	}							\
+>  
+> +#define EXYNOS9_PIN_BANK_EINTN(pins, reg, id)			\
+> +	{							\
+> +		.type		= &exynos850_bank_type_alive,	\
 
-but here you also mention Alpha. So which is it?
+Having the prefix EXYNOS9 is actually confusing because:
+1. There is no Exynos9 support,
+2. The type is exynos850.
 
-See also my review of patch 9/9.
+Let's keep it consistent, so 850 everywhere,
 
-> 
+> +		.pctl_offset	= reg,				\
+> +		.nr_pins	= pins,				\
+> +		.eint_type	= EINT_TYPE_NONE,		\
+> +		.name		= id				\
+> +	}
+> +
+> +#define EXYNOS9_PIN_BANK_EINTG(pins, reg, id, offs)		\
+> +	{							\
+> +		.type		= &exynos850_bank_type_off,	\
+> +		.pctl_offset	= reg,				\
+> +		.nr_pins	= pins,				\
+> +		.eint_type	= EINT_TYPE_GPIO,		\
+> +		.eint_offset	= offs,				\
+> +		.name		= id				\
+> +	}
+> +
+> +#define EXYNOS9_PIN_BANK_EINTW(pins, reg, id, offs)		\
+> +	{							\
+> +		.type		= &exynos850_bank_type_alive,	\
+> +		.pctl_offset	= reg,				\
+> +		.nr_pins	= pins,				\
+> +		.eint_type	= EINT_TYPE_WKUP,		\
+> +		.eint_offset	= offs,				\
+> +		.name		= id				\
+> +	}
+> +
 
-I'm getting some warnings building this doc:
-
-Documentation/media/userspace-api/drivers/stm32-uapi.rst:4: WARNING: Title underline too short.
-
-STM32 Chrom-Art 2D Graphics Accelerator unit (DMA2D) driver
-================================================
-Documentation/media/userspace-api/drivers/stm32-uapi.rst:9: WARNING: Title underline too short.
-
-``V4L2_CID_DMA2D_R2M_MODE``
--------------------------
-
-Regards,
-
-	Hans
+Best regards,
+Krzysztof
