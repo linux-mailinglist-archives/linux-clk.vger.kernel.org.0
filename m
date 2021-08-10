@@ -2,186 +2,126 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5642E3E55FC
-	for <lists+linux-clk@lfdr.de>; Tue, 10 Aug 2021 10:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D673E56ED
+	for <lists+linux-clk@lfdr.de>; Tue, 10 Aug 2021 11:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236086AbhHJIxO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 10 Aug 2021 04:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238291AbhHJIxB (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 10 Aug 2021 04:53:01 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834B4C061798;
-        Tue, 10 Aug 2021 01:52:39 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id k3so14537248ilu.2;
-        Tue, 10 Aug 2021 01:52:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lWXJ4+PjF5glFDtXwt/vNE0iEHr+A6wHia7xM2/xz1w=;
-        b=RSyf2G/TrYO742mmP79dNqVaAkt/Z+/FFY9knRlUQFKTfXEdKiP8qGt3UtV5nsPHRE
-         CSLS8yC66Zp3D4ytzq51fAvkfkpTZdP2S4g2LCMq3JdiTk4J7o1FhADvTVKWP6PyplsF
-         c74q+eJlFX8tMRziWa378uLAp9LZ1TnbAdsmCdnqAwEVjHEOjBQoZ2DIpfLwvUkZiaCj
-         JpmtGDqEQiAPf3moCXNAza1rYWlHOI5IMHC9EGFmYzeTVjpRtZWPS7C4yK86yulJwxZS
-         16/rnaR45WFBzrwyapORQ18rvwhqgHCTLZheMYf1jL4FokxZhjtOeWzs4m0cIRi0xfFi
-         3k2Q==
+        id S239096AbhHJJcw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 10 Aug 2021 05:32:52 -0400
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:42566
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239040AbhHJJcv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 10 Aug 2021 05:32:51 -0400
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPS id BB64E40C80
+        for <linux-clk@vger.kernel.org>; Tue, 10 Aug 2021 09:32:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1628587947;
+        bh=/TjUAhhwvSRFuslwguP2QiddIzNChxvR3o7MxjSQJ14=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=P3dMRhJ94z4SbEeqHGR2UwlFLPPStVsQmsleniCRwWm7MjWbX0yganjB3ITo7VugD
+         svZy0IpdGcGFLD2Ld4820VkvvU3PnXDXmT++JhmVnzNpfQ0EU6x8fvXR2gLby5mpKE
+         EuwcKSEL2+Id6neDf7wh71ETtu7mIVHlJ5zUyLszTllL8aUVHMOOgdMzdcDJJ1VE3J
+         C7d6/vmLEev1U0szgcRSUSfxMcbIrTDjV62rK03VkbFSxj2rrg0PyLUpJCyKL/80AS
+         OETUN1G81mGKUcyvpqUyi+Us3g+t6iOlKcvvXX9SLWbgzd9qclTj+a9OmYQuoJJ5Me
+         8rg+/XTH1wvcg==
+Received: by mail-ed1-f72.google.com with SMTP id b16-20020a0564022790b02903be6352006cso3287388ede.15
+        for <linux-clk@vger.kernel.org>; Tue, 10 Aug 2021 02:32:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lWXJ4+PjF5glFDtXwt/vNE0iEHr+A6wHia7xM2/xz1w=;
-        b=f0J5MJHuCy5ojycOeNDKMPnN9m+4QFMtVfLZ0bHgrxhqfer012RjqUCcNXN5yJO7lO
-         grOVajHBCO28eGDgmnotcbQG7lWiD7k2JWfdSX1bfUbAVbSXnmeVUpZMqKO/Q+/TBy5h
-         wQCxWdS8uZAQbcv5AEP1FibPqTawNSjpol2XY8HcWzr9VYAygQoTQKKZT560ry1ICpkU
-         tl4Byedu7Qg//hatx2qPqORqvxrI8HwiR1S0br3HklhukleYActppqWZBhJyx4GUz9KQ
-         9aGUdTc2BlbYm4V6NB8Zip31xMeyw3OIAaPAWhyuqzRC/XE4fb6EOKHR9HGsWbQvAYta
-         BuUA==
-X-Gm-Message-State: AOAM531fqV+9CVU3weMBKckk4Ii/nGLFI26l6pyVH8e3HPXoNcYmxQm3
-        VrZFP610f1fo/EUcVMlBP+shP9Mhv80/Tol9XuE=
-X-Google-Smtp-Source: ABdhPJwzzeoVZ8XWeqwnCkOYfBWOdVOBvKw/YO8LbIhn6Mjk+DGdz9I9hHDwolLR9vxDRuFHs7u09g1OxGrGsMKRwmA=
-X-Received: by 2002:a05:6e02:13b3:: with SMTP id h19mr49185ilo.218.1628585558984;
- Tue, 10 Aug 2021 01:52:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <1626341068-20253-1-git-send-email-dillon.minfei@gmail.com>
- <1626341068-20253-18-git-send-email-dillon.minfei@gmail.com> <7131ee03-fc81-cb9b-665f-80e4ce8435ab@xs4all.nl>
-In-Reply-To: <7131ee03-fc81-cb9b-665f-80e4ce8435ab@xs4all.nl>
-From:   Dillon Min <dillon.minfei@gmail.com>
-Date:   Tue, 10 Aug 2021 16:52:04 +0800
-Message-ID: <CAL9mu0+QF==63hzkLo1x=dVeXdnu7wyugmfQCRLsTE+=AJZWxw@mail.gmail.com>
-Subject: Re: [PATCH v2 7/9] media: docs: add doc for the stm32 dma2d driver
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        mchehab+huawei@kernel.org, ezequiel@collabora.com,
-        gnurou@gmail.com, Pi-Hsun Shih <pihsun@chromium.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Michael Turquette <mturquette@baylibre.com>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/TjUAhhwvSRFuslwguP2QiddIzNChxvR3o7MxjSQJ14=;
+        b=Qsy3eB2Jjg65eAzETOundQfKzOfaBjxSnX3ixjxcTR9fcbaxmoZp67+EpvIqxnlKJk
+         ZG1i1zA1/LwMDe5TJ18u4g98hlkUM241fvWVaXMLNNGBtz0gZrLsrDDZPCjuobnKuHJW
+         p6F8Qhma3vVtZQMTHWb4chHFgcuLiCF5TzltmNAA5sEljtBYiHfmvtaWkJ43GKiSCWWo
+         8jKL/I3KttScppRyY/IuiqxKA4a19EJAOw3ZkHFZpmjIFwO/l+RPPZshhpCdfQ7OCKik
+         9wJfJgVVJ+C8mtNfff528+HWGSFqGunPSxKgCHKLp9Iex5ZLy6c8brwpez4z1FRYS5Uw
+         iu6g==
+X-Gm-Message-State: AOAM531f7v/JaZwN8ZeCMKNI29mo+QnUHwFyttc+ajjcoSFRjLLbJCKS
+        WLxbPq/+dtj26cAXBLfxpXpv24gRRk+7HsC1rQ1tHgCeTWzNjPHJvy+a0EYcYOJ7V7pSuvHACwh
+        upUhgvXJn3Odwq4OEj9eQKIzIj0WlqA1rK3vPHA==
+X-Received: by 2002:a05:6402:796:: with SMTP id d22mr3886390edy.57.1628587946810;
+        Tue, 10 Aug 2021 02:32:26 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxTDejpsnySJ5hI4EiBZYSmNUdOwiCDaSglUDL7QJIhM3zKW5UGTy4wbFQDlfcb7RdEzzFCRA==
+X-Received: by 2002:a05:6402:796:: with SMTP id d22mr3886364edy.57.1628587946598;
+        Tue, 10 Aug 2021 02:32:26 -0700 (PDT)
+Received: from localhost.localdomain ([86.32.42.198])
+        by smtp.gmail.com with ESMTPSA id q21sm5117606ejs.43.2021.08.10.02.32.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Aug 2021 02:32:26 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Patrice CHOTARD <patrice.chotard@foss.st.com>,
-        hugues.fruchet@foss.st.com,
-        linux-media <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Sam Protsenko <semen.protsenko@linaro.org>
+Subject: [PATCH v2 0/8] dt-bindings: clock: samsung: convert to dtschema
+Date:   Tue, 10 Aug 2021 11:31:37 +0200
+Message-Id: <20210810093145.26153-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Hans
+Hi,
 
-Thanks for the detailed review.
+Combined patchset of separate v1 sets:
 
-On Mon, 9 Aug 2021 at 17:16, Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
->
-> On 15/07/2021 11:24, dillon.minfei@gmail.com wrote:
-> > From: Dillon Min <dillon.minfei@gmail.com>
-> >
-> > add stm32-uapi.rst for stm32's dma2d driver, explain the details of ioctl
-> > V4L2_CID_DMA2D_R2M_MODE, V4L2_CID_DMA2D_R2M_COLOR.
-> >
-> > Signed-off-by: Dillon Min <dillon.minfei@gmail.com>
-> > ---
-> > v2: introduce the stm32-uapi.rst to explain the detail of dma2d's ioctl.
-> >
-> >  .../userspace-api/media/drivers/index.rst          |  1 +
-> >  .../userspace-api/media/drivers/stm32-uapi.rst     | 22 ++++++++++++++++++++++
-> >  2 files changed, 23 insertions(+)
-> >  create mode 100644 Documentation/userspace-api/media/drivers/stm32-uapi.rst
-> >
-> > diff --git a/Documentation/userspace-api/media/drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
-> > index 12e3c512d718..ce42915d48f4 100644
-> > --- a/Documentation/userspace-api/media/drivers/index.rst
-> > +++ b/Documentation/userspace-api/media/drivers/index.rst
-> > @@ -38,4 +38,5 @@ For more details see the file COPYING in the source distribution of Linux.
-> >       max2175
-> >       meye-uapi
-> >       omap3isp-uapi
-> > +     stm32-uapi
-> >       uvcvideo
-> > diff --git a/Documentation/userspace-api/media/drivers/stm32-uapi.rst b/Documentation/userspace-api/media/drivers/stm32-uapi.rst
-> > new file mode 100644
-> > index 000000000000..d7a4f717387d
-> > --- /dev/null
-> > +++ b/Documentation/userspace-api/media/drivers/stm32-uapi.rst
-> > @@ -0,0 +1,22 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +STM32 Chrom-Art 2D Graphics Accelerator unit (DMA2D) driver
-> > +================================================
-> > +
-> > +The DMA2D driver implements the following driver-specific controls:
-> > +
-> > +``V4L2_CID_DMA2D_R2M_MODE``
->
-> Please mention the control type as well.
+https://lore.kernel.org/linux-samsung-soc/20210809120544.56596-1-krzysztof.kozlowski@canonical.com/T/#t
+https://lore.kernel.org/linux-samsung-soc/20210809130935.80565-1-krzysztof.kozlowski@canonical.com/T/#t
+https://lore.kernel.org/linux-samsung-soc/20210809135942.100744-1-krzysztof.kozlowski@canonical.com/T/#t
 
-OK, how about change to
-``V4L2_CID_DMA2D_R2M_MODE (boolean)``
+Changes since v1:
+1. Patch 7/8: include header to fix clock IDs error in example.
 
->
-> > +-------------------------
-> > +    Enable/Disable the Register-To-Memory mode, filling a part or the
-> > +    whole of a destination image with a specific color.
-> > +
-> > +    1 for enable, 0 for disable.
-> > +
-> > +``V4L2_CID_DMA2D_R2M_COLOR``
->
-> Ditto.
-
-I will remove this item in v3, turn to use your suggestion (add
-V4L2_COLORFX_SET_COLOR_ARGB to V4L2_CID_COLORFX)
-
->
-> > +-------------------------------
-> > +    Set the color to fill a part or the whole of a destination image.
-> > +    only used under Register-To-Memory mode, to set the DMA2D_OCOLR register
-> > +    (RED, GREEN, BLUE) which is:
->
-> Here you mention RGB only,
->
-> > +
-> > +    31 .. 24    23 .. 16  15 .. 8     7 .. 0
-> > +    ALPHA[7:0]  RED[7:0]  GREEN[7:0]  BLUE[7:0]
->
-> but here you also mention Alpha. So which is it?
-
-Anyway this will be removed in v3, give a short explanation about it,
-The DMA2D_OCOLR register contains alpha value for m2m-pfc-blend mode,
-which defines the alpha channel of the output color. it's not used for R2M.
-
-sorry for confusion.
-
->
-> See also my review of patch 9/9.
->
-> >
->
-> I'm getting some warnings building this doc:
->
-> Documentation/media/userspace-api/drivers/stm32-uapi.rst:4: WARNING: Title underline too short.
->
-> STM32 Chrom-Art 2D Graphics Accelerator unit (DMA2D) driver
-> ================================================
-> Documentation/media/userspace-api/drivers/stm32-uapi.rst:9: WARNING: Title underline too short.
->
-> ``V4L2_CID_DMA2D_R2M_MODE``
-> -------------------------
-
-OK, will be fixed in v3.
-
->
-> Regards,
->
->         Hans
+Best regards,
+Krzysztof
 
 
-Thanks and Best Regards
-Dillon
+Krzysztof Kozlowski (8):
+  dt-bindings: clock: samsung: convert Exynos5250 to dtschema
+  dt-bindings: clock: samsung: add bindings for Exynos external clock
+  dt-bindings: clock: samsung: convert Exynos542x to dtschema
+  dt-bindings: clock: samsung: convert Exynos3250 to dtschema
+  dt-bindings: clock: samsung: convert Exynos4 to dtschema
+  dt-bindings: clock: samsung: convert Exynos AudSS to dtschema
+  dt-bindings: clock: samsung: convert S5Pv210 AudSS to dtschema
+  MAINTAINERS: clock: include S3C and S5P in Samsung SoC clock entry
+
+ .../bindings/clock/clk-exynos-audss.txt       | 103 ------------------
+ .../bindings/clock/clk-s5pv210-audss.txt      |  53 ---------
+ .../bindings/clock/exynos3250-clock.txt       |  57 ----------
+ .../bindings/clock/exynos4-clock.txt          |  86 ---------------
+ .../bindings/clock/exynos5250-clock.txt       |  41 -------
+ .../bindings/clock/exynos5420-clock.txt       |  42 -------
+ .../clock/samsung,exynos-audss-clock.yaml     |  79 ++++++++++++++
+ .../bindings/clock/samsung,exynos-clock.yaml  |  87 +++++++++++++++
+ .../clock/samsung,exynos-ext-clock.yaml       |  46 ++++++++
+ .../clock/samsung,s5pv210-audss-clock.yaml    |  77 +++++++++++++
+ MAINTAINERS                                   |   4 +
+ 11 files changed, 293 insertions(+), 382 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/clock/clk-exynos-audss.txt
+ delete mode 100644 Documentation/devicetree/bindings/clock/clk-s5pv210-audss.txt
+ delete mode 100644 Documentation/devicetree/bindings/clock/exynos3250-clock.txt
+ delete mode 100644 Documentation/devicetree/bindings/clock/exynos4-clock.txt
+ delete mode 100644 Documentation/devicetree/bindings/clock/exynos5250-clock.txt
+ delete mode 100644 Documentation/devicetree/bindings/clock/exynos5420-clock.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/samsung,exynos-audss-clock.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/samsung,exynos-clock.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/samsung,exynos-ext-clock.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/samsung,s5pv210-audss-clock.yaml
+
+-- 
+2.30.2
+
