@@ -2,67 +2,69 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA493E94C2
-	for <lists+linux-clk@lfdr.de>; Wed, 11 Aug 2021 17:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BDB3E97FA
+	for <lists+linux-clk@lfdr.de>; Wed, 11 Aug 2021 20:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbhHKPmy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 11 Aug 2021 11:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbhHKPmy (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 11 Aug 2021 11:42:54 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F293C061765;
-        Wed, 11 Aug 2021 08:42:30 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id u1so2307716wmm.0;
-        Wed, 11 Aug 2021 08:42:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
-        b=aPvMyuJPOs08K3NAudcw29XHwX8GhXseP7ht1DAKTPwOU/C8/LINDUxBEgYS2ZEOfR
-         g0d0+RCWtmr7WH6toPzpnEwMBxS5imDbP5zPObFn49kEsfZEStK3iIci3m1jMdL60i8T
-         AE5tsOBZfUqYiIjev8zP9CpnIwhTSHpuwD44sYZaBstgcHD5TheBIN2+cA9A1kYm1QG3
-         m5hnjUGR5Juyxr1evhmd3TCnkK9bP+jQdzv5giJWWst1SlQZZLGEYXbR7BJ/QLnXfjBR
-         yQW0rr5PFgc+D0ktuEUhkzUfX4KWXuxTu6NBx03ZAmwvC66nHaH6uRqldsZ8KyL05mCi
-         F69g==
+        id S230479AbhHKSxu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 11 Aug 2021 14:53:50 -0400
+Received: from mail-pl1-f180.google.com ([209.85.214.180]:41803 "EHLO
+        mail-pl1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230364AbhHKSxt (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 11 Aug 2021 14:53:49 -0400
+Received: by mail-pl1-f180.google.com with SMTP id e15so3875602plh.8;
+        Wed, 11 Aug 2021 11:53:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
-        b=liMX6B6iurSWGblAaw/eQjjswfr1jyQT0XNgIH/FXnMXg+QISb4J75qiti2ucrvP0J
-         LyjLL5P4rpkL/HIpYawVodxypvnNGVsG/kGw/8gnK/yk57i1BNmlRadmaYxG1XRXa7yP
-         vbcgoxYXk6ToFynGB99J/fS6g3uIqhCWytrobklGgc+rpjaD8Y/XrNwbKiliUcQmM4cu
-         B7uye7alWSquOyuK8qH0Notyro+6NRbK9E+NK95/6icuhmspc2s+AhfztnL2QS1LECRx
-         yeTo+bb7a8CTbUUA5otFTW8BA+1rSH2yYIxFBIHyHx9Pwo4lur293pS0KA1ASud3849H
-         NURw==
-X-Gm-Message-State: AOAM532bXqs2cyK2FAOmNp614XVPMLn9PLPLJj9jwUJa8ikphLS1jLL3
-        PU3Er+NxeQ0hACFv8SI6wC0=
-X-Google-Smtp-Source: ABdhPJxhHq6kXRw/oO4VuI5QDgrC5sZPSC3ZAgx49e+iMMqciTgSniQTnZhbuKrYlSDpb9hRyWzo6g==
-X-Received: by 2002:a1c:3c8b:: with SMTP id j133mr703977wma.9.1628696548848;
-        Wed, 11 Aug 2021 08:42:28 -0700 (PDT)
-Received: from [192.168.1.70] ([102.64.209.185])
-        by smtp.gmail.com with ESMTPSA id r18sm9485707wrt.76.2021.08.11.08.42.22
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Wed, 11 Aug 2021 08:42:28 -0700 (PDT)
-Message-ID: <6113efe4.1c69fb81.ffd8e.2a83@mx.google.com>
-From:   Vanina curth <curtisvani0038@gmail.com>
-X-Google-Original-From: Vanina  curth
-Content-Type: text/plain; charset="iso-8859-1"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=06qEygJLTx39dSgIqgtwE46EcOnHTjW1rAqvEK4oK0U=;
+        b=o/22w2xtrGZZ6EJABGZ8LPjpDidUHDLyaxuBZB19gCKopDGVk5kZ/nBdtzwNw8QF/K
+         TN1zhO4zREwV2ESIVV2nj9gKo3GbUtQwQI8mbdtK3Fb1TXVfzqE7cSvxwzo3jtfx2W/a
+         xIOhXEQ6dU+7PmVCgTNkMRG5BZYxz7yHYmI1yge9bWUSoIH2cAwW/RsLiETvsC3Qibqs
+         8yIUf/WxbMyg1cHUO6cItjnsa/vZibXZHXjlUpKY6nDER8bMas63qQcKhyJnNsfiJ6SI
+         7JXtNrGqbyrIbW+jCMHeKYhJjRnbEtKF+Brl498h391o5K6aG3+5k8Jc4xYQpoUTpirz
+         ZDrw==
+X-Gm-Message-State: AOAM531/0UsvCr/MuOpOMS6hcHO6CIk+uDcg1HfAh2YlE++UR7LZBl+e
+        c2ZvqelSJVeFYfEKCdqC1w==
+X-Google-Smtp-Source: ABdhPJwzpBJ1ynaRsE7+HKXnfeFz0YJ0Zr9leVRMDLimx0O+ThxMCysCraSCWxOuhZEfzKK92jq4YA==
+X-Received: by 2002:a17:90a:150d:: with SMTP id l13mr66203pja.93.1628708005765;
+        Wed, 11 Aug 2021 11:53:25 -0700 (PDT)
+Received: from robh.at.kernel.org ([208.184.162.215])
+        by smtp.gmail.com with ESMTPSA id u27sm262625pfg.83.2021.08.11.11.53.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Aug 2021 11:53:25 -0700 (PDT)
+Received: (nullmailer pid 89551 invoked by uid 1000);
+        Wed, 11 Aug 2021 18:53:20 -0000
+Date:   Wed, 11 Aug 2021 12:53:20 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        yuji2.ishikawa@toshiba.co.jp, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        punit1.agrawal@toshiba.co.jp, Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v4 1/4] dt-bindings: clock: Add DT bindings for PLL of
+ Toshiba Visconti TMPV770x SoC
+Message-ID: <YRQcoD6xhxCf2gy8@robh.at.kernel.org>
+References: <20210804092244.390376-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+ <20210804092244.390376-2-nobuhiro1.iwamatsu@toshiba.co.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Dear
-To:     Recipients <Vanina@vger.kernel.org>
-Date:   Wed, 11 Aug 2021 15:42:12 +0000
-Reply-To: curtisvani9008@gmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210804092244.390376-2-nobuhiro1.iwamatsu@toshiba.co.jp>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-How are you? I'm Vanina. I'm interested to know you and I would like to kno=
-w more about you and establish relationship with you. i will wait for your =
-response. thank you.
+On Wed, 04 Aug 2021 18:22:41 +0900, Nobuhiro Iwamatsu wrote:
+> Add device tree bindings for PLL of Toshiba Visconti TMPV770x SoC series.
+> 
+> Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+> ---
+>  .../clock/toshiba,tmpv770x-pipllct.yaml       | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/toshiba,tmpv770x-pipllct.yaml
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
