@@ -2,141 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA4F3E8F61
-	for <lists+linux-clk@lfdr.de>; Wed, 11 Aug 2021 13:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE57B3E9147
+	for <lists+linux-clk@lfdr.de>; Wed, 11 Aug 2021 14:32:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237330AbhHKLUl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 11 Aug 2021 07:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
+        id S229769AbhHKMcY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 11 Aug 2021 08:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237335AbhHKLUk (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 11 Aug 2021 07:20:40 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9025EC06179B
-        for <linux-clk@vger.kernel.org>; Wed, 11 Aug 2021 04:20:15 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id v3so1003406uau.3
-        for <linux-clk@vger.kernel.org>; Wed, 11 Aug 2021 04:20:15 -0700 (PDT)
+        with ESMTP id S229794AbhHKMcR (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 11 Aug 2021 08:32:17 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B9AC061A24
+        for <linux-clk@vger.kernel.org>; Wed, 11 Aug 2021 05:30:18 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id r16-20020a0568304190b02904f26cead745so3077982otu.10
+        for <linux-clk@vger.kernel.org>; Wed, 11 Aug 2021 05:30:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=t0kEBolSkLS2sqce8sXfB33QiH70Nq/WEHar/RhDH00=;
-        b=EXu9onjXPrdieAXb4oXgi7XDK2Cs0n7NV6W1fs65ZqHGgYhojmH+np0TMd9X9TqyuL
-         mOnHJv7IMjvM9aW6URokLeKObx1Hr9sjULLeVyDoJV4IKgi8fwJ//B4u5gldK+Z5wFx9
-         BKtL5eL2UislHCHvFKd2LH1s/w/8kUDgOikyU9jhJ/2FvWAV5lYtV4zP5KAHH5VelCmZ
-         OILdkPwbA6BPx1xP6y3Vmt5x8OAnk13uX69egwyyuj2xCe/JXUzlmQ1/WZHG02cohJit
-         nyEOMegmP/pDz8Yx19iIhYRG2XssOk/biOMEYxoM2J5Xg5LaVzEzM6IeYbKxMX6BoUG0
-         DcBA==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
+        b=JLDnRf25Eb6PKvCYA5DKs9y9j99zKAJA36bc7PJTIpXiHPDCujx3MnACbZjp6mrxrY
+         eEnZVPRoG9jdc54LvqexHB+U7VEq9IxY2QdfBq2YSFH3SOEjhlw4x/NLZYvR2HSN6BUe
+         SCcSBdPGwWVA2Zj9N4A1YQAiAQiGoiNcBA2ckslmkH2JqPbF6RIP3bps3Oc3PVj8NFaD
+         +ETGkX1KAHW7/LPI6Jo2RFOcVlRvlIzX0BMFIKtErpKFnIzBuJlBG8pa7svbB3Db2tHU
+         TBlGkxVV3m1mswxYPcuZRKFIsOvmRMoelP8xE2ArlsNG12tr0m2ogNjil1ITH7O7SKhB
+         mKgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=t0kEBolSkLS2sqce8sXfB33QiH70Nq/WEHar/RhDH00=;
-        b=qryMwWMe8nUPVT8/CBY+Lo2AaYnCkxkJAGoKE05zf3GGH1O7NOf+jDNdCWK5aJ4eZE
-         Muy5Wz3WjgH574upQ+UytdVEPCs8nDxoEJnvqj/Lm/55xShClcntoS3VKP2uKLTFWC88
-         hOhXm3Kw+3N8VsiY9avxIJLibMfCyIK4zvrykaa3MAoIJxhlfeXFau7OT9qnsn0QNzeO
-         /YlgREa0Eb4Uuzm6NP8KdfdmlnFdiz/1+4QjR9Xfa5hCY/nCN/9TNdNRsYUU8oIgLS2s
-         JZh/NBorggD8bLdc7XqB+9fPT+9w9nZ5btEcJHQS4YVdM08CRqRT9qzV3lDT5kuQNZPQ
-         /qfw==
-X-Gm-Message-State: AOAM533BS4NGZhHsHh1uHufg/z3osN4I9zphqa5PBotnuSWzXUuoNNyJ
-        xtp3p8HVE7fQII2TAUvVA4lxeUSW4dPfa35DWDDD8A==
-X-Google-Smtp-Source: ABdhPJzHREh3TtpeK5LboogIOTf9B16ur3hdtF1iwFqcdwjhPQLqbrAfGLqvXhyblELiy1U/5s3uTaTrZeYTfryBy8o=
-X-Received: by 2002:ab0:7014:: with SMTP id k20mr10843046ual.9.1628680814267;
- Wed, 11 Aug 2021 04:20:14 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=77BwqRII9XCweQU8IJul6unijI/BEL+vUJmVmCRLxH4=;
+        b=oNsU3lb0JTiDqZkiGRs8lsRgztHgytvZPvehdLIAmlkHUxA2SJcC+fiDc0Yt+P7Ovn
+         zeNEFycrMiF4tDL8ALpS7CwOVGn2G1s/FudxM3/rJY0c9LeHfH0I2hjrWe/XIhS5ry+t
+         uWbhRJHlbBM3+FHUG7F1EK3uPyjwd8ygAH2RIJN5zf+FYuzViHCKXz7aL0ch+hF8lwc4
+         QvVFz8YQU+i1IC8MH2HVP1XdBJri5tMQDf9Bf2Q8Vxrw5ckT0xJyqSm9TzpNYyYmH/75
+         8ManFb79qn3aUYcFXYezfzXYRmJcz0zCUgI5Q6kfpPoNBLseQEjfT0//Z/3zXOeuSK4L
+         SscA==
+X-Gm-Message-State: AOAM5323s7hnY4Gzn4Rm7ZDhC6/McfQ85ehIU/2kkP0mqgUSFLk6NYQ+
+        IV0GHNRq3g/rWAmMN4dozhbXKSJpQ8w/Rbl0Os8=
+X-Google-Smtp-Source: ABdhPJwdrr7XguJcPmO5+g98rSs/4n6T51gE6N2Czls1WtQylyxhyPliwkpfVE5Y3mUZMeaTO8hfijSwokFMiUVWtAk=
+X-Received: by 2002:a9d:65d0:: with SMTP id z16mr22680523oth.196.1628685017856;
+ Wed, 11 Aug 2021 05:30:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210806152146.16107-1-semen.protsenko@linaro.org>
- <20210806152146.16107-8-semen.protsenko@linaro.org> <3add6f87-7293-e1ae-8f9e-c69e9de18cf5@canonical.com>
- <CGME20210809194915eucas1p19999295aef3127f95ffe4c75a8acc63f@eucas1p1.samsung.com>
- <CAPLW+4=-uUcoLCjjBAC2K5NLswnXGXW1qrsTJrb_uZDgOQ5Ehw@mail.gmail.com> <bb69e79d-55a8-2090-e51c-fdfea755cf99@samsung.com>
-In-Reply-To: <bb69e79d-55a8-2090-e51c-fdfea755cf99@samsung.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Wed, 11 Aug 2021 14:20:02 +0300
-Message-ID: <CAPLW+4mPrPSeukiJY6DmpEz0V=bjEYbjzLTnJ28T01yqoQY=mg@mail.gmail.com>
-Subject: Re: [PATCH v2 7/8] clk: samsung: Add Exynos850 clock driver stub
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        =?UTF-8?Q?Pawe=C5=82_Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Charles Keepax <ckeepax@opensource.wolfsonmicro.com>,
-        Ryu Euiyoul <ryu.real@samsung.com>,
-        Tom Gall <tom.gall@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>
+Received: by 2002:a05:6830:23a5:0:0:0:0 with HTTP; Wed, 11 Aug 2021 05:30:17
+ -0700 (PDT)
+Reply-To: rihabmanyang07@yahoo.com
+From:   Rihab Manyang <ndourandiogou1@gmail.com>
+Date:   Wed, 11 Aug 2021 13:30:17 +0100
+Message-ID: <CAP5_mB7uaxDVzgPo-0C2sDYvzWYre49BQzTgZym0ALZ8xnLUGg@mail.gmail.com>
+Subject: hi
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, 10 Aug 2021 at 10:55, Sylwester Nawrocki <s.nawrocki@samsung.com> wrote:
->
-> On 09.08.2021 21:48, Sam Protsenko wrote:
-> >>> +/* Will be extracted to bindings header once proper clk driver is implemented */
-> >>> +#define OSCCLK               1
-> >>> +#define DOUT_UART    2
-> >>> +#define CLK_NR_CLKS  3
-> >>> +
-> >>> +/* Fixed rate clocks generated outside the SoC */
-> >>> +static struct samsung_fixed_rate_clock exynos850_fixed_rate_ext_clks[] __initdata = {
-> >>> +     FRATE(OSCCLK, "fin_pll", NULL, 0, 26000000),
-> >>> +};
-> >>> +
-> >>> +/*
-> >>> + * Model the UART clock as a fixed-rate clock for now, to make serial driver
-> >>> + * work. This clock is already configured in the bootloader.
-> >>> + */
-> >>> +static const struct samsung_fixed_rate_clock exynos850_peri_clks[] __initconst = {
-> >>> +     FRATE(DOUT_UART, "DOUT_UART", NULL, 0, 200000000),
-> >>> +};
-> >>> +
-> >>> +static const struct of_device_id ext_clk_match[] __initconst = {
-> >>> +     { .compatible = "samsung,exynos850-oscclk" },
-> >>
-> >> One more thing - I am not sure anymore if this is correct. AFAIR, we
-> >> wanted to drop compatibles for external clocks.
-> >>
-> > I'll remove oscclk from the clock driver and device tree. It's not
-> > needed right now anyway, as that driver is just a stub.
-> >
-> > But I'd still like to know the proper way to define external clocks. I
-> > can see that in exynos7.dtsi and exynos5433.dtsi there is just regular
-> > fixed clock defined for "oscclk" (or "fin_pll"), and then that clock
-> > is referenced in corresponding clock driver by its
-> > 'clock-output-names' property. I guess that approach is the
-> > recommended one?
->
-> Yes, we should use generic "fixed-clock" in DT to model the external
-> root clock. Registering the external clock from within the CMU driver
-> is a legacy method that predates generic "fixed-clock" and should be
-> avoided.
->
-
-Thanks for confirming this. I'll go with generic fixed clock in my
-clock patch series then.
-
-> That said I think this temporary stub driver is not needed at all,
-> you could well define a fixed clock in DT and reference it in the UART
-> node, as Krzysztof suggested.
->
-
-Ok, I'll remove the stub clock driver in v3. Using fixed clock in
-device tree for serial seems to work fine.
-
-> --
-> Regards,
-> Sylwester
+-- 
+How are you?I am miss.Rihab Manyang i will like to be your friend
+please write me back on my email for more details, Thanks.
