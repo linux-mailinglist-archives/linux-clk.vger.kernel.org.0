@@ -2,100 +2,166 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 353AB3EA689
-	for <lists+linux-clk@lfdr.de>; Thu, 12 Aug 2021 16:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6423EA8EE
+	for <lists+linux-clk@lfdr.de>; Thu, 12 Aug 2021 19:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237987AbhHLO0O (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 12 Aug 2021 10:26:14 -0400
-Received: from elvis.franken.de ([193.175.24.41]:57499 "EHLO elvis.franken.de"
+        id S233853AbhHLRBH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 12 Aug 2021 13:01:07 -0400
+Received: from mga12.intel.com ([192.55.52.136]:62812 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233282AbhHLO0O (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 12 Aug 2021 10:26:14 -0400
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1mEBeQ-0002iE-00; Thu, 12 Aug 2021 16:25:42 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id DCCD2C07DD; Thu, 12 Aug 2021 16:09:34 +0200 (CEST)
-Date:   Thu, 12 Aug 2021 16:09:34 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, mturquette@baylibre.com,
-        daniel.lezcano@linaro.org, linus.walleij@linaro.org,
-        vkoul@kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 0/9] MIPS: Migrate pistachio to generic kernel
-Message-ID: <20210812140934.GA9924@alpha.franken.de>
-References: <20210723022543.4095-1-jiaxun.yang@flygoat.com>
+        id S233875AbhHLRBG (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 12 Aug 2021 13:01:06 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10074"; a="194987169"
+X-IronPort-AV: E=Sophos;i="5.84,316,1620716400"; 
+   d="scan'208";a="194987169"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2021 10:00:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,316,1620716400"; 
+   d="scan'208";a="571539798"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga004.jf.intel.com with ESMTP; 12 Aug 2021 10:00:29 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 13C93B1; Thu, 12 Aug 2021 20:00:28 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH v4 1/4] clk: fractional-divider: Export approximation algorithm to the CCF users
+Date:   Thu, 12 Aug 2021 20:00:22 +0300
+Message-Id: <20210812170025.67074-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210723022543.4095-1-jiaxun.yang@flygoat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, Jul 23, 2021 at 10:25:34AM +0800, Jiaxun Yang wrote:
-> I'm lucky enough to get a Creator CI40 board from dusts.
-> This patchset move it to gerneic kernel to reduce maintenance burden.
-> It have been tested with SD Card boot.
-> 
-> --
-> v2: Minor fixes
-> v3: Typo fixes and 0day testbot warning fix (Thanks to Sergei!)
-> v4: 01.org warning fix
-> 
-> Jiaxun Yang (9):
->   MIPS: generic: Allow generating FIT image for Marduk board
->   MIPS: DTS: Pistachio add missing cpc and cdmm
->   clk: pistachio: Make it selectable for generic MIPS kernel
->   clocksource/drivers/pistachio: Make it selectable for MIPS
->   phy: pistachio-usb: Depend on MIPS || COMPILE_TEST
->   pinctrl: pistachio: Make it as an option
->   MIPS: config: generic: Add config for Marduk board
->   MIPS: Retire MACH_PISTACHIO
->   MIPS: Make a alias for pistachio_defconfig
-> 
->  arch/mips/Kbuild.platforms                    |   1 -
->  arch/mips/Kconfig                             |  30 --
->  arch/mips/Makefile                            |   3 +
->  arch/mips/boot/dts/Makefile                   |   2 +-
->  arch/mips/boot/dts/img/Makefile               |   3 +-
->  arch/mips/boot/dts/img/pistachio.dtsi         |  10 +
->  arch/mips/configs/generic/board-marduk.config |  53 +++
->  arch/mips/configs/pistachio_defconfig         | 316 ------------------
->  arch/mips/generic/Kconfig                     |   6 +
->  arch/mips/generic/Platform                    |   1 +
->  arch/mips/generic/board-marduk.its.S          |  22 ++
->  arch/mips/pistachio/Kconfig                   |  14 -
->  arch/mips/pistachio/Makefile                  |   2 -
->  arch/mips/pistachio/Platform                  |   6 -
->  arch/mips/pistachio/init.c                    | 125 -------
->  arch/mips/pistachio/irq.c                     |  24 --
->  arch/mips/pistachio/time.c                    |  55 ---
->  drivers/clk/Kconfig                           |   1 +
->  drivers/clk/Makefile                          |   2 +-
->  drivers/clk/pistachio/Kconfig                 |   8 +
->  drivers/clocksource/Kconfig                   |   3 +-
->  drivers/phy/Kconfig                           |   2 +-
->  drivers/pinctrl/Kconfig                       |   5 +-
->  23 files changed, 114 insertions(+), 580 deletions(-)
->  create mode 100644 arch/mips/configs/generic/board-marduk.config
->  delete mode 100644 arch/mips/configs/pistachio_defconfig
->  create mode 100644 arch/mips/generic/board-marduk.its.S
->  delete mode 100644 arch/mips/pistachio/Kconfig
->  delete mode 100644 arch/mips/pistachio/Makefile
->  delete mode 100644 arch/mips/pistachio/Platform
->  delete mode 100644 arch/mips/pistachio/init.c
->  delete mode 100644 arch/mips/pistachio/irq.c
->  delete mode 100644 arch/mips/pistachio/time.c
->  create mode 100644 drivers/clk/pistachio/Kconfig
+At least one user currently duplicates some functions that are provided
+by fractional divider module. Let's export approximation algorithm and
+replace the open-coded variant.
 
-series applied to mips-next.
+As a bonus the exported function will get better documentation in place.
 
-Thomas.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Tested-by: Heiko Stuebner <heiko@sntech.de>
+Acked-by: Heiko Stuebner <heiko@sntech.de>
+---
+v4: rebased on top of latest CLK codebase
+ drivers/clk/clk-fractional-divider.c | 11 +++++++----
+ drivers/clk/clk-fractional-divider.h |  9 +++++++++
+ drivers/clk/rockchip/clk.c           | 17 +++--------------
+ 3 files changed, 19 insertions(+), 18 deletions(-)
+ create mode 100644 drivers/clk/clk-fractional-divider.h
 
+diff --git a/drivers/clk/clk-fractional-divider.c b/drivers/clk/clk-fractional-divider.c
+index b1e556f20911..535d299af646 100644
+--- a/drivers/clk/clk-fractional-divider.c
++++ b/drivers/clk/clk-fractional-divider.c
+@@ -14,6 +14,8 @@
+ #include <linux/slab.h>
+ #include <linux/rational.h>
+ 
++#include "clk-fractional-divider.h"
++
+ static inline u32 clk_fd_readl(struct clk_fractional_divider *fd)
+ {
+ 	if (fd->flags & CLK_FRAC_DIVIDER_BIG_ENDIAN)
+@@ -68,9 +70,10 @@ static unsigned long clk_fd_recalc_rate(struct clk_hw *hw,
+ 	return ret;
+ }
+ 
+-static void clk_fd_general_approximation(struct clk_hw *hw, unsigned long rate,
+-					 unsigned long *parent_rate,
+-					 unsigned long *m, unsigned long *n)
++void clk_fractional_divider_general_approximation(struct clk_hw *hw,
++						  unsigned long rate,
++						  unsigned long *parent_rate,
++						  unsigned long *m, unsigned long *n)
+ {
+ 	struct clk_fractional_divider *fd = to_clk_fd(hw);
+ 	unsigned long scale;
+@@ -102,7 +105,7 @@ static long clk_fd_round_rate(struct clk_hw *hw, unsigned long rate,
+ 	if (fd->approximation)
+ 		fd->approximation(hw, rate, parent_rate, &m, &n);
+ 	else
+-		clk_fd_general_approximation(hw, rate, parent_rate, &m, &n);
++		clk_fractional_divider_general_approximation(hw, rate, parent_rate, &m, &n);
+ 
+ 	ret = (u64)*parent_rate * m;
+ 	do_div(ret, n);
+diff --git a/drivers/clk/clk-fractional-divider.h b/drivers/clk/clk-fractional-divider.h
+new file mode 100644
+index 000000000000..4fa359a12ef4
+--- /dev/null
++++ b/drivers/clk/clk-fractional-divider.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++struct clk_hw;
++
++void clk_fractional_divider_general_approximation(struct clk_hw *hw,
++						  unsigned long rate,
++						  unsigned long *parent_rate,
++						  unsigned long *m,
++						  unsigned long *n);
+diff --git a/drivers/clk/rockchip/clk.c b/drivers/clk/rockchip/clk.c
+index 049e5e0b64f6..b7be7e11b0df 100644
+--- a/drivers/clk/rockchip/clk.c
++++ b/drivers/clk/rockchip/clk.c
+@@ -22,6 +22,8 @@
+ #include <linux/regmap.h>
+ #include <linux/reboot.h>
+ #include <linux/rational.h>
++
++#include "../clk-fractional-divider.h"
+ #include "clk.h"
+ 
+ /*
+@@ -178,10 +180,8 @@ static void rockchip_fractional_approximation(struct clk_hw *hw,
+ 		unsigned long rate, unsigned long *parent_rate,
+ 		unsigned long *m, unsigned long *n)
+ {
+-	struct clk_fractional_divider *fd = to_clk_fd(hw);
+ 	unsigned long p_rate, p_parent_rate;
+ 	struct clk_hw *p_parent;
+-	unsigned long scale;
+ 
+ 	p_rate = clk_hw_get_rate(clk_hw_get_parent(hw));
+ 	if ((rate * 20 > p_rate) && (p_rate % rate != 0)) {
+@@ -190,18 +190,7 @@ static void rockchip_fractional_approximation(struct clk_hw *hw,
+ 		*parent_rate = p_parent_rate;
+ 	}
+ 
+-	/*
+-	 * Get rate closer to *parent_rate to guarantee there is no overflow
+-	 * for m and n. In the result it will be the nearest rate left shifted
+-	 * by (scale - fd->nwidth) bits.
+-	 */
+-	scale = fls_long(*parent_rate / rate - 1);
+-	if (scale > fd->nwidth)
+-		rate <<= scale - fd->nwidth;
+-
+-	rational_best_approximation(rate, *parent_rate,
+-			GENMASK(fd->mwidth - 1, 0), GENMASK(fd->nwidth - 1, 0),
+-			m, n);
++	clk_fractional_divider_general_approximation(hw, rate, parent_rate, m, n);
+ }
+ 
+ static struct clk *rockchip_clk_register_frac_branch(
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.30.2
+
