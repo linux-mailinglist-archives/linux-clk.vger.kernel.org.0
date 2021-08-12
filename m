@@ -2,73 +2,71 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3803E9803
-	for <lists+linux-clk@lfdr.de>; Wed, 11 Aug 2021 20:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73BB53E9E01
+	for <lists+linux-clk@lfdr.de>; Thu, 12 Aug 2021 07:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbhHKSyU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 11 Aug 2021 14:54:20 -0400
-Received: from mail-pj1-f41.google.com ([209.85.216.41]:44811 "EHLO
-        mail-pj1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbhHKSyU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 11 Aug 2021 14:54:20 -0400
-Received: by mail-pj1-f41.google.com with SMTP id hv22-20020a17090ae416b0290178c579e424so6601183pjb.3;
-        Wed, 11 Aug 2021 11:53:56 -0700 (PDT)
+        id S234367AbhHLFjt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 12 Aug 2021 01:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234361AbhHLFjt (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 12 Aug 2021 01:39:49 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BDAC0613D3
+        for <linux-clk@vger.kernel.org>; Wed, 11 Aug 2021 22:39:24 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id b7so7758567edu.3
+        for <linux-clk@vger.kernel.org>; Wed, 11 Aug 2021 22:39:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=Aauu7gYvMaBruI9Zt1CgTlkxSZ8evQwPBhKOMH6jf8s=;
+        b=o42wBDdZ8eUnP65ttOx8SoiRxi7wqG5rfLFPzZF055Wumtk9+Otebp0gc+jrsbFXpf
+         SKJu0pQkRhdr8lwoXRCrLN3FzWdall/ccuWr2cvquTMdWfe9n5qoxACYgwrZsrZ0XHmi
+         jleo0SgL+nXa5mLBsvY9OFu2uf7vfDmVVWfggMDyXNSDXHgbmK+2zb+PmMkDTpn3N0Ve
+         +fcAb0/rdiKUm4/iWcNh6nVs16sQPOnNylFwn/y15QSurfaWcBhxcDrtkmZ04mB5XLRQ
+         /0p30m+ODWydRihtrBUjc0MuLZ3VxrbKL9MK4itElCGf/ETlc7Acr42QMr2lESRZoIUk
+         OHfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=M1uZob/D+GwylCXdgRi3obUxS40Qeihru4aemoTLAUQ=;
-        b=RQAqBoGxIRm1rwU9qIU5SbqrqvqxjaC4mdS43Jw1QDluVcYXrEohGmWjV7FvMy/PNJ
-         Sw9LtcKEa6fB5ZTdiTSKfe5678gQ1YlwcybLwCe7mHnQ87MqkKxK5sdqObKh5epaNV6E
-         0wMDsCMEt8WsiczQIKba06N7tdjUIIQuMf1jEnBGGBpX49G4Il6SElXMMF9hlaznrn/h
-         UaL6A6vussnbhn5u9suoDROOYh33eSXtnWrsXI39qoaifIUSuvkp9kez/xAM5keSgKrv
-         GJE4oZQB7lOBinpE+6bxLvy00vTQZRNORXQ3nDEqRGWi2/xoRCG2G2fEuOU1UpmMzcE0
-         5dwQ==
-X-Gm-Message-State: AOAM530UnvSDATHBkB6o2Zh0R1v/lh0hhVIh3fNhQNHgVt0M5GMU2D76
-        X6Lya6jvYAWgbot+fRdCYQ==
-X-Google-Smtp-Source: ABdhPJzwPWdzjp/BVTGo4S+qJUbIvZLtknvskDXcbQTrge6t+rdZVuqlnSego1aoSS8+I6dV0b0rbA==
-X-Received: by 2002:a17:90a:d144:: with SMTP id t4mr64475pjw.113.1628708036070;
-        Wed, 11 Aug 2021 11:53:56 -0700 (PDT)
-Received: from robh.at.kernel.org ([208.184.162.215])
-        by smtp.gmail.com with ESMTPSA id x13sm188199pjh.30.2021.08.11.11.53.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Aug 2021 11:53:55 -0700 (PDT)
-Received: (nullmailer pid 90561 invoked by uid 1000);
-        Wed, 11 Aug 2021 18:53:52 -0000
-Date:   Wed, 11 Aug 2021 12:53:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-Cc:     Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        punit1.agrawal@toshiba.co.jp, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yuji2.ishikawa@toshiba.co.jp, Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Subject: Re: [PATCH v4 2/4] dt-bindings: clock: Add DT bindings for SMU of
- Toshiba Visconti TMPV770x SoC
-Message-ID: <YRQcwD7771ncxtMT@robh.at.kernel.org>
-References: <20210804092244.390376-1-nobuhiro1.iwamatsu@toshiba.co.jp>
- <20210804092244.390376-3-nobuhiro1.iwamatsu@toshiba.co.jp>
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=Aauu7gYvMaBruI9Zt1CgTlkxSZ8evQwPBhKOMH6jf8s=;
+        b=muWz4a9MlJ9jwjSMXcviBZki1GT+LbVnR96WXCaOg6zO7F9TSZDxUHQZgnjig1qVJN
+         uFbfFX/JAGYWgJM6pFyq0NsUirq36tjXNG5OB//9JVIWLxDJHhsSUqyBOZNvQKOcFaOI
+         Da1kwxRassryZkKtLtQRm/0xxglqDHKtlDKJMf1gg/cRU4n9BTrYu1VcQDnAzO/t0/GQ
+         zyYU3U270sibKjPQiMg7HTMCRvlatXb8jZ09NdwAKDkUzHlzrLrPULpd2FeMUlYufV3D
+         7bObDgTangyatt0JOioBbkIEonZykQi5Gxry8MEbBcyEq8cEqlHBSCpECCv1hfOnH563
+         Q7sQ==
+X-Gm-Message-State: AOAM533Sp+KyWRHi2HGhnlEvwPT7a6Xd2n4e2hrvX7O5v6nDqc10VV9v
+        NMTrX4JziLZ+EQrc55M9hPF5FMGdIJM1i/cXu28=
+X-Google-Smtp-Source: ABdhPJxjA0Jg0qIwHXi4Z8PkNNES7uws7RFBpxPdKy5wYU5yOnngysGLYCZLAgOfQAACXgT4cackBxetTPteIXVXS5A=
+X-Received: by 2002:aa7:ce87:: with SMTP id y7mr3374126edv.306.1628746762842;
+ Wed, 11 Aug 2021 22:39:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210804092244.390376-3-nobuhiro1.iwamatsu@toshiba.co.jp>
+Reply-To: godwinppter@gmail.com
+Sender: godwinpeter2401@gmail.com
+Received: by 2002:a50:7ec9:0:0:0:0:0 with HTTP; Wed, 11 Aug 2021 22:39:22
+ -0700 (PDT)
+From:   Godwin Pete <godwinnpeter@gmail.com>
+Date:   Thu, 12 Aug 2021 07:39:22 +0200
+X-Google-Sender-Auth: 9dB3Kq6fVsZaEWjQhXMYkp_Lhw8
+Message-ID: <CAGyeThDJtSy-yjCiZiPNMtRhWZb2tCZUWMZP0NwyfoGcL=ctZA@mail.gmail.com>
+Subject: I need your response
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, 04 Aug 2021 18:22:42 +0900, Nobuhiro Iwamatsu wrote:
-> Add device tree bindings for SMU (System Management Unit) controller of
-> Toshiba Visconti TMPV770x SoC series.
-> 
-> Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-> ---
->  .../clock/toshiba,tmpv770x-pismu.yaml         |  50 +++++
->  include/dt-bindings/clock/toshiba,tmpv770x.h  | 181 ++++++++++++++++++
->  include/dt-bindings/reset/toshiba,tmpv770x.h  |  41 ++++
->  3 files changed, 272 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/toshiba,tmpv770x-pismu.yaml
->  create mode 100644 include/dt-bindings/clock/toshiba,tmpv770x.h
->  create mode 100644 include/dt-bindings/reset/toshiba,tmpv770x.h
-> 
+My good friend,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+I just want to know if you, can help me to transfer the amount of
+($6Million). After the transfer we have to share it, 50% for me, and
+50% for you. Please let me know if you can help me for more
+information in regards with the transfer. I hope you can work with me
+honestly?
+
+
+Thanks.
+
+Godwin Peter,
