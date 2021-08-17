@@ -2,74 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2306B3EE1E2
-	for <lists+linux-clk@lfdr.de>; Tue, 17 Aug 2021 02:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C2E3EE211
+	for <lists+linux-clk@lfdr.de>; Tue, 17 Aug 2021 03:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237029AbhHQA54 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 16 Aug 2021 20:57:56 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:33154 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S237458AbhHQA5X (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 16 Aug 2021 20:57:23 -0400
-X-UUID: ce495c5686564724827ffbe9e808d723-20210817
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=8Se+dA6bWDSCT1uz7OrMcwbFzv7R0Gbma0mJSh3g/IE=;
-        b=IreyQIm+HEdAUkdKeuVFSS3S8PPo7aKvgcFk4dE5ezLF24ACJKXIjjP5SPqXceX+95rp6EW2dvjD3iJDKh6brWwsKj29RP+npN4e+7UEznMJD1bWQzfstrEClrbOxKe27epjzjO6Uu6pNjjW7LfiFUD+ahT2TzWBpY1j3GsFvc0=;
-X-UUID: ce495c5686564724827ffbe9e808d723-20210817
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
-        (envelope-from <chun-jie.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 359255259; Tue, 17 Aug 2021 08:56:47 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 17 Aug 2021 08:56:46 +0800
-Received: from mtksdccf07 (172.21.84.99) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 17 Aug 2021 08:56:46 +0800
-Message-ID: <326b8ef66a70b526d11b0e2fad4f94b22241e9c1.camel@mediatek.com>
-Subject: Re: [PATCH 08/22] clk: mediatek: Add MT8195 ccusys clock support
-From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 17 Aug 2021 08:56:46 +0800
-In-Reply-To: <CAGXv+5ETXT-pxuP1NFEUrV+m3RR25zD9RZmDjHxVOLOy7gGj8w@mail.gmail.com>
-References: <20210616224743.5109-1-chun-jie.chen@mediatek.com>
-         <20210616224743.5109-9-chun-jie.chen@mediatek.com>
-         <CAGXv+5ETXT-pxuP1NFEUrV+m3RR25zD9RZmDjHxVOLOy7gGj8w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        id S235351AbhHQB0M (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 16 Aug 2021 21:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235494AbhHQB0L (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 16 Aug 2021 21:26:11 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C5DC0617AE
+        for <linux-clk@vger.kernel.org>; Mon, 16 Aug 2021 18:25:39 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id g26so8937200ybe.0
+        for <linux-clk@vger.kernel.org>; Mon, 16 Aug 2021 18:25:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=iELgCLbQqv5tFsHgMTPz+ef0nc8wwD8GBHZ8BVFl4tE=;
+        b=pshFSEX5hG0P1wFr7rkSxtmqyGxRXvE61FQuPXDo7vRTqFmv9YgK/CQ15Z9meXeik5
+         nPTN57kpHDXQmSuGtXbZMGanV2zRX/Te9qjRY69Bf2Ipc9yHdTSbL0GpLb76Ds2oHk90
+         cTwmOlBaiJ5e8fPWctUKCR4HMdp41S47qQSxtYeKBuCIPQS+32T/z7RmH+Y87brrKXlf
+         BcEULn5zD+KhsdMs+i2lbStluRSwq4RX7AoPYAHajk5ALSK6kwcEVX+olFIIAoM8FN/V
+         P3RYGTRqoVuxASwyn129i5NMEBTkkEAi4ai42sOArorMd6DCTuiFNhn+lrAph8PCaIdR
+         FZtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=iELgCLbQqv5tFsHgMTPz+ef0nc8wwD8GBHZ8BVFl4tE=;
+        b=hv7iAmBCYo26J7UD2WNLX6KrDVXt6/rGFY6ZRDsqcyXAnqKsUpThGNPV50n41hTBw7
+         Ka6bK3hcjbNb12EUwysvMmdacmpyLo4w87szm/1TvxeZ0Ji2R1aphr9r3L050Ei4+3Qr
+         ZdbKDAmAxj88Kpy8xk3ivsLgOAWwvHI5C9nmOX6UoAb8v9WsxNHCk/ZfTsxsUZMaGVVu
+         omF/Ge9+Q4FTQbD4SgwM2x5t7nkqu+jJrjgFGjPt7VEbH8KaOV9s8u1P2eSCpysnaFjC
+         kKPLyqrNDwiGIJhw5Q0fj5S2N6HEJtX+sFxo3eQj2RBy2wSPPfOhKB4aWSVHndXcoz/k
+         nE2g==
+X-Gm-Message-State: AOAM533/+9uJ0sq9KvRQn24UYI7iGhy0hbtys67vfazHh0q0SdX2LU5O
+        aFYjviPg7SrsrORg7IXk9dMsqOUsxDZSXv9H4SU=
+X-Google-Smtp-Source: ABdhPJzVe7/0QIP7d9Wp2b410OgLcORKnGWwWYybgaCsajCANRP2FgP62pi+pD8W+++a9lkMLpAvoiDknRJKirEFGhA=
+X-Received: by 2002:a25:a4e5:: with SMTP id g92mr1194348ybi.327.1629163538513;
+ Mon, 16 Aug 2021 18:25:38 -0700 (PDT)
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Received: by 2002:a05:7000:5e1b:0:0:0:0 with HTTP; Mon, 16 Aug 2021 18:25:38
+ -0700 (PDT)
+Reply-To: charleswjacksonjr94@outlook.com
+From:   "Charles w.jackson" <powellilluminati666@gmail.com>
+Date:   Mon, 16 Aug 2021 18:25:38 -0700
+Message-ID: <CAC=uWm5Y0MmV0o6ABTZL2cowaHUa7o=4iQeVGVEQ5n_3XZ_vFQ@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-T24gVHVlLCAyMDIxLTA3LTA2IGF0IDE3OjAwICswODAwLCBDaGVuLVl1IFRzYWkgd3JvdGU6DQo+
-IE9uIFRodSwgSnVuIDE3LCAyMDIxIGF0IDY6NTkgQU0gQ2h1bi1KaWUgQ2hlbg0KPiA8Y2h1bi1q
-aWUuY2hlbkBtZWRpYXRlay5jb20+IHdyb3RlOg0KPiA+IA0KPiA+IEFkZCBNVDgxOTUgY2N1c3lz
-IGNsb2NrIHByb3ZpZGVyDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogQ2h1bi1KaWUgQ2hlbiA8
-Y2h1bi1qaWUuY2hlbkBtZWRpYXRlay5jb20+DQo+IA0KPiBSZXZpZXdlZC1ieTogQ2hlbi1ZdSBU
-c2FpIDx3ZW5zdEBjaHJvbWl1bS5vcmc+DQo+IA0KPiBBbHNvLCBJIG5vdGljZWQgdGhhdCBNZWRp
-YXRlayBkcml2ZXJzIGRvbid0IHN1cHBvcnQgdGhlIHJlc2V0DQo+IGNvbnRyb2xzIGZvdW5kDQo+
-IGluIHRoZXNlIGNsb2NrIGNvbnRyb2xsZXJzLiBBcmUgdGhlcmUgcGxhbnMgdG8gYWRkIHN1cHBv
-cnQgZm9yIHRoZW0/DQoNCkF0IHByZXNlbnQsIHdlIGhhdmUgbm8gcGxhbiB0byBzdXBwb3J0IHJl
-c2V0IGNvbnRyb2wgaW4gY2xvY2sNCmNvbnRyb2xsZXJzIGJlY2F1c2Ugbm8gcmVxdWVzdCBmcm9t
-IHN1YiBzeXN0ZW0sIGJ1dCB3ZSBoYXZlIHJlc2V0DQpjb250cm9sbGVyIGluIE1UODE5NSBmcm9t
-IFRPUFJHVSBbMV0uDQoNClsxXSANCmh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcHJvamVj
-dC9saW51eC1tZWRpYXRlay9saXN0Lz9zZXJpZXM9NTIxMjE5DQoNCkJlc3QgUmVnYXJkcywNCkNo
-dW4tSmllDQo=
+--=20
+Hallo lieber Beg=C3=BCnstigter
 
+Eine Million zweihunderttausend Dollar (1.200.000.000,00 USD) wurden gespen=
+det
+Charles.w.jackson mit einem Power Ball-Jackpot von 344,6 Millionen
+US-Dollar, den er
+in den USA gewonnen. Gehen Sie zur=C3=BCck, um weitere Informationen zu
+Anspr=C3=BCchen zu erhalten:
+charleswjacksonjr94@outlook.com.
+
+    Es wurde festgestellt, dass, wenn Sie diese E-Mail in Ihrem Spam
+finden, es bitte wissen
+Es wird durch ein schwaches Netzwerk verursacht, das auf Ihre Antwort warte=
+t
+
+Herr Charles.w.jackson.
