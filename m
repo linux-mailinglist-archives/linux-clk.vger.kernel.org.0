@@ -2,178 +2,101 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 320213EE2E3
-	for <lists+linux-clk@lfdr.de>; Tue, 17 Aug 2021 03:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95CC3EE72D
+	for <lists+linux-clk@lfdr.de>; Tue, 17 Aug 2021 09:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237753AbhHQBby (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 16 Aug 2021 21:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
+        id S238432AbhHQH1X (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 17 Aug 2021 03:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237733AbhHQBbQ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 16 Aug 2021 21:31:16 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4FEC0617AF;
-        Mon, 16 Aug 2021 18:30:43 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id x7so30213719ljn.10;
-        Mon, 16 Aug 2021 18:30:43 -0700 (PDT)
+        with ESMTP id S238067AbhHQH1W (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 17 Aug 2021 03:27:22 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC925C061764
+        for <linux-clk@vger.kernel.org>; Tue, 17 Aug 2021 00:26:49 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id z9so27037749wrh.10
+        for <linux-clk@vger.kernel.org>; Tue, 17 Aug 2021 00:26:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iOx0CWJJWTap5wEALtflt5TD5too2w66bm1HP4jwmAM=;
-        b=dreUCBMrVhYah6QEsUyRd1PPgDd5hIy+DesXjyoqwsziCnPgxwHOO3/ccoapjG7aZi
-         gdOB9YWHykn9CBHVoMbolMqh3iE0EhyvsLH+qGOvgVt03Deot8AtFfdcyWSVoXnQ1eVU
-         UwnBkCAe+2Tdsf1MZCRe5vcw/RW+uiM52YnRIY+ENijj5tE+Yemi7r9GgE89BUMAmAUM
-         jsAI1v0kF23+iatkXiKJaiEtA3oBFi0ltiMZfhH9/3bz05xizmamYpTc+zUn/W5V1sbL
-         UBn+LlIxSaB1dLLVkfigh8u7UEPw4trFV1Yo47xqq5JHzpNLRZYYxHJ4WQuJ3EDJfhHi
-         RPhw==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DeSKEV4kzIYCFvMlyG0CcZpPIPk6C3caP7V/Uxgw/9k=;
+        b=eIdqLOZVL0OULfaNktsy49d15zGef7kYk5Nsaq5mcWm+4QJjKmvjms0mljsplVDwyv
+         b1QwVTESuN9vFQIXGgKcGFtJuQu+QVTC0vCQOpBHOlydYmWISc2TxqiZdbdJmaE8DKZY
+         DMjaDsvDb1vzIWum/cSNA+M71QNvMW8pJrZmzRHbcvUpTmUCRhRb6UBvpO5LgA9fAsga
+         dfKLBbJzl7CrVmzcEdaYOWcoeZuYp1d04TrMaxOtXMOrG5sHIu1wqL/ENHaa2YhvTGz9
+         KCD7U4L+l1oBtUt9sFbCtmbz3cRGu5FkkdlSQxmHKkZKfmUJHP6xjOTZn7DAdrGG41Jb
+         tauw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iOx0CWJJWTap5wEALtflt5TD5too2w66bm1HP4jwmAM=;
-        b=L1SG/c5s+JQmQW/PtGogEavn+8e8TIShby16MgMuUj8EC7lFOPSSPVT/O64L049JSG
-         JknfUHDxiayHzqvLO1hq9PZswqMKzDyIYUkXlsmD90QWNkdJBX24B84z3Z5RLUx9UfSA
-         QjlDN5fro+uVIu0ACrF+tJxzKw4pNl6lChNvNHwee0Bd4HZuWIXW+6CiRWbjIubCDBSj
-         2ttIgPbOD9AvpSTTesmHAuaL3YrD68sYgbhjg7N+2jfASjC/htJNGWT0XCTr/UGdASn9
-         P3noOZ973rNFEtKWgqsQgyCUnGyaZoGx+u7eXVP7G/Ey7p7APh6NlmIjmi3Hav8R4bMW
-         PNKw==
-X-Gm-Message-State: AOAM532THN3tTcsfTrrJrMnOiXbeKHglgwKnOYzUl26rD09k8vw6nI25
-        /Kql+neIxnDcWf1C6kispPE=
-X-Google-Smtp-Source: ABdhPJyJWT1KmD0sqd2sSotoMjtfPR5X64L14svV6ntEW3IdWZmW/kCpAtqR9QrK1vxFDyAhpmSYDQ==
-X-Received: by 2002:a05:651c:39c:: with SMTP id e28mr864074ljp.498.1629163841949;
-        Mon, 16 Aug 2021 18:30:41 -0700 (PDT)
-Received: from localhost.localdomain (46-138-85-91.dynamic.spd-mgts.ru. [46.138.85.91])
-        by smtp.gmail.com with ESMTPSA id g30sm46607lfj.298.2021.08.16.18.30.40
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DeSKEV4kzIYCFvMlyG0CcZpPIPk6C3caP7V/Uxgw/9k=;
+        b=AGXX+l+Cwu7TqTzHIUFpaTfm9ZnwiWdPppTRSb2kbsaAVS8wJY60SvbZZC+fvozV4o
+         SOaMCkJfodV7Z7JjaCiPxjybNswaKwfes10JZoLBUw/5VTESFUJE45WC9Y7J2ilwNTvH
+         Bvl/7s585AvXM0/1kV/RR1tKQSeqtqFOkCCfU3ZP6kR1iUNi0/NnieUQLVNXlN6kaZmk
+         ZIn40StB3zYaTZcQgMEaLbGQMvIWxpMjWQOq/Jm9yy/zUP4H2RekqOgSSqq6nqQis3Qy
+         VMUi0imx9iEB015h2Evqkn9NUA0K1eaEXe9zS+8Fs+oxNl8NIEjbB40zRrOGwUAVmaQk
+         nNbw==
+X-Gm-Message-State: AOAM531J3ksOOeGJROFARGt1QJXLSKPF3q+ui5jo+8ompMpnatpl09tv
+        LWt5bfR5/GKEiew/Ur6cayPoIJxImZSv2A==
+X-Google-Smtp-Source: ABdhPJxpbtwzWAD4DHKJBWVTKhC3N9ycqOWMcg7VtGaTjC0n0r5Cn7CshtZhQlmoPTl82e1tVBmgng==
+X-Received: by 2002:adf:8287:: with SMTP id 7mr2228934wrc.360.1629185208510;
+        Tue, 17 Aug 2021 00:26:48 -0700 (PDT)
+Received: from blmsp ([2a02:2454:3e6:c900::97e])
+        by smtp.gmail.com with ESMTPSA id b12sm1576598wrx.72.2021.08.17.00.26.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Aug 2021 18:30:41 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: [PATCH v8 34/34] ARM: tegra20/30: Disable unused host1x hardware
-Date:   Tue, 17 Aug 2021 04:27:54 +0300
-Message-Id: <20210817012754.8710-35-digetx@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210817012754.8710-1-digetx@gmail.com>
-References: <20210817012754.8710-1-digetx@gmail.com>
+        Tue, 17 Aug 2021 00:26:48 -0700 (PDT)
+Date:   Tue, 17 Aug 2021 09:26:47 +0200
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Russell King <linux@armlinux.org.uk>, linux-clk@vger.kernel.org
+Subject: Re: [PATCH] clk: Fix *bulk_get* return value documentation
+Message-ID: <20210817072647.55funsorbowf544b@blmsp>
+References: <20210811075719.1716886-1-msp@baylibre.com>
+ <162879633884.19113.18202513608808069954@swboyd.mtv.corp.google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <162879633884.19113.18202513608808069954@swboyd.mtv.corp.google.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-MPE, VI, EPP and ISP were never used and we don't have drivers for them.
-Since these modules are enabled by default in a device-tree, a device is
-created for them, blocking voltage scaling because there is no driver to
-bind, and thus, state of PMC driver is never synced. Disable them.
+Hi Stephen,
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- arch/arm/boot/dts/tegra20.dtsi | 4 ++++
- arch/arm/boot/dts/tegra30.dtsi | 8 ++++++++
- 2 files changed, 12 insertions(+)
+On Thu, Aug 12, 2021 at 12:25:38PM -0700, Stephen Boyd wrote:
+> Quoting Markus Schneider-Pargmann (2021-08-11 00:57:19)
+> > Some of the bulk_get variants document that the return value is a valid
+> > IS_ERR() condition but it is not. These functions return an errno
+> > directly if an error occures.
+> > 
+> > This patch fixes that documentation and documents that the return value
+> > is 0 or errno.
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > ---
+> >  include/linux/clk.h | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/include/linux/clk.h b/include/linux/clk.h
+> > index 266e8de3cb51..56a741903963 100644
+> > --- a/include/linux/clk.h
+> > +++ b/include/linux/clk.h
+> > @@ -340,7 +340,7 @@ struct clk *clk_get(struct device *dev, const char *id);
+> >   * that were obtained will be freed before returning to the caller.
+> >   *
+> >   * Returns 0 if all clocks specified in clk_bulk_data table are obtained
+> > - * successfully, or valid IS_ERR() condition containing errno.
+> > + * successfully, or an errno otherwise.
+> >   * The implementation uses @dev and @clk_bulk_data.id to determine the
+> >   * clock consumer, and thereby the clock producer.
+> >   * The clock returned is stored in each @clk_bulk_data.clk field.
+> 
+> While you're here can you also use the Return: syntax so it isn't
+> freeform and doc generation can split it out?
 
-diff --git a/arch/arm/boot/dts/tegra20.dtsi b/arch/arm/boot/dts/tegra20.dtsi
-index 2cb31bdd9eea..32abe559645f 100644
---- a/arch/arm/boot/dts/tegra20.dtsi
-+++ b/arch/arm/boot/dts/tegra20.dtsi
-@@ -59,6 +59,7 @@ mpe@54040000 {
- 			reset-names = "mpe";
- 			operating-points-v2 = <&mpe_dvfs_opp_table>;
- 			power-domains = <&pd_mpe>;
-+			status = "disabled";
- 		};
- 
- 		vi@54080000 {
-@@ -70,6 +71,7 @@ vi@54080000 {
- 			reset-names = "vi";
- 			operating-points-v2 = <&vi_dvfs_opp_table>;
- 			power-domains = <&pd_venc>;
-+			status = "disabled";
- 		};
- 
- 		epp@540c0000 {
-@@ -81,6 +83,7 @@ epp@540c0000 {
- 			reset-names = "epp";
- 			operating-points-v2 = <&epp_dvfs_opp_table>;
- 			power-domains = <&pd_core>;
-+			status = "disabled";
- 		};
- 
- 		isp@54100000 {
-@@ -91,6 +94,7 @@ isp@54100000 {
- 			resets = <&tegra_car 23>;
- 			reset-names = "isp";
- 			power-domains = <&pd_venc>;
-+			status = "disabled";
- 		};
- 
- 		gr2d@54140000 {
-diff --git a/arch/arm/boot/dts/tegra30.dtsi b/arch/arm/boot/dts/tegra30.dtsi
-index be6fd700838c..55718e44ca98 100644
---- a/arch/arm/boot/dts/tegra30.dtsi
-+++ b/arch/arm/boot/dts/tegra30.dtsi
-@@ -145,6 +145,8 @@ mpe@54040000 {
- 			power-domains = <&pd_mpe>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_MPE>;
-+
-+			status = "disabled";
- 		};
- 
- 		vi@54080000 {
-@@ -158,6 +160,8 @@ vi@54080000 {
- 			power-domains = <&pd_venc>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_VI>;
-+
-+			status = "disabled";
- 		};
- 
- 		epp@540c0000 {
-@@ -171,6 +175,8 @@ epp@540c0000 {
- 			power-domains = <&pd_heg>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_EPP>;
-+
-+			status = "disabled";
- 		};
- 
- 		isp@54100000 {
-@@ -183,6 +189,8 @@ isp@54100000 {
- 			power-domains = <&pd_venc>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_ISP>;
-+
-+			status = "disabled";
- 		};
- 
- 		gr2d@54140000 {
--- 
-2.32.0
+thanks, good idea. Will do that.
 
+Best,
+Markus
