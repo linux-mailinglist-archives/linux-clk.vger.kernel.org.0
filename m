@@ -2,40 +2,40 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F312A3F5B36
-	for <lists+linux-clk@lfdr.de>; Tue, 24 Aug 2021 11:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE9C3F5B55
+	for <lists+linux-clk@lfdr.de>; Tue, 24 Aug 2021 11:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235566AbhHXJr1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 24 Aug 2021 05:47:27 -0400
-Received: from mail-ua1-f42.google.com ([209.85.222.42]:41951 "EHLO
-        mail-ua1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235703AbhHXJr0 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 24 Aug 2021 05:47:26 -0400
-Received: by mail-ua1-f42.google.com with SMTP id 75so10614100uav.8;
-        Tue, 24 Aug 2021 02:46:42 -0700 (PDT)
+        id S235803AbhHXJw2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 24 Aug 2021 05:52:28 -0400
+Received: from mail-ua1-f54.google.com ([209.85.222.54]:38805 "EHLO
+        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235658AbhHXJw2 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 24 Aug 2021 05:52:28 -0400
+Received: by mail-ua1-f54.google.com with SMTP id 90so10624130uax.5;
+        Tue, 24 Aug 2021 02:51:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hqodygYobBXq0/TAU8O8Kl7uUmBwz/UAGwIO0XgGL9A=;
-        b=T7zMyTP/Tkanl6Ry1jVE3DLPhSp/vNuOzVK71GOxXN1FGaDAWXWYjl6+YyeQ0ZrO0a
-         b2groy7IH/XcmHiv9j8qwnWKOI/vkn2tm5BHBocZWrTJWpIezgrLGSnU+c2RzQP3DcOh
-         ojeCOdpWOsyV0+1HslJQOBI6EcMtB/GfTI8Z94wi07rwIsgx2hFXGvjQFzeyzmYFq2ue
-         gTCmx1b+7falYdA/22pSbvU5NQH6I2dAztKgyHHxyYJEuaTJMjmVcxUN6dSn7lMvGXGE
-         PNNoAx/QM23FVngQG0UNWbkJHK9uiRBIxGKbGSkdpKJqN+pL37mq1IEoqR4SzUW/Nks0
-         qIxw==
-X-Gm-Message-State: AOAM5314yp+wOAhZEKBo90jfkTL97Q3u1nbP56KetgHvYS5VapBYuuoi
-        NE2xqUq0HJe8w0mSo233K9pDhh20fyTkfjzt7XU=
-X-Google-Smtp-Source: ABdhPJxF9bS7xsIdWxYKR9Z16K3aHj84ioBBfAZ0EqCe9leLs2pXXK2tKIEpYyjsaEpMxUikJVPvo2ozDdR5PhBlyDE=
-X-Received: by 2002:a05:6102:3e92:: with SMTP id m18mr27022666vsv.53.1629798402452;
- Tue, 24 Aug 2021 02:46:42 -0700 (PDT)
+        bh=aPMkc5tkrrP7KSGuGhzhgFxgFiDjCPdAxtqc5KXrigw=;
+        b=gZPoUvW+yWg2W/rJIn2aGK9cgxRZvKRVSrkVdR3gR8v9UHMBKkPo8mZ9T0138MAbVE
+         fwrUafb7933yva/7/xUKVkjc4Kx/RHZK76brdvMRzEyPc6b9hRT9xE8zvxR7/vy+sQmz
+         /WM2QySspjCazeejQyVy61HCSzPH7xSrJgwEouN5uziig3+bLhKZhYB6VFcHTPqpMCno
+         XlEDLPaXtcwWYgg/YUDgaOfnfuky7w3uwIJ5f/ELuZcbshksjBV3MTOkaKUWeeyYVNUv
+         ryETPttrnaXrm++5OKexfiezD+07m2fhu0enn1d+cHw2+U4jmJIREySGHj8QBXa/pnUi
+         5H5g==
+X-Gm-Message-State: AOAM532LjRbIkU36xWP6VKUK/16XdiczkS3ly16Pn72i2AyjAvhzpwIj
+        4mBH4qgB3ZGbKqBhbg98+a/eAE99eN5063Rum7o=
+X-Google-Smtp-Source: ABdhPJyvTEDivJEYMu7XfKx/XQwcqMgLgi4M7Ikex8hqMaeOHRbq9363DenW2+hH2IWWP/1Z6g70/RPGNNduhIYdzfU=
+X-Received: by 2002:a67:ce90:: with SMTP id c16mr5472147vse.7.1629798704259;
+ Tue, 24 Aug 2021 02:51:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210810072533.27620-1-shubhrajyoti.datta@xilinx.com>
-In-Reply-To: <20210810072533.27620-1-shubhrajyoti.datta@xilinx.com>
+References: <20210810072533.27620-1-shubhrajyoti.datta@xilinx.com> <20210810072533.27620-3-shubhrajyoti.datta@xilinx.com>
+In-Reply-To: <20210810072533.27620-3-shubhrajyoti.datta@xilinx.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 24 Aug 2021 11:46:31 +0200
-Message-ID: <CAMuHMdVvy+cHJB4XQ8HKLrQWvOpUUZyqVaGA69mdy_yqU8rZPA@mail.gmail.com>
-Subject: Re: [PATCH v12 0/5] clk: clocking-wizard: Driver updates
+Date:   Tue, 24 Aug 2021 11:51:33 +0200
+Message-ID: <CAMuHMdU=td=e-tv7ohNQe_VDHB8d6+UUUnj2=nv3DFb6atEn2w@mail.gmail.com>
+Subject: Re: [PATCH v12 2/5] clk: clocking-wizard: Add the clockwizard to clk directory
 To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 Cc:     linux-clk <linux-clk@vger.kernel.org>, git@xilinx.com,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
@@ -47,36 +47,50 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 Hi Shubhrajyoti,
 
+Thanks for your patch!
+
 On Tue, Aug 10, 2021 at 10:37 AM Shubhrajyoti Datta
 <shubhrajyoti.datta@xilinx.com> wrote:
-> The patch does the following
-> Update the versions of the clocking wizard ip.
-> Move from staging to clk directory.
-> Update the bindings.
+> Add clocking wizard driver to clk.
+> And delete the driver from the staging as it is in drivers/clk.
 
-Thanks for your series!
-
-> v12:
-> No change.
-> Rebased
-
-There is a change: you lost the move from staging to clk.
+The old driver is not deleted from staging?
 
 >
-> Shubhrajyoti Datta (5):
->   dt-bindings: add documentation of xilinx clocking wizard
->   clk: clocking-wizard: Add the clockwizard to clk directory
->   clk: clocking-wizard: Rename nr-outputs to xlnx,nr-outputs
->   clk: clocking-wizard: Fix the reconfig for 5.2
->   clk: clocking-wizard: Update the compatible
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> ---
 >
->  .../bindings/clock/xlnx,clocking-wizard.yaml  |  77 +++
->  drivers/clk/Kconfig                           |   9 +
->  drivers/clk/Makefile                          |   1 +
->  drivers/clk/clk-xlnx-clock-wizard.c           | 643 ++++++++++++++++++
->  4 files changed, 730 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
+>  drivers/clk/Kconfig                 |   9 +
+>  drivers/clk/Makefile                |   1 +
+>  drivers/clk/clk-xlnx-clock-wizard.c | 635 ++++++++++++++++++++++++++++
+>  3 files changed, 645 insertions(+)
 >  create mode 100644 drivers/clk/clk-xlnx-clock-wizard.c
+>
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index e873f9ea2e65..22817be89bd8 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -390,6 +390,15 @@ config COMMON_CLK_K210
+>         help
+>           Support for the Canaan Kendryte K210 RISC-V SoC clocks.
+>
+> +config COMMON_CLK_XLNX_CLKWZRD
+> +       tristate "Xilinx Clocking Wizard"
+> +       depends on COMMON_CLK && OF
+
+Should there be a platform dependency ("depends on <FOO> ||
+COMPILE_TEST"), to avoid asking the user about this driver when
+configuring a kernel for a platform that does not have this device,
+or can this device be present on any platform?
+
+Despite the original driver having been added 7 years ago, there are
+no upstream users of "xlnx,clocking-wizard" yet...
+
+> +       help
+> +         Support for the Xilinx Clocking Wizard IP core clock generator.
+> +         Adds support for clocking wizard and compatible.
+> +         This driver supports the Xilinx clocking wizard programmable clock
+> +         synthesizer. The number of output is configurable in the design.
 
 Gr{oetje,eeting}s,
 
