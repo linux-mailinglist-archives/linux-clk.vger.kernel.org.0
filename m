@@ -2,84 +2,77 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A070D3F9882
-	for <lists+linux-clk@lfdr.de>; Fri, 27 Aug 2021 13:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 443273F98AA
+	for <lists+linux-clk@lfdr.de>; Fri, 27 Aug 2021 14:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245019AbhH0Lmc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 27 Aug 2021 07:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38932 "EHLO
+        id S245057AbhH0MDW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 27 Aug 2021 08:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233376AbhH0Lmb (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 27 Aug 2021 07:42:31 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B389BC0613CF
-        for <linux-clk@vger.kernel.org>; Fri, 27 Aug 2021 04:41:42 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id g13-20020a17090a3c8d00b00196286963b9so1747059pjc.3
-        for <linux-clk@vger.kernel.org>; Fri, 27 Aug 2021 04:41:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=itfac-mrt-ac-lk.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id;
-        bh=mGpH5mvYecvwlCQ8u2SHdQPH4lb1tr2RmaIwutOOIpo=;
-        b=yAeswcrBqfgkHPkxXbxBYRCTM1ss+RtFy8k2TIQe7lO/YP7yO0he7KCaivhVA2wjdQ
-         wq2hG8o6/3CIAW/GIh5lk2Qm6dTtl1XSxPai0k8p4tmb5i/dUakXBLwOdaYZ7jgsUS8C
-         cb7qfzc1afzkoG3ekB/85O2+1996VAqpxBIKho5PskjWBSCo5AxgySSQHiJCiLqqXY2U
-         kaZJ0Bm13g6iRsUeOFuVH/YNQyrj2Nq6ubC8Ul9YivP7RCCYY9HBNWYsaxF4cxZlJtzI
-         r1scPaqPfP2DSRk+RKy1kZlRcTWq51iQbORnVM/6H03mk+OkXi+R7rsklk07oSDTcPiT
-         g+CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=mGpH5mvYecvwlCQ8u2SHdQPH4lb1tr2RmaIwutOOIpo=;
-        b=E+LzZkm5XFfhPpjWnRw4MnGAq+pAq1T+1ngq4mc6vmD1W13OT5VIFPdTu4dNNa4KRI
-         l1rRam7o/WrJShtKfq8P/aTilfsAkY6L/cxNMqLj4g+7ept9G6OtGq2qx9MoZXPObTEG
-         Je4i7gnkJwJHCBWkfWEpULDy10HLtQZfgwZ3AOjHZKQZ2+qD6COHQUyfYozdMyQ4rptk
-         d2hZEJcDQpRlNzsiTQTWnp7GH/uUNnH1rot0OVhZEzDoAzIWxw2X5pinKKXRZQZU6KuK
-         Q+Jyt80cqWlYPYCMMN9HtFUkVmHEKDZMRIDxn49mN1ulI4/1FxC9MsyS8S3+I64uw9/M
-         AkNA==
-X-Gm-Message-State: AOAM533+nZQzmDXM4fq2RJ2u5CWrbCVsjdocAjNCJbd/rHDtHhOTltjg
-        VttrAkchj9rgzNRGZUDf0tLi
-X-Google-Smtp-Source: ABdhPJyEBx8IHEJhRdJ/KkDw4FOc5Vq3z8Q5+PGGvfxtplxN/JfH8vBByqeOI8eJ/9EdufbTYektgA==
-X-Received: by 2002:a17:90b:1d0c:: with SMTP id on12mr23008283pjb.12.1630064502206;
-        Fri, 27 Aug 2021 04:41:42 -0700 (PDT)
-Received: from localhost.localdomain ([123.231.122.209])
-        by smtp.gmail.com with ESMTPSA id i11sm5977457pfd.37.2021.08.27.04.41.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Aug 2021 04:41:41 -0700 (PDT)
-From:   "F.A.Sulaiman" <asha.16@itfac.mrt.ac.lk>
-To:     mturquette@baylibre.com, sboyd@kernel.org
-Cc:     "F.A.Sulaiman" <asha.16@itfac.mrt.ac.lk>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: fix passing zero to warning in clk_hw_create_clk()
-Date:   Fri, 27 Aug 2021 17:11:15 +0530
-Message-Id: <20210827114115.15255-1-asha.16@itfac.mrt.ac.lk>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S245060AbhH0MDV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 27 Aug 2021 08:03:21 -0400
+Received: from mail.bugwerft.de (mail.bugwerft.de [IPv6:2a03:6000:1011::59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55020C0613D9;
+        Fri, 27 Aug 2021 05:02:32 -0700 (PDT)
+Received: from hq-00021.fritz.box (p57bc979a.dip0.t-ipconnect.de [87.188.151.154])
+        by mail.bugwerft.de (Postfix) with ESMTPSA id 8BE32327CF8;
+        Fri, 27 Aug 2021 11:54:25 +0000 (UTC)
+From:   Daniel Mack <daniel@zonque.org>
+To:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     robh+dt@kernel.org, kuninori.morimoto.gx@renesas.com,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        Daniel Mack <daniel@zonque.org>
+Subject: [PATCH v4 0/9] clk: cs2000-cp: add dynamic mode and more features
+Date:   Fri, 27 Aug 2021 13:54:11 +0200
+Message-Id: <20210827115420.3052019-1-daniel@zonque.org>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Smatch has reported passing to zero warning in ERR_CAST.
-"drivers/clk/clk.c:3673 clk_hw_create_clk() warn: passing zero to 'ERR_CAST'"
+This patch series adds support for dynamic mode, configurable clock
+skip settings and a tranisition to regmap.
 
-This patch resolves it by using IS_ERR instead of IS_ERR_OR_NULL.
+The most significant change is the additional support for dynamic mode.
+Currently, the driver only supports static mode in which the (currently
+mandatory) CLK_IN clock input is not used by the hardware.
 
-Signed-off-by: F.A. SULAIMAN <asha.16@itfac.mrt.ac.lk>
----
- drivers/clk/clk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Unlike v3 of this series, the patch stack now maintains full
+compatibility with existing bindings. Rather than infering the mode of
+operation through the presence of an optional clock, the driver now
+parses a new DT property to enable the dynamic mode.
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 65508eb89ec9..cf47526789af 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -3669,7 +3669,7 @@ struct clk *clk_hw_create_clk(struct device *dev, struct clk_hw *hw,
- 	struct clk_core *core;
- 
- 	/* This is to allow this function to be chained to others */
--	if (IS_ERR_OR_NULL(hw))
-+	if (IS_ERR(hw))
- 		return ERR_CAST(hw);
- 
- 	core = hw->core;
+Rob, I left your Reviewed-by in 1/9 as that is untouched since v2. I'd
+much appreciate a review of the other 3 patches that concern
+dt-bindings.
+
+
+Thanks,
+Daniel
+
+Daniel Mack (9):
+  dt-bindings: clock: convert cs2000-cp bindings to yaml
+  dt-bindings: clock: cs2000-cp: document aux-output-source
+  dt-bindings: clock: cs2000-cp: document cirrus,clock-skip flag
+  dt-bindings: clock: cs2000-cp: document cirrus,dynamic-mode
+  clk: cs2000-cp: Make aux output function controllable
+  clk: cs2000-cp: add support for dynamic mode
+  clk: cs2000-cp: make clock skip setting configurable
+  clk: cs2000-cp: freeze config during register fiddling
+  clk: cs2000-cp: convert driver to regmap
+
+ .../bindings/clock/cirrus,cs2000-cp.yaml      |  91 +++++++
+ .../devicetree/bindings/clock/cs2000-cp.txt   |  22 --
+ drivers/clk/Kconfig                           |   1 +
+ drivers/clk/clk-cs2000-cp.c                   | 243 ++++++++++++------
+ include/dt-bindings/clock/cirrus,cs2000-cp.h  |  14 +
+ 5 files changed, 264 insertions(+), 107 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
+ delete mode 100644 Documentation/devicetree/bindings/clock/cs2000-cp.txt
+ create mode 100644 include/dt-bindings/clock/cirrus,cs2000-cp.h
+
 -- 
-2.17.1
+2.31.1
 
