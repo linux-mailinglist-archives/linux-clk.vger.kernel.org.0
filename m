@@ -2,105 +2,63 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 101583FAE1D
-	for <lists+linux-clk@lfdr.de>; Sun, 29 Aug 2021 21:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AAC83FAE31
+	for <lists+linux-clk@lfdr.de>; Sun, 29 Aug 2021 21:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235969AbhH2Thd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 29 Aug 2021 15:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233681AbhH2Th3 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 29 Aug 2021 15:37:29 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC35FC061796;
-        Sun, 29 Aug 2021 12:36:36 -0700 (PDT)
-Received: from localhost.localdomain (83.6.166.149.neoplus.adsl.tpnet.pl [83.6.166.149])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 8976C3E859;
-        Sun, 29 Aug 2021 21:36:34 +0200 (CEST)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND v2 9/9] clk: qcom: gcc-msm8994: Add a quirk for a different SDCC configuration
-Date:   Sun, 29 Aug 2021 21:36:16 +0200
-Message-Id: <20210829193617.4105-9-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210829193617.4105-1-konrad.dybcio@somainline.org>
-References: <20210829193617.4105-1-konrad.dybcio@somainline.org>
+        id S233976AbhH2Tsm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 29 Aug 2021 15:48:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34180 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231354AbhH2Tsm (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sun, 29 Aug 2021 15:48:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8982760C41;
+        Sun, 29 Aug 2021 19:47:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1630266469;
+        bh=Ksu2vYoflPDWXoUQE5SmdmZfKvHqGucVHmVRQOzB+mY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jCYcyzzb+5ZLzbEmhrVZqrJJPsqWKy0GpV2d5mT/2bQukmOmDq4Px7qzMAphIK4lZ
+         09STacznATYO40bVpfa1/1HlzhdbojL4yXau2kwrjwCWN38Pjjd08eSamBu4CgE+iE
+         F93sFuuVA/2doKqfKN+FyqTFofGuj2SvBkR+j1qd9EWsgdyq3L/AUb7qO7melhgHmN
+         42TwuC3JeqL8SFEV+6k/GstK/31DhBlQ60DA9m/RxB0hFsM5ThTYzDMWz7IiHPYU1y
+         L2lnyDrCkTK+YT/+G3MhjLL1bMBCblmLG3hGSAJLDAPEEISSIdDyoEAFzUX56B0HSK
+         QPzVS7rZSv0hw==
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] clk fixes for v5.14-rc7
+Date:   Sun, 29 Aug 2021 12:47:48 -0700
+Message-Id: <20210829194748.682333-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.33.0.259.gc128427fd7-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Some devices come with a different SDCC clock configuration,
-account for that.
+The following changes since commit 9711759a87a041705148161b937ec847048d882e:
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
- .../bindings/clock/qcom,gcc-msm8994.yaml         |  4 ++++
- drivers/clk/qcom/gcc-msm8994.c                   | 16 ++++++++++++++++
- 2 files changed, 20 insertions(+)
+  clk: qcom: gdsc: Ensure regulator init state matches GDSC state (2021-08-05 18:19:04 -0700)
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8994.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8994.yaml
-index b44a844d894c..4ba2f72d3cad 100644
---- a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8994.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8994.yaml
-@@ -49,6 +49,10 @@ properties:
-     description:
-       Protected clock specifier list as per common clock binding.
- 
-+  qcom,sdcc2-clk-src-40mhz:
-+    description: SDCC2_APPS clock source runs at 40MHz.
-+    type: boolean
-+
- required:
-   - compatible
-   - reg
-diff --git a/drivers/clk/qcom/gcc-msm8994.c b/drivers/clk/qcom/gcc-msm8994.c
-index 72038e4c04df..55c0fd069640 100644
---- a/drivers/clk/qcom/gcc-msm8994.c
-+++ b/drivers/clk/qcom/gcc-msm8994.c
-@@ -1012,6 +1012,19 @@ static struct clk_rcg2 sdcc1_apps_clk_src = {
- 	},
- };
- 
-+static struct freq_tbl ftbl_sdcc2_40mhz_apps_clk_src[] = {
-+	F(144000, P_XO, 16, 3, 25),
-+	F(400000, P_XO, 12, 1, 4),
-+	F(20000000, P_GPLL0, 15, 1, 2),
-+	F(25000000, P_GPLL0, 12, 1, 2),
-+	F(40000000, P_GPLL0, 15, 0, 0),
-+	F(50000000, P_GPLL0, 12, 0, 0),
-+	F(80000000, P_GPLL0, 7.5, 0, 0),
-+	F(100000000, P_GPLL0, 6, 0, 0),
-+	F(200000000, P_GPLL0, 3, 0, 0),
-+	{ }
-+};
-+
- static struct freq_tbl ftbl_sdcc2_4_apps_clk_src[] = {
- 	F(144000, P_XO, 16, 3, 25),
- 	F(400000, P_XO, 12, 1, 4),
-@@ -2788,6 +2801,9 @@ static int gcc_msm8994_probe(struct platform_device *pdev)
- 		gcc_msm8994_desc.clks[GCC_SYS_NOC_UFS_AXI_CLK] = NULL;
- 	}
- 
-+	if (of_find_property(dev->of_node, "qcom,sdcc2-clk-src-40mhz", NULL))
-+		sdcc2_apps_clk_src.freq_tbl = ftbl_sdcc2_40mhz_apps_clk_src;
-+
- 	return qcom_cc_probe(pdev, &gcc_msm8994_desc);
- }
- 
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
+
+for you to fetch changes up to 1669a941f7c4844ae808cf441db51dde9e94db07:
+
+  clk: renesas: rcar-usb2-clock-sel: Fix kernel NULL pointer dereference (2021-08-28 21:29:36 -0700)
+
+----------------------------------------------------------------
+One hot fix for a NULL pointer deref in the Renesas usb clk driver
+
+----------------------------------------------------------------
+Adam Ford (1):
+      clk: renesas: rcar-usb2-clock-sel: Fix kernel NULL pointer dereference
+
+ drivers/clk/renesas/rcar-usb2-clock-sel.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
 -- 
-2.33.0
-
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
