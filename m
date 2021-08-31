@@ -2,143 +2,90 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B80CF3FCBA5
-	for <lists+linux-clk@lfdr.de>; Tue, 31 Aug 2021 18:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BA803FCDD0
+	for <lists+linux-clk@lfdr.de>; Tue, 31 Aug 2021 22:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240523AbhHaQnV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 31 Aug 2021 12:43:21 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:58416 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S240334AbhHaQnM (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 31 Aug 2021 12:43:12 -0400
-X-UUID: a865064f0d914a93a1e7e60d817add79-20210901
-X-UUID: a865064f0d914a93a1e7e60d817add79-20210901
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 993845599; Wed, 01 Sep 2021 00:42:13 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 1 Sep 2021 00:42:12 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 1 Sep 2021 00:42:12 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
+        id S240795AbhHaT21 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 31 Aug 2021 15:28:27 -0400
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:38868 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240607AbhHaT20 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 31 Aug 2021 15:28:26 -0400
+Received: by mail-oi1-f180.google.com with SMTP id u25so567486oiv.5;
+        Tue, 31 Aug 2021 12:27:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=B18XCxdh5roXXYBkgIgsolQaF3/RyCT+RYjyoh97Brk=;
+        b=p/K7gazXe3lixbGJQhpSlMMBsSaHaLL9r11KMAZPuYN6euzDBiqxKMoPvLu397c0Fx
+         0Yjhxb7elnwVI+RgLm0KersY5tqv1Rn3KROfZfKxND20+0QCkXuP3JFfZxcVpMz1CZbY
+         +V7xCMOeN4zKnCvltLRJLyV48jfcJzBAzL8N0BA5WtNoeaJy7OhTjINMYi78FGsiwEo9
+         st42Pp1rtkSUYeb/kvshA/f4l7aYkJN3TnjEQgTErml7RKRAxGgG+QkQGadiLe3rE6Jk
+         aYBMpz17HUCKL/FONrAzgqigRS4N3MR3OojosvZv9lJS6rsfW41gOdrgh9eoQD+doIMT
+         k10g==
+X-Gm-Message-State: AOAM532L1Ck3ANTACeGOZLg6bMaXtLx0U3s460Y6JEANYkSIwjxNqYhX
+        3tvAg7MDFWyFsVd5Ezq+mjwbX5pO7g==
+X-Google-Smtp-Source: ABdhPJyISGNvUkiwv/aZwGtTy7OmqleXpitzw8KMrZYdmigKN/S7wGPQvq/Drjnoa3iN8bG0Uc6OpA==
+X-Received: by 2002:a54:4182:: with SMTP id 2mr4533320oiy.66.1630438050741;
+        Tue, 31 Aug 2021 12:27:30 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id o8sm3712041oiw.55.2021.08.31.12.27.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Aug 2021 12:27:30 -0700 (PDT)
+Received: (nullmailer pid 515234 invoked by uid 1000);
+        Tue, 31 Aug 2021 19:27:28 -0000
+Date:   Tue, 31 Aug 2021 14:27:28 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sam Shih <sam.shih@mediatek.com>
+Cc:     Sean Wang <sean.wang@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Wendell Lin <wendell.lin@mediatek.com>,
-        Hanks Chen <hanks.chen@mediatek.com>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <wsd_upstream@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH v2 4/4] clk: mediatek: use tristate for COMMON_CLK_MEDAITEK and COMMON_CLK_MT6779
-Date:   Wed, 1 Sep 2021 00:42:10 +0800
-Message-ID: <20210831164210.15455-5-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210831164210.15455-1-miles.chen@mediatek.com>
-References: <20210831164210.15455-1-miles.chen@mediatek.com>
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Seiya Wang <seiya.wang@mediatek.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-clk@vger.kernel.org, John Crispin <john@phrozen.org>,
+        Ryder Lee <Ryder.Lee@mediatek.com>
+Subject: Re: [v2,05/12] dt-bindings: pinctrl: update bindings for MT7986 SoC
+Message-ID: <YS6CoAxnarhqdTl+@robh.at.kernel.org>
+References: <20210817074557.30953-1-sam.shih@mediatek.com>
+ <20210817074557.30953-6-sam.shih@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210817074557.30953-6-sam.shih@mediatek.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Now we have all necessary exported symbols, change
-COMMON_CLK_MEDAITEK and COMMON_CLK_MT6779* to tristate.
+On Tue, Aug 17, 2021 at 03:45:50PM +0800, Sam Shih wrote:
+> This updates bindings for MT7986 pinctrl driver.
+> The difference of pinctrl between mt7986a and mt7986b
+> is that pin-41 to pin-65 do not exist on mt7986b
+> 
+> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
+> 
+> ---
+> v2 : deleted the redundant description of mt7986a/mt7986b
+> 
+> ---
+>  .../bindings/pinctrl/pinctrl-mt7622.txt       | 170 ++++++++++++++++++
+>  1 file changed, 170 insertions(+)
 
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Hanks Chen <hanks.chen@mediatek.com>
-Cc: Wendell Lin <wendell.lin@mediatek.com>
-Cc: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Miles Chen <miles.chen@mediatek.com>
----
- drivers/clk/mediatek/Kconfig | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+This is adding a lot to not be in schema format. I imagine this will 
+need to be a separate file if the pin and function names are different 
+for each SoC.
 
-diff --git a/drivers/clk/mediatek/Kconfig b/drivers/clk/mediatek/Kconfig
-index 886e2d9fced5..62ed2054a849 100644
---- a/drivers/clk/mediatek/Kconfig
-+++ b/drivers/clk/mediatek/Kconfig
-@@ -6,7 +6,7 @@ menu "Clock driver for MediaTek SoC"
- 	depends on ARCH_MEDIATEK || COMPILE_TEST
- 
- config COMMON_CLK_MEDIATEK
--	bool
-+	tristate
- 	select RESET_CONTROLLER
- 	help
- 	  MediaTek SoCs' clock support.
-@@ -204,7 +204,7 @@ config COMMON_CLK_MT6765_MIPI2BSYS
-          This driver supports MediaTek MT6765 mipi2bsys clocks.
- 
- config COMMON_CLK_MT6779
--	bool "Clock driver for MediaTek MT6779"
-+	tristate "Clock driver for MediaTek MT6779"
- 	depends on (ARCH_MEDIATEK && ARM64) || COMPILE_TEST
- 	select COMMON_CLK_MEDIATEK
- 	default ARCH_MEDIATEK && ARM64
-@@ -212,49 +212,49 @@ config COMMON_CLK_MT6779
- 	  This driver supports MediaTek MT6779 basic clocks.
- 
- config COMMON_CLK_MT6779_MMSYS
--	bool "Clock driver for MediaTek MT6779 mmsys"
-+	tristate "Clock driver for MediaTek MT6779 mmsys"
- 	depends on COMMON_CLK_MT6779
- 	help
- 	  This driver supports MediaTek MT6779 mmsys clocks.
- 
- config COMMON_CLK_MT6779_IMGSYS
--	bool "Clock driver for MediaTek MT6779 imgsys"
-+	tristate "Clock driver for MediaTek MT6779 imgsys"
- 	depends on COMMON_CLK_MT6779
- 	help
- 	  This driver supports MediaTek MT6779 imgsys clocks.
- 
- config COMMON_CLK_MT6779_IPESYS
--	bool "Clock driver for MediaTek MT6779 ipesys"
-+	tristate "Clock driver for MediaTek MT6779 ipesys"
- 	depends on COMMON_CLK_MT6779
- 	help
- 	  This driver supports MediaTek MT6779 ipesys clocks.
- 
- config COMMON_CLK_MT6779_CAMSYS
--	bool "Clock driver for MediaTek MT6779 camsys"
-+	tristate "Clock driver for MediaTek MT6779 camsys"
- 	depends on COMMON_CLK_MT6779
- 	help
- 	  This driver supports MediaTek MT6779 camsys clocks.
- 
- config COMMON_CLK_MT6779_VDECSYS
--	bool "Clock driver for MediaTek MT6779 vdecsys"
-+	tristate "Clock driver for MediaTek MT6779 vdecsys"
- 	depends on COMMON_CLK_MT6779
- 	help
- 	  This driver supports MediaTek MT6779 vdecsys clocks.
- 
- config COMMON_CLK_MT6779_VENCSYS
--	bool "Clock driver for MediaTek MT6779 vencsys"
-+	tristate "Clock driver for MediaTek MT6779 vencsys"
- 	depends on COMMON_CLK_MT6779
- 	help
- 	  This driver supports MediaTek MT6779 vencsys clocks.
- 
- config COMMON_CLK_MT6779_MFGCFG
--	bool "Clock driver for MediaTek MT6779 mfgcfg"
-+	tristate "Clock driver for MediaTek MT6779 mfgcfg"
- 	depends on COMMON_CLK_MT6779
- 	help
- 	  This driver supports MediaTek MT6779 mfgcfg clocks.
- 
- config COMMON_CLK_MT6779_AUDSYS
--	bool "Clock driver for Mediatek MT6779 audsys"
-+	tristate "Clock driver for Mediatek MT6779 audsys"
- 	depends on COMMON_CLK_MT6779
- 	help
- 	  This driver supports Mediatek MT6779 audsys clocks.
--- 
-2.18.0
-
+Rob
