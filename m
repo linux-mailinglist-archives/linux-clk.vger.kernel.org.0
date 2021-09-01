@@ -2,26 +2,29 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6FD83FD6E9
-	for <lists+linux-clk@lfdr.de>; Wed,  1 Sep 2021 11:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A69C3FD6EF
+	for <lists+linux-clk@lfdr.de>; Wed,  1 Sep 2021 11:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243706AbhIAJhg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 1 Sep 2021 05:37:36 -0400
-Received: from mail.bugwerft.de ([46.23.86.59]:37094 "EHLO mail.bugwerft.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243560AbhIAJhf (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 1 Sep 2021 05:37:35 -0400
+        id S243712AbhIAJhh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 1 Sep 2021 05:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243700AbhIAJhg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 1 Sep 2021 05:37:36 -0400
+Received: from mail.bugwerft.de (mail.bugwerft.de [IPv6:2a03:6000:1011::59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BDAC7C061764;
+        Wed,  1 Sep 2021 02:36:39 -0700 (PDT)
 Received: from hq-00021.holoplot.net (unknown [194.162.236.226])
-        by mail.bugwerft.de (Postfix) with ESMTPSA id D81C432D174;
-        Wed,  1 Sep 2021 09:36:37 +0000 (UTC)
+        by mail.bugwerft.de (Postfix) with ESMTPSA id 38B5B32D175;
+        Wed,  1 Sep 2021 09:36:38 +0000 (UTC)
 From:   Daniel Mack <daniel@zonque.org>
 To:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     robh+dt@kernel.org, kuninori.morimoto.gx@renesas.com,
         mturquette@baylibre.com, sboyd@kernel.org,
-        Daniel Mack <daniel@zonque.org>, Rob Herring <robh@kernel.org>
-Subject: [PATCH v5 4/9] dt-bindings: clock: cs2000-cp: document cirrus,dynamic-mode
-Date:   Wed,  1 Sep 2021 11:36:26 +0200
-Message-Id: <20210901093631.1403278-5-daniel@zonque.org>
+        Daniel Mack <daniel@zonque.org>
+Subject: [PATCH v5 5/9] clk: cs2000-cp: Make aux output function controllable
+Date:   Wed,  1 Sep 2021 11:36:27 +0200
+Message-Id: <20210901093631.1403278-6-daniel@zonque.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210901093631.1403278-1-daniel@zonque.org>
 References: <20210901093631.1403278-1-daniel@zonque.org>
@@ -31,34 +34,48 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This new flag exists to enable the dynamic mode of the hardware.
-When not given, the static mode is used.
+The aux output pin can be configured to output either of the two clock
+inputs, the generated clock or the pll lock status. Allow access to
+this feature through a new optional device-tree property.
 
 Signed-off-by: Daniel Mack <daniel@zonque.org>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/clock/cirrus,cs2000-cp.yaml       | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/clk/clk-cs2000-cp.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml b/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
-index 9047d8a24a08..0abd6ba82dfd 100644
---- a/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
-+++ b/Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
-@@ -54,6 +54,14 @@ properties:
-       has missing pulses for up to 20 ms.
-     $ref: /schemas/types.yaml#/definitions/flag
+diff --git a/drivers/clk/clk-cs2000-cp.c b/drivers/clk/clk-cs2000-cp.c
+index 92bc4aca0f95..db7290621cef 100644
+--- a/drivers/clk/clk-cs2000-cp.c
++++ b/drivers/clk/clk-cs2000-cp.c
+@@ -39,6 +39,8 @@
+ /* DEVICE_CFG1 */
+ #define RSEL(x)		(((x) & 0x3) << 3)
+ #define RSEL_MASK	RSEL(0x3)
++#define AUXOUTSRC(x)	(((x) & 0x3) << 1)
++#define AUXOUTSRC_MASK	AUXOUTSRC(0x3)
+ #define ENDEV1		(0x1)
  
-+  cirrus,dynamic-mode:
-+    description:
-+      In dynamic mode, the CLK_IN input is used to drive the
-+      digital PLL of the silicon.
-+      If not given, the static mode shall be used to derive the
-+      output signal directly from the REF_CLK input.
-+    $ref: /schemas/types.yaml#/definitions/flag
+ /* DEVICE_CFG2 */
+@@ -421,12 +423,19 @@ static int cs2000_clk_register(struct cs2000_priv *priv)
+ 	struct clk_init_data init;
+ 	const char *name = np->name;
+ 	static const char *parent_names[CLK_MAX];
++	u32 aux_out = 0;
+ 	int ch = 0; /* it uses ch0 only at this point */
+ 	int rate;
+ 	int ret;
+ 
+ 	of_property_read_string(np, "clock-output-names", &name);
+ 
++	of_property_read_u32(np, "cirrus,aux-output-source", &aux_out);
++	ret = cs2000_bset(priv, DEVICE_CFG1,
++			  AUXOUTSRC_MASK, AUXOUTSRC(aux_out));
++	if (ret < 0)
++		return ret;
 +
- required:
-   - compatible
-   - reg
+ 	/*
+ 	 * set default rate as 1/1.
+ 	 * otherwise .set_rate which setup ratio
 -- 
 2.31.1
 
