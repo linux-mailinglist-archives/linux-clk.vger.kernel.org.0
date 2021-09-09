@@ -2,85 +2,63 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B6D405EE3
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Sep 2021 23:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A165B405EF5
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Sep 2021 23:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348310AbhIIVcn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 9 Sep 2021 17:32:43 -0400
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:41629 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347899AbhIIVcm (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 9 Sep 2021 17:32:42 -0400
-Received: by mail-oi1-f175.google.com with SMTP id 6so4448559oiy.8;
-        Thu, 09 Sep 2021 14:31:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4RGipb3g9UyGGbTnPe+UXBQocgQri+M+u0rf69gVlyU=;
-        b=kua8rCpvSgpDQ5tL+6uktjqQ4CiZfh8EjR7pXzHwHeMsP1bTOKOuPBddT63Y9/lpXh
-         eNne8cN8yvFRuLHwpljU5cFV9k76CF4ADbYdME8wzYzi86L/08+kOct1El+P+Mqn1SeM
-         cz6KZ0V9YkGiz8HZhAbES+dpcJC+QtLrhyRNiKG7L0ckC0PfbD2zeVx/vrQd5ThbzHOb
-         lWZMGq6puGyzz+re2nTIEMAiM5kegW/aSpp8Puhj8WNGXDTyiM/VbrPbUaNQg2yFTHDa
-         XCKLNPWHkAEHs4EKVnFTmdOQCAByx9IxFGIqk92JCFjjrNwtYQFaRRYxyan2lC0cVKna
-         3vvg==
-X-Gm-Message-State: AOAM531RehDSoG7B/EJtzJlk2Or9/PtA5cqB8hNjdn20oby/7w7Blx0m
-        4fxl/xzX/Sti1kAsGVUoYw==
-X-Google-Smtp-Source: ABdhPJxjPch2dyLlqk9vwZMGMtLlzJCA5Y28kCLbGxV+UcOlddl4grhLvoxGHj6VSU7s1UUryJS5IA==
-X-Received: by 2002:aca:3051:: with SMTP id w78mr1553627oiw.159.1631223091455;
-        Thu, 09 Sep 2021 14:31:31 -0700 (PDT)
-Received: from xps15.herring.priv (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.googlemail.com with ESMTPSA id m24sm694929oie.50.2021.09.09.14.31.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Sep 2021 14:31:30 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Cc:     Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org
-Subject: [PATCH 8/8] kbuild: Enable dtc 'unit_address_format' warning by default
-Date:   Thu,  9 Sep 2021 16:31:18 -0500
-Message-Id: <20210909213118.1087083-9-robh@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210909213118.1087083-1-robh@kernel.org>
-References: <20210909213118.1087083-1-robh@kernel.org>
+        id S1345078AbhIIVeG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 9 Sep 2021 17:34:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35802 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233994AbhIIVeF (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 9 Sep 2021 17:34:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9C8BA6103E;
+        Thu,  9 Sep 2021 21:32:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631223175;
+        bh=wh+BIbhMXd5mS7KMBDTEfvO/RMAk2Irr0HrxVVBSAis=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jkjn7opwZj/v3UYxXClITbqmPJdRmkELqk756uzVJeo9jPuPLd6Z8xaLwgwqBFco8
+         ALGlljn2wa/4Fsl0LCG0xkPMwYIR0iGenCvCm6P7+tQRU4r+JZHXxLIgRGKep3AAAJ
+         k987XoUS/jae4I5NIY6WF7/pL2ebHjHryt85tWlZ3HONFZ3c299bm5hGje28MUWDdT
+         1wm4AKSk99abbF+LnwoPXMlRDp3V52fWSblwVyMeRngiPUmmB7fiQebHhSP6Wa5eX9
+         5dohBwYRpmYi2xeG3P8ULbw589SZCXiyKIpZk7o0Z5TcD23t99oQECKQYuYmwcv9MJ
+         IQaz8LwThuSYQ==
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Another clk change for the merge window
+Date:   Thu,  9 Sep 2021 14:32:54 -0700
+Message-Id: <20210909213254.2423881-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.33.0.309.g3052b89438-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-With all the 'unit_address_format' warnings fixed, enable the warning by
-default.
+The following changes since commit 47505bf3a82166c3576155c229e941af922bf147:
 
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Michal Marek <michal.lkml@markovi.net>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-kbuild@vger.kernel.org
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- scripts/Makefile.lib | 1 -
- 1 file changed, 1 deletion(-)
+  Merge branches 'clk-kirkwood', 'clk-imx', 'clk-doc', 'clk-zynq' and 'clk-ralink' into clk-next (2021-09-01 15:27:07 -0700)
 
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 54582673fc1a..56d50eb0cd80 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -310,7 +310,6 @@ DTC_FLAGS += -Wno-interrupt_provider
- # Disable noisy checks by default
- ifeq ($(findstring 1,$(KBUILD_EXTRA_WARN)),)
- DTC_FLAGS += -Wno-unit_address_vs_reg \
--	-Wno-unit_address_format \
- 	-Wno-avoid_unnecessary_addr_size \
- 	-Wno-alias_paths \
- 	-Wno-graph_child_address \
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-for-linus
+
+for you to fetch changes up to 2cfa946be843834d937e0914552d4967ffd421fc:
+
+  clk: qcom: gcc-sm6350: Remove unused variable (2021-09-03 11:14:18 -0700)
+
+----------------------------------------------------------------
+One patch to fix an unused variable warning in a Qualcomm clk driver.
+
+----------------------------------------------------------------
+Konrad Dybcio (1):
+      clk: qcom: gcc-sm6350: Remove unused variable
+
+ drivers/clk/qcom/gcc-sm6350.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
 -- 
-2.30.2
-
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
