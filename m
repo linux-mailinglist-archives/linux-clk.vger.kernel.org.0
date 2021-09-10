@@ -2,39 +2,39 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CB9406301
-	for <lists+linux-clk@lfdr.de>; Fri, 10 Sep 2021 02:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C8AC406303
+	for <lists+linux-clk@lfdr.de>; Fri, 10 Sep 2021 02:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241362AbhIJAqp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 9 Sep 2021 20:46:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45886 "EHLO mail.kernel.org"
+        id S241398AbhIJAqq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 9 Sep 2021 20:46:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46170 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233216AbhIJATh (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 9 Sep 2021 20:19:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 59194610E9;
-        Fri, 10 Sep 2021 00:18:26 +0000 (UTC)
+        id S232578AbhIJAT6 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 9 Sep 2021 20:19:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0DD1A6023D;
+        Fri, 10 Sep 2021 00:18:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631233107;
-        bh=oa4wwDdzBYZNqvMFtcmTxt5aqRk6L4HRjI4WQ6iUDVY=;
+        s=k20201202; t=1631233128;
+        bh=UeNb57tKzwWRAwXejt0MpMewHQPDGOuLS/1eXFaB9G0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i+7RvikcYR3U9VJGnBTMoa+KffFM6WM9bI2HntaHmJwGwhM7UtNXyDP6cdoUq7ZIz
-         GX5D5gEh9ypnkoQnl1mjijRTfv5p++riUFTQbGoZmdZVBvw7C7v3Kk4G53ejlf1w1u
-         /FJoWo8ZZhqoBM51FOkiZLSGXXGSm5TOKCo4ENai9e2a6EE0KvIi5HlFkEkEfl5rrg
-         tQpW0W8SszBG99KA3RL7va4rWs6Fj/eoxeq42PIuG2ZoHw5GnZkZhG2QoLmdJCuSSX
-         O7/18tzklAUFpVqHNc75ghkFUCgwcAe6C5uud2ahgTVqfZexMRfQ4bNV1x0abjavgG
-         f+ZK8adVeudiQ==
+        b=D8YHWDiB7aPj4j8RBXoHR0cFLFD+kG23OeIztZsBoBWlzmTKcbsVeS8UnnUqMD9/p
+         utQijMfz+u/DSVj5aMUsMdC4e1vI7LAUNKV3x/ptNxeS89ovsbzx+qlvs2dlrMQdkb
+         NrALNK1eTwrqVaF+46Ek8tUq7rZbLaWWdW3bwkmM+dKxBuexy+S2zXml+pmgxp2+67
+         LArM13E6didpl3W15eotJfXxabod4xoa2jj44mPdgN+sNBV72Dcl3bknlRDYVns6eP
+         3dIF+le2eY7AS62nAvBml94hyuaiw4rKCSDJthj2N1YEuuRcvNtKwxpVrphEu+kE6U
+         ZvP6qL/+FYtpw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jon Lin <jon.lin@rock-chips.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
+Cc:     Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Ikjoon Jang <ikjn@chromium.org>,
+        Weiyi Lu <weiyi.lu@mediatek.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
         Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.13 04/88] clk: rockchip: rk3036: fix up the sclk_sfc parent error
-Date:   Thu,  9 Sep 2021 20:16:56 -0400
-Message-Id: <20210910001820.174272-4-sashal@kernel.org>
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.13 19/88] clk: mediatek: Fix asymmetrical PLL enable and disable control
+Date:   Thu,  9 Sep 2021 20:17:11 -0400
+Message-Id: <20210910001820.174272-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210910001820.174272-1-sashal@kernel.org>
 References: <20210910001820.174272-1-sashal@kernel.org>
@@ -46,43 +46,86 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Jon Lin <jon.lin@rock-chips.com>
+From: Chun-Jie Chen <chun-jie.chen@mediatek.com>
 
-[ Upstream commit 0be3df186f870cbde56b223c1ad7892109c9c440 ]
+[ Upstream commit 7cc4e1bbe300c5cf610ece8eca6c6751b8bc74db ]
 
-Choose the correct pll
+In fact, the en_mask is a combination of divider enable mask
+and pll enable bit(bit0).
+Before this patch, we enabled both divider mask and bit0 in prepare(),
+but only cleared the bit0 in unprepare().
+In the future, we hope en_mask will only be used as divider enable mask.
+The enable register(CON0) will be set in 2 steps:
+first is divider mask, and then bit0 during prepare(), and vice versa.
+But considering backward compatibility, at this stage we allow en_mask
+to be a combination or a pure divider enable mask.
+And then we will make en_mask a pure divider enable mask in another
+following patch series.
 
-Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
-Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
-Acked-by: Stephen Boyd <sboyd@kernel.org>
-Link: https://lore.kernel.org/r/20210713094456.23288-5-jon.lin@rock-chips.com
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Reviewed-by: Ikjoon Jang <ikjn@chromium.org>
+Signed-off-by: Weiyi Lu <weiyi.lu@mediatek.com>
+Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+Link: https://lore.kernel.org/r/20210726105719.15793-7-chun-jie.chen@mediatek.com
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/rockchip/clk-rk3036.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/clk/mediatek/clk-pll.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clk/rockchip/clk-rk3036.c b/drivers/clk/rockchip/clk-rk3036.c
-index 91d56ad45817..1986856d94b2 100644
---- a/drivers/clk/rockchip/clk-rk3036.c
-+++ b/drivers/clk/rockchip/clk-rk3036.c
-@@ -121,6 +121,7 @@ PNAME(mux_pll_src_3plls_p)	= { "apll", "dpll", "gpll" };
- PNAME(mux_timer_p)		= { "xin24m", "pclk_peri_src" };
+diff --git a/drivers/clk/mediatek/clk-pll.c b/drivers/clk/mediatek/clk-pll.c
+index f440f2cd0b69..11ed5d1d1c36 100644
+--- a/drivers/clk/mediatek/clk-pll.c
++++ b/drivers/clk/mediatek/clk-pll.c
+@@ -238,6 +238,7 @@ static int mtk_pll_prepare(struct clk_hw *hw)
+ {
+ 	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
+ 	u32 r;
++	u32 div_en_mask;
  
- PNAME(mux_pll_src_apll_dpll_gpll_usb480m_p)	= { "apll", "dpll", "gpll", "usb480m" };
-+PNAME(mux_pll_src_dmyapll_dpll_gpll_xin24_p)   = { "dummy_apll", "dpll", "gpll", "xin24m" };
+ 	r = readl(pll->pwr_addr) | CON0_PWR_ON;
+ 	writel(r, pll->pwr_addr);
+@@ -247,10 +248,15 @@ static int mtk_pll_prepare(struct clk_hw *hw)
+ 	writel(r, pll->pwr_addr);
+ 	udelay(1);
  
- PNAME(mux_mmc_src_p)	= { "apll", "dpll", "gpll", "xin24m" };
- PNAME(mux_i2s_pre_p)	= { "i2s_src", "i2s_frac", "ext_i2s", "xin12m" };
-@@ -340,7 +341,7 @@ static struct rockchip_clk_branch rk3036_clk_branches[] __initdata = {
- 			RK2928_CLKSEL_CON(16), 8, 2, MFLAGS, 10, 5, DFLAGS,
- 			RK2928_CLKGATE_CON(10), 4, GFLAGS),
+-	r = readl(pll->base_addr + REG_CON0);
+-	r |= pll->data->en_mask;
++	r = readl(pll->base_addr + REG_CON0) | CON0_BASE_EN;
+ 	writel(r, pll->base_addr + REG_CON0);
  
--	COMPOSITE(SCLK_SFC, "sclk_sfc", mux_pll_src_apll_dpll_gpll_usb480m_p, 0,
-+	COMPOSITE(SCLK_SFC, "sclk_sfc", mux_pll_src_dmyapll_dpll_gpll_xin24_p, 0,
- 			RK2928_CLKSEL_CON(16), 0, 2, MFLAGS, 2, 5, DFLAGS,
- 			RK2928_CLKGATE_CON(10), 5, GFLAGS),
++	div_en_mask = pll->data->en_mask & ~CON0_BASE_EN;
++	if (div_en_mask) {
++		r = readl(pll->base_addr + REG_CON0) | div_en_mask;
++		writel(r, pll->base_addr + REG_CON0);
++	}
++
+ 	__mtk_pll_tuner_enable(pll);
  
+ 	udelay(20);
+@@ -268,6 +274,7 @@ static void mtk_pll_unprepare(struct clk_hw *hw)
+ {
+ 	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
+ 	u32 r;
++	u32 div_en_mask;
+ 
+ 	if (pll->data->flags & HAVE_RST_BAR) {
+ 		r = readl(pll->base_addr + REG_CON0);
+@@ -277,8 +284,13 @@ static void mtk_pll_unprepare(struct clk_hw *hw)
+ 
+ 	__mtk_pll_tuner_disable(pll);
+ 
+-	r = readl(pll->base_addr + REG_CON0);
+-	r &= ~CON0_BASE_EN;
++	div_en_mask = pll->data->en_mask & ~CON0_BASE_EN;
++	if (div_en_mask) {
++		r = readl(pll->base_addr + REG_CON0) & ~div_en_mask;
++		writel(r, pll->base_addr + REG_CON0);
++	}
++
++	r = readl(pll->base_addr + REG_CON0) & ~CON0_BASE_EN;
+ 	writel(r, pll->base_addr + REG_CON0);
+ 
+ 	r = readl(pll->pwr_addr) | CON0_ISO_EN;
 -- 
 2.30.2
 
