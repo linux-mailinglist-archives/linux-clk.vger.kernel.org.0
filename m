@@ -2,85 +2,100 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F7640632C
-	for <lists+linux-clk@lfdr.de>; Fri, 10 Sep 2021 02:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CDE1406330
+	for <lists+linux-clk@lfdr.de>; Fri, 10 Sep 2021 02:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232525AbhIJAq6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 9 Sep 2021 20:46:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49890 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234854AbhIJAYu (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 9 Sep 2021 20:24:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7BD6F611BF;
-        Fri, 10 Sep 2021 00:23:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631233420;
-        bh=hHfun2QuFXBMbzhgZApLvyuprJpsbQfb7C8DV7W5Exw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ulKKKPa2lMCRDxTTKfp0A3jVohXS2PQBZHcamO4UIzl6cj7nCegXU4hZ2m3u94sEe
-         tCiburl82ZRYkug6YBitbz0fxsDL6xEd58V5p4jzAiYOAtB+C1x7KxU7T9pDjVUYtF
-         a0TbjcF4YRl5A/kOQkTESvoG25UPCxjS7w6gWNwPNRaWRgmovwE7EW+uyi0XWO9Efd
-         qdy67/VjoRqua99xyEIEQlm0w8PAUkF7hKEv4NfenjGbM6CEHh/X5IP6OsgOiKNyca
-         EzZbi1NdZQP71vz4xFx72Ktpl13TlKh3nbEU/XhvIYYakj7ojbnwPz1T5zViP5Y3Db
-         FNaWDxgRPgbCQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jon Lin <jon.lin@rock-chips.com>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sasha Levin <sashal@kernel.org>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.9 01/17] clk: rockchip: rk3036: fix up the sclk_sfc parent error
-Date:   Thu,  9 Sep 2021 20:23:22 -0400
-Message-Id: <20210910002338.176677-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        id S233541AbhIJAq7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 9 Sep 2021 20:46:59 -0400
+Received: from condef-10.nifty.com ([202.248.20.75]:42615 "EHLO
+        condef-10.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239551AbhIJAjX (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 9 Sep 2021 20:39:23 -0400
+X-Greylist: delayed 365 seconds by postgrey-1.27 at vger.kernel.org; Thu, 09 Sep 2021 20:39:01 EDT
+Received: from conssluserg-02.nifty.com ([10.126.8.81])by condef-10.nifty.com with ESMTP id 18A0ShsV021526;
+        Fri, 10 Sep 2021 09:28:43 +0900
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 18A0SMaI003027;
+        Fri, 10 Sep 2021 09:28:22 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 18A0SMaI003027
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1631233703;
+        bh=3BKQgzHIpldXuMHUJ6SaQQUNOmT0VJRr0GBhL34/P2c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SmQ8gJjUW5qCQBoxvKCfTgv+uQUgADXrxiSO193JbR71wEGJyRpeybxD2r0j1cPrk
+         zVX9Fffjuuo7MIRpkPN83vlH2Q6gKuT9nAzta5B4BMvbx2xFEOOqFhg2oMjLcvjqTJ
+         z6kDeJv+HUvKDXTVjkCDSAHsmvfZZ3piODTPpDaLPMwpM6+FNq71m7ItsS58WVagp9
+         Au8s99s9lYkVD08kEo1Z+wis3O/T2OIBOFUux3Ip3Cdk3loqUJhDz6YAZIqu4bGMew
+         /y8qfTMLvcSbizAjb3M2laEliIJ65HyyLIJZLCl6NiZEZOBQtxIXbePMFOh9TpA3mS
+         PEDccKuURGdmg==
+X-Nifty-SrcIP: [209.85.216.50]
+Received: by mail-pj1-f50.google.com with SMTP id gp20-20020a17090adf1400b00196b761920aso243508pjb.3;
+        Thu, 09 Sep 2021 17:28:22 -0700 (PDT)
+X-Gm-Message-State: AOAM531jWlcz5xXyH4LGxcSAgloLjkFMF3E7tV2CYi2ZwWQN4w0a1LIP
+        mKcezbH7CXL9GfMCx4eaTgmgFdV9wnJ17WUC4bU=
+X-Google-Smtp-Source: ABdhPJzD06aFs0p/r4Q9yVgjNgi9sLrgBCBxV2NQtWqdP6NM/aEatdL0eTrM0VaY63R0ni0GHq0J+dlHnIb5BVBDpwI=
+X-Received: by 2002:a17:90a:192:: with SMTP id 18mr6573730pjc.119.1631233702032;
+ Thu, 09 Sep 2021 17:28:22 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20210909213118.1087083-1-robh@kernel.org> <20210909213118.1087083-9-robh@kernel.org>
+In-Reply-To: <20210909213118.1087083-9-robh@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 10 Sep 2021 09:27:45 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQx8yqUdEWOmYqq2Mqk5BVuqc1w3rOcVm2Bb5wDSFRXaA@mail.gmail.com>
+Message-ID: <CAK7LNAQx8yqUdEWOmYqq2Mqk5BVuqc1w3rOcVm2Bb5wDSFRXaA@mail.gmail.com>
+Subject: Re: [PATCH 8/8] kbuild: Enable dtc 'unit_address_format' warning by default
+To:     Rob Herring <robh@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-leds@vger.kernel.org, Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Jon Lin <jon.lin@rock-chips.com>
+On Fri, Sep 10, 2021 at 6:31 AM Rob Herring <robh@kernel.org> wrote:
+>
+> With all the 'unit_address_format' warnings fixed, enable the warning by
+> default.
+>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
 
-[ Upstream commit 0be3df186f870cbde56b223c1ad7892109c9c440 ]
+Acked-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Choose the correct pll
+> Cc: Michal Marek <michal.lkml@markovi.net>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: linux-kbuild@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  scripts/Makefile.lib | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index 54582673fc1a..56d50eb0cd80 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -310,7 +310,6 @@ DTC_FLAGS += -Wno-interrupt_provider
+>  # Disable noisy checks by default
+>  ifeq ($(findstring 1,$(KBUILD_EXTRA_WARN)),)
+>  DTC_FLAGS += -Wno-unit_address_vs_reg \
+> -       -Wno-unit_address_format \
+>         -Wno-avoid_unnecessary_addr_size \
+>         -Wno-alias_paths \
+>         -Wno-graph_child_address \
+> --
+> 2.30.2
+>
 
-Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
-Signed-off-by: Jon Lin <jon.lin@rock-chips.com>
-Acked-by: Stephen Boyd <sboyd@kernel.org>
-Link: https://lore.kernel.org/r/20210713094456.23288-5-jon.lin@rock-chips.com
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/clk/rockchip/clk-rk3036.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/rockchip/clk-rk3036.c b/drivers/clk/rockchip/clk-rk3036.c
-index dcde70f4c105..597cc9b781ea 100644
---- a/drivers/clk/rockchip/clk-rk3036.c
-+++ b/drivers/clk/rockchip/clk-rk3036.c
-@@ -128,6 +128,7 @@ PNAME(mux_pll_src_3plls_p)	= { "apll", "dpll", "gpll" };
- PNAME(mux_timer_p)		= { "xin24m", "pclk_peri_src" };
- 
- PNAME(mux_pll_src_apll_dpll_gpll_usb480m_p)	= { "apll", "dpll", "gpll", "usb480m" };
-+PNAME(mux_pll_src_dmyapll_dpll_gpll_xin24_p)   = { "dummy_apll", "dpll", "gpll", "xin24m" };
- 
- PNAME(mux_mmc_src_p)	= { "apll", "dpll", "gpll", "xin24m" };
- PNAME(mux_i2s_pre_p)	= { "i2s_src", "i2s_frac", "ext_i2s", "xin12m" };
-@@ -347,7 +348,7 @@ static struct rockchip_clk_branch rk3036_clk_branches[] __initdata = {
- 			RK2928_CLKSEL_CON(16), 8, 2, MFLAGS, 10, 5, DFLAGS,
- 			RK2928_CLKGATE_CON(10), 4, GFLAGS),
- 
--	COMPOSITE(SCLK_SFC, "sclk_sfc", mux_pll_src_apll_dpll_gpll_usb480m_p, 0,
-+	COMPOSITE(SCLK_SFC, "sclk_sfc", mux_pll_src_dmyapll_dpll_gpll_xin24_p, 0,
- 			RK2928_CLKSEL_CON(16), 0, 2, MFLAGS, 2, 5, DFLAGS,
- 			RK2928_CLKGATE_CON(10), 5, GFLAGS),
- 
 -- 
-2.30.2
-
+Best Regards
+Masahiro Yamada
