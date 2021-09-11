@@ -2,107 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB7A407814
-	for <lists+linux-clk@lfdr.de>; Sat, 11 Sep 2021 15:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4F64079E0
+	for <lists+linux-clk@lfdr.de>; Sat, 11 Sep 2021 19:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237087AbhIKNW5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 11 Sep 2021 09:22:57 -0400
-Received: from relay04.th.seeweb.it ([5.144.164.165]:57071 "EHLO
-        relay04.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237244AbhIKNUq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 11 Sep 2021 09:20:46 -0400
-Received: from Marijn-Arch-PC.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 1218E1F50A;
-        Sat, 11 Sep 2021 15:19:31 +0200 (CEST)
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S232985AbhIKRb0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 11 Sep 2021 13:31:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49682 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233089AbhIKRbX (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sat, 11 Sep 2021 13:31:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id AFCCC61027;
+        Sat, 11 Sep 2021 17:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1631381410;
+        bh=Ee6lTU5fshELmTjb8TiGh3Ay9IAlp2p3qprA67DnaHA=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=k4ah7NBLDIs7Lvi7pPwFihHPbaIdB6jzoQDs6pt/In1jCxKoiWFhQyUVfnauMAQ3E
+         V9FFGks4z7eqMgJkldYIQNRupiNIMiPQ/Ypvp/TJwsYj5JPowC8Uc/vDqsW9HogG0q
+         4xauBTbJC0mRKkvb74psPGHcYSX7vAO4OajDWByT4SGXtEKXlFr5YxjnRTb4awEwSO
+         cBJdShmNJ5TMeUkDXv+HmOvYqJVIYFBJ6Sw/BAqNG4gxkdxy5Td/lkdyVix5BqSOTA
+         hPMKENRdsFQwRb4oRM3hWWnJY6OQT78w1k0B9cu75DnrjrlWhA/8N3ARmLtY02npjB
+         2Azpqp56wdY8g==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id AACF2600E8;
+        Sat, 11 Sep 2021 17:30:10 +0000 (UTC)
+Subject: Re: [GIT PULL] Another clk change for the merge window
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20210909213254.2423881-1-sboyd@kernel.org>
+References: <20210909213254.2423881-1-sboyd@kernel.org>
+X-PR-Tracked-List-Id: <linux-clk.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20210909213254.2423881-1-sboyd@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-for-linus
+X-PR-Tracked-Commit-Id: 2cfa946be843834d937e0914552d4967ffd421fc
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 2aae0a937ad169752b5710d4f210c1ae7a49d3cf
+Message-Id: <163138141069.31565.11487666763326981468.pr-tracker-bot@kernel.org>
+Date:   Sat, 11 Sep 2021 17:30:10 +0000
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-Subject: [PATCH v3 2/2] clk: qcom: gcc-sdm660: Remove transient global "xo" clock
-Date:   Sat, 11 Sep 2021 15:19:21 +0200
-Message-Id: <20210911131922.387964-3-marijn.suijten@somainline.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210911131922.387964-1-marijn.suijten@somainline.org>
-References: <20210911131922.387964-1-marijn.suijten@somainline.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The DSI PHY/PLL was relying on a global "xo" clock to be found, but the
-real clock is named "xo_board" in the DT.  The standard nowadays is to
-never use global clock names anymore but require the firmware (DT) to
-provide every clock binding explicitly with .fw_name.  The DSI PLLs have
-since been converted to this mechanism (specifically 14nm for SDM660)
-and this transient clock can now be removed.
+The pull request you sent on Thu,  9 Sep 2021 14:32:54 -0700:
 
-This issue was originally discovered in:
-https://lore.kernel.org/linux-arm-msm/386db1a6-a1cd-3c7d-a88e-dc83f8a1be96@somainline.org/
-and prevented the removal of "xo" at that time.
+> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-for-linus
 
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-Acked-by: Stephen Boyd <sboyd@kernel.org>
----
- drivers/clk/qcom/gcc-sdm660.c | 14 --------------
- 1 file changed, 14 deletions(-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/2aae0a937ad169752b5710d4f210c1ae7a49d3cf
 
-diff --git a/drivers/clk/qcom/gcc-sdm660.c b/drivers/clk/qcom/gcc-sdm660.c
-index 7fb5adf7fa01..429d12193146 100644
---- a/drivers/clk/qcom/gcc-sdm660.c
-+++ b/drivers/clk/qcom/gcc-sdm660.c
-@@ -37,19 +37,6 @@ enum {
- 	P_GPLL1_EARLY_DIV,
- };
- 
--static struct clk_fixed_factor xo = {
--	.mult = 1,
--	.div = 1,
--	.hw.init = &(struct clk_init_data){
--		.name = "xo",
--		.parent_data = &(const struct clk_parent_data) {
--			.fw_name = "xo"
--		},
--		.num_parents = 1,
--		.ops = &clk_fixed_factor_ops,
--	},
--};
--
- static struct clk_alpha_pll gpll0_early = {
- 	.offset = 0x0,
- 	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-@@ -2280,7 +2267,6 @@ static struct gdsc pcie_0_gdsc = {
- };
- 
- static struct clk_hw *gcc_sdm660_hws[] = {
--	&xo.hw,
- 	&gpll0_early_div.hw,
- 	&gpll1_early_div.hw,
- };
+Thank you!
+
 -- 
-2.33.0
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
