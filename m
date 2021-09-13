@@ -2,108 +2,244 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 615CB408774
-	for <lists+linux-clk@lfdr.de>; Mon, 13 Sep 2021 10:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5664F408616
+	for <lists+linux-clk@lfdr.de>; Mon, 13 Sep 2021 10:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238465AbhIMIty (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 13 Sep 2021 04:49:54 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:54617 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238476AbhIMItu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 Sep 2021 04:49:50 -0400
-Received: from stretch.efe.local ([79.233.161.113]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MatmF-1mw1eH10It-00cPMW; Mon, 13 Sep 2021 10:48:30 +0200
-From:   Jens Renner <renner@efe-gmbh.de>
-To:     linux-clk@vger.kernel.org
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, renner@efe-gmbh.de
-Subject: [PATCH] clk: si5351: Update datasheet references
-Date:   Mon, 13 Sep 2021 09:48:23 +0200
-Message-Id: <20210913074823.115212-1-renner@efe-gmbh.de>
-X-Mailer: git-send-email 2.33.0
+        id S237722AbhIMIKx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 13 Sep 2021 04:10:53 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:37727 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234684AbhIMIKw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 13 Sep 2021 04:10:52 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id A4E95580B92;
+        Mon, 13 Sep 2021 04:09:36 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Mon, 13 Sep 2021 04:09:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=taTDVVgNHDmxrDI6auoBpwRlTeV
+        9nCDLqv3i8d33BxY=; b=IGzL8uXiUHJvU4ElPo2UTotQSCdYJodtrUCmQzGxwjp
+        mdVwMcEPzcmsnj5SFfxsj0eLESNAU1mx9pZL3gbnJfilNMK2XFw+Mx8tQjOvYJAB
+        HQS7+8WanabvwpkIOyxucn+lGIEwA8ks11lx3sY7unSFsJdaJDMKB2c4AiutuEKV
+        MPLwacvmqwDuy+sEPO1CDLG7emoKIByIDDkFE6uNmDgxIvjsK+gcniBK/z0ZUJ54
+        OxvD6J3rEaK+okvbcNeuK6KBRSDIxmc+R8equbb54wOGmh+jGqGWWJBQnGrMLYhN
+        Hm4Ct70kgnXh/0u5J9MZXunokWwKYyJIOWV/x+1dKkQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=taTDVV
+        gNHDmxrDI6auoBpwRlTeV9nCDLqv3i8d33BxY=; b=rk8FOzd7VEkTxSSi3R6HL1
+        ABEIcR2qjr8ifv0r32ZRJRkcTHa5BoFClOUqBbDdpiyHT2VscnEKCavciWg4E91Q
+        6KlL4GCULyhuq2WX1yUFhIKxdAOXQb9jtt3F6nGDFAHX8uB44uIxpqkbWUfhq7bz
+        WbDjwQZ79Tsfkvy+xn0RaC06GF/RB1YwQiNMJ2Qm4Uo4fXctOTyZulnUhn+D9/hh
+        maA4oHof99Tc2yB3CT5F0Uun2SKoyhiCnLvlOD3PlcyY2k982AVg/cGqTozlX29O
+        HKQ0Xed/bTcjQrdU1AekKqEIwAloAnrjtuJeBAryQ5APUgBFD/Me5W+BHc9g0Jrw
+        ==
+X-ME-Sender: <xms:PQc_YSTQtcIjV2_ZfcZJwSps85cN4OM9X9qiIVDnjq326Kp5Xclp8Q>
+    <xme:PQc_YXwTkKEC0juq2cq4ICaAvdsF9xvcGeFa335Z8ctY6_pc7_I7uBrCVlWwPgbE6
+    sgBnjd1dut7AniTgIw>
+X-ME-Received: <xmr:PQc_Yf0LirGJRGp-USmNCkWvg9p3dHFMCHgMHra5l4R5MfKb_TS3EcN2CfPBWXWypOKJSQ3SGzwp0kjSxxRtS8l8Oi1n7aBse275>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudegjecutefuodetggdotefrodftvfcurf
+    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgvucft
+    ihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtthgvrh
+    hnpeelkeeghefhuddtleejgfeljeffheffgfeijefhgfeufefhtdevteegheeiheeguden
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigih
+    hmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:PQc_YeDUq1Y6mGRnuOcfa-r1FhJBCZdr7Pz1AHTKDr9ZZnZ1DuSYEA>
+    <xmx:PQc_YbinLgNC1M1pzP0_rDM2gS_nroIjGFODlQ913fQeVRukaSnNIQ>
+    <xmx:PQc_YapVE_Q7VE3OvMdFP9NQ3KbLwX-nXpWvAsf_2poMqi0rtrqRgg>
+    <xmx:QAc_YY0rzQCz3_zmrtV5nTMmxXxhQ3eEV9SatvZ0JMKxiZP360kkWQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 13 Sep 2021 04:09:33 -0400 (EDT)
+Date:   Mon, 13 Sep 2021 10:09:31 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH 05/22] dt-bindings: media: sun6i-a31-csi: Add MIPI CSI-2
+ input port
+Message-ID: <20210913080931.opbtx45sxqu52jxe@gilmour>
+References: <20210910184147.336618-1-paul.kocialkowski@bootlin.com>
+ <20210910184147.336618-6-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:wzqlxJi40j2sKko4YJ9Lg847UXl2YS2B5uKzZqhTKTtfmXs+wNj
- 7Mb8mkXVVSGr5uD0WE6ZntvvveFZYf1Jo8gzYYMXKKyjXOhCbyJmxMLoGVjaQflTmqk6J4K
- 8BToJI6i0p9UoStWj8yRh+JqE33RJjvTQrwi9FifyqgU6ZqjCl27IOvlCW/ABOhV8sw/ok9
- Rystt16Wv0kL/DE49/nVg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:9Cu8QfukTn8=:6c382jIQTVlxkRP0+MiA3m
- RCmS9UmbHO86Ejvk+cpfsqlRBkHlm8yDG6E9CzbvJq41KzeJZD0k00pHtvAyMKTNdEiXbVqiY
- Tuq4LZQTeHrpR+FmzKRTpboZDszYrh+mgXpyIG0Vcsnbv97p25ZHg2GqNUCimquBbp5agsuKc
- 9p2jFcGXBtcwqq5iTjl/ANJoIL2aWUaEh/4eKagwBXQpaYv61nPPBOAoB1v2jVP+hxDImT+Ob
- qPdzP7B+db8XkAmcTzhm7GcTe0iKeLpUp1jxIOCUu5FR0h0UA28qR69j4NK1VomJXsDbsDDxV
- 2AdB/e3TLiwGzUPy9P1yPM/rhHKsPYcL6LfbolFwbZnkCdlaq6XosmNlrYPNtYZPM46ooQ51l
- h7oZklUDNiPTg/PLo0PfbMDaQNIAmrHS5eP0G9bsjaXbhun+lGBowR+fCjEZGSaokn6PU0Bio
- J3TSBxWF15OREBKOGEzubtaVKuNxLlbnhji+Z4rBam7jQrRiL5HbANg4AtfQpkXwMj7704iUZ
- UCJniqcQNDHrq50x9TqEciPhm17tOksHoLCJAnmdg5MPecMC5A7BtRGEDHGtGJELXvjDUw7Uj
- LjNec50kho0vJtwXXVXs1oKL/xGDfW8krFq77SW3hdHHIxkDXfvLrFQdh73UtGxP0N/N7rEcp
- 72zR2GH7JxO+8xVItZOPlGLeXB6yf5H235HE1sSUsO+d52iTwKLCp1IlglU+P5++irlKaz+qE
- JD+ZTcF/A4DjjlONhHerPdCSlBPdcp/JHArnkg==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="upsk4eai2egrf6nm"
+Content-Disposition: inline
+In-Reply-To: <20210910184147.336618-6-paul.kocialkowski@bootlin.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Silicon Labs is now part of Skyworks Inc. so update the URLs to the
-datasheet and application note.
 
-Signed-off-by: Jens Renner <renner@efe-gmbh.de>
----
- Documentation/devicetree/bindings/clock/silabs,si5351.txt | 2 +-
- drivers/clk/clk-si5351.c                                  | 8 ++++----
- drivers/clk/clk-si5351.h                                  | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+--upsk4eai2egrf6nm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/clock/silabs,si5351.txt b/Documentation/devicetree/bindings/clock/silabs,si5351.txt
-index 8fe6f80afade..bfda6af76bee 100644
---- a/Documentation/devicetree/bindings/clock/silabs,si5351.txt
-+++ b/Documentation/devicetree/bindings/clock/silabs,si5351.txt
-@@ -2,7 +2,7 @@ Binding for Silicon Labs Si5351a/b/c programmable i2c clock generator.
- 
- Reference
- [1] Si5351A/B/C Data Sheet
--    https://www.silabs.com/Support%20Documents/TechnicalDocs/Si5351.pdf
-+    https://www.skyworksinc.com/-/media/Skyworks/SL/documents/public/data-sheets/Si5351-B.pdf
- 
- The Si5351a/b/c are programmable i2c clock generators with up to 8 output
- clocks. Si5351a also has a reduced pin-count package (MSOP10) where only
-diff --git a/drivers/clk/clk-si5351.c b/drivers/clk/clk-si5351.c
-index 57e4597cdf4c..93fa8c9e11be 100644
---- a/drivers/clk/clk-si5351.c
-+++ b/drivers/clk/clk-si5351.c
-@@ -1,15 +1,15 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
- /*
-- * clk-si5351.c: Silicon Laboratories Si5351A/B/C I2C Clock Generator
-+ * clk-si5351.c: Skyworks / Silicon Labs Si5351A/B/C I2C Clock Generator
-  *
-  * Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-  * Rabeeh Khoury <rabeeh@solid-run.com>
-  *
-  * References:
-  * [1] "Si5351A/B/C Data Sheet"
-- *     https://www.silabs.com/Support%20Documents/TechnicalDocs/Si5351.pdf
-- * [2] "Manually Generating an Si5351 Register Map"
-- *     https://www.silabs.com/Support%20Documents/TechnicalDocs/AN619.pdf
-+ *     https://www.skyworksinc.com/-/media/Skyworks/SL/documents/public/data-sheets/Si5351-B.pdf
-+ * [2] "AN619: Manually Generating an Si5351 Register Map"
-+ *     https://www.skyworksinc.com/-/media/Skyworks/SL/documents/public/application-notes/AN619.pdf
-  */
- 
- #include <linux/module.h>
-diff --git a/drivers/clk/clk-si5351.h b/drivers/clk/clk-si5351.h
-index 73dc8effc519..e9e2bfdaaedf 100644
---- a/drivers/clk/clk-si5351.h
-+++ b/drivers/clk/clk-si5351.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0-or-later */
- /*
-- * clk-si5351.h: Silicon Laboratories Si5351A/B/C I2C Clock Generator
-+ * clk-si5351.h: Skyworks / Silicon Labs Si5351A/B/C I2C Clock Generator
-  *
-  * Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-  * Rabeeh Khoury <rabeeh@solid-run.com>
--- 
-2.33.0
+On Fri, Sep 10, 2021 at 08:41:30PM +0200, Paul Kocialkowski wrote:
+> The A31 CSI controller supports two distinct input interfaces:
+> parallel and an external MIPI CSI-2 bridge. The parallel interface
+> is often connected to a set of hardware pins while the MIPI CSI-2
+> bridge is an internal FIFO-ish link. As a result, these two inputs
+> are distinguished as two different ports.
+>=20
+> Note that only one of the two may be present on a controller instance.
+> For example, the V3s has one controller dedicated to MIPI-CSI2 and one
+> dedicated to parallel.
+>=20
+> Update the binding with an explicit ports node that holds two distinct
+> port nodes: one for parallel input and one for MIPI CSI-2.
+>=20
+> This is backward-compatible with the single-port approach that was
+> previously taken for representing the parallel interface port, which
+> stays enumerated as fwnode port 0.
+>=20
+> Note that additional ports may be added in the future, especially to
+> support feeding the CSI controller's output to the ISP.
+>=20
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Acked-by: Maxime Ripard <mripard@kernel.org>
+> ---
+>  .../media/allwinner,sun6i-a31-csi.yaml        | 75 +++++++++++++++----
+>  1 file changed, 62 insertions(+), 13 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-=
+csi.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.=
+yaml
+> index 8b568072a069..f4a686b77a38 100644
+> --- a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
+> +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
+> @@ -61,6 +61,49 @@ properties:
+> =20
+>      additionalProperties: false
+> =20
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        description: Parallel input port, connect to a parallel sensor
+> +
+> +        properties:
+> +          reg:
+> +            const: 0
+> +
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              bus-width:
+> +                enum: [ 8, 10, 12, 16 ]
+> +
+> +              pclk-sample: true
+> +              hsync-active: true
+> +              vsync-active: true
+> +
+> +            required:
+> +              - bus-width
+> +
+> +        additionalProperties: false
 
+You don't have to duplicate the entire definition there, you can just
+reference port:
+
+$ref: #/properties/port
+
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        description: MIPI CSI-2 bridge input port
+> +
+> +        properties:
+> +          reg:
+> +            const: 1
+> +
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +        additionalProperties: false
+> +
+
+port@0 is required?
+
+And at the top-level, either ports or port are required too
+
+>  required:
+>    - compatible
+>    - reg
+> @@ -89,19 +132,25 @@ examples:
+>                        "ram";
+>          resets =3D <&ccu RST_BUS_CSI>;
+> =20
+> -        port {
+> -            /* Parallel bus endpoint */
+> -            csi1_ep: endpoint {
+> -                remote-endpoint =3D <&adv7611_ep>;
+> -                bus-width =3D <16>;
+> -
+> -                /*
+> -                 * If hsync-active/vsync-active are missing,
+> -                 * embedded BT.656 sync is used.
+> -                 */
+> -                 hsync-active =3D <0>; /* Active low */
+> -                 vsync-active =3D <0>; /* Active low */
+> -                 pclk-sample =3D <1>;  /* Rising */
+> +        ports {
+> +            #address-cells =3D <1>;
+> +            #size-cells =3D <0>;
+> +
+> +            port@0 {
+> +                reg =3D <0>;
+> +                /* Parallel bus endpoint */
+> +                csi1_ep: endpoint {
+> +                    remote-endpoint =3D <&adv7611_ep>;
+> +                    bus-width =3D <16>;
+> +
+> +                    /*
+> +                     * If hsync-active/vsync-active are missing,
+> +                     * embedded BT.656 sync is used.
+> +                     */
+> +                     hsync-active =3D <0>; /* Active low */
+> +                     vsync-active =3D <0>; /* Active low */
+> +                     pclk-sample =3D <1>;  /* Rising */
+> +                };
+>              };
+>          };
+>      };
+
+I'd keep the original example and add one with the CSI bridge
+
+Maxime
+
+--upsk4eai2egrf6nm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYT8HOwAKCRDj7w1vZxhR
+xVPgAQCQRGZo6oa4WL9v6n8HncVFzdZFDZEb8Opb0Dfte4y9OAEAtplvq/ByItS7
+9+yO+N8K3cQCS/R7oD/8qvWHosfT/AM=
+=t9Py
+-----END PGP SIGNATURE-----
+
+--upsk4eai2egrf6nm--
