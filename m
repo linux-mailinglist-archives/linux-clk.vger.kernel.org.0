@@ -2,53 +2,69 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3584640BD30
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Sep 2021 03:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E5340BD3A
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Sep 2021 03:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232752AbhIOB0z (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 14 Sep 2021 21:26:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59076 "EHLO mail.kernel.org"
+        id S230087AbhIOBbg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 14 Sep 2021 21:31:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60724 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232319AbhIOB0y (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 14 Sep 2021 21:26:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7D6C261164;
-        Wed, 15 Sep 2021 01:25:36 +0000 (UTC)
+        id S229548AbhIOBbf (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 14 Sep 2021 21:31:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0B65161166;
+        Wed, 15 Sep 2021 01:30:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1631669136;
-        bh=PjoWXD3Ovpkeo3CE/drCq9itutca2yZIn5UbamCKixc=;
+        s=k20201202; t=1631669417;
+        bh=LkGWfO9TM3hmZrbs0mR4qnqCRRt2tPV/Mn90T2rkA/s=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=GVQatktFLMlu3I1vvoYBlJyg4KnAHe9OC0FGg3Mflc1aaCbvG3BtAYrab/1QPkd9Z
-         iDEWWazUJDKjbVrm+xOkRWoivosxLiqRVYnlkBlgMaZj9WbZmKjevgndVI+xo6e3e+
-         723Io8/XjuWEqvRrqHZDioZuPdXgTy8C8t56BeqoOYyDIMBDLdyYHspwhdQsO4wVIG
-         vhyWf50xULvDvCjr/HPa8cMKQTY0ekTA81O4iTAzub5oTsY3dKW1O4sACujxS8sBrE
-         3z3r4STFLDMBvE2Ri8wwcySo7P1prTBYYCOI8IlflQianGXxsE/Sh8IbCgWHwQnqy5
-         +Fjrs0OB1Yzfw==
+        b=fNeuIjiaFW7WC95Jgokcl7SDV02Azv2kTwQWaFM5pSvRbq7xZSnO+SNh7RK8xFq90
+         O9C/rN5BSJfsrzNd21JekyShIf85ktQQK5+9lAY/GeB6Y2e1JJN6Z5svIJ3pcSllLY
+         Yl6rR9tJvJC+wNA4HIcTxtrRC//AS/KIGdocESLc9CA76+e+pGbyws1bFhYqJATQmo
+         wX+9MZi7sOyFiVV3SE1iJQcOWuPcVmDpwJ9HrvzcTnprzBIDeO+B5yzGPx7M8yl/JG
+         1bOSy6/DYmAcBrnZjdtU6QTGN3Brlu0HEUwHwA2x6DZWPbr3mM0IjQyFrsnK1Dzp8N
+         iqlCF562jXkFg==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <545df946044fc1fc05a4217cdf0054be7a79e49e.1619161112.git.christophe.jaillet@wanadoo.fr>
-References: <545df946044fc1fc05a4217cdf0054be7a79e49e.1619161112.git.christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] clk: mvebu: ap-cpu-clk: Fix a memory leak in error handling paths
+In-Reply-To: <20210914143201.1062947-1-dinguyen@kernel.org>
+References: <20210914143201.1062947-1-dinguyen@kernel.org>
+Subject: Re: [PATCH] clk: socfpga: agilex: remove unused s2f_usr0_clk define
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Julia.Lawall@inria.fr, gregory.clement@bootlin.com,
-        lee.jones@linaro.org, mturquette@baylibre.com
-Date:   Tue, 14 Sep 2021 18:25:34 -0700
-Message-ID: <163166913446.763609.1283697746683465869@swboyd.mtv.corp.google.com>
+Cc:     dinguyen@kernel.org, mturquette@baylibre.com,
+        linux-clk@vger.kernel.org, kernel test robot <lkp@intel.com>
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Date:   Tue, 14 Sep 2021 18:30:15 -0700
+Message-ID: <163166941570.763609.2177760843201537150@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Christophe JAILLET (2021-04-23 00:02:26)
-> If we exit the for_each_of_cpu_node loop early, the reference on the
-> current node must be decremented, otherwise there is a leak.
+Quoting Dinh Nguyen (2021-09-14 07:32:01)
+> Remove unused s2f_usr0_clk define.
 >=20
-> Fixes: f756e362d938 ("clk: mvebu: add CPU clock driver for Armada 7K/8K")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
+> Fixes: 80c6b7a0894f ("clk: socfpga: agilex: add clock driver for the
+> Agilex platform")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 
-Applied to clk-next
+And dropped now. It is still used?
+
+> ---
+>  drivers/clk/socfpga/clk-agilex.c | 7 -------
+>  1 file changed, 7 deletions(-)
+>=20
+> diff --git a/drivers/clk/socfpga/clk-agilex.c b/drivers/clk/socfpga/clk-a=
+gilex.c
+> index b4d300fbbc66..bf8cd928c228 100644
+> --- a/drivers/clk/socfpga/clk-agilex.c
+> +++ b/drivers/clk/socfpga/clk-agilex.c
+> @@ -165,13 +165,6 @@ static const struct clk_parent_data mpu_mux[] =3D {
+>           .name =3D "boot_clk", },
+>  };
+> =20
+> -static const struct clk_parent_data s2f_usr0_mux[] =3D {
+
+This is s2f_usr0_mux, not s2f_usr0_clk.
+
+> -       { .fw_name =3D "f2s-free-clk",
