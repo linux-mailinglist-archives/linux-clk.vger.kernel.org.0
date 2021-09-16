@@ -2,85 +2,183 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D25F740DB50
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Sep 2021 15:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B9740DCB0
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Sep 2021 16:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240186AbhIPNfQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 16 Sep 2021 09:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240213AbhIPNfB (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Sep 2021 09:35:01 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E1CC0613CF
-        for <linux-clk@vger.kernel.org>; Thu, 16 Sep 2021 06:33:32 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id i3-20020a056830210300b0051af5666070so8344709otc.4
-        for <linux-clk@vger.kernel.org>; Thu, 16 Sep 2021 06:33:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=9ifSJ2xil03I9kJ4JQo+VTUIjwQemHC+E35sv+kOQ84=;
-        b=Wis0tBa5pe1S2zwhrw6/folJo5HrlPX+s/nLzwzDP2RKKMfK4ac0tfJcaVSFrSHqaA
-         EQffRlsK63amku68xopImX4NjwKAIaAUG4QBKH0GP40ORWYUdXK0f/LxCxV3ikiXpS/n
-         jenvP/S6E0cxBg4Tmv5S4UDie2mf1xOHHs+HRa3kvEW3kfAi38kd2b5SnzmBQwIcMAgU
-         upzRr3kQK0edofQxnR3c/lNmDAPoTGaaIVMyHQ/NDi1s68QSlz2xRRZm9DJ0Xba02tMT
-         UlYHpJjp1jpNmwAvLeUsCWenAnD79slS/VTc3AMDS/2b519ELA0GlkZplQv+GokTfuxA
-         vYcg==
+        id S238208AbhIPOax (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 16 Sep 2021 10:30:53 -0400
+Received: from mail-il1-f177.google.com ([209.85.166.177]:37855 "EHLO
+        mail-il1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234701AbhIPOaw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Sep 2021 10:30:52 -0400
+Received: by mail-il1-f177.google.com with SMTP id i13so6792114ilm.4;
+        Thu, 16 Sep 2021 07:29:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=9ifSJ2xil03I9kJ4JQo+VTUIjwQemHC+E35sv+kOQ84=;
-        b=uddVJKanWoIuCtHYTcjSDIOyguoMfcJP8a8hIvX0ubcutrIVWMPFEsPhK1eKZYuZgg
-         9AdDnAYrHe/PFNMpqzL2BIEm59+D7qrOeitfmfKUGWCMwmQDSV5eGe8LxdTxSXXyoFiL
-         zx4NU0xRec56EOusauHIfmowml2YumlvfroRZvJT9CODAyjmzEfPO/+lKF+zZ85GX3c3
-         1ARIny5azpwuo2uGn4Jqzn9HFCsP7a07UPZN1GPCyR6m/m/7GTN14WJuV1gg4aRtNO1n
-         Guv+koHTnjWVERAM9njDFrafS1fMwswnHq9aTm6pyElGWYt1Oyt9VuaV4YM6kZTBfiJA
-         Gj2A==
-X-Gm-Message-State: AOAM5327ACHPNA/xLwIM88ltH6R6zXlLb9/iChX/SYI+fl9hfaqpuJqg
-        fStfbgV2tIY7lg5lGzV9AklSTc1ocFZLpleFzbk=
-X-Google-Smtp-Source: ABdhPJzpK2WPERKopp8T2jwfmiI8HcvJjxaHI9M5KhRXAHVMJIG7rcpzBwKAsPeGxe1hBpKtDBSHQmGQNoTKe/GNzqk=
-X-Received: by 2002:a05:6830:31ae:: with SMTP id q14mr2304371ots.118.1631799211853;
- Thu, 16 Sep 2021 06:33:31 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=frRlwJ/10bK38eYStAOqRcdEJX7eQoVjAi5npDQfV+M=;
+        b=m3CzB870ix24SFKv5OjiXhrjPuJ+Y3WKL8FPEdusmUPkSiTSq+1Dgw4HLwu8eIvqIk
+         QUEdy3vMtrgTykMWFTfpb/nuSR0DF+bO7BdiRTDjYszU19f/mlGqqjldyKKl8mpfOZCp
+         YLslTZ//c8sW6zPVl3IYvjb2/lbr5QUaz9M9x3ZfZVgi3CV0wVCF6UVSuZcm2+Vr90i2
+         HX50MdBF+IkzeJKP5Fta2FUxSopoNSOjRSfTJBV/jd80FHdEeBdFw7QCzzNZrugcDrTv
+         0+SxA9ar3YzORCwJZpYMcz7lvToQjb+RZvR8sxi8ilikJ/3Lj8e8jiOL+xWkPw3jIorh
+         te5Q==
+X-Gm-Message-State: AOAM530CNbxO/oK6KyjBwVAkRUdXVCaYvrWSVzVfaRqTrrxzs+GH5kir
+        JHAaF6GNoE0PuieblnyNxw==
+X-Google-Smtp-Source: ABdhPJwNYZd7xpVuZDfxAUPHXc9QXyAk3Crli9jNKY8hibPZMTQIDmY+hfVbpBd8eOJzBJLhoj3V+g==
+X-Received: by 2002:a05:6e02:1546:: with SMTP id j6mr4137495ilu.154.1631802571878;
+        Thu, 16 Sep 2021 07:29:31 -0700 (PDT)
+Received: from robh.at.kernel.org (96-84-70-89-static.hfc.comcastbusiness.net. [96.84.70.89])
+        by smtp.gmail.com with ESMTPSA id r7sm1826408ilm.5.2021.09.16.07.29.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Sep 2021 07:29:31 -0700 (PDT)
+Received: (nullmailer pid 1304478 invoked by uid 1000);
+        Thu, 16 Sep 2021 14:29:30 -0000
+Date:   Thu, 16 Sep 2021 09:29:30 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, Baolin Wang <baolin.wang7@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/4] dt-bindings: clk: sprd: Add bindings for ums512
+ clock controller
+Message-ID: <YUNUyolr6ksEoZI3@robh.at.kernel.org>
+References: <20210916084714.311048-1-zhang.lyra@gmail.com>
+ <20210916084714.311048-3-zhang.lyra@gmail.com>
 MIME-Version: 1.0
-Sender: mrsgloria.carlsen00@gmail.com
-Received: by 2002:a05:6838:9d44:0:0:0:0 with HTTP; Thu, 16 Sep 2021 06:33:31
- -0700 (PDT)
-From:   "helen.carlsen" <helen.carlsen26@gmail.com>
-Date:   Thu, 16 Sep 2021 14:33:31 +0100
-X-Google-Sender-Auth: Z9Od07L80S28cu_kWuqVR6oCmTQ
-Message-ID: <CAEgYZyr73cX3tLEv1Smjt8hEN=PPMdO_cDrmaBqdemuGs+RtsQ@mail.gmail.com>
-Subject: Hello my dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210916084714.311048-3-zhang.lyra@gmail.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
- I sent this mail praying it will found you in a good condition of
-health, since I myself are in a very critical health condition in
-which I  sleep every night without knowing if I may be alive to see
-the next day. I'm Mrs. Helen John carlsen, wife of late Mrs. Helen
-John carlsen, a widow suffering from long time illness. I have some
-funds I inherited from my late husband, the sum of($ 11.000.000,eleven
-million dollars)my Doctor told merecently that I have serious sickness
-which is cancer problem. What disturbs me most is my stroke
-sickness.Having known my condition, I decided to donate this fund to a
-good person that will utilize it the way i am going to instruct
-herein. I need a very honest and God fearing person who can claim this
-money and use it for Charity works, for orphanages, widows and also
-build schools for less privileges that will be named after my late
-husband if possible and to promote the word of God and the effort that
-the house of God is maintained.
+On Thu, Sep 16, 2021 at 04:47:12PM +0800, Chunyan Zhang wrote:
+> From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> 
+> Add a new bindings to describe ums512 clock compatible strings.
+> 
+> Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> ---
+>  .../bindings/clock/sprd,ums512-clk.yaml       | 106 ++++++++++++++++++
+>  1 file changed, 106 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml b/Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
+> new file mode 100644
+> index 000000000000..be3c37180279
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
+> @@ -0,0 +1,106 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright 2019-2021 Unisoc Inc.
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/clock/sprd,ums512-clk.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: UMS512 Clock Control Unit Device Tree Bindings
+> +
+> +maintainers:
+> +  - Orson Zhai <orsonzhai@gmail.com>
+> +  - Baolin Wang <baolin.wang7@gmail.com>
+> +  - Chunyan Zhang <zhang.lyra@gmail.com>
+> +
+> +properties:
+> +  "#clock-cells":
+> +    const: 1
+> +
+> +  compatible:
+> +    enum:
+> +      - sprd,ums512-apahb-gate
+> +      - sprd,ums512-ap-clk
+> +      - sprd,ums512-aonapb-clk
+> +      - sprd,ums512-pmu-gate
+> +      - sprd,ums512-g0-pll
+> +      - sprd,ums512-g2-pll
+> +      - sprd,ums512-g3-pll
+> +      - sprd,ums512-gc-pll
+> +      - sprd,ums512-aon-gate
+> +      - sprd,ums512-audcpapb-gate
+> +      - sprd,ums512-audcpahb-gate
+> +      - sprd,ums512-gpu-clk
+> +      - sprd,ums512-mm-clk
+> +      - sprd,ums512-mm-gate-clk
+> +      - sprd,ums512-apapb-gate
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 4
+> +    description: |
+> +      The input parent clock(s) phandle for this clock, only list fixed
+> +      clocks which are declared in devicetree.
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 4
+> +    items:
+> +      - const: ext-26m
+> +      - const: ext-32k
+> +      - const: ext-4m
+> +      - const: rco-100m
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - '#clock-cells'
+> +
+> +if:
+> +  properties:
+> +    compatible:
+> +      enum:
+> +        - sprd,ums512-ap-clk
+> +        - sprd,ums512-aonapb-clk
+> +        - sprd,ums512-mm-clk
+> +then:
+> +  required:
+> +    - reg
+> +
+> +else:
+> +  description: |
+> +    Other UMS512 clock nodes should be the child of a syscon node in
+> +    which compatible string should be:
+> +            "sprd,ums512-glbregs", "syscon", "simple-mfd"
+> +
+> +    The 'reg' property for the clock node is also required if there is a sub
+> +    range of registers for the clocks.
 
-I do not want a situation where this money will be used in an ungodly
-manner. That's why I'm taking this decision. I'm not afraid of death
-so I know where I'm going. I accept this decision because I do not
-have any child who will inherit this money after I die. Please I want
-your sincerely and urgent answer to know if you will be able to
-execute this project, and I will give you more information on how the
-fund will be transferred to your bank account. I am waiting for your
-reply.
+In which cases is this not true?
 
-May God bless you and your family.
-Best Regards, Mrs. Helen John carlsen,
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    ap_clk: clock-controller@20200000 {
+> +      compatible = "sprd,ums512-ap-clk";
+> +      reg = <0x20200000 0x1000>;
+> +      clocks = <&ext_26m>;
+> +      clock-names = "ext-26m";
+> +      #clock-cells = <1>;
+> +    };
+> +
+> +  - |
+> +    ap_apb_regs: syscon@71000000 {
+> +      compatible = "sprd,ums512-glbregs", "syscon", "simple-mfd";
+> +      reg = <0x71000000 0x3000>;
+> +      #address-cells = <1>;
+> +      #size-cells = <1>;
+> +      ranges = <0 0x71000000 0x3000>;
+> +
+> +      apahb_gate: clock-controller@0 {
+> +        compatible = "sprd,ums512-apahb-gate";
+> +        reg = <0x0 0x2000>;
+> +        #clock-cells = <1>;
+> +      };
+
+We have this example in the MFD schema, so drop it here.
