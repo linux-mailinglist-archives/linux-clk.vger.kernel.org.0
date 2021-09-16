@@ -2,96 +2,88 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F6240D715
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Sep 2021 12:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE24A40D9D4
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Sep 2021 14:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236408AbhIPKJN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 16 Sep 2021 06:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43566 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236175AbhIPKJM (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Sep 2021 06:09:12 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14D9C061574
-        for <linux-clk@vger.kernel.org>; Thu, 16 Sep 2021 03:07:51 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id b18so15122213lfb.1
-        for <linux-clk@vger.kernel.org>; Thu, 16 Sep 2021 03:07:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jUO5tSYLVRile5AWlAafA8DmhpHLLp7fGg/YtJNAKkA=;
-        b=kb18yEmDjFeTISL5Cj3f+OE1reEAL0nH5XmyNUxp+vvOyzUcj+l9m5OworF15vyOXF
-         b8YVBrLmGwq/u0XPPb8fk3JaoNhQe+7Ho6ZKojUxfMsvVZB1S+AXaj2bjkGQpTH2BDMF
-         RFKGzdZkL5STdbXuztAsLUi82lROJaEFce1QQBJQFnJ6BNDzh73ydU6twoHnOf/LFIT6
-         m36gdukOrXppQsBrmuso+yADYfJZDVaWVxIsFzYI2GyA9+KlNEDbRQnmoxutZH37cusb
-         kMvPFWujPGOtbzPt0qbQ8UKq9xhYrz+jKKgOqdrQtVAmzqRwqbisq3ed603uxeTFFJJ1
-         7TrA==
+        id S239456AbhIPMXc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 16 Sep 2021 08:23:32 -0400
+Received: from mail-il1-f178.google.com ([209.85.166.178]:44636 "EHLO
+        mail-il1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239479AbhIPMXb (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Sep 2021 08:23:31 -0400
+Received: by mail-il1-f178.google.com with SMTP id x2so6354521ila.11;
+        Thu, 16 Sep 2021 05:22:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jUO5tSYLVRile5AWlAafA8DmhpHLLp7fGg/YtJNAKkA=;
-        b=2UxuXmzJskKLkG6ou4qVlZqUuMf9DIQh9LoKUYQ2GAFTFlRiOPtm+dZiQfcDaNiU2x
-         OCtorr0fQACYX9tvP7nOQe2WqeNuW6PlHPCb320AZ1NuCemWLcfcj5e8art197fDcmBg
-         FOtqQsKqy/x4vr+iiaCNmoIWoxb0W709nIz9IcoJBlTM9QZ0jSLydw/QDvve15EQza8F
-         lELdwztvkgfBSvauOeOlR1S/JchLNhGoem0I88MA7xnew56vBwu0J7GnyUL3xf+dvZqJ
-         SL4WsNl7McGj6mk6Yp45F7/cnLwQk5mjrAQFMsFOeRZj5YJgtzzSmrupGKyd9E5M9gRJ
-         pKaA==
-X-Gm-Message-State: AOAM530tMCnNwkpehJ47J/mOGhDBdV/eiVIZUOv2BBSV5eg3cyYM9QGb
-        qkIkDD0eUWBViHXrQBf62niAS6JkDFxugesoUOhg3Q==
-X-Google-Smtp-Source: ABdhPJytweAIsY0sxsinkWN7FPbeTdhVCteGXtpk0WGBS/7V1nIDt7Ry+vbrBBnhe783d+4wyWb3AQdWBV5/FDYn/9Q=
-X-Received: by 2002:a05:6512:3096:: with SMTP id z22mr3486963lfd.584.1631786869054;
- Thu, 16 Sep 2021 03:07:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210914085137.31761-1-sam.shih@mediatek.com> <20210914085137.31761-5-sam.shih@mediatek.com>
-In-Reply-To: <20210914085137.31761-5-sam.shih@mediatek.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 16 Sep 2021 12:07:38 +0200
-Message-ID: <CACRpkdYkvBS5+MHSGBDhNQtvCxRquef1kPHmCSfzruz2N=VCyw@mail.gmail.com>
-Subject: Re: [RESEND,v3,4/9] pinctrl: mediatek: moore: check if pin_desc is
- valid before use
-To:     Sam Shih <sam.shih@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Sean Wang <sean.wang@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Seiya Wang <seiya.wang@mediatek.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        John Crispin <john@phrozen.org>,
-        Ryder Lee <Ryder.Lee@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=IFftwoDUAHs9Nz4h9MoROct44Y+LsTp6P6HEC2g+7PI=;
+        b=KQw0ou/RCLOyURHpSJzxKWGZ8+Se1gLOa6Jhsj96RLHeaeK8BCp1RGZUWS/U+UTgPl
+         xRa/Bk/LcEnGiElly0qs5XAkyTW2iVGPESObHZx0H9Ci+8K7pmYfH2VfOYS4/kkJWatW
+         xz9mWztp8Rghrb0TyPe9/1NZ8f//hhnG+sWWUG4NBodv0PpyXtYZdKaWg7rufaKnJj4W
+         7QVKkVRQmU4dKfNo7EaRAqFmY7EAQxqfPaeVR7PnqZK0NRXp31/+izn2vbYc5Q1xfHtW
+         xc3bPtn6NnjqH9ZPRKefXl2bQDbPWOsUwR9KvIDiDzWaDjE+ql2jyb3hVXlBq6+pa+n7
+         eZZA==
+X-Gm-Message-State: AOAM5339Wd3dJAfV0JJ6tYnA9DoPM0oOu5pSwyQ6fchJVS5xurwIY98l
+        9E0VcJzhcdsMyk2vMwtbuA==
+X-Google-Smtp-Source: ABdhPJyM21Lfun7gEMOg6IfXLhT7D1Exg4DZsflUvLg259E9u2BpDENkfoIlSfCgxYHOA6gj7Pq+6g==
+X-Received: by 2002:a05:6e02:1a0e:: with SMTP id s14mr3658426ild.47.1631794930759;
+        Thu, 16 Sep 2021 05:22:10 -0700 (PDT)
+Received: from robh.at.kernel.org (96-84-70-89-static.hfc.comcastbusiness.net. [96.84.70.89])
+        by smtp.gmail.com with ESMTPSA id g19sm1799388ilb.84.2021.09.16.05.22.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Sep 2021 05:22:10 -0700 (PDT)
+Received: (nullmailer pid 1119422 invoked by uid 1000);
+        Thu, 16 Sep 2021 12:21:53 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-clk@vger.kernel.org, Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        Stephen Boyd <sboyd@kernel.org>
+In-Reply-To: <20210916084714.311048-3-zhang.lyra@gmail.com>
+References: <20210916084714.311048-1-zhang.lyra@gmail.com> <20210916084714.311048-3-zhang.lyra@gmail.com>
+Subject: Re: [PATCH v2 2/4] dt-bindings: clk: sprd: Add bindings for ums512 clock controller
+Date:   Thu, 16 Sep 2021 07:21:53 -0500
+Message-Id: <1631794913.511855.1119421.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, Sep 14, 2021 at 10:52 AM Sam Shih <sam.shih@mediatek.com> wrote:
+On Thu, 16 Sep 2021 16:47:12 +0800, Chunyan Zhang wrote:
+> From: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> 
+> Add a new bindings to describe ums512 clock compatible strings.
+> 
+> Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> ---
+>  .../bindings/clock/sprd,ums512-clk.yaml       | 106 ++++++++++++++++++
+>  1 file changed, 106 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
+> 
 
-> Certain SoC are missing the middle part gpios in consecutive pins,
-> it's better to check if mtk_pin_desc is a valid pin for the extensibility
->
-> Signed-off-by: Sam Shih <sam.shih@mediatek.com>
-> Acked-by: Sean Wang <sean.wang@mediatek.com>
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-This patch applied for v5.16 so we get some stuff merged.
+yamllint warnings/errors:
 
-Yours,
-Linus Walleij
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/clock/sprd,ums512-clk.example.dt.yaml:0:0: /example-1/syscon@71000000: failed to match any schema with compatible: ['sprd,ums512-glbregs', 'syscon', 'simple-mfd']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1528692
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
