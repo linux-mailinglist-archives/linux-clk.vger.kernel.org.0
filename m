@@ -2,55 +2,55 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED484101D6
-	for <lists+linux-clk@lfdr.de>; Sat, 18 Sep 2021 01:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A02B54101DD
+	for <lists+linux-clk@lfdr.de>; Sat, 18 Sep 2021 01:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235072AbhIQXnA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 17 Sep 2021 19:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48702 "EHLO
+        id S234275AbhIQXqp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 17 Sep 2021 19:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbhIQXnA (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 17 Sep 2021 19:43:00 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32613C061574
-        for <linux-clk@vger.kernel.org>; Fri, 17 Sep 2021 16:41:37 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id bq5so39518876lfb.9
-        for <linux-clk@vger.kernel.org>; Fri, 17 Sep 2021 16:41:37 -0700 (PDT)
+        with ESMTP id S230330AbhIQXqo (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 17 Sep 2021 19:46:44 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA6FC061757
+        for <linux-clk@vger.kernel.org>; Fri, 17 Sep 2021 16:45:21 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id z24so13088474lfu.13
+        for <linux-clk@vger.kernel.org>; Fri, 17 Sep 2021 16:45:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=PnbdN3UCLAUCSO4VZIIA2qQL73S6L45jVruxNydbTrE=;
-        b=aWqIVvX9llY6+8fAsRoJ5vE0qofZ3Ge2tLqBWaHXKlXI++P+q9sHj+3Vs8HM+V+EeX
-         7enIyaJbxFhE/wSf5//Xx2Zyhz5Y2NrVXE+ByHojfqDz9JOlmMjxBJ2oyS8xF3n22ctK
-         62b9Fk8lBZG9h7xOzDtP1d9WWD1Ia0pFRuuzCtx+on5rE72/Qv1PN3QGUDb+4INDIgvK
-         UP3U90hcFVxlw31d4TX3CdSKE/ZS/qdVn2VNfESCFO1b3zDd1rX4xzoMvpfxQp0uQuli
-         CZCPCkMCPRvnzFoOnXYFlidK8l99mOysSDqVJNJVnPk3+erdS8Ml9wzdlIkVNIlbed4F
-         6YWg==
+        bh=Adpjj8eb9qPefLqJjlRRH4Z+UTglNnbz6imJOtpowtE=;
+        b=Stu4Yvcx+jZlQ6bo4SsaVgSClupIVtykd85F8zGJwqrRts+FNZKGCFRHGGl/XECWkG
+         F9ceDrRBFlGqgZoQ6Ro8gV1Ip44OxLU7jAJ8prtT6k4BUAx+NwH/Xp81ioV+o3QUYC52
+         LPzi4M8ehhgEOcyl4/4wqcrQZjedLbviqQKZ6MNPcNbSLRaetIZMhcsL9Zvh/JyttAtG
+         gcfm4hdIKFBeRTjVl6zUTB8mzTG55FQ+hsNogyDh7ZK9ME8jFvqcND6CLG1i7ZEDogID
+         xrxJQhuQvKImxHbaGmUJWoahxq6WwUdESY32n6tpsr7dznrHmSaWcdXRxdNh+oRIo2kq
+         L02A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=PnbdN3UCLAUCSO4VZIIA2qQL73S6L45jVruxNydbTrE=;
-        b=jPexTs8KzX30dOwvgHFKW7HZQ+GGjYZ0ey0Yyt+JBRF68RcozxnRBYvCLMfkGlkUWl
-         yo6SmYSSfSrbD38/HKk3mNWpbNeOEgG+jX+dT+iJmPRxImERMk+iWDv6JUfJZUPVC6gD
-         yU8MBz86Pm5sUh6ot7YFmTsSV8u5EP3UxSkM/6u2wslUviZr4DQY0MKN6RLSqmgoQBgI
-         UqWp46YzB7qi8nYhz/ygRFXNfEHgkiJWC8aetiZhJtJ3c9S8SYWpFV9Azv0HzS1dNsP9
-         Z9VRD1icyCyqPrtRyNWVlDGSIrjQprgR1qNWkDYSgP6M01O/XEcG29fQ9BT/kDORQFGM
-         EIvg==
-X-Gm-Message-State: AOAM532SUvrVdhXWpn1YsSAEg+F1WCh/0/SNNUtPo9q7qufZAsySobh2
-        m/fvSTEmX7ublI98LQ36A6KY+QWwyZTaIN5zyhrgGA==
-X-Google-Smtp-Source: ABdhPJzIV512qryJ+JnO7qP7YBFgWkpHpPcXbqnJv8d2u3jbvziAQ2liUehMup4iRBRk+n/kRb/tARgPhmw9tlb6rxU=
-X-Received: by 2002:a2e:5758:: with SMTP id r24mr11874618ljd.432.1631922095497;
- Fri, 17 Sep 2021 16:41:35 -0700 (PDT)
+        bh=Adpjj8eb9qPefLqJjlRRH4Z+UTglNnbz6imJOtpowtE=;
+        b=GGlH0FcxOOdVyxkRYWYlQIN4BKlrfPep1NNcBsKlx5Z7Ix/FmIViNqPfASgUgJZvaq
+         oRQyRkuM3wCVzfwI1LOlxARp2iwS2xKiKn+7OW7o3GXRQHhkFSsl8kSz36flA4pQnV85
+         isJeKWbNNarJTTKbtcnPtPu602Lewv99a1GT6nIyHcz1qqYPNk6AfttX+l4JFaVuyHWu
+         NOfdgGyPBz9ytPFJ0HB1R72c/MLUD5hCCR0fdeMrb9oQ4UlA62N9FBIUWWp4Fyd5rVjR
+         WbZxANroq1XIGCpi+FXaGITVlVuG+WmhjV0B2sIwoyWk+H2NvWPQtZDEu9mLoORfattl
+         kUTw==
+X-Gm-Message-State: AOAM530ybKqw/YvaeMR9J0A6CQ06Fn/CgKYxhkcbFYFm3zkkN7k1cFqm
+        Mt/NNLNIi2kib6qNG3Oy+DlivcUpgShbBvGlywBgTw==
+X-Google-Smtp-Source: ABdhPJySPdlC4kFGb/uPqpNRVO7RsaaNmYQ7Dsfc4dTO/WXhWAE1PedasJyvgTCKrCA5g+mA2q9H0CQsy0ibTumhe7A=
+X-Received: by 2002:ac2:4651:: with SMTP id s17mr5137396lfo.584.1631922319876;
+ Fri, 17 Sep 2021 16:45:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210909213118.1087083-1-robh@kernel.org> <20210909213118.1087083-7-robh@kernel.org>
-In-Reply-To: <20210909213118.1087083-7-robh@kernel.org>
+References: <20210913192816.1225025-1-robh@kernel.org> <20210913192816.1225025-5-robh@kernel.org>
+In-Reply-To: <20210913192816.1225025-5-robh@kernel.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 18 Sep 2021 01:41:24 +0200
-Message-ID: <CACRpkdbYGtzfc5qDGCgqFnYLi4eSB3K61DWz9ypUH9mneUrLGQ@mail.gmail.com>
-Subject: Re: [PATCH 6/8] ARM: dts: arm: Update register-bit-led nodes 'reg'
- and node names
+Date:   Sat, 18 Sep 2021 01:45:09 +0200
+Message-ID: <CACRpkdb5ZOyaoVg74ByFDqv9Da-=zaBwD_4uTnd7ZTe875dY3Q@mail.gmail.com>
+Subject: Re: [PATCH v2 4/8] dt-bindings: clock: arm,syscon-icst: Use 'reg'
+ instead of 'vco-offset' for VCO register address
 To:     Rob Herring <robh@kernel.org>
 Cc:     Stephen Boyd <sboyd@kernel.org>, Pavel Machek <pavel@ucw.cz>,
         Liviu Dudau <liviu.dudau@arm.com>,
@@ -61,26 +61,28 @@ Cc:     Stephen Boyd <sboyd@kernel.org>, Pavel Machek <pavel@ucw.cz>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, Sep 9, 2021 at 11:31 PM Rob Herring <robh@kernel.org> wrote:
+On Mon, Sep 13, 2021 at 9:28 PM Rob Herring <robh@kernel.org> wrote:
 
-> Add a 'reg' entry for register-bit-led nodes on the Arm Ltd platforms.
-> The 'reg' entry is the LED control register address. With this, the node
-> name can be updated to use a generic node name, 'led', and a
-> unit-address.
+> 'reg' is the standard property for defining register banks/addresses. Add
+> it to use for the VCO register address and deprecate 'vco-offset'. This
+> will also allow for using standard node names with unit-addresses.
 >
 > Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Liviu Dudau <liviu.dudau@arm.com>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
 > Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-clk@vger.kernel.org
+> Cc: Michael Turquette <mturquette@baylibre.com>
 > Signed-off-by: Rob Herring <robh@kernel.org>
 
+Yeah this is better, dunno why I did it like that. I guess
+it was the Wild West of DT bindings back then.
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
