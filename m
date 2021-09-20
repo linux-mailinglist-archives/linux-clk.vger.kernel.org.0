@@ -2,177 +2,101 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9AB412C31
-	for <lists+linux-clk@lfdr.de>; Tue, 21 Sep 2021 04:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD86412C33
+	for <lists+linux-clk@lfdr.de>; Tue, 21 Sep 2021 04:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242091AbhIUCnH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        id S242094AbhIUCnH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
         Mon, 20 Sep 2021 22:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241808AbhIUCDP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 Sep 2021 22:03:15 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C666EC14093A;
-        Mon, 20 Sep 2021 11:12:48 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id x27so71302679lfu.5;
-        Mon, 20 Sep 2021 11:12:48 -0700 (PDT)
+        with ESMTP id S1349431AbhIUC0f (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 20 Sep 2021 22:26:35 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42215C1E3278
+        for <linux-clk@vger.kernel.org>; Mon, 20 Sep 2021 12:04:34 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id p2-20020a170902bd0200b0013da15f4ab0so2078319pls.7
+        for <linux-clk@vger.kernel.org>; Mon, 20 Sep 2021 12:04:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GkvxncHOY8DvHcvIZZ5ALhHomt+6uxaaFq6TQ6h+fMg=;
-        b=p3McJnvyBc+CTcDTD8UtxLeB2ZXB1zXQiJojH/qHQI+5HqAHT37cHQz005HKHfdxVE
-         O5NPRwSrWiPereIDxUCOlhMdGlhZ1mf5cKF6a2SFkX0vxia9sRMKTSQ5gLydM1CMcS8F
-         yJw1gWENo6zp4qFCQUhO1jkWZP4JGVldQtT7fsQt24tKafP7JwYkg5/+Au7n/iwRqbfk
-         EuiFM19Q+j0iN6hsP/f4GwFJ00a22XMJbRWlCcRFuLP2I1whhD+CsjkKEKF76UnaUrDe
-         UsdKa49Zh7Pzc+Km5NQ8khTlBHR3FdVXomkQqXK8J3Ut/ULtGWLfqg/yT5JCMzG/FuTB
-         YfCg==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=lAZa/uDHOuRnoNyLpi7ucyhYyEvosH1TAO5N4aOwUf4=;
+        b=HJ4DeaiXQZr/enJuuumnzUVek0sze1KSs1HaUFw8WJ2QjKDgCJ+XwqlXtIKksEJTSB
+         eJPNj0/XcdBMPeuj/YrtRk5F29cSqZe1dId4FqCoGZiNPBWzdFx30W5h/xLW26+BqvfX
+         YIeVJtYvSn8/osqR/UC47hxNHlwd5CFw1g5I6G6laBbLs6IrsPItvBwZaz/M7ZiPDiGy
+         G78/3CoaXwvo4Q1SP5Yu+8dr780ohJwW8zQxL4td/6hORnL6horUxhkDSRBN3XhngzAH
+         yHZp4/yFk/1CZnhehuXJnoiXyp7lpCgiwKBWgqRESq/OukmKsnArNqqSOHl6+vmjMmvv
+         SEag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GkvxncHOY8DvHcvIZZ5ALhHomt+6uxaaFq6TQ6h+fMg=;
-        b=DhaJZvRjq9X49yGdue0UwJVnZSnGZ/IHHoGUglQolhdMvbtR20VYXEpZNnj+w9Zuvj
-         J9JwszJJKGbTG3sCyZxwpiKcAnOuYww3YSr1q9Yybi5DEhIuxcnPRItB9juNgoEUUSYB
-         zNdmEZ/1mnrsLlxSFSy9CVvxf0wv1EApX/CqAoIy5u8zLJjvrSIkGY9gZqetFloO7vcQ
-         P8fKU//mUoPYQAn6fuHECGMmlmcaLv3r+d0d1e4IUOKyZZyUlBwaUcTd5gCcDQmH/mLn
-         XvXdx+8S70tXPRInr0rc8OMihtS9Dpyff/vc5T5+Z4dpi+mxND5+lYd1bkfwYDaZGRDK
-         PQ2A==
-X-Gm-Message-State: AOAM532xZgwt3zGt8Cojmfcvmer1tgymaQMiCMFyue8B72dfCsMsJlhO
-        zNvrXCux2JX8aD8BowCTYHo=
-X-Google-Smtp-Source: ABdhPJwlgGKO3aMXePQ47tKK8EPh05YbuveS/dXOiz7N8s1w1kaCmMJkGRQCBT7OqTJwUfNNaaLf2w==
-X-Received: by 2002:a2e:9f4f:: with SMTP id v15mr5075723ljk.468.1632161566073;
-        Mon, 20 Sep 2021 11:12:46 -0700 (PDT)
-Received: from localhost.localdomain (46-138-151-206.dynamic.spd-mgts.ru. [46.138.151.206])
-        by smtp.gmail.com with ESMTPSA id u3sm1775677lju.107.2021.09.20.11.12.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Sep 2021 11:12:45 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=lAZa/uDHOuRnoNyLpi7ucyhYyEvosH1TAO5N4aOwUf4=;
+        b=H+JWcS2DJNdXxegzIsmexPLK3/vtyKbmD/TPTzlAiUiFsSO1XCfD9ansmcxCUdDN1A
+         C9R+IUvTL6fYYuBv53WxfUVgXnrOQ1uIf+PGHWu6QVehCoCsfaHxgge6jyCWg/JKm7c+
+         CKP5BSELWWh0BpPTXcZCoIS9s82/FivTZO20RQOgCJ+AlJcT35E+FPx2DUBbNZ9ftprL
+         7pOQ/xlNejv3P0ls9bW3wwnsVdrXpUZHAr5uUwo8DmAMeOmWUqv3vcMbDxAXBKS7lTgX
+         9xD3BhX6DADvxPEM5h06KH5Fy3RApX/CuhL4YIA/GkWbMBiezO2ym14lqZuaQLZ8Tznr
+         cwvA==
+X-Gm-Message-State: AOAM533n+o7S6GQobNQ8lzMN2dn1g52T6Yme4LKLjkW9KD0g6q59sndE
+        Fm9dOORzPxP7JBFlM/iuwpo60Hm94j4s/mKcHxg=
+X-Google-Smtp-Source: ABdhPJzUNF/PM6NP+/MIABOOlGQE6wEJIPyLI9894e884/ud4IKfYPTvMOuCyfQ8j6JThtSCqFknZPzuuWRs07ogzoQ=
+X-Received: from willmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:2dd0])
+ (user=willmcvicker job=sendgmr) by 2002:a05:6a00:1c52:b0:443:41c3:1e51 with
+ SMTP id s18-20020a056a001c5200b0044341c31e51mr23232314pfw.32.1632164673665;
+ Mon, 20 Sep 2021 12:04:33 -0700 (PDT)
+Date:   Mon, 20 Sep 2021 19:03:45 +0000
+Message-Id: <20210920190350.3860821-1-willmcvicker@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.33.0.464.g1972c5931b-goog
+Subject: [PATCH v1 0/4] arm64: Kconfig: Update ARCH_EXYNOS select configs
+From:   Will McVicker <willmcvicker@google.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Subject: [PATCH v12 35/35] ARM: tegra20/30: Disable unused host1x hardware
-Date:   Mon, 20 Sep 2021 21:11:45 +0300
-Message-Id: <20210920181145.19543-36-digetx@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210920181145.19543-1-digetx@gmail.com>
-References: <20210920181145.19543-1-digetx@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Will McVicker <willmcvicker@google.com>,
+        kernel-team@android.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-MPE, VI, EPP and ISP were never used and we don't have drivers for them.
-Since these modules are enabled by default in a device-tree, a device is
-created for them, blocking voltage scaling because there is no driver to
-bind, and thus, state of PMC driver is never synced. Disable them.
+This patch series tries to address the issue of ARCH_EXYNOS force selecting
+a handful of drivers without allowing the vendor to override any of the
+default configs. This takes away from the flexibilty of compiling a generic
+kernel with exynos kernel modules. For example, it doesn't allow vendors to
+modularize these drivers out of the core kernel in order to share a generic
+kernel image across multiple devices that require device-specific kernel
+modules.
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- arch/arm/boot/dts/tegra20.dtsi | 4 ++++
- arch/arm/boot/dts/tegra30.dtsi | 8 ++++++++
- 2 files changed, 12 insertions(+)
+To address this without impacting the existing behavior, this series
+switches the default config logic for the offending configs to use "default
+y if ARCH_EXYNOS" versus having ARCH_EXYNOS directly select them. I have
+verified that these patches do not impact the default aarch64 .config.
 
-diff --git a/arch/arm/boot/dts/tegra20.dtsi b/arch/arm/boot/dts/tegra20.dtsi
-index eb6e5518fb5f..05788c9cddc1 100644
---- a/arch/arm/boot/dts/tegra20.dtsi
-+++ b/arch/arm/boot/dts/tegra20.dtsi
-@@ -59,6 +59,7 @@ mpe@54040000 {
- 			reset-names = "mpe";
- 			operating-points-v2 = <&mpe_dvfs_opp_table>;
- 			power-domains = <&pd_mpe>;
-+			status = "disabled";
- 		};
- 
- 		vi@54080000 {
-@@ -70,6 +71,7 @@ vi@54080000 {
- 			reset-names = "vi";
- 			operating-points-v2 = <&vi_dvfs_opp_table>;
- 			power-domains = <&pd_venc>;
-+			status = "disabled";
- 		};
- 
- 		epp@540c0000 {
-@@ -81,6 +83,7 @@ epp@540c0000 {
- 			reset-names = "epp";
- 			operating-points-v2 = <&epp_dvfs_opp_table>;
- 			power-domains = <&pd_core>;
-+			status = "disabled";
- 		};
- 
- 		isp@54100000 {
-@@ -91,6 +94,7 @@ isp@54100000 {
- 			resets = <&tegra_car 23>;
- 			reset-names = "isp";
- 			power-domains = <&pd_venc>;
-+			status = "disabled";
- 		};
- 
- 		gr2d@54140000 {
-diff --git a/arch/arm/boot/dts/tegra30.dtsi b/arch/arm/boot/dts/tegra30.dtsi
-index 09cb1ab75312..f9613384a487 100644
---- a/arch/arm/boot/dts/tegra30.dtsi
-+++ b/arch/arm/boot/dts/tegra30.dtsi
-@@ -145,6 +145,8 @@ mpe@54040000 {
- 			power-domains = <&pd_mpe>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_MPE>;
-+
-+			status = "disabled";
- 		};
- 
- 		vi@54080000 {
-@@ -158,6 +160,8 @@ vi@54080000 {
- 			power-domains = <&pd_venc>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_VI>;
-+
-+			status = "disabled";
- 		};
- 
- 		epp@540c0000 {
-@@ -171,6 +175,8 @@ epp@540c0000 {
- 			power-domains = <&pd_heg>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_EPP>;
-+
-+			status = "disabled";
- 		};
- 
- 		isp@54100000 {
-@@ -183,6 +189,8 @@ isp@54100000 {
- 			power-domains = <&pd_venc>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_ISP>;
-+
-+			status = "disabled";
- 		};
- 
- 		gr2d@54140000 {
+Will McVicker (4):
+  clk: samsung: change COMMON_CLK_SAMSUNG default config logic
+  soc: samsung: change SOC_SAMSUNG default config logic
+  pinctrl: samsung: change PINCTRL_EXYNOS default config logic
+  rtc: change HAVE_S3C_RTC default config logic
+
+ arch/arm64/Kconfig.platforms    | 7 -------
+ drivers/clk/samsung/Kconfig     | 1 +
+ drivers/pinctrl/samsung/Kconfig | 1 +
+ drivers/rtc/Kconfig             | 1 +
+ drivers/soc/samsung/Kconfig     | 4 ++++
+ 5 files changed, 7 insertions(+), 7 deletions(-)
+
 -- 
-2.32.0
+2.33.0.464.g1972c5931b-goog
 
