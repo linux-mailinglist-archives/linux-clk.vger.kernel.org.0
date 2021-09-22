@@ -2,97 +2,77 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49518414575
-	for <lists+linux-clk@lfdr.de>; Wed, 22 Sep 2021 11:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5F741464B
+	for <lists+linux-clk@lfdr.de>; Wed, 22 Sep 2021 12:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234308AbhIVJqP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 22 Sep 2021 05:46:15 -0400
-Received: from mail.bugwerft.de ([46.23.86.59]:57802 "EHLO mail.bugwerft.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234233AbhIVJqO (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 22 Sep 2021 05:46:14 -0400
-Received: from [192.168.178.106] (p57bc9a45.dip0.t-ipconnect.de [87.188.154.69])
-        by mail.bugwerft.de (Postfix) with ESMTPSA id 5EDCC3ADF23;
-        Wed, 22 Sep 2021 09:44:43 +0000 (UTC)
-Subject: Re: [PATCH v5 0/9] clk: cs2000-cp: add dynamic mode and more features
-To:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     robh+dt@kernel.org, kuninori.morimoto.gx@renesas.com,
-        mturquette@baylibre.com, sboyd@kernel.org
-References: <20210901093631.1403278-1-daniel@zonque.org>
-From:   Daniel Mack <daniel@zonque.org>
-Message-ID: <72d37dde-f50a-df89-57c7-243e7f287680@zonque.org>
-Date:   Wed, 22 Sep 2021 11:44:42 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S235009AbhIVKdi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 22 Sep 2021 06:33:38 -0400
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:6803 "EHLO
+        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234917AbhIVKde (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 22 Sep 2021 06:33:34 -0400
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 18MAB7vf012562;
+        Wed, 22 Sep 2021 18:11:07 +0800 (GMT-8)
+        (envelope-from chin-ting_kuo@aspeedtech.com)
+Received: from localhost.localdomain (192.168.10.9) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 22 Sep
+ 2021 18:31:25 +0800
+From:   Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+To:     <robh+dt@kernel.org>, <joel@jms.id.au>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <adrian.hunter@intel.com>,
+        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
+        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <andrew@aj.id.au>
+CC:     <BMC-SW@aspeedtech.com>, <steven_lee@aspeedtech.com>
+Subject: [PATCH 00/10] ASPEED SD/eMMC controller clock configuration
+Date:   Wed, 22 Sep 2021 18:31:06 +0800
+Message-ID: <20210922103116.30652-1-chin-ting_kuo@aspeedtech.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20210901093631.1403278-1-daniel@zonque.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [192.168.10.9]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 18MAB7vf012562
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Mike, Stephen,
+This patch series aims to configure SD and eMMC controllers' clock
+frequency and clock phase parameters. The main modification is the
+clock phase calculation method which has been checked with the HW IP
+designer. Also, the clock source detection method is updated for
+AST2600-A2/A3. This patch series has been verified on AST2600-A3 EVB.
 
-Is there a chance to get this series reviewed and potentially queued for
-5.16?
+Chin-Ting Kuo (10):
+  clk: aspeed: ast2600: Porting sdhci clock source
+  sdhci: aspeed: Add SDR50 support
+  dts: aspeed: ast2600: Support SDR50 for SD device
+  mmc: Add invert flag for clock phase signedness
+  mmc: aspeed: Adjust delay taps calculation method
+  arm: dts: aspeed: Change eMMC device compatible
+  arm: dts: aspeed: Adjust clock phase parameter
+  arm: dts: ibm: Adjust clock phase parameter
+  dt-bindings: mmc: aspeed: Add max-tap-delay property
+  dt-bindings: mmc: aspeed: Add a new compatible string
 
-We have clearance for the devicetree side, and the functional changes of
-the driver are all guarded by new feature flags, so my patches shouldn't
-break existing setups.
+ .../devicetree/bindings/mmc/aspeed,sdhci.yaml |   4 +
+ arch/arm/boot/dts/aspeed-ast2600-evb-a1.dts   |   8 ++
+ arch/arm/boot/dts/aspeed-ast2600-evb.dts      |  11 +-
+ arch/arm/boot/dts/aspeed-bmc-ibm-everest.dts  |   3 +-
+ arch/arm/boot/dts/aspeed-bmc-ibm-rainier.dts  |   3 +-
+ arch/arm/boot/dts/aspeed-bmc-opp-tacoma.dts   |   3 +-
+ arch/arm/boot/dts/aspeed-g6.dtsi              |   2 +-
+ drivers/clk/clk-ast2600.c                     |  69 ++++++++--
+ drivers/mmc/core/host.c                       |  10 +-
+ drivers/mmc/host/sdhci-of-aspeed.c            | 123 ++++++++++++++----
+ include/linux/mmc/host.h                      |   2 +
+ 11 files changed, 193 insertions(+), 45 deletions(-)
 
-
-Thanks a lot,
-Daniel
-
-
-On 9/1/21 11:36 AM, Daniel Mack wrote:
-> This patch series adds support for dynamic mode, configurable clock
-> skip settings and a tranisition to regmap.
-> 
-> The most significant change is the additional support for dynamic mode.
-> Currently, the driver only supports static mode in which the (currently
-> mandatory) CLK_IN clock input is not used by the hardware.
-> 
-> Unlike v3 of this series, the patch stack now maintains full
-> compatibility with existing bindings. Rather than infering the mode of
-> operation through the presence of an optional clock, the driver now
-> parses a new DT property to enable the dynamic mode.
-> 
-> Thanks,
-> Daniel
-> 
-> Changelog:
-> 
-> v4 -> v5:
-> 	* Fixed a regression for static mode configurations
-> 	* Added Rob's Acked-by signatures
-> 
-> v3 -> v4:
-> 	* Introduced cirrus,dynamic-mode in favor of making CLK_IN
-> 	  optional
-> 
-> 
-> Daniel Mack (9):
->   dt-bindings: clock: convert cs2000-cp bindings to yaml
->   dt-bindings: clock: cs2000-cp: document aux-output-source
->   dt-bindings: clock: cs2000-cp: document cirrus,clock-skip flag
->   dt-bindings: clock: cs2000-cp: document cirrus,dynamic-mode
->   clk: cs2000-cp: Make aux output function controllable
->   clk: cs2000-cp: add support for dynamic mode
->   clk: cs2000-cp: make clock skip setting configurable
->   clk: cs2000-cp: freeze config during register fiddling
->   clk: cs2000-cp: convert driver to regmap
-> 
->  .../bindings/clock/cirrus,cs2000-cp.yaml      |  91 +++++++
->  .../devicetree/bindings/clock/cs2000-cp.txt   |  22 --
->  drivers/clk/Kconfig                           |   1 +
->  drivers/clk/clk-cs2000-cp.c                   | 240 +++++++++++-------
->  include/dt-bindings/clock/cirrus,cs2000-cp.h  |  14 +
->  5 files changed, 261 insertions(+), 107 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/clock/cirrus,cs2000-cp.yaml
->  delete mode 100644 Documentation/devicetree/bindings/clock/cs2000-cp.txt
->  create mode 100644 include/dt-bindings/clock/cirrus,cs2000-cp.h
-> 
+-- 
+2.17.1
 
