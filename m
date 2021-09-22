@@ -2,58 +2,58 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 128004149CD
-	for <lists+linux-clk@lfdr.de>; Wed, 22 Sep 2021 14:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 802D54149CF
+	for <lists+linux-clk@lfdr.de>; Wed, 22 Sep 2021 14:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236001AbhIVM4A (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 22 Sep 2021 08:56:00 -0400
-Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:37493 "EHLO
+        id S236026AbhIVM4D (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 22 Sep 2021 08:56:03 -0400
+Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:33219 "EHLO
         wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236045AbhIVMz7 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 22 Sep 2021 08:55:59 -0400
+        by vger.kernel.org with ESMTP id S236016AbhIVM4C (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 22 Sep 2021 08:56:02 -0400
 Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
-        by mailnew.west.internal (Postfix) with ESMTP id C8B0F2B015E6;
-        Wed, 22 Sep 2021 08:54:28 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 22 Sep 2021 08:54:29 -0400
+        by mailnew.west.internal (Postfix) with ESMTP id 210B82B015E3;
+        Wed, 22 Sep 2021 08:54:32 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 22 Sep 2021 08:54:33 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm3; bh=mct8oUUoPQCmb
-        XzWWfTX5bHQO1PQnsAmowWUCVA6sbM=; b=kPF2S1eZC/yeq7ngJhq+C5+2SGDMc
-        6g4R1BAPfpAat8lECFY5Qkoq65WHuTO4E9HX6wzqtzj7+ox3OBgqrBqJ/T3b8A5e
-        YF/1b8e9aNnEFQ8TqltOXD3/V9EowkY0/51V3bT0fLv3S6kreDMiWHYPiP1nZw9L
-        RLwvioBr+1SE8H3YchGUGW3p6JO1Cgm2Fog8Y3OIAiy6zb6zWHXEmp8L16CNAQBh
-        vk/zMEcmZ9yO50LS4ngIOh1Zm0A9cliUHFPRn26rG0ndnhGpf3oTfHq7V7SR4i1M
-        BfmrwlDPXF6Ue84DaTvUMHbS3+54opSA4lpCNoksBRbmnW+QBbCqCsU8Q==
+        :mime-version:content-transfer-encoding; s=fm3; bh=+VQJ1qYl9kyaC
+        FZ/5gVwTnLYe2FgtAOmnjOeyAZZK+U=; b=Vz4YqM9th7Z8btkrBP/p7azTBzutJ
+        bH7yQ3YzfvBNRxLVCXOd9b3s2BkYCVpu29PdjIoU67yAZZ3cI6phfAoj+e0CU/Ry
+        bMtX3SNSqHZOQPqYkOtsGXCUwk75+S28L9xajb0y7SNZ+yUiKG26cTgyWSw7P1fL
+        Un5tASKgvUMDxqyx0AFGtK+DqIHD/BmqyRt24jYsRHZv41AXrMa39jR/LqACjWGG
+        u7VVbXfidXMvHWhnvCQ6x39hMjmMiqNe8UP2K+mpjdYbikCL7M6SHXslscagSYmW
+        /YB8p9GtD1A9K9zSv6GdGaSx+Qocq4fO3oTV8ANl9L6ZTO+l279FXOLSw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:date:from
         :in-reply-to:message-id:mime-version:references:subject:to
         :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; bh=mct8oUUoPQCmbXzWWfTX5bHQO1PQnsAmowWUCVA6sbM=; b=DN6t97Tw
-        jSFK2L1Ng+NOpe/Ux3Nfrhg911RsZFPi5WMrMM948WsA/MdHOePn22GLZtktEoN5
-        yp/6eDN3XI3krIVZFZKEHxnOw+PaE7b7+pe4oZ5QJ/kG+ki1w8sMytUUE1cQGxGf
-        Wau11+mkxauchihXfXmrq9t+ARPJ8vr4ScdI5aJ0nMx9PMlDtPOaouycXxJpzPxH
-        /8QtimTVWDikFMxhNvFE0iilOKSll7dm7BxzwGiE+32/e2xf5fc3Gf7lqvpCObj/
-        8beVmUwFb0na+XbUrFkZnnSbQJmISEzrkjDynGnYwfUcZKifY+aLzZWYHtImHaui
-        gM8setN182W/YQ==
-X-ME-Sender: <xms:gydLYbJfKG5YIs4ub2ANPUB1ECWWplxkW-k_QemQvNifJ0R7XO7wgQ>
-    <xme:gydLYfLGOAkK0-tead8GIIKt-u35oyzuYpEQhnyU96xTM5E3DjPwVSvLEZLVIEVXy
-    eJMLOGOFDVranKCpyc>
-X-ME-Received: <xmr:gydLYTt5YipiCNfAWqU1NQIcNraAqY8OWAMrS20rhFyGrG8ntiB-MkqxT-IEVMtLKWBZ4ouxI1lvjlVrwWXKAohEDCiM1vsqURGi>
+        fm3; bh=+VQJ1qYl9kyaCFZ/5gVwTnLYe2FgtAOmnjOeyAZZK+U=; b=pZjKibEi
+        QOIqeSrzP8z6t+kE8XdxfwcfXw57igiwFN+rJL0tQdBAXMzodGKso4Yvd9UwKWDt
+        nHECACDZctEY5y/Ks1Hy5tIrX4xZotYwSX0e7gQIVYXOLe5HfuvxAZ6xK7spwng8
+        MoY8NN3KcQm5LBra3+xz2bj5cJYAqp6XJatmGqXiUuIHN1Elfhbl467paYLLh84B
+        3J92k6DWuPWJpx/joXR1ZqlPCLzBx2AxRKQi1B0PcMboEB2kHCfClSjrZKBxgdHs
+        bdxT08N3QBKf1YKNgI6afBcQp1PLjcV0UQdK0fe4bWohq68FkezzcCXm59rBCIbN
+        kEIJwLykZ8XVuA==
+X-ME-Sender: <xms:hydLYecHkgfOioo_8gFdXpMvMWfAGaLOmi5kLzOFoLa9-gz7dVNlbQ>
+    <xme:hydLYYMDMU8vTQmDe73jCd9gkVZfX7IQNzV_fmdgA2MNy1m8tOl1s6UrkGLNAYj9x
+    n0W7jiEv8She6jzLbg>
+X-ME-Received: <xmr:hydLYfiIKo-TjozSy4Y6grx9fMKCsq5XsVxh3cc__WpK5R4y_-VXak0RPOhK9mLKo-vi2OOBETt-KdMkq08uPgPoKN2i9GnZsLn6>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudeijedgheeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhm
     vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
     htvghrnhepvdekleevfeffkeejhfffueelteelfeduieefheduudfggffhhfffheevveeh
-    hedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    hedvnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhepmh
     grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:gydLYUYMILbU8rDdoUjdQ_3fh4YooZzU3ULe6uenHYbv1Kx-pedyig>
-    <xmx:gydLYSbid5cavjWv3Eto5WQXwG8BkiNh8zJeZ11kg5Hb4X_WBkQyKQ>
-    <xmx:gydLYYAKKCOafC_ZuImQPne6AQ3JbMP9fsO2d-nKm5h73-DOIz2Rfg>
-    <xmx:hCdLYeSX0zvW2wCE17U9kzpeebV63gud8HJvhbtWjKpiinYibQ0Ut-pXwWI>
+X-ME-Proxy: <xmx:hydLYb-NrsVYVZA2ezEVm3eQKq0RH9CdpCNGZhUzEw0Hj6vx2LXiqw>
+    <xmx:hydLYau4A4lkt803rvi9TN_wu70iE1xJfiToI51scIZoGHm-m98VxA>
+    <xmx:hydLYSHfCbcq0jMD3UaqvTfuJkqkeWW311cROXn78H6wp1fj-WgPJw>
+    <xmx:hydLYbGDvJEj1WcPZNu761UIaO-sbM32gVm_NvbS93xOTNlnMLEFZ2FSjnQ>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Sep 2021 08:54:27 -0400 (EDT)
+ 22 Sep 2021 08:54:31 -0400 (EDT)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Thomas Zimmermann <tzimmermann@suse.de>,
@@ -68,9 +68,9 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
         Florian Fainelli <f.fainelli@gmail.com>,
         Michael Stapelberg <michael@stapelberg.ch>,
         Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 1/5] clk: bcm-2835: Pick the closest clock rate
-Date:   Wed, 22 Sep 2021 14:54:15 +0200
-Message-Id: <20210922125419.4125779-2-maxime@cerno.tech>
+Subject: [PATCH 2/5] clk: bcm-2835: Remove rounding up the dividers
+Date:   Wed, 22 Sep 2021 14:54:16 +0200
+Message-Id: <20210922125419.4125779-3-maxime@cerno.tech>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210922125419.4125779-1-maxime@cerno.tech>
 References: <20210922125419.4125779-1-maxime@cerno.tech>
@@ -80,34 +80,70 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The driver currently tries to pick the closest rate that is lower than
-the rate being requested.
+The driver, once it found a divider, tries to round it up by increasing
+the least significant bit of the fractional part by one when the
+round_up argument is set and there's a remainder.
 
-This causes an issue with clk_set_min_rate() since it actively checks
-for the rounded rate to be above the minimum that was just set.
+However, since it increases the divider it will actually reduce the
+clock rate below what we were asking for, leading to issues with
+clk_set_min_rate() that will complain that our rounded clock rate is
+below the minimum of the rate.
 
-Let's change the logic a bit to pick the closest rate to the requested
-rate, no matter if it's actually higher or lower.
+Since the dividers are fairly precise already, let's remove that part so
+that we can have clk_set_min_rate() working.
 
-Fixes: 6d18b8adbe67 ("clk: bcm2835: Support for clock parent selection")
+This is effectively a revert of 9c95b32ca093 ("clk: bcm2835: add a round
+up ability to the clock divisor").
+
+Fixes: 9c95b32ca093 ("clk: bcm2835: add a round up ability to the clock divisor")
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
- drivers/clk/bcm/clk-bcm2835.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/bcm/clk-bcm2835.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/clk/bcm/clk-bcm2835.c b/drivers/clk/bcm/clk-bcm2835.c
-index a254512965eb..bf97b2b2a63f 100644
+index bf97b2b2a63f..3667b4d731e7 100644
 --- a/drivers/clk/bcm/clk-bcm2835.c
 +++ b/drivers/clk/bcm/clk-bcm2835.c
-@@ -1216,7 +1216,7 @@ static int bcm2835_clock_determine_rate(struct clk_hw *hw,
- 		rate = bcm2835_clock_choose_div_and_prate(hw, i, req->rate,
- 							  &div, &prate,
- 							  &avgrate);
--		if (rate > best_rate && rate <= req->rate) {
-+		if (abs(req->rate - rate) < abs(req->rate - best_rate)) {
- 			best_parent = parent;
- 			best_prate = prate;
- 			best_rate = rate;
+@@ -932,8 +932,7 @@ static int bcm2835_clock_is_on(struct clk_hw *hw)
+ 
+ static u32 bcm2835_clock_choose_div(struct clk_hw *hw,
+ 				    unsigned long rate,
+-				    unsigned long parent_rate,
+-				    bool round_up)
++				    unsigned long parent_rate)
+ {
+ 	struct bcm2835_clock *clock = bcm2835_clock_from_hw(hw);
+ 	const struct bcm2835_clock_data *data = clock->data;
+@@ -945,10 +944,6 @@ static u32 bcm2835_clock_choose_div(struct clk_hw *hw,
+ 
+ 	rem = do_div(temp, rate);
+ 	div = temp;
+-
+-	/* Round up and mask off the unused bits */
+-	if (round_up && ((div & unused_frac_mask) != 0 || rem != 0))
+-		div += unused_frac_mask + 1;
+ 	div &= ~unused_frac_mask;
+ 
+ 	/* different clamping limits apply for a mash clock */
+@@ -1079,7 +1074,7 @@ static int bcm2835_clock_set_rate(struct clk_hw *hw,
+ 	struct bcm2835_clock *clock = bcm2835_clock_from_hw(hw);
+ 	struct bcm2835_cprman *cprman = clock->cprman;
+ 	const struct bcm2835_clock_data *data = clock->data;
+-	u32 div = bcm2835_clock_choose_div(hw, rate, parent_rate, false);
++	u32 div = bcm2835_clock_choose_div(hw, rate, parent_rate);
+ 	u32 ctl;
+ 
+ 	spin_lock(&cprman->regs_lock);
+@@ -1130,7 +1125,7 @@ static unsigned long bcm2835_clock_choose_div_and_prate(struct clk_hw *hw,
+ 
+ 	if (!(BIT(parent_idx) & data->set_rate_parent)) {
+ 		*prate = clk_hw_get_rate(parent);
+-		*div = bcm2835_clock_choose_div(hw, rate, *prate, true);
++		*div = bcm2835_clock_choose_div(hw, rate, *prate);
+ 
+ 		*avgrate = bcm2835_clock_rate_from_divisor(clock, *prate, *div);
+ 
 -- 
 2.31.1
 
