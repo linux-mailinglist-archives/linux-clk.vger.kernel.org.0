@@ -2,68 +2,82 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F354D41466A
-	for <lists+linux-clk@lfdr.de>; Wed, 22 Sep 2021 12:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45165414713
+	for <lists+linux-clk@lfdr.de>; Wed, 22 Sep 2021 12:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235176AbhIVKeF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 22 Sep 2021 06:34:05 -0400
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:48990 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235115AbhIVKeC (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 22 Sep 2021 06:34:02 -0400
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 18MAB9WG012572;
-        Wed, 22 Sep 2021 18:11:09 +0800 (GMT-8)
-        (envelope-from chin-ting_kuo@aspeedtech.com)
-Received: from localhost.localdomain (192.168.10.9) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 22 Sep
- 2021 18:31:28 +0800
-From:   Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-To:     <robh+dt@kernel.org>, <joel@jms.id.au>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <adrian.hunter@intel.com>,
-        <linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
-        <linux-mmc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <andrew@aj.id.au>
-CC:     <BMC-SW@aspeedtech.com>, <steven_lee@aspeedtech.com>
-Subject: [PATCH 10/10] dt-bindings: mmc: aspeed: Add a new compatible string
-Date:   Wed, 22 Sep 2021 18:31:16 +0800
-Message-ID: <20210922103116.30652-11-chin-ting_kuo@aspeedtech.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210922103116.30652-1-chin-ting_kuo@aspeedtech.com>
-References: <20210922103116.30652-1-chin-ting_kuo@aspeedtech.com>
+        id S235151AbhIVK6E (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 22 Sep 2021 06:58:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57050 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235123AbhIVK6D (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 22 Sep 2021 06:58:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A3CA60ED7;
+        Wed, 22 Sep 2021 10:56:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1632308193;
+        bh=AU3eAVQ3E4tohBMshWxiOAyUqFg6wmmF2TEuQwxk1K4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uWaFnuBdoPKXKXfJE6p9k4asTcMuvae5MoYmInpwI5sELfZf0ouMwAJyXZ5c/cUr1
+         ztE9MezqTEsMJQHIyorJLO/OaEkyJacWUZgOjbK6mM2NGoW46/+ZE48//2aCkOtXdi
+         43OJEe/UrXcFIU23mgKcBW5TqVNlLUQOwcTKjegWwKdfIa3cs5ka5YzBBpcNzNuazK
+         i+KxODgWFB0ePNaPOYrTmk7vzStZJLjKjx3XMqqgaXFK+K2jPjXNiBgoxD0Hp/YxJ2
+         yhIsKYMhSvFG4kRhOWHuVDVD0YHSYaUfmvyaXMvdlpi16gg6601S+2t3ORX+sXKg7+
+         OXPK/8V7j2x2Q==
+Received: by pali.im (Postfix)
+        id 0F95E79F; Wed, 22 Sep 2021 12:56:31 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Vladimir Vid <vladimir.vid@sartura.hr>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [RESEND PATCH v5 0/6] serial: mvebu-uart: Support for higher baudrates
+Date:   Wed, 22 Sep 2021 12:54:27 +0200
+Message-Id: <20210922105433.11744-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [192.168.10.9]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 18MAB9WG012572
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add "aspeed,ast2600-emmc" compatible string for the sake of
-distinguishing between SD and eMMC device.
+Per Greg's request I'm resending this patch series, please review it:
+https://lore.kernel.org/linux-serial/YUmMli6LA%2F7Ew3hD@kroah.com/
 
-Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
----
- Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml | 1 +
- 1 file changed, 1 insertion(+)
+This patch series add support for baudrates higher than 230400 on
+Marvell Armada 37xx boards.
 
-diff --git a/Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml b/Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml
-index 5bb66849df65..41105cd104c6 100644
---- a/Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml
-+++ b/Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml
-@@ -52,6 +52,7 @@ patternProperties:
-           - aspeed,ast2400-sdhci
-           - aspeed,ast2500-sdhci
-           - aspeed,ast2600-sdhci
-+          - aspeed,ast2600-emmc
-       reg:
-         maxItems: 1
-         description: The SDHCI registers
+Pali Rohár (6):
+  math64: New DIV_U64_ROUND_CLOSEST helper
+  serial: mvebu-uart: implement UART clock driver for configuring UART
+    base clock
+  dt-bindings: mvebu-uart: document DT bindings for
+    marvell,armada-3700-uart-clock
+  dt-bindings: mvebu-uart: update information about UART clock
+  arm64: dts: marvell: armada-37xx: add device node for UART clock and
+    use it
+  serial: mvebu-uart: implement support for baudrates higher than 230400
+
+ .../bindings/clock/armada3700-uart-clock.yaml |  57 ++
+ .../devicetree/bindings/serial/mvebu-uart.txt |   9 +-
+ .../arm64/boot/dts/marvell/armada-3720-db.dts |   4 +
+ .../dts/marvell/armada-3720-espressobin.dtsi  |   4 +
+ .../dts/marvell/armada-3720-turris-mox.dts    |   4 +
+ .../boot/dts/marvell/armada-3720-uDPU.dts     |   4 +
+ arch/arm64/boot/dts/marvell/armada-37xx.dtsi  |  15 +-
+ drivers/tty/serial/Kconfig                    |   1 +
+ drivers/tty/serial/mvebu-uart.c               | 592 +++++++++++++++++-
+ include/linux/math64.h                        |  13 +
+ 10 files changed, 682 insertions(+), 21 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/armada3700-uart-clock.yaml
+
 -- 
-2.17.1
+2.20.1
 
