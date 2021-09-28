@@ -2,57 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC06441AB27
-	for <lists+linux-clk@lfdr.de>; Tue, 28 Sep 2021 10:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B02341AB2E
+	for <lists+linux-clk@lfdr.de>; Tue, 28 Sep 2021 10:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239933AbhI1Iwe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 28 Sep 2021 04:52:34 -0400
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:48592
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239883AbhI1IwI (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 28 Sep 2021 04:52:08 -0400
+        id S239936AbhI1Iwg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 28 Sep 2021 04:52:36 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:53494
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239793AbhI1IwM (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 28 Sep 2021 04:52:12 -0400
 Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com [209.85.167.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3135F40862
-        for <linux-clk@vger.kernel.org>; Tue, 28 Sep 2021 08:50:13 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4416F40265
+        for <linux-clk@vger.kernel.org>; Tue, 28 Sep 2021 08:50:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1632819013;
-        bh=9+M3zOsXaCPGsy+Y7A3HK2jtwWbSZ2cmPLzUVQxLrjg=;
+        s=20210705; t=1632819016;
+        bh=7tIJ+clHqy+CZwai/Om4gGD+ttDWFFGGGFnCE/+PWi8=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=rHCUhS49Cya8Zbyjlqf4NmHcrp5rk0zKoaaJEe3RQfXEIcS+gBCxfMYsfrHhZgc1F
-         Zmzpktvc2E/U9nXcJ6+lU3RlHeT7PTlPrWeBTah2S3ZouSruc0p9HRs2mMnBUOGEkB
-         5HYvHWCVgQeaIoMBOKgBPsUnqWUH8uOwWBme2FpmlPQlZFi3susI0Wyjd4vkLUtZal
-         xtvea1/v5OyjJHaEmjeOx25HkIYDeAiIj/DNO+0lfdLhZFE6Dlom980tTSIbjj18gC
-         IX/SAovj2c/a3ivUyjmrI+nRNQcP3ZZi64vcAQ2VMAEoJleT2vhpi4CpNUPwdKR1qx
-         Ge5QZAA3ew/1g==
-Received: by mail-lf1-f72.google.com with SMTP id o4-20020a056512230400b003fc39bb96c7so18670328lfu.8
-        for <linux-clk@vger.kernel.org>; Tue, 28 Sep 2021 01:50:13 -0700 (PDT)
+        b=rvuAxQLbNhId7yW/E3zmIp8gS3uhwWq88vVidv7/rPvSZVOY003vi+MypE5ljDeCH
+         ARWJCAySJGTV5AGeS67gwoyTHYj8AOgHBo2/0NTK04Kzzwac5EHDKh503n6RTY06lx
+         SU5cnnmF6YCgeLa2d4RjZHWLKIBXHrYV2kvoKHwciYSWBDlZHYhGSl9m919jewxxf7
+         HmiXkGMcEjR+M5Z84mJl++XcRfwSXx0EN95ksIQKn8IjdBcM9hYulKGZP76rqI6dlx
+         imhQeK2TfDbUTnn18wfmn7/Gs38wCp3HxkqfSQ52Gxb+jplVhgmA61ELdKv5vv8duG
+         tDwMhLsd8NjxA==
+Received: by mail-lf1-f72.google.com with SMTP id x33-20020a0565123fa100b003fcfd99073dso1127215lfa.6
+        for <linux-clk@vger.kernel.org>; Tue, 28 Sep 2021 01:50:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9+M3zOsXaCPGsy+Y7A3HK2jtwWbSZ2cmPLzUVQxLrjg=;
-        b=0pm6oGp2ksWVIZ/t/102QdZhH2yIm+0ki1lT2VIOKgGTDIclZWM/SQ2v3uOCZ+ILmM
-         dcj4PBbeAjvI5vYZmNCuky6nOLwFdu07SGwQ/6DcUo6Yul8FaQyZEA6R6i7j/Vcnask5
-         XA4pOlEM0jmPsYlX75oBuu0ylM5gvXhRG78XPgG/umP9TbuH695m6rBeuYAS774EeMvJ
-         vUYdz1ck7neKl93R3DRPOBHEIrGwSpdohNOvFdwXuAA1hrN42ZjSZGpaJhi4/gH3W1uj
-         8Lv3UbiRhP6bfGyf6GGijw9o3FcjIzXtK3+ANWWRPCE9XKbH9CVWK4zQrBKAqE30dbny
-         s04Q==
-X-Gm-Message-State: AOAM53119BMuGheueUobTq0r94GBT14+ynox36r/UDPyLXl62oMQlrfG
-        O21gV7ofEQ2vpVKKxi/PQ1Mqu/6TmQZ+3yd+qeyAKyXrHJqe1svBltmXYZQaubTQfYfQnFtdlPQ
-        3Hw26D0Pk5bygXGzXN7xWTNz57qruOcseIbcwiA==
-X-Received: by 2002:a05:6512:13a0:: with SMTP id p32mr4522397lfa.492.1632819012271;
-        Tue, 28 Sep 2021 01:50:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxd1p1KF27X5q/HMw+Wy8K3uWfL4WhxDC2Ry8lcW1WZpEG8XLZ+MIvFRBAUiAMpcYmQVFUpMw==
-X-Received: by 2002:a05:6512:13a0:: with SMTP id p32mr4522379lfa.492.1632819012109;
-        Tue, 28 Sep 2021 01:50:12 -0700 (PDT)
+        bh=7tIJ+clHqy+CZwai/Om4gGD+ttDWFFGGGFnCE/+PWi8=;
+        b=ka1Lq2mybX70YeS4kgMgOK4NNI+cQZqoAxLNQKy0K99+uLZnjUazZlr4RUEkzzilFl
+         kJwhwfy1R7EEfoMpvfJRHn3dT7PMKtTFsK1/Qki5MeFYDUMp4FYA4eoaY4aJb5siPebF
+         5wSqIW/L3of796dnUt6oFAUtZ5mlIapX3T+/Z+mZsyq/y6J7ABUOy9UXHCFFnHv/7gdf
+         HPRoeGFikhJfypFPpGzYXYLP0I4kbPpYxLC03XvV9PuO2dl8X1aF0NKbKAk6LM2hyV4i
+         Ea05PTjp/Dut0I44CGo+ei5f6GlTHevlS1BHYGSUbI21IQy2nZ3XQPb1tjmWbPOwyqqq
+         W0Uw==
+X-Gm-Message-State: AOAM533RUEEHKKabbsyLWgBi2bDXS7TzeVDXC7JhgJo3ws1GHFlBo1um
+        Z/6TAt0h6Ys6h/pHvckWAvHxEWiz2zJy0eyTr00XCwDriH7WPtHHoyi7Zk0alTyPUDORdLGLfFZ
+        au2Fm9s1g9tjK0LS5aCGdmoEizssP8fFRxjv4Jw==
+X-Received: by 2002:a2e:bba0:: with SMTP id y32mr4729613lje.135.1632819013560;
+        Tue, 28 Sep 2021 01:50:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwXNIsIC74EHEhcaaIOoTj5Amse61yM2/pmnchBnUI0iS1c3lanOpAQelzFzUvbyrrH5gtK6Q==
+X-Received: by 2002:a2e:bba0:: with SMTP id y32mr4729585lje.135.1632819013368;
+        Tue, 28 Sep 2021 01:50:13 -0700 (PDT)
 Received: from localhost.localdomain (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id h13sm1848419lfl.205.2021.09.28.01.50.10
+        by smtp.gmail.com with ESMTPSA id h13sm1848419lfl.205.2021.09.28.01.50.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Sep 2021 01:50:11 -0700 (PDT)
+        Tue, 28 Sep 2021 01:50:13 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -70,9 +70,9 @@ To:     Michael Turquette <mturquette@baylibre.com>,
         linux-arm-kernel@lists.infradead.org
 Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
         Sylwester Nawrocki <snawrocki@kernel.org>
-Subject: [PATCH 11/12] ARM: dts: exynos: remove unneeded DVS voltages from PMIC on Arndale
-Date:   Tue, 28 Sep 2021 10:49:48 +0200
-Message-Id: <20210928084949.27939-12-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 12/12] ARM: dts: exynos: use spaces instead of tabs around '='
+Date:   Tue, 28 Sep 2021 10:49:49 +0200
+Message-Id: <20210928084949.27939-13-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210928084949.27939-1-krzysztof.kozlowski@canonical.com>
 References: <20210928084949.27939-1-krzysztof.kozlowski@canonical.com>
@@ -82,31 +82,181 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The S5M8767 PMIC does not require anymore a safe DVS voltage, if the DVS
-GPIO is not enabled.  Although previously bindings required providing
-this safe DVS voltage, but since commit 04f9f068a619 ("regulator:
-s5m8767: Modify parsing method of the voltage table of buck2/3/4") this
-was ignored.
+Use spaces in Origen boards instead of tabs around '=' for simple
+property assignments, to match coding style.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- arch/arm/boot/dts/exynos5250-arndale.dts | 3 ---
- 1 file changed, 3 deletions(-)
+ arch/arm/boot/dts/exynos4210-origen.dts | 24 ++++++++++++------------
+ arch/arm/boot/dts/exynos4412-origen.dts | 14 +++++++-------
+ 2 files changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/arch/arm/boot/dts/exynos5250-arndale.dts b/arch/arm/boot/dts/exynos5250-arndale.dts
-index a771542e28b8..3583095fbb2a 100644
---- a/arch/arm/boot/dts/exynos5250-arndale.dts
-+++ b/arch/arm/boot/dts/exynos5250-arndale.dts
-@@ -240,9 +240,6 @@ pmic@66 {
- 		vinl8-supply = <&buck8_reg>;
- 		vinl9-supply = <&buck8_reg>;
+diff --git a/arch/arm/boot/dts/exynos4210-origen.dts b/arch/arm/boot/dts/exynos4210-origen.dts
+index 1c5394152561..435fda60e86d 100644
+--- a/arch/arm/boot/dts/exynos4210-origen.dts
++++ b/arch/arm/boot/dts/exynos4210-origen.dts
+@@ -206,74 +206,74 @@ ldo3_reg: LDO3 {
+ 			ldo4_reg: LDO4 {
+ 				regulator-name = "VDD_RTC_1.8V";
+ 				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt	= <1800000>;
++				regulator-max-microvolt = <1800000>;
+ 				regulator-always-on;
+ 			};
  
--		s5m8767,pmic-buck2-dvs-voltage = <1300000>;
--		s5m8767,pmic-buck3-dvs-voltage = <1100000>;
--		s5m8767,pmic-buck4-dvs-voltage = <1200000>;
- 		s5m8767,pmic-buck-dvs-gpios = <&gpd1 0 GPIO_ACTIVE_HIGH>,
- 					      <&gpd1 1 GPIO_ACTIVE_HIGH>,
- 					      <&gpd1 2 GPIO_ACTIVE_HIGH>;
+ 			ldo6_reg: LDO6 {
+ 				regulator-name = "VMIPI_1.8V";
+ 				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt	= <1800000>;
++				regulator-max-microvolt = <1800000>;
+ 				regulator-always-on;
+ 			};
+ 
+ 			ldo7_reg: LDO7 {
+ 				regulator-name = "VDD_AUD_1.8V";
+ 				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt	= <1800000>;
++				regulator-max-microvolt = <1800000>;
+ 			};
+ 
+ 			ldo8_reg: LDO8 {
+ 				regulator-name = "VADC_3.3V";
+ 				regulator-min-microvolt = <3300000>;
+-				regulator-max-microvolt	= <3300000>;
++				regulator-max-microvolt = <3300000>;
+ 			};
+ 
+ 			ldo9_reg: LDO9 {
+ 				regulator-name = "DVDD_SWB_2.8V";
+ 				regulator-min-microvolt = <2800000>;
+-				regulator-max-microvolt	= <2800000>;
++				regulator-max-microvolt = <2800000>;
+ 				regulator-always-on;
+ 			};
+ 
+ 			ldo10_reg: LDO10 {
+ 				regulator-name = "VDD_PLL_1.1V";
+ 				regulator-min-microvolt = <1100000>;
+-				regulator-max-microvolt	= <1100000>;
++				regulator-max-microvolt = <1100000>;
+ 				regulator-always-on;
+ 			};
+ 
+ 			ldo11_reg: LDO11 {
+ 				regulator-name = "VDD_AUD_3V";
+ 				regulator-min-microvolt = <3000000>;
+-				regulator-max-microvolt	= <3000000>;
++				regulator-max-microvolt = <3000000>;
+ 			};
+ 
+ 			ldo14_reg: LDO14 {
+ 				regulator-name = "AVDD18_SWB_1.8V";
+ 				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt	= <1800000>;
++				regulator-max-microvolt = <1800000>;
+ 				regulator-always-on;
+ 			};
+ 
+ 			ldo17_reg: LDO17 {
+ 				regulator-name = "VDD_SWB_3.3V";
+ 				regulator-min-microvolt = <3300000>;
+-				regulator-max-microvolt	= <3300000>;
++				regulator-max-microvolt = <3300000>;
+ 				regulator-always-on;
+ 			};
+ 
+ 			ldo21_reg: LDO21 {
+ 				regulator-name = "VDD_MIF_1.2V";
+ 				regulator-min-microvolt = <1200000>;
+-				regulator-max-microvolt	= <1200000>;
++				regulator-max-microvolt = <1200000>;
+ 				regulator-always-on;
+ 			};
+ 
+ 			buck1_reg: BUCK1 {
+ 				regulator-name = "VDD_ARM_1.2V";
+ 				regulator-min-microvolt = <950000>;
+-				regulator-max-microvolt	= <1350000>;
++				regulator-max-microvolt = <1350000>;
+ 				regulator-always-on;
+ 				regulator-boot-on;
+ 			};
+@@ -281,7 +281,7 @@ buck1_reg: BUCK1 {
+ 			buck2_reg: BUCK2 {
+ 				regulator-name = "VDD_INT_1.1V";
+ 				regulator-min-microvolt = <900000>;
+-				regulator-max-microvolt	= <1100000>;
++				regulator-max-microvolt = <1100000>;
+ 				regulator-always-on;
+ 				regulator-boot-on;
+ 			};
+diff --git a/arch/arm/boot/dts/exynos4412-origen.dts b/arch/arm/boot/dts/exynos4412-origen.dts
+index 5479ef09f9f3..e6aec5facabf 100644
+--- a/arch/arm/boot/dts/exynos4412-origen.dts
++++ b/arch/arm/boot/dts/exynos4412-origen.dts
+@@ -382,7 +382,7 @@ ldo28_reg: LDO28 {
+ 			buck1_reg: BUCK1 {
+ 				regulator-name = "VDD_MIF";
+ 				regulator-min-microvolt = <950000>;
+-				regulator-max-microvolt	= <1100000>;
++				regulator-max-microvolt = <1100000>;
+ 				regulator-always-on;
+ 				regulator-boot-on;
+ 				op_mode = <1>; /* Normal Mode */
+@@ -391,7 +391,7 @@ buck1_reg: BUCK1 {
+ 			buck2_reg: BUCK2 {
+ 				regulator-name = "VDD_ARM";
+ 				regulator-min-microvolt = <900000>;
+-				regulator-max-microvolt	= <1350000>;
++				regulator-max-microvolt = <1350000>;
+ 				regulator-always-on;
+ 				regulator-boot-on;
+ 				op_mode = <1>; /* Normal Mode */
+@@ -400,7 +400,7 @@ buck2_reg: BUCK2 {
+ 			buck3_reg: BUCK3 {
+ 				regulator-name = "VDD_INT";
+ 				regulator-min-microvolt = <900000>;
+-				regulator-max-microvolt	= <1200000>;
++				regulator-max-microvolt = <1200000>;
+ 				regulator-always-on;
+ 				regulator-boot-on;
+ 				op_mode = <1>; /* Normal Mode */
+@@ -409,7 +409,7 @@ buck3_reg: BUCK3 {
+ 			buck4_reg: BUCK4 {
+ 				regulator-name = "VDD_G3D";
+ 				regulator-min-microvolt = <750000>;
+-				regulator-max-microvolt	= <1500000>;
++				regulator-max-microvolt = <1500000>;
+ 				regulator-always-on;
+ 				regulator-boot-on;
+ 				op_mode = <1>; /* Normal Mode */
+@@ -418,7 +418,7 @@ buck4_reg: BUCK4 {
+ 			buck5_reg: BUCK5 {
+ 				regulator-name = "VDD_M12";
+ 				regulator-min-microvolt = <750000>;
+-				regulator-max-microvolt	= <1500000>;
++				regulator-max-microvolt = <1500000>;
+ 				regulator-always-on;
+ 				regulator-boot-on;
+ 				op_mode = <1>; /* Normal Mode */
+@@ -427,7 +427,7 @@ buck5_reg: BUCK5 {
+ 			buck6_reg: BUCK6 {
+ 				regulator-name = "VDD12_5M";
+ 				regulator-min-microvolt = <750000>;
+-				regulator-max-microvolt	= <1500000>;
++				regulator-max-microvolt = <1500000>;
+ 				regulator-always-on;
+ 				regulator-boot-on;
+ 				op_mode = <1>; /* Normal Mode */
+@@ -436,7 +436,7 @@ buck6_reg: BUCK6 {
+ 			buck9_reg: BUCK9 {
+ 				regulator-name = "VDDF28_EMMC";
+ 				regulator-min-microvolt = <750000>;
+-				regulator-max-microvolt	= <3000000>;
++				regulator-max-microvolt = <3000000>;
+ 				regulator-always-on;
+ 				regulator-boot-on;
+ 				op_mode = <1>; /* Normal Mode */
 -- 
 2.30.2
 
