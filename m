@@ -2,150 +2,239 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E432D41DF7B
-	for <lists+linux-clk@lfdr.de>; Thu, 30 Sep 2021 18:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B6241E088
+	for <lists+linux-clk@lfdr.de>; Thu, 30 Sep 2021 20:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352270AbhI3QqA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 30 Sep 2021 12:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40218 "EHLO
+        id S1352952AbhI3SEU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 30 Sep 2021 14:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352277AbhI3Qp7 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 30 Sep 2021 12:45:59 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC21EC061770
-        for <linux-clk@vger.kernel.org>; Thu, 30 Sep 2021 09:44:16 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id p9so2680304vst.9
-        for <linux-clk@vger.kernel.org>; Thu, 30 Sep 2021 09:44:16 -0700 (PDT)
+        with ESMTP id S1352958AbhI3SET (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 30 Sep 2021 14:04:19 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521DAC06176D
+        for <linux-clk@vger.kernel.org>; Thu, 30 Sep 2021 11:02:36 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id i4so29258396lfv.4
+        for <linux-clk@vger.kernel.org>; Thu, 30 Sep 2021 11:02:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
-        b=QarvOlJMuTSdHI+b8Hr3A3HrXimA547zfxBxsgE3cWk0htfApzaiL4/m+PlwNlDFuW
-         5QiZANF2fDaEHGtKfAXTax5CfmJ9+6VoNDLp5TpRVGYfHNkM9YCMRpziHjlf45OuyALh
-         ltkHFxK1XaDeuRQ3br+kpQXFf717kamV0Rii/lmaMYUdvh8PpSW9JC3BXvTaJ6dtHZYg
-         wwIati/h9T6zmgykEpbfUF8dnlGB4B5zFL8vU+PqIwDzxWFuB9apZ+OfzNjcNZfKyThH
-         E8bu9cyC5P7tImy3KVgdbLW5529f9X1xqRQxSg2RSqx2Hls1NE0MceyKCtdzZb5YCqS7
-         w7MA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dUhjkiUkO5I2gtWdIxEyHz4heTocnFLTG0gdIYBH7Fs=;
+        b=KIDcqn81Sg2UQ1zgtYLS8/gOtvnCl5foO15Oov8fENG2j/KJhIMpX7gpi8/3NsjI+S
+         urLk6nrb8vsm+4RC5gacoMznmqvjwK4eflApBMOpXV6InvV+mjjEfUZN4g1SbpIk1KJS
+         64e4OOWuzUb1VVTJPXy9Ev+paKLrpNG7qWCr+lJk0YBXINY8+BnEX5xIu+kjgtlI6HCT
+         iuV9h569AeNUhY4rA7lfd839Zv8hvYNXnd2eDTaiNyBm91DGfMFVvriT/fJEnVOGxOxX
+         9gU97UrmSeik8lCVLC6wieTSc0SWN4t3/kf3/kQaiMBjzWZUa5RyXSivb8xwX8Zg5klk
+         VKHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/T9drlD1s9vO6lHEMs4LJzmDo2MKXEHBXvFYaWoQWpk=;
-        b=TCuOIj3aCh1fd/tj76ha9qfIEuWmWpZ0jrIjk/LA1ONWRb5c85ftHZVuyBo7epKacq
-         tRW659uM/+N1fv4l1FfaLvUfLfYvAhoty7QXniZB/KM5gMsEijkBsAfR5HlwONtaoa5d
-         OEKXCZaFZyRmIZQniHQjPnQBGg42JjxwoN0YBLCOfdr216bGYOagcxeJelcXqKKTEHoo
-         a3z5JHoT60R+5bBUX1c51vONV2UMBfVffm89ciB34lpXzzplXdvVNyF9J3g6xWVe+rNQ
-         P3w72JJVW5Hcqdknrk60Z4ZlKI7FkWDwYxMK8yB0mPxSM+mPQ/Xxpxbu8D+47Ci66qoZ
-         CKZQ==
-X-Gm-Message-State: AOAM531Gq4N4BH+HTi8/K3e6C50fJ/DPlOqtLf5HwWUrUQMgwlSRItPA
-        N8QfucUNnUQiJ5SPpEimsSmGZeKQ2Ewrl8VXp1E=
-X-Google-Smtp-Source: ABdhPJylc8jr22SgVWjaSGbV5AA2fINHLLnkryQ3YSc8O9YHaCdhISJtr4mesfL+Vz6nH2CFYAiSfAGQOPAVq77cqbY=
-X-Received: by 2002:a67:f74f:: with SMTP id w15mr88415vso.61.1633020255972;
- Thu, 30 Sep 2021 09:44:15 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dUhjkiUkO5I2gtWdIxEyHz4heTocnFLTG0gdIYBH7Fs=;
+        b=IB+lGsGRcKvc0NhqBJa79PH+POm4lr7JXB+ACcYKRIjmSpEZDq87O8aR/eX1WHX+Sb
+         8F2k8TvJuJNRKPKRXs3tosxnVU20AExeuU+Ybr0ire/u3F7DOB/OUImYF9wJqMIHPkOT
+         ofFjg4BPSq9M+Uyn/Tr7vkINpwadO6FXh7G2VUZ3xyZmwM1wbYK6+d5zuavNk9z7oj2b
+         6zgjSAGPh8rrHMpeMusFZLkmID7j+JM+x6bjERG8Qn7ThSpWih8pGDZuVNvPTSTX2bGJ
+         LXwo1mLW3PA4bM5KN+/m2PGYBXQMkdZZBhD8xV6nyEAP+yFPGhKCyq0HL9cpGyg/8Ojd
+         c4Cg==
+X-Gm-Message-State: AOAM531+lgz2vwM96fcZRrCuSLKCmOXnhp8IAS+V+a/V3V3sZZBTrVeQ
+        Ocwa+YI16brQSF9meF7zsJk7N1mrxZsuCN00we5c3w==
+X-Google-Smtp-Source: ABdhPJwFzeI5sjPMfTasnMbbhqM/NDtim2bc2OhsLak9gYNJ3UgL2h5e5BJWFK7ZtTnHct/UqSlCzvBcjYmWDbD3SFk=
+X-Received: by 2002:a05:6512:12d6:: with SMTP id p22mr629668lfg.42.1633024954260;
+ Thu, 30 Sep 2021 11:02:34 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a59:ab2e:0:b0:22d:7f44:603a with HTTP; Thu, 30 Sep 2021
- 09:44:15 -0700 (PDT)
-Reply-To: irenezakari24@gmail.com
-From:   Irene zakari <irenezakari88@gmail.com>
-Date:   Thu, 30 Sep 2021 09:44:15 -0700
-Message-ID: <CAFT8PFHO6AoNO68AY9yLBeu9HW25zXm39mgx+NiZtQSk6n-rcg@mail.gmail.com>
-Subject: PLEASE I NEED YOUR HELP
-To:     undisclosed-recipients:;
+References: <20210928235635.1348330-1-willmcvicker@google.com>
+ <7766faf8-2dd1-6525-3b9a-8ba790c29cff@canonical.com> <CABYd82YodFDwBxexCv+0hpYrdYEX1Z1CvnRkmnBPkEJNJ4bssQ@mail.gmail.com>
+ <c65bf0db-6fd1-eb05-f407-37c41f9125f4@canonical.com> <YVWCK5QO331rfhJJ@google.com>
+ <72d27a82-9d4d-1f91-bd1f-ebead3b75ffa@canonical.com> <YVWwBz8jrznqXah4@google.com>
+ <8d260548-176e-d76b-6f05-d4d02ddd4f67@canonical.com> <YVW7xoHaLdGHBoEQ@google.com>
+ <CAMuHMdU_dbQYHF=8uOZ3e_v4+Li0bHfQABdLVSpJJPG4XkwhZw@mail.gmail.com>
+ <YVXkGiwAV3kGiBd3@google.com> <CAMuHMdXTp_cv4Ry0XBzCkv+-Gh3RY-HPZ8uDiNkxqK227+cozw@mail.gmail.com>
+In-Reply-To: <CAMuHMdXTp_cv4Ry0XBzCkv+-Gh3RY-HPZ8uDiNkxqK227+cozw@mail.gmail.com>
+From:   Will McVicker <willmcvicker@google.com>
+Date:   Thu, 30 Sep 2021 11:02:18 -0700
+Message-ID: <CABYd82b9wmzZHAQwBqn-6uJupEV=r6Zx7fiaz+o4Xxt8RQppUA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/12] arm64: Kconfig: Update ARCH_EXYNOS select configs
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Saravana Kannan <saravanak@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello   ..
+On Thu, Sep 30, 2021 at 9:26 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Lee,
+>
+> On Thu, Sep 30, 2021 at 6:21 PM Lee Jones <lee.jones@linaro.org> wrote:
+> > On Thu, 30 Sep 2021, Geert Uytterhoeven wrote:
+> > > On Thu, Sep 30, 2021 at 3:29 PM Lee Jones <lee.jones@linaro.org> wrote:
+> > > > On Thu, 30 Sep 2021, Krzysztof Kozlowski wrote:
+> > > > > On 30/09/2021 14:39, Lee Jones wrote:
+> > > > > > On Thu, 30 Sep 2021, Krzysztof Kozlowski wrote:
+> > > > > >> On 30/09/2021 11:23, Lee Jones wrote:
+> > > > > >>> [0] Full disclosure: part of my role at Linaro is to keep the Android
+> > > > > >>> kernel running as close to Mainline as possible and encourage/push the
+> > > > > >>> upstream-first mantra, hence my involvement with this and other sets.
+> > > > > >>> I assure you all intentions are good and honourable.  If you haven't
+> > > > > >>> already seen it, please see Todd's most recent update on the goals and
+> > > > > >>> status of GKI:
+> > > > > >>>
+> > > > > >>>   Article: https://tinyurl.com/saaen3sp
+> > > > > >>>   Video:   https://youtu.be/O_lCFGinFPM
+> > > > > >>>
+> > > > > >>
+> > > > > >> Side topic, why this patchset is in your scope or Will's/Google's scope?
+> > > > > >> Just drop it from Android main kernel, it will not be your problem. I
+> > > > > >> mean, really, you don't need this patchset in your tree at all. The only
+> > > > > >> platform which needs it, the only platform which will loose something
+> > > > > >> will be one specific vendor. Therefore this will be an incentive for
+> > > > > >> them to join both discussions and upstream development. :)
+> > > > > >
+> > > > > > How would they fix this besides upstreaming support for unreleased
+> > > > > > work-in-progress H/W?
+> > > > > >
+> > > > > > Haven't I explained this several times already? :)
+> > > > >
+> > > > > Either that way or the same as Will's doing but that's not my question.
+> > > > > I understand you flush the queue of your GKI patches to be closer to
+> > > > > upstream. Reduce the backlog/burden. you can achieve your goal by simply
+> > > > > dropping such patch and making it not your problem. :)
+> > > >
+> > > > git reset --hard mainline/master   # job done - tea break  :)
+> > > >
+> > > > Seriously though, we wish to encourage the use of GKI so all vendors
+> > > > can enjoy the benefits of more easily updateable/secure code-bases.
+> > > >
+> > > > I can't see how pushing back on seamlessly benign changes would
+> > > > benefit them or anyone else.
+> > >
+> > > I like your wording ;-)
+> > >
+> > > Indeed, seamlessly benign changes, which are (1) not tested, and (2)
+> > > some believed by the platform maintainer to break the platform.
+> > > What can possibly go wrong? ;-)
+> >
+> > William has already shown a willingness to test the series.
+>
+> I'm looking forward to the results!
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
 
-How do you do over there? I hope you are doing well?
+Hi Krzysztof and Geert,
 
-My name is Irene. (24 years), i am single, from Gambia, the only child
-of late Eng. Bernard Bakary Zakaria. the Director of Bajam Enterprise
-(Building Construction Company in The Gambia) also the CEO of Bernard
-Import and Export (GAMBIA).
+Thanks for all the responses! There are a few things I want to respond
+to. Since this thread is 32 responses deep, I'm copying and pasting
+the parts I'm responding to. I hope that isn't an issue.
 
-As a matter of fact my mother died when i was barely 4 years old
-according to my late father and because of the type of love he had for
-my mother made him to remain UN-married till he left the ghost..
+>You are changing not default, but selectability which is part of the
+>enforced configuration to make platforms working. The distros do not
+>always choose defaults but rather all as modules.
 
-So after the death of my father as a result of assassinate, his brother (My
-Uncle) who is the purchasing and marketing sale manager of my late
-fathers company named (Mr. James Tokunbo Oriade Zakaria) wanted to
-convert all the properties and resources of my late father into his
-which i quarreled with him and it made him to lay his anger on me to
-the extent of hiring an assassins to kill me but to God be the glory i
-succeeded by making a way to Burkina faso for my dear life.
-Honestly i do live a fearful life even here in Burkina faso because of
-those Assassins coming after me .
+I'm guessing you are referring to distros using the "allmodconfig". I
+agree that this would affect their platforms in the sense that they
+would get a module vs built-in, but obviously that is the choice they
+are making by using "allmodconfig". I also agree that my changes
+should not break any distros. I definitely don't want you or anyone
+else to accept these without them being tested and verified.
 
-I would want to live and study in your country for my better future.
-because my father same blood brother wanted to force me into undecided
-marriage, just for me to leave my father home and went and live with
-another man I never know as he want to occupied all my father home
-and maybe to sold it as my father no longer alive, I'm the only child
-daughter my father born, '' but he don't know that i am not
-interesting in any of my father properties or early marriage for now,
-because i still have future to think about and to focus on my studies
-first as i was doing my first year in the University before the death
-of my father.
+>I don't understand the point (2) here. Anyone can use upstream kernel
+>for supported and unsupported platforms. How upstream benefits from a
+>change affecting supported platforms made for unsupported, downstream
+>platforms.
 
-Actually what I want to discuss with you is about my personal issue
-concern funds my late father deposited in a bank outside my country,
-worth $4.5 million united state dollars. i need your assistance to
-receive and invest this funds in your country.
+We believe that if we make it easier for SoC vendors to directly use
+the upstream kernel during bring-up and during the development stages
+of their project, then that will decrease the friction of working with
+upstream (less downstream changes) and increase the upstream
+contributions. As mentioned in the LPC talk by Todd, the Android
+kernel team is constantly pushing to reduce the number of out-of-tree
+changes we carry so that we can ultimately use the upstream kernel
+directly.
 
-Please help me, I am sincere to you and I want to be member of your
-family as well if you wouldn't mind to accept me and lead me to better
-future in your country.
+>You also mentioned downstream devices but without actually ever defining
+>them. Please be more specific. What SoC, what hardware?
 
-All the documents the bank issue to my father during time of deposit
-is with me now.
-I already notify the bank on phone about the death of my father and
-they are surprise for the news and accept that my father is their good
-customer.
-I will be happy if this money can be invested in any business of your
-choice and it will be under your control till i finished my education,
-also I'm assuring you good relationship and I am ready to discuss the
-amount of money to give you from this money for your help.
+Saravana provided 2 platforms in his response. The first one is
+hikey960 devboard and the second one is the Pixel 5 which uses the
+Qualcomm sm7250 chipset. In particular the Pixel 5 is running a fully
+modular kernel. It has 320+ modules including interrupt controllers,
+timers, pinctrl and clocks.
 
-Therefore, I shall give you the bank contact and other necessary
-information in my next email if you will only promise me that you will
-not/never betray and disclosed this matter to anybody, because, this
-money is the only hope i have for survival on earth since I have lost
-my parents.
+To address your question regarding if Exynos is special? No, Exynos
+isn't special. There is a long road ahead of us to get to where we'd
+ultimately like to be and ARCH_EXYNOS happens to be along the way.
+Currently, we are working through the arm64 ARCH_XXX configs that are
+supported by Android to make sure that all drivers included by any
+ARCH_XXX are modularized if they can be which benefits all parties.
+From my understanding upstream does support modularizing drivers and
+we can help with that. I believe this also kind of addresses Geert's
+comments regarding what a generic kernel is. We look at it as a kernel
+that only includes the absolutely necessary SoC drivers as built-in.
+Obviously we can't go back and change older hardware like Cortex A9 to
+support this, but we can do our best to support future SoCs.
 
-Moreover I have the FUND PLACEMENT CERTIFICATE and the DEATH
-CERTIFICATE here with me, but before I give you further information, i
-will like to know your full data
+Lastly, you mentioned a couple of times that we should just disable
+ARCH_EXYNOS and move on. At the moment we are not able to do that
+because some SoC specific drivers actually do need to be built-in to
+the kernel (tainting it's generic-ness unfortunately) and are
+protected by these ARCH_XXX configs. One example that you or Geert
+pointed out is the early console serial driver which Greg did try to
+decouple from ARCH_EXYNOS but was turned down. There are likely other
+reasons as well that I don't know of off hand.
 
-1. Full Name: ........................
-2. Address: ..................
-3. Nationality: ........... Sex................
-4. Age:........... Date of Birth:................
-5. Occupation:...................
-.....
-6. Phone: ........... Fax:.........................
-7. State of Origin: .......Country:..............
-8. Occupation:...................
-................
-9. Marital status........... E-mail address's: ............
-10. Scan copy of your ID card or Driving License/Photo:............
-DECLARATION:
+I hope Lee and I answered all your questions. Ultimately, I think we
+all understand what is being debated here and it sounds like we all
+agree that we are okay with modules as long as (1) they are proven to
+work as both built-in and as modules and (2) can't be disabled if they
+are required by the platform, but can be built-in or modular. Let me
+know if I misunderstood that.
 
-so that i will be fully sure that i am not trusting the wrong person.
-and it will also give me the mind to send you the bank contact for you
-to communicate with them for more verification about this money. and
-to know you more better.
+Regarding the testing, I will look around for a devboard that I can
+test my clock driver changes on since those are the most contested
+ones. I obviously am not going to be able to find all the HW variants
+you mentioned, but I will try to find an ARM64 Exynos7 or Exynos5433
+devboard since my patchset only modifies the clocks for these SoCs
+which seem to be the most contested. Once I provide some testing
+results, I'm hoping someone upstream can help verify that on the other
+affected hardware. Of course this will take some time though.
 
-Meanwhile, you can reach me through my pastor,his name is Pastor Paul
-any time you call, tell him that you want to speak with me because
-right now i am living in the church here in Burkina faso and i don't
-want to stay here any longer,
-send for me to speak with you his phone number is this(+226 75213646)
+In the meantime, I will try to push some of these easier patches that
+don't need extensive testing, but are required before modularizing the
+drivers.
 
-I will stop here and i will be waiting for your reply and feel free
-ask any thing you want to know about me.
-Please help me, I would be highly appreciated
-Have nice day.
-From Irene
+Thanks,
+Will
