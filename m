@@ -2,211 +2,163 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A6341D6F2
-	for <lists+linux-clk@lfdr.de>; Thu, 30 Sep 2021 11:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 371AD41D71D
+	for <lists+linux-clk@lfdr.de>; Thu, 30 Sep 2021 12:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349665AbhI3KAw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 30 Sep 2021 06:00:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60690 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349654AbhI3KAv (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 30 Sep 2021 06:00:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6850A617E6;
-        Thu, 30 Sep 2021 09:59:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1632995948;
-        bh=K6FKq2NmXzk9TyUl3buQDg5LY+AZGHy3lCAN8OTMS+E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j55llJTKngc1+hMJWvXPWn19sADxZcVBf4JHQ4qKkG+U08ke/2NLrv4HIF+rRncI/
-         1EF8kbqokFB9FJK8aQuzHZ5XhD4gXdDKRothlVX2j4uAyglO8YjuTm9cwe81Dxcoba
-         EVP3P4buA3rx12Nyf3FcDZbjDsm9KWsw71yxu4P17Q8W7nEWJDuOe9Xpi1P3BzzW8w
-         TaAHz4yeQNOgT4i8a+dpWuV1l2hvgqMA7n8FpvwcTOX3SOsizF1oNgNTXbff/0+Oig
-         Dam+vg9Umobl1FemjbuSyfQOjYNTGzarSZ5Z4B2tpNvG8DveJxsSVoh0wNKw07veah
-         fqYF4bvtvb7Yw==
-Received: by pali.im (Postfix)
-        id 29166E79; Thu, 30 Sep 2021 11:59:08 +0200 (CEST)
-From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Vladimir Vid <vladimir.vid@sartura.hr>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v7 6/6] serial: mvebu-uart: implement support for baudrates higher than 230400
-Date:   Thu, 30 Sep 2021 11:58:38 +0200
-Message-Id: <20210930095838.28145-7-pali@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210930095838.28145-1-pali@kernel.org>
-References: <20210930095838.28145-1-pali@kernel.org>
+        id S1349619AbhI3KG6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 30 Sep 2021 06:06:58 -0400
+Received: from mail-vs1-f46.google.com ([209.85.217.46]:41525 "EHLO
+        mail-vs1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238316AbhI3KG5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 30 Sep 2021 06:06:57 -0400
+Received: by mail-vs1-f46.google.com with SMTP id az15so6542332vsb.8;
+        Thu, 30 Sep 2021 03:05:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VccpeQji2hy7yWXLtaE8V95GTOfMBmicTvoIIYKCrK8=;
+        b=ZSLFtkL5qFEYXffsO+19P9nahZvfOl+aQSDq1/M+nznd6OPiyUaMlusFVtMVFo9Xpc
+         /Bn84jmtRSJUUYj4gZrIA0vl5CEKAYznsroc6ZN7wFV0QrHWLLEaw5S16T/R82lOgFcU
+         K+H1tP00GpnCEV3Xzeaglz94gk4mx/q/XNSdV2kfyIgrks1k2zfn/tpi8OvB2EmGKtWe
+         ijkXj2MDtmAoX6hu3H5N8VQgwz736MYCkCWfuzc2lSazdN5gBCUMpAFobQhQ9Q5I96IN
+         ShN/TU2Ly1FeIwjLsCp0NgSiV4KWM1ymOg4iNvBEhkPlQceP76j3uylDaGAVDvEfMBYf
+         yDWA==
+X-Gm-Message-State: AOAM533vkGiDAZ8Nht0nkYAEcM02i6roAC36CqpI59pTvsIf6fvW4Jt7
+        VbA/k370rpv7lCd93s/EPz/TvnF0LSqD9WxSf4w=
+X-Google-Smtp-Source: ABdhPJzD6rww5rdym7fqYLiUgTKhLdrlVDeNx1RyAejSa9k8ku+6oJVHTD7G8k1OdOprw//5eCnEc3DVZMOf743mBRI=
+X-Received: by 2002:a67:f147:: with SMTP id t7mr2290466vsm.41.1632996314406;
+ Thu, 30 Sep 2021 03:05:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20210928235635.1348330-1-willmcvicker@google.com>
+ <7766faf8-2dd1-6525-3b9a-8ba790c29cff@canonical.com> <CABYd82YodFDwBxexCv+0hpYrdYEX1Z1CvnRkmnBPkEJNJ4bssQ@mail.gmail.com>
+ <c65bf0db-6fd1-eb05-f407-37c41f9125f4@canonical.com> <CAK8P3a0zezKvexqvL29Oc44uQq-8QG7LwZy31VYJuYAYbh-Utw@mail.gmail.com>
+In-Reply-To: <CAK8P3a0zezKvexqvL29Oc44uQq-8QG7LwZy31VYJuYAYbh-Utw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 30 Sep 2021 12:05:02 +0200
+Message-ID: <CAMuHMdU_VO1X=fCupgbEL77TrMjdOx0LNdjzk8nXa2skSXNDtg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/12] arm64: Kconfig: Update ARCH_EXYNOS select configs
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Saravana Kannan <saravanak@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, Olof Johansson <olof@lixom.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This change implements simple usage of fractional divisor. When main
-divisor D is too large to represent requested baudrate then use divisor M
-from fractional divisor feature. All the M prescalers are set to same and
-maximal value 63, so fractional part is not used at all.
+On Thu, Sep 30, 2021 at 11:01 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> On Thu, Sep 30, 2021 at 8:15 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@canonical.com> wrote:
+> > On 29/09/2021 21:48, Will McVicker wrote:
+> > > On Wed, Sep 29, 2021 at 6:02 AM Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com> wrote:
+> > >> What is more, it seems you entirely ignored Geert's comments. I pointed
+> > >> attention to it last time and you just said you will send v2 instead of
+> > >> joining discussion.
+> > >>
+> > >> It's a NAK for this reason - ignoring what Geert brought: you just broke
+> > >> distro configs for Exynos.
+> > >
+> > > First off I did want to chime into the discussion from the previous
+> > > patchset, but I felt that Lee and Saravana addressed all your concerns
+> > > regarding the intent and feasibility. You also made it clear what the
+> > > next steps were that I needed to take.
+> >
+> > One of the steps was problem with distros using everything as modules.
+> > They should not receive these drivers as modules.
+> > Reminder: these are essential drivers and all Exynos platforms must have
+> > them as built-in (at least till someone really tests this on multiple
+> > setups).
+>
+> Agreed. I absolutely love the work of the GKI developers to turn more
+> drivers into loadable modules, but the "correctness-first" principle is
+> not up for negotiation. If you are uncomfortable with the code or the
+> amount of testing because you think it breaks something, you should
+> reject the patches. Moving core platform functionality is fundamentally
+> hard and it can go wrong in all possible ways where it used to work
+> by accident because the init order was fixed.
 
-Tests showed that UART at 1500000 baudrate via this configuration is stable
-and usable. So there is no need to implement complicated calculation of
-fractional coefficients yet.
+Exactly.
+And patches to change this that haven't been tested at all should be
+very clearly marked that way.
 
-To use this feature with higher baudrates, it is required to use UART clock
-provided by UART clock driver. Default boot xtal clock is not capable of
-higher baudrates and this change also contains code for determining upper
-limit of possible baudrate.
+> > > You said that upstream supports a generic
+> > > kernel, but I argue that the upstream "generic" arm64 kernel can't be
+> > > considered generic if it builds in SoC specific drivers that can be
+> > > modules.
+> >
+> > Good point, but since having them as modules was not tested, I consider
+> > it as theoretical topic.
+>
+> I actually disagree strongly with labelling the kernel as "non-generic"
+> just because it requires platform specific support to be built-in rather than
+> a loadable module. This has never been possible on any platform
+> I'm aware of, and likely never will, except for minor variations of
+> an existing platform.
 
-Signed-off-by: Pali Rohár <pali@kernel.org>
----
- drivers/tty/serial/mvebu-uart.c | 79 ++++++++++++++++++++++++++-------
- 1 file changed, 62 insertions(+), 17 deletions(-)
+There seem to be two different meanings for a "generic" kernel:
+  1. To me, a generic kernel is a kernel that can boot on a variety of
+     hardware platforms. and will operate correctly with all expected
+     functionality.  That is, it should include[1] drivers for all that
+     hardware.
+     Examples of this are arm/multi_v7_defconfig and arm64/defconfig.
+  2. To GKI, a generic kernel is a minimal kernel that doesn't include
+     any[2] hardware-specific drivers, and has loadable modules for
+     all[2] hardware-specific drivers. Before loading these modules, it
+     can run an application on the CPU, but it cannot do any I/O to real
+     hardware.
 
-diff --git a/drivers/tty/serial/mvebu-uart.c b/drivers/tty/serial/mvebu-uart.c
-index f3fb1f3718f2..925b3e0c098c 100644
---- a/drivers/tty/serial/mvebu-uart.c
-+++ b/drivers/tty/serial/mvebu-uart.c
-@@ -99,6 +99,7 @@
- #define UART_OSAMP		0x14
- #define  OSAMP_DEFAULT_DIVISOR	16
- #define  OSAMP_DIVISORS_MASK	0x3F3F3F3F
-+#define  OSAMP_MAX_DIVISOR	63
- 
- #define MVEBU_NR_UARTS		2
- 
-@@ -479,18 +480,59 @@ static int mvebu_uart_baud_rate_set(struct uart_port *port, unsigned int baud)
- 		return -EOPNOTSUPP;
- 
- 	/*
--	 * The baudrate is derived from the UART clock thanks to two divisors:
--	 *   > D ("baud generator"): can divide the clock from 2 to 2^10 - 1.
--	 *   > M ("fractional divisor"): allows a better accuracy for
--	 *     baudrates higher than 230400.
-+	 * The baudrate is derived from the UART clock thanks to divisors:
-+	 *   > d1 * d2 ("TBG divisors"): can divide only TBG clock from 1 to 6
-+	 *   > D ("baud generator"): can divide the clock from 1 to 1023
-+	 *   > M ("fractional divisor"): allows a better accuracy (from 1 to 63)
- 	 *
--	 * As the derivation of M is rather complicated, the code sticks to its
--	 * default value (x16) when all the prescalers are zeroed, and only
--	 * makes use of D to configure the desired baudrate.
-+	 * Exact formulas for calculating baudrate:
-+	 *
-+	 * with default x16 scheme:
-+	 *   baudrate = xtal / (d * 16)
-+	 *   baudrate = tbg / (d1 * d2 * d * 16)
-+	 *
-+	 * with fractional divisor:
-+	 *   baudrate = 10 * xtal / (d * (3 * (m1 + m2) + 2 * (m3 + m4)))
-+	 *   baudrate = 10 * tbg / (d1*d2 * d * (3 * (m1 + m2) + 2 * (m3 + m4)))
-+	 *
-+	 * Oversampling value:
-+	 *   osamp = (m1 << 0) | (m2 << 8) | (m3 << 16) | (m4 << 24);
-+	 *
-+	 * Where m1 controls number of clock cycles per bit for bits 1,2,3;
-+	 * m2 for bits 4,5,6; m3 for bits 7,8 and m4 for bits 9,10.
-+	 *
-+	 * To simplify baudrate setup set all the M prescalers to same value.
-+	 * For 9600 baudrate and higher it is enough to use just default (x16)
-+	 * divisor or fractional divisor with M = 63, so there is no need to
-+	 * use real fractional support (when the M prescalers are not equal).
-+	 *
-+	 * When all the M prescalers are zeroed then default (x16) divisor is
-+	 * used. Default x16 scheme is more stable than M (fractional divisor),
-+	 * so use M only when D divisor is not enough to derivate baudrate.
-+	 *
-+	 * Member port->uartclk is either xtal clock rate or TBG clock rate
-+	 * divided by (d1 * d2). So UART clock driver already sets d1 and d2
-+	 * divisors and UART driver cannot change them. Moreover they are
-+	 * shared with both UARTs.
- 	 */
-+
- 	m_divisor = OSAMP_DEFAULT_DIVISOR;
- 	d_divisor = DIV_ROUND_CLOSEST(port->uartclk, baud * m_divisor);
- 
-+	if (d_divisor > BRDV_BAUD_MAX) {
-+		/*
-+		 * Experiments showed that small M divisors are unstable.
-+		 * So use maximal possible M = 63 and calculate D divisor.
-+		 */
-+		m_divisor = OSAMP_MAX_DIVISOR;
-+		d_divisor = DIV_ROUND_CLOSEST(port->uartclk, baud * m_divisor);
-+	}
-+
-+	if (d_divisor < 1)
-+		d_divisor = 1;
-+	else if (d_divisor > BRDV_BAUD_MAX)
-+		d_divisor = BRDV_BAUD_MAX;
-+
- 	spin_lock_irqsave(&mvebu_uart_lock, flags);
- 	brdv = readl(port->membase + UART_BRDV);
- 	brdv &= ~BRDV_BAUD_MASK;
-@@ -500,6 +542,9 @@ static int mvebu_uart_baud_rate_set(struct uart_port *port, unsigned int baud)
- 
- 	osamp = readl(port->membase + UART_OSAMP);
- 	osamp &= ~OSAMP_DIVISORS_MASK;
-+	if (m_divisor != OSAMP_DEFAULT_DIVISOR)
-+		osamp |= (m_divisor << 0) | (m_divisor << 8) |
-+			(m_divisor << 16) | (m_divisor << 24);
- 	writel(osamp, port->membase + UART_OSAMP);
- 
- 	return 0;
-@@ -529,14 +574,14 @@ static void mvebu_uart_set_termios(struct uart_port *port,
- 		port->ignore_status_mask |= STAT_RX_RDY(port) | STAT_BRK_ERR;
- 
- 	/*
--	 * Maximal divisor is 1023 * 16 when using default (x16) scheme.
--	 * Maximum achievable frequency with simple baudrate divisor is 230400.
--	 * Since the error per bit frame would be of more than 15%, achieving
--	 * higher frequencies would require to implement the fractional divisor
--	 * feature.
-+	 * Maximal divisor is 1023 and maximal fractional divisor is 63. And
-+	 * experiments showed that baudrates above 1/80 of base clock are not
-+	 * stable and usable. So disallow baudrate above 1/80 of the base clock.
-+	 * When port->uartclk is not available then mvebu_uart_baud_rate_set()
-+	 * fails so values min_baud and max_baud in this case does not matter.
- 	 */
--	min_baud = DIV_ROUND_UP(port->uartclk, 1023 * 16);
--	max_baud = 230400;
-+	min_baud = DIV_ROUND_UP(port->uartclk, BRDV_BAUD_MAX*OSAMP_MAX_DIVISOR);
-+	max_baud = port->uartclk / 80;
- 
- 	baud = uart_get_baud_rate(port, termios, old, min_baud, max_baud);
- 	if (mvebu_uart_baud_rate_set(port, baud)) {
-@@ -1394,14 +1439,14 @@ static int mvebu_uart_clock_probe(struct platform_device *pdev)
- 			 * Calculate the smallest TBG d1 and d2 divisors that
- 			 * still can provide 9600 baudrate.
- 			 */
--			d1 = DIV_ROUND_UP(rate, 9600 * OSAMP_DEFAULT_DIVISOR *
-+			d1 = DIV_ROUND_UP(rate, 9600 * OSAMP_MAX_DIVISOR *
- 						BRDV_BAUD_MAX);
- 			if (d1 < 1)
- 				d1 = 1;
- 			else if (d1 > CLK_TBG_DIV1_MAX)
- 				d1 = CLK_TBG_DIV1_MAX;
- 
--			d2 = DIV_ROUND_UP(rate, 9600 * OSAMP_DEFAULT_DIVISOR *
-+			d2 = DIV_ROUND_UP(rate, 9600 * OSAMP_MAX_DIVISOR *
- 						BRDV_BAUD_MAX * d1);
- 			if (d2 < 1)
- 				d2 = 1;
-@@ -1416,7 +1461,7 @@ static int mvebu_uart_clock_probe(struct platform_device *pdev)
- 		}
- 
- 		/* Skip clock source which cannot provide 9600 baudrate */
--		if (rate > 9600 * OSAMP_DEFAULT_DIVISOR * BRDV_BAUD_MAX * d1 * d2)
-+		if (rate > 9600 * OSAMP_MAX_DIVISOR * BRDV_BAUD_MAX * d1 * d2)
- 			continue;
- 
- 		/*
+[1] Developers usually want the drivers builtin, distros want them
+     modular.
+[2] On arm/arm64, this must rely on the GIC and architectured timer
+    being built-in (AFAIK these cannot be modules yet), and thus
+    precludes booting on Cortex A9 and older that lack GIC and/or
+    architectured timer as their primary interrupt controller and timer.
+    I'm wondering how this works on other architectures with
+    less-standardized interrupt controllers and timers?
+
+> Look at x86 as an example: there are less than a dozen SoC platforms
+> supported and they are incredibly similar hardware-wise, but the kernel
+> is anything but "generic" in the sense that was mentioned above.
+> Most of the platform specific drivers in arch/x86/platform and the
+> corresponding bits in drivers/{irqchip,clocksource,iommu} are always
+> built-in, and a lot more is hardwired in architecture code as PCI
+> quirks or conditional on cpuid or dmi firmware checks.
+
+Indeed. X86 has less variability in the hardware than other
+architectures, and has all the critical drivers built-in or in firmware.
+Where there have been big differences (remember Voyager?), x86 never
+had the option to have a generic (in the meaning of 1 above) kernel
+(but James did try, cfr. https://lwn.net/Articles/328469/).
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.20.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
