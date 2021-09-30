@@ -2,374 +2,142 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBFE341DB08
-	for <lists+linux-clk@lfdr.de>; Thu, 30 Sep 2021 15:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB0441DB13
+	for <lists+linux-clk@lfdr.de>; Thu, 30 Sep 2021 15:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351411AbhI3NaW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 30 Sep 2021 09:30:22 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:17460 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351292AbhI3NaT (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 30 Sep 2021 09:30:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1633008516; x=1664544516;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=Eu2hSiAI8L6vu5nvHEvLYO50NCTXA67MnLtHKRAjzVo=;
-  b=wZ2LoaSgrqZdtSxLucjcmHvKhasbclaYPzs15bwoTrLhSuEuHI6Qz4Kn
-   yDlG085GPoj7oh7CK1LDFQocBuwtVmY3REU6outtsMths57ASMRb0TRmx
-   CIH7lYWkMJShLG2TCuCut0hBN43BooE564QqcILxTYBkQ9lrTAXzozwyh
-   96/2Namo6i8+G1WwPeW0JZ6286O2UglJkewpE7nXbmaeeW5htyGR2lO9O
-   Nk5/FayGhGfhRZOzHjjoDNb46Lw4kteS/CpfQWNb8ef3Hp4cqkXSM9NUb
-   myLMYkmwF+ud/9v1WKDKzFoz40rDEyT2WiNy+fsjH19tTs6P04noMMBeo
-   A==;
-IronPort-SDR: jYAbQcu2L3MVzf4aJD7AtpqDwOJrlwi1fxaRRo597IbDiwO9zzIx0fjifkN7uLZcwGQ8cTq62l
- YxBV/qnvMJKHIgHv4vmMFocEJTagFs0pI+xocUsOX68K9rF/3fr1s+jiYp1yVWqrXVL3C1IFVI
- feEIo6XNQZIld3jajLlcGRkZfitm/xlWNH8xDoFxMP3xF0LjkYBuLtObjTl8nvrCqvk9oYAN0z
- /3Ao4FCJwYykBpwrO+tBL0Y9ZGYWOWQMNoTyJ1I3/1YoOdlJBog08fOkt1JGWG823/UOKF8Y+u
- K+jWu/5FRdaCbJPp4YNc7bz2
-X-IronPort-AV: E=Sophos;i="5.85,336,1624345200"; 
-   d="scan'208";a="131255677"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Sep 2021 06:28:35 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Thu, 30 Sep 2021 06:28:35 -0700
-Received: from kavya-HP-Compaq-6000-Pro-SFF-PC.microchip.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Thu, 30 Sep 2021 06:28:32 -0700
-From:   Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-To:     <robh+dt@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <UNGLinuxDriver@microchip.com>,
-        <Eugen.Hristev@microchip.com>, <Kavyasree.Kotagiri@microchip.com>,
-        <Manohar.Puri@microchip.com>
-Subject: [PATCH v7 3/3] clk: lan966x: Add lan966x SoC clock driver
-Date:   Thu, 30 Sep 2021 18:58:15 +0530
-Message-ID: <20210930132815.15353-4-kavyasree.kotagiri@microchip.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210930132815.15353-1-kavyasree.kotagiri@microchip.com>
-References: <20210930132815.15353-1-kavyasree.kotagiri@microchip.com>
+        id S1351451AbhI3Nba (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 30 Sep 2021 09:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350049AbhI3Nb3 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 30 Sep 2021 09:31:29 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94D2C06176A
+        for <linux-clk@vger.kernel.org>; Thu, 30 Sep 2021 06:29:46 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id v17so10052353wrv.9
+        for <linux-clk@vger.kernel.org>; Thu, 30 Sep 2021 06:29:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=q+R3lw9hSs/DZNzD1ywHyamm1IrGhxmkV4ENbV1GCU4=;
+        b=DgISTWDu6rOHfzRjV6Qlml3/7p6txDssydTajODz+GlRBwZnnZJ+mHqxja6SLqqzZS
+         eyqevG/RTJ1e19LvzUSviCvcRdY/ZQlLzVjdheF0j9oYG2VCjjxYzy70fFH6h8wQFIl1
+         heZTwo8Ij6lQSgsdYl1dZiwV3X78qZHJLVBF7Te55QST9l020nZl0zdexD6cQxRMEf6W
+         SRIUEGew9SLXCrM/mV3q/VEp2npSKkXBbZ5+s2TfsplI/1q6wc/x7KyW1mrI5x5IDs/H
+         NBJzxCeq6cVp7HZB2iCl43ejKQHiNBQy43JZ3VV5ezx4T/8upAw3Pc/u2fcrSEWOZw/o
+         CpiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=q+R3lw9hSs/DZNzD1ywHyamm1IrGhxmkV4ENbV1GCU4=;
+        b=7oGfGxrlk7zbRnG9lx2ONFVweit9LspKG/AK99CJ5+CbYHMhjXtbNsirINCefLI/jE
+         tfaTqIHxdtWagEvpXC8br+CoVmxaHISoTyAShhhmvSZ9pnkR9KA2oUuFuDZK7kZBizpS
+         D5scmgMnQwRNDUrYQj5cRQFS6gEFcDyGUBJhzC7P6GeN+eiYmuQK0UqnhiEA2e9HQoaZ
+         b61DOVBLoJ8K0DqV+DGbwb1z8dJe9gn3eqBoZMm51Bw5eUtEt7RUT7qaM37hEQsF7VQH
+         LLKfpiDXjfiHTc+FINuLq9V4DAo5selXl8z0il4CDLIC5r8RCjVBBR1I8SyIIATHLwbe
+         FvfA==
+X-Gm-Message-State: AOAM530GoxdiJ76I/DBncGHR6Z2euc8BjCmPZ2ELUZ7nN+diUxo/sLSp
+        uyfLwpyB71YtLcFzhcwo+xsFcAmNVTx/Jw==
+X-Google-Smtp-Source: ABdhPJy/y/6uR/KPQ8dQ/+hV2n00qqTbyI2pfOM4zKq4a5jrPB98oGnv1D/dr/8czG2Kuq8YEDugGw==
+X-Received: by 2002:adf:eac8:: with SMTP id o8mr5785614wrn.273.1633008585451;
+        Thu, 30 Sep 2021 06:29:45 -0700 (PDT)
+Received: from google.com ([95.148.6.233])
+        by smtp.gmail.com with ESMTPSA id x21sm4825619wmc.14.2021.09.30.06.29.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Sep 2021 06:29:44 -0700 (PDT)
+Date:   Thu, 30 Sep 2021 14:29:42 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Will McVicker <willmcvicker@google.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Saravana Kannan <saravanak@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Subject: Re: [PATCH v2 00/12] arm64: Kconfig: Update ARCH_EXYNOS select
+ configs
+Message-ID: <YVW7xoHaLdGHBoEQ@google.com>
+References: <20210928235635.1348330-1-willmcvicker@google.com>
+ <7766faf8-2dd1-6525-3b9a-8ba790c29cff@canonical.com>
+ <CABYd82YodFDwBxexCv+0hpYrdYEX1Z1CvnRkmnBPkEJNJ4bssQ@mail.gmail.com>
+ <c65bf0db-6fd1-eb05-f407-37c41f9125f4@canonical.com>
+ <YVWCK5QO331rfhJJ@google.com>
+ <72d27a82-9d4d-1f91-bd1f-ebead3b75ffa@canonical.com>
+ <YVWwBz8jrznqXah4@google.com>
+ <8d260548-176e-d76b-6f05-d4d02ddd4f67@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8d260548-176e-d76b-6f05-d4d02ddd4f67@canonical.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This adds Generic Clock Controller driver for lan966x SoC.
+On Thu, 30 Sep 2021, Krzysztof Kozlowski wrote:
 
-Lan966x clock controller contains 3 PLLs - cpu_clk, ddr_clk
-and sys_clk. It generates and supplies clock to various
-peripherals within SoC.
-Register settings required to provide GCK clocking to a
-peripheral is as below:
-GCK_SRC_SEL     = Select clock source.
-GCK_PRESCALER   = Set divider value.
-GCK_ENA         = 1 - Enable GCK clock.
+> On 30/09/2021 14:39, Lee Jones wrote:
+> > On Thu, 30 Sep 2021, Krzysztof Kozlowski wrote:
+> > 
+> >> On 30/09/2021 11:23, Lee Jones wrote:
+> >>> [0] Full disclosure: part of my role at Linaro is to keep the Android
+> >>> kernel running as close to Mainline as possible and encourage/push the
+> >>> upstream-first mantra, hence my involvement with this and other sets.
+> >>> I assure you all intentions are good and honourable.  If you haven't
+> >>> already seen it, please see Todd's most recent update on the goals and
+> >>> status of GKI:
+> >>>
+> >>>   Article: https://tinyurl.com/saaen3sp
+> >>>   Video:   https://youtu.be/O_lCFGinFPM
+> >>>
+> >>
+> >> Side topic, why this patchset is in your scope or Will's/Google's scope?
+> >> Just drop it from Android main kernel, it will not be your problem. I
+> >> mean, really, you don't need this patchset in your tree at all. The only
+> >> platform which needs it, the only platform which will loose something
+> >> will be one specific vendor. Therefore this will be an incentive for
+> >> them to join both discussions and upstream development. :)
+> > 
+> > How would they fix this besides upstreaming support for unreleased
+> > work-in-progress H/W?
+> > 
+> > Haven't I explained this several times already? :)
+> 
+> Either that way or the same as Will's doing but that's not my question.
+> I understand you flush the queue of your GKI patches to be closer to
+> upstream. Reduce the backlog/burden. you can achieve your goal by simply
+> dropping such patch and making it not your problem. :)
 
-Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-Co-developed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
-v6 -> v7:
-- Added Kconfig and Makefile entires for lan966x clock driver.
+git reset --hard mainline/master   # job done - tea break  :)
 
-v5 -> v6:
-- No changes.
+Seriously though, we wish to encourage the use of GKI so all vendors
+can enjoy the benefits of more easily updateable/secure code-bases.
 
-v4 -> v5:
-- Returning proper error - PTR_ERR.
-- Removed unused variable "ret" in probe function.
+I can't see how pushing back on seamlessly benign changes would
+benefit them or anyone else.
 
-v3 -> v4:
-- Used clk_parent_data instead of of_clk_get_parent_name().
-
-v2 -> v3:
-- No changes.
-
-v1 -> v2:
-- No changes.
-
- drivers/clk/Kconfig       |   7 ++
- drivers/clk/Makefile      |   1 +
- drivers/clk/clk-lan966x.c | 236 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 244 insertions(+)
- create mode 100644 drivers/clk/clk-lan966x.c
-
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index c5b3dc97396a..1b992a554ff8 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -221,6 +221,13 @@ config COMMON_CLK_GEMINI
- 	  This driver supports the SoC clocks on the Cortina Systems Gemini
- 	  platform, also known as SL3516 or CS3516.
- 
-+config COMMON_CLK_LAN966X
-+	bool "Generic Clock Controller driver for LAN966X SoC"
-+	help
-+	  This driver provides support for Generic Clock Controller(GCK) on
-+	  LAN966X SoC. GCK generates and supplies clock to various peripherals
-+	  within the SoC.
-+
- config COMMON_CLK_ASPEED
- 	bool "Clock driver for Aspeed BMC SoCs"
- 	depends on ARCH_ASPEED || COMPILE_TEST
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index e42312121e51..d8565ef01b34 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -37,6 +37,7 @@ obj-$(CONFIG_ARCH_HIGHBANK)		+= clk-highbank.o
- obj-$(CONFIG_CLK_HSDK)			+= clk-hsdk-pll.o
- obj-$(CONFIG_COMMON_CLK_K210)		+= clk-k210.o
- obj-$(CONFIG_LMK04832)			+= clk-lmk04832.o
-+obj-$(CONFIG_COMMON_CLK_LAN966X)	+= clk-lan966x.o
- obj-$(CONFIG_COMMON_CLK_LOCHNAGAR)	+= clk-lochnagar.o
- obj-$(CONFIG_COMMON_CLK_MAX77686)	+= clk-max77686.o
- obj-$(CONFIG_COMMON_CLK_MAX9485)	+= clk-max9485.o
-diff --git a/drivers/clk/clk-lan966x.c b/drivers/clk/clk-lan966x.c
-new file mode 100644
-index 000000000000..0f24b95fd78f
---- /dev/null
-+++ b/drivers/clk/clk-lan966x.c
-@@ -0,0 +1,236 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Microchip LAN966x SoC Clock driver.
-+ *
-+ * Copyright (C) 2021 Microchip Technology, Inc. and its subsidiaries
-+ *
-+ * Author: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/clk-provider.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+
-+#include <dt-bindings/clock/microchip,lan966x.h>
-+
-+#define GCK_ENA         BIT(0)
-+#define GCK_SRC_SEL     GENMASK(9, 8)
-+#define GCK_PRESCALER   GENMASK(23, 16)
-+
-+static const char *clk_names[N_CLOCKS] = {
-+	"qspi0", "qspi1", "qspi2", "sdmmc0",
-+	"pi", "mcan0", "mcan1", "flexcom0",
-+	"flexcom1", "flexcom2", "flexcom3",
-+	"flexcom4", "timer", "usb_refclk",
-+};
-+
-+struct lan966x_gck {
-+	struct clk_hw hw;
-+	void __iomem *reg;
-+};
-+#define to_lan966x_gck(hw) container_of(hw, struct lan966x_gck, hw)
-+
-+static const struct clk_parent_data lan966x_gck_pdata[] = {
-+	{ .fw_name = "cpu_clk", .name = "cpu_clk" },
-+	{ .fw_name = "ddr_clk", .name = "ddr_clk" },
-+	{ .fw_name = "sys_clk", .name = "sys_clk" },
-+};
-+
-+static struct clk_init_data init = {
-+	.parent_data = lan966x_gck_pdata,
-+	.num_parents = ARRAY_SIZE(lan966x_gck_pdata),
-+};
-+
-+static void __iomem *base;
-+
-+static int lan966x_gck_enable(struct clk_hw *hw)
-+{
-+	struct lan966x_gck *gck = to_lan966x_gck(hw);
-+	u32 val = readl(gck->reg);
-+
-+	val |= GCK_ENA;
-+	writel(val, gck->reg);
-+
-+	return 0;
-+}
-+
-+static void lan966x_gck_disable(struct clk_hw *hw)
-+{
-+	struct lan966x_gck *gck = to_lan966x_gck(hw);
-+	u32 val = readl(gck->reg);
-+
-+	val &= ~GCK_ENA;
-+	writel(val, gck->reg);
-+}
-+
-+static int lan966x_gck_set_rate(struct clk_hw *hw,
-+				unsigned long rate,
-+				unsigned long parent_rate)
-+{
-+	struct lan966x_gck *gck = to_lan966x_gck(hw);
-+	u32 div, val = readl(gck->reg);
-+
-+	if (rate == 0 || parent_rate == 0)
-+		return -EINVAL;
-+
-+	/* Set Prescalar */
-+	div = parent_rate / rate;
-+	val &= ~GCK_PRESCALER;
-+	val |= FIELD_PREP(GCK_PRESCALER, (div - 1));
-+	writel(val, gck->reg);
-+
-+	return 0;
-+}
-+
-+static long lan966x_gck_round_rate(struct clk_hw *hw, unsigned long rate,
-+				   unsigned long *parent_rate)
-+{
-+	unsigned int div;
-+
-+	if (rate == 0 || *parent_rate == 0)
-+		return -EINVAL;
-+
-+	if (rate >= *parent_rate)
-+		return *parent_rate;
-+
-+	div = DIV_ROUND_CLOSEST(*parent_rate, rate);
-+
-+	return *parent_rate / div;
-+}
-+
-+static unsigned long lan966x_gck_recalc_rate(struct clk_hw *hw,
-+					     unsigned long parent_rate)
-+{
-+	struct lan966x_gck *gck = to_lan966x_gck(hw);
-+	u32 div, val = readl(gck->reg);
-+
-+	div = FIELD_GET(GCK_PRESCALER, val);
-+
-+	return parent_rate / (div + 1);
-+}
-+
-+static int lan966x_gck_determine_rate(struct clk_hw *hw,
-+				      struct clk_rate_request *req)
-+{
-+	struct clk_hw *parent;
-+	int i;
-+
-+	for (i = 0; i < clk_hw_get_num_parents(hw); ++i) {
-+		parent = clk_hw_get_parent_by_index(hw, i);
-+		if (!parent)
-+			continue;
-+
-+		if (clk_hw_get_rate(parent) / req->rate < 254) {
-+			req->best_parent_hw = parent;
-+			req->best_parent_rate = clk_hw_get_rate(parent);
-+
-+			return 0;
-+		}
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static u8 lan966x_gck_get_parent(struct clk_hw *hw)
-+{
-+	struct lan966x_gck *gck = to_lan966x_gck(hw);
-+	u32 val = readl(gck->reg);
-+
-+	return FIELD_GET(GCK_SRC_SEL, val);
-+}
-+
-+static int lan966x_gck_set_parent(struct clk_hw *hw, u8 index)
-+{
-+	struct lan966x_gck *gck = to_lan966x_gck(hw);
-+	u32 val = readl(gck->reg);
-+
-+	val &= ~GCK_SRC_SEL;
-+	val |= FIELD_PREP(GCK_SRC_SEL, index);
-+	writel(val, gck->reg);
-+
-+	return 0;
-+}
-+
-+static const struct clk_ops lan966x_gck_ops = {
-+	.enable         = lan966x_gck_enable,
-+	.disable        = lan966x_gck_disable,
-+	.set_rate       = lan966x_gck_set_rate,
-+	.round_rate     = lan966x_gck_round_rate,
-+	.recalc_rate    = lan966x_gck_recalc_rate,
-+	.determine_rate = lan966x_gck_determine_rate,
-+	.set_parent     = lan966x_gck_set_parent,
-+	.get_parent     = lan966x_gck_get_parent,
-+};
-+
-+static struct clk_hw *lan966x_gck_clk_register(struct device *dev, int i)
-+{
-+	struct lan966x_gck *priv;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return ERR_PTR(-ENOMEM);
-+
-+	priv->reg = base + (i * 4);
-+	priv->hw.init = &init;
-+	ret = devm_clk_hw_register(dev, &priv->hw);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	return &priv->hw;
-+};
-+
-+static int lan966x_clk_probe(struct platform_device *pdev)
-+{
-+	struct clk_hw_onecell_data *hw_data;
-+	struct device *dev = &pdev->dev;
-+	int i;
-+
-+	hw_data = devm_kzalloc(dev, sizeof(*hw_data), GFP_KERNEL);
-+	if (!hw_data)
-+		return -ENOMEM;
-+
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
-+
-+	init.ops = &lan966x_gck_ops;
-+
-+	hw_data->num = N_CLOCKS;
-+
-+	for (i = 0; i < N_CLOCKS; i++) {
-+		init.name = clk_names[i];
-+		hw_data->hws[i] = lan966x_gck_clk_register(dev, i);
-+		if (IS_ERR(hw_data->hws[i])) {
-+			dev_err(dev, "failed to register %s clock\n",
-+				init.name);
-+			return PTR_ERR(hw_data->hws[i]);
-+		}
-+	}
-+
-+	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, hw_data);
-+}
-+
-+static const struct of_device_id lan966x_clk_dt_ids[] = {
-+	{ .compatible = "microchip,lan966x-gck", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, lan966x_clk_dt_ids);
-+
-+static struct platform_driver lan966x_clk_driver = {
-+	.probe  = lan966x_clk_probe,
-+	.driver = {
-+		.name = "lan966x-clk",
-+		.of_match_table = lan966x_clk_dt_ids,
-+	},
-+};
-+builtin_platform_driver(lan966x_clk_driver);
-+
-+MODULE_AUTHOR("Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>");
-+MODULE_DESCRIPTION("LAN966X clock driver");
-+MODULE_LICENSE("GPL v2");
 -- 
-2.17.1
-
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
