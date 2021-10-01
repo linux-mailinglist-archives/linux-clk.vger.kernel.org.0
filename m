@@ -2,71 +2,100 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 044A041EC28
-	for <lists+linux-clk@lfdr.de>; Fri,  1 Oct 2021 13:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EBAE41EC64
+	for <lists+linux-clk@lfdr.de>; Fri,  1 Oct 2021 13:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353997AbhJALgt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 1 Oct 2021 07:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
+        id S1353988AbhJALkK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 1 Oct 2021 07:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354002AbhJALgr (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 1 Oct 2021 07:36:47 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6ACDC0613E7
-        for <linux-clk@vger.kernel.org>; Fri,  1 Oct 2021 04:35:02 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id l8so33897606edw.2
-        for <linux-clk@vger.kernel.org>; Fri, 01 Oct 2021 04:35:02 -0700 (PDT)
+        with ESMTP id S1354080AbhJALkJ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 1 Oct 2021 07:40:09 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C36BC061775
+        for <linux-clk@vger.kernel.org>; Fri,  1 Oct 2021 04:38:25 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id x27so37683467lfu.5
+        for <linux-clk@vger.kernel.org>; Fri, 01 Oct 2021 04:38:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=5L/E4eErsLvrvRSyjenHMn1XgR3BfAibYkaUBTxnmho=;
-        b=kb6MbLUy++O6PNHhKSFPx9v4fFtwpvxJeNblR4kji6+6qq2Lucl0Bos7Wr8pcLX+hO
-         tRyb9xiWVR8p706SNC+HizJNgSL5UH7etOYT4KJNUPAxZsx19kSXdlPSkzuaY1jTWaLY
-         4tzz18G2my1E8FkqDzcvEfU/fmLr7epbivZsMIbMD2QsJgHn219yKjZHacudF+1Otelk
-         Ps1x6eI3Y+KniUoXNyOSthjl8bPizc7o0PNNLM7mCUJWrsXs698IFJfmckZW2ZuwAS6o
-         Sx6QKffvmRb5RhKFnE364qOhRDY4B39bqiG8gRsgkqiSO/SRZOJpzUOpTrf/l9gFCHVc
-         XGiQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PgQJwBmVLBdUeAFbcJpLOUvKI5KGsOalaorIVrJziYU=;
+        b=ulGdV921YPSj31Yv4v5aF/syTvWDzr0emxFqFfTXLGaac8eOgGmUwTS2oQqs9+4MaT
+         ycJJ4EGMFd1wiR/zE0HlRhLZMtUDrYcG8Cr0hZxQmBlm3f6VfnGmWUYOyEGuccqje6Kd
+         f4GITEqFG47ZwzLDHw9uq53A5+pAdnhsw17ahJv5ZuVf4U9IJ2d3AwJBGWDMAfF5AhZm
+         MrXvj+pMDYf7U5gRFhMMsvAqNMb/OCUK9FxDr6neZzgERJ4g+QgUNRGh/nG+POoPyV28
+         vf9j6BK1UWjNCQXLmoyAqCerQFmcdJzzsxVO48fBV8Tiiwq75Yk8tA868/lhicBoEji6
+         WTSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=5L/E4eErsLvrvRSyjenHMn1XgR3BfAibYkaUBTxnmho=;
-        b=S9phwsnjUCDc2AtnQQj2vTYIQNa0eThttO6W1lz0p4J+xigLVELxIcKnxu1o+KPdtk
-         Duz/u35utyfR+yo40qaZx8zIUc1c9dPb1wFbKiIfPIMgkcZAEsHLiLxy2LYJ0ra55tgS
-         xak17QMmA4kU6xMmlokzwqARGV5DY12sNS9rfiUqFgxEXP6VJup0uJJzCQxzUXQITr+4
-         fa07gYgGXZTJCPekxN+nJP4rXgl1EoDXPy+FSQVyi0ZWyoDnhyCxrND4UFPkcifBoS3V
-         IdKJcvMk12/Kfz+HjI4ErTQSPZYj1a68OcxoxWBdmmSoIi1QrVM0jmHin53Hgs++0ZO8
-         sHoQ==
-X-Gm-Message-State: AOAM533luW9fuEaTkaFbEJmrKeAl28bq34HEoawZiKqAAMCjg/r1kcYl
-        RV5lSodPfGl+IogTElkyVlOYdiMI6p+MOVDGYEU=
-X-Google-Smtp-Source: ABdhPJxO5JZDMou4ZeNj31LReXKwuJbss5Bcqb0SVbR3DI9xevoj0I1eyLAyk/Sg0BjFpvAB7vI/ZitZ52WunSuQcUw=
-X-Received: by 2002:a17:906:3882:: with SMTP id q2mr5834865ejd.396.1633088100599;
- Fri, 01 Oct 2021 04:35:00 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PgQJwBmVLBdUeAFbcJpLOUvKI5KGsOalaorIVrJziYU=;
+        b=EEqBQz/YanyTPZt1N+uCN9CvHxfjvGJ5u4tr/4fKbNlM8hgBBBTJW0HciWrKFop23y
+         jrL7t6abpMU3CtAJIWf2aHKv6PWpI455YJ9wLr1ftu1CnVfvncbZRoPGhk09TTB8cITk
+         c1AoSNs4ZlS+iw99oS8RVze5QvmlMjyKFq/szC+74KTEgBfjSzxkII9MWvB4yJmNF5JI
+         p5naKSvnDHvTCpu4qZAiPjMhKjXT0EzamgTzAyMdsQHiGHyduQz7zy23Sl8GIBvV6xAW
+         9gNvvyYtpOOr5nokQptrV+HrDkBMsoB76TqooxUvpgC2aUjftNM7ijaELyRt68cWK/if
+         iq/Q==
+X-Gm-Message-State: AOAM531xMYLpP0PgJXAdIXV5wxc/X4iC9l91nl3VLNyDyTO7z2xA3tgF
+        UR+AMa/1u0ORWw68cyEgPF7fs+YUNPvc9VpxG+qtFA==
+X-Google-Smtp-Source: ABdhPJxco3cL637mdMjAYhbk4AYPbPN/02smOY4EnT08ERaI7xmLVT0QYUwcEKNdpq2dlrNPhyl+AzDtpyyabfLalGs=
+X-Received: by 2002:a2e:8011:: with SMTP id j17mr10931191ljg.145.1633088303563;
+ Fri, 01 Oct 2021 04:38:23 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a17:906:724a:0:0:0:0 with HTTP; Fri, 1 Oct 2021 04:34:58
- -0700 (PDT)
-Reply-To: joymat52@gmail.com
-From:   Joyce Thomas <tjoyc1234@gmail.com>
-Date:   Fri, 1 Oct 2021 04:34:58 -0700
-Message-ID: <CAF-RpUjEy3ZrsPpj7r5ZFKjGM=JQyOMzOcWwONVKJZrBckwU0Q@mail.gmail.com>
-Subject: ATTN:
-To:     undisclosed-recipients:;
+References: <20210928235635.1348330-1-willmcvicker@google.com>
+ <7766faf8-2dd1-6525-3b9a-8ba790c29cff@canonical.com> <CABYd82YodFDwBxexCv+0hpYrdYEX1Z1CvnRkmnBPkEJNJ4bssQ@mail.gmail.com>
+ <CAOesGMgSt_mYvRzF0rC=fnjMYGO9EX0_Ow2cD1d8XKLD5pHsZA@mail.gmail.com>
+ <CAGETcx-b0ea-rqH+fj37sq9SLWY=+ePK94Y6rnLPuNbqFVBWmw@mail.gmail.com> <CAOesGMhQ3YsLJeQ7aUfb=0oNa3uPCx42wO1U7-ArqJTAUq1G3Q@mail.gmail.com>
+In-Reply-To: <CAOesGMhQ3YsLJeQ7aUfb=0oNa3uPCx42wO1U7-ArqJTAUq1G3Q@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 1 Oct 2021 13:38:11 +0200
+Message-ID: <CACRpkdajAwysiTOGuFcEySJjePp774J+4Z_YHXaoquTXk6cA+g@mail.gmail.com>
+Subject: Re: [PATCH v2 00/12] arm64: Kconfig: Update ARCH_EXYNOS select configs
+To:     Olof Johansson <olof@lixom.net>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-rtc <linux-rtc@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello Dear
-My Name is Mr. Joyce Thomas. Contact me for more information on the
-transfer of ($7.9 million dollars) left by my late client from your
-Country. I want to present you as a business partner and next of kin
-of the fund. I will give you the details of this transaction, as soon
-as I hear from you. I need the information below:
-Full Name:
-Address:
-Occupation:
-Age:
-Personal Email:
-Personal Telephone:
-Best Regards,
-Mr.Joyce  Thomas
+On Fri, Oct 1, 2021 at 7:36 AM Olof Johansson <olof@lixom.net> wrote:
+
+> A much more valuable approach would be to work towards being able to
+> free up memory by un-probed drivers at the end of boot. That would
+> possibly benefit all platforms on all architectures.
+
+This would be really neat.
+
+Also the ages-old problem of discarding unreferenced strings which
+apparently still isn't possible would be great to have solved. E.g.
+to couple strings to the file/module it belongs with and discard them
+if the code is not probed.
+
+Yours,
+Linus Walleij
