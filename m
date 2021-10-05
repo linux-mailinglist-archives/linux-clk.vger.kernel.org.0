@@ -2,101 +2,177 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35198422666
-	for <lists+linux-clk@lfdr.de>; Tue,  5 Oct 2021 14:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC2242276F
+	for <lists+linux-clk@lfdr.de>; Tue,  5 Oct 2021 15:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbhJEM2i (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 5 Oct 2021 08:28:38 -0400
-Received: from mail-oo1-f54.google.com ([209.85.161.54]:41699 "EHLO
-        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234780AbhJEM2g (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 5 Oct 2021 08:28:36 -0400
-Received: by mail-oo1-f54.google.com with SMTP id b5-20020a4ac285000000b0029038344c3dso6342924ooq.8;
-        Tue, 05 Oct 2021 05:26:45 -0700 (PDT)
+        id S234437AbhJENM7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 5 Oct 2021 09:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54562 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234614AbhJENM6 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 5 Oct 2021 09:12:58 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5F6C061749
+        for <linux-clk@vger.kernel.org>; Tue,  5 Oct 2021 06:11:08 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id y26so86533687lfa.11
+        for <linux-clk@vger.kernel.org>; Tue, 05 Oct 2021 06:11:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=jjr/5gs80cWEm3vhyk3aM1mKvl135EXltar2PLrRZ/k=;
+        b=P2GJcTPd6Kk45HZ8Ezt3mOStexgciMfR/ERjqn7quus9WPj7c0pgJ31TVKDyKIyFGw
+         Y+F7WGFBzXS/vp5jDxxMyzTz/hmBB5xPYGuEv6qEQ23KVdyCACYcfsWUkcNmRV/ofYHS
+         vE4LfuNllox/XGETXWlqstK2Q0L/vr7oXCynROhlgtpi4vvXnVvj6wEyBllh0eoIaYn8
+         f40td9gch4cO2Jp1h51EkJPAQ6/xwpwREWWIr5YIzLYLVQSBM9my6mb9NpueANAdQfBZ
+         CLGXLy2HZcaqGOasKeUtPNXPs47D7ubFHOmVm/lx2TuvCwySuEvv9iGf+AtaMpafWnSk
+         y69w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=12B425lue7e7bkxC1MmLr36fhfhw6Ghp6FxDgU81lTI=;
-        b=2ZvG6cRtRoQjw9TDwvPnA1TmO7OhqJ6eaJoK+UE/2H2KxmT0yPkim3HJ0SwNxgH+Z7
-         L4qfZL3FosZuTGVTVUwZ55JKyoLs9wObGO2QmDmq93cHAA0krvj0VAGxIGzH0B7t7GHk
-         E/ZrHImSvCpcGnvI15KWiQrBDn+ZStyY8k6E+aQbxedRW6XejOZdoR+K0IZTiBME4+eB
-         R7hGEnxcbG+u1YfMifCl0MjgwSYYXVG4WjfV2ohZCkDz3uDr+YRZd/4X2+FGMxeUtvlL
-         kTf6wrQahHRAHpC3IOoTrbrBKtdpMrZwU7JEk4BNkivYetrZ+JaSx//8GE3eGhMqYQzB
-         /J3A==
-X-Gm-Message-State: AOAM5335Z1tshfYxBdJgSgmTYQXDvLnF9Hw7PfTztOFx54noCi97LlR0
-        a4gs7jqglkDLP3ab2HPtdg==
-X-Google-Smtp-Source: ABdhPJzviUxP+uSvuH4E4JBAfoTZZ7tkOF4YnI98mcMiSAVS1rlPEbdZ3k7X70uJfL7DNdiD2Hhe0w==
-X-Received: by 2002:a4a:b994:: with SMTP id e20mr12894523oop.50.1633436805397;
-        Tue, 05 Oct 2021 05:26:45 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id g21sm3490872ooc.31.2021.10.05.05.26.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Oct 2021 05:26:44 -0700 (PDT)
-Received: (nullmailer pid 3226798 invoked by uid 1000);
-        Tue, 05 Oct 2021 12:26:38 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>, Taniya Das <tdas@codeaurora.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=jjr/5gs80cWEm3vhyk3aM1mKvl135EXltar2PLrRZ/k=;
+        b=QlxKc5XpmpsAe2YWKqXJM8yb1VxGXuEBLRVT4IBoHiDl+cZj2bE2rj2J3KH3I3x6GY
+         x+9dUeP5iB2op08R7/Cfie2KuBdF5vLAW1UZlUpfncmPat7W4VwvVxLdEpO2attEusQi
+         LqeyUhZmBAfJAxKxTdDahkV8W9HKkvccfXd3hkgV0HNUoj99LKp2yj9v+4A25qzUBZSz
+         s1F+E0vs4hnq4iJznRn6plBEkWFIesn6a0QAaoxo51tUINLNScfhT9eei9k6CZHY1EB6
+         s+kEi6vVpaiUq5ltdJN+SlhxzvqVm0BgT/hPuFzw5NQlDABypMe6piuMcgKsofpa9HI7
+         J5+Q==
+X-Gm-Message-State: AOAM531VYYaDYwAIfBP3W40lFsPAw/h3aAQa7WqAEc2oYDpj9xDajkqA
+        MQVOi5NUNIG+0QxwqEZRI8etUgfkVyvvsqQa9WUynw==
+X-Google-Smtp-Source: ABdhPJzhN75cYX0QdxPZZrVkTo8LNm3eo8IzoivQ7mSAH2J9FquztKwBCIMLaRlaWOOdBUUox7ZGcX1wvMYGNrjgk1w=
+X-Received: by 2002:a05:651c:20b:: with SMTP id y11mr22911109ljn.463.1633439466354;
+ Tue, 05 Oct 2021 06:11:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210926224058.1252-1-digetx@gmail.com> <20210926224058.1252-7-digetx@gmail.com>
+ <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com> <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com>
+In-Reply-To: <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 5 Oct 2021 15:10:30 +0200
+Message-ID: <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
+Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Martin Botka <martin.botka@somainline.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        phone-devel@vger.kernel.org
-In-Reply-To: <20211004195255.701220-2-marijn.suijten@somainline.org>
-References: <20211004195255.701220-1-marijn.suijten@somainline.org> <20211004195255.701220-2-marijn.suijten@somainline.org>
-Subject: Re: [PATCH v5 1/2] dt-bindings: clk: qcom: Document MSM8976 Global Clock Controller
-Date:   Tue, 05 Oct 2021 07:26:38 -0500
-Message-Id: <1633436798.553183.3226797.nullmailer@robh.at.kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, 04 Oct 2021 21:52:54 +0200, Marijn Suijten wrote:
-> Document the required properties and firmware clocks for gcc-msm8976 to
-> operate nominally, and add header definitions for referencing the clocks
-> from firmware.
-> 
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> ---
->  .../bindings/clock/qcom,gcc-msm8976.yaml      |  95 +++++++
->  include/dt-bindings/clock/qcom,gcc-msm8976.h  | 240 ++++++++++++++++++
->  2 files changed, 335 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-msm8976.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,gcc-msm8976.h
-> 
+On Sat, 2 Oct 2021 at 22:44, Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> 01.10.2021 15:32, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> >> +static __maybe_unused int tegra_clock_pm_suspend(struct device *dev)
+> >> +{
+> >> +       struct tegra_clk_device *clk_dev =3D dev_get_drvdata(dev);
+> >> +
+> >> +       /*
+> >> +        * Power management of the clock is entangled with the Tegra P=
+MC
+> >> +        * GENPD because PMC driver enables/disables clocks for toggli=
+ng
+> >> +        * of the PD's on/off state.
+> >> +        *
+> >> +        * The PMC GENPD is resumed in NOIRQ phase, before RPM of the =
+clocks
+> >> +        * becomes available, hence PMC can't use clocks at the early =
+resume
+> >> +        * phase if RPM is involved. For example when 3d clock is enab=
+led,
+> >> +        * it may enable the parent PLL clock that needs to be RPM-res=
+umed.
+> >> +        *
+> >> +        * Secondly, the PLL clocks may be enabled by the low level su=
+spend
+> >> +        * code, so we need to assume that PLL is in enabled state dur=
+ing
+> >> +        * suspend.
+> >> +        *
+> >> +        * We will keep PLLs and system clock resumed during suspend t=
+ime.
+> >> +        * All PLLs on all SoCs are low power and system clock is alwa=
+ys-on,
+> >> +        * so practically not much is changed here.
+> >> +        */
+> >> +
+> >> +       return clk_prepare(clk_dev->hw->clk);
+> > I am trying to understand, more exactly, what you intend to achieve
+> > with the clk_prepare() here. It looks a bit weird, to me. Can you try
+> > to elaborate a bit more on the use case?
+>
+> The Tegra GENPD driver enable/disable clocks when domain is turned on.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Okay. I noticed that in tegra_genpd_power_on(). And the same clocks
+are enabled/disabled also in tegra_genpd_power_off(), when powering
+off the PM domain.
 
-yamllint warnings/errors:
+So I guess the problem kind of exists for tegra_genpd_power_off() too?
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc-msm8976.example.dt.yaml: clock-controller@1800000: 'vdd_gfx-supply' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/qcom,gcc-msm8976.yaml
+> This can't be done during early system resume, when domains are getting
+> turned on by the drivers core, because when clock is enabled, it's
+> getting prepared (RPM-resumed) and this preparation fails because
+> performance state of the clock goes up and it doesn't work during the
+> early resume time since I2C, which applies the state to hardware, is
+> suspended and can't work at that early time.
 
-doc reference errors (make refcheckdocs):
+This sounds complicated and I still don't quite follow all of it, sorry.
 
-See https://patchwork.ozlabs.org/patch/1536345
+So, tegra_genpd_power_on() gets called from genpd_resume_noirq(), when
+the first device of the attached devices to genpd gets resumed. And
+vice versa for tegra_genpd_power_off() and genpd_suspend_noirq().
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+Are you saying that trying to enable/disable clocks from
+tegra_genpd_power_on|off() in these paths doesn't work, because it
+would also require the performance state to be changed, which would
+fail because the I2C bus/driver is suspended?
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+>
+> Secondly, Tegra has arch-specific low level assembly which touches
+> clocks during last phase of system suspend and in the beginning of
+> resume. Hence, clocks should stay prepared during suspend just because
+> technically clock should be prepared before it can be enabled.
 
-pip3 install dtschema --upgrade
+So the low level code is gating and ungating the clock behind the back
+of the clock driver then? Why is that done like that, more exactly?
 
-Please check and re-submit.
+>
+> > Is this rather about making sure that the clock's corresponding PM
+> > domain stays powered on during system suspend? In that case, I think
+> > there may be an alternative option....
+> >
+>
+> This is not about domain staying powered on, this is about keeping the
+> performance state of the domain high during suspend.
 
+Right, so the PM domain managed in tegra_genpd_power_on|off() can
+still be powered on/off, as long as the clock remains ungated?
+
+Kind regards
+Uffe
