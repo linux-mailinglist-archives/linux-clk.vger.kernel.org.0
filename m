@@ -2,185 +2,284 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA02424A7B
-	for <lists+linux-clk@lfdr.de>; Thu,  7 Oct 2021 01:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D807424B46
+	for <lists+linux-clk@lfdr.de>; Thu,  7 Oct 2021 02:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231817AbhJFXX3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 6 Oct 2021 19:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48646 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbhJFXX3 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 6 Oct 2021 19:23:29 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0962CC061746;
-        Wed,  6 Oct 2021 16:21:36 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id u18so16621926lfd.12;
-        Wed, 06 Oct 2021 16:21:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=a/ql+r46Ame/CsYV0fgunPq11GmpNhDml+WxJj5qjlw=;
-        b=JKm7LKBrYq3LrZ9P4TjFV0xnEVV5oFhCjO8jq6QK7r2sFfCeLaVeWur8vvLPj+bcOK
-         3ijaiGyLljSMAfPZa/VEYRjgPnOewdTfLJQxCvN+JoRDS0HLgzZ/q74pg+AjPcazOz5n
-         Ojaq8PwZPy62kphplYEz4vipCog/VV6Km3G5D02Il8G/wXPvM3NBBGINMv+/vd2EsRW/
-         ycYWRLlWm7GUP5avwqaptqbxeuw3LLjZMY0lQri8idx3TDLJaVfHQvWlFwviTkzmJ6Bh
-         ZAj2Z9AxhyKDP0C7wPQxPxv1LVpnFliUedydnUalNZFKZFx7963POwxq1miRructAR4w
-         QIgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=a/ql+r46Ame/CsYV0fgunPq11GmpNhDml+WxJj5qjlw=;
-        b=EBwP1BVeDqljgyEpGZ7McX+6MlY4MUSKMMfczvA0rSMoZR5X1YYPRQfbLFGSS4xLe2
-         fgbjU1lG2qtYkRmvMD0zSpeCFuEiXtONKodU5p6BD/c7W6YOez8h5SxZ048dZ0aEKBHB
-         9UPimE5lcm/yjMJCzpmFZcI2HAS2pMWiQ+8fxc5ZEbapDom73e61exCBmMoBhhfOb2aO
-         nqUiZo74y+cV/fDQ5Q2Jk2YiVFbYvmrf9MBY2ds158DA6bWz1hjtF4mkEB/gdQ9E2prU
-         2H2pzCvMegz5ritUhNhrrKYNE9UvvQrNmjN/QE9jo2BT6MenNEn8DyUgljgx13erxBAX
-         Q/bA==
-X-Gm-Message-State: AOAM530rnz+zWu91sWjdFfBi6VHyI1C4iQBTnepx4kBiIufJftrGR5kC
-        UToaIVHa9G9tBiCTrxZC20A=
-X-Google-Smtp-Source: ABdhPJw1nzydLMDqpraN/PkeCiCqMRjExYJnqaQOWQLneLDJ9G5wjD+HFXU5hLbNfgyv+WR4nF9vzQ==
-X-Received: by 2002:a2e:8858:: with SMTP id z24mr902852ljj.203.1633562494365;
-        Wed, 06 Oct 2021 16:21:34 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-163-57.dynamic.spd-mgts.ru. [79.139.163.57])
-        by smtp.googlemail.com with ESMTPSA id 9sm2377459ljo.78.2021.10.06.16.21.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Oct 2021 16:21:34 -0700 (PDT)
-Subject: Re: [PATCH v13 06/35] clk: tegra: Support runtime PM and power domain
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-pwm@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-References: <20210926224058.1252-1-digetx@gmail.com>
- <20210926224058.1252-7-digetx@gmail.com>
- <CAPDyKFq+LS4Jr1GyC-a-tGWPzGH0JxfJ9wKY=uQEBGYm952azw@mail.gmail.com>
- <24101cd6-d3f5-1e74-db39-145ecd30418b@gmail.com>
- <CAPDyKFreK7976PJL-1zySoza_yXM7rMQ64aODWUZ+U3L-uCa0w@mail.gmail.com>
- <4bdba8a2-4b9b-ed7d-e6ca-9218d8200a85@gmail.com>
- <74a47158-e2e4-5fd0-3f37-0b50d4ead4d9@gmail.com>
- <CAPDyKFr2-f1wM+6jF9vWJ-Nq80Zg1Z3qFP6saULOrBi1270HGw@mail.gmail.com>
- <b06bf794-b8b3-417b-58ef-4d815ca86c95@gmail.com>
- <4c7b1a4c-c136-3650-8f77-9f98caa506f7@gmail.com>
-Message-ID: <2dd6bffc-9817-f4b1-0b92-f82f22fcf79a@gmail.com>
-Date:   Thu, 7 Oct 2021 02:21:32 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <4c7b1a4c-c136-3650-8f77-9f98caa506f7@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S240100AbhJGAqJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 6 Oct 2021 20:46:09 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:53095 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240091AbhJGAqI (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 6 Oct 2021 20:46:08 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1633567455; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=F9LFd7zEp2fy5P7bq+8J1pgiTkSQRvBHWbOHAJ8Jwf8=; b=iFDYAPVpXMAzjl45OKw7rvUtPMBvMXHfOptwQYHeKzl+Pu82VlkPbyVz0cHs6hIe5T4HBFBp
+ 1To5t5oXJRnrLBoaQ0BdNPYMmXiuDhAQu26q81FAbygL8IEeFYwKUSlAjLZWO6bC2X+Y8/VG
+ Z3TIMLd2SCUybewOZcqMASOUNDE=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI4MzlhZiIsICJsaW51eC1jbGtAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
+ 615e42ce003e680efb8fc086 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 07 Oct 2021 00:43:58
+ GMT
+Sender: tdas=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8A85EC4360D; Thu,  7 Oct 2021 00:43:57 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from tdas-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: tdas)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 152A2C4338F;
+        Thu,  7 Oct 2021 00:43:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 152A2C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Taniya Das <tdas@codeaurora.org>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?q?Michael=20Turquette=20=C2=A0?= <mturquette@baylibre.com>
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh@kernel.org, robh+dt@kernel.org,
+        Taniya Das <tdas@codeaurora.org>
+Subject: [PATCH v1 1/2] dt-bindings: clock: Add YAML schemas for CAMCC clocks on SC7280
+Date:   Thu,  7 Oct 2021 06:13:44 +0530
+Message-Id: <1633567425-11953-1-git-send-email-tdas@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-07.10.2021 01:01, Dmitry Osipenko пишет:
-> 07.10.2021 00:14, Dmitry Osipenko пишет:
->> 06.10.2021 15:43, Ulf Hansson пишет:
->>> On Wed, 6 Oct 2021 at 00:43, Dmitry Osipenko <digetx@gmail.com> wrote:
->>>>
->>>> 06.10.2021 01:19, Dmitry Osipenko пишет:
->>>> ...
->>>>> I reproduced the OFF problem by removing the clk prepare/unprepare from
->>>>> the suspend/resume of the clk driver and making some extra changes to
->>>>> clock tree topology and etc to trigger the problem on Nexus 7.
->>>>>
->>>>> tegra-pmc 7000e400.pmc: failed to turn off PM domain heg: -13
->>>>>
->>>>> It happens from genpd_suspend_noirq() -> tegra_genpd_power_off() -> clk
->>>>> -> GENPD -> I2C -> runtime-pm.
->>>>>
->>>>> -13 is EACCES, it comes from the runtime PM of I2C device. RPM is
->>>>> prohibited/disabled during late (NOIRQ) suspend by the drivers core.
->>>>
->>>> My bad, I double-checked and it's not I2C RPM that is failing now, but
->>>> the clock's RPM [1], which is also unavailable during NOIRQ.
->>>
->>> Yes, that sounds reasonable.
->>>
->>> You would then need a similar patch for the tegra clock driver as I
->>> suggested for tegra I2C driver. That should solve the problem, I
->>> think.
->>>
->>>>
->>>> [1]
->>>> https://elixir.free-electrons.com/linux/v5.15-rc4/source/drivers/clk/clk.c#L116
->>>>
->>>> Previously it was I2C RPM that was failing in a similar way, but code
->>>> changed a tad since that time.
->>>
->>> Alright. In any case, as long as the devices gets suspended in the
->>> correct order, I think it should be fine to cook a patch along the
->>> lines of what I suggest for the I2C driver as well.
->>>
->>> It should work, I think. Although, maybe you want to avoid runtime
->>> resuming the I2C device, unless it's the device belonging to the PMIC
->>> interface, if there is a way to distinguish that for the driver.
->>
->> Ulf, thank you very much for the suggestions! I was thinking about this
->> all once again and concluded that the simplest variant will be to just
->> remove the suspend ops from the clk driver since neither of PLLs require
->> high voltage. We now have voltage bumped to a nominal level during
->> suspend by Tegra's regulator-coupler driver and it's much higher than
->> voltage needed by PLLs. So the problem I was trying to work around
->> doesn't really exist anymore.
-> 
-> I hurried a bit with the conclusion, keep forgetting that I need to
-> change the clock tree in order to test it all properly :/ It's not fixed
-> yet.
-> 
+The camera clock controller clock provider have a bunch of generic
+properties that are needed in a device tree. Add the CAMCC clock IDs for
+camera client to request for the clocks.
 
-Please let me iterate once again. The problem we currently have is that
-clock may be enabled during NOIRQ time. In order to enable clock, it
-needs to be prepared. In order to prepare clock, the clock's device
-needs to be runtime-resumed. The runtime PM is unavailable at the NOIRQ
-time.
+Signed-off-by: Taniya Das <tdas@codeaurora.org>
+---
+ .../bindings/clock/qcom,sc7280-camcc.yaml          |  71 ++++++++++++
+ include/dt-bindings/clock/qcom,camcc-sc7280.h      | 127 +++++++++++++++++++++
+ 2 files changed, 198 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,sc7280-camcc.yaml
+ create mode 100644 include/dt-bindings/clock/qcom,camcc-sc7280.h
 
-To solve this problem we need to prepare clock beforehand.
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sc7280-camcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sc7280-camcc.yaml
+new file mode 100644
+index 0000000..f27ca6f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/qcom,sc7280-camcc.yaml
+@@ -0,0 +1,71 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/qcom,sc7280-camcc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Camera Clock & Reset Controller Binding for SC7280
++
++maintainers:
++  - Taniya Das <tdas@codeaurora.org>
++
++description: |
++  Qualcomm camera clock control module which supports the clocks, resets and
++  power domains on SC7280.
++
++  See also dt-bindings/clock/qcom,camcc-sc7280.h
++
++properties:
++  compatible:
++    const: qcom,sc7280-camcc
++
++  clocks:
++    items:
++      - description: Board XO source
++      - description: Board XO active source
++      - description: Sleep clock source
++
++  clock-names:
++    items:
++      - const: bi_tcxo
++      - const: bi_tcxo_ao
++      - const: sleep_clk
++
++  '#clock-cells':
++    const: 1
++
++  '#reset-cells':
++    const: 1
++
++  '#power-domain-cells':
++    const: 1
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - '#clock-cells'
++  - '#reset-cells'
++  - '#power-domain-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,rpmh.h>
++    clock-controller@ad00000 {
++      compatible = "qcom,sc7280-camcc";
++      reg = <0x0ad00000 0x10000>;
++      clocks = <&rpmhcc RPMH_CXO_CLK>,
++               <&rpmhcc RPMH_CXO_CLK_A>,
++               <&sleep_clk>;
++      clock-names = "bi_tcxo", "bi_tcxo_ao", "sleep_clk";
++      #clock-cells = <1>;
++      #reset-cells = <1>;
++      #power-domain-cells = <1>;
++    };
++...
+diff --git a/include/dt-bindings/clock/qcom,camcc-sc7280.h b/include/dt-bindings/clock/qcom,camcc-sc7280.h
+new file mode 100644
+index 0000000..56640f4
+--- /dev/null
++++ b/include/dt-bindings/clock/qcom,camcc-sc7280.h
+@@ -0,0 +1,127 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
++ */
++
++#ifndef _DT_BINDINGS_CLK_QCOM_CAM_CC_SC7280_H
++#define _DT_BINDINGS_CLK_QCOM_CAM_CC_SC7280_H
++
++/* CAM_CC clocks */
++#define CAM_CC_PLL0				0
++#define CAM_CC_PLL0_OUT_EVEN			1
++#define CAM_CC_PLL0_OUT_ODD			2
++#define CAM_CC_PLL1				3
++#define CAM_CC_PLL1_OUT_EVEN			4
++#define CAM_CC_PLL2				5
++#define CAM_CC_PLL2_OUT_AUX			6
++#define CAM_CC_PLL2_OUT_AUX2			7
++#define CAM_CC_PLL3				8
++#define CAM_CC_PLL3_OUT_EVEN			9
++#define CAM_CC_PLL4				10
++#define CAM_CC_PLL4_OUT_EVEN			11
++#define CAM_CC_PLL5				12
++#define CAM_CC_PLL5_OUT_EVEN			13
++#define CAM_CC_PLL6				14
++#define CAM_CC_PLL6_OUT_EVEN			15
++#define CAM_CC_PLL6_OUT_ODD			16
++#define CAM_CC_BPS_AHB_CLK			17
++#define CAM_CC_BPS_AREG_CLK			18
++#define CAM_CC_BPS_AXI_CLK			19
++#define CAM_CC_BPS_CLK				20
++#define CAM_CC_BPS_CLK_SRC			21
++#define CAM_CC_CAMNOC_AXI_CLK			22
++#define CAM_CC_CAMNOC_AXI_CLK_SRC		23
++#define CAM_CC_CAMNOC_DCD_XO_CLK		24
++#define CAM_CC_CCI_0_CLK			25
++#define CAM_CC_CCI_0_CLK_SRC			26
++#define CAM_CC_CCI_1_CLK			27
++#define CAM_CC_CCI_1_CLK_SRC			28
++#define CAM_CC_CORE_AHB_CLK			29
++#define CAM_CC_CPAS_AHB_CLK			30
++#define CAM_CC_CPHY_RX_CLK_SRC			31
++#define CAM_CC_CSI0PHYTIMER_CLK			32
++#define CAM_CC_CSI0PHYTIMER_CLK_SRC		33
++#define CAM_CC_CSI1PHYTIMER_CLK			34
++#define CAM_CC_CSI1PHYTIMER_CLK_SRC		35
++#define CAM_CC_CSI2PHYTIMER_CLK			36
++#define CAM_CC_CSI2PHYTIMER_CLK_SRC		37
++#define CAM_CC_CSI3PHYTIMER_CLK			38
++#define CAM_CC_CSI3PHYTIMER_CLK_SRC		39
++#define CAM_CC_CSI4PHYTIMER_CLK			40
++#define CAM_CC_CSI4PHYTIMER_CLK_SRC		41
++#define CAM_CC_CSIPHY0_CLK			42
++#define CAM_CC_CSIPHY1_CLK			43
++#define CAM_CC_CSIPHY2_CLK			44
++#define CAM_CC_CSIPHY3_CLK			45
++#define CAM_CC_CSIPHY4_CLK			46
++#define CAM_CC_FAST_AHB_CLK_SRC			47
++#define CAM_CC_GDSC_CLK				48
++#define CAM_CC_ICP_AHB_CLK			49
++#define CAM_CC_ICP_CLK				50
++#define CAM_CC_ICP_CLK_SRC			51
++#define CAM_CC_IFE_0_AXI_CLK			52
++#define CAM_CC_IFE_0_CLK			53
++#define CAM_CC_IFE_0_CLK_SRC			54
++#define CAM_CC_IFE_0_CPHY_RX_CLK		55
++#define CAM_CC_IFE_0_CSID_CLK			56
++#define CAM_CC_IFE_0_CSID_CLK_SRC		57
++#define CAM_CC_IFE_0_DSP_CLK			58
++#define CAM_CC_IFE_1_AXI_CLK			59
++#define CAM_CC_IFE_1_CLK			60
++#define CAM_CC_IFE_1_CLK_SRC			61
++#define CAM_CC_IFE_1_CPHY_RX_CLK		62
++#define CAM_CC_IFE_1_CSID_CLK			63
++#define CAM_CC_IFE_1_CSID_CLK_SRC		64
++#define CAM_CC_IFE_1_DSP_CLK			65
++#define CAM_CC_IFE_2_AXI_CLK			66
++#define CAM_CC_IFE_2_CLK			67
++#define CAM_CC_IFE_2_CLK_SRC			68
++#define CAM_CC_IFE_2_CPHY_RX_CLK		69
++#define CAM_CC_IFE_2_CSID_CLK			70
++#define CAM_CC_IFE_2_CSID_CLK_SRC		71
++#define CAM_CC_IFE_2_DSP_CLK			72
++#define CAM_CC_IFE_LITE_0_CLK			73
++#define CAM_CC_IFE_LITE_0_CLK_SRC		74
++#define CAM_CC_IFE_LITE_0_CPHY_RX_CLK		75
++#define CAM_CC_IFE_LITE_0_CSID_CLK		76
++#define CAM_CC_IFE_LITE_0_CSID_CLK_SRC		77
++#define CAM_CC_IFE_LITE_1_CLK			78
++#define CAM_CC_IFE_LITE_1_CLK_SRC		79
++#define CAM_CC_IFE_LITE_1_CPHY_RX_CLK		80
++#define CAM_CC_IFE_LITE_1_CSID_CLK		81
++#define CAM_CC_IFE_LITE_1_CSID_CLK_SRC		82
++#define CAM_CC_IPE_0_AHB_CLK			83
++#define CAM_CC_IPE_0_AREG_CLK			84
++#define CAM_CC_IPE_0_AXI_CLK			85
++#define CAM_CC_IPE_0_CLK			86
++#define CAM_CC_IPE_0_CLK_SRC			87
++#define CAM_CC_JPEG_CLK				88
++#define CAM_CC_JPEG_CLK_SRC			89
++#define CAM_CC_LRME_CLK				90
++#define CAM_CC_LRME_CLK_SRC			91
++#define CAM_CC_MCLK0_CLK			92
++#define CAM_CC_MCLK0_CLK_SRC			93
++#define CAM_CC_MCLK1_CLK			94
++#define CAM_CC_MCLK1_CLK_SRC			95
++#define CAM_CC_MCLK2_CLK			96
++#define CAM_CC_MCLK2_CLK_SRC			97
++#define CAM_CC_MCLK3_CLK			98
++#define CAM_CC_MCLK3_CLK_SRC			99
++#define CAM_CC_MCLK4_CLK			100
++#define CAM_CC_MCLK4_CLK_SRC			101
++#define CAM_CC_MCLK5_CLK			102
++#define CAM_CC_MCLK5_CLK_SRC			103
++#define CAM_CC_SLEEP_CLK			104
++#define CAM_CC_SLEEP_CLK_SRC			105
++#define CAM_CC_SLOW_AHB_CLK_SRC			106
++#define CAM_CC_XO_CLK_SRC			107
++
++/* CAM_CC power domains */
++#define CAM_CC_BPS_GDSC				0
++#define CAM_CC_IFE_0_GDSC			1
++#define CAM_CC_IFE_1_GDSC			2
++#define CAM_CC_IFE_2_GDSC			3
++#define CAM_CC_IPE_0_GDSC			4
++#define CAM_CC_TITAN_TOP_GDSC			5
++
++#endif
+--
+Qualcomm INDIA, on behalf of Qualcomm Innovation Center, Inc.is a member
+of the Code Aurora Forum, hosted by the  Linux Foundation.
 
-The clock will stay prepared during suspend, but this is not a problem
-since all the clocks we care about don't require high voltage and
-voltage is guaranteed to be bumped high during suspend by Tegra's
-regulator-coupler driver anyways.
-
-So everything we need to do is to keep clocks prepared. There are two
-options how to do that:
-
-[1] this patch which explicitly prepares clocks using clk API.
-
-[2] Use runtime PM API, like this:
-
-static const struct dev_pm_ops tegra_clock_pm = {
-	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_resume_and_get, pm_runtime_put)
-};
-
-Ulf, are you now okay with the current variant [1] of the patch or you
-prefer the second [2] option more?
