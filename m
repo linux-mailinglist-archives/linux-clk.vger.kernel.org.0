@@ -2,57 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBFF4269E3
-	for <lists+linux-clk@lfdr.de>; Fri,  8 Oct 2021 13:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C684269FE
+	for <lists+linux-clk@lfdr.de>; Fri,  8 Oct 2021 13:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240752AbhJHLoq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 8 Oct 2021 07:44:46 -0400
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:33736
+        id S242442AbhJHLpT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 8 Oct 2021 07:45:19 -0400
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:33766
         "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243021AbhJHLmG (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 8 Oct 2021 07:42:06 -0400
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        by vger.kernel.org with ESMTP id S242433AbhJHLmL (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 8 Oct 2021 07:42:11 -0400
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id F031C4001F
-        for <linux-clk@vger.kernel.org>; Fri,  8 Oct 2021 11:40:07 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A5C3140016
+        for <linux-clk@vger.kernel.org>; Fri,  8 Oct 2021 11:40:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1633693207;
-        bh=phCSw5kxExg8gioSpHB+wngrq+jBT0Kz7+SB/4iyLt8=;
+        s=20210705; t=1633693214;
+        bh=B1LQlQ7B/5D6Dgl3qfPf6DLDJ9sR5D/GqEBR3sbuvCA=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=QjerPsuD1CpeLJpG9Rkjwtmtkb/UHt6DdhmDIbitTjXj+Mo+4k0Xk4K+q0OV5Y1xC
-         xm1iAawXpaqUU26cobtCpm6IhGEeNnM6SuWFJ07MU0T5p+PIUcNT1NB1Ttf7TPjdXh
-         iAkoLgZI+zezZJlGQx2dl+hT3Kr+WYhHJbAhZFGSvXMiNH9ywF2UEr99AVbKr8mAhZ
-         qjZOWVMrzRlpyzMipCC3M3g4AiMKGitBpPcqTEHda7bgmKvqHuMg7byl3DoNzkqtXm
-         ih3Zn0f5WxGmmSFMCbBhC9WdVapOCghBshJ6PtfjqXkCPurlOUUs5YABkVTDHH2/pz
-         QiOUIfLkPzrPg==
-Received: by mail-ed1-f71.google.com with SMTP id q26-20020aa7da9a000000b003db531e7acbso4556261eds.22
-        for <linux-clk@vger.kernel.org>; Fri, 08 Oct 2021 04:40:07 -0700 (PDT)
+        b=jXU0HLLgHBaP1b7E567QazLOTnCenmdPEKIxgTYwd0zt+wHIBLibRkevKhFr//AN1
+         leU4BzaBt8JJjFrQVt+CRv4gWc0ngzUj3Prelg5gTY+FF6Twz5QUXKz9wbE9a6MEIB
+         hcuKh5q9Zgy/doqv1uRvWVVQoRh1/X89XMdyERmAvrVx90U2HJfhMmWz0pANEpFMpW
+         Zjt0eT1/n5dsnLaCZ04IoCre5gJn5s3/UJAXSARMDs5DAM9KvC5ol18/2D39TZ/8rG
+         aLgO94H3TCqq0g3IHI3SQX243y/E72CYC1Fu4spNsrT4Z8ZhnSibdfx3SNPMJE0VhQ
+         fU8twIfe4m2Dg==
+Received: by mail-ed1-f69.google.com with SMTP id u23-20020a50a417000000b003db23c7e5e2so8941665edb.8
+        for <linux-clk@vger.kernel.org>; Fri, 08 Oct 2021 04:40:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=phCSw5kxExg8gioSpHB+wngrq+jBT0Kz7+SB/4iyLt8=;
-        b=s+WPFk7SBx1IcQkntllZ6VNOm2/FVakfCQrF2PJYornidn5RkF/Zr3K/CnMJsCxSSt
-         m+e2phE0j2kVebsly0IegIJyJ16U/5zdMDiP6y/uNLDgCckq3uF++aPqa0vmFhQ+sBwq
-         QAIynBy/TKuCVeS9x5oY8woaUq0NX8Vr02RhqsJBgU/QIN/Ezs4tidoQrYFYGb0gq0u+
-         SUSzylTEC9kbdYMvmhnfhj+U5URlw3fqbsbWL0AEWHXHsUE81oOzp85mEJAeqwtSvoHg
-         o7JeN5Eh3GiPbaIZ5gFRKrRjZJA9zjIMUZDU1/Ewb+RzX+jkkr8a4LdBh63fOcKKGhk8
-         nnBg==
-X-Gm-Message-State: AOAM530oYGSiZetQHo98qTVbflI1ozKC0HyJyco3dUKpV09WHK0V690D
-        Knri/boLCCcphmpAMQPrI2e/7Ijf+AmrYXL1Ygll6EC2l2eApd4HihS0nPcqTqwV025ciVWdRwq
-        CiWbMEvGYw4tCAQ5R/EXTSyLwcQ6aS2tSdkvRfw==
-X-Received: by 2002:a17:906:ce25:: with SMTP id sd5mr2060556ejb.398.1633693207182;
-        Fri, 08 Oct 2021 04:40:07 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwjmBMRe5dusDzDWdeybqFAP2p4bJKuoJO1MbaP0Wf2d/EeDSDH1EOvWJ1WMv1k1yjFSY8Xzg==
-X-Received: by 2002:a17:906:ce25:: with SMTP id sd5mr2060528ejb.398.1633693206877;
-        Fri, 08 Oct 2021 04:40:06 -0700 (PDT)
+        bh=B1LQlQ7B/5D6Dgl3qfPf6DLDJ9sR5D/GqEBR3sbuvCA=;
+        b=LeeBp5dl53rw8QE6Pit0L+77NPcgPulEdEv3srtdcvgvWBsEKHPMBsRD1RoForUi8G
+         mxaJCNZVtH8qIK3x5lUKUUsNlF3Cn9qm6p+aj8lkGQTskMin5za//Vr8fEKnxH/1nDIg
+         tiiWRIkzlhgXhS8inKA2uEOHBcmn9t9UDkW7LvAt88yD+GEVZ9PjrRDIUk2YLjzD3Odj
+         nTb5HHogYxGL6bh2Ri/Fmh+wvJo8h7dHqVFULuv9K6GxK2JU8Bv8PvoJyKyek4/T4Ogw
+         JAFE9EkntDruxuL4PGnMoD+xYrRTzR7TbmBxXO84sqnQ5jvsK6aDme4WcCjNrps8AbPH
+         Aisw==
+X-Gm-Message-State: AOAM532PDKMMYQvmQ3zn1kxAXd0iWy/qa3rDSfIUx2LPCxNzsaBvhg7R
+        ZilDfQWgE6wDeOcqwZbyJEWNa735cFPjNenH6I9ojaPLc9tmwmX2Oro4raCfFX5XauA2BABBGrG
+        JxbXSkwjrcdskh/FM7CYTUQbYtEidd0tAJp2T6Q==
+X-Received: by 2002:a17:906:c1d0:: with SMTP id bw16mr3691956ejb.146.1633693214140;
+        Fri, 08 Oct 2021 04:40:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwuKP5BdLY5Fq3JlRDEgrRfyOt0gnhtGpKb+dXUYuugRnsOqnr9q4TsCmLP/rwcRPZSHNmP0w==
+X-Received: by 2002:a17:906:c1d0:: with SMTP id bw16mr3691930ejb.146.1633693213918;
+        Fri, 08 Oct 2021 04:40:13 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-186-13.adslplus.ch. [188.155.186.13])
-        by smtp.gmail.com with ESMTPSA id c17sm901437edu.11.2021.10.08.04.40.06
+        by smtp.gmail.com with ESMTPSA id c17sm901437edu.11.2021.10.08.04.40.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Oct 2021 04:40:06 -0700 (PDT)
+        Fri, 08 Oct 2021 04:40:13 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -69,9 +69,9 @@ To:     Michael Turquette <mturquette@baylibre.com>,
         linux-samsung-soc@vger.kernel.org
 Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 04/10] regulator: dt-bindings: samsung,s2m: convert to dtschema
-Date:   Fri,  8 Oct 2021 13:39:26 +0200
-Message-Id: <20211008113931.134847-1-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v4 05/10] regulator: dt-bindings: samsung,s2mpa01: convert to dtschema
+Date:   Fri,  8 Oct 2021 13:39:27 +0200
+Message-Id: <20211008113931.134847-2-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211008113723.134648-1-krzysztof.kozlowski@canonical.com>
 References: <20211008113723.134648-1-krzysztof.kozlowski@canonical.com>
@@ -81,41 +81,30 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Convert the regulators of Samsung
-S2MPS11/S2MPS13/S2MPS14/S2MPS15/S2MPU02 family of PMICs to DT schema
-format.
+Convert the regulators of Samsung S2MPA01 PMIC to DT schema format.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../bindings/regulator/samsung,s2mps11.txt    | 102 ------------------
- .../bindings/regulator/samsung,s2mps11.yaml   |  44 ++++++++
- .../bindings/regulator/samsung,s2mps13.yaml   |  44 ++++++++
- .../bindings/regulator/samsung,s2mps14.yaml   |  44 ++++++++
- .../bindings/regulator/samsung,s2mps15.yaml   |  44 ++++++++
- .../bindings/regulator/samsung,s2mpu02.yaml   |  44 ++++++++
- MAINTAINERS                                   |   2 +-
- 7 files changed, 221 insertions(+), 103 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/regulator/samsung,s2mps11.txt
- create mode 100644 Documentation/devicetree/bindings/regulator/samsung,s2mps11.yaml
- create mode 100644 Documentation/devicetree/bindings/regulator/samsung,s2mps13.yaml
- create mode 100644 Documentation/devicetree/bindings/regulator/samsung,s2mps14.yaml
- create mode 100644 Documentation/devicetree/bindings/regulator/samsung,s2mps15.yaml
- create mode 100644 Documentation/devicetree/bindings/regulator/samsung,s2mpu02.yaml
+ .../bindings/regulator/samsung,s2mpa01.txt    | 79 -------------------
+ .../bindings/regulator/samsung,s2mpa01.yaml   | 62 +++++++++++++++
+ 2 files changed, 62 insertions(+), 79 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/regulator/samsung,s2mpa01.txt
+ create mode 100644 Documentation/devicetree/bindings/regulator/samsung,s2mpa01.yaml
 
-diff --git a/Documentation/devicetree/bindings/regulator/samsung,s2mps11.txt b/Documentation/devicetree/bindings/regulator/samsung,s2mps11.txt
+diff --git a/Documentation/devicetree/bindings/regulator/samsung,s2mpa01.txt b/Documentation/devicetree/bindings/regulator/samsung,s2mpa01.txt
 deleted file mode 100644
-index 27a48bf1b185..000000000000
---- a/Documentation/devicetree/bindings/regulator/samsung,s2mps11.txt
+index bae3c7f838cf..000000000000
+--- a/Documentation/devicetree/bindings/regulator/samsung,s2mpa01.txt
 +++ /dev/null
-@@ -1,102 +0,0 @@
--Binding for Samsung S2M family regulator block
--==============================================
+@@ -1,79 +0,0 @@
+-Binding for Samsung S2MPA01 regulator block
+-===========================================
 -
 -This is a part of device tree bindings for S2M family multi-function devices.
 -More information can be found in bindings/mfd/sec-core.txt file.
 -
--The S2MPS11/13/14/15 and S2MPU02 devices provide buck and LDO regulators.
+-The S2MPA01 device provide buck and LDO regulators.
 -
 -To register these with regulator framework instantiate under main device node
 -a sub-node named "regulators" with more sub-nodes for each regulator using the
@@ -123,73 +112,50 @@ index 27a48bf1b185..000000000000
 - - Documentation/devicetree/bindings/regulator/regulator.txt
 -
 -
--Names of regulators supported by different devices:
+-Names of regulators supported by S2MPA01 device:
 -	- LDOn
--		  - valid values for n are:
--			- S2MPS11: 1 to 38
--			- S2MPS13: 1 to 40
--			- S2MPS14: 1 to 25
--			- S2MPS15: 1 to 27
--			- S2MPU02: 1 to 28
--		  - Example: LDO1, LDO2, LDO28
+-		  - valid values for n are 1 to 26
+-		  - Example: LDO1, LD02, LDO26
 -	- BUCKn
--		  - valid values for n are:
--			- S2MPS11: 1 to 10
--			- S2MPS13: 1 to 10
--			- S2MPS14: 1 to 5
--			- S2MPS15: 1 to 10
--			- S2MPU02: 1 to 7
+-		  - valid values for n are 1 to 10.
 -		  - Example: BUCK1, BUCK2, BUCK9
 -Note: The 'n' in LDOn and BUCKn represents the LDO or BUCK number
 -as per the datasheet of device.
 -
 -
--Optional properties of the nodes under "regulators" sub-node:
-- - regulator-ramp-delay: ramp delay in uV/us. May be 6250, 12500,
--   25000 (default) or 50000.
+-Optional properties of buck regulator nodes under "regulators" sub-node:
+- - regulator-ramp-delay: ramp delay in uV/us. May be 6250, 12500
+-   (default), 25000, or 50000. May be 0 for disabling the ramp delay on
+-   BUCK{1,2,3,4}.
 -
--   Additionally S2MPS11 supports disabling ramp delay for BUCK{2,3,4,6}
--   by setting it to <0>.
+-   In the absence of the regulator-ramp-delay property, the default ramp
+-   delay will be used.
 -
--   Note: On S2MPS11 some bucks share the ramp rate setting i.e. same ramp value
+-   Note: Some bucks share the ramp rate setting i.e. same ramp value
 -   will be set for a particular group of bucks so provide the same
 -   regulator-ramp-delay value for them.
 -   Groups sharing ramp rate:
 -    - buck{1,6},
--    - buck{3,4},
--    - buck{7,8,10}.
--
-- - samsung,ext-control-gpios: On S2MPS14 the LDO10, LDO11 and LDO12 can be
--   configured to external control over GPIO. To turn this feature on this
--   property must be added to the regulator sub-node:
--    - samsung,ext-control-gpios: GPIO specifier for one GPIO
--                                 controlling this regulator (enable/disable)
--  Example:
--	LDO12 {
--		regulator-name = "V_EMMC_2.8V";
--		regulator-min-microvolt = <2800000>;
--		regulator-max-microvolt = <2800000>;
--		samsung,ext-control-gpios = <&gpk0 2 0>;
--	};
--
+-    - buck{2,4},
+-    - buck{8,9,10}.
 -
 -Example:
 -
--	s2mps11_pmic@66 {
--		compatible = "samsung,s2mps11-pmic";
+-	s2mpa01_pmic@66 {
+-		compatible = "samsung,s2mpa01-pmic";
 -		reg = <0x66>;
 -
 -		regulators {
 -			ldo1_reg: LDO1 {
--				regulator-name = "VDD_ABB_3.3V";
--				regulator-min-microvolt = <3300000>;
--				regulator-max-microvolt = <3300000>;
+-				regulator-name = "VDD_ALIVE";
+-				regulator-min-microvolt = <1000000>;
+-				regulator-max-microvolt = <1000000>;
 -			};
 -
 -			ldo2_reg: LDO2 {
--				regulator-name = "VDD_ALIVE_1.1V";
--				regulator-min-microvolt = <1100000>;
--				regulator-max-microvolt = <1100000>;
+-				regulator-name = "VDDQ_MMC2";
+-				regulator-min-microvolt = <2800000>;
+-				regulator-max-microvolt = <2800000>;
 -				regulator-always-on;
 -			};
 -
@@ -211,19 +177,19 @@ index 27a48bf1b185..000000000000
 -			};
 -		};
 -	};
-diff --git a/Documentation/devicetree/bindings/regulator/samsung,s2mps11.yaml b/Documentation/devicetree/bindings/regulator/samsung,s2mps11.yaml
+diff --git a/Documentation/devicetree/bindings/regulator/samsung,s2mpa01.yaml b/Documentation/devicetree/bindings/regulator/samsung,s2mpa01.yaml
 new file mode 100644
-index 000000000000..e3b780715f44
+index 000000000000..0627dec513da
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/samsung,s2mps11.yaml
-@@ -0,0 +1,44 @@
++++ b/Documentation/devicetree/bindings/regulator/samsung,s2mpa01.yaml
+@@ -0,0 +1,62 @@
 +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/regulator/samsung,s2mps11.yaml#
++$id: http://devicetree.org/schemas/regulator/samsung,s2mpa01.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Samsung S2MPS11 Power Management IC regulators
++title: Samsung S2MPA01 Power Management IC regulators
 +
 +maintainers:
 +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
@@ -232,14 +198,14 @@ index 000000000000..e3b780715f44
 +  This is a part of device tree bindings for S2M and S5M family of Power
 +  Management IC (PMIC).
 +
-+  The S2MPS11 provides buck and LDO regulators.
++  The S2MPA01 provides buck and LDO regulators.
 +
-+  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml for
++  See also Documentation/devicetree/bindings/mfd/samsung,s2mpa01.yaml for
 +  additional information and example.
 +
 +patternProperties:
-+  # 38 LDOs
-+  "^LDO([1-9]|[1-2][0-9]|3[0-8])$":
++  # 26 LDOs
++  "^LDO([1-9]|1[0-9]|2[0-6])$":
 +    type: object
 +    $ref: regulator.yaml#
 +    unevaluatedProperties: false
@@ -257,223 +223,28 @@ index 000000000000..e3b780715f44
 +    description:
 +      Properties for single BUCK regulator.
 +
-+    required:
-+      - regulator-name
++    properties:
++      regulator-ramp-delay:
++        enum: [0, 6250, 12500, 25000, 50000]
++        default: 12500
++        description: |
++          May be 0 for disabling the ramp delay on BUCK{1,2,3,4}.
 +
-+additionalProperties: false
-diff --git a/Documentation/devicetree/bindings/regulator/samsung,s2mps13.yaml b/Documentation/devicetree/bindings/regulator/samsung,s2mps13.yaml
-new file mode 100644
-index 000000000000..579d77aefc3f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/samsung,s2mps13.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/regulator/samsung,s2mps13.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++          In the absence of the regulator-ramp-delay property, the default ramp
++          delay will be used.
 +
-+title: Samsung S2MPS13 Power Management IC regulators
-+
-+maintainers:
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+
-+description: |
-+  This is a part of device tree bindings for S2M and S5M family of Power
-+  Management IC (PMIC).
-+
-+  The S2MPS13 provides buck and LDO regulators.
-+
-+  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml for
-+  additional information and example.
-+
-+patternProperties:
-+  # 40 LDOs
-+  "^LDO([1-9]|[1-3][0-9]|40)$":
-+    type: object
-+    $ref: regulator.yaml#
-+    unevaluatedProperties: false
-+    description:
-+      Properties for single LDO regulator.
-+
-+    required:
-+      - regulator-name
-+
-+  # 10 bucks
-+  "^BUCK([1-9]|10)$":
-+    type: object
-+    $ref: regulator.yaml#
-+    unevaluatedProperties: false
-+    description:
-+      Properties for single BUCK regulator.
++          Note: Some bucks share the ramp rate setting i.e. same ramp value
++          will be set for a particular group of bucks so provide the same
++          regulator-ramp-delay value for them.
++          Groups sharing ramp rate:
++            * buck{1,6},
++            * buck{2,4},
++            * buck{8,9,10}.
 +
 +    required:
 +      - regulator-name
 +
 +additionalProperties: false
-diff --git a/Documentation/devicetree/bindings/regulator/samsung,s2mps14.yaml b/Documentation/devicetree/bindings/regulator/samsung,s2mps14.yaml
-new file mode 100644
-index 000000000000..fdea290b3e94
---- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/samsung,s2mps14.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/regulator/samsung,s2mps14.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Samsung S2MPS14 Power Management IC regulators
-+
-+maintainers:
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+
-+description: |
-+  This is a part of device tree bindings for S2M and S5M family of Power
-+  Management IC (PMIC).
-+
-+  The S2MPS14 provides buck and LDO regulators.
-+
-+  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml for
-+  additional information and example.
-+
-+patternProperties:
-+  # 25 LDOs
-+  "^LDO([1-9]|[1][0-9]|2[0-5])$":
-+    type: object
-+    $ref: regulator.yaml#
-+    unevaluatedProperties: false
-+    description:
-+      Properties for single LDO regulator.
-+
-+    required:
-+      - regulator-name
-+
-+  # 5 bucks
-+  "^BUCK[1-5]$":
-+    type: object
-+    $ref: regulator.yaml#
-+    unevaluatedProperties: false
-+    description:
-+      Properties for single BUCK regulator.
-+
-+    required:
-+      - regulator-name
-+
-+additionalProperties: false
-diff --git a/Documentation/devicetree/bindings/regulator/samsung,s2mps15.yaml b/Documentation/devicetree/bindings/regulator/samsung,s2mps15.yaml
-new file mode 100644
-index 000000000000..b3a883c94628
---- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/samsung,s2mps15.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/regulator/samsung,s2mps15.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Samsung S2MPS15 Power Management IC regulators
-+
-+maintainers:
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+
-+description: |
-+  This is a part of device tree bindings for S2M and S5M family of Power
-+  Management IC (PMIC).
-+
-+  The S2MPS15 provides buck and LDO regulators.
-+
-+  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml for
-+  additional information and example.
-+
-+patternProperties:
-+  # 27 LDOs
-+  "^LDO([1-9]|[1][0-9]|2[0-7])$":
-+    type: object
-+    $ref: regulator.yaml#
-+    unevaluatedProperties: false
-+    description:
-+      Properties for single LDO regulator.
-+
-+    required:
-+      - regulator-name
-+
-+  # 10 bucks
-+  "^BUCK([1-9]|10)$":
-+    type: object
-+    $ref: regulator.yaml#
-+    unevaluatedProperties: false
-+    description:
-+      Properties for single BUCK regulator.
-+
-+    required:
-+      - regulator-name
-+
-+additionalProperties: false
-diff --git a/Documentation/devicetree/bindings/regulator/samsung,s2mpu02.yaml b/Documentation/devicetree/bindings/regulator/samsung,s2mpu02.yaml
-new file mode 100644
-index 000000000000..0ded6953e3b6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/samsung,s2mpu02.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/regulator/samsung,s2mpu02.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Samsung S2MPU02 Power Management IC regulators
-+
-+maintainers:
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+
-+description: |
-+  This is a part of device tree bindings for S2M and S5M family of Power
-+  Management IC (PMIC).
-+
-+  The S2MPU02 provides buck and LDO regulators.
-+
-+  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml for
-+  additional information and example.
-+
-+patternProperties:
-+  # 28 LDOs
-+  "^LDO([1-9]|1[0-9]|2[0-8])$":
-+    type: object
-+    $ref: regulator.yaml#
-+    unevaluatedProperties: false
-+    description:
-+      Properties for single LDO regulator.
-+
-+    required:
-+      - regulator-name
-+
-+  # 7 bucks
-+  "^BUCK[1-7]$":
-+    type: object
-+    $ref: regulator.yaml#
-+    unevaluatedProperties: false
-+    description:
-+      Properties for single BUCK regulator.
-+
-+    required:
-+      - regulator-name
-+
-+additionalProperties: false
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d86fd237edee..6d15a483fd3c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16638,7 +16638,7 @@ L:	linux-samsung-soc@vger.kernel.org
- S:	Supported
- F:	Documentation/devicetree/bindings/clock/samsung,s2mps11.yaml
- F:	Documentation/devicetree/bindings/mfd/samsung,sec-core.txt
--F:	Documentation/devicetree/bindings/regulator/samsung,s2m*.txt
-+F:	Documentation/devicetree/bindings/regulator/samsung,s2m*.yaml
- F:	Documentation/devicetree/bindings/regulator/samsung,s5m*.txt
- F:	drivers/clk/clk-s2mps11.c
- F:	drivers/mfd/sec*.c
 -- 
 2.30.2
 
