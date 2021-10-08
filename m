@@ -2,70 +2,58 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21418425EB6
-	for <lists+linux-clk@lfdr.de>; Thu,  7 Oct 2021 23:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EEA8426184
+	for <lists+linux-clk@lfdr.de>; Fri,  8 Oct 2021 03:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241187AbhJGV1S (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 7 Oct 2021 17:27:18 -0400
-Received: from mail.z3ntu.xyz ([128.199.32.197]:58918 "EHLO mail.z3ntu.xyz"
+        id S230514AbhJHBCf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 7 Oct 2021 21:02:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38176 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233028AbhJGV1S (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 7 Oct 2021 17:27:18 -0400
-Received: from localhost.localdomain (ip-213-127-63-121.ip.prioritytelecom.net [213.127.63.121])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 2333FC91C0;
-        Thu,  7 Oct 2021 21:25:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1633641923; bh=vm4XvzJRFYh/K71Zt5Zz2PQqoNrCtNh97Lggz9HLaJg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=tFQf1PhLUs6sIHrn86U4XyF7E+aaJ0/0bTAv3/E88RukOWmeBs43vQK3Dx3moozIQ
-         mYz0CPPVw2FyjrhzDhAKeKnesOdo58zMsnYgHPrvlhdMUjkhXwXVTT53wo50uBjupr
-         ESfBYJp+nPcWIODwYmxGK7nmER56wZrDuNQ+tfes=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        konrad.dybcio@somainline.org, Luca Weiss <luca@z3ntu.xyz>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 01/11] clk: qcom: add select QCOM_GDSC for SM6350
-Date:   Thu,  7 Oct 2021 23:24:28 +0200
-Message-Id: <20211007212444.328034-2-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211007212444.328034-1-luca@z3ntu.xyz>
-References: <20211007212444.328034-1-luca@z3ntu.xyz>
+        id S229487AbhJHBCe (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 7 Oct 2021 21:02:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 582F76105A;
+        Fri,  8 Oct 2021 01:00:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1633654840;
+        bh=D+XA5fuEc0s9newVeuhTo1y7PECcDXZC5n/B6YKr7ro=;
+        h=In-Reply-To:References:Subject:From:To:Date:From;
+        b=eYuXRcqsCMSwer/fIppi90eCe9539s9nqhMEjG4QF08jJQeM951v54+xsFoSUXWf5
+         09GPKKK5l0ECqQHs3wcK4WOv4Bl40YxIy/kX7pgE1BL/aV1cRqGK6WSotcbHCIqNqx
+         wYXxG5H7zPPJ8SH4Uq0wal3CV3fvKv++btyuTXjRQmqZ5HOQU9qTW/Ux6qwiOTSbUM
+         S0hWqdBmenAAy8w+wtM9hx0z32WOMAs1pBRA46S7Ba6REG+9u7reB6kNiJ9OcHldkd
+         SGu57cAQgcLM8wGeBJ2UguZzd5NM0B7DCezpBBmp8BAly8VteG3b52UjuGtlihgYNy
+         vAhKYooKFnByg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211001094106.52412-4-krzysztof.kozlowski@canonical.com>
+References: <20211001094106.52412-1-krzysztof.kozlowski@canonical.com> <20211001094106.52412-4-krzysztof.kozlowski@canonical.com>
+Subject: Re: [PATCH v2 03/10] dt-bindings: clock: samsung,s2mps11: convert to dtschema
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Date:   Thu, 07 Oct 2021 18:00:39 -0700
+Message-ID: <163365483901.2041162.15481041802463999867@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-QCOM_GDSC is needed for the gcc driver to probe.
+Quoting Krzysztof Kozlowski (2021-10-01 02:40:59)
+> Convert the clock provider of Samsung S2MPS11 family of PMICs to DT
+> schema format.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
 
-Fixes: 131abae905df ("clk: qcom: Add SM6350 GCC driver")
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
-v2: add R-b
-
- drivers/clk/qcom/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-index 0a5596797b93..9ef007b3cf9b 100644
---- a/drivers/clk/qcom/Kconfig
-+++ b/drivers/clk/qcom/Kconfig
-@@ -564,6 +564,7 @@ config SM_GCC_6125
- 
- config SM_GCC_6350
- 	tristate "SM6350 Global Clock Controller"
-+	select QCOM_GDSC
- 	help
- 	  Support for the global clock controller on SM6350 devices.
- 	  Say Y if you want to use peripheral devices such as UART,
--- 
-2.33.0
-
+Acked-by: Stephen Boyd <sboyd@kernel.org>
