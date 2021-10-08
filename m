@@ -2,71 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F15426750
-	for <lists+linux-clk@lfdr.de>; Fri,  8 Oct 2021 12:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2199542679A
+	for <lists+linux-clk@lfdr.de>; Fri,  8 Oct 2021 12:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238321AbhJHKEG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 8 Oct 2021 06:04:06 -0400
-Received: from gloria.sntech.de ([185.11.138.130]:56816 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236118AbhJHKEG (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 8 Oct 2021 06:04:06 -0400
-Received: from ip5f5a6e92.dynamic.kabel-deutschland.de ([95.90.110.146] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1mYmhb-0008SB-JP; Fri, 08 Oct 2021 12:02:07 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     krzysztof.kozlowski@canonical.com, robh@kernel.org,
-        linux-riscv@lists.infradead.org
-Cc:     krzysztof.kozlowski@canonical.com, zong.li@sifive.com,
-        aou@eecs.berkeley.edu, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-clk@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        mturquette@baylibre.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        sboyd@kernel.org, Palmer Dabbelt <palmer@dabbelt.com>
-Subject: Re: [PATCH] dt-bindings: clock: fu740-prci: add reset-cells
-Date:   Fri, 08 Oct 2021 12:02:06 +0200
-Message-ID: <24526929.Pe8KFHSfS2@diego>
-In-Reply-To: <mhng-b9e6d8f9-b9be-4651-9649-3378d227eae1@palmerdabbelt-glaptop>
-References: <mhng-b9e6d8f9-b9be-4651-9649-3378d227eae1@palmerdabbelt-glaptop>
+        id S239727AbhJHKXK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 8 Oct 2021 06:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239592AbhJHKXG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 8 Oct 2021 06:23:06 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB89C061570;
+        Fri,  8 Oct 2021 03:21:11 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id C21C91F4575D
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     bjorn.andersson@linaro.org
+Cc:     agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
+        marijn.suijten@somainline.org, martin.botka@somainline.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 1/2] clk: qcom: mmcc-sdm660: Add necessary CXCs to venus_gdsc
+Date:   Fri,  8 Oct 2021 12:20:40 +0200
+Message-Id: <20211008102041.268253-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Am Freitag, 8. Oktober 2021, 03:29:17 CEST schrieb Palmer Dabbelt:
-> On Thu, 23 Sep 2021 09:59:32 PDT (-0700), robh@kernel.org wrote:
-> > On Mon, 20 Sep 2021 16:49:44 +0200, Krzysztof Kozlowski wrote:
-> >> The SiFive FU740 Power Reset Clock Interrupt Controller is a reset line
-> >> provider so add respective reset-cells property to fix:
-> >>
-> >>   arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dt.yaml: clock-controller@10000000:
-> >>     '#reset-cells' does not match any of the regexes: 'pinctrl-[0-9]+'
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> >> ---
-> >>  .../devicetree/bindings/clock/sifive/fu740-prci.yaml          | 4 ++++
-> >>  1 file changed, 4 insertions(+)
-> >>
-> >
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> 
-> Acked-by: Palmer Dabbelt <palmerdabbelt@google.com>
-> 
-> For some reason I thought these went through your tree, LMK if you were 
-> planning on having me take it through mine.
+As also shown on downstream dts[1], for a correct operation of the
+Venus block, we have to retain MEM/PERIPH when halting the video_core,
+video_axi and video_subcore0 branches: add these CXCs to the main
+Venus GDSC.
 
-Normally both driver + binding patches go through the driver-tree
-and actual dts changes through the tree carrying the dts files.
+[1]: https://github.com/sonyxperiadev/kernel/blob/aosp/LA.UM.6.4.r1/arch/arm/boot/dts/qcom/sdm660-vidc.dtsi#L80
 
-So for a clock-patch this should be the clock-tree aka Mike Turquette
-and Stephen Boyd - already in Cc of original patch, so I'd assume they'll
-pick it up.
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/clk/qcom/mmcc-sdm660.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
-Heiko
-
+diff --git a/drivers/clk/qcom/mmcc-sdm660.c b/drivers/clk/qcom/mmcc-sdm660.c
+index 9bfce9c31ca7..c5fdc36e3c34 100644
+--- a/drivers/clk/qcom/mmcc-sdm660.c
++++ b/drivers/clk/qcom/mmcc-sdm660.c
+@@ -2560,6 +2560,8 @@ static struct clk_branch video_subcore0_clk = {
+ 
+ static struct gdsc venus_gdsc = {
+ 	.gdscr = 0x1024,
++	.cxcs = (unsigned int[]){ 0x1028, 0x1034, 0x1048 },
++	.cxc_count = 3,
+ 	.pd = {
+ 		.name = "venus",
+ 	},
+-- 
+2.33.0
 
