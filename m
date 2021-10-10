@@ -2,60 +2,42 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 555CA428231
-	for <lists+linux-clk@lfdr.de>; Sun, 10 Oct 2021 17:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AF3428339
+	for <lists+linux-clk@lfdr.de>; Sun, 10 Oct 2021 20:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232815AbhJJPMv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 10 Oct 2021 11:12:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:59935 "EHLO
+        id S232947AbhJJTBH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 10 Oct 2021 15:01:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54895 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232714AbhJJPMu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 10 Oct 2021 11:12:50 -0400
+        by vger.kernel.org with ESMTP id S232895AbhJJS7b (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 10 Oct 2021 14:59:31 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1633878651;
+        s=mimecast20190719; t=1633892252;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ymYBEBSUvf6CaVJZTg55f7eZ0XT38KYWfIPvyX/VujI=;
-        b=D/ogrlM/OxA6lV3KzvWHGmNlKTkEyB5yjC9uj/NtJbYc3ATIByvivJ5wg2bQ8Fu3z+V+mJ
-        +KwUz2NaMkntB/DcwHtPWvipV3L6truq1f0qqfAbQ8QI54z5UMDMl97dy9BxvpTBBnCg2V
-        lghuKB5YzZIRtk4jsdeD+EtCjmGYqG0=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-555-WPxB2pgtMxSAyVySsopiow-1; Sun, 10 Oct 2021 11:10:50 -0400
-X-MC-Unique: WPxB2pgtMxSAyVySsopiow-1
-Received: by mail-ed1-f69.google.com with SMTP id x5-20020a50f185000000b003db0f796903so13504389edl.18
-        for <linux-clk@vger.kernel.org>; Sun, 10 Oct 2021 08:10:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ymYBEBSUvf6CaVJZTg55f7eZ0XT38KYWfIPvyX/VujI=;
-        b=wdP4cxsmiDFt//ldCkpmKwY7vo/NvPmnHsnMifbJV5DjYqPOcmYjdgKfiAIKWnefeP
-         CBqiiB98pM22DgIROCEJYSaNbC0G71squ9JzXi3QNMeLj9F2Qd+ktbozXhSVAhj/67E+
-         pt1dTDld9j+X4DwWaPFCEtkt60qBA+PhpQt+hR/eT0klGEyTxe37aIqhOgyCr8dk302E
-         yF0e/ngyZ3k3KZW0Y6UnLytXG/HjPe1AdOCtEpQeTxansLSgTvgNZ6yRylqs/gf9aHGu
-         BTF3b7pfP6fna8kqdhzmcCX/0to6Dyv/M92bU9DcbdLLYoLRBZjfxKR9cYz+1Z0Z3BxM
-         rrVA==
-X-Gm-Message-State: AOAM533IM/kZtq2Po7U+jkCESJNVj5TFBA2hFROrep5f6Yj9aRyOwbzZ
-        8zZnX/q3JwQyZduJiB6yHDNaFEOQqKYdUYD81T1mVp1YDxau8D56m6iHQVt6/zdHg7LZm3s4GSx
-        EGHZsaDfhp0HkH2zzq0DxcPpWTohpTmAWXM9KcewJcUd7Dhl2ci4BsxsunybDD3LlErnZam9z
-X-Received: by 2002:a05:6402:268c:: with SMTP id w12mr32262468edd.376.1633878648725;
-        Sun, 10 Oct 2021 08:10:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwLPx4rw5dSOqmTSWeFvO+pX78uTWdkgxG68sKgpA1md+rOQ4QAYdlxxEJVEnKXjnU/oTQ3mQ==
-X-Received: by 2002:a05:6402:268c:: with SMTP id w12mr32262422edd.376.1633878648447;
-        Sun, 10 Oct 2021 08:10:48 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id h11sm2171214eji.96.2021.10.10.08.10.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Oct 2021 08:10:48 -0700 (PDT)
-Subject: Re: [PATCH v2 02/13] ACPI: honor dependencies for devices with a _DEP
- pointing to an INT3472 device
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9fP16BY7AsTDNFJGLr1NMnUHLpxbega7qb7JKUQTqx8=;
+        b=Iu2Lj6G2eOitFmGL7uMANdCzAk16VWNfbt7Rn2k//PVNowFHnZNqIe3QpaG0o7qMseYUbd
+        QMqqDOh0W6QEMpLrW1U6AIU2IIoQtyqTAzaIEMbgK7rFD1P8ihAt8ZIa7NO/hIpxX9dITa
+        JjMXLMhsFS7ATanNFLvJcVSZNfh6Shc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-238-1YFKpSw2PDKGspw1HsPLAA-1; Sun, 10 Oct 2021 14:57:16 -0400
+X-MC-Unique: 1YFKpSw2PDKGspw1HsPLAA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7E5231808304;
+        Sun, 10 Oct 2021 18:57:13 +0000 (UTC)
+Received: from x1.localdomain (unknown [10.39.192.6])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7438E5F4E1;
+        Sun, 10 Oct 2021 18:57:08 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
 To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Mark Gross <markgross@kernel.org>,
         Andy Shevchenko <andy@infradead.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Daniel Scally <djrscally@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -63,185 +45,132 @@ To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Mark Brown <broonie@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
-Cc:     Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     Hans de Goede <hdegoede@redhat.com>, Len Brown <lenb@kernel.org>,
+        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
         linux-clk@vger.kernel.org
-References: <20211009160548.306550-1-hdegoede@redhat.com>
- <20211009160548.306550-3-hdegoede@redhat.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <d90f8514-a779-06ad-5e8d-5c42a5771b15@redhat.com>
-Date:   Sun, 10 Oct 2021 17:10:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+Subject: [PATCH v3 00/11] Add support for X86/ACPI camera sensor/PMIC setup with clk and regulator platform data
+Date:   Sun, 10 Oct 2021 20:56:56 +0200
+Message-Id: <20211010185707.195883-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20211009160548.306550-3-hdegoede@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi,
+Hi All,
 
-On 10/9/21 6:05 PM, Hans de Goede wrote:
-> The clk and regulator frameworks expect clk/regulator consumer-devices
-> to have info about the consumed clks/regulators described in the device's
-> fw_node.
-> 
-> To work around cases where this info is not present in the firmware tables,
-> which is often the case on x86/ACPI devices, both frameworks allow the
-> provider-driver to attach info about consumers to the clks/regulators
-> when registering these.
-> 
-> This causes problems with the probe ordering wrt drivers for consumers
-> of these clks/regulators. Since the lookups are only registered when the
-> provider-driver binds, trying to get these clks/regulators before then
-> results in a -ENOENT error for clks and a dummy regulator for regulators.
-> 
-> One case where we hit this issue is camera sensors such as e.g. the OV8865
-> sensor found on the Microsoft Surface Go. The sensor uses clks, regulators
-> and GPIOs provided by a TPS68470 PMIC which is described in an INT3472
-> ACPI device. There is special platform code handling this and setting
-> platform_data with the necessary consumer info on the MFD cells
-> instantiated for the PMIC under: drivers/platform/x86/intel/int3472.
-> 
-> For this to work properly the ov8865 driver must not bind to the i2c-client
-> for the OV8865 sensor until after the TPS68470 PMIC gpio, regulator and
-> clk MFD cells have all been fully setup.
-> 
-> The OV8865 on the Microsoft Surface Go is just one example, all X86
-> devices using the Intel IPU3 camera block found on recent Intel SoCs
-> have similar issues where there is an INT3472 HID ACPI-device which
-> describes the clks and regulators and the driver for this INT3472 device
-> must be fully initialized before the sensor driver (any sensor driver)
-> binds for things to work properly.
-> 
-> On these devices the ACPI nodes describing the sensors all have a _DEP
-> dependency on the matching INT3472 ACPI device (there is one per sensor).
-> 
-> This allows solving the probe-ordering problem by making ACPI-devices
-> honor the _DEP dependencies (like we already do for batteries) when they
-> have a dependency on an INT3472 device.
-> 
-> Note the matching is done on there being a _DEP on an INT3472 device,
-> rather then matching on the HID of the sensor device itself to avoid
-> having to maintain an ever growing list of HIDs of sensors which need
-> the honor_dep behavior.
-> 
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Here is v2 of my patch-set adding support for camera sensor connected to a
+TPS68470 PMIC on x86/ACPI devices.
 
-In the end I was not entirely happy with the approach in patch 1 + 2
-(this patch) myself, reporting 0 for the status of some devices until
-the _DEP-s are met has some troublesome implications for code which
-behavior depends on acpi_dev_is_present() calls (or equivalent code).
+v3 of this patch-set further reworks how to defer the binding of the
+camera-sensor drivers till all clk/regulator/gpio consumer/lookup info has
+been registered. See the new patch 1 + 2 (replacing v1 patch 1-3 /
+v2 patch 1-2).
 
-Which led to the: "[PATCH v2 13/13] media: ipu3-cio2: Add module
-soft-deps for the INT3472 drivers" adding unnecessary soft
-module-dependencies to the ipu3-cio2 code to make sure that the
-status was not reported as 0 because of unmet deps when that code
-runs.
+I'm quite happy with how this works now, so from my pov this is the final
+version of the device-instantiation deferral code / approach.
 
-Besides these soft-deps being non-sense / undesirable. This also
-is a bit racy since the status only gets updated to reflect the
-unmet_deps==0 once the acpi_scan_clear_dep() workqueue work
-has run and there is no guarantee the work has fully run
-once the modprobe-s of the INT3472 are done (it should run
-soon afterwards, but there is a race there).
+###
 
-So I'm working on a rewrite of patch 1 + 2 now which replaces
-the approach where we "lie" about the status with deferring the
-enumeration step (1) until all the _DEP-s are met (for select
-devices).
+The clk and regulator frameworks expect clk/regulator consumer-devices
+to have info about the consumed clks/regulators described in the device's
+fw_node, but on ACPI this info is missing.
 
-Expect a v3 with this new approach soon...
+This series worksaround this by providing platform_data with the info to
+the TPS68470 clk/regulator MFD cells.
+
+Patches 1 - 2 deal with a probe-ordering problem this introduces,
+since the lookups are only registered when the provider-driver binds,
+trying to get these clks/regulators before then results in a -ENOENT
+error for clks and a dummy regulator for regulators. See the patches
+for more details.
+
+Patch 3 adds a header file which adds tps68470_clk_platform_data and
+tps68470_regulator_platform_data structs. The futher patches depend on
+this new header file.
+
+Patch 4 + 5 add the TPS68470 clk and regulator drivers
+
+Patches 6 - 11 Modify the INT3472 driver which instantiates the MFD cells to
+provide the necessary platform-data.
+
+Assuming this series is acceptable to everyone, we need to talk about how
+to merge this.
+
+Assuming the i2c-core-acpi.c are ok with it patches 1 + 2 can both be
+merged into linux-pm by Rafael, independent of the rest of the series
+(there are some runtime deps on other changes for everything to work,
+but the camera-sensors impacted by this are not fully supported yet in
+the mainline kernel anyways).
+
+For "[PATCH 03/13] platform_data: Add linux/platform_data/tps68470.h file",
+which all further patches depend on I plan to provide an immutable branch
+myself (once it has been reviewed), which the clk / regulator maintainers
+can then merge before merging the clk / regulator driver which depends on
+this.
+
+And I will merge that IM-branch + patches 6-11 into the pdx86 tree myself.
 
 Regards,
 
 Hans
 
 
+Daniel Scally (1):
+  platform/x86: int3472: Enable I2c daisy chain
 
-1) The step where a platform_device or e.g. i2c-client is
-instantiated as physical_device_node for the ACPI-device
+Hans de Goede (10):
+  ACPI: delay enumeration of devices with a _DEP pointing to an INT3472
+    device
+  i2c: acpi: Use acpi_dev_ready_for_enumeration() helper
+  platform_data: Add linux/platform_data/tps68470.h file
+  regulator: Introduce tps68470-regulator driver
+  clk: Introduce clk-tps68470 driver
+  platform/x86: int3472: Split into 2 drivers
+  platform/x86: int3472: Add get_sensor_adev_and_name() helper
+  platform/x86: int3472: Pass tps68470_clk_platform_data to the
+    tps68470-regulator MFD-cell
+  platform/x86: int3472: Pass tps68470_regulator_platform_data to the
+    tps68470-regulator MFD-cell
+  platform/x86: int3472: Deal with probe ordering issues
 
+ drivers/acpi/scan.c                           |  36 ++-
+ drivers/clk/Kconfig                           |   6 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-tps68470.c                    | 256 ++++++++++++++++++
+ drivers/i2c/i2c-core-acpi.c                   |   5 +-
+ drivers/platform/x86/intel/int3472/Makefile   |   9 +-
+ ...lk_and_regulator.c => clk_and_regulator.c} |   2 +-
+ drivers/platform/x86/intel/int3472/common.c   |  82 ++++++
+ .../{intel_skl_int3472_common.h => common.h}  |   6 +-
+ ...ntel_skl_int3472_discrete.c => discrete.c} |  51 ++--
+ .../intel/int3472/intel_skl_int3472_common.c  | 106 --------
+ ...ntel_skl_int3472_tps68470.c => tps68470.c} |  97 ++++++-
+ drivers/platform/x86/intel/int3472/tps68470.h |  25 ++
+ .../x86/intel/int3472/tps68470_board_data.c   | 118 ++++++++
+ drivers/regulator/Kconfig                     |   9 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/tps68470-regulator.c        | 193 +++++++++++++
+ include/acpi/acpi_bus.h                       |   5 +-
+ include/linux/mfd/tps68470.h                  |  11 +
+ include/linux/platform_data/tps68470.h        |  35 +++
+ 20 files changed, 904 insertions(+), 150 deletions(-)
+ create mode 100644 drivers/clk/clk-tps68470.c
+ rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_clk_and_regulator.c => clk_and_regulator.c} (99%)
+ create mode 100644 drivers/platform/x86/intel/int3472/common.c
+ rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_common.h => common.h} (94%)
+ rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_discrete.c => discrete.c} (91%)
+ delete mode 100644 drivers/platform/x86/intel/int3472/intel_skl_int3472_common.c
+ rename drivers/platform/x86/intel/int3472/{intel_skl_int3472_tps68470.c => tps68470.c} (55%)
+ create mode 100644 drivers/platform/x86/intel/int3472/tps68470.h
+ create mode 100644 drivers/platform/x86/intel/int3472/tps68470_board_data.c
+ create mode 100644 drivers/regulator/tps68470-regulator.c
+ create mode 100644 include/linux/platform_data/tps68470.h
 
-
-
-> ---
->  drivers/acpi/scan.c     | 16 ++++++++++++++--
->  include/acpi/acpi_bus.h |  1 +
->  2 files changed, 15 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> index 4e0a946b35ed..976724540197 100644
-> --- a/drivers/acpi/scan.c
-> +++ b/drivers/acpi/scan.c
-> @@ -796,6 +796,12 @@ static const char * const acpi_ignore_dep_ids[] = {
->  	NULL
->  };
->  
-> +/* List of HIDs for which we honor deps of matching ACPI devs, when checking _DEP lists. */
-> +static const char * const acpi_honor_dep_ids[] = {
-> +	"INT3472", /* Camera sensor PMIC / clk and regulator info */
-> +	NULL
-> +};
-> +
->  static struct acpi_device *acpi_bus_get_parent(acpi_handle handle)
->  {
->  	struct acpi_device *device = NULL;
-> @@ -1761,8 +1767,12 @@ static void acpi_scan_dep_init(struct acpi_device *adev)
->  		adev->honor_deps = true;
->  
->  	list_for_each_entry(dep, &acpi_dep_list, node) {
-> -		if (dep->consumer == adev->handle)
-> +		if (dep->consumer == adev->handle) {
-> +			if (dep->honor_dep)
-> +				adev->honor_deps = true;
-> +
->  			adev->dep_unmet++;
-> +		}
->  	}
->  }
->  
-> @@ -1966,7 +1976,7 @@ static u32 acpi_scan_check_dep(acpi_handle handle, bool check_dep)
->  	for (count = 0, i = 0; i < dep_devices.count; i++) {
->  		struct acpi_device_info *info;
->  		struct acpi_dep_data *dep;
-> -		bool skip;
-> +		bool skip, honor_dep;
->  
->  		status = acpi_get_object_info(dep_devices.handles[i], &info);
->  		if (ACPI_FAILURE(status)) {
-> @@ -1975,6 +1985,7 @@ static u32 acpi_scan_check_dep(acpi_handle handle, bool check_dep)
->  		}
->  
->  		skip = acpi_info_matches_ids(info, acpi_ignore_dep_ids);
-> +		honor_dep = acpi_info_matches_ids(info, acpi_honor_dep_ids);
->  		kfree(info);
->  
->  		if (skip)
-> @@ -1988,6 +1999,7 @@ static u32 acpi_scan_check_dep(acpi_handle handle, bool check_dep)
->  
->  		dep->supplier = dep_devices.handles[i];
->  		dep->consumer = handle;
-> +		dep->honor_dep = honor_dep;
->  
->  		mutex_lock(&acpi_dep_list_lock);
->  		list_add_tail(&dep->node , &acpi_dep_list);
-> diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
-> index 0ba344a5f4f8..b6fb050e77bb 100644
-> --- a/include/acpi/acpi_bus.h
-> +++ b/include/acpi/acpi_bus.h
-> @@ -284,6 +284,7 @@ struct acpi_dep_data {
->  	struct list_head node;
->  	acpi_handle supplier;
->  	acpi_handle consumer;
-> +	bool honor_dep;
->  };
->  
->  /* Performance Management */
-> 
+-- 
+2.31.1
 
