@@ -2,180 +2,80 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42770428AF7
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Oct 2021 12:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83778428B52
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Oct 2021 12:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235970AbhJKKoh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 Oct 2021 06:44:37 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:38506 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235922AbhJKKoh (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Oct 2021 06:44:37 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20211011104235euoutp01b1ee4e7d52060ac207f1e13535be4128~s8_sIg8bA0359103591euoutp01Z
-        for <linux-clk@vger.kernel.org>; Mon, 11 Oct 2021 10:42:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20211011104235euoutp01b1ee4e7d52060ac207f1e13535be4128~s8_sIg8bA0359103591euoutp01Z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1633948955;
-        bh=J7KKnes26YKxIl1DF2YVzhIQDaDB0Ll/DkSnNhmb6nE=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=VB1KyPAFXLcpLgret3VOdriLVw0E21HB2EHlzWSHrB9ZlNQjAicxbq4YdO3LrrKg9
-         XNz8UHQN+0aTwL9n864nJZZyb8F4wicTzHkm9oUIb/M33uZ2BGmwqeLquWFx7j0DKM
-         DtIGdQygAIi1xTTTKwAsAZaF7g1FbrWm8L5cbxeo=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20211011104234eucas1p29558b59d525671a011b8c649a0ee99fa~s8_rV19PK0084000840eucas1p2g;
-        Mon, 11 Oct 2021 10:42:34 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id AD.A5.45756.A1514616; Mon, 11
-        Oct 2021 11:42:34 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20211011104234eucas1p1d6d2a7246b6222f7d293801ec36ec53a~s8_q3TiNE0393503935eucas1p1B;
-        Mon, 11 Oct 2021 10:42:34 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20211011104234eusmtrp2045ea1f87c4380f870da5406767f96cf~s8_q2YQDl0845608456eusmtrp2d;
-        Mon, 11 Oct 2021 10:42:34 +0000 (GMT)
-X-AuditID: cbfec7f2-7bdff7000002b2bc-7f-6164151aa49e
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 39.B1.31287.91514616; Mon, 11
-        Oct 2021 11:42:34 +0100 (BST)
-Received: from [106.210.134.141] (unknown [106.210.134.141]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20211011104231eusmtip21a6d4a61b1811676394c07ee993920e4~s8_oFAkUI2795627956eusmtip2E;
-        Mon, 11 Oct 2021 10:42:31 +0000 (GMT)
-Message-ID: <ef781890-76ca-3392-9a17-3856fa1834cf@samsung.com>
-Date:   Mon, 11 Oct 2021 12:42:30 +0200
+        id S236068AbhJKK6C (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 Oct 2021 06:58:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235933AbhJKK6B (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Oct 2021 06:58:01 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75AEC061570
+        for <linux-clk@vger.kernel.org>; Mon, 11 Oct 2021 03:56:01 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id y3so21728486wrl.1
+        for <linux-clk@vger.kernel.org>; Mon, 11 Oct 2021 03:56:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=DOxN63QWnl4dBNWQl+LufsBrewR+8VuPJnGph7ijSeE=;
+        b=km/+rwE10MGCG3K0BNjxD+A2l394aMlSCDFqBEiDyrs45mObKwVEkOccUp5BPFftJU
+         5cB06txNzUPVxcrxQnkqMq9zaxAqQeR9eoa3+7DqnAg3rX7wMze/dloERdrhczopiGET
+         PvxtLks7kWCMKTs5Q8Mmq12LwUKUT5cPH1x1mszpEwl0kuXWAYNTl0kX4+cL3oWAj8+a
+         6an2wLimFEmscCT9jtQf7FGYav0q/UTa6GRCeFihab7mYp8KZTVzyAi9ONxHllw1wfay
+         OSS3CoE7RnQ2PFKTnc/5Yya8gHnSshWvMzermo1msudbBS7MTk09iY8fA6ci8A/KmFSk
+         +E4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=DOxN63QWnl4dBNWQl+LufsBrewR+8VuPJnGph7ijSeE=;
+        b=1+vhd8ttb76AJ8Tk18cryG/bMyvvVVpums0f7d65jhmNH6iiG1emRfzxn3EXK9V7cL
+         okzX1SrjKY8F8nHsXAsvbJ4ABClxgaRVYAGO707oa1AhCBRitNqOtPHGMmxbky8JlPsf
+         OCdLqcKcsOlrq8Uvlq9PLsxyQPSr90ppPK3yNCuIf7pFMkwdVPLf8oc/Vq0f5ACeXG2o
+         gwgtgrsVWf5xLwHVSpKSz96JI+wwtH7nBrUMoe24O2VfBsF/Kj0uFBrC6mnnTtvkq72f
+         7OlgiQGqbPoT6OWxZfF0jHz5vpr9ZfvZuNmTv/+hsuZ4+eHKfO/zscdHHFAywzx5r9tz
+         9rQA==
+X-Gm-Message-State: AOAM532CtqKydXCV0380sjwYaYt/kr4KqSPm6aBjlMLxYV91IbX75ELZ
+        IQceF6FnrdLXb53gBZF/dk3S8KcNpvkcrys+xNw=
+X-Google-Smtp-Source: ABdhPJxWYMUVxuj7Tly9azrkWxEMXzTPZAklmoVIH4V2ykknMMiBN9imOFz2zTqxux/zk/7pzvFSRlX+C6mfjc7ADy4=
+X-Received: by 2002:adf:8b9a:: with SMTP id o26mr24377548wra.109.1633949760323;
+ Mon, 11 Oct 2021 03:56:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.2.0
-Subject: Re: [PATCH v3 4/5] dt-bindings: clock: Document Exynos850 CMU
- bindings
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Ryu Euiyoul <ryu.real@samsung.com>, Tom Gall <tom.gall@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        =?UTF-8?Q?Pawe=c5=82_Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>
-From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
-In-Reply-To: <CAPLW+4kJK=kaiCLDXX1EGLhbKJo5pcHQY9QCj0SVyGQP1n7q0g@mail.gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrEKsWRmVeSWpSXmKPExsWy7djP87pSoimJBr2L1Sw+rFjEaHH9y3NW
-        i/lHzrFanPmta7Hx7Q8mi02Pr7FafOy5x2pxedccNosZ5/cxWVw85Wrx43gfs0Xr3iPsFlN/
-        3GKz+HdtI4vF8z6gZPvTl8wWp+5+Zre4cqaDyWLVrj+MDsIe72+0snvMauhl89g56y67x6ZV
-        nWwed67tYfPYvKTeo2/LKkaPz5vkAjiiuGxSUnMyy1KL9O0SuDJ2X37MXvBUsOLk1E72Bsa9
-        fF2MHBwSAiYSy24YdDFycQgJrGCUeNK2nBHC+cIo8fRjH1sXIyeQ85lR4s5GQ5iGN6uCIGqW
-        M0qs2T8JquEjo8T3E2fZQRp4BewkbjW/ZAGxWQRUJc7f2MgCEReUODnzCZgtKpAkMX/2A3aQ
-        ocICgRLLZ6uChJkFxCVuPZnPBGKLCOhJrJv5ih0ivpFN4tJySxCbTcBQovdoHyOIzQnUOv3Q
-        DUaIGnmJ7W/nMIPcIyFwilNi+9OLYIMkBFwkHv7+BmULS7w6voUdwpaR+L8TZBlIQzOjRM/u
-        2+wQzgRGifvHFzBCVFlL3Dn3iw3kUmYBTYn1u/QhIeEoMWNPAoTJJ3HjrSDEDXwSk7ZNZ4YI
-        80p0tAlBzFCR+L1qOtQFUhLdT/6zTGBUmoUUKLOQfD8LyTezENYuYGRZxSieWlqcm55abJiX
-        Wq5XnJhbXJqXrpecn7uJEZgMT/87/mkH49xXH/UOMTJxMB5ilOBgVhLhfcuRkijEm5JYWZVa
-        lB9fVJqTWnyIUZqDRUmcd9XsNfFCAumJJanZqakFqUUwWSYOTqkGpoTJ7tu0XXSbu+/5NVy6
-        K8y14l7FlQf9zmJyVnqyjqnmBzfOZSv8eG5q+8eIifGzXiuufBQo5/9S0/HoYQPD9uqDtTtW
-        H6k8s+hwaH1P1Ls5M9aeU+I5Wl928fp6cUbmGTyKfKuX3pQt2flhqiD72dfr43blumaH7ynq
-        YJosvKho6/aurvWHLvi+za+5fOiCZWiQ54/L3quu3r7vm56puOVr9HSNksBtt7/NeLz7wSdO
-        FstJbwt0F09SfH/gRtoO17mJU3J8j6bfuKskdHuffELS+9Wr+q/7csy0/zV1dzE3U9HXQsEF
-        EjI7d5cGKu7+yPJPiKt8z7cvvUcPfDl47I7BbO+9E8Kl/7fefBHbsdRdiaU4I9FQi7moOBEA
-        KUv2wPUDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrKIsWRmVeSWpSXmKPExsVy+t/xe7pSoimJBvc2M1l8WLGI0eL6l+es
-        FvOPnGO1OPNb12Lj2x9MFpseX2O1+Nhzj9Xi8q45bBYzzu9jsrh4ytXix/E+ZovWvUfYLab+
-        uMVm8e/aRhaL531AyfanL5ktTt39zG5x5UwHk8WqXX8YHYQ93t9oZfeY1dDL5rFz1l12j02r
-        Otk87lzbw+axeUm9R9+WVYwenzfJBXBE6dkU5ZeWpCpk5BeX2CpFG1oY6RlaWugZmVjqGRqb
-        x1oZmSrp29mkpOZklqUW6dsl6GXsvvyYveCpYMXJqZ3sDYx7+boYOTgkBEwk3qwK6mLk4hAS
-        WMoo8XnXazaIuJTE/BalLkZOIFNY4s+1LjaImveMEpdblzCDJHgF7CRuNb9kAbFZBFQlzt/Y
-        yAIRF5Q4OfMJmC0qkCTxccMMZpCZwgKBEstnq4KEmQXEJW49mc8EYosI6Emsm/mKHWQ+s8Bm
-        NomrPa+glh1hkrj/8QzYMjYBQ4neo32MIDYn0KDph24wggxlFlCXWD9PCGKovMT2t3OYJzAK
-        zUJyxiwk+2YhdMxC0rGAkWUVo0hqaXFuem6xoV5xYm5xaV66XnJ+7iZGYPxvO/Zz8w7Gea8+
-        6h1iZOJgPMQowcGsJML7liMlUYg3JbGyKrUoP76oNCe1+BCjKTAoJjJLiSbnAxNQXkm8oZmB
-        qaGJmaWBqaWZsZI479a5a+KFBNITS1KzU1MLUotg+pg4OKUamKrm7405cscidWKUp9aB52Y3
-        LXq3PV3h5xzm0B6xQLhdNnfK/NUCpY/43z+M2ve8O8Svpbqm1Fw227j5ra78B17fVqPMiW+z
-        Qs0KNQzve2gLVrVePJ0Z07w2aNFVkYndUXsTcy/0qYYaP96WsP/SnIOPxBbNXqckqu4U42Rj
-        J3Nu+2IJB23eN9YcbXfmCazR8fm6050/WtMybDfv6a6ak30JT5J3v1ksu9Lw4LcNGR+bqjm+
-        rFxSn2flUtpx64DkhJ08x34c2cra7lFW15mY6JNZMn+Px4c9O8+fL5X/6mrXb7vz1e+Uit11
-        NzLFRJM21M5+f/3v3eDM7bEz1ohHW0xgXnrP5a4no0Xfct6fSizFGYmGWsxFxYkA0eX15ogD
-        AAA=
-X-CMS-MailID: 20211011104234eucas1p1d6d2a7246b6222f7d293801ec36ec53a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20211011101326eucas1p17e6deeaa2449bf3f0d6306fb930cce17
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20211011101326eucas1p17e6deeaa2449bf3f0d6306fb930cce17
-References: <20211008154352.19519-1-semen.protsenko@linaro.org>
-        <20211008154352.19519-5-semen.protsenko@linaro.org>
-        <7049b3a9-dc8f-2ae9-01e6-eb3b6f461400@kernel.org>
-        <CGME20211011101326eucas1p17e6deeaa2449bf3f0d6306fb930cce17@eucas1p1.samsung.com>
-        <CAPLW+4kJK=kaiCLDXX1EGLhbKJo5pcHQY9QCj0SVyGQP1n7q0g@mail.gmail.com>
+Received: by 2002:adf:dd8c:0:0:0:0:0 with HTTP; Mon, 11 Oct 2021 03:55:59
+ -0700 (PDT)
+Reply-To: ramcharan9910@outlook.com
+From:   "Cr.David Ramcharan" <convy0101@gmail.com>
+Date:   Mon, 11 Oct 2021 03:55:59 -0700
+Message-ID: <CADDRs95718H=K3tUjphEHH_C96xYhoJw7jeCMpt_FfZZjhEXrA@mail.gmail.com>
+Subject: Thank You
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 11.10.2021 12:13, Sam Protsenko wrote:
-> On Sat, 9 Oct 2021 at 23:41, Sylwester Nawrocki <snawrocki@kernel.org> wrote:
->>
->> On 08.10.2021 17:43, Sam Protsenko wrote:
->>> Provide dt-schema documentation for Exynos850 SoC clock controller.
->>>
->>> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
->>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->>> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-[...]
->>> +++ b/Documentation/devicetree/bindings/clock/samsung,exynos850-clock.yaml
->>> @@ -0,0 +1,185 @@
-[...]
->>> +
->>> +title: Samsung Exynos850 SoC clock controller
->>> +
->>> +maintainers:
->>> +  - Sam Protsenko <semen.protsenko@linaro.org>
->>> +  - Chanwoo Choi <cw00.choi@samsung.com>
->>> +  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->>> +  - Sylwester Nawrocki <s.nawrocki@samsung.com>
->>> +  - Tomasz Figa <tomasz.figa@gmail.com>
->>> +
->>> +description: |
->>> +  Exynos850 clock controller is comprised of several CMU units, generating
->>> +  clocks for different domains. Those CMU units are modeled as separate device
->>> +  tree nodes, and might depend on each other. Root clocks in that clock tree are
->>> +  two external clocks:: OSCCLK (26 MHz) and RTCCLK (32768 Hz). Those external
->>> +  clocks must be defined as fixed-rate clocks in dts.
->>> +
->>> +  CMU_TOP is a top-level CMU, where all base clocks are prepared using PLLs and
->>> +  dividers; all other leaf clocks (other CMUs) are usually derived from CMU_TOP.
->>> +
->>> +  Each clock is assigned an identifier and client nodes can use this identifier
->>> +  to specify the clock which they consume. All clocks that available for usage
->>
->> s/All clocks that available/All clocks available ?
->> No need to resend, I can amend it when applying.
->>
-> 
-> Yeah, not a native speaker, I tend to do such mistakes sometimes :)
-> Please fix when applying.
-> 
-> Btw, I can see that you already applied 3 out of 5 patches from this
-> patch series here: [1]. Can you please also apply the rest, or is
-> there any outstanding comments that I missed?
+Please I am writing to notify you again on my intention to list your
+name as a beneficiary to the total sum of GBP6.350 million (Six
+million, Three hundred and fifty thousand British Pounds Sterlings) in
+the intent of the deceased (name now withheld since this is my second
+letter to you).
 
-The patches look good to me, I just wanted to allow some for Rob to have
-a look and provide an Ack.
+I contacted you because you bear the surname identity and therefore
+can present you as the beneficiary to inherit the account proceeds of
+the deceased since there is no written "WILL" or trace to the deceased
+family relatives. My aim is to present you to my Bank Authorities as
+the Next of Kin to our deceased client. I will guide you all through
+the Claim procedure by providing all relevant Information and guiding
+you in your decisions and response to the Bank Management. All the
+papers will be processed after your acceptance.
 
-Regards,
--- 
-Sylwester Nawrocki
-Samsung R&D Institute Poland
+In your acceptance of this deal, I request that you kindly forward to
+me your letter of acceptance; your current telephone and fax numbers
+,age, occupational status and a forwarding address to enable me submit
+to the Bank Management the details as the Next of Kin to their
+deceased customer. Reply strictly through: ramcharancrdavid@gmail.com
+
+Yours faithfully,
+Cr.David Ramcharan
