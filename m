@@ -2,88 +2,139 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B45D842918D
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Oct 2021 16:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BEB842952E
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Oct 2021 19:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243443AbhJKOTc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 Oct 2021 10:19:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38722 "EHLO mail.kernel.org"
+        id S233127AbhJKRGj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 Oct 2021 13:06:39 -0400
+Received: from marcansoft.com ([212.63.210.85]:58420 "EHLO mail.marcansoft.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243292AbhJKORZ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 11 Oct 2021 10:17:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 07AAC61078;
-        Mon, 11 Oct 2021 14:11:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1633961503;
-        bh=zD+AKuupSTYCoj9CcPWhQv82n92KFccXo3yZu9KbnTk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NlKtPXc5y6RKZlCZzv1omZ6axzdFRkATGimdWqud/doU9kWYbzWK8c0frJfhyCfLI
-         25ejDlAh8OTc9yIpR7+XpyRQ/ozUm23Hghu+kZm18hSSqo8LFwfCdWdj1Q36P7RC1s
-         RGilW596VwN3Iu2z9xOnIPfCQexNBFvXud4Wc7LCmK+Okkl28DLAK6t1vFI2NrOtUv
-         Nv8c08ulC+pST0QI54DxJwrRA3d7rPFEOrCqCX+AVttHvG1YkuRyqqBiIW5fG03Vt0
-         YUEB5DJGFFXTLh+olfNiKhBXi7upaYffBalzaH+yPxgvBhCX3LbLixIKY8a2km/qHx
-         PRn4hNJ6S1Hfg==
-Received: by mail-ed1-f54.google.com with SMTP id g10so67631296edj.1;
-        Mon, 11 Oct 2021 07:11:42 -0700 (PDT)
-X-Gm-Message-State: AOAM531ftzA5BIuV5h3aBp5wQsVaUlXLMm7JxJ/jITQNhfz/0vt4XJt8
-        Yb3QcpGua/nOd9Rt0BTRQ/Kq9+t3ZDvKEs6WXQ==
-X-Google-Smtp-Source: ABdhPJw0f8TOUqPxU2srZU6oT+yPzQ8tPFsfVqJQ97sHOzWxNPvUan4j9Baaqte3d/Xw1feY7RVQSsfUXDUCp9emalk=
-X-Received: by 2002:a17:906:9399:: with SMTP id l25mr25557872ejx.363.1633961500932;
- Mon, 11 Oct 2021 07:11:40 -0700 (PDT)
+        id S233456AbhJKRGh (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 11 Oct 2021 13:06:37 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: hector@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id EFDA84206F;
+        Mon, 11 Oct 2021 16:57:23 +0000 (UTC)
+From:   Hector Martin <marcan@marcan.st>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/9] Apple SoC CPU P-state switching
+Date:   Tue, 12 Oct 2021 01:56:58 +0900
+Message-Id: <20211011165707.138157-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-References: <20210923064137.60722-1-zhang.lyra@gmail.com> <20210923064137.60722-3-zhang.lyra@gmail.com>
- <YV1XpL7ibF1y4LbV@google.com>
-In-Reply-To: <YV1XpL7ibF1y4LbV@google.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 11 Oct 2021 09:11:29 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+eqqv=qtKOiNdEpYGi2amek_m+Q-Z9A769pXXqJ4R88A@mail.gmail.com>
-Message-ID: <CAL_Jsq+eqqv=qtKOiNdEpYGi2amek_m+Q-Z9A769pXXqJ4R88A@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] dt-bindings: mfd: sprd: Add bindings for ums512
- global registers
-To:     Lee Jones <lee.jones@linaro.org>, Stephen Boyd <sboyd@kernel.org>
-Cc:     Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        devicetree@vger.kernel.org, Baolin Wang <baolin.wang7@gmail.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Oct 6, 2021 at 3:00 AM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Thu, 23 Sep 2021, Chunyan Zhang wrote:
->
-> > From: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> >
-> > Add bindings for Unisoc system global register which provide register map
-> > for clocks.
-> >
-> > Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  .../bindings/mfd/sprd,ums512-glbreg.yaml      | 68 +++++++++++++++++++
-> >  1 file changed, 68 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
->
-> Unapplied v3 and applied this (v4) instead, thanks.
+Hi folks, here's a first attempt at cpufreq support for the Apple M1.
+I'd appreciate any feedback on this approach.
 
-What about the clock binding this depends on:
+The hardware in these SoCs is very simple: you just poke a single
+register to change the performance state of a CPU cluster. There's
+some init required on older firmware versions, but we're going to
+say that's the bootloader's responsibility. This keeps the driver
+nice and simple and generic and likely to work on future SoCs too.
 
-Unknown file referenced: [Errno 2] No such file or directory:
-'/usr/local/lib/python3.8/dist-packages/dtschema/schemas/clock/sprd,ums512-clk.yaml'
-xargs: dt-doc-validate: exited with status 255; aborting
-make[1]: *** Deleting file
-'Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.example.dt.yaml'
-Unknown file referenced: [Errno 2] No such file or directory:
-'/usr/local/lib/python3.8/dist-packages/dtschema/schemas/clock/sprd,ums512-clk.yaml'
-make[1]: *** [scripts/Makefile.lib:385:
-Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.example.dt.yaml]
-Error 255
+However, there's a catch: the memory controller config should also be
+modified when higher clock states are engaged on the P-cores, to
+get optimal performance.
 
+This series implements this using two drivers, on top of the existing
+cpufreq-dt infrastructure. The cpu clock driver represents the p-state
+switching as if it were a standard clock driver, so it can work with
+cpufreq-dt. To do this, it also needs access to the OPP table, so it can
+map the incoming clock frequences back to P-State index numbers, so that
+is present in the binding. This might be a bit strange, since the same
+OPP table is referenced by the CPUs themselves, and by the clocks driver
+that provides the actual switching for them...
 
-Once again, all the components of MFD bindings need to be applied together.
+The memory controller stuff is implemented as a genpd provider that
+exposes two performance states that the CPU OPP tables can depend on.
+Unfortunately, the cpufreq path doesn't work properly for this, since
+the CPUs aren't typical devices participating in runtime-pm. So instead
+I opted to put that logic in the clock driver, which means it gets a
+power-domains reference to the memory controller. This required a hack
+to the OPP core so that it wouldn't complain about the missing parent
+domain when evaluating the OPPs in the context of the CPUs...
 
-Rob
+The actual memory controller config is two magic numbers per performance
+state. I'd love to find out what they do, but this seems unlikely
+without docs or a deep memory performance analysis expedition... so I
+think we're going to have to settle for this way, at least for now. If
+things become better understood in the future, we can modify the binding
+and keep the driver backwards-compatible with old DTs at least.
+
+I did benchmark the CPU p-state switching, so the latency numbers there
+have been experimentally measured. The CPU capacity numbers are also
+based on real benchmarks (oddly enough, Dhrystone was a big outlier
+here that was not representative of everything else, so we didn't use
+it).
+
+Patches:
+ #1:   MAINTAINERS updates, split out so this can go through the SoC
+       tree so we can spare all the subsystem maintainers the merge
+       conflicts, since we have a bunch of other changes here going on
+       in parallel.
+ #2-3: DT bindings
+ #4:   The aforementioned hack for the OPP core
+ #5:   Add of_genpd_add_provider_simple_noclk()
+ #6:   Memory controller driver
+ #7:   CPU p-state clock driver
+ #8:   Add some deps for ARCH_APPLE
+ #9:   DT updates (for asahi-soc tree)
+
+Hector Martin (9):
+  MAINTAINERS: apple: Add apple-mcc and clk-apple-cluster paths
+  dt-bindings: memory-controller: Add apple,mcc binding
+  dt-bindings: clock: Add apple,cluster-clk binding
+  opp: core: Don't warn if required OPP device does not exist
+  PM: domains: Add of_genpd_add_provider_simple_noclk()
+  memory: apple: Add apple-mcc driver to manage MCC perf in Apple SoCs
+  clk: apple: Add clk-apple-cluster driver to manage CPU p-states
+  arm64: apple: Select MEMORY and APPLE_MCC
+  arm64: apple: Add CPU frequency scaling support for t8103
+
+ .../bindings/clock/apple,cluster-clk.yaml     | 115 ++++++++
+ .../memory-controllers/apple,mcc.yaml         |  80 ++++++
+ .../opp/apple,mcc-operating-points.yaml       |  62 +++++
+ MAINTAINERS                                   |   5 +
+ arch/arm64/Kconfig.platforms                  |   2 +
+ arch/arm64/boot/dts/apple/t8103.dtsi          | 255 +++++++++++++++++-
+ drivers/base/power/domain.c                   |  39 ++-
+ drivers/clk/Kconfig                           |   9 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-apple-cluster.c               | 184 +++++++++++++
+ drivers/memory/Kconfig                        |   9 +
+ drivers/memory/Makefile                       |   1 +
+ drivers/memory/apple-mcc.c                    | 130 +++++++++
+ drivers/opp/core.c                            |   5 +-
+ include/linux/pm_domain.h                     |   8 +
+ 15 files changed, 887 insertions(+), 18 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/apple,cluster-clk.yaml
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/apple,mcc.yaml
+ create mode 100644 Documentation/devicetree/bindings/opp/apple,mcc-operating-points.yaml
+ create mode 100644 drivers/clk/clk-apple-cluster.c
+ create mode 100644 drivers/memory/apple-mcc.c
+
+-- 
+2.33.0
+
