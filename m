@@ -2,295 +2,90 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C0342A645
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Oct 2021 15:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C9642A664
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Oct 2021 15:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237309AbhJLNow (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 12 Oct 2021 09:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
+        id S236943AbhJLNuW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 12 Oct 2021 09:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237144AbhJLNo3 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 12 Oct 2021 09:44:29 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744CBC061766;
-        Tue, 12 Oct 2021 06:42:24 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id p16so17252712lfa.2;
-        Tue, 12 Oct 2021 06:42:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cbeHlNwKol/P/1xSu0ws0uqYe/FZJCZw0pLtjT2oTVc=;
-        b=Hdi6lFiHxTQtsuTTfdmWSEg3NsUoRwsDI6KMRJx/jzYj6tvrlIsL9HVOpvTnp47uyo
-         m19vwMV8+LbguCTWAiQ1NbZnrf2GasZSEaG8zM40ACkSQHfRc8VO9J8lM7jNXcnc3W43
-         oZQy8ADVAz8S1RCP60FInyxszcEQ0wpGfnKkSCNsFbJr7Ca8suPR4XNKYUWcyeaJGk8G
-         6RZSks7SAP3XIfqC94PQsxzxPLmuorp5U2QCPkdgKGNPS1iul5o495Vt/Zh5HDdL2l1h
-         Onb2KBXhNvL6RcAK4bkdrvyedrnC+JeygRuS+lJNpysTBkVcnfyK2G7ySC8hkPtg1UqD
-         Yzew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=cbeHlNwKol/P/1xSu0ws0uqYe/FZJCZw0pLtjT2oTVc=;
-        b=S4lH4Q0e9sr3WicPnbE/STi4y9ZRBx5/T/7DZnn6EwNH4e8luas2zJ4rJXR1Ra0WNd
-         r5NKRRkPJb1a5tWuM0Kxd28qMpit4jHPn6pqZ0nMbi32FRcHdfdO4QzoojO5COhZRoc7
-         saIL0qknXLYtizq62QzKlaBbeuU9pSUeFQz59bNIBIidBXoVVb8HYZyDxSSE20IVs33h
-         E9slcomaOV+YrsyPao8bjC6JJioDoxWzJbgW5b7YtUL2yfSEtWM8YAnxiqWrCDijtGdK
-         qt4TK25ErTN9IoBJhUCqqSpBY4YVtukF+botjPIAaon+B3/BYdwgdZh+ibpk9dIzQAl1
-         8RmA==
-X-Gm-Message-State: AOAM532LebLcQFjHUGsQapzl4u2WliwVHS+hzexbiF+4+Y8BvODfwAH3
-        KKBRuqrv4AoeJ9sFOy2CX0k=
-X-Google-Smtp-Source: ABdhPJx4WCAZwLlqLtq1R/xAEtv9AGzk3zM2XV/iyK4JOU/Av9ew0yaOMNAMGlfQF2JRVRQfYJvUzA==
-X-Received: by 2002:a2e:9346:: with SMTP id m6mr17757191ljh.188.1634046142879;
-        Tue, 12 Oct 2021 06:42:22 -0700 (PDT)
-Received: from stitch.. (80.71.140.73.ipv4.parknet.dk. [80.71.140.73])
-        by smtp.gmail.com with ESMTPSA id k16sm1033761lfo.219.2021.10.12.06.42.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Oct 2021 06:42:22 -0700 (PDT)
-Sender: Emil Renner Berthing <emil.renner.berthing@gmail.com>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-To:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Cc:     Emil Renner Berthing <kernel@esmil.dk>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S236678AbhJLNuV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 12 Oct 2021 09:50:21 -0400
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989EEC061570;
+        Tue, 12 Oct 2021 06:48:19 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 7D39F426A2;
+        Tue, 12 Oct 2021 13:48:12 +0000 (UTC)
+Subject: Re: [RFC PATCH 3/9] dt-bindings: clock: Add apple,cluster-clk binding
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+References: <20211011165707.138157-1-marcan@marcan.st>
+ <20211011165707.138157-4-marcan@marcan.st>
+ <0fe602f6-3adc-dfac-beee-2854b01cec5c@canonical.com>
+ <20211012093529.pzzfo44ikq5oc6cl@vireshk-i7>
+ <D0DE08FE-562E-4A48-BCA0-9094DAFCA564@marcan.st>
+ <20211012094302.3cownyzr4phxwifs@vireshk-i7>
+ <64584F8C-D49F-41B5-9658-CF8A25186E67@marcan.st>
+ <20211012095735.mhh2lzu52ohtotl6@vireshk-i7>
+Cc:     Hector Martin <marcan@marcan.st>,
+        linux-arm-kernel@lists.infradead.org,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Matteo Croce <mcroce@microsoft.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 16/16] RISC-V: Add BeagleV Starlight Beta device tree
-Date:   Tue, 12 Oct 2021 15:40:27 +0200
-Message-Id: <20211012134027.684712-17-kernel@esmil.dk>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211012134027.684712-1-kernel@esmil.dk>
-References: <20211012134027.684712-1-kernel@esmil.dk>
+        Rob Herring <robh+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <0168a91d-0e7d-41df-8a65-bc739fc50498@marcan.st>
+Date:   Tue, 12 Oct 2021 22:48:09 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211012095735.mhh2lzu52ohtotl6@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add initial device tree for the BeagleV Starlight Beta board. About 300
-of these boards were sent out as part of a now cancelled BeagleBoard.org
-project.
+On 12/10/2021 18.57, Viresh Kumar wrote:
+> I didn't realize earlier that we have moved out of lists :)
 
-I2C timing data is based on the device tree in the vendor u-boot port.
-Heartbeat LED added by Geert.
+Whoops, sorry, I was on mobile and must've hit the wrong reply button! 
+My apologies.
 
-Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-Co-developed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
----
- arch/riscv/boot/dts/Makefile                  |   1 +
- arch/riscv/boot/dts/starfive/Makefile         |   2 +
- .../dts/starfive/jh7100-beaglev-starlight.dts | 162 ++++++++++++++++++
- 3 files changed, 165 insertions(+)
- create mode 100644 arch/riscv/boot/dts/starfive/Makefile
- create mode 100644 arch/riscv/boot/dts/starfive/jh7100-beaglev-starlight.dts
+> On 12-10-21, 18:54, Hector Martin "marcan" wrote:
+>> Typically cpufreq-dt is used with clock drivers that directly take
+>> the clock frequency and do whatever voodoo is necessary to set it
+>> for the CPU. But here, the hardware just wants to know the index,
+>> and does everything itself. So we need to encode that somewhere, to
+>> avoid hardcoding it in the clock driver.
+>>
+>> In general, based on how these SoCs are designed, we're trying to
+>> avoid having tables of volatile information in the drivers, and
+>> instead keep everything in the DT. This means we have a good chance
+>> that these drivers will continue to work with future SoC
+>> generations, since Apple doesn't change register definitions
+>> randomly most of the time.
+> 
+> Yeah I get that and it is actually better this way. I just wanted to
+> point out that we didn't think of it this way earlier :)
 
-diff --git a/arch/riscv/boot/dts/Makefile b/arch/riscv/boot/dts/Makefile
-index fe996b88319e..ff174996cdfd 100644
---- a/arch/riscv/boot/dts/Makefile
-+++ b/arch/riscv/boot/dts/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- subdir-y += sifive
-+subdir-y += starfive
- subdir-$(CONFIG_SOC_CANAAN_K210_DTB_BUILTIN) += canaan
- subdir-y += microchip
- 
-diff --git a/arch/riscv/boot/dts/starfive/Makefile b/arch/riscv/boot/dts/starfive/Makefile
-new file mode 100644
-index 000000000000..0ea1bc15ab30
---- /dev/null
-+++ b/arch/riscv/boot/dts/starfive/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+dtb-$(CONFIG_SOC_STARFIVE) += jh7100-beaglev-starlight.dtb
-diff --git a/arch/riscv/boot/dts/starfive/jh7100-beaglev-starlight.dts b/arch/riscv/boot/dts/starfive/jh7100-beaglev-starlight.dts
-new file mode 100644
-index 000000000000..d30d42d299c6
---- /dev/null
-+++ b/arch/riscv/boot/dts/starfive/jh7100-beaglev-starlight.dts
-@@ -0,0 +1,162 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/* Copyright (C) 2021 StarFive Technology Co., Ltd. */
-+/* Copyright (C) 2021 Emil Renner Berthing <kernel@esmil.dk> */
-+
-+/dts-v1/;
-+#include "jh7100.dtsi"
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/pinctrl/pinctrl-starfive.h>
-+
-+/ {
-+	model = "BeagleV Starlight Beta";
-+	compatible = "beagle,beaglev-starlight-jh7100-r0", "starfive,jh7100";
-+
-+	aliases {
-+		serial0 = &uart3;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	cpus {
-+		timebase-frequency = <6250000>;
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x0 0x80000000 0x2 0x0>;
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-ack {
-+			gpios = <&gpio 43 GPIO_ACTIVE_HIGH>;
-+			color = <LED_COLOR_ID_GREEN>;
-+			function = LED_FUNCTION_HEARTBEAT;
-+			linux,default-trigger = "heartbeat";
-+			label = "ack";
-+		};
-+	};
-+};
-+
-+&gpio {
-+	i2c0_pins: i2c0-0 {
-+		i2c-pins {
-+			pinmux = <GPIOMUX(62, GPO_LOW,
-+				  GPO_I2C0_PAD_SCK_OEN,
-+				  GPI_I2C0_PAD_SCK_IN)>,
-+				 <GPIOMUX(61, GPO_LOW,
-+				  GPO_I2C0_PAD_SDA_OEN,
-+				  GPI_I2C0_PAD_SDA_IN)>;
-+			bias-disable; /* external pull-up */
-+			input-enable;
-+			input-schmitt-enable;
-+		};
-+	};
-+
-+	i2c1_pins: i2c1-0 {
-+		i2c-pins {
-+			pinmux = <GPIOMUX(47, GPO_LOW,
-+				  GPO_I2C1_PAD_SCK_OEN,
-+				  GPI_I2C1_PAD_SCK_IN)>,
-+				 <GPIOMUX(48, GPO_LOW,
-+				  GPO_I2C1_PAD_SDA_OEN,
-+				  GPI_I2C1_PAD_SDA_IN)>;
-+			bias-pull-up;
-+			input-enable;
-+			input-schmitt-enable;
-+		};
-+	};
-+
-+	i2c2_pins: i2c2-0 {
-+		i2c-pins {
-+			pinmux = <GPIOMUX(60, GPO_LOW,
-+				  GPO_I2C2_PAD_SCK_OEN,
-+				  GPI_I2C2_PAD_SCK_IN)>,
-+				 <GPIOMUX(59, GPO_LOW,
-+				  GPO_I2C2_PAD_SDA_OEN,
-+				  GPI_I2C2_PAD_SDA_IN)>;
-+			bias-disable; /* external pull-up */
-+			input-enable;
-+			input-schmitt-enable;
-+		};
-+	};
-+
-+	uart3_pins: uart3-0 {
-+		rx-pin {
-+			pinmux = <GPIOMUX(13, GPO_LOW, GPO_DISABLE,
-+				  GPI_UART3_PAD_SIN)>;
-+			bias-pull-up;
-+			drive-strength = <14>;
-+			input-enable;
-+			input-schmitt-enable;
-+			slew-rate = <0>;
-+		};
-+		tx-pin {
-+			pinmux = <GPIOMUX(14, GPO_UART3_PAD_SOUT,
-+				  GPO_ENABLE, GPI_NONE)>;
-+			bias-disable;
-+			drive-strength = <35>;
-+			input-disable;
-+			input-schmitt-disable;
-+			slew-rate = <0>;
-+		};
-+	};
-+};
-+
-+&i2c0 {
-+	clock-frequency = <100000>;
-+	i2c-sda-hold-time-ns = <300>;
-+	i2c-sda-falling-time-ns = <500>;
-+	i2c-scl-falling-time-ns = <500>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c0_pins>;
-+	status = "okay";
-+
-+	pmic@5e {
-+		compatible = "ti,tps65086";
-+		reg = <0x5e>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+
-+		regulators {
-+		};
-+	};
-+};
-+
-+&i2c1 {
-+	clock-frequency = <400000>;
-+	i2c-sda-hold-time-ns = <300>;
-+	i2c-sda-falling-time-ns = <100>;
-+	i2c-scl-falling-time-ns = <100>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c1_pins>;
-+	status = "okay";
-+};
-+
-+&i2c2 {
-+	clock-frequency = <100000>;
-+	i2c-sda-hold-time-ns = <300>;
-+	i2c-sda-falling-time-ns = <500>;
-+	i2c-scl-falling-time-ns = <500>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c2_pins>;
-+	status = "okay";
-+};
-+
-+&osc_sys {
-+	clock-frequency = <25000000>;
-+};
-+
-+&osc_aud {
-+	clock-frequency = <27000000>;
-+};
-+
-+&uart3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart3_pins>;
-+	status = "okay";
-+};
+Yeah, makes sense. Seems to work fine :)
+
+
 -- 
-2.33.0
-
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub
