@@ -2,111 +2,62 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFAF742CDA4
-	for <lists+linux-clk@lfdr.de>; Thu, 14 Oct 2021 00:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8F642CD5D
+	for <lists+linux-clk@lfdr.de>; Thu, 14 Oct 2021 00:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbhJMWRe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 13 Oct 2021 18:17:34 -0400
-Received: from aposti.net ([89.234.176.197]:39994 "EHLO aposti.net"
+        id S230520AbhJMWLP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 13 Oct 2021 18:11:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41202 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230228AbhJMWRd (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 13 Oct 2021 18:17:33 -0400
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     list@opendingux.net, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 2/2] clk: ingenic: Add MDMA and BDMA clocks
-Date:   Wed, 13 Oct 2021 23:08:15 +0100
-Message-Id: <20211013220815.38692-2-paul@crapouillou.net>
-In-Reply-To: <20211013220815.38692-1-paul@crapouillou.net>
-References: <20211013220815.38692-1-paul@crapouillou.net>
+        id S230505AbhJMWLL (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 13 Oct 2021 18:11:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C5E98610D0;
+        Wed, 13 Oct 2021 22:09:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634162946;
+        bh=fXSt8zwbgiMjEdpcffbwmBBVjBq4B3sSUZAeZJVWZf0=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=bt7CHmJ5vwagU4BDPtZ2LMoQ6WlycRK+rXR9p3cfbIMsMC+g/WyIv4Zy1p8uZrSMe
+         4y9/P2tsd/LbPEY5zmH8K6HAptaQKUi7KYNzrJYrEYqObTNI1ZRE8+jgvoH+Xd+p5k
+         jyI+BE47ycEpXWYLb74GzqzepUleiKLu/9ke3RY8eRqgDcPjLVzutWxSgUyzZtbq/Y
+         D1dt2p0fIjyMD+d0O3JJ2cJVgLvtgLpeB7NrSK2fT+hyArS8NJxWPcQzipxOC8HnpK
+         IwuwfcXsHHXHzWHjr8kkqfcSOhhwupFHxqmrTJ9fMoXgnNIw9rjGVwm+5bH1GWumui
+         xJ4dnBcv3vYCA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211008102041.268253-1-angelogioacchino.delregno@collabora.com>
+References: <20211008102041.268253-1-angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH 1/2] clk: qcom: mmcc-sdm660: Add necessary CXCs to venus_gdsc
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     agross@kernel.org, mturquette@baylibre.com,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
+        marijn.suijten@somainline.org, martin.botka@somainline.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        bjorn.andersson@linaro.org
+Date:   Wed, 13 Oct 2021 15:09:05 -0700
+Message-ID: <163416294547.936110.17487346014340369643@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The Ingenic JZ4760 and JZ4770 both have an extra DMA core named BDMA
-dedicated to the NAND and BCH controller, but which can also do
-memory-to-memory transfers. The JZ4760 additionally has a DMA core named
-MDMA dedicated to memory-to-memory transfers. The programming manual for
-the JZ4770 does have a bit for a MDMA clock, but does not seem to have
-the hardware wired in.
+Quoting AngeloGioacchino Del Regno (2021-10-08 03:20:40)
+> As also shown on downstream dts[1], for a correct operation of the
+> Venus block, we have to retain MEM/PERIPH when halting the video_core,
+> video_axi and video_subcore0 branches: add these CXCs to the main
+> Venus GDSC.
+>=20
+> [1]: https://github.com/sonyxperiadev/kernel/blob/aosp/LA.UM.6.4.r1/arch/=
+arm/boot/dts/qcom/sdm660-vidc.dtsi#L80
+>=20
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
+> ---
 
-Add the BDMA and MDMA clocks to the JZ4760 CGU code, and the BDMA clock
-to the JZ4770 code, so that the BDMA and MDMA controllers can be used.
-
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/clk/ingenic/jz4760-cgu.c               | 10 ++++++++++
- drivers/clk/ingenic/jz4770-cgu.c               |  5 +++++
- include/dt-bindings/clock/ingenic,jz4760-cgu.h |  2 ++
- include/dt-bindings/clock/ingenic,jz4770-cgu.h |  1 +
- 4 files changed, 18 insertions(+)
-
-diff --git a/drivers/clk/ingenic/jz4760-cgu.c b/drivers/clk/ingenic/jz4760-cgu.c
-index 080d492ac95c..8fdd383560fb 100644
---- a/drivers/clk/ingenic/jz4760-cgu.c
-+++ b/drivers/clk/ingenic/jz4760-cgu.c
-@@ -313,6 +313,16 @@ static const struct ingenic_cgu_clk_info jz4760_cgu_clocks[] = {
- 		.parents = { JZ4760_CLK_H2CLK, },
- 		.gate = { CGU_REG_CLKGR0, 21 },
- 	},
-+	[JZ4760_CLK_MDMA] = {
-+		"mdma", CGU_CLK_GATE,
-+		.parents = { JZ4760_CLK_HCLK, },
-+		.gate = { CGU_REG_CLKGR0, 25 },
-+	},
-+	[JZ4760_CLK_BDMA] = {
-+		"bdma", CGU_CLK_GATE,
-+		.parents = { JZ4760_CLK_HCLK, },
-+		.gate = { CGU_REG_CLKGR1, 0 },
-+	},
- 	[JZ4760_CLK_I2C0] = {
- 		"i2c0", CGU_CLK_GATE,
- 		.parents = { JZ4760_CLK_EXT, },
-diff --git a/drivers/clk/ingenic/jz4770-cgu.c b/drivers/clk/ingenic/jz4770-cgu.c
-index 8c6c1208f462..7ef91257630e 100644
---- a/drivers/clk/ingenic/jz4770-cgu.c
-+++ b/drivers/clk/ingenic/jz4770-cgu.c
-@@ -329,6 +329,11 @@ static const struct ingenic_cgu_clk_info jz4770_cgu_clocks[] = {
- 		.parents = { JZ4770_CLK_H2CLK, },
- 		.gate = { CGU_REG_CLKGR0, 21 },
- 	},
-+	[JZ4770_CLK_BDMA] = {
-+		"bdma", CGU_CLK_GATE,
-+		.parents = { JZ4770_CLK_H2CLK, },
-+		.gate = { CGU_REG_CLKGR1, 0 },
-+	},
- 	[JZ4770_CLK_I2C0] = {
- 		"i2c0", CGU_CLK_GATE,
- 		.parents = { JZ4770_CLK_EXT, },
-diff --git a/include/dt-bindings/clock/ingenic,jz4760-cgu.h b/include/dt-bindings/clock/ingenic,jz4760-cgu.h
-index 4bb2e19c4743..9fb04ebac6de 100644
---- a/include/dt-bindings/clock/ingenic,jz4760-cgu.h
-+++ b/include/dt-bindings/clock/ingenic,jz4760-cgu.h
-@@ -50,5 +50,7 @@
- #define JZ4760_CLK_LPCLK_DIV	41
- #define JZ4760_CLK_TVE		42
- #define JZ4760_CLK_LPCLK	43
-+#define JZ4760_CLK_MDMA		44
-+#define JZ4760_CLK_BDMA		45
- 
- #endif /* __DT_BINDINGS_CLOCK_JZ4760_CGU_H__ */
-diff --git a/include/dt-bindings/clock/ingenic,jz4770-cgu.h b/include/dt-bindings/clock/ingenic,jz4770-cgu.h
-index d68a7695a1f8..0b475e8ae321 100644
---- a/include/dt-bindings/clock/ingenic,jz4770-cgu.h
-+++ b/include/dt-bindings/clock/ingenic,jz4770-cgu.h
-@@ -54,5 +54,6 @@
- #define JZ4770_CLK_OTG_PHY	45
- #define JZ4770_CLK_EXT512	46
- #define JZ4770_CLK_RTC		47
-+#define JZ4770_CLK_BDMA		48
- 
- #endif /* __DT_BINDINGS_CLOCK_JZ4770_CGU_H__ */
--- 
-2.33.0
-
+Applied to clk-next
