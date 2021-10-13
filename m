@@ -2,223 +2,58 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A10242CD8B
-	for <lists+linux-clk@lfdr.de>; Thu, 14 Oct 2021 00:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B3442CD82
+	for <lists+linux-clk@lfdr.de>; Thu, 14 Oct 2021 00:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbhJMWMg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 13 Oct 2021 18:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbhJMWMf (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 13 Oct 2021 18:12:35 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE20C061749
-        for <linux-clk@vger.kernel.org>; Wed, 13 Oct 2021 15:10:31 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id t75-20020a63784e000000b002993a9284b0so2234299pgc.11
-        for <linux-clk@vger.kernel.org>; Wed, 13 Oct 2021 15:10:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=wqNELjpmtlGEH41rLEk9ERkQkG/0kIH/3vHQh1QjL18=;
-        b=shMjCyt21hCl3oG5ov9YV/koHCJMWMBpeRKIZiTz/TdlcaUZY4c5029DWcjOLBg55v
-         pP/p3ziQunijS7XGR4kOYNbDzOR6MtUq/BOKmmgTSddZKHNI0pM513UrfHdw8LpaxyAl
-         SIci4bHoNukoPscZnCMqpCstVAqQYHRiXBzxZahL991idYJeK0uCtq1IywfOAIE8AtVr
-         VCCKjdgwleV+Hu4O1F018Lc8VAqXJHmRKiuMmfA3yU1GIIiSYK8cKqfp7neNULCIjHiz
-         eArEfyh63J19/YrLexQIp4Uj2WlfTGHVcRz5R/C+noXT3JLTUEMpTr+H0fBM1ncPlnWa
-         QhgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=wqNELjpmtlGEH41rLEk9ERkQkG/0kIH/3vHQh1QjL18=;
-        b=mOwF6PDjkb+0pyjOfPEj6OaJ1MLcacyCjd9LwidU3c+BOY9UPgcVc+jHsu/xzQ3XJ5
-         0vxACT3M/0i/ULC2vu6N6Pk6+ph65dJgHV8C7ZCWlzzJU8RhPXX3enNJeO5/Fd1gOEsM
-         vyfWsN6MNWrXuruLq8zZBc0KXLeDpZm9TiHbZzLWCwZ1atqR2OXnxOUo7f0KFuWutnaM
-         dgfuQ9KIwGnG3Wd9wyp00BC5Shw13I5MqnxIUBKiLwOkWwSDzyAZjbulHiqSXVeflX0H
-         qNtdGhxyPnSfY/bn0wC/rnCDDRZkaHyh27jrWVQo37fZjbbI9XiW7di2lImoNp7t+t/q
-         esxQ==
-X-Gm-Message-State: AOAM532q0P/nlzG8yVsXt8wFOlL0CfaoSwTqpMmK/dFWJ6uCSfsGtZMM
-        EigS2UpWZuEjXQO18X2O13/H6TxrPDe5sVH/CTY=
-X-Google-Smtp-Source: ABdhPJwSHq7t4EDLLAtv4RUzmCWL7n/SHCwJF1dRQXyJ3LKA9du+tmSUO665Mf74ZPLjq2ZJLDufZJT9YVDHODWdxaA=
-X-Received: from willmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:2dd0])
- (user=willmcvicker job=sendgmr) by 2002:a17:902:8b81:b0:13f:3d30:f624 with
- SMTP id ay1-20020a1709028b8100b0013f3d30f624mr1635638plb.51.1634163031149;
- Wed, 13 Oct 2021 15:10:31 -0700 (PDT)
-Date:   Wed, 13 Oct 2021 22:10:20 +0000
-In-Reply-To: <20211013221021.3433704-1-willmcvicker@google.com>
-Message-Id: <20211013221021.3433704-3-willmcvicker@google.com>
-Mime-Version: 1.0
-References: <20211013221021.3433704-1-willmcvicker@google.com>
-X-Mailer: git-send-email 2.33.0.1079.g6e70778dc9-goog
-Subject: [PATCH v3 2/2] [RFT] clk: samsung: exynos5433: update apollo and
- atlas clock probing
-From:   Will McVicker <willmcvicker@google.com>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
+        id S230448AbhJMWMb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 13 Oct 2021 18:12:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42558 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230312AbhJMWMa (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Wed, 13 Oct 2021 18:12:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0042161130;
+        Wed, 13 Oct 2021 22:10:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1634163027;
+        bh=pbGIzeH7lr0l+cXXI6HRhGSu+27o+zz6WsxR9ZHGpWE=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=ct8fGDqC8FA92VTSNl0TN/09lhE3k+BITN0tPtH1hXw1SKlTnwM9HDCtMWhCSlfV+
+         M+eFr2gyybJoLgf3zoqdJE0qSVRfR76Y+Y2CGJnGxpZtbf1BmDp+vmv91tbKHV6Jws
+         IcaEfhE4OJI+bw8/7FWfARS6AVphbvJaEHY4sYugT646SUWSDhgEl6bvsGAUWgfpF4
+         WKsIjrB9lM9NIV1RGsNcVxFQk1sJ05NRzMmIYkT2piJg2/EV2PxWVdH3A4YT8k73b/
+         az+SR1usOd2RGpvsQaiZG0P3P90qZrtRz6KUYM1rLO8IeqetM64DeNUc2rTL/3yvjN
+         Un8U9ujm4CBTw==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210923162645.23257-9-konrad.dybcio@somainline.org>
+References: <20210923162645.23257-1-konrad.dybcio@somainline.org> <20210923162645.23257-9-konrad.dybcio@somainline.org>
+Subject: Re: [PATCH v4 9/9] clk: qcom: gcc-msm8994: Use ARRAY_SIZE() for num_parents
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     kernel-team@android.com, Will McVicker <willmcvicker@google.com>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Date:   Wed, 13 Oct 2021 15:10:25 -0700
+Message-ID: <163416302578.936110.13535057184944225764@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Use the samsung common clk driver to initialize and probe the apollo and
-atlas clocks. This removes their custom init functions and uses the
-samsung_cmu_register_one() instead.
+Quoting Konrad Dybcio (2021-09-23 09:26:42)
+> Don't rely on the programmer to enter the name of array elements, since t=
+he
+> computer can compute it with much less chance of making a mistake.
+>=20
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> ---
 
-Signed-off-by: Will McVicker <willmcvicker@google.com>
----
- drivers/clk/samsung/clk-exynos5433.c | 120 +++++++++++----------------
- 1 file changed, 48 insertions(+), 72 deletions(-)
-
-diff --git a/drivers/clk/samsung/clk-exynos5433.c b/drivers/clk/samsung/clk-exynos5433.c
-index f203074d858b..0ef809c9e2da 100644
---- a/drivers/clk/samsung/clk-exynos5433.c
-+++ b/drivers/clk/samsung/clk-exynos5433.c
-@@ -3675,44 +3675,32 @@ static const struct exynos_cpuclk_cfg_data exynos5433_apolloclk_d[] __initconst
- 	{  0 },
- };
- 
-+static const struct samsung_cpu_clock apollo_cpu_clks[] __initconst = {
-+	CPU_CLK(CLK_SCLK_APOLLO, "apolloclk", "mout_apollo_pll",
-+			"mout_bus_pll_apollo_user",
-+			CLK_CPU_HAS_E5433_REGS_LAYOUT, 0x200,
-+			exynos5433_apolloclk_d),
-+};
-+
-+static const struct samsung_cmu_info apollo_cmu_info __initconst = {
-+	.pll_clks	= apollo_pll_clks,
-+	.nr_pll_clks	= ARRAY_SIZE(apollo_pll_clks),
-+	.mux_clks	= apollo_mux_clks,
-+	.nr_mux_clks	= ARRAY_SIZE(apollo_mux_clks),
-+	.div_clks	= apollo_div_clks,
-+	.nr_div_clks	= ARRAY_SIZE(apollo_div_clks),
-+	.gate_clks	= apollo_gate_clks,
-+	.nr_gate_clks	= ARRAY_SIZE(apollo_gate_clks),
-+	.cpu_clks	= apollo_cpu_clks,
-+	.nr_cpu_clks	= ARRAY_SIZE(apollo_cpu_clks),
-+	.nr_clk_ids	= APOLLO_NR_CLK,
-+	.clk_regs	= apollo_clk_regs,
-+	.nr_clk_regs	= ARRAY_SIZE(apollo_clk_regs),
-+};
-+
- static void __init exynos5433_cmu_apollo_init(struct device_node *np)
- {
--	void __iomem *reg_base;
--	struct samsung_clk_provider *ctx;
--	struct clk_hw **hws;
--
--	reg_base = of_iomap(np, 0);
--	if (!reg_base) {
--		panic("%s: failed to map registers\n", __func__);
--		return;
--	}
--
--	ctx = samsung_clk_init(np, reg_base, APOLLO_NR_CLK);
--	if (!ctx) {
--		panic("%s: unable to allocate ctx\n", __func__);
--		return;
--	}
--
--	samsung_clk_register_pll(ctx, apollo_pll_clks,
--				 ARRAY_SIZE(apollo_pll_clks), reg_base);
--	samsung_clk_register_mux(ctx, apollo_mux_clks,
--				 ARRAY_SIZE(apollo_mux_clks));
--	samsung_clk_register_div(ctx, apollo_div_clks,
--				 ARRAY_SIZE(apollo_div_clks));
--	samsung_clk_register_gate(ctx, apollo_gate_clks,
--				  ARRAY_SIZE(apollo_gate_clks));
--
--	hws = ctx->clk_data.hws;
--
--	exynos_register_cpu_clock(ctx, CLK_SCLK_APOLLO, "apolloclk",
--		hws[CLK_MOUT_APOLLO_PLL], hws[CLK_MOUT_BUS_PLL_APOLLO_USER], 0x200,
--		exynos5433_apolloclk_d, ARRAY_SIZE(exynos5433_apolloclk_d),
--		CLK_CPU_HAS_E5433_REGS_LAYOUT);
--
--	samsung_clk_sleep_init(reg_base, apollo_clk_regs,
--			       ARRAY_SIZE(apollo_clk_regs));
--
--	samsung_clk_of_add_provider(np, ctx);
-+	samsung_cmu_register_one(np, &apollo_cmu_info);
- }
- CLK_OF_DECLARE(exynos5433_cmu_apollo, "samsung,exynos5433-cmu-apollo",
- 		exynos5433_cmu_apollo_init);
-@@ -3932,44 +3920,32 @@ static const struct exynos_cpuclk_cfg_data exynos5433_atlasclk_d[] __initconst =
- 	{  0 },
- };
- 
--static void __init exynos5433_cmu_atlas_init(struct device_node *np)
--{
--	void __iomem *reg_base;
--	struct samsung_clk_provider *ctx;
--	struct clk_hw **hws;
--
--	reg_base = of_iomap(np, 0);
--	if (!reg_base) {
--		panic("%s: failed to map registers\n", __func__);
--		return;
--	}
--
--	ctx = samsung_clk_init(np, reg_base, ATLAS_NR_CLK);
--	if (!ctx) {
--		panic("%s: unable to allocate ctx\n", __func__);
--		return;
--	}
--
--	samsung_clk_register_pll(ctx, atlas_pll_clks,
--				 ARRAY_SIZE(atlas_pll_clks), reg_base);
--	samsung_clk_register_mux(ctx, atlas_mux_clks,
--				 ARRAY_SIZE(atlas_mux_clks));
--	samsung_clk_register_div(ctx, atlas_div_clks,
--				 ARRAY_SIZE(atlas_div_clks));
--	samsung_clk_register_gate(ctx, atlas_gate_clks,
--				  ARRAY_SIZE(atlas_gate_clks));
--
--	hws = ctx->clk_data.hws;
--
--	exynos_register_cpu_clock(ctx, CLK_SCLK_ATLAS, "atlasclk",
--		hws[CLK_MOUT_ATLAS_PLL], hws[CLK_MOUT_BUS_PLL_ATLAS_USER], 0x200,
--		exynos5433_atlasclk_d, ARRAY_SIZE(exynos5433_atlasclk_d),
--		CLK_CPU_HAS_E5433_REGS_LAYOUT);
-+static const struct samsung_cpu_clock atlas_cpu_clks[] __initconst = {
-+	CPU_CLK(CLK_SCLK_ATLAS, "atlasclk", "mout_atlas_pll",
-+			"mout_bus_pll_atlas_user",
-+			CLK_CPU_HAS_E5433_REGS_LAYOUT, 0x200,
-+			exynos5433_atlasclk_d),
-+};
- 
--	samsung_clk_sleep_init(reg_base, atlas_clk_regs,
--			       ARRAY_SIZE(atlas_clk_regs));
-+static const struct samsung_cmu_info atlas_cmu_info __initconst = {
-+	.pll_clks	= atlas_pll_clks,
-+	.nr_pll_clks	= ARRAY_SIZE(atlas_pll_clks),
-+	.mux_clks	= atlas_mux_clks,
-+	.nr_mux_clks	= ARRAY_SIZE(atlas_mux_clks),
-+	.div_clks	= atlas_div_clks,
-+	.nr_div_clks	= ARRAY_SIZE(atlas_div_clks),
-+	.gate_clks	= atlas_gate_clks,
-+	.nr_gate_clks	= ARRAY_SIZE(atlas_gate_clks),
-+	.cpu_clks	= atlas_cpu_clks,
-+	.nr_cpu_clks	= ARRAY_SIZE(atlas_cpu_clks),
-+	.nr_clk_ids	= ATLAS_NR_CLK,
-+	.clk_regs	= atlas_clk_regs,
-+	.nr_clk_regs	= ARRAY_SIZE(atlas_clk_regs),
-+};
- 
--	samsung_clk_of_add_provider(np, ctx);
-+static void __init exynos5433_cmu_atlas_init(struct device_node *np)
-+{
-+	samsung_cmu_register_one(np, &atlas_cmu_info);
- }
- CLK_OF_DECLARE(exynos5433_cmu_atlas, "samsung,exynos5433-cmu-atlas",
- 		exynos5433_cmu_atlas_init);
--- 
-2.33.0.882.g93a45727a2-goog
-
+Applied to clk-next
