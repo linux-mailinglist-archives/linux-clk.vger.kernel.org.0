@@ -2,196 +2,135 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD7242D446
-	for <lists+linux-clk@lfdr.de>; Thu, 14 Oct 2021 09:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B20C42D47D
+	for <lists+linux-clk@lfdr.de>; Thu, 14 Oct 2021 10:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbhJNH6l (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 14 Oct 2021 03:58:41 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:46268 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230172AbhJNH6k (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 14 Oct 2021 03:58:40 -0400
-X-UUID: 7c14215bd0cb4c839db4cf9f8f183afa-20211014
-X-UUID: 7c14215bd0cb4c839db4cf9f8f183afa-20211014
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <sam.shih@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1548455158; Thu, 14 Oct 2021 15:56:33 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 14 Oct 2021 15:56:32 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 Oct 2021 15:56:32 +0800
-From:   Sam Shih <sam.shih@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        id S230118AbhJNIG7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 14 Oct 2021 04:06:59 -0400
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:57636
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230035AbhJNIG7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 14 Oct 2021 04:06:59 -0400
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E089A40003
+        for <linux-clk@vger.kernel.org>; Thu, 14 Oct 2021 08:04:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1634198693;
+        bh=ojVn2ZVbkcgXLj7A1DRlVPqyw/Wvd+lGjqh+OPrsbYg=;
+        h=To:Cc:References:From:Subject:Message-ID:Date:MIME-Version:
+         In-Reply-To:Content-Type;
+        b=h+V/m8SE0ysBm9lknGPpnnkrr4Cm8wmFe8JqLgGBn2Fqz26H3Res69bAqugxBDn8i
+         cxVbUVQU9lY7qhoZjNpgaogQm4iWpKgFXaLJhXl+GVGaHBlWJr7tc0b7UWC3mmBQYx
+         H+uMjk7eAIr6ia93HNL7Nak5YBWodeB0Z4Li6X28L/zBQsPpNadka1TYjSVyRWb5Pz
+         SujZ0E6vIOOGzByJyq1G6gqavCq1gYOGUeO/HezX0VdUIPjkdtnWT2diQZ5twOqEVu
+         Ih1Sq9f/dED08Bg+BtLtncvk57wYW56Z82b7/kfE+70sZdSBxT0stGt75pigql/vU5
+         xz/xw+AQ6IQWw==
+Received: by mail-lf1-f69.google.com with SMTP id bt36-20020a056512262400b003fd7e6a96e8so3764575lfb.19
+        for <linux-clk@vger.kernel.org>; Thu, 14 Oct 2021 01:04:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ojVn2ZVbkcgXLj7A1DRlVPqyw/Wvd+lGjqh+OPrsbYg=;
+        b=1vDN58FtxUmDMeds9sypbVykL027SR1XbDZuX7d0KDHN5A6dERADfszd6lEw+FY7HW
+         WhLZpsgYx0uNkPzPuhcop3HKM4aZ6xXMqu9+o8JCtZt66vA31BBVMdSFtDr3VSgIfauX
+         ul4tTe8WlDOtibZN00yTj+twrkjk01iMZjDgd6wEphyk/x9KhIOwI0vbyDpHH6olU2fq
+         pCm5EoXBi0VIWWKAKlfBU6wb9PowxqKv3tlJedGkHqpu0E6t4gqp+VJJWZy1wMRzw1Pu
+         T9w36DFxlVuILoE5Y11YFDFFkYqUkfmdrWvWgTYmACgYrhhruMfG360EVyrtrP2JXCP1
+         C89A==
+X-Gm-Message-State: AOAM533moA0yC7e8zr9fyy9q5XE/pwEE1AQPZFwF64t3amA35MsyGELc
+        zAC4oQTj7i3uGaxRnrj+9Tj/kdu9Qgws6eza1x9Xm7GqwRV23azYILRlRtzuP+tCoEB6A5+Gmgd
+        7eic3zUZpOv96ZeoUZxMIpTBrbpiV2tdjg9zXJw==
+X-Received: by 2002:a05:651c:907:: with SMTP id e7mr4525979ljq.457.1634198693185;
+        Thu, 14 Oct 2021 01:04:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw+fscirp5GuIbG7uOPrahokzBv9+3ns/V49MlZBkkCWBoqQbGM80foMTQ19Sle1sD5Y+4ZXA==
+X-Received: by 2002:a05:651c:907:: with SMTP id e7mr4525955ljq.457.1634198692964;
+        Thu, 14 Oct 2021 01:04:52 -0700 (PDT)
+Received: from [192.168.3.161] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id z12sm161733lfs.101.2021.10.14.01.04.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Oct 2021 01:04:52 -0700 (PDT)
+To:     Hector Martin <marcan@marcan.st>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Fabien Parent <fparent@baylibre.com>,
-        "Weiyi Lu" <weiyi.lu@mediatek.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Miles Chen <miles.chen@mediatek.com>,
-        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>
-CC:     John Crispin <john@phrozen.org>,
-        Ryder Lee <Ryder.Lee@mediatek.com>,
-        "Sam Shih" <sam.shih@mediatek.com>
-Subject: [PATCH v4 5/5] arm64: dts: mediatek: add clock support for mt7986b
-Date:   Thu, 14 Oct 2021 15:56:20 +0800
-Message-ID: <20211014075620.17563-6-sam.shih@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20211014075620.17563-1-sam.shih@mediatek.com>
-References: <20211014075620.17563-1-sam.shih@mediatek.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211011165707.138157-1-marcan@marcan.st>
+ <20211011165707.138157-7-marcan@marcan.st>
+ <a9f6898d-bd76-b94e-52fc-98e9da1a04bd@canonical.com>
+ <2a6f14e5-fbc9-4b9a-9378-a4b5200bc3fb@marcan.st>
+ <f81467d4-74b2-176d-06bf-f04e073efce4@canonical.com>
+ <00925242-b837-d75b-3655-536d45dcd4d2@marcan.st>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: Re: [RFC PATCH 6/9] memory: apple: Add apple-mcc driver to manage MCC
+ perf in Apple SoCs
+Message-ID: <410c0ccb-68d3-478b-2b5b-9165890e614a@canonical.com>
+Date:   Thu, 14 Oct 2021 10:04:51 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+In-Reply-To: <00925242-b837-d75b-3655-536d45dcd4d2@marcan.st>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add clock controller nodes, include 40M clock source, topckgen,
-infracfg, apmixedsys and ethernet subsystem.
+On 14/10/2021 09:52, Hector Martin wrote:
+> On 14/10/2021 16.36, Krzysztof Kozlowski wrote:
 
-Signed-off-by: Sam Shih <sam.shih@mediatek.com>
----
- arch/arm64/boot/dts/mediatek/mt7986b.dtsi | 68 +++++++++++++++++++++--
- 1 file changed, 63 insertions(+), 5 deletions(-)
+(...)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986b.dtsi b/arch/arm64/boot/dts/mediatek/mt7986b.dtsi
-index 2b8e0a382398..9cc27020901a 100644
---- a/arch/arm64/boot/dts/mediatek/mt7986b.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt7986b.dtsi
-@@ -6,6 +6,7 @@
- 
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/clock/mt7986-clk.h>
- 
- / {
- 	compatible = "mediatek,mt7986b";
-@@ -13,9 +14,10 @@ / {
- 	#address-cells = <2>;
- 	#size-cells = <2>;
- 
--	system_clk: dummy40m {
-+	clk40m: oscillator@0 {
- 		compatible = "fixed-clock";
- 		clock-frequency = <40000000>;
-+		clock-output-names = "clkxtal";
- 		#clock-cells = <0>;
- 	};
- 
-@@ -99,6 +101,18 @@ gic: interrupt-controller@c000000 {
- 			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		infracfg: infracfg@10001000 {
-+			compatible = "mediatek,mt7986-infracfg", "syscon";
-+			reg = <0 0x10001000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		topckgen: topckgen@1001b000 {
-+			compatible = "mediatek,mt7986-topckgen", "syscon";
-+			reg = <0 0x1001B000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
- 		watchdog: watchdog@1001c000 {
- 			compatible = "mediatek,mt7986-wdt",
- 				     "mediatek,mt6589-wdt";
-@@ -108,11 +122,31 @@ watchdog: watchdog@1001c000 {
- 			status = "disabled";
- 		};
- 
-+		apmixedsys: apmixedsys@1001e000 {
-+			compatible = "mediatek,mt7986-apmixedsys";
-+			reg = <0 0x1001E000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		sgmiisys0: syscon@10060000 {
-+			compatible = "mediatek,mt7986-sgmiisys_0",
-+				     "syscon";
-+			reg = <0 0x10060000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		sgmiisys1: syscon@10070000 {
-+			compatible = "mediatek,mt7986-sgmiisys_1",
-+				     "syscon";
-+			reg = <0 0x10070000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
- 		trng: trng@1020f000 {
- 			compatible = "mediatek,mt7986-rng",
- 				     "mediatek,mt7623-rng";
- 			reg = <0 0x1020f000 0 0x100>;
--			clocks = <&system_clk>;
-+			clocks = <&infracfg CLK_INFRA_TRNG_CK>;
- 			clock-names = "rng";
- 			status = "disabled";
- 		};
-@@ -122,7 +156,13 @@ uart0: serial@11002000 {
- 				     "mediatek,mt6577-uart";
- 			reg = <0 0x11002000 0 0x400>;
- 			interrupts = <GIC_SPI 123 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&system_clk>;
-+			clocks = <&infracfg CLK_INFRA_UART0_SEL>,
-+				 <&infracfg CLK_INFRA_UART0_CK>;
-+			clock-names = "baud", "bus";
-+			assigned-clocks = <&topckgen CLK_TOP_UART_SEL>,
-+					  <&infracfg CLK_INFRA_UART0_SEL>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_XTAL>,
-+						 <&topckgen CLK_TOP_UART_SEL>;
- 			status = "disabled";
- 		};
- 
-@@ -131,7 +171,11 @@ uart1: serial@11003000 {
- 				     "mediatek,mt6577-uart";
- 			reg = <0 0x11003000 0 0x400>;
- 			interrupts = <GIC_SPI 124 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&system_clk>;
-+			clocks = <&infracfg CLK_INFRA_UART1_SEL>,
-+				 <&infracfg CLK_INFRA_UART1_CK>;
-+			clock-names = "baud", "bus";
-+			assigned-clocks = <&infracfg CLK_INFRA_UART1_SEL>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_F26M_SEL>;
- 			status = "disabled";
- 		};
- 
-@@ -140,10 +184,24 @@ uart2: serial@11004000 {
- 				     "mediatek,mt6577-uart";
- 			reg = <0 0x11004000 0 0x400>;
- 			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&system_clk>;
-+			clocks = <&infracfg CLK_INFRA_UART2_SEL>,
-+				 <&infracfg CLK_INFRA_UART2_CK>;
-+			clock-names = "baud", "bus";
-+			assigned-clocks = <&infracfg CLK_INFRA_UART2_SEL>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_F26M_SEL>;
- 			status = "disabled";
- 		};
- 
-+		ethsys: syscon@15000000 {
-+			 #address-cells = <1>;
-+			 #size-cells = <1>;
-+			 compatible = "mediatek,mt7986-ethsys",
-+				      "syscon";
-+			 reg = <0 0x15000000 0 0x1000>;
-+			 #clock-cells = <1>;
-+			 #reset-cells = <1>;
-+		};
-+
- 	};
- 
- };
--- 
-2.29.2
+> 
+>>> Ah, I didn't realize that was a valid option for MODULE_LICENSE. I guess
+>>> anything containing "GPL" works with EXPORT_SYMBOL_GPL?
+>>
+>> I don't think exporting symbols is related to how you license your code.
+> 
+> It is; only modules with a GPL-compatible MODULE_LICENSE get to use 
+> symbols exported via EXPORT_SYMBOL_GPL.
 
+Although there might be such correlation but it's not a rule. You can
+have a GPL module exporting symbols without GPL requirement
+(EXPORT_SYMBOLS). You can have a GPL+MIT module exporting symbols as
+GPL. Obviously you cannot have a non-GPL module, as we do not accept
+these and there is no such choice.
+
+So answering your question that "GPL" works with EXPORT_SYMBOL_GPL -
+everything is GPL but it works with both EXPORT_SYMBOL and
+EXPORT_SYMBOL_GPL.
+
+> 
+> See kernel/module.c for the symbol lookup logic and 
+> include/linux/license.h for the logic to check the string (seems like 
+> "Dual MIT/GPL" is explicitly whitelisted there).
+
+Not related to export symbol. It is used for determining the tainted
+kernel via other licenses.
+
+> 
+> Of course, this is a futile effort, as ~every time I see a proprietary 
+> module in some embedded device, it either falsely declares itself to be 
+> GPL, or they have a shim module that re-exports GPL symbols as non-GPL.
+> 
+
+This is being removed soon (or already).
+
+
+Best regards,
+Krzysztof
