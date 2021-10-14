@@ -2,133 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD01842DBAD
-	for <lists+linux-clk@lfdr.de>; Thu, 14 Oct 2021 16:31:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A427542DE7F
+	for <lists+linux-clk@lfdr.de>; Thu, 14 Oct 2021 17:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbhJNOdX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 14 Oct 2021 10:33:23 -0400
-Received: from mail-oi1-f174.google.com ([209.85.167.174]:46893 "EHLO
-        mail-oi1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231910AbhJNOdQ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 14 Oct 2021 10:33:16 -0400
-Received: by mail-oi1-f174.google.com with SMTP id o204so8658560oih.13;
-        Thu, 14 Oct 2021 07:31:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=LIGlTpgW1tWbiwTKp+gXJ96FX9IdJratUHQ3TqZY3b0=;
-        b=hxNTomxh9KLjQqCp7hx1ediqTfBIGVdG8ECwk++KSI3sxSNQgO7c3C4fRWDpxZ1iB4
-         GbhjAU38CzcuAQFBCdIjRm8rmDPNGfTqJEFtKqPLD9T4karGOe+O1zjVViMsFEAYefSR
-         pKqPin/Nku3wN4lilU7baI2/nfTqXspm6H3GGez+/cLDhCP+kk/f1+jseT0BvERLAxyE
-         UD+EYcfMI2gUKWQp0MCTxRep8Adzkc5axRhXNCcUIpETicoG7Ok6TqOmuKr6Odq8i+lq
-         UgpgOzs0PycNISP7Zc7/Ja9BzbMlj6jC6by5Gwy+O3Rbty5KYKdGzBhOToLK2SXLSPAK
-         VyOw==
-X-Gm-Message-State: AOAM533K7Ur5nkBdnw33Eb8K1wSfggMQ+n5mLEF0IL+cZK5Dc9xjc9ak
-        7mt0uQ67SaZ53y4s01UfsA==
-X-Google-Smtp-Source: ABdhPJw/trDzPyr4wm7mQqsmQls0HHi+6ZgTWKM/1st60QAbZ/vPRbSVcXQBdXrjDoyPcU+mZ85fXQ==
-X-Received: by 2002:a05:6808:1250:: with SMTP id o16mr4293459oiv.63.1634221871201;
-        Thu, 14 Oct 2021 07:31:11 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id x18sm472578oov.13.2021.10.14.07.31.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Oct 2021 07:31:10 -0700 (PDT)
-Received: (nullmailer pid 3295883 invoked by uid 1000);
-        Thu, 14 Oct 2021 14:31:04 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     Loic Poulain <loic.poulain@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andy Gross <agross@kernel.org>, phone-devel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Viresh Kumar <vireshk@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-In-Reply-To: <20211014083016.137441-3-y.oudjana@protonmail.com>
-References: <20211014083016.137441-1-y.oudjana@protonmail.com> <20211014083016.137441-3-y.oudjana@protonmail.com>
-Subject: Re: [PATCH 2/8] dt-bindings: clk: qcom: msm8996-apcc: Add MSM8996 Pro compatible
-Date:   Thu, 14 Oct 2021 09:31:04 -0500
-Message-Id: <1634221864.197594.3295882.nullmailer@robh.at.kernel.org>
+        id S232395AbhJNPpU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 14 Oct 2021 11:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232565AbhJNPpT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 14 Oct 2021 11:45:19 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD93EC061570
+        for <linux-clk@vger.kernel.org>; Thu, 14 Oct 2021 08:43:14 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mb2su-0002sB-Qj; Thu, 14 Oct 2021 17:43:08 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mb2su-00074v-0K; Thu, 14 Oct 2021 17:43:08 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1mb2st-000453-Vb; Thu, 14 Oct 2021 17:43:07 +0200
+Date:   Thu, 14 Oct 2021 17:43:07 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2] clk: expand clk_ignore_unused mechanism to keep only
+ a few clks on
+Message-ID: <20211014154307.eb3y3sh5lca4426t@pengutronix.de>
+References: <20210819121403.337833-1-u.kleine-koenig@pengutronix.de>
+ <20210922081549.kit3lsek7lh6w6ji@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dh5ic32cncbw4ucf"
+Content-Disposition: inline
+In-Reply-To: <20210922081549.kit3lsek7lh6w6ji@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, 14 Oct 2021 08:32:04 +0000, Yassine Oudjana wrote:
-> Add a compatible string for msm8996pro-apcc.
-> 
-> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-> ---
->  Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+--dh5ic32cncbw4ucf
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+Hello,
 
-Full log is available here: https://patchwork.ozlabs.org/patch/1540829
+On Wed, Sep 22, 2021 at 10:15:49AM +0200, Uwe Kleine-K=F6nig wrote:
+> On Thu, Aug 19, 2021 at 02:14:03PM +0200, Uwe Kleine-K=F6nig wrote:
+> > Allow to pass an integer n that results in only keeping n unused clocks
+> > enabled.
+> >=20
+> > This helps to debug the problem if you only know that clk_ignore_unused
+> > helps but you have no clue yet which clock is the culprit.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> I consider this patch really helpful, it helped me to debug a clk issue
+> without having to recompile the kernel for each bisection step.
+>=20
+> On #kernelnewbies I got some positive feedback for it (1629304050 < j_ey>
+> ukleinek: nice clk_ignore_unused patch, I added a pr_err there recently
+> to print the clocks that were being disabled).
 
+Any thoughts on this patch? Would be great if it makes it into the next
+merge window.
 
-clock-controller@6400000: clock-names:0: 'pwrcl_pll' was expected
-	arch/arm64/boot/dts/qcom/apq8096-db820c.dt.yaml
-	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-mtp.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dt.yaml
+Thanks for considering,
+Uwe
 
-clock-controller@6400000: clock-names: ['xo'] is too short
-	arch/arm64/boot/dts/qcom/apq8096-db820c.dt.yaml
-	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-mtp.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dt.yaml
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-clock-controller@6400000: clocks: [[29]] is too short
-	arch/arm64/boot/dts/qcom/msm8996-mtp.dt.yaml
+--dh5ic32cncbw4ucf
+Content-Type: application/pgp-signature; name="signature.asc"
 
-clock-controller@6400000: clocks: [[33]] is too short
-	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dt.yaml
+-----BEGIN PGP SIGNATURE-----
 
-clock-controller@6400000: clocks: [[36]] is too short
-	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dt.yaml
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmFoUAgACgkQwfwUeK3K
+7Aktygf/cdio49GPc9UkYKY+3xrQTW8959xvhu4EU90eE3NquxbG6EbX82LLacD/
+gzmrCE/3ZNaGEWkwjp2NQJZxlimjRA+RXqS3UsX2vXdBz0xwcOPVpx3HbJfzBdeN
+uLh+ZHxTX7zeq7TRiaO1jbKzGdKa2f0VusXDTet9OChGBuZmXdvazdF0OQPbOk/K
+tWvrLwDqEyEWR+6DkjxB8eI14eVHj0GwS+0gQuA+ZitdZE/J6cDEudWJhVCQq2oH
+hRQcdIg4RLtNcCVoOuIpbW/xJpYrascLZzU+1BrlqvebDCRZtedqVdf5TqqO+AXt
+Cx28VH+3r6ZLSBPq617FL+6IvYvPQw==
+=QxHw
+-----END PGP SIGNATURE-----
 
-clock-controller@6400000: clocks: [[41]] is too short
-	arch/arm64/boot/dts/qcom/apq8096-db820c.dt.yaml
-
-clock-controller@6400000: reg: [[104857600, 589824]] is too short
-	arch/arm64/boot/dts/qcom/apq8096-db820c.dt.yaml
-	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-mtp.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dt.yaml
-	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dt.yaml
-
+--dh5ic32cncbw4ucf--
