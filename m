@@ -2,111 +2,146 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E87F42D683
-	for <lists+linux-clk@lfdr.de>; Thu, 14 Oct 2021 11:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D3842D68C
+	for <lists+linux-clk@lfdr.de>; Thu, 14 Oct 2021 11:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbhJNJzu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 14 Oct 2021 05:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32908 "EHLO
+        id S229912AbhJNJ6D (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 14 Oct 2021 05:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbhJNJzt (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 14 Oct 2021 05:55:49 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4AEC06174E
-        for <linux-clk@vger.kernel.org>; Thu, 14 Oct 2021 02:53:44 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id x27so24610832lfu.5
-        for <linux-clk@vger.kernel.org>; Thu, 14 Oct 2021 02:53:44 -0700 (PDT)
+        with ESMTP id S230026AbhJNJ6C (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 14 Oct 2021 05:58:02 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A18BC061746
+        for <linux-clk@vger.kernel.org>; Thu, 14 Oct 2021 02:55:58 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id j21so24806422lfe.0
+        for <linux-clk@vger.kernel.org>; Thu, 14 Oct 2021 02:55:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/KsJRdiob87Ja5PgF5X/ti+BR7dI5FBOZcD9kz6Ozto=;
-        b=h9409aXB6YV05xq/pABEkmxSxFhTfpqrruXdlc5z7R9nLrph5NnzM/EBjSxJ9VBEd1
-         6NMrB5sswM/Ks9ujE5TeT+LdGjhG5OW/Sthv0VyCQ+5TDGCWjs3BSdQpHqLJR32u/IVy
-         3yA7DnbG9F5PlUNRf80NI+u/iJrs96xdUBoYX07isyy2y2gEVggGj6uEw2GiV0+H3vCm
-         DLkuhQVpOZ2Epai5CX0uonVB6S/iAKC0NtfkPPQdQlX2OHtmG+crZfWual8sefpN/EVe
-         CILMtmLbkDVMdRNOJKLfW1mb3VJ5MpatvmEAXlRj9OHXTVA9YNMAOi0HLak+NWmk/Vjg
-         WwYA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JmYUMK/UpCPTQkNa2eHt3u3bSnQ6UeJZgf9fcyINgsU=;
+        b=mVYlAwjTxWDUaBNLDN0kgN/g/YvJGNU+qqXTHe/yDPKOT7wKUmz2VhEvsDmJpaLbUF
+         JzmX5SOBfopOFWv4MMobCXKvOtq35pi9+Tv2h99NRH7LDKiMgD13AGFjtqXdfZVmA3/2
+         LBBEQ24GND2moC7wMKG2krrUoGENkEJdY9LuvzsJIAXnUZ+qbQGNJhMBv7F4Zf5OLuFw
+         0X+9oY7KpkjEJuBfbYCGHYr/2+Fx3OyQ9M/4ihjNNdGXU+RQYM5EfLcbh/75NClaUyHQ
+         swSYYlaB6z+O2nPtdN8qjfZdFJUykeYjnZHyWiWQnuIHIDEf/QNrD9FadDjd70wRTuZZ
+         eEHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/KsJRdiob87Ja5PgF5X/ti+BR7dI5FBOZcD9kz6Ozto=;
-        b=2aaTJJu/ZbGq00HnfqTkYjmwC/It6nGxLTDcGCVmTrrlWEsnKi08eoYZvk1yx2HpL2
-         +xqrCZfi9PvKDc+t2boxe77B+kOsaGegcNSapedTNUpiNve78ZdNQFWFwN6pQa+p9qid
-         gAHqJHtvSzlVWjV9Ul3jMbsX3rd6cgq7Ubw5qVf2NmdggcGalPjXkI5qtp1XP3FBDLmE
-         0e0K/O4CoSzxDPiUfVPU3gPnIfyajd9spGQm0ocpMkFeTpdgKIuKnQF05ZvTL+4BEU0A
-         OM3ApJf3OvH0PqQr4GrysgwMFKzVAJ5becSmQm33tW2QQXZCebAatnDRfz6jB33M1+VY
-         s/nQ==
-X-Gm-Message-State: AOAM533b9Cj8gIvXsm+vHKPN/h4o3vozZmODtwLpIS+BC4yHv5RHLG74
-        GfQSN+v31klortq4MA3EZwHP1g==
-X-Google-Smtp-Source: ABdhPJyyYEu0EPxRrb37K9hW8OcK5o+4Jwzf2jK9MJng9VLqg4T97Er87U0t4/FYgeISUNHmm0nAUw==
-X-Received: by 2002:a05:6512:b08:: with SMTP id w8mr4024902lfu.505.1634205223215;
-        Thu, 14 Oct 2021 02:53:43 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id s11sm181297lfd.262.2021.10.14.02.53.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Oct 2021 02:53:42 -0700 (PDT)
-Subject: Re: [PATCH v7 7/8] clk: qcom: dispcc-sm8250: stop using mmcx
- regulator
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20210829154757.784699-1-dmitry.baryshkov@linaro.org>
- <20210829154757.784699-8-dmitry.baryshkov@linaro.org>
- <YV8WsQb9H7+CaLjP@ripper> <4614587c-b87a-4375-cb6a-6af6f5462c6b@linaro.org>
- <163415465484.936110.9292145029740247591@swboyd.mtv.corp.google.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Message-ID: <070b1b25-3718-5f3a-869b-a3954fdcc7c5@linaro.org>
-Date:   Thu, 14 Oct 2021 12:53:41 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JmYUMK/UpCPTQkNa2eHt3u3bSnQ6UeJZgf9fcyINgsU=;
+        b=rRERLhABquY0VBR2vK+ynAkhZ4IEs4E9cxI2CspqpILb0Atl5CVmzDJyJDptxW8GmQ
+         apllhlX7g3miVbrN6C0suh515cjr7pooE+AvyrYk5LFnClG2pxf2a7eLRqB1gjwPtOUA
+         dKfIfIGUQLnAEpMQQ9CAdS57cNfJQ6QfqCp9Lx39O30qegOQ0m6L3EtBmkPvuyi4/XmU
+         H2QFQmuZ0jXTgDrB54/U9OI9y5bYEgrS1y2y5XHBNWJq4LtFNcVwt2RUir67l6zgyUeZ
+         wxxa/KDkGHY/BZ55wuW5IcrgfqerFckoSevzI5VzJc0JrzF0Pm4lY9Uq4WjdmLlmFKWy
+         l9jQ==
+X-Gm-Message-State: AOAM5302uz6DUWtJYh1/l3cz1i0TQiCBAKUb3tCUNTfhAqra4WZyw76m
+        c7+5qqXvuNHqkMwE8hB+P3MA5wlJu6kNpil1jT6h/w==
+X-Google-Smtp-Source: ABdhPJzfcuLOXluZNCiIFiHuEMZOmaPq4SFwqJhe51BVnbLOcrMdlfjEobokM/9rmKz908yjKMJDYvKU8LEE1TjdTto=
+X-Received: by 2002:a2e:85c4:: with SMTP id h4mr5021872ljj.4.1634205356539;
+ Thu, 14 Oct 2021 02:55:56 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <163415465484.936110.9292145029740247591@swboyd.mtv.corp.google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+References: <20211011165707.138157-1-marcan@marcan.st> <20211011165707.138157-5-marcan@marcan.st>
+ <20211012032144.2ltlpat7orrsyr6k@vireshk-i7> <b7cd51ec-38e5-11d8-5193-1170c9d60ac9@marcan.st>
+ <20211012055143.xmkbvhbnolspgjin@vireshk-i7> <caf16a6c-f127-7f27-ed17-0522d9f1fb9e@marcan.st>
+In-Reply-To: <caf16a6c-f127-7f27-ed17-0522d9f1fb9e@marcan.st>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 14 Oct 2021 11:55:16 +0200
+Message-ID: <CAPDyKFoVjVYkc4+v-=eD+JbC10GazGt8A1LtD1so3PKMmVcyMg@mail.gmail.com>
+Subject: Re: [RFC PATCH 4/9] opp: core: Don't warn if required OPP device does
+ not exist
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>, Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 13/10/2021 22:50, Stephen Boyd wrote:
-> Quoting Dmitry Baryshkov (2021-10-07 09:16:13)
->> On 07/10/2021 18:48, Bjorn Andersson wrote:
->>> On Sun 29 Aug 08:47 PDT 2021, Dmitry Baryshkov wrote:
->>>
->>>> Now as the common qcom clock controller code has been taught about power
->>>> domains, stop mentioning mmcx supply as a way to power up the clock
->>>> controller's gdsc.
->>>>
->>>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->>>
->>> Once we merge these, I expect that the boards will start crashing if
->>> the kernel is booted using an existing DTB?
->>>
->>> Is it okay to just merge the first 6 patches in the series now and
->>> postpone these two until we've had the dts change sitting for a while?
->>
->> Sure it is.
->>
-> 
-> What's the merge strategy? It goes through arm-soc?
+On Tue, 12 Oct 2021 at 07:57, Hector Martin <marcan@marcan.st> wrote:
+>
+> On 12/10/2021 14.51, Viresh Kumar wrote:
+> > On 12-10-21, 14:34, Hector Martin wrote:
+> >> The table *is* assigned to a genpd (the memory controller), it's just that
+> >> that genpd isn't actually a parent of the CPU device. Without the patch you
+> >> end up with:
+> >>
+> >> [    3.040060] cpu cpu4: Failed to set performance rate of cpu4: 0 (-19)
+> >> [    3.042881] cpu cpu4: Failed to set required opps: -19
+> >> [    3.045508] cpufreq: __target_index: Failed to change cpu frequency: -19
+> >
+> > Hmm, Saravana and Sibi were working on a similar problem earlier and decided to
+> > solve this using devfreq instead. Don't remember the exact series which got
+> > merged for this, Sibi ?
+> >
+> > If this part fails, how do you actually set the performance state of the memory
+> > controller's genpd ?
+>
+> The clock controller has the genpd as an actual power-domain parent, so
+> it does it instead. From patch #7:
+>
+> > +     if (cluster->has_pd)
+> > +             dev_pm_genpd_set_performance_state(cluster->dev,
+> > +                                                dev_pm_opp_get_required_pstate(opp, 0));
+> > +
+>
+> This is arguably not entirely representative of how the hardware works,
+> since technically the cluster switching couldn't care less what the
+> memory controller is doing; it's a soft dependency, states that should
+> be switched together but are not interdependent (in fact, the clock code
+> does this unconditionally after the CPU p-state change, regardless of
+> whether we're shifting up or down; this is, FWIW, the same order macOS
+> uses, and it clearly doesn't matter which way you do it).
 
-I think this should go through the clk tree. There is little chance of 
-conflicts.
+Yes, this sounds like you should move away from modeling the memory
+part as a parent genpd for the CPUs' genpd.
 
+As Viresh pointed out, a devfreq driver seems like a better way to do
+this. As a matter of fact, there are already devfreq drivers that do
+this, unless I am mistaken.
 
--- 
-With best wishes
-Dmitry
+It looks like devfreq providers are listening to opp/cpufreq
+notifiers, as to get an indication of when it could make sense to
+change a performance state.
+
+In some cases the devfreq provider is also modeled as an interconnect
+provider, allowing consumers to specify memory bandwidth constraints,
+which may trigger a new performance state to be set for the memory
+controller.
+
+In the tegra case, the memory controller is modelled as an
+interconnect provider and the devfreq node is modelled as an
+interconnect-consumer of the memory controller. Perhaps this can work
+for apple SoCs too?
+
+That said, perhaps as an option to move forward, we can try to get the
+cpufreq pieces solved first. Then as a step on top, add the
+performance scaling for the memory controller?
+
+>
+> --
+> Hector Martin (marcan@marcan.st)
+> Public Key: https://mrcn.st/pub
+
+Kind regards
+Uffe
