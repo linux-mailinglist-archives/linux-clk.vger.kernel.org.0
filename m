@@ -2,126 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0868843178D
-	for <lists+linux-clk@lfdr.de>; Mon, 18 Oct 2021 13:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6E84317C5
+	for <lists+linux-clk@lfdr.de>; Mon, 18 Oct 2021 13:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbhJRLj2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 18 Oct 2021 07:39:28 -0400
-Received: from mail-ua1-f54.google.com ([209.85.222.54]:37382 "EHLO
-        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbhJRLj2 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 18 Oct 2021 07:39:28 -0400
-Received: by mail-ua1-f54.google.com with SMTP id f4so5124904uad.4;
-        Mon, 18 Oct 2021 04:37:17 -0700 (PDT)
+        id S230525AbhJRLsi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 18 Oct 2021 07:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38566 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230470AbhJRLsg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 18 Oct 2021 07:48:36 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92161C06161C
+        for <linux-clk@vger.kernel.org>; Mon, 18 Oct 2021 04:46:25 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id b189-20020a1c1bc6000000b0030da052dd4fso8239998wmb.3
+        for <linux-clk@vger.kernel.org>; Mon, 18 Oct 2021 04:46:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=user-agent:from:to:cc:cc:subject:date:message-id:mime-version;
+        bh=C174KNLIkQcIpVKqoVKmO0XecOJBPPgsZBNsljzoVYI=;
+        b=ZEE/wRzPZbn/EEEhxb+i2m0hwMQskOM5+yE7+3TAU9RVD/9Ga0Pps4hsWQI2UzNvkI
+         6kh5H7dzZSdfRXA22f5aCDTL405uA6gdWQedBTOkooNICHPkDvnF/xzhhguG/Lcaxarv
+         nmnxJGp61e8YSnd2qtOBM7240wVHKP/t7skuyxQV+kI94kotiKDSxTp5wTGf5eqsiooD
+         Q5S0ff11x52nZu7nfLu7OZwK4XjZENY8Ipo6izjBZxvbcFYlKYzuz58A0CfLNdEZ+KMg
+         ad3uopaXJ+DJpnJmuUYGUSuArLLrzk3PnCZl+0G/5clemyuW6R9xq0gKLOTO60VyIvlL
+         1Z/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yoiylfhsu7vOzWaVrb8Sfpqi1MCIs1ryTZwMWyEH6Ag=;
-        b=Bcen5t89gEoZ6eoroXnsq1Mk7Q4yFwfaYv+3P41TrqBwwGwl67CaWO0xOtEeZeLb/m
-         1RU/+Ca9flBr94WEBsskisVTGI59N8bKM+TU3zwPhKTUldAhvr0b8mZtIrDUUTFfGbfh
-         7sMdpFc/dZuAInSct28pjRrbYD/epxA7ZPxEL+Pkl/wHHCnTMkUEiWtsUVMfqGSb0rqX
-         jmFxUrMm6cuj7933Ys3K2fjvNCdqDHve4Yx7QfB7hMROTjiyN8XjC0l7yRAyr+0Dj5Nh
-         1ru86qU2/tGnM+CGF80nQF4rqiWgTa0OhBM5HgwkayyOwHbCVKT33huM2QeABTStmvHG
-         EJ7Q==
-X-Gm-Message-State: AOAM531dn9lx344lXGlobSEuULUbTpE65CufM/q4Mdo1fTlfbfZ54aRh
-        6B6GiNRV8Ai+kVTzwPFB6n4gAe0uRuQp9w==
-X-Google-Smtp-Source: ABdhPJydUuu55vT6vkPDOdiZ7jMcFEzd+CMbA4JZz4mJY4f2LLn2V1q80p/42Pgpc5nGRORgyn47Zw==
-X-Received: by 2002:ab0:3c48:: with SMTP id u8mr25896475uaw.124.1634557036521;
-        Mon, 18 Oct 2021 04:37:16 -0700 (PDT)
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
-        by smtp.gmail.com with ESMTPSA id p26sm1646092uaa.18.2021.10.18.04.37.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Oct 2021 04:37:16 -0700 (PDT)
-Received: by mail-vk1-f179.google.com with SMTP id x207so8421804vke.2;
-        Mon, 18 Oct 2021 04:37:15 -0700 (PDT)
-X-Received: by 2002:a1f:1841:: with SMTP id 62mr23885899vky.26.1634557035711;
- Mon, 18 Oct 2021 04:37:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210923064137.60722-1-zhang.lyra@gmail.com> <YV1XpL7ibF1y4LbV@google.com>
- <CAL_Jsq+eqqv=qtKOiNdEpYGi2amek_m+Q-Z9A769pXXqJ4R88A@mail.gmail.com>
- <YWVD0RXHVLxuXEIN@google.com> <CAMuHMdWqYVp1JyzZoidAJhPy9ypRnSOWHJLz5knDUMcFHPOzAw@mail.gmail.com>
- <YWfSz00Rj5AVhkgT@google.com> <CAL_Jsq+GHt+DqHa0GeLKWoni+Lghg5wg5ssREZBdSD-=K3XQ1A@mail.gmail.com>
- <163425256290.1688384.5646232860050218479@swboyd.mtv.corp.google.com>
- <CAL_JsqJV_CoPH7VrX-D5=u2WsoUpp-pTKbcR2y+gWxhv+WKcEg@mail.gmail.com>
- <CAMuHMdU1TCOvDwx6pjg=0-hLkFywRGQsZUNM+0aJLb96fZGAQA@mail.gmail.com> <163433541408.1688384.16269113818432626325@swboyd.mtv.corp.google.com>
-In-Reply-To: <163433541408.1688384.16269113818432626325@swboyd.mtv.corp.google.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 18 Oct 2021 13:37:04 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUuB1JfDXJiC281xanzW1zoq-LeTRmWtRDzn3vn2Z6wFw@mail.gmail.com>
-Message-ID: <CAMuHMdUuB1JfDXJiC281xanzW1zoq-LeTRmWtRDzn3vn2Z6wFw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] dt-bindings: mfd: sprd: Add bindings for ums512
- global registers
+        h=x-gm-message-state:user-agent:from:to:cc:cc:subject:date:message-id
+         :mime-version;
+        bh=C174KNLIkQcIpVKqoVKmO0XecOJBPPgsZBNsljzoVYI=;
+        b=IpiiK+ZT4ySs+r/kDVfJEkzoB/IJryZ8evs8R9xbgw4LQ/D1f9wdFVW8TLcwn8mAqP
+         TbGkMlWeTSg8qHUhBUZGG0CEYiRcde3btbRZhTemTOUPKjNdOeS1lvUlhkuF1vLiJzJS
+         KBJc292rjVf2q90Qmxufkdgohgyv3FQ2St/Ri6Zsc4hcG3S+7oaOo2xyMu4eBciojpp5
+         yw+fHLFSF7n9JYSKETCdhkF0jnYYSHtUMGaBCn2WnKm8O2O7R0fgBaspE+CromFb3sqR
+         icZb8Pm571Q2H4VHSj3P7GYGKX4bDoAy6vA+3UGEyH5ehDbevpPcGDqqubSSl17U/BnE
+         ypPQ==
+X-Gm-Message-State: AOAM531K8MHdS1jKG2+gePzx0gO5SAVKhTWPOlZ27cGbZa5+N0uPtIOe
+        dtUGKgweJDVORGgtmiynJ2HWTZRLFIJ/Ow==
+X-Google-Smtp-Source: ABdhPJyNZnEnLK0VWhZt5BvHvaJ2EgT5Ta5yrzcUBW3wU+Y6VN06mk5NyoAlWVIlfVGExCVEbVMRSw==
+X-Received: by 2002:a1c:a783:: with SMTP id q125mr43825165wme.108.1634557584200;
+        Mon, 18 Oct 2021 04:46:24 -0700 (PDT)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id m4sm14382721wrz.45.2021.10.18.04.46.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Oct 2021 04:46:23 -0700 (PDT)
+User-agent: mu4e 1.6.6; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
 To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Lee Jones <lee.jones@linaro.org>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>, Baolin Wang <baolin.wang7@gmail.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+Cc:     linux-clk@vger.kernel.org, linux-amlogic@lists.infradead.org
+Subject: [GIT PULL] clk: meson: amlogic updates for v5.16
+Date:   Mon, 18 Oct 2021 13:44:22 +0200
+Message-ID: <1jtuhetv1s.fsf@starbuckisacylon.baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+
 Hi Stephen,
 
-On Sat, Oct 16, 2021 at 12:03 AM Stephen Boyd <sboyd@kernel.org> wrote:
-> Quoting Geert Uytterhoeven (2021-10-15 10:09:10)
-> > On Fri, Oct 15, 2021 at 3:59 PM Rob Herring <robh+dt@kernel.org> wrote:
-> > > On Thu, Oct 14, 2021 at 6:02 PM Stephen Boyd <sboyd@kernel.org> wrote:
-> > > > Quoting Rob Herring (2021-10-14 09:18:16)
-> > > > > On Thu, Oct 14, 2021 at 1:48 AM Lee Jones <lee.jones@linaro.org> wrote:
-> > > > > >
-> > > > > > I don't explicitly build DT documentation.
-> > > > > >
-> > > > > > Since I use the build bots to let me know if there are strange !(C,
-> > > > > > ASM, arm, aarch64, mips, ppc, x86) build issues or ones with odd
-> > > > > > configuration possibilities (randconfig) in the repos I maintain, you
-> > > > > > might have to convince them that this is important too.
-> > > > >
-> > > > > It's really just a matter of turning on the build in
-> > > > > allyesconfig/allmodconfig builds. I've not done that primarily because
-> > > > > there's one person I don't want to yell at me, but I could probably
-> > > > > make it arm and/or arm64 only. It's really arch and config
-> > > > > independent, so doing it multiple times is kind of pointless.
-> > > > >
-> > > > > I assume for bots you mean kernel-ci mainly? Do you run that before
-> > > > > stuff gets into linux-next? IMO, that's too late. But still a slight
-> > > > > improvement if things go in via one tree. Otherwise, I see the
-> > > > > breakage twice, 1st linux-next then the merge window.
-> > > > >
-> > > >
-> > > > I run `make dt_binding_check DT_SCHEMA_FILES="<path to yaml file>"` but
-> > > > nowadays this seems to check all the bindings and not just the one
-> > > > binding I care to check. Did something break?
-> > >
-> > > It should apply all the schemas to the example in DT_SCHEMA_FILES.
-> > > Originally, it only applied DT_SCHEMA_FILES schema to the example in
-> > > DT_SCHEMA_FILES.
-> >
-> > Probably Stephen means that yamllint is still run on all files, which
-> > I tried to fix in [1]?
-> >
-> > I've been running an improved version for months, but I haven't sent
-> > it out yet.
-> >
->
-> Oh yeah probably. Do I need to carry this patch locally until it is
-> fixed?
+Here are the updates of the amlogic clocks for v5.16. Nothing out the
+ordinary. Please pull.
 
-Submitted the improved version:
-https://lore.kernel.org/all/cover.1634551582.git.geert+renesas@glider.be
+Thx.
+Cheers
 
-Gr{oetje,eeting}s,
+Jerome
 
-                        Geert
+The following changes since commit 6880fa6c56601bb8ed59df6c30fd390cc5f6dd8f:
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+  Linux 5.15-rc1 (2021-09-12 16:28:37 -0700)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+are available in the Git repository at:
+
+  https://github.com/BayLibre/clk-meson.git tags/clk-meson-v5.16-1
+
+for you to fetch changes up to 7bcf9ef6b9c50e87bcb1dee5ced50ccfa2b21470:
+
+  clk: meson: meson8b: Make the video clock trees mutable (2021-09-23 11:46:38 +0200)
+
+----------------------------------------------------------------
+Amlogic clock updates for v5.16
+
+* Update video path realted clocks for meson8
+
+----------------------------------------------------------------
+Martin Blumenstingl (6):
+      clk: meson: meson8b: Export the video clocks
+      clk: meson: meson8b: Use CLK_SET_RATE_NO_REPARENT for vclk{,2}_in_sel
+      clk: meson: meson8b: Add the vid_pll_lvds_en gate clock
+      clk: meson: meson8b: Add the HDMI PLL M/N parameters
+      clk: meson: meson8b: Initialize the HDMI PLL registers
+      clk: meson: meson8b: Make the video clock trees mutable
+
+ drivers/clk/meson/meson8b.c              | 163 ++++++++++++++++++++++---------
+ drivers/clk/meson/meson8b.h              |  26 ++---
+ include/dt-bindings/clock/meson8b-clkc.h |  10 ++
+ 3 files changed, 143 insertions(+), 56 deletions(-)
