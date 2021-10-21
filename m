@@ -2,65 +2,146 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4B7436164
-	for <lists+linux-clk@lfdr.de>; Thu, 21 Oct 2021 14:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1559E436189
+	for <lists+linux-clk@lfdr.de>; Thu, 21 Oct 2021 14:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbhJUMVu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 21 Oct 2021 08:21:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbhJUMV0 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 21 Oct 2021 08:21:26 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15916C06176C
-        for <linux-clk@vger.kernel.org>; Thu, 21 Oct 2021 05:18:58 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id r134so585036iod.11
-        for <linux-clk@vger.kernel.org>; Thu, 21 Oct 2021 05:18:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=G2Jq8ABcZaKAiy06d3oRm5z7XXaT0OFvg3EWPt/6AmM=;
-        b=ffKmYx2fMIYl+OvJQQopnpiCeJRTG9P9KFv8M/82NWd2iRdr6FH2GSUfX4dihVwp/4
-         j3BBt8gtfGRwriH7QaI70cXqaYxp9ZB8IdW+AAJ3XWxbhn/W/4z89PrBZ3/2rnhl+5p4
-         slIUeI/d0se+fbKVCqySusiscs7YTggdFIx/lIQo0jD9OBm3/E6HIs73TdR5+EDc4Ahn
-         Mx3oX/4Jht8hJFRtk5Rk/ZtBUnWHcvUlGjzuHFD2c3qgVHCXo5sQXMFhDt//I4s8bxor
-         0lHgZbVQWxyw1uqR2LKA3z5mNeOQjztcOBRK2nMHBotT/Ptq5yh5oJc65RUVpYj9vAKX
-         E+1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=G2Jq8ABcZaKAiy06d3oRm5z7XXaT0OFvg3EWPt/6AmM=;
-        b=uZnYks4oWrakxQqmkxtKOBezYvIKBfgWZ9VT1G/WrXh6ud5YyHDX0GJExzWx94z4iZ
-         aHa2iVhdR0nw9POcW2fy78K1p+GfMWIuzRJqsc0DuSGJE0PszI4NCr7Tj2r8JeimXz4T
-         I701qUNYQqM1s/7dYozONyoEaKRpE7HkNaWp/3qdCMBBxBSMtydGmnxVqus0gPhASBfh
-         kmbV1wmBYMkHMHQQZ36YZ+bs/Hp4CWnZPN6ThBjghFfjs5bgPwu0h8MYmX6hm+DahzFd
-         UXrDxqnFhzNpqaJ0NCGBgpHE9IzLLdFTAyToMATr8rLgp52GJU8ST1I9Nf1V24u31Ie2
-         VVUA==
-X-Gm-Message-State: AOAM530uoTDuMT/6W59zQS8drh2UdMsInV/6ZSaJgzD7OH3pY1f9oBkH
-        VBCEb6Q/rnBm4cL6mIqJTjbohMWshAf4rO3+/6I=
-X-Google-Smtp-Source: ABdhPJy/O5GAp34/8OGCgwxgN16t4zAtUhD1QqHkZqC4kznm6N81zl7Wcf3jBmF+fUfqmk/Z+gQhgoaiTdlocMxWQvk=
-X-Received: by 2002:a05:6602:2e81:: with SMTP id m1mr3773434iow.23.1634818737372;
- Thu, 21 Oct 2021 05:18:57 -0700 (PDT)
+        id S230508AbhJUMZU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 21 Oct 2021 08:25:20 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:3531 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230425AbhJUMZU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 21 Oct 2021 08:25:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1634818984; x=1666354984;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YtjyPXLkroGsz9agc6VrcGiYg7a86tG8R99+t7K0eFo=;
+  b=EGqQsKl3EYcNaPsjhYHqHdrWv1FKdLGsjrBAfQeuDPcBisOydv0DbI2Y
+   u/GgBtmZ7CeO0+bEUFGlTvb8eTCk/XCiyaC408d0eIc8PwryWSCfcV7KU
+   VgcJlulxUZ3l5k9t4f1s+3G5ZEv3bjqtKPZDgObMECpL6fuPpmrgGRWDC
+   YOkPS10TXIP8D7lbbPqeQ/X5nFj9yi/jyVYKtxIrW7xrYtAfsusfkjt92
+   PZyePeNLbbtxy+beJI84cKp0MLSwGMPF/iI+TAxEoc3SOLIVo6HabbjfY
+   FUuwVLbWIJCKOb9ybkz3ztuHaZvXF7W1uPq505tPm2giSRzwSlCSA+Md2
+   Q==;
+IronPort-SDR: 5SjRX4WIFmH8a0fVc5piMgZLHkcdwsfOgArp/+Sa9QkmWSA0vb5SWWUMGKEaE23B1hB2mOyYAF
+ 39K9n43lAupipxDUUW1u2CPoXwqEgEKFHfVU7XGHm7U3qPC+QHdZT6kOuk5nmTK6jJigu54QjJ
+ WdFjSGjslmyzAChHzYkvZUp9x0R4lrR/KFLGDjSAc66KittI3jDRHEMTdvRLZ2Gazt2LDnxHcs
+ 8eCw3V8VitFTw54X8DeTxD7pD/R4ahNG3HRg8eqgx7/4SX2z4R9FfSNqEj7xKkbWJibQbXxqB1
+ J13owTIfaSHlGBVEFWcuP7Uf
+X-IronPort-AV: E=Sophos;i="5.87,169,1631602800"; 
+   d="scan'208";a="133907797"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Oct 2021 05:23:03 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Thu, 21 Oct 2021 05:23:03 -0700
+Received: from ness.mchp-main.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Thu, 21 Oct 2021 05:23:01 -0700
+From:   <nicolas.ferre@microchip.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <linux-clk@vger.kernel.org>
+CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Linux Kernel list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [GIT PULL] clk: at91: clk changes for 5.16
+Date:   Thu, 21 Oct 2021 14:22:48 +0200
+Message-ID: <20211021122248.33261-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Received: by 2002:a05:6638:1924:0:0:0:0 with HTTP; Thu, 21 Oct 2021 05:18:57
- -0700 (PDT)
-Reply-To: ooisangkuang63@gmail.com
-From:   Mr Ooi Sang Kuang <mrsshirleyperezfosgate7@gmail.com>
-Date:   Thu, 21 Oct 2021 05:18:57 -0700
-Message-ID: <CA+ynneC82om4XGpeSLLyaZ9uiZCuHkofPAtHcga0--5BW77aFA@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
+Organization: microchip
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
+
+Stephen,
+
+Here are the clk changes for 5.16. I took the initiative to create a
+Pull-Request for it as it's surely more convenient, as I proposed in my
+reply to Claudiu's cover letter.
+I created it on top of your current clk-at91 branch that contains one patch by
+Clément already.
+
+Please pull.
+
+Thanks, best regards,
+  Nicolas
+
+The following changes since commit c405f5c15e9f6094f2fa1658e73e56f3058e2122:
+
+  clk: at91: check pmc node status before registering syscore ops (2021-10-07 20:47:47 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git tags/clk-at91-5.16
+
+for you to fetch changes up to 865aea519c06456c30846782be063dd9fcd3f99e:
+
+  clk: use clk_core_get_rate_recalc() in clk_rate_get() (2021-10-21 14:00:59 +0200)
+
+----------------------------------------------------------------
+AT91 clk driver changes for 5.16:
+
+- Clock power management for new SAMA7G5 SoC;
+- Updates to the master clock driver and sam9x60-pll to be able to use
+  cpufreq-dt driver and avoid overclocking of CPU and MCK0 domains while
+  changing the frequency via DVFS;
+- Power management refinement with the use of save_context()/restore_context()
+  on each clock driver to specify their use in case of Backup mode only.
+
+----------------------------------------------------------------
+Claudiu Beznea (15):
+      clk: at91: re-factor clocks suspend/resume
+      clk: at91: pmc: execute suspend/resume only for backup mode
+      clk: at91: sama7g5: add securam's peripheral clock
+      clk: at91: clk-master: add register definition for sama7g5's master clock
+      clk: at91: clk-master: improve readability by using local variables
+      clk: at91: pmc: add sama7g5 to the list of available pmcs
+      clk: at91: sam9x60-pll: use DIV_ROUND_CLOSEST_ULL
+      clk: at91: clk-master: check if div or pres is zero
+      clk: at91: clk-master: mask mckr against layout->mask
+      clk: at91: clk-master: fix prescaler logic
+      clk: at91: clk-sam9x60-pll: add notifier for div part of PLL
+      clk: at91: clk-master: add notifier for divider
+      clk: at91: sama7g5: remove prescaler part of master clock
+      clk: at91: sama7g5: set low limit for mck0 at 32KHz
+      clk: use clk_core_get_rate_recalc() in clk_rate_get()
+
+ drivers/clk/at91/at91rm9200.c       |   2 +-
+ drivers/clk/at91/at91sam9260.c      |   2 +-
+ drivers/clk/at91/at91sam9g45.c      |   2 +-
+ drivers/clk/at91/at91sam9n12.c      |   2 +-
+ drivers/clk/at91/at91sam9rl.c       |   2 +-
+ drivers/clk/at91/at91sam9x5.c       |   2 +-
+ drivers/clk/at91/clk-generated.c    |  46 +++-
+ drivers/clk/at91/clk-main.c         |  66 +++++
+ drivers/clk/at91/clk-master.c       | 463 ++++++++++++++++++++++++++++-------
+ drivers/clk/at91/clk-peripheral.c   |  40 ++-
+ drivers/clk/at91/clk-pll.c          |  39 +++
+ drivers/clk/at91/clk-programmable.c |  29 ++-
+ drivers/clk/at91/clk-sam9x60-pll.c  | 174 ++++++++++---
+ drivers/clk/at91/clk-system.c       |  20 ++
+ drivers/clk/at91/clk-usb.c          |  27 ++
+ drivers/clk/at91/clk-utmi.c         |  39 +++
+ drivers/clk/at91/dt-compat.c        |   2 +-
+ drivers/clk/at91/pmc.c              | 173 +++----------
+ drivers/clk/at91/pmc.h              |  29 ++-
+ drivers/clk/at91/sam9x60.c          |   6 +-
+ drivers/clk/at91/sama5d2.c          |   2 +-
+ drivers/clk/at91/sama5d3.c          |   2 +-
+ drivers/clk/at91/sama5d4.c          |   2 +-
+ drivers/clk/at91/sama7g5.c          |  29 +--
+ drivers/clk/clk.c                   |   2 +-
+ 25 files changed, 890 insertions(+), 312 deletions(-)
+
 -- 
-Hello,
-
-I want to discuss an important project issue with you.
-Please, let me know if this email is valid. Reply me at ooisangkuang63@gmail.com
-
-Thank you,
-Mr Ooi Sang Kuang
+Nicolas Ferre
