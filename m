@@ -2,142 +2,515 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9F4437737
-	for <lists+linux-clk@lfdr.de>; Fri, 22 Oct 2021 14:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D8F437806
+	for <lists+linux-clk@lfdr.de>; Fri, 22 Oct 2021 15:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230519AbhJVMlE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 22 Oct 2021 08:41:04 -0400
-Received: from mail-eopbgr20075.outbound.protection.outlook.com ([40.107.2.75]:6908
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230408AbhJVMlD (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Fri, 22 Oct 2021 08:41:03 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xta8E1pUjGzRaao6gML6MpT75sgSCmrGvzyK+GaeWrVhNyVAIrONOQVr0SiC3UXI2xkcC6Z/SL3nc9Bw3+ErGTfr5qRn4VfxdpQC2fQmC4mfLhgcnRJwuTiQN15jJRKNb1kB+bJKi8X/KekvjdGiuvbmyz5HjiPe3xntLrhBbpU80dsAHAVUybqB0uVejFn5O/ATAwtU6jbjfw8Wrsi/BLNUSeacA4xrBiyAvfZl+7RhwXmbkd0K8fz06A70M/A5VFdEWN0JsufAnnDol6puAeZlZs0ryL82wfOhj+lPwLXOzqxVayTrZfT/yGjBw6x8cDrJTa8yoF4D88B4FDuQpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w0bweevhAYfqJ93uSbstApZm3XKvHYUIiqzH6T++zZQ=;
- b=h3sU9+2X9mBfEEWcoLnzqhvc3COf9XZuQNEkbea+jDZWwCfOVA/L8RHtgLn1YK5QrMguTfKf00++FBNXD/K69fPf9fl01DPXAm+O6Qz7Lsy2aYlzAQ57hzA9nkPmCfO9S+rUyId+K1ooDqkePro5cwE5SOoglsnjPQLvOOZbYukGKeWU6/VQdNDiMQKjutWjsSIu4wZiR69XLqMI4MNUenjyXWlmNWFvlbuhdhcilhWVUn8n78kGawAErJmNU8IImPJW+iKWkC5qSdxjpothi2P60d3eGLEoHrQeJJcW9VWL4+Q46vquillFZLhSTfGRrAf8laqNX0x3etWJUrFwuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w0bweevhAYfqJ93uSbstApZm3XKvHYUIiqzH6T++zZQ=;
- b=C8nJr2U6aXcP60DnwGOL1h8Pf4AXn5I30I9pSxdFJ6ljWTPLwBdtYVMiMzWO5cEtdpJfKpijf42KkXiKgGFjIb5O2yPt8gVK0qupb2ZBzlwII/BVyZ1GuYOjLxNwGEgV0CBDXyns6wImtkw4cg8vDe0TArwP0HmTfo06knF5qZY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU2PR04MB9020.eurprd04.prod.outlook.com (2603:10a6:10:2e3::9)
- by DU2PR04MB9212.eurprd04.prod.outlook.com (2603:10a6:10:2fb::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.16; Fri, 22 Oct
- 2021 12:38:43 +0000
-Received: from DU2PR04MB9020.eurprd04.prod.outlook.com
- ([fe80::b928:9230:aa10:639a]) by DU2PR04MB9020.eurprd04.prod.outlook.com
- ([fe80::b928:9230:aa10:639a%9]) with mapi id 15.20.4628.018; Fri, 22 Oct 2021
- 12:38:43 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     sboyd@kernel.org, mturquette@baylibre.com, abel.vesa@nxp.com,
-        s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V2] clk: imx: imx8ulp: set suppress_bind_attrs to true
-Date:   Fri, 22 Oct 2021 21:15:13 +0800
-Message-Id: <20211022131513.17381-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.30.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0043.apcprd01.prod.exchangelabs.com
- (2603:1096:4:193::12) To DU2PR04MB9020.eurprd04.prod.outlook.com
- (2603:10a6:10:2e3::9)
+        id S232775AbhJVNfQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 22 Oct 2021 09:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41458 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230342AbhJVNfQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 22 Oct 2021 09:35:16 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5D1C061766;
+        Fri, 22 Oct 2021 06:32:58 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id y12so1195697eda.4;
+        Fri, 22 Oct 2021 06:32:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EBsLI/faLA0zw49px/yYwmlwDnDZ4uqZUJO+RDaz1A4=;
+        b=RJiaRQHTNdx9xJCcOJTwXVz/wAu9/LU658C0G2n4KMxQour2tBFZMhiMtYnaqGJSyV
+         dFDb+zKVE1Pyf2rWqNECbFywvgUUly6C7fnEQ9f9QF17XRz7UIL3bBtPUh16ZriiJ7TX
+         hSyCX9pSmgZukuG7deAt8Zir91L1q3P2YAYQppCqhVeCmQPrJEKpY34TX4Owl5qzIvr9
+         yKbKvm/DxnwYzPfmxwAtyoUJ7S4aZhMQu2ski+ykKPdBqPAfWt0t9239lPcriZ5ee/91
+         blmJ78/OlhRTh+yePfnK0kPmoeR0addSaM0FnJ508hOwkKv5R3qOdHZSW+oTog8LW0pd
+         DzdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EBsLI/faLA0zw49px/yYwmlwDnDZ4uqZUJO+RDaz1A4=;
+        b=UhaHPqQa++1XDvm9BTq5ThFsdVMSBmjmTrp8ntxaRwCm2LRegqwws+yItzs6ZJhmUj
+         /v3d7i8ls9lzhXugpHoQk1tsfmxygN9sBSBt6DEf2ZE3xmpHkO7uKL2pHt7tLSugzVm1
+         tDrgAC9OEv1JLxE31k0sRF+gV2OCGywR5sHIpJoL0h1OpPrw7yCEUMOS5MbQNWasXdNO
+         Lhdil0PhF3+hmQno3ECyTNWkxVUBRAXXRTyjZbvzdYMOvNNODwQ/650LPNESVBULNdyg
+         Q3ZzGfA+qtSWdELE6PhX8HEbCvm5oQIjiqOKCOn4o3T2qXcyIPD3cIiU0xPHw8IjmiQC
+         ekOg==
+X-Gm-Message-State: AOAM532E2mNWyip2ODvX6sjZzWO63Yg49n/Y+x7DHUPO9uPtLxnBhYAw
+        /tfuxLUSeRbxZxI5JmzXQ1zN8Dg7+ZZsQMxMZrk=
+X-Google-Smtp-Source: ABdhPJycSC5CaffjTYi/vnFOFMYpknlYdImAcoI5AuRpRXLUtJ/Ft+aip5yyxgDXPX+pdCuXCWfp6ozey0ICMvRMgi0=
+X-Received: by 2002:a05:6402:2031:: with SMTP id ay17mr51080edb.240.1634909576879;
+ Fri, 22 Oct 2021 06:32:56 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from linux-1xn6.ap.freescale.net (119.31.174.71) by SI2PR01CA0043.apcprd01.prod.exchangelabs.com (2603:1096:4:193::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.18 via Frontend Transport; Fri, 22 Oct 2021 12:38:39 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a52b71e4-473e-4ef3-0472-08d99558e21d
-X-MS-TrafficTypeDiagnostic: DU2PR04MB9212:
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <DU2PR04MB92126A35F0BFF2E0FF03361FC9809@DU2PR04MB9212.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3p2CYu9nlFYti67a9j937OlqWkR4YuLoeVVLaFNDnwLqwtcOTMHkpC/lGkk/kreoK4YfFySu7ZddWiDH2Pl8fVzJLbYVHkPqXqv8/Zx2AMUmV6OsxNQOdXY1XHzX3Au2eMS8SzPAuYdkSFtTiNo8sfyeMgG8zZH6l9XGKKoCh8TGlBPMrAfp0kxyxYpytHe4m2rHjqPh5sONIH2jT/ADiBlz2N5ywaOAqKWubnVj8bUsVWTZ3ZJM3Yn2W0ewuGImBU58hDNfMOPsAN/uKQ2aLHjhyMcKP2v3xW1/FPmPUj1J0gLysDoPhsHGHLFkb3hhICM7ba+/DtAGjvrCwzPivBD69ogfEjKHWhJYHx80PO/Od2+ZJbens0VausSU+zwDc27EJnhquDeiIe+6ZdIunEoyWyYnj4x8/7YTsgLhAjReswst9hj+eA09XMUE9n8rYNOMBjP6+8IVMxiDlq0dQyOo7AchNmjl3slwyigEeZkmer2Uwb4fr9GuIpr+1rn5IwLXTHU2B2B+jbBZxmQtBRM5X6ZHnKrEPe7IFgelrde9CLNjlRB7Jo8CAputX4AMezPNQjwKYLW/mj4KgcQNmOeQeUr73aNwN3OMaMYxsVokvgf6xEyFGKGJlAfMsFI0aoC+9yCkh2Umy8wqNoPX54TSW/6qPP70s0Pqt/tB1zn+kyureY2hv5IXR6SK6dmVDfOx1obEkbt7u0PESN39zMMNJsqEdfT/RiYVXZai6XI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB9020.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(5660300002)(38350700002)(6486002)(8676002)(6506007)(6666004)(4326008)(83380400001)(52116002)(66946007)(186003)(1076003)(4744005)(26005)(8936002)(86362001)(66556008)(956004)(2616005)(38100700002)(6512007)(66476007)(2906002)(316002)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pUl3R4o9a54RcGRkq3brE3mIgD5g5d6DSC/6pHOy3IYSTCrkJwwOfA+ELE53?=
- =?us-ascii?Q?qgeRP1qKAoc0MtDnXdZhTQo4ggcsWVCNLFil+TnAQ45VppXaFPaNwL8Pod9v?=
- =?us-ascii?Q?77jVDZeoCyka8WNo3AbfIr87htewWZWdiR0G5L35diN+6LTniGMofSXM4VsB?=
- =?us-ascii?Q?vSOWuQ4XBXHAPd4nr7tdu/pXPa/bX+Q7vdB7Av3bVsB/HLXSQy+m5NehaVIM?=
- =?us-ascii?Q?U2pbZ0qRQRYFRvYNEHHm/BqV9Xy1lQAjbYFY4E1athJRSCQOUI1OrAnHjXa3?=
- =?us-ascii?Q?K3oxJ9MM0qK+nfhPKsz0QAilnidFagJd5XVN3Z4guEeHGMkv9PA/pr17CCQ6?=
- =?us-ascii?Q?vcW0V5MoLsGRrj1HQxylwIMlRns8r5Z9ijYNfq9rKbLixp0KrvWEu05iReGf?=
- =?us-ascii?Q?72630YhfPf3HJK8ACFlw0gXdQEqMsYK35BKdrPcCMawv6yLRb0vFcAFjuGrk?=
- =?us-ascii?Q?ji3vDioeQZG267xI9PoiP9pwMfCSnWEl/vQkdqPvC04Xtxu1X/ocjWWSNm6U?=
- =?us-ascii?Q?iAll8dVxIVGiCxdAFt+N4TqEW6yJP0hsMpHqoRnwdywPpwbejKNGfPEf2Rft?=
- =?us-ascii?Q?0krI3aFrbqrZnKmyX2qJZbNO6KppWO13dFxQTW/lxBK/0avTKh2X55HyuwHN?=
- =?us-ascii?Q?xpxzh6BUWi2K1AdIr3FH1UcZ19XJKCltQQ/DPeeS1JQRhZ3IDTopjfcdHCMb?=
- =?us-ascii?Q?IoQoily+hbNsQ6ojvVuO24/FjMH5/te1a0A/2jiO3xUaU0KdRBZI1VGrzISp?=
- =?us-ascii?Q?9XSp8eeoT5xfF5DXd/IKi9i+Ey49f8JVvY2wMLLRicWS0bvuhUSL4mh2Jf6a?=
- =?us-ascii?Q?zSg9pMBvBy0KO5/P8VmGleSp91CAk1kaywSA3hMTx0scIJAmbF6valKiRVs2?=
- =?us-ascii?Q?4GnxLv7b0BzFFiShJxl0wZduexTZExTJfvQ3cR3AsbChP9B4NQIZIf13SDdK?=
- =?us-ascii?Q?teo/3BtU7YeZXwzTLOOL6JT2SBXKebRZM2yuJXuBj5qTd08/BgsRgb86q9SF?=
- =?us-ascii?Q?xwgbTRdQm1J+0k3rnqw+msjpHDhM/rJaSnIJRoXleSRlHsNOBDrHbsvNKd12?=
- =?us-ascii?Q?rjqGKpb4LPlTfLbDW9jKt8lyk8TPdJZmm5sq6JBnWjORfuzGc3V7DYawE42p?=
- =?us-ascii?Q?bO0E7NW8e3CY1uhuq4DcuUhscfSyQ6JOQNZXKKOArVb17cJsvnUpxx3dzDiD?=
- =?us-ascii?Q?TiSIHPu+h0NqB5Ax2L4LC7hNc4LRS6Fm+DKphZqQH8xAbiQy4FLIIh5lZlOj?=
- =?us-ascii?Q?m6SGw67pHVg3ZkyNBuIcjJyV5Wx7N7+KvraSCrpXMQ8xR208OBn2XZjr+kuy?=
- =?us-ascii?Q?BD/E4eA5wv21a4d7Oh+w10UhZNvgUMbIo8kUN5PdHP+SU8ePMThMq5vxa68B?=
- =?us-ascii?Q?WOYOwAOn9goqZavHOYitssJXWQVaHsEZHw54ct4rkbiQ9I8ug2QBqslP3Inl?=
- =?us-ascii?Q?iYDIQyt6Sq4=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a52b71e4-473e-4ef3-0472-08d99558e21d
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB9020.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Oct 2021 12:38:43.6094
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: peng.fan@nxp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9212
+References: <20211021174223.43310-1-kernel@esmil.dk> <20211021174223.43310-13-kernel@esmil.dk>
+In-Reply-To: <20211021174223.43310-13-kernel@esmil.dk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 22 Oct 2021 16:31:59 +0300
+Message-ID: <CAHp75Vf3yNoKxguHP3EPcRV_3tG++Fd=FVM0MXqW4_SmLA6HEw@mail.gmail.com>
+Subject: Re: [PATCH v2 12/16] pinctrl: starfive: Add pinctrl driver for
+ StarFive SoCs
+To:     Emil Renner Berthing <kernel@esmil.dk>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michael Zhu <michael.zhu@starfivetech.com>,
+        Fu Wei <tekkamanninja@gmail.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Matteo Croce <mcroce@microsoft.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Huan Feng <huan.feng@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+On Thu, Oct 21, 2021 at 8:44 PM Emil Renner Berthing <kernel@esmil.dk> wrote:
+>
+> Add a combined pinctrl and GPIO driver for the StarFive JH7100 SoC.
+>
+> For each "GPIO" there are two registers for configuring the output and
+> output enable signals which may come from other peripherals. Among these
+> are two special signals that are constant 0 and constant 1 respectively.
+> Controlling the GPIOs from software is done by choosing one of these
+> signals. In other words the same registers are used for both pinmuxing
 
-The clock driver is registered as platform devices and
-it is possible to reloading the driver at runtime.
+pin muxing
 
-But actually the clocks should never be removed to make system work,
-attempting to bind again would result in a crash, because almost all
-devices depends on clock to function well.
+> and controlling the GPIOs, which makes it easier to combine the pinctrl
+> and GPIO driver in one.
+>
+> I wrote the pinconf and pinmux parts, but the GPIO part of the code is
+> based on the GPIO driver in the vendor tree written by Huan Feng with
+> cleanups and fixes by Drew and me.
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
+...
 
-V2:
- Update commit log to explain more
+> +#define PAD_BIAS_MASK                  (PAD_BIAS_STRONG_PULL_UP | \
+> +                                        PAD_BIAS_DISABLE | \
+> +                                        PAD_BIAS_PULL_DOWN)
 
- drivers/clk/imx/clk-imx8ulp.c | 1 +
- 1 file changed, 1 insertion(+)
+It's slightly better looking if the value is begins on the next line
 
-diff --git a/drivers/clk/imx/clk-imx8ulp.c b/drivers/clk/imx/clk-imx8ulp.c
-index 6699437e17b8..8eb1af2d6429 100644
---- a/drivers/clk/imx/clk-imx8ulp.c
-+++ b/drivers/clk/imx/clk-imx8ulp.c
-@@ -559,6 +559,7 @@ static struct platform_driver imx8ulp_clk_driver = {
- 	.probe	= imx8ulp_clk_probe,
- 	.driver = {
- 		.name		= KBUILD_MODNAME,
-+		.suppress_bind_attrs = true,
- 		.of_match_table	= imx8ulp_clk_dt_ids,
- 	},
- };
+#define PAD_BIAS_MASK    \
+        (PAD_BIAS_STRONG_PULL_UP | \
+         PAD_BIAS_DISABLE | \
+         PAD_BIAS_PULL_DOWN)
+
+...
+
+> +       seq_printf(s, "dout=%u%s doen=%u%s",
+> +                  dout & (u32)GENMASK(7, 0), (dout & BIT(31)) ? "r" : "",
+> +                  doen & (u32)GENMASK(7, 0), (doen & BIT(31)) ? "r" : "");
+
+Why castings?
+
+...
+
+> +       for_each_child_of_node(np, child) {
+> +               int npinmux = of_property_count_u32_elems(child, "pinmux");
+> +               int npins   = of_property_count_u32_elems(child, "pins");
+> +
+> +               if (npinmux > 0 && npins > 0) {
+
+> +                       dev_err(dev, "invalid pinctrl group %pOFn.%pOFn: %s\n",
+> +                               np, child, "both pinmux and pins set");
+
+Why %s for string literal?! It's quite unusual. Ditto for other similar cases.
+
+> +                       of_node_put(child);
+> +                       return -EINVAL;
+> +               }
+
+...
+
+> +               } else {
+> +                       dev_err(dev, "invalid pinctrl group %pOFn.%pOFn: %s\n",
+> +                               np, child, "neither pinmux nor pins set");
+> +                       of_node_put(child);
+> +                       return -EINVAL;
+> +               }
+
+This can be checjed above with other sanity check(s), right?
+
+> +               ngroups += 1;
+> +       }
+
+...
+
+> +       ret = -ENOMEM;
+
+It should be below...
+
+> +       pgnames = devm_kcalloc(dev, ngroups, sizeof(*pgnames), GFP_KERNEL);
+> +       if (!pgnames)
+> +               return ret;
+
+...like here, where it makes more sense.
+
+> +       map = kcalloc(nmaps, sizeof(*map), GFP_KERNEL);
+> +       if (!map)
+> +               goto free_pgnames;
+
+...
+
+> +       for_each_child_of_node(np, child) {
+> +               int npins;
+> +               int i;
+> +
+> +               ret = -ENOMEM;
+> +               grpname = devm_kasprintf(dev, GFP_KERNEL, "%s.%s", np->name, child->name);
+> +               if (!grpname)
+> +                       goto put_child;
+> +
+> +               pgnames[ngroups++] = grpname;
+> +
+> +               if ((npins = of_property_count_u32_elems(child, "pinmux")) > 0) {
+> +                       pins = devm_kcalloc(dev, npins, sizeof(*pins), GFP_KERNEL);
+> +                       if (!pins)
+> +                               goto free_grpname;
+> +
+> +                       pinmux = devm_kcalloc(dev, npins, sizeof(*pinmux), GFP_KERNEL);
+> +                       if (!pinmux)
+> +                               goto free_pins;
+> +
+> +                       for (i = 0; i < npins; i++) {
+> +                               u32 v;
+> +
+> +                               ret = of_property_read_u32_index(child, "pinmux", i, &v);
+> +                               if (ret)
+> +                                       goto free_pinmux;
+> +                               pins[i] = starfive_gpio_to_pin(sfp, starfive_pinmux_to_gpio(v));
+> +                               pinmux[i] = v;
+> +                       }
+
+Why you can't use of_property_read_u32_array() APIs?
+
+> +                       map[nmaps].type = PIN_MAP_TYPE_MUX_GROUP;
+> +                       map[nmaps].data.mux.function = np->name;
+> +                       map[nmaps].data.mux.group = grpname;
+> +                       nmaps += 1;
+> +               } else if ((npins = of_property_count_u32_elems(child, "pins")) > 0) {
+> +                       pins = devm_kcalloc(dev, npins, sizeof(*pins), GFP_KERNEL);
+> +                       if (!pins)
+> +                               goto free_grpname;
+> +
+> +                       pinmux = NULL;
+> +
+> +                       for (i = 0; i < npins; i++) {
+> +                               u32 v;
+> +
+> +                               ret = of_property_read_u32_index(child, "pins", i, &v);
+> +                               if (ret)
+> +                                       goto free_pins;
+> +                               pins[i] = v;
+> +                       }
+
+NIH _array() APIs.
+
+> +               } else {
+> +                       ret = -EINVAL;
+> +                       goto free_grpname;
+> +               }
+> +
+> +               ret = pinctrl_generic_add_group(pctldev, grpname, pins, npins, pinmux);
+> +               if (ret < 0) {
+> +                       dev_err(dev, "error adding group %pOFn.%pOFn: %d\n",
+> +                               np, child, ret);
+> +                       goto free_pinmux;
+> +               }
+> +
+> +               ret = pinconf_generic_parse_dt_config(child, pctldev,
+> +                                                     &map[nmaps].data.configs.configs,
+> +                                                     &map[nmaps].data.configs.num_configs);
+> +               if (ret) {
+> +                       dev_err(dev, "invalid pinctrl group %pOFn.%pOFn: %s\n",
+> +                               np, child, "error parsing pin config");
+> +                       goto put_child;
+> +               }
+> +
+> +               /* don't create a map if there are no pinconf settings */
+> +               if (map[nmaps].data.configs.num_configs == 0)
+> +                       continue;
+> +
+> +               map[nmaps].type = PIN_MAP_TYPE_CONFIGS_GROUP;
+> +               map[nmaps].data.configs.group_or_pin = grpname;
+> +               nmaps += 1;
+> +       }
+
+...
+
+> +free_pinmux:
+> +       devm_kfree(dev, pinmux);
+> +free_pins:
+> +       devm_kfree(dev, pins);
+> +free_grpname:
+> +       devm_kfree(dev, grpname);
+
+> +free_pgnames:
+> +       devm_kfree(dev, pgnames);
+
+Just no, please get rid of them either way as I explained in previous reviews.
+
+...
+
+> +               raw_spin_lock_irqsave(&sfp->lock, flags);
+> +               writel_relaxed(dout, reg_dout);
+> +               writel_relaxed(doen, reg_doen);
+> +               if (reg_din)
+> +                       writel_relaxed(gpio + 2, reg_din);
+
+Why 0 can't be written?
+
+> +               raw_spin_unlock_irqrestore(&sfp->lock, flags);
+
+...
+
+> +       dev_dbg(starfive_dev(sfp),
+> +               "padctl_rmw(%u, 0x%03x, 0x%03x)\n", pin, _mask, _value);
+
+One line?
+
+...
+
+> +       mask = 0;
+> +       value = 0;
+> +       for (i = 0; i < num_configs; i++) {
+> +               int param = pinconf_to_config_param(configs[i]);
+> +               u32 arg = pinconf_to_config_argument(configs[i]);
+>
++
+> +               switch (param) {
+> +               case PIN_CONFIG_BIAS_DISABLE:
+> +                       mask |= PAD_BIAS_MASK;
+> +                       value = (value & ~PAD_BIAS_MASK) | PAD_BIAS_DISABLE;
+
+Okay, I have got why you are masking on each iteration, but here is
+the question, shouldn't you apply the cnages belonged to each of the
+group of options as it's requested by the user? Here you basically
+ignore all previous changes to bias.
+
+I would expect that you have something like
+
+for () {
+  switch (type) {
+  case BIAS*:
+    return apply_bias();
+  ...other types...
+  default:
+    return err;
+  }
+}
+
+> +                       break;
+> +               case PIN_CONFIG_BIAS_PULL_DOWN:
+> +                       if (arg == 0)
+> +                               return -ENOTSUPP;
+> +                       mask |= PAD_BIAS_MASK;
+> +                       value = (value & ~PAD_BIAS_MASK) | PAD_BIAS_PULL_DOWN;
+> +                       break;
+> +               case PIN_CONFIG_BIAS_PULL_UP:
+> +                       if (arg == 0)
+> +                               return -ENOTSUPP;
+> +                       mask |= PAD_BIAS_MASK;
+> +                       value = value & ~PAD_BIAS_MASK;
+> +                       break;
+> +               case PIN_CONFIG_DRIVE_STRENGTH:
+> +                       mask |= PAD_DRIVE_STRENGTH_MASK;
+> +                       value = (value & ~PAD_DRIVE_STRENGTH_MASK) |
+> +                               starfive_drive_strength_from_max_mA(arg);
+> +                       break;
+> +               case PIN_CONFIG_INPUT_ENABLE:
+> +                       mask |= PAD_INPUT_ENABLE;
+> +                       if (arg)
+> +                               value |= PAD_INPUT_ENABLE;
+> +                       else
+> +                               value &= ~PAD_INPUT_ENABLE;
+> +                       break;
+> +               case PIN_CONFIG_INPUT_SCHMITT_ENABLE:
+> +                       mask |= PAD_INPUT_SCHMITT_ENABLE;
+> +                       if (arg)
+> +                               value |= PAD_INPUT_SCHMITT_ENABLE;
+> +                       else
+> +                               value &= ~PAD_INPUT_SCHMITT_ENABLE;
+> +                       break;
+> +               case PIN_CONFIG_SLEW_RATE:
+> +                       mask |= PAD_SLEW_RATE_MASK;
+> +                       value = (value & ~PAD_SLEW_RATE_MASK) |
+> +                               ((arg << PAD_SLEW_RATE_POS) & PAD_SLEW_RATE_MASK);
+> +                       break;
+> +               case PIN_CONFIG_STARFIVE_STRONG_PULL_UP:
+> +                       if (arg) {
+> +                               mask |= PAD_BIAS_MASK;
+> +                               value = (value & ~PAD_BIAS_MASK) |
+> +                                       PAD_BIAS_STRONG_PULL_UP;
+> +                       } else {
+> +                               mask |= PAD_BIAS_STRONG_PULL_UP;
+> +                               value = value & ~PAD_BIAS_STRONG_PULL_UP;
+> +                       }
+> +                       break;
+> +               default:
+> +                       return -ENOTSUPP;
+> +               }
+> +       }
+
+...
+
+> +static int starfive_gpio_request(struct gpio_chip *gc, unsigned int gpio)
+> +{
+> +       return pinctrl_gpio_request(gc->base + gpio);
+> +}
+> +
+> +static void starfive_gpio_free(struct gpio_chip *gc, unsigned int gpio)
+> +{
+> +       pinctrl_gpio_free(gc->base + gpio);
+> +}
+
+Point of having these function is...?
+
+...
+
+> +       if (gpio >= NR_GPIOS)
+> +               return -EINVAL;
+
+Dead code?
+
+...
+
+> +       if (gpio >= NR_GPIOS)
+> +               return -EINVAL;
+
+Dead code?
+
+...
+
+> +       /* enable input and schmitt trigger */
+
+Use capitalization consistently.
+
+...
+
+> +       if (gpio >= NR_GPIOS)
+> +               return -EINVAL;
+
+Dead code?
+
+...
+
+> +       if (gpio >= NR_GPIOS)
+> +               return -EINVAL;
+
+Dead code?
+
+...
+
+> +       if (gpio >= NR_GPIOS)
+> +               return;
+
+Dead code?
+
+...
+
+> +       struct starfive_pinctrl *sfp = starfive_from_gc(gc);
+
+The starfive_from_gc() is useless. Inline it whenever you use it.
+
+...
+
+> +       case IRQ_TYPE_EDGE_RISING:
+> +               irq_type  = mask; /* 1: edge triggered */
+> +               edge_both = 0;    /* 0: single edge */
+> +               polarity  = mask; /* 1: rising edge */
+> +               handler   = handle_edge_irq;
+> +               break;
+> +       case IRQ_TYPE_EDGE_FALLING:
+> +               irq_type  = mask; /* 1: edge triggered */
+> +               edge_both = 0;    /* 0: single edge */
+> +               polarity  = 0;    /* 0: falling edge */
+> +               handler   = handle_edge_irq
+> +               break;
+> +       case IRQ_TYPE_EDGE_BOTH:
+> +               irq_type  = mask; /* 1: edge triggered */
+> +               edge_both = mask; /* 1: both edges */
+> +               polarity  = 0;    /* 0: ignored */
+> +               handler   = handle_edge_irq;
+
+Dup. You may do it once without any temporary variable.
+I haven't got why you haven't addressed this.
+
+> +               break;
+> +       case IRQ_TYPE_LEVEL_HIGH:
+> +               irq_type  = 0;    /* 0: level triggered */
+> +               edge_both = 0;    /* 0: ignored */
+> +               polarity  = mask; /* 1: high level */
+> +               handler   = handle_level_irq;
+> +               break;
+> +       case IRQ_TYPE_LEVEL_LOW:
+> +               irq_type  = 0;    /* 0: level triggered */
+> +               edge_both = 0;    /* 0: ignored */
+> +               polarity  = 0;    /* 0: low level */
+> +               handler   = handle_level_irq;
+
+Ditto.
+
+> +               break;
+
+...
+
+> +       clk = devm_clk_get(dev, NULL);
+> +       if (IS_ERR(clk)) {
+
+> +               ret = PTR_ERR(clk);
+
+Inline into below.
+
+> +               return dev_err_probe(dev, ret, "could not get clock: %d\n", ret);
+> +       }
+
+Ditto for all other similar cases.
+
+...
+
+> +       ret = clk_prepare_enable(clk);
+> +       if (ret)
+> +               return dev_err_probe(dev, ret, "could not enable clock: %d\n", ret);
+
+Double ret?!Ditto for all other similar cases.
+
+...
+
+> +       if (!device_property_read_u32(dev, "starfive,signal-group", &value)) {
+
+Since you are using of_property_* elsewhere, makes sense to use same
+here, or otherwise, use device_*() APIs there.
+
+...
+
+> +done:
+
+Perhaps you may factor out the function and get rid of this label.
+
 -- 
-2.30.0
-
+With Best Regards,
+Andy Shevchenko
