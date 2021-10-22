@@ -2,111 +2,132 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5E5437700
-	for <lists+linux-clk@lfdr.de>; Fri, 22 Oct 2021 14:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6063843772A
+	for <lists+linux-clk@lfdr.de>; Fri, 22 Oct 2021 14:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232473AbhJVMYk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 22 Oct 2021 08:24:40 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:34686 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231611AbhJVMYj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 22 Oct 2021 08:24:39 -0400
-X-UUID: fe42fe69248a4aeb9b4cd1680e6ae3b2-20211022
-X-UUID: fe42fe69248a4aeb9b4cd1680e6ae3b2-20211022
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <sam.shih@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1662205131; Fri, 22 Oct 2021 20:22:20 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 22 Oct 2021 20:22:19 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 22 Oct
- 2021 20:22:18 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 22 Oct 2021 20:22:18 +0800
-From:   Sam Shih <sam.shih@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        id S231852AbhJVMhH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 22 Oct 2021 08:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230342AbhJVMhG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 22 Oct 2021 08:37:06 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF4DC061764;
+        Fri, 22 Oct 2021 05:34:48 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id w19so1046771edd.2;
+        Fri, 22 Oct 2021 05:34:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sJaedp+WwFniAnsPOoxdNlKqeKWuyKqfMjHYa+KV7DM=;
+        b=psg2ERjBTmguvun4iRACGpDey3AvgvUOnPmxWUCYXNVPU2Lja48yf8k+qfNAZHOwvE
+         mdx3NZ0QRraYobiycacjFN6GrT7SLBMgp8n8Kqr/AvOabhepU1KW/RVlwhMr3BwMhdG+
+         p/zqmQMKhWN3xPImJkgHjc/eH9wQ5b7oURXn4dazCZpAlvpXKQAc2n4p8pJCc++RwtFl
+         k+1IlequuJarwJ4yBYhG+DbtcgFq8+azfLBvpEO0/5QbHqJ1Jv/O6hG34TPMH1wzYs6M
+         oEfjywrYcb0XcWD2TlkYM83WX4je/xXED6cfzrUGgUk4MS6heQk4AGP3/k/LW6FFf8sD
+         5cXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sJaedp+WwFniAnsPOoxdNlKqeKWuyKqfMjHYa+KV7DM=;
+        b=sz2CxHbXKfshMVHzxBWLN/bmmTFzt/P58FHBVNo6vdbkF6A91ifTyYyqcp2hQ2C3Hx
+         z+VDU8K8E6yCjaJL4YTNuvEj28WRurD4lLWeFHYbjIwkaVGFZBm+X+aYNCt1ws4vKuuN
+         Hn91bFUezWLzbV1f0yAVdCsyROn1eVrL4W91HDXukVN7e5u4vWSrquen3DetwrzY7nAD
+         HMbk/8Md2CHyMmLfMUDU33RAeLaa4Z1YWrmpGPRMph5wLYHDpXYJh9zSiGSgzs3jUBXx
+         y4Y84awf2jF6xBw07EM/K9vUoysDMLGz+P8IvD7SqglInxeTciC6iLxjmigwMy0UCkZ9
+         swqQ==
+X-Gm-Message-State: AOAM530094OoWgu4RhEmFXW5O2uKXY9jph3MfqZh2LmuLriWGAwV3tm9
+        4OGOAcWEioy+PsfeSnwq0YVhctwV8XHDbIdKXWw=
+X-Google-Smtp-Source: ABdhPJzELMMCdF3V0ssE/+Finv7LByJ4VhsgFR1Ko44YZnSsrQh8x6Ri7/3ky81qJckrRAZEb9X0ta8R9EPXbJ4mi0w=
+X-Received: by 2002:aa7:c0d2:: with SMTP id j18mr17043167edp.107.1634906087448;
+ Fri, 22 Oct 2021 05:34:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20211021174223.43310-1-kernel@esmil.dk> <20211021174223.43310-7-kernel@esmil.dk>
+In-Reply-To: <20211021174223.43310-7-kernel@esmil.dk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 22 Oct 2021 15:33:50 +0300
+Message-ID: <CAHp75VcS7ZZCciAgBH2QU7u8CiHzveAOsvSdv2DQBvpBn_6opQ@mail.gmail.com>
+Subject: Re: [PATCH v2 06/16] clk: starfive: Add JH7100 clock generator driver
+To:     Emil Renner Berthing <kernel@esmil.dk>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Fabien Parent <fparent@baylibre.com>,
-        "Weiyi Lu" <weiyi.lu@mediatek.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Miles Chen <miles.chen@mediatek.com>,
-        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>
-CC:     John Crispin <john@phrozen.org>,
-        Ryder Lee <Ryder.Lee@mediatek.com>,
-        "Sam Shih" <sam.shih@mediatek.com>
-Subject: [RESEND, PATCH v6 0/5] Mediatek MT7986 basic clock support
-Date:   Fri, 22 Oct 2021 20:22:13 +0800
-Message-ID: <20211022122213.27065-1-sam.shih@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-MIME-Version: 1.0
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Michael Zhu <michael.zhu@starfivetech.com>,
+        Fu Wei <tekkamanninja@gmail.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Matteo Croce <mcroce@microsoft.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This patch series add basic clock support for mediatek mt7986 SoC.
-It is based on patch series "Add basic SoC support for mediatek mt7986"
-https://lore.kernel.org/all/20211018114009.13350-1-sam.shih@mediatek.com/
-and "clk: mediatek: Add API for clock resource recycle"
-https://lore.kernel.org/linux-arm-kernel/20210914021633.26377-5-chun-jie.chen@mediatek.com/
+On Thu, Oct 21, 2021 at 8:43 PM Emil Renner Berthing <kernel@esmil.dk> wrote:
 
----
-v6: Used lowercase hex values in clock DT
-v5: used builtin_platform_driver instead of CLK_OF_DECLARE
-    follow recent clk-mt8195 clock patch series:
-    https://lore.kernel.org/linux-arm-kernel/20210914021633.26377-1-chun-jie.chen@mediatek.com/
+...
 
-v4:
-According to the maintainer’s suggestion, this patch splits the previous
-thread into independent patch series.
-This patch include clock driver and device tree update
+> +static struct clk_hw *clk_starfive_jh7100_get(struct of_phandle_args *clkspec, void *data)
+> +{
+> +       struct clk_starfive_jh7100_priv *priv = data;
+> +       unsigned int idx = clkspec->args[0];
+> +
+> +       if (idx >= JH7100_CLK_END) {
+> +               dev_err(priv->dev, "invalid clock index %u\n", idx);
+> +               return ERR_PTR(-EINVAL);
 
-Original thread:
-https://lore.kernel.org/all/20210914085137.31761-1-sam.shih@mediatek.com/
-https://lore.kernel.org/linux-arm-kernel/20210914085137.31761-2-sam.shih@mediatek.com/
----
+After this
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/commit/?h=driver-core-next&id=7065f92255bb2468dbb9aa0537ff186ef64d5a02
+It's okay to use
 
-Sam Shih (5):
-  dt-bindings: clock: mediatek: document clk bindings for mediatek
-    mt7986 SoC
-  clk: mediatek: add mt7986 clock IDs
-  clk: mediatek: add mt7986 clock support
-  arm64: dts: mediatek: add clock support for mt7986a
-  arm64: dts: mediatek: add clock support for mt7986b
+> +       }
 
- .../arm/mediatek/mediatek,apmixedsys.txt      |   1 +
- .../bindings/arm/mediatek/mediatek,ethsys.txt |   1 +
- .../arm/mediatek/mediatek,infracfg.txt        |   1 +
- .../arm/mediatek/mediatek,sgmiisys.txt        |   2 +
- .../arm/mediatek/mediatek,topckgen.txt        |   1 +
- arch/arm64/boot/dts/mediatek/mt7986a.dtsi     |  68 +++-
- arch/arm64/boot/dts/mediatek/mt7986b.dtsi     |  68 +++-
- drivers/clk/mediatek/Kconfig                  |  17 +
- drivers/clk/mediatek/Makefile                 |   4 +
- drivers/clk/mediatek/clk-mt7986-apmixed.c     | 100 +++++
- drivers/clk/mediatek/clk-mt7986-eth.c         | 132 +++++++
- drivers/clk/mediatek/clk-mt7986-infracfg.c    | 224 ++++++++++++
- drivers/clk/mediatek/clk-mt7986-topckgen.c    | 342 ++++++++++++++++++
- include/dt-bindings/clock/mt7986-clk.h        | 169 +++++++++
- 14 files changed, 1120 insertions(+), 10 deletions(-)
- create mode 100644 drivers/clk/mediatek/clk-mt7986-apmixed.c
- create mode 100644 drivers/clk/mediatek/clk-mt7986-eth.c
- create mode 100644 drivers/clk/mediatek/clk-mt7986-infracfg.c
- create mode 100644 drivers/clk/mediatek/clk-mt7986-topckgen.c
- create mode 100644 include/dt-bindings/clock/mt7986-clk.h
+       if (idx >= JH7100_CLK_END)
+               return dev_err_probe(priv->dev, -EINVAL, "invalid clock
+index %u\n", idx);
 
---
-2.29.2
+Ditto for other similar cases.
 
+> +       if (idx >= JH7100_CLK_PLL0_OUT)
+> +               return priv->pll[idx - JH7100_CLK_PLL0_OUT];
+> +
+> +       return &priv->reg[idx].hw;
+> +}
+
+...
+
+> +       while (idx)
+> +               clk_hw_unregister(&priv->reg[--idx].hw);
+
+I still consider that usual pattern, i.e.
+
+       while (idx--)
+               clk_hw_unregister(&priv->reg[idx].hw);
+
+but since you are pushing hard for your variant I'll leave it to the
+maintainers and author.
+
+-- 
+With Best Regards,
+Andy Shevchenko
