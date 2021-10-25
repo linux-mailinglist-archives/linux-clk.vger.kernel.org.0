@@ -2,170 +2,178 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BBC43954F
-	for <lists+linux-clk@lfdr.de>; Mon, 25 Oct 2021 13:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08194395A0
+	for <lists+linux-clk@lfdr.de>; Mon, 25 Oct 2021 14:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231699AbhJYLy5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 25 Oct 2021 07:54:57 -0400
-Received: from mail-eopbgr150071.outbound.protection.outlook.com ([40.107.15.71]:29489
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        id S232268AbhJYMKy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 25 Oct 2021 08:10:54 -0400
+Received: from mail-eopbgr70045.outbound.protection.outlook.com ([40.107.7.45]:26785
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231855AbhJYLyz (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Mon, 25 Oct 2021 07:54:55 -0400
+        id S231129AbhJYMKy (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Mon, 25 Oct 2021 08:10:54 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=REAahljd/XWf1mKM4SwYrsRAaW/XryKSkP7NnjuAXxjsPXROc02/jqAnU6mSu1ILSHlaZ/rWf8jKVfMwCdsObfYE3Z7dpj+Hj1wWvALOoKP+6b4gUADb3OP5S3Ku0ZucVQ1gfG3oMLL5ixe4kFj7/bhDTKASV0aA+YB1TcW/kBcH372etuNUHB+DwmVtLqErotuS9xXYkHOj+5bJLKJeW/eWJd0r9Z2Hi6IYXOs5yPnRIt/+vU97V79qTTf3edE1W96n4xkw49PDK7G20dIjI5cMU++urMqJZAlQLl4z+5C9JQOjqJe0GqdvXdy/2L17AxvAedR1lg4RLTwNsybSFQ==
+ b=CUVicnZJO5As8dOFOK0GO3w5PCe8L0ve0eq1fnQBjZuyAcohlFuk3ic+qC4wyiDG4FE+1xWysofJ3bOf8U1yETrSkwClsphq4xfjVZRSeeMAT6gHeLRYJckQhKsmQBt8sY/7nzgXHh6ozE7xXVWFSBdUY6JY4jhloG8xTrvxwyLFQLcW8E9ppGD2Hh1k5SyCIEQimchs/pSDoyceF1AZEzHwgP5d0sqmS48yrXGPTvdAH0RufRlgTVaHpJupGnThwc5gLLwNW24lxXY/OhCeze6dEJzM5Y9edSAnjIF0cGwF0MZMypewKdMYHXEgSDkg2FbX1nq2WujyMYhE4HkFag==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qgT5a3RyUl6QqrOguIZYh0l4rMCS6QAkW9XIdSNtfR4=;
- b=SJnqwqeo7hm7s26WBkJMr08feL/xEjF7wpLDi1cXr0dezuT0c88YUQ22y4bLbRXNnqX8J3J2IC4gjXmvSykEUrsMmNIG2gLCjZR8nQCfiVMMK4E2C9tRiIfsBLiOhXLzFhdKwmnMXnbZeyFJq89cyRil/hgL62PLwENEtwWVGvX5FK6z83sQ30I7pJqKStwI6yVUDAW/CY+eekmFw6t9qmWST0tQHMEigipYzCbg1tB/8svYjqiIkMm4rZYPMwIQt9QH4lOGksd+cfbnxZTxQG3V7rZ3rpDHGPgKEDK7nOR54UbgMIC8R8gWB+ZWyoY/RaUmlGSJKrfLZECIFE5npw==
+ bh=KRWS4lRQ1wvdDP2acBVcNvcIdkjHr+Lcjflri5mDZeU=;
+ b=KnmXWu3Wl2x5WWlXS31VqJIWkoM4ap3rlbaQp7Qjx4la+4dOP4DdfNQTmfqzD8B6ktcDGZZUT2bpPbuyq/cplxWmVZyVRctIbzLt3vQUo/Nriq4wRxZJTEjzsH459JjWk1lOZDZmi8VPY9WAxScI8P0RlrftnQ9k1jKOlEJVnnwBfL7cBIqaDq9pjL4zcW6+Un4FwDCazusR1eseenygAE5aWX2/YyyeEAuEKOUhtAnNRmdBjSzIbnTi8zkzPVeMEmu2jF/Pv49P8iVtxPsUuW4WtYQKWJ/zpGhErQWQk10DEg6R/I3hSlhRf8T8Zlf9bUpzsVCDbFFCoOD8Ny459Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qgT5a3RyUl6QqrOguIZYh0l4rMCS6QAkW9XIdSNtfR4=;
- b=E4N8cv9qJeqrCu8/26khbK79ro2EnW3GwYsSWY/Enc0GIWRdJ9cYqjbvpna+iyqrKmUFfR/A2RvKPCcDBltYF86dDGXw3BZUW+bgedEWJmFDmF0dnzNQdgCYCzx2DlMpYf3u/95MliQhvzzJGn4ISkhAPKLYEQsta9Q9Pg9I/Lc=
+ bh=KRWS4lRQ1wvdDP2acBVcNvcIdkjHr+Lcjflri5mDZeU=;
+ b=rfkqdPD13GyHB4z4ZTgN1wKE/iekeqDQNtOkqgu+Mw5M8qc6oiOaMOfbcT+a1b+Cr1/q7B1SR0LxLkt5anvvLGHDfNc0u3xsY0CnFInkAAswfuKUhpM9W5MVWP16c/rtq/mwyyZBAHf9dtEg0UQ3nSh1vptHSiZJdsPb0rzPHP8=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU2PR04MB9020.eurprd04.prod.outlook.com (2603:10a6:10:2e3::9)
- by DB9PR04MB8445.eurprd04.prod.outlook.com (2603:10a6:10:2bc::20) with
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
+ by VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.16; Mon, 25 Oct
- 2021 11:52:30 +0000
-Received: from DU2PR04MB9020.eurprd04.prod.outlook.com
- ([fe80::b928:9230:aa10:639a]) by DU2PR04MB9020.eurprd04.prod.outlook.com
- ([fe80::b928:9230:aa10:639a%9]) with mapi id 15.20.4628.020; Mon, 25 Oct 2021
- 11:52:30 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     sboyd@kernel.org, mturquette@baylibre.com, abel.vesa@nxp.com,
-        s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.18; Mon, 25 Oct
+ 2021 12:08:27 +0000
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::885c:ddee:c614:9787]) by VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::885c:ddee:c614:9787%7]) with mapi id 15.20.4628.020; Mon, 25 Oct 2021
+ 12:08:27 +0000
+Date:   Mon, 25 Oct 2021 15:08:25 +0300
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     sboyd@kernel.org, mturquette@baylibre.com, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V2] clk: imx: gate off peripheral clock slice
-Date:   Mon, 25 Oct 2021 20:29:02 +0800
-Message-Id: <20211025122902.1151-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.30.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR0401CA0017.apcprd04.prod.outlook.com
- (2603:1096:3:1::27) To DU2PR04MB9020.eurprd04.prod.outlook.com
- (2603:10a6:10:2e3::9)
+Subject: Re: [PATCH V2] clk: imx: gate off peripheral clock slice
+Message-ID: <YXaeOa9CsT3cd/u+@ryzen>
+References: <20211025122902.1151-1-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211025122902.1151-1-peng.fan@oss.nxp.com>
+X-ClientProxiedBy: VI1PR07CA0268.eurprd07.prod.outlook.com
+ (2603:10a6:803:b4::35) To VI1PR04MB4688.eurprd04.prod.outlook.com
+ (2603:10a6:803:6a::30)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from linux-1xn6.ap.freescale.net (119.31.174.71) by SG2PR0401CA0017.apcprd04.prod.outlook.com (2603:1096:3:1::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4628.15 via Frontend Transport; Mon, 25 Oct 2021 11:52:26 +0000
+Received: from ryzen (188.26.41.202) by VI1PR07CA0268.eurprd07.prod.outlook.com (2603:10a6:803:b4::35) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4649.11 via Frontend Transport; Mon, 25 Oct 2021 12:08:26 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3a7b1132-a127-4168-c82a-08d997adec25
-X-MS-TrafficTypeDiagnostic: DB9PR04MB8445:
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <DB9PR04MB8445FDA18369F34D2ABC68AEC9839@DB9PR04MB8445.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-MS-Office365-Filtering-Correlation-Id: 5c844781-bcac-4599-8847-08d997b026b4
+X-MS-TrafficTypeDiagnostic: VI1PR04MB4688:
+X-Microsoft-Antispam-PRVS: <VI1PR04MB4688DBA3E5F5142617BF0BF9F6839@VI1PR04MB4688.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U03KNJ55/sN+qPJmDIBsxoUAfFW1eCeJrTvUT9V01nr7Bx2rKOU9FPmV9T2afpaPp70HkGeA6+fiitLGu+40pNY9oglCrYAWbadhjs56/ftGoZuukXgIHfN0rddKTEw97b/3zhCAqjM0tsKb9KwDYGl+WFpCfMJRctyykAEtbReBUIzc3jbs7vzRJSF2czbERCKA0g5qRDo20E15ylku2mzsqYc09/EzLPyDTJILqyc4HTmlzzwYRzrGORmofdXm1B/BTyeXM7uCTb0xBE+2E0GJuDB8vUhJrgYG98jz6sJJ/8nLXyuUHl/6Z/xw4eRhdKWGb4V2xQXPBLaV+T4MOkZzxzlxJexyvQ0Q5CSCrr4rjUVCipmg3DVwLC6ubwL3caBtxRNBlw2rg38zmsW+JWqCGEwd++3tS7dsFuNOjCSqpZwXfSZ8N65r/kXt4C+/FKvzqggyn+BWRIGSfJcdGdBjuUgzD34ChIneXtOwuOoi7o2+FrWawN3KA7VxLaCuqy1WEPY5YCJzM3NS5LA5IKKUuZHeYMzTwyzJYU3MRZSTOd196EQ0kZdHSuP6LaDCC78cxTlSAGlsszrliU8g7dlEPtN1RJfHcvrVEsWvKZeSQufR7wjXspaJxbJ7nk1jUkNn6Hxwp8Vmcl/Bb5E3naqrhvLZi8XO/63ayPt/jxz25q84YB7/wtx88ALYwSIcedd1TTJHruHGYOL/q7OCag==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB9020.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6512007)(4326008)(26005)(52116002)(6666004)(6506007)(8676002)(83380400001)(6486002)(186003)(956004)(38100700002)(38350700002)(2616005)(1076003)(316002)(66476007)(66556008)(86362001)(2906002)(66946007)(508600001)(5660300002)(8936002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: uPsnZAVHCZgl3roamYskySPvAF/oBjjy7hsQCtoYooRS0YXMA/h5Jqb0vHH1ecvTnwBlRlfjPnROgw5Pp/Y5V2h7276MKcSF3PI+i7SG4e215UmWdK6QO3S8/igEedapiqwhuAeJOYBRzVPh9oHlTczqaTziaXm0PBLESqhjHl0oxS9oIkBz757cFKNx2DPKh5ivSScMMa5FbPry1RroJPpnzw9Z9QuHTf8f7QIFh3/bGE1BgmxCml/AiErphgHo2W10PQBFG7Jh3j+nZFsScN81Bix8KMUYr4FwKGp1AUKlg+ZBayY9w8wWT3u8kGBtKjsyIEr1dbb2l1zGq8MKLbSvPP5PeQ4m3vW2PJDJlLWjSq8boUnePJhySgDLgzaL+2vA4LuDBrndqGvSrMWgeqdwMaGRY2sHFpImIsK/QDxQG+t6RrrXEtW2G4WPtyNOdDSoZ8yV7IkzPJ7OLc6VAb6P8maPj9fRhOu7ybkwvau/CRH+tksUD6Yng0l3dVjuOiYESiK9E7PY7ZfGOk3N8rkFJeS6Eh4ejOzYd2P/qreCs/4og6c6OMfszKTf+3Nq1aNRjyGr8lpe4Oo/+lC9iwO3APoaS6j32dtBb3tLAAVnRKzsXXlG+YHML/Xo2pjkC30pZgLwtSTs7kDJxq4r6/ky2UDl9482dZU3z40riCTnXFuB6pcRNzXqiYujKwvl4qSvPc6rf6vXeD+2ncAgHA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(8676002)(66946007)(956004)(2906002)(66556008)(66476007)(33716001)(316002)(6862004)(53546011)(4326008)(44832011)(8936002)(9576002)(508600001)(83380400001)(186003)(52116002)(26005)(5660300002)(6496006)(86362001)(9686003)(55016002)(38100700002)(38350700002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?i4PtnC3m8J7Lbx0Q58aretjrYgJJLKHHftI06qsxre794cnsVJDr6Ov88JXa?=
- =?us-ascii?Q?AjC4Uz2FfCy799XV8r/aYcIl7g9wFMsMSaLKeA1DOeAlQVOiXOjU9CwOhOp6?=
- =?us-ascii?Q?XHxRiQGsQcF7wXLbj8ZiJwPX+QZS/lnk/08wG1sZVYEpIZ8lEQCG8FJ+OB/H?=
- =?us-ascii?Q?Cg32CPO8QjJkilhG22/1KI/2IUWsn7zNrWWOo2EPMnzKQJw6OkO7kDbnLvIZ?=
- =?us-ascii?Q?jOZsPAI5D3vNj0VA5zHBvSOYiDdyMspqF18W6GQypW/Udu//cRDK0m8yaZCD?=
- =?us-ascii?Q?WrrTHkjsaH3OkvuHip0i8QFmf42Kn0lG71Pqb9LACO/Nb5wL2F/TBsvLBVFH?=
- =?us-ascii?Q?yZS1Z8B7mQUnQIVabCYA5bpad0XMMIWF15ebb9eo6qnXikGHPY+lENL9ChRa?=
- =?us-ascii?Q?ct7SapLuHtfMlrco0/XY3HVndAD777mL6aLWf8LcoqDRVIJW2gGtGxZf2Oxi?=
- =?us-ascii?Q?98RVdcu93JfCzcb0Sycs6xVoZx0Et2Y1+IhiCOIqrtmsCwJ7Htr9avRgljrz?=
- =?us-ascii?Q?GbfVQKGIlaFN001NJ7o6jY0oVyVx1Mrwc09Qwqs/8oG7yJSnjcW1nAhxJwFc?=
- =?us-ascii?Q?/SV+kUgGNrLaDmHDD+1ZkhB7CmyGE3MfcxWEJAYyWBN7ezvb7eFBKFIVL9CI?=
- =?us-ascii?Q?HxXI41DkrDUWpBpo5XbmjBPP+3g4SGP1wS/Uo8Chc9tfeSdDdmKi002G930R?=
- =?us-ascii?Q?P29n2qTV127VIdT+QWIll3chxLXxH7vi4S5E8E4QkJRDouksqn5FCPUlHDbc?=
- =?us-ascii?Q?FdaBkhuIJlI9DR0yg+dS8p0n8/KqBiFmzfu7Y3NFZkyjge9VgNAqqk2xB5fs?=
- =?us-ascii?Q?/UearhFW3r/82K04cVi1dREonvZatFFIy9rBLuA43VYKqpwB41NyfrQWv/Vx?=
- =?us-ascii?Q?ylOPRxwnmnYfrvYWaK2Oj6QavSlTMZxXSASkBckZv0HNST/o+oiMrQX93+7d?=
- =?us-ascii?Q?f3hcmS0uhUyxMw1rcrNJ3nQbNsQi0xRuyysnrpMNaPFK7f8lTyJKfuRLtfgO?=
- =?us-ascii?Q?OyVNA0VU+SH7OeJ1dgTscKtARoGsh/j8TF7LZf7DK/MStoCLmDadpbaTXLEP?=
- =?us-ascii?Q?Vxdq7Q6y8pM8tfALHg/Xou0FPMAUaCvAYKj6iOisRUMQWz+1EUmHbXnkdzyY?=
- =?us-ascii?Q?frt62dPOgu+FkjnbB0LZ0C0c+jKYMDTwlJpPnn3jzWUGZKQl4IFchNaSLOxe?=
- =?us-ascii?Q?nDZVCa3kfDBYkUICb7Q51EPG2y+SspfydiUXC1dI6AxmcuIx2o1bpUWUg0sn?=
- =?us-ascii?Q?c7t8mz3h9HEjmyzrpVz7NbCaZtUHK1TcF1caHlKgSaJYicxjARyINRxeEVa9?=
- =?us-ascii?Q?It/2piRXqdlP68N47TLSBgd1OrSK9qt+HJZFZv3RHJLg4qinT1by/oevPeWt?=
- =?us-ascii?Q?xGTYldpsfpgHWeitZNbYTQwPQR1wNpJw5ekZy6BPtsvzodBhOTkvvJ0tQNWI?=
- =?us-ascii?Q?LtnNUmZf9zBz+AAQHCu1WqGRACw9RR1RoeOQH8hahiXQzy4oZnDPUzs4FjsF?=
- =?us-ascii?Q?rDQ9pnqeNBETKXnTGhaZo82cMwOxVg5JxlCBHzOFsOLPJvm2jOh9SIqCTVsT?=
- =?us-ascii?Q?I477LymeRVoQrM8XC1+RmfDeSqV418BJOoKLpyq6WzJQkASy7avfWjJBZlGw?=
- =?us-ascii?Q?ZfHEISxCz4KNcvrg08GTdEk=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a7b1132-a127-4168-c82a-08d997adec25
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB9020.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?J9/UReYlLCMJLsqJ5Y69ZpcFFj4k4D1/cmnIbgYGsJzT3OSWyzlE27w2eRyb?=
+ =?us-ascii?Q?UsDhTtXmNj7R/fUhxFTsRoD8oQhzaEDCfjlyCF5dA5rL6xqQXUSoktGWi912?=
+ =?us-ascii?Q?TVXHcOK2JTvb1NW4PCZUGZvLHYmjWp1r73xaqmrYna6SrnSnfH6l01BMW3yT?=
+ =?us-ascii?Q?WNc+Ym7124zfqvDwS96TyQj8EPGbMAhE1C+s0ZC9GFin4ILK2BOm+sBjo5Wa?=
+ =?us-ascii?Q?jgmEcyqMrhm3tk5xF1AoA0EQB0ebH/Mcb9PXwMJo6oIj3KjsIcx4GHp93tk8?=
+ =?us-ascii?Q?nAyeMNMPdJfcGFmi5XffDrm2BuhD72bHBvuB1VJDCRKJ1V4v05gc10oh+uP0?=
+ =?us-ascii?Q?l9eRSBbPUs9E8hnBB1CNm9f9Y8f6RVbZzIP0j4GAjoHf9h+VyFSX6U8de336?=
+ =?us-ascii?Q?PPgys+koOoy7RwLhmQMxKhQZUdqjMdWKQFfhUTdZkrBO8rAzBdEGEU2pMr3I?=
+ =?us-ascii?Q?NMz5NIPXUIPZo1/PMIi43j4XJf+5j8/xyU7PMfqyl1/TcjlykqqmVYw4dbog?=
+ =?us-ascii?Q?tU7aqN3y3LkC35M6fPVb2SPAE0wELXWF//QDogN3T2SbItjcQbQBJxg+SveQ?=
+ =?us-ascii?Q?PGFYK877Bb7YQaFBu5rNt1XMXrxzisQ9hn26qluJKPpOUyShvBu8Y73QQUCD?=
+ =?us-ascii?Q?NT4D8k2XD01WX87xOZmAO2gZheaK+36eHUy4L9Xz5yN9D7cOMSmG8FZAfKUW?=
+ =?us-ascii?Q?HMqv3nyXXdZt6o400UaH3rAoARKDbXNL2IZg0XofyT65n598SKyhDMJNusXm?=
+ =?us-ascii?Q?KaqnhgK6inmwIbQCv8Q4XHA5s/CR+3xZEUPSs7S/tz2qtKAFVh1tPOyLr7q+?=
+ =?us-ascii?Q?9THQ3iLi5f7FgqtSK/MYwxT0tJ68O41/WH65eAoPzRcqe6Hybx+ydNTUFGEv?=
+ =?us-ascii?Q?phfm/Hz2SA67XV8AcQyF+6arrMLMwObXeuBZsMZv1S33MfJrv6En8O+1Ayp0?=
+ =?us-ascii?Q?ZOvJNbXcsCULpsnDf9DWFPJxNBIrcNI6nFwgKGeBuZWypYlgUujB3yAX7u8p?=
+ =?us-ascii?Q?X0GL5zpowP+M72Mewhv/W3mE9g9li3cXmGmiWOfnBV9rwKKxG5m6oCVDAOuv?=
+ =?us-ascii?Q?OtZhjvPuBb7oIb3YQETt7mhd5dq1SaDKenufuVkwmejF/bAbIHF3IVyNRbJ7?=
+ =?us-ascii?Q?VmSoZfJyZYUDPLQudlz9J3vOLTep3xs59EQSgdDcLuR7IqDK/2pu13qyzHUT?=
+ =?us-ascii?Q?s1TysBmmHyyx5A3YLJPt+EPjm8D59rm9OOIJsKW1B2EEnDLyWCvLbo6fwiVY?=
+ =?us-ascii?Q?ob97+/vIYwoMx1GpexBYCwdkuziiX2IxT+OKPr9azGBkCyOg772+mqDQ9DM0?=
+ =?us-ascii?Q?6zR/UwgkExA7s0iQxdwxaWsUd7Gh1ttZUF/ETfzWuzDsSW4DQ6QRv5UMz48T?=
+ =?us-ascii?Q?ZUGpTyMd3j9GdM9ezmoWxXs7HcnOwuZDv8p4vnjfov+kh582S3OLAvdbijqr?=
+ =?us-ascii?Q?vBvs3xYU8esUp/nBhCKW8fAlCg2XR9+O2n036oIUoDuOeInCFqHFDlBLcvKz?=
+ =?us-ascii?Q?oUoB1RblaEmyfdgEh7YVVrIt7yvgthGkWzs7fc2pdSjmD5UcZgy7vwKPh49o?=
+ =?us-ascii?Q?MEA+FqQ00+gjuDg3zqAE4ZLEJFgeaBWiGzuiJp0fsbhTmSvUduC6J8seow+t?=
+ =?us-ascii?Q?ZoTrRb+wY1EbNb1mymIVe10=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c844781-bcac-4599-8847-08d997b026b4
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2021 11:52:29.9538
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2021 12:08:27.0598
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: obArg+8i52AX+NMzVi1a+xIpTySXauCDjqqyWHg9ZmlvRISNdesCwRL3G1LITlOeg7+t8eEL4TclMdUT3j9sOA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8445
+X-MS-Exchange-CrossTenant-UserPrincipalName: CQ0wyo0OrHusqPVzrPY3+tzq3+T4ip2GXnQWXaWOPUsrOQqT7BjJc6Wvr2uMlqCVTftgU1jcZIvYjAq9Ds3MrA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4688
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+On 21-10-25 20:29:02, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> The Peripheral clocks are default enabled when SoC power on, and
+> bootloader not gate off the clocks when booting Linux Kernel.
+> 
+> So Linux Kernel is not aware the peripheral clocks are enabled and
+> still take them as disabled because of enable count is zero.
+> 
+> Then Peripheral clock's source without clock gated off could be
+> changed when have assigned-parents in device tree
+> 
+> However, per i.MX8M* reference mannual, "Peripheral clock slices must
+> be stopped to change the clock source", so need to gate off the
+> the peripheral clock when registering the clocks to avoid glitch.
+> 
+> Tested boot on i.MX8MM/P-EVK board
+> 
+> Fixes: d3ff9728134e ("clk: imx: Add imx composite clock")
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+> 
+> V2:
+>  Add Fixes tag
+> 
+>  drivers/clk/imx/clk-composite-8m.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/imx/clk-composite-8m.c b/drivers/clk/imx/clk-composite-8m.c
+> index 2dfd6149e528..ee41fbf90589 100644
+> --- a/drivers/clk/imx/clk-composite-8m.c
+> +++ b/drivers/clk/imx/clk-composite-8m.c
+> @@ -184,6 +184,7 @@ struct clk_hw *__imx8m_clk_hw_composite(const char *name,
+>  	struct clk_mux *mux = NULL;
+>  	const struct clk_ops *divider_ops;
+>  	const struct clk_ops *mux_ops;
+> +	u32 val;
+>  
+>  	mux = kzalloc(sizeof(*mux), GFP_KERNEL);
+>  	if (!mux)
+> @@ -216,8 +217,14 @@ struct clk_hw *__imx8m_clk_hw_composite(const char *name,
+>  		div->width = PCG_PREDIV_WIDTH;
+>  		divider_ops = &imx8m_clk_composite_divider_ops;
+>  		mux_ops = &clk_mux_ops;
+> -		if (!(composite_flags & IMX_COMPOSITE_FW_MANAGED))
+> +		if (!(composite_flags & IMX_COMPOSITE_FW_MANAGED)) {
+>  			flags |= CLK_SET_PARENT_GATE;
+> +			if (!(flags & CLK_IS_CRITICAL)) {
+> +				val = readl(reg);
+> +				val &= ~BIT(PCG_CGC_SHIFT);
+> +				writel(val, reg);
+> +			}
+> +		}
 
-The Peripheral clocks are default enabled when SoC power on, and
-bootloader not gate off the clocks when booting Linux Kernel.
+Though I'm usually against special cases like this one. I think the clock
+core needs some generic flag that would read the state from HW on probe
+and/or another generic flag for disabling on probe.
 
-So Linux Kernel is not aware the peripheral clocks are enabled and
-still take them as disabled because of enable count is zero.
+But for now, I'm OK with this:
 
-Then Peripheral clock's source without clock gated off could be
-changed when have assigned-parents in device tree
+Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
 
-However, per i.MX8M* reference mannual, "Peripheral clock slices must
-be stopped to change the clock source", so need to gate off the
-the peripheral clock when registering the clocks to avoid glitch.
-
-Tested boot on i.MX8MM/P-EVK board
-
-Fixes: d3ff9728134e ("clk: imx: Add imx composite clock")
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
-
-V2:
- Add Fixes tag
-
- drivers/clk/imx/clk-composite-8m.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/clk/imx/clk-composite-8m.c b/drivers/clk/imx/clk-composite-8m.c
-index 2dfd6149e528..ee41fbf90589 100644
---- a/drivers/clk/imx/clk-composite-8m.c
-+++ b/drivers/clk/imx/clk-composite-8m.c
-@@ -184,6 +184,7 @@ struct clk_hw *__imx8m_clk_hw_composite(const char *name,
- 	struct clk_mux *mux = NULL;
- 	const struct clk_ops *divider_ops;
- 	const struct clk_ops *mux_ops;
-+	u32 val;
- 
- 	mux = kzalloc(sizeof(*mux), GFP_KERNEL);
- 	if (!mux)
-@@ -216,8 +217,14 @@ struct clk_hw *__imx8m_clk_hw_composite(const char *name,
- 		div->width = PCG_PREDIV_WIDTH;
- 		divider_ops = &imx8m_clk_composite_divider_ops;
- 		mux_ops = &clk_mux_ops;
--		if (!(composite_flags & IMX_COMPOSITE_FW_MANAGED))
-+		if (!(composite_flags & IMX_COMPOSITE_FW_MANAGED)) {
- 			flags |= CLK_SET_PARENT_GATE;
-+			if (!(flags & CLK_IS_CRITICAL)) {
-+				val = readl(reg);
-+				val &= ~BIT(PCG_CGC_SHIFT);
-+				writel(val, reg);
-+			}
-+		}
- 	}
- 
- 	div->lock = &imx_ccm_lock;
--- 
-2.30.0
-
+>  	}
+>  
+>  	div->lock = &imx_ccm_lock;
+> -- 
+> 2.30.0
+>
