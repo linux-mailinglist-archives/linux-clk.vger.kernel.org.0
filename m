@@ -2,122 +2,114 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD79439502
-	for <lists+linux-clk@lfdr.de>; Mon, 25 Oct 2021 13:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076E343955C
+	for <lists+linux-clk@lfdr.de>; Mon, 25 Oct 2021 13:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233110AbhJYLoA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 25 Oct 2021 07:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
+        id S230232AbhJYL5S (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 25 Oct 2021 07:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232207AbhJYLn5 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 25 Oct 2021 07:43:57 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5DFC061745;
-        Mon, 25 Oct 2021 04:41:35 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id g8so10320150edb.2;
-        Mon, 25 Oct 2021 04:41:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Af+qmYvV3PY7oY9iMHf1WDLN+yTC/dfVl6LmNB2Ru+M=;
-        b=iLTzGHKq62wcRXJw/NQeb8QVl0SSGxd0VOXTRXyEMYtWDF16J/H4D9o1cX+9caqz8h
-         pXrPyzBaUiZ0wa/rRI5QqSYx28CxRd1p5Ys03yoYaNBgm3qYTV80XOmaEFCOc8WN3eI+
-         /Zwrh18K9RiH6f4EmIOxd9zjwFUeuIeq/GdpkLulr84hMeotFMMfUuWWmc1F0lnxsvey
-         1wozSc9mRa+aSgqBIsqi3KeUU16h2VN8zp5sptzJqmma4Ljkt5BOEK3yDYNWT89byf7X
-         cX9CfI4culRu/NEpETmT2OCUXcdXtWlLT82RGyimdnOIp4g0iEyt3U8uwefzVYNDGf9/
-         VyeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Af+qmYvV3PY7oY9iMHf1WDLN+yTC/dfVl6LmNB2Ru+M=;
-        b=UUfPSHY/5GTlh7vNnngmfbwcsOt1bbIg3kAuA7pAdr+5yiWD+5apss0uaJI76lIM0B
-         PZNlk+dFc68optixYEHjIqKAyILm+RYyPEpMXWQ1Tb13icpyy9tzLG042Y/VZ/JtZLBj
-         AZzJhiDwiefr//OvgpmAuy96rWNR++eWXf6MBy2DbhgqhgN3M8z84jozTE3JHJwIKaXi
-         f6ONyxx/qZpx8+Uwm0kOIn9Go5HjvbCVJjFg0HJW93gFp6sWMbRjCW4fYssGvWltrRmy
-         8UdxH94gs4NyNN4pffRPyXicaJwVUI7+ocgYLLVt14J9AeCQKDVP+8RLV4bG+8DcQafQ
-         aadw==
-X-Gm-Message-State: AOAM532wd7W+KrnWTlLjEnCsLZLCJmsW7oqOtBK8pUNvMRulJG3xTnhE
-        yHSacVq8seR56o2Xe1L4jRZLNbzZQxllRv5/bb0=
-X-Google-Smtp-Source: ABdhPJzjBN4K07mgHexd4fWyTF3MfP5LCSNqxjtFEIj1rgPmmarKsiTdhxurgICUQfmRRjgJ3XTV28Ui7aDLiZxfOA8=
-X-Received: by 2002:a17:906:d553:: with SMTP id cr19mr14340955ejc.128.1635162093757;
- Mon, 25 Oct 2021 04:41:33 -0700 (PDT)
+        with ESMTP id S230231AbhJYL5R (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 25 Oct 2021 07:57:17 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C515C061745
+        for <linux-clk@vger.kernel.org>; Mon, 25 Oct 2021 04:54:55 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1meyZ3-0007VY-NM; Mon, 25 Oct 2021 13:54:53 +0200
+Subject: Re: [PATCH V2] clk: imx: gate off peripheral clock slice
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, sboyd@kernel.org,
+        mturquette@baylibre.com, abel.vesa@nxp.com, s.hauer@pengutronix.de
+Cc:     Peng Fan <peng.fan@nxp.com>, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, kernel@pengutronix.de, festevam@gmail.com,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20211025122902.1151-1-peng.fan@oss.nxp.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+Message-ID: <fc1ac63d-30c3-f309-7631-212ffa3f9de0@pengutronix.de>
+Date:   Mon, 25 Oct 2021 13:54:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20211025094119.82967-1-hdegoede@redhat.com> <20211025094119.82967-12-hdegoede@redhat.com>
-In-Reply-To: <20211025094119.82967-12-hdegoede@redhat.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 25 Oct 2021 14:40:39 +0300
-Message-ID: <CAHp75VdJav6L03oVNd0DNA8jUXHPaqNzHU+q=+2-eEbh087bOQ@mail.gmail.com>
-Subject: Re: [PATCH v4 11/11] platform/x86: int3472: Deal with probe ordering issues
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211025122902.1151-1-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, Oct 25, 2021 at 12:42 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> The clk and regulator frameworks expect clk/regulator consumer-devices
-> to have info about the consumed clks/regulators described in the device's
-> fw_node.
->
-> To work around this info missing from the ACPI tables on devices where
-> the int3472 driver is used, the int3472 MFD-cell drivers attach info about
-> consumers to the clks/regulators when registering these.
->
-> This causes problems with the probe ordering wrt drivers for consumers
-> of these clks/regulators. Since the lookups are only registered when the
-> provider-driver binds, trying to get these clks/regulators before then
-> results in a -ENOENT error for clks and a dummy regulator for regulators.
->
-> All the sensor ACPI fw-nodes have a _DEP dependency on the INT3472 ACPI
-> fw-node, so to work around these probe ordering issues the ACPI core /
-> i2c-code does not instantiate the I2C-clients for any ACPI devices
-> which have a _DEP dependency on an INT3472 ACPI device until all
-> _DEP-s are met.
->
-> This relies on acpi_dev_clear_dependencies() getting called by the driver
-> for the _DEP-s when they are ready, add a acpi_dev_clear_dependencies()
-> call to the discrete.c probe code.
->
-> In the tps68470 case calling acpi_dev_clear_dependencies() is already done
-> by the acpi_gpiochip_add() call done by the driver for the GPIO MFD cell
-> (The GPIO cell is deliberately the last cell created to make sure the
-> clk + regulator cells are already instantiated when this happens).
->
-> However for proper probe ordering, the clk/regulator cells must not just
-> be instantiated the must be fully ready (the clks + regulators must be
-> registered with their subsystems).
->
-> Add MODULE_SOFTDEP dependencies for the clk and regulator drivers for
-> the instantiated MFD-cells so that these are loaded before us and so
-> that they bind immediately when the platform-devs are instantiated.
+On 25.10.21 14:29, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> The Peripheral clocks are default enabled when SoC power on, and
+> bootloader not gate off the clocks when booting Linux Kernel.
+> 
+> So Linux Kernel is not aware the peripheral clocks are enabled and
+> still take them as disabled because of enable count is zero.
+> 
+> Then Peripheral clock's source without clock gated off could be
+> changed when have assigned-parents in device tree
+> 
+> However, per i.MX8M* reference mannual, "Peripheral clock slices must
+> be stopped to change the clock source", so need to gate off the
+> the peripheral clock when registering the clocks to avoid glitch.
+> 
+> Tested boot on i.MX8MM/P-EVK board
+> 
+> Fixes: d3ff9728134e ("clk: imx: Add imx composite clock")
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-Just a side note: MODULE_SOFTDEP() won't work in some (special?) cases
-when module tools are limited in functionality (e.g. busybox
-implementation as of today).
+I've been running an i.MX8MM-based system with this patch for a few days
+so far and no apparent issues:
+
+Tested-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+
+> ---
+> 
+> V2:
+>  Add Fixes tag
+> 
+>  drivers/clk/imx/clk-composite-8m.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/imx/clk-composite-8m.c b/drivers/clk/imx/clk-composite-8m.c
+> index 2dfd6149e528..ee41fbf90589 100644
+> --- a/drivers/clk/imx/clk-composite-8m.c
+> +++ b/drivers/clk/imx/clk-composite-8m.c
+> @@ -184,6 +184,7 @@ struct clk_hw *__imx8m_clk_hw_composite(const char *name,
+>  	struct clk_mux *mux = NULL;
+>  	const struct clk_ops *divider_ops;
+>  	const struct clk_ops *mux_ops;
+> +	u32 val;
+>  
+>  	mux = kzalloc(sizeof(*mux), GFP_KERNEL);
+>  	if (!mux)
+> @@ -216,8 +217,14 @@ struct clk_hw *__imx8m_clk_hw_composite(const char *name,
+>  		div->width = PCG_PREDIV_WIDTH;
+>  		divider_ops = &imx8m_clk_composite_divider_ops;
+>  		mux_ops = &clk_mux_ops;
+> -		if (!(composite_flags & IMX_COMPOSITE_FW_MANAGED))
+> +		if (!(composite_flags & IMX_COMPOSITE_FW_MANAGED)) {
+>  			flags |= CLK_SET_PARENT_GATE;
+> +			if (!(flags & CLK_IS_CRITICAL)) {
+> +				val = readl(reg);
+> +				val &= ~BIT(PCG_CGC_SHIFT);
+> +				writel(val, reg);
+> +			}
+> +		}
+>  	}
+>  
+>  	div->lock = &imx_ccm_lock;
+> 
+
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
