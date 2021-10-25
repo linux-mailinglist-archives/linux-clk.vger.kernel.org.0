@@ -2,196 +2,191 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82767438CCF
-	for <lists+linux-clk@lfdr.de>; Mon, 25 Oct 2021 02:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE506438DA9
+	for <lists+linux-clk@lfdr.de>; Mon, 25 Oct 2021 05:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbhJYAib (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 24 Oct 2021 20:38:31 -0400
-Received: from mail-pf1-f172.google.com ([209.85.210.172]:43781 "EHLO
-        mail-pf1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231938AbhJYAi0 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 24 Oct 2021 20:38:26 -0400
-Received: by mail-pf1-f172.google.com with SMTP id 187so9060599pfc.10;
-        Sun, 24 Oct 2021 17:36:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2qH0EkjmGBqZqzNWAd5xakY+DAqcPlo0/17L+watSFo=;
-        b=xYjCDeGXzElczrJq4/5CpPeaUIsLRkPrCFmX60Ip2DKd4UGdW991GssP04e5jSmWdV
-         K8QY87yueWwhta5+a+PeqXM8SmzGMGbRX87sWtRdiNyyA39euhoUZ4tcVvTQLpgWNdK8
-         p9VR4dnh9OhZeHQwL0BOUVm2sRSFQWZkyxbyVMNgcsqxiCb24vlX+hF+hnzHO+Wesq1r
-         nCySeY3ewkLX7S6cfGREyYSwAlA6XscGoLs964WjILxJaGzQyc//+n/Ex9SBADbWXnq0
-         q9PZ8BYbSvhE3TS6am4aYM2leMGEHHsF4OJcuufHfQh1X9msHxcykrcUWqLNiTgpb+IA
-         Ktsw==
-X-Gm-Message-State: AOAM532N5BNqC7YrBOnRSzlMcF9QoDMzatAXb6BV825yBT2HXZn9YsA5
-        U0Nfm7mUrpL/bWUotLvIaM0sqzbu9qEUg6Khdm+/bR9L3SCbMQ==
-X-Google-Smtp-Source: ABdhPJzl54zpKV3sQ8JY+vUbzNFdI4ziqWls7u/hP7OYNEq6resMPJD1kH5xqGf6CGbcj8bF7QSTME7U2/JD7t9HACg=
-X-Received: by 2002:a63:b11:: with SMTP id 17mr11021028pgl.51.1635122163670;
- Sun, 24 Oct 2021 17:36:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211021174223.43310-1-kernel@esmil.dk> <20211021174223.43310-12-kernel@esmil.dk>
- <CACRpkdYZzKtFcBUM8sV4uze2T_EbfOGG=QkO9miDKKq=1mws_A@mail.gmail.com>
-In-Reply-To: <CACRpkdYZzKtFcBUM8sV4uze2T_EbfOGG=QkO9miDKKq=1mws_A@mail.gmail.com>
-From:   Emil Renner Berthing <kernel@esmil.dk>
-Date:   Mon, 25 Oct 2021 02:35:52 +0200
-Message-ID: <CANBLGczuVgT30OGDSN=4WcX8AgpoTQc5goUg23YY859T8axkRQ@mail.gmail.com>
-Subject: Re: [PATCH v2 11/16] dt-bindings: pinctrl: Add StarFive JH7100 bindings
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
+        id S231961AbhJYDNT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 24 Oct 2021 23:13:19 -0400
+Received: from mo-csw1515.securemx.jp ([210.130.202.154]:47328 "EHLO
+        mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231610AbhJYDNT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 24 Oct 2021 23:13:19 -0400
+Received: by mo-csw.securemx.jp (mx-mo-csw1515) id 19P3AhKR003229; Mon, 25 Oct 2021 12:10:44 +0900
+X-Iguazu-Qid: 34tIWSYHCieujeRQRA
+X-Iguazu-QSIG: v=2; s=0; t=1635131443; q=34tIWSYHCieujeRQRA; m=RK/Bg2T8APxsmPrQXug5NkOjYxXvMIPYIDMolk3DfcQ=
+Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
+        by relay.securemx.jp (mx-mr1512) id 19P3AfXF019206
+        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 25 Oct 2021 12:10:42 +0900
+Received: from enc01.toshiba.co.jp (enc01.toshiba.co.jp [106.186.93.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by imx2-a.toshiba.co.jp (Postfix) with ESMTPS id B7BEB1000CA;
+        Mon, 25 Oct 2021 12:10:41 +0900 (JST)
+Received: from hop001.toshiba.co.jp ([133.199.164.63])
+        by enc01.toshiba.co.jp  with ESMTP id 19P3Af6w004067;
+        Mon, 25 Oct 2021 12:10:41 +0900
+From:   Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michael Zhu <michael.zhu@starfivetech.com>,
-        Fu Wei <tekkamanninja@gmail.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Matteo Croce <mcroce@microsoft.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Rob Herring <robh+dt@kernel.org>
+Cc:     punit1.agrawal@toshiba.co.jp, yuji2.ishikawa@toshiba.co.jp,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Subject: [PATCH v5 0/4] clk: visconti: Add support common clock driver and reset driver
+Date:   Mon, 25 Oct 2021 12:10:34 +0900
+X-TSB-HOP: ON
+Message-Id: <20211025031038.4180686-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, 25 Oct 2021 at 01:11, Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Thu, Oct 21, 2021 at 7:42 PM Emil Renner Berthing <kernel@esmil.dk> wrote:
->
-> > Add bindings for the StarFive JH7100 GPIO/pin controller.
-> >
-> > Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->
-> That is a very terse commit message for an entirely new
-> SoC, please put a little blurb about this silicon there.
-> Like mention that it is RISC-V at least.
+Hi,
 
-Will do!
+This series is PLL, clock and reset driver for Toshiba's ARM SoC,
+Visconti[0].
+Since the clock driver and reset driver are provided as one function,
+they are
+provided in cooperation with the clock driver.
 
-> Overall quite interesting!
->
-> > +$id: http://devicetree.org/schemas/pinctrl/starfive,jh7100-pinctrl.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: StarFive JH7100 Pin Controller Device Tree Bindings
-> > +
-> > +maintainers:
-> > +  - Emil Renner Berthing <kernel@esmil.dk>
-> > +  - Drew Fustini <drew@beagleboard.org>
->
-> Add description: talking about that this is a RISC-V SoC
-> and other implicit things that are really good to know.
+This provides DT binding documentation, device driver, MAINTAINER files.
 
-Gotcha.
+Best regards,
+  Nobuhiro
 
-> > +  starfive,signal-group:
-> > +    description: |
-> > +      The SoC has a global setting selecting one of 7 different pinmux
-> > +      configurations of the pads named GPIO[0:63] and FUNC_SHARE[0:141]. After
-> > +      this global setting is chosen only the 64 "GPIO" pins can be further
-> > +      muxed by configuring them to be controlled by certain peripherals rather
-> > +      than software.
-> > +      Note that in configuration 0 none of GPIOs are routed to pads, and only
-> > +      in configuration 1 are the GPIOs routed to the pads named GPIO[0:63].
-> > +      If this property is not set it defaults to the configuration already
-> > +      chosen by the earlier boot stages.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    enum: [0, 1, 2, 3, 4, 5, 6]
->
-> This still is hard for me to understand. Does it mean that 0..6 define
-> how the direct-to-peripheral-pins are set up?
+[0]: https://toshiba.semicon-storage.com/ap-en/semiconductor/product/image-recognition-processors-visconti.html
 
-Yeah, so the SoC has many pins, but only the pins named GPIO[0:63] and
-FUNC_SHARE[0:141] can be muxed. To do that you first select one of 7
-different "signal groups". This is a global setting. There is just a
-single register on the whole SoC where you write either 0, 1, .., or
-6. As an example signal group 6 maps LCD output to FUNC_SHARE[40:97],
-ethernet phy connection to FUNC_SHARE[115:141], MIPI to GPIO[0:60] and
-confusingly it maps "GPIO0", "GPIO1", ..., "GPIO63" to pins
-FUNC_SHARE[0:63]. So the pin names doesn't necessarily match the
-function. In fact only signal group 1 maps GPIO0-63 to pins
-GPIO[0:63]. See table 11-1 starting on page 62 of this PDF:
-https://github.com/starfive-tech/JH7100_Docs/blob/main/JH7100%20Data%20Sheet%20V01.01.04-EN%20(4-21-2021).pdf
+  dt-bindings: clock: Add DT bindings for PLL of Toshiba Visconti TMPV7708 SoC
+    v4 -> v5:
+       - Add Reviewed-by: Rob Herring <robh@kernel.org>.
+    v3 -> v4:
+       - Fix node name to clock-controller.
+       - Remove osc2-clk-frequency, and this defines to DT as
+         fixed-clock.
+       - Add clocks.
+    v2 -> v3:
+       - Change file name.
+    v1 -> v2:
+       - Update subject.
 
-GPIO0-63 can of course be used as GPIOs, but they can also have their
-output value and output enable controlled by certain (slow)
-peripherals like UARTs, I2C, SPI, PWM etc. These can be chosen freely.
-So once you've chosen signal group 6, you can have any of GPIO0-GPIO63
-(that is any of pins FUNC_SHARE[0:63]) be controlled by the UART0 TX
-signal fx.
+  dt-bindings: clock: Add DT bindings for SMU of Toshiba Visconti TMPV7708 SoC
+    v4 -> v5:
+       - Add Reviewed-by: Rob Herring <robh@kernel.org>.
+       - v5: Update to use syscon.
+    v3 -> v4:
+      - Move reset dt-binding header file.
+      - Move clock dt-binding header file.
+      - Change dt-binding header's License to 'GPL-2.0-only OR
+        BSD-2-Clause'
+      - Fix node name to clock-controller.
+    v2 -> v3:
+       - Change file name.
+    v1 -> v2:
+       - Update subject.
 
-So for each of GPIO0 to GPIO63 there is a register to select the
-output value signal and a register to select its output enable signal.
-You can see the list of signals to choose from in the header
-introduced in the previous patch.
+  clk: visconti: Add support common clock driver and reset driver
+    v4 -> v5:
+      - Makefile/Kconfig
+        Update Kconfig with using COMPILE_TEST
+      - clkc-tmpv770x.c
+        Fix location of include file.
+        Fix to use clk-provider.h.
+        Update clock flags in pietherpll_clk_gate_tables and others.
+        Use lowercase hex.
+        Update to use syscon.
+        Update to use platform driver instead of CLK_OF_DECLARE_DRIVER.
+      - clkc.c
+        Fix check of visconti_gate_clk_is_enabled.
+        Drop visconti_gate_clk_is_enabled in visconti_gate_clk_enable().
+        Drop unnecessary comment.
+        Update to use clk_parent_data instead of parent_names.
+        Update to use devm_clk_hw_register().
+        Update to use struct device in visconti_clk_register_gate().
+        Update to get structure size from pointer with sizeof().
+      - clkc.h
+        Update struct visconti_clk_gate_table to using struct clk_parent_data.
+        Drop flags in struct visconti_clk_gate.
+      - pll-tmpv770x.c
+        Use lowercase hex.
+        Update to use platform driver instead of CLK_OF_DECLARE_DRIVER.
+        Update to use size_t in visconti_pll and move position.
+        Update use FIELD_GET().
+        Drop braces.
+        Use const point in visconti_get_pll_rate_from_data().
+        Update to comparison by memcmp in visconti_get_pll_rate_from_data().
+        Drop unnecessary comment.
+        Drop unnecessary print.
+        Drop unnecessary lock and unlock.
+        Drop visconti_pll_is_enabled in visconti_pll_enable().
+        Drop unused flags.
+        Update to use clk_hw_register().
+        Drop to use kmemdup().
+      - pll.h
+        Drop __init.
+    v3 -> v4:
+       - Remove osc2 clock's code. Move to DT.
+    v2 -> v3:
+       - Fix return value in visconti_register_pll().
+       - Remove initialization of flags used by spin_lock_irqsave().
+       - - Change function name from *7708* to *770x*.
+       - Fix some coding style.
+    v1 -> v2:
+       - Fix warning with W=1
 
-Input from GPIO0-63 to peripherals works the other way around. Here
-there is a register for each input signal, where you can select which
-(if any) of GPIO0-63 is routed to the peripheral.
+  MAINTAINERS: Add entries for Toshiba Visconti PLL and clock controller
+    v4 -> v5:
+       - no update.
+    v3 -> v4:
+       - no update.
+    v2 -> v3:
+       - Change path of DT binding files.
+    v1 -> v2:
 
-> Then it would make sense to describe what happens for 0, 1, 2 ...6
-> i.e. what the different set-ups are.
 
-Yeah, so how much of table 11-1 does it make sense to write out.
-Certainly I can list how GPIO0-63 are mapped to pins for each of the 7
-signal groups, but should I also list LCD, ethernet, interconnect,
-mipi etc. for each of the 7 signal groups?
+Nobuhiro Iwamatsu (4):
+  dt-bindings: clock: Add DT bindings for PLL of Toshiba Visconti TMPV770x SoC
+  dt-bindings: clock: Add DT bindings for SMU of Toshiba Visconti TMPV770x SoC
+  clk: visconti: Add support common clock driver and reset driver
+  MAINTAINERS: Add entries for Toshiba Visconti PLL and clock controller
 
-> Actually this is what we call group-based pin multiplexing in Linux,
-> this property seems to avoid using that concept.
-> See for example:
-> Documentation/devicetree/bindings/pinctrl/cortina,gemini-pinctrl.txt
+ .../clock/toshiba,tmpv770x-pipllct.yaml       |  57 +++
+ .../clock/toshiba,tmpv770x-pismu.yaml         |  52 +++
+ MAINTAINERS                                   |   3 +
+ drivers/clk/Kconfig                           |   1 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/visconti/Kconfig                  |   9 +
+ drivers/clk/visconti/Makefile                 |   5 +
+ drivers/clk/visconti/clkc-tmpv770x.c          | 291 +++++++++++++++
+ drivers/clk/visconti/clkc.c                   | 206 +++++++++++
+ drivers/clk/visconti/clkc.h                   |  76 ++++
+ drivers/clk/visconti/pll-tmpv770x.c           |  85 +++++
+ drivers/clk/visconti/pll.c                    | 339 ++++++++++++++++++
+ drivers/clk/visconti/pll.h                    |  62 ++++
+ drivers/clk/visconti/reset.c                  | 107 ++++++
+ drivers/clk/visconti/reset.h                  |  36 ++
+ include/dt-bindings/clock/toshiba,tmpv770x.h  | 181 ++++++++++
+ include/dt-bindings/reset/toshiba,tmpv770x.h  |  41 +++
+ 17 files changed, 1552 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/toshiba,tmpv770x-pipllct.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/toshiba,tmpv770x-pismu.yaml
+ create mode 100644 drivers/clk/visconti/Kconfig
+ create mode 100644 drivers/clk/visconti/Makefile
+ create mode 100644 drivers/clk/visconti/clkc-tmpv770x.c
+ create mode 100644 drivers/clk/visconti/clkc.c
+ create mode 100644 drivers/clk/visconti/clkc.h
+ create mode 100644 drivers/clk/visconti/pll-tmpv770x.c
+ create mode 100644 drivers/clk/visconti/pll.c
+ create mode 100644 drivers/clk/visconti/pll.h
+ create mode 100644 drivers/clk/visconti/reset.c
+ create mode 100644 drivers/clk/visconti/reset.h
+ create mode 100644 include/dt-bindings/clock/toshiba,tmpv770x.h
+ create mode 100644 include/dt-bindings/reset/toshiba,tmpv770x.h
 
-I don't think this is the same, but hope you can tell me after reading
-the description above.
+-- 
+2.33.0
 
-> > +    patternProperties:
-> > +      '-pins*$':
-> > +        type: object
-> > +        description: |
-> > +          A pinctrl node should contain at least one subnode representing the
-> > +          pinctrl groups available on the machine. Each subnode will list the
-> > +          pins it needs, and how they should be configured, with regard to
-> > +          muxer configuration, bias, input enable/disable, input schmitt
-> > +          trigger enable/disable, slew-rate and drive strength.
-> > +        $ref: "/schemas/pinctrl/pincfg-node.yaml"
->
-> Nice that you use pincfg-node.yaml
->
-> > +        properties:
-> > +          pins:
-> > +            description: |
-> > +              The list of pin identifiers that properties in the node apply to.
-> > +              This should be set using either the PAD_GPIO or PAD_FUNC_SHARE
-> > +              macro. Either this or "pinmux" has to be specified.
-> > +
-> > +          pinmux:
-> > +            description: |
-> > +              The list of GPIO identifiers and their mux settings that
-> > +              properties in the node apply to. This should be set using the
-> > +              GPIOMUX macro. Either this or "pins" has to be specified.
->
-> What about referencing
-> Documentation/devicetree/bindings/pinctrl/pinmux-node.yaml
-> for this?
 
-Sure. You just mean adding $ref: like above right?
-
-Thanks!
-/Emil
