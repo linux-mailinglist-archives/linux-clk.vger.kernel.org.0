@@ -2,67 +2,78 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 889F743BF10
-	for <lists+linux-clk@lfdr.de>; Wed, 27 Oct 2021 03:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E56E43BF5C
+	for <lists+linux-clk@lfdr.de>; Wed, 27 Oct 2021 04:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237555AbhJ0Bhl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 26 Oct 2021 21:37:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37002 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234326AbhJ0Bhi (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 26 Oct 2021 21:37:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0020161090;
-        Wed, 27 Oct 2021 01:35:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635298514;
-        bh=wzUAKibokzpu1YYUAj4sR9y15lTC/Rx79Ak5rO0PQZU=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=EH5Y6cMpcuJKqlSdDq2VydAAFoQZQjyT+D5XZ+pC1kt4jIOgZtz6l1AcfuSYg0gvU
-         7FZZOtBNVr+tAKG2J0r/0dKJRTdohIkSplhM/q1s0ZXOeApOqR3JMzGl8bUBSzo0Jt
-         7Wpr2pMKAdFg0xedbO+r+w4Yt36qJjADvGmAOaNqJnsDjn79fvWcakUfHp11YR1Sqs
-         5qUSi7ToonoEIMcp90UxdyLqMi/n0jx4tggYZdiJibfJGMFcapfmSLnynWdD6umHI6
-         RUknELPSYTTf6k1nH8JJKohSe8BzrXjeY/TqDycsGdwEd6+dtUa+pisSFWW0DXWAx8
-         5L/eI9MaxhPPA==
-Content-Type: text/plain; charset="utf-8"
+        id S238137AbhJ0CPq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 26 Oct 2021 22:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46256 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237837AbhJ0CPo (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 26 Oct 2021 22:15:44 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25EEEC061227
+        for <linux-clk@vger.kernel.org>; Tue, 26 Oct 2021 19:13:20 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id f8so881827plo.12
+        for <linux-clk@vger.kernel.org>; Tue, 26 Oct 2021 19:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=+OhYyTKGmAf5Y61RBhMkXMlQv+hOjswu4u5NSWPSjMI=;
+        b=EG9Nsjl+Eip141PWF+gaBUl1KOWYkVWkt1OXOEZnqtckn0jrX24eTk8UDRzdanWsjC
+         9yBSsvsQJotknvFKA9EQtwg6TYbjKuB2B6TeA9FpEjuXwfev4spJrb1stelnldSVU05K
+         9gDfyUx9hxjQgXAvSoidRv5/L36SOUZnVcgUrTM9tbDStJSMOyaTK7co10bTYaslWL6G
+         KEMVQ2/UtsJj5Uhe9sAzIbF0NlCUlFDN4b2Grw7CXZCthk66H6QQ7cfpSD7pU+Ay2+Nj
+         Q0QsrrBll0HvZsVEqt8NPrW+XN3K+0FC+b/X0b9b+fJud88cD9kdaePkDe4cxFsTTvDp
+         HYfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=+OhYyTKGmAf5Y61RBhMkXMlQv+hOjswu4u5NSWPSjMI=;
+        b=i2QU+8dv4ZQQfliPeljmDFA2QBGzpOJUxaj6hgdtgOhdG3T7169u0BAALdwE4WOVz0
+         4AlA0LwocEG9FJG7bdo1K+LK6XrYQMLuV/2S9zk5HC8YLMHEa6aD1hioxZIXv9DTIDEG
+         TS+Ua7V45MQ9+Z+MTbgFOd8wUTXIfS2i16Nrs17O+gbOhYbeFhU9k7E0MJP35bEh8IoA
+         1VEgjvGfOd3zEKvW/5VZUDRLtIzDY9BvyCVYwAimbO3ZZk6FurF0OjGulGDCOyUiLj4L
+         lP5sEUFA3AP++YhgL4Re+xYJF6KmPfyvVdjDOTgowf7GTjm1FbjGSZGydCoGnM3IEby/
+         mCqQ==
+X-Gm-Message-State: AOAM532O6oi/ybz3sJOGPqm69YxAqVnjt5laxnAwuJLmWDQEh+tcbnP2
+        joiaif4iZ3HJJ0GnLT8nm2biKVwO/atSZ4DU3MA=
+X-Google-Smtp-Source: ABdhPJzwOfSEFC+ZhBFJFbO7cJJvi3wx28mFQEmwNZmSp0wIuhE8auS2ZQZdxDxGrsxbdq14UKAhXuffjqSVAtd5Ev8=
+X-Received: by 2002:a17:90b:1c02:: with SMTP id oc2mr2782635pjb.52.1635300799308;
+ Tue, 26 Oct 2021 19:13:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <2dad9397-425f-baaf-e0fc-5a9e6e39de32@microchip.com>
-References: <20211011112719.3951784-1-claudiu.beznea@microchip.com> <2dad9397-425f-baaf-e0fc-5a9e6e39de32@microchip.com>
-Subject: Re: [PATCH v5 00/15] clk: at91: updates for power management and dvfs
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, ludovic.desroches@microchip.com,
-        alexandre.belloni@bootlin.com
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        mturquette@baylibre.com
-Date:   Tue, 26 Oct 2021 18:35:12 -0700
-Message-ID: <163529851265.15791.12903982814427348260@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+Sender: officedeskofgeneral0@gmail.com
+Received: by 2002:a17:90b:4c11:0:0:0:0 with HTTP; Tue, 26 Oct 2021 19:13:18
+ -0700 (PDT)
+From:   "Mr. Mustafa Ali." <muafalia@gmail.com>
+Date:   Wed, 27 Oct 2021 03:13:18 +0100
+X-Google-Sender-Auth: -ap4vRnh22PsKG1mBvTJWKrUl0o
+Message-ID: <CAL=mczUC43H-jvBwTepLgLaj-FOUBZcvw1kdD=RpB4-U2MPw0g@mail.gmail.com>
+Subject: Greetings Dear Friend.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Nicolas Ferre (2021-10-15 01:33:38)
-> Stephen,
->=20
-> On 11/10/2021 at 13:27, Claudiu Beznea wrote:
-> > Hi,
-> >=20
-> > This series addresses the clock power management for SAMA7G5 and also
-> > updates the master clock driver and sam9x60-pll driver to accommodate
-> > the requests at [1] and avoid overclocking of CPU and MCK0 domains while
-> > changing the frequency via DVFS.
->=20
-> I've just added my Ack tags to the whole series. I think that it brings=20
-> so much important additions to our new SoC as well as fixing some (non=20
-> urgent) bugs.
->=20
-> In order to streamline the process of including this series to upstream, =
+Hello Friend,
 
-> do you want me to send you a pull-request? against latest clk-at91=20
-> branch in your tree?
->=20
+This message might meet you in utmost surprise. However, It's just my
+urgent need for a foreign partner that made me contact you for this
+transaction. I assured you of honesty and reliability to champion this
+business opportunity. I am a banker by profession in Turkey, and
+currently holding the post of Auditor in Standard Chartered Bank.
 
-That's fine. Just let me know if you want to do that in the future. For
-now I picked them all up and pushed it out.
+I have the opportunity of transferring the leftover funds ($15 Million
+Dollars) of one of my clients who died along with his entire family in
+a crisis in Myanmar Asia. I am inviting you for a business deal where
+this money can be shared between us if you agree to my business
+proposal.
+
+Further details of the transfer will be forwarded to you immediately
+after I receive your return letter.
+
+Best Regards,
+Mr. Mustafa Ali.
+mustafa.ali@rahroco.com
