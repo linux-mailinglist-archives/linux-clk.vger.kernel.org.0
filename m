@@ -2,89 +2,160 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B255D43DF43
-	for <lists+linux-clk@lfdr.de>; Thu, 28 Oct 2021 12:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF7E43E033
+	for <lists+linux-clk@lfdr.de>; Thu, 28 Oct 2021 13:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbhJ1Kyj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 28 Oct 2021 06:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbhJ1Kyj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 Oct 2021 06:54:39 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226EBC061767
-        for <linux-clk@vger.kernel.org>; Thu, 28 Oct 2021 03:52:12 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id 188so9951748ljj.4
-        for <linux-clk@vger.kernel.org>; Thu, 28 Oct 2021 03:52:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
-        b=MqgQiMnth4O6zLvpsYbAhVLW1BorpgoCleWwfkY0/i+i6OSDuXRZO1jIKzpTTrmehO
-         XtsLWdXiTcL+XCe4naFtf2tTUJnbwwmDpuUkpvRhLd+LEnuxY7nNr11hmTRUVX1WOHsO
-         bN0u1arCg4gm9LHdXRMZFcXOD22U5gDGuBOuhPo6qvWbt6nA2j/p/5IZ88XFHrEsiSW3
-         12hentYJMlWeUfa2lUQkLm+5/fvMSizrI7wGoF2taOa3dgGUV5HKZWb0yAAH7nAXVevJ
-         tDC/xbHNLzSn310XeD3Gkoobjl6MPBQzT5DSLzerNBdTKOdmyp3xvfvOyo80qVUTZIED
-         gaRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=vprh3gRT3Cegcj0K7Fy7tqOfLGKK384XjLMkCZvF/BY=;
-        b=eCVbchJNPii1m5aBpIANY83eb8n6hbMw5ipqgnf1i0Q4MJhqVUamuQ6sqaXEA2pPCv
-         +HM+vebzBAzxGT8/85uoIC4+wcKASj9OuWvCxmK/NT5Sgqn94TShfCULlufxtlgXRs7x
-         bkAS8tXA3a+0Na4LIN+wxOL+++IP2wB0dlHQGYE/Uwbpo7IDSPt7FCcRPfkbktgqwnqA
-         Adj3rRv096Xou03aD2bBZkUrYrXSAg9xXo571oA/afGI5JltM5TsNFUVxO2O9GwZn5p+
-         qZgEdLiB4jFGzbWi2+ILKjvOwtBhVP1dKspY1dUm8MB9CxXumf0JJQzokXYfo3Jpnzsb
-         dHaA==
-X-Gm-Message-State: AOAM532RkQGyBNtp4qJ+Gyc632gyx2pqwVkcpScr1kqPC0V53eVHtGvX
-        bssCzhFricPAvARAGgYh8tBKJHii9py5K5NFZNo=
-X-Google-Smtp-Source: ABdhPJw39EF9dJlXS9lAFrZ3adXxB8DVzXcygVzA3uRLiZxWlggxaB9ElCxkEB0P82xisoA6G442GD5iqMe2hCgLIt8=
-X-Received: by 2002:a2e:9a83:: with SMTP id p3mr3750290lji.145.1635418330269;
- Thu, 28 Oct 2021 03:52:10 -0700 (PDT)
+        id S230162AbhJ1Lss convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-clk@lfdr.de>); Thu, 28 Oct 2021 07:48:48 -0400
+Received: from aposti.net ([89.234.176.197]:36912 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229835AbhJ1Lsr (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 28 Oct 2021 07:48:47 -0400
+Date:   Thu, 28 Oct 2021 12:46:07 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 1/2] dt-bindings: Rename Ingenic CGU headers to
+ ingenic,*.h
+To:     Rob Herring <robh@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, list@opendingux.net,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <VCRO1R.FQ8R7TN6NPYP3@crapouillou.net>
+In-Reply-To: <YXiNLZ9ne8D8uv82@robh.at.kernel.org>
+References: <20211016133322.40771-1-paul@crapouillou.net>
+        <YXiNLZ9ne8D8uv82@robh.at.kernel.org>
 MIME-Version: 1.0
-Received: by 2002:ab3:6f89:0:0:0:0:0 with HTTP; Thu, 28 Oct 2021 03:52:09
- -0700 (PDT)
-Reply-To: aabdulwalialhashmi@gmail.com
-From:   Abdulwali Alhashmi <husamalsayed.hs@gmail.com>
-Date:   Thu, 28 Oct 2021 03:52:09 -0700
-Message-ID: <CAF6yYCeS=rm8=_71-kMjVo4oaVK57w9X52R_yv1HDrBe7vh-sA@mail.gmail.com>
-Subject: PLEASE GET BACK TO ME IF I CAN I TRUST YOU
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
--- 
-Greetings,
+Hi Rob,
 
-Firstly, I apologize for encroaching into your privacy in this manner
-as it may seem unethical though it is a matter of great importance.
+Le mar., oct. 26 2021 at 18:20:13 -0500, Rob Herring <robh@kernel.org> 
+a écrit :
+> On Sat, Oct 16, 2021 at 02:33:21PM +0100, Paul Cercueil wrote:
+>>  Tidy up a bit the tree, by prefixing all include/dt-bindings/clock/ 
+>> files
+>>  related to Ingenic SoCs with 'ingenic,'.
+>> 
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  ---
+>> 
+>>  Notes:
+>>      v2: Fix x1000-cgu.h and x1830-cgu.h incorrectly renamed to
+>>          x1000.h / x1830.h
+>> 
+>>   Documentation/devicetree/bindings/clock/ingenic,cgu.yaml      | 2 
+>> +-
+>>   Documentation/devicetree/bindings/display/ingenic,ipu.yaml    | 2 
+>> +-
+>>   Documentation/devicetree/bindings/display/ingenic,lcd.yaml    | 4 
+>> ++--
+>>   Documentation/devicetree/bindings/dma/ingenic,dma.yaml        | 2 
+>> +-
+>>   Documentation/devicetree/bindings/i2c/ingenic,i2c.yaml        | 2 
+>> +-
+>>   Documentation/devicetree/bindings/iio/adc/ingenic,adc.yaml    | 2 
+>> +-
+>>   .../devicetree/bindings/memory-controllers/ingenic,nemc.yaml  | 2 
+>> +-
+>>   .../devicetree/bindings/mips/ingenic/ingenic,cpu.yaml         | 2 
+>> +-
+>>   Documentation/devicetree/bindings/mmc/ingenic,mmc.yaml        | 2 
+>> +-
+>>   Documentation/devicetree/bindings/mtd/ingenic,nand.yaml       | 2 
+>> +-
+>>   Documentation/devicetree/bindings/net/ingenic,mac.yaml        | 2 
+>> +-
+>>   .../devicetree/bindings/nvmem/ingenic,jz4780-efuse.yaml       | 2 
+>> +-
+>>   Documentation/devicetree/bindings/phy/ingenic,phy-usb.yaml    | 2 
+>> +-
+>>   Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml | 2 
+>> +-
+>>   Documentation/devicetree/bindings/rng/ingenic,trng.yaml       | 2 
+>> +-
+>>   Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml        | 2 
+>> +-
+>>   Documentation/devicetree/bindings/serial/ingenic,uart.yaml    | 2 
+>> +-
+>>   Documentation/devicetree/bindings/sound/ingenic,aic.yaml      | 2 
+>> +-
+>>   Documentation/devicetree/bindings/sound/ingenic,codec.yaml    | 2 
+>> +-
+>>   Documentation/devicetree/bindings/timer/ingenic,sysost.yaml   | 2 
+>> +-
+>>   Documentation/devicetree/bindings/timer/ingenic,tcu.yaml      | 2 
+>> +-
+>>   Documentation/devicetree/bindings/usb/ingenic,musb.yaml       | 2 
+>> +-
+>>   arch/mips/boot/dts/ingenic/jz4725b.dtsi                       | 2 
+>> +-
+>>   arch/mips/boot/dts/ingenic/jz4740.dtsi                        | 2 
+>> +-
+>>   arch/mips/boot/dts/ingenic/jz4770.dtsi                        | 2 
+>> +-
+>>   arch/mips/boot/dts/ingenic/jz4780.dtsi                        | 2 
+>> +-
+>>   arch/mips/boot/dts/ingenic/x1000.dtsi                         | 2 
+>> +-
+>>   arch/mips/boot/dts/ingenic/x1830.dtsi                         | 2 
+>> +-
+>>   drivers/clk/ingenic/jz4725b-cgu.c                             | 2 
+>> +-
+>>   drivers/clk/ingenic/jz4740-cgu.c                              | 2 
+>> +-
+>>   drivers/clk/ingenic/jz4760-cgu.c                              | 2 
+>> +-
+>>   drivers/clk/ingenic/jz4770-cgu.c                              | 2 
+>> +-
+>>   drivers/clk/ingenic/jz4780-cgu.c                              | 2 
+>> +-
+>>   drivers/clk/ingenic/x1000-cgu.c                               | 2 
+>> +-
+>>   drivers/clk/ingenic/x1830-cgu.c                               | 2 
+>> +-
+>>   .../clock/{jz4725b-cgu.h => ingenic,jz4725b-cgu.h}            | 0
+>>   .../dt-bindings/clock/{jz4740-cgu.h => ingenic,jz4740-cgu.h}  | 0
+>>   .../dt-bindings/clock/{jz4760-cgu.h => ingenic,jz4760-cgu.h}  | 0
+>>   .../dt-bindings/clock/{jz4770-cgu.h => ingenic,jz4770-cgu.h}  | 0
+>>   .../dt-bindings/clock/{jz4780-cgu.h => ingenic,jz4780-cgu.h}  | 0
+>>   .../dt-bindings/clock/{x1000-cgu.h => ingenic,x1000-cgu.h}    | 0
+>>   .../dt-bindings/clock/{x1830-cgu.h => ingenic,x1830-cgu.h}    | 0
+>>   42 files changed, 36 insertions(+), 36 deletions(-)
+>>   rename include/dt-bindings/clock/{jz4725b-cgu.h => 
+>> ingenic,jz4725b-cgu.h} (100%)
+>>   rename include/dt-bindings/clock/{jz4740-cgu.h => 
+>> ingenic,jz4740-cgu.h} (100%)
+>>   rename include/dt-bindings/clock/{jz4760-cgu.h => 
+>> ingenic,jz4760-cgu.h} (100%)
+>>   rename include/dt-bindings/clock/{jz4770-cgu.h => 
+>> ingenic,jz4770-cgu.h} (100%)
+>>   rename include/dt-bindings/clock/{jz4780-cgu.h => 
+>> ingenic,jz4780-cgu.h} (100%)
+>>   rename include/dt-bindings/clock/{x1000-cgu.h => 
+>> ingenic,x1000-cgu.h} (100%)
+>>   rename include/dt-bindings/clock/{x1830-cgu.h => 
+>> ingenic,x1830-cgu.h} (100%)
+> 
+> Acked-by: Rob Herring <robh@kernel.org>
+> 
+> However, this will be a pain to merge if there are any new users 
+> coming
+> in during the merge window. If not, then Stephen can just take this. 
+> If
+> there are, then at the end of the merge window is the best time. For
+> that to work, you need to track when all dependent changes are merged
+> and we need to agree who will pick this up. I usually have fixes from
+> breakages in the merge window anyways.
 
-I am Abdulwali Alhashmi, I work with Cayman National Bank (Cayman Islands).
+I get Cc'd on all ingenic-related patches, so far I don't see anything 
+that will cause a breakage. I think it would be okay to merge it now 
+(we're at -rc7 after all).
 
-I am contacting you because my status would not permit me to do this
-alone as it is concerning our customer and an investment placed under
-our bank's management over 5 years ago.
+Cheers,
+-Paul
 
-I have a proposal I would love to discuss with you which will be very
-beneficial to both of us. It's regarding my late client who has a huge
-deposit with my bank.
 
-He is from your country and shares the same last name with you.
-
-I want to seek your consent to present you as the next of kin to my
-late client who died and left a huge deposit with my bank.
-
-I would respectfully request that you keep the contents of this mail
-confidential and respect the integrity of the information you come by
-as a result of this mail.
-
-Please kindly get back to me for more details if I can TRUST YOU.{
-aabdulwalialhashmi@gmail.com }
-
-Regards
-Abdulwali Alhashmi
-Treasury and Deposit Management,
-Cayman National Bank Cayman Islands
