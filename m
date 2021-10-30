@@ -2,66 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC59440A0E
-	for <lists+linux-clk@lfdr.de>; Sat, 30 Oct 2021 17:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5AC440BA5
+	for <lists+linux-clk@lfdr.de>; Sat, 30 Oct 2021 22:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbhJ3Pzq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 30 Oct 2021 11:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231830AbhJ3Pzq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 30 Oct 2021 11:55:46 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA19C061570
-        for <linux-clk@vger.kernel.org>; Sat, 30 Oct 2021 08:53:15 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id t5-20020a17090a4e4500b001a0a284fcc2so12963901pjl.2
-        for <linux-clk@vger.kernel.org>; Sat, 30 Oct 2021 08:53:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=OVj7HUK4np7F7v9xCJ/y2Gv7pRKdx+TSAR15eVlUhCQ=;
-        b=PnO44z/aXqjnyL3uqi5dWhx7LdlQhBL/pc/joBIXZoOzCGShq0FaYaZUfrLF1dbiLE
-         zOfUDEKsF3e61vRTRsryShL66gfaqBMk8RwOOejn/fNRIfu7wu0Qs2KCXdqZJyCAbDBY
-         PxziF9AEHUud/FJVBI2kKRxDcQc8tyUiN6H3GYVt8XiVBQ4T/IC1vozkCaWnDoQtvNnN
-         eu51oRvF0zCSFTa/CBeOqrwe62ABs/VR11iXEa/X2eSqHG4bGcj+aX5qXwVRdluEDJnL
-         rjlSvgZbhOwxViE3EbMaSCFVOaKITs6yABIze9+q+tTtPTiFkXjx92em8iVOIk8wdTs1
-         Jd9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=OVj7HUK4np7F7v9xCJ/y2Gv7pRKdx+TSAR15eVlUhCQ=;
-        b=xuOd+DnQjKb3QmQWYybqUnselMrIRC25sll6CY3gOUlcywsdq7kaN9I/JF0zJPMmY4
-         VyQ79nYwc2kYB0tdEjwjQ8bozaSWOw3MQkTo/Rr8PeGXj2vHOjRmrTuUkxDUos2b32nR
-         DLnFaF9NZIZ4nGgWLiLWOh/QeOC//0p830sGlODR8FRCgQ9geEklFLsHKsLiBHd2+UNI
-         wCrdg07+ut87qBUBdx+wcC+KFeISk86KaOEcDN180d/LHEguP1Y2gijCiibXRL07ufXW
-         FwVXXPb/lwuENrKLqEbmPPZHSa/IZ/JLW+mRbG64raMwCE9myH3JQR7DMthZfyzwCiDd
-         wyPA==
-X-Gm-Message-State: AOAM533R4EQqKc2F8owf207gUoxbYSWsDGb8JGQlij7v3/WRxsW/Exsz
-        PeZOnEct8peA4l3+TNt/WwMxw37CJTQNtQEawrs=
-X-Google-Smtp-Source: ABdhPJwzbTUCNxIH6ldTbXj+OgB4p0w3HlvjmfZbHTGuW9JROrvlzWdLpL1ZHvqlVBkPkZEQheoqwn2UvF843fcJ+5I=
-X-Received: by 2002:a17:90a:e395:: with SMTP id b21mr2781288pjz.103.1635609194893;
- Sat, 30 Oct 2021 08:53:14 -0700 (PDT)
-MIME-Version: 1.0
-Sender: br.bcha02@gmail.com
-Received: by 2002:a05:6a10:f954:0:0:0:0 with HTTP; Sat, 30 Oct 2021 08:53:14
- -0700 (PDT)
-From:   charles anthony <banthonylawfirm01@gmail.com>
-Date:   Sat, 30 Oct 2021 15:53:14 +0000
-X-Google-Sender-Auth: bAYeGH_SnjNoeK3nvMho6quIEyc
-Message-ID: <CAP2kOeTw101WpuLG9oVin8tKeTZ2seEP44Le4uWnAJkODc1QKw@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S231518AbhJ3UuJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 30 Oct 2021 16:50:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38338 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231437AbhJ3UuJ (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Sat, 30 Oct 2021 16:50:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 9A1CE60F38;
+        Sat, 30 Oct 2021 20:47:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1635626858;
+        bh=Y8WJ2ly3YSyis+TcSKDN1sXLoncu8sSC0xRedEgNf2c=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=LPCLSfhKQ5je0+blyFWnxxPjxBB3CPTReDNv0985N0zoYfaJyzHiquV7fJBg1advf
+         EplUhLJMh4d+IIVMXPm4b1accRg3g/zImlhTKiEtjghl7T9Gcw5AOqZ4y++36npFEK
+         t5/10Eq6mGWNnDPYTNJTbwmY+wAg0m5oB9mly30RsIQJADpPw7T+s4sNCh5JYSCb6v
+         ZEhu5hakNF0jFdHFpPtNQsJKpZGF2a5bOyjXTqERt3pnZxtn4b4OTkFpBYw39nffCG
+         TqSUkYIezQK1qJGVyIkLxKcZZGSrGEXCkrut3FiNUcdYsWL6H2EqHpeMsC6Im0Qwrx
+         cW09uY3YETbyg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 7E6CC60A0F;
+        Sat, 30 Oct 2021 20:47:38 +0000 (UTC)
+Subject: Re: [GIT PULL] clk fixes for v5.15-rc7
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20211030024551.2638329-1-sboyd@kernel.org>
+References: <20211030024551.2638329-1-sboyd@kernel.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20211030024551.2638329-1-sboyd@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
+X-PR-Tracked-Commit-Id: 675c496d0f92b481ebe4abf4fb06eadad7789de6
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3a4347d82efdfcc5465b3ed37616426989182915
+Message-Id: <163562685845.6976.8628880673991238224.pr-tracker-bot@kernel.org>
+Date:   Sat, 30 Oct 2021 20:47:38 +0000
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+The pull request you sent on Fri, 29 Oct 2021 19:45:51 -0700:
+
+> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3a4347d82efdfcc5465b3ed37616426989182915
+
+Thank you!
+
 -- 
-Hello
-
-My Dear, I am Barrister Charles Anthony, I am contacting you to assist
-retrieve his huge deposit Mr. Alexander left in the bank before its
-get confiscated by the bank. please get back to me for more details.
-
-Barrister. Charles Anthony
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
