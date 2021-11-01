@@ -2,81 +2,87 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 195B64414E1
-	for <lists+linux-clk@lfdr.de>; Mon,  1 Nov 2021 09:06:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8E64414FA
+	for <lists+linux-clk@lfdr.de>; Mon,  1 Nov 2021 09:07:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbhKAIIo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 1 Nov 2021 04:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbhKAIIi (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 1 Nov 2021 04:08:38 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6F5C061225
-        for <linux-clk@vger.kernel.org>; Mon,  1 Nov 2021 01:06:01 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id k24so8692849ljg.3
-        for <linux-clk@vger.kernel.org>; Mon, 01 Nov 2021 01:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
-        b=SFtDbE+6IDkHc1ulMYz3kIam1g8jrqMGveAFEIhzD57obcB2AAsvwDS7G9U5mllj4v
-         CXcMkcBLXp8av6pKrkxlnlH5OKDvvoptJUs33+ZsvH08EiMe99qcW7O6zHQLvSZrgd0O
-         vCM1DFFUxXbOTgTBZUHaqMWAsLsVkwQHIKx7yYArIjJiU9Id6qnVa2AaPiZRD+AlKd5h
-         AdNSKNBm0Kf1bwocLQT9cET1yolKLuAIwOilZUtmrnQSP+fGgJWS3nO8E8Mb56sNH1Bp
-         AO0nfdr8sSYDIc/xE0EXH23DxgT/1mFqpNrA+Y0Xex+/Q8MVRWz+jzSmqE3rPOpMkPfs
-         t3vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=J/sLAHxRh6EjJh2rcjPDJLzA40VXjb4DP54UXQAr8IU=;
-        b=AwzlvQjdSBr9/Q7VP9azBRGqPHDOamtcOzJiUnta9x6ZeYzkpg464yZw9hWPJguABG
-         usvR+RH8SILBNt50BP79bUD3qpEV8MWVkDj3SmUd8tmtlwwPRQbNa0OU+m7J98ylZVXw
-         XSVt7kpjDKjLFQvT7ZZ1RYgnmPD1K2oXtaGTP304qF1r+MCq1UltiHwrZss9eNuKSAUv
-         WC+MRzFAboeGx9YpjnezI9Kzj5PaOX5ydDrzbL4f+vExTxKn6BVdzsJRpSpFOesmtkq4
-         KW1X2+vgvsvwaSRv9brOK+ldfaLr+hr+/FIWnSmPxodQckbLpJkelBbi47xXG9NX9Btr
-         /g0g==
-X-Gm-Message-State: AOAM532HgSkZMzVl4eEdOIwxt7OVmIKMrsg2tWkQVxZe2YZWYOfe0pRR
-        EnCsWDJuMQ2A2mRko4biqmmjAD4sJJbR7y6VOnkZxMhg0KM=
-X-Google-Smtp-Source: ABdhPJxUF1tFmQzyAoIKyVPAG7R9FZL/KscgZLvfipr9TchgvjoT54aDh6EPcy8Ml6w3HwOZZMYj/oDtLWKn7uRbNdI=
-X-Received: by 2002:a05:651c:548:: with SMTP id q8mr6002668ljp.220.1635753949864;
- Mon, 01 Nov 2021 01:05:49 -0700 (PDT)
+        id S231708AbhKAIJ7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 1 Nov 2021 04:09:59 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:62106 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231470AbhKAIJ6 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 1 Nov 2021 04:09:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1635754045; x=1667290045;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OqCupavxhellN9DVR1JhZQjBSHWKv2Z7me13wqboXFA=;
+  b=NQxnJ5z3jW3/xH6F5RBXQWmLq9a9h3slWpo1bML9LSivyN99bXnkwokm
+   /BT4KR86uOj+Y39pxxX9yooKMakIk6cAzrHY7oKkSZPAijHTTQBdqySIS
+   a02dwNnf5srG9ZCAMuF8wop7vhrQg0BAi0pPL+vg8blNO++vRrSpCgF5L
+   a8AlsojQrMIgTUXr8UbkD9av4G81ZuHNlDK2fBgY+tjYQvD6EVKiTj0qo
+   NdhOLlQpOfvQcGGfAodHTLVSWbetohWgL12e4vsE7OJphFUJvIL5iPUZU
+   vH0xGOk7DPktedQitmmMkEP3BWm+WGUUdsdznkloxPOG8UprA6xoj3Mai
+   A==;
+IronPort-SDR: vrQeYL6J66D6id8IuHpnn0Zu1WGRP+40chCbfCulU9d0+Bc11evTze2C8vqrw+5FMvdEI1FSqb
+ tG/tFHq+3CpQE4JAH/yLBUV6GGijHFtxcqY1UAk/StzciVk5OjOPuH4YVGr5OyZvV+mr3jTBxp
+ 0xSZKDctFN7LZ7DKqis3+TgUdMSmrwmtmRl5o88LSsSCiCyLidoYHRSP1qAgNiamXgaYiL+Y9P
+ TazDQiJux9JHTxu/T0IeIS/nGP7i4zvsTc5WbcOlbFYn4HiykqQRpYk+bFEMEFbMeFehwW3lCO
+ K9KlJRsGvC5CvHyulHlVcmhx
+X-IronPort-AV: E=Sophos;i="5.87,198,1631602800"; 
+   d="scan'208";a="74923430"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Nov 2021 01:07:23 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Mon, 1 Nov 2021 01:07:23 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Mon, 1 Nov 2021 01:07:21 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <nicolas.ferre@microchip.com>,
+        <kavyasree.kotagiri@microchip.com>, <eugen.hristev@microchip.com>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [RFC PATCH v3 0/4] Extend lan966x clock driver for clock gating support
+Date:   Mon, 1 Nov 2021 09:08:41 +0100
+Message-ID: <20211101080845.3343836-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Received: by 2002:a05:6512:304b:0:0:0:0 with HTTP; Mon, 1 Nov 2021 01:05:49
- -0700 (PDT)
-Reply-To: aisha.7d@yahoo.com
-From:   Aisha AG <rbx17058@gmail.com>
-Date:   Mon, 1 Nov 2021 00:05:49 -0800
-Message-ID: <CA+KbyydWeN4vHtdJCa8_Ot01GFV1JVo19c-A3KMMDn_Yj4rckg@mail.gmail.com>
-Subject: Hello Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+This patch series depends on the following series, therefor keep it as RFC.
+https://www.spinics.net/lists/linux-clk/msg62795.html
+
+This patch series extend the clock driver to support also clock gating.
+
+v2->v3:
+ - add devm_clk_hw_register_gate function
+
+v1->v2:
+ - add Acked-by tag for patch 2
+ - make the resource for clock gating as an optional resource
+
+Horatiu Vultur (4):
+  clk: gate: Add devm_clk_hw_register_gate()
+  dt-bindings: clock: lan966x: Extend for clock gate support
+  dt-bindings: clock: lan966x: Extend includes with clock gates
+  clk: lan966x: Extend lan966x clock driver for clock gating support
+
+ .../bindings/clock/microchip,lan966x-gck.yaml |  3 +-
+ drivers/clk/clk-gate.c                        | 35 +++++++++++
+ drivers/clk/clk-lan966x.c                     | 59 ++++++++++++++++++-
+ include/dt-bindings/clock/microchip,lan966x.h |  8 ++-
+ include/linux/clk-provider.h                  | 23 ++++++++
+ 5 files changed, 123 insertions(+), 5 deletions(-)
+
 -- 
+2.33.0
 
-Hello Dear,
-
-I came across your e-mail contact prior to a private search while in
-need of your assistance. I am Aisha Al-Qaddafi, the only biological
-Daughter of Former President of Libya Col.Muammar Al-Qaddafi.
-Am a Widow and a single Mother with three Children.
-
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar $27.500.000.00, and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country,may be from there,we can build business relationship
-in the nearest future.
-
-I am willing to negotiate an investment/business profit sharing ratio
-with you based on the future investment earning profits.
-
-If you are willing to handle this project on my behalf kindly reply
-urgently to enable me to provide you more information about the
-investment funds.
-Best Regards
-Mrs Aisha Al-Qaddafi.
