@@ -2,103 +2,142 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5563E443506
-	for <lists+linux-clk@lfdr.de>; Tue,  2 Nov 2021 19:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C46E144368F
+	for <lists+linux-clk@lfdr.de>; Tue,  2 Nov 2021 20:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234811AbhKBSFI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 2 Nov 2021 14:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
+        id S230419AbhKBTp6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 2 Nov 2021 15:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234795AbhKBSE7 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 2 Nov 2021 14:04:59 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE086C061205
-        for <linux-clk@vger.kernel.org>; Tue,  2 Nov 2021 11:02:23 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id h11so36320539ljk.1
-        for <linux-clk@vger.kernel.org>; Tue, 02 Nov 2021 11:02:23 -0700 (PDT)
+        with ESMTP id S230361AbhKBTp5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 2 Nov 2021 15:45:57 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B38C061714;
+        Tue,  2 Nov 2021 12:43:20 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id r4so1374382edi.5;
+        Tue, 02 Nov 2021 12:43:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=VyoOlx1f4bY9qJ0WEn854eIaH9saJD/psl6FGa9mBmM=;
-        b=pMvwuX2WUAff1IBYhKTiMQfWaecynxsPLRATx7G5TcSA7MpirU6cOEjw4BXSZq/tCR
-         D1+tVrvSfk6B1vBgeNkfmJ7EPJkr80bCooyJm5IjYImpr0I7RKu8K9as48ONYlOB9Bze
-         H4EJqHymqNboBU0SxXO8ORlLHELyJVH1eab3jLwUD9N7b9xAw2z6BMdVUk4bKQrz81HS
-         XDQwa6M49B3f5i86txLPYUJJAeLUI8yNEWZuQ7xXqvMYlQ7cK+xugj0GQb+AaGqFGgzZ
-         7nBbES/3AqWN0Z4lP5Zhnfjmx7sZcu5ph4rAjEwDaPREPZQY0OE4q3KNHHvQtqXyBnzt
-         6dlA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ceu22Dc39UeKUUHkFo8E6TEFnBT5pBoF+8MRYhui+3g=;
+        b=iL9ZdMGpiEq08FDiyAvoxoALZriK6r3TSAAvJPOItnzqnE834kvOqkBw4kyHzjlRgw
+         hwojMrQb148XuOqrV7AjcG+H0RoTRQS8uAZ3Azmzz8vXs99IaiQzln+ZbxHTV20Za7K/
+         sdLjOXP0y9PbUG2/IBzv6PLoiX418Q9ppI6hPCaBRrf1p7j6y3LeO0m46ulrsleuDhB6
+         7KlijIokOrLyjaRYKaBLH7ugQMl+wkWnrqB4M3tEkcGGjyLIoFCa6XYuy2BgVG8X8H+t
+         N9/xnLKZUGsHgw/zra7e0WQsxiHTNdryMfLdqcKCoFZDTMijIuI7DL3lreiERhI1VO69
+         SqHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=VyoOlx1f4bY9qJ0WEn854eIaH9saJD/psl6FGa9mBmM=;
-        b=nmGiXFPL1IWSPo1WxAbs2LRC3S6xVarYgks3eh8FKBkOalkXHX93ZTYrKfSuzuZ61q
-         1DZ03itdnRU7iHvLSEdVacD4XWDKhzBev9jZCKftR0CGEBnG5P2YeQdexCpZyTDGq6i1
-         60FhUcEglD4IHIza9MlMAbPlYxYatxD/u9n58HmlXO0xEcCQPT7J0J6yH0rlmw3HCOEj
-         W3lm8LswZnQd7CbZVE+dJ1QN+TNyBtoJHGhOuVixlL7lwLPl2kAUj/m526HsME9ONd0u
-         36ouSB0ELHlmlHRGZlPUBR3oIUEoTzV4UQhU+6d0mfSLtb3t/U08XbZ2PrslUouM2+ow
-         j+aA==
-X-Gm-Message-State: AOAM530Sp/qhzt42/E9ABYJSAfG5WzqVYqS1cxHoyXfHs5B87wBc6xQP
-        +upNLX630B+2A9kbp5rwgfjdHdlbAhIJ7Pdxr60=
-X-Google-Smtp-Source: ABdhPJy5jm9MtYd0GPC8ydkh2aaXU+Dn5obOMlCYzpmvMGWtw0L1yRfk/Jbf0XwWQfEp1mM2p21JclYRNP9/uTZ491Q=
-X-Received: by 2002:a2e:878c:: with SMTP id n12mr1534325lji.404.1635876141945;
- Tue, 02 Nov 2021 11:02:21 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ceu22Dc39UeKUUHkFo8E6TEFnBT5pBoF+8MRYhui+3g=;
+        b=n/v0jYVgwnEorjPOsyilVn589aJncLkGVdzht5MMS1DrTkVEpbYnB4IyfjDmEp3ANH
+         OPS8TCpCYBbcY3cYO+rpDKp2lVPKy66Hur1eMyYYlGXEP1cuLvit1xTNlIzCTku+XzHo
+         ZJLphkDezb3MzY8tYVZkyuPJvXfAb+anb0K5aRbbIt86ei15pRK8QJkOP3MYzNugePhs
+         cQwA3/c3O5vbQeCS5eYBzbMEpLsFB9G1Xeqp0ygeCBgEFELf2h5o3zqLB0/ELVQlGspr
+         96tOb0nzAa74eGWumBRF/1euOJdzmzBZetviSftFr9Z9Pc5F7V2gHYIllLfM0jm8fxlA
+         UIgQ==
+X-Gm-Message-State: AOAM531zTIev5zsdy8sPRPXYkTIrBqGTGsis7SRCG/euPrHvLVi2Vptv
+        UN3nRPmmllmMFhdj9IvYy/P+ENkp8NB7LSOPYhA=
+X-Google-Smtp-Source: ABdhPJx9QGKRGz3j6D7SSykvvgSu5AJJRydl2DbJOG2BUnaKZeBT7ctk5NcVsU1upIedOx7rpLMKjvjWoEYUwxGTUhY=
+X-Received: by 2002:a17:906:a158:: with SMTP id bu24mr44829165ejb.356.1635882199443;
+ Tue, 02 Nov 2021 12:43:19 -0700 (PDT)
 MIME-Version: 1.0
-Sender: smithwilson780@gmail.com
-Received: by 2002:a2e:5811:0:0:0:0:0 with HTTP; Tue, 2 Nov 2021 11:02:21 -0700 (PDT)
-From:   DINA MCKENNA <dinamckennahowley@gmail.com>
-Date:   Tue, 2 Nov 2021 18:02:21 +0000
-X-Google-Sender-Auth: ZXkHNEhbol_nSwb_z8GBP5l3s1c
-Message-ID: <CADh0myt+1skQ3DVWtqRq-vuZqs3ZEDUJ3H3-ck_hu460i1UzrA@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
+References: <20211102161125.1144023-1-kernel@esmil.dk> <20211102161125.1144023-10-kernel@esmil.dk>
+In-Reply-To: <20211102161125.1144023-10-kernel@esmil.dk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 2 Nov 2021 21:42:30 +0200
+Message-ID: <CAHp75Ve-P8DR00mtRP_NkrXgB4nsZ+qBkgBen94iTcPqxQYUOg@mail.gmail.com>
+Subject: Re: [PATCH v3 09/16] reset: starfive-jh7100: Add StarFive JH7100
+ reset driver
+To:     Emil Renner Berthing <kernel@esmil.dk>,
+        Yury Norov <yury.norov@gmail.com>
+Cc:     linux-riscv <linux-riscv@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Drew Fustini <drew@beagleboard.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michael Zhu <michael.zhu@starfivetech.com>,
+        Fu Wei <tekkamanninja@gmail.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Matteo Croce <mcroce@microsoft.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello my dear ,
++Cc: Yury (bitmap expert)
 
- I sent this mail praying it will get to you in a good condition of
-health, since I myself are in a very critical health condition in
-which I sleep every night without knowing if I may be alive to see the
-next day. I bring peace and love to you. It is by the grace of God, I
-had no choice than to do what is lawful and right in the sight of God
-for eternal life and in the sight of man, for witness of God=E2=80=99s merc=
-y
-and glory upon my life. I am Mrs. Dina Mckenna Howley., a widow. I am
-suffering from a long time brain tumor, It has defiled all forms of
-medical treatment, and right now I have about a few months to leave,
-according to medical experts. The situation has gotten complicated
-recently with my inability to hear proper, am communicating with you
-with the help of the chief nurse herein the hospital, from all
-indication my conditions is really deteriorating and it is quite
-obvious that, according to my doctors they have advised me that I may
-not live too long, Because this illness has gotten to a very bad
-stage. I plead that you will not expose or betray this trust and
-confidence that I am about to repose on you for the mutual benefit of
-the orphans and the less privilege. I have some funds I inherited from
-my late husband, the sum of ($ 11,000,000.00, Eleven Million Dollars).
-Having known my condition, I decided to donate this fund to you
-believing that you will utilize it the way i am going to instruct
-herein. I need you to assist me and reclaim this money and use it for
-Charity works therein your country for orphanages and gives justice
-and help to the poor, needy and widows says The Lord." Jeremiah
-22:15-16.=E2=80=9C and also build schools for less privilege that will be
-named after my late husband if possible and to promote the word of God
-and the effort that the house of God is maintained. I do not want a
-situation where this money will be used in an ungodly manner. That's
-why I'm taking this decision. I'm not afraid of death, so I know where
-I'm going. I accept this decision because I do not have any child who
-will inherit this money after I die. Please I want your sincerely and
-urgent answer to know if you will be able to execute this project for
-the glory of God, and I will give you more information on how the fund
-will be transferred to your bank account. May the grace, peace, love
-and the truth in the Word of God be with you and all those that you
-love and care for.
+On Tue, Nov 2, 2021 at 6:50 PM Emil Renner Berthing <kernel@esmil.dk> wrote:
+>
+> Add a driver for the StarFive JH7100 reset controller.
 
-I'm waiting for your immediate reply..
+...
 
-May God Bless you,
-Mrs. Dina Mckenna..
+> +#define BIT_MASK32(x) BIT((x) % 32)
+
+Possible namespace collision.
+
+...
+
+> +/*
+> + * the registers work like a 32bit bitmap, so writing a 1 to the m'th bit of
+> + * the n'th ASSERT register asserts line 32n + m, and writing a 0 deasserts the
+> + * same line.
+> + * most reset lines have their status inverted so a 0 in the STATUS register
+> + * means the line is asserted and a 1 means it's deasserted. a few lines don't
+> + * though, so store the expected value of the status registers when all lines
+> + * are asserted.
+> + */
+
+Besides missing capitalization, if it sounds like bitmap, use bitmap.
+I have checked DT definitions and it seems you don't even need the
+BIT_MASK() macro,
+
+> +static const u32 jh7100_reset_asserted[4] = {
+> +       /* STATUS0 register */
+> +       BIT_MASK32(JH7100_RST_U74) |
+> +       BIT_MASK32(JH7100_RST_VP6_DRESET) |
+> +       BIT_MASK32(JH7100_RST_VP6_BRESET),
+> +       /* STATUS1 register */
+> +       BIT_MASK32(JH7100_RST_HIFI4_DRESET) |
+> +       BIT_MASK32(JH7100_RST_HIFI4_BRESET),
+> +       /* STATUS2 register */
+> +       BIT_MASK32(JH7100_RST_E24),
+> +       /* STATUS3 register */
+> +       0,
+> +};
+
+Yury, do we have any clever (clean) way to initialize a bitmap with
+particular bits so that it will be a constant from the beginning? If
+no, any suggestion what we can provide to such users?
+
+...
+
+> +       dev_dbg(rcdev->dev, "reset(%lu)\n", id);
+
+These debug messages are useless since one should use ftrace facility instead,
+
+-- 
+With Best Regards,
+Andy Shevchenko
