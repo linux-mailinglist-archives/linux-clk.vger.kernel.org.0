@@ -2,152 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC007443304
-	for <lists+linux-clk@lfdr.de>; Tue,  2 Nov 2021 17:37:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 303FC4434BD
+	for <lists+linux-clk@lfdr.de>; Tue,  2 Nov 2021 18:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234952AbhKBQje (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 2 Nov 2021 12:39:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22453 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235040AbhKBQir (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 2 Nov 2021 12:38:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1635870936;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zq/1+DwBXNQ+10dXmUih1iaLiLYP5xeOcEC+C1MZoN8=;
-        b=JD/p/8OhjQMWQrlfBz3aSYilpNVjCACmG6nFGvBbqhFcScrKKPC5H3Tquk0daUofsQxSq+
-        C9kQYufueHZIjsk1p0esI3hTfFEGpEJLXfsQ1SHAxQCvLA+K8oPxPEJnYCrwUB9amcyXDm
-        CN5o9VEOhlxH1eU0YEDYwrLk4SPeI50=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-321-lX46N162P6-BEHWEqfxJ-A-1; Tue, 02 Nov 2021 12:35:35 -0400
-X-MC-Unique: lX46N162P6-BEHWEqfxJ-A-1
-Received: by mail-ed1-f71.google.com with SMTP id t18-20020a056402021200b003db9e6b0e57so19380897edv.10
-        for <linux-clk@vger.kernel.org>; Tue, 02 Nov 2021 09:35:35 -0700 (PDT)
+        id S230500AbhKBRqq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 2 Nov 2021 13:46:46 -0400
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:42653 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234676AbhKBRqp (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 2 Nov 2021 13:46:45 -0400
+Received: by mail-oi1-f172.google.com with SMTP id g125so31099935oif.9;
+        Tue, 02 Nov 2021 10:44:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Zq/1+DwBXNQ+10dXmUih1iaLiLYP5xeOcEC+C1MZoN8=;
-        b=BffX25bez4KanRX5Di/RSlDdAhGCtw1erkNmAP/tZ4LsWh4NY+SHwIq+2eyqKZbvBa
-         Jih8J6IkrJf5z6Tp3luzsvzTlLP89xqWNa0JCQIJqzMA5fELLYrA/fN0/RZVg5jtFQ1Q
-         qVxvdmpWSLtMmLEb7i0BlJpnOhFtM4OMruWXQ2eQOe56yJCogAoNy4peQ/+WsDs8+PLL
-         0ZA26YvFY0dfKxHscqJcQu6dYPUUhVrJvemt2jWEeuar1R9jh47lMEEoN7iXbDl92C/x
-         qzid1XKLA78pAq9QYlhMbcEY0qj3TA6Y2xUSMrDfc22fXmsKauaIqMMEw9iYgeUFnOkt
-         B78g==
-X-Gm-Message-State: AOAM530+NH13IsRutZ8W54v/dPPFt9KfIsn1bwZbWCFeIKK9PlRyIE//
-        IBZ2KfzHTMehtq2eQmSYhBKyUCOV8DS8CkeXmpXsVFQvbuZ0n7XFZJVhlZsaxLvbXt5YSi4uURW
-        dyL+1Hx/s1bQDLGiIfKCy
-X-Received: by 2002:a05:6402:42ce:: with SMTP id i14mr51371764edc.276.1635870934120;
-        Tue, 02 Nov 2021 09:35:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzZ3/uj2tKBojwj8TODwyc/o2fUAP67S0ubiS8nI4mwEt6KxH9DG1zYZPSLje6xVryW/hO80w==
-X-Received: by 2002:a05:6402:42ce:: with SMTP id i14mr51371745edc.276.1635870933972;
-        Tue, 02 Nov 2021 09:35:33 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1054:9d19:e0f0:8214? (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id r18sm29563eje.90.2021.11.02.09.35.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Nov 2021 09:35:33 -0700 (PDT)
-Message-ID: <8d0821c9-b9d2-66de-ca2b-25525e26c67a@redhat.com>
-Date:   Tue, 2 Nov 2021 17:35:32 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1SmEr1k0s7n+Ap3lvkJLWzJiWyw4fGH67BDx2Poz4iM=;
+        b=A5R6z8XpmItM9CX2bk2lJ3cOp7G/6FKCY6a6er+fwC7w7Z6cld4bU20TO095QkVoav
+         DHllEiuDrrCSpYqvjOnwSNuxsUJPelqdPuHx/svaore24YsWZEj5/My3FfEeEPjCNf8p
+         dBNKo/cIp7zuTftK/pAW0ZvbUQ5n/4H0xQsxd3bPpsx5A7MhZtJr/ZPqpwcihAL92Qct
+         kZrX26McvXxgf7os6ctwuIxZjnFRzAxUOI3h6Kul3wFdb0RQ7nifPtSFrUTYx1ZLKAJb
+         GiYUNb6CPLZlPzs3Y3t7C2U5rxyk28epGkt8IOsy9SXFjSbWilHfJcn965o3+as0RZhq
+         72Nw==
+X-Gm-Message-State: AOAM531DJcxOkxD0p0tNr7mRiWyN5C+Zh+sZgIAaTraIt6F4elXoF59W
+        7rW9EwJqYO/lLXOufjIpvA==
+X-Google-Smtp-Source: ABdhPJxBIecywmYXbnEap9qc5dDUbTqVmZVPKWGPUUIKP/Z7AhbRBm0jx7LwK4YSUiNa7vO+6mapVQ==
+X-Received: by 2002:a05:6808:f8b:: with SMTP id o11mr6034751oiw.5.1635875050384;
+        Tue, 02 Nov 2021 10:44:10 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id z13sm1097381otq.53.2021.11.02.10.44.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Nov 2021 10:44:09 -0700 (PDT)
+Received: (nullmailer pid 3142432 invoked by uid 1000);
+        Tue, 02 Nov 2021 17:44:08 -0000
+Date:   Tue, 2 Nov 2021 12:44:08 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Qin Jian <qinjian@cqplus1.com>
+Cc:     p.zabel@pengutronix.de, linux-clk@vger.kernel.org,
+        broonie@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, mturquette@baylibre.com,
+        sboyd@kernel.org, devicetree@vger.kernel.org, robh+dt@kernel.org,
+        wells.lu@sunplus.com, maz@kernel.org
+Subject: Re: [PATCH v3 1/8] dt-bindings: vendor-prefixes: Add Sunplus
+Message-ID: <YYF46H/1JUSD59AZ@robh.at.kernel.org>
+References: <cover.1635737544.git.qinjian@cqplus1.com>
+ <1a5f86dbfd1e4053cd2a69111fc7b277a49bc98a.1635737544.git.qinjian@cqplus1.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v5 10/11] platform/x86: int3472: Pass
- tps68470_regulator_platform_data to the tps68470-regulator MFD-cell
-Content-Language: en-US
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Kate Hsuan <hpa@redhat.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-References: <20211102094907.31271-1-hdegoede@redhat.com>
- <20211102094907.31271-11-hdegoede@redhat.com>
- <CAHp75Vd-xY43H8jPOUqJp55Rq3Wuhsdzctfhqq300S0vAKTzpw@mail.gmail.com>
- <1f4377bb-2902-05e9-95c7-ad924477b543@redhat.com>
- <YYFkqlGkd7Jftcdk@paasikivi.fi.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <YYFkqlGkd7Jftcdk@paasikivi.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1a5f86dbfd1e4053cd2a69111fc7b277a49bc98a.1635737544.git.qinjian@cqplus1.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi,
-
-On 11/2/21 17:17, Sakari Ailus wrote:
-> On Tue, Nov 02, 2021 at 03:59:41PM +0100, Hans de Goede wrote:
->> Hi,
->>
->> On 11/2/21 15:34, Andy Shevchenko wrote:
->>> On Tue, Nov 2, 2021 at 11:50 AM Hans de Goede <hdegoede@redhat.com> wrote:
->>>>
->>>> Pass tps68470_regulator_platform_data to the tps68470-regulator
->>>> MFD-cell, specifying the voltages of the various regulators and
->>>> tying the regulators to the sensor supplies so that sensors which use
->>>> the TPS68470 can find their regulators.
->>>>
->>>> Since the voltages and supply connections are board-specific, this
->>>> introduces a DMI matches int3472_tps68470_board_data struct which
->>>> contains the necessary per-board info.
->>>>
->>>> This per-board info also includes GPIO lookup information for the
->>>> sensor IO lines which may be connected to the tps68470 GPIOs.
->>>
->>> ...
->>>
->>>> +               board_data = int3472_tps68470_get_board_data(dev_name(&client->dev));
->>>> +               if (!board_data) {
->>>> +                       dev_err(&client->dev, "No board-data found for this laptop/tablet model\n");
->>>> +                       return -ENODEV;
->>>
->>> It's fine to use dev_err_probe() for known error codes.
->>>
->>>> +               }
->>>
->>> ...
->>>
->>>> +               cells[1].platform_data = (void *)board_data->tps68470_regulator_pdata;
->>>
->>> Do we need casting?
->>
->> Yes, the cast casts away a "const", the const is correct
->> since the data only ever gets read by the regulator driver,
->> but platform_data pointers are normally not const, so it
->> is either the cast, or loose the const on the definition
->> of the struct to which board_data->tps68470_regulator_pdata
->> points...
->>
->> So not good choice here really, only chosing between bad
->> options and I picked the lets do the cast "least worse"
->> option (at least to me). I'm open to changing this.
+On Mon, 01 Nov 2021 13:01:51 +0800, Qin Jian wrote:
+> Add vendor prefix for Sunplus Technology Co., Ltd. (http://www.sunplus.com)
 > 
-> Maybe a comment explaining this briefly?
+> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-Yes, I was thinking the same myself, I'll add this for the
-next version (which I expect to be the final version).
-
-Regards,
-
-Hans
-
+Acked-by: Rob Herring <robh@kernel.org>
