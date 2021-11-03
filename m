@@ -2,78 +2,69 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFCA3443AA8
-	for <lists+linux-clk@lfdr.de>; Wed,  3 Nov 2021 01:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C0B443AFD
+	for <lists+linux-clk@lfdr.de>; Wed,  3 Nov 2021 02:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbhKCBCF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 2 Nov 2021 21:02:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51756 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229778AbhKCBCF (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 2 Nov 2021 21:02:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8582F60FC4;
-        Wed,  3 Nov 2021 00:59:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1635901169;
-        bh=EE/bOVd8vhFU3MMrom1BvHLf8zsd5QVrHEBuJ973vWY=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=qN+p7UfX2eCOwF2fgyolD0kfSXyQ+yp/cmA2hul9GmNjOsQg+dBTWlQ991uEr05j1
-         HWSTh9Zt5K8gYaO/pRAfzS3r+tIhqJuGOLBs/SgPy7r7VDZNELc8W0hz1zSsJyVv27
-         YZ09eCSEllp2jko99wvBD5pjlDjzhTAPxrwU9OGlwgGD7izH+lKO0DvA/O3K9RW6Dn
-         uJ38S/6cgHt/cKpN7Ht4v8GpuaFPAKq9mv8j1eE2+95ez+iwytT+nAbXdlkFL6bG+R
-         838AI+lHb88kZzkRI+qKdkR8FpXMb+2OEXGJXwvlrkrzFjNx8QSe98aEVPBSdUmpJg
-         oeQ8WaDHMJy3g==
+        id S231435AbhKCB0r (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 2 Nov 2021 21:26:47 -0400
+Received: from [113.204.237.245] ([113.204.237.245]:48164 "EHLO
+        test.cqplus1.com" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232835AbhKCB0r (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 2 Nov 2021 21:26:47 -0400
+X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
+        R,40,3)
+Received: from 172.27.96.203
+        by cqmailgates with MailGates ESMTP Server V5.0(16713:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Wed, 03 Nov 2021 09:20:41 +0800 (CST)
+Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
+ CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 3 Nov 2021 09:20:34 +0800
+Received: from CQEXMAIL01.cqplus1.com ([fe80::f436:deb3:dd20:6b5]) by
+ CQEXMAIL01.cqplus1.com ([fe80::f436:deb3:dd20:6b5%4]) with mapi id
+ 15.01.2176.009; Wed, 3 Nov 2021 09:20:34 +0800
+From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+CC:     "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0ggdjMgMy84XSBkdC1iaW5kaW5nczogcmVzZXQ6IEFk?=
+ =?utf-8?Q?d_bindings_for_SP7021_reset_driver?=
+Thread-Topic: [PATCH v3 3/8] dt-bindings: reset: Add bindings for SP7021 reset
+ driver
+Thread-Index: AQHXzt6BXNsU5ZWDsUy9VCnQJXhHSqvvnAYAgAFmWFA=
+Date:   Wed, 3 Nov 2021 01:20:34 +0000
+Message-ID: <316eb67cafae48ef92d5e7d5ab56b5c4@cqplus1.com>
+References: <cover.1635737544.git.qinjian@cqplus1.com>
+         <852e24e942cf40b8240ced4de4ac78acc7694355.1635737544.git.qinjian@cqplus1.com>
+ <34481cb056c4bc4dc355571713675f141350e04d.camel@pengutronix.de>
+In-Reply-To: <34481cb056c4bc4dc355571713675f141350e04d.camel@pengutronix.de>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.28.110.18]
 Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <2912588.a5UK1EFgBA@diego>
-References: <20211027132616.1039814-1-heiko@sntech.de> <5381956.U9aoDET0nm@diego> <163548978553.15791.2075313346592720953@swboyd.mtv.corp.google.com> <2912588.a5UK1EFgBA@diego>
-Subject: Re: [PATCH 0/2] clk: rockchip: cleanup errors in (module-)driver handling
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     kernel@esmil.dk, linux-clk@vger.kernel.org, mturquette@baylibre.com
-To:     Heiko =?utf-8?q?St=C3=BCbner?= <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org
-Date:   Tue, 02 Nov 2021 17:59:28 -0700
-Message-ID: <163590116816.2993099.4747068629839558630@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Heiko St=C3=BCbner (2021-10-29 05:37:06)
-> Am Freitag, 29. Oktober 2021, 08:43:05 CEST schrieb Stephen Boyd:
-> > Quoting Heiko St=EF=BF=BDbner (2021-10-27 16:20:17)
-> > > Am Mittwoch, 27. Oktober 2021, 22:27:46 CEST schrieb Stephen Boyd:
-> > > > Quoting Heiko Stuebner (2021-10-27 06:26:14)
-> > > > > Recent conversions or inclusions of rk3399 and rk3568 as platform=
--drivers
-> > > > > and subsequently allowing them to be built as modules introduced =
-some
-> > > > > problems.
-> > > > >=20
-> > > > > These two patches try to correct them.
-> > > >=20
-> > > > By removing modular support? Ok.
-> > >=20
-> > > It looked like the easiest way to go for now.
-> > >=20
-> > > With all the clock-definitions as init-data still in both drivers, I =
-don't think
-> > > anybody ever tested running this as a real module.
-> > >=20
-> > > We could of course also remove all the __init + __initdata attributes=
-, but
-> > > still wouldn't know if it actually runs as a module, without someone
-> > > building a real test environment for it.
-> > >=20
-> > >=20
-> >=20
-> > Sure. Do I need to pick these up directly?
->=20
-> I don't have anything more for 5.16 and the 5.15 release should happen
-> on sunday, so yeah just pick them if you like - no need for doing a separ=
-ate
-> pull request.
->=20
-
-Ok I picked them up and I'll send them off next week.
+PiA+ICtwcm9wZXJ0aWVzOg0KPiA+ICsgIGNvbXBhdGlibGU6DQo+ID4gKyAgICBlbnVtOg0KPiA+
+ICsgICAgICAtIHN1bnBsdXMsc3A3MDIxLXJlc2V0ICMgUmVzZXQgQ29udHJvbGxlciBvbiBTUDcw
+MjEgYW5kIGNvbXBhdGlibGUgU29Dcw0KPiA+ICsgICAgICAtIHN1bnBsdXMscTY0NS1yZXNldCAj
+IFJlc2V0IENvbnRyb2xsZXIgb24gUTY0NSBhbmQgY29tcGF0aWJsZSBTb0NzDQo+IA0KPiBUaGUg
+Y29tbWl0IG1lc3NhZ2Ugb25seSBtZW50aW9ucyBTUDcwMjEuIFNob3VsZCBRNjQ1IGJlIGFkZGVk
+IGxhdGVyLCBvcg0KPiBpcyB0aGlzIHBhdGNoIG1pc3NpbmcgdGhlIGJpbmRpbmcgaGVhZGVyIGZv
+ciBRNjU1Pw0KPg0KDQpJJ2xsIHJlbW92ZSB0aGUgUTY0NSBlbnRyeSwgd2hpY2ggd2lsbCBiZSBh
+ZGRlZCBsYXRlciB3aGVuIHN1Ym1pdHRpbmcgUTY0NSBzdXBwb3J0Lg0KVGhhbmtzIGZvciB5b3Vy
+IHJldmlldy4gDQoNCg0K
