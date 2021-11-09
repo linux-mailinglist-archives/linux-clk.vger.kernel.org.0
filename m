@@ -2,91 +2,77 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C33744B82A
-	for <lists+linux-clk@lfdr.de>; Tue,  9 Nov 2021 23:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19FAA44B8FC
+	for <lists+linux-clk@lfdr.de>; Tue,  9 Nov 2021 23:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345433AbhKIWkk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 9 Nov 2021 17:40:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59456 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345397AbhKIWh2 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 9 Nov 2021 17:37:28 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 306D561AEC;
-        Tue,  9 Nov 2021 22:22:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636496568;
-        bh=7xoY8n8uQOFMeGwlpGixZjniBDpaU8T0lcYuoX6KMzA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LS8yJXd/JZOvK30diXRX1RJlR0bjNZtWsUcNeNgyykOEexlln17Elz8mtIzzGBPgy
-         0UraVbJaWdjRbdKBktfVwh6bTBig16ABEQyQAEJSewM1M38w624qUBlukjkLVJUB+G
-         ed08NXkp999dUyPTSZ+GzCzbeC922vW95FFEruHhdqhVksV/6bfZ1Nk4i8O+1jo4SS
-         QioavIfH0eqwTRd6aSxBl+okTwm8sUwzqdl/P6Q5sXDMfqtwNkdpscB2sEU+D+Zy9l
-         4NYwUGYgAN+77h+fnTfgXRqDcgrYBdH0lN6Y1abCIXiydrX7FQglMdC1AXjUWGx32h
-         aR73kBBQtZc1g==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Stefan Riedmueller <s.riedmueller@phytec.de>,
-        Abel Vesa <abel.vesa@nxp.com>, Sasha Levin <sashal@kernel.org>,
-        shawnguo@kernel.org, kernel@pengutronix.de,
-        mturquette@baylibre.com, sboyd@codeaurora.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 14/30] clk: imx: imx6ul: Move csi_sel mux to correct base register
-Date:   Tue,  9 Nov 2021 17:22:08 -0500
-Message-Id: <20211109222224.1235388-14-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211109222224.1235388-1-sashal@kernel.org>
-References: <20211109222224.1235388-1-sashal@kernel.org>
+        id S236383AbhKIWyY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 9 Nov 2021 17:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242389AbhKIWxO (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 9 Nov 2021 17:53:14 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D625EC0F26F0
+        for <linux-clk@vger.kernel.org>; Tue,  9 Nov 2021 14:23:03 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so932068otl.3
+        for <linux-clk@vger.kernel.org>; Tue, 09 Nov 2021 14:23:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PgvfvNdwSI/3ph2NDnZGZVBMBhLt3hGukHq2mKYVk4E=;
+        b=ezGw9H7bK2e/s/4uure9G6i0ebK2VdicuchuQBo0XrMhltr4yLF4uioTnD7PUtSme0
+         OePrOFZy2xKznFmRa4kWryPPqSDr5KsA3FHmWvPnhzn9VGOr/5/sCVsV/b48g58sZG5Y
+         LdGvmusJLsiDg78lbyLvDdTWzbI35WNVFVM4ialFj7jcKKOcZKQd308uyj0GomRNPo5u
+         XqaD370mJ5NKpFFmzdUhTiqzyL3riw7Uo7hYGZjzRMdR4eaMbWfB9t/4m2hFHbzw1+WL
+         ahXbPCs1rFJ3HXqJzf6XeOso0kdfvJyF4mVwiHwpKiKF9Kbxb7+LLq5Na8bZLQBd7KGi
+         ENHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PgvfvNdwSI/3ph2NDnZGZVBMBhLt3hGukHq2mKYVk4E=;
+        b=yraDOZIuoWMkIHUEcPdonuVYTDCDdck1Lu2ZmvKmZ4oz9m+D5TVonCUKOXbVsnSbKh
+         1MoR+mNW+RdpgCztXXB2aadNhDLoU6qerB0Sv9nHZwrX43l1fqIKApdbNqXYb0Uphu00
+         Q+dJSuBFBdw57V76yoNCd7w2dZTl2R/0cid4V9l0zu+T+MKb4BEFctlecxSxiWud4jxj
+         Aqo2yoPwrbIRVNIPDz8GmOO37J6L4jIAnJV/VMwcHoTiXvizz1byw20Vm4lkCUk7Mc2m
+         w0jdYhN964V28D68x2qyIlPYxrlR4gaSrVYu8SfAZ8BI1De2CNcFbupDW1uipnbwKQEQ
+         7T/A==
+X-Gm-Message-State: AOAM532UqH6UU790de85ij83cKb+SBP1Yv8FmnOBfcrnnxdgJEOgachm
+        kkxbhuQ6tC+9+CMK6ad2qxlrDEL2pFjQNlyehAYbFA==
+X-Google-Smtp-Source: ABdhPJzm3G0CFDoatPM1xAySmN9ryiR6N5sit39Y1Pb5dB8zXLzT9ztTe9fQor4ppdDUgnGjTWOFVjbFNCkeAX5UGds=
+X-Received: by 2002:a9d:ed6:: with SMTP id 80mr8697308otj.35.1636496583272;
+ Tue, 09 Nov 2021 14:23:03 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20211109164650.2233507-1-robh@kernel.org>
+In-Reply-To: <20211109164650.2233507-1-robh@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 9 Nov 2021 23:22:51 +0100
+Message-ID: <CACRpkdYuX5zfJrywx0kWWJJk2A963kzzVGvFrGJciUuGjh7XGw@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Fix Arm Ltd board node name collisions
+To:     Rob Herring <robh@kernel.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Sudeep Holla <Sudeep.Holla@arm.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Stefan Riedmueller <s.riedmueller@phytec.de>
+On Tue, Nov 9, 2021 at 5:46 PM Rob Herring <robh@kernel.org> wrote:
 
-[ Upstream commit 2f9d61869640f732599ec36b984c2b5c46067519 ]
+> This does break DT ABI compatibility which is partially mitigated if
+> these changes are backported to stable. The alternative is reverting the
+> referenced DT changes and coming up with different node names without
+> unit-addresses. Ultimately, ABI issues are platform maintainers'
+> decision, not mine.
 
-The csi_sel mux register is located in the CCM register base and not the
-CCM_ANALOG register base. So move it to the correct position in code.
+I don't mind breaking the ABI for these boards since everyone I
+know rebuild the DT with the kernel and boot. I don't know if
+other users flash it though, so check what Sudeep says.
 
-Otherwise changing the parent of the csi clock can lead to a complete
-system failure due to the CCM_ANALOG_PLL_SYS_TOG register being falsely
-modified.
-
-Also remove the SET_RATE_PARENT flag since one possible supply for the
-csi_sel mux is the system PLL which we don't want to modify.
-
-Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
-Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
-Link: https://lore.kernel.org/r/20210927072857.3940880-1-s.riedmueller@phytec.de
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/clk/imx/clk-imx6ul.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/clk/imx/clk-imx6ul.c b/drivers/clk/imx/clk-imx6ul.c
-index bc931988fe7b2..f3ac5a524f4ed 100644
---- a/drivers/clk/imx/clk-imx6ul.c
-+++ b/drivers/clk/imx/clk-imx6ul.c
-@@ -161,7 +161,6 @@ static void __init imx6ul_clocks_init(struct device_node *ccm_node)
- 	hws[IMX6UL_PLL5_BYPASS] = imx_clk_hw_mux_flags("pll5_bypass", base + 0xa0, 16, 1, pll5_bypass_sels, ARRAY_SIZE(pll5_bypass_sels), CLK_SET_RATE_PARENT);
- 	hws[IMX6UL_PLL6_BYPASS] = imx_clk_hw_mux_flags("pll6_bypass", base + 0xe0, 16, 1, pll6_bypass_sels, ARRAY_SIZE(pll6_bypass_sels), CLK_SET_RATE_PARENT);
- 	hws[IMX6UL_PLL7_BYPASS] = imx_clk_hw_mux_flags("pll7_bypass", base + 0x20, 16, 1, pll7_bypass_sels, ARRAY_SIZE(pll7_bypass_sels), CLK_SET_RATE_PARENT);
--	hws[IMX6UL_CLK_CSI_SEL] = imx_clk_hw_mux_flags("csi_sel", base + 0x3c, 9, 2, csi_sels, ARRAY_SIZE(csi_sels), CLK_SET_RATE_PARENT);
- 
- 	/* Do not bypass PLLs initially */
- 	clk_set_parent(hws[IMX6UL_PLL1_BYPASS]->clk, hws[IMX6UL_CLK_PLL1]->clk);
-@@ -270,6 +269,7 @@ static void __init imx6ul_clocks_init(struct device_node *ccm_node)
- 	hws[IMX6UL_CLK_ECSPI_SEL]	  = imx_clk_hw_mux("ecspi_sel",	base + 0x38, 18, 1, ecspi_sels, ARRAY_SIZE(ecspi_sels));
- 	hws[IMX6UL_CLK_LCDIF_PRE_SEL]	  = imx_clk_hw_mux_flags("lcdif_pre_sel", base + 0x38, 15, 3, lcdif_pre_sels, ARRAY_SIZE(lcdif_pre_sels), CLK_SET_RATE_PARENT);
- 	hws[IMX6UL_CLK_LCDIF_SEL]	  = imx_clk_hw_mux("lcdif_sel",	base + 0x38, 9, 3, lcdif_sels, ARRAY_SIZE(lcdif_sels));
-+	hws[IMX6UL_CLK_CSI_SEL]		  = imx_clk_hw_mux("csi_sel", base + 0x3c, 9, 2, csi_sels, ARRAY_SIZE(csi_sels));
- 
- 	hws[IMX6UL_CLK_LDB_DI0_DIV_SEL]  = imx_clk_hw_mux("ldb_di0", base + 0x20, 10, 1, ldb_di0_div_sels, ARRAY_SIZE(ldb_di0_div_sels));
- 	hws[IMX6UL_CLK_LDB_DI1_DIV_SEL]  = imx_clk_hw_mux("ldb_di1", base + 0x20, 11, 1, ldb_di1_div_sels, ARRAY_SIZE(ldb_di1_div_sels));
--- 
-2.33.0
-
+Yours,
+Linus Walleij
