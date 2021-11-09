@@ -2,63 +2,59 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73AF244CE70
-	for <lists+linux-clk@lfdr.de>; Thu, 11 Nov 2021 01:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF2744D11A
+	for <lists+linux-clk@lfdr.de>; Thu, 11 Nov 2021 06:06:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232332AbhKKAoI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 10 Nov 2021 19:44:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42380 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232077AbhKKAoH (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Wed, 10 Nov 2021 19:44:07 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 86ED26135E;
-        Thu, 11 Nov 2021 00:41:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636591279;
-        bh=hhTl/K3vGzRFZ3vjhy7pDbKkn6USsecqA6WNitwGUGk=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=N4YAEYew+VeYugIXPsKBigKFuYUo+PkHXePWFofolFcvM+F4aHIyZhEPkJ1wn3LLf
-         ZcvG1irdlEbT5Jet+UZ7DISPOpxd9pcQLEPp77MZWPcGYhN+JYNKb6oHPtqMfe5KFX
-         yBeEuRVd6pYxxjVWDJXUxe01H+jVsqdzkQOVrbY8IyPkN0m4e+lZQa/rhEvBEK5fia
-         BACwM+kjtY4XhkRBoutMwKPdqK38NGnB3HdL1yWnGaP/uugNEaD9yehptySANwK58M
-         fw3pOUUFu8TKNeyHAvG4fCNuCP5diMEhHfWWdFGWHRbAGxI1bX526OsFttTlCEbQIy
-         fqt1AdGctnVMw==
+        id S229706AbhKKFJW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-clk@lfdr.de>); Thu, 11 Nov 2021 00:09:22 -0500
+Received: from host-200-90-157-143.netpc.ec ([200.90.157.143]:51786 "EHLO
+        mail.gruponetpc.com" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S229379AbhKKFJU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 11 Nov 2021 00:09:20 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.gruponetpc.com (Postfix) with ESMTP id 58903E0FB29;
+        Wed, 10 Nov 2021 08:37:06 -0500 (-05)
+Received: from mail.gruponetpc.com ([127.0.0.1])
+        by localhost (mail.gruponetpc.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id uQVs6cJIZhVE; Wed, 10 Nov 2021 08:37:05 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.gruponetpc.com (Postfix) with ESMTP id 62E338667C8;
+        Tue,  9 Nov 2021 22:21:55 -0500 (-05)
+X-Virus-Scanned: amavisd-new at gruponetpc.com
+Received: from mail.gruponetpc.com ([127.0.0.1])
+        by localhost (mail.gruponetpc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id qs_LApJ6uYqI; Tue,  9 Nov 2021 22:21:54 -0500 (-05)
+Received: from [192.168.0.108] (unknown [93.182.105.113])
+        by mail.gruponetpc.com (Postfix) with ESMTPSA id C8D9F8667B3;
+        Tue,  9 Nov 2021 15:25:13 -0500 (-05)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211109164650.2233507-3-robh@kernel.org>
-References: <20211109164650.2233507-1-robh@kernel.org> <20211109164650.2233507-3-robh@kernel.org>
-Subject: Re: [PATCH 2/2] clk: versatile: clk-icst: Ensure clock names are unique
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Date:   Wed, 10 Nov 2021 16:41:18 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20211111004119.86ED26135E@mail.kernel.org>
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: donation
+To:     Recipients <ecouso@mail.gruponetpc.com>
+From:   ecouso@mail.gruponetpc.com
+Date:   Tue, 09 Nov 2021 20:24:41 +0000
+Reply-To: stefanopessina35@gmail.com
+Message-Id: <20211109202513.C8D9F8667B3@mail.gruponetpc.com>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Rob Herring (2021-11-09 08:46:50)
-> Commit 2d3de197a818 ("ARM: dts: arm: Update ICST clock nodes 'reg' and
-> node names") moved to using generic node names. That results in trying
-> to register multiple clocks with the same name. Fix this by including
-> the unit-address in the clock name.
->=20
-> Fixes: 2d3de197a818 ("ARM: dts: arm: Update ICST clock nodes 'reg' and no=
-de names")
-> Cc: stable@vger.kernel.org
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-clk@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+
+Hallo,
+
+Ich bin STEFANO PESSINA. Ich bin ein italienisch-monegassischer Milliardär und stellvertretender Vorsitzender, Chief Executive Officer (CEO) und größter Einzelaktionär der Walgreens Boots Alliance. Au   fgrund dieser aktuellen Situation (Corona-Virus), die sich auf der ganzen Welt ausbreitet, spenden ich selbst und andere 19 italienische Milliardäre mehr als 45 Millionen US-Dollar, um das Coronavirus in Italien zu bekämpfen. Ich habe auch zugesagt, 1.500.000,00 € an Einzelpersonen, Kirchen und Waisenhäuser usw. zu spenden. Ich habe mich entschieden, Ihnen 1.500.000,00 € zu spenden, da Ihre E-Mail-Adresse zu den glücklichen Gewinnern gehört. Wenn Sie an meiner Spende interessiert sind, kontaktieren Sie mich für weitere Informationen. Du kannst auch über den untenstehenden Link mehr über mich lesen
+
+https://en.wikipedia.org/wiki/Stefano_Pessina
+
+Herzlicher Gruss
+Stellvertretender Vorsitzender und Geschäftsführer,
+Walgreens Boots-Allianz.
+Stefano Pessina
+
+E-Mail: stefanopessina35@gmail.com
+
+
+
