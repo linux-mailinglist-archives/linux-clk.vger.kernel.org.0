@@ -2,91 +2,83 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 319F644B787
-	for <lists+linux-clk@lfdr.de>; Tue,  9 Nov 2021 23:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5758844B8F7
+	for <lists+linux-clk@lfdr.de>; Tue,  9 Nov 2021 23:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345144AbhKIWf2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 9 Nov 2021 17:35:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55890 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345213AbhKIWdi (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 9 Nov 2021 17:33:38 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 09ECA61AA4;
-        Tue,  9 Nov 2021 22:21:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636496508;
-        bh=oG/uIkjLf5CEuRpeIfPLBoyhAMHDQ+aFP2cDf3DGI9k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aPU+IzzNg0INmEZYV6bUReyLmQ2Ndv/ChXvrK6/A1ZLpTN4ijVvbgggAr+EKFmN6R
-         Gp/7mOBtTpc2cT11nXCFwu8E+EtL2b7XFxDLQ9K6FGOMAkvOr3WRde0V6gyAIBpqE2
-         Z7P7Qy2evwNDZyXH1Sbs+Qy7XHfnmXWI/9RBj9xocWyzhLXpDwqIDV5ilGRwyLy31f
-         2lu0fJLeTAd+GdREBuQsukamL7rytywfUqh8znuZ1SkIsm28KBL1Dp01u4TH6pltw+
-         2AhsOwHIMaJlgqAQoNuU7Bf6kKN6s30IGJEEytq90lgdbyQ2MpHf/Zyo6QN/qxDElU
-         cY1VkjIWqsC5w==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Stefan Riedmueller <s.riedmueller@phytec.de>,
-        Abel Vesa <abel.vesa@nxp.com>, Sasha Levin <sashal@kernel.org>,
-        shawnguo@kernel.org, kernel@pengutronix.de,
-        mturquette@baylibre.com, sboyd@codeaurora.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 26/50] clk: imx: imx6ul: Move csi_sel mux to correct base register
-Date:   Tue,  9 Nov 2021 17:20:39 -0500
-Message-Id: <20211109222103.1234885-26-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211109222103.1234885-1-sashal@kernel.org>
-References: <20211109222103.1234885-1-sashal@kernel.org>
+        id S240977AbhKIWu5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 9 Nov 2021 17:50:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345043AbhKIWuF (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 9 Nov 2021 17:50:05 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC55C00EB3F
+        for <linux-clk@vger.kernel.org>; Tue,  9 Nov 2021 14:21:24 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id b5-20020a9d60c5000000b0055c6349ff22so850445otk.13
+        for <linux-clk@vger.kernel.org>; Tue, 09 Nov 2021 14:21:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qLsRex488etMkJyCCFaXLtgPzZ6BB/J9dKWw8UO3KF8=;
+        b=HiVLib1yZobRnuW7sMIDMYgEiV7yhcNYV53azWFi6aSYW4Hu++8xN0MqgT9ZBTBPe1
+         tHfuZJW+x3zpArXVhEztoQURqBgNNAqvkhrpdok2c1CYScgbTEkk3toWbsXGaEsMPhBc
+         pobpQ2rMClAZp0i0TvDBo0SZAGTrza1mdUUSgjugkU2oA7tzpHVZSIZWY2OOOlvRabpj
+         xPBPjmrQZd9Z6fxEVq7BWnagN67ohxQ3kkVDeE0cZHQkykxoJzisjtym0erskVnhIOYl
+         BxQABSwHk0vmOC8j2uq7gypLmELd9QUegVybgm3hF2dKB/JaBQMP0LD29ohzDV3YG8Wz
+         hM9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qLsRex488etMkJyCCFaXLtgPzZ6BB/J9dKWw8UO3KF8=;
+        b=uWs1zah+dOeSMhA5a4cfamzicOulp4uyHdfXB3NmW2UNAvwKfcqvrxUiZHZjLSo4VJ
+         vvrNVp9FviKKq2XYk6PS7yqXVwyYvNDx3PW3N6HO9qYXTUM3LN+cNg/mRLMccdmxRhEc
+         hY+vwdm1MHRk6/5lAGcTlydrX1tS2VAj+TcmjSTg/9/jMhVW7v2NItA6bHaQQXNdFYUg
+         l53czAFBjx1k+J5xrXu3TS1LfTlCoSHPii0PdsCAH1rlxTmWzwNLmRMULt6uFNaSGk9H
+         WiV1NjHxMiLzBPRj0TpwPRWCopkdchDPs5Ivq+L4QuO0JBKm3p6Qp7d5R4efg/aDNlo8
+         Yoyw==
+X-Gm-Message-State: AOAM530wgtgK5CQ2wb9AZkb80ono1R78AKGE9X1lt5BKfq6KrxUeP2eV
+        UtlYX1gO+IwCQSo/sNgJS1TiF8VjJSA8B+E0IsRnKg==
+X-Google-Smtp-Source: ABdhPJxnGCMwPBzOn0vDnUGZChUhsq9PbhUnrHTyTVpdBpkdT5/1fxR/EpRTVr/sEUcMpLzruQlZhgh3IK5H9XIVdOU=
+X-Received: by 2002:a9d:ed6:: with SMTP id 80mr8689832otj.35.1636496484311;
+ Tue, 09 Nov 2021 14:21:24 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20211109164650.2233507-1-robh@kernel.org> <20211109164650.2233507-3-robh@kernel.org>
+In-Reply-To: <20211109164650.2233507-3-robh@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 9 Nov 2021 23:21:12 +0100
+Message-ID: <CACRpkdaY9VQcUCNe4ZFKFyRd7HSFh1FX8yOT-AFqjJ6wc56Ehw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] clk: versatile: clk-icst: Ensure clock names are unique
+To:     Rob Herring <robh@kernel.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Sudeep Holla <Sudeep.Holla@arm.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Stefan Riedmueller <s.riedmueller@phytec.de>
+On Tue, Nov 9, 2021 at 5:46 PM Rob Herring <robh@kernel.org> wrote:
 
-[ Upstream commit 2f9d61869640f732599ec36b984c2b5c46067519 ]
+> Commit 2d3de197a818 ("ARM: dts: arm: Update ICST clock nodes 'reg' and
+> node names") moved to using generic node names. That results in trying
+> to register multiple clocks with the same name. Fix this by including
+> the unit-address in the clock name.
+>
+> Fixes: 2d3de197a818 ("ARM: dts: arm: Update ICST clock nodes 'reg' and node names")
+> Cc: stable@vger.kernel.org
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-clk@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-The csi_sel mux register is located in the CCM register base and not the
-CCM_ANALOG register base. So move it to the correct position in code.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Otherwise changing the parent of the csi clock can lead to a complete
-system failure due to the CCM_ANALOG_PLL_SYS_TOG register being falsely
-modified.
-
-Also remove the SET_RATE_PARENT flag since one possible supply for the
-csi_sel mux is the system PLL which we don't want to modify.
-
-Signed-off-by: Stefan Riedmueller <s.riedmueller@phytec.de>
-Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
-Link: https://lore.kernel.org/r/20210927072857.3940880-1-s.riedmueller@phytec.de
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/clk/imx/clk-imx6ul.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/clk/imx/clk-imx6ul.c b/drivers/clk/imx/clk-imx6ul.c
-index 5dbb6a9377324..206e4c43f68f8 100644
---- a/drivers/clk/imx/clk-imx6ul.c
-+++ b/drivers/clk/imx/clk-imx6ul.c
-@@ -161,7 +161,6 @@ static void __init imx6ul_clocks_init(struct device_node *ccm_node)
- 	hws[IMX6UL_PLL5_BYPASS] = imx_clk_hw_mux_flags("pll5_bypass", base + 0xa0, 16, 1, pll5_bypass_sels, ARRAY_SIZE(pll5_bypass_sels), CLK_SET_RATE_PARENT);
- 	hws[IMX6UL_PLL6_BYPASS] = imx_clk_hw_mux_flags("pll6_bypass", base + 0xe0, 16, 1, pll6_bypass_sels, ARRAY_SIZE(pll6_bypass_sels), CLK_SET_RATE_PARENT);
- 	hws[IMX6UL_PLL7_BYPASS] = imx_clk_hw_mux_flags("pll7_bypass", base + 0x20, 16, 1, pll7_bypass_sels, ARRAY_SIZE(pll7_bypass_sels), CLK_SET_RATE_PARENT);
--	hws[IMX6UL_CLK_CSI_SEL] = imx_clk_hw_mux_flags("csi_sel", base + 0x3c, 9, 2, csi_sels, ARRAY_SIZE(csi_sels), CLK_SET_RATE_PARENT);
- 
- 	/* Do not bypass PLLs initially */
- 	clk_set_parent(hws[IMX6UL_PLL1_BYPASS]->clk, hws[IMX6UL_CLK_PLL1]->clk);
-@@ -270,6 +269,7 @@ static void __init imx6ul_clocks_init(struct device_node *ccm_node)
- 	hws[IMX6UL_CLK_ECSPI_SEL]	  = imx_clk_hw_mux("ecspi_sel",	base + 0x38, 18, 1, ecspi_sels, ARRAY_SIZE(ecspi_sels));
- 	hws[IMX6UL_CLK_LCDIF_PRE_SEL]	  = imx_clk_hw_mux_flags("lcdif_pre_sel", base + 0x38, 15, 3, lcdif_pre_sels, ARRAY_SIZE(lcdif_pre_sels), CLK_SET_RATE_PARENT);
- 	hws[IMX6UL_CLK_LCDIF_SEL]	  = imx_clk_hw_mux("lcdif_sel",	base + 0x38, 9, 3, lcdif_sels, ARRAY_SIZE(lcdif_sels));
-+	hws[IMX6UL_CLK_CSI_SEL]		  = imx_clk_hw_mux("csi_sel", base + 0x3c, 9, 2, csi_sels, ARRAY_SIZE(csi_sels));
- 
- 	hws[IMX6UL_CLK_LDB_DI0_DIV_SEL]  = imx_clk_hw_mux("ldb_di0", base + 0x20, 10, 1, ldb_di0_div_sels, ARRAY_SIZE(ldb_di0_div_sels));
- 	hws[IMX6UL_CLK_LDB_DI1_DIV_SEL]  = imx_clk_hw_mux("ldb_di1", base + 0x20, 11, 1, ldb_di1_div_sels, ARRAY_SIZE(ldb_di1_div_sels));
--- 
-2.33.0
-
+Yours,
+Linus Walleij
