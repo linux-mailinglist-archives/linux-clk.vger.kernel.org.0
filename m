@@ -2,95 +2,85 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A250644B744
-	for <lists+linux-clk@lfdr.de>; Tue,  9 Nov 2021 23:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9961B44B8EB
+	for <lists+linux-clk@lfdr.de>; Tue,  9 Nov 2021 23:45:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343984AbhKIWdA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 9 Nov 2021 17:33:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51454 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344814AbhKIWat (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 9 Nov 2021 17:30:49 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C22C361A84;
-        Tue,  9 Nov 2021 22:20:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1636496457;
-        bh=s42mWIpAsOZrqBiWAEm25NkcCa/cXzGgUEKUh0F8EgY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V4dh0FHYTbMlhkJd63vDdRPy91FU7JKXz0+PaPrfZhgAp84p2x4VYfkJ3mxVTVndE
-         dCvYorZLcOETm4MuoJxnQzGaMoww/02YchPEDmkSEJCuLUfB/3lJESWKGmCTytSndm
-         qa71s0dbTO+XInKDb2Jq4QaJjAaeqSGF6TGi9NfBLLjHGt8K4/UJ0RcafgBXBgrTiO
-         DC3CCxdWWtp3Vzo5aGL897QQZPqjFGTkycM/zpFNR2a6dx7/BHjKN1a43F6WvU52iG
-         VfhtNEY3FeBliZriXipqREaOjW7gjyBEIFgCGDaCKoCgr7uP+bH30HOpCqDa1O6qbd
-         6l3BgWakpW1Jg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        boris.brezillon@free-electrons.com, mturquette@baylibre.com,
-        sboyd@codeaurora.org, linux-clk@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.14 72/75] clk: at91: sama7g5: remove prescaler part of master clock
-Date:   Tue,  9 Nov 2021 17:19:02 -0500
-Message-Id: <20211109221905.1234094-72-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211109221905.1234094-1-sashal@kernel.org>
-References: <20211109221905.1234094-1-sashal@kernel.org>
+        id S1346098AbhKIWrq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 9 Nov 2021 17:47:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346459AbhKIWpq (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 9 Nov 2021 17:45:46 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02798C014B1A
+        for <linux-clk@vger.kernel.org>; Tue,  9 Nov 2021 14:20:30 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id r26so1430339oiw.5
+        for <linux-clk@vger.kernel.org>; Tue, 09 Nov 2021 14:20:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+tM5hwtc8qbA0vJnA/spVuUcAKq7RJsV9X1LvQfoH/k=;
+        b=h7vZVQnWosqI2nzh5w/sb5vYzdU1TiyAsKdqbBralIgonWiGEc5UbZidtSleiF0hxK
+         zJ+qaZ0+PaAS4lh02MOHHE9xLEDhPIp5BQxA3fx93Lm2208vnCLIj7G657nJ444On2Qo
+         j/9VVwemLZGIoyT7NPEAnF7viu+czcGHQtnzxoot7eP1RbAxY/7BMsqntlSfVSTZMeAX
+         9X2EOwbTvPS7xZohylFH8EdHRVWLpfu2A38P710onxxQx1QbkeMLPjBEDjcEE5pe978H
+         n61UNe1JttQKTk339jLavJ+Y/l+LE/Gqos+i2AV6i3KH/A71sNxsfwvIShZJtWx3kHEJ
+         qG1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+tM5hwtc8qbA0vJnA/spVuUcAKq7RJsV9X1LvQfoH/k=;
+        b=YZ8MNxPOiney8iS67ML+IJ+H3Mk+HInhi2aJ5wzZPPjJsgo5HfBzsijnnpLsDjYc34
+         vXOPj8U6B2/8aZq+Z6nELz/NbtK+QxUePfx5hzRZ/2tdw7ye8JI7cw7vf7pUoHZpc0sq
+         FJ2BaHbBavXsz+6yYcWXHxyoSj05+ozi3c5L2SzMg4OVGLdVu11fhkMVrXKbUr6CnYmG
+         8CE+NREBfF+SSASDxOdzv4LSBRhlb+ZRXkkioPkyjW3oacTJq6bJEAE9hGIl+wJJ9XKg
+         NrFNV/MNU5dkCT26f8G0mxFQlp+i5IkpyiRd4LibxOuSsHPDYEK9nHfGJNWd351bgUC9
+         h63Q==
+X-Gm-Message-State: AOAM530R6OtlF7sgOfHmDScgDGH4oQ+tAEb/7CzhJ1QDQsYc+eWLU+CP
+        nF8b1VeP4lyEyx3uO4K28W7nkqd9xKAWbpCDpcIYZw==
+X-Google-Smtp-Source: ABdhPJwS1A/efTpFOEzGt1pP7H+1n7DSmf2TzXrZeZBd93vSJksHoW0cKUO1zqPxehATkVkot2uor9tquBnaVfR43WM=
+X-Received: by 2002:a54:4791:: with SMTP id o17mr9294816oic.114.1636496429410;
+ Tue, 09 Nov 2021 14:20:29 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20211109164650.2233507-1-robh@kernel.org> <20211109164650.2233507-2-robh@kernel.org>
+In-Reply-To: <20211109164650.2233507-2-robh@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 9 Nov 2021 23:20:17 +0100
+Message-ID: <CACRpkdZOuhA8w4CYetBKfaZ_wKT4QgKe=bffdYDTB68ihVE3-A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] of: Support using 'mask' in making device bus id
+To:     Rob Herring <robh@kernel.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Sudeep Holla <Sudeep.Holla@arm.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+On Tue, Nov 9, 2021 at 5:46 PM Rob Herring <robh@kernel.org> wrote:
 
-[ Upstream commit facb87ad75603813bc3b1314f5a87377f020fcb8 ]
+> Commit 25b892b583cc ("ARM: dts: arm: Update register-bit-led nodes
+> 'reg' and node names") added a 'reg' property to nodes. This change has
+> the side effect of changing how the kernel generates the device name.
+> The assumption was a translatable 'reg' address is unique. However, in
+> the case of the register-bit-led binding (and a few others) that is not
+> the case. The 'mask' property must also be used in this case to make a
+> unique device name.
+>
+> Fixes: 25b892b583cc ("ARM: dts: arm: Update register-bit-led nodes 'reg' and node names")
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Cc: stable@vger.kernel.org
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-On SAMA7G5 the prescaler part of master clock has been implemented as a
-changeable one. Everytime the prescaler is changed the PMC_SR.MCKRDY bit
-must be polled. Value 1 for PMC_SR.MCKRDY means the prescaler update is
-done. Driver polls for this bit until it becomes 1. On SAMA7G5 it has
-been discovered that in some conditions the PMC_SR.MCKRDY is not rising
-but the rate it provides it's stable. The workaround is to add a timeout
-when polling for PMC_SR.MCKRDY. At the moment, for SAMA7G5, the prescaler
-will be removed from Linux clock tree as all the frequencies for CPU could
-be obtained from PLL and also there will be less overhead when changing
-frequency via DVFS.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20211011112719.3951784-14-claudiu.beznea@microchip.com
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/clk/at91/sama7g5.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
-
-diff --git a/drivers/clk/at91/sama7g5.c b/drivers/clk/at91/sama7g5.c
-index 9e1ec48c44747..9c05ecb760b79 100644
---- a/drivers/clk/at91/sama7g5.c
-+++ b/drivers/clk/at91/sama7g5.c
-@@ -982,16 +982,7 @@ static void __init sama7g5_pmc_setup(struct device_node *np)
- 	}
- 
- 	parent_names[0] = "cpupll_divpmcck";
--	hw = at91_clk_register_master_pres(regmap, "cpuck", 1, parent_names,
--					   &mck0_layout, &mck0_characteristics,
--					   &pmc_mck0_lock,
--					   CLK_SET_RATE_PARENT, 0);
--	if (IS_ERR(hw))
--		goto err_free;
--
--	sama7g5_pmc->chws[PMC_CPU] = hw;
--
--	hw = at91_clk_register_master_div(regmap, "mck0", "cpuck",
-+	hw = at91_clk_register_master_div(regmap, "mck0", "cpupll_divpmcck",
- 					  &mck0_layout, &mck0_characteristics,
- 					  &pmc_mck0_lock, 0);
- 	if (IS_ERR(hw))
--- 
-2.33.0
-
+Yours,
+Linus Walleij
