@@ -2,148 +2,215 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0009944C374
-	for <lists+linux-clk@lfdr.de>; Wed, 10 Nov 2021 15:57:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFBBF44C3A6
+	for <lists+linux-clk@lfdr.de>; Wed, 10 Nov 2021 16:02:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232285AbhKJPAK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 10 Nov 2021 10:00:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48844 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbhKJPAK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 10 Nov 2021 10:00:10 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FD4C061766
-        for <linux-clk@vger.kernel.org>; Wed, 10 Nov 2021 06:57:22 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id h12-20020a056830034c00b0055c8458126fso4367093ote.0
-        for <linux-clk@vger.kernel.org>; Wed, 10 Nov 2021 06:57:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IVWIafG6+i9xxjsT6NKZgVi6v4U8498TFF3OthQIW6Y=;
-        b=wLsddjtemJvbZuWvnkRiu3a4Emu2EPb9yImANBdNpxFCYrzvCaaaP9FcygHgEO8WSC
-         w8fTQCFN6W7isD+uwVmaUoom3hXJb1+RICWc6LnEMjSoY48VC80jVUB3SAoUmoGF3GXS
-         n9Qw1WpO34h52wM66sv1NjIemiIWjxhBxoTAIyoPEMOLY8J08lcakE8GbOrBz13yAUkx
-         a43jWXqfKwCOwpM+V/LhaNBl5doCaCypefXfuXuID/5Z3XsDtU8JAHielqzfIRQcm7h2
-         DKBwsyQeDeZ/33jJNU0YrrqrAr+Imbmab3Ow9xp9ZTFn/b76QoNJ6KwJHtiNlzxSxOGl
-         g3Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IVWIafG6+i9xxjsT6NKZgVi6v4U8498TFF3OthQIW6Y=;
-        b=DB4JJSmNRxJPpjeBzxey8RuiaAOzDs7TBnw70xzb/bx3TUpCID+P6QFHyKDxFbFBGx
-         RgtKrDtCh6IRIlDDo1ZXp+9rSunCGCGSq4Sb6305py12otPwt72amXcOlBbe+LCn0F5j
-         AvDAE+y+MNZOeJNAgUrVmS1WNh+y5027/YKbobMSHxdlqFJuNy4bycGQWZEFW3TPrB2I
-         bvWeUM/CbCO3AqqjqC3kwNzM0p2arTQ5SjNnJkuyklBlWVRU3qUIOhYCTXYrb5kHEwRC
-         dToVR5lbyyCNxbec8wK5bKSQ602LvYZ5UBBjYQTQGh9MAcrUjmEVUo+qxXvtaQotZkoU
-         HRlg==
-X-Gm-Message-State: AOAM531nJy+BPWBUAk7hPLGry8aaYdIpw9yau+cihuYswSXsM689tTJe
-        r/DW+9mkVb+X4a2VK/v7+ZcvglYmPmaL8w==
-X-Google-Smtp-Source: ABdhPJwJAXzABpKw5ehc6yIDRRZ/JrOG6RbToMjsgBB+lI48bP9ZxSWINSfd8FbgNNITxP408uC1Fg==
-X-Received: by 2002:a9d:7302:: with SMTP id e2mr401519otk.52.1636556241870;
-        Wed, 10 Nov 2021 06:57:21 -0800 (PST)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id u136sm4064oie.13.2021.11.10.06.57.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Nov 2021 06:57:21 -0800 (PST)
-Date:   Wed, 10 Nov 2021 06:58:54 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Shawn Guo <shawn.guo@linaro.org>, Stephen Boyd <sboyd@kernel.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] clk: qcom: smd-rpm: Report enable state to framework
-Message-ID: <YYveLqgDUrizgC/Q@ripper>
-References: <20211109022558.14529-1-shawn.guo@linaro.org>
- <YYpMzau3CWRQYlkJ@gerhold.net>
- <20211110131507.GJ7231@dragon>
- <YYvSmEr/Fo2LPJwu@gerhold.net>
+        id S232425AbhKJPFM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 10 Nov 2021 10:05:12 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:45810 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232395AbhKJPFK (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 10 Nov 2021 10:05:10 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AADAFhf017710;
+        Wed, 10 Nov 2021 16:01:50 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=Sh0W/4ohStKFB2Xy24SvmA8j0+SruP92VNN5TAvdPDM=;
+ b=4ioO9K5CklY1uultzOl+2wdStUShYa9KwjSsBeH8j+ws1/hc6fEjrrK2S9QoFI+x3nKT
+ 9TKyTlI8oUzXv2dzA8dD0RCFdvtmNC39IwzbyhfWHEVQzT2tHtbZL+D1Ir6i19UE2Mu3
+ rL7pEWUsA7h0rQrPetRarCkcX3aZUyr0EqV6qgMzrA7eqvVLWdzEUlbJ6JRR15iweWC6
+ ZelRPAeDuz56JphJbCkPRNC/ioWG5rdZo3VU1xvOQwl9YMCWcMaNDDd+D9IzD1ZJ1TZf
+ eg4+EfFUEwtooNW2w9bh+Mu6POIfvoiQadGnf2juwF/X1+vGUUit+7n+93HVvDEMRjnT fA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3c7ufnfuf7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Nov 2021 16:01:49 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1E14810002A;
+        Wed, 10 Nov 2021 16:01:49 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F3764207568;
+        Wed, 10 Nov 2021 16:01:48 +0100 (CET)
+Received: from localhost (10.75.127.50) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 10 Nov 2021 16:01:48
+ +0100
+From:   <patrice.chotard@foss.st.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        maxime coquelin <mcoquelin.stm32@gmail.com>,
+        alexandre torgue <alexandre.torgue@foss.st.com>,
+        michael turquette <mturquette@baylibre.com>,
+        stephen boyd <sboyd@kernel.org>,
+        herbert xu <herbert@gondor.apana.org.au>,
+        "david s . miller" <davem@davemloft.net>,
+        david airlie <airlied@linux.ie>,
+        daniel vetter <daniel@ffwll.ch>,
+        thierry reding <thierry.reding@gmail.com>,
+        sam ravnborg <sam@ravnborg.org>,
+        yannick fertre <yannick.fertre@foss.st.com>,
+        "philippe cornu" <philippe.cornu@foss.st.com>,
+        benjamin gaignard <benjamin.gaignard@linaro.org>,
+        vinod koul <vkoul@kernel.org>,
+        ohad ben-cohen <ohad@wizery.com>,
+        bjorn andersson <bjorn.andersson@linaro.org>,
+        baolin wang <baolin.wang7@gmail.com>,
+        jonathan cameron <jic23@kernel.org>,
+        "lars-peter clausen" <lars@metafoo.de>,
+        olivier moysan <olivier.moysan@foss.st.com>,
+        arnaud pouliquen <arnaud.pouliquen@foss.st.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matt Mackall <mpm@selenic.com>,
+        "Alessandro Zummo" <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        "dillon min" <dillon.minfei@gmail.com>,
+        Marek Vasut <marex@denx.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Lionel Debieve <lionel.debieve@foss.st.com>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Pierre-Yves MORDRET <pierre-yves.mordret@foss.st.com>,
+        Ludovic Barre <ludovic.barre@foss.st.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        pascal Paillet <p.paillet@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        "Jose Abreu" <joabreu@synopsys.com>,
+        Le Ray <erwan.leray@foss.st.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <dmaengine@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-media@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <netdev@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-gpio@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>
+Subject: [PATCH v3 0/5] Update STMicroelectronics maintainers email
+Date:   Wed, 10 Nov 2021 16:01:39 +0100
+Message-ID: <20211110150144.18272-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YYvSmEr/Fo2LPJwu@gerhold.net>
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-10_05,2021-11-08_02,2020-04-07_01
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed 10 Nov 06:09 PST 2021, Stephan Gerhold wrote:
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-> On Wed, Nov 10, 2021 at 09:15:11PM +0800, Shawn Guo wrote:
-> > On Tue, Nov 09, 2021 at 11:26:21AM +0100, Stephan Gerhold wrote:
-> > > On Tue, Nov 09, 2021 at 10:25:55AM +0800, Shawn Guo wrote:
-> > > > Currently the enable state of smd-rpm clocks are not properly reported
-> > > > back to framework due to missing .is_enabled and .is_prepared hooks.
-> > > > This causes a couple of issues.
-> > > > 
-> > > > - All those unused clocks are not voted for off, because framework has
-> > > >   no knowledge that they are unused.  It becomes a problem for vlow
-> > > >   power mode support, as we do not have every single RPM clock claimed
-> > > >   and voted for off by client devices, and rely on clock framework to
-> > > >   disable those unused RPM clocks.
-> > > > 
-> > > 
-> > > I posted a similar patch a bit more than a year ago [1].
-> > 
-> > Ouch, that's unfortunate!  If your patch landed, I wouldn't have had to
-> > spend such a long time to figure out why my platform fails to reach vlow
-> > power mode :(
-> > 
-> 
-> Sorry, I was waiting for Stephen to reply and eventually decided to
-> shift focus to other things first. :)
-> 
-> The whole low-power topic is kind of frustrating on older platforms
-> because they currently still lack almost everything that is necessary to
-> reach those low power states. Even things that you already consider
-> natural for newer platforms (such as interconnect) are still very much
-> work in progress on all older ones.
-> 
-> > > Back then one
-> > > of the concerns was that we might disable critical clocks just because
-> > > they have no driver using it actively. For example, not all of the
-> > > platforms using clk-smd-rpm already have an interconnect driver.
-> > > Disabling the interconnect related clocks will almost certainly make the
-> > > device lock up completely. (I tried it back then, it definitely does...)
-> > > 
-> > > I proposed adding CLK_IGNORE_UNUSED for the interconnect related clocks
-> > > back then [2] which would allow disabling most of the clocks at least.
-> > > Stephen Boyd had an alternative proposal to instead move the
-> > > interconnect related clocks completely out of clk-smd-rpm [3].
-> > > But I'm still unsure how this would work in a backwards compatible way. [4]
-> > > 
-> > > Since your patches are more or less identical I'm afraid the same
-> > > concerns still need to be solved somehow. :)
-> > 
-> > I do not really understand why smd-rpm clock driver needs to be a special
-> > case.  This is a very common issue, mostly in device early support phase
-> > where not all clock consumer drivers are ready.  Flag CLK_IGNORE_UNUSED
-> > and kernel cmdline 'clk_ignore_unused' are created just for that.  Those
-> > "broken" platforms should be booted with 'clk_ignore_unused' until they
-> > have related consumer drivers in place.  IMHO, properly reporting enable
-> > state to framework is definitely the right thing to do, and should have
-> > been done from day one.
-> > 
-> 
-> ... And therefore I think we should be careful with such changes,
-> especially if they would prevent devices from booting completely.
-> Unfortunately the users trying to make use of old platforms are also
-> often the ones who might not be aware that they suddenly need
-> "clk_ignore_unused" just to boot a system that was previously working
-> (mostly) fine, except for the whole low-power topic.
-> 
-> I fully agree with you that disabling the unused clocks here is the
-> right thing to do, but I think we should try to carefully flag the most
-> important clocks in the driver to avoid causing too many regressions.
-> 
+Update maintainers name for some yaml files.
+Update @st.com email address to @foss.st.com as @foss.st.com email
+address is dedicated for upstream activities.
 
-I don't fancy the idea of forcing everyone to run with specific kernel
-command line parameters - in particular not as a means to avoid
-"regressions".
+Changes in v3:
+  _ fix typo in patch 2/3/4 commit message 
+  _ resend to missing mailing list
 
-I think the only way around this problem is to figure out how to move
-the clk disablement to sync_state - probably per clock driver.
+Patrice Chotard (5):
+  dt-bindings: timer: Update maintainers for st,stm32-timer
+  dt-bindings: mfd: timers: Update maintainers for st,stm32-timers
+  dt-bindings: media: Update maintainers for st,stm32-cec.yaml
+  dt-bindings: media: Update maintainers for st,stm32-hwspinlock.yaml
+  dt-bindings: treewide: Update @st.com email address to @foss.st.com
 
-Regards,
-Bjorn
+ Documentation/devicetree/bindings/arm/sti.yaml                | 2 +-
+ Documentation/devicetree/bindings/arm/stm32/st,mlahb.yaml     | 4 ++--
+ .../devicetree/bindings/arm/stm32/st,stm32-syscon.yaml        | 4 ++--
+ Documentation/devicetree/bindings/arm/stm32/stm32.yaml        | 2 +-
+ Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml  | 2 +-
+ Documentation/devicetree/bindings/crypto/st,stm32-crc.yaml    | 2 +-
+ Documentation/devicetree/bindings/crypto/st,stm32-cryp.yaml   | 2 +-
+ Documentation/devicetree/bindings/crypto/st,stm32-hash.yaml   | 2 +-
+ .../devicetree/bindings/display/bridge/snps,dw-mipi-dsi.yaml  | 2 +-
+ .../devicetree/bindings/display/panel/orisetech,otm8009a.yaml | 2 +-
+ .../devicetree/bindings/display/panel/raydium,rm68200.yaml    | 2 +-
+ Documentation/devicetree/bindings/display/st,stm32-dsi.yaml   | 4 ++--
+ Documentation/devicetree/bindings/display/st,stm32-ltdc.yaml  | 4 ++--
+ Documentation/devicetree/bindings/dma/st,stm32-dma.yaml       | 2 +-
+ Documentation/devicetree/bindings/dma/st,stm32-dmamux.yaml    | 2 +-
+ Documentation/devicetree/bindings/dma/st,stm32-mdma.yaml      | 2 +-
+ .../devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml       | 3 +--
+ Documentation/devicetree/bindings/i2c/st,stm32-i2c.yaml       | 2 +-
+ .../devicetree/bindings/iio/adc/sigma-delta-modulator.yaml    | 2 +-
+ Documentation/devicetree/bindings/iio/adc/st,stm32-adc.yaml   | 2 +-
+ .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml       | 4 ++--
+ Documentation/devicetree/bindings/iio/dac/st,stm32-dac.yaml   | 2 +-
+ .../bindings/interrupt-controller/st,stm32-exti.yaml          | 4 ++--
+ Documentation/devicetree/bindings/mailbox/st,stm32-ipcc.yaml  | 4 ++--
+ Documentation/devicetree/bindings/media/st,stm32-cec.yaml     | 3 +--
+ Documentation/devicetree/bindings/media/st,stm32-dcmi.yaml    | 2 +-
+ .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml        | 2 +-
+ Documentation/devicetree/bindings/mfd/st,stm32-lptimer.yaml   | 2 +-
+ Documentation/devicetree/bindings/mfd/st,stm32-timers.yaml    | 3 +--
+ Documentation/devicetree/bindings/mfd/st,stmfx.yaml           | 2 +-
+ Documentation/devicetree/bindings/mfd/st,stpmic1.yaml         | 2 +-
+ Documentation/devicetree/bindings/mtd/st,stm32-fmc2-nand.yaml | 2 +-
+ Documentation/devicetree/bindings/net/snps,dwmac.yaml         | 2 +-
+ Documentation/devicetree/bindings/net/stm32-dwmac.yaml        | 4 ++--
+ Documentation/devicetree/bindings/nvmem/st,stm32-romem.yaml   | 2 +-
+ Documentation/devicetree/bindings/phy/phy-stm32-usbphyc.yaml  | 2 +-
+ .../devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml         | 2 +-
+ .../devicetree/bindings/regulator/st,stm32-booster.yaml       | 2 +-
+ .../devicetree/bindings/regulator/st,stm32-vrefbuf.yaml       | 2 +-
+ .../devicetree/bindings/regulator/st,stm32mp1-pwr-reg.yaml    | 2 +-
+ .../devicetree/bindings/remoteproc/st,stm32-rproc.yaml        | 4 ++--
+ Documentation/devicetree/bindings/rng/st,stm32-rng.yaml       | 2 +-
+ Documentation/devicetree/bindings/rtc/st,stm32-rtc.yaml       | 2 +-
+ Documentation/devicetree/bindings/serial/st,stm32-uart.yaml   | 2 +-
+ Documentation/devicetree/bindings/sound/cirrus,cs42l51.yaml   | 2 +-
+ Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml     | 2 +-
+ Documentation/devicetree/bindings/sound/st,stm32-sai.yaml     | 2 +-
+ Documentation/devicetree/bindings/sound/st,stm32-spdifrx.yaml | 2 +-
+ Documentation/devicetree/bindings/spi/st,stm32-qspi.yaml      | 4 ++--
+ Documentation/devicetree/bindings/spi/st,stm32-spi.yaml       | 4 ++--
+ .../devicetree/bindings/thermal/st,stm32-thermal.yaml         | 2 +-
+ Documentation/devicetree/bindings/timer/st,stm32-timer.yaml   | 3 ++-
+ Documentation/devicetree/bindings/usb/st,stusb160x.yaml       | 2 +-
+ Documentation/devicetree/bindings/watchdog/st,stm32-iwdg.yaml | 4 ++--
+ 54 files changed, 67 insertions(+), 69 deletions(-)
+
+-- 
+2.17.1
+
