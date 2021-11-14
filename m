@@ -2,63 +2,63 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90AD744FC25
-	for <lists+linux-clk@lfdr.de>; Sun, 14 Nov 2021 23:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 108E244FC31
+	for <lists+linux-clk@lfdr.de>; Sun, 14 Nov 2021 23:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236280AbhKNWLq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 14 Nov 2021 17:11:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34716 "EHLO
+        id S234835AbhKNW1V (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 14 Nov 2021 17:27:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233335AbhKNWLh (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 14 Nov 2021 17:11:37 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E7DC061210;
-        Sun, 14 Nov 2021 14:08:33 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id e7so16697709ljq.12;
-        Sun, 14 Nov 2021 14:08:33 -0800 (PST)
+        with ESMTP id S231469AbhKNW1R (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 14 Nov 2021 17:27:17 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205A2C061746;
+        Sun, 14 Nov 2021 14:24:18 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id b1so32406523lfs.13;
+        Sun, 14 Nov 2021 14:24:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=lypIbzMAdKowQS1+HnRTSDwp19bsKifrMWVI3aerImY=;
-        b=GIyy8Bd20lA9Se8HAyleCJsBw3VqLDo4vkKWFbWV/DUOJBrZGzVjkLu4DIZb/YUL2F
-         aTXCWRfjjI3enkdZib/z7ccPslKKB2CU5u0peDBRan+09h8qsZgzHY/tUQffcR1uNeYC
-         tl7SIML8qmJQlj94gw44scY88Uw+aIqUdYSpxeufrRTiH6DrMQmxG6oIwRz/36XU23o1
-         znCPGrtAzuGF33sgfRF4GgXAT8/NzLwMqv50cKenVWT3JW+gMgxvY+r6gZ+UR5xBs78L
-         H+T6BfYsQ4IuY5CGk/vhNQTUZIEYFY7tqxS7Q33RaYyXFujU8KrbFpW5KR6s0139gIL+
-         fadg==
+        bh=48XZovVNV/PbOzkLzCtoiEWbflOcMGPbMrTaZE0X8FE=;
+        b=UgVvGAMFXb9vtVkKql7iJujsrJJqhAwxQCwiHDvRzTQUi+Fb6GwlYbhcFSPnNajD05
+         afV/+a/LFb5zr1xGqCW+HdhvA1sWz5ABHcKVXLVkQY6Wgyg+vX7jH/eUZSb33nE+zgFu
+         l4ilY16549yC28TBbZ8kCsB0o+qfcgaPCggv2GOH1CiJemJ/tv83Xc89wyUn6cd9k8IR
+         GiLXCRs2deXQDGs7nmlf01X4Fx4fMqu8qgBMqSzbtLwzntDHT+/6jwf0onpM24cQWPN7
+         eHaqitDTh7ETVe7o/oJnqg9Hfq64ld/xGddxuYCSbyjoqWDnS/v2A6jMfQlYio7DEftP
+         zjnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=lypIbzMAdKowQS1+HnRTSDwp19bsKifrMWVI3aerImY=;
-        b=otojN/Nva07us/ehfJUum1y/Qi8RKtHv+FZ0rs6LaDpZStD5LCLIDtyfFjSkI2rSeo
-         KOS9ALZk2RnY1z0iRIZOzbg5qB4x3tyB5Z0EUIMtvphHT9CKm3XP3gE+3vCdy9pQE/8+
-         08gZDhhmF06S9fVTXJW5WjmXH4bWrAjQfJjm+mir/U6SvooxDro+O2EvPQKOd1IEF9Y7
-         c/x0hgwcAbkGIGKlh0Mjg6N0pcQriDhlO3jG46GVrYLYa2C41W5TZVaIYbqhKlC9FmIc
-         IGFO/v2MZLQhMRbxSJTVNIpBnSLpZ64yTEbb56z0FLx2P3rBiQAnPesiNZ8OuTvI20PB
-         JFUg==
-X-Gm-Message-State: AOAM530XuqbTLxZHWnsOADg/5GKEuN0SMVEYtQRUk+CxsiHXkgky1zOw
-        ahrEJPtI9FyviSH5gUccNQbGuUZfvWM=
-X-Google-Smtp-Source: ABdhPJwxu8a+VBshOpGvA1zOzu8EJS0UGis8jXtFU42wc6iO/LEKUG51NSMkpJ0pRD30OsoS/3KONA==
-X-Received: by 2002:a2e:9dd5:: with SMTP id x21mr33433722ljj.459.1636927711577;
-        Sun, 14 Nov 2021 14:08:31 -0800 (PST)
+        bh=48XZovVNV/PbOzkLzCtoiEWbflOcMGPbMrTaZE0X8FE=;
+        b=T5fjqei5QZM0rcYtECzY5e7yvd3SOTmg49KCuItydiQppsJUybpEzksKzpNvDxWYfz
+         uUiRDfunbroMmTtM1NfBlUsXqHg1mos3dWhIsbwgtmV9VtV3EFpdctVdfspyMqizaFge
+         7gTfFxnYJXIRcBtnNmcWpOi14iUkzsm60tKPHxe8/pgTJ3WdmJlgsOXYqKZ/zaM19NxB
+         q0G+daFsvFzmREYSU3gwzycWosVy2kQMYqYTh7oTOaS05c420dV3B0SuhIXUasSe5G/g
+         mBaMTIRfX+cM36LIJEr8qKjhLMG/jviSnZfDrGT6RAAGvkacyhc8BuqYQQGuYjpcYnYr
+         pHdg==
+X-Gm-Message-State: AOAM533mu60WceRcBUz09MGBvdQEINtGjFdN0tT1IaiiYG5n1zRibRbi
+        Y8MAjmklC4luF/wJQEiL1m4=
+X-Google-Smtp-Source: ABdhPJx7CA5hvSVinPXfamTs948Bg57tl1gmgxN88USRgOgCCEs84DwQyamqOWvJJDHXts2zZMMzTA==
+X-Received: by 2002:a05:6512:c28:: with SMTP id z40mr29762557lfu.457.1636928656490;
+        Sun, 14 Nov 2021 14:24:16 -0800 (PST)
 Received: from localhost.localdomain (46-138-46-211.dynamic.spd-mgts.ru. [46.138.46.211])
-        by smtp.gmail.com with ESMTPSA id bp22sm1219807lfb.93.2021.11.14.14.08.30
+        by smtp.gmail.com with ESMTPSA id d6sm1223339lfi.52.2021.11.14.14.24.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Nov 2021 14:08:31 -0800 (PST)
+        Sun, 14 Nov 2021 14:24:16 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-tegra@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1] clk: tegra: Make vde a child of pll_p on tegra114
-Date:   Mon, 15 Nov 2021 01:07:58 +0300
-Message-Id: <20211114220758.20224-1-digetx@gmail.com>
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Anton Bambura <jenneron@protonmail.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/3] Add NVIDIA Tegra114 support to video decoder driver
+Date:   Mon, 15 Nov 2021 01:23:50 +0300
+Message-Id: <20211114222353.22435-1-digetx@gmail.com>
 X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -66,30 +66,24 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The current default is to leave the VDE clock's parent at the default,
-which is clk_m. However, that is not a configuration that will allow the
-VDE to function. Reparent it to pll_p instead to make sure the hardware
-can actually decode video content.
+Video decoder of Tegra114/124 SoCs uses additional memory buffer required
+for decoding of protected content. We won't support that content, but it
+is impossible to disable access to the buffer, hence a stub buffer needs
+to be provided. This series enables decoder driver only for Tegra114
+because Tegra124 support requires more non-trivial changes on both kernel
+and userspace sides.
 
-Tested-by: Anton Bambura <jenneron@protonmail.com> # ASUS TF701T
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- drivers/clk/tegra/clk-tegra114.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Dmitry Osipenko (1):
+  media: staging: tegra-vde: Reorder misc device registration
 
-diff --git a/drivers/clk/tegra/clk-tegra114.c b/drivers/clk/tegra/clk-tegra114.c
-index bc9e47a4cb60..ef718c4b3826 100644
---- a/drivers/clk/tegra/clk-tegra114.c
-+++ b/drivers/clk/tegra/clk-tegra114.c
-@@ -1158,7 +1158,7 @@ static struct tegra_clk_init_table init_table[] __initdata = {
- 	{ TEGRA114_CLK_XUSB_HS_SRC, TEGRA114_CLK_XUSB_SS_DIV2, 61200000, 0 },
- 	{ TEGRA114_CLK_XUSB_FALCON_SRC, TEGRA114_CLK_PLL_P, 204000000, 0 },
- 	{ TEGRA114_CLK_XUSB_HOST_SRC, TEGRA114_CLK_PLL_P, 102000000, 0 },
--	{ TEGRA114_CLK_VDE, TEGRA114_CLK_CLK_MAX, 600000000, 0 },
-+	{ TEGRA114_CLK_VDE, TEGRA114_CLK_PLL_P, 408000000, 0 },
- 	{ TEGRA114_CLK_SPDIF_IN_SYNC, TEGRA114_CLK_CLK_MAX, 24000000, 0 },
- 	{ TEGRA114_CLK_I2S0_SYNC, TEGRA114_CLK_CLK_MAX, 24000000, 0 },
- 	{ TEGRA114_CLK_I2S1_SYNC, TEGRA114_CLK_CLK_MAX, 24000000, 0 },
+Thierry Reding (2):
+  media: staging: tegra-vde: Support reference picture marking
+  media: staging: tegra-vde: Properly mark invalid entries
+
+ drivers/staging/media/tegra-vde/vde.c | 143 +++++++++++++++++++++++---
+ drivers/staging/media/tegra-vde/vde.h |  18 ++++
+ 2 files changed, 148 insertions(+), 13 deletions(-)
+
 -- 
 2.33.1
 
