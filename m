@@ -2,167 +2,94 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3831144FAA9
-	for <lists+linux-clk@lfdr.de>; Sun, 14 Nov 2021 20:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90AD744FC25
+	for <lists+linux-clk@lfdr.de>; Sun, 14 Nov 2021 23:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236447AbhKNTjz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 14 Nov 2021 14:39:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
+        id S236280AbhKNWLq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 14 Nov 2021 17:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236396AbhKNTjf (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 14 Nov 2021 14:39:35 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F61C06120C;
-        Sun, 14 Nov 2021 11:36:35 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id p16so37617150lfa.2;
-        Sun, 14 Nov 2021 11:36:35 -0800 (PST)
+        with ESMTP id S233335AbhKNWLh (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 14 Nov 2021 17:11:37 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E7DC061210;
+        Sun, 14 Nov 2021 14:08:33 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id e7so16697709ljq.12;
+        Sun, 14 Nov 2021 14:08:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=KUl5NgtppOXN7aMrj+VJMJxgtwwCvjbf2LUP4ZJTZHk=;
-        b=Yy/hKIPWSodlFNY6swmkyJRCh+WhikTA/dRazVz6AKJzSBnF2jYDK/5q6e3nxyFWIa
-         BNKlRQlFq22odK1W1PGiaNYP8D03qiUr5dz93d5GLxOtr3836lr+B2ybo1dUtxep2Q5+
-         wWY5SRlhPMbJUMk3k1giiLPXXqvyEReqHI+ZHyiZSKvPOHC0Ga7h5o34WdPeFT+cv6K4
-         gVaTwurnwjzCi/TiPwC6GXWYDCG5rtamz60rquUksOhMtMdy2enNd45c3fYBZFYZ0O1p
-         7g+Mb2mmw1/TyYCw9zZwDl30Sz2cX80v0eg6MGK7QD+3uXmOkcUD+W6luLzxZuzahx+8
-         PtUw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lypIbzMAdKowQS1+HnRTSDwp19bsKifrMWVI3aerImY=;
+        b=GIyy8Bd20lA9Se8HAyleCJsBw3VqLDo4vkKWFbWV/DUOJBrZGzVjkLu4DIZb/YUL2F
+         aTXCWRfjjI3enkdZib/z7ccPslKKB2CU5u0peDBRan+09h8qsZgzHY/tUQffcR1uNeYC
+         tl7SIML8qmJQlj94gw44scY88Uw+aIqUdYSpxeufrRTiH6DrMQmxG6oIwRz/36XU23o1
+         znCPGrtAzuGF33sgfRF4GgXAT8/NzLwMqv50cKenVWT3JW+gMgxvY+r6gZ+UR5xBs78L
+         H+T6BfYsQ4IuY5CGk/vhNQTUZIEYFY7tqxS7Q33RaYyXFujU8KrbFpW5KR6s0139gIL+
+         fadg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=KUl5NgtppOXN7aMrj+VJMJxgtwwCvjbf2LUP4ZJTZHk=;
-        b=S8EJ7ykZI+7Qyz9FILpn+dMDyuoQM5nxqUZtzkbgkYU21OJ88ZFwTrTzVzcgCwjrjs
-         /qMmcrJ7uuYt/Mv+Wrepby+nDfhl5Ec17kg81XFXDBrTQH281kUT6QHkHCOa3a4mUmW6
-         BmqNaWVxRD8KHuB9yjOJ32msLvH1J428jjihW12theVM+hrU87ToZscbuZsxgLgv7AUa
-         +vY3q1EI1Sl6T052wx4Bi6dt7Z5SNDnWv9Kj2CZRRCIqGB3fIn6/v6gZ2onHPT51qiWu
-         o2Z5zXYBuni4pLNVxAP/nnK14rJaCcSOzl3/6++R39qgjhdeKjjn8rzcSjWNwqfiZRl+
-         2i9Q==
-X-Gm-Message-State: AOAM533B40TMYdK3+pJG5/RX9FDbVe/sm0tmxGTLUYURZCiZlWCxn45l
-        7uEFaVKIbrf8OuY9L+XSzz0=
-X-Google-Smtp-Source: ABdhPJwkl0EgJTGgwtb6u0tc69twYwIooQnj94EJ74B6thW9WYrExV03eJqhkxli+EYJLyHT25vMkQ==
-X-Received: by 2002:a05:6512:92d:: with SMTP id f13mr28203010lft.63.1636918593677;
-        Sun, 14 Nov 2021 11:36:33 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lypIbzMAdKowQS1+HnRTSDwp19bsKifrMWVI3aerImY=;
+        b=otojN/Nva07us/ehfJUum1y/Qi8RKtHv+FZ0rs6LaDpZStD5LCLIDtyfFjSkI2rSeo
+         KOS9ALZk2RnY1z0iRIZOzbg5qB4x3tyB5Z0EUIMtvphHT9CKm3XP3gE+3vCdy9pQE/8+
+         08gZDhhmF06S9fVTXJW5WjmXH4bWrAjQfJjm+mir/U6SvooxDro+O2EvPQKOd1IEF9Y7
+         c/x0hgwcAbkGIGKlh0Mjg6N0pcQriDhlO3jG46GVrYLYa2C41W5TZVaIYbqhKlC9FmIc
+         IGFO/v2MZLQhMRbxSJTVNIpBnSLpZ64yTEbb56z0FLx2P3rBiQAnPesiNZ8OuTvI20PB
+         JFUg==
+X-Gm-Message-State: AOAM530XuqbTLxZHWnsOADg/5GKEuN0SMVEYtQRUk+CxsiHXkgky1zOw
+        ahrEJPtI9FyviSH5gUccNQbGuUZfvWM=
+X-Google-Smtp-Source: ABdhPJwxu8a+VBshOpGvA1zOzu8EJS0UGis8jXtFU42wc6iO/LEKUG51NSMkpJ0pRD30OsoS/3KONA==
+X-Received: by 2002:a2e:9dd5:: with SMTP id x21mr33433722ljj.459.1636927711577;
+        Sun, 14 Nov 2021 14:08:31 -0800 (PST)
 Received: from localhost.localdomain (46-138-46-211.dynamic.spd-mgts.ru. [46.138.46.211])
-        by smtp.gmail.com with ESMTPSA id p18sm1191280lfu.127.2021.11.14.11.36.32
+        by smtp.gmail.com with ESMTPSA id bp22sm1219807lfb.93.2021.11.14.14.08.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Nov 2021 11:36:33 -0800 (PST)
+        Sun, 14 Nov 2021 14:08:31 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
         Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
-Subject: [PATCH v15 39/39] ARM: tegra20/30: Disable unused host1x hardware
-Date:   Sun, 14 Nov 2021 22:34:35 +0300
-Message-Id: <20211114193435.7705-40-digetx@gmail.com>
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-tegra@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] clk: tegra: Make vde a child of pll_p on tegra114
+Date:   Mon, 15 Nov 2021 01:07:58 +0300
+Message-Id: <20211114220758.20224-1-digetx@gmail.com>
 X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211114193435.7705-1-digetx@gmail.com>
-References: <20211114193435.7705-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-MPE, VI, EPP and ISP were never used and we don't have drivers for them.
-Since these modules are enabled by default in a device-tree, a device is
-created for them, blocking voltage scaling because there is no driver to
-bind, and thus, state of PMC driver is never synced. Disable them.
+The current default is to leave the VDE clock's parent at the default,
+which is clk_m. However, that is not a configuration that will allow the
+VDE to function. Reparent it to pll_p instead to make sure the hardware
+can actually decode video content.
 
+Tested-by: Anton Bambura <jenneron@protonmail.com> # ASUS TF701T
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- arch/arm/boot/dts/tegra20.dtsi | 4 ++++
- arch/arm/boot/dts/tegra30.dtsi | 8 ++++++++
- 2 files changed, 12 insertions(+)
+ drivers/clk/tegra/clk-tegra114.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/tegra20.dtsi b/arch/arm/boot/dts/tegra20.dtsi
-index 7b69ffc57abe..8010b40d7377 100644
---- a/arch/arm/boot/dts/tegra20.dtsi
-+++ b/arch/arm/boot/dts/tegra20.dtsi
-@@ -59,6 +59,7 @@ mpe@54040000 {
- 			reset-names = "mpe";
- 			power-domains = <&pd_mpe>;
- 			operating-points-v2 = <&mpe_dvfs_opp_table>;
-+			status = "disabled";
- 		};
- 
- 		vi@54080000 {
-@@ -70,6 +71,7 @@ vi@54080000 {
- 			reset-names = "vi";
- 			power-domains = <&pd_venc>;
- 			operating-points-v2 = <&vi_dvfs_opp_table>;
-+			status = "disabled";
- 		};
- 
- 		epp@540c0000 {
-@@ -81,6 +83,7 @@ epp@540c0000 {
- 			reset-names = "epp";
- 			power-domains = <&pd_core>;
- 			operating-points-v2 = <&epp_dvfs_opp_table>;
-+			status = "disabled";
- 		};
- 
- 		isp@54100000 {
-@@ -91,6 +94,7 @@ isp@54100000 {
- 			resets = <&tegra_car 23>;
- 			reset-names = "isp";
- 			power-domains = <&pd_venc>;
-+			status = "disabled";
- 		};
- 
- 		gr2d@54140000 {
-diff --git a/arch/arm/boot/dts/tegra30.dtsi b/arch/arm/boot/dts/tegra30.dtsi
-index c1be136aac7d..d961ce3761e6 100644
---- a/arch/arm/boot/dts/tegra30.dtsi
-+++ b/arch/arm/boot/dts/tegra30.dtsi
-@@ -145,6 +145,8 @@ mpe@54040000 {
- 			operating-points-v2 = <&mpe_dvfs_opp_table>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_MPE>;
-+
-+			status = "disabled";
- 		};
- 
- 		vi@54080000 {
-@@ -158,6 +160,8 @@ vi@54080000 {
- 			operating-points-v2 = <&vi_dvfs_opp_table>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_VI>;
-+
-+			status = "disabled";
- 		};
- 
- 		epp@540c0000 {
-@@ -171,6 +175,8 @@ epp@540c0000 {
- 			operating-points-v2 = <&epp_dvfs_opp_table>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_EPP>;
-+
-+			status = "disabled";
- 		};
- 
- 		isp@54100000 {
-@@ -183,6 +189,8 @@ isp@54100000 {
- 			power-domains = <&pd_venc>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_ISP>;
-+
-+			status = "disabled";
- 		};
- 
- 		gr2d@54140000 {
+diff --git a/drivers/clk/tegra/clk-tegra114.c b/drivers/clk/tegra/clk-tegra114.c
+index bc9e47a4cb60..ef718c4b3826 100644
+--- a/drivers/clk/tegra/clk-tegra114.c
++++ b/drivers/clk/tegra/clk-tegra114.c
+@@ -1158,7 +1158,7 @@ static struct tegra_clk_init_table init_table[] __initdata = {
+ 	{ TEGRA114_CLK_XUSB_HS_SRC, TEGRA114_CLK_XUSB_SS_DIV2, 61200000, 0 },
+ 	{ TEGRA114_CLK_XUSB_FALCON_SRC, TEGRA114_CLK_PLL_P, 204000000, 0 },
+ 	{ TEGRA114_CLK_XUSB_HOST_SRC, TEGRA114_CLK_PLL_P, 102000000, 0 },
+-	{ TEGRA114_CLK_VDE, TEGRA114_CLK_CLK_MAX, 600000000, 0 },
++	{ TEGRA114_CLK_VDE, TEGRA114_CLK_PLL_P, 408000000, 0 },
+ 	{ TEGRA114_CLK_SPDIF_IN_SYNC, TEGRA114_CLK_CLK_MAX, 24000000, 0 },
+ 	{ TEGRA114_CLK_I2S0_SYNC, TEGRA114_CLK_CLK_MAX, 24000000, 0 },
+ 	{ TEGRA114_CLK_I2S1_SYNC, TEGRA114_CLK_CLK_MAX, 24000000, 0 },
 -- 
 2.33.1
 
