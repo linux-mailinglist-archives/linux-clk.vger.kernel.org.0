@@ -2,141 +2,99 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A31744FC51
-	for <lists+linux-clk@lfdr.de>; Sun, 14 Nov 2021 23:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7509144FD77
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Nov 2021 04:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234667AbhKNWvj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 14 Nov 2021 17:51:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
+        id S236610AbhKOD3J (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 14 Nov 2021 22:29:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbhKNWvZ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 14 Nov 2021 17:51:25 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477E6C0613B9;
-        Sun, 14 Nov 2021 14:48:30 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id b40so38353792lfv.10;
-        Sun, 14 Nov 2021 14:48:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ImcZoW2Pqa7ZRY/8PEMeXuQQ0A4lrgRe4vr/rypxpxM=;
-        b=hDm+hWyRQI66NSlBlRF3pXrbBPomci2YplEsAU3wgIVCOYTv2uClgrNw+wbic17+kj
-         5xo5effVDq+wZ6ZhysDJ4vNNsPnpA/s//WRVrlMWai9sVeub2ulsYWS0r+82mR/wf388
-         KvbOJ9ONvzJ4n6YB0ceRQPaV3jvfUD3Ocw4qJRPwkP1acynqV+5+Wv7E3NnmLmsLCevC
-         TPZQYwPA9HbP+cQ7zCt/iYC3GCKMhkPKYPVVIKJKjyuyegSbTnLYvneEB9cRh2L9M/eH
-         3uYkjZg9zKxRGabyFrFpfPd8TuH0B/usMxmweDYKvWy1I1a7Jx/US9KqH2uzGfLRSsdz
-         a7JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ImcZoW2Pqa7ZRY/8PEMeXuQQ0A4lrgRe4vr/rypxpxM=;
-        b=2mMZRTSIIyQOPz/OZNRtxBRVhS5/58wmOanyMz9mY2/khP3GFmelL7AfjG3vBaSQWb
-         2qpm3DHMQiuQl9fIyen0JjUcliODOnx9cGidzbLSaFKg3fiqgA3c9uslGdo/MxFOfgpM
-         yAnENjukzrIsy/3PEKCXPWr9lsHWNF9bLEDp0cbqWDJDMSM6QjPParVP+OhXuEtP0cNq
-         ZgntTFsNZLUhka+P1nM0LVVz7X4T4YEaQBmqD8lZih4uuCdnnx00L35Lt5SiukW/f9Lg
-         5Y6wpJM/eJ1QzneWii5FKI/jHRjn9WXonLwdMjwiSEN/U4AoPnUmvHWqrBe2Kqtek4t4
-         /J8w==
-X-Gm-Message-State: AOAM531xSXJwYek+7QQALn4jGaewKF1cKuZfvpgvUiUcVw58Rb7vNXPt
-        A3DxgdT5AUSb00y9iw9Ph4k=
-X-Google-Smtp-Source: ABdhPJza0kexM3zW71JVQc6l5KmuNpf+eeMnHcB7U4RkNa3k2wzk30jArYTMgkgYnWxAnz+gAuXQ2w==
-X-Received: by 2002:ac2:4907:: with SMTP id n7mr13887808lfi.86.1636930108582;
-        Sun, 14 Nov 2021 14:48:28 -0800 (PST)
-Received: from localhost.localdomain (46-138-46-211.dynamic.spd-mgts.ru. [46.138.46.211])
-        by smtp.gmail.com with ESMTPSA id h1sm1228591lfu.277.2021.11.14.14.48.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Nov 2021 14:48:28 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Anton Bambura <jenneron@protonmail.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] media: staging: tegra-vde: Reorder misc device registration
-Date:   Mon, 15 Nov 2021 01:47:32 +0300
-Message-Id: <20211114224732.11550-4-digetx@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211114224732.11550-1-digetx@gmail.com>
-References: <20211114224732.11550-1-digetx@gmail.com>
+        with ESMTP id S236604AbhKOD3E (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 14 Nov 2021 22:29:04 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C09C061767;
+        Sun, 14 Nov 2021 19:26:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=kakjXWrVPjIpWA4NzfTn4ZMWF2F5iG3NP2+aAwPTtfI=; b=BlMmvMFvUDyEGaT7hp7h+KajhG
+        R22K1iX9yWKfMbpK0XJE8sbs6ne9MePlGbOkpb3oXBvRnQTW6CnWm85P9Mf+G13tHvUIJOZO2Tv8H
+        JDMOzLg0QSEnWbpy2U0lonfmoZWZAu6SKqa+Q4A9fnx3Yl2viZC6FgoYILzk5Ea6p/icYLd5IyDGs
+        koSvj40V16ASuEHHYNgewS7ffjTkF9mZB63df0mKHZkSbTfm/gADCr+AIQIUpcJQ67ICmHcc8JC5Z
+        DLwjeLWrCKd6zuss79/G0MusnhkWVaRApuuhWICmlOQF+dgnReAlOjIHKyuemda3QJKgh8sVsPdKh
+        keUuj77w==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mmSdE-00EJ3U-87; Mon, 15 Nov 2021 03:26:08 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Abel Vesa <abel.vesa@nxp.com>, linux-clk@vger.kernel.org,
+        linux-imx@nxp.com, Alexander Shiyan <shc_work@mail.ru>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH] clk: imx: pllv1: fix kernel-doc notation for struct clk_pllv1
+Date:   Sun, 14 Nov 2021 19:26:07 -0800
+Message-Id: <20211115032607.28970-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Register misc device in the end of driver's probing since device should
-become visible to userspace once driver is fully prepared. Do the opposite
-in case of driver removal. This is a minor improvement that doesn't solve
-any problem, but makes code more consistent.
+Convert struct clk_pllv1 comments to kernel-doc notation and move them
+below the MFN_* macros.
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+Fixes this kernel-doc warning:
+
+drivers/clk/imx/clk-pllv1.c:12: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * pll v1
+
+Fixes: 2af9e6db14db ("ARM i.MX: Add common clock support for pllv1")
+Fixes: a594790368a8 ("ARM: imx: pllv1: Fix PLL calculation for i.MX27")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Abel Vesa <abel.vesa@nxp.com>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-imx@nxp.com
+Cc: Alexander Shiyan <shc_work@mail.ru>
+Cc: Shawn Guo <shawn.guo@linaro.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
 ---
- drivers/staging/media/tegra-vde/vde.c | 21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
+ drivers/clk/imx/clk-pllv1.c |   17 ++++++++---------
+ 1 file changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/staging/media/tegra-vde/vde.c b/drivers/staging/media/tegra-vde/vde.c
-index f4f65eb78d44..a8f1a024c343 100644
---- a/drivers/staging/media/tegra-vde/vde.c
-+++ b/drivers/staging/media/tegra-vde/vde.c
-@@ -1193,12 +1193,6 @@ static int tegra_vde_probe(struct platform_device *pdev)
- 		goto err_gen_free;
- 	}
+--- linux-next-20211102.orig/drivers/clk/imx/clk-pllv1.c
++++ linux-next-20211102/drivers/clk/imx/clk-pllv1.c
+@@ -8,20 +8,19 @@
  
--	err = misc_register(&vde->miscdev);
--	if (err) {
--		dev_err(dev, "Failed to register misc device: %d\n", err);
--		goto err_deinit_iommu;
--	}
--
- 	pm_runtime_enable(dev);
- 	pm_runtime_use_autosuspend(dev);
- 	pm_runtime_set_autosuspend_delay(dev, 300);
-@@ -1220,15 +1214,20 @@ static int tegra_vde_probe(struct platform_device *pdev)
- 		goto err_pm_runtime;
- 	}
+ #include "clk.h"
  
-+	err = misc_register(&vde->miscdev);
-+	if (err) {
-+		dev_err(dev, "Failed to register misc device: %d\n", err);
-+		goto err_free_secure_bo;
-+	}
++#define MFN_BITS	(10)
++#define MFN_SIGN	(BIT(MFN_BITS - 1))
++#define MFN_MASK	(MFN_SIGN - 1)
 +
- 	return 0;
- 
-+err_free_secure_bo:
-+	tegra_vde_free_bo(vde->secure_bo);
- err_pm_runtime:
--	misc_deregister(&vde->miscdev);
+ /**
+- * pll v1
++ * struct clk_pllv1 - IMX PLLv1 clock descriptor
+  *
+- * @clk_hw	clock source
+- * @parent	the parent clock name
+- * @base	base address of pll registers
++ * @hw:		clock source
++ * @base:	base address of pll registers
++ * @type:	type of IMX_PLLV1
+  *
+  * PLL clock version 1, found on i.MX1/21/25/27/31/35
+  */
 -
- 	pm_runtime_dont_use_autosuspend(dev);
- 	pm_runtime_disable(dev);
- 
--err_deinit_iommu:
- 	tegra_vde_iommu_deinit(vde);
- 
- err_gen_free:
-@@ -1243,6 +1242,8 @@ static int tegra_vde_remove(struct platform_device *pdev)
- 	struct tegra_vde *vde = platform_get_drvdata(pdev);
- 	struct device *dev = &pdev->dev;
- 
-+	misc_deregister(&vde->miscdev);
-+
- 	tegra_vde_free_bo(vde->secure_bo);
- 
- 	/*
-@@ -1261,8 +1262,6 @@ static int tegra_vde_remove(struct platform_device *pdev)
- 	pm_runtime_put_noidle(dev);
- 	clk_disable_unprepare(vde->clk);
- 
--	misc_deregister(&vde->miscdev);
+-#define MFN_BITS	(10)
+-#define MFN_SIGN	(BIT(MFN_BITS - 1))
+-#define MFN_MASK	(MFN_SIGN - 1)
 -
- 	tegra_vde_dmabuf_cache_unmap_all(vde);
- 	tegra_vde_iommu_deinit(vde);
- 
--- 
-2.33.1
-
+ struct clk_pllv1 {
+ 	struct clk_hw	hw;
+ 	void __iomem	*base;
