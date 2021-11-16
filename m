@@ -2,67 +2,71 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDDE453079
-	for <lists+linux-clk@lfdr.de>; Tue, 16 Nov 2021 12:27:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D034531C8
+	for <lists+linux-clk@lfdr.de>; Tue, 16 Nov 2021 13:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234998AbhKPLao (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 16 Nov 2021 06:30:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235026AbhKPL35 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 16 Nov 2021 06:29:57 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA26EC061234
-        for <linux-clk@vger.kernel.org>; Tue, 16 Nov 2021 03:26:46 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id k37-20020a05600c1ca500b00330cb84834fso1653963wms.2
-        for <linux-clk@vger.kernel.org>; Tue, 16 Nov 2021 03:26:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=49VN2EPgYHrEXK97OpQX0CxGM5w7EiGtxSfN5GFh/XE=;
-        b=JHkobXVvRWKPjJgpwGctsZrNZAaUXURTmWtz1PAwkjpShtnw2xIe4IxyGotDPuzibC
-         Q5mot2AR1EdZp0YszaR3r2ybEOx2FNi+mf9boXaZtQYZk2aaSxUll9YDCw62bdI1DnLQ
-         oIH4ijYH8dimZ9b18CZOM02DemPbh5TPbp0IZQP6LRYEW6CI4vBuyYF3v6dQKruXhra0
-         ISrh3nRfCz/kgnPaZL6TX2CyZGhX8FthNY6hgTSNy87Rzf6pOs269tH9u40KOKtFP2VF
-         vmbdlhp1YbM/ub4lOMlme0/ipfqvkOa6H2ey7QjU3Yr8TVzgn7XtIn6eo6g0+GjlmkU9
-         mnhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=49VN2EPgYHrEXK97OpQX0CxGM5w7EiGtxSfN5GFh/XE=;
-        b=WyNBfvxxhsH171JiMKS/VYqBtdU1BMRycucF1QQRSQf+1VpSRqROymF+cShXaVqzJI
-         CjljdRudqmsFNurcERIP+4uyRlIMVpQrFKXrqGx2VMCMXX9ghn3V1w8wCvCIwb/0qNU2
-         CwY6/CuXM5xDHg8ohdrtHOsBvFcA0JSdscRpGzB+jInMl5EtGZswOiCJF99407tuy5Gq
-         8iXHxvifacGR1a9nIvQYkAidk+mI3v3H/j3Dch8HKmE8RaXzIL3y5VakY2TWkZOs2L+O
-         SwoCrszNJeR5icTnDnm/0ufS4cP/7szWe2xmowVH0KsnRcOYIdTB8uzeRRTef3Dz3/cz
-         8EmA==
-X-Gm-Message-State: AOAM533OBhPZ9lZMwkLlrxw+Hn6GYPVhndk88CRzRH8+kc/d+aLZJL43
-        XLY67W1k0IEu07JjBwYY3vHlH1XFaZXHC7k4tLQ=
-X-Google-Smtp-Source: ABdhPJxY17HC6nmGOHWE6iqbA8wRJP0vZMHkpbaBLpxjBs8AHHbhGKQYmexWpwcaaXI+7XwIdfO/LY/kc1YAwclgHr0=
-X-Received: by 2002:a1c:f213:: with SMTP id s19mr68487015wmc.169.1637062003979;
- Tue, 16 Nov 2021 03:26:43 -0800 (PST)
+        id S236007AbhKPMK1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 16 Nov 2021 07:10:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48442 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236232AbhKPMIr (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Tue, 16 Nov 2021 07:08:47 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 11CF361A7D;
+        Tue, 16 Nov 2021 12:05:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1637064350;
+        bh=BYhL4okiZLw5w3k/7r78kRy4W08MKuNGrkynR9V31m0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aOh1e63IYuuyJt3oc/lC89yb5yu7/8f0/OL4lap7+0HXaYRfeBTBoQFO6/CeHvxt6
+         RDsjeqp8FKHW/WVoC27otB9F7u8l4lgoDQ/n63NJ6chWw7rNAi2XJCECZgzGXG2lpJ
+         UqhPewKRlW8PUdz/lykBkshpMfPMmFTTNBACYKPFEWO8KmXvgTRKGhnNqu7peoERUd
+         R0UPcEe3R8HZazaJk+lvmHzW2Vh/fYn0xSmcC8uG+K2zmv+HPNE3OfO5M3B28b6YOQ
+         t+57KgGsmlFvo+0mEOsbovsQKUqChRFmZrITWTwpKMljlGMkZU0KRhiefKOUDRyWE8
+         LK8Uz8R3/49ZA==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1mmxDe-00A9CC-Em; Tue, 16 Nov 2021 12:05:46 +0000
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Wei Xu <xuwei5@hisilicon.com>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND 0/2] Ensure that HiKey 970 won't hang during boot time
+Date:   Tue, 16 Nov 2021 12:05:42 +0000
+Message-Id: <cover.1637064075.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Received: by 2002:a05:600c:3b97:0:0:0:0 with HTTP; Tue, 16 Nov 2021 03:26:43
- -0800 (PST)
-Reply-To: ebodrdickson1020@gmail.com
-From:   "Dr.Dickson Ebo" <drdicksonelo1023@gmail.com>
-Date:   Tue, 16 Nov 2021 03:26:43 -0800
-Message-ID: <CABq-xD5cMc7YDaqm-jE=T02sHTTAJFwPRjYALiWxVYa2NbnX+Q@mail.gmail.com>
-Subject: hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Finance and Audit Department, Zenith Bank Plc.
+During HiKey 970 boot, hundreds of clock lines are disabled, causing the device to
+hang.
 
-The President of the Federal Republic of Nigeria through the Zenith
-International Bank Nigeria PLC has released your
-Contract/Inheritance/Compensation Fund.
+There are actually two issues here:
 
-Kindly get back to us as soon as possible.
+1. The clk core doesn't wait enough time for the device drivers to be probed
+    before agressively disabling "unused" clocks. This was noticed at the
+    drivers built as modules;
+2. Several HiKey 970 gates are essencial for the device to work, but they're
+    not marked as such.
 
-Yours faithfully,
-Dr. Dickson Ebo.
+The first patch fixes the clk core issue, while second one marks the mandatory
+clocks as such.
+
+Mauro Carvalho Chehab (2):
+  clk: wait for extra time before disabling unused clocks
+  clk: clk-hi3670: mark some clocks as CLK_IS_CRITICAL
+
+ drivers/clk/clk.c                  | 51 +++++++++++++++++++-----------
+ drivers/clk/hisilicon/clk-hi3670.c | 24 +++++++-------
+ 2 files changed, 44 insertions(+), 31 deletions(-)
+
+-- 
+2.33.1
+
+
