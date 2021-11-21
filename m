@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F80458716
-	for <lists+linux-clk@lfdr.de>; Mon, 22 Nov 2021 00:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1FB045871C
+	for <lists+linux-clk@lfdr.de>; Mon, 22 Nov 2021 00:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231535AbhKUXaz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 21 Nov 2021 18:30:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
+        id S231975AbhKUXbB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 21 Nov 2021 18:31:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbhKUXaz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 21 Nov 2021 18:30:55 -0500
+        with ESMTP id S231614AbhKUXa5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 21 Nov 2021 18:30:57 -0500
 Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47421C061748
-        for <linux-clk@vger.kernel.org>; Sun, 21 Nov 2021 15:27:49 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id b1so71771160lfs.13
-        for <linux-clk@vger.kernel.org>; Sun, 21 Nov 2021 15:27:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C7BC061748
+        for <linux-clk@vger.kernel.org>; Sun, 21 Nov 2021 15:27:51 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id k37so72321371lfv.3
+        for <linux-clk@vger.kernel.org>; Sun, 21 Nov 2021 15:27:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=l8CZKqka7M6tEP9XVjxB965JDKVWEBscM9hH1JFJ6ZQ=;
-        b=YEEEiJW178qXfDDc0lusKijK4A5UHRKm4Zk131Dw0u0RfiBMb6De7fk21+pRhJI6rU
-         gHfGnD+468uPGASMJnY4lCeLrlIMSfBsU8V6JNmr4d06nVSJi4e5NPiKsZYIMBRpBXld
-         9PVgl72pG/02StJ/MYgiIR46poPSnOL8JiplmbbgbHlG78ESK6ndNrYbuWEDLlDYmrji
-         vOb6oGl189xDMF5pzcNmI39vYDVXtehsXYPTyPxTtw5tTgJZSEoGModxcZAuBEg7Vy81
-         qRqVtoNwxIeiZa/Ion7m4AK3TViTdu+8gx1KEVdqOw9KnBH2bXcdV81e/2eGyCDDeg+Q
-         ozCA==
+        bh=9RWfUaVEvOe/xqbTnGEBAz8g1kePABZzY6Rf9OiwS5c=;
+        b=gky5GxE5+UtVWY6Zyjf6DSJUaB5VVRbBFP0Ioh09RvLqHYEOS7J7d6lalLpxpcKZ3L
+         6B8rEja+Q/T3KKl4nwSsFQcuoByf/rYOW4qgSGm5UKXWRo6+QnqTAdhSKPH88SapINxU
+         paymxp5+DSALgmb5wxmO4sg9eNRdU0rPLv7lRGiFJiO6AFtSQpj9JCsWO/6z6ELwDf71
+         TRt322mUM9luQfDu4XqfkRONsjjoxEJLd+56FmfRbRtrmU/DNByzfZakK5xdiSZubW3M
+         JVTWU3HayLjNH6rd7YWIWNd/OHXB2hytMHniqh+C+H/sv/sV9/ugm9EkRHHKb/G0uyno
+         0LhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=l8CZKqka7M6tEP9XVjxB965JDKVWEBscM9hH1JFJ6ZQ=;
-        b=OvyK+d2Xp4q9p8SUpJVYCUwC4mjvdpewtgf+eH0qKOj/FL6Z40bl9Wk3m0o8iSmBZ5
-         VXHPxeWW8CF9eAP/gVnyOLgg2IIBEYMkEfIHv/3ZBwxij+NReKT6azSWwu/MlW9SncsK
-         3mCONwk7QI8Ej58VO2RRsJLafcCStdztdQL+6LPPTBtRQk9BGZxqo4clq0vtIhVflrBc
-         bYyNgT9fXR3eW5lRAzOUo27k8IdgE31jHWaDri0ck7GMup9tXnDx7DZi6Lq8TFA4eRFx
-         sOuQAANj3rqxqgFwNWPw9XF3iiSig5xPgaTIhbR7nVpELWYXz7aa4UaUhhzsJtq5g/Ih
-         PSNA==
-X-Gm-Message-State: AOAM5330HkKiN68M9y+4kP/HwyTRvaBTgb5RLQ4rgTT0MjKXs5Zpo3Xo
-        a3O5CPuUOfEfJ+BVVPaqk7GehA==
-X-Google-Smtp-Source: ABdhPJzD+8zJSuHLU6JveUo3jrkNaH50rQSXy7vBXwXD0Iy3UFqqkwso7IqNjw+3Ijo2FKj9b11aEA==
-X-Received: by 2002:a2e:7a11:: with SMTP id v17mr33328270ljc.33.1637537267633;
-        Sun, 21 Nov 2021 15:27:47 -0800 (PST)
+        bh=9RWfUaVEvOe/xqbTnGEBAz8g1kePABZzY6Rf9OiwS5c=;
+        b=xShYNVTwhpSgByES8QS8vj1/bs5NYVO2wxLDjdswROMh9aTYg0XMoZWbxcC9R74Tf/
+         9TE+QKW2UVn6sQo1OXFQm+jykfMbWLUpopDsZUMHykczsUYP6BApJVqKQlaqJ/qFz3XY
+         lUyDXqFnORAmFemr8NzCnCaQ+et3IxGc53w4IuIRP/aLSaYgp4AFIPV+TzT7QVOyGFKi
+         pShg64p40qxGzi02ID2HzjTfOwn/10XsFaIJWuQbQmAEdLOGWya6Oa54MD79b/eIvYqu
+         6U8Nr9oC4WphMuIZeIDJj7Ndd40k0q/GNwbPjEyN8T+aMmT9j/b0gOCzqTVDd/NfZu5K
+         WvEA==
+X-Gm-Message-State: AOAM532bdZ8yKIn7U3aOZk3h3+MhuDmQ4KBPBxAsbj2j2OmDqL8+5hMe
+        ozHDDPaWK63JtQHWpAHlPO4cug==
+X-Google-Smtp-Source: ABdhPJz4V33QDr/AZEulkm9hC1UnIzeC1C53dQdhj2EnZo3HqHgFC+Z53VIweZ6dNdpsjOx8FnY/og==
+X-Received: by 2002:a05:6512:3a8d:: with SMTP id q13mr49222206lfu.73.1637537269900;
+        Sun, 21 Nov 2021 15:27:49 -0800 (PST)
 Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id b26sm778961lff.148.2021.11.21.15.27.46
+        by smtp.gmail.com with ESMTPSA id c25sm730518lja.38.2021.11.21.15.27.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Nov 2021 15:27:47 -0800 (PST)
+        Sun, 21 Nov 2021 15:27:49 -0800 (PST)
 From:   Sam Protsenko <semen.protsenko@linaro.org>
 To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
@@ -60,9 +60,9 @@ Cc:     David Virag <virag.david003@gmail.com>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 3/6] dt-bindings: clock: Add bindings for Exynos850 CMU_CMGP
-Date:   Mon, 22 Nov 2021 01:27:38 +0200
-Message-Id: <20211121232741.6967-4-semen.protsenko@linaro.org>
+Subject: [PATCH 4/6] clk: samsung: exynos850: Implement CMU_CMGP domain
+Date:   Mon, 22 Nov 2021 01:27:39 +0200
+Message-Id: <20211121232741.6967-5-semen.protsenko@linaro.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211121232741.6967-1-semen.protsenko@linaro.org>
 References: <20211121232741.6967-1-semen.protsenko@linaro.org>
@@ -72,84 +72,137 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-CMU_CMGP generates USI and ADC clocks for BLK_ALIVE. In particular USI
-clocks are needed for HSI2C_3 and HSI2C_4 instances.
-
-Add clock indices and bindings documentation for CMU_CMGP domain.
+CMU_CMGP clock domain provides clocks for CMGP IP-core (Common GPIO).
+CMGP module encapsulates next blocks:
+  - 8 GPIO lines
+  - 1 GPADC
+  - 2 USI blocks, each can be configured to provide one of
+    UART/SPI/HSI2C serial interfaces
 
 Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
 ---
- .../clock/samsung,exynos850-clock.yaml        | 19 +++++++++++++++++++
- include/dt-bindings/clock/exynos850.h         | 17 +++++++++++++++++
- 2 files changed, 36 insertions(+)
+ drivers/clk/samsung/clk-exynos850.c | 100 ++++++++++++++++++++++++++++
+ 1 file changed, 100 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/samsung,exynos850-clock.yaml b/Documentation/devicetree/bindings/clock/samsung,exynos850-clock.yaml
-index 5618cfa62f80..80ba60838f2b 100644
---- a/Documentation/devicetree/bindings/clock/samsung,exynos850-clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/samsung,exynos850-clock.yaml
-@@ -33,6 +33,7 @@ properties:
-     enum:
-       - samsung,exynos850-cmu-top
-       - samsung,exynos850-cmu-apm
-+      - samsung,exynos850-cmu-cmgp
-       - samsung,exynos850-cmu-core
-       - samsung,exynos850-cmu-dpu
-       - samsung,exynos850-cmu-hsi
-@@ -87,6 +88,24 @@ allOf:
-             - const: oscclk
-             - const: dout_clkcmu_apm_bus
+diff --git a/drivers/clk/samsung/clk-exynos850.c b/drivers/clk/samsung/clk-exynos850.c
+index 95e373d17b42..0eab7a115b44 100644
+--- a/drivers/clk/samsung/clk-exynos850.c
++++ b/drivers/clk/samsung/clk-exynos850.c
+@@ -492,6 +492,103 @@ static const struct samsung_cmu_info apm_cmu_info __initconst = {
+ 	.clk_name		= "dout_clkcmu_apm_bus",
+ };
  
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: samsung,exynos850-cmu-cmgp
++/* ---- CMU_CMGP ------------------------------------------------------------ */
 +
-+    then:
-+      properties:
-+        clocks:
-+          items:
-+            - description: External reference clock (26 MHz)
-+            - description: CMU_CMGP bus clock (from CMU_APM)
++/* Register Offset definitions for CMU_CMGP (0x11c00000) */
++#define CLK_CON_MUX_CLK_CMGP_ADC		0x1000
++#define CLK_CON_MUX_MUX_CLK_CMGP_USI_CMGP0	0x1004
++#define CLK_CON_MUX_MUX_CLK_CMGP_USI_CMGP1	0x1008
++#define CLK_CON_DIV_DIV_CLK_CMGP_ADC		0x1800
++#define CLK_CON_DIV_DIV_CLK_CMGP_USI_CMGP0	0x1804
++#define CLK_CON_DIV_DIV_CLK_CMGP_USI_CMGP1	0x1808
++#define CLK_CON_GAT_GOUT_CMGP_ADC_PCLK_S0	0x200c
++#define CLK_CON_GAT_GOUT_CMGP_ADC_PCLK_S1	0x2010
++#define CLK_CON_GAT_GOUT_CMGP_GPIO_PCLK		0x2018
++#define CLK_CON_GAT_GOUT_CMGP_USI_CMGP0_IPCLK	0x2044
++#define CLK_CON_GAT_GOUT_CMGP_USI_CMGP0_PCLK	0x2048
++#define CLK_CON_GAT_GOUT_CMGP_USI_CMGP1_IPCLK	0x204c
++#define CLK_CON_GAT_GOUT_CMGP_USI_CMGP1_PCLK	0x2050
 +
-+        clock-names:
-+          items:
-+            - const: oscclk
-+            - const: gout_clkcmu_cmgp_bus
++static const unsigned long cmgp_clk_regs[] __initconst = {
++	CLK_CON_MUX_CLK_CMGP_ADC,
++	CLK_CON_MUX_MUX_CLK_CMGP_USI_CMGP0,
++	CLK_CON_MUX_MUX_CLK_CMGP_USI_CMGP1,
++	CLK_CON_DIV_DIV_CLK_CMGP_ADC,
++	CLK_CON_DIV_DIV_CLK_CMGP_USI_CMGP0,
++	CLK_CON_DIV_DIV_CLK_CMGP_USI_CMGP1,
++	CLK_CON_GAT_GOUT_CMGP_ADC_PCLK_S0,
++	CLK_CON_GAT_GOUT_CMGP_ADC_PCLK_S1,
++	CLK_CON_GAT_GOUT_CMGP_GPIO_PCLK,
++	CLK_CON_GAT_GOUT_CMGP_USI_CMGP0_IPCLK,
++	CLK_CON_GAT_GOUT_CMGP_USI_CMGP0_PCLK,
++	CLK_CON_GAT_GOUT_CMGP_USI_CMGP1_IPCLK,
++	CLK_CON_GAT_GOUT_CMGP_USI_CMGP1_PCLK,
++};
 +
-   - if:
-       properties:
-         compatible:
-diff --git a/include/dt-bindings/clock/exynos850.h b/include/dt-bindings/clock/exynos850.h
-index df3978b58304..8aa5e82af0d3 100644
---- a/include/dt-bindings/clock/exynos850.h
-+++ b/include/dt-bindings/clock/exynos850.h
-@@ -84,6 +84,23 @@
- #define CLK_GOUT_SPEEDY_PCLK		21
- #define APM_NR_CLK			22
++/* List of parent clocks for Muxes in CMU_CMGP */
++PNAME(mout_cmgp_usi0_p)	= { "clk_rco_cmgp", "gout_clkcmu_cmgp_bus" };
++PNAME(mout_cmgp_usi1_p)	= { "clk_rco_cmgp", "gout_clkcmu_cmgp_bus" };
++PNAME(mout_cmgp_adc_p)	= { "oscclk", "dout_cmgp_adc" };
++
++static const struct samsung_fixed_rate_clock cmgp_fixed_clks[] __initconst = {
++	FRATE(CLK_RCO_CMGP, "clk_rco_cmgp", NULL, 0, 49152000),
++};
++
++static const struct samsung_mux_clock cmgp_mux_clks[] __initconst = {
++	MUX(CLK_MOUT_CMGP_ADC, "mout_cmgp_adc", mout_cmgp_adc_p,
++	    CLK_CON_MUX_CLK_CMGP_ADC, 0, 1),
++	MUX(CLK_MOUT_CMGP_USI0, "mout_cmgp_usi0", mout_cmgp_usi0_p,
++	    CLK_CON_MUX_MUX_CLK_CMGP_USI_CMGP0, 0, 1),
++	MUX(CLK_MOUT_CMGP_USI1, "mout_cmgp_usi1", mout_cmgp_usi1_p,
++	    CLK_CON_MUX_MUX_CLK_CMGP_USI_CMGP1, 0, 1),
++};
++
++static const struct samsung_div_clock cmgp_div_clks[] __initconst = {
++	DIV(CLK_DOUT_CMGP_ADC, "dout_cmgp_adc", "gout_clkcmu_cmgp_bus",
++	    CLK_CON_DIV_DIV_CLK_CMGP_ADC, 0, 4),
++	DIV(CLK_DOUT_CMGP_USI0, "dout_cmgp_usi0", "mout_cmgp_usi0",
++	    CLK_CON_DIV_DIV_CLK_CMGP_USI_CMGP0, 0, 5),
++	DIV(CLK_DOUT_CMGP_USI1, "dout_cmgp_usi1", "mout_cmgp_usi1",
++	    CLK_CON_DIV_DIV_CLK_CMGP_USI_CMGP1, 0, 5),
++};
++
++static const struct samsung_gate_clock cmgp_gate_clks[] __initconst = {
++	GATE(CLK_GOUT_CMGP_ADC_S0_PCLK, "gout_adc_s0_pclk",
++	     "gout_clkcmu_cmgp_bus",
++	     CLK_CON_GAT_GOUT_CMGP_ADC_PCLK_S0, 21, 0, 0),
++	GATE(CLK_GOUT_CMGP_ADC_S1_PCLK, "gout_adc_s1_pclk",
++	     "gout_clkcmu_cmgp_bus",
++	     CLK_CON_GAT_GOUT_CMGP_ADC_PCLK_S1, 21, 0, 0),
++	GATE(CLK_GOUT_CMGP_GPIO_PCLK, "gout_gpio_cmgp_pclk",
++	     "gout_clkcmu_cmgp_bus",
++	     CLK_CON_GAT_GOUT_CMGP_GPIO_PCLK, 21, 0, 0),
++	GATE(CLK_GOUT_CMGP_USI0_IPCLK, "gout_cmgp_usi0_ipclk", "dout_cmgp_usi0",
++	     CLK_CON_GAT_GOUT_CMGP_USI_CMGP0_IPCLK, 21, 0, 0),
++	GATE(CLK_GOUT_CMGP_USI0_PCLK, "gout_cmgp_usi0_pclk",
++	     "gout_clkcmu_cmgp_bus",
++	     CLK_CON_GAT_GOUT_CMGP_USI_CMGP0_PCLK, 21, 0, 0),
++	GATE(CLK_GOUT_CMGP_USI1_IPCLK, "gout_cmgp_usi1_ipclk", "dout_cmgp_usi1",
++	     CLK_CON_GAT_GOUT_CMGP_USI_CMGP1_IPCLK, 21, 0, 0),
++	GATE(CLK_GOUT_CMGP_USI1_PCLK, "gout_cmgp_usi1_pclk",
++	     "gout_clkcmu_cmgp_bus",
++	     CLK_CON_GAT_GOUT_CMGP_USI_CMGP1_PCLK, 21, 0, 0),
++};
++
++static const struct samsung_cmu_info cmgp_cmu_info __initconst = {
++	.mux_clks		= cmgp_mux_clks,
++	.nr_mux_clks		= ARRAY_SIZE(cmgp_mux_clks),
++	.div_clks		= cmgp_div_clks,
++	.nr_div_clks		= ARRAY_SIZE(cmgp_div_clks),
++	.gate_clks		= cmgp_gate_clks,
++	.nr_gate_clks		= ARRAY_SIZE(cmgp_gate_clks),
++	.fixed_clks		= cmgp_fixed_clks,
++	.nr_fixed_clks		= ARRAY_SIZE(cmgp_fixed_clks),
++	.nr_clk_ids		= CMGP_NR_CLK,
++	.clk_regs		= cmgp_clk_regs,
++	.nr_clk_regs		= ARRAY_SIZE(cmgp_clk_regs),
++	.clk_name		= "gout_clkcmu_cmgp_bus",
++};
++
+ /* ---- CMU_HSI ------------------------------------------------------------- */
  
-+/* CMU_CMGP */
-+#define CLK_RCO_CMGP			1
-+#define CLK_MOUT_CMGP_ADC		2
-+#define CLK_MOUT_CMGP_USI0		3
-+#define CLK_MOUT_CMGP_USI1		4
-+#define CLK_DOUT_CMGP_ADC		5
-+#define CLK_DOUT_CMGP_USI0		6
-+#define CLK_DOUT_CMGP_USI1		7
-+#define CLK_GOUT_CMGP_ADC_S0_PCLK	8
-+#define CLK_GOUT_CMGP_ADC_S1_PCLK	9
-+#define CLK_GOUT_CMGP_GPIO_PCLK		10
-+#define CLK_GOUT_CMGP_USI0_IPCLK	11
-+#define CLK_GOUT_CMGP_USI0_PCLK		12
-+#define CLK_GOUT_CMGP_USI1_IPCLK	13
-+#define CLK_GOUT_CMGP_USI1_PCLK		14
-+#define CMGP_NR_CLK			15
-+
- /* CMU_HSI */
- #define CLK_MOUT_HSI_BUS_USER		1
- #define CLK_MOUT_HSI_MMC_CARD_USER	2
+ /* Register Offset definitions for CMU_HSI (0x13400000) */
+@@ -943,6 +1040,9 @@ static const struct of_device_id exynos850_cmu_of_match[] = {
+ 	{
+ 		.compatible = "samsung,exynos850-cmu-apm",
+ 		.data = &apm_cmu_info,
++	}, {
++		.compatible = "samsung,exynos850-cmu-cmgp",
++		.data = &cmgp_cmu_info,
+ 	}, {
+ 		.compatible = "samsung,exynos850-cmu-hsi",
+ 		.data = &hsi_cmu_info,
 -- 
 2.30.2
 
