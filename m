@@ -2,189 +2,110 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EAA945921F
-	for <lists+linux-clk@lfdr.de>; Mon, 22 Nov 2021 16:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB7D45929D
+	for <lists+linux-clk@lfdr.de>; Mon, 22 Nov 2021 17:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240171AbhKVP7N (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 22 Nov 2021 10:59:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37410 "EHLO
+        id S232071AbhKVQHE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 22 Nov 2021 11:07:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240181AbhKVP6P (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 22 Nov 2021 10:58:15 -0500
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3403DC06175A
-        for <linux-clk@vger.kernel.org>; Mon, 22 Nov 2021 07:55:08 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:e4da:38c:79e9:48bf])
-        by michel.telenet-ops.be with bizsmtp
-        id MTuK2600Z4yPVd606TuK7s; Mon, 22 Nov 2021 16:55:06 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mpBe6-00EL3u-UU; Mon, 22 Nov 2021 16:54:18 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1mpBe5-00HH2O-V9; Mon, 22 Nov 2021 16:54:17 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Paul Walmsley <paul@pwsan.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
-        Benoit Parrot <bparrot@ti.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH/RFC 17/17] rtw89: Use bitfield helpers
-Date:   Mon, 22 Nov 2021 16:54:10 +0100
-Message-Id: <f7b81122f7596fa004188bfae68f25a68c2d2392.1637592133.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1637592133.git.geert+renesas@glider.be>
-References: <cover.1637592133.git.geert+renesas@glider.be>
+        with ESMTP id S231739AbhKVQHE (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 22 Nov 2021 11:07:04 -0500
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 833CDC061714
+        for <linux-clk@vger.kernel.org>; Mon, 22 Nov 2021 08:03:57 -0800 (PST)
+Received: by mail-ua1-x931.google.com with SMTP id l24so37662791uak.2
+        for <linux-clk@vger.kernel.org>; Mon, 22 Nov 2021 08:03:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=k01X7HLQW+k2kjIuefa6cfmdvw6hKa9dfM63nn0fC24=;
+        b=tEFZfAxLA9Ph2Oo2CFd7i4n+xuUSG1w6qoBmYut6gEDnchWzNHOC/zt4nkaL+YyG4t
+         WKMyqObdem1DJw4YBT+Th0UJT7tPmXjOLdJ3nBx5TyGL3F4AQY7aRPrJRFuiWqtuHOIw
+         x3pUPG2Bk0KhfSCaBJVN7IMcgNJuZQlqajueKiOVU6EffMA3ItMwheOtLWCzXL4ROa7o
+         Ku00+QsKYjHgTFPLN3LvV0uECgKcBY4/Q2xgldOIAEsAs5WvmcCY20sj98ysDMYn1ESW
+         nABieCPiHTQoyt01ynvy9acBERyMQDF7K9VuR5MXTIJNZdDO27Kp5+OsuZMpQc2UBNu1
+         i7ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=k01X7HLQW+k2kjIuefa6cfmdvw6hKa9dfM63nn0fC24=;
+        b=XTa6lnr6BVJoqwJxMJQcjPRm5kJu4UNw2xhgGHFMAA/+zij51oPL6Wm+DYBAu0DO/q
+         B3alE6ER+w2snD1ESBtdD8chZDfNnESranqKlQR51MJcIalqc/spovNE/7W4lhwdO+z7
+         Tr2WK8P0JhmbVMOGbINmTyphOWhW6TS3IOwnL5H8pn1sSqjiERlpjKk26mDy7AOe2ESH
+         Ys1gs7jhdBVNKGXpQxMO7Kc5NXAt7DkpC868T7KuWZ3g1HfxgWb3CTDR1Kq+teU5GUzh
+         y9NtVjSUWkbVUdKxR3ehfzxPQGvZ+eVvDeYyRE0zIjX1A4Jj+Tdk88NokLeN8ah2YRQf
+         E0Aw==
+X-Gm-Message-State: AOAM5331YAGSzJDfAZiGRKPlopbfuexkfVXlvG3OKKSSJ0sj7Urd0MU5
+        5ZHGyrAcuxXWw3VKavYgcCjTs+uNbVV2bRibMQaHpw==
+X-Google-Smtp-Source: ABdhPJz4CLAMIeE69lGuhlgRG87VJp7SsFQbPEx7lhqds0H3jnLEbxgyl225ynuwfmyWEDQqrCSd4hjXxwXXvCICwJE=
+X-Received: by 2002:a05:6102:ac3:: with SMTP id m3mr117236680vsh.1.1637597036721;
+ Mon, 22 Nov 2021 08:03:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211013172042.10884-1-semen.protsenko@linaro.org>
+ <CAOMZO5CT+5=py=TBUMOZKRDsacNnGWV2TPBE7RtnZ3ocBBVReA@mail.gmail.com> <CAPLW+4ne9xDxDW=RCzjXURujGCwbCU5mOrfPJ6bn2wY41jstiw@mail.gmail.com>
+In-Reply-To: <CAPLW+4ne9xDxDW=RCzjXURujGCwbCU5mOrfPJ6bn2wY41jstiw@mail.gmail.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Mon, 22 Nov 2021 18:03:44 +0200
+Message-ID: <CAPLW+4kp6G8QeMUggEhMLyB6gfbNpiyp1hn_+O76C_iVoAj53g@mail.gmail.com>
+Subject: Re: [PATCH v6] clk: Add write operation for clk_parent debugfs node
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Mike Tipton <mdtipton@codeaurora.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Fabio Estevam <festevam@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Use the field_{get,prep}() helpers, instead of open-coding the same
-operations.
+On Tue, 19 Oct 2021 at 16:32, Sam Protsenko <semen.protsenko@linaro.org> wrote:
+>
+> On Wed, 13 Oct 2021 at 21:04, Fabio Estevam <festevam@gmail.com> wrote:
+> >
+> > Hi Sam,
+> >
+> > On Wed, Oct 13, 2021 at 2:20 PM Sam Protsenko
+> > <semen.protsenko@linaro.org> wrote:
+> > >
+> > > Useful for testing mux clocks. One can write the index of the parent to
+> > > be set into clk_parent node, starting from 0. Example
+> > >
+> > >     # cd /sys/kernel/debug/clk/mout_peri_bus
+> > >     # cat clk_possible_parents
+> > >       dout_shared0_div4 dout_shared1_div4
+> > >     # cat clk_parent
+> > >       dout_shared0_div4
+> > >     # echo 1 > clk_parent
+> > >     # cat clk_parent
+> > >       dout_shared1_div4
+> > >
+> > > CLOCK_ALLOW_WRITE_DEBUGFS has to be defined in drivers/clk/clk.c in
+> > > order to use this feature.
+> > >
+> > > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> >
+> > This is useful, thanks:
+> >
+> > Reviewed-by: Fabio Estevam <festevam@gmail.com>
+>
+> Hi Michael, Stephen,
+>
+> If there are no outstanding comments, can you please take this one?
+>
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-Compile-tested only.
-Marked RFC, as this depends on [PATCH 01/17], but follows a different
-path to upstream.
----
- drivers/net/wireless/realtek/rtw89/core.h | 38 ++++-------------------
- 1 file changed, 6 insertions(+), 32 deletions(-)
+Bump.
 
-diff --git a/drivers/net/wireless/realtek/rtw89/core.h b/drivers/net/wireless/realtek/rtw89/core.h
-index c2885e4dd882f045..f9c0300ec373aaf2 100644
---- a/drivers/net/wireless/realtek/rtw89/core.h
-+++ b/drivers/net/wireless/realtek/rtw89/core.h
-@@ -2994,81 +2994,55 @@ rtw89_write32_clr(struct rtw89_dev *rtwdev, u32 addr, u32 bit)
- static inline u32
- rtw89_read32_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask)
- {
--	u32 shift = __ffs(mask);
--	u32 orig;
--	u32 ret;
--
--	orig = rtw89_read32(rtwdev, addr);
--	ret = (orig & mask) >> shift;
--
--	return ret;
-+	return field_get(mask, rtw89_read32(rtwdev, addr));
- }
- 
- static inline u16
- rtw89_read16_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask)
- {
--	u32 shift = __ffs(mask);
--	u32 orig;
--	u32 ret;
--
--	orig = rtw89_read16(rtwdev, addr);
--	ret = (orig & mask) >> shift;
--
--	return ret;
-+	return field_get(mask, rtw89_read16(rtwdev, addr));
- }
- 
- static inline u8
- rtw89_read8_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask)
- {
--	u32 shift = __ffs(mask);
--	u32 orig;
--	u32 ret;
--
--	orig = rtw89_read8(rtwdev, addr);
--	ret = (orig & mask) >> shift;
--
--	return ret;
-+	return field_get(mask, rtw89_read8(rtwdev, addr));
- }
- 
- static inline void
- rtw89_write32_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask, u32 data)
- {
--	u32 shift = __ffs(mask);
- 	u32 orig;
- 	u32 set;
- 
- 	WARN(addr & 0x3, "should be 4-byte aligned, addr = 0x%08x\n", addr);
- 
- 	orig = rtw89_read32(rtwdev, addr);
--	set = (orig & ~mask) | ((data << shift) & mask);
-+	set = (orig & ~mask) | field_prep(mask, data);
- 	rtw89_write32(rtwdev, addr, set);
- }
- 
- static inline void
- rtw89_write16_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask, u16 data)
- {
--	u32 shift;
- 	u16 orig, set;
- 
- 	mask &= 0xffff;
--	shift = __ffs(mask);
- 
- 	orig = rtw89_read16(rtwdev, addr);
--	set = (orig & ~mask) | ((data << shift) & mask);
-+	set = (orig & ~mask) | field_prep(mask, data);
- 	rtw89_write16(rtwdev, addr, set);
- }
- 
- static inline void
- rtw89_write8_mask(struct rtw89_dev *rtwdev, u32 addr, u32 mask, u8 data)
- {
--	u32 shift;
- 	u8 orig, set;
- 
- 	mask &= 0xff;
--	shift = __ffs(mask);
- 
- 	orig = rtw89_read8(rtwdev, addr);
--	set = (orig & ~mask) | ((data << shift) & mask);
-+	set = (orig & ~mask) | field_prep(mask, data);
- 	rtw89_write8(rtwdev, addr, set);
- }
- 
--- 
-2.25.1
-
+> Thanks!
