@@ -2,120 +2,227 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B1E45D8C4
-	for <lists+linux-clk@lfdr.de>; Thu, 25 Nov 2021 12:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 811FB45D8C8
+	for <lists+linux-clk@lfdr.de>; Thu, 25 Nov 2021 12:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbhKYLKe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 25 Nov 2021 06:10:34 -0500
-Received: from mail-sn1anam02on2089.outbound.protection.outlook.com ([40.107.96.89]:38339
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        id S231590AbhKYLKg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 25 Nov 2021 06:10:36 -0500
+Received: from mail-dm6nam10on2089.outbound.protection.outlook.com ([40.107.93.89]:39456
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231277AbhKYLIt (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 25 Nov 2021 06:08:49 -0500
+        id S231395AbhKYLI4 (ORCPT <rfc822;linux-clk@vger.kernel.org>);
+        Thu, 25 Nov 2021 06:08:56 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iUjB2Lqz/qMGw7OHwk2eWC+zTq6ph3sGkMc0c9hjLd4gX7iu6JGfnLO0VcXVGHgBk2unnjG6QifgUb+Pppekz+nDDyJOwCjiB6OlgOPfJACuhCsq4Kf/dvNSWVXUjrjdN60ttdTyYm9IViVkPHhBLS4PXZocfO3DThsDgdaghfliToDbExHxLVzLQKljwRQkClqoHX8M1WJmm+KC8rQBAuusUDP2hB+7JdJ5LQQnExn9pGyFRM4BoYwguFaa2lQhNS9N2rhtJSudGmioxS9qz9y1MwkAPj2eHh6gUhjfnMHMJyu3Qq5mqFjaCMHWGez+o9njPAZ5GNNAHeT8QPaJ9A==
+ b=nXJnJvDbI1Qu/F1MCg2Z/DPkssqrjHfrPg+Iarn1dn6QdE4eDiaAAx6nVRxkOvg1iO9iKFJChIQY5TzvDoZH7bttGSdSH4+PRT9dvfo10PMhpqSwY5fUIgZo3d4OGBOJqBtGClnqTzKzgtW92cBws163/FBOAuJncgA7NDYhq3DAiQgpVc3ezqIFSOvd+sfRnaeQaEJqgPaSnFFKajp568wmb0eF80cTPS2SPdeMYxnXXAJrr0O+OmBIGTj9S0vUDCkVtyoB3csZOnGt1ygQmxVXyZRsKRYr1gfoW8Pmtq5+5+WGXIqVVjQWNtQnbQJF25zsYY5R7C3nyAw90Wl45g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IpzVrYe5nagjkI/gCmDPiluZFEEmERHNnpzOVhFe1cI=;
- b=kHdzjywR1f0gN+Apa4LexX6Qgf61dDMvvvvpOXTDCEyfqmbWXHA4+xidsa+md95K+LUTbjtVV8QCJOeEvH5iLD5oFSE+dbbLKmU6tU4BFVCJfgq/xziOCQkiWpdrt7PiASs8CoFXVsyWkpBMRCDIdM4X4ctjie2vKbB5/Lc2lvNaRuW11i5tJrEsHA+ouhfzHl4mU17GQWOL1GobBIzb4U2fkB8RRsq10U3b2e+rcn3brn43FS7s1lFbolTpo2qkTR5g5fBnEOxAhS4VkioFAHi0YXAr/G/qY8yAwLYSBCJIiuKbBKOEYfvQWDRQXYdCxP/GWkFDYgfpD1nLpu2Igw==
+ bh=kpwchxyZKhYZJ2daXHNA2qjsVocG08YlYHSX+Fjb9rE=;
+ b=e7kRcuUXUkj1nVAfBNoa5Xc6D1FOYZjxRkTTWpzBVTCX42KduoAezzDeSbmqq9FtsLn8/4LhL833nR7BSExP8adCpUU4/sWbW4Bo2CTp2pBl7kkzLuiuh0Wb0SWXKn8962IFb1q/mzJ0kOFElwaGKjfLPTaA0q9eaYlTGeHsuyV74hyclsjlxw/JjohQwQZMXMs1OFPdt6v78OqnNsCJQbHjYwLb7Byb45VO8VyndQCzmfRRomv9UP9qammc2SX+8EAO1k1jSElWiJ/ajsa4Unl7IA0duvXEitK5L48dFKg8sDJHYC5bJ6tNompvkn7JUaX6T6bUuba0dhyXtl4Cfw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IpzVrYe5nagjkI/gCmDPiluZFEEmERHNnpzOVhFe1cI=;
- b=GOUJHfTPAW2jpo+Ew0MRx1FaOg/cG5Pv0g0SErPRp8mGZe0nexdrQ1TNOpvkjv1pg6wOOAyLaG31raEbYn1AtkD3390iQsAlyPgvVlo17yCizZIZjkYjUF5TJk2wLFnos5iJiOPQ06qwBU+x9FVBWBHsR5HmQMxsq3uEwrmlbz0=
-Received: from MW4PR04CA0140.namprd04.prod.outlook.com (2603:10b6:303:84::25)
- by MN2PR12MB3296.namprd12.prod.outlook.com (2603:10b6:208:aa::11) with
+ bh=kpwchxyZKhYZJ2daXHNA2qjsVocG08YlYHSX+Fjb9rE=;
+ b=pujvrOQqQdluhnfXuYMyH3fNRDZ4loknqei/ATOhjW2TdT4jLuBuV2wRikcGEOF/JjYQgKYiK+4gp6igN5KR6QLM05OlPFitiaw7k201YEo9XKasGPeApnbj6qMZTK7LdV3PHA/yuV57FpD5cljMZ3JocF0wYSfvaMkp55U9FAc=
+Received: from DM6PR05CA0049.namprd05.prod.outlook.com (2603:10b6:5:335::18)
+ by DM6PR12MB3036.namprd12.prod.outlook.com (2603:10b6:5:119::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.19; Thu, 25 Nov
- 2021 11:05:36 +0000
-Received: from CO1NAM11FT003.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:84:cafe::35) by MW4PR04CA0140.outlook.office365.com
- (2603:10b6:303:84::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.22 via Frontend
- Transport; Thu, 25 Nov 2021 11:05:35 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.22; Thu, 25 Nov
+ 2021 11:05:43 +0000
+Received: from DM6NAM11FT047.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:335:cafe::74) by DM6PR05CA0049.outlook.office365.com
+ (2603:10b6:5:335::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.6 via Frontend
+ Transport; Thu, 25 Nov 2021 11:05:43 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1NAM11FT003.mail.protection.outlook.com (10.13.175.93) with Microsoft SMTP
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT047.mail.protection.outlook.com (10.13.172.139) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4734.22 via Frontend Transport; Thu, 25 Nov 2021 11:05:35 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.4734.22 via Frontend Transport; Thu, 25 Nov 2021 11:05:43 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 25 Nov
- 2021 05:05:34 -0600
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 25 Nov
- 2021 05:05:34 -0600
+ 2021 05:05:42 -0600
 Received: from chrome.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Thu, 25 Nov 2021 05:05:31 -0600
+ Transport; Thu, 25 Nov 2021 05:05:39 -0600
 From:   Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
 To:     <sboyd@kernel.org>, <rafael@kernel.org>,
         <linux-clk@vger.kernel.org>
 CC:     <Vijendar.Mukunda@amd.com>, <Alexander.Deucher@amd.com>,
         <Basavaraj.Hiregoudar@amd.com>, <Sunil-kumar.Dommati@amd.com>,
         <Mario.Limonciello@amd.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
-Subject: [PATCH v4 0/7] Add support for newer family of AMD's SOC.
-Date:   Thu, 25 Nov 2021 16:34:40 +0530
-Message-ID: <20211125110447.1188073-1-AjitKumar.Pandey@amd.com>
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 1/7] x86: clk: clk-fch: Add support for newer family of AMD's SOC
+Date:   Thu, 25 Nov 2021 16:34:41 +0530
+Message-ID: <20211125110447.1188073-2-AjitKumar.Pandey@amd.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211125110447.1188073-1-AjitKumar.Pandey@amd.com>
+References: <20211125110447.1188073-1-AjitKumar.Pandey@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a69327a0-8573-4538-fc29-08d9b00381c6
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3296:
-X-Microsoft-Antispam-PRVS: <MN2PR12MB3296C0334B93C4B65BB8434F82629@MN2PR12MB3296.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2803;
+X-MS-Office365-Filtering-Correlation-Id: 0bafbb8f-3fae-482c-65d6-08d9b0038694
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3036:
+X-Microsoft-Antispam-PRVS: <DM6PR12MB3036F46E9320E35BCB1DE5AC82629@DM6PR12MB3036.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZphBEjKH34k0FtO9JjBnqcnp30GQvcaUKVCBuA2H7jRvxipkpdxLobR0iH0+bs2L18qCvpi34GoaVHgJJBHD2CgUV7CTXplEMSszIukkXLx8PDB57eLdxw/YdYqWEhhS5T1NvBEt9mfIfwNhk+s1RN0Xq7bSBR5HQtQpp9M/fUOyUOukpB9YX+EAcRrVnGlE59Mz82UKuaZ9OJy/YjZxo5Olr1b8+jAE/jefXVq5MzEr3f+0vG3n8J9IOlJo45SK40Cb8AIu7iqf9MPe1m5xGh61+RaAspbJVL5cyariLXQMU1EjQC3aluGVc+G4xLfkdT+p+qvICVmCDpKGcmIUiIV24RafmkoXD2PEYmFiDfPmMu/qtU65OWPwfLYBd556dv1HAtFfvQORwb2DpgN+Xs4vSatfJDWHBHqHD+ceAEtZbzvRC1b4wy1MiUe1EHK+oyCPCVqESer653uP2R0+mJd3mJIS0EJml6o4JFlnh6RzRE9qVQh9wffixJ+Mai6Zx/9O0GtrbDkDXOh4wll1GCd+xzttltO2Wi2xQjMEPDglTrInczNu4VwbklE0PGv69qTARemdvUj0y9v1aD4gt3gHBoDephAoiAK8VsWnt8kj8AijxYlJ1XzCdi0+Q7YYmC9wp1ITi7KnReMggBk1bE7Nyfa9mPvrjVYeZgL3lqQN3rpPUFpQxS1E35NOa3/iRrXXtTKonR3uuoWFHs+/TAoqepkt4t26ji0bUh9aK2s=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(8936002)(508600001)(47076005)(70206006)(186003)(426003)(82310400004)(2906002)(316002)(7696005)(110136005)(4744005)(54906003)(1076003)(36756003)(70586007)(81166007)(4326008)(336012)(5660300002)(6666004)(2616005)(86362001)(26005)(83380400001)(8676002)(356005)(36860700001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: SyzA6TgO9610Z7nDIf1l11iyJuFBPyChxvEkQ1zUA4pkggeaqrNxts11IMOc+g2Vd9RsZfmO5jnhOT9F3qDVccZ6wHI/kZqQk/eCu+tpzPIxjvHDg0+rWgGzNKODnoNqX4WacC6xBQWIFREfCCXPb/H3lqZx3EEkhvib/TnlkXOwpM/QrnZShdc66/NtVVWj55XmCPIXDr3hfwypGi1XicpJUMBHGeFPtKbta3Vyzc9YjxQ/fzzzWN8q7IdD5MIu8rSxqDhfXCjjoDWTDFRC3vYnwDiSHrP/jETP8y7U6atXtHh9YDNoJSbDQaY8Lt86qUh+t1STMiznB60NntvOYMUF8WKCTy83wAwi0DfWvwm3EyfDSaY3tYrgwC73OkXA7xXqexgr9GRa5kEiVXvEe6+iHlPS8l+zxb2ZayYkk0Lw63i7AUsYsrZErj/7ESok1lHvy5pur8Eav03Op/0VlakyRwf6OzJ0fV4zVWSZ93S3hYotk/mgCnXs88ibXn9QjZaDKD5dT09Q+jD1qPmwyG65a0TCvBPKyx55LGrGm3pjbCsbWFq1SEPbAL6DfpUF6/0nZaDM2gJPv6f+vYjbv71Bow8VRpNjw7Sx/ZHOSyKs6Xh5ha5rmw1ySC8cdrRMyBGJrlar1V1tUZfmE1KUC0PJ3zJicMXMMFIDhJcNv1vXTNuRrolZ2r8qRPosDkkP8j2Q1btPCFpCVcS8a1JOT+3cYRJr/VFTlJkvxXKj5es=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(7696005)(82310400004)(508600001)(426003)(186003)(86362001)(4326008)(8676002)(2906002)(47076005)(8936002)(36860700001)(110136005)(2616005)(356005)(81166007)(70206006)(70586007)(316002)(26005)(6666004)(336012)(1076003)(36756003)(54906003)(5660300002)(83380400001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2021 11:05:35.6788
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2021 11:05:43.8059
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a69327a0-8573-4538-fc29-08d9b00381c6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0bafbb8f-3fae-482c-65d6-08d9b0038694
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT003.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT047.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3296
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3036
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-changes since v3:
-- Update driver description
-- Add pci_dev_put() to avoid leak
-- changed variable name for pci device
+FCH controller clock configuration slightly differs across AMD's
+SOC architectures. Newer family of SOC only support a 48MHz fixed
+clock while older family has a clk_mux to choose 48MHz and 25MHz.
+At present fixed clk support is only enabled for RV architecture
+using "is-rv" device property initialized from boot loader. This
+limit 48MHz fixed clock gate support to RV platform unless we add
+similar device property in boot loader for other architecture.
 
-Ajit Kumar Pandey (7):
-  x86: clk: clk-fch: Add support for newer family of AMD's SOC
-  drivers: acpi: acpi_apd: Remove unused device property "is-rv"
-  ACPI: APD: Add a fmw property clk-name
-  clk: x86: Use dynamic con_id string during clk registration
-  clk: x86: Fix clk_gate_flags for RV_CLK_GATE
-  drivers: x86: clk-fch: Add 48MHz fixed clk support on Renoir platform
-  drivers: x86: clk-fch: Add 48MHz fixed clk support on Stoneyridge
+Add pci_device_id table with Raven platform id and replace "is-rv"
+device property check with pci id match to support 48MHz fixed clk
+support. This enhanced flexibility to enable fixed 48MHz fch clock
+framework on other architectures by simply adding new entries into
+pci_device_id table. Also replace RV with FIXED as generic naming
+convention across all platforms.
 
- drivers/acpi/acpi_apd.c               | 11 ++++--
- drivers/clk/x86/clk-fch.c             | 49 +++++++++++++++++++++------
- include/linux/platform_data/clk-fch.h |  2 +-
- 3 files changed, 48 insertions(+), 14 deletions(-)
+Signed-off-by: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+---
+ drivers/clk/x86/clk-fch.c | 41 ++++++++++++++++++++++++++++++---------
+ 1 file changed, 32 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/clk/x86/clk-fch.c b/drivers/clk/x86/clk-fch.c
+index 8f7c5142b0f0..de556b03e184 100644
+--- a/drivers/clk/x86/clk-fch.c
++++ b/drivers/clk/x86/clk-fch.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: MIT
+ /*
+- * clock framework for AMD Stoney based clocks
++ * clock framework for AMD FCH controller block
+  *
+  * Copyright 2018 Advanced Micro Devices, Inc.
+  */
+@@ -8,6 +8,7 @@
+ #include <linux/clk.h>
+ #include <linux/clkdev.h>
+ #include <linux/clk-provider.h>
++#include <linux/pci.h>
+ #include <linux/platform_data/clk-fch.h>
+ #include <linux/platform_device.h>
+ 
+@@ -26,22 +27,37 @@
+ #define ST_CLK_GATE	3
+ #define ST_MAX_CLKS	4
+ 
+-#define RV_CLK_48M	0
+-#define RV_CLK_GATE	1
+-#define RV_MAX_CLKS	2
++#define CLK_48M_FIXED	0
++#define CLK_GATE_FIXED	1
++#define CLK_MAX_FIXED	2
++
++/* List of supported CPU ids for fixed clk */
++#define AMD_CPU_ID_RV			0x15D0
+ 
+ static const char * const clk_oscout1_parents[] = { "clk48MHz", "clk25MHz" };
+ static struct clk_hw *hws[ST_MAX_CLKS];
+ 
++static const struct pci_device_id soc_pci_ids[] = {
++	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, AMD_CPU_ID_RV) },
++	{ }
++};
++
+ static int fch_clk_probe(struct platform_device *pdev)
+ {
+ 	struct fch_clk_data *fch_data;
++	struct pci_dev *rdev;
+ 
+ 	fch_data = dev_get_platdata(&pdev->dev);
+ 	if (!fch_data || !fch_data->base)
+ 		return -EINVAL;
+ 
+-	if (!fch_data->is_rv) {
++	rdev = pci_get_domain_bus_and_slot(0, 0, PCI_DEVFN(0, 0));
++	if (!rdev) {
++		dev_err(&pdev->dev, "FCH device not found\n");
++		return -ENODEV;
++	}
++
++	if (!pci_match_id(soc_pci_ids, rdev)) {
+ 		hws[ST_CLK_48M] = clk_hw_register_fixed_rate(NULL, "clk48MHz",
+ 			NULL, 0, 48000000);
+ 		hws[ST_CLK_25M] = clk_hw_register_fixed_rate(NULL, "clk25MHz",
+@@ -61,17 +77,18 @@ static int fch_clk_probe(struct platform_device *pdev)
+ 		devm_clk_hw_register_clkdev(&pdev->dev, hws[ST_CLK_GATE],
+ 			"oscout1", NULL);
+ 	} else {
+-		hws[RV_CLK_48M] = clk_hw_register_fixed_rate(NULL, "clk48MHz",
++		hws[CLK_48M_FIXED] = clk_hw_register_fixed_rate(NULL, "clk48MHz",
+ 			NULL, 0, 48000000);
+ 
+-		hws[RV_CLK_GATE] = clk_hw_register_gate(NULL, "oscout1",
++		hws[CLK_GATE_FIXED] = clk_hw_register_gate(NULL, "oscout1",
+ 			"clk48MHz", 0, fch_data->base + MISCCLKCNTL1,
+ 			OSCCLKENB, CLK_GATE_SET_TO_DISABLE, NULL);
+ 
+-		devm_clk_hw_register_clkdev(&pdev->dev, hws[RV_CLK_GATE],
++		devm_clk_hw_register_clkdev(&pdev->dev, hws[CLK_GATE_FIXED],
+ 			"oscout1", NULL);
+ 	}
+ 
++	pci_dev_put(rdev);
+ 	return 0;
+ }
+ 
+@@ -79,14 +96,20 @@ static int fch_clk_remove(struct platform_device *pdev)
+ {
+ 	int i, clks;
+ 	struct fch_clk_data *fch_data;
++	struct pci_dev *rdev;
+ 
+ 	fch_data = dev_get_platdata(&pdev->dev);
+ 
+-	clks = fch_data->is_rv ? RV_MAX_CLKS : ST_MAX_CLKS;
++	rdev = pci_get_domain_bus_and_slot(0, 0, PCI_DEVFN(0, 0));
++	if (!rdev)
++		return -ENODEV;
++
++	clks = pci_match_id(soc_pci_ids, rdev) ? CLK_MAX_FIXED : ST_MAX_CLKS;
+ 
+ 	for (i = 0; i < clks; i++)
+ 		clk_hw_unregister(hws[i]);
+ 
++	pci_dev_put(rdev);
+ 	return 0;
+ }
+ 
 -- 
 2.25.1
 
