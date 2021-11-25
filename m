@@ -2,133 +2,151 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D622F45D8CB
-	for <lists+linux-clk@lfdr.de>; Thu, 25 Nov 2021 12:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A6A45D8E0
+	for <lists+linux-clk@lfdr.de>; Thu, 25 Nov 2021 12:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbhKYLKj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 25 Nov 2021 06:10:39 -0500
-Received: from mail-mw2nam12on2050.outbound.protection.outlook.com ([40.107.244.50]:63521
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230479AbhKYLJm (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 25 Nov 2021 06:09:42 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lsKLbtXMUqYOWRWqju3XGVWJArciGS62bkYeh4DXKgzUmlmeSp963cj3bg9LbZG8siU4i9jGFvw9dzBgKFZSPrMnUJrqxh/TO/m8qCstvmwpA6oJkC1yyEjIBO6thi9s4sLZ0uqb+LGcb29P4KlQt5FG+Y9dv2v2ewAywKZ+AeSSlj93olNndyyNHoUGBjPaJtrlnvmK4f17XQgLyGUckiR3kqprIIePPoHfgvnSiU5Hy9bkVOWXXiEymBvnfM7i6q3Ecmdp1ovtDb1DH3JJlQdEZMQi3Uf3gOhKrN8GRDXDfwKV9Yxq0o4k8mqL3lJJPlNwU1gO3pkG2/oqenuBIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G7KGFiD30k7y+U5gkqoqBPfIAYgYril7/G1Q1CuQWP0=;
- b=MlnYRwItmVRqTZltAwZcBJ7XA/ijwCyK3bQqRi1ZLlXvNQ3zzA8F2Z8sjvpILx5M1K0SLtxofyTfrKWstfQxZVX2VmJyxoQ/Wj1x2blAZJnZ2mZH6nJykb6I7a8zn6VEX+C6XfSzNv771iPT0XLHQJvCeUmIEQvb8spMEG6Wpt/cOKONxnQwM0dl8AboF3++2nWglPsw1CqjyUBrpDlE+DPvbJtMM5qa95GuPL7cLUE0hDhrIulDcYJQhVjX0aFN+hMHL1oVZInbSmnoEkKcEWWcssTKGB5B+Icwn+9+nYPBhyC7vWK5GRe+MLGxQvdINAnBZr1uh2z5QJfdp5yJfg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G7KGFiD30k7y+U5gkqoqBPfIAYgYril7/G1Q1CuQWP0=;
- b=hzPuyiBizBLJ41g8ddDcinJwuY/8QV1duBMiFoMge7nFiG7bXJyhbfTvJshXoFvXWaYqOrr+BGB6oH8vVwm0wIPTvdHMRGXfR0dGi8FEZ0RLGiF+femUXd6GWoRxPG7lPBQiEqPJz5Clf6GbNaWTEI2/xJCkhtRbq7+mLU1Fq5w=
-Received: from MWHPR21CA0044.namprd21.prod.outlook.com (2603:10b6:300:129::30)
- by BYAPR12MB3557.namprd12.prod.outlook.com (2603:10b6:a03:ad::31) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4713.22; Thu, 25 Nov
- 2021 11:06:28 +0000
-Received: from CO1NAM11FT040.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:129:cafe::c) by MWHPR21CA0044.outlook.office365.com
- (2603:10b6:300:129::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.8 via Frontend
- Transport; Thu, 25 Nov 2021 11:06:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com;
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1NAM11FT040.mail.protection.outlook.com (10.13.174.140) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4734.22 via Frontend Transport; Thu, 25 Nov 2021 11:06:28 +0000
-Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 25 Nov
- 2021 05:06:27 -0600
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB07.amd.com
- (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Thu, 25 Nov
- 2021 03:06:27 -0800
-Received: from chrome.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Thu, 25 Nov 2021 05:06:24 -0600
-From:   Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
-To:     <sboyd@kernel.org>, <rafael@kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     <Vijendar.Mukunda@amd.com>, <Alexander.Deucher@amd.com>,
-        <Basavaraj.Hiregoudar@amd.com>, <Sunil-kumar.Dommati@amd.com>,
-        <Mario.Limonciello@amd.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        id S235533AbhKYLQc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 25 Nov 2021 06:16:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229601AbhKYLOb (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 25 Nov 2021 06:14:31 -0500
+Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B1FC06179C;
+        Thu, 25 Nov 2021 03:07:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+         s=20160729; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=jITFGqtpvoxEL23PjkR27KCeXhEBkHp7XMd+YpRpYG4=; b=Y7twgnTULc03x5zB+MTRm7iGYw
+        HBiHtwkzcaqZMUSRj4edIf8/mUvDf+3wAUPzWOi8BSCnVXzXV7z4u+hsfzGR5rQInQv3hjMjdQbZS
+        FRncS/9+bC4MkNebGB8AV5YIlzWLIQgEzctTgoMyKhCiZrSLN6bntvqynYORVJoFwErY=;
+Received: from p54ae9f3f.dip0.t-ipconnect.de ([84.174.159.63] helo=localhost.localdomain)
+        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <nbd@nbd.name>)
+        id 1mqCbS-0002ws-AH; Thu, 25 Nov 2021 12:07:46 +0100
+From:   Felix Fietkau <nbd@nbd.name>
+To:     linux-arm-kernel@lists.infradead.org,
         Michael Turquette <mturquette@baylibre.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 7/7] drivers: x86: clk-fch: Add 48MHz fixed clk support on Stoneyridge
-Date:   Thu, 25 Nov 2021 16:34:47 +0530
-Message-ID: <20211125110447.1188073-8-AjitKumar.Pandey@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211125110447.1188073-1-AjitKumar.Pandey@amd.com>
-References: <20211125110447.1188073-1-AjitKumar.Pandey@amd.com>
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     john@phrozen.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 06/12] dt-bindings: Add en7523-scu device tree binding documentation
+Date:   Thu, 25 Nov 2021 12:07:32 +0100
+Message-Id: <20211125110738.41028-7-nbd@nbd.name>
+X-Mailer: git-send-email 2.30.1
+In-Reply-To: <20211125110738.41028-1-nbd@nbd.name>
+References: <20211125110738.41028-1-nbd@nbd.name>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 99f5dbce-12ad-42e7-5a87-08d9b003a148
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3557:
-X-Microsoft-Antispam-PRVS: <BYAPR12MB35575A5CE8397562CE2E298382629@BYAPR12MB3557.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pZb77NSccZ2VJjZ5rrxZJFYzvMzz2MVszzf2qJ4ZSNw3rfc5qln3okCoYZ7kVOC1AVW7gH5HkeGEzbumEVC4ucxZaXrGDORQ0P+zITIfpv1/USz4ObrufnOjRkXdi6Pz9xyrzuMryAjiZeYfhO0x4aHxvJB6PVFXkLMKmBRseZsHznn86I/zWZdfFDt0cuDQPor0KTIaYbL4B5p/S0K5YCV4rubsyQEToiVjDiJoElBnR2/n6rIRLQZ+sKs29hZHrr6r8kxOzpl0cKPeEuCAwYw/ol+z6yoxDRo8yHmxyWaLteV0jt7albtbSQOoDeV7l+larjYyId3qOcjrvItl8hFnmxf3PeISrgIG3NkOPQ5ZTBJmbB1cgZB0rXvcN5fvJmyfZwC7UTJQ52p42XsEc151oFHQjKgAgNVw+yPi877o+rdOoJAWTkjmCks+zCTBXRL04epVWOd7muvnjYoKVqIMTMd2P1MLa4+SIrPoUcYBLwpodx+AVhGGAisSGs0MD0492AmuOwHa6y1HNc0l9K2tPECpGP1vd+MEw2Gb2nKvH+gW/0YF7aKB3gHh3X5KIQrhrFE2XoUkcEWK2C1NgCoC0Yb1JxeKdRNcYA+K/HjFz+Oa99ma+t24sZtPF9Tm+L8hpFPgGa8TH4J+y2MNXZjePn6KnwM1Bgh2r0h/QivD23+ZWodj8/j11EH0EpkwgAAPyRzwKxN4twL331qnqQoO6k3HLqTGf/Vru7HSIz0=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(8936002)(316002)(36860700001)(186003)(70586007)(70206006)(336012)(426003)(81166007)(356005)(2616005)(1076003)(4744005)(47076005)(508600001)(86362001)(5660300002)(6666004)(36756003)(8676002)(110136005)(54906003)(26005)(4326008)(2906002)(83380400001)(7696005)(82310400004)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2021 11:06:28.5317
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 99f5dbce-12ad-42e7-5a87-08d9b003a148
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT040.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3557
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add stoney ridge SOC pci root port id into pci_device_id table to
-enable 48 MHz fixed fch clock support on Stoneyridge platforms.
+From: John Crispin <john@phrozen.org>
 
-Signed-off-by: Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>
+Adds device tree binding documentation for clocks in the EN7523 SOC.
+
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Signed-off-by: John Crispin <john@phrozen.org>
 ---
- drivers/clk/x86/clk-fch.c | 2 ++
- 1 file changed, 2 insertions(+)
+ .../bindings/clock/airoha,en7523-scu.yaml     | 58 +++++++++++++++++++
+ include/dt-bindings/clock/en7523-clk.h        | 17 ++++++
+ 2 files changed, 75 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/airoha,en7523-scu.yaml
+ create mode 100644 include/dt-bindings/clock/en7523-clk.h
 
-diff --git a/drivers/clk/x86/clk-fch.c b/drivers/clk/x86/clk-fch.c
-index 8747212cd289..e3cd176a49e8 100644
---- a/drivers/clk/x86/clk-fch.c
-+++ b/drivers/clk/x86/clk-fch.c
-@@ -34,6 +34,7 @@
- /* List of supported CPU ids for fixed clk */
- #define AMD_CPU_ID_RV			0x15D0
- #define AMD_CPU_ID_RN			0x1630
-+#define AMD_CPU_ID_ST			0x1576
- 
- static const char * const clk_oscout1_parents[] = { "clk48MHz", "clk25MHz" };
- static struct clk_hw *hws[ST_MAX_CLKS];
-@@ -41,6 +42,7 @@ static struct clk_hw *hws[ST_MAX_CLKS];
- static const struct pci_device_id fch_pci_ids[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, AMD_CPU_ID_RV) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, AMD_CPU_ID_RN) },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_AMD, AMD_CPU_ID_ST) },
- 	{ }
- };
- 
+diff --git a/Documentation/devicetree/bindings/clock/airoha,en7523-scu.yaml b/Documentation/devicetree/bindings/clock/airoha,en7523-scu.yaml
+new file mode 100644
+index 000000000000..79660f8126fa
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/airoha,en7523-scu.yaml
+@@ -0,0 +1,58 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/airoha,en7523-scu.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: EN7523 Clock Device Tree Bindings
++
++maintainers:
++  - Felix Fietkau <nbd@nbd.name>
++  - John Crispin <nbd@nbd.name>
++
++description: |
++  This node defines the System Control Unit of the EN7523 SoC,
++  a collection of registers configuring many different aspects of the SoC.
++
++  The clock driver uses it to read and configure settings of the
++  PLL controller, which provides clocks for the CPU, the bus and
++  other SoC internal peripherals.
++
++  Each clock is assigned an identifier and client nodes use this identifier
++  to specify which clock they consume.
++
++  All these identifiers can be found in:
++  [1]: <include/dt-bindings/clock/en7523-clk.h>.
++
++  The clocks are provided inside a system controller node.
++
++properties:
++  compatible:
++    items:
++      - const: airoha,en7523-scu
++
++  reg:
++    maxItems: 2
++
++  "#clock-cells":
++    description:
++      The first cell indicates the clock number, see [1] for available
++      clocks.
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - '#clock-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/en7523-clk.h>
++    scu: scu@1fa20000 {
++      compatible = "airoha,en7523-scu";
++      reg = <0x1fa20000 0x400>,
++            <0x1fb00000 0x1000>;
++      #clock-cells = <1>;
++    };
+diff --git a/include/dt-bindings/clock/en7523-clk.h b/include/dt-bindings/clock/en7523-clk.h
+new file mode 100644
+index 000000000000..7c8414a7cb66
+--- /dev/null
++++ b/include/dt-bindings/clock/en7523-clk.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef _DT_BINDINGS_CLOCK_AIROHA_EN7523_H_
++#define _DT_BINDINGS_CLOCK_AIROHA_EN7523_H_
++
++#define EN7523_CLK_GSW		0
++#define EN7523_CLK_EMI		1
++#define EN7523_CLK_BUS		2
++#define EN7523_CLK_SLIC		3
++#define EN7523_CLK_SPI		4
++#define EN7523_CLK_NPU		5
++#define EN7523_CLK_CRYPTO	6
++#define EN7523_CLK_PCIE		7
++
++#define EN7523_NUM_CLOCKS	8
++
++#endif /* _DT_BINDINGS_CLOCK_AIROHA_EN7523_H_ */
 -- 
-2.25.1
+2.30.1
 
