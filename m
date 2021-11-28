@@ -2,67 +2,125 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA041461684
-	for <lists+linux-clk@lfdr.de>; Mon, 29 Nov 2021 14:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 103CF461FB6
+	for <lists+linux-clk@lfdr.de>; Mon, 29 Nov 2021 19:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377846AbhK2NhE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 29 Nov 2021 08:37:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244348AbhK2NfE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Nov 2021 08:35:04 -0500
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D2FC0043B0
-        for <linux-clk@vger.kernel.org>; Mon, 29 Nov 2021 04:12:09 -0800 (PST)
-Received: by mail-lf1-x144.google.com with SMTP id r26so43982198lfn.8
-        for <linux-clk@vger.kernel.org>; Mon, 29 Nov 2021 04:12:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=3g5/+0VpETtANs7SbpU05Osc0ahCybesHKHbzVy0Y3U=;
-        b=bYg4APyMEYUN682c2IwSQrmrnmLYb1usDBfVMHv3RRzWCxFC6IZC51mqN82uKbV/1A
-         TWVPayA0RczZNCkHniSEbi8SlamytDPRfo6GGHyGZ0FhUvJwvyTo7ZG1yuy7IWTZOb2R
-         0zSC2he7l3Il4PX7mOv52uqi5yuqfORV5hIdBf85aqn2I15mA8KB7BufSZpOcjeHGOMm
-         g6+I8GYrDGStgQQliB0EdqavoyPagN+rbY3djTseFGs5EKaMwy5REG1SsDTKRQorD9bG
-         BsD9Q1IqeCZ1HK2o2/9aDV0n4gRMoOBxO1rlm6O0qWZIW8hzAMKTit3cqs49y3aWxn2c
-         Yijw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=3g5/+0VpETtANs7SbpU05Osc0ahCybesHKHbzVy0Y3U=;
-        b=stZbQa4vrtIOHA4hLwr5jwI0vj9mJegtiwQIdQtOjnBk9xZt/oZSBUYFlvQAN23rVb
-         U+mT/dQLXcD0s1M5RyI9kTNFkc7VtOZiUcOenyKT9UASZaWXj+zjBZUiMQ38AA+tvJSB
-         xpr1utvZahJ6VXDQrfBGi27+v12nVrb3QTmzhlf0fWwehCOItkZ7KV8lLo/a3B3fSAaz
-         qlppl3YMSnmDZt1RHYU0mdcOXSios9g+AZwAx1lCbyCvNCerEM0mEfdj2LbcO2NJL4Tc
-         psPWCW4SNfOyqigEdNC/MZ7FvP5srEbwBqL8ICh/2fbAnzIxBkcaTeowfMyr/cr2hbZF
-         7hcg==
-X-Gm-Message-State: AOAM532cK1jATDhW81UAz8O7B+w3zV6Y1j8n0KZwlrCLi9js95iqV3PC
-        5Lk3zGWLKXPReJYyIWQyl6AqjshYikkk7nEMceo=
-X-Google-Smtp-Source: ABdhPJyBQl2q/zGMAd6bpic3WN4FLIivV41ZN4qk4BzzbO76TWWnQ5+VZw3uifS9v9yrB9v0sgC8SBXmTwXOY+/qhw8=
-X-Received: by 2002:a05:6512:39c7:: with SMTP id k7mr46190884lfu.650.1638187927109;
- Mon, 29 Nov 2021 04:12:07 -0800 (PST)
+        id S1379423AbhK2S6m (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 29 Nov 2021 13:58:42 -0500
+Received: from smtpcmd14161.aruba.it ([62.149.156.161]:32820 "EHLO
+        smtpcmd14161.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379325AbhK2S4l (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 29 Nov 2021 13:56:41 -0500
+Received: from [192.168.50.18] ([146.241.138.59])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id rSUYmwZPnrIRlrSUZmkupp; Sun, 28 Nov 2021 23:17:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1638137874; bh=aXY7K66LArue7ekBfUqC+O3Vdu3DF45DOCQggVHhyRk=;
+        h=Subject:To:From:Date:MIME-Version:Content-Type;
+        b=UWFMkiSsKQ62KY+0ZURyD6NV1IdL1jjXBcAjrqYTEE7wNQN3tR/3plBoFRl5Ymo9R
+         XdqL6804DiwhYuUrxfCjxoLtDxrlexLUjPjMzPphMcHQvejZNlErXgIocjFwb5BveM
+         uKZRBszKtpbKIn99ZaSStwtUV0M4Vn7/SaGIDfbh5TJaEPIxhTOldS1rBY0FcN9jYk
+         vy4iDf7ox+ZK7PCY0a+RqgJi1gRitzGTPBUkS90y5rQ+4tBVARx/tXovG+j5B3l3nh
+         Fb2NKuGqmbVxEcmQN2J18zlZ4+0SGUgvN0BJF64Be+wfqVL8sOov9cVBJ7itP+l8av
+         J/EPoY0WuV66w==
+Subject: Re: [PATCH v3 07/13] clk: imx: Add initial support for i.MXRT clock
+ driver
+To:     Jesse Taube <mr.bossman075@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     NXP Linux Team <linux-imx@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Stefan Agner <stefan@agner.ch>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-serial@vger.kernel.org
+References: <20211125211443.1150135-1-Mr.Bossman075@gmail.com>
+ <20211125211443.1150135-8-Mr.Bossman075@gmail.com>
+ <CAOMZO5Dqo6c=4nGCOakMKG8fn=V1HA7-O26t3GmwWtD-FbZiPg@mail.gmail.com>
+ <dae68360-456e-3db8-57ed-2287dc7cfd57@gmail.com>
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+Message-ID: <de705094-1b8c-3950-b7f5-f7150b525ea5@benettiengineering.com>
+Date:   Sun, 28 Nov 2021 23:17:50 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Received: by 2002:a05:6512:371a:0:0:0:0 with HTTP; Mon, 29 Nov 2021 04:12:06
- -0800 (PST)
-Reply-To: cosme.legal@hotmail.com
-From:   "Mr. Cosme Amossou" <nkememe@gmail.com>
-Date:   Mon, 29 Nov 2021 20:12:06 +0800
-Message-ID: <CAJyjRUHkRndXRRU=K8HApOz=CoekUOveC0WpEUwvhSFEbRMYFA@mail.gmail.com>
-Subject: Re:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <dae68360-456e-3db8-57ed-2287dc7cfd57@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfC2+WimnYT4jDoL/5Qj39vMuFzShQz7FE/Z8sP1XkxBcrbdPos5MDmBJUX4HG5hh+ebK3KAL0how8VdRfqKsNrF/aWMVS2LsH/RZ6zyMVg9un5zPZZoN
+ XpWsgys9jMAvtyErhZCjCg6c2qhQ+1ryfHitGjvwSIq5/z+GPvn8Trh3JpwusaUYelmuQOw2GUitDYe0RYkp4D3mLVXw0OnHmiwx+4fe8w/7q5wJwvTomNpJ
+ RvxQo74zbj9Agg42zgej+InyJTDpxrNNx/mrojuEwwl4wApu4ST1yBYJnBnay9L9MUd2JBbfZbybNuev6n+VxbA0jqan6TpaUXOZMhe8s6zXc/u8Spgbevwh
+ 9ZrFmJjLHacRXAUklqpbukFqImaltYXulxze8paExwJkEn6GWfP8Ugsf9jQmusZmVhIEQd9+Ec99+fR1zFkK+QkYq6FVavA+WR9oUwBVQlDnMIAQHOZLJjvp
+ otERI3O0iDAgTl5EZdtf7dN4utkZsrZpvLi8k6HhcXHI+PQzJS4Aas31z6ZtCWB3H+IFlnoEXGhgwvOA2WaMwM4E6ftEDDfx4ugg6iQy40iiIU9wRElp/BN+
+ 1L2+DjRbjnQnZYFTnm6f5Bm+PYSmRi2LVrVvuLTLCRtX1gYD58LEPYbY6XKhdwVes39RaJNEhwK4dC0kSU3jWJF6qnrRDnvVPi5GYWDbzXQLqzhCD07w8Cyn
+ mgrkecLsHm8q471VM2FCy03c+/h6WDPublFMtL/ySznu61+FmUMDh4MrgwBY8EOLyvbI3tDnECr0J223wqwHMpLYKCTrvfsPDv5mhiWdg7JJycF0kukdo9WS
+ +d/fkpVfyZe6uh431ToarZWHxPmF3B9FAZdPXfouVHuOBzpV+Pdm/y66C7BACVeSJ7mkyNedf/uG8K5coWzFH6OSWlxKNBAiXqV1qfX6pXrwuhFO+VfyT1ph
+ tK6Xf/dA4Eq5QYjFtXbrPcZUCYJ5drhXeQTIE3Sqx1sFYqrVaI6OfdJKfri3Y/VQBRVuPxC5esevDY0AEBxqnXhbd/OHAy3lNN2ed2wC2Gi7NBglCsPvYTIj
+ wNSHJHBqkWZds8O5IqlT4MxLNfDNRUjkPEDCZTJ3wQ5sIsRQ6G5/LeofgvkQSHRXAcwrPTSqAiUIWl+k2ItjIeC/vfPHKzM0TR4=
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello,
+Hi Jesse, Fabio,
 
-My name is Mr.Cosme Amossou, I apologize for contacting you in this
-manner but the situation at hand demands urgent attention from all
-presumed beneficiaries. I have an important subject to share with you,
-regarding my late client Mr.Peter fund's domicile in his bank. Write
-back to me for more detailed information. E-mail: cosme@legalcosme.net
+On 28/11/21 21:52, Jesse Taube wrote:
+> 
+> 
+> On 11/28/21 15:50, Fabio Estevam wrote:
+>> On Thu, Nov 25, 2021 at 6:14 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
+>>>
+>>> From: Jesse Taube <mr.bossman075@gmail.com>
+>>>
+>>> This patch adds initial clock driver support for the i.MXRT series.
 
-Thanks
-Mr. Cosme
+Also the commit log must be modified according(Summary+body).
+
+Thank you
+-- 
+Giulio Benetti
+Benetti Engineering sas
+
+>>> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+>>> Suggested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>>> ---
+>>> V1->V2:
+>>> * Kconfig: Add new line
+>>> * clk-imxrt.c: Remove unused const
+>>> * clk-imxrt.c: Remove set parents
+>>> * clk-imxrt.c: Use fsl,imxrt-anatop for anatop base address
+>>> V2->V3:
+>>> * Remove unused ANATOP_BASE_ADDR
+>>> * Move to hw API
+>>> * Add GPT's own clock
+>>> * Add SEMC clocks to set muxing to CRITICAL
+>>> ---
+>>>    drivers/clk/imx/Kconfig     |   4 +
+>>>    drivers/clk/imx/Makefile    |   1 +
+>>>    drivers/clk/imx/clk-imxrt.c | 156 ++++++++++++++++++++++++++++++++++++
+>>
+>> Wouldn't it be better to name it clk-imxrt1050.c instead?
+> we can have multiple imxrt versions in there like the other IMX clk
+> drivers, is this okay?
+>>
+
