@@ -2,79 +2,79 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06BC8462F2E
-	for <lists+linux-clk@lfdr.de>; Tue, 30 Nov 2021 10:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30140462F6D
+	for <lists+linux-clk@lfdr.de>; Tue, 30 Nov 2021 10:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235760AbhK3JF4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 30 Nov 2021 04:05:56 -0500
-Received: from mta-p7.oit.umn.edu ([134.84.196.207]:54626 "EHLO
-        mta-p7.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235424AbhK3JF4 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 30 Nov 2021 04:05:56 -0500
-X-Greylist: delayed 453 seconds by postgrey-1.27 at vger.kernel.org; Tue, 30 Nov 2021 04:05:56 EST
+        id S240036AbhK3JVO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 30 Nov 2021 04:21:14 -0500
+Received: from mta-p5.oit.umn.edu ([134.84.196.205]:47456 "EHLO
+        mta-p5.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240079AbhK3JVO (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 30 Nov 2021 04:21:14 -0500
 Received: from localhost (unknown [127.0.0.1])
-        by mta-p7.oit.umn.edu (Postfix) with ESMTP id 4J3GSs071Dz9vCGS
-        for <linux-clk@vger.kernel.org>; Tue, 30 Nov 2021 09:02:37 +0000 (UTC)
+        by mta-p5.oit.umn.edu (Postfix) with ESMTP id 4J3GpR1YPDz9vBr0
+        for <linux-clk@vger.kernel.org>; Tue, 30 Nov 2021 09:17:51 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p7.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p7.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id WPU8HT2O_W23 for <linux-clk@vger.kernel.org>;
-        Tue, 30 Nov 2021 03:02:36 -0600 (CST)
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+Received: from mta-p5.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p5.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id AAYxdlXeXucO for <linux-clk@vger.kernel.org>;
+        Tue, 30 Nov 2021 03:17:51 -0600 (CST)
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mta-p7.oit.umn.edu (Postfix) with ESMTPS id 4J3GSr54w7z9vCFp
-        for <linux-clk@vger.kernel.org>; Tue, 30 Nov 2021 03:02:36 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p7.oit.umn.edu 4J3GSr54w7z9vCFp
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p7.oit.umn.edu 4J3GSr54w7z9vCFp
-Received: by mail-pl1-f199.google.com with SMTP id v23-20020a170902bf9700b001421d86afc4so7912691pls.9
-        for <linux-clk@vger.kernel.org>; Tue, 30 Nov 2021 01:02:36 -0800 (PST)
+        by mta-p5.oit.umn.edu (Postfix) with ESMTPS id 4J3GpQ6Zq5z9vBqq
+        for <linux-clk@vger.kernel.org>; Tue, 30 Nov 2021 03:17:50 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p5.oit.umn.edu 4J3GpQ6Zq5z9vBqq
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p5.oit.umn.edu 4J3GpQ6Zq5z9vBqq
+Received: by mail-pf1-f200.google.com with SMTP id u4-20020a056a00098400b004946fc3e863so12501697pfg.8
+        for <linux-clk@vger.kernel.org>; Tue, 30 Nov 2021 01:17:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=umn.edu; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=JB/xnaYRERTHfThz3BeKOjYTQVcTowsU7QWWYd5kA3k=;
-        b=OS2U0S97KdtYbru48E9PVinKaS8ajlz38Gs67N+WmxDHN5E7BtqqyV5aIK2NPvJQ7x
-         JnMQ/apjMmGUkZ92r5R9HAojVBAZhdTKUh6DPCIMJNouHmuw1p9EJGxa0RcvhBle6/Kx
-         m786DzGuNV2R4f4fbq/yI7qy7m4befRm+Q8j/QuytpySgeWe1rwPHQox2XB3lM7JXAB6
-         zX8OGrkXmsbxg4lSPTuyHi0R1uEzWSlbeHJbaBszcw1K3NgSSbAP0cUln+bLUYSjBOsO
-         93LxR8K4FvuTe0lJsLNRItn79ygLkvNyK6dxH/ZulD7Z9yhJOqhETWx97nB+lS33YKkw
-         Pjdw==
+        bh=NIZ6/hw1XbXKmzO5MEDGHAzLrrUD6afmSXwxKYg8s/I=;
+        b=D9KCbyPE8cbAAhjSIS3q2zIbB/si0IkVOWglgG0AtZmAnW1IKHFfoy2WJdoDi2jGX+
+         QznQAlGRyDJG5WSjdQY5vMjgU0LqT8EQh+Kx3Gq1cyfNCNvg1XdAmr0U4omKWQQqBEOE
+         UUUmF+LPHpvh2bwgooNOx1oLjvqBZaFdvFtEyAZ2so+LqJj1VOJQKYx6QhfJuqeQAE2h
+         7pcSGCVua1F9BGvchX36yapYJvOVEQjMHCYYM6gnVM0eAGDtw+gFqIz1HBvyxHjCCecN
+         q0ZHRBLsVU8E1Hs34Dq73AOxo8ql1lGT0GlFpeAr+1kjs3uR9K+X+PE2dgFGr3efJh7r
+         CQ6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=JB/xnaYRERTHfThz3BeKOjYTQVcTowsU7QWWYd5kA3k=;
-        b=iBHiNLZkf8yNkrRA5i3azpZIdNGG5XTVTK9Nb+K0GmwLB+UIg+0OjwCBpI2ipy9rzC
-         1058enndkYSUuxND3Ex/b/K+p2TmSaREg/qpQ/QUN2cPRmE1nn9hkyN7SPFQrFsf+L/7
-         Mxm7vdDGDf8y7a2l/1SFSmqukU2SEeYKQeKFlVmfSM6ogYmosA+9i1U+9Z49gh2+QpHr
-         6Eht2UrE++/hM0/AVwzQrG1dhLS69IaVu19E+46pB6JI+wTzo/I6CuLirSJ+Oxo03sb2
-         tBzhVVNhBnQExb3jbWxBKOydiFdbTkQzz1DZUihZFNJsj0AC2Xr8Htrm8eUwa5cueYzA
-         MVFg==
-X-Gm-Message-State: AOAM533SPJKAl5hAasouPkp3dZ4ZXGKfCwZiS6J6gcoto5SE2V/2ix2R
-        ubWGg6eoOQbFUqkSkC4Nd8Il9ma6WH4BbXXGCpr2lnfnoCIAnLo0rfIxHQSeUFFItE1Qx7Kagx7
-        k60j1hZmGrIxYQP2qBwDM6D5B
-X-Received: by 2002:a17:902:9349:b0:143:88c3:375e with SMTP id g9-20020a170902934900b0014388c3375emr66274423plp.16.1638262956004;
-        Tue, 30 Nov 2021 01:02:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxFrEQrsuwZ277titXaqT8fk1JaMbrMsWZ/xVKNYBxWfn8JVIFmUsszxNKjkAxJJjqUoJjMLA==
-X-Received: by 2002:a17:902:9349:b0:143:88c3:375e with SMTP id g9-20020a170902934900b0014388c3375emr66274403plp.16.1638262955785;
-        Tue, 30 Nov 2021 01:02:35 -0800 (PST)
+        bh=NIZ6/hw1XbXKmzO5MEDGHAzLrrUD6afmSXwxKYg8s/I=;
+        b=Le3IDGwsPtaHr+AfYX6kk40nCHroRxJD7SjHwlQKqUoSCHNe0Sq0+/9IxjcuQBa19y
+         0GbkTUOdtyvmgTRY0ZGolkCtF+GqnSS/7ESWwrU5IwV1Uuzwhp331G8nauRmaxlc5BzK
+         XtS0XHKT58Pc2GpmFXDjJCQLvWE+8z38kuD5dVstmA1a2LSYim9XfDDCYP8ZyDyeSvuX
+         LQTjlgg7/xQCGCEbXBJEjtvHhOpVky+6fLJ1OYVfiqzU9EMHBY5wyGWimwycQRWXCaH2
+         TQzAO5C6aDidMGKbQ9NWgndoTolk3U4nsBuz4hlBiOVIrD47fo5Ki1v0omsmgUsqsvMt
+         iLRA==
+X-Gm-Message-State: AOAM531PnnM0DXzd69As/T8B9jfbiJR2nF3I5n1302nawDBp1+q1HbsQ
+        BFXjafMk+Pn/KRc5yWZTpzyu9kO5DDPM/SX77MTITSUF4rsM6v0j+LNB7q9xbyYbJvU76hKLxj9
+        gBPcbvTT3rfmF2OyK9eFcvX9/
+X-Received: by 2002:a63:9b12:: with SMTP id r18mr36848725pgd.367.1638263870231;
+        Tue, 30 Nov 2021 01:17:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwE9GjxEfwgileQZRn/vK5o6v6tvFGZ9TQmfO803I9D8llMPNWOFqVq3X0eX5DM9fIdE/TGtA==
+X-Received: by 2002:a63:9b12:: with SMTP id r18mr36848718pgd.367.1638263870052;
+        Tue, 30 Nov 2021 01:17:50 -0800 (PST)
 Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id j38sm14209940pgb.84.2021.11.30.01.02.33
+        by smtp.gmail.com with ESMTPSA id h21sm14275844pgk.74.2021.11.30.01.17.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 01:02:35 -0800 (PST)
+        Tue, 30 Nov 2021 01:17:49 -0800 (PST)
 From:   Zhou Qingyang <zhou1615@umn.edu>
 To:     zhou1615@umn.edu
 Cc:     kjlu@umn.edu, Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        "weiyi.lu@mediatek.com" <weiyi.lu@mediatek.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mars Cheng <mars.cheng@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Owen Chen <owen.chen@mediatek.com>, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] clk: mediatek: mt2712: Fix a NULL pointer dereference in clk_mt2712_apmixed_probe()
-Date:   Tue, 30 Nov 2021 17:02:28 +0800
-Message-Id: <20211130090230.77618-1-zhou1615@umn.edu>
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: mediatek: mt6765: Fix a NULL pointer dereference in clk_mt6765_apmixed_probe()
+Date:   Tue, 30 Nov 2021 17:17:19 +0800
+Message-Id: <20211130091720.80514-1-zhou1615@umn.edu>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -82,7 +82,7 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-In clk_mt2712_apmixed_probe(), the return value of
+In clk_mt6765_apmixed_probe(), the return value of
 mtk_alloc_clk_data() is assigned to clk_data and used in
 mtk_clk_register_plls(). There is a dereference of clk_data in
 mtk_clk_register_plls(), which could lead to a NULL pointer
@@ -104,27 +104,27 @@ Note that, as a bug found by static analysis, it can be a false
 positive or hard to trigger. Multiple researchers have cross-reviewed
 the bug.
 
-Builds with CONFIG_COMMON_CLK_MT2712=y show no new warnings, and our
+Builds with CONFIG_COMMON_CLK_MT6765=y show no new warnings, and our
 static analyzer no longer warns about this code.
 
-Fixes: e2f744a82d72 ("clk: mediatek: Add MT2712 clock support")
+Fixes: 1aca9939bf72 ("clk: mediatek: Add MT6765 clock support")
 Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
 ---
- drivers/clk/mediatek/clk-mt2712.c | 2 ++
+ drivers/clk/mediatek/clk-mt6765.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/clk/mediatek/clk-mt2712.c b/drivers/clk/mediatek/clk-mt2712.c
-index a3bd9a107209..08ef56f68c7a 100644
---- a/drivers/clk/mediatek/clk-mt2712.c
-+++ b/drivers/clk/mediatek/clk-mt2712.c
-@@ -1266,6 +1266,8 @@ static int clk_mt2712_apmixed_probe(struct platform_device *pdev)
- 	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
+diff --git a/drivers/clk/mediatek/clk-mt6765.c b/drivers/clk/mediatek/clk-mt6765.c
+index d77ea5aff292..5f723906675b 100644
+--- a/drivers/clk/mediatek/clk-mt6765.c
++++ b/drivers/clk/mediatek/clk-mt6765.c
+@@ -785,6 +785,8 @@ static int clk_mt6765_apmixed_probe(struct platform_device *pdev)
+ 	}
  
- 	mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
+ 	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
 +	if (!clk_data)
 +		return -ENOMEM;
  
- 	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
+ 	mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
  
 -- 
 2.25.1
