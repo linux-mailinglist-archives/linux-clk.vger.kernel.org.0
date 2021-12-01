@@ -2,167 +2,78 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C67A64642FD
-	for <lists+linux-clk@lfdr.de>; Wed,  1 Dec 2021 00:25:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B198C4647E1
+	for <lists+linux-clk@lfdr.de>; Wed,  1 Dec 2021 08:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241316AbhK3X3O (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 30 Nov 2021 18:29:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345470AbhK3X14 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 30 Nov 2021 18:27:56 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406B0C06175C;
-        Tue, 30 Nov 2021 15:24:35 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id z7so23591530lfi.11;
-        Tue, 30 Nov 2021 15:24:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ops+ixvINP38o4nA4ikQm5GyykwXVWsU0qQPTLJ2ovo=;
-        b=YMJPx1WkfQ4OtvgoHiEOjNWPEVjmn3npVavgDBfRcNtJDkNDsT+oIhWmoM6O2vWsFz
-         kDfpD5FcITyBnC2WuMVLxKEi13AvMRCTzq0ziSJJ3GMHqJ1GZeh8mmMiENZw293W3hoh
-         mbjG8N3cb1e8+k4AUPL9nxcldnvXDRrUQDXPA3FfG9zQRX7TFmzQA3LU3Pn+zelGrqP8
-         fv2bDd75irm5uKgrOxMJjI+jzBDGrK+24gXvFS/BW4cpb9k9r83dMlJxIcZqWCHapD78
-         iKuBfdBjVqeMBg+gCfa2Vok8CbbEsYlGoOkCBJ4lOIKW2mr0wPEl0jmVvU8ud2k8B4w1
-         eM8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ops+ixvINP38o4nA4ikQm5GyykwXVWsU0qQPTLJ2ovo=;
-        b=Abqyu988mDzSCna70Gtbr9nclNj1MJbFOddNxUmfjsFL2qK/bO/hjt+y/1Y0UuDInJ
-         mMWUCl1kMxxPpiz57lkwQUF0fsV+WjZ+J3cSGg9LkX5ZFcT2mge+w+kyCxtOB418J0cG
-         izsPJpmxA/7z/cQLp65wpnhKmCSo0jgIjllU4DAMfddN/neFRfAG6wG3wHFuql/U9DcS
-         nYWlaLYhmat2Xcv0nzn7/IN0kAaUJizLpnSmURT5h+HBvLQxqcVQXgm5UNBmDAaubXm1
-         mGZUJzItGhYKPt7VvJPvxmweNSv04JF8+zE4h+yQ8JCiuLfIbTGubD3GdlQadNT9u1vH
-         3QKA==
-X-Gm-Message-State: AOAM531WaB0BUy6dIOxPLpIr1KyyLSMTsipzWUkRCJHSg0tkAwHsP5SD
-        xTzsIWf+FOcC2+rx9Wu2s3AZEFsjZtA=
-X-Google-Smtp-Source: ABdhPJwYhMt2gMhwNZLB8J5sGborl43HOmKpzseUac+5sucFsKDv4qipP1jfRU2yxx/VOb5FtiCQaA==
-X-Received: by 2002:ac2:491e:: with SMTP id n30mr2284370lfi.97.1638314673603;
-        Tue, 30 Nov 2021 15:24:33 -0800 (PST)
-Received: from localhost.localdomain (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.gmail.com with ESMTPSA id x199sm1860735lff.284.2021.11.30.15.24.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 15:24:33 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
-Subject: [PATCH v16 40/40] ARM: tegra20/30: Disable unused host1x hardware
-Date:   Wed,  1 Dec 2021 02:23:47 +0300
-Message-Id: <20211130232347.950-41-digetx@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211130232347.950-1-digetx@gmail.com>
-References: <20211130232347.950-1-digetx@gmail.com>
+        id S1347220AbhLAH0s (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 1 Dec 2021 02:26:48 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:52500 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347168AbhLAH0r (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 1 Dec 2021 02:26:47 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 44566CE1D68;
+        Wed,  1 Dec 2021 07:23:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14985C53FAD;
+        Wed,  1 Dec 2021 07:23:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638343403;
+        bh=QkDYnqLkhpOqGOf8REtEmrkoUi08AcwqoUU69C4hG64=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CLNLhW2/CHpgb9eszwtFYwrlvYor2KX4jPLFowSflbgOCRT9M5Rdi7lC9zIkoIRVd
+         T+j/zrpm/Y45tKRIF8d6YgyZ8gvxcgJ6YtqaUXIqSubs51Mo9sb6/1WZrl9SDAXbdc
+         oepD7jw2ejaHlyY+NAUjiEMKqzLU64eOryHYEV3EuRP+/QuML+lsSyeYizvbtJ/eow
+         3jCNu0EfyiGY5QXMCs8m5x6g4pT+J1R288neGYvCgFaqXi8y3EJEfP1/N3buRN0gFr
+         K8vX4DGsR6CPFn6cOzuUUnKj95oRO2gRIU75EGymTpgZkXx8TGYbiTERD7rlnZ8QjN
+         b/WUVn+FqumpQ==
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] clk: qcom: Add clocks for SM8450 SoC
+Date:   Wed,  1 Dec 2021 12:53:06 +0530
+Message-Id: <20211201072310.3968679-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-MPE, VI, EPP and ISP were never used and we don't have drivers for them.
-Since these modules are enabled by default in a device-tree, a device is
-created for them, blocking voltage scaling because there is no driver to
-bind, and thus, state of PMC driver is never synced. Disable them.
+This series adds the GCC and RPMH clock support required for SM8450 SoC
+along with devicetree binding for these clocks.
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- arch/arm/boot/dts/tegra20.dtsi | 4 ++++
- arch/arm/boot/dts/tegra30.dtsi | 8 ++++++++
- 2 files changed, 12 insertions(+)
+Please note that the GCC driver patch depends on new alpha LUCID_EVO
+introduced by Vamsi in [1]. That would be required to be picked before this
+patch can be applied.
 
-diff --git a/arch/arm/boot/dts/tegra20.dtsi b/arch/arm/boot/dts/tegra20.dtsi
-index 7b69ffc57abe..8010b40d7377 100644
---- a/arch/arm/boot/dts/tegra20.dtsi
-+++ b/arch/arm/boot/dts/tegra20.dtsi
-@@ -59,6 +59,7 @@ mpe@54040000 {
- 			reset-names = "mpe";
- 			power-domains = <&pd_mpe>;
- 			operating-points-v2 = <&mpe_dvfs_opp_table>;
-+			status = "disabled";
- 		};
- 
- 		vi@54080000 {
-@@ -70,6 +71,7 @@ vi@54080000 {
- 			reset-names = "vi";
- 			power-domains = <&pd_venc>;
- 			operating-points-v2 = <&vi_dvfs_opp_table>;
-+			status = "disabled";
- 		};
- 
- 		epp@540c0000 {
-@@ -81,6 +83,7 @@ epp@540c0000 {
- 			reset-names = "epp";
- 			power-domains = <&pd_core>;
- 			operating-points-v2 = <&epp_dvfs_opp_table>;
-+			status = "disabled";
- 		};
- 
- 		isp@54100000 {
-@@ -91,6 +94,7 @@ isp@54100000 {
- 			resets = <&tegra_car 23>;
- 			reset-names = "isp";
- 			power-domains = <&pd_venc>;
-+			status = "disabled";
- 		};
- 
- 		gr2d@54140000 {
-diff --git a/arch/arm/boot/dts/tegra30.dtsi b/arch/arm/boot/dts/tegra30.dtsi
-index 96d1c5688248..c8b22ec30ef0 100644
---- a/arch/arm/boot/dts/tegra30.dtsi
-+++ b/arch/arm/boot/dts/tegra30.dtsi
-@@ -145,6 +145,8 @@ mpe@54040000 {
- 			operating-points-v2 = <&mpe_dvfs_opp_table>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_MPE>;
-+
-+			status = "disabled";
- 		};
- 
- 		vi@54080000 {
-@@ -158,6 +160,8 @@ vi@54080000 {
- 			operating-points-v2 = <&vi_dvfs_opp_table>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_VI>;
-+
-+			status = "disabled";
- 		};
- 
- 		epp@540c0000 {
-@@ -171,6 +175,8 @@ epp@540c0000 {
- 			operating-points-v2 = <&epp_dvfs_opp_table>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_EPP>;
-+
-+			status = "disabled";
- 		};
- 
- 		isp@54100000 {
-@@ -183,6 +189,8 @@ isp@54100000 {
- 			power-domains = <&pd_venc>;
- 
- 			iommus = <&mc TEGRA_SWGROUP_ISP>;
-+
-+			status = "disabled";
- 		};
- 
- 		gr2d@54140000 {
+[1]: https://lore.kernel.org/all/a0b04869a20a0afef99dd457ebb6474f50591210.1637302009.git.quic_vamslank@quicinc.com/
+
+Vinod Koul (4):
+  dt-bindings: clock: Add SM8450 GCC clock bindings
+  dt-bindings: clock: Add RPMHCC bindings for SM8450
+  clk: qcom: Add clock driver for SM8450
+  clk: qcom: rpmh: add support for SM8450 rpmh clocks
+
+ .../bindings/clock/qcom,gcc-sm8450.yaml       |   85 +
+ .../bindings/clock/qcom,rpmhcc.yaml           |    1 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/clk-rpmh.c                   |   27 +
+ drivers/clk/qcom/gcc-sm8450.c                 | 3314 +++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-sm8450.h   |  244 ++
+ 7 files changed, 3680 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sm8450.yaml
+ create mode 100644 drivers/clk/qcom/gcc-sm8450.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-sm8450.h
+
 -- 
-2.33.1
+2.31.1
 
