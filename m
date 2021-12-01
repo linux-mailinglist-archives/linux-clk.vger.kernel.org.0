@@ -2,77 +2,137 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1C7464CDC
-	for <lists+linux-clk@lfdr.de>; Wed,  1 Dec 2021 12:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 913E5464DAD
+	for <lists+linux-clk@lfdr.de>; Wed,  1 Dec 2021 13:11:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349036AbhLALhl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 1 Dec 2021 06:37:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
+        id S1349229AbhLAMOa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 1 Dec 2021 07:14:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348973AbhLALhg (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 1 Dec 2021 06:37:36 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6037C0613F3
-        for <linux-clk@vger.kernel.org>; Wed,  1 Dec 2021 03:34:10 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id p13so16437750pfw.2
-        for <linux-clk@vger.kernel.org>; Wed, 01 Dec 2021 03:34:10 -0800 (PST)
+        with ESMTP id S1349275AbhLAMNN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 1 Dec 2021 07:13:13 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8EAC0613E0
+        for <linux-clk@vger.kernel.org>; Wed,  1 Dec 2021 04:09:49 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id e11so47600785ljo.13
+        for <linux-clk@vger.kernel.org>; Wed, 01 Dec 2021 04:09:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
-        b=nKE9e+4jEQRb21OhoYPSbxPLfJ2IuSmNXU0U6wmcP4ykCacrWpdbtE0jjuz/hSLLGi
-         3CHjeG+lFmWzoULwCsmlhVFgDEk5dLFaYb51pw7bXGjZ9H8t0j91dP9aL17MRQYkMPZK
-         Snvty/Yp8/ZrWZr2EuFXHqBxUdbU8X39ik45viERJ1Dn7qW8BPCFp2vlafV2okU0kn5j
-         QPTIDY8QJSy8zAVbK10d6+AY0lky+mrQRAAg0uS1DacQStzD/dQtt/uBz/RlGIdZCai/
-         BHep24kmiLdl1nvBvHYMFonu8NoJvJlErv7lbZlg2+2c277BpkzmDA4WwPZoxzlIf0Mh
-         Af5g==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WgVnAy4PaVSjL+4eGkdCy1MSurSmINPE/moDhmd7OEY=;
+        b=fGHuBiNONaIQcCEGqZ933n0z5CLNjyxitYLpdM95CqtoZrjDnnf0049EceiUDdzlCi
+         DLeM5kgtHk65Swl2mOqvlO7sPdM6RPowjQyC0NBilqGF+V/QgS6zS12MXQ6ECmSf5G/i
+         7LtMTeWWVFrSDdV5UhuoWUMN3ATxuD9U+XYKc76j+D6Wf6nIBqbPqZ15m/ub5iNILJDn
+         39QES/jHh+jaODfaMRpsroySad0MXtN24HC9ukBKijzXYQnRv9Gi856wLmwxJTlqRCUE
+         q36xud4TFp/n98IqYrLlIOC/3s3S2Xu+nSslMQPnlyCaub3e1ThOSXITn1DCV9GRF5XO
+         iWHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
-        b=qod9x3pBKgcpDFubUuxM0UHrDqySQiMUN8c8da6/FszJ2ucT5JYDn0FgFdTF1J13On
-         7wBmcxoxEEqGgxADzUF3NO6oLEz/bGjC82wijBKai4qHM/0ThIg3SyqQXxjQ956Mmy+w
-         FunBj4Q6VvrFfEj/DGMOggXy+LqOcQlNkElySnZnXjimXV4HnLjSsLhNtjfCsFUER+On
-         bDfoow2m+ZU8YBhh2z3Nt86mWkRQ3GnOW+ZT8Y/f84bv6JYA/OfcIeyaVDQhZ6RQJPlN
-         QKDvwlCPPEsVfAqpOHP6YYGhv/IGCn/AuKyX226bTc5eduO/uaqpr32NfZgjELMeRn6J
-         zWUw==
-X-Gm-Message-State: AOAM530hmiTbLN2WWdgAiHQVyWxp7ll41cTOem2CSPMSeR97tcEQKHnk
-        eHWqoPulTd1pKIjhgi36BVtG1dBLqhIsEC5WdK01mbr6KfQ=
-X-Google-Smtp-Source: ABdhPJwK+H50pzFgfv5CJPfAwBzUdMqIKHh+Ckkuju2lG2knVlJrzqINPiiwPjc/Uz6xuSJez7Fkn5YZPcfa5CPpvro=
-X-Received: by 2002:a67:ef4d:: with SMTP id k13mr6266305vsr.4.1638358439020;
- Wed, 01 Dec 2021 03:33:59 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WgVnAy4PaVSjL+4eGkdCy1MSurSmINPE/moDhmd7OEY=;
+        b=J7akv03TxCHqdJn3IkKRRv8RBS1RkRxP7gSnFwrbdT1gmjqLYF4FkUI2R2xIwJasMQ
+         uOU6VB1mOX2KoUK6JYE4OpW81GhnMib0oxZMI6ny7wGmo7deCoBsKM6YsbnzgsQd6nVN
+         Huy4VstuXJOnBQRMJ7uuSP2ZMIsGsZXI4jCPFe6OEn+GvjRxZansaZ94w8eMEKsL/dzF
+         JBJyR/gi79SX8nIYUwqY3/fKhb2F6SwlPmBYRVXnckLUl6/LYGhaFECPEwK70DRzKPHO
+         tn3ZqV7BOxfE06BFiu4cLNNI3ludgjxjqR0h/Enll+03iVkN6hKA6lf3XsxrsS78eOdP
+         bRzQ==
+X-Gm-Message-State: AOAM532YAfhkXTrU/p2ME+eeHuAUhqrRpoUHrkx1nr6CyVMCNxmz5fJ5
+        YS8jBq96bD3TShFcrFqiR9NFyg==
+X-Google-Smtp-Source: ABdhPJwwMeZ23XuP5iUvcy/R/g0hpL/lUNgAh0ERVoZdcnMwCE7QDvXIpDSH/0/XU1A+sboOaZ3U0A==
+X-Received: by 2002:a2e:b1cf:: with SMTP id e15mr5267678lja.368.1638360587351;
+        Wed, 01 Dec 2021 04:09:47 -0800 (PST)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id f10sm2078642lfu.122.2021.12.01.04.09.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 04:09:46 -0800 (PST)
+Subject: Re: [PATCH 4/4] clk: qcom: rpmh: add support for SM8450 rpmh clocks
+To:     Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211201072310.3968679-1-vkoul@kernel.org>
+ <20211201072310.3968679-5-vkoul@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Message-ID: <ef6e0041-0e99-d169-d9af-9fa4d4ad5960@linaro.org>
+Date:   Wed, 1 Dec 2021 15:09:46 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Sender: unitednationawardwinner@gmail.com
-Received: by 2002:ab0:6c55:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 03:33:58 -0800 (PST)
-From:   "Mrs. Orgil Baatar" <mrs.orgilbaatar21@gmail.com>
-Date:   Wed, 1 Dec 2021 03:33:58 -0800
-X-Google-Sender-Auth: uTQ_nfkzXaWGWaTWp1BSFqK3Ucs
-Message-ID: <CAJ4dHaSrD-X=xpfKNZV-hXSiMV6mNYrgy5vWCNkKm6iu5RQStg@mail.gmail.com>
-Subject: Your long awaited part payment of $2.5.000.00Usd
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211201072310.3968679-5-vkoul@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Attention: Beneficiary, Your long awaited part payment of
-$2.5.000.00Usd (TWO MILLION FIVE Hundred Thousand United State
-Dollars) is ready for immediate release to you, and it was
-electronically credited into an ATM Visa Card for easy delivery.
+On 01/12/2021 10:23, Vinod Koul wrote:
+> This adds the RPMH clocks present in SM8450 SoC
+> 
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
 
-Your new Payment Reference No.- 6363836,
-Pin Code No: 1787
-Your Certificate of Merit Payment No: 05872,
+Tested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Your Names: |
-Address: |
+> ---
+>   drivers/clk/qcom/clk-rpmh.c | 27 +++++++++++++++++++++++++++
+>   1 file changed, 27 insertions(+)
+> 
+> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
+> index 441d7a20e6f3..0403cff6c230 100644
+> --- a/drivers/clk/qcom/clk-rpmh.c
+> +++ b/drivers/clk/qcom/clk-rpmh.c
+> @@ -515,6 +515,32 @@ static const struct clk_rpmh_desc clk_rpmh_sm8350 = {
+>   /* Resource name must match resource id present in cmd-db */
+>   DEFINE_CLK_RPMH_ARC(sc7280, bi_tcxo, bi_tcxo_ao, "xo.lvl", 0x3, 4);
+>   
+> +DEFINE_CLK_RPMH_VRM(sm8450, ln_bb_clk1, ln_bb_clk1_ao, "lnbclka1", 4);
+> +DEFINE_CLK_RPMH_VRM(sm8450, ln_bb_clk2, ln_bb_clk2_ao, "lnbclka2", 4);
+> +
+> +static struct clk_hw *sm8450_rpmh_clocks[] = {
+> +	[RPMH_CXO_CLK]		= &sc7280_bi_tcxo.hw,
+> +	[RPMH_CXO_CLK_A]	= &sc7280_bi_tcxo_ao.hw,
+> +	[RPMH_LN_BB_CLK1]	= &sm8450_ln_bb_clk1.hw,
+> +	[RPMH_LN_BB_CLK1_A]	= &sm8450_ln_bb_clk1_ao.hw,
+> +	[RPMH_LN_BB_CLK2]	= &sm8450_ln_bb_clk2.hw,
+> +	[RPMH_LN_BB_CLK2_A]	= &sm8450_ln_bb_clk2_ao.hw,
+> +	[RPMH_RF_CLK1]		= &sdm845_rf_clk1.hw,
+> +	[RPMH_RF_CLK1_A]	= &sdm845_rf_clk1_ao.hw,
+> +	[RPMH_RF_CLK2]		= &sdm845_rf_clk2.hw,
+> +	[RPMH_RF_CLK2_A]	= &sdm845_rf_clk2_ao.hw,
+> +	[RPMH_RF_CLK3]		= &sdm845_rf_clk3.hw,
+> +	[RPMH_RF_CLK3_A]	= &sdm845_rf_clk3_ao.hw,
+> +	[RPMH_RF_CLK4]		= &sm8350_rf_clk4.hw,
+> +	[RPMH_RF_CLK4_A]	= &sm8350_rf_clk4_ao.hw,
+> +	[RPMH_IPA_CLK]		= &sdm845_ipa.hw,
+> +};
+> +
+> +static const struct clk_rpmh_desc clk_rpmh_sm8450 = {
+> +	.clks = sm8450_rpmh_clocks,
+> +	.num_clks = ARRAY_SIZE(sm8450_rpmh_clocks),
+> +};
+> +
+>   static struct clk_hw *sc7280_rpmh_clocks[] = {
+>   	[RPMH_CXO_CLK]      = &sc7280_bi_tcxo.hw,
+>   	[RPMH_CXO_CLK_A]    = &sc7280_bi_tcxo_ao.hw,
+> @@ -647,6 +673,7 @@ static const struct of_device_id clk_rpmh_match_table[] = {
+>   	{ .compatible = "qcom,sm8150-rpmh-clk", .data = &clk_rpmh_sm8150},
+>   	{ .compatible = "qcom,sm8250-rpmh-clk", .data = &clk_rpmh_sm8250},
+>   	{ .compatible = "qcom,sm8350-rpmh-clk", .data = &clk_rpmh_sm8350},
+> +	{ .compatible = "qcom,sm8450-rpmh-clk", .data = &clk_rpmh_sm8450},
+>   	{ .compatible = "qcom,sc7280-rpmh-clk", .data = &clk_rpmh_sc7280},
+>   	{ }
+>   };
+> 
 
-Person to Contact:MR KELLY HALL the Director of the International
-Audit unit ATM Payment Center,
 
-Email: uba-bf@e-ubabf.com
-TELEPHONE: +226 64865611 You can whatsApp the bank
-
-Regards.
-Mrs ORGIL BAATAR
+-- 
+With best wishes
+Dmitry
