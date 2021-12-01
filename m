@@ -2,53 +2,31 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 913E5464DAD
-	for <lists+linux-clk@lfdr.de>; Wed,  1 Dec 2021 13:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C25B64651F5
+	for <lists+linux-clk@lfdr.de>; Wed,  1 Dec 2021 16:44:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349229AbhLAMOa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 1 Dec 2021 07:14:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
+        id S238849AbhLAPsK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 1 Dec 2021 10:48:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349275AbhLAMNN (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 1 Dec 2021 07:13:13 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8EAC0613E0
-        for <linux-clk@vger.kernel.org>; Wed,  1 Dec 2021 04:09:49 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id e11so47600785ljo.13
-        for <linux-clk@vger.kernel.org>; Wed, 01 Dec 2021 04:09:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=WgVnAy4PaVSjL+4eGkdCy1MSurSmINPE/moDhmd7OEY=;
-        b=fGHuBiNONaIQcCEGqZ933n0z5CLNjyxitYLpdM95CqtoZrjDnnf0049EceiUDdzlCi
-         DLeM5kgtHk65Swl2mOqvlO7sPdM6RPowjQyC0NBilqGF+V/QgS6zS12MXQ6ECmSf5G/i
-         7LtMTeWWVFrSDdV5UhuoWUMN3ATxuD9U+XYKc76j+D6Wf6nIBqbPqZ15m/ub5iNILJDn
-         39QES/jHh+jaODfaMRpsroySad0MXtN24HC9ukBKijzXYQnRv9Gi856wLmwxJTlqRCUE
-         q36xud4TFp/n98IqYrLlIOC/3s3S2Xu+nSslMQPnlyCaub3e1ThOSXITn1DCV9GRF5XO
-         iWHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=WgVnAy4PaVSjL+4eGkdCy1MSurSmINPE/moDhmd7OEY=;
-        b=J7akv03TxCHqdJn3IkKRRv8RBS1RkRxP7gSnFwrbdT1gmjqLYF4FkUI2R2xIwJasMQ
-         uOU6VB1mOX2KoUK6JYE4OpW81GhnMib0oxZMI6ny7wGmo7deCoBsKM6YsbnzgsQd6nVN
-         Huy4VstuXJOnBQRMJ7uuSP2ZMIsGsZXI4jCPFe6OEn+GvjRxZansaZ94w8eMEKsL/dzF
-         JBJyR/gi79SX8nIYUwqY3/fKhb2F6SwlPmBYRVXnckLUl6/LYGhaFECPEwK70DRzKPHO
-         tn3ZqV7BOxfE06BFiu4cLNNI3ludgjxjqR0h/Enll+03iVkN6hKA6lf3XsxrsS78eOdP
-         bRzQ==
-X-Gm-Message-State: AOAM532YAfhkXTrU/p2ME+eeHuAUhqrRpoUHrkx1nr6CyVMCNxmz5fJ5
-        YS8jBq96bD3TShFcrFqiR9NFyg==
-X-Google-Smtp-Source: ABdhPJwwMeZ23XuP5iUvcy/R/g0hpL/lUNgAh0ERVoZdcnMwCE7QDvXIpDSH/0/XU1A+sboOaZ3U0A==
-X-Received: by 2002:a2e:b1cf:: with SMTP id e15mr5267678lja.368.1638360587351;
-        Wed, 01 Dec 2021 04:09:47 -0800 (PST)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id f10sm2078642lfu.122.2021.12.01.04.09.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 04:09:46 -0800 (PST)
-Subject: Re: [PATCH 4/4] clk: qcom: rpmh: add support for SM8450 rpmh clocks
+        with ESMTP id S1351106AbhLAPsJ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 1 Dec 2021 10:48:09 -0500
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C751EC061748
+        for <linux-clk@vger.kernel.org>; Wed,  1 Dec 2021 07:44:42 -0800 (PST)
+Received: from [192.168.1.101] (83.6.166.111.neoplus.adsl.tpnet.pl [83.6.166.111])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 576393F767;
+        Wed,  1 Dec 2021 16:37:03 +0100 (CET)
+Message-ID: <2649eada-3e80-cec3-5dca-bded67fa5f80@somainline.org>
+Date:   Wed, 1 Dec 2021 16:37:02 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 3/4] clk: qcom: Add clock driver for SM8450
+Content-Language: en-US
 To:     Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org,
@@ -59,80 +37,182 @@ Cc:     linux-arm-msm@vger.kernel.org,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20211201072310.3968679-1-vkoul@kernel.org>
- <20211201072310.3968679-5-vkoul@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Message-ID: <ef6e0041-0e99-d169-d9af-9fa4d4ad5960@linaro.org>
-Date:   Wed, 1 Dec 2021 15:09:46 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20211201072310.3968679-5-vkoul@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
+ <20211201072310.3968679-4-vkoul@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20211201072310.3968679-4-vkoul@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 01/12/2021 10:23, Vinod Koul wrote:
-> This adds the RPMH clocks present in SM8450 SoC
-> 
+
+On 01.12.2021 08:23, Vinod Koul wrote:
+> This adds Global Clock controller (GCC) driver for SM8450 SoC including
+> the gcc resets and gdsc.
+>
+> This patch is based on initial code downstream by Vivek Aknurwar
+> <viveka@codeaurora.org>
+>
 > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-
-Tested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
 > ---
->   drivers/clk/qcom/clk-rpmh.c | 27 +++++++++++++++++++++++++++
->   1 file changed, 27 insertions(+)
-> 
-> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-> index 441d7a20e6f3..0403cff6c230 100644
-> --- a/drivers/clk/qcom/clk-rpmh.c
-> +++ b/drivers/clk/qcom/clk-rpmh.c
-> @@ -515,6 +515,32 @@ static const struct clk_rpmh_desc clk_rpmh_sm8350 = {
->   /* Resource name must match resource id present in cmd-db */
->   DEFINE_CLK_RPMH_ARC(sc7280, bi_tcxo, bi_tcxo_ao, "xo.lvl", 0x3, 4);
->   
-> +DEFINE_CLK_RPMH_VRM(sm8450, ln_bb_clk1, ln_bb_clk1_ao, "lnbclka1", 4);
-> +DEFINE_CLK_RPMH_VRM(sm8450, ln_bb_clk2, ln_bb_clk2_ao, "lnbclka2", 4);
+>  drivers/clk/qcom/Kconfig      |    8 +
+>  drivers/clk/qcom/Makefile     |    1 +
+>  drivers/clk/qcom/gcc-sm8450.c | 3314 +++++++++++++++++++++++++++++++++
+>  3 files changed, 3323 insertions(+)
+>  create mode 100644 drivers/clk/qcom/gcc-sm8450.c
+>
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index 74efc82127e1..3a568e7ad886 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -618,6 +618,14 @@ config SM_GCC_8350
+>  	  Say Y if you want to use peripheral devices such as UART,
+>  	  SPI, I2C, USB, SD/UFS, PCIe etc.
+>  
+> +config SM_GCC_8450
+> +	tristate "SM8450 Global Clock Controller"
+> +	select QCOM_GDSC
+> +	help
+> +	  Support for the global clock controller on SM8450 devices.
+> +	  Say Y if you want to use peripheral devices such as UART,
+> +	  SPI, I2C, USB, SD/UFS, PCIe etc.
 > +
-> +static struct clk_hw *sm8450_rpmh_clocks[] = {
-> +	[RPMH_CXO_CLK]		= &sc7280_bi_tcxo.hw,
-> +	[RPMH_CXO_CLK_A]	= &sc7280_bi_tcxo_ao.hw,
-> +	[RPMH_LN_BB_CLK1]	= &sm8450_ln_bb_clk1.hw,
-> +	[RPMH_LN_BB_CLK1_A]	= &sm8450_ln_bb_clk1_ao.hw,
-> +	[RPMH_LN_BB_CLK2]	= &sm8450_ln_bb_clk2.hw,
-> +	[RPMH_LN_BB_CLK2_A]	= &sm8450_ln_bb_clk2_ao.hw,
-> +	[RPMH_RF_CLK1]		= &sdm845_rf_clk1.hw,
-> +	[RPMH_RF_CLK1_A]	= &sdm845_rf_clk1_ao.hw,
-> +	[RPMH_RF_CLK2]		= &sdm845_rf_clk2.hw,
-> +	[RPMH_RF_CLK2_A]	= &sdm845_rf_clk2_ao.hw,
-> +	[RPMH_RF_CLK3]		= &sdm845_rf_clk3.hw,
-> +	[RPMH_RF_CLK3_A]	= &sdm845_rf_clk3_ao.hw,
-> +	[RPMH_RF_CLK4]		= &sm8350_rf_clk4.hw,
-> +	[RPMH_RF_CLK4_A]	= &sm8350_rf_clk4_ao.hw,
-> +	[RPMH_IPA_CLK]		= &sdm845_ipa.hw,
+>  config SM_GPUCC_8150
+>  	tristate "SM8150 Graphics Clock Controller"
+>  	select SM_GCC_8150
+> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+> index 1718c34d3551..efb0837ea199 100644
+> --- a/drivers/clk/qcom/Makefile
+> +++ b/drivers/clk/qcom/Makefile
+> @@ -90,6 +90,7 @@ obj-$(CONFIG_SM_GCC_6350) += gcc-sm6350.o
+>  obj-$(CONFIG_SM_GCC_8150) += gcc-sm8150.o
+>  obj-$(CONFIG_SM_GCC_8250) += gcc-sm8250.o
+>  obj-$(CONFIG_SM_GCC_8350) += gcc-sm8350.o
+> +obj-$(CONFIG_SM_GCC_8450) += gcc-sm8450.o
+>  obj-$(CONFIG_SM_GPUCC_8150) += gpucc-sm8150.o
+>  obj-$(CONFIG_SM_GPUCC_8250) += gpucc-sm8250.o
+>  obj-$(CONFIG_SM_VIDEOCC_8150) += videocc-sm8150.o
+> diff --git a/drivers/clk/qcom/gcc-sm8450.c b/drivers/clk/qcom/gcc-sm8450.c
+> new file mode 100644
+> index 000000000000..175c18a1cdbe
+> --- /dev/null
+> +++ b/drivers/clk/qcom/gcc-sm8450.c
+> @@ -0,0 +1,3314 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2021, Linaro Limited
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/regmap.h>
+> +
+> +#include <dt-bindings/clock/qcom,gcc-sm8450.h>
+> +
+> +#include "clk-alpha-pll.h"
+> +#include "clk-branch.h"
+> +#include "clk-rcg.h"
+> +#include "clk-regmap.h"
+> +#include "clk-regmap-divider.h"
+> +#include "clk-regmap-mux.h"
+> +#include "gdsc.h"
+> +#include "reset.h"
+> +
+> +enum {
+> +	P_BI_TCXO,
+> +	P_GCC_GPLL0_OUT_EVEN,
+> +	P_GCC_GPLL0_OUT_MAIN,
+> +	P_GCC_GPLL4_OUT_MAIN,
+> +	P_GCC_GPLL9_OUT_MAIN,
+> +	P_PCIE_0_PIPE_CLK,
+> +	P_PCIE_1_PHY_AUX_CLK,
+> +	P_PCIE_1_PIPE_CLK,
+> +	P_SLEEP_CLK,
+> +	P_UFS_PHY_RX_SYMBOL_0_CLK,
+> +	P_UFS_PHY_RX_SYMBOL_1_CLK,
+> +	P_UFS_PHY_TX_SYMBOL_0_CLK,
+> +	P_USB3_PHY_WRAPPER_GCC_USB30_PIPE_CLK,
 > +};
 > +
-> +static const struct clk_rpmh_desc clk_rpmh_sm8450 = {
-> +	.clks = sm8450_rpmh_clocks,
-> +	.num_clks = ARRAY_SIZE(sm8450_rpmh_clocks),
-> +};
+> +static struct clk_alpha_pll gcc_gpll0 = {
+> +	.offset = 0x0,
+> +	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID_EVO],
+> +	.clkr = {
+> +		.enable_reg = 0x62018,
+> +		.enable_mask = BIT(0),
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gcc_gpll0",
+> +			.parent_data = &(const struct clk_parent_data){
+> +				.fw_name = "bi_tcxo",
+> +				.name = "bi_tcxo",
+
+I don't think we want .name for new drivers, as we do things cleanly
+
+from the start and don't have DT incompatibility problems.
+
+[...]
+
+
 > +
->   static struct clk_hw *sc7280_rpmh_clocks[] = {
->   	[RPMH_CXO_CLK]      = &sc7280_bi_tcxo.hw,
->   	[RPMH_CXO_CLK_A]    = &sc7280_bi_tcxo_ao.hw,
-> @@ -647,6 +673,7 @@ static const struct of_device_id clk_rpmh_match_table[] = {
->   	{ .compatible = "qcom,sm8150-rpmh-clk", .data = &clk_rpmh_sm8150},
->   	{ .compatible = "qcom,sm8250-rpmh-clk", .data = &clk_rpmh_sm8250},
->   	{ .compatible = "qcom,sm8350-rpmh-clk", .data = &clk_rpmh_sm8350},
-> +	{ .compatible = "qcom,sm8450-rpmh-clk", .data = &clk_rpmh_sm8450},
->   	{ .compatible = "qcom,sc7280-rpmh-clk", .data = &clk_rpmh_sc7280},
->   	{ }
->   };
-> 
+> +static int gcc_sm8450_probe(struct platform_device *pdev)
+> +{
+> +	struct regmap *regmap;
+> +	int ret;
+> +
+> +	regmap = qcom_cc_map(pdev, &gcc_sm8450_desc);
+> +	if (IS_ERR(regmap))
+> +		return PTR_ERR(regmap);
+> +
+> +	ret = qcom_cc_register_rcg_dfs(regmap, gcc_dfs_clocks,
+> +				       ARRAY_SIZE(gcc_dfs_clocks));
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* FORCE_MEM_CORE_ON for ufs phy ice core clocks */
+> +	regmap_update_bits(regmap, gcc_ufs_phy_ice_core_clk.halt_reg, BIT(14), BIT(14));
+> +
+> +	/* Keep the critical clock always-On
+
+I think the general style for multiline comments is to start with /* and then add a newline
 
 
--- 
-With best wishes
-Dmitry
+
+> +	 * gcc_camera_ahb_clk, gcc_camera_xo_clk, gcc_disp_ahb_clk,
+> +	 * gcc_disp_xo_clk, gcc_gpu_cfg_ahb_clk, gcc_video_ahb_clk,
+> +	 * gcc_video_xo_clk
+> +	 */
+> +	regmap_update_bits(regmap, 0x36004, BIT(0), BIT(0));
+> +	regmap_update_bits(regmap, 0x36020, BIT(0), BIT(0));
+> +	regmap_update_bits(regmap, 0x37004, BIT(0), BIT(0));
+> +	regmap_update_bits(regmap, 0x3701c, BIT(0), BIT(0));
+> +	regmap_update_bits(regmap, 0x81004, BIT(0), BIT(0));
+> +	regmap_update_bits(regmap, 0x42004, BIT(0), BIT(0));
+> +	regmap_update_bits(regmap, 0x42028, BIT(0), BIT(0));
+> +
+> +	ret = qcom_cc_really_probe(pdev, &gcc_sm8450_desc, regmap);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Failed to register GCC clocks\n");
+
+That's a bad downstream leftover that we don't want..
+
+
+
+> +		return ret;
+> +	}
+> +
+> +	dev_info(&pdev->dev, "Registered GCC clocks\n");
+
+And so is this.
+
+
+
+> +
+> +	return ret;
+
+You can simply return qcom_cc_really_probe(pdev, &gcc_sm8450_desc, regmap);
+
+
+Konrad
+
