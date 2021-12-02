@@ -2,77 +2,116 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EEAE465A7C
-	for <lists+linux-clk@lfdr.de>; Thu,  2 Dec 2021 01:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DDF0465AB0
+	for <lists+linux-clk@lfdr.de>; Thu,  2 Dec 2021 01:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353980AbhLBAPm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 1 Dec 2021 19:15:42 -0500
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:35790 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354212AbhLBAPb (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 1 Dec 2021 19:15:31 -0500
-Received: by mail-oi1-f177.google.com with SMTP id m6so52123843oim.2;
-        Wed, 01 Dec 2021 16:12:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+s50L4ewH0uZfxKb9gTcsPyAWEISfg/7jiV2kO1vvPo=;
-        b=j2N5M1FyJXIuBQ3Rv2D1/2IKHZzK38WNP4hVUz302nxDDPGUAlCPf41FjknD7Enpac
-         QZTQkKMnVemNHQtEzbP4nW4HlAwwev2THmu6BQpDKFld1jcTkOZFhTJ1E+oc6JZnK2nW
-         T7YaDk5MFaEeSEjjfsiZSkx9BHH0RaQL2U9OdsaKi8aHZApr7Ad6GTFS29Hak5h+3lXv
-         1qKux6mTUyThvRFV+kCDSlGkYFtRMVQN0rrm3b49DZTk4Q7QKH8TfhFz+uLCLTkN2H8f
-         CV/XhE4LnzTU8ojmX7ohZlsJNHU6w9gvnrxzmNBqWzxCIXlWGbcbmf0j9IF5QxWny9bE
-         kHWg==
-X-Gm-Message-State: AOAM530xE2eJ3EiqYlDHarIA92IBz4Vg3fBPkSqFOxbRnL7q9KTUhNSW
-        Dg2g4aWQMD5MNnqp5NGIpA==
-X-Google-Smtp-Source: ABdhPJzdsRJrpzhVv6agP0inyMBFQdKUoQ0uW3BGKemHkqnCoJHNosyy7qg6P8pSiq37ZeYtxJeRkw==
-X-Received: by 2002:aca:4b11:: with SMTP id y17mr1660931oia.170.1638403929689;
-        Wed, 01 Dec 2021 16:12:09 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id t11sm514328otj.24.2021.12.01.16.12.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 16:12:09 -0800 (PST)
-Received: (nullmailer pid 3278312 invoked by uid 1000);
-        Thu, 02 Dec 2021 00:12:08 -0000
-Date:   Wed, 1 Dec 2021 18:12:08 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     linux-samsung-soc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        David Virag <virag.david003@gmail.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        =?utf-8?B?UGF3ZcWC?= Chmiel <pawel.mikolaj.chmiel@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>
-Subject: Re: [PATCH 1/2] dt-bindings: clock: exynos850: Add bindings for
- Exynos850 sysreg clocks
-Message-ID: <YagPWOj0CLxE/+ER@robh.at.kernel.org>
-References: <20211126203641.24005-1-semen.protsenko@linaro.org>
+        id S1354364AbhLBAZX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 1 Dec 2021 19:25:23 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:46542 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1354336AbhLBAZQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 1 Dec 2021 19:25:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638404515; x=1669940515;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8OWuRcA3lxtUFLm25cs+ndOW/6ZK4EfEP56wGsWdKl4=;
+  b=BcqBkAgnXEOaNnx7HXNfOrNUcO/WMckTgVDevDsgvHh4mbnIBA4xsPiw
+   u7mnrcPsz68dY6BJ47e1g5sLBPmIrRF26kXwvuq6JmMuYL+rmu83Dty7t
+   ZNAWTpuNcwesiMKfq7Z2Oe3CjtsL6GGo9DzdCuyyzYxr+oIFv5ySP2+Yu
+   s=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Dec 2021 16:21:55 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:21:54 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 1 Dec 2021 16:21:54 -0800
+Received: from hu-vamslank-sd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 1 Dec 2021 16:21:53 -0800
+From:   <quic_vamslank@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <tglx@linutronix.de>, <maz@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <manivannan.sadhasivam@linaro.org>,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+Subject: [PATCH v6 0/5] Add GCC and RPMh clock support for SDX65 
+Date:   Wed, 1 Dec 2021 16:21:30 -0800
+Message-ID: <cover.1638402361.git.quic_vamslank@quicinc.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211126203641.24005-1-semen.protsenko@linaro.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, 26 Nov 2021 22:36:40 +0200, Sam Protsenko wrote:
-> System Register is used to configure system behavior, like USI protocol,
-> etc. SYSREG clocks should be provided to corresponding syscon nodes, to
-> make it possible to modify SYSREG registers.
-> 
-> While at it, add also missing PMU and GPIO clocks, which looks necessary
-> and might be needed for corresponding Exynos850 features soon.
-> 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
->  include/dt-bindings/clock/exynos850.h | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
-> 
+From: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
 
-Acked-by: Rob Herring <robh@kernel.org>
+Hello,
+Changes from v5:
+ - Collected Vinod Koul's and Rob's Reviewed-by for the patches
+ - Rebased on the latest tip of Torvald's tree (MAINTAINERS: co-maintain random.c)
+
+Changes from v4:
+ - Fixed comments from vinod koul on Clock Alpha PLL and GCC driver support patches
+ - Addressed Rob's comments related to GCC dt-binding patch
+ - Collected Vinod Koul's Reviewed-by for the dt-bindings patches
+
+Changes from v3:
+ - Fixed DTbindings and unused variables errors reported by kernel test bot
+ - Rebased on top of v5.16-rc1
+
+Changes from v2:
+ - Addressed Taniya Das and Vinod Koul's comments related to adding LUCID_EVO
+   PLL type and rpmh support patches
+ - Collected Rob's Acked-by for the dt-bindings patches
+
+Changes from v1:
+ - Addressed Bjorn's comments related to the GCC support patch
+ - Collected Bjorn's and Rob's Reviewed-by for the dt-bindings patches
+
+This patch series adds bindings and device driver changes for GCC, pdc and RPMh
+clock support for SDX65 Platform.
+
+Thanks,
+Vamsi
+
+Vamsi Krishna Lanka (2):
+  clk: qcom: Add LUCID_EVO PLL type for SDX65
+  clk: qcom: Add SDX65 GCC support
+
+Vamsi krishna Lanka (3):
+  dt-bindings: clock: Add SDX65 GCC clock bindings
+  dt-bindings: clock: Introduce RPMHCC bindings for SDX65
+  clk: qcom: Add support for SDX65 RPMh clocks
+
+ .../bindings/clock/qcom,gcc-sdx65.yaml        |   80 +
+ .../bindings/clock/qcom,rpmhcc.yaml           |    1 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/clk-alpha-pll.c              |  204 ++-
+ drivers/clk/qcom/clk-alpha-pll.h              |    3 +
+ drivers/clk/qcom/clk-rpmh.c                   |   25 +
+ drivers/clk/qcom/gcc-sdx65.c                  | 1603 +++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-sdx65.h    |  122 ++
+ 9 files changed, 2021 insertions(+), 26 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sdx65.yaml
+ create mode 100644 drivers/clk/qcom/gcc-sdx65.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-sdx65.h
+
+
+base-commit: 58e1100fdc5990b0cc0d4beaf2562a92e621ac7d
+-- 
+2.33.1
+
