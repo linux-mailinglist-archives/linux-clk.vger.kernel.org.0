@@ -2,84 +2,115 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E008346B4B9
-	for <lists+linux-clk@lfdr.de>; Tue,  7 Dec 2021 08:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9C146B3F4
+	for <lists+linux-clk@lfdr.de>; Tue,  7 Dec 2021 08:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231382AbhLGH6Q (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 7 Dec 2021 02:58:16 -0500
-Received: from [113.204.237.245] ([113.204.237.245]:41272 "EHLO
-        test.cqplus1.com" rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231334AbhLGH6Q (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 7 Dec 2021 02:58:16 -0500
-X-MailGates: (compute_score:DELIVER,40,3)
-Received: from 172.27.96.203
-        by cqmailgates with MailGates ESMTP Server V5.0(21476:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Tue, 07 Dec 2021 15:21:34 +0800 (CST)
-Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
- CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 7 Dec 2021 15:21:31 +0800
-Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
- ([::1]) with mapi id 15.01.2375.017; Tue, 7 Dec 2021 15:21:31 +0800
-From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Mark Brown <broonie@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Subject: RE: [PATCH v5 09/10] ARM: sunplus: Add initial support for Sunplus
- SP7021 SoC
-Thread-Topic: [PATCH v5 09/10] ARM: sunplus: Add initial support for Sunplus
- SP7021 SoC
-Thread-Index: AQHX6BmLzMMFC/bfnUOF4rJ/hd0nkqwgNNgAgAZiSeA=
-Date:   Tue, 7 Dec 2021 07:21:31 +0000
-Message-ID: <88f8cc0b1334467aae7a5a4b0643176a@cqplus1.com>
-References: <cover.1638515726.git.qinjian@cqplus1.com>
- <eabfe1b84b889e4aa95e24c30a114c68ef95fd07.1638515726.git.qinjian@cqplus1.com>
- <CAK8P3a1_coAnp8P3L2UA+smxuRL9widFQv9Y5ZZ0X_Sr9zsZtg@mail.gmail.com>
-In-Reply-To: <CAK8P3a1_coAnp8P3L2UA+smxuRL9widFQv9Y5ZZ0X_Sr9zsZtg@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.28.110.18]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S230243AbhLGHgh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 7 Dec 2021 02:36:37 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:40331 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230202AbhLGHgg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 7 Dec 2021 02:36:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638862386; x=1670398386;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=EoBuBtj/CKp/HWzfb39zfxN4Nrr9d2HqG5zVFr+fPkQ=;
+  b=ZepunwatZ4O7Lu/v1MNc9jH/0RV8zvQ9Ejp+RYK3IPTtC2qhfAGDwm6E
+   wTfHct5b7vOJ+83U6FjCy54d1i9UWhQtjwQ/d4kJmQJ1ZrmxBk/72PwSE
+   X+vyHUDl6gCAWui0w80bvpBYcqUVECFmXqdTpatKJ+b1GnzRWQDKT8fm/
+   I=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 06 Dec 2021 23:33:06 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2021 23:33:05 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 6 Dec 2021 23:33:05 -0800
+Received: from hu-vamslank-sd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 6 Dec 2021 23:33:04 -0800
+From:   <quic_vamslank@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <robh+dt@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <manivannan.sadhasivam@linaro.org>,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+Subject: [PATCH v7 0/3] Add PLL and GCC clock support for SDX65 
+Date:   Mon, 6 Dec 2021 23:32:48 -0800
+Message-ID: <cover.1638861860.git.quic_vamslank@quicinc.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-PiA+ICtjb25maWcgQVJDSF9TVU5QTFVTDQo+ID4gKyAgICAgICBib29sICJTdW5wbHVzIFNvQ3Mi
-DQo+ID4gKyAgICAgICBzZWxlY3QgQ0xLU1JDX09GDQo+ID4gKyAgICAgICBzZWxlY3QgQ09NTU9O
-X0NMSw0KPiA+ICsgICAgICAgc2VsZWN0IEdFTkVSSUNfQ0xPQ0tFVkVOVFMNCj4gPiArICAgICAg
-IHNlbGVjdCBHRU5FUklDX0lSUV9DSElQDQo+ID4gKyAgICAgICBzZWxlY3QgR0VORVJJQ19JUlFf
-TVVMVElfSEFORExFUg0KPiA+ICsgICAgICAgc2VsZWN0IFVTRV9PRg0KPiA+ICsgICAgICAgc2Vs
-ZWN0IFJUQ19DTEFTUw0KPiA+ICsgICAgICAgc2VsZWN0IFJFU0VUX1NVTlBMVVMNCj4gDQo+IFRo
-aXMgaXMgaW4gdGhlIHdyb25nIHBsYWNlOiBtb3ZlIHRoZSBLY29uZmlnIGVudHJ5IGludG8NCj4g
-YXJjaC9hcm0vbWFjaC1zdW5wbHVzL0tjb25maWcNCj4gYW5kIG1ha2UgaXQgJ2RlcGVuZHMgb24g
-QVJDSF9NVUxUSV9WNycuDQo+IA0KPiBJIHRoaW5rIHlvdSBjYW4gcmVtb3ZlIGFsbCB0aGUgJ3Nl
-bGVjdCcgbGluZXMgYXMgd2VsbCBiZWNhdXNlIHRoZXkgYXJlDQo+IGVpdGhlciBpbXBsaWVkIGJ5
-DQo+IEFSQ0hfTVVMVElfVjcgb3Igbm90IGFjdHVhbGx5IG5lY2Vzc2FyeS4NCj4gLi4uLi4uDQoN
-ClRoYW5rcyBmb3IgeW91ciByZXZpZXcsIEknbGwgY29ycmVjdCB0aGVzZSBhdCBuZXh0IGNvbW1p
-dC4NCg0KPiANCj4gPiBAQCAtMTUyLDYgKzE1Miw3IEBAIHRleHRvZnMtJChDT05GSUdfQVJDSF9N
-U004WDYwKSA6PSAweDAwMjA4MDAwDQo+ID4gIHRleHRvZnMtJChDT05GSUdfQVJDSF9NU004OTYw
-KSA6PSAweDAwMjA4MDAwDQo+ID4gIHRleHRvZnMtJChDT05GSUdfQVJDSF9NRVNPTikgOj0gMHgw
-MDIwODAwMA0KPiA+ICB0ZXh0b2ZzLSQoQ09ORklHX0FSQ0hfQVhYSUEpIDo9IDB4MDAzMDgwMDAN
-Cj4gPiArdGV4dG9mcy0kKENPTkZJR19BUkNIX1NVTlBMVVMpIDo9IDB4MDAzMDgwMDANCj4gDQo+
-IFdoYXQgaXMgdGhpcyBuZWVkZWQgZm9yPyBJZiBpdCBib290cyB3aXRob3V0IHRoaXMgbGluZSwg
-YmV0dGVyIGF2b2lkDQo+IGFkZGluZyBpdCwgYmVjYXVzZQ0KPiBpdCB3aWxsIGluY3JlYXNlIHRo
-ZSBrZXJuZWwgc2l6ZSBmb3IgZXZlcnlvbmUgZWxzZSAodW5sZXNzIHRoZXkgYWxzbyBlbmFibGUN
-Cj4gQVhYSUEpLg0KPiANCg0KU1A3MDIxIHJlc2VydmVkIHRoZSAxc3QgMU1CIG1lbW9yeSBmb3Ig
-QVJNOTI2QFAtQ2hpcCB1c2luZywNClRoZSAybmQgMU1CIG1lbW9yeSBmb3IgSU9QIGRldmljZSBh
-bmQgdGhlIDNyZCAxTUIgbWVtb3J5IGZvciBib290bG9hZGVyLg0KSSdsbCBhZGQgdGhlc2UgY29t
-bWVudHMgYXQgbmV4dCBjb21taXQuDQoNCg0K
+From: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+
+Hello,
+Changes from v6:
+ - Addressed stephen's comments related to GCC and PLL patches
+ - separated PLL and GCC patches from rpmh patches as suggested by Bjorn
+
+Changes from v5:
+ - Collected Vinod Koul's and Rob's Reviewed-by for the patches
+ - Rebased on the latest tip of Torvald's tree (MAINTAINERS: co-maintain random.c)
+
+Changes from v4:
+ - Fixed comments from vinod koul on Clock Alpha PLL and GCC driver support patches
+ - Addressed Rob's comments related to GCC dt-binding patch
+ - Collected Vinod Koul's Reviewed-by for the dt-bindings patches
+
+Changes from v3:
+ - Fixed DTbindings and unused variables errors reported by kernel test bot
+ - Rebased on top of v5.16-rc1
+
+Changes from v2:
+ - Addressed Taniya Das and Vinod Koul's comments related to adding LUCID_EVO
+   PLL type and rpmh support patches
+ - Collected Rob's Acked-by for the dt-bindings patches
+
+Changes from v1:
+ - Addressed Bjorn's comments related to the GCC support patch
+ - Collected Bjorn's and Rob's Reviewed-by for the dt-bindings patches
+
+This patch series adds bindings and device driver changes for GCC, pdc and RPMh
+clock support for SDX65 Platform.
+
+Thanks,
+Vamsi
+
+Vamsi Krishna Lanka (2):
+  clk: qcom: Add LUCID_EVO PLL type for SDX65
+  clk: qcom: Add SDX65 GCC support
+
+Vamsi krishna Lanka (1):
+  dt-bindings: clock: Add SDX65 GCC clock bindings
+
+ .../bindings/clock/qcom,gcc-sdx65.yaml        |   80 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/clk-alpha-pll.c              |  204 ++-
+ drivers/clk/qcom/clk-alpha-pll.h              |    3 +
+ drivers/clk/qcom/gcc-sdx65.c                  | 1611 +++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-sdx65.h    |  122 ++
+ 7 files changed, 2003 insertions(+), 26 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sdx65.yaml
+ create mode 100644 drivers/clk/qcom/gcc-sdx65.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-sdx65.h
+
+
+base-commit: 58e1100fdc5990b0cc0d4beaf2562a92e621ac7d
+-- 
+2.33.1
+
