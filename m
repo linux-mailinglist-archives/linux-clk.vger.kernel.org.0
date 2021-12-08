@@ -2,441 +2,718 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 897E546D8ED
-	for <lists+linux-clk@lfdr.de>; Wed,  8 Dec 2021 17:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 388A846D933
+	for <lists+linux-clk@lfdr.de>; Wed,  8 Dec 2021 18:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbhLHQza (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 8 Dec 2021 11:55:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46994 "EHLO
+        id S229507AbhLHRI4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 8 Dec 2021 12:08:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbhLHQza (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 8 Dec 2021 11:55:30 -0500
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDABC0617A2
-        for <linux-clk@vger.kernel.org>; Wed,  8 Dec 2021 08:51:58 -0800 (PST)
-Received: by mail-ua1-x930.google.com with SMTP id 30so5732331uag.13
-        for <linux-clk@vger.kernel.org>; Wed, 08 Dec 2021 08:51:58 -0800 (PST)
+        with ESMTP id S237526AbhLHRI4 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 8 Dec 2021 12:08:56 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86B7C0617A2
+        for <linux-clk@vger.kernel.org>; Wed,  8 Dec 2021 09:05:23 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id p3-20020a05600c1d8300b003334fab53afso4643149wms.3
+        for <linux-clk@vger.kernel.org>; Wed, 08 Dec 2021 09:05:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=NsPq00yIfOBpAmL7EJoPHmZ49H4SAg5EXmPB7erQLMw=;
-        b=lCsuLSwfSHmuaosWw8kbB4sTHJM+gA9ROusB9lhNrc6AHVX4eoWNGLJZPvq3A9Is/X
-         +yhiCcI6gAZOEqxAOj2JvxzFYF1oaqvqSrFdgzuvV0ce6ajuHiuSt3cdWMbNZ4XsCfBD
-         KKmKh1TZ2r3Eah//Zt8W4aFIuTu1e7N/cQcJ3gy5GFmbhhYosku2DIORF6iQQRJMTjeN
-         vI8vYD1IAT2WDk3ja8KebpdcIZCX+YqoBL/XRvr7+hGNaS6eCWyH6uQ8TUxixSXc9NUS
-         dKIhAvuoYDZ4huagX2FbEk4uOS0N5Wo+1bIoLgz0Ej38FtICaclo3T7sgvdFaxnd5SRX
-         S+KA==
+        h=from:to:cc:subject:date:message-id;
+        bh=FmP1M+I3ZbdkcjuNnpLMqci7716QcqZn8qj7RLjdl40=;
+        b=vbDUP4RxL4pqBA8ENNCtlz0mwH1SQBnW03/KUBCz6+nVj/+0BfeOre6f+xvjSuv5J2
+         qN2aShqEtcEtjxlioi9xdrANYQxf1zix1kvfmjqFS71FzDm7K5cvn2yEyBCM5zxLG1vT
+         5kp2EuAJ+db06GuN7FLT7ZKlgmTZ6FPKiJ2n9gu+cPPiNZPJfVNjL6aBSQuzuF6xl0l3
+         fuOjyoafy2i6RhOyImTmMGu6EuU9JGRRoDRvTVMrbNNbRhkDVHmlmoVGPwMypMtwfs+f
+         MFznR3NC+q44XLKiRfEe9CEOCXxRVdRXEJ384dY47m3TfXIIgpRGFgCwrs33+arVYwaa
+         kdWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NsPq00yIfOBpAmL7EJoPHmZ49H4SAg5EXmPB7erQLMw=;
-        b=bZnkUwGGEDmEdKBK3YSw9pE1bmZbsJ7tEAXu6M2y0BFXJn621D2edk9EN6OmbpdlMq
-         peW6s1RAkxLpwi4d/m+Lhp+GnW33KX3qSKnKHdaHJkNVNijmcQuCNRBkdq1rEKLQcOR2
-         9rx5G3Yjl4+0QgANZsBrPs5Hu9/autV3JN+DPVRv7h+FvW3tjEXkTNKTyWzp+5/tPfyW
-         7RVrj6N1pmkWV0fdpGim8ShZPwL0hdlo+rX6rLP/vA9wkyiWvibamZZeODY7XeXRBmBJ
-         VnhloNj4pNxbSVkt56SsI9swd+Xgn7cie1u0CGbBJon2aoEfpaB1utA7pROeJ+++6kdU
-         xcwg==
-X-Gm-Message-State: AOAM533pUP0U5bAXFy3IZsu0oQZl0bR4732HhD8Mo+egJJfo+X025CKw
-        cNGDmxfgEoLQ0DxLVFk5BsW+R+kK1R2i7lXEALwoSg==
-X-Google-Smtp-Source: ABdhPJzSp7LNFdlDZQpDLMZULnPfdtRwmUOM/YhcHaNNHYhtbRZiyC2gxLf1d4O1CceWOQkIDkA3Xah8GvhA+bVPr+A=
-X-Received: by 2002:ab0:6002:: with SMTP id j2mr9946991ual.9.1638982316992;
- Wed, 08 Dec 2021 08:51:56 -0800 (PST)
-MIME-Version: 1.0
-References: <20211206153124.427102-1-virag.david003@gmail.com>
- <20211206153124.427102-8-virag.david003@gmail.com> <CAPLW+4k3Vmg0W0jVsTChHTG8+eeg=5QF+actz1Tk0vNV9w-y-A@mail.gmail.com>
- <0c7fc14b-a0d0-7d31-3a33-623f07114a80@canonical.com> <CAPLW+4=ioLewf5Hv5FO1jXjxaLrgedrzyKNtNtevTGADF9rBmw@mail.gmail.com>
- <a7d5f290-7992-b37c-fe2c-90bf3e5e83ce@canonical.com>
-In-Reply-To: <a7d5f290-7992-b37c-fe2c-90bf3e5e83ce@canonical.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Wed, 8 Dec 2021 18:51:45 +0200
-Message-ID: <CAPLW+4kmt1fEWG14jLJmPM0uHoyf017U7rigri47KT9Tamto=Q@mail.gmail.com>
-Subject: Re: [PATCH v4 7/7] arm64: dts: exynos: Add initial device tree
- support for Exynos7885 SoC
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     David Virag <virag.david003@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=FmP1M+I3ZbdkcjuNnpLMqci7716QcqZn8qj7RLjdl40=;
+        b=vfOdDxesKzorZwTmwoKxoCIudapyESNh96gBT8YovqFMNCSmlvJmHNdpO7trRbl59O
+         t70vxJK4PWZU73OiDeq1vm81NzUhFfcTTiLFZ5vyhFV0iaYB8zq4l1xNEaF3qU6/i1bJ
+         zQQQl1TKsRfjksdC7dZd67FGiYzUWiy60bVogqitrAnzwStos8pt9t3fXzbdBnNf4Kbc
+         vWeXX//KVDcvEvNnBLq0CbqKzdQjMwRl+gShqIAaWmq8DNjPrAgf8etvAJfW28fryaDI
+         8OKy9az/Q5VDX1vdkycYMw+v2wzlrIElhKQUEDzlmGVdpY6AlrlKylacDPNHJ0MjpG0u
+         OWGg==
+X-Gm-Message-State: AOAM5316C1E+E/V7e20qUBivbjZalYbCp0dbsLx5fgzhqYsb7kdpFxqE
+        lioKypsh/XCoqUQGPrXQhdUJWA==
+X-Google-Smtp-Source: ABdhPJwOWSLeh3OHh5a8rKelsAe8uA/x4c4wQ3muZFjl3mPdEnUPT6hWGElnQh2pGBSn7wFgRg+WYQ==
+X-Received: by 2002:a7b:ca55:: with SMTP id m21mr17529165wml.178.1638983121215;
+        Wed, 08 Dec 2021 09:05:21 -0800 (PST)
+Received: from localhost.localdomain ([88.160.176.23])
+        by smtp.gmail.com with ESMTPSA id h27sm7183883wmc.43.2021.12.08.09.05.20
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 08 Dec 2021 09:05:20 -0800 (PST)
+From:   Loic Poulain <loic.poulain@linaro.org>
+To:     bjorn.andersson@linaro.org, agross@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, shawn.guo@linaro.org,
+        Loic Poulain <loic.poulain@linaro.org>
+Subject: [PATCH 1/2] clk: qcom: Add display clock controller driver for QCM2290
+Date:   Wed,  8 Dec 2021 18:17:20 +0100
+Message-Id: <1638983841-23773-1-git-send-email-loic.poulain@linaro.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, 8 Dec 2021 at 18:29, Krzysztof Kozlowski
-<krzysztof.kozlowski@canonical.com> wrote:
->
-> On 08/12/2021 16:37, Sam Protsenko wrote:
-> > On Wed, 8 Dec 2021 at 11:05, Krzysztof Kozlowski
-> > <krzysztof.kozlowski@canonical.com> wrote:
-> >>
-> >> On 07/12/2021 21:19, Sam Protsenko wrote:
-> >>> On Mon, 6 Dec 2021 at 17:32, David Virag <virag.david003@gmail.com> w=
-rote:
-> >>>>
-> >>>> Add initial Exynos7885 device tree nodes with dts for the Samsung Ga=
-laxy
-> >>>> A8 (2018), a.k.a. "jackpotlte", with model number "SM-A530F".
-> >>>> Currently this includes some clock support, UART support, and I2C no=
-des.
-> >>>>
-> >>>> Signed-off-by: David Virag <virag.david003@gmail.com>
-> >>>> ---
-> >>>> Changes in v2:
-> >>>>   - Remove address-cells, and size-cells from dts, since they are
-> >>>>     already in the dtsi.
-> >>>>   - Lower case hex in memory node
-> >>>>   - Fix node names with underscore instead of hyphen
-> >>>>   - Fix line breaks
-> >>>>   - Fix "-key" missing from gpio keys node names
-> >>>>   - Use the form without "key" in gpio key labels on all keys
-> >>>>   - Suffix pin configuration node names with "-pins"
-> >>>>   - Remove "fimc_is_mclk" nodes from pinctrl dtsi for now
-> >>>>   - Use macros for "samsung,pin-con-pdn", and "samsung,pin-con-pdn"
-> >>>>   - Add comment about Arm PMU
-> >>>>   - Rename "clock-oscclk" to "osc-clock"
-> >>>>   - Include exynos-syscon-restart.dtsi instead of rewriting its cont=
-ents
-> >>>>
-> >>>> Changes in v3:
-> >>>>   - Fix typo (seperate -> separate)
-> >>>>
-> >>>> Changes in v4:
-> >>>>   - Fixed leading 0x in clock-controller nodes
-> >>>>   - Actually suffixed pin configuration node names with "-pins"
-> >>>>   - Seperated Cortex-A53 and Cortex-A73 PMU
-> >>>>
-> >>>>  arch/arm64/boot/dts/exynos/Makefile           |   7 +-
-> >>>>  .../boot/dts/exynos/exynos7885-jackpotlte.dts |  95 ++
-> >>>>  .../boot/dts/exynos/exynos7885-pinctrl.dtsi   | 865 +++++++++++++++=
-+++
-> >>>>  arch/arm64/boot/dts/exynos/exynos7885.dtsi    | 438 +++++++++
-> >>>>  4 files changed, 1402 insertions(+), 3 deletions(-)
-> >>>>  create mode 100644 arch/arm64/boot/dts/exynos/exynos7885-jackpotlte=
-.dts
-> >>>
-> >>> Shouldn't SoC and board files be sent as two separate patches? For
-> >>> example, I've checked exynos5433 and exynos7, SoC support
-> >>
-> >> Does not have to be. DTSI by itself cannot be even compiled, so keepin=
-g
-> >> it a separate commit does not bring that much benefits. Especially if =
-it
-> >> is only one DTSI and one DTS.
-> >>
-> >
-> > Right, the only theoretical benefit I can see is reverting the board
-> > dts in future, if another board already uses SoC dtsi. Or
-> > cherry-picking in similar manner. Not my call though, for me it just
-> > seems easier to review it that way, and more atomic.
-> >
-> >>>
-> >>>>  create mode 100644 arch/arm64/boot/dts/exynos/exynos7885-pinctrl.dt=
-si
-> >>>>  create mode 100644 arch/arm64/boot/dts/exynos/exynos7885.dtsi
-> >>>>
-> >>>> diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/d=
-ts/exynos/Makefile
-> >>>> index b41e86df0a84..c68c4ad577ac 100644
-> >>>> --- a/arch/arm64/boot/dts/exynos/Makefile
-> >>>> +++ b/arch/arm64/boot/dts/exynos/Makefile
-> >>>> @@ -1,6 +1,7 @@
-> >>>>  # SPDX-License-Identifier: GPL-2.0
-> >>>>  dtb-$(CONFIG_ARCH_EXYNOS) +=3D \
-> >>>> -       exynos5433-tm2.dtb      \
-> >>>> -       exynos5433-tm2e.dtb     \
-> >>>> -       exynos7-espresso.dtb    \
-> >>>> +       exynos5433-tm2.dtb              \
-> >>>> +       exynos5433-tm2e.dtb             \
-> >>>> +       exynos7-espresso.dtb            \
-> >>>> +       exynos7885-jackpotlte.dtb       \
-> >>>>         exynosautov9-sadk.dtb
-> >>>> diff --git a/arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts b/=
-arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts
-> >>>> new file mode 100644
-> >>>> index 000000000000..f5941dc4c374
-> >>>> --- /dev/null
-> >>>> +++ b/arch/arm64/boot/dts/exynos/exynos7885-jackpotlte.dts
-> >>>> @@ -0,0 +1,95 @@
-> >>>> +// SPDX-License-Identifier: GPL-2.0
-> >>>> +/*
-> >>>> + * Samsung Galaxy A8 2018 (jackpotlte/SM-A530F) device tree source
-> >>>> + *
-> >>>> + * Copyright (c) 2021 Samsung Electronics Co., Ltd.
-> >>>> + * Copyright (c) 2021 D=C3=A1vid Vir=C3=A1g
-> >>>> + *
-> >>>
-> >>> This line is not needed.
-> >>>
-> >>>> + */
-> >>>> +
-> >>>> +/dts-v1/;
-> >>>
-> >>> Suggest adding empty line here.
-> >>>
-> >>>> +#include "exynos7885.dtsi"
-> >>>> +#include <dt-bindings/gpio/gpio.h>
-> >>>> +#include <dt-bindings/input/input.h>
-> >>>> +#include <dt-bindings/interrupt-controller/irq.h>
-> >>>> +
-> >>>> +/ {
-> >>>> +       model =3D "Samsung Galaxy A8 (2018)";
-> >>>> +       compatible =3D "samsung,jackpotlte", "samsung,exynos7885";
-> >>>> +       chassis-type =3D "handset";
-> >>>> +
-> >>>> +       aliases {
-> >>>> +               serial0 =3D &serial_0;
-> >>>> +               serial1 =3D &serial_1;
-> >>>> +               serial2 =3D &serial_2;
-> >>>
-> >>> Suggestion: add aliases also for i2c nodes, to keep i2c instance
-> >>> numbers fixed in run-time (e.g. in "i2cdetect -l" output).
-> >>>
-> >>>> +       };
-> >>>> +
-> >>>> +       chosen {
-> >>>> +               stdout-path =3D &serial_2;
-> >>>> +       };
-> >>>> +
-> >>>> +       memory@80000000 {
-> >>>> +               device_type =3D "memory";
-> >>>> +               reg =3D <0x0 0x80000000 0x3da00000>,
-> >>>> +                     <0x0 0xc0000000 0x40000000>,
-> >>>> +                     <0x8 0x80000000 0x40000000>;
-> >>>> +       };
-> >>>> +
-> >>>> +       gpio-keys {
-> >>>> +               compatible =3D "gpio-keys";
-> >>>> +               pinctrl-names =3D "default";
-> >>>> +               pinctrl-0 =3D <&key_volup &key_voldown &key_power>;
-> >>>> +
-> >>>> +               volup-key {
-> >>>> +                       label =3D "Volume Up";
-> >>>> +                       interrupts =3D <5 IRQ_TYPE_LEVEL_HIGH 0>;
-> >>>
-> >>> Here and below: what is 0, why it's needed? Also, isn't it enough to
-> >>> have just "gpios", and remove interrupt*? Need to check "gpio-keys"
-> >>> driver and bindings doc, but AFAIR it should be enough to have just
-> >>> "gpios =3D" or just "interrupts =3D".
-> >>
-> >> "gpios" is enough, because the IRQ line is derived from it. However
-> >> explicitly describing interrupts seems like a more detailed hardware
-> >> description.
-> >>
-> >
-> > Frankly I don't think it's more detailed, it states the same thing
-> > (gpa1 controller, line=3D5).
->
-> It states that interrupt is exactly the same as GPIO which not
-> explicitly coming from bindings.
->
-> > Also not sure if level interrupt is needed
-> > for a key, maybe edge type would be better. Also, I still don't
-> > understand 0 in the end.
->
-> Indeed this part looks not correct - the leve and 0 at the end. In such
-> case better to skip it then define misleading property.
->
-> > Checking existing dts's, most of those only
-> > define "gpios". I'd say having only "gpios" is more obvious, and will
-> > work the same way. But that's not a strong preference on my side, just
-> > think it's a bit misleading right now.
->
-> Yep.
->
-> >
-> >>>
-> >>>
-> >>>> +                       interrupt-parent =3D <&gpa1>;
-> >>>> +                       linux,code =3D <KEY_VOLUMEUP>;
-> >>>> +                       gpios =3D <&gpa1 5 GPIO_ACTIVE_LOW>;
-> >>>> +               };
-> >>>> +
-> >>>> +               voldown-key {
-> >>>> +                       label =3D "Volume Down";
-> >>>> +                       interrupts =3D <6 IRQ_TYPE_LEVEL_HIGH 0>;
-> >>>> +                       interrupt-parent =3D <&gpa1>;
-> >>>> +                       linux,code =3D <KEY_VOLUMEDOWN>;
-> >>>> +                       gpios =3D <&gpa1 6 GPIO_ACTIVE_LOW>;
-> >>>> +               };
-> >>>> +
-> >>>> +               power-key {
-> >>>> +                       label =3D "Power";
-> >>>> +                       interrupts =3D <7 IRQ_TYPE_LEVEL_HIGH 0>;
-> >>>> +                       interrupt-parent =3D <&gpa1>;
-> >>>> +                       linux,code =3D <KEY_POWER>;
-> >>>> +                       gpios =3D <&gpa1 7 GPIO_ACTIVE_LOW>;
-> >>>> +                       wakeup-source;
-> >>>> +               };
-> >>>> +       };
-> >>>> +};
-> >>>> +
-> >>>
-> >>> If there are some LEDs by chance on that board -- it might be useful
-> >>> to define those here with "gpio-leds" as well. Maybe even set some
-> >>> default trigger like "heartbeat".
-> >>>
-> >>>> +&serial_2 {
-> >>>> +       status =3D "okay";
-> >>>> +};
-> >>>> +
-> >>>> +&pinctrl_alive {
-> >>>> +       key_volup: key-volup-pins {
-> >>>> +               samsung,pins =3D "gpa1-5";
-> >>>> +               samsung,pin-function =3D <EXYNOS_PIN_FUNC_F>;
-> >>>
-> >>> Maybe EXYNOS_PIN_FUNC_EINT is more self-explanatory? Just a suggestio=
-n though.
-> >>>
-> >>>> +               samsung,pin-pud =3D <EXYNOS_PIN_PULL_NONE>;
-> >>>> +               samsung,pin-drv =3D <0>;
-> >>>
-> >>> Here and below: please use EXYNOS5420_PIN_DRV_LV1 (means drive level =
-=3D 1x).
-> >>
-> >> But are these drive level 1x? The Exynos Auto v9 has different values
-> >> than older ones.
-> >>
-> >
-> > It should be that. One way to implicitly figure that out is to look at
-> > nodes like "sd0_clk_fast_slew_rate_3x" and those pin-drv properties.
-> > Also, in Exynos850 for most of domains those constants are
-> > appropriate, that's why I mentioned that.
->
-> Then I agree, use existing macros. The macros can be skipped for cases
-> when the meaning is different.
->
-> >
-> >>>
-> >>>> +       };
-> >>>> +
-> >>>> +       key_voldown: key-voldown-pins {
-> >>>> +               samsung,pins =3D "gpa1-6";
-> >>>> +               samsung,pin-function =3D <EXYNOS_PIN_FUNC_F>;
-> >>>> +               samsung,pin-pud =3D <EXYNOS_PIN_PULL_NONE>;
-> >>>> +               samsung,pin-drv =3D <0>;
-> >>>> +       };
-> >>>> +
-> >>>> +       key_power: key-power-pins {
-> >>>> +               samsung,pins =3D "gpa1-7";
-> >>>> +               samsung,pin-function =3D <EXYNOS_PIN_FUNC_F>;
-> >>>> +               samsung,pin-pud =3D <EXYNOS_PIN_PULL_NONE>;
-> >>>> +               samsung,pin-drv =3D <0>;
-> >>>> +       };
-> >>>> +};
-> >>>> diff --git a/arch/arm64/boot/dts/exynos/exynos7885-pinctrl.dtsi b/ar=
-ch/arm64/boot/dts/exynos/exynos7885-pinctrl.dtsi
-> >>>> new file mode 100644
-> >>>> index 000000000000..8336b2e48858
-> >>>> --- /dev/null
-> >>>> +++ b/arch/arm64/boot/dts/exynos/exynos7885-pinctrl.dtsi
-> >>>> @@ -0,0 +1,865 @@
-> >>>> +// SPDX-License-Identifier: GPL-2.0
-> >>>> +/*
-> >>>> + * Samsung Exynos7885 SoC pin-mux and pin-config device tree source
-> >>>> + *
-> >>>> + * Copyright (c) 2017 Samsung Electronics Co., Ltd.
-> >>>> + * Copyright (c) 2021 D=C3=A1vid Vir=C3=A1g
-> >>>> + *
-> >>>> + * Samsung's Exynos7885 SoC pin-mux and pin-config options are list=
-ed as
-> >>>> + * device tree nodes in this file.
-> >>>> + */
-> >>>> +
-> >>>> +#include <dt-bindings/pinctrl/samsung.h>
-> >>>
-> >>> You probably also need <dt-bindings/interrupt-controller/arm-gic.h>
-> >>> here for GIC_SPI definition.
-> >>>
-> >>>> +
-> >>>> +&pinctrl_alive {
-> >>>> +       etc0: etc0 {
-> >>>> +               gpio-controller;
-> >>>> +               #gpio-cells =3D <2>;
-> >>>> +
-> >>>> +               interrupt-controller;
-> >>>> +               #interrupt-cells =3D <2>;
-> >>>> +       };
-> >>>> +
-> >>>> +       etc1: etc1 {
-> >>>> +               gpio-controller;
-> >>>> +               #gpio-cells =3D <2>;
-> >>>> +
-> >>>> +               interrupt-controller;
-> >>>> +               #interrupt-cells =3D <2>;
-> >>>> +       };
-> >>>
-> >>> Hmm, what are these two? I can't find anything related in
-> >>> exynos7885.dtsi. If it's just some leftover from downstream vendor
-> >>> kernel -- please remove it.
-> >>
-> >> This is a pinctrl DTSI file. What do you expect to find in
-> >> exynos7885.dtsi for these? Why removing them?
-> >
-> > etc0 and etc1 nodes are defined as gpio-controller and
-> > interrupt-controller. So "compatible" should be provided somewhere for
-> > those nodes. For example, for "gpa0" node below you can find its
-> > compatible in exynos7885.dtsi.
->
-> I am sorry, I still don't get it. gpa0 below does not have compatible.
->
+Add support for the display clock controller found in QCM2290
+based devices. This clock controller feeds the Multimedia Display
+SubSystem (MDSS).
 
-I was probably groggy and missed the fact those etc* nodes are child
-nodes of pinctrl_alive :) And now I can see those are actually
-described in pinctrl-exynos-arm64.c (in linux-next, where 7885 pinctrl
-support is added). Please ignore my request w.r.t. etc* nodes, those
-should stay of course.
+It's a porting of dispcc-scuba GPL-2.0 driver from CAF msm-4.19 kernel:
+https://source.codeaurora.org/quic/la/kernel/msm-4.19/tree/drivers/clk/qcom/dispcc-scuba.c?h=LE.UM.4.4.1.r3
+Global clock name references (parent_names) have been replaced by
+parent_data and parent_hws.
 
-> > Right now I don't understand how those
-> > etc0 and etc1 can be used at all.
->
-> Exactly the same as gpa0, nothing changes here.
->
-> >  So maybe it's better to just remove
-> > those? Those are not used anywhere and we probably don't even know
-> > what those nodes represent. My point is, if those are actually some
-> > leftovers from vendor kernel and those are not going to be used (and I
-> > don't see how, without "compatible"), then we probablly better off
-> > without those.
->
-> I don't have the manual but in other SoCs these are not left-overs, but
-> real GPIO banks. Their configurability depends on the SoCs. I agree that
-> usually they are not used (because one of the uses is debugging), but
-> they can be included for completness of HW description. Assuming they exi=
-st.
->
-> (...)
->
-> >>>> +#include "exynos7885-pinctrl.dtsi"
-> >>>> +#include "arm/exynos-syscon-restart.dtsi"
-> >>>
-> >>> Have you verified both reboot and power off functions from this file?
-> >>> I guess if some doesn't work, it's better to avoid including this, bu=
-t
-> >>> instead add corresponding sub-nodes into your pmu_sytem_controller.
-> >>
-> >> Why open-coding same code work and including would not? Assuming that =
-it
-> >> compiles, of course.
-> >>
-> >
-> > For example, in case of Exynos850 the "power off" node from this file
-> > wasn't suitable. In that case it's not worth including it. But David
-> > already confirmed both work fine for him, so it doesn't matter
-> > anymore.
->
-> These nodes were here before and since they duplicated common syscon, I
-> asked to use DTSI. The boards which do not use the same syscon
-> registers/methods should not include it, obviously. :)
->
->
-> Best regards,
-> Krzysztof
+Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
+---
+ drivers/clk/qcom/Kconfig          |   8 +
+ drivers/clk/qcom/Makefile         |   1 +
+ drivers/clk/qcom/dispcc-qcm2290.c | 602 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 611 insertions(+)
+ create mode 100644 drivers/clk/qcom/dispcc-qcm2290.c
+
+diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+index 74efc82..b136cd2 100644
+--- a/drivers/clk/qcom/Kconfig
++++ b/drivers/clk/qcom/Kconfig
+@@ -332,6 +332,14 @@ config QCM_GCC_2290
+ 	  Say Y if you want to use multimedia devices or peripheral
+ 	  devices such as UART, SPI, I2C, USB, SD/eMMC etc.
+ 
++config QCM_DISPCC_2290
++	tristate "QCM2290 Display Clock Controller"
++	help
++	  Support for the display clock controller on Qualcomm Technologies, Inc
++	  QCM2290 devices.
++	  Say Y if you want to support display devices and functionality such as
++	  splash screen.
++
+ config QCS_GCC_404
+ 	tristate "QCS404 Global Clock Controller"
+ 	help
+diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+index 1718c34..348d012 100644
+--- a/drivers/clk/qcom/Makefile
++++ b/drivers/clk/qcom/Makefile
+@@ -55,6 +55,7 @@ obj-$(CONFIG_QCOM_CLK_RPM) += clk-rpm.o
+ obj-$(CONFIG_QCOM_CLK_RPMH) += clk-rpmh.o
+ obj-$(CONFIG_QCOM_CLK_SMD_RPM) += clk-smd-rpm.o
+ obj-$(CONFIG_QCM_GCC_2290) += gcc-qcm2290.o
++obj-$(CONFIG_QCM_DISPCC_2290) += dispcc-qcm2290.o
+ obj-$(CONFIG_QCS_GCC_404) += gcc-qcs404.o
+ obj-$(CONFIG_QCS_Q6SSTOP_404) += q6sstop-qcs404.o
+ obj-$(CONFIG_QCS_TURING_404) += turingcc-qcs404.o
+diff --git a/drivers/clk/qcom/dispcc-qcm2290.c b/drivers/clk/qcom/dispcc-qcm2290.c
+new file mode 100644
+index 00000000..8aa5d31
+--- /dev/null
++++ b/drivers/clk/qcom/dispcc-qcm2290.c
+@@ -0,0 +1,602 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (c) 2020, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2021, Linaro Ltd.
++ */
++
++#include <linux/clk.h>
++#include <linux/clk-provider.h>
++#include <linux/err.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of_device.h>
++#include <linux/of.h>
++#include <linux/regmap.h>
++
++#include <dt-bindings/clock/qcom,dispcc-qcm2290.h>
++
++#include "clk-alpha-pll.h"
++#include "clk-branch.h"
++#include "clk-rcg.h"
++#include "clk-regmap.h"
++#include "clk-regmap-divider.h"
++#include "common.h"
++#include "reset.h"
++#include "gdsc.h"
++
++enum {
++	P_BI_TCXO,
++	P_CORE_BI_PLL_TEST_SE,
++	P_DISP_CC_PLL0_OUT_MAIN,
++	P_DSI0_PHY_PLL_OUT_BYTECLK,
++	P_DSI0_PHY_PLL_OUT_DSICLK,
++	P_DSI1_PHY_PLL_OUT_DSICLK,
++	P_GPLL0_OUT_MAIN,
++	P_SLEEP_CLK,
++};
++
++static struct pll_vco spark_vco[] = {
++	{ 500000000, 1000000000, 2 },
++};
++
++/* 768MHz configuration */
++static const struct alpha_pll_config disp_cc_pll0_config = {
++	.l = 0x28,
++	.alpha = 0x0,
++	.alpha_en_mask = BIT(24),
++	.vco_val = 0x2 << 20,
++	.vco_mask = GENMASK(21, 20),
++	.main_output_mask = BIT(0),
++	.config_ctl_val = 0x4001055B,
++};
++
++static struct clk_alpha_pll disp_cc_pll0 = {
++	.offset = 0x0,
++	.vco_table = spark_vco,
++	.num_vco = ARRAY_SIZE(spark_vco),
++	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
++	.clkr = {
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_pll0",
++			.parent_data = &(const struct clk_parent_data){
++				.fw_name = "bi_tcxo",
++			},
++			.num_parents = 1,
++			.ops = &clk_alpha_pll_ops,
++		},
++	},
++};
++
++static const struct parent_map disp_cc_parent_map_0[] = {
++	{ P_BI_TCXO, 0 },
++	{ P_DSI0_PHY_PLL_OUT_BYTECLK, 1 },
++	{ P_CORE_BI_PLL_TEST_SE, 7 },
++};
++
++static const struct clk_parent_data disp_cc_parent_data_0[] = {
++	{ .fw_name = "bi_tcxo" },
++	{ .fw_name = "dsi0_phy_pll_out_byteclk" },
++	{ .fw_name = "core_bi_pll_test_se" },
++};
++
++static const struct parent_map disp_cc_parent_map_1[] = {
++	{ P_BI_TCXO, 0 },
++	{ P_CORE_BI_PLL_TEST_SE, 7 },
++};
++
++static const struct clk_parent_data disp_cc_parent_data_1[] = {
++	{ .fw_name = "bi_tcxo" },
++	{ .fw_name = "core_bi_pll_test_se" },
++};
++
++static const struct clk_parent_data disp_cc_parent_data_1_ao[] = {
++	{ .fw_name = "bi_tcxo_ao" },
++	{ .fw_name = "core_bi_pll_test_se" },
++};
++
++static const struct parent_map disp_cc_parent_map_2[] = {
++	{ P_BI_TCXO, 0 },
++	{ P_GPLL0_OUT_MAIN, 4 },
++	{ P_CORE_BI_PLL_TEST_SE, 7 },
++};
++
++static const struct clk_parent_data disp_cc_parent_data_2[] = {
++	{ .fw_name = "bi_tcxo_ao" },
++	{ .fw_name = "gcc_disp_gpll0_div_clk_src" },
++	{ .fw_name = "core_bi_pll_test_se" },
++};
++
++static const struct parent_map disp_cc_parent_map_3[] = {
++	{ P_BI_TCXO, 0 },
++	{ P_DISP_CC_PLL0_OUT_MAIN, 1 },
++	{ P_GPLL0_OUT_MAIN, 4 },
++	{ P_CORE_BI_PLL_TEST_SE, 7 },
++};
++
++static const struct clk_parent_data disp_cc_parent_data_3[] = {
++	{ .fw_name = "bi_tcxo" },
++	{ .hw = &disp_cc_pll0.clkr.hw },
++	{ .fw_name = "gcc_disp_gpll0_clk_src" },
++	{ .fw_name = "core_bi_pll_test_se" },
++};
++
++static const struct parent_map disp_cc_parent_map_4[] = {
++	{ P_BI_TCXO, 0 },
++	{ P_DSI0_PHY_PLL_OUT_DSICLK, 1 },
++	{ P_DSI1_PHY_PLL_OUT_DSICLK, 2 },
++	{ P_CORE_BI_PLL_TEST_SE, 7 },
++};
++
++static const struct clk_parent_data disp_cc_parent_data_4[] = {
++	{ .fw_name = "bi_tcxo" },
++	{ .fw_name = "dsi0_phy_pll_out_dsiclk" },
++	{ .fw_name = "dsi1_phy_pll_out_dsiclk" },
++	{ .fw_name = "core_bi_pll_test_se" },
++};
++
++static const struct parent_map disp_cc_parent_map_5[] = {
++	{ P_SLEEP_CLK, 0 },
++	{ P_CORE_BI_PLL_TEST_SE, 7 },
++};
++
++static const struct clk_parent_data disp_cc_parent_data_5[] = {
++	{ .fw_name = "sleep_clk", .name = "sleep_clk" },
++	{ .fw_name = "core_bi_pll_test_se" },
++};
++
++static struct clk_rcg2 disp_cc_mdss_byte0_clk_src = {
++	.cmd_rcgr = 0x20a4,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_0,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_byte0_clk_src",
++		.parent_data = disp_cc_parent_data_0,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_0),
++		.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE | CLK_OPS_PARENT_ENABLE,
++		.ops = &clk_byte2_ops,
++	},
++};
++
++static struct clk_regmap_div disp_cc_mdss_byte0_div_clk_src = {
++	.reg = 0x20bc,
++	.shift = 0,
++	.width = 2,
++	.clkr.hw.init = &(struct clk_init_data) {
++		.name = "disp_cc_mdss_byte0_div_clk_src",
++		.parent_hws = (const struct clk_hw*[]){
++			&disp_cc_mdss_byte0_clk_src.clkr.hw,
++		},
++		.num_parents = 1,
++		.flags = CLK_GET_RATE_NOCACHE,
++		.ops = &clk_regmap_div_ops,
++	},
++};
++
++static const struct freq_tbl ftbl_disp_cc_mdss_ahb_clk_src[] = {
++	F(19200000, P_BI_TCXO, 1, 0, 0),
++	F(37500000, P_GPLL0_OUT_MAIN, 8, 0, 0),
++	F(75000000, P_GPLL0_OUT_MAIN, 4, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 disp_cc_mdss_ahb_clk_src = {
++	.cmd_rcgr = 0x2154,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_2,
++	.freq_tbl = ftbl_disp_cc_mdss_ahb_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_ahb_clk_src",
++		.parent_data = disp_cc_parent_data_2,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_2),
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static const struct freq_tbl ftbl_disp_cc_mdss_esc0_clk_src[] = {
++	F(19200000, P_BI_TCXO, 1, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 disp_cc_mdss_esc0_clk_src = {
++	.cmd_rcgr = 0x20c0,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_0,
++	.freq_tbl = ftbl_disp_cc_mdss_esc0_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_esc0_clk_src",
++		.parent_data = disp_cc_parent_data_0,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_0),
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static const struct freq_tbl ftbl_disp_cc_mdss_mdp_clk_src[] = {
++	F(19200000, P_BI_TCXO, 1, 0, 0),
++	F(192000000, P_DISP_CC_PLL0_OUT_MAIN, 4, 0, 0),
++	F(256000000, P_DISP_CC_PLL0_OUT_MAIN, 3, 0, 0),
++	F(307200000, P_DISP_CC_PLL0_OUT_MAIN, 2.5, 0, 0),
++	F(384000000, P_DISP_CC_PLL0_OUT_MAIN, 2, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 disp_cc_mdss_mdp_clk_src = {
++	.cmd_rcgr = 0x2074,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_3,
++	.freq_tbl = ftbl_disp_cc_mdss_mdp_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_mdp_clk_src",
++		.parent_data = disp_cc_parent_data_3,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_3),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_pclk0_clk_src = {
++	.cmd_rcgr = 0x205c,
++	.mnd_width = 8,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_4,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_pclk0_clk_src",
++		.parent_data = disp_cc_parent_data_4,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_4),
++		.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE | CLK_OPS_PARENT_ENABLE,
++		.ops = &clk_pixel_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_mdss_vsync_clk_src = {
++	.cmd_rcgr = 0x208c,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_1,
++	.freq_tbl = ftbl_disp_cc_mdss_esc0_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_mdss_vsync_clk_src",
++		.parent_data = disp_cc_parent_data_1,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_1),
++		.flags = CLK_SET_RATE_PARENT,
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static const struct freq_tbl ftbl_disp_cc_sleep_clk_src[] = {
++	F(32764, P_SLEEP_CLK, 1, 0, 0),
++	{ }
++};
++
++static struct clk_rcg2 disp_cc_sleep_clk_src = {
++	.cmd_rcgr = 0x6050,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_5,
++	.freq_tbl = ftbl_disp_cc_sleep_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_sleep_clk_src",
++		.parent_data = disp_cc_parent_data_5,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_5),
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static struct clk_rcg2 disp_cc_xo_clk_src = {
++	.cmd_rcgr = 0x6034,
++	.mnd_width = 0,
++	.hid_width = 5,
++	.parent_map = disp_cc_parent_map_1,
++	.freq_tbl = ftbl_disp_cc_mdss_esc0_clk_src,
++	.clkr.hw.init = &(struct clk_init_data){
++		.name = "disp_cc_xo_clk_src",
++		.parent_data = disp_cc_parent_data_1_ao,
++		.num_parents = ARRAY_SIZE(disp_cc_parent_data_1_ao),
++		.ops = &clk_rcg2_ops,
++	},
++};
++
++static struct clk_branch disp_cc_mdss_ahb_clk = {
++	.halt_reg = 0x2044,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2044,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_ahb_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_ahb_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_byte0_clk = {
++	.halt_reg = 0x201c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x201c,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_byte0_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_byte0_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_byte0_intf_clk = {
++	.halt_reg = 0x2020,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2020,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_byte0_intf_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_byte0_div_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_esc0_clk = {
++	.halt_reg = 0x2024,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2024,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_esc0_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_esc0_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_mdp_clk = {
++	.halt_reg = 0x2008,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2008,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_mdp_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_mdp_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_mdp_lut_clk = {
++	.halt_reg = 0x2010,
++	.halt_check = BRANCH_HALT_VOTED,
++	.clkr = {
++		.enable_reg = 0x2010,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_mdp_lut_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_mdp_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_non_gdsc_ahb_clk = {
++	.halt_reg = 0x4004,
++	.halt_check = BRANCH_HALT_VOTED,
++	.clkr = {
++		.enable_reg = 0x4004,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_non_gdsc_ahb_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_ahb_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_pclk0_clk = {
++	.halt_reg = 0x2004,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2004,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_pclk0_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_pclk0_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT | CLK_GET_RATE_NOCACHE,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_mdss_vsync_clk = {
++	.halt_reg = 0x2018,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x2018,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_mdss_vsync_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_mdss_vsync_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_sleep_clk = {
++	.halt_reg = 0x6068,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x6068,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_sleep_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_sleep_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch disp_cc_xo_clk = {
++	.halt_reg = 0x604c,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x604c,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "disp_cc_xo_clk",
++			.parent_hws = (const struct clk_hw*[]){
++				&disp_cc_xo_clk_src.clkr.hw,
++			},
++			.num_parents = 1,
++			.flags = CLK_IS_CRITICAL | CLK_SET_RATE_PARENT,
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct gdsc mdss_gdsc = {
++	.gdscr = 0x3000,
++	.pd = {
++		.name = "mdss_gdsc",
++	},
++	.pwrsts = PWRSTS_OFF_ON,
++	.flags = HW_CTRL,
++};
++
++static struct gdsc *disp_cc_qcm2290_gdscs[] = {
++	[MDSS_GDSC] = &mdss_gdsc,
++};
++
++static struct clk_regmap *disp_cc_qcm2290_clocks[] = {
++	[DISP_CC_MDSS_AHB_CLK] = &disp_cc_mdss_ahb_clk.clkr,
++	[DISP_CC_MDSS_AHB_CLK_SRC] = &disp_cc_mdss_ahb_clk_src.clkr,
++	[DISP_CC_MDSS_BYTE0_CLK] = &disp_cc_mdss_byte0_clk.clkr,
++	[DISP_CC_MDSS_BYTE0_CLK_SRC] = &disp_cc_mdss_byte0_clk_src.clkr,
++	[DISP_CC_MDSS_BYTE0_DIV_CLK_SRC] = &disp_cc_mdss_byte0_div_clk_src.clkr,
++	[DISP_CC_MDSS_BYTE0_INTF_CLK] = &disp_cc_mdss_byte0_intf_clk.clkr,
++	[DISP_CC_MDSS_ESC0_CLK] = &disp_cc_mdss_esc0_clk.clkr,
++	[DISP_CC_MDSS_ESC0_CLK_SRC] = &disp_cc_mdss_esc0_clk_src.clkr,
++	[DISP_CC_MDSS_MDP_CLK] = &disp_cc_mdss_mdp_clk.clkr,
++	[DISP_CC_MDSS_MDP_CLK_SRC] = &disp_cc_mdss_mdp_clk_src.clkr,
++	[DISP_CC_MDSS_MDP_LUT_CLK] = &disp_cc_mdss_mdp_lut_clk.clkr,
++	[DISP_CC_MDSS_NON_GDSC_AHB_CLK] = &disp_cc_mdss_non_gdsc_ahb_clk.clkr,
++	[DISP_CC_MDSS_PCLK0_CLK] = &disp_cc_mdss_pclk0_clk.clkr,
++	[DISP_CC_MDSS_PCLK0_CLK_SRC] = &disp_cc_mdss_pclk0_clk_src.clkr,
++	[DISP_CC_MDSS_VSYNC_CLK] = &disp_cc_mdss_vsync_clk.clkr,
++	[DISP_CC_MDSS_VSYNC_CLK_SRC] = &disp_cc_mdss_vsync_clk_src.clkr,
++	[DISP_CC_PLL0] = &disp_cc_pll0.clkr,
++	[DISP_CC_SLEEP_CLK] = &disp_cc_sleep_clk.clkr,
++	[DISP_CC_SLEEP_CLK_SRC] = &disp_cc_sleep_clk_src.clkr,
++	[DISP_CC_XO_CLK] = &disp_cc_xo_clk.clkr,
++	[DISP_CC_XO_CLK_SRC] = &disp_cc_xo_clk_src.clkr,
++};
++
++static const struct regmap_config disp_cc_qcm2290_regmap_config = {
++	.reg_bits = 32,
++	.reg_stride = 4,
++	.val_bits = 32,
++	.max_register = 0x10000,
++	.fast_io = true,
++};
++
++static const struct qcom_cc_desc disp_cc_qcm2290_desc = {
++	.config = &disp_cc_qcm2290_regmap_config,
++	.clks = disp_cc_qcm2290_clocks,
++	.num_clks = ARRAY_SIZE(disp_cc_qcm2290_clocks),
++	.gdscs = disp_cc_qcm2290_gdscs,
++	.num_gdscs = ARRAY_SIZE(disp_cc_qcm2290_gdscs),
++};
++
++static const struct of_device_id disp_cc_qcm2290_match_table[] = {
++	{ .compatible = "qcom,qcm2290-dispcc" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, disp_cc_qcm2290_match_table);
++
++static int disp_cc_qcm2290_probe(struct platform_device *pdev)
++{
++	struct regmap *regmap;
++	int ret;
++
++	regmap = qcom_cc_map(pdev, &disp_cc_qcm2290_desc);
++	if (IS_ERR(regmap))
++		return PTR_ERR(regmap);
++
++	clk_alpha_pll_configure(&disp_cc_pll0, regmap, &disp_cc_pll0_config);
++
++	ret = qcom_cc_really_probe(pdev, &disp_cc_qcm2290_desc, regmap);
++	if (ret) {
++		dev_err(&pdev->dev, "Failed to register DISP CC clocks\n");
++		return ret;
++	}
++
++	dev_info(&pdev->dev, "Registered DISP CC clocks\n");
++
++	return ret;
++}
++
++static struct platform_driver disp_cc_qcm2290_driver = {
++	.probe = disp_cc_qcm2290_probe,
++	.driver = {
++		.name = "dispcc-qcm2290",
++		.of_match_table = disp_cc_qcm2290_match_table,
++	},
++};
++
++static int __init disp_cc_qcm2290_init(void)
++{
++	return platform_driver_register(&disp_cc_qcm2290_driver);
++}
++subsys_initcall(disp_cc_qcm2290_init);
++
++static void __exit disp_cc_qcm2290_exit(void)
++{
++	platform_driver_unregister(&disp_cc_qcm2290_driver);
++}
++module_exit(disp_cc_qcm2290_exit);
++
++MODULE_DESCRIPTION("QTI DISP_CC qcm2290 Driver");
++MODULE_LICENSE("GPL v2");
+-- 
+2.7.4
+
