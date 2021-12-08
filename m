@@ -2,166 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E9646D931
-	for <lists+linux-clk@lfdr.de>; Wed,  8 Dec 2021 18:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3D246DA6E
+	for <lists+linux-clk@lfdr.de>; Wed,  8 Dec 2021 18:54:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237535AbhLHRI5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 8 Dec 2021 12:08:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50166 "EHLO
+        id S236244AbhLHR6G (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 8 Dec 2021 12:58:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237526AbhLHRI4 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 8 Dec 2021 12:08:56 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902C8C0617A1
-        for <linux-clk@vger.kernel.org>; Wed,  8 Dec 2021 09:05:24 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id j3so5260063wrp.1
-        for <linux-clk@vger.kernel.org>; Wed, 08 Dec 2021 09:05:24 -0800 (PST)
+        with ESMTP id S233885AbhLHR6G (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 8 Dec 2021 12:58:06 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81ACC061746
+        for <linux-clk@vger.kernel.org>; Wed,  8 Dec 2021 09:54:33 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id bi37so7135279lfb.5
+        for <linux-clk@vger.kernel.org>; Wed, 08 Dec 2021 09:54:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=YR/2vGWZHeBMgde5ORehOtykBe6sle8e8s6nTFv/bzo=;
-        b=QeLapHn2fyK83X/BSi9XHMAYbBtpZ2EvXoXANoAd7wvwM6qLw0wQXyA5tQthLDGn/M
-         98kOyUxx6XZnKVCWFF/xRkD+FV2Hm+A9iEpj2fbh2jDw4htbloVlimRavtPnqGFWfgfr
-         ICl/Sa9iXjcse4XJsY0AZQ5GpYW/kKNo8CjMu5a3IBItBa5gvZMdMfhwhGCim8TheR+c
-         UztyoMGzeNVTCSyFL5myzxaTLSc5ve5YDGVDoM3QUgYD1nClxsK7JxHQEaucasEbkI7E
-         y+fOSiaaK+Lr3ntvRR4NGjToUij6QyzzaMbODmnFbZDbteAy5vQz9JS/MLazOZ5PT8kj
-         CWbQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GMPx53MpG/QJWLIiHMQJ+ymiXYsC5a5Eqmeg0LsvpXA=;
+        b=m5+wQnypJMqXL5EATTQSxAi7xEX1jfrtqA7KmS8eqVkx+9yGJiNNKHb/nzXhl4az9x
+         P+hptZEH7CVhKhSv+tXvCMTufULONooYcckERnLgF9yH1Jao4NYGvhcdH6DvE9YQKL8Y
+         ctfy2K1CrD+Qnmc/+MwYadsYWxp1WRUZYyPsL9UfrR1uA1LWFUN1DjHYED9n1O214imA
+         WDSVkDNvLO50iiSqrvZC+hGyIATtnnVNJ84BRnMTqKRh63XDrYTcZIPPui2mET9c7FtF
+         94ZRrlYQGUqtY13WwZluiBeEgztaqSBUT9PyWOd8QrN4OI0leoJ9tr/O3930itD9rjX0
+         Snkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=YR/2vGWZHeBMgde5ORehOtykBe6sle8e8s6nTFv/bzo=;
-        b=EWACuHdFDH5GpJ1IJIl0jS8u/SGh/B3KFMtHhDroH5jOYHmKV9wT5Orpk9VOAADAun
-         5Ivu1X/Y2YzvnjmWMsqXZxwqcs3/Dw8ZR8og0+UNaF36Cl2f12te9qNlPYTxraSGj+ks
-         mEBsLAa1OnMWnM7HGDmc32cpWI2Uk5VAhT2mfL4OljGK8M3jVIKxA5/K3tml3A01vexS
-         mNzuIAQoEJsk5jhnq6Tuk7t39y6QqvO5qW8zMTevHmYW7eVjHJ9FEH0AFl5BXuHL9Ce8
-         jypRqCpY/O9j5ySqhQdB2DqVSa0A3q0kzwYXVjcAoKRnyJrZRfmq2+n0oZ+eYZ7G/RO8
-         xOaw==
-X-Gm-Message-State: AOAM531UPH9/vQQzgUc6VwiJ0ojqCF15amGfX81yTWgm4CCwqM9xSwee
-        BiTdlrjZ6OCmAqOmr8+R5iSyai1GpTNzHg==
-X-Google-Smtp-Source: ABdhPJwASlolKwSqDxW4C/k6+e2eDfwwejSZxDegidEKgRpfkB00YVfQYkA5IpgjEibVfRdYCDd6gQ==
-X-Received: by 2002:a5d:6211:: with SMTP id y17mr60986067wru.97.1638983122998;
-        Wed, 08 Dec 2021 09:05:22 -0800 (PST)
-Received: from localhost.localdomain ([88.160.176.23])
-        by smtp.gmail.com with ESMTPSA id h27sm7183883wmc.43.2021.12.08.09.05.21
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 08 Dec 2021 09:05:22 -0800 (PST)
-From:   Loic Poulain <loic.poulain@linaro.org>
-To:     bjorn.andersson@linaro.org, agross@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, shawn.guo@linaro.org,
-        Loic Poulain <loic.poulain@linaro.org>
-Subject: [PATCH 2/2] dt-bindings: clock: Add qualcomm QCM2290 DISPCC bindings
-Date:   Wed,  8 Dec 2021 18:17:21 +0100
-Message-Id: <1638983841-23773-2-git-send-email-loic.poulain@linaro.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1638983841-23773-1-git-send-email-loic.poulain@linaro.org>
-References: <1638983841-23773-1-git-send-email-loic.poulain@linaro.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GMPx53MpG/QJWLIiHMQJ+ymiXYsC5a5Eqmeg0LsvpXA=;
+        b=coLdDdR+fZiAfTqVk3cVvdtMHOukm5rbRYAG+15cYWOOrfYngJhSjTkqFxJXTEywyq
+         WfybrKagMsOaKpmGO2iuJgwxqjM4Da2ZZOqIyeAd3SpQLYzK05ODhRiWP+s+kOPSD5fs
+         Nrj8rn2LHVoacrx9MQLIFDpNB3qQ+rpaCOzlhHciBXWtfOiY0w1ENXERro60qWnaEzUt
+         4Z6V/VP74OnLeb2UXar0GZbCuOrg7XBbM9Niauitnv2iR+YD4h2k1gcy67Y5hjwu+70m
+         MyM5m1p/ZyhEPvvXjQ98HD967l8KtY7Zfihc9KTMUyz7sKT0iGQd40H8LdkGAgaEoN4k
+         V/hg==
+X-Gm-Message-State: AOAM531ZiXSfA0BMdl8P/KFjQmkUGAQ8YZm90Bp3hOtATHWNXc7efqn1
+        +eUNj4P5quuvK8rCr+jYOAaPn3XpReHWrF7V
+X-Google-Smtp-Source: ABdhPJysd8gsVWoEpdVQfTDHTZ/t/+1vpfgNi0qwo804bO74N4nYmwnzn+MVeyblJMuKrz6hWFgzuw==
+X-Received: by 2002:a05:6512:1382:: with SMTP id p2mr872412lfa.403.1638986072198;
+        Wed, 08 Dec 2021 09:54:32 -0800 (PST)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id f23sm388903ljg.90.2021.12.08.09.54.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 09:54:31 -0800 (PST)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <tdas@codeaurora.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH 00/11] clk: qcom: another round of clock drivers cleanup
+Date:   Wed,  8 Dec 2021 20:54:19 +0300
+Message-Id: <20211208175430.1333594-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add device tree bindings for display clock controller on QCM2290 SoCs.
+Another bunch of updates for Qualcomm clock controller driver, removing
+unused enum values, test clock, using parent_data, parent_hws and
+ARRAY_SIZE.
 
-Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
----
- .../bindings/clock/qcom,qcm2290-dispcc.yaml        | 87 ++++++++++++++++++++++
- 1 file changed, 87 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,qcm2290-dispcc.yaml
+The following changes since commit fa55b7dcdc43c1aa1ba12bca9d2dd4318c2a0dbf:
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,qcm2290-dispcc.yaml b/Documentation/devicetree/bindings/clock/qcom,qcm2290-dispcc.yaml
-new file mode 100644
-index 00000000..44d5ce7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/qcom,qcm2290-dispcc.yaml
-@@ -0,0 +1,87 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/qcom,qcm2290-dispcc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm Display Clock & Reset Controller Binding for qcm2290
-+
-+maintainers:
-+  - Loic Poulain <loic.poulain@linaro.org>
-+
-+description: |
-+  Qualcomm display clock control module which supports the clocks, resets and
-+  power domains on qcm2290.
-+
-+  See also dt-bindings/clock/qcom,dispcc-qcm2290.h.
-+
-+properties:
-+  compatible:
-+    const: qcom,qcm2290-dispcc
-+
-+  clocks:
-+    items:
-+      - description: Board XO source
-+      - description: Board active-only XO source
-+      - description: GPLL0 source from GCC
-+      - description: GPLL0 div source from GCC
-+      - description: Byte clock from DSI PHY
-+      - description: Pixel clock from DSI PHY
-+
-+  clock-names:
-+    items:
-+      - const: bi_tcxo
-+      - const: bi_tcxo_ao
-+      - const: gcc_disp_gpll0_clk_src
-+      - const: gcc_disp_gpll0_div_clk_src
-+      - const: dsi0_phy_pll_out_byteclk
-+      - const: dsi0_phy_pll_out_dsiclk
-+
-+  '#clock-cells':
-+    const: 1
-+
-+  '#reset-cells':
-+    const: 1
-+
-+  '#power-domain-cells':
-+    const: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - '#clock-cells'
-+  - '#reset-cells'
-+  - '#power-domain-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/qcom,dispcc-qcm2290.h>
-+    #include <dt-bindings/clock/qcom,gcc-qcm2290.h>
-+    #include <dt-bindings/clock/qcom,rpmcc.h>
-+    clock-controller@5f00000 {
-+            compatible = "qcom,qcm2290-dispcc";
-+            reg = <0x5f00000 0x20000>;
-+            clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
-+                     <&rpmcc RPM_SMD_XO_A_CLK_SRC>,
-+                     <&gcc GCC_DISP_GPLL0_CLK_SRC>,
-+                     <&gcc GCC_DISP_GPLL0_DIV_CLK_SRC>,
-+                     <&dsi0_phy 0>,
-+                     <&dsi0_phy 1>;
-+            clock-names = "bi_tcxo",
-+                          "bi_tcxo_ao",
-+                          "gcc_disp_gpll0_clk_src",
-+                          "gcc_disp_gpll0_div_clk_src",
-+                          "dsi0_phy_pll_out_byteclk",
-+                          "dsi0_phy_pll_out_dsiclk";
-+            #clock-cells = <1>;
-+            #reset-cells = <1>;
-+            #power-domain-cells = <1>;
-+    };
-+...
--- 
-2.7.4
+  Linux 5.16-rc1 (2021-11-14 13:56:52 -0800)
+
+are available in the Git repository at:
+
+  https://git.linaro.org/people/dmitry.baryshkov/kernel.git msm-clocks-bulk-2
+
+for you to fetch changes up to 7589a5b1bf85ad364815b238586d90e1d446f8d8:
+
+  clk: qcom: gcc-msm8996: use ARRAY_SIZE instead of specifying num_parents (2021-12-08 20:52:09 +0300)
+
+----------------------------------------------------------------
+Dmitry Baryshkov (11):
+      clk: qcom: gpucc-sdm660: get rid of the test clock
+      clk: qcom: gpucc-sdm660: use parent_hws instead of parent_data
+      clk: qcom: camcc-sc7180: get rid of the test clock
+      clk: qcom: camcc-sdm845: get rid of the test clock
+      clk: qcom: camcc-sdm845: convert to parent data
+      clk: qcom: camcc-sc7180: use parent_hws instead of parent_data
+      clk: qcom: videocc-sc7180: use parent_hws instead of parent_data
+      clk: qcom: gcc-msm8996: drop unsupported clock sources
+      clk: qcom: gcc-msm8996: move clock parent tables down
+      clk: qcom: gcc-msm8996: use parent_hws/_data instead of parent_names
+      clk: qcom: gcc-msm8996: use ARRAY_SIZE instead of specifying num_parents
+
+ drivers/clk/qcom/camcc-sc7180.c   | 221 ++++-----
+ drivers/clk/qcom/camcc-sdm845.c   | 323 +++++++------
+ drivers/clk/qcom/gcc-msm8996.c    | 971 +++++++++++++++++++++++---------------
+ drivers/clk/qcom/gpucc-sdm660.c   |  13 +-
+ drivers/clk/qcom/videocc-sc7180.c |   8 +-
+ 5 files changed, 870 insertions(+), 666 deletions(-)
+
 
