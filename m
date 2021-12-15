@@ -2,64 +2,65 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F32964765CA
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Dec 2021 23:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1394765DC
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Dec 2021 23:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbhLOW2a (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Dec 2021 17:28:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
+        id S231602AbhLOW2r (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Dec 2021 17:28:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231570AbhLOW2J (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Dec 2021 17:28:09 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF29C061395
-        for <linux-clk@vger.kernel.org>; Wed, 15 Dec 2021 14:28:02 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id 7so33666205oip.12
-        for <linux-clk@vger.kernel.org>; Wed, 15 Dec 2021 14:28:02 -0800 (PST)
+        with ESMTP id S231601AbhLOW2K (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Dec 2021 17:28:10 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49635C061375
+        for <linux-clk@vger.kernel.org>; Wed, 15 Dec 2021 14:28:07 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id 7so33666453oip.12
+        for <linux-clk@vger.kernel.org>; Wed, 15 Dec 2021 14:28:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zNJXnvSs07GTtLLZAuVX1BCNo0uRWcG5BRLFd99VBjs=;
-        b=A6zQSNgY/7S9UibonlY7GfSGeBaqyjarUfTYqvUlQXaV0tlgG0NUP9PtTH+N5A/9Yt
-         46hgsHRPUfipDEr5quShnJww5ZffRZjBVypstFvCDx64BUQqwoLL2foZALrOXKjUzBIv
-         WzW5JooFuEZR7L/5CmxsDu4mIN0IXxtOCLPVIM77QrpIHEH68vFUEkZ1UMn03IVZ6XcH
-         couRncau756a1GAs8tE9XWSEOjKEV4CThLSPisxYPvYzHOyIpKCKwexHspDI4mTO+Zww
-         6L+WcPQp/uretBg1tA3ZQZXa1Y7kA0LyxsHCR0losMbsCnfCqaipbFvZUchdGSj8E4FQ
-         5wqQ==
+        bh=SK63vxKrZwaNQvieiGIU0vVsUkzcjcWKDTfGdB9aCuE=;
+        b=yYpTB0XEYF4R3lVYu9gBMnvU9dq/b1JGiSaUBD59DARHi40AR11EdR+NmFkbVMYaK1
+         k0gydFmcsBOKAVcOqA/A/uT0816Sijhphqsb7wPopl3az1OVZivWNaxEPIUm0o+Ii0ee
+         fnFb/j45l/gznUlkZRy/FRpUtmyX7a3vGD6ehcnGUgOd7kNNu2Df9TMS5WZJFvzxW9vr
+         ZsJ42hwxcgWRGuXvzzzadHMeSl4q4MeZGU5kMq9U1xcM93ItsMdMkPHgcAcbm7cAAHcv
+         WzZlQh3dEOnM6nkdNm55MnTdP4hei0QTs4Jpf9DbpfHhyIK2iOissN3ZGj/S1uUanfLy
+         uamQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zNJXnvSs07GTtLLZAuVX1BCNo0uRWcG5BRLFd99VBjs=;
-        b=wiBGaOBKqoQ8DeE+ec4TJ8PopBDuVy9Ry2u4qBh/9zQLsLbgNNCWY4LaAaKPvCFpVn
-         heG4aeJSm4vEVYxMqvY1e2PQWQLekhCgedWkMuiKsDb+L59Qe8NFe2DXoR5Eubljyk89
-         RdVuryffxQO6kB5wBwKfNfHvz5nmUJ3iu/TBPYBnYsv6iHA0uugTUy+65nNLHXxmmw1n
-         YZbO3548kMbT+oeFYnysijrHnrnds1nleGklRHL/7uaEWo2799P26k39V+vvYbr/63wS
-         0TJFsjwyKvMBdJz0NJvFAYmuBVHoE2PugEKbjY2Hp9b/PzFYseTh0W7eoCC6IT17MGBu
-         DFxw==
-X-Gm-Message-State: AOAM5320KrtT0ykUpXbqNYE4ft42R6cZ1ZRfjHzzmAhlV7uTB+2GqImE
-        UIfewpfZUZtXEhEJ+QiH1J43bg==
-X-Google-Smtp-Source: ABdhPJwFXYdPBsDmuwPjYm8A5yZhkegTSZzeCJ0fMZ0B4URuSub04avPSXyXP3No3NVhP8fEqIASsg==
-X-Received: by 2002:aca:1c07:: with SMTP id c7mr1861598oic.133.1639607282108;
-        Wed, 15 Dec 2021 14:28:02 -0800 (PST)
+        bh=SK63vxKrZwaNQvieiGIU0vVsUkzcjcWKDTfGdB9aCuE=;
+        b=P5m6099lklgQz1LYbln2FcoqXu1QpFyCsy9roz/mXG6TRFIc1uEYSi8fjLMR7sfAc0
+         ED2JLu7nHMDxCLsefy/hvqojDgMyxNbPxRnRXoBaRtecnFDpyn1sEwVFmIUejqNJTglr
+         Q8fEgNknKb96r66CiSHXKKMNTo5dQjXEmnKsoKyf+S+IgHY7u11GRabVvqRh6BJ4yJVy
+         lnm5ZNk+aUt8DLIROeOrxElKNKtBwATNf6MknIqhnhQE7xBnxa6hkIn9AtKJLhCd2UlU
+         86uGTsDNYdk/sicKY7es9IX4tEZ+g13Z5nap7ioyhFQF0frIGAacxWdqAKGKRzElzdXB
+         g1Hw==
+X-Gm-Message-State: AOAM533px3/e2SJfgA2+Y2wh2SjLhtHTMrmmj0IgxGLF33vvnitPYtxs
+        rVkuaHeFh6ofey9EhxVT1IM4tw==
+X-Google-Smtp-Source: ABdhPJyfrJB+bp/wlYelJ7JQQC102saJenkrO5gIDWvQ7uaFfm5k9fsdVDv8UMSZ52c3c2hIYJRb7g==
+X-Received: by 2002:a05:6808:609:: with SMTP id y9mr1884494oih.178.1639607286701;
+        Wed, 15 Dec 2021 14:28:06 -0800 (PST)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id t14sm700500oth.81.2021.12.15.14.28.01
+        by smtp.gmail.com with ESMTPSA id t14sm700500oth.81.2021.12.15.14.28.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 14:28:01 -0800 (PST)
+        Wed, 15 Dec 2021 14:28:06 -0800 (PST)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     agross@kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
-        robh+dt@kernel.org, quic_vamslank@quicinc.com
-Cc:     manivannan.sadhasivam@linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh@kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: (subset) [PATCH v7 1/3] dt-bindings: clock: Add SDX65 GCC clock bindings
-Date:   Wed, 15 Dec 2021 16:27:34 -0600
-Message-Id: <163960723735.3062250.15848772572019435761.b4-ty@linaro.org>
+To:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+Subject: Re: (subset) [PATCH v2 1/2] dt-bindings: clock: Add SM8450 GCC clock bindings
+Date:   Wed, 15 Dec 2021 16:27:39 -0600
+Message-Id: <163960723735.3062250.8848555721887430569.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <e15509b2b7c9b600ab38c5269d4fac609c077b5b.1638861860.git.quic_vamslank@quicinc.com>
-References: <cover.1638861860.git.quic_vamslank@quicinc.com> <e15509b2b7c9b600ab38c5269d4fac609c077b5b.1638861860.git.quic_vamslank@quicinc.com>
+In-Reply-To: <20211207114003.100693-2-vkoul@kernel.org>
+References: <20211207114003.100693-1-vkoul@kernel.org> <20211207114003.100693-2-vkoul@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -67,17 +68,15 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, 6 Dec 2021 23:32:49 -0800, quic_vamslank@quicinc.com wrote:
-> From: Vamsi krishna Lanka <quic_vamslank@quicinc.com>
-> 
-> Add device tree bindings for global clock controller on SDX65 SOCs.
+On Tue, 7 Dec 2021 17:10:02 +0530, Vinod Koul wrote:
+> Add device tree bindings for global clock controller on SM8450 SoCs.
 > 
 > 
 
 Applied, thanks!
 
-[1/3] dt-bindings: clock: Add SDX65 GCC clock bindings
-      commit: 8f8ef3860d4403d1bf0887380f9e3376be092c40
+[1/2] dt-bindings: clock: Add SM8450 GCC clock bindings
+      commit: 72a0ca203ca7fae34fe61668906fe483b97d9039
 
 Best regards,
 -- 
