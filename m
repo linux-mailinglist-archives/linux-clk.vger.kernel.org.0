@@ -2,74 +2,72 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B61475C3C
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Dec 2021 16:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E71475C59
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Dec 2021 16:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244149AbhLOPvd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Dec 2021 10:51:33 -0500
-Received: from mail-oi1-f180.google.com ([209.85.167.180]:38679 "EHLO
-        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239535AbhLOPvd (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Dec 2021 10:51:33 -0500
-Received: by mail-oi1-f180.google.com with SMTP id r26so32210373oiw.5;
-        Wed, 15 Dec 2021 07:51:32 -0800 (PST)
+        id S244226AbhLOPzV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Dec 2021 10:55:21 -0500
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:46851 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232935AbhLOPzU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Dec 2021 10:55:20 -0500
+Received: by mail-ot1-f47.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so25349191oto.13;
+        Wed, 15 Dec 2021 07:55:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=l0rtz85Jyq9MgaFtmlaxUe2NnGfFjYdGSaO09tkfYYE=;
-        b=0FGnEZ8c7D8mS9MLTX6hNQBJjvVvM4aKrdcVhRk+c3QaPXcF6ezCc6F6EfRo0zm3dM
-         63WRjDwFAXn/RGM4RDWKfgC4D9l6twaUPYg/DsJcwTD9PGsp0MlRKSB0KObLvfJ8V8u2
-         Lgf84OtmxmSZvz3g9T3ESGNOm1GMd6HKa+E9/9l3CFXoZGRGYdbK7ntLSwcKrcM4lAvz
-         XwFJrXOeQ+gzGvk1LoAl31gkP2K2thr3G/8wh5GNdg8K3xWHd0S3ozyuXNFaTyetnukJ
-         3n6MvSELQ+R92GjckkTxgML7CgnL5v7z7VEnhRg+5yC0B0b8Xy1xkir77ZOQqjhPqtuo
-         iJ8A==
-X-Gm-Message-State: AOAM533+mQXAr+AEMO16uhKmaHoqt43FQ2jinvDmkq57W0NA6GvMVcYX
-        NL/udv1KZx9DDnjgg25aNA==
-X-Google-Smtp-Source: ABdhPJyT8MM4VWo5djPVVC7PJS/aRHbaodZBQ6f2mpjfmDUs5c8N9fTVxzDIG7Yrxh0oUjHkLtcT+Q==
-X-Received: by 2002:a05:6808:1c5:: with SMTP id x5mr358735oic.144.1639583492378;
-        Wed, 15 Dec 2021 07:51:32 -0800 (PST)
+        bh=1uN/AqHq/16fmWso+ckRBZMPm8uIk1S05gPTw3SpmPY=;
+        b=5wSByh36Ux6JGZav4koolC2t0qCKOK6ljaTp3ugb1FZ36dTXpykQLIh7zSlo3xDJM3
+         5seQCfFtOdOAFGUNYONb6MHWRvWbJNqhHnFkbCctt5dJNsmQdgfJKbuHkGpBQ64v+7ar
+         9axrimLhQ8X2d7BXOJfo2c+gu2dsmMMp4OgFEN4FF90b1GxecqBeOplB6Sk83DbMx2II
+         CA8lBFeG5tbf9WEDXRNLSezMq5VvJM4UlixnoBvjYYw+PauOLDS/RUQaqoDLNE7NWGCv
+         2+NbCDfOXfimLciifMQHVlcs+17GmSL+c3gn4k7rIuDGQNRy89DWoXm0gBw6QDkUrH4k
+         /xdQ==
+X-Gm-Message-State: AOAM530+FMxp5dm5iVy+h3sjBUkN2WtxntCVqpUCvQdEIel1WKu14Zsk
+        rpf6bVlBX1dWvxUe2lLmICEQJc/yAA==
+X-Google-Smtp-Source: ABdhPJz+BdqqYA7oiWw+kTcTRG+9z9GLCeD0Vi6YlvvtrKR1sMRLQfp3H7e/ZuYhjZ7GDhGlHaYmag==
+X-Received: by 2002:a05:6830:5a:: with SMTP id d26mr9044542otp.316.1639583720233;
+        Wed, 15 Dec 2021 07:55:20 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id y17sm507820ote.48.2021.12.15.07.51.31
+        by smtp.gmail.com with ESMTPSA id 69sm496716otf.33.2021.12.15.07.55.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 07:51:31 -0800 (PST)
-Received: (nullmailer pid 1378981 invoked by uid 1000);
-        Wed, 15 Dec 2021 15:51:30 -0000
-Date:   Wed, 15 Dec 2021 09:51:30 -0600
+        Wed, 15 Dec 2021 07:55:19 -0800 (PST)
+Received: (nullmailer pid 1385017 invoked by uid 1000);
+        Wed, 15 Dec 2021 15:55:18 -0000
+Date:   Wed, 15 Dec 2021 09:55:18 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     conor.dooley@microchip.com
-Cc:     sboyd@kernel.org, linux-clk@vger.kernel.org, palmer@dabbelt.com,
-        mturquette@baylibre.com, geert@linux-m68k.org,
-        cyril.jean@microchip.com, david.abdurachmanov@gmail.com,
-        krzysztof.kozlowski@canonical.com, devicetree@vger.kernel.org,
-        daire.mcnamara@microchip.com, robh+dt@kernel.org
-Subject: Re: [PATCH v7 1/2] dt-bindings: clk: microchip: Add Microchip
- PolarFire host binding
-Message-ID: <YboPAmeRMNKCUpCf@robh.at.kernel.org>
-References: <20211215083002.1353-1-conor.dooley@microchip.com>
- <20211215083002.1353-2-conor.dooley@microchip.com>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: clock: Add SM8450 GCC clock bindings
+Message-ID: <YboP5r3BeImwIsQB@robh.at.kernel.org>
+References: <20211207114003.100693-1-vkoul@kernel.org>
+ <20211207114003.100693-2-vkoul@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211215083002.1353-2-conor.dooley@microchip.com>
+In-Reply-To: <20211207114003.100693-2-vkoul@kernel.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, 15 Dec 2021 08:30:01 +0000, conor.dooley@microchip.com wrote:
-> From: Daire McNamara <daire.mcnamara@microchip.com>
+On Tue, 07 Dec 2021 17:10:02 +0530, Vinod Koul wrote:
+> Add device tree bindings for global clock controller on SM8450 SoCs.
 > 
-> Add device tree bindings for the Microchip PolarFire system
-> clock controller
-> 
-> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
 > ---
->  .../bindings/clock/microchip,mpfs.yaml        | 61 +++++++++++++++++++
->  .../dt-bindings/clock/microchip,mpfs-clock.h  | 45 ++++++++++++++
->  2 files changed, 106 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/microchip,mpfs.yaml
->  create mode 100644 include/dt-bindings/clock/microchip,mpfs-clock.h
+>  .../bindings/clock/qcom,gcc-sm8450.yaml       |  85 ++++++
+>  include/dt-bindings/clock/qcom,gcc-sm8450.h   | 244 ++++++++++++++++++
+>  2 files changed, 329 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sm8450.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,gcc-sm8450.h
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
