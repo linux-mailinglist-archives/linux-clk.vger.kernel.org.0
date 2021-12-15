@@ -2,170 +2,220 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 027204761F6
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Dec 2021 20:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF6F47625C
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Dec 2021 20:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbhLOThg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Dec 2021 14:37:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        id S233981AbhLOT55 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Dec 2021 14:57:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbhLOThf (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Dec 2021 14:37:35 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C3AC061401
-        for <linux-clk@vger.kernel.org>; Wed, 15 Dec 2021 11:37:34 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id b19so33119306ljr.12
-        for <linux-clk@vger.kernel.org>; Wed, 15 Dec 2021 11:37:34 -0800 (PST)
+        with ESMTP id S229791AbhLOT54 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Dec 2021 14:57:56 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E00C061574
+        for <linux-clk@vger.kernel.org>; Wed, 15 Dec 2021 11:57:56 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id p8so35025702ljo.5
+        for <linux-clk@vger.kernel.org>; Wed, 15 Dec 2021 11:57:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ED+CvZZdmTnzliZC6CUsqBsJW1sq3Ne4IvgOnWZDhLA=;
-        b=ZW8BJ3OxVYAJKE0pwFAlSs/GIyo6ypWidQ+8z24WIJJsAvp2m9GoaKT16P2ab2UR7t
-         nkzKp/q3Rjz60aL9tAq61HCiNNty7WqvZAOTqnaN/sQZCQjE1iIVWHBzIAWDE/X4RAvO
-         Wa333qo1CXEt4zaSB+aELfU0UxfnTVl8NFheRtCi6pGpeKPzZA96OBfKM1lEQXpoOCoB
-         hMpw7zmhE5a+3v04WgGgTOZUwUma+ZT1vmrhkBOXN0Lx0mC1wgntk+H6rogdb86wRVRk
-         1xa1/dxcx9mMaPl1gS8qx1/Q33uYZ0XB60ByLaSYLjm2cPYHmXzxYRWhZNvMmz4gViY+
-         IfNg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=xzBRnW091E2hYttdO0EPFhJ6cH97SZxsTkE7s33U1XU=;
+        b=Q2astHq+BVkv2Vzv5F6Jicrgstv08rqCGISGYvZkbqqszqIAgWCfeFEkkxulWzaFEX
+         tGxPmgR9JbL9EuTp3fWKlyzHuy03tFWz6eSb7Gultp+R2w1dK4+TXJluBeQl8KWn67ax
+         Tvs6HtfUOt6CGBWcLYMj7d53/RjOfCGYAIwCwOGLfdorsOycBmxcjF9szZOrAzkoTujq
+         ZudgJ5hf44CqIaZQo23qs5tiHVXR6rYaj/sOm8aP8bxM93Pc3Mtqpu27WLL/zyme9uut
+         etZmFER6akRkdIZVw06QXlH6BxKk38L319qQ3INexdQB468zOwUAZ0rRiHqzONN941tD
+         5Jpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ED+CvZZdmTnzliZC6CUsqBsJW1sq3Ne4IvgOnWZDhLA=;
-        b=5xZ/dd4WyxUnXmIZCSe4zU9Xl8uEX5dPGMLv5UpDTPisgVbVMEiWO7rxefNFkbla5H
-         f6petR2RcGt/S0VhWjy/fJU17fSzfdygR/fYkBK51HFQyTLpd3lJOzxwFUtT8SQImTop
-         6f/rTI0nfKk+YAq67YTKIz3YQ2tfixFLKSsTvz0pTUVMQj6hEF8r6nVG22kU3s5x4rDU
-         uAjA16ioMOCBUWw24HMZlVs/7rYpa1CqNq9cCSQOqMyL+hnKgFQ8fF/Gbv+hFFUjZArz
-         TYPz+7shRNxauMGbd6OO60XZ1Vo6LxHFb7hi2OrrZGFAbSJGzLM5o/QnbGVytRsbG3B5
-         TKxw==
-X-Gm-Message-State: AOAM533KGtZcBkmzV37jQTq4sA45aQnu6bfopkGnzWIW7INtDGFPepIg
-        NFesLjrsPlZlZWQDIo7LNFpBuXDB9YVI8FzL
-X-Google-Smtp-Source: ABdhPJzqVfcFG7u431vmgXnWeciKV9pImYGNaFtv1WvIy6yeHmG0ru15q3J+Zv/Aj60aIyw3Zq8asQ==
-X-Received: by 2002:a2e:b60d:: with SMTP id r13mr11625290ljn.72.1639597052825;
-        Wed, 15 Dec 2021 11:37:32 -0800 (PST)
-Received: from eriador.lan ([2001:470:dd84:abc0::8a5])
-        by smtp.gmail.com with ESMTPSA id a7sm460592lfi.149.2021.12.15.11.37.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 11:37:32 -0800 (PST)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <tdas@codeaurora.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v3 16/16] clk: qcom: gcc-msm8996: start getting rid of xo clk
-Date:   Wed, 15 Dec 2021 22:37:04 +0300
-Message-Id: <20211215193704.2821775-17-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211215193704.2821775-1-dmitry.baryshkov@linaro.org>
-References: <20211215193704.2821775-1-dmitry.baryshkov@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=xzBRnW091E2hYttdO0EPFhJ6cH97SZxsTkE7s33U1XU=;
+        b=YWOaIWPMIc6MHSZyXnmks/eokqUxfPlcvicp1OB3+3mUA2BOhEhF5pUyyF/Ik3vz1n
+         N7peOY/eeTFieUNt3LVpbEQbNKnZkwT101cNjPCabyjwKeMTLszuj+N8371uTwhYr2la
+         nJ2zlqlfW6hWBr0cq5p/KrydYbfv3qaPxnES92SPmxRE+BBK9r1kcYc8D4z6aNfp//E5
+         Fb23aBvGQXEuwynEeNekdwh59UCjmtobmQRcVjRCAmDCG/NFnkq7eRBELeIF/0n0ikKK
+         vCXr4IP2xJMolESHxWW68Q00ixq5KghvYwbs1IGUp7N5VqrkXe3f+kh7PbyBaYUPuBQb
+         fEew==
+X-Gm-Message-State: AOAM530FoF8bzqmtDgyau4WHuATHNgYckQW9u5pTlxyw0O4N9OIrAeFA
+        zqN9jyd/cIxYUnFf/XHden+1Vw==
+X-Google-Smtp-Source: ABdhPJxdumx8QChUC4wNlRA2hk//MDt1M3tNJWiARcl992IAZ/D8QucGCmYEjmGxyRU6uRxW6Fr3xA==
+X-Received: by 2002:a2e:b0ee:: with SMTP id h14mr11902221ljl.478.1639598274332;
+        Wed, 15 Dec 2021 11:57:54 -0800 (PST)
+Received: from ?IPV6:2001:470:dd84:abc0::8a5? ([2001:470:dd84:abc0::8a5])
+        by smtp.gmail.com with ESMTPSA id u17sm468737lfm.279.2021.12.15.11.57.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Dec 2021 11:57:53 -0800 (PST)
+Message-ID: <e1e7f91c-fcdb-7789-0094-80e2b5b09d4f@linaro.org>
+Date:   Wed, 15 Dec 2021 22:57:48 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v3 1/2] drm/msm/dsi: Use "ref" fw clock instead of global
+ name for VCO parent
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Abhinav Kumar <abhinavk@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, Stephen Boyd <swboyd@chromium.org>
+References: <20210911131922.387964-1-marijn.suijten@somainline.org>
+ <20210911131922.387964-2-marijn.suijten@somainline.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20210911131922.387964-2-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The "xo" fixed_factor clock is a leftover/hack from a time when we
-couldn't make rpmhcc the root of all clocks. It is going to be removed
-once all users of this clock are converted to use clocks specified
-through the DTS. Replace internal usage of the xo clock with the cxo
-(RPM_SMD_BB_CLK1) parent, specifying xo_board as a fallback.
+On 11/09/2021 16:19, Marijn Suijten wrote:
+> All DSI PHY/PLL drivers were referencing their VCO parent clock by a
+> global name, most of which don't exist or have been renamed.  These
+> clock drivers seem to function fine without that except the 14nm driver
+> for sdm6xx [1].
+> 
+> At the same time all DTs provide a "ref" clock as per the requirements
+> of dsi-phy-common.yaml, but the clock is never used.  This patchset puts
+> that clock to use without relying on a global clock name, so that all
+> dependencies are explicitly defined in DT (the firmware) in the end.
+> 
+> Note that this patch intentionally breaks older firmware (DT) that
+> relies on the clock to be found globally instead.  The only affected
+> platform is msm8974 [2] for whose dsi_phy_28nm a .name="xo" fallback is
+> left in place to accommodate a more graceful transition period.  All
+> other platforms had the "ref" clock added to their phy node since its
+> inception, or in a followup patch some time after.  These patches
+> wrongly assumed that the "ref" clock was actively used and have hence
+> been listed as "Fixes:" below.
+> Furthermore apq8064 was providing the wrong 19.2MHz cxo instead of
+> 27MHz pxo clock, which has been addressed in [3].
+> 
+> It is expected that both [2] and [3] are applied to the tree well in
+> advance of this patch such that any actual breakage is extremely
+> unlikely, but might still occur if kernel upgrades are performed without
+> the DT to match.  After some time the fallback for msm8974 can be
+> removed again as well.
+> 
+> [1]: https://lore.kernel.org/linux-arm-msm/386db1a6-a1cd-3c7d-a88e-dc83f8a1be96@somainline.org/
+> [2]: https://lore.kernel.org/linux-arm-msm/20210830175739.143401-1-marijn.suijten@somainline.org/
+> [3]: https://lore.kernel.org/linux-arm-msm/20210829203027.276143-2-marijn.suijten@somainline.org/
+> 
+> Fixes: 79e51645a1dd ("arm64: dts: qcom: msm8916: Set 'xo_board' as ref clock of the DSI PHY")
+> Fixes: 6969d1d9c615 ("ARM: dts: qcom-apq8064: Set 'cxo_board' as ref clock of the DSI PHY")
+> Fixes: 0c0e72705a33 ("arm64: dts: sdm845: Set 'bi_tcxo' as ref clock of the DSI PHYs")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/clk/qcom/gcc-msm8996.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-diff --git a/drivers/clk/qcom/gcc-msm8996.c b/drivers/clk/qcom/gcc-msm8996.c
-index 204c1f4c68c4..8da5ad2ad563 100644
---- a/drivers/clk/qcom/gcc-msm8996.c
-+++ b/drivers/clk/qcom/gcc-msm8996.c
-@@ -54,8 +54,8 @@ static struct clk_alpha_pll gpll0_early = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gpll0_early",
--			.parent_hws = (const struct clk_hw*[]){
--				&xo.hw,
-+			.parent_data = &(const struct clk_parent_data){
-+				.fw_name = "cxo", .name = "xo_board",
- 			},
- 			.num_parents = 1,
- 			.ops = &clk_alpha_pll_ops,
-@@ -131,8 +131,8 @@ static struct clk_alpha_pll gpll4_early = {
- 		.enable_mask = BIT(4),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gpll4_early",
--			.parent_hws = (const struct clk_hw*[]){
--				&xo.hw,
-+			.parent_data = &(const struct clk_parent_data){
-+				.fw_name = "cxo", .name = "xo_board",
- 			},
- 			.num_parents = 1,
- 			.ops = &clk_alpha_pll_ops,
-@@ -167,7 +167,7 @@ static const struct parent_map gcc_xo_gpll0_map[] = {
- };
- 
- static const struct clk_parent_data gcc_xo_gpll0[] = {
--	{ .hw = &xo.hw },
-+	{ .fw_name = "cxo", .name = "xo_board" },
- 	{ .hw = &gpll0.clkr.hw }
- };
- 
-@@ -177,7 +177,7 @@ static const struct parent_map gcc_xo_sleep_clk_map[] = {
- };
- 
- static const struct clk_parent_data gcc_xo_sleep_clk[] = {
--	{ .hw = &xo.hw },
-+	{ .fw_name = "cxo", .name = "xo_board" },
- 	{ .fw_name = "sleep_clk", .name = "sleep_clk" }
- };
- 
-@@ -188,7 +188,7 @@ static const struct parent_map gcc_xo_gpll0_gpll0_early_div_map[] = {
- };
- 
- static const struct clk_parent_data gcc_xo_gpll0_gpll0_early_div[] = {
--	{ .hw = &xo.hw },
-+	{ .fw_name = "cxo", .name = "xo_board" },
- 	{ .hw = &gpll0.clkr.hw },
- 	{ .hw = &gpll0_early_div.hw }
- };
-@@ -200,7 +200,7 @@ static const struct parent_map gcc_xo_gpll0_gpll4_map[] = {
- };
- 
- static const struct clk_parent_data gcc_xo_gpll0_gpll4[] = {
--	{ .hw = &xo.hw },
-+	{ .fw_name = "cxo", .name = "xo_board" },
- 	{ .hw = &gpll0.clkr.hw },
- 	{ .hw = &gpll4.clkr.hw }
- };
-@@ -212,7 +212,7 @@ static const struct parent_map gcc_xo_gpll0_aud_ref_clk_map[] = {
- };
- 
- static const struct clk_parent_data gcc_xo_gpll0_aud_ref_clk[] = {
--	{ .hw = &xo.hw },
-+	{ .fw_name = "cxo", .name = "xo_board" },
- 	{ .hw = &gpll0.clkr.hw },
- 	{ .fw_name = "aud_ref_clk", .name = "aud_ref_clk" }
- };
-@@ -225,7 +225,7 @@ static const struct parent_map gcc_xo_gpll0_sleep_clk_gpll0_early_div_map[] = {
- };
- 
- static const struct clk_parent_data gcc_xo_gpll0_sleep_clk_gpll0_early_div[] = {
--	{ .hw = &xo.hw },
-+	{ .fw_name = "cxo", .name = "xo_board" },
- 	{ .hw = &gpll0.clkr.hw },
- 	{ .fw_name = "sleep_clk", .name = "sleep_clk" },
- 	{ .hw = &gpll0_early_div.hw }
-@@ -239,7 +239,7 @@ static const struct parent_map gcc_xo_gpll0_gpll4_gpll0_early_div_map[] = {
- };
- 
- static const struct clk_parent_data gcc_xo_gpll0_gpll4_gpll0_early_div[] = {
--	{ .hw = &xo.hw },
-+	{ .fw_name = "cxo", .name = "xo_board" },
- 	{ .hw = &gpll0.clkr.hw },
- 	{ .hw = &gpll4.clkr.hw },
- 	{ .hw = &gpll0_early_div.hw }
+> ---
+>   drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c      | 4 +++-
+>   drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c      | 4 +++-
+>   drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c      | 4 +++-
+>   drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c | 4 +++-
+>   drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c       | 4 +++-
+>   5 files changed, 15 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
+> index e46b10fc793a..3cbb1f1475e8 100644
+> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
+> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c
+> @@ -562,7 +562,9 @@ static int pll_10nm_register(struct dsi_pll_10nm *pll_10nm, struct clk_hw **prov
+>   	char clk_name[32], parent[32], vco_name[32];
+>   	char parent2[32], parent3[32], parent4[32];
+>   	struct clk_init_data vco_init = {
+> -		.parent_names = (const char *[]){ "xo" },
+> +		.parent_data = &(const struct clk_parent_data) {
+> +			.fw_name = "ref",
+> +		},
+>   		.num_parents = 1,
+>   		.name = vco_name,
+>   		.flags = CLK_IGNORE_UNUSED,
+> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
+> index ebedbb6c8961..789b08c24d25 100644
+> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
+> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
+> @@ -802,7 +802,9 @@ static int pll_14nm_register(struct dsi_pll_14nm *pll_14nm, struct clk_hw **prov
+>   {
+>   	char clk_name[32], parent[32], vco_name[32];
+>   	struct clk_init_data vco_init = {
+> -		.parent_names = (const char *[]){ "xo" },
+> +		.parent_data = &(const struct clk_parent_data) {
+> +			.fw_name = "ref",
+> +		},
+>   		.num_parents = 1,
+>   		.name = vco_name,
+>   		.flags = CLK_IGNORE_UNUSED,
+> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c
+> index eb1b8ff61da1..531c4b65aede 100644
+> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c
+> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c
+> @@ -521,7 +521,9 @@ static int pll_28nm_register(struct dsi_pll_28nm *pll_28nm, struct clk_hw **prov
+>   {
+>   	char clk_name[32], parent1[32], parent2[32], vco_name[32];
+>   	struct clk_init_data vco_init = {
+> -		.parent_names = (const char *[]){ "xo" },
+> +		.parent_data = &(const struct clk_parent_data) {
+> +			.fw_name = "ref", .name = "xo",
+> +		},
+>   		.num_parents = 1,
+>   		.name = vco_name,
+>   		.flags = CLK_IGNORE_UNUSED,
+> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c
+> index aaa37456f4ee..9662cb236468 100644
+> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c
+> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c
+> @@ -385,7 +385,9 @@ static int pll_28nm_register(struct dsi_pll_28nm *pll_28nm, struct clk_hw **prov
+>   {
+>   	char *clk_name, *parent_name, *vco_name;
+>   	struct clk_init_data vco_init = {
+> -		.parent_names = (const char *[]){ "pxo" },
+> +		.parent_data = &(const struct clk_parent_data) {
+> +			.fw_name = "ref",
+> +		},
+>   		.num_parents = 1,
+>   		.flags = CLK_IGNORE_UNUSED,
+>   		.ops = &clk_ops_dsi_pll_28nm_vco,
+> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
+> index 9eade6d81a54..1a5abbd9fb76 100644
+> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
+> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
+> @@ -588,7 +588,9 @@ static int pll_7nm_register(struct dsi_pll_7nm *pll_7nm, struct clk_hw **provide
+>   	char clk_name[32], parent[32], vco_name[32];
+>   	char parent2[32], parent3[32], parent4[32];
+>   	struct clk_init_data vco_init = {
+> -		.parent_names = (const char *[]){ "bi_tcxo" },
+> +		.parent_data = &(const struct clk_parent_data) {
+> +			.fw_name = "ref",
+> +		},
+>   		.num_parents = 1,
+>   		.name = vco_name,
+>   		.flags = CLK_IGNORE_UNUSED,
+> --
+> 2.33.0
+> 
+
+
 -- 
-2.33.0
-
+With best wishes
+Dmitry
