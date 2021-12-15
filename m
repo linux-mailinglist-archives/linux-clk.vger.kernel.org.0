@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F997475CE7
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Dec 2021 17:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EC9475CD5
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Dec 2021 17:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238150AbhLOQJe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Dec 2021 11:09:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S244482AbhLOQJT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Dec 2021 11:09:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244238AbhLOQJP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Dec 2021 11:09:15 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A59FC061759
-        for <linux-clk@vger.kernel.org>; Wed, 15 Dec 2021 08:09:13 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id d198-20020a1c1dcf000000b0034569cdd2a2so1365503wmd.5
-        for <linux-clk@vger.kernel.org>; Wed, 15 Dec 2021 08:09:13 -0800 (PST)
+        with ESMTP id S244427AbhLOQJR (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Dec 2021 11:09:17 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B6CC06175C
+        for <linux-clk@vger.kernel.org>; Wed, 15 Dec 2021 08:09:14 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id d198-20020a1c1dcf000000b0034569cdd2a2so1365554wmd.5
+        for <linux-clk@vger.kernel.org>; Wed, 15 Dec 2021 08:09:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=u4zZ+z1pGP+Htk3E+7BpOhHUxDFBFodnyOqMJFTyq+8=;
-        b=oYZR9hF/CodulLOtmAdszrJJnJs/Ny9cc6G7wkr6zvqlQgG3/n8IDv0ZAhHEwF2pYn
-         k2YUqoxHDs2QsdWTBgG9BTgI5B7XYcaO7qX3xbY4Ue+E5ERkAoJdhA5UKGyGAFXAm5j3
-         viYtFHYPw7sJmwt2iGdabMirVEItKAybcnfwOFXDwZo9kv/pRJ3eVk7RUT0BbQE5Cp5a
-         Jhm/5wd3U0jRAVtDHfyblnc7ET6dtJpiphJxApUGm0LmDGJ65YjKx+YIawE70E3cxqxd
-         Ou8FtpLxlNXUsHDplUriMcmOtYHB7J+rnH80g2SJbelkI8niO8RQ6F4R/dndd3keTgzs
-         A4WQ==
+        bh=dz9umB5IGIToqYZftMBO3IU3Cs19TgfRkZ7uiNPvoRw=;
+        b=Lckz/WAa0xszZdKca065FH4mciLh/lYpayGiAm3jCEqUBANW+FM5KouHbtkuh9xUZi
+         wc2OyvBCIn6/4n3DOEjw1QgJPxDyngupSYwQKM4N+KuBUV5GTUoVZUdOQUlqJ/UeaY90
+         aWQDdTZxYyWTfIVpsbJOBv81+jjlmae6J5VzEHaUYvFwpq+6OlE1wQNopYOmLbGN3wDk
+         1oU8cvmfiDR8XLBOuyV6LFBavUi2Y8WARzAbj1AbfuBovQoQ+OSDkYxU/aUZ0DNqo4Qv
+         og2PXuI5ykIrXEozOAfw06I3+RTM7P4k6q8zqtb6yi/1J3JcIpOTA5z9RC8whXF7Ge42
+         lJUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=u4zZ+z1pGP+Htk3E+7BpOhHUxDFBFodnyOqMJFTyq+8=;
-        b=XTXJmgCttY2tl0+K86VLO9Jm7KxM6j9gPj3OMSKmq2ghUCSUwNqJqsn5wcf5jZaQU/
-         yc9iR0aY7KOx2vXY2NXuq6LRLEAEbgG9fOhfC+uOH6KppSpYoeMMM/P5ek3DFWsd36ga
-         tEUpmUFcVdSZjqdF0JaSkJebI/sK198MbTThkyUnlEWP+FvzPiy8eBcs0zhw8DLmtge5
-         /8x4IA1HF/xOz+gmwJDF2agl7HGSKsS0is6M/vSv770Q9Qj9HGtkmzv/oUPTzUqjOSXG
-         gNJLDJ7uIPImP55IIJuC7hg50ozfTH59Q/ce5oM7q6MxmV6Z3z6WmRnYQA2HjzeGg3YI
-         Rz+w==
-X-Gm-Message-State: AOAM532RENzJt3ROxqrwE4SvX8AjL72QHvUhCbe2i2XG9tLIARtdfMtt
-        mpalJm17fcSNaUaoIkAR++bOxQ==
-X-Google-Smtp-Source: ABdhPJzGSJCvZ0o2lhXsioS+2QTFi++7SI1Tfu2g1ePTsn+jn9X2ZXiEPV5u98fsYf4jsKpaPwqz2g==
-X-Received: by 2002:a7b:cb55:: with SMTP id v21mr504663wmj.45.1639584552115;
-        Wed, 15 Dec 2021 08:09:12 -0800 (PST)
+        bh=dz9umB5IGIToqYZftMBO3IU3Cs19TgfRkZ7uiNPvoRw=;
+        b=DQp+8gDITP5DWGizukbjZR7WsnWh2ePS8NzKa3KlxXrxuN6c2kMj/jsueFekXDVfZS
+         zuD5Cv6262WzD8syIXvv7B4+Vgkbk1CpvmXdyuicGDvKNIZJNJxoB5fSHPk+IsuBarTN
+         T74GWXz4A4wC+V0uEzi/4wjB+Id07WuARX3wYV6wdyFZfpOc7vSmUWcN/T8MLwJuX79Z
+         xFo5/SOJzK+Ejgkji7sotqZKzWrP+Zl5rHxlTGEMQUkduWvVW/7y+0DsZcxx3NW71TNx
+         bMktv0oM0qSezU+2Mq/G10VDTHZFpUoVrZUkDMkpS/2U+5hpGIvk8OrUWjIXeYXtwLTm
+         aegg==
+X-Gm-Message-State: AOAM530Tx321o+Fr0DKtOJWZIDfZSovTKiTJwYU4Dg/UmNd00vAdg4ex
+        6KlB96TnKQlGSU4moOSnqnyKkQ==
+X-Google-Smtp-Source: ABdhPJwyEiH0fomN/E3toR4LTUG8ouZsXe50NaVQvsh+mAJZehnftHhVnF2WZv6uA4D3FjmVmvUPZQ==
+X-Received: by 2002:a05:600c:21cd:: with SMTP id x13mr547905wmj.52.1639584553539;
+        Wed, 15 Dec 2021 08:09:13 -0800 (PST)
 Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id 10sm3034006wrb.75.2021.12.15.08.09.11
+        by smtp.gmail.com with ESMTPSA id j14sm1859285wrn.88.2021.12.15.08.09.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 08:09:11 -0800 (PST)
+        Wed, 15 Dec 2021 08:09:13 -0800 (PST)
 From:   Sam Protsenko <semen.protsenko@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -65,9 +65,9 @@ Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH 3/7] dt-bindings: Add vendor prefix for WinLink
-Date:   Wed, 15 Dec 2021 18:09:02 +0200
-Message-Id: <20211215160906.17451-4-semen.protsenko@linaro.org>
+Subject: [PATCH 4/7] dt-bindings: arm: samsung: Document E850-96 board binding
+Date:   Wed, 15 Dec 2021 18:09:03 +0200
+Message-Id: <20211215160906.17451-5-semen.protsenko@linaro.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211215160906.17451-1-semen.protsenko@linaro.org>
 References: <20211215160906.17451-1-semen.protsenko@linaro.org>
@@ -77,29 +77,31 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-WinLink Co., Ltd is a hardware design and manufacturing company based in
-South Korea. Official web-site: [1].
-
-[1] http://win-link.net/
+Add binding for the WinLink E850-96 board, which is based on Samsung
+Exynos850 SoC.
 
 Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../devicetree/bindings/arm/samsung/samsung-boards.yaml     | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 932c5ded6c00..83f6b484997c 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -1326,6 +1326,8 @@ patternProperties:
-     description: Wiligear, Ltd.
-   "^winbond,.*":
-     description: Winbond Electronics corp.
-+  "^winlink,.*":
-+    description: WinLink Co., Ltd
-   "^winstar,.*":
-     description: Winstar Display Corp.
-   "^wits,.*":
+diff --git a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+index ef6dc14be4b5..00f122197476 100644
+--- a/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
++++ b/Documentation/devicetree/bindings/arm/samsung/samsung-boards.yaml
+@@ -205,6 +205,12 @@ properties:
+               - samsung,exynosautov9-sadk   # Samsung Exynos Auto v9 SADK
+           - const: samsung,exynosautov9
+ 
++      - description: Exynos850 based boards
++        items:
++          - enum:
++              - winlink,e850-96                 # WinLink E850-96
++          - const: samsung,exynos850
++
+ required:
+   - compatible
+ 
 -- 
 2.30.2
 
