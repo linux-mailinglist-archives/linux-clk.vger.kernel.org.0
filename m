@@ -2,117 +2,117 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6EFD475C61
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Dec 2021 16:55:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2E6475CCA
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Dec 2021 17:09:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244255AbhLOPzk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Dec 2021 10:55:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42212 "EHLO
+        id S235190AbhLOQJK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Dec 2021 11:09:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244245AbhLOPzj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Dec 2021 10:55:39 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB285C06173E;
-        Wed, 15 Dec 2021 07:55:38 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id a18so39013817wrn.6;
-        Wed, 15 Dec 2021 07:55:38 -0800 (PST)
+        with ESMTP id S229944AbhLOQJJ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Dec 2021 11:09:09 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF36C061574
+        for <linux-clk@vger.kernel.org>; Wed, 15 Dec 2021 08:09:09 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id t18so39015468wrg.11
+        for <linux-clk@vger.kernel.org>; Wed, 15 Dec 2021 08:09:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=R67lTnWwXbUTzFzCGUUL+WExD12deXb0Qh98T1uTW0w=;
-        b=OhHVBsH+JSjXGRjWW3dS71NC/5sbYxFPZeF0Q4crce9RPU1G+fwh5oGbAJmZOtYSDn
-         yjuE+M/vGo+HcrEQy22dlJU89eYUIQKX9sy91E3wHpbdRpvBDG7E9pqh+KnpWWxUSq9v
-         PNF4kbB9qDszar6MdLFK6vUT3qHSmSkZinyZ9tTuRpB9k8dn911giQKHsHtqs8Ub7qfH
-         d+kpMd6Mn09M8+dSrQ6c/fZrNlAwgj2PLcnx4Skskb/YzyUvtGrwTTyqbbEG/OT3HkPf
-         3zJ8bhxulq+9LmiMbMGftBQwPezCtnNWvi9+c4T4qCyJR3jP+j7uHUtw5ctkZOex5L9X
-         70hQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=miak/i2hpYLrUnHAJtCSqYH++KiQVAx0lzOfX3VFDhs=;
+        b=YLi+Map8CrZDUMzwjQftVbIvXrD/TGP48S7VMuAlfV4OA9QBsCobU0lZvNTKgmO4Bd
+         VMiaDUtne7LqIdkK4A1i7n5NOio6+cRyMfqvu+gXr4R4HjDpPe0327RaIaYUMKLRZlhI
+         o2OzS2sZLp9WdYnoVswGfp0ECWlMrrilKGoIrpa8nWY8dGafejh9sTAaUW2dK5nBhy81
+         lIdvX6E11MUFCyfZOXP7ppSiwuK7lCE/8QCC+bYxrUk+mBQnemzNiPWrmpWeAiHdgcCH
+         5+SLT9bgqXasuDO12QP/FFuh9kzHPw6+B7mDzvfyRliLar2Cl3mwfOnI6JEztIORZW43
+         iCNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=R67lTnWwXbUTzFzCGUUL+WExD12deXb0Qh98T1uTW0w=;
-        b=sHHcAsmUjlzPDcQmpUcHYEWzDHwclvEfs/QMK4iRWxkeFCQLhMnd1hSl1pZMh8AdR2
-         YIyxH57lgz0pVB2uTGAsHgo2ihxGo9EClg6HyXl2xzPMUJcBd528Znr0OzSHg4pToYeX
-         uuQjuGDDQ/Wz0bqeiNbhQAiVOTOohfEpLbnnVx32YT3Q/txiVzXRykczoYfjVyBuZA4A
-         dIWfBUqbc8XRjntCVQx6Nx5qwnRULtZ3jF/bKQmy8fffjJFJ+/vSXjjVKtc3uEqNqBHP
-         EtRXxf/x+SdSMKnY3h9FDEsIZ94nwSAlEFakeB6oPE2+HeMDVZBYuIkz/Q1i3XxBzd4N
-         8ctA==
-X-Gm-Message-State: AOAM533EILDOO9SFdZxZP07B661BqVHsly5rnNjGK/7/BZsEOUR4MQHy
-        yZ6KtbUR4syzhdnLBo1RNh0=
-X-Google-Smtp-Source: ABdhPJxHztDvenoHWfBqOVDnmyiUgaQWSSLPpt6XX3/VYHhw8RSChI7rhoZIlA+1HRtQtKu2hou5Tg==
-X-Received: by 2002:a5d:6488:: with SMTP id o8mr5000272wri.631.1639583737576;
-        Wed, 15 Dec 2021 07:55:37 -0800 (PST)
-Received: from orome ([193.209.96.43])
-        by smtp.gmail.com with ESMTPSA id n7sm2363354wro.68.2021.12.15.07.55.34
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=miak/i2hpYLrUnHAJtCSqYH++KiQVAx0lzOfX3VFDhs=;
+        b=VtZj8BtipPrl8ZkqHJP0JkMlFBcst8Z1GONKLTESDNx4qbKA3PMpUYXpH4QxW69jBF
+         xKcoIh4Q1k7nIkUKbx8I2Q0pt7Qg1IDEoonsELLZJ7Mb+mGY8AgnREQVRgvfLBDM8U2S
+         vNKXs7tyz34sczKiWh4a/rAaNC8Z9wYGyzhLV9NeO+59sg6tBtj5W7zJoSa8TKUDv41r
+         Q/v/Ea5VS7QRONn1KnigyOh+Cj+CA8UU6kfNQ4sDX9014kHV2k2Pi/npub1yA1/I5P9Y
+         2mmfZU6Sfq1SqIJN1KiUvNEZwRujqeKqJBOFUo6MPy1KE+uhd52Mfia41u38csTJ5DK8
+         +kdw==
+X-Gm-Message-State: AOAM533K9CZnvfcR6cxsSpQ0zgltyKt+8Pw9UIfikLRHG4MRUOe0xB++
+        KIIv8nFGMZ3EPuBGdqYG9FPgrw==
+X-Google-Smtp-Source: ABdhPJzsGRd487Qtry582CfMd10zTS8QWxJIAZQOiMVPhG3S8uwc8QKnH4OH3ZsHO9NGfYMgiYPcwQ==
+X-Received: by 2002:adf:d1c1:: with SMTP id b1mr4932000wrd.296.1639584547840;
+        Wed, 15 Dec 2021 08:09:07 -0800 (PST)
+Received: from localhost ([31.134.121.151])
+        by smtp.gmail.com with ESMTPSA id bg34sm5861786wmb.47.2021.12.15.08.09.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 07:55:36 -0800 (PST)
-Date:   Wed, 15 Dec 2021 16:55:32 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
+        Wed, 15 Dec 2021 08:09:07 -0800 (PST)
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
-Subject: Re: [PATCH v16 00/40] NVIDIA Tegra power management patches for 5.17
-Message-ID: <YboP9IFMUrUnEzrU@orome>
-References: <20211130232347.950-1-digetx@gmail.com>
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH 0/7] arm64: dts: exynos: Add E850-96 board support
+Date:   Wed, 15 Dec 2021 18:08:59 +0200
+Message-Id: <20211215160906.17451-1-semen.protsenko@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="HWWUr3zWZyjxMtnU"
-Content-Disposition: inline
-In-Reply-To: <20211130232347.950-1-digetx@gmail.com>
-User-Agent: Mutt/2.1.3 (987dde4c) (2021-09-10)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+WinLink's E850-96 is a dev board based on Exynos850 SoC [1]. The board's
+design follows 96boards specifications, hence it's compatible with
+96boards mezzanines [2].
 
---HWWUr3zWZyjxMtnU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch series adds the initial support for E850-96 board and
+Exynos850 SoC, along with corresponding bindings. Only basic platform
+components are enabled at the moment (like serial, I2C, eMMC, RTC, WDT,
+clock driver, etc). Right now with this patch series it's possible to
+run the kernel with BusyBox rootfs as a RAM disk. More features are
+coming soon.
 
-On Wed, Dec 01, 2021 at 02:23:07AM +0300, Dmitry Osipenko wrote:
-> This series adds runtime PM support to Tegra drivers and enables core
-> voltage scaling for Tegra20/30 SoCs, resolving overheating troubles.
->=20
-> All patches in this series are interdependent and should go via Tegra tree
-> for simplicity.
+[1] https://www.samsung.com/semiconductor/minisite/exynos/products/mobileprocessor/exynos-850/
+[2] https://www.96boards.org/products/mezzanine/
 
-So these can be applied in any order without breaking anything?
+Sam Protsenko (7):
+  dt-bindings: clock: exynos850: Add bindings for Exynos850 sysreg
+    clocks
+  clk: samsung: exynos850: Add missing sysreg clocks
+  dt-bindings: Add vendor prefix for WinLink
+  dt-bindings: arm: samsung: Document E850-96 board binding
+  dt-bindings: pinctrl: samsung: Add pin drive definitions for Exynos850
+  arm64: dts: exynos: Add initial Exynos850 SoC support
+  arm64: dts: exynos: Add initial E850-96 board support
 
-Thierry
+ .../bindings/arm/samsung/samsung-boards.yaml  |   6 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ arch/arm64/boot/dts/exynos/Makefile           |   3 +-
+ .../boot/dts/exynos/exynos850-e850-96.dts     | 157 ++++
+ .../boot/dts/exynos/exynos850-pinctrl.dtsi    | 755 ++++++++++++++++++
+ arch/arm64/boot/dts/exynos/exynos850.dtsi     | 755 ++++++++++++++++++
+ drivers/clk/samsung/clk-exynos850.c           |  29 +
+ include/dt-bindings/clock/exynos850.h         |  12 +-
+ include/dt-bindings/pinctrl/samsung.h         |  13 +-
+ 9 files changed, 1727 insertions(+), 5 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
+ create mode 100644 arch/arm64/boot/dts/exynos/exynos850-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/exynos/exynos850.dtsi
 
---HWWUr3zWZyjxMtnU
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.30.2
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmG6D/QACgkQ3SOs138+
-s6HzZw//SGRlSbxYGcf2puc+SV4jxqHgVmBVp8biQjzJoeSIatV6B+8n7NAvS0x/
-qMBw7S5I7uFy8rqsIUHNQI929PW2XNbz2H8qid5UjtDVlUo5ir1qtVgvH8HYQruX
-l+PlVayuhBblIEemscYhMNeuyKgrAMeho9ZnnJjITvMVBKRGOxGp38RUgf+Tzrpc
-lF7KIxOcm9FoYTeLxAiVFKtI6Evkt+xJbEvqxkIpaNAzo/AvX6ognGeUQCg7USWu
-v2Km4gqjV0bvZUi+HlMPnYGAFpt3X9ws5NCR5ED4huHislttMacNlkfWGpHw/KkU
-/VJlYrSnlpJkppzOio+g91qdXXlTfXpa3g5ZHSOLqsNFOPFppN9PU9K2DhwFN3Ej
-mNIVbs8Oarq/bJdCftc6dX9saiL9AdKCD1MJO+XgsJuHtQ4FkJHnxMk/p8m9KH33
-HurZ3qmVir9YQh9kyE3MVT95o3gSR+M6hpPcSDiCf4g9XjwvEfJ+sDSg7B8lmM+0
-ZYOmkLu0iLKGOLOn/gBU9Z/Zw9Kw2iW2J/glHU4E5/GI2MNgs99GQPOwyFEq6AvQ
-B4V/SN10i1F0RzeuqsFacfr25c9UGwcXUDNxJqebib27ZRhcGkwu53tEBqYWXep9
-7MAMtQ8il969lajf/1tAlUVPR6AXLiuGcKgZZTEcDUReMvR4Dqk=
-=drq6
------END PGP SIGNATURE-----
-
---HWWUr3zWZyjxMtnU--
