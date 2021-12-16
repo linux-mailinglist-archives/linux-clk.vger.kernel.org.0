@@ -2,87 +2,109 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BC84765D7
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Dec 2021 23:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95DB14766F6
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Dec 2021 01:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231504AbhLOW2j (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Dec 2021 17:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
+        id S232206AbhLPAns (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Dec 2021 19:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbhLOW2L (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Dec 2021 17:28:11 -0500
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237EEC06137C
-        for <linux-clk@vger.kernel.org>; Wed, 15 Dec 2021 14:28:08 -0800 (PST)
-Received: by mail-oi1-x234.google.com with SMTP id n66so33685163oia.9
-        for <linux-clk@vger.kernel.org>; Wed, 15 Dec 2021 14:28:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=aDH/YWWKVjZlLQyZIFy+0zDo05Gsdaj6wljJxBa+2jc=;
-        b=MPWCz68OrRpvSst+iVdfMyq6jg48qRuzBcPfo2JGINrzbqvA6sELJlpGwXUW/vA2Az
-         /SLeUiByRI43dndlScquJaC/mEDGTmewmS+UMgxPH6p4UZ5ubj1P82SvFAiXxsdTTRJM
-         uuP8o/wywTmp25wdDrkMFNnRiw6qxK9ElcL104NRPxeI58XgWR5HHQaN0aPnSy/viZVx
-         m8YL0VtE41F+3KBFlBxSUryV31RO8RCEqtss/ytE+2nCR0qv4kK63Bf/JdpM/Sq1kHeM
-         iZbr8dOHQey6enZXHTW719V9/sgNhOKYRd0XlfNTaFP17UVARg0vuHvTN4xPvGBzPO9X
-         sohw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aDH/YWWKVjZlLQyZIFy+0zDo05Gsdaj6wljJxBa+2jc=;
-        b=V+pPotr5E9U6KCytAx5ehs1ygTo9qJJ9UjmigdgzS0WJHMasmyMiS2KlIbgVaknN9U
-         IJVZ1o9tvDe5fVz0VyPruugp8ncCJ+8Ma4h8i6i6RteITgj6tl5CkUqyFtPnv1AfOfL0
-         ztU0WxuPZkJ0VtZpqr6geWrDWYZk7VcmmNHNMhOkfmnJfZJL08MYEpAi6a7h39LALJ2l
-         j4fXmBmaZm01ZYKK6hrjNhxIi0p4EthlARnOizCYu0IWTTc+EzboVy8OG9Dhyv3ztBZk
-         XiJbNf/FhE7Xet/STHVNPb3+C9u/zpySP1sd5AB00JL9vyhGKFjUBTCKA/w+1rhQfaXE
-         wseA==
-X-Gm-Message-State: AOAM5303TogiEW/NgmaIfvehTufL1ZcXVEY0MORAqYYS2aYikoFKDv0b
-        vwjHl/vLSSW9XyxK1SlQHPzmGg==
-X-Google-Smtp-Source: ABdhPJwJdbwMVlL/jXVTrqrq59MY54DlXVcNCPbgciPrF48scJIoEnZ465spYSOB9vjt8inpfiE9Mw==
-X-Received: by 2002:a05:6808:1396:: with SMTP id c22mr1909525oiw.59.1639607287547;
-        Wed, 15 Dec 2021 14:28:07 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id t14sm700500oth.81.2021.12.15.14.28.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Dec 2021 14:28:07 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>
-Subject: Re: (subset) [PATCH v2 2/2] clk: qcom: Add clock driver for SM8450
-Date:   Wed, 15 Dec 2021 16:27:40 -0600
-Message-Id: <163960723735.3062250.17177131067279462625.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211207114003.100693-3-vkoul@kernel.org>
-References: <20211207114003.100693-1-vkoul@kernel.org> <20211207114003.100693-3-vkoul@kernel.org>
-MIME-Version: 1.0
+        with ESMTP id S231771AbhLPAns (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Dec 2021 19:43:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08105C061574;
+        Wed, 15 Dec 2021 16:43:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 391DC61BA2;
+        Thu, 16 Dec 2021 00:43:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77383C36AE1;
+        Thu, 16 Dec 2021 00:43:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1639615426;
+        bh=0a0+jjKb223PJQa3TiWBP7QgKr5ZKDUK1W5ZPLWni6Q=;
+        h=In-Reply-To:References:Subject:From:To:Date:From;
+        b=Rapx9OBhWmNGrOE6j9ZULoqvZo1LX2XmHvIcYR9DUGdb8iP7pxyPZTXZu7XvwRJjm
+         gmyRgheUUr8YCeUyhrOphJfp4xlfjED3phY/27+yNsptx45EMnQbdF7A+CftEiW1QK
+         QRTlGGU70Cuu59De/0AoZEjvNCQXD1AdbaN42roDp/J9SHNIoKygReTZp7c3ThnLH5
+         uBBOmTpQxzbXecoCegGbwHoVxD/+2o3JUKrzmorVUXRAxxTNynqmEX9uOyVy/ShTjt
+         uv1oTa1oAavVJ3INQaZsueIfWNT7ZQPTTMF9dMivWByM4E3kNZ3gM4bZoFLWFm6BU9
+         sWuVKBeI+M26g==
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <69e44191-201f-8714-8a83-1a65a7026b54@linaro.org>
+References: <20210911131922.387964-1-marijn.suijten@somainline.org> <163165584152.763609.4056232270079096475@swboyd.mtv.corp.google.com> <20210918144038.6q352hzqopx7vvdu@SoMainline.org> <20211214194656.mayiy4xhcshjluwf@SoMainline.org> <69e44191-201f-8714-8a83-1a65a7026b54@linaro.org>
+Subject: Re: [PATCH v3 0/2] Use "ref" clocks from firmware for DSI PLL VCO parent
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Abhinav Kumar <abhinavk@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Date:   Wed, 15 Dec 2021 16:43:45 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20211216004346.77383C36AE1@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, 7 Dec 2021 17:10:03 +0530, Vinod Koul wrote:
-> This adds Global Clock controller (GCC) driver for SM8450 SoC including
-> the gcc resets and gdsc.
-> 
-> This patch is based on initial code downstream by Vivek Aknurwar
-> <viveka@codeaurora.org>
-> 
-> 
-> [...]
+Quoting Dmitry Baryshkov (2021-12-15 12:02:37)
+> On 14/12/2021 22:46, Marijn Suijten wrote:
+> > Hi all,
+> >=20
+> > On 2021-09-18 16:40:38, Marijn Suijten wrote:
+> >> On 2021-09-14 14:44:01, Stephen Boyd wrote:
+> >>> Quoting Marijn Suijten (2021-09-11 06:19:19)
+> >>>> All DSI PHY/PLL drivers were referencing their VCO parent clock by a
+> >>>> global name, most of which don't exist or have been renamed.  These
+> >>>> clock drivers seem to function fine without that except the 14nm dri=
+ver
+> >>>> for sdm6xx [1].
+> >>>>
+> >>>> At the same time all DTs provide a "ref" clock as per the requiremen=
+ts
+> >>>> of dsi-phy-common.yaml, but the clock is never used.  This patchset =
+puts
+> >>>> that clock to use without relying on a global clock name, so that all
+> >>>> dependencies are explicitly defined in DT (the firmware) in the end.
+> >>>
+> >>> I can take this through clk tree if it helps avoid conflicts. There a=
+re
+> >>> some other patches to sdm660.c in the clk tree already.
+> >>
+> >> Might be useful to maintain proper ordering of these dependent patches
+> >> but it's up to Dmitry and Rob to decide, whom I'm sending this mail
+> >> directly to so that they can chime in.
+> >=20
+> > Dependent patch [3] landed in 5.15 and [2] made it into 5.16 rc's - is
+> > it time to pick this series up and if so through what tree?
+>=20
+> I'd also second the idea of merging these two patches into 5.17.
+> Most probably it'd be easier to merge both of them through the clk tree. =
 
-Applied, thanks!
+> Or we can take the first patch into drm-msm (but then we'd have a=20
+> dependency between msm-next and clk-qcom-next).
+>=20
+> Bjorn, Stephen?
+>=20
 
-[2/2] clk: qcom: Add clock driver for SM8450
-      commit: e855145c5325c14b928aff439a0e2bc089e6a513
-
-Best regards,
--- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+Sounds fine to take through clk tree.
