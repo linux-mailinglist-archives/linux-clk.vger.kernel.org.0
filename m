@@ -2,98 +2,160 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A2E4790AE
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Dec 2021 16:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A9D4790B9
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Dec 2021 16:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238502AbhLQPzu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 17 Dec 2021 10:55:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
+        id S238615AbhLQP4h (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 17 Dec 2021 10:56:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235133AbhLQPzu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 17 Dec 2021 10:55:50 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730D6C06173F
-        for <linux-clk@vger.kernel.org>; Fri, 17 Dec 2021 07:55:48 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id z7so9413016edc.11
-        for <linux-clk@vger.kernel.org>; Fri, 17 Dec 2021 07:55:48 -0800 (PST)
+        with ESMTP id S235513AbhLQP4h (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 17 Dec 2021 10:56:37 -0500
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A57C061574
+        for <linux-clk@vger.kernel.org>; Fri, 17 Dec 2021 07:56:36 -0800 (PST)
+Received: by mail-ua1-x92c.google.com with SMTP id 30so5082367uag.13
+        for <linux-clk@vger.kernel.org>; Fri, 17 Dec 2021 07:56:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7755/oSm9xb3xyECSk0fLF9ekbC+MSg548pl7mm+dvs=;
-        b=PM52FyxxKrfr/YfvOpCGnn5QuSEdpLGLGAhIIZ+rf917QjULuP+7ypuzS7SziIy+LU
-         7DfuYuYmD3hwKC61MUpVCDa4Pr0ugi7yfEiGfWfok0H6kQLHM4XPOkGbjl9vL4zuFVri
-         0OK2jLHMthBDAFekKONF33uJjMzXKgpWdKbng=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ElflHpQkLuzl8P2eAKJJkdqkTvJ6AItQbXCMpCRS8yg=;
+        b=eIonsckjRxmhvgvt6jfEqbEqWnigVC/86CAxpO3iaqgtNloYFFgMbJo+PkICrcB/92
+         XeSY5tlCEGsfQXjAI1PEJNm54M7adwN222B9Q8c/B1bPYcMaPP/dy1c8Bebyc0gsAG98
+         YYkhcAz7hiza9paN+MluRgPMZse3uRvR2D8Ic2CT1/fKGE7GNzb7emkDp+xozCKEGwcY
+         7RCq4zQTk2YaQ6uWAU7ucDw9PS2uQU1MK9Mx45uss4TPIefm2+Ay7ixorICNNC2cwx7c
+         M3NtS4JZfssTg2rFjYrLGKnqoQNUXwUcUIwGmkIaGiK4MzdHj1NI9+V5EQkFBFerPPth
+         8Bsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7755/oSm9xb3xyECSk0fLF9ekbC+MSg548pl7mm+dvs=;
-        b=7027Kyndf3QSSPXlrGYmanBSYcsipP0CSRX4LjffbPalU6l9+AydvfXT2WzrVXZWfB
-         0Ghoq1Ri/fm3QggLpwr/zARIF6a7sDaVseMhgAQ8Nu+I+cNluYVPMT7tXAVisuZnRmHR
-         Nxskg1/uTFdWjjHFT5Rj3oEokWV3TyiiS4LyH3eQmcQggj4F5hn7pb5IAWhNEGoBhq8x
-         7Kd7GY8vNjnL7weS9uYUrprBREe6J7wNTuz7iLtx2+mB2RcviCf4EmIa3dCQyP+1JIkV
-         vV4XW5tQd4p9R86oYhjLKrctiXmDlveA7qbS2EbnWobA8Zn9KLW01yB8sspxHHdCVBhe
-         W8lA==
-X-Gm-Message-State: AOAM533bluGHLr2DE+JKjdyF6TKxaoKnJjTOji5muIFs8u6DdQO0o/Ii
-        nnD1gS38+RUB5DEEMjYkQU5/TQ==
-X-Google-Smtp-Source: ABdhPJyMTZOZAd1aoaZIc13FzAy0XfeTkk3umcmhxcsYykPFbkE0P11xR7Nw0c+6k+Tpb29X2PNzlg==
-X-Received: by 2002:a05:6402:42cf:: with SMTP id i15mr3431756edc.82.1639756547043;
-        Fri, 17 Dec 2021 07:55:47 -0800 (PST)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com (host-79-56-50-241.retail.telecomitalia.it. [79.56.50.241])
-        by smtp.gmail.com with ESMTPSA id i6sm772158edx.46.2021.12.17.07.55.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Dec 2021 07:55:46 -0800 (PST)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Michael Trimarchi <michael@amarulasolutions.com>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
-Subject: [RFC PATCH 1/4] clk: mxs: imx28: Reparent gpmi clk to ref_gpmi
-Date:   Fri, 17 Dec 2021 16:55:09 +0100
-Message-Id: <20211217155512.1877408-2-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211217155512.1877408-1-dario.binacchi@amarulasolutions.com>
-References: <20211217155512.1877408-1-dario.binacchi@amarulasolutions.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ElflHpQkLuzl8P2eAKJJkdqkTvJ6AItQbXCMpCRS8yg=;
+        b=x6Fr7NIra2s0qrVBYLTmKRerK76b09w4W65BksYhRvFpsWPUvoBVNwXniyfkb0M002
+         b4wG/06pazlQHWgWPxLh2k476DhtJAWc1skcjZhfBCcNRKKrDtFgWbXbQecSP5K7pX0F
+         CqoJlxHIyshbZb2HtFXQNT8Zk/LbxMi7X50Op+F3ZCxMVDYlfMVL8MR3JHhutnPDHSNj
+         sWG53DRaLRwG0FKt/Jlx5oF5SQiQlJf+d4RpjrABdDbKK766Ir8hF7wajnaDPMsg1tD6
+         AhWdgAVMTvFvNVVIvGCAIEZR26NNvGBmwu+V0s0b2jKmAVnoHAwQXX3cL8bn5ND1wbP/
+         VE1g==
+X-Gm-Message-State: AOAM530noSH9jZ6g05kZmnycTYcfux2X749sMNjLZIHzVBkm8cVuVGkf
+        kTXXIZ/3XqbZDhT90BrKB6MhzDiHyXpZgMRyJB6ohg==
+X-Google-Smtp-Source: ABdhPJxreb5JlA/rQW3pI2rH7hhfpaWxc1ic4KV6Svi8Wq8H7Y90V8E8MrdFIqB90JJDjHgtHAOwoEmxNeheS6A3Lrs=
+X-Received: by 2002:a05:6102:512:: with SMTP id l18mr1034560vsa.57.1639756595998;
+ Fri, 17 Dec 2021 07:56:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211215160906.17451-1-semen.protsenko@linaro.org>
+ <20211215160906.17451-7-semen.protsenko@linaro.org> <8c1dbcda-ce01-81c9-b34a-f64b6f61c868@canonical.com>
+ <CAPLW+4ndeokx3WiYaK_3ooe0J+BQe8Dx7QCecA7Deowk0AdxnA@mail.gmail.com> <73c5a527-2d5d-8524-b067-f9128055ff10@canonical.com>
+In-Reply-To: <73c5a527-2d5d-8524-b067-f9128055ff10@canonical.com>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Fri, 17 Dec 2021 17:56:24 +0200
+Message-ID: <CAPLW+4n+iVwhVB06vwBKxesaeuRo0kgXEZvqPQo6RbOiZO3Vbw@mail.gmail.com>
+Subject: Re: [PATCH 6/7] arm64: dts: exynos: Add initial Exynos850 SoC support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Michael Trimarchi <michael@amarulasolutions.com>
+On Fri, 17 Dec 2021 at 10:21, Krzysztof Kozlowski
+<krzysztof.kozlowski@canonical.com> wrote:
+>
+> On 16/12/2021 20:40, Sam Protsenko wrote:
+> > On Wed, 15 Dec 2021 at 18:47, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@canonical.com> wrote:
+> >>
+>
+> (...)
+>
+> >>> +             serial0 = &serial_0;
+> >>> +             serial1 = &serial_1;
+> >>> +             serial2 = &serial_2;
+> >>> +             i2c0 = &i2c_0;
+> >>> +             i2c1 = &i2c_1;
+> >>> +             i2c2 = &i2c_2;
+> >>> +             i2c3 = &i2c_3;
+> >>> +             i2c4 = &i2c_4;
+> >>> +             i2c5 = &i2c_5;
+> >>> +             i2c6 = &i2c_6;
+> >>> +             i2c7 = &hsi2c_0;
+> >>> +             i2c8 = &hsi2c_1;
+> >>> +             i2c9 = &hsi2c_2;
+> >>> +             i2c10 = &hsi2c_3;
+> >>> +             i2c11 = &hsi2c_4;
+> >>> +     };
+> >>> +
+> >>> +     arm-pmu {
+> >>> +             compatible = "arm,cortex-a55-pmu";
+> >>> +             interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>,
+> >>> +                          <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>,
+> >>> +                          <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>,
+> >>> +                          <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>,
+> >>> +                          <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>,
+> >>> +                          <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
+> >>> +                          <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
+> >>> +                          <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>;
+> >>> +             interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>,
+> >>> +                                  <&cpu4>, <&cpu5>, <&cpu6>, <&cpu7>;
+> >>> +     };
+> >>> +
+> >>> +     /* Main system clock (XTCXO); external, must be 26 MHz */
+> >>> +     oscclk: clock-oscclk {
+> >>> +             compatible = "fixed-clock";
+> >>> +             clock-output-names = "oscclk";
+> >>> +             #clock-cells = <0>;
+> >>> +     };
+> >>> +
+> >>> +     /* RTC clock (XrtcXTI); external, must be 32.768 kHz */
+> >>
+> >> This clock is usually provided by PMIC, so instead I expect updating
+> >> s2mps11-clk driver. It's not correct to mock it with fixed-clock, but in
+> >> some cases might be needed. Then I would need an explanation and maybe a
+> >> TODO note.
+> >>
+> >> I wonder if we already discussed this...
+> >>
+> >
+> > Don't really remember discussing that. That's actually something new
+> > for me :) I was planning to add PMIC support as a part of separate
+> > activity later, it might not be so easy: S2MPU12 uses I3C connection.
+> > And RTC clock is not handled even in downstream kernel. So I'll have
+> > to implement that by PMIC datasheet. I'll keep some TODO comment for
+> > now, hope it's ok with you?
+>
+> Assuming it is really coming from the PMIC (should be visible in the
+> board schematics), it should be using s2mps11-clk. I am fine with
+> keeping fixed-clock now + TODO note, but please move it to the board
+> DTS. It's not the property of the SoC.
+>
 
-ref_gpmi is connected that is sourced from pll0. This allow
-to get nand clk frequency to handle edo mode 5,4,3
+Yes, I checked, RTC clock is coming from PMIC. Moved "rtcclk" clock to
+board file, and corresponding clock properties for "rtc" and "cmu_hsi"
+nodes as well. Will send v4 soon.
 
-Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
-
- drivers/clk/mxs/clk-imx28.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/clk/mxs/clk-imx28.c b/drivers/clk/mxs/clk-imx28.c
-index 62146ea4d5b8..9e0b9f8e5885 100644
---- a/drivers/clk/mxs/clk-imx28.c
-+++ b/drivers/clk/mxs/clk-imx28.c
-@@ -243,6 +243,9 @@ static void __init mx28_clocks_init(struct device_node *np)
- 
- 	clk_register_clkdev(clks[enet_out], NULL, "enet_out");
- 
-+	/* GPMI set parent to ref_gpmi instead of osc */
-+	clk_set_parent(clks[gpmi_sel], clks[ref_gpmi]);
-+
- 	for (i = 0; i < ARRAY_SIZE(clks_init_on); i++)
- 		clk_prepare_enable(clks[clks_init_on[i]]);
- }
--- 
-2.32.0
-
+> >
+> >>> +     rtcclk: clock-rtcclk {> +               compatible = "fixed-clock";
+> >>> +             clock-output-names = "rtcclk";
+> >>> +             #clock-cells = <0>;
+> >>> +     };
+> >>> +
+>
+>
+> Best regards,
+> Krzysztof
