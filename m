@@ -2,57 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDCD47FD62
-	for <lists+linux-clk@lfdr.de>; Mon, 27 Dec 2021 14:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB7847FD72
+	for <lists+linux-clk@lfdr.de>; Mon, 27 Dec 2021 14:35:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234170AbhL0NcO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 27 Dec 2021 08:32:14 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:39446
+        id S236776AbhL0Nfz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 27 Dec 2021 08:35:55 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:39514
         "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234112AbhL0NcL (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 Dec 2021 08:32:11 -0500
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
+        by vger.kernel.org with ESMTP id S234268AbhL0Nfx (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 Dec 2021 08:35:53 -0500
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 90E973F1B2
-        for <linux-clk@vger.kernel.org>; Mon, 27 Dec 2021 13:32:10 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7926C3F1AA
+        for <linux-clk@vger.kernel.org>; Mon, 27 Dec 2021 13:35:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1640611930;
-        bh=MHp/uWCH5GnB9eOTk5ejo8HU97THJSgA4dspcnuZXTw=;
+        s=20210705; t=1640612152;
+        bh=SHDOTqD45fkOcgdIZOrzabWTlwg9fQB3mqCZYwiASwc=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=NBwZedFcCNYfYrCJzpyhn2vacoF2SklyAqP1rTSyEvwO3IIJsNqIgKfBeHHyuI4Xu
-         mG78cSf6g4lFCLZRK9+pTHVMXVI8iTBeswjBI921YR0vvRg7uHaB7T9Ob1qZUfIIp1
-         oEbHTZ/oGWgHGrxFgaXkxWbCcJ1wM4msDH06SKhMnUcsmmFIkDzODpiO9EKL0o1gTZ
-         1ZB7O93ZRO2OJYnel1IGO0k9kYEhNlVm9S5GFdGduLn/mYV1NsFZkkLRHReTkPaEWz
-         IUe3TYKEiNq1mUrDVUdFSBxAtl9FiqDaYYbpQyHegK59dKsV5WxuSMEBE+mBKtL6O8
-         ZqA35erNF7EHA==
-Received: by mail-lj1-f199.google.com with SMTP id l6-20020a2e8686000000b0022d9a4d18d5so3951312lji.19
-        for <linux-clk@vger.kernel.org>; Mon, 27 Dec 2021 05:32:10 -0800 (PST)
+        b=Q3FslC6lesIAV88C7ZW/jyt4KbTp+Bv33AUsKlaF568VrgMz2xl2I63btQ0XQstw4
+         7i3NbcM/KRs6dB7iARVg/iXAAbGivirjgLSPfRVlCxfTstDSl+cP0ZYj1eq7RJd5oY
+         JnSSwVhFyVaoV2ew7/r0Qo9mO0vz1+w2O6klNdxfVINcCqA0RXr4qbkNbLso8OYbc8
+         lItcf7QgdLeSve6MHti8kExUsJfK6h4hjpiYsdNV/fmQJPiEFNBIffAD/HVIfvVMb3
+         qmWgSL2u0C1c5P/ssnuJ+KW2REAn9u1kNwxPExiWNBGxtwP3ppfTc0jlGQGYq3eFZQ
+         awundG1tuw0bw==
+Received: by mail-lj1-f198.google.com with SMTP id w17-20020a05651c119100b0022dcdb204b9so1603753ljo.5
+        for <linux-clk@vger.kernel.org>; Mon, 27 Dec 2021 05:35:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=MHp/uWCH5GnB9eOTk5ejo8HU97THJSgA4dspcnuZXTw=;
-        b=CYG9vgKmtKPV4kjnf1Duv8qwv6hl7hPudubTp2LZ8vyUjqamCiTH53l/M/CLV//g62
-         PJbKtbvgiNg9FViakgPYGCAJ887GdIcyNY45KI1vE3IdWsG9y46/TEfv4i4yNDqLtyUT
-         wnNGPmXzqMDYR4EiIHERlp27RBPa6Ejl7atOM5zV8H7tu95YvD1T2/wOwjlW1yh1pPze
-         eYaxIOdfHS1b2YY2w9yDg7461lc9+vOUvZ+PcYP1hBtW6KvZyB4wkU7/oh0+I2EPCkxd
-         i/+jW9lkSu14SSKoph500F2fBSCNaFSqZuSNQvpgXTONaC9Tsmo0iup9Qcgs6wVg7BOs
-         KY0A==
-X-Gm-Message-State: AOAM531iehHal4IgNVvfhLGu6ihQ7Pq/ZeBXUA5RrNcaml1cr+X9S43/
-        A7Sg5ELKEoL7HjhIsG5l2AJP2MCb5Z1t5eKhQ+9e8D1hWvEtepEbbuRwug3yBsr9PtNVGWK2Gcy
-        njtjOhdZHk+9s28i+9J+d90osmwpQx8zJvWCWxw==
-X-Received: by 2002:ac2:4828:: with SMTP id 8mr16033488lft.477.1640611929489;
-        Mon, 27 Dec 2021 05:32:09 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw77J68nGFhgLXCA+eXYxvqfScF69sInQCoFPQykWUbx1r+RPtCS3P0q/HkVn3cmdzNIMd/cw==
-X-Received: by 2002:ac2:4828:: with SMTP id 8mr16033482lft.477.1640611929332;
-        Mon, 27 Dec 2021 05:32:09 -0800 (PST)
+        bh=SHDOTqD45fkOcgdIZOrzabWTlwg9fQB3mqCZYwiASwc=;
+        b=utsL1gYc6UMIO4SUXJfW2GbYsUcO19hvLo07412wAKOOlFHocbXQAHYib6XZ3gb/Nb
+         EOdHXY7M9CZ3jmIlS/MzUELv+ruQVH2jJxXjWG33Z5jvr0bFLyGPugRFqFjAr/45fdkg
+         4C58/MWCXiogQ5IlKMOJtLibQ+ktZpNoHJ1/6fvk4gJHhMNuF7OT4lUdRRJb3o8fxX65
+         Uv+57V97VryDoyaJ60arF0M/fLa76jkNfXbAe2EGBiuv1ISeo3mAs3MmpU1aH/ZXHN2M
+         9vDumwMQbSORUJJPbhWGS4cwTGZqMk5odxsMa7a+zSzwjT4PykRDZEw6CP+Jb//FhjGO
+         TJrA==
+X-Gm-Message-State: AOAM533kOYzwTq6rjA54ROnrh6Uiwsd2UadnqEsfQbbJcgM8ue/aEcKs
+        lWNTpB6s8OzYZ2y3ulE+wzr6Yxvxgvk5Yc9JGk4d4G7VEfdTolLengdvHBg4BWz83A6vj3luD0h
+        FXW6lLO1QtKhBkhFFQL9AYU9lwPGX0xIWdk4/Rw==
+X-Received: by 2002:ac2:51bc:: with SMTP id f28mr15038334lfk.222.1640612150083;
+        Mon, 27 Dec 2021 05:35:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz74YnaGqeKHmwR3S7E74UQQMqDX12yIAKinwFN3GzO62zbbfUGRpdn19Zp2pmz0D3CIOT/OA==
+X-Received: by 2002:ac2:51bc:: with SMTP id f28mr15038324lfk.222.1640612149924;
+        Mon, 27 Dec 2021 05:35:49 -0800 (PST)
 Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id d14sm1433510lfg.18.2021.12.27.05.32.06
+        by smtp.gmail.com with ESMTPSA id h21sm829100lfu.253.2021.12.27.05.35.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Dec 2021 05:32:08 -0800 (PST)
+        Mon, 27 Dec 2021 05:35:49 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -62,9 +62,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-mmc@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH 05/19] dt-bindings: altera: document VT compatibles
-Date:   Mon, 27 Dec 2021 14:31:17 +0100
-Message-Id: <20211227133131.134369-6-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 06/19] dt-bindings: altera: document Stratix 10 based board compatibles
+Date:   Mon, 27 Dec 2021 14:35:32 +0100
+Message-Id: <20211227133545.135049-1-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211227133131.134369-1-krzysztof.kozlowski@canonical.com>
 References: <20211227133131.134369-1-krzysztof.kozlowski@canonical.com>
@@ -74,29 +74,30 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add new compatible for SoCFPGA VT boards/designs.
+Add new compatible for Stratix 10 based boards.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- Documentation/devicetree/bindings/arm/altera.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ Documentation/devicetree/bindings/arm/altera.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/arm/altera.yaml b/Documentation/devicetree/bindings/arm/altera.yaml
-index 963c83904010..f4e07a21aaf5 100644
+index f4e07a21aaf5..5e2017c0a051 100644
 --- a/Documentation/devicetree/bindings/arm/altera.yaml
 +++ b/Documentation/devicetree/bindings/arm/altera.yaml
-@@ -43,6 +43,11 @@ properties:
+@@ -43,6 +43,12 @@ properties:
            - const: altr,socfpga-cyclone5
            - const: altr,socfpga
  
-+      - description: SoCFPGA VT
++      - description: Stratix 10 boards
 +        items:
-+          - const: altr,socfpga-vt
-+          - const: altr,socfpga
++          - enum:
++              - altr,socfpga-stratix10-socdk
++          - const: altr,socfpga-stratix10
 +
- additionalProperties: true
- 
- ...
+       - description: SoCFPGA VT
+         items:
+           - const: altr,socfpga-vt
 -- 
 2.32.0
 
