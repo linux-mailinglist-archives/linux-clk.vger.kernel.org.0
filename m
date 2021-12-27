@@ -2,57 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E6B47FD59
-	for <lists+linux-clk@lfdr.de>; Mon, 27 Dec 2021 14:32:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F83C47FD5C
+	for <lists+linux-clk@lfdr.de>; Mon, 27 Dec 2021 14:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234086AbhL0NcJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 27 Dec 2021 08:32:09 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:54424
+        id S234061AbhL0NcN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 27 Dec 2021 08:32:13 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:54462
         "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233997AbhL0NcI (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 Dec 2021 08:32:08 -0500
-Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
+        by vger.kernel.org with ESMTP id S234051AbhL0NcK (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 27 Dec 2021 08:32:10 -0500
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E0F02402DE
-        for <linux-clk@vger.kernel.org>; Mon, 27 Dec 2021 13:32:03 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4AACC402E2
+        for <linux-clk@vger.kernel.org>; Mon, 27 Dec 2021 13:32:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1640611923;
-        bh=QDOgrK+UXXf2EP9Xg5SGCwl/Jd4bs8eRi//6n3uyqR8=;
+        s=20210705; t=1640611926;
+        bh=y5MJv5dkFEWJeZ+ENEwYHJsdTdmbB9oIwbRFldgvfL0=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=lziYc1EyreVicuvSUM231+QnhedgUjWnfzZWLR4kUcM6QrjdfQHQtAlaCscTiszqS
-         y4ZyrK5/sBwNsRrYbOiaGj868Yda5Na8K7OHutI1macXslU1x2zGzYMURN7vMU7dXn
-         BhFMj5y6hguQKPnVFIVWh0kOnGuGU4TX4bX/4Qm4sZiJZ0K6yIihb/YCapbbzzWX1M
-         8jBoXw3qyJR+/QRN47LtOejHR+G3mLWvshD6icL0KXTUEPcAwzoos2pjoAkw5HQrh5
-         FM7aI/kZc6dWBAI+UG04z+oy/tRGAHoao/bY8VBI7PWDQvF7fspeqQVVsg6itMqmxi
-         q8iZofKL7V8Pg==
-Received: by mail-lj1-f198.google.com with SMTP id k11-20020a05651c0a0b00b0022dc4d55f14so1980723ljq.22
-        for <linux-clk@vger.kernel.org>; Mon, 27 Dec 2021 05:32:03 -0800 (PST)
+        b=BP9M00ZoN29zuv08qJJmuekdohnbW3EhqGxI1tMjT8GFGYaxSWh2NHjgUJqFmqiOD
+         vBSfUIYkNJqw+svUfJchYlVwl4eAyFtsp6euWygo1K5N77USJxS2edt3IMfBw0FGJH
+         /Iel2W2ZrkfPZnpRL5AcAiApmshO7VPZi6pvr/JtitbpBe2/dGjUA3iM3t7h6lrfXF
+         SKtEBWXh1ZVDxAhQ+UVnsnnpQsrcuOmAO5Sb3LKF0Birh3M06IePrR9lNFIuDCF051
+         Cc0OB9yUD8BkhH9VnY+dsAul/D+CDP1V2NN3AmB9fBOGYTnpPI+SY/nDho9ceBlD7a
+         dTcBth4bKC1Fw==
+Received: by mail-lf1-f70.google.com with SMTP id k25-20020a056512331900b004259a8d8090so3685895lfe.12
+        for <linux-clk@vger.kernel.org>; Mon, 27 Dec 2021 05:32:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=QDOgrK+UXXf2EP9Xg5SGCwl/Jd4bs8eRi//6n3uyqR8=;
-        b=HRlBW5Ftoea5zpYqE1qIq7HjsTp5+n6Nw9A4gZYTaEhhIpxDQ31M2+9zanBvDmkTiz
-         xdEYm84nhEPxiCJW2OSvHCy9VJWEEGM+tGAKptmJnp4UK701ZZrHSNyF++Xfnn6SOPQH
-         WPZpoIR9hf3TP+bXKVwpV8coADej+OLJcsrc6ippbrbmL41AN5O/qt2AdEXkqrJlcgjJ
-         fJip4gZvDp1sjLlkOIpdZ/G8bwo7dlfEApSifqHBlHs913x6mTrTo/wJlSxJAolKP/25
-         4BqwCVycdaeyRrmSxwAWH4eH9OcONACrcFFHRHVGGa434T/twlcjqVG66kISvJWddmL2
-         XMow==
-X-Gm-Message-State: AOAM5336uMz3y3wahzvS0MM8GCdbtwF+OZ/Re1N/2cClaYpn0yrg5cH+
-        rukKTxonAAVY6k2jFkchLtvVgNg5FT0AzvFd+ngKChTwp+vveYmcdwGXSQyx0n4B71uBmBWV1JM
-        wHvuga9rFxSFazlePnxKe9KOdDD2X8zDTepN75Q==
-X-Received: by 2002:a2e:968d:: with SMTP id q13mr14005318lji.463.1640611923255;
-        Mon, 27 Dec 2021 05:32:03 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJynCHx4YS7Nx8hWr33RmvpMJvVcwhIG9PNwD3XcJLGvPB1pyTdxMyPh0ubQJsJZiiyheysjag==
-X-Received: by 2002:a2e:968d:: with SMTP id q13mr14005298lji.463.1640611922973;
-        Mon, 27 Dec 2021 05:32:02 -0800 (PST)
+        bh=y5MJv5dkFEWJeZ+ENEwYHJsdTdmbB9oIwbRFldgvfL0=;
+        b=o2ULiiL810qHAUHv4Ra7su3CFVmJX1PEYRkSiQg+M4hR08hba0xem2k569+zv3pqMN
+         oDHAQiXvqAGiZMA5YerjSWkLhGMHq692Ng8rSNY2WzktsFe+5zbp5BbEb1VLcWiHjhCh
+         6V1CdmivUhDXmyaBdix0sJkQZSh25ZUbOOkAR2cDc014AWra8LY5jZ/+8Bs4ucf1JV24
+         Yc5cmDCos+ohxY9TTBkAr/08S+W/yVcV3TrAzHJpkpB8YNAVaaUxgxdxiK9n7kxRQwed
+         tRBbqfxEZQiVzUtXxmiqqGK7ppUNHFSY+m9yg9oaxqhXf0oBLRnRhayNC/rFkY3B1CLA
+         rFow==
+X-Gm-Message-State: AOAM532GBJGFG2C53+CyQi2Z84l557Cgo2Lvlrra2qO62dUFyxfEyuOG
+        5stTv+r/83DyvndKQav4QqaEZAIJe28zgPG3h8hltzzkOTwszptXf//FttE8X6HOKmruv5VIAhv
+        D4BShOI4azEjH8AhBQ74sO0PF7Pwop9yAQR55Xw==
+X-Received: by 2002:a19:6e0b:: with SMTP id j11mr15350183lfc.226.1640611925721;
+        Mon, 27 Dec 2021 05:32:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxdC9kbL0s6EJ1Ul2bU9vVLa0PpXYnccCSTpvf6T3GQkXGRZJCOybKlDM22aTnjracXRomVlw==
+X-Received: by 2002:a19:6e0b:: with SMTP id j11mr15350120lfc.226.1640611924436;
+        Mon, 27 Dec 2021 05:32:04 -0800 (PST)
 Received: from krzk-bin.lan (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
-        by smtp.gmail.com with ESMTPSA id d14sm1433510lfg.18.2021.12.27.05.32.01
+        by smtp.gmail.com with ESMTPSA id d14sm1433510lfg.18.2021.12.27.05.32.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Dec 2021 05:32:02 -0800 (PST)
+        Mon, 27 Dec 2021 05:32:03 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -62,9 +62,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-mmc@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH 01/19] dt-bindings: vendor-prefixes: add Enclustra
-Date:   Mon, 27 Dec 2021 14:31:13 +0100
-Message-Id: <20211227133131.134369-2-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 02/19] dt-bindings: altera: document existing Cyclone 5 board compatibles
+Date:   Mon, 27 Dec 2021 14:31:14 +0100
+Message-Id: <20211227133131.134369-3-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20211227133131.134369-1-krzysztof.kozlowski@canonical.com>
 References: <20211227133131.134369-1-krzysztof.kozlowski@canonical.com>
@@ -74,26 +74,55 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add vendor prefix for Enclustra GmbH (https://www.enclustra.com).
+Several Cyclone 5 SoCFPGA based boards have additional board compatibles
+which are not documented in the bindings.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../devicetree/bindings/arm/altera.yaml       | 30 +++++++++++++++----
+ 1 file changed, 24 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 1497303e2600..a909dc1c8e28 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -373,6 +373,8 @@ patternProperties:
-     description: Empire Electronix
-   "^emtrion,.*":
-     description: emtrion GmbH
-+  "^enclustra,.*":
-+    description: Enclustra GmbH
-   "^endless,.*":
-     description: Endless Mobile, Inc.
-   "^ene,.*":
+diff --git a/Documentation/devicetree/bindings/arm/altera.yaml b/Documentation/devicetree/bindings/arm/altera.yaml
+index c15c92fdf2ed..0d62c2bde053 100644
+--- a/Documentation/devicetree/bindings/arm/altera.yaml
++++ b/Documentation/devicetree/bindings/arm/altera.yaml
+@@ -13,12 +13,30 @@ properties:
+   $nodename:
+     const: "/"
+   compatible:
+-    items:
+-      - enum:
+-          - altr,socfpga-cyclone5
+-          - altr,socfpga-arria5
+-          - altr,socfpga-arria10
+-      - const: altr,socfpga
++    oneOf:
++      - description: Arria 5 boards
++        items:
++          - const: altr,socfpga-arria5
++          - const: altr,socfpga
++
++      - description: Arria 10 boards
++        items:
++          - const: altr,socfpga-arria10
++          - const: altr,socfpga
++
++      - description: Cyclone 5 boards
++        items:
++          - enum:
++              - altr,socfpga-cyclone5-socdk
++              - denx,mcvevk
++              - ebv,socrates
++              - macnica,sodia
++              - novtech,chameleon96
++              - samtec,vining
++              - terasic,de0-atlas
++              - terasic,socfpga-cyclone5-sockit
++          - const: altr,socfpga-cyclone5
++          - const: altr,socfpga
+ 
+ additionalProperties: true
+ 
 -- 
 2.32.0
 
