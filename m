@@ -2,128 +2,94 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18648482171
-	for <lists+linux-clk@lfdr.de>; Fri, 31 Dec 2021 03:18:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0619C482736
+	for <lists+linux-clk@lfdr.de>; Sat,  1 Jan 2022 11:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242064AbhLaCSp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 30 Dec 2021 21:18:45 -0500
-Received: from mga14.intel.com ([192.55.52.115]:41960 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230097AbhLaCSp (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Thu, 30 Dec 2021 21:18:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1640917125; x=1672453125;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wtEJ0zWFCIg9b5L8s1KYkJATOZKPuIOSMQp1wVJxQgk=;
-  b=BNXCkTO0ljN8zYQqphbPNng89CX+h6E1k9CgZEpZK+D4i6zlv3/dw+vW
-   GKe4/sIAEnp12FjsipfL8LGqnXQ5SmKi4BA7H/wXSJ+SAKu4YjIJgZp4m
-   uLV6EROgYM5Xv+i6gmFOH86XakS0ToVTi2RctGluuTdnLo88kyl9rqkMx
-   M4l6Tk64CM3+Fodk5pzNKwbBxDw1MiRHPfjr4QpYUjnwdECfXHxpL1Eqv
-   1BTtCuUNCOf+/xAcLtNjZJTwXTjNxwW3YDXrJfjiQNzu6wO1i58+xaORZ
-   r6jh6isow2Yhxj/6qcG90KuxaNsPBF6F/kDPlIfyztmfAbO6mGSx4cgD/
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10213"; a="241969845"
-X-IronPort-AV: E=Sophos;i="5.88,250,1635231600"; 
-   d="scan'208";a="241969845"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2021 18:18:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.88,250,1635231600"; 
-   d="scan'208";a="687376744"
-Received: from lkp-server01.sh.intel.com (HELO e357b3ef1427) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 30 Dec 2021 18:18:40 -0800
-Received: from kbuild by e357b3ef1427 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1n37V9-000ArO-75; Fri, 31 Dec 2021 02:18:39 +0000
-Date:   Fri, 31 Dec 2021 10:17:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Taniya Das <tdas@codeaurora.org>, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette =?iso-8859-1?Q?=A0?= 
-        <mturquette@baylibre.com>
-Cc:     kbuild-all@lists.01.org, Rajendra Nayak <rnayak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-soc@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh@kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH v2 5/5] clk: qcom: lpass: Add support for LPASS clock
- controller for SC7280
-Message-ID: <202112311037.baApS5Qa-lkp@intel.com>
-References: <1640018638-19436-6-git-send-email-tdas@codeaurora.org>
+        id S231438AbiAAK3T (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 1 Jan 2022 05:29:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45088 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229624AbiAAK3S (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 1 Jan 2022 05:29:18 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962C2C061574
+        for <linux-clk@vger.kernel.org>; Sat,  1 Jan 2022 02:29:18 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id c9-20020a17090a1d0900b001b2b54bd6c5so11138005pjd.1
+        for <linux-clk@vger.kernel.org>; Sat, 01 Jan 2022 02:29:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
+        b=qloV/hRhRMPg9TZjdpxPNsSBQM9wKKYz4UUeLPuWp27ASMF2d9mszDybe5h+f1sdLm
+         39Ml3G7o3klJAc7nBqW+WY40857veQ9odSksI9R+QJwCk/GVSzybjOybhlflPX7nRvHv
+         W8YYIY9akK5kFXknl9oBncr6DaXNC4qMqiR5Z5YUUimSCljGa2LMOG1HtpglrKbTAf1/
+         cg9m7Pp1+qBk0Q/eNqkBTDOfoBRilTD8LqZX23bA/qxBRSGQruRHGRiFFAnman5tdfpU
+         FAs51jCdx9yhatvNBweelzssHZ1M5y/z2lUrqSmbcPMzx9t9OmCcBrcYPFic0i9X4Etd
+         57ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=dhFaFNGf9P/hgzfpigNOAcNefTeR7Csml9+Bh/hdy/w=;
+        b=6L2Th3E6eVlHlF/FyeJHps0n3pPwCUxomBAhvSajaumn9Sf3ziUD50GINQfyDKTWRO
+         qbCfvaGcKFFa/NAqHzJCqxzjJtU7+WNsifH+DG4EOd50SNUGiKM2DrEt4B433yS0BsU3
+         h9yTOtncLbS/LJv3e8p+UcBJLp/TER/5ultNg0fceSzdy2Q1+s3ZPJY/1XhjJGIZgopN
+         jCqVAgMI16//cRw0aNRD+StCmA0ZJUCR/hr9PW5ZzMNPhmP4ZoQiPb7rlnhjMmwmsUy8
+         WJmpDbNCaYdXUv8yNV675SOzMIjWfFC3q2Mrq1eY0mWYbsB95JxnZirKoIb4vFKIFZGZ
+         n2hQ==
+X-Gm-Message-State: AOAM531QG7ELapat75Ez+MSfHmgcfKN2swda+xnl6luFhaOqgEpp1T07
+        qI+kXPL9KTeREaMMO5/5WKQ=
+X-Google-Smtp-Source: ABdhPJzxqGfP3IJnlh6jbysl6ONaGNkUrWbLlFREtZNXud0L7txO6b+l96riW22DRYEygPw/BOjUHw==
+X-Received: by 2002:a17:902:7294:b0:149:64f4:bdba with SMTP id d20-20020a170902729400b0014964f4bdbamr34050515pll.48.1641032958163;
+        Sat, 01 Jan 2022 02:29:18 -0800 (PST)
+Received: from [192.168.0.153] ([143.244.48.136])
+        by smtp.gmail.com with ESMTPSA id e9sm27443407pgp.39.2022.01.01.02.29.10
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sat, 01 Jan 2022 02:29:17 -0800 (PST)
+Message-ID: <61d02cfd.1c69fb81.ff6c2.deac@mx.google.com>
+From:   vipiolpeace@gmail.com
+X-Google-Original-From: suport.prilend@gmail.com
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1640018638-19436-6-git-send-email-tdas@codeaurora.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: RE:
+To:     Recipients <suport.prilend@gmail.com>
+Date:   Sat, 01 Jan 2022 12:29:02 +0200
+Reply-To: andres.stemmet1@gmail.com
+X-Mailer: TurboMailer 2
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Taniya,
+I want to confide in you to finalize this transaction of mutual benefits. I=
+t may seem strange to you, but it is real. This is a transaction that has n=
+o risk at all, due process shall be followed and it shall be carried out un=
+der the ambit of the financial laws. Being the Chief Financial Officer, BP =
+Plc. I want to trust and put in your care Eighteen Million British Pounds S=
+terling, The funds were acquired from an over-invoiced payment from a past =
+contract executed in one of my departments. I can't successfully achieve th=
+is transaction without presenting you as foreign contractor who will provid=
+e a bank account to receive the funds.
 
-Thank you for the patch! Yet something to improve:
+Documentation for the claim of the funds will be legally processed and docu=
+mented, so I will need your full cooperation on this matter for our mutual =
+benefits. We will discuss details if you are interested to work with me to =
+secure this funds. I will appreciate your prompt response in every bit of o=
+ur communication. Stay Blessed and Stay Safe.
 
-[auto build test ERROR on clk/clk-next]
-[also build test ERROR on robh/for-next linus/master v5.16-rc7 next-20211224]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Taniya-Das/Add-support-for-LPASS-Core-and-Audio-Clock-for-SC7280/20211221-004818
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-config: alpha-allmodconfig (https://download.01.org/0day-ci/archive/20211231/202112311037.baApS5Qa-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/fec640fab5ec498e79475ecd4b15bc95035a76b1
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Taniya-Das/Add-support-for-LPASS-Core-and-Audio-Clock-for-SC7280/20211221-004818
-        git checkout fec640fab5ec498e79475ecd4b15bc95035a76b1
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/clk/qcom/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/uapi/linux/posix_types.h:5,
-                    from include/uapi/linux/types.h:14,
-                    from include/linux/types.h:6,
-                    from include/linux/of.h:14,
-                    from include/linux/clk-provider.h:9,
-                    from drivers/clk/qcom/lpassaudiocc-sc7280.c:6:
-   drivers/clk/qcom/lpassaudiocc-sc7280.c: In function 'lpass_audio_cc_sc7280_probe':
->> include/linux/stddef.h:8:14: error: called object is not a function or function pointer
-       8 | #define NULL ((void *)0)
-         |              ^
-   include/linux/pm_clock.h:82:25: note: in expansion of macro 'NULL'
-      82 | #define pm_clk_suspend  NULL
-         |                         ^~~~
-   drivers/clk/qcom/lpassaudiocc-sc7280.c:740:9: note: in expansion of macro 'pm_clk_suspend'
-     740 |         pm_clk_suspend(&pdev->dev);
-         |         ^~~~~~~~~~~~~~
-   drivers/clk/qcom/lpassaudiocc-sc7280.c: In function 'lpass_aon_cc_sc7280_probe':
->> include/linux/stddef.h:8:14: error: called object is not a function or function pointer
-       8 | #define NULL ((void *)0)
-         |              ^
-   include/linux/pm_clock.h:82:25: note: in expansion of macro 'NULL'
-      82 | #define pm_clk_suspend  NULL
-         |                         ^~~~
-   drivers/clk/qcom/lpassaudiocc-sc7280.c:798:9: note: in expansion of macro 'pm_clk_suspend'
-     798 |         pm_clk_suspend(&pdev->dev);
-         |         ^~~~~~~~~~~~~~
+Best Regards
 
 
-vim +8 include/linux/stddef.h
+Tel: +44 7537 185910
+Andres  Stemmet
+Email: andres.stemmet1@gmail.com  =
 
-^1da177e4c3f41 Linus Torvalds   2005-04-16  6  
-^1da177e4c3f41 Linus Torvalds   2005-04-16  7  #undef NULL
-^1da177e4c3f41 Linus Torvalds   2005-04-16 @8  #define NULL ((void *)0)
-6e218287432472 Richard Knutsson 2006-09-30  9  
+Chief financial officer
+BP Petroleum p.l.c.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+                                                                           =
+                        Copyright =A9 1996-2021
+
