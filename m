@@ -2,148 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E515348834C
-	for <lists+linux-clk@lfdr.de>; Sat,  8 Jan 2022 12:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1B648888D
+	for <lists+linux-clk@lfdr.de>; Sun,  9 Jan 2022 10:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234129AbiAHLuC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 8 Jan 2022 06:50:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
+        id S234042AbiAIJpa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 9 Jan 2022 04:45:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234122AbiAHLuB (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 8 Jan 2022 06:50:01 -0500
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DA9C06173F
-        for <linux-clk@vger.kernel.org>; Sat,  8 Jan 2022 03:50:01 -0800 (PST)
-Received: by mail-vk1-xa35.google.com with SMTP id j4so5243313vkr.12
-        for <linux-clk@vger.kernel.org>; Sat, 08 Jan 2022 03:50:01 -0800 (PST)
+        with ESMTP id S233604AbiAIJpa (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 9 Jan 2022 04:45:30 -0500
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E303C061748
+        for <linux-clk@vger.kernel.org>; Sun,  9 Jan 2022 01:45:30 -0800 (PST)
+Received: by mail-ua1-x930.google.com with SMTP id l15so7011425uai.11
+        for <linux-clk@vger.kernel.org>; Sun, 09 Jan 2022 01:45:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jT+rZ6KhWgyOiP8gxdO8rfmpX6djtwY+FUwd5SZNm1o=;
-        b=ACIzHwB/Ky1kjBSFyQgqEhnsE3Obu0izZaLSJnESASh5JGs1J3mR65xCNqsyDpXyJk
-         0sJL5/uYRWDUaH+7J9ZO9s8a1AS0rGrvpdtcn3wd2mfJCyRA3gCo1DGzAkX12HgYjI9d
-         yrjO9tJLtxprk9m7ELO5gr4jMN/nfpTxbIiR0=
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=muDLpDbWJ7+5o2h/WSFjj/IcElI1JnlzjYoFpnWANM4=;
+        b=MICe9GrAHMLrHSyW6Wnh2lkHte027EDWYVbmaobJMvAlGAC151nGkv9uRHaFAjpAlx
+         G30esLx+pHP9Pxm+DNs5reqr6dZgqx/kZTCceYx1F3I2HGtXJ/1hSesHFdZl9K3giiYb
+         Nlt12T8j+WxjGWEiqgk5+HWR4gBVdr3jJQF60R2N+v7CIFg7r4hXcT6zcoUK6cmHjwRC
+         HYbOIbxBcUDqcDJX6yMECAQM7KfE9nJY+c8NfJFnG4V6S40pf9v8D1pZnu3SQUBzMqzC
+         7weRGf1SC7FI5IKSdee/bM/BsQkru0KE2t4h/ufe5CHUoczwyZFNwC2On3hgGKzbUBp4
+         /sHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jT+rZ6KhWgyOiP8gxdO8rfmpX6djtwY+FUwd5SZNm1o=;
-        b=c+jl/KuOMz5EqEzBbc1ogj6t5dK5G8GLS+Lo9qVAGsMOodu1+wSvgXLGBcTEXIETof
-         ZpTuiaGnfZNR26bHPzrYxl52Ln0lIabINt3W95XNjDOr677eAin7KJa8WXBtexlHN7A5
-         5jZtb2r1FpN88PdjvrPJZcSFEfn/sVOx/3puai7DrdD0E8PJtI/dFESdn2doVUyly2YJ
-         f9+//4r/pCdG/PFd1wqISXgMq+OtId/WppbYK5qKnDX4jDuKFt/hALZge+BqvRHwexVK
-         3oQQ23+fu2UYCYuAWe8d2Z1Ici67Byr4WrpSi5IIplW6QRJyOL4fn2n9cKQ05W5GSgE+
-         HbKA==
-X-Gm-Message-State: AOAM533JLNJP6NYECM34J+0weUI28jfQRlr9sVexdK/dISnrT4r7+3Dm
-        ccIyYwRX20ct/UAee/C3iEQ1tU5cJJy7AUCLNFvHuw==
-X-Google-Smtp-Source: ABdhPJysus5Yn/PoxPLFBsNV4aVDh5kZHK4M1irFeEkdg+EXrcz9VCeGuicFabTl+uMRLKeeDpbKaMsEn1lMI2wcD3o=
-X-Received: by 2002:a05:6122:788:: with SMTP id k8mr21980762vkr.39.1641642600543;
- Sat, 08 Jan 2022 03:50:00 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=muDLpDbWJ7+5o2h/WSFjj/IcElI1JnlzjYoFpnWANM4=;
+        b=JN0pwq3n2dRKDFv1B67Quat4//M58MhoXWbRr2odlKBwNJ+uWPnIB7DbIwswuotFug
+         u8KdZVNSbCCH/IidvXd2zbWx+pSq9f0U/wOZmS/RlaVX0D1h14XxMnFfseuxZdMzjqa/
+         Z0T5nO5Xudw5CjJGbCzw03zeCBNzK/n15CnPTucOca1UqppQbZGYk1/dJIzzu4Me9Nei
+         NP31VG8eOhURS+jm42O/KIVsRR8zQ4HLUwpFyfTVtNWtfS54gfMlDbsBNcVk3E5fwkla
+         0p6oM3CoevtLIsMQ8iNDq+/yk5L0t1qARrcAg8lF9xZq/bo3Hge0UBI68YnJCm48d6Q2
+         3aew==
+X-Gm-Message-State: AOAM530XiK2flZdIQzlaMDxrzAOp05ieSegW02NK49wzPP/OpU9/eX4d
+        zr7x51Uy/q912PIwCwesso5OVJX7La6AZdGQlUE=
+X-Google-Smtp-Source: ABdhPJynm3p4Gp47Ek9SPBlRR2ZgDVSzbJlqoeAmmhHYPpW9L7VUyxOFBLeTHXgGpwzDrMJyE7O2k4rkJ3DL4vylSUU=
+X-Received: by 2002:a05:6102:9c7:: with SMTP id g7mr272598vsi.69.1641721529280;
+ Sun, 09 Jan 2022 01:45:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20220102165730.50190-1-romain.perier@gmail.com>
- <20220102165730.50190-3-romain.perier@gmail.com> <20220108012515.D1213C36AEB@smtp.kernel.org>
-In-Reply-To: <20220108012515.D1213C36AEB@smtp.kernel.org>
-From:   Daniel Palmer <daniel@0x0f.com>
-Date:   Sat, 8 Jan 2022 20:49:49 +0900
-Message-ID: <CAFr9PX=PvqTtueB9Mi_hZWaUvwfQWhm9Z2D+VtiJcnjzZSxH9w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/9] clk: mstar: msc313 cpupll clk driver
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Romain Perier <romain.perier@gmail.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Willy Tarreau <w@1wt.eu>
+Reply-To: mrselodieantonie778@yahoo.com
+Sender: marianmiche754@gmail.com
+Received: by 2002:a67:f9c6:0:0:0:0:0 with HTTP; Sun, 9 Jan 2022 01:45:28 -0800 (PST)
+From:   Mrs Elodie Antoine <mrselodieatonie32@gmail.com>
+Date:   Sun, 9 Jan 2022 01:45:28 -0800
+X-Google-Sender-Auth: o04GIdSpbeaItlzTzDwaxENcTsE
+Message-ID: <CAND8_neroN=6ke7nQqk65wL4otETcTZ3RD-0vo2xxFkpwSkYNQ@mail.gmail.com>
+Subject: Calvary Greetings
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Stephen,
+CAN I TRUST YOU WITH  THIS (US$4.5 Million Dollars) FOR CHARITY WORKS,
 
-Thank you for looking at this for us.
+Calvary Greetings in the name of the LORD Almighty and Our LORD JESUS
+CHRIST the giver of every good thing. Good day,i know this letter will
+definitely come to you as a huge surprise, but I implore you to take
+the time to go through it carefully as the decision you make will go
+off a long way to determine my future and continued existence. I am
+Mrs Elodie Antoine
+aging widow of 59 years old suffering from long time illness. I have
+some funds I inherited from my late husband,
 
-On Sat, 8 Jan 2022 at 10:25, Stephen Boyd <sboyd@kernel.org> wrote:
+The sum of (US$4.5 Million Dollars) and I needed a very honest and God
+fearing  who can withdraw this money then use the funds for Charity
+works. I WISH TO GIVE THIS FUNDS TO YOU FOR CHARITY WORKS. I found
+your email address from the internet after honest prayers  to the LORD
+to bring me a helper and i decided to contact you if you may be
+willing and interested to handle these trust funds in good faith
+before anything happens to me.
+I accept this decision because I do not have any child who will
+inherit this money after I die. I want your urgent reply to me so that
+I will give you the deposit receipt which the  COMPANY issued to me as
+next of kin for immediate transfer of the money to your account in
+your country, to start the good work of God, I want you to use the
+15/percent of the total amount to help yourself in doing the project.
 
-> > +static void msc313_cpupll_reg_write32(struct msc313_cpupll *cpupll, unsigned int reg, u32 value)
-> > +{
-> > +       u16 l = value & 0xffff, h = (value >> 16) & 0xffff;
-> > +
-> > +       iowrite16(l, cpupll->base + reg);
->
-> We don't usually see 16-bit accesses but if that's what the hardware
-> wants then OK.
 
-This hardware is weird and most of the registers are like this where
-they are 32bit spaced but only 16 bits are used in each.
-32bit registers are split across 2 16 bit registers spaced 32bits
-apart. Writing the two parts has to be in the right order to get the
-right result.
+I am desperately in keen need of assistance and I have summoned up
+courage to contact you for this task, you must not fail me and the
+millions of the poor people in our todays WORLD. This is no stolen
+money and there are no dangers involved,100% RISK FREE with full legal
+proof. Please if you would be able to use the funds for the Charity
+works kindly let me know immediately.I will appreciate your utmost
+confidentiality and trust in this matter to accomplish my heart
+desire, as I don't want anything that will jeopardize my last wish. I
+want you to take 15 percent of the total money for your personal use
+while 85% of the money will go to charity.I will appreciate your
+utmost confidentiality and trust in this matter to accomplish my heart
+desire, as I don't want anything that will jeopardize my last wish.
 
-> > +       iowrite16(h, cpupll->base + reg + 4);
-> > +}
-> > +
-> > +static void msc313_cpupll_setfreq(struct msc313_cpupll *cpupll, u32 regvalue)
-> > +{
-> > +       msc313_cpupll_reg_write32(cpupll, REG_LPF_HIGH_BOTTOM, regvalue);
-> > +
-> > +       iowrite16(0x1, cpupll->base + REG_LPF_MYSTERYONE);
-> > +       iowrite16(0x6, cpupll->base + REG_LPF_MYSTERYTWO);
-> > +       iowrite16(0x8, cpupll->base + REG_LPF_UPDATE_COUNT);
-> > +       iowrite16(BIT(12), cpupll->base + REG_LPF_TRANSITIONCTRL);
-> > +
-> > +       iowrite16(0, cpupll->base + REG_LPF_TOGGLE);
-> > +       iowrite16(1, cpupll->base + REG_LPF_TOGGLE);
-> > +
-> > +       while (!(ioread16(cpupll->base + REG_LPF_LOCK)))
-> > +               cpu_relax();
->
-> Any timeout? Can this use the io read timeout APIs?
 
-Good point. I never saw a situation where the lock didn't happen but I
-think Willy did when he was poking at it.
-I guess if it doesn't lock we should timeout, warn that something
-isn't working and return an error.
+Kindly reply me
 
-> > +static long msc313_cpupll_round_rate(struct clk_hw *hw, unsigned long rate,
-> > +                                    unsigned long *parent_rate)
-> > +{
-> > +       u32 reg = msc313_cpupll_regforfrequecy(rate, *parent_rate);
-> > +       long rounded = msc313_cpupll_frequencyforreg(reg, *parent_rate);
-> > +
-> > +       /*
-> > +        * This is my poor attempt at making sure the resulting
-> > +        * rate doesn't overshoot the requested rate.
->
-> If you want better bounds you can use determine_rate and then look at
-> the min/max constraints to make sure you don't overshoot. But otherwise
-> round_rate implementation is up to the provider to figure out what
-> should happen, i.e. overshooting could be OK if the provider intends for
-> it.
+Thanks and God bless you,
 
-This clock is basically only used by cpufreq-dt. I'm not sure what it
-would do with determine_rate. I'll take a look.
-The main thing I wanted to do here was make sure the resulting clock
-wasn't higher than what we have in the opp table and end up with the
-CPU locking up.
-
-> > +       clk_init.name = dev_name(dev);
-> > +       clk_init.ops = &msc313_cpupll_ops;
-> > +       clk_init.flags = CLK_IS_CRITICAL;
->
-> Why is it critical? Can we have a comment? The clk ops don't have enable
-> or disable so it seems like the flag won't do anything.
-
-This clock is critical in the sense that once the DDR memory is setup
-by the bootloader you must not turn it off even if you switch the CPU
-to the other clock source. If you disable it the system locks up.
-I think it can be dropped as does nothing without enable or disable
-like you wrote.
-
-Cheers,
-
-Daniel
+Mrs Elodie Antoine
