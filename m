@@ -2,31 +2,34 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19208492F59
-	for <lists+linux-clk@lfdr.de>; Tue, 18 Jan 2022 21:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE6E492F61
+	for <lists+linux-clk@lfdr.de>; Tue, 18 Jan 2022 21:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237591AbiARUaS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 18 Jan 2022 15:30:18 -0500
-Received: from phobos.denx.de ([85.214.62.61]:50654 "EHLO phobos.denx.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230264AbiARUaS (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Tue, 18 Jan 2022 15:30:18 -0500
+        id S230264AbiARUaW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 18 Jan 2022 15:30:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349064AbiARUaV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 18 Jan 2022 15:30:21 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64D4C061574
+        for <linux-clk@vger.kernel.org>; Tue, 18 Jan 2022 12:30:20 -0800 (PST)
 Received: from tr.lan (ip-89-176-112-137.net.upcbroadband.cz [89.176.112.137])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id C30278303A;
-        Tue, 18 Jan 2022 21:30:16 +0100 (CET)
+        by phobos.denx.de (Postfix) with ESMTPSA id 61FEB837FB;
+        Tue, 18 Jan 2022 21:30:17 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
         s=phobos-20191101; t=1642537817;
-        bh=4vlJQViHiRSeddYnY36K5HsMu8V0Pl0vpaw3u5O6HKU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cTplIhhT1DKLs2haeYRTEKdXN67FPq/teqfIGDymT8PF1sutcE16jGRpXoBkXcmta
-         tz2dy/vuzBzimFcjt7r4yYeAW31agyYfxbg12Jj7nSHcMHZVlyryrKNTdWvWt3atWf
-         GN7725kNOdtEkPC3z58gox9BYa6DNrmt4DWUNz58ybNQvZrekIJosBo3Fh0w/l22ng
-         Kl908eioEM7lpIZkmwZBPxQbU7da4mgSBTP9LjqdIhOqdIis0I/fChcV4UiuA50CzC
-         17CBwoKn5SBtRGNPAaOAKZkpFYjUZQasv6Y4o+JlIfbQJFFY0S3Gptbg8XvjC5i2i4
-         5Wbq8NBeplvRQ==
+        bh=uTDeTM2D48k2yzr9h85UvqziO2sb4/QxAgXOrgHVPhg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fJZi/0IxG4eQUpdSxVI6nqYr1x8KyqyFomAjCQgRJAgeKKQx6qbyzfHVD1BRfZBIg
+         a6OJQHrfVG2LvfYXmsxN04MfM/CTmIpkwYn0zqu+4sFyldI5N8x3PaFpc+m6ZOl/Hx
+         P8fLf0GUd8keywWWAV4f1UR8YrNDyiNKPfzLP4SZZ7NbHBiyNAhCvb/lTgg1DG/9XB
+         ZjMEcWcWAEkpgOcx465s4Dl2+jeIpHIzzM4K6XVyFwmrvXD3qRqlmTAsE8tf13gAvn
+         Q0HqsWR+AautSKOWwQRGtGSSrxvmXKs14KKZ2N3iPTWCfE7Q3aaob1/1ZX0GUPRwuL
+         sphbRWvUhbDRQ==
 From:   Marek Vasut <marex@denx.de>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     jneuhauser@dh-electronics.com, Marek Vasut <marex@denx.de>,
@@ -37,10 +40,12 @@ Cc:     jneuhauser@dh-electronics.com, Marek Vasut <marex@denx.de>,
         Patrick Delaunay <patrick.delaunay@foss.st.com>,
         Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH 1/5] clk: stm32mp1: Split ETHCK_K into separate MUX and GATE clock
-Date:   Tue, 18 Jan 2022 21:29:54 +0100
-Message-Id: <20220118202958.1840431-1-marex@denx.de>
+Subject: [PATCH 2/5] clk: stm32mp1: Add parent_data to ETHRX clock
+Date:   Tue, 18 Jan 2022 21:29:55 +0100
+Message-Id: <20220118202958.1840431-2-marex@denx.de>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220118202958.1840431-1-marex@denx.de>
+References: <20220118202958.1840431-1-marex@denx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
@@ -49,19 +54,21 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The ETHCK_K are modeled as composite clock of MUX and GATE, however per
-STM32MP1 Reference Manual RM0436 Rev 3, Page 574, Figure 83. Peripheral
-clock distribution for Ethernet, ETHPTPDIV divider is attached past the
-ETHCK_K mux, and ETH_CLK/eth_clk_fb clock are output past ETHCKEN gate.
-Therefore, in case ETH_CLK/eth_clk_fb are not in use AND PTP clock are
-in use, ETHCKEN gate can be turned off. Current driver does not permit
-that, fix it.
+Pass parent_data to ETHRX clock with new fw_name = "ETH_RX_CLK/ETH_REF_CLK".
+By default, this change has no impact on the operation of the clock driver.
+However, due to the fw_name, it permits DT to override ETHRX clock parent,
+which might be needed in case the ETHRX clock are supplied by external clock
+source.
 
-This patch converts ETHCK_K from composite clock into a ETHCKEN gate,
-ETHPTP_K from composite clock into ETHPTPDIV divider, and adds another
-NO_ID clock "ck_ker_eth" which models the ETHSRC mux and is parent clock
-to both ETHCK_K and ETHPTP_K. Therefore, all references to ETHCK_K and
-ETHPTP_K remain functional as before.
+Example of MCO2 supplying clock to ETH_RX_CLK via external pad-to-pad wire:
+&rcc {
+         clocks = <&rcc CK_MCO2>;
+         clock-names = "ETH_RX_CLK/ETH_REF_CLK";
+};
+
+Note that while this patch permits to implement this rare usecase, the issue
+with ethernet RX and TX input clock modeling on MP1 is far more complex and
+requires more core plumbing.
 
 [1] STM32MP1 Reference Manual RM0436 Rev 3, Page 574,
     Figure 83. Peripheral clock distribution for Ethernet
@@ -78,40 +85,126 @@ Cc: linux-clk@vger.kernel.org
 Cc: linux-stm32@st-md-mailman.stormreply.com
 To: linux-arm-kernel@lists.infradead.org
 ---
- drivers/clk/clk-stm32mp1.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/clk/clk-stm32mp1.c | 36 ++++++++++++++++++++++++++++++++----
+ 1 file changed, 32 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/clk/clk-stm32mp1.c b/drivers/clk/clk-stm32mp1.c
-index 863274aa50e38..23a34ab459a3b 100644
+index 23a34ab459a3b..7ad2e6203baef 100644
 --- a/drivers/clk/clk-stm32mp1.c
 +++ b/drivers/clk/clk-stm32mp1.c
-@@ -2008,7 +2008,6 @@ static const struct clock_config stm32mp1_clock_cfg[] = {
- 	KCLK(DSI_K, "dsi_k", dsi_src, 0, G_DSI, M_DSI),
- 	KCLK(ADFSDM_K, "adfsdm_k", sai_src, 0, G_ADFSDM, M_SAI1),
- 	KCLK(USBO_K, "usbo_k", usbo_src, 0, G_USBO, M_USBO),
--	KCLK(ETHCK_K, "ethck_k", eth_src, 0, G_ETHCK, M_ETHCK),
+@@ -155,6 +155,10 @@ static const char * const eth_src[] = {
+ 	"pll4_p", "pll3_q"
+ };
  
- 	/* Particulary Kernel Clocks (no mux or no gate) */
- 	MGATE_MP1(DFSDM_K, "dfsdm_k", "ck_mcu", 0, G_DFSDM),
-@@ -2017,11 +2016,16 @@ static const struct clock_config stm32mp1_clock_cfg[] = {
- 	MGATE_MP1(GPU_K, "gpu_k", "pll2_q", 0, G_GPU),
- 	MGATE_MP1(DAC12_K, "dac12_k", "ck_lsi", 0, G_DAC12),
- 
--	COMPOSITE(ETHPTP_K, "ethptp_k", eth_src, CLK_OPS_PARENT_ENABLE |
-+	COMPOSITE(NO_ID, "ck_ker_eth", eth_src, CLK_OPS_PARENT_ENABLE |
- 		  CLK_SET_RATE_NO_REPARENT,
- 		  _NO_GATE,
- 		  _MMUX(M_ETHCK),
--		  _DIV(RCC_ETHCKSELR, 4, 4, 0, NULL)),
-+		  _NO_DIV),
++const struct clk_parent_data ethrx_src[] = {
++	{ .name = "ethck_k", .fw_name = "ETH_RX_CLK/ETH_REF_CLK" },
++};
 +
-+	MGATE_MP1(ETHCK_K, "ethck_k", "ck_ker_eth", 0, G_ETHCK),
-+
-+	DIV(ETHPTP_K, "ethptp_k", "ck_ker_eth", CLK_OPS_PARENT_ENABLE |
-+	    CLK_SET_RATE_NO_REPARENT, RCC_ETHCKSELR, 4, 4, 0),
+ static const char * const rng_src[] = {
+ 	"ck_csi", "pll4_r", "ck_lse", "ck_lsi"
+ };
+@@ -317,6 +321,7 @@ struct clock_config {
+ 	const char *name;
+ 	const char *parent_name;
+ 	const char * const *parent_names;
++	const struct clk_parent_data *parent_data;
+ 	int num_parents;
+ 	unsigned long flags;
+ 	void *cfg;
+@@ -576,6 +581,7 @@ static struct clk_hw *
+ clk_stm32_register_gate_ops(struct device *dev,
+ 			    const char *name,
+ 			    const char *parent_name,
++			    const struct clk_parent_data *parent_data,
+ 			    unsigned long flags,
+ 			    void __iomem *base,
+ 			    const struct stm32_gate_cfg *cfg,
+@@ -586,7 +592,10 @@ clk_stm32_register_gate_ops(struct device *dev,
+ 	int ret;
  
- 	/* RTC clock */
- 	COMPOSITE(RTC, "ck_rtc", rtc_src, CLK_OPS_PARENT_ENABLE,
+ 	init.name = name;
+-	init.parent_names = &parent_name;
++	if (parent_name)
++		init.parent_names = &parent_name;
++	if (parent_data)
++		init.parent_data = parent_data;
+ 	init.num_parents = 1;
+ 	init.flags = flags;
+ 
+@@ -611,6 +620,7 @@ clk_stm32_register_gate_ops(struct device *dev,
+ static struct clk_hw *
+ clk_stm32_register_composite(struct device *dev,
+ 			     const char *name, const char * const *parent_names,
++			     const struct clk_parent_data *parent_data,
+ 			     int num_parents, void __iomem *base,
+ 			     const struct stm32_composite_cfg *cfg,
+ 			     unsigned long flags, spinlock_t *lock)
+@@ -1135,6 +1145,7 @@ _clk_stm32_register_gate(struct device *dev,
+ 	return clk_stm32_register_gate_ops(dev,
+ 				    cfg->name,
+ 				    cfg->parent_name,
++				    cfg->parent_data,
+ 				    cfg->flags,
+ 				    base,
+ 				    cfg->cfg,
+@@ -1148,8 +1159,8 @@ _clk_stm32_register_composite(struct device *dev,
+ 			      const struct clock_config *cfg)
+ {
+ 	return clk_stm32_register_composite(dev, cfg->name, cfg->parent_names,
+-					    cfg->num_parents, base, cfg->cfg,
+-					    cfg->flags, lock);
++					    cfg->parent_data, cfg->num_parents,
++					    base, cfg->cfg, cfg->flags, lock);
+ }
+ 
+ #define GATE(_id, _name, _parent, _flags, _offset, _bit_idx, _gate_flags)\
+@@ -1258,6 +1269,16 @@ _clk_stm32_register_composite(struct device *dev,
+ 	.func		= _clk_stm32_register_gate,\
+ }
+ 
++#define STM32_GATE_PDATA(_id, _name, _parent, _flags, _gate)\
++{\
++	.id		= _id,\
++	.name		= _name,\
++	.parent_data	= _parent,\
++	.flags		= _flags,\
++	.cfg		= (struct stm32_gate_cfg *) {_gate},\
++	.func		= _clk_stm32_register_gate,\
++}
++
+ #define _STM32_GATE(_gate_offset, _gate_bit_idx, _gate_flags, _mgate, _ops)\
+ 	(&(struct stm32_gate_cfg) {\
+ 		&(struct gate_cfg) {\
+@@ -1291,6 +1312,10 @@ _clk_stm32_register_composite(struct device *dev,
+ 	STM32_GATE(_id, _name, _parent, _flags,\
+ 		   _STM32_MGATE(_mgate))
+ 
++#define MGATE_MP1_PDATA(_id, _name, _parent, _flags, _mgate)\
++	STM32_GATE_PDATA(_id, _name, _parent, _flags,\
++		   _STM32_MGATE(_mgate))
++
+ #define _STM32_DIV(_div_offset, _div_shift, _div_width,\
+ 		   _div_flags, _div_table, _ops)\
+ 	.div = &(struct stm32_div_cfg) {\
+@@ -1354,6 +1379,9 @@ _clk_stm32_register_composite(struct device *dev,
+ #define PCLK(_id, _name, _parent, _flags, _mgate)\
+ 	MGATE_MP1(_id, _name, _parent, _flags, _mgate)
+ 
++#define PCLK_PDATA(_id, _name, _parent, _flags, _mgate)\
++	MGATE_MP1_PDATA(_id, _name, _parent, _flags, _mgate)
++
+ #define KCLK(_id, _name, _parents, _flags, _mgate, _mmux)\
+ 	     COMPOSITE(_id, _name, _parents, CLK_OPS_PARENT_ENABLE |\
+ 		       CLK_SET_RATE_NO_REPARENT | _flags,\
+@@ -1951,7 +1979,7 @@ static const struct clock_config stm32mp1_clock_cfg[] = {
+ 	PCLK(MDMA, "mdma", "ck_axi", 0, G_MDMA),
+ 	PCLK(GPU, "gpu", "ck_axi", 0, G_GPU),
+ 	PCLK(ETHTX, "ethtx", "ck_axi", 0, G_ETHTX),
+-	PCLK(ETHRX, "ethrx", "ck_axi", 0, G_ETHRX),
++	PCLK_PDATA(ETHRX, "ethrx", ethrx_src, 0, G_ETHRX),
+ 	PCLK(ETHMAC, "ethmac", "ck_axi", 0, G_ETHMAC),
+ 	PCLK(FMC, "fmc", "ck_axi", CLK_IGNORE_UNUSED, G_FMC),
+ 	PCLK(QSPI, "qspi", "ck_axi", CLK_IGNORE_UNUSED, G_QSPI),
 -- 
 2.34.1
 
