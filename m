@@ -2,117 +2,76 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A8B491FB8
-	for <lists+linux-clk@lfdr.de>; Tue, 18 Jan 2022 08:19:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC269492218
+	for <lists+linux-clk@lfdr.de>; Tue, 18 Jan 2022 10:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244578AbiARHTy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 18 Jan 2022 02:19:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
+        id S1345203AbiARJGz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 18 Jan 2022 04:06:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiARHTx (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 18 Jan 2022 02:19:53 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6F7C061574
-        for <linux-clk@vger.kernel.org>; Mon, 17 Jan 2022 23:19:53 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id o15so66896999lfo.11
-        for <linux-clk@vger.kernel.org>; Mon, 17 Jan 2022 23:19:52 -0800 (PST)
+        with ESMTP id S1345259AbiARJGu (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 18 Jan 2022 04:06:50 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD35C061753
+        for <linux-clk@vger.kernel.org>; Tue, 18 Jan 2022 01:06:50 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id o80so1974594yba.6
+        for <linux-clk@vger.kernel.org>; Tue, 18 Jan 2022 01:06:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QErlBlCXc+a1jsNeHhAG3QvKs8DThEwDqqGrTQJEmKM=;
-        b=Cjars/H6j45gYLQkoPMsEllTMBG70C1LHa06SGInYCzXmoS9ijngx+PwY1cWhsnV69
-         67f28Y8J8i3CWhggCTKFSIppeyJizkiI/eHKsQ1CvQl3hxZl7oDW9MzjhA1XilWmuXdd
-         OuqkvduOPVXfWSYLn/rrthFHAgqKX1wsAIhy8=
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=AIHedDQeQ2nfeFyhlIY6iBZ7Eo/kAlP72EhStgPHV1I=;
+        b=bFbIZFrO20tVeHnfrbOf5kTdx0G/SAT5rW1Plwk765tZmY9OhnAnZt7H9wAnCdcz0t
+         KGJJ1IFvRrlIFyyf3OpODiLX2uvvgMkLZb2Pg3rHkla7YrWm8dPVkIdD4jxKBl9tZjgU
+         YEl9+0y7OM4wfPZG8wq4wesxMyTvlzvu9lrqm5xr/w4/bam5fdKYM4J5WdaYsNqKgTWU
+         peY41oy9PyZYn5UvpKGp90sGZmOyQG9GENoHsPtFEHTH/uwtUvtDitTmc5V6YGpXcdMm
+         nerXyKU+7yxDNkfVyR5CNiy+px+Ve13ICnm6vqwtNL37/aB+VGhLUW1YNzEKoSuYdMTG
+         8i9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QErlBlCXc+a1jsNeHhAG3QvKs8DThEwDqqGrTQJEmKM=;
-        b=04XQaO6tgFcrpwukkBZyYruoNA+yP3msfEQ7djtTY85a4D4HemA00HOZ80HMZlrNZX
-         TtrPftKAassKS0055XR0W2uGwZgz4cB/kIGEadF1ID5oAhEP5hK+kg8YQ84MHTyykTJD
-         Yg5TIfJsrndgm/8mW20XmhUkAnALMnkzjwH7pXZCT8d2UmTeQgmrEQkj8/MjbDJyk5vM
-         rNu5FIMQ/AfA5NKViBBt3juHL7TwchbDsQJqAElPAxUP5cwiSrXOckY+B6pEPg9YxunH
-         sBkDo6GlXx2z+VXu+0Wyfg6D07an80CjPkIbuuridgAipdPfZoSc3+vu0enZ8TcTcZD4
-         cMpw==
-X-Gm-Message-State: AOAM532zxRJyUm/8Fwie8T4sA0xkU8PjwoLZQPqwo8N40PqwLGzWaTHa
-        lxo0Te1RgTKwVpslcGIKbUF4VCu1gFygdS0rNZWK6Q==
-X-Google-Smtp-Source: ABdhPJwXqSU3eM+obWywWHyddOWfpjQDK/HtlFI7KumYOm8sZXw1tbMN6njQNPqs6dDTjFNH7waDHttj7UPplBOmsPg=
-X-Received: by 2002:a2e:b70a:: with SMTP id j10mr15365829ljo.376.1642490391444;
- Mon, 17 Jan 2022 23:19:51 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=AIHedDQeQ2nfeFyhlIY6iBZ7Eo/kAlP72EhStgPHV1I=;
+        b=WLfQSpoAt762+feNDS0SHtDgFA6nEyUC//1C5YGmva5J/IyKhIzRtnlS7jl+xOUztC
+         Hxsj52hZ0lpz+tMz/RTxMLq/Kogq2TLLUxkpFMCd///2V1Bj6Sg7ivyxzgq6pLr7XgpL
+         fcPmzXE+0GOG1EhAMhj4XhLaPGOASrbGtt3UdVRb3to96GbeoDoZGJc2gqnY6/RPCKBO
+         6amGWwxTSzMaWQjDmnlGQGy3vcMkFPKgAr9FQOK8eaMNDnkWcSQsSMYFxqkeB/4ifbOR
+         C6UqWoSKtlgHV4HO7ZT9DJOQ/UAnKd03WIVeOVLSFME1pi1X1D8Lz6r4yICUzvpJF9aA
+         tqfQ==
+X-Gm-Message-State: AOAM533+VJiiEv/fP2r509y0l+w+ngtnhn4gOdZYpp6R1zIn8FGqx0r+
+        hyxx5e/Y5FxZWE8xTzToxbf9HjEUWWYD40KWoaA=
+X-Google-Smtp-Source: ABdhPJwRbsRQ+CkmlR6OPnnbiekPrQEpsaTCCbWKAEH0vyO2CmbC3DSpp7LM58snge5WfZ7fe2WRq4+EERNT8vI3Ay0=
+X-Received: by 2002:a5b:34b:: with SMTP id q11mr31498784ybp.652.1642496809442;
+ Tue, 18 Jan 2022 01:06:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20220110181330.3224-1-alyssa.rosenzweig@collabora.com>
- <eb6d11af-ff48-a366-d428-77bcaa250a8a@arm.com> <YeF/AYZ0DuKGwLLk@maud>
-In-Reply-To: <YeF/AYZ0DuKGwLLk@maud>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 18 Jan 2022 15:19:40 +0800
-Message-ID: <CAGXv+5H9BsNUdiY6zMH6THKKMvRdPypNtUEVviMHQEjgNGDk_A@mail.gmail.com>
-Subject: Re: [PATCH] clk: mediatek: Disable ACP to fix 3D on MT8192
-To:     Alyssa Rosenzweig <alyssa@collabora.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        linux-mediatek@lists.infradead.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Nick Fan <Nick.Fan@mediatek.com>,
-        Nicolas Boichat <drinkcat@chromium.org>
+Received: by 2002:a05:7108:3655:0:0:0:0 with HTTP; Tue, 18 Jan 2022 01:06:48
+ -0800 (PST)
+Reply-To: asil.ajwad@gmail.com
+From:   Asil Ajwad <graceyaogokamboule@gmail.com>
+Date:   Mon, 17 Jan 2022 21:06:48 -1200
+Message-ID: <CA+Yy_gA7+jE7dqD=WebdT7kitHvMACkH44b4SxL-MC_huN-uuA@mail.gmail.com>
+Subject: Greetings,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi,
+-- 
+Greetings,
 
-On Fri, Jan 14, 2022 at 9:47 PM Alyssa Rosenzweig <alyssa@collabora.com> wrote:
->
-> > > That links to an internal Google issue tracker which I assume has more
-> > > information on the bug. I would appreciate if someone from Google or
-> > > MediaTek could explain what this change actually does and why it's
-> > > necessary on MT8192.
-> > >
-> > > At any rate, this register logically belongs to the MT8192 "infra" clock
-> > > device, so it makes sense to set it there too. This avoids adding any
-> > > platform-specific hacks to the 3D driver, either mainline (Panfrost) or
-> > > legacy (kbase).
-> >
-> > Does this really have anything to do with clocks?
->
-> I have no idea. MediaTek, Google, please explain.
->
-> > In particular, "ACP" usually refers to the Accelerator Coherency Port
-> > of a CPU cluster or DSU, and given the stated symptom of the issue
-> > affected by it, my first guess would be that this bit might indeed
-> > control routing of GPU traffic either to the ACP or the (presumably
-> > non-coherent) main interconnect.
->
-> I'd easily believe that.
+I am Mr.Asil Ajwad, I work with United Bank of Africa, can you use
+an ATM Visa Card to withdraw money at, ATM Cash Machine in your
+country, if yes I want to transfer abounded fund the sum of $10.5million
+US-Dollars, to you from my country, this is part of the money that was
+abounded by our late old client a politician who unfortunately lost
+his life and was forced out of power Du to his greedy act, the bank will
 
-As Robin guessed, "ACP" here does refer to the Accelerator Coherency Port.
-And the bit in infracfg toggles whether ACP is used or not.
+change the account details to your name, and apply for a Visa Card
+with your details, the Visa Card will be send to you, and you can be
+withdrawing money with it always, whatever any amount you withdraw
+daily, you will send 60% to me and you will take 40%, the Visa Card
+and the bank account will be on your name, I will be waiting for your
+response for more details, thanks to you a lot for giving me your time.
 
-Explanation from MediaTek in verbatim:
-
--------------------------------------------------------------------------
-The ACP path on MT8192 is just for experimental only.
-We are not intended to enable ACP by design.
-
-But due to an unexpected operation, it was accidently opened by default.
-So we need a patch to disable the ACP for MT8192.
--------------------------------------------------------------------------
-
-
-Regards
-ChenYu
-
-> > If that is the case, I think this would logically belong as a SoC-specific
-> > quirk in panfrost, where we'd need to retrieve the syscon regmap for
-> > ourselves (see around line 800 of drivers/iommu/mtk_iommu.c for a similar
-> > example).
->
-> Alright. Doing this in panfrost seems ugly but if that's the right place
-> for it, that's the right place for it.
+regards,
+Mr.Asil Ajwad.
