@@ -2,247 +2,234 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11653494AB1
-	for <lists+linux-clk@lfdr.de>; Thu, 20 Jan 2022 10:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B01BA494DFC
+	for <lists+linux-clk@lfdr.de>; Thu, 20 Jan 2022 13:33:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359505AbiATJ0r (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 20 Jan 2022 04:26:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46992 "EHLO
+        id S242538AbiATMb5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 20 Jan 2022 07:31:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359527AbiATJ0r (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Jan 2022 04:26:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19B3C061574;
-        Thu, 20 Jan 2022 01:26:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C518B81D1A;
-        Thu, 20 Jan 2022 09:26:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C5EC340E5;
-        Thu, 20 Jan 2022 09:26:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1642670804;
-        bh=BcyvFDDwhdjpKYZJc4GkgLr1FsdGQLqlk/uEpVwTb7A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qd1hHBxWE3qKbN/Srqn5IuS5Y9XSw5xNgNs4BciP9fxV5GfSJ0FlRNMm2Jqwst8aj
-         898OmrfYMizKz/YqgflSfiN+2Bs50lcCDQFiEanzYtGgVymsH+Zrq8Pq4f1zaFMVKI
-         1LCa0YbCiC854LGkbvbfJYdZ3o5t+vWmC43eqx6OxD386buDGKyLVFe9ztOzRxo+RO
-         hy3Nv+YjPsRnZTJpYBQPbRNP+yHsFckj3Yy4Zn6GNp2hDsXm9C+AWKPTTwnn4iTCR1
-         6DjxmRLJdt4vPwUcFmMWeeJ5xf/PbGEQbjR9OUPmAo12C3YXZhhryswRC4NpWYbPKl
-         tOscG0WRyd1Xg==
-Received: by pali.im (Postfix)
-        id 75E20791; Thu, 20 Jan 2022 10:26:41 +0100 (CET)
-Date:   Thu, 20 Jan 2022 10:26:41 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Vladimir Vid <vladimir.vid@sartura.hr>,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v7 3/6] dt-bindings: mvebu-uart: document DT bindings for
- marvell,armada-3700-uart-clock
-Message-ID: <20220120092641.o4ffzeyakhuuf3c7@pali>
-References: <20211015093701.pfvkighxsndj4ujg@pali>
- <163433494758.1688384.5994009027317282677@swboyd.mtv.corp.google.com>
- <20211016064210.7ahqfqcvf66wtt66@pali>
- <20220115080213.0CCAFC36AE3@smtp.kernel.org>
- <20220115115018.he4hnnhlvrb6kann@pali>
- <20220115130509.4a240730@thinkpad>
- <20220115122618.plhiqnjh2755bv5h@pali>
- <20220119231655.EFFF3C004E1@smtp.kernel.org>
- <20220120000651.in7s6nazif5qjkme@pali>
- <20220120060149.0FF24C340E0@smtp.kernel.org>
+        with ESMTP id S232606AbiATMbu (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Jan 2022 07:31:50 -0500
+Received: from mx2.securetransport.de (mx2.securetransport.de [IPv6:2a03:4000:13:6c7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42238C061401
+        for <linux-clk@vger.kernel.org>; Thu, 20 Jan 2022 04:31:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
+        s=dhelectronicscom; t=1642681353;
+        bh=haRx+ubYjgsAVsAb5w88a4ry5nJOF4pa9uDRBaSa44w=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=cZ5qJEyS/orQOOU91nKcQhTSnJqYqW7MXnegpOI2sZxzeTyUWheyJn69wWnBRMAoS
+         ML7stLZ1yUp6fcc/ShECchfssFyh9abrZB2Gsj9rBreYZnwMtGbX1s38egRMmS+MHt
+         0oGdzVe/NFSFqJ5VjsYtWMfOQuOqkyQlgkOwUBtZOnl5bQTXAmlzizfHZcsv/IPxEs
+         Poe9/AhaOweMNNX9sglE/i7nh8U9FkBBQnOSFn+DytYy8in4s2+/gk1dccEfzuIFcI
+         nPu6Xc4WHRUGY8zFuN7UrbHL/b081G05arw0ZVNvIv+4ZGeTu73SVUTvZAgcErmDW6
+         pYhz/rsO+BB6Q==
+X-secureTransport-forwarded: yes
+From:   Johann Neuhauser <jneuhauser@dh-electronics.com>
+Complaints-To: abuse@cubewerk.de
+To:     "Marek MV. Vasut" <marex@denx.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+CC:     "Marek MV. Vasut" <marex@denx.de>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Patrick Delaunay <patrick.delaunay@foss.st.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>
+Subject: RE: [PATCH 2/5] clk: stm32mp1: Add parent_data to ETHRX clock
+Thread-Topic: [PATCH 2/5] clk: stm32mp1: Add parent_data to ETHRX clock
+Thread-Index: AQHYDKowBbptfmImJ0K3nNIY0Ny5waxr0veA
+Date:   Thu, 20 Jan 2022 12:07:12 +0000
+Message-ID: <ddf6afba3fd2402a8b3f60fe30bbdbba@dh-electronics.com>
+References: <20220118202958.1840431-1-marex@denx.de>
+ <20220118202958.1840431-2-marex@denx.de>
+In-Reply-To: <20220118202958.1840431-2-marex@denx.de>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220120060149.0FF24C340E0@smtp.kernel.org>
-User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wednesday 19 January 2022 22:01:47 Stephen Boyd wrote:
-> Quoting Pali Rohár (2022-01-19 16:06:51)
-> > On Wednesday 19 January 2022 15:16:54 Stephen Boyd wrote:
-> > > Quoting Pali Rohár (2022-01-15 04:26:18)
-> > > > On Saturday 15 January 2022 13:05:09 Marek Behún wrote:
-> > > > > On Sat, 15 Jan 2022 12:50:18 +0100
-> > > > > Pali Rohár <pali@kernel.org> wrote:
-> > > > > 
-> > > > > > On Saturday 15 January 2022 00:02:11 Stephen Boyd wrote:
-> > > > > > > Quoting Pali Rohár (2021-10-15 23:42:10)  
-> > > > > > > > 
-> > > > > > > > If I was designing this driver and DTS bindings I would have choose
-> > > > > > > > something like this:
-> > > > > > > > 
-> > > > > > > > uart@0x12000 {  
-> > > > > > > 
-> > > > > > > Drop the 0x
-> > > > > > >   
-> > > > > > > >     reg = <0x12000 0x18>, <0x12200 0x30>;
-> > > > > > > >     clock-controller {
-> > > > > > > >         ...
-> > > > > > > >     };  
-> > > > > > > 
-> > > > > > > Drop this node and put whatever properties are inside into the parent
-> > > > > > > node.
-> > > > > > >   
-> > > > > > > >     serial1 {
-> > > > > > > >         ...
-> > > > > > > >         status = "disabled";
-> > > > > > > >     };
-> > > > > > > >     serial2 {
-> > > > > > > >         ...
-> > > > > > > >         status = "disabled";
-> > > > > > > >     };
-> > > > > > > > };
-> > > > > > > > 
-> > > > > > > > Meaning that 0x12000 node would be 3 subnodes and all registers would be
-> > > > > > > > defined in top level nodes and would be handled by one driver.
-> > > > > > > > 
-> > > > > > > > This is really how hardware block looks like. But it is not backward
-> > > > > > > > compatible...  
-> > > > > > > 
-> > > > > > > Sounds good to me. I presume we need the serial child nodes so we can
-> > > > > > > reference them from the stdout-path?  
-> > > > > > 
-> > > > > > Yes, exactly, separate nodes for serial1 and serial2 are still required.
-> > > > > > 
-> > > > > > But dropping clock controller is not possible as for higher baudrates we
-> > > > > > need to use and configure uart clock controller. Without it we just get
-> > > > > > comparable feature support which is already present in driver.
-> > > > > 
-> > > > > What Stephen means is making clock controller out of the uart node
-> > > > > directly. No need to add separate subnode just for clock controller.
-> > > > 
-> > > > This is already implemented in v7 patch series. Clock controller is
-> > > > already outside of uart nodes.
-> > > 
-> > > I mean to combine the uart node and the clock-controller node together
-> > > 
-> > >       uart-wrapper {
-> > >               reg = <0x12000 0x18>, <0x12200 0x30>;
-> > >               #clock-cells ...
-> > > 
-> > >               serial1 {
-> > >                       ...
-> > >               };
-> > > 
-> > >               serial2 {
-> > >                       ...
-> > >               };
-> > >       };
-> > 
-> > Ok, now I see what you mean.
-> > 
-> > But problem is that this is not backward compatible change. And would
-> > not work per existing DT bindings definitions, which defines how
-> > bootloader should set configured clocks.
-> > 
-> > As I wrote in emails 3 months ago, this new "proposed" DTS definition is
-> > something which I would have chosen if I had designed this driver and
-> > bindings in past. But that did not happen and different approach is
-> > already widely in used.
-> > 
-> > To support existing DTS definitions and bootloaders, it is really
-> > required to have current structure backward compatible like it is
-> > defined in current DT bindings document. And my changes in this patch
-> > series are backward compatible.
-> 
-> I'm lost. Is the bootloader the one that's expecting some particular
-> serial node format and updating something? What is the bootloader doing?
-
-If bootloader uses or configures UART to different clock it needs to
-update "clocks" property in DT. Otherwise UART would be unusable and
-there would be no dmesg output.
-
-A3720 heavily depends that bootloader patches at boot time DTB file to
-the layout of the current hardware.
-
-> > 
-> > To change DTS structure, it would be needed to provide uart nodes in DTS
-> > files two times: once in old style (the current one) and second time in
-> > this new style.
-> 
-> That's not a good idea. Why do we need to support both at the same time?
-
-Because old bootloaders do not and will never support this new style. It
-is not only linux kernel project who provides DTB files. Also bootloader
-itself has own DTB files and use it for booting (e.g kernel). For some
-boards is in-kernel-tree DTS file only as a reference. So it is
-important that kernel can use and support DTS files from old version and
-also from the new patched version. Gregory (A3720 DTS files maintainer)
-always ask me what happens if I try to boot new patched kernel drivers
-with old unmodified DTS files and wants to know if nothing is broken by
-introduced changed.
-
-> > 
-> > But such thing would even more complicate updating driver and it needs
-> > to be implemented.
-> > 
-> > Plus this would open a question how to define default stdout-path if
-> > there would be 4 serial nodes, where one pair would describe old style
-> > and second pair new style; meaning that 2 cross nodes would describe
-> > same define.
-> 
-> Huh? We shouldn't have both bindings present in the DTB.
-
-Ideally yes, I would like to see to prevent it. But for backward
-compatibility we really need old bindings still present (as explained
-above).
-
-So really I see two options here: Make changes in patches backward
-compatible (old nodes stay in DT and also kernel would be able to use
-old DT). Or let old bindings untouched in DT and new backward
-incompatible definitions would have to be in separate nodes.
-
-> > 
-> > For me this looks like a more complications and I do not see any benefit
-> > from it.
-> > 
-> > It is really important to break backward compatibility, just to try
-> > having new cleaner API at the cost of having more complications and
-> > requirement for more development and also important maintenance?
-> 
-> It's important to not make DT nodes have reg properties that overlap.
-> Maybe this is a DT purist viewpoint and I'm totally off base! I think
-> Rob did ack this binding already so I must be coming from the wrong
-> angle.
-
-I know this. In case it happens that driver for "one DT node" needs to
-access regs of "another DT node" then regmap interface is used and
-driver access regs of "another DT node" via regmap. No overlapping is in
-DT. But here it is not possible to use regmap as "another DT node" is in
-"disabled" state on some boards. And so regmap driver is not bound to
-it.
-
-In beginning there was not overlapping in DT because people have not
-looked properly that some registers of uart2 are in uart1 space and did
-not exported them to driver (bootloader initialized them to some sane
-values and nobody noticed that they are required).
-
-This overlapping starting to be required after I properly looked how
-driver is working, how it maps to HW and how to implement choosing
-clocks and allowing to change baudrate to higher values.
-
-> Nothing prevents register overlap from happening in practice, but it's
-> good to avoid such a situation as it clearly divides the I/O space by
-> assigning an address range to a particular device. In this case, we see
-> the two uarts are really one device, but we need two nodes in DT for
-> stdout-path, so we make some child nodes and have the driver figure out
-> which serial port to use for the console.
-> 
-> We shouldn't be adding more nodes to DT to get drivers to probe for
-> device I/O spaces that have already been described in DT. When this
-> happens, we learn that some I/O range is actually a combination of
-> functions, like uart and clks, and thus we should be able to add any
-> required properties to the existing DT node to support that new feature
-> that wasn't described before in the binding.
+> From: Marek Vasut [mailto:marex@denx.de]
+> Sent: Tuesday, January 18, 2022 9:30 PM
+>=20
+> Pass parent_data to ETHRX clock with new fw_name =3D "ETH_RX_CLK/ETH_REF_=
+CLK".
+> By default, this change has no impact on the operation of the clock drive=
+r.
+> However, due to the fw_name, it permits DT to override ETHRX clock parent=
+,
+> which might be needed in case the ETHRX clock are supplied by external cl=
+ock
+> source.
+>=20
+> Example of MCO2 supplying clock to ETH_RX_CLK via external pad-to-pad wir=
+e:
+> &rcc {
+>          clocks =3D <&rcc CK_MCO2>;
+>          clock-names =3D "ETH_RX_CLK/ETH_REF_CLK";
+> };
+>=20
+> Note that while this patch permits to implement this rare usecase, the is=
+sue
+> with ethernet RX and TX input clock modeling on MP1 is far more complex a=
+nd
+> requires more core plumbing.
+>=20
+> [1] STM32MP1 Reference Manual RM0436 Rev 3, Page 574,
+>     Figure 83. Peripheral clock distribution for Ethernet
+>     https://www.st.com/resource/en/reference_manual/dm00327659-stm32mp157=
+-advanced-armbased-32bit-mpus-
+> stmicroelectronics.pdf
+>=20
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Cc: Christophe Roullier <christophe.roullier@foss.st.com>
+> Cc: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+> Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+> Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: linux-stm32@st-md-mailman.stormreply.com
+> To: linux-arm-kernel@lists.infradead.org
+> ---
+>  drivers/clk/clk-stm32mp1.c | 36 ++++++++++++++++++++++++++++++++----
+>  1 file changed, 32 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/clk/clk-stm32mp1.c b/drivers/clk/clk-stm32mp1.c
+> index 23a34ab459a3b..7ad2e6203baef 100644
+> --- a/drivers/clk/clk-stm32mp1.c
+> +++ b/drivers/clk/clk-stm32mp1.c
+> @@ -155,6 +155,10 @@ static const char * const eth_src[] =3D {
+>         "pll4_p", "pll3_q"
+>  };
+>=20
+> +const struct clk_parent_data ethrx_src[] =3D {
+> +       { .name =3D "ethck_k", .fw_name =3D "ETH_RX_CLK/ETH_REF_CLK" },
+> +};
+> +
+>  static const char * const rng_src[] =3D {
+>         "ck_csi", "pll4_r", "ck_lse", "ck_lsi"
+>  };
+> @@ -317,6 +321,7 @@ struct clock_config {
+>         const char *name;
+>         const char *parent_name;
+>         const char * const *parent_names;
+> +       const struct clk_parent_data *parent_data;
+>         int num_parents;
+>         unsigned long flags;
+>         void *cfg;
+> @@ -576,6 +581,7 @@ static struct clk_hw *
+>  clk_stm32_register_gate_ops(struct device *dev,
+>                             const char *name,
+>                             const char *parent_name,
+> +                           const struct clk_parent_data *parent_data,
+>                             unsigned long flags,
+>                             void __iomem *base,
+>                             const struct stm32_gate_cfg *cfg,
+> @@ -586,7 +592,10 @@ clk_stm32_register_gate_ops(struct device *dev,
+>         int ret;
+>=20
+>         init.name =3D name;
+> -       init.parent_names =3D &parent_name;
+> +       if (parent_name)
+> +               init.parent_names =3D &parent_name;
+> +       if (parent_data)
+> +               init.parent_data =3D parent_data;
+>         init.num_parents =3D 1;
+>         init.flags =3D flags;
+>=20
+> @@ -611,6 +620,7 @@ clk_stm32_register_gate_ops(struct device *dev,
+>  static struct clk_hw *
+>  clk_stm32_register_composite(struct device *dev,
+>                              const char *name, const char * const *parent=
+_names,
+> +                            const struct clk_parent_data *parent_data,
+>                              int num_parents, void __iomem *base,
+>                              const struct stm32_composite_cfg *cfg,
+>                              unsigned long flags, spinlock_t *lock)
+> @@ -1135,6 +1145,7 @@ _clk_stm32_register_gate(struct device *dev,
+>         return clk_stm32_register_gate_ops(dev,
+>                                     cfg->name,
+>                                     cfg->parent_name,
+> +                                   cfg->parent_data,
+>                                     cfg->flags,
+>                                     base,
+>                                     cfg->cfg,
+> @@ -1148,8 +1159,8 @@ _clk_stm32_register_composite(struct device *dev,
+>                               const struct clock_config *cfg)
+>  {
+>         return clk_stm32_register_composite(dev, cfg->name, cfg->parent_n=
+ames,
+> -                                           cfg->num_parents, base, cfg->=
+cfg,
+> -                                           cfg->flags, lock);
+> +                                           cfg->parent_data, cfg->num_pa=
+rents,
+> +                                           base, cfg->cfg, cfg->flags, l=
+ock);
+>  }
+>=20
+>  #define GATE(_id, _name, _parent, _flags, _offset, _bit_idx, _gate_flags=
+)\
+> @@ -1258,6 +1269,16 @@ _clk_stm32_register_composite(struct device *dev,
+>         .func           =3D _clk_stm32_register_gate,\
+>  }
+>=20
+> +#define STM32_GATE_PDATA(_id, _name, _parent, _flags, _gate)\
+> +{\
+> +       .id             =3D _id,\
+> +       .name           =3D _name,\
+> +       .parent_data    =3D _parent,\
+> +       .flags          =3D _flags,\
+> +       .cfg            =3D (struct stm32_gate_cfg *) {_gate},\
+> +       .func           =3D _clk_stm32_register_gate,\
+> +}
+> +
+>  #define _STM32_GATE(_gate_offset, _gate_bit_idx, _gate_flags, _mgate, _o=
+ps)\
+>         (&(struct stm32_gate_cfg) {\
+>                 &(struct gate_cfg) {\
+> @@ -1291,6 +1312,10 @@ _clk_stm32_register_composite(struct device *dev,
+>         STM32_GATE(_id, _name, _parent, _flags,\
+>                    _STM32_MGATE(_mgate))
+>=20
+> +#define MGATE_MP1_PDATA(_id, _name, _parent, _flags, _mgate)\
+> +       STM32_GATE_PDATA(_id, _name, _parent, _flags,\
+> +                  _STM32_MGATE(_mgate))
+> +
+>  #define _STM32_DIV(_div_offset, _div_shift, _div_width,\
+>                    _div_flags, _div_table, _ops)\
+>         .div =3D &(struct stm32_div_cfg) {\
+> @@ -1354,6 +1379,9 @@ _clk_stm32_register_composite(struct device *dev,
+>  #define PCLK(_id, _name, _parent, _flags, _mgate)\
+>         MGATE_MP1(_id, _name, _parent, _flags, _mgate)
+>=20
+> +#define PCLK_PDATA(_id, _name, _parent, _flags, _mgate)\
+> +       MGATE_MP1_PDATA(_id, _name, _parent, _flags, _mgate)
+> +
+>  #define KCLK(_id, _name, _parents, _flags, _mgate, _mmux)\
+>              COMPOSITE(_id, _name, _parents, CLK_OPS_PARENT_ENABLE |\
+>                        CLK_SET_RATE_NO_REPARENT | _flags,\
+> @@ -1951,7 +1979,7 @@ static const struct clock_config stm32mp1_clock_cfg=
+[] =3D {
+>         PCLK(MDMA, "mdma", "ck_axi", 0, G_MDMA),
+>         PCLK(GPU, "gpu", "ck_axi", 0, G_GPU),
+>         PCLK(ETHTX, "ethtx", "ck_axi", 0, G_ETHTX),
+> -       PCLK(ETHRX, "ethrx", "ck_axi", 0, G_ETHRX),
+> +       PCLK_PDATA(ETHRX, "ethrx", ethrx_src, 0, G_ETHRX),
+>         PCLK(ETHMAC, "ethmac", "ck_axi", 0, G_ETHMAC),
+>         PCLK(FMC, "fmc", "ck_axi", CLK_IGNORE_UNUSED, G_FMC),
+>         PCLK(QSPI, "qspi", "ck_axi", CLK_IGNORE_UNUSED, G_QSPI),
+> --
+> 2.34.1
+Tested-by: Johann Neuhauser <jneuhauser@dh-electronics.com>
