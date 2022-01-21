@@ -2,114 +2,88 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B057C4956DA
-	for <lists+linux-clk@lfdr.de>; Fri, 21 Jan 2022 00:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B734957C8
+	for <lists+linux-clk@lfdr.de>; Fri, 21 Jan 2022 02:37:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378169AbiATXVM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 20 Jan 2022 18:21:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378232AbiATXUu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Jan 2022 18:20:50 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127B9C061574;
-        Thu, 20 Jan 2022 15:20:50 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id f202-20020a1c1fd3000000b0034dd403f4fbso14390158wmf.1;
-        Thu, 20 Jan 2022 15:20:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=70y9nP+1TJuyoQVHWKHYrgk62/1kbAozVgHhQoGQnWU=;
-        b=W9FIXQ88UaSTP59Qi7+oime1sFU7XPsBBr+GgtIZuDCxabPolRSg0UVB57+j7xn3TL
-         L4J7c3XN5cVXU9vUf/jC5K7uxhGch/2CdvfibqBaKT5alYLpdgoGJC0Sechz5wI13ueW
-         yz1HoXFN/s6m+/l2+I2rKH/GFcdU6pu9U14eRH0Vb4jaqUZSyKndqo0sqB3evNjZHBfe
-         9MgvwW7Su+DfBOpYp0wZpCnECInP2+66b0NQDJscSnZgYRNWUL8Bs3pua9a6K1rwKdtY
-         TTyirOIfrj5QFrdL/rS8eb23El1xVwL1JItJRWwdE30ei42exZSy7tk421zuJVgwzPRz
-         gavQ==
+        id S239140AbiAUBhl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 20 Jan 2022 20:37:41 -0500
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:38624 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232540AbiAUBhl (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 20 Jan 2022 20:37:41 -0500
+Received: by mail-oi1-f177.google.com with SMTP id g205so11559536oif.5;
+        Thu, 20 Jan 2022 17:37:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=70y9nP+1TJuyoQVHWKHYrgk62/1kbAozVgHhQoGQnWU=;
-        b=ryWacxUS5gcpzIpAapqVN/nXu+mTYaCl07RCEn222HIN73nJ8anwgGJtOQDJxRvRWK
-         yKR4eX97TNvuCSLfXOyCwwxbraHHAkGRnfNf3Y1itRpsUsrWPugps/RLGLL8gOJKWw9k
-         t1vNnn21+A3fqfxfRbv46TmYE1mMlsvng/aEyPna7HkSe6l20Yd1zQvNA+VLxZhgoYkj
-         6giLeHjOCuixBtCeQm02RV8bIPkIjwjoHl5xGZhx9dGBVIha8SDfVQDBcJBeTZIH1JSL
-         RsrNr5O8Tqk7RJk/zeK6Sq7jMslwXunUibh+1+Jixgmb64s8oHgfTuZI8nABF7Ml9WtN
-         ilCA==
-X-Gm-Message-State: AOAM533jLCkXh2hQCvUNuC97ObA1SPjKLzcf8Eo4JkOI1zUuhiZeKRir
-        lpzOJiW8gMB0zKiEWMciGak=
-X-Google-Smtp-Source: ABdhPJy2EAGYqEGxCHtEc43zDu9wvxI6e81Sk5trFgKtuU1q9UCCbNWoXPBJztPhW8RkxnbwpfmtgQ==
-X-Received: by 2002:a05:600c:5125:: with SMTP id o37mr1107030wms.161.1642720848419;
-        Thu, 20 Jan 2022 15:20:48 -0800 (PST)
-Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.googlemail.com with ESMTPSA id a9sm3939283wmm.32.2022.01.20.15.20.47
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=lwx/3sI/jAgnGg6BbYNTq2g4K7zJzyk25fhYkr3exC0=;
+        b=t8VFvFhmokBMq5hdyD47XrcVaaRq9Blc6EZwVd2Mckp3jhx+LodO6HWZSIQnrQq3wL
+         3pewnyc7SdBo/iPhkNu3t33cF7eh34HUKLZF66ErQx7hLP0jC1ym2gvy7ao4dHa5ZrBC
+         2/l/Zk6VMu0V3YTKydLL3TcWZW1soN0aAQZQD2haK55S/Vj9r1wTRaV8dmhg4msbE/dH
+         V3O7/G/n3EQQjERTSCLG7BRJGXSeTTblICulS+cTuxw2jBzlCYdW/By32LirEiPk9+RM
+         gzG5WASeOFl4VUoin7QlvrTtQOywTB5iFPR6E2LROy/LtRZHMrcHvAcH++TOJTeaHTtm
+         Z2+g==
+X-Gm-Message-State: AOAM5319yGRvILIv0c+R+pQE2qzqUcX/M+qdyP51Xf73ZZdYMuBM988u
+        LqQoS+jGYeb/g8Y0lrzVsA==
+X-Google-Smtp-Source: ABdhPJxw18vz18oJhNnQmNv3Pg97sN04HSdTjldQBZY7zJAkoFUNRxgJGeo1b/7bNUVA/HdTHKyzKw==
+X-Received: by 2002:a05:6808:aa7:: with SMTP id r7mr1447327oij.47.1642729060372;
+        Thu, 20 Jan 2022 17:37:40 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id o21sm440941ote.4.2022.01.20.17.37.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jan 2022 15:20:48 -0800 (PST)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
+        Thu, 20 Jan 2022 17:37:39 -0800 (PST)
+Received: (nullmailer pid 2314865 invoked by uid 1000);
+        Fri, 21 Jan 2022 01:37:38 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     devicetree@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
+        linux-kernel@vger.kernel.org,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <tdas@codeaurora.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 15/15] ARM: dts: qcom: Add syscon and cxo/pxo clock to gcc node for ipq8064
-Date:   Fri, 21 Jan 2022 00:20:28 +0100
-Message-Id: <20220120232028.6738-16-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220120232028.6738-1-ansuelsmth@gmail.com>
-References: <20220120232028.6738-1-ansuelsmth@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        linux-clk@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>
+In-Reply-To: <20220120232028.6738-3-ansuelsmth@gmail.com>
+References: <20220120232028.6738-1-ansuelsmth@gmail.com> <20220120232028.6738-3-ansuelsmth@gmail.com>
+Subject: Re: [PATCH v2 02/15] dt-bindings: clock: simplify qcom,gcc-apq8064 Documentation
+Date:   Thu, 20 Jan 2022 19:37:38 -0600
+Message-Id: <1642729058.530862.2314864.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add syscon compatible required for tsens driver to correctly probe driver
-and access the reg. Also add cxo and pxo tag and declare them as gcc clock
-now requires them for the ipq8064 gcc driver that has now been modernized.
+On Fri, 21 Jan 2022 00:20:15 +0100, Ansuel Smith wrote:
+> Simplify qcon,gcc-apq8064 Documentation by using qcom,gcc.yaml as a
+> template.
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/clock/qcom,gcc-apq8064.yaml      | 27 +++----------------
+>  1 file changed, 3 insertions(+), 24 deletions(-)
+> 
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
----
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index 11481313bdb6..5524a68cf3d1 100644
---- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -298,13 +298,13 @@ smem: smem@41000000 {
- 	};
- 
- 	clocks {
--		cxo_board {
-+		cxo_board: cxo_board {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <25000000>;
- 		};
- 
--		pxo_board {
-+		pxo_board: pxo_board {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <25000000>;
-@@ -736,7 +736,9 @@ tsens_calib_backup: calib_backup@410 {
- 		};
- 
- 		gcc: clock-controller@900000 {
--			compatible = "qcom,gcc-ipq8064";
-+			compatible = "qcom,gcc-ipq8064", "syscon";
-+			clocks = <&pxo_board>, <&cxo_board>;
-+			clock-names = "pxo", "cxo";
- 			reg = <0x00900000 0x4000>;
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
--- 
-2.33.1
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.example.dt.yaml:0:0: /example-0/clock-controller@900000: failed to match any schema with compatible: ['qcom,gcc-apq8064']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1582347
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
