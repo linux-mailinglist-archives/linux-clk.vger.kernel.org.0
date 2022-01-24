@@ -2,134 +2,98 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFB7498268
-	for <lists+linux-clk@lfdr.de>; Mon, 24 Jan 2022 15:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00032498384
+	for <lists+linux-clk@lfdr.de>; Mon, 24 Jan 2022 16:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbiAXObE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 24 Jan 2022 09:31:04 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:42888 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238902AbiAXOae (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Jan 2022 09:30:34 -0500
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220124143009epoutp02b11da9102f878931cca7874e27a3478e~NO0W0OJ2H0050500505epoutp02T
-        for <linux-clk@vger.kernel.org>; Mon, 24 Jan 2022 14:30:09 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220124143009epoutp02b11da9102f878931cca7874e27a3478e~NO0W0OJ2H0050500505epoutp02T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1643034609;
-        bh=20DD9ZfqdzeIRvLdgr8SyGYaXTaluXzTMYIGxQu91xk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cZhxuCjnNYa6gOhdz+dKCKRatBrxxO2dzd0pSeIG6gAggVbrHJwM3XoFrrX1sdYkA
-         90iKUqB/30U3lQfJ2qWmFu1YBSRoByzOsKfyojN7Zz8oWoKsxqgT3YG/R/o+JfOLRv
-         Mv7olzN+Orf3nGsO9g8wtBEdOYTHc0cLxj/ax2R0=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20220124143008epcas5p2bb837ff8cf602145bc5c095dda672815~NO0V9kiRs2966029660epcas5p2L;
-        Mon, 24 Jan 2022 14:30:08 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.176]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4JjC7K4qdqz4x9Pp; Mon, 24 Jan
-        2022 14:30:05 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A3.AE.06423.DE7BEE16; Mon, 24 Jan 2022 23:30:05 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220124143005epcas5p103598aa358ac35fe5e1ee762faf508b0~NO0SsNLtz2099820998epcas5p10;
-        Mon, 24 Jan 2022 14:30:05 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220124143005epsmtrp1037a66a6b091dfba90a2804bc822bad1~NO0SrVxqR2824028240epsmtrp1A;
-        Mon, 24 Jan 2022 14:30:05 +0000 (GMT)
-X-AuditID: b6c32a49-b01ff70000001917-d6-61eeb7ed8a7d
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        87.BB.08738.DE7BEE16; Mon, 24 Jan 2022 23:30:05 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220124143002epsmtip143653e4940264b251bcd9b8d509793be~NO0QdrvR92189021890epsmtip1H;
-        Mon, 24 Jan 2022 14:30:02 +0000 (GMT)
-From:   Alim Akhtar <alim.akhtar@samsung.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     soc@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, olof@lixom.net, arnd@arndb.de,
-        linus.walleij@linaro.org, catalin.marinas@arm.com,
-        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com,
-        s.nawrocki@samsung.com, linux-samsung-soc@vger.kernel.org,
-        pankaj.dubey@samsung.com, sboyd@kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>, linux-fsd@tesla.com
-Subject: [PATCH v5 16/16] arm64: defconfig: Enable Tesla FSD SoC
-Date:   Mon, 24 Jan 2022 19:46:44 +0530
-Message-Id: <20220124141644.71052-17-alim.akhtar@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220124141644.71052-1-alim.akhtar@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNJsWRmVeSWpSXmKPExsWy7bCmhu7b7e8SDc7tVLR4MG8bm8XfScfY
-        Ld4v62G0mH/kHKvFxrc/mCym/FnOZLHp8TVWi48991gtHr4Kt7i8aw6bxYzz+5gsTl3/zGax
-        aOsXdovWvUfYLQ6/aWe1+HdtI4vF4+t/2BwEPdbMW8Po8fvXJEaPWQ29bB6bVnWyedy5tofN
-        Y/OSeo8rJ5pYPfq2rGL0+Nc0l93j8ya5AK6obJuM1MSU1CKF1Lzk/JTMvHRbJe/geOd4UzMD
-        Q11DSwtzJYW8xNxUWyUXnwBdt8wcoH+UFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnFJbZKqQUp
-        OQUmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZZ/4uZi3Yz1oxbf155gbGJyxdjJwcEgImEiv2
-        TAeyuTiEBHYzSmxrmMgG4XxilJj04DIThPOZUeLUhPXMMC2zJ85ghUjsYpT4/2sjM4TTwiTx
-        8vk/NpAqNgFtibvTtzCB2CICbhI3GjvARjEL/GeS2NizDKxIWMBB4kVLP1A3BweLgKrE8+vJ
-        IGFeAVuJTyfWskJsk5dYveEA2GZOoPi8hd/A5kgI7OGQuNBxhwWkV0LARWL2zRCIemGJV8e3
-        sEPYUhIv+9vYIUqyJXp2GUOEaySWzjsG9b+9xIErc8CmMAtoSqzfpQ8SZhbgk+j9/YQJopNX
-        oqNNCKJaVaL53VWoTmmJid3dUEd6SLy42g0NxQmMEnundTFOYJSdhTB1ASPjKkbJ1ILi3PTU
-        YtMCw7zUcng8JefnbmIEp1Itzx2Mdx980DvEyMTBeIhRgoNZSYS3KuVdohBvSmJlVWpRfnxR
-        aU5q8SFGU2CATWSWEk3OBybzvJJ4QxNLAxMzMzMTS2MzQyVx3tPpGxKFBNITS1KzU1MLUotg
-        +pg4OKUamNbuj1CzTLb2257mpVWo0vN6Sr314WvnrlsI5kZq131Ojf7s+0TlV+Pi1T81z5fu
-        evmXxX1lZ0DruYLTV798zHjmWsKTP5PhtolKxzVFPa5f3WeTL/5wefPhs8CiV0n16Y11rA+e
-        rVp/tsJdwPW4i8gc/v/Smw7uWvpn2j1//8dL2eV9bnFuCamW+H1jsbTwa/G9ufP273KJP/DF
-        9c98jWYdMfX289eDlL/36D3/UyU4S+3LP45jKj/faoYdrjjlcJHpi1GCG3uX+OmNYe8spzY+
-        vbqsIfaZ+VWRnQE5KRcS07fJ/N5wgv2ufNOEv8/6K0v8Nng28G8Titmq+CUgyILl77UfM5tL
-        xC5O6nyQ0qbEUpyRaKjFXFScCADzD9EoLgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPLMWRmVeSWpSXmKPExsWy7bCSnO7b7e8SDaZdYbV4MG8bm8XfScfY
-        Ld4v62G0mH/kHKvFxrc/mCym/FnOZLHp8TVWi48991gtHr4Kt7i8aw6bxYzz+5gsTl3/zGax
-        aOsXdovWvUfYLQ6/aWe1+HdtI4vF4+t/2BwEPdbMW8Po8fvXJEaPWQ29bB6bVnWyedy5tofN
-        Y/OSeo8rJ5pYPfq2rGL0+Nc0l93j8ya5AK4oLpuU1JzMstQifbsErowzfxezFuxnrZi2/jxz
-        A+MTli5GTg4JAROJ2RNnsHYxcnEICexglPj24gEbREJa4vrGCewQtrDEyn/P2SGKmpgkTvY8
-        ZAVJsAloS9ydvoUJxBYR8JBo+3ePGaSIWWAis8TGvWfBVggLOEi8aOkHSnBwsAioSjy/ngwS
-        5hWwlfh0Yi0rxAJ5idUbDjCD2JxA8XkLvzGBlAsJ2Eic+60ygZFvASPDKkbJ1ILi3PTcYsMC
-        o7zUcr3ixNzi0rx0veT83E2M4DjQ0trBuGfVB71DjEwcjIcYJTiYlUR4q1LeJQrxpiRWVqUW
-        5ccXleakFh9ilOZgURLnvdB1Ml5IID2xJDU7NbUgtQgmy8TBKdXAJPbs2cP3es0LuTcu5mRs
-        VC6SiGx7vrHMq67ulS7j0X3fy9hvKixttp0S0TmFa/OaM5P7biU80dHiFou85h/ozLvrS+vr
-        hMlqNi+5C4MnfzT/l7rZbfpDzuPzjuqnJc19ujiDe4PPyd8+V7StTy7ZriF2dF/qypnB1368
-        k1e7NfnXLb3jsl8Xz7luFv0zN8tw7drzYsq1ASLnA3bL2qh+D/2Y+fzmGn7FUB1jjVIhjsnX
-        BV+KKD3oaU6wSC0Rz2DZbFf/XHJtnYzUlCffH/ZZ/xJ7e6ntjWXwu6SDmQmr7hSd67nNeGdR
-        2kJ7vd6yiaLdG+6+erigc+mOw4dviMye+MI0f1XgyjtZ5YujGTrttymxFGckGmoxFxUnAgB7
-        h8ho8gIAAA==
-X-CMS-MailID: 20220124143005epcas5p103598aa358ac35fe5e1ee762faf508b0
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220124143005epcas5p103598aa358ac35fe5e1ee762faf508b0
-References: <20220124141644.71052-1-alim.akhtar@samsung.com>
-        <CGME20220124143005epcas5p103598aa358ac35fe5e1ee762faf508b0@epcas5p1.samsung.com>
+        id S234510AbiAXP1k (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 24 Jan 2022 10:27:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239044AbiAXP1i (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Jan 2022 10:27:38 -0500
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF76C061401
+        for <linux-clk@vger.kernel.org>; Mon, 24 Jan 2022 07:27:38 -0800 (PST)
+Received: by mail-vk1-xa2e.google.com with SMTP id 48so7250002vki.0
+        for <linux-clk@vger.kernel.org>; Mon, 24 Jan 2022 07:27:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3HDDkZ4JptQvUueROJyMLPvuWRpma8Lk9Kajk4VoZ7g=;
+        b=oCZW1Uf34XcMXjVM7frYNDOAJhTX8eifTi5L9BJqN4uZJ5E5GRaSY8GmkvNuysIg4J
+         SSJHF0q7lgcbjS2DUyJtgKeRbw3rM1DckwB99lwNYnoz26GvbKvveQoG9BHnbR3+Fshu
+         ktWvS6ywdxY2xQlyr7XUaRaMUSsLlZD0wqdm09DMnbZm6FYs43QzgfIjmVZNxFMKGP3Q
+         EvC5Gez0WbuDEMzcKfjFvwURn12duMeyr/bdHehL1SFrzV0dAbqQjy6hi0PBE3w2ywjt
+         PnBzGCwAPVaWomYjsmKM+qwYG7hWQBtlDC7spCVHsg8jqpBvccAgSU6xZzuRRr7cM62G
+         lkYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3HDDkZ4JptQvUueROJyMLPvuWRpma8Lk9Kajk4VoZ7g=;
+        b=cY0tEPsJ7qHkk1Wo7St2X9nFuVQkof8Qj2QzRjYVjZFh9X0gFAE9SMDUSezBGySL/e
+         MQ48ruk2rib3ODkXKcRbUYw5KF8PlvJY1UNsgnjg/37vbT8J4FHsudmHAIiJc57PiiwS
+         oqEJ6vgZRABT6L363jEyMCgZUSYrWO2iKwHbXd+VQu/2ugD3cc6P56lOOT89C3NJZQT/
+         /2qbEnomizQVUGFFezSNp0oq3n5dHKnKs2jmgbg4hSsyky9Nuidlj6mjrJ0/jdWUw6CA
+         p/m8R0W5+Y/rLulwdXZuykSDnzVsBrHyKJRvfYvZTSwqzlpOfOI9acpCWKWs+E+IWh4k
+         BTuA==
+X-Gm-Message-State: AOAM530jfenPX+hiJtQ50dg0d9X9U/Jy3d6nc3qhrSC/43skGxzLushU
+        BERdESIKKIi/oTDSxztRkcM0Z7d2aZnzjE0utCZTcNT8nyY=
+X-Google-Smtp-Source: ABdhPJycPXj58poXbIS7wrV7p/bJJKo5dmP5xCUFrpidft8+LA9/WrCcL9NqzoSpBkz/mtGiO73S/qyVN+j8LB5Wtgk=
+X-Received: by 2002:a17:902:b10d:b0:14b:4e8c:4859 with SMTP id
+ q13-20020a170902b10d00b0014b4e8c4859mr5060131plr.95.1643038046755; Mon, 24
+ Jan 2022 07:27:26 -0800 (PST)
+MIME-Version: 1.0
+References: <1639763060-24524-1-git-send-email-loic.poulain@linaro.org> <1639763060-24524-2-git-send-email-loic.poulain@linaro.org>
+In-Reply-To: <1639763060-24524-2-git-send-email-loic.poulain@linaro.org>
+From:   Loic Poulain <loic.poulain@linaro.org>
+Date:   Mon, 24 Jan 2022 16:39:03 +0100
+Message-ID: <CAMZdPi_q17UPdU-exVGPLffUwfL2LBxkdV69WOdugeo5nosF8g@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] clk: qcom: Add display clock controller driver for QCM2290
+To:     bjorn.andersson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, shawn.guo@linaro.org,
+        robh+dt@kernel.org, agross@kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, sboyd@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This patch enables the Tesla FSD SoC in arm64 defconfig.
+Hi Bjorn,
 
-Cc: linux-fsd@tesla.com
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+On Fri, 17 Dec 2021 at 18:32, Loic Poulain <loic.poulain@linaro.org> wrote:
+>
+> Add support for the display clock controller found in QCM2290
+> based devices. This clock controller feeds the Multimedia Display
+> SubSystem (MDSS).
+>
+> It's a porting of dispcc-scuba GPL-2.0 driver from CAF msm-4.19 kernel:
+> https://source.codeaurora.org/quic/la/kernel/msm-4.19/tree/drivers/clk/qcom/dispcc-scuba.c?h=LE.UM.4.4.1.r3
+>
+> Global clock name references (parent_names) have been replaced by
+> parent_data and parent_hws.
+>
+> Clocks marked enable_safe_config have their clk_rcg2_ops moved to
+> clk_rcg2_shared_ops.
+>
+> Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 30516dc0b70e..415fb3aca4b3 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -54,6 +54,7 @@ CONFIG_ARCH_SEATTLE=y
- CONFIG_ARCH_INTEL_SOCFPGA=y
- CONFIG_ARCH_SYNQUACER=y
- CONFIG_ARCH_TEGRA=y
-+CONFIG_ARCH_TESLA_FSD=y
- CONFIG_ARCH_SPRD=y
- CONFIG_ARCH_THUNDER=y
- CONFIG_ARCH_THUNDER2=y
--- 
-2.25.1
+Any other comments on this series?
 
+Regards,
+Loic
+
+> ---
+>  v2: Added missing dispcc-qcm2290.h header file
+>  v3: - Moved dt-bindings header into dt bindings commit
+>      - clk_rcg2_ops to clk_rcg2_shared_ops for enable_safe_config
+>        marked clocks.
+>  v4: - Removed useless NOCACHE clk flags
+>      - Added explicit comment for OPS_PARENT_ENABLE flag
+>      - Removed useless headers (clk.h, reset.h)
+>      - spark_vco tab as const
+>      - removed global .name reference for sleep_clk
+>      - removed dispcc_xo_clk as it is always on (enabled in probe)
+>      - removed dev_info message on probe success
+>      - Kconfig: Select QCM_GCC_2290 for builtin
