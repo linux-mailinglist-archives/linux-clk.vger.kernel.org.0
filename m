@@ -2,72 +2,102 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 411D349AD1B
-	for <lists+linux-clk@lfdr.de>; Tue, 25 Jan 2022 08:08:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A0B49AD8E
+	for <lists+linux-clk@lfdr.de>; Tue, 25 Jan 2022 08:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442291AbiAYHHB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 25 Jan 2022 02:07:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
+        id S1343551AbiAYHZD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 25 Jan 2022 02:25:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391731AbiAYHCc (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 25 Jan 2022 02:02:32 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB11C08ED73
-        for <linux-clk@vger.kernel.org>; Mon, 24 Jan 2022 21:41:42 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id l68so57805492ybl.0
-        for <linux-clk@vger.kernel.org>; Mon, 24 Jan 2022 21:41:42 -0800 (PST)
+        with ESMTP id S1444563AbiAYHWq (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 25 Jan 2022 02:22:46 -0500
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831D3C06E039;
+        Mon, 24 Jan 2022 22:27:47 -0800 (PST)
+Received: by mail-ua1-x930.google.com with SMTP id b16so35536049uaq.4;
+        Mon, 24 Jan 2022 22:27:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
-        b=omchJdYJcVvbnbx3iWDsqNfzfvgFxRY5UV8d5JFHFd0Qxp4Fs99oOTWbnsLJvmkGLO
-         KJ9h0aIZipzZCxLYUC1EbKJQXjsTnrYD4skWPu5L6KEa7WwksJ/DgfAKn2I//FvNz16e
-         yvRSMjBJIkfJOiN7QosmIFzfX6t0OymUxXq/kzoldmt5Tk4SMXy3poAlzZfnj4tLqkCO
-         r1uVZjBjIcfKcTHUm4yIRwmNGijXGA0OAhFYRol/6hiAAZJ37V1K6a3bLM+XpGdFXGos
-         hPiIHyT9XSW8aiVFGjIdHRgRcnWLHkX21ZW87GvspRwlXlL9xuI6dXFZXWxBZnRTJWgA
-         Bk5w==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x7OWhLsmJS1+uUOEexpDwoIKITm+x9XBIi30vSgK1xg=;
+        b=hkWuAz/YuA6uirgqIr8pVE292nRVrNT1FRntEAbq6BSmuV1RjGikjVpCJ91lvOiWTI
+         wsSfkTZlPqf02zgXbqLu59iYosJKmRfHg9UN4n4eofqmvQSx24qipIN2arr5JrhMgs2o
+         UbVYyHuG3MrfZG3BR/VubSt4JsNDJWK1I5Q3IIaK9xATYai+n5SM0iOngkYc89ZUEinE
+         ZCW8ujZ79F1WoVYy5wmQzUPcE54FTEkgU98Ngt+xWYhUmXJTsD6h2aQo5YR5fGPI3i9K
+         dFfww1Uqm4jRM60BxU3/W42mUddMTt8OoHrM3+yYOWgNkrld2w4uraPYqsW3pkYsj1a2
+         4skA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
-        b=1pWTaHWkcU0N8t802o8JBWkSHhUXILzR6pxpZDIuGziwXa70nKEBrqFGd1A6ODbHYL
-         RlxXAfybHlDsGoIh0BrmaRo6SBNOdjSWxoAXktJwnQ5cN/COc7QMO6R4CpvirHrl7QXL
-         dIys3nWGybJ4Yorl+5Ohm2+XxLdcl9uPeMyEw+DN1dEifWrPlDmXW4eNrZWXG2B5M3Rp
-         IxxxbMfvEMv80kFxTTCcjf6nlpQiEIkUxfFoj+nhIMNnXImMkdjckANBV07YHDi8WZNm
-         gD5VuBUIYc1bNIVUAQkpVWTk61Ioc1UUdnWEwzIDTl++MCU7+EbGTsA191do/WGV5y8X
-         9jOg==
-X-Gm-Message-State: AOAM532lA0VElAVVhR5QV8c5KI4EnZKKjyxBMv2bt8f7RP4/72mb4w/u
-        YqbTOagxkRm8rqdNKQnIns8iJ3qgX9KqT9ELNA0=
-X-Google-Smtp-Source: ABdhPJwywiwyTtOCXfovmJIEM7Vqt+PFDzMW3tzxRj90P3fJDPhIlV2jOd/vI9WPw47eCab8Z7S4n4qldrLRD5Ly+Sc=
-X-Received: by 2002:a25:d783:: with SMTP id o125mr27594671ybg.710.1643089301256;
- Mon, 24 Jan 2022 21:41:41 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x7OWhLsmJS1+uUOEexpDwoIKITm+x9XBIi30vSgK1xg=;
+        b=RPPkLZ43GCj5+OEhz+JlbqRVrKlui86EiARCri8cXjAspUj5HS5aGvSIJnIwVnnRJK
+         M18yXyyWxs/tTiOBaRJB/Jw30ghuxhQEwtrtbqH1SV+ZSqXe5uMrAQetL76onlwPIpZ9
+         oQ2C0QHqIS+3A8GeS4zmOVNZ7TlqP9wJ0vM7NmwGYvDebEZtOt36WeWMnED7LrAOpKks
+         WupxLLHpw6RAEBD8eAtHvENyz+Q4sHKywvQbmWDPOX/KAFVUX64Wubm+6nNaxEpb9HJm
+         BuVejrmTpgxupVuTNKeaYLpdm9CQwpRc4KdezQsHKxKyKIQjjwIk7H/HE867n1hLw1R+
+         DwSQ==
+X-Gm-Message-State: AOAM532AWL+2ue3rGgkizmkaqkbA9oMcHAJ5x5/1U5VUiZhOdrDBogYi
+        ZCfbTrI8psC9kujGPZpkO9xJGEfGokZIDsfOAvaCutwQwyU=
+X-Google-Smtp-Source: ABdhPJx+rYdRl8Z7+AGuvxfELBIQDGePT2oG2nEhInJMqyAa5hjsASHccpDLr9LNE0L1Vk3U7tCnise0rK2hMuuJdiI=
+X-Received: by 2002:ab0:3caa:: with SMTP id a42mr296234uax.46.1643092066597;
+ Mon, 24 Jan 2022 22:27:46 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:7000:ad9d:0:0:0:0 with HTTP; Mon, 24 Jan 2022 21:41:40
- -0800 (PST)
-Reply-To: danielseyba@yahoo.com
-From:   Seyba Daniel <mrssuzaramaling19@gmail.com>
-Date:   Tue, 25 Jan 2022 06:41:40 +0100
-Message-ID: <CAKN-9XgQjuMspSnu-F01fv+Bgr6eZEygpsR3pZ-5cF=m78av-Q@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
+References: <20220110114930.1406665-1-sergio.paracuellos@gmail.com>
+ <20220110114930.1406665-4-sergio.paracuellos@gmail.com> <20220125011429.93D9FC340E4@smtp.kernel.org>
+In-Reply-To: <20220125011429.93D9FC340E4@smtp.kernel.org>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Tue, 25 Jan 2022 07:27:35 +0100
+Message-ID: <CAMhs-H9e4Ww2GNk4JqfkuRketb3ZR54UbrqaOx4qH+EJQiNakQ@mail.gmail.com>
+Subject: Re: [PATCH v8 3/4] clk: ralink: make system controller node a reset provider
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        John Crispin <john@phrozen.org>, linux-staging@lists.linux.dev,
+        Greg KH <gregkh@linuxfoundation.org>,
+        NeilBrown <neil@brown.name>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello,
+On Tue, Jan 25, 2022 at 2:14 AM Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting Sergio Paracuellos (2022-01-10 03:49:29)
+> > MT7621 system controller node is already providing the clocks for the whole
+> > system but must also serve as a reset provider. Hence, add reset controller
+> > related code to the clock driver itself. To get resets properly ready for
+> > the rest of the world we need to move platform driver initialization process
+> > to 'arch_initcall'.
+> >
+> > CC: Philipp Zabel <p.zabel@pengutronix.de>
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > ---
+> >  drivers/clk/ralink/clk-mt7621.c | 92 ++++++++++++++++++++++++++++++++-
+> >  1 file changed, 91 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/clk/ralink/clk-mt7621.c b/drivers/clk/ralink/clk-mt7621.c
+> > index a2c045390f00..99256659dd96 100644
+> > --- a/drivers/clk/ralink/clk-mt7621.c
+> > +++ b/drivers/clk/ralink/clk-mt7621.c
+> > @@ -11,14 +11,17 @@
+> >  #include <linux/mfd/syscon.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/regmap.h>
+> > +#include <linux/reset-controller.h>
+> >  #include <linux/slab.h>
+> >  #include <dt-bindings/clock/mt7621-clk.h>
+> > +#include <dt-bindings/reset/mt7621-reset.h>
+>
+> I can't take this patch without taking the first patch. I suppose if
+> Greg is OK I can take the staging patch #4 through clk tree too? Let me
+> know.
 
-I am so sorry contacting you in this means especially when we have never
-met before. I urgently seek your service to represent me in investing in
-your region / country and you will be rewarded for your service without
-affecting your present job with very little time invested in it.
+Greg, can you Ack patch 4 of the series to get all applied through CLK tree?
 
-My interest is in buying real estate, private schools or companies with
-potentials for rapid growth in long terms.
+Thanks!
 
-So please confirm interest by responding back.
-
-My dearest regards
-
-Seyba Daniel
+Best regards,
+    Sergio Paracuellos
