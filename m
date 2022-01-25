@@ -2,74 +2,74 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0659749B9E8
-	for <lists+linux-clk@lfdr.de>; Tue, 25 Jan 2022 18:16:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB94E49B9F3
+	for <lists+linux-clk@lfdr.de>; Tue, 25 Jan 2022 18:17:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351985AbiAYRPc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 25 Jan 2022 12:15:32 -0500
-Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:51442
-        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238286AbiAYRN3 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 25 Jan 2022 12:13:29 -0500
+        id S1455905AbiAYRPs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 25 Jan 2022 12:15:48 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:55152
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244497AbiAYRNe (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 25 Jan 2022 12:13:34 -0500
 Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com [209.85.221.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 883654004C
-        for <linux-clk@vger.kernel.org>; Tue, 25 Jan 2022 17:11:51 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id F3DF43F20A
+        for <linux-clk@vger.kernel.org>; Tue, 25 Jan 2022 17:11:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1643130711;
-        bh=nJD04sb6YlgkCDJRA+fLgaKrPYRbjxz+KSgh9HtSg7M=;
+        s=20210705; t=1643130713;
+        bh=g7yYrXHImPhCQwOj0UskOn25n3xq1OGmRzWasb1bHQQ=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version:Content-Type;
-        b=Hy+Xq28Q947HPl7lWkrTl4U8LKoN8K00zLywrsYmMuXZLqThbz8AysF9eYc4TN5Ja
-         tiZPDHhAhektlFDFDhIcJvxO4ELMAgIyAeFLU2l+jlWQ/qpGtdeMMKNzXB6EqFa9LK
-         TyIo8bq8577NNl138slYoRvpNA4PCM/ONqIrvqjMblA7Ae1OaEgQcC9dGsuwAGc7Pa
-         kzzxo75Na+RlmVJxtFDfzZzhRpS59PJhDSLOAvxaHgZ26djQ/gXXgw9Lzzg+nqhKCY
-         3qex8utXZ2Ks+DTvdD8hfzhV0+djXSB7lVGODQjidPsNwlbCIcAVz8+6MKyAFRS7V8
-         Qy+9jWj1Eg1ag==
-Received: by mail-wr1-f69.google.com with SMTP id g6-20020adfbc86000000b001a2d62be244so3335015wrh.23
-        for <linux-clk@vger.kernel.org>; Tue, 25 Jan 2022 09:11:51 -0800 (PST)
+        b=v58fsI5ZjRXi8vtti/QlBrn+BOsq6CYW2107452tJfEbmRYd/yeIC4lINq4Gpk7xV
+         zLByh1QZLgsg55tDec9WEl42LNlGeG5a69Sy+dMtaKq7v1nCunln1mbB1PqCmw6qBG
+         oHskFQWoWurXCpP0ssQCkzfod6Oad9uX3uwo8Z7Xy1AD4VNd2FiNWrr2epthotjm2O
+         WRR+OVU6rLvhDOeBwHyrNMn1EzG0PLFvegzJOKol3frUPG+bJJyYwim1DcrN0fQFmG
+         zmePwj03jL6YGk+V7a/kl00wF8F6F4C/kBknk1f9Z7byUmgb0nlagLzk/V8XOuYAv+
+         495H4f76fpd4A==
+Received: by mail-wr1-f69.google.com with SMTP id c10-20020adfa30a000000b001d79c73b64bso3349176wrb.1
+        for <linux-clk@vger.kernel.org>; Tue, 25 Jan 2022 09:11:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=nJD04sb6YlgkCDJRA+fLgaKrPYRbjxz+KSgh9HtSg7M=;
-        b=yZEJ0ke+E0P92s9lJrGNCNyyWyuY20R7s/UqU8q29qDeAQ+kd9UDbO5r8oXF93vVx2
-         VpWM8dus+2GGZd6ATAdlGJ6jtiygjIQMvY4JwEzbE1ryGdAzRghCScLWkY2oWdbCgm4M
-         YKB/boISP2dkt/042SZEK686IzRsu8OFVV6dUnEC4Vu4zmKE9qoscvMla3M2XKoy5Iau
-         zpLx4LbvhQZRMilXEFpBaaBmDrPo0ve2HTN35aEPm58dOrcAXw41km69bhYpwzWEbZ1U
-         YB46NdFOaUSKv0qlmBzkP+lNgRkVPI8s33krMH70nIXagIAR333GAOs6wX+KTaSFcGb8
-         TSDw==
-X-Gm-Message-State: AOAM533CJG+BLW2TRPxkaqS7GuOYb2rbWclNl941cgVmwZFFz5SkDBrV
-        S4ZY9AKDMdM/Cndwn3oYPDzIb5BMrfy5ZMRxFnhU+S/iSyMALqtefod/u4qX90pfNPCEdpINAsG
-        xrCB1Q1NhBeSi35wv9GGpmwvjwwUyXH2zSCw99w==
-X-Received: by 2002:adf:aa4b:: with SMTP id q11mr275074wrd.133.1643130710993;
-        Tue, 25 Jan 2022 09:11:50 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwPqH6ulE3sqPBWWffAmdgL6WA3sDpkRpkDHhrb5WblxRR/QVuQqNilQduWRS+6/UDQMl7bTA==
-X-Received: by 2002:adf:aa4b:: with SMTP id q11mr275059wrd.133.1643130710867;
-        Tue, 25 Jan 2022 09:11:50 -0800 (PST)
+        bh=g7yYrXHImPhCQwOj0UskOn25n3xq1OGmRzWasb1bHQQ=;
+        b=QW07L3khgU4QULjPK/ihAZqxz9J2f8riC6dMBpV0FIqOPhkUmv7um3ycsviNklwWDh
+         6qMfEis0fd13LIx1xICAcyxuEEpN9b3YrTcoyYheWgDA3uycGuSRMwmiYGaBYCM6iOKG
+         5ld1sC2tAW4CuWu8YUY4OfzfamzAvt69UQ5JW+5YkJknGNBWzFu8IvimCwIjePAi6RFJ
+         3cdQ9dM3Ow2eQuuFLAQJUt5lTz6J8x13+S8SmNwggAaTlt+dV2dD22WN+ArO4VBdob/1
+         HFxpHU65jVpU4N1DYZKDOqTGSxfZ8ZiVS3QO76K5TqjbO/Dv8CXLGoEwreRYNMNYQIR+
+         I15w==
+X-Gm-Message-State: AOAM532AEUcjDfPbKHE1n+bD9ZPSh8SswA+bLkULgFloaFrwOOPYe83J
+        kAJMrrS6OodarB+J0umjeEASDUmr0iQ61caZ8mT+31vL6Tryj6JF3ezviCDEwZUr+tRIRPYw8AK
+        Jsp9fAoxXeB6tcLt9AxxTJcRORvY053zo4lFGFA==
+X-Received: by 2002:adf:e592:: with SMTP id l18mr18490671wrm.217.1643130712410;
+        Tue, 25 Jan 2022 09:11:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxmNgL2L2/wufXJkt0M/aVg1sqAVlqZZAkIIrefWSMS+S6RErnsKS/CAuAI5H838RBZZxTQ1g==
+X-Received: by 2002:adf:e592:: with SMTP id l18mr18490639wrm.217.1643130712199;
+        Tue, 25 Jan 2022 09:11:52 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
-        by smtp.gmail.com with ESMTPSA id f8sm1185826wmg.44.2022.01.25.09.11.49
+        by smtp.gmail.com with ESMTPSA id f8sm1185826wmg.44.2022.01.25.09.11.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jan 2022 09:11:50 -0800 (PST)
+        Tue, 25 Jan 2022 09:11:51 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     linux-arm-kernel@lists.infradead.org,
         Alim Akhtar <alim.akhtar@samsung.com>,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        devicetree@vger.kernel.org, linus.walleij@linaro.org,
-        linux-fsd@tesla.com, olof@lixom.net, sboyd@kernel.org,
-        linux-clk@vger.kernel.org, arnd@arndb.de,
-        linux-samsung-soc@vger.kernel.org, pankaj.dubey@samsung.com,
-        catalin.marinas@arm.com, robh+dt@kernel.org, soc@kernel.org,
+        devicetree@vger.kernel.org, linux-fsd@tesla.com,
+        linus.walleij@linaro.org, olof@lixom.net, soc@kernel.org,
+        sboyd@kernel.org, linux-clk@vger.kernel.org, arnd@arndb.de,
+        linux-samsung-soc@vger.kernel.org, catalin.marinas@arm.com,
+        robh+dt@kernel.org, pankaj.dubey@samsung.com,
         s.nawrocki@samsung.com
-Subject: Re: (subset) [PATCH v5 01/16] dt-bindings: add vendor prefix for Tesla
-Date:   Tue, 25 Jan 2022 18:11:03 +0100
-Message-Id: <164313065135.81319.13219734487510623073.b4-ty@canonical.com>
+Subject: Re: (subset) [PATCH v5 13/16] dt-bindings: arm: add Tesla FSD ARM SoC
+Date:   Tue, 25 Jan 2022 18:11:04 +0100
+Message-Id: <164313065136.81319.902005401446620690.b4-ty@canonical.com>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220124141644.71052-2-alim.akhtar@samsung.com>
-References: <20220124141644.71052-1-alim.akhtar@samsung.com> <CGME20220124142857epcas5p4af44b43ce57414ad6667c84753c36f16@epcas5p4.samsung.com> <20220124141644.71052-2-alim.akhtar@samsung.com>
+In-Reply-To: <20220124141644.71052-14-alim.akhtar@samsung.com>
+References: <20220124141644.71052-1-alim.akhtar@samsung.com> <CGME20220124142951epcas5p255712c3a9e37b9542687587d8114bda3@epcas5p2.samsung.com> <20220124141644.71052-14-alim.akhtar@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -77,15 +77,15 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, 24 Jan 2022 19:46:29 +0530, Alim Akhtar wrote:
-> Add vendor prefix for the Tesla (https://www.tesla.com)
+On Mon, 24 Jan 2022 19:46:41 +0530, Alim Akhtar wrote:
+> Add device tree bindings for the Tesla FSD ARM SoC.
 > 
 > 
 
 Applied, thanks!
 
-[01/16] dt-bindings: add vendor prefix for Tesla
-        commit: a5a93e9b9ab9b4f367a773b32bbe1687006d75b7
+[13/16] dt-bindings: arm: add Tesla FSD ARM SoC
+        commit: d25c5eb511df3439cd91517bcbce4b274f8972b9
 
 Best regards,
 -- 
