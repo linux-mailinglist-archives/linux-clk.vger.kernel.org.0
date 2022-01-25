@@ -2,63 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB3549A9BC
-	for <lists+linux-clk@lfdr.de>; Tue, 25 Jan 2022 05:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 771FC49A9AC
+	for <lists+linux-clk@lfdr.de>; Tue, 25 Jan 2022 05:27:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1323366AbiAYD2I (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 24 Jan 2022 22:28:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59904 "EHLO
+        id S1356774AbiAYD0b (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 24 Jan 2022 22:26:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455538AbiAYCCD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Jan 2022 21:02:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C05C0619D0;
-        Mon, 24 Jan 2022 16:56:08 -0800 (PST)
+        with ESMTP id S3415412AbiAYBqM (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Jan 2022 20:46:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEA5C06E00F;
+        Mon, 24 Jan 2022 17:05:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0008960AF3;
-        Tue, 25 Jan 2022 00:56:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BFBAC340E4;
-        Tue, 25 Jan 2022 00:56:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38EF9B81603;
+        Tue, 25 Jan 2022 01:05:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5B04C340E4;
+        Tue, 25 Jan 2022 01:05:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643072167;
-        bh=HGL+ZuBOHbR5QhIj3i8dJ+BOoFj7BWUdJb5AT3Nbmgk=;
+        s=k20201202; t=1643072738;
+        bh=C4zBnJsZ2BHLB/IT2MtkBDaS9vKy5lnt6zqu9oZCg5w=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=G98934XM7FvuZKrSQlupbv5mzhDZPcGmLNSpyGKYSZxmQtJnSKTtbY6YPfaj8tFAS
-         1r0R9d2QOtNocB1Z0Z7O5dRWt+X5inWR1jTVZXBqHatYd9RM4SlydSVXtTaATBCzmB
-         G0+K5JxsLUw+eF0NFvBKn+tJ7OLvYgD8BPfGBWfNkJ9y+jcV9VYm8gnYEeG/5ofgId
-         Uvkr6447UGI8cuDFB5WvupF+adnZweJxTX/atXz17zOY8Yi2O+9alFIiJmc6oN8YCq
-         kxV6oB5nXOzw+y8B2sejSJKKq9kQCVQ137pI4h1QzcO42Fa7ZT+rdHc+F7zzALfMIY
-         JJdCofjxz4JxQ==
+        b=D1Mcqa6whk00jKaF4NhYbHl8B6iOCcajCt8d70fLrBNeBDOzt0Aj80tTqnrF+cATi
+         DyiVZZp9YkybjBeFeJzaHeFGzlYB2KarenVKdjIOJiaq5BRY1WjSyPYeQO6KsvIsRy
+         JFiOBrpv6J/2M7iH9ijM+1R5Faobo+Xb1HX2yzgX6oLY7MiitYFQhZHjWJhgTinQ5B
+         KWZho5ddeaTJDOPW8Zr5DtlsrfQj0XdIQiTrXSsZFF5ey8DwSRSIZafVy0v4SVX4QH
+         XqFHbSoqsNtSBqEUfrwasAauTmFYu8MYq2M/GPduujD7mO61dvz0Q3JFmOGsHt4Q/s
+         wR9vmep6Ao3NQ==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220124052038.6242-1-miles.chen@mediatek.com>
-References: <20220117090030.13064-1-miles.chen@mediatek.com> <20220124052038.6242-1-miles.chen@mediatek.com>
-Subject: Re: [PATCH] clk: mediatek: add unregister logic to mtk_clk_simple_probe error path
+In-Reply-To: <20220111142051.37957-1-admin@hifiphile.com>
+References: <20220111142051.37957-1-admin@hifiphile.com>
+Subject: Re: [PATCH] clk: at91: allow setting PMC_AUDIOPINCK clock parents via DT
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     chun-jie.chen@mediatek.com, ikjn@chromium.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        matthias.bgg@gmail.com, mturquette@baylibre.com,
-        weiyi.lu@mediatek.com
-To:     Miles Chen <miles.chen@mediatek.com>
-Date:   Mon, 24 Jan 2022 16:56:05 -0800
+Cc:     Zixun LI <admin@hifiphile.com>,
+        Claudiu Beznea <Claudiu.Beznea@microchip.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zixun LI <admin@hifiphile.com>
+Date:   Mon, 24 Jan 2022 17:05:37 -0800
 User-Agent: alot/0.10
-Message-Id: <20220125005607.5BFBAC340E4@smtp.kernel.org>
+Message-Id: <20220125010538.D5B04C340E4@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Miles Chen (2022-01-23 21:20:38)
-> Hi Stephen,
+Quoting Zixun LI (2022-01-11 06:20:50)
+> Make AUDIOPINCK accessible via phandle to select it
+> as peripheral clock parent using assigned-clock-parents in DT
+> where available.
 >=20
-> > Stephen pointed out that there is no unregister logic in
-> > mtk_clk_simple_probe() error path [1].
-> > Fix it by adding unregister logic to mtk_clk_simple_probe().
->=20
-> Chen-Yu's work [1] already addresses this problem. So please ignore
-> this patch.
+> Signed-off-by: Zixun LI <admin@hifiphile.com>
+> Reviewed-by: Claudiu Beznea <Claudiu.Beznea@microchip.com>
+> ---
 
-Alright. Thanks.
+Applied to clk-next
