@@ -2,64 +2,62 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB75249A9A6
-	for <lists+linux-clk@lfdr.de>; Tue, 25 Jan 2022 05:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CAAE49A9C7
+	for <lists+linux-clk@lfdr.de>; Tue, 25 Jan 2022 05:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356211AbiAYD0I (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 24 Jan 2022 22:26:08 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33202 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3409514AbiAYA0h (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Jan 2022 19:26:37 -0500
+        id S1323492AbiAYD2g (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 24 Jan 2022 22:28:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S3423965AbiAYCiZ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Jan 2022 21:38:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9950C06175F;
+        Mon, 24 Jan 2022 16:51:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68338B81229;
-        Tue, 25 Jan 2022 00:26:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16C42C340E4;
-        Tue, 25 Jan 2022 00:26:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96F52B810A8;
+        Tue, 25 Jan 2022 00:51:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 435C7C340E4;
+        Tue, 25 Jan 2022 00:51:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643070393;
-        bh=aoKzkc7anyXT7Y6fKPYFjdWVeGFeRLKDqWmnSy5nbHU=;
+        s=k20201202; t=1643071899;
+        bh=yzRDLvQ1vjIVlRYsbDhIDsSJXen/Z3G3DRZtgTvGlUA=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=aXAQ4slrDeQlo0cHfxwvpUdn5I/krO3FaZtb3J1TNMPJGwcyL50e1GXx2/f7PJqKr
-         U66wRnMe9UG/SsytAz6RzrM9giaMBWF6eJkbsxx8+ZEF/XOeSCWCDCU8N07bG7RtsQ
-         1hQ7t1B6CRGq8VY9H4WLEzRSWb6i83dXQ4Paurd6FKSvawJUqQjcGk0gd/xgcmJU+P
-         c/hXW3VpXZAYOzBJfYUd6nLK/d4BeU1bRbQmpm/ZrWq8njnyAlbsTeTOw2W1JIx9RU
-         R/RyQOhshJ4KRf1zI42S/PKG6FTbQVw2MD6lMlLL06/oLOpxageV7w6DSxbkF0nh4+
-         k936vaTwGOiaA==
+        b=JBLM8yTO0Ukv00hwrmiBtCeo55IkbagEIY1shJs+gUP+D0TkYhsGdAbFSfo/7aa+U
+         E7+4i0BsfWEW9oXOwke5XmMyoaj0a/rjcJELP4t8/5Ut3DMm6XjY4Ol+E+ttqs/j0s
+         hj0t1NWRmB3mQ/kdn4znEU9FNAar9xsn0oTWOI9FNi72ruvFYroiUxJ3UpjzPDau/K
+         nnnT/W05KluRK998MEGlYJ8LbviIsN89ir+EZKbWL1iAu3hmCbhTBumI7jBuIVNTat
+         VkR0YNc3OhRWIWpS+Wdy/uTPQ3ST6kKKUm7FN7IIQ3XMI824apDCu5dMy5HGepKgyw
+         2uN21gr91HV5w==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211216140022.16146-2-conor.dooley@microchip.com>
-References: <20211216140022.16146-1-conor.dooley@microchip.com> <20211216140022.16146-2-conor.dooley@microchip.com>
-Subject: Re: [PATCH v9 1/2] dt-bindings: clk: microchip: Add Microchip PolarFire host binding
+In-Reply-To: <20211203141125.2447520-1-dev_public@wujek.eu>
+References: <20211203141125.2447520-1-dev_public@wujek.eu>
+Subject: Re: [PATCH] clk: si5341: fix reported clk_rate when output divider is 2
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
-        david.abdurachmanov@gmail.com, palmer@dabbelt.com,
-        daire.mcnamara@microchip.com, cyril.jean@microchip.com,
-        conor.dooley@microchip.com, Rob Herring <robh@kernel.org>
-To:     conor.dooley@microchip.com, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, mturquette@baylibre.com,
-        robh+dt@kernel.org
-Date:   Mon, 24 Jan 2022 16:26:31 -0800
+Cc:     Adam Wujek <dev_public@wujek.eu>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+To:     Adam Wujek <dev_public@wujek.eu>,
+        Michael Turquette <mturquette@baylibre.com>
+Date:   Mon, 24 Jan 2022 16:51:37 -0800
 User-Agent: alot/0.10
-Message-Id: <20220125002633.16C42C340E4@smtp.kernel.org>
+Message-Id: <20220125005139.435C7C340E4@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting conor.dooley@microchip.com (2021-12-16 06:00:21)
-> From: Daire McNamara <daire.mcnamara@microchip.com>
+Quoting Adam Wujek (2021-12-03 06:12:07)
+> SI5341_OUT_CFG_RDIV_FORCE2 shall be checked first to distinguish whether
+> a divider for a given output is set to 2 (SI5341_OUT_CFG_RDIV_FORCE2
+> is set) or the output is disabled (SI5341_OUT_CFG_RDIV_FORCE2 not set,
+> SI5341_OUT_R_REG is set 0).
+> Before the change, divider set to 2 (SI5341_OUT_R_REG set to 0) was
+> interpreted as output is disabled.
 >=20
-> Add device tree bindings for the Microchip PolarFire system
-> clock controller
->=20
-> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
->=20
-> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Adam Wujek <dev_public@wujek.eu>
 > ---
 
 Applied to clk-next
