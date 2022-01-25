@@ -2,84 +2,95 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 645B049A9B5
-	for <lists+linux-clk@lfdr.de>; Tue, 25 Jan 2022 05:27:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 510C349A9B9
+	for <lists+linux-clk@lfdr.de>; Tue, 25 Jan 2022 05:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384328AbiAYD12 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 24 Jan 2022 22:27:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57126 "EHLO
+        id S1323324AbiAYD1y (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 24 Jan 2022 22:27:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S3416031AbiAYByK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Jan 2022 20:54:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF75C028BFF;
-        Mon, 24 Jan 2022 17:14:32 -0800 (PST)
+        with ESMTP id S1349744AbiAYCAn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 24 Jan 2022 21:00:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB12C09B047
+        for <linux-clk@vger.kernel.org>; Mon, 24 Jan 2022 17:16:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02426B815FE;
-        Tue, 25 Jan 2022 01:14:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93D9FC340E4;
-        Tue, 25 Jan 2022 01:14:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FBC661212
+        for <linux-clk@vger.kernel.org>; Tue, 25 Jan 2022 01:16:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3B5FC340E4;
+        Tue, 25 Jan 2022 01:16:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1643073269;
-        bh=vuPHwP5mvesHSyqAIvXrWSziPwVD5YCX+k4I3E3APq4=;
+        s=k20201202; t=1643073391;
+        bh=kc+g6ITavbbQw+IHrNc9P2tQVl1HkLw8o6r843h1QaI=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=MOMxz1i+dBupYvGtGZbKKOp/v5MChx3K2YKwfCQZupOUGfu7w0EggtKGwG8etHmGP
-         Wgq2lKH2GZEaq0TpI/7hKvfEnwDaUQuvmX7oKG4swynQ4zJRc9LqK5Gqf22OSNfU8c
-         Oz4AGC8QaXFcFtyog53UhMJuuiG7G7B86/iUI3c9WgH254aYhoLbpIzYeb2hDGITsW
-         2G43C3eMsNljAHoTZLKezN0S7Ubxb18/mEVI4BHZd5bhby9rz0IQTcemDPB6m1/EGi
-         2IcJEnkzbY2Cnk9Rhqfiy2ho/SesUh4aooLXCSibniW+ZTFLP3ZYCa3NltD8bp4eFz
-         wDBQ/sdDrWeBQ==
+        b=sSxge+ArTE+xYAcpztTaPgmVB2/C9SVXAoPHT4ZcmhvayrDAFPREKThrJQ2eY2My9
+         waezny0L25haJQJ/nwLmmHy7wo9y4Z1aXSAt0DbdM9OqP70R+jqVU2MTYhmAvjbH/n
+         1NaepN9wiDgqtx+7ivOfni7t0UjKexi1WHnfv8mQWSLK94E1Rf9addAlRczDF2BZ8F
+         udm6b9/n4jjl2SXNRlX3v3y1srVqZedk9ImWmNbubT2OrTirjJ6OnS4RN66r5L57ah
+         DAX11KH5BZq+PMy3iLnzVfsRlPifhSHqLg7zhaE4PtjC9lH8ZEja5mKKeINLOfpxDb
+         vIw3bYs90V0Bw==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220110114930.1406665-4-sergio.paracuellos@gmail.com>
-References: <20220110114930.1406665-1-sergio.paracuellos@gmail.com> <20220110114930.1406665-4-sergio.paracuellos@gmail.com>
-Subject: Re: [PATCH v8 3/4] clk: ralink: make system controller node a reset provider
+In-Reply-To: <20220118202958.1840431-2-marex@denx.de>
+References: <20220118202958.1840431-1-marex@denx.de> <20220118202958.1840431-2-marex@denx.de>
+Subject: Re: [PATCH 2/5] clk: stm32mp1: Add parent_data to ETHRX clock
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     john@phrozen.org, linux-staging@lists.linux.dev,
-        gregkh@linuxfoundation.org, neil@brown.name,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-clk@vger.kernel.org
-Date:   Mon, 24 Jan 2022 17:14:27 -0800
+Cc:     jneuhauser@dh-electronics.com, Marek Vasut <marex@denx.de>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Christophe Roullier <christophe.roullier@foss.st.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Patrick Delaunay <patrick.delaunay@foss.st.com>,
+        linux-clk@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+To:     Marek Vasut <marex@denx.de>, linux-arm-kernel@lists.infradead.org
+Date:   Mon, 24 Jan 2022 17:16:29 -0800
 User-Agent: alot/0.10
-Message-Id: <20220125011429.93D9FC340E4@smtp.kernel.org>
+Message-Id: <20220125011631.A3B5FC340E4@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Sergio Paracuellos (2022-01-10 03:49:29)
-> MT7621 system controller node is already providing the clocks for the who=
-le
-> system but must also serve as a reset provider. Hence, add reset controll=
-er
-> related code to the clock driver itself. To get resets properly ready for
-> the rest of the world we need to move platform driver initialization proc=
-ess
-> to 'arch_initcall'.
+Quoting Marek Vasut (2022-01-18 12:29:55)
+> Pass parent_data to ETHRX clock with new fw_name =3D "ETH_RX_CLK/ETH_REF_=
+CLK".
+> By default, this change has no impact on the operation of the clock drive=
+r.
+> However, due to the fw_name, it permits DT to override ETHRX clock parent,
+> which might be needed in case the ETHRX clock are supplied by external cl=
+ock
+> source.
 >=20
-> CC: Philipp Zabel <p.zabel@pengutronix.de>
-> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> Example of MCO2 supplying clock to ETH_RX_CLK via external pad-to-pad wir=
+e:
+> &rcc {
+>          clocks =3D <&rcc CK_MCO2>;
+>          clock-names =3D "ETH_RX_CLK/ETH_REF_CLK";
+> };
+>=20
+> Note that while this patch permits to implement this rare usecase, the is=
+sue
+> with ethernet RX and TX input clock modeling on MP1 is far more complex a=
+nd
+> requires more core plumbing.
+>=20
+> [1] STM32MP1 Reference Manual RM0436 Rev 3, Page 574,
+>     Figure 83. Peripheral clock distribution for Ethernet
+>     https://www.st.com/resource/en/reference_manual/dm00327659-stm32mp157=
+-advanced-armbased-32bit-mpus-stmicroelectronics.pdf
+>=20
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Cc: Christophe Roullier <christophe.roullier@foss.st.com>
+> Cc: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+> Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+> Cc: Patrick Delaunay <patrick.delaunay@foss.st.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: linux-stm32@st-md-mailman.stormreply.com
+> To: linux-arm-kernel@lists.infradead.org
 > ---
->  drivers/clk/ralink/clk-mt7621.c | 92 ++++++++++++++++++++++++++++++++-
->  1 file changed, 91 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/clk/ralink/clk-mt7621.c b/drivers/clk/ralink/clk-mt7=
-621.c
-> index a2c045390f00..99256659dd96 100644
-> --- a/drivers/clk/ralink/clk-mt7621.c
-> +++ b/drivers/clk/ralink/clk-mt7621.c
-> @@ -11,14 +11,17 @@
->  #include <linux/mfd/syscon.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
-> +#include <linux/reset-controller.h>
->  #include <linux/slab.h>
->  #include <dt-bindings/clock/mt7621-clk.h>
-> +#include <dt-bindings/reset/mt7621-reset.h>
 
-I can't take this patch without taking the first patch. I suppose if
-Greg is OK I can take the staging patch #4 through clk tree too? Let me
-know.
+Applied to clk-next
