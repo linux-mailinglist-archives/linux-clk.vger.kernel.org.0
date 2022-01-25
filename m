@@ -2,318 +2,240 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8198549B0D4
-	for <lists+linux-clk@lfdr.de>; Tue, 25 Jan 2022 11:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1EC49B0FF
+	for <lists+linux-clk@lfdr.de>; Tue, 25 Jan 2022 11:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234422AbiAYJtW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 25 Jan 2022 04:49:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
+        id S233696AbiAYJ50 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 25 Jan 2022 04:57:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234384AbiAYJmU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 25 Jan 2022 04:42:20 -0500
-Received: from mail.bugwerft.de (mail.bugwerft.de [IPv6:2a03:6000:1011::59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6080DC061771;
-        Tue, 25 Jan 2022 01:42:19 -0800 (PST)
-Received: from hq-00021.fritz.box (p57bc97b3.dip0.t-ipconnect.de [87.188.151.179])
-        by mail.bugwerft.de (Postfix) with ESMTPSA id 78DC85015A8;
-        Tue, 25 Jan 2022 09:33:46 +0000 (UTC)
-From:   Daniel Mack <daniel@zonque.org>
-To:     mturquette@baylibre.com, sboyd@kernel.org
-Cc:     linux-clk@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, kuninori.morimoto.gx@renesas.com,
-        Daniel Mack <daniel@zonque.org>
-Subject: [PATCH RESEND v4 9/9] clk: cs2000-cp: convert driver to regmap
-Date:   Tue, 25 Jan 2022 10:33:36 +0100
-Message-Id: <20220125093336.226787-10-daniel@zonque.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220125093336.226787-1-daniel@zonque.org>
-References: <20220125093336.226787-1-daniel@zonque.org>
+        with ESMTP id S237552AbiAYJzY (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 25 Jan 2022 04:55:24 -0500
+X-Greylist: delayed 644 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Jan 2022 01:55:22 PST
+Received: from proxima.lasnet.de (proxima.lasnet.de [IPv6:2a01:4f8:121:31eb:3::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC8AC06173D;
+        Tue, 25 Jan 2022 01:55:22 -0800 (PST)
+Received: from [IPV6:2003:e9:d71e:a9f7:7a7b:6f31:a637:f96b] (p200300e9d71ea9f77a7b6f31a637f96b.dip0.t-ipconnect.de [IPv6:2003:e9:d71e:a9f7:7a7b:6f31:a637:f96b])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: stefan@datenfreihafen.org)
+        by proxima.lasnet.de (Postfix) with ESMTPSA id F07DEC038E;
+        Tue, 25 Jan 2022 10:44:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
+        s=2021; t=1643103874;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GoIG+75u1/C8Q0IQMWQkza+f14Geqz2ci3clcv5LbbA=;
+        b=sGVaqmb8ajP7SMAimYbwmLeoz3qwgAKJtXKJhVBI6LVnprU3zcENtw8CSuIVtlDP12Ftcg
+        omtJC4WBLS9wYTTYBNtwuVwIpt9p+QXLrBu2J5mSbkoUdwkk6Q2U+dEAkWJcH84zrQEyei
+        x733CU2siv1QufCl/+nKqBu3Gb9hr+Y2jwgbd/nGY+h+cGoJ1aMrkQ/Xr04xLClVQrb7Zb
+        TfJLM6l+udOvFgWOaiKtuRju9kT+LL2mscfBK+X4SZcr+cFkeecEEkxb8wgAwr3nuwM406
+        TQmICGSC57YvMB7lqOtVDQPqzsvnI2bxJ1XBFEpgEaxjDEmWG5ZeH7Hj87MfNg==
+Message-ID: <c82b8cc0-ef82-9e8a-525c-8d811376bfae@datenfreihafen.org>
+Date:   Tue, 25 Jan 2022 10:44:28 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 5/5] spi: make remove callback a void function
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>
+Cc:     =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Emma Anholt <emma@anholt.net>,
+        David Lechner <david@lechnology.com>,
+        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dan Robertson <dan@dlrobertson.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Kent Gustavsson <kent@minoris.se>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Yasunari Takiguchi <Yasunari.Takiguchi@sony.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Charles-Antoine Couret <charles-antoine.couret@nexvision.fr>,
+        Antti Palosaari <crope@iki.fi>,
+        Lee Jones <lee.jones@linaro.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Eric Piel <eric.piel@tremplin-utc.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Thomas Kopp <thomas.kopp@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Harry Morris <h.morris@cascoda.com>,
+        Varka Bhadram <varkabhadram@gmail.com>,
+        Xue Liu <liuxuenetmail@gmail.com>, Alan Ott <alan@signal11.us>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Ajay Singh <ajay.kathat@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Solomon Peachy <pizza@shaftnet.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Mark Greer <mgreer@animalcreek.com>,
+        Benson Leung <bleung@chromium.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jerome.pouiller@silabs.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        Mike Looijmans <mike.looijmans@topic.nl>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Antoniu Miclaus <antoniu.miclaus@analog.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        =?UTF-8?Q?Ronald_Tschal=c3=a4r?= <ronald@innovation.ch>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Emmanuel Gil Peyrot <linkmauve@linkmauve.fr>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Heiko Schocher <hs@denx.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Matt Kline <matt@bitbashing.io>,
+        Torin Cooper-Bennun <torin@maxiluxsystems.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        =?UTF-8?Q?Stefan_M=c3=a4tje?= <stefan.maetje@esd.eu>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Nanyong Sun <sunnanyong@huawei.com>,
+        Yang Shen <shenyang39@huawei.com>,
+        dingsenjie <dingsenjie@yulong.com>,
+        Aditya Srivastava <yashsri421@gmail.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Michael Walle <michael@walle.cc>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        wengjianfeng <wengjianfeng@yulong.com>,
+        Sidong Yang <realwakka@gmail.com>,
+        Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
+        Zhang Qilong <zhangqilong3@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
+        Davidlohr Bueso <dbueso@suse.de>, Claudius Heine <ch@denx.de>,
+        Jiri Prchal <jiri.prchal@aksignal.cz>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        patches@opensource.cirrus.com, alsa-devel@alsa-project.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+        linux-wireless@vger.kernel.org, libertas-dev@lists.infradead.org,
+        platform-driver-x86@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        kernel@pengutronix.de
+References: <20220123175201.34839-1-u.kleine-koenig@pengutronix.de>
+ <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
+From:   Stefan Schmidt <stefan@datenfreihafen.org>
+In-Reply-To: <20220123175201.34839-6-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Regmap gives us caching, debugging infrastructure and other things for
-free and does away with open-coded bit-fiddling implementations.
 
-Signed-off-by: Daniel Mack <daniel@zonque.org>
----
- drivers/clk/Kconfig         |   1 +
- drivers/clk/clk-cs2000-cp.c | 124 ++++++++++++++++++++----------------
- 2 files changed, 69 insertions(+), 56 deletions(-)
+Hello.
 
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index 70df25b2cd8b..237a3a76118c 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -195,6 +195,7 @@ config COMMON_CLK_CDCE925
- config COMMON_CLK_CS2000_CP
- 	tristate "Clock driver for CS2000 Fractional-N Clock Synthesizer & Clock Multiplier"
- 	depends on I2C
-+	select REGMAP_I2C
- 	help
- 	  If you say yes here you get support for the CS2000 clock multiplier.
- 
-diff --git a/drivers/clk/clk-cs2000-cp.c b/drivers/clk/clk-cs2000-cp.c
-index 1baf0595ba59..dc5040a84dcc 100644
---- a/drivers/clk/clk-cs2000-cp.c
-+++ b/drivers/clk/clk-cs2000-cp.c
-@@ -11,6 +11,7 @@
- #include <linux/i2c.h>
- #include <linux/of_device.h>
- #include <linux/module.h>
-+#include <linux/regmap.h>
- 
- #define CH_MAX 4
- #define RATIO_REG_SIZE 4
-@@ -74,11 +75,36 @@
- #define REF_CLK	1
- #define CLK_MAX 2
- 
-+static bool cs2000_readable_reg(struct device *dev, unsigned int reg)
-+{
-+	return reg > 0;
-+}
-+
-+static bool cs2000_writeable_reg(struct device *dev, unsigned int reg)
-+{
-+	return reg != DEVICE_ID;
-+}
-+
-+static bool cs2000_volatile_reg(struct device *dev, unsigned int reg)
-+{
-+	return reg == DEVICE_CTRL;
-+}
-+
-+static const struct regmap_config cs2000_regmap_config = {
-+	.reg_bits	= 8,
-+	.val_bits	= 8,
-+	.max_register	= FUNC_CFG2,
-+	.readable_reg	= cs2000_readable_reg,
-+	.writeable_reg	= cs2000_writeable_reg,
-+	.volatile_reg	= cs2000_volatile_reg,
-+};
-+
- struct cs2000_priv {
- 	struct clk_hw hw;
- 	struct i2c_client *client;
- 	struct clk *clk_in;
- 	struct clk *ref_clk;
-+	struct regmap *regmap;
- 
- 	bool dynamic_mode;
- 	bool lf_ratio;
-@@ -101,41 +127,22 @@ static const struct i2c_device_id cs2000_id[] = {
- };
- MODULE_DEVICE_TABLE(i2c, cs2000_id);
- 
--#define cs2000_read(priv, addr) \
--	i2c_smbus_read_byte_data(priv_to_client(priv), addr)
--#define cs2000_write(priv, addr, val) \
--	i2c_smbus_write_byte_data(priv_to_client(priv), addr, val)
--
--static int cs2000_bset(struct cs2000_priv *priv, u8 addr, u8 mask, u8 val)
--{
--	s32 data;
--
--	data = cs2000_read(priv, addr);
--	if (data < 0)
--		return data;
--
--	data &= ~mask;
--	data |= (val & mask);
--
--	return cs2000_write(priv, addr, data);
--}
--
- static int cs2000_enable_dev_config(struct cs2000_priv *priv, bool enable)
- {
- 	int ret;
- 
--	ret = cs2000_bset(priv, DEVICE_CFG1, ENDEV1,
--			  enable ? ENDEV1 : 0);
-+	ret = regmap_update_bits(priv->regmap, DEVICE_CFG1, ENDEV1,
-+				 enable ? ENDEV1 : 0);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = cs2000_bset(priv, GLOBAL_CFG,  ENDEV2,
--			  enable ? ENDEV2 : 0);
-+	ret = regmap_update_bits(priv->regmap, GLOBAL_CFG,  ENDEV2,
-+				 enable ? ENDEV2 : 0);
- 	if (ret < 0)
- 		return ret;
- 
--	ret = cs2000_bset(priv, FUNC_CFG1, CLKSKIPEN,
--			  (enable && priv->clk_skip) ? CLKSKIPEN : 0);
-+	ret = regmap_update_bits(priv->regmap, FUNC_CFG1, CLKSKIPEN,
-+				 (enable && priv->clk_skip) ? CLKSKIPEN : 0);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -156,21 +163,21 @@ static int cs2000_ref_clk_bound_rate(struct cs2000_priv *priv,
- 	else
- 		return -EINVAL;
- 
--	return cs2000_bset(priv, FUNC_CFG1,
--			   REFCLKDIV_MASK,
--			   REFCLKDIV(val));
-+	return regmap_update_bits(priv->regmap, FUNC_CFG1,
-+				  REFCLKDIV_MASK,
-+				  REFCLKDIV(val));
- }
- 
- static int cs2000_wait_pll_lock(struct cs2000_priv *priv)
- {
- 	struct device *dev = priv_to_dev(priv);
--	s32 val;
--	unsigned int i;
-+	unsigned int i, val;
-+	int ret;
- 
- 	for (i = 0; i < 256; i++) {
--		val = cs2000_read(priv, DEVICE_CTRL);
--		if (val < 0)
--			return val;
-+		ret = regmap_read(priv->regmap, DEVICE_CTRL, &val);
-+		if (ret < 0)
-+			return ret;
- 		if (!(val & PLL_UNLOCK))
- 			return 0;
- 		udelay(1);
-@@ -184,10 +191,10 @@ static int cs2000_wait_pll_lock(struct cs2000_priv *priv)
- static int cs2000_clk_out_enable(struct cs2000_priv *priv, bool enable)
- {
- 	/* enable both AUX_OUT, CLK_OUT */
--	return cs2000_bset(priv, DEVICE_CTRL,
--			   (AUXOUTDIS | CLKOUTDIS),
--			   enable ? 0 :
--			   (AUXOUTDIS | CLKOUTDIS));
-+	return regmap_update_bits(priv->regmap, DEVICE_CTRL,
-+				  (AUXOUTDIS | CLKOUTDIS),
-+				  enable ? 0 :
-+				  (AUXOUTDIS | CLKOUTDIS));
- }
- 
- static u32 cs2000_rate_to_ratio(u32 rate_in, u32 rate_out, bool lf_ratio)
-@@ -235,7 +242,7 @@ static int cs2000_ratio_set(struct cs2000_priv *priv,
- 
- 	val = cs2000_rate_to_ratio(rate_in, rate_out, priv->lf_ratio);
- 	for (i = 0; i < RATIO_REG_SIZE; i++) {
--		ret = cs2000_write(priv,
-+		ret = regmap_write(priv->regmap,
- 				   Ratio_Add(ch, i),
- 				   Ratio_Val(val, i));
- 		if (ret < 0)
-@@ -247,14 +254,14 @@ static int cs2000_ratio_set(struct cs2000_priv *priv,
- 
- static u32 cs2000_ratio_get(struct cs2000_priv *priv, int ch)
- {
--	s32 tmp;
-+	unsigned int tmp, i;
- 	u32 val;
--	unsigned int i;
-+	int ret;
- 
- 	val = 0;
- 	for (i = 0; i < RATIO_REG_SIZE; i++) {
--		tmp = cs2000_read(priv, Ratio_Add(ch, i));
--		if (tmp < 0)
-+		ret = regmap_read(priv->regmap, Ratio_Add(ch, i), &tmp);
-+		if (ret < 0)
- 			return 0;
- 
- 		val |= Val_Ratio(tmp, i);
-@@ -271,15 +278,15 @@ static int cs2000_ratio_select(struct cs2000_priv *priv, int ch)
- 	if (CH_SIZE_ERR(ch))
- 		return -EINVAL;
- 
--	ret = cs2000_bset(priv, DEVICE_CFG1, RSEL_MASK, RSEL(ch));
-+	ret = regmap_update_bits(priv->regmap, DEVICE_CFG1, RSEL_MASK, RSEL(ch));
- 	if (ret < 0)
- 		return ret;
- 
- 	fracnsrc = priv->dynamic_mode ? FRACNSRC_DYNAMIC : FRACNSRC_STATIC;
- 
--	ret = cs2000_bset(priv, DEVICE_CFG2,
--			  AUTORMOD | LOCKCLK_MASK | FRACNSRC_MASK,
--			  LOCKCLK(ch) | fracnsrc);
-+	ret = regmap_update_bits(priv->regmap, DEVICE_CFG2,
-+				 AUTORMOD | LOCKCLK_MASK | FRACNSRC_MASK,
-+				 LOCKCLK(ch) | fracnsrc);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -326,8 +333,8 @@ static int cs2000_select_ratio_mode(struct cs2000_priv *priv,
- 	 */
- 	priv->lf_ratio = priv->dynamic_mode && ((rate / parent_rate) > 4096);
- 
--	return cs2000_bset(priv, FUNC_CFG2, LFRATIO_MASK,
--			   priv->lf_ratio ? LFRATIO_20_12 : LFRATIO_12_20);
-+	return regmap_update_bits(priv->regmap, FUNC_CFG2, LFRATIO_MASK,
-+				  priv->lf_ratio ? LFRATIO_20_12 : LFRATIO_12_20);
- }
- 
- static int __cs2000_set_rate(struct cs2000_priv *priv, int ch,
-@@ -336,7 +343,7 @@ static int __cs2000_set_rate(struct cs2000_priv *priv, int ch,
- {
- 	int ret;
- 
--	ret = cs2000_bset(priv, GLOBAL_CFG, FREEZE, FREEZE);
-+	ret = regmap_update_bits(priv->regmap, GLOBAL_CFG, FREEZE, FREEZE);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -352,7 +359,7 @@ static int __cs2000_set_rate(struct cs2000_priv *priv, int ch,
- 	if (ret < 0)
- 		return ret;
- 
--	ret = cs2000_bset(priv, GLOBAL_CFG, FREEZE, 0);
-+	ret = regmap_update_bits(priv->regmap, GLOBAL_CFG, FREEZE, 0);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -469,8 +476,8 @@ static int cs2000_clk_register(struct cs2000_priv *priv)
- 		 priv->dynamic_mode ? "dynamic" : "static");
- 
- 	of_property_read_u32(np, "cirrus,aux-output-source", &aux_out);
--	ret = cs2000_bset(priv, DEVICE_CFG1,
--			  AUXOUTSRC_MASK, AUXOUTSRC(aux_out));
-+	ret = regmap_update_bits(priv->regmap, DEVICE_CFG1,
-+				 AUXOUTSRC_MASK, AUXOUTSRC(aux_out));
- 	if (ret < 0)
- 		return ret;
- 
-@@ -522,12 +529,13 @@ static int cs2000_clk_register(struct cs2000_priv *priv)
- static int cs2000_version_print(struct cs2000_priv *priv)
- {
- 	struct device *dev = priv_to_dev(priv);
--	s32 val;
- 	const char *revision;
-+	unsigned int val;
-+	int ret;
- 
--	val = cs2000_read(priv, DEVICE_ID);
--	if (val < 0)
--		return val;
-+	ret = regmap_read(priv->regmap, DEVICE_ID, &val);
-+	if (ret < 0)
-+		return ret;
- 
- 	/* CS2000 should be 0x0 */
- 	if (val >> 3)
-@@ -576,6 +584,10 @@ static int cs2000_probe(struct i2c_client *client,
- 	priv->client = client;
- 	i2c_set_clientdata(client, priv);
- 
-+	priv->regmap = devm_regmap_init_i2c(client, &cs2000_regmap_config);
-+	if (IS_ERR(priv->regmap))
-+		return PTR_ERR(priv->regmap);
-+
- 	ret = cs2000_clk_get(priv);
- 	if (ret < 0)
- 		return ret;
--- 
-2.31.1
+On 23.01.22 18:52, Uwe Kleine-König wrote:
+> The value returned by an spi driver's remove function is mostly ignored.
+> (Only an error message is printed if the value is non-zero that the
+> error is ignored.)
+> 
+> So change the prototype of the remove function to return no value. This
+> way driver authors are not tempted to assume that passing an error to
+> the upper layer is a good idea. All drivers are adapted accordingly.
+> There is no intended change of behaviour, all callbacks were prepared to
+> return 0 before.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
 
+[...]
+
+>   drivers/net/ieee802154/adf7242.c                      |  4 +---
+>   drivers/net/ieee802154/at86rf230.c                    |  4 +---
+>   drivers/net/ieee802154/ca8210.c                       |  6 ++----
+>   drivers/net/ieee802154/cc2520.c                       |  4 +---
+>   drivers/net/ieee802154/mcr20a.c                       |  4 +---
+>   drivers/net/ieee802154/mrf24j40.c                     |  4 +---
+
+[...]
+
+For the ieee802154 drivers:
+
+Acked-by: Stefan Schmidt <stefan@datenfreihafen.org>
+
+regards
+Stefan Schmidt
