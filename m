@@ -2,106 +2,112 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 547C949D1DC
-	for <lists+linux-clk@lfdr.de>; Wed, 26 Jan 2022 19:37:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4270D49D512
+	for <lists+linux-clk@lfdr.de>; Wed, 26 Jan 2022 23:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbiAZShu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 26 Jan 2022 13:37:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiAZSht (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 26 Jan 2022 13:37:49 -0500
-X-Greylist: delayed 117 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 26 Jan 2022 10:37:49 PST
-Received: from mxd1.seznam.cz (mxd1.seznam.cz [IPv6:2a02:598:a::78:210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A05C06161C
-        for <linux-clk@vger.kernel.org>; Wed, 26 Jan 2022 10:37:49 -0800 (PST)
-Received: from email.seznam.cz
-        by email-smtpc26b.ko.seznam.cz (email-smtpc26b.ko.seznam.cz [10.53.18.37])
-        id 37f13abf6cff6ed63658f6e1;
-        Wed, 26 Jan 2022 19:37:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
-        t=1643222267; bh=N7Z0TgBqcMlNBuyZQo/fdQSFLPZ4eH8wQaILENj49WE=;
-        h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
-         References:MIME-Version:Content-Transfer-Encoding:X-szn-frgn:
-         X-szn-frgc;
-        b=EfR5kGOmXy429GwnKStSD0LKxPuqfi0i0oExBUqC0y6eVGQ1ima1XfivdjXGPA7+4
-         cJXwzScqwlgpKzAqYoyXKR0/mQrHTRNX/+ddRKdyi+1FtBzBTjLhUp7QPr6OL6aN4P
-         Xqv7qCq8S8wztdFK8rwa4IhjskVdHKahWmiaiMXQ=
-Received: from localhost.localdomain (ip-244-214.dynamic.ccinternet.cz [185.148.214.244])
-        by email-relay21.ko.seznam.cz (Seznam SMTPD 1.3.136) with ESMTP;
-        Wed, 26 Jan 2022 19:35:27 +0100 (CET)  
-From:   michael.srba@seznam.cz
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        id S232955AbiAZWLK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 26 Jan 2022 17:11:10 -0500
+Received: from mail-ot1-f41.google.com ([209.85.210.41]:43876 "EHLO
+        mail-ot1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232925AbiAZWLF (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 26 Jan 2022 17:11:05 -0500
+Received: by mail-ot1-f41.google.com with SMTP id j38-20020a9d1926000000b0059fa6de6c71so674398ota.10;
+        Wed, 26 Jan 2022 14:11:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=mWzFgIdFBfjTrsmYvpDvQiTB3AYUGt3QjdlF8YKt81o=;
+        b=RT1m7CGSZvih/vfj89e0qh1HIZgPE5hKmv8oAUsaCEmNUkZCHPsYmAVoczgt2R4Fqf
+         Ag3mmzn4vtwnZlw0LbLALcefIVUKDwq5VJYvmcqOoYo18QcmqTYqZuLyrRz/L8lvBUW/
+         QsqxUSiyf1VeOgd0jTsL1Hmk6NtpABNqEVNDcJOEDU6ZjQbsx1s5/f2PuwE6Md+c50lB
+         1uUNhTuTTtzmwynv1w9S9rFlDQWL47AUDzIA7VPo8zwmvqRqI6HkfpNvhtS5ahT4vr/H
+         vuIi+CHZVj8VXegoDM3a7slX+DmcPtuz9Ih3CXKWDL3+ltl6fWUxZ4QO5IvO2zBwEAL8
+         Da+g==
+X-Gm-Message-State: AOAM531saVec5O9k0dH1cKoU9owO5Wg6jDTd5Py1TZsL81qQ9EAgDOED
+        wixHUCb/bH0E/IYmHZpUyw==
+X-Google-Smtp-Source: ABdhPJw5ToBw3P3H9Ryzc7tRQt+hkw/HI9tQEKtEPH0l0u1PGZUDhWxMmp4AzUxfZ97PPLdUJuJGBw==
+X-Received: by 2002:a05:6830:1e11:: with SMTP id s17mr492020otr.347.1643235064885;
+        Wed, 26 Jan 2022 14:11:04 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id k17sm9189614otk.80.2022.01.26.14.11.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jan 2022 14:11:04 -0800 (PST)
+Received: (nullmailer pid 1535100 invoked by uid 1000);
+        Wed, 26 Jan 2022 22:10:52 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     michael.srba@seznam.cz
+Cc:     Andy Gross <agross@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Srba <Michael.Srba@seznam.cz>,
         Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Saravana Kannan <saravanak@google.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, Michael Srba <michael.srba@seznam.cz>,
-        Michael Srba <Michael.Srba@seznam.cz>
-Subject: [PATCH v4 5/5] arm64: dts: qcom: msm8998: reserve potentially inaccessible clocks
-Date:   Wed, 26 Jan 2022 19:32:50 +0100
-Message-Id: <20220126183250.11924-5-michael.srba@seznam.cz>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220126183250.11924-1-michael.srba@seznam.cz>
-References: <20220126183250.11924-1-michael.srba@seznam.cz>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-szn-frgn: <ca8c4a70-7e2b-42fd-9f40-80c58c1e4f75>
-X-szn-frgc: <0>
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
+In-Reply-To: <20220126183250.11924-3-michael.srba@seznam.cz>
+References: <20220126183250.11924-1-michael.srba@seznam.cz> <20220126183250.11924-3-michael.srba@seznam.cz>
+Subject: Re: [PATCH v4 3/5] dt-bindings: bus: add device tree bindings for qcom,ssc-block-bus
+Date:   Wed, 26 Jan 2022 16:10:52 -0600
+Message-Id: <1643235052.876294.1535099.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Michael Srba <michael.srba@seznam.cz>
+On Wed, 26 Jan 2022 19:32:48 +0100, michael.srba@seznam.cz wrote:
+> From: Michael Srba <Michael.Srba@seznam.cz>
+> 
+> This patch adds bindings for the AHB bus which exposes the SCC block in
+> the global address space. This bus (and the SSC block itself) is present
+> on certain qcom SoCs.
+> 
+> In typical configuration, this bus (as some of the clocks and registers
+> that we need to manipulate) is not accessible to the OS, and the
+> resources on this bus are indirectly accessed by communicating with a
+> hexagon CPU core residing in the SSC block. In this configuration, the
+> hypervisor is the one performing the bus initialization for the purposes
+> of bringing the haxagon CPU core out of reset.
+> 
+> However, it is possible to change the configuration, in which case this
+> binding serves to allow the OS to initialize the bus.
+> 
+> Signed-off-by: Michael Srba <Michael.Srba@seznam.cz>
+> ---
+>  CHANGES:
+>  - v2: fix issues caught by by dt-schema
+>  - v3: none
+>  - v4: address the issues pointed out in the review
+> ---
+>  .../bindings/bus/qcom,ssc-block-bus.yaml      | 150 ++++++++++++++++++
+>  1 file changed, 150 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/bus/qcom,ssc-block-bus.yaml
+> 
 
-With the gcc driver now being more complete and describing clocks which
-might not always be write-accessible to the OS, conservatively specify
-all such clocks as protected in the SoC dts.
-The board dts - or even user-supplied dts - can override this property
-to reflect the actual configuration.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Signed-off-by: Michael Srba <Michael.Srba@seznam.cz>
----
- CHANGES:
- - v2: add this patch
- - v3: fix missing Signed-off-by
- - v4: add a proper explanation as per review, (hopefully) fix the subject and commit message
----
- arch/arm64/boot/dts/qcom/msm8998.dtsi | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/bus/qcom,ssc-block-bus.yaml:86:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-index f273bc1ff629..16dccf9d881e 100644
---- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-@@ -863,6 +863,21 @@ gcc: clock-controller@100000 {
- 
- 			clock-names = "xo", "sleep_clk";
- 			clocks = <&xo>, <&sleep_clk>;
-+
-+			/*
-+			 * The hypervisor typically configures the memory region where these clocks
-+			 * reside as read-only for the HLOS. If the HLOS tried to enable or disable
-+			 * these clocks on a device with such configuration (e.g. because they are
-+			 * enabled but unused during boot-up), the device will most likely decide
-+			 * to reboot.
-+			 * In light of that, we are conservative here and we list all such clocks
-+			 * as protected. The board dts (or a user-supplied dts) can override the
-+			 * list of protected clocks if it differs from the norm, and it is in fact
-+			 * desired for the HLOS to manage these clocks
-+			 */
-+			protected-clocks = <AGGRE2_SNOC_NORTH_AXI>,
-+					   <SSC_XO>,
-+					   <SSC_CNOC_AHBS_CLK>;
- 		};
- 
- 		rpm_msg_ram: sram@778000 {
--- 
-2.34.1
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/bus/qcom,ssc-block-bus.example.dt.yaml:0:0: /example-0/soc/bus@10ac008/pinctrl@5e10000: failed to match any schema with compatible: ['qcom,msm8998-ssc-tlmm-pinctrl']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1584622
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
