@@ -2,90 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 513624A2D7F
-	for <lists+linux-clk@lfdr.de>; Sat, 29 Jan 2022 10:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 779244A3107
+	for <lists+linux-clk@lfdr.de>; Sat, 29 Jan 2022 18:34:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237480AbiA2JwX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 29 Jan 2022 04:52:23 -0500
-Received: from mout.gmx.net ([212.227.15.15]:53347 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237502AbiA2JwV (ORCPT <rfc822;linux-clk@vger.kernel.org>);
-        Sat, 29 Jan 2022 04:52:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1643449935;
-        bh=gRoLgReVt9sFMKKgTgP9bxEx0JJNCyYEO1Me2LoeXqw=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=C7xHbw6ntN6xluwDa+g4kH8xrQQZpYeq6yLleXEIo9Q9jvAIFx5bCFY5C60avI2Dt
-         cEYZfbzzrPT2XArpBXs4gb7X3S2O6ep8egRmbnuSxPLVeE7vBbt0pBRIB8azvqqsME
-         y5PxRDCVRJGchMlZp5f3/GJP6lAjYHH7mbdcFj9Q=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.194.160]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M2f5Z-1nF6mG2kIB-0048sg; Sat, 29
- Jan 2022 10:52:15 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-clk@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        id S244452AbiA2ReP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 29 Jan 2022 12:34:15 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:58492
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244373AbiA2ReO (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 29 Jan 2022 12:34:14 -0500
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 370893FFFC
+        for <linux-clk@vger.kernel.org>; Sat, 29 Jan 2022 17:34:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1643477652;
+        bh=ZuEiDOWhV4/MXvSraxhDORfUTCUItaxIltcgFzmODQE=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=OsaYhI0gc6zmL8d5whKQhGM88RTgDF7yXiBeQGoJuU+K1Kzkq9eA0LkK73H7cpLn7
+         eZf4wX0HydSC3cJAF0+OBJxqtb4bKGuY2n0+jgtL2GGAObP/fnZSh7B+qyJVMBlqqw
+         4y7j7kkPyTzP0EqMeP2rZQWIB4XsvKDSPtwY2viY1UX3X86m0fbc7+ZDH+5FZ9OMN6
+         nzjTzZSJ7umgMBHV22wiP0WXeppw1avQwftEkvrfS+pFh+xQIQP+wbhZW3Q6YUR+wA
+         nNgQEKBcG2Cy5TOqMvrFguf0Ec93E5SGwUihfmcgQr3GIe1FDIwwe5H/zk9AR98Ako
+         lsScWgIhM2fdQ==
+Received: by mail-ed1-f69.google.com with SMTP id b26-20020a056402139a00b004094fddbbdfso4689521edv.12
+        for <linux-clk@vger.kernel.org>; Sat, 29 Jan 2022 09:34:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZuEiDOWhV4/MXvSraxhDORfUTCUItaxIltcgFzmODQE=;
+        b=JrKmkNW+FNqwLt7oVEkUc8VjTAWiaKJZmq4UR6iBKcG9wVAvybCrp3njYwQP9UStp7
+         7CTYdqWVeKewHtkeO7dYr3VA4w2/Llm1vlXdBQHdfo3yQaPUZxsDlU2LUPDrxydfZA1G
+         RSuUTYTS+VwQCfzUFANa+TkNThpt0N4RGvZDvqq+78EBSySIlap283UnSd5A0HxiUd8P
+         qXgAVin0e3k+tRGNknJWfX/L0pCGO85L7DChS9A7Vsmrc3rjpX9SXTNUVaTa12cwuNez
+         Ttp6QEY4zcecRWmlNE47CURS9Q9bYKJlWF7KOYQ/NJBJRzprRU1Vkx59o5blrqbhTIlj
+         XFMw==
+X-Gm-Message-State: AOAM532FF1lgIYGih1AuePZJwxMAXNFZgy52gmvBcgeUOss0yEj22pNl
+        jY1wwKqT1dpllWgXUJmH7748WTbzddvwvMNfYjlp06Lk9dygHqnvTOcRJVR6J66aqYm+a4bTTAD
+        3YKR9Qmm419gHqxwp5tiXvNIXMpMZwK88fMgBTA==
+X-Received: by 2002:a17:907:2cc7:: with SMTP id hg7mr5203865ejc.288.1643477651658;
+        Sat, 29 Jan 2022 09:34:11 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwiwyRKb0YWVvVPEq/FWwv5yWs8r/pn2KnZovPieiPe70Duqq+TiEIpanQItvzLIpNIJNkH6w==
+X-Received: by 2002:a17:907:2cc7:: with SMTP id hg7mr5203843ejc.288.1643477651452;
+        Sat, 29 Jan 2022 09:34:11 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-168-84.adslplus.ch. [188.155.168.84])
+        by smtp.gmail.com with ESMTPSA id e18sm14886981edj.85.2022.01.29.09.34.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 29 Jan 2022 09:34:11 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH 5/5] clk: pistachio: Declare mux table as const u32[]
-Date:   Sat, 29 Jan 2022 10:51:58 +0100
-Message-Id: <20220129095159.2202366-6-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220129095159.2202366-1-j.neuschaefer@gmx.net>
-References: <20220129095159.2202366-1-j.neuschaefer@gmx.net>
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>
+Subject: [PATCH] clk: samsung: fix missing Tesla FSD dependency on Exynos
+Date:   Sat, 29 Jan 2022 18:34:07 +0100
+Message-Id: <20220129173407.278591-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:KE34mcs5juQ711y5ONeWmE3pM2pJTHQcjAqXXEo6hqDu3hKtRb8
- oWLGrhaqghRtr1ay00lRaJZcxlQXQSChmKqjGBMYweOXYz0FoyaCcjGux6qoOrI8VEQItWY
- ZsdC122xXAPDo8tVEAU38QSlZ2v8/gCcfphFtFrJH4DMywKO2IzNO6XtpPFEHQhFYpXWgEt
- G3P6rzIOoqOV29jrlZsFw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:cXKG2Akly48=:QciOPHrQgYxI/ETkmFgGn9
- sus+9uF/epI5kONu7NoLtMOZOmpX7zFs+gMTa2tXO8k3LIIun3TJAjyRqh+d7PTduaRmhP3Vo
- s5uv1pgkqGN9qFHECnrJXcuI2CbqtMUp0C6I+jklZ+jhoPY2gfFEwtucpRttDhDwfNojUhPx1
- /UYTddRqdLujmObhwHGgJNBrtC4IAEvwY7ZDmT/YeKj5T8pQ5G7LxCInmY2PMG7SjIooH5Hyc
- xlaWs/DX3IxnTbk/ScyMcEPv/YMSByceloQzzLoyOyk41+6YwiY9rx2+hn3Z7vwje2OT8as/H
- glnGxY7pxxuyi3QhljcKAeG4438rnij2CwpDM8p7HIYOTPOjgGLfB8A8NTqPQ2vPkhT9bkeoc
- Taa+EyP9QdSRE/bRrzW05RhI/sFhnHbbxV4vJYZc4sIJWsYidBptmxKwPo40PYAuPcqTZH3AP
- PJWyPXOutWkgMx+pOsXNrjUqHG+Tfrp910XOd2vzKEqB3nHX6Xma1h+A3TRMlkokuv9ymG2Dt
- T9L8OFbE4CrHExEGkBxe7NyZpoOLUbDpHAV6IS+IpOj7OMIYPwAXmLK8I+97B+U2n7Bdhk9PH
- Tbck6jojmVUmeW0Qhq671uvef/czzS4qEGhjg8HsvGrEx+V+p9ujLQk664fUIJ2VtBDNDeuo/
- F6UPbaISC+FlxHVe5m4YSd2SYI5UuP5kjiOEQkFKCV27GWxgvl2yn/UomRxvFkV+N9NOmeqNU
- hLKNgS9dqCOe1aPRd5PTEXwLivSFoG2g/SeVnaHQZQD+4ObhxfnRy8vobAGeLaMDsdL9aeZza
- rQ1KTnwj5+FyCoGNJvWrbMruDn99PnCDTs+5LZ/pF7reiQG9pYQTspfccsG1WX1243ANHsbXE
- 6esTqn944NXWWeK0HVMrFmb9PD94MV6t4/gOxEfkmvVkgcmmIhust1AniR0FND+z0cxj409Vo
- V6cRK8QtJmALWkYgKkngv5druxSlAEIa7caS9zjKYhDekiFwd+b7vJOOJwfz06wkN1Djcz8gB
- oJNHjkWU/8CjiNi9AfaBvVn7mnLgiKvkSk3Rf68pAisK39vuA4xLBLshbQalw2IFm3OviD5sE
- 4x08IuhviEb4Sw=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Now that clk_register_mux_table takes a const u32 *, we can declare the
-mux table as const u32[].
+The Tesla FSD clock controller driver uses shared parts from Exynos
+ARM64 clock drivers, so add proper dependency to fix COMPILE_TEST build
+errors like:
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- drivers/clk/pistachio/clk-pistachio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  /usr/bin/aarch64-linux-gnu-ld: drivers/clk/samsung/clk-fsd.o: in function `fsd_cmu_probe':
+  clk-fsd.c:(.init.text+0x9c): undefined reference to `exynos_arm64_register_cmu'
 
-diff --git a/drivers/clk/pistachio/clk-pistachio.c b/drivers/clk/pistachio=
-/clk-pistachio.c
-index 76f492c7e917e..2a6d583237dc7 100644
-=2D-- a/drivers/clk/pistachio/clk-pistachio.c
-+++ b/drivers/clk/pistachio/clk-pistachio.c
-@@ -154,7 +154,7 @@ static struct pistachio_pll pistachio_plls[] __initdat=
-a =3D {
- PNAME(mux_debug) =3D { "mips_pll_mux", "rpu_v_pll_mux",
- 		     "rpu_l_pll_mux", "sys_pll_mux",
- 		     "wifi_pll_mux", "bt_pll_mux" };
--static u32 mux_debug_idx[] =3D { 0x0, 0x1, 0x2, 0x4, 0x8, 0x10 };
-+static const u32 mux_debug_idx[] =3D { 0x0, 0x1, 0x2, 0x4, 0x8, 0x10 };
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: e3f3dc3810d3 ("clk: samsung: fsd: Add cmu_peric block clock information")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+---
+ drivers/clk/samsung/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
- static unsigned int pistachio_critical_clks_core[] __initdata =3D {
- 	CLK_MIPS
-=2D-
-2.34.1
+diff --git a/drivers/clk/samsung/Kconfig b/drivers/clk/samsung/Kconfig
+index 5f64c58f120f..8e8245ab3fd1 100644
+--- a/drivers/clk/samsung/Kconfig
++++ b/drivers/clk/samsung/Kconfig
+@@ -129,6 +129,7 @@ config S3C2443_COMMON_CLK
+ config TESLA_FSD_COMMON_CLK
+ 	bool "Tesla FSD clock controller support" if COMPILE_TEST
+ 	depends on COMMON_CLK_SAMSUNG
++	depends on EXYNOS_ARM64_COMMON_CLK
+ 	help
+ 	  Support for the clock controller present on the Tesla FSD SoC.
+ 	  Choose Y here only if you build for this SoC.
+-- 
+2.32.0
 
