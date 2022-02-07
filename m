@@ -2,49 +2,50 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9C04ABF5F
-	for <lists+linux-clk@lfdr.de>; Mon,  7 Feb 2022 14:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C82DA4ABF19
+	for <lists+linux-clk@lfdr.de>; Mon,  7 Feb 2022 14:23:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234616AbiBGM6I (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 7 Feb 2022 07:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
+        id S236024AbiBGM5W (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 7 Feb 2022 07:57:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382668AbiBGM3J (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Feb 2022 07:29:09 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C7FC1DF3CA
-        for <linux-clk@vger.kernel.org>; Mon,  7 Feb 2022 04:19:39 -0800 (PST)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2179Cq8b017276;
-        Mon, 7 Feb 2022 12:48:12 +0100
+        with ESMTP id S1390515AbiBGLy4 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Feb 2022 06:54:56 -0500
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416CEC03FEC0
+        for <linux-clk@vger.kernel.org>; Mon,  7 Feb 2022 03:51:27 -0800 (PST)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2177eodE028141;
+        Mon, 7 Feb 2022 12:49:09 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=selector1;
- bh=cJRAOFfgOf9gPaoNLn/6JXn6H8gweIgTFS6SlxTjhx8=;
- b=TkD00dzvWof6J0e5bo3szfMtab8wKVHfMf3gTlz9ZwU6EUWA7Pd2s73e1jWcTkLmRlr1
- o3Z++Qo8CNCD9jt7VzmWZpGQvFbhF4b2l6j/rf91VkGVDLI6xSwhu1sFFwWYpdibMT19
- Glor4B1bNmtQ6E5t9NVZM6aCvMK9tKDpRmKNj0WX/CNyYo+Qj7V2YexT131zXr3p42KT
- /m+VtuItn7Xok/vhuzD2SoMuzaLzWdoRTOEdc/VhGiZSNPKeQAz6NK54U1x0Jrp8M2Mh
- kJZ0jdlhWXli/Ua2r+zSTUbgHgLZC9461ltl3nm1QdfzIqIYSijbUuNxgJ9i4dCPrlPy 4A== 
+ bh=X625PkH7tVgQ0OpW/ae9JenbtwbtxQ43M08JhwRUZPw=;
+ b=bWNj7wpBXzS40BmCgYlyAFExlxr0E9pYrk9toT7r18RBU21prIlAak0U560Si5VV8hW6
+ eK+6NlKq+klZuyv8mnydpbRqu+RLYcENhTMT0yw6UPf7op7jbYsiNfTPYRH3So5DM72J
+ d/eUG/X37rA6b6jGyBnL/1tqz1hceXuWNiUjr9YRoc21uznV/hZJrWWaxZn7dsO+TPSt
+ 97CXxwLi0CuZBGg1c3yRDtGBa7jBGIBE6XvOPIxWNSnyOguvsiEpMFr/7bU5Uu3IgsQK
+ fsdYNoKaDZC0O9UBjpSgfutvf8QMI7b3TcXkQPbQQOsN2zcsFfw1HXtCYwlIUVjYXGpL ZQ== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e30kg0t7k-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3e2fg5m0p5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Feb 2022 12:48:12 +0100
+        Mon, 07 Feb 2022 12:49:09 +0100
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DFA7810002A;
-        Mon,  7 Feb 2022 12:48:11 +0100 (CET)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 13E3C10002A;
+        Mon,  7 Feb 2022 12:49:09 +0100 (CET)
 Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D79B1217B9D;
-        Mon,  7 Feb 2022 12:48:11 +0100 (CET)
-Received: from [10.48.0.252] (10.75.127.46) by SFHDAG2NODE2.st.com
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0D32E2194C8;
+        Mon,  7 Feb 2022 12:49:09 +0100 (CET)
+Received: from [10.48.0.252] (10.75.127.44) by SFHDAG2NODE2.st.com
  (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 7 Feb
- 2022 12:48:11 +0100
-Message-ID: <2e41f485-f07a-c9d5-9b0d-cc31d9039962@foss.st.com>
-Date:   Mon, 7 Feb 2022 12:48:11 +0100
+ 2022 12:49:08 +0100
+Message-ID: <477a14e5-2bff-b23f-d361-f7f3289190af@foss.st.com>
+Date:   Mon, 7 Feb 2022 12:49:08 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH 4/5] ARM: dts: stm32: Add alternate pinmux for mco2 pins
+Subject: Re: [PATCH 5/5] ARM: dts: stm32: Switch DWMAC RMII clock to MCO2 on
+ DHCOM
 Content-Language: en-US
 To:     Marek Vasut <marex@denx.de>, <linux-arm-kernel@lists.infradead.org>
 CC:     <jneuhauser@dh-electronics.com>,
@@ -55,12 +56,12 @@ CC:     <jneuhauser@dh-electronics.com>,
         Stephen Boyd <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>
 References: <20220118202958.1840431-1-marex@denx.de>
- <20220118202958.1840431-4-marex@denx.de>
+ <20220118202958.1840431-5-marex@denx.de>
 From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20220118202958.1840431-4-marex@denx.de>
+In-Reply-To: <20220118202958.1840431-5-marex@denx.de>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.46]
+X-Originating-IP: [10.75.127.44]
 X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
  (10.75.127.5)
 X-Proofpoint-Virus-Version: vendor=baseguard
@@ -77,8 +78,25 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 On 1/18/22 21:29, Marek Vasut wrote:
-> Add pinmux option for MCO2 pin. This is used on DHCOM when the
-> ethernet PHY 50 MHz clock is generated by the MCO2 on PG2 pin.
+> The DHCOM SoM has two options for supplying ETHRX clock to the DWMAC
+> block and PHY. Either (1) ETHCK_K generates 50 MHz clock on ETH_CLK
+> pad for the PHY and the same 50 MHz clock are fed back to ETHRX via
+> internal eth_clk_fb clock connection OR (2) ETH_CLK is not used at
+> all, MCO2 generates 50 MHz clock on MCO2 output pad for the PHY and
+> the same MCO2 clock are fed back into ETHRX via ETH_RX_CLK input pad
+> using external pad-to-pad connection.
+> 
+> Option (1) has two downsides. ETHCK_K is supplied directly from either
+> PLL3_Q or PLL4_P, hence the PLL output is limited to exactly 50 MHz and
+> since the same PLL output is also used to supply SDMMC blocks, the
+> performance of SD and eMMC access is affected. The second downside is
+> that using this option, the EMI of the SoM is higher.
+> 
+> Option (2) solves both of those problems, so implement it here. In this
+> case, the PLL4_P is no longer limited and can be operated faster, at
+> 100 MHz, which improves SDMMC performance (read performance is improved
+> from ~41 MiB/s to ~57 MiB/s with dd if=/dev/mmcblk1 of=/dev/null bs=64M
+> count=1). The EMI interference also decreases.
 > 
 > Signed-off-by: Marek Vasut <marex@denx.de>
 > Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>
@@ -91,37 +109,58 @@ On 1/18/22 21:29, Marek Vasut wrote:
 > Cc: linux-stm32@st-md-mailman.stormreply.com
 > To: linux-arm-kernel@lists.infradead.org
 > ---
->   arch/arm/boot/dts/stm32mp15-pinctrl.dtsi | 15 +++++++++++++++
->   1 file changed, 15 insertions(+)
+>   arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi | 22 ++++++++++++++++----
+>   1 file changed, 18 insertions(+), 4 deletions(-)
 > 
-> diff --git a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
-> index 2cd2ac9beaf20..6da84e3f05ea3 100644
-> --- a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
-> +++ b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
-> @@ -882,6 +882,21 @@ pins {
->   		};
->   	};
+> diff --git a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+> index 8c41f819f7769..b091d9901e976 100644
+> --- a/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp15xx-dhcom-som.dtsi
+> @@ -116,15 +116,29 @@ &dts {
+>   	status = "okay";
+>   };
 >   
-> +	mco2_pins_a: mco2-0 {
-> +		pins {
-> +			pinmux = <STM32_PINMUX('G', 2, AF1)>; /* MCO2 */
-> +			bias-disable;
-> +			drive-push-pull;
-> +			slew-rate = <2>;
-> +		};
-> +	};
+> +&rcc {
+> +	/* Connect MCO2 output to ETH_RX_CLK input via pad-pad connection */
+> +	clocks = <&rcc CK_MCO2>;
+> +	clock-names = "ETH_RX_CLK/ETH_REF_CLK";
 > +
-> +	mco2_sleep_pins_a: mco2-sleep-0 {
-> +		pins {
-> +			pinmux = <STM32_PINMUX('G', 2, ANALOG)>; /* MCO2 */
-> +		};
-> +	};
+> +	/*
+> +	 * Set PLL4P output to 100 MHz to supply SDMMC with faster clock,
+> +	 * set MCO2 output to 50 MHz to supply ETHRX clock with PLL4P/2,
+> +	 * so that MCO2 behaves as a divider for the ETHRX clock here.
+> +	 */
+> +	assigned-clocks = <&rcc CK_MCO2>, <&rcc PLL4_P>;
+> +	assigned-clock-parents = <&rcc PLL4_P>;
+> +	assigned-clock-rates = <50000000>, <100000000>;
+> +};
 > +
->   	m_can1_pins_a: m-can1-0 {
->   		pins1 {
->   			pinmux = <STM32_PINMUX('H', 13, AF9)>; /* CAN1_TX */
+>   &ethernet0 {
+>   	status = "okay";
+> -	pinctrl-0 = <&ethernet0_rmii_pins_a>;
+> -	pinctrl-1 = <&ethernet0_rmii_sleep_pins_a>;
+> +	pinctrl-0 = <&ethernet0_rmii_pins_b &mco2_pins_a>;
+> +	pinctrl-1 = <&ethernet0_rmii_sleep_pins_b &mco2_sleep_pins_a>;
+>   	pinctrl-names = "default", "sleep";
+>   	phy-mode = "rmii";
+>   	max-speed = <100>;
+>   	phy-handle = <&phy0>;
+> -	st,eth-ref-clk-sel;
+>   
+>   	mdio0 {
+>   		#address-cells = <1>;
+> @@ -136,7 +150,7 @@ phy0: ethernet-phy@1 {
+>   			/* LAN8710Ai */
+>   			compatible = "ethernet-phy-id0007.c0f0",
+>   				     "ethernet-phy-ieee802.3-c22";
+> -			clocks = <&rcc ETHCK_K>;
+> +			clocks = <&rcc CK_MCO2>;
+>   			reset-gpios = <&gpioh 3 GPIO_ACTIVE_LOW>;
+>   			reset-assert-us = <500>;
+>   			reset-deassert-us = <500>;
 
-Applied on stm32-next
+Applied on stm32-next using ethernet0_rmii_pins_c instead of 
+ethernet0_rmii_pins_b (same for sleep pins.
 
-thanks
+Cheers
 Alex
