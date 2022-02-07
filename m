@@ -2,126 +2,157 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F504AAC67
-	for <lists+linux-clk@lfdr.de>; Sat,  5 Feb 2022 21:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DFC64AB433
+	for <lists+linux-clk@lfdr.de>; Mon,  7 Feb 2022 07:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348720AbiBEUPG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 5 Feb 2022 15:15:06 -0500
-Received: from new2-smtp.messagingengine.com ([66.111.4.224]:57447 "EHLO
-        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243682AbiBEUPF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 5 Feb 2022 15:15:05 -0500
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 7BD35580138;
-        Sat,  5 Feb 2022 15:15:03 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sat, 05 Feb 2022 15:15:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; bh=o+YT8dM65eINM7
-        uU12V7S7CiGbJyTBQ0DTTXbszDH5A=; b=h54tOPJ+R6s9s6BX7rxDpJGJusl6Cn
-        xOA9NZHxingpnUQxIPCuN2Q+1xUvkcfjI1oewBOseZnmGJWMBkKtFewJWWFVJT9G
-        LM3Zs+0br5NdmhiLTbyy+h5fZDRR6zWwePRgWf7Vg7pGkGxqbS9W7uEzi40Ji1uh
-        Hz7XwueelqGrLCVdqDaupJ62V7FpsSUDHrob0iFOKDNkgGpMZznJUL3z7zC3hheo
-        NX3eWnUI7ZwIiDdjnH2Y3DHycxb2Tc7IlYZde2XfyZLBgP1jGhMSFAzSHBaiCuul
-        NBgZNTWHJ7UPnSE3GEslBh7nNGhGav8o83IJOU6PikBr/jF29gts0ckw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=o+YT8dM65eINM7uU12V7S7CiGbJyTBQ0DTTXbszDH
-        5A=; b=F6SKmv1B2f8Q6PEKJhn+l6Mmr4L3KXkfLRGDhxcfzEp8OaBquZH/z3lyV
-        apkOd/Q8fCqwHvnxAksFDOdl0icttpS1MCJ5vnYAo8sIAHJZSiXE5bmrvRlcFD4U
-        lTuA/BMkSnwBi1vYSrl178w2Lw6ddqctacgYcTAMrgvAdWgGKBwqrOkmrHMV208y
-        4yCPPwuWAxQI9S9OX3rnFCo81f0wvfuyJSIxm1wvcYiIwW5QPFwKxxeeR72Bvqa5
-        B5JgIvjO8+35rudcOHLc0KYroeGc0AXNjytBA9zG48XANQjAW3GwwTHg90kqfDzW
-        Ig7l6HKJlFZIsyb/tj2ouHX3CzZUg==
-X-ME-Sender: <xms:xdr-YRuEELIwf6C_80xflXTojQpWZPP3IgLorcryiRsKcCKGYZJ6PQ>
-    <xme:xdr-YaedkiIpdSYlMu7C3msF6F0NlJE3n8aY0E1G4npN5ySFTZDKeuYfXXkja33T9
-    KAWjFRT6Lb1Sb1VYg>
-X-ME-Received: <xmr:xdr-YUyCZZHO9ZVZNHXwigPCP391GD2dt19Y8zU-Wg9mK55XwRjpA9QNA_qxhciZtRuu3Di6rVsekP4RUZNvZeazexkqXhTKhG2KR4i8LohvNeb1f14WUF5m_w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrhedugddufeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepffefvdfhhefhkeefteeiheeftdevuddvleeileegtedtfeejhfej
-    kedtffdtjeeknecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgr
-    nhgurdhorhhg
-X-ME-Proxy: <xmx:xdr-YYMuPGb3RKzPx2sCF7P1sx9DpQlivNqFahdzXwfCohVlFoYh2g>
-    <xmx:xdr-YR9EcVCQoWMzpuGQJKWk1SWfUIwTsxiCcQzD1MMBxatkHu6azA>
-    <xmx:xdr-YYV36DLjVoTDTvXq26BuxeBcAuJDtdKSApyC-z6cAuq_XBB-_A>
-    <xmx:x9r-YYiSTR_JsUoQ0tmyE1mpu4vuyi0XqXo5g-70QG1FqRMHi6isXA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 5 Feb 2022 15:15:00 -0500 (EST)
-Subject: Re: [PATCH v2 02/66] dt-bindings: interconnect: sunxi: Add V3s mbus
- compatible
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
-        Yong Deng <yong.deng@magewell.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
- <20220205185429.2278860-3-paul.kocialkowski@bootlin.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <5386b1f5-9e75-4ce3-6641-bd7667c85d42@sholland.org>
-Date:   Sat, 5 Feb 2022 14:14:59 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S240970AbiBGFvN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 7 Feb 2022 00:51:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242918AbiBGCwe (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 6 Feb 2022 21:52:34 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BD1C061A73;
+        Sun,  6 Feb 2022 18:52:31 -0800 (PST)
+X-UUID: 99c12dbabde24c4f9733a4db35d00fe1-20220207
+X-UUID: 99c12dbabde24c4f9733a4db35d00fe1-20220207
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 488659191; Mon, 07 Feb 2022 10:47:26 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 7 Feb 2022 10:47:25 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 7 Feb 2022 10:47:24 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <wenst@chromium.org>
+CC:     <chun-jie.chen@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <miles.chen@mediatek.com>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>
+Subject: Re: [PATCH v2 13/31] clk: mediatek: pll: Implement unregister API
+Date:   Mon, 7 Feb 2022 10:47:25 +0800
+Message-ID: <20220207024725.14618-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220202134834.690675-14-wenst@chromium.org>
+References: <20220202134834.690675-14-wenst@chromium.org>
 MIME-Version: 1.0
-In-Reply-To: <20220205185429.2278860-3-paul.kocialkowski@bootlin.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 2/5/22 12:53 PM, Paul Kocialkowski wrote:
-> Since the V3s uses the internal mbus, document its compatible.
+> The PLL clk type within the MediaTek clk driver library only has a
+> register function, and no corresponding unregister function. This
+> means there is no way for its users to properly implement cleanup
+> and removal.
 > 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> Add a matching unregister function for the PLL type clk.
+> 
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+
+Reviewed-by: Miles Chen <miles.chen@mediatek.com>
+
 > ---
->  .../devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml  | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/clk/mediatek/clk-pll.c | 55 ++++++++++++++++++++++++++++++++++
+>  drivers/clk/mediatek/clk-pll.h |  2 ++
+>  2 files changed, 57 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml b/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml
-> index 29c9961ee2d8..b67bf9261a6a 100644
-> --- a/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml
-> +++ b/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml
-> @@ -31,6 +31,7 @@ properties:
->        - allwinner,sun5i-a13-mbus
->        - allwinner,sun8i-h3-mbus
->        - allwinner,sun8i-r40-mbus
-> +      - allwinner,sun8i-v3s-mbus
-
-Please enable the expanded binding added in commit 245578ba9f03 ("dt-bindings:
-arm: sunxi: Expand MBUS binding")[1] by adding the new compatible to the "if"
-block lower in the file. That way we can add V3S devfreq support in the future
-without changing that binding.
-
-Regards,
-Samuel
-
-[1]: https://git.kernel.org/torvalds/c/245578ba9f03
-
->        - allwinner,sun50i-a64-mbus
+> diff --git a/drivers/clk/mediatek/clk-pll.c b/drivers/clk/mediatek/clk-pll.c
+> index 64f59554bc9b..b54e33b75d4e 100644
+> --- a/drivers/clk/mediatek/clk-pll.c
+> +++ b/drivers/clk/mediatek/clk-pll.c
+> @@ -360,6 +360,21 @@ static struct clk *mtk_clk_register_pll(const struct mtk_pll_data *data,
+>  	return clk;
+>  }
 >  
->    reg:
+> +static void mtk_clk_unregister_pll(struct clk *clk)
+> +{
+> +	struct clk_hw *hw;
+> +	struct mtk_clk_pll *pll;
+> +
+> +	hw = __clk_get_hw(clk);
+> +	if (!hw)
+> +		return;
+> +
+> +	pll = to_mtk_clk_pll(hw);
+> +
+> +	clk_unregister(clk);
+> +	kfree(pll);
+> +}
+> +
+>  void mtk_clk_register_plls(struct device_node *node,
+>  		const struct mtk_pll_data *plls, int num_plls, struct clk_onecell_data *clk_data)
+>  {
+> @@ -388,4 +403,44 @@ void mtk_clk_register_plls(struct device_node *node,
+>  }
+>  EXPORT_SYMBOL_GPL(mtk_clk_register_plls);
+>  
+> +static __iomem void *mtk_clk_pll_get_base(struct clk *clk,
+> +					  const struct mtk_pll_data *data)
+> +{
+> +	struct clk_hw *hw = __clk_get_hw(clk);
+> +	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
+> +
+> +	return pll->base_addr - data->reg;
+> +}
+> +
+> +void mtk_clk_unregister_plls(const struct mtk_pll_data *plls, int num_plls,
+> +			     struct clk_onecell_data *clk_data)
+> +{
+> +	__iomem void *base = NULL;
+> +	int i;
+> +
+> +	if (!clk_data)
+> +		return;
+> +
+> +	for (i = num_plls; i > 0; i--) {
+> +		const struct mtk_pll_data *pll = &plls[i - 1];
+> +
+> +		if (IS_ERR_OR_NULL(clk_data->clks[pll->id]))
+> +			continue;
+> +
+> +		/*
+> +		 * This is quite ugly but unfortunately the clks don't have
+> +		 * any device tied to them, so there's no place to store the
+> +		 * pointer to the I/O region base address. We have to fetch
+> +		 * it from one of the registered clks.
+> +		 */
+> +		base = mtk_clk_pll_get_base(clk_data->clks[pll->id], pll);
+> +
+> +		mtk_clk_unregister_pll(clk_data->clks[pll->id]);
+> +		clk_data->clks[pll->id] = ERR_PTR(-ENOENT);
+> +	}
+> +
+> +	iounmap(base);
+> +}
+> +EXPORT_SYMBOL_GPL(mtk_clk_unregister_plls);
+> +
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/clk/mediatek/clk-pll.h b/drivers/clk/mediatek/clk-pll.h
+> index d01b0c38311d..a889b1e472e7 100644
+> --- a/drivers/clk/mediatek/clk-pll.h
+> +++ b/drivers/clk/mediatek/clk-pll.h
+> @@ -51,5 +51,7 @@ struct mtk_pll_data {
+>  void mtk_clk_register_plls(struct device_node *node,
+>  			   const struct mtk_pll_data *plls, int num_plls,
+>  			   struct clk_onecell_data *clk_data);
+> +void mtk_clk_unregister_plls(const struct mtk_pll_data *plls, int num_plls,
+> +			     struct clk_onecell_data *clk_data);
+>  
+>  #endif /* __DRV_CLK_MTK_PLL_H */
+> -- 
+> 2.35.0.rc2.247.g8bbb082509-goog
 > 
-
+> 
