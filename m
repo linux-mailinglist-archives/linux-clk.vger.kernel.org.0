@@ -2,132 +2,146 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1394AB3DF
-	for <lists+linux-clk@lfdr.de>; Mon,  7 Feb 2022 07:12:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8B24AB6FC
+	for <lists+linux-clk@lfdr.de>; Mon,  7 Feb 2022 10:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240929AbiBGFvN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 7 Feb 2022 00:51:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
+        id S231447AbiBGIwc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 7 Feb 2022 03:52:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233113AbiBGFWE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Feb 2022 00:22:04 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9239BC043181
-        for <linux-clk@vger.kernel.org>; Sun,  6 Feb 2022 21:22:03 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id z19so24479364lfq.13
-        for <linux-clk@vger.kernel.org>; Sun, 06 Feb 2022 21:22:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OGto9Xi5kXT109TGKxmESbnUdLkURSUbKuwtAM3GVRY=;
-        b=GJYJs5kr8L0CzbroD4u7gx12y0B2e/A+Jz8EL53bOvsjtCs/mAgZDnq3jzwqzO+xl0
-         06SVvCAQ48ly9xfH1vZ6XttX+BjiM2aLz9J2QV4dBlFL8h/cyY3oUnTdJkio5YwZHtl4
-         lb/EmaT+WIxT2jh5rzhWwHE1Grpz5T517csUsI6DBroXvJtpWzAcLvbv2Ab59sf4IMbI
-         hREJpECLkM3ZhSswZ025QpXrE0kHPdHcqJU8I81V42KTMNbVLg/31QDZzz4XRZ5jNf7q
-         +FnQIDVk2DuB1eCWk9/RjawuZp2iqT8o0aj2dwGZskWk2gLHmX2BG6gkBIN0hXKS/fBu
-         6gLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OGto9Xi5kXT109TGKxmESbnUdLkURSUbKuwtAM3GVRY=;
-        b=yVNtKOnBa8j7BVkHf3ZvV9iaTTXlvkP0vodNKJblFMNBP3jtCrl97yiaZ7qU+sckkh
-         vBe4Z1UWhqGVbJVF0+Pp0Z+0wWYcGFuklTjDCIX3Lq8atoNENiEfbHg/4r8bPbJ7CEcA
-         qX4vMVsFITlE/gKb+iZfKdk2sqIEjGPTPFfXXoP14LgsiKACG1LwlvkdDQgmC5IYRUro
-         pZ4rzxIJqQ88/l2Xe/WDaJsm20WGfg9o5JQTGgTMb+Y918zyjhqrYAUPjRI4fZThsgNy
-         75Zj6cSPuu56owZbbBr7xKQAFFmTXLmJ6AZ+HZB4CxIWQ7LjP7scnhK3RmRcW++0Ew79
-         x4dg==
-X-Gm-Message-State: AOAM533p6uRvR7IAAbvRUz2Jte9i8G+YjjSGDQEtlBy1R6LSVOTdrCin
-        hzJyiZDy5AQ4KqQGDzc5aLHQcmaCMi6TQn/U8fBHxg==
-X-Google-Smtp-Source: ABdhPJxpeJtXFqUmwrOBzOQ8MX54Xs5LsU2VrMor7DxLiCWIdFLgRJ2+sq3U6j9wrfCSu7HJ7TGRQJP+lUaFlqERBQY=
-X-Received: by 2002:a05:6512:3e0b:: with SMTP id i11mr7348588lfv.510.1644211321557;
- Sun, 06 Feb 2022 21:22:01 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1642582832.git.zong.li@sifive.com> <mhng-ffd770d4-8f8a-417a-a589-f14d09f55282@palmer-ri-x1c9>
-In-Reply-To: <mhng-ffd770d4-8f8a-417a-a589-f14d09f55282@palmer-ri-x1c9>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Mon, 7 Feb 2022 13:21:50 +0800
-Message-ID: <CANXhq0pYHfsa4T1t=FK2=jM4OEfgXD=sDS5vVV4EKCpkwTz6og@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Refactor the PRCI driver to reduce the complexity
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Lee Jones <lee.jones@linaro.org>,
+        with ESMTP id S243028AbiBGInx (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Feb 2022 03:43:53 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CA1C043181;
+        Mon,  7 Feb 2022 00:43:50 -0800 (PST)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7BAC8E000C;
+        Mon,  7 Feb 2022 08:43:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1644223426;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aqtEkkE4CxAPCqiyjvQlRqA4fyM6M/H+WbMg+4em3bk=;
+        b=b/8uLavJfT0Pt7E5NoIji6JTEqyrnFW8AjRy2crSYjYa2+QxdwCGQc+rmkX8TpLU5/QH2B
+        uXn/ZDuogrQ6mrqVH7TXf8npZfUUAvpaAkd7mavWrTl8CLvuYVYlLmJiQLtaw8z3KSzzHh
+        0dClE6y7UCGqM1NJDXiyE8WDFc/dV6WZNEG7TJBNCL4fJmBdtmMsgNJEB/BHqTf5ryGxfR
+        3y7pKlclTbaRTjTWl94cEd38+jWj3JUtyi6B+JFfjXc/S9vXarXeekHfSn1K95ltQdwScI
+        KtNMhUPRgqM/sKC1j20xCDvOlzNXAmuXMF4bCE3bSsX+SdJGU3T7pWgvuBjZfA==
+Date:   Mon, 7 Feb 2022 09:43:43 +0100
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Maxime Ripard <mripard@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 02/66] dt-bindings: interconnect: sunxi: Add V3s mbus
+ compatible
+Message-ID: <YgDbv8aQEOOjwTb0@aptenodytes>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-3-paul.kocialkowski@bootlin.com>
+ <5386b1f5-9e75-4ce3-6641-bd7667c85d42@sholland.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="siWsic/QuhUMqNlN"
+Content-Disposition: inline
+In-Reply-To: <5386b1f5-9e75-4ce3-6641-bd7667c85d42@sholland.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sat, Feb 5, 2022 at 2:56 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
-> On Wed, 19 Jan 2022 01:28:37 PST (-0800), zong.li@sifive.com wrote:
-> > This patch set tries to improve the PRCI driver to reduce the
-> > complexity, we remove the SoCs C files by putting putting all stuff in
-> > each SoCs header file, and include these SoCs-specific header files in
-> > core of PRCI. It can also avoid the W=1 kernel build warnings about
-> > variable defined but not used [-Wunused-const-variable=], like 'commit
-> > 487dc7bb6a0c ("clk: sifive:fu540-prci: Declare static const variable
-> > 'prci_clk_fu540' where it's used")' does.
-> >
-> > This patch set also contains the dt-bindings and dts change, because
-> > we change the macro name for fu540 and fu740 by adding the prefix
-> > respectively.
-> >
-> > Thanks all for your review and suggestions.
-> >
-> > Zong Li (4):
-> >   dt-bindings: change the macro name of prci in header files and example
-> >   riscv: dts: Change the macro name of prci in each device node
-> >   clk: sifive: Add SoCs prefix in each SoCs-dependent data
->
-> IIUC these there aren't bisectable: the bindings change will break
-> builds of the DTs and drivers.  I'm not sure what's generally the way to
-> go with these, but I always try to avoid broken builds in the middle of
-> patch sets.
->
-> Aside from that this generally looks good to me, but the DT and clock
-> folks are probably a better bet for a proper review here.  Happy to take
-> this through the RISC-V tree, but IMO it's a better candidate for the
-> clock tree so
->
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # aside from breaking bisect
->
-> Thanks!
->
 
-Many thanks for your review and reminding, and yes, it seems a bit
-hard there since the DT binding docs and includes need to be a
-separate patch.
+--siWsic/QuhUMqNlN
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> >   clk: sifive: Move all stuff into SoCs header files from C files
-> >
-> >  .../devicetree/bindings/gpio/sifive,gpio.yaml |   2 +-
-> >  .../bindings/pci/sifive,fu740-pcie.yaml       |   2 +-
-> >  .../bindings/serial/sifive-serial.yaml        |   2 +-
-> >  arch/riscv/boot/dts/sifive/fu540-c000.dtsi    |  22 +--
-> >  arch/riscv/boot/dts/sifive/fu740-c000.dtsi    |  26 ++--
-> >  drivers/clk/sifive/Makefile                   |   2 +-
-> >  drivers/clk/sifive/fu540-prci.c               |  89 ------------
-> >  drivers/clk/sifive/fu540-prci.h               |  91 +++++++++++-
-> >  drivers/clk/sifive/fu740-prci.c               | 134 ------------------
-> >  drivers/clk/sifive/fu740-prci.h               | 130 ++++++++++++++++-
-> >  drivers/clk/sifive/sifive-prci.c              |   5 -
-> >  include/dt-bindings/clock/sifive-fu540-prci.h |   8 +-
-> >  include/dt-bindings/clock/sifive-fu740-prci.h |  18 +--
-> >  13 files changed, 254 insertions(+), 277 deletions(-)
-> >  delete mode 100644 drivers/clk/sifive/fu540-prci.c
-> >  delete mode 100644 drivers/clk/sifive/fu740-prci.c
+Hi,
+
+On Sat 05 Feb 22, 14:14, Samuel Holland wrote:
+> On 2/5/22 12:53 PM, Paul Kocialkowski wrote:
+> > Since the V3s uses the internal mbus, document its compatible.
+> >=20
+> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > ---
+> >  .../devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-mbus.yaml  | 1 +
+> >  1 file changed, 1 insertion(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4=
+i-a10-mbus.yaml b/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun=
+4i-a10-mbus.yaml
+> > index 29c9961ee2d8..b67bf9261a6a 100644
+> > --- a/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-m=
+bus.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/sunxi/allwinner,sun4i-a10-m=
+bus.yaml
+> > @@ -31,6 +31,7 @@ properties:
+> >        - allwinner,sun5i-a13-mbus
+> >        - allwinner,sun8i-h3-mbus
+> >        - allwinner,sun8i-r40-mbus
+> > +      - allwinner,sun8i-v3s-mbus
+>=20
+> Please enable the expanded binding added in commit 245578ba9f03 ("dt-bind=
+ings:
+> arm: sunxi: Expand MBUS binding")[1] by adding the new compatible to the =
+"if"
+> block lower in the file. That way we can add V3S devfreq support in the f=
+uture
+> without changing that binding.
+
+I had missed that new driver but surely I will expand the updated binding.
+
+By the way do you have an explanation about the cell index given to the
+interconnects (after &mbus)?
+
+Paul
+
+> Regards,
+> Samuel
+>=20
+> [1]: https://git.kernel.org/torvalds/c/245578ba9f03
+>=20
+> >        - allwinner,sun50i-a64-mbus
+> > =20
+> >    reg:
+> >=20
+>=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--siWsic/QuhUMqNlN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmIA274ACgkQ3cLmz3+f
+v9Hedwf/dd7O5weguOH+OM1fWPM+D01os8bCMg2BVi/eJAzHIsTRwpzNVnuC5GkL
+jEPrckhWzLYI9QVdh9sxYGDe3WtMpG5L0mXxvfM0AruEZ8OA9Up1eZ/4a/pXtjmp
+ge2AkXEcmDd2BbtlMHe8obvpO9se0uDYHjA1MgApK8F5fVwRNn2dmu1zE5dAhufc
+GF3GDEPpS7MLe7ReDnGd9wAt109SEIxDgJ9XeiC1XdumNE5BAnT49+7Qq2Wy4zjf
+HDyDxIoHke+4+66Gf03JpeGikvOIW/8C/rwwh8AWLopLrcNVzyh1AM4BVI83Yaf2
+DMLRURk+Ae/bMrUUReDsYsgpsKZ42w==
+=B81B
+-----END PGP SIGNATURE-----
+
+--siWsic/QuhUMqNlN--
