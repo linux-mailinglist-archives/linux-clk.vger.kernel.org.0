@@ -2,84 +2,90 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E91644AB704
-	for <lists+linux-clk@lfdr.de>; Mon,  7 Feb 2022 10:08:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC564AB7A5
+	for <lists+linux-clk@lfdr.de>; Mon,  7 Feb 2022 10:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237526AbiBGJCz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 7 Feb 2022 04:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
+        id S229536AbiBGJWg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 7 Feb 2022 04:22:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349805AbiBGJAw (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Feb 2022 04:00:52 -0500
+        with ESMTP id S243239AbiBGJKS (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Feb 2022 04:10:18 -0500
 Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E4CC043181;
-        Mon,  7 Feb 2022 01:00:50 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 31E9E58018B;
-        Mon,  7 Feb 2022 04:00:50 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 07 Feb 2022 04:00:50 -0500
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90EBC043181;
+        Mon,  7 Feb 2022 01:10:17 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 3564F580197;
+        Mon,  7 Feb 2022 04:10:17 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 07 Feb 2022 04:10:17 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; bh=LlmYXeK2fC2UdJ
-        0/MsJYEQrTJxKAOlqRD+axqJoLm3I=; b=fm5k1dGy1PeO02r1/TlAHJNiPhTGWE
-        5Iz8JgwP01EUiauX3iYERT0YPoAlmiNhvh3zHn48pU5ZR7i50wdIqMi2TqDT6zwS
-        hSIARHAQBic+WMq594pw+r1hdkJH4foiJ/v+za5CYtlxOHDk/rYnjJ62V9U2/ukk
-        R3ewIPTVnznf+fpkdJ/DJZMLouLKFrfDOanqmzwMjhr8CK/tWD65z3sO/CnpyEKO
-        fldsssTSz1jV+UAAVeaAblRuLVmN8hZUZ0VnWsFFq27v9+RX3ZCcaLoT52X32/KW
-        UatXs76ZJTfxBlcK/Hc3RYGiYWUjHrc7YN7Ksm1/YyQZN9WQa13550lw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; bh=LlmYXeK2fC2UdJ0/MsJYEQrTJxKAOlqRD+axqJoLm
-        3I=; b=adMfYwoaQ/+F0Adw54uNBbogBqWCNOpwNoQ9vM7kPwDVtliGcE/0sJW5T
-        GSkPw8fKguIjcu3WS6SwiePhrbtPoapSJKd278hw9l2tAE/4SvgN9Kgdr6/zer0p
-        A6PTNSUunpLYmjfPgmCuXdOvtVnzckBrHJs1f6PbP1WMrBR2ZJGyNx4VBsi4cBzm
-        eWcn6BqdpcHjNov6rWoYYhZfXlzkoFhtDP7lZuQR/ySkBo6afBQJYlWgJOg6lPma
-        VaQ5opIv7rqfHGUpqYb3c0/pWUsLWRQ8cZf27BEA9hvk78RevuqoSUyunTfG2SVC
-        7fHlzXXpXiu1lF9InYRRu7WoiVb8A==
-X-ME-Sender: <xms:wt8AYvpYzksObIQVOstgSzXW_j7vTFG4na98z1tyat7OAlBQVMWVAg>
-    <xme:wt8AYpqaOsWE4i3N_9ZNkIZLPgSfeoklFLKzjhLbeUSB542-49RtnhvuFn84nDMCD
-    K-d_uqCQ0a0HTq-2Mw>
-X-ME-Received: <xmr:wt8AYsOHMqrHXEo3mqTx-DPOHWLrrIzBhHpR67W2xZSY-b0oBFO7OgzQ1heB2KGO1LjxAipzrsiiEftZuklxmByAIK4CMiZ884aFoCw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheeggdduvddvucetufdoteggodetrfdotf
+        :subject:to:to; s=fm2; bh=R7UJ3iF3QHld5VlL8DXB8KHalc3jQUprq6G9Hy
+        azmd4=; b=pnZ8k0BqtwOlrpwjVR9F+Ywos6Celc3JwwbWPdnm6EpMOZwuNw7ayN
+        oxHfUAk1haNbOFsrs3Pcsj9Z3kgikXa5tl9sahiBMI34BPJxwtSrhI0NcoQ6f1tX
+        co1HIxABhBVHZm3PVKHcz/LUQgS8vzLMHtV0Zx052z9fztFg6eXB5Tmr/GvEcMI9
+        6TtoyUHbIJDCgR+PD6OurVD3nbcZ7LXMI20KFgnHMnLx/Qym0onRKMv4q7hB1pKI
+        J4E3YiUq/AguO4vMKuEbvat7JDC2XdFFplRfBblgEo2IVoz2AD68VJGLuDwF2Ci7
+        sIgww9T6PD8iuELP7AQEe2ORxnaemNyw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=R7UJ3iF3QHld5VlL8
+        DXB8KHalc3jQUprq6G9Hyazmd4=; b=I6KDPlL1blMggMMpM4sfBmsi+xz5ZkoIy
+        CGG1kfBDiZ+Cb6stxr9Q4wl2ekuaVwuWsbgiN+6qI0qSQiwy9kn9rmUVVtYCcDg+
+        QfOItq+ftrzN7AMoxS/BRrY7xrd7F1HAJ69UH0/ywES29RFZqF0dPsIxQF/DUzoX
+        SADmRDVMMqelhoPIpxJgOif5YnFmQjTst/ryXZId60emVmLuRbEsA2fZrbW3yRKT
+        iWnrMMTRtk0vMcc7LXVdidjTMdvIbxOlVX+mMDvutOKp7As0J9EqX9HD6Bf5iVqO
+        F+Bx2cIkuXM/lAlNaQvX4EE2zDmC4Yl1taf8UF1KaGsizsQKzducw==
+X-ME-Sender: <xms:-OEAYi6ZC8ybTYDe51-rgSjE4J6tYtrXvr4fH1xFVQsyUM__fG4fFQ>
+    <xme:-OEAYr6o7a5xsoJU-ado0ccOaUNIj96q7Bir_gXZXdKd5iJeK_HYJOqNOGUH5UIYu
+    o48IKfCAfb5umVCaZU>
+X-ME-Received: <xmr:-OEAYhflU0vIqTcdb4UeLBNpRHEOj-PB-ZOvMufB8UYJ2umvuZJILke-Fv0Nrh97PMjDGBs9zDJHcOccgsl1NE3LLNBwpWuNMK1Y9_E>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrheeggdduvdegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeejuefggeekfffgueevtddvudffhfejffejjedvvdduudethefhfefhfeeg
-    ieekkeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:wt8AYi5sJGTaHdSyOFBTpB5GBdyKWj7W4q2Qx6G4ow6j7a3Ngk9u8w>
-    <xmx:wt8AYu4nXzcilGfFlbSU8FeohOslwB1MibQ6UJwKse6CAHxnRQI0MA>
-    <xmx:wt8AYqhwssUi8JB6SACMjFKALBnoIooSAjNSWdHq-vI-PfVYgLIm0Q>
-    <xmx:wt8AYtQUyHpHBiDSq0K7o6o4idoY_DwsL7FYrbumcamqnkqPLVPQxg>
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:-OEAYvKgotox7wuaen_JPKuVushrlWshKfgnHyw5fFKH3yny111A5Q>
+    <xmx:-OEAYmK3M6uHOz0aREF_IB9-a-w0kaD-iIsdKJCjnIDRmb415DsIHQ>
+    <xmx:-OEAYgy9BeecMal-mAODbT4HdTHd_y5Rb4e5CKlpeFpXK0Luk3RoUg>
+    <xmx:-eEAYrBt6LqJFndomEn_wOo7QhXvozfYzDdBtJn3nKnIbVMkNdTIvA>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 7 Feb 2022 04:00:49 -0500 (EST)
+ 7 Feb 2022 04:10:15 -0500 (EST)
+Date:   Mon, 7 Feb 2022 10:10:14 +0100
 From:   Maxime Ripard <maxime@cerno.tech>
-To:     Chen-Yu Tsai <wens@csie.org>, linux-sunxi@lists.linux.dev,
-        Samuel Holland <samuel@sholland.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Maxime Ripard <maxime@cerno.tech>, Stephen Boyd <sboyd@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>
-Subject: Re: (subset) [PATCH v3 5/6] clk: sunxi-ng: Add support for the sun6i RTC clocks
-Date:   Mon,  7 Feb 2022 10:00:45 +0100
-Message-Id: <164422443570.21572.13511859513410998733.b4-ty@cerno.tech>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220203021736.13434-6-samuel@sholland.org>
-References: <20220203021736.13434-1-samuel@sholland.org> <20220203021736.13434-6-samuel@sholland.org>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 17/66] media: sun6i-csi: Define and use driver name
+ and (reworked) description
+Message-ID: <20220207091014.6rugcnspzjdubuxb@houat>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-18-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="w2mtmwumvelpbuht"
+Content-Disposition: inline
+In-Reply-To: <20220205185429.2278860-18-paul.kocialkowski@bootlin.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -90,22 +96,35 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, 2 Feb 2022 20:17:35 -0600, Samuel Holland wrote:
-> The RTC power domain in sun6i and newer SoCs manages the 16 MHz RC
-> oscillator (called "IOSC" or "osc16M") and the optional 32 kHz crystal
-> oscillator (called "LOSC" or "osc32k"). Starting with the H6, this power
-> domain also handles the 24 MHz DCXO (called variously "HOSC", "dcxo24M",
-> or "osc24M") as well. The H6 also adds a calibration circuit for IOSC.
-> 
-> Later SoCs introduce further variations on the design:
->  - H616 adds an additional mux for the 32 kHz fanout source.
->  - R329 adds an additional mux for the RTC timekeeping clock, a clock
->    for the SPI bus between power domains inside the RTC, and removes the
->    IOSC calibration functionality.
-> 
-> [...]
 
-Applied to local tree (sunxi/clk-for-5.18).
+--w2mtmwumvelpbuht
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks!
+On Sat, Feb 05, 2022 at 07:53:40PM +0100, Paul Kocialkowski wrote:
+> Add proper defines for driver name and description instead of
+> MODULE_NAME and hardcoding (cosmetics).
+>=20
+> Also rework the description while at it to mention the hardware
+> generation that the driver supports and remove the video capture
+> mentions since it applies to the whole media device.
+>=20
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+
+Reviewed-by: Maxime Ripard <maxime@cerno.tech>
+
 Maxime
+
+--w2mtmwumvelpbuht
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYgDh9gAKCRDj7w1vZxhR
+xUhdAQDxosvE5Z1tfazCfFwKTKvd8wdE1L1J0eAJW2n0zJD0GwD/Y/ZSfxTbktu6
+mAwempvC3dPabl4ELRLwkyfcajQdcwg=
+=hI7k
+-----END PGP SIGNATURE-----
+
+--w2mtmwumvelpbuht--
