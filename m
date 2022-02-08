@@ -2,48 +2,48 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA2C4AD943
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Feb 2022 14:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA6204AD93E
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Feb 2022 14:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343603AbiBHNQ5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Feb 2022 08:16:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
+        id S244896AbiBHNQy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Feb 2022 08:16:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358476AbiBHMl0 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Feb 2022 07:41:26 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76436C03FEC0
-        for <linux-clk@vger.kernel.org>; Tue,  8 Feb 2022 04:41:26 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id my12-20020a17090b4c8c00b001b528ba1cd7so2605738pjb.1
-        for <linux-clk@vger.kernel.org>; Tue, 08 Feb 2022 04:41:26 -0800 (PST)
+        with ESMTP id S1358534AbiBHMl3 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Feb 2022 07:41:29 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E107C03FEC0
+        for <linux-clk@vger.kernel.org>; Tue,  8 Feb 2022 04:41:28 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id e28so18650384pfj.5
+        for <linux-clk@vger.kernel.org>; Tue, 08 Feb 2022 04:41:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=R3JoellM0j3/drkIwePqf6xNXC0okTaVtKIbynTeAOc=;
-        b=cDbvFXn+++jD2RBihOfm+4NuHtNk8YlQxYmPjF35O1yrsUbdXxfadniAuG4XR5nFwS
-         6AjlYWaCgdXKEQ9wtER+Kay6SUeGumXjw601aAOrw5/VgQcSA14qgibFM3JGqGXyIn/9
-         ETByjiRDfguEMxbmnwqFjDAIY6/V0+X2N5eCw=
+        bh=rLQw4RJqDZVMPw30M9uz1PhQpXBhvEj1u6VLau9OtwY=;
+        b=jL2a5QDyajKzOUAWV5B0Nd19HhIgfINHJvM9WNEn6b+LxDB4bDUyKQZLkDZMB1szH8
+         sSKODHRSvOsJrGymmMHci7fr5tCxsmLXcZm38aNquOg8tvsqskd0Of82WHAiGSpdjBVg
+         LJb7i6DxEMHHloBmjgN+29AbkGYR//LBVbPzo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=R3JoellM0j3/drkIwePqf6xNXC0okTaVtKIbynTeAOc=;
-        b=G4NYTbmLwu7XLc2OLQij/XlvUap7Dvaxp0aCCtQg1PNSeBGI1+rOUwCI2M6iNUcHP+
-         hnCV5EfIjiYL74nAFVxolw4GGOctCWlteKsiJSFCtbi7KBsuYvgyuvcw/BGPzY6hB8F7
-         UTjFzjl3SYmMeWTT3iEH6pQ1Y1Pu9gOC48cw3pGWsj8X+6pWuQm2cnLL0t0yMEVnNRmK
-         C8/naRpj/E6o/joA5/chJB5Gc1yFO8UMHtYHJT7rRwy6BruGzZvhs7ecPyXGrcva0Yn/
-         9kFy/ew4mw/VGI5pUslQhdXuWmd81xjXZFgSZ8nU7oXHf4NAf1RacAnrSJIHOiB+RNi+
-         tSyA==
-X-Gm-Message-State: AOAM5321EaujDTXNTAEAN1q5AblXeei/xdEHjYqzWhsc9sUywZRhOhMM
-        ykig4m8Y2q/b4wH0vQPiyJtaBw==
-X-Google-Smtp-Source: ABdhPJySG6k3d+lfO+J6p0YF76ehegEmYbi/IhHoJqpoMykEiunvLKUkSg7jAzY0zepF1RSOzn+Q1w==
-X-Received: by 2002:a17:90b:3a86:: with SMTP id om6mr1151521pjb.99.1644324085808;
-        Tue, 08 Feb 2022 04:41:25 -0800 (PST)
+        bh=rLQw4RJqDZVMPw30M9uz1PhQpXBhvEj1u6VLau9OtwY=;
+        b=JGWfq/iv5DKvxK0q6lFlno0PiM6loY4njndbB2x3nev8Th6Y/m+WBeRuGHjqBA7/Cw
+         4TjPKO88krUotY7WuutqdcxzH8kBJFbEKjrUpRn8CF9IYetSr9PBqy4Qzb/cQGVfUlCX
+         zF+LnkKQQCtxkaP4/dHLk91/gfdkL9Oe2DzQyD/Y3WZE4hJ8wZyRGkI6etEa+zsKyJCA
+         qw4rJqgZHjrJ8rJmWGyex9ra0DVMaLfdzjDwE8zQm3xXLo9GUHQEeDYZBE5gQO7wlCL2
+         IU2+wsBEZ2c4z/VaY3UZKZgKb/HDEz4XDz+zSeGFcK/ypJFeSBm/sN8OYa6+DcIjGgck
+         SH0w==
+X-Gm-Message-State: AOAM532eP9yNMDv3akShl0e849mzyE6hXOT/kU58WfjWj1BAqZwkhbpn
+        dGVxoUp1VxOvzRjdE/TG+9MaOQ==
+X-Google-Smtp-Source: ABdhPJyoH//QGDvsw16k4jMFINHEtKQ6bLu2VPWjf6rsSG2qmmitjA3mxEh+PsT2umh3po921k0HrQ==
+X-Received: by 2002:a63:2f82:: with SMTP id v124mr3314490pgv.139.1644324088094;
+        Tue, 08 Feb 2022 04:41:28 -0800 (PST)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:41b6:813e:c823:609c])
-        by smtp.gmail.com with ESMTPSA id h11sm15056939pfe.214.2022.02.08.04.41.23
+        by smtp.gmail.com with ESMTPSA id h11sm15056939pfe.214.2022.02.08.04.41.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 04:41:25 -0800 (PST)
+        Tue, 08 Feb 2022 04:41:27 -0800 (PST)
 From:   Chen-Yu Tsai <wenst@chromium.org>
 To:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -55,9 +55,9 @@ Cc:     Chen-Yu Tsai <wenst@chromium.org>,
         Miles Chen <miles.chen@mediatek.com>,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 17/31] clk: mediatek: Implement mtk_clk_unregister_divider_clks() API
-Date:   Tue,  8 Feb 2022 20:40:20 +0800
-Message-Id: <20220208124034.414635-18-wenst@chromium.org>
+Subject: [PATCH v3 18/31] clk: mediatek: Implement mtk_clk_unregister_composites() API
+Date:   Tue,  8 Feb 2022 20:40:21 +0800
+Message-Id: <20220208124034.414635-19-wenst@chromium.org>
 X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
 In-Reply-To: <20220208124034.414635-1-wenst@chromium.org>
 References: <20220208124034.414635-1-wenst@chromium.org>
@@ -65,7 +65,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,8 +73,8 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-mtk_clk_register_divider_clks(), as the name suggests, is used to register
-a given list of divider clks. However it is lacking a counterpart
+mtk_clk_register_composites(), as the name suggests, is used to register
+a given list of composite clks. However it is lacking a counterpart
 unregister API.
 
 Implement said unregister API so that the various clock platform drivers
@@ -84,23 +84,56 @@ In the header file, the register function's declaration is also
 reformatted to fit code style guidelines.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Miles Chen <miles.chen@mediatek.com>
 ---
- drivers/clk/mediatek/clk-mtk.c | 19 +++++++++++++++++++
- drivers/clk/mediatek/clk-mtk.h |  8 +++++---
- 2 files changed, 24 insertions(+), 3 deletions(-)
+ drivers/clk/mediatek/clk-mtk.c | 46 ++++++++++++++++++++++++++++++++++
+ drivers/clk/mediatek/clk-mtk.h |  2 ++
+ 2 files changed, 48 insertions(+)
 
 diff --git a/drivers/clk/mediatek/clk-mtk.c b/drivers/clk/mediatek/clk-mtk.c
-index b267b2f04b84..3a6dfe445e63 100644
+index 3a6dfe445e63..869e6ae55c82 100644
 --- a/drivers/clk/mediatek/clk-mtk.c
 +++ b/drivers/clk/mediatek/clk-mtk.c
-@@ -286,6 +286,25 @@ void mtk_clk_register_dividers(const struct mtk_clk_divider *mcds,
- 	}
+@@ -233,6 +233,32 @@ struct clk *mtk_clk_register_composite(const struct mtk_composite *mc,
+ 	return ERR_PTR(ret);
  }
  
-+void mtk_clk_unregister_dividers(const struct mtk_clk_divider *mcds, int num,
-+				 struct clk_onecell_data *clk_data)
++static void mtk_clk_unregister_composite(struct clk *clk)
++{
++	struct clk_hw *hw;
++	struct clk_composite *composite;
++	struct clk_mux *mux = NULL;
++	struct clk_gate *gate = NULL;
++	struct clk_divider *div = NULL;
++
++	hw = __clk_get_hw(clk);
++	if (!hw)
++		return;
++
++	composite = to_clk_composite(hw);
++	if (composite->mux_hw)
++		mux = to_clk_mux(composite->mux_hw);
++	if (composite->gate_hw)
++		gate = to_clk_gate(composite->gate_hw);
++	if (composite->rate_hw)
++		div = to_clk_divider(composite->rate_hw);
++
++	clk_unregister_composite(clk);
++	kfree(div);
++	kfree(gate);
++	kfree(mux);
++}
++
+ void mtk_clk_register_composites(const struct mtk_composite *mcs,
+ 		int num, void __iomem *base, spinlock_t *lock,
+ 		struct clk_onecell_data *clk_data)
+@@ -259,6 +285,26 @@ void mtk_clk_register_composites(const struct mtk_composite *mcs,
+ }
+ EXPORT_SYMBOL_GPL(mtk_clk_register_composites);
+ 
++void mtk_clk_unregister_composites(const struct mtk_composite *mcs, int num,
++				   struct clk_onecell_data *clk_data)
 +{
 +	int i;
 +
@@ -108,38 +141,33 @@ index b267b2f04b84..3a6dfe445e63 100644
 +		return;
 +
 +	for (i = num; i > 0; i--) {
-+		const struct mtk_clk_divider *mcd = &mcds[i - 1];
++		const struct mtk_composite *mc = &mcs[i - 1];
 +
-+		if (IS_ERR_OR_NULL(clk_data->clks[mcd->id]))
++		if (IS_ERR_OR_NULL(clk_data->clks[mc->id]))
 +			continue;
 +
-+		clk_unregister_divider(clk_data->clks[mcd->id]);
-+		clk_data->clks[mcd->id] = ERR_PTR(-ENOENT);
++		mtk_clk_unregister_composite(clk_data->clks[mc->id]);
++		clk_data->clks[mc->id] = ERR_PTR(-ENOENT);
 +	}
 +}
++EXPORT_SYMBOL_GPL(mtk_clk_unregister_composites);
 +
- int mtk_clk_simple_probe(struct platform_device *pdev)
- {
- 	const struct mtk_clk_desc *mcd;
+ void mtk_clk_register_dividers(const struct mtk_clk_divider *mcds,
+ 			int num, void __iomem *base, spinlock_t *lock,
+ 				struct clk_onecell_data *clk_data)
 diff --git a/drivers/clk/mediatek/clk-mtk.h b/drivers/clk/mediatek/clk-mtk.h
-index 4db1a97c1250..e3ae22fb0334 100644
+index e3ae22fb0334..3c3a934f53cd 100644
 --- a/drivers/clk/mediatek/clk-mtk.h
 +++ b/drivers/clk/mediatek/clk-mtk.h
-@@ -176,9 +176,11 @@ struct mtk_clk_divider {
- 		.div_width = _width,				\
- }
+@@ -153,6 +153,8 @@ struct clk *mtk_clk_register_composite(const struct mtk_composite *mc,
+ void mtk_clk_register_composites(const struct mtk_composite *mcs,
+ 		int num, void __iomem *base, spinlock_t *lock,
+ 		struct clk_onecell_data *clk_data);
++void mtk_clk_unregister_composites(const struct mtk_composite *mcs, int num,
++				   struct clk_onecell_data *clk_data);
  
--void mtk_clk_register_dividers(const struct mtk_clk_divider *mcds,
--			int num, void __iomem *base, spinlock_t *lock,
--				struct clk_onecell_data *clk_data);
-+void mtk_clk_register_dividers(const struct mtk_clk_divider *mcds, int num,
-+			       void __iomem *base, spinlock_t *lock,
-+			       struct clk_onecell_data *clk_data);
-+void mtk_clk_unregister_dividers(const struct mtk_clk_divider *mcds, int num,
-+				 struct clk_onecell_data *clk_data);
- 
- struct clk_onecell_data *mtk_alloc_clk_data(unsigned int clk_num);
- void mtk_free_clk_data(struct clk_onecell_data *clk_data);
+ struct mtk_clk_divider {
+ 	int id;
 -- 
 2.35.0.263.gb82422642f-goog
 
