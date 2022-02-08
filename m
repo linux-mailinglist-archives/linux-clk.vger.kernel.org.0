@@ -2,123 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59AC44AD70C
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Feb 2022 12:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 401744AD93C
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Feb 2022 14:17:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356930AbiBHLbj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Feb 2022 06:31:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39916 "EHLO
+        id S242723AbiBHNQw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Feb 2022 08:16:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357022AbiBHLTM (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Feb 2022 06:19:12 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D20C03FEC0
-        for <linux-clk@vger.kernel.org>; Tue,  8 Feb 2022 03:19:12 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id E6A291F40DB2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1644319148;
-        bh=YZ4vl5dn4dGgAIbf9dSevrTrJvjW1muxZxlPq1Ez3H0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=b+B+WOsCW8uf+hliLI9pK0Q1jfdIXl1UAKsX71b6kncuJjnC5hvbygSy89Hfgo3Kb
-         DgJr53dAhlbPw1H/rO/I6EE1HDAV00+aUr8DqygFT4eSkvxv3VEBv0+jAPkAVarl+z
-         xAmoAykC6HzAsh3t3MET8KvQNTFjUVXYYSVKm5aFdlnVqngWNmYWj6I7Y0qa0jw3Gk
-         YgAohlu4E3ubs0lMjbJ9eW3Tt5f0WcWMhlo+kbDtdA03rBc8lMreQnxEhQLPJ1H6o4
-         SB3cZnH5wBJ/AlsVysgzXiJSbqk6Pbnc36Ia7CTAd375DumCoVIJm0gE4/s7/QZLYM
-         JdkLaHYo21Jxw==
-Message-ID: <95383ff1-2696-6dac-26ab-1239b5323c8c@collabora.com>
-Date:   Tue, 8 Feb 2022 12:19:04 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 15/31] clk: mediatek: Implement
- mtk_clk_unregister_fixed_clks() API
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
+        with ESMTP id S1359498AbiBHMpB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Feb 2022 07:45:01 -0500
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49183C03FECA
+        for <linux-clk@vger.kernel.org>; Tue,  8 Feb 2022 04:45:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=mblPKvsTR+I38VBuTL3AMx3pOcg6
+        Ef8IgRkhKBFuNgU=; b=qMBmciIXgm9mIqfnNnuy1GxVTBCm9tAO5J0INHCm1qRK
+        ai5Am6gaNi2jpsyZoL7/l+u3C4p6vXaC1/hcsqzv2J7ywpwfbbKw5JPbPP8rA8VO
+        2YUUZZ0kPN8raQwnbfrRuB3Rq5dlXQPBcS289NUEHWeL7p/+i9yzEIHoOeEAqCA=
+Received: (qmail 251182 invoked from network); 8 Feb 2022 13:38:17 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Feb 2022 13:38:17 +0100
+X-UD-Smtp-Session: l3s3148p1@0J7M/YDXYMkgAQnoAF1FAEKPHF9sYOFO
+Date:   Tue, 8 Feb 2022 13:38:17 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        LUU HOAI <hoai.luu.ub@renesas.com>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 1/5] clk: renesas: r8a779f0: Add WDT clock
+Message-ID: <YgJkOVpdZdMWj0m6@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
         Michael Turquette <mturquette@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220202134834.690675-1-wenst@chromium.org>
- <20220202134834.690675-16-wenst@chromium.org>
- <752d5d00-4e05-1bd6-564f-3bce21a35713@collabora.com>
- <CAGXv+5HSLh0OgJc=EU=wvB4DaOMDLjsgJ6qnHY423d1L5+DixQ@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAGXv+5HSLh0OgJc=EU=wvB4DaOMDLjsgJ6qnHY423d1L5+DixQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Stephen Boyd <sboyd@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        LUU HOAI <hoai.luu.ub@renesas.com>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+References: <cover.1642525158.git.geert+renesas@glider.be>
+ <8d9b280065a663f2cf31db7b21a010aa781a0af1.1642525158.git.geert+renesas@glider.be>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CuXxExDNR0gwWf+V"
+Content-Disposition: inline
+In-Reply-To: <8d9b280065a663f2cf31db7b21a010aa781a0af1.1642525158.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Il 08/02/22 04:50, Chen-Yu Tsai ha scritto:
-> Hi,
-> 
-> On Thu, Feb 3, 2022 at 5:47 PM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> Il 02/02/22 14:48, Chen-Yu Tsai ha scritto:
->>> mtk_clk_register_fixed_clks(), as the name suggests, is used to register
->>> a given list of fixed rate clks. However it is lacking a counterpart
->>> unregister API.
->>>
->>> Implement said unregister API so that the various clock platform drivers
->>> can utilize it to do proper unregistration, cleanup and removal.
->>>
->>> In the header file, the register function's declaration is also
->>> reformatted to fit code style guidelines.
->>>
->>> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
->>> Reviewed-by: Miles Chen <miles.chen@mediatek.com>
->>
->> Hello Chen-Yu,
->>
->> I like this entire series, but I had to manually apply this patch (and some of
->> the other ones)...
-> 
-> This was based on linux-next, which already has a couple clk patches queued
-> up.
-> 
->> Especially for the ones that will be touching MT8195 clock drivers, can you
->> please rebase over series [1] by Chun-Jie?
-> 
-> I think this series supersedes the first patch in that series? As for the
-> other two, I think the discussion about the bindings is ongoing, which
-> might affect the third patch as well?
 
-You're right about that - besides, the mentioned series will take a bit of time to
-get merged in and this cleanup should not be waiting for all that time, as it's
-very, very nice...
-In any case, I don't think that the third patch from that series will be affected,
-as it's a double-definition instance: the vppsys{0,1} are really defined in mmsys
-and they're simply moving it around... The committer forgot to add the two
-properties (the ones that he removed from mt8195-clock) to mediatek,mmsys.yaml,
-I'll send a reply over that thread.
+--CuXxExDNR0gwWf+V
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Anyway, yes, this series definitely supersedes patch 1 in that series, so,
-I'm sorry for the noise, and:
+On Tue, Jan 18, 2022 at 06:09:01PM +0100, Geert Uytterhoeven wrote:
+> Add the module clock used by the RCLK Watchdog Timer (RWDT) on the
+> Renesas R-Car S4-8 (r8a779f0) SoC.  Mark it as a critical clock, to
+> ensure uninterrupted watchdog operation.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-> 
-> ChenYu
-> 
->> [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=603955
->>
->> Thanks,
->> Angelo
->>
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
+--CuXxExDNR0gwWf+V
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmICZDkACgkQFA3kzBSg
+KbYRxQ//UzcAb6CurhSVTJgjpRYr3RCkJdwUUJ5icYWg8tinwKd2litbjZFFJgp4
++VCbypK2gK3a2hfdZZpelee9hCFGpd95sfFQUm12HPJ2wIsj+pBW0Feuem0lCQbT
+JqYTt259nxMudemRt1JZz3oYKC4NUdYXuzIPF8Bm50p8AL+ANNJThbc4tEXjQbUc
+txaP3dbbv4nNDlf2NCYPQQne+k6zyYnMqoi1a8UMD8wxZARnsnH/HwsyjF5Yg/a7
+YhynhkpeaLDIo7VsFYZbEQCjGLY560lwVzzUo8a+suzKCqFGarb70z4vCIs589Bb
+qHdRhCCTf3qWNRt2ziO1lxVWrRRpXA9MstfL+CP36WZqVSwqfFWn0tOwHaITweKD
+wqN9Zcygz4kZDQzaSpoZTLnfcfYNjr/leXrgn+oX5pVM8J7axQDBe74uA9myPylE
+IoUbtc+qRrRQ4FATKWVGW9tQFh9aBquawg0Sf75/P01f4us2RdnxXZhkHJQNs35P
+QQhxjzkH5WU+S3vfecU/hyM6m4HL74xakN+un6vghWHAy514hd+f+9SQEKlBvGGc
+rNHRNACIQdZUvxcBtPtJyqfYL/1GOjVSNlYl4/KhFM0TgsOwGZZSD9KrtsxyXTX7
+9yZImUJf0r+7vEkwQQYiN3t22C4gk93u9AHhiZ8nSWftK/fIkwk=
+=akA/
+-----END PGP SIGNATURE-----
+
+--CuXxExDNR0gwWf+V--
