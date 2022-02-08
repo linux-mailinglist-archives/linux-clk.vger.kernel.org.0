@@ -2,48 +2,48 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15684AD949
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Feb 2022 14:17:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC334AD925
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Feb 2022 14:17:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343710AbiBHNRA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Feb 2022 08:17:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58820 "EHLO
+        id S1353972AbiBHNQc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Feb 2022 08:16:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358137AbiBHMlA (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Feb 2022 07:41:00 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A169C03FEC0
-        for <linux-clk@vger.kernel.org>; Tue,  8 Feb 2022 04:41:00 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id m7so16086877pjk.0
-        for <linux-clk@vger.kernel.org>; Tue, 08 Feb 2022 04:41:00 -0800 (PST)
+        with ESMTP id S1358139AbiBHMlC (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Feb 2022 07:41:02 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9E5C03FEC0
+        for <linux-clk@vger.kernel.org>; Tue,  8 Feb 2022 04:41:02 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id om7so2926001pjb.5
+        for <linux-clk@vger.kernel.org>; Tue, 08 Feb 2022 04:41:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Rg7A4+9l27NSY42Qe+sFkyiXBBTKwVjr3yLAs4KlFxg=;
-        b=mlwzzpOJIyTPenSMBs+vzWOWF4s11a2iKpFwkjBFPNJ2wIbzWSCm8BTUlwqJX+N1Cu
-         DAaDL0V7f8HlDhF8CB7YxNR7wAJCaLZbAsPEdi1EBt+rrzIFaTDaUeoFbcQryratNDJV
-         YBaoXUES6ZVTjN7uqH5rf2Bc0DEByC092aAME=
+        bh=yu5wC4iGlAJptCPwbvLdBvXWnUX/vMCoe837u17t2vE=;
+        b=WYmMFm75NEaKiAQgXHcNywEYl4EfNKMdlnHmbH+Y/S70IQ6WZ9BTZFIM6qXllePpzx
+         VqxfGa3WakmxF3TFYcuEqxxCXNGBaGXzpSF7WpnjK4acriB5IPWJHkzpCdKwAC2iXA2q
+         MpfJH/5jIsHVddh1YI+t3DBLCwl7un6kbnAxA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Rg7A4+9l27NSY42Qe+sFkyiXBBTKwVjr3yLAs4KlFxg=;
-        b=1VxMtstQBCUJiSkk0s16HDYGI3AN9VzL0fIGDrbD0aMtB9ot//kePras2G5xJVJEDf
-         +Enyuvr4R/D3jwg9L9CdR6l3tCu6LmzAVfjKkzP7XT5v1vZelXL5VMG45UVsXq/9vip0
-         q0Kh21ipOrH8g8ws8KWqlFQDMNkE8OZHYPlBFD/mExe4RVijtyQRYZCWlZ4k72MEA5B0
-         WfTliU0ykO5LV9ZZwFjTB32O8zNvuGlgfxpFe2O3vTYMkKvqmfPoUZRDc1YSaq8I2r4j
-         dMNWzyNkG0B5EVhZPezA6SgCH0KPbOAr5mCSorUmraNiHShE7psQSxcZWyLON/iyLlUj
-         6+4A==
-X-Gm-Message-State: AOAM532dB/4JoqPCmkkrerP8vvwAo9AJuWMyw9NtjwANhMHjh9xcarlC
-        g4ZqAeQgjN2qnHydhdWDQibJyQ==
-X-Google-Smtp-Source: ABdhPJwyIYewICHmp67Gv493qjDoHahQ0wtK5N12U7VeDgZpqQE8uKBp4aXA9WxD/jUC6YVuudwbvQ==
-X-Received: by 2002:a17:90a:7a82:: with SMTP id q2mr1183088pjf.40.1644324059938;
-        Tue, 08 Feb 2022 04:40:59 -0800 (PST)
+        bh=yu5wC4iGlAJptCPwbvLdBvXWnUX/vMCoe837u17t2vE=;
+        b=uJv9oEVwH//oEEsqzT0Sy4oulBQHCS3/jrSqFhvcL04wmXNVG/GkTk1D/UTiV+Ghd9
+         M/C2qfcSproiWpQKmge0/MSXptMASoudl+jqXGul8lr8yLkV0aGBL/1dnCUS+qADsvbP
+         I9YNCVxwgGp8qzTdJdxmhbbRAaNbij9YLX3W1lF0n/0QgdaQpoqfQjEFS8b2TjOCpT0n
+         vAf2gZusn6r7ul9B2FkfM16y02sUCsCpQ1XGokTmrlUpsH4D77yMeLU1lqMCx3HYeU00
+         wGJqYE7N5AKaUo/6y2rXFYboF+58ahWQoo1YsW+he8vRTUvaWl6I+1QAFzFCK9Gty8QT
+         BkCQ==
+X-Gm-Message-State: AOAM532jDfiTonYueUCFejo614agMFR5F2UvvbpvRipuw8WhmN2J88oQ
+        F78XgqsXnU8LXiarO7C85Xcm0A==
+X-Google-Smtp-Source: ABdhPJzUeRlYjgcD/Tizn2yiqNMWwskxr1QbMAtRHQShttT8ptqsm5WTOeTXEuEiu4TrR1RbEMFh/Q==
+X-Received: by 2002:a17:902:6b8c:: with SMTP id p12mr4434188plk.51.1644324062033;
+        Tue, 08 Feb 2022 04:41:02 -0800 (PST)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:41b6:813e:c823:609c])
-        by smtp.gmail.com with ESMTPSA id h11sm15056939pfe.214.2022.02.08.04.40.58
+        by smtp.gmail.com with ESMTPSA id h11sm15056939pfe.214.2022.02.08.04.41.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 04:40:59 -0800 (PST)
+        Tue, 08 Feb 2022 04:41:01 -0800 (PST)
 From:   Chen-Yu Tsai <wenst@chromium.org>
 To:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -55,9 +55,9 @@ Cc:     Chen-Yu Tsai <wenst@chromium.org>,
         Miles Chen <miles.chen@mediatek.com>,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 05/31] clk: mediatek: gate: Clean up included headers
-Date:   Tue,  8 Feb 2022 20:40:08 +0800
-Message-Id: <20220208124034.414635-6-wenst@chromium.org>
+Subject: [PATCH v3 06/31] clk: mediatek: cpumux: Implement unregister API
+Date:   Tue,  8 Feb 2022 20:40:09 +0800
+Message-Id: <20220208124034.414635-7-wenst@chromium.org>
 X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
 In-Reply-To: <20220208124034.414635-1-wenst@chromium.org>
 References: <20220208124034.414635-1-wenst@chromium.org>
@@ -73,73 +73,80 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Some included headers aren't actually used anywhere, while other headers
-with the declaration of functions and structures aren't directly
-included.
+The cpumux clk type within the MediaTek clk driver library only has
+a register function, and no corresponding unregister function. This
+means there is no way for its users to properly implement cleanup
+and removal.
 
-Get rid of the unused ones, and add the ones that should be included
-directly.
-
-On the header side, replace headers that are included purely for data
-structure definitions with forward declarations. This decreases the
-amount of preprocessing and compilation effort required for each
-inclusion.
+Add a matching unregister function for the cpumux type clk.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 Reviewed-by: Miles Chen <miles.chen@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/clk/mediatek/clk-gate.c | 11 +++--------
- drivers/clk/mediatek/clk-gate.h | 10 +++++++---
- 2 files changed, 10 insertions(+), 11 deletions(-)
+ drivers/clk/mediatek/clk-cpumux.c | 31 +++++++++++++++++++++++++++++++
+ drivers/clk/mediatek/clk-cpumux.h |  3 +++
+ 2 files changed, 34 insertions(+)
 
-diff --git a/drivers/clk/mediatek/clk-gate.c b/drivers/clk/mediatek/clk-gate.c
-index ed1ad5535d41..e8881ae1489a 100644
---- a/drivers/clk/mediatek/clk-gate.c
-+++ b/drivers/clk/mediatek/clk-gate.c
-@@ -4,18 +4,13 @@
-  * Author: James Liao <jamesjj.liao@mediatek.com>
-  */
+diff --git a/drivers/clk/mediatek/clk-cpumux.c b/drivers/clk/mediatek/clk-cpumux.c
+index cab5095416b6..99a819e3673f 100644
+--- a/drivers/clk/mediatek/clk-cpumux.c
++++ b/drivers/clk/mediatek/clk-cpumux.c
+@@ -77,6 +77,21 @@ mtk_clk_register_cpumux(const struct mtk_composite *mux,
+ 	return clk;
+ }
  
--#include <linux/of.h>
--#include <linux/of_address.h>
--
--#include <linux/io.h>
--#include <linux/slab.h>
--#include <linux/delay.h>
--#include <linux/clkdev.h>
- #include <linux/clk-provider.h>
--#include <linux/container_of.h>
- #include <linux/mfd/syscon.h>
- #include <linux/module.h>
-+#include <linux/printk.h>
- #include <linux/regmap.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
- 
- #include "clk-gate.h"
- 
-diff --git a/drivers/clk/mediatek/clk-gate.h b/drivers/clk/mediatek/clk-gate.h
-index 344adffb6578..6b5738826a22 100644
---- a/drivers/clk/mediatek/clk-gate.h
-+++ b/drivers/clk/mediatek/clk-gate.h
-@@ -7,9 +7,13 @@
- #ifndef __DRV_CLK_GATE_H
- #define __DRV_CLK_GATE_H
- 
--#include <linux/clk-provider.h>
--#include <linux/device.h>
--#include <linux/of.h>
-+#include <linux/types.h>
++static void mtk_clk_unregister_cpumux(struct clk *clk)
++{
++	struct mtk_clk_cpumux *cpumux;
++	struct clk_hw *hw;
 +
-+struct clk;
-+struct clk_onecell_data;
-+struct clk_ops;
-+struct device;
-+struct device_node;
++	hw = __clk_get_hw(clk);
++	if (!hw)
++		return;
++
++	cpumux = to_mtk_clk_cpumux(hw);
++
++	clk_unregister(clk);
++	kfree(cpumux);
++}
++
+ int mtk_clk_register_cpumuxes(struct device_node *node,
+ 			      const struct mtk_composite *clks, int num,
+ 			      struct clk_onecell_data *clk_data)
+@@ -106,4 +121,20 @@ int mtk_clk_register_cpumuxes(struct device_node *node,
+ 	return 0;
+ }
  
- extern const struct clk_ops mtk_clk_gate_ops_setclr;
- extern const struct clk_ops mtk_clk_gate_ops_setclr_inv;
++void mtk_clk_unregister_cpumuxes(const struct mtk_composite *clks, int num,
++				 struct clk_onecell_data *clk_data)
++{
++	int i;
++
++	for (i = num; i > 0; i--) {
++		const struct mtk_composite *mux = &clks[i - 1];
++
++		if (IS_ERR_OR_NULL(clk_data->clks[mux->id]))
++			continue;
++
++		mtk_clk_unregister_cpumux(clk_data->clks[mux->id]);
++		clk_data->clks[mux->id] = ERR_PTR(-ENOENT);
++	}
++}
++
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/clk/mediatek/clk-cpumux.h b/drivers/clk/mediatek/clk-cpumux.h
+index 2aaf1afd4e5f..fda7770fd803 100644
+--- a/drivers/clk/mediatek/clk-cpumux.h
++++ b/drivers/clk/mediatek/clk-cpumux.h
+@@ -19,4 +19,7 @@ int mtk_clk_register_cpumuxes(struct device_node *node,
+ 			      const struct mtk_composite *clks, int num,
+ 			      struct clk_onecell_data *clk_data);
+ 
++void mtk_clk_unregister_cpumuxes(const struct mtk_composite *clks, int num,
++				 struct clk_onecell_data *clk_data);
++
+ #endif /* __DRV_CLK_CPUMUX_H */
 -- 
 2.35.0.263.gb82422642f-goog
 
