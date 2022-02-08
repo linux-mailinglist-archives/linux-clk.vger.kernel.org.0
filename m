@@ -2,48 +2,48 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21EA24AD935
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Feb 2022 14:17:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D7904AD919
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Feb 2022 14:17:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241042AbiBHNQs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Feb 2022 08:16:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58982 "EHLO
+        id S243166AbiBHNQY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Feb 2022 08:16:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358326AbiBHMlS (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Feb 2022 07:41:18 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C9EC03FECA
-        for <linux-clk@vger.kernel.org>; Tue,  8 Feb 2022 04:41:17 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id j4so1443259plj.8
-        for <linux-clk@vger.kernel.org>; Tue, 08 Feb 2022 04:41:17 -0800 (PST)
+        with ESMTP id S1358343AbiBHMlU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Feb 2022 07:41:20 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FF9C03FECA
+        for <linux-clk@vger.kernel.org>; Tue,  8 Feb 2022 04:41:19 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id y5so17714302pfe.4
+        for <linux-clk@vger.kernel.org>; Tue, 08 Feb 2022 04:41:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ucbCQXspAieTR5IRJ88apHKs0Oo+TcGwEm7YM7yoBFE=;
-        b=oHY673UW7vPbSg3PGRcTlPVTR8Y6tSg1ME93cddkHRfN3evzBumjNKPjS9MMXetvGz
-         cyaPopBpjfAlMvtxCgg+GHb5cpygQczzim0Yug0Mh8xdzazLH7miTaVhCIIXd9h9QdUn
-         7TbUW0Nsppw/Izk8VE5AGFZaPWyj9T5IpYftw=
+        bh=VHqh/ijWzTkcfpqZcH5Nz4N1ISUlPyaJ60Q4OawbBT8=;
+        b=VnE41xebylDSIYGhpkKNh6ZSVZj7DTmMZVRnyN0MXW4J5q0SI5huCttg3YkTT/ADYt
+         3DheENGasIAUHE7ketk881llrCYZtC31y558+C3G/eh93+rEmIPR374s5tVphnYIuS50
+         EcGL+mY2csHY5WHy0gsEFrhBXtCv3+HUfvyEI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ucbCQXspAieTR5IRJ88apHKs0Oo+TcGwEm7YM7yoBFE=;
-        b=iY7DWCWgL7l5JoDN8lz3U7e/8DPkNa03FXkX+WauMVqelO8kaXciJUjHunPyIMfHzn
-         IIo6vzZ7QAucdkCtYgijJbzaDEloiOI3gSrBFouwY/Y21RYPDI9IcS1V51PqaMs/K1S2
-         IeDWzRA9vx4boX4WotRxGDpBh8ra8onArb2mSzqSLm1WDJOzByj+RDnEl9VsrxuHKxLc
-         z3NVspX+AUj5ghDSAC/kePx+5r6E10TMm+adP0dvHfRVPxCIWr7HURBJy9kRGuCwZNpe
-         bj4KdbB4msFY4fT2yX/ePNq5HNakKyHz6E6+z61yvQNGaJExhJ3oMoIE7KfOa6S/wPcK
-         va2w==
-X-Gm-Message-State: AOAM532Kpge1ZptDLNuuY9ABATmH6gxzyFsgv/G/BwraoEaos44ftUdH
-        HQUa0uM8dWUE+T2AuuD9SilrKQ==
-X-Google-Smtp-Source: ABdhPJxdkJmcSGDXCQW6yjqpsQN+RjwrIexHzblWHmuV0z4WVMDQoML2GrmGp6e07CaXZlQ30GG28g==
-X-Received: by 2002:a17:902:7048:: with SMTP id h8mr4338247plt.40.1644324077323;
-        Tue, 08 Feb 2022 04:41:17 -0800 (PST)
+        bh=VHqh/ijWzTkcfpqZcH5Nz4N1ISUlPyaJ60Q4OawbBT8=;
+        b=eu3zb/gg1jLb0T7Eqh/jTRwsjKI8OdlJ+aC9MJnxD+Jh5ddTMI2lI9nZQNim61l6+O
+         YkPnaT5Y+++AdzLXK74GZIb0u4bNFTWhwnWphjNllqCA9yE+d6USrERIVTN3+N8hYmcr
+         F6V7SPqn2onL8Eq+oZuxIY75ufK9s1OiijIC2DQ3x69jwjzM0jEwTNz8HGFgvfIhQOMO
+         UoAfN5rhajE/286nypF2QWPm+DmChkXmfvTW6+sTH+i6hJ6xeD6etlxqvH0ZhDPQvFnO
+         8S+zSrSclfKfFVJ+RtSujtDMaiV7cy6X8WWb2+/moH/vqEurP5XQaM9wv6YuNxsFj0S5
+         Lqvw==
+X-Gm-Message-State: AOAM532lAvXy8UuHL/uWLmYXt6FVm4lKsD14sxNY5Ei5KTmzoxY6lER2
+        cUI8z4w+7oVeEgJReLvnZRshYQ==
+X-Google-Smtp-Source: ABdhPJzo0Dp/SCBcUkYHyRIcTeVZXRqv8ziFNxicZ9SLxGT7dPNBKPsfl76t0sK8wZgzQsmDxW8paw==
+X-Received: by 2002:a65:4b82:: with SMTP id t2mr3342176pgq.607.1644324079445;
+        Tue, 08 Feb 2022 04:41:19 -0800 (PST)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:41b6:813e:c823:609c])
-        by smtp.gmail.com with ESMTPSA id h11sm15056939pfe.214.2022.02.08.04.41.15
+        by smtp.gmail.com with ESMTPSA id h11sm15056939pfe.214.2022.02.08.04.41.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Feb 2022 04:41:17 -0800 (PST)
+        Tue, 08 Feb 2022 04:41:19 -0800 (PST)
 From:   Chen-Yu Tsai <wenst@chromium.org>
 To:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -55,9 +55,9 @@ Cc:     Chen-Yu Tsai <wenst@chromium.org>,
         Miles Chen <miles.chen@mediatek.com>,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 13/31] clk: mediatek: pll: Implement unregister API
-Date:   Tue,  8 Feb 2022 20:40:16 +0800
-Message-Id: <20220208124034.414635-14-wenst@chromium.org>
+Subject: [PATCH v3 14/31] clk: mediatek: pll: Clean up included headers
+Date:   Tue,  8 Feb 2022 20:40:17 +0800
+Message-Id: <20220208124034.414635-15-wenst@chromium.org>
 X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
 In-Reply-To: <20220208124034.414635-1-wenst@chromium.org>
 References: <20220208124034.414635-1-wenst@chromium.org>
@@ -73,104 +73,52 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The PLL clk type within the MediaTek clk driver library only has a
-register function, and no corresponding unregister function. This
-means there is no way for its users to properly implement cleanup
-and removal.
+Some included headers aren't actually used anywhere, while other headers
+with the declaration of functions and structures aren't directly
+included.
 
-Add a matching unregister function for the PLL type clk.
+Get rid of the unused ones, and add the ones that should be included
+directly.
+
+Also, copy the MHZ macro from clk-mtk.h, and drop clk-mtk.h from the
+included headers.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 Reviewed-by: Miles Chen <miles.chen@mediatek.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/clk/mediatek/clk-pll.c | 55 ++++++++++++++++++++++++++++++++++
- drivers/clk/mediatek/clk-pll.h |  2 ++
- 2 files changed, 57 insertions(+)
+ drivers/clk/mediatek/clk-pll.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/clk/mediatek/clk-pll.c b/drivers/clk/mediatek/clk-pll.c
-index 64f59554bc9b..b54e33b75d4e 100644
+index b54e33b75d4e..8439d37e354d 100644
 --- a/drivers/clk/mediatek/clk-pll.c
 +++ b/drivers/clk/mediatek/clk-pll.c
-@@ -360,6 +360,21 @@ static struct clk *mtk_clk_register_pll(const struct mtk_pll_data *data,
- 	return clk;
- }
+@@ -4,17 +4,19 @@
+  * Author: James Liao <jamesjj.liao@mediatek.com>
+  */
  
-+static void mtk_clk_unregister_pll(struct clk *clk)
-+{
-+	struct clk_hw *hw;
-+	struct mtk_clk_pll *pll;
-+
-+	hw = __clk_get_hw(clk);
-+	if (!hw)
-+		return;
-+
-+	pll = to_mtk_clk_pll(hw);
-+
-+	clk_unregister(clk);
-+	kfree(pll);
-+}
-+
- void mtk_clk_register_plls(struct device_node *node,
- 		const struct mtk_pll_data *plls, int num_plls, struct clk_onecell_data *clk_data)
- {
-@@ -388,4 +403,44 @@ void mtk_clk_register_plls(struct device_node *node,
- }
- EXPORT_SYMBOL_GPL(mtk_clk_register_plls);
+-#include <linux/of.h>
+-#include <linux/of_address.h>
++#include <linux/clk-provider.h>
++#include <linux/container_of.h>
++#include <linux/delay.h>
++#include <linux/err.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
++#include <linux/of_address.h>
+ #include <linux/slab.h>
+-#include <linux/clkdev.h>
+-#include <linux/delay.h>
  
-+static __iomem void *mtk_clk_pll_get_base(struct clk *clk,
-+					  const struct mtk_pll_data *data)
-+{
-+	struct clk_hw *hw = __clk_get_hw(clk);
-+	struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
-+
-+	return pll->base_addr - data->reg;
-+}
-+
-+void mtk_clk_unregister_plls(const struct mtk_pll_data *plls, int num_plls,
-+			     struct clk_onecell_data *clk_data)
-+{
-+	__iomem void *base = NULL;
-+	int i;
-+
-+	if (!clk_data)
-+		return;
-+
-+	for (i = num_plls; i > 0; i--) {
-+		const struct mtk_pll_data *pll = &plls[i - 1];
-+
-+		if (IS_ERR_OR_NULL(clk_data->clks[pll->id]))
-+			continue;
-+
-+		/*
-+		 * This is quite ugly but unfortunately the clks don't have
-+		 * any device tied to them, so there's no place to store the
-+		 * pointer to the I/O region base address. We have to fetch
-+		 * it from one of the registered clks.
-+		 */
-+		base = mtk_clk_pll_get_base(clk_data->clks[pll->id], pll);
-+
-+		mtk_clk_unregister_pll(clk_data->clks[pll->id]);
-+		clk_data->clks[pll->id] = ERR_PTR(-ENOENT);
-+	}
-+
-+	iounmap(base);
-+}
-+EXPORT_SYMBOL_GPL(mtk_clk_unregister_plls);
-+
- MODULE_LICENSE("GPL");
-diff --git a/drivers/clk/mediatek/clk-pll.h b/drivers/clk/mediatek/clk-pll.h
-index d01b0c38311d..a889b1e472e7 100644
---- a/drivers/clk/mediatek/clk-pll.h
-+++ b/drivers/clk/mediatek/clk-pll.h
-@@ -51,5 +51,7 @@ struct mtk_pll_data {
- void mtk_clk_register_plls(struct device_node *node,
- 			   const struct mtk_pll_data *plls, int num_plls,
- 			   struct clk_onecell_data *clk_data);
-+void mtk_clk_unregister_plls(const struct mtk_pll_data *plls, int num_plls,
-+			     struct clk_onecell_data *clk_data);
+-#include "clk-mtk.h"
+ #include "clk-pll.h"
  
- #endif /* __DRV_CLK_MTK_PLL_H */
++#define MHZ			(1000 * 1000)
++
+ #define REG_CON0		0
+ #define REG_CON1		4
+ 
 -- 
 2.35.0.263.gb82422642f-goog
 
