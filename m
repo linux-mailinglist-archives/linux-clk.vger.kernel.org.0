@@ -2,109 +2,239 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B784AD955
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Feb 2022 14:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3C84AD91D
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Feb 2022 14:17:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233423AbiBHNRH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Feb 2022 08:17:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58388 "EHLO
+        id S1350651AbiBHNQ0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Feb 2022 08:16:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357971AbiBHMj0 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Feb 2022 07:39:26 -0500
-X-Greylist: delayed 66 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 04:39:25 PST
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD62DC03FECA
-        for <linux-clk@vger.kernel.org>; Tue,  8 Feb 2022 04:39:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=9smJiqXDXeoe+SY+ky2K+yevWbS3
-        UyGERBjmQzbmvjE=; b=Q2Nbt+4rcsnBl9GGOYdEzjfIzRDRBV2k1d8E/bjmUNvc
-        H8XM3E8A2X3w/B9k4jgiY99RmTzLc6cYdoCCukilGuHcc20u/JydqmEHoUqgF1uk
-        QGEJ87H0T2eY57MyWcCHtdlnWgZMaq9D2ErjMq8UitH38lEFYVIDJ3sXgKmZivE=
-Received: (qmail 251800 invoked from network); 8 Feb 2022 13:39:23 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 8 Feb 2022 13:39:23 +0100
-X-UD-Smtp-Session: l3s3148p1@rkm4AYHXYskgAQnoAF1FAEKPHF9sYOFO
-Date:   Tue, 8 Feb 2022 13:39:23 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        LUU HOAI <hoai.luu.ub@renesas.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Thanh Quan <thanh.quan.xn@renesas.com>
-Subject: Re: [PATCH 2/5] dt-bindings: watchdog: renesas-wdt: Document
- r8a779f0 support
-Message-ID: <YgJke+iXkwn0VSM9@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        with ESMTP id S1358064AbiBHMku (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Feb 2022 07:40:50 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B9CC03FECA
+        for <linux-clk@vger.kernel.org>; Tue,  8 Feb 2022 04:40:49 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id 10so5817923plj.1
+        for <linux-clk@vger.kernel.org>; Tue, 08 Feb 2022 04:40:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KMrUAZQe9JUnVj5EUjsHzOkSwiZvLDAMScWPGf0Fm7Y=;
+        b=Tv2sNlDXK1Ko6uI/SUxKmBShnZK1++IAMa8F4Lj3hYheLkNiKldHy6fSEfC2jyv7cp
+         /MnlRv6jwo5QdrgVmIFVlPJWBTP2rY3pR1W9ymm3PL7ZbqftNLKV/+nhZCTFfyRTAzMf
+         C55QO7PkMzxcNnw3dCqFlbGUrymPAr2fd3PhQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KMrUAZQe9JUnVj5EUjsHzOkSwiZvLDAMScWPGf0Fm7Y=;
+        b=RfgHLH9g5anRww/p7vfXDotthurDpcpy6a9pz9RPV26wcFmTUyhEr+EhSWEZmKX4Ta
+         6MbK9+48Xav0uKdIeC1Jf/iq7oHtatcwvE7Tk6OW7uAS4D/V68mrDKeBuzLH6pVuRfij
+         WrE0gLsNTx0nL80keyZ35Dx/nvHjgngST0nCg48Zem4EUcJ0A4gQlEjzdfT5YJd6jEc8
+         iY6o8zhHZASN4YOtPcOGY/8+CGx9SNUQFn0HYOUA2Gw2Bw3RmLOT4eMpFBj/AjhKO722
+         3HS3QYoUK3fgofdXJ6kuS6hGEfuMftiCXvH0pni2A6zgo8jMyuhZFj9wqYby/F0K/LSS
+         X0+w==
+X-Gm-Message-State: AOAM532b2Zxtvxnkksiqf/TBfgdyQxLzyIwSNGSPh44wQ0UKZ1uCvNKm
+        HYcVBsy3UIqr6qrhKy9XyPh+Ug==
+X-Google-Smtp-Source: ABdhPJy8bQUmp0LwZ6FrJof01Qa1olsgrYoahsed5EV70vn0DwuNDR2d0/b3XFrg2nh3rQtTCRo4HA==
+X-Received: by 2002:a17:90a:780e:: with SMTP id w14mr1195661pjk.42.1644324049220;
+        Tue, 08 Feb 2022 04:40:49 -0800 (PST)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:41b6:813e:c823:609c])
+        by smtp.gmail.com with ESMTPSA id h11sm15056939pfe.214.2022.02.08.04.40.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 04:40:49 -0800 (PST)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        LUU HOAI <hoai.luu.ub@renesas.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Thanh Quan <thanh.quan.xn@renesas.com>
-References: <cover.1642525158.git.geert+renesas@glider.be>
- <cca61a83ae82ecf5c23eb28e30c39f2f661f0e02.1642525158.git.geert+renesas@glider.be>
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 00/31] clk: mediatek: Cleanups and Improvements - Part 1
+Date:   Tue,  8 Feb 2022 20:40:03 +0800
+Message-Id: <20220208124034.414635-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.35.0.263.gb82422642f-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4lz/16p7tLSRDwdp"
-Content-Disposition: inline
-In-Reply-To: <cca61a83ae82ecf5c23eb28e30c39f2f661f0e02.1642525158.git.geert+renesas@glider.be>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Hi everyone,
 
---4lz/16p7tLSRDwdp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is version 3 of part 1 of planned work to cleanup, improve, and
+modernize the MediaTek clk drivers. The full proposal can be found here:
 
-On Tue, Jan 18, 2022 at 06:09:02PM +0100, Geert Uytterhoeven wrote:
-> From: Thanh Quan <thanh.quan.xn@renesas.com>
->=20
-> Document support for the Watchdog Timer (WDT) Controller in the Renesas
-> R-Car S4-8 (R8A779F0) SoC.
->=20
-> Signed-off-by: Thanh Quan <thanh.quan.xn@renesas.com>
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+https://lore.kernel.org/linux-clk/20220122091731.283592-1-wenst@chromium.org/
 
 
---4lz/16p7tLSRDwdp
-Content-Type: application/pgp-signature; name="signature.asc"
+Changes since version 2:
 
------BEGIN PGP SIGNATURE-----
+- Collected review tags
+- Moved platform_set_drvdata() in clk_mt8195_apusys_pll_probe() to the
+  correct patch (patch 30)
+- Corrected error path for clk_mt8195_apmixed_probe() in patch
+  "clk: mediatek: mt8195: Implement error handling in probe functions"
+  - Also dropped review tag for this patch
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmICZHoACgkQFA3kzBSg
-KbYB5BAAr5DGS+Sh/754QQlhwRYnCKENrRVAFJYuVYROnsSBOwvVTeldZx3IHO3P
-DYt+Ll13SSY0enGextSAzIrHoIVxXOQ524VyZedqmj0mdv3g7mwO98pxDbIAyVFk
-m9Z0u/ECwKRsKu8nZSFVfwN1iMUwBThWk6k6tSZK/OelRQ5M798k7hFsvCRVOXX3
-tvTehufUkFOUVGMP3fKO+BW+iRuqGwwZI1xY07zFIZmiM09bR6NjCTi0JXy6yKWD
-vt2nouZRXWYiWMwSEIf1i3jiF1vRG6uwXbrfpLlZD24OOQpvGV6sAY7GprsK1gBd
-Ti7sph7gfX/Elj9qveo8AoXgfTAmCyVSJ0NJ/V5zMp3qSlHXaQYOfxrmwzSxZv5J
-W1bKOCkfW2w4n/NX7sGqqT3dPfyDLyef7PVtU3/5XDZtq46mIApZpqZnq7xVyHom
-KpQwK0EAYNxCblN9DmtRXRxw8kflFkCMw1XS5g/eo9ds3qfwOsJV2QJrCC4d5FM1
-B5xplsruGT2wW+DbM5fFqPO5uiofO9DRbDhur7ucQGn6OPjcHXK1yLlQFb3S/Ab6
-5iikxxcIqMEu2rjO3+QocQZl/ppXKiI8x4cP7AY//p3bc35DbTd5f9bPUBdC5esQ
-1CxNgry/A4gfEtnJZwk3212shJ96pDb2AFOzsaS8BxIjlw9r6SE=
-=LCvS
------END PGP SIGNATURE-----
+Changes since version 1:
 
---4lz/16p7tLSRDwdp--
+- Added NULL pointer check against __clk_get_hw() return value in
+  mtk_clk_unregister_pll()
+- Added NULL pointer check against __clk_get_hw() return value in
+  mtk_clk_unregister_composite()
+- Copied MHZ macro into clk-pll.c and restored its usage
+- Dropped extra semicolon in mtk_clk_register_plls()
+  - Reported by kernel test robot <lkp@intel.com>
+
+
+I also wanted to ask, what would be a good way to do the "struct clk" to
+"struct clk_hw" API conversion?
+
+A. Add new register/unregister APIs that use "struct clk_hw" instead of
+   "struct clk". This would result in a lot of patches and a lot of
+   churn though.
+
+B. Replace "struct clk" with "struct clk_hw" (and "struct clk_onecell_data"
+   with "struct clk_hw_onecell_data") and work around existing code with
+   __clk_get_hw() or its opposite. This would result in a few huge
+   pages, as to not break bisection, but would likely cause less churn.
+   And it would cover all existing platforms in one go.
+
+
+Thanks
+ChenYu
+
+
+Original cover letter sans full proposal as follows:
+
+Part 1 involves cleaning up various parts of the MediaTek common clk
+driver library:
+
+- Code style cleanups in places touched by other changes
+- Code for a given clk type that happened to be split between different
+  files is consolidated
+- Parts of the implementation, such as the internal data structures and
+  registration/unregistration of a single clk, are internalized and no
+  longer exported to other parts of the library
+- Unregister APIs for all clk types in the library are added
+- Remove function added for the simple driver case
+- Error handling is added for all clk types
+- MT8195 clk drivers cleaned up with error handling and removal support
+  added
+
+Adding error handling to the clk driver library results is a change in
+its behavior, and might cause some breakage where the affected system
+was originally somewhat working, but not completely. The failure would
+result from a duplicated clk, either in name or ID. Old behavior was to
+skip over these and ignore the error, whereas the new behavior is to
+restore changes and error out.
+
+To detect duplicate IDs, an additional warning will now be printed when
+such occurrences happen. In a correct driver such things should not
+happen though, so maybe we could consider wrapping that in some debug
+Kconfig option. That's why I put it as the last patch in this series.
+
+This series was tested on MT8195 with the series applied on the downstream
+ChromeOS v5.10 kernel. Some other patches were applied to make this
+series apply cleanly, but nothing The cpumux clk type changes were
+not tested due to lack of related hardware. However the changes are
+very similar to the other types, and I am confident there are no issues.
+
+
+Chen-Yu Tsai (31):
+  clk: mediatek: Use %pe to print errors
+  clk: mediatek: gate: Consolidate gate type clk related code
+  clk: mediatek: gate: Internalize clk implementation
+  clk: mediatek: gate: Implement unregister API
+  clk: mediatek: gate: Clean up included headers
+  clk: mediatek: cpumux: Implement unregister API
+  clk: mediatek: cpumux: Internalize struct mtk_clk_cpumux
+  clk: mediatek: cpumux: Clean up included headers
+  clk: mediatek: mux: Implement unregister API
+  clk: mediatek: mux: Internalize struct mtk_clk_mux
+  clk: mediatek: mux: Clean up included headers
+  clk: mediatek: pll: Split definitions into separate header file
+  clk: mediatek: pll: Implement unregister API
+  clk: mediatek: pll: Clean up included headers
+  clk: mediatek: Implement mtk_clk_unregister_fixed_clks() API
+  clk: mediatek: Implement mtk_clk_unregister_factors() API
+  clk: mediatek: Implement mtk_clk_unregister_divider_clks() API
+  clk: mediatek: Implement mtk_clk_unregister_composites() API
+  clk: mediatek: Add mtk_clk_simple_remove()
+  clk: mediatek: mtk: Clean up included headers
+  clk: mediatek: cpumux: Implement error handling in register API
+  clk: mediatek: gate: Implement error handling in register API
+  clk: mediatek: mux: Reverse check for existing clk to reduce nesting
+    level
+  clk: mediatek: mux: Implement error handling in register API
+  clk: mediatek: pll: Implement error handling in register API
+  clk: mediatek: mtk: Implement error handling in register APIs
+  clk: mediatek: Unregister clks in mtk_clk_simple_probe() error path
+  clk: mediatek: mt8195: Hook up mtk_clk_simple_remove()
+  clk: mediatek: mt8195: Implement error handling in probe functions
+  clk: mediatek: mt8195: Implement remove functions
+  clk: mediatek: Warn if clk IDs are duplicated
+
+ drivers/clk/mediatek/clk-apmixed.c            |   2 +-
+ drivers/clk/mediatek/clk-cpumux.c             |  69 +++-
+ drivers/clk/mediatek/clk-cpumux.h             |  13 +-
+ drivers/clk/mediatek/clk-gate.c               | 148 +++++++--
+ drivers/clk/mediatek/clk-gate.h               |  59 ++--
+ drivers/clk/mediatek/clk-mt2701.c             |   5 +-
+ drivers/clk/mediatek/clk-mt2712.c             |   3 +-
+ drivers/clk/mediatek/clk-mt6765.c             |   3 +-
+ drivers/clk/mediatek/clk-mt6779.c             |   3 +-
+ drivers/clk/mediatek/clk-mt6797.c             |   3 +-
+ drivers/clk/mediatek/clk-mt7622.c             |   5 +-
+ drivers/clk/mediatek/clk-mt7629.c             |   5 +-
+ drivers/clk/mediatek/clk-mt7986-apmixed.c     |   4 +-
+ drivers/clk/mediatek/clk-mt8135.c             |   3 +-
+ drivers/clk/mediatek/clk-mt8167.c             |   3 +-
+ drivers/clk/mediatek/clk-mt8173.c             |   5 +-
+ drivers/clk/mediatek/clk-mt8183.c             |   3 +-
+ drivers/clk/mediatek/clk-mt8192.c             |   3 +-
+ drivers/clk/mediatek/clk-mt8195-apmixedsys.c  |  30 +-
+ drivers/clk/mediatek/clk-mt8195-apusys_pll.c  |  25 +-
+ drivers/clk/mediatek/clk-mt8195-cam.c         |   1 +
+ drivers/clk/mediatek/clk-mt8195-ccu.c         |   1 +
+ drivers/clk/mediatek/clk-mt8195-img.c         |   1 +
+ .../clk/mediatek/clk-mt8195-imp_iic_wrap.c    |   1 +
+ drivers/clk/mediatek/clk-mt8195-infra_ao.c    |   1 +
+ drivers/clk/mediatek/clk-mt8195-ipe.c         |   1 +
+ drivers/clk/mediatek/clk-mt8195-mfg.c         |   1 +
+ drivers/clk/mediatek/clk-mt8195-peri_ao.c     |   1 +
+ drivers/clk/mediatek/clk-mt8195-scp_adsp.c    |   1 +
+ drivers/clk/mediatek/clk-mt8195-topckgen.c    |  69 +++-
+ drivers/clk/mediatek/clk-mt8195-vdec.c        |   1 +
+ drivers/clk/mediatek/clk-mt8195-vdo0.c        |  20 +-
+ drivers/clk/mediatek/clk-mt8195-vdo1.c        |  20 +-
+ drivers/clk/mediatek/clk-mt8195-venc.c        |   1 +
+ drivers/clk/mediatek/clk-mt8195-vpp0.c        |   1 +
+ drivers/clk/mediatek/clk-mt8195-vpp1.c        |   1 +
+ drivers/clk/mediatek/clk-mt8195-wpe.c         |   1 +
+ drivers/clk/mediatek/clk-mt8516.c             |   3 +-
+ drivers/clk/mediatek/clk-mtk.c                | 304 +++++++++++++-----
+ drivers/clk/mediatek/clk-mtk.h                | 105 ++----
+ drivers/clk/mediatek/clk-mux.c                |  89 ++++-
+ drivers/clk/mediatek/clk-mux.h                |  17 +-
+ drivers/clk/mediatek/clk-pll.c                | 100 +++++-
+ drivers/clk/mediatek/clk-pll.h                |  57 ++++
+ drivers/clk/mediatek/reset.c                  |   3 +-
+ 45 files changed, 903 insertions(+), 292 deletions(-)
+ create mode 100644 drivers/clk/mediatek/clk-pll.h
+
+-- 
+2.35.0.263.gb82422642f-goog
+
