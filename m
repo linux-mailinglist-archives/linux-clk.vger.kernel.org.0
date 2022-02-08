@@ -2,81 +2,109 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50AAB4AE11F
-	for <lists+linux-clk@lfdr.de>; Tue,  8 Feb 2022 19:43:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D4D4AE133
+	for <lists+linux-clk@lfdr.de>; Tue,  8 Feb 2022 19:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385104AbiBHSlr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Feb 2022 13:41:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
+        id S1353275AbiBHSn5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Feb 2022 13:43:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385079AbiBHSlm (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Feb 2022 13:41:42 -0500
-X-Greylist: delayed 402 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 08 Feb 2022 10:41:38 PST
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FA4C06157A;
-        Tue,  8 Feb 2022 10:41:38 -0800 (PST)
-From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1644345294; bh=nalpL5PXfzIK2UIFKSiwUgZ+m6XFsf+U367lw7XDLSc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=m15AE0ClOPpIccqAJQ6O935Ffl14jKzA6sTw0XDAC0z2q7dYrKrHS9mJHMJhlW1TX
-         ngL5/5i3uDYsJwU3+oiP+iflFl6/dfGRk+vJTYUeAR+Zfkcu7SOOtJLrqlt9R3rUAJ
-         J4cvt5cLA1xH29AjWVAtD0DBM96Paegsf9K/SiXk=
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        with ESMTP id S1385391AbiBHSnj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Feb 2022 13:43:39 -0500
+Received: from smtpout1.mo3004.mail-out.ovh.net (smtpout1.mo3004.mail-out.ovh.net [79.137.123.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210C0C03E943;
+        Tue,  8 Feb 2022 10:43:13 -0800 (PST)
+Received: from pro2.mail.ovh.net (unknown [10.108.1.178])
+        by mo3004.mail-out.ovh.net (Postfix) with ESMTPS id E50A7246E7F;
+        Tue,  8 Feb 2022 18:35:27 +0000 (UTC)
+Received: from localhost.localdomain (88.125.132.78) by DAG1EX2.emp2.local
+ (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Tue, 8 Feb
+ 2022 19:35:26 +0100
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+To:     <linux-renesas-soc@vger.kernel.org>, <geert+renesas@glider.be>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Magnus Damm <magnus.damm@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mark Kettenis <kettenis@openbsd.org>,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
-Subject: [PATCH v4 3/3] MAINTAINERS: Add clk-apple-nco under ARM/APPLE MACHINE
-Date:   Tue,  8 Feb 2022 19:34:11 +0100
-Message-Id: <20220208183411.61090-4-povik+lin@cutebit.org>
-In-Reply-To: <20220208183411.61090-1-povik+lin@cutebit.org>
-References: <20220208183411.61090-1-povik+lin@cutebit.org>
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+CC:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>,
+        <linux-watchdog@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: [PATCH v2 0/6] ARM: r9a06g032: add support for the watchdogs
+Date:   Tue, 8 Feb 2022 19:35:04 +0100
+Message-ID: <20220208183511.2925304-1-jjhiblot@traphandler.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam: Yes
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM,SPF_FAIL,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,URIBL_RED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [88.125.132.78]
+X-ClientProxiedBy: DAG1EX1.emp2.local (172.16.2.1) To DAG1EX2.emp2.local
+ (172.16.2.2)
+X-Ovh-Tracer-Id: 13254093705174858197
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrheejgdduudduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgtghisehtkeertdertddtnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpeejudfgffelleehheevveeutdejfffgjeekudekkedugfeutdeffeeuhfeuveehieenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedtrddtrddtrddtpdekkedruddvhedrudefvddrjeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehprhhovddrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdgtlhhksehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Acked-by: Sven Peter <sven@svenpeter.dev>
-Acked-by: Hector Martin <marcan@marcan.st>
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+Hi all,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 35ca7a4a65d8..984613444331 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1769,6 +1769,7 @@ C:	irc://irc.oftc.net/asahi-dev
- T:	git https://github.com/AsahiLinux/linux.git
- F:	Documentation/devicetree/bindings/arm/apple.yaml
- F:	Documentation/devicetree/bindings/arm/apple/*
-+F:	Documentation/devicetree/bindings/clock/apple,nco.yaml
- F:	Documentation/devicetree/bindings/i2c/apple,i2c.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
- F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
-@@ -1777,6 +1778,7 @@ F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
- F:	Documentation/devicetree/bindings/power/apple*
- F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
- F:	arch/arm64/boot/dts/apple/
-+F:	drivers/clk/clk-apple-nco.c
- F:	drivers/i2c/busses/i2c-pasemi-core.c
- F:	drivers/i2c/busses/i2c-pasemi-platform.c
- F:	drivers/irqchip/irq-apple-aic.c
+This series adds support for the watchdog timers of the RZ/N1.
+The watchdog driver (rzn1-wdt.c) is derived from the driver available at
+https://github.com/renesas-rz/rzn1_linux.git with a few modifications
+
+In order to be able to reset the board when a watchdog timer expires,
+the RSTEN register must be configured. it is the responsability of the
+bootloader to set those bits (or not, depending on the chosen policy).
+
+If the watchdog reset source is not enabled, an interrupt is triggered
+when the watchdog expires. Currently this interrupt doesn't much apart
+from printing a message.
+
+Changes v1 -> v2:
+* Modified the clock driver to not enable the watchdog reset sources.
+  On other renesas platforms, those bits are by the bootloader. The
+  watchdog reset sources are still disabled when the platform is halted
+  to prevent a watchdog reset.
+* Added a SOC-specific compatible "renesas,r9a06g032-wdt"
+* reordered the dts/i entries
+* default timeout is 60 seconds
+* reworked the probe function of the wdt driver to better error cases
+* removed the set_timeout() and use a fixed period computed in probe().
+  This removes the confusion and makes it clear that the period defined
+  by the user space in indeed handled by the watchdog core
+
+Jean-Jacques Hiblot (5):
+  dt-bindings: clock: r9a06g032: Add the definition of the the watchdog
+    clock
+  dt-bindings: watchdog: renesas,wdt: Add support for RZ/N1
+  ARM: dts: r9a06g032: Add the watchdog nodes
+  ARM: dts: r9a06g032-rzn1d400-db: Enable watchdog0 with a 60s timeout
+  clk: renesas: r9a06g032: Disable the watchdog reset sources when
+    halting
+
+Phil Edworthy (1):
+  watchdog: Add Renesas RZ/N1 Watchdog driver
+
+ .../bindings/watchdog/renesas,wdt.yaml        |   6 +
+ arch/arm/boot/dts/r9a06g032-rzn1d400-db.dts   |   5 +
+ arch/arm/boot/dts/r9a06g032.dtsi              |  16 ++
+ drivers/clk/renesas/r9a06g032-clocks.c        |  30 +++
+ drivers/watchdog/Kconfig                      |   8 +
+ drivers/watchdog/Makefile                     |   1 +
+ drivers/watchdog/rzn1_wdt.c                   | 208 ++++++++++++++++++
+ include/dt-bindings/clock/r9a06g032-sysctrl.h |   1 +
+ 8 files changed, 275 insertions(+)
+ create mode 100644 drivers/watchdog/rzn1_wdt.c
+
 -- 
-2.33.0
+2.25.1
 
