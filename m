@@ -2,65 +2,67 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9854AE7BF
-	for <lists+linux-clk@lfdr.de>; Wed,  9 Feb 2022 04:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3CA4AE83F
+	for <lists+linux-clk@lfdr.de>; Wed,  9 Feb 2022 05:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344268AbiBIDNm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 8 Feb 2022 22:13:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
+        id S1345983AbiBIEH7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 8 Feb 2022 23:07:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344046AbiBIDNQ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Feb 2022 22:13:16 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DCDC0613CC
-        for <linux-clk@vger.kernel.org>; Tue,  8 Feb 2022 19:13:15 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id p5so2113525ybd.13
-        for <linux-clk@vger.kernel.org>; Tue, 08 Feb 2022 19:13:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/R2LriswMiHtMayk3cQe3ZgDGVpDn6vfPdguZ1VAL8c=;
-        b=Z4htK1PvPjLN2hbBeC6YYrji+agQMuMV5YG42X2kwEw2dpzm0JxFKo8hsFa2C1Jfx6
-         aiqSpFNGQmDBS2DDI+xB/nArXQTRf8UlOzrFaZGH+fyy6IVPwIXsISWvJMcGQ6vwcd4N
-         brBY26HkIFXOwhYOm+A2RznepAOysyGRvyKdM=
+        with ESMTP id S1347194AbiBIDjU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 8 Feb 2022 22:39:20 -0500
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58AFC043186;
+        Tue,  8 Feb 2022 19:32:54 -0800 (PST)
+Received: by mail-oi1-f181.google.com with SMTP id ay7so1207959oib.8;
+        Tue, 08 Feb 2022 19:32:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/R2LriswMiHtMayk3cQe3ZgDGVpDn6vfPdguZ1VAL8c=;
-        b=O5CdkvST2DZhO9TsvvHi9DNC5f4QemOerBbUTbDjBvzjBbnM0X1bWTix2cghps1ITK
-         h9yo/O44PrhwOrkLRvVNFSe1sfaIbJw3p0kKZnfempX90cMoparxSbnImBaVDKX/7XWd
-         Bb/XjP/jgSDXDOw4ui/Wc8KC946iqyueOtScyDpr/1SW72YRS9GSUhdRAXI0BKHrEjGU
-         pEvrOf8yE1A5qlsrzEA1l2zSweOBuS9NoVh2rE1AhF2+SXn1GtjAfIrHLxdTlOQ3rlie
-         6nE89EH40X3xa0grEOZaMuuQOIbNK8hstsWexwQ+KwjQCS8MLE+TWR7WAFuQCPQr+DDU
-         FZZA==
-X-Gm-Message-State: AOAM530R61JNxdMwkj5moSao5wo8vhgpgKvfKTpqktAss8Uj7zZneEDP
-        7DcA4uLP9246IonENwLCEMuJc6xmHQjiY45vXPZhKr6Ahe9hfQ==
-X-Google-Smtp-Source: ABdhPJxTxvn/1WdP/keqrM63kkqlFYBObLI54gDsNyXkQOm6LGSkEX7oidm2bg05AxRzM3cqFgbOsLGSQybe+5qqx+o=
-X-Received: by 2002:a25:5382:: with SMTP id h124mr384351ybb.291.1644376394583;
- Tue, 08 Feb 2022 19:13:14 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xVw4y7RQcicGcqAuoJIIuX9sgfKI9eeI2fR3E2FgTqw=;
+        b=gZs+UuEGlJxmDKsUbx4WSHZ63bRNA+Z/jXjppVaA9Cs0sBWp5rSHKGuWMWfOUr2Jlz
+         vcaYWSEn5vCirFeElVKG4Z6n04zq3hNlFl/zcHBYZy3+oAV8XNEePxU8Yfym/mdPxXnV
+         +TPlbPJxLzlfLZmYqFbpxZ08QyxhTy78ZOwSEBzdlGMiKqjxqunGvsYptuidZpP7Vvyy
+         iiUXOr4xF5J0AsKy4KukYCPhvtc0VU9d2MeIiezCaoCdCy6bmg+ZQzESBlXhNiFw+sVa
+         aTPMBsXN/sfEFd/7g+A52TYbCO57QSpfJgUu1+ErQFDvW+Q6UHrPp+x7IFpDq5bXXMVy
+         UJ1g==
+X-Gm-Message-State: AOAM533e3iDyDsI//Sq1dBH0iZE4a+LZEAc5sUWKH9P34P4/63t+YwrP
+        voHO5EeSmAPc/TZ92o+nzg==
+X-Google-Smtp-Source: ABdhPJxymnsCCtzX1ASuD0v5iwd+GBNOtOo+3Im/y5HtMBxm3SPRXXSc5a/Bd1zECZyepbo+R32dJQ==
+X-Received: by 2002:aca:3657:: with SMTP id d84mr129368oia.212.1644377573999;
+        Tue, 08 Feb 2022 19:32:53 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id e9sm6251393oom.8.2022.02.08.19.32.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Feb 2022 19:32:53 -0800 (PST)
+Received: (nullmailer pid 3586969 invoked by uid 1000);
+        Wed, 09 Feb 2022 03:32:52 -0000
+Date:   Tue, 8 Feb 2022 21:32:52 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Emil Renner Berthing <kernel@esmil.dk>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Michael Zhu <michael.zhu@starfivetech.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Fu Wei <tekkamanninja@gmail.com>, devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>
+Subject: Re: [PATCH v1 3/7] dt-bindings: clock: Add JH7100 audio clock
+ definitions
+Message-ID: <YgM15GkF7Fv1y3gE@robh.at.kernel.org>
+References: <20220126173953.1016706-1-kernel@esmil.dk>
+ <20220126173953.1016706-4-kernel@esmil.dk>
 MIME-Version: 1.0
-References: <20220208124034.414635-1-wenst@chromium.org> <20220208223252.7f179c63@pc>
-In-Reply-To: <20220208223252.7f179c63@pc>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Wed, 9 Feb 2022 11:13:03 +0800
-Message-ID: <CAGXv+5Hz6-aZpisXuFqdez5CQBtsg-h7H6yOAWUwBP-L8L=qkw@mail.gmail.com>
-Subject: Re: [PATCH v3 00/31] clk: mediatek: Cleanups and Improvements - Part 1
-To:     Boris Lysov <arz65xx@gmail.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126173953.1016706-4-kernel@esmil.dk>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,70 +70,14 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi,
+On Wed, 26 Jan 2022 18:39:49 +0100, Emil Renner Berthing wrote:
+> Add all clock outputs for the StarFive JH7100 audio clock generator.
+> 
+> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+> ---
+>  .../dt-bindings/clock/starfive-jh7100-audio.h | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/starfive-jh7100-audio.h
+> 
 
-On Wed, Feb 9, 2022 at 3:32 AM Boris Lysov <arz65xx@gmail.com> wrote:
->
-> Hi, I couldn't find a particular patch to reply to so I'm replying cover
-> letter to give some input on the PLL subsystem.
->
-> On Tue,  8 Feb 2022 20:40:03 +0800
-> Chen-Yu Tsai <wenst@chromium.org> wrote:
-> >  drivers/clk/mediatek/clk-pll.c                | 100 +++++-
-> >  drivers/clk/mediatek/clk-pll.h                |  57 ++++
->
-> In clk-pll.c there is an mtk_clk_register_pll function which at some point
-> executes this:
->
-> > init.ops = &mtk_pll_ops;
->
-> In my opinion there should be a possibility to define a custom mtk_pll_ops for a
-> given SoC instead of using a hardcoded one because not all Mediatek SoCs share
-> the same PLL startup/powerdown flow. For example, the existing mtk_pll_prepare
-> implementation won't work for the entire Mediatek Cortex-A9 SoC family (this
-> includes but not limited to mt6515, mt6517, mt6575, and mt6577).
-
-Ack. My scope is limited to SoCs used in Chromebooks. However Miles and
-Chun-Jie, who are Cc-ed on the series, should know more.
-
-That said, we can implement support for these varying parameters as we
-see them, not before.
-
-> > static int mtk_pll_prepare(struct clk_hw *hw)
-> > {
-> >       struct mtk_clk_pll *pll = to_mtk_clk_pll(hw);
-> >       u32 r;
-> >       u32 div_en_mask;
-> >
-> >       r = readl(pll->pwr_addr) | CON0_PWR_ON;
-> >       writel(r, pll->pwr_addr);
->
-> This code sets a bit to 1 to start a PLL but the SoCs I mentioned above would
-> need to have that bit cleared (set to 0) [1] [2].
->
-> Another interesting thing in mtk_pll_prepare is
-> >       udelay(20);
-> Is 20 ms a settle time for PLL? If yes then it would also be cool to specify an
-> arbitrary value easily as some PLLs have longer settle time [3] [4].
-
-This is a question for whomever upstreamed the driver.
-> Worth noting the SoCs I mentioned aren't in mainline yet, and I think there are
-> more modern mainline-worthy Mediatek SoCs that might also need these changes in
-> the future.
-
-Again, we can implement varying parameters as they appear.
-
-Thanks
-ChenYu
-
-
->
-> Thanks.
->
-> [1] MT6577 HSPA Smartphone Application Processor Datasheet, pages 1212-1227
-> (*_CON0 registers).
-> [2] MT6515 GSM/EDGE Smartphone Application Processor Datasheet, pages
-> 1202-1216 (*_CON0 registers).
-> [3] pages 1303-1306 of [1]
-> [4] MT6589 HSPA+ Smartphone Application Processor Datasheet, page 1344
-> (MDPLL1 & MDPLL2)
+Acked-by: Rob Herring <robh@kernel.org>
