@@ -2,65 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87FB04B09EA
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Feb 2022 10:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 832C44B0A04
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Feb 2022 10:53:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238997AbiBJJtN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 10 Feb 2022 04:49:13 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36514 "EHLO
+        id S239024AbiBJJxD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 10 Feb 2022 04:53:03 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:40504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238996AbiBJJtG (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 10 Feb 2022 04:49:06 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56141DE4;
-        Thu, 10 Feb 2022 01:49:05 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id m14so8423357wrg.12;
-        Thu, 10 Feb 2022 01:49:05 -0800 (PST)
+        with ESMTP id S232590AbiBJJxD (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 10 Feb 2022 04:53:03 -0500
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BDE128;
+        Thu, 10 Feb 2022 01:53:04 -0800 (PST)
+Received: by mail-vs1-xe34.google.com with SMTP id j5so2434371vsm.5;
+        Thu, 10 Feb 2022 01:53:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=eI3fCFf37CCoQJRBAcmDJpz8mE50p5tBxfje5+tt4pg=;
-        b=Xi1f3pZq+klAMhE3RIy6dcglxD+vh1ffEqI/q4ThVpJY4UUKwU8IAXrll5CTnQzodI
-         A5aDTZrdPwYwLLCI0Z9XeiiV9cgwHI8QmGmrNQXaHVSWmlrtccB1OsczH/MBSJX7p1jp
-         BO1X9LpkyG6Y9XO+Gl7wiC7dbsv9f3DKnMtyoKdtR82Mvql5QWPMFPWC41dhMDq0/xzJ
-         +DGJn3c/vi7yZcBMA6FMZDJGS93jNgvDW+rS4ja/XbW4XfOOXuhWCJV/k9T0MfD3F1r/
-         rxuVTjRYccrTqLv9WdEWYmcLzyQ1Me6ATbTIoCFVwT24IRTFX1LWRpIZ/YhG21/nSwWx
-         IPrQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=N/o/oEDK6yNA6KzQQ36RhfRwk2uRGWwiWLSILhdKP7k=;
+        b=kqbXjTNyeNaOJPTbZTaTkpLJJbJdJN35K23eEWCPQYQWK5f9EUQMZt1qygDTuXHANb
+         eKBBIx0YJ89trZZabVjK9YltMrTqVuvyv1Ylp3PodeckaKNlcTOeSL9yXkFxFSzGTgAh
+         H8pBwAUYO9ZtYNl+cDM+hoQF5+e7qPVCrP9m+ypCU6QSaM6aJhPPTbvI+q5VexvO8JB9
+         Zxcz/WkbFtMgjuFqe/fJ0OCRz/drMA/0I1Y1siddfF8ocT82IBe1+T2T5mAu60IRbBnc
+         O3Ga+/BrmxDaITxMs1ASPhH9RWURXvloUTyHTxHYO499G+vWQRQwR6pNpWfXdwBztLlZ
+         6VTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=eI3fCFf37CCoQJRBAcmDJpz8mE50p5tBxfje5+tt4pg=;
-        b=42TTTrKg/AHq3LOA0d7G7U0etqXt+y+tsUfZsvNvppZO0+7XyXyHqN0nt/jvnsh10X
-         yqFT1qg/GBSQg96Bw52BrwNOdD0w3lKNLAf7rRdij/B8+IX9tRXykQ6wFXrIEOsDX0sx
-         K+BvL19V054Lw9dI1YQByewOW1EmPJzS0lIY1B1607RtU/TCCUYIhRptHnWHb+3wRNmF
-         ioLwYka1CDiQd6S2qyYzmMDF0af0voT7QBpKN/b5C+q6/EIpDoAHHMWpCr8y0tnHdsLH
-         rigUPp6ZZcjY/A2DFqfhRcPAT88PRiP9wTZuSDNqBUCpO1b2kl7Kqig3SDdd6E8lEi1u
-         wFtA==
-X-Gm-Message-State: AOAM532JSUkvMA7Ym2p+w0jHfif+8a14pW8DRnv8kC/J5eB/sG3DBIMJ
-        n7thXlAHqRxF1grEy0KQWOx+WPQxzBM=
-X-Google-Smtp-Source: ABdhPJw1khVqZkbk0yx0tHKDjJfm/laxlwndE2gAJXpxHvGe4EbZ1IuVaQ7GdrTL1Q0CCfKagYTChA==
-X-Received: by 2002:a05:6000:168c:: with SMTP id y12mr5518658wrd.265.1644486543616;
-        Thu, 10 Feb 2022 01:49:03 -0800 (PST)
-Received: from localhost.localdomain (198.red-81-44-130.dynamicip.rima-tde.net. [81.44.130.198])
-        by smtp.gmail.com with ESMTPSA id j6sm6636601wrt.70.2022.02.10.01.49.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Feb 2022 01:49:03 -0800 (PST)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     linux-clk@vger.kernel.org
-Cc:     john@phrozen.org, linux-staging@lists.linux.dev,
-        gregkh@linuxfoundation.org, neil@brown.name,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        sboyd@kernel.org
-Subject: [PATCH v9 2/2] clk: ralink: make system controller node a reset provider
-Date:   Thu, 10 Feb 2022 10:48:59 +0100
-Message-Id: <20220210094859.927868-3-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220210094859.927868-1-sergio.paracuellos@gmail.com>
-References: <20220210094859.927868-1-sergio.paracuellos@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=N/o/oEDK6yNA6KzQQ36RhfRwk2uRGWwiWLSILhdKP7k=;
+        b=FZ6oaTRlIztaRPzTFBl5zzecNEmgGiuFyzEYj6oRgs/Tn0G0jC7X7Rg1m8n+m25xQ8
+         1dzgMcD+7kiaQgLgQGJAsjih5AlBd088OCBgYAlEU/8YT9QmR65GDqEvYYgbkS0ZPgQN
+         ZAwZ8NoSIQtFDpoCUBog5LOSmhj4Xc/xRmkWpz3i4IXgQqx6a3m9s7E9wORWMDgEhvdu
+         YrIQhh3CVmyQJ8oCrG1rjwXfRHLwetcEawms3U9FMgwWQBh2i8R/KOVfjm9S36vd3cJ5
+         AJ/+J8R4M4v3UM0vMh0sJNMX/Yt2mr3+ghrsyrJTV90nyUJe8IJZRG25h5D7qP7emsx1
+         Y6aA==
+X-Gm-Message-State: AOAM532q/02EAeCEWDHZgDzH+yIebV+zRvUWmU30fJTBA6KkFb3sy7fh
+        6FGUC+gEeuZwj6vIsDhYfjIwmIgU1B7IPVqisos=
+X-Google-Smtp-Source: ABdhPJy3BmfjGBsQ/1m6jTaEjOrRuG/WxuKfSjaUqL39oOImZUuIRENvrfMRIIwP14Pwy6n28CGijThXnVMbZNnA5hE=
+X-Received: by 2002:a67:f890:: with SMTP id h16mr2554081vso.43.1644486783621;
+ Thu, 10 Feb 2022 01:53:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220110114930.1406665-1-sergio.paracuellos@gmail.com>
+ <YfE5MOkQRoHQV7Wf@kroah.com> <CAMhs-H8s0d=PswQDR86Tq-bQt634Z6rdFYHTE+DFepsthmKAYA@mail.gmail.com>
+ <YfE7LNFuf79i3oAQ@kroah.com> <CAMhs-H9c8zF=v2tu5Y1OsFRP6esOi5zrUceqS_OUiJ=MSfCvRQ@mail.gmail.com>
+ <20220205025548.AA1BBC004E1@smtp.kernel.org> <CAMhs-H82J5DC+m0V==tQKKYyqsu30kGLkdUbMRU+nsyLb8sL3Q@mail.gmail.com>
+ <CAMhs-H9RSjgW1-dafqDqbfBaQ4iH6NFDLoRHqjt=f41zAEcC-g@mail.gmail.com> <YgS26WAtSkQbZam4@kroah.com>
+In-Reply-To: <YgS26WAtSkQbZam4@kroah.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Thu, 10 Feb 2022 10:52:52 +0100
+Message-ID: <CAMhs-H_x0My6ZfnZkyyEiSd+vT66ijf-fPzxxHohD_Yzko4h-Q@mail.gmail.com>
+Subject: Re: [PATCH v8 0/4] clk: ralink: make system controller a reset provider
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     "open list:COMMON CLK FRAMEWORK" <linux-clk@vger.kernel.org>,
+        John Crispin <john@phrozen.org>, linux-staging@lists.linux.dev,
+        NeilBrown <neil@brown.name>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -71,149 +72,84 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-MT7621 system controller node is already providing the clocks for the whole
-system but must also serve as a reset provider. Hence, add reset controller
-related code to the clock driver itself. To get resets properly ready for
-the rest of the world we need to move platform driver initialization process
-to 'arch_initcall'.
+On Thu, Feb 10, 2022 at 7:55 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Feb 10, 2022 at 07:44:33AM +0100, Sergio Paracuellos wrote:
+> > Hi Greg,
+> >
+> > On Sat, Feb 5, 2022 at 8:31 AM Sergio Paracuellos
+> > <sergio.paracuellos@gmail.com> wrote:
+> > >
+> > > On Sat, Feb 5, 2022 at 3:55 AM Stephen Boyd <sboyd@kernel.org> wrote:
+> > > >
+> > > > Quoting Sergio Paracuellos (2022-01-26 04:45:31)
+> > > > > On Wed, Jan 26, 2022 at 1:14 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > > > >
+> > > > > > On Wed, Jan 26, 2022 at 01:08:52PM +0100, Sergio Paracuellos wrote:
+> > > > > > > On Wed, Jan 26, 2022 at 1:06 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > > > > > >
+> > > > > > > > On Mon, Jan 10, 2022 at 12:49:26PM +0100, Sergio Paracuellos wrote:
+> > > > > > > > > Hi all,
+> > > > > > > > >
+> > > > > > > > > This patch series add minimal change to provide mt7621 resets properly
+> > > > > > > > > defining them in the 'mediatek,mt7621-sysc' node which is the system
+> > > > > > > > > controller of the SoC and is already providing clocks to the rest of
+> > > > > > > > > the world.
+> > > > > > > > >
+> > > > > > > > > There is shared architecture code for all ralink platforms in 'reset.c'
+> > > > > > > > > file located in 'arch/mips/ralink' but the correct thing to do to align
+> > > > > > > > > hardware with software seems to define and add related reset code to the
+> > > > > > > > > already mainlined clock driver.
+> > > > > > > > >
+> > > > > > > > > After this changes, we can get rid of the useless reset controller node
+> > > > > > > > > in the device tree and use system controller node instead where the property
+> > > > > > > > > '#reset-cells' has been added. Binding documentation for this nodeq has
+> > > > > > > > > been updated with the new property accordly.
+> > > > > > > > >
+> > > > > > > > > This series also provide a bindings include header where all related
+> > > > > > > > > reset bits for the MT7621 SoC are defined.
+> > > > > > > > >
+> > > > > > > > > Also, please take a look to this review [0] to understand better motivation
+> > > > > > > > > for this series.
+> > > > > > > > >
+> > > > > > > > > Regarding the way of merging this:
+> > > > > > > > >  - I'd like patches 1 and 4 which are related going through staging tree.
+> > > > > > > >
+> > > > > > > > Patches 1 and 4 now in the staging tree, thanks.
+> > > > > > >
+> > > > > > > Stephen wanted all to go through the CLK tree since PATCH 3 and 1 were
+> > > > > > > also a dependency... Can we get all of them through the same tree,
+> > > > > > > then? I am ok with both CLK or staging trees.
+> > > > > >
+> > > > > > That's fine with me if they all go through the CLK tree, but there will
+> > > > > > be a merge issue that I already fixed up in my tree.  If you want me to
+> > > > > > drop them, just let me know.
+> > > > >
+> > > > > Stephen, what do you prefer? Is it better all going through staging-tree then?
+> > > > >
+> > > >
+> > > > Sure take them through staging tree.
+> > > >
+> > > > Acked-by: Stephen Boyd <sboyd@kernel.org>
+> > >
+> > > Thanks, Stephen.
+> > >
+> > > Greg, can you please take remaining patches 2 and 3 through your tree, then?
+> > >
+> > > Thanks in advance for your time.
+> >
+> > Please, let me know if you prefer me to resend the remaining two
+> > patches with tags added to make this easier for you.
+>
+> Please do so, as I can't seem to dig up the remaining ones...
 
-CC: Philipp Zabel <p.zabel@pengutronix.de>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Acked-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- drivers/clk/ralink/clk-mt7621.c | 92 ++++++++++++++++++++++++++++++++-
- 1 file changed, 91 insertions(+), 1 deletion(-)
+Ok, done. Please check:
+https://lore.kernel.org/linux-staging/20220210094859.927868-1-sergio.paracuellos@gmail.com/T/#t
 
-diff --git a/drivers/clk/ralink/clk-mt7621.c b/drivers/clk/ralink/clk-mt7621.c
-index a2c045390f00..99256659dd96 100644
---- a/drivers/clk/ralink/clk-mt7621.c
-+++ b/drivers/clk/ralink/clk-mt7621.c
-@@ -11,14 +11,17 @@
- #include <linux/mfd/syscon.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
-+#include <linux/reset-controller.h>
- #include <linux/slab.h>
- #include <dt-bindings/clock/mt7621-clk.h>
-+#include <dt-bindings/reset/mt7621-reset.h>
- 
- /* Configuration registers */
- #define SYSC_REG_SYSTEM_CONFIG0         0x10
- #define SYSC_REG_SYSTEM_CONFIG1         0x14
- #define SYSC_REG_CLKCFG0		0x2c
- #define SYSC_REG_CLKCFG1		0x30
-+#define SYSC_REG_RESET_CTRL		0x34
- #define SYSC_REG_CUR_CLK_STS		0x44
- #define MEMC_REG_CPU_PLL		0x648
- 
-@@ -398,6 +401,82 @@ static void __init mt7621_clk_init(struct device_node *node)
- }
- CLK_OF_DECLARE_DRIVER(mt7621_clk, "mediatek,mt7621-sysc", mt7621_clk_init);
- 
-+struct mt7621_rst {
-+	struct reset_controller_dev rcdev;
-+	struct regmap *sysc;
-+};
-+
-+static struct mt7621_rst *to_mt7621_rst(struct reset_controller_dev *dev)
-+{
-+	return container_of(dev, struct mt7621_rst, rcdev);
-+}
-+
-+static int mt7621_assert_device(struct reset_controller_dev *rcdev,
-+				unsigned long id)
-+{
-+	struct mt7621_rst *data = to_mt7621_rst(rcdev);
-+	struct regmap *sysc = data->sysc;
-+
-+	return regmap_update_bits(sysc, SYSC_REG_RESET_CTRL, BIT(id), BIT(id));
-+}
-+
-+static int mt7621_deassert_device(struct reset_controller_dev *rcdev,
-+				  unsigned long id)
-+{
-+	struct mt7621_rst *data = to_mt7621_rst(rcdev);
-+	struct regmap *sysc = data->sysc;
-+
-+	return regmap_update_bits(sysc, SYSC_REG_RESET_CTRL, BIT(id), 0);
-+}
-+
-+static int mt7621_reset_device(struct reset_controller_dev *rcdev,
-+			       unsigned long id)
-+{
-+	int ret;
-+
-+	ret = mt7621_assert_device(rcdev, id);
-+	if (ret < 0)
-+		return ret;
-+
-+	return mt7621_deassert_device(rcdev, id);
-+}
-+
-+static int mt7621_rst_xlate(struct reset_controller_dev *rcdev,
-+			    const struct of_phandle_args *reset_spec)
-+{
-+	unsigned long id = reset_spec->args[0];
-+
-+	if (id == MT7621_RST_SYS || id >= rcdev->nr_resets)
-+		return -EINVAL;
-+
-+	return id;
-+}
-+
-+static const struct reset_control_ops reset_ops = {
-+	.reset = mt7621_reset_device,
-+	.assert = mt7621_assert_device,
-+	.deassert = mt7621_deassert_device
-+};
-+
-+static int mt7621_reset_init(struct device *dev, struct regmap *sysc)
-+{
-+	struct mt7621_rst *rst_data;
-+
-+	rst_data = devm_kzalloc(dev, sizeof(*rst_data), GFP_KERNEL);
-+	if (!rst_data)
-+		return -ENOMEM;
-+
-+	rst_data->sysc = sysc;
-+	rst_data->rcdev.ops = &reset_ops;
-+	rst_data->rcdev.owner = THIS_MODULE;
-+	rst_data->rcdev.nr_resets = 32;
-+	rst_data->rcdev.of_reset_n_cells = 1;
-+	rst_data->rcdev.of_xlate = mt7621_rst_xlate;
-+	rst_data->rcdev.of_node = dev_of_node(dev);
-+
-+	return devm_reset_controller_register(dev, &rst_data->rcdev);
-+}
-+
- static int mt7621_clk_probe(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node;
-@@ -424,6 +503,12 @@ static int mt7621_clk_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	ret = mt7621_reset_init(dev, priv->sysc);
-+	if (ret) {
-+		dev_err(dev, "Could not init reset controller\n");
-+		return ret;
-+	}
-+
- 	count = ARRAY_SIZE(mt7621_clks_base) +
- 		ARRAY_SIZE(mt7621_fixed_clks) + ARRAY_SIZE(mt7621_gates);
- 	clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, count),
-@@ -485,4 +570,9 @@ static struct platform_driver mt7621_clk_driver = {
- 		.of_match_table = mt7621_clk_of_match,
- 	},
- };
--builtin_platform_driver(mt7621_clk_driver);
-+
-+static int __init mt7621_clk_reset_init(void)
-+{
-+	return platform_driver_register(&mt7621_clk_driver);
-+}
-+arch_initcall(mt7621_clk_reset_init);
--- 
-2.25.1
+Best regards,
+    Sergio Paracuellos
 
+>
+> thanks,
+>
+> greg k-h
