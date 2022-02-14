@@ -2,135 +2,115 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F02974B555F
-	for <lists+linux-clk@lfdr.de>; Mon, 14 Feb 2022 16:53:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 198A14B5527
+	for <lists+linux-clk@lfdr.de>; Mon, 14 Feb 2022 16:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355986AbiBNPx3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 14 Feb 2022 10:53:29 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44486 "EHLO
+        id S1352272AbiBNPsw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 14 Feb 2022 10:48:52 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:42604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355985AbiBNPx3 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Feb 2022 10:53:29 -0500
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC74C49261;
-        Mon, 14 Feb 2022 07:53:20 -0800 (PST)
-Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 7FC07CEE4A;
-        Mon, 14 Feb 2022 15:46:31 +0000 (UTC)
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id F3629240006;
-        Mon, 14 Feb 2022 15:46:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1644853586;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6ywu1zL9TscboOTL+KoPo7dZ6f2fEaqerWdTVr9qxik=;
-        b=A4CnLIzQ5f3D5+0+ZyuCP8fGLUGNr3eCLcIRf21jidFewb//SlR/zb7Lyd0/MOE8NLVvVa
-        sTDqJpZchwZd8AC4M1eDjlR6E+X1I3Ie61VNE7VW9RZ5MlcWLIVVen8yJ0zQfddAxaWfLK
-        iuymkZZEOra8qtl/QUyEza2pc6mlD4S/GXvcQSDlyL2BrswAzLeo5z7S8Tblj26PDs7rkI
-        LWtXjgHLPPM10VL5MzpMBm3JZXErjsRlw5JylQQn3HMir4dQNXgjzXd1nd9pVP4W7jxeor
-        kw2AG71XY9qOvX9sMqZub7Vgo8zNVBxEz0yWWA/XseLaufRAmKk6r6fkOv/krA==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>,
-        Pali =?utf-8?Q?Roh?= =?utf-8?Q?=C3=A1r?= <pali@kernel.org>,
+        with ESMTP id S1346014AbiBNPsw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Feb 2022 10:48:52 -0500
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D214C60A94;
+        Mon, 14 Feb 2022 07:48:44 -0800 (PST)
+Received: by mail-oo1-xc2a.google.com with SMTP id u25-20020a4ad0d9000000b002e8d4370689so19733396oor.12;
+        Mon, 14 Feb 2022 07:48:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eNNtqm8EpmpM3533I3FfPpJ0jXPvy/LfN0oxAHh3x3M=;
+        b=EI+aGyX21Q8PfcNohLpV4XGV+abyjxsipwep0JcybqAGDvqFYQeXfqJ7gFegBzd7L7
+         Dswir/ivkF3yIy0wTnzyfUFnNyQDRjuZuNWo3JfkuF8MaRqWYhEMifEP9U79VK8nmRdk
+         a04I3YtRx6aC88R8ewLtlQ3ph2zD68oesh+UwotboudNujD1pEEtq0WQLLACWpzmIeQr
+         bMrpQp/Hq5obBWumz8K5luW7c2GBXA3Mgbjtllc0GVEIPf6TJwMtjcOKVdoa5i7VtWA/
+         U6WeBsoq0XhHkp3nRgPQN0hu0WZVBKD0R5RwJs4XxgVgVBWER7xXzZfhU9RDT89M0OpL
+         gkCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=eNNtqm8EpmpM3533I3FfPpJ0jXPvy/LfN0oxAHh3x3M=;
+        b=HNez435M6BLH+EzyYwMnk698dhpgPxsAHZ8b2jUgAzzKmY1ghSQSqPBJ0BPpC8k6V6
+         hc3DRnPP/DPkY6JV9Vk+5NI0CxPBtz257yljOV8Sdizi32ObShG/NyGiH+tF2iB8ERxo
+         HFVGdu7lecIZuV778MHceEcS6tiP0nLEAjnldXr1IzN6GvAq7+murD6Lb+y742ZjbuWx
+         Q5CNpOqU9kN3V5du19F+CTl7H6r5eplFzLixK7W5tcayiEogqCkv+ruv42u9lbF/kGRq
+         Wq5AxpoAQUw+nUtOE+H/5679vsOXPMghr+lZYTQ6dE7ggWnee4NvNGwbZdlqpBApXR1p
+         0qyg==
+X-Gm-Message-State: AOAM530uQnN2sKY+2K8yO7z9Upk6RnXgKrhrZZf5JXWo7KaWYN9/92C3
+        cAuOInTlLEG8xWcm3RCcQvw=
+X-Google-Smtp-Source: ABdhPJzkywkhm7Rq6NsxeJ2BNJkNSdrH42e5c/sMzjJ4wifWqh1sy4XWOc5vypLnNe3xPZSd3VubIg==
+X-Received: by 2002:a05:6870:a11e:: with SMTP id m30mr36609oae.260.1644853724274;
+        Mon, 14 Feb 2022 07:48:44 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v32sm1930812oaa.4.2022.02.14.07.48.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Feb 2022 07:48:43 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 14 Feb 2022 07:48:42 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Marek =?utf-8?Q?Beh=C3=BAn?= <kabel@kernel.org>
-Subject: Re: [PATCH v8 5/6] arm64: dts: marvell: armada-37xx: add device
- node for UART clock and use it
-In-Reply-To: <20220211191238.2142-6-kabel@kernel.org>
-References: <20220211191238.2142-1-kabel@kernel.org>
- <20220211191238.2142-6-kabel@kernel.org>
-Date:   Mon, 14 Feb 2022 16:46:25 +0100
-Message-ID: <87leydjvse.fsf@BL-laptop>
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        LUU HOAI <hoai.luu.ub@renesas.com>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Thanh Quan <thanh.quan.xn@renesas.com>
+Subject: Re: [PATCH 2/5] dt-bindings: watchdog: renesas-wdt: Document
+ r8a779f0 support
+Message-ID: <20220214154842.GA4172444@roeck-us.net>
+References: <cover.1642525158.git.geert+renesas@glider.be>
+ <cca61a83ae82ecf5c23eb28e30c39f2f661f0e02.1642525158.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cca61a83ae82ecf5c23eb28e30c39f2f661f0e02.1642525158.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello Marek and Pali,
+On Tue, Jan 18, 2022 at 06:09:02PM +0100, Geert Uytterhoeven wrote:
+> From: Thanh Quan <thanh.quan.xn@renesas.com>
+> 
+> Document support for the Watchdog Timer (WDT) Controller in the Renesas
+> R-Car S4-8 (R8A779F0) SoC.
+> 
+> Signed-off-by: Thanh Quan <thanh.quan.xn@renesas.com>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-> From: Pali Roh=C3=A1r <pali@kernel.org>
->
-> Define DT node for UART clock "marvell,armada-3700-uart-clock" and use
-> this UART clock as a base clock for all UART devices.
->
-> Signed-off-by: Pali Roh=C3=A1r <pali@kernel.org>
-> Reviewed-by: Marek Beh=C3=BAn <kabel@kernel.org>
-> Signed-off-by: Marek Beh=C3=BAn <kabel@kernel.org>
-
-Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-
-However for keeping bisectability we have to ensure that this patch will
-be applied after the drivers changes.
-
-Thanks,
-
-Gregory
-
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
-> Changes since v7:
-> - changed commit message ("This change defines" -> "Define")
-> - added Marek's Reviewed-by tag
-> ---
->  arch/arm64/boot/dts/marvell/armada-37xx.dtsi | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi b/arch/arm64/bo=
-ot/dts/marvell/armada-37xx.dtsi
-> index 673f4906eef9..4cf6c8aa0ac2 100644
-> --- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-> +++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
-> @@ -132,10 +132,20 @@ avs: avs@11500 {
->  				reg =3D <0x11500 0x40>;
->  			};
->=20=20
-> +			uartclk: clock-controller@12010 {
-> +				compatible =3D "marvell,armada-3700-uart-clock";
-> +				reg =3D <0x12010 0x4>, <0x12210 0x4>;
-> +				clocks =3D <&tbg 0>, <&tbg 1>, <&tbg 2>,
-> +					 <&tbg 3>, <&xtalclk>;
-> +				clock-names =3D "TBG-A-P", "TBG-B-P", "TBG-A-S",
-> +					      "TBG-B-S", "xtal";
-> +				#clock-cells =3D <1>;
-> +			};
+>  Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> index 91a98ccd4226f505..d060438e1402d502 100644
+> --- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> @@ -55,6 +55,11 @@ properties:
+>                - renesas,r8a779a0-wdt     # R-Car V3U
+>            - const: renesas,rcar-gen3-wdt # R-Car Gen3 and RZ/G2
+>  
+> +      - items:
+> +          - enum:
+> +              - renesas,r8a779f0-wdt     # R-Car S4-8
+> +          - const: renesas,rcar-gen4-wdt # R-Car Gen4
 > +
->  			uart0: serial@12000 {
->  				compatible =3D "marvell,armada-3700-uart";
->  				reg =3D <0x12000 0x18>;
-> -				clocks =3D <&xtalclk>;
-> +				clocks =3D <&uartclk 0>;
->  				interrupts =3D
->  				<GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>,
->  				<GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>,
-> @@ -147,7 +157,7 @@ uart0: serial@12000 {
->  			uart1: serial@12200 {
->  				compatible =3D "marvell,armada-3700-uart-ext";
->  				reg =3D <0x12200 0x30>;
-> -				clocks =3D <&xtalclk>;
-> +				clocks =3D <&uartclk 1>;
->  				interrupts =3D
->  				<GIC_SPI 30 IRQ_TYPE_EDGE_RISING>,
->  				<GIC_SPI 31 IRQ_TYPE_EDGE_RISING>;
-> --=20
-> 2.34.1
->
-
---=20
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+>    reg:
+>      maxItems: 1
+>  
