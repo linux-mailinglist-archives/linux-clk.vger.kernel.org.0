@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5094B77B2
-	for <lists+linux-clk@lfdr.de>; Tue, 15 Feb 2022 21:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC2C4B7861
+	for <lists+linux-clk@lfdr.de>; Tue, 15 Feb 2022 21:52:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244047AbiBOURG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 15 Feb 2022 15:17:06 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37416 "EHLO
+        id S243436AbiBOURF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 15 Feb 2022 15:17:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243981AbiBOURD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 15 Feb 2022 15:17:03 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92892EBAC1
-        for <linux-clk@vger.kernel.org>; Tue, 15 Feb 2022 12:15:45 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id u20so10531525lff.2
-        for <linux-clk@vger.kernel.org>; Tue, 15 Feb 2022 12:15:45 -0800 (PST)
+        with ESMTP id S244060AbiBOURE (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 15 Feb 2022 15:17:04 -0500
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DFEEBACA
+        for <linux-clk@vger.kernel.org>; Tue, 15 Feb 2022 12:15:46 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id b38so125790ljr.12
+        for <linux-clk@vger.kernel.org>; Tue, 15 Feb 2022 12:15:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=289/KRcXVcnS1cCQf6Ylol+IbGt3fnLTiUWFx0ZifHU=;
-        b=KzYHgYSUpFP3q5+s3QyhWqexkkOlfiRzO73vnK/LoLeOfoqJ/HIFz4agRS5YWTLk7v
-         NevGSZ32B6WWyOlzDbtPoPQyMd5k3xXdD0TuC3jnt6aEKyh4YlGg5OUJLdTUAr0v7ibe
-         wDb9MxZSi3JFxu04HmNfkBK5F1SinPs06sLGVI9JwoFHv/YRugMrHJkKfGnq3eFYXIdM
-         5zVej9lK0lgq+LT70nixO/ZSL5I/X4aeOMwPiHc18BE6sDmo1X2qSOoazT3jRegwyF6h
-         XE/Qxkm32qDxlP8TIIW1rGGQ0u+gkh9UC7DjKZ6itiHuLbiI4EW9zqlyHaUkdcukGmi4
-         1T1Q==
+        bh=T2+DDOdrcGPnlAZTACHXV/AJiHKfc3Ic3cTglmWdDWE=;
+        b=ydYV9zG2iFm+pJ4khvAGMrd/aSo++Tqsib0wOG+sW86UpRfWodrilh1PlbjFliOlzu
+         lKbyE3MXUU8N8BxxvnEvAJ7c7fnVY7haE5YfrIOJY0BlCk4XSwv+77o0TRbbqRF1eYq5
+         3r35IydfamM/GoTe292eZyB8KBjp/80bGRNu/pDs2kogMiMAzsG0Dc3eOWZtWPWXXzaC
+         nxK8XUDHe6CFr/VzuzvSXtOqePVtesjaNXB1gG7CCND+FImywbJ1D9iHfI5dmFeAaLGk
+         awK6Rn//QzTY4Zw7KafFf9GwnqmAg1phpspfLnB1fxBB9SjPtwgOG9Jdx+VybSDzJgJj
+         JfmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=289/KRcXVcnS1cCQf6Ylol+IbGt3fnLTiUWFx0ZifHU=;
-        b=Pv0cjHq/uKJ6Rw9/XWW2FSKQdGMzn91+Tw+iUxzX/JT54CxZ8JlqNjIbXflOUBv7MG
-         JRQ1HfvMxr31ur14n3csXSKwjWRcst3GhiKHXjdR8yWems9rE5DTxX1XmKoGAjvoNAv5
-         dLroT5+M/PG1PMk3/kfscBt4ND43wmo9GiWXBYKwW+v/lZJtY7cVaz4JT4nzCIGXJ29F
-         K4h6cSwTkPqrObmw5RVW+hFL4skFomWlSuPDkD0tS4FUh1guAHjEBwUo7YJ7LmypllDa
-         72gbQf4uVjX2akmLmkP9iEwlbIQa0nuAouPVnpDKbxJskg4cuaQsS2hBJr5gZbRLBAKd
-         LZDA==
-X-Gm-Message-State: AOAM532AmFo2rsY4rh5xXb8X0L7NJpNlh0X9LGb9mphs3IcwmF4EcyTH
-        g8Lwm+64jJ2yL5o2MtZo5AuBTA==
-X-Google-Smtp-Source: ABdhPJyIEQrGOXrpemV0qqsQDBWBeeEye1u1Iumt5gTShQ0bbEzhs5uLX3H/tZ8L4yUaMOsDm1Mjsg==
-X-Received: by 2002:a05:6512:3087:: with SMTP id z7mr566466lfd.446.1644956143839;
-        Tue, 15 Feb 2022 12:15:43 -0800 (PST)
+        bh=T2+DDOdrcGPnlAZTACHXV/AJiHKfc3Ic3cTglmWdDWE=;
+        b=tFwlnL0l3QmlEET3jQeXbTcZYbRrYdz4iJ6gn+zT0BIhLG5DSAGube6n1h4Ks6UD0X
+         6uw2BpbofNjJyWuxmD8AYPhFLPZsyK2L2Sx3NUgjWsuErAYg+Wa1BtnIiQ90D7lyp5wO
+         m0dRi7T6R/5q51iwyQ7EzrZnVHxdjWAbK3pa3CD6kLLZW/l2lqnU8oipf3lxLn4MZRvM
+         odIt0M5okPQGrCIm+XVPOiV8ZQr8PL4dTu25Sy85Q7EuckFOyN7+PQXcAUvUVSYwdmcB
+         4Ia1G8cQJWvzNN1toM8LPLomOnvc4b4dCUXPCcU+uqM4xuZZxpjmEak2CzXC8cTWPX0s
+         IVGQ==
+X-Gm-Message-State: AOAM530PW3SQ21VOPYALNCOtuPkRDr3sT/ksqhRPVO2N1x15u/wXd6vv
+        YJ8diIEkp7sUKHD0oX9eWhG+QA==
+X-Google-Smtp-Source: ABdhPJypqsFAyrOnR8xEC6MM8SQuEZzuDqR+1Zeo2EqZaF8sNUubmMsB0CZsfn8bft97IXkDDE+gEg==
+X-Received: by 2002:a2e:bf16:: with SMTP id c22mr537905ljr.416.1644956144764;
+        Tue, 15 Feb 2022 12:15:44 -0800 (PST)
 Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id k16sm4548419ljg.111.2022.02.15.12.15.42
+        by smtp.gmail.com with ESMTPSA id k16sm4548419ljg.111.2022.02.15.12.15.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 12:15:43 -0800 (PST)
+        Tue, 15 Feb 2022 12:15:44 -0800 (PST)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -55,9 +55,9 @@ To:     Andy Gross <agross@kernel.org>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH 4/5] arm64: dts: qcom: msm8996: add cxo and sleep-clk to gcc node
-Date:   Tue, 15 Feb 2022 23:15:38 +0300
-Message-Id: <20220215201539.3970459-5-dmitry.baryshkov@linaro.org>
+Subject: [PATCH 5/5] arm64: dts: qcom: msm8996: convert xo_board to RPM_SMD_BB_CLK1
+Date:   Tue, 15 Feb 2022 23:15:39 +0300
+Message-Id: <20220215201539.3970459-6-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220215201539.3970459-1-dmitry.baryshkov@linaro.org>
 References: <20220215201539.3970459-1-dmitry.baryshkov@linaro.org>
@@ -73,31 +73,64 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Supply proper cxo (RPM_SMD_BB_CLK1) and sleep_clk to the gcc clock
-controller node.
+Convert all device tree xo_board users to the RPM_SMD_BB_CLK1 clock.
+Note, that xo_board can not be removed (yet), as clk-smd-rpm uses
+xo_board internally as the parent for all the clocks.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/msm8996.dtsi | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index 91bc974aeb0a..7a46f0f67cbb 100644
+index 7a46f0f67cbb..598dbaab1d1c 100644
 --- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
 +++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -679,8 +679,10 @@ gcc: clock-controller@300000 {
- 			#power-domain-cells = <1>;
- 			reg = <0x00300000 0x90000>;
+@@ -889,7 +889,7 @@ dsi0_phy: dsi-phy@994400 {
+ 				#clock-cells = <1>;
+ 				#phy-cells = <0>;
  
--			clocks = <&rpmcc RPM_SMD_LN_BB_CLK>;
--			clock-names = "cxo2";
-+			clocks = <&rpmcc RPM_SMD_BB_CLK1>,
-+				 <&rpmcc RPM_SMD_LN_BB_CLK>,
-+				 <&sleep_clk>;
-+			clock-names = "cxo", "cxo2", "sleep_clk";
+-				clocks = <&mmcc MDSS_AHB_CLK>, <&xo_board>;
++				clocks = <&mmcc MDSS_AHB_CLK>, <&rpmcc RPM_SMD_BB_CLK1>;
+ 				clock-names = "iface", "ref";
+ 				status = "disabled";
+ 			};
+@@ -2595,7 +2595,7 @@ kryocc: clock-controller@6400000 {
+ 			reg = <0x06400000 0x90000>;
+ 
+ 			clock-names = "xo";
+-			clocks = <&xo_board>;
++			clocks = <&rpmcc RPM_SMD_BB_CLK1>;
+ 
+ 			#clock-cells = <1>;
  		};
+@@ -2706,7 +2706,7 @@ sdhc1: sdhci@7464900 {
+ 			clock-names = "iface", "core", "xo";
+ 			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
+ 				<&gcc GCC_SDCC1_APPS_CLK>,
+-				<&xo_board>;
++				<&rpmcc RPM_SMD_BB_CLK1>;
  
- 		tsens0: thermal-sensor@4a9000 {
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&sdc1_state_on>;
+@@ -2729,7 +2729,7 @@ sdhc2: sdhci@74a4900 {
+ 			clock-names = "iface", "core", "xo";
+ 			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
+ 				<&gcc GCC_SDCC2_APPS_CLK>,
+-				<&xo_board>;
++				<&rpmcc RPM_SMD_BB_CLK1>;
+ 
+ 			pinctrl-names = "default", "sleep";
+ 			pinctrl-0 = <&sdc2_state_on>;
+@@ -3030,7 +3030,7 @@ adsp_pil: remoteproc@9300000 {
+ 			interrupt-names = "wdog", "fatal", "ready",
+ 					  "handover", "stop-ack";
+ 
+-			clocks = <&xo_board>;
++			clocks = <&rpmcc RPM_SMD_BB_CLK1>;
+ 			clock-names = "xo";
+ 
+ 			memory-region = <&adsp_region>;
 -- 
 2.34.1
 
