@@ -2,135 +2,139 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC2C4B7861
-	for <lists+linux-clk@lfdr.de>; Tue, 15 Feb 2022 21:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E66A74B79D8
+	for <lists+linux-clk@lfdr.de>; Tue, 15 Feb 2022 22:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243436AbiBOURF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 15 Feb 2022 15:17:05 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37322 "EHLO
+        id S243302AbiBOVVV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 15 Feb 2022 16:21:21 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:37956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244060AbiBOURE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 15 Feb 2022 15:17:04 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DFEEBACA
-        for <linux-clk@vger.kernel.org>; Tue, 15 Feb 2022 12:15:46 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id b38so125790ljr.12
-        for <linux-clk@vger.kernel.org>; Tue, 15 Feb 2022 12:15:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=T2+DDOdrcGPnlAZTACHXV/AJiHKfc3Ic3cTglmWdDWE=;
-        b=ydYV9zG2iFm+pJ4khvAGMrd/aSo++Tqsib0wOG+sW86UpRfWodrilh1PlbjFliOlzu
-         lKbyE3MXUU8N8BxxvnEvAJ7c7fnVY7haE5YfrIOJY0BlCk4XSwv+77o0TRbbqRF1eYq5
-         3r35IydfamM/GoTe292eZyB8KBjp/80bGRNu/pDs2kogMiMAzsG0Dc3eOWZtWPWXXzaC
-         nxK8XUDHe6CFr/VzuzvSXtOqePVtesjaNXB1gG7CCND+FImywbJ1D9iHfI5dmFeAaLGk
-         awK6Rn//QzTY4Zw7KafFf9GwnqmAg1phpspfLnB1fxBB9SjPtwgOG9Jdx+VybSDzJgJj
-         JfmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=T2+DDOdrcGPnlAZTACHXV/AJiHKfc3Ic3cTglmWdDWE=;
-        b=tFwlnL0l3QmlEET3jQeXbTcZYbRrYdz4iJ6gn+zT0BIhLG5DSAGube6n1h4Ks6UD0X
-         6uw2BpbofNjJyWuxmD8AYPhFLPZsyK2L2Sx3NUgjWsuErAYg+Wa1BtnIiQ90D7lyp5wO
-         m0dRi7T6R/5q51iwyQ7EzrZnVHxdjWAbK3pa3CD6kLLZW/l2lqnU8oipf3lxLn4MZRvM
-         odIt0M5okPQGrCIm+XVPOiV8ZQr8PL4dTu25Sy85Q7EuckFOyN7+PQXcAUvUVSYwdmcB
-         4Ia1G8cQJWvzNN1toM8LPLomOnvc4b4dCUXPCcU+uqM4xuZZxpjmEak2CzXC8cTWPX0s
-         IVGQ==
-X-Gm-Message-State: AOAM530PW3SQ21VOPYALNCOtuPkRDr3sT/ksqhRPVO2N1x15u/wXd6vv
-        YJ8diIEkp7sUKHD0oX9eWhG+QA==
-X-Google-Smtp-Source: ABdhPJypqsFAyrOnR8xEC6MM8SQuEZzuDqR+1Zeo2EqZaF8sNUubmMsB0CZsfn8bft97IXkDDE+gEg==
-X-Received: by 2002:a2e:bf16:: with SMTP id c22mr537905ljr.416.1644956144764;
-        Tue, 15 Feb 2022 12:15:44 -0800 (PST)
-Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id k16sm4548419ljg.111.2022.02.15.12.15.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Feb 2022 12:15:44 -0800 (PST)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH 5/5] arm64: dts: qcom: msm8996: convert xo_board to RPM_SMD_BB_CLK1
-Date:   Tue, 15 Feb 2022 23:15:39 +0300
-Message-Id: <20220215201539.3970459-6-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220215201539.3970459-1-dmitry.baryshkov@linaro.org>
-References: <20220215201539.3970459-1-dmitry.baryshkov@linaro.org>
+        with ESMTP id S233461AbiBOVVU (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 15 Feb 2022 16:21:20 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE51BA753;
+        Tue, 15 Feb 2022 13:21:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1644960070; x=1676496070;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D3mH1ZQYnUmDyHebTFiaM1aX+zULtvkheCq0LawoiFk=;
+  b=MOFWvdK+LAwtynpujM5pfTDLUDe+5zezk3M91/aVdxTOHfNUXWD7i0vg
+   5x9STv62ooHwC9WGsR9cubH8bMYt/0jHxk/NeNh4HUWiaRwQYEnHAUHUx
+   Xq3yBcHZKhbY4qNDKKbqOPiAKdZogISCY5jXufNSoaLSYXZwYpQKDQ4eO
+   eo5eZPSMrs2T2wFJM59ugt+RT3Fgv31HDmCj63pKbDLhBsbJgrumgfJTV
+   9EK/0/wOk3WCenSNxe67ubgQxj3defKVv7gk+0Dp74RmC9GKO2R5IFIXI
+   +cJPLOrX0rynOQ/xf9pVrC4lTMCBJV3NQ0xF7E2T96GXRS+HBaNJhimDG
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10259"; a="249289916"
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="249289916"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 13:21:10 -0800
+X-IronPort-AV: E=Sophos;i="5.88,371,1635231600"; 
+   d="scan'208";a="625027203"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2022 13:21:05 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 723FA200F1;
+        Tue, 15 Feb 2022 23:21:03 +0200 (EET)
+Date:   Tue, 15 Feb 2022 23:21:03 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-staging@lists.linux.dev,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helen Koike <helen.koike@collabora.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 37/66] media: sun6i-csi: Move power management to
+ runtime pm in capture
+Message-ID: <YgwZP4CS26FCOOqc@paasikivi.fi.intel.com>
+References: <20220205185429.2278860-1-paul.kocialkowski@bootlin.com>
+ <20220205185429.2278860-38-paul.kocialkowski@bootlin.com>
+ <YgqftcDgfrsZfTdF@paasikivi.fi.intel.com>
+ <Ygt4xh2Mq0qStyKs@aptenodytes>
+ <Ygt6vwydxg9/WuDH@pendragon.ideasonboard.com>
+ <Ygt+nZJrZMNXV4Cl@aptenodytes>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ygt+nZJrZMNXV4Cl@aptenodytes>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Convert all device tree xo_board users to the RPM_SMD_BB_CLK1 clock.
-Note, that xo_board can not be removed (yet), as clk-smd-rpm uses
-xo_board internally as the parent for all the clocks.
+Hi Paul,
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+On Tue, Feb 15, 2022 at 11:21:17AM +0100, Paul Kocialkowski wrote:
+> Hi Laurent,
+> 
+> On Tue 15 Feb 22, 12:04, Laurent Pinchart wrote:
+> > Hi Paul,
+> > 
+> > On Tue, Feb 15, 2022 at 10:56:22AM +0100, Paul Kocialkowski wrote:
+> > > On Mon 14 Feb 22, 20:30, Sakari Ailus wrote:
+> > > > On Sat, Feb 05, 2022 at 07:54:00PM +0100, Paul Kocialkowski wrote:
+> > > > > Let's just enable the module when we start using it (at stream on)
+> > > > > and benefit from runtime pm instead of enabling it at first open.
+> > > > > 
+> > > > > Also reorder the call to v4l2_pipeline_pm_get.
+> > > > > 
+> > > > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > > 
+> > > > Nice patch!
+> > > 
+> > > Thanks!
+> > > 
+> > > > Do you still need v4l2_pipeline_pm_put()? Removing it would be a separate
+> > > > patch of course.
+> > > 
+> > > My understanding is that this is still useful if there are drivers in the
+> > > pipeline that rely on s_power instead of rpm (a typical case could be an
+> > > old sensor driver). So that's why this is kept around, but all other components
+> > > of the pipeline (isp/csi/mipi csi-2) are using rpm now.
+> > 
+> > If that's not the case on your test platforms, I think it would be
+> > better to drop support for this old API, and convert drivers that still
+> > use .s_power() if someone needs to use one on an Allwinner platform.
+> 
+> I agree this is the path to follow but it feels like we're not quite there
+> yet and a bunch of driver were not converted at this point, including some
+> popular ones like ov5640, which I know for sure is used with Allwinner devices.
+> 
+> Honestly I'd be happy to get rid of these legacy functions as soon as the
+> transition is done, but doing it now would mean breaking a significant number
+> of use cases (which I'm trying to avoid here despite all the changes).
+> 
+> I definitely wouldn't be confident making that transition here and it
+> probably wouldn't be a good idea to make that a requirement to merge this
+> (already quite big) series.
+> 
+> What do you think?
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index 7a46f0f67cbb..598dbaab1d1c 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -889,7 +889,7 @@ dsi0_phy: dsi-phy@994400 {
- 				#clock-cells = <1>;
- 				#phy-cells = <0>;
- 
--				clocks = <&mmcc MDSS_AHB_CLK>, <&xo_board>;
-+				clocks = <&mmcc MDSS_AHB_CLK>, <&rpmcc RPM_SMD_BB_CLK1>;
- 				clock-names = "iface", "ref";
- 				status = "disabled";
- 			};
-@@ -2595,7 +2595,7 @@ kryocc: clock-controller@6400000 {
- 			reg = <0x06400000 0x90000>;
- 
- 			clock-names = "xo";
--			clocks = <&xo_board>;
-+			clocks = <&rpmcc RPM_SMD_BB_CLK1>;
- 
- 			#clock-cells = <1>;
- 		};
-@@ -2706,7 +2706,7 @@ sdhc1: sdhci@7464900 {
- 			clock-names = "iface", "core", "xo";
- 			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
- 				<&gcc GCC_SDCC1_APPS_CLK>,
--				<&xo_board>;
-+				<&rpmcc RPM_SMD_BB_CLK1>;
- 
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&sdc1_state_on>;
-@@ -2729,7 +2729,7 @@ sdhc2: sdhci@74a4900 {
- 			clock-names = "iface", "core", "xo";
- 			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
- 				<&gcc GCC_SDCC2_APPS_CLK>,
--				<&xo_board>;
-+				<&rpmcc RPM_SMD_BB_CLK1>;
- 
- 			pinctrl-names = "default", "sleep";
- 			pinctrl-0 = <&sdc2_state_on>;
-@@ -3030,7 +3030,7 @@ adsp_pil: remoteproc@9300000 {
- 			interrupt-names = "wdog", "fatal", "ready",
- 					  "handover", "stop-ack";
- 
--			clocks = <&xo_board>;
-+			clocks = <&rpmcc RPM_SMD_BB_CLK1>;
- 			clock-names = "xo";
- 
- 			memory-region = <&adsp_region>;
+Feel free to keep it if you prefer that.
+
+All sensor drivers that implement s_power are old but there are quite a few
+of them. Converting them isn't trivial so best done by someone who has
+access to the hardware.
+
 -- 
-2.34.1
+Regards,
 
+Sakari Ailus
