@@ -2,41 +2,52 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4281C4BAE1E
-	for <lists+linux-clk@lfdr.de>; Fri, 18 Feb 2022 01:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E33F4BAD56
+	for <lists+linux-clk@lfdr.de>; Fri, 18 Feb 2022 00:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbiBRALS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 17 Feb 2022 19:11:18 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:47914 "EHLO
+        id S229550AbiBQXsA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 17 Feb 2022 18:48:00 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:59632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbiBRALS (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 17 Feb 2022 19:11:18 -0500
-X-Greylist: delayed 2498 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 16:10:55 PST
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0DB593AC
-        for <linux-clk@vger.kernel.org>; Thu, 17 Feb 2022 16:10:55 -0800 (PST)
-Received: from localhost.localdomain (abxk63.neoplus.adsl.tpnet.pl [83.9.4.63])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id D98143F825;
-        Fri, 18 Feb 2022 00:24:12 +0100 (CET)
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-To:     ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] clk: qcom: gcc-msm8994: Remove NoC clocks
-Date:   Fri, 18 Feb 2022 00:24:08 +0100
-Message-Id: <20220217232408.78932-1-konrad.dybcio@somainline.org>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S229515AbiBQXr7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 17 Feb 2022 18:47:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EE137A429;
+        Thu, 17 Feb 2022 15:47:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20319618F5;
+        Thu, 17 Feb 2022 23:39:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C8ABC340E8;
+        Thu, 17 Feb 2022 23:39:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1645141194;
+        bh=i+sxzCX0Bfe/BG5rfiKh5UAxg+Z4BhJECi8C+Ih352U=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=YJArVd3/AdKHXuZDc4JDhag1w5xv5ioFy/DQtRHA6RogfkGOoiUhKI+K3DcqbFQ0Y
+         R2RtPcRRC5uicsJMNimBQzyEECBOtyjR02ast5uYNvhVMzfboOXJMyJogd598PCTe1
+         6eZnWPtRB7iBMQH1v3dYZxeukakEu1o+ayxEvoURQffZHiaya6ZZBQDZFEO5tIwds7
+         TO86VJ5Zk8B+9yTuCLZkGkZZFN4dEKO1fQjcs9hXEAXBKzd+9D4HCOUMJLIcupTwwN
+         GB3tVb8CupGvuLGn9Knx6ZXKLrpp2pu67/qySc5hmqJcMelSbSrW/lYMyux6b7q2Zy
+         9q1Os6UnpVyCg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220213173310.152230-1-marex@denx.de>
+References: <20220213173310.152230-1-marex@denx.de>
+Subject: Re: [PATCH 1/2] dt-bindings: clk: rs9: Add Renesas 9-series I2C PCIe clock generator
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     devicetree@vger.kernel.org, Marek Vasut <marex@denx.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+To:     Marek Vasut <marex@denx.de>, linux-clk@vger.kernel.org
+Date:   Thu, 17 Feb 2022 15:39:51 -0800
+User-Agent: alot/0.10
+Message-Id: <20220217233954.6C8ABC340E8@smtp.kernel.org>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,323 +55,122 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Just like in commit 05cf3ec00d460b50088d421fb878a0f83f57e262
-("clk: qcom: gcc-msm8996: Drop (again) gcc_aggre1_pnoc_ahb_clk")
-adding NoC clocks turned out to be a huge mistake, as they cause a lot of
-issues at little benefit (basically letting Linux know about their
-children's frequencies), especially when mishandled or misconfigured.
+Quoting Marek Vasut (2022-02-13 09:33:09)
+> diff --git a/Documentation/devicetree/bindings/clock/renesas,9series.yaml=
+ b/Documentation/devicetree/bindings/clock/renesas,9series.yaml
+> new file mode 100644
+> index 0000000000000..774053748d9f0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/renesas,9series.yaml
+> @@ -0,0 +1,102 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/renesas,9series.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Binding for Renesas 9-series I2C PCIe clock generators
+> +
+> +description: |
+> +  The Renesas 9-series are I2C PCIe clock generators providing
+> +  from 1 to 20 output clocks.
+> +
+> +  When referencing the provided clock in the DT using phandle
+> +  and clock specifier, the following mapping applies:
+> +
+> +  - 9FGV0241:
+> +    0 -- DIF0
+> +    1 -- DIF1
+> +
+> +maintainers:
+> +  - Marek Vasut <marex@denx.de>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - renesas,9fgv0241
+> +
+> +  reg:
+> +    description: I2C device address
+> +    enum: [ 0x68, 0x6a ]
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: XTal input clock
+> +
+> +  renesas,out-amplitude:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [ 600000, 700000, 800000, 900000 ]
+> +    description: Output clock signal amplitude in uV
+> +
+> +  renesas,out-spread-spectrum:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [ 100000, 99750, 99500 ]
+> +    description: Output clock down spread in pcm
+> +
+> +patternProperties:
+> +  "^DIF[0-19]$":
+> +    type: object
+> +    description:
+> +      Description of one of the outputs (DIF0..DIF19).
+> +    properties:
+> +      renesas,slew-rate:
+> +        $ref: /schemas/types.yaml#/definitions/uint32
+> +        enum: [ 2000000, 3000000 ]
+> +        description: Output clock slew rate select in V/ns
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#clock-cells'
 
-Adding these ones broke SDCC approx 99 out of 100 times, but that somehow
-went unnoticed. To prevent further issues like this one, remove them.
+Can it operate without an input xtal?
 
-This commit is effectively a revert of 74a33fac3aab77558ca0d80c9935
-(clk: qcom: gcc-msm8994: Add missing NoC clocks) with ABI preservation.
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    /* 25MHz reference crystal */
+> +    ref25: ref25m {
+> +        compatible =3D "fixed-clock";
+> +        #clock-cells =3D <0>;
+> +        clock-frequency =3D <25000000>;
+> +    };
+> +
+> +    i2c@0 {
+> +        reg =3D <0x0 0x100>;
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        rs9: clock-generator@6a {
+> +            compatible =3D "renesas,9fgv0241";
+> +            reg =3D <0x6a>;
+> +            #clock-cells =3D <1>;
+> +
+> +            clocks =3D <&ref25m>;
+> +
+> +            DIF0 {
+> +                renesas,slew-rate =3D <3000000>;
+> +            };
+> +        };
+> +    };
+> +
+> +    /* Consumer referencing the 9FGV0241 pin DIF0 */
 
-Fixes: 74a33fac3aab ("clk: qcom: gcc-msm8994: Add missing NoC clocks")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
----
- drivers/clk/qcom/gcc-msm8994.c | 106 +++------------------------------
- 1 file changed, 9 insertions(+), 97 deletions(-)
+Consumers are typically left out of clk bindings.
 
-diff --git a/drivers/clk/qcom/gcc-msm8994.c b/drivers/clk/qcom/gcc-msm8994.c
-index 702a9bdc0559..5df9f1ead48e 100644
---- a/drivers/clk/qcom/gcc-msm8994.c
-+++ b/drivers/clk/qcom/gcc-msm8994.c
-@@ -107,42 +107,6 @@ static const struct clk_parent_data gcc_xo_gpll0_gpll4[] = {
- 	{ .hw = &gpll4.clkr.hw },
- };
- 
--static struct clk_rcg2 system_noc_clk_src = {
--	.cmd_rcgr = 0x0120,
--	.hid_width = 5,
--	.parent_map = gcc_xo_gpll0_map,
--	.clkr.hw.init = &(struct clk_init_data){
--		.name = "system_noc_clk_src",
--		.parent_data = gcc_xo_gpll0,
--		.num_parents = ARRAY_SIZE(gcc_xo_gpll0),
--		.ops = &clk_rcg2_ops,
--	},
--};
--
--static struct clk_rcg2 config_noc_clk_src = {
--	.cmd_rcgr = 0x0150,
--	.hid_width = 5,
--	.parent_map = gcc_xo_gpll0_map,
--	.clkr.hw.init = &(struct clk_init_data){
--		.name = "config_noc_clk_src",
--		.parent_data = gcc_xo_gpll0,
--		.num_parents = ARRAY_SIZE(gcc_xo_gpll0),
--		.ops = &clk_rcg2_ops,
--	},
--};
--
--static struct clk_rcg2 periph_noc_clk_src = {
--	.cmd_rcgr = 0x0190,
--	.hid_width = 5,
--	.parent_map = gcc_xo_gpll0_map,
--	.clkr.hw.init = &(struct clk_init_data){
--		.name = "periph_noc_clk_src",
--		.parent_data = gcc_xo_gpll0,
--		.num_parents = ARRAY_SIZE(gcc_xo_gpll0),
--		.ops = &clk_rcg2_ops,
--	},
--};
--
- static struct freq_tbl ftbl_ufs_axi_clk_src[] = {
- 	F(50000000, P_GPLL0, 12, 0, 0),
- 	F(100000000, P_GPLL0, 6, 0, 0),
-@@ -1149,8 +1113,6 @@ static struct clk_branch gcc_blsp1_ahb_clk = {
- 		.enable_mask = BIT(17),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_blsp1_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1434,8 +1396,6 @@ static struct clk_branch gcc_blsp2_ahb_clk = {
- 		.enable_mask = BIT(15),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_blsp2_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1763,8 +1723,6 @@ static struct clk_branch gcc_lpass_q6_axi_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_lpass_q6_axi_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1777,8 +1735,6 @@ static struct clk_branch gcc_mss_q6_bimc_axi_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_mss_q6_bimc_axi_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1806,9 +1762,6 @@ static struct clk_branch gcc_pcie_0_cfg_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_pcie_0_cfg_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &config_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1821,9 +1774,6 @@ static struct clk_branch gcc_pcie_0_mstr_axi_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_pcie_0_mstr_axi_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1853,9 +1803,6 @@ static struct clk_branch gcc_pcie_0_slv_axi_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_pcie_0_slv_axi_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1883,9 +1830,6 @@ static struct clk_branch gcc_pcie_1_cfg_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_pcie_1_cfg_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &config_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1898,9 +1842,6 @@ static struct clk_branch gcc_pcie_1_mstr_axi_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_pcie_1_mstr_axi_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1929,9 +1870,6 @@ static struct clk_branch gcc_pcie_1_slv_axi_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_pcie_1_slv_axi_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1959,8 +1897,6 @@ static struct clk_branch gcc_pdm_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_pdm_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -1988,9 +1924,6 @@ static struct clk_branch gcc_sdcc1_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_sdcc1_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2003,9 +1936,6 @@ static struct clk_branch gcc_sdcc2_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_sdcc2_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2033,9 +1963,6 @@ static struct clk_branch gcc_sdcc3_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_sdcc3_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2063,9 +1990,6 @@ static struct clk_branch gcc_sdcc4_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_sdcc4_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
--			.flags = CLK_SET_RATE_PARENT,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2123,8 +2047,6 @@ static struct clk_branch gcc_tsif_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_tsif_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2152,8 +2074,6 @@ static struct clk_branch gcc_ufs_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_ufs_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &config_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2197,8 +2117,6 @@ static struct clk_branch gcc_ufs_rx_symbol_0_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_ufs_rx_symbol_0_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2212,8 +2130,6 @@ static struct clk_branch gcc_ufs_rx_symbol_1_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_ufs_rx_symbol_1_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2242,8 +2158,6 @@ static struct clk_branch gcc_ufs_tx_symbol_0_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_ufs_tx_symbol_0_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2257,8 +2171,6 @@ static struct clk_branch gcc_ufs_tx_symbol_1_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_ufs_tx_symbol_1_clk",
--			.parent_hws = (const struct clk_hw *[]){ &system_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2363,8 +2275,6 @@ static struct clk_branch gcc_usb_hs_ahb_clk = {
- 		.enable_mask = BIT(0),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_usb_hs_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2487,8 +2397,6 @@ static struct clk_branch gcc_boot_rom_ahb_clk = {
- 		.enable_mask = BIT(10),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_boot_rom_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &config_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2502,8 +2410,6 @@ static struct clk_branch gcc_prng_ahb_clk = {
- 		.enable_mask = BIT(13),
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_prng_ahb_clk",
--			.parent_hws = (const struct clk_hw *[]){ &periph_noc_clk_src.clkr.hw },
--			.num_parents = 1,
- 			.ops = &clk_branch2_ops,
- 		},
- 	},
-@@ -2546,9 +2452,6 @@ static struct clk_regmap *gcc_msm8994_clocks[] = {
- 	[GPLL0] = &gpll0.clkr,
- 	[GPLL4_EARLY] = &gpll4_early.clkr,
- 	[GPLL4] = &gpll4.clkr,
--	[CONFIG_NOC_CLK_SRC] = &config_noc_clk_src.clkr,
--	[PERIPH_NOC_CLK_SRC] = &periph_noc_clk_src.clkr,
--	[SYSTEM_NOC_CLK_SRC] = &system_noc_clk_src.clkr,
- 	[UFS_AXI_CLK_SRC] = &ufs_axi_clk_src.clkr,
- 	[USB30_MASTER_CLK_SRC] = &usb30_master_clk_src.clkr,
- 	[BLSP1_QUP1_I2C_APPS_CLK_SRC] = &blsp1_qup1_i2c_apps_clk_src.clkr,
-@@ -2695,6 +2598,15 @@ static struct clk_regmap *gcc_msm8994_clocks[] = {
- 	[USB_SS_PHY_LDO] = &usb_ss_phy_ldo.clkr,
- 	[GCC_BOOT_ROM_AHB_CLK] = &gcc_boot_rom_ahb_clk.clkr,
- 	[GCC_PRNG_AHB_CLK] = &gcc_prng_ahb_clk.clkr,
-+
-+	/*
-+	 * The following clocks should NOT be managed by this driver, but they once were
-+	 * mistakengly added. Now they are only here to indicate that they are not defined
-+	 * on purpose, even though the names will stay in the header file (for ABI sanity).
-+	 */
-+	[CONFIG_NOC_CLK_SRC] = NULL,
-+	[PERIPH_NOC_CLK_SRC] = NULL,
-+	[SYSTEM_NOC_CLK_SRC] = NULL,
- };
- 
- static struct gdsc *gcc_msm8994_gdscs[] = {
--- 
-2.35.1
-
+> +    consumer {
+> +        /* ... */
+> +        clocks =3D <&rs9 0>;
+> +        /* ... */
+> +    };
+> +
+> +...
+> --=20
+> 2.34.1
+>
