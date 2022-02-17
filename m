@@ -2,30 +2,30 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2704B9EB5
-	for <lists+linux-clk@lfdr.de>; Thu, 17 Feb 2022 12:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E0A4B9EC5
+	for <lists+linux-clk@lfdr.de>; Thu, 17 Feb 2022 12:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239135AbiBQLeP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 17 Feb 2022 06:34:15 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34096 "EHLO
+        id S239813AbiBQLf1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 17 Feb 2022 06:35:27 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:38494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236534AbiBQLeO (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 17 Feb 2022 06:34:14 -0500
-X-Greylist: delayed 68 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 03:34:00 PST
+        with ESMTP id S239810AbiBQLf0 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 17 Feb 2022 06:35:26 -0500
 Received: from mxd2.seznam.cz (mxd2.seznam.cz [IPv6:2a02:598:2::210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F212278295
-        for <linux-clk@vger.kernel.org>; Thu, 17 Feb 2022 03:33:59 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB9B2AA3A5
+        for <linux-clk@vger.kernel.org>; Thu, 17 Feb 2022 03:35:12 -0800 (PST)
 Received: from email.seznam.cz
-        by email-smtpc1a.ng.seznam.cz (email-smtpc1a.ng.seznam.cz [10.23.10.15])
-        id 48b02eac13be7ac54919e2f2;
-        Thu, 17 Feb 2022 12:33:58 +0100 (CET)
+        by email-smtpc26b.ng.seznam.cz (email-smtpc26b.ng.seznam.cz [10.23.18.37])
+        id 43a409c818aa5da1420dc596;
+        Thu, 17 Feb 2022 12:35:10 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
-        t=1645097638; bh=I0huqjO3Ze0Tthxe1VueCZOTHs0UvA6L60KoxxYO8N0=;
-        h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
-         Content-Transfer-Encoding:X-szn-frgn:X-szn-frgc;
-        b=K6vL939Gz6MsYFQT3Y60jZ8F5nK4idL4s5l0UBbjehij0skQgDef5qlYGvTIw8hDF
-         FscLcfvle7qurVqBJKI4N3+VlY/CBFsuJlwB0jEMd8SCAAMFBYx+XIZKe8p1XUA741
-         xu3SD8ta1wOE5gsG7XlAijjPDDBt9I835deuqUyQ=
+        t=1645097710; bh=s0Sl0vV8bxTas7cVGdxupTDuDRfDCRZkk+zmIdoJFCE=;
+        h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
+         References:MIME-Version:Content-Transfer-Encoding:X-szn-frgn:
+         X-szn-frgc;
+        b=DrgfA+ARB219SasfJ1O0GRXc59I55umaQiBelMKySqYDTjTsj4ltnsAkHhiyiPR+W
+         JJDM+sbSiOp2sYNtYkBfytJcYmBDFdyiuxOtMzBoI5UlkF+QqP5xmKB7Dyn75+6Lzk
+         N8AI13zxEPSJ0EYaBYJezGIdE+uOyljWIYzZB3wI=
 Received: from localhost.localdomain (ip-111-27.static.ccinternet.cz [147.161.27.111])
         by email-relay20.ng.seznam.cz (Seznam SMTPD 1.3.136) with ESMTP;
         Thu, 17 Feb 2022 12:32:31 +0100 (CET)  
@@ -41,15 +41,16 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Saravana Kannan <saravanak@google.com>,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, Michael Srba <Michael.Srba@seznam.cz>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 1/5] dt-bindings: clock: gcc-msm8998: Add definitions of SSC-related clocks
-Date:   Thu, 17 Feb 2022 12:30:00 +0100
-Message-Id: <20220217113004.22757-1-michael.srba@seznam.cz>
+        devicetree@vger.kernel.org, Michael Srba <Michael.Srba@seznam.cz>
+Subject: [PATCH v6 2/5] clk: qcom: gcc-msm8998: add SSC-related clocks
+Date:   Thu, 17 Feb 2022 12:30:01 +0100
+Message-Id: <20220217113004.22757-2-michael.srba@seznam.cz>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220217113004.22757-1-michael.srba@seznam.cz>
+References: <20220217113004.22757-1-michael.srba@seznam.cz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-szn-frgn: <beafa1f3-a171-4ad1-9b7a-1724450eefa2>
+X-szn-frgn: <bc6f6abc-165a-45a4-8472-b4fe70474670>
 X-szn-frgc: <0>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
@@ -63,38 +64,100 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 From: Michael Srba <Michael.Srba@seznam.cz>
 
-This patch adds definitions of four clocks which need to be manipulated
-in order to initialize the AHB bus which exposes the SCC block in the
-global address space.
+This patch adds four clocks which need to be manipulated in order to
+initialize the AHB bus which exposes the SCC block in the global address
+space.
+
+If a device is known to be configured such that writing to these
+registers from Linux is not permitted, the 'protected-clocks'
+device tree property must be used to denote that fact.
 
 Signed-off-by: Michael Srba <Michael.Srba@seznam.cz>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
  CHANGES:
  - v2: none
  - v3: none
- - v4: none
+ - v4: reword the commit message
  - v5: none
  - v6: none
 ---
- include/dt-bindings/clock/qcom,gcc-msm8998.h | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/clk/qcom/gcc-msm8998.c | 56 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-diff --git a/include/dt-bindings/clock/qcom,gcc-msm8998.h b/include/dt-bindings/clock/qcom,gcc-msm8998.h
-index 72c99e486d86..1badb4f9c58f 100644
---- a/include/dt-bindings/clock/qcom,gcc-msm8998.h
-+++ b/include/dt-bindings/clock/qcom,gcc-msm8998.h
-@@ -186,6 +186,10 @@
- #define UFS_UNIPRO_CORE_CLK_SRC					177
- #define GCC_MMSS_GPLL0_CLK					178
- #define HMSS_GPLL0_CLK_SRC					179
-+#define GCC_IM_SLEEP						180
-+#define AGGRE2_SNOC_NORTH_AXI					181
-+#define SSC_XO							182
-+#define SSC_CNOC_AHBS_CLK					183
+diff --git a/drivers/clk/qcom/gcc-msm8998.c b/drivers/clk/qcom/gcc-msm8998.c
+index 407e2c5caea4..2d14c3d672fc 100644
+--- a/drivers/clk/qcom/gcc-msm8998.c
++++ b/drivers/clk/qcom/gcc-msm8998.c
+@@ -2833,6 +2833,58 @@ static struct clk_branch gcc_rx1_usb2_clkref_clk = {
+ 	},
+ };
  
- #define PCIE_0_GDSC						0
- #define UFS_GDSC						1
++static struct clk_branch gcc_im_sleep_clk = {
++	.halt_reg = 0x4300C,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x4300C,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "gcc_im_sleep_clk",
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch aggre2_snoc_north_axi_clk = {
++	.halt_reg = 0x83010,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x83010,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "aggre2_snoc_north_axi_clk",
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch ssc_xo_clk = {
++	.halt_reg = 0x63018,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x63018,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "ssc_xo_clk",
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
++static struct clk_branch ssc_cnoc_ahbs_clk = {
++	.halt_reg = 0x6300C,
++	.halt_check = BRANCH_HALT,
++	.clkr = {
++		.enable_reg = 0x6300C,
++		.enable_mask = BIT(0),
++		.hw.init = &(struct clk_init_data){
++			.name = "ssc_cnoc_ahbs_clk",
++			.ops = &clk_branch2_ops,
++		},
++	},
++};
++
+ static struct gdsc pcie_0_gdsc = {
+ 	.gdscr = 0x6b004,
+ 	.gds_hw_ctrl = 0x0,
+@@ -3036,6 +3088,10 @@ static struct clk_regmap *gcc_msm8998_clocks[] = {
+ 	[GCC_MSS_MNOC_BIMC_AXI_CLK] = &gcc_mss_mnoc_bimc_axi_clk.clkr,
+ 	[GCC_MMSS_GPLL0_CLK] = &gcc_mmss_gpll0_clk.clkr,
+ 	[HMSS_GPLL0_CLK_SRC] = &hmss_gpll0_clk_src.clkr,
++	[GCC_IM_SLEEP] = &gcc_im_sleep_clk.clkr,
++	[AGGRE2_SNOC_NORTH_AXI] = &aggre2_snoc_north_axi_clk.clkr,
++	[SSC_XO] = &ssc_xo_clk.clkr,
++	[SSC_CNOC_AHBS_CLK] = &ssc_cnoc_ahbs_clk.clkr,
+ };
+ 
+ static struct gdsc *gcc_msm8998_gdscs[] = {
 -- 
 2.34.1
 
