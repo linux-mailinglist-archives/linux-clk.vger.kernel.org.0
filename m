@@ -2,120 +2,103 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9696A4BB9A1
-	for <lists+linux-clk@lfdr.de>; Fri, 18 Feb 2022 13:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B294BBF15
+	for <lists+linux-clk@lfdr.de>; Fri, 18 Feb 2022 19:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235682AbiBRM5d (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 18 Feb 2022 07:57:33 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:36334 "EHLO
+        id S239006AbiBRSMv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 18 Feb 2022 13:12:51 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:35026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235631AbiBRM5L (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 18 Feb 2022 07:57:11 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B6A286CA
-        for <linux-clk@vger.kernel.org>; Fri, 18 Feb 2022 04:56:38 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id h18so15344123edb.7
-        for <linux-clk@vger.kernel.org>; Fri, 18 Feb 2022 04:56:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=JQAvlLJWgldHDOHcIcacjIOpg5TUZmVngZ2Pms5NG7Q=;
-        b=OZEbl6KFipfUGSY3KFbkW5bY3S675hY6/6OQBZOkiQDH6GySEY4TVOEFN7FJqiqPJO
-         agFru8efuG36LReL5w2nHtLPmYtalsoT1wnvZtm5B66UR3WpHZe7YTWBnI+8hwcg+B9b
-         6VTqOjeC2sjnoEVsct21NLGE+w42y7sE+dK+Kvyf2ZNQWqLNSVCxvg8SrSQ4nfcquitG
-         gNzOCZpbJ3cIiSkDeprGVHuEDLqS0lNFTsmcAJrL1QvP69xRb+k98zeCzu96aeF/5vna
-         AQQtm0c00Xr1SD+EXnd+BcRUJLCn+nrZnVcDaQjb8hG/lck3U1O70LYNSK/UVt5iDZ4s
-         w/aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=JQAvlLJWgldHDOHcIcacjIOpg5TUZmVngZ2Pms5NG7Q=;
-        b=5FZ1qnQ+rns+Dk2Osz80vovne53QaJ5lGooTZ5CcTHrNFFINYMDff5Hgxc8Rg6ChLy
-         NGp5Xq4vtUPLDWqAxyXm4nEdbnVxQp6XHEqefq0V4GktrGdFY2RREtYEevsgNRfIoFKZ
-         bEfIgM9+TnFRkoHe7xC3YvWOKgu2Nban3IuUSM+mMh/TiADfAzvNBnGerIIpqUlzvGh2
-         HOxlO6QbXzxP2KuFNdKxvDvMe9fOzSkfdahD1IuLW21AM7r+a/6jnd6nlTmwpWvihK7t
-         POZb57lQKUGbf9pyKSn7M5yzmRBYSGQwZtxnr9ZrCWvS+0cGTdM7Q/6d8DPnrehV+pFN
-         1mRQ==
-X-Gm-Message-State: AOAM530V45lA6czMm55+v0BKcQdNSRg/6/yZGVkEyoPsDr0pVScmQrYe
-        sBb1wbiJohWlHqb0+rgh6s/33WoIhKgoTujLrEM=
-X-Google-Smtp-Source: ABdhPJyy4wsNexIMJl8t/qFduIub1BwgK6qhMR7/odqNLNSPL6c7sGIHAwwI3wMCua1JSW86yo5J9Zuy9ZUHmEauhdw=
-X-Received: by 2002:a05:6402:2801:b0:410:a592:a5d0 with SMTP id
- h1-20020a056402280100b00410a592a5d0mr8026964ede.253.1645188996769; Fri, 18
- Feb 2022 04:56:36 -0800 (PST)
+        with ESMTP id S234881AbiBRSMu (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 18 Feb 2022 13:12:50 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92ECB35DFC;
+        Fri, 18 Feb 2022 10:12:32 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8D4FD20005;
+        Fri, 18 Feb 2022 18:12:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1645207948;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=deSZu+qBukwpiSRa2N8bS3T5wydQePa0aCzjNVX3Mw8=;
+        b=Pk8v0BgZwgu65ScCZtPLdmSu9VKd46Fmv9RjfKs1KZNe6+5PXJe4M13835t+vjLhmAIF4m
+        Flioj+nb7zFgTUvdmlsVTY0zLSUhEYJsALxvR+nIxGVtLJvrDqwvZmlC3fHX3+A536xtdB
+        iRgVrJ4t+SnJQ+UzoNEjDT3SM9WI4SfrxD7OGtxb8JdVt/YJzFPe+FxfGOdU1KVd0RZL0e
+        lucOGa0dbYS4pNykS5Tg10x2NMYfXCUAMZheeCfAft5PghrM+a0DoBnV7gWFpzhkdwVjaI
+        KdjDRsBOpyiR33f+0hXS8aiPFhrcHmlQW0o1fLskuviB1sClQknQn4Kn9yd1dA==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Viresh Kumar <vireshk@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        dmaengine@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Laetitia MARIOTTINI <laetitia.mariottini@se.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH 0/8] RZN1 DMA support
+Date:   Fri, 18 Feb 2022 19:12:18 +0100
+Message-Id: <20220218181226.431098-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Sender: brianphilippe60@gmail.com
-Received: by 2002:a17:906:d04b:0:0:0:0 with HTTP; Fri, 18 Feb 2022 04:56:36
- -0800 (PST)
-From:   Aisha Al-Qaddafi <aishagaddafi1894@gmail.com>
-Date:   Fri, 18 Feb 2022 12:56:36 +0000
-X-Google-Sender-Auth: zimhkdm4D_7Zb9el7ImS1HVoEM8
-Message-ID: <CAG_+5rzYP5EJeFoJ8ag25DHdaJAYO-mwwPF+ctcuT0zqZyKjHw@mail.gmail.com>
-Subject: Investment proposal,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.3 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:530 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5010]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [aishagaddafi1894[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [brianphilippe60[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.6 URG_BIZ Contains urgent matter
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
-        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello Dear Friend,
+Hello,
 
-With due respect to your person and much sincerity of purpose I wish
-to write to you today for our mutual benefit in this investment
-transaction.
-I'm Mrs. Aisha Al-Gaddafi, presently residing herein Oman the
-Southeastern coast of the Arabian Peninsula in Western Asia, I'm a
-single Mother and a widow with three Children. I am the only
-biological Daughter of the late Libyan President (Late Colonel.
-Muammar Gaddafi). I have an investment funds worth Twenty Seven
-Million Five Hundred Thousand United State Dollars ($27.500.000.00 )
-and i need an investment Manager/Partner and because of my Asylum
-Status I will authorize you the ownership of the investment funds,
-However, I am interested in you for investment project assistance in
-your country, may be from there,. we can build a business relationship
-in the nearest future.
+Here is a first series bringing DMA support to RZN1 platforms. I'm not a
+DMA expert at all so criticism is welcome.
 
-I am willing to negotiate an investment/business profit sharing ratio
-with you based on the future investment earning profits. If you are
-willing to handle this project kindly reply urgently to enable me to
-provide you more information about the investment funds.
+Soon a second series will come with changes made to the UART controller
+driver, in order to interact with the RZN1 DMA controller.
 
-Your urgent reply will be appreciated if only you are interested in
-this investment project..
-Best Regards
-Mrs. Aisha Al-Gaddafi.
+Cheers,
+Miquèl
+
+Miquel Raynal (7):
+  dt-bindings: dma: Introduce RZN1 dmamux bindings
+  dt-bindings: dma: Introduce RZN1 DMA compatible
+  soc: renesas: rzn1-sysc: Export function to set dmamux
+  dma: dmamux: Introduce RZN1 DMA router support
+  dma: dw: Add RZN1 compatible
+  ARM: dts: r9a06g032: Add the two DMA nodes
+  ARM: dts: r9a06g032: Describe the DMA router
+
+Phil Edworthy (1):
+  dma: dw: Avoid partial transfers
+
+ .../bindings/dma/renesas,rzn1-dmamux.yaml     |  42 +++++
+ .../bindings/dma/snps,dma-spear1340.yaml      |   8 +-
+ MAINTAINERS                                   |   1 +
+ arch/arm/boot/dts/r9a06g032.dtsi              |  37 ++++
+ drivers/clk/renesas/r9a06g032-clocks.c        |  27 +++
+ drivers/dma/dw/Makefile                       |   2 +-
+ drivers/dma/dw/core.c                         |   3 +
+ drivers/dma/dw/dmamux.c                       | 175 ++++++++++++++++++
+ drivers/dma/dw/platform.c                     |   1 +
+ include/dt-bindings/clock/r9a06g032-sysctrl.h |   2 +
+ include/linux/soc/renesas/r9a06g032-syscon.h  |  11 ++
+ 11 files changed, 307 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.yaml
+ create mode 100644 drivers/dma/dw/dmamux.c
+ create mode 100644 include/linux/soc/renesas/r9a06g032-syscon.h
+
+-- 
+2.27.0
+
