@@ -2,66 +2,37 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FBD94BD3FD
-	for <lists+linux-clk@lfdr.de>; Mon, 21 Feb 2022 03:57:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E184BD47F
+	for <lists+linux-clk@lfdr.de>; Mon, 21 Feb 2022 05:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343945AbiBUCg6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 20 Feb 2022 21:36:58 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48774 "EHLO
+        id S1344412AbiBUDrF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 20 Feb 2022 22:47:05 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:51550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343938AbiBUCgy (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 20 Feb 2022 21:36:54 -0500
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989AF299;
-        Sun, 20 Feb 2022 18:36:31 -0800 (PST)
-Received: by mail-il1-f177.google.com with SMTP id p11so8992040ils.1;
-        Sun, 20 Feb 2022 18:36:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=QyX/i2/YrR/rW3J3vcQL5VJG0A8Hvyop2ZIeubiA5uY=;
-        b=31BVrDMMHkfUoZhz/E4uchbtevPAmv2DARIy4BG6ZnmCbgdiANjL8c40C2i/jz5HDM
-         4YVT6C6Nqi5eJoPVuBGppH4+QS1PU70XVltW0QNXIigSr6ah8T/qw7gXhAACwmPa86FQ
-         hKFyNYWZ0qNy0IzP95SzszTAwOm9yvTWO44betxNJd5ZGrsJJFNctuQo0WkYbuKvO1JZ
-         XrITdvo9ENscJEhe329jrqL505rYh5yIoBdJCeprqbg4dMV71wO/TzcS4I1NiHZbZDjj
-         ofgjlKu7OvgslbMF3MwPrZA2Iwg+BI4YpcmeapUIm7S2APRBbyzoD1KLtw1pWhETs0oG
-         Tlyw==
-X-Gm-Message-State: AOAM533a+05RkWvkwoe7DpYTJ0ZZfBKQawA9JFkzvZyFSG2fz4S7eFU4
-        DFX4xjRAw6jv5BGXfi3Ayg==
-X-Google-Smtp-Source: ABdhPJzdwNs2TTvMMhPurie/Z2ze3Kaj4Y2IAOi9YjrL1pMLCBZwuYrSXPXRDjt2YTX9QydWacu9Kw==
-X-Received: by 2002:a92:ca0f:0:b0:2bf:56d4:3aec with SMTP id j15-20020a92ca0f000000b002bf56d43aecmr14324732ils.220.1645410990890;
-        Sun, 20 Feb 2022 18:36:30 -0800 (PST)
-Received: from robh.at.kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id h13sm7203330ili.28.2022.02.20.18.36.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Feb 2022 18:36:30 -0800 (PST)
-Received: (nullmailer pid 2041543 invoked by uid 1000);
-        Mon, 21 Feb 2022 02:36:09 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     linux-clk@vger.kernel.org,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        dmaengine@vger.kernel.org, Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-renesas-soc@vger.kernel.org,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Laetitia MARIOTTINI <laetitia.mariottini@se.com>,
-        devicetree@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20220218181226.431098-3-miquel.raynal@bootlin.com>
-References: <20220218181226.431098-1-miquel.raynal@bootlin.com> <20220218181226.431098-3-miquel.raynal@bootlin.com>
-Subject: Re: [PATCH 2/8] dt-bindings: dma: Introduce RZN1 DMA compatible
-Date:   Sun, 20 Feb 2022 20:36:09 -0600
-Message-Id: <1645410969.367667.2041542.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        with ESMTP id S240546AbiBUDrC (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 20 Feb 2022 22:47:02 -0500
+Received: from mx1.cqplus1.com (unknown [113.204.237.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21B2A51E5E
+        for <linux-clk@vger.kernel.org>; Sun, 20 Feb 2022 19:46:24 -0800 (PST)
+X-MailGates: (compute_score:DELIVER,40,3)
+Received: from 172.28.114.216
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(26028:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Mon, 21 Feb 2022 11:29:22 +0800 (CST)
+From:   Qin Jian <qinjian@cqplus1.com>
+To:     robh+dt@kernel.org
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, tglx@linutronix.de,
+        maz@kernel.org, p.zabel@pengutronix.de, linux@armlinux.org.uk,
+        broonie@kernel.org, arnd@arndb.de, stefan.wahren@i2se.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        wells.lu@sunplus.com, Qin Jian <qinjian@cqplus1.com>
+Subject: [PATCH v9 00/10] Add Sunplus SP7021 SoC Support
+Date:   Mon, 21 Feb 2022 11:29:11 +0800
+Message-Id: <cover.1645413746.git.qinjian@cqplus1.com>
+X-Mailer: git-send-email 2.33.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,47 +41,129 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, 18 Feb 2022 19:12:20 +0100, Miquel Raynal wrote:
-> Just like for the NAND controller that is also on this SoC, let's
-> provide a SoC generic and a more specific couple of compatibles.
-> 
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  .../devicetree/bindings/dma/snps,dma-spear1340.yaml       | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
+This patch series add Sunplus SP7021 SoC support.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates many
+peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and etc.) into a
+single chip. It is designed for industrial control.
 
-yamllint warnings/errors:
+SP7021 consists of two chips (dies) in a package. One is called C-chip
+(computing chip). It is a 4-core ARM Cortex A7 CPU. It adopts high-level
+process (22 nm) for high performance computing. The other is called P-
+chip (peripheral chip). It has many peripherals and an ARM A926 added
+especially for real-time control. P-chip is made for customers. It adopts
+low-level process (ex: 0.11 um) to reduce cost.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/renesas-nandc.example.dt.yaml: nand-controller@40102000: '#dma-cells' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/dma/snps,dma-spear1340.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/renesas-nandc.example.dt.yaml: nand-controller@40102000: $nodename:0: 'nand-controller@40102000' does not match '^dma-controller(@.*)?$'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/dma/snps,dma-spear1340.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/renesas-nandc.example.dt.yaml: nand-controller@40102000: clocks: [[4294967295, 117], [4294967295, 37]] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/dma/snps,dma-spear1340.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/renesas-nandc.example.dt.yaml: nand-controller@40102000: clock-names: ['hclk', 'eclk'] is too long
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/dma/snps,dma-spear1340.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/renesas-nandc.example.dt.yaml: nand-controller@40102000: Unevaluated properties are not allowed ('clocks', 'clock-names', '#address-cells', '#size-cells' were unexpected)
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/dma/snps,dma-spear1340.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mtd/renesas-nandc.example.dt.yaml: nand-controller@40102000: '#dma-cells' is a required property
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/dma/snps,dma-spear1340.yaml
+Refer to (for documentations):
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
 
-doc reference errors (make refcheckdocs):
+Refer to (applications):
+https://tibbo.com/store/plus1.html
 
-See https://patchwork.ozlabs.org/patch/1594847
+Refer to (applications):
+http://www.sinovoip.com.cn/ecp_view.asp?id=586
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+Changes in v9:
+- clk/Kconfig: fix the comments form Stephen Boyd
+- clk-sp7021.c: fix the comments form Stephen Boyd
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+Changes in v8:
+- clk-sp7021.c: fix the comments form Stephen Boyd
 
-pip3 install dtschema --upgrade
+Changes in v7:
+- sunplus,sp7021-clkc.yaml: Add clocks & clock-names
+- clk-sp7021.c: fix the comments form Stephen Boyd
+- irq-sp7021-intc.c: fix the comments from Marc
 
-Please check and re-submit.
+Changes in v6:
+- reset-sunplus.c: fix the comments from Philipp
+- irq-sp7021-intc.c: fix the comments from Marc
+- mach-sunplus: fix the comments from Arnd
+
+Changes in v5:
+- reset-sunplus.c: fix strict checks
+- clk/Kconfig: fix spell
+- clk-sp7021.c: using bitfield ops, fix strict checks
+- irqchip/Kconfig: fix spell
+- irq-sp7021-intc.c: cleanup error path in probe, fix strict checks
+- arm/Kconfig: fix spell & typo, remove CONFIG_SERIAL_SUNPLUS
+- mach-sunplus/Kconfig: fix typo
+- sp7021_defconfig: add CONFIG_SERIAL_SUNPLUS
+
+Changes in v4:
+- mach-sunplus: add initial support for SP7021
+- sp7021_defconfig: add generic SP7021 defconfig
+- reset-sunplus: remove Q645 support
+- reset-sunplus.c: refine code based on Philipp's review
+- clk-sp7021: clock defines add prefix, more clean up
+
+Changes in v3:
+- sp7021-intc: remove primary controller mode due to P-chip running Linux
+  not supported any more.
+- sp7021-intc.h: removed, not set ext through the DT but sp_intc_set_ext()
+- sunplus,sp7021-intc.yaml: update descriptions for above changes
+- irq-sp7021-intc.c: more cleanup based on Marc's review
+- all driver's Kconfig removed default, it's selected by platform config
+
+Changes in v2:
+- sunplus,sp7021-intc.yaml: add descrption for "#interrupt-cells", interrupts
+- sunplus,sp7021-intc.yaml: drop "ext0-mask"/"ext1-mask" from DT
+- sunplus,sp7021-intc.yaml: fix example.dt too long error
+- irq-sp7021-intc.c: major rewrite
+- all files with dual license
+
+Qin Jian (10):
+  dt-bindings: vendor-prefixes: Add Sunplus
+  dt-bindings: arm: sunplus: Add bindings for Sunplus SP7021 SoC boards
+  dt-bindings: reset: Add bindings for SP7021 reset driver
+  reset: Add Sunplus SP7021 reset driver
+  dt-bindings: clock: Add bindings for SP7021 clock driver
+  clk: Add Sunplus SP7021 clock driver
+  dt-bindings: interrupt-controller: Add bindings for SP7021 interrupt
+    controller
+  irqchip: Add Sunplus SP7021 interrupt controller driver
+  ARM: sunplus: Add initial support for Sunplus SP7021 SoC
+  ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
+
+ .../bindings/arm/sunplus,sp7021.yaml          |  27 +
+ .../bindings/clock/sunplus,sp7021-clkc.yaml   |  52 ++
+ .../sunplus,sp7021-intc.yaml                  |  62 ++
+ .../bindings/reset/sunplus,reset.yaml         |  38 +
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |  17 +
+ arch/arm/Kconfig                              |   2 +
+ arch/arm/Makefile                             |   1 +
+ arch/arm/configs/multi_v7_defconfig           |   1 +
+ arch/arm/configs/sp7021_defconfig             |  61 ++
+ arch/arm/mach-sunplus/Kconfig                 |  26 +
+ arch/arm/mach-sunplus/Makefile                |   9 +
+ arch/arm/mach-sunplus/sp7021.c                |  16 +
+ drivers/clk/Kconfig                           |  10 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-sp7021.c                      | 741 ++++++++++++++++++
+ drivers/irqchip/Kconfig                       |   9 +
+ drivers/irqchip/Makefile                      |   1 +
+ drivers/irqchip/irq-sp7021-intc.c             | 288 +++++++
+ drivers/reset/Kconfig                         |   9 +
+ drivers/reset/Makefile                        |   1 +
+ drivers/reset/reset-sunplus.c                 | 130 +++
+ include/dt-bindings/clock/sp-sp7021.h         | 112 +++
+ include/dt-bindings/reset/sp-sp7021.h         |  97 +++
+ 24 files changed, 1713 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/sunplus,reset.yaml
+ create mode 100644 arch/arm/configs/sp7021_defconfig
+ create mode 100644 arch/arm/mach-sunplus/Kconfig
+ create mode 100644 arch/arm/mach-sunplus/Makefile
+ create mode 100644 arch/arm/mach-sunplus/sp7021.c
+ create mode 100644 drivers/clk/clk-sp7021.c
+ create mode 100644 drivers/irqchip/irq-sp7021-intc.c
+ create mode 100644 drivers/reset/reset-sunplus.c
+ create mode 100644 include/dt-bindings/clock/sp-sp7021.h
+ create mode 100644 include/dt-bindings/reset/sp-sp7021.h
+
+-- 
+2.33.1
 
