@@ -2,105 +2,64 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CCF4BE7B1
-	for <lists+linux-clk@lfdr.de>; Mon, 21 Feb 2022 19:03:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0E14BE0EF
+	for <lists+linux-clk@lfdr.de>; Mon, 21 Feb 2022 18:52:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358671AbiBUNNA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 21 Feb 2022 08:13:00 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:47762 "EHLO
+        id S1358983AbiBUNWh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 21 Feb 2022 08:22:37 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:57694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350923AbiBUNM6 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 21 Feb 2022 08:12:58 -0500
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983371EC73;
-        Mon, 21 Feb 2022 05:12:33 -0800 (PST)
-Received: from relay1-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::221])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id A2DE7D114C;
-        Mon, 21 Feb 2022 12:59:38 +0000 (UTC)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2BC3024000E;
-        Mon, 21 Feb 2022 12:59:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1645448371;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uhTsNJ0kQ/JteUN01wS0pWNvIJDnfr56O80qPFYTQnw=;
-        b=Alwdtw0XSor57w4FVemMV1hXlcsJhPuvWYXPMpOc+ZmsLlD+gUr/85IBzkW4AEh+MpD9Pz
-        GONNuZNjuZiWPr3bNNBzwK6A6XdPiC5plnS8DQk6Bpma9rwYKFVabKt7huyLV0/iL9eENv
-        XZTvGh9ODK0HwLKXHOevSkDK4AAkYqgJdyDnwG/s2XIzRXjZ3MHMi5P2Xf2xZ7g4xnn6M0
-        inB2hbEUozQbq3ZVwUdXus0c9CPEr/xU0GRchwkQNWtDifsCCUeyLDWh/KfuGFRlROY2b+
-        QZGQ7WVCWy42MLbWe+rtfjbu9EK7fsFpxb0w7YF+53H2YJFefrpvR78+xxEuag==
-Date:   Mon, 21 Feb 2022 13:59:27 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Phil Edworthy <phil.edworthy@renesas.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Laetitia MARIOTTINI <laetitia.mariottini@se.com>
-Subject: Re: [PATCH 5/8] dma: dw: Avoid partial transfers
-Message-ID: <20220221135915.7a441663@xps13>
-In-Reply-To: <TYYPR01MB7086F412B035A09AED2037A9F53A9@TYYPR01MB7086.jpnprd01.prod.outlook.com>
-References: <20220218181226.431098-1-miquel.raynal@bootlin.com>
-        <20220218181226.431098-6-miquel.raynal@bootlin.com>
-        <YhIcyyBp53LnMbjU@smile.fi.intel.com>
-        <TYYPR01MB7086F412B035A09AED2037A9F53A9@TYYPR01MB7086.jpnprd01.prod.outlook.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        with ESMTP id S1358988AbiBUNWd (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 21 Feb 2022 08:22:33 -0500
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79F921816
+        for <linux-clk@vger.kernel.org>; Mon, 21 Feb 2022 05:22:07 -0800 (PST)
+Received: by mail-vk1-xa35.google.com with SMTP id x62so805969vkg.6
+        for <linux-clk@vger.kernel.org>; Mon, 21 Feb 2022 05:22:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=94r73LrRNpO7YYFshzYM25uztFOXVTrm/QHuYFLiQ7w=;
+        b=mADrFrQ+ZaM0TTq14DVXo+gL51+p2NcBjrN5ntCAKNfmsIAoFYM5Vg05TATz1Ho3Mp
+         QntpqOZN3naiWGycPE6mYfwtwAPtneL7Rw/9nMeZB7wOOnN7+w2ZC1J+VfjucP6dvjgH
+         lTknf1/DqWRCd1lnEY8XJSo0sGGNKAN/Q2AhiiVd+kM3VozUxI+7uzBPycoXp1Vaqj8M
+         p4xbfkLFbWc6MBQeg7cIzVnUHjQm0cWUH2jqTe7+s4ph8qXwOHR43B1LSf5Ms39DYX6u
+         tw+yyEkJLsVPXxfaTvunyjyvU9BKx7n8SvP6JAiSZnaM93bNVM1/BrqWWs2xeZURVai0
+         iuLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=94r73LrRNpO7YYFshzYM25uztFOXVTrm/QHuYFLiQ7w=;
+        b=CIlxta1HHxuyB9BevdS+YjK3DCBgKUvGyYjJwhSXDcaHbyxfPNev/sUGV0y74MFDhs
+         EkqbSuRp+oH5GXSXFOCGLHJxLYSivbakduU+YDd+i16irUlc8z0U4L4N4DOwGmMTOq5t
+         4f4AmJqkYl0SuHMIJmNRJzsJPrBn8zyYsj4EapEA8ASoi7OZNfK+xCqDmZ7O2bCkCNDD
+         GZZa9VI6YHsFgAXUvUHTpVO/rJFHwGLBZQz3RP6kqsOpUBWzeplehxlHZWcUZT71dhbo
+         bymsTfhmPowq+qpQlgieF7cBDkthFibhsPN8MYkcFrfLulUBnnq/dQYrLphXbw/Hu4pv
+         YSRw==
+X-Gm-Message-State: AOAM532YtO09TyQ5nTIGNnG7Ubq4EMK/LlQcZQjjWVoqemsFBarOvRsL
+        tkftEfqbrEo/ekS//CC1h1To5HtoKzqVjQzoNbA=
+X-Google-Smtp-Source: ABdhPJzY3uRVFinJaUL83lROLKmjYUZ+TZRkDI5fVeFEVDRnDD4++VfHZ1wYicaoN9REPkmsXvaggGijHkcU6zzfCJU=
+X-Received: by 2002:a05:6122:c9f:b0:330:e2ed:4786 with SMTP id
+ ba31-20020a0561220c9f00b00330e2ed4786mr7735605vkb.29.1645449726641; Mon, 21
+ Feb 2022 05:22:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a59:d8cd:0:b0:28c:6bb4:8918 with HTTP; Mon, 21 Feb 2022
+ 05:22:06 -0800 (PST)
+From:   Anders Pedersen <ousmanebarkissou@gmail.com>
+Date:   Mon, 21 Feb 2022 13:22:06 +0000
+Message-ID: <CAE0fZ3d1A2trQ_6K_TKOtuh1imki0Bk2BNv+2OWiPjRVVrO41A@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Andy,
-
-phil.edworthy@renesas.com wrote on Mon, 21 Feb 2022 08:14:47 +0000:
-
-> Hi Andy,
->=20
-> I wrote the patch a few years ago, but didn't get the time to upstream it.
->=20
-> I am not aware of a HW integration bug on the RZ/N1 device but can't rule=
- it out. I am struggling to see what kind of HW issue this could be as, iir=
-c, word accesses work fine when the size of the transfer is a multiple of t=
-he MEM width.
->=20
-> I found the issue when testing DMA with the UART transferring different a=
-mounts of data.
->=20
-> > > +		if (sconfig->dst_addr_width && sconfig->dst_addr_width < =20
-> > data_width) =20
-> > > +			data_width =3D sconfig->dst_addr_width; =20
-> >=20
-> > But here no check that you do it for explicitly peripheral to memory, so
-> > this
-> > will affect memory to peripheral transfers as well. =20
-> No, this should be ok as this change is within:
-> 	case DMA_DEV_TO_MEM:
-
-I will add this to the commit log to clarify.
-
-Thanks,
-Miqu=C3=A8l
+Greeting, I'm Anders Pedersen, from Norway. I want to know if this
+email is valid? Thanks.
