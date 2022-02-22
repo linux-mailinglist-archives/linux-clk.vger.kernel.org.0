@@ -2,122 +2,120 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83AF14BF91B
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Feb 2022 14:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03F514BF946
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Feb 2022 14:28:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbiBVNTr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 22 Feb 2022 08:19:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
+        id S232439AbiBVN3L (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 22 Feb 2022 08:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232374AbiBVNTq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 22 Feb 2022 08:19:46 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BAEC3303
-        for <linux-clk@vger.kernel.org>; Tue, 22 Feb 2022 05:19:21 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id CE59F5C02A7;
-        Tue, 22 Feb 2022 08:19:20 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 22 Feb 2022 08:19:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; bh=B/S+5pJTjISbVKXDbmkZvJslRN2Aa6
-        NU173g50j/vbU=; b=F+mdGpaG9z3fetPwFzIGTrYl4fAJg6HGc6CMNahQq7hbpW
-        8A/3QNlNKXv72AIkfsdtqnaMRB/PwaEYFLIlv1f8zGRC7rFEqdpT6bKgsUZPfWxR
-        tZ3RR56vMnRpoFU+GfaNyedLUWn2Dwst4rakShI+apbfA54VQIG5DXeJKhEV4WJ6
-        wJpdLhZ3gK5JyRSU5PwZN0v6mrAaUX2jjD0nwYBOgzOR0DI7/itI9tOPKiV7w95v
-        qv4FVM82t+UAUkRHTZpVREcl1jESBUBkUTbOkAGLfWlw3ppPCPm6clKArWbJRNWL
-        oYBjs60iEv5348dB5jSzOAsaDW0yZAPXvSzNG2TQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=B/S+5p
-        JTjISbVKXDbmkZvJslRN2Aa6NU173g50j/vbU=; b=LBuLf4LcU6W9IwF604VwVp
-        q0IPuJ4EB4/nZOKdBKIlLOb+T1PuHbHkK7tvsyHm/RJBSKHbo4DuemgQeo7fW2cy
-        P67vVdTpEaR/k+P20zopYY7OpcWW7efQssS+3lw+Z7kiRClq4WO+zm9699H6y+W6
-        C00PcsejnOWJ0d6dcXuHxXGnSy3FJ0jBFmJwIk/rxcUGBMFHZqdQTCa67hKVst3z
-        GIcCVurM5VM4jk2nfXY8rVDXFGwYhaI+gKhmoU8gZF0uKQ35rBXEIK7kodOKWxkx
-        VxoIZwCjx/eZtogsS/Dxz15y0Wm7KugwyEeLokHo9cOXCnP4unixSeEpYwWWCdng
-        ==
-X-ME-Sender: <xms:2OIUYi4gQL5TSgCFgM64Bo7r2JoGqMSNdTb960lPIxCqMefQcvWK0A>
-    <xme:2OIUYr4jlXTRp9lIqx7eb5FVYrDqBdurA4c1qXDoW6_qqr1FL77WH4WfKark_AU0m
-    DDYC9MM04O4uNNn-P8>
-X-ME-Received: <xmr:2OIUYhdEJVDCGWBNT52YOmvsWhz4G20qR-CbZVHbgKMiwGRrx6PcfDWn2RaC5iAhhK2XxaUHIcueuZ-Xev8rEtBRT5FlodXiWoV9P-Y>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrkeekgdehtdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpedvkeelveefffekjefhffeuleetleefudeifeehuddugffghffhffehveevheeh
-    vdenucevlhhushhtvghrufhiiigvpeegnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
-    igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:2OIUYvITIpeMjWTzHoXU4JTekwS3Z3giRRNTrcbANDhzLPLyB4SbQQ>
-    <xmx:2OIUYmKuyXJ32u0XLf8dqSDiBNtEJBG9PqN2mnGI5kOksGYoC-S8HA>
-    <xmx:2OIUYgzoyVEXBiYpNi-4L8B9E5lZ5lKTIcMlKshMJ0LGQLk2D839ug>
-    <xmx:2OIUYnoZpygPWOtHhUu_QypK5MImsedgc0icwvrUkgyztKG690CipA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 22 Feb 2022 08:19:20 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-clk@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Tim Gover <tim.gover@raspberrypi.com>,
-        Dom Cobley <dom@raspberrypi.com>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v5 11/11] drm/vc4: hdmi: Remove clock rate initialization
-Date:   Tue, 22 Feb 2022 14:18:53 +0100
-Message-Id: <20220222131853.198625-12-maxime@cerno.tech>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220222131853.198625-1-maxime@cerno.tech>
-References: <20220222131853.198625-1-maxime@cerno.tech>
+        with ESMTP id S232430AbiBVN3K (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 22 Feb 2022 08:29:10 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2EC97B96
+        for <linux-clk@vger.kernel.org>; Tue, 22 Feb 2022 05:28:44 -0800 (PST)
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B83E73FCAC
+        for <linux-clk@vger.kernel.org>; Tue, 22 Feb 2022 13:28:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645536522;
+        bh=syQJnDJvIk7oDut501097JANOAQimJJ8XX+nOUPJjUo=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=SpwWIDK079KsZengzmEv7Z0tWqAsfgDccqZg/evf9Aep7QIQA6kKGZJ9qo9IMKUyL
+         ceIhsXdXVYbxsIvN28bBnyZQXkvvIYOmRSYWVZEwYWHQ5ipWWv2Tjpx1ecsjQHu2mi
+         VYexBbTwFXCi0Lz07FCHf3Ad2dHa/GjqWPOfODFikl7DHKj3y4OPkOQpFNxsdg2vqE
+         98wf7OMaNV26+zIxuFIzlICNTdIK0SW1ko7zuseztlVf2l265XqAOOYM/x5nu+gtkk
+         sFjnZBZdDw9OkkF2izQCFkTRRd4RnuzfC9MS/01Mmz1GgCfP0mGxo8xqZDnBDHnp25
+         dUHc22fReuncA==
+Received: by mail-ej1-f72.google.com with SMTP id h22-20020a1709060f5600b006b11a2d3dcfso5781808ejj.4
+        for <linux-clk@vger.kernel.org>; Tue, 22 Feb 2022 05:28:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=syQJnDJvIk7oDut501097JANOAQimJJ8XX+nOUPJjUo=;
+        b=MLzqLZQ0cfXDIOrfvCDLVDRq2QRmNwJy+8/nIXGa6zGHlYLRL4gjlmT/GjqVgZhUGW
+         XmO/T9/FV7VQOdlk9SbPVoa5ZmV1j2ptYxARKbDN0RlhoN2UqwbSmsKWjBRiVRqRUy78
+         V9acw7RNaW5VDCW5Oig1wi6LRkk4SZaI7yP0B8OFvQwfFnrZizGgP0Ll2vKRGy3r/msT
+         g9KyTFd5IC3hPYLSXQzO+5sSA/b9W6i0FSzXXorGrVLSycYgoU1JWDIK5lfatLufGdTa
+         wU+LjulmNfkWfvnPDFmn2DiMXed0us1EHGni/jeldSvLrSoOH4TeX+jf01zySG5VDSma
+         PDUw==
+X-Gm-Message-State: AOAM532Q6hGGoojzpkVSoTWgX7g/GAg3HjXWrD0nZ/3zrS7LznW4OkoD
+        au1ywAVTPGkahAjEHUCWpZh6d2mul/KXUF6C/JNAsIYlQXmytC8YbhJYrE2BvgpZTclfzVoCpX9
+        DZk/pmwzid9XaMY6VAQsQgfx30tUu/zxaz8i80Q==
+X-Received: by 2002:a17:906:d935:b0:6cc:fcfc:c286 with SMTP id rn21-20020a170906d93500b006ccfcfcc286mr19267959ejb.423.1645536520190;
+        Tue, 22 Feb 2022 05:28:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzyrFfwlMx3wyhaWOiWMYUuCZ2Sd0V6lJlo9wHP9II92B5eFvZo3+bHsg4+GgnT5+leTtK+fA==
+X-Received: by 2002:a17:906:d935:b0:6cc:fcfc:c286 with SMTP id rn21-20020a170906d93500b006ccfcfcc286mr19267945ejb.423.1645536520030;
+        Tue, 22 Feb 2022 05:28:40 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id c5sm10029875edk.43.2022.02.22.05.28.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Feb 2022 05:28:39 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Abel Vesa <abel.vesa@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [RFT PATCH 0/3] Fix kfree() of const memory on setting driver_override
+Date:   Tue, 22 Feb 2022 14:27:04 +0100
+Message-Id: <20220222132707.266883-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Now that the clock driver makes sure we never end up with a rate of 0,
-the HDMI driver doesn't need to care anymore.
+Hi,
 
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/gpu/drm/vc4/vc4_hdmi.c | 13 -------------
- 1 file changed, 13 deletions(-)
+Drivers still seem to use driver_override incorrectly. Perhaps my old
+patch makes sense now?
+https://lore.kernel.org/all/1550484960-2392-3-git-send-email-krzk@kernel.org/
 
-diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-index 92b1530aa17b..21aff3ad96cf 100644
---- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-+++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-@@ -2576,19 +2576,6 @@ static int vc4_hdmi_bind(struct device *dev, struct device *master, void *data)
- 			vc4_hdmi->disable_4kp60 = true;
- 	}
- 
--	/*
--	 * If we boot without any cable connected to the HDMI connector,
--	 * the firmware will skip the HSM initialization and leave it
--	 * with a rate of 0, resulting in a bus lockup when we're
--	 * accessing the registers even if it's enabled.
--	 *
--	 * Let's put a sensible default at runtime_resume so that we
--	 * don't end up in this situation.
--	 */
--	ret = clk_set_min_rate(vc4_hdmi->hsm_clock, HSM_MIN_CLOCK_FREQ);
--	if (ret)
--		goto err_put_ddc;
--
- 	/*
- 	 * We need to have the device powered up at this point to call
- 	 * our reset hook and for the CEC init.
+Not tested - please review and test (e.g. by writing to dirver_override
+sysfs entry with KASAN enabled).
+
+Dependencies
+============
+Patches are independent.
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (3):
+  clk: imx: scu: fix kfree() of const memory on setting driver_override
+  slimbus: qcom-ngd: fix kfree() of const memory on setting
+    driver_override
+  rpmsg: fix kfree() of const memory on setting driver_override
+
+ drivers/clk/imx/clk-scu.c       |  6 +++++-
+ drivers/rpmsg/rpmsg_internal.h  | 12 ++++++++++--
+ drivers/rpmsg/rpmsg_ns.c        | 13 +++++++++++--
+ drivers/slimbus/qcom-ngd-ctrl.c |  9 ++++++++-
+ 4 files changed, 34 insertions(+), 6 deletions(-)
+
 -- 
-2.35.1
+2.32.0
 
