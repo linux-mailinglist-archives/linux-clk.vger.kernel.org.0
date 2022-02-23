@@ -2,286 +2,104 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9F74C0DB8
-	for <lists+linux-clk@lfdr.de>; Wed, 23 Feb 2022 08:56:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C98734C0DEF
+	for <lists+linux-clk@lfdr.de>; Wed, 23 Feb 2022 09:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238880AbiBWH4g (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 23 Feb 2022 02:56:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
+        id S238816AbiBWIAb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 23 Feb 2022 03:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238878AbiBWH4e (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 23 Feb 2022 02:56:34 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D417D74DE6
-        for <linux-clk@vger.kernel.org>; Tue, 22 Feb 2022 23:56:06 -0800 (PST)
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nMmVJ-0006yh-3m; Wed, 23 Feb 2022 08:56:05 +0100
-Received: from sha by dude02.hi.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1nMmVH-00FNi7-Uk; Wed, 23 Feb 2022 08:56:03 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     linux-clk@vger.kernel.org
-Cc:     Abel Vesa <abel.vesa@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Adrian Alonso <adrian.alonso@nxp.com>,
-        Mads Bligaard Nielsen <bli@bang-olufsen.dk>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Subject: [PATCH 8/8] clk: imx: pll14xx: Support dynamic rates
-Date:   Wed, 23 Feb 2022 08:56:01 +0100
-Message-Id: <20220223075601.3652543-9-s.hauer@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220223075601.3652543-1-s.hauer@pengutronix.de>
-References: <20220223075601.3652543-1-s.hauer@pengutronix.de>
+        with ESMTP id S238314AbiBWIAa (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 23 Feb 2022 03:00:30 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFE179C5D
+        for <linux-clk@vger.kernel.org>; Wed, 23 Feb 2022 00:00:02 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3F76B3F33A
+        for <linux-clk@vger.kernel.org>; Wed, 23 Feb 2022 08:00:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1645603201;
+        bh=0xTh4hFbTPwbf+ePQ8BHMeIBtxU7/uHwVLEfcY4fm78=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=XXBpG94nBYkvSPOPtvuP3dGLRH5InnZ6umkC7oOEsvG/gclfQVW7mWq8cQ4o/KeAR
+         Gg+OYlDpr+iSu/k/gxXQpQkSFFUtyDmhsOsaLWczsFOpXODA+Jmmv2kc99MFGzd8aO
+         wLK6mpw1Dz6UjgV8isd8Ai6YqdA0VnsDiPDz0Tlzse0aGgAj88wn5LaScqH1BoD55x
+         CZ20f5Ep0D+K35o7iij4CKyBRFv0t98uRBqwDttYGwMPoy17arG7ZmOo92mCU9oLwq
+         YMQe4OIT6/6px61fqYqbz3m0A4HK/D/zQqgrx5ygMBnR087WulubdroWaGnqbnc1Tx
+         I7EmkkkeYgMPA==
+Received: by mail-ed1-f69.google.com with SMTP id e10-20020a056402190a00b00410f20467abso13202134edz.14
+        for <linux-clk@vger.kernel.org>; Wed, 23 Feb 2022 00:00:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0xTh4hFbTPwbf+ePQ8BHMeIBtxU7/uHwVLEfcY4fm78=;
+        b=0CkPL70vLNaPZX8awGJ6Mw01dQ+UxF425KSXyibmQKGWlC9PDPdsVZSQ1LwJr50dkL
+         Af/YigEIU71natZ+ySkPMfRxhbHh+FmMsBlsi8Cc4HuxIU3BQGJr/DaPtMyzkTS4c+Iu
+         wgs9Xw0pahX0/Vwi0QsrxTu5LDCpWPYgwodfn5VaCK5RSluTw8pz83WvbQyTrbR1oLt7
+         T1OznEnjoQbOTZ7SKQZ191uLYGYzW68bl4teoaEUANktgV3WkBDid2QQ9PZVfyr4bP9+
+         /c+06jR9NQ/Ef2NOXJwqw3fJTKwLgVKlxBgsJf/1tik40hE92sKkbRQa///r8KXhpVhh
+         0LrA==
+X-Gm-Message-State: AOAM530NqcrjgUaX7G+SwI1dmqzWpHfuHaAbyF7X4FTTgNf/rez8Ghhs
+        pGl4sVSHD3y4PgQ8Pqe4g4maGkjbwgPOeGX2n3LDOpsF9fecn3wY7U7lJgBKTmauWs+Xb218RbX
+        CXnqb7fbCCt16Kh+sQw0zxM0prt+ouO2q5zi+9g==
+X-Received: by 2002:a17:907:78c2:b0:6b7:ecfd:7b94 with SMTP id kv2-20020a17090778c200b006b7ecfd7b94mr21592111ejc.370.1645603200871;
+        Wed, 23 Feb 2022 00:00:00 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzbTuWFvalNHVl71bvqSMslTNLiOjQOQDzYAoctBuKPGYWkAs8WXXS8I9PjQCBFuI0UnVbTAg==
+X-Received: by 2002:a17:907:78c2:b0:6b7:ecfd:7b94 with SMTP id kv2-20020a17090778c200b006b7ecfd7b94mr21592099ejc.370.1645603200691;
+        Wed, 23 Feb 2022 00:00:00 -0800 (PST)
+Received: from [192.168.0.124] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id h5sm7085865ejo.124.2022.02.22.23.59.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Feb 2022 00:00:00 -0800 (PST)
+Message-ID: <3abfe9cb-68d7-5644-c422-226ca259e7c9@canonical.com>
+Date:   Wed, 23 Feb 2022 08:59:59 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/2] dt-bindings: clock: Add sc8280xp to the RPMh clock
+ controller binding
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220223044516.3776637-1-bjorn.andersson@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220223044516.3776637-1-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The pll1443x PLL so far only supports rates from a rate table passed
-during initialization. Calculating PLL settings dynamically helps audio
-applications to get their desired rates, so support for this is added
-in this patch.
+On 23/02/2022 05:45, Bjorn Andersson wrote:
+> The Qualcomm SC8280XP has a RPMh clock controller, so add a compatible
+> for this to the binding.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/clock/qcom,rpmhcc.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-The strategy to get to the PLL setting for a rate is:
 
-- First try to only adjust kdiv which specifies the fractional part of the PLL.
-  This setting can be changed without glitches on the output and is therefore
-  preferred
-- When that isn't possible then the rate table is searched for suitable rates,
-  so for standard rates the same settings are used as without this patch
-- As a last resort the best settings are calculated dynamically
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-The code in this patch is based on patches from Adrian Alonso <adrian.alonso@nxp.com>
-and Mads Bligaard Nielsen <bli@bang-olufsen.dk>
 
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
----
- drivers/clk/imx/clk-pll14xx.c | 143 ++++++++++++++++++++++++++++++----
- 1 file changed, 126 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/clk/imx/clk-pll14xx.c b/drivers/clk/imx/clk-pll14xx.c
-index 28c75963a80bd..d2e2c742ce8f2 100644
---- a/drivers/clk/imx/clk-pll14xx.c
-+++ b/drivers/clk/imx/clk-pll14xx.c
-@@ -28,6 +28,8 @@
- #define PDIV_MASK	GENMASK(9, 4)
- #define SDIV_MASK	GENMASK(2, 0)
- #define KDIV_MASK	GENMASK(15, 0)
-+#define KDIV_MIN	SHRT_MIN
-+#define KDIV_MAX	SHRT_MAX
- 
- #define LOCK_TIMEOUT_US		10000
- 
-@@ -112,7 +114,106 @@ static long pll14xx_calc_rate(struct clk_pll14xx *pll, int mdiv, int pdiv,
- 	return fvco;
- }
- 
--static long clk_pll14xx_round_rate(struct clk_hw *hw, unsigned long rate,
-+static long pll1443x_calc_kdiv(int mdiv, int pdiv, int sdiv,
-+		unsigned long rate, unsigned long prate)
-+{
-+	long kdiv;
-+
-+	/* calc kdiv = round(rate * pdiv * 65536 * 2^sdiv / prate) - (mdiv * 65536) */
-+	kdiv = ((rate * ((pdiv * 65536) << sdiv) + prate / 2) / prate) - (mdiv * 65536);
-+
-+	return clamp_t(short, kdiv, KDIV_MIN, KDIV_MAX);
-+}
-+
-+static void imx_pll14xx_calc_settings(struct clk_pll14xx *pll, unsigned long rate,
-+				      unsigned long prate, struct imx_pll14xx_rate_table *t)
-+{
-+	u32 pll_div_ctl0, pll_div_ctl1;
-+	int mdiv, pdiv, sdiv, kdiv;
-+	long fvco, rate_min, rate_max, dist, best = LONG_MAX;
-+	const struct imx_pll14xx_rate_table *tt;
-+
-+	/*
-+	 * Fractional PLL constrains:
-+	 *
-+	 * a) 6MHz <= prate <= 25MHz
-+	 * b) 1 <= p <= 63 (1 <= p <= 4 prate = 24MHz)
-+	 * c) 64 <= m <= 1023
-+	 * d) 0 <= s <= 6
-+	 * e) -32768 <= k <= 32767
-+	 *
-+	 * fvco = (m * 65536 + k) * prate / (p * 65536)
-+	 */
-+
-+	pll_div_ctl0 = readl_relaxed(pll->base + DIV_CTL0);
-+	mdiv = FIELD_GET(MDIV_MASK, pll_div_ctl0);
-+	pdiv = FIELD_GET(PDIV_MASK, pll_div_ctl0);
-+	sdiv = FIELD_GET(SDIV_MASK, pll_div_ctl0);
-+	pll_div_ctl1 = readl_relaxed(pll->base + DIV_CTL1);
-+
-+	/* First see if we can get the desired rate by only adjusting kdiv (glitch free) */
-+	rate_min = pll14xx_calc_rate(pll, mdiv, pdiv, sdiv, KDIV_MIN, prate);
-+	rate_max = pll14xx_calc_rate(pll, mdiv, pdiv, sdiv, KDIV_MAX, prate);
-+
-+	if (rate >= rate_min && rate <= rate_max) {
-+		kdiv = pll1443x_calc_kdiv(mdiv, pdiv, sdiv, rate, prate);
-+		pr_debug("%s: in=%ld, want=%ld Only adjust kdiv %ld -> %d\n",
-+			 clk_hw_get_name(&pll->hw), prate, rate,
-+			 FIELD_GET(KDIV_MASK, pll_div_ctl1), kdiv);
-+		fvco = pll14xx_calc_rate(pll, mdiv, pdiv, sdiv, kdiv, prate);
-+		t->rate = (unsigned int)fvco;
-+		t->mdiv = mdiv;
-+		t->pdiv = pdiv;
-+		t->sdiv = sdiv;
-+		t->kdiv = kdiv;
-+		return;
-+	}
-+
-+	/* Then try if we can get the desired rate from one of the static entries */
-+	tt = imx_get_pll_settings(pll, rate);
-+	if (tt) {
-+		pr_debug("%s: in=%ld, want=%ld, Using PLL setting from table\n",
-+			 clk_hw_get_name(&pll->hw), prate, rate);
-+		t->rate = tt->rate;
-+		t->mdiv = tt->mdiv;
-+		t->pdiv = tt->pdiv;
-+		t->sdiv = tt->sdiv;
-+		t->kdiv = tt->kdiv;
-+		return;
-+	}
-+
-+	/* Finally calculate best values */
-+	for (pdiv = 1; pdiv <= 7; pdiv++) {
-+		for (sdiv = 0; sdiv <= 6; sdiv++) {
-+			/* calc mdiv = round(rate * pdiv * 2^sdiv) / prate) */
-+			mdiv = DIV_ROUND_CLOSEST(rate * (pdiv << sdiv), prate);
-+			mdiv = clamp(mdiv, 64, 1023);
-+
-+			kdiv = pll1443x_calc_kdiv(mdiv, pdiv, sdiv, rate, prate);
-+			fvco = pll14xx_calc_rate(pll, mdiv, pdiv, sdiv, kdiv, prate);
-+
-+			/* best match */
-+			dist = abs((long)rate - (long)fvco);
-+			if (dist < best) {
-+				best = dist;
-+				t->rate = (unsigned int)fvco;
-+				t->mdiv = mdiv;
-+				t->pdiv = pdiv;
-+				t->sdiv = sdiv;
-+				t->kdiv = kdiv;
-+
-+				if (!dist)
-+					goto found;
-+			}
-+		}
-+	}
-+found:
-+	pr_debug("%s: in=%ld, want=%ld got=%d (pdiv=%d sdiv=%d mdiv=%d kdiv=%d)\n",
-+		 clk_hw_get_name(&pll->hw), prate, rate, t->rate, t->pdiv, t->sdiv,
-+		 t->mdiv, t->kdiv);
-+}
-+
-+static long clk_pll1416x_round_rate(struct clk_hw *hw, unsigned long rate,
- 			unsigned long *prate)
- {
- 	struct clk_pll14xx *pll = to_clk_pll14xx(hw);
-@@ -128,6 +229,17 @@ static long clk_pll14xx_round_rate(struct clk_hw *hw, unsigned long rate,
- 	return rate_table[pll->rate_count - 1].rate;
- }
- 
-+static long clk_pll1443x_round_rate(struct clk_hw *hw, unsigned long rate,
-+			unsigned long *prate)
-+{
-+	struct clk_pll14xx *pll = to_clk_pll14xx(hw);
-+	struct imx_pll14xx_rate_table t;
-+
-+	imx_pll14xx_calc_settings(pll, rate, *prate, &t);
-+
-+	return t.rate;
-+}
-+
- static unsigned long clk_pll14xx_recalc_rate(struct clk_hw *hw,
- 						  unsigned long parent_rate)
- {
-@@ -238,25 +350,21 @@ static int clk_pll1443x_set_rate(struct clk_hw *hw, unsigned long drate,
- 				 unsigned long prate)
- {
- 	struct clk_pll14xx *pll = to_clk_pll14xx(hw);
--	const struct imx_pll14xx_rate_table *rate;
-+	struct imx_pll14xx_rate_table rate;
- 	u32 gnrl_ctl, div_ctl0;
- 	int ret;
- 
--	rate = imx_get_pll_settings(pll, drate);
--	if (!rate) {
--		pr_err("%s: Invalid rate : %lu for pll clk %s\n", __func__,
--			drate, clk_hw_get_name(hw));
--		return -EINVAL;
--	}
-+	imx_pll14xx_calc_settings(pll, drate, prate, &rate);
- 
- 	div_ctl0 = readl_relaxed(pll->base + DIV_CTL0);
- 
--	if (!clk_pll14xx_mp_change(rate, div_ctl0)) {
-+	if (!clk_pll14xx_mp_change(&rate, div_ctl0)) {
-+		/* only sdiv and/or kdiv changed - no need to RESET PLL */
- 		div_ctl0 &= ~SDIV_MASK;
--		div_ctl0 |= FIELD_PREP(SDIV_MASK, rate->sdiv);
-+		div_ctl0 |= FIELD_PREP(SDIV_MASK, rate.sdiv);
- 		writel_relaxed(div_ctl0, pll->base + DIV_CTL0);
- 
--		writel_relaxed(FIELD_PREP(KDIV_MASK, rate->kdiv),
-+		writel_relaxed(FIELD_PREP(KDIV_MASK, rate.kdiv),
- 			       pll->base + DIV_CTL1);
- 
- 		return 0;
-@@ -271,11 +379,12 @@ static int clk_pll1443x_set_rate(struct clk_hw *hw, unsigned long drate,
- 	gnrl_ctl |= BYPASS_MASK;
- 	writel_relaxed(gnrl_ctl, pll->base + GNRL_CTL);
- 
--	div_ctl0 = FIELD_PREP(MDIV_MASK, rate->mdiv) |
--		   FIELD_PREP(PDIV_MASK, rate->pdiv) |
--		   FIELD_PREP(SDIV_MASK, rate->sdiv);
-+	div_ctl0 = FIELD_PREP(MDIV_MASK, rate.mdiv) |
-+		   FIELD_PREP(PDIV_MASK, rate.pdiv) |
-+		   FIELD_PREP(SDIV_MASK, rate.sdiv);
- 	writel_relaxed(div_ctl0, pll->base + DIV_CTL0);
--	writel_relaxed(FIELD_PREP(KDIV_MASK, rate->kdiv), pll->base + DIV_CTL1);
-+
-+	writel_relaxed(FIELD_PREP(KDIV_MASK, rate.kdiv), pll->base + DIV_CTL1);
- 
- 	/*
- 	 * According to SPEC, t3 - t2 need to be greater than
-@@ -358,7 +467,7 @@ static const struct clk_ops clk_pll1416x_ops = {
- 	.unprepare	= clk_pll14xx_unprepare,
- 	.is_prepared	= clk_pll14xx_is_prepared,
- 	.recalc_rate	= clk_pll14xx_recalc_rate,
--	.round_rate	= clk_pll14xx_round_rate,
-+	.round_rate	= clk_pll1416x_round_rate,
- 	.set_rate	= clk_pll1416x_set_rate,
- };
- 
-@@ -371,7 +480,7 @@ static const struct clk_ops clk_pll1443x_ops = {
- 	.unprepare	= clk_pll14xx_unprepare,
- 	.is_prepared	= clk_pll14xx_is_prepared,
- 	.recalc_rate	= clk_pll14xx_recalc_rate,
--	.round_rate	= clk_pll14xx_round_rate,
-+	.round_rate	= clk_pll1443x_round_rate,
- 	.set_rate	= clk_pll1443x_set_rate,
- };
- 
--- 
-2.30.2
-
+Best regards,
+Krzysztof
