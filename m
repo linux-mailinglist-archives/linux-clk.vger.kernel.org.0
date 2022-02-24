@@ -2,52 +2,52 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31BC14C2288
-	for <lists+linux-clk@lfdr.de>; Thu, 24 Feb 2022 04:43:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF3A4C22A2
+	for <lists+linux-clk@lfdr.de>; Thu, 24 Feb 2022 04:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiBXDnk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 23 Feb 2022 22:43:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
+        id S229751AbiBXDtU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 23 Feb 2022 22:49:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbiBXDnj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 23 Feb 2022 22:43:39 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D33C25A314
-        for <linux-clk@vger.kernel.org>; Wed, 23 Feb 2022 19:43:09 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id s5so1188776oic.10
-        for <linux-clk@vger.kernel.org>; Wed, 23 Feb 2022 19:43:09 -0800 (PST)
+        with ESMTP id S229539AbiBXDtT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 23 Feb 2022 22:49:19 -0500
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4F820D82F
+        for <linux-clk@vger.kernel.org>; Wed, 23 Feb 2022 19:48:48 -0800 (PST)
+Received: by mail-oo1-xc2e.google.com with SMTP id i6-20020a4ac506000000b0031c5ac6c078so1681392ooq.6
+        for <linux-clk@vger.kernel.org>; Wed, 23 Feb 2022 19:48:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=LQV2Ce0Cqm3fFzgko900zEq9hMhH+dYL1BenORkgZSE=;
-        b=cLYZ+u45ycfZDh38NHEb/21XbNgNJUZG3on3NOdklDWSJ7PYJ+mdinq7E890TK38OQ
-         tSkQUxI/xCNA/cht+qvJAbH0cwiq7f7N3rXRxmjZbGS3GHMwWBev1n1I02+bJN7zW90S
-         Y73yWgHuDPVmf6+iArbNDFcrS1A79n7D5oRnf5N/FJ8ywVtznp2wcRdZ9W46JWcAonIF
-         XUk4j4BQcWTfayGWJUrM4yxLtlsHnLKU4H2WPmutQHSw3DikI6o0QvBR6/NDcFEpdp1e
-         5No0/Xf00aVJsSrQu/9VrUfDI9OA88oOlURFV1yzpkIuS88PD7aWFFrnlzjG3lTTSP1/
-         +wIg==
+        bh=PiZRCkT93sFuayBwB1xNP2rtK4QBBQDElK070sJbl20=;
+        b=kWLCOEIIoARj8rSjwrhQdP1BxIimAbTDawAsKCgZVaS/Psc+uZ1JyikdmjP6ymoEV4
+         1VPNmeAn5EcxSHRuwb5VspBLmXjCjdULzq9moCqW58e041uA1FiwBkUlk59NYVUUuFDP
+         /b1+ITJj0wb9UD8MMq8DWkbl8YyqKbxMcpLFy8DQB60wztZEvRE+K0RgBMfR5bVAhADH
+         f29fbfQL55ro9aoh05VZ/rs55XvfPBYcr+2VwTKYSup38YDXebAd4dvCrEhvbI9+tWeZ
+         JIl+kbYVahux6z9LBYafKUdecvM09H1ylJRMtZ5S/SYjyvvjOGSE+E5nfsvbWW8CxJaF
+         eGwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=LQV2Ce0Cqm3fFzgko900zEq9hMhH+dYL1BenORkgZSE=;
-        b=gN36FvkQa48iv4EVvZGjS6bNGfd2ZS5eWq6zkn4PN6WEyYMO6AU8ChzPDOQ5KZSQ49
-         yLPOKngfkUVHSzfH9w0rd3eeZMWr/25Vh1yrCzt1gUuIUTBu+8057R5U8rsUzDWUsMG1
-         PUyLzjodvTCWh87AghhjlcFmw9QrmHVzs1imMy/5VdGQT+douOP3Gps6MrYXe8FrYooP
-         I4u5ObCh0S2V0Tw0og3kIVmjkFDvR5aBU0iyxIFJ9hqh7AbysYuFcufqjGo+jcijMvoL
-         ZjGDQLdljCY6la3ENBtI6hkzH+OdwjapgHowAicB24oPdK/dQ3ATp4I3Rcm30oT3ACvm
-         Oang==
-X-Gm-Message-State: AOAM530pPxUz/6hdu/kxFaPxCb+8CLJFcZtqBCROarLRQETyaKQry/2a
-        FqbsLOFfmdM3C6zyh7EEVBnIVg==
-X-Google-Smtp-Source: ABdhPJzgnESy4fUgWr9qkHrfCBVEALdcwUFNttweBpXgPrGC9ko/0af5qYzPPWqA86hfZugFItirDw==
-X-Received: by 2002:aca:32c1:0:b0:2ce:6ee7:2c9f with SMTP id y184-20020aca32c1000000b002ce6ee72c9fmr6192858oiy.205.1645674189114;
-        Wed, 23 Feb 2022 19:43:09 -0800 (PST)
+        bh=PiZRCkT93sFuayBwB1xNP2rtK4QBBQDElK070sJbl20=;
+        b=TYT+/MMLRTS7zag1q3QEZX5uF7FxossNWWJCGdfSzUDmJbkgA65SNwqAewU8mcPJIl
+         A7GmP2a6gfBkffCzsi81c6O/f0AcDAkyUKdzoguC3VI8tLCzKm6mW2WHNSDxBcRgOQiX
+         0cOHzJ1F4aXKciBY5EHk4qb3UoWbNXb/BD4NjNziTq+xXI4DT5pUbP6utqX8QfGtx6nz
+         a7rjsIpuLnmgKqb0NLhEcqB6dTFhn5iGZAaRpJdC7lXEh3zR5FfviivYVXdSVuIpjzhM
+         K0JmQH/ynyrlfXrwkAESU2Qey7axV1dQnJnjG6frQiO3rdYdeGkWrXGlKIw1i2SRDg38
+         C+gg==
+X-Gm-Message-State: AOAM530KMmBmLLcONZ0y0D86usf2i6BOmhPZ/Dq3rgu61JF2BBmndmjI
+        4fIp4xAUzw5rieMYyBPyGY5rLw==
+X-Google-Smtp-Source: ABdhPJxpRKS9EU1A1z6bjy/RblCyFIMKM+1oZF3OhJTobvfA0c4mNBj9lNyKrtKKLExZyW1HVEZupg==
+X-Received: by 2002:a05:6870:3652:b0:d3:4ada:37cb with SMTP id v18-20020a056870365200b000d34ada37cbmr5516789oak.328.1645674527359;
+        Wed, 23 Feb 2022 19:48:47 -0800 (PST)
 Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id e9sm604775oos.19.2022.02.23.19.43.08
+        by smtp.gmail.com with ESMTPSA id gn26sm853445oab.24.2022.02.23.19.48.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Feb 2022 19:43:08 -0800 (PST)
-Date:   Wed, 23 Feb 2022 21:43:06 -0600
+        Wed, 23 Feb 2022 19:48:46 -0800 (PST)
+Date:   Wed, 23 Feb 2022 21:48:45 -0600
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Ansuel Smith <ansuelsmth@gmail.com>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -58,15 +58,15 @@ Cc:     Andy Gross <agross@kernel.org>,
         Taniya Das <tdas@codeaurora.org>,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 04/16] clk: qcom: gcc-ipq806x: fix wrong naming for
- gcc_pxo_pll8_pll0
-Message-ID: <Yhb+yiSIBmO9iJNs@builder.lan>
+Subject: Re: [PATCH v4 05/16] clk: qcom: gcc-ipq806x: convert parent_names to
+ parent_data
+Message-ID: <YhcAHQdtvSeROhT+@builder.lan>
 References: <20220217235703.26641-1-ansuelsmth@gmail.com>
- <20220217235703.26641-5-ansuelsmth@gmail.com>
+ <20220217235703.26641-6-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220217235703.26641-5-ansuelsmth@gmail.com>
+In-Reply-To: <20220217235703.26641-6-ansuelsmth@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -79,109 +79,173 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 On Thu 17 Feb 17:56 CST 2022, Ansuel Smith wrote:
 
-> Parent gcc_pxo_pll8_pll0 had the parent definition and parent map
-> swapped. Fix this naming error.
+> Convert parent_names to parent_data to modernize the driver.
+> Where possible use parent_hws directly.
 > 
+
+Really nice to see this kind of cleanup. Unfortunately I have two
+comments below.
+
 > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
 > ---
->  drivers/clk/qcom/gcc-ipq806x.c | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
+>  drivers/clk/qcom/gcc-ipq806x.c | 286 ++++++++++++++++++++-------------
+>  1 file changed, 173 insertions(+), 113 deletions(-)
 > 
 > diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
-> index d6b7adb4be38..34cddf461dba 100644
+> index 34cddf461dba..828383c30322 100644
 > --- a/drivers/clk/qcom/gcc-ipq806x.c
 > +++ b/drivers/clk/qcom/gcc-ipq806x.c
-> @@ -291,13 +291,13 @@ static const char * const gcc_pxo_pll3[] = {
->  	"pll3",
+> @@ -25,6 +25,10 @@
+>  #include "clk-hfpll.h"
+>  #include "reset.h"
+>  
+> +static const struct clk_parent_data gcc_pxo[] = {
+> +	{ .fw_name = "pxo" },
+
+I expect that this will break booting these boards with existing dtb,
+because there's not yet a clocks <&pxo_board> in the gcc node.
+
+If you also add .name = "pxo" here that it should still fall back to map
+to the board clock registered in gcc_ipq806x_probe() and once we have
+passed 1-2 kernel releases we can clean out the old mapping.
+
+> +};
+> +
+>  static struct clk_pll pll0 = {
+>  	.l_reg = 0x30c4,
+>  	.m_reg = 0x30c8,
+> @@ -35,7 +39,7 @@ static struct clk_pll pll0 = {
+>  	.status_bit = 16,
+>  	.clkr.hw.init = &(struct clk_init_data){
+>  		.name = "pll0",
+> -		.parent_names = (const char *[]){ "pxo" },
+> +		.parent_data = gcc_pxo,
+>  		.num_parents = 1,
+>  		.ops = &clk_pll_ops,
+>  	},
+> @@ -46,7 +50,9 @@ static struct clk_regmap pll0_vote = {
+>  	.enable_mask = BIT(0),
+>  	.hw.init = &(struct clk_init_data){
+>  		.name = "pll0_vote",
+> -		.parent_names = (const char *[]){ "pll0" },
+> +		.parent_hws = (const struct clk_hw*[]){
+> +			&pll0.clkr.hw,
+> +		},
+>  		.num_parents = 1,
+>  		.ops = &clk_pll_vote_ops,
+>  	},
+> @@ -62,7 +68,7 @@ static struct clk_pll pll3 = {
+>  	.status_bit = 16,
+>  	.clkr.hw.init = &(struct clk_init_data){
+>  		.name = "pll3",
+> -		.parent_names = (const char *[]){ "pxo" },
+> +		.parent_data = gcc_pxo,
+>  		.num_parents = 1,
+>  		.ops = &clk_pll_ops,
+>  	},
+> @@ -89,7 +95,7 @@ static struct clk_pll pll8 = {
+>  	.status_bit = 16,
+>  	.clkr.hw.init = &(struct clk_init_data){
+>  		.name = "pll8",
+> -		.parent_names = (const char *[]){ "pxo" },
+> +		.parent_data = gcc_pxo,
+>  		.num_parents = 1,
+>  		.ops = &clk_pll_ops,
+>  	},
+> @@ -100,7 +106,9 @@ static struct clk_regmap pll8_vote = {
+>  	.enable_mask = BIT(8),
+>  	.hw.init = &(struct clk_init_data){
+>  		.name = "pll8_vote",
+> -		.parent_names = (const char *[]){ "pll8" },
+> +		.parent_hws = (const struct clk_hw*[]){
+> +			&pll8.clkr.hw,
+> +		},
+>  		.num_parents = 1,
+>  		.ops = &clk_pll_vote_ops,
+>  	},
+> @@ -123,7 +131,7 @@ static struct hfpll_data hfpll0_data = {
+>  static struct clk_hfpll hfpll0 = {
+>  	.d = &hfpll0_data,
+>  	.clkr.hw.init = &(struct clk_init_data){
+> -		.parent_names = (const char *[]){ "pxo" },
+> +		.parent_data = gcc_pxo,
+>  		.num_parents = 1,
+>  		.name = "hfpll0",
+>  		.ops = &clk_ops_hfpll,
+> @@ -149,7 +157,7 @@ static struct hfpll_data hfpll1_data = {
+>  static struct clk_hfpll hfpll1 = {
+>  	.d = &hfpll1_data,
+>  	.clkr.hw.init = &(struct clk_init_data){
+> -		.parent_names = (const char *[]){ "pxo" },
+> +		.parent_data = gcc_pxo,
+>  		.num_parents = 1,
+>  		.name = "hfpll1",
+>  		.ops = &clk_ops_hfpll,
+> @@ -175,7 +183,7 @@ static struct hfpll_data hfpll_l2_data = {
+>  static struct clk_hfpll hfpll_l2 = {
+>  	.d = &hfpll_l2_data,
+>  	.clkr.hw.init = &(struct clk_init_data){
+> -		.parent_names = (const char *[]){ "pxo" },
+> +		.parent_data = gcc_pxo,
+>  		.num_parents = 1,
+>  		.name = "hfpll_l2",
+>  		.ops = &clk_ops_hfpll,
+> @@ -194,7 +202,7 @@ static struct clk_pll pll14 = {
+>  	.status_bit = 16,
+>  	.clkr.hw.init = &(struct clk_init_data){
+>  		.name = "pll14",
+> -		.parent_names = (const char *[]){ "pxo" },
+> +		.parent_data = gcc_pxo,
+>  		.num_parents = 1,
+>  		.ops = &clk_pll_ops,
+>  	},
+> @@ -205,7 +213,9 @@ static struct clk_regmap pll14_vote = {
+>  	.enable_mask = BIT(14),
+>  	.hw.init = &(struct clk_init_data){
+>  		.name = "pll14_vote",
+> -		.parent_names = (const char *[]){ "pll14" },
+> +		.parent_hws = (const struct clk_hw*[]){
+> +			&pll14.clkr.hw,
+> +		},
+>  		.num_parents = 1,
+>  		.ops = &clk_pll_vote_ops,
+>  	},
+> @@ -238,7 +248,7 @@ static struct clk_pll pll18 = {
+>  	.freq_tbl = pll18_freq_tbl,
+>  	.clkr.hw.init = &(struct clk_init_data){
+>  		.name = "pll18",
+> -		.parent_names = (const char *[]){ "pxo" },
+> +		.parent_data = gcc_pxo,
+>  		.num_parents = 1,
+>  		.ops = &clk_pll_ops,
+>  	},
+> @@ -259,9 +269,9 @@ static const struct parent_map gcc_pxo_pll8_map[] = {
+>  	{ P_PLL8, 3 }
 >  };
 >  
-> -static const struct parent_map gcc_pxo_pll8_pll0[] = {
-> +static const struct parent_map gcc_pxo_pll8_pll0_map[] = {
->  	{ P_PXO, 0 },
->  	{ P_PLL8, 3 },
->  	{ P_PLL0, 2 }
+> -static const char * const gcc_pxo_pll8[] = {
+> -	"pxo",
+> -	"pll8_vote",
+> +static const struct clk_parent_data gcc_pxo_pll8[] = {
+> +	{ .fw_name = "pxo" },
+> +	{ .hw = &pll8_vote.hw },
 >  };
 >  
-> -static const char * const gcc_pxo_pll8_pll0_map[] = {
-> +static const char * const gcc_pxo_pll8_pll0[] = {
->  	"pxo",
->  	"pll8_vote",
->  	"pll0_vote",
-> @@ -1993,7 +1993,7 @@ static struct clk_rcg usb30_master_clk_src = {
->  	},
->  	.s = {
->  		.src_sel_shift = 0,
-> -		.parent_map = gcc_pxo_pll8_pll0,
-> +		.parent_map = gcc_pxo_pll8_pll0_map,
->  	},
->  	.freq_tbl = clk_tbl_usb30_master,
->  	.clkr = {
-> @@ -2001,7 +2001,7 @@ static struct clk_rcg usb30_master_clk_src = {
->  		.enable_mask = BIT(11),
->  		.hw.init = &(struct clk_init_data){
->  			.name = "usb30_master_ref_src",
-> -			.parent_names = gcc_pxo_pll8_pll0_map,
-> +			.parent_names = gcc_pxo_pll8_pll0,
->  			.num_parents = 3,
->  			.ops = &clk_rcg_ops,
->  			.flags = CLK_SET_RATE_GATE,
-> @@ -2063,7 +2063,7 @@ static struct clk_rcg usb30_utmi_clk = {
->  	},
->  	.s = {
->  		.src_sel_shift = 0,
-> -		.parent_map = gcc_pxo_pll8_pll0,
-> +		.parent_map = gcc_pxo_pll8_pll0_map,
->  	},
->  	.freq_tbl = clk_tbl_usb30_utmi,
->  	.clkr = {
-> @@ -2071,7 +2071,7 @@ static struct clk_rcg usb30_utmi_clk = {
->  		.enable_mask = BIT(11),
->  		.hw.init = &(struct clk_init_data){
->  			.name = "usb30_utmi_clk",
-> -			.parent_names = gcc_pxo_pll8_pll0_map,
-> +			.parent_names = gcc_pxo_pll8_pll0,
->  			.num_parents = 3,
->  			.ops = &clk_rcg_ops,
->  			.flags = CLK_SET_RATE_GATE,
-> @@ -2133,7 +2133,7 @@ static struct clk_rcg usb_hs1_xcvr_clk_src = {
->  	},
->  	.s = {
->  		.src_sel_shift = 0,
-> -		.parent_map = gcc_pxo_pll8_pll0,
-> +		.parent_map = gcc_pxo_pll8_pll0_map,
->  	},
->  	.freq_tbl = clk_tbl_usb,
->  	.clkr = {
-> @@ -2141,7 +2141,7 @@ static struct clk_rcg usb_hs1_xcvr_clk_src = {
->  		.enable_mask = BIT(11),
->  		.hw.init = &(struct clk_init_data){
->  			.name = "usb_hs1_xcvr_src",
-> -			.parent_names = gcc_pxo_pll8_pll0_map,
-> +			.parent_names = gcc_pxo_pll8_pll0,
->  			.num_parents = 3,
->  			.ops = &clk_rcg_ops,
->  			.flags = CLK_SET_RATE_GATE,
-> @@ -2197,7 +2197,7 @@ static struct clk_rcg usb_fs1_xcvr_clk_src = {
->  	},
->  	.s = {
->  		.src_sel_shift = 0,
-> -		.parent_map = gcc_pxo_pll8_pll0,
-> +		.parent_map = gcc_pxo_pll8_pll0_map,
->  	},
->  	.freq_tbl = clk_tbl_usb,
->  	.clkr = {
-> @@ -2205,7 +2205,7 @@ static struct clk_rcg usb_fs1_xcvr_clk_src = {
->  		.enable_mask = BIT(11),
->  		.hw.init = &(struct clk_init_data){
->  			.name = "usb_fs1_xcvr_src",
-> -			.parent_names = gcc_pxo_pll8_pll0_map,
-> +			.parent_names = gcc_pxo_pll8_pll0,
->  			.num_parents = 3,
->  			.ops = &clk_rcg_ops,
->  			.flags = CLK_SET_RATE_GATE,
-> -- 
-> 2.34.1
-> 
+>  static const struct parent_map gcc_pxo_pll8_cxo_map[] = {
+> @@ -270,10 +280,10 @@ static const struct parent_map gcc_pxo_pll8_cxo_map[] = {
+>  	{ P_CXO, 5 }
+>  };
+>  
+> -static const char * const gcc_pxo_pll8_cxo[] = {
+> -	"pxo",
+> -	"pll8_vote",
+> -	"cxo",
+> +static const struct clk_parent_data gcc_pxo_pll8_cxo[] = {
+> +	{ .fw_name = "pxo" },
+> +	{ .hw = &pll8_vote.hw },
+> +	{ .fw_name = "cxo" },
+
+As with "pxo", I think you need a .name = "cxo" here as well.
+
+Regards,
+Bjorn
