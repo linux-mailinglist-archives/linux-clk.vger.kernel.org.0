@@ -2,26 +2,26 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 139094C4020
-	for <lists+linux-clk@lfdr.de>; Fri, 25 Feb 2022 09:30:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E584C401A
+	for <lists+linux-clk@lfdr.de>; Fri, 25 Feb 2022 09:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238519AbiBYIaV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 25 Feb 2022 03:30:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
+        id S238513AbiBYIaP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 25 Feb 2022 03:30:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238516AbiBYIaU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 25 Feb 2022 03:30:20 -0500
+        with ESMTP id S238511AbiBYIaN (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 25 Feb 2022 03:30:13 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255562399FD
-        for <linux-clk@vger.kernel.org>; Fri, 25 Feb 2022 00:29:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24307239D5D
+        for <linux-clk@vger.kernel.org>; Fri, 25 Feb 2022 00:29:41 -0800 (PST)
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <sha@pengutronix.de>)
-        id 1nNVyt-0007PD-An; Fri, 25 Feb 2022 09:29:39 +0100
+        id 1nNVyt-0007PE-An; Fri, 25 Feb 2022 09:29:39 +0100
 Received: from sha by dude02.hi.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <sha@pengutronix.de>)
-        id 1nNVys-00BWSf-EP; Fri, 25 Feb 2022 09:29:38 +0100
+        id 1nNVys-00BWSi-F2; Fri, 25 Feb 2022 09:29:38 +0100
 From:   Sascha Hauer <s.hauer@pengutronix.de>
 To:     linux-clk@vger.kernel.org
 Cc:     Abel Vesa <abel.vesa@nxp.com>,
@@ -33,9 +33,9 @@ Cc:     Abel Vesa <abel.vesa@nxp.com>,
         Adrian Alonso <adrian.alonso@nxp.com>,
         Mads Bligaard Nielsen <bli@bang-olufsen.dk>,
         Sascha Hauer <s.hauer@pengutronix.de>
-Subject: [PATCH v2 3/8] clk: imx: pll14xx: Use FIELD_GET/FIELD_PREP
-Date:   Fri, 25 Feb 2022 09:29:32 +0100
-Message-Id: <20220225082937.2746176-4-s.hauer@pengutronix.de>
+Subject: [PATCH v2 4/8] clk: imx: pll14xx: consolidate rate calculation
+Date:   Fri, 25 Feb 2022 09:29:33 +0100
+Message-Id: <20220225082937.2746176-5-s.hauer@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220225082937.2746176-1-s.hauer@pengutronix.de>
 References: <20220225082937.2746176-1-s.hauer@pengutronix.de>
@@ -54,134 +54,121 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Linux has these marvelous FIELD_GET/FIELD_PREP macros for easy access
-to bitfields in registers. Use them and remove the now unused *_SHIFT
-defines.
+The PLL driver has support for two different PLLs: The pll1416x and
+the pll1443x. The latter has support for an additional kdiv value.
+recalc_rate can be the same calculation when kdiv is assumed to be zero
+for the PLL which doesn't support that value.
 
 Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
 ---
-
-Notes:
-    Changes since v1:
-    - Explicitly include linux/bitfield.h for FIELD_PREP/FIELD_GET
-
- drivers/clk/imx/clk-pll14xx.c | 40 +++++++++++++++++------------------
- 1 file changed, 19 insertions(+), 21 deletions(-)
+ drivers/clk/imx/clk-pll14xx.c | 59 +++++++++++++++--------------------
+ 1 file changed, 26 insertions(+), 33 deletions(-)
 
 diff --git a/drivers/clk/imx/clk-pll14xx.c b/drivers/clk/imx/clk-pll14xx.c
-index b295d8a049009..fabb380b87305 100644
+index fabb380b87305..ebd5d888fea6d 100644
 --- a/drivers/clk/imx/clk-pll14xx.c
 +++ b/drivers/clk/imx/clk-pll14xx.c
-@@ -3,6 +3,7 @@
-  * Copyright 2017-2018 NXP.
-  */
+@@ -97,6 +97,20 @@ static const struct imx_pll14xx_rate_table *imx_get_pll_settings(
+ 	return NULL;
+ }
  
-+#include <linux/bitfield.h>
- #include <linux/bits.h>
- #include <linux/clk-provider.h>
- #include <linux/err.h>
-@@ -22,13 +23,9 @@
- #define CLKE_MASK	BIT(11)
- #define RST_MASK	BIT(9)
- #define BYPASS_MASK	BIT(4)
--#define MDIV_SHIFT	12
- #define MDIV_MASK	GENMASK(21, 12)
--#define PDIV_SHIFT	4
- #define PDIV_MASK	GENMASK(9, 4)
--#define SDIV_SHIFT	0
- #define SDIV_MASK	GENMASK(2, 0)
--#define KDIV_SHIFT	0
- #define KDIV_MASK	GENMASK(15, 0)
++static long pll14xx_calc_rate(struct clk_pll14xx *pll, int mdiv, int pdiv,
++			      int sdiv, int kdiv, unsigned long prate)
++{
++	u64 fvco = prate;
++
++	/* fvco = (m * 65536 + k) * Fin / (p * 65536) */
++	fvco *= (mdiv * 65536 + kdiv);
++	pdiv *= 65536;
++
++	do_div(fvco, pdiv << sdiv);
++
++	return fvco;
++}
++
+ static long clk_pll14xx_round_rate(struct clk_hw *hw, unsigned long rate,
+ 			unsigned long *prate)
+ {
+@@ -113,46 +127,25 @@ static long clk_pll14xx_round_rate(struct clk_hw *hw, unsigned long rate,
+ 	return rate_table[i - 1].rate;
+ }
  
- #define LOCK_TIMEOUT_US		10000
-@@ -124,9 +121,9 @@ static unsigned long clk_pll1416x_recalc_rate(struct clk_hw *hw,
- 	u64 fvco = parent_rate;
- 
- 	pll_div = readl_relaxed(pll->base + DIV_CTL0);
--	mdiv = (pll_div & MDIV_MASK) >> MDIV_SHIFT;
--	pdiv = (pll_div & PDIV_MASK) >> PDIV_SHIFT;
--	sdiv = (pll_div & SDIV_MASK) >> SDIV_SHIFT;
-+	mdiv = FIELD_GET(MDIV_MASK, pll_div);
-+	pdiv = FIELD_GET(PDIV_MASK, pll_div);
-+	sdiv = FIELD_GET(SDIV_MASK, pll_div);
- 
- 	fvco *= mdiv;
- 	do_div(fvco, pdiv << sdiv);
-@@ -144,10 +141,10 @@ static unsigned long clk_pll1443x_recalc_rate(struct clk_hw *hw,
+-static unsigned long clk_pll1416x_recalc_rate(struct clk_hw *hw,
+-						  unsigned long parent_rate)
+-{
+-	struct clk_pll14xx *pll = to_clk_pll14xx(hw);
+-	u32 mdiv, pdiv, sdiv, pll_div;
+-	u64 fvco = parent_rate;
+-
+-	pll_div = readl_relaxed(pll->base + DIV_CTL0);
+-	mdiv = FIELD_GET(MDIV_MASK, pll_div);
+-	pdiv = FIELD_GET(PDIV_MASK, pll_div);
+-	sdiv = FIELD_GET(SDIV_MASK, pll_div);
+-
+-	fvco *= mdiv;
+-	do_div(fvco, pdiv << sdiv);
+-
+-	return fvco;
+-}
+-
+-static unsigned long clk_pll1443x_recalc_rate(struct clk_hw *hw,
++static unsigned long clk_pll14xx_recalc_rate(struct clk_hw *hw,
+ 						  unsigned long parent_rate)
+ {
+ 	struct clk_pll14xx *pll = to_clk_pll14xx(hw);
+-	u32 mdiv, pdiv, sdiv, pll_div_ctl0, pll_div_ctl1;
+-	short int kdiv;
+-	u64 fvco = parent_rate;
++	u32 mdiv, pdiv, sdiv, kdiv, pll_div_ctl0, pll_div_ctl1;
  
  	pll_div_ctl0 = readl_relaxed(pll->base + DIV_CTL0);
- 	pll_div_ctl1 = readl_relaxed(pll->base + DIV_CTL1);
--	mdiv = (pll_div_ctl0 & MDIV_MASK) >> MDIV_SHIFT;
--	pdiv = (pll_div_ctl0 & PDIV_MASK) >> PDIV_SHIFT;
--	sdiv = (pll_div_ctl0 & SDIV_MASK) >> SDIV_SHIFT;
--	kdiv = pll_div_ctl1 & KDIV_MASK;
-+	mdiv = FIELD_GET(MDIV_MASK, pll_div_ctl0);
-+	pdiv = FIELD_GET(PDIV_MASK, pll_div_ctl0);
-+	sdiv = FIELD_GET(SDIV_MASK, pll_div_ctl0);
-+	kdiv = FIELD_GET(KDIV_MASK, pll_div_ctl1);
+-	pll_div_ctl1 = readl_relaxed(pll->base + DIV_CTL1);
+ 	mdiv = FIELD_GET(MDIV_MASK, pll_div_ctl0);
+ 	pdiv = FIELD_GET(PDIV_MASK, pll_div_ctl0);
+ 	sdiv = FIELD_GET(SDIV_MASK, pll_div_ctl0);
+-	kdiv = FIELD_GET(KDIV_MASK, pll_div_ctl1);
  
- 	/* fvco = (m * 65536 + k) * Fin / (p * 65536) */
- 	fvco *= (mdiv * 65536 + kdiv);
-@@ -163,8 +160,8 @@ static inline bool clk_pll14xx_mp_change(const struct imx_pll14xx_rate_table *ra
- {
- 	u32 old_mdiv, old_pdiv;
+-	/* fvco = (m * 65536 + k) * Fin / (p * 65536) */
+-	fvco *= (mdiv * 65536 + kdiv);
+-	pdiv *= 65536;
+-
+-	do_div(fvco, pdiv << sdiv);
++	if (pll->type == PLL_1443X) {
++		pll_div_ctl1 = readl_relaxed(pll->base + DIV_CTL1);
++		kdiv = FIELD_GET(KDIV_MASK, pll_div_ctl1);
++	} else {
++		kdiv = 0;
++	}
  
--	old_mdiv = (pll_div & MDIV_MASK) >> MDIV_SHIFT;
--	old_pdiv = (pll_div & PDIV_MASK) >> PDIV_SHIFT;
-+	old_mdiv = FIELD_GET(MDIV_MASK, pll_div);
-+	old_pdiv = FIELD_GET(PDIV_MASK, pll_div);
- 
- 	return rate->mdiv != old_mdiv || rate->pdiv != old_pdiv;
+-	return fvco;
++	return pll14xx_calc_rate(pll, mdiv, pdiv, sdiv, kdiv, parent_rate);
  }
-@@ -196,7 +193,7 @@ static int clk_pll1416x_set_rate(struct clk_hw *hw, unsigned long drate,
  
- 	if (!clk_pll14xx_mp_change(rate, tmp)) {
- 		tmp &= ~SDIV_MASK;
--		tmp |= rate->sdiv << SDIV_SHIFT;
-+		tmp |= FIELD_PREP(SDIV_MASK, rate->sdiv);
- 		writel_relaxed(tmp, pll->base + DIV_CTL0);
+ static inline bool clk_pll14xx_mp_change(const struct imx_pll14xx_rate_table *rate,
+@@ -363,20 +356,20 @@ static const struct clk_ops clk_pll1416x_ops = {
+ 	.prepare	= clk_pll14xx_prepare,
+ 	.unprepare	= clk_pll14xx_unprepare,
+ 	.is_prepared	= clk_pll14xx_is_prepared,
+-	.recalc_rate	= clk_pll1416x_recalc_rate,
++	.recalc_rate	= clk_pll14xx_recalc_rate,
+ 	.round_rate	= clk_pll14xx_round_rate,
+ 	.set_rate	= clk_pll1416x_set_rate,
+ };
  
- 		return 0;
-@@ -215,8 +212,8 @@ static int clk_pll1416x_set_rate(struct clk_hw *hw, unsigned long drate,
- 	tmp |= BYPASS_MASK;
- 	writel(tmp, pll->base + GNRL_CTL);
+ static const struct clk_ops clk_pll1416x_min_ops = {
+-	.recalc_rate	= clk_pll1416x_recalc_rate,
++	.recalc_rate	= clk_pll14xx_recalc_rate,
+ };
  
--	div_val = (rate->mdiv << MDIV_SHIFT) | (rate->pdiv << PDIV_SHIFT) |
--		(rate->sdiv << SDIV_SHIFT);
-+	div_val = FIELD_PREP(MDIV_MASK, rate->mdiv) | FIELD_PREP(PDIV_MASK, rate->pdiv) |
-+		FIELD_PREP(SDIV_MASK, rate->sdiv);
- 	writel_relaxed(div_val, pll->base + DIV_CTL0);
- 
- 	/*
-@@ -262,10 +259,10 @@ static int clk_pll1443x_set_rate(struct clk_hw *hw, unsigned long drate,
- 
- 	if (!clk_pll14xx_mp_change(rate, tmp)) {
- 		tmp &= ~SDIV_MASK;
--		tmp |= rate->sdiv << SDIV_SHIFT;
-+		tmp |= FIELD_PREP(SDIV_MASK, rate->sdiv);
- 		writel_relaxed(tmp, pll->base + DIV_CTL0);
- 
--		tmp = rate->kdiv << KDIV_SHIFT;
-+		tmp = FIELD_PREP(KDIV_MASK, rate->kdiv);
- 		writel_relaxed(tmp, pll->base + DIV_CTL1);
- 
- 		return 0;
-@@ -280,10 +277,11 @@ static int clk_pll1443x_set_rate(struct clk_hw *hw, unsigned long drate,
- 	tmp |= BYPASS_MASK;
- 	writel_relaxed(tmp, pll->base + GNRL_CTL);
- 
--	div_val = (rate->mdiv << MDIV_SHIFT) | (rate->pdiv << PDIV_SHIFT) |
--		(rate->sdiv << SDIV_SHIFT);
-+	div_val = FIELD_PREP(MDIV_MASK, rate->mdiv) |
-+		  FIELD_PREP(PDIV_MASK, rate->pdiv) |
-+		  FIELD_PREP(SDIV_MASK, rate->sdiv);
- 	writel_relaxed(div_val, pll->base + DIV_CTL0);
--	writel_relaxed(rate->kdiv << KDIV_SHIFT, pll->base + DIV_CTL1);
-+	writel_relaxed(FIELD_PREP(KDIV_MASK, rate->kdiv), pll->base + DIV_CTL1);
- 
- 	/*
- 	 * According to SPEC, t3 - t2 need to be greater than
+ static const struct clk_ops clk_pll1443x_ops = {
+ 	.prepare	= clk_pll14xx_prepare,
+ 	.unprepare	= clk_pll14xx_unprepare,
+ 	.is_prepared	= clk_pll14xx_is_prepared,
+-	.recalc_rate	= clk_pll1443x_recalc_rate,
++	.recalc_rate	= clk_pll14xx_recalc_rate,
+ 	.round_rate	= clk_pll14xx_round_rate,
+ 	.set_rate	= clk_pll1443x_set_rate,
+ };
 -- 
 2.30.2
 
