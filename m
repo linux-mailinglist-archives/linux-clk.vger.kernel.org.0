@@ -2,122 +2,117 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6F84C5651
-	for <lists+linux-clk@lfdr.de>; Sat, 26 Feb 2022 14:55:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E094B4C57F5
+	for <lists+linux-clk@lfdr.de>; Sat, 26 Feb 2022 21:15:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232179AbiBZNxu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 26 Feb 2022 08:53:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
+        id S229483AbiBZUQa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 26 Feb 2022 15:16:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232111AbiBZNxn (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 26 Feb 2022 08:53:43 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C2415AF0E;
-        Sat, 26 Feb 2022 05:52:58 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id hw13so16093917ejc.9;
-        Sat, 26 Feb 2022 05:52:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=JMwsuXhcZCUY1xAPROhRSlnLd+vcejQGSPOqCS3EgMc=;
-        b=N+4fOhzAVoXkCKmyZSoL18l3f6i6mwhm1I6KOcxKmUyZ6NP99hWFig6q/Roo13Vl7d
-         Pfeg72uSsSU1Qgy7kc8gecgw9JtWL+EeItD0otAIr0/6Nw/J6Wn7gnG7uDuAAMaVAhO4
-         yOXkX1dgfh79CNONve7cB3Wrtm8AM2ZgP1Gkf8y02UZkMVtPHCb7AJ27JC8stJ3ujkts
-         zlL28LRFZCheVUgb3ke1wGeVik3X19MVEciipvGGc3Pe8TXxk1okMCzX7pWHH3pfsguZ
-         yf85RtnIia9DbVwG60/p9cV1HQTDBXIUaVUbidhgT1tzCN/zNGfOxFj8Y73IBgRCjrZ6
-         IHYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JMwsuXhcZCUY1xAPROhRSlnLd+vcejQGSPOqCS3EgMc=;
-        b=nLikmAKplAU7kUcRBeNR/GW+0AvM7yVEgOOFOYdrvC3YgU1ygwwHkNu4bAnGAFJOis
-         Fs7KA50gOfrAhePD6mloUBrfebSXohg5Qw/eBcf/4imAS2jwYI7XPD5i6PpvPgtr9wP8
-         v8KzbqiKLBkvOLYY8rhSo3hj4yARXs5oJ4stgmljYGYymE/AZcKUJ07j5aBaW2zN8ilQ
-         o4aSWRLb+/shusyswqRxgcZ2FHq+6/xWAyd+Bm5tV+Wmm/gPaLWsls7TcHkp58BXWCKJ
-         0IpPgSTo7RpBkmOcxVoQvaM/t+3NaeyH+PjrwQZ9p6FSJh9CzIckor36p+FQ0i5l6yMR
-         Zeqg==
-X-Gm-Message-State: AOAM5304t1G19SBcNTyKQv8kmv8tEquR2oAlFHfNptLEqYUd0y6z8Mk/
-        b/SRvkKjNj6VRW7U3Afa2jQ=
-X-Google-Smtp-Source: ABdhPJzZfBY8B14M+bdFwPcMLSvMyiyZbdc+OHFml0f8dD3R7rDblC2MDuHs6ArFh8glN4d+5tZYlA==
-X-Received: by 2002:a17:906:40da:b0:6ce:51b:a593 with SMTP id a26-20020a17090640da00b006ce051ba593mr9768284ejk.604.1645883577117;
-        Sat, 26 Feb 2022 05:52:57 -0800 (PST)
-Received: from Ansuel-xps.localdomain (host-95-251-226-220.retail.telecomitalia.it. [95.251.226.220])
-        by smtp.googlemail.com with ESMTPSA id j21-20020aa7c415000000b004127ac9ddc3sm2836369edq.50.2022.02.26.05.52.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Feb 2022 05:52:56 -0800 (PST)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
+        with ESMTP id S229481AbiBZUQa (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 26 Feb 2022 15:16:30 -0500
+X-Greylist: delayed 400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Feb 2022 12:15:55 PST
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5197921F5DF
+        for <linux-clk@vger.kernel.org>; Sat, 26 Feb 2022 12:15:55 -0800 (PST)
+Received: from Marijn-Arch-PC.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id EC7F03F494;
+        Sat, 26 Feb 2022 21:09:13 +0100 (CET)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Pavel Dubrova <pashadubrova@gmail.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <tdas@codeaurora.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 15/15] ARM: dts: qcom: add syscon and cxo/pxo clock to gcc node for ipq8064
-Date:   Sat, 26 Feb 2022 14:52:35 +0100
-Message-Id: <20220226135235.10051-16-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220226135235.10051-1-ansuelsmth@gmail.com>
-References: <20220226135235.10051-1-ansuelsmth@gmail.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/3] clk: qcom: Fix sorting of SDX_GCC_65 in Makefile and Kconfig
+Date:   Sat, 26 Feb 2022 21:09:09 +0100
+Message-Id: <20220226200911.230030-2-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220226200911.230030-1-marijn.suijten@somainline.org>
+References: <20220226200911.230030-1-marijn.suijten@somainline.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add syscon compatible required for tsens driver to correctly probe driver
-and access the reg. Also add cxo and pxo tag and declare them as gcc clock
-now requires them for the ipq8064 gcc driver that has now been modernized.
+In order to keep at least the list of `CONFIG_SM_` drivers sorted
+alphabetically, SDX_GCC_65 should have been moved one line up.  This in
+turn makes it easier and cleaner to add the followup SM_DISPCC_6125
+driver in the right place, right before SM_DISPCC_8250.
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Fixes: d79afa201328 ("clk: qcom: Add SDX65 GCC support")
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 ---
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/clk/qcom/Kconfig  | 14 +++++++-------
+ drivers/clk/qcom/Makefile |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index 11481313bdb6..5524a68cf3d1 100644
---- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -298,13 +298,13 @@ smem: smem@41000000 {
- 	};
+diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+index f5b54bfc992f..161b257da9ca 100644
+--- a/drivers/clk/qcom/Kconfig
++++ b/drivers/clk/qcom/Kconfig
+@@ -574,13 +574,6 @@ config SDX_GCC_55
+ 	  Say Y if you want to use peripheral devices such as UART,
+ 	  SPI, I2C, USB, SD/UFS, PCIe etc.
  
- 	clocks {
--		cxo_board {
-+		cxo_board: cxo_board {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <25000000>;
- 		};
+-config SM_CAMCC_8250
+-	tristate "SM8250 Camera Clock Controller"
+-	select SM_GCC_8250
+-	help
+-	  Support for the camera clock controller on SM8250 devices.
+-	  Say Y if you want to support camera devices and camera functionality.
+-
+ config SDX_GCC_65
+ 	tristate "SDX65 Global Clock Controller"
+ 	select QCOM_GDSC
+@@ -589,6 +582,13 @@ config SDX_GCC_65
+ 	  Say Y if you want to use peripheral devices such as UART,
+ 	  SPI, I2C, USB, SD/UFS, PCIe etc.
  
--		pxo_board {
-+		pxo_board: pxo_board {
- 			compatible = "fixed-clock";
- 			#clock-cells = <0>;
- 			clock-frequency = <25000000>;
-@@ -736,7 +736,9 @@ tsens_calib_backup: calib_backup@410 {
- 		};
- 
- 		gcc: clock-controller@900000 {
--			compatible = "qcom,gcc-ipq8064";
-+			compatible = "qcom,gcc-ipq8064", "syscon";
-+			clocks = <&pxo_board>, <&cxo_board>;
-+			clock-names = "pxo", "cxo";
- 			reg = <0x00900000 0x4000>;
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
++config SM_CAMCC_8250
++	tristate "SM8250 Camera Clock Controller"
++	select SM_GCC_8250
++	help
++	  Support for the camera clock controller on SM8250 devices.
++	  Say Y if you want to support camera devices and camera functionality.
++
+ config SM_DISPCC_8250
+ 	tristate "SM8150 and SM8250 Display Clock Controller"
+ 	depends on SM_GCC_8150 || SM_GCC_8250
+diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+index d96d6793fc7d..3e4eb843b8d2 100644
+--- a/drivers/clk/qcom/Makefile
++++ b/drivers/clk/qcom/Makefile
+@@ -84,8 +84,8 @@ obj-$(CONFIG_SDM_GPUCC_845) += gpucc-sdm845.o
+ obj-$(CONFIG_SDM_LPASSCC_845) += lpasscc-sdm845.o
+ obj-$(CONFIG_SDM_VIDEOCC_845) += videocc-sdm845.o
+ obj-$(CONFIG_SDX_GCC_55) += gcc-sdx55.o
+-obj-$(CONFIG_SM_CAMCC_8250) += camcc-sm8250.o
+ obj-$(CONFIG_SDX_GCC_65) += gcc-sdx65.o
++obj-$(CONFIG_SM_CAMCC_8250) += camcc-sm8250.o
+ obj-$(CONFIG_SM_DISPCC_8250) += dispcc-sm8250.o
+ obj-$(CONFIG_SM_GCC_6115) += gcc-sm6115.o
+ obj-$(CONFIG_SM_GCC_6125) += gcc-sm6125.o
 -- 
-2.34.1
+2.35.1
 
