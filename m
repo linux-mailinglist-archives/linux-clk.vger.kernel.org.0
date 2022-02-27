@@ -2,60 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C224C5BA1
-	for <lists+linux-clk@lfdr.de>; Sun, 27 Feb 2022 14:53:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF784C5B94
+	for <lists+linux-clk@lfdr.de>; Sun, 27 Feb 2022 14:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbiB0Nx4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 27 Feb 2022 08:53:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
+        id S231301AbiB0Nxm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 27 Feb 2022 08:53:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbiB0Nxb (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 27 Feb 2022 08:53:31 -0500
+        with ESMTP id S231247AbiB0Nxa (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 27 Feb 2022 08:53:30 -0500
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96EDE0A4
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92DBE099
         for <linux-clk@vger.kernel.org>; Sun, 27 Feb 2022 05:52:53 -0800 (PST)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com [209.85.208.198])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 29E5740A80
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A736F41274
         for <linux-clk@vger.kernel.org>; Sun, 27 Feb 2022 13:52:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
         s=20210705; t=1645969967;
-        bh=m4/zffFNkZQ1c8QkZX27EHIqdt+D+lrYYYcC+6RBnKM=;
+        bh=lHEHPtP6JAM6zCrRNeDTlRy/WZxSvWGZvNHgREr2xAI=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=ueDhaYh+23F7yoeYNZcWvvzixtmhq+FchPKeuFEqY46Kop/WjA+g0aCSnUpXESkvZ
-         1oXx+llw0XE7NDIE01gIbiLnJD1uLnCROr2n5MRSwXUfNFgNVw6GoD0PQvas1VHf1E
-         B1/xdE34pIKPPCfcVvpMaMi96puXJ4SxbFCS6hPpgICKV5WbAwEAYIFhOKEy9lu6iC
-         TgnZkfWV8zpqxzx6VC30CbrbB6Pi8B9jiTqQWf48X53uf48nuUXIM8WFN7+/rFVaKb
-         ZpKW7uIjlPssmJuqrp4fVyh4XR6IPz2HH39XtglChgDygA3wogM8Qyr7vdCRa/I57b
-         8HmTaalyJgtiQ==
-Received: by mail-ed1-f70.google.com with SMTP id f9-20020a0564021e8900b00412d0a6ef0dso4242831edf.11
+        b=BddtnmlhtW0yc8uxzOxEKoC5UbmYRRVe65EIYowMdSJ1/yEdOzc01mJTayNtJOg/B
+         g1okumschZUbP8Rx2cEMt6GQZlNkvZggCRim12RA2wpqM1ENlzlqv3AjXUNdZLYn4K
+         eBGIeLnt1/PD+qgcmacUWduYJFsmbfUMEbHu11vSnCkkT1VX9uhpnuS7QDdPEjJ761
+         VSguCWJ58LVZYl8nyl0YGodaXmfCausJXCJ7NqIte9A6kRIVSQ7LveHc/LRPPIzb/Z
+         v/f0lfgiqhnktGFkDD06D8EUjfMChY2m6n9FHd5HUQpVKjpqIq78nZ3tTRVMjw9YXp
+         e8eSBaDPfbk1Q==
+Received: by mail-lj1-f198.google.com with SMTP id bd5-20020a05651c168500b002467c7cdfb2so1715860ljb.16
         for <linux-clk@vger.kernel.org>; Sun, 27 Feb 2022 05:52:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=m4/zffFNkZQ1c8QkZX27EHIqdt+D+lrYYYcC+6RBnKM=;
-        b=5eH2s43dOwc8vklWu+sV0wjOG5hQbBOjeHRr70G+1V9WQUy6uJbQRmoCZHpOmDFIW2
-         xjvIXeLYJkJqiUxDx48hkCetKJJL6hHK3RV2SO4hn6N7WiLD6iKqmefUegxJdAqh2Vc6
-         bTDmNv0ydc2tVbZE+QvEsF9pU06IBw7B4HFLDZnWp0HiOpdW6izv/r4ByjBVisqVcJPX
-         m+GIeCzo3MW9H/pLCyXmVAkx3s7Xaey0OLY8jrla5n84cgAGmiRQVhIIQK9yReWqrh8C
-         5nqnxWy/lLYmkGemtlN4XViltZJtdDRVZFyaleK4tNHS9k1hgoPwzwWtXtRUIcGoA2B2
-         I/uQ==
-X-Gm-Message-State: AOAM530yp6Kf2sYgRAmP+cg21UEjjlKSja3tUO+wvDOMuvYycfE1aRY6
-        71DHSSFjjG52r6yJJ0n8Xvaf2iXvx2rMKPJya/xdi/Z/MUcZROzGBxJ9ms7ja91zF9atn0GRRm7
-        fmN+EYJ70HIPqWt/CFQR8Wrs1yAcPluXxpb5EqQ==
-X-Received: by 2002:a17:906:4a09:b0:6d0:7f19:d738 with SMTP id w9-20020a1709064a0900b006d07f19d738mr12036151eju.76.1645969954374;
-        Sun, 27 Feb 2022 05:52:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyDrA1IPUhAcFT/Pi1MZ832Wj6CLhe3h27Schy7iuQVqfDwWSjNQI4J+6UflVGRe+cHgFDDSw==
-X-Received: by 2002:a17:906:4a09:b0:6d0:7f19:d738 with SMTP id w9-20020a1709064a0900b006d07f19d738mr12036129eju.76.1645969954167;
-        Sun, 27 Feb 2022 05:52:34 -0800 (PST)
+        bh=lHEHPtP6JAM6zCrRNeDTlRy/WZxSvWGZvNHgREr2xAI=;
+        b=rEmReOOXL7fLMpFsyxiZqLDkY9gIckbbPbuPFDCpgbzLasZvO6q70LR4vfXw5M/Z1b
+         i5jicYNS1c2JPPVpevlOm3JrERJ/4gVk0Hzi7TS+x41wTuxqqV+/LQzgAXE6WRpiQ8bo
+         jWDZU3uMouyK9WhkEJHIzsxZJlg23Nk3ZeY5xdEoEwdFOkNPaX7cNHPZFyd8I0uNcA2F
+         nlFIofWePqZggAi6D5dMFJt16IjGDCxShgByYE7rw2nLhVKghQndoYZRf5ivEP5pFtq9
+         8qgTwM2jZlri3vKzelPv0FitgSMRHyhRJx0RdqG083+Sde6lpRP3a4/IuAzzg8WxcSq4
+         Dl7A==
+X-Gm-Message-State: AOAM531ggrcygZpr6E2m/8DO3Ck4YPLuOawXhjogkYldCLXUjT0Of8hc
+        I4zbnELkB2LzauI4ITnyDPOL/DIQ0pK8emFRchtD0o1ozb0ogEL1AbmnKHenFyR/hZ1GGJvRkqT
+        SHPssTsMEDbSpjVvwOsDHJATyk39gJ8IFwQIlOQ==
+X-Received: by 2002:a17:906:d10c:b0:6cd:4aa2:cd62 with SMTP id b12-20020a170906d10c00b006cd4aa2cd62mr12751207ejz.229.1645969956004;
+        Sun, 27 Feb 2022 05:52:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyXq+ZARVgwx9GQqR/xqmr4FidvI0jbXs/SPWVteyhvLCXz3Udlc0TuaU2TzyIf2JoyZYkY6w==
+X-Received: by 2002:a17:906:d10c:b0:6cd:4aa2:cd62 with SMTP id b12-20020a170906d10c00b006cd4aa2cd62mr12751178ejz.229.1645969955744;
+        Sun, 27 Feb 2022 05:52:35 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id r22-20020a17090638d600b006d584aaa9c9sm3393333ejd.133.2022.02.27.05.52.32
+        by smtp.gmail.com with ESMTPSA id r22-20020a17090638d600b006d584aaa9c9sm3393333ejd.133.2022.02.27.05.52.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 05:52:33 -0800 (PST)
+        Sun, 27 Feb 2022 05:52:35 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -92,9 +92,9 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH v3 02/11] amba: Use driver_set_override() instead of open-coding
-Date:   Sun, 27 Feb 2022 14:52:05 +0100
-Message-Id: <20220227135214.145599-3-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v3 03/11] fsl-mc: Use driver_set_override() instead of open-coding
+Date:   Sun, 27 Feb 2022 14:52:06 +0100
+Message-Id: <20220227135214.145599-4-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220227135214.145599-1-krzysztof.kozlowski@canonical.com>
 References: <20220227135214.145599-1-krzysztof.kozlowski@canonical.com>
@@ -116,21 +116,25 @@ modified by the core and it matches other subsystems.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- drivers/amba/bus.c       | 28 ++++------------------------
- include/linux/amba/bus.h |  7 ++++++-
- 2 files changed, 10 insertions(+), 25 deletions(-)
+ drivers/bus/fsl-mc/fsl-mc-bus.c | 25 ++++---------------------
+ include/linux/fsl/mc.h          |  6 ++++--
+ 2 files changed, 8 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
-index e1a5eca3ae3c..9dffa17f50c0 100644
---- a/drivers/amba/bus.c
-+++ b/drivers/amba/bus.c
-@@ -94,31 +94,11 @@ static ssize_t driver_override_store(struct device *_dev,
+diff --git a/drivers/bus/fsl-mc/fsl-mc-bus.c b/drivers/bus/fsl-mc/fsl-mc-bus.c
+index 8fd4a356a86e..ba01c7f4de92 100644
+--- a/drivers/bus/fsl-mc/fsl-mc-bus.c
++++ b/drivers/bus/fsl-mc/fsl-mc-bus.c
+@@ -166,31 +166,14 @@ static ssize_t driver_override_store(struct device *dev,
  				     const char *buf, size_t count)
  {
- 	struct amba_device *dev = to_amba_device(_dev);
--	char *driver_override, *old, *cp;
--
--	/* We need to keep extra room for a newline */
+ 	struct fsl_mc_device *mc_dev = to_fsl_mc_device(dev);
+-	char *driver_override, *old = mc_dev->driver_override;
+-	char *cp;
++	int ret;
+ 
+ 	if (WARN_ON(dev->bus != &fsl_mc_bus_type))
+ 		return -EINVAL;
+ 
 -	if (count >= (PAGE_SIZE - 1))
 -		return -EINVAL;
 -
@@ -142,42 +146,44 @@ index e1a5eca3ae3c..9dffa17f50c0 100644
 -	if (cp)
 -		*cp = '\0';
 -
--	device_lock(_dev);
--	old = dev->driver_override;
 -	if (strlen(driver_override)) {
--		dev->driver_override = driver_override;
+-		mc_dev->driver_override = driver_override;
 -	} else {
 -		kfree(driver_override);
--		dev->driver_override = NULL;
+-		mc_dev->driver_override = NULL;
 -	}
--	device_unlock(_dev);
-+	int ret;
- 
+-
 -	kfree(old);
-+	ret = driver_set_override(_dev, &dev->driver_override, buf, count);
++	ret = driver_set_override(dev, &mc_dev->driver_override, buf, count);
 +	if (ret)
 +		return ret;
  
  	return count;
  }
-diff --git a/include/linux/amba/bus.h b/include/linux/amba/bus.h
-index 6c7f47846971..7c703cb7a3cf 100644
---- a/include/linux/amba/bus.h
-+++ b/include/linux/amba/bus.h
-@@ -70,7 +70,12 @@ struct amba_device {
- 	unsigned int		cid;
- 	struct amba_cs_uci_id	uci;
- 	unsigned int		irq[AMBA_NR_IRQS];
--	char			*driver_override;
-+	/*
-+	 * Driver name to force a match.
-+	 * Do not set directly, because core frees it.
-+	 * Use driver_set_override() to set or clear it.
-+	 */
-+	const char		*driver_override;
+diff --git a/include/linux/fsl/mc.h b/include/linux/fsl/mc.h
+index 7b6c42bfb660..7a87ab9eba99 100644
+--- a/include/linux/fsl/mc.h
++++ b/include/linux/fsl/mc.h
+@@ -170,7 +170,9 @@ struct fsl_mc_obj_desc {
+  * @regions: pointer to array of MMIO region entries
+  * @irqs: pointer to array of pointers to interrupts allocated to this device
+  * @resource: generic resource associated with this MC object device, if any.
+- * @driver_override: driver name to force a match
++ * @driver_override: driver name to force a match; do not set directly,
++ *                   because core frees it; use driver_set_override() to
++ *                   set or clear it.
+  *
+  * Generic device object for MC object devices that are "attached" to a
+  * MC bus.
+@@ -204,7 +206,7 @@ struct fsl_mc_device {
+ 	struct fsl_mc_device_irq **irqs;
+ 	struct fsl_mc_resource *resource;
+ 	struct device_link *consumer_link;
+-	char   *driver_override;
++	const char *driver_override;
  };
  
- struct amba_driver {
+ #define to_fsl_mc_device(_dev) \
 -- 
 2.32.0
 
