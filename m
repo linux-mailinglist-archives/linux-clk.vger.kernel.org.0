@@ -2,60 +2,60 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B96C34C5BC8
-	for <lists+linux-clk@lfdr.de>; Sun, 27 Feb 2022 14:54:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7484C5BB4
+	for <lists+linux-clk@lfdr.de>; Sun, 27 Feb 2022 14:54:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbiB0Nyj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 27 Feb 2022 08:54:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
+        id S230370AbiB0NyX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 27 Feb 2022 08:54:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbiB0Nyb (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 27 Feb 2022 08:54:31 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408DB1BE88
-        for <linux-clk@vger.kernel.org>; Sun, 27 Feb 2022 05:53:53 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        with ESMTP id S230400AbiB0NyV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 27 Feb 2022 08:54:21 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A070C13EBF
+        for <linux-clk@vger.kernel.org>; Sun, 27 Feb 2022 05:53:42 -0800 (PST)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 77C3A3FCAC
-        for <linux-clk@vger.kernel.org>; Sun, 27 Feb 2022 13:53:51 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 838BF3F1DD
+        for <linux-clk@vger.kernel.org>; Sun, 27 Feb 2022 13:53:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645970031;
-        bh=x+DOMuEjhXppqlmSDNC0RKdzUzslcBqDhsGS9OsoQS4=;
+        s=20210705; t=1645970021;
+        bh=Ittcal6Pd+WYY4FgdYnMj0oR0y7noG6anoPNpq8mwII=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=fqtz3nQVi5TjYwJxw0nX5FCG8CIsVmwudBKZjnrG6qv4VqMjYplEwyu1maQjtgQ3n
-         67CUny07O8wu7hmOMlwti7I1WieNvenhJytR9Eukoh9grNqpIu+Tod4NrL5d/Bmd2S
-         wfXCTvxdcbq+RKgCGnbv44rAVPrRtXdz38zMz61DfBvLra+8aG3zepPL1A6su+Dcz4
-         +i8zRhowqxldmJhyzqHwO+gtyxPpQ3HbXFyMXS4xabAXet8sXK/eXV9gcYphq80bwN
-         2S6deJfQuM6H3Unt6lBLDQO8+mxgkbq8Vf0julCPRtuQNhmVnJffh2+l9a3uxBTCxX
-         uzj4+QgkJRlNg==
-Received: by mail-ed1-f71.google.com with SMTP id bq19-20020a056402215300b0040f276105a4so4254351edb.2
-        for <linux-clk@vger.kernel.org>; Sun, 27 Feb 2022 05:53:51 -0800 (PST)
+        b=MfA22CvYBUUIvpI2+eRjFniMalFMd4ttSDNNE2THW8LMvYQE2vU9yoZoCLyjpvUGY
+         eMi+gnCiYrdx+ASWsEmSeaQ0sRRGQhdPC0fY7Q3vnqit/HBXD5dTH2s7usPeZs9tOi
+         XH6DrS/oXKXpmQOgrG42dlxpFlLNAjqmu43zZqrRsK2BqJiGvU0OzTHH+kOEhYgF6k
+         SI1zwH1csmWBNL3yGEGIGhiU+SQu6agY+E02WoQ5VWDctAxAkMPLrzVUrqRzXNpm9V
+         AtmVCISUOXGHmJajn9Nfd+Sawa5MsYNXA6oHYM/yM69yPhlJkNtLvgs+gN20ze7uX9
+         jAucYoCN0v3aQ==
+Received: by mail-ed1-f69.google.com with SMTP id d11-20020a50c88b000000b00410ba7a14acso4250077edh.6
+        for <linux-clk@vger.kernel.org>; Sun, 27 Feb 2022 05:53:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=x+DOMuEjhXppqlmSDNC0RKdzUzslcBqDhsGS9OsoQS4=;
-        b=rnNrIpYQyzU3pgxZBmbHKaZ44YlxY8ndyAcbW8y9AWUUd3lRyzq/pJndlxzIuH43lt
-         CGvBkgfk0TEVFWCqvKTUUq6idgerZVUoTO+kFk8rbeMfAw0UricSCmapdf11XzzISrOa
-         wIz/zM9v+KoWjWJjUKMVV+ixwyTz+rrsX51Eo8r2NIItfgDaHUNtMNfl9iW4g5hFZQUa
-         i1y+TkOhl8BhDEqY0zV+eKC4N2OBsS9eCxjsiMul0ImV+VqNUnO/AcHY+MoLyw4stUIP
-         w1a1XjydrANtt4ErdRS2hk1+/DbwLNa2/q9sYiq+MojsKQ8tcRb9EqHt10pFB0BVDuUQ
-         WvlA==
-X-Gm-Message-State: AOAM532F86WUmpctj+jAyjS3zLlvBSwR86+KmVHMSHd14jABPpIyWXKq
-        68hl0tBElu5oAJrhm4SuQ9ITwfYtvAsuxjQyaP+60YxrMw00calMLiozbo0b5YcvzQaQJmRceBh
-        t/IL646sjwfgJQHkIWLjHP82eVId9yo5d5dLjKw==
-X-Received: by 2002:a17:906:354f:b0:6b4:1449:2d03 with SMTP id s15-20020a170906354f00b006b414492d03mr13078908eja.197.1645970019290;
-        Sun, 27 Feb 2022 05:53:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyLkm/ya1hWTxNWHY0owECzZBrknUNuVIsi2Y1TI9mIZSzwklvOz9AjjK7v7g0U5lSZuOzjqQ==
-X-Received: by 2002:a17:906:354f:b0:6b4:1449:2d03 with SMTP id s15-20020a170906354f00b006b414492d03mr13078900eja.197.1645970019102;
-        Sun, 27 Feb 2022 05:53:39 -0800 (PST)
+        bh=Ittcal6Pd+WYY4FgdYnMj0oR0y7noG6anoPNpq8mwII=;
+        b=4ZX7DG2IpOddyUnk2Whwp8cdJS3b102y++ObYhVOhAkgz/WONm2FqP7U2aUApgoZWU
+         2RfUyTGX/3pczTsFewU7nsmpYfS1bDo3RTsSF9oDBXA0wIYUas7TJw1WW3g09sD5Z8fC
+         5r5JbclM/vjoDfmpcOVTTmSeNHXtA/fGijqgqKQV7eFpAFNaEXyb4rVhqAgoIgqK+5tc
+         +JoZQz9n7Sa20j3C6VDeOq+h88wScRvani90GRa/aFloL9RL0qCZgHoR9bA2zGfVZuZo
+         xW0W8wQes04yoF6Ee1z8eTN7zM/csLqSZPzjfZyF3TBKmlyS0sXUq2qjrB5k0qDF/e5Z
+         fLQw==
+X-Gm-Message-State: AOAM531ENsje9ig8GLq6jo/whGk7oGmX4aGtCsq70azrbC+fjsG42Nwl
+        khefuGk7HJgithhojKLaYX0XTWVY4jcoyoMO0VEdReERCmJ8iLM9qqKrwFxPvGqBYd586qxP+cQ
+        pMrE0ZLfna2G5Ox0G1W1cCfMehR/2Y16U0R2BtQ==
+X-Received: by 2002:a05:6402:42c6:b0:412:8cbc:8f3d with SMTP id i6-20020a05640242c600b004128cbc8f3dmr15364978edc.310.1645970020960;
+        Sun, 27 Feb 2022 05:53:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxGCAqzYcYv+6/2reZV+SOww6e12ONBNi9SinPyNgz1D+wg9pi5uHfXVkGat4zViryxXKoTAQ==
+X-Received: by 2002:a05:6402:42c6:b0:412:8cbc:8f3d with SMTP id i6-20020a05640242c600b004128cbc8f3dmr15364941edc.310.1645970020805;
+        Sun, 27 Feb 2022 05:53:40 -0800 (PST)
 Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id w11-20020a056402128b00b00412ec3f5f74sm4600760edv.62.2022.02.27.05.53.37
+        by smtp.gmail.com with ESMTPSA id w11-20020a056402128b00b00412ec3f5f74sm4600760edv.62.2022.02.27.05.53.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Feb 2022 05:53:38 -0800 (PST)
+        Sun, 27 Feb 2022 05:53:40 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -93,9 +93,9 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         stable@vger.kernel.org
-Subject: [PATCH v3 09/11] clk: imx: scu: Fix kfree() of static memory on setting driver_override
-Date:   Sun, 27 Feb 2022 14:53:27 +0100
-Message-Id: <20220227135329.145862-3-krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v3 10/11] slimbus: qcom-ngd: Fix kfree() of static memory on setting driver_override
+Date:   Sun, 27 Feb 2022 14:53:28 +0100
+Message-Id: <20220227135329.145862-4-krzysztof.kozlowski@canonical.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220227135214.145599-1-krzysztof.kozlowski@canonical.com>
 References: <20220227135214.145599-1-krzysztof.kozlowski@canonical.com>
@@ -117,31 +117,44 @@ for example when driver_override is set via sysfs.
 
 Use dedicated helper to set driver_override properly.
 
-Fixes: 77d8f3068c63 ("clk: imx: scu: add two cells binding support")
+Fixes: 917809e2280b ("slimbus: ngd: Add qcom SLIMBus NGD driver")
 Cc: <stable@vger.kernel.org>
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 ---
- drivers/clk/imx/clk-scu.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/slimbus/qcom-ngd-ctrl.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/imx/clk-scu.c b/drivers/clk/imx/clk-scu.c
-index 083da31dc3ea..4b2268b7d0d0 100644
---- a/drivers/clk/imx/clk-scu.c
-+++ b/drivers/clk/imx/clk-scu.c
-@@ -683,7 +683,12 @@ struct clk_hw *imx_clk_scu_alloc_dev(const char *name,
- 		return ERR_PTR(ret);
- 	}
+diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
+index 7040293c2ee8..e5d9fdb81eb0 100644
+--- a/drivers/slimbus/qcom-ngd-ctrl.c
++++ b/drivers/slimbus/qcom-ngd-ctrl.c
+@@ -1434,6 +1434,7 @@ static int of_qcom_slim_ngd_register(struct device *parent,
+ 	const struct of_device_id *match;
+ 	struct device_node *node;
+ 	u32 id;
++	int ret;
  
--	pdev->driver_override = "imx-scu-clk";
-+	ret = driver_set_override(&pdev->dev, &pdev->driver_override,
-+				  "imx-scu-clk", strlen("imx-scu-clk"));
-+	if (ret) {
-+		platform_device_put(pdev);
-+		return ERR_PTR(ret);
-+	}
+ 	match = of_match_node(qcom_slim_ngd_dt_match, parent->of_node);
+ 	data = match->data;
+@@ -1455,7 +1456,17 @@ static int of_qcom_slim_ngd_register(struct device *parent,
+ 		}
+ 		ngd->id = id;
+ 		ngd->pdev->dev.parent = parent;
+-		ngd->pdev->driver_override = QCOM_SLIM_NGD_DRV_NAME;
++
++		ret = driver_set_override(&ngd->pdev->dev,
++					  &ngd->pdev->driver_override,
++					  QCOM_SLIM_NGD_DRV_NAME,
++					  strlen(QCOM_SLIM_NGD_DRV_NAME));
++		if (ret) {
++			platform_device_put(ngd->pdev);
++			kfree(ngd);
++			of_node_put(node);
++			return ret;
++		}
+ 		ngd->pdev->dev.of_node = node;
+ 		ctrl->ngd = ngd;
  
- 	ret = imx_clk_scu_attach_pd(&pdev->dev, rsrc_id);
- 	if (ret)
 -- 
 2.32.0
 
