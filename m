@@ -2,197 +2,190 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EB94C5A64
-	for <lists+linux-clk@lfdr.de>; Sun, 27 Feb 2022 11:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E264C4C5B75
+	for <lists+linux-clk@lfdr.de>; Sun, 27 Feb 2022 14:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbiB0KEf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 27 Feb 2022 05:04:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56408 "EHLO
+        id S231273AbiB0Nxc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 27 Feb 2022 08:53:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiB0KEe (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 27 Feb 2022 05:04:34 -0500
+        with ESMTP id S231270AbiB0Nx3 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 27 Feb 2022 08:53:29 -0500
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF345C37C
-        for <linux-clk@vger.kernel.org>; Sun, 27 Feb 2022 02:03:57 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB27313DFF
+        for <linux-clk@vger.kernel.org>; Sun, 27 Feb 2022 05:52:50 -0800 (PST)
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 20BC43FCA8
-        for <linux-clk@vger.kernel.org>; Sun, 27 Feb 2022 10:03:55 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6F9E44092C
+        for <linux-clk@vger.kernel.org>; Sun, 27 Feb 2022 13:52:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1645956235;
-        bh=IfVXPHlKvsF/IugNOxJ2nfDin24YI7mhh0WDRsHK5Xo=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=P/mAev3ks6m/REqgAqjHXLVl9KPAHGZ/Ncc2NMJUUfNrHvhPodopMyItXyCVR180W
-         RaROqczYBdlKDPapvQL+s5nO/FXH/omMkqLBvDXnFURGRraBCv65VYYIySPd5EUJXr
-         9E2xNPoWZCEnZkFkWlCgPqDk81sEcTU74++b+0kAIw3WQ36k910aLmrQ/bc4BnwoGK
-         mNjn79OR/LX4TRMXYtbnZiYUvp1Q3xtJVru0dBrWGm3YPOurcud1eFdn2BRDa2xAOE
-         IJmgEHPPSJUbD5c46bFl90Y1FZS0e8vQgoYmLV8/CkOe/F+M7M/afvvfhEo7XmRXXL
-         Fzzf408yO0ebg==
-Received: by mail-ed1-f71.google.com with SMTP id y10-20020a056402358a00b00410deddea4cso4029319edc.16
-        for <linux-clk@vger.kernel.org>; Sun, 27 Feb 2022 02:03:55 -0800 (PST)
+        s=20210705; t=1645969963;
+        bh=beBPqukoSZCIAAv6gBbQLkWehzWMNdiQtzWlJ1M8u3o=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=Q0yBogF5EI/STkEA/utUdvdzoZQv3aIdqXs5dw92ptnuSLJ63I4KlAJFeNMiwuVCj
+         I3gTmZIvYZOcKsOvq5CV8ldWxrKm0z4zEPLZAvT/X6zIRLHF08lc1Uv3o4b2FqOdkn
+         eAlT+RDtY55EiYwHv/sdHdxMt9nPcC7f6adHMJ7TgdSD4ot+jO55arzz/PdnDjxvGf
+         3XHaUNAPZ8dijFUoTe8hdIRzAtjELnK3aBPbEfYw3Yn/Akl/QnIRuRZZyIL7dl5Lr9
+         XkmMi6vc+J/xqTjbFHlPtigzmR558EadvKilX9Nch4LsiqjB79wZHPa67yqWftbtyA
+         Cicp83FpizRPg==
+Received: by mail-wr1-f72.google.com with SMTP id j27-20020adfb31b000000b001ea8356972bso1426126wrd.1
+        for <linux-clk@vger.kernel.org>; Sun, 27 Feb 2022 05:52:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=IfVXPHlKvsF/IugNOxJ2nfDin24YI7mhh0WDRsHK5Xo=;
-        b=Y8E83itCGYbt7rP9x0fwuZp7jUFeaSQNgn9AqW/dOTjSS8q99GifFrSdl/nYPv80Pv
-         RkV6H/nS9C+tm/tv0yQayamfrQTZECAKrh3/r0tXPutog+m82kCiyPjL0f31HoWjDBau
-         dMYRjr17NSH1GdRfw/7ZMbCkBnFy5qkzw4lgoG0Nf1w2Hq++QnLnBH86x3StmZdbD2F/
-         48cblFqhA0eW4rcuJ99M/RwyFzsMkbUSYpcxViraCmYBHpNkVSHNNFL1bSNolUmoL+ov
-         yV+h5/7E1d/Tuz0N8xKbRGAlsLXybiODnn87vFTGWo+F5PF5jt70r7wW2aD1OlvYlQcB
-         AJdQ==
-X-Gm-Message-State: AOAM531eymYUShbSrmBomO6vz1pX0bjB4fbZgp907DXjKXhryrJjbZJm
-        MQePy0LX32prBSZKkUfGaeRUWRzeoD1mPZ+VJLFtb+VPopwb5RB62BJ93wSihK/dg/zlqGNfPDn
-        CDZq2VpSxyEjUOONCfCKW4yq2evPJpCBlRinnZg==
-X-Received: by 2002:a17:906:6d09:b0:6b9:2e0e:5bdd with SMTP id m9-20020a1709066d0900b006b92e0e5bddmr11270627ejr.246.1645956234709;
-        Sun, 27 Feb 2022 02:03:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwPviELBAb3YlJF3dqApYWhzkERExWKru4Uij+RIvAJZ8xES86UbS47+QTJNfsojvKwn0q7ag==
-X-Received: by 2002:a17:906:6d09:b0:6b9:2e0e:5bdd with SMTP id m9-20020a1709066d0900b006b92e0e5bddmr11270607ejr.246.1645956234415;
-        Sun, 27 Feb 2022 02:03:54 -0800 (PST)
-Received: from [192.168.0.133] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id ee21-20020a056402291500b00410d4261313sm4211234edb.24.2022.02.27.02.03.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Feb 2022 02:03:53 -0800 (PST)
-Message-ID: <ea5d34c6-fe75-c096-d5b2-6a327c9d0ae5@canonical.com>
-Date:   Sun, 27 Feb 2022 11:03:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/3] dt-bindings: clock: add QCOM SM6125 display clock
- bindings
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Pavel Dubrova <pashadubrova@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220226200911.230030-1-marijn.suijten@somainline.org>
- <20220226200911.230030-3-marijn.suijten@somainline.org>
+        bh=beBPqukoSZCIAAv6gBbQLkWehzWMNdiQtzWlJ1M8u3o=;
+        b=YGy+iZkNr8SwmOatYeDPz57h7pSWyyC+/61PeYDucj8RnjFd/CY/QQbC+hus6fwP7N
+         AFrVM8A01VZgIR7wtWrbi8udaYWi8nt26AvLfOSiKljrRrdspO45mHZQmPXWlb8Wnrse
+         l/uG/BxFGdevq6wCDuy+iJ01YOozqWzJhu+7iDOO5DTQhsAHDFZ8W32IQR2WC/z05ZpW
+         Sbb1qamNZS5gu5lnB15rS4aEHxHAI/ENgUZFX6I/UINms8XLSwto/x9LykYiS6wNq+V+
+         5/ZX+M7rBVyUHXDg6ggoHkudLyuCxa4LwjPMxNgnyZYDlRWpPvD0ZKLp5jJUF2j4RQmR
+         Al+w==
+X-Gm-Message-State: AOAM530Tl5IRbzMHlsX7eX6AtksJsVdo77aFRygBco0r55HXpGhuCIuB
+        MH2k/PqCst42ofDyXyDejO8DwJcO5kiIzeXupzLand1OzbGvafrAfKb/4a747fBXScvwxVSeWug
+        WnhoTunF7T1GQHFCC3ZEaeT0XYYLKwJR3kstl8A==
+X-Received: by 2002:a05:6402:50d4:b0:413:2a27:6b56 with SMTP id h20-20020a05640250d400b004132a276b56mr15602866edb.228.1645969951018;
+        Sun, 27 Feb 2022 05:52:31 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyMchrZ/z130i6cHNU0MCCxUHxTeH+44NX7i1itMtaADlHbWFNXu2qsfZhNkboTf+/7DLObYg==
+X-Received: by 2002:a05:6402:50d4:b0:413:2a27:6b56 with SMTP id h20-20020a05640250d400b004132a276b56mr15602826edb.228.1645969950731;
+        Sun, 27 Feb 2022 05:52:30 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
+        by smtp.gmail.com with ESMTPSA id r22-20020a17090638d600b006d584aaa9c9sm3393333ejd.133.2022.02.27.05.52.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Feb 2022 05:52:30 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220226200911.230030-3-marijn.suijten@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v3 00/11] Fix broken usage of driver_override (and kfree of static memory)
+Date:   Sun, 27 Feb 2022 14:52:03 +0100
+Message-Id: <20220227135214.145599-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 26/02/2022 21:09, Marijn Suijten wrote:
-> From: Martin Botka <martin.botka@somainline.org>
-> 
-> Add device tree bindings for display clock controller for
-> Qualcomm Technology Inc's SM6125 SoC.
-> 
-> Signed-off-by: Martin Botka <martin.botka@somainline.org>
-> ---
->  .../bindings/clock/qcom,dispcc-sm6125.yaml    | 87 +++++++++++++++++++
->  .../dt-bindings/clock/qcom,dispcc-sm6125.h    | 41 +++++++++
->  2 files changed, 128 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml
->  create mode 100644 include/dt-bindings/clock/qcom,dispcc-sm6125.h
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml b/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml
-> new file mode 100644
-> index 000000000000..3465042d0d9f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml
-> @@ -0,0 +1,87 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/qcom,dispcc-sm6125.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Display Clock Controller Binding for SM6125
-> +
-> +maintainers:
-> +  - Martin Botka <martin.botka@somainline.org>
-> +
-> +description: |
-> +  Qualcomm display clock control module which supports the clocks and
-> +  power domains on SM6125.
-> +
-> +  See also:
-> +    dt-bindings/clock/qcom,dispcc-sm6125.h
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,sm6125-dispcc
-> +
-> +  clocks:
-> +    items:
-> +      - description: Board XO source
-> +      - description: Byte clock from DSI PHY0
-> +      - description: Pixel clock from DSI PHY0
-> +      - description: Pixel clock from DSI PHY1
-> +      - description: Link clock from DP PHY
-> +      - description: VCO DIV clock from DP PHY
-> +      - description: AHB config clock from GCC
-> +
-> +  clock-names:
-> +    items:
-> +      - const: bi_tcxo
-> +      - const: dsi0_phy_pll_out_byteclk
-> +      - const: dsi0_phy_pll_out_dsiclk
-> +      - const: dsi1_phy_pll_out_dsiclk
-> +      - const: dp_phy_pll_link_clk
-> +      - const: dp_phy_pll_vco_div_clk
-> +      - const: cfg_ahb_clk
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +  '#power-domain-cells':
-> +    const: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - '#clock-cells'
-> +  - '#power-domain-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,rpmcc.h>
-> +    #include <dt-bindings/clock/qcom,gcc-sm6125.h>
-> +    clock-controller@5f00000 {
-> +      compatible = "qcom,sm6125-dispcc";
-> +      reg = <0x5f00000 0x20000>;
-> +      clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
-> +               <&dsi0_phy 0>,
-> +               <&dsi0_phy 1>,
-> +               <0>,
+Hi,
 
-This does not look like a valid phandle. This clock is required, isn't it?
+This is a continuation of my old patchset from 2019. [1]
+Back then, few drivers set driver_override wrong. I fixed Exynos
+in a different way after discussions. QCOM NGD was not fixed
+and a new user appeared - IMX SCU.
 
+It seems "char *" in driver_override looks too consty, so we
+tend to make a mistake of storing there string literals.
+
+Changes since latest v2
+=======================
+1. Make all driver_override fields as "const char *", just like SPI
+   and VDPA. (Mark)
+2. Move "count" check to the new helper and add "count" argument. (Michael)
+3. Fix typos in docs, patch subject. Extend doc. (Michael, Bjorn)
+4. Compare pointers to reduce number of string readings in the helper.
+5. Fix clk-imx return value.
+
+Changes since latest v1 (not the old 2019 solution):
+====================================================
+https://lore.kernel.org/all/708eabb1-7b35-d525-d4c3-451d4a3de84f@rasmusvillemoes.dk/
+1. Add helper for setting driver_override.
+2. Use the helper.
+
+Dependencies (and stable):
+==========================
+1. All patches, including last three fixes, depend on the first patch
+   introducing the helper.
+2. The last three commits - fixes - are probably not backportable
+   directly, because of this dependency. I don't know how to express
+   this dependency here, since stable-kernel-rules.rst mentions only commits as
+   possible dependencies.
+
+[1] https://lore.kernel.org/all/1550484960-2392-3-git-send-email-krzk@kernel.org/
 
 Best regards,
 Krzysztof
+
+Krzysztof Kozlowski (11):
+  driver: platform: Add helper for safer setting of driver_override
+  amba: Use driver_set_override() instead of open-coding
+  fsl-mc: Use driver_set_override() instead of open-coding
+  hv: Use driver_set_override() instead of open-coding
+  PCI: Use driver_set_override() instead of open-coding
+  s390: cio: Use driver_set_override() instead of open-coding
+  spi: Use helper for safer setting of driver_override
+  vdpa: Use helper for safer setting of driver_override
+  clk: imx: scu: Fix kfree() of static memory on setting driver_override
+  slimbus: qcom-ngd: Fix kfree() of static memory on setting
+    driver_override
+  rpmsg: Fix kfree() of static memory on setting driver_override
+
+ drivers/amba/bus.c              | 28 +++---------------
+ drivers/base/driver.c           | 51 +++++++++++++++++++++++++++++++++
+ drivers/base/platform.c         | 28 +++---------------
+ drivers/bus/fsl-mc/fsl-mc-bus.c | 25 +++-------------
+ drivers/clk/imx/clk-scu.c       |  7 ++++-
+ drivers/hv/vmbus_drv.c          | 28 +++---------------
+ drivers/pci/pci-sysfs.c         | 28 +++---------------
+ drivers/rpmsg/rpmsg_core.c      |  3 +-
+ drivers/rpmsg/rpmsg_internal.h  | 13 +++++++--
+ drivers/rpmsg/rpmsg_ns.c        | 14 +++++++--
+ drivers/s390/cio/cio.h          |  7 ++++-
+ drivers/s390/cio/css.c          | 28 +++---------------
+ drivers/slimbus/qcom-ngd-ctrl.c | 13 ++++++++-
+ drivers/spi/spi.c               | 26 +++--------------
+ drivers/vdpa/vdpa.c             | 29 +++----------------
+ include/linux/amba/bus.h        |  7 ++++-
+ include/linux/device/driver.h   |  2 ++
+ include/linux/fsl/mc.h          |  6 ++--
+ include/linux/hyperv.h          |  7 ++++-
+ include/linux/pci.h             |  7 ++++-
+ include/linux/platform_device.h |  7 ++++-
+ include/linux/rpmsg.h           |  6 ++--
+ include/linux/spi/spi.h         |  2 ++
+ include/linux/vdpa.h            |  4 ++-
+ 24 files changed, 171 insertions(+), 205 deletions(-)
+
+-- 
+2.32.0
+
