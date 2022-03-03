@@ -2,68 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658464CB9C7
-	for <lists+linux-clk@lfdr.de>; Thu,  3 Mar 2022 10:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7181A4CBA19
+	for <lists+linux-clk@lfdr.de>; Thu,  3 Mar 2022 10:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbiCCJF6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 3 Mar 2022 04:05:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
+        id S231154AbiCCJXR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 3 Mar 2022 04:23:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiCCJF6 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 3 Mar 2022 04:05:58 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2DE177740;
-        Thu,  3 Mar 2022 01:05:10 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so2792148wmp.5;
-        Thu, 03 Mar 2022 01:05:10 -0800 (PST)
+        with ESMTP id S230133AbiCCJXR (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 3 Mar 2022 04:23:17 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08D9BDB;
+        Thu,  3 Mar 2022 01:22:31 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id b23so4056500qtt.6;
+        Thu, 03 Mar 2022 01:22:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+FOBCOKBUOKBrO8yhdXy1yyP31Rv+CE5Az+FJgpuSOw=;
-        b=bV0quv7CQHqRsqMuMnYki4NDf3gyminsa8fgh1Tkc09abQfrsbuKCSyIiNQsR89d3M
-         kj+RSpp585GVLCBfQZ3ZUb7yAUCpOu/yN7XukhV+udVL/9xkrC2ifWDnMgH5aunLxQTv
-         Zi6PGwfDUpWv7DW3l6wEV7x7EgcEk/5Rohqs54CouPvTTS78X4SMsbKnRzfnezg4kr4k
-         WWw3+EeOD1QM3tpg0qnkgvHB8rWJrMwRdXG6XyDwzPSwKDOwjxWyBNZVyYTZGShIPIVv
-         0hwKaTajT54NLnq6rHttPXXvBjRUKGGVgmaSg1AfIltw0xSOlJQEQr3UiLFI5QE6ygDR
-         1UTw==
+        bh=/zSPK6JEvJijyCiO9MABrtOwuhrRt9yY2leCnS6HUS0=;
+        b=XgIZuW+mhwEVgZNB9ZO+iX9LiKtwmin8cXBt3P5Hewpj+JwXcqYDkDl8SYwIT47Ve1
+         6UC0aedtNtUysYMmAFMXeJE9EYxVEanwBVpZ113sU+G/ZyGvfil3dM8ic9KjfjVfvB3L
+         eQd1OzdGtgxWqxSz9ObNMeqhp8P9RguYj0Itc9gx4/PFCB9dVXofrryo8HLjBOn0XcHl
+         oleEwQ7uAr6HnW70wt883JxIk1+Kv0wn++bDg7Cz1sKCukcJ2Hn+/b34mKO0ajQVtyb5
+         7iM0jhRroUGomEBqruhafh+7uiWGChVzm4VMZij8H76cWiHfY9++kkREXPvJbEl24jF5
+         w9zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+FOBCOKBUOKBrO8yhdXy1yyP31Rv+CE5Az+FJgpuSOw=;
-        b=Moti2u3j8pA95HvPLQRerhGC3sVwbJ2deWif1rCJX6o5CToE4PGXb1bnXVRDYpcIOx
-         1W7189vfRtFKSpB1Gxc6rmaYmn4Iqj4fwzRCAKfoDV7U0ukff5Y6zBmsO1Nj6WWduajl
-         C/5DTY1pWsCDOSDiBN/9Zu9sJXXTPFVeaG9rIHXjSlxxWSdLWgeUQy2pmsK5QBoAFq51
-         iJcNjo3S69ayq8FmUOLWiWZYXQWkkdJIIaZUkkh9nKL3cIMPbgX/3ruyopl5FvZjwvrH
-         ZR1ic5uiJVn9FPbdVTc66bpFjGiCG8e6rYtjyniV6F7oyUW7qf9uWptYhAEs5AYRCt+q
-         qNAw==
-X-Gm-Message-State: AOAM533ddzI4x2phYqVbQYMsP5G6Czu/Se+KUM71ITSBrVkOTq3BK6rp
-        RquqHUc4Om2+WYoZh9xJQUc=
-X-Google-Smtp-Source: ABdhPJwQfGl2taTo7TZ21DRaALXumXvZYaUbZJ65zGR4LRTDVWP64sLQJSK2ZUxRUaKTbvBt3qe0jw==
-X-Received: by 2002:a1c:1907:0:b0:380:f6ec:4daa with SMTP id 7-20020a1c1907000000b00380f6ec4daamr3088912wmz.50.1646298309192;
-        Thu, 03 Mar 2022 01:05:09 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id e20-20020adfa454000000b001f01a14dce8sm1357768wra.97.2022.03.03.01.05.08
+        bh=/zSPK6JEvJijyCiO9MABrtOwuhrRt9yY2leCnS6HUS0=;
+        b=yE4BqWRVTW+9y4Tlc67YCo8PdWbb9mJDJBFO5RDGeMxXNDJdqgIVZThaqW8mxrdrj4
+         ekLKJBd8Oy7NVvxGJWqF84NV1LNidmgmHK5OJ+lan2Bjkal077C++4J4BZRmfxSURGev
+         whIcfUzBSEqv/1WpD2yqMEbyVwdXCvxKeZgNdxtWO45jExZWuwGToW6Bni1dvq7norNv
+         HmvLy+2UyvNYaMnpIF586u+4GbszKbY2b1CVspsvueQi4JGI+g2wIRIrehJf19nM41+P
+         iNR7w1+qTy9tzeopJqWbYK7FZCtRXgeJoKmbyHsphAHp+O/OzAysrAskyao08E6vF6pu
+         FvPA==
+X-Gm-Message-State: AOAM5300/6LB1flmhoz2NCUBQH5pnhL4augPU8fzPz26IfsRr9Pd0mJA
+        0YCCbj4d4sxUIT4+YI7rMBxlaijW6ao=
+X-Google-Smtp-Source: ABdhPJwG5VUeWIl21NeNrWs2YKDhLgzYhhIJRERbt2tiJT5u7bdGVyUMP9LlqEQmttn4Xwpe/ngUJQ==
+X-Received: by 2002:ac8:5946:0:b0:2df:c52:86e3 with SMTP id 6-20020ac85946000000b002df0c5286e3mr21929324qtz.575.1646299350796;
+        Thu, 03 Mar 2022 01:22:30 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id s7-20020a05622a018700b002dfed15c9edsm1191015qtw.74.2022.03.03.01.22.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 01:05:08 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Abel Vesa <abel.vesa@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: imx: remove redundant re-assignment of pll->base
-Date:   Thu,  3 Mar 2022 09:05:08 +0000
-Message-Id: <20220303090508.1125175-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 03 Mar 2022 01:22:30 -0800 (PST)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     s.nawrocki@samsung.com
+Cc:     tomasz.figa@gmail.com, cw00.choi@samsung.com,
+        alim.akhtar@samsung.com, mturquette@baylibre.com, sboyd@kernel.org,
+        krzysztof.kozlowski@canonical.com,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] clk/samsung: Use of_device_get_match_data()
+Date:   Thu,  3 Mar 2022 09:22:23 +0000
+Message-Id: <20220303092223.2060108-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -75,30 +73,41 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-There are two identical assignments of pll->base to the same value,
-the second assignment is redundant and can be removed.
+From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 
-Cleans up cppcheck warning:
-drivers/clk/imx/clk-sscg-pll.c:528:12: style: Variable 'pll->base' is
-reassigned a value before the old one has been used. [redundantAssignment]
+Use of_device_get_match_data() to simplify the code.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
 ---
- drivers/clk/imx/clk-sscg-pll.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/clk/samsung/clk-exynos-clkout.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/drivers/clk/imx/clk-sscg-pll.c b/drivers/clk/imx/clk-sscg-pll.c
-index 9d6cdff0537f..81f304fae908 100644
---- a/drivers/clk/imx/clk-sscg-pll.c
-+++ b/drivers/clk/imx/clk-sscg-pll.c
-@@ -525,7 +525,6 @@ struct clk_hw *imx_clk_hw_sscg_pll(const char *name,
- 	init.parent_names = parent_names;
- 	init.num_parents = num_parents;
+diff --git a/drivers/clk/samsung/clk-exynos-clkout.c b/drivers/clk/samsung/clk-exynos-clkout.c
+index e6d6cbf8c4e6..feed1a347c09 100644
+--- a/drivers/clk/samsung/clk-exynos-clkout.c
++++ b/drivers/clk/samsung/clk-exynos-clkout.c
+@@ -81,19 +81,13 @@ MODULE_DEVICE_TABLE(of, exynos_clkout_ids);
+ static int exynos_clkout_match_parent_dev(struct device *dev, u32 *mux_mask)
+ {
+ 	const struct exynos_clkout_variant *variant;
+-	const struct of_device_id *match;
  
--	pll->base = base;
- 	pll->hw.init = &init;
+ 	if (!dev->parent) {
+ 		dev_err(dev, "not instantiated from MFD\n");
+ 		return -EINVAL;
+ 	}
  
- 	hw = &pll->hw;
+-	match = of_match_device(exynos_clkout_ids, dev->parent);
+-	if (!match) {
+-		dev_err(dev, "cannot match parent device\n");
+-		return -EINVAL;
+-	}
+-	variant = match->data;
++	variant = of_device_get_match_data(dev->parent);
+ 
+ 	*mux_mask = variant->mux_mask;
+ 
 -- 
-2.34.1
+2.25.1
 
