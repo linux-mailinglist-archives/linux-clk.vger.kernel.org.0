@@ -2,71 +2,122 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E8E4CD7DB
-	for <lists+linux-clk@lfdr.de>; Fri,  4 Mar 2022 16:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A48F24CDBD4
+	for <lists+linux-clk@lfdr.de>; Fri,  4 Mar 2022 19:09:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240326AbiCDPdb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 4 Mar 2022 10:33:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
+        id S241534AbiCDSKC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 4 Mar 2022 13:10:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240330AbiCDPd3 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 4 Mar 2022 10:33:29 -0500
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02E541618
-        for <linux-clk@vger.kernel.org>; Fri,  4 Mar 2022 07:32:39 -0800 (PST)
-Received: by mail-ed1-x543.google.com with SMTP id eq12so2140551edb.5
-        for <linux-clk@vger.kernel.org>; Fri, 04 Mar 2022 07:32:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=VSEH8Q3Lr+Mcr/0lsL1VFPftJp7ALZ21MKYEz4sry74=;
-        b=VhWUuXiYq4fMyydPuD4+tOqa4uZV0GnfFiNbsEyBzsGSQAymWSUuJiuPv3/bfGMzb+
-         Ir3503xuMzl6IRHUQirCL8smYy6dSiwgZ2g76ntYIE9vbtq0mgh1t7POZJMpAZpacAUu
-         W2RLSd7rqAQPIu1ndH2Gt7Tnzs9ZNzVJ2GD4AzhOF0zh/vaonlyQ77G+LfejcOCc7riH
-         dkfndQWpzxBXs6VnMnYN4HgfllcxaSzymN/Dk9L2VbxolPcunibHloqaDKyb9CkWLtS1
-         l9So7YDCTJb8cWu8mmpFjztyqgxTj0jXSnXIDrOwECauQPKqdXng/a3mNzkLmEK7okoB
-         HxMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=VSEH8Q3Lr+Mcr/0lsL1VFPftJp7ALZ21MKYEz4sry74=;
-        b=bYN40QOoLC53BCensWuRbGO1goMIjOktdW6kC4rHOodC8NYVyTa8GWfPkShfico0Rr
-         svESUTMeEOHPUL0lgjrsdojV1KjBpTzsAJn+LB5hDIHWc42SglxgzyJIiXVs1yO3Ni0d
-         PYP+MmWlR79/O627jjSB5t6k2YKzGDGfXaFIFuUPN92TAfmo4tNUWLs/vXFfIRBLqFH6
-         Q1B+0STyK2FCYyTP6gGvYEF6o3LP/2iwLf24zK+JV21achPNvxOI5lwCw6Pz/VFL4P0C
-         vvlPN2Ojm6+Re9zGhx0kjXrxRFqC+hs+hDQfbtWqijaaPyJxfjZLI2ES6MCm9wGuLpNg
-         RBIg==
-X-Gm-Message-State: AOAM53342K3VVtM3XmzJjvKNZiM1r17Idyh8rnzFi59eEapoagAHpvuL
-        2uKZb0GCrB3locFJ7S1HC3o/nw9Av+oQej9pzt4=
-X-Google-Smtp-Source: ABdhPJwqu5AOBSoGCP5RoOGmEL9pJgzp+Px5HqqmmB4uSQ9T2MsWH+pgl8bj71RS+oa0M33TTIy0mGAyvz66WBslCeI=
-X-Received: by 2002:a50:d7c1:0:b0:415:e599:416c with SMTP id
- m1-20020a50d7c1000000b00415e599416cmr7504064edj.37.1646407957538; Fri, 04 Mar
- 2022 07:32:37 -0800 (PST)
+        with ESMTP id S241491AbiCDSKB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 4 Mar 2022 13:10:01 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A421CA5E4;
+        Fri,  4 Mar 2022 10:09:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646417350; x=1677953350;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=V/bZBUMsYnI85haLHW2qBk7fMPvFA3wzMy4PTN+iSoA=;
+  b=tNfk8EABYo1yLD/z/pOhGPasey3ZMDOZKw72gWEm9mJ81VD9wZJ6Ghl9
+   TzNDlWLfPj+S3aVgk0L8hzLvT2LlFLvCNR1rEQEC9sAiPoRONIAfdGD95
+   sQzaGuaT08UQ+98F89+wFpPE5OVs0AhdAZP2pjQDyg87GnH833B571ZH0
+   szjO2Q9JkP5dMjrlPqQ+u3CO/XX8KfNeInJCZyNyVTjURG2VcueQMRnRt
+   z19JOrs/dw0KZcOdt2SN82MalFSUMnPbBgQvbZW78agIOww355NCX2M7S
+   Gdsd+BRjlRL7H914fJEwk5eGFyUJQ6i9rleCg4EbImYS8+bm3xlMq9s43
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,155,1643698800"; 
+   d="scan'208";a="164568479"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 04 Mar 2022 11:09:09 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Fri, 4 Mar 2022 11:09:08 -0700
+Received: from [10.12.73.230] (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Fri, 4 Mar 2022 11:09:06 -0700
+Message-ID: <d3dfbe45-00d4-2131-9d42-32ce11b5c2f5@microchip.com>
+Date:   Fri, 4 Mar 2022 19:09:05 +0100
 MIME-Version: 1.0
-Received: by 2002:a54:3cc8:0:0:0:0:0 with HTTP; Fri, 4 Mar 2022 07:32:36 -0800 (PST)
-Reply-To: christopherdaniel830@gmail.com
-From:   Christopher Daniel <cd01100222@gmail.com>
-Date:   Fri, 4 Mar 2022 15:32:36 +0000
-Message-ID: <CAO=CV9J7j46hj4cyG3NsM0WGGw_nLS6nWoh-qBM=XKm36+eqbw@mail.gmail.com>
-Subject: Investment Funding
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] clk: at91: sama7g5: Allow MCK1 to be exported and
+ referenced in DT
+Content-Language: en-US
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        <claudiu.beznea@microchip.com>, <mturquette@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+CC:     <alexandre.belloni@bootlin.com>, <robh+dt@kernel.org>,
+        <rdunlap@infradead.org>, <unixbhaskar@gmail.com>,
+        <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20220111125310.902856-1-tudor.ambarus@microchip.com>
+ <20220125010554.BB92BC340E4@smtp.kernel.org>
+ <deb6ace6-adfc-bbaa-d31f-16d02a5f762b@microchip.com>
+Organization: microchip
+In-Reply-To: <deb6ace6-adfc-bbaa-d31f-16d02a5f762b@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-.
-I wish to invite you to participate in our Investment Funding Program,
-get back to me for more details if interested please.
+On 25/02/2022 at 11:31, Nicolas Ferre wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> On 25/01/2022 at 02:05, Stephen Boyd wrote:
+>> Quoting Tudor Ambarus (2022-01-11 04:53:10)
+>>> MCK1 feeds the External Bus Interface (EBI). EBI's clock rate is used
+>>> to translate EBI's timmings to SMC timings, thus we need to handle MCK1
+>>> in the EBI driver. Allow MCK1 to be referenced as a PMC_TYPE_CORE clock
+>>> from phandle in DT.
+>>>
+>>> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+>>> ---
+>>
+>> Applied to clk-next
+> 
+> Hi Stephen,
+> 
+> I depend on the PMC_MCK1 definition for some of the DT patches that I
+> must queue for my pull request to arm-soc, for 5.18.
+> 
+> Would you mind doing an immutable branch for me to pull from, so that
+> the build doesn't crash while the clock tree is not integrated yet with
+> my patches?
 
-Regards.
-Christopher Daniel.
+Stephen,
+
+I added the needed chunk in the DT patch. I don't need this anymore.
+
+Best regards,
+   Nicolas
+
+> Tell me if there's a better way, as well.
+> 
+> Thanks, best regards,
+>     Nicolas
+> 
+> --
+> Nicolas Ferre
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+
+-- 
+Nicolas Ferre
