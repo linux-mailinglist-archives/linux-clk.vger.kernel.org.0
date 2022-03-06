@@ -2,96 +2,75 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF654CE24D
-	for <lists+linux-clk@lfdr.de>; Sat,  5 Mar 2022 03:41:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2EDC4CE990
+	for <lists+linux-clk@lfdr.de>; Sun,  6 Mar 2022 07:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbiCECml (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 4 Mar 2022 21:42:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
+        id S233028AbiCFGvo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 6 Mar 2022 01:51:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiCECml (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 4 Mar 2022 21:42:41 -0500
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C295A24F866;
-        Fri,  4 Mar 2022 18:41:52 -0800 (PST)
-Received: by mail-vk1-xa29.google.com with SMTP id x62so5318394vkg.6;
-        Fri, 04 Mar 2022 18:41:52 -0800 (PST)
+        with ESMTP id S232846AbiCFGvn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 6 Mar 2022 01:51:43 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AAA83191D
+        for <linux-clk@vger.kernel.org>; Sat,  5 Mar 2022 22:50:50 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id o6so16313902ljp.3
+        for <linux-clk@vger.kernel.org>; Sat, 05 Mar 2022 22:50:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KkcNCtjpcO8rVm8LUzoHbBDqzf+JRgklTyG6XGrgh2A=;
-        b=n3v5g4r26iSDUpyH/15c34qb0OSlTQqGD+1AH+W+Ewm3Q8qbcr6ZF6eVUJqPxPg4AK
-         v1GMcYCik7Q682YyBSUSvzc4tarHahIlPrBHLKlVNZ6xWcydkFrucAajd29dD6DrJJwB
-         KTzCOgZpQjNn+KApVn46AtG6+ybOyLOhA9IoX4hMorNwLui+negdc5M2M9uoYiNIs9yd
-         rBlpV3llDOutr17RMr5lWoEb9FOXiZ9lIk79HMyeVyH1CJcoAt+fTwQEcMbyduPCmZax
-         Ew3hwauqxhC3lmJkK/c1qRQHdxy6tAj+6Hq97iFEV2MNzbiVNsP8nR/6Cf4PLyfkf3T6
-         J5CA==
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=VaaSLAJ+hgNGNq49WyPsh3ndDLo+mnrYcswrOHpJSv8=;
+        b=KDgAx1nMZI4VA0728iAuqALj69hyn7X0WLLUiz2m+OH09NDtWJqkn0K0IjhaqXccDL
+         nYA9IS56U+BvEYDp5ZuYOTDJ28DkbGQXOo4nCoFRXwOq8btCUGBKve+nLdvXGAtQGfZd
+         8/3HmQyIohZytZNIAaZ2YSJ+VGfF2cuAbX+92kqJIy7dPjcCYPV+qxcIVHj5OJkNioe8
+         RnnPJV63I7FofbcYlKCR7cawwHR+Gyj/OksLFoNh7LOBENUnMHRRrWfgS+R5N0DbQgRd
+         FM7OvtlHYW5haJ9bCovh/xFv8pj40s/F/HFWyLhlvxnDTkjGlvvz7xTkeBicCtgptiHh
+         fIkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KkcNCtjpcO8rVm8LUzoHbBDqzf+JRgklTyG6XGrgh2A=;
-        b=xdZXcN9ndX6kIjQSkktOsaEWTkfV/+JtGBe5Tiy4wCcYZjhq2uxKVQ0TQMNAFTSNoD
-         29ckoy8axEIFoc7y4PEQm5uaFXxCAgPPnb1iqcio403cY4MNpoDFqSH7xUTztYTStCI/
-         Y9dn0fTy+jO6U630wuOY4Ci2+sx//kcZH6s0Me0oksnu0ZZTUy/ClYSoM9vSTBsOn0kS
-         ZegBiwEgNgCk+jmyVWy7EAxBIwap5CuQOtqfUS/kT9O9ebsc9HdWhrhnTwzxYXafus++
-         bYDD5jPFxxarNP2ON8gOqRSLUkRzKrcgqMXElCcKSWhhkNfrXObLB5aDM6OhmK9PkSQD
-         2TNg==
-X-Gm-Message-State: AOAM531VMTI4FhWRyCvpHzxIQA0Z+62a7ky8EVFagBAXlNCwHd1lNwH4
-        G5ykantArbgyJyL3RVa8f+3N2rDE+9Im3KVt00iZBH3z
-X-Google-Smtp-Source: ABdhPJxOsN2RrE8cJHgE60PZbU5R7UZ2J4YCIf+ekeTLJwL7RE7YXmJekBtVPUrks2W4I8GY7/R3s05NmLLJnOyQapA=
-X-Received: by 2002:a1f:ee4a:0:b0:336:e616:82c6 with SMTP id
- m71-20020a1fee4a000000b00336e61682c6mr603775vkh.8.1646448111552; Fri, 04 Mar
- 2022 18:41:51 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=VaaSLAJ+hgNGNq49WyPsh3ndDLo+mnrYcswrOHpJSv8=;
+        b=FjOyqy3AbDykxSYyEtNSkqDtkaYK0DWgpjWdW3VWeOYjjWnoRZXNB395VkW7woH/xb
+         pdrn1bjQJoPjizE1rQoNscc6G2ElTzYqFEVigqRaYSZhwkUs5yzWJoHFNJJG+Kv19Kqt
+         kK1d2Le7w7ET1MN45isGNnhOaAvNuDuau7NY5nj/IME8YriTQYJUoeQYPX9XxDgT98kd
+         WT3PfuuWirR8zRvKPRK2lWGy27hL3nbSKXRJBKZ5AZMZUMnQmf2SgdQv9GuL7qDOhFCJ
+         u0HsnbfY7uEwfmLx20ZD48YI4jMV06D/+8ZXOh+1pHOa18QUyAt9oBp7F6Lo40N0Ifa6
+         fc1A==
+X-Gm-Message-State: AOAM530osDyUXh3kflTSr6JkgRVHmDOQGEYKyUcS/m0P75sxK/5Erb6j
+        YbRc2GS0RhbkoPCorSGwLln0mOI9UPDPPiRj+RA=
+X-Google-Smtp-Source: ABdhPJzq04i8VJyC6uwySEx5tzgrtxCg/XL0hqdBTWFWm66/zQAuy3m2ubrZV75jrYUP9jvmG0PdhfRUhLuebg8/B7w=
+X-Received: by 2002:a2e:94c7:0:b0:247:de4e:e9bc with SMTP id
+ r7-20020a2e94c7000000b00247de4ee9bcmr2397951ljh.397.1646549448778; Sat, 05
+ Mar 2022 22:50:48 -0800 (PST)
 MIME-Version: 1.0
-References: <20210226141411.2517368-1-linux@rasmusvillemoes.dk>
- <20210304221247.488173-1-linux@rasmusvillemoes.dk> <20210304221247.488173-2-linux@rasmusvillemoes.dk>
- <4b560502-3885-91a0-3100-4b5506a17b32@roeck-us.net>
-In-Reply-To: <4b560502-3885-91a0-3100-4b5506a17b32@roeck-us.net>
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Date:   Fri, 4 Mar 2022 18:41:39 -0800
-Message-ID: <CAKdAkRQj9fTv-g03__ncNrnyNh5x+4uG2_yioyrc-iFAd22c3Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] clk: add devm_clk_prepare_enable() helper
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Arnd Bergmann <arnd@arndb.de>, Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+Reply-To: mrs.susanelwoodhara17@gmail.com
+Sender: mrs.arawyann@gmail.com
+Received: by 2002:ab3:7d89:0:0:0:0:0 with HTTP; Sat, 5 Mar 2022 22:50:48 -0800 (PST)
+From:   Mrs Susan Elwood Hara <mrs.susanelwoodhara17@gmail.com>
+Date:   Sun, 6 Mar 2022 06:50:48 +0000
+X-Google-Sender-Auth: NOWRSnt_sskMD3s295a30bcHvEs
+Message-ID: <CACppo47TD9J4Sy+vaJu1wXHqd88WqFwMNn6OdkY1khwXu3TuFw@mail.gmail.com>
+Subject: GOD BLESS YOU AS YOU REPLY URGENTLY
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, Mar 8, 2021 at 9:32 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 3/4/21 2:12 PM, Rasmus Villemoes wrote:
-> > Add a managed wrapper for clk_prepare_enable().
-> >
-> > Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
->
-> That has been tried several times, including by yours truly,
-> and has always been rejected.
->
-> Just use devm_add_action_or_reset() like many other watchdog
-> drivers.
+GOD BLESS YOU AS YOU REPLY URGENTLY
 
-Can we apply the devm version for crying out loud? I do not see what
-benefit there is to force everyone open-code it with
-devm_add_action_or_reset(). By simply blocking it we are not making
-the kernel better and it's been stalled for a very long time.
-
-Thanks.
-
--- 
-Dmitry
+ Hello Dear,
+Greetings, I am contacting you regarding an important information i
+have for you please reply to confirm your email address and for more
+details Thanks
+Regards
+Mrs Susan Elwood Hara.
