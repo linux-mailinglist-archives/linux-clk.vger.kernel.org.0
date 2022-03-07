@@ -2,305 +2,182 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165AB4CF4AE
-	for <lists+linux-clk@lfdr.de>; Mon,  7 Mar 2022 10:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2636C4CF8D3
+	for <lists+linux-clk@lfdr.de>; Mon,  7 Mar 2022 11:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236451AbiCGJU6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 7 Mar 2022 04:20:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
+        id S236433AbiCGKCl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 7 Mar 2022 05:02:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236406AbiCGJUu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Mar 2022 04:20:50 -0500
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2055.outbound.protection.outlook.com [40.107.215.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B849522C3;
-        Mon,  7 Mar 2022 01:19:45 -0800 (PST)
+        with ESMTP id S240351AbiCGKA6 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Mar 2022 05:00:58 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DAF4DF2D;
+        Mon,  7 Mar 2022 01:47:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1646646463; x=1678182463;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=ykzgbS9sk8UyPff9EfK82V6AnYXzQDPmqj7oXLfO26g=;
+  b=OpRZ6Nlc2qdrRp6KOj95z2ld8h8MLhnCpzKEMLFnEsROoWDR1ti3oRek
+   Ry8er2C3AM36aALSsGtxwrOyIflP6QFwa5jwS1M6qM8xEYA/l2ge3UIBs
+   BrmM6GtbGchdZPshMFogISLCedQXeobvn7GH9s3fomkjsIv9ezk+isc4c
+   WxE5NsDZJ4KIVpbCC7A4tunG6HdsTo1yI50ClWddIS8F/PgWu5WSF0e1B
+   Cj53tj9M+avCxotheHpMqBKSYkS123sFlybTjNeWwao2BOBtsr/sB82Zh
+   0iuLiY1S6c37eZ8HwaEJ3HTLoKfHXQjQ82NhsGvF/M92Fy7qv8hyJtLXL
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,161,1643698800"; 
+   d="scan'208";a="155928516"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2022 02:47:41 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 7 Mar 2022 02:47:40 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Mon, 7 Mar 2022 02:47:40 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Kwh5Plf3eIQ9gs53ZERTk0TLNCR9Vd6KS1ITHC2mj6G9AtBB8j7qR97dcKglPvvy4KCfNlCUHKg+Ye9yDpOvnuTo9j/xQpY4hlBj7vgQUZBImVF6iyKwZi/t0gBbScw/ZshzJ15MSrHF6cBNSw0+Q7iAr5wrOmTM1p/uADXFveo66LfWSauBo1/jY7K+BbBxFdtfnC91VmWU3MBJ37laX5lAVGUIuU25IrpbmTU912tHOsO+PBgiFrZMOR+BSzrRpk/xOED44oeuHtpuOKlqEGd0nklmxIg+dcbLNvJMGXEFS71V0jW/dsMdFL+yGC6v4D2mLThJfqiGMZU7KdL7rQ==
+ b=HvO9wgRIZRNvzMAZ0KfFxu7kJPLc7SUi/x6QNie9i+Chmntckj7xau7ysGJWPs9AAuWuLiiYZ8vTbI+ANAhtTP0m4JzUx9TF8RcCw5NxoLrRL+ysepkYLobG1kpTktVL/j/cewdXZetCowY5XI369bPZ79E0rcnqdPrM4YSPKZ6XH3PCUdKcgx05HIrNZKA9y9fDmaMbpGxnHf+8bwff3xeQFQm1IgqKKnwEowEWgjkKbpyGz9wWHYyUmDCgNHI/FZKnu+oNQqCXWgtbCsCs7BEzlVEkIt3ZM7baRNP0/XAEAuTpHP0ykRUC/2iBrultTSCcyO9U+PTEGD35U3agMQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hjNjjnzCJMF2QjZTTKHEKWi2u+8FCf2NGgGvl5IlhIA=;
- b=K/U2rRlbhW8SgfTfu8+3uQ8xkYHfCZBsRJgk2DnwLvhesOX2C88L7Bo3Xa8z0C+WZV4s4ShvGdVxlXOJA+xz/tiJ1iwk4B13zZ7urahu9cVQcbT9rPe8bsO7N8Qj5U/X1IwZ0nCmHCKTaB9J804TBrLYV+77KV9UuRHIjLBefgH2MXjUDHjU4Rx06SFagcFN+pvuBkTwQgN6bId0BEDwttukoP3H4FwdY9c9bw2hBilwubtmlu2B4hTPK5V2l0eCXZTbOmpbg0NL4wEuKD/PQ2t5Pn/AfeGR6CRjtI93EVMmsNAkyiegExm7ES1Isd+UlFSN+AfiMGGYx77cKbqckQ==
+ bh=ykzgbS9sk8UyPff9EfK82V6AnYXzQDPmqj7oXLfO26g=;
+ b=a0il5j1teMR/QP97gQn+/sz/PVqZZYv9NcRAnykTx0+EW/22/QRDJAy8pJbzL2GucfDZBHNaC2pGbBsRyNxcIWy4CWkfqZIiEEWNHHyV09WyeqFetlr03xfNHonlcwxkSlyJ3FK4el/uuKc8M+lt5yjzzTeOCeaVKhlAmhhLpULyPt0/nC24iEeB/wBUlQN61ab74bO/57v6R8XdXvPfqbjFXHRB8L6d3A3qVYYM6ZcrOZvipQCSaamM8V6fEwEslw8Li+wFMUxR29pPNn9n6ewNHOn7SHLfswhQhwzJ/1o/7IjefLjvcUAP+dSmMl9uwD5JKq7H7tZWYeJEdm5MIw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nuvoton.com; dmarc=pass action=none header.from=nuvoton.com;
- dkim=pass header.d=nuvoton.com; arc=none
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=nuvoton.onmicrosoft.com; s=selector2-nuvoton-onmicrosoft-com;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hjNjjnzCJMF2QjZTTKHEKWi2u+8FCf2NGgGvl5IlhIA=;
- b=Csem5soSXU3IymIxtJfGl394wwyHsEdq9SbHCnVeogH/YwcUiHl/JO/udHsZXD1Bc3TW40TF4bQ5XcG5BLIwX2bUVQERxWM0xO+60frl1WN5RTUGdHjaGzVlVHpkOsWQyszmvi+HfBsKTWVFymeCs1h6ZdzxDBC/G5Uot7dTa7o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nuvoton.com;
-Received: from HK0PR03MB4833.apcprd03.prod.outlook.com (2603:1096:203:b1::19)
- by KL1PR03MB4646.apcprd03.prod.outlook.com (2603:1096:820:1c::12) with
+ bh=ykzgbS9sk8UyPff9EfK82V6AnYXzQDPmqj7oXLfO26g=;
+ b=B4EVsdHgWsIMx8pLRTgD0MS3Il87L3zFft1+vf2e1uVBm7hnuXFfInxKX2/zriwqVcCB5N9saejKjFZhvbN4M+9vsFbghYBeSyCjuUi5NzUPwu/Vn2CPFJ/i5FPT1f6V+XE9X720tGdnPen6+x24lsA2aomEWipc+Z6y3HCQUa0=
+Received: from CO1PR11MB4769.namprd11.prod.outlook.com (2603:10b6:303:91::21)
+ by DM4PR11MB5343.namprd11.prod.outlook.com (2603:10b6:5:392::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.8; Mon, 7 Mar
- 2022 09:19:41 +0000
-Received: from HK0PR03MB4833.apcprd03.prod.outlook.com
- ([fe80::39bb:b24a:15ed:811e]) by HK0PR03MB4833.apcprd03.prod.outlook.com
- ([fe80::39bb:b24a:15ed:811e%3]) with mapi id 15.20.5061.017; Mon, 7 Mar 2022
- 09:19:41 +0000
-From:   Jacky Huang <ychuang3@nuvoton.com>
-To:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        arnd@arndb.de, olof@lixom.net
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Jacky Huang <ychuang3@nuvoton.com>
-Subject: [PATCH 3/3] arm64: dts: nuvoton: Add initial support for MA35D1
-Date:   Mon,  7 Mar 2022 17:19:23 +0800
-Message-Id: <20220307091923.9909-4-ychuang3@nuvoton.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220307091923.9909-1-ychuang3@nuvoton.com>
-References: <20220307091923.9909-1-ychuang3@nuvoton.com>
-Content-Type: text/plain
-X-ClientProxiedBy: HK2PR04CA0079.apcprd04.prod.outlook.com
- (2603:1096:202:15::23) To HK0PR03MB4833.apcprd03.prod.outlook.com
- (2603:1096:203:b1::19)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Mon, 7 Mar
+ 2022 09:47:34 +0000
+Received: from CO1PR11MB4769.namprd11.prod.outlook.com
+ ([fe80::6d66:3f1d:7b05:660b]) by CO1PR11MB4769.namprd11.prod.outlook.com
+ ([fe80::6d66:3f1d:7b05:660b%5]) with mapi id 15.20.5038.026; Mon, 7 Mar 2022
+ 09:47:34 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <Codrin.Ciubotariu@microchip.com>, <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>
+Subject: Re: [PATCH] clk: at91: sama7g5: fix parents of PDMCs' GCLK
+Thread-Topic: [PATCH] clk: at91: sama7g5: fix parents of PDMCs' GCLK
+Thread-Index: AQHYMghetY0lSBUbzU6JrhPhrIxlJg==
+Date:   Mon, 7 Mar 2022 09:47:34 +0000
+Message-ID: <2d6f6552-5ff8-295d-e7e1-d4dc5f767ebd@microchip.com>
+References: <20220304182616.1920392-1-codrin.ciubotariu@microchip.com>
+In-Reply-To: <20220304182616.1920392-1-codrin.ciubotariu@microchip.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4212a09b-c275-466c-f1c4-08da001f8184
+x-ms-traffictypediagnostic: DM4PR11MB5343:EE_
+x-microsoft-antispam-prvs: <DM4PR11MB53437402FB5915C3146F89B387089@DM4PR11MB5343.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FdGvNitWeyGeGm0I25/13hWIfHEv0Rc+X7ZhuB4YPl7kZeiuiM/7/vWakLniW+P1XBQXQyrg2C/yu4v1L82cTWgJuDb1Zae+yNa94l9ByxMdgLTTrWw1FkLECfYM3Sd0fGfX4TywbmiJPlE3LqovqPETJnQ6r4aKQgq+q1zcN3MkvcX3cH09zF1eWLAcaw4WuAxiESp1GPtNu369bBQLrLQ2zZ/o9xnSEeSqmFGQwFy7RYzdD2JoCNkzlBDG8CMO2CT4ZJ4e0VInDNc3TI7LfxSKMxrTf4Nr9C6RRGuotOldSQsQFwwwKuZVjDzDK6gDP1FTZUbhl6Etg3fZt60+95ym+hRQrcvK6tz6Toio8FBpOjIU2E41l5DBqesojrGlf9GQO6GYYs+VIWABY+UjpdOVs5NSUphvB4zUVCQXOasPhbCN0PuOBfyZIAtQrsEFrdPVRX6FQQVirDZ8yLZlrkYKzEewEw+V5+QHt/hRpSzyluBhjkMlr2ablgw2Gft/Bjwgkx593onXYfgHqfn7qwvsYyd+WDm4wQ1uEVdUUMDTSI5k//9Ct0qMxlHlq3fJMfrUL0lqsNXlsxWgfoSS9YbPKMuMRkbY0UayaGj6UjziRvnfz3GBPicz92zocSjn33A/PrglqnNFlTugPk/XndnUuqcb5otFDGc18Exxd+m+AOgtu4gdFBDALkK9gX1JeiNvBjQLo3SeKAgghILIZghrY3cC4zsCcusk7A3KfsS021gxK9cQ7Os8j9SqDduAaJvlOQMXKaYHZjfbsh7mQw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4769.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(6486002)(2616005)(66946007)(8936002)(36756003)(4326008)(8676002)(5660300002)(508600001)(76116006)(66556008)(91956017)(31696002)(2906002)(66476007)(64756008)(66446008)(83380400001)(86362001)(26005)(71200400001)(31686004)(6512007)(316002)(6506007)(186003)(122000001)(54906003)(38070700005)(110136005)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?c0RVNTR2S2RYV01VUFFyT0RhUVlDNFFpaGhwdWY2Q21mdkxOa2F0Rko5Vndm?=
+ =?utf-8?B?NU8walM4QUVHa1BHeEJtenBtRm1CTzhpTkNZQUdSK1R2RjBiRDFENmJoT1Fa?=
+ =?utf-8?B?WDFOVTVHTTdISytMalJ2VFh0cVRiU1RFMWtFdmIyZzZjNXhoMjNOUkVMUTNJ?=
+ =?utf-8?B?VzFLd083L0EzRUN6R3F0TExSanJnbzVpbDNYY3VCTFNWckJuOHJya1FEOFlF?=
+ =?utf-8?B?OGd0NExxY1gyMW8zeHFiMUViejc2dkhoZnN4eE5TMWdaZW9YeFc4OGdvSG8r?=
+ =?utf-8?B?RTlEcllCTm1zK3ZVdllEU3M4bUJ1eXJiKzcySkRlNmo3NEZ5SFJScFpZUmVa?=
+ =?utf-8?B?VkVhQ1ZOcWFkekxNYkZlK2xnUm9HV2VxWm92QjdGQy9WaFNhaDVMN0pCNXdH?=
+ =?utf-8?B?U2phZVhGTDJLbmZrN2tpWlZoTTVWNTdVOE9xR0ZpdUVUK09kQ1Q2ckZHR3d4?=
+ =?utf-8?B?dmJLMEdTQUZpMXlFQk03R2dxK1k0UTdyS3ZQMlI0ME4zOTdPaTg1MnlrNUpv?=
+ =?utf-8?B?aU4vSS9aUkF4TDNGT3VtVGVWdko2YmxqYzBLVmJUYmZEQ1BqR1pQclBkWk52?=
+ =?utf-8?B?V24zOVhyVEpJOE9GeitEVzZ0TDM3WkQ3R29vcERFU1pTeWYwYm5EM3ptNzNh?=
+ =?utf-8?B?MFpGTG40YWlLZStDb0NPcFFnUXd3emZjTS90b3BOYjJ0YTlFR3ZlWGRxTmd5?=
+ =?utf-8?B?NytZdk1meTFnT3FoWkxpUjBCWjRhM0pqa3VLb04rRzhubi9qV3VveDAzeWYw?=
+ =?utf-8?B?NW1qTDZmNnQwZmJwdGtWR0RQYklVVi9scE9QK0pkb2N0Wm1ob3FYUk93UERM?=
+ =?utf-8?B?dVBEVldDYlNtRmRGajIyM1ozL0YvTUVsNERxVWx0NFJHSVVvclVhSUx2d3hw?=
+ =?utf-8?B?aWVFeXZYd0t1NzNlSkxpdm9Ya1hSQUxpWEtRMGVNa0J3dU1vZzN0cXNOR2Rh?=
+ =?utf-8?B?NXVkZHRWRWZQbC82eTRaakNQWFkzbnVDdVd2YmZiZWpWQ05ndXROUTdFYkV0?=
+ =?utf-8?B?eUtNVnUvMHh0NFR4NWdZbVpWNlN0d0ZUejhhMGhHcUdYcEZLVDIzNDJkd3Bv?=
+ =?utf-8?B?aE9ESjhGbUoycWsrOWdidE9GK2trajl4enpJZE1mOEJhRnlMK0NxelBDMXp2?=
+ =?utf-8?B?N2lGbUEzQ2hnemJOR0tVVHdEMG1vd0RwMUtnSitYd1lNZTEvZm9ES0hBbnJV?=
+ =?utf-8?B?OGFiK0lRZ0FMMW9uc2pmKzFsZ3BNL2pWU0JPLy9HeGkyNjVmZEJsQlNkVjkw?=
+ =?utf-8?B?YjM3am1JdWs5ZVo1WEs1cUhQaTU5c3poMzJtVTJtOE0xQXJUVWVlaE04Rnhk?=
+ =?utf-8?B?bFplSkt6SmVSZmFyN1JUTnJsNXhEVU5ZdkN2RTdhVDdrZEFxNzg0aDNyUVJS?=
+ =?utf-8?B?emZwSWVwSElIbTlOc1haQmxUSDU2VmpGS2lMUWtVTytQSU9nT0FRSURkU2ZD?=
+ =?utf-8?B?MmxFdlN6L2xvaG0rNUR5azh1V3ZJOG9hLzZnL3NDR2JnQmxFK3RtTm5FTGxW?=
+ =?utf-8?B?elZIQVZWQ3AveUk4bGVnajJzUlRZaUZSdGdUdW1LeXNXMjJuc1FvNUI4ZlJD?=
+ =?utf-8?B?cmlRVGhGU3FJVUV4UnJwZmcxbGM2U2FoSnlVVG81Qm5OVHQ5SEcxS2prVHgx?=
+ =?utf-8?B?YlhzeVE5Wmw0aXhyVkdOV0hraGhTK09RYkFUd2xXeWRNRmJsc1VheEFnaDhY?=
+ =?utf-8?B?N3phNHpUL2hLelBwQ2ZmSFBCY3NFbzRhN3o3akNKdDdHYUxTOHN0MngrNUMz?=
+ =?utf-8?B?TDJsWDl0ZmJEUjQxc0JDNDZWRXVsc0tmaGswVnRMSW1yY2R5azhLbEVFUi83?=
+ =?utf-8?B?UCs0YXlGN1NXUjBkZlE2YzNPTXo0NDQzZlJpOURMMENpQXROWjBHNk85TTZE?=
+ =?utf-8?B?V3lOVlA4WTR5ZjBOZDNGL1RLWnNpVkRVWEdZdkw2SDNYVkN1NUZpb0ZwRUpX?=
+ =?utf-8?B?Y0dvakU3Um0vRzhFZHRDY3VRbG1qU08zN1pyU2g1LytwUlFFV2VWWTF4aHMv?=
+ =?utf-8?B?NDdlUGlqS1RXYm9DNTZnQ1ducDF6UFRVYzQ2V05KMUlrRW5pM2dKSXpOcWJ3?=
+ =?utf-8?B?R25MZDhnL2NsKzdpR1ovQk9ydEpvanNNNUN3SzEwKy9ZVHluMTFwMWZnZGZT?=
+ =?utf-8?B?dW8rTmt2QlcyUGJSeVJwTlM0WjZMZnk0ZEg1dStQVElxZTcyMkoxb29OTk02?=
+ =?utf-8?B?TVMrb2sxZmdPT3JsQmsrclFKZ0xLNFY1ZUNnNDJFVUJLVnlmLzg4MEQ4SUVj?=
+ =?utf-8?B?STNpYkFkb0NIM2w3LytoTDBaa0lBPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <543A07ABED5C054E9EA73AAEC08F2BC6@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 98286bfb-2bc3-44a6-d1c8-08da001b9c88
-X-MS-TrafficTypeDiagnostic: KL1PR03MB4646:EE_
-X-Microsoft-Antispam-PRVS: <KL1PR03MB4646B43A5BE3938A798BECFC9E089@KL1PR03MB4646.apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LQtfbZ34joxcM6pQ++h7Ic+cqex3smPuO6BN5CXt2JkLUpFNK8iVkbhs6IorLQLm+R1ohl+U3hQX/TOnlUw3Ub5S8sAwr2/rQQ9dyEr6Oo2il+Dl/O2GLCQutsh7Uvy181/GYYJicHK/kjGQHfvz1HIj77Eb+RomVvdQC4Z/Kn3jsT4siu+46v9lVoG9FuQf4jBx/V/v+xe1K3W+Us5yG3JIQs6FTVciqVEuJHGovZvitTH5AtEj79E75i72A8M5QZm2/GD5xgLLEe9gog2Aw6SY72lgP5AqyQHqdvNcDBiHA0/waiaQT4K1zlURhIvq/rlvz+pvZ004f/o+uYBzlVqzYVrHD0w63OuiyPiRRcd0YEWzJo/kFLPF06ZzvA8vxjunlTDw/nbXqe9QR289SPrxUQfQgZCbbDIF3Eef4Wazo3sKLupNcjFF5j1/6aMHLGmxgkmp686ScmySt4qwpcPHp59wrgDuHFEA7s9O022UoN7LaMLoKTwmT/QgME1vcYmwa13z0ROehTJKA9mAIfWchHZH5bk4LHetUf2LBAExIwV/rC7klBSdfmQAgBCDTOiqgNvUAn9U8dYBiwUA474lr4VacEkwYayr1KMCO/2vdAjlCLqEeZukFooW3OIrjgT0a+HpyDYQfnQMEZIxbxv8/oHTNJ+uq/RUFtYB6e0QEyjllZq/IZfgW0/o7EXdcg4GwpLPVPoBVNYX1qqx0Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR03MB4833.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(38100700002)(38350700002)(2616005)(1076003)(186003)(508600001)(5660300002)(8936002)(7416002)(2906002)(26005)(36756003)(6666004)(6512007)(6506007)(66556008)(66476007)(86362001)(8676002)(66946007)(4326008)(52116002)(107886003)(83380400001)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XK2tvCUdKMK5w63kvgU7uOuGGAmY6kv1MkEZGbk9zIjYfAty9e91TBT3Uiao?=
- =?us-ascii?Q?NDuPjZp8vOPB2N3VTXlDC4wqeAI8pQ6131fEK7sDrqAby5GVgTVx+gPgs95s?=
- =?us-ascii?Q?S0uWQBDi7m6gy1SzbfwXqVI0IG4vAlwKVBoMAo7/iZNcS1pBRoSCLMBARj+v?=
- =?us-ascii?Q?C1QDXKfK9+zcJ978Kggvm8vyNt/1vymqKCwg3Qtk0O5PvvPjhjIgSZH6lGhK?=
- =?us-ascii?Q?dt7U1V74DiBVQitrIXaDYqa4Re6AAThtetQO2qAYVWbdPuSLewvEtexz5kpq?=
- =?us-ascii?Q?BiiSA9Hdb0+xeZ2aeO8bhqmNxtMwsliTu8CKyk+vVNMFA7YfBUxSmobRswI5?=
- =?us-ascii?Q?bdKOR0cQn4q1EDRqBNYJ4szB15pRQbWtSQ1c01yoV0rSSsQLGYKMEjskwCHc?=
- =?us-ascii?Q?patmkWz720eRz7ZBQHTv65m5CgwJUlJFllP0bhBUh0TWWcTpWRrKk8G5URso?=
- =?us-ascii?Q?U2CHtCnFH0nTgmc0Sne1erZJH2GDPWcH/raNhHUy2jYvwyKebWLz5tfXh8Zp?=
- =?us-ascii?Q?HSHWHnXXuUEhTX/qvATKEcqtjifBdEZSyNfBdcoiXiRMrCdE5l2272WjMboz?=
- =?us-ascii?Q?tTxcgqO7DeTEF3JE3HJe6m7duljn3WqoZC/i7KX4UdwYWPK5svaEsZ2uNcJj?=
- =?us-ascii?Q?pQ9U1Gl+XLOkNfraV601tjed8jM+nUFn5AMin3FwT86skMUawDNY1wAehRho?=
- =?us-ascii?Q?nqWjnZpaMxPzr/+JPGjnEObPomENhlUMz326kxbLaBVgBA2TrR1FNb3nDe3E?=
- =?us-ascii?Q?0qLMdULYHOEnL9XrDFHkLmraAwQl9aonV6SiXS6niRIbepvBpcqcH0eRuvs3?=
- =?us-ascii?Q?X9PDFELNqYg7JNHTaBuMx0z0jYPaPa6vkqAeVoVIYCxxc0fuyD8uXsuprdFw?=
- =?us-ascii?Q?dks8wsb5pU2vPZr69mbmvZt9T5Bnr193Y38H0qdqbsZhQhun1MFCpNiLNN/c?=
- =?us-ascii?Q?1bnOB59Qb9agNbBRQxOp5B15BoQv6dAJk2AePf9c9MVKpeypdnAjD4UX3GFI?=
- =?us-ascii?Q?nEisaFrX5xdiLDG2NFBkjpVbLXoqDLXe1YxwE9P+8/FrpGFPbNRUxETDNJCt?=
- =?us-ascii?Q?luUnsf/KTVSR/kdtMVqvJ7Tfbhx5Zv//35TSCHCq5EHRe87NKAZNid21MyEj?=
- =?us-ascii?Q?mlYATYwX8GJncAJl2aYZYEcgREBzV++g+L+wtam1umNK715XX5/cmpjpqtuH?=
- =?us-ascii?Q?G6NL6IQUJqI8Eaw9pqCU2VPT2qj/09CiwlX7sCPKrvyCEcN9cKzQtEEvXg+s?=
- =?us-ascii?Q?QzBWZr2gp0px0UiNtChJPdxLo2eLrEIQqJ+bDf/KGpztD9AV9IdRVI1kygvL?=
- =?us-ascii?Q?LAIOXaMeOeGIAn4zwubS15UhjzP0XQS1rubwmRfRZS/O7memIAPzAOUAQOOY?=
- =?us-ascii?Q?Fn4HNAQzIlvag/B6jK9haNkdhTK9UPUlrsDfWFKTXQJ2mc/8BHX13KXNH2VP?=
- =?us-ascii?Q?cyQANCK/W+qOtejaAmcqt124ck4dAVbg8EAU8dSedf4qEQU5231NiA=3D=3D?=
-X-OriginatorOrg: nuvoton.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98286bfb-2bc3-44a6-d1c8-08da001b9c88
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR03MB4833.apcprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 09:19:41.7769
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4769.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4212a09b-c275-466c-f1c4-08da001f8184
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Mar 2022 09:47:34.2682
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: a3f24931-d403-4b4a-94f1-7d83ac638e07
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: E2fkD9qL1Rt5lJn+gxvaGy/3/X2SbQCEVD3HNJB9y3CcLoFDMxgpSO7nzAUJWZfKtihKmB4o4tZpx5SrIzMRdA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB4646
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: B7zoiD5StSwBh73gk+Bltk9nuhIH8CQQGnV/dWAAvF8JPcQUFGZqkw+x4mcaGwctpEGnnGEDkZfgMeePV7YS8SBL5Gn6ufH9eboGLcRWJLA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5343
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the initial device tree files for Nuvoton MA35D1 Soc.
-
-Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
----
- arch/arm64/boot/dts/Makefile               |   1 +
- arch/arm64/boot/dts/nuvoton/Makefile       |   2 +
- arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts |  23 +++++
- arch/arm64/boot/dts/nuvoton/ma35d1.dtsi    | 106 +++++++++++++++++++++
- 4 files changed, 132 insertions(+)
- create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
- create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
- create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
-
-diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
-index 639e01a4d855..28e01442094f 100644
---- a/arch/arm64/boot/dts/Makefile
-+++ b/arch/arm64/boot/dts/Makefile
-@@ -30,3 +30,4 @@ subdir-y +=3D synaptics
- subdir-y +=3D ti
- subdir-y +=3D toshiba
- subdir-y +=3D xilinx
-+subdir-y +=3D nuvoton
-diff --git a/arch/arm64/boot/dts/nuvoton/Makefile b/arch/arm64/boot/dts/nuv=
-oton/Makefile
-new file mode 100644
-index 000000000000..e1e0c466bf5e
---- /dev/null
-+++ b/arch/arm64/boot/dts/nuvoton/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+dtb-$(CONFIG_ARCH_NUVOTON) +=3D ma35d1-evb.dtb
-diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts b/arch/arm64/boot/d=
-ts/nuvoton/ma35d1-evb.dts
-new file mode 100644
-index 000000000000..38e4f734da0f
---- /dev/null
-+++ b/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Device Tree Source for MA35D1 Evaluation Board (EVB)
-+ *
-+ * Copyright (C) 2021 Nuvoton Technology Corp.
-+ */
-+
-+/dts-v1/;
-+#include "ma35d1.dtsi"
-+
-+/ {
-+       model =3D "Nuvoton MA35D1-EVB";
-+
-+       chosen {
-+               bootargs =3D "console=3DttyS0,115200n8";
-+       };
-+
-+       memory@80000000 {
-+               device_type =3D "memory";
-+               reg =3D <0x00000000 0x80000000 0 0x10000000>;
-+       };
-+};
-+
-diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi b/arch/arm64/boot/dts/=
-nuvoton/ma35d1.dtsi
-new file mode 100644
-index 000000000000..27adac4975c3
---- /dev/null
-+++ b/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
-@@ -0,0 +1,106 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2022 Nuvoton Technology Corp.
-+ */
-+
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
-+
-+/ {
-+       compatible =3D "nuvoton,ma35d1";
-+       interrupt-parent =3D <&gic>;
-+       #address-cells =3D <2>;
-+       #size-cells =3D <2>;
-+
-+       cpus {
-+               #address-cells =3D <2>;
-+               #size-cells =3D <0>;
-+               cpu-map {
-+                       cluster0 {
-+                               core0 {
-+                                       cpu =3D <&cpu0>;
-+                               };
-+                               core1 {
-+                                       cpu =3D <&cpu1>;
-+                               };
-+                       };
-+               };
-+               cpu0: cpu@0 {
-+                       device_type =3D "cpu";
-+                       compatible =3D "arm,cortex-a35";
-+                       reg =3D <0x0 0x0>;
-+                       enable-method =3D "psci";
-+                       next-level-cache =3D <&L2_0>;
-+               };
-+               cpu1: cpu@1 {
-+                       device_type =3D "cpu";
-+                       compatible =3D "arm,cortex-a35";
-+                       reg =3D <0x0 0x1>;
-+                       enable-method =3D "psci";
-+                       next-level-cache =3D <&L2_0>;
-+               };
-+               L2_0: l2-cache0 {
-+                       compatible =3D "cache";
-+                       cache-level =3D <2>;
-+               };
-+       };
-+
-+       psci {
-+               compatible =3D "arm,psci-0.2";
-+               method =3D "smc";
-+       };
-+
-+       timer {
-+               compatible =3D "arm,armv8-timer";
-+               interrupts =3D <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) |
-+                                         IRQ_TYPE_LEVEL_LOW)>,
-+                            <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) |
-+                                         IRQ_TYPE_LEVEL_LOW)>,
-+                            <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) |
-+                                         IRQ_TYPE_LEVEL_LOW)>,
-+                            <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) |
-+                                         IRQ_TYPE_LEVEL_LOW)>;
-+               clock-frequency =3D <12000000>;
-+       };
-+
-+       sys: system-controller@40460000 {
-+               compatible =3D "nuvoton,ma35d1-sys", "syscon", "simple-mfd"=
-;
-+               reg =3D <0x0 0x40460000 0x0 0x200>;
-+       };
-+
-+       reset: reset-controller {
-+               compatible =3D "nuvoton,ma35d1-reset";
-+               nuvoton,ma35d1-sys =3D <&sys>;
-+               #reset-cells =3D <1>;
-+       };
-+
-+       clk: clock-controller@40460200 {
-+               compatible =3D "nuvoton,ma35d1-clk";
-+               reg =3D <0x00000000 0x40460200 0x0 0x100>;
-+               #clock-cells =3D <1>;
-+               assigned-clocks =3D <&clk DDRPLL>,
-+                                 <&clk APLL>,
-+                                 <&clk EPLL>,
-+                                 <&clk VPLL>;
-+               assigned-clock-rates =3D <266000000>,
-+                                      <180000000>,
-+                                      <500000000>,
-+                                      <102000000>;
-+               clock-pll-mode =3D <1>, <0>, <0>, <0>;
-+       };
-+
-+       gic: interrupt-controller@50800000 {
-+               compatible =3D "arm,gic-400";
-+               #interrupt-cells =3D <3>;
-+               interrupt-parent =3D <&gic>;
-+               interrupt-controller;
-+               reg =3D <0x0 0x50801000 0 0x1000>,
-+                     <0x0 0x50802000 0 0x2000>,
-+                     <0x0 0x50804000 0 0x2000>,
-+                     <0x0 0x50806000 0 0x2000>;
-+               interrupts =3D <GIC_PPI 9 (GIC_CPU_MASK_RAW(0x13) |
-+                                        IRQ_TYPE_LEVEL_HIGH)>;
-+       };
-+};
---
-2.17.1
-
-________________________________
-________________________________
- The privileged confidential information contained in this email is intende=
-d for use only by the addressees as indicated by the original sender of thi=
-s email. If you are not the addressee indicated in this email or are not re=
-sponsible for delivery of the email to such a person, please kindly reply t=
-o the sender indicating this fact and delete all copies of it from your com=
-puter and network server immediately. Your cooperation is highly appreciate=
-d. It is advised that any unauthorized use of confidential information of N=
-uvoton is strictly prohibited; and any information in this email irrelevant=
- to the official business of Nuvoton shall be deemed as neither given nor e=
-ndorsed by Nuvoton.
+T24gMDQuMDMuMjAyMiAyMDoyNiwgQ29kcmluIENpdWJvdGFyaXUgd3JvdGU6DQo+IEF1ZGlvIFBM
+TCBjYW4gYmUgdXNlZCBhcyBwYXJlbnQgYnkgdGhlIEdDTEtzIG9mIFBETUNzLg0KPiANCj4gRml4
+ZXM6IGNiNzgzYmJiY2Y1NCAoImNsazogYXQ5MTogc2FtYTdnNTogYWRkIGNsb2NrIHN1cHBvcnQg
+Zm9yIHNhbWE3ZzUiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBDb2RyaW4gQ2l1Ym90YXJpdSA8Y29kcmlu
+LmNpdWJvdGFyaXVAbWljcm9jaGlwLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IENsYXVkaXUgQmV6bmVh
+IDxjbGF1ZGl1LmJlem5lYUBtaWNyb2NoaXAuY29tPg0KDQo+IC0tLQ0KPiAgZHJpdmVycy9jbGsv
+YXQ5MS9zYW1hN2c1LmMgfCA4ICsrKystLS0tDQo+ICAxIGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRp
+b25zKCspLCA0IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2xrL2F0
+OTEvc2FtYTdnNS5jIGIvZHJpdmVycy9jbGsvYXQ5MS9zYW1hN2c1LmMNCj4gaW5kZXggZTQzNDU4
+NjczYWZiLi45YTIxM2JhOWU1OGIgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvY2xrL2F0OTEvc2Ft
+YTdnNS5jDQo+ICsrKyBiL2RyaXZlcnMvY2xrL2F0OTEvc2FtYTdnNS5jDQo+IEBAIC02OTksMTYg
+KzY5OSwxNiBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHsNCj4gIAl7IC5uICA9ICJwZG1jMF9nY2xr
+IiwNCj4gIAkgIC5pZCA9IDY4LA0KPiAgCSAgLnIgPSB7IC5tYXggPSA1MDAwMDAwMCAgfSwNCj4g
+LQkgIC5wcCA9IHsgInN5c3BsbF9kaXZwbWNjayIsICJiYXVkcGxsX2RpdnBtY2NrIiwgfSwNCj4g
+LQkgIC5wcF9tdXhfdGFibGUgPSB7IDUsIDgsIH0sDQo+ICsJICAucHAgPSB7ICJzeXNwbGxfZGl2
+cG1jY2siLCAiYXVkaW9wbGxfZGl2cG1jY2siLCB9LA0KPiArCSAgLnBwX211eF90YWJsZSA9IHsg
+NSwgOSwgfSwNCj4gIAkgIC5wcF9jb3VudCA9IDIsDQo+ICAJICAucHBfY2hnX2lkID0gSU5UX01J
+TiwgfSwNCj4gIA0KPiAgCXsgLm4gID0gInBkbWMxX2djbGsiLA0KPiAgCSAgLmlkID0gNjksDQo+
+ICAJICAuciA9IHsgLm1heCA9IDUwMDAwMDAwLCB9LA0KPiAtCSAgLnBwID0geyAic3lzcGxsX2Rp
+dnBtY2NrIiwgImJhdWRwbGxfZGl2cG1jY2siLCB9LA0KPiAtCSAgLnBwX211eF90YWJsZSA9IHsg
+NSwgOCwgfSwNCj4gKwkgIC5wcCA9IHsgInN5c3BsbF9kaXZwbWNjayIsICJhdWRpb3BsbF9kaXZw
+bWNjayIsIH0sDQo+ICsJICAucHBfbXV4X3RhYmxlID0geyA1LCA5LCB9LA0KPiAgCSAgLnBwX2Nv
+dW50ID0gMiwNCj4gIAkgIC5wcF9jaGdfaWQgPSBJTlRfTUlOLCB9LA0KPiAgDQoNCg==
