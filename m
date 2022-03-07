@@ -2,44 +2,44 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72EF24CF4B2
-	for <lists+linux-clk@lfdr.de>; Mon,  7 Mar 2022 10:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 281724CF4A9
+	for <lists+linux-clk@lfdr.de>; Mon,  7 Mar 2022 10:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236472AbiCGJU7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 7 Mar 2022 04:20:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
+        id S236470AbiCGJUz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 7 Mar 2022 04:20:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236445AbiCGJUs (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Mar 2022 04:20:48 -0500
+        with ESMTP id S236460AbiCGJUt (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 7 Mar 2022 04:20:49 -0500
 Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2055.outbound.protection.outlook.com [40.107.215.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D3E517DF;
-        Mon,  7 Mar 2022 01:19:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D4451E54;
+        Mon,  7 Mar 2022 01:19:43 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UFYfXpSPhKVVdIuiDQ1cTUWCC03pWXYfiqcwOLLPns1vrXFz7bm7hwhcKj4vwrPZ8JIZL5wK4jWkJCvcmnYpo/JNlCTxi0Ek1F3GIxBcKPnpPZh2kmeY9SCcFa1qH1fDrJAUTwAJH+HZzxDS4y5Ol+sLpigH7tUrFN5uZRxx5rTFm3CncEzG1ioMr+rXnZXUEaBf79/to4bYB90bPdVxKHh45fDMO2LRYrv+DHEjhd0rBLorSynhooukJKrYYT32HxR9mkzGI7Bo2BHTKAFVQPFNS9gMiqpA13/31rAruyNASOOVPoduJ0fzoj7qTkIqLa1qsn2KCwBkdH53PQfNCA==
+ b=XVL2LfXzNCscxgGd0QyNQHwGAWFFJaTW/WGv7q/ToF7m4QsJ/yxTuRmmvdFDf9Bikm0x3nn02+6TkY8ovsEZBdB7Xr3b/BAQMLzp+xEont/iKgv6n2Pkn9kplURMlZZBF5KZUseiVpIkBYdSSNwtcWvNtf6LFHZWkdsBVI/iD82QcMQsN5bICf4YNf/CoPS/CtchGDuz3sGu6C0ucOjd/3ZC55dFdzD6pdV4pnvNj9pnnPPvs6x4TsO2wUlfIrJafjDSfBJoAalQGqS1Aw46eK05q0kNy/KywGulTxtLa1+slihYtq3PgDKod9U1qGKO4PQdGysSeqfGCVdXSC/udA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CBe2uK7z9BH0Agoojh3RMuWkRPRB7x9WVAJfFN9vd1A=;
- b=hIWTumZ32HZPMmp/zDeZP8UCaeT11GRbHSHkzBJu/a0edu9zkfCguViDLrwAAHdwVD532aGFxpTKio7yi3dnw2W7X+8IJ5I2OuIC8BeN62aqv4xOl1kt/USBVEp+P5W3ABG3dByrcdzA7/gNGnHXOqcQFI/Lz09SkMKDpKmAabh62wYCsKrW8mQ3Mxc6j8+sO60+0zNkKn2XJfloy9Ra3bdzaaQK8zTnHdcfSQ934VjUgd5Pc4seb19Qfn2sfejDGPjdtpEE4ZKGmiUFYjXVUpKVrgBZlO/NX7N/QjhQxTUOdWyVGb83NWBExMZa1OmU5lK6GTmXxioyOlojaB6y+Q==
+ bh=Xk3fR0QObBpshHKCt59VGxdksnb+mElR9kwWjUsMm6Y=;
+ b=HnVFljWGWhXtHDwakS/jJrUWfATHKEDLzoGBD1a6zZDuPtdvhwKxy9wcdracnzSeMdzZFZIEW+FzmCDsLpcjh2RpBQ3owL1KmqhHzviXTgo/6pR51QpFQeMpJ8D2Zad9H1QOhdex7Is3o9eTYxnFFHr+tnzw7H6CA/CwFfDGssZBqDYiBfke5+ZsEvu2031MBv81gJDCL5O0euMxHSP6GwFGelPv64PjdJDYTjIXTjS/Dp9bmbFY1QU+NfqPKvp2oGmnb7ONoRpvS94cKl45WP4SZA0d0H/f/5I/YTJ1mv4ZqgbEIBgRsPQh+c8W1ZBTYQtD7ls5wuS7jCpuaOgu4g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nuvoton.com; dmarc=pass action=none header.from=nuvoton.com;
  dkim=pass header.d=nuvoton.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=nuvoton.onmicrosoft.com; s=selector2-nuvoton-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CBe2uK7z9BH0Agoojh3RMuWkRPRB7x9WVAJfFN9vd1A=;
- b=mFg6y78S5SveaRhTjntI8ZlcAuIWsX38bDbyLSV4CA/aV43+aTBQwLBPqf/7K6FNuTRyJ7s34KE4DQiKpgI3pzEGw0Jj1tLnuDH1l+QzXUpVCiseEGDzjHxuIODCGatqrRpDXlgK/kiXStP8nwZ17S7Xyjy2RvCuLRhAbnVXARU=
+ bh=Xk3fR0QObBpshHKCt59VGxdksnb+mElR9kwWjUsMm6Y=;
+ b=s9IDvTBem2qd5ExSQf2hbhRMrBsW22db0G/5fJXgKJyK7l3FPZNXXmABNm6mKl99xpQbAdpLLJxJ4KzSpjbS6RfVF5uCF1KLNJdmMJj0R4lUooGAotuQThNwSd+x63g7+34em/so80HJZ/XxESfgniisPMTwpBoXkB/CqJX4kSM=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nuvoton.com;
 Received: from HK0PR03MB4833.apcprd03.prod.outlook.com (2603:1096:203:b1::19)
  by KL1PR03MB4646.apcprd03.prod.outlook.com (2603:1096:820:1c::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.8; Mon, 7 Mar
- 2022 09:19:37 +0000
+ 2022 09:19:39 +0000
 Received: from HK0PR03MB4833.apcprd03.prod.outlook.com
  ([fe80::39bb:b24a:15ed:811e]) by HK0PR03MB4833.apcprd03.prod.outlook.com
  ([fe80::39bb:b24a:15ed:811e%3]) with mapi id 15.20.5061.017; Mon, 7 Mar 2022
- 09:19:37 +0000
+ 09:19:39 +0000
 From:   Jacky Huang <ychuang3@nuvoton.com>
 To:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
         arnd@arndb.de, olof@lixom.net
@@ -47,9 +47,9 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-clk@vger.kernel.org, soc@kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Jacky Huang <ychuang3@nuvoton.com>
-Subject: [PATCH 1/3] dt-bindings: clock: add binding for MA35D1 clock controller
-Date:   Mon,  7 Mar 2022 17:19:21 +0800
-Message-Id: <20220307091923.9909-2-ychuang3@nuvoton.com>
+Subject: [PATCH 2/3] dt-bindings: clock: Document MA35D1 clock controller bindings
+Date:   Mon,  7 Mar 2022 17:19:22 +0800
+Message-Id: <20220307091923.9909-3-ychuang3@nuvoton.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220307091923.9909-1-ychuang3@nuvoton.com>
 References: <20220307091923.9909-1-ychuang3@nuvoton.com>
@@ -59,51 +59,51 @@ X-ClientProxiedBy: HK2PR04CA0079.apcprd04.prod.outlook.com
  (2603:1096:203:b1::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9413de9a-3c3c-4017-d6ef-08da001b99d7
+X-MS-Office365-Filtering-Correlation-Id: 039c6d3f-0226-480d-837d-08da001b9b50
 X-MS-TrafficTypeDiagnostic: KL1PR03MB4646:EE_
-X-Microsoft-Antispam-PRVS: <KL1PR03MB464633FDE735CED891B706E59E089@KL1PR03MB4646.apcprd03.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <KL1PR03MB46466DD4C7F2FD0C6D8443DA9E089@KL1PR03MB4646.apcprd03.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CGXsys1Mr+v92/fz1UaaqDMegPyoTtZ2MeW1B0j6Ss8vLdOrgJPHm/SF5IfW60Vpj6bo1/3LyW6TU94uV27HABaJSethxufr+n7C0SLO8T0pFVZeDPHmgr7odZS28f+qdeK1GmRw3T2iX9Aj8FoQywkpXXBmmrAW7FOiUtvJ6Dvt/DwjJBK0SLiDbcNoStOCMm3nJ8AyUiIil2kbvZ0wZKzo6dOCY2dpKNRtlP0zm85z54ehFHXmFYfyZO74udgFUNBoeQ8Q0qvMrt9XcJobifSzwycRG74kFNXJMmVoabasgxTwspZyxysloNO9aXf5VsbSqoH8AGIwsJdHKFhV4DV40xvm2cdhqv7Ni97Xn7UzC/ny3mTprxLr7NctrA2t2F1mdC7LBjRdVqX4BTZpKLji+iq9wUsDe2wS0na7Ia1d4oznRNRmLB/QCnKBT1GrcxT3vImnZSPwcSB4AQJxvdo20Z5pZucxU/46a5ec/aZqVLyrlaF4a1ApKO+ADXrFsgAdLSweV1BBkdSmBFokdgRTWgQ7eAwlVcnaQDEBNiBaMlhy0eW6vfr18pXhkjXSEV7yhKFZqV2FLldqq/RUtUTH44ulW5YNk5jbDMSOSTtyqLndAiR7gCK2qAsszANDFDRS/V9OXXloFqQlpOEFLua0vUV0WZ4Kc+1QzP/sg8y+LdBu44D5wkkuMYemliqJFYmJeWIMIP3Hr5HVqXs/cA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR03MB4833.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(38100700002)(38350700002)(2616005)(1076003)(186003)(508600001)(5660300002)(8936002)(7416002)(2906002)(26005)(36756003)(6666004)(6512007)(6506007)(66556008)(66476007)(86362001)(8676002)(66946007)(4326008)(52116002)(107886003)(83380400001)(316002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: mEWJSdFXvOhqtT4fkkBiXE+elOOLHRVxF+HuVTQApfpuBtlxOyLZBIoPLJ3IunZqtPYztQdpBG2CUQtQhhOe7VU/pLJDMEoyAqJaXec1FlPQd6gsyhB7tzTVLwgHhoo4ZSS/4mDOtDN35n0mB6OV/yOKZnj1TkqR+bKYyfrXmIvXYOWXd7l57me7bZ/PcXQ/pf6Udd7Clh9K/lctKRPlLQ0V97GWI465HHnfjegJF9XK0esgDZGuFPs3GjRC4jlKDGWzHfJqPPPTia2o1DeJGRij+9tZHhfmg63g0x3Q7PWddoVbs9eNZb2Qv84QExJMUMmfye69UGWQ2IY68suY3tWgCDihFPyAfPTuEvbieT03dM07tlEVZ2KFLoQyGgW5wrMYzXvj1yZvuWxtIpgfxiW5jxH8wwtWiKT0akH+qJ1AUro9lHIAgVH9KM39M3uFULvyqzo2U7rKUqDeZXX3XV8lN8Xd1gT1slUwSfW0SHh+lAnYXwuAk1JuYbsE2J3MHF9Hv7wBSkACUnw+mFXPNuXURn1CG83ebJ9e+kMS9MsWqT0syHg0r0fvqUGvpcxbf+cyfusk1zIDQPw53tGmqKOXQ31s2UijYqmoz2G8tmLvp5jyGjvjMzmeF9UTgUtPwb0cAiDDCRSKdrXsQ7V50Z8GENbVKkN119cKlhNE7Ev6KFjl5bJNtDImbGD8R1Dc7jjAGVSAlljqY/w1yQaAQNgmn+buocNUXqelYvXV3IKMc/AWXimjvQMlq5nX1TVAKhukfJQR/jGkizXI7Sse3ICE0dkk0fLhETKTrkOMJmg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR03MB4833.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(38100700002)(966005)(38350700002)(2616005)(1076003)(186003)(508600001)(5660300002)(8936002)(7416002)(2906002)(26005)(36756003)(6666004)(6512007)(6506007)(66556008)(66476007)(86362001)(8676002)(66946007)(4326008)(52116002)(107886003)(83380400001)(316002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2Ha9+6Y+EnbJ2PkdMKIqR0c3teGLEcVK59rY0Ti+ziXowNpQB/vX1atzPWh1?=
- =?us-ascii?Q?eRseTDaC72DBfyaOgusmfno8UJVyl6Fz69Drm5ZErBcJlx8ycatGJrUkkZJF?=
- =?us-ascii?Q?8r2vLTOWLplcJ/8l+e4FZ6lAhFWadLsxazATpqm7Y7s6JD9MO0mm+j/tR22G?=
- =?us-ascii?Q?bCMpFs4w/LJ85CaKDwET3ehzK0/kZMcONP47U0ezReK32KglskYxBLIiBrIj?=
- =?us-ascii?Q?UwupBZEhttNtGbJROTVdKlzAu9SmrulzZn4WrQF9YREij/uqoxb9swOz8n6K?=
- =?us-ascii?Q?I9Z01lm2TsBkHHoTm5WXBydClVzTgvJInGNjZhK/TDCaD7Mofm5dUneEuzag?=
- =?us-ascii?Q?dc+RXeitOlgW21EEEd9ei47au7354x6nU6+oNvt92TvSget2oveMe94zuNzk?=
- =?us-ascii?Q?D7YDNWogQhl77ExuVzHsH0OAX1oRXVPDE2AKOG9by69SCfE/Z/bDQRaDcK6f?=
- =?us-ascii?Q?CdF7lTgKy/GzYnXJok1jpOjtSUmpwhaYWngY2BIqg8vL1s6PpsmL656s6KaI?=
- =?us-ascii?Q?MKoRGlgXehqlM24iXMroGiA9QeSVg6nCreWw9woN5UZG7SyWAB7tPfMCRwb1?=
- =?us-ascii?Q?IFjsPVZ2Hm8OLb0eOAApaBpAtdHZOyyVE6uS5YrmvMl4rW9eTUqCJs8OSCAs?=
- =?us-ascii?Q?ik5OBZaD4lDDxP5NDN82LLpGHIPivyw8Eid4GS95rSz+/ZsyPxBsFDFmR7uw?=
- =?us-ascii?Q?Gpk/589hNtNQeDxgAJ79JPp+Gnt133sj0RIy0IRUUyMgZq/iwdeg7hKnJZpa?=
- =?us-ascii?Q?Z+mnmMlAGm+IitTaubyAEPoS165DZ2AA8Fob0dD7VedVo+sSWX6MygBm0+Dw?=
- =?us-ascii?Q?kqHqSzp3NfUKK62AYnzraiUXJzzz4gQJWhLEGgZRoJ0y/TpGAIHGg+IvV0ad?=
- =?us-ascii?Q?h0cKFYe3qREbBmIkOGKuefJhwotZbhhyAvf3WVqvzsfwM/PAU7UdWzazc1Zp?=
- =?us-ascii?Q?O8PCj1D6Gw6DIhcaxfC7x3kvJOxmP8Ivmz6+nb2O5+jOxYLGj4jj6Hr+KrHT?=
- =?us-ascii?Q?jOXse0LKbHOUkfjF4t/Ue9SbOPT66oFSGdXTecZ3QF6Re9sZVrW4YrOCzIp0?=
- =?us-ascii?Q?HoFP5x0AcNcqob/6oQJBUphpmX7m11A4lrvVoc/uB6GUOKQl8zkUlrrzLcXa?=
- =?us-ascii?Q?vC43oUkkKRvfcfDy1bZKxNDpqU+xCQfhkvxljQlJEeRLA3fbjnBqtBhofjGK?=
- =?us-ascii?Q?/280CDY6IkMsly2afWRKr9w9RvFKPiVIn0llgQBvjst0mNUwsvWBQPtF9rGA?=
- =?us-ascii?Q?kLhiJaXWlOsK9HYy7QvrR7uV0vJ+grloGUNK+k1mL0x2MZcWWAuteaZ36ezj?=
- =?us-ascii?Q?JuLfvkbDEYCj2/C7H0i7DSoDxzCVzbPwo6KZN39gMeSi1wYS68rrJCNuLUcl?=
- =?us-ascii?Q?zFEr9zqJ6RZOCgIffFkqRvjE6rGrL5zFKRitYe8fxEV4kf/6TZdR/QPX/0Xa?=
- =?us-ascii?Q?Y7eJI/MVFiPzkzkroUS9UvJfhhnkb2KRKlp0M9x1IuEQFYTw9xxyHQ=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uIMoNOifoVcMH1cXbcrOT2OVHCPKa6trFmJdnXtO3eOocRb5QZOPLT9Bgp+Q?=
+ =?us-ascii?Q?9ErG0ID8gqvSu9m28Bm2d8BThk91iMlZrGpAq1vSUZZyqEXkLJW2+BboN31r?=
+ =?us-ascii?Q?C2YbovwfC78ic408yXpWaLXE/Am5f9AKLvURNkyJglfjUN4meWtsCDahXlr7?=
+ =?us-ascii?Q?ozNr8oOz/ocNPUFmQOxZqPbO6muk5BYZ0awHb4JRczMAY/AP75qhfQUFMGNL?=
+ =?us-ascii?Q?il/raK69KTi8j8XCAbasmbEb9ATls6xAP0TesxRFEBkQXb8ivf6Vst9CwY7Q?=
+ =?us-ascii?Q?3jJaOZ9cFjGRQK+04pz3PKmRlSlvk+cbIlEgB6OmHqXaVdySEGI4PclUzpPx?=
+ =?us-ascii?Q?N4UGJ7ax/B7Hzp+rg7esC+BVR8J2/FBt5a+HPmf2sH0QbRYvbUxXVzgVHIZ+?=
+ =?us-ascii?Q?srvtfAzFJhszNuUuErlh8Z30XmqOItBJveFrKR497Nl0QH4sl7sRHYBq1u5r?=
+ =?us-ascii?Q?LOBnQVgMSpA2F5cEYqny5x3+MAu7bnD4KZx8WuhIP5zNqAA0YZgHvdz4otrY?=
+ =?us-ascii?Q?j856QDNQrIV1thJt77YgGHAUIH3ByEZWkgAfuBoaM9DmUSzMMqPlW8/rj06B?=
+ =?us-ascii?Q?lLWjB+QLUbgxsWZAWBCakDntfo61Ja4PsjnNzzagvut+W3kmJSZhUrDojomX?=
+ =?us-ascii?Q?XSFtZQ4DH10sMyhbNPbtZmu2spByaGW8COSDvf/PRrhS9ePqQcUHEOYvy86B?=
+ =?us-ascii?Q?ONURbxw8JoqW8hO8/nm8g+8yG+1wucvOtW5Xz0ak59N+Dh3Yn/cBplsT5810?=
+ =?us-ascii?Q?Vj6nFV7qZLrev43GIjtixGGgFUQLRQvIm+nZBTFzLLZJ7/glIgwdiU9nSKaj?=
+ =?us-ascii?Q?J5C1pC7MEfxWeEmsQOptif1uDiUnnagMx6eg50Ln5Qdaal7csvY2Grvg6o2d?=
+ =?us-ascii?Q?zAqL+o+VUI6QtRbZ8GWA3EQABvOTFiPsKPczpNFQUCRxmRy+U1ISWz8Se55e?=
+ =?us-ascii?Q?5LKqu+FDYyscpNIsM50B/iNdGPjNQlHJTOJy/vj7wVymq3Ysyi+Bb8f5h1WR?=
+ =?us-ascii?Q?RWYTdhZZAkJtG1ukLw+kp4hx1zeW3ZS7U3z0S1OvxKUdOrXbwBOtWyUWKf/9?=
+ =?us-ascii?Q?sAu1vwR1pZmhiUQdFwVYZ8s9ixHf96Nvp1nC1Zghlo08gz045sltEFibX/NH?=
+ =?us-ascii?Q?9FWADAzu93DHaLjPxti+Ps+1t1EtC3mJbI7DxJQE+PIlUJHDi8WPu9pRgGl9?=
+ =?us-ascii?Q?OKKaDHOpfXQI7iymIjvt3VDVXCZ48kRqXqR0QvFBNQhB9fOY1/HLjfK8D0W2?=
+ =?us-ascii?Q?43zYrpkLXa5fYcJpMyEVK1u4VcvxaKwrsKMzMkOa5wXN3KxYWbObm+4ywCQf?=
+ =?us-ascii?Q?xALDhgs8b/E/BJEUxi+Fs9oP1S7enN5wMCKy3/OmW+9VIUMofO3e1KvAqycL?=
+ =?us-ascii?Q?Sf6C0Y3FOclts6Q01FoMdReC8UsCHECSIG/iIXkDR+TEIxXGbR4w7pEizu9p?=
+ =?us-ascii?Q?aPzNjer2cowQtx3n6j2c+CdsmJOb1/K8ikKoeUdHEXixlwtvHlgESQ=3D=3D?=
 X-OriginatorOrg: nuvoton.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9413de9a-3c3c-4017-d6ef-08da001b99d7
+X-MS-Exchange-CrossTenant-Network-Message-Id: 039c6d3f-0226-480d-837d-08da001b9b50
 X-MS-Exchange-CrossTenant-AuthSource: HK0PR03MB4833.apcprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 09:19:37.2928
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 09:19:39.7302
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: a3f24931-d403-4b4a-94f1-7d83ac638e07
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rLoXB9m8uenoG8pHMovV1MAh8gpIxuvxDYVRooX6OXUr0B1ccHftg6Y+guDe7v2vT13wX+p6OF/AIYj3Xsjyhg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: TyKpAPAjGbKnor7uU8wkqSJzQE8ChiQYE2U/UUJ0UDNdUmICBTFTpqRcavI1zZe0QTNVZUIJw6h6A4Jfeo2zIg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB4646
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
@@ -114,284 +114,88 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the dt-bindings header for Nuvoton MA35D1, that gets shared
-between the clock controller and clock references in the dts.
+Add documentation to describe Nuvoton MA35D1 clock driver bindings.
 
 Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
 ---
- .../dt-bindings/clock/nuvoton,ma35d1-clk.h    | 262 ++++++++++++++++++
- 1 file changed, 262 insertions(+)
- create mode 100644 include/dt-bindings/clock/nuvoton,ma35d1-clk.h
+ .../bindings/clock/nuvoton,ma35d1-clk.yaml    | 66 +++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,ma35d1-=
+clk.yaml
 
-diff --git a/include/dt-bindings/clock/nuvoton,ma35d1-clk.h b/include/dt-bi=
-ndings/clock/nuvoton,ma35d1-clk.h
+diff --git a/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yam=
+l b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
 new file mode 100644
-index 000000000000..3634e5edcac5
+index 000000000000..f08b6f29bdcf
 --- /dev/null
-+++ b/include/dt-bindings/clock/nuvoton,ma35d1-clk.h
-@@ -0,0 +1,262 @@
-+/* SPDX-License-Identifier: GPL-2.0+ OR MIT */
-+/*
-+ * Copyright (c) 2022 Nuvoton Technology Corporation.
-+ */
++++ b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+@@ -0,0 +1,66 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/nuvoton,ma35d1-clk.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#ifndef __DT_BINDINGS_MA35D1_CLK_H
-+#define __DT_BINDINGS_MA35D1_CLK_H
++title: Nuvoton MA35D1 Clock Control Module Binding
 +
-+/* Clock Sources */
-+/* External and Internal oscillator clocks */
-+#define        HXT             0
-+#define        HXT_GATE        1
-+#define        LXT             2
-+#define        LXT_GATE        3
-+#define        HIRC            4
-+#define        HIRC_GATE       5
-+#define        LIRC            6
-+#define        LIRC_GATE       7
++maintainers:
++  - Chi-Fang Li <cfli0@nuvoton.com>
++  - Jacky Huang <ychuang3@nuvoton.com>
 +
-+/* PLLs */
-+#define        CAPLL           8
-+#define        SYSPLL          9
-+#define        DDRPLL          10
-+#define        APLL            11
-+#define        EPLL            12
-+#define        VPLL            13
++description: |
++  The MA35D1 clock controller generates clocks for the whole chip,
++  including system clocks and all peripheral clocks.
 +
-+/* EPLL Divider */
-+#define        EPLL_DIV2       14
-+#define        EPLL_DIV4       15
-+#define        EPLL_DIV8       16
++  See also:
++    dt-bindings/clock/ma35d1-clk.h
 +
-+/* CA35 CPU Clock, System Clock, AXI, HCLK and PCLK */
-+#define        CA35CLK_MUX     17
-+#define        AXICLK_DIV2     18
-+#define        AXICLK_DIV4     19
-+#define        AXICLK_MUX      20
-+#define        SYSCLK0_MUX     21
-+#define        SYSCLK1_MUX     22
-+#define        SYSCLK1_DIV2    23
-+#define        HCLK0           24
-+#define        HCLK1           25
-+#define        HCLK2           26
-+#define        PCLK0           27
-+#define        PCLK1           28
-+#define        PCLK2           29
-+#define        HCLK3           30
-+#define        PCLK3           31
-+#define        PCLK4           32
++properties:
++  compatible:
++    const: nuvoton,ma35d1-clk
 +
-+/* Peripheral clocks */
-+/* AXI and AHB Clocks */
-+#define        USBPHY0         33
-+#define        USBPHY1         34
-+#define        DDR0_GATE       35
-+#define        DDR6_GATE       36
-+#define        CAN0_MUX        37
-+#define        CAN0_DIV        38
-+#define        CAN0_GATE       39
-+#define        CAN1_MUX        40
-+#define        CAN1_DIV        41
-+#define        CAN1_GATE       42
-+#define        CAN2_MUX        43
-+#define        CAN2_DIV        44
-+#define        CAN2_GATE       45
-+#define        CAN3_MUX        46
-+#define        CAN3_DIV        47
-+#define        CAN3_GATE       48
-+#define        SDH0_MUX        49
-+#define        SDH0_GATE       50
-+#define        SDH1_MUX        51
-+#define        SDH1_GATE       52
-+#define        NAND_GATE       53
-+#define        USBD_GATE       54
-+#define        USBH_GATE       55
-+#define        HUSBH0_GATE     56
-+#define        HUSBH1_GATE     57
-+#define        GFX_MUX         58
-+#define        GFX_GATE        59
-+#define        VC8K_GATE       60
-+#define        DCU_MUX         61
-+#define        DCU_GATE        62
-+#define        DCUP_DIV        63
-+#define        EMAC0_GATE      64
-+#define        EMAC1_GATE      65
-+#define        CCAP0_MUX       66
-+#define        CCAP0_DIV       67
-+#define        CCAP0_GATE      68
-+#define        CCAP1_MUX       69
-+#define        CCAP1_DIV       70
-+#define        CCAP1_GATE      71
-+#define        PDMA0_GATE      72
-+#define        PDMA1_GATE      73
-+#define        PDMA2_GATE      74
-+#define        PDMA3_GATE      75
-+#define        WH0_GATE        76
-+#define        WH1_GATE        77
-+#define        HWS_GATE        78
-+#define        EBI_GATE        79
-+#define        SRAM0_GATE      80
-+#define        SRAM1_GATE      81
-+#define        ROM_GATE        82
-+#define        TRA_GATE        83
-+#define        DBG_MUX         84
-+#define        DBG_GATE        85
-+#define        CKO_MUX         86
-+#define        CKO_DIV         87
-+#define        CKO_GATE        88
-+#define        GTMR_GATE       89
-+#define        GPA_GATE        90
-+#define        GPB_GATE        91
-+#define        GPC_GATE        92
-+#define        GPD_GATE        93
-+#define        GPE_GATE        94
-+#define        GPF_GATE        95
-+#define        GPG_GATE        96
-+#define        GPH_GATE        97
-+#define        GPI_GATE        98
-+#define        GPJ_GATE        99
-+#define        GPK_GATE        100
-+#define        GPL_GATE        101
-+#define        GPM_GATE        102
-+#define        GPN_GATE        103
++  reg:
++    maxItems: 1
 +
-+/* APB Clocks */
-+#define        TMR0_MUX        104
-+#define        TMR0_GATE       105
-+#define        TMR1_MUX        106
-+#define        TMR1_GATE       107
-+#define        TMR2_MUX        108
-+#define        TMR2_GATE       109
-+#define        TMR3_MUX        110
-+#define        TMR3_GATE       111
-+#define        TMR4_MUX        112
-+#define        TMR4_GATE       113
-+#define        TMR5_MUX        114
-+#define        TMR5_GATE       115
-+#define        TMR6_MUX        116
-+#define        TMR6_GATE       117
-+#define        TMR7_MUX        118
-+#define        TMR7_GATE       119
-+#define        TMR8_MUX        120
-+#define        TMR8_GATE       121
-+#define        TMR9_MUX        122
-+#define        TMR9_GATE       123
-+#define        TMR10_MUX       124
-+#define        TMR10_GATE      125
-+#define        TMR11_MUX       126
-+#define        TMR11_GATE      127
-+#define        UART0_MUX       128
-+#define        UART0_DIV       129
-+#define        UART0_GATE      130
-+#define        UART1_MUX       131
-+#define        UART1_DIV       132
-+#define        UART1_GATE      133
-+#define        UART2_MUX       134
-+#define        UART2_DIV       135
-+#define        UART2_GATE      136
-+#define        UART3_MUX       137
-+#define        UART3_DIV       138
-+#define        UART3_GATE      139
-+#define        UART4_MUX       140
-+#define        UART4_DIV       141
-+#define        UART4_GATE      142
-+#define        UART5_MUX       143
-+#define        UART5_DIV       144
-+#define        UART5_GATE      145
-+#define        UART6_MUX       146
-+#define        UART6_DIV       147
-+#define        UART6_GATE      148
-+#define        UART7_MUX       149
-+#define        UART7_DIV       150
-+#define        UART7_GATE      151
-+#define        UART8_MUX       152
-+#define        UART8_DIV       153
-+#define        UART8_GATE      154
-+#define        UART9_MUX       155
-+#define        UART9_DIV       156
-+#define        UART9_GATE      157
-+#define        UART10_MUX      158
-+#define        UART10_DIV      159
-+#define        UART10_GATE     160
-+#define        UART11_MUX      161
-+#define        UART11_DIV      162
-+#define        UART11_GATE     163
-+#define        UART12_MUX      164
-+#define        UART12_DIV      165
-+#define        UART12_GATE     166
-+#define        UART13_MUX      167
-+#define        UART13_DIV      168
-+#define        UART13_GATE     169
-+#define        UART14_MUX      170
-+#define        UART14_DIV      171
-+#define        UART14_GATE     172
-+#define        UART15_MUX      173
-+#define        UART15_DIV      174
-+#define        UART15_GATE     175
-+#define        UART16_MUX      176
-+#define        UART16_DIV      177
-+#define        UART16_GATE     178
-+#define        RTC_GATE        179
-+#define        DDR_GATE        180
-+#define        KPI_MUX         181
-+#define        KPI_DIV         182
-+#define        KPI_GATE        183
-+#define        I2C0_GATE       184
-+#define        I2C1_GATE       185
-+#define        I2C2_GATE       186
-+#define        I2C3_GATE       187
-+#define        I2C4_GATE       188
-+#define        I2C5_GATE       189
-+#define        QSPI0_MUX       190
-+#define        QSPI0_GATE      191
-+#define        QSPI1_MUX       192
-+#define        QSPI1_GATE      193
-+#define        SMC0_MUX        194
-+#define        SMC0_DIV        195
-+#define        SMC0_GATE       196
-+#define        SMC1_MUX        197
-+#define        SMC1_DIV        198
-+#define        SMC1_GATE       199
-+#define        WDT0_MUX        200
-+#define        WDT0_GATE       201
-+#define        WDT1_MUX        202
-+#define        WDT1_GATE       203
-+#define        WDT2_MUX        204
-+#define        WDT2_GATE       205
-+#define        WWDT0_MUX       206
-+#define        WWDT1_MUX       207
-+#define        WWDT2_MUX       208
-+#define        EPWM0_GATE      209
-+#define        EPWM1_GATE      210
-+#define        EPWM2_GATE      211
-+#define        I2S0_MUX        212
-+#define        I2S0_GATE       213
-+#define        I2S1_MUX        214
-+#define        I2S1_GATE       215
-+#define        SSMCC_GATE      216
-+#define        SSPCC_GATE      217
-+#define        SPI0_MUX        218
-+#define        SPI0_GATE       219
-+#define        SPI1_MUX        220
-+#define        SPI1_GATE       221
-+#define        SPI2_MUX        222
-+#define        SPI2_GATE       223
-+#define        SPI3_MUX        224
-+#define        SPI3_GATE       225
-+#define        ECAP0_GATE      226
-+#define        ECAP1_GATE      227
-+#define        ECAP2_GATE      228
-+#define        QEI0_GATE       229
-+#define        QEI1_GATE       230
-+#define        QEI2_GATE       231
-+#define        ADC_DIV         232
-+#define        ADC_GATE        233
-+#define        EADC_DIV        234
-+#define        EADC_GATE       235
-+#define        CLK_MAX         236
++  '#clock-cells':
++    const: 1
 +
-+#define        MA35D1_CLK_MAX_IDX      236
++  assigned-clocks:
++    maxItems: 4
 +
-+#endif /* __DT_BINDINGS_MA35D1_CLK_H */
++  assigned-clock-rates:
++    maxItems: 4
++
++  clock-pll-mode:
++    maxItems: 4
++
++required:
++  - compatible
++  - reg
++  - '#clock-cells'
++  - assigned-clocks
++  - assigned-clock-rates
++  - clock-pll-mode
++
++additionalProperties: false
++
++examples:
++  # clock control module node:
++  - |
++    clk: clock-controller@40460200 {
++        compatible =3D "nuvoton,ma35d1-clk";
++        reg =3D <0x00000000 0x40460200 0x0 0x100>;
++        #clock-cells =3D <1>;
++        assigned-clocks =3D <&clk DDRPLL>,
++                          <&clk APLL>,
++                          <&clk EPLL>,
++                          <&clk VPLL>;
++        assigned-clock-rates =3D <266000000>,
++                               <180000000>,
++                               <500000000>,
++                               <102000000>;
++        clock-pll-mode =3D <1>, <0>, <0>, <0>;
++    };
++...
 --
 2.17.1
 
