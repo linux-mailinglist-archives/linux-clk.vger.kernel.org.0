@@ -2,213 +2,153 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990244D4825
-	for <lists+linux-clk@lfdr.de>; Thu, 10 Mar 2022 14:36:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DE44D4DD1
+	for <lists+linux-clk@lfdr.de>; Thu, 10 Mar 2022 16:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242446AbiCJNhk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 10 Mar 2022 08:37:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
+        id S239301AbiCJP7K (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 10 Mar 2022 10:59:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242445AbiCJNhk (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 10 Mar 2022 08:37:40 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1623D14E958;
-        Thu, 10 Mar 2022 05:36:34 -0800 (PST)
-X-UUID: bea02a7fddde472dbc27cfea5490503d-20220310
-X-UUID: bea02a7fddde472dbc27cfea5490503d-20220310
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <chun-jie.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 265800282; Thu, 10 Mar 2022 21:36:29 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 10 Mar 2022 21:36:27 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 10 Mar 2022 21:36:27 +0800
-Message-ID: <d80c89fd5fb704ed03244a7e333d59d0ee972e8f.camel@mediatek.com>
-Subject: Re: [PATCH v2 01/15] dt-bindings: ARM: Mediatek: Add new document
- bindings of MT8186 clock
-From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 10 Mar 2022 21:36:27 +0800
-In-Reply-To: <YhkmnnIApvU7gRlZ@robh.at.kernel.org>
-References: <20220221015258.913-1-chun-jie.chen@mediatek.com>
-         <20220221015258.913-2-chun-jie.chen@mediatek.com>
-         <YhkmnnIApvU7gRlZ@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S239293AbiCJP7J (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 10 Mar 2022 10:59:09 -0500
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C637C4C42B;
+        Thu, 10 Mar 2022 07:58:06 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 54E6620000D;
+        Thu, 10 Mar 2022 15:57:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1646927879;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=9W+sFtR6uDeTiBUoASekZcg3xrvt0vVSp2kEUxiXddA=;
+        b=XvxRl+x/AwIecTzjlKuRsK0PS6XxesRtpWu29qO9VmAvDZRW41nxHdEzBh6P2U8iffNTno
+        SRfz+ALKHY71uRkZ72sxc5APvWyL3SNLWY6gmeMXcOZ+OPFJZEemNKMfonSQjZ5V7pj8It
+        oBWMP75k8LDTtGElWh0JlKVGNsUBuPMB+mURPel5FWC12zSfN3bNXu4u96p0ILsbOuGw2P
+        MoI/ynIaBFnMh/SXZreHS9iJkwcRnDeURsCXQsaknN+HLgcN04Bdl/diyYFNjfoC5ssegL
+        bcEEEKq6AosRbeRt4qCk8eg0PrRFO9zjsq9tpJ9G/yfCn2iZrQcdokgYgQ9ciw==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     linux-renesas-soc@vger.kernel.org,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH v4 0/9] RZN1 DMA support
+Date:   Thu, 10 Mar 2022 16:57:46 +0100
+Message-Id: <20220310155755.287294-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, 2022-02-25 at 12:57 -0600, Rob Herring wrote:
-> On Mon, Feb 21, 2022 at 09:52:44AM +0800, Chun-Jie Chen wrote:
-> > This patch adds the new binding documentation for system clock
-> > and functional clock on Mediatek MT8186.
-> > 
-> > Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
-> > ---
-> >  .../arm/mediatek/mediatek,mt8186-clock.yaml   |  56 +++
-> >  .../mediatek/mediatek,mt8186-sys-clock.yaml   |  54 +++
-> >  include/dt-bindings/clock/mt8186-clk.h        | 445
-> > ++++++++++++++++++
-> >  3 files changed, 555 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-
-> > clock.yaml
-> >  create mode 100644
-> > Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-sys-
-> > clock.yaml
-> >  create mode 100644 include/dt-bindings/clock/mt8186-clk.h
-> > 
-> > diff --git
-> > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-
-> > clock.yaml
-> > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-
-> > clock.yaml
-> > new file mode 100644
-> > index 000000000000..373e8a100da3
-> > --- /dev/null
-> > +++
-> > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-
-> > clock.yaml
-> > @@ -0,0 +1,56 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: "
-> > https://urldefense.com/v3/__http://devicetree.org/schemas/arm/mediatek/mediatek,mt8186-clock.yaml*__;Iw!!CTRNKA9wMg0ARbw!xKDeg6ddrFWd8p__fZiG7r5F5Py9NVWCmi7zVue5fUzuxKtvqHCSu_pslcpXRWfJmMCT$
-> >  "
-> > +$schema: "
-> > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!xKDeg6ddrFWd8p__fZiG7r5F5Py9NVWCmi7zVue5fUzuxKtvqHCSu_pslcpXRfM3OA21$
-> >  "
-> > +
-> > +title: Mediatek Functional Clock Controller for MT8186
-> > +
-> > +maintainers:
-> > +  - Chun-Jie Chen <chun-jie.chen@mediatek.com>
-> > +
-> > +description:
-> 
-> You need a '|' to preserve the formatting.
-> 
-> > +  The clock architecture in Mediatek like below
-> > +  PLLs -->
-> > +          dividers -->
-> > +                      muxes
-> > +                           -->
-> > +                              clock gate
-> > +
-> > +  The devices provide clock gate control in different IP blocks.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - enum:
-> > +          - mediatek,mt8186-imp_iic_wrap
-> > +          - mediatek,mt8186-mfgsys
-> > +          - mediatek,mt8186-wpesys
-> > +          - mediatek,mt8186-imgsys1
-> > +          - mediatek,mt8186-imgsys2
-> > +          - mediatek,mt8186-vdecsys
-> > +          - mediatek,mt8186-vencsys
-> > +          - mediatek,mt8186-camsys
-> > +          - mediatek,mt8186-camsys_rawa
-> > +          - mediatek,mt8186-camsys_rawb
-> > +          - mediatek,mt8186-mdpsys
-> > +          - mediatek,mt8186-ipesys
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  '#clock-cells':
-> > +    const: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    imp_iic_wrap: clock-controller@11017000 {
-> > +        compatible = "mediatek,mt8186-imp_iic_wrap";
-> > +        reg = <0x11017000 0x1000>;
-> > +        #clock-cells = <1>;
-> > +    };
-> > diff --git
-> > a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-
-> > sys-clock.yaml
-> > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-
-> > sys-clock.yaml
-> > new file mode 100644
-> > index 000000000000..4c071dd66b76
-> > --- /dev/null
-> > +++
-> > b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-
-> > sys-clock.yaml
-> > @@ -0,0 +1,54 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: "
-> > https://urldefense.com/v3/__http://devicetree.org/schemas/arm/mediatek/mediatek,mt8186-sys-clock.yaml*__;Iw!!CTRNKA9wMg0ARbw!xKDeg6ddrFWd8p__fZiG7r5F5Py9NVWCmi7zVue5fUzuxKtvqHCSu_pslcpXRRtmGvUx$
-> >  "
-> > +$schema: "
-> > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!xKDeg6ddrFWd8p__fZiG7r5F5Py9NVWCmi7zVue5fUzuxKtvqHCSu_pslcpXRfM3OA21$
-> >  "
-> > +
-> > +title: Mediatek System Clock Controller for MT8186
-> > +
-> > +maintainers:
-> > +  - Chun-Jie Chen <chun-jie.chen@mediatek.com>
-> > +
-> > +description:
-> 
-> And here.
-> 
-> With that,
-> 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> 
+Hello,
 
-Ok, I will fix it in next version.
+Here is a first series bringing DMA support to RZN1 platforms. Soon a
+second series will come with changes made to the UART controller
+driver, in order to interact with the RZN1 DMA controller.
 
-Thanks!
+Cheers,
+Miquèl
 
-> > +  The clock architecture in Mediatek like below
-> > +  PLLs -->
-> > +          dividers -->
-> > +                      muxes
-> > +                           -->
-> > +                              clock gate
-> > +
-> > +  The apmixedsys provides most of PLLs which generated from SoC
-> > 26m.
-> > +  The topckgen provides dividers and muxes which provide the clock
-> > source to other IP blocks.
-> > +  The infracfg_ao provides clock gate in peripheral and
-> > infrastructure IP blocks.
-> > +  The mcusys provides mux control to select the clock source in AP
-> > MCU.
-> > +  The device nodes also provide the system control capacity for
-> > configuration.
+Changes in v4:
+* Freed "map" in the error path of the dmamux driver.
+* Improved a bit the style as requested by Prabhakar.
+* Dropped a __maybe_unused.
+* Reorder the includes.
+* Added a dependency on ARCH_RZN1.
+* Added Rob's Ack.
+* Added a reg property to the dmamux binding file.
+* Referenced the dmamux binding from the system controller file.
+* Called of_platform_populate from the end of the system controller
+  (clock) driver probe in order to probe the dmamux if it was
+  populated.
+* Added DMA properties to all the relevant UARTs.
+
+Changes in v3:
+* Added Reviewed-by tags.
+* Exported the set_dmamux* symbol properly.
+* Dropped a useless check in the probe and moved the sysctrl_priv
+  assignation to the end of the probe.
+* Renamed the dmamux driver
+* Added a couple of missing MODULE_ macros in the dmamux driver.
+* Decided to use a regular platform init call instead of the
+  arch_initcall() initially proposed.
+* s/%d/%u/ in printk's when appropriate.
+* Used a hardcoded value instead of dmamux->dmac_requests when
+  appropriate.
+* Changed the variable name "master" to "dmac_idx" to be more
+  descriptive.
+* Dropped most of the of_* calls in favor of #define's.
+* Fixed a typo.
+* Exported two symbols from 8250_dma.c.
+
+Changes in v2:
+* Clarified that the 'fix' regarding non aligned reads would only apply
+  to the DEV_TO_MEM case.
+* Fix the DMA controller compatible string (copy-paste error).
+* s/syscon/sysctrl/ as advised by Geert.
+* Disabled irqs when taking the spinlock from the clocks driver.
+* Moved the DMAMUX offset inside the driver.
+* Removed extra commas.
+* Improved the style as suggested by Andy.
+* Removed a dupplicated check against the device node presence.
+* Reduced the number of lines of code by using dev_err_probe().
+* Created a Kconfig symbol for DMAMUX to fix the two robot reports
+  received and be sure there was no useless overhead with other
+  platforms.
+* Exported the serial8250_{tx,rx}_dma() symbols.
+
+Miquel Raynal (9):
+  dt-bindings: dma: Introduce RZN1 dmamux bindings
+  dt-bindings: clock: r9a06g032-sysctrl: Reference the DMAMUX subnode
+  dt-bindings: dma: Introduce RZN1 DMA compatible
+  soc: renesas: rzn1-sysc: Export function to set dmamux
+  dma: dw: dmamux: Introduce RZN1 DMA router support
+  dma: dw: Add RZN1 compatible
+  dma: dw: Avoid partial transfers
+  ARM: dts: r9a06g032: Add the two DMA nodes
+  ARM: dts: r9a06g032: Describe the DMA router
+
+ .../clock/renesas,r9a06g032-sysctrl.yaml      |  11 ++
+ .../bindings/dma/renesas,rzn1-dmamux.yaml     |  51 ++++++
+ .../bindings/dma/snps,dma-spear1340.yaml      |   8 +-
+ MAINTAINERS                                   |   1 +
+ arch/arm/boot/dts/r9a06g032.dtsi              |  40 +++++
+ drivers/clk/renesas/r9a06g032-clocks.c        |  36 ++++-
+ drivers/dma/dw/Kconfig                        |   9 ++
+ drivers/dma/dw/Makefile                       |   2 +
+ drivers/dma/dw/core.c                         |   4 +
+ drivers/dma/dw/platform.c                     |   1 +
+ drivers/dma/dw/rzn1-dmamux.c                  | 152 ++++++++++++++++++
+ include/linux/soc/renesas/r9a06g032-sysctrl.h |  11 ++
+ 12 files changed, 324 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.yaml
+ create mode 100644 drivers/dma/dw/rzn1-dmamux.c
+ create mode 100644 include/linux/soc/renesas/r9a06g032-sysctrl.h
+
+-- 
+2.27.0
 
