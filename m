@@ -2,99 +2,197 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DFCA4D6EC6
-	for <lists+linux-clk@lfdr.de>; Sat, 12 Mar 2022 14:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EED14D6EE1
+	for <lists+linux-clk@lfdr.de>; Sat, 12 Mar 2022 14:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbiCLNEz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 12 Mar 2022 08:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
+        id S231865AbiCLNac (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 12 Mar 2022 08:30:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiCLNEy (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 12 Mar 2022 08:04:54 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E150E3D1C7
-        for <linux-clk@vger.kernel.org>; Sat, 12 Mar 2022 05:03:47 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id l10so6664728wmb.0
-        for <linux-clk@vger.kernel.org>; Sat, 12 Mar 2022 05:03:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod-ie.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=F4ZxAMvdyayeBfKvb+RIOxNuxxzTOU9uY/N/Ir8tEVk=;
-        b=pxcoqmCCYvT6TkWVajDPrCWVrrjGub2g1njqN41rRxE2cQoVVD0Hxj9u2bEKTfyMfA
-         V/xkR7dLfCq/13/tSiu/BlYFUEni1Kl1O3uRap7oRjUoAYYg5wKnS3y/Zc7FDn4eZEqI
-         iqkEUgsTaoOJigp9gAy43FQi3KJ8I/c27NowrUPreyBfLEtF4sPNir79r+zW04VIkN+K
-         c7pt3ezm+dfpABNb8YmzRiFp1xfa2lNG5Ko4yKo1qDojg5K/9Yg3Pi+gjaO+1a1Hxo0x
-         tQ4O9yb+m1PSyZcCKa+Zn69olwiwPRSAsoLZs6BkcxxIk9X/kDCDh5Xw0cbpMSwlsY8g
-         V62A==
+        with ESMTP id S231852AbiCLNaa (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 12 Mar 2022 08:30:30 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66675427C7
+        for <linux-clk@vger.kernel.org>; Sat, 12 Mar 2022 05:29:25 -0800 (PST)
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4A1B23FCA1
+        for <linux-clk@vger.kernel.org>; Sat, 12 Mar 2022 13:29:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1647091764;
+        bh=OCrj2Lr7nKg3/D4n6AH2mK+/SAYpiHPGeQpPG1FkFdg=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=C5a/Lc+fEWU0XFHELFPTtnYIQ+axiWWdgD2ikjA6y/WsHB5AJeMHCOJnxlUDkU8xE
+         yyQTzpYZm6FXHFS8PEAnz7mBIws/1NXe8Z7yeLI2Ir/TRrI4g+n8DOXyGVFrPP9pXI
+         idU5ojneO0B+NcfSkKamfJaZeRKrLDxGDGBMU0X77aHJbWB0OVF5I0AsNDnH819Uyu
+         N7QZCkxlbHrEJDkWUCsu6OXQXhZHkEP3RnXKSWuPAmasmV9Rym3bPCuvbTRmFnUmKn
+         AOzE1CnftYGixqFmbULqEvKgtEXwGE6n4lmtIhtLhMYQX/zxWqHRYqoxryvd5eA/RS
+         DorYJVLIrpDjg==
+Received: by mail-wm1-f72.google.com with SMTP id 10-20020a1c020a000000b0037fae68fcc2so6889432wmc.8
+        for <linux-clk@vger.kernel.org>; Sat, 12 Mar 2022 05:29:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=F4ZxAMvdyayeBfKvb+RIOxNuxxzTOU9uY/N/Ir8tEVk=;
-        b=YB1yfLEozDOa1fqqDLmTc+YPhs6f1XX4IBxnkVNInM+iTB14Mb3srgAgI9cB4T56wy
-         PXTZwQYB23VacDX1jsPgTiktFXe7aPeXV12dJFGlNJJtT03MUYMbcZyiVmMHlM6A0+Me
-         AP8Za1cYgCQ9lPsrtNyVOThzGHnc0TU4H6xg7GeBvCccl9h9Jh3I/N4YhORZpox+bXuZ
-         wd/tH32uxrCjiSS8F4rC4rMGOeEP7nkoeuU2optuOVTbf/saxC2vUvp8ytHH63dFfOEf
-         HW9X0u/ZxrxuirpqsoNV+bBpnapihbSncxSF04D0M2o7iX5eOaCK7qZHF6sum9GMhJPI
-         NB8w==
-X-Gm-Message-State: AOAM532sY7R46Op8a6Qp8Q7IJs6k64R85gdLgS10YYU/WMpjTERVIAKc
-        cWZ4bAoVKLoVZKwKdrRKEOmObg==
-X-Google-Smtp-Source: ABdhPJxUGmG844w1SIPn3JsQVTzy6w7HV63dr1JeVPmdac+rE5PxCxyYoZd2BF5SK/sNa3jOBghTdA==
-X-Received: by 2002:a7b:c5d0:0:b0:389:fe85:3d79 with SMTP id n16-20020a7bc5d0000000b00389fe853d79mr1803275wmk.77.1647090226367;
-        Sat, 12 Mar 2022 05:03:46 -0800 (PST)
-Received: from [192.168.2.222] ([109.76.4.19])
-        by smtp.gmail.com with ESMTPSA id v124-20020a1cac82000000b0037c3d08e0e7sm12862918wme.29.2022.03.12.05.03.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Mar 2022 05:03:45 -0800 (PST)
-Message-ID: <05e2fa13-163f-e6ef-4cf8-be6de513f068@conchuod.ie>
-Date:   Sat, 12 Mar 2022 13:03:43 +0000
+        bh=OCrj2Lr7nKg3/D4n6AH2mK+/SAYpiHPGeQpPG1FkFdg=;
+        b=WC1G8fUBFG5avNoEact34E2gxKEMMYFtaU2zK7eGbZEVxRitcFVgPK5/5hbaGSvlnc
+         iCfEixZDT2GB4uV5R0Hqklzzx7SzNmP2yEc0j1EtDvSufTMqrwhF7CpE1g3/YNxabyhI
+         LTdg/bOHtYBJ9TjXF5na+mph59qEm4OI/E4T/ooZMOOWJlJ8kwS3lPBBIgFCnFvU6wYe
+         byowVlIDFPszA0nBFsGeDMzkdDgYXX5YaWMOH7jnUt/GM27NRhhaVur2pVyrAIHDnqDC
+         6MKI4qPz6RPRMRlznHASGRW8+EsqPzqeVmxQTAk8RsIN2QFz65VLo8SS8iZbfMQcZkzj
+         UeCQ==
+X-Gm-Message-State: AOAM533dbv1yxNvWvxHgv3CoJWUECJSVF+MbaXs3QdJnpOWZ7EfEevPc
+        fLgoE7HnjbnjgpTWVdAauEeUbvyrUa3wJ2/IfGScyVgiwxV8FXwuYlnvJe9Kq1ho1iWPHcsM6tz
+        pwGk+56yDy0dq+655McySbT9b0cmA9F+WOdfRaA==
+X-Received: by 2002:a5d:4dca:0:b0:1f0:2543:e10e with SMTP id f10-20020a5d4dca000000b001f02543e10emr10689882wru.60.1647091753568;
+        Sat, 12 Mar 2022 05:29:13 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx08jwnIztDnOLiXVDOEbPcafrm/CtfYrKe3rhTTULaSTSBSgqOJ8fo2V1YMqeSSpK6UdbZbQ==
+X-Received: by 2002:a5d:4dca:0:b0:1f0:2543:e10e with SMTP id f10-20020a5d4dca000000b001f02543e10emr10689827wru.60.1647091753256;
+        Sat, 12 Mar 2022 05:29:13 -0800 (PST)
+Received: from localhost.localdomain (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id p22-20020a1c5456000000b00389e7e62800sm5751550wmi.8.2022.03.12.05.29.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Mar 2022 05:29:12 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v4 00/11] Fix broken usage of driver_override (and kfree of static memory)
+Date:   Sat, 12 Mar 2022 14:28:45 +0100
+Message-Id: <20220312132856.65163-1-krzysztof.kozlowski@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v12 1/1] clk: microchip: Add driver for Microchip
- PolarFire SoC
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, conor.dooley@microchip.com,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        mturquette@baylibre.com, robh+dt@kernel.org
-Cc:     krzysztof.kozlowski@canonical.com, geert@linux-m68k.org,
-        david.abdurachmanov@gmail.com, palmer@dabbelt.com,
-        daire.mcnamara@microchip.com, cyril.jean@microchip.com,
-        Padmarao Begari <padmarao.begari@microchip.com>
-References: <20220222121143.3316880-1-conor.dooley@microchip.com>
- <20220222121143.3316880-2-conor.dooley@microchip.com>
- <20220312033230.5CB87C340E9@smtp.kernel.org>
-From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <20220312033230.5CB87C340E9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Hi,
 
-On 12/03/2022 03:32, Stephen Boyd wrote:
-> Quoting conor.dooley@microchip.com (2022-02-22 04:11:44)
->> From: Daire McNamara <daire.mcnamara@microchip.com>
->>
->> Add support for clock configuration on Microchip PolarFire SoC
->>
->> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
->> Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
->> Co-developed-by: Padmarao Begari <padmarao.begari@microchip.com>
->> Signed-off-by: Padmarao Begari <padmarao.begari@microchip.com>
->> Signed-off-by: Daire McNamara <daire.mcnamara@microchip.com>
->> Co-developed-by: Conor Dooley <conor.dooley@microchip.com>
->> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->> ---
-> 
-> Applied to clk-next
+This is a continuation of my old patchset from 2019. [1]
+Back then, few drivers set driver_override wrong. I fixed Exynos
+in a different way after discussions. QCOM NGD was not fixed
+and a new user appeared - IMX SCU.
 
-great, thanks!
+It seems "char *" in driver_override looks too consty, so we
+tend to make a mistake of storing there string literals.
+
+Changes since latest v3
+=======================
+1. Wrap comments, extend comment in driver_set_override() about newline.
+2. Minor commit msg fixes.
+3. Add tags.
+
+Changes since latest v2
+=======================
+1. Make all driver_override fields as "const char *", just like SPI
+   and VDPA. (Mark)
+2. Move "count" check to the new helper and add "count" argument. (Michael)
+3. Fix typos in docs, patch subject. Extend doc. (Michael, Bjorn)
+4. Compare pointers to reduce number of string readings in the helper.
+5. Fix clk-imx return value.
+
+Changes since latest v1 (not the old 2019 solution):
+====================================================
+https://lore.kernel.org/all/708eabb1-7b35-d525-d4c3-451d4a3de84f@rasmusvillemoes.dk/
+1. Add helper for setting driver_override.
+2. Use the helper.
+
+Dependencies, merging and stable
+================================
+1. All patches, including last three fixes, depend on the first patch
+   introducing the helper.
+2. Merging idea: everything via driver core (Greg KH?).
+2. The last three commits - fixes - are probably not backportable
+   directly, because of this dependency. I don't know how to express
+   this dependency here, since stable-kernel-rules.rst mentions only commits as
+   possible dependencies.
+
+[1] https://lore.kernel.org/all/1550484960-2392-3-git-send-email-krzk@kernel.org/
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (11):
+  driver: platform: Add helper for safer setting of driver_override
+  amba: Use driver_set_override() instead of open-coding
+  fsl-mc: Use driver_set_override() instead of open-coding
+  hv: Use driver_set_override() instead of open-coding
+  PCI: Use driver_set_override() instead of open-coding
+  s390/cio: Use driver_set_override() instead of open-coding
+  spi: Use helper for safer setting of driver_override
+  vdpa: Use helper for safer setting of driver_override
+  clk: imx: scu: Fix kfree() of static memory on setting driver_override
+  slimbus: qcom-ngd: Fix kfree() of static memory on setting
+    driver_override
+  rpmsg: Fix kfree() of static memory on setting driver_override
+
+ drivers/amba/bus.c              | 28 +++--------------
+ drivers/base/driver.c           | 56 +++++++++++++++++++++++++++++++++
+ drivers/base/platform.c         | 28 +++--------------
+ drivers/bus/fsl-mc/fsl-mc-bus.c | 25 +++------------
+ drivers/clk/imx/clk-scu.c       |  7 ++++-
+ drivers/hv/vmbus_drv.c          | 28 +++--------------
+ drivers/pci/pci-sysfs.c         | 28 +++--------------
+ drivers/rpmsg/rpmsg_core.c      |  3 +-
+ drivers/rpmsg/rpmsg_internal.h  | 13 ++++++--
+ drivers/rpmsg/rpmsg_ns.c        | 14 +++++++--
+ drivers/s390/cio/cio.h          |  6 +++-
+ drivers/s390/cio/css.c          | 28 +++--------------
+ drivers/slimbus/qcom-ngd-ctrl.c | 13 +++++++-
+ drivers/spi/spi.c               | 26 +++------------
+ drivers/vdpa/vdpa.c             | 29 +++--------------
+ include/linux/amba/bus.h        |  6 +++-
+ include/linux/device/driver.h   |  2 ++
+ include/linux/fsl/mc.h          |  6 ++--
+ include/linux/hyperv.h          |  6 +++-
+ include/linux/pci.h             |  6 +++-
+ include/linux/platform_device.h |  6 +++-
+ include/linux/rpmsg.h           |  6 ++--
+ include/linux/spi/spi.h         |  2 ++
+ include/linux/vdpa.h            |  4 ++-
+ 24 files changed, 171 insertions(+), 205 deletions(-)
+
+-- 
+2.32.0
+
