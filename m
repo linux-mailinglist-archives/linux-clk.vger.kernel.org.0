@@ -2,129 +2,73 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135854D6FC8
-	for <lists+linux-clk@lfdr.de>; Sat, 12 Mar 2022 16:43:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 371CC4D70A8
+	for <lists+linux-clk@lfdr.de>; Sat, 12 Mar 2022 21:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiCLPoz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 12 Mar 2022 10:44:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59060 "EHLO
+        id S229613AbiCLUFE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 12 Mar 2022 15:05:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232024AbiCLPoz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 12 Mar 2022 10:44:55 -0500
-Received: from m12-15.163.com (m12-15.163.com [220.181.12.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54BAA44774
-        for <linux-clk@vger.kernel.org>; Sat, 12 Mar 2022 07:43:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=lZWbX
-        flR8AcZkbYCaKCSLjseRw1brO/TC22nKV0dYJM=; b=WpLTI2pUKq2jFXGb9Mg97
-        bB5pLzaNzVpJ8FsNGQl2/Im9iR22fPA7OG1rUZlomrHV9t9ogHAKh9vkpZ/pm2qv
-        XZcpsRKE9Ie0vJoVKQ5XNIbskpgLgeuwGwV5xT6v1kr1omFkKHDFd/3hPEHEto11
-        EHKFkXZ4Bsts7DWU4PBSZY=
-Received: from localhost.localdomain (unknown [183.53.78.103])
-        by smtp11 (Coremail) with SMTP id D8CowABnSTmPvyxiPke3BA--.444S2;
-        Sat, 12 Mar 2022 23:43:16 +0800 (CST)
-From:   logic_wei@163.com
-To:     mturquette@baylibre.com, sboyd@kernel.org
-Cc:     nsaenz@kernel.org, f.fainelli@gmail.com, maxime@cerno.tech,
-        linux-clk@vger.kernel.org, Peng Wei <logic_wei@163.com>
-Subject: [PATCH v2] clk: bcm: rpi: Fix slab-out-of-bounds during raspberrypi_discover_clocks.
-Date:   Sat, 12 Mar 2022 23:42:44 +0800
-Message-Id: <20220312154244.557841-1-logic_wei@163.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231804AbiCLUFD (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 12 Mar 2022 15:05:03 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5206749279
+        for <linux-clk@vger.kernel.org>; Sat, 12 Mar 2022 12:03:57 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id e186so23466464ybc.7
+        for <linux-clk@vger.kernel.org>; Sat, 12 Mar 2022 12:03:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=ElKoPt64izj9FSG/0eE/NmsT2fBcrqCjzH/tZgH7SXeqBdYMAi/IvuZyXePP7Bwjzj
+         EOFmv0h13Ia/uhSsz1IGQCe62l0TQuXOb7HQw4GssxN8tnbVyXupHiBmRYtCe9gL0uXl
+         p5zSAjhW3bQtd0eJzTysvzdJlAqPoiEQABs+l13Gr9AHBlojt0jtJ/7DO7gaQvh4UoBo
+         jzcMCdE67eDB4T1ZZtb4ROz7MafVnL+8v/kqIcM87B32upjp8QZqC4iKrpVD1PD+gr/B
+         QmELstyUq+ueCTn/9B3X7ZKomb9c6+AL1cZ69coSamkqFu+L8jpjEIgIf/CK7juC+YBp
+         5C9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
+        b=d4MuJkJvi5wbPR7BiTm0dZwnMHeHYy1Hi+q37ql+NvZFZgw3D9jRPOiobtlSoWuByC
+         LUUSFBSVkOe3PDxn7nEUYLOoNeoznpIOL+bw1wfOvTPjxJXuMz32HSs7zifQJoRgwqy4
+         6k2DbOQDZT+VKPrElYTxlgEP9FPXoAPhwJA9GWgJzGZlWdcfGcbnxb/ACwoW9iGBxX5q
+         4wKhUJXFb6cccIuwa+ZQqEx6XnU1bB2GhZ82NRM1xNDyfEFAAc+t7o4VGzt/guR2GVTo
+         5kQyPxBSEb3WBNi8K7ZCAmMWrNxKWNvUEQ5ELzQ5H0p0wW6n5h7Uxxu/4TDmQTUnHgDc
+         IR7g==
+X-Gm-Message-State: AOAM5318fw57az6ii0t4TEPirhgRWNfJshxzgNFVeZ/pwLm/KgQM9913
+        IG59m8K2xKkLuI6/dovBxnstkCj5xXi6p6yTqiU=
+X-Google-Smtp-Source: ABdhPJxUb1eIenpMFGZ4ZJT7YCpQjYQCjTf0T6fpp+19StyQ4qJ07TXUqgYKdtC1Mixr/W1WfHc2RvDlHtSmX+zb6IU=
+X-Received: by 2002:a5b:9c2:0:b0:611:ad59:be04 with SMTP id
+ y2-20020a5b09c2000000b00611ad59be04mr12452938ybq.405.1647115436363; Sat, 12
+ Mar 2022 12:03:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: D8CowABnSTmPvyxiPke3BA--.444S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJr13XFWUGF15WryrKFy5twb_yoW8Zw1UpF
-        W8Aa45AFyjqw4vga15JF1Duw1F93yavFWrWr97uw4Sva17GF95KF4UKr97JFyrWr48twn8
-        GrW3A398AF1xZFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRfsqQUUUUU=
-X-Originating-IP: [183.53.78.103]
-X-CM-SenderInfo: 5orjxupbzhxqqrwthudrp/xtbB0BTBumEspbfPiQAAsm
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7108:1cc:0:0:0:0 with HTTP; Sat, 12 Mar 2022 12:03:55
+ -0800 (PST)
+Reply-To: avamedicinemed3@gmail.com
+From:   Dr Ava Smith <doctortracywilliam@gmail.com>
+Date:   Sat, 12 Mar 2022 12:03:55 -0800
+Message-ID: <CAJiqmQHLGPWsQG2YkOzOHO1_wHb8JRyyj0B1bkmD36ktGMwnTw@mail.gmail.com>
+Subject: From Dr Ava Smith from United States
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Peng Wei <logic_wei@163.com>
-
-There's no way to break the loop until any error is returned. It causes
-overflow bug when accessing the clks.
-
-The KASAN warning:
-
-BUG: KASAN: slab-out-of-bounds in raspberrypi_clk_probe+0x1d8/0x2f8
-
-Read of size 4 at addr ffffff8040bd8704 by task swapper/0/1
-
-Call trace:
- ...
- __asan_load4+0x94/0xd0
- raspberrypi_clk_probe+0x1d8/0x2f8
- platform_probe+0x94/0x110
- ...
-
-v2:
- - Improve the comments
- - Change to for loop
- - Add fixes tag
- - Remove the modification about enum rpi_firmware_clk_id
-
-Fixes: 93d2725affd6 ("clk: bcm: rpi: Discover the firmware clocks")
-Signed-off-by: Peng Wei <logic_wei@163.com>
----
- drivers/clk/bcm/clk-raspberrypi.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/clk/bcm/clk-raspberrypi.c b/drivers/clk/bcm/clk-raspberrypi.c
-index dd3b71eafabf..5f963254d4eb 100644
---- a/drivers/clk/bcm/clk-raspberrypi.c
-+++ b/drivers/clk/bcm/clk-raspberrypi.c
-@@ -250,6 +250,7 @@ static int raspberrypi_discover_clocks(struct raspberrypi_clk *rpi,
- {
- 	struct rpi_firmware_get_clocks_response *clks;
- 	int ret;
-+	int i;
- 
- 	clks = devm_kcalloc(rpi->dev,
- 			    sizeof(*clks), RPI_FIRMWARE_NUM_CLK_ID,
-@@ -263,26 +264,25 @@ static int raspberrypi_discover_clocks(struct raspberrypi_clk *rpi,
- 	if (ret)
- 		return ret;
- 
--	while (clks->id) {
-+	for (i = 0; i < RPI_FIRMWARE_NUM_CLK_ID; i++) {
- 		struct clk_hw *hw;
- 
--		switch (clks->id) {
-+		switch (clks[i].id) {
- 		case RPI_FIRMWARE_ARM_CLK_ID:
- 		case RPI_FIRMWARE_CORE_CLK_ID:
- 		case RPI_FIRMWARE_M2MC_CLK_ID:
- 		case RPI_FIRMWARE_V3D_CLK_ID:
- 		case RPI_FIRMWARE_PIXEL_BVB_CLK_ID:
--			hw = raspberrypi_clk_register(rpi, clks->parent,
--						      clks->id);
-+			hw = raspberrypi_clk_register(rpi, clks[i].parent,
-+						      clks[i].id);
- 			if (IS_ERR(hw))
- 				return PTR_ERR(hw);
- 
--			data->hws[clks->id] = hw;
--			data->num = clks->id + 1;
-+			data->hws[clks[i].id] = hw;
-+			data->num = clks[i].id + 1;
- 			fallthrough;
- 
- 		default:
--			clks++;
- 			break;
- 		}
- 	}
 -- 
-2.25.1
-
+Hello Dear,
+how are you today?hope you are fine
+My name is Dr Ava Smith ,Am an English and French nationalities.
+I will give you pictures and more details about me as soon as i hear from you
+Thanks
+Ava
