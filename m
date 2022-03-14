@@ -2,51 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31AB34D8697
-	for <lists+linux-clk@lfdr.de>; Mon, 14 Mar 2022 15:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD21C4D868F
+	for <lists+linux-clk@lfdr.de>; Mon, 14 Mar 2022 15:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233435AbiCNOSY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 14 Mar 2022 10:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54280 "EHLO
+        id S242224AbiCNOSQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 14 Mar 2022 10:18:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242228AbiCNOSW (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Mar 2022 10:18:22 -0400
+        with ESMTP id S242218AbiCNOSP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Mar 2022 10:18:15 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D9013D3D
-        for <linux-clk@vger.kernel.org>; Mon, 14 Mar 2022 07:17:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDE019C1C
+        for <linux-clk@vger.kernel.org>; Mon, 14 Mar 2022 07:17:05 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1nTlVN-00051C-73; Mon, 14 Mar 2022 15:17:01 +0100
+        id 1nTlVN-00054l-QO; Mon, 14 Mar 2022 15:17:01 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1nTlVN-000f3T-JU; Mon, 14 Mar 2022 15:17:00 +0100
+        id 1nTlVO-000f3b-57; Mon, 14 Mar 2022 15:17:00 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1nTlVL-0097bL-Jv; Mon, 14 Mar 2022 15:16:59 +0100
+        id 1nTlVL-0097bO-R5; Mon, 14 Mar 2022 15:16:59 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Russell King <linux@armlinux.org.uk>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
 Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Wolfram Sang <wsa@kernel.org>,
         Alexandru Ardelean <aardelean@deviqon.com>
-Subject: [PATCH v8 13/16] rtc: at91sam9: Simplify using devm_clk_get_enabled()
-Date:   Mon, 14 Mar 2022 15:16:40 +0100
-Message-Id: <20220314141643.22184-14-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH v8 14/16] i2c: imx: Simplify using devm_clk_get_enabled()
+Date:   Mon, 14 Mar 2022 15:16:41 +0100
+Message-Id: <20220314141643.22184-15-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
 References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2398; i=uwe@kleine-koenig.org; h=from:subject; bh=B46sFCPHlcrcaPsavyXMd4P0PfwkNsS4guEpBZ8cN4Y=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBiL04VXyfINyi5TQGccw4ZBV+b44hcbVF4eex82mu2 wFwWV0OJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYi9OFQAKCRDB/BR4rcrsCZI2B/ 4rREB2v9oI2LNjgrdooT1QZDfkJTLHqnWlnj0U7F3roPGmJNf9o2inI5OZ+YKu3PzeiAOHaWxcN5K6 ilaeNUOTVVa1okyFfTlQZ3qYWvWo96oapuJBTvdQc+o54fpwK07ZxHz6vRDQjTpGUDBwSU1kQmt5lc KSW6EZ4Ug1sLQOXJC8ig8Po3JsAcZSyGYyOxl8Ay9lLYoz1KvUmd3dQf8WA+brtk1n2Cg0UoTUfL6H G0vdL+/BURCGxjN4mfawiu9SDXEfB0w41Tc6n+n99l0bVdOWBkKQh+LKVR4vtpqzc0xHg2nssSYev7 J2DgT63/KX00Fl28bk/KRYN1loDSAG
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1934; i=uwe@kleine-koenig.org; h=from:subject; bh=cpOMMXrTgDVsYCx6J041u9Sl0/KU1ysc3e28Et5yT2A=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBiL04Y4IYmtIk+6wsiLalltodMqdw1TLc/q+2Nnx0c cq8KWxyJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYi9OGAAKCRDB/BR4rcrsCckbB/ 9ogXsizZb0rBg6Bx/xYUbIdKqpE30LnfXEqv017psaGBUuc/2tt/TSHUsuc5UghUr/EvpLqTZUCRif c8ry4euVhU3+JKjchSi1N1LN3LGJmqjShya3Bdn2HlUK75MXMCPwhhvOGjJ19MVqtljxGg6aXL3M5a qXywvqajbwSr2el+lDH9697DniQpWhCgC4PQJB1FT3nGhRLoT0hbonljjUePM5Yo2jTQkMm+rxLWDm IqKZt1CtXEiqFxzOEjfOIdBp4vJttpnzsNJ26yaRTuj6TQVmyrU9ryGVK+eloJRmlgX3YYJTJnS572 C4SHo3v9PHkzI9KpIEAUMFfdcoQVQD
 X-Developer-Key: i=uwe@kleine-koenig.org; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -66,80 +68,53 @@ devm_clk_get_enabled() returns the clk already (prepared and) enabled
 and the automatically called cleanup cares for disabling (and
 unpreparing). So simplify .probe() and .remove() accordingly.
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Acked-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Acked-by: Wolfram Sang <wsa@kernel.org>
 Reviewed-by: Alexandru Ardelean <aardelean@deviqon.com>
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/rtc/rtc-at91sam9.c | 22 ++++------------------
- 1 file changed, 4 insertions(+), 18 deletions(-)
+ drivers/i2c/busses/i2c-imx.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/rtc/rtc-at91sam9.c b/drivers/rtc/rtc-at91sam9.c
-index b7b5ea1a4e67..d54127aba1e9 100644
---- a/drivers/rtc/rtc-at91sam9.c
-+++ b/drivers/rtc/rtc-at91sam9.c
-@@ -374,21 +374,14 @@ static int at91_rtc_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 	}
+diff --git a/drivers/i2c/busses/i2c-imx.c b/drivers/i2c/busses/i2c-imx.c
+index 27f969b3dc07..6c346b0bec8b 100644
+--- a/drivers/i2c/busses/i2c-imx.c
++++ b/drivers/i2c/busses/i2c-imx.c
+@@ -1448,16 +1448,10 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 	ACPI_COMPANION_SET(&i2c_imx->adapter.dev, ACPI_COMPANION(&pdev->dev));
  
--	rtc->sclk = devm_clk_get(&pdev->dev, NULL);
-+	rtc->sclk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(rtc->sclk))
- 		return PTR_ERR(rtc->sclk);
- 
--	ret = clk_prepare_enable(rtc->sclk);
+ 	/* Get I2C clock */
+-	i2c_imx->clk = devm_clk_get(&pdev->dev, NULL);
++	i2c_imx->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(i2c_imx->clk))
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(i2c_imx->clk),
+-				     "can't get I2C clock\n");
+-
+-	ret = clk_prepare_enable(i2c_imx->clk);
 -	if (ret) {
--		dev_err(&pdev->dev, "Could not enable slow clock\n");
+-		dev_err(&pdev->dev, "can't enable I2C clock, ret=%d\n", ret);
 -		return ret;
 -	}
--
- 	sclk_rate = clk_get_rate(rtc->sclk);
- 	if (!sclk_rate || sclk_rate > AT91_RTT_RTPRES) {
- 		dev_err(&pdev->dev, "Invalid slow clock rate\n");
--		ret = -EINVAL;
--		goto err_clk;
-+		return -EINVAL;
- 	}
++				     "can't get prepared I2C clock\n");
  
- 	mr = rtt_readl(rtc, MR);
-@@ -406,7 +399,7 @@ static int at91_rtc_probe(struct platform_device *pdev)
- 	rtc->rtcdev = devm_rtc_allocate_device(&pdev->dev);
- 	if (IS_ERR(rtc->rtcdev)) {
- 		ret = PTR_ERR(rtc->rtcdev);
--		goto err_clk;
-+		return ret;
- 	}
- 
- 	rtc->rtcdev->ops = &at91_rtc_ops;
-@@ -418,7 +411,7 @@ static int at91_rtc_probe(struct platform_device *pdev)
- 			       dev_name(&rtc->rtcdev->dev), rtc);
- 	if (ret) {
- 		dev_dbg(&pdev->dev, "can't share IRQ %d?\n", rtc->irq);
--		goto err_clk;
-+		return ret;
- 	}
- 
- 	/* NOTE:  sam9260 rev A silicon has a ROM bug which resets the
-@@ -432,11 +425,6 @@ static int at91_rtc_probe(struct platform_device *pdev)
- 			 dev_name(&rtc->rtcdev->dev));
- 
- 	return devm_rtc_register_device(rtc->rtcdev);
--
--err_clk:
--	clk_disable_unprepare(rtc->sclk);
--
--	return ret;
+ 	/* Init queue */
+ 	init_waitqueue_head(&i2c_imx->queue);
+@@ -1530,7 +1524,6 @@ static int i2c_imx_probe(struct platform_device *pdev)
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_set_suspended(&pdev->dev);
+ 	pm_runtime_dont_use_autosuspend(&pdev->dev);
+-	clk_disable_unprepare(i2c_imx->clk);
+ 	return ret;
  }
  
- /*
-@@ -450,8 +438,6 @@ static int at91_rtc_remove(struct platform_device *pdev)
- 	/* disable all interrupts */
- 	rtt_writel(rtc, MR, mr & ~(AT91_RTT_ALMIEN | AT91_RTT_RTTINCIEN));
+@@ -1562,7 +1555,6 @@ static int i2c_imx_remove(struct platform_device *pdev)
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq >= 0)
+ 		free_irq(irq, i2c_imx);
+-	clk_disable_unprepare(i2c_imx->clk);
  
--	clk_disable_unprepare(rtc->sclk);
--
- 	return 0;
- }
- 
+ 	pm_runtime_put_noidle(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
 -- 
 2.35.1
 
