@@ -2,147 +2,227 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 429814D8538
-	for <lists+linux-clk@lfdr.de>; Mon, 14 Mar 2022 13:47:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 574234D86B6
+	for <lists+linux-clk@lfdr.de>; Mon, 14 Mar 2022 15:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbiCNMsz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 14 Mar 2022 08:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
+        id S234180AbiCNOTV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 14 Mar 2022 10:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242347AbiCNMsa (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Mar 2022 08:48:30 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2909DE084;
-        Mon, 14 Mar 2022 05:46:05 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id dr20so33281489ejc.6;
-        Mon, 14 Mar 2022 05:46:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AfEfhobctAMGnNXoz9DFMeE1Ezn5+I06/IwgfEiFWno=;
-        b=NaViX/Ob7EurjojWFVkHCuVX5/dyO3EnUFQ8RfPzSUgNxDNUBgF7cCtrIr+DDwJ7ms
-         KSJFtMOMjj0vCxvc23rmNzyQO5bzAwO/zG64GgfcCFZMrAm9jGERgMocY4x9XvQjZskh
-         yGn2L2k+mxg6yxLVvRC21Nk+nEN2xfZ7gS3VMFlHS+FSBz9y0k179x0luSQ+RPhBTaKF
-         IbR7Rn1rAJlbsruiXG9LhDEqT4xf2wrW0QF0jzr8gnf5r8f3O1eIhrxxZT1AgigVfbgI
-         mZFv4UZ2zwE6p8NjNsO4HHoTOMTT+cbnrIM0WR4sjA+Y5gpuUwUHIvvNhrk1mAaRn1S6
-         ZWFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AfEfhobctAMGnNXoz9DFMeE1Ezn5+I06/IwgfEiFWno=;
-        b=jk0IrdbSlxlXk3zIvYJ7+KwMh6NTByyR4F/LTWOL0GKLX2cNkccCkmfwavOpQGzlya
-         PeDBJ+7RedilrF7sH3k+xhtvgpeuscgOKyFiA4LoiowDBQjz2XOn6GugZA+e0j5hhTNN
-         pWiJ9Uiz/OjdeJr+x2FczId9FnSTEWpS5/Opm1ezBEHY/6/eNYyoxaEY4BEonxj+5rro
-         nirhIzflCxX7me1a9yLyVPBIagvJCmv99zPlnpU7iSkWjBX74S7zjP9ArRAXNY+Fl7Ao
-         Pu3X4x9bMdKgzNKErPK5hDUXuPLpAqytj3uxfllylY6XSNvxsDJvc267VR2M4AL1g9/K
-         /F5w==
-X-Gm-Message-State: AOAM532RINSz3IDWHjXlSUsGqn7WxmDEv0xDxYAU1kFoa6N2S240ii/r
-        u2Qh8M74qnRi9bwGhlq4hr8=
-X-Google-Smtp-Source: ABdhPJwQGEMNdKZIXZb8s4Ify5Z34Z/odEvJCAh4X2AaHEDVr1X24opAoevxRgsgAviJFEl3gvNV3Q==
-X-Received: by 2002:a17:907:1c0b:b0:6db:b756:4267 with SMTP id nc11-20020a1709071c0b00b006dbb7564267mr9181812ejc.147.1647261963250;
-        Mon, 14 Mar 2022 05:46:03 -0700 (PDT)
-Received: from Ansuel-xps.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
-        by smtp.gmail.com with ESMTPSA id gl2-20020a170906e0c200b006a767d52373sm6759106ejb.182.2022.03.14.05.46.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Mar 2022 05:46:02 -0700 (PDT)
-Date:   Mon, 14 Mar 2022 13:46:01 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Jonathan McDowell <noodles@earth.li>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
+        with ESMTP id S242267AbiCNOTT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Mar 2022 10:19:19 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC58193C6
+        for <linux-clk@vger.kernel.org>; Mon, 14 Mar 2022 07:18:09 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nTlVQ-0004zI-Ju; Mon, 14 Mar 2022 15:17:04 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nTlVH-000f2a-PX; Mon, 14 Mar 2022 15:16:54 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nTlVF-0097aV-Ov; Mon, 14 Mar 2022 15:16:53 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 15/15] ARM: dts: qcom: add syscon and cxo/pxo clock to
- gcc node for ipq8064
-Message-ID: <Yi85CWQdY08GLxzp@Ansuel-xps.localdomain>
-References: <20220226135235.10051-1-ansuelsmth@gmail.com>
- <20220226135235.10051-16-ansuelsmth@gmail.com>
- <Yi8SrZkjYdU3W8aj@earth.li>
+        Russell King <linux@armlinux.org.uk>,
+        =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com, linux-hwmon@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>
+Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Tomislav Denis <tomislav.denis@avl.com>,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        =?utf-8?q?Andr=C3=A9_Gustavo_Nakagomi_Lopez?= <andregnl@usp.br>,
+        Cai Huoqing <caihuoqing@baidu.com>, linux-iio@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mips@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        linux-watchdog@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-pwm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org,
+        Amireddy Mallikarjuna reddy 
+        <mallikarjunax.reddy@linux.intel.com>, dmaengine@vger.kernel.org
+Subject: [PATCH v8 00/16] clk: provide new devm helpers for prepared and enabled clocks
+Date:   Mon, 14 Mar 2022 15:16:27 +0100
+Message-Id: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yi8SrZkjYdU3W8aj@earth.li>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5140; i=uwe@kleine-koenig.org; h=from:subject; bh=UyYZYiS1jsIjibZ2MrufsJ1VrXFVRIfOx2nxS5wK9sc=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBiL03mRL8wE3boX5TsxdQb7A/4ALVpT93/3rzycIlB hFpTWs+JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYi9N5gAKCRDB/BR4rcrsCc4ZB/ 9EDZG3qguuMeWbZAfXaH9prZGcSynBDBtwqLtmnGRt28ZTaarFw88YmZERvpaHjVQ0WPcNKCMjBphZ C/YPMpezXK2TikRkYqr2gsFaWKLwJ5+rqhGqxNSg4wZqzBgxjEgMa4BRbXRgQZvFOb/8ucyk4f/y3U oXCTg8ZOWQwebvd7JJsMztn6aZl6uW9im2ZqZji8vnmZt0yG28aNRWS33RDwWlQzrat//LG5Pb7S41 7uVOkFnphQjm5eRjOvblGRbYIxlM0SEETKun6FycjvR4gk1OvqrePSrWZY01rN3iXQF/v/C3RrHXL6 fzr+e9MLjqZjR6qpuN+DvujbCtKzRp
+X-Developer-Key: i=uwe@kleine-koenig.org; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 10:02:21AM +0000, Jonathan McDowell wrote:
-> AFAICT the rest of the series has been picked up in clk-for-5.18, but I
-> don't see this there or in dts-for-5.18. It's required for a
-> functioning tsens driver on IPQ8064 so it would be nice to see it landed.
->
+Hello,
 
-I think we just have to wait, they said that it was expected a delay
-between the clk and the dts merge. (one of the reason I couldn't drop
-the pxo/cxo fixed clock)
+this is another try to convince the relevant people that
+devm_clk_get_enabled() is a nice idea. Compared to v7 (back in May 2021) this
+series is rebased to v5.17-rc8 and converts quite some drivers that open code
+devm_clk_get_enabled() up to now (patches #3 - #11).
 
-> On Sat, Feb 26, 2022 at 02:52:35PM +0100, Ansuel Smith wrote:
-> > Add syscon compatible required for tsens driver to correctly probe driver
-> > and access the reg. Also add cxo and pxo tag and declare them as gcc clock
-> > now requires them for the ipq8064 gcc driver that has now been modernized.
-> > 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-> > ---
-> >  arch/arm/boot/dts/qcom-ipq8064.dtsi | 8 +++++---
-> >  1 file changed, 5 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > index 11481313bdb6..5524a68cf3d1 100644
-> > --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-> > @@ -298,13 +298,13 @@ smem: smem@41000000 {
-> >  	};
-> >  
-> >  	clocks {
-> > -		cxo_board {
-> > +		cxo_board: cxo_board {
-> >  			compatible = "fixed-clock";
-> >  			#clock-cells = <0>;
-> >  			clock-frequency = <25000000>;
-> >  		};
-> >  
-> > -		pxo_board {
-> > +		pxo_board: pxo_board {
-> >  			compatible = "fixed-clock";
-> >  			#clock-cells = <0>;
-> >  			clock-frequency = <25000000>;
-> > @@ -736,7 +736,9 @@ tsens_calib_backup: calib_backup@410 {
-> >  		};
-> >  
-> >  		gcc: clock-controller@900000 {
-> > -			compatible = "qcom,gcc-ipq8064";
-> > +			compatible = "qcom,gcc-ipq8064", "syscon";
-> > +			clocks = <&pxo_board>, <&cxo_board>;
-> > +			clock-names = "pxo", "cxo";
-> >  			reg = <0x00900000 0x4000>;
-> >  			#clock-cells = <1>;
-> >  			#reset-cells = <1>;
-> > -- 
-> > 2.34.1
-> > 
-> 
-> J.
-> 
-> -- 
->     I program, therefore I am.     |  .''`.  Debian GNU/Linux Developer
->                                    | : :' :  Happy to accept PGP signed
->                                    | `. `'   or encrypted mail - RSA
->                                    |   `-    key on the keyservers.
+A concern about devm_clk_get_enabled() in v7 was that it helps people to be
+lazy and I agree that in some situations when devm_clk_get_enabled() is used it
+would be more efficient and sensible to care to only enable the clk when really
+needed.
 
+On the other hand, the function is right for some users, e.g. the watchdog
+drivers. For the others it's not so simple to judge. Given that there are a
+lot of drivers that are lazy even if doing so is some effort (i.e. calling
+clk_prepare_enable() and devm_add_action()) convinces me, that introducing the
+function family is sensible. (And if you want to work on these drivers,
+grepping for devm_clk_get_enabled gives you a few candidates once the
+series is in :-)
+
+Otherwise looking at the diffstat of this series:
+
+ 48 files changed, 257 insertions(+), 851 deletions(-)
+
+is quite convincing. Just the first two patches (which introduce the new
+functions) account for
+
+ 2 files changed, 169 insertions(+), 17 deletions(-)
+
+. A rough third of the added lines is documentation. The rest is driver
+updates which then has:
+
+ 46 files changed, 88 insertions(+), 834 deletions(-)
+
+which makes a really nice cleanup.
+
+The series is build-tested on arm64, m68k, powerpc, riscv, s390, sparc64
+and x86_64 using an allmodconfig.
+
+Best regards
+Uwe
+
+Uwe Kleine-König (16):
+  clk: generalize devm_clk_get() a bit
+  clk: Provide new devm_clk helpers for prepared and enabled clocks
+  hwmon: Make use of devm_clk_get_enabled()
+  iio: Make use of devm_clk_get_enabled()
+  hwrng: meson - Don't open-code devm_clk_get_optional_enabled()
+  bus: bt1: Don't open code devm_clk_get_enabled()
+  gpio: vf610: Simplify error handling in probe
+  drm/meson: dw-hdmi: Don't open code devm_clk_get_enabled()
+  rtc: ingenic: Simplify using devm_clk_get_enabled()
+  clk: meson: axg-audio: Don't duplicate devm_clk_get_enabled()
+  watchdog: Make use of devm_clk_get_enabled()
+  pwm: atmel: Simplify using devm_clk_get_prepared()
+  rtc: at91sam9: Simplify using devm_clk_get_enabled()
+  i2c: imx: Simplify using devm_clk_get_enabled()
+  spi: davinci: Simplify using devm_clk_get_enabled()
+  dmaengine: lgm: Fix error handling
+
+ drivers/bus/bt1-apb.c                 | 23 +------
+ drivers/bus/bt1-axi.c                 | 23 +------
+ drivers/char/hw_random/meson-rng.c    | 20 +-----
+ drivers/clk/clk-devres.c              | 96 ++++++++++++++++++++++-----
+ drivers/clk/meson/axg-audio.c         | 36 ++--------
+ drivers/dma/lgm/lgm-dma.c             |  8 +--
+ drivers/gpio/gpio-vf610.c             | 45 +++----------
+ drivers/gpu/drm/meson/meson_dw_hdmi.c | 48 +++++---------
+ drivers/hwmon/axi-fan-control.c       | 15 +----
+ drivers/hwmon/ltc2947-core.c          | 17 +----
+ drivers/hwmon/mr75203.c               | 26 +-------
+ drivers/hwmon/sparx5-temp.c           | 19 +-----
+ drivers/i2c/busses/i2c-imx.c          | 12 +---
+ drivers/iio/adc/ad7124.c              | 15 +----
+ drivers/iio/adc/ad7768-1.c            | 17 +----
+ drivers/iio/adc/ad9467.c              | 17 +----
+ drivers/iio/adc/ingenic-adc.c         | 15 +----
+ drivers/iio/adc/lpc18xx_adc.c         | 18 +----
+ drivers/iio/adc/rockchip_saradc.c     | 44 +-----------
+ drivers/iio/adc/ti-ads131e08.c        | 19 +-----
+ drivers/iio/adc/xilinx-ams.c          | 15 +----
+ drivers/iio/adc/xilinx-xadc-core.c    | 18 +----
+ drivers/iio/frequency/adf4371.c       | 17 +----
+ drivers/iio/frequency/admv1013.c      | 15 +----
+ drivers/iio/frequency/adrf6780.c      | 16 +----
+ drivers/iio/imu/adis16475.c           | 15 +----
+ drivers/pwm/pwm-atmel.c               | 16 +----
+ drivers/rtc/rtc-at91sam9.c            | 22 ++----
+ drivers/rtc/rtc-jz4740.c              | 21 +-----
+ drivers/spi/spi-davinci.c             | 11 +--
+ drivers/watchdog/cadence_wdt.c        | 17 +----
+ drivers/watchdog/davinci_wdt.c        | 18 +----
+ drivers/watchdog/imgpdc_wdt.c         | 31 +--------
+ drivers/watchdog/imx2_wdt.c           | 15 +----
+ drivers/watchdog/imx7ulp_wdt.c        | 15 +----
+ drivers/watchdog/loongson1_wdt.c      | 17 +----
+ drivers/watchdog/lpc18xx_wdt.c        | 30 +--------
+ drivers/watchdog/meson_gxbb_wdt.c     | 16 +----
+ drivers/watchdog/of_xilinx_wdt.c      | 16 +----
+ drivers/watchdog/pic32-dmt.c          | 15 +----
+ drivers/watchdog/pic32-wdt.c          | 17 +----
+ drivers/watchdog/pnx4008_wdt.c        | 15 +----
+ drivers/watchdog/qcom-wdt.c           | 16 +----
+ drivers/watchdog/rtd119x_wdt.c        | 16 +----
+ drivers/watchdog/st_lpc_wdt.c         | 16 +----
+ drivers/watchdog/stm32_iwdg.c         | 31 +--------
+ drivers/watchdog/visconti_wdt.c       | 18 +----
+ include/linux/clk.h                   | 90 ++++++++++++++++++++++++-
+ 48 files changed, 257 insertions(+), 851 deletions(-)
+
+
+base-commit: 09688c0166e76ce2fb85e86b9d99be8b0084cdf9
 -- 
-	Ansuel
+2.35.1
+
