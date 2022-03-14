@@ -2,56 +2,63 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7E04D8698
-	for <lists+linux-clk@lfdr.de>; Mon, 14 Mar 2022 15:17:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8FC4D871D
+	for <lists+linux-clk@lfdr.de>; Mon, 14 Mar 2022 15:43:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242239AbiCNOSZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 14 Mar 2022 10:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
+        id S239946AbiCNOoI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 14 Mar 2022 10:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242233AbiCNOSY (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Mar 2022 10:18:24 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CD41A383
-        for <linux-clk@vger.kernel.org>; Mon, 14 Mar 2022 07:17:13 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nTlVO-00055P-FO; Mon, 14 Mar 2022 15:17:02 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nTlVO-000f3e-HW; Mon, 14 Mar 2022 15:17:01 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nTlVM-0097bV-AF; Mon, 14 Mar 2022 15:17:00 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        Amireddy Mallikarjuna reddy 
-        <mallikarjunax.reddy@linux.intel.com>, dmaengine@vger.kernel.org
-Subject: [PATCH v8 16/16] dmaengine: lgm: Fix error handling
-Date:   Mon, 14 Mar 2022 15:16:43 +0100
-Message-Id: <20220314141643.22184-17-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
-References: <20220314141643.22184-1-u.kleine-koenig@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1796; i=uwe@kleine-koenig.org; h=from:subject; bh=lnYF+Rp4uQSBPl21vZvNytughSjblSgWjFEEAFtBkUU=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBiL04fQXumhMT235kSD6N70fAzqtECjOg0TFKxJsoj LkvENvWJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCYi9OHwAKCRDB/BR4rcrsCeMmB/ 9HLw37+Kw66dEv/fLAWEF9hJfFla6RSk571W/CW/fBH6caBGsM/akyUEWmm+1k6bU4+AljtgP87dD9 vhUL+UdNu56APpY2WXPuYSIS9W4HdfeHrNTMw8wlUvQ4IPqG7J/VUhVvpCJxefSU0fgaxJVkspifIs xG1T/h/g+08/wWJa36SfN5N3ndYN/xA8SnQUjU0rdNb1Cl1RqKSOjybjChvn3Fq39zHBUGoFIp+TFN FAF4JZUVdUs0xUxJ3NZxX4x73cxLBF1Kq9UxmFa0rN9RL+8U3WT7/ifDelFhEqH4O7OhzcC1BL9iQ2 tkyVEG73MiyEsKxMLULhLkPMwNHQCH
-X-Developer-Key: i=uwe@kleine-koenig.org; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-clk@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S238554AbiCNOoG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Mar 2022 10:44:06 -0400
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8FD2657;
+        Mon, 14 Mar 2022 07:42:56 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id r2so18430576iod.9;
+        Mon, 14 Mar 2022 07:42:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=ZFm3098Qq38ZihocmoyjymWLRXt7L5rX0Wix1tDlZKI=;
+        b=7XCQEwPqbLm5tVah6hX9ZlYpSUfbq7s9t1GRlAWDlOfwQZxwH/yzmW6slLpGKUurL8
+         qou+/KHhapWzDM4MIHyzqGSE0x5S8tR4B/bOsAVDIbolpI/7/bj+lRGb0b8ZtYkXS1Zx
+         IY7MdBp4Srg+KIyT5EF21LR81ZlTf34u1xr8Fgg9OQIJGkPiCAYF0lNCMdKtwkdabGNa
+         c+4E1oK8nkJ1vehfZeYTm9oWDuqoTIJ/+Y1iZ/LHI3q3A/SAOTU1jMvLRSZ9XttD2pr9
+         EC++C/iZdgBs0Uq/zrhc7YwBli5+kkXiO+0ZmnUck8rqTPPk4thPRFxE1oLrPnUDQ/50
+         yVvA==
+X-Gm-Message-State: AOAM530/bxXQ4Sqy/ZUGxbVRnKQa0dNEobHsQlGhImkJBUEfVvoxblYX
+        wifZ93gP4PCeQU9vfPL6NL/S00Fb6w==
+X-Google-Smtp-Source: ABdhPJyQaBTGAIetjdRf6giyx6SU7LHoFADIdsRp3lXRCDkqAdzyIb0mzuwjvoX1KW3dUpVp8++XJA==
+X-Received: by 2002:a02:6910:0:b0:319:4f4c:eede with SMTP id e16-20020a026910000000b003194f4ceedemr20591642jac.301.1647268976134;
+        Mon, 14 Mar 2022 07:42:56 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id a4-20020a5d9544000000b00640a6eb6e1esm8957167ios.53.2022.03.14.07.42.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 07:42:55 -0700 (PDT)
+Received: (nullmailer pid 12511 invoked by uid 1000);
+        Mon, 14 Mar 2022 14:42:49 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>
+In-Reply-To: <20220313190419.2207-17-ansuelsmth@gmail.com>
+References: <20220313190419.2207-1-ansuelsmth@gmail.com> <20220313190419.2207-17-ansuelsmth@gmail.com>
+Subject: Re: [PATCH 16/16] dt-bindings: arm: msm: Convert kpss driver Documentation to yaml
+Date:   Mon, 14 Mar 2022 08:42:49 -0600
+Message-Id: <1647268969.336967.12510.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,56 +66,43 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-It's an invalid approach to use only a single devm cleanup handler for
-two resources (without further error handling at least). In this case the
-core clk isn't disabled if getting the reset control fails.
+On Sun, 13 Mar 2022 20:04:19 +0100, Ansuel Smith wrote:
+> Convert kpss-acc and kpss-gcc Documentation to yaml. Fix multiple
+> Documentation error and provide additional example for kpss-gcc-v2.
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/arm/msm/qcom,kpss-acc.txt        | 49 ----------
+>  .../bindings/arm/msm/qcom,kpss-acc.yaml       | 97 +++++++++++++++++++
+>  .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ---------
+>  .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 62 ++++++++++++
+>  4 files changed, 159 insertions(+), 93 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.txt
+>  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-acc.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
+>  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+> 
 
-This also fixes the problem that the return value of clk_prepare_enable()
-wasn't checked before.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Fixes: 32d31c79a1a4 ("dmaengine: Add Intel LGM SoC DMA support.")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/dma/lgm/lgm-dma.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml:62:4: [error] no new line character at the end of file (new-line-at-end-of-file)
 
-diff --git a/drivers/dma/lgm/lgm-dma.c b/drivers/dma/lgm/lgm-dma.c
-index efe8bd3a0e2a..f8904cf2d832 100644
---- a/drivers/dma/lgm/lgm-dma.c
-+++ b/drivers/dma/lgm/lgm-dma.c
-@@ -1463,11 +1463,10 @@ static int ldma_init_v22(struct ldma_dev *d, struct platform_device *pdev)
- 	return 0;
- }
- 
--static void ldma_clk_disable(void *data)
-+static void ldma_reset(void *data)
- {
- 	struct ldma_dev *d = data;
- 
--	clk_disable_unprepare(d->core_clk);
- 	reset_control_assert(d->rst);
- }
- 
-@@ -1590,17 +1589,16 @@ static int intel_ldma_probe(struct platform_device *pdev)
- 		return PTR_ERR(d->base);
- 
- 	/* Power up and reset the dma engine, some DMAs always on?? */
--	d->core_clk = devm_clk_get_optional(dev, NULL);
-+	d->core_clk = devm_clk_get_optional_enabled(dev, NULL);
- 	if (IS_ERR(d->core_clk))
- 		return PTR_ERR(d->core_clk);
--	clk_prepare_enable(d->core_clk);
- 
- 	d->rst = devm_reset_control_get_optional(dev, NULL);
- 	if (IS_ERR(d->rst))
- 		return PTR_ERR(d->rst);
- 	reset_control_deassert(d->rst);
- 
--	ret = devm_add_action_or_reset(dev, ldma_clk_disable, d);
-+	ret = devm_add_action_or_reset(dev, ldma_reset, d);
- 	if (ret) {
- 		dev_err(dev, "Failed to devm_add_action_or_reset, %d\n", ret);
- 		return ret;
--- 
-2.35.1
+dtschema/dtc warnings/errors:
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1604836
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
