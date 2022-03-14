@@ -2,72 +2,110 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB37E4D7FAD
-	for <lists+linux-clk@lfdr.de>; Mon, 14 Mar 2022 11:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C144D8187
+	for <lists+linux-clk@lfdr.de>; Mon, 14 Mar 2022 12:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238469AbiCNKTT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 14 Mar 2022 06:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
+        id S239565AbiCNLpC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 14 Mar 2022 07:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238473AbiCNKTS (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Mar 2022 06:19:18 -0400
-Received: from mail-yw1-x1142.google.com (mail-yw1-x1142.google.com [IPv6:2607:f8b0:4864:20::1142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0C0240BA
-        for <linux-clk@vger.kernel.org>; Mon, 14 Mar 2022 03:18:08 -0700 (PDT)
-Received: by mail-yw1-x1142.google.com with SMTP id 00721157ae682-2e51609648cso64576957b3.10
-        for <linux-clk@vger.kernel.org>; Mon, 14 Mar 2022 03:18:08 -0700 (PDT)
+        with ESMTP id S240459AbiCNLn5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 14 Mar 2022 07:43:57 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AEC1CFF6
+        for <linux-clk@vger.kernel.org>; Mon, 14 Mar 2022 04:42:16 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id w27so26597598lfa.5
+        for <linux-clk@vger.kernel.org>; Mon, 14 Mar 2022 04:42:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=s9IGPqOTuFEFxKMxMPq1P/MfyJrhGXNasZNiCUUGkGw=;
-        b=QLLsRy/dmyqoI0RxbutlRZI/KB6PQe9IvOCU+8CAeBQGMyqmF6/tAgeCdcEdZZWTQR
-         +lM4dx52NBCcTyQ2m0WfXEwW0vNy/Q2h5+2c+HanumuiwHWZmSKPKFlw44pXKTJtml+R
-         dwkeF3hAq1OG1XPpJqiioazUaaQX+JYj0dZPXjKsK11KQt1mm6NBeApJvW01vlTwCTmr
-         0zavqxu3N8bMBLwVdJob1TzN3h9Ad2e2PR9EIiqawtuU/tja8f0QInngMnTjQrwOBH97
-         yAIfAPxmHT/edHFTmHy/X6VQzKIXHrAJ5+snD7BUcPM2WrhmxfSgG3hq1NGxgIWRcIi2
-         0/fQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h8tEzrxdNc4jjoNSfhM1jc3MU9LSemhGmq+z88lCX5o=;
+        b=ggqnU4YO/MtIU9SDNvfKkqtI7Ty5stK/oQTMQWB8AHI21Hdk+iTYwcmK3GJwj2R+l0
+         tZ7F5HVoEcAvxcQyegUAswfiMsCuBAIY/LA2xxo4BLkT8bPU6T5usDsXiqBf043lS2GF
+         NSUlLXfwrgMjNcQbh0tMUpRyd4TZQf6Q1HabBxpWWhDGns+M8Ht5/S6xkxflme7Rn7Xv
+         Gg2NpXJdPpJSDssoHlKdRfgz4Un4BI3TZVi7A/tBntbkrVchXMc0cR2udshT+rClIMBn
+         063xNfPhfP1v00IbuwsWhgK8iXa1O95E7Mc1bFE+T9h0RJju9GpoLEzj9t0C+RJfD+YY
+         xntA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=s9IGPqOTuFEFxKMxMPq1P/MfyJrhGXNasZNiCUUGkGw=;
-        b=zuI03oDUet0VIfUvq9BCsQKbu0kKvPCKtyl8G360RD1fWuCFpm+gfElQr9DfvSLHIH
-         87sVpeZB1i0TxfrCypkI1jX8B8tQ4erb7EgWe+LMI0kFQDGmr32/WWliFY+EMkDpYZxa
-         JGLvAkDcNGZv5q0RrmKNpdvQMuPj7xLic4oKvSi+Uxxp7JbpoxCqLtgg2bOVlGbk6teQ
-         LM+Q0rp34EBVbGQVGAe5WP3DTspihMibu3WqoP1dC0Bk9vNNuPYNrCnVCm7WkX2af9RJ
-         BjWBUfGs2Aya1mBogJLDLcQZXbVDwm/+lvhu0R0q8MLg7stdWxzKakIXG61EbXrxrZmp
-         F+6A==
-X-Gm-Message-State: AOAM533X58VQesXPR8B/EPAzZTq3Kx/fLub45KGHYLhlWquk27rRtsJh
-        KpwHNsyvDLQ7EFkOO8UNZ+LO35KH4hS/DCTiHbc=
-X-Google-Smtp-Source: ABdhPJxt3sbAxxrwf4Yfrv8UBK0gVaHR239NIWyNSkIxk2Sc5EP6VOe5GgMUyXsnR38oFmRN2oH1ymMI9cBZdKCj6G0=
-X-Received: by 2002:a81:738a:0:b0:2dc:2bf4:76b0 with SMTP id
- o132-20020a81738a000000b002dc2bf476b0mr17333592ywc.296.1647253085893; Mon, 14
- Mar 2022 03:18:05 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h8tEzrxdNc4jjoNSfhM1jc3MU9LSemhGmq+z88lCX5o=;
+        b=lWsxku33KVwVhKAN6cycdZOZecdcNpQ5CLu7Phi8aMzru2QK0M2IFibzU5HlRoFb+u
+         r28GRxA/3IBvjq54QHDMHcMFBa4XInEP6X8MQdGrVVj4yL3MiLUwayZXzpfqOxExCkjz
+         qww+4E2CgE9bvoiJCkMELZzPjhR1RP1zf8XhasdI+eGfOOAzoEu4VHflIGO/upGYHh7c
+         jxizTkBlMvuXqA1j4hZHqKlFw1b7X6SFio2man1cvqxFq+4UUI1E0MMXbJmb//UK2Bj/
+         7zXUsMrxDCoMYrL4tDV4IRSzby6t7uK4lQeZdfLNMGlGWYawQIZ7/Y4rDlxcOGLbZBoV
+         z2sA==
+X-Gm-Message-State: AOAM532P+bQWm9fx7QNR7taJ44iT1saRdHngWhMNqrEymfnzZDBcXQnl
+        7u64XSlaqf5e1ov4yRliohTc2dK+iCm0qett7eM=
+X-Google-Smtp-Source: ABdhPJzMrZPGC8buT0pqOE22MRVIe72bNArccD6iWtuauQNVqk1p+xjC26DlMTe82pNybumgK90eJg==
+X-Received: by 2002:a05:6512:22d1:b0:447:5fde:a2ee with SMTP id g17-20020a05651222d100b004475fdea2eemr13696335lfu.115.1647258134540;
+        Mon, 14 Mar 2022 04:42:14 -0700 (PDT)
+Received: from localhost.localdomain (88-113-46-102.elisa-laajakaista.fi. [88.113.46.102])
+        by smtp.gmail.com with ESMTPSA id l11-20020a2e834b000000b00246308690e2sm3893333ljh.85.2022.03.14.04.42.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Mar 2022 04:42:14 -0700 (PDT)
+From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCH v2 0/7] clk: qcom: add camera clock controller driver for SM8450 SoC
+Date:   Mon, 14 Mar 2022 13:42:09 +0200
+Message-Id: <20220314114211.1636574-1-vladimir.zapolskiy@linaro.org>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Received: by 2002:a05:7000:664e:0:0:0:0 with HTTP; Mon, 14 Mar 2022 03:18:05
- -0700 (PDT)
-Reply-To: lawrencetansanco.y@gmail.com
-From:   Lawrence Tansanco Yacouba <ltansancoy@gmail.com>
-Date:   Mon, 14 Mar 2022 10:18:05 +0000
-Message-ID: <CAK5Y89B_nM=NB3F74FU=OkW46S8+sqUpfZMbv5ei+DSF9F90LA@mail.gmail.com>
-Subject: THANKS FOR YOUR RESPONSE AND GOD BLESS
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-.
-I will like to disclose something very important to you,
-get back for more details please.
+The patchset adds support of a camera clock controller found on
+QCOM SM8450 SoC, noticeably a camcc pll2 is a new "rivian evo"
+type of pll, its generic support is added in the series.
 
-Regards.
-Mr Lawrence Tansanco Y.
+Note that SM8450 ES variant has a slightly different configurtion,
+the published version is intended to support SM8450 CS SoC.
+
+Changes from v1 to v2:
+* updated qcom,camcc-sm8450.yaml according to review comments from Rob,
+* changed qcom,camcc-sm8450.h licence to dual one,
+* disabled camcc device tree node by default,
+* added Stephen's tag,
+* rebased the series on top of clk-for-5.18
+
+Vladimir Zapolskiy (7):
+  dt-bindings: clock: add QCOM SM8450 camera clock bindings
+  arm64: dts: qcom: sm8450: Add description of camera clock controller
+  clk: qcom: clk-alpha-pll: fix clk_trion_pll_configure description
+  clk: qcom: clk-alpha-pll: limit exported symbols to GPL licensed code
+  clk: qcom: clk-alpha-pll: export lucid evo PLL configuration interfaces
+  clk: qcom: clk-alpha-pll: add rivian evo PLL configuration interfaces
+  clk: qcom: add camera clock controller driver for SM8450 SoC
+
+ .../bindings/clock/qcom,camcc-sm8450.yaml     |   89 +
+ arch/arm64/boot/dts/qcom/sm8450.dtsi          |   20 +
+ drivers/clk/qcom/Kconfig                      |    7 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/camcc-sm8450.c               | 2869 +++++++++++++++++
+ drivers/clk/qcom/clk-alpha-pll.c              |  145 +-
+ drivers/clk/qcom/clk-alpha-pll.h              |   11 +-
+ include/dt-bindings/clock/qcom,camcc-sm8450.h |  159 +
+ 8 files changed, 3295 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,camcc-sm8450.yaml
+ create mode 100644 drivers/clk/qcom/camcc-sm8450.c
+ create mode 100644 include/dt-bindings/clock/qcom,camcc-sm8450.h
+
+-- 
+2.33.0
+
