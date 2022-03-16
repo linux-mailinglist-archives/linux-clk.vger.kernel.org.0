@@ -2,191 +2,130 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F7C4DAFCA
-	for <lists+linux-clk@lfdr.de>; Wed, 16 Mar 2022 13:31:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5607A4DB005
+	for <lists+linux-clk@lfdr.de>; Wed, 16 Mar 2022 13:46:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354945AbiCPMcO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 16 Mar 2022 08:32:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38350 "EHLO
+        id S1355878AbiCPMrg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 16 Mar 2022 08:47:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236328AbiCPMcN (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 16 Mar 2022 08:32:13 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228653C487;
-        Wed, 16 Mar 2022 05:30:58 -0700 (PDT)
-Received: from tr.lan (ip-89-176-112-137.net.upcbroadband.cz [89.176.112.137])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id A99538301E;
-        Wed, 16 Mar 2022 13:30:56 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1647433857;
-        bh=fEYvIWC6xo2xNf3PH8VNaMyulNlzE2HvVibuAfq7fWY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aNUXy+r9rn0jIQQyMxmQqaJuHJY3NXy6YowSZ5h9bwVp0HDZiBu7oG8lo4i6Er37w
-         HkRAlvBSxCgsyUgYJY/fohvBCgR5y3FDPNa1QKaCKUi4gctPJuVxN4NSlWt5vZ/mW2
-         Yg0IFlu0lqaVh2XgIReESw+Ed/5L3KJKVGdnVFKZormLPfgRthGSfoNYFhz7aVZAX8
-         qWb9OC0ltGB9F9q9z6QNxQebQIyCA/zaO5HM5QULR+tt08v+z65GStlPx2emJC3c4L
-         TnClCdNMNC0HifTjV0X2E1E4wRJWCe9krp4F0GGWiH7CY1zfvdIeiAYKqvsegkdoB7
-         Ogos+4yz4/uDw==
-From:   Marek Vasut <marex@denx.de>
-To:     linux-clk@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>,
-        Michael Turquette <mturquette@baylibre.com>,
+        with ESMTP id S1355866AbiCPMre (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 16 Mar 2022 08:47:34 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67456548D;
+        Wed, 16 Mar 2022 05:46:20 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22GAA4Yv013540;
+        Wed, 16 Mar 2022 13:46:02 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=xQ0LY62N9ucJsRtmmS7ed7yZVgwJC7hBULDEdrXmsp4=;
+ b=G4WdUUHjUULb5wZFHpgXbt+9XrzcIJGjvHqHnwzTy2OYZm4wBWHgOPosiBoGiR/A4EwU
+ i2PITWsjEAiXSXozHLkKLunwDQ78rhPamMfdh/eU6hgUHUhQVYmkjhrLEa7AZ9YHWyJF
+ G/TKfojRwbwnrPLZp6kOggJlY4/9dryVtg0dd7wYghiwi8ncRdTneh+x6jCq9OLsQzRK
+ TxVVco+Aj6SOu8Qb7kv7EIUmgSbB6Tjd8SJWi3XWyHOMuvZVRs4Lo0yg2QjFnWN/Dfbe
+ GS3J6w4IWazcy+PU68kjXw2NGvg+aMNvtzlqWEPo0gs4258x7W+YWtso03H8Wm/9MBPo kw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3et63hdhen-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 16 Mar 2022 13:46:02 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CA00310002A;
+        Wed, 16 Mar 2022 13:45:57 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B3729226FB3;
+        Wed, 16 Mar 2022 13:45:57 +0100 (CET)
+Received: from localhost (10.75.127.47) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 16 Mar 2022 13:45:57
+ +0100
+From:   <gabriel.fernandez@foss.st.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org
-Subject: [PATCH v2 2/2] clk: Introduce 'critical-clocks' property
-Date:   Wed, 16 Mar 2022 13:30:34 +0100
-Message-Id: <20220316123034.13465-2-marex@denx.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220316123034.13465-1-marex@denx.de>
-References: <20220316123034.13465-1-marex@denx.de>
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>
+CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 00/13] Introduction of STM32MP13 RCC driver (Reset Clock Controller)
+Date:   Wed, 16 Mar 2022 13:45:40 +0100
+Message-ID: <20220316124553.6818-1-gabriel.fernandez@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.5 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-16_04,2022-03-15_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Some platforms require select clock to be always running, e.g. because
-those clock supply vital devices which are not otherwise attached to
-the system and thus do not have a matching DT node and clock consumer.
+From: Gabriel Fernandez <gabriel.fernandez@foss.st.com>
 
-An example is a system where the SoC serves as a crystal oscillator
-replacement for a programmable logic device. The "critical-clocks"
-property of a clock controller allows listing clock which must never
-be turned off.
+v3:
+  - cosmetic change from Stephen Boyd
+  - rename some functions in clk-stm32-core
+  - add missing static for variables or functions
 
-Clock listed in the "critical-clocks" property may have other consumers
-in DT, listing the clock in "critical-clocks" only assures those clock
-are never turned off, and none of these optional additional consumers
-can turn the clock off either. This is achieved by adding CLK_IS_CRITICAL
-flag to these critical clock.
+v2:
+  - Resend because patch 9,10,12,13 has not been sent
+  - add Reviewed by Krzysztof Kozlowski for patch 1
 
-This flag has thus far been added to select clock by hard-coding it in
-various clock drivers, this patch provides generic DT interface to add
-the flag to arbitrary clock that may be critical.
+Gabriel Fernandez (13):
+  dt-bindings: rcc: stm32: add new compatible for STM32MP13 SoC
+  clk: stm32: Introduce STM32MP13 RCC drivers (Reset Clock Controller)
+  clk: stm32mp13: add stm32_mux clock management
+  clk: stm32mp13: add stm32_gate management
+  clk: stm32mp13: add stm32 divider clock
+  clk: stm32mp13: add composite clock
+  clk: stm32mp13: manage secured clocks
+  clk: stm32mp13: add all STM32MP13 peripheral clocks
+  clk: stm32mp13: add all STM32MP13 kernel clocks
+  clk: stm32mp13: add multi mux function
+  clk: stm32mp13: add safe mux management
+  ARM: dts: stm32: enable optee firmware and SCMI support on STM32MP13
+  ARM: dts: stm32: add RCC on STM32MP13x SoC family
 
-The implementation is modeled after "protected-clocks", except the protected
-clock property is currently driver specific. This patch attempts to provide
-a generic implementation of "critical-clocks" instead.
+ .../bindings/clock/st,stm32mp1-rcc.yaml       |    2 +
+ arch/arm/boot/dts/stm32mp131.dtsi             |  128 +-
+ arch/arm/boot/dts/stm32mp133.dtsi             |    4 +-
+ arch/arm/boot/dts/stm32mp13xf.dtsi            |    3 +-
+ drivers/clk/Kconfig                           |    5 +
+ drivers/clk/Makefile                          |    1 +
+ drivers/clk/stm32/Makefile                    |    1 +
+ drivers/clk/stm32/clk-stm32-core.c            |  695 +++++++
+ drivers/clk/stm32/clk-stm32-core.h            |  188 ++
+ drivers/clk/stm32/clk-stm32mp13.c             | 1620 +++++++++++++++
+ drivers/clk/stm32/reset-stm32.c               |  122 ++
+ drivers/clk/stm32/reset-stm32.h               |    8 +
+ drivers/clk/stm32/stm32mp13_rcc.h             | 1748 +++++++++++++++++
+ include/dt-bindings/clock/stm32mp13-clks.h    |  229 +++
+ include/dt-bindings/reset/stm32mp13-resets.h  |  100 +
+ 15 files changed, 4794 insertions(+), 60 deletions(-)
+ create mode 100644 drivers/clk/stm32/Makefile
+ create mode 100644 drivers/clk/stm32/clk-stm32-core.c
+ create mode 100644 drivers/clk/stm32/clk-stm32-core.h
+ create mode 100644 drivers/clk/stm32/clk-stm32mp13.c
+ create mode 100644 drivers/clk/stm32/reset-stm32.c
+ create mode 100644 drivers/clk/stm32/reset-stm32.h
+ create mode 100644 drivers/clk/stm32/stm32mp13_rcc.h
+ create mode 100644 include/dt-bindings/clock/stm32mp13-clks.h
+ create mode 100644 include/dt-bindings/reset/stm32mp13-resets.h
 
-Unlike "assigned-clocks", the "critical-clocks" must be parsed much earlier
-in __clk_register() to assign CLK_IS_CRITICAL flag to clk_init_data .flags
-field.
-
-The new match_clkspec() callback is used to determine whether struct clk_hw
-that is currently being registered matches the clock specifier in the DT
-"critical-clocks" property, and if so, then the CLK_IS_CRITICAL is added to
-these newly registered clock. This callback can only be driver specific.
-
-Signed-off-by: Marek Vasut <marex@denx.de>
-Cc: Michael Turquette <mturquette@baylibre.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: devicetree@vger.kernel.org
-To: linux-clk@vger.kernel.org
----
-V2: - Warn in case critical-clock field cannot be parsed and skip those clock
-    - Use match_clkspec() only for non-zero clock-cells controllers
-    - Pull the critical-clock code into __clk_register_critical_clock()
-    - Update commit message
----
- drivers/clk/clk.c            | 44 ++++++++++++++++++++++++++++++++++++
- include/linux/clk-provider.h |  3 +++
- 2 files changed, 47 insertions(+)
-
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 6dc768a9674f4..8831c8f9e47c4 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -3896,6 +3896,48 @@ static void clk_core_free_parent_map(struct clk_core *core)
- 	kfree(core->parents);
- }
- 
-+static void
-+__clk_register_critical_clock(struct device_node *np, struct clk_core *core,
-+			      struct clk_hw *hw)
-+{
-+	struct of_phandle_args clkspec;
-+	u32 clksize, clktotal;
-+	int ret, i, index;
-+
-+	if (!np)
-+		return;
-+
-+	if (of_property_read_u32(np, "#clock-cells", &clksize))
-+		return;
-+
-+	/* Clock node with #clock-cells = <0> uses critical-clocks; */
-+	if (clksize == 0) {
-+		if (of_property_read_bool(np, "critical-clocks"))
-+			core->flags |= CLK_IS_CRITICAL;
-+		return;
-+	}
-+
-+	if (!core->ops->match_clkspec)
-+		return;
-+
-+	clkspec.np = np;
-+	clktotal = of_property_count_u32_elems(np, "critical-clocks");
-+	clktotal /= clksize;
-+	for (index = 0; index < clktotal; index++) {
-+		for (i = 0; i < clksize; i++) {
-+			ret = of_property_read_u32_index(np, "critical-clocks",
-+							 (index * clksize) + i,
-+							 &(clkspec.args[i]));
-+			if (ret) {
-+				pr_warn("Skipping critical-clocks index %d (ret=%d)\n",
-+					i, ret);
-+			}
-+		}
-+		if (!core->ops->match_clkspec(hw, &clkspec))
-+			core->flags |= CLK_IS_CRITICAL;
-+	}
-+}
-+
- static struct clk *
- __clk_register(struct device *dev, struct device_node *np, struct clk_hw *hw)
- {
-@@ -3940,6 +3982,8 @@ __clk_register(struct device *dev, struct device_node *np, struct clk_hw *hw)
- 	core->min_rate = 0;
- 	core->max_rate = ULONG_MAX;
- 
-+	__clk_register_critical_clock(np, core, hw);
-+
- 	ret = clk_core_populate_parent_map(core, init);
- 	if (ret)
- 		goto fail_parents;
-diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
-index 48d67574d4030..ad205d065c606 100644
---- a/include/linux/clk-provider.h
-+++ b/include/linux/clk-provider.h
-@@ -205,6 +205,8 @@ struct clk_duty {
-  *		directory is provided as an argument.  Called with
-  *		prepare_lock held.  Returns 0 on success, -EERROR otherwise.
-  *
-+ * @match_clkspec: Check whether clk_hw matches DT clock specifier.
-+ *		Returns 0 on success, -EERROR otherwise.
-  *
-  * The clk_enable/clk_disable and clk_prepare/clk_unprepare pairs allow
-  * implementations to split any work between atomic (enable) and sleepable
-@@ -252,6 +254,7 @@ struct clk_ops {
- 	int		(*init)(struct clk_hw *hw);
- 	void		(*terminate)(struct clk_hw *hw);
- 	void		(*debug_init)(struct clk_hw *hw, struct dentry *dentry);
-+	int		(*match_clkspec)(struct clk_hw *hw, struct of_phandle_args *clkspec);
- };
- 
- /**
 -- 
-2.35.1
+2.25.1
 
