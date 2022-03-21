@@ -2,212 +2,89 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 644284E2C9E
-	for <lists+linux-clk@lfdr.de>; Mon, 21 Mar 2022 16:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8166C4E2C4F
+	for <lists+linux-clk@lfdr.de>; Mon, 21 Mar 2022 16:31:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345487AbiCUPpi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 21 Mar 2022 11:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
+        id S1348677AbiCUPcq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 21 Mar 2022 11:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234700AbiCUPpg (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 21 Mar 2022 11:45:36 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE3413DE4;
-        Mon, 21 Mar 2022 08:44:04 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id h16so8249221wmd.0;
-        Mon, 21 Mar 2022 08:44:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XoXisWW93pi2sg9tIKJ01ulYb1YdPWU5OGPWRm7ICC8=;
-        b=ZkJpGUGZG9/PZzeERfZOKs755Ch+NcehEboHt9ataGdfL9hvC87CjoNyVxbqHHxAbZ
-         R+vrihTuqVommri1kJaqDILNLLl1/jXiK7/8yuL4ENXPCCpklTkxHRCz4/teui+aJgA4
-         n0w7eC++x+3Q/DuRGB4V9SAo8EZYQ7OYFk6rRCfVVI3mc4jgBZcTGWIo/5iqdCI/OBTg
-         9IkUdIShLal30IKV0DZ8VaBwDaEL14DLa13qFx5WX87BkZbwnWjsEAuh6GIWQJ3GhIun
-         UZg4IT6Q2RD7YzbPupQoNTNBBP+iQPhhzqS0+HtgTf3qDg1/ag9TNJlrljxJwbKZxD70
-         HotA==
+        with ESMTP id S241939AbiCUPcp (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 21 Mar 2022 11:32:45 -0400
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04C5169798;
+        Mon, 21 Mar 2022 08:31:19 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id q20so8786567wmq.1;
+        Mon, 21 Mar 2022 08:31:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XoXisWW93pi2sg9tIKJ01ulYb1YdPWU5OGPWRm7ICC8=;
-        b=DiHW7vePiRkykqYQ7rYzFJoEOG1TmKcL9ZERm3Ry2i8KmParjgKsPe6XTquumBqGez
-         sHRj/galPRSO7s7yBVrpHt7Dm6EyA7dIGCGQswwnyuBOQkMtyzvxCPtM03pQsQRcZKcm
-         HX/bj2NAf0oWhafCoBGyrz979XVJ7xJuTNHKrdwkpYUZG5YgHHFZytpG18gl0LyMD2fU
-         Q0Jr+/MROmYiscia32wBydT8ZN6xRj5X/1Hk3veUUEGmqXV3OGNxlT8USz1ieWYMRbdV
-         pD6rgPtwiMHpzi9kZ95hrS3TAAr1K6/CP+Z/DZyj7bvfs3ey4NN8X+CuEp4qubmS++AP
-         7taA==
-X-Gm-Message-State: AOAM531u9mGf+eKcdCx5s7ZLNkdncliT/hEcGrUJ4vm04hbN6k89RaQZ
-        s1FZAdQ67B1pjwxu1aZ33Zk=
-X-Google-Smtp-Source: ABdhPJxz1OvwDf6onrSDOBQ3m4NWwCfjreQVmBfTLj/cPJO7pdDw9tod5DFAPbxVQ1P8+ZVmz1FBfg==
-X-Received: by 2002:a7b:c844:0:b0:37b:b986:7726 with SMTP id c4-20020a7bc844000000b0037bb9867726mr20648461wml.160.1647877443015;
-        Mon, 21 Mar 2022 08:44:03 -0700 (PDT)
-Received: from Ansuel-xps.localdomain (93-42-69-170.ip85.fastwebnet.it. [93.42.69.170])
-        by smtp.gmail.com with ESMTPSA id k40-20020a05600c1ca800b0038c6c8b7fa8sm15457215wms.25.2022.03.21.08.44.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 08:44:02 -0700 (PDT)
-Date:   Mon, 21 Mar 2022 16:14:43 +0100
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/5/C1gYgp4VfvcuFi8LRcN8/3RmQ7G2v7pTXWSD0gyk=;
+        b=ikU2jUK8bO2Y8uvXIouxrNntLlS3zOteRo7pzh6zSJRj+Ehe9WRh/zqCub/FMm6ZFE
+         8+An2O5WYwx3ZZZuaUzvuwgHA+AHZSnlyUihi/ubWUBemyi6cgTxgkdSAprvoBE0n4UM
+         lF7orA/1anN4N2UpAjsL6Tqbb8u5r5J4IfutZzY4642oTcq/SQK1K/H82+C1ohgdtwnC
+         JTOnvkNnkkq5xjE3IZ4/U20tLcCK29y7NARKK/EQO63LANKYmQcmFOFFN4JOE4r3LWS8
+         YnzOiDlISRizVea3inz3abGIS5JeJFVCrtw+ZukGGWE5swmzIIYq5d2PueRiK8Dp+hy6
+         DTMA==
+X-Gm-Message-State: AOAM530i74lfKoB8ZztmbTWKiowtw+9vhMnjvvLHMoj+34QDKOLm+6WC
+        yKPN83MC2Zr0UG49p7itY1E=
+X-Google-Smtp-Source: ABdhPJwVJp0KtpTuBf4c2VyunnMuFCDqiKloKbAIJMgm6G95zkywhdBK4Zy0uSs2jpqDnjxCqCmmuw==
+X-Received: by 2002:a05:600c:1d9f:b0:389:a1c4:f400 with SMTP id p31-20020a05600c1d9f00b00389a1c4f400mr27473867wms.171.1647876678403;
+        Mon, 21 Mar 2022 08:31:18 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.googlemail.com with ESMTPSA id h188-20020a1c21c5000000b0038c6c37efc3sm14255712wmh.12.2022.03.21.08.31.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 08:31:17 -0700 (PDT)
+Message-ID: <24ba0e3e-b6ba-8434-059a-8bda197a74e3@kernel.org>
+Date:   Mon, 21 Mar 2022 16:31:16 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 14/18] dt-bindings: clock: Convert qcom,krait-cc to
+ yaml
+Content-Language: en-US
+To:     Ansuel Smith <ansuelsmth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: Re: [PATCH v4 18/18] dt-bindings: arm: msm: Convert kpss-gcc driver
- Documentation to yaml
-Message-ID: <YjiWY9wxGMtUAcjY@Ansuel-xps.localdomain>
 References: <20220321144825.11736-1-ansuelsmth@gmail.com>
- <20220321144825.11736-19-ansuelsmth@gmail.com>
- <a7837388-e36f-9e55-4107-9f7f85571f3b@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a7837388-e36f-9e55-4107-9f7f85571f3b@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+ <20220321144825.11736-15-ansuelsmth@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220321144825.11736-15-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 04:41:37PM +0100, Krzysztof Kozlowski wrote:
-> On 21/03/2022 15:48, Ansuel Smith wrote:
-> > Convert kpss-gcc driver Documentation to yaml.
-> > 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >  .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ------------
-> >  .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 68 +++++++++++++++++++
-> >  2 files changed, 68 insertions(+), 44 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
-> >  create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
-> > deleted file mode 100644
-> > index e628758950e1..000000000000
-> > --- a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
-> > +++ /dev/null
-> > @@ -1,44 +0,0 @@
-> > -Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
-> > -
-> > -PROPERTIES
-> > -
-> > -- compatible:
-> > -	Usage: required
-> > -	Value type: <string>
-> > -	Definition: should be one of the following. The generic compatible
-> > -			"qcom,kpss-gcc" should also be included.
-> > -			"qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc"
-> > -			"qcom,kpss-gcc-apq8064", "qcom,kpss-gcc"
-> > -			"qcom,kpss-gcc-msm8974", "qcom,kpss-gcc"
-> > -			"qcom,kpss-gcc-msm8960", "qcom,kpss-gcc"
-> > -
-> > -- reg:
-> > -	Usage: required
-> > -	Value type: <prop-encoded-array>
-> > -	Definition: base address and size of the register region
-> > -
-> > -- clocks:
-> > -	Usage: required
-> > -	Value type: <prop-encoded-array>
-> > -	Definition: reference to the pll parents.
-> > -
-> > -- clock-names:
-> > -	Usage: required
-> > -	Value type: <stringlist>
-> > -	Definition: must be "pll8_vote", "pxo".
-> > -
-> > -- clock-output-names:
-> > -	Usage: required
-> > -	Value type: <string>
-> > -	Definition: Name of the output clock. Typically acpu_l2_aux indicating
-> > -		    an L2 cache auxiliary clock.
-> > -
-> > -Example:
-> > -
-> > -	l2cc: clock-controller@2011000 {
-> > -		compatible = "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc";
-> > -		reg = <0x2011000 0x1000>;
-> > -		clocks = <&gcc PLL8_VOTE>, <&gcc PXO_SRC>;
-> > -		clock-names = "pll8_vote", "pxo";
-> > -		clock-output-names = "acpu_l2_aux";
-> > -	};
-> > diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-> > new file mode 100644
-> > index 000000000000..20ee182eb16f
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-> > @@ -0,0 +1,68 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/arm/msm/qcom,kpss-gcc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
-> > +
-> > +maintainers:
-> > +  - Ansuel Smith <ansuelsmth@gmail.com>
-> > +
-> > +description: |
-> > +  Krait Processor Sub-system (KPSS) Global Clock Controller (GCC). Used
-> > +  to control L2 mux (in the current implementation).
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - enum:
-> > +          - qcom,kpss-gcc-ipq8064
-> > +          - qcom,kpss-gcc-apq8064
-> > +          - qcom,kpss-gcc-msm8974
-> > +          - qcom,kpss-gcc-msm8960
-> > +      - const: qcom,kpss-gcc
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: phandle to pll8_vote
-> > +      - description: phandle to pxo_board
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: pll8_vote
-> > +      - const: pxo
-> > +
-> > +  clock-output-names:
-> > +    const: acpu_l2_aux
-> > +
-> > +  '#clock-cells':
-> > +    const: 0
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - clocks
-> > +  - clock-names
-> > +  - clock-output-names
-> > +  - '#clock-cells'
+On 21/03/2022 15:48, Ansuel Smith wrote:
+> Convert qcom,krait-cc to yaml Documentation.
 > 
-> You add here a new required property, so this is not a pure conversion.
-> Please explain in the commit msg why are you doing this. I asked about
-> this in your previous patchset.
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/clock/qcom,krait-cc.txt          | 34 -----------
+>  .../bindings/clock/qcom,krait-cc.yaml         | 59 +++++++++++++++++++
+>  2 files changed, 59 insertions(+), 34 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/clock/qcom,krait-cc.txt
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,krait-cc.yaml
 > 
-> Best regards,
-> Krzysztof
 
-Sorry I probably missed it. Just to make sure you are referring to
-#clock-cells?
-Since this expose a clock, clock-cells is required. Should I put this in
-a different commit? 
 
--- 
-	Ansuel
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+
+Best regards,
+Krzysztof
