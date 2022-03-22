@@ -2,41 +2,56 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9208E4E38F0
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Mar 2022 07:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 868354E3A95
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Mar 2022 09:30:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237088AbiCVG0X (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 22 Mar 2022 02:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
+        id S231142AbiCVIby (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 22 Mar 2022 04:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237080AbiCVGZ6 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 22 Mar 2022 02:25:58 -0400
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF77633A0E
-        for <linux-clk@vger.kernel.org>; Mon, 21 Mar 2022 23:24:14 -0700 (PDT)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 172.28.114.216
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(7841:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Tue, 22 Mar 2022 14:16:35 +0800 (CST)
-From:   Qin Jian <qinjian@cqplus1.com>
-To:     krzysztof.kozlowski@canonical.com
-Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, p.zabel@pengutronix.de,
-        linux@armlinux.org.uk, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Qin Jian <qinjian@cqplus1.com>
-Subject: [PATCH v11 9/9] ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
-Date:   Tue, 22 Mar 2022 14:17:00 +0800
-Message-Id: <8372ee2fcf361a3af7233450c4403178052ceee2.1647928316.git.qinjian@cqplus1.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1647928315.git.qinjian@cqplus1.com>
-References: <cover.1647928315.git.qinjian@cqplus1.com>
+        with ESMTP id S229706AbiCVIbx (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 22 Mar 2022 04:31:53 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC0713F8D;
+        Tue, 22 Mar 2022 01:30:24 -0700 (PDT)
+X-UUID: 2c5a5ae2a33341f9803f4fa11f802fd3-20220322
+X-UUID: 2c5a5ae2a33341f9803f4fa11f802fd3-20220322
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <chun-jie.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1934978458; Tue, 22 Mar 2022 16:30:18 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 22 Mar 2022 16:30:17 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 22 Mar 2022 16:30:17 +0800
+Message-ID: <51750d230b38aa3d2e9d370247bcb4be93a35877.camel@mediatek.com>
+Subject: Re: [PATCH v2 02/15] clk: mediatek: Add MT8186 mcusys clock support
+From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 22 Mar 2022 16:30:17 +0800
+In-Reply-To: <CAGXv+5Fq4_dZBWJvKZ8ADUSQF4bTu-QWZ+7KG1dsJoWDrT2nXg@mail.gmail.com>
+References: <20220221015258.913-1-chun-jie.chen@mediatek.com>
+         <20220221015258.913-3-chun-jie.chen@mediatek.com>
+         <CAGXv+5Fq4_dZBWJvKZ8ADUSQF4bTu-QWZ+7KG1dsJoWDrT2nXg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,108 +59,220 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add generic Sunplus SP7021 based board defconfig
+On Wed, 2022-03-09 at 18:13 +0800, Chen-Yu Tsai wrote:
+> Hi,
+> 
+> On Mon, Feb 21, 2022 at 9:59 AM Chun-Jie Chen
+> <chun-jie.chen@mediatek.com> wrote:
+> > 
+> > Add MT8186 mcusys clock controller which provides muxes
+> > to select the clock source of APMCU.
+> > 
+> > Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+> > Acked-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > ---
+> >  drivers/clk/mediatek/Kconfig          |   8 ++
+> >  drivers/clk/mediatek/Makefile         |   1 +
+> >  drivers/clk/mediatek/clk-mt8186-mcu.c | 106
+> > ++++++++++++++++++++++++++
+> >  3 files changed, 115 insertions(+)
+> >  create mode 100644 drivers/clk/mediatek/clk-mt8186-mcu.c
+> > 
+> > diff --git a/drivers/clk/mediatek/Kconfig
+> > b/drivers/clk/mediatek/Kconfig
+> > index 01ef02c54725..d5936cfb3bee 100644
+> > --- a/drivers/clk/mediatek/Kconfig
+> > +++ b/drivers/clk/mediatek/Kconfig
+> > @@ -512,6 +512,14 @@ config COMMON_CLK_MT8183_VENCSYS
+> >         help
+> >           This driver supports MediaTek MT8183 vencsys clocks.
+> > 
+> > +config COMMON_CLK_MT8186
+> > +       bool "Clock driver for MediaTek MT8186"
+> > +       depends on ARM64 || COMPILE_TEST
+> > +       select COMMON_CLK_MEDIATEK
+> > +       default ARCH_MEDIATEK
+> > +       help
+> > +         This driver supports MediaTek MT8186 clocks.
+> > +
+> >  config COMMON_CLK_MT8192
+> >         bool "Clock driver for MediaTek MT8192"
+> >         depends on ARM64 || COMPILE_TEST
+> > diff --git a/drivers/clk/mediatek/Makefile
+> > b/drivers/clk/mediatek/Makefile
+> > index 7b0c2646ce4a..677fa4f0eea2 100644
+> > --- a/drivers/clk/mediatek/Makefile
+> > +++ b/drivers/clk/mediatek/Makefile
+> > @@ -71,6 +71,7 @@ obj-$(CONFIG_COMMON_CLK_MT8183_MFGCFG) += clk-
+> > mt8183-mfgcfg.o
+> >  obj-$(CONFIG_COMMON_CLK_MT8183_MMSYS) += clk-mt8183-mm.o
+> >  obj-$(CONFIG_COMMON_CLK_MT8183_VDECSYS) += clk-mt8183-vdec.o
+> >  obj-$(CONFIG_COMMON_CLK_MT8183_VENCSYS) += clk-mt8183-venc.o
+> > +obj-$(CONFIG_COMMON_CLK_MT8186) += clk-mt8186-mcu.o
+> >  obj-$(CONFIG_COMMON_CLK_MT8192) += clk-mt8192.o
+> >  obj-$(CONFIG_COMMON_CLK_MT8192_AUDSYS) += clk-mt8192-aud.o
+> >  obj-$(CONFIG_COMMON_CLK_MT8192_CAMSYS) += clk-mt8192-cam.o
+> > diff --git a/drivers/clk/mediatek/clk-mt8186-mcu.c
+> > b/drivers/clk/mediatek/clk-mt8186-mcu.c
+> > new file mode 100644
+> > index 000000000000..6d82c5de16c1
+> > --- /dev/null
+> > +++ b/drivers/clk/mediatek/clk-mt8186-mcu.c
+> > @@ -0,0 +1,106 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +//
+> > +// Copyright (c) 2022 MediaTek Inc.
+> > +// Author: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+> > +
+> > +#include "clk-mtk.h"
+> 
+> Please move local headers after global ones. And please do this for
+> all
+> patches.
+> 
+> > +
+> > +#include <dt-bindings/clock/mt8186-clk.h>
+> > +#include <linux/clk-provider.h>
+> > +#include <linux/platform_device.h>
+> > +
+> > +static DEFINE_SPINLOCK(mt8186_clk_lock);
+> > +
+> > +static const char * const mcu_armpll_ll_parents[] = {
+> > +       "clk26m",
+> > +       "armpll_ll",
+> > +       "mainpll",
+> > +       "univpll_d2"
+> > +};
+> > +
+> > +static const char * const mcu_armpll_bl_parents[] = {
+> > +       "clk26m",
+> > +       "armpll_bl",
+> > +       "mainpll",
+> > +       "univpll_d2"
+> > +};
+> > +
+> > +static const char * const mcu_armpll_bus_parents[] = {
+> > +       "clk26m",
+> > +       "ccipll",
+> > +       "mainpll",
+> > +       "univpll_d2"
+> > +};
+> > +
+> > +static struct mtk_composite mcu_muxes[] = {
+> > +       /* CPU_PLLDIV_CFG0 */
+> > +       MUX(CLK_MCU_ARMPLL_LL_SEL, "mcu_armpll_ll_sel",
+> > mcu_armpll_ll_parents, 0x2A0, 9, 2),
+> 
+> Can you add a comment stating that these registers have other bits
+> that
+> should not be touched? Otherwise anyone reading the datasheet might
+> consider this to be incomplete.
+> 
+> I assume the other bits (such as one field that looks like a divider)
+> are
+> configured in the bootloader, or the POR defaults are correct.
+> 
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Qin Jian <qinjian@cqplus1.com>
----
- MAINTAINERS                         |  1 +
- arch/arm/configs/multi_v7_defconfig |  1 +
- arch/arm/configs/sp7021_defconfig   | 61 +++++++++++++++++++++++++++++
- 3 files changed, 63 insertions(+)
- create mode 100644 arch/arm/configs/sp7021_defconfig
+Yes, We only control mux in linux side and keep same value in divider.
+I will add more description in v4. Sorry I missed this comment before.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 38890c055..93f4de6c1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2747,6 +2747,7 @@ F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
- F:	Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
- F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
-+F:	arch/arm/configs/sp7021_*defconfig
- F:	arch/arm/mach-sunplus/
- F:	drivers/clk/clk-sp7021.c
- F:	drivers/irqchip/irq-sp7021-intc.c
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 8863fa969..a3bd9dbd8 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -86,6 +86,7 @@ CONFIG_MACH_SPEAR1310=y
- CONFIG_MACH_SPEAR1340=y
- CONFIG_ARCH_STI=y
- CONFIG_ARCH_STM32=y
-+CONFIG_ARCH_SUNPLUS=y
- CONFIG_ARCH_SUNXI=y
- CONFIG_ARCH_TEGRA=y
- CONFIG_ARCH_UNIPHIER=y
-diff --git a/arch/arm/configs/sp7021_defconfig b/arch/arm/configs/sp7021_defconfig
-new file mode 100644
-index 000000000..cda16d33a
---- /dev/null
-+++ b/arch/arm/configs/sp7021_defconfig
-@@ -0,0 +1,61 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_PREEMPT=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=14
-+# CONFIG_RD_GZIP is not set
-+# CONFIG_RD_BZIP2 is not set
-+# CONFIG_RD_LZMA is not set
-+# CONFIG_RD_XZ is not set
-+# CONFIG_RD_LZO is not set
-+# CONFIG_RD_LZ4 is not set
-+CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-+CONFIG_PERF_EVENTS=y
-+CONFIG_SLAB=y
-+CONFIG_ARCH_SUNPLUS=y
-+# CONFIG_VDSO is not set
-+CONFIG_SMP=y
-+CONFIG_HAVE_ARM_ARCH_TIMER=y
-+CONFIG_THUMB2_KERNEL=y
-+CONFIG_FORCE_MAX_ZONEORDER=12
-+CONFIG_VFP=y
-+CONFIG_NEON=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_MODVERSIONS=y
-+# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-+CONFIG_UEVENT_HELPER=y
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_INPUT_SPARSEKMAP=y
-+CONFIG_INPUT_EVDEV=y
-+# CONFIG_INPUT_KEYBOARD is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_LEGACY_PTYS is not set
-+# CONFIG_HW_RANDOM is not set
-+# CONFIG_HWMON is not set
-+CONFIG_STAGING=y
-+# CONFIG_IOMMU_SUPPORT is not set
-+CONFIG_RESET_CONTROLLER=y
-+CONFIG_EXT4_FS=y
-+# CONFIG_DNOTIFY is not set
-+CONFIG_FANOTIFY=y
-+CONFIG_VFAT_FS=y
-+CONFIG_FAT_DEFAULT_IOCHARSET="utf8"
-+CONFIG_EXFAT_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+# CONFIG_MISC_FILESYSTEMS is not set
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ASCII=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_NLS_UTF8=y
-+CONFIG_PRINTK_TIME=y
-+CONFIG_DYNAMIC_DEBUG=y
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_FS=y
-+CONFIG_DEBUG_USER=y
--- 
-2.33.1
+> > +       /* CPU_PLLDIV_CFG1 */
+> > +       MUX(CLK_MCU_ARMPLL_BL_SEL, "mcu_armpll_bl_sel",
+> > mcu_armpll_bl_parents, 0x2A4, 9, 2),
+> > +       /* BUS_PLLDIV_CFG */
+> > +       MUX(CLK_MCU_ARMPLL_BUS_SEL, "mcu_armpll_bus_sel",
+> > mcu_armpll_bus_parents, 0x2E0, 9, 2),
+> > +};
+> 
+> Note: I've checked the register bits against the datasheet.
+> 
+> > +
+> > +static const struct of_device_id of_match_clk_mt8186_mcu[] = {
+> > +       { .compatible = "mediatek,mt8186-mcusys", },
+> > +       {}
+> > +};
+> > +
+> > +static int clk_mt8186_mcu_probe(struct platform_device *pdev)
+> > +{
+> > +       struct clk_onecell_data *clk_data;
+> > +       struct device_node *node = pdev->dev.of_node;
+> > +       int r;
+> > +       void __iomem *base;
+> > +
+> > +       clk_data = mtk_alloc_clk_data(CLK_MCU_NR_CLK);
+> > +       if (!clk_data)
+> > +               return -ENOMEM;
+> > +
+> > +       base = devm_platform_ioremap_resource(pdev, 0);
+> > +       if (IS_ERR(base)) {
+> > +               r = PTR_ERR(base);
+> > +               goto free_mcu_data;
+> > +       }
+> > +
+> > +       r = mtk_clk_register_composites(mcu_muxes,
+> > ARRAY_SIZE(mcu_muxes), base,
+> > +                                       &mt8186_clk_lock,
+> > clk_data);
+> 
+> I don't think you need the lock. None of the bit fields you have
+> defined
+> in this driver have overlapping registers.
+> 
+> 
+> Regards
+> ChenYu
+> 
+
+Yes, the muxes register of big and little CPU are not overlapping,
+I will remove the lock in next patch.
+
+Thanks!
+
+> > +       if (r)
+> > +               goto free_mcu_data;
+> > +
+> > +       r = of_clk_add_provider(node, of_clk_src_onecell_get,
+> > clk_data);
+> > +       if (r)
+> > +               goto unregister_composite_muxes;
+> > +
+> > +       platform_set_drvdata(pdev, clk_data);
+> > +
+> > +       return r;
+> > +
+> > +unregister_composite_muxes:
+> > +       mtk_clk_unregister_composites(mcu_muxes,
+> > ARRAY_SIZE(mcu_muxes), clk_data);
+> > +free_mcu_data:
+> > +       mtk_free_clk_data(clk_data);
+> > +       return r;
+> > +}
+> > +
+> > +static int clk_mt8186_mcu_remove(struct platform_device *pdev)
+> > +{
+> > +       struct clk_onecell_data *clk_data =
+> > platform_get_drvdata(pdev);
+> > +       struct device_node *node = pdev->dev.of_node;
+> > +
+> > +       of_clk_del_provider(node);
+> > +       mtk_clk_unregister_composites(mcu_muxes,
+> > ARRAY_SIZE(mcu_muxes), clk_data);
+> > +       mtk_free_clk_data(clk_data);
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static struct platform_driver clk_mt8186_mcu_drv = {
+> > +       .probe = clk_mt8186_mcu_probe,
+> > +       .remove = clk_mt8186_mcu_remove,
+> > +       .driver = {
+> > +               .name = "clk-mt8186-mcu",
+> > +               .of_match_table = of_match_clk_mt8186_mcu,
+> > +       },
+> > +};
+> > +builtin_platform_driver(clk_mt8186_mcu_drv);
+> > --
+> > 2.18.0
+> > 
 
