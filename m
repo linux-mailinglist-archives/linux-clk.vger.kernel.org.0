@@ -2,125 +2,128 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5924E34A3
-	for <lists+linux-clk@lfdr.de>; Tue, 22 Mar 2022 00:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B5094E361F
+	for <lists+linux-clk@lfdr.de>; Tue, 22 Mar 2022 02:48:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233504AbiCUXuU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 21 Mar 2022 19:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57348 "EHLO
+        id S234660AbiCVBrB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 21 Mar 2022 21:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233561AbiCUXuP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 21 Mar 2022 19:50:15 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182BE18FADD
-        for <linux-clk@vger.kernel.org>; Mon, 21 Mar 2022 16:48:32 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id a26so9129094lfg.10
-        for <linux-clk@vger.kernel.org>; Mon, 21 Mar 2022 16:48:32 -0700 (PDT)
+        with ESMTP id S234610AbiCVBrB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 21 Mar 2022 21:47:01 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2129E33E91;
+        Mon, 21 Mar 2022 18:45:34 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9so10790300ilu.9;
+        Mon, 21 Mar 2022 18:45:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=vZTvMBdW3SQjqfTPOqJ6W0r31NdUorzCOEH8bkHbTlQ=;
-        b=DNJxsbg9hyEho72sbA/PsOzXerpDKUbAoD1Wltv+qjynA4sLHEDGiZnBca4lu2VCdc
-         0qYWrPEtVItPwhew2p3BfdYIwdLfkzWI0G+/98zuPY5/F077QHyD7hO/ravHqjwRsK3U
-         yBB1Db5KF8G538bbhK4CN/5Ua6eTOFqlAi5nIqopXR0dF3W58UhtYB5VwtTPBReeESwV
-         PLAu6mYjKAv8MMVI9UM5GYe2oz/RM4CdOIEZoXx2FTVQUioN+VPz2N4nH7XCk/Jw3ZHK
-         F+6u2Tp7tOe44sime6Pnrjma/bJ7dFshJeaic/595Lt8K3GSGQwNI06zEVOztMXcI2wR
-         NJAw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zr0mWxQ50In1k50aI0C4tqPbw585vCp4j+PEvB7bkb8=;
+        b=WPeQWzlV2V8L+K20EVJb+LMeyLxwsBHU8JgNhDMz2/4wk7Upkb0JOcwnXg8aFR+A+7
+         pEg6qPQ6Eob5oE0M4bP3muGozT/dxeB/eAusirOX1ledQNzJ1k4xcA3J7Rr2q34NGp50
+         3zwU8o43mM6yToZ5771Ww/E2I9vbLrXzC0q+kNaALhWkkKf5BDkpS+KdaKMTLPnuyxfE
+         ux232B2Pl8yJmWhorpLFITU1hHTa1Mwl8tXoK+gBBayyBOffGncDPSPI2LTyoqH40Aa2
+         40yEdRDRbW1tmENlHoVfU5G8yXHSA6agJM+Q/lGTtm6U8/kL91jFTbVThKbRKAIeDAC+
+         4rzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=vZTvMBdW3SQjqfTPOqJ6W0r31NdUorzCOEH8bkHbTlQ=;
-        b=WnT0khO5aK7lonj6E6asBIr6MdXoLPjy64xxNcXdCFvZWzH7hV80q4KNdPnqjZEQ6v
-         WxHW12fj9gwKTvAJXLfpQaT/QRV7buchZYNIsNQHtj6yEYNi9gWNetDv6ZO9PAjS7Zt8
-         UfshO/9ijhLOCkCG21Siynt84csV7IRWbkoXjoZQbdClw3szASueT09KVoqgxI1+IYyb
-         TUp8lBGR6ZFUBexnIZ5uUfZhfXBQfVu2qf+EpPKdbkqu4I6nPMbl/JfByZGJjW394sxr
-         Dq4cCl8xNVdqruzKMFeZ9io0J/HaxEnGsMZzw5CD+G7B8IZfKvajB0g8vFRtt3nHaljb
-         UFYw==
-X-Gm-Message-State: AOAM533eZvnjGGUAKANobC5Tb2ELvPWhXGAWv02Rzscj1FLiv9NewAdF
-        RtmtTchZbSu6htKWuZpfakR0+VkUQ0mbdRG6YQI=
-X-Google-Smtp-Source: ABdhPJx7rQTHgMyRQeVsjHOMLgiPFC3LjYOg+7kRD+GTWefIdhqs8NVdrUwKtdOwPwwbe8EbEZErNggB18ZQ1LY4hbs=
-X-Received: by 2002:a05:6512:104d:b0:44a:360e:ebe1 with SMTP id
- c13-20020a056512104d00b0044a360eebe1mr1975152lfb.655.1647906505442; Mon, 21
- Mar 2022 16:48:25 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zr0mWxQ50In1k50aI0C4tqPbw585vCp4j+PEvB7bkb8=;
+        b=Ygg+AecK7bVi/1ESvb6hDwHr/FOXaFYNM1bUtfhITcwX6c01tdnVDPHkHnpKlInYBE
+         c/2Ufw4W3CEjDs2So4cC9A1pVBFRfNkT3cLboTLL/GYNaHNI5Oab1IXVEi7JuzvlVB8g
+         mBcp8rUJlGxEAn9CB5cObofDY5EuaJDiIUyD3qMF+ia741WIxvNeP7r0SU/gFxlXAJuz
+         QUvnYt7nNyHMmLLT0Lvn8ER3Xnz6guR/cN6Re9bKbj0V6rN9PRj86GKyK+LOKhaVrUAn
+         /Ndz4FJBAP55cNNoe0bdjM/tLqmzAddkJFcmdfCu80nRChDehJJk+UjgzkB9PAfS5hDg
+         t5ug==
+X-Gm-Message-State: AOAM530bPUXT8eHXTPdBKvA6gJSyitQlYzZ6R7UDnqOq2vnVj/uiyfWt
+        D5IJZbSPDLdiKyIOpBOuBCg=
+X-Google-Smtp-Source: ABdhPJyO1XKSI7rN37fLL9+RWQm3FDgEEZEuiFvyfCvwgCm0b+qN5b2DQubr3ioFDqHp4GAM0w4Pzw==
+X-Received: by 2002:a92:cbc3:0:b0:2c6:78fa:41e9 with SMTP id s3-20020a92cbc3000000b002c678fa41e9mr11160986ilq.112.1647913533439;
+        Mon, 21 Mar 2022 18:45:33 -0700 (PDT)
+Received: from [10.4.10.38] (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
+        by smtp.gmail.com with ESMTPSA id m2-20020a056e021c2200b002c837530587sm1389456ilh.60.2022.03.21.18.45.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Mar 2022 18:45:32 -0700 (PDT)
+Message-ID: <ca6c4fe5-93c5-9ad4-0c9f-86ec3213d44e@gmail.com>
+Date:   Mon, 21 Mar 2022 21:45:28 -0400
 MIME-Version: 1.0
-Received: by 2002:aa6:da4a:0:b0:1a5:bbcd:69f6 with HTTP; Mon, 21 Mar 2022
- 16:48:24 -0700 (PDT)
-Reply-To: tuulii@adres.pl
-From:   "Dr.Ibrahim" <tassingt@gmail.com>
-Date:   Mon, 21 Mar 2022 12:48:24 -1100
-Message-ID: <CAGRDgB_8h6nKg=F5WUPUdiErPvD5bsNix9p4ky3Tc8ayGgvDfQ@mail.gmail.com>
-Subject: Do You Remember ?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.4 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:12c listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5878]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [tassingt[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: ******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 2/2] dt-bindings: clock: drop useless consumer example
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        "A.s. Dong" <aisheng.dong@nxp.com>,
+        Giulio Benetti <giulio.benetti@benettiengineering.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Ioana Ciornei <ioana.ciornei@nxp.com>
+References: <20220316130858.93455-1-krzysztof.kozlowski@canonical.com>
+ <20220316130858.93455-2-krzysztof.kozlowski@canonical.com>
+ <YjjCpQ9vwFoEmFFi@robh.at.kernel.org>
+From:   Jesse Taube <mr.bossman075@gmail.com>
+In-Reply-To: <YjjCpQ9vwFoEmFFi@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Salamo Alaykom,
 
-Longest time my dear, I know you might have deleted my mail; I=E2=80=99m th=
-e
-banker that contacted you for inheritance claim of US$4.3million long
-ago abandoned by our deceased costumer from Syria.
 
-I 'm happy to inform you that the transaction has ended well through
-the help of Mr Kent Travolter from Poland.
+On 3/21/22 14:23, Rob Herring wrote:
+> On Wed, Mar 16, 2022 at 02:08:58PM +0100, Krzysztof Kozlowski wrote:
+>> Consumer examples in the bindings of resource providers are trivial,
+>> useless and duplication of code.  Remove the example code for consumer
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> ---
+>>   .../bindings/clock/bitmain,bm1880-clk.yaml           | 12 ------------
+>>   .../devicetree/bindings/clock/idt,versaclock5.yaml   |  7 -------
+>>   .../devicetree/bindings/clock/imx1-clock.yaml        |  9 ---------
+>>   .../devicetree/bindings/clock/imx21-clock.yaml       |  9 ---------
+>>   .../devicetree/bindings/clock/imx23-clock.yaml       |  9 ---------
+>>   .../devicetree/bindings/clock/imx25-clock.yaml       |  8 --------
+>>   .../devicetree/bindings/clock/imx27-clock.yaml       |  9 ---------
+>>   .../devicetree/bindings/clock/imx28-clock.yaml       |  9 ---------
+>>   .../devicetree/bindings/clock/imx31-clock.yaml       |  8 --------
+>>   .../devicetree/bindings/clock/imx35-clock.yaml       |  8 --------
+>>   .../devicetree/bindings/clock/imx7ulp-pcc-clock.yaml | 11 -----------
+>>   .../devicetree/bindings/clock/imx7ulp-scg-clock.yaml | 11 -----------
+>>   .../devicetree/bindings/clock/imx8qxp-lpcg.yaml      | 11 -----------
+>>   .../devicetree/bindings/clock/imxrt1050-clock.yaml   |  8 --------
+>>   .../bindings/clock/nvidia,tegra124-car.yaml          |  7 -------
+>>   .../bindings/clock/nvidia,tegra20-car.yaml           |  7 -------
+>>   16 files changed, 143 deletions(-)
+> 
+> Doesn't apply to my tree (no imxrt1050-clock.yaml), so
+merge against linux-next I can submit another patch if needed.
+> Acked-by: Rob Herring <robh@kernel.org>
 
-I 'm waiting for my bank to approve my resigning letter as I will soon
-be on my way to Poland with my family to investment and reside there.
-
-It's true I was surprised of your silent, but while sharing the fund
-with Mr Travolter,I reminded him that i contacted you first for the
-business before him, so we agree to give you US$ 1million for keepping
-the secret, Mr Travolter took 1.3Milion and I as the inventor took
-2milion US$.
-
-Mr Travolter my partner doesn=E2=80=99t want to return to the bank again, h=
-e
-instructed the bank to packaged your US$ 1million in a small box to
-deliver to you through Cargo as family treasure, he is now waiting for
-your address =E2=80=A6=E2=80=A6........and phone=E2=80=A6=E2=80=A6.to send =
-this packaged to you as
-he's ready to return to Poland.
-
-Whatsapp +226 60 69 50 43
-
-Urgently waiting .
-
-Best Regard
-Dr Ibrahim .K. Ahmed.
-Accountant IB-Bank Staff BF.
-Burkina Faso.
