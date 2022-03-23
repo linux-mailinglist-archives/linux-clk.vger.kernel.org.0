@@ -2,66 +2,72 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 160A84E4E80
-	for <lists+linux-clk@lfdr.de>; Wed, 23 Mar 2022 09:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3862C4E4EA9
+	for <lists+linux-clk@lfdr.de>; Wed, 23 Mar 2022 09:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231853AbiCWIsy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 23 Mar 2022 04:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
+        id S242948AbiCWIv7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 23 Mar 2022 04:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234839AbiCWIsx (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 23 Mar 2022 04:48:53 -0400
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5C0D710D6
-        for <linux-clk@vger.kernel.org>; Wed, 23 Mar 2022 01:47:15 -0700 (PDT)
-X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
-        R,40,3)
-Received: from 172.27.96.203
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(7823:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Wed, 23 Mar 2022 16:45:30 +0800 (CST)
-Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
- CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.18; Wed, 23 Mar 2022 16:45:58 +0800
-Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
- ([::1]) with mapi id 15.01.2375.018; Wed, 23 Mar 2022 16:45:58 +0800
-From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S240539AbiCWIvr (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 23 Mar 2022 04:51:47 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B117523C
+        for <linux-clk@vger.kernel.org>; Wed, 23 Mar 2022 01:50:13 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id r22so896882ljd.4
+        for <linux-clk@vger.kernel.org>; Wed, 23 Mar 2022 01:50:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/s85OGqNXpkecnGselKWsKN2lTwYoyTplSl6MyjZK1Y=;
+        b=Rv1EUItMANZppwyCr9Jl2CMrJmPC0C5EQ/mwQX4i9HwrH9gjUugekbESDuDoXXXdgw
+         lM4vHt+/zzY8T2DfU/eSP+6kb9qV0uaH+EqQUO9cOmOKL+QM6DZza6yPtk4boMJYGQ4b
+         pXscXdP/SF7CNI3VDCX5COa+YoOaf831fzok1D0fxUV7kL9vcX/kw89M4QtEQG/AjLPF
+         FfSYO0Yui+BSak0K4c7d47o/QDMjToQYt12Kf6S80nk3KJnXWyPmfuobJTvUW7dBbNL3
+         0XPmFCmoM/tY2EGrzUd8z6Dlz6lMl9nyDUl+w9ixuBz2mbFa2Xilg9gClILyCRkvFPMP
+         a2qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/s85OGqNXpkecnGselKWsKN2lTwYoyTplSl6MyjZK1Y=;
+        b=e1k9Rnr6VCUKvJQyap2OoPubGi5is6IcIW6GFJCWV7hmASfCiML7wp7uQQ9LnKwhlL
+         uLnGb9X6Y6k50/G5fGFilq86m5xX7x4YbKEtKku5Zll0XQOnEUBMGwY5EEkX/DqHSXOM
+         3RLgQq/FScE3ecXInz03fHeijgazmzGZyOkiwa0gTpCMvBVOYYcw4cxtwJABpVSfpTUv
+         RFASzmvjc7EdAFrB/m1zCHpSMuB72HCZJl5u/FTS8MBfZFinlxLWiDiO9/SZsnzOgY+D
+         kPjiDYq0KSNsCY0BTqeX6LbRqbehfnwT/XWU0xAPoBCC3jmuS/hpA8T5nGUROOhjBuXm
+         camQ==
+X-Gm-Message-State: AOAM5338RwW5gD1o2L9SnNmbbEjh4uVjryDgfa34CqaSt667w3Ckj36N
+        ZL/ePaI7AG4pfNBOjzeeY36pNQ==
+X-Google-Smtp-Source: ABdhPJzZBjgziwAktuqj5IF3PvEcgzoqe5VUzz07rF9U+wnxqiPYUwlXvbKIw1wNahdhKbyS4/fXIQ==
+X-Received: by 2002:a05:651c:506:b0:22d:b44b:113e with SMTP id o6-20020a05651c050600b0022db44b113emr22374179ljp.32.1648025411971;
+        Wed, 23 Mar 2022 01:50:11 -0700 (PDT)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id c40-20020a05651223a800b0044a1edf823dsm1376140lfv.150.2022.03.23.01.50.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 01:50:11 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Russell King - ARM Linux" <linux@armlinux.org.uk>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Subject: RE: [PATCH v11 9/9] ARM: sp7021_defconfig: Add Sunplus SP7021
- defconfig
-Thread-Topic: [PATCH v11 9/9] ARM: sp7021_defconfig: Add Sunplus SP7021
- defconfig
-Thread-Index: AQHYPbV20XoTM/apKU2VdtNWQYp2n6zKqyIAgAGFk2D//+uUgIAAjMMg
-Date:   Wed, 23 Mar 2022 08:45:58 +0000
-Message-ID: <c0af7c88c19f4fe9a9288f371482c302@cqplus1.com>
-References: <cover.1647928315.git.qinjian@cqplus1.com>
- <8372ee2fcf361a3af7233450c4403178052ceee2.1647928316.git.qinjian@cqplus1.com>
- <CAK8P3a1H2xM1PdDwKPWHD0fqZ0q_o-KZTLvSXdm9jjqTWcX-hA@mail.gmail.com>
- <d79dd7655c964f88a58d8bf403da39be@cqplus1.com>
- <CAK8P3a10rsxpzd4eJbSJmRUDEMbOO+=6+=6Eu-7EY86+xw8V6g@mail.gmail.com>
-In-Reply-To: <CAK8P3a10rsxpzd4eJbSJmRUDEMbOO+=6+=6Eu-7EY86+xw8V6g@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.28.110.18]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Taniya Das <tdas@codeaurora.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: [PATCH v1 0/5] PCI: qcom: rework pipe_clk/pipe_clk_src handling
+Date:   Wed, 23 Mar 2022 11:50:05 +0300
+Message-Id: <20220323085010.1753493-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,18 +75,37 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-PiA+IEluIHBhdGNoIDYsIEkgZml4ZWQgYWxsIHlvdXIgY29tbWVudHMuDQo+ID4NCj4gPiBJIGdv
-dCBhIHJlcGx5IGZyb20geW91Og0KPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9hbGwvQ0FLOFAz
-YTFEb2g4R1k5aUZac3ZtZDZ3QVNIb1BxeVIrcm9YeDBHNVhpZG5tSE5rR2FBQG1haWwuZ21haWwu
-Y29tLw0KPiA+ID4gVGhpcyBsb29rcyBhbGwgZ29vZCB0byBtZSBub3csIGl0IGp1c3QgbmVlZHMg
-YSByZXZpZXcgZm9yIHRoZSBjbGssDQo+ID4gPiByZXNldCAgYW5kIGlycWNoaXAgZHJpdmVycy4g
-Li4uDQo+ID4NCj4gPiBJZiB0aGVzZSBub3QgbWVhbnMgeW91IHJldmlld2VkLCBJJ2xsIHJlbW92
-ZSB5b3VyIHJldmlldy10YWcuDQo+IA0KPiBZb3UgY2FuIG9ubHkgYWRkIFJldmlld2VkLWJ5IHRh
-Z3MgdGhhdCBoYXZlIGJlZW4gZXhwbGljaXRseSBnaXZlbiwNCj4gc2VlIHRoZSBkb2N1bWVudGF0
-aW9uIGF0IFsxXSBmb3IgZGV0YWlscy4gV2hhdCBJIHdyb3RlIHdhcyBhIGxlc3MNCj4gZm9ybWFs
-IGFja25vd2xlZGdlbWVudCB0aGF0IGRvZXMgbm90IGhhdmUgdGhlIHNwZWNpZmljIG1lYW5pbmcu
-DQo+IA0KPiAgICAgICBBcm5kDQo+IA0KPiBbMV0gaHR0cHM6Ly93d3cua2VybmVsLm9yZy9kb2Mv
-aHRtbC9sYXRlc3QvdHJhbnNsYXRpb25zL3poX1RXL3Byb2Nlc3Mvc3VibWl0dGluZy1wYXRjaGVz
-Lmh0bWwjdXNpbmctcmVwb3J0ZWQtYnktdGVzdGVkLWJ5LQ0KPiByZXZpZXdlZC1ieS1zdWdnZXN0
-ZWQtYnktYW5kLWZpeGVzDQoNClRoYW5rcyBmb3IgeW91ciBjb21tZW50cywgSSdsbCByZW1vdmUg
-eW91ciB0YWdzIGxhdGVyLg0K
+PCIe pipe clk (and some other clocks) must be parked to the "safe"
+source (bi_tcxo) when corresponding GDSC is turned off and on again.
+Currently this is handcoded in the PCIe driver by reparenting the
+gcc_pipe_N_clk_src clock.
+
+Instead of doing it manually, follow the approach used by
+clk_rcg2_shared_ops and implement this parking in the enable() and
+disable() clock operations for respective pipe clocks.
+
+Changes since RFC:
+ - Rework clk-regmap-mux fields. Specify safe parent as P_* value rather
+   than specifying the register value directly
+ - Expand commit message to the first patch to specially mention that
+   it is required only on newer generations of Qualcomm chipsets.
+
+Dmitry Baryshkov (5):
+  clk: qcom: regmap-mux: add pipe clk implementation
+  clk: qcom: gcc-sm8450: use new clk_regmap_mux_safe_ops for PCIe pipe
+    clocks
+  clk: qcom: gcc-sc7280: use new clk_regmap_mux_safe_ops for PCIe pipe
+    clocks
+  PCI: qcom: Remove unnecessary pipe_clk handling
+  PCI: qcom: Drop manual pipe_clk_src handling
+
+ drivers/clk/qcom/clk-regmap-mux.c      | 78 +++++++++++++++++++++++
+ drivers/clk/qcom/clk-regmap-mux.h      |  3 +
+ drivers/clk/qcom/gcc-sc7280.c          |  6 +-
+ drivers/clk/qcom/gcc-sm8450.c          |  6 +-
+ drivers/pci/controller/dwc/pcie-qcom.c | 87 +-------------------------
+ 5 files changed, 92 insertions(+), 88 deletions(-)
+
+-- 
+2.35.1
+
