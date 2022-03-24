@@ -2,146 +2,122 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1BCA4E978D
-	for <lists+linux-clk@lfdr.de>; Mon, 28 Mar 2022 15:08:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D38D4E9BDA
+	for <lists+linux-clk@lfdr.de>; Mon, 28 Mar 2022 18:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242773AbiC1NJr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 28 Mar 2022 09:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
+        id S240958AbiC1QFx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 28 Mar 2022 12:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242993AbiC1NIJ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 28 Mar 2022 09:08:09 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638D65DE55;
-        Mon, 28 Mar 2022 06:06:09 -0700 (PDT)
-X-UUID: b164718828564221bf88909a37564e5b-20220328
-X-UUID: b164718828564221bf88909a37564e5b-20220328
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <chun-jie.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 429216100; Mon, 28 Mar 2022 21:06:01 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 28 Mar 2022 21:05:59 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 28 Mar 2022 21:05:58 +0800
-From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        with ESMTP id S237468AbiC1QFv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 28 Mar 2022 12:05:51 -0400
+Received: from mail.baikalelectronics.ru (mail.baikalelectronics.com [87.245.175.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AF131BE97;
+        Mon, 28 Mar 2022 09:04:08 -0700 (PDT)
+Received: from mail.baikalelectronics.ru (unknown [192.168.51.25])
+        by mail.baikalelectronics.ru (Postfix) with ESMTP id 16B591E28C5;
+        Thu, 24 Mar 2022 04:09:15 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 16B591E28C5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baikalelectronics.ru; s=mail; t=1648084155;
+        bh=YVpd6KAsEUbbMZJf57BbrLaVjshlK01mwVdnX4r/674=;
+        h=From:To:CC:Subject:Date:From;
+        b=X1h7mcIUZY7pl39Vrh120xbozF9qqNx9EFw20NXmtC0ad2N90pWVXbVAHms9YvIzk
+         gaXsYyJkJDXvG3bILoUEaCjGKJRW4CU4y645jQ+lE4pnj36IHENIxrQB5rwktB8uxS
+         j47d9g8IwMy9i5BYUw6h1lSBd88inQrKedIL6+1o=
+Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 24 Mar 2022 04:09:14 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>
-Subject: [PATCH v4 15/15] clk: mediatek: Add MT8186 ipesys clock support
-Date:   Mon, 28 Mar 2022 21:05:21 +0800
-Message-ID: <20220328130521.24385-16-chun-jie.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220328130521.24385-1-chun-jie.chen@mediatek.com>
-References: <20220328130521.24385-1-chun-jie.chen@mediatek.com>
+        Michael Turquette <mturquette@baylibre.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        <linux-clk@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/4] clk: Baikal-T1 DDR/PCIe resets and some xGMAC fixes
+Date:   Thu, 24 Mar 2022 04:09:01 +0300
+Message-ID: <20220324010905.15589-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add MT8186 ipesys clock controller which provides clock gate
-control for Image Process Engine.
+This patchset is an initial one in the series created in the framework
+of my Baikal-T1 PCIe/eDMA-related work:
 
-Signed-off-by: Chun-Jie Chen <chun-jie.chen@mediatek.com>
-Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Miles Chen <miles.chen@mediatek.com>
----
- drivers/clk/mediatek/Makefile         |  2 +-
- drivers/clk/mediatek/clk-mt8186-ipe.c | 55 +++++++++++++++++++++++++++
- 2 files changed, 56 insertions(+), 1 deletion(-)
- create mode 100644 drivers/clk/mediatek/clk-mt8186-ipe.c
+[1: In-progress] clk: Baikal-T1 DDR/PCIe resets and some xGMAC fixes
+Link: --you are looking at it--
+[2: Stalling]    PCI: dwc: Various fixes and cleanups
+Link: --being submitted afterwards--
+[3: Stalling]    PCI: dwc: Add dma-ranges/YAML-schema/Baikal-T1 support
+Link: --being submitted afterwards--
+[4: Stalling]    dmaengine: dw-edma: Add RP/EP local DMA controllers support
+Link: --being submitted afterwards--
 
-diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
-index 6902da61e150..caf2ce93d666 100644
---- a/drivers/clk/mediatek/Makefile
-+++ b/drivers/clk/mediatek/Makefile
-@@ -75,7 +75,7 @@ obj-$(CONFIG_COMMON_CLK_MT8186) += clk-mt8186-mcu.o clk-mt8186-topckgen.o clk-mt
- 				   clk-mt8186-apmixedsys.o clk-mt8186-imp_iic_wrap.o \
- 				   clk-mt8186-mfg.o clk-mt8186-mm.o clk-mt8186-wpe.o \
- 				   clk-mt8186-img.o clk-mt8186-vdec.o clk-mt8186-venc.o \
--				   clk-mt8186-cam.o clk-mt8186-mdp.o
-+				   clk-mt8186-cam.o clk-mt8186-mdp.o clk-mt8186-ipe.o
- obj-$(CONFIG_COMMON_CLK_MT8192) += clk-mt8192.o
- obj-$(CONFIG_COMMON_CLK_MT8192_AUDSYS) += clk-mt8192-aud.o
- obj-$(CONFIG_COMMON_CLK_MT8192_CAMSYS) += clk-mt8192-cam.o
-diff --git a/drivers/clk/mediatek/clk-mt8186-ipe.c b/drivers/clk/mediatek/clk-mt8186-ipe.c
-new file mode 100644
-index 000000000000..8fca148effa6
---- /dev/null
-+++ b/drivers/clk/mediatek/clk-mt8186-ipe.c
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+//
-+// Copyright (c) 2022 MediaTek Inc.
-+// Author: Chun-Jie Chen <chun-jie.chen@mediatek.com>
-+
-+#include <linux/clk-provider.h>
-+#include <linux/platform_device.h>
-+#include <dt-bindings/clock/mt8186-clk.h>
-+
-+#include "clk-gate.h"
-+#include "clk-mtk.h"
-+
-+static const struct mtk_gate_regs ipe_cg_regs = {
-+	.set_ofs = 0x4,
-+	.clr_ofs = 0x8,
-+	.sta_ofs = 0x0,
-+};
-+
-+#define GATE_IPE(_id, _name, _parent, _shift)			\
-+	GATE_MTK(_id, _name, _parent, &ipe_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
-+
-+static const struct mtk_gate ipe_clks[] = {
-+	GATE_IPE(CLK_IPE_LARB19, "ipe_larb19", "top_ipe", 0),
-+	GATE_IPE(CLK_IPE_LARB20, "ipe_larb20", "top_ipe", 1),
-+	GATE_IPE(CLK_IPE_SMI_SUBCOM, "ipe_smi_subcom", "top_ipe", 2),
-+	GATE_IPE(CLK_IPE_FD, "ipe_fd", "top_ipe", 3),
-+	GATE_IPE(CLK_IPE_FE, "ipe_fe", "top_ipe", 4),
-+	GATE_IPE(CLK_IPE_RSC, "ipe_rsc", "top_ipe", 5),
-+	GATE_IPE(CLK_IPE_DPE, "ipe_dpe", "top_ipe", 6),
-+	GATE_IPE(CLK_IPE_GALS_IPE, "ipe_gals_ipe", "top_img1", 8),
-+};
-+
-+static const struct mtk_clk_desc ipe_desc = {
-+	.clks = ipe_clks,
-+	.num_clks = ARRAY_SIZE(ipe_clks),
-+};
-+
-+static const struct of_device_id of_match_clk_mt8186_ipe[] = {
-+	{
-+		.compatible = "mediatek,mt8186-ipesys",
-+		.data = &ipe_desc,
-+	}, {
-+		/* sentinel */
-+	}
-+};
-+
-+static struct platform_driver clk_mt8186_ipe_drv = {
-+	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
-+	.driver = {
-+		.name = "clk-mt8186-ipe",
-+		.of_match_table = of_match_clk_mt8186_ipe,
-+	},
-+};
-+builtin_platform_driver(clk_mt8186_ipe_drv);
+Since some of the patches in the later patchsets depend on modifications
+introduced here @Bjorn could you please merge this series through your
+PCIe subsystem repo? After getting all the required ack'es of course.
+
+Short summary regarding this patchset. A few more modifications are
+introduced here to finally finish the Baikal-T1 CCU unit support up and
+prepare the code before adding the Baikal-T1 PCIe/xGMAC support. First of
+all it turned out I specified wrong DW xGMAC PTP reference clock divider
+in my initial patches. It must be 8, not 10. Secondly I was wrong to add a
+joint xGMAC Ref and PTP clock instead of having them separately defined.
+The SoC manual describes these clocks as separate fixed clock wrappers.
+Finally in order to close the SoC clock/reset support up we need to add
+the DDR and PCIe interfaces reset controls support. It's done in two
+steps. First I've moved the reset-controls-related code into a dedicated
+module. Then the DDR/PCIe reset-control functionality is added.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: "Krzysztof Wilczyński" <kw@linux.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-pci@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (4):
+  clk: baikal-t1: Fix invalid xGMAC PTP clock divider
+  clk: baikal-t1: Define shared xGMAC ref/ptp clocks parent
+  clk: baikal-t1: Move reset-controls code into a dedicated module
+  clk: baikal-t1: Add DDR/PCIe directly controlled resets support
+
+ drivers/clk/baikal-t1/Kconfig       |  12 +-
+ drivers/clk/baikal-t1/Makefile      |   1 +
+ drivers/clk/baikal-t1/ccu-div.c     |   1 +
+ drivers/clk/baikal-t1/ccu-div.h     |   6 +
+ drivers/clk/baikal-t1/ccu-rst.c     | 373 ++++++++++++++++++++++++++++
+ drivers/clk/baikal-t1/ccu-rst.h     |  64 +++++
+ drivers/clk/baikal-t1/clk-ccu-div.c | 102 ++------
+ include/dt-bindings/reset/bt1-ccu.h |   9 +
+ 8 files changed, 482 insertions(+), 86 deletions(-)
+ create mode 100644 drivers/clk/baikal-t1/ccu-rst.c
+ create mode 100644 drivers/clk/baikal-t1/ccu-rst.h
+
 -- 
-2.18.0
+2.35.1
 
