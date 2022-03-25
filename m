@@ -2,87 +2,106 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 307A24E7173
-	for <lists+linux-clk@lfdr.de>; Fri, 25 Mar 2022 11:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9FAF4E71B5
+	for <lists+linux-clk@lfdr.de>; Fri, 25 Mar 2022 11:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239454AbiCYKoe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 25 Mar 2022 06:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35048 "EHLO
+        id S244096AbiCYLAI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 25 Mar 2022 07:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236476AbiCYKod (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 25 Mar 2022 06:44:33 -0400
-X-Greylist: delayed 730 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 25 Mar 2022 03:42:59 PDT
-Received: from out203-205-221-209.mail.qq.com (out203-205-221-209.mail.qq.com [203.205.221.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A60CC50B
-        for <linux-clk@vger.kernel.org>; Fri, 25 Mar 2022 03:42:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1648204977;
-        bh=r7MTF35xCe4CtzCMUlH4AuHMMOLVBgWolF8Nu+I39t8=;
-        h=From:To:Cc:Subject:Date;
-        b=BsL/tmQi5bgyRV2NoO5Slo7/xj0Og1YxzLKe6PO3g309jBb9XKq/UZs7/6dzVcw3j
-         qn0RPuUVvwCi17ze6Wwc4wz32rtrj0Uo3dq+Jh/SKCoAjPNqNHXiBnJLeJaD65pqfN
-         dB4HdI+woNtMbWeNLlnghvQ4rLAp3FBcgQZ1ad9A=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrszc11.qq.com (NewEsmtp) with SMTP
-        id 6DFA0EBB; Fri, 25 Mar 2022 18:27:31 +0800
-X-QQ-mid: xmsmtpt1648204051tp1m08xmo
-Message-ID: <tencent_C0622B5C4209E83F1C6495D926979F239D05@qq.com>
-X-QQ-XMAILINFO: OOWntbL6xj16UYjmDCYdk3zdV6AkUlVJYVXvFXwyqwiwhHIj+QucYg/rjcEuOt
-         YO7j/eprBmyc4h2c06wgdcYMWSep4SXwq7n+QGxdcp6ICsFbd9yTBd2y9WzUKB2YwYvs/h8Mu+NF
-         3O/awHA4MLl1CeBeM8HFfgPZWH4/vqzvwiDrMgaZ1iu7C+gGmhfen9xCWY78+E9vsdumUiwchXp4
-         mJ73wtlnQeZQVQvB0aU6xAs+7niZUpJswpFFx/U+6co38r4urXkGPe7qIJSEtptS8cCk3XI76bTp
-         GBE+6cG8pXUfIhIIY9a7UwUFabdQ/611P/rXY4ZbxNXiy8imWSu0q73DKFp1Msl/Pa6B+f5RKrac
-         sSm5Px8sotmHtHcqLRGQL365aXb8G3bBusnZsNdweoK6RnKfba5j1ExXohhWM3FWaZVb01iUwIjO
-         pT0uKiE2iQVbdhmVfWnzg2WAg+6AXI+v+dsz4HXd4ir0CpdQyG4Mib4UAQ2w64jYH+G2tUmzeiO9
-         9N+Ovt6E8HcR0Tgr/s+oXNSDCJh9CgsVSGZnTQUqi93ePXrydTOfbWsoZ0bm/3w7cdnlXn6pNOF9
-         40+wNNghlHZdV0tlfWByU4qL02Q62qlEokvhYrJA08qEVbWsPgtdDnFlY2pEOyogx28ge0OdJ2+m
-         uVRokNyTXZOSXJFejgBRQH3MwBIxrMvlEuN81q5FUuHsBCfxmqKB3NrQcjYDGNjsWOA7q/UFbbU8
-         0RgF7ducb3U9hMY0DCyV5rs3grDP+0m82+2Fxk+Bgc47ZWsWcTGnKI23eMDlfDInZFmuP8CXDGfo
-         3F5LJfdBoqKuPXyuapA6uM02us/UpXvP6ex3EJV25oaVzPNcIvty5n3vPl95GMhOiXT+jqXPdXYX
-         uhv4HuJcsBQ3Sq8KD4AmLy27zc0kW4D6QVRKYYc1Ma8FrYOrL8GxLkNokTZ7YcnIA0Tdh2vAxPmH
-         erom5GfnM=
-From:   xkernel.wang@foxmail.com
-To:     mturquette@baylibre.com, sboyd@kernel.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] clk: pxa: add a check for the return value of kzalloc()
-Date:   Fri, 25 Mar 2022 18:27:20 +0800
-X-OQ-MSGID: <20220325102720.4155-1-xkernel.wang@foxmail.com>
+        with ESMTP id S1346224AbiCYLAG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 25 Mar 2022 07:00:06 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069764AE36
+        for <linux-clk@vger.kernel.org>; Fri, 25 Mar 2022 03:58:29 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8A0385C0051;
+        Fri, 25 Mar 2022 06:58:26 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Fri, 25 Mar 2022 06:58:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=8r7t2v8slyq37pMiLh7npibLuc0RE1WTRjMQYY
+        t+jv0=; b=NItixDzqNbkYDiXRmOShGushnaNKUd2jkOzj3wUgWY46X5HNtzskUS
+        IDHHuCGxPnVHZ5bEZC+u4dUUeZd+5Wjr/73NvAObS5w7/Qo8pStK4hV+dgc6s/Kv
+        APhoiJOh+96nDesCIP6A1st9P5Q023yazH9qBZYFxes8ARSNP4NNXYjhFucVsPOj
+        /vku7LhPpPOaZu4jtQPep9v3NvAAxsFWiqLWRFElE8KhZKx21s/CwWX+uzVWUyBI
+        oI4gLfx04bqyjzXo8e6ie/t+WKcDoByA4aPBk5Vu6MwXnmkz56N+18BS6cYT91ZK
+        NidlC1YBQKQB8GxoElxYaue9i/P18Lag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=8r7t2v
+        8slyq37pMiLh7npibLuc0RE1WTRjMQYYt+jv0=; b=WFEJxwL8wrcsgAlsMq7Qz2
+        5TG2E/uPeaVAjvWPHxu2iJr3g4xB1yJftNODxvVxmpeWc+qBTjGT8S9+HZX5p/ez
+        1eCiHyJN4TP8T4JtWLFdyrKaZxsxWFUnZqe7q8xyOOnMhf8O9b33fld/CfDZWvEc
+        tIA34R9YF8isBulDYMiTlYOl+OJ8xdVyCPvPz1r7nCxTDwIS7nJIx09uyBxofqIX
+        LDDO+ug1My7EoUB+MaZH7ytV4Wf9i06a+HHkeYxgHfS3Ix5oNJ+UhaV2wQCL8dPP
+        1FlhE3fKC9tX2bmziwuuL5GYWASOxBHtxQ39r8MvxRfQYtU4jEsVpOgD7sePXyDQ
+        ==
+X-ME-Sender: <xms:UaA9YvlOH9yQ3LI3brsoROedXe9y6YkKSglNkpe5iMVzeiTYdZ-X3w>
+    <xme:UaA9Yi1yyt1PCuJqkhJvzUuf8sp7APEODffvBQp7pySheAPXOvpKTLsb_XfQ1J0OH
+    vXtF1s5cJK2L-2j8ac>
+X-ME-Received: <xmr:UaA9Ylpjo5AH3ByvGb3vL5BCJmKRZCr973Zw2lycr-UrJ1QYkJTCkozeDb8hKXej1gpFgXNgtCW73XHQ3kDqwYQLUub8iC4g-hRrK7o>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudehuddgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffotggggfesthhqredtredtjeenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeetieekgfffkeegkeeltdehudetteejgfekueevhffhteegudfgkedtueegfffg
+    feenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    igihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:UaA9YnmVr0g3vIc32iC8xPHCWhXjNs0XXPwoELBJMrXAS_4c-iHipQ>
+    <xmx:UaA9Yt0e3agPdNfpyYLo9rxe-sN-aA6wWTNwBMxrQmz1lD_fazBrWQ>
+    <xmx:UaA9YmtOgyqVvQn3kXlZK9Ain3jLeuiIirDBj5bDOAqO1YrF3VTxsQ>
+    <xmx:UqA9Ymz2wLhOrgFOemNTHi6RUiHgxAdHR4F5YYXS2HgzYwO8nmk6iw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 25 Mar 2022 06:58:25 -0400 (EDT)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     linux-clk@vger.kernel.org,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: [PATCH 0/3] clk: Some Clock Range Fixes
+Date:   Fri, 25 Mar 2022 11:58:19 +0100
+Message-Id: <20220325105822.1723827-1-maxime@cerno.tech>
+X-Mailer: git-send-email 2.35.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
-
-kzalloc() is a memory allocation function which can return NULL when
-some internal memory errors happen. So it is better to check it to
-prevent potential wrong memory access.
-
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/clk/pxa/clk-pxa.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/clk/pxa/clk-pxa.c b/drivers/clk/pxa/clk-pxa.c
-index cfc79f9..d0df104 100644
---- a/drivers/clk/pxa/clk-pxa.c
-+++ b/drivers/clk/pxa/clk-pxa.c
-@@ -102,6 +102,8 @@ int __init clk_pxa_cken_init(const struct desc_clk_cken *clks, int nb_clks)
- 
- 	for (i = 0; i < nb_clks; i++) {
- 		pxa_clk = kzalloc(sizeof(*pxa_clk), GFP_KERNEL);
-+		if (!pxa_clk)
-+			continue;
- 		pxa_clk->is_in_low_power = clks[i].is_in_low_power;
- 		pxa_clk->lp = clks[i].lp;
- 		pxa_clk->hp = clks[i].hp;
--- 
+Hi,=0D
+=0D
+This fixes one regression for Tegra30 reported by Dmitry, and another issue=
+ I=0D
+came across while looking at it.=0D
+=0D
+We're also adding a bunch of unit tests to cover those cases.=0D
+=0D
+Let me know what you think,=0D
+Maxime=0D
+=0D
+Maxime Ripard (3):=0D
+  clk: Initialize orphan req_rate=0D
+  clk: test: Test clk_set_rate_range on orphan mux=0D
+  clk: Drop the rate range on clk_put=0D
+=0D
+ drivers/clk/clk.c      |  47 +++++++--=0D
+ drivers/clk/clk_test.c | 213 +++++++++++++++++++++++++++++++++++++++++=0D
+ 2 files changed, 254 insertions(+), 6 deletions(-)=0D
+=0D
+-- =0D
+2.35.1=0D
+=0D
