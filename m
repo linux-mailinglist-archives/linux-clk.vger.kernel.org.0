@@ -2,145 +2,120 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7854E88C4
-	for <lists+linux-clk@lfdr.de>; Sun, 27 Mar 2022 18:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4D64E897C
+	for <lists+linux-clk@lfdr.de>; Sun, 27 Mar 2022 21:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235977AbiC0QPn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 27 Mar 2022 12:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
+        id S236409AbiC0TGY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 27 Mar 2022 15:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235986AbiC0QPi (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 27 Mar 2022 12:15:38 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3FF27FF5;
-        Sun, 27 Mar 2022 09:13:59 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id m30so17071446wrb.1;
-        Sun, 27 Mar 2022 09:13:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=On9c+G9wOwaq0PXoo//3sjDSnBW1cAGDzfd4Bq86hek=;
-        b=Oq1fS/ddvMVMh5iisU3oCJE3wkCPlUAh9Rd3zskheaOOfLmrZS1oawdQPjNesF8S8k
-         bFwD1HpiEq6zOppBX+c8m3J6ka813oxk5C0XVicBhD9jZV/awQnP9lA6K21Wh9Wah5Rq
-         1G6TTuALlzSFv4y3BKVMCSbSCId9jhCwMtj0rLQX+gLFwTtLXPcu7Cv2BFUegTd0GInS
-         +ElwKRFUEWo5rnqIepvAc0VmPgm02ztt9iZZRpQUDEpT5wb2Yn9t2Adrjd7kk4jSSd4a
-         4ADsGIuIbqy/hMlZMmAcLNwpV+zYkgux9T0ZzrpfVXq3QcYnTnq1ppxgQSPdj5BkTkCj
-         E1yQ==
+        with ESMTP id S230222AbiC0TGY (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 27 Mar 2022 15:06:24 -0400
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CCBBCA3;
+        Sun, 27 Mar 2022 12:04:44 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id b19so17344746wrh.11;
+        Sun, 27 Mar 2022 12:04:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=On9c+G9wOwaq0PXoo//3sjDSnBW1cAGDzfd4Bq86hek=;
-        b=Bcljxo3dxw7F7l6PV5E60xxKYy5mKfaFAM5WcSW/ZODijyUx3I8nNVvuBxq9N6Jjjx
-         CHeHPk9SjfdVFEW6zA8aLy/IpfmBWD+CfKKd1/BAZGomIKZMUoe6V38TZREvqC4WBsFs
-         EHYjaxmODZCuclp1u7j13UThpBStpZ1n0Ow9NYSZP9iATni5tW0iupI+UowHjvjedV6C
-         r4TRwh26LZ75RQtXKLcxzTud8UfqHEs/VmxZXeTAxPGblTUU421cDa6Cnbx/vIyoD2F5
-         yUMvN0Qe1tmg7mLONwJGBWXyPJWYOJOLr5MwX+VYGkb9YrcWJ9DW+jluEBorhOKmgi5n
-         ZUww==
-X-Gm-Message-State: AOAM531GVTgBAkLfv+a1wkLEnwmVZB3neHdkATGmsjJJe/TWUQFAVV3Y
-        ldfetchoHvE+RHByri1syMOEOVcfBhE=
-X-Google-Smtp-Source: ABdhPJx86+5yxFGWi0F7jkpq8gRKFmb/EqMC7WdZoXYKMhyxPFV16sWURSfIqm84P4103aRrnn4dSQ==
-X-Received: by 2002:a5d:5704:0:b0:203:f9bb:b969 with SMTP id a4-20020a5d5704000000b00203f9bbb969mr17509860wrv.459.1648397638085;
-        Sun, 27 Mar 2022 09:13:58 -0700 (PDT)
-Received: from localhost.localdomain (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net. [86.13.91.161])
-        by smtp.gmail.com with ESMTPSA id k2-20020a1ca102000000b0038c78fdd59asm13764924wme.39.2022.03.27.09.13.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Mar 2022 09:13:57 -0700 (PDT)
-From:   Daniel Scally <djrscally@gmail.com>
-To:     linux-acpi@vger.kernel.org, linux-clk@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Cc:     rafael@kernel.org, lenb@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, hdegoede@redhat.com, markgross@kernel.org,
-        robert.moore@intel.com
-Subject: [PATCH v2 5/5] platform/x86: int3472: Add board data for Surface Go2 IR camera
-Date:   Sun, 27 Mar 2022 17:13:44 +0100
-Message-Id: <20220327161344.50477-6-djrscally@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220327161344.50477-1-djrscally@gmail.com>
-References: <20220327161344.50477-1-djrscally@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=8dxte/Nk3Xo80atGww0qKbqjPcx0rSBfv6e4dj7Bp+o=;
+        b=fWx0MS91TNxrQkxiUxd4/zefgdxU4/jc42WYtU5o2FF/WtKTF7aaAJ6Y7ckF2GVLOS
+         AgKKjhkRbvp2Bpn2aRSXOO0OePu7Z6D73GxYaG870VxBY8CdNZ2TaRBPnwMobYwOw6aW
+         PRQTvuTmftdGsU/KsHMrOpI/xr9WtdlIh56Mz//YCqNlUZNpAecZxwYQ1soV4lkVQA0U
+         90804+VbVMhPa/ZHxObzJ6D38hWwy/dnO3Ne/DcsnKAFqk3/nZJMaRxpcrx4+L7P5sXs
+         otHMBRG8xSGax8YC+GUozQHZlt6vj5gQZvfYRQFYX7xGZYsYO2ZzxM9ti/+McvRSePbO
+         WqTg==
+X-Gm-Message-State: AOAM531Nfw00C1Zh87WnqiohbWIRPZctqPUdsCb/SNGPurhaliEuBwdr
+        OP52Xpx13MqzU9uJS5Wzmbg=
+X-Google-Smtp-Source: ABdhPJxgtelMWREwOcVfYU6jhvUzEq+0pS7TbK1Vm24wXlEwm6t6U8r8bXOGWGDUJ08t5C79ijV+mA==
+X-Received: by 2002:a5d:6841:0:b0:205:9bc5:9470 with SMTP id o1-20020a5d6841000000b002059bc59470mr15195659wrw.15.1648407883095;
+        Sun, 27 Mar 2022 12:04:43 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.googlemail.com with ESMTPSA id 185-20020a1c19c2000000b0038a1d06e862sm14781875wmz.14.2022.03.27.12.04.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Mar 2022 12:04:42 -0700 (PDT)
+Message-ID: <6264b6d2-63e1-db65-f201-41a34437c99e@kernel.org>
+Date:   Sun, 27 Mar 2022 21:04:41 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 01/12] dt-bindings: arm: imx: Add i.MXRT compatible
+ Documentation
+Content-Language: en-US
+To:     Jesse Taube <mr.bossman075@gmail.com>, linux-imx@nxp.com
+Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, aisheng.dong@nxp.com, stefan@agner.ch,
+        linus.walleij@linaro.org, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        linux@armlinux.org.uk, abel.vesa@nxp.com, dev@lynxeye.de,
+        marcel.ziswiler@toradex.com, tharvey@gateworks.com,
+        leoyang.li@nxp.com, sebastian.reichel@collabora.com,
+        cniedermaier@dh-electronics.com, clin@suse.com,
+        giulio.benetti@benettiengineering.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
+References: <20220326144313.673549-1-Mr.Bossman075@gmail.com>
+ <20220326144313.673549-2-Mr.Bossman075@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220326144313.673549-2-Mr.Bossman075@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the board data describing the regulators for the Microsoft
-Surface Go line's IR camera.
+On 26/03/2022 15:43, Jesse Taube wrote:
+> Recently the imxrt1050 was added but the cpu compatible node wasn't
+> added. Add both i.MXRT1170 and 1050 compatible to fsl.yaml
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Daniel Scally <djrscally@gmail.com>
----
-Changes in v2:
+s/i.MXRT1170 and 1050 compatible/i.MXRT1170 and 1050 compatibles/
 
-	- None
+...and a full stop.
 
- .../x86/intel/int3472/tps68470_board_data.c   | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
+> 
+> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/arm/fsl.yaml | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+> index 0b595b26061f..59575053ff03 100644
+> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
+> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+> @@ -834,6 +834,18 @@ properties:
+>            - const: toradex,colibri-imx8x
+>            - const: fsl,imx8qxp
+>  
+> +      - description: i.MXRT1170 based Boards
+> +        items:
+> +          - enum:
+> +              - fsl,imxrt1170-evk         # i.MXRT1170 EVK Board
+> +          - const: fsl,imxrt1170
+> +
+> +      - description: i.MXRT1050 based Boards
+> +        items:
+> +          - enum:
+> +              - fsl,imxrt1050-evk         # i.MXRT1050 EVK Board
+> +          - const: fsl,imxrt1050
 
-diff --git a/drivers/platform/x86/intel/int3472/tps68470_board_data.c b/drivers/platform/x86/intel/int3472/tps68470_board_data.c
-index dfb9431e4b1b..3573c46e7993 100644
---- a/drivers/platform/x86/intel/int3472/tps68470_board_data.c
-+++ b/drivers/platform/x86/intel/int3472/tps68470_board_data.c
-@@ -30,6 +30,15 @@ static struct regulator_consumer_supply int347a_vcm_consumer_supplies[] = {
- static struct regulator_consumer_supply int347a_vsio_consumer_supplies[] = {
- 	REGULATOR_SUPPLY("dovdd", "i2c-INT347A:00"),
- 	REGULATOR_SUPPLY("vsio", "i2c-INT347A:00-VCM"),
-+	REGULATOR_SUPPLY("vddd", "i2c-INT347E:00"),
-+};
-+
-+static struct regulator_consumer_supply int347a_aux1_consumer_supplies[] = {
-+	REGULATOR_SUPPLY("vdda", "i2c-INT347E:00"),
-+};
-+
-+static struct regulator_consumer_supply int347a_aux2_consumer_supplies[] = {
-+	REGULATOR_SUPPLY("vdddo", "i2c-INT347E:00"),
- };
- 
- static const struct regulator_init_data surface_go_tps68470_core_reg_init_data = {
-@@ -76,12 +85,36 @@ static const struct regulator_init_data surface_go_tps68470_vsio_reg_init_data =
- 	.consumer_supplies = int347a_vsio_consumer_supplies,
- };
- 
-+static const struct regulator_init_data surface_go_tps68470_aux1_reg_init_data = {
-+	.constraints = {
-+		.min_uV = 2815200,
-+		.max_uV = 2815200,
-+		.apply_uV = 1,
-+		.valid_ops_mask = REGULATOR_CHANGE_STATUS,
-+	},
-+	.num_consumer_supplies = ARRAY_SIZE(int347a_aux1_consumer_supplies),
-+	.consumer_supplies = int347a_aux1_consumer_supplies,
-+};
-+
-+static const struct regulator_init_data surface_go_tps68470_aux2_reg_init_data = {
-+	.constraints = {
-+		.min_uV = 1800600,
-+		.max_uV = 1800600,
-+		.apply_uV = 1,
-+		.valid_ops_mask = REGULATOR_CHANGE_STATUS,
-+	},
-+	.num_consumer_supplies = ARRAY_SIZE(int347a_aux2_consumer_supplies),
-+	.consumer_supplies = int347a_aux2_consumer_supplies,
-+};
-+
- static const struct tps68470_regulator_platform_data surface_go_tps68470_pdata = {
- 	.reg_init_data = {
- 		[TPS68470_CORE] = &surface_go_tps68470_core_reg_init_data,
- 		[TPS68470_ANA]  = &surface_go_tps68470_ana_reg_init_data,
- 		[TPS68470_VCM]  = &surface_go_tps68470_vcm_reg_init_data,
- 		[TPS68470_VSIO] = &surface_go_tps68470_vsio_reg_init_data,
-+		[TPS68470_AUX1] = &surface_go_tps68470_aux1_reg_init_data,
-+		[TPS68470_AUX2] = &surface_go_tps68470_aux2_reg_init_data,
- 	},
- };
- 
--- 
-2.25.1
+Order the entries alphabetically, so 1170 goes after 1050.
 
+> +
+>        - description:
+>            Freescale Vybrid Platform Device Tree Bindings
+>  
+
+
+Best regards,
+Krzysztof
