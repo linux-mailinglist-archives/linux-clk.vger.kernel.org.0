@@ -2,311 +2,109 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 444CD4E9BD5
-	for <lists+linux-clk@lfdr.de>; Mon, 28 Mar 2022 18:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A4AD4E9CEB
+	for <lists+linux-clk@lfdr.de>; Mon, 28 Mar 2022 18:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240855AbiC1QFw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 28 Mar 2022 12:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
+        id S240498AbiC1Q7Q (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 28 Mar 2022 12:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239807AbiC1QFv (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 28 Mar 2022 12:05:51 -0400
-X-Greylist: delayed 4200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Mar 2022 09:04:09 PDT
-Received: from mail.baikalelectronics.ru (mail.baikalelectronics.com [87.245.175.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24D011A3B7;
-        Mon, 28 Mar 2022 09:04:08 -0700 (PDT)
-Received: from mail.baikalelectronics.ru (unknown [192.168.51.25])
-        by mail.baikalelectronics.ru (Postfix) with ESMTP id 9FBFB1E28FC;
-        Thu, 24 Mar 2022 04:09:18 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.ru 9FBFB1E28FC
+        with ESMTP id S234838AbiC1Q7P (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 28 Mar 2022 12:59:15 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E340C4CD4B;
+        Mon, 28 Mar 2022 09:57:34 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a8so29908300ejc.8;
+        Mon, 28 Mar 2022 09:57:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baikalelectronics.ru; s=mail; t=1648084158;
-        bh=KwgRwEaLuj9S7bcXvNqk9nfNR+7FKV+wml4/e4DFTxo=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=ROn3Fxd7SVgCbaeh6EHEBzZUnw8DuOGGUcegQOYTAYZvEY3BVkS5M2U6zepKglqWd
-         9myfruuGLx7AYQj3Md1hvAY+74MZ5LG+KS8U3q2ruZyBLKiM28d7A7kbhUjHjFiwob
-         UwTBGx9Z1V4Mv7PW31AlvsxHa513RByGtX9NprIM=
-Received: from localhost (192.168.168.10) by mail (192.168.51.25) with
- Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 24 Mar 2022 04:09:18 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        <linux-clk@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-mips@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: [PATCH 4/4] clk: baikal-t1: Add DDR/PCIe directly controlled resets support
-Date:   Thu, 24 Mar 2022 04:09:05 +0300
-Message-ID: <20220324010905.15589-5-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20220324010905.15589-1-Sergey.Semin@baikalelectronics.ru>
-References: <20220324010905.15589-1-Sergey.Semin@baikalelectronics.ru>
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=wBY8GOjTBGWVEL0GTMWI6P1arfhZD9nF3EMgpiHJ8pg=;
+        b=TrhfV81sE8oJYSmCYeOpiNX4rwzFlNa0YYzLP08JEAl6V9ZLFZAITEpA+veBQrtYXd
+         nTIjE75VTCdIqCw6ACstHID8jmEUgPezsa2Ye+Q8W1m3xfHTfeACSgW68kRyL0MmayFL
+         y6fCbN7XOb4+BqlfFW+POMeDwCKcSLdInFNbxW1/RObEC7S48YVIEaaj7mIRVg9cBG15
+         2beqkvhDpR66XCMne9A7AkOOyftPDo8lqXCdH3KL4usS/GBmP0v4FgXC0I0ohOZ3So6t
+         JRh1x+o00LD4zh72QK1QlcGKLfNkewdqNuktuGZnEQEyx0ijfjAX/mqSuMPxI5K9/NIS
+         EQlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=wBY8GOjTBGWVEL0GTMWI6P1arfhZD9nF3EMgpiHJ8pg=;
+        b=b/HWAANSSAgj7N2sbARHIp85cju/6wieArTUtr9yRGrt9z9kXzj6UpHVpMAnhGilMC
+         USkt6cHlb2vm8qJakP0bEV1YdB7djmEvfMipWYYqk1txS2txLIWe9Dq7JEsycTgTTkXr
+         uMFNThoE7jBMeflNREz2ueNZKp8Zp1IiMiqZHBRk2e8MmuYCguLYyloQRrsqgl/JVobM
+         XNH8Y8vsQYW3AWvDhz/tVfqEN29AHYDJzsWC3sPC5MhCy5eIzLTyPsq6DzfVSWPBenpK
+         6WPvxCwSvN1OjC65evSGXX5HI3Mcw+e29gZs8tGrZ+p68f8m1jXXjym+uKeA7XXG3GBu
+         XRRQ==
+X-Gm-Message-State: AOAM531OKdieaSY5IKM5b8byoB4DjSecZCZcsXKRjHOWZqe4t/l+Y3Rz
+        cos9igW8S7oWOiRCuVOUTqo=
+X-Google-Smtp-Source: ABdhPJwbZdbg18gH4uRako7Q+MjVs4nlqqVBcAfzLaiEeJvaLPgfUTObm+Sv22eUIX11zO3Tys/+HQ==
+X-Received: by 2002:a17:907:2a53:b0:6ce:e4fe:3f92 with SMTP id fe19-20020a1709072a5300b006cee4fe3f92mr28685432ejc.389.1648486649986;
+        Mon, 28 Mar 2022 09:57:29 -0700 (PDT)
+Received: from jernej-laptop.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id p12-20020a17090635cc00b006e055c9c91esm6038305ejb.101.2022.03.28.09.57.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Mar 2022 09:57:29 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Wan Jiabing <wanjiabing@vivo.com>
+Cc:     kael_w@yeah.net, Wan Jiabing <wanjiabing@vivo.com>
+Subject: Re: [PATCH] clk: sunxi-ng: fix not NULL terminated coccicheck error
+Date:   Mon, 28 Mar 2022 18:57:28 +0200
+Message-ID: <2621623.mvXUDI8C0e@jernej-laptop>
+In-Reply-To: <20220328073931.36544-1-wanjiabing@vivo.com>
+References: <20220328073931.36544-1-wanjiabing@vivo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Aside with a set of the trigger-like resets Baikal-T1 CCU provides two
-additional blocks with directly controlled reset signals. In particular it
-concerns DDR full and initial resets and various PCIe sub-domains resets.
-Let's add the direct reset assertion/de-assertion of the corresponding
-flags support into the Baikal-T1 CCU driver then. It will be required at
-least for the PCIe platform driver. Obviously the DDR controller isn't
-supposed to be fully reset in the kernel, so the corresponding controls
-are added just for the sake of the interface implementation completeness.
+Dne ponedeljek, 28. marec 2022 ob 09:39:31 CEST je Wan Jiabing napisal(a):
+> Fix the following coccicheck error:
+> ./drivers/clk/sunxi-ng/ccu-sun6i-rtc.c:348:1-2: sun6i_rtc_ccu_match is
+> not NULL terminated at line 348
+> 
+> Fixes: d91612d7f01a ("clk: sunxi-ng: Add support for the sun6i RTC clocks")
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
----
- drivers/clk/baikal-t1/ccu-rst.c     | 117 +++++++++++++++++++++++++++-
- drivers/clk/baikal-t1/ccu-rst.h     |   4 +
- include/dt-bindings/reset/bt1-ccu.h |   9 +++
- 3 files changed, 129 insertions(+), 1 deletion(-)
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-diff --git a/drivers/clk/baikal-t1/ccu-rst.c b/drivers/clk/baikal-t1/ccu-rst.c
-index 5e33c3ce962a..186a1491a7d9 100644
---- a/drivers/clk/baikal-t1/ccu-rst.c
-+++ b/drivers/clk/baikal-t1/ccu-rst.c
-@@ -25,17 +25,33 @@
- #include "ccu-div.h"
- #include "ccu-rst.h"
- 
-+#define CCU_SYS_DDR_BASE		0x02c
-+#define CCU_SYS_PCIE_BASE		0x144
-+
- #define CCU_RST_MAP(_rst_id, _clk_id)		\
- 	{					\
- 		.rst_id = _rst_id,		\
- 		.clk_id = _clk_id,		\
- 	}
- 
-+#define CCU_RST_DIR(_rst_id, _base, _ofs)	\
-+	{					\
-+		.rst_id = _rst_id,		\
-+		.base = _base,			\
-+		.ofs = _ofs			\
-+	}
-+
- struct ccu_rst_map {
- 	unsigned int rst_id;
- 	unsigned int clk_id;
- };
- 
-+struct ccu_rst_dir {
-+	unsigned int rst_id;
-+	unsigned int base;
-+	unsigned int ofs;
-+};
-+
- struct ccu_rst_data {
- 	struct device_node *np;
- 	struct regmap *sys_regs;
-@@ -46,6 +62,9 @@ struct ccu_rst_data {
- 	unsigned int rsts_map_num;
- 	const struct ccu_rst_map *rsts_map;
- 
-+	unsigned int rsts_dir_num;
-+	const struct ccu_rst_dir *rsts_dir;
-+
- 	unsigned int divs_num;
- 	struct ccu_div **divs;
- 
-@@ -81,6 +100,23 @@ static const struct ccu_rst_map sys_rst_map[] = {
- 	CCU_RST_MAP(CCU_SYS_APB_RST, CCU_SYS_APB_CLK),
- };
- 
-+/*
-+ * DDR and PCIe sub-domains can be reset with directly controlled reset
-+ * signals. I wouldn't suggest to reset the DDR controller though at least
-+ * while the Linux kernel is working.
-+ */
-+static const struct ccu_rst_dir sys_rst_dir[] = {
-+	CCU_RST_DIR(CCU_SYS_DDR_FULL_RST, CCU_SYS_DDR_BASE, 1),
-+	CCU_RST_DIR(CCU_SYS_DDR_INIT_RST, CCU_SYS_DDR_BASE, 2),
-+	CCU_RST_DIR(CCU_SYS_PCIE_PCS_PHY_RST, CCU_SYS_PCIE_BASE, 0),
-+	CCU_RST_DIR(CCU_SYS_PCIE_PIPE0_RST, CCU_SYS_PCIE_BASE, 4),
-+	CCU_RST_DIR(CCU_SYS_PCIE_CORE_RST, CCU_SYS_PCIE_BASE, 8),
-+	CCU_RST_DIR(CCU_SYS_PCIE_PWR_RST, CCU_SYS_PCIE_BASE, 9),
-+	CCU_RST_DIR(CCU_SYS_PCIE_STICKY_RST, CCU_SYS_PCIE_BASE, 10),
-+	CCU_RST_DIR(CCU_SYS_PCIE_NSTICKY_RST, CCU_SYS_PCIE_BASE, 11),
-+	CCU_RST_DIR(CCU_SYS_PCIE_HOT_RST, CCU_SYS_PCIE_BASE, 12),
-+};
-+
- static int ccu_rst_reset(struct reset_controller_dev *rcdev,
- 			 unsigned long idx)
- {
-@@ -92,12 +128,81 @@ static int ccu_rst_reset(struct reset_controller_dev *rcdev,
- 		return -EINVAL;
- 	}
- 
-+	/*
-+	 * No CCU divider descriptor means having directly handled reset control,
-+	 * which is mapped into the CCU Divider registers.
-+	 */
- 	rst = &data->rsts[idx];
-+	if (!rst->div)
-+		return -EOPNOTSUPP;
-+
- 	return ccu_div_reset_domain(rst->div);
- }
- 
-+static int ccu_rst_set(struct ccu_rst_data *data,
-+		       unsigned long idx, bool high)
-+{
-+	struct ccu_rst *rst;
-+
-+	if (idx >= data->rsts_num) {
-+		pr_err("Invalid reset ID %lu specified\n", idx);
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * Having CCU divider descriptor means trigger-like reset control so
-+	 * direct assertion/de-assertion is unsupported.
-+	 */
-+	rst = &data->rsts[idx];
-+	if (rst->div)
-+		return high ? -EOPNOTSUPP : 0;
-+
-+	return regmap_update_bits(data->sys_regs, rst->reg_ctl,
-+				  rst->mask, high ? rst->mask : 0);
-+}
-+
-+static int ccu_rst_assert(struct reset_controller_dev *rcdev,
-+			  unsigned long idx)
-+{
-+	struct ccu_rst_data *data = to_ccu_rst_data(rcdev);
-+
-+	return ccu_rst_set(data, idx, true);
-+}
-+
-+static int ccu_rst_deassert(struct reset_controller_dev *rcdev,
-+			    unsigned long idx)
-+{
-+	struct ccu_rst_data *data = to_ccu_rst_data(rcdev);
-+
-+	return ccu_rst_set(data, idx, false);
-+}
-+
-+static int ccu_rst_status(struct reset_controller_dev *rcdev,
-+			  unsigned long idx)
-+{
-+	struct ccu_rst_data *data = to_ccu_rst_data(rcdev);
-+	struct ccu_rst *rst;
-+	u32 val;
-+
-+	if (idx >= data->rsts_num) {
-+		pr_err("Invalid reset ID %lu specified\n", idx);
-+		return -EINVAL;
-+	}
-+
-+	rst = &data->rsts[idx];
-+	if (rst->div)
-+		return -EOPNOTSUPP;
-+
-+	regmap_read(data->sys_regs, rst->reg_ctl, &val);
-+
-+	return !!(val & rst->mask);
-+}
-+
- static const struct reset_control_ops ccu_rst_ops = {
- 	.reset = ccu_rst_reset,
-+	.assert = ccu_rst_assert,
-+	.deassert = ccu_rst_deassert,
-+	.status = ccu_rst_status,
- };
- 
- static int ccu_rst_of_idx_get(struct reset_controller_dev *rcdev,
-@@ -153,6 +258,8 @@ static struct ccu_rst_data *ccu_rst_create_data(const struct ccu_rst_init_data *
- 	} else if (of_device_is_compatible(data->np, "baikal,bt1-ccu-sys")) {
- 		data->rsts_map_num = ARRAY_SIZE(sys_rst_map);
- 		data->rsts_map = sys_rst_map;
-+		data->rsts_dir_num = ARRAY_SIZE(sys_rst_dir);
-+		data->rsts_dir = sys_rst_dir;
- 	} else {
- 		pr_err("Incompatible DT node '%s' specified\n",
- 			of_node_full_name(data->np));
-@@ -160,7 +267,7 @@ static struct ccu_rst_data *ccu_rst_create_data(const struct ccu_rst_init_data *
- 		goto err_kfree_data;
- 	}
- 
--	data->rsts_num = data->rsts_map_num;
-+	data->rsts_num = data->rsts_map_num + data->rsts_dir_num;
- 	data->rsts = kcalloc(data->rsts_num, sizeof(*data->rsts), GFP_KERNEL);
- 	if (!data->rsts) {
- 		ret = -ENOMEM;
-@@ -198,6 +305,14 @@ static int ccu_rst_init_desc(struct ccu_rst_data *data)
- 		}
- 	}
- 
-+	for (idx = 0; idx < data->rsts_dir_num; ++idx, ++rst) {
-+		const struct ccu_rst_dir *dir = &data->rsts_dir[idx];
-+
-+		rst->id = dir->rst_id;
-+		rst->reg_ctl = dir->base;
-+		rst->mask = BIT(dir->ofs);
-+	}
-+
- 	return 0;
- }
- 
-diff --git a/drivers/clk/baikal-t1/ccu-rst.h b/drivers/clk/baikal-t1/ccu-rst.h
-index 2ef82899dba8..58347dc8a504 100644
---- a/drivers/clk/baikal-t1/ccu-rst.h
-+++ b/drivers/clk/baikal-t1/ccu-rst.h
-@@ -33,10 +33,14 @@ struct ccu_rst_init_data {
-  * struct ccu_div - CCU Reset descriptor
-  * @id: Reset identifier.
-  * @div: Pointer to the CCU Divider descriptor (can be NULL).
-+ * @reg_ctl: reset control register base address.
-+ * @mask: reset flag within the control register.
-  */
- struct ccu_rst {
- 	unsigned int id;
- 	struct ccu_div *div;
-+	unsigned int reg_ctl;
-+	unsigned int mask;
- };
- 
- #ifdef CONFIG_CLK_BT1_CCU_RST
-diff --git a/include/dt-bindings/reset/bt1-ccu.h b/include/dt-bindings/reset/bt1-ccu.h
-index 3578e83026bc..c691efaa678f 100644
---- a/include/dt-bindings/reset/bt1-ccu.h
-+++ b/include/dt-bindings/reset/bt1-ccu.h
-@@ -21,5 +21,14 @@
- 
- #define CCU_SYS_SATA_REF_RST		0
- #define CCU_SYS_APB_RST			1
-+#define CCU_SYS_DDR_FULL_RST		2
-+#define CCU_SYS_DDR_INIT_RST		3
-+#define CCU_SYS_PCIE_PCS_PHY_RST	4
-+#define CCU_SYS_PCIE_PIPE0_RST		5
-+#define CCU_SYS_PCIE_CORE_RST		6
-+#define CCU_SYS_PCIE_PWR_RST		7
-+#define CCU_SYS_PCIE_STICKY_RST		8
-+#define CCU_SYS_PCIE_NSTICKY_RST	9
-+#define CCU_SYS_PCIE_HOT_RST		10
- 
- #endif /* __DT_BINDINGS_RESET_BT1_CCU_H */
--- 
-2.35.1
+Best regards,
+Jernej
+
+> ---
+>  drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
+> b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c index 8a10bade7e0d..ffb72d9a9c36
+> 100644
+> --- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
+> +++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
+> @@ -346,6 +346,7 @@ static const struct of_device_id sun6i_rtc_ccu_match[] =
+> { .compatible	= "allwinner,sun50i-r329-rtc",
+>  		.data		= &sun50i_r329_rtc_ccu_data,
+>  	},
+> +	{},
+>  };
+> 
+>  int sun6i_rtc_ccu_probe(struct device *dev, void __iomem *reg)
+
+
+
 
