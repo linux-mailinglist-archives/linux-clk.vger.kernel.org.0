@@ -2,106 +2,100 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C6F4EB39A
-	for <lists+linux-clk@lfdr.de>; Tue, 29 Mar 2022 20:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F7C4EB3DB
+	for <lists+linux-clk@lfdr.de>; Tue, 29 Mar 2022 21:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240639AbiC2Spe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 29 Mar 2022 14:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42150 "EHLO
+        id S240818AbiC2TG6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 29 Mar 2022 15:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240643AbiC2Spd (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 29 Mar 2022 14:45:33 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480A97E595;
-        Tue, 29 Mar 2022 11:43:50 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id x34so21707700ede.8;
-        Tue, 29 Mar 2022 11:43:50 -0700 (PDT)
+        with ESMTP id S240815AbiC2TG4 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 29 Mar 2022 15:06:56 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B8B122232
+        for <linux-clk@vger.kernel.org>; Tue, 29 Mar 2022 12:05:08 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id c10so18644633ejs.13
+        for <linux-clk@vger.kernel.org>; Tue, 29 Mar 2022 12:05:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=xBJkwvNeki5PfTqOsvfJ8a7WGcSaDHdZIXo5PFl9ZH4=;
-        b=Fh+hp3c9C56wxdRXyU/NFIsIQjB5m67Zkizv52Y6yu4n8bg7nWzMMIg2fGM0Y4alnn
-         KxbxZqTc9BYKE1IDQrQjujvTv/4adFFCrpFPT8oq6Ou9IqqiNs2u8aPQY6PhflBxrGnz
-         0na83mlgrmzHeNCw6AaehTXklkDtbO9uAljp1XyRDJkRUa7e6rjC5wJi8PzE6DGVt72D
-         zNpf9nq94iB7Ulmqbz1rn639u/YnVWavAj7wBxVd2SEt2UZkG5cj0xpB6apRnC5fhe22
-         75SdMFI0NER9HpiZO0GXG9f6pKkdTHeIDapwWHEQ1OU+eD3fPxorrQ761X5M40La5j7P
-         hsUg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=S+eaPVhOntRldab/h9j2OpmXWaKh1yuCdKow3ToRxmk=;
+        b=BdcWfpm06YeOlKVWp4x/inLyxqw/LWhOVYObUkiX0CqZ41MLopiXNHyloYePwKpTDB
+         OcOmCKDbxg1nXs/BiS30rsoa3jl04jvHZM4AKHb8CrCrUhb+IyG8PEn5qNfwGiAyVNjB
+         Ln8W7lzoyp1A7A5HB/hIUiaAKWPld+yd0tc+ZO/nsnSh73acoajpMXvqA6b7k4vwhkR3
+         GBONWmd5K39r/7iRa9MIBUXVYpnwNA1QYQz6vnf2/Lhw0VBUFj8kmmio17woJSc/UhvS
+         pNYGJKvNv9FaSr/sdcl+TO+YmpDMTp3PFInZ/TM/6edkQS60WCKxdRmji+l/0svB0boC
+         CVUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xBJkwvNeki5PfTqOsvfJ8a7WGcSaDHdZIXo5PFl9ZH4=;
-        b=QsJHgUPmOw3EqDK88xD9S1RKAwANJI6HmjX2VB9NOxlGapLUeqw2X7V8uHodPzh/WJ
-         Wmp/bf9yuYH5ZoBbgzdz29sr3mH87hrB7j9CgZXFXSe1hZ6tHmS1CRsIwct/PeeNMwNi
-         qe+cT3SClMZa89vDBkM4vmSmmwP2qJ6hRIlf72e84TOjflH5kLg5krG184El7HKEkYC/
-         hymd+Q+kiJLXUmC5Ls1q7QvVtHuVrHR2YH2lGywfbpVXlpnxI5WjaaugBDawo68eQ400
-         OEgsydaSqduk5YUDnEKSCQlZO9xNUI//aWb9Qid5Yj3uiOmNja454xAlsF4p7N49ftHx
-         ISAA==
-X-Gm-Message-State: AOAM530tza6mssgYYkG0rFszAa5iiWlyKgGn5HkVLmD+E4aKPTRx280J
-        mgTQq8SV30ZzCyr11673A0w=
-X-Google-Smtp-Source: ABdhPJyrlb3mvXOJgIqbuaQuQYalBaoCxOz4mvbsmiTDPBplEVYFMP3StxTyydNuVperBtbUNHBuhQ==
-X-Received: by 2002:aa7:c748:0:b0:418:f0fb:83a1 with SMTP id c8-20020aa7c748000000b00418f0fb83a1mr6395176eds.350.1648579428630;
-        Tue, 29 Mar 2022 11:43:48 -0700 (PDT)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id z12-20020a17090674cc00b006df9afdda91sm7138714ejl.185.2022.03.29.11.43.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 11:43:48 -0700 (PDT)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de, zhangqing@rock-chips.com
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=S+eaPVhOntRldab/h9j2OpmXWaKh1yuCdKow3ToRxmk=;
+        b=odtPUjpnEh3dPC5HnNtCs8JF3NdKAAtrl9sXG2CRx0wDtgk2TABkumyFTAIeNB/FMF
+         suEAe4s9tjStcFfQ2Hd7mbtlSlR0RfSrcshuEQkad8KAUY5jH5pkBNBdB32GxRxqfs0q
+         W7xSw/kwFi2LBCMhdedt9xzTRu+11mOwqymRC7pl9kegfulWHKvRo1s8RdNWMo9xF+KS
+         lWTjxlV11e9ZcRK0KytlPuhCRDScRIgVrCjwZT5t45m61cQvm6B0H07ZYN6g46c/QNEH
+         yGVTUofbB+ZFeFpPeH00Yv0hDHUqhgpapZowTGtWwOfm2h3W2YhE6IzyxS0xfQQeoUC1
+         W8rA==
+X-Gm-Message-State: AOAM532nxhjscXzKK1Qaf7kfS2b+iB9XcrseOfTkT0vc2Jv4bXEPcbC0
+        4Xxl0v2vNvkF/Dlfv9IyE0BS3g==
+X-Google-Smtp-Source: ABdhPJycTC7raztfAiipL763FFF5helrC1RN+N+kIOc93r7W1QZPixjRFiQxK64qYQpm/akt0PEFlw==
+X-Received: by 2002:a17:907:60d1:b0:6e0:22a8:e2e5 with SMTP id hv17-20020a17090760d100b006e022a8e2e5mr35512365ejc.612.1648580707324;
+        Tue, 29 Mar 2022 12:05:07 -0700 (PDT)
+Received: from [192.168.0.162] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id g9-20020aa7c849000000b00412fc6bf26dsm8990032edt.80.2022.03.29.12.05.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Mar 2022 12:05:06 -0700 (PDT)
+Message-ID: <f766c981-2d40-d254-27d9-2d93b500c368@linaro.org>
+Date:   Tue, 29 Mar 2022 21:05:05 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v1 1/2] dt-bindings: clock: convert rockchip,
+ rk3308-cru.txt to YAML
+Content-Language: en-US
+To:     Johan Jonker <jbx6244@gmail.com>, heiko@sntech.de,
+        zhangqing@rock-chips.com
 Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
         sboyd@kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] arm64: rockchip: add clocks property to cru node rk3308
-Date:   Tue, 29 Mar 2022 20:43:39 +0200
-Message-Id: <20220329184339.1134-2-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220329184339.1134-1-jbx6244@gmail.com>
 References: <20220329184339.1134-1-jbx6244@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220329184339.1134-1-jbx6244@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add clocks and clock-names to the rk3308 cru node, because
-the device has to have at least one input clock.
-Also in case someone wants to add properties that start with
-assign-xxx to fix warnings like:
-'clocks' is a dependency of 'assigned-clocks'
-With the addition of new properties also sort the node properties
-a little bit.
+On 29/03/2022 20:43, Johan Jonker wrote:
+> Convert rockchip,rk3308-cru.txt to YAML.
+> 
+> Changes against original bindings:
+>  - Add clocks and clock-names because the device has to have
+>    at least one input clock.
+> 
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  .../bindings/clock/rockchip,rk3308-cru.txt    | 60 ---------------
+>  .../bindings/clock/rockchip,rk3308-cru.yaml   | 76 +++++++++++++++++++
+>  2 files changed, 76 insertions(+), 60 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3308-cru.txt
+>  create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3308-cru.yaml
+> 
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- arch/arm64/boot/dts/rockchip/rk3308.dtsi | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3308.dtsi b/arch/arm64/boot/dts/rockchip/rk3308.dtsi
-index 1cbe21261..2dfa67f1c 100644
---- a/arch/arm64/boot/dts/rockchip/rk3308.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3308.dtsi
-@@ -745,10 +745,11 @@
- 	cru: clock-controller@ff500000 {
- 		compatible = "rockchip,rk3308-cru";
- 		reg = <0x0 0xff500000 0x0 0x1000>;
-+		clocks = <&xin24m>;
-+		clock-names = "xin24m";
-+		rockchip,grf = <&grf>;
- 		#clock-cells = <1>;
- 		#reset-cells = <1>;
--		rockchip,grf = <&grf>;
--
- 		assigned-clocks = <&cru SCLK_RTC32K>;
- 		assigned-clock-rates = <32768>;
- 	};
--- 
-2.20.1
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+
+Best regards,
+Krzysztof
