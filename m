@@ -2,96 +2,125 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274464EC419
-	for <lists+linux-clk@lfdr.de>; Wed, 30 Mar 2022 14:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9394EC505
+	for <lists+linux-clk@lfdr.de>; Wed, 30 Mar 2022 14:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233660AbiC3MeA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 30 Mar 2022 08:34:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
+        id S242840AbiC3M6A (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 30 Mar 2022 08:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238372AbiC3Mdu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 30 Mar 2022 08:33:50 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0210E6C944;
-        Wed, 30 Mar 2022 05:19:57 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id c10so22726719ejs.13;
-        Wed, 30 Mar 2022 05:19:56 -0700 (PDT)
+        with ESMTP id S1345425AbiC3M57 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 30 Mar 2022 08:57:59 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B0A1D2074
+        for <linux-clk@vger.kernel.org>; Wed, 30 Mar 2022 05:56:13 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id bq24so19697629lfb.5
+        for <linux-clk@vger.kernel.org>; Wed, 30 Mar 2022 05:56:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yb13D0MHL1q0I5GMitPig2+TSOgHDixtNwuPnXxvwfA=;
-        b=dI7gx0ZI5YlOBk1wG2SDHXM04Peh5+DkcX7RDGRl9EwkN6RszSeZBTj6ZN7fE6Yxx4
-         UMNH8SIDUrXlcSZ5IRBPixrf7W0oXWo8IB23yIYe7GCEAe10pIT7oL9xs8EVvXrPdtlY
-         mpbuImX83TEuRXCPaxnag7HtMh7oj7XRVe5H57whU6AAGHsWPl47gXIvWgLspvf6bEGc
-         naxxdvy0YYl9tYpUDNexlLoA2LCVWK68KOA33vQDD85RVDsQkgB9H80JSPhOtDl4WE8Z
-         d7Wep1OhiBOzSHrVJQbI68jkXrqvJPLKdxuiB61MnNOUh7PnIM/HdK1ZjtPe8gmJxfWG
-         SwjA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=G5HJzN7yLosBTkE6FblfJhF8/NxTEia64Q4IDEWiIUY=;
+        b=QwfPAD+9wwtOxMGPx3FuoweZ9OmsOzbFFUoPPM4R81ypDZdDHjAVZqBfEQ/MCcEXFm
+         qzgZmn3q75tuixnjAwl1C3n/Hm+NRs9wji7+rfoqk2G1/jZzbzponHpetWW0XMSWqQtD
+         mj69FKBVmfKntzvJR1RLQ0hsY/LPdRTQFcAvagy5SGOSiRp2+n0hVibQ0f9t5aMApovc
+         oXIDttUEWfkxn7n4V8xv8fgqVq9awCBnj8cTNVDr05iJx7ZoxuOS3dylB+XTeP7zqEqi
+         l1pGxDRwcw6kZYZdIU0XQx8TXO9IIX8nlCEgrn0mVVb623ZPuptOiOBYFospCC2u4ANS
+         ifdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yb13D0MHL1q0I5GMitPig2+TSOgHDixtNwuPnXxvwfA=;
-        b=eWHTDmPrTR4TJZC0xQcyMYvZqjH1t2/aTlPtMcDf+ZzLz6ryG33FoXZwvoCbNQT0zn
-         4ylivb1htCxGZDzrvhZgB7Ib4K58nfEBnhMbZvAZoAWIliSX2+nwrJtoJQQhzDZWEomz
-         XvBbEoEBjOHOXfLphzpp6pITmOH97RH7ctdQYMDdjobjX8yFzLqxIU/bFEtaPk7J88ca
-         cfzW5qRWentC0C2F3geeSp7wTKEQsTIqTz1BsUqU3+YPB4dAOZ8+VhMPP923M5UEyDRv
-         cBj+yVlkz/HgzOzer2ICO4UnY3wikAbvT3DZ6gRMs2wjSJDP9QOMjRXyOE0Pyew3nD2y
-         Dyxw==
-X-Gm-Message-State: AOAM530jasDNp2Hva6oexvgzPmO3QDgYmvlZr2OSYRwdI4YVwUuzXCsN
-        AnmH2DIk+jwZmVEgpTzbQzo=
-X-Google-Smtp-Source: ABdhPJz5HqJgfVLDw1fcgFbevMH0wU4OD3vKhI5tl/7Qy20DQc2ktAI+VZ2y8SpWOlN8Rd2RDGSLmw==
-X-Received: by 2002:a17:907:2513:b0:6e1:2c10:2ada with SMTP id y19-20020a170907251300b006e12c102adamr10865184ejl.211.1648642772122;
-        Wed, 30 Mar 2022 05:19:32 -0700 (PDT)
-Received: from debian.home (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id j21-20020a170906255500b006e08c4862ccsm7288778ejb.96.2022.03.30.05.19.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 05:19:31 -0700 (PDT)
-From:   Johan Jonker <jbx6244@gmail.com>
-To:     heiko@sntech.de, zhangqing@rock-chips.com
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/3] ARM: dts: rockchip: rk322x: use generic node name for dma
-Date:   Wed, 30 Mar 2022 14:19:23 +0200
-Message-Id: <20220330121923.24240-3-jbx6244@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220330121923.24240-1-jbx6244@gmail.com>
-References: <20220330121923.24240-1-jbx6244@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=G5HJzN7yLosBTkE6FblfJhF8/NxTEia64Q4IDEWiIUY=;
+        b=E8ycpcjM7n7hW2aIh+X1vFGUxSaqVj0O3qlw6wwpP3U4GMuPTJowK3ae9klTiUMmV7
+         XQ8jBdYSJGhC6pDK5nDa6TtxVifLG2ICj3SOxcr+6OlTSZo1GV3/iBNshxzeZ+j/KUSj
+         IjpJlkm9laBHmJWXV7lHOFyP3hRSQmBa/Zp3yOjBAcIOf+PVrSsvbQs+G9BypJ/EiK+4
+         63A9IypxCRFjkmOEmvTBNG9rCwYnHy2SfO+P0YxJeuKg0bVMlx1p3jQOQwz358SbrgNQ
+         +2+JyHuDVfrWqk+6cGNWHWLd6OmdEYYQLRBg/XxrDmy5INfoXNZfTosaHFxdOgEBemqe
+         4w6g==
+X-Gm-Message-State: AOAM530c4aT7jiBB1bY5ImXjaC1vmwrQjDCIn2APwrfTqKte/VbEOUPd
+        TQG50lTAfM+420jjK3opJQ9ykg==
+X-Google-Smtp-Source: ABdhPJz0ETGvRlDBDOivkyi/5XpRFV5fGpwgEKcaUN5wmAZnanZInTJpmaYJHQCoxwseyYPRJLLpFg==
+X-Received: by 2002:a05:6512:118b:b0:438:b7ad:11a2 with SMTP id g11-20020a056512118b00b00438b7ad11a2mr6656755lfr.295.1648644968195;
+        Wed, 30 Mar 2022 05:56:08 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id h6-20020a2e5306000000b00247e893075asm2367302ljb.37.2022.03.30.05.56.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 05:56:07 -0700 (PDT)
+Message-ID: <edfff61f-02a0-7962-a72c-97ef5f14ba76@linaro.org>
+Date:   Wed, 30 Mar 2022 15:56:06 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v1 0/5] PCI: qcom: rework pipe_clk/pipe_clk_src handling
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <tdas@codeaurora.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pci@vger.kernel.org
+References: <20220323085010.1753493-1-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220323085010.1753493-1-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The node names should be generic, so fix this for the rk3228 dma node
-and rename it to "dma-controller".
+On 23/03/2022 11:50, Dmitry Baryshkov wrote:
+> PCIe pipe clk (and some other clocks) must be parked to the "safe"
+> source (bi_tcxo) when corresponding GDSC is turned off and on again.
+> Currently this is handcoded in the PCIe driver by reparenting the
+> gcc_pipe_N_clk_src clock.
+> 
+> Instead of doing it manually, follow the approach used by
+> clk_rcg2_shared_ops and implement this parking in the enable() and
+> disable() clock operations for respective pipe clocks.
 
-Signed-off-by: Johan Jonker <jbx6244@gmail.com>
----
- arch/arm/boot/dts/rk322x.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Prasad, can we please get your comments on this patchset?
+Since you have submitted original patchset for sc7280, it looks like you 
+should be interested in testing that this patchset doesn't break your 
+devices.
 
-diff --git a/arch/arm/boot/dts/rk322x.dtsi b/arch/arm/boot/dts/rk322x.dtsi
-index 2547f46fe..ffc16d6b9 100644
---- a/arch/arm/boot/dts/rk322x.dtsi
-+++ b/arch/arm/boot/dts/rk322x.dtsi
-@@ -503,7 +503,7 @@
- 			<75000000>;
- 	};
- 
--	pdma: pdma@110f0000 {
-+	pdma: dma-controller@110f0000 {
- 		compatible = "arm,pl330", "arm,primecell";
- 		reg = <0x110f0000 0x4000>;
- 		interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
+> 
+> Changes since RFC:
+>   - Rework clk-regmap-mux fields. Specify safe parent as P_* value rather
+>     than specifying the register value directly
+>   - Expand commit message to the first patch to specially mention that
+>     it is required only on newer generations of Qualcomm chipsets.
+> 
+> Dmitry Baryshkov (5):
+>    clk: qcom: regmap-mux: add pipe clk implementation
+>    clk: qcom: gcc-sm8450: use new clk_regmap_mux_safe_ops for PCIe pipe
+>      clocks
+>    clk: qcom: gcc-sc7280: use new clk_regmap_mux_safe_ops for PCIe pipe
+>      clocks
+>    PCI: qcom: Remove unnecessary pipe_clk handling
+>    PCI: qcom: Drop manual pipe_clk_src handling
+> 
+>   drivers/clk/qcom/clk-regmap-mux.c      | 78 +++++++++++++++++++++++
+>   drivers/clk/qcom/clk-regmap-mux.h      |  3 +
+>   drivers/clk/qcom/gcc-sc7280.c          |  6 +-
+>   drivers/clk/qcom/gcc-sm8450.c          |  6 +-
+>   drivers/pci/controller/dwc/pcie-qcom.c | 87 +-------------------------
+>   5 files changed, 92 insertions(+), 88 deletions(-)
+> 
+
+
 -- 
-2.20.1
-
+With best wishes
+Dmitry
