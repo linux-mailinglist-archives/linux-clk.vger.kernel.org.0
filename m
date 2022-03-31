@@ -2,226 +2,154 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F3E4ED315
-	for <lists+linux-clk@lfdr.de>; Thu, 31 Mar 2022 06:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C17E24ED3E6
+	for <lists+linux-clk@lfdr.de>; Thu, 31 Mar 2022 08:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbiCaEij (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 31 Mar 2022 00:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
+        id S230313AbiCaG3Z (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 31 Mar 2022 02:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiCaEih (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 31 Mar 2022 00:38:37 -0400
-Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2EEBB5C65A;
-        Wed, 30 Mar 2022 21:36:48 -0700 (PDT)
-Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
-        by maillog.nuvoton.com (Postfix) with ESMTP id 112C31C8105A;
-        Thu, 31 Mar 2022 10:43:37 +0800 (CST)
-Received: from NTHCCAS02.nuvoton.com (10.1.9.121) by NTHCCAS01.nuvoton.com
- (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Thu, 31 Mar
- 2022 10:43:36 +0800
-Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS02.nuvoton.com
- (10.1.9.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Thu, 31 Mar
- 2022 10:43:36 +0800
-Received: from localhost.localdomain (172.19.1.47) by NTHCCAS01.nuvoton.com
- (10.1.12.25) with Microsoft SMTP Server id 15.1.2375.7 via Frontend
- Transport; Thu, 31 Mar 2022 10:43:35 +0800
-From:   Jacky Huang <ychuang3@nuvoton.com>
-To:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-CC:     <robh+dt@kernel.org>, <sboyd@kernel.org>, <krzk+dt@kernel.org>,
-        <arnd@arndb.de>, <olof@lixom.net>, <soc@kernel.org>,
-        <cfli0@nuvoton.com>, Jacky Huang <ychuang3@nuvoton.com>
-Subject: [PATCH 3/3] arm64: dts: nuvoton: Add initial support for MA35D1
-Date:   Thu, 31 Mar 2022 10:42:56 +0800
-Message-ID: <20220331024256.14762-4-ychuang3@nuvoton.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220331024256.14762-1-ychuang3@nuvoton.com>
-References: <20220331024256.14762-1-ychuang3@nuvoton.com>
+        with ESMTP id S230293AbiCaG3Z (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 31 Mar 2022 02:29:25 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D391EC9AB
+        for <linux-clk@vger.kernel.org>; Wed, 30 Mar 2022 23:27:38 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id c10so27525858ejs.13
+        for <linux-clk@vger.kernel.org>; Wed, 30 Mar 2022 23:27:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=hnWdlmqxMOaLiEjonagZkR7OoglUhQY9jRtY4sA56yg=;
+        b=TQGgkFMOMKjrhzhg1buAAt2dln2/Y76JCQKayw3/AFBjl/55VPEBjFtHJqvwUHABYk
+         zx4NjQmIc+cYgyHYx8xMqr2J0u3y1FHnplY9mYqctDMDmYAmLsvETVP667ksLnSEaDyk
+         4J+FT5x58ISqcbHNsc4f8ddXZ5H98q4AjI1NK63c7XiJUoTyAp/LIWuNdehwxpzTwVf0
+         VsEfqqHBCDcJdln/X1o345dU1335IvQ4VHOEZUeNan3PtDj6FK0L2EbpidUsNX2qRCiX
+         611Fe7bLspzdEEnWuHjeSxsE+Y9JWeO2xkeTxyZyy5k+JCfL94rKKOXkri7kenKsiFlF
+         aqJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hnWdlmqxMOaLiEjonagZkR7OoglUhQY9jRtY4sA56yg=;
+        b=JGMEDaMWVYLIxwzlH5zBJlEmOjMYzk6p7FzHIq5n1XlqYmZau2rInCrsFqt/o/wHP/
+         0ZKg4wSD5KMqS7TEe7srmpsF2bPMsDcJ+ubJ05y4LO2GIggs4THvD2gKhjYfGZXtdeyM
+         aAmi1aDvU6Ffll/AC4Mj1W7BW8wnxF8ac6eXclopjmqUTxL11Re0B9vMkM6KZWTMeNgy
+         d3b8CiMh36zownWT4ocQw44CtdXPWxvrTziIh2HNqmCLPxDVNxTnlx0fVhXaJDYJHAyx
+         5gHNFKa5nUzZyN2MuXe0IIv0UOwYR6NP62DNGqvNOW7k/cvt6bdjlOshc0D/P+EQ6PfI
+         nxYA==
+X-Gm-Message-State: AOAM530GoiOSG0B4L7R2H2TltDVJsh37xo0cIL6LlC9BudReZu0ekwLR
+        0+2pPEPtU3qqtGXlLq09WPj3FbR/PzlgU0ax
+X-Google-Smtp-Source: ABdhPJznK1yc+Q8z09lYsKMyARLvyV/F5B8LDTxytJ3B10ASFD6OyJpaHp5kCShMKGp4w4XQ85EeeA==
+X-Received: by 2002:a17:907:a422:b0:6e0:238c:4f44 with SMTP id sg34-20020a170907a42200b006e0238c4f44mr3526205ejc.257.1648708056576;
+        Wed, 30 Mar 2022 23:27:36 -0700 (PDT)
+Received: from [192.168.0.164] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id e9-20020a170906c00900b006d4a45869basm9017489ejz.199.2022.03.30.23.27.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 23:27:36 -0700 (PDT)
+Message-ID: <6be6ffd1-a303-f3f2-0424-0ce622de197f@linaro.org>
+Date:   Thu, 31 Mar 2022 08:27:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/3] dt-bindings: clock: Document MA35D1 clock controller
+ bindings
+Content-Language: en-US
+To:     Jacky Huang <ychuang3@nuvoton.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     robh+dt@kernel.org, sboyd@kernel.org, krzk+dt@kernel.org,
+        arnd@arndb.de, olof@lixom.net, soc@kernel.org, cfli0@nuvoton.com
+References: <20220331024256.14762-1-ychuang3@nuvoton.com>
+ <20220331024256.14762-3-ychuang3@nuvoton.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220331024256.14762-3-ychuang3@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the initial device tree files for Nuvoton MA35D1 Soc.
+On 31/03/2022 04:42, Jacky Huang wrote:
+> Add documentation to describe Nuvoton MA35D1 clock driver bindings.
+> 
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> ---
+>  .../bindings/clock/nuvoton,ma35d1-clk.yaml    | 59 +++++++++++++++++++
+>  1 file changed, 59 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+> new file mode 100644
+> index 000000000000..bf5474b10420
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+> @@ -0,0 +1,59 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/nuvoton,ma35d1-clk.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton MA35D1 Clock Control Module Binding
+> +
+> +maintainers:
+> +  - Chi-Fang Li <cfli0@nuvoton.com>
+> +  - Jacky Huang <ychuang3@nuvoton.com>
+> +
+> +description: |
+> +  The MA35D1 clock controller generates clocks for the whole chip,
+> +  including system clocks and all peripheral clocks.
+> +
+> +  See also:
+> +    dt-bindings/clock/ma35d1-clk.h
 
-Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
----
- arch/arm64/boot/dts/Makefile               |   1 +
- arch/arm64/boot/dts/nuvoton/Makefile       |   2 +
- arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts |  23 +++++
- arch/arm64/boot/dts/nuvoton/ma35d1.dtsi    | 106 +++++++++++++++++++++
- 4 files changed, 132 insertions(+)
- create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
- create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
- create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
+Full path needed.
 
-diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
-index 1ba04e31a438..87e9bda91276 100644
---- a/arch/arm64/boot/dts/Makefile
-+++ b/arch/arm64/boot/dts/Makefile
-@@ -31,3 +31,4 @@ subdir-y += tesla
- subdir-y += ti
- subdir-y += toshiba
- subdir-y += xilinx
-+subdir-y += nuvoton
-diff --git a/arch/arm64/boot/dts/nuvoton/Makefile b/arch/arm64/boot/dts/nuvoton/Makefile
-new file mode 100644
-index 000000000000..e1e0c466bf5e
---- /dev/null
-+++ b/arch/arm64/boot/dts/nuvoton/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+dtb-$(CONFIG_ARCH_NUVOTON) += ma35d1-evb.dtb
-diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts b/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
-new file mode 100644
-index 000000000000..38e4f734da0f
---- /dev/null
-+++ b/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Device Tree Source for MA35D1 Evaluation Board (EVB)
-+ *
-+ * Copyright (C) 2021 Nuvoton Technology Corp.
-+ */
-+
-+/dts-v1/;
-+#include "ma35d1.dtsi"
-+
-+/ {
-+	model = "Nuvoton MA35D1-EVB";
-+
-+	chosen {
-+		bootargs = "console=ttyS0,115200n8";
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x00000000 0x80000000 0 0x10000000>;
-+	};
-+};
-+
-diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi b/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
-new file mode 100644
-index 000000000000..76e47517d80d
---- /dev/null
-+++ b/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
-@@ -0,0 +1,106 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2022 Nuvoton Technology Corp.
-+ */
-+
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
-+
-+/ {
-+	compatible = "nuvoton,ma35d1";
-+	interrupt-parent = <&gic>;
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpu0>;
-+				};
-+				core1 {
-+					cpu = <&cpu1>;
-+				};
-+			};
-+		};
-+		cpu0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a35";
-+			reg = <0x0>;
-+			enable-method = "psci";
-+			next-level-cache = <&L2_0>;
-+		};
-+		cpu1: cpu@1 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a35";
-+			reg = <0x1>;
-+			enable-method = "psci";
-+			next-level-cache = <&L2_0>;
-+		};
-+		L2_0: l2-cache0 {
-+			compatible = "cache";
-+			cache-level = <2>;
-+		};
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-0.2";
-+		method = "smc";
-+	};
-+
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) |
-+					  IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) |
-+					  IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) |
-+					  IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) |
-+					  IRQ_TYPE_LEVEL_LOW)>;
-+		clock-frequency = <12000000>;
-+	};
-+
-+	sys: system-controller@40460000 {
-+		compatible = "nuvoton,ma35d1-sys", "syscon", "simple-mfd";
-+		reg = <0x40460000 0x400>;
-+	};
-+
-+	reset: reset-controller {
-+		compatible = "nuvoton,ma35d1-reset";
-+		nuvoton,ma35d1-sys = <&sys>;
-+		#reset-cells = <1>;
-+	};
-+
-+	clk: clock-controller@40460200 {
-+		compatible = "nuvoton,ma35d1-clk";
-+		reg = <0x40460200 0x100>;
-+		#clock-cells = <1>;
-+		assigned-clocks = <&clk DDRPLL>,
-+				  <&clk APLL>,
-+				  <&clk EPLL>,
-+				  <&clk VPLL>;
-+		assigned-clock-rates = <266000000>,
-+				       <180000000>,
-+				       <500000000>,
-+				       <102000000>;
-+		clock-pll-mode = <1>, <0>, <0>, <0>;
-+	};
-+
-+	gic: interrupt-controller@50800000 {
-+		compatible = "arm,gic-400";
-+		#interrupt-cells = <3>;
-+		interrupt-parent = <&gic>;
-+		interrupt-controller;
-+		reg = <0x50801000 0x1000>,
-+		      <0x50802000 0x2000>,
-+		      <0x50804000 0x2000>,
-+		      <0x50806000 0x2000>;
-+		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_RAW(0x13) |
-+					 IRQ_TYPE_LEVEL_HIGH)>;
-+	};
-+};
--- 
-2.30.2
+> +
+> +properties:
+> +  compatible:
+> +    const: nuvoton,ma35d1-clk
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#clock-cells":
+> +    const: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  assigned-clocks:
+> +    maxItems: 4
+> +
+> +  assigned-clock-rates:
+> +    maxItems: 4
+> +
+> +  clock-pll-mode:
+> +    maxItems: 4
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#clock-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  # clock control module node:
 
+Useless comment, remove it.
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
