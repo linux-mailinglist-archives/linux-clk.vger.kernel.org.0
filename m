@@ -2,87 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E35B4ED7B3
-	for <lists+linux-clk@lfdr.de>; Thu, 31 Mar 2022 12:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F026E4ED89F
+	for <lists+linux-clk@lfdr.de>; Thu, 31 Mar 2022 13:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234583AbiCaKVM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 31 Mar 2022 06:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60276 "EHLO
+        id S230433AbiCaLmC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 31 Mar 2022 07:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234582AbiCaKVL (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 31 Mar 2022 06:21:11 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE4B4667B;
-        Thu, 31 Mar 2022 03:19:23 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2E1BF5C01B3;
-        Thu, 31 Mar 2022 06:19:23 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Thu, 31 Mar 2022 06:19:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; bh=aIIdikQ6BinNUj
-        lLTKP7oRxwmVl6g9SbKG/hAgruEic=; b=HxlxHD+e8wxAkM73dNVXPWGE3qDmdG
-        5ffDJI3vQHUykPaDNwy59OCk4u1beSzwPuVmOLcu/rwpqoG4nx06YH9VhfDCHNZ6
-        +ohz0efnEiHKbpfpvOVFZc6lXJC5DuFble/X2Kdg8J2QCFOaB5Vyb5B6qYmwlFL/
-        MVp2v8N5vaLTK/7s8L8r4X4lF/eUQJaUl/set5DUL0yIdCNxr+xkx1KE/QvGknMj
-        tKsmi3IthtBqNRvzJsHesxwD4T87oshC+wMBiD7+KlxjIoV4uWAkGINvCVO4yka3
-        Jh+Uo94ekyypEprG5F4Ax+nPTRQ+S2nVH9lpmt3mlH935+qwRQbwhaVw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=aIIdikQ6BinNUjlLTKP7oRxwmVl6g9SbKG/hAgruE
-        ic=; b=QKfkxoWADkg9OGe5Fm1C5or+nxS8ydkHOK8CimajDNfRHP3qfPWAujS9G
-        MjrR2+kk6we4txWlkVX1GMN49+gByYXhSzU6DKlBeVcFVrk4JB+31IvEdj+y1lDt
-        yo3K/WnSKCLLweeIq1FcrymX1I40jQ9uEJil3agdHYLtRSUdcT0ZMdKIrMu3tON8
-        1nqi3zVaKky3bLkTwdF2QnlzMkbfA8jGBtFnvvZ79vfh5MlSA62or582I8EvnaDw
-        y5PJjLlYm/qRAuwvp0NjhG8Pp/+DYbP7JkNhYJR+Bk9scLAeWn9qnWWP9w5mEjvN
-        lwRUJQir2P6lkCa5D0wfMdwAj+5mA==
-X-ME-Sender: <xms:KoBFYiz5CijH9U9O6rXJywNXtUVO9PrSwQFDY0Dc74KqWCgvrMSApw>
-    <xme:KoBFYuS7Dw2nDPgvLECIUSOG5OKxPN3Gqh2fa4aSAdv4i8kjcFo1vHXdVXuwd5K1f
-    6h-51JpwrHlLj9lI9Q>
-X-ME-Received: <xmr:KoBFYkUwEpgAXkpS6LuC5_kzeOdjeIZwlV7umUD38mvuVFJBMG3VqgimOArPcvHTcjWqEo00zb2JONKPBdd9KPcfycnSd6yKa8wUR54>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeigedgvdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtugfgjgesthhqredttddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeehledvhfeklefgveelkeeludevffethfdukedvfffhhfegfeeugfehgeef
-    jeevtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:KoBFYoj3m7HQ83GLNhSWdcxMydurXjmV14AsrRphh1blxxz3fkKTmg>
-    <xmx:KoBFYkBZcB22RZCTD1u5ghaZ7WFCLZqhTYq5pZ3XdlJdiIHWTNHKcg>
-    <xmx:KoBFYpIc7MAfpzwy1nuttYOtJZP3a23F3gydzX_2bms6Cn45Kpn50Q>
-    <xmx:K4BFYj5SUJfBWhO1wf3oJTr7KXwhJi6DhiNFqsbqxm2B6vIRyUXL7A>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 31 Mar 2022 06:19:21 -0400 (EDT)
-Date:   Thu, 31 Mar 2022 12:19:19 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>,
-        linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH v2 3/3] clk: Drop the rate range on clk_put
-Message-ID: <20220331101919.urqhi2cspyjfthlj@houat>
-References: <20220325161144.1901695-1-maxime@cerno.tech>
- <20220325161144.1901695-4-maxime@cerno.tech>
- <CGME20220330080612eucas1p195caaf35d900412de762a27ae02b7b9e@eucas1p1.samsung.com>
- <366a0232-bb4a-c357-6aa8-636e398e05eb@samsung.com>
- <20220330084710.3r6b5pjspz5hdmy6@houat>
- <7465a7dc-c45e-2612-4c39-d15eceb9b75c@samsung.com>
+        with ESMTP id S235273AbiCaLmC (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 31 Mar 2022 07:42:02 -0400
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E3738788;
+        Thu, 31 Mar 2022 04:40:14 -0700 (PDT)
+Received: by mail-qt1-f174.google.com with SMTP id bp39so21110778qtb.6;
+        Thu, 31 Mar 2022 04:40:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tsmHwbJm2HnWmEEnGO1Kr5LLzGgAaLDEK9i1GDikghQ=;
+        b=5kYBxWsdXryEclKhU1a076YQ803MVdYIHmhan0nyJfXeijYIpgUW/NNuMLRwzIp5t8
+         sBosPe+VGOmazOalvDOnu3R67DohzjEDFqup0wsNfIhfBP5t6LHSVDUJ//0l3HVpc/sN
+         ebyyGakAM15aTe9plvMimhQosZthYIy8/59Tv2r39JJ2qs8boDin0fHKJWhrO7eSj3Oz
+         xTk1ies1lyLbedtChLgaC5VnXzF7mVrK626RcUWwHBzIUOV/4cQUFMXF3WipACfUnRFE
+         GmVnv9nYfB7Xr+6eINCachM84CWsbZIhnnVD9FACCnmMsgCcLiRlkoAxhjQInj5GeiQH
+         40aQ==
+X-Gm-Message-State: AOAM53083vcKuqbcw9x01PIg+J3DfFcSyeIF2eUkUqed/lca2EGdbhL5
+        C4prY/s7AjNSLB2vjhTSi17PTAfFmRi6tA==
+X-Google-Smtp-Source: ABdhPJw9SF0CR7oGBSzShFE4nxbkjbZT38PfI5oYSK0PmHdvdw5SWGyeIctr/kSCkJqt3jmZoaE5sQ==
+X-Received: by 2002:ac8:5809:0:b0:2e1:f0bc:2e88 with SMTP id g9-20020ac85809000000b002e1f0bc2e88mr3809752qtg.138.1648726813355;
+        Thu, 31 Mar 2022 04:40:13 -0700 (PDT)
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
+        by smtp.gmail.com with ESMTPSA id w1-20020ac857c1000000b002e1e899badesm19232314qta.72.2022.03.31.04.40.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 04:40:12 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id e81so12730430ybf.13;
+        Thu, 31 Mar 2022 04:40:12 -0700 (PDT)
+X-Received: by 2002:a5b:a8f:0:b0:633:fd57:f587 with SMTP id
+ h15-20020a5b0a8f000000b00633fd57f587mr3658548ybq.506.1648726812358; Thu, 31
+ Mar 2022 04:40:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <7465a7dc-c45e-2612-4c39-d15eceb9b75c@samsung.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <20220315154649.22343-1-biju.das.jz@bp.renesas.com> <20220315154649.22343-2-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20220315154649.22343-2-biju.das.jz@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 31 Mar 2022 13:40:00 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVoMxEYs+tS4QZ9rA+QLQG_Bp719oSMM3=6H5FnjfoGHA@mail.gmail.com>
+Message-ID: <CAMuHMdVoMxEYs+tS4QZ9rA+QLQG_Bp719oSMM3=6H5FnjfoGHA@mail.gmail.com>
+Subject: Re: [PATCH 1/4] clk: renesas: r9a07g043: Add GPIO clock and reset entries
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,96 +69,21 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 11:56:51AM +0200, Marek Szyprowski wrote:
-> Hi,
->=20
-> On 30.03.2022 10:47, Maxime Ripard wrote:
-> > On Wed, Mar 30, 2022 at 10:06:13AM +0200, Marek Szyprowski wrote:
-> >> On 25.03.2022 17:11, Maxime Ripard wrote:
-> >>> While the current code will trigger a new clk_set_rate call whenever =
-the
-> >>> rate boundaries are changed through clk_set_rate_range, this doesn't
-> >>> occur when clk_put() is called.
-> >>>
-> >>> However, this is essentially equivalent since, after clk_put()
-> >>> completes, those boundaries won't be enforced anymore.
-> >>>
-> >>> Let's add a call to clk_set_rate_range in clk_put to make sure those
-> >>> rate boundaries are dropped and the clock drivers can react.
-> >>>
-> >>> Let's also add a few tests to make sure this case is covered.
-> >>>
-> >>> Fixes: c80ac50cbb37 ("clk: Always set the rate on clk_set_range_rate")
-> >>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> >> This patch landed recently in linux-next 20220328 as commit 7dabfa2bc4=
-80
-> >> ("clk: Drop the rate range on clk_put()"). Sadly it breaks booting of
-> >> the few of my test systems: Samsung ARM 32bit Exynos3250 based Rinato
-> >> board and all Amlogic Meson G12B/SM1 based boards (Odroid C4, N2, Khad=
-as
-> >> VIM3/VIM3l). Rinato hangs always with the following oops:
-> >>
-> >> --->8---
-> >>
-> >> Kernel panic - not syncing: MCT hangs after writing 4 (offset:0x420)
-> >> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.17.0-rc1-00014-g7dabfa2bc4=
-80
-> >> #11551
-> >> Hardware name: Samsung Exynos (Flattened Device Tree)
-> >>   =A0unwind_backtrace from show_stack+0x10/0x14
-> >>   =A0show_stack from dump_stack_lvl+0x58/0x70
-> >>   =A0dump_stack_lvl from panic+0x10c/0x328
-> >>   =A0panic from exynos4_mct_tick_stop+0x0/0x2c
-> >> ---[ end Kernel panic - not syncing: MCT hangs after writing 4
-> >> (offset:0x420) ]---
-> >>
-> >> --->8---
-> >>
-> >> Amlogic boards hang randomly during early userspace init, usually just
-> >> after loading the driver modules.
-> >>
-> >> Reverting $subject on top of linux-next fixes all those problems.
-> >>
-> >> I will try to analyze it a bit more and if possible provide some more
-> >> useful/meaning full logs later.
-> > I'm not sure what could go wrong there, but if you can figure out the
-> > clock, if it tries to set a new rate and what rate it is, it would be
-> > awesome :)
->=20
-> So far I've noticed that the problem is caused by setting rate of some=20
-> clocks to zero. The following patch fixes my issues:
->=20
-> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-> index 32a9eaf35c6b..39cab08dbecb 100644
-> --- a/drivers/clk/clk.c
-> +++ b/drivers/clk/clk.c
-> @@ -2201,6 +2201,9 @@ static int clk_core_set_rate_nolock(struct=20
-> clk_core *core,
->  =A0=A0=A0=A0=A0=A0=A0 if (!core)
->  =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return 0;
->=20
-> +=A0=A0=A0=A0=A0=A0 if (req_rate =3D=3D 0)
-> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return 0;
-> +
->  =A0=A0=A0=A0=A0=A0=A0 rate =3D clk_core_req_round_rate_nolock(core, req_=
-rate);
->=20
->  =A0=A0=A0=A0=A0=A0=A0 /* bail early if nothing to do */
-> --
->=20
-> I will soon grab the call stack and relevant clock topology show how the=
-=20
-> rate is set to zero.
+On Tue, Mar 15, 2022 at 4:47 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> Add GPIO clock and reset entries in CPG driver.
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-The most likely thing to happen is that clk_set_rate_range will call
-clk_core_set_rate_nolock with clk_core->req_rate, and at the time
-req_rate is at 0.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-And I'm a bit puzzled at this point, the only reason I could spot for
-req_rate to be at 0 is that it's an orphan clock that doesn't have its
-parent yet, but during userspace init I'd expect all the clocks to have
-been registered.
+Gr{oetje,eeting}s,
 
-Can you check if that clock is still orphan?
+                        Geert
 
-Maxime
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
