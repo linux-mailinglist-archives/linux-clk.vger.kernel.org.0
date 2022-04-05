@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 428094F55F5
-	for <lists+linux-clk@lfdr.de>; Wed,  6 Apr 2022 08:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175F54F5666
+	for <lists+linux-clk@lfdr.de>; Wed,  6 Apr 2022 08:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233232AbiDFFoX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 6 Apr 2022 01:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
+        id S233626AbiDFFn5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 6 Apr 2022 01:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1851322AbiDFDDI (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 5 Apr 2022 23:03:08 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB36E0B6
-        for <linux-clk@vger.kernel.org>; Tue,  5 Apr 2022 16:59:14 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id p15so1204314lfk.8
-        for <linux-clk@vger.kernel.org>; Tue, 05 Apr 2022 16:59:14 -0700 (PDT)
+        with ESMTP id S1851332AbiDFDDQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 5 Apr 2022 23:03:16 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A5923BED
+        for <linux-clk@vger.kernel.org>; Tue,  5 Apr 2022 16:59:15 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id a30so1040815ljq.13
+        for <linux-clk@vger.kernel.org>; Tue, 05 Apr 2022 16:59:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vhtdAyfV1krIwAG7X02HHXOhQylPf2Ui3KgfDhnX9YE=;
-        b=AdfKLHZmoPdZNSJVkKgzqHaBcewohzGlnexe7aUiZnUeb96K3nSEMuABGpn0o9TEa2
-         jWfEdpTp6+A8t5xMdmjYFpt4Yfx8js+FmgJvO9b2imXbFg+/EibkxQqeC+TNa9IhBaiK
-         dS2BD0NS1yhnyDZvy5DfjIoSW5fObsX0g9hoCi8L6x+zsbiQsA6/HNcTQjLY7Qt8dEQJ
-         czalAv8ypf8nB18VulsbioUUImKDISAT9gFjYYxEtFafZ3RrAhtIxPKkfjIsAXyUXDch
-         zYcYM8SzxTgwHVUdUiEssklx3MPosadvIOsv4zosGjthe77t9QkLlGuKuPDM0/DoBGga
-         pmtg==
+        bh=c/JxrbhWAHjw8ckYVJv9DMMKqM3jkzyjVUcpKG0Ot64=;
+        b=gaza2oJTKLFw55AclhDk0/Ajbh8SVxqqcz7RXA5284kNNaZd+zz78VoQQLeNAXTfzf
+         apiYrA1In7nO1jdEHkJhlN4hkDydpgPsUtBvi+e1KiV9X7XMmJHJRo71Ym10pEw+jY/2
+         WUYWLbbSwKje9rLp4XLw1fzGGgMrJlIDgLFVHTqpXgGR5bIYoZNTR0zU0Xth5GNl55Lt
+         qUuCbZemsdwDq5KzgcWoE9IaXJHu1gJCZgusgZrgjT06xpW247WgVMF6GkyoaGim1+Er
+         cKe22mNTd7vON6v802JQanFyJ5++0kcOqFo3v3hkexjoU1xFlgQOIh1bxptGhmYjMFpc
+         2k3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vhtdAyfV1krIwAG7X02HHXOhQylPf2Ui3KgfDhnX9YE=;
-        b=k6bHoRNGsmcMDVmMMBiNBd08VUW1Tr6HduQMB7JsEOWiGlwespaa0Z1dxinqcVUGmR
-         YfR0+GNt+SdW2Nw/xQVp8AB3OB7iStTqcksjm26PoWM5UDyfqD/oeVCk/NOUQW/tPm+v
-         iMMUk8LwaDq+d4lNN6MofwWP20smK8oPTvnvK+gddX9ThtT041LV9KI5dsWYtYEdeGzs
-         5m4MBdX6BA/Xi+QRkEm+qiZrTZL9Hp4kJnh2cjZPGZTYcLbDMdO260q60kvnWvndBa6a
-         jfuR440qt9XLevVZat4bdY30obXgqdrqmFF0c0ROCVpH0LlOXoJcw3clkEuAJWQI0zbn
-         RrjA==
-X-Gm-Message-State: AOAM533DbWr7bo2ZvN8IKd+aD9cneWnkJh+ByFArJjIIp5fO4pWcY/r/
-        tyT+MoCYJ1wbpvwaZB6XSfGSgA==
-X-Google-Smtp-Source: ABdhPJyneH2lzB2yrK/wBsY3Lw+u6V/ruICOrErnb9XYe3gesY/IKS6KltXpzrGMx1WhSTRCwdk9yQ==
-X-Received: by 2002:a05:6512:1281:b0:44a:b492:5e7 with SMTP id u1-20020a056512128100b0044ab49205e7mr4015837lfs.265.1649203152796;
-        Tue, 05 Apr 2022 16:59:12 -0700 (PDT)
+        bh=c/JxrbhWAHjw8ckYVJv9DMMKqM3jkzyjVUcpKG0Ot64=;
+        b=aQNVrBRCplgKztm7t7rldye/aUl6xRQ4ma6pVMYSU3pYwKAxgGYWOejwisjy4erJUN
+         oCfbaSKhIoKbmFFfJmqDz5eIZoTcYQkuMLa/svXdqMqxHC7PjWTKUTmknEuTQ6FUMqmx
+         Dh9c4vLyN2RLvRY2u8WD2MN+6pSpTICVfy/eHesC/lAeyrHz7OU6bd+gszrSBX6H4Cee
+         Vaf0OrkYxg+mzIY00w7lsGk8grnCma8tv8p5IJcufjLAdBPRtgHSL0W3xbsjyU7rtL19
+         ffogLYVukZ6C4w1uee1b00F0htKOh9vnlAUJ+RNE+uSM7hiGLzGKd3GqBL0RHN4thpZk
+         jcQw==
+X-Gm-Message-State: AOAM5305dPf3ObCy8T9G6ZqqriCGD8bKMbjYwkh/PdtxVhiQsc4zoKXj
+        7ug9jcwPvvy9yIiUagXNy35J6A==
+X-Google-Smtp-Source: ABdhPJwWdHLZp9cwRO5mb+bG5RQ8DC3/RcS13t+LRAGrf5jqQ2VvX4VTZcc5deIUZjy5rCpcfCv6QQ==
+X-Received: by 2002:a2e:9ec4:0:b0:24b:115c:aedb with SMTP id h4-20020a2e9ec4000000b0024b115caedbmr3561269ljk.235.1649203153677;
+        Tue, 05 Apr 2022 16:59:13 -0700 (PDT)
 Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id w14-20020a0565120b0e00b0044a9b61d2b3sm1646471lfu.221.2022.04.05.16.59.11
+        by smtp.gmail.com with ESMTPSA id w14-20020a0565120b0e00b0044a9b61d2b3sm1646471lfu.221.2022.04.05.16.59.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 16:59:12 -0700 (PDT)
+        Tue, 05 Apr 2022 16:59:13 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -58,9 +58,9 @@ To:     Andy Gross <agross@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH 1/4] dt-bindings: thermal: qcom-tsens.yaml: add msm8960 compat string
-Date:   Wed,  6 Apr 2022 02:59:07 +0300
-Message-Id: <20220405235910.373107-2-dmitry.baryshkov@linaro.org>
+Subject: [PATCH 2/4] thermal/drivers/tsens: add compat string for the qcom,msm8960
+Date:   Wed,  6 Apr 2022 02:59:08 +0300
+Message-Id: <20220405235910.373107-3-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405235910.373107-1-dmitry.baryshkov@linaro.org>
 References: <20220405235910.373107-1-dmitry.baryshkov@linaro.org>
@@ -68,7 +68,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,39 +76,29 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add compatibility string for the thermal sensors on MSM8960/APQ8064
-platforms.
+On apq8064 (msm8960) platforms the tsens device is created manually by
+the gcc driver. Prepare the tsens driver for the qcom,msm8960-tsens
+device instantiated from the device tree.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/thermal/qcom/tsens.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-index b6406bcc683f..43510b8399ff 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -19,10 +19,11 @@ description: |
- properties:
-   compatible:
-     oneOf:
--      - description: msm9860 TSENS based
-+      - description: msm8960 TSENS based
-         items:
-           - enum:
-               - qcom,ipq8064-tsens
-+              - qcom,msm8960-tsens
- 
-       - description: v0.1 of TSENS
-         items:
-@@ -116,6 +117,7 @@ allOf:
-               - qcom,ipq8064-tsens
-               - qcom,mdm9607-tsens
-               - qcom,msm8916-tsens
-+              - qcom,msm8960-tsens
-               - qcom,msm8974-tsens
-               - qcom,msm8976-tsens
-               - qcom,qcs404-tsens
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index 154d3cb19c88..7963ee33bf75 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -979,6 +979,9 @@ static const struct of_device_id tsens_table[] = {
+ 	}, {
+ 		.compatible = "qcom,msm8939-tsens",
+ 		.data = &data_8939,
++	}, {
++		.compatible = "qcom,msm8960-tsens",
++		.data = &data_8960,
+ 	}, {
+ 		.compatible = "qcom,msm8974-tsens",
+ 		.data = &data_8974,
 -- 
 2.35.1
 
