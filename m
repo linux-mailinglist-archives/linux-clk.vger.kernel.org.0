@@ -2,114 +2,153 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446264F5145
-	for <lists+linux-clk@lfdr.de>; Wed,  6 Apr 2022 04:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11AF14F5140
+	for <lists+linux-clk@lfdr.de>; Wed,  6 Apr 2022 04:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242614AbiDFBsu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 5 Apr 2022 21:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
+        id S1385670AbiDFBsk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 5 Apr 2022 21:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452300AbiDEPyp (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 5 Apr 2022 11:54:45 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919765DA11;
-        Tue,  5 Apr 2022 07:52:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649170333; x=1680706333;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=j43We/NuvgFWbEzhQtKpK2IXQeIEAZ3DIUzlKkfSios=;
-  b=jTlBpo9ZT6SqJacT5oR1fLrCnaPgfGk6jVqC62Ow50/3MoG9m+pkBFuU
-   eRHQ2wLiAny8t4ETbGTWWKFPitJHkUZOXZJ1ICmvCgQkLuWMFnZc7tRD5
-   2EaxEZ8Boec9KEk9ww0tRB4dAdJmdCa+9IR06ZrTmDF0PcuO04H845AZ2
-   r6uvZ5qA1TZW36mBM9PhRaSp+dxI+RJNpaByoNpYTcmIRbouXifAvNFuw
-   IZeekotsd7dmXnsiCdildrpC33pod68Kj2AHO4D36wBQndLzNXprnCGHG
-   8u/bZHrmozfTTejvnDKnAnND8iVex95QGVm0FRs/FFKl9hPoRPQTydFK5
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="347207507"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="347207507"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 07:52:02 -0700
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="524023886"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 07:51:58 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nbkWl-00DQ4I-K7;
-        Tue, 05 Apr 2022 17:51:27 +0300
-Date:   Tue, 5 Apr 2022 17:51:27 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        linux-renesas-soc@vger.kernel.org, dmaengine@vger.kernel.org,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        with ESMTP id S1458176AbiDERNK (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 5 Apr 2022 13:13:10 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACC164BEA
+        for <linux-clk@vger.kernel.org>; Tue,  5 Apr 2022 10:11:10 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id i11-20020a9d4a8b000000b005cda3b9754aso9782353otf.12
+        for <linux-clk@vger.kernel.org>; Tue, 05 Apr 2022 10:11:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2aY58p3Eu08i1zvroIKdthxIFG+lHzOcPDP1Vod5UdQ=;
+        b=BJlLixmapZXG3Z12MRft8f1o+ERnrNsMEOuO+htxHtOkkXNoC4g+Fj1hvUrrz2eiR4
+         bbLh9uCYeNiIVW87oZB/Hf2zirGPhRhZs4MZFYQKP0lT5uFogrweIdBUU638/F+vk8MM
+         1XdUXhdAsAizdg4UAkuu6oeBzHDIdwhMxz+vGg+2NqOPoCUyUnwMUPKELdYC0y2EEVnx
+         l302qabGpKEelNd6fdET2izAcrhjx6ZXdty+FKfxGQhRT1RWJZTm6vZ6qscVeEq76dyX
+         QL55dLz7mFEFaoJpPbnuJnPj9hVDedGHH2VDGUnoO0snxp7Lh/xCE0QEunJnYaWLh0gi
+         0wsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2aY58p3Eu08i1zvroIKdthxIFG+lHzOcPDP1Vod5UdQ=;
+        b=GteKw/LL4iRzgNrHPe8i+M/u/JMfjlTYh/ohqP4uFzkmIlaqIUUgkGhEYf4w/SlY5X
+         Q2t7aZCA5Z3b/y3R1iZykYs86LagR+ur4KBBgxnIw/VepFK5mc7ZfdqAMhASZqdT37OI
+         JOwA1PmeGr0GpAKCLDRWrwnUJegjUbugE9nq6b5lbq9Vy/DZjH2svd/Go+h8guqLXWIn
+         0MK+bu/lwkje0oB9v2IPgdOLPlglAqxjKuy5piRIZpON9vHeCwJVfN/aQLguzhOusZdo
+         tT4FCcqkEbHKpwH80vYPN10//RxkWG5fqAvs2OBeLogMcBTJgQkRo/SK4483jTpyO1dl
+         hmbA==
+X-Gm-Message-State: AOAM531JbjJ2Yeasz7Kd977KhS8iNg7+Pwy+qjjiSqLs9qbXn1pw5u99
+        rbpYwRdnWJhP66QSye2ju/4HZg==
+X-Google-Smtp-Source: ABdhPJw3Dog+Ye6joupCF1nJ1gu6mLF/8uu2LULDI3pj1f67IYGzNXfMwLJXsBStJIdXMshXWyQ+wg==
+X-Received: by 2002:a9d:6442:0:b0:5b2:3851:597 with SMTP id m2-20020a9d6442000000b005b238510597mr1566869otl.247.1649178669314;
+        Tue, 05 Apr 2022 10:11:09 -0700 (PDT)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id e4-20020a056808148400b002d9be41b179sm5680214oiw.50.2022.04.05.10.11.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 10:11:08 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 10:13:31 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
-        Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: Re: [PATCH v7 7/9] dmaengine: dw: Add RZN1 compatible
-Message-ID: <YkxXb5moC6/DkRwV@smile.fi.intel.com>
-References: <20220405081911.1349563-1-miquel.raynal@bootlin.com>
- <20220405081911.1349563-8-miquel.raynal@bootlin.com>
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH 3/4] arm64: dts: qcom: sdm845: control RPMHPD
+ performance states with UFS
+Message-ID: <Ykx4u+E/vDNrQRUg@ripper>
+References: <20220401145820.1003826-1-krzysztof.kozlowski@linaro.org>
+ <20220401145820.1003826-4-krzysztof.kozlowski@linaro.org>
+ <0da0b229-3493-967d-c14d-60d3246b07b2@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220405081911.1349563-8-miquel.raynal@bootlin.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <0da0b229-3493-967d-c14d-60d3246b07b2@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 10:19:09AM +0200, Miquel Raynal wrote:
-> The Renesas RZN1 DMA IP is very close to the original DW DMA IP, a DMA
-> router has been introduced to handle the wiring options that have been
-> added.
+On Sun 03 Apr 17:02 PDT 2022, Dmitry Baryshkov wrote:
 
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  drivers/dma/dw/platform.c | 1 +
->  1 file changed, 1 insertion(+)
+> On 01/04/2022 17:58, Krzysztof Kozlowski wrote:
+> > UFS, when scaling gears, should choose appropriate performance state of
+> > RPMHPD power domain controller.  Since UFS belongs to UFS_PHY_GDSC power
+> > domain, add necessary parent power domain to GCC.
 > 
-> diff --git a/drivers/dma/dw/platform.c b/drivers/dma/dw/platform.c
-> index 246118955877..47f2292dba98 100644
-> --- a/drivers/dma/dw/platform.c
-> +++ b/drivers/dma/dw/platform.c
-> @@ -137,6 +137,7 @@ static void dw_shutdown(struct platform_device *pdev)
->  #ifdef CONFIG_OF
->  static const struct of_device_id dw_dma_of_id_table[] = {
->  	{ .compatible = "snps,dma-spear1340", .data = &dw_dma_chip_pdata },
-> +	{ .compatible = "renesas,rzn1-dma", .data = &dw_dma_chip_pdata },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, dw_dma_of_id_table);
+> This will cause all gcc GDSCs to be rooted in the CX. Are we sure that this
+> is an expected (and correct) change?
+> 
+
+Per the last part of Rajendra's reply in [1], this should be fine.
+Naturally we might have to come up with some way to bind gdscs to one of
+multiple power-domains if that changes.
+
+[1] https://lore.kernel.org/all/5e572c50-d6fe-5a21-d09f-f11a072538c5@codeaurora.org/
+
+Regards,
+Bjorn
+
+> > 
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > ---
+> >   arch/arm64/boot/dts/qcom/sdm845.dtsi | 17 ++++++++++++++++-
+> >   1 file changed, 16 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > index b31bf62e8680..c999b41c2605 100644
+> > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > @@ -1078,6 +1078,7 @@ gcc: clock-controller@100000 {
+> >   			#clock-cells = <1>;
+> >   			#reset-cells = <1>;
+> >   			#power-domain-cells = <1>;
+> > +			power-domains = <&rpmhpd SDM845_CX>;
+> >   		};
+> >   		qfprom@784000 {
+> > @@ -2336,8 +2337,22 @@ ufs_mem_hc: ufshc@1d84000 {
+> >   				<0 0>,
+> >   				<0 0>,
+> >   				<0 300000000>;
+> > -
+> > +			operating-points-v2 = <&ufs_opp_table>;
+> >   			status = "disabled";
+> > +
+> > +			ufs_opp_table: opp-table {
+> > +				compatible = "operating-points-v2";
+> > +
+> > +				opp-50000000 {
+> > +					opp-hz = /bits/ 64 <50000000>;
+> > +					required-opps = <&rpmhpd_opp_svs>;
+> > +				};
+> > +
+> > +				opp-200000000 {
+> > +					opp-hz = /bits/ 64 <200000000>;
+> > +					required-opps = <&rpmhpd_opp_nom>;
+> > +				};
+> > +			};
+> >   		};
+> >   		ufs_mem_phy: phy@1d87000 {
+> 
+> 
 > -- 
-> 2.27.0
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> With best wishes
+> Dmitry
