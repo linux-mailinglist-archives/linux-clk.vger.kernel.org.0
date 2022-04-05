@@ -2,98 +2,90 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 889894F3395
-	for <lists+linux-clk@lfdr.de>; Tue,  5 Apr 2022 15:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D994F4F2F1B
+	for <lists+linux-clk@lfdr.de>; Tue,  5 Apr 2022 14:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235734AbiDEIkW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 5 Apr 2022 04:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
+        id S235967AbiDEJxA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 5 Apr 2022 05:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240958AbiDEIcl (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 5 Apr 2022 04:32:41 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAE091352;
-        Tue,  5 Apr 2022 01:25:32 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S236072AbiDEJbC (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 5 Apr 2022 05:31:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85BA9B;
+        Tue,  5 Apr 2022 02:18:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BA4321F38C;
-        Tue,  5 Apr 2022 08:25:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649147130; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zu0DOcyD/nGWCPug+auF7Wbod45QBkXEGLd0rGqegqY=;
-        b=iT/xSl1G3Atfmvra3mOtDL6PenNX+qApfIuDT5obicNzD1XZizYn8HGn4k+/6n7W1BFDCs
-        3L8muz/QzU+MiMTOWmHgTgQz2Jew1NOHgdblxA9RyPY+crXYy7LYMI23QuuSZFimqvqz2d
-        Qa1sGCfqylKPzmH+qJm36SmKPkTafDE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649147130;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zu0DOcyD/nGWCPug+auF7Wbod45QBkXEGLd0rGqegqY=;
-        b=W6uDqGqFPJSKtOhBX/73/3eyztesPCRsJykdVkveSBwtQcXj2uSeInJ/4tqDLpBb9L5H+j
-        5GpnPWraS4SwMjCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A038D13A30;
-        Tue,  5 Apr 2022 08:25:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id mOW1Jvr8S2JwEQAAMHmgww
-        (envelope-from <iivanov@suse.de>); Tue, 05 Apr 2022 08:25:30 +0000
-From:   "Ivan T. Ivanov" <iivanov@suse.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Maxime Ripard <maxime@cerno.tech>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Ivan T. Ivanov" <iivanov@suse.de>,
-        Dom Cobley <popcornmix@gmail.com>
-Subject: [PATCH v2 1/2] clk: bcm: rpi: Add support HEVC clock
-Date:   Tue,  5 Apr 2022 11:25:02 +0300
-Message-Id: <20220405082503.61041-2-iivanov@suse.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20220405082503.61041-1-iivanov@suse.de>
-References: <20220405082503.61041-1-iivanov@suse.de>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74380B81C6C;
+        Tue,  5 Apr 2022 09:18:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C493C385A0;
+        Tue,  5 Apr 2022 09:18:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649150307;
+        bh=KqfmPx/FGZuQc1QjAMWhBBJLn80U3WK0f+K5lsmzmv8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ooEXi9RjMzMSxfLeOZEDjlTKA2kg1ILji4AeosSD72b5yu7U90rI1zHsW27BxBtKH
+         7S8+M5MPtdndh01Bnz7seefyYKzBuRNKUTnluAM9otDxptJ3nIg7ouNT41fRPe38C3
+         24rladwUbzaGGuxtmr75bnWKos85SB+LTOgZSkOtz9mcz+J6qJ9eARSqo/6k8s0bRx
+         c1Q19JrIqmUCO9hws+/YyGFdZI7ww06cB4Pc4Dvxq7kHGtVz3M+TU0+LuP5F+EHiHe
+         76X5+yA1xiB9Ldt/IEEN9vWR5GlwqqXxR2+tM12JtD1a90BmYUEmis6S9g10FOiLmT
+         Nq1mgmt1lNq+Q==
+Date:   Tue, 5 Apr 2022 14:48:22 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        dmaengine@vger.kernel.org,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
+        Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>
+Subject: Re: [PATCH v6 5/8] dmaengine: dw: dmamux: Introduce RZN1 DMA router
+ support
+Message-ID: <YkwJXq+8tAPJ9saP@matsya>
+References: <20220404133904.1296258-1-miquel.raynal@bootlin.com>
+ <20220404133904.1296258-6-miquel.raynal@bootlin.com>
+ <YkvaOKmamLF+Mp7m@matsya>
+ <YkvqsO0aecSjGqx2@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkvqsO0aecSjGqx2@smile.fi.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Export clock required for RPiVid video decoder hardware.
+On 05-04-22, 10:07, Andy Shevchenko wrote:
+> On Tue, Apr 05, 2022 at 11:27:12AM +0530, Vinod Koul wrote:
+> > On 04-04-22, 15:39, Miquel Raynal wrote:
+> 
+> ...
+> 
+> > > +MODULE_LICENSE("GPL");
+> > 
+> > This is not consistent with the SPDX tag..
+> 
+> Actually it is. "GPLv2" is obsolete form, in new code we are supposed using
+> "GPL" as per Documentation.
 
-Cc: Dom Cobley <popcornmix@gmail.com>
-Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
----
- drivers/clk/bcm/clk-raspberrypi.c | 3 +++
- 1 file changed, 3 insertions(+)
+Yes this has been updated, thanks for pointing out.
 
-diff --git a/drivers/clk/bcm/clk-raspberrypi.c b/drivers/clk/bcm/clk-raspberrypi.c
-index 9d09621549b9..2e2491d85835 100644
---- a/drivers/clk/bcm/clk-raspberrypi.c
-+++ b/drivers/clk/bcm/clk-raspberrypi.c
-@@ -129,6 +129,9 @@ raspberrypi_clk_variants[RPI_FIRMWARE_NUM_CLK_ID] = {
- 	[RPI_FIRMWARE_V3D_CLK_ID] = {
- 		.export = true,
- 	},
-+	[RPI_FIRMWARE_HEVC_CLK_ID] = {
-+		.export = true,
-+	},
- 	[RPI_FIRMWARE_PIXEL_BVB_CLK_ID] = {
- 		.export = true,
- 	},
 -- 
-2.26.2
-
+~Vinod
