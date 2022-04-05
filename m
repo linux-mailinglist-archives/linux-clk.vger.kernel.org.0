@@ -2,103 +2,97 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5464F5104
-	for <lists+linux-clk@lfdr.de>; Wed,  6 Apr 2022 04:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14ADD4F562F
+	for <lists+linux-clk@lfdr.de>; Wed,  6 Apr 2022 08:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444856AbiDFBsp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 5 Apr 2022 21:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56194 "EHLO
+        id S229696AbiDFFo7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 6 Apr 2022 01:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573308AbiDEStk (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 5 Apr 2022 14:49:40 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3407BAF1DD
-        for <linux-clk@vger.kernel.org>; Tue,  5 Apr 2022 11:47:40 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 908BC200006;
-        Tue,  5 Apr 2022 18:47:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649184454;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Xxdt0tyZWd8zeGpcOomewbA36qGbMLLM+1tWmHX19c8=;
-        b=NJFDnHyej9QXSnfYFN+Nd9Y6DySfU/M34GWjlzY/xKl5ohq8pspgXHHbCZ2VnRB6xm0mP6
-        pDB8+w8a6Ja8ftDsQQcTAX4Y9+9t2IGNZxprl72OGFuwe3M4bOKdFEM/s6tZd8DbozcxvY
-        EsyPdSEv0o2UzQhmFBdP/4mG4nhq6ySpMYMKVAWwQSnErp7mYGxQk0LiLKh2ErQ6ww2iW1
-        qUY/zR8rzya5GfuKAfkTn1wx58+DOm5aToTNEIYkhdjngk8rTw2H8j6bsK7X2OtwYYdfom
-        8TsYmWS9rROGKzFBvJKQrrB0BHzA5i13oSCo21Hi6wWlyM6cLTwSOEg4P0xU6Q==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        with ESMTP id S1851308AbiDFDCz (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 5 Apr 2022 23:02:55 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1C16166
+        for <linux-clk@vger.kernel.org>; Tue,  5 Apr 2022 16:59:13 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 5so1269855lfp.1
+        for <linux-clk@vger.kernel.org>; Tue, 05 Apr 2022 16:59:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QOt6DJcLelTgkTPVmldTvMlvDQEbrpbWK917oZbjN0w=;
+        b=tHjIQHSXPYXo6cTSKoL3JHG0UImC5yIJ+e/f9YaJDb9ZqDD9TNBB7U8EczTEXMmnk/
+         xQaoJCCgTk2t9KgbcdXuBiFwZEPteCYG8ZHHEaDiFBbRi4zlsxu7uLRG9dVuqkkOUEoX
+         QOLJ0fDNLZu6f0nPHj38DekLjDHPTO+fggRVpYFkd/SStJZ7a4rNENEj9weqtJPskiYl
+         6DdNIaNhdMvn29IP9L1Z2170us9SEFyUui8pHoDVAlYIH5nrcwd4v4MhPkhnGjCi3jkS
+         IIZHRXdtThjM/gRZ3nnzaTta7ukxzt5JiONJmn96GuH998VuWSgSY6upUxUv3U6dMLBS
+         yW/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QOt6DJcLelTgkTPVmldTvMlvDQEbrpbWK917oZbjN0w=;
+        b=PPgbfikCOGyQr8jofkhbaAp5tTwiwErHB3VByWtvJGGSLw4KAzTBPZXxBMdHgFtTcQ
+         hmPrVF/xSKcGCVCCqCH1aIUoC/5chZfFQbQPTN9l36ucUDlPGah4eje0px8D4gsVegSy
+         asrLY75UWnldbhYlThrzsK5X7qt+YPq4Q+yMc8VH/ljOlQ7vBqQtdx6YcbamikyCaQcy
+         8nrur6ZJ/1H4DZJG6dc6KzbTXtJx9bsQz/067rbGzGzg9IKCMnWis0uRqPsofRdAOGcY
+         cOs76DPoLDZyYR3EwF8o64XaLhbHIJR5CPWRzx1Xy3jeKLgL49CTkc8gKJoSQg987ztk
+         1jIw==
+X-Gm-Message-State: AOAM530lcZI31FBsAObw+izG2X1U9LkZ/HX68/6dRECnrVrnTY2rdKLi
+        Tm4gf/pSR2j34gw6e35lLLpGLw==
+X-Google-Smtp-Source: ABdhPJyRrLV6ZhWNcC+LtcC93NA/42wRqTNcug5mNhrZb9Xd+1lGj4wfRvbf/sgIYJiwvkye/aavpg==
+X-Received: by 2002:a05:6512:16a7:b0:445:862e:a1ba with SMTP id bu39-20020a05651216a700b00445862ea1bamr4085065lfb.85.1649203151822;
+        Tue, 05 Apr 2022 16:59:11 -0700 (PDT)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id w14-20020a0565120b0e00b0044a9b61d2b3sm1646471lfu.221.2022.04.05.16.59.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 16:59:11 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-renesas-soc@vger.kernel.org,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        linux-rtc@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 7/7] ARM: dts: r9a06g032: Describe the RTC
-Date:   Tue,  5 Apr 2022 20:47:16 +0200
-Message-Id: <20220405184716.1578385-8-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220405184716.1578385-1-miquel.raynal@bootlin.com>
-References: <20220405184716.1578385-1-miquel.raynal@bootlin.com>
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH 0/4] arm: qcom: qcom-apq8064: add separate device node for tsens
+Date:   Wed,  6 Apr 2022 02:59:06 +0300
+Message-Id: <20220405235910.373107-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Describe the SoC RTC which counts time and provides alarm support.
+Currently gcc-msm8960 driver manually creates tsens device. Instantiate
+the device using DT node instead. This follow the IPQ8064 device tree
+schema.
 
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
----
- arch/arm/boot/dts/r9a06g032.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Compatibility with the previous devices trees is kept intact.
 
-diff --git a/arch/arm/boot/dts/r9a06g032.dtsi b/arch/arm/boot/dts/r9a06g032.dtsi
-index 4288b935fcea..7d380a38c7cd 100644
---- a/arch/arm/boot/dts/r9a06g032.dtsi
-+++ b/arch/arm/boot/dts/r9a06g032.dtsi
-@@ -103,6 +103,18 @@ dmamux: dma-router@a0 {
- 			};
- 		};
- 
-+		rtc0: rtc@40006000 {
-+			compatible = "renesas,r9a06g032-rtc", "renesas,rzn1-rtc";
-+			reg = <0x40006000 0x1000>;
-+			interrupts = <GIC_SPI 66 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 67 IRQ_TYPE_EDGE_RISING>,
-+				     <GIC_SPI 68 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "alarm", "timer", "pps";
-+			clocks = <&sysctrl R9A06G032_HCLK_RTC>;
-+			clock-names = "hclk";
-+			status = "disabled";
-+		};
-+
- 		uart0: serial@40060000 {
- 			compatible = "renesas,r9a06g032-uart", "renesas,rzn1-uart", "snps,dw-apb-uart";
- 			reg = <0x40060000 0x400>;
+Dmitry Baryshkov (4):
+  dt-bindings: thermal: qcom-tsens.yaml: add msm8960 compat string
+  thermal/drivers/tsens: add compat string for the qcom,msm8960
+  clk: qcom: gcc-msm8960: create tsens device if there are no child
+    nodes
+  arm: dts: qcom-apq8064: create tsens device node
+
+ .../bindings/thermal/qcom-tsens.yaml          |  4 +++-
+ arch/arm/boot/dts/qcom-apq8064.dtsi           | 23 +++++++++++++------
+ drivers/clk/qcom/gcc-msm8960.c                | 18 +++++++++------
+ drivers/thermal/qcom/tsens.c                  |  3 +++
+ 4 files changed, 33 insertions(+), 15 deletions(-)
+
 -- 
-2.27.0
+2.35.1
 
