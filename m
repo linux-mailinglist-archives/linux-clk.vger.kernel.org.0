@@ -2,100 +2,102 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420A34F2D15
-	for <lists+linux-clk@lfdr.de>; Tue,  5 Apr 2022 13:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1BC4F2BEF
+	for <lists+linux-clk@lfdr.de>; Tue,  5 Apr 2022 13:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234794AbiDEI0U (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 5 Apr 2022 04:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
+        id S235837AbiDEIk3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 5 Apr 2022 04:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239969AbiDEIV5 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 5 Apr 2022 04:21:57 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C27F24;
-        Tue,  5 Apr 2022 01:19:33 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id CE8B240012;
-        Tue,  5 Apr 2022 08:19:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649146772;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        with ESMTP id S240959AbiDEIcl (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 5 Apr 2022 04:32:41 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECFC91560;
+        Tue,  5 Apr 2022 01:25:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D0341210E1;
+        Tue,  5 Apr 2022 08:25:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649147130; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gDMgEYZK2TXVp0tig+qscRTbrixY++njrNcYKAKseyE=;
-        b=mWfVGsQ1PF77oIzR6uCt5GFIsq0P0ca6jBDsHzyFMJrcwyV0d1/nkzNIQ93c1mH/Oy8x5Z
-        98q7O2q1m3PzCPYFwYQjmfzE5FQcYZN9212lLKBCv/wC1O6CASUo7WjJvNtwBBzl8o7+gT
-        utAtUroEvwjCnUmzG281jRadSRmEXHujzGVR5798sugFXWyD3gxWIWxrvA6KcTc2J3jwtc
-        axkv3A5E+6T0Q7GhmcrF+mRu0tZyZ8xor4txOuZETPlyg6mxTkQ34FonaTY1Kp+cGAKuDh
-        DtAzfbzyYeW6F+/+dDkwlqhAQ+gVGMcNUsgxKS1gVBOYSELuUcVuUvrMRECtEw==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-renesas-soc@vger.kernel.org, dmaengine@vger.kernel.org,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v7 9/9] ARM: dts: r9a06g032: Describe the DMA router
-Date:   Tue,  5 Apr 2022 10:19:11 +0200
-Message-Id: <20220405081911.1349563-10-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220405081911.1349563-1-miquel.raynal@bootlin.com>
-References: <20220405081911.1349563-1-miquel.raynal@bootlin.com>
+        bh=p7Y05L7uOkIJquMnEg+eO/WF4r7xbv9mlE1hTt5HzHs=;
+        b=QTCcWeRSxmtaPQcnjhcxGV6y8zrYNXXfKZvW0smRC1Z4E8alqJxsnm3t1m5cIiLud6rBDX
+        CCFz18ZHmdnp4m1SaZg8qRC2zmNdtPamt4TTGfryllKc9mlcJP70meU4aXUD8kkrnkFVj7
+        CObTXQscO+vhCwIc9MT78jVoyqsxd64=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649147130;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=p7Y05L7uOkIJquMnEg+eO/WF4r7xbv9mlE1hTt5HzHs=;
+        b=z850LmrTnqtL0PP3wyuPWV69JsNFpCW527wlNSNd9XqpJvWPDk+MS08t5MJQwvGBVhuaES
+        /OqRCZbvuc6hY8Aw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B795D13A04;
+        Tue,  5 Apr 2022 08:25:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id mKOcLPr8S2JwEQAAMHmgww
+        (envelope-from <iivanov@suse.de>); Tue, 05 Apr 2022 08:25:30 +0000
+From:   "Ivan T. Ivanov" <iivanov@suse.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Maxime Ripard <maxime@cerno.tech>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "Ivan T. Ivanov" <iivanov@suse.de>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+Subject: [PATCH v2 2/2] clk: bcm: rpi: Handle pixel clock in firmware
+Date:   Tue,  5 Apr 2022 11:25:03 +0300
+Message-Id: <20220405082503.61041-3-iivanov@suse.de>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20220405082503.61041-1-iivanov@suse.de>
+References: <20220405082503.61041-1-iivanov@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-There is a dmamux on this SoC which allows picking two different sources
-for a single DMA request.
+The clk-bcm2835 handling of the pixel clock does not function
+correctly when the HDMI power domain is disabled.
 
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+The firmware supports it correctly, so add it to the
+firmware clock driver.
+
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
 ---
- arch/arm/boot/dts/r9a06g032.dtsi | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/clk/bcm/clk-raspberrypi.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm/boot/dts/r9a06g032.dtsi b/arch/arm/boot/dts/r9a06g032.dtsi
-index 839580ec21ee..c854aa4cfa77 100644
---- a/arch/arm/boot/dts/r9a06g032.dtsi
-+++ b/arch/arm/boot/dts/r9a06g032.dtsi
-@@ -91,6 +91,16 @@ sysctrl: system-controller@4000c000 {
- 			clocks = <&ext_mclk>, <&ext_rtc_clk>,
- 					<&ext_jtag_clk>, <&ext_rgmii_ref>;
- 			clock-names = "mclk", "rtc", "jtag", "rgmii_ref_ext";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			dmamux: dma-router@a0 {
-+				compatible = "renesas,rzn1-dmamux";
-+				reg = <0xa0 4>;
-+				#dma-cells = <6>;
-+				dma-requests = <32>;
-+				dma-masters = <&dma0 &dma1>;
-+			};
- 		};
- 
- 		uart0: serial@40060000 {
+diff --git a/drivers/clk/bcm/clk-raspberrypi.c b/drivers/clk/bcm/clk-raspberrypi.c
+index 2e2491d85835..530820d13104 100644
+--- a/drivers/clk/bcm/clk-raspberrypi.c
++++ b/drivers/clk/bcm/clk-raspberrypi.c
+@@ -129,6 +129,9 @@ raspberrypi_clk_variants[RPI_FIRMWARE_NUM_CLK_ID] = {
+ 	[RPI_FIRMWARE_V3D_CLK_ID] = {
+ 		.export = true,
+ 	},
++	[RPI_FIRMWARE_PIXEL_CLK_ID] = {
++		.export = true,
++	},
+ 	[RPI_FIRMWARE_HEVC_CLK_ID] = {
+ 		.export = true,
+ 	},
 -- 
-2.27.0
+2.26.2
 
