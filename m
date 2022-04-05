@@ -2,57 +2,64 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922054F30FC
-	for <lists+linux-clk@lfdr.de>; Tue,  5 Apr 2022 14:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889894F3395
+	for <lists+linux-clk@lfdr.de>; Tue,  5 Apr 2022 15:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235770AbiDEIkY (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 5 Apr 2022 04:40:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
+        id S235734AbiDEIkW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 5 Apr 2022 04:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240968AbiDEIcl (ORCPT
+        with ESMTP id S240958AbiDEIcl (ORCPT
         <rfc822;linux-clk@vger.kernel.org>); Tue, 5 Apr 2022 04:32:41 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF3491341;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAE091352;
         Tue,  5 Apr 2022 01:25:32 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A20121F37E;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BA4321F38C;
         Tue,  5 Apr 2022 08:25:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1649147130; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=xzto3jOtflbOG3/cNYqAPCn/Axn/FLld8h6se3wYmZE=;
-        b=ChdIPMtso4JJwBpqRzHAhGLRP30X+9pHNGNiuTgjaH1hXuobELrD9qzt5jax1ipyMJybXx
-        t7mgY0Lx+URG5o+W74f2VVB0Bjc2Eapjm6JeOHHAXOZ+3pzifKaxU2OwXzsoYFUbjP6val
-        RQzTZnG4rleh3yzt+76DjH5A1K+WH4s=
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zu0DOcyD/nGWCPug+auF7Wbod45QBkXEGLd0rGqegqY=;
+        b=iT/xSl1G3Atfmvra3mOtDL6PenNX+qApfIuDT5obicNzD1XZizYn8HGn4k+/6n7W1BFDCs
+        3L8muz/QzU+MiMTOWmHgTgQz2Jew1NOHgdblxA9RyPY+crXYy7LYMI23QuuSZFimqvqz2d
+        Qa1sGCfqylKPzmH+qJm36SmKPkTafDE=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1649147130;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=xzto3jOtflbOG3/cNYqAPCn/Axn/FLld8h6se3wYmZE=;
-        b=RrkIJBOVI265E6joX/1kUqUm8sazSgGWVoholWR1rp/jUWoIoQOs3SfxcWJXcCOHtDCz5d
-        xd17nyXdeNxR+gDg==
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Zu0DOcyD/nGWCPug+auF7Wbod45QBkXEGLd0rGqegqY=;
+        b=W6uDqGqFPJSKtOhBX/73/3eyztesPCRsJykdVkveSBwtQcXj2uSeInJ/4tqDLpBb9L5H+j
+        5GpnPWraS4SwMjCg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 889BE13A04;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A038D13A30;
         Tue,  5 Apr 2022 08:25:30 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id aWISIfr8S2JwEQAAMHmgww
+        id mOW1Jvr8S2JwEQAAMHmgww
         (envelope-from <iivanov@suse.de>); Tue, 05 Apr 2022 08:25:30 +0000
 From:   "Ivan T. Ivanov" <iivanov@suse.de>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     Maxime Ripard <maxime@cerno.tech>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Ivan T. Ivanov" <iivanov@suse.de>
-Subject: [PATCH v2 0/2] clk: bcm: rpi: Add support for two more clocks
-Date:   Tue,  5 Apr 2022 11:25:01 +0300
-Message-Id: <20220405082503.61041-1-iivanov@suse.de>
+        linux-kernel@vger.kernel.org, "Ivan T. Ivanov" <iivanov@suse.de>,
+        Dom Cobley <popcornmix@gmail.com>
+Subject: [PATCH v2 1/2] clk: bcm: rpi: Add support HEVC clock
+Date:   Tue,  5 Apr 2022 11:25:02 +0300
+Message-Id: <20220405082503.61041-2-iivanov@suse.de>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20220405082503.61041-1-iivanov@suse.de>
+References: <20220405082503.61041-1-iivanov@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -65,20 +72,28 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add missing clock required by RPiVid video decoder and make HDMI
-pixel clock more reliable.
+Export clock required for RPiVid video decoder hardware.
 
-Changes since v1
-- Drop RPI_FIRMWARE_VEC_CLK_ID clock it doesn't seems to be used.
-- Rework downstream changes on top of recent Maxime changes.
+Cc: Dom Cobley <popcornmix@gmail.com>
+Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
+---
+ drivers/clk/bcm/clk-raspberrypi.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Ivan T. Ivanov (2):
-  clk: bcm: rpi: Add support HEVC clock
-  clk: bcm: rpi: Handle pixel clock in firmware
-
- drivers/clk/bcm/clk-raspberrypi.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
+diff --git a/drivers/clk/bcm/clk-raspberrypi.c b/drivers/clk/bcm/clk-raspberrypi.c
+index 9d09621549b9..2e2491d85835 100644
+--- a/drivers/clk/bcm/clk-raspberrypi.c
++++ b/drivers/clk/bcm/clk-raspberrypi.c
+@@ -129,6 +129,9 @@ raspberrypi_clk_variants[RPI_FIRMWARE_NUM_CLK_ID] = {
+ 	[RPI_FIRMWARE_V3D_CLK_ID] = {
+ 		.export = true,
+ 	},
++	[RPI_FIRMWARE_HEVC_CLK_ID] = {
++		.export = true,
++	},
+ 	[RPI_FIRMWARE_PIXEL_BVB_CLK_ID] = {
+ 		.export = true,
+ 	},
 -- 
 2.26.2
 
