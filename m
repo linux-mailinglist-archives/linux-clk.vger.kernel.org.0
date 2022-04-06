@@ -2,148 +2,117 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B55704F60E8
-	for <lists+linux-clk@lfdr.de>; Wed,  6 Apr 2022 16:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E2D4F625E
+	for <lists+linux-clk@lfdr.de>; Wed,  6 Apr 2022 16:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233846AbiDFOBs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 6 Apr 2022 10:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
+        id S235257AbiDFOyZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-clk@lfdr.de>); Wed, 6 Apr 2022 10:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234037AbiDFOB2 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 6 Apr 2022 10:01:28 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2070.outbound.protection.outlook.com [40.107.220.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E9C33223D
-        for <linux-clk@vger.kernel.org>; Wed,  6 Apr 2022 02:22:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W6IoemwusoIrNIG1LaP4yO4JqYbFVc9VwHFsFZPbRzMo/yfrCo2DUsc6/P8rQyugNoReFymAaONgbmwSnDbHh0+L/tav7gTCX4l5p6hWy8rBmImMxKGZWj9RZOHf++k7O0fy8v4JN3gWm14WqOENMXKmMosvVidnlBGVMjCmN7tQvqegxsO8ZPWqijBVEilrpGWoMrueTh+jIJCLaOxHpw1uRJyrjhQcX492alvL7ZrF3VsZaOOHrEtjMfky0WmVlZZpWJTHkVsaOkDoOFMOnTM/xPhBviJ0TobTXONCNs+YZmfovK7pFcFTnQ07gIMSrkRkOMCx+HLtC+hwhH3QYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fuPqTPhNdiN2Hj7I73BVK0048gAVoY/AvIIsV8kAxJY=;
- b=MDvNDBtOukTrV2ad2DdvsWAMrd3fr++6rhfQC49zsBoOZ619WC+DdaBcZ73SiVlHsbapzfqW3/SFYKrh2Ex2j3W76mz+GjgGV36ApXId25CbQoDJZDVopdijvnhB1Y1YJiOh0nPOxWQ0WDeEvzSa1afTsNJmet/8UDSCKpbf0V3XVTkrn6at/AGI5X2hvk2xB3vCUHgbsAamwXkAlMOxHJCPYu7asA1S1uEX8JgjDq0CI3ZnZ7bmXRDA6MMPZ4BsJFRC2Ak2xFw+S7aMVEO7sNcZsiPMAa6da0cJKlOtAh3ILU5HEnj2IAttX+e9B3dPzMMwvOuDbA3yuDEOUMbaEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fuPqTPhNdiN2Hj7I73BVK0048gAVoY/AvIIsV8kAxJY=;
- b=hKcM3VrFSBvp2hzqea9np1tQZbn/Jzxk563SpMPNqViAEDT+typHHRdwpG1WGtY3OVMN7egChA2/hXh1kPmpay52k+mfBUiLzNUgwSew6jnMJV2nwUpHwxppJ+owWxYYKc3fj12mkobNH7rKRNYFI9O5AK7n7NakXuMJ9y/ZPYg=
-Received: from BN6PR1101CA0005.namprd11.prod.outlook.com
- (2603:10b6:405:4a::15) by BN7PR02MB5122.namprd02.prod.outlook.com
- (2603:10b6:408:2f::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Wed, 6 Apr
- 2022 09:22:16 +0000
-Received: from BN1NAM02FT041.eop-nam02.prod.protection.outlook.com
- (2603:10b6:405:4a:cafe::29) by BN6PR1101CA0005.outlook.office365.com
- (2603:10b6:405:4a::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.21 via Frontend
- Transport; Wed, 6 Apr 2022 09:22:16 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT041.mail.protection.outlook.com (10.13.2.152) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5144.21 via Frontend Transport; Wed, 6 Apr 2022 09:22:16 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Wed, 6 Apr 2022 02:22:14 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Wed, 6 Apr 2022 02:22:14 -0700
-Envelope-to: git@xilinx.com,
- linux-clk@vger.kernel.org,
- sboyd@kernel.org
-Received: from [10.140.6.59] (port=53110 helo=xhdshubhraj40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <shubhrajyoti.datta@xilinx.com>)
-        id 1nc1rh-000B27-Ma; Wed, 06 Apr 2022 02:22:14 -0700
-From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
-To:     <linux-clk@vger.kernel.org>
-CC:     <git@xilinx.com>, <shubhrajyoti.datta@xilinx.com>,
-        <sboyd@kernel.org>, <michal.simek@xilinx.com>
-Subject: [PATCH v2] clk: zynqmp: Check the return type  zynqmp_pm_query_data
-Date:   Wed, 6 Apr 2022 14:52:11 +0530
-Message-ID: <20220406092211.19017-1-shubhrajyoti.datta@xilinx.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S235126AbiDFOwT (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 6 Apr 2022 10:52:19 -0400
+X-Greylist: delayed 2339 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 06 Apr 2022 04:27:52 PDT
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B074C4E5D4C;
+        Wed,  6 Apr 2022 04:27:52 -0700 (PDT)
+Received: from mail-wm1-f41.google.com ([209.85.128.41]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MuDoR-1nq8pN1sfF-00ua7I; Wed, 06 Apr 2022 11:41:00 +0200
+Received: by mail-wm1-f41.google.com with SMTP id l62-20020a1c2541000000b0038e4570af2fso1232266wml.5;
+        Wed, 06 Apr 2022 02:41:00 -0700 (PDT)
+X-Gm-Message-State: AOAM532nots+nSUALq2sX+8t4yFa83Z0hnqRN2+LPukycXzuCmW5OmVI
+        zgohL12wKb90MaWG5IcnjzZDov4cWCjAw8++KEk=
+X-Google-Smtp-Source: ABdhPJzxUZX+E7XCtlp8CuL3coz4kajfPoqdCKk/EJtWFQ5dur8RDTboYWVRRTfTH1oiwHkEqf8zaBfFzz/1pPZluso=
+X-Received: by 2002:a05:600c:4ecc:b0:38e:354d:909 with SMTP id
+ g12-20020a05600c4ecc00b0038e354d0909mr6846810wmq.33.1649238060031; Wed, 06
+ Apr 2022 02:41:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3ad5e148-cf51-41c3-89b6-08da17aef137
-X-MS-TrafficTypeDiagnostic: BN7PR02MB5122:EE_
-X-Microsoft-Antispam-PRVS: <BN7PR02MB5122FC7D99C35F8FCAC81FA5AAE79@BN7PR02MB5122.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1ICmqlYZIADccGae0ahlacVhMh2xd9cGRfI5MWhKyGa97mZr5x6lRZpa0J7ssuTmB6/zUQ5A3NMdXTI+CF/Zgk50i10Z+kXDOk/8264Oh72XUSNfxJRXvactZa1S+4mJLFrnaxABwl9xYgG+6HVASgyTNYVFYuRbAEph9vf5tk8olQKoWAjkxFPPnqv+0k092C19fws3dxhI08IJTePtH6e7y3Gs650HejQ5uvd/aeNEamYeGpJm1z/RcLy8LdZg9DTd6/Y8X8Y1er3NZos6gBfY5H67SXaKen8FUY1b9S8wNQckbgcLA+2QIcvdwFjKey4wDee/HqsqmStrLMPWjnI4jwzTekfnvNKfj1o7FSNhZN42eTIVbakIM8V5vAmbQ8Ti87iVz6c+VffYxcQvjaFKjmAbxW37mwgEdG3VfHQTXTCev3qSSdB/jd1IysAsj+GIyjGug76CbMeCOiqQlxINWDts/zqXRkJpUb0giTSQ5QcK0euI2mKx1SQ8xc/HPIpMu50/S4KPwQPREVVGc/cBODti3rEhENM4cBaLIR3BiM8FkotTX2Ek6/I+YmAu60itECu66H5T9uSG9FKs/64t4MWOG5caYTgDLL0xllDHRA342GWKQpdy1PlXGJNClckoD+LA21dtClQeMbTAOcEbzgdJYFPBpDDfK9FejCxBThFTHZ7qpje9eM+Xi5cpW9EgTq4Wqrj7Yq6y+hdiyw==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(356005)(7636003)(82310400005)(107886003)(70586007)(7696005)(6666004)(36860700001)(70206006)(5660300002)(4326008)(36756003)(47076005)(83380400001)(8676002)(26005)(186003)(44832011)(8936002)(54906003)(336012)(426003)(1076003)(316002)(6916009)(2616005)(9786002)(40460700003)(508600001)(2906002)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Apr 2022 09:22:16.2700
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ad5e148-cf51-41c3-89b6-08da17aef137
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT041.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR02MB5122
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220307091923.9909-1-ychuang3@nuvoton.com> <20220307091923.9909-4-ychuang3@nuvoton.com>
+ <2669852c-5bb6-1edf-bf58-ea815f54d50f@kernel.org> <ef8efda1-e985-0684-470f-7acf9b8a5e93@nuvoton.com>
+ <bba99b9d-6960-f6e8-0ee4-0b5fe8a5601d@linaro.org> <ab89589f-6dd7-d4ff-635d-ff8dbd2d3e02@nuvoton.com>
+In-Reply-To: <ab89589f-6dd7-d4ff-635d-ff8dbd2d3e02@nuvoton.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 6 Apr 2022 11:40:44 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a034bvYcD81h-jo92PbQwDDapa8JvS140fsBhaP7qrFXw@mail.gmail.com>
+Message-ID: <CAK8P3a034bvYcD81h-jo92PbQwDDapa8JvS140fsBhaP7qrFXw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] arm64: dts: nuvoton: Add initial support for MA35D1
+To:     Jacky Huang <ychuang3@nuvoton.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>, "olof@lixom.net" <olof@lixom.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "soc@kernel.org" <soc@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:ym5E5RCTMbe3WDe7e5tAv7Ns5tg0qVR7XTBsncM0V4ygUGzYLkX
+ wVNMZVF4lA38S+Ax9xlUCP7lUFgv6Mo3+vKhVqN0weEC2oXc2EeHOxVIAPOcTcZktUvRYMM
+ kqD/0uGLlOHjulxDn6dg4oh6Kwz3U5fDRYmeavTrJg/tjjmv5nd0bam+u3zhRNNEJ0iD0vA
+ vIPUj1TkMFdLgXxHFz/Aw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0FJFHUnyfrw=:M1ZZfWhg0NqGqONOnDrmqt
+ YjskGH/X47PoWikYHCufKyZa4tD+iAvY8z0u9qhNkZrGLVdMlpcWo+y2nh3rukQIJ2WFm2UM1
+ rnsJQ9WjRfU4xuyqx2mgevuwzv0FnFd6E/PUtNLMGCyWhSU2tLGHf6/itW/btxeSR3sEtuusY
+ l2KsvKcpPk0zhwADNd6ekB9MEG87cVrHR8K+lasn5rKf50PUvyts/egDzKXk1y+3miL147uDx
+ DHSN5phmvW5NzQ7HoF/FUl8c7FrNsHW7Wz93tJtZOo/b9XVE9gyHVzaTGfhwyLAgf9B1VZm8u
+ NN0YnfLEBEl1Si6a6hcoXi1uGSaugNJcPV/mOlOfQatte+oDOSNpyHKrxpPTO2fVt+nOn6hoM
+ JHwAVNxdyM0N99MkYiMK1Cw4lqSYSMEfPBR1e5svbEmrMgI+u6GnUORA5PO4mhtn1s5Raa4mW
+ LPec6BwxC8LdxXj8eNsRQCEUGsI8fS87BsYxN5XgbzvzH54xSdcSzu5xXeqNfqIV8XR5Ax+nr
+ gLXOk3wjIin8XGpWjcGwlWv8OAV/DxKh2/l3DFKz0iXjcCXhuE+gv9hLid0NhoKYHpdj4VHFk
+ 6kd2L1vhKPoibYC0l2vOQxit7nxU30ITOwtaMqBOy7/58JlXXV+PlkOtRy45ELUdIMx/95Iew
+ lWcaw9ddPKiwq7gnktuagoRAv2yIdF242WA0db42RM9vKKQV8vFEfnmzALlOw1eulTQMK72Ae
+ mZycrRY7LFQTPGwUtP9SjELIzfR99TIsC+zEGwQzFNAZh121MUWmMa94B88SHQKeEpe3ReYHc
+ 0HdrfQdExzmvhEZb/i2wolaxA0K2z1N4UFJGOB6Yh6BS8usfac=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Check the return type of zynqmp_pm_query_data(qdata, ret_payload);
+On Wed, Apr 6, 2022 at 11:25 AM Jacky Huang <ychuang3@nuvoton.com> wrote:
+> On 2022/4/6 下午 03:14, Krzysztof Kozlowski wrote:
+> > On 06/04/2022 04:58, Jacky Huang wrote:
+> >> config ARCH_MA35D1
+> >>       bool "Nuvoton MA35D1 SOC Family"
+> > We do not add options for specific SoCs, but for entire families, so
+> > ARCH_NUVOTON is correct.
+>
+> Yes, I would like to modify it as the following:
+>
+> config ARCH_NUVOTON
+>      bool "Nuvoton SoC Family"
+>      select PINCTRL
+>      select PINCTRL_MA35D1
+>      select PM
+>      select GPIOLIB
+>      select SOC_BUS
+>      help
+>        This enables support for Nuvoton MA35D1 ARMv8 SoC.
+>
+> (Currently, we have MA35D1 only in the support list for arm64 SoC.).
 
-Addresses-Coverity: Event check_return
-Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
----
-v2:
-Update the documentation
+You could reword this to "This enables support for Nuvoton ARMv8 SoCs
+such as the MA35D1", to prevent this from getting stale, or repeatedly
+updated when future SoCs are added.
 
- drivers/clk/zynqmp/clkc.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Another change you can consider is to remove the 'select PINCTRL_MA35D1'
+here and instead change the pinctrl Kconfig entry to
 
-diff --git a/drivers/clk/zynqmp/clkc.c b/drivers/clk/zynqmp/clkc.c
-index 75d895be2d89..013464af0344 100644
---- a/drivers/clk/zynqmp/clkc.c
-+++ b/drivers/clk/zynqmp/clkc.c
-@@ -220,18 +220,22 @@ static int zynqmp_pm_clock_get_num_clocks(u32 *nclocks)
-  * This function is used to get name of clock specified by given
-  * clock ID.
-  *
-- * Return: Returns 0
-+ * Return: 0 on success else error+reason
-  */
- static int zynqmp_pm_clock_get_name(u32 clock_id,
- 				    struct name_resp *response)
- {
- 	struct zynqmp_pm_query_data qdata = {0};
- 	u32 ret_payload[PAYLOAD_ARG_CNT];
-+	int ret;
- 
- 	qdata.qid = PM_QID_CLOCK_GET_NAME;
- 	qdata.arg1 = clock_id;
- 
--	zynqmp_pm_query_data(qdata, ret_payload);
-+	ret = zynqmp_pm_query_data(qdata, ret_payload);
-+	if (ret)
-+		return ret;
-+
- 	memcpy(response, ret_payload, sizeof(*response));
- 
- 	return 0;
--- 
-2.17.1
+config PINCTRL_MA35D1
+           bool "..."
+           depends on ARCH_NUVOTON || COMPILE_TEST
+           default ARCH_NUVOTON
 
+That way you get it default-enabled when ARCH_NUVOTON is
+turned on, or disabled in configurations without ARCH_NUVOTON,
+but can make a more fine-grained selection for a particular SoC
+if you get more than one such driver in the future.
+
+        Arnd
