@@ -2,138 +2,185 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD2D4F6853
-	for <lists+linux-clk@lfdr.de>; Wed,  6 Apr 2022 19:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C604F6837
+	for <lists+linux-clk@lfdr.de>; Wed,  6 Apr 2022 19:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239667AbiDFR7T convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-clk@lfdr.de>); Wed, 6 Apr 2022 13:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44778 "EHLO
+        id S239947AbiDFR60 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 6 Apr 2022 13:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239903AbiDFR6l (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 6 Apr 2022 13:58:41 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0CC3BCB7B;
-        Wed,  6 Apr 2022 09:18:38 -0700 (PDT)
-Received: from [213.70.33.226] (helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nc8MP-0007f5-Ur; Wed, 06 Apr 2022 18:18:22 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Johan Jonker <jbx6244@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        zhangqing@rock-chips.com, Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, mturquette@baylibre.com,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: clock: convert rockchip,rk3188-cru.txt to YAML
-Date:   Wed, 06 Apr 2022 18:18:20 +0200
-Message-ID: <14123901.uLZWGnKmhe@phil>
-In-Reply-To: <4b7af0ed-c5e1-7523-0abc-4204596edeb9@linaro.org>
-References: <20220329111323.3569-1-jbx6244@gmail.com> <0eed395b-ca02-2308-a5c6-7c4a72720175@gmail.com> <4b7af0ed-c5e1-7523-0abc-4204596edeb9@linaro.org>
+        with ESMTP id S240152AbiDFR5z (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 6 Apr 2022 13:57:55 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338773C0917;
+        Wed,  6 Apr 2022 09:19:01 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E9E2A20011;
+        Wed,  6 Apr 2022 16:18:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649261939;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Etkyn+DLDnyeQYyktlNswU2ptlm2zZrExIk3QJJfEvk=;
+        b=B3OnPf7FRTg2PNrwYLick+0s7fnya3ZLirEHEcbDrNoBT0HwQyCVjR6circHuz3RqpZ4YP
+        1+VZ4WyyVsDjNMPHxbYJGU0U0cZORGY5y2JTAR9zeVtQEahC7IL9UCYbeFiyPeHEvMYm9o
+        9a8vtPdLgJsRe/THTIFNN62PZhPDyo995iJ4DCyq8ooDgLQMjivLQg4BuFgpyh9g1fCXao
+        9xaI/yqKHN7Cc29hfxBoDQnjMS4h0iNK0bY/HgXwek8z6KMRWI2c4iLyhL024lWFRR4gHS
+        pbodiKBq+xrtzTNHvaUG+vxRfNdkjSihOjriYeVosEtufflPx2HRZUna1GVJYQ==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-renesas-soc@vger.kernel.org, dmaengine@vger.kernel.org,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
+Subject: [PATCH v8 0/9] RZN1 DMA support
+Date:   Wed,  6 Apr 2022 18:18:47 +0200
+Message-Id: <20220406161856.1669069-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Am Samstag, 2. April 2022, 18:01:11 CEST schrieb Krzysztof Kozlowski:
-> On 02/04/2022 14:20, Johan Jonker wrote:
-> > 
-> > 
-> > On 4/2/22 14:16, Krzysztof Kozlowski wrote:
-> >> On 02/04/2022 13:45, Johan Jonker wrote:
-> >>>
-> >>>
-> >>> On 4/2/22 13:41, Krzysztof Kozlowski wrote:
-> >>>> On 01/04/2022 09:55, Heiko Stübner wrote:
-> >>>>> Hi Stephen,
-> >>>>>
-> >>>>> Am Freitag, 1. April 2022, 00:51:32 CEST schrieb Stephen Boyd:
-> >>>>>> Quoting Johan Jonker (2022-03-29 04:13:22)
-> >>>>>>> diff --git a/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml b/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
-> >>>>>>> new file mode 100644
-> >>>>>>> index 000000000..ddd7e46af
-> >>>>>>> --- /dev/null
-> >>>>>>> +++ b/Documentation/devicetree/bindings/clock/rockchip,rk3188-cru.yaml
-> >>>>>>> @@ -0,0 +1,78 @@
-> >>>>>>> +# SPDX-License-Identifier: GPL-2.0
-> >>>>>>> +%YAML 1.2
-> >>>>>>> +---
-> >>>>>>> +$id: http://devicetree.org/schemas/clock/rockchip,rk3188-cru.yaml#
-> >>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>>>>>> +
-> >>>>>>> +title: Rockchip RK3188/RK3066 Clock and Reset Unit (CRU)
-> >>>>>>> +
-> >>>>>>> +maintainers:
-> >>>>>>> +  - Elaine Zhang <zhangqing@rock-chips.com>
-> >>>>>>> +  - Heiko Stuebner <heiko@sntech.de>
-> >>>>>>> +
-> >>>>>>> +description: |
-> >>>>>>> +  The RK3188/RK3066 clock controller generates and supplies clocks to various
-> >>>>>>> +  controllers within the SoC and also implements a reset controller for SoC
-> >>>>>>> +  peripherals.
-> >>>>>>> +  Each clock is assigned an identifier and client nodes can use this identifier
-> >>>>>>> +  to specify the clock which they consume. All available clocks are defined as
-> >>>>>>> +  preprocessor macros in the dt-bindings/clock/rk3188-cru.h and
-> >>>>>>> +  dt-bindings/clock/rk3066-cru.h headers and can be used in device tree sources.
-> >>>>>>> +  Similar macros exist for the reset sources in these files.
-> >>>>>>> +  There are several clocks that are generated outside the SoC. It is expected
-> >>>>>>> +  that they are defined using standard clock bindings with following
-> >>>>>>> +  clock-output-names:
-> >>>>>>> +    - "xin24m"    - crystal input                 - required
-> >>>>>>> +    - "xin32k"    - RTC clock                     - optional
-> >>>>>>> +    - "xin27m"    - 27mhz crystal input on RK3066 - optional
-> >>>>>>> +    - "ext_hsadc" - external HSADC clock          - optional
-> >>>>>>> +    - "ext_cif0"  - external camera clock         - optional
-> >>>>>>> +    - "ext_rmii"  - external RMII clock           - optional
-> >>>>>>> +    - "ext_jtag"  - external JTAG clock           - optional
-> >>>>>>
-> >>>>>> I'd expect all these clks here to be inputs to this node.
-> >>>>>
-> >>>>> The optional clocks are all part of a circular dependency.
-> >>>>>
-> >>>>> So for example xin32k normally is generated by the pmic and fed
-> >>>>> back into the system, so to get xin32k, we need the pmic to probe,
-> >>>>> which needs i2c, which in turn already needs the clock controller.
-> >>>>
-> >>>> Are you sure that xin32k (RTC) clock should be input to the clock
-> >>>> controller? I would expect it is the input to the SoC RTC block, so
-> >>>> there is no circular dependency.
-> >>>
-> >>> clk-rk3188.c:
-> >>>
-> >>> PNAME(mux_pll_p)		= { "xin24m", "xin32k" };
-> >>
-> >> Thanks, but that's not the answer whether it is an input to the clock
-> >> controller. It's the answer how the driver implements this. :)
-> > 
-> > PX2 == rk3066
-> > 
-> > Rockchip PX2 TRM V1.0.pdf
-> > 
-> > page 30
-> > 
-> > Chip Clock Architecture Diagram 1
-> 
-> I found it, thanks. That's the answer, so indeed this is an input.
-> 
-> Answering partially to Heiko/Stephen, this could be still modeled in DTS
-> as a fixed-frequency clock going as input to the clock-controller. The
-> trouble with that approach is that it would actually duplicate the
-> definition (another one coming from PMIC).
+Hello,
 
-And it has the issue that the pmic doesn't necessarily has the clock
-enabled at boot. Also this would combat one issue by introducing
-a different one, as this would be modelling a clock in a way that is
-not reflected by hardware at all.
+Here is a first series bringing DMA support to RZN1 platforms. Soon a
+second series will come with changes made to the UART controller
+driver, in order to interact with the RZN1 DMA controller.
 
+Stephen acked the sysctrl patch (in the clk driver) but somehow I feel
+like it would be good to have this patch applied on both sides
+(dmaengine and clk) because more changes will depend on the addition of
+this helper, that are not related to DMA at all. I'll let you folks
+figure out what is best.
+
+Cheers,
+MiquÃ¨l
+
+Changes in v8:
+* Collected more tags.
+* Moved the Makefile line adding the dmamux driver to the bottom of the
+  file.
+* Reversed the logic in a ternary operation as suggested by Andy.
+* Changed a bit the naming of a #define as suggested by Andy.
+
+Changes in v7:
+* This time, really added Stephen's Acks (sorry for the error).
+* Moved an error check to get rid of one mutex_unlock/lock call as
+  suggested by Ilpo.
+* Split the patch adding the dmamux driver as advised by Vinod. One
+  patch introduces the dmamux driver, the other populates the children
+  of the system controller. As the original patch got acked by Stephen
+  Boyd, I moved his tag to the patch touching the clock controller only.
+
+Changes in v6:
+* Added Stephen's acks.
+* Fixed an extra newline added in the middle of nowhere.
+* Rebased on top of v5.18-rc1.
+
+Changes in v5:
+* Used gotos in rzn1_dmamux_route_allocate().
+* Changed the prefix to "dmaengine:".
+* Dropped the partial transfers fix.
+* Added Rob's acks.
+
+Changes in v4:
+* Freed "map" in the error path of the dmamux driver.
+* Improved a bit the style as requested by Prabhakar.
+* Dropped a __maybe_unused.
+* Reorder the includes.
+* Added a dependency on ARCH_RZN1.
+* Added Rob's Ack.
+* Added a reg property to the dmamux binding file.
+* Referenced the dmamux binding from the system controller file.
+* Called of_platform_populate from the end of the system controller
+  (clock) driver probe in order to probe the dmamux if it was
+  populated.
+* Added DMA properties to all the relevant UARTs.
+
+Changes in v3:
+* Added Reviewed-by tags.
+* Exported the set_dmamux* symbol properly.
+* Dropped a useless check in the probe and moved the sysctrl_priv
+  assignation to the end of the probe.
+* Renamed the dmamux driver
+* Added a couple of missing MODULE_ macros in the dmamux driver.
+* Decided to use a regular platform init call instead of the
+  arch_initcall() initially proposed.
+* s/%d/%u/ in printk's when appropriate.
+* Used a hardcoded value instead of dmamux->dmac_requests when
+  appropriate.
+* Changed the variable name "master" to "dmac_idx" to be more
+  descriptive.
+* Dropped most of the of_* calls in favor of #define's.
+* Fixed a typo.
+* Exported two symbols from 8250_dma.c.
+
+Changes in v2:
+* Clarified that the 'fix' regarding non aligned reads would only apply
+  to the DEV_TO_MEM case.
+* Fix the DMA controller compatible string (copy-paste error).
+* s/syscon/sysctrl/ as advised by Geert.
+* Disabled irqs when taking the spinlock from the clocks driver.
+* Moved the DMAMUX offset inside the driver.
+* Removed extra commas.
+* Improved the style as suggested by Andy.
+* Removed a dupplicated check against the device node presence.
+* Reduced the number of lines of code by using dev_err_probe().
+* Created a Kconfig symbol for DMAMUX to fix the two robot reports
+  received and be sure there was no useless overhead with other
+  platforms.
+* Exported the serial8250_{tx,rx}_dma() symbols.
+
+Miquel Raynal (9):
+  dt-bindings: dmaengine: Introduce RZN1 dmamux bindings
+  dt-bindings: clock: r9a06g032-sysctrl: Reference the DMAMUX subnode
+  dt-bindings: dmaengine: Introduce RZN1 DMA compatible
+  soc: renesas: rzn1-sysc: Export function to set dmamux
+  dmaengine: dw: dmamux: Introduce RZN1 DMA router support
+  clk: renesas: r9a06g032: Probe possible children
+  dmaengine: dw: Add RZN1 compatible
+  ARM: dts: r9a06g032: Add the two DMA nodes
+  ARM: dts: r9a06g032: Describe the DMA router
+
+ .../clock/renesas,r9a06g032-sysctrl.yaml      |  11 ++
+ .../bindings/dma/renesas,rzn1-dmamux.yaml     |  51 ++++++
+ .../bindings/dma/snps,dma-spear1340.yaml      |   8 +-
+ MAINTAINERS                                   |   1 +
+ arch/arm/boot/dts/r9a06g032.dtsi              |  40 +++++
+ drivers/clk/renesas/r9a06g032-clocks.c        |  36 +++-
+ drivers/dma/dw/Kconfig                        |   9 +
+ drivers/dma/dw/Makefile                       |   2 +
+ drivers/dma/dw/platform.c                     |   1 +
+ drivers/dma/dw/rzn1-dmamux.c                  | 157 ++++++++++++++++++
+ include/linux/soc/renesas/r9a06g032-sysctrl.h |  11 ++
+ 11 files changed, 325 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/dma/renesas,rzn1-dmamux.yaml
+ create mode 100644 drivers/dma/dw/rzn1-dmamux.c
+ create mode 100644 include/linux/soc/renesas/r9a06g032-sysctrl.h
+
+-- 
+2.27.0
 
