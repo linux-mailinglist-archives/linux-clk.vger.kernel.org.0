@@ -2,124 +2,101 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0614F86B4
-	for <lists+linux-clk@lfdr.de>; Thu,  7 Apr 2022 19:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2B24F888A
+	for <lists+linux-clk@lfdr.de>; Thu,  7 Apr 2022 22:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346008AbiDGR6y (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 7 Apr 2022 13:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
+        id S229644AbiDGUc5 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 7 Apr 2022 16:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245441AbiDGR6x (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Apr 2022 13:58:53 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D0ACA6EF
-        for <linux-clk@vger.kernel.org>; Thu,  7 Apr 2022 10:56:52 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id r5so1197999ybd.8
-        for <linux-clk@vger.kernel.org>; Thu, 07 Apr 2022 10:56:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VlVF6lOp5dpC/j+GTWtTRB8fshiniUoILlPCbn8biBo=;
-        b=cnyeRbdWotGynXREUrsZQqgNgw9t4HD1KXVc4VKbHn62elv0ZJt7/Sny282D3dfpa7
-         9mwQsjnSnkas/boXNFGM4nCbO8mV/xB7h4n5AXa8sVjfI3a6kspQMlWxD7mZyWIVwdGO
-         1k9Sx57p+wkTVmp+URiYVrQqs+xgROZiGchYY37qIcmaFSYoqXA6sCPLlvBhtZUFpu3f
-         gvjzwXPBDF9oHVP9nQmjySzPmPJpUHFLeynLskBL2jB3YA1jp/eVHOgk7UEUFUcJOEAi
-         tFuYYy5mhJhPwfEJ/9nNrBcZZrwOjPrIpmdswHYrYNZ6PiZjnrXsqcHnToS9LDQHE13L
-         +V7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VlVF6lOp5dpC/j+GTWtTRB8fshiniUoILlPCbn8biBo=;
-        b=Xu5rM+92amI/+hUKW2/iPKRmsjmZzGatI/l6WL6SE1HKIdRZvF+OQft/+rgv5KIpFS
-         lV6vuR8F1F5TwJTqlTsSoQVb1DKFX5rPXXfjEplXUAl4lijmPScWw6+ZL/X+92wnVLsn
-         CnzY9KXBwWpszwO8inziWqIAQ8jW+6OtqoWuwxP33SabTWcsOuPGPp7Vdyraa2/QHMlh
-         J3iPMorVxqzLSl7RgeSG0PTJKujTzoL5Uwuwf16LSlQB8ILdB5WsEwrPfiC9mexo9mMh
-         DOyODcv7gq/IOAzOIZi+gymyvLQLOQy3DrcdAvdL11szAwRHW/KvlUL7vvi5mqTc/nq4
-         JoWQ==
-X-Gm-Message-State: AOAM532Jlrk0gHMFJlkI46/9ne7I1KUaMZ91wNBnItbqTbgIuiAjLURQ
-        qtJJ5sMz8EEMQxnEFRTBF79X7BjJwgxZHBtdEKClNA==
-X-Google-Smtp-Source: ABdhPJx7pBIu4DCGwRwQQvrbwgWliwJ3a5uEdC2cz90Zd9apB6WTYrp2DxQjMM+J44bGx5hlZh8QCq7A4LTclign76w=
-X-Received: by 2002:a25:2409:0:b0:634:15f4:2240 with SMTP id
- k9-20020a252409000000b0063415f42240mr10337229ybk.88.1649354211810; Thu, 07
- Apr 2022 10:56:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <CA+G9fYuqU45hHmK4WMUNEXQbmBucE+9fB=S9wcHEfEHaZ2jgcQ@mail.gmail.com>
- <20220401151058.fipdax3kvmxknctv@houat> <CA+G9fYu+WddXTb0NcbviUfGQHhsmThssVCafLPw7+nj3JsoFAA@mail.gmail.com>
- <20220407075435.ahlylmbqmqnpxz64@houat> <CA+G9fYvT_W9+0AguQu97mqTm5zNnSvF0asnatZX8BTf=_1oANg@mail.gmail.com>
- <20220407134615.pqx4lxvgl4ofjrki@houat>
-In-Reply-To: <20220407134615.pqx4lxvgl4ofjrki@houat>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 7 Apr 2022 23:26:40 +0530
-Message-ID: <CA+G9fYucyqd6LqBGGzmwXA=hYRyETJmk_w1Z0qPnFn3+Fzj7sQ@mail.gmail.com>
-Subject: Re: [next] db845c: WARNING: CPU: 5 PID: 8 at drivers/clk/clk-divider.c:139
- divider_recalc_rate
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        gabriel.fernandez@foss.st.com,
+        with ESMTP id S229852AbiDGUct (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Apr 2022 16:32:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0CC2FB198;
+        Thu,  7 Apr 2022 13:17:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2DC9EB82980;
+        Thu,  7 Apr 2022 20:09:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CDE7C385A4;
+        Thu,  7 Apr 2022 20:09:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649362158;
+        bh=A4/AzbWjitUbjirM7/ydBpWaRSNBSrPwtnLuXdyc/MU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lyH4Q2P4HkDYq7/TtiyUjfK8WuBdDRj/YgcBTUanXsjyLBeKqldFbQMYUGrdMS9/H
+         EbgL4P5fr3DZCq1epjuIo4EhOGnS2dd2T54sT7SbJqaLcGgHJvZ2eCVb51FdZVzBnd
+         Vm43695JfJA1VCOV+fOJANgAq2pkvkFwUVlK07R2xsQllKtzV4IQriHNLqCyHAh0/k
+         dGy0FZT1KxLH5oXVnuX1HO3kPeyDF8KpRDyMuSSnbiP+WILhz4sqll2jTZzMQ1vcmy
+         H+eylayuhm1/n/hHQwLp6mniElSPnhQPs0nzATpDRo+NIWxwhAHGOr+UzsA834x/s4
+         SprzIvE8eTRng==
+Date:   Thu, 7 Apr 2022 22:09:15 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 01/10] clk: cdce706: use simple i2c probe function
+Message-ID: <Yk9E6wOtIxnmCwkm@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Stephen Kitt <steve@sk2.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Nicolas Dechesne <nicolas.dechesne@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220407151831.2371706-1-steve@sk2.org>
+ <20220407151831.2371706-2-steve@sk2.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="X/S6ZsKhA/2CDvFL"
+Content-Disposition: inline
+In-Reply-To: <20220407151831.2371706-2-steve@sk2.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Maxime
 
-On Thu, 7 Apr 2022 at 19:16, Maxime Ripard <maxime@cerno.tech> wrote:
->
-> Hi Naresh,
->
-> On Thu, Apr 07, 2022 at 05:12:09PM +0530, Naresh Kamboju wrote:
-> > On Thu, 7 Apr 2022 at 13:24, Maxime Ripard <maxime@cerno.tech> wrote:
-> > >
-> > > Hi,
-> > >
-> > > > > I'm not sure if it's feasible, but if it is, it looks like something
-> > > > > that could be fixed by the patch pasted here:
-> > > > >
-> > > > > https://lore.kernel.org/linux-clk/20220401122736.5yvanksa4pla7uql@houat/
-> > > > > Could you test it?
-> > > >
-> > > > I have tested the single line patch and reported problems not fixed.
-> > >
-> > > Could you test this branch?
-> > > https://github.com/mripard/linux/tree/rpi/clk-improvements-more-fixes
-> >
-> > I have tested your tree and branch.
-> > I saw more clk prints in the boot log and did not notice the reported warning.
->
-> I just pushed a new version of my branch? It should get rid of most of
-> the side effects (and logs) you were seeing.
+--X/S6ZsKhA/2CDvFL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The reported problem has been fixed.
-Please check this boot log and test log [1].
-FYI, "clk_ignore_unused" has been used in Kernel boot args.
+On Thu, Apr 07, 2022 at 05:18:22PM +0200, Stephen Kitt wrote:
+> The i2c probe function here doesn't use the id information provided in
+> its second argument, so the single-parameter i2c probe function
+> ("probe_new") can be used instead.
+>=20
+> This avoids scanning the identifier tables during probes.
+>=20
+> Signed-off-by: Stephen Kitt <steve@sk2.org>
 
-https://lkft.validation.linaro.org/scheduler/job/4862043#L2712
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
-- Naresh
+--X/S6ZsKhA/2CDvFL
+Content-Type: application/pgp-signature; name="signature.asc"
 
->
-> Thanks!
-> Maxime
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJPROYACgkQFA3kzBSg
+KbZnCA/8DPZitLAB9IgjOgu6tWf0yjJPWfSk8iS/jSOQ/ZNjIBWR6mFqaVFAkGYS
+JV7yMM7aBL/hx3mqM5oo1KvR061AHn7x1HMdaSmTiKQMIMCfiFki9BKBv6ougd69
+RtOo97FGq+pNwYQsXc28DkZKH/H2ddJK2sCOXBxPML2yIZUzcnPZFpFMp1Dv1DZ1
+Wruq9RXl9c3mr3GnoWD1IXbSbEBIv7OQOdQEWr8W5SeWhsbmbJejb0ks1xn580jm
+8nOI0ZYI6q2ytjOor8irtikMbPrCEUKs5NmLG8HyXeBrEACsYmgFJeqXXULgJpEa
+fTAR2stu1HlFkriLlsRfn5OOM+tIyq9ICR0YCVIe1mdrjs2cM9EadJcJz6ketTdZ
+7f7BPQJlG1BF9RHAK32EoYhFi09GJwj70jtUmh/I/p4+TG7wTdTNgwNRSyZd9iS9
+TmAPrYYWrtU69btf4PADSSmGolLAi+yrszSklQTTwTpMGvOhQhDzP59eI4PCr/ua
+KsSJ3is7u7gJUsXbG3puChMzJMvGcT4jhWlpNXC5wAoJh5i1V2+0cK8741dYxrp1
+41YhbfNmfGQ7nrdOtHJlyeANlDvleClCoH1u3HeBHm+14dW40xOQQE+NzKKf/VyS
+cmrvC4ZKfCvYe9DB/VEGGJR+Th/0LjeoVH8JOZ/gBRnQUoYP6mc=
+=9I0p
+-----END PGP SIGNATURE-----
+
+--X/S6ZsKhA/2CDvFL--
