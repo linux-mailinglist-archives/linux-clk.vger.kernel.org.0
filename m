@@ -2,115 +2,124 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B9F4F8513
-	for <lists+linux-clk@lfdr.de>; Thu,  7 Apr 2022 18:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB0614F86B4
+	for <lists+linux-clk@lfdr.de>; Thu,  7 Apr 2022 19:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241227AbiDGQkR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 7 Apr 2022 12:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
+        id S1346008AbiDGR6y (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 7 Apr 2022 13:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbiDGQkR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Apr 2022 12:40:17 -0400
-Received: from 19.mo582.mail-out.ovh.net (19.mo582.mail-out.ovh.net [188.165.56.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745F1184265
-        for <linux-clk@vger.kernel.org>; Thu,  7 Apr 2022 09:38:16 -0700 (PDT)
-Received: from player796.ha.ovh.net (unknown [10.109.146.137])
-        by mo582.mail-out.ovh.net (Postfix) with ESMTP id AFE1D241C0
-        for <linux-clk@vger.kernel.org>; Thu,  7 Apr 2022 15:20:30 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player796.ha.ovh.net (Postfix) with ESMTPSA id DD6AA293301E3;
-        Thu,  7 Apr 2022 15:20:22 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-99G0034263be14-6f21-4a81-963b-ca0d4b4f9814,
-                    5995496A90EC26C6A3824F4C00BBD29EFE55D398) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-From:   Stephen Kitt <steve@sk2.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>, Stephen Kitt <steve@sk2.org>
-Subject: [PATCH v2 08/10] clk: si544: use i2c_match_id and simple i2c probe
-Date:   Thu,  7 Apr 2022 17:18:29 +0200
-Message-Id: <20220407151831.2371706-9-steve@sk2.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220407151831.2371706-1-steve@sk2.org>
-References: <20220407151831.2371706-1-steve@sk2.org>
+        with ESMTP id S245441AbiDGR6x (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Apr 2022 13:58:53 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D0ACA6EF
+        for <linux-clk@vger.kernel.org>; Thu,  7 Apr 2022 10:56:52 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id r5so1197999ybd.8
+        for <linux-clk@vger.kernel.org>; Thu, 07 Apr 2022 10:56:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VlVF6lOp5dpC/j+GTWtTRB8fshiniUoILlPCbn8biBo=;
+        b=cnyeRbdWotGynXREUrsZQqgNgw9t4HD1KXVc4VKbHn62elv0ZJt7/Sny282D3dfpa7
+         9mwQsjnSnkas/boXNFGM4nCbO8mV/xB7h4n5AXa8sVjfI3a6kspQMlWxD7mZyWIVwdGO
+         1k9Sx57p+wkTVmp+URiYVrQqs+xgROZiGchYY37qIcmaFSYoqXA6sCPLlvBhtZUFpu3f
+         gvjzwXPBDF9oHVP9nQmjySzPmPJpUHFLeynLskBL2jB3YA1jp/eVHOgk7UEUFUcJOEAi
+         tFuYYy5mhJhPwfEJ/9nNrBcZZrwOjPrIpmdswHYrYNZ6PiZjnrXsqcHnToS9LDQHE13L
+         +V7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VlVF6lOp5dpC/j+GTWtTRB8fshiniUoILlPCbn8biBo=;
+        b=Xu5rM+92amI/+hUKW2/iPKRmsjmZzGatI/l6WL6SE1HKIdRZvF+OQft/+rgv5KIpFS
+         lV6vuR8F1F5TwJTqlTsSoQVb1DKFX5rPXXfjEplXUAl4lijmPScWw6+ZL/X+92wnVLsn
+         CnzY9KXBwWpszwO8inziWqIAQ8jW+6OtqoWuwxP33SabTWcsOuPGPp7Vdyraa2/QHMlh
+         J3iPMorVxqzLSl7RgeSG0PTJKujTzoL5Uwuwf16LSlQB8ILdB5WsEwrPfiC9mexo9mMh
+         DOyODcv7gq/IOAzOIZi+gymyvLQLOQy3DrcdAvdL11szAwRHW/KvlUL7vvi5mqTc/nq4
+         JoWQ==
+X-Gm-Message-State: AOAM532Jlrk0gHMFJlkI46/9ne7I1KUaMZ91wNBnItbqTbgIuiAjLURQ
+        qtJJ5sMz8EEMQxnEFRTBF79X7BjJwgxZHBtdEKClNA==
+X-Google-Smtp-Source: ABdhPJx7pBIu4DCGwRwQQvrbwgWliwJ3a5uEdC2cz90Zd9apB6WTYrp2DxQjMM+J44bGx5hlZh8QCq7A4LTclign76w=
+X-Received: by 2002:a25:2409:0:b0:634:15f4:2240 with SMTP id
+ k9-20020a252409000000b0063415f42240mr10337229ybk.88.1649354211810; Thu, 07
+ Apr 2022 10:56:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 89509043186730630
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejkedgkeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeejleelvdefieeiuddtfeevkeegueehkeekvdffgedvhedugeekgfejjeekgfeugeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejleeirdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdgtlhhksehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CA+G9fYuqU45hHmK4WMUNEXQbmBucE+9fB=S9wcHEfEHaZ2jgcQ@mail.gmail.com>
+ <20220401151058.fipdax3kvmxknctv@houat> <CA+G9fYu+WddXTb0NcbviUfGQHhsmThssVCafLPw7+nj3JsoFAA@mail.gmail.com>
+ <20220407075435.ahlylmbqmqnpxz64@houat> <CA+G9fYvT_W9+0AguQu97mqTm5zNnSvF0asnatZX8BTf=_1oANg@mail.gmail.com>
+ <20220407134615.pqx4lxvgl4ofjrki@houat>
+In-Reply-To: <20220407134615.pqx4lxvgl4ofjrki@houat>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 7 Apr 2022 23:26:40 +0530
+Message-ID: <CA+G9fYucyqd6LqBGGzmwXA=hYRyETJmk_w1Z0qPnFn3+Fzj7sQ@mail.gmail.com>
+Subject: Re: [next] db845c: WARNING: CPU: 5 PID: 8 at drivers/clk/clk-divider.c:139
+ divider_recalc_rate
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        gabriel.fernandez@foss.st.com,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Nicolas Dechesne <nicolas.dechesne@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-As part of the ongoing i2c transition to the simple probe
-("probe_new"), this patch uses i2c_match_id to retrieve the
-driver_data for the probed device. The id parameter is thus no longer
-necessary and the simple probe can be used instead.
+Hi Maxime
 
-Signed-off-by: Stephen Kitt <steve@sk2.org>
----
- drivers/clk/clk-si544.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+On Thu, 7 Apr 2022 at 19:16, Maxime Ripard <maxime@cerno.tech> wrote:
+>
+> Hi Naresh,
+>
+> On Thu, Apr 07, 2022 at 05:12:09PM +0530, Naresh Kamboju wrote:
+> > On Thu, 7 Apr 2022 at 13:24, Maxime Ripard <maxime@cerno.tech> wrote:
+> > >
+> > > Hi,
+> > >
+> > > > > I'm not sure if it's feasible, but if it is, it looks like something
+> > > > > that could be fixed by the patch pasted here:
+> > > > >
+> > > > > https://lore.kernel.org/linux-clk/20220401122736.5yvanksa4pla7uql@houat/
+> > > > > Could you test it?
+> > > >
+> > > > I have tested the single line patch and reported problems not fixed.
+> > >
+> > > Could you test this branch?
+> > > https://github.com/mripard/linux/tree/rpi/clk-improvements-more-fixes
+> >
+> > I have tested your tree and branch.
+> > I saw more clk prints in the boot log and did not notice the reported warning.
+>
+> I just pushed a new version of my branch? It should get rid of most of
+> the side effects (and logs) you were seeing.
 
-diff --git a/drivers/clk/clk-si544.c b/drivers/clk/clk-si544.c
-index d9ec9086184d..089786907641 100644
---- a/drivers/clk/clk-si544.c
-+++ b/drivers/clk/clk-si544.c
-@@ -451,11 +451,19 @@ static const struct regmap_config si544_regmap_config = {
- 	.volatile_reg = si544_regmap_is_volatile,
- };
- 
--static int si544_probe(struct i2c_client *client,
--		const struct i2c_device_id *id)
-+static const struct i2c_device_id si544_id[] = {
-+	{ "si544a", si544a },
-+	{ "si544b", si544b },
-+	{ "si544c", si544c },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, si544_id);
-+
-+static int si544_probe(struct i2c_client *client)
- {
- 	struct clk_si544 *data;
- 	struct clk_init_data init;
-+	const struct i2c_device_id *id = i2c_match_id(si544_id, client);
- 	int err;
- 
- 	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
-@@ -499,14 +507,6 @@ static int si544_probe(struct i2c_client *client,
- 	return 0;
- }
- 
--static const struct i2c_device_id si544_id[] = {
--	{ "si544a", si544a },
--	{ "si544b", si544b },
--	{ "si544c", si544c },
--	{ }
--};
--MODULE_DEVICE_TABLE(i2c, si544_id);
--
- static const struct of_device_id clk_si544_of_match[] = {
- 	{ .compatible = "silabs,si544a" },
- 	{ .compatible = "silabs,si544b" },
-@@ -520,7 +520,7 @@ static struct i2c_driver si544_driver = {
- 		.name = "si544",
- 		.of_match_table = clk_si544_of_match,
- 	},
--	.probe		= si544_probe,
-+	.probe_new	= si544_probe,
- 	.id_table	= si544_id,
- };
- module_i2c_driver(si544_driver);
--- 
-2.27.0
+The reported problem has been fixed.
+Please check this boot log and test log [1].
+FYI, "clk_ignore_unused" has been used in Kernel boot args.
 
+https://lkft.validation.linaro.org/scheduler/job/4862043#L2712
+
+
+- Naresh
+
+>
+> Thanks!
+> Maxime
