@@ -2,27 +2,27 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627C94F83A3
-	for <lists+linux-clk@lfdr.de>; Thu,  7 Apr 2022 17:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B9D34F8333
+	for <lists+linux-clk@lfdr.de>; Thu,  7 Apr 2022 17:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiDGPkN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 7 Apr 2022 11:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
+        id S1343669AbiDGPaP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 7 Apr 2022 11:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiDGPkM (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Apr 2022 11:40:12 -0400
-X-Greylist: delayed 593 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Apr 2022 08:38:11 PDT
-Received: from 2.mo560.mail-out.ovh.net (2.mo560.mail-out.ovh.net [188.165.53.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C025BB7EB
-        for <linux-clk@vger.kernel.org>; Thu,  7 Apr 2022 08:38:11 -0700 (PDT)
-Received: from player796.ha.ovh.net (unknown [10.111.208.192])
-        by mo560.mail-out.ovh.net (Postfix) with ESMTP id 33F0F23AC7
-        for <linux-clk@vger.kernel.org>; Thu,  7 Apr 2022 15:19:30 +0000 (UTC)
+        with ESMTP id S245358AbiDGPaP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Apr 2022 11:30:15 -0400
+X-Greylist: delayed 492 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Apr 2022 08:28:14 PDT
+Received: from 17.mo561.mail-out.ovh.net (17.mo561.mail-out.ovh.net [87.98.178.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D898BFA
+        for <linux-clk@vger.kernel.org>; Thu,  7 Apr 2022 08:28:14 -0700 (PDT)
+Received: from player796.ha.ovh.net (unknown [10.110.171.96])
+        by mo561.mail-out.ovh.net (Postfix) with ESMTP id 7B4DF23A05
+        for <linux-clk@vger.kernel.org>; Thu,  7 Apr 2022 15:19:46 +0000 (UTC)
 Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
         (Authenticated sender: steve@sk2.org)
-        by player796.ha.ovh.net (Postfix) with ESMTPSA id 9BEC22932FE43;
-        Thu,  7 Apr 2022 15:19:24 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-99G003fbe37ff8-48bc-4f04-b220-b5b9d6c02b3b,
+        by player796.ha.ovh.net (Postfix) with ESMTPSA id CD8F02932FFCF;
+        Thu,  7 Apr 2022 15:19:39 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-99G0036ce79144-b56c-4add-9154-6fb98c6ebeca,
                     5995496A90EC26C6A3824F4C00BBD29EFE55D398) smtp.auth=steve@sk2.org
 X-OVh-ClientIp: 82.65.25.201
 From:   Stephen Kitt <steve@sk2.org>
@@ -30,96 +30,90 @@ To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>
 Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
         Wolfram Sang <wsa@kernel.org>, Stephen Kitt <steve@sk2.org>
-Subject: [PATCH v2 00/10] clk: switch to simple i2c probe function
-Date:   Thu,  7 Apr 2022 17:18:21 +0200
-Message-Id: <20220407151831.2371706-1-steve@sk2.org>
+Subject: [PATCH v2 02/10] clk: cdce925: use i2c_match_id and simple i2c probe
+Date:   Thu,  7 Apr 2022 17:18:23 +0200
+Message-Id: <20220407151831.2371706-3-steve@sk2.org>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220407151831.2371706-1-steve@sk2.org>
+References: <20220407151831.2371706-1-steve@sk2.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 72620546474870406
+X-Ovh-Tracer-Id: 77124144948741766
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejkedgkeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejleeirdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdgtlhhksehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejkedgkeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeejleelvdefieeiuddtfeevkeegueehkeekvdffgedvhedugeekgfejjeekgfeugeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejleeirdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdgtlhhksehvghgvrhdrkhgvrhhnvghlrdhorhhg
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This series of patches updates i2c probes in clk to use the simple
-probe variant (simple as in "single argument"), probe_new, following
-one of two scenarios.
+As part of the ongoing i2c transition to the simple probe
+("probe_new"), this patch uses i2c_match_id to retrieve the
+driver_data for the probed device. The id parameter is thus no longer
+necessary and the simple probe can be used instead.
 
-In the first scenario, the existing probe function
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+---
+ drivers/clk/clk-cdce925.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-int (*probe)(struct i2c_client *client, const struct i2c_device_id *id);
-
-(see struct i2c_driver in include/linux/i2c.h) doesn't use the id
-argument, so it can be trivially converted to
-
-int (*probe_new)(struct i2c_client *client);
-
-and the i2c_driver declaration updated to use .probe_new instead of
-.probe.
-
-In the second scenario, the probe function does use the id argument.
-In this case, the relevant part of the calling code,
-
-        /*
-         * When there are no more users of probe(),
-         * rename probe_new to probe.
-         */
-        if (driver->probe_new)
-                status = driver->probe_new(client);
-        else if (driver->probe)
-                status = driver->probe(client,
-                                       i2c_match_id(driver->id_table, client));
-        else
-                status = -EINVAL;
-
-(from drivers/i2c/i2c-core-base.c) is moved down into the probe
-function, typically along the lines of
-
-const struct i2c_device_id *id = i2c_match_id(ids, id);
-
-where ids is the i2c_device_id table. The latter needs to be declared
-before the probe function; as suggested by Wolfram Sang, the full
-definition is moved above the probe function.
-
-Changes since v1:
-  - the pair of patches have been split up into a single patch series
-    with one patch per modified file, and the commit titles adjusted
-    accordingly
-  - renesas-pcie has been added
-
-
-Stephen Kitt (10):
-  clk: cdce706: use simple i2c probe function
-  clk: cdce925: use i2c_match_id and simple i2c probe
-  clk: cs2000-cp: use simple i2c probe function
-  clk: max9485: use simple i2c probe function
-  clk: si514: use simple i2c probe function
-  clk: si5341: use simple i2c probe function
-  clk: si5351: use i2c_match_id and simple i2c probe
-  clk: si544: use i2c_match_id and simple i2c probe
-  clk: si570: use i2c_match_id and simple i2c probe
-  clk: renesas-pcie: use simple i2c probe function
-
- drivers/clk/clk-cdce706.c      |  5 ++---
- drivers/clk/clk-cdce925.c      | 24 ++++++++++++------------
- drivers/clk/clk-cs2000-cp.c    |  5 ++---
- drivers/clk/clk-max9485.c      |  5 ++---
- drivers/clk/clk-renesas-pcie.c |  4 ++--
- drivers/clk/clk-si514.c        |  5 ++---
- drivers/clk/clk-si5341.c       |  5 ++---
- drivers/clk/clk-si5351.c       | 24 ++++++++++++------------
- drivers/clk/clk-si544.c        | 22 +++++++++++-----------
- drivers/clk/clk-si570.c        | 24 ++++++++++++------------
- 10 files changed, 59 insertions(+), 64 deletions(-)
-
+diff --git a/drivers/clk/clk-cdce925.c b/drivers/clk/clk-cdce925.c
+index 308b353815e1..ef9a2d44e40c 100644
+--- a/drivers/clk/clk-cdce925.c
++++ b/drivers/clk/clk-cdce925.c
+@@ -634,11 +634,20 @@ static struct regmap_bus regmap_cdce925_bus = {
+ 	.read = cdce925_regmap_i2c_read,
+ };
+ 
+-static int cdce925_probe(struct i2c_client *client,
+-		const struct i2c_device_id *id)
++static const struct i2c_device_id cdce925_id[] = {
++	{ "cdce913", CDCE913 },
++	{ "cdce925", CDCE925 },
++	{ "cdce937", CDCE937 },
++	{ "cdce949", CDCE949 },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, cdce925_id);
++
++static int cdce925_probe(struct i2c_client *client)
+ {
+ 	struct clk_cdce925_chip *data;
+ 	struct device_node *node = client->dev.of_node;
++	const struct i2c_device_id *id = i2c_match_id(cdce925_id, client);
+ 	const char *parent_name;
+ 	const char *pll_clk_name[MAX_NUMBER_OF_PLLS] = {NULL,};
+ 	struct clk_init_data init;
+@@ -814,15 +823,6 @@ static int cdce925_probe(struct i2c_client *client,
+ 	return err;
+ }
+ 
+-static const struct i2c_device_id cdce925_id[] = {
+-	{ "cdce913", CDCE913 },
+-	{ "cdce925", CDCE925 },
+-	{ "cdce937", CDCE937 },
+-	{ "cdce949", CDCE949 },
+-	{ }
+-};
+-MODULE_DEVICE_TABLE(i2c, cdce925_id);
+-
+ static const struct of_device_id clk_cdce925_of_match[] = {
+ 	{ .compatible = "ti,cdce913" },
+ 	{ .compatible = "ti,cdce925" },
+@@ -837,7 +837,7 @@ static struct i2c_driver cdce925_driver = {
+ 		.name = "cdce925",
+ 		.of_match_table = of_match_ptr(clk_cdce925_of_match),
+ 	},
+-	.probe		= cdce925_probe,
++	.probe_new	= cdce925_probe,
+ 	.id_table	= cdce925_id,
+ };
+ module_i2c_driver(cdce925_driver);
 -- 
 2.27.0
 
