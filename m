@@ -2,150 +2,124 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 834924F80EB
-	for <lists+linux-clk@lfdr.de>; Thu,  7 Apr 2022 15:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 627C94F83A3
+	for <lists+linux-clk@lfdr.de>; Thu,  7 Apr 2022 17:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240024AbiDGNsW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 7 Apr 2022 09:48:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
+        id S230168AbiDGPkN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 7 Apr 2022 11:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbiDGNsU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Apr 2022 09:48:20 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AB42BB18;
-        Thu,  7 Apr 2022 06:46:20 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 3CB773201591;
-        Thu,  7 Apr 2022 09:46:19 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 07 Apr 2022 09:46:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=5MSx+d/bXZx5XVZ50S+zjx2/Cpj0N8/ygeOMyG
-        KvsCs=; b=G3q6HFdoLRkTmNBNumrXdlcJS8czebdcWGFIoOney3lh9BIiMK4bPk
-        B/NIRqJWmvEWZbcEw0iGQBi896zGgdWlDnEPuV1kGcKU1nWPHK6bNE/eIvFvMpI6
-        /to7w4McrLT21izHjXAWfB+1u2TPWRpKTB9tshlOCV+6UtsoDjWUjVONg2dYvXey
-        lXrqXWSHWsr7aOKYie6jGuGouXdr9eox1P3l79F5gQEDCk7LkauHoQJKjrkf38on
-        v5A3PfbRCPyyWbbKtq6sFiYmspIeKBLuS4NyOftHhVp9/seUGBAbf3qvbfbGtFFW
-        nKTDkm2xo+Id/Ww+MpvmIG2++F1orA2A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=5MSx+d/bXZx5XVZ50
-        S+zjx2/Cpj0N8/ygeOMyGKvsCs=; b=F3kF1OkFZOgLN5KdNWcDu4ISxuQ8KHqzm
-        9yLyWIgKjO7g8qJBrb689juCdmpD1GTZXgnH+QMJDa2lm6kgoeJ/pwDmbVDfjeQi
-        B+oaMLTxUJgiZ4RlvpHosLycd9WE9pGVgD7LHBsaLCDpcY9k2qJC7Kk+FzHVrSWK
-        IZ6gcFu/1RGG37KxmGFSkVAZn/BNNn3o6rYbZklExFZmzQFEFv/xppT4fXfurvDy
-        2xUZe5rY3M61iJtAc8wc6B7hpR6q05DCJDFcVbscENsC5Nqvbw3qcfxaQh4aqEQX
-        SkNiersEJENFgOfXRgYjcoFXAC5RWyvz250pKctDuVkINSF0ST4IQ==
-X-ME-Sender: <xms:KetOYhEPeSNlbcKftz7DvQP1Mwu4B8fMn8eTGPRDBRea8ETtJgd30w>
-    <xme:KetOYmXMtsdCZ6Udi84yb2N1TMDaqS5qQ_BjfvIogicWWD937Lq_EtUJ7WYBw-Di5
-    EAqJyiaGWT4RcyfobY>
-X-ME-Received: <xmr:KetOYjId9D55254Q5KgdNxUEcvM6VAsWymziLCH-ykei5y8SKRBP6SBnUiB-i-5laV3-1uSjcEW4zq3tnunIHUyV7cIko04O80wPV7U>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudejkedgieekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepkeegveefgefgtdeifeeijefhvdehffekudetheejgeefteeihefffffhlefh
-    gefhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtohhmnecuve
-    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgv
-    segtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:KetOYnHGJqscSlNMgp2WMHjZbbAXtZeEPQ94vnntAWBQSu58jui4_g>
-    <xmx:KetOYnXIO-Bhlt9HHApAJTyfMBGvxE7_L1AgrvSGPmmDG79j1W5OYA>
-    <xmx:KetOYiMUUPK0YPnUubxWXRmdOMbgihzmXy6SshvNttj4dmZxh3FCKg>
-    <xmx:KutOYgVBjRG0zdeycNJhX0xBWTOTbPqfwj4HD3dmXtSCfCpbgf76cQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 7 Apr 2022 09:46:16 -0400 (EDT)
-Date:   Thu, 7 Apr 2022 15:46:15 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        gabriel.fernandez@foss.st.com,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Nicolas Dechesne <nicolas.dechesne@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [next] db845c: WARNING: CPU: 5 PID: 8 at
- drivers/clk/clk-divider.c:139 divider_recalc_rate
-Message-ID: <20220407134615.pqx4lxvgl4ofjrki@houat>
-References: <CA+G9fYuqU45hHmK4WMUNEXQbmBucE+9fB=S9wcHEfEHaZ2jgcQ@mail.gmail.com>
- <20220401151058.fipdax3kvmxknctv@houat>
- <CA+G9fYu+WddXTb0NcbviUfGQHhsmThssVCafLPw7+nj3JsoFAA@mail.gmail.com>
- <20220407075435.ahlylmbqmqnpxz64@houat>
- <CA+G9fYvT_W9+0AguQu97mqTm5zNnSvF0asnatZX8BTf=_1oANg@mail.gmail.com>
+        with ESMTP id S229640AbiDGPkM (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Apr 2022 11:40:12 -0400
+X-Greylist: delayed 593 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Apr 2022 08:38:11 PDT
+Received: from 2.mo560.mail-out.ovh.net (2.mo560.mail-out.ovh.net [188.165.53.149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C025BB7EB
+        for <linux-clk@vger.kernel.org>; Thu,  7 Apr 2022 08:38:11 -0700 (PDT)
+Received: from player796.ha.ovh.net (unknown [10.111.208.192])
+        by mo560.mail-out.ovh.net (Postfix) with ESMTP id 33F0F23AC7
+        for <linux-clk@vger.kernel.org>; Thu,  7 Apr 2022 15:19:30 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player796.ha.ovh.net (Postfix) with ESMTPSA id 9BEC22932FE43;
+        Thu,  7 Apr 2022 15:19:24 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-99G003fbe37ff8-48bc-4f04-b220-b5b9d6c02b3b,
+                    5995496A90EC26C6A3824F4C00BBD29EFE55D398) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>, Stephen Kitt <steve@sk2.org>
+Subject: [PATCH v2 00/10] clk: switch to simple i2c probe function
+Date:   Thu,  7 Apr 2022 17:18:21 +0200
+Message-Id: <20220407151831.2371706-1-steve@sk2.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qlotqj4qfa6bze52"
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYvT_W9+0AguQu97mqTm5zNnSvF0asnatZX8BTf=_1oANg@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 72620546474870406
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejkedgkeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejleeirdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdgtlhhksehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+This series of patches updates i2c probes in clk to use the simple
+probe variant (simple as in "single argument"), probe_new, following
+one of two scenarios.
 
---qlotqj4qfa6bze52
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In the first scenario, the existing probe function
 
-Hi Naresh,
+int (*probe)(struct i2c_client *client, const struct i2c_device_id *id);
 
-On Thu, Apr 07, 2022 at 05:12:09PM +0530, Naresh Kamboju wrote:
-> On Thu, 7 Apr 2022 at 13:24, Maxime Ripard <maxime@cerno.tech> wrote:
-> >
-> > Hi,
-> >
-> > > > I'm not sure if it's feasible, but if it is, it looks like something
-> > > > that could be fixed by the patch pasted here:
-> > > >
-> > > > https://lore.kernel.org/linux-clk/20220401122736.5yvanksa4pla7uql@h=
-ouat/
-> > > > Could you test it?
-> > >
-> > > I have tested the single line patch and reported problems not fixed.
-> >
-> > Could you test this branch?
-> > https://github.com/mripard/linux/tree/rpi/clk-improvements-more-fixes
->=20
-> I have tested your tree and branch.
-> I saw more clk prints in the boot log and did not notice the reported war=
-ning.
+(see struct i2c_driver in include/linux/i2c.h) doesn't use the id
+argument, so it can be trivially converted to
 
-I just pushed a new version of my branch? It should get rid of most of
-the side effects (and logs) you were seeing.
+int (*probe_new)(struct i2c_client *client);
 
-Thanks!
-Maxime
+and the i2c_driver declaration updated to use .probe_new instead of
+.probe.
 
---qlotqj4qfa6bze52
-Content-Type: application/pgp-signature; name="signature.asc"
+In the second scenario, the probe function does use the id argument.
+In this case, the relevant part of the calling code,
 
------BEGIN PGP SIGNATURE-----
+        /*
+         * When there are no more users of probe(),
+         * rename probe_new to probe.
+         */
+        if (driver->probe_new)
+                status = driver->probe_new(client);
+        else if (driver->probe)
+                status = driver->probe(client,
+                                       i2c_match_id(driver->id_table, client));
+        else
+                status = -EINVAL;
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYk7rJwAKCRDj7w1vZxhR
-xbTsAQC7LjET/cX1wvLVmcjsot44URT7Kp4tB6E6WFMkcILK7AEAzPiySlA4o95h
-mfsabSaOvr20D/J3iMVsLQUyauL6xwQ=
-=E5bt
------END PGP SIGNATURE-----
+(from drivers/i2c/i2c-core-base.c) is moved down into the probe
+function, typically along the lines of
 
---qlotqj4qfa6bze52--
+const struct i2c_device_id *id = i2c_match_id(ids, id);
+
+where ids is the i2c_device_id table. The latter needs to be declared
+before the probe function; as suggested by Wolfram Sang, the full
+definition is moved above the probe function.
+
+Changes since v1:
+  - the pair of patches have been split up into a single patch series
+    with one patch per modified file, and the commit titles adjusted
+    accordingly
+  - renesas-pcie has been added
+
+
+Stephen Kitt (10):
+  clk: cdce706: use simple i2c probe function
+  clk: cdce925: use i2c_match_id and simple i2c probe
+  clk: cs2000-cp: use simple i2c probe function
+  clk: max9485: use simple i2c probe function
+  clk: si514: use simple i2c probe function
+  clk: si5341: use simple i2c probe function
+  clk: si5351: use i2c_match_id and simple i2c probe
+  clk: si544: use i2c_match_id and simple i2c probe
+  clk: si570: use i2c_match_id and simple i2c probe
+  clk: renesas-pcie: use simple i2c probe function
+
+ drivers/clk/clk-cdce706.c      |  5 ++---
+ drivers/clk/clk-cdce925.c      | 24 ++++++++++++------------
+ drivers/clk/clk-cs2000-cp.c    |  5 ++---
+ drivers/clk/clk-max9485.c      |  5 ++---
+ drivers/clk/clk-renesas-pcie.c |  4 ++--
+ drivers/clk/clk-si514.c        |  5 ++---
+ drivers/clk/clk-si5341.c       |  5 ++---
+ drivers/clk/clk-si5351.c       | 24 ++++++++++++------------
+ drivers/clk/clk-si544.c        | 22 +++++++++++-----------
+ drivers/clk/clk-si570.c        | 24 ++++++++++++------------
+ 10 files changed, 59 insertions(+), 64 deletions(-)
+
+-- 
+2.27.0
+
