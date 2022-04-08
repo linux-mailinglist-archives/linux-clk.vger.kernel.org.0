@@ -2,268 +2,199 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0C94F95AD
-	for <lists+linux-clk@lfdr.de>; Fri,  8 Apr 2022 14:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7473D4F9577
+	for <lists+linux-clk@lfdr.de>; Fri,  8 Apr 2022 14:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbiDHM3C (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 8 Apr 2022 08:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
+        id S232014AbiDHMUH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 8 Apr 2022 08:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbiDHM3B (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 8 Apr 2022 08:29:01 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC6233DC9B
-        for <linux-clk@vger.kernel.org>; Fri,  8 Apr 2022 05:26:57 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id m30so12635855wrb.1
-        for <linux-clk@vger.kernel.org>; Fri, 08 Apr 2022 05:26:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=GYmKAXiVY5iRCCnJxkXBlD2rPlZJ1PCYNBabWNTi7Vo=;
-        b=Gn0r33PICX6iM1Z+B3IsHI83gHe6Tinntnv9xtP/eRfqHHtlcCFOllNlEJgSdljEdP
-         dG7Nn8LjjIPVZuWKsDPJ6ivDM1GE+HPKOT8wwW/8zvN5sjoxZWJnD+4Wxi6UkoL7eFh2
-         5kgTDmnHGq3C7IDlNoVJFNyvQ7EDiWYqCQQrIk5DOsvojgdS2g88cgPE+W0p7QxktrS4
-         n64EeUSJ69zsbFAmIwXDCbKs6jW8uQKh1QgKW2zr0AcJeoU8RgkTD+xWVI8Ua7HmY188
-         rzx3gmRkbhfvLrmJoqwuYekXRq+1JsadGlZ9bpka8CVDMONzskMwxb0vfkCFSVSOh5JO
-         fBiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=GYmKAXiVY5iRCCnJxkXBlD2rPlZJ1PCYNBabWNTi7Vo=;
-        b=xvCt67UvLRjoEg1lIgg6xeRvx2kg6aTtPdjjuvWXKnUiwYmynYGd0s4MsE18sYaoO/
-         /pIIAP/Z1g999Mb9TKhFvVrCEjKA8YF1BJJWUJ3zcnivAXJuZM3H/Cuce5Ge52caJAbN
-         amk9wj+SJCQ+EhNpPeNOc/8nrOxAngyQAqgOiy1hJZxAHo1GfPmv9x1DmDjkI/8Qn0Ky
-         3YpY8P1/2hUo4yWGX1C6+Fnb2EFudCFEdAmkaGXjtG+GLyZYW7+XqHfEmh5fcX62DciW
-         X4+1fS5z5Xwt5Pd6kOP7b1iQ7Ioszlq6kI3NaU7f69dsmP4PClIq4WqrjRkFxfiLPL8j
-         y8aQ==
-X-Gm-Message-State: AOAM531k32X4MzOvF9vTSlQtNjoVJhYVsIottj/KmXriEBirQ9o5JHdD
-        JOegGg0Xqx2e7MsmgszkYzk5X5ucTJ90qA==
-X-Google-Smtp-Source: ABdhPJzrWiStOdmsdk08vQ4QBgijXe2pf3Klfh4i3OMjwjEfkXmVL1Qg4yy4WPgW+fTOJgeJurlAPw==
-X-Received: by 2002:a5d:6485:0:b0:204:1643:ad45 with SMTP id o5-20020a5d6485000000b002041643ad45mr14692645wri.450.1649420816188;
-        Fri, 08 Apr 2022 05:26:56 -0700 (PDT)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id a11-20020a056000188b00b00204109f7826sm22266722wri.28.2022.04.08.05.26.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 05:26:55 -0700 (PDT)
-References: <20220408091037.2041955-1-maxime@cerno.tech>
- <20220408091037.2041955-23-maxime@cerno.tech>
- <1jwnfzlxx1.fsf@starbuckisacylon.baylibre.com>
- <20220408104127.ilmcntbhvktr2fbh@houat>
-User-agent: mu4e 1.6.10; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        with ESMTP id S229762AbiDHMUG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 8 Apr 2022 08:20:06 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F581E5328
+        for <linux-clk@vger.kernel.org>; Fri,  8 Apr 2022 05:18:00 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220408121757euoutp0298e61e24ead98eae9a121384f8ed8c50~j6wDClV0k1186511865euoutp02l
+        for <linux-clk@vger.kernel.org>; Fri,  8 Apr 2022 12:17:57 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220408121757euoutp0298e61e24ead98eae9a121384f8ed8c50~j6wDClV0k1186511865euoutp02l
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1649420277;
+        bh=KNoDlojck1BbleDfchKOzn4aT5+3lTjBp0fNGhYr1Xk=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=KQrHPN7dWEa+qZ3jpFt2I1PR6e44k2jE+1Xz71datNBPhqof1nxh8byD9Qsi38eui
+         p1pLub/3RBS9Sq9AgfitcrU6FNPVTtbDbOqorJeP+EemQxvjmNeoh+aiO7hPJGUoVJ
+         b556Cw7eqCyaQ6e44Mf+TF3tbZQ0Mwt7sAXUPO08=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220408121756eucas1p157b309beeea50ba9c4a5fd080bd4cf5b~j6wCkIzPJ3057230572eucas1p1U;
+        Fri,  8 Apr 2022 12:17:56 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id CE.7B.09887.4F720526; Fri,  8
+        Apr 2022 13:17:56 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220408121755eucas1p15a867f100b29640db83bc5488c51e597~j6wBrIN_g0935009350eucas1p1D;
+        Fri,  8 Apr 2022 12:17:55 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220408121755eusmtrp2cb043273c9311c13962564be0006ef10~j6wBqNEMS3126231262eusmtrp20;
+        Fri,  8 Apr 2022 12:17:55 +0000 (GMT)
+X-AuditID: cbfec7f4-45bff7000000269f-14-625027f4fc9c
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id FE.6F.09522.3F720526; Fri,  8
+        Apr 2022 13:17:55 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220408121754eusmtip21daeb804de70a22ccda89729765c6d18~j6wBIapz_0592305923eusmtip2v;
+        Fri,  8 Apr 2022 12:17:54 +0000 (GMT)
+Message-ID: <351cfb4a-7457-d4e1-8317-9ebf2a3167f8@samsung.com>
+Date:   Fri, 8 Apr 2022 14:17:55 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH 22/22] clk: Prevent a clock without a rate to register
+Content-Language: en-US
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
         Tony Lindgren <tony@atomide.com>,
         Yassine Oudjana <y.oudjana@protonmail.com>,
         Neil Armstrong <narmstrong@baylibre.com>
-Subject: Re: [PATCH 22/22] clk: Prevent a clock without a rate to register
-Date:   Fri, 08 Apr 2022 13:24:59 +0200
-In-reply-to: <20220408104127.ilmcntbhvktr2fbh@houat>
-Message-ID: <1jpmlrlq0h.fsf@starbuckisacylon.baylibre.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <1jwnfzlxx1.fsf@starbuckisacylon.baylibre.com>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrCKsWRmVeSWpSXmKPExsWy7djP87pf1AOSDKYfF7d4PWUtk8WbR0eY
+        LT723GO1mPHjH6PFxVOuFrc+8Vsc6ou2+HdtI4vF/iteFlfXTWR34PL49nUSi8f7G63sHnfO
+        nWfzeDHhH5PHplWdbB53ru1h8+hp28Tk8XmTXABHFJdNSmpOZllqkb5dAlfGpoMbWAu+ilfs
+        +d3A2MD4RqiLkZNDQsBEontLBxOILSSwglHi+8K8LkYuIPsLo0TjnptsEM5nRomlx94zwnTs
+        XDwDKrGcUWLxpKMsEM5HRoktZ/cCZTg4eAXsJG5sMwFpYBFQkfhw4wo7iM0rIChxcuYTFhBb
+        VCBJYvX21WDlwgJeEiu+WICEmQXEJW49mc8EMlJEYCujxJr2J+wgDrPAXUaJK48ngDWzCRhK
+        dL3tYgOxOQWsJXY+WcQG0S0vsf3tHGaQBgmBbk6JlvfzWUE2SAi4SEzelAPxgbDEq+Nb2CFs
+        GYn/O0G2gZTkS/ydYQwRrpC49noNM4RtLXHn3C+wO5kFNCXW79KHCDtKtB+axwzRySdx460g
+        xAF8EpO2TYcK80p0tEHDWU1i1vF1cDsPXrjEPIFRaRZSmMxC8vwsJK/MQti7gJFlFaN4amlx
+        bnpqsVFearlecWJucWleul5yfu4mRmDCOv3v+JcdjMtffdQ7xMjEwXiIUYKDWUmEtyrXJ0mI
+        NyWxsiq1KD++qDQntfgQozQHi5I4b3LmhkQhgfTEktTs1NSC1CKYLBMHp1QDk4ig/Mvo630e
+        0z8kFTllnc/le73nyIEYvwln6rNd3A2rOPek8371fPFfSMDTUv7g5rsT4l8bn2+yuc13V0FI
+        ZJPxxr2pjD/rdu1eW/NGZ/GUH8d6SnzWC2xo77KzSAmeN89y18Hip1N83A3++v38tHY2w0/P
+        kzUT67glOx4d4JC8pK56k9vjywsNr+SS0OCq/VztT87pztpyiP/y572dHzuuRMw4fW9PUMYG
+        kTWBdi/feJptzV4jYpKfsE7twx71Pb2yLxw+/ln0ZKpqGFfBjRXrLt3eMknkIff3GyeU6/9G
+        KX7J3Vm4dOuUk59nV+z9m/grKDiTVdPy3adNG//aL/i/9MkGz298lw+tZ5wcnl+rxFKckWio
+        xVxUnAgAf3hY9scDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNIsWRmVeSWpSXmKPExsVy+t/xe7qf1QOSDDZsl7V4PWUtk8WbR0eY
+        LT723GO1mPHjH6PFxVOuFrc+8Vsc6ou2+HdtI4vF/iteFlfXTWR34PL49nUSi8f7G63sHnfO
+        nWfzeDHhH5PHplWdbB53ru1h8+hp28Tk8XmTXABHlJ5NUX5pSapCRn5xia1StKGFkZ6hpYWe
+        kYmlnqGxeayVkamSvp1NSmpOZllqkb5dgl7GpoMbWAu+ilfs+d3A2MD4RqiLkZNDQsBEYufi
+        GWxdjFwcQgJLGSXWnznCCpGQkTg5rQHKFpb4c60Lqug9o8TUDwsZuxg5OHgF7CRubDMBqWER
+        UJH4cOMKO4jNKyAocXLmExYQW1QgSeJSVztYubCAl8SKLxYgYWYBcYlbT+YzgYwUEdjKKHG6
+        cQsriMMscJ9R4uG96YwQy94ySsx93MQM0sImYCjR9RbkCk4OTgFriZ1PFrFBjDKT6NraxQhh
+        y0tsfzuHeQKj0Cwkh8xCsnEWkpZZSFoWMLKsYhRJLS3OTc8tNtQrTswtLs1L10vOz93ECIzV
+        bcd+bt7BOO/VR71DjEwcjIcYJTiYlUR4q3J9koR4UxIrq1KL8uOLSnNSiw8xmgJDYyKzlGhy
+        PjBZ5JXEG5oZmBqamFkamFqaGSuJ83oWdCQKCaQnlqRmp6YWpBbB9DFxcEo1MO0xmPv0f2uZ
+        WIdP+o5VH8TFE7PNTu/K3rNQfZrg+U/lyoL/HKXd/n51yH54LDSS//6ExLr39pbrbmtfVFfX
+        v35glx+/3pKZ3eV+Lf1vb+3Z21yi/Pfpb824sGC9R2ZVVtOemoaeOjrdVcDYsXiV38dVBuz/
+        Lvp07NHj13g2ZYHox2eb2qv+B8zzY1IwyBIxE27W6RRuuxrmq+L8zEYuhpvR65zvCgmnciVV
+        BhPnB98e7WyT1d3tavby9sL/jGmznvoIVsUUyPAIzZo/pUJiS7bGjKBpPzZMf1Pck/nw43lx
+        1qnVqS+3eVkHeX9+qpDhmRJm9l5onkiU857l7+8sPtYatF9fbuHylrd1D/IZlFiKMxINtZiL
+        ihMB32g9pF4DAAA=
+X-CMS-MailID: 20220408121755eucas1p15a867f100b29640db83bc5488c51e597
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220408093618eucas1p27b1e9b34a7439020b052f18dcc178925
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220408093618eucas1p27b1e9b34a7439020b052f18dcc178925
+References: <20220408091037.2041955-1-maxime@cerno.tech>
+        <20220408091037.2041955-23-maxime@cerno.tech>
+        <CGME20220408093618eucas1p27b1e9b34a7439020b052f18dcc178925@eucas1p2.samsung.com>
+        <1jwnfzlxx1.fsf@starbuckisacylon.baylibre.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Hi All,
 
-On Fri 08 Apr 2022 at 12:41, Maxime Ripard <maxime@cerno.tech> wrote:
-
-> [[PGP Signed Part:Undecided]]
-> On Fri, Apr 08, 2022 at 11:18:58AM +0200, Jerome Brunet wrote:
->> On Fri 08 Apr 2022 at 11:10, Maxime Ripard <maxime@cerno.tech> wrote:
->> > A rate of 0 for a clock is considered an error, as evidenced by the
->> > documentation of clk_get_rate() and the code of clk_get_rate() and
->> > clk_core_get_rate_nolock().
->> >
->> > The main source of that error is if the clock is supposed to have a
->> > parent but is orphan at the moment of the call. This is likely to be
->> > transient and solved later in the life of the system as more clocks are
->> > registered.
->> >
->> > The corollary is thus that if a clock is not an orphan, has a parent that
->> > has a rate (so is not an orphan itself either) but returns a rate of 0,
->> > something is wrong in the driver. Let's return an error in such a case.
->> >
->> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->> > ---
->> >  drivers/clk/clk.c | 10 ++++++++++
->> >  1 file changed, 10 insertions(+)
->> >
->> > diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
->> > index 8bbb6adeeead..e8c55678da85 100644
->> > --- a/drivers/clk/clk.c
->> > +++ b/drivers/clk/clk.c
->> > @@ -3773,6 +3773,16 @@ static int __clk_core_init(struct clk_core *core)
->> >  		rate = 0;
->> >  	core->rate = core->req_rate = rate;
->> >  
->> > +	/*
->> > +	 * If we're not an orphan clock and our parent has a rate, then
->> > +	 * if our rate is 0, something is badly broken in recalc_rate.
->> > +	 */
->> > +	if (!core->orphan && (parent && parent->rate) && !core->rate) {
->> > +		ret = -EINVAL;
->> > +		pr_warn("%s: recalc_rate returned a null rate\n", core->name);
->> > +		goto out;
->> > +	}
->> > +
->> 
->> As hinted in the cover letter, I don't really agree with that.
->> 
->> There are situations where we can't compute the rate. Getting invalid
->> value in the register is one reason.
->> 
->> You mentioned the PLLs of the Amlogic SoCs (it is not limited to g12 - all
->> SoCs would be affected):
->> 
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/clk/meson/clk-pll.c#n82
->> Yes, PLL that have not been previously used (by the ROMCode or the
->> bootloader) tend to have the value of the divider set to 0 which in
->> invalid as it would result in a division by zero.
->> 
->> I don't think this is a bug. It is just what the HW is, an unlocked,
->> uninitialized PLL. There is no problem here and the PLL can remain like
->> that until it is needed.
+On 08.04.2022 11:18, Jerome Brunet wrote:
+> On Fri 08 Apr 2022 at 11:10, Maxime Ripard <maxime@cerno.tech> wrote:
 >
-> I think the larger issue is around the semantics of clk_get_rate(), and
-> especially whether we can call it without a clk_enable(), and whether
-> returning 0 is fine.
->
-> The (clk.h) documentation of clk_get_rate() mentions that "This is only
-> valid once the clock source has been enabled", and it's fairly
-> ambiguous. I can see how it could be interpreted as "you need to call
-> clk_enable() before calling clk_get_rate()", but it can also be
-> interpreted as "The returned rate will only be valid once clk_enable()
-> is called".
->
-> I think the latter is the proper interpretation though based on what the
-> drivers are doing, and even the CCF itself will call recalc_rate without
-> making sure that the clock is enabled (in __clk_core_init() for example).
->
-> Then there is the question of whether returning 0 is fine. Again
-> clk_get_rate() (clk.c) documentation states that "If clk is NULL then
-> returns 0.". This is indeed returned in case of an error condition (in
-> clk_get_rate() itself, but also in clk_core_get_rate_nolock()).
->
-> All the drivers I could find either assume the rate is valid, or test
-> whether it's 0 or not (randomly picked, but across completely different
-> platforms):
-> https://elixir.bootlin.com/linux/latest/source/drivers/clocksource/armv7m_systick.c#L50
-> https://elixir.bootlin.com/linux/latest/source/drivers/cpufreq/armada-8k-cpufreq.c#L74
-> https://elixir.bootlin.com/linux/latest/source/sound/soc/sti/uniperif_player.c#L194
-> https://elixir.bootlin.com/linux/latest/source/sound/soc/tegra/tegra20_i2s.c#L278
->
-> So my understanding is that the consensus is that clk_get_rate() can be
-> called even if the clock hasn't been enabled, and that returning 0 is
-> only meant to be used for errors in general, a NULL pointer according to
-> the documentation.
->
-> That would mean that pcie_pll_dco is buggy because it assumes that
-> clk_enable()
-
-This one indeed does everything in the enable and I could agree it is
-fishy, but since it supports only a single rate I don't think it is a
-problem. Even if it had a proper set_rate(), it would not change your
-problem since it would still return 0 until some consumer actually needs
-its parameter to change.
-
-> is going to be called before clk_get_rate(), gp0_pll_dco
-> and hifi_pll_dco because they expect "someone" to call clk_set_rate()
-> before clk_get_rate(),
-
-No, they don't expect anything. They will return 0 until they are set
-with a an actual rate. I don't think returning 0 should be
-problem and it has not been so far.
-
-I understand the ambiguity you mentioned above. If the framework decides
-it is clearly forbidden to return 0, we'll change.
-
-Still I don't think it would be wise. What are the alternative if you
-can't compute a rate ? return 1 ? This looks aweful to me. At least 0 is
-a clear indication that the clock is not in a working state.
-
-> and hdmi_pll_dco because it will always return 0,
-
-It is a read-only clock - whatever we do in CCF, it is not going to
-change. CCF has always supported RO clocks.
-
-> unless the display driver comes around and updates it. If it never does,
-> or if it's not compiled in, then you're out of luck.
-
-I'm all for managing the display clocks from CCF but it has proved tricky
-so far. Maybe it will someday.
-
-Being a read-only clock, the value is what it is and CCF should
-deal with it gracefully. It has so far.
-
-If the driver actually managing the clock is not compiled in, then the
-clock will never be set, and it should not be a problem either.
-
->
->> IMO, whenever possible we should not put default values in the clocks
->> which is why I chose to leave it like that.
+>> A rate of 0 for a clock is considered an error, as evidenced by the
+>> documentation of clk_get_rate() and the code of clk_get_rate() and
+>> clk_core_get_rate_nolock().
 >>
->> The PLL being unlocked, it has no rate. It is not set to have any rate.
->> IMO a returning a rate of 0 is valid here.
+>> The main source of that error is if the clock is supposed to have a
+>> parent but is orphan at the moment of the call. This is likely to be
+>> transient and solved later in the life of the system as more clocks are
+>> registered.
+>>
+>> The corollary is thus that if a clock is not an orphan, has a parent that
+>> has a rate (so is not an orphan itself either) but returns a rate of 0,
+>> something is wrong in the driver. Let's return an error in such a case.
+>>
+>> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>> ---
+>>   drivers/clk/clk.c | 10 ++++++++++
+>>   1 file changed, 10 insertions(+)
+>>
+>> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+>> index 8bbb6adeeead..e8c55678da85 100644
+>> --- a/drivers/clk/clk.c
+>> +++ b/drivers/clk/clk.c
+>> @@ -3773,6 +3773,16 @@ static int __clk_core_init(struct clk_core *core)
+>>   		rate = 0;
+>>   	core->rate = core->req_rate = rate;
+>>   
+>> +	/*
+>> +	 * If we're not an orphan clock and our parent has a rate, then
+>> +	 * if our rate is 0, something is badly broken in recalc_rate.
+>> +	 */
+>> +	if (!core->orphan && (parent && parent->rate) && !core->rate) {
+>> +		ret = -EINVAL;
+>> +		pr_warn("%s: recalc_rate returned a null rate\n", core->name);
+>> +		goto out;
+>> +	}
+>> +
+> As hinted in the cover letter, I don't really agree with that.
 >
-> If there's not a sensible default in the hardware already, I don't see
-> what the big issue is to be honest. You already kind of do that for all
-> the other PLL parameters with init_regs
-
-Those initial parameters are "magic" analog setting which don't have an
-impact on the rate setting. The initial rate of the clock is never set
-by the clock driver on purpose.
-
-> , and most drivers do that for
-> various stuff:
-> https://elixir.bootlin.com/linux/latest/source/drivers/clk/imx/clk-imx6q.c#L917
-> https://elixir.bootlin.com/linux/latest/source/drivers/clk/nxp/clk-lpc32xx.c#L1550
-> https://elixir.bootlin.com/linux/latest/source/drivers/clk/rockchip/clk-rk3036.c#L448
-> https://elixir.bootlin.com/linux/latest/source/drivers/clk/sunxi-ng/ccu-sun8i-h3.c#L1157
-> https://elixir.bootlin.com/linux/latest/source/drivers/clk/tegra/clk-tegra20.c#L1013
-
-It is done by other drivers or controllers, yes. It does not make it
-right (again, it is just my opinion). Rate should never be set by the
-clock driver or the clock controller - Those should just implement what
-consumer wants. I would agree it sometimes proves tricky to hold onto
-this.
-
-Taking one of the example above:
-https://elixir.bootlin.com/linux/latest/source/drivers/clk/nxp/clk-lpc32xx.c#L1550
-
-I think it would be better to have an "assigned-clock" on the related
-PLL in the USB node of the platform DT. That way the PLL is set when
-needed.
-
-If we go down the road of "others are doing it, so why not ?", I think Marek
-initial regression report mentioned Exynos too ;) 
-
+> There are situations where we can't compute the rate. Getting invalid
+> value in the register is one reason.
 >
-> If the driver needs that kind of quirks in order to make the clock
-> usable in itself, then it just makes sense to do that, especially if
-> it's to avoid breaking a generic API.
-
-As it is the clock are usable and it did not break anything so far.
-
-I have no problem updating the drivers if need be. I do have a problem
-with the framework changing and requiring the clock driver to set an
-initial rate to make it happy.
-
+> You mentioned the PLLs of the Amlogic SoCs (it is not limited to g12 - all
+> SoCs would be affected):
 >
-> Maxime
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/clk/meson/clk-pll.c#n82
+> Yes, PLL that have not been previously used (by the ROMCode or the
+> bootloader) tend to have the value of the divider set to 0 which in
+> invalid as it would result in a division by zero.
 >
-> [[End of PGP Signed Part]]
+> I don't think this is a bug. It is just what the HW is, an unlocked,
+> uninitialized PLL. There is no problem here and the PLL can remain like
+> that until it is needed.
+>
+> IMO, whenever possible we should not put default values in the clocks
+> which is why I chose to leave it like that.
+>
+> The PLL being unlocked, it has no rate. It is not set to have any rate.
+> IMO a returning a rate of 0 is valid here.
+
+I agree that it should be possible to register so called unconfigured 
+clock, which doesn't have any rate set yet. It might be used later by 
+some drivers, which will do the whole initialization (set rate and or 
+parents). I also wonder why the above patch triggers warning on the 
+Amlogic Socs, while on Exynos I still have some unused clocks with 0 
+rate registered properly.
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
