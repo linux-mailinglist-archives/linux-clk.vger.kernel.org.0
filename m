@@ -2,153 +2,268 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFFDE4F94A6
-	for <lists+linux-clk@lfdr.de>; Fri,  8 Apr 2022 13:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0C94F95AD
+	for <lists+linux-clk@lfdr.de>; Fri,  8 Apr 2022 14:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235300AbiDHL5g (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 8 Apr 2022 07:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
+        id S232419AbiDHM3C (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 8 Apr 2022 08:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235287AbiDHL5c (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 8 Apr 2022 07:57:32 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2048.outbound.protection.outlook.com [40.107.21.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC9772E05;
-        Fri,  8 Apr 2022 04:55:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ij+42JIeNzskrDtVJp6VeU8GsmZhKVC1/S9qqmLB4zZ4U6IBeqyQUYisxLK8CiVVhnlBtnhWMxV4R3HQEXwhf2utE3RaJd4f8wOAIFkrUIFxtnZ4duDHjPuXLYP/0D8sCGzyzLsePxWGDatslmtBXTvr7HTy/LO633dNCuKjl6+P9uSSPXMWF6wsDoIpcFdQyTtQBpTGKBSUWuiaoWXskRcZYVmCR/qm78HiB+015i+cT9hUfMRAxHkHjvYMRnYzxJMbhFtyQ2/zjBydH9faTrg3md/f8z1NOXthMY5HgeUXspvDrDUWX6J+qMtn6c7M1bE4eEwalQqExDR+zBF84A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZsZsmYFNT1Gph68gNqQ2T3vroeAABtjB+EzOi3TGcKY=;
- b=mWHtSrvafEe+vosDE2hUq5tHlusj+YGdyT20WwoNyelkPsbRM0kXLrchu0CmhBa8euCKGVTnFx7ngl6tZiZQ+Pgku9HXtFNmhJOCg+lRbvJqvyv5r78huS+5XL2IJJzFxO8n5iQJteNspqjFHwkrKhNGP8ZsKOy9jQaIJZBhaUR0dW3xlbzK7eRb+VLYHSwdBvbW3AMKZO34XWZEPuS9N4gLkPSFOP7ObCLi3OVUrqODY4U0wkUaL9vBEpWM8/YEQ43bILT15tuQjvrh42V+o1JTVVI/9JyqZ8JmApiO/SvswYOCRMkkdGCoKda7rClgCO30VdJoWfwLpbbCCxzztA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZsZsmYFNT1Gph68gNqQ2T3vroeAABtjB+EzOi3TGcKY=;
- b=PowzwEllosEqiqpbqiN7g27xdM/KBWFpajidWrc0v2tyBC6kdxzkADAiOs/6NlMJzNAtxtfmI1PPQQDcyweQII4hjztWY2Zg2dr9ElX4FZTxBBq2AwWQIYrkCAVznAlqm5KMKwuubWjUCjVrmQcNr2cszk2FyMksw2XvWQWgS2g=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
- by AM0PR04MB6978.eurprd04.prod.outlook.com (2603:10a6:208:17d::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Fri, 8 Apr
- 2022 11:55:24 +0000
-Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
- ([fe80::a9d1:199:574b:502f]) by VI1PR04MB4688.eurprd04.prod.outlook.com
- ([fe80::a9d1:199:574b:502f%6]) with mapi id 15.20.5123.031; Fri, 8 Apr 2022
- 11:55:24 +0000
-Date:   Fri, 8 Apr 2022 14:55:22 +0300
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     xkernel.wang@foxmail.com
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: imx: scu: fix a potential memory leak in
- __imx_clk_gpr_scu()
-Message-ID: <YlAiqhRf1p+svR1O@abelvesa>
-References: <tencent_27FF59903EE6AB5C0D0E6D0A8E7059A59007@qq.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_27FF59903EE6AB5C0D0E6D0A8E7059A59007@qq.com>
-X-ClientProxiedBy: VI1PR07CA0238.eurprd07.prod.outlook.com
- (2603:10a6:802:58::41) To VI1PR04MB4688.eurprd04.prod.outlook.com
- (2603:10a6:803:6a::30)
+        with ESMTP id S231757AbiDHM3B (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 8 Apr 2022 08:29:01 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC6233DC9B
+        for <linux-clk@vger.kernel.org>; Fri,  8 Apr 2022 05:26:57 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id m30so12635855wrb.1
+        for <linux-clk@vger.kernel.org>; Fri, 08 Apr 2022 05:26:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=GYmKAXiVY5iRCCnJxkXBlD2rPlZJ1PCYNBabWNTi7Vo=;
+        b=Gn0r33PICX6iM1Z+B3IsHI83gHe6Tinntnv9xtP/eRfqHHtlcCFOllNlEJgSdljEdP
+         dG7Nn8LjjIPVZuWKsDPJ6ivDM1GE+HPKOT8wwW/8zvN5sjoxZWJnD+4Wxi6UkoL7eFh2
+         5kgTDmnHGq3C7IDlNoVJFNyvQ7EDiWYqCQQrIk5DOsvojgdS2g88cgPE+W0p7QxktrS4
+         n64EeUSJ69zsbFAmIwXDCbKs6jW8uQKh1QgKW2zr0AcJeoU8RgkTD+xWVI8Ua7HmY188
+         rzx3gmRkbhfvLrmJoqwuYekXRq+1JsadGlZ9bpka8CVDMONzskMwxb0vfkCFSVSOh5JO
+         fBiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=GYmKAXiVY5iRCCnJxkXBlD2rPlZJ1PCYNBabWNTi7Vo=;
+        b=xvCt67UvLRjoEg1lIgg6xeRvx2kg6aTtPdjjuvWXKnUiwYmynYGd0s4MsE18sYaoO/
+         /pIIAP/Z1g999Mb9TKhFvVrCEjKA8YF1BJJWUJ3zcnivAXJuZM3H/Cuce5Ge52caJAbN
+         amk9wj+SJCQ+EhNpPeNOc/8nrOxAngyQAqgOiy1hJZxAHo1GfPmv9x1DmDjkI/8Qn0Ky
+         3YpY8P1/2hUo4yWGX1C6+Fnb2EFudCFEdAmkaGXjtG+GLyZYW7+XqHfEmh5fcX62DciW
+         X4+1fS5z5Xwt5Pd6kOP7b1iQ7Ioszlq6kI3NaU7f69dsmP4PClIq4WqrjRkFxfiLPL8j
+         y8aQ==
+X-Gm-Message-State: AOAM531k32X4MzOvF9vTSlQtNjoVJhYVsIottj/KmXriEBirQ9o5JHdD
+        JOegGg0Xqx2e7MsmgszkYzk5X5ucTJ90qA==
+X-Google-Smtp-Source: ABdhPJzrWiStOdmsdk08vQ4QBgijXe2pf3Klfh4i3OMjwjEfkXmVL1Qg4yy4WPgW+fTOJgeJurlAPw==
+X-Received: by 2002:a5d:6485:0:b0:204:1643:ad45 with SMTP id o5-20020a5d6485000000b002041643ad45mr14692645wri.450.1649420816188;
+        Fri, 08 Apr 2022 05:26:56 -0700 (PDT)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id a11-20020a056000188b00b00204109f7826sm22266722wri.28.2022.04.08.05.26.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 05:26:55 -0700 (PDT)
+References: <20220408091037.2041955-1-maxime@cerno.tech>
+ <20220408091037.2041955-23-maxime@cerno.tech>
+ <1jwnfzlxx1.fsf@starbuckisacylon.baylibre.com>
+ <20220408104127.ilmcntbhvktr2fbh@houat>
+User-agent: mu4e 1.6.10; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+Subject: Re: [PATCH 22/22] clk: Prevent a clock without a rate to register
+Date:   Fri, 08 Apr 2022 13:24:59 +0200
+In-reply-to: <20220408104127.ilmcntbhvktr2fbh@houat>
+Message-ID: <1jpmlrlq0h.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9136091b-79cc-46c2-915e-08da1956aa83
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6978:EE_
-X-Microsoft-Antispam-PRVS: <AM0PR04MB6978E62DFEE5014C097CEF46F6E99@AM0PR04MB6978.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: b3H9UXRDunl7e+r+5C0BAuVkwuX8/x3FeMVcfLLJc22NdNVZc68ubummyAEdDuzh91ss2vBqGdTubO4ls+k4M2Vpz2SsCirjfsQa/3MLs4SDkprD13OBFNfudS6VYDj5Q4m4qLPNJEI1bOA4/0kqD8UoK8wIiLedtUZ3jykkjNCAoO5rRZ6XqFX3SmOkrts9o3VNjsWauzt9DJTadCQkPRXfVYht4SXETLvNfncd7So5ypQgk81Bkb5TOU4d/Tzc/zA1tWXz2AI1isXvFtmuI5E1YBz4xjD5akjm9uA95FNG4XI1tHkM/86CGsACBRaFFcGDPAkgXU4kx1j3pR/PMHjnM9x8rqEF8I6+QtW2nhZtBY205/sRuoW56Pk8cF7LmRI+tKopTOC7c7G3IFkkAPXlpCE0tiPei7FgpaI1r2ZHq2IPjy+xEVXTm/PWDo4ovb8eUMQu8ajco3KnKVxt2lVOLf1moXLXXan6y0SkvU0yP8Wpd08x/rWwMerRnERqG+9jnKfC9usRq7uAPXRehrQm6QLq4tV8G7MrzLiikoPdNT82bYJ6/HmqHAoWH5QMf3jS1RgvVVNMdOu4sviokA3ykCxHEag1TqXPOJHAO9go0hDF6VMFYbiuU+cR4PTFojja2Xj5U4ZOb0yJPGVKmZWopKGlw5AsO0cAHocKM2Nw2I90DJT+LUBntV/s9vG36ETG4Qjn1hBTeMbRa9e1FNRu1YiJmCEmyHKory59m/KtDhxPeLlrbNq0y1oxB6Kx
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(38350700002)(8676002)(4326008)(66946007)(52116002)(2906002)(9686003)(38100700002)(66556008)(66476007)(508600001)(316002)(6486002)(6512007)(6916009)(186003)(26005)(83380400001)(6506007)(86362001)(53546011)(7416002)(5660300002)(8936002)(44832011)(33716001)(48020200002)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7S0TR5d7Xj3Y77eo6tclzF29XZlb5iP7kQUjAV3O4Yz7LaLNFTvotf8qTmj5?=
- =?us-ascii?Q?y2FL7o6L8s0tMWSMVSVhAlF65vaH2ZnBy6yJ0K5uFX9rK1KssWuYQdGGcVoL?=
- =?us-ascii?Q?PIBuNV6oo2pm0Oo3jU5jUBD5Trfm5j4qTitdU52c5DBOZAuFPYPISxBK/9Ue?=
- =?us-ascii?Q?4d5LV+/GOFbac2SED/0tk36gHT6OzUxyRqoZcuylJJ4pJfQe7QF28HfvXumf?=
- =?us-ascii?Q?LndNz21EpudWH/nes8upZOCko4DHWt6F4LPm6tj3orX8TDYAORueb9+vq28E?=
- =?us-ascii?Q?JWnNwrHzNZgm6a6mEflqJAsh4XfHMNBsdLh4UPWb0c/im3lGge2vYdCWS2QA?=
- =?us-ascii?Q?lvYsf1603HodFkpjMJjxBIdS9a44SIur4dbq7grej8qS9cPCd5KIQIcXt+j6?=
- =?us-ascii?Q?0aHITs0FcRklC0+QuNjWbIUahiPp+aKZ3FlxiswhIEMARHcgFv5CHAjF+tyT?=
- =?us-ascii?Q?mbDoZIncEyDwASgD6zTDQK7FejM/a1YExaL97hJ8urc74P9NZ1+6V45osq0c?=
- =?us-ascii?Q?2DlYUCFqNSEVj3ZH6nx1diHw4RKs2UQtwN71wrWdfL70Fwx2pLk97J5GhQHb?=
- =?us-ascii?Q?PCVrk3tlHt+/8bzcAlV4LzFcGLCkM2Kd2LbO8zzv6tLBIjwr3xnB5q0o9rHD?=
- =?us-ascii?Q?CqjJ71dLizuJn+9e+d8VvmYqrPke5UTl7eWPKdwTmHmKYKKku0vgmRr/fe9l?=
- =?us-ascii?Q?T0qtLJ2pCDeqZKYBLS6xcqLuwrHRRXaiwVxLI1qonoDQM4CdcR0JA3o3GuMP?=
- =?us-ascii?Q?fhbsxwRaM2rXxbwsQZmRRNEIJFYLyFkAzaFSSPM3SofMkMJ4YVOrDxh/7RYz?=
- =?us-ascii?Q?HB8H1dX8x7icZw+QuICplVdKsv9VqZEXOxuZMy/iq83sUF1aCs2OFtAmBzOe?=
- =?us-ascii?Q?qRevAWk8/poOTO3wnhRSfWBBH/hMikgzfxiyhG27mGQCg5Fj8XvKS6DANQsf?=
- =?us-ascii?Q?wopLlWe+HF3S1TIZ8EElpq9DKSHwoIbzw2YKkj4Hh/RZG9DCUJnozdxWc+9l?=
- =?us-ascii?Q?GkwCVIrQeRsKfBrf5AkgxZ5C8mP/tuXGYAUpkjHbOjabW6XB4ciZQ0wLz4dA?=
- =?us-ascii?Q?shl13r0c4yzsR7pglXpSAr3KuItaa8IUiUuo1dEIJZWXWTKf05ryOtXO8T3G?=
- =?us-ascii?Q?oCiCfOClTUf9Jeve13WK9Lm6eROTnCihPMMTuhjFKnJhqX1FmqtXsb/9Mkzd?=
- =?us-ascii?Q?mIrz2IUkRPzSXV5WUK3ZEL5k3HoZGQpfmgmLIKCpSJHBQ7WKUhAPT2fVoxOh?=
- =?us-ascii?Q?YoGGz7di5rmtmfyRBL+sBNVe3cWKMgq5nLpCSmyCKeS58EoZ9kD6qU3Zz0mZ?=
- =?us-ascii?Q?ujmKXkkDhXbVlYLHsPc6p+ThoQD+zfDiZtYt8FgAJPkT77ufFFddUzCODwQJ?=
- =?us-ascii?Q?hLJQOJfvoWwBEXDBUSRJHKdZXIS+CMPsbnzSf8jRGprsdNKTLpcCqc6dBEyK?=
- =?us-ascii?Q?rKa9x/NKUzyte526I0n8Xb9nObDoB9MWy5FfGN29+3bhe8p2wha+WGiqtv88?=
- =?us-ascii?Q?X31MXyGX+rAJ3i3VDJ6j6uI+dqT9yRl27iTjdViRLgB8x+RyU0vbfQ06K+f+?=
- =?us-ascii?Q?q8p1BqM7WEMhKn6R+sfz0SXxVGAJx1p03oh68f1/yqAypsrPT1Fk1F6qbpci?=
- =?us-ascii?Q?GrAYuAptSmzrMtbF1f5hMUJ56D6F1dYJuS/NXW1MEpAICK7yoP6z3OHzNkHG?=
- =?us-ascii?Q?Vow1VC2xnjK3mR3vw0wNOaLcDzuveeH4FEyfsHvqV+SsQCMN51Q4P+Qt/dV+?=
- =?us-ascii?Q?6b7Yw9W3MQ=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9136091b-79cc-46c2-915e-08da1956aa83
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2022 11:55:24.6539
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oSKirM5zzgjQsUjXx3w13JqnwLaixciXOMfckd/4/EFn5I6+yl+beZ2TO6UQh1k2dnR/yJEFUTCpRJrhcijGDg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6978
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 22-04-07 15:37:22, xkernel.wang@foxmail.com wrote:
-> From: Xiaoke Wang <xkernel.wang@foxmail.com>
->
-> In __imx_clk_gpr_scu(), if imx_scu_clk_is_valid(rsrc_id) fails, then
-> `clk_node` which is allocated by kzalloc() is not properly released,
-> which may lead to memory leak.
-> So this patch added kfree(clk_node) on the above error path before
-> return ERR_PTR(-EINVAL).
->
-> Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
+On Fri 08 Apr 2022 at 12:41, Maxime Ripard <maxime@cerno.tech> wrote:
 
-> ---
->  drivers/clk/imx/clk-scu.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> [[PGP Signed Part:Undecided]]
+> On Fri, Apr 08, 2022 at 11:18:58AM +0200, Jerome Brunet wrote:
+>> On Fri 08 Apr 2022 at 11:10, Maxime Ripard <maxime@cerno.tech> wrote:
+>> > A rate of 0 for a clock is considered an error, as evidenced by the
+>> > documentation of clk_get_rate() and the code of clk_get_rate() and
+>> > clk_core_get_rate_nolock().
+>> >
+>> > The main source of that error is if the clock is supposed to have a
+>> > parent but is orphan at the moment of the call. This is likely to be
+>> > transient and solved later in the life of the system as more clocks are
+>> > registered.
+>> >
+>> > The corollary is thus that if a clock is not an orphan, has a parent that
+>> > has a rate (so is not an orphan itself either) but returns a rate of 0,
+>> > something is wrong in the driver. Let's return an error in such a case.
+>> >
+>> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>> > ---
+>> >  drivers/clk/clk.c | 10 ++++++++++
+>> >  1 file changed, 10 insertions(+)
+>> >
+>> > diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+>> > index 8bbb6adeeead..e8c55678da85 100644
+>> > --- a/drivers/clk/clk.c
+>> > +++ b/drivers/clk/clk.c
+>> > @@ -3773,6 +3773,16 @@ static int __clk_core_init(struct clk_core *core)
+>> >  		rate = 0;
+>> >  	core->rate = core->req_rate = rate;
+>> >  
+>> > +	/*
+>> > +	 * If we're not an orphan clock and our parent has a rate, then
+>> > +	 * if our rate is 0, something is badly broken in recalc_rate.
+>> > +	 */
+>> > +	if (!core->orphan && (parent && parent->rate) && !core->rate) {
+>> > +		ret = -EINVAL;
+>> > +		pr_warn("%s: recalc_rate returned a null rate\n", core->name);
+>> > +		goto out;
+>> > +	}
+>> > +
+>> 
+>> As hinted in the cover letter, I don't really agree with that.
+>> 
+>> There are situations where we can't compute the rate. Getting invalid
+>> value in the register is one reason.
+>> 
+>> You mentioned the PLLs of the Amlogic SoCs (it is not limited to g12 - all
+>> SoCs would be affected):
+>> 
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/clk/meson/clk-pll.c#n82
+>> Yes, PLL that have not been previously used (by the ROMCode or the
+>> bootloader) tend to have the value of the divider set to 0 which in
+>> invalid as it would result in a division by zero.
+>> 
+>> I don't think this is a bug. It is just what the HW is, an unlocked,
+>> uninitialized PLL. There is no problem here and the PLL can remain like
+>> that until it is needed.
 >
-> diff --git a/drivers/clk/imx/clk-scu.c b/drivers/clk/imx/clk-scu.c
-> index 083da31..ed3c01d 100644
-> --- a/drivers/clk/imx/clk-scu.c
-> +++ b/drivers/clk/imx/clk-scu.c
-> @@ -837,8 +837,10 @@ struct clk_hw *__imx_clk_gpr_scu(const char *name, const char * const *parent_na
->  	if (!clk_node)
->  		return ERR_PTR(-ENOMEM);
+> I think the larger issue is around the semantics of clk_get_rate(), and
+> especially whether we can call it without a clk_enable(), and whether
+> returning 0 is fine.
 >
-> -	if (!imx_scu_clk_is_valid(rsrc_id))
-> +	if (!imx_scu_clk_is_valid(rsrc_id)) {
-> +		kfree(clk_node);
->  		return ERR_PTR(-EINVAL);
-> +	}
+> The (clk.h) documentation of clk_get_rate() mentions that "This is only
+> valid once the clock source has been enabled", and it's fairly
+> ambiguous. I can see how it could be interpreted as "you need to call
+> clk_enable() before calling clk_get_rate()", but it can also be
+> interpreted as "The returned rate will only be valid once clk_enable()
+> is called".
 >
->  	clk = kzalloc(sizeof(*clk), GFP_KERNEL);
->  	if (!clk) {
-> --
+> I think the latter is the proper interpretation though based on what the
+> drivers are doing, and even the CCF itself will call recalc_rate without
+> making sure that the clock is enabled (in __clk_core_init() for example).
+>
+> Then there is the question of whether returning 0 is fine. Again
+> clk_get_rate() (clk.c) documentation states that "If clk is NULL then
+> returns 0.". This is indeed returned in case of an error condition (in
+> clk_get_rate() itself, but also in clk_core_get_rate_nolock()).
+>
+> All the drivers I could find either assume the rate is valid, or test
+> whether it's 0 or not (randomly picked, but across completely different
+> platforms):
+> https://elixir.bootlin.com/linux/latest/source/drivers/clocksource/armv7m_systick.c#L50
+> https://elixir.bootlin.com/linux/latest/source/drivers/cpufreq/armada-8k-cpufreq.c#L74
+> https://elixir.bootlin.com/linux/latest/source/sound/soc/sti/uniperif_player.c#L194
+> https://elixir.bootlin.com/linux/latest/source/sound/soc/tegra/tegra20_i2s.c#L278
+>
+> So my understanding is that the consensus is that clk_get_rate() can be
+> called even if the clock hasn't been enabled, and that returning 0 is
+> only meant to be used for errors in general, a NULL pointer according to
+> the documentation.
+>
+> That would mean that pcie_pll_dco is buggy because it assumes that
+> clk_enable()
+
+This one indeed does everything in the enable and I could agree it is
+fishy, but since it supports only a single rate I don't think it is a
+problem. Even if it had a proper set_rate(), it would not change your
+problem since it would still return 0 until some consumer actually needs
+its parameter to change.
+
+> is going to be called before clk_get_rate(), gp0_pll_dco
+> and hifi_pll_dco because they expect "someone" to call clk_set_rate()
+> before clk_get_rate(),
+
+No, they don't expect anything. They will return 0 until they are set
+with a an actual rate. I don't think returning 0 should be
+problem and it has not been so far.
+
+I understand the ambiguity you mentioned above. If the framework decides
+it is clearly forbidden to return 0, we'll change.
+
+Still I don't think it would be wise. What are the alternative if you
+can't compute a rate ? return 1 ? This looks aweful to me. At least 0 is
+a clear indication that the clock is not in a working state.
+
+> and hdmi_pll_dco because it will always return 0,
+
+It is a read-only clock - whatever we do in CCF, it is not going to
+change. CCF has always supported RO clocks.
+
+> unless the display driver comes around and updates it. If it never does,
+> or if it's not compiled in, then you're out of luck.
+
+I'm all for managing the display clocks from CCF but it has proved tricky
+so far. Maybe it will someday.
+
+Being a read-only clock, the value is what it is and CCF should
+deal with it gracefully. It has so far.
+
+If the driver actually managing the clock is not compiled in, then the
+clock will never be set, and it should not be a problem either.
+
+>
+>> IMO, whenever possible we should not put default values in the clocks
+>> which is why I chose to leave it like that.
+>>
+>> The PLL being unlocked, it has no rate. It is not set to have any rate.
+>> IMO a returning a rate of 0 is valid here.
+>
+> If there's not a sensible default in the hardware already, I don't see
+> what the big issue is to be honest. You already kind of do that for all
+> the other PLL parameters with init_regs
+
+Those initial parameters are "magic" analog setting which don't have an
+impact on the rate setting. The initial rate of the clock is never set
+by the clock driver on purpose.
+
+> , and most drivers do that for
+> various stuff:
+> https://elixir.bootlin.com/linux/latest/source/drivers/clk/imx/clk-imx6q.c#L917
+> https://elixir.bootlin.com/linux/latest/source/drivers/clk/nxp/clk-lpc32xx.c#L1550
+> https://elixir.bootlin.com/linux/latest/source/drivers/clk/rockchip/clk-rk3036.c#L448
+> https://elixir.bootlin.com/linux/latest/source/drivers/clk/sunxi-ng/ccu-sun8i-h3.c#L1157
+> https://elixir.bootlin.com/linux/latest/source/drivers/clk/tegra/clk-tegra20.c#L1013
+
+It is done by other drivers or controllers, yes. It does not make it
+right (again, it is just my opinion). Rate should never be set by the
+clock driver or the clock controller - Those should just implement what
+consumer wants. I would agree it sometimes proves tricky to hold onto
+this.
+
+Taking one of the example above:
+https://elixir.bootlin.com/linux/latest/source/drivers/clk/nxp/clk-lpc32xx.c#L1550
+
+I think it would be better to have an "assigned-clock" on the related
+PLL in the USB node of the platform DT. That way the PLL is set when
+needed.
+
+If we go down the road of "others are doing it, so why not ?", I think Marek
+initial regression report mentioned Exynos too ;) 
+
+>
+> If the driver needs that kind of quirks in order to make the clock
+> usable in itself, then it just makes sense to do that, especially if
+> it's to avoid breaking a generic API.
+
+As it is the clock are usable and it did not break anything so far.
+
+I have no problem updating the drivers if need be. I do have a problem
+with the framework changing and requiring the clock driver to set an
+initial rate to make it happy.
+
+>
+> Maxime
+>
+> [[End of PGP Signed Part]]
+
