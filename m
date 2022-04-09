@@ -2,79 +2,50 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75344FA6E2
-	for <lists+linux-clk@lfdr.de>; Sat,  9 Apr 2022 12:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8F74FA83B
+	for <lists+linux-clk@lfdr.de>; Sat,  9 Apr 2022 15:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241432AbiDIKu3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 9 Apr 2022 06:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
+        id S241959AbiDINZu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 9 Apr 2022 09:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241426AbiDIKu2 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 9 Apr 2022 06:50:28 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F10722BC0
-        for <linux-clk@vger.kernel.org>; Sat,  9 Apr 2022 03:48:21 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id lc2so1255432ejb.12
-        for <linux-clk@vger.kernel.org>; Sat, 09 Apr 2022 03:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=zurZzrPnoV4r9DOy+KZk14qxFnOBvVLhR9qywD2QyTw=;
-        b=odUO6U5irUD1TkbGAOs9IgaVtCu9ZJQSdzKAbAtU03h2pKET2StPIxNP0ccPnw6ryi
-         7L7QpO3e2/HsMEJWXV0X9STvzCCGfy2/Z4+Dw9Ug89GBEHB+W6wSaFFDmkF0Z+OrdzDQ
-         oqRCfKhYtQOMKBEQ/EHifuKnX7bKjrllz/fIYy1Xvsi4F/Z+aqZj864bj8pXz1fWKf7e
-         0sDo0lmj0IjbinYYlxcY1qNS5L8++7zZnS/J7TtRaTzf0rg/mWPfEAiObNqJAAHVl6wb
-         Vgr+tqTCLMgh0oC3kuozx6TgQ5GQ2qNEvLfD1anUDzs+G7yqwhKZYaxxOUmwHFXm9Any
-         Cv4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=zurZzrPnoV4r9DOy+KZk14qxFnOBvVLhR9qywD2QyTw=;
-        b=vfkbtS5FKlYJ5eJBcIvSt0XJWTxLRPi8mG/rUzY+FpAItzny8GIYbslQSBmlnwrLZj
-         ZuAQxtU5xlDpj8aoIHXNFYHmWJcZUwR8vx1arWV5MQtuqsFHLYOvxSI/TE14KFma9mEy
-         5bOnX24sqOYi0Hkilz+7Qm+5lmFrrsu7hKl7m6jpcNKb2zNLo4A6JQIBpdo94mwNL2dp
-         pOZH8rXhUmMhcBojv49+WOOF6FcRfOjNMe9imbzWrgmgYhArE6FigYsJnlwM6Oc0bOlg
-         FuHmbDlaFuAqXttzjoQMHurC3rfjOIJXAY0A10xDT1qByf5mQovjItoz/UY+wXSeJ/zD
-         T1zA==
-X-Gm-Message-State: AOAM532OX1cBOMwqW6k4hJ32fi98uqQ52kIQYHUf3Zl6fOc/BvgpDPw0
-        9t75HEtYBQ4A+53SEbRPXvj1fg==
-X-Google-Smtp-Source: ABdhPJw9pBeXg2SGuQ2eXUyY6HU7X577pbo9P5dDrtLudpd5GXm2ecpBgXeFvECzMwpI0j1dbrfsyA==
-X-Received: by 2002:a17:907:1b27:b0:6d9:ceb6:7967 with SMTP id mp39-20020a1709071b2700b006d9ceb67967mr23101859ejc.186.1649501299954;
-        Sat, 09 Apr 2022 03:48:19 -0700 (PDT)
-Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id jv20-20020a170907769400b006e7f859e683sm6045929ejc.19.2022.04.09.03.48.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Apr 2022 03:48:19 -0700 (PDT)
-Message-ID: <7e6a0489-f90f-a362-e37b-b219fe2d71fe@linaro.org>
-Date:   Sat, 9 Apr 2022 12:48:18 +0200
+        with ESMTP id S241968AbiDINZt (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 9 Apr 2022 09:25:49 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7149D078;
+        Sat,  9 Apr 2022 06:23:32 -0700 (PDT)
+X-UUID: f57a0faa8a5c41b38589fcd6fe44a310-20220409
+X-UUID: f57a0faa8a5c41b38589fcd6fe44a310-20220409
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <chun-jie.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1229948373; Sat, 09 Apr 2022 21:23:27 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Sat, 9 Apr 2022 21:23:26 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 9 Apr 2022 21:23:25 +0800
+From:   Chun-Jie Chen <chun-jie.chen@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v5 00/15] MediaTek MT8186 clock support
+Date:   Sat, 9 Apr 2022 21:22:36 +0800
+Message-ID: <20220409132251.31725-1-chun-jie.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v1 0/7] Add rtc refclk support for PolarFire SoC
-Content-Language: en-US
-To:     Conor Dooley <mail@conchuod.ie>,
-        Conor Dooley <conor.dooley@microchip.com>, sboyd@kernel.org,
-        aou@eecs.berkeley.edu, paul.walmsley@sifive.com,
-        palmer@rivosinc.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
-        krzk+dt@kernel.org, mturquette@baylibre.com
-Cc:     daire.mcnamara@microchip.com, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-References: <20220408143646.3693104-1-conor.dooley@microchip.com>
- <1fa15b36-7a84-e0ac-2c56-d6a2bec566ff@linaro.org>
- <cc11d576-3670-ff0a-e0a1-e92780a04c2a@conchuod.ie>
- <98026c4a-a065-3965-27f0-71de29cdb264@conchuod.ie>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <98026c4a-a065-3965-27f0-71de29cdb264@conchuod.ie>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,55 +53,83 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 09/04/2022 09:14, Conor Dooley wrote:
-> 
-> 
-> On 08/04/2022 16:29, Conor Dooley wrote:
->>
->>
->> On 08/04/2022 15:57, Krzysztof Kozlowski wrote:
->>> On 08/04/2022 16:36, Conor Dooley wrote:
->>>> Hey,
->>>> As I mentioned in my fixes for 5.18 [0], found out that the reference
->>>> clock for the rtc is actually missing from the clock driver (and the
->>>> dt binding).
->>>>
->>>> Currently the mpfs clock driver uses a reference clock called the
->>>> "msspll", set in the device tree, as the parent for the cpu/axi/ahb
->>>> (config) clocks. The frequency of the msspll is determined by the FPGA
->>>> bitstream & the bootloader configures the clock to match the bitstream.
->>>> The real reference is provided by a 100 or 125 MHz off chip oscillator.
->>>>
->>>> However, the msspll clock is not actually the parent of all clocks on
->>>> the system - the reference clock for the rtc/mtimer actually has the
->>>> off chip oscillator as its parent.
->>>>
->>>> This series enables reading the rate of the msspll clock, converts
->>>> the refclock in the device tree to the external reference & adds
->>>> the missing rtc reference clock.
->>>>
->>>> I assume it is okay not to add fixes tags for the rtc dt binding?
->>>> Since the clock was previously missing, the binding is wrong, but
->>>> idk if that qualifies as a fix?
->>>
->>> Usually ABI breakage, even if accepted, should be be tagged as fix
->>> because it is clearly then a break of other peoples' trees...
->>>
->>
->> That means either a) do something messy in the clock driver or b) mark
->> the whole series as fixes (and roll it into [0]).
->>
->> The second option seems far more sensible to me, do you agree?
-> 
-> Having thought some more about it, patches 2, 3 and the rtc part of 7
-> should be moved into [0] since they're fixing a binding that only
-> arrived in 5.18-rc1.
-> For the rest, make the second part of the reg optional and if it doesnt
-> exist just return prate for the msspll clock?
+this patch series is based on v5.18-rc1.
 
-Ah, so this got into v5.18-rc1? I think I missed that information from
-the patches description and focused on backporting to stables. Then
-indeed you could combine all fixes together, mark them with Fixes.
+changes since v4:
+- change "Acked-by" to "Reviewed-by"
+- rebase to 5.18-rc1
 
-Best regards,
-Krzysztof
+changes since v3:
+- re-order linux and internal driver header
+- remove redundant lock in mcusys muxes
+- add more description for mcusys clock driver
+
+changes since v2:
+- add '|' to preserve the formatting in binding document
+- change 'Mediatek'to 'MediaTek'
+
+changes since v1:
+- combine dt-binding documents as a single patch
+- remove redundant example in binding document
+- change to dual license in binding document
+- add more clock error handle based on interface provided in [1]
+[1]https://patchwork.kernel.org/project/linux-mediatek/list/?series=612171
+
+Chun-Jie Chen (15):
+  dt-bindings: ARM: MediaTek: Add new document bindings of MT8186 clock
+  clk: mediatek: Add MT8186 mcusys clock support
+  clk: mediatek: Add MT8186 topckgen clock support
+  clk: mediatek: Add MT8186 infrastructure clock support
+  clk: mediatek: Add MT8186 apmixedsys clock support
+  clk: mediatek: Add MT8186 imp i2c wrapper clock support
+  clk: mediatek: Add MT8186 mfgsys clock support
+  clk: mediatek: Add MT8186 mmsys clock support
+  clk: mediatek: Add MT8186 wpesys clock support
+  clk: mediatek: Add MT8186 imgsys clock support
+  clk: mediatek: Add MT8186 vdecsys clock support
+  clk: mediatek: Add MT8186 vencsys clock support
+  clk: mediatek: Add MT8186 camsys clock support
+  clk: mediatek: Add MT8186 mdpsys clock support
+  clk: mediatek: Add MT8186 ipesys clock support
+
+ .../arm/mediatek/mediatek,mt8186-clock.yaml   |  56 ++
+ .../mediatek/mediatek,mt8186-sys-clock.yaml   |  54 ++
+ drivers/clk/mediatek/Kconfig                  |   8 +
+ drivers/clk/mediatek/Makefile                 |   5 +
+ drivers/clk/mediatek/clk-mt8186-apmixedsys.c  | 133 +++
+ drivers/clk/mediatek/clk-mt8186-cam.c         |  90 ++
+ drivers/clk/mediatek/clk-mt8186-img.c         |  68 ++
+ .../clk/mediatek/clk-mt8186-imp_iic_wrap.c    |  67 ++
+ drivers/clk/mediatek/clk-mt8186-infra_ao.c    | 216 +++++
+ drivers/clk/mediatek/clk-mt8186-ipe.c         |  55 ++
+ drivers/clk/mediatek/clk-mt8186-mcu.c         | 108 +++
+ drivers/clk/mediatek/clk-mt8186-mdp.c         |  80 ++
+ drivers/clk/mediatek/clk-mt8186-mfg.c         |  48 ++
+ drivers/clk/mediatek/clk-mt8186-mm.c          | 111 +++
+ drivers/clk/mediatek/clk-mt8186-topckgen.c    | 780 ++++++++++++++++++
+ drivers/clk/mediatek/clk-mt8186-vdec.c        |  88 ++
+ drivers/clk/mediatek/clk-mt8186-venc.c        |  51 ++
+ drivers/clk/mediatek/clk-mt8186-wpe.c         |  51 ++
+ include/dt-bindings/clock/mt8186-clk.h        | 445 ++++++++++
+ 19 files changed, 2514 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-clock.yaml
+ create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt8186-sys-clock.yaml
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-apmixedsys.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-cam.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-img.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-imp_iic_wrap.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-infra_ao.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-ipe.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-mcu.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-mdp.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-mfg.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-mm.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-topckgen.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-vdec.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-venc.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8186-wpe.c
+ create mode 100644 include/dt-bindings/clock/mt8186-clk.h
+
+-- 
+2.18.0
+
