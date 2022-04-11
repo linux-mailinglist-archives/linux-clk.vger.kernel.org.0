@@ -2,41 +2,57 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BCD4FB43B
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Apr 2022 08:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B950C4FB4B6
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Apr 2022 09:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245154AbiDKG7x (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 Apr 2022 02:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S245375AbiDKH1i (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 Apr 2022 03:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245186AbiDKG7u (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Apr 2022 02:59:50 -0400
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBAA92C137
-        for <linux-clk@vger.kernel.org>; Sun, 10 Apr 2022 23:57:28 -0700 (PDT)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 172.28.114.216
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(1173:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Mon, 11 Apr 2022 14:49:06 +0800 (CST)
-From:   Qin Jian <qinjian@cqplus1.com>
-To:     krzysztof.kozlowski@linaro.org
-Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, p.zabel@pengutronix.de,
-        linux@armlinux.org.uk, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Qin Jian <qinjian@cqplus1.com>
-Subject: [PATCH v13 9/9] ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
-Date:   Mon, 11 Apr 2022 14:49:59 +0800
-Message-Id: <c313ad71ec68b93811369287c596385d99628815.1649659095.git.qinjian@cqplus1.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1649659095.git.qinjian@cqplus1.com>
-References: <cover.1649659095.git.qinjian@cqplus1.com>
+        with ESMTP id S245366AbiDKH1P (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Apr 2022 03:27:15 -0400
+Received: from mxd2.seznam.cz (mxd2.seznam.cz [IPv6:2a02:598:2::210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC8E39BBB;
+        Mon, 11 Apr 2022 00:24:52 -0700 (PDT)
+Received: from email.seznam.cz
+        by email-smtpc7a.ng.seznam.cz (email-smtpc7a.ng.seznam.cz [10.23.10.195])
+        id 0d4e80be5640d4d70ce74ce0;
+        Mon, 11 Apr 2022 09:24:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
+        t=1649661869; bh=B8UfqYhtDAANtycvzPyjICoFKFyGu9U+8xDMD/CjZMg=;
+        h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+         Content-Transfer-Encoding:X-szn-frgn:X-szn-frgc;
+        b=EuPGSr/E4vPmBSfC5K44HZvO4mod0eCfPeIrHiSU5oLF6M4oI9rksmg9rPw8tRhJ0
+         UPEs2gtLIcZqbTj6PFiXcaqRXKR3dGP89k01qUAR7dAqZ3eIPMU5+gD8RyzVVD5jwJ
+         o23CtccflugTbGUEh2dbjL7EFxFcXJkfiMfOBfY0=
+Received: from localhost.localdomain (ip-111-27.static.ccinternet.cz [147.161.27.111])
+        by email-relay18.ng.seznam.cz (Seznam SMTPD 1.3.136) with ESMTP;
+        Mon, 11 Apr 2022 09:24:22 +0200 (CEST)  
+From:   michael.srba@seznam.cz
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, Michael Srba <Michael.Srba@seznam.cz>
+Subject: [RESEND v9 0/5] enable use of resources on the SSC bus on (some) qcom SoCs
+Date:   Mon, 11 Apr 2022 09:21:51 +0200
+Message-Id: <20220411072156.24451-1-michael.srba@seznam.cz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-szn-frgn: <6611fa77-a821-48c8-bb11-57a3bfa1e278>
+X-szn-frgc: <0>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,108 +60,47 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add generic Sunplus SP7021 based board defconfig
+From: Michael Srba <Michael.Srba@seznam.cz>
 
-Signed-off-by: Qin Jian <qinjian@cqplus1.com>
----
-Move CONFIG_HAVE_ARM_ARCH_TIMER from defconfig to platform Kconfig.
-Remove unused CONFIG_STAGING.
----
- MAINTAINERS                         |  1 +
- arch/arm/configs/multi_v7_defconfig |  1 +
- arch/arm/configs/sp7021_defconfig   | 59 +++++++++++++++++++++++++++++
- 3 files changed, 61 insertions(+)
- create mode 100644 arch/arm/configs/sp7021_defconfig
+NOTE: previous versions of this series didn't use a cover letter,
+it's added in this resend in order to not upset the kernel bot.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 38890c055..93f4de6c1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2747,6 +2747,7 @@ F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
- F:	Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
- F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
-+F:	arch/arm/configs/sp7021_*defconfig
- F:	arch/arm/mach-sunplus/
- F:	drivers/clk/clk-sp7021.c
- F:	drivers/irqchip/irq-sp7021-intc.c
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 8863fa969..a3bd9dbd8 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -86,6 +86,7 @@ CONFIG_MACH_SPEAR1310=y
- CONFIG_MACH_SPEAR1340=y
- CONFIG_ARCH_STI=y
- CONFIG_ARCH_STM32=y
-+CONFIG_ARCH_SUNPLUS=y
- CONFIG_ARCH_SUNXI=y
- CONFIG_ARCH_TEGRA=y
- CONFIG_ARCH_UNIPHIER=y
-diff --git a/arch/arm/configs/sp7021_defconfig b/arch/arm/configs/sp7021_defconfig
-new file mode 100644
-index 000000000..703b9aaa4
---- /dev/null
-+++ b/arch/arm/configs/sp7021_defconfig
-@@ -0,0 +1,59 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_PREEMPT=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=14
-+# CONFIG_RD_GZIP is not set
-+# CONFIG_RD_BZIP2 is not set
-+# CONFIG_RD_LZMA is not set
-+# CONFIG_RD_XZ is not set
-+# CONFIG_RD_LZO is not set
-+# CONFIG_RD_LZ4 is not set
-+CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-+CONFIG_PERF_EVENTS=y
-+CONFIG_SLAB=y
-+CONFIG_ARCH_SUNPLUS=y
-+# CONFIG_VDSO is not set
-+CONFIG_SMP=y
-+CONFIG_THUMB2_KERNEL=y
-+CONFIG_FORCE_MAX_ZONEORDER=12
-+CONFIG_VFP=y
-+CONFIG_NEON=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_MODVERSIONS=y
-+# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-+CONFIG_UEVENT_HELPER=y
-+CONFIG_UEVENT_HELPER_PATH="/sbin/hotplug"
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_INPUT_SPARSEKMAP=y
-+CONFIG_INPUT_EVDEV=y
-+# CONFIG_INPUT_KEYBOARD is not set
-+# CONFIG_INPUT_MOUSE is not set
-+# CONFIG_LEGACY_PTYS is not set
-+# CONFIG_HW_RANDOM is not set
-+# CONFIG_HWMON is not set
-+# CONFIG_IOMMU_SUPPORT is not set
-+CONFIG_RESET_CONTROLLER=y
-+CONFIG_EXT4_FS=y
-+# CONFIG_DNOTIFY is not set
-+CONFIG_FANOTIFY=y
-+CONFIG_VFAT_FS=y
-+CONFIG_FAT_DEFAULT_IOCHARSET="utf8"
-+CONFIG_EXFAT_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+# CONFIG_MISC_FILESYSTEMS is not set
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_NLS_ASCII=y
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_NLS_UTF8=y
-+CONFIG_PRINTK_TIME=y
-+CONFIG_DYNAMIC_DEBUG=y
-+CONFIG_MAGIC_SYSRQ=y
-+CONFIG_DEBUG_FS=y
-+CONFIG_DEBUG_USER=y
+This series adds necessary changes for accessing recources in the SSC block
+on msm8998 (though it should be possible to extend this to support other
+SoCs).
+
+In order to make use of these changes, Linux (HLOS in qcom's terms) needs
+to be allowed to access the relevant address ranges by the SMMU
+configuration.
+
+For a simple way to modify an existing (closed source) qcom hypervisor
+image to change the static SMMU configuration, see [1].
+
+If you lack ownership of your device, it should alternatively be possible
+to change the SMMU configuration at a later point, provided you manage to
+get code execution in the hypervisor by way of an exploit.
+
+[1] https://michael-srba.cz/mainline4life/msm8998_hypervisor_patch.html
+
+Michael Srba (5):
+  dt-bindings: clock: gcc-msm8998: Add definitions of SSC-related clocks
+  clk: qcom: gcc-msm8998: add SSC-related clocks
+  dt-bindings: bus: add device tree bindings for qcom,ssc-block-bus
+  drivers: bus: add driver for initializing the SSC bus on (some) qcom
+    SoCs
+  arm64: dts: qcom: msm8998: reserve potentially inaccessible clocks
+
+ .../bindings/bus/qcom,ssc-block-bus.yaml      | 147 +++++++
+ arch/arm64/boot/dts/qcom/msm8998.dtsi         |  15 +
+ drivers/bus/Kconfig                           |  11 +
+ drivers/bus/Makefile                          |   1 +
+ drivers/bus/qcom-ssc-block-bus.c              | 391 ++++++++++++++++++
+ drivers/clk/qcom/gcc-msm8998.c                |  56 +++
+ include/dt-bindings/clock/qcom,gcc-msm8998.h  |   4 +
+ 7 files changed, 625 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/bus/qcom,ssc-block-bus.yaml
+ create mode 100644 drivers/bus/qcom-ssc-block-bus.c
+
 -- 
-2.33.1
+2.35.1
 
