@@ -2,118 +2,105 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D894FB4A8
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Apr 2022 09:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307544FB49C
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Apr 2022 09:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244948AbiDKH1h (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 Apr 2022 03:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
+        id S245347AbiDKH0h (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 Apr 2022 03:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245394AbiDKH1R (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Apr 2022 03:27:17 -0400
-Received: from mxd2.seznam.cz (mxd2.seznam.cz [IPv6:2a02:598:2::210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA33C3A5D6;
-        Mon, 11 Apr 2022 00:24:56 -0700 (PDT)
-Received: from email.seznam.cz
-        by email-smtpc27a.ng.seznam.cz (email-smtpc27a.ng.seznam.cz [10.23.18.38])
-        id 6cf7735d37f927346d5ebf03;
-        Mon, 11 Apr 2022 09:24:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seznam.cz; s=beta;
-        t=1649661871; bh=o414pkHhgL9vMorRestr4vWHbQMDn+w/yudCwqqpe8M=;
-        h=Received:From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:
-         References:MIME-Version:Content-Transfer-Encoding:X-szn-frgn:
-         X-szn-frgc;
-        b=UFq9wfRe5qfzDyn8C407aykGQdhfYFrlzvbzlNdQXdK3EGj/SvUhYNWPzB/Z/RaAF
-         jIBe37GUzpoeNgdGxcGXoabM+sEauLnMxAhcfmiTyNfwEfWBcxOKgtlu1vnEE+m5E6
-         QC1G8vPneRA+ROasFSWapHEFBDnHvY6erKIyjPMU=
-Received: from localhost.localdomain (ip-111-27.static.ccinternet.cz [147.161.27.111])
-        by email-relay18.ng.seznam.cz (Seznam SMTPD 1.3.136) with ESMTP;
-        Mon, 11 Apr 2022 09:24:25 +0200 (CEST)  
-From:   michael.srba@seznam.cz
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, Michael Srba <michael.srba@seznam.cz>,
-        Michael Srba <Michael.Srba@seznam.cz>
-Subject: [RESEND v9 5/5] arm64: dts: qcom: msm8998: reserve potentially inaccessible clocks
-Date:   Mon, 11 Apr 2022 09:21:56 +0200
-Message-Id: <20220411072156.24451-6-michael.srba@seznam.cz>
+        with ESMTP id S245338AbiDKH0g (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Apr 2022 03:26:36 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C75193C0
+        for <linux-clk@vger.kernel.org>; Mon, 11 Apr 2022 00:24:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1649661861; x=1681197861;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SNoeLigDyTw1Cancdccozb6dxDfUAxB0MNSrsNTLnEg=;
+  b=NMswAvDd/RmhSrSFJal4hv1RjpFrzv1C5OtmHLZEsATIle8FZd0TQHUe
+   DllrEGi6cm/4hcfcRHCBjrCuxC2ChpjFE59lgue3ptfIk8A5j7+mKRj4Q
+   CzusE+bkQGj4y7NknBpv3xYIYT9R0WpaImyBbePzzt+JlI9MqzSizckxY
+   vejC4rSXiXdwbG8nuhfCT7sm5+7wQKftBNkZFI0s9b7cxYnHGsriQdZaE
+   1LNu2GVVQDuu/WXuR6x9bVRBjmMisZsgJ0EtyWM4VZIX7t9lRO0/q7rjI
+   6++Z5ODNwWN6xEDh/jQK2tDKuL8rSnBzv4R8/C5pghmbgk9fRzrQUC4g0
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.90,251,1643698800"; 
+   d="scan'208";a="159613695"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2022 00:24:17 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 11 Apr 2022 00:24:16 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Mon, 11 Apr 2022 00:24:14 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <linux-clk@vger.kernel.org>
+CC:     <daire.mcnamara@microchip.com>, <linux-riscv@lists.infradead.org>,
+        <palmer@rivosinc.com>, <andrew@lunn.ch>, <linux@armlinux.org.uk>,
+        "Conor Dooley" <conor.dooley@microchip.com>
+Subject: [PATCH v2] clk: microchip: mpfs: don't reset disabled peripherals
+Date:   Mon, 11 Apr 2022 08:23:41 +0100
+Message-ID: <20220411072340.740981-1-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220411072156.24451-1-michael.srba@seznam.cz>
-References: <20220411072156.24451-1-michael.srba@seznam.cz>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-szn-frgn: <57c7363e-9df6-4d40-904b-3b8167d4d3c3>
-X-szn-frgc: <0>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Michael Srba <michael.srba@seznam.cz>
+The current clock driver for PolarFire SoC puts the hardware behind
+"periph" clocks into reset if their clock is disabled. CONFIG_PM was
+recently added to the riscv defconfig and exposed issues caused by this
+behaviour, where the Cadence GEM was being put into reset between its
+bringup & the PHY bringup:
 
-With the gcc driver now being more complete and describing clocks which
-might not always be write-accessible to the OS, conservatively specify
-all such clocks as protected in the SoC dts.
-The board dts - or even user-supplied dts - can override this property
-to reflect the actual configuration.
+https://lore.kernel.org/linux-riscv/9f4b057d-1985-5fd3-65c0-f944161c7792@microchip.com/
 
-Signed-off-by: Michael Srba <Michael.Srba@seznam.cz>
-Reviewed-by: Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+Fix this (for now) by removing the reset from mpfs_periph_clk_disable.
+
+Fixes: 635e5e73370e ("clk: microchip: Add driver for Microchip PolarFire SoC")
+Reviewed-by: Daire McNamara <daire.mcnamara@microchip.com>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- CHANGES:
- - v2: add this patch
- - v3: fix missing Signed-off-by
- - v4: add a proper explanation as per review, (hopefully) fix the subject and commit message
- - v5: none
- - v6: none
- - v7: none
- - v8: none
- - v9: none
----
- arch/arm64/boot/dts/qcom/msm8998.dtsi | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-index 2fda21e810c9..4a84de6cee1e 100644
---- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-@@ -815,6 +815,21 @@ gcc: clock-controller@100000 {
+Changes since v1:
+  The first stage bootloader takes most, but not all, of the peripherals
+  out of reset. In v1 all code touching the reset reg was removed, but in
+  v2 the code taking peripherals out of reset is kept to cover the edge
+  case peripherals.
+  The permanent fix will be to move the reset stuff its own driver.
+
+ drivers/clk/microchip/clk-mpfs.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/drivers/clk/microchip/clk-mpfs.c b/drivers/clk/microchip/clk-mpfs.c
+index aa1561b773d6..744ef2ba2a0c 100644
+--- a/drivers/clk/microchip/clk-mpfs.c
++++ b/drivers/clk/microchip/clk-mpfs.c
+@@ -200,10 +200,6 @@ static void mpfs_periph_clk_disable(struct clk_hw *hw)
  
- 			clock-names = "xo", "sleep_clk";
- 			clocks = <&xo>, <&sleep_clk>;
-+
-+			/*
-+			 * The hypervisor typically configures the memory region where these clocks
-+			 * reside as read-only for the HLOS. If the HLOS tried to enable or disable
-+			 * these clocks on a device with such configuration (e.g. because they are
-+			 * enabled but unused during boot-up), the device will most likely decide
-+			 * to reboot.
-+			 * In light of that, we are conservative here and we list all such clocks
-+			 * as protected. The board dts (or a user-supplied dts) can override the
-+			 * list of protected clocks if it differs from the norm, and it is in fact
-+			 * desired for the HLOS to manage these clocks
-+			 */
-+			protected-clocks = <AGGRE2_SNOC_NORTH_AXI>,
-+					   <SSC_XO>,
-+					   <SSC_CNOC_AHBS_CLK>;
- 		};
+ 	spin_lock_irqsave(&mpfs_clk_lock, flags);
  
- 		rpm_msg_ram: sram@778000 {
+-	reg = readl_relaxed(base_addr + REG_SUBBLK_RESET_CR);
+-	val = reg | (1u << periph->shift);
+-	writel_relaxed(val, base_addr + REG_SUBBLK_RESET_CR);
+-
+ 	reg = readl_relaxed(base_addr + REG_SUBBLK_CLOCK_CR);
+ 	val = reg & ~(1u << periph->shift);
+ 	writel_relaxed(val, base_addr + REG_SUBBLK_CLOCK_CR);
 -- 
 2.35.1
 
