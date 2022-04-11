@@ -2,203 +2,200 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C99D34FB4A2
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Apr 2022 09:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 403324FB516
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Apr 2022 09:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245342AbiDKH0m (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 Apr 2022 03:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54212 "EHLO
+        id S245543AbiDKHmS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 Apr 2022 03:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245362AbiDKH0l (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Apr 2022 03:26:41 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4875F26106
-        for <linux-clk@vger.kernel.org>; Mon, 11 Apr 2022 00:24:27 -0700 (PDT)
+        with ESMTP id S245534AbiDKHmR (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Apr 2022 03:42:17 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC0F2EE
+        for <linux-clk@vger.kernel.org>; Mon, 11 Apr 2022 00:40:03 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id r206-20020a1c44d7000000b0038ccb70e239so3949039wma.3
+        for <linux-clk@vger.kernel.org>; Mon, 11 Apr 2022 00:40:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1649661867; x=1681197867;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gLVYInG1QIEeMC+HdYt1pmNg/6ITtUK5E9Ju8+MtiyQ=;
-  b=nEPONyxTQNAsNzydTAJN8HoV6HsJcPfgGueRVLvD0UmpvCjLdCPd5pTZ
-   njV/CEkn9ymxr2YE3xMz8C5Wdpuz2Ca652Z0ueYLsvDNW0KDcqz6oe7FE
-   tpeXxhkCs2Lds+1azqduH/EgPbH2SYLrAChknkWOaThOQeJzLGQIw3Ccx
-   lPkn25yWH4sKKRkiHSh+HXUIBomKGdrgXLJlM+wOtQ+6/NACWl3GC4MBr
-   ogPoAocr+WsFMR8c5/j+TuisHdxmC8NKDFeikzwBKJL88C65fVsM76jUT
-   XSRc2NLkyTAiRB/t/PKQ76tgSobjOqu+khHu+IJ4Bfbs9nyRV0DiEGvan
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,251,1643670000"; 
-   d="scan'208";a="23211599"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 11 Apr 2022 09:24:25 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 11 Apr 2022 09:24:25 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Mon, 11 Apr 2022 09:24:25 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1649661865; x=1681197865;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gLVYInG1QIEeMC+HdYt1pmNg/6ITtUK5E9Ju8+MtiyQ=;
-  b=nsGkZ3Cc/Zi6yXjTrvn43/ZmKe/IlK93aWoGym3NuRy+wwT1JKBXCM/5
-   1+HJCq56wCh4SDVY2W/h2j0TU9ChVqhsP9c5asz8PIRpv/wh0kbzsh1ck
-   cCDxlfmSLK9Ri/8qML4qlExMh5C8yKMBSA+jZs7E1QPtIAo5DJqqDHsGi
-   zeR7bTMuSUAkPl8TSQbxl7qTVMRxQMG9wxSKpvlau0f7kWYQaeLFzCY5v
-   gUjsO2Ka73GtRfT7dmylDSxRDTtlr2PavXwdoRQgfwpWcQN8nLjAeKME+
-   lQxIJP7nSnlkwHNTXHFRct+YBuHdHj7ZzY+L2zpq4++Gq59BGMMDPs3LI
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,251,1643670000"; 
-   d="scan'208";a="23211598"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 11 Apr 2022 09:24:25 +0200
-Received: from steina-w.localnet (unknown [10.123.49.12])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 16DF9280070;
-        Mon, 11 Apr 2022 09:24:25 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Maxime Ripard <maxime@cerno.tech>,
-        Mike Turquette <mturquette@baylibre.com>,
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=eHUhpESnzNrGTrdol6SHskKb8YtH0zD8DXuSZXY3nFQ=;
+        b=B8ocYA2FHy37eAiQiOTxXukXWYA7y1hSezwXzYjjrjZxTF+7m+C4cNRYbAEdldK3U4
+         hfNac3N+qMu9zdYz67QA3nLGb7Iu4QO4Mv92Ds4y8mQhaaPXEio68y1stGFG+Wo73QYE
+         ezPGDD359Zn4ZF6sVjs5ZNZP6Floxh7ljwuBeLCQE0v6V5ds4zVQmKPigdtCH9ri4M6C
+         Rjix7Xe5x9za4Kt85aDTj3Kt95VIShSzP9i1qHyjLR6dw+I3rNxYDyLWC65wmLcO7090
+         So8zNQAIyZAq1hYDcag5pDLI9CwYpAuvNwfE2d2Fl6JxHa/L1NSlSXtYFwyd4hG50/xa
+         Fumw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=eHUhpESnzNrGTrdol6SHskKb8YtH0zD8DXuSZXY3nFQ=;
+        b=jAPlZM4NEFNLbjc+utZsOEWJm/MVB6dQOK9hjhj6CsqwiA6f8q2JE5Jx6azbijKny8
+         TonSeHsAHsBYBS9+kF0gvK9tZ5dkfJ9xztWm+6ZMyN/mccmh3FnbpHCs5ZPMlcQJsppn
+         vQ+vkKtUBZdxrW91H5Ff48N50rB0h5XukM2GTBKdf/aTewGo3QRdEKL3ZfK6UL5iSZb2
+         +y5radQBs10btTHqAe52Jhu5yfXJqyEgPtaDSlEIYSHBysZGt1ripKEISC6fLy4QaQeK
+         SyP92pmq74SSeFzeX+k+ogte/4wev6E5yYbN0vJwiiybVDCR+06iGn59ycLcG1zF7Iis
+         TIAQ==
+X-Gm-Message-State: AOAM533ibvWyyt5GTuy6zv9FUcG4DoLJRvLTris8E37/Q95Wc1YeJ6jM
+        X5TaK27ApU0UbDj5cE4/C+6ouw==
+X-Google-Smtp-Source: ABdhPJzYS3McMRlRNCe9OR3mwf2Y21wZUzDdGoZo75TAVLcqZh3/02lsDmd5hFFImqXzuHsMvEb9ew==
+X-Received: by 2002:a05:600c:358d:b0:38c:6d54:bf40 with SMTP id p13-20020a05600c358d00b0038c6d54bf40mr27651607wmq.203.1649662801896;
+        Mon, 11 Apr 2022 00:40:01 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:d1:e096:d183:1bc5? ([2001:861:44c0:66c0:d1:e096:d183:1bc5])
+        by smtp.gmail.com with ESMTPSA id i7-20020a5d5587000000b00207a8cde900sm1174470wrv.19.2022.04.11.00.40.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 00:40:01 -0700 (PDT)
+Message-ID: <a30e6471-eb1d-cf41-9ca9-cf33fd570c6a@baylibre.com>
+Date:   Mon, 11 Apr 2022 09:40:03 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 22/22] clk: Prevent a clock without a rate to register
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Jerome Brunet <jbrunet@baylibre.com>
+Cc:     Mike Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
         Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Tony Lindgren <tony@atomide.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: Re: (EXT) [PATCH 00/22] clk: More clock rate fixes and tests
-Date:   Mon, 11 Apr 2022 09:24:22 +0200
-Message-ID: <4703993.GXAFRqVoOG@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <11958147.O9o76ZdvQC@steina-w>
-References: <20220408091037.2041955-1-maxime@cerno.tech> <11958147.O9o76ZdvQC@steina-w>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Yassine Oudjana <y.oudjana@protonmail.com>
+References: <20220408091037.2041955-1-maxime@cerno.tech>
+ <20220408091037.2041955-23-maxime@cerno.tech>
+ <1jwnfzlxx1.fsf@starbuckisacylon.baylibre.com>
+ <20220408104127.ilmcntbhvktr2fbh@houat>
+ <1jpmlrlq0h.fsf@starbuckisacylon.baylibre.com>
+ <20220408125526.ykk5ktix52mnwvh2@houat>
+ <1jlewflizh.fsf@starbuckisacylon.baylibre.com>
+ <20220408153625.ugodcmfwtanr75gu@houat>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <20220408153625.ugodcmfwtanr75gu@houat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Am Montag, 11. April 2022, 08:25:31 CEST schrieb Alexander Stein:
-> Hello Maxime,
+On 08/04/2022 17:36, Maxime Ripard wrote:
+> On Fri, Apr 08, 2022 at 04:48:08PM +0200, Jerome Brunet wrote:
+>>>>> and hdmi_pll_dco because it will always return 0,
+>>>>
+>>>> It is a read-only clock - whatever we do in CCF, it is not going to
+>>>> change. CCF has always supported RO clocks.
+>>>
+>>> Yes, if a clock has a rate of 0Hz it's entirely useless. And if it's
+>>> useful in anyway, it should report its current rate. Read-only or not.
+>>>
+>>
+>> It does report its rate, it does not have any.
+>> ... and It would pretty weird to initialize a read-only clock.
 > 
-> Am Freitag, 8. April 2022, 11:10:15 CEST schrieb Maxime Ripard:
-> > Hi,
-> > 
-> > Thanks to the feedback I got on the previous series, I found and fixed a
-> > number of bugs in the clock framework and how it deals with rates,
-> > especially when it comes to orphan clocks.
-> > 
-> > In order to make sure this doesn't pop up again as a regression, I've
-> > extended the number of tests.
-> > 
-> > The first patch reintroduces the clk_set_rate_range call on clk_put, but
-> > this time will only do so if there was a range set on that clock to
-> > begin with. It should be less intrusive, and reduce the number of
-> > potential side effects considerably.
-> > 
-> > All the other patches should be probably be flagged as fixes, but
-> > they've never seem to have shown any real-world issues until now, and
-> > they aren't all really trivial to backport either, so I'm not sure it's
-> > worth it.
-> > 
-> > The last patch will probably prove to be controversial, but it can be
-> > left out without affecting the rest of the series. It will affect the
-> > meson clock drivers for the g12b SoC at least. It stems from the
-> > realisation that on the g12b, 4 PLLs (and thus all their children) have
-> > a rate of 0, pretty much forever which feels like a bug considering the
-> > rate 0 is used as an error in most places.
-> > 
-> > Those 4 PLLs have a rate of 0 because meson_clk_pll_recalc_rate will
-> > 
-> > return 0 if the diviser of the PLL is set to 0 in the register, but:
-> >   - pcie_pll_dco has a few registers to initialize set in
-> >   
-> >     g12a_pcie_pll_dco, but meson_clk_pcie_pll_ops don't set the init
-> >     hook and will instead call it in the enable hook. This looks like a
-> >     bug and could be easily fixed by adding that init hook.
-> >   
-> >   - gp0_pll_dco and hifi_pll_dco both don't set any of there n field in
-> >   
-> >     the initialisation of their register (g12a_gp0_init_regs and
-> >     g12a_hifi_init_regs). So if the bootloader doesn't set it, and as
-> >     long as set_rate isn't called, that field is going to remain at 0. And
-> >     since all but one users don't have CLK_SET_RATE_PARENT, this is
-> >     still fairly unlikely.
-> >   
-> >   - hdmi_pll_dco doesn't set the n field in the initialisation either,
-> >   
-> >     but also doesn't have a set_rate implementation. Thus, if the
-> >     bootloader doesn't set it, this clock and all its children will
-> >     always report a rate of 0, even if the clock is functional.
-> > 
-> > During the discussion with amlogic clock maintainers, we kind of ended
-> > up on a disagreement of whether returning 0 was ok or not, hence the
-> > expected controversy :)
-> > 
-> > Let me know what you think,
-> > Maxime
-> > 
-> > Maxime Ripard (22):
-> >   clk: Drop the rate range on clk_put()
-> >   clk: tests: Add test suites description
-> >   clk: tests: Add reference to the orphan mux bug report
-> >   clk: tests: Add tests for uncached clock
-> >   clk: tests: Add tests for single parent mux
-> >   clk: tests: Add tests for mux with multiple parents
-> >   clk: tests: Add some tests for orphan with multiple parents
-> >   clk: Take into account uncached clocks in clk_set_rate_range()
-> >   clk: Fix clk_get_parent() documentation
-> >   clk: Set req_rate on reparenting
-> >   clk: Skip set_rate_range if our clock is orphan
-> >   clk: Add our request boundaries in clk_core_init_rate_req
-> >   clk: Change clk_core_init_rate_req prototype
-> >   clk: Introduce clk_hw_init_rate_request()
-> >   clk: Add missing clk_core_init_rate_req calls
-> >   clk: Remove redundant clk_core_init_rate_req() call
-> >   clk: Switch from __clk_determine_rate to clk_core_round_rate_nolock
-> >   clk: Introduce clk_core_has_parent()
-> >   clk: Stop forwarding clk_rate_requests to the parent
-> >   clk: Zero the clk_rate_request structure
-> >   clk: Test the clock pointer in clk_hw_get_name()
-> >   clk: Prevent a clock without a rate to register
-> >  
-> >  drivers/clk/clk.c            |  239 +++++--
-> >  drivers/clk/clk_test.c       | 1256 +++++++++++++++++++++++++++++++++-
-> >  include/linux/clk-provider.h |    6 +
-> >  include/linux/clk.h          |    5 +-
-> >  4 files changed, 1439 insertions(+), 67 deletions(-)
+> The KMS driver doesn't seem to have a problem with that.
 > 
-> Thanks for another round of patches.
-> On top my patchset this one does *not* break my imx8mp based setup. Booting
-> is as usual without any changes in dmesg.
-> Given this patch set I suspect the other one on github you sent me on
-> Thursday is obsolete now.
+>>>>> unless the display driver comes around and updates it. If it never does,
+>>>>> or if it's not compiled in, then you're out of luck.
+>>>>
+>>>> I'm all for managing the display clocks from CCF but it has proved tricky
+>>>> so far. Maybe it will someday.
+>>>>
+>>>> Being a read-only clock, the value is what it is and CCF should
+>>>> deal with it gracefully. It has so far.
+>>>>
+>>>> If the driver actually managing the clock is not compiled in, then the
+>>>> clock will never be set, and it should not be a problem either.
+>>>
+>>> Again, it depends on what you expect from clk_get_rate(). If it can only
+>>> report a rate of 0 on error, then it's definitely a problem.
+>>
+>> Agreed, it depends on what you expect from clk_get_rate().
+>> Still when something does not oscillate, the rate is 0.
+>>
+>> If a driver call clk_get_rate() on an uninitialized, unlocked PLL, I
+>> think returning 0 makes sense.
+> 
+> You're confusing two things: the rate output by the hardware, and what
+> the CCF needs to return. We're discussing the latter here, a software
+> construct. It models the hardware, but it doesn't have to be true to the
+> hardware.
+> 
+> And even the meson driver doesn't follow what you're claiming to the
+> letter and is inconsistent with what you're saying. Any disabled gate
+> will also have a hardware rate of 0. Yet, it doesn't return 0 in such a
+> case. And no one does, because clk_get_rate() isn't supposed to return
+> the actual rate in hardware at the moment. It's supposed to return what
+> would be the rate if it was enabled.
 
-I have to correct myself here a bit. While using my current board .dts fpr 
-imx8mp works with this patchset, things change if I apply Lucas' HDMI patchset 
-[1] and enable HDMI devices. In this case I get the following errors:
-> hdmi_pclk: recalc_rate returned a null rate
-> fsl-samsung-hdmi-phy 32fdff00.phy: error -EINVAL: failed to register clock
-> fsl-samsung-hdmi-phy 32fdff00.phy: register clk failed
-> fsl-samsung-hdmi-phy: probe of 32fdff00.phy failed with error -22
+You're pointing a real issue, what should we return as a rate then ?
 
-The offending patch is the last one 'clk: Prevent a clock without a rate to 
-register'.
+The rate is not only the rate output by the HW but is also used by the whole
+subtree of the PLL to calculate the rates.
 
-Best regards,
-Alexander
+If we return a fake or dummy rate instead of 0 (which is the physical reality),
+the clock subtree will be populated from a fake rate and if we did set a clock
+rate using assigned-clock, eventually this fake rate would match and no set_rate()
+would be called on the PLL.
 
-[1] https://patchwork.kernel.org/project/linux-arm-kernel/cover/
-20220406160123.1272911-1-l.stach@pengutronix.de/
+This is why we return the true physical rate, it's the software to adapt in order
+to handle the possible HW states.
 
+> 
+>>> And it's not because it was done before that it wasn't just as
+>>> problematic then.
+>>>
+>>>>>> IMO, whenever possible we should not put default values in the clocks
+>>>>>> which is why I chose to leave it like that.
+>>>>>>
+>>>>>> The PLL being unlocked, it has no rate. It is not set to have any rate.
+>>>>>> IMO a returning a rate of 0 is valid here.
+>>>>>
+>>>>> If there's not a sensible default in the hardware already, I don't see
+>>>>> what the big issue is to be honest. You already kind of do that for all
+>>>>> the other PLL parameters with init_regs
+>>>>
+>>>> Those initial parameters are "magic" analog setting which don't have an
+>>>> impact on the rate setting. The initial rate of the clock is never set
+>>>> by the clock driver on purpose.
+>>>
+>>> It's still fundamentally the same: whatever is there at boot isn't good
+>>> enough, so you change it to have a somewhat sensible default.
+>>
+>> If you don't need it, no.
+> 
+> I mean, I provided multiple examples that the meson driver is being
+> inconsistent with both the CCF documentation and the expected usage of
+> the CCF consumers. And I suggested solutions to fix this inconsistency
+> both here and on IRC to Neil and you.
 
+It's not that we don't like it, we only care the actual HW state is correctly
+reported in the clock tree, nothing else.
 
+If a new flag like CLK_INVALID_RATE existed then we would use it.
+
+But so far a zero rate never was problematic, and iMX8mp HDMI PLL and MSM mmpll2
+also return a 0 rate as init because it's probably the default PLL state at
+HW startup.
+
+> 
+> The only argument you provided so far is that you don't like or want it.
+> I'm sorry you feel this way, but it doesn't change either the consensus
+> or the documentation that every other driver and consumer is following.
+> Nor does it provide any solution.
+> 
+> In the grand scheme of things, I don't care, if you want to have your
+> own conventions a policies, go ahead. Just don't expect me to debug
+> whatever is going on next time it falls apart.
+> 
+> Maxime
+
+Neil
