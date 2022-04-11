@@ -2,133 +2,152 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A648E4FB6CC
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Apr 2022 11:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCF24FB8EA
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Apr 2022 12:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344088AbiDKJDV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 Apr 2022 05:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
+        id S1345030AbiDKKHV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 Apr 2022 06:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344111AbiDKJDD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Apr 2022 05:03:03 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98DC53ED2F;
-        Mon, 11 Apr 2022 02:00:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649667649; x=1681203649;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dPt81KGByL2JT3h91dRTMfPIeeyxRYvMJGbksSYGCkQ=;
-  b=lwG3my8wtILXVpW3tuPue1yGyrx8cjcs72RR8pcXvHvVtsfY5VbZWzyY
-   C2zFiJlXmLEQm6QgFXghREVuyKtqmZPjrd2JylXT7YLjPCPAZEa6bume6
-   EVs4exKcMQHoUofqVzJIRHQClCj8GXe9JEd91B3uNLUf7Ec+CfSqorOYX
-   LjSeml1leEZOMzICocrLRg0xP7wfE2DHt0Oxq7eqffk+/4kVFe6WqN36B
-   hGsddOAwefXTE8d7dwMn1CXV4MmK+W6bM/2YiWrmj8C+X3+W3bLhz3+Ap
-   bBFlpqlSYp8D+L6bAvqrBVAtDrIx9ReoOKC+h5qojePR2qTF+XChhB/RS
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,251,1643698800"; 
-   d="scan'208";a="155113068"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2022 02:00:48 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+        with ESMTP id S1345062AbiDKKHL (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Apr 2022 06:07:11 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on20619.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::619])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00C8DFC4;
+        Mon, 11 Apr 2022 03:04:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NmqEoHMwpyrbBWaTysXyvNzi7LNIpJaCjwA/P8dOPpXBj7a72K5Ws4zk79u3eGSVOhmBx2DjrhYAsMqe9bYre+r76Re4W49SSZ+tZ1xDI9rtSoAfB09myiJwrdqpzsHKGZa8c95ceIaT13SlCAX3B2mWwPmt0JxlY6Daju0gGV6OBXKYVHYtDJbbIuNOWGSryNao8UmHZFx2i+aFMfOnKOZZFNv2eOS+ZTaM/XGpU0Gz5YgLevorrG9MI5w/z+zefBsyt8JSsCJoz3sjb14lhwjq/spoY+jrZ0qfWUW6Q9PbqXNIjPCmRwtyNkJleKMtxABqmUb6Bl8sFlBiRLMuuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LZH9EjQZ5GN6hbPZmjp5OChiVOBI3X8HcD7j/Ct7i8c=;
+ b=iAkAH00nhl9dOrnsR8cdjyq4knTtM9X0HPB7tw0CusqC39xsGHmEY8wW4Pg9zRG+2WhreZDPIVRbuXQL8XHC4SX9+qfkDMZR9v8juPsWyIahlKFjmjT9Eg51YMwdPeD5kfnM/k3WCd2zpLQ4d3M1BUbUV308EaZD44qYFZ4e2UVfJHM5X4z3EDxw5mYEiDjYO+lpQOVAb/d/8VYLjcG75t14H6wm8AvHcZUHUCSdO1KuUy9L4dVoKHsMZ13BqK7bLgtLz7MSKNOmYCSLCbP9ebipLvKj0RJ1tR2rC2UKGFTlpUYBvvonFIgv4xLQaV/6FbqG6d2eGzUxfPmKxJv/gw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LZH9EjQZ5GN6hbPZmjp5OChiVOBI3X8HcD7j/Ct7i8c=;
+ b=NlFAAePYgBfz1x/r5ci2mKDY37Fkp3ucSlWgxhDpt3kcDxZW1URV02Hgfo/Tn+/pMOs5feclQXvkhZMt7o7KATL6lY8auUWzUS7vPnZhqhGK3MOexwbaZnUx5b+TJ0Aa2qARyEcLLxAHlqC6yglhFKnwQwGYwU7Qgjy6g0t80G0=
+Received: from BN9PR03CA0550.namprd03.prod.outlook.com (2603:10b6:408:138::15)
+ by DM6PR02MB6698.namprd02.prod.outlook.com (2603:10b6:5:217::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
+ 2022 10:04:50 +0000
+Received: from BN1NAM02FT008.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:138:cafe::49) by BN9PR03CA0550.outlook.office365.com
+ (2603:10b6:408:138::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29 via Frontend
+ Transport; Mon, 11 Apr 2022 10:04:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT008.mail.protection.outlook.com (10.13.2.126) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5144.21 via Frontend Transport; Mon, 11 Apr 2022 10:04:50 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 11 Apr 2022 02:00:48 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Mon, 11 Apr 2022 02:00:44 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <aou@eecs.berkeley.edu>, <paul.walmsley@sifive.com>,
-        <palmer@rivosinc.com>, <a.zummo@towertech.it>,
-        <alexandre.belloni@bootlin.com>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>
-CC:     <daire.mcnamara@microchip.com>, <linux-rtc@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v2 9/9] riscv: dts: microchip: reparent mpfs clocks
-Date:   Mon, 11 Apr 2022 09:59:17 +0100
-Message-ID: <20220411085916.941433-10-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220411085916.941433-1-conor.dooley@microchip.com>
-References: <20220411085916.941433-1-conor.dooley@microchip.com>
+ 15.1.2176.14; Mon, 11 Apr 2022 03:04:47 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Mon, 11 Apr 2022 03:04:47 -0700
+Envelope-to: linux-clk@vger.kernel.org,
+ robh+dt@kernel.org,
+ gregkh@linuxfoundation.org,
+ sboyd@kernel.org,
+ devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Received: from [10.140.6.59] (port=36530 helo=xhdshubhraj40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <shubhrajyoti.datta@xilinx.com>)
+        id 1ndquc-0003Jf-NX; Mon, 11 Apr 2022 03:04:47 -0700
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+To:     <linux-clk@vger.kernel.org>
+CC:     <robh+dt@kernel.org>, <gregkh@linuxfoundation.org>,
+        <sboyd@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Subject: [PATCH v14 0/5] clk: clocking-wizard: Driver updates
+Date:   Mon, 11 Apr 2022 15:34:38 +0530
+Message-ID: <20220411100443.15132-1-shubhrajyoti.datta@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a2c39987-c149-4068-c782-08da1ba2b795
+X-MS-TrafficTypeDiagnostic: DM6PR02MB6698:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR02MB669855A6364780F6E4D626F5AAEA9@DM6PR02MB6698.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zvAVYZmXjpMNiIPbBtAfAbLYPhTupUJKhzgM4Kj7rV7nRf0QlxKG5mPivjRcacmPgIVyZPi6kEglFaX4mr+vonfJjtVDEZIt6S+KGpeA4SOG/Jyh7QEvGfQskVSb+ma0DlvDY2WBh+adGaYn2TX9t6Gv6dJddXn0JPVCKgfHR5dqzwlMi356oT6v1XRiNKtfmv7XoDCWVhTvHu2l8Qz7Bda2JI/gLbHXZkiG7SEXXmLQFE9fgRxcCZ65tUr/f7etc48Fqps40O9/+cCJgeKY0Svsqb8ZE7NZOlLl0AkuGdjXublCv20lOf0vxribDvT9nc72p4E7prL/Py3wZ+r5IOesxeOkCf7cogYSNyqHnOyCaQO2JcCfVa71XEQ5o6ea+/RsHrtevi4B9EInzz3F29lgOhgynIxGxK2wz2BxrX7LpsxdEaVNjYkC2K4g+r+jmskVUyrTKlcbX3sUn6407x1QVhHifDqGeg13JfXTUkY9CBfd0cZy+HsHU+tWmgMtADbkw8/+8JQF1Mt1Ckax566/gx3Vh/xl036ilPs7QF96V/tpCIEfe7ehUxSTmxjbHqkw1gHPTX4VaNhu4L7ghlD6JknLt47gRIc1cOPz8skEbfpYhYwx7dnq0SuYKBJ4uQVqjIASBMnddo9Iwwxh2Z4ex5KcMzVE40hoFYWqLKWNzzxMfaZl9bL49j/wy5Abbt2aKMc2Du/6Xf5hjAYU9g==
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(1076003)(8676002)(107886003)(2616005)(4326008)(6916009)(54906003)(9786002)(508600001)(70206006)(316002)(70586007)(426003)(44832011)(6666004)(356005)(7636003)(7696005)(83380400001)(8936002)(15650500001)(2906002)(40460700003)(36756003)(36860700001)(186003)(82310400005)(26005)(47076005)(5660300002)(336012)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 10:04:50.3638
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a2c39987-c149-4068-c782-08da1ba2b795
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT008.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB6698
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The 600M clock in the fabric is not the real reference, replace it with
-a 125M clock which is the correct value for the icicle kit. Rename the
-msspllclk node to mssrefclk since this is now the input to, not the
-output of, the msspll clock. Control of the msspll clock has been moved
-into the clock configurator, so add the register range for it to the clk
-configurator. Finally, add a new output of the clock config block which
-will provide the 1M reference clock for the MTIMER and the rtc.
+The patch does the following
+Update the versions of the clocking wizard ip.
+Move from staging to clk directory.
+Update the bindings.
 
-Fixes: feeb38685523 ("Update the Icicle Kit device tree")
-Reviewed-by: Daire McNamara <daire.mcnamara@microchip.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- .../boot/dts/microchip/microchip-mpfs-icicle-kit.dts      | 2 +-
- arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi         | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+v12: 
+No change. 
+Rebased
+v13:
+Update the clocking compatible
+Add the change removing the driver from staging
+v14:
+Moved to the xilinx folder
 
-diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts b/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-index cd2fe80fa81a..3392153dd0f1 100644
---- a/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-+++ b/arch/riscv/boot/dts/microchip/microchip-mpfs-icicle-kit.dts
-@@ -45,7 +45,7 @@ ddrc_cache_hi: memory@1000000000 {
- };
- 
- &refclk {
--	clock-frequency = <600000000>;
-+	clock-frequency = <125000000>;
- };
- 
- &mmuart1 {
-diff --git a/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi b/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
-index 3b48b7f35410..746c4d4e7686 100644
---- a/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
-+++ b/arch/riscv/boot/dts/microchip/microchip-mpfs.dtsi
-@@ -141,7 +141,7 @@ cpu4_intc: interrupt-controller {
- 		};
- 	};
- 
--	refclk: msspllclk {
-+	refclk: mssrefclk {
- 		compatible = "fixed-clock";
- 		#clock-cells = <0>;
- 	};
-@@ -190,7 +190,7 @@ plic: interrupt-controller@c000000 {
- 
- 		clkcfg: clkcfg@20002000 {
- 			compatible = "microchip,mpfs-clkcfg";
--			reg = <0x0 0x20002000 0x0 0x1000>;
-+			reg = <0x0 0x20002000 0x0 0x1000>, <0x0 0x3E001000 0x0 0x1000>;
- 			clocks = <&refclk>;
- 			#clock-cells = <1>;
- 		};
-@@ -393,8 +393,8 @@ rtc: rtc@20124000 {
- 			reg = <0x0 0x20124000 0x0 0x1000>;
- 			interrupt-parent = <&plic>;
- 			interrupts = <80>, <81>;
--			clocks = <&clkcfg CLK_RTC>;
--			clock-names = "rtc";
-+			clocks = <&clkcfg CLK_RTC>, <&clkcfg CLK_RTCREF>;
-+			clock-names = "rtc", "rtcref";
- 			status = "disabled";
- 		};
- 
+Shubhrajyoti Datta (5):
+  dt-bindings: add documentation of xilinx clocking wizard
+  clk: clocking-wizard: Add the clockwizard to clk directory
+  clk: clocking-wizard: Rename nr-outputs to xlnx,nr-outputs
+  clk: clocking-wizard: Fix the reconfig for 5.2
+  clk: clocking-wizard: Update the compatible
+
+ .../bindings/clock/xlnx,clocking-wizard.yaml  | 77 +++++++++++++++++++
+ drivers/clk/xilinx/Kconfig                    | 11 +++
+ drivers/clk/xilinx/Makefile                   |  1 +
+ .../xilinx}/clk-xlnx-clock-wizard.c           | 19 +++--
+ drivers/staging/Kconfig                       |  2 -
+ drivers/staging/Makefile                      |  1 -
+ drivers/staging/clocking-wizard/Kconfig       | 10 ---
+ drivers/staging/clocking-wizard/Makefile      |  2 -
+ drivers/staging/clocking-wizard/TODO          | 13 ----
+ .../staging/clocking-wizard/dt-binding.txt    | 30 --------
+ 10 files changed, 103 insertions(+), 63 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/xlnx,clocking-wizard.yaml
+ rename drivers/{staging/clocking-wizard => clk/xilinx}/clk-xlnx-clock-wizard.c (96%)
+ delete mode 100644 drivers/staging/clocking-wizard/Kconfig
+ delete mode 100644 drivers/staging/clocking-wizard/Makefile
+ delete mode 100644 drivers/staging/clocking-wizard/TODO
+ delete mode 100644 drivers/staging/clocking-wizard/dt-binding.txt
+
 -- 
-2.35.1
+2.17.1
 
