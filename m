@@ -2,159 +2,157 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF414FC148
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Apr 2022 17:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B724FC16A
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Apr 2022 17:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348193AbiDKPqu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 Apr 2022 11:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
+        id S1348243AbiDKPul (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 Apr 2022 11:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348201AbiDKPq3 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Apr 2022 11:46:29 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0C0B1CC
-        for <linux-clk@vger.kernel.org>; Mon, 11 Apr 2022 08:44:13 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id v4so5463309edl.7
-        for <linux-clk@vger.kernel.org>; Mon, 11 Apr 2022 08:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fU0hWQzn7l8dJNLIMz5BIxCZUns693+M8CLZSpbHGLA=;
-        b=TMn/tnTA+w5TRa4vNuxS5vEJFOk5yiXG5dLIwTHI+6D9zp71rfgpAnjTEpO4zmD3di
-         hSiK6prSo1T1hrLP4OM47zkcxCeGCa5N71/Mh043fmIZmyoawgPhb9oyqm0hnNcttIgq
-         eo8c0K35dQmvk2Xi29V4HadfSMbrnFl0dnIKXUtPyuve7F32+GnsbY8KZUlrIxV8NU3K
-         ON+HX/M+XVMrMprIQ/U1GhyrBbFH5yKRUhju/TgdlQUnk5iI7nSaznj2TIZXRmxYRGdg
-         qYa+8sxevq25oPSMmILdZRNnK7rSZKDE3eEbIYoFm0jHR1/SjtBBdQosvohu0P5PBLY6
-         fI4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fU0hWQzn7l8dJNLIMz5BIxCZUns693+M8CLZSpbHGLA=;
-        b=b6hJH0c+66QyLbYhNfVWpNktrMN5UT/aeW0c3bCeey2qJr1EFQyeJlrZbwMIzcI/oD
-         ZSwH8mwOQgHXbs5SQC1+66rWVt8IhrzqsOxrd4dpTnx85Was4cm+i8fnD98B9gJi/9r1
-         k42ryTWHDrz5uQvZb0yhM4kk0HztO/usXCVuZTzP2QjNkbqyzoMO5b/9sGYPKgqS18f9
-         fIy/CCgNBuISHSwTE9WA5H4Ez4d9q94K519+XqQ+x0TDyu750mWZn8kg6Ac+l0+bL6zs
-         hgI8t9xtfB5BGWxUqkNrLiaBs1pHi/j9gM8wUTyvlGULRtb4ioCODSsY5ZDIVqAP1bJe
-         avmA==
-X-Gm-Message-State: AOAM5334lmO4eboa8y3m0CU8AaO6I2TQdIHpYZzUHbT52i+cygtSi/KE
-        452tAspcIbEzp86rTbkaL7R/jg==
-X-Google-Smtp-Source: ABdhPJyBq4Yl6LDEdydbHJ5/4b8uC0V4SNm/51/Z48/ZlLGb4PTPG74I33M/AeumvQmbioftCHhorw==
-X-Received: by 2002:a05:6402:11cf:b0:41c:dbc7:79d2 with SMTP id j15-20020a05640211cf00b0041cdbc779d2mr34495460edw.50.1649691851702;
-        Mon, 11 Apr 2022 08:44:11 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id t14-20020a170906608e00b006d1455acc62sm12173177ejj.74.2022.04.11.08.44.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 08:44:11 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RFC PATCH v2 6/6] arm64: dts: qcom: sdm845: control RPMHPD performance states with UFS
-Date:   Mon, 11 Apr 2022 17:43:47 +0200
-Message-Id: <20220411154347.491396-7-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S1348253AbiDKPuk (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Apr 2022 11:50:40 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134591095;
+        Mon, 11 Apr 2022 08:48:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1649692104; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GzjHsbs/7qSGCFYQ88nDQNONwndE9IJBOq5MtVE7Jlo=;
+        b=irfY+Heo0qgVl8mNgMTOU2axOiNWNKuRMRb/+sWiWaLMzJwfwhs+65I5d6M1ZJmuOz6tql
+        39cMYxC7n28Du/Zoaza/rFV4gW3YnalhCRIwhjNaEwx2bdvJeXOtGI+Dmd7XDxGC9LwdTx
+        DjW3EOz13xmp+KuFgT8Mws9T4gAJI/o=
+Date:   Mon, 11 Apr 2022 16:48:15 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v4 2/2] clk: ingenic-tcu: Fix missing TCU clock for X1000
+ SoCs
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Message-Id: <FKM6AR.T3U5W4W42W2R3@crapouillou.net>
+In-Reply-To: <20220411154241.50834-3-aidanmacdonald.0x0@gmail.com>
+References: <20220411154241.50834-1-aidanmacdonald.0x0@gmail.com>
+        <20220411154241.50834-3-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-UFS, when scaling gears, should choose appropriate performance state of
-RPMHPD power domain controller.  Since UFS belongs to UFS_PHY_GDSC power
-domain, add necessary parent power domain to GCC.
+Hi Aidan,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 43 +++++++++++++++++++++-------
- 1 file changed, 33 insertions(+), 10 deletions(-)
+Le lun., avril 11 2022 at 16:42:41 +0100, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+> The TCU clock gate on X1000 wasn't requested by the driver and could
+> be gated automatically later on in boot, which prevents timers from
+> running and breaks PWM.
+>=20
+> Add a workaround to support old device trees that don't specify the
+> "tcu" clock gate. In this case the kernel will print a warning and
+> attempt to continue without the clock, which is wrong, but it could
+> work if "clk_ignore_unused" is in the kernel arguments.
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>  drivers/clk/ingenic/tcu.c | 38 ++++++++++++++++++++++++++------------
+>  1 file changed, 26 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
+> index 77acfbeb4830..ce8c768db997 100644
+> --- a/drivers/clk/ingenic/tcu.c
+> +++ b/drivers/clk/ingenic/tcu.c
+> @@ -31,6 +31,7 @@ struct ingenic_soc_info {
+>  	unsigned int num_channels;
+>  	bool has_ost;
+>  	bool has_tcu_clk;
+> +	bool allow_missing_tcu_clk;
+>  };
+>=20
+>  struct ingenic_tcu_clk_info {
+> @@ -320,7 +321,8 @@ static const struct ingenic_soc_info=20
+> jz4770_soc_info =3D {
+>  static const struct ingenic_soc_info x1000_soc_info =3D {
+>  	.num_channels =3D 8,
+>  	.has_ost =3D false, /* X1000 has OST, but it not belong TCU */
+> -	.has_tcu_clk =3D false,
+> +	.has_tcu_clk =3D true,
+> +	.allow_missing_tcu_clk =3D true,
+>  };
+>=20
+>  static const struct of_device_id __maybe_unused=20
+> ingenic_tcu_of_match[] __initconst =3D {
+> @@ -354,15 +356,27 @@ static int __init ingenic_tcu_probe(struct=20
+> device_node *np)
+>  	if (tcu->soc_info->has_tcu_clk) {
+>  		tcu->clk =3D of_clk_get_by_name(np, "tcu");
+>  		if (IS_ERR(tcu->clk)) {
+> -			ret =3D PTR_ERR(tcu->clk);
+> -			pr_crit("Cannot get TCU clock\n");
+> -			goto err_free_tcu;
+> -		}
+> -
+> -		ret =3D clk_prepare_enable(tcu->clk);
+> -		if (ret) {
+> -			pr_crit("Unable to enable TCU clock\n");
+> -			goto err_put_clk;
+> +			/*
+> +			 * Old device trees for some SoCs did not include the
+> +			 * TCU clock because this driver (incorrectly) didn't
+> +			 * use it. In this case we complain loudly and attempt
+> +			 * to continue without the clock, which might work if
+> +			 * booting with workarounds like "clk_ignore_unused".
+> +			 */
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index b31bf62e8680..920e4b0c71cf 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -1078,6 +1078,7 @@ gcc: clock-controller@100000 {
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
- 			#power-domain-cells = <1>;
-+			power-domains = <&rpmhpd SDM845_CX>;
- 		};
- 
- 		qfprom@784000 {
-@@ -2326,18 +2327,40 @@ ufs_mem_hc: ufshc@1d84000 {
- 				<&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
- 				<&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>,
- 				<&gcc GCC_UFS_PHY_ICE_CORE_CLK>;
--			freq-table-hz =
--				<50000000 200000000>,
--				<0 0>,
--				<0 0>,
--				<37500000 150000000>,
--				<0 0>,
--				<0 0>,
--				<0 0>,
--				<0 0>,
--				<0 300000000>;
- 
-+			operating-points-v2 = <&ufs_opp_table>;
- 			status = "disabled";
-+
-+			ufs_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-50000000 {
-+					opp-hz = /bits/ 64 <50000000
-+						 0
-+						 0
-+						 37500000
-+						 0
-+						 0
-+						 0
-+						 0
-+						 // FIXME: value 0 copied from freq-table-hz
-+						 0>;
-+					required-opps = <&rpmhpd_opp_svs>;
-+				};
-+
-+				opp-200000000 {
-+					opp-hz = /bits/ 64 <200000000
-+						 0
-+						 0
-+						 150000000
-+						 0
-+						 0
-+						 0
-+						 0
-+						 300000000>;
-+					required-opps = <&rpmhpd_opp_nom>;
-+				};
-+			};
- 		};
- 
- 		ufs_mem_phy: phy@1d87000 {
--- 
-2.32.0
+Why not unconditionally enable it instead? Then it would boot without=20
+clk_ignore_unused.
+
+Cheers,
+-Paul
+
+> +			if (tcu->soc_info->allow_missing_tcu_clk &&
+> +			    PTR_ERR(tcu->clk) =3D=3D -EINVAL) {
+> +				pr_warn("TCU clock missing from device tree, please update your=20
+> device tree\n");
+> +				tcu->clk =3D NULL;
+> +			} else {
+> +				pr_crit("Cannot get TCU clock from device tree\n");
+> +				goto err_free_tcu;
+> +			}
+> +		} else {
+> +			ret =3D clk_prepare_enable(tcu->clk);
+> +			if (ret) {
+> +				pr_crit("Unable to enable TCU clock\n");
+> +				goto err_put_clk;
+> +			}
+>  		}
+>  	}
+>=20
+> @@ -432,10 +446,10 @@ static int __init ingenic_tcu_probe(struct=20
+> device_node *np)
+>  			clk_hw_unregister(tcu->clocks->hws[i]);
+>  	kfree(tcu->clocks);
+>  err_clk_disable:
+> -	if (tcu->soc_info->has_tcu_clk)
+> +	if (tcu->clk)
+>  		clk_disable_unprepare(tcu->clk);
+>  err_put_clk:
+> -	if (tcu->soc_info->has_tcu_clk)
+> +	if (tcu->clk)
+>  		clk_put(tcu->clk);
+>  err_free_tcu:
+>  	kfree(tcu);
+> --
+> 2.35.1
+>=20
+
 
