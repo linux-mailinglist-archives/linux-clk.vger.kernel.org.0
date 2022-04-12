@@ -2,84 +2,110 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF434FEA9A
-	for <lists+linux-clk@lfdr.de>; Wed, 13 Apr 2022 01:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0254FEA8E
+	for <lists+linux-clk@lfdr.de>; Wed, 13 Apr 2022 01:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbiDLXTI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 12 Apr 2022 19:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51708 "EHLO
+        id S229877AbiDLX1C (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 12 Apr 2022 19:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiDLXTB (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 12 Apr 2022 19:19:01 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39176433A1;
-        Tue, 12 Apr 2022 15:06:50 -0700 (PDT)
-Received: by mail-oi1-f177.google.com with SMTP id e4so193610oif.2;
-        Tue, 12 Apr 2022 15:06:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=G0pAhD9aV5AnyvwmtEpWGX9c5HWPBuJjLdVCNmvb9b0=;
-        b=dMsjOhm/N8YBqpt3hVD5slD8DOgLJRA4+YCmqdH/HbLlgR+wv+LWU1sYWu4dSfIPyx
-         eOnguFiUNWlFcy5iE0+WM1LxYj8I7DylPnYjEyn0VS+JnmJCNOBDx1mgcTWkRQc/kktt
-         7hBqgdyjWf3esvLcgLkDlba1ISGo5vB+iTDEf1WQEVpTZGs/appZ9tmKVHR5GhBUV6xw
-         N2RDFY4ipDVvWwq6lHIlajydBp5/JIoSpBnSeM7DXEe+59AYAEjcXXbyLehb1d+A/ueJ
-         DnIwZOKQ/HrzR6bsaTaBrSDe2A7sqCpg6tNqyBPOPJ3c95KUxST7y+lS5aqTdVghsPKO
-         YWUw==
-X-Gm-Message-State: AOAM5328BMKTyGTNzu05h6X99cR+ogvtTOLH4jmtKhPf3/6JKukbrGYS
-        ma7CLDdW8eqagczr4vDdDg==
-X-Google-Smtp-Source: ABdhPJxE/UsRuMfOAtqMzMZJgMh3Iphs+MRCEPCalHC0CQNxxJhgkhfFrPYjVDsBukILcUlibYaHNw==
-X-Received: by 2002:a05:6808:13d2:b0:2f9:b876:31e8 with SMTP id d18-20020a05680813d200b002f9b87631e8mr2798341oiw.157.1649801209539;
-        Tue, 12 Apr 2022 15:06:49 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id ek23-20020a056870f61700b000e2f14d4f8csm1439791oab.53.2022.04.12.15.06.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 15:06:49 -0700 (PDT)
-Received: (nullmailer pid 1028482 invoked by uid 1000);
-        Tue, 12 Apr 2022 22:06:48 -0000
-Date:   Tue, 12 Apr 2022 17:06:48 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Qin Jian <qinjian@cqplus1.com>
-Cc:     krzysztof.kozlowski@linaro.org, linux-clk@vger.kernel.org,
-        linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, maz@kernel.org, robh+dt@kernel.org,
-        tglx@linutronix.de, p.zabel@pengutronix.de,
-        mturquette@baylibre.com, linux-kernel@vger.kernel.org,
-        sboyd@kernel.org, arnd@arndb.de
-Subject: Re: [PATCH v13 2/9] dt-bindings: reset: Add bindings for SP7021
- reset driver
-Message-ID: <YlX3+EgShsr01dkT@robh.at.kernel.org>
-References: <cover.1649659095.git.qinjian@cqplus1.com>
- <11b8f60a7f19f25d2fdaa7a2ed770e9383cec3ba.1649659095.git.qinjian@cqplus1.com>
+        with ESMTP id S230072AbiDLX00 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 12 Apr 2022 19:26:26 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217155E16F;
+        Tue, 12 Apr 2022 15:38:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1649803132; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xNAG0SZZHvrLl10xQGGWue13a4HRKmHPzD7hJXX4nXw=;
+        b=JrCsWn2rWIljaUBYBbe4lfE1WQfRTPty5lP17RS5P46896a7F0Klgi9OrmOXuP9gLhIkNH
+        SG1EzrVTvrFCtbI+6rPgdFfNjm3BNfEQ+cz4GyEfA1e0Fs3s8MWOnmdedVoks84rkkFpKu
+        qVg9d2d/TTBZq+Y0afxP2tEHOqRfv08=
+Date:   Tue, 12 Apr 2022 23:38:42 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v5 1/2] mips: dts: ingenic: Add TCU clock to x1000/x1830
+ tcu device node
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        dan.carpenter@oracle.com
+Message-Id: <I809AR.0C3UZTFR7V5I1@crapouillou.net>
+In-Reply-To: <20220412122750.279058-2-aidanmacdonald.0x0@gmail.com>
+References: <20220412122750.279058-1-aidanmacdonald.0x0@gmail.com>
+        <20220412122750.279058-2-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <11b8f60a7f19f25d2fdaa7a2ed770e9383cec3ba.1649659095.git.qinjian@cqplus1.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, 11 Apr 2022 14:49:52 +0800, Qin Jian wrote:
-> Add documentation to describe Sunplus SP7021 reset driver bindings.
-> 
-> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
-> ---
-> Move HW mapping from dt-binding header to driver.
-> ---
->  .../bindings/reset/sunplus,reset.yaml         | 38 ++++++++
->  MAINTAINERS                                   |  2 +
->  include/dt-bindings/reset/sp-sp7021.h         | 87 +++++++++++++++++++
->  3 files changed, 127 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/reset/sunplus,reset.yaml
->  create mode 100644 include/dt-bindings/reset/sp-sp7021.h
-> 
+Hi,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Le mar., avril 12 2022 at 13:27:49 +0100, Aidan MacDonald=20
+<aidanmacdonald.0x0@gmail.com> a =E9crit :
+> This clock is a gate for the TCU hardware block on these SoCs, but
+> it wasn't included in the device tree since the ingenic-tcu driver
+> erroneously did not request it.
+>=20
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+
+Cheers,
+-Paul
+
+> ---
+>  arch/mips/boot/dts/ingenic/x1000.dtsi | 5 +++--
+>  arch/mips/boot/dts/ingenic/x1830.dtsi | 5 +++--
+>  2 files changed, 6 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi=20
+> b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> index 8bd27edef216..c69df8eb158e 100644
+> --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
+> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> @@ -111,8 +111,9 @@ tcu: timer@10002000 {
+>=20
+>  		clocks =3D <&cgu X1000_CLK_RTCLK>,
+>  			 <&cgu X1000_CLK_EXCLK>,
+> -			 <&cgu X1000_CLK_PCLK>;
+> -		clock-names =3D "rtc", "ext", "pclk";
+> +			 <&cgu X1000_CLK_PCLK>,
+> +			 <&cgu X1000_CLK_TCU>;
+> +		clock-names =3D "rtc", "ext", "pclk", "tcu";
+>=20
+>  		interrupt-controller;
+>  		#interrupt-cells =3D <1>;
+> diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi=20
+> b/arch/mips/boot/dts/ingenic/x1830.dtsi
+> index 2595df8671c7..4408df24ca98 100644
+> --- a/arch/mips/boot/dts/ingenic/x1830.dtsi
+> +++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
+> @@ -104,8 +104,9 @@ tcu: timer@10002000 {
+>=20
+>  		clocks =3D <&cgu X1830_CLK_RTCLK>,
+>  			 <&cgu X1830_CLK_EXCLK>,
+> -			 <&cgu X1830_CLK_PCLK>;
+> -		clock-names =3D "rtc", "ext", "pclk";
+> +			 <&cgu X1830_CLK_PCLK>,
+> +			 <&cgu X1830_CLK_TCU>;
+> +		clock-names =3D "rtc", "ext", "pclk", "tcu";
+>=20
+>  		interrupt-controller;
+>  		#interrupt-cells =3D <1>;
+> --
+> 2.35.1
+>=20
+
+
