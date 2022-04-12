@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406124FE8D4
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Apr 2022 21:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C484FE8CF
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Apr 2022 21:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352214AbiDLTlP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 12 Apr 2022 15:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
+        id S1355960AbiDLTlM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 12 Apr 2022 15:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351182AbiDLTlE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 12 Apr 2022 15:41:04 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2232A3B2A1
-        for <linux-clk@vger.kernel.org>; Tue, 12 Apr 2022 12:38:45 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 15so10559448ljw.8
-        for <linux-clk@vger.kernel.org>; Tue, 12 Apr 2022 12:38:45 -0700 (PDT)
+        with ESMTP id S1353632AbiDLTlI (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 12 Apr 2022 15:41:08 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D682F396
+        for <linux-clk@vger.kernel.org>; Tue, 12 Apr 2022 12:38:46 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 17so25396521lji.1
+        for <linux-clk@vger.kernel.org>; Tue, 12 Apr 2022 12:38:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3m7sD5DReLGuXAEizIRitWnlXHp9Kn3L0qq2hxmokpc=;
-        b=yyW+dOnPrRJyXxXjq0M/Pf0vDwHy1Hp3MjxkLBE3/zl+eZQDNhpNvK5B/o0zFUifq0
-         uHfnWzeBLZ2IrveN8Dpnm2Vg9+ppSfVUav65BoQvzKfipdEEkqIyiwGEWPuVHwkCjTP+
-         8C8B7ZF5PUnDWFSkNsX0yIM6Pzi9tJX2Y0Fa0lDHILYHwUaVxSE+YwchGrQjoggIhIgE
-         UR1J9shENZT2jhWqeeEAYi2/ZSvroaTMs/yJBUAmsXE2CZd3Me+kDmYL+mQPl1pNv1v4
-         Pi9MAc0i1LTj95Y4zGwrLlrjPQ2MOV9HRqyGi74XrU429HxKB3vbF6+ea3p2QLYD3ecj
-         Q5Og==
+        bh=7AIHmdlMdzmULilg6qWLqJ5/9CAU4VNtUbygox8IGUI=;
+        b=gf2DWvtp8X96llUq5WWFMCuIbQlTw3x7+rphw1OZVo+UmAXIJEFZnz57IzF2hutZHE
+         fTYmKrUC+qAg2td0o3zEgJ7wplnWWnLBgQOcGRGJoVeCARJJS9KowyK0U+BQKtYYMLKZ
+         ZzsnOmrFUB7Pz+4zlmMtyfbi/9dTA6kIRDpwSSArUckRDnm7dAQ9bOcPXPuFexfU1ejm
+         0R7z6ek+9J1g/9q6JwxCTzwYllRLd7BHPuauXAQ7zruK06qfkHKpHusLH2ThN854jjU7
+         GaS353rMTOysLw98SUZM7BD40AfBZbzQzltEvHbcOr35MxAoQdMvBpIoXVUjmdNZ6GmN
+         gM8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3m7sD5DReLGuXAEizIRitWnlXHp9Kn3L0qq2hxmokpc=;
-        b=O7mPpu/v9MoMoPpC8TxYW7ctn+5Rw0DNmK4YmGr6cR3YzbUsSYZdy21/qmmFnhGzZ1
-         SIhPaiRdHjX2XJj1tH/nIQ+GHPEkmlY3WJPV0yRdrqbkhDVkYCfpEsrAKwk17A5z9VvQ
-         1x9M8eUcnR8Cv8AWG2DEWCa7ERbQn0p/3wqHYYbsapYgh1zKmf0oRB8y5opkc6r5QqxC
-         CiHDfCWf7o46xolejOiwrp8LLQ4WI6EVtm8bS9SHVzGZi6mEVme/ChxHqwei4lPiLeJW
-         MrEuHajbaWYPA/7UUpbWX+xydhFq9k9oy2RzfzwsdHY4512jSglx9p8eRxFiRFPSiHs8
-         aiiA==
-X-Gm-Message-State: AOAM532dtFVYFjzUJxwL3BuHoNz7UHox35wcqTIYc0lKFsn8VsGtQ3EK
-        ffXHOsihCFL7c54sp11v/DCVFQ==
-X-Google-Smtp-Source: ABdhPJxk41WXmv7SEUBUYZPOMe0q5NwIRxJxzIsCkRozc97NDnkVkiPeCo75AI7qkodLAclNiGyDbQ==
-X-Received: by 2002:a2e:a783:0:b0:24b:6927:7460 with SMTP id c3-20020a2ea783000000b0024b69277460mr5167989ljf.104.1649792323315;
-        Tue, 12 Apr 2022 12:38:43 -0700 (PDT)
+        bh=7AIHmdlMdzmULilg6qWLqJ5/9CAU4VNtUbygox8IGUI=;
+        b=Mwbnz3aLJvBlZeISWnRwIB9/SG4wgeYVkb5DlhVVastYkYlqEPXTpWI4DrLsfwY7ht
+         byK0H64zx+8w1uqHGyuPFyRDK8HCv++KXrNZtcK7Zl8netn6bI+dwrV+mejqptGyfbcR
+         NbekH94r8tyhR9xE6HQBI3RWl1j31rpm+r30uw0zmdzNee558e3+zZ26kWO9sTGLGQMU
+         fnfDKT79I1IS3tYejCxAZk79nxE2aGmYjNAxF99KR0wW+nTkflzY7YiHoCne6pSURroO
+         prLM1EfTEspMX9KVKqZOicKzSVvbSZLuPSUR3z0WlzbiLigUBCZNej8e1sos82BJLDJx
+         rrUQ==
+X-Gm-Message-State: AOAM531XpKkVbW4cgPTFwPnn0klTsMAxAJsS70893mjnFfsAATIzaSC1
+        tmPT2UKUpGOvc9QN3j31ZMJUvg==
+X-Google-Smtp-Source: ABdhPJy5Yqd0jHrINXB4AdA3/oP7bWaZtIGhD+LStxlMzh6aVIpEIfjtVjiCI+2GKDMrUNj05+w4vg==
+X-Received: by 2002:a2e:934d:0:b0:24b:41cf:fb50 with SMTP id m13-20020a2e934d000000b0024b41cffb50mr18378989ljh.336.1649792324792;
+        Tue, 12 Apr 2022 12:38:44 -0700 (PDT)
 Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id m4-20020a0565120a8400b00450abeb42b3sm2731641lfu.235.2022.04.12.12.38.42
+        by smtp.gmail.com with ESMTPSA id m4-20020a0565120a8400b00450abeb42b3sm2731641lfu.235.2022.04.12.12.38.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 12:38:42 -0700 (PDT)
+        Tue, 12 Apr 2022 12:38:43 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -59,9 +59,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     Prasad Malisetty <quic_pmaliset@quicinc.com>,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-pci@vger.kernel.org
-Subject: [PATCH v2 2/5] clk: qcom: gcc-sm8450: use new clk_regmap_mux_safe_ops for PCIe pipe clocks
-Date:   Tue, 12 Apr 2022 22:38:36 +0300
-Message-Id: <20220412193839.2545814-3-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v2 3/5] clk: qcom: gcc-sc7280: use new clk_regmap_mux_safe_ops for PCIe pipe clocks
+Date:   Tue, 12 Apr 2022 22:38:37 +0300
+Message-Id: <20220412193839.2545814-4-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412193839.2545814-1-dmitry.baryshkov@linaro.org>
 References: <20220412193839.2545814-1-dmitry.baryshkov@linaro.org>
@@ -84,40 +84,40 @@ switched off and restore the parent when the clock is switched on.
 Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/clk/qcom/gcc-sm8450.c | 6 ++++--
+ drivers/clk/qcom/gcc-sc7280.c | 6 ++++--
  1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/qcom/gcc-sm8450.c b/drivers/clk/qcom/gcc-sm8450.c
-index 593a195467ff..fb6decd3df49 100644
---- a/drivers/clk/qcom/gcc-sm8450.c
-+++ b/drivers/clk/qcom/gcc-sm8450.c
-@@ -243,13 +243,14 @@ static struct clk_regmap_mux gcc_pcie_0_pipe_clk_src = {
- 	.reg = 0x7b060,
- 	.shift = 0,
- 	.width = 2,
-+	.safe_src_parent = P_BI_TCXO,
- 	.parent_map = gcc_parent_map_4,
- 	.clkr = {
- 		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_pcie_0_pipe_clk_src",
- 			.parent_data = gcc_parent_data_4,
- 			.num_parents = ARRAY_SIZE(gcc_parent_data_4),
--			.ops = &clk_regmap_mux_closest_ops,
-+			.ops = &clk_regmap_mux_safe_ops,
- 		},
- 	},
- };
-@@ -273,13 +274,14 @@ static struct clk_regmap_mux gcc_pcie_1_pipe_clk_src = {
- 	.reg = 0x9d064,
+diff --git a/drivers/clk/qcom/gcc-sc7280.c b/drivers/clk/qcom/gcc-sc7280.c
+index 423627d49719..dafbbc8f3bf4 100644
+--- a/drivers/clk/qcom/gcc-sc7280.c
++++ b/drivers/clk/qcom/gcc-sc7280.c
+@@ -373,13 +373,14 @@ static struct clk_regmap_mux gcc_pcie_0_pipe_clk_src = {
+ 	.reg = 0x6b054,
  	.shift = 0,
  	.width = 2,
 +	.safe_src_parent = P_BI_TCXO,
  	.parent_map = gcc_parent_map_6,
  	.clkr = {
  		.hw.init = &(struct clk_init_data){
- 			.name = "gcc_pcie_1_pipe_clk_src",
+ 			.name = "gcc_pcie_0_pipe_clk_src",
  			.parent_data = gcc_parent_data_6,
  			.num_parents = ARRAY_SIZE(gcc_parent_data_6),
+-			.ops = &clk_regmap_mux_closest_ops,
++			.ops = &clk_regmap_mux_safe_ops,
+ 		},
+ 	},
+ };
+@@ -388,13 +389,14 @@ static struct clk_regmap_mux gcc_pcie_1_pipe_clk_src = {
+ 	.reg = 0x8d054,
+ 	.shift = 0,
+ 	.width = 2,
++	.safe_src_parent = P_BI_TCXO,
+ 	.parent_map = gcc_parent_map_7,
+ 	.clkr = {
+ 		.hw.init = &(struct clk_init_data){
+ 			.name = "gcc_pcie_1_pipe_clk_src",
+ 			.parent_data = gcc_parent_data_7,
+ 			.num_parents = ARRAY_SIZE(gcc_parent_data_7),
 -			.ops = &clk_regmap_mux_closest_ops,
 +			.ops = &clk_regmap_mux_safe_ops,
  		},
