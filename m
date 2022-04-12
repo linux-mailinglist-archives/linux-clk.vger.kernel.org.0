@@ -2,69 +2,77 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B237E4FE9C7
-	for <lists+linux-clk@lfdr.de>; Tue, 12 Apr 2022 23:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A60D4FE9FE
+	for <lists+linux-clk@lfdr.de>; Tue, 12 Apr 2022 23:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbiDLVDJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 12 Apr 2022 17:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42176 "EHLO
+        id S229865AbiDLVeQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 12 Apr 2022 17:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbiDLVDG (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 12 Apr 2022 17:03:06 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39983C627B
-        for <linux-clk@vger.kernel.org>; Tue, 12 Apr 2022 13:50:45 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id t207so13367478qke.2
-        for <linux-clk@vger.kernel.org>; Tue, 12 Apr 2022 13:50:44 -0700 (PDT)
+        with ESMTP id S229602AbiDLVeP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 12 Apr 2022 17:34:15 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7BD19A57F
+        for <linux-clk@vger.kernel.org>; Tue, 12 Apr 2022 14:13:21 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id bq30so92166lfb.3
+        for <linux-clk@vger.kernel.org>; Tue, 12 Apr 2022 14:13:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Q+h04QniZy9JFOQoK0z9/PVBPK4EocYqj6rRLx+j0L0=;
-        b=SMIgV8aLDiNeKnmDEIb0Inx08TYPHvQgnS+zOknfZE0gUH0ZFQ3H1dUPPJnEpjuINQ
-         H3p7qQqcbUqSIHEuDAkLI20wHOcfbLenWoHzsQ8kY/MY4d4Lp6/rtZoWb7CWVyUX8/94
-         MQjNGjiioQKb2uwTczKfJivg9TlEvPBDsSeQSjoos1HKfj3DhuCB3vTmHH6KkeSVXZSv
-         L2EKgQc2Fr3VG+hSAIebU/2SRI+jbmUGzI3HA9sJf4J3nFA1zMP6faG5cVLOBXGarhpe
-         QOuATxLwJDWBvdr/A/3E0ubrxZRnXzrlTHIUwg35KHPm4aW6cstT40J605DLoLT8hG9Q
-         R36g==
+        bh=5MGAtg924xQO54iJ+qv/RwdxCFigZdsll8ZfNIcJPJc=;
+        b=IRqKqtapX/MHyA0kDhcmneShyhbP439lD8Z4ajJgKEEMZUq7Vj+sED/f2zG9UVnerm
+         jpzuGuKrJfonnDeOMuIf0vIONMOIwnyrV3mqp8hjXo3XRoLeZeoo5BR1yxZ0us5IGLCX
+         H9JVNJpKmIEhAUOLZsJ/ckHDfJizPDyhh1LzKV9AJtaDXTMi6VVYWGZyQloKrFqD7Mdn
+         9mlgMDkO81cme6GlAzsCleTj8LTu7ADAE1Mw8pFcgc04Vg340p+7NMYOHu9JOT4aQDus
+         /ERJHCjamQajYUIAoG0AWxsglQKtacsyg28H/ioh0WG/5bTnm3HRNiz9TzBHQCOjpLva
+         mUsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Q+h04QniZy9JFOQoK0z9/PVBPK4EocYqj6rRLx+j0L0=;
-        b=zBY0e6Pozf3Om8QbUB+pZA5MskTXp7671oz+1khtg4TcjM2h+UnB79t2d/5mMSy7Sl
-         9lAoiqN8Xg3+r5BYR76PVIUp6KGJtcpAGMenZk0g4O4e8aALNH3cwaDxt9w7xXxe92IB
-         1bYXdYmRH2+AKfL2MdNmAHSFMu6HEzxJSiAvczV/APR3LJulLLdfR7w4Ntgy7vScPE7K
-         yICx5DTpDbr8IGbWe3AjugrjgrYEWfkfJ6sXfzXOzY3MyiD6KzsMx3dH3Sh09rf+iAo3
-         MX+GlLYSgmG2WwUimUvjD/Gl5Cpj2HWPKRD4tmJ30x6Qaxadx4k846oQIvKopOTrhd6V
-         KCZg==
-X-Gm-Message-State: AOAM5313qh6q5zCJwDWeE2IjSKBT06znmeHzfbwiDG5A19f/Kbf0r2IW
-        Sw/2mKjT182oF5+2BSHg10r0yuqFF/RZHA==
-X-Google-Smtp-Source: ABdhPJyHK84NQIavAf1tKxFEr0MsaqmU0Ke82mZQQrRn63U0+bN8oY1vPi9nSGHo0FSmPMVTmsqQfA==
-X-Received: by 2002:a05:6638:d82:b0:323:9bb9:e62a with SMTP id l2-20020a0566380d8200b003239bb9e62amr18747267jaj.124.1649796157160;
-        Tue, 12 Apr 2022 13:42:37 -0700 (PDT)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id m7-20020a056e02158700b002c61541edd7sm22548667ilu.3.2022.04.12.13.42.35
+        bh=5MGAtg924xQO54iJ+qv/RwdxCFigZdsll8ZfNIcJPJc=;
+        b=UL+sO8+jF6JvHequ3COuCgbej2VJV/Kqxkay0cMIf17jKsh8py24JoKkh9UOPukG4f
+         YYbuzxEWk+X3U9S1M7m7UId2HLOKKTCxwLPzCq6VDe0XY2qr64LH+IqcQRhDyXZlxPWj
+         neTn3q3XY7CA3D3eaWIab/lW5Hhg+VlGDic34Fx3SEdXMm0T9lKo7IuSvmdo416ijeTE
+         fPpylJaqKE8BBQLCWnPsRU8nUb8EASoe1/c1+1ZvNbz8zwOlKBnkrT4vdBR521eZlmRu
+         vsztJYUNNq7i4W9sUdtJYW2a52csXZV/ZzenFqJK/onBKnr9LjtcmwS4CVDfZ7SzUtac
+         IG0w==
+X-Gm-Message-State: AOAM531Who0x/YCD3tl1N0coev5i+BFQiJRPRRT8uZW7L01pxk6tmSVI
+        3UxztN7dofVqMTFhmddyY+IwNoa6ocpYHQ==
+X-Google-Smtp-Source: ABdhPJxdvBgpOsgvYWc5ohlR+DrAhqAl4jpj9UN/qFwISEbPBxwK1JrxbDhyByhkPcvbEwT59vMZ5g==
+X-Received: by 2002:a2e:a585:0:b0:24b:70d2:249b with SMTP id m5-20020a2ea585000000b0024b70d2249bmr3482854ljp.78.1649797049159;
+        Tue, 12 Apr 2022 13:57:29 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id p9-20020a2e93c9000000b0024b3c2ecc18sm1861940ljh.115.2022.04.12.13.57.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 13:42:36 -0700 (PDT)
-Message-ID: <9af84dd7-75ed-3fa3-d1ea-f71a778bfaaf@linaro.org>
-Date:   Tue, 12 Apr 2022 15:42:35 -0500
+        Tue, 12 Apr 2022 13:57:28 -0700 (PDT)
+Message-ID: <3c96b6f5-878f-ee90-657e-71e8de16e290@linaro.org>
+Date:   Tue, 12 Apr 2022 23:57:27 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] clk: qcom: rpmh: Set wake/sleep state for BCM clks
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
+Subject: Re: [PATCH v2 0/4] arm: qcom: qcom-apq8064: add separate device node
+ for tsens
+Content-Language: en-GB
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Amit Kucheria <amitk@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, patches@lists.linux.dev,
-        Taniya Das <quic_tdas@quicinc.com>
-References: <20220412194505.614002-1-swboyd@chromium.org>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20220412194505.614002-1-swboyd@chromium.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20220406002648.393486-1-dmitry.baryshkov@linaro.org>
+ <20220406154028.EC897C385A3@smtp.kernel.org>
+ <CAA8EJpod2cNOYr3g+DmdWo_2Ujv7-pW39fBKqcpCPvtVgP5-NQ@mail.gmail.com>
+ <20220412184304.79012C385A8@smtp.kernel.org>
+ <CAA8EJppha+V77S6LAZW9us6XiVu9vD9X=RF+RKd+5cvCz+NxEg@mail.gmail.com>
+ <YlXcTNv4ex54G/ig@ripper>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <YlXcTNv4ex54G/ig@ripper>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,75 +85,53 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 4/12/22 2:45 PM, Stephen Boyd wrote:
-> Set the wake and sleep state for BCM clks here, not just the active
-> state, as the active only state is dropped when CPUs go to deep idle.
-> This ensures the clk is always on when the driver thinks it is on.
+On 12/04/2022 23:08, Bjorn Andersson wrote:
+> On Tue 12 Apr 12:20 PDT 2022, Dmitry Baryshkov wrote:
 > 
-> This was found by inspection, and could very well be incorrect if the
-> RPMh hardware copies over the active only state to the sleep and wake
-> states.
-
-I ran with this code and found no obvious errors.  And
-it looks reasonable to me.
-
-However someone (probably Taniya) needs to comment on
-whether it's the right thing to do (based on Stephen's
-second paragraph above), or if not, why not.  It might
-warrant an additional comment also.
-
-I can add a "Tested-by" but I'm going to wait for
-some more input.
-
-					-Alex
-
-> Cc: Alex Elder <elder@linaro.org>
-> Cc: Taniya Das <quic_tdas@quicinc.com>
-> Fixes: 04053f4d23a4 ("clk: qcom: clk-rpmh: Add IPA clock support")
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->   drivers/clk/qcom/clk-rpmh.c | 19 ++++++++++++-------
->   1 file changed, 12 insertions(+), 7 deletions(-)
+>> On Tue, 12 Apr 2022 at 21:43, Stephen Boyd <sboyd@kernel.org> wrote:
+>>>
+>>> Quoting Dmitry Baryshkov (2022-04-06 12:57:30)
+>>>> On Wed, 6 Apr 2022 at 18:40, Stephen Boyd <sboyd@kernel.org> wrote:
+>>>>>
+>>>>> Quoting Dmitry Baryshkov (2022-04-05 17:26:44)
+>>>>>> Currently gcc-msm8960 driver manually creates tsens device. Instantiate
+>>>>>> the device using DT node instead. This follow the IPQ8064 device tree
+>>>>>> schema.
+>>>>>
+>>>>> Why can't the schema be changed?
+>>>>
+>>>> But these commits change the schema. They make apq8064 follow more
+>>>> logical scheme of ipq8064.
+>>>>
+>>>
+>>> Sounds like ipq8064 and apq8064 follow different schemas. Is there any
+>>> benefit to harmonizing the two vs. just leaving it as it is in the dts
+>>> and making the schema match whatever the dts has?
+>>
+>> I'd prefer to harmonize them. It makes no sense to have two different
+>> approaches for the single IP block (shared between ipq and apq/msm).
+>> And having a separate device tree node for the tsens removes a
+>> dependency from gcc on the nvmem/qfprom.
+>> Note, upstream qcom-msm8960.dtsi doesn't describe tsens at all, so we
+>> don't have to worry about it.
+>>
 > 
-> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
-> index aed907982344..29da1ffd10cf 100644
-> --- a/drivers/clk/qcom/clk-rpmh.c
-> +++ b/drivers/clk/qcom/clk-rpmh.c
-> @@ -260,6 +260,7 @@ static int clk_rpmh_bcm_send_cmd(struct clk_rpmh *c, bool enable)
->   	struct tcs_cmd cmd = { 0 };
->   	u32 cmd_state;
->   	int ret = 0;
-> +	enum rpmh_state state;
->   
->   	mutex_lock(&rpmh_clk_lock);
->   	if (enable) {
-> @@ -274,15 +275,19 @@ static int clk_rpmh_bcm_send_cmd(struct clk_rpmh *c, bool enable)
->   		cmd.addr = c->res_addr;
->   		cmd.data = BCM_TCS_CMD(1, enable, 0, cmd_state);
->   
-> -		ret = clk_rpmh_send(c, RPMH_ACTIVE_ONLY_STATE, &cmd, enable);
-> -		if (ret) {
-> -			dev_err(c->dev, "set active state of %s failed: (%d)\n",
-> -				c->res_name, ret);
-> -		} else {
-> -			c->last_sent_aggr_state = cmd_state;
-> +		for (state = RPMH_SLEEP_STATE; state <= RPMH_ACTIVE_ONLY_STATE; state++) {
-> +			ret = clk_rpmh_send(c, state, &cmd, enable);
-> +			if (ret) {
-> +				dev_err(c->dev, "set %s state of %s failed: (%d)\n",
-> +					!state ? "sleep" :
-> +					state == RPMH_WAKE_ONLY_STATE	?
-> +					"wake" : "active", c->res_name, ret);
-> +				goto out;
-> +			}
->   		}
-> +		c->last_sent_aggr_state = cmd_state;
->   	}
-> -
-> +out:
->   	mutex_unlock(&rpmh_clk_lock);
->   
->   	return ret;
+> The apq8064 design was chosen in order to make the dts represent the GCC
+> being a single hardware block, and the fact that this is a clock and a
+> thermal driver in Linux is an implementation decision.
 > 
-> base-commit: 3123109284176b1532874591f7c81f3837bbdc17
+> Seems like we forgot about this decision when we introduce the
+> ipq8064...
+> 
+> 
+> I'm not against harmonizing the two, but I don't see any changes to
+> Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml and the
+> clock patch describes what happens, but not why (i.e. if it's to
+> harmonize the implementations the commit message should say so).
 
+Nice catch. I forgot about the gcc-apq8064 schema. Will fix in the next 
+iteration.
+
+-- 
+With best wishes
+Dmitry
