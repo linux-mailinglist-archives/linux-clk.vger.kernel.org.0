@@ -2,112 +2,107 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59271502C04
-	for <lists+linux-clk@lfdr.de>; Fri, 15 Apr 2022 16:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E091E502E59
+	for <lists+linux-clk@lfdr.de>; Fri, 15 Apr 2022 19:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354573AbiDOOjI (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 15 Apr 2022 10:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
+        id S244504AbiDORmm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 15 Apr 2022 13:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354575AbiDOOjD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 15 Apr 2022 10:39:03 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EBE1A6E3E
-        for <linux-clk@vger.kernel.org>; Fri, 15 Apr 2022 07:36:33 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id c64so10101727edf.11
-        for <linux-clk@vger.kernel.org>; Fri, 15 Apr 2022 07:36:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Gh17tsDRSQFxH17SjRmyw7jE7M/XUCynsfnEDNujD7A=;
-        b=NPiXc3gdwRfweyq9uL7iCQTTkrBW/lJw/BPOOciazwatFrmQq/Z0VPzu/OtVpHi6EA
-         Q4n3iZZ3pjItlGADHl76VZp/l8PXtw2erm4BA/x4q5NJYPKX4SELSCPXf7Q7yb8Mfixm
-         /gESouGNcccB9pK7gVvNSIVj3r6RMBZesOZIgf+yS7FK61cDbeVwEa7zsjyWhahlKLcP
-         t3TCLO7h1t9r/Y8S9JFe8/NKhvkGA9Wyyi3pb1NwUVN2LBCfYOk1tVlsSTKHiavvz+LF
-         /8kjwmPK01/Yc6pSrXHTgRWjvjgqqLD5WkebkIKBgrkQE0TxMjaTUTtYDic5lMhAJMt3
-         w3qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Gh17tsDRSQFxH17SjRmyw7jE7M/XUCynsfnEDNujD7A=;
-        b=rQ8UeygMMeFFqkcW9CYy0vp95SBWC4Oax7lWjQ52pEsU47Xz8169gSh7qMspULd4PM
-         ZMNwUJo7lb7sBv0MpuprFD/L8A8JU5/vKn2zEuFcYhOG/G849usL2rcH3RCedCCQX8DF
-         B6CdHYy4CBs1UwRKedqRIRY5CQzsDk0p4v9HzfbpOr5uGxTx3DWao+uWoB34Cm9f2ulV
-         4G/pmFq6mpKq6NZreF2+lye19OY0Zbb05Mtc2bio+Gfa6Fy02chaNTEGvcLirjlL9ion
-         LxwPVsbcDOGM4dhBW+BDeaN3NCY7Zh8yxqzkBVI0wk54vytF5CYLTvUOQyKjFpycr3bC
-         f+FA==
-X-Gm-Message-State: AOAM533bRK22Yx3YV683r3Ah0MxwJeE32rJsOQM3dFBk5zOL0thPkqDz
-        3shvBxRhIPV2Kz568uy3YoNksS0aZ6NlR/SDONs=
-X-Google-Smtp-Source: ABdhPJwU4FAm3bUO+vAXDPJ1JsgQW/neoC/f6L0NzHd3gWzjpBMeInzpI0qCIG4QXOorW38FEc1zBj9aiJrbik/w+Fs=
-X-Received: by 2002:a05:6402:354d:b0:41d:dfe:6a8c with SMTP id
- f13-20020a056402354d00b0041d0dfe6a8cmr8577527edd.286.1650033391828; Fri, 15
- Apr 2022 07:36:31 -0700 (PDT)
+        with ESMTP id S243665AbiDORmg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 15 Apr 2022 13:42:36 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D2C5C369;
+        Fri, 15 Apr 2022 10:40:05 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23FHe20X130102;
+        Fri, 15 Apr 2022 12:40:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650044402;
+        bh=kaZ6Nxqiacg38fVMqIk7hdcjqcvJLSzaBMBHEm/y8Vc=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=itdH7JQUJ+w8UIxkM+bDMYJF9a3CWCIV1odpgLrX+a0x8l2+vdpGlVgu7Np8lqNL1
+         HNeBfhIehcN18VM1M0RGejhvbug2SkawhSNoBhaCVYNm0BPEHaIbNmG13jfDpr/kUZ
+         9/1lIbJvdh8cyUTsh/qZcqaE0Ogrs3CEYnblqoIA=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23FHe11W098273
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 15 Apr 2022 12:40:01 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 15
+ Apr 2022 12:40:00 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 15 Apr 2022 12:40:00 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23FHe0vM069602;
+        Fri, 15 Apr 2022 12:40:00 -0500
+Date:   Fri, 15 Apr 2022 12:40:00 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Georgi Vlaev <g-vlaev@ti.com>
+CC:     <ssantosh@kernel.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>
+Subject: Re: [PATCH 2/2] dt-bindings: clock: ehrpwm: Add AM62 specific
+ compatible
+Message-ID: <20220415174000.cnnmolsaktl7ghye@jurist>
+References: <20220415134142.12141-1-g-vlaev@ti.com>
+ <20220415134142.12141-3-g-vlaev@ti.com>
 MIME-Version: 1.0
-Received: by 2002:a05:640c:2dd1:b0:155:1376:f4cf with HTTP; Fri, 15 Apr 2022
- 07:36:31 -0700 (PDT)
-Reply-To: attorneyjoel4ever2021@gmail.com
-From:   Felix Joel <starotchi200@gmail.com>
-Date:   Fri, 15 Apr 2022 14:36:31 +0000
-Message-ID: <CANd7BbeKMeW0MPPjSGZHj-sJJHxffM=539kQkSvfnvNrYWfsSA@mail.gmail.com>
-Subject: sto aspettando la tua risposta
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:542 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4998]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [attorneyjoel4ever2021[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [starotchi200[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [starotchi200[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220415134142.12141-3-g-vlaev@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
---=20
-Ciao,
-Per favore, accetta le mie scuse. Non voglio invadere la tua privacy,
-sono Felix Joel, un avvocato di professione. Ti ho scritto una mail
-precedente ma senza risposta e nella mia prima mail ti ho accennato
-del mio defunto cliente, che porta il tuo stesso cognome. Dalla sua
-morte ho ricevuto diverse lettere dalla sua banca in cui ha effettuato
-un deposito prima della sua morte, la banca mi ha chiesto di fornire i
-suoi parenti pi=C3=B9 prossimi o qualcuno dei suoi parenti che possono
-rivendicare i suoi fondi o sar=C3=A0 confiscato e poich=C3=A9 Non sono rius=
-cito
-a localizzare nessuno dei suoi parenti, ho deciso di contattarti per
-questo reclamo quindi hai lo stesso cognome con lui. contattami
-urgentemente per maggiori dettagli.
-Cordiali saluti,
-L'avvocato Felix Joel.
+On 16:41-20220415, Georgi Vlaev wrote:
+> Introduce AM62 specific compatible for EPWM time-base
+> sub-module clock. The time-base clock setup is identical
+> to AM64. The only difference is AM62 provides 3 time-base
+> clocks instead of the 9 found in AM64.
+> 
+> Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
+> Tested-by: Vignesh Raghavendra <vigneshr@ti.com>
+
+Reviewed-by: Nishanth Menon <nm@ti.com>
+
+
+That said, please re-org the patches. Bindings come before the driver
+changes :)
+
+> ---
+>  .../devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml         | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml b/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
+> index 9b537bc876b5..66765116aff5 100644
+> --- a/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
+> +++ b/Documentation/devicetree/bindings/clock/ti,am654-ehrpwm-tbclk.yaml
+> @@ -15,6 +15,7 @@ properties:
+>        - enum:
+>            - ti,am654-ehrpwm-tbclk
+>            - ti,am64-epwm-tbclk
+> +          - ti,am62-epwm-tbclk
+>        - const: syscon
+>  
+>    "#clock-cells":
+> -- 
+> 2.30.2
+> 
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
