@@ -2,168 +2,106 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E946E5032EF
-	for <lists+linux-clk@lfdr.de>; Sat, 16 Apr 2022 07:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5822E5034BD
+	for <lists+linux-clk@lfdr.de>; Sat, 16 Apr 2022 09:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiDPDBy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 15 Apr 2022 23:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
+        id S230132AbiDPHwA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 16 Apr 2022 03:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiDPDBn (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 15 Apr 2022 23:01:43 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0213EFA23F;
-        Fri, 15 Apr 2022 19:59:13 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id ks6so18207263ejb.1;
-        Fri, 15 Apr 2022 19:59:12 -0700 (PDT)
+        with ESMTP id S230135AbiDPHv7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 16 Apr 2022 03:51:59 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CBAFFFA5
+        for <linux-clk@vger.kernel.org>; Sat, 16 Apr 2022 00:49:27 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id f5so5884381ilj.13
+        for <linux-clk@vger.kernel.org>; Sat, 16 Apr 2022 00:49:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6kCehNo5ngnv+AR/8Crw7G8bbbsFA1kQKSA748Q4B5I=;
-        b=kqHylPCidoznaIHTWZKtutc7vYQy7agr+P/t43ywdDhc1YOPaXfslUSYWb6QI0cGlE
-         dpAdde4bqExFOSf2c1JXDNMq//7GFBgiMPRYmALM4HYPzLFWscDKhWZwo5ftWGEQkyEe
-         Wh6I04zQknzWcK19+tGjvo1UXEgrcU3IDxJrVF5WGgBrs+xu5qDHlhcQqVeCHFHLggAq
-         1DuTkwtZLuHrCqAnDVP8/Xc9PegZfvLSoQY6hFVp91JlWPCCLDwQf0jXrGG64uzxm1YO
-         t0y4durJxLr+YUo9zd7/tRCfVqMM9z6cBX4Bgei7VobL+GbFsGxjcKfmhMA1qIIkZDUG
-         a36w==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
+        b=bJd2DIgtyK+bZCVQpMa9XLiI7bVnFQgVFeGzbZ6bXamjrEFIUCNaIDR9YpvR5iTRQC
+         EoRjHn2hxdGgHpTmUXoJLhLdkz8kw8CpdMkf+RjOM2yxgJf0M2w5tnzpw0NiczM9cGQm
+         aTRY2J48j2+AVBVM6ZplapTERLwB7sqpQHn0KTPy+GATyEE1HlWbU25nZewZyTln9PiO
+         eb2iuPe3VcoLkYjZ6tmC44EeIcF1BzRiek/y+/+gg720T1wEvd/5m2iOgdTIUS3isI5Z
+         q2z1OdX/gYACU6OexrbNcXzEKBC+MKUq0Bm7V68HpmeyS3D5tFhEEP1iOfnkPKJo7x6w
+         XtNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6kCehNo5ngnv+AR/8Crw7G8bbbsFA1kQKSA748Q4B5I=;
-        b=kicPTzIt/bsKC8v4w0H012i8n5iZD/WWZ7eC+29yZFF9bFQu6iFkBHqTkpgU4ehBp3
-         VADqNhSrymnqpcortEMewHeVZB4BF4WV4A+rq6F+JKmNd8QehNYW7BOQVLJXxFu9ccpk
-         1MABDB+UWpZ8Spxtf3oAUQLOadGG1uEa8R1UFAU8NeTsfiBTaLn31wCXJQTknq9dAe9c
-         POMdfQYdHrD8ZcmmUcvfKhkFY1aVE+6m7muCyuvGhMTkxpbAT8EtyeiyTNZDLnU9kjGR
-         A6L7Y4mxzrPN5B1j6+l3rYn1bQDSVXqoxqZ/Fbf1vOz7/eltxZPMfFb2++gSGOf2eRia
-         +AZg==
-X-Gm-Message-State: AOAM533M9pNUW4JVLM8iKFt0CtaMEX2UjRjBS5p4+Hhq5ik86M9JZn+P
-        eOCw9HQ5MJVeM1+1J6dQA8E=
-X-Google-Smtp-Source: ABdhPJwHHJ1fnnyDCZwsM8RO7I0Dnd4veOx5hIB19ACG2nH8GUAQcIde8QHE6NvnM+nhX3NHP+1pwA==
-X-Received: by 2002:a17:907:97c8:b0:6ef:6a79:6285 with SMTP id js8-20020a17090797c800b006ef6a796285mr1370190ejc.231.1650077951595;
-        Fri, 15 Apr 2022 19:59:11 -0700 (PDT)
-Received: from localhost.localdomain ([138.199.7.159])
-        by smtp.gmail.com with ESMTPSA id oz20-20020a170906cd1400b006e872188edbsm2200915ejb.104.2022.04.15.19.59.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 19:59:11 -0700 (PDT)
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH RESEND v2 9/9] arm64: dts: qcom: msm8996-xiaomi-scorpio: Use MSM8996 Pro
-Date:   Sat, 16 Apr 2022 06:56:37 +0400
-Message-Id: <20220416025637.83484-10-y.oudjana@protonmail.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220416025637.83484-1-y.oudjana@protonmail.com>
-References: <20220416025637.83484-1-y.oudjana@protonmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
+        b=FeO79wWXwSYOtCMxct8d1cVEFVYPTw5rTPc5WsfLbILgbOrS65mAw41TK92StTg89z
+         UkUTvzNIWr27+l+oszD1c+gAGLnXdsghxXR5MN9zWScRvrdun4bJqVp/HIuWopVON+zV
+         03LZso+BG8IKBlA4KmgCaVfe1/3pc5Q3si+xPtCR25QdOAS9VRJdA0O9SATdLDnTekAq
+         IXCq6lGJbgKH9zdBObL08eT2r7FqBvjZT4ANUxGeiGch6eUZ8bWshuLkjNkLL6JlaSea
+         9n2kQTGZbJF5UVsUcUA2CstJyRviS2R/I94yPu7KMxtv6w3VnXbe9OXRu7FmUXcWEN5e
+         95CA==
+X-Gm-Message-State: AOAM533egV780RNsR0P4V/ZNwl47U9pnt6hc+IQX45HzGzvTBF0VdR0c
+        dp3qMx4bwjsRQ28keIXinWv4FteBp41UdHRkZm4=
+X-Google-Smtp-Source: ABdhPJzPQ782jxaaybf4v05kBQtFRTzv0MMrux20NcZ4Q10XmGrK6dnUIabFDBNBmBOv8fFyQY5zqzYAgf4Cnc3KaCc=
+X-Received: by 2002:a92:508:0:b0:2cb:ebd8:a76b with SMTP id
+ q8-20020a920508000000b002cbebd8a76bmr1009500ile.156.1650095366830; Sat, 16
+ Apr 2022 00:49:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6638:1309:0:0:0:0 with HTTP; Sat, 16 Apr 2022 00:49:26
+ -0700 (PDT)
+Reply-To: daniel.seyba@yahoo.com
+From:   Seyba Daniel <royhalton13@gmail.com>
+Date:   Sat, 16 Apr 2022 09:49:26 +0200
+Message-ID: <CALSxb2w9zQYotuLcRSCPns53ksvT9UrEMVx-1Cp1f8RE7er3cA@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:141 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [royhalton13[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [royhalton13[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The Xiaomi Mi Note 2 has the MSM8996 Pro SoC. Rename the dts
-to match, include msm8996pro.dtsi, and add the qcom,msm8996pro
-compatible. To do that, the msm8996.dtsi include in msm8996-xiaomi-common
-has to be moved to msm8996-xiaomi-gemini, the only device that needs it
-included after this change. The msm-id is also removed as it is now defined
-in msm8996pro.dtsi.
+Hello,
 
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
----
- arch/arm64/boot/dts/qcom/Makefile                             | 2 +-
- arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi           | 3 ---
- arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts            | 1 +
- ...m8996-xiaomi-scorpio.dts => msm8996pro-xiaomi-scorpio.dts} | 4 ++--
- 4 files changed, 4 insertions(+), 6 deletions(-)
- rename arch/arm64/boot/dts/qcom/{msm8996-xiaomi-scorpio.dts => msm8996pro-xiaomi-scorpio.dts} (99%)
+I am so sorry contacting you in this means especially when we have never
+met before. I urgently seek your service to represent me in investing in
+your region / country and you will be rewarded for your service without
+affecting your present job with very little time invested in it.
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index f9e6343acd03..72b8fcdd9074 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -37,7 +37,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-sony-xperia-tone-dora.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-sony-xperia-tone-kagura.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-sony-xperia-tone-keyaki.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-xiaomi-gemini.dtb
--dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-xiaomi-scorpio.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8996pro-xiaomi-scorpio.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-asus-novago-tp370ql.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-fxtec-pro1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-hp-envy-x2.dtb
-diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
-index 7a9fcbe9bb31..1bdd3f09f536 100644
---- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
-@@ -3,9 +3,6 @@
-  * Copyright (c) 2020, Yassine Oudjana <y.oudjana@protonmail.com>
-  */
- 
--/dts-v1/;
--
--#include "msm8996.dtsi"
- #include "pm8994.dtsi"
- #include "pmi8994.dtsi"
- #include <dt-bindings/input/input.h>
-diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts
-index 34f82e06ef53..e360187109a2 100644
---- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts
-@@ -5,6 +5,7 @@
- 
- /dts-v1/;
- 
-+#include "msm8996.dtsi"
- #include "msm8996-xiaomi-common.dtsi"
- #include <dt-bindings/sound/qcom,q6afe.h>
- #include <dt-bindings/sound/qcom,q6asm.h>
-diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts b/arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-scorpio.dts
-similarity index 99%
-rename from arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts
-rename to arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-scorpio.dts
-index 27a45ddbb5bd..2028325e1c0f 100644
---- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-scorpio.dts
-@@ -5,6 +5,7 @@
- 
- /dts-v1/;
- 
-+#include "msm8996pro.dtsi"
- #include "msm8996-xiaomi-common.dtsi"
- #include "pmi8996.dtsi"
- #include <dt-bindings/sound/qcom,q6afe.h>
-@@ -12,9 +13,8 @@
- 
- / {
- 	model = "Xiaomi Mi Note 2";
--	compatible = "xiaomi,scorpio", "qcom,msm8996";
-+	compatible = "xiaomi,scorpio", "qcom,msm8996pro", "qcom,msm8996";
- 	chassis-type = "handset";
--	qcom,msm-id = <305 0x10000>;
- 	qcom,board-id = <34 0>;
- 
- 	chosen {
--- 
-2.35.1
+My interest is in buying real estate, private schools or companies with
+potentials for rapid growth in long terms.
 
+So please confirm interest by responding back.
+
+My dearest regards
+
+Seyba Daniel
