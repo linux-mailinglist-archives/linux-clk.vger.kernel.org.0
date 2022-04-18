@@ -2,105 +2,101 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2856F50509F
-	for <lists+linux-clk@lfdr.de>; Mon, 18 Apr 2022 14:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4052250560D
+	for <lists+linux-clk@lfdr.de>; Mon, 18 Apr 2022 15:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238862AbiDRM0x (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 18 Apr 2022 08:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        id S241959AbiDRNbu (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 18 Apr 2022 09:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238744AbiDRM0W (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 18 Apr 2022 08:26:22 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF6412610
-        for <linux-clk@vger.kernel.org>; Mon, 18 Apr 2022 05:20:26 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id l7so26580276ejn.2
-        for <linux-clk@vger.kernel.org>; Mon, 18 Apr 2022 05:20:26 -0700 (PDT)
+        with ESMTP id S244873AbiDRNa7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 18 Apr 2022 09:30:59 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919B11EEF3;
+        Mon, 18 Apr 2022 05:56:51 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id s137so18740387pgs.5;
+        Mon, 18 Apr 2022 05:56:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IrspqwoC0i8xWBSDGv/e81WYq/G3Gaial55KaXcpMB4=;
-        b=EROJPtVhkTWMC362VRxsn28ErAWXjxRwSGzBrXd/ILtzWuytV08hvlbx49encLOOqc
-         yeMw9yc7SKrF1+IquHFumnC5nzv8sCjiS/9h3Ie6onCCBYKAmaLf0suDnplCv4q3oEDF
-         knghEFqpRQpYEfE3tDtNwMu2obylGzqhbXAdLhvCLWIQKLnEXd8Sw7hYct4HM0iizOxM
-         KJxVev9k4sh5XJ89IrjxtG8nz5L8AoKnxF88C74xHknJiavH0KHq7Pxu0mOPH9XvZWze
-         PiVvIKdjNyMdM4oEgTDgrWs57aI2jc86pzv2U3KyxgYxeQX5iqZEIrJxIMY3Y4NeUc0Y
-         leDw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ODAyrur2uuG6LpXXHU2KctLzjDAk76d6YTt1ZAO0Ttk=;
+        b=ZlVp1ObmY67pdpfEJIBhb4Gtc8gONWPpAeAZ65R65t+xXuKHjIhv7rfiTu6XtSSk6e
+         jnf0lQtyup4Yyvqc4/qRJ+RozRB9NFaffvcLgQL7anfu4sIEZKVxN3WlTyLQS22Nm4qH
+         ll/vRIlGniiGngEq0Ef3cyZDeiPKUljf7yPPnJea3kUeD7V/GnPioJK9S11dolGOaxXn
+         zIlg3QsWEdx52Ha2gnwiYtiKMb7vc0cep4qjR/8xgB2x0b5iJmlYC1SowZgl+7qpqhfE
+         k7nLOY/eaZ3CYZWG2lKku/qx7g2lRlDAweerrz46bEF8c8RSCNerthN4+immxkjWfzrK
+         utvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=IrspqwoC0i8xWBSDGv/e81WYq/G3Gaial55KaXcpMB4=;
-        b=4nnyu1uH1JX9I5LwXhJY0o5w65rSNczNhS9ake5DIGqrtxkn5CuoM764weW+8JmOos
-         lRw07fAHcEeDX0DYX6GcDWJy6awBhe8CPUf+H9ip/5yuHrfQDhlHww8EEJtczm1s6zXx
-         MXNzU+vtLlK5y5mHqxRRIYwCKO/nWOU/OXDG2Vo8SxK4hNMN/xLeYUqG2V45Igb7uVXq
-         waKqY93tBIZUEinnYg5XThMUuibXwWR38zaMLlom4mcfoaTJWbLwftb38MhoNyHI0xH/
-         iye/ks2Wp/oC68gOt/jd8NuhnmqUyqoMsmLfW+cUlWUsK9Qbb8pRy/Ijl0XeVQy6Knhq
-         tpJw==
-X-Gm-Message-State: AOAM532CmanEeR+NLeY9ukIQZqD7AcVn6E2md/I3eLoKFb/HmByHBXb+
-        /e6d6XlnjZLA4GN/io63cxVS0A==
-X-Google-Smtp-Source: ABdhPJzoDxvcNzmEcyeGaDq97ow/WOeOSzYmXAahpLo2Kg1wrT2tHDDGSBII00dY0Cob+6Pqx4rvHQ==
-X-Received: by 2002:a17:907:7e9f:b0:6e8:92eb:4171 with SMTP id qb31-20020a1709077e9f00b006e892eb4171mr8636712ejc.53.1650284425490;
-        Mon, 18 Apr 2022 05:20:25 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id o14-20020a170906774e00b006d5b915f27dsm4538016ejn.169.2022.04.18.05.20.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 05:20:25 -0700 (PDT)
-Message-ID: <60e50c11-118d-431f-7120-95fcbb53eeb5@linaro.org>
-Date:   Mon, 18 Apr 2022 14:20:24 +0200
+        bh=ODAyrur2uuG6LpXXHU2KctLzjDAk76d6YTt1ZAO0Ttk=;
+        b=0sGD8tlOqnS0Nzxh8rduHWD1DEEliztOGIojiZyk/WfIDwTcEjfGoPglKJ4bPKt+00
+         iS/A1OmtzaiMSoeneWjT+QZLzmXuq2vgfsrpO6SsJzsAVI2LC0Po46/+cu3uXEHhkud4
+         w9dkyFbkCRJivv/Dy1BlTqAFojUDTwH4ZTTBM5MA8HoR8fFKkhud3UerPGdDWve872ri
+         RIynJ4028eqYPZ1sQeBfbux3clhNdM3kNOMtELxBNv00JDMaDoqxunWTwh3/VJtbJUUp
+         x6wHNApOBONVlB0ZpyKgyY5aW8lFqErDsWfnKUEoXi+UHcdPU5jNn1y1fDoeg7+p4jtA
+         NSeQ==
+X-Gm-Message-State: AOAM532XKxakk43guRmdeAHQQ9K/4D97bG47jyr8Or9E1jdTMwUWIxZj
+        /iW8pKB9pKQ5gQ7Mk2TeD64Idjzi3CU=
+X-Google-Smtp-Source: ABdhPJzYyEiG3pNKaLYXXQ5xjcjy2jalY3a7dOwMm/JW/Gxzs17ECpSZhAvtfVP9lHEgQ+isRQXw8g==
+X-Received: by 2002:a63:714e:0:b0:398:9bdc:e11a with SMTP id b14-20020a63714e000000b003989bdce11amr9721798pgn.572.1650286610963;
+        Mon, 18 Apr 2022 05:56:50 -0700 (PDT)
+Received: from tj10039pcu.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id 73-20020a63064c000000b003a216524089sm11358212pgg.57.2022.04.18.05.56.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 05:56:50 -0700 (PDT)
+From:   Cixi Geng <gengcixi@gmail.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, orsonzhai@gmail.com,
+        baolin.wang7@gmail.com, zhang.lyra@gmail.com
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V3 0/3] Add ums512 clocks and relative bindings file
+Date:   Mon, 18 Apr 2022 20:56:27 +0800
+Message-Id: <20220418125630.2342538-1-gengcixi@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 3/5] arm64: dts: nuvoton: Add initial support for
- MA35D1
-Content-Language: en-US
-To:     Jacky Huang <ychuang3@nuvoton.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, ychuang570808@gmail.com
-Cc:     robh+dt@kernel.org, sboyd@kernel.org, krzk+dt@kernel.org,
-        arnd@arndb.de, olof@lixom.net, will@kernel.org, soc@kernel.org,
-        cfli0@nuvoton.com
-References: <20220418082738.11301-1-ychuang3@nuvoton.com>
- <20220418082738.11301-4-ychuang3@nuvoton.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220418082738.11301-4-ychuang3@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 18/04/2022 10:27, Jacky Huang wrote:
-> Add the initial device tree files for Nuvoton MA35D1 Soc.
-> 
+From: Cixi Geng <cixi.geng1@unisoc.com>
 
-(...)
+This patchset is add the UMS512 clocks support
 
-> +	gic: interrupt-controller@50800000 {
+v2 changes:
+  adjust description and add the "sprd,ums512-glbregs,syscon,simple-mfd"
+  compatibles to fix match failed logs in the dt_binding_check.
+  add the property license and copyright notice.
 
-The unit address does not match first reg property. Don't you have
-warnings with this?
+v3 changes:
+  fix wrong indentation and hint: "maxItems" is not needed with an "items" list
+  when use the latest dtschema.
 
-> +		compatible = "arm,gic-400";
-> +		#interrupt-cells = <3>;
-> +		interrupt-parent = <&gic>;
-> +		interrupt-controller;
-> +		reg = <0x0 0x50801000 0x0 0x1000>,
-> +		      <0x0 0x50802000 0x0 0x2000>,
-> +		      <0x0 0x50804000 0x0 0x2000>,
-> +		      <0x0 0x50806000 0x0 0x2000>;
-> +		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_RAW(0x13) |
-> +			      IRQ_TYPE_LEVEL_HIGH)>;
-> +	};
-> +};
+Cixi Geng (3):
+  dt-bindings: clk: sprd: Add bindings for ums512 clock controller
+  clk: sprd: Add dt-bindings include file for UMS512
+  clk: sprd: Add clocks support for UMS512
 
-Best regards,
-Krzysztof
+ .../bindings/clock/sprd,ums512-clk.yaml       |  112 +
+ drivers/clk/sprd/Kconfig                      |    6 +
+ drivers/clk/sprd/Makefile                     |    1 +
+ drivers/clk/sprd/ums512-clk.c                 | 2199 +++++++++++++++++
+ include/dt-bindings/clock/sprd,ums512-clk.h   |  397 +++
+ 5 files changed, 2715 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
+ create mode 100644 drivers/clk/sprd/ums512-clk.c
+ create mode 100644 include/dt-bindings/clock/sprd,ums512-clk.h
+
+-- 
+2.25.1
+
