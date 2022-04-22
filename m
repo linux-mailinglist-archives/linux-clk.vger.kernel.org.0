@@ -2,70 +2,79 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B7950C3FA
-	for <lists+linux-clk@lfdr.de>; Sat, 23 Apr 2022 01:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9E550C429
+	for <lists+linux-clk@lfdr.de>; Sat, 23 Apr 2022 01:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233926AbiDVWoA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 22 Apr 2022 18:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
+        id S233333AbiDVWgV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 22 Apr 2022 18:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233939AbiDVWnj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 22 Apr 2022 18:43:39 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955AF20F202
-        for <linux-clk@vger.kernel.org>; Fri, 22 Apr 2022 14:40:34 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id q3so13620737plg.3
-        for <linux-clk@vger.kernel.org>; Fri, 22 Apr 2022 14:40:34 -0700 (PDT)
+        with ESMTP id S233258AbiDVWgJ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 22 Apr 2022 18:36:09 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F3022C3C5;
+        Fri, 22 Apr 2022 14:51:49 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id fu34so6463120qtb.8;
+        Fri, 22 Apr 2022 14:51:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hprmnOUA4/3FlmJh7kQF6XL3/Oe5JP21iOb+ppvENHA=;
-        b=VdTgxJp6iaQGYLdO2T00e5mydN8yUlSBKdxKAR02oKgdllMIajdCnVACLvEDHFAm0K
-         +FdTgKJYWpIdn0HVA3RD0Ql+Vl0U2Q0CyCxHBWI8W56ilGD7Bdh0PK0Ho6bF49WHDXH6
-         WrFIMtgPHK9MqZchFV7tUBu3FHfY/x4rQj7vlxQ6bvaQDGcFvS4155E5zFh5RNxjf/zq
-         wnOYaXbdhPyWGL2hUvO9hiETdErtm3tKRfS24aAbvMbl/UQn/Fjo2xF6Ldw9kixJdZ84
-         B2zbkO5eAi3VuDIrZhhODYWj7oqQ3yL+07L9w/3Q7N2IQIEv5wS/okO4N3rdG3E5bphy
-         0prA==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RZMfk42e8wN88X1x4Oc4ckY2xJ8vXIPWfHgWdfKTn9M=;
+        b=OSzfMYbMeDyu2ee3SkdVdwdxHDs6Jzcx2Ft5LhsurqKR50qJ8HRKBjD3f87T0XNmxR
+         qPnidw8ZJGlkLY4hMiMsUUqST228rD37ocmfljP7rOdrbzZs3xADUHms29i9T65N5q9E
+         clMgoBeG13AcWf9ZZfieqatqAf8Yj3w3rxiAT2PbzEXyVNfRiReGT+XgQbJekBqIWe5q
+         P/XFEhR+21IEscdN+hf34slbakBnAe7UATNkKqG4TVmxXH+UjyXh7SddnQ7HDYvfH9Nt
+         OEqb8324QrpnTlQriByF9ZcZf/Go3TvUITwT8PsNgo2rtCmUHHWiuk1BEArJwiB3TjTB
+         bExQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=hprmnOUA4/3FlmJh7kQF6XL3/Oe5JP21iOb+ppvENHA=;
-        b=BpZw9q5CiA910o3D/0+HMo46RTeirvO5STNXUuylh4rUFfdoKDuOLbq4cA4/7jLJgp
-         olGgs4NWMAqeBOdYzwEcGswe7NMLQYQTVkry9XqwSUNzhYp+BCgGWWIb/q3zbz73tnnR
-         WdiU0KvrZ0ZIbsbyOV0AnLS2z3iCM0zQsnPzKLXuQ+aq8abH0X4pf6ru74j61vZX+EF1
-         oi+qEnJAGdS0eSIpvv26Qy4ugZuxP6QYxTqNsLnAbAkyjnHtbf8XSbiI19ulHoxxIM7j
-         HqfVTki/ouSbIwiNmhq3W3XyWyri+h5kT6dloY3jWQ7EyitNOD+3rDAKabDWXU7dXotU
-         aluA==
-X-Gm-Message-State: AOAM530f6VXNYJGvl1Xv9lPRDI0MAvWCeeRd7dgfqaDfGA754McAEm8B
-        wWedlOlUeTEON4iAZqIvKVQIBg==
-X-Google-Smtp-Source: ABdhPJy36dziWxrx9VNGKb+ZJ9QYf23DzNrptVA5BjFCnHIlqW+yS/E17cWlIdJ736Efbyw8yGz3uw==
-X-Received: by 2002:a17:90a:8418:b0:1d2:7c69:e3bf with SMTP id j24-20020a17090a841800b001d27c69e3bfmr18408269pjn.44.1650663634143;
-        Fri, 22 Apr 2022 14:40:34 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id i6-20020a628706000000b0050adb5a4452sm3540245pfe.101.2022.04.22.14.40.33
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RZMfk42e8wN88X1x4Oc4ckY2xJ8vXIPWfHgWdfKTn9M=;
+        b=5Qycu7xY6XTw1/MlnTnSvQQ+h8U81dPsVKgvdUmzkEHLOZx6HFCQMB3oEh7upWR+tU
+         SHIijXfzsIG1JMXPj+TKUCodQbAwb13uNkKJqueK5ZjXizHvZPobsLhARckIXmE9pSzZ
+         B1p8CV8D5XJ1nfQHb3nYGhw93qqdmcJmTEqnh5mk+zlb/l/iYwNGuZdWKKCcfYdaBgE0
+         utxGDwOo9nY0F7nZ8odrhE++tKuCXatN/cc7A8QLhcy/ME2hq5Uiwm5caDhCkrfEvlSg
+         G7JX19otKVyoDed7mvpa/YvBXnupS78fMvH3HOw/bEABgxFXpdgUcEqZG4p8XU2FBhLX
+         wJZA==
+X-Gm-Message-State: AOAM530d/h1v3j9q0NZdJah39aNaQ/q9DL9NPoF8JA0YHhEMr7p1/Sll
+        meTv1Rb43x6c8qReQaLxOw==
+X-Google-Smtp-Source: ABdhPJxyyCkFj9u8Z2ocvKIb99chaQNgfvpROYCjFGnjIdmRADHMMNVhTGFRGUajfZ+aBtu4TsJEvA==
+X-Received: by 2002:a05:622a:1a86:b0:2f3:4be4:42dd with SMTP id s6-20020a05622a1a8600b002f34be442ddmr4854803qtc.55.1650664308682;
+        Fri, 22 Apr 2022 14:51:48 -0700 (PDT)
+Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
+        by smtp.gmail.com with ESMTPSA id y20-20020a05622a121400b002eefd7bf5basm2080434qtx.63.2022.04.22.14.51.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 14:40:33 -0700 (PDT)
-Date:   Fri, 22 Apr 2022 14:40:33 -0700 (PDT)
-X-Google-Original-Date: Fri, 22 Apr 2022 14:40:27 PDT (-0700)
-Subject:     Re: [PATCH v3 0/9] More PolarFire SoC Fixes for 5.18
-In-Reply-To: <986c73df-9634-d18b-eed3-37584fa2ea89@conchuod.ie>
-CC:     sboyd@kernel.org, mturquette@baylibre.com, aou@eecs.berkeley.edu,
-        Paul Walmsley <paul.walmsley@sifive.com>, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
-        krzk+dt@kernel.org, daire.mcnamara@microchip.com,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
-        conor.dooley@microchip.com, atulkhare@rivosinc.com
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     mail@conchuod.ie
-Message-ID: <mhng-08dea5a1-77b8-4b79-93e3-cda9fffdf2ff@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 22 Apr 2022 14:51:48 -0700 (PDT)
+Date:   Fri, 22 Apr 2022 17:51:46 -0400
+From:   Kent Overstreet <kent.overstreet@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Christoph Hellwig <hch@lst.de>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        hannes@cmpxchg.org, akpm@linux-foundation.org,
+        linux-clk@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-input@vger.kernel.org, roman.gushchin@linux.dev
+Subject: Re: [PATCH v2 1/8] lib/printbuf: New data structure for
+ heap-allocated strings
+Message-ID: <20220422215146.i663tn6zzn6blzo3@moria.home.lan>
+References: <20220421234837.3629927-7-kent.overstreet@gmail.com>
+ <20220422042017.GA9946@lst.de>
+ <YmI5yA1LrYrTg8pB@moria.home.lan>
+ <20220422052208.GA10745@lst.de>
+ <YmI/v35IvxhOZpXJ@moria.home.lan>
+ <20220422113736.460058cc@gandalf.local.home>
+ <20220422193015.2rs2wvqwdlczreh3@moria.home.lan>
+ <20220422153916.7ebf20c3@gandalf.local.home>
+ <20220422203057.iscsmurtrmwkpwnq@moria.home.lan>
+ <20220422164744.6500ca06@gandalf.local.home>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422164744.6500ca06@gandalf.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,45 +82,45 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, 22 Apr 2022 14:10:55 PDT (-0700), mail@conchuod.ie wrote:
->
->
-> On 22/04/2022 22:00, Stephen Boyd wrote:
->> Quoting Conor Dooley (2022-04-22 12:59:09)
->>> On 22/04/2022 20:39, Palmer Dabbelt wrote:
->>>>
->>>> Thanks.  These generally look good to me, but I don't see acks from everyone.  I'm perfectly fine treating these as fixes and taking them through the RISC-V tree, but looks like it's mostly clk stuff so
->>>>
->>>> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
->>>
->>> Ye, hopefully they go via clk. Stephen replied to v1 or 2 so
->>> I figure they're in his queue :)
->>
->> It helps to be explicit in the cover letter. It's in my queue but I put
->> it on hold because the cover letter didn't clarify what tree it was
->> intended for nor the priority of what is being fixed.
->
-> Ah right, my bad. The coordinating things between trees stuff is
-> still pretty new to me. If you could take the lot via clk, that'd
-> be great?
+On Fri, Apr 22, 2022 at 04:47:44PM -0400, Steven Rostedt wrote:
+> Which is something you could do on top of seq_buf. Point being, you do not
+> need to re-implement printbuf, and I have not looked at the code, but
+> instead, implement printbuf on top of seq_buf, and extend seq_buf where
+> needed. Like trace_seq does, and the patches I have for seq_file would do.
+> It would leave the string processing and buffer space management to
+> seq_buf, as there's ways to see "oh, we need more space, let's allocate
+> more" and then increase the heap.
 
-No problem, the multi-tree stuff is always tricky.  It ended up in my 
-queue too, but I fast-forward to the latest version of each set as I 
-stumble into earlier ones so I guess I got here quickly.
+That sounds like it could work. 
 
-Having these go through clk is better for me, I'll ignore them.
+> I would be more willing to accept a printbuf, if it was built on top of
+> seq_buf. That is, you don't need to change all your user cases, you just
+> need to make printbuf an extension of seq_buf by using it underneath, like
+> trace_seq does. Then it would not be re-inventing the wheel, but just
+> building on top of it.
 
-Thanks!
+Hmm... At first glance, redoing printbuf on top of seq_buf looks like it would
+save a pretty trivial amount of code - and my engineering taste these days leans
+more toward less layering if it's only slightly more code; I think I might like
+printbuf and seq_buf to stay separate things (and both of them are pretty
+small).
 
->> Is boot broken? Do I need to send these up to Linus next week as part of
->> fixes for this merge window?
->
-> Boot is not broken, I was hoping this would go into 5.18 to avoid
-> having to deal with two different sorts of reference clock DT
-> entries - 5.18 where the DT provides the mss pll & 5.18+n where
-> the DT provides the input to the mss pll.
->
-> So, not next week urgent, but as fixes for this window please.
->
-> Thanks,
-> Conor.
+But it's definitely not an unreasonable idea - I can try it out and see how it
+turns out. Would you have any objections to making some changes to seq_buf?
+
+ - You've got size and len as size_t, I've got them as unsigned. Given that we
+   need to be checking for overflow anyways for correctens, I like having them
+   as u32s.
+ - seq_buf->readpos - it looks like this is only used by seq_buf_to_user(), does
+   it need to be in seq_buf?
+ - in printbufs, I make sure the buffer is always nul-terminated - seems
+   simplest, given that we need to make sure there's always room for the
+   terminating nul anyways.
+
+A downside of having printbuf on top of seq_buf is that now we've got two apis
+that functions can output to - vs. if we modified printbuf by adding a flag for
+"this is an external buffer, don't reallocate it". That approach would be less
+code overall, for sure.
+
+Could I get you to look over printbuf and share your thoughts on the different
+approaches?
