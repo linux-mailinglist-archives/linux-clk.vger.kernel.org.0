@@ -2,72 +2,54 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9F9350EB9B
-	for <lists+linux-clk@lfdr.de>; Tue, 26 Apr 2022 00:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B0050EC2A
+	for <lists+linux-clk@lfdr.de>; Tue, 26 Apr 2022 00:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234045AbiDYWYk (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 25 Apr 2022 18:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
+        id S233909AbiDYWhd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 25 Apr 2022 18:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343528AbiDYVbC (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 25 Apr 2022 17:31:02 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0CB38780
-        for <linux-clk@vger.kernel.org>; Mon, 25 Apr 2022 14:27:57 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id y32so28550062lfa.6
-        for <linux-clk@vger.kernel.org>; Mon, 25 Apr 2022 14:27:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oPLNTV7n0Ijb4QN5+/ZP2G9taYmSFsaYJE9s/1u9hZM=;
-        b=naJmfFn/7aQnWrxs9416P0rXLGU3UuoRg12Hd2uPQ7aG8ExsuJJ3O5N0UcqtwH1Gjr
-         D6KcqvTJmL3XaOU50e05bhYTtDlDs49JFC1bebV+ilqiPq6mrUkL2R/ar7nsfLaY51FH
-         qpVp8cyC6ZngTFZT5gxmL0I+IaCaR6cY42SEdIPYG5osUdiy6R8zwSwx/sySiV+5as5j
-         +D50vkEtXK+eWPp5fRkHt3NJXwVP+J7rQVTTYxuJvwC981dGs34YVBq5HpbS59acGsuQ
-         QPZdfcTlVHuIPXk5Xili/MiDQcAocHnGhkisRPsqs5FOG+mxscW2ee7JJ92Vgl3Y5WMJ
-         eqlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oPLNTV7n0Ijb4QN5+/ZP2G9taYmSFsaYJE9s/1u9hZM=;
-        b=UIjCDRmZE+iozQrQOa151jxOxD/6sEuW1FFn1fm+kMbdZ+MicE/zA4sUVEgWE7Tlf2
-         DQY9j2ltqzX2QIzBRR/qFBfNbsCt/QY6TU/tje8ygzND8xRalanEtbeGfmd0uzNSCTJ9
-         KSChngw4Q2V8wDTMN7WNgaxmebgHY34CdwsVC2mHbeELxa5mD4+kqHHp/Usn76OYJpk7
-         X8Z+eBNg7wgF4nm4xsuanm2u/u8cOT2srcOGT9o3MPq0HtDMI8roVhEu4a2sgGGY9mfV
-         gm7DECP+CFfkjIptEkJ1zbUkvi+Q5ZNFFRrm+owwzr6MBhDyauJpL8jMBajgCdf4/Hfr
-         E3Zg==
-X-Gm-Message-State: AOAM531QGnk+kRK2iq2kWOEShPpQRA9kRckY9B5E+Yf5wtg/JzAOX+u0
-        jR7QzNayZEsdMtRMUjPRftZ93A==
-X-Google-Smtp-Source: ABdhPJzEO2UHb/QHosYyH0Xm5NQj8w1ENiOVLuq2H7eBIiIfNVF7f3HXW7kbOg0E9EVBQJ9SZt36WQ==
-X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id y3-20020ac24203000000b004488053d402mr14176200lfh.687.1650922075466;
-        Mon, 25 Apr 2022 14:27:55 -0700 (PDT)
-Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id l13-20020a19494d000000b0046ba0e38750sm1533314lfj.3.2022.04.25.14.27.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 14:27:54 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v3 3/3] dt-bindings: clock: qcom,gcc-apq8064: split tsens to the child node
-Date:   Tue, 26 Apr 2022 00:27:50 +0300
-Message-Id: <20220425212750.2749135-4-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220425212750.2749135-1-dmitry.baryshkov@linaro.org>
-References: <20220425212750.2749135-1-dmitry.baryshkov@linaro.org>
+        with ESMTP id S230484AbiDYWhc (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 25 Apr 2022 18:37:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF72104F2C;
+        Mon, 25 Apr 2022 15:34:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A46061553;
+        Mon, 25 Apr 2022 22:34:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE973C385A4;
+        Mon, 25 Apr 2022 22:34:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650926066;
+        bh=kcoJOwxO7li9dg8WiipeoY/VN7Fr/qwxU1nP5uosILM=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=pOb/CjVMTnNj5CtyEGmtzZu4ukywwssAoRr6dCrvih/QV+LtwArQKq3zBai0RCpQ4
+         /e5snSqYfUO+LCP1azsjP8yTgLm1KgrZPQCoHbUX/GPDl88MabLpNDuu016aDz3j8l
+         jsvhHMCCl56daLBIP1YKtTS59MZrERDn1wvWvJAaBXQnHR79+wivFJwMOoxlLjiNK6
+         b8xjvbKWsIeWJCGJjRf4RlhrZCtpC7JYTI1f4yPh/4YZMt9mLWQsE9k/B0WAdbmrsV
+         MJ0K/zgfEMII79g+Z/8NPeXb+FKfpp8nqSzaD1wtCe8JUfwsus48jgftn1o5etP/gG
+         WVQGk/hEli9aQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YmN11qt/PqogYruQ@ripper>
+References: <20220422230013.1332993-1-bjorn.andersson@linaro.org> <20220423014824.912ACC385A0@smtp.kernel.org> <YmNsYSxLtwLpw98t@ripper> <20220423031350.01299C385A0@smtp.kernel.org> <YmN11qt/PqogYruQ@ripper>
+Subject: Re: [PATCH v2 1/2] dt-bindings: clock: Add Qualcomm SC8280XP GCC bindings
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_tdas@quicinc.com
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Date:   Mon, 25 Apr 2022 15:34:24 -0700
+User-Agent: alot/0.10
+Message-Id: <20220425223426.BE973C385A4@smtp.kernel.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,85 +57,90 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Split tsens properties to the child node of the gcc. This follows the
-lead of ipq8064 (which also uses a separate node for tsens) and makes
-device tree closer to other platforms, where tsens is a completely
-separate device.
+Quoting Bjorn Andersson (2022-04-22 20:43:18)
+> On Fri 22 Apr 20:13 PDT 2022, Stephen Boyd wrote:
+> >=20
+> > I'd really rather not have clock-names at all because we spend a bunch
+> > of time comparing strings with them when we could just as easily use
+> > a number.
+>=20
+> I know that you would like to get rid of the clock-names for the clock
+> controllers. I've looked at it since and while it will be faster to
+> execute I still feel that it's going to be harder to write and maintain.
+>=20
+> E.g. look at gcc_pcie_4_pipe_clk_src, its parents today are
+> pcie_4_pipe_clk and bi_tcxo. Something I can reason about being correct
+> or not.
+>=20
+> If we ditch the clock-names I will have:
+>=20
+> static const struct clk_parent_data gcc_parent_data_14[] =3D {
+>         { .index =3D 30 },
+>         { .index =3D 0 },
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- .../bindings/clock/qcom,gcc-apq8064.yaml      | 45 +++++++------------
- 1 file changed, 17 insertions(+), 28 deletions(-)
+Those numbers could have some #define.
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-index b867da12761e..f2762599f679 100644
---- a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-@@ -23,47 +23,36 @@ description: |
- 
- properties:
-   compatible:
--    enum:
--      - qcom,gcc-apq8064
--      - qcom,gcc-msm8060
--
--  nvmem-cells:
--    minItems: 1
--    maxItems: 2
--    description:
--      Qualcomm TSENS (thermal sensor device) on some devices can
--      be part of GCC and hence the TSENS properties can also be part
--      of the GCC/clock-controller node.
--      For more details on the TSENS properties please refer
--      Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
--
--  nvmem-cell-names:
--    minItems: 1
-     items:
--      - const: calib
--      - const: calib_backup
--
--  '#thermal-sensor-cells':
--    const: 1
-+      - enum:
-+          - qcom,gcc-apq8064
-+          - qcom,gcc-msm8060
-+      - const: syscon
- 
- required:
-   - compatible
--  - nvmem-cells
--  - nvmem-cell-names
--  - '#thermal-sensor-cells'
- 
- unevaluatedProperties: false
- 
- examples:
-   - |
-     clock-controller@900000 {
--      compatible = "qcom,gcc-apq8064";
-+      compatible = "qcom,gcc-apq8064", "syscon";
-       reg = <0x00900000 0x4000>;
--      nvmem-cells = <&tsens_calib>, <&tsens_backup>;
--      nvmem-cell-names = "calib", "calib_backup";
-       #clock-cells = <1>;
-       #reset-cells = <1>;
-       #power-domain-cells = <1>;
--      #thermal-sensor-cells = <1>;
-+
-+      thermal-sensor {
-+        compatible = "qcom,msm8960-tsens";
-+
-+        nvmem-cells = <&tsens_calib>, <&tsens_backup>;
-+        nvmem-cell-names = "calib", "calib_backup";
-+        interrupts = <0 178 4>;
-+        interrupt-names = "uplow";
-+
-+        #qcom,sensors = <11>;
-+        #thermal-sensor-cells = <1>;
-+        };
-     };
- ...
--- 
-2.35.1
+	{ .index =3D PCIE_4_PIPE_CLK_DT }
+	{ .index =3D BI_TCXO_DT }
 
+> };
+>=20
+> Generally we would perhaps use some compile time constant, but that
+> won't work here because we're talking about the index in the clocks
+> array in the yaml.
+>=20
+>=20
+> But perhaps I'm missing something that would make this manageable?
+
+I dunno. Maybe a macro in the dt-binding header could be used to specify
+the 'clocks' property of the DT node that is providing the other side?
+The idea is to make a bunch of macros that insert the arguments of the
+macro in the right place for the clocks property and then define the
+order of arguments otherwise. It would be similar to how
+CREATE_TRACE_POINTS is used in include/trace/define_trace.h=20
+
+In the dt-bindings/qcom,gcc-soc.h file:
+
+	#ifdef IN_DTSI
+
+	#undef GCC_DT_NODE_CLOCKS
+	#define GCC_DT_NODE_CLOCKS
+		clocks =3D <BI_TCXO_DT>,
+			 <SLEEP_CLK_DT>;
+
+	#endif /* IN_DTSI */
+
+	#define BI_TCXO_DT 0
+	#define SLEEP_CLK_DT 1
+
+
+And then in the SoC.dtsi file have
+
+	#define IN_DTSI
+	#include <dt-bindings/qcom,gcc-soc.h>
+
+	#define BI_TCXO_DT	&xo_board
+	#define SLEEP_CLK_DT	&sleep_clk
+
+	...
+
+	clock-controller@a000000 {
+		compatible =3D "qcom,gcc-soc";
+		reg =3D <0xa000000 0x10000>;
+		GCC_DT_NODE_CLOCKS
+	};
+
+
+and then in drivers/clk/qcom/gcc-soc.c file:
+
+	#include <dt-bindings/qcom,gcc-soc.h>
+
+	static const struct clk_parent_data gcc_parent_data_14[] =3D {
+		{ .index =3D PCIE_4_PIPE_CLK_DT },
+		{ .index =3D BI_TCXO_DT },
+	};
+
+The benefit I see to this is that the index for each clock is in the
+header file (BI_TCXO_DT is 0) and it's next to the clocks property.
+Someone could still mess up the index based on where the macro is used
+in the clocks property though.
