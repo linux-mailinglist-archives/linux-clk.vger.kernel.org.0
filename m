@@ -2,159 +2,104 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF0150EAB9
-	for <lists+linux-clk@lfdr.de>; Mon, 25 Apr 2022 22:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC4450EB9E
+	for <lists+linux-clk@lfdr.de>; Tue, 26 Apr 2022 00:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245614AbiDYUnR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 25 Apr 2022 16:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
+        id S234616AbiDYWYl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 25 Apr 2022 18:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245610AbiDYUnP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 25 Apr 2022 16:43:15 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E283B2A5
-        for <linux-clk@vger.kernel.org>; Mon, 25 Apr 2022 13:40:08 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id g23so12874802edy.13
-        for <linux-clk@vger.kernel.org>; Mon, 25 Apr 2022 13:40:08 -0700 (PDT)
+        with ESMTP id S1343516AbiDYVa7 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 25 Apr 2022 17:30:59 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85565220CE
+        for <linux-clk@vger.kernel.org>; Mon, 25 Apr 2022 14:27:54 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id k12so4140119lfr.9
+        for <linux-clk@vger.kernel.org>; Mon, 25 Apr 2022 14:27:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=sOsTp5aBXIqdnMkOZufs6chxOiba6BGNfqJDs66Y7sI=;
-        b=MSRbdZgI3MdaTlyTtZgN60FdjSiXxhCkh0699Cbv5rxL/1i4+FUzFrqusDaKqWlXjx
-         AgBYJ3ZImI9jT1Ay9JJ2LIQudwdhji3zZWpY5A9HWzvwGCwvvkILSqMw2CcV3g8uhnsY
-         SNVCPNeJQgwrTXWlXpHV3C7xeSzcEdsVw4wBH3OY8fetyFfYXWEZE1SBIJ5JTt4n8e5w
-         RWf4uF7KxTyl0AuyMn5RsO3DZcomVKMZRxBHu87j+5EXeifNdc+2jfmSSyCTxR8KDXkL
-         meLhkQNTpjx7PdFlIEPTMpxwn+aRS7R/lFBjTtBfbgACuuv5rWvR9qKEBlpjiYz8GQoz
-         MAaA==
+        bh=3gVY44DVF1y7zdefajo6u3CKe3aVY/euE49UOOawFzk=;
+        b=jRmo0SpHDBz5apKEalXqAVnP3JNXwC7+7qia8GGi4s29oRf4tpppZx81UJ8xpalkXa
+         99kv5SA9q5apsKoqs4Ay7wP6B+uw6LNJq2k0rmVYxQfxkUDQVmNBVJpwuzXvtNCcC7MI
+         zl3+zKJECuuTRqFvE/xgGgAWjvbQCJgmaOUICvE0xiaf4yzSU8w1tWQlOVCla7PU3bv8
+         g++aykqaJ4RkMeQ95A0PR2yEg4ZefxW9tOtjQbumouvfrWRuin9M8eMCzQRnxRQWYaq1
+         c4e79A9dLJBuOyyv2WasqlE6csEzFV9i/BDZfS8KWu+O8xLJn2aeSLulTZyrE86QnMil
+         Ouog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=sOsTp5aBXIqdnMkOZufs6chxOiba6BGNfqJDs66Y7sI=;
-        b=BZSytXKtIM6hrA03k3puO/Xf9Pw4AtWUbzci6g7b5Ikv7b0LriGSn4iTnoYCkt04CL
-         mHU3g9140RB5555f8J2GLVClyWL2cWth3+sl1yRkc6NrdIz/yvW3MVqP8Okni4dQvNe5
-         ILnduyCQTSZNJY44AkKIvdSXNukSwygD4dOKmWXIa62DIqCBWqb3cDunsD8/Suj3lmOm
-         rLfxvVX5aDTgbjZqA8gMBAJWtcbjvzI4W8psdsS/FMscm+/RsuX/e9yfK5OWZD7F6DyF
-         VRHYPn1rf+9pFPTT0A+QGPWS08VzRUeWQxUZbBW4sL7HR58QIAgdzRnRAlTWM2sXMqYZ
-         dgjw==
-X-Gm-Message-State: AOAM533DyLhoFNqAKwMbDkA0D1rHV8oOyf3AqL0Pr0ZGFBcuKlU529bW
-        mgPJ+Iak71o6XcHZapzm4ucR4A==
-X-Google-Smtp-Source: ABdhPJzcBeQI2OUItvPLc2iaIO48nqrQvXbe2W1iE7on1AFBKVTxymAxNKJLV2vEc1rSfD1SGMYt7w==
-X-Received: by 2002:a05:6402:1a36:b0:425:f96c:350f with SMTP id be22-20020a0564021a3600b00425f96c350fmr560924edb.160.1650919207297;
-        Mon, 25 Apr 2022 13:40:07 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id mb22-20020a170906eb1600b006f38dcf211bsm1834037ejb.138.2022.04.25.13.40.06
+        bh=3gVY44DVF1y7zdefajo6u3CKe3aVY/euE49UOOawFzk=;
+        b=4hdsBTA/q6L7FEtY/qWM4GYR5luoDOWjlAj5mDMLSZ6oRjq41l+NotN6v5F61MnTre
+         S70V+4QmFim6Y4PUW4P4TOdy4Ka9aN1vhEti18EvBv5ghn2Dp8Ae1Q/6PF8Axjfy0bIH
+         Y7r8Jk73MD0QwlJCvRV+1RFYn+iCp6lV0Y9VbdoP27YS6zx+eisG1pwe+DdXImPgllL6
+         i59xN3MbBrjcR6P0ZvdlB3ZlajRRTzpjCfs3/rtVGrBkgXQM+5m/dlzmDEvVk4raHXML
+         YOQ61uav75p1zdaoAlJ31Z8OI8gKOY3RfWBzoGI+uQ9QiIjv/b4GQxif9QbQFs3qCKG6
+         Qlqw==
+X-Gm-Message-State: AOAM533T2vnWviwHXwqZTdsu5GgEhgt3cnw7294ReeyFBW78OCDu67P0
+        tmSHhkcH8nDeOMwpNfsbUv+DWw==
+X-Google-Smtp-Source: ABdhPJz7e+TOf2sNiJDfS84im2PT7UAjBiL9ICoMFGaLk1Fe7kPvyMqdqdXDDus3YzQZEvT/mM0O2A==
+X-Received: by 2002:ac2:4e0c:0:b0:472:5d1:ce49 with SMTP id e12-20020ac24e0c000000b0047205d1ce49mr5340928lfr.602.1650922072862;
+        Mon, 25 Apr 2022 14:27:52 -0700 (PDT)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id l13-20020a19494d000000b0046ba0e38750sm1533314lfj.3.2022.04.25.14.27.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 13:40:06 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        Mon, 25 Apr 2022 14:27:52 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH] dt-bindings: clock: qcom,gcc-apq8064: Fix typo in compatible and split apq8084
-Date:   Mon, 25 Apr 2022 22:40:01 +0200
-Message-Id: <20220425204001.710238-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: [PATCH v3 0/3] arm: qcom: qcom-apq8064: add separate device node for tsens
+Date:   Tue, 26 Apr 2022 00:27:47 +0300
+Message-Id: <20220425212750.2749135-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-The qcom,gcc-apq8064.yaml was meant to describe only APQ8064 and APQ8084
-should have slightly different bindings (without Qualcomm thermal sensor
-device).
+Currently gcc-msm8960 driver manually creates tsens device. Instantiate
+the device using DT node instead. This makes the APQ8064 follow the
+IPQ8064 device tree schema (which is also closer to the way tsens
+devices are described on newer Qualcomm platforms).
 
-Fixes: a469bf89a009 ("dt-bindings: clock: simplify qcom,gcc-apq8064 Documentation")
-Reported-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/clock/qcom,gcc-apq8064.yaml      |  4 +-
- .../bindings/clock/qcom,gcc-apq8084.yaml      | 42 +++++++++++++++++++
- 2 files changed, 43 insertions(+), 3 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-apq8084.yaml
+Compatibility with the previous devices trees is kept intact.
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-index 97936411b6b4..9fafcb080069 100644
---- a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-@@ -20,12 +20,10 @@ description: |
-   See also:
-   - dt-bindings/clock/qcom,gcc-msm8960.h
-   - dt-bindings/reset/qcom,gcc-msm8960.h
--  - dt-bindings/clock/qcom,gcc-apq8084.h
--  - dt-bindings/reset/qcom,gcc-apq8084.h
- 
- properties:
-   compatible:
--    const: qcom,gcc-apq8084
-+    const: qcom,gcc-apq8064
- 
-   nvmem-cells:
-     minItems: 1
-diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8084.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8084.yaml
-new file mode 100644
-index 000000000000..63d08e82b3d8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8084.yaml
-@@ -0,0 +1,42 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/qcom,gcc-apq8084.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm Global Clock & Reset Controller Binding for APQ8084
-+
-+maintainers:
-+  - Stephen Boyd <sboyd@kernel.org>
-+  - Taniya Das <tdas@codeaurora.org>
-+
-+description: |
-+  Qualcomm global clock control module which supports the clocks, resets and
-+  power domains on APQ8064/APQ8084.
-+
-+  See also::
-+  - dt-bindings/clock/qcom,gcc-apq8084.h
-+  - dt-bindings/reset/qcom,gcc-apq8084.h
-+
-+allOf:
-+  - $ref: qcom,gcc.yaml#
-+
-+properties:
-+  compatible:
-+    const: qcom,gcc-apq8084
-+
-+required:
-+  - compatible
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    clock-controller@fc400000 {
-+        compatible = "qcom,gcc-apq8084";
-+        reg = <0xfc400000 0x4000>;
-+        #clock-cells = <1>;
-+        #reset-cells = <1>;
-+        #power-domain-cells = <1>;
-+    };
-+...
+Changes since v2:
+- Remove patches merged by Daniel
+- Rephrase commit messages to emphasize that these changes make apq8064
+  follow ipq8064
+
+Changes since v1:
+- populate child devices in gcc-msm8960
+- add syscon to the gcc device tree node
+
+Dmitry Baryshkov (3):
+  clk: qcom: gcc-msm8960: create tsens device if there are no child
+    nodes
+  arm: dts: qcom-apq8064: create tsens device node
+  dt-bindings: clock: qcom,gcc-apq8064: split tsens to the child node
+
+ .../bindings/clock/qcom,gcc-apq8064.yaml      | 45 +++++++------------
+ arch/arm/boot/dts/qcom-apq8064.dtsi           | 25 +++++++----
+ drivers/clk/qcom/gcc-msm8960.c                |  6 ++-
+ 3 files changed, 39 insertions(+), 37 deletions(-)
+
 -- 
-2.32.0
+2.35.1
 
