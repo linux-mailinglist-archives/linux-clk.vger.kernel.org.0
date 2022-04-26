@@ -2,72 +2,94 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3FC50F9AE
-	for <lists+linux-clk@lfdr.de>; Tue, 26 Apr 2022 12:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396A950F9E9
+	for <lists+linux-clk@lfdr.de>; Tue, 26 Apr 2022 12:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348523AbiDZKLs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 26 Apr 2022 06:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
+        id S1348401AbiDZKOd (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 26 Apr 2022 06:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348521AbiDZKLH (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 26 Apr 2022 06:11:07 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25CA620BDD7;
-        Tue, 26 Apr 2022 02:34:19 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 261811F42EA8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650965658;
-        bh=tcRCODsiHa0GCjxOg9qb3gec1FUUlqIrKCXGOGU7ZjU=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=l8S1h1bWx9PtCiYzoXrXDfMtsZONH2SY1+FJ1e2Ayu8Dd/tZowI8gpOzFuIhVyC0h
-         0HtGoFU59JMgok80/St8vahQQIlZajspvpYARimS4e1G9okckV2pOCll5nH9ukc3M6
-         JmAHDxVe5ev77Xmp4QZPWcUKryRmqkgCghwOAEV0XyNGE8fUUOVaSHOiuP7T+ZIoUy
-         25MIKYsvtzIj7DQHm+ZFuC5kiKqnFC1Vr2SMGpIKA7c3+7yQeekiqJTs1GweOraw/i
-         v8vUzkG3LG80ZMLE+5kcT8AFt2RfULFfNzCiV1UVuXi0TDTYKjaIkLlPchOXzpr3Ds
-         IF+KCL8t6rT6w==
-Message-ID: <2e2f27b5-2ad9-b70a-3f2c-3bcdbd0bec72@collabora.com>
-Date:   Tue, 26 Apr 2022 11:34:14 +0200
+        with ESMTP id S1348576AbiDZKNY (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 26 Apr 2022 06:13:24 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4A9229EE6
+        for <linux-clk@vger.kernel.org>; Tue, 26 Apr 2022 02:36:13 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id v4so9037298ljd.10
+        for <linux-clk@vger.kernel.org>; Tue, 26 Apr 2022 02:36:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zA3PSG9S8RMpYvQYHUqOQZlj9sUgez8UvKaakxGaS30=;
+        b=vMH/nkn7Ek8lu3EnkzNmkfAe84/udsNJViKYI/sG6o/Tn7he4dHiEgPoQ3bE1JhmS+
+         GP2LOio+cfl4s+07nBIrglBPBxezm9iktGZuuJ1P3nK4pWgVaaDtLWJIsuE7V+UQyTFC
+         EjgktGySqaEs9j7mweGYpsFTyMWdazhxNdFn0EdLu914KSxsJ5GE5Ed8P2CnieQi8rP6
+         blqyfxN4zr3ob9bccoVgtp+2mTI0d8RfnUbXjx4dqUZ6sxXkuPDzvecpRtvEacgOia/R
+         3P5/TZSW8qc3ZpegrQHsCpqWkljV/Jpl9s+x8LyqxSYpaKyA5gfaSH4/IvizVBYUEL6L
+         NF8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zA3PSG9S8RMpYvQYHUqOQZlj9sUgez8UvKaakxGaS30=;
+        b=T5MeiqXs5WUWWylWgSqHT06itK/m049ATY1qhEyR2+G9nC3OgQ355OYgEZ53D6uCVZ
+         WGQ/QIfyEUHrmE5iiDpN3Jvo96KrQhFE+aPvLGYKiPB7LZG+yn/Jy/LG2/WoVEoihcEE
+         Xj4jyJ8lEV5D8dQyh42IOr3kSxFmtEekDRJUCTO8dbQKtCFgVCbY9HPL0ppNCW6wN2dx
+         y1TaOAUt28rT0GnYARCjg7MwtMJyZ9OKZ+x02qo9YktdJv+5QPmq/2AhXur8++B9sDAl
+         6Lk/5Zfmb0YYk4tDR+CPRCXkDmwQed4UF0yesbFWOiKaD900BlDDLV13j9FaGWLUptbr
+         10YA==
+X-Gm-Message-State: AOAM532E60Y2vJMCCoaLG8fvSDznHNc5roM73sM6vUFFZfZHDCJl2EBv
+        U+SZ9tpVlT8CnJaw5vGlaVyhIg==
+X-Google-Smtp-Source: ABdhPJzXDvyrCttoYUsdXCn/FRtm9sEhujJ6qBuKmBTSL/i0RlcWq4Rke6jvS/oCzhr4ix4EY7abdA==
+X-Received: by 2002:a05:651c:311:b0:23f:d9fc:9e89 with SMTP id a17-20020a05651c031100b0023fd9fc9e89mr13815822ljp.136.1650965771577;
+        Tue, 26 Apr 2022 02:36:11 -0700 (PDT)
+Received: from eriador.lumag.spb.ru ([188.162.64.30])
+        by smtp.gmail.com with ESMTPSA id x23-20020a056512131700b004486c863c8esm1684232lfu.257.2022.04.26.02.36.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 02:36:10 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 0/2] dt-bindings: clock: sourt out gcc-apq8064 compats
+Date:   Tue, 26 Apr 2022 12:36:06 +0300
+Message-Id: <20220426093608.2957210-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH V3 08/17] clk: mediatek: reset: Add new register reset
- function with device
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, mturquette@baylibre.com,
-        sboyd@kernel.org, matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     p.zabel@pengutronix.de, chun-jie.chen@mediatek.com,
-        wenst@chromium.org, runyang.chen@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220422060152.13534-1-rex-bc.chen@mediatek.com>
- <20220422060152.13534-9-rex-bc.chen@mediatek.com>
-Content-Language: en-US
-In-Reply-To: <20220422060152.13534-9-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Il 22/04/22 08:01, Rex-BC Chen ha scritto:
-> It's a proper implementation using device to register reset controller.
-> Howerver, some clock drviers of MediaTeks only provide device_node.
-> Therefore, we still remain register reset function with device_node and
-> add a function with device to register reset controller.
-> 
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+Move qcom,gcc-apq8084 to clock/qcom,gcc-other.yaml as it follows a generic
+bindings rather than qcom,gcc-apq8064 one. Also while we are at it, move
+qcom,gcc-msm8960 in the other direction: from qcom,gcc-other.yaml to
+qcom,gcc-apq8064.yaml as MSM8960 shares the design and the driver with
+APQ8064 platform.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Changes since v1:
+ - Split the msm8960 change into a separate patch
+ - Remove qcom,gcc-msm8960 compat from qcom,gcc-other.yaml
+
+Dmitry Baryshkov (2):
+  dt-bindings: clock: gcc-apq8064: move qcom,apq8084 back to
+    gcc-other.yaml
+  dt-bindings: clock/qcom,gcc-apq8064: move msm8960 compat from
+    gcc-other.yaml
+
+ .../devicetree/bindings/clock/qcom,gcc-apq8064.yaml       | 8 ++++----
+ .../devicetree/bindings/clock/qcom,gcc-other.yaml         | 8 +++++---
+ 2 files changed, 9 insertions(+), 7 deletions(-)
+
+-- 
+2.35.1
 
