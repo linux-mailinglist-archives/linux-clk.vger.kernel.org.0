@@ -2,105 +2,113 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3762C5114EE
-	for <lists+linux-clk@lfdr.de>; Wed, 27 Apr 2022 12:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE355114C6
+	for <lists+linux-clk@lfdr.de>; Wed, 27 Apr 2022 12:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiD0Khw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 27 Apr 2022 06:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
+        id S229521AbiD0KSR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 27 Apr 2022 06:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiD0Khv (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 27 Apr 2022 06:37:51 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11BC438EE0;
-        Wed, 27 Apr 2022 03:16:06 -0700 (PDT)
-Received: from relay12.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::232])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 5C7B3CC51C;
-        Wed, 27 Apr 2022 09:57:57 +0000 (UTC)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 13C56200019;
-        Wed, 27 Apr 2022 09:57:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1651053437;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UxzMEOqhe0N5yp6GmaQi9cglbTWdIMVSkvcspvfYAsA=;
-        b=WtY8Rp/wzqRTZj3Sfbvox6ilJE6pxreJnw4mczmp6V6fZzYr+mZifk+JPUSh4WW+bkGIvx
-        yxeSLhqTZu1k7+Ab52/DGhPZ+EclGHG5pZvOhiuMeo6zFy59ducknxROc/PB5vdzlAApKR
-        uH6RUAYTaZBgy91RDHgGmYM5X/xYSftk9LT0e8HNDG7iQpYyO5mXYSJCUAMFea4S5KUj69
-        C7iHIKlbt5xZOWaoFr9wM8yxAGr6auzqOqlTJBT0vVvRahuaBulRsl30KgXhtGky0LZcuE
-        EO5Pwm/5JDl7A20zghrZPymdSjNuh7UKtQcMR6EwGZXOUXI4YRtGrgJN+AH81A==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-renesas-soc@vger.kernel.org, dmaengine@vger.kernel.org,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ilpo Jarvinen <ilpo.jarvinen@linux.intel.com>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v12 9/9] ARM: dts: r9a06g032: Describe the DMA router
-Date:   Wed, 27 Apr 2022 11:56:53 +0200
-Message-Id: <20220427095653.91804-10-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220427095653.91804-1-miquel.raynal@bootlin.com>
-References: <20220427095653.91804-1-miquel.raynal@bootlin.com>
+        with ESMTP id S229437AbiD0KSP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 27 Apr 2022 06:18:15 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B1931316E;
+        Wed, 27 Apr 2022 03:13:45 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id q8so1137839plx.3;
+        Wed, 27 Apr 2022 03:13:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1C1O4qQcGaAVxBHfYfmRjgPqtuMUIW3qAkaHngqvDes=;
+        b=NlE9mJ5p7PFfL2h8xzZtuCRTGWvpzPKaA1aFLOoH9Ktft0+MBAqiMLe9WR9zZ+q1tG
+         M2hj910wONU/0LgyvpOkBj/o8KoCenPqXS6p7SMBU17RP92WX27hKFpCFwSQLGf8PO0r
+         UOUp1geb3AK11zri/1W0EYN3Eh9y8RmQyGnaLbdhZ6lNcz+PCKOKA+JsXw14bdPcHMQF
+         w+inUUtuNakbrJ2b7ZsdLSv6PPMuniBSx79OmDdr50Bpn7NDj/b56neoaAlgo/Kn3Fhy
+         YoGnNb/VpokgIRhgWhzRWoScdi1iwTvKj1QZIzlmss146M3Rrl5/ICnnx7RgiA9P79lY
+         SLbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1C1O4qQcGaAVxBHfYfmRjgPqtuMUIW3qAkaHngqvDes=;
+        b=53oW5IyMJbKiMDG02lOD9aMAbR/HwSs9G1mfATFCPwJIFu2Iw1iPvs6wrrWEIW8S5C
+         H6R1uBD2tPil5PoC7E49JF+0MmpdKcrfuRdq7kSNX6FgXJmqqzMB3NQCCPlTzmC1NlV+
+         UVuABzcrnwGv5OuYy568k+H2HrR0KlQtAykh5mkFiZMFrECcr38TC/JEL9Mfd5xOOPDK
+         Hk9DRuzqPWSI5wEAtkMoMwgvsayoM6LsqbBzwkfSl4fKwVwegC4pfg59W5JeRJr7+aCr
+         knI0+W+fjvR8YxfDOMkW8ML5slJLWy8p363+cfqSDGMRCxis0xMDRBhCXeLRqloQH2Fh
+         Lpjw==
+X-Gm-Message-State: AOAM533Ux0CwP/xYm/bd5s5vMd3vBYnsgpeK9+S7Jgj1/giZ2BGtKi+a
+        0f6EmTxg0tmfPb/TGknMzw52BFGf6gQGZg==
+X-Google-Smtp-Source: ABdhPJzz9M4sSrRhLl/SVH2jOIGF0Fae8qCGPAcsCMAJ6QlQWlTDkHN6EP6kfL6MBcOG4iYcm0V59w==
+X-Received: by 2002:a17:90b:164b:b0:1d1:b0b7:9033 with SMTP id il11-20020a17090b164b00b001d1b0b79033mr32105321pjb.164.1651054142386;
+        Wed, 27 Apr 2022 03:09:02 -0700 (PDT)
+Received: from tj10039pcu.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id h7-20020aa786c7000000b00505bf336385sm18260649pfo.124.2022.04.27.03.08.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 03:09:01 -0700 (PDT)
+From:   Cixi Geng <gengcixi@gmail.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, orsonzhai@gmail.com,
+        baolin.wang7@gmail.com, zhang.lyra@gmail.com, lee.jones@linaro.org
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V4 0/4] Add ums512 clocks and relative bindings file
+Date:   Wed, 27 Apr 2022 18:08:44 +0800
+Message-Id: <20220427100848.3525710-1-gengcixi@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-There is a dmamux on this SoC which allows picking two different sources
-for a single DMA request.
+From: Cixi Geng <cixi.geng1@unisoc.com>
 
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- arch/arm/boot/dts/r9a06g032.dtsi | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+This patchset is add the UMS512 clocks support
 
-diff --git a/arch/arm/boot/dts/r9a06g032.dtsi b/arch/arm/boot/dts/r9a06g032.dtsi
-index 1e90bfc76417..37c2eb7bbb7f 100644
---- a/arch/arm/boot/dts/r9a06g032.dtsi
-+++ b/arch/arm/boot/dts/r9a06g032.dtsi
-@@ -91,6 +91,16 @@ sysctrl: system-controller@4000c000 {
- 			clocks = <&ext_mclk>, <&ext_rtc_clk>,
- 					<&ext_jtag_clk>, <&ext_rgmii_ref>;
- 			clock-names = "mclk", "rtc", "jtag", "rgmii_ref_ext";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			dmamux: dma-router@a0 {
-+				compatible = "renesas,rzn1-dmamux";
-+				reg = <0xa0 4>;
-+				#dma-cells = <6>;
-+				dma-requests = <32>;
-+				dma-masters = <&dma0 &dma1>;
-+			};
- 		};
- 
- 		uart0: serial@40060000 {
+v2 changes:
+  adjust description and add the "sprd,ums512-glbregs,syscon,simple-mfd"
+  compatibles to fix match failed logs in the dt_binding_check.
+  add the property license and copyright notice.
+
+v3 changes:
+  fix wrong indentation and hint: "maxItems" is not needed with an "items"
+  list when use the latest dtschema.
+
+v4 changes:
+  move the syscon bindins from clk to glbreg yaml file by pickup 
+  chunyan's patch for global registers bindings
+  fix the comments from Krzysztof in v3 patchset
+  add the Acked-by: Krzysztof in patch v4 3/4
+  fix the  warning Prefer "GPL" over "GPL v2"
+
+Chunyan Zhang (1):
+  dt-bindings: mfd: sprd: Add bindings for ums512 global registers
+
+Cixi Geng (3):
+  dt-bindings: clk: sprd: Add bindings for ums512 clock controller
+  clk: sprd: Add dt-bindings include file for UMS512
+  clk: sprd: Add clocks support for UMS512
+
+ .../bindings/clock/sprd,ums512-clk.yaml       |   71 +
+ .../bindings/mfd/sprd,ums512-glbreg.yaml      |   68 +
+ drivers/clk/sprd/Kconfig                      |    6 +
+ drivers/clk/sprd/Makefile                     |    1 +
+ drivers/clk/sprd/ums512-clk.c                 | 2199 +++++++++++++++++
+ include/dt-bindings/clock/sprd,ums512-clk.h   |  397 +++
+ 6 files changed, 2742 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
+ create mode 100644 drivers/clk/sprd/ums512-clk.c
+ create mode 100644 include/dt-bindings/clock/sprd,ums512-clk.h
+
 -- 
-2.27.0
+2.25.1
 
