@@ -2,133 +2,90 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E012513E12
-	for <lists+linux-clk@lfdr.de>; Thu, 28 Apr 2022 23:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF894513EC2
+	for <lists+linux-clk@lfdr.de>; Fri, 29 Apr 2022 00:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352741AbiD1Vww (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 28 Apr 2022 17:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
+        id S1353077AbiD1W6S (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 28 Apr 2022 18:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352638AbiD1Vwh (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 Apr 2022 17:52:37 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F12C3E8B;
-        Thu, 28 Apr 2022 14:49:06 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id f14so4501813qtq.1;
-        Thu, 28 Apr 2022 14:49:06 -0700 (PDT)
+        with ESMTP id S1350157AbiD1W6S (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 Apr 2022 18:58:18 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB80C1CA8
+        for <linux-clk@vger.kernel.org>; Thu, 28 Apr 2022 15:55:00 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id m128so11633265ybm.5
+        for <linux-clk@vger.kernel.org>; Thu, 28 Apr 2022 15:55:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=x2tfNJJ7zvk5t2UFdzL7uNJCGv9rRgs1ExdTc2XZh9U=;
-        b=baXLtRyTMQ7d/LV1qdLfIjPKcoZLa/+WgUsUFZmrNSSw1msbNF4DpgT0CwPs7rjxK9
-         0ioHyPE5v+hfAEhGAPSsAHJCO+wv2FMP6Dr9t/BCigIw/sGbbSQqMzbESC7lfCFyjAQ/
-         sn6KgPtKJ6XP9UowM1ptd+p7MqQNCBFlG9l7UqNjBz3adUedpNWRnm3Tlnk58HdNTMYL
-         qaq+ETHzKpkaR//VBKb4ovs7g/5lgGNOAM+rtkDd2SXlaiB/bSp/2FS58wfAiM7pBSVh
-         Lq8C7SPfoIiAR7tE1hi+XzYarY9HfpB200D8kdxoYRMAXvmw5CpppgySeAnzsTBJ5GRL
-         lTag==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cgTFMUsq9gVZz59+3kDOySK+OVbeH8W2pPDccjzuXKE=;
+        b=ov2q5f2yE12o/uS00CPcFLtntiChTcYemtbGaDmhDAusLUIMEjB4VaNqGcC3WNcCPd
+         L7yYE9xuB/7zZyKq9VQCxp2jIFB8CR7OFU5ZyhIOoVX3kFdYNID85+1a7J1f7sxAjjtG
+         W7h8rWHl0hDVgXzxH0vvYzqteazALEC74JXOYii/DLzplO/NYZ0Lc0/ot+q4NvVAqt/I
+         YIiJgCRu8Bb3hGo76YEBHfVL64mDFlBZKDBoB33icT3OC/SkBRmpCz6Nglkboa6ia0jE
+         dDwfvH+RJVmQAqLIK8xM+VJl3XthUy4h6wSYEuLNngxFj+VdGOtvJcl1oBXwOwCsjeKl
+         KreQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=x2tfNJJ7zvk5t2UFdzL7uNJCGv9rRgs1ExdTc2XZh9U=;
-        b=x74qU254n30Bsebps1jsKEvzaSA9z2ukV0x0UqOHjWr6QOCcR3GlFcxbh/LhIK6WRM
-         qdW1tUpL3TLkHty7lXpSsBn0a6KFDrL1EYscJTIMSI/XDDWZUZgsbCSCzef4916uxqmQ
-         4RBXQWJin5R8OQX/bVGKBc/3VPQ4DmM9aujECxtJSDp1Q275OJYdDVhx2P4zwCVIgLaR
-         WqGLlDqU1fdoKLcd24MSixW7SJQ9I32l7ESTpJyNGfLQNDo3KkqZCuBLZdPS0ABjc9Zc
-         cQvErxLIiY/v/ttt44c0wpyyzxYSne/HuZlZTNfim9TmpZceJJwUvlUrnIIbb9TIDXOn
-         r4HQ==
-X-Gm-Message-State: AOAM533aqHgv3s/5oSzCp8D2KJUv90FS6ONYVlvu+4bGUN+4XqdJ/fDr
-        KL4nTAZj0b5FJz3axqEy/BE=
-X-Google-Smtp-Source: ABdhPJzx4tI+mCCSK+NG5AFusHNVdENss/6rZpTI+zjsZ5SvXww7P7xynhM8elMWOFDfB8sN136FlA==
-X-Received: by 2002:a05:622a:148b:b0:2f1:fb24:5bcb with SMTP id t11-20020a05622a148b00b002f1fb245bcbmr24425756qtx.64.1651182545613;
-        Thu, 28 Apr 2022 14:49:05 -0700 (PDT)
-Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id bl5-20020a05620a1a8500b0069f51e47c5esm546442qkb.110.2022.04.28.14.49.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 14:49:05 -0700 (PDT)
-From:   Jesse Taube <mr.bossman075@gmail.com>
-X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
-To:     linux-imx@nxp.com
-Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, aisheng.dong@nxp.com, stefan@agner.ch,
-        linus.walleij@linaro.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, arnd@arndb.de, olof@lixom.net, soc@kernel.org,
-        linux@armlinux.org.uk, abel.vesa@nxp.com, dev@lynxeye.de,
-        marcel.ziswiler@toradex.com, tharvey@gateworks.com,
-        leoyang.li@nxp.com, sebastian.reichel@collabora.com,
-        cniedermaier@dh-electronics.com, Mr.Bossman075@gmail.com,
-        clin@suse.com, giulio.benetti@benettiengineering.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org
-Subject: [PATCH v2 15/15] ARM: imxrt_defconfig: Add i.MXRT1170
-Date:   Thu, 28 Apr 2022 17:48:38 -0400
-Message-Id: <20220428214838.1040278-16-Mr.Bossman075@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220428214838.1040278-1-Mr.Bossman075@gmail.com>
-References: <20220428214838.1040278-1-Mr.Bossman075@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cgTFMUsq9gVZz59+3kDOySK+OVbeH8W2pPDccjzuXKE=;
+        b=W5xE8apkCaB3zSeqz+B0LzdtprN6rQLO0fW9XXnmhtc6tIqNQMLmyruTALTPF4oav2
+         0hhxxhrq8rOmKqeeuDtIpgURgvaFS7n9+L0noYoQ31/P3gTeWNMMHx8Y4RYmBKrUXjZ5
+         TfbkxEbe1FWKRXJmmzLjDhexrRbdxj4TcFvYURb3h5yBXktl3Q/jMRiNOjX8cmPnC5B2
+         WyD2jOJNqMibwPwzc5zgjZ/v6NyI7wl1TwqkgvpNWmFDm6hdaJCYOtbF3s/Y8nyAeV9H
+         haot0xCb0tSmHBN9idY268esz/1+Lb/DsVAoBTVZThNtGOnl34VuGvbY0+9nxTTQhGlG
+         8PSg==
+X-Gm-Message-State: AOAM532Asou2S1w10F04++X6+9NMYr+NrLoRFt5OC45rl2x7B5UM3ULc
+        63Mfn2gHV9B5EB9Yfy0/7SLANXfuuRMwjSC5/rVtKw==
+X-Google-Smtp-Source: ABdhPJzzpmlI/Pkjo7HQbAq5Q2zszomNzPfs/JPPXY6KHrXgc/mt8oB2lus+Oi/UtX2SN9COoG/Tm2fMjSmMEsomV1M=
+X-Received: by 2002:a25:bcc3:0:b0:648:7360:8e75 with SMTP id
+ l3-20020a25bcc3000000b0064873608e75mr20334083ybm.533.1651186500208; Thu, 28
+ Apr 2022 15:55:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+References: <20220422170920.401914-1-sebastian.reichel@collabora.com> <20220422170920.401914-13-sebastian.reichel@collabora.com>
+In-Reply-To: <20220422170920.401914-13-sebastian.reichel@collabora.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 29 Apr 2022 00:54:49 +0200
+Message-ID: <CACRpkdZZGXMV5cnZpdat1Z_22CZE-gGfCqRHpOqnd_asw_KMwQ@mail.gmail.com>
+Subject: Re: [PATCHv1 12/19] pinctrl/rockchip: add error handling for
+ pull/drive register getters
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@lists.collabora.co.uk,
+        kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add i.MXRT1170 pinctrl, clocks imxrt_defconfig.
-Add support for CHIPIDEA usb host and usb gadget and other usb drives.
+On Fri, Apr 22, 2022 at 7:09 PM Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
 
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
----
-V1 -> V2:
- - Remove USB_CONFIGFS*
----
- arch/arm/configs/imxrt_defconfig | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+> Add error handling for the pull and driver register getters in preparation
+> for RK3588 support.
+>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-diff --git a/arch/arm/configs/imxrt_defconfig b/arch/arm/configs/imxrt_defconfig
-index 52dba3762996..b3a013686255 100644
---- a/arch/arm/configs/imxrt_defconfig
-+++ b/arch/arm/configs/imxrt_defconfig
-@@ -17,7 +17,23 @@ CONFIG_SERIAL_FSL_LPUART=y
- CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
- CONFIG_SERIAL_DEV_BUS=y
- CONFIG_PINCTRL_IMXRT1050=y
-+CONFIG_PINCTRL_IMXRT1170=y
- CONFIG_GPIO_MXC=y
-+CONFIG_USB=y
-+CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
-+CONFIG_USB_DYNAMIC_MINORS=y
-+CONFIG_USB_OTG=y
-+CONFIG_USB_OTG_FSM=y
-+CONFIG_USB_EHCI_HCD=y
-+CONFIG_USB_EHCI_FSL=y
-+CONFIG_USB_EHCI_HCD_PLATFORM=y
-+CONFIG_USB_CHIPIDEA=y
-+CONFIG_USB_CHIPIDEA_UDC=y
-+CONFIG_USB_CHIPIDEA_HOST=y
-+CONFIG_NOP_USB_XCEIV=y
-+CONFIG_USB_MXS_PHY=y
-+CONFIG_USB_GADGET=y
-+CONFIG_USB_MASS_STORAGE=y
- CONFIG_MMC=y
- CONFIG_MMC_SDHCI=y
- CONFIG_MMC_SDHCI_PLTFM=y
-@@ -25,6 +41,7 @@ CONFIG_MMC_SDHCI_ESDHC_IMX=y
- CONFIG_DMADEVICES=y
- CONFIG_FSL_EDMA=y
- CONFIG_CLK_IMXRT1050=y
-+CONFIG_CLK_IMXRT1170=y
- CONFIG_EXT4_FS=y
- CONFIG_EXT4_FS_POSIX_ACL=y
- CONFIG_EXT4_FS_SECURITY=y
--- 
-2.35.1
+Patch applied.
 
+Yours,
+Linus Walleij
