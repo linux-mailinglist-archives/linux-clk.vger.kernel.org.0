@@ -2,116 +2,88 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA39513310
-	for <lists+linux-clk@lfdr.de>; Thu, 28 Apr 2022 13:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 522B6513376
+	for <lists+linux-clk@lfdr.de>; Thu, 28 Apr 2022 14:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345829AbiD1L74 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 28 Apr 2022 07:59:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36666 "EHLO
+        id S1346120AbiD1MWR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 28 Apr 2022 08:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345850AbiD1L7u (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 Apr 2022 07:59:50 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D9788B22;
-        Thu, 28 Apr 2022 04:56:33 -0700 (PDT)
-X-UUID: 223a3ca3df354217a7b1a2fea560289f-20220428
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:b3597e68-7571-4e0b-b7eb-82f56f96b7fb,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:95
-X-CID-INFO: VERSION:1.1.4,REQID:b3597e68-7571-4e0b-b7eb-82f56f96b7fb,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,ACT
-        ION:quarantine,TS:95
-X-CID-META: VersionHash:faefae9,CLOUDID:2d5a0c2f-6199-437e-8ab4-9920b4bc5b76,C
-        OID:865956aaf4d8,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 223a3ca3df354217a7b1a2fea560289f-20220428
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1107191612; Thu, 28 Apr 2022 19:56:26 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 28 Apr 2022 19:56:24 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 28 Apr 2022 19:56:24 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 28 Apr 2022 19:56:24 +0800
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <p.zabel@pengutronix.de>,
-        <angelogioacchino.delregno@collabora.com>,
-        <chun-jie.chen@mediatek.com>, <wenst@chromium.org>,
-        <runyang.chen@mediatek.com>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH V5 16/16] arm64: dts: mediatek: Add infra #reset-cells property for MT8195
-Date:   Thu, 28 Apr 2022 19:56:19 +0800
-Message-ID: <20220428115620.13512-17-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220428115620.13512-1-rex-bc.chen@mediatek.com>
-References: <20220428115620.13512-1-rex-bc.chen@mediatek.com>
+        with ESMTP id S1346119AbiD1MWQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 Apr 2022 08:22:16 -0400
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28E7ADD4A;
+        Thu, 28 Apr 2022 05:19:02 -0700 (PDT)
+Received: by mail-qv1-f48.google.com with SMTP id a5so3074818qvx.1;
+        Thu, 28 Apr 2022 05:19:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Qx+NlNMvZd/Uol0esYxQUqFnkcuFOYByfHMHURYPZNQ=;
+        b=opZ4ZIQhDk+HBUXUxFxfeT1fqlcFL5VLZAV16itc4PbA5iq/rbbLnuiKKp+oxz8U4B
+         3wVlNpMDnbkE72ZdlbuVN3F9vwVo607ngeLprDgiBZAqRbHcuJlh5yDs82Jpl+X1QP8s
+         IntePXYinUyrZJR434MeOf4/WBOnbuN0Q4mqWuLoo6Y1xz4y3tuuLHB22QH3zJ64KZFD
+         ERkeDaBrNAeXPrPaZdGIUTXkkCAUoZjiwpePyR/IoIz8DErfP3UHe669bqqvvRfNuIDN
+         gO6h0REiCuYWKrRuKqB02x86SzNr9pinIWoaE4JPKEcQvnJb9jz7ZLdCgOkBtNEB5Qe9
+         Lw2g==
+X-Gm-Message-State: AOAM531+1McKxsU+cqa/HhdBqrfzlKjviRxz/UCuALWihv6hXknBvi5x
+        +bkceTYDPd56jZGYukhgqigPcsnBx0mDNg==
+X-Google-Smtp-Source: ABdhPJxFTMhR5WnU7Ph0RRtjZdgpXvzWY8LN4HbujjGYAUindYRhjSX3UqqC2JXYKTOvk15q6dCXiw==
+X-Received: by 2002:a05:6214:e4a:b0:446:5408:56f1 with SMTP id o10-20020a0562140e4a00b00446540856f1mr24168991qvc.64.1651148341604;
+        Thu, 28 Apr 2022 05:19:01 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id f20-20020ac87f14000000b002f3813335a9sm3926959qtk.0.2022.04.28.05.19.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 05:19:01 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id f38so8704100ybi.3;
+        Thu, 28 Apr 2022 05:19:00 -0700 (PDT)
+X-Received: by 2002:a25:8087:0:b0:641:dd06:577d with SMTP id
+ n7-20020a258087000000b00641dd06577dmr30137878ybk.207.1651148340563; Thu, 28
+ Apr 2022 05:19:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220425095244.156720-1-biju.das.jz@bp.renesas.com> <20220425095244.156720-7-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20220425095244.156720-7-biju.das.jz@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 28 Apr 2022 14:18:48 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXW=P8Uyeb7A2SvMboRyet+nGWG+kxApjZngPNOVwT_2w@mail.gmail.com>
+Message-ID: <CAMuHMdXW=P8Uyeb7A2SvMboRyet+nGWG+kxApjZngPNOVwT_2w@mail.gmail.com>
+Subject: Re: [PATCH 6/6] clk: renesas: r9a07g043: Add WDT clock and reset entries
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-We will use mediatek clock reset as infracfg_ao reset instead of
-ti-syscon. To support this, remove property of ti reset and add
-property of #reset-cells for mediatek clock reset.
+On Mon, Apr 25, 2022 at 11:53 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> Add WDT{0,2} clock and reset entries to CPG driver.
+>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-Fixes: 4c78814a1f46ac0 (arm64: dts: Add mediatek SoC mt8195 and evaluation board)
-Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
----
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-clk-for-v5.19.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index b57e620c2c72..8e5ac11b19f1 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -10,7 +10,6 @@
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/phy/phy.h>
- #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
--#include <dt-bindings/reset/ti-syscon.h>
- 
- / {
- 	compatible = "mediatek,mt8195";
-@@ -295,17 +294,7 @@
- 			compatible = "mediatek,mt8195-infracfg_ao", "syscon", "simple-mfd";
- 			reg = <0 0x10001000 0 0x1000>;
- 			#clock-cells = <1>;
--
--			infracfg_rst: reset-controller {
--				compatible = "ti,syscon-reset";
--				#reset-cells = <1>;
--				ti,reset-bits = <
--					0x140 18 0x144 18 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* pcie */
--					0x120 0  0x124 0  0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* thermal */
--					0x730 10 0x734 10 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* thermal */
--					0x150 5  0x154 5  0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* svs gpu */
--				>;
--			};
-+			#reset-cells = <1>;
- 		};
- 
- 		pericfg: syscon@10003000 {
--- 
-2.18.0
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
