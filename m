@@ -2,174 +2,106 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9955F513250
-	for <lists+linux-clk@lfdr.de>; Thu, 28 Apr 2022 13:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D52513283
+	for <lists+linux-clk@lfdr.de>; Thu, 28 Apr 2022 13:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345496AbiD1LWH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 28 Apr 2022 07:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
+        id S1345588AbiD1Lfe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 28 Apr 2022 07:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbiD1LWD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 Apr 2022 07:22:03 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F28A94F6;
-        Thu, 28 Apr 2022 04:18:48 -0700 (PDT)
-X-UUID: 6da760cb734a4341bb8b8abd0fde6d5b-20220428
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:d83dbdcb-c48c-45e9-af44-dd36e57a733c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:d83dbdcb-c48c-45e9-af44-dd36e57a733c,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:5198d3c6-85ee-4ac1-ac05-bd3f1e72e732,C
-        OID:IGNORED,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil,QS:0
-        ,BEC:nil
-X-UUID: 6da760cb734a4341bb8b8abd0fde6d5b-20220428
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 228262536; Thu, 28 Apr 2022 19:18:43 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 28 Apr 2022 19:18:42 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 28 Apr 2022 19:18:41 +0800
-Message-ID: <b83049a9cc9714a28c90a167245c43afddbc1aab.camel@mediatek.com>
-Subject: Re: [PATCH V4 12/15] dt-bindings: reset: mediatek: Add infra_ao
- reset bit for MT8192/MT8195
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Jie Chen =?UTF-8?Q?=28=E9=99=B3=E6=B5=9A=E6=A1=80=29?= 
-        <Chun-Jie.Chen@mediatek.com>,
-        "wenst@chromium.org" <wenst@chromium.org>,
-        Runyang Chen =?UTF-8?Q?=28=E9=99=88=E6=B6=A6=E6=B4=8B=29?= 
-        <Runyang.Chen@mediatek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 28 Apr 2022 19:18:41 +0800
-In-Reply-To: <d96797dc-8fbd-fe1c-f970-2f6fc8ca5b69@linaro.org>
-References: <20220427030950.23395-1-rex-bc.chen@mediatek.com>
-         <20220427030950.23395-13-rex-bc.chen@mediatek.com>
-         <d96797dc-8fbd-fe1c-f970-2f6fc8ca5b69@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S1345567AbiD1Lfd (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 Apr 2022 07:35:33 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BAF5EDE1
+        for <linux-clk@vger.kernel.org>; Thu, 28 Apr 2022 04:32:19 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id f2so5867008ioh.7
+        for <linux-clk@vger.kernel.org>; Thu, 28 Apr 2022 04:32:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=UXiI1Ou+hgS6xUOBleoXBZ0P1W6h3cfa19FRe+lKcNc=;
+        b=qdRXWsH4VboVZqMp+U+9xgTkruA8gP1PnMemdrmmg0YO6COokK/UN2OFrTer0rQTAT
+         L/Gk1tYZKKFPFqo7JdutorIHaZilUNgMXSNSOCNevKkAHmcBVMElQGq6HpkYC/lBhR+z
+         cGdhDa6PfwxJvXH1rpfTD2kgzo8ZHUp1se8gwJDs9ievPavEXtbkGq5W5APCsSBEjbhG
+         b6RpLTbmn4cGsMi3ZP7Vc/UnPeVn3UhTzAwx9cOph6YMcAfGfSlA3NE/eQL+O/fC+ky6
+         WCEFGtzo/pZQofGZq0COcl2SR3VgReM6aVbjBeulJfsOg1nbD9JO0lCeZ9TTXm3ROS5F
+         lBgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=UXiI1Ou+hgS6xUOBleoXBZ0P1W6h3cfa19FRe+lKcNc=;
+        b=uDPr6No78ufAI9lwRnwB/87QDjCHKwPbYmuPKtdZLG2qDGXUf+Ar15b9rylRfUTU+a
+         olW8LtL9h9DlUz/jigMCtTVbm5t+sMAuwzv2nvZ1EJ310Wdep2d8uMg5wMv6DWgSGlVn
+         UxjpPW6QMWq6KjaO+58+YPNxAmVGBweZiWK272Tr0YI0QW4Sz/aHvFQfQ6mXv87TppkJ
+         sIq96yNVydjWQ4Gkj7v5uAjCTAYPdomOeuGfUK+Egp/KrJbTcfmkzta8Xgeu9/whNui5
+         dOmq4ATnWF08gXEGJr3bw8pfiwp7pr5j6IiISMaDj6jDsVyhHr3ZtBXy6W2GvCl2B0Yw
+         FNbA==
+X-Gm-Message-State: AOAM532cgC8ZGTHpWjTA6RqEPW3EEQnFsnPe31eZslGbSCuqFZewjnVa
+        9Qp0rtOClOLwdTILJesxDfLtK4yg5Hr4j67fGtQ=
+X-Google-Smtp-Source: ABdhPJy//UOmnScX3U+9HAMHSaslp0Zg2kKG2rsRF1VyHdz+6Vg1gTuTmghrLA5VXddaXujrR+D0UZta7z+mQH+DG2g=
+X-Received: by 2002:a6b:680c:0:b0:657:aecd:c666 with SMTP id
+ d12-20020a6b680c000000b00657aecdc666mr4431049ioc.218.1651145538572; Thu, 28
+ Apr 2022 04:32:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:6e02:20e7:0:0:0:0 with HTTP; Thu, 28 Apr 2022 04:32:18
+ -0700 (PDT)
+Reply-To: barristerbenwaidhoferb@gmail.com
+From:   "Barrister. Ben Waidhofer" <gogalonasiru@gmail.com>
+Date:   Thu, 28 Apr 2022 04:32:18 -0700
+Message-ID: <CAPs4PmpVKkFuMtUTtqYzDMEM1tkHd6mExwR5ngFD_ZF_qd_qtg@mail.gmail.com>
+Subject: Investment Offer
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.4 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d43 listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.9246]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [gogalonasiru[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Thu, 2022-04-28 at 15:18 +0800, Krzysztof Kozlowski wrote:
-> On 27/04/2022 05:09, Rex-BC Chen wrote:
-> > - To support reset of infra_ao, add the bit definition of
-> >   thermal/PCIe/SVS for MT8192.
-> > - To support reset of infra_ao, add the bit definition of
-> >   thermal/SVS for MT8195.
-> > - Add the driver comment to separate the reset index for
-> >   TOPRGU and INFRA.
-> > 
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  include/dt-bindings/reset/mt8192-resets.h | 8 ++++++++
-> >  include/dt-bindings/reset/mt8195-resets.h | 6 ++++++
-> >  2 files changed, 14 insertions(+)
-> > 
-> > diff --git a/include/dt-bindings/reset/mt8192-resets.h
-> > b/include/dt-bindings/reset/mt8192-resets.h
-> > index be9a7ca245b9..ee0ca02a39bf 100644
-> > --- a/include/dt-bindings/reset/mt8192-resets.h
-> > +++ b/include/dt-bindings/reset/mt8192-resets.h
-> > @@ -7,6 +7,7 @@
-> >  #ifndef _DT_BINDINGS_RESET_CONTROLLER_MT8192
-> >  #define _DT_BINDINGS_RESET_CONTROLLER_MT8192
-> >  
-> > +/* TOPRGU resets */
-> >  #define MT8192_TOPRGU_MM_SW_RST					
-> > 1
-> >  #define MT8192_TOPRGU_MFG_SW_RST				2
-> >  #define MT8192_TOPRGU_VENC_SW_RST				3
-> > @@ -27,4 +28,11 @@
-> >  
-> >  #define MT8192_TOPRGU_SW_RST_NUM				23
-> >  
-> > +/* INFRA resets */
-> > +#define MT8192_INFRA_THERMAL_CTRL_RST			0
-> > +#define MT8192_INFRA_PEXTP_PHY_RST				79
-> > +#define MT8192_INFRA_PTP_RST					
-> > 101
-> > +#define MT8192_INFRA_RST4_PCIE_TOP				129
-> > +#define MT8192_INFRA_THERMAL_CTRL_MCU_RST		140
-> 
-> This is still wrong. I gave you exactly what has to be used:
-> 0
-> 1
-> 2
-> ...
-> 
-> It's a decimal number incremented by one.
-> 
-> 
-> > +
-> >  #endif  /* _DT_BINDINGS_RESET_CONTROLLER_MT8192 */
-> > diff --git a/include/dt-bindings/reset/mt8195-resets.h
-> > b/include/dt-bindings/reset/mt8195-resets.h
-> > index a26bccc8b957..a3226f40779c 100644
-> > --- a/include/dt-bindings/reset/mt8195-resets.h
-> > +++ b/include/dt-bindings/reset/mt8195-resets.h
-> > @@ -7,6 +7,7 @@
-> >  #ifndef _DT_BINDINGS_RESET_CONTROLLER_MT8195
-> >  #define _DT_BINDINGS_RESET_CONTROLLER_MT8195
-> >  
-> > +/* TOPRGU resets */
-> >  #define MT8195_TOPRGU_CONN_MCU_SW_RST          0
-> >  #define MT8195_TOPRGU_INFRA_GRST_SW_RST        1
-> >  #define MT8195_TOPRGU_APU_SW_RST               2
-> > @@ -26,4 +27,9 @@
-> >  
-> >  #define MT8195_TOPRGU_SW_RST_NUM               16
-> >  
-> > +/* INFRA resets */
-> > +#define MT8195_INFRA_THERMAL_AP_RST            0
-> > +#define MT8195_INFRA_PTP_RST                   101
-> > +#define MT8195_INFRA_THERMAL_MCU_RST           138
-> 
-> Same issue.
-> 
-> 
-> Best regards,
-> Krzysztof
+Good day,
 
-Hello Krzysztof,
+I am Barrister. Ben Waidhofer from the stated law firm in London. I act
+for Mr. Andrew Walker, a former loyalist and a personal Friend to the
+President of Russia Vladimir Putin presently in London; he flew into
+the UK months ago before the invasion of Ukraine by Russian government.
+The sum of $3.5b was deposited in a Private bank in Switzerland for
+the procurement of MIC war equipment from North Korea to fight the
+war, but he has decided to back out of the initial plan to divert part
+of the fund for investment in a viable venture.
 
-Thanks for your review.
-As mentioned in prvious mail, I will add all reset bits in MT8192 and
-MT8195.
+There is a need for a matured and trusted individual or corporate
+organization to receive part of the fund. All the needed documentation
+will be perfected here in London.
 
-BRs,
-Rex
+You are at liberty to respond for more detail.
 
+Thanks.
+Regards,
+Barrister. Ben Waidhofer
