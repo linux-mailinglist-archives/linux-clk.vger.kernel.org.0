@@ -2,67 +2,63 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 515F7514EEA
-	for <lists+linux-clk@lfdr.de>; Fri, 29 Apr 2022 17:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7A2514EF9
+	for <lists+linux-clk@lfdr.de>; Fri, 29 Apr 2022 17:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378209AbiD2PQv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 29 Apr 2022 11:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37808 "EHLO
+        id S1378268AbiD2PRo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 29 Apr 2022 11:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378205AbiD2PQq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 29 Apr 2022 11:16:46 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B415BD4C4D
-        for <linux-clk@vger.kernel.org>; Fri, 29 Apr 2022 08:13:26 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id p18so9430134edr.7
-        for <linux-clk@vger.kernel.org>; Fri, 29 Apr 2022 08:13:26 -0700 (PDT)
+        with ESMTP id S1378255AbiD2PRR (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 29 Apr 2022 11:17:17 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F45D4CAF
+        for <linux-clk@vger.kernel.org>; Fri, 29 Apr 2022 08:13:46 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2f7bb893309so88181227b3.12
+        for <linux-clk@vger.kernel.org>; Fri, 29 Apr 2022 08:13:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=u+4ICOXn1NGB+W/pvp37gYyyl9Rne1IW3j+B3PtGKuY=;
-        b=tyXrIVQyP8BKE4Qeo30lYqIVIon4mWE2t5kV9pOrtLwaLoyHTez53dyMViCYWmHu7p
-         x5a/+09Bp9WOjwDAVYZxss1lYvo6UC067Qq2x8L78yj3EXiSsCYgWYTImj6ryBEs8JTG
-         0l9ey8acmSLT06FYVMfN8A9QO2gALRdUyT59vnF3VvB4JDdK9VFis9JiUm9YebGZCTp9
-         5hGocKavutrSk+tOJiFP0CR7Cmlo3RvTdeZNREtG2p/5AHYG8/fW+WeozKwn8yWgvDrq
-         /GF6RsUNoVg5pzTUaqlXLhHiAFDxlHdsvGeb+qyFN8gR3To5tSlcrihDE0yNR8N+9lMU
-         4COQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fOXimSCWoaVOE75jYDyXyVZtWa+IqFp/UvK677qe1Uk=;
+        b=PDcGimo/5s3U9nmlgqUxiJVzyUi9WZgblxXKb+cIYX+nHz5/aTWd3qO63NTaYXOIG2
+         ephTbM10gm0qGHp9Xg8IAcj7v8rI1/VUay8WcOgm2YfeCARpjP0QIqK0chU9IfVcE5Z5
+         rq1YtWNw4KXwRzo3Xt86/LxFUyZDLLXnfWxYLVwuGZYpVasgiXRd3VDh/k2uiV/eY5K9
+         zI/Ldu0Nti/Z1IRGPL0IFzgTruprZQH6YooGDmCilYl4UeyvIhr/kSDR1Sp72lAc/2hn
+         LpXx2YGPZ4IriZ28HQBctK1zf3Bvp3Ha9WjaX2nfQNnFN0YGFdbR81WVrqZjd00w2bL4
+         Sjbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=u+4ICOXn1NGB+W/pvp37gYyyl9Rne1IW3j+B3PtGKuY=;
-        b=OVTezJG7HNc1id4UVu1OjGCNM2XirP5IvdWGm32YnEB0Fyrd9T49OPsgTPIo/eGHhV
-         S0X36oBv2YivlPqtZxVzTQjRt+p3lByd82vZXMGQGEvm2l3/NFxbKEfgc4BTZkl49Bt7
-         LCMCFdymmSIbFuBLNBuKdZd2SCespoZla22VzXR6sgPav5sYNsMzR+30wykHxKWDj3RE
-         ADMAZLvuEJskaPstq3DKoUB6OsVBzSB9aA82lQQXcsUIvR6gS4ZBXolb2wiMYtui6geq
-         cxHQDOu+l4jKZ5l8HM92MtevVlFc4HFmdbDgVHS3RlEUAU5/P4psThmwx1M4n6w6MF9B
-         86Eg==
-X-Gm-Message-State: AOAM532rAmrIytt1xzuei02WBfQuGsvWpAbvEcl4jZot5fOj3OfzZFm+
-        cAI9UlIss2AgzBE75t3Mz2Cn1A==
-X-Google-Smtp-Source: ABdhPJw+elzBB9/MX2cnP6ewv0SbsAy9X4Mfsmi57vSFBLkyX4Fcklh/lfFAF3/6ySJ1aZFzru8d7g==
-X-Received: by 2002:a05:6402:42d4:b0:416:5cac:a9a0 with SMTP id i20-20020a05640242d400b004165caca9a0mr41834497edc.86.1651245205335;
-        Fri, 29 Apr 2022 08:13:25 -0700 (PDT)
-Received: from prec5560.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
-        by smtp.gmail.com with ESMTPSA id zp15-20020a17090684ef00b006f3ef214e4esm712677ejb.180.2022.04.29.08.13.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Apr 2022 08:13:24 -0700 (PDT)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     bjorn.andersson@linaro.org, agross@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, jonathan@marek.ca, tdas@codeaurora.org,
-        anischal@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Robert Foss <robert.foss@linaro.org>
-Subject: [PATCH v1 9/9] arm64: dts: qcom: sm8350: Add DISPCC node
-Date:   Fri, 29 Apr 2022 17:12:47 +0200
-Message-Id: <20220429151247.388837-9-robert.foss@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220429151247.388837-1-robert.foss@linaro.org>
-References: <20220429151247.388837-1-robert.foss@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fOXimSCWoaVOE75jYDyXyVZtWa+IqFp/UvK677qe1Uk=;
+        b=IQ9Qtd+O0rPGIzqcwHgFm6JSqyihCng5doQB8QO1iGpYdzGZ4MFVOTv0TUODVG4L98
+         go5U2y2xwrosLptinHZmDmqpwJPwkhMHLNyqBkHm03FZzYiBEjBR2jmE6iujhR88Z9F+
+         m1Cgc06uq/k+PTVYckqrxV357GBabP7QkU6eq9nL+QURQNbdHR5aHDIMWpMQr3rGJDk9
+         p+TXMWD9oaW0B1ol3lfeirmuUE0FGLior88oWdZe729/WC5oSXqCcDmUFDoKYgnOapTG
+         n0+ipzQduiD9nMkJr3bYbiaECz/288qCV/dxb1Dnsy2CKfH9flDyppnFHnyXjVdc7V+w
+         v0Pw==
+X-Gm-Message-State: AOAM532hZRimKs0XUALnbwtW2txkjbzjZbpAtk1nSBwCOYxlc4odZQYO
+        cdW+bDL87SRGzra/GhmDbWDR7j/q4F+F4cCsYGacpHk21EI=
+X-Google-Smtp-Source: ABdhPJyU2T98l+dDUUN+TqVFXfp4urNMrgRil/xWQSQfajPv5Q5lFfjL9/rvXHau5ituz1aDGEmtlFm20S6u5dxO8UI=
+X-Received: by 2002:a81:5603:0:b0:2f8:3187:f37a with SMTP id
+ k3-20020a815603000000b002f83187f37amr16995409ywb.255.1651245225429; Fri, 29
+ Apr 2022 08:13:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220429120108.9396-1-ansuelsmth@gmail.com> <20220429120108.9396-5-ansuelsmth@gmail.com>
+ <1f013429-8a5b-47c8-a146-41bb66af3f03@linaro.org> <626c0034.1c69fb81.d55d4.4f09@mx.google.com>
+In-Reply-To: <626c0034.1c69fb81.d55d4.4f09@mx.google.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 29 Apr 2022 18:13:34 +0300
+Message-ID: <CAA8EJpqF74gUrPnOjVmZhwmdE-sR4G_SCOxK6Wvmh1ss1Rv_jA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] clk: qcom: clk-krait: add apq/ipq8064 errata workaround
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -72,57 +68,106 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the dispcc clock-controller DT node for sm8350.
+On Fri, 29 Apr 2022 at 18:11, Ansuel Smith <ansuelsmth@gmail.com> wrote:
+>
+> On Fri, Apr 29, 2022 at 06:00:45PM +0300, Dmitry Baryshkov wrote:
+> > On 29/04/2022 15:01, Ansuel Smith wrote:
+> > > Add apq/ipq8064 errata workaround where the sec_src clock gating needs to
+> > > be disabled during switching. To enable this set disable_sec_src_gating
+> > > in the mux struct.
+> > >
+> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > > ---
+> > >   drivers/clk/qcom/clk-krait.c | 16 ++++++++++++++++
+> > >   drivers/clk/qcom/clk-krait.h |  1 +
+> > >   drivers/clk/qcom/krait-cc.c  |  1 +
+> > >   3 files changed, 18 insertions(+)
+> > >
+> > > diff --git a/drivers/clk/qcom/clk-krait.c b/drivers/clk/qcom/clk-krait.c
+> > > index 6c367ad6506a..4a9b3296c45b 100644
+> > > --- a/drivers/clk/qcom/clk-krait.c
+> > > +++ b/drivers/clk/qcom/clk-krait.c
+> > > @@ -18,13 +18,23 @@
+> > >   static DEFINE_SPINLOCK(krait_clock_reg_lock);
+> > >   #define LPL_SHIFT 8
+> > > +#define SECCLKAGD  BIT(4)
+> > > +
+> > >   static void __krait_mux_set_sel(struct krait_mux_clk *mux, int sel)
+> > >   {
+> > >     unsigned long flags;
+> > >     u32 regval;
+> > >     spin_lock_irqsave(&krait_clock_reg_lock, flags);
+> > > +
+> > >     regval = krait_get_l2_indirect_reg(mux->offset);
+> > > +
+> > > +   /* apq/ipq8064 Errata: disable sec_src clock gating during switch. */
+> > > +   if (mux->disable_sec_src_gating) {
+> > > +           regval |= SECCLKAGD;
+> > > +           krait_set_l2_indirect_reg(mux->offset, regval);
+> > > +   }
+> > > +
+> > >     regval &= ~(mux->mask << mux->shift);
+> > >     regval |= (sel & mux->mask) << mux->shift;
+> > >     if (mux->lpl) {
+> > > @@ -33,6 +43,12 @@ static void __krait_mux_set_sel(struct krait_mux_clk *mux, int sel)
+> > >     }
+> > >     krait_set_l2_indirect_reg(mux->offset, regval);
+> > > +   /* apq/ipq8064 Errata: re-enabled sec_src clock gating. */
+> > > +   if (mux->disable_sec_src_gating) {
+> > > +           regval &= ~SECCLKAGD;
+> > > +           krait_set_l2_indirect_reg(mux->offset, regval);
+> > > +   }
+> > > +
+> > >     /* Wait for switch to complete. */
+> > >     mb();
+> > >     udelay(1);
+> > > diff --git a/drivers/clk/qcom/clk-krait.h b/drivers/clk/qcom/clk-krait.h
+> > > index 9120bd2f5297..f930538c539e 100644
+> > > --- a/drivers/clk/qcom/clk-krait.h
+> > > +++ b/drivers/clk/qcom/clk-krait.h
+> > > @@ -15,6 +15,7 @@ struct krait_mux_clk {
+> > >     u8              safe_sel;
+> > >     u8              old_index;
+> > >     bool            reparent;
+> > > +   bool            disable_sec_src_gating;
+> > >     struct clk_hw   hw;
+> > >     struct notifier_block   clk_nb;
+> > > diff --git a/drivers/clk/qcom/krait-cc.c b/drivers/clk/qcom/krait-cc.c
+> > > index 4d4b657d33c3..0f88bf41ec6e 100644
+> > > --- a/drivers/clk/qcom/krait-cc.c
+> > > +++ b/drivers/clk/qcom/krait-cc.c
+> > > @@ -138,6 +138,7 @@ krait_add_sec_mux(struct device *dev, int id, const char *s,
+> > >     mux->parent_map = sec_mux_map;
+> > >     mux->hw.init = &init;
+> > >     mux->safe_sel = 0;
+> > > +   mux->disable_sec_src_gating = true;
+> >
+> > This has to be guarded with the of_compatible checks. Otherwise you'd apply
+> > this errata to all Krait CPUs, not only apq/ipq8064.
+> >
+> > At least this should be limited to krait-cc-v1 with the note that there is
+> > no way to distinguish between platforms.
+> >
+>
+> Mhh can't i check the machine compatible directly to limit this to
+> apq/ipq8064?
 
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+Yes, use of_machine_is_compatible(). Add a comment that you have to do
+this because of the lack of soc-specific device compats.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index c49735d1b458..252fdef927cb 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -3,7 +3,9 @@
-  * Copyright (c) 2020, Linaro Limited
-  */
- 
-+#include <dt-bindings/interconnect/qcom,sm8350.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/clock/qcom,dispcc-sm8350.h>
- #include <dt-bindings/clock/qcom,gcc-sm8350.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
- #include <dt-bindings/dma/qcom-gpi.h>
-@@ -2533,6 +2535,29 @@ usb_2_dwc3: usb@a800000 {
- 			};
- 		};
- 
-+		dispcc: clock-controller@af00000 {
-+			compatible = "qcom,sm8350-dispcc";
-+			reg = <0 0x0af00000 0 0x10000>;
-+			mmcx-supply = <&mmcx_reg>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+				 <0>,
-+				 <0>,
-+				 <0>,
-+				 <0>,
-+				 <0>,
-+				 <0>;
-+			clock-names = "bi_tcxo",
-+				      "dsi0_phy_pll_out_byteclk",
-+				      "dsi0_phy_pll_out_dsiclk",
-+				      "dsi1_phy_pll_out_byteclk",
-+				      "dsi1_phy_pll_out_dsiclk",
-+				      "dp_phy_pll_link_clk",
-+				      "dp_phy_pll_vco_div_clk";
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		adsp: remoteproc@17300000 {
- 			compatible = "qcom,sm8350-adsp-pas";
- 			reg = <0 0x17300000 0 0x100>;
+> > >     init.name = kasprintf(GFP_KERNEL, "krait%s_sec_mux", s);
+> > >     if (!init.name)
+> >
+> >
+> > --
+> > With best wishes
+> > Dmitry
+>
+> --
+>         Ansuel
+
+
+
 -- 
-2.32.0
-
+With best wishes
+Dmitry
