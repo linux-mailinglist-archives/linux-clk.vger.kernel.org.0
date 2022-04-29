@@ -2,59 +2,58 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D88351560B
-	for <lists+linux-clk@lfdr.de>; Fri, 29 Apr 2022 22:46:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59B5F515617
+	for <lists+linux-clk@lfdr.de>; Fri, 29 Apr 2022 22:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381037AbiD2Utc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 29 Apr 2022 16:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
+        id S1381066AbiD2UvJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 29 Apr 2022 16:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381137AbiD2UtV (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 29 Apr 2022 16:49:21 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFD780BE5
-        for <linux-clk@vger.kernel.org>; Fri, 29 Apr 2022 13:46:01 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id p18so10340746edr.7
-        for <linux-clk@vger.kernel.org>; Fri, 29 Apr 2022 13:46:00 -0700 (PDT)
+        with ESMTP id S1381064AbiD2UvG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 29 Apr 2022 16:51:06 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F74A5EA2
+        for <linux-clk@vger.kernel.org>; Fri, 29 Apr 2022 13:47:46 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id dk23so17554370ejb.8
+        for <linux-clk@vger.kernel.org>; Fri, 29 Apr 2022 13:47:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :references:from:in-reply-to:content-transfer-encoding;
-        bh=ochQJGvAfnV9VCduFrexGwXrShT60JDPrJL2+ME4cQ4=;
-        b=LSJ/V0b2j/fqVDcMnrT6FBN1mebxobirc9EAxiHC/FZdOkrohbioYBEybtnAnQ8cMc
-         r2SjDMHDLXyypSR732Vvb71UA7FCP6q7yBXTPEIF71DZdCK7liUdGPeNyMeF3Oe7KJfO
-         XP+OgECXvpkyta1sSC2EvgY8GAi0w+qdVUyd4yMb2Xw9S320MO2HELFDVxaZuAuzvl1t
-         OYH5rCu8JkJWYJdRawU7tp9Qpp97LVlWncVaZVhSyG1E4GQ5f8MmVJoTiB9aV8gSWqsk
-         lGRHAdA/EpQyKGxRAl0fTzlqykh82YOzsPBYOLSS5GANO8dIuPM/pGaT/cqRIbBBhDsd
-         YtvQ==
+        bh=7XFv0enAym+ID9R3vXfpM3vAOvL5k1kdXEpaRFJe1CA=;
+        b=FA9Vla0q5kmg3t9U6lDt1g7PjTCHg7wH9SuQqQKoueF53p/pt0lvTacAT7XeT8nbdi
+         AAQIGarG8AuhPBmEHDkxDslSITkeNOLXXlPnsqn9bCtMeESkLt6R3dnxhwwghdkVEZCG
+         +N7+WB9MdciyoSV4YPFN9Bwy76n7fAdCGs3jBszl8rRYc8AQMUJZzojy7N5gM6Dqjd5H
+         FBhSXmiYTmWV4QB/uEuwXwPk6Ms2xmZYsb97BXGwk3+0vgP9N6dIG3bM6h4ExmmgIR42
+         6SFqex9GDbPeI7uAXhDTKDT97XqiC+NkLqepQueJwgwDrbx0DF1CrRs2W1idNPJXLIWp
+         ZJdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=ochQJGvAfnV9VCduFrexGwXrShT60JDPrJL2+ME4cQ4=;
-        b=aBvh8TRu0AAVe4jJXRNpnCDKV/C8MRTLRTPSUtGUcnTOUAI6RYFuPCrhZn8bw4Lj65
-         U6hQvgQpvsMoR4BCdHZNnpuJ4PG+2MzaSryKFWG6E+Ml9Vle5cDSaXZA9f1MtAfwe9fB
-         GinZg38Tdoewwn6d/H1VE73hCiKiEeXS9ZhabqdOXyTfc3OsO9hyDTBp2vlpc8W2C2Ey
-         tOSca4g4Y3e0hs4orXXrYWksID1oJYHNEdEslb8UTctNSMEnAbdAu0oKGdbC5Gc32RDN
-         AYQgWRzw9WlAFOA0M4vcQ8A+qbXy4Z2zLJyB6Mp0bdWhRRPJsj9YiDXl8uDEiLNNUGI/
-         z+3A==
-X-Gm-Message-State: AOAM532rEth1pgPM+uJp3pf2JXpi9SpegbwWlgYJXWkv4d/5+/1iz0V+
-        f8LX8LpJ7ggF3ti4xIgwfnvn3w==
-X-Google-Smtp-Source: ABdhPJyi1MDo1zRub/Ovah2DsFuZ1Cs98xS2bAOhuo/XVUB+gAAw2pNRnHke/CISIJe1ILdOLtbb/w==
-X-Received: by 2002:a05:6402:11c9:b0:425:ef56:a1dd with SMTP id j9-20020a05640211c900b00425ef56a1ddmr1099914edw.143.1651265159632;
-        Fri, 29 Apr 2022 13:45:59 -0700 (PDT)
+        bh=7XFv0enAym+ID9R3vXfpM3vAOvL5k1kdXEpaRFJe1CA=;
+        b=iEFFlk8PvUjYOlXfiDmiGqDTMaYPgJA4NMxVJvpniAgHJBb1j/YBPrNNQHsRvdL/sn
+         rKhb3IEOsNeDiXn/eV2jA8RVqBgxL9ztm3jzNu4rR65nFNhR53eC/rwvrIdXk3jUGcsZ
+         DMb7OpKAKB7nZ/4Cg8qJgLfTBVkfD2Fswf/rorcvXYMyNJJ2QvyLI9N/AJ7rlcBxja8P
+         CKu0TGt4NUpEno7HgdosuP39OseeikZ4K2P5/V2MMAwpxjToCTi/4jzQS8jhnR9SPIjn
+         WcrIH7M6QZO3/shA1v4wW3ZHFMSBpRDgWOFA9EEOrAlsycQMIKJxopHKPsjSEAWgSmAr
+         lUXw==
+X-Gm-Message-State: AOAM532Hs4YqFqWXoGP3WhlrmMb13rpdbemcHH34E48askV0sf8tdbbe
+        VUiSvr3Va0/hdGq+kuYNWEuqUw==
+X-Google-Smtp-Source: ABdhPJx8NIy7aI2AgyUS6bXRPo7rEIWxGmXm72s/3A6kmrHKRAvH2T0l9dyQDRkC7PwDU+bTGKI8fA==
+X-Received: by 2002:a17:906:2ac9:b0:6ce:dc0f:9139 with SMTP id m9-20020a1709062ac900b006cedc0f9139mr1069924eje.206.1651265265461;
+        Fri, 29 Apr 2022 13:47:45 -0700 (PDT)
 Received: from [192.168.0.176] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id jz24-20020a17090775f800b006f3ef214de1sm959183ejc.71.2022.04.29.13.45.58
+        by smtp.gmail.com with ESMTPSA id ig1-20020a1709072e0100b006f3ef214e7asm961748ejc.224.2022.04.29.13.47.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 13:45:59 -0700 (PDT)
-Message-ID: <1b545fbb-eaca-fb98-f77a-15326a7a2e4e@linaro.org>
-Date:   Fri, 29 Apr 2022 22:45:58 +0200
+        Fri, 29 Apr 2022 13:47:44 -0700 (PDT)
+Message-ID: <791bb7a7-a717-7d86-eca4-3a270e6b3d0f@linaro.org>
+Date:   Fri, 29 Apr 2022 22:47:43 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 2/6] clk: qcom: Add DT bindings for IPQ8074 APSS clock
- controller
+Subject: Re: [PATCH 5/6] dt-bindings: mailbox: set correct #clock-cells
 Content-Language: en-US
 To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
         bjorn.andersson@linaro.org, jassisinghbrar@gmail.com,
@@ -63,9 +62,9 @@ To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-clk@vger.kernel.org
 References: <20220429114330.59026-1-robimarko@gmail.com>
- <20220429114330.59026-2-robimarko@gmail.com>
+ <20220429114330.59026-5-robimarko@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220429114330.59026-2-robimarko@gmail.com>
+In-Reply-To: <20220429114330.59026-5-robimarko@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,29 +78,22 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 On 29/04/2022 13:43, Robert Marko wrote:
-> Add DT-binding for the IPQ8074 APSS clock controller.
+> IPQ6018 and IPQ8074 require #clock-cells to be set to 1 as their APSS
+> clock driver provides multiple clock outputs.
+> 
+> So allow setting 1 as #clock-cells and check that its set to 1 for IPQ6018
+> and IPQ8074, check others for 0 as its currently.
 > 
 > Signed-off-by: Robert Marko <robimarko@gmail.com>
-
-These are dt-bindings, so prefix the title matching dt-bindings
-subsystem and remove "DT bindings" words form the title. Instead "Add
-clock ID headers for..."
-
 > ---
->  include/dt-bindings/clock/qcom,apss-ipq8074.h | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->  create mode 100644 include/dt-bindings/clock/qcom,apss-ipq8074.h
-> 
-> diff --git a/include/dt-bindings/clock/qcom,apss-ipq8074.h b/include/dt-bindings/clock/qcom,apss-ipq8074.h
-> new file mode 100644
-> index 000000000000..df07766b0146
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/qcom,apss-ipq8074.h
-> @@ -0,0 +1,14 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
+>  .../mailbox/qcom,apcs-kpss-global.yaml         | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
 
-This should be licensed the same as bindings, so GPL|BSD, unless it's a
-derivative of some other work?
+
+With the changes asked by Jassi:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
 Best regards,
 Krzysztof
