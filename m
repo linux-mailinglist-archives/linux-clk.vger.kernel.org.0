@@ -2,72 +2,119 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72003515D4E
-	for <lists+linux-clk@lfdr.de>; Sat, 30 Apr 2022 15:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA3C515CFB
+	for <lists+linux-clk@lfdr.de>; Sat, 30 Apr 2022 14:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382669AbiD3NNP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 30 Apr 2022 09:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49798 "EHLO
+        id S240644AbiD3Mo7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 30 Apr 2022 08:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382659AbiD3NNN (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 30 Apr 2022 09:13:13 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F31482D02;
-        Sat, 30 Apr 2022 06:09:51 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id p18so11896552edr.7;
-        Sat, 30 Apr 2022 06:09:51 -0700 (PDT)
+        with ESMTP id S237251AbiD3Mo6 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 30 Apr 2022 08:44:58 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A330102F;
+        Sat, 30 Apr 2022 05:41:36 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id z5-20020a9d62c5000000b00606041d11f1so1057558otk.2;
+        Sat, 30 Apr 2022 05:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=3P6gFLiLHpQOXPwOnJdtu8LsXK946l+L0SXzplHXgp8=;
-        b=A2zQVsk6TsPWFFnKRLzrD/HI3vGHQL6AVekVCNp500SknGG8SJwz7kyiJrvA19EShI
-         BNLPMmTKIeNYoM41oByYLvde4UGaWMc2tYI4swETHVbaT+110s4N2rW4HtT0AkQqwgcg
-         6g4P2bCl4tWQf3CHllg+3VcNxxdsEKJuUGSWm/3lrydS56ig/rf1Z/h7qjdfsfu68zv3
-         wwNUX8OSrEuZa5pgRoqW9YsfimCitya3OdMFujgs9WeaPLqRgpWQRsOYk8qrH/WzaxbH
-         eWZ2WTaKxAFrS4PQquJe2V2vvHteqNqF7y1hJGibl08BKdS0sADiZicXmAclcH2bgZnu
-         qQDA==
+        bh=+4KmgQYfIuFm8h1U7R2YwSpU4hiAkXj3VbXO1u4n31Y=;
+        b=bOMCzvCOAKpdv9fXaje9jMI1pqeKHqZONG1kyrwpEn5SRSjZ3gWLYQa3I3V8E0XTqe
+         23L3GQAWJeNEVk7g8b+1UkAgEnQmLz3wKCy7oL9ps0rKBiKWBGcNJePTi8yZdc7eAm1K
+         drdd70QPm41ZeopLgQmmcBSPYqUdoh6aLM9KWSTIn7/lTrG/Cl6+v62W2AmGpZwfQKuG
+         nJsb/pkjFRynFoTYu5l6pn8u9pt2CaT1jCMhsjk/5NBUgOkrkYq3BZENTznAZdLbqTNg
+         OGQz6xI5kVYIDfriuLeWqba0UWos0/qt3bWMGA48AnxKNk/33rWth8ALS3TZQJlUqq9u
+         /Xfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3P6gFLiLHpQOXPwOnJdtu8LsXK946l+L0SXzplHXgp8=;
-        b=bm1LRLhmXFWousbf4UyBf/BrjS4mPuFx+42eo0+sglVyXUQCC685O5eYYaXvHPhF4a
-         iLRbhl/+Mt0cHueRYoEVjytCUdMPSFForGZp9t0mr7xSYZonHD+ldRjXE5aGPc1X7gYc
-         Y3lbOzRWkJdbjogSzooMWlszoeYQTv3XT1AsH19OLvc7ruuXMBKIoJu8wB8LljTovJW5
-         0R28F6fR1sXd6gwFMmV1ZnYk3HIWKhpEoQBkYKBm9wo+xgBoNntxqWLjMI1cOGQQjhcv
-         9Yz/cwQL4X2DPFtj9djyKifDMmUZwf6TBz/fhiddDBY91S6ODWnDNB8RiDxvuY3BseWO
-         iarA==
-X-Gm-Message-State: AOAM531JN4hG6jZ6QRHVM+hIT5SsCPssh+qpSTBoksRUWAzBdnhIQd1m
-        fG4rvvUr8Zp2DkFrE+jqh6A=
-X-Google-Smtp-Source: ABdhPJx2qDGExsPDlSuKlEw7Cpu8Sx2qH4tTWnvkjIQ9BFGSbprqbq1Qr0JkUcxBM7IZ2RjZDFTROg==
-X-Received: by 2002:aa7:c49a:0:b0:425:d526:98ad with SMTP id m26-20020aa7c49a000000b00425d52698admr4312411edq.352.1651324189976;
-        Sat, 30 Apr 2022 06:09:49 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id u5-20020a056402064500b0042617ba63a0sm4142404edx.42.2022.04.30.06.09.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Apr 2022 06:09:49 -0700 (PDT)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+4KmgQYfIuFm8h1U7R2YwSpU4hiAkXj3VbXO1u4n31Y=;
+        b=2eKTkE0mtN5koY1UIxv5K/5k1vHT7cMa2sIqOYiK5fP4HsZrmECuxLlgUUKifvUgvl
+         otLiqrRpRdyZZQfggehIM2AvFIaRLEULV8znL6IYhNcUdLmo2quETDJnwThF5riZ5elI
+         JeMpJ1MHJUqJA2ngD0nAaTLdbNWBiCXqYsA+raYdZ+q2B3/HPeHMoJLeulHqKx7IgL6s
+         urnpNTAqaujPTX8Ebwp+nsOKsgKv6reyLxELmtRCMTvLlMyGvhlvIcgRg678sr2+Nc73
+         yV95GipK7EHKdnIP0XqtOCAYudG6/+8HHyj7aLG+mGYuUgar5jrWa4OBtrTE6+G3MZA0
+         sJng==
+X-Gm-Message-State: AOAM5338euTdLyOe6KP8GGEEf4ETyVDCn+HeNojjTNFevLbmFZL7JKRW
+        pJ1X4phsIOrmZacKus7o2e0=
+X-Google-Smtp-Source: ABdhPJx/RnInjVQBRODIzLjFN1nUE8Qwa3akS1eWhsyayobpVL5cALhdflWKmFg+xyGlLB5eP7Dd1w==
+X-Received: by 2002:a9d:6957:0:b0:605:de97:1ac9 with SMTP id p23-20020a9d6957000000b00605de971ac9mr1368958oto.83.1651322495923;
+        Sat, 30 Apr 2022 05:41:35 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c5-20020a056870b28500b000e686d13881sm3932471oao.27.2022.04.30.05.41.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 30 Apr 2022 05:41:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net>
+Date:   Sat, 30 Apr 2022 05:41:31 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Ansuel Smith <ansuelsmth@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v2 3/3] dt-bindings: arm: msm: Convert kpss-gcc driver Documentation to yaml
-Date:   Sat, 30 Apr 2022 08:01:25 +0200
-Message-Id: <20220430060125.9124-4-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220430060125.9124-1-ansuelsmth@gmail.com>
-References: <20220430060125.9124-1-ansuelsmth@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+References: <20220419163810.2118169-1-arnd@kernel.org>
+ <20220422170530.GA2338209@roeck-us.net>
+ <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
+ <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net>
+ <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
+ <20220422234150.GA3442771@roeck-us.net>
+ <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
+ <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net>
+ <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
+ <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net>
+ <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
+ <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
+ <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net>
+ <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
+ <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
+ <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net>
+ <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,142 +122,71 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Convert kpss-gcc driver Documentation to yaml.
-Add #clock-cells additional binding to required bindings and example
-as it's a required binding for clock-output-names.
+On 4/30/22 01:04, Arnd Bergmann wrote:
+> On Sat, Apr 30, 2022 at 1:09 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>> On 4/29/22 14:46, Arnd Bergmann wrote:
+>>> On Fri, Apr 29, 2022 at 10:23 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>>> On 4/29/22 10:48, Guenter Roeck wrote:
+>>>>>
+>>>>> I tried the pxa-multiplatform-5.18 branch. Its failures match
+>>>>> those in v5.18-rc1.
+>>>>>
+>>>>
+>>>> Uuh, wait, the build wasn't complete. There are still some
+>>>> failures. I'll report later.
+>>>
+>>> Sorry about the breakage, I got a few more reports about minor build errors
+>>> and warnings, the newly uploaded branches should address all of the ones
+>>> I got reports for.
+>>>
+>>
+>> Unless I am missing something the failures are the same as before. See
+>> https://kerneltests.org/builders/qemu-arm-testing/builds/74/steps/qemubuildcommand/logs/stdio
+>>
+>> This is with v5.18-rc1-49-ge8ab9a9a2745 which is the tip of
+>> soc/pxa-multiplatform-5.18.
+>>
+>> Should I check a different branch ?
+> 
+> I only addressed the pcmcia probe failure that you reported for the
+> final pxa patch, which
+> previously caused a NULL pointer reference here:
+> 
+> [    1.405319] PC is at pcmcia_init_one+0xf8/0x27c
+> [    1.405476] LR is at devres_add+0x40/0x6c
+> [    1.405611] pc : [<c04bdea0>]    lr : [<c044d808>]    psr: a0000113
+> [    1.405846] sp : c48a5d00  ip : c15f4220  fp : 60000113
+> [    1.406026] r10: 00000000  r9 : c48b000e  r8 : c48b0000
+> [    1.406195] r7 : feeb0000  r6 : feeb000e  r5 : c15ec090  r4 : c15ec020
+> [    1.406395] r3 : 00000002  r2 : 00000000  r1 : c15f4200  r0 : feeb000e
+> 
+> This now seems to work:
+> 
+> [    1.435846] pcmcia_socket pcmcia_socket1: pccard: PCMCIA card
+> inserted into slot 1
+> [    1.456350] pcmcia_socket pcmcia_socket0: pccard: PCMCIA card
+> inserted into slot 0
+> [    1.457489] pcmcia 0.0: pcmcia: registering new device pcmcia0.0 (IRQ: 217)
+> [    1.460275] pata_pcmcia: probe of 0.0 failed with error -12
+> 
+> So it sounds like there are additional bugs that I have to look at. I
+> probably won't
+> be able to do that in time for the merge window. The logs contain a number of
+> warnings, but I have no idea which ones of those are preexisting issue. I had
+> a look at
+> 
+> [    0.689982] pxa-dma pxa-dma.0: error -ENXIO: IRQ index 1 not found
+> 
+Yes, those messages are indeed old.
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
----
- .../bindings/arm/msm/qcom,kpss-gcc.txt        | 44 ------------
- .../bindings/arm/msm/qcom,kpss-gcc.yaml       | 68 +++++++++++++++++++
- 2 files changed, 68 insertions(+), 44 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
- create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
+> and concluded that it must have done this for a long time. In my own qemu
+> instance, I see a crash from iWMMXt, but that works fine on your machine.
+> OTOH, your failed instances all look like they either time out or
+> failed to find a
+> rootfs. I tried passing an MMC device as root, and that works here.
+> 
 
-diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
-deleted file mode 100644
-index e628758950e1..000000000000
---- a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.txt
-+++ /dev/null
-@@ -1,44 +0,0 @@
--Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
--
--PROPERTIES
--
--- compatible:
--	Usage: required
--	Value type: <string>
--	Definition: should be one of the following. The generic compatible
--			"qcom,kpss-gcc" should also be included.
--			"qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc"
--			"qcom,kpss-gcc-apq8064", "qcom,kpss-gcc"
--			"qcom,kpss-gcc-msm8974", "qcom,kpss-gcc"
--			"qcom,kpss-gcc-msm8960", "qcom,kpss-gcc"
--
--- reg:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: base address and size of the register region
--
--- clocks:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: reference to the pll parents.
--
--- clock-names:
--	Usage: required
--	Value type: <stringlist>
--	Definition: must be "pll8_vote", "pxo".
--
--- clock-output-names:
--	Usage: required
--	Value type: <string>
--	Definition: Name of the output clock. Typically acpu_l2_aux indicating
--		    an L2 cache auxiliary clock.
--
--Example:
--
--	l2cc: clock-controller@2011000 {
--		compatible = "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc";
--		reg = <0x2011000 0x1000>;
--		clocks = <&gcc PLL8_VOTE>, <&gcc PXO_SRC>;
--		clock-names = "pll8_vote", "pxo";
--		clock-output-names = "acpu_l2_aux";
--	};
-diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-new file mode 100644
-index 000000000000..20ee182eb16f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc.yaml
-@@ -0,0 +1,68 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/msm/qcom,kpss-gcc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
-+
-+maintainers:
-+  - Ansuel Smith <ansuelsmth@gmail.com>
-+
-+description: |
-+  Krait Processor Sub-system (KPSS) Global Clock Controller (GCC). Used
-+  to control L2 mux (in the current implementation).
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - qcom,kpss-gcc-ipq8064
-+          - qcom,kpss-gcc-apq8064
-+          - qcom,kpss-gcc-msm8974
-+          - qcom,kpss-gcc-msm8960
-+      - const: qcom,kpss-gcc
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: phandle to pll8_vote
-+      - description: phandle to pxo_board
-+
-+  clock-names:
-+    items:
-+      - const: pll8_vote
-+      - const: pxo
-+
-+  clock-output-names:
-+    const: acpu_l2_aux
-+
-+  '#clock-cells':
-+    const: 0
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - clock-output-names
-+  - '#clock-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/qcom,gcc-ipq806x.h>
-+
-+    clock-controller@2011000 {
-+      compatible = "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc";
-+      reg = <0x2011000 0x1000>;
-+      clocks = <&gcc PLL8_VOTE>, <&pxo_board>;
-+      clock-names = "pll8_vote", "pxo";
-+      clock-output-names = "acpu_l2_aux";
-+      #clock-cells = <0>;
-+    };
-+...
-+
--- 
-2.34.1
+Booting from mmc works for me as well. Booting from pcmcia worked before,
+so I assume that there must be some regression.
 
+Guenter
