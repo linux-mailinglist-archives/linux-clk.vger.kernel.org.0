@@ -2,107 +2,102 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F4C515C84
-	for <lists+linux-clk@lfdr.de>; Sat, 30 Apr 2022 13:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE3D515D0A
+	for <lists+linux-clk@lfdr.de>; Sat, 30 Apr 2022 14:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238505AbiD3LqE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 30 Apr 2022 07:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35756 "EHLO
+        id S232852AbiD3M4j (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 30 Apr 2022 08:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240429AbiD3LqC (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 30 Apr 2022 07:46:02 -0400
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD7F45F251;
-        Sat, 30 Apr 2022 04:42:34 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.91,187,1647270000"; 
-   d="scan'208";a="118460285"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 30 Apr 2022 20:42:34 +0900
-Received: from localhost.localdomain (unknown [10.226.92.1])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 681314232068;
-        Sat, 30 Apr 2022 20:42:31 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v3 9/9] clk: renesas: r9a07g044: Add DSI clock and reset entries
-Date:   Sat, 30 Apr 2022 12:41:56 +0100
-Message-Id: <20220430114156.6260-10-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220430114156.6260-1-biju.das.jz@bp.renesas.com>
-References: <20220430114156.6260-1-biju.das.jz@bp.renesas.com>
+        with ESMTP id S229831AbiD3M4i (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 30 Apr 2022 08:56:38 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652DE60AA6;
+        Sat, 30 Apr 2022 05:53:17 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id dk23so20055662ejb.8;
+        Sat, 30 Apr 2022 05:53:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mAQMceYOTyepNyy81qetN6xjIgF24kvDcmdMEakHKdA=;
+        b=VDQiZ9gle0DYIu1HeD8kYTH7Q0GdjrSCveevSvIMnCmpzxrj5oYVykEkKFcUS5qJuw
+         v4dpV7ydmobrQXwA6g1NvIhZXri40c7gherhrlOO2p3adabtYe575xvIoNeiBXwShelk
+         40XgCUm4vsIv3qLrfAbg9u/6xvGTVm6hqLIOsFkhpcFpFLuz3ul1IjYxwz4npthkwe+G
+         /dw1Nf5Z1rbY2MKl2CDfcWjw4QMVaYbl86AmKNPO/jG0NoCjxUhFwA0ULIYqUq/TCYQe
+         fj0D3OnXRwKjgfQ7C0BAs9tQm7S0H5eF2r87Vjiuhc0bVyxmL9LUf9DqqLPfZcyCBDgO
+         I70Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mAQMceYOTyepNyy81qetN6xjIgF24kvDcmdMEakHKdA=;
+        b=BJylXI/2gCxam/yFGnVpD8Oi2Sob7k2L5g10ddSC7yMcK2h7vkVEv9RTH4dgksmCeW
+         xdfj+aR8G3sQIRWp+5DVKmeTstlHpCHtcU6mlJmw9+y9YScKsJ/NEV9c+els6HpDW9IZ
+         pmykwaqGSCpTN0pn2GwS9DSgNeYlJz76PmDk/WNGbUOqxM+Yr2Ap+yUM9Rm3h/Xs4i5c
+         Om5PePaMAsD6orq4EPa1OB0rwnv9wmi7BORyES8yVQw8CZHz1KVE60lDNV2EeeMOxAvs
+         Q0wdkWs3dJPXPlI53vEMkPVTPr3PYbR5u9xE1iC7VzCz0Z0Cn1DIjubJqu5oAk1642ea
+         n0LQ==
+X-Gm-Message-State: AOAM533UOcnhi+Jqa7ZQB9jQw7bA7Jd21Stm2TcIrZP8BFiysUFoVx94
+        CMZ+C6COFU41JsJpua0SGtJ9QJK0dE4=
+X-Google-Smtp-Source: ABdhPJwApadsEjI+8tlebGbQqspwcBB/aD15404MIyeQLr5Rc9ZTI73JUP9ssVlMGbeiJGf/5b1ViA==
+X-Received: by 2002:a17:907:7f08:b0:6f3:8c69:1779 with SMTP id qf8-20020a1709077f0800b006f38c691779mr3660647ejc.414.1651323195618;
+        Sat, 30 Apr 2022 05:53:15 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.googlemail.com with ESMTPSA id jl25-20020a17090775d900b006f3ef214dc5sm1597209ejc.43.2022.04.30.05.53.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Apr 2022 05:53:15 -0700 (PDT)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sricharan R <sricharan@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>
+Subject: [PATCH v2 0/3] Small fixes/improvement for hfpll and krait
+Date:   Sat, 30 Apr 2022 07:44:55 +0200
+Message-Id: <20220430054458.31321-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add DSI clock and reset entries to CPG driver.
+This series has small fixes/improvement to the hfpll and krait clk
+driver.
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-V2->V3:
- * No Change
-V1->V2:
- * No Change
-RFC->V1:
- * Added Rb tag from Geert
----
- drivers/clk/renesas/r9a07g044-cpg.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+This comes from another series that got split to better facilitate the
+merge since it was grown to 21 patches and was getting hard to review.
 
-diff --git a/drivers/clk/renesas/r9a07g044-cpg.c b/drivers/clk/renesas/r9a07g044-cpg.c
-index b5ddc5058670..57ec50659bb3 100644
---- a/drivers/clk/renesas/r9a07g044-cpg.c
-+++ b/drivers/clk/renesas/r9a07g044-cpg.c
-@@ -194,7 +194,7 @@ static const struct {
- };
- 
- static const struct {
--	struct rzg2l_mod_clk common[65];
-+	struct rzg2l_mod_clk common[71];
- #ifdef CONFIG_CLK_R9A07G054
- 	struct rzg2l_mod_clk drp[0];
- #endif
-@@ -254,6 +254,18 @@ static const struct {
- 					0x558, 1),
- 		DEF_MOD("gpu_ace_clk",	R9A07G044_GPU_ACE_CLK, R9A07G044_CLK_P1,
- 					0x558, 2),
-+		DEF_MOD("dsi_pll_clk",	R9A07G044_MIPI_DSI_PLLCLK, R9A07G044_CLK_M1,
-+					0x568, 0),
-+		DEF_MOD("dsi_sys_clk",	R9A07G044_MIPI_DSI_SYSCLK, CLK_M2_DIV2,
-+					0x568, 1),
-+		DEF_MOD("dsi_aclk",	R9A07G044_MIPI_DSI_ACLK, R9A07G044_CLK_P1,
-+					0x568, 2),
-+		DEF_MOD("dsi_pclk",	R9A07G044_MIPI_DSI_PCLK, R9A07G044_CLK_P2,
-+					0x568, 3),
-+		DEF_MOD("dsi_vclk",	R9A07G044_MIPI_DSI_VCLK, R9A07G044_CLK_M3,
-+					0x568, 4),
-+		DEF_MOD("dsi_lpclk",	R9A07G044_MIPI_DSI_LPCLK, R9A07G044_CLK_M4,
-+					0x568, 5),
- 		DEF_COUPLED("lcdc_a",	R9A07G044_LCDC_CLK_A, R9A07G044_CLK_M0,
- 					0x56c, 0),
- 		DEF_COUPLED("lcdc_p",	R9A07G044_LCDC_CLK_P, R9A07G044_CLK_ZT,
-@@ -355,6 +367,9 @@ static struct rzg2l_reset r9a07g044_resets[] = {
- 	DEF_RST(R9A07G044_GPU_RESETN, 0x858, 0),
- 	DEF_RST(R9A07G044_GPU_AXI_RESETN, 0x858, 1),
- 	DEF_RST(R9A07G044_GPU_ACE_RESETN, 0x858, 2),
-+	DEF_RST(R9A07G044_MIPI_DSI_CMN_RSTB, 0x868, 0),
-+	DEF_RST(R9A07G044_MIPI_DSI_ARESET_N, 0x868, 1),
-+	DEF_RST(R9A07G044_MIPI_DSI_PRESET_N, 0x868, 2),
- 	DEF_RST(R9A07G044_LCDC_RESET_N, 0x86c, 0),
- 	DEF_RST(R9A07G044_SSI0_RST_M2_REG, 0x870, 0),
- 	DEF_RST(R9A07G044_SSI1_RST_M2_REG, 0x870, 1),
+For hfpll, a conversion to read_poll macro and introduction
+of a timeout to prevent a stall.
+For krait, a fix for the mux sel logic and an introduction for
+8064 errata.
+
+v2:
+- Drop patch add hw_parent check for div2_round_rate
+- Add extra comments for errata patch
+
+Ansuel Smith (3):
+  clk: qcom: clk-hfpll: use poll_timeout macro
+  clk: qcom: clk-krait: unlock spin after mux completion
+  clk: qcom: clk-krait: add apq/ipq8064 errata workaround
+
+ drivers/clk/qcom/clk-hfpll.c | 15 +++++++++------
+ drivers/clk/qcom/clk-krait.c | 23 ++++++++++++++++++++++-
+ drivers/clk/qcom/clk-krait.h |  1 +
+ drivers/clk/qcom/krait-cc.c  |  8 ++++++++
+ 4 files changed, 40 insertions(+), 7 deletions(-)
+
 -- 
-2.25.1
+2.34.1
 
