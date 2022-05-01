@@ -2,125 +2,78 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F775163D0
-	for <lists+linux-clk@lfdr.de>; Sun,  1 May 2022 12:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99EC3516439
+	for <lists+linux-clk@lfdr.de>; Sun,  1 May 2022 13:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344739AbiEAKkD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 1 May 2022 06:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
+        id S237006AbiEALkM (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 1 May 2022 07:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345535AbiEAKjD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 1 May 2022 06:39:03 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C51E42
-        for <linux-clk@vger.kernel.org>; Sun,  1 May 2022 03:35:37 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id g20so13683913edw.6
-        for <linux-clk@vger.kernel.org>; Sun, 01 May 2022 03:35:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=h9YZjRwoHC6GaFFb1SDwA29ZxpNfUjxNdlL96hvSsO0=;
-        b=YY6qFncodP37LtEhEAtatrQ82fz/hPWy6G+dDcAafnW8/Lila7XInflVXwajnJNKcS
-         JNYDc9UkVSLbYrChCHIcyMzmc+UtYg1jLNiWSa69AIrTB2M9yt89MNKI6DPyNAWHXUJz
-         pwozzUisJWWhvadt+p3BEcDySyWLYXssYSrxwKbPNS9ZwcM5FUzofRSuru894YsOguUf
-         NyZ9gBJJCi6X6WdjNIv/ph4MaIZ8Ou0xvZFPDZCsFZQSB7cBXMTFoiz+EJ4bpZrSpmAI
-         XynyMXuzVv0orW+ui+Pb/4HlIwEjDklhauFgP+++nn8JAAYppqEIc5bRVgS0pORJrKN0
-         WQeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=h9YZjRwoHC6GaFFb1SDwA29ZxpNfUjxNdlL96hvSsO0=;
-        b=fId2ttVXY/YTOBAym4og3a2C3u1VifZikiZVn4t2gcSTGRdj8BYh/iTkMwx7mHea0b
-         Yjw4jTFqjJlfEjWYwuSWRjhsxKHEq1hszrur16CxT0VRKm4DupQOo2UmkdkFKGT90FTc
-         VDhUqSHLygtD0W/OcFAeCVl/qqe0giHj4Vi2gqYldi1V7el1ZrjI0MxkkJoV2sQW7sE7
-         wDwacHuWIhOjTxMWe7+Yd5ZHc7jUEQVfBM09+f2L8Nw4OH60thnWbTVHziWbkgyOCFtL
-         jYb3d24fr5i9GGyIHfHhPQAImd9reexH1j4eA1tYeTE1nkklkY2N2T3t9lAsqrePoGN+
-         x+BQ==
-X-Gm-Message-State: AOAM531CwKqNX/L4UFGFOA4hRo658CKVZ/HmJUiSpSQatMx6aZl6qiDD
-        8znf8ZKlsNvQIsz13o4SJD7CFQ==
-X-Google-Smtp-Source: ABdhPJw7iJwj9jQ5tU/50tMqagxdWh7joTS/ou6UwmV14fytS26n1/8N5nLzSNI34O3clqBJelNflQ==
-X-Received: by 2002:a05:6402:2d6:b0:425:ed85:46bf with SMTP id b22-20020a05640202d600b00425ed8546bfmr8106806edx.6.1651401335819;
-        Sun, 01 May 2022 03:35:35 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id zp1-20020a17090684e100b006f3ef214df1sm2464438ejb.87.2022.05.01.03.35.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 May 2022 03:35:35 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
+        with ESMTP id S229988AbiEALkL (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 1 May 2022 07:40:11 -0400
+Received: from mx-out2.startmail.com (mx-out2.startmail.com [145.131.90.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3ADB1D0C2;
+        Sun,  1 May 2022 04:36:45 -0700 (PDT)
+Date:   Sun, 1 May 2022 06:36:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=startmail.com;
+        s=2020-07; t=1651405003;
+        bh=EJO0qMWBy/NTbXIPnclz3OjTdOhNYK7qnowCOESkQMQ=;
+        h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+         Content-Type:Content-Disposition:In-Reply-To:From:Subject:To:Date:
+         Sender:Content-Type:Content-Transfer-Encoding:Content-Disposition:
+         Mime-Version:Reply-To:In-Reply-To:References:Message-Id:Autocrypt;
+        b=1GkHYQ+nXQJZ0rOe+wnMncD7WAwPzJoAAy5gW75ZaUQu0gaJKJFvGWOjAABwvJ9V1
+         J5Lg5e64FxO1vLE6ML96bhxf/9+HjEidWnIYpcrq8ZMPjRBGV6abkOvWT8zCVdCH0Z
+         S/Oifi+QYBq3/Mm3jlalB32FyHgyYWz+EUQFaSLkUR9sSHvsGDtsPuc29hGEEw/Cf3
+         bnzorcFCDKqYScuFAa6+rD7OTKgGylAtORFO4pddnjGIuOlB8uCQZk1OO0kXs1rVSj
+         oS54EBJkTWRQWAZV+ZiqrG45AwrkUtBFeRVzQ+jr/6uT5aE0qzV/BOVNUYaIslsxUm
+         GyQ0xxhXL9vrg==
+From:   "Marty E. Plummer" <hanetzer@startmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 8/8] soc: qcom: correct kerneldoc
-Date:   Sun,  1 May 2022 12:35:20 +0200
-Message-Id: <20220501103520.111561-8-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220501103520.111561-1-krzysztof.kozlowski@linaro.org>
-References: <20220501103520.111561-1-krzysztof.kozlowski@linaro.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] clk: hisilicon: add CRG driver Hi3521a SoC
+Message-ID: <20220501113215.rh6he5344hssziy7@proprietary-killer>
+References: <20220501051020.2432338-1-hanetzer@startmail.com>
+ <20220501051020.2432338-2-hanetzer@startmail.com>
+ <0b66148a-c65f-2acf-9751-ae931778ad45@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0b66148a-c65f-2acf-9751-ae931778ad45@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Correct kerneldoc warnings like:
-
-  drivers/soc/qcom/mdt_loader.c:126:
-    warning: Function parameter or member 'fw_name' not described in 'qcom_mdt_read_metadata'
-
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/soc/qcom/mdt_loader.c | 4 +++-
- drivers/soc/qcom/smp2p.c      | 3 +++
- 2 files changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
-index 366db493579b..3f11554df2f3 100644
---- a/drivers/soc/qcom/mdt_loader.c
-+++ b/drivers/soc/qcom/mdt_loader.c
-@@ -108,6 +108,8 @@ EXPORT_SYMBOL_GPL(qcom_mdt_get_size);
-  * qcom_mdt_read_metadata() - read header and metadata from mdt or mbn
-  * @fw:		firmware of mdt header or mbn
-  * @data_len:	length of the read metadata blob
-+ * @fw_name:	name of the firmware, for construction of segment file names
-+ * @dev:	device handle to associate resources with
-  *
-  * The mechanism that performs the authentication of the loading firmware
-  * expects an ELF header directly followed by the segment of hashes, with no
-@@ -192,7 +194,7 @@ EXPORT_SYMBOL_GPL(qcom_mdt_read_metadata);
-  * qcom_mdt_pas_init() - initialize PAS region for firmware loading
-  * @dev:	device handle to associate resources with
-  * @fw:		firmware object for the mdt file
-- * @firmware:	name of the firmware, for construction of segment file names
-+ * @fw_name:	name of the firmware, for construction of segment file names
-  * @pas_id:	PAS identifier
-  * @mem_phys:	physical address of allocated memory region
-  * @ctx:	PAS metadata context, to be released by caller
-diff --git a/drivers/soc/qcom/smp2p.c b/drivers/soc/qcom/smp2p.c
-index 59dbf4b61e6c..d9c28a8a7cbf 100644
---- a/drivers/soc/qcom/smp2p.c
-+++ b/drivers/soc/qcom/smp2p.c
-@@ -119,6 +119,9 @@ struct smp2p_entry {
-  * @out:	pointer to the outbound smem item
-  * @smem_items:	ids of the two smem items
-  * @valid_entries: already scanned inbound entries
-+ * @ssr_ack_enabled: SMP2P_FEATURE_SSR_ACK feature is supported and was enabled
-+ * @ssr_ack: current cached state of the local ack bit
-+ * @negotiation_done: whether negotiating finished
-  * @local_pid:	processor id of the inbound edge
-  * @remote_pid:	processor id of the outbound edge
-  * @ipc_regmap:	regmap for the outbound ipc
--- 
-2.32.0
-
+On Sun, May 01, 2022 at 10:35:37AM +0200, Krzysztof Kozlowski wrote:
+> On 01/05/2022 07:10, Marty E. Plummer wrote:
+> > Add CRG driver for Hi3521A SoC. CRG (Clock and Reset Generator) module
+> > generates clock and reset signals used by other module blocks on SoC.
+> > 
+> >
+> (...)
+> 
+> > +		return;
+> > +
+> > +	hisi_clk_register_mux(hi3521a_sysctrl_mux_clks,
+> > +				ARRAY_SIZE(hi3521a_sysctrl_mux_clks),
+> > +				clk_data);
+> > +}
+> > +CLK_OF_DECLARE(hi3521a_sysctrl, "hisilicon,hi3521a-sysctrl", hi3521a_sysctrl_init);
+> Missing bindings.
+> 
+Assume you mean the Documentation/dt/binding/... file? Will do. I
+probably should have prefixed it with RFC, as I'm mostly hoping to get
+the attention of the hisi people to see what's the deal with the mtd
+reads being borked.
+> Best regards,
+> Krzysztof
