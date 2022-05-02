@@ -2,154 +2,169 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F5A516C9F
-	for <lists+linux-clk@lfdr.de>; Mon,  2 May 2022 10:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 837ED516CCA
+	for <lists+linux-clk@lfdr.de>; Mon,  2 May 2022 11:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383962AbiEBI6e (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 2 May 2022 04:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41530 "EHLO
+        id S1383998AbiEBJEw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 2 May 2022 05:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383958AbiEBI6d (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 2 May 2022 04:58:33 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0429426132;
-        Mon,  2 May 2022 01:55:05 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 8D15D1F4305D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651481701;
-        bh=3BW+nxuTRA49LbcdXaeq9ZCmg12LIlVHpHv79umm3nU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jDPcTXu8R4vBjXC9eYZzcXigt/dEgh9fzk8DyL5ipvwVNXD+kb9RvR+nBzl0A1x+1
-         n8waVx/o+73r2krzd2TsWxU/5vPWvSFWAGsfOUPeXPuvbBgsJ7CU2hDZDu+E5yMeSF
-         ZUKxBlCmoYazE+C9EJWr45b9h7vTlyTO1TkD9zuE93hQWuaCByEnWCExEZ3wS07Sxf
-         FejKSb9B1B3bEwUUOijFwtLJ2iMe2xxHSGAkjn/zsemHMihFSA0aYne+VdDuMS2NIe
-         v3IzKoMOS6UjYgmLQwJ+N8BA4oh1lf2KYilAKr2usTB4Q9LoAWmrD2O8bVmfvnWyFr
-         QdAMettwC+Pig==
-Message-ID: <c56464d3-d33d-1797-2c98-67bec34df756@collabora.com>
-Date:   Mon, 2 May 2022 10:54:57 +0200
+        with ESMTP id S1384018AbiEBJEp (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 2 May 2022 05:04:45 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EDC58E4C
+        for <linux-clk@vger.kernel.org>; Mon,  2 May 2022 02:01:15 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220502090105epoutp0320d6455205820c0afe3ea8b89b2a69d3~rPjBirWmA0216702167epoutp03R
+        for <linux-clk@vger.kernel.org>; Mon,  2 May 2022 09:01:05 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220502090105epoutp0320d6455205820c0afe3ea8b89b2a69d3~rPjBirWmA0216702167epoutp03R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1651482065;
+        bh=FHFRw8iVEn6KWkd+IiUZkgKqT1XB2r/t3GZz91zc85o=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=vT3PKercQSYHaTGor9iMTnPX/hg53KjpQXFj8ZdACGvEX+fm2dkjWOB8+IonCd16I
+         J1itRP4Bal5zoD19+8Ux34cM5sP/gXSzeludhiRT+j2vEsj5OjnBbbPKf7opKaXz94
+         WHmLKuPANJ7XBFEfzNT8LI2wbaUqsAKnZJCVVsrM=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20220502090105epcas2p3c397c0232bc5e93bc8f02b2c3c4a3ccc~rPjA432792741227412epcas2p3B;
+        Mon,  2 May 2022 09:01:05 +0000 (GMT)
+Received: from epsmges2p3.samsung.com (unknown [182.195.36.68]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4KsHBQ2VT9z4x9Pw; Mon,  2 May
+        2022 09:01:02 +0000 (GMT)
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        CD.55.10028.CCD9F626; Mon,  2 May 2022 18:01:00 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220502090100epcas2p16b7838ebe7831adbe9daa05822b45b82~rPi8fvphK2147721477epcas2p18;
+        Mon,  2 May 2022 09:01:00 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220502090100epsmtrp1945c8630bfd6137b3dba60cdabf7766d~rPi8e41if2529725297epsmtrp1Y;
+        Mon,  2 May 2022 09:01:00 +0000 (GMT)
+X-AuditID: b6c32a47-573ff7000000272c-7d-626f9dcc5dd1
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        4F.EB.08924.CCD9F626; Mon,  2 May 2022 18:01:00 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.229.9.51]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220502090100epsmtip22abd70be5f4b082cedc877c4d0db2294~rPi8TGbgL1980019800epsmtip2O;
+        Mon,  2 May 2022 09:01:00 +0000 (GMT)
+From:   Chanho Park <chanho61.park@samsung.com>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>
+Subject: [PATCH 00/12] initial clock support for exynosauto v9 SoC
+Date:   Mon,  2 May 2022 18:02:18 +0900
+Message-Id: <20220502090230.12853-1-chanho61.park@samsung.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V5 12/16] dt-bindings: reset: mediatek: Add infra_ao reset
- bit for MT8195
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     p.zabel@pengutronix.de, chun-jie.chen@mediatek.com,
-        wenst@chromium.org, runyang.chen@mediatek.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220428115620.13512-1-rex-bc.chen@mediatek.com>
- <20220428115620.13512-13-rex-bc.chen@mediatek.com>
- <839978c5-c337-7784-a04f-26b9883c703b@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <839978c5-c337-7784-a04f-26b9883c703b@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGJsWRmVeSWpSXmKPExsWy7bCmhe6ZuflJBo2tJhYP5m1js7i8X9vi
+        +pfnrBbzj5xjteh78ZDZYu/rrewWH3vusVrMOL+PyeLiKVeL1r1H2C0Ov2lntfh3bSOLxfM+
+        oPiqXX8YHfg83t9oZffYOesuu8emVZ1sHneu7WHz6NuyitHj8ya5ALaobJuM1MSU1CKF1Lzk
+        /JTMvHRbJe/geOd4UzMDQ11DSwtzJYW8xNxUWyUXnwBdt8wcoGOVFMoSc0qBQgGJxcVK+nY2
+        RfmlJakKGfnFJbZKqQUpOQXmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZ3zf8YCv4x1sxd8sL
+        tgbGddxdjJwcEgImEnt+7mDqYuTiEBLYwSjRM+UlI4TziVHi2MFFLBDOZ0aJiXtussK07F19
+        hx0isYtRYtH1lWwQzkdGiftHDjCBVLEJ6Epsef4KbJaIQBezxMW+e2CzmAW2MkocvzELrEpY
+        wEni/8+T7CA2i4CqxMT768HivAJ2EpN33AcaywG0T17i3+JQiLCgxMmZT1hAbGagcPPW2cwg
+        MyUEejkkzp4/B1XvIvFrtR7EqcISr45vYYewpSRe9rdB2cUSS2d9YoLobWCUuLztFxtEwlhi
+        1rN2RpA5zAKaEut36UOMVJY4cgtqLZ9Ex+G/7BBhXomONiGIRnWJA9uns0DYshLdcz5DA8tD
+        YvWKW2DDhQRiJZpOT2OdwCg/C8kzs5A8Mwth7wJG5lWMYqkFxbnpqcVGBcbwWE3Oz93ECE6w
+        Wu47GGe8/aB3iJGJg/EQowQHs5IIb9uGnCQh3pTEyqrUovz4otKc1OJDjKbA0J3ILCWanA9M
+        8Xkl8YYmlgYmZmaG5kamBuZK4rxeKRsShQTSE0tSs1NTC1KLYPqYODilGpimGd+fwXYmy0/h
+        l02suk9QxaeqS4V8bStf3Jwj+Ue33793Vfq39e2fX7wtTDqbKOxg3Mz2RurHqd0+28RMpXYw
+        MBrIP1t15cGtlTFF7Om8E2x8lfNni087GmwjxVy11fVUjZO9e8HWvQoS6xZkN2w7bKXElr84
+        VY7x8/yXN5d98NFn99zy85CiuM9qk5ftC9OP3AvXn84suv2pwR+dNf61siembV2ydbZyivse
+        kTUKu37/CXv59afjK9N5maXpa5YFPlm5fbe+7ZN5Mitudv71WH5wRnbUzB0qqRvmXCxJfqq8
+        MfddywPVbpbXD+zk6899jTVdPlfm+tPNojOPtp2xv1BxzZ+1wPzV+uRFb7SYlViKMxINtZiL
+        ihMB52hUzTkEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrKLMWRmVeSWpSXmKPExsWy7bCSvO6ZuflJBue/iFs8mLeNzeLyfm2L
+        61+es1rMP3KO1aLvxUNmi72vt7JbfOy5x2ox4/w+JouLp1wtWvceYbc4/Kad1eLftY0sFs/7
+        gOKrdv1hdODzeH+jld1j56y77B6bVnWyedy5tofNo2/LKkaPz5vkAtiiuGxSUnMyy1KL9O0S
+        uDK+b/jBVvCPt2LulhdsDYzruLsYOTkkBEwk9q6+w97FyMUhJLCDUaL30St2iISsxLN3O6Bs
+        YYn7LUdYQWwhgfeMEsdfBYLYbAK6Eluev2IEaRYRmMAs8ebKB7BJzAI7GSXuvDrFBlIlLOAk
+        8f/nSbBJLAKqEhPvr2cCsXkF7CQm77gPVMMBtEFe4t/iUIiwoMTJmU9YQGxmoHDz1tnMExj5
+        ZiFJzUKSWsDItIpRMrWgODc9t9iwwCgvtVyvODG3uDQvXS85P3cTIzjktbR2MO5Z9UHvECMT
+        B+MhRgkOZiUR3rYNOUlCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeS90nYwXEkhPLEnNTk0tSC2C
+        yTJxcEo1MNkrMoUrJRxacscg/O3LF077V7ZMzjh2Ubqgm+X2/eYTvwy6kw+uWllcYnK1/+t5
+        81nna2ZPvJns8WVJ8r3jE1eYGu7+Z8utdW5fwIVnDtq3+Jt1bhu9UPrvt0l5wXt3n4UlQu/c
+        fSqarl/jmDd19aeNHuwRNlPvRjDZZ6hubl8k43xnf0aH/JuDGgrLr+r8e+qhHDXTqS74SNxH
+        i0klAe8lK+rzWJfpRU2Y6TPJ+VnP3AXyub9XbA3tkxCVrs+9t0bv9QPbNxGt7ydM42z4fpz9
+        8wnzdcK1cz8VzWN51NRXccRvtv/E+4JBC6tMn1rYnU2W2sloedKr84bxHWPLkLSOH/rCGl5y
+        jLbznsoGblZiKc5INNRiLipOBACGnwxv6AIAAA==
+X-CMS-MailID: 20220502090100epcas2p16b7838ebe7831adbe9daa05822b45b82
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220502090100epcas2p16b7838ebe7831adbe9daa05822b45b82
+References: <CGME20220502090100epcas2p16b7838ebe7831adbe9daa05822b45b82@epcas2p1.samsung.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Il 29/04/22 23:13, Krzysztof Kozlowski ha scritto:
-> On 28/04/2022 13:56, Rex-BC Chen wrote:
->> To support reset of infra_ao, add the bit definitions for MT8195.
->> The infra_ao reset includes 5 banks and 32 bits for each bank.
->>
->> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
->> ---
->>   include/dt-bindings/reset/mt8195-resets.h | 170 ++++++++++++++++++++++
->>   1 file changed, 170 insertions(+)
->>
->> diff --git a/include/dt-bindings/reset/mt8195-resets.h b/include/dt-bindings/reset/mt8195-resets.h
->> index a26bccc8b957..463114014483 100644
->> --- a/include/dt-bindings/reset/mt8195-resets.h
->> +++ b/include/dt-bindings/reset/mt8195-resets.h
->> @@ -7,6 +7,7 @@
->>   #ifndef _DT_BINDINGS_RESET_CONTROLLER_MT8195
->>   #define _DT_BINDINGS_RESET_CONTROLLER_MT8195
->>   
->> +/* TOPRGU resets */
->>   #define MT8195_TOPRGU_CONN_MCU_SW_RST          0
->>   #define MT8195_TOPRGU_INFRA_GRST_SW_RST        1
->>   #define MT8195_TOPRGU_APU_SW_RST               2
->> @@ -26,4 +27,173 @@
->>   
->>   #define MT8195_TOPRGU_SW_RST_NUM               16
->>   
->> +/* INFRA RST0 */
->> +#define MT8195_INFRA_RST0_THERM_CTRL_SWRST	0
->> +#define MT8195_INFRA_RST0_RSV0			1
->> +#define MT8195_INFRA_RST0_DISP_PWM1_SWRST	2
->> +#define MT8195_INFRA_RST0_RSV1			3
->> +#define MT8195_INFRA_RST0_MSDC3_SWRST		4
->> +#define MT8195_INFRA_RST0_MSDC2_SWRST		5
->> +#define MT8195_INFRA_RST0_MSDC1_SWRST		6
->> +#define MT8195_INFRA_RST0_MSDC0_SWRST		7
->> +#define MT8195_INFRA_RST0_RSV2			8
->> +#define MT8195_INFRA_RST0_AP_DMA_SWRST		9
->> +#define MT8195_INFRA_RST0_MIPI_D_SWRST		10
->> +#define MT8195_INFRA_RST0_RSV3			11
->> +#define MT8195_INFRA_RST0_RSV4			12
->> +#define MT8195_INFRA_RST0_SSUSB_TOP_SWRST	13
->> +#define MT8195_INFRA_RST0_DISP_PWM_SWRST	14
->> +#define MT8195_INFRA_RST0_AUXADC_SWRST		15
->> +#define MT8195_INFRA_RST0_RSV5			16
->> +#define MT8195_INFRA_RST0_RSV6			17
->> +#define MT8195_INFRA_RST0_RSV7			18
->> +#define MT8195_INFRA_RST0_RSV8			19
->> +#define MT8195_INFRA_RST0_RSV9			20
->> +#define MT8195_INFRA_RST0_RSV10			21
->> +#define MT8195_INFRA_RST0_RSV11			22
->> +#define MT8195_INFRA_RST0_RSV12			23
->> +#define MT8195_INFRA_RST0_RSV13			24
->> +#define MT8195_INFRA_RST0_RSV14			25
->> +#define MT8195_INFRA_RST0_RSV15			26
->> +#define MT8195_INFRA_RST0_RSV16			27
->> +#define MT8195_INFRA_RST0_RSV17			28
->> +#define MT8195_INFRA_RST0_RSV18			29
->> +#define MT8195_INFRA_RST0_RSV19			30
->> +#define MT8195_INFRA_RST0_RSV20			31
-> 
-> These are not proper IDs... don't work-around usage of bits with fake
-> reserved IDs...
+This patchset adds initial clock driver support for Exynos Auto v9 SoC.
+This driver is highly inspired from exynos850 clock driver. Like
+exynos850, this does not use Q-channel control & Hardware automatic
+clock gating. So, all the gate clocks will be controlled by CCF & CMU
+driver.
 
-Hello Krzysztof,
+Below CMU blocks are supported in this patchset and remains will be
+implemented later.
 
-Actually, I get that it may seem that Rex is trying to cheat with fake
-reserved numbers... but it's really how the registers are laid out: there
-really are reserved bits in between used reset bits.
+- CMU_TOP
+- CMU_BUSMC
+- CMU_CORE
+- CMU_FSYS2
+- CMU_PERIC0
+- CMU_PERIC1
+- CMU_PERIS
 
-I don't think that the reserved bits are doing anything though, so the
-best way to proceed is to just remove them and map the dt-bindings IDs to
-the HW register's bits in the driver instead.
-Even though the current approach is very simplistic, I agree that this is
-not how it's supposed to be done (and I'm sort-of sad about that).
+Chanho Park (12):
+  dt-bindings: clock: add Exynos Auto v9 SoC CMU bindings
+  dt-bindings: clock: add clock binding definitions for Exynos Auto v9
+  clk: samsung: add top clock support for Exynos Auto v9 SoC
+  clk: samsung: exynosautov9: add cmu_core clock support
+  clk: samsung: exynosautov9: add cmu_peris clock support
+  clk: samsung: exynosautov9: add cmu_busmc clock support
+  clk: samsung: exynosautov9: add cmu_fsys2 clock support
+  clk: samsung: exynosautov9: add cmu_peric0 clock support
+  clk: samsung: exynosautov9: add cmu_peric1 clock support
+  arm64: dts: exynosautov9: add initial cmu clock nodes
+  arm64: dts: exynosautov9: switch usi clocks
+  arm64: dts: exynosautov9: switch ufs clock node
 
-Rex, please map these values in the reset driver so that, in this header,
-you'll get something like:
+ .../clock/samsung,exynosautov9-clock.yaml     |  217 +++
+ arch/arm64/boot/dts/exynos/exynosautov9.dtsi  |  103 +-
+ drivers/clk/samsung/Makefile                  |    1 +
+ drivers/clk/samsung/clk-exynosautov9.c        | 1736 +++++++++++++++++
+ include/dt-bindings/clock/exynosautov9.h      |  299 +++
+ 5 files changed, 2331 insertions(+), 25 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/samsung,exynosautov9-clock.yaml
+ create mode 100644 drivers/clk/samsung/clk-exynosautov9.c
+ create mode 100644 include/dt-bindings/clock/exynosautov9.h
 
-#define MT8195_INFRA_RST0_THERM_CTRL_SWRST	0
-#define MT8195_INFRA_RST0_DISP_PWM1_SWRST	1
-#define MT8195_INFRA_RST0_MSDC3_SWRST		2
-#define .... (etc)
-
-Cheers,
-Angelo
-
-> 
-> Best regards,
-> Krzysztof
+-- 
+2.36.0
 
