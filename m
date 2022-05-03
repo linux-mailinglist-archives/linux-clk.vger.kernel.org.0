@@ -2,64 +2,77 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF3E518134
-	for <lists+linux-clk@lfdr.de>; Tue,  3 May 2022 11:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AA951817F
+	for <lists+linux-clk@lfdr.de>; Tue,  3 May 2022 11:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233543AbiECJml (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 3 May 2022 05:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
+        id S233789AbiECJp4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 3 May 2022 05:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233521AbiECJmj (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 3 May 2022 05:42:39 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580C932052;
-        Tue,  3 May 2022 02:39:07 -0700 (PDT)
-X-UUID: 4108f5a9be124324b96b8ee22cde3599-20220503
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:fd8b63c8-53b8-4425-9fb6-15b179b2bd96,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:bde4872f-6199-437e-8ab4-9920b4bc5b76,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:1,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 4108f5a9be124324b96b8ee22cde3599-20220503
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1099010090; Tue, 03 May 2022 17:39:01 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 3 May 2022 17:39:01 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 3 May 2022 17:39:00 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Tue, 3 May 2022 17:39:00 +0800
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <p.zabel@pengutronix.de>,
-        <angelogioacchino.delregno@collabora.com>,
-        <chun-jie.chen@mediatek.com>, <wenst@chromium.org>,
-        <runyang.chen@mediatek.com>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH v6 16/16] arm64: dts: mediatek: Add infra #reset-cells property for MT8195
-Date:   Tue, 3 May 2022 17:38:56 +0800
-Message-ID: <20220503093856.22250-17-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220503093856.22250-1-rex-bc.chen@mediatek.com>
-References: <20220503093856.22250-1-rex-bc.chen@mediatek.com>
+        with ESMTP id S233883AbiECJpq (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 3 May 2022 05:45:46 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245AE39806
+        for <linux-clk@vger.kernel.org>; Tue,  3 May 2022 02:41:52 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id n10so14946245ejk.5
+        for <linux-clk@vger.kernel.org>; Tue, 03 May 2022 02:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=b566PPGsjaHWkMbL7FSptu6pFhyMnCOUSbKGby8X3Q0=;
+        b=Gkh9UXQVwF65yXWd0IuvhOJPE2joZBCrE654qMIDm7yDmntq/HBsiKJM6B1Dvk6yM/
+         UxAlak39n8KEi8x+y9EDaAdz0pt6ygUE2PhIafxZikJGH0eJ4KmP+fGuFABxg81EG2uu
+         VOu2fVuqy9LRgTJXSuA+3WD/EZxl1UTOOGU0nH8yhVB4jam+XQdnSncg+RIPoYoxS5MV
+         YgzUvtGrKGzx7HuvL0Uuc26n+os8X/Tp7BWryHg5mYN7WHqDOyEWtH7GWlV9cfZOobHe
+         4UZe5xOaVwe8Zngx24UUcyCBZrlSN55iVriTLbqs8Z8kooGqOOACp96tkFfGiZWJXMfS
+         /RAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=b566PPGsjaHWkMbL7FSptu6pFhyMnCOUSbKGby8X3Q0=;
+        b=xabQymsonJbyrc91bLFmArdpOlZo6tmH6Rk8enfQyQLxNClI7Lf06nUI1cfp3/b3w3
+         QehZ4ESy8jg3LZd0HR28nVUZg6Y7EqvJNMPkGNWoRQ3LDzCcus5q8J1OYUJYjQUhS9WD
+         /CSc7z2C89XVNbCZNJBi9IIcqz/l5/Sm0lzGL3KCwOcDczFitulnJ0ZVip4we3DIy/Hv
+         r7WrNlh5WkTza/yD5mynFxOp2EcYx080KlYK2/LVvRnNWaBzWsGTd8s/aSt8peRgwbXe
+         EEfOrnYh7gOhZXGb9g9kmJTeM00Gcbc9ILp+Q4Q1kx+0+G/AQ+uh8/KEzYXAY5jwBUcy
+         z9hA==
+X-Gm-Message-State: AOAM530qtr4qQTWwptvWE9afYkAaFC+AdPVvgqPROm6TL8bZflGXjj4O
+        QtVNLi6vp+Q6myYilu4Utac9Lg==
+X-Google-Smtp-Source: ABdhPJyzst4s7hrEZNpwk9DA5qdrjy5euejkI2joEvaH1c2+lrpv/9TjwCRAJBGmhr2xJVxo0oIkRA==
+X-Received: by 2002:a17:907:3c81:b0:6e6:cf3e:6e14 with SMTP id gl1-20020a1709073c8100b006e6cf3e6e14mr15088988ejc.181.1651570910698;
+        Tue, 03 May 2022 02:41:50 -0700 (PDT)
+Received: from [192.168.0.201] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id g7-20020aa7d1c7000000b0042617ba63b1sm7680835edp.59.2022.05.03.02.41.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 02:41:50 -0700 (PDT)
+Message-ID: <bacc123d-bedc-0034-6591-3ef0caf270ae@linaro.org>
+Date:   Tue, 3 May 2022 11:41:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] clk: hisilicon: add CRG driver Hi3521a SoC
+Content-Language: en-US
+To:     "Marty E. Plummer" <hanetzer@startmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220501051020.2432338-1-hanetzer@startmail.com>
+ <20220501051020.2432338-2-hanetzer@startmail.com>
+ <0b66148a-c65f-2acf-9751-ae931778ad45@linaro.org>
+ <20220501113215.rh6he5344hssziy7@proprietary-killer>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220501113215.rh6he5344hssziy7@proprietary-killer>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,47 +80,34 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-We will use mediatek clock reset as infracfg_ao reset instead of
-ti-syscon. To support this, remove property of ti reset and add
-property of #reset-cells for mediatek clock reset.
+On 01/05/2022 13:36, Marty E. Plummer wrote:
+> On Sun, May 01, 2022 at 10:35:37AM +0200, Krzysztof Kozlowski wrote:
+>> On 01/05/2022 07:10, Marty E. Plummer wrote:
+>>> Add CRG driver for Hi3521A SoC. CRG (Clock and Reset Generator) module
+>>> generates clock and reset signals used by other module blocks on SoC.
+>>>
+>>>
+>> (...)
+>>
+>>> +		return;
+>>> +
+>>> +	hisi_clk_register_mux(hi3521a_sysctrl_mux_clks,
+>>> +				ARRAY_SIZE(hi3521a_sysctrl_mux_clks),
+>>> +				clk_data);
+>>> +}
+>>> +CLK_OF_DECLARE(hi3521a_sysctrl, "hisilicon,hi3521a-sysctrl", hi3521a_sysctrl_init);
+>> Missing bindings.
+>>
+> Assume you mean the Documentation/dt/binding/... file? Will do. I
+> probably should have prefixed it with RFC, as I'm mostly hoping to get
+> the attention of the hisi people to see what's the deal with the mtd
+> reads being borked.
 
-Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
+Then just don't Cc devicetree folks and put in cover letter disclaimer
+that this was intentionally omitted and will be later fixed.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index b57e620c2c72..8e5ac11b19f1 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -10,7 +10,6 @@
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/phy/phy.h>
- #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
--#include <dt-bindings/reset/ti-syscon.h>
- 
- / {
- 	compatible = "mediatek,mt8195";
-@@ -295,17 +294,7 @@
- 			compatible = "mediatek,mt8195-infracfg_ao", "syscon", "simple-mfd";
- 			reg = <0 0x10001000 0 0x1000>;
- 			#clock-cells = <1>;
--
--			infracfg_rst: reset-controller {
--				compatible = "ti,syscon-reset";
--				#reset-cells = <1>;
--				ti,reset-bits = <
--					0x140 18 0x144 18 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* pcie */
--					0x120 0  0x124 0  0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* thermal */
--					0x730 10 0x734 10 0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* thermal */
--					0x150 5  0x154 5  0 0 (ASSERT_SET | DEASSERT_SET | STATUS_NONE) /* svs gpu */
--				>;
--			};
-+			#reset-cells = <1>;
- 		};
- 
- 		pericfg: syscon@10003000 {
--- 
-2.18.0
+It is a waste of time of reviewers to look/filter/organize such email,
+if it is intentionally not for us.
 
+Best regards,
+Krzysztof
