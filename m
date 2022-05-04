@@ -2,59 +2,59 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6EB51AC78
-	for <lists+linux-clk@lfdr.de>; Wed,  4 May 2022 20:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA6651AC80
+	for <lists+linux-clk@lfdr.de>; Wed,  4 May 2022 20:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376715AbiEDSPh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 4 May 2022 14:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
+        id S1345314AbiEDSQa (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 4 May 2022 14:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376734AbiEDSPV (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 May 2022 14:15:21 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E94A83027;
-        Wed,  4 May 2022 10:34:18 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id p6so1507543plr.12;
-        Wed, 04 May 2022 10:34:18 -0700 (PDT)
+        with ESMTP id S1354674AbiEDSQR (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 4 May 2022 14:16:17 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2026FBF4D;
+        Wed,  4 May 2022 10:35:21 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id i62so1705286pgd.6;
+        Wed, 04 May 2022 10:35:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=jblhqxfOFV75AAp+jd6eRYN+nZlv4aqjxAkvxCMkgjQ=;
-        b=iSJWn4TJlqx4ILaMA49xxBLKbypl+0GJ5wPpgy1cJ8uV9JlPaBfw7Aoide3neWN9Jl
-         0F1zbm05VIGnyL+8IF1s0YMI+0eljfwMu5oez7835+bzV2UO63jdPj5PhIuJC566nhRv
-         8WBsI6IpcIKHazMCdLQDUamupeCaQns/moeQwnQdwtqOsvfIcGy72AqOtpLh+Q5IpfDU
-         5af/ubXLCTW9dFSWuP6nm8G0sC4uuZiSsVvgAZilEEQ7Xt1zB1endlwwThSfh0p4k1G5
-         eN7ByfAoVq79Rmc5Rl7y+lTkByHtwjZibisUV/MwEyTuZuzKFxT4wniuTcy4O/MRq1uk
-         47aw==
+        bh=MNJT9YzuHEAZEheWVsgmUZA8nQvMITugjqtFZYM9yzI=;
+        b=qcvs0NN+UVLDdqTT/NYRME6WjfWaBW9uy3X41u9k0CfY18BT3f5gCWMNZE4/q4a85Z
+         sKi3aujMmD7fDjjzcsmNqQkcfVEGlJWNRnnplaI6dRB5RvFnZ6J7JoLzizRSPp5CTYec
+         XPDynShDMimsPffdW5eCCobD4HRmGqnQBN9yF1JJgBehshm0NOt+H7JqsrUcKCQGnXgJ
+         P4077BcV0nsL+gDac5n0DRVw7GbFd1uQWaAqe59BUOxtYvt7HFWhyhJ1XLSvRpUxdzs0
+         Uh8+0uytNj71iSqMzLuRpJE8DHD239+uAMRIKhZ0glEQY+BRRPcQtOs78SSYTALpv8c6
+         gsIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=jblhqxfOFV75AAp+jd6eRYN+nZlv4aqjxAkvxCMkgjQ=;
-        b=GPEmZoDCHlTrMUvAnyMmIdgRyCJai33gEGcYZdpsaPuycEWThGrCMqpVyql3SUryjR
-         ifWzN+/LqnlbO7ROGanQgKmFMc9GPPS4WkTt4PF4AhwTekFSfhUTBTVJe/INWxkYEN/D
-         7Nv37mHHBEl6MoznAgDARAuqIj8+hwxVtPR5jAgSjOZJ84nqZTYAgOQU9IL4Vn1a0eDO
-         2BxUVyXo3MOZq7y6jMMVDbMCdmpUv5Z0HcYWf6emvCJGUKIec28IW+uWnBCXemtMzJFy
-         3m1rQ9mTvcANZAWSFGw6XkM/qknWZSpl4v2/jB2DlpBWVqPKg2OLZEv2ycvUZ7ryBZTz
-         8sdA==
-X-Gm-Message-State: AOAM531Lg+NER8lOlhNs5dH7fCnyh74TOq+tX0rCEyvoEhG6Oauf0baI
-        M7aOM6z7MhyQBEqya8aDm+0=
-X-Google-Smtp-Source: ABdhPJx2AuQy0XdBufEzogX2iHlKW5zHFufBrHdbBQ/7zXRxAHbXM8GtO3LWglG9ct+nzkp5oj5tyg==
-X-Received: by 2002:a17:90b:4a08:b0:1dc:6cc1:3d24 with SMTP id kk8-20020a17090b4a0800b001dc6cc13d24mr620454pjb.131.1651685657526;
-        Wed, 04 May 2022 10:34:17 -0700 (PDT)
+        bh=MNJT9YzuHEAZEheWVsgmUZA8nQvMITugjqtFZYM9yzI=;
+        b=8BVFhmnoslpqBO5xrCvkZga6pdOf+OalP7O2xZ6WkNtc0eyy/FbNY62k5yqKY2JDC4
+         KYHOAKjIsHkUrbpq3Ta2d9hDW0kIINL27DEDNpfbOtw5LfBfEhkaCXNKFaH3AIMrDC/n
+         FKstlv68dz46Jf5jU3yjUlWcDomdSONFQcb68ID616xF6OMfwukyS3cDXtM4dcGQybmv
+         2yFynPAif2tltshuBH7jBMuG+1+SADn3picXCp1G/iQeaxYpkbWAmnjgn3a0vNemVLxP
+         97XPv/VJq1whjB4jnWnHlHfrKOI542yGtCBeox0p7IkUznPBZJoA7G4lEMgsqjA4d7Zz
+         vldg==
+X-Gm-Message-State: AOAM530MR5o1T5bilPrnh+a6CTB0c04iX/wgTcROrQPod099YnVpHkPZ
+        OF/xiL2+ujN4VRjc7HwiZM5a75+UiWs=
+X-Google-Smtp-Source: ABdhPJwcUisFPL9uPWplV1T40GpRsHfI54F/UB7Jj6vFaHRLvxruWDuWodqfjBrwJ+3g+vkgrpzIvg==
+X-Received: by 2002:a62:7ccc:0:b0:510:4e07:79f3 with SMTP id x195-20020a627ccc000000b005104e0779f3mr2050271pfc.10.1651685721045;
+        Wed, 04 May 2022 10:35:21 -0700 (PDT)
 Received: from [172.30.1.41] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id p8-20020a17090ab90800b001d9780b7779sm3547060pjr.15.2022.05.04.10.34.13
+        by smtp.gmail.com with ESMTPSA id n9-20020a170903110900b0015e8d4eb1c1sm8616219plh.11.2022.05.04.10.35.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 May 2022 10:34:17 -0700 (PDT)
-Message-ID: <c0997b2d-59cf-38f0-414d-774756ff36d0@gmail.com>
-Date:   Thu, 5 May 2022 02:34:12 +0900
+        Wed, 04 May 2022 10:35:20 -0700 (PDT)
+Message-ID: <df273a5d-793d-0069-2df6-77b05050b2d2@gmail.com>
+Date:   Thu, 5 May 2022 02:35:15 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
-Subject: Re: [PATCH v3 04/12] clk: samsung: exynosautov9: add cmu_core clock
- support
+Subject: Re: [PATCH v3 02/12] dt-bindings: clock: add Exynos Auto v9 SoC CMU
+ bindings
 Content-Language: en-US
 To:     Chanho Park <chanho61.park@samsung.com>,
         Sylwester Nawrocki <s.nawrocki@samsung.com>,
@@ -70,10 +70,10 @@ Cc:     Sam Protsenko <semen.protsenko@linaro.org>,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org
 References: <20220504075154.58819-1-chanho61.park@samsung.com>
- <CGME20220504075004epcas2p45eda7f97897fde225da2dee2611c290f@epcas2p4.samsung.com>
- <20220504075154.58819-5-chanho61.park@samsung.com>
+ <CGME20220504075003epcas2p17f37265b522bb0c26dbdd4ebeec92ab9@epcas2p1.samsung.com>
+ <20220504075154.58819-3-chanho61.park@samsung.com>
 From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20220504075154.58819-5-chanho61.park@samsung.com>
+In-Reply-To: <20220504075154.58819-3-chanho61.park@samsung.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,24 +87,19 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 On 22. 5. 4. 16:51, Chanho Park wrote:
-> Add CMU_CORE clock which represents Core BUS clocks. The source clocks
-> of this CMU block are oscclk or dout_clkcmu_core_bus. Thus, two source
-> clocks should be provided via device tree. All the gate clocks are
-> defined as CLK_IS_CRITICAL because they control(gate/ungate) core bus
-> clocks but not been assigned to any drivers.
+> Add dt-schema for Exynos Auto v9 SoC clock controller.
 > 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > Signed-off-by: Chanho Park <chanho61.park@samsung.com>
 > ---
->   drivers/clk/samsung/clk-exynosautov9.c | 92 ++++++++++++++++++++++++++
->   1 file changed, 92 insertions(+)
-
+>   .../clock/samsung,exynosautov9-clock.yaml     | 219 ++++++++++++++++++
+>   1 file changed, 219 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/clock/samsung,exynosautov9-clock.yaml
+> 
 
 
 (snip)
 
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-
+Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
 
 -- 
 Best Regards,
