@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1590851C114
-	for <lists+linux-clk@lfdr.de>; Thu,  5 May 2022 15:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4584351C118
+	for <lists+linux-clk@lfdr.de>; Thu,  5 May 2022 15:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379903AbiEENrF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 5 May 2022 09:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
+        id S241377AbiEENrz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 5 May 2022 09:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379906AbiEENrF (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 5 May 2022 09:47:05 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6EE579A5
-        for <linux-clk@vger.kernel.org>; Thu,  5 May 2022 06:43:20 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id u23so1878723lfc.1
-        for <linux-clk@vger.kernel.org>; Thu, 05 May 2022 06:43:20 -0700 (PDT)
+        with ESMTP id S245347AbiEENrw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 5 May 2022 09:47:52 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0BF57983
+        for <linux-clk@vger.kernel.org>; Thu,  5 May 2022 06:44:12 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id y19so5666000ljd.4
+        for <linux-clk@vger.kernel.org>; Thu, 05 May 2022 06:44:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
         bh=x2/oaeLvBGUjNh6Ua3HoGxwQ5NaCtqAGbLaQrSSqV/M=;
-        b=jQ7NW+lH4NNqotrerCsrcusTqX8GQpUiluA3ye3312tFpsTZB9tF4+JQ71OIC4c43v
-         hBovEjZTA410k9tL7jgNEHi/3LvUy7muCGqc9BKh7x7PrcP+P4TvKtF+NXVl51YAr7Jn
-         BnAztyCO7Fjrq1mYY4LMCskoWxEn9PklapE/WtKwkD2lTd2ZbclRdXk5rxvGyJRwEMV4
-         L2yHNWETPO1U2lopFRKCEDeMWuIQmGXN0jcnghqksTf75HsL00JtyK7Vem2feY9IMsyF
-         p2ZtvvinZ9o7LUgU/+RQQqaQA5mwKrozY03HnRBbL/0+D5gHAo6hISLje+yTHZIzG19L
-         VaSw==
+        b=gqrvQMYNF7YMLsZA7U87NMOSNJGvmoivK+ajS50rXz+M+z7nn1W8pdy5oOvZqi8e7J
+         MUuHWVzu+vGwpYs8t1uW3HcpE+eb2bvpu/Uv44f4Wnc1HZiiWftsy7Kzh10Nfb4JeI4h
+         zsgmD+m3oqSWohlWNaGcmA6/59kcQ67LoK7SGafYrOtfwTFIlizdubobyBsFz/SbPqao
+         QGZAiPaFpwOsS3WZfsTH8x/sXJ6Nhf6tP1IFVdp0f6M+T/mc6Q/KGR+EDfLbaSmRwtXT
+         nvPFLFhdbpN+0yMvj5f+sCyU7Wdk7aYRxyQt2VnI8M92jRp98aSmyaNoZ50f+kMS8oE5
+         uowA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
         bh=x2/oaeLvBGUjNh6Ua3HoGxwQ5NaCtqAGbLaQrSSqV/M=;
-        b=7uKGqVaUbt7y1+Q9c+wKKGkmEECr1PY/kK6QfAvJNmQIGqcxhvIVz9C8pUkX77Sp+w
-         I6CcyEAVzSN+01+c7xocKk61P/KsuJhSDVUQ/gXQhwNugCHna1wU4SvjkbdzSoAQtNCq
-         MmZvplPBAonhMQ/dduqScokoqmzxj+5AVjrrvUdzM0dMBM/4ny4xEPSdhH1c9dbg3Lvg
-         Nkz+3jle8hPGL8bM56ra0L6g2fila3WrWrU7kFJ7/VbJcdtyaT5VR5MLwEDLM7C63epT
-         2Hgkr3hhn2OeA8viy2cTAkviNHssmSeLfcpnycR3EqaXuN3azCE21jfm584ndH5oLtzU
-         mfkw==
-X-Gm-Message-State: AOAM530v5DoCHLU52x9gaRgwC3vJMflFqeoSy6hOwYv779rpNtuGtTqa
-        501ecrFsy67cpJkRYQBK+QwokA==
-X-Google-Smtp-Source: ABdhPJzpcR1GfsPLVSO3CUUTjXCpwjNGLdH+A7uTkjTbRPx2KZ4xiGNF5M4f85d6IarIf2OOziF60A==
-X-Received: by 2002:a19:ac04:0:b0:471:664f:95df with SMTP id g4-20020a19ac04000000b00471664f95dfmr18305751lfc.310.1651758198359;
-        Thu, 05 May 2022 06:43:18 -0700 (PDT)
+        b=0y503nwC1mhddMETw9iNYLcX719qwLNplYam78AXjyFBqm4WrCbOFfupdC6ag7nc+w
+         p4OO4SBlS+nLVsLJ5OeJfP+fCfyjVLaaO1Qng1y56yyHbqPSlBMfc1+5E9TnOT19OsJ8
+         cjRXQWFALe8bsHc72TTP4yuk57B1EhUVxMzOwCPYqo2/OBXkTaHlnKQhON1IenHm7ux5
+         cjvnDZNxlZrvCmxdivJFDVX20spvdh9OkOXaxd2l/DMnBrBuNY6T9AxufohLAvG1xrbv
+         2A1OFuHs/RTmJ3D7iUTfhB+8xyWSheWPc7mmH+vmzn/hw2Fe72P9Fa5wERa0s+EOOcyf
+         KsDg==
+X-Gm-Message-State: AOAM530NmSEQmVQwXD367ZOf0WoaF06+0GWglkfoWFTZy3HWt2pOjwj5
+        U6KsJ389T8GojN2mkkXNy9eScw==
+X-Google-Smtp-Source: ABdhPJw9sq4hhQFvOhKElq33RsMsy8B6/efk9XLTaI64SK+Q1s7iBTu6oUDnJe9ZtnPoVu99PwSJKg==
+X-Received: by 2002:a05:651c:1503:b0:24c:81df:e1f2 with SMTP id e3-20020a05651c150300b0024c81dfe1f2mr16585157ljf.182.1651758250878;
+        Thu, 05 May 2022 06:44:10 -0700 (PDT)
 Received: from localhost.localdomain (mobile-access-5672eb-224.dhcp.inet.fi. [86.114.235.224])
-        by smtp.gmail.com with ESMTPSA id z10-20020a056512308a00b0047255d2115bsm221164lfd.138.2022.05.05.06.43.17
+        by smtp.gmail.com with ESMTPSA id g17-20020ac24d91000000b0047255d211d1sm218719lfe.256.2022.05.05.06.44.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 06:43:17 -0700 (PDT)
+        Thu, 05 May 2022 06:44:10 -0700 (PDT)
 From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>
@@ -55,16 +55,16 @@ Cc:     Andy Gross <agross@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-clk@vger.kernel.org
 Subject: [PATCH v4 1/7] dt-bindings: clock: add QCOM SM8450 camera clock bindings
-Date:   Thu,  5 May 2022 16:43:15 +0300
-Message-Id: <20220505134315.4124554-1-vladimir.zapolskiy@linaro.org>
+Date:   Thu,  5 May 2022 16:44:08 +0300
+Message-Id: <20220505134408.4124575-1-vladimir.zapolskiy@linaro.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <<20220505121213.4121802-2-vladimir.zapolskiy@linaro.org>>
-References: <<20220505121213.4121802-2-vladimir.zapolskiy@linaro.org>>
+In-Reply-To: <20220505121213.4121802-2-vladimir.zapolskiy@linaro.org>
+References: <20220505121213.4121802-2-vladimir.zapolskiy@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
