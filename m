@@ -2,59 +2,59 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6920451F910
-	for <lists+linux-clk@lfdr.de>; Mon,  9 May 2022 12:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7AE51F92A
+	for <lists+linux-clk@lfdr.de>; Mon,  9 May 2022 12:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238509AbiEIJji (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 9 May 2022 05:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36438 "EHLO
+        id S238456AbiEIJjh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 9 May 2022 05:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237251AbiEIJF7 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 May 2022 05:05:59 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EECA1C15D4
-        for <linux-clk@vger.kernel.org>; Mon,  9 May 2022 02:01:53 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id u23so16920775lfc.1
-        for <linux-clk@vger.kernel.org>; Mon, 09 May 2022 02:01:53 -0700 (PDT)
+        with ESMTP id S237304AbiEIJGB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 May 2022 05:06:01 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8736B88F5C
+        for <linux-clk@vger.kernel.org>; Mon,  9 May 2022 02:01:54 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id b32so7943100ljf.1
+        for <linux-clk@vger.kernel.org>; Mon, 09 May 2022 02:01:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ju8qIcVxu8nKYNTamtJUWMRGDCG286a6Cxhr7ezIYWA=;
-        b=eJ8v2bs8NMeZ/LD29Kud2zd8sWHamaOEjf7hmouo1LWfTyhIw3DIJEPlgUS1bIucSA
-         ePPaakbn+QERzc8aTw1F9CACNUTrGUD+36rl8TLcMrw5SgAkvxmhnqAcxPXLSalwdFy6
-         yRp5SpregPpY/SXdAnlRL+caa0zrIx/LCVzDVlRqhqBNpqWR4TBih/ovV7tNHGqJ2So2
-         yf56HHEjVGukq7D15sPd1lF4rVpksQiuswyUdBtF2H/id26mLyvBkLfIKaX7LQpGvEwG
-         lDzC9eAC8OnEKQ4uaL++u0ljmK1ADVtfesFAT7Va0CCjsyTUc4ziu7jo7UrHDULfWFsn
-         z+ow==
+        bh=kmq0qX5rZBrOn+EiEOWlsQTnWTwLO0dKtKwWNOTxB2s=;
+        b=lH/Y9vYhEjrL6lgdO6hFTDFkoQ5bKDeTGEOd5ROxIB3I5FQRZ6Fi6NruZ3wdVpT4Z6
+         ZXjsMSI7pAwOXdozwuNKXW1fVlXgO2odfutrfs363XO/O/e/8xnBkYgtK41RhoaTNqG5
+         ReQ4VQMA4d3MsZ70T4EPA90qWBG+yy1svPxdTIoeUwjZb8+xBYalFG/i1A5eJPTAuaNe
+         dFAIDcf7FkjjBkKTR9eG+LEwYjdhAePMYHe83+IcjjEwJaL2LGvg9Cg7IsC15wGuaWze
+         BhUaim001FFUe4UkYkhzbs6K7uSp2W5Vk5+tO8a5hnoLK7oQmGvxjXt118dHbOjXv2ql
+         2QSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ju8qIcVxu8nKYNTamtJUWMRGDCG286a6Cxhr7ezIYWA=;
-        b=CrWEb3vYGzDjZ0vo0gs+0HfjWPnIjw2HSgaX3WXXGxU2R5i9bFQzQBMnOE7ldGNRiq
-         D5YzlTe642P8lduNWQwwCgulj3zal91HOjln6DdtdVQKPoCBwDRrLSQPFE6Dpt+WfsDC
-         4gVzKhAJR6OUWiCGECCAyclr8zWHsnlqDm4S4ieF4FwNUQFdF8MXji3WxULPzjU6aKqx
-         +l398L3EZVyt8XXRljQ7nmTHHLXRvqVjk0uBRSdJmw7gYab/UYLbj1b55YtS5txf1rSv
-         dY7yIfFkQ/yOJl9YCjN95JUTYBEjHBad4Mo87C8V9mlwD/cGWLh+mDdSzJlrngjqMEEZ
-         JnkA==
-X-Gm-Message-State: AOAM533hd4HNDZ+kyO9poKVIPpOovQzQhyNzPsNhrvDZbqeU4N0jxaTd
-        LJx1p6qc3bqQgok9Nx3Zf2Pu6Za6TWOqcg==
-X-Google-Smtp-Source: ABdhPJzoW3UTtoYpzMe/y/xA99p84CYwQq9S9lx8sgiU7+e3mU3SyD3T77LesLgTmuo0hmLAm+k7lg==
-X-Received: by 2002:ac2:58db:0:b0:473:f40c:5858 with SMTP id u27-20020ac258db000000b00473f40c5858mr10828992lfo.414.1652086908359;
-        Mon, 09 May 2022 02:01:48 -0700 (PDT)
+        bh=kmq0qX5rZBrOn+EiEOWlsQTnWTwLO0dKtKwWNOTxB2s=;
+        b=zJ6ezYeFfZGibSUGIWHXlSJTftZMcZUqaiQOO3Q1ARpDnwClLI9KN9AjDY/qxGk7Cv
+         6b1KEd122wH1SbPqyGFf1oUj5vEK1Pd2rt9isvu18sUCv4SOFCYzN2hZ8ksY0jVx8XTg
+         v/AiInSxSPpawEbYm8jszIF0c+4gssWyNUMNxtWI8jj9XvCdakh3HaGT3V7J7E0HmknO
+         FlxgAmPotoiAn+UpM5/+qx31qqtrMIO4eOzU0k/5kNB1ZsaoPsqhd0QiEqtiIVmmNiqB
+         PCHKe3Bg84hS7W+e6e3Ryu2AVkSYY1USy5i14SbaOi81PkLKtimCM7vwwah+hI9NVmof
+         +fCQ==
+X-Gm-Message-State: AOAM532cdtbCyTrpV1PLOaEFddVeIT/448xYxMtevxLKu3vEG4Ovtofv
+        d6bqtKVhdeCLo2dxMNwQ0WEgscqLR1QkIw==
+X-Google-Smtp-Source: ABdhPJyXBaJaQe7Ppz6sFxeKtfyJxkJlRDvHlcLMC3lAiDKGPQVZPuR4UBoXsc7ndRpudlQOdYnbtg==
+X-Received: by 2002:a2e:9949:0:b0:24f:140b:4319 with SMTP id r9-20020a2e9949000000b0024f140b4319mr10159843ljj.294.1652086910925;
+        Mon, 09 May 2022 02:01:50 -0700 (PDT)
 Received: from localhost.localdomain (mobile-access-5672eb-224.dhcp.inet.fi. [86.114.235.224])
-        by smtp.gmail.com with ESMTPSA id m5-20020a196145000000b0047255d21135sm1873219lfk.100.2022.05.09.02.01.47
+        by smtp.gmail.com with ESMTPSA id v13-20020a056512348d00b0047255d211ecsm1875785lfr.283.2022.05.09.02.01.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 02:01:47 -0700 (PDT)
+        Mon, 09 May 2022 02:01:50 -0700 (PDT)
 From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc:     Andy Gross <agross@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v5 3/7] clk: qcom: clk-alpha-pll: fix clk_trion_pll_configure description
-Date:   Mon,  9 May 2022 12:01:43 +0300
-Message-Id: <20220509090143.4140999-1-vladimir.zapolskiy@linaro.org>
+Subject: [PATCH v5 4/7] clk: qcom: clk-alpha-pll: limit exported symbols to GPL licensed code
+Date:   Mon,  9 May 2022 12:01:48 +0300
+Message-Id: <20220509090148.4141020-1-vladimir.zapolskiy@linaro.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220509090059.4140941-1-vladimir.zapolskiy@linaro.org>
 References: <20220509090059.4140941-1-vladimir.zapolskiy@linaro.org>
@@ -62,7 +62,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,30 +70,60 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-After merging lucid and trion pll functions in commit 0b01489475c6
-("clk: qcom: clk-alpha-pll: same regs and ops for trion and lucid")
-the function clk_trion_pll_configure() is left with an old description
-header, which results in a W=2 compile time warning, fix it.
+Unify all exported PLL clock configuration functions and data structures
+as GPL symbols.
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 ---
- drivers/clk/qcom/clk-alpha-pll.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes from v3 to v5:
+* none.
+
+Changes from v2 to v3:
+* added Bjorn's reviewed-by tag
+
+ drivers/clk/qcom/clk-alpha-pll.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
-index 4406cf609aae..288692f0ea39 100644
+index 288692f0ea39..47879ee5a677 100644
 --- a/drivers/clk/qcom/clk-alpha-pll.c
 +++ b/drivers/clk/qcom/clk-alpha-pll.c
-@@ -1439,7 +1439,7 @@ const struct clk_ops clk_alpha_pll_postdiv_fabia_ops = {
- EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_fabia_ops);
+@@ -1823,7 +1823,7 @@ const struct clk_ops clk_alpha_pll_lucid_5lpe_ops = {
+ 	.round_rate = clk_alpha_pll_round_rate,
+ 	.set_rate = alpha_pll_lucid_5lpe_set_rate,
+ };
+-EXPORT_SYMBOL(clk_alpha_pll_lucid_5lpe_ops);
++EXPORT_SYMBOL_GPL(clk_alpha_pll_lucid_5lpe_ops);
  
- /**
-- * clk_lucid_pll_configure - configure the lucid pll
-+ * clk_trion_pll_configure - configure the trion pll
-  *
-  * @pll: clk alpha pll
-  * @regmap: register map
+ const struct clk_ops clk_alpha_pll_fixed_lucid_5lpe_ops = {
+ 	.enable = alpha_pll_lucid_5lpe_enable,
+@@ -1832,14 +1832,14 @@ const struct clk_ops clk_alpha_pll_fixed_lucid_5lpe_ops = {
+ 	.recalc_rate = clk_trion_pll_recalc_rate,
+ 	.round_rate = clk_alpha_pll_round_rate,
+ };
+-EXPORT_SYMBOL(clk_alpha_pll_fixed_lucid_5lpe_ops);
++EXPORT_SYMBOL_GPL(clk_alpha_pll_fixed_lucid_5lpe_ops);
+ 
+ const struct clk_ops clk_alpha_pll_postdiv_lucid_5lpe_ops = {
+ 	.recalc_rate = clk_alpha_pll_postdiv_fabia_recalc_rate,
+ 	.round_rate = clk_alpha_pll_postdiv_fabia_round_rate,
+ 	.set_rate = clk_lucid_5lpe_pll_postdiv_set_rate,
+ };
+-EXPORT_SYMBOL(clk_alpha_pll_postdiv_lucid_5lpe_ops);
++EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_lucid_5lpe_ops);
+ 
+ void clk_zonda_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
+ 			     const struct alpha_pll_config *config)
+@@ -1992,7 +1992,7 @@ const struct clk_ops clk_alpha_pll_zonda_ops = {
+ 	.round_rate = clk_alpha_pll_round_rate,
+ 	.set_rate = clk_zonda_pll_set_rate,
+ };
+-EXPORT_SYMBOL(clk_alpha_pll_zonda_ops);
++EXPORT_SYMBOL_GPL(clk_alpha_pll_zonda_ops);
+ 
+ static int alpha_pll_lucid_evo_enable(struct clk_hw *hw)
+ {
 -- 
 2.33.0
 
