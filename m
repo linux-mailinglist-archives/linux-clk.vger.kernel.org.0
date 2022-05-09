@@ -2,168 +2,185 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1935A51F0CA
-	for <lists+linux-clk@lfdr.de>; Sun,  8 May 2022 21:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E77C351F430
+	for <lists+linux-clk@lfdr.de>; Mon,  9 May 2022 08:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231673AbiEHTsQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 8 May 2022 15:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
+        id S229862AbiEIFoA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 9 May 2022 01:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbiEHTsM (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 8 May 2022 15:48:12 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5F8B7EF;
-        Sun,  8 May 2022 12:44:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1652039036;
-        bh=ZMFFSXatdPBOGp95nTHs++I59HrGyDFQ5G/SIMPqqhM=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=RjEIdeqKWDmOJO5dgr+BdpN++zY6zcrKaVZ2pnkcdtLw5XNe3asI7lmlLvJNsJyXj
-         PvVtQPC7xkGaziwR5ghao0q6zoDZWd0jjllui6MmaX0xEHS7IoWTcVCaCHLusQ+ID6
-         jZsZM3gb3oez8m7qJInVhpAihqewZ06TnaZY6F+Y=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([37.201.215.103]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MEm6F-1nZDoV2X3D-00GJDe; Sun, 08
- May 2022 21:43:56 +0200
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v3 7/7] ARM: dts: wpcm450: Switch clocks to clock controller
-Date:   Sun,  8 May 2022 21:43:32 +0200
-Message-Id: <20220508194333.2170161-8-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220508194333.2170161-1-j.neuschaefer@gmx.net>
-References: <20220508194333.2170161-1-j.neuschaefer@gmx.net>
+        with ESMTP id S234520AbiEIFj5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 May 2022 01:39:57 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217CC37AB6;
+        Sun,  8 May 2022 22:36:02 -0700 (PDT)
+X-UUID: eaf69eb13c7b4e61836ecad789cf549d-20220509
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:8cc222ed-4217-40b0-926a-b7adea8aa0a9,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:31f511b3-56b5-4c9e-8d83-0070b288eb6a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: eaf69eb13c7b4e61836ecad789cf549d-20220509
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2127698123; Mon, 09 May 2022 13:35:57 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 9 May 2022 13:35:55 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 9 May 2022 13:35:55 +0800
+Message-ID: <445ef1e3ef9d62934e1b84d4fb207705a90d4f34.camel@mediatek.com>
+Subject: Re: [PATCH v6 00/16] Cleanup MediaTek clk reset drivers and support
+ MT8192/MT8195
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Jie Chen =?UTF-8?Q?=28=E9=99=B3=E6=B5=9A=E6=A1=80=29?= 
+        <Chun-Jie.Chen@mediatek.com>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        Runyang Chen =?UTF-8?Q?=28=E9=99=88=E6=B6=A6=E6=B4=8B=29?= 
+        <Runyang.Chen@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 9 May 2022 13:35:55 +0800
+In-Reply-To: <20220503093856.22250-1-rex-bc.chen@mediatek.com>
+References: <20220503093856.22250-1-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:kkDcTVKHYxQWJty64O/zo4HzicYg5+GXVtXaJFZY35ZwbBQKgYd
- zvZ0lSKISIrw6iDMJ30CaX1EaqdEq5W5IO9XJUBy0Gh7/8kqKAEiVS3LhmC6TI7z9IQucXf
- JqKzmNiJsHin8PcaWclRQQ5oU0oXvgvqiaouMJH5V6j0w9Kk4bgsuy7UwJU5jOzpZ74yA9m
- +xh6sCA5teAj0W96PLtEw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:h7PjhEGAGOY=:E9L81qjT7kzz0e1fwo1uT7
- hP7PDfwv9bFJoDbDNnAEoAeD6NEVYJPBRko2AGHhE2c4NefKXvFE+mKhavU6F132Pc0Ga84WC
- jG+5Oc5Hg0WtD7vI/Qx9dcU7qjLROxeUhOAQCNiNkhbKs2MoOwUver026OQbwrsPgPm4LBmOC
- TLdqKJ1RVwRv5ZSzuT7chMxc4qU+YdCrkHBF58CgwQDz9YZA9ZG20hcKyLodBiv5SIDQSDjrS
- mu+3ffQjErTwwkioRN/2l7Be4b8Kzi4BcXTyLyL+CyNQT+bqRhIn+gQy8+Ye+RwPXOU+xipyd
- 6F1JK4aHJf6SzOJdNmWBUKNtkx8+p1SnJeVtjU6VpGuAIowdksfXwih+1vhYwFHR2benybRk3
- E8tSm+YyqXHbPjjDqSkxn/5wYNXHfU6Vz/euXhJEVHPru0tHID+wPfTsSEKXfNBSSnfiYsT0E
- bbnHBmOe9CRkNO1noDUUixS6PItcivvP2Xo33MeSXE0eXUewx3f7xZnJG8xJA+Ggc0QavlIfn
- Hp6K9ZScZ6kAEBkRwPJrJuHhHsYdxFtRfdSyhjVQsAcZcmZrXYZv0sh/LB+8zpTSRu/NLoOFM
- AKfvDfBq+UspetCK7m3vnW7RCbvg2nIL14mwfcp02+y+l+uoB7d+Sl5U8EbFRlD6huvwpexvv
- ghDkuJ2yrptKI1a49kcTtECiYe+KNtR1BO+zEgTeM+TG0FNH3fq6lLcivQ6Uk+YycR1BTFNfF
- 3bU+WjihzPQF4h1OgOIHULAngsFKFw4FYFxDMXHp42pKDuJF7s+UhCKqZVDTpqRitgHEuG6JA
- BGtlo8BSF/TUlG4lwa7q+FcIwQEOLQQh1GalrIieqlKkeHNaeLuTGLlckdF0RetlbtheLLhqE
- Vp0SWHJDzskYAcEw6xGZdaLrBLQb9afN+UoydsSlz65hBfErrB/VC+v+HGnrxzsyn64s0Vlm4
- tq798DMw7fpFLru9XucyPLtcNsGmQbgr2KZIgHvrJ5xGnlX7X+s1dfhULtOO8gS5FUYmLHwKi
- 7iibNhowRvgn9ewxJwU45M1lLex5AsQdEEFWnYMFkZ+9qi6BFFCHMCFTP1QmAgqwrQGhC2oME
- C30VTj5QQgijc0=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-This change is incompatible with older kernels because it requires the
-clock controller driver, but I think that's acceptable because WPCM450
-support is generally still in an early phase.
+On Tue, 2022-05-03 at 17:38 +0800, Rex-BC Chen wrote:
+> In this series, we cleanup MediaTek clock reset drivers in
+> clk/mediatek
+> folder. MediaTek clock reset driver is used to provide reset control
+> of modules controlled in clk, like infra_ao.
+> 
+> Changes for v6:
+> 1. Add a new patch to support inuput argument index mode.
+> 2. Revise definition in reset.h to index.
+> 
+> Changes for V5:
+> 1. Add all infra reset bits for MT8192 and MT8195.
+> 2. Fix reviewers' comments.
+> 
+> Changes for V4:
+> 1. Abandon the implementation of reset-cell = 2, and use reset index
+> to
+>    determine which reset bit is used.
+> 2. Add documentation for enum/structure/function in reset.h.
+> 3. Combine binding/drvier support patch for MT8192 and MT8195.
+> 4. The MT8195 DTS is accepted by Matthias, and I add new DTS patch to
+>    support infracfg_ao reset for MT8195. The DTS of MT8195 is still
+>    not merged into mainline. Please refer to [1].
+> 
+> [1]: 
+> https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=for-next&id=37f2582883be7218dc69f9af135959a8e93de223
+> 
+> Changes for V3:
+> 1. Modify drivers for reviewers' comments.
+> 2. Add dt-binding patch for MT8192/MT8195 infra.
+> 3. Add reset property of infra node for MT8192.
+> 4. Use original function for simple operation.
+> 
+> Changes for V2:
+> 1. Modify drivers for reviewers' comments.
+> 2. Use simple reset to replace v1.
+> 3. Recover v2 to set_clr.
+> 4. Separate error handling to another patch.
+> 5. Add support for input offset and bit from DT.
+> 6. Add support for MT8192 and MT8195.
+> 
+> Rex-BC Chen (16):
+>   clk: mediatek: reset: Add reset.h
+>   clk: mediatek: reset: Fix written reset bit offset
+>   clk: mediatek: reset: Refine and reorder functions in reset.c
+>   clk: mediatek: reset: Extract common drivers to update function
+>   clk: mediatek: reset: Merge and revise reset register function
+>   clk: mediatek: reset: Revise structure to control reset register
+>   clk: mediatek: reset: Support nonsequence base offsets of reset
+>     registers
+>   clk: mediatek: reset: Support inuput argument index mode
+>   clk: mediatek: reset: Change return type for clock reset register
+>     function
+>   clk: mediatek: reset: Add new register reset function with device
+>   clk: mediatek: reset: Add reset support for simple probe
+>   dt-bindings: arm: mediatek: Add #reset-cells property for
+>     MT8192/MT8195
+>   dt-bindings: reset: mediatek: Add infra_ao reset index for
+>     MT8192/MT8195
+>   clk: mediatek: reset: Add infra_ao reset support for MT8192/MT8195
+>   arm64: dts: mediatek: Add infra #reset-cells property for MT8192
+>   arm64: dts: mediatek: Add infra #reset-cells property for MT8195
+> 
+>  .../mediatek/mediatek,mt8192-sys-clock.yaml   |   3 +
+>  .../mediatek/mediatek,mt8195-sys-clock.yaml   |   3 +
+>  arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   1 +
+>  arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  13 +-
+>  drivers/clk/mediatek/clk-mt2701-eth.c         |  10 +-
+>  drivers/clk/mediatek/clk-mt2701-g3d.c         |  10 +-
+>  drivers/clk/mediatek/clk-mt2701-hif.c         |  10 +-
+>  drivers/clk/mediatek/clk-mt2701.c             |  22 +-
+>  drivers/clk/mediatek/clk-mt2712.c             |  22 +-
+>  drivers/clk/mediatek/clk-mt7622-eth.c         |  10 +-
+>  drivers/clk/mediatek/clk-mt7622-hif.c         |  12 +-
+>  drivers/clk/mediatek/clk-mt7622.c             |  22 +-
+>  drivers/clk/mediatek/clk-mt7629-eth.c         |  10 +-
+>  drivers/clk/mediatek/clk-mt7629-hif.c         |  12 +-
+>  drivers/clk/mediatek/clk-mt8135.c             |  22 +-
+>  drivers/clk/mediatek/clk-mt8173.c             |  22 +-
+>  drivers/clk/mediatek/clk-mt8183.c             |  18 +-
+>  drivers/clk/mediatek/clk-mt8192.c             |  29 +++
+>  drivers/clk/mediatek/clk-mt8195-infra_ao.c    |  24 +++
+>  drivers/clk/mediatek/clk-mtk.c                |   7 +
+>  drivers/clk/mediatek/clk-mtk.h                |   9 +-
+>  drivers/clk/mediatek/reset.c                  | 198 +++++++++++++---
+> --
+>  drivers/clk/mediatek/reset.h                  |  82 ++++++++
+>  include/dt-bindings/reset/mt8192-resets.h     |   8 +
+>  include/dt-bindings/reset/mt8195-resets.h     |   6 +
+>  25 files changed, 491 insertions(+), 94 deletions(-)
+>  create mode 100644 drivers/clk/mediatek/reset.h
+> 
+> -- 
+> 2.18.0
+> 
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
+Hello Stephen and Michael,
 
-v2, v3:
-- no changes
-=2D--
- arch/arm/boot/dts/nuvoton-wpcm450.dtsi | 20 +++++++++-----------
- 1 file changed, 9 insertions(+), 11 deletions(-)
+The drivers of this series are reviewed.
+The binding of this series are also acked.
+Could you spare some time and give us some suggestion?
 
-diff --git a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi b/arch/arm/boot/dts/nu=
-voton-wpcm450.dtsi
-index 515e943787416..d5ed95ef810e8 100644
-=2D-- a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
-+++ b/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
-@@ -2,6 +2,7 @@
- // Copyright 2021 Jonathan Neusch=C3=A4fer
+Thanks!
 
- #include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/clock/nuvoton,wpcm450-clk.h>
-
- / {
- 	compatible =3D "nuvoton,wpcm450";
-@@ -32,13 +33,6 @@ cpu@0 {
- 		};
- 	};
-
--	clk24m: clock-24mhz {
--		/* 24 MHz dummy clock */
--		compatible =3D "fixed-clock";
--		clock-frequency =3D <24000000>;
--		#clock-cells =3D <0>;
--	};
--
- 	refclk: clock-48mhz {
- 		/* 48 MHz reference oscillator */
- 		compatible =3D "fixed-clock";
-@@ -73,7 +67,7 @@ serial0: serial@b8000000 {
- 			reg =3D <0xb8000000 0x20>;
- 			reg-shift =3D <2>;
- 			interrupts =3D <7 IRQ_TYPE_LEVEL_HIGH>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_UART0>;
- 			pinctrl-names =3D "default";
- 			pinctrl-0 =3D <&bsp_pins>;
- 			status =3D "disabled";
-@@ -84,7 +78,7 @@ serial1: serial@b8000100 {
- 			reg =3D <0xb8000100 0x20>;
- 			reg-shift =3D <2>;
- 			interrupts =3D <8 IRQ_TYPE_LEVEL_HIGH>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_UART1>;
- 			status =3D "disabled";
- 		};
-
-@@ -92,14 +86,18 @@ timer0: timer@b8001000 {
- 			compatible =3D "nuvoton,wpcm450-timer";
- 			interrupts =3D <12 IRQ_TYPE_LEVEL_HIGH>;
- 			reg =3D <0xb8001000 0x1c>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_TIMER0>,
-+				 <&clk WPCM450_CLK_TIMER1>,
-+				 <&clk WPCM450_CLK_TIMER2>,
-+				 <&clk WPCM450_CLK_TIMER3>,
-+				 <&clk WPCM450_CLK_TIMER4>;
- 		};
-
- 		watchdog0: watchdog@b800101c {
- 			compatible =3D "nuvoton,wpcm450-wdt";
- 			interrupts =3D <1 IRQ_TYPE_LEVEL_HIGH>;
- 			reg =3D <0xb800101c 0x4>;
--			clocks =3D <&clk24m>;
-+			clocks =3D <&clk WPCM450_CLK_WDT>;
- 		};
-
- 		aic: interrupt-controller@b8002000 {
-=2D-
-2.35.1
+BRs,
+Rex
 
