@@ -2,88 +2,83 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0755D51F923
-	for <lists+linux-clk@lfdr.de>; Mon,  9 May 2022 12:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE6F51F8DA
+	for <lists+linux-clk@lfdr.de>; Mon,  9 May 2022 12:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238543AbiEIJjl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 9 May 2022 05:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
+        id S238445AbiEIJjg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 9 May 2022 05:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238302AbiEIJOA (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 May 2022 05:14:00 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F67C18C05A;
-        Mon,  9 May 2022 02:10:07 -0700 (PDT)
-X-UUID: 14444f6f29ec47a49a6e3b82e97ec271-20220509
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:b9630579-9e2f-4516-8da7-72a36d810f09,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,
-        ACTION:release,TS:80
-X-CID-INFO: VERSION:1.1.4,REQID:b9630579-9e2f-4516-8da7-72a36d810f09,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:-20,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,
-        ACTION:quarantine,TS:80
-X-CID-META: VersionHash:faefae9,CLOUDID:78f41ab3-56b5-4c9e-8d83-0070b288eb6a,C
-        OID:a4cc6925e36a,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 14444f6f29ec47a49a6e3b82e97ec271-20220509
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <sam.shih@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 430947493; Mon, 09 May 2022 17:10:02 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Mon, 9 May 2022 17:10:00 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Mon, 9 May 2022 17:10:00 +0800
-From:   Sam Shih <sam.shih@mediatek.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ryder Lee <ryder.lee@kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     John Crispin <john@phrozen.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Sam Shih <sam.shih@mediatek.com>
-Subject: [PATCH 1/1] clk: mediatek: update compatible string for MT7986 ethsys
-Date:   Mon, 9 May 2022 17:09:39 +0800
-Message-ID: <20220509090939.845-2-sam.shih@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220509090939.845-1-sam.shih@mediatek.com>
-References: <20220509090939.845-1-sam.shih@mediatek.com>
+        with ESMTP id S237144AbiEIJQZ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 May 2022 05:16:25 -0400
+Received: from out28-124.mail.aliyun.com (out28-124.mail.aliyun.com [115.124.28.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95D6205270;
+        Mon,  9 May 2022 02:12:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.411162|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0325975-0.00943409-0.957968;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047194;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.NgYRNRV_1652087532;
+Received: from 192.168.1.123(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NgYRNRV_1652087532)
+          by smtp.aliyun-inc.com(33.40.73.199);
+          Mon, 09 May 2022 17:12:19 +0800
+Subject: Re: [PATCH v2 0/3] Clock fixes for Ingenic SoCs
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, sboyd@kernel.org,
+        mturquette@baylibre.com, tsbogend@alpha.franken.de
+Cc:     paulburton@kernel.org, paul@crapouillou.net,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20220428164454.17908-1-aidanmacdonald.0x0@gmail.com>
+From:   =?UTF-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
+Message-ID: <f5ca7c72-6526-d733-93fd-933aa9b719bc@wanyeetech.com>
+Date:   Mon, 9 May 2022 17:12:11 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220428164454.17908-1-aidanmacdonald.0x0@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Update compatible string of mt7986 ethsys clock driver to fit the
-devicetree bindings document.
+Hi,
 
-Signed-off-by: Sam Shih <sam.shih@mediatek.com>
----
- drivers/clk/mediatek/clk-mt7986-eth.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2022/4/29 上午12:44, Aidan MacDonald wrote:
+> I ran across a problem trying to get Linux running on an Ingenic X1000 SoC:
+> since the memory clock isn't referenced by any driver, it appears unused and
+> gets disabled automatically. After that, the system hangs on any RAM access.
+>
+> There is a hack in board-ingenic.c to forcibly enable the CPU clock, but this
+> is insufficient for the X1000 since the memory clock has its own gate and mux
+> that isn't tied to the CPU.
+>
+> This patch series fixes the bug by adding CLK_IS_CRITICAL flags to important
+> clocks, which seems to be the approach used in many other SoC clock drivers.
+>
+> v2: Add comments to patch 02 to explain why we need CLK_IS_CRITICAL.
+>
+> Aidan MacDonald (3):
+>    clk: ingenic: Allow specifying common clock flags
+>    clk: ingenic: Mark critical clocks in Ingenic SoCs
+>    mips: ingenic: Do not manually reference the CPU clock
+>
+>   arch/mips/generic/board-ingenic.c | 26 --------------------------
+>   drivers/clk/ingenic/cgu.c         |  2 +-
+>   drivers/clk/ingenic/cgu.h         |  3 +++
+>   drivers/clk/ingenic/jz4725b-cgu.c | 10 ++++++++++
+>   drivers/clk/ingenic/jz4740-cgu.c  | 10 ++++++++++
+>   drivers/clk/ingenic/jz4760-cgu.c  | 10 ++++++++++
+>   drivers/clk/ingenic/jz4770-cgu.c  |  5 +++++
+>   drivers/clk/ingenic/jz4780-cgu.c  | 15 +++++++++++++++
+>   drivers/clk/ingenic/x1000-cgu.c   | 15 +++++++++++++++
+>   drivers/clk/ingenic/x1830-cgu.c   | 11 +++++++++++
+>   10 files changed, 80 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/clk/mediatek/clk-mt7986-eth.c b/drivers/clk/mediatek/clk-mt7986-eth.c
-index 495d023ccad7..ed2e7b200987 100644
---- a/drivers/clk/mediatek/clk-mt7986-eth.c
-+++ b/drivers/clk/mediatek/clk-mt7986-eth.c
-@@ -129,4 +129,4 @@ static void __init mtk_ethsys_init(struct device_node *node)
- 		pr_err("%s(): could not register clock provider: %d\n",
- 		       __func__, r);
- }
--CLK_OF_DECLARE(mtk_ethsys, "mediatek,mt7986-ethsys_ck", mtk_ethsys_init);
-+CLK_OF_DECLARE(mtk_ethsys, "mediatek,mt7986-ethsys", mtk_ethsys_init);
--- 
-2.18.0
+
+Tested-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com> # On X1000 and 
+X1830
+
 
