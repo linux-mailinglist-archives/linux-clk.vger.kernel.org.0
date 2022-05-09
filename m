@@ -2,40 +2,63 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02E651F8E7
-	for <lists+linux-clk@lfdr.de>; Mon,  9 May 2022 12:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB3551F88C
+	for <lists+linux-clk@lfdr.de>; Mon,  9 May 2022 11:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238542AbiEIJjl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 9 May 2022 05:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S232063AbiEIJxZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 9 May 2022 05:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236561AbiEIJ0U (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 May 2022 05:26:20 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF571C15E2;
-        Mon,  9 May 2022 02:22:25 -0700 (PDT)
-Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KxbGd0bHWzGphT;
-        Mon,  9 May 2022 17:19:37 +0800 (CST)
-Received: from huawei.com (10.67.174.157) by kwepemi500014.china.huawei.com
- (7.221.188.232) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 9 May
- 2022 17:22:23 +0800
-From:   Li Zhengyu <lizhengyu3@huawei.com>
-To:     <sboyd@kernel.org>
-CC:     <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <manivannan.sadhasivam@linaro.org>, <mturquette@baylibre.com>
-Subject: [PATCH] clk: fixed-rate: Remove redundant if statement
-Date:   Mon, 9 May 2022 17:21:02 +0800
-Message-ID: <20220509092102.140520-1-lizhengyu3@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S239570AbiEIJqn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 May 2022 05:46:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C749D4F1;
+        Mon,  9 May 2022 02:42:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1111B810AD;
+        Mon,  9 May 2022 09:41:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A05F1C385A8;
+        Mon,  9 May 2022 09:41:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652089290;
+        bh=uz/2I097YaC72815e/cPi9TS8annMekWx+H8PCJvgnA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BAqUJ6k7ZR0G1QnS1BRb9f4vUUIiEq6e1L0EhS0chKwyziCOj7zdGAH1HdaVmoVru
+         SbyeOP6pG9zpglHrLkxAnipJPmYgwRYKIJe0G3zPyfKpe4DpIHNfa0uSABIM+q3lpz
+         NZO98zSIH/XcEEA9UCduWREzm5r5NpJFoP5/psVUvKN3Qg0dbjwqaUEXv25VeXKemy
+         F/FWYWwxfIjzeRJmgBxDO1LMFtaMrsmKxHn0p5jTCi6kb8QUK9u+xUf4Gz7570Fi3g
+         ba5Mnk5e9g6IYnIUC+OiHeXQMN1zhWe483cgXkUKzxXXcGzoxpOmZvi+wXys3CeSgH
+         S1QPxysOnrwSg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1nnztO-0005tH-TP; Mon, 09 May 2022 11:41:27 +0200
+Date:   Mon, 9 May 2022 11:41:26 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v4 1/5] PCI: qcom: Remove unnecessary pipe_clk handling
+Message-ID: <YnjhxkajHW0u8SAK@hovoldconsulting.com>
+References: <20220501192149.4128158-1-dmitry.baryshkov@linaro.org>
+ <20220501192149.4128158-2-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.157]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500014.china.huawei.com (7.221.188.232)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220501192149.4128158-2-dmitry.baryshkov@linaro.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -44,27 +67,14 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-(np) is always true when (dev || !np) is false, so just remove
-the check.
+On Sun, May 01, 2022 at 10:21:45PM +0300, Dmitry Baryshkov wrote:
+> QMP PHY driver already does clk_prepare_enable()/_disable() pipe_clk.
 
-Signed-off-by: Li Zhengyu <lizhengyu3@huawei.com>
----
- drivers/clk/clk-fixed-rate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The pcie-qcom driver is used also with non-QMP PHYs such as the Qualcomm
+PCIe2 PHY so please expand the commit message here explaining why this
+is safe to remove.
 
-diff --git a/drivers/clk/clk-fixed-rate.c b/drivers/clk/clk-fixed-rate.c
-index 45501637705c..ac68a6b40f0e 100644
---- a/drivers/clk/clk-fixed-rate.c
-+++ b/drivers/clk/clk-fixed-rate.c
-@@ -87,7 +87,7 @@ struct clk_hw *__clk_hw_register_fixed_rate(struct device *dev,
- 	hw = &fixed->hw;
- 	if (dev || !np)
- 		ret = clk_hw_register(dev, hw);
--	else if (np)
-+	else
- 		ret = of_clk_hw_register(np, hw);
- 	if (ret) {
- 		kfree(fixed);
--- 
-2.17.1
+> Remove extra calls to enable/disable this clock from the PCIe driver, so
+> that the PHY driver can manage the clock on its own.
 
+Johan
