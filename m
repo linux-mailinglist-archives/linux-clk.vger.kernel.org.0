@@ -2,32 +2,28 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B829E520B85
-	for <lists+linux-clk@lfdr.de>; Tue, 10 May 2022 04:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF83A520BF7
+	for <lists+linux-clk@lfdr.de>; Tue, 10 May 2022 05:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234982AbiEJC4p (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 9 May 2022 22:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
+        id S235368AbiEJDaC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 9 May 2022 23:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234960AbiEJC4m (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 May 2022 22:56:42 -0400
+        with ESMTP id S230358AbiEJDaB (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 9 May 2022 23:30:01 -0400
 Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E441EFC777;
-        Mon,  9 May 2022 19:52:46 -0700 (PDT)
-Received: from NTHCCAS04.nuvoton.com (NTHCCAS04.nuvoton.com [10.1.8.29])
-        by maillog.nuvoton.com (Postfix) with ESMTP id 49A1B1C811BA;
-        Tue, 10 May 2022 10:52:46 +0800 (CST)
-Received: from NTHCML01B.nuvoton.com (10.1.8.178) by NTHCCAS04.nuvoton.com
- (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Tue, 10
- May 2022 10:52:45 +0800
-Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCML01B.nuvoton.com
- (10.1.8.178) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Tue, 10 May
- 2022 10:52:45 +0800
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58FD84993C;
+        Mon,  9 May 2022 20:26:01 -0700 (PDT)
+Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
+        by maillog.nuvoton.com (Postfix) with ESMTP id 28D3C1C80DCB;
+        Tue, 10 May 2022 11:26:01 +0800 (CST)
+Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.7; Tue, 10 May
+ 2022 11:26:00 +0800
 Received: from localhost.localdomain (172.19.1.47) by NTHCCAS04.nuvoton.com
  (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Tue, 10 May 2022 10:52:45 +0800
+ Transport; Tue, 10 May 2022 11:26:00 +0800
 From:   Jacky Huang <ychuang3@nuvoton.com>
 To:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-clk@vger.kernel.org>,
@@ -36,69 +32,68 @@ CC:     <robh+dt@kernel.org>, <sboyd@kernel.org>, <krzk+dt@kernel.org>,
         <arnd@arndb.de>, <olof@lixom.net>, <catalin.marinas@arm.com>,
         <will@kernel.org>, <soc@kernel.org>, <cfli0@nuvoton.com>,
         Jacky Huang <ychuang3@nuvoton.com>
-Subject: [PATCH 5/5] dt-bindings: arm: Add initial bindings for Nuvoton Platform
-Date:   Tue, 10 May 2022 10:52:14 +0800
-Message-ID: <20220510025214.5586-6-ychuang3@nuvoton.com>
+Subject: [PATCH V4 0/5] Add initial support for MA35D1 SoC
+Date:   Tue, 10 May 2022 11:25:53 +0800
+Message-ID: <20220510032558.10304-1-ychuang3@nuvoton.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220510025214.5586-1-ychuang3@nuvoton.com>
-References: <20220510025214.5586-1-ychuang3@nuvoton.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add binding for ARMv8 based Nuvotn SoCs and platform boards.
-Add initial bindings for MA35D1 series development boards.
+This patch series adds initial support for Nuvoton MA35D1 SoC,
+include initial dts and clock controller binding.
 
-Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
----
- .../devicetree/bindings/arm/nuvoton.yaml      | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
+v4:
+  - patch 4/5 is a resend
+  - Fixed dt_binding_check errors of nuvoton,ma35d1-clk.yaml
+  - Modify ma35d1.dtsi
+    1. Add a node hxt_24m
+    2. Fixed the base address of gic node
+    3. Add clocks and clock-names to clock node
+  - Fixed borad binding mistakes of nuvoton.yaml
+
+v3:
+  - added patch 4/5 and 5/5
+  - introduce CONFIG_ARCH_NUVOTON option
+  - add initial bindings for Nuvoton Platform boards
+  - fixed coding style problem of nuvoton,ma35d1-clk.h
+  - added CAPLL to clock-controller node
+  - modify the chosen node of ma35d1-evb.dts
+  - modify clock yaml "clk-pll-mode" to "nuvoton,clk-pll-mode"
+
+v2:
+  - fixed dt_binding_check failed of nuvoton,ma35d1-clk.yaml
+
+Jacky Huang (5):
+  dt-bindings: clock: add binding for MA35D1 clock controller
+  dt-bindings: clock: Document MA35D1 clock controller bindings
+  arm64: dts: nuvoton: Add initial support for MA35D1
+  arm64: Kconfig: nuvoton: Introduce CONFIG_ARCH_NUVOTON
+  dt-bindings: arm: Add initial bindings for Nuvoton Platform
+
+ .../devicetree/bindings/arm/nuvoton.yaml      |  31 +++
+ .../bindings/clock/nuvoton,ma35d1-clk.yaml    |  74 +++++
+ arch/arm64/Kconfig.platforms                  |  10 +
+ arch/arm64/boot/dts/Makefile                  |   1 +
+ arch/arm64/boot/dts/nuvoton/Makefile          |   2 +
+ arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts    |  24 ++
+ arch/arm64/boot/dts/nuvoton/ma35d1.dtsi       | 120 ++++++++
+ .../dt-bindings/clock/nuvoton,ma35d1-clk.h    | 260 ++++++++++++++++++
+ 8 files changed, 522 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/arm/nuvoton.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+ create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
+ create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
+ create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
+ create mode 100644 include/dt-bindings/clock/nuvoton,ma35d1-clk.h
 
-diff --git a/Documentation/devicetree/bindings/arm/nuvoton.yaml b/Documentation/devicetree/bindings/arm/nuvoton.yaml
-new file mode 100644
-index 000000000000..56fb5bb41d0c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/nuvoton.yaml
-@@ -0,0 +1,31 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/nuvoton.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Nuvoton Platforms Device Tree Bindings
-+
-+maintainers:
-+  - Jacky Huang <ychuang3@nuvoton.com>
-+
-+description: |
-+  Boards with an ARMv8 based Nuvoton SoC shall have the following
-+  properties.
-+
-+properties:
-+  $nodename:
-+    const: '/'
-+  compatible:
-+    oneOf:
-+
-+      - description: MA35D1 based boards
-+        items:
-+          - enum:
-+              - nuvoton,ma35d1-evb
-+              - nuvoton,ma35d1-iot
-+              - nuvoton,ma35d1-som
-+          - const: nuvoton,ma35d1
-+
-+additionalProperties: true
-+...
 -- 
 2.30.2
 
