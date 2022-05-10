@@ -2,37 +2,37 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27264520E72
-	for <lists+linux-clk@lfdr.de>; Tue, 10 May 2022 09:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60877520E7E
+	for <lists+linux-clk@lfdr.de>; Tue, 10 May 2022 09:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235784AbiEJHgG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 10 May 2022 03:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40320 "EHLO
+        id S237523AbiEJHgg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 10 May 2022 03:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238223AbiEJHGR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 10 May 2022 03:06:17 -0400
+        with ESMTP id S239174AbiEJHMQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 10 May 2022 03:12:16 -0400
 Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B26E89CDE;
-        Tue, 10 May 2022 00:02:19 -0700 (PDT)
-Received: from mail-yb1-f171.google.com ([209.85.219.171]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1M7s1M-1njOCR3gdG-004yY2; Tue, 10 May 2022 09:02:18 +0200
-Received: by mail-yb1-f171.google.com with SMTP id y76so29055581ybe.1;
-        Tue, 10 May 2022 00:02:17 -0700 (PDT)
-X-Gm-Message-State: AOAM533ETVQqOGd98mKKn5I3jsOydLd8pfc9K4zQhooUGt9dJm4p1/8b
-        3UeFHFMLwIhMPqCtbms+ZAofTta2br3qPE7El+M=
-X-Google-Smtp-Source: ABdhPJzCoErVlOlWP+3agvpOC/u6kgO4/gR8EykNKzu19PrW0u0Z98t99jOPlEpsD8ttySzd6YiVB2UWW4A083+k8U4=
-X-Received: by 2002:a25:cbc9:0:b0:645:879a:cdd3 with SMTP id
- b192-20020a25cbc9000000b00645879acdd3mr15923423ybg.550.1652166136461; Tue, 10
- May 2022 00:02:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BC52AC6FB;
+        Tue, 10 May 2022 00:08:18 -0700 (PDT)
+Received: from mail-yb1-f177.google.com ([209.85.219.177]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N1fag-1nv9Y11NdY-0123Gc; Tue, 10 May 2022 09:08:17 +0200
+Received: by mail-yb1-f177.google.com with SMTP id j2so29119964ybu.0;
+        Tue, 10 May 2022 00:08:16 -0700 (PDT)
+X-Gm-Message-State: AOAM532ylf6yHyeBsJKvV2LztCvkyKV3YsOQ/ShOQjJ+2PKvWx0qITuv
+        AtiMAxGtKE6mNvFuap/IqIOv5kbWyIJCIBu96xg=
+X-Google-Smtp-Source: ABdhPJxWna6rlyrTKaLzkGLXfLQ5G36EvqX7iK3snQCVCxZJEjl921KjovbWJOm/HvkmjLf51wP/GU+2IK3ZKdNeooU=
+X-Received: by 2002:a25:31c2:0:b0:641:660f:230f with SMTP id
+ x185-20020a2531c2000000b00641660f230fmr16728943ybx.472.1652166495925; Tue, 10
+ May 2022 00:08:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220510032558.10304-1-ychuang3@nuvoton.com> <20220510032558.10304-4-ychuang3@nuvoton.com>
-In-Reply-To: <20220510032558.10304-4-ychuang3@nuvoton.com>
+References: <20220510032558.10304-1-ychuang3@nuvoton.com>
+In-Reply-To: <20220510032558.10304-1-ychuang3@nuvoton.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 10 May 2022 09:01:59 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1tbvE+PTB-qy2y7o3_i3VP0zkgMueDy3zBd64BsGKssw@mail.gmail.com>
-Message-ID: <CAK8P3a1tbvE+PTB-qy2y7o3_i3VP0zkgMueDy3zBd64BsGKssw@mail.gmail.com>
-Subject: Re: [PATCH V4 3/5] arm64: dts: nuvoton: Add initial support for MA35D1
+Date:   Tue, 10 May 2022 09:07:59 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1k8y8U99bBmqBYE1vYAc0q-UeaM0oLP4tTHZCpyYNOgA@mail.gmail.com>
+Message-ID: <CAK8P3a1k8y8U99bBmqBYE1vYAc0q-UeaM0oLP4tTHZCpyYNOgA@mail.gmail.com>
+Subject: Re: [PATCH V4 0/5] Add initial support for MA35D1 SoC
 To:     Jacky Huang <ychuang3@nuvoton.com>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         DTML <devicetree@vger.kernel.org>,
@@ -46,23 +46,23 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Will Deacon <will@kernel.org>, SoC Team <soc@kernel.org>,
         cfli0@nuvoton.com
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:41uXJV8ZDI63xzuVbY8paB13ziPpltqOnktwNglwfUmNJw9cwCd
- 5P5mu20L/Nj1xc8WlYqCwvAtU+g/vFs7tbrlxZxKacQTrJIa434jFkbAQTSRxmbOa8wx3qA
- PTGOpcRLTwidHUrxL/WFup/F9NkJjUsJ1A79nwzzRNgynnIp3dB3zvvkyjGmL+sk0Jbe66W
- JorYpPblV4AbPGXK6o7YA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:EywyeRWjnAM=:tgppNxSMe33OniewTBHltP
- sdTFdQQeI4ME11si5cRlTj8pqdF21LRzNVODnHZJTYonX/jKI4dt3kV1l5pGSfPgDcg4Yi5pm
- F4yngPZPg55zwDBCOAyFgcqTtidatGFt98rNZMfUOiy7U5IxFcmrbl4dfTf3R9pGyBHmuTjco
- ZF2p9tmplFKS37hwWL2zChcEExR9UkXrSJY8IkGoOozZHL2CUjNp9QLBBSqcFdDEKdnLGVKO0
- pmu2ZCvbbM2IYYX+UwoRM0Kad/77LkRDNWJCpFtZO7/SeahAwg7K5JyhuJ0xi9VQMiusB9n6C
- fNjCog6hWmmqmtLph55AGx0aBcPJxZzLMmotvyLmedU15Eo7b+VT/o87qEjVFWqc+IzX4/Y+S
- Ul5uVdzNhaiLsrjRheSC5cvJYmuNzOrGqGLSyV3g8zA1lo9SItndZnex4CSmr4BI+FjCZmKJl
- wSdIF2o83cmogKKZxdihAJCGGEmqNGLc5SMoME7T10fg+6emYUSAB7sXWMLErSCbol5A8P0d/
- M/PVqAnlTrWHwpZFe8bEvEw01YJPaberRT4nHnLnS7xwwT8Rff+jBn+Tn01NbtleAdK54+pS1
- qwJw6sBbbpZQoGa5DqvzFR4l7iQHSwVZlsyfj1rCTwgPsS7aSIwZ1PC93Us17D/mxS0+sDvrt
- ufOzQNe30mZ7+zv2f506yzooqzxSB30NuK+Kp8DhYHrLH6QL17L1H9+ZgMBpeiEtl+nC0DLvy
- xOvkVHyJoRHuxBgal47FNPOVMogUx4oBdVw7yNw1YAORqXVHnKfddA+9jq/cU6Ikoly7uexoA
- 0bn3ObIxyt1W4I2uDU3dsn2H+9hQmzXk/Bmj/8AApXSfu+1/Uk=
+X-Provags-ID: V03:K1:AfVDd0F7X2lkWYQBHKX3m/O5w1goVick1k2D/8QnsT2lZ76G6rl
+ c3bztW6lGea6meDExjBavSFzRcQX7NRekcihf7PsWDQi6g6xi9iZf/zGBYbsXaHAX9kCWjp
+ nTMOuSvUNCXgevEVk/lqVo+pLyGNzPVrt/fUILdJKjce1hjWZAtVsGriulv6A9yHmSr2HwA
+ R9NqvJ7kDrrNhmEWx/pRw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:soJ1UPUwGqA=:GOvMO455rTUxZPmYL0g3tt
+ LKyZGFkdmK5Sy1bnjjo9B63HACyIlqGTIAcJ/g30MTl4adxNla4I55dywaLYW88cFNSluuLoA
+ QAsgabz6a+Nkd/3HDRSRM1+Kv5JFDrput7MlWrPTG1tAYOwvenyjfZKt5s1H8CH4c0EKa9RuT
+ EoBHQY8bx5VQcDofv3jg7bxihEzZr0GIKbZZ5lpyu38BWRrCyjik0rzFi0dSSEsLAWbeY9yxa
+ 1f7GUdAXo2h1604T2x++NXrcVAShyDUT8KH5FyZm9fktRZIw/c3W9k+6jM2AIscm/UmcKKsiP
+ tF6+6Pgv5nYLOtTSjYvUHYa8XIarT/6rmy0WE3VHzVUAj/O9awxgAkNqFtudMMX1xiGWs/b5e
+ ymy00fMwtMxi2qn0KdlU5I3AWbKl3WvxsE4DAOd5IetvFOqiC9hCjst7cbeQuu1htws1dBRZc
+ TWSW1kGbkM60MQOQGF2QMRgz/MOkhSwtcxf9erYpua8ylyVSkIMfX1H0S/iUC0PPrG1P1X5eY
+ PdMgR8SVZd8MgHUZKwLzCArcq3LTxTQOYe8cxxfozfW6o7ylkkTvCE88xlwVAvCisu7aBC11F
+ 8Ec9uXq+P+/gIprYA1yZUOgkVX2xLcyjGRPcGw5TXU+nVDNiq3PLjpvdHDKhWZOqw/6m/Zgig
+ TKit7PqakpFD49yDtjLrjA6GfcaoPLOr+ngjLNq3+JvmKblBTZyGWUJCEPYw4Ta9lx33SmVOd
+ 4b93vLfGpXXZoep9YGCuru5c1ebS56oEdZBSkNr6oO6OSwTMgSI2MljGwqrFQFecTSrVmqo6Q
+ rW45qrfMoc/CYG6Msf8EjMQaYKGykRbX3dN2pnfDQG2l/snbdk=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -74,26 +74,24 @@ X-Mailing-List: linux-clk@vger.kernel.org
 
 On Tue, May 10, 2022 at 5:25 AM Jacky Huang <ychuang3@nuvoton.com> wrote:
 >
-> Add the initial device tree files for Nuvoton MA35D1 Soc.
+> This patch series adds initial support for Nuvoton MA35D1 SoC,
+> include initial dts and clock controller binding.
 >
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-> ---
-> +
-> +/ {
-> +       model = "Nuvoton MA35D1-EVB";
-> +       compatible = "nuvoton,ma35d1-evb", "nuvoton,ma35d1";
-> +
-> +       chosen {
-> +               stdout-path = "serial0:115200n8";
-> +       };
 
-Something seems to be missing here: you set the console to the serial0
-alias, but that is not defined anywhere, and the ma35d1.dtsi file does not
-appear to define any UART at all. Are you still missing the driver for this?
+This looks fine in principle, but we are getting close to the merge window and
+should finalize this quickly to make it into v5.19. I see that you don't have a
+console device, as commented in the .dts patch. Normally I prefer merging
+platforms only when there is at least rudimentary support for booting into
+an initramfs with a serial console, but this is a flexible rule.
 
-Please add a more detailed description in the changelog text above that
-explains what kind of SoC this is (maybe a link to the product web page,
-if there is one), and a status of how complete the support is: which drivers
-are already merged, and which ones are still being worked on?
+As with the changelog text for the .dts file, please explain in the [PATCH 0/5]
+cover letter what the status is.
 
-        Arnd
+Regarding continued maintainership, we should discuss how you plan to
+maintain this platform. In particular, there should be an entry in the
+MAINTAINERS
+file for the platform, either pointing to yourself, or adding it to the  NPCM or
+WPCM450 entries if this chip is in the same family. Is this also a BMC
+implementation, or is it something different?
+
+       Arnd
