@@ -2,97 +2,93 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67AF552132E
-	for <lists+linux-clk@lfdr.de>; Tue, 10 May 2022 13:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1480252135F
+	for <lists+linux-clk@lfdr.de>; Tue, 10 May 2022 13:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240405AbiEJLLg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 10 May 2022 07:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53110 "EHLO
+        id S240821AbiEJLSj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 10 May 2022 07:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240720AbiEJLLE (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 10 May 2022 07:11:04 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 514BB53B7A;
-        Tue, 10 May 2022 04:07:07 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.91,214,1647270000"; 
-   d="scan'208";a="120516040"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 10 May 2022 20:07:06 +0900
-Received: from localhost.localdomain (unknown [10.226.92.112])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id DD2CB432529E;
-        Tue, 10 May 2022 20:07:03 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 2/2] clk: renesas: r9a07g044: Add POEG clock and reset entries
-Date:   Tue, 10 May 2022 12:06:53 +0100
-Message-Id: <20220510110653.7326-3-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220510110653.7326-1-biju.das.jz@bp.renesas.com>
-References: <20220510110653.7326-1-biju.das.jz@bp.renesas.com>
+        with ESMTP id S240781AbiEJLSi (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 10 May 2022 07:18:38 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14222A9748
+        for <linux-clk@vger.kernel.org>; Tue, 10 May 2022 04:14:33 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id g20so19561296edw.6
+        for <linux-clk@vger.kernel.org>; Tue, 10 May 2022 04:14:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=4JwYfzCW0d3vVHs2chH50RoPcTXl+p2rYFHpKu+IVW4=;
+        b=AXNP3L1jlNNld+AfYDE4rCUd4CBTBuwdr0eZulRHjY3x0ZZZ3yXH/4Br+OYLJpueaF
+         E7KDyugsHlh4UZMxiMPlvzIhDCejBq4R2lfver50RZoZi9yD7tD3IQSoFCaUB81czw4Y
+         mhJkH8EtXvaOJWcrfqTwxQc4yXs5wvhqCf0QKdvURRn2bGXCi274HJKlEp8RPLcUvQVS
+         DrinH5hNknIK4NOwoVeef7GuWvtRRMvzAgMiDowny8xzM1RDDDty5NBtiL1XplmJtBQc
+         eeaJiG2zvEYyOagJg3P1pA3hCe8eHVCFYItSKsqIM1Rzmebr+avNEyYM6OSqOac44pQj
+         YatA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4JwYfzCW0d3vVHs2chH50RoPcTXl+p2rYFHpKu+IVW4=;
+        b=JRK8iJ37+3EoLr7TuiZ4sJJFiLst+QD8i/+ti4khQKv3ncSdCsH39QrX2CBsvAH9kk
+         VT6CnVxK1Ad56kiePkcxLQK78E9ewHyZJTl+BQ0A1XYvokWa+bG1s5/MvuHdNhs9Epqu
+         845K8d7WtwsxlXblTTnOEPnjSEDQ+b9SCQGX0t+zWEMxlxuEpJzssT9Sw274rRvRQapT
+         1m9GJ9ZAnMlxdaTQRElDVXWYKSvwLsnuYnkc68QQthJQH4DEU70TupuQMzTYGa+XNTOL
+         M76K9eoU6+2eaNME1KxNZN2gGZ/DSGCHpbrUhtx3gHlop77CUSJZUhF6SsDIYWSFAdjO
+         YFZw==
+X-Gm-Message-State: AOAM533UyHqSzBUWYY+VqOcIGOsjW2dFfbBo7QGg4xlYiSTlRRB8VhL1
+        HabOadH/oEG84NA5EvDrgVqhsg==
+X-Google-Smtp-Source: ABdhPJw2may85niAU8fFjZaNm8TxPW3OvlRCJXDNHwFd2/GdAFbmFc7XZO+vX1kHq7qUlyG9Cwm0Ug==
+X-Received: by 2002:aa7:dcc1:0:b0:427:e1ae:d822 with SMTP id w1-20020aa7dcc1000000b00427e1aed822mr22254333edu.353.1652181272297;
+        Tue, 10 May 2022 04:14:32 -0700 (PDT)
+Received: from [192.168.0.251] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id mm27-20020a170906cc5b00b006f3ef214e1csm6020744ejb.130.2022.05.10.04.14.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 May 2022 04:14:31 -0700 (PDT)
+Message-ID: <ea361487-60fa-f4ec-2d26-e8a2ad5590bc@linaro.org>
+Date:   Tue, 10 May 2022 13:14:30 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] clk: vc5: Add support for IDT/Renesas VersaClock
+ 5P49V6975
+Content-Language: en-US
+To:     Matthias Fend <matthias.fend@emfend.at>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220510065150.278349-1-matthias.fend@emfend.at>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220510065150.278349-1-matthias.fend@emfend.at>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add POEG clock and reset entries to CPG driver.
+On 10/05/2022 08:51, Matthias Fend wrote:
+> Update IDT VersaClock 5 driver to support 5P49V6975. The 5P49V6975 is a
+> member of the VersaClock 6E family and supports four fractional dividers
+> (FODs), five clock outputs and an internal oscillator.
+> 
+> Signed-off-by: Matthias Fend <matthias.fend@emfend.at>
+> ---
+>  .../devicetree/bindings/clock/idt,versaclock5.yaml    |  2 ++
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
- drivers/clk/renesas/r9a07g044-cpg.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+Bindings are a separate patch, please.
 
-diff --git a/drivers/clk/renesas/r9a07g044-cpg.c b/drivers/clk/renesas/r9a07g044-cpg.c
-index cd2777abd957..fd7c4eecd398 100644
---- a/drivers/clk/renesas/r9a07g044-cpg.c
-+++ b/drivers/clk/renesas/r9a07g044-cpg.c
-@@ -182,7 +182,7 @@ static const struct {
- };
- 
- static const struct {
--	struct rzg2l_mod_clk common[72];
-+	struct rzg2l_mod_clk common[76];
- #ifdef CONFIG_CLK_R9A07G054
- 	struct rzg2l_mod_clk drp[0];
- #endif
-@@ -206,6 +206,14 @@ static const struct {
- 					0x534, 2),
- 		DEF_MOD("gpt_pclk",	R9A07G044_GPT_PCLK, R9A07G044_CLK_P0,
- 					0x540, 0),
-+		DEF_MOD("poeg_a_clkp",	R9A07G044_POEG_A_CLKP, R9A07G044_CLK_P0,
-+					0x544, 0),
-+		DEF_MOD("poeg_b_clkp",	R9A07G044_POEG_B_CLKP, R9A07G044_CLK_P0,
-+					0x544, 1),
-+		DEF_MOD("poeg_c_clkp",	R9A07G044_POEG_C_CLKP, R9A07G044_CLK_P0,
-+					0x544, 2),
-+		DEF_MOD("poeg_d_clkp",	R9A07G044_POEG_D_CLKP, R9A07G044_CLK_P0,
-+					0x544, 3),
- 		DEF_MOD("wdt0_pclk",	R9A07G044_WDT0_PCLK, R9A07G044_CLK_P0,
- 					0x548, 0),
- 		DEF_MOD("wdt0_clk",	R9A07G044_WDT0_CLK, R9A07G044_OSCCLK,
-@@ -349,6 +357,10 @@ static struct rzg2l_reset r9a07g044_resets[] = {
- 	DEF_RST(R9A07G044_OSTM1_PRESETZ, 0x834, 1),
- 	DEF_RST(R9A07G044_OSTM2_PRESETZ, 0x834, 2),
- 	DEF_RST(R9A07G044_GPT_RST_C, 0x840, 0),
-+	DEF_RST(R9A07G044_POEG_A_RST, 0x844, 0),
-+	DEF_RST(R9A07G044_POEG_B_RST, 0x844, 1),
-+	DEF_RST(R9A07G044_POEG_C_RST, 0x844, 2),
-+	DEF_RST(R9A07G044_POEG_D_RST, 0x844, 3),
- 	DEF_RST(R9A07G044_WDT0_PRESETN, 0x848, 0),
- 	DEF_RST(R9A07G044_WDT1_PRESETN, 0x848, 1),
- 	DEF_RST(R9A07G044_WDT2_PRESETN, 0x848, 2),
--- 
-2.25.1
 
+Best regards,
+Krzysztof
