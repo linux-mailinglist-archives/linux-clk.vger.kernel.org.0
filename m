@@ -2,126 +2,104 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B185229D4
-	for <lists+linux-clk@lfdr.de>; Wed, 11 May 2022 04:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDDB522B34
+	for <lists+linux-clk@lfdr.de>; Wed, 11 May 2022 06:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241365AbiEKCcX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 10 May 2022 22:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
+        id S235372AbiEKEj0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 11 May 2022 00:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242382AbiEKCcJ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 10 May 2022 22:32:09 -0400
-Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E81E960BAA;
-        Tue, 10 May 2022 19:31:41 -0700 (PDT)
-Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
-        by maillog.nuvoton.com (Postfix) with ESMTP id 222F31C80D1F;
-        Wed, 11 May 2022 10:31:41 +0800 (CST)
-Received: from NTHCCAS02.nuvoton.com (10.1.9.121) by NTHCCAS01.nuvoton.com
- (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Wed, 11 May
- 2022 10:31:40 +0800
-Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS02.nuvoton.com
- (10.1.9.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Wed, 11 May
- 2022 10:31:40 +0800
-Received: from [172.19.1.47] (172.19.1.47) by NTHCCAS04.nuvoton.com
- (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Wed, 11 May 2022 10:31:40 +0800
-Message-ID: <f4d77335-262e-479f-3fec-b68ec19a51c4@nuvoton.com>
-Date:   Wed, 11 May 2022 10:31:40 +0800
+        with ESMTP id S235951AbiEKEjW (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 11 May 2022 00:39:22 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD6F14CA01
+        for <linux-clk@vger.kernel.org>; Tue, 10 May 2022 21:39:13 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id j14so755644plx.3
+        for <linux-clk@vger.kernel.org>; Tue, 10 May 2022 21:39:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
+        b=nrkBIDyCffFbQz5WNhQU88q5l+bx8m1CoLNL/nRcxBFZRgp3B2RwRJzpJi69hjmFPQ
+         Eotn36CVTQor8sTwq84btYhQQ+OsypTpYdHIfGkC/Ekjg8a9U0HkQq0T/gbcQg5/if4Y
+         i1yzcJYhTRMm8ny1NIiOYUNRazrfloxlCC/1XVxW2+TG0ItQpx2/G3cXjgMuOALgO1Rc
+         auxKHXwS3ghK6vFFIfR8essc70JXfRi2oIpi3YT/VLqISCMTaVWCOI/Xf0rWfpfTmlnw
+         XgqCFC8jOuHD5AjsEtox3h0b9tzcHlVM0fA1RrJyDFubK9aS707t1BYf/K43qSc4slo4
+         wrQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
+        b=pceHTLO5z0KAY5pxm10VuscJemNB2KEys6ZLfuRGcgMYHl3i/YqgCVqvRIbCuja91C
+         ybnyt+pVPKr2rmYLL9mweOO1/zXs+FQrPnc+01xNvWOWQHKbywd6Jw1czWh96HCIgbQj
+         C5eKpvTbKheZxsYP/ZEtTAEdfrQYN5urzo8yifJwZW8s1nC2ybh+vv8jhE+T0CFIQLub
+         bxZC+u0Ost9hKj9XKxw3kQMIPYuE1p4Oj/MyEjqdBPl2EQkbazCNxIJME8qoOy5ON07b
+         0aJV6bX0ZGBMxTELWOMqlSVVdbXg1ce1/NjsJL1nFGTH0VXe3wO1q0YdfOnzHOXK3ltl
+         1m6w==
+X-Gm-Message-State: AOAM531k1dQ0KHO9PIS9M4GPjQLePYmGihvIesidHcYQpJesT6cT3py5
+        zalnjODmbWeXAePf8/9B/SVWJ3oWu9H778BwxTs=
+X-Google-Smtp-Source: ABdhPJwbKHmbnZDflMHBZCcp2YbZAAZvFdPcM4owWeuPIkoxodmwIZJ+Xpgi08ylB1RFXLrw63SQRxJzumbwJKMTxhs=
+X-Received: by 2002:a17:90b:1007:b0:1dc:9862:68af with SMTP id
+ gm7-20020a17090b100700b001dc986268afmr3261389pjb.205.1652243951499; Tue, 10
+ May 2022 21:39:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V4 0/5] Add initial support for MA35D1 SoC
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        <ychuang570808@gmail.com>, "Rob Herring" <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
-        Olof Johansson <olof@lixom.net>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, SoC Team <soc@kernel.org>,
-        <cfli0@nuvoton.com>
-References: <20220510032558.10304-1-ychuang3@nuvoton.com>
- <CAK8P3a1k8y8U99bBmqBYE1vYAc0q-UeaM0oLP4tTHZCpyYNOgA@mail.gmail.com>
- <d64f260d-8ee6-808a-5725-e1181f104dfe@nuvoton.com>
- <CAK8P3a3UZ_thp=CVeXYwJ57MXxsurr+Y9Ad0bv0EOi4Jn=S+eg@mail.gmail.com>
-From:   Jacky Huang <ychuang3@nuvoton.com>
-In-Reply-To: <CAK8P3a3UZ_thp=CVeXYwJ57MXxsurr+Y9Ad0bv0EOi4Jn=S+eg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a10:319:0:0:0:0 with HTTP; Tue, 10 May 2022 21:39:10
+ -0700 (PDT)
+From:   Private Mail <privatemail1961@gmail.com>
+Date:   Tue, 10 May 2022 21:39:10 -0700
+Message-ID: <CANjAOAiiVcSrSv31FjThCVmeppS54UVvGVj3SRSvMfxOB+T8DA@mail.gmail.com>
+Subject: Have you had this? It is for your Benefit
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.3 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
+        BAYES_50,DEAR_BENEFICIARY,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
+        LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Our Ref: BG/WA0151/2022
 
+Dear Beneficiary
 
-On 2022/5/10 下午 08:45, Arnd Bergmann wrote:
-> On Tue, May 10, 2022 at 10:40 AM Jacky Huang <ychuang3@nuvoton.com> wrote:
->> On 2022/5/10 下午 03:07, Arnd Bergmann wrote:
->>
->> MA35D1 is target at consumer application, while NPCM is for BMC.
->> MA35D1 is equipped with ARM Coretx-A35 dual-core with the M4 co-processor.
->>
->> Our team has developed Linux application on MA35D1 test chip in the last
->> year, and
->> the mass production version is wafer-out in last month. It will be
->> announced soon.
->>
->> We have ported TF-A, U-Boot, OP-TEE, and Linux 5.4.y to MA35D1 platform, and
->> have provided Yocto and Buildroot distribution for beta site evaluation.
->> All the source
->> code can be found at https://apc01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2FOpenNuvoton%2FMPU-Family&amp;data=05%7C01%7Cychuang3%40nuvoton.com%7Cf65d464391574dcf60af08da3282f453%7Ca3f24931d4034b4a94f17d83ac638e07%7C0%7C0%7C637877835284415849%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=b6sopMTwT8XT%2FR76qASvOtqw7zs9Kcp7lIxDw4O9%2FT8%3D&amp;reserved=0, include the
->> Linux 5.4.y porting on MA35D1 platform.
-> Ok, thanks for the information, this is exactly what we need in the
-> changelog text for the platform, and (if you send a pull request)
-> in the tag description.
->
->> Yes, we have console device driver ready. Please refer to
->> https://apc01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2FOpenNuvoton%2FMA35D1_linux-5.4.y%2Fblob%2Fmaster%2Fdrivers%2Ftty%2Fserial%2Fma35d1_serial.c&amp;data=05%7C01%7Cychuang3%40nuvoton.com%7Cf65d464391574dcf60af08da3282f453%7Ca3f24931d4034b4a94f17d83ac638e07%7C0%7C0%7C637877835284415849%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=ULfLkju2X98pXn%2BeCWGrvEgRchIAlv%2FSECx%2BoJzSdWI%3D&amp;reserved=0.
->> But I think we have to fix coding style and have more review on it. Is
->> the console driver must for the initial support submit, or can we submit it later?
-> I would prefer to have it included, but it looks like this has never been
-> reviewed, and I can immediately see a few things that need changes
-> before it can get included, so I suppose we could merge the platform
-> without it.
->
-> The reason I'd like to have it included is that without any I/O devices
-> it is obvious that the code you are sending has never been tested
-> on the kernel version you are sending it against, and that makes it
-> more likely that there are bugs.
->
-> If the platform for some reason does not make it into v5.19, I would
-> ask you to include the serial driver in the series so we can merge
-> a working initial branch for v5.20.
->
-> In the meantime, please post the driver for review to the linux-kernel
-> and linux-serial lists by itself, and keep me on Cc.
->
->> And thank you to remind us to create an entry in MAINTAINERS file. I
->> will add the patch in the next version.
-> Ok.
->
->         Arnd
+Subject: An Estate of US$15.8 Million
 
-Hi Anrd,
+Blount and Griffin Genealogical Investigators specializes in probate
+research to locate missing heirs and beneficiaries to estates in the
+United Kingdom and Europe.
 
-Thanks for your kind help.
-Sure, we will have review on the serial driver and include the serial 
-driver in the next submit.
+We can also help you find wills, obtain copies of certificates, help
+you to administer an estate, as well as calculating how an estate,
+intestacy or trust should be distributed.
 
+You may be entitled to a large pay out for an inheritance in Europe
+worth US$15.8 million. We have discovered an estate belonging to the
+late Depositor has remained unclaimed since he died in 2011 and we
+have strong reasons to believe you are the closest living relative to
+the deceased we can find.
 
-Best Regards,
-Jacky Huang
+You may unknowingly be the heir of this person who died without
+leaving a will (intestate). We will conduct a probate research to
+prove your entitlement, and can submit a claim on your behalf all at
+no risk to yourselves.
 
+Our service fee of 10% will be paid to us after you have received the estate.
 
+The estate transfer process should take just a matter of days as we
+have the mechanism and expertise to get this done very quickly. This
+message may come to you as a shock, however we hope to work with you
+to transfer the estate to you as quickly as possible.
+
+Feel free to email our senior case worker Mr. Malcolm Casey on email:
+malcolmcasey68@yahoo.com for further discussions.
+
+With warm regards,
+
+Mr. Blount W. Gort, CEO.
+Blount and Griffin Associates Inc
