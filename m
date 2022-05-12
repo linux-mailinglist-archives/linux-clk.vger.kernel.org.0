@@ -2,572 +2,150 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB10524608
-	for <lists+linux-clk@lfdr.de>; Thu, 12 May 2022 08:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F127A524669
+	for <lists+linux-clk@lfdr.de>; Thu, 12 May 2022 09:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350573AbiELGkx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 12 May 2022 02:40:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
+        id S1350674AbiELHFX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 12 May 2022 03:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350571AbiELGkS (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 12 May 2022 02:40:18 -0400
-Received: from mx1.cqplus1.com (unknown [113.204.237.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FD51819A9
-        for <linux-clk@vger.kernel.org>; Wed, 11 May 2022 23:39:46 -0700 (PDT)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 172.28.114.216
-        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(26385:0:AUTH_RELAY)
-        (envelope-from <qinjian@cqplus1.com>); Thu, 12 May 2022 14:32:14 +0800 (CST)
-From:   Qin Jian <qinjian@cqplus1.com>
-To:     sboyd@kernel.org
-Cc:     krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
-        mturquette@baylibre.com, tglx@linutronix.de, maz@kernel.org,
-        p.zabel@pengutronix.de, linux@armlinux.org.uk, arnd@arndb.de,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Qin Jian <qinjian@cqplus1.com>
-Subject: [PATCH v15 10/10] ARM: dts: Add Sunplus SP7021-Demo-V3 board device tree
-Date:   Thu, 12 May 2022 14:31:05 +0800
-Message-Id: <daeccdfb9655e549656af0af955a4697871e3ab0.1652329411.git.qinjian@cqplus1.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1652329411.git.qinjian@cqplus1.com>
-References: <cover.1652329411.git.qinjian@cqplus1.com>
+        with ESMTP id S1350731AbiELHEr (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 12 May 2022 03:04:47 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60054.outbound.protection.outlook.com [40.107.6.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC45612A0;
+        Thu, 12 May 2022 00:04:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dYqNe3FHa0ZS5PVIv0oosLXNUrkoQZdULMR00m97GfgDiRiEuwkxOXHx3p6s/H8NZsTX6G0hW0CDFaXZmKxRUa9h6eHAPgAo/xqKCwpgJsO67UEwR4iDbK5YZsaGYLHEr44QOp4B1Jyi0L4BoTcmIHiiq7klVbE8HrO2GBSX4VA5Bn+asKDaZbZG2nKlbM0wwThUMqB1HDJIrBYIHlVBAhmB0RxBB4YbYW1RUa5cwV2OZvjUuCJojQZW7AOfXNiTPs6I48UuNQ08gvo2zfd1vWcEVj27sm5BWO2GddIXRFe/V1Wfgs+8m2g0J0xv8UwCiNcmEXU4psIVjgEN+jZ7fw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AUGgLvWGLp3vL4pp6UrIIvSNJ9DzY9if4T8+JNRtg4k=;
+ b=KxUn+oXh4hrnz1aAj20tKNB5vj4EopgpZFnbqepgyiDqiu7/k/gsEmhPJcdFlR4WibCws3L64YsZqsIvUoWSzzHQusJp3Pag2RmBbax83vT896PVoUsIeNIcBIcy0PsWSrJgyHE/qIWXKNf4etj+SZG/Yq1XJZWgGr5ua+PGy3nKyh4Vbr99gh72tdpZqgnXTfVWbOtswhCumKtVDBpmpJi2NogW2xG8uyMvy4eLSvjkYhvUKwuNjcFYJntNuyvm585EJN/yWYrJTmTQed1J3t7BZb+Y5LodbvNs0fCLemPd2wAzy6bkGswodtlLouKchGTtKaSKgSOJGe8pMqXUiA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AUGgLvWGLp3vL4pp6UrIIvSNJ9DzY9if4T8+JNRtg4k=;
+ b=Wr+LrOTN5p7Knfu88ipe0Sx843OfdU2N0hoUbyXVXM7RixShI360Ngo3zoGY1umWellr6C5bEqDkOb5bjK21bwbc8dT6GMWmarNMY/4fsj7QdfyoePBy4/X/n9ULA38hCUaKyweGffxsF4ervdjV7oR3i4iO8TkRxJfdbqELqr8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
+ by PAXPR04MB9643.eurprd04.prod.outlook.com (2603:10a6:102:241::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5227.22; Thu, 12 May
+ 2022 07:04:40 +0000
+Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::9060:4119:5466:f5d]) by VI1PR04MB4688.eurprd04.prod.outlook.com
+ ([fe80::9060:4119:5466:f5d%3]) with mapi id 15.20.5250.014; Thu, 12 May 2022
+ 07:04:40 +0000
+Date:   Thu, 12 May 2022 10:04:37 +0300
+From:   Abel Vesa <abel.vesa@nxp.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH] clk: imx8mp: fix usb_root_clk parent
+Message-ID: <YnyxhduCou/wU+ue@abelvesa>
+References: <20220507125430.793287-1-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220507125430.793287-1-peng.fan@oss.nxp.com>
+X-ClientProxiedBy: AM5PR0601CA0071.eurprd06.prod.outlook.com
+ (2603:10a6:206::36) To VI1PR04MB4688.eurprd04.prod.outlook.com
+ (2603:10a6:803:6a::30)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9e2a59fa-94bd-4b47-49d4-08da33e5af00
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9643:EE_
+X-Microsoft-Antispam-PRVS: <PAXPR04MB964344E602E193F372F0765BF6CB9@PAXPR04MB9643.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ram19i6JaSGINsI1I9Zn2l89KqnV5dZJjTI4pbAfDcFnNyWJRnB8IEPdmnVxknJAUsKii5vzn1V3/YgwriYCCSpe0C06XN+OPTkn7Iq/KPnB3Xb3hhFn9y/CbSsmlm+tWeJTAMWGQPinguQ2iVewVPGD48NkEZUkchlLPVOrVlBUh4/sdMXI4+InBdQxwYRBZWKoa7D9WwdygS6GNsSnsAfPr2FrAu7913PjH7Rw670NqRrcRtq8jpYMX4wC2/7Pa5DpO/AzFJmQtUcMhw20grB6I7S3zRSs5FyPcKQoklaQu/jQ9gnqMHzF0DMexeRh1qXyRxMsXhvdaIII+IMxMybBHeB268X7lW1cUpTktmHBIH77l3CCuQahnKtWUb7+h3gXQ0bdoOdGD8YyoEBMAUJ6O8CGaGxQ/17feb5x8G5WAHQggbzn8ceRHyt5saO/g+OPF3Zjv75sg71pbXWEFaXpE+Pfo7VM0MJP5bYcjKR6SHFOY+fGmggfyKiinsr6dOn7NkOTO2yiNEakPxGBgyx/Ah4M+5uU/29iPG+ePPu6FfVyA3SVamkabS5Pxcki5J2qpPVn8JM5r4hiQ5zlw8qFKpiSvDICn9Jk6dQrwdFefUC+icAUn/0Xo1ssTO9CRHAz317sjKj8OZfNVFmJy8xjAGKBnPbCIL90rUPmDWKfMPBpwIuw34hzW59tC5xggtO1fJLpZaQsvHw3IHe8mh/Lr/eQEzjcfaKeUoLRCoA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(2906002)(8936002)(33716001)(44832011)(5660300002)(66556008)(8676002)(66946007)(66476007)(6862004)(4326008)(186003)(83380400001)(86362001)(38350700002)(38100700002)(9686003)(6486002)(53546011)(6506007)(26005)(316002)(52116002)(6666004)(6512007)(508600001)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1rexKTgAeo4KURcD3YqIznAgVadBvchGBFT9s75CnPB0Sgk1Pg+lE2sX8U+l?=
+ =?us-ascii?Q?GTdVf6Z4H3vObMp+BiAtpHjSSpwIEuFynBQZfc+KQWPm5vLpFbuAvgyLsrCs?=
+ =?us-ascii?Q?HbwJZeCnKvCXSVXNZOs58OufIMoJIgLUkUATEjp/PXZyqXrRx2Az6RUbpHW5?=
+ =?us-ascii?Q?C+j5xUgb8sfX8NAEEmaTytzCR2hMtnsnNlpe5qC30fcEX/Fl99hoZk4KZ5Ad?=
+ =?us-ascii?Q?mHlVUiPEz8XYvvrCskMRWFWW7KYgpNmGI219mpYgdypAGtzTE/ay4J7kmPuZ?=
+ =?us-ascii?Q?cKTPiPFw6yDIQ27Txwmi5l+Z0f7C4UcLoVZMeI//759kPM7tJMmXaQW2DnLZ?=
+ =?us-ascii?Q?5OLueAE7E0QgpRkPOetP2TGyVsHNSfP8SzKBIhgEtvv2ry/YfTTTIsobWEuY?=
+ =?us-ascii?Q?ACP/qpiENIjpA+JDnyC1tbH8JYI+QEUtSVcslYg11KxxejfsvRAMsn0yqfdu?=
+ =?us-ascii?Q?UxnivlRLjN6U6ykJHeazPt1K2nE6lTQ44RAkBvpyIbkqWsRPEQ2Lh09KRKCI?=
+ =?us-ascii?Q?EA0wfecbpgDMQ2C9rJbx/YRACUo1B6RFDhVJuZm/uAwdpXeHtJ1C4M4W65Aj?=
+ =?us-ascii?Q?6hpXCb0LM+kNxLLArrdRprR/K4iwOGRiNBOQuODQJ7bH7kThYO5g1sL5Ns2M?=
+ =?us-ascii?Q?7Sb+iyYvTGnQ+Eui/eM1ELNW9R01clez/jkVFuhVBAj5zgAZNsK6slLZJG8j?=
+ =?us-ascii?Q?ya1T9Pc06Esv72cShLX6FEBBkSuIsfzGlZWRxoZbY4+7cXDTB1LCufQimPly?=
+ =?us-ascii?Q?eWUlfboZuZrnukitAygEftULXU3CTW84YYzLf4X5ykw1z4FokZcaYdQp3hLX?=
+ =?us-ascii?Q?QnOQJtnTaXTC2/eln/o6VuOV8nnN6B2L2zaSg+jPusUjx3w6NrFY5jnEchdA?=
+ =?us-ascii?Q?242Eu/Xtlnmt2ESK6av5AzSwbdMq1ipfqwSopqT3pRBimc8usiAA96JAMBes?=
+ =?us-ascii?Q?gblvRIYqJ+4EiIvhnWmEKg0r77IrLxWdHu01fPuOmBVokMiEOl4wWcRivz1f?=
+ =?us-ascii?Q?uRABrLVVWp2mARKNgimNLmVm8L7AZbCCdc6CYwCe8/jPRnvgFqXm+1x6B7mo?=
+ =?us-ascii?Q?PIzCinWpeFqA4FScaZUuv49E6vfkcawCmnIqGKxcndVSUcYIn99daxQqe88l?=
+ =?us-ascii?Q?6elIRtEB/3Moe5nhlVqxydBQwDvS8Nh8NLj+Mu9hsxhgGazOK1qR7bhqWtTs?=
+ =?us-ascii?Q?kbfv/sdEFh4o+xVlvadTSHtKhji3VYvSg3FmMWWnUmHX3nDzAkpYZmvE4lcI?=
+ =?us-ascii?Q?bBYmhs2ZgOKyzgcd3k2JSpfbbVtQ0PaaBw48D6AulgoSiGOxBhUNJRb7NaHo?=
+ =?us-ascii?Q?2vGjfm4tqAIOo10Km/EJU8p3tL+CQZRK9DySaXlC5zEboFF277XSB4MSyFnK?=
+ =?us-ascii?Q?ThW6jZtEm0VoI5YlrTVevVA1WK3/L9VZ/4cOb/0fa+wMmEDl5Fqf8z7N23MV?=
+ =?us-ascii?Q?QCdNu9S5H8pInGlr0+Wce33GT0TsKo2VM/3Wrp4DK1QOJ+dL50hARZ1Oj8h1?=
+ =?us-ascii?Q?P/Yzik7Zd/b4p7qQScQa1Ly0XKtiZpqZniAX1FE548vALzUcZqE0AoVIzhOp?=
+ =?us-ascii?Q?qeDioQ65XJT5cSXWdh+0Uu4LZCATqvfG95vF5g7hEbHjM1sEittLrvEytLVm?=
+ =?us-ascii?Q?HfD2O0LBKs7YOGPx7AwHvg6Ij6tsLS7/GY0qVTGAGzylhTxydtLhjN9E7CAr?=
+ =?us-ascii?Q?7NmW2BZSkh6rqniKLL5NpUXoLF4CKiFY6Z6gQOuC2rjowezuLX/D2ovGfDaR?=
+ =?us-ascii?Q?BDMQxwgsjQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e2a59fa-94bd-4b47-49d4-08da33e5af00
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2022 07:04:40.4155
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VQvNqjHUktdfbP2vU0n4qNbC0I0uJVCVh1hHbGnmqWRPflALoKulHDM1Yvx5lUvZvYLHMRlaqO+aizlpXybYfA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9643
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add the basic support for Sunplus SP7021-Demo-V3 board.
+On 22-05-07 20:54:30, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> According to reference mannual CCGR77(usb) sources from hsio_axi, fix
+> it.
+>
+> Fixes: 9c140d9926761 ("clk: imx: Add support for i.MX8MP clock driver")
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-Signed-off-by: Qin Jian <qinjian@cqplus1.com>
----
- MAINTAINERS                                  |   1 +
- arch/arm/boot/dts/sunplus-sp7021-achip.dtsi  |  85 +++++
- arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts |  27 ++
- arch/arm/boot/dts/sunplus-sp7021.dtsi        | 369 +++++++++++++++++++
- 4 files changed, 482 insertions(+)
- create mode 100644 arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
- create mode 100644 arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts
- create mode 100644 arch/arm/boot/dts/sunplus-sp7021.dtsi
+Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9cf30e776..b55ec0768 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2747,6 +2747,7 @@ F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
- F:	Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
- F:	Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
- F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
-+F:	arch/arm/boot/dts/sunplus-sp7021*.dts*
- F:	arch/arm/configs/sp7021_*defconfig
- F:	arch/arm/mach-sunplus/
- F:	drivers/clk/clk-sp7021.c
-diff --git a/arch/arm/boot/dts/sunplus-sp7021-achip.dtsi b/arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
-new file mode 100644
-index 000000000..1560c95d9
---- /dev/null
-+++ b/arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree Source for Sunplus SP7021
-+ *
-+ * Copyright (C) 2021 Sunplus Technology Co.
-+ */
-+
-+#include "sunplus-sp7021.dtsi"
-+
-+/ {
-+	compatible = "sunplus,sp7021-achip";
-+	model = "Sunplus SP7021 (CA7)";
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+	interrupt-parent = <&gic>;
-+
-+	clocks {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		extclk: clk@osc0 {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <27000000>;
-+			clock-output-names = "extclk";
-+		};
-+
-+		divextclk: clk@0 {
-+			compatible = "fixed-factor-clock";
-+			#clock-cells = <0>;
-+			clocks  = <&extclk>;
-+			clock-mult = <1>;
-+			clock-div = <2>;
-+			clock-output-names = "extdivclk";
-+		};
-+
-+		A_pll0: clk@A_pll0 {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <2000000000>;
-+			clock-output-names = "A_pll0";
-+		};
-+	};
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu0: cpu@0 {
-+			compatible = "arm,cortex-a7";
-+			device_type = "cpu";
-+			reg = <0>;
-+			clock-frequency = <931000000>;
-+		};
-+		cpu1: cpu@1 {
-+			compatible = "arm,cortex-a7";
-+			device_type = "cpu";
-+			reg = <1>;
-+			clock-frequency = <931000000>;
-+		};
-+		cpu2: cpu@2 {
-+			compatible = "arm,cortex-a7";
-+			device_type = "cpu";
-+			reg = <2>;
-+			clock-frequency = <931000000>;
-+		};
-+		cpu3: cpu@3 {
-+			compatible = "arm,cortex-a7";
-+			device_type = "cpu";
-+			reg = <3>;
-+			clock-frequency = <931000000>;
-+		};
-+	};
-+
-+	arm-pmu {
-+		compatible = "arm,cortex-a7-pmu";
-+		interrupts = <GIC_SPI 219 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 220 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 221 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 222 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-affinity = <&cpu0>, <&cpu1>, <&cpu2>, <&cpu3>;
-+	};
-+
-+};
-diff --git a/arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts b/arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts
-new file mode 100644
-index 000000000..05e164115
---- /dev/null
-+++ b/arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree Source for Sunplus SP7021 Demo V3 SBC board
-+ *
-+ * Copyright (C) Sunplus Technology Co.
-+ */
-+
-+/dts-v1/;
-+
-+#include "sunplus-sp7021-achip.dtsi"
-+
-+/ {
-+	compatible = "sunplus,sp7021-demo-v3";
-+	model = "SP7021/CA7/Demo_V3";
-+	#address-cells = <1>;
-+	#size-cells = <1>;
-+
-+	chosen {
-+		bootargs = "console=ttyS0,115200 loglevel=8 earlycon";
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	memory {
-+		device_type = "memory";
-+		reg = <0x00000000 0x20000000>;
-+	};
-+};
-diff --git a/arch/arm/boot/dts/sunplus-sp7021.dtsi b/arch/arm/boot/dts/sunplus-sp7021.dtsi
-new file mode 100644
-index 000000000..4777abdce
---- /dev/null
-+++ b/arch/arm/boot/dts/sunplus-sp7021.dtsi
-@@ -0,0 +1,369 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree Source for Sunplus SP7021
-+ *
-+ * Copyright (C) 2021 Sunplus Technology Co.
-+ */
-+
-+#include <dt-bindings/clock/sunplus,sp7021-clkc.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/reset/sunplus,sp7021-reset.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/pinctrl/sppctl-sp7021.h>
-+
-+/ {
-+	compatible = "sunplus,sp7021";
-+	model = "Sunplus SP7021";
-+
-+	aliases {
-+		serial0 = &uart0;
-+		serial1 = &uart1;
-+		serial2 = &uart2;
-+		serial3 = &uart3;
-+		serial4 = &uart4;
-+	};
-+
-+	soc@A {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+		interrupt-parent = <&gic>;
-+
-+		gic: interrupt-controller@CPU {
-+			compatible = "arm,cortex-a7-gic";
-+			interrupt-controller;
-+			#interrupt-cells = <3>;
-+			reg = <0x9f101000 0x1000>,
-+			      <0x9f102000 0x2000>,
-+			      <0x9f104000 0x2000>,
-+			      <0x9f106000 0x2000>;
-+		};
-+
-+		timer: timer@CPU {
-+			compatible = "arm,armv7-timer";
-+			interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+				     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+				     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+				     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
-+			clock-frequency = <27000000>;
-+			arm,cpu-registers-not-fw-configured;
-+		};
-+	};
-+
-+	soc@B {
-+		compatible = "simple-bus";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+		interrupt-parent = <&intc>;
-+
-+		intc: interrupt-controller@9c000780 {
-+			compatible = "sunplus,sp7021-intc";
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+			reg = <0x9c000780 0x80>, <0x9c000a80 0x80>;
-+			interrupt-parent = <&gic>;
-+			interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>, /* EXT_INT0 */
-+				     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>; /* EXT_INT1 */
-+		};
-+
-+		clkc: clock-controller@9c000000 {
-+			compatible = "sunplus,sp7021-clkc";
-+			reg = <0x9c000000 0x280>;
-+			#clock-cells = <1>;
-+			clocks = <&extclk>;
-+		};
-+
-+		rstc: reset@9c000054 {
-+			compatible = "sunplus,sp7021-reset";
-+			reg = <0x9c000054 0x28>;
-+			#reset-cells = <1>;
-+		};
-+
-+		rtc: serial@9c003a00 {
-+			compatible = "sunplus,sp7021-rtc";
-+			reg = <0x9c003a00 0x80>;
-+			reg-names = "rtc";
-+			clocks = <&clkc CLK_RTC>;
-+			resets = <&rstc RST_RTC>;
-+			interrupt-parent = <&intc>;
-+			interrupts = <163 IRQ_TYPE_EDGE_RISING>;
-+		};
-+
-+		otp: otp@9c00af00 {
-+			compatible = "sunplus,sp7021-ocotp";
-+			reg = <0x9c00af00 0x34>, <0x9c00af80 0x58>;
-+			reg-names = "hb_gpio", "otprx";
-+			clocks = <&clkc CLK_OTPRX>;
-+			resets = <&rstc RST_OTPRX>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			therm_calib: thermal-calibration@14 {
-+				reg = <0x14 0x3>;
-+			};
-+			disc_vol: disconnect-voltage@18 {
-+				reg = <0x18 0x2>;
-+			};
-+			mac_addr0: mac-address0@34 {
-+				reg = <0x34 0x6>;
-+			};
-+			mac_addr1: mac-address1@3a {
-+				reg = <0x3a 0x6>;
-+			};
-+		};
-+
-+		led {
-+			compatible = "gpio-leds";
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&leds_pins>;
-+			system-led {
-+				label = "system-led";
-+				gpios = <&pctl 0 GPIO_ACTIVE_HIGH>;
-+				default-state = "off";
-+				linux,default-trigger = "heartbeat";
-+			};
-+		};
-+
-+		uart0: serial@9c000900 {
-+			compatible = "sunplus,sp7021-uart";
-+			reg = <0x9c000900 0x80>;
-+			interrupt-parent = <&intc>;
-+			interrupts = <53 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clkc CLK_UA0>;
-+			resets = <&rstc RST_UA0>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart0_pins>;
-+		};
-+
-+		uart1: serial@9c000980 {
-+			compatible = "sunplus,sp7021-uart";
-+			reg = <0x9c000980 0x80>;
-+			interrupt-parent = <&intc>;
-+			interrupts = <54 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clkc CLK_UA1>;
-+			resets = <&rstc RST_UA1>;
-+			status = "disabled";
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart1_pins>;
-+		};
-+
-+		uart2: serial@9c000800 {
-+			compatible = "sunplus,sp7021-uart";
-+			reg = <0x9c000800 0x80>;
-+			interrupt-parent = <&intc>;
-+			interrupts = <55 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clkc CLK_UA2>;
-+			resets = <&rstc RST_UA2>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart2_pins>;
-+			status = "disabled";
-+		};
-+
-+		uart3: serial@9c000880 {
-+			compatible = "sunplus,sp7021-uart";
-+			reg = <0x9c000880 0x80>;
-+			interrupt-parent = <&intc>;
-+			interrupts = <56 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clkc CLK_UA3>;
-+			resets = <&rstc RST_UA3>;
-+			status = "disabled";
-+		};
-+
-+		uart4: serial@9c008780 {
-+			compatible = "sunplus,sp7021-uart";
-+			reg = <0x9c008780 0x80>;
-+			interrupt-parent = <&intc>;
-+			interrupts = <134 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clkc CLK_UA4>;
-+			resets = <&rstc RST_UA4>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&uart4_pins>;
-+			status = "disabled";
-+		};
-+
-+		spi_controller0: spi@9c002d80 {
-+			compatible = "sunplus,sp7021-spi";
-+			reg = <0x9c002d80 0x80>, <0x9c002e00 0x80>;
-+			reg-names = "master", "slave";
-+			interrupt-parent = <&intc>;
-+			interrupt-names = "dma_w",
-+					  "master_risc",
-+					  "slave_risc";
-+			interrupts = <144 IRQ_TYPE_LEVEL_HIGH>,
-+				     <146 IRQ_TYPE_LEVEL_HIGH>,
-+				     <145 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clkc CLK_SPI_COMBO_0>;
-+			resets = <&rstc RST_SPI_COMBO_0>;
-+
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&spi0_pins>;
-+			cs-gpios = <&pctl 26 GPIO_ACTIVE_LOW>, <&pctl 28 GPIO_ACTIVE_LOW>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			spi@0 {
-+				compatible = "rohm,dh2228fv";
-+				spi-max-frequency = <5000000>;
-+				reg = <0x0>;
-+				status = "okay";
-+			};
-+			spi@1 {
-+				compatible = "rohm,dh2228fv";
-+				spi-max-frequency = <5000000>;
-+				reg = <0x1>;
-+				status = "okay";
-+			};
-+		};
-+
-+		spi_controller1: spi@9c00f480 {
-+			compatible = "sunplus,sp7021-spi";
-+			reg = <0x9c00f480 0x80>, <0x9c00f500 0x80>;
-+			reg-names = "master", "slave";
-+			interrupt-parent = <&intc>;
-+			interrupt-names = "dma_w",
-+					  "master_risc",
-+					  "slave_risc";
-+			interrupts = <67 IRQ_TYPE_LEVEL_HIGH>,
-+				     <69 IRQ_TYPE_LEVEL_HIGH>,
-+				     <68 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clkc CLK_SPI_COMBO_1>;
-+			resets = <&rstc RST_SPI_COMBO_1>;
-+			spi-max-frequency = <25000000>;
-+			status = "disabled";
-+		};
-+
-+		spi_controller2: spi@9c00f600 {
-+			compatible = "sunplus,sp7021-spi";
-+			reg = <0x9c00f600 0x80>, <0x9c00f680 0x80>;
-+			reg-names = "master", "slave";
-+			interrupt-parent = <&intc>;
-+			interrupt-names = "dma_w",
-+					  "master_risc",
-+					  "slave_risc";
-+			interrupts = <70 IRQ_TYPE_LEVEL_HIGH>,
-+				     <72 IRQ_TYPE_LEVEL_HIGH>,
-+				     <71 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clkc CLK_SPI_COMBO_2>;
-+			resets = <&rstc RST_SPI_COMBO_2>;
-+			spi-max-frequency = <25000000>;
-+			status = "disabled";
-+		};
-+
-+		spi_controller3: spi@9c00f780 {
-+			compatible = "sunplus,sp7021-spi";
-+			reg = <0x9c00f780 0x80>, <0x9c00f800 0x80>;
-+			reg-names = "master", "slave";
-+			interrupt-parent = <&intc>;
-+			interrupt-names = "dma_w",
-+					  "master_risc",
-+					  "slave_risc";
-+			interrupts = <73 IRQ_TYPE_LEVEL_HIGH>,
-+				     <75 IRQ_TYPE_LEVEL_HIGH>,
-+				     <74 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clkc CLK_SPI_COMBO_3>;
-+			resets = <&rstc RST_SPI_COMBO_3>;
-+			spi-max-frequency = <25000000>;
-+			status = "disabled";
-+		};
-+
-+		pctl: pinctl@9c000100 {
-+			compatible = "sunplus,sp7021-pctl";
-+			reg = <0x9C000100 0x100>,
-+			      <0x9C000300 0x100>,
-+			      <0x9C0032e4 0x1C>,
-+			      <0x9C000080 0x20>;
-+			reg-names = "moon2", "gpioxt", "first", "moon1";
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			clocks = <&clkc CLK_GPIO>;
-+			resets = <&rstc RST_GPIO>;
-+			pinctrl-names = "default";
-+
-+			leds_pins: pinmux_gpio_leds-pins {
-+				sunplus,pins = < SPPCTL_IOPAD(0,SPPCTL_PCTL_G_GPIO,0,SPPCTL_PCTL_L_OUT) >;
-+			};
-+
-+			emmc_pins: emmc-pins {
-+				function = "CARD0_EMMC";
-+				groups = "CARD0_EMMC";
-+			};
-+
-+			sdcard-pins {
-+				function = "SD_CARD";
-+				groups = "SD_CARD";
-+				sunplus,pins = < SPPCTL_IOPAD(91, SPPCTL_PCTL_G_GPIO, 0, 0) >;
-+			};
-+
-+			emac_pins: pinmux_emac_demo_board_v3-pins {
-+				sunplus,pins = <
-+					SPPCTL_IOPAD(49,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_CLK_OUT,0)
-+					SPPCTL_IOPAD(44,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_MAC_SMI_MDC,0)
-+					SPPCTL_IOPAD(43,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_MAC_SMI_MDIO,0)
-+					SPPCTL_IOPAD(52,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P0_MAC_RMII_TXEN,0)
-+					SPPCTL_IOPAD(50,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P0_MAC_RMII_TXD0,0)
-+					SPPCTL_IOPAD(51,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P0_MAC_RMII_TXD1,0)
-+					SPPCTL_IOPAD(46,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P0_MAC_RMII_CRSDV,0)
-+					SPPCTL_IOPAD(47,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P0_MAC_RMII_RXD0,0)
-+					SPPCTL_IOPAD(48,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P0_MAC_RMII_RXD1,0)
-+					SPPCTL_IOPAD(45,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P0_MAC_RMII_RXER,0)
-+					SPPCTL_IOPAD(59,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P1_MAC_RMII_TXEN,0)
-+					SPPCTL_IOPAD(57,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P1_MAC_RMII_TXD0,0)
-+					SPPCTL_IOPAD(58,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P1_MAC_RMII_TXD1,0)
-+					SPPCTL_IOPAD(54,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P1_MAC_RMII_CRSDV,0)
-+					SPPCTL_IOPAD(55,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P1_MAC_RMII_RXD0,0)
-+					SPPCTL_IOPAD(56,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P1_MAC_RMII_RXD1,0)
-+					SPPCTL_IOPAD(53,SPPCTL_PCTL_G_PMUX,MUXF_L2SW_P1_MAC_RMII_RXER,0)
-+				>;
-+				sunplus,zerofunc = <
-+					MUXF_L2SW_LED_FLASH0
-+					MUXF_L2SW_LED_FLASH1
-+					MUXF_L2SW_LED_ON0
-+					MUXF_L2SW_LED_ON1
-+					MUXF_DAISY_MODE
-+				>;
-+			};
-+
-+			uart0_pins: pinmux_uart0-pins {
-+				function = "UA0";
-+				groups = "UA0";
-+			};
-+
-+			uart1_pins: pinmux_uart1-pins {
-+				sunplus,pins = <
-+					SPPCTL_IOPAD(14,SPPCTL_PCTL_G_PMUX,MUXF_UA4_TX,0)
-+					SPPCTL_IOPAD(16,SPPCTL_PCTL_G_PMUX,MUXF_UA4_RX,0)
-+				>;
-+			};
-+
-+			uart2_pins: pinmux_uart2-pins {
-+				sunplus,pins = <
-+					SPPCTL_IOPAD(16,SPPCTL_PCTL_G_PMUX,MUXF_UA2_TX,0)
-+					SPPCTL_IOPAD(17,SPPCTL_PCTL_G_PMUX,MUXF_UA2_RX,0)
-+					SPPCTL_IOPAD(18,SPPCTL_PCTL_G_PMUX,MUXF_UA2_RTS,0)
-+					SPPCTL_IOPAD(19,SPPCTL_PCTL_G_PMUX,MUXF_UA2_CTS,0)
-+				>;
-+			};
-+
-+			uart4_pins: pinmux_uart4-pins {
-+				sunplus,pins = <
-+					SPPCTL_IOPAD(22,SPPCTL_PCTL_G_PMUX,MUXF_UA4_TX,0)
-+					SPPCTL_IOPAD(20,SPPCTL_PCTL_G_PMUX,MUXF_UA4_RX,0)
-+					SPPCTL_IOPAD(23,SPPCTL_PCTL_G_PMUX,MUXF_UA4_RTS,0)
-+					SPPCTL_IOPAD(21,SPPCTL_PCTL_G_PMUX,MUXF_UA4_CTS,0)
-+				>;
-+			};
-+
-+			spi0_pins: pinmux_spi0-pins {
-+				sunplus,pins = <
-+					SPPCTL_IOPAD(26,SPPCTL_PCTL_G_GPIO,0,0)
-+					SPPCTL_IOPAD(28,SPPCTL_PCTL_G_GPIO,0,0)
-+					SPPCTL_IOPAD(23,SPPCTL_PCTL_G_PMUX,MUXF_SPI0S_DO,0)
-+					SPPCTL_IOPAD(25,SPPCTL_PCTL_G_PMUX,MUXF_SPI0S_DI,0)
-+					SPPCTL_IOPAD(27,SPPCTL_PCTL_G_PMUX,MUXF_SPI0S_CLK,0)
-+				>;
-+			};
-+		};
-+	};
-+};
--- 
-2.33.1
-
+> ---
+>  drivers/clk/imx/clk-imx8mp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
+> index ba058fbccecc..e89db568f5a8 100644
+> --- a/drivers/clk/imx/clk-imx8mp.c
+> +++ b/drivers/clk/imx/clk-imx8mp.c
+> @@ -673,7 +673,7 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
+>  	hws[IMX8MP_CLK_UART2_ROOT] = imx_clk_hw_gate4("uart2_root_clk", "uart2", ccm_base + 0x44a0, 0);
+>  	hws[IMX8MP_CLK_UART3_ROOT] = imx_clk_hw_gate4("uart3_root_clk", "uart3", ccm_base + 0x44b0, 0);
+>  	hws[IMX8MP_CLK_UART4_ROOT] = imx_clk_hw_gate4("uart4_root_clk", "uart4", ccm_base + 0x44c0, 0);
+> -	hws[IMX8MP_CLK_USB_ROOT] = imx_clk_hw_gate4("usb_root_clk", "osc_32k", ccm_base + 0x44d0, 0);
+> +	hws[IMX8MP_CLK_USB_ROOT] = imx_clk_hw_gate4("usb_root_clk", "hsio_axi", ccm_base + 0x44d0, 0);
+>  	hws[IMX8MP_CLK_USB_PHY_ROOT] = imx_clk_hw_gate4("usb_phy_root_clk", "usb_phy_ref", ccm_base + 0x44f0, 0);
+>  	hws[IMX8MP_CLK_USDHC1_ROOT] = imx_clk_hw_gate4("usdhc1_root_clk", "usdhc1", ccm_base + 0x4510, 0);
+>  	hws[IMX8MP_CLK_USDHC2_ROOT] = imx_clk_hw_gate4("usdhc2_root_clk", "usdhc2", ccm_base + 0x4520, 0);
+> --
+> 2.25.1
+>
