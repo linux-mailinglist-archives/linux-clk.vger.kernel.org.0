@@ -2,50 +2,50 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20DC15251E4
-	for <lists+linux-clk@lfdr.de>; Thu, 12 May 2022 18:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6AC05251DE
+	for <lists+linux-clk@lfdr.de>; Thu, 12 May 2022 18:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356192AbiELQEq (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 12 May 2022 12:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55614 "EHLO
+        id S1355992AbiELQEm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 12 May 2022 12:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356231AbiELQE1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 12 May 2022 12:04:27 -0400
+        with ESMTP id S1356234AbiELQEa (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 12 May 2022 12:04:30 -0400
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799EB2655FE
-        for <linux-clk@vger.kernel.org>; Thu, 12 May 2022 09:04:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5DE26607D
+        for <linux-clk@vger.kernel.org>; Thu, 12 May 2022 09:04:27 -0700 (PDT)
 Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id DDF6B5C0166;
-        Thu, 12 May 2022 12:04:24 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 12 May 2022 12:04:24 -0400
+        by mailout.nyi.internal (Postfix) with ESMTP id CE9345C01D8;
+        Thu, 12 May 2022 12:04:26 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Thu, 12 May 2022 12:04:26 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1652371464; x=1652457864; bh=Fn
-        INeXDpqfZQvnpUMeGwCH8/C3Q8pUUmHAC9Sd1qMJg=; b=QciwLz5zCOab7sOaSF
-        IYjHgT+Ims4+xxRWmo4OZdxL2uRQSaCbT4WGsl1j+IsHxKusmoYdtFuh4peulLis
-        SpeoiFadx4a8OAq+BU3sdhSXPEcRs6K9Iq7s5SOluiocgygJz4h30jziUUoBqKV9
-        i/rf7M0ZaHwSuAvqFr/OUxLoRttBd2eaFY21aeYIX10rswIYG9CjczeEzBTZZ4cY
-        RF8Uagonjrl1ZSrM/smyt1qqic/naoV0o3CNl0kMgFBQms1AnujXIDrc+nQwa90Y
-        L3Qyj6RcOKtVSe3otqC8kb+DeBp/UbJZOInaQWZzDlR4d2pt5kpYnflPRjYVLHZ5
-        UERw==
+        :subject:subject:to:to; s=fm3; t=1652371466; x=1652457866; bh=SG
+        8KiB0JOs0eJtOyi8iWf1V92E7PeQYfPsv+1aCaOFI=; b=HB0sCCHP2LHj2SjbA5
+        Ax050xhH014bfDqTtV0n4LOJqU8kLkBA4RpDaMBM+7eHzwSAs9nQU1oMqf5D0E9i
+        YYDNcuOGPOmFHjb1Qu7dGTq65QtyCBSBuRIK2BvhYJgdTKyzYOJ2beWAUPgbOHfI
+        Yds0kChCp1mS/mgSonBCXyIk2+/H0bqpKmBN92cUGgiIMwBP6pzvW9UOJ2Jp1UCw
+        ZeNbfiGIl8Nc2dUs2q6av11IRQBp5WijA6/0Vnrs3KOhjouwWEOBwgLMF4evwcBk
+        xpJI9FOAk5BE9qd56M6JNNgQtTS4+8x6dF6DGiK+2PV/3lhcKuCacUCb7UbQlCFB
+        R3gw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to:x-me-proxy
         :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1652371464; x=1652457864; bh=FnINeXDpqfZQvnpUMeGwCH8/C3Q8pUUmHAC
-        9Sd1qMJg=; b=pSK5iC+oX65JzfhciFpj4QFTLgeITme/jDNcsbuOZ+VIabqQqPj
-        Pz9fWQKgRwZEmAnAB5VHwH9LqQ0LuTssfAL9TYa5aDmSZ9g/RACaTt9L+2gZrjzK
-        GVolthbOr1qY/Dj+XdLwhKzJRgnE9v12VEEHrp6Ev0AnW0kRVEinoZTVo/4qXfYO
-        Y6RKUM3GI4GzHEmTuTgPdA2JLoEAo2YFjJcdULdkagrjcLrgI2ZWfkHGR6kPuvcr
-        J3snrgtQX8vlvW3mvDGm7/ZXOy1pKUAS/upGE1wuKUYtu7Kt0Q+BKd2tSFpm6cnm
-        6g0Q3otE33aI1fOKOS8mbBRv/zRT6ZBTETg==
-X-ME-Sender: <xms:CDB9Ysd_7dtXXabTozOe-kANUpv80hVzaQe0vOGa48yg2JPSc1wZ7A>
-    <xme:CDB9YuNNVqoWRLz-tVwZx2_ziOuOwXJEaEU0sSAZdcfY3ewppXcci5hBVXzAbn9-w
-    tPVDF_LxGwOFKw397Y>
-X-ME-Received: <xmr:CDB9YthzXa-Ya50xlNC9M1bysdIWAZKikV7ZCHiaCyXkmflx8oRxZTtnfMVnV5xNwmqSLJ45p8IpB33nSoQpBaopiJ7S8vIzz-ilYPg>
+        1652371466; x=1652457866; bh=SG8KiB0JOs0eJtOyi8iWf1V92E7PeQYfPsv
+        +1aCaOFI=; b=oG9yqLK2iUPTPmehsxo+rbwIeLBwBeE/4q6gfqRk98ZcZ2qo0iw
+        +GFap338Q77a4j3HTLSRiLtaYQI1LRP/ltBMszzBINa7Lr4V3ZJ9hGg/HWGC9pdK
+        Avb6ca8MG44KNAkLi4JHPewAJEoGkHy1sDPZ+56vMVCVGLV2sHGHJ8ffjg8eqznF
+        DX/TUix34t/f2duhNqfXRrB2Qu+ruov4dOgY2wQmaxxbKJHERTBxqtGYoyG1iPgb
+        QnPPjJ4Uc3T/KIFi7qefRP+xtWwhKlSkP1gV9No3ehBbctRf0HOO/nEW+vukBLlI
+        MwNLMY+YCwo4sYoRVagZEupQDjUwHNhR7Ww==
+X-ME-Sender: <xms:CjB9YrBswasXk8AAuVItz8tjZCC5Rp3YOkNOqb5OBZ9ptYZAWKW1Ww>
+    <xme:CjB9YhiDNwMa3pnS1MFgScXPeVQew6J8CTPujpSmrZJcqQanDEQf5c1PlM6Ui85eU
+    etQizStn0m2YFjtbc8>
+X-ME-Received: <xmr:CjB9Ymm56t_cJduFsbpMAUI40suDTTda4r-WDwW3J_Dq0FXPCHfkkoEQQQCvkHhx8Wxqm3RLCDlQo9PP6P_FU1mixyPWV6-fFty3exI>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgeejgdelgecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
@@ -54,12 +54,12 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgeejgdelgecutefuodetggdote
     htvghrnhepleekfeetudfhkeejiefhtedugfeuvdevkeekteetkefhkefhtdelgfefuddv
     jefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
     grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:CDB9Yh_P4QAShi7_V9zPdpPHLHDnxJTaFGgvHywUJusMpgxpiRKt1Q>
-    <xmx:CDB9YovOEk_DSttKeJ5UWKP3rzKmber08gELggJm5jygKb3RpWWAsg>
-    <xmx:CDB9YoFvnQOvmP4_SleQFnrq5NLR0XlDkiz0ByaXvwR7huGij1umjw>
-    <xmx:CDB9YpkZxoCcyoEP-Ka7gR0vmTqwPxC6ysPi-chLfAsjuEkAq5yVbA>
+X-ME-Proxy: <xmx:CjB9YtyzNHku60MhMTbeMO4qOepqNqme_hWTh2ROB0-Fk64AybUTRQ>
+    <xmx:CjB9YgQBHMh8DoubHGXNW9sbR0ejPY-DfndlIbv89oO9C4dOQARcRQ>
+    <xmx:CjB9YgajbEUv0oTW9nenFXE3dCSMBewUTHs-MixBfwm-cQTyr9ZizA>
+    <xmx:CjB9YlLcVI3B86TKw_0KnqTEy1eeJ-AApg3H6PordRLfKtWZ6c3-eg>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 12 May 2022 12:04:24 -0400 (EDT)
+ 12 May 2022 12:04:26 -0400 (EDT)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     Mike Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
@@ -72,9 +72,9 @@ Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
         Tony Lindgren <tony@atomide.com>,
         Neil Armstrong <narmstrong@baylibre.com>,
         Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v4 03/28] clk: Introduce clk_get_rate_range()
-Date:   Thu, 12 May 2022 18:03:47 +0200
-Message-Id: <20220512160412.1317123-4-maxime@cerno.tech>
+Subject: [PATCH v4 04/28] drm/vc4: hdmi: Rework hdmi_enable_4kp60 detection
+Date:   Thu, 12 May 2022 18:03:48 +0200
+Message-Id: <20220512160412.1317123-5-maxime@cerno.tech>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220512160412.1317123-1-maxime@cerno.tech>
 References: <20220512160412.1317123-1-maxime@cerno.tech>
@@ -90,144 +90,41 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-With the recent introduction of clock drivers that will force their
-clock rate to either the minimum or maximum boundaries, it becomes
-harder for clock users to discover either boundary of their clock.
+In order to support higher HDMI frequencies, users have to set the
+hdmi_enable_4kp60 parameter in their config.txt file.
 
-Indeed, the best way to do that previously was to call clk_round_rate()
-on either 0 or ULONG_MAX and count on the driver to clamp the rate to
-the current boundary, but that won't work anymore.
+We were detecting this so far by calling clk_round_rate() on the core
+clock with the frequency we're supposed to run at when one of those
+modes is enabled. Whether or not the parameter was enabled could then be
+inferred by the returned rate since the maximum clock rate reported by
+the firmware was one of the side effect of setting that parameter.
 
-Since any other alternative (calling clk_set_rate_range() and looking at
-the returned value, calling clk_round_rate() still, or just doing
-nothing) depends on how the driver will behaves, we actually are
-punching a hole through the abstraction provided by the clock framework.
+However, the recent clock rework we did changed what clk_round_rate()
+was returning to always return the minimum allowed, and thus this test
+wasn't reliable anymore.
 
-In order to avoid any abstraction violation, let's create a bunch of
-accessors that will return the current minimum and maximum for a given
-clock.
+Let's use the new clk_get_max_rate() function to reliably determine the
+maximum rate allowed on that clock and fix the 4k@60Hz output.
 
+Fixes: e9d6cea2af1c ("clk: bcm: rpi: Run some clocks at the minimum rate allowed")
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
- drivers/clk/clk.c   | 20 +++++++++++++++
- include/linux/clk.h | 59 +++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 79 insertions(+)
+ drivers/gpu/drm/vc4/vc4_hdmi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index d46c00bbedea..c9d7016550a2 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -2465,6 +2465,26 @@ int clk_set_max_rate(struct clk *clk, unsigned long rate)
- }
- EXPORT_SYMBOL_GPL(clk_set_max_rate);
+diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+index 6aadb65eb640..962a1b9b1c4f 100644
+--- a/drivers/gpu/drm/vc4/vc4_hdmi.c
++++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+@@ -2891,7 +2891,7 @@ static int vc4_hdmi_bind(struct device *dev, struct device *master, void *data)
  
-+/**
-+ * clk_get_rate_range - returns the clock rate range for a clock source
-+ * @clk: clock source
-+ * @min: Pointer to the variable that will hold the minimum
-+ * @max: Pointer to the variable that will hold the maximum
-+ *
-+ * Fills the @min and @max variables with the minimum and maximum that
-+ * the clock source can reach.
-+ */
-+void clk_get_rate_range(struct clk *clk, unsigned long *min, unsigned long *max)
-+{
-+	if (!clk || !min || !max)
-+		return;
-+
-+	clk_prepare_lock();
-+	clk_core_get_boundaries(clk->core, min, max);
-+	clk_prepare_unlock();
-+}
-+EXPORT_SYMBOL_GPL(clk_get_rate_range);
-+
- /**
-  * clk_get_parent - return the parent of a clk
-  * @clk: the clk whose parent gets returned
-diff --git a/include/linux/clk.h b/include/linux/clk.h
-index 39faa54efe88..1507d5147898 100644
---- a/include/linux/clk.h
-+++ b/include/linux/clk.h
-@@ -713,6 +713,17 @@ bool clk_has_parent(struct clk *clk, struct clk *parent);
-  */
- int clk_set_rate_range(struct clk *clk, unsigned long min, unsigned long max);
+ 	if (variant->max_pixel_clock == 600000000) {
+ 		struct vc4_dev *vc4 = to_vc4_dev(drm);
+-		long max_rate = clk_round_rate(vc4->hvs->core_clk, 550000000);
++		unsigned long max_rate = clk_get_max_rate(vc4->hvs->core_clk);
  
-+/**
-+ * clk_get_rate_range - returns the clock rate range for a clock source
-+ * @clk: clock source
-+ * @min: Pointer to the variable that will hold the minimum
-+ * @max: Pointer to the variable that will hold the maximum
-+ *
-+ * Fills the @min and @max variables with the minimum and maximum that
-+ * the clock source can reach.
-+ */
-+void clk_get_rate_range(struct clk *clk, unsigned long *min, unsigned long *max);
-+
- /**
-  * clk_set_min_rate - set a minimum clock rate for a clock source
-  * @clk: clock source
-@@ -908,6 +919,16 @@ static inline int clk_set_rate_range(struct clk *clk, unsigned long min,
- 	return 0;
- }
- 
-+static inline void clk_get_rate_range(struct clk *clk, unsigned long *min,
-+				      unsigned long *max)
-+{
-+	if (!min || !max)
-+		return;
-+
-+	*min = 0;
-+	*max = ULONG_MAX;
-+}
-+
- static inline int clk_set_min_rate(struct clk *clk, unsigned long rate)
- {
- 	return 0;
-@@ -997,6 +1018,44 @@ static inline int clk_drop_range(struct clk *clk)
- 	return clk_set_rate_range(clk, 0, ULONG_MAX);
- }
- 
-+/**
-+ * clk_get_min_rate - returns the minimum clock rate for a clock source
-+ * @clk: clock source
-+ *
-+ * Returns either the minimum clock rate in Hz that clock source can
-+ * reach, or 0 on error.
-+ */
-+static inline unsigned long clk_get_min_rate(struct clk *clk)
-+{
-+	unsigned long min, max;
-+
-+	if (!clk)
-+		return 0;
-+
-+	clk_get_rate_range(clk, &min, &max);
-+
-+	return min;
-+}
-+
-+/**
-+ * clk_get_max_rate - returns the maximum clock rate for a clock source
-+ * @clk: clock source
-+ *
-+ * Returns either the maximum clock rate in Hz that clock source can
-+ * reach, or 0 on error.
-+ */
-+static inline unsigned long clk_get_max_rate(struct clk *clk)
-+{
-+	unsigned long min, max;
-+
-+	if (!clk)
-+		return 0;
-+
-+	clk_get_rate_range(clk, &min, &max);
-+
-+	return max;
-+}
-+
- /**
-  * clk_get_optional - lookup and obtain a reference to an optional clock
-  *		      producer.
+ 		if (max_rate < 550000000)
+ 			vc4_hdmi->disable_4kp60 = true;
 -- 
 2.36.1
 
