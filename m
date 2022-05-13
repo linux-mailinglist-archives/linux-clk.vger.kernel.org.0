@@ -2,67 +2,67 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755FF525F3E
-	for <lists+linux-clk@lfdr.de>; Fri, 13 May 2022 12:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066A0525F70
+	for <lists+linux-clk@lfdr.de>; Fri, 13 May 2022 12:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232508AbiEMJnP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 13 May 2022 05:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
+        id S1379215AbiEMJzh (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 13 May 2022 05:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232296AbiEMJnO (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 13 May 2022 05:43:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F121D644C6;
-        Fri, 13 May 2022 02:43:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85A5BB82D5A;
-        Fri, 13 May 2022 09:43:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E134C34100;
-        Fri, 13 May 2022 09:43:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652434990;
-        bh=b8sBE15RBNxyIMw0U56/5sGMycgU0eaNt/RbigefwkY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BtRjPJpwP45vGmTA6ujugg3YaQ+NtUTFNfrKB8DpjpaOJjITZkw6CZHDpB8ypyR5y
-         i9a8vmeFcliCDQ1eGs5NJ916tS1B+ZhD291f0ocTlDnsFck6imb649KaW49S6htyFx
-         hZWk4OomHHZIa87kYufx6Uk6R9mrBfHvZy1UnSzm51Z0940BkWbypRQ6E2ljNOO4Di
-         R5IOqkL9tto90rX9OPF1cKYU4ALsF1L6Pq3Y71w/cRHv48dstv8hHn/8i+vwfi2LZV
-         x3lDYryM+vgnRepr50izSovTShaZd2/Nwvif4D4hHaHvrogFUYbC9AooPx1DSiyEP0
-         1z9nywvIi7BgA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1npRpB-0007x3-T1; Fri, 13 May 2022 11:43:06 +0200
-Date:   Fri, 13 May 2022 11:43:05 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Prasad Malisetty <pmaliset@codeaurora.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v5 0/5] PCI: qcom: Rework pipe_clk/pipe_clk_src handling
-Message-ID: <Yn4oKQS+7DfjP9c5@hovoldconsulting.com>
-References: <20220512172909.2436302-1-dmitry.baryshkov@linaro.org>
- <Yn4LsB/dkwjdslQs@hovoldconsulting.com>
- <CAA8EJpqCFAxNuK4B25hZUQa4DWqc3M4FXvJq7Cob752OWUmYcg@mail.gmail.com>
+        with ESMTP id S1378821AbiEMJz3 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 13 May 2022 05:55:29 -0400
+Received: from mx1.cqplus1.com (unknown [113.204.237.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8585C26C4E6
+        for <linux-clk@vger.kernel.org>; Fri, 13 May 2022 02:55:13 -0700 (PDT)
+X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
+        R,40,3)
+Received: from 172.27.96.203
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(7678:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Fri, 13 May 2022 17:47:40 +0800 (CST)
+Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
+ CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.6; Fri, 13 May 2022 17:47:38 +0800
+Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
+ ([::1]) with mapi id 15.01.2507.006; Fri, 13 May 2022 17:47:38 +0800
+From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "sboyd@kernel.org" <sboyd@kernel.org>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>
+Subject: RE: [PATCH v15 10/10] ARM: dts: Add Sunplus SP7021-Demo-V3 board
+ device tree
+Thread-Topic: [PATCH v15 10/10] ARM: dts: Add Sunplus SP7021-Demo-V3 board
+ device tree
+Thread-Index: AQHYZcsUOdNmnhD0gkKqn75ry15Nq60ahDUAgAHng+D//4R3gIAAnWgA
+Date:   Fri, 13 May 2022 09:47:38 +0000
+Message-ID: <878e3edf42434620b31cf7f8bf97209f@cqplus1.com>
+References: <cover.1652329411.git.qinjian@cqplus1.com>
+ <daeccdfb9655e549656af0af955a4697871e3ab0.1652329411.git.qinjian@cqplus1.com>
+ <32c80a79-abd5-3fd2-cbb4-e2ae93c539da@linaro.org>
+ <3a01fe9aa860407694ee77133459a9ab@cqplus1.com>
+ <85c40d22-afaa-0f7b-01bd-6de9e592079f@linaro.org>
+In-Reply-To: <85c40d22-afaa-0f7b-01bd-6de9e592079f@linaro.org>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.28.110.18]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJpqCFAxNuK4B25hZUQa4DWqc3M4FXvJq7Cob752OWUmYcg@mail.gmail.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,18 +70,17 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Fri, May 13, 2022 at 12:31:27PM +0300, Dmitry Baryshkov wrote:
-> On Fri, 13 May 2022 at 10:41, Johan Hovold <johan@kernel.org> wrote:
-> > On Thu, May 12, 2022 at 08:29:04PM +0300, Dmitry Baryshkov wrote:
-
-> > > PCIe part depends on [1].
-> >
-> > This one was merged a month ago.
-> 
-> It is not in Linus's tree (only in Lorenzo's one). So anybody wishing
-> to test the series would still have to pick it up manually.
-
-Fair enough, but you generally don't need to describe dependencies that
-have already been picked up by the maintainer.
-
-Johan
+PiA+DQo+ID4gSSBkaWQgcGFzc2VkIHRoZSBtYWtlIGR0YnNfY2hlY2suDQo+ID4gY29tcGF0aWJs
+ZSBzdHJpbmc6ICJzdW5wbHVzLHNwNzAyMSIsICJzdW5wbHVzLHNwNzAyMS1hY2hpcCIsICJzdW5w
+bHVzLHNwNzAyMS1kZW1vLXYzIg0KPiA+IGFsbCBkZWZpbmVkIEAgRG9jdW1lbnRhdGlvbi9kZXZp
+Y2V0cmVlL2JpbmRpbmdzL2FybS9zdW5wbHVzLHNwNzAyMS55YW1sIFsxXQ0KPiANCj4gSG93IHRo
+aXMgY2FuIHBhc3MgdGhlIGNoZWNrIGlmIGl0IGlzIGVudGlyZWx5IGRpZmZlcmVudCBjb21wYXRp
+YmxlIGFuZA0KPiBkb2VzIG5vdCBtYXRjaCBzY2hlbWE/IFRoZSBjb2RlIGlzIG5vdCBjb3JyZWN0
+LiBJZiB5b3UgdGVzdCB5b3VyIERUUw0KPiB3aXRoIGR0YnNfY2hlY2sgeW91IHdpbGwgc2VlOg0K
+PiANCj4gCXN1bnBsdXMtc3A3MDIxLWRlbW8tdjMuZHRiOiAvOiBjb21wYXRpYmxlOiBbJ3N1bnBs
+dXMsc3A3MDIxLWRlbW8tdjMnXQ0KPiBpcyB0b28gc2hvcnQNCj4gDQo+IA0KPiBBZGRpdGlvbmFs
+bHk6DQo+IDEuIFlvdXIgRFRCcyBkbyBub3QgY29tcGlsZSwgbWlzc2luZyBNYWtlZmlsZSBlbnRy
+eS4NCj4gDQoNCkdvdCBpdCwgSSBjb21waWxlZCB0aGUgZHRiIHdpdGggY29tbWFuZDogbWFrZSBz
+dW5wbHVzLXNwNzAyMS1kZW1vLXYzLmR0Yg0KQWZ0ZXIgSSBhZGQgaXQgdG8gYXJjaC9hcm0vYm9v
+dC9kdHMvTWFrZWZpbGUsDQptYWtlIGR0YnNfY2hlY2sgZ290IHRoZSBlcnJvci4NClRoYW5rcyBm
+b3IgeW91ciBwYXRpZW50IGd1aWRhbmNlLg0KDQo=
