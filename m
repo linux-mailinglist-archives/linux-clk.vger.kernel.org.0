@@ -2,64 +2,64 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FFEC52854D
-	for <lists+linux-clk@lfdr.de>; Mon, 16 May 2022 15:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D828528554
+	for <lists+linux-clk@lfdr.de>; Mon, 16 May 2022 15:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237956AbiEPN03 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 16 May 2022 09:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58102 "EHLO
+        id S238957AbiEPN14 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 16 May 2022 09:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243955AbiEPN0W (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 16 May 2022 09:26:22 -0400
+        with ESMTP id S238226AbiEPN0Z (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 16 May 2022 09:26:25 -0400
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A298925C1
-        for <linux-clk@vger.kernel.org>; Mon, 16 May 2022 06:26:20 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id D5024320097F;
-        Mon, 16 May 2022 09:26:18 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B35F25FB
+        for <linux-clk@vger.kernel.org>; Mon, 16 May 2022 06:26:24 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 3B20932009A7;
+        Mon, 16 May 2022 09:26:22 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 16 May 2022 09:26:19 -0400
+  by compute5.internal (MEProxy); Mon, 16 May 2022 09:26:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1652707578; x=1652793978; bh=Dx
-        yJkcxCAII238/8lzOhfhjaqUkXNzmfa3UFGyc1L9Q=; b=ljXq0rzpRIhnSzC+nl
-        OIhqVRl0JYDOFiiKvO0IsuYInWZYU/ZWYYhBMVG9sKJJGFil4U+7Hevf06SEIq8H
-        TY7pGXkzm7TugWSMYA8OW9O4vcQl/i/p9EeO9BreYeqqSMQDyP97W1yfTHObpIHz
-        G8oeME6qaPd4vUMlYlF4fuls444HlSOinxdyUguXJ1KhqjMRGhYIUpzqgk2IiBqG
-        /YIktkhF9BjLhUOtiqbPGskoGq4SW8xv9dVJbqPKjuxG5N9L7aIeH9TiWR5mJ+jb
-        +TvT1KJEQK0lYNp7NH09ZSUfp/N8OmKEi0ptkZWX26Kuw2VwZT//5DXvDYL31wEV
-        rWVg==
+        :subject:subject:to:to; s=fm3; t=1652707581; x=1652793981; bh=WI
+        btfN6QN3QACpaSXCtqEP9OCzN0b/rwRnYojT6Am34=; b=ahcXJ7EFcP0qp8SLwa
+        lsE5UfT90sAqBptWsmIQZq5Qqf2J7IOAhknewKOCw4hDO4+IV8kfCLZByFE/zsZZ
+        llkTJYs5Hx0yCd1EyNCWkJkMk5B3bixmw2LuXiMBnxZXzTzRWn8SBX3qsuRi3d1s
+        G7MU3+lB4tcod+6ocvlu+K+W/k7XESchuwNTh41JSnPYxi5R+PSs7+v9sgEausxY
+        O7fkAx1Ga2nNnWl+3awxZsegZixmoXexb5v98NRT4NXzbxg/VXjCPsJvU4W9oHw5
+        zudE6KSQeYEAdbYyRB9E9VsGpRQszsnFprbOSy9/SE3TXd19Qgo4vqVN2wE2eXoT
+        xx3A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :from:from:in-reply-to:in-reply-to:message-id:mime-version
         :references:reply-to:sender:subject:subject:to:to:x-me-proxy
         :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1652707578; x=1652793978; bh=DxyJkcxCAII238/8lzOhfhjaqUkXNzmfa3U
-        FGyc1L9Q=; b=WklJP6DTMnly6PeSSqMPbLtw56QIq+NpMWDdKdJJEdTxiUwsItk
-        ieNqwiwXmiPpVTiS9tdSQ+W0ua9jA+GvaRHz7ZaXG3l2Els4/KWxAyoSm9xzuuGh
-        TI0I7sLtSejSm6P9MzmvWOCyZ1fflZs+1OYupWYaseiM8QjPkegypsew7T4kN+fr
-        I0fVjL45x7GW2sP5jMqGPOlMAwTr2mVzkleebCfq5ezzPbRqQUUWhMNpThn4zn+9
-        4fxZDWO+Qdfom15her2YxNUbJ2dm9+5eqBkr/vmsxTL3YW9wNaa/tOx6i/95KNJZ
-        G6jCcQEJUlg/oSvKZOG+C4vQMIjAUvf0sbg==
-X-ME-Sender: <xms:-lCCYq05HaHdX_Td7RrWia7c2ha-PQ4gG4E4I0XPzsrqYv7vPGe0qA>
-    <xme:-lCCYtEYtVRCz7hO3un4Nq20ClugI9o7tQZ3GyrQGIvYuhHBjcK2enoTEyyTyik0O
-    fB9u1WnbbmsMRLQAuc>
-X-ME-Received: <xmr:-lCCYi6vc9tSlWuZ-Jggnz8JEy6mtaVnUJlcvtHDaeD9q4zZQmmbKjLlzj9EQfY6KUFwxlwZBJ1L0hx8fci750VAb2T9SxrC7y3qkFg>
+        1652707581; x=1652793981; bh=WIbtfN6QN3QACpaSXCtqEP9OCzN0b/rwRnY
+        ojT6Am34=; b=JWZT3M+yZdAMwU7qe9RGVjlQdoYP9m0cuFt7ovCMCXFsMHq6sba
+        a/AJ9ltj6FpPZLzGm0Yrfx3upZBGv5AQtVukMrDLdqi1hyiCRj6VnV+p1ZAfzsMb
+        M+a+cn1Nr1i3YrXKPCb535fghimFd9hEVhO/pi8gptrubLDwlzuqMzi4bM9ojAG2
+        n1i3/Hk+a5QbNyyvbFax+hZmJfxlw8Tl++zsVDPjUX8C7nSRbGGEeRiQ+/jIYVSf
+        s73v7L0zCWt5y3I+i+xAYzAXxrB+7CTxI4iSF0ayQUjEIHIEI79qkCgvEByYODVv
+        m84Vif2/ZpUHNTHuLoLyG+sP5jrjZKwKb0w==
+X-ME-Sender: <xms:_VCCYjR-UEkeIizr5q1s2aWbdfZgUIHB9epkizZKK7QhYUhgTrsvmw>
+    <xme:_VCCYkyQjkC9GRGIAy1oX460lTOsHXeFVZIwCjN0rAX2dnw9xpjZN5pyqIvd81bm-
+    7IJNLEvFY3uHgZzCMM>
+X-ME-Received: <xmr:_VCCYo0QyHcknXzmpZ1I76fcW41lKo4UAVzECbsYT9D3U3jtDaDooxms8HRNCqG9p51jOuL-IfqT9THLuNp6juAGdxJ_g4f-SiFR04o>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrheehgdeivdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhm
     vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
     htvghrnhepleekfeetudfhkeejiefhtedugfeuvdevkeekteetkefhkefhtdelgfefuddv
-    jefhnecuvehluhhsthgvrhfuihiivgepgeenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    jefhnecuvehluhhsthgvrhfuihiivgepfeenucfrrghrrghmpehmrghilhhfrhhomhepmh
     grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:-lCCYr1W8AZW4iv4IQ587Y4_OBxasEwSXpkd7_WTw9X2ck34Ygu_MQ>
-    <xmx:-lCCYtGAwvqjWZocjKVn2x_ohoqdA-M-5G9QuS1SpJ4ApnsUC5WuBQ>
-    <xmx:-lCCYk87HwRRGutonkGE0axY6Ed3ezvaD7oOxmF7_Lg4S7_XVrbJ5w>
-    <xmx:-lCCYl_pfn8ggQCL_2A-MD8uphvdnIC3cMS25f6j1h3UgpLjNKxjNw>
+X-ME-Proxy: <xmx:_VCCYjAm7YuJqlbeEZ2_PNh_54t1IoHqSOlFRau5y-8bgJAaE8YzqA>
+    <xmx:_VCCYsgmzLQPpcXMrO_r4vH8MerNjklapia5j6u9MXrG_GKOv2yQOg>
+    <xmx:_VCCYnrPChdYeKqk9kOGiZl7Xkxygg-GY1Yw-3M7Rwi9WWh68jvUUw>
+    <xmx:_VCCYhb7KaO4wOknJzRnotAylHff2goWWjqdUx1mLp1mV1tNPqmElg>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 16 May 2022 09:26:17 -0400 (EDT)
+ 16 May 2022 09:26:21 -0400 (EDT)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     linux-clk@vger.kernel.org,
         Mike Turquette <mturquette@baylibre.com>,
@@ -73,9 +73,9 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v5 13/28] clk: Take into account uncached clocks in clk_set_rate_range()
-Date:   Mon, 16 May 2022 15:25:12 +0200
-Message-Id: <20220516132527.328190-14-maxime@cerno.tech>
+Subject: [PATCH v5 14/28] clk: Fix clk_get_parent() documentation
+Date:   Mon, 16 May 2022 15:25:13 +0200
+Message-Id: <20220516132527.328190-15-maxime@cerno.tech>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220516132527.328190-1-maxime@cerno.tech>
 References: <20220516132527.328190-1-maxime@cerno.tech>
@@ -91,87 +91,73 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-clk_set_rate_range() will use the last requested rate for the clock when
-it calls into the driver set_rate hook.
+The clk_get_parent() documentation in the header states that it will
+return a valid pointer, or an error pointer on failure.
 
-However, if CLK_GET_RATE_NOCACHE is set on that clock, the last
-requested rate might not be matching the current rate of the clock. In
-such a case, let's read out the rate from the hardware and use that in
-our set_rate instead.
+However, the documentation in the source file, and the code itself, will
+return also return NULL if there isn't any parent for that clock. Let's
+mention it.
+
+An orphan clock should return NULL too, so let's add a test for it.
 
 Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com> # imx8mp
 Tested-by: Marek Szyprowski <m.szyprowski@samsung.com> # exynos4210, meson g12b
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
- drivers/clk/clk.c      |  6 +++++-
- drivers/clk/clk_test.c | 28 ++++++++++++++++++++++++++++
- 2 files changed, 33 insertions(+), 1 deletion(-)
+ drivers/clk/clk_test.c | 17 +++++++++++++++++
+ include/linux/clk.h    |  5 +++--
+ 2 files changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 95be72f9373e..09849453047c 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -2373,6 +2373,10 @@ static int clk_set_rate_range_nolock(struct clk *clk,
- 		goto out;
- 	}
- 
-+	rate = clk->core->req_rate;
-+	if (clk->core->flags & CLK_GET_RATE_NOCACHE)
-+		rate = clk_core_get_rate_recalc(clk->core);
-+
- 	/*
- 	 * Since the boundaries have been changed, let's give the
- 	 * opportunity to the provider to adjust the clock rate based on
-@@ -2390,7 +2394,7 @@ static int clk_set_rate_range_nolock(struct clk *clk,
- 	 * - the determine_rate() callback does not really check for
- 	 *   this corner case when determining the rate
- 	 */
--	rate = clamp(clk->core->req_rate, min, max);
-+	rate = clamp(rate, min, max);
- 	ret = clk_core_set_rate_nolock(clk->core, rate);
- 	if (ret) {
- 		/* rollback the changes */
 diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
-index 8de6339f4f8d..9aa5b946f324 100644
+index 9aa5b946f324..c52098e463d3 100644
 --- a/drivers/clk/clk_test.c
 +++ b/drivers/clk/clk_test.c
-@@ -362,9 +362,37 @@ static void clk_test_uncached_set_range(struct kunit *test)
- 	KUNIT_EXPECT_LE(test, rate, DUMMY_CLOCK_RATE_2);
+@@ -532,6 +532,22 @@ clk_orphan_transparent_multiple_parent_mux_test_exit(struct kunit *test)
+ 	clk_hw_unregister(&ctx->parents_ctx[1].hw);
  }
  
 +/*
-+ * Test that for an uncached clock, clk_set_rate_range() will work
-+ * properly if the rate has changed in hardware.
-+ *
-+ * In this case, it means that if the rate wasn't initially in the range
-+ * we're trying to set, but got changed at some point into the range
-+ * without the kernel knowing about it, its rate shouldn't be affected.
++ * Test that, for a mux whose current parent hasn't been registered yet,
++ * clk_get_parent() will return NULL.
 + */
-+static void clk_test_uncached_updated_rate_set_range(struct kunit *test)
++static void
++clk_test_orphan_transparent_multiple_parent_mux_get_parent(struct kunit *test)
 +{
-+	struct clk_dummy_context *ctx = test->priv;
++	struct clk_multiple_parent_ctx *ctx = test->priv;
 +	struct clk_hw *hw = &ctx->hw;
 +	struct clk *clk = hw->clk;
-+	unsigned long rate;
++	struct clk *parent;
 +
-+	ctx->rate = DUMMY_CLOCK_RATE_1 + 1000;
-+	KUNIT_ASSERT_EQ(test,
-+			clk_set_rate_range(clk,
-+					   DUMMY_CLOCK_RATE_1,
-+					   DUMMY_CLOCK_RATE_2),
-+			0);
-+
-+	rate = clk_get_rate(clk);
-+	KUNIT_ASSERT_GT(test, rate, 0);
-+	KUNIT_EXPECT_EQ(test, rate, DUMMY_CLOCK_RATE_1 + 1000);
++	parent = clk_get_parent(clk);
++	KUNIT_EXPECT_PTR_EQ(test, parent, NULL);
 +}
 +
- static struct kunit_case clk_uncached_test_cases[] = {
- 	KUNIT_CASE(clk_test_uncached_get_rate),
- 	KUNIT_CASE(clk_test_uncached_set_range),
-+	KUNIT_CASE(clk_test_uncached_updated_rate_set_range),
- 	{}
- };
+ /*
+  * Test that, for a mux whose current parent hasn't been registered yet,
+  * calling clk_set_parent() to a valid parent will properly update the
+@@ -678,6 +694,7 @@ clk_test_orphan_transparent_multiple_parent_mux_set_range_set_parent_get_rate(st
+ }
+ 
+ static struct kunit_case clk_orphan_transparent_multiple_parent_mux_test_cases[] = {
++	KUNIT_CASE(clk_test_orphan_transparent_multiple_parent_mux_get_parent),
+ 	KUNIT_CASE(clk_test_orphan_transparent_multiple_parent_mux_set_parent),
+ 	KUNIT_CASE(clk_test_orphan_transparent_multiple_parent_mux_set_parent_get_rate),
+ 	KUNIT_CASE(clk_test_orphan_transparent_multiple_parent_mux_set_parent_set_range_modified),
+diff --git a/include/linux/clk.h b/include/linux/clk.h
+index 1507d5147898..39710b8453fa 100644
+--- a/include/linux/clk.h
++++ b/include/linux/clk.h
+@@ -755,8 +755,9 @@ int clk_set_parent(struct clk *clk, struct clk *parent);
+  * clk_get_parent - get the parent clock source for this clock
+  * @clk: clock source
+  *
+- * Returns struct clk corresponding to parent clock source, or
+- * valid IS_ERR() condition containing errno.
++ * Returns struct clk corresponding to parent clock source, a NULL
++ * pointer if it doesn't have a parent, or a valid IS_ERR() condition
++ * containing errno.
+  */
+ struct clk *clk_get_parent(struct clk *clk);
  
 -- 
 2.36.1
