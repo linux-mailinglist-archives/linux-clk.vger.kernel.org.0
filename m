@@ -2,170 +2,126 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E5A52855E
-	for <lists+linux-clk@lfdr.de>; Mon, 16 May 2022 15:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEB35288C8
+	for <lists+linux-clk@lfdr.de>; Mon, 16 May 2022 17:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243196AbiEPN2E (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 16 May 2022 09:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
+        id S245280AbiEPP1F (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 16 May 2022 11:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234746AbiEPN1O (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 16 May 2022 09:27:14 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2DF2AE2F
-        for <linux-clk@vger.kernel.org>; Mon, 16 May 2022 06:27:13 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id B6AC232009A7;
-        Mon, 16 May 2022 09:27:11 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 16 May 2022 09:27:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1652707631; x=1652794031; bh=sq
-        RfGdeQAqJMPxO9VUcDlzAvt058Yt2DTJa/DUBaKS0=; b=SYqVF1tUcN5Iassn9/
-        2DIUpxc9H7zyQENlejfaIlsIhcE3UzORdssTF9hL1VtSPSdcFimKJQxpSETZ/lsL
-        7zx4+nqLJolWAhXjI+lCXGKFUb8hiMhZ4UZzY68IdoZ3jtBVwLpZTxEJ5OdCxCac
-        fHVNC/Lnd5S3NRkta0Y7hAXjPRBpPfUO+Foq0wp8YRwEx25HpCy5K8a+7PU5pT+p
-        BYGWXpo/bQyvbuirs21IJDyHMazyoUUY1wQ3swA1i2IFThN8a7uCoSBHmSTB9nPF
-        JtEnHQ26a+2kiyvkjrKdfVZK/R7692QmRwzXUZnHPd2QT4j+dVaY5dUaCAtrwRGg
-        qdLA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1652707631; x=1652794031; bh=sqRfGdeQAqJMPxO9VUcDlzAvt058Yt2DTJa
-        /DUBaKS0=; b=YnrSicldZkrjYwJPbc6TEVXyWcWdyltIpP+MXH5kSTxjGoS6f3U
-        pq5ia7bqh/255hcKrbicR2vg/skhVbwIB5+RUk472CHnDkJbbN8NRUdpKHcyqt0C
-        aKrKcuWHjPgIB426wgosbGCvPgG147pO2EeMHH/XkGOC+tE0BifdqTL7wGwebEeo
-        RgPsQglLCh4bvmpWsLxd9gMZAbBVHkn/uzVoV8cG8J8vVdAY3Egx7CSqO6WdxNLK
-        l3ogTHBVQpXIgmO6LBHgeJDbMXoUdBsTBFdwnAAG79KHXZx6ss0ANO7ImjNn/yjf
-        RBTtByq+U3b1bP2C0gnR4PXvDaNG778zYGA==
-X-ME-Sender: <xms:L1GCYggtVrDpf6iGaAatuFGNWMaAaz1NnjTe399iuYOZaZA3SfoJ4Q>
-    <xme:L1GCYpB4fDx_s5y-htDyNvyTfnNjKXB-ChMpNWFJo3e3nq2OeYyD-80gmkdAB-6yC
-    0Evu5hi3UeFU1P2fSc>
-X-ME-Received: <xmr:L1GCYoENcZFsBqALO1HkXcbd82K6ymi2Sl0MfgAb0AAv5J-JoQDcKQeZyquL-b3zpZMz51rXNguW79-vp6lk1NZPM68DifcJ5BoSmrA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrheehgdeifecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleekfeetudfhkeejiefhtedugfeuvdevkeekteetkefhkefhtdelgfefuddv
-    jefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:L1GCYhQSFBUex0fwJij_67hIwC_GeEDeCvbvdYMhDniauCQ1bIzXKw>
-    <xmx:L1GCYtxufUDqgsk2WYJi6_cBNRlTOGUpg3q1BJHoTkF5uovBuOJJEg>
-    <xmx:L1GCYv53uKIDxU6qPCkGi8VO1Fh3akQ0UWK5de57A_eqWPNMa6Auww>
-    <xmx:L1GCYipwzaZ567f-jbhbKe723gzsZ1LVJjMbZc1J9H1zGkBkrQKggA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 16 May 2022 09:27:10 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     linux-clk@vger.kernel.org,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v5 28/28] clk: tests: Add missing test case for ranges
-Date:   Mon, 16 May 2022 15:25:27 +0200
-Message-Id: <20220516132527.328190-29-maxime@cerno.tech>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220516132527.328190-1-maxime@cerno.tech>
-References: <20220516132527.328190-1-maxime@cerno.tech>
+        with ESMTP id S229688AbiEPP1C (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 16 May 2022 11:27:02 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DDE12754;
+        Mon, 16 May 2022 08:26:55 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-edf9ddb312so20530436fac.8;
+        Mon, 16 May 2022 08:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KHyeVKxqxatLeY3gDq4jdVF9Tt519Zk/h+VHXOLojzc=;
+        b=KewvRBMJACjGiAlIKD93nIY5CDbfu7LGLi5U9OT3JumiPFbrpxe/9hLyeFkc/lrj9W
+         nyGDOJdITBAxQzLjMsAtN3oVx6acR1EWDeCWuS5Bd76MnSfwqtGsu1op6ye4kfO5CSEg
+         kyAvSbwiXB2Wctjrp7/yIbHPfXU8bo/c/Na8FsNDrd2IewsEeOUHsrgrbCChJFtxq4Xg
+         IbIjbK0xHOfAtds8bB6vnnsS1hu/Zv0xIdI/oEbKwWOt7kdKS6i1efSkkS1/Yh+RkHIv
+         AcFdJQl6YijSS3Vzpn7tqldQsxM+mtnHyKfaPlcsPcTq3aYi7vFD5B1VH2e5WXC3ddxO
+         Mftw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KHyeVKxqxatLeY3gDq4jdVF9Tt519Zk/h+VHXOLojzc=;
+        b=tJChQStwvwqF2VBreDpMlHcHk2fInDb+4XutpKFhIzIaNBQn1y+dcfwiy2TnWSvmTF
+         Aza7Md5bST8lepRWHm83VAZA89tXGbxDXPlmoYTKcdbGr6Jni1jJcojh9cwGigr8rtmS
+         al6Zjp42rYcMG59gYG+tBe6d6HTOVJqdUYkCHXq6xe5efpw47XgnKHPpHea6x3RO9jQn
+         3V+GtACDVx9FNm6u7Je0JOSLtod3ezEnbYEyX/lKFBM0OzbSkPC63Yco0bOGVt81eRCY
+         mTtdRYOXq7gXWVmZ1mIyesTPzEzNbT7qbkihg4+wCptTRFCgrSBgtVV6d/GRANz9A0jM
+         3Stw==
+X-Gm-Message-State: AOAM532FG9XcG058P247KiVrPeyRuP07jYZynK+cyGOYyun4IBcN706t
+        2iRwPnkw4CxiPBC1zfQMtj4=
+X-Google-Smtp-Source: ABdhPJzIjGJ8YJEvupAXFxrzzx+fCG8rregIbh6jLEAET5ITg4EypP6IKnXddR5n4Rh0gU+G8PeHrw==
+X-Received: by 2002:a05:6870:c692:b0:e9:5368:10df with SMTP id cv18-20020a056870c69200b000e9536810dfmr9767194oab.182.1652714814852;
+        Mon, 16 May 2022 08:26:54 -0700 (PDT)
+Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
+        by smtp.gmail.com with ESMTPSA id z30-20020a056870461e00b000e686d1389fsm5475774oao.57.2022.05.16.08.26.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 08:26:54 -0700 (PDT)
+Date:   Mon, 16 May 2022 10:26:51 -0500
+From:   Chris Morgan <macroalpha82@gmail.com>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 6/6] arm64: dts: rockchip: enable sfc controller on
+ Quartz64 Model A
+Message-ID: <20220516152651.GA18461@wintermute.localdomain>
+References: <20220511150117.113070-1-pgwipeout@gmail.com>
+ <20220511150117.113070-7-pgwipeout@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220511150117.113070-7-pgwipeout@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Let's add a test on the rate range after a reparenting. This fails for
-now, but it's worth having it to document the corner cases we don't
-support yet.
+On Wed, May 11, 2022 at 11:01:17AM -0400, Peter Geis wrote:
+> Add the sfc controller binding for the Quartz64 Model A. This is not
+> populated by default, so leave it disabled.
+> 
+> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> ---
+>  .../boot/dts/rockchip/rk3566-quartz64-a.dts      | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> index 71df64655de5..6ec349e7e521 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+> @@ -603,6 +603,22 @@ &sdmmc1 {
+>  	status = "okay";
+>  };
+>  
+> +&sfc {
+> +	pinctrl-0 = <&fspi_pins>;
+> +	pinctrl-names = "default";
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +	status = "disabled";
+> +
+> +	flash@0 {
+> +		compatible = "jedec,spi-nor";
+> +		reg = <0>;
+> +		spi-max-frequency = <24000000>;
+> +		spi-rx-bus-width = <4>;
+> +		spi-tx-bus-width = <1>;
 
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/clk/clk_test.c | 52 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+This isn't really a concern, just a comment. Did you test this with the
+spi-tx-bus-width of 4 by chance? While I did have to use 1 for my
+implementation (the Odroid Go Advance) the Rockchip engineer I worked
+with couldn't replicate the issue on his end and we ended up chalking
+my issues up to an implementation specific problem. I'm only commenting
+here because I don't want you to think that for this device the tx
+always has to be 1, of course if your implementation does have issues
+with a tx of 2 or 4 that's different...
 
-diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
-index b4ae6eec7758..8226f2c6c8a3 100644
---- a/drivers/clk/clk_test.c
-+++ b/drivers/clk/clk_test.c
-@@ -488,9 +488,61 @@ clk_test_multiple_parents_mux_has_parent(struct kunit *test)
- 	KUNIT_EXPECT_TRUE(test, clk_has_parent(clk, ctx->parents_ctx[1].hw.clk));
- }
- 
-+/*
-+ * Test that for a clock with a multiple parents, if we set a range on
-+ * that clock and the parent is changed, its rate after the reparenting
-+ * is still within the range we asked for.
-+ *
-+ * FIXME: clk_set_parent() only does the reparenting but doesn't
-+ * reevaluate whether the new clock rate is within its boundaries or
-+ * not.
-+ */
-+static void
-+clk_test_multiple_parents_mux_set_range_set_parent_get_rate(struct kunit *test)
-+{
-+	struct clk_multiple_parent_ctx *ctx = test->priv;
-+	struct clk_hw *hw = &ctx->hw;
-+	struct clk *clk = hw->clk;
-+	struct clk *parent1, *parent2;
-+	unsigned long rate;
-+	int ret;
-+
-+	kunit_skip(test, "This needs to be fixed in the core.");
-+
-+	parent1 = clk_hw_get_clk(&ctx->parents_ctx[0].hw, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent1);
-+	KUNIT_ASSERT_TRUE(test, clk_is_match(clk_get_parent(clk), parent1));
-+
-+	parent2 = clk_hw_get_clk(&ctx->parents_ctx[1].hw, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent2);
-+
-+	ret = clk_set_rate(parent1, DUMMY_CLOCK_RATE_1);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = clk_set_rate(parent2, DUMMY_CLOCK_RATE_2);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = clk_set_rate_range(clk,
-+				 DUMMY_CLOCK_RATE_1 - 1000,
-+				 DUMMY_CLOCK_RATE_1 + 1000);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = clk_set_parent(clk, parent2);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	rate = clk_get_rate(clk);
-+	KUNIT_ASSERT_GT(test, rate, 0);
-+	KUNIT_EXPECT_GE(test, rate, DUMMY_CLOCK_RATE_1 - 1000);
-+	KUNIT_EXPECT_LE(test, rate, DUMMY_CLOCK_RATE_1 + 1000);
-+
-+	clk_put(parent2);
-+	clk_put(parent1);
-+}
-+
- static struct kunit_case clk_multiple_parents_mux_test_cases[] = {
- 	KUNIT_CASE(clk_test_multiple_parents_mux_get_parent),
- 	KUNIT_CASE(clk_test_multiple_parents_mux_has_parent),
-+	KUNIT_CASE(clk_test_multiple_parents_mux_set_range_set_parent_get_rate),
- 	{}
- };
- 
--- 
-2.36.1
+Thank you.
 
+> +	};
+> +};
+> +
+>  /* spdif is exposed on con40 pin 18 */
+>  &spdif {
+>  	status = "okay";
+> -- 
+> 2.25.1
+> 
