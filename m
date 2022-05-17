@@ -2,201 +2,170 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 866CC52A38D
-	for <lists+linux-clk@lfdr.de>; Tue, 17 May 2022 15:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5DC752A42F
+	for <lists+linux-clk@lfdr.de>; Tue, 17 May 2022 16:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347839AbiEQNgX (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 17 May 2022 09:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56184 "EHLO
+        id S1348340AbiEQOD3 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 17 May 2022 10:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348137AbiEQNgK (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 17 May 2022 09:36:10 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2130.outbound.protection.outlook.com [40.107.114.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E294CF2;
-        Tue, 17 May 2022 06:36:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gO6IAw2L+A8J3QhMOXloKTTqgUlzO2Mv7EZDmkcCpI16oe3JsF74mDBYaeLRHF+9eLFoRTNLWFoQS5kRV1r6FneT/F0y/WdvtEtnIDNxMVLL+Bcr1AyjcWLaJ2zzVjI32aXdyPAkPz2ZCP2y0VEyc3ka/9vAZEuXrKnGteRg4fB2Szk9lq2sboaW+4/WImoadocmLOS9ovozpw9IZyvgbyVSqR34laFc4gCfIAUAxe9ZT6fql//H+XHtfiGZG8tQT/HuO+um4oj9IKURq4IgWihK4xu8B95W3kTvvgxb/vUSr6DCt3THwy5ixz1xttMHfcWQh8ykxkWzhguTHDCDLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VvJ5Z2UI2SZEM2O5wA3RRnwvAJaGA/0G5WktnUqurCA=;
- b=SVS2AuUUZnji/ORJfUJYYot9ITred4BDqssKXkltPC2lFixx3HWNXn5v57MSwUDdDdLeTpE7YBGPoWYWroUkomqzayZUObNcTUSQ6ffkNVIKPNNEHIcl97oJ9Qtb0uHCNcIZcCAtbd1xRDoSWQvTnz0ucwDw5sZfnGdYukqCVAL+28LDV3SjqWDDwEhINTfwhpJIu844j6HYwzttUQKN4WMzLVCOdpYiDiGv3fOaaiv2c5R+MMWcLypEqIF/zRhno7PWUlO3TAkCQ1zFxO9oMUQDTG5Oww8+hXCeuyTpaetID5eEVX6nnOy1JySLyn8iPqkJma+EL2TWcnPyBPIFKQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VvJ5Z2UI2SZEM2O5wA3RRnwvAJaGA/0G5WktnUqurCA=;
- b=URDD8YZBAhTiPBNixifiQPc7rRxiZDa4aXADJkmd2wpf+wRxgVTxa4jTqC8ED1oIq44OZ1tZcAsSe0GuOr6kC0gTdvUvNFkntSHFmsxbdh9GKHzeq4HEG13H8CvS7LkTIme3uL5d6hDNC8TDAfFXbaznyggTbiec1GQTBYDWBZI=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TYCPR01MB7458.jpnprd01.prod.outlook.com (2603:1096:400:f5::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5250.13; Tue, 17 May
- 2022 13:36:04 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::3e:970b:c238:f57]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::3e:970b:c238:f57%9]) with mapi id 15.20.5250.018; Tue, 17 May 2022
- 13:36:04 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-CC:     Michael Turquette <mturquette@baylibre.com>,
+        with ESMTP id S1348339AbiEQODP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 17 May 2022 10:03:15 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09044C790;
+        Tue, 17 May 2022 07:03:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1652796160;
+        bh=fNY2b38/lRCFmOcpmYkMr48xo1NJhCPqgD9dKQ1HrOM=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=MOD0wBu2si3IYs33eSdACwDOy4EbDCrJtxcvWgvDjQ4YslUMp4qkP1qhu6LJxjLkv
+         AkAdijPOiSqwgwE0bMJtQtCeW/T9QIjmMcfag4cU/CHjBTj1u7Eg3PDgYVzmTfKDRg
+         mHih7a+pc1Q2bcxwq7P0+qEpTUZfXoEce+X8jj5o=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([5.146.195.3]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MaJ3t-1oMdpl1mqb-00WH5f; Tue, 17
+ May 2022 16:02:40 +0200
+Date:   Tue, 17 May 2022 16:02:37 +0200
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: RE: [PATCH] clk: renesas: cpg-mssr: Add a delay after deassert
-Thread-Topic: [PATCH] clk: renesas: cpg-mssr: Add a delay after deassert
-Thread-Index: AQHYX+bzJzYgcOdHs023qA1K4buvQK0P3WyAgAAvvCCAExOzAIAAAbRQ
-Date:   Tue, 17 May 2022 13:36:04 +0000
-Message-ID: <OS0PR01MB592211288197B1923D452B3986CE9@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20220504184406.93788-1-biju.das.jz@bp.renesas.com>
- <CAMuHMdUh69grzYVsMwdZLgv=KLy5-_FVjeMWx37qGsqCxz9Y6g@mail.gmail.com>
- <OS0PR01MB59224D1908A7DBB08DAF444986C29@OS0PR01MB5922.jpnprd01.prod.outlook.com>
- <CAMuHMdVqj6nr5h5G9w3wTDHCDbDK_9fJW4d7cvc1c1LC9D2roA@mail.gmail.com>
-In-Reply-To: <CAMuHMdVqj6nr5h5G9w3wTDHCDbDK_9fJW4d7cvc1c1LC9D2roA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8ed56651-065d-4337-5916-08da380a308a
-x-ms-traffictypediagnostic: TYCPR01MB7458:EE_
-x-microsoft-antispam-prvs: <TYCPR01MB745891DEF43F198E4337BEF786CE9@TYCPR01MB7458.jpnprd01.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: gu1r167fVxulC84HcTnvMjaPlURKq3um0it1vLPFW4zJGLnIhKhhJlwwyuHr6EF2Q5reDAE9y8lCiKhERe+4z/epp/NNWbOavrOBVt18gkqg3Hr0CkqJh7q8b58bqcK7k49itUZnEXaC8I8Gb+jcDj/iTFnWV1772mphlJo+IRgm5UFsc+Fg7J5s4+65/4278A+g3kleOZ+VxwogvIANfr6RlaUsuKIuKdlr2oHPznAmbRif9UWJZntSPwdjUef7oJlkS5zdGUCg6pCCfBFOlK/5dWBcEZ1uiFYQqzp7iTFIjX6guatXYaHmKOzMRz9YmZOyKw2QCz04Whmxe/SG/QOb32+1Ub0iiSpqKNObSfWnQg3Xglz91/QuK/zLYeoydt9V0lHNX9dx7RkBvNFs1eEyxlih5jWK3hjOo5bCz/7Eo1JSV/MiWhNxotU3iIbKKXvCmxPZSIkx7CWKpD4lMPtxtYu2XsW0sVtIV1WrfEKswrTIJqRNmeYaDAX/GMjy1d/p0AoeuOgceaNjloqaWy+GchoZa2Xr94ESvED6nHvThiAUka7oWf9YObEIeA2UPE1h706GjrV3AQwWdrsMYSFmRZ1gUAipT3BXQNmAHfs7OZuTjTiEKO9CbuFCG4r5z9RUiBS6ADssdJRtXMtIq/TqFwatwa8k87T4M/n9PeSCH5FhlamyZyTE3d9WIgznmXdONg8WTbsgVcQDtPKsZg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(7696005)(38070700005)(122000001)(33656002)(9686003)(26005)(71200400001)(2906002)(52536014)(8936002)(508600001)(316002)(66476007)(8676002)(6916009)(83380400001)(64756008)(66446008)(4326008)(66556008)(55016003)(86362001)(54906003)(66946007)(76116006)(53546011)(38100700002)(6506007)(5660300002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TEdyd0d1WXhWVXY1Wm9CVVBWY1pkZnIvQ0tWb0l6QUQwL2xKU1lKTnAwclY1?=
- =?utf-8?B?cC9POUhsZjZTcy8relBSOTFoODRKbjMwZkJhaXB3YjBTcU1mV1ZSQ2tleEZB?=
- =?utf-8?B?dGV3ZDh1TmZoUERqM0ZSRDhuR3NKbnNXWkhWMEZ6akpUWVZMNm9MNGNPc3Ex?=
- =?utf-8?B?dkVDOTQ5cWRpaW1JK3d1MlRqek0zOFpQNkN5Vld5RFI0WUlIQjVtZmg3dHZj?=
- =?utf-8?B?TDNaRzRXUUtzZjZkZGJaZlUrK01OMmtPWUNNZjE5cWZsMFMwS1ByVVNlUkt4?=
- =?utf-8?B?QWR4Rk13TExicXU4ZndoRzVWOTlQdFI3RHQ2K0FMLzRxSWE5dUlzUGM5Tkor?=
- =?utf-8?B?SXZ5OE54dy9vbU5CWHRKWnJQQkYxQVFKZzdOQ3pUSHAyM3pVNmdkN24rYzVr?=
- =?utf-8?B?K2NSWWk3UGkzUGl4L2F5SkwwM1RsVDJBWG5Dekt0TmR1aGJETDRlTmdRSU1Q?=
- =?utf-8?B?d2kvaGhadHpEMFFURTBzTU9rYUFoZXgvKzVYRktIMCtJTkNFZzBia2pvVlZR?=
- =?utf-8?B?S3ptYWUvbm40L2ZzQ1ZRS3psYndUVEVyN01zZWUybmV1U0VvUkNnY1VTWWpo?=
- =?utf-8?B?VXNKcmpZZ1RnY1JDOFFocmJmSWR2eHEzcjBZZ1ZkZU1WcHFlMEN5cHVLSTBZ?=
- =?utf-8?B?TzhELzQ5WmpGWUNJU3pSWEdkYmdFaUxrNzd2c3hpeGV0V0Q5V2ZZanozUStK?=
- =?utf-8?B?RDZnUUxVU0JhOXljSUVhYzkwZ3ZaOWJzQ2RDeUF2cXMrVUNTSHlMUk5tWm9D?=
- =?utf-8?B?bGtXREg4dlpiWUtISCsxT2wzNFVEMldzWGNkNlk0VUgwWE4yUnoraWhKTmpU?=
- =?utf-8?B?OGVjQURLYjZSenNEU1kyazVFdmUwV0VBQysxNEwya0ZlMTg0VlJHcEhISmxu?=
- =?utf-8?B?NFk5SVBPeGtvcnJIZHduUGd4c1FBb2R0eDRDTHNVLzRuc2Q2MGV3aXhqR3ph?=
- =?utf-8?B?UXFYWDN4UzZTeE82cTZVNlNxYko3UVQybmVXWGRXQm41NXQ2alh0L1IvUFA3?=
- =?utf-8?B?Uy9JVUNqMUt5Yk9VYXd5Umw0TXRNblhSZ1Flak81b2NYQUJuajFaNFduTkx1?=
- =?utf-8?B?ZDRqcXNOMDZiK1lRU1FXc2k5N3dGWVUvbTlUdGtYWSs5STYyamlUOFZEMVdy?=
- =?utf-8?B?a3J1eHZQREwvc2pVUmRYd1dpcHBJRWJDWWpsVHdrQkF5T0lLZHNra3V6eEc2?=
- =?utf-8?B?ZlhCeUdLQ2txZm9paHo4WTA0aloySVRLdXR6dkN4QWtLOTVjcmFQZm5XUnU2?=
- =?utf-8?B?a1BETzdEczVidVpwc2lLZDdxMkcwRGQrYkUwREQvNmo3K2IxVXdRWVdHWHRj?=
- =?utf-8?B?akpVUkt4bnlMOUlobG9SSWVpUGw0RmxVVmtJZUo4Z3BsZDUvdFRnaGxRVGJu?=
- =?utf-8?B?MGpJSFlyZjRwSi93aGJqVDhKUElLOTZVdDB0NzNYb1lvcldVSUF3N3NoSE9s?=
- =?utf-8?B?K3lhdU95WVpBTEMxa1JGM29xUm5sYTUxb016ZGhEVkVtWnVmakRmcXpmb054?=
- =?utf-8?B?QXkvNHJ0ZEZMRE13SVR4MUptSkdEWUFOMExoWFQzMTFmdGZIOTNVWFBOaXBL?=
- =?utf-8?B?eUl6VHlBdnRMUU5EblowL2xUTFVVbW1vaUx1UlJRTjA5RFBNWFcvNm1DRDdo?=
- =?utf-8?B?emh0WWJvZ2ZqZDE2aHJjVVdhWkd3bXRiZkx4ekFsQktnb1pkOElvVDUweUo3?=
- =?utf-8?B?ZGYxQ0ZVSWRBcDlDSUJWQ0xFR1U0L3lGMm1EdTlveFVZdGphR1JnUHFqSS9u?=
- =?utf-8?B?YTdua0dLK0tZb1N3WG45bFRQQUVsSXBDb3FYdkI5T2tudURLZzl0T3l6TW90?=
- =?utf-8?B?RlJNVnZDUTNUZFc2TlhDSU41R3EvbjYvd2pFQzZIRStwcEs1a1E1ZUdNUUVH?=
- =?utf-8?B?TTdMa214M1ZVbytaYUR2RmJhSUZTRFN6c1JDcFlUcXdKRnE2YlI4cHZOaGpK?=
- =?utf-8?B?ZjlyYXZsdld0M1RJa1p1TUdFZzRSOEwwSHRHNXB1TGRoU3lMdG10Ym9wZGhB?=
- =?utf-8?B?M2NDRmRtNnJzUmlyQU55YWVCMC8rS1p2cWNBcVhaTCsxY0xBRG9Zb2prMGtO?=
- =?utf-8?B?VitrSFV4dWQ5eGp1T3lGaHNmOUZwTk1lSm9RTStnY1pmcGpiYXBWT2pSZzZv?=
- =?utf-8?B?NUFlMkJDN1NQMXBGdXIxTExOc2JsNnZnelA0am1OSTJmMzdpb3pJdkhSUm1y?=
- =?utf-8?B?ZmpTejladmJDcmtXb0ZLWGs0bmdqOHVkK2pWRTkzdVRJbG1rbE5TU1RGZ3Jq?=
- =?utf-8?B?WXpMYnNybzRua0FIVUN4ZHQrRkU1dnR4Rnk0TnpLOWphUTNjbGQvLzh6SGt3?=
- =?utf-8?B?VGR0Q3l1ZVlKc2pBa3FKd1pIbUJhZ0F6ODJFMmFYNHpYckFRQzlCOTZnSDZz?=
- =?utf-8?Q?n9site0NOWAUYQyI=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Subject: Re: [PATCH v3 3/7] watchdog: npcm: Enable clock if provided
+Message-ID: <YoOq/enI6YSplnS5@latitude>
+References: <20220508194333.2170161-1-j.neuschaefer@gmx.net>
+ <20220508194333.2170161-4-j.neuschaefer@gmx.net>
+ <6c22fe1c-03d9-3a7e-26e8-463b989a02b7@roeck-us.net>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8ed56651-065d-4337-5916-08da380a308a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 May 2022 13:36:04.1065
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0QICdDMk8V3pUz5bMBGvBkiisIibxhu6lJg6uRbF3nO2aiua37fK9uqNr63eyOjW5Dkvv3SoiUK/AYgs0s8V2rA/RfPVoxxVF99ILpQfKxk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB7458
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vQZf1NsHbsdMxgvC"
+Content-Disposition: inline
+In-Reply-To: <6c22fe1c-03d9-3a7e-26e8-463b989a02b7@roeck-us.net>
+X-Provags-ID: V03:K1:suSOJwDkQbNjA5mis1Bopb6tozdowhVxJzoa07b0zru4xZCWGOA
+ tsoznaEQDds/YKVMaJzzMaGBODp04lLUdTyFHM9euL564w+DelOmCjgLJDDF3cVbQCO+Neb
+ KOZQfLaSwI55oBzMeJ1q9ZUVKDCTcFqaDgvk9SgjR/aAim+tKhdVsllPF5BG/ZVozMGwhHh
+ NvwlEx5YR05vTcEL1mbLw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:pHsyUMFlhB8=:JmoGOoA3kt1s/STOUO7LAm
+ iXaHbERzSnV9p8zPELbsRLWZq7q/kFAm1pusIJAvuF4F9RlCIIEMwPs9vv72NC6wMfmg4PKTf
+ ZLm44B7et5A9ShaSC7wkQKclQ7Tq0J/Ljp3L+m3GlHpMUPCtjJtWpU6foeNBFn8FqToKEIIw8
+ 8pCGGTCjE7EQ5vpbxjDptpjJr2qUaul+DTj6nQk3zxCrvnBOpDToYot8brs9A6RFzo6h8JxPs
+ uKh1+0+tWAEp3CbaNIq0K4DyjtzMM/y6A1cS1lfgVSzeBd9Vvzqm8cj/NNJV026WhVa5V64Yk
+ YBmJqzeFWZaRCoL0FgMTGxUN4hJaCnVTWVQuLBaeJGw9G7EMgqVik6agpozYet+wcMP29dw2p
+ XFulvkK7Y8PcnMYSN/rP5N8DPJQ94Vrb0qJstF75DpIGE7daly2mZh15McNG5v1E3GIsfavwe
+ qqoAB4mdml6kd7ms6T0k8gLihWItNHr+U3jPxqNC3Vskwp2sNPkOWq08O3HwJmbQ1ZjpjbNOC
+ NQY7A9tNN9p4EUdfabmQx/+Ek9dGDVAw94fFn/wKmhHq3JMMSadL0nZ+sQ9f+7JjcDKlwWTg+
+ xtYW85EKMkTpsjQgF4AOIVz0j/q0r777EWLvjTXTWDSlHZriB/q6XI1QVAW4UYpevMVBn92Aj
+ ZSa2JZjy5gnlWPTQEjCBgJagMD/9WOrUdXjLQZOFA8rxEG5Ib6NHLixUEVnThRdJgGFAZ0ski
+ IZrvCy7UhGS5IBvx/6xQu6wlNj1juyCob2CpBp3A5n9bp91FvjO9mosZhpGcTfqzXg6dhLnaO
+ Tg4qqkf1tEUH5sQGZOyEh4/esDiBMiatOe0ICiqM2/8QULtOwegqzttPPGGmWq4Wb5IOJOALq
+ fLmAek0MMrrIfolo/jWMyDwI0c4YvUqPtaYpRyfQWdrEfLHM4zmhS5ul2CyEQOVROyW16Rjsx
+ 8YPZPsHf6l9f2qKy9L8CYc9MAwp33iKDukhRC/kk1nyVlp8fBDoMC0dPNk+BK074ShiRxrA6o
+ VrJGF5490T7KDxj/khVUP8itVoo0EENnlKApJtTlId381SyIqwNczj/O8Vd9W+mzGiPQQ36sG
+ 62cfBgLD30wSZGrOUjYHQMeg40N/gRqdjaGMvZfQiZEjIXHOrZUvWVR7Q==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-SGkgR2VlcnQsDQoNClRoYW5rcyBmb3IgdGhlIGZlZWRiYWNrLg0KDQo+IFN1YmplY3Q6IFJlOiBb
-UEFUQ0hdIGNsazogcmVuZXNhczogY3BnLW1zc3I6IEFkZCBhIGRlbGF5IGFmdGVyIGRlYXNzZXJ0
-DQo+IA0KPiBIaSBCaWp1LA0KPiANCj4gT24gVGh1LCBNYXkgNSwgMjAyMiBhdCAxMjowMSBQTSBC
-aWp1IERhcyA8YmlqdS5kYXMuanpAYnAucmVuZXNhcy5jb20+DQo+IHdyb3RlOg0KPiA+ID4gU3Vi
-amVjdDogUmU6IFtQQVRDSF0gY2xrOiByZW5lc2FzOiBjcGctbXNzcjogQWRkIGEgZGVsYXkgYWZ0
-ZXINCj4gPiA+IGRlYXNzZXJ0IE9uIFdlZCwgTWF5IDQsIDIwMjIgYXQgODo0NCBQTSBCaWp1IERh
-cw0KPiA8YmlqdS5kYXMuanpAYnAucmVuZXNhcy5jb20+IHdyb3RlOg0KPiA+ID4gPiBBZnRlciBh
-ZGRpbmcgcmVzZXQgc3VwcG9ydCB0byB2c3AsIGl0IG5lZWRzIGEgZGVsYXkgb2YgMzINCj4gPiA+
-ID4gbWljcm9zZWNvbmRzIGFmdGVyIHJlc2V0IG9wZXJhdGlvbiwgb3RoZXJ3aXNlIHN5c3RlbSBo
-YW5ncyhkdWUgdG8NCj4gPiA+ID4gcmVnaXN0ZXINCj4gPiA+IHJlYWQvd3JpdGUpLg0KPiA+ID4g
-PiBUaGlzIHBhdGNoIGZpeGVzIHRoZSBzeXN0ZW0gaGFuZyBpc3N1ZSBieSBhZGRpbmcgZGVsYXkg
-YWZ0ZXINCj4gPiA+ID4gZGVhc3NlcnQgb3BlcmF0aW9uLg0KPiA+ID4gPg0KPiA+ID4gPiBTaWdu
-ZWQtb2ZmLWJ5OiBCaWp1IERhcyA8YmlqdS5kYXMuanpAYnAucmVuZXNhcy5jb20+DQo+ID4gPg0K
-PiA+ID4gPiBBZnRlciBhZGRpbmcgcmVzZXQvZGVhc3NlcnQgc3VwcG9ydCBmb3IgdnNwIGJhc2Vk
-IG9uIFsxXSwgUlovRzFODQo+ID4gPiA+IGJvYXJkIGhhbmdzLiBPbiBkZWJ1Z2dpbmcgaXQgZm91
-bmQgdGhhdCBpdCBuZWVkcyBhIGRlbGF5IG9mIDM1DQo+ID4gPiA+IG1pY3Jvc2Vjb25kcyBhZnRl
-ciBkZWFzc2VyaW50IHJlc2V0LiBXdGhvdXQgZGVsYXkgaWYgdGhlcmUgaXMgYW55DQo+ID4gPiA+
-IHJlZ2lzdGVyIHJlYWQvd3JpdGUgd2lsbCBsZWFkIHRvIGhhbmcuDQo+ID4gPiA+DQo+ID4gPiA+
-IFRoaXMgMzUgbWljcm9zZWNvbmRzIHZhbHVlIGlzICBwaWNrZWQgZnJvbSB0aGUgcmVzZXQoKS4N
-Cj4gPiA+DQo+ID4gPiBUaGUgMzUgwrVzIGNvbWVzIGZyb20gdGhlIEhhcmR3YXJlIFVzZXIncyBN
-YW51YWw6IHRoZXJlIHNob3VsZCBiZSBhdA0KPiA+ID4gbGVhc3QgMSBSQ0xLIGN5Y2xlIF9pbiBi
-ZXR3ZWVuXyBhc3NlcnRpbmcgYW5kIGRlYXNzZXJ0aW5nIHJlc2V0Lg0KPiA+ID4gVGhlIG1hbnVh
-bCBkb2Vzbid0IHNheSBhbnl0aGluZyBhYm91dCBkZWxheXMgX2FmdGVyXyBkZWFzc2VydGluZw0K
-PiByZXNldC4NCj4gPiA+DQo+ID4gPiBDb3VsZCBpdCBiZSB0aGF0IHRoZSBWU1AxIGRyaXZlciBp
-cyBhY3R1YWxseSBkZWFzc2VydGluZyByZXNldCB0b28NCj4gZWFybHk/DQo+ID4NCj4gPiBNeSB0
-ZXN0IHJlc3VsdHMgb24gUlovRzFOIHNob3dzLCBpdCBuZWVkcyAzNSBtaWNybyBzZWNvbmRzIGFm
-dGVyDQo+IGRlYXNzZXJ0aW5nIHJlc2V0Lg0KPiANCj4gSSBjYW4gY29uZmlybSB0aGF0IGFjY2Vz
-c2luZyB0aGUgVlNQIHJlZ2lzdGVycyB3aXRob3V0IHRoZSBkZWxheSBjYXVzZXMgYQ0KPiBsb2Nr
-LXVwIG9uIFItQ2FyIE0yLVcsIHRvby4NCj4gSSBzZWUgbm8gc3VjaCBsb2NrLXVwIG9uIFItQ2Fy
-IEdlbjMsIGJ1dCBJIGNhbm5vdCBydWxlIG91dCB0aGF0IGl0IGlzDQo+IG1pdGlnYXRlZCBieSBh
-IGhhbmRsZXIgaW4gc2VjdXJlIG1vZGUsIGFuZCB0aGF0IFZTUCBpbml0aWFsaXphdGlvbiBtYXkN
-Cj4gYWN0dWFsbHkgZmFpbCAoYWNjZXNzaW5nIHJlZ2lzdGVycyBvZiBub24tY2xvY2tlZCBtb2R1
-bGVzIHVzdWFsbHkgY2F1c2VzDQo+IGFuIGltcHJlY2lzZSBleHRlcm5hbCBhYm9ydCwgd2hpY2gg
-aXMgY2F1Z2h0IGJ5IExpbnV4IG9uIFItQ2FyIEdlbjIsIGJ1dA0KPiB0dXJuZWQgaW50byBhIG5v
-LW9wIGJ5IHNlY3VyZSBmaXJtd2FyZSBvbiBSLUNhciBHZW4zKS4NCj4gDQo+IEluc3RlYWQgb2Yg
-YWRkaW5nIHRoZSBleHBsaWNpdCBkZWxheSwgSSB0cmllZCBhZGRlZCBhIHBvbGxpbmcgbG9vcCBh
-ZnRlcg0KPiB0aGUgY2FsbCB0byByZXNldF9jb250cm9sX2RlYXNzZXJ0KCkgaW4gdGhlIHZzcDEg
-ZHJpdmVyLCB0byB3YWl0IHVudGlsIHRoZQ0KPiByZXNldCBpcyBjbGVhcmVkLCBsaWtlIGlzIGRv
-bmUgaW4gdGhlIGkyYy1yY2FyIGRyaXZlcjoNCj4gDQo+ICAgICAgICAgcmV0ID0gcmVhZF9wb2xs
-X3RpbWVvdXRfYXRvbWljKHJlc2V0X2NvbnRyb2xfc3RhdHVzLCByZXQsIHJldCA9PQ0KPiAwLCAx
-LA0KPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAxMDAsIGZhbHNlLCB2
-c3AxLT5yc3RjKTsNCj4gICAgICAgICBpZiAocmV0IDwgMCkgew0KPiAgICAgICAgICAgICAgICAg
-Li4uDQo+ICAgICAgICAgfQ0KPiANCj4gVGhpcyBhbHNvIGZpeGVzIHRoZSBpc3N1ZSBmb3IgbWUu
-DQoNClllcywgSXQgaXMgYmV0dGVyIGZpeCB0aGFuIHRoZSBleHBsaWNpdCBkZWxheS4NCg0KPiBB
-ZGRpbmcgbW9yZSBkZWJ1ZyBjb2RlIHNob3dzIHRoYXQgcmVzZXRfY29udHJvbF9zdGF0dXMoKSBp
-cyBjYWxsZWQgb25seQ0KPiBvbmNlIChib3RoIGZvciBpMmMgYW5kIHZzcDEpLCBzbyB0aGUgcG9s
-bGluZyBjb21wbGV0ZXMgYmVmb3JlIGFueSBjYWxsIHRvDQo+IHVkZWxheSgpLg0KDQo+IA0KPiBO
-b3RlIHRoYXQgYXQgdGhhdCB0aW1lWzFdLCB3ZSBhZGRlZCB0aGUgZGVsYXkgdG8gdGhlIGkyYy1y
-Y2FyIGRyaXZlcg0KPiBpbnN0ZWFkIG9mIHRoZSBDUEcvTVNTUiBkcml2ZXIsIGFzIHdlIHdlcmUg
-dG9sZCB0aGF0IGkyYyByZXNldCB3YXMNCj4gc3BlY2lhbCwgYW5kIG90aGVyIG1vZHVsZXMgZG8g
-bm90IG5lZWQgdGhpcy4NCj4gUGVyaGFwcyB2c3AgcmVzZXQgaXMgc3BlY2lhbCwgdG9vPw0KPiBP
-ciBwZXJoYXBzIGl0IGlzIHRpbWUgdG8gcmV2aXNpdCB0aGlzLCBhbmQgYWRkIHRoZSBwb2xsaW5n
-IHRvIGJvdGgNCj4gY3BnX21zc3JfcmVzZXQoKSBhbmQgY3BnX21zc3JfZGVhc3NlcnQoKSwgc28g
-aXQgY2FuIGJlIHJlbW92ZWQgZnJvbSB0aGUNCj4gZHJpdmVycz8NCg0KSSBmZWVsIGFkZGluZyBw
-b2xsIGluIFZTUCBkcml2ZXIgaXMgYmV0dGVyIGNvbXBhcmVkIHRvIGNwZyBkcml2ZXIsIGFzIA0K
-aXQgcmVkdWNlcyB3YWtldXAgdGltZSBhZnRlciAiU3VzcGVuZCB0byBSQU0iIG9wZXJhdGlvbi4N
-Cg0KSG93IGRvIHdlIHByb2NlZWQgaGVyZT8gRG8geW91IHdhbnQgbWUgdG8gYWRkIGFzIHBhcnQg
-b2YgUlovRzJMIHBhdGNoIHNlcmllcz8gT3IgeW91IHdpbGwgcG9zdCBzZXBhcmF0ZWx5Lg0KDQpQ
-bGVhc2UgbGV0IG1lIGtub3cuDQoNCkNoZWVycywNCkJpanUNCg0KPiANCj4gWzFdIENvbW1pdCAz
-Yjc3MDAxN2IwM2E0Y2RmICgiaTJjOiByY2FyOiBoYW5kbGUgUlhETUEgSFcgYmVoYXZpb3VyIG9u
-DQo+IEdlbjMiKS4NCg0KQWRkaW5nIA0K
+
+--vQZf1NsHbsdMxgvC
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, May 09, 2022 at 07:31:31PM -0700, Guenter Roeck wrote:
+> On 5/8/22 12:43, Jonathan Neusch=C3=A4fer wrote:
+> > On the Nuvoton WPCM450 SoC, with its upcoming clock driver, peripheral
+> > clocks are individually gated and ungated. Therefore, the watchdog
+> > driver must be able to ungate the watchdog clock.
+> >=20
+> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+> > ---
+> >=20
+> > v3:
+> > - Add enable/disable calls to npcm_wdt_restart handler
+> > - Not applied due to the above change:  Acked-by: Guenter Roeck <linux@=
+roeck-us.net>
+> >=20
+> > v2:
+> > - https://lore.kernel.org/lkml/20220429172030.398011-4-j.neuschaefer@gm=
+x.net/
+> > - Add clk_disable_unprepare call, suggested by Guenter Roeck
+> >=20
+> > v1:
+> > - https://lore.kernel.org/lkml/20220422183012.444674-4-j.neuschaefer@gm=
+x.net/
+> > ---
+[...]
+> > @@ -147,9 +155,15 @@ static int npcm_wdt_restart(struct watchdog_device=
+ *wdd,
+> >   {
+> >   	struct npcm_wdt *wdt =3D to_npcm_wdt(wdd);
+> >=20
+> > +	if (wdt->clk)
+> > +		clk_prepare_enable(wdt->clk);
+> > +
+> >   	writel(NPCM_WTR | NPCM_WTRE | NPCM_WTE, wdt->reg);
+> >   	udelay(1000);
+> >=20
+> > +	if (wdt->clk)
+> > +		clk_disable_unprepare(wdt->clk);
+> > +
+>=20
+> I am trying to understand why you stop the clock here.
+> If the watchdog didn't reset the system by now, for whatever reason,
+> you explicitly don't want it to reset the system ? If so, please add
+> a comment describing the reason for stopping the clock here.
+
+It was for symmetry with starting the clock, and in the hope that
+udelay(1000) will be enough to reach timer expiration. (In practice it
+does appear to work, although 1ms is not much.)
+
+Upon reconsideration, I agree it's better to leave the clock running for
+reset (with a comment pointing out the asymmetry).
+
+
+Best regards,
+Jonathan
+
+--vQZf1NsHbsdMxgvC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmKDqtwACgkQCDBEmo7z
+X9uEnQ/+PieUjR1LsgZzUOsXNS+aAubr0M4s9fyJdH14/eol2H39zy5/Y8ylCJIq
+zzFWjUFI6PVXPKiZ/GkOMMNp25cD2a+vEfFzSaaN/yaeNGv8vkU6q1ABm5PVihpK
++44o0bPpuy0SHbIxKCy7pGMvBR3UrjVA5Q/1GSxQd5fLQxOMwoziLNzhfXqI3dJb
+s5S1hx8pezpRR9WwAqIX4R6xiyqrwdL8KacjoAiNYQhLLrD/OOQcIlSijCLLnriM
+au59vZK1FzFaYsTI8w5vRgq8C6LtiXQCZsXUT9TJ17hC4OQnzNIlxvls+0O9GHlL
+e6MTmskpf/BLMbPiYUarLVvgFGqUE3FyVvuha3GUNK4nfBM5bjjyhtbDElvAs1j1
+cgBsIyWKbMB2zH5XrTsdTPB3CfQx8+ZZ98sHhzZEYg4C3oynFDNf1Y8g735SZiAq
+7bEqMy+nyrLXxPF55eEuh6AKm6FhZaVjZj9n5YqjxfAfeezDN4K8rCg9xWRy0Oyw
+C16jjVdbEufJWQIWopPzw5zM2uvu3ZTMjYr3kfIULs3wIYwoa2+fW6tiK8yHWB2B
+LFweECTpYkfBYkKGuxfnft4lgzTmSsSK7ggOnkkBjA0GiA0EgJN0JQ0SchBbzlhb
+nOPyAKh9/4LFosqLlGiLyDdZJGX3yaqw3xGK7up7tgfWUiWL+F8=
+=24UD
+-----END PGP SIGNATURE-----
+
+--vQZf1NsHbsdMxgvC--
