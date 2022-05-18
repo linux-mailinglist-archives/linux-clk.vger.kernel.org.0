@@ -2,77 +2,92 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D8052C5C9
-	for <lists+linux-clk@lfdr.de>; Wed, 18 May 2022 23:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F8552C70C
+	for <lists+linux-clk@lfdr.de>; Thu, 19 May 2022 00:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiERV4s (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 18 May 2022 17:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
+        id S230136AbiERW5h (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 18 May 2022 18:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiERV4U (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 18 May 2022 17:56:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA8365B7;
-        Wed, 18 May 2022 14:45:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 511916130C;
-        Wed, 18 May 2022 21:45:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A30FEC385A5;
-        Wed, 18 May 2022 21:45:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652910346;
-        bh=8ycTWVvX6puDTwUNj5c6I9dNAAzsSHDh5Ka/xeEnI9E=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=hWuW8UDwTfv0LOlg3CyRoDs8RmNiVuXq0WUcLqmXOUror4WQhUTbUN5tSE/pRSC/O
-         k3T17CqC9B4sCpL0Ct/PDfImMKDXmfJNtzTUG2nM34k/JsudmBEjW4KDFtQFoFilmj
-         WtiFub+zvVC3bvI0hY2cmgZDmtk3w3YBmn+N1lVm2ddBzcQ0ayfUOTVTN8WGpLafKF
-         KknqABLM1ejmCaSlojhWPC+3tn3sKTV5QLRcqOG0WNPO+UuLUIsUXyoIoVo95DcnIH
-         BvYfSPh1pGmw/22W3nl6D7KW2mrs+HRKbl7qoI1N4cqljxy7e6DQ3Cd42xnWSIyhaY
-         dXnLbmrARS9hg==
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230465AbiERW45 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 18 May 2022 18:56:57 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDB425C9
+        for <linux-clk@vger.kernel.org>; Wed, 18 May 2022 15:56:55 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id t26so6161946ybt.3
+        for <linux-clk@vger.kernel.org>; Wed, 18 May 2022 15:56:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
+        b=ovbcf3BPb/ZrA/FpQ+ZjErGDIEZ9sF3fYOxqsE4Z0xdiTlYY9UY36hS3ty6MLllddq
+         FdZzNc2PcFHW5cwKZ0FlQqx6F8uTY06Ab/cmT+eL89dkm6I4fHT5v6DDGzwY+fqIjM8b
+         RjeYQt93Ckr4p0lPVWY342OwWKznH6xDl4nV36uj7bwrBPcHFh3ePzF5GNEmu/mQBhIV
+         GwWDekgJIDWSV60014hyLdzt2NtjUStY8MI6SiwBWMH8LEBnRGkE0W6Db0zUE9IYWmDQ
+         Ifd6nbhkESdcIbQrjo3sdEfmdPtb1VAIHCw/LAZv1DOtvQwqLYnhML4dVDmuoYeMmVFn
+         q7TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=mZ3wqB4NmL7z6lpFr/h15h1rYqsZKafJnUpMVahbEPg=;
+        b=im6WBnBZ0Ost3+nWFIr0+wnXSjNSgiMaANvOeugLePsPOpZ/wzEVzZuok1OY43LHHb
+         if1X3ERvz+4hfzidJeZbeXm/En6t5txKjSAiwxUOiGZTWZGKXv7IdfcZZ3+zxV+n2gGA
+         sdq5UY2f9V+G/o+EJWbziZia5wS2nBtgekChCR1jZjQQWin0t4+6Xfpc20Dr2t8nxF+o
+         ymbOfR2O76BI/UGIa6qKe071ZJpM1fBOsN3AqphISnr7sikLob4OwcZv+fESjU58o6Jf
+         2E4Hvf/XQHBGfBc/ERMhnrNTi5sqCVGKTmAdZxWxaELV+GPsBtyG0rHQKyeKPGm75yJG
+         F5sw==
+X-Gm-Message-State: AOAM530q6Xa9u5Y/kcZFG4tRyIDd6vVSTBUS7UGZkOkCjZIuEFa76AMi
+        l9LOvBEQjQGXMwd5LHbcqBHbAbasUW58b8Mip4Q=
+X-Google-Smtp-Source: ABdhPJyyLDAg+sVdsLTxwEXiZ5avjedwK/uWMP/Y3UWcChEjwDE+iXuY4kOycHY8vIqM/rcV0hLTcVdg0IN0RAQYgBc=
+X-Received: by 2002:a5b:f87:0:b0:64a:9aa6:e181 with SMTP id
+ q7-20020a5b0f87000000b0064a9aa6e181mr1852277ybh.157.1652914614913; Wed, 18
+ May 2022 15:56:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220510104804.544597-1-wenst@chromium.org>
-References: <20220510104804.544597-1-wenst@chromium.org>
-Subject: Re: [PATCH v2 00/11] clk: mediatek: Move to struct clk_hw provider APIs
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Date:   Wed, 18 May 2022 14:45:44 -0700
-User-Agent: alot/0.10
-Message-Id: <20220518214546.A30FEC385A5@smtp.kernel.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a05:7000:7143:0:0:0:0 with HTTP; Wed, 18 May 2022 15:56:53
+ -0700 (PDT)
+Reply-To: tonywenn@asia.com
+From:   Tony Wen <weboutloock4@gmail.com>
+Date:   Thu, 19 May 2022 06:56:53 +0800
+Message-ID: <CAE2_YrD=5bo8j9+ah-xptEBBV-HEC4=Gb0SRHf996phiopc3WQ@mail.gmail.com>
+Subject: engage
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b29 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4933]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [weboutloock4[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [weboutloock4[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.4 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Chen-Yu Tsai (2022-05-10 03:47:53)
->=20
-> Patch 10 fixes, by hand, a build error from a call site that was not cove=
-red
-> by the previous patch.
->=20
-> Patch 11 converts the last usage of clk_register*() in the MediaTek clk
-> drivers.
->=20
-> As mentioned above, this series includes parts that don't build, but are
-> split out for clarity. These are patches 3~8 and 9+10. Once the patches
-> are reviewed, they can be squashed together.
-
-Sounds ok to me. Please resend with the squash and I'll apply them.
+Can I engage your services?
