@@ -2,86 +2,63 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3709952D1AF
-	for <lists+linux-clk@lfdr.de>; Thu, 19 May 2022 13:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BD952D33E
+	for <lists+linux-clk@lfdr.de>; Thu, 19 May 2022 14:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237488AbiESLoL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 19 May 2022 07:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
+        id S238397AbiESM4G (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 19 May 2022 08:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237505AbiESLoI (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 May 2022 07:44:08 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D7FB41DD
-        for <linux-clk@vger.kernel.org>; Thu, 19 May 2022 04:44:06 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id u7so5191005ljd.11
-        for <linux-clk@vger.kernel.org>; Thu, 19 May 2022 04:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IYmL6dQH/QpkV/dg7FbG8d6+fzH8Ngy5GLGM2DwQbvY=;
-        b=nCf/woJ3G3cja5kfD1C2aOtthsXTRdetx2BypJr0AdoP1+EOvoeT9iigd7dc30Aq1+
-         VGss7SiBjlFGHih+///eZBMdAeUyo+muNJOR7rxglxZ/Nela2Rh047IRK6+aUe/cPsHt
-         mO279Kia1cxrjFw+69JrCiHwy3U4y6D6UGeAJ8ry3pAHFEV1K0uV9+ETeCIA4jEYAyb/
-         JwV4p9CFuzDLL16wkXlCSAAelj4/vlwUxmmSJWY1L5OkMI8q9qgnQI1wFDDDt3jl7YXC
-         a0soUO1X8XPJL4PUo+r4aivMy57yZJuFzkcjCBtFmwEhmV4Ga2jmm/9tBEyyKCM2Ocen
-         H12A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IYmL6dQH/QpkV/dg7FbG8d6+fzH8Ngy5GLGM2DwQbvY=;
-        b=JYboaEc8v/TmasJfE5rjDtMNUS9d/cNMzYnA15NcibgM5HQKj8/xSeUIVT6EAioGy+
-         5vi5ggxyPNBTAwXJct5LMy1KrvreuzoGES9y5W+y2ZwzjKcW7VBmWBcZlEi46MImiuKu
-         SZBgEXUX3kYTvdrak2C3J5fCKY8veqJe9RDGiiUuaTEn8c2Q4CtvtTjJiDRegvc5VcLW
-         UGQ785gakZpdKWIgZEjeVsLxjGoBKoLZR0tCQPCX6eGWIJo63EI4CIEgwzj/vph0M6it
-         Pnnp4zcd11Wg14bxRi05Jaig2YI8y3DG12oepLdJmxdcyqfVE4N3FRKAOpAo5lNq60pQ
-         bywA==
-X-Gm-Message-State: AOAM531cX/B3sZVMR9H+z+1DO39U4x07QoHG/xiKAx0vnAz/3TC2jfi5
-        7bDhw8lOFWOLLVeGSXkbX3EszA==
-X-Google-Smtp-Source: ABdhPJyswJAQj7bSsDiRxhVta7mphaBUwYrWcW/mlylni/THFVGZEPnzja834BWmYxSnpaPDHLxvow==
-X-Received: by 2002:a2e:9097:0:b0:253:c84e:e4a6 with SMTP id l23-20020a2e9097000000b00253c84ee4a6mr2369051ljg.529.1652960644667;
-        Thu, 19 May 2022 04:44:04 -0700 (PDT)
-Received: from ?IPV6:2001:470:dd84:abc0::8a5? ([2001:470:dd84:abc0::8a5])
-        by smtp.gmail.com with ESMTPSA id n22-20020a05651203f600b00477b223ab3fsm264171lfq.167.2022.05.19.04.44.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 04:44:04 -0700 (PDT)
-Message-ID: <b0742ac1-f04a-8594-0662-e4cc194c72a3@linaro.org>
-Date:   Thu, 19 May 2022 14:44:02 +0300
+        with ESMTP id S238228AbiESMzm (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 19 May 2022 08:55:42 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA05A88B4;
+        Thu, 19 May 2022 05:55:37 -0700 (PDT)
+X-UUID: 4a83d12f1ba04a069294eab1c2ebd641-20220519
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:3a6359d7-6f8f-448e-8367-dfc7add8d402,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:90
+X-CID-INFO: VERSION:1.1.5,REQID:3a6359d7-6f8f-448e-8367-dfc7add8d402,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:90
+X-CID-META: VersionHash:2a19b09,CLOUDID:e88fdf79-5ef6-470b-96c9-bdb8ced32786,C
+        OID:63ae97993cc8,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: 4a83d12f1ba04a069294eab1c2ebd641-20220519
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 824742674; Thu, 19 May 2022 20:55:29 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 19 May 2022 20:55:28 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 19 May 2022 20:55:28 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <matthias.bgg@gmail.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <p.zabel@pengutronix.de>,
+        <angelogioacchino.delregno@collabora.com>,
+        <chun-jie.chen@mediatek.com>, <wenst@chromium.org>,
+        <runyang.chen@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH v7 00/19] Cleanup MediaTek clk reset drivers and support SoCs
+Date:   Thu, 19 May 2022 20:55:08 +0800
+Message-ID: <20220519125527.18544-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v6 2/5] clk: qcom: regmap: add PHY clock source
- implementation
-Content-Language: en-GB
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20220513175339.2981959-1-dmitry.baryshkov@linaro.org>
- <20220513175339.2981959-3-dmitry.baryshkov@linaro.org>
- <YoShe/rWXVq78+As@hovoldconsulting.com>
- <YoSk3i00b02bRThU@hovoldconsulting.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <YoSk3i00b02bRThU@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,50 +66,76 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 18/05/2022 10:48, Johan Hovold wrote:
-> On Wed, May 18, 2022 at 09:34:19AM +0200, Johan Hovold wrote:
->> On Fri, May 13, 2022 at 08:53:36PM +0300, Dmitry Baryshkov wrote:
-> 
->>> +/*
->>> + * A special clock implementation for PHY pipe and symbols clock sources.
->>
->> s/sources/muxes/
->>
->>> + *
->>> + * If the clock is running off the from-PHY source, report it as enabled.
->>> + * Report it as disabled otherwise (if it uses reference source).
->>> + *
->>> + * This way the PHY will disable the pipe clock before turning off the GDSC,
->>
->> s|pipe|pipe/symbol|
->>
->>> + * which in turn would lead to disabling corresponding pipe_clk_src (and thus
->>> + * it being parked to a safe, reference clock source). And vice versa, after
->>> + * enabling the GDSC the PHY will enable the pipe clock, which would cause
->>
->> s|pipe|pipe/symbol|
->>
->>> + * pipe_clk_src to be switched from a safe source to the working one.
->>> + */
->>
->> You're still referring to the old pipe_clk_src name in two places in
->> this comment.
-> 
-> Just remembered that the PCIe/USB mux is also referred to as
-> pipe_clk_src and that your not referring to the clock implementation.
-> 
-> I guess the comment works as-is even if the example refers to just
-> USB/PCIe.
+In this series, we cleanup MediaTek clock reset drivers in clk/mediatek
+folder. MediaTek clock reset driver is used to provide reset control
+of modules controlled in clk, like infra_ao.
 
-I will add a phrase mentioning UFS symbol clocks.
+Changes for v7:
+1. v7 is based on linux-next next-20220519 and Chen-Yu's series[1].
+2. Add support for MT8186.
 
-> 
->> Should this be reflected in Subject as well (e.g. "PHY mux
->> implementation")?
-> 
-> Johan
+[1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=643003
 
+Changes for v6:
+1. Add a new patch to support inuput argument index mode.
+2. Revise definition in reset.h to index.
+
+Rex-BC Chen (19):
+  clk: mediatek: reset: Add reset.h
+  clk: mediatek: reset: Fix written reset bit offset
+  clk: mediatek: reset: Refine and reorder functions in reset.c
+  clk: mediatek: reset: Extract common drivers to update function
+  clk: mediatek: reset: Merge and revise reset register function
+  clk: mediatek: reset: Revise structure to control reset register
+  clk: mediatek: reset: Support nonsequence base offsets of reset
+    registers
+  clk: mediatek: reset: Support inuput argument index mode
+  clk: mediatek: reset: Change return type for clock reset register
+    function
+  clk: mediatek: reset: Add new register reset function with device
+  clk: mediatek: reset: Add reset support for simple probe
+  dt-bindings: arm: mediatek: Add #reset-cells property for
+    MT8192/MT8195
+  dt-bindings: reset: mediatek: Add infra_ao reset index for
+    MT8192/MT8195
+  clk: mediatek: reset: Add infra_ao reset support for MT8192/MT8195
+  arm64: dts: mediatek: Add infra #reset-cells property for MT8192
+  arm64: dts: mediatek: Add infra #reset-cells property for MT8195
+  dt-bindings: reset: mediatek: Add infra_ao reset index for MT8186
+  dt-bindings: arm: mediatek: Add #reset-cells property for MT8186
+  clk: mediatek: reset: Add infra_ao reset support for MT8186
+
+ .../mediatek/mediatek,mt8186-sys-clock.yaml   |   3 +
+ .../mediatek/mediatek,mt8192-sys-clock.yaml   |   3 +
+ .../mediatek/mediatek,mt8195-sys-clock.yaml   |   3 +
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      |   1 +
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  13 +-
+ drivers/clk/mediatek/clk-mt2701-eth.c         |  10 +-
+ drivers/clk/mediatek/clk-mt2701-g3d.c         |  10 +-
+ drivers/clk/mediatek/clk-mt2701-hif.c         |  10 +-
+ drivers/clk/mediatek/clk-mt2701.c             |  22 +-
+ drivers/clk/mediatek/clk-mt2712.c             |  22 +-
+ drivers/clk/mediatek/clk-mt7622-eth.c         |  10 +-
+ drivers/clk/mediatek/clk-mt7622-hif.c         |  12 +-
+ drivers/clk/mediatek/clk-mt7622.c             |  22 +-
+ drivers/clk/mediatek/clk-mt7629-eth.c         |  10 +-
+ drivers/clk/mediatek/clk-mt7629-hif.c         |  12 +-
+ drivers/clk/mediatek/clk-mt8135.c             |  22 +-
+ drivers/clk/mediatek/clk-mt8173.c             |  22 +-
+ drivers/clk/mediatek/clk-mt8183.c             |  18 +-
+ drivers/clk/mediatek/clk-mt8186-infra_ao.c    |  23 ++
+ drivers/clk/mediatek/clk-mt8192.c             |  29 +++
+ drivers/clk/mediatek/clk-mt8195-infra_ao.c    |  24 +++
+ drivers/clk/mediatek/clk-mtk.c                |   7 +
+ drivers/clk/mediatek/clk-mtk.h                |   9 +-
+ drivers/clk/mediatek/reset.c                  | 198 +++++++++++++-----
+ drivers/clk/mediatek/reset.h                  |  82 ++++++++
+ include/dt-bindings/reset/mt8186-resets.h     |   5 +
+ include/dt-bindings/reset/mt8192-resets.h     |   8 +
+ include/dt-bindings/reset/mt8195-resets.h     |   6 +
+ 28 files changed, 522 insertions(+), 94 deletions(-)
+ create mode 100644 drivers/clk/mediatek/reset.h
 
 -- 
-With best wishes
-Dmitry
+2.18.0
+
