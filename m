@@ -2,72 +2,83 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F9952F4F9
-	for <lists+linux-clk@lfdr.de>; Fri, 20 May 2022 23:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 962E452F5A3
+	for <lists+linux-clk@lfdr.de>; Sat, 21 May 2022 00:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353632AbiETVVL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 20 May 2022 17:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
+        id S1348346AbiETWVo (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 20 May 2022 18:21:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350715AbiETVVH (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 20 May 2022 17:21:07 -0400
-Received: from smtp.smtpout.orange.fr (smtp10.smtpout.orange.fr [80.12.242.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01DC49923
-        for <linux-clk@vger.kernel.org>; Fri, 20 May 2022 14:21:04 -0700 (PDT)
-Received: from pop-os.home ([86.243.180.246])
-        by smtp.orange.fr with ESMTPA
-        id sA3Pn0Q162ovCsA3PnypMs; Fri, 20 May 2022 23:21:02 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Fri, 20 May 2022 23:21:02 +0200
-X-ME-IP: 86.243.180.246
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] clk: bcm: rpi: Use correct order for the parameters of devm_kcalloc()
-Date:   Fri, 20 May 2022 23:20:58 +0200
-Message-Id: <49d726d11964ca0e3757bdb5659e3b3eaa1572b5.1653081643.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S1347550AbiETWVn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 20 May 2022 18:21:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269455676E;
+        Fri, 20 May 2022 15:21:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BF3CFB82E18;
+        Fri, 20 May 2022 22:21:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EA73C385A9;
+        Fri, 20 May 2022 22:21:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653085299;
+        bh=qJwASo9Th0s9B1XSYYW0kv0RCtC/qm3SNe5fIxpPzqk=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=ldtVo39yD8ihAPF/im536M8gIymZBYh4K7JvPCFy9MwHQ1MODy1tspqewrOnr7c0U
+         RtKekES6aGdfhgfcnzAxm7wHIFFWWvoQ6N+jZ0WryofsBO0v8+P9v6UtMo0n8FEmCE
+         jg6DlQ+aJqG67s7H1PiZxCNedhzVcANf9R5epbGCawA6p+4u4RuVPZMO6khfuLavHU
+         7RLfyiGGkQSEjz6RWf7AzEqIe7PsvkcWuK/3FHFHWuIJNOLnVvYsOYIfY54Wzfj9qc
+         UBSEyU1AuabTZujmTiUbI+N0P8u1E4Ma+v8C7DlRE2mgtHq9BehLu/bNv3zdxYAcYa
+         xrl6PYvCgsv5w==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <26c2fb0c-e58a-5864-4256-f60f948ca634@gmail.com>
+References: <20220429123133.28869-1-matthias.bgg@kernel.org> <20220429123133.28869-2-matthias.bgg@kernel.org> <YnGjScfQA9axBYBO@robh.at.kernel.org> <26c2fb0c-e58a-5864-4256-f60f948ca634@gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: ARM: Mediatek: Remove msdc binding of MT8192 clock
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     mturquette@baylibre.com, allen-kh.cheng@mediatek.com,
+        weiyi.lu@mediatek.com, chun-jie.chen@mediatek.com,
+        linux-kernel@vger.kernel.org, ikjn@chromium.org,
+        miles.chen@mediatek.com, linux-mediatek@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        angelogioacchino.delregno@collabora.com,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh@kernel.org>, matthias.bgg@kernel.org
+Date:   Fri, 20 May 2022 15:21:37 -0700
+User-Agent: alot/0.10
+Message-Id: <20220520222139.2EA73C385A9@smtp.kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-We should have 'n', then 'size', not the opposite.
-This is harmless because the 2 values are just multiplied, but having
-the correct order silence a (unpublished yet) smatch warning.
+Quoting Matthias Brugger (2022-05-05 09:47:30)
+>=20
+>=20
+> On 03/05/2022 23:48, Rob Herring wrote:
+> > On Fri, Apr 29, 2022 at 02:31:31PM +0200, matthias.bgg@kernel.org wrote:
+> >> From: Matthias Brugger <matthias.bgg@gmail.com>
+> >>
+> >> The msdc gate is part of the MMC driver. Delete the binding description
+> >> of this node.
+> >=20
+> > An ABI break is okay because ...?
+> >=20
+>=20
+> Because the code controlling the clock gate was moved to the consumer. Th=
+is node=20
+> did never ever represent any working implementation of a peripheral. Just=
+ a=20
+> lonely clock gate that wasn't used.
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/clk/bcm/clk-raspberrypi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/clk/bcm/clk-raspberrypi.c b/drivers/clk/bcm/clk-raspberrypi.c
-index 9d09621549b9..73518009a0f2 100644
---- a/drivers/clk/bcm/clk-raspberrypi.c
-+++ b/drivers/clk/bcm/clk-raspberrypi.c
-@@ -345,7 +345,7 @@ static int raspberrypi_discover_clocks(struct raspberrypi_clk *rpi,
- 	int ret;
- 
- 	clks = devm_kcalloc(rpi->dev,
--			    sizeof(*clks), RPI_FIRMWARE_NUM_CLK_ID,
-+			    RPI_FIRMWARE_NUM_CLK_ID, sizeof(*clks),
- 			    GFP_KERNEL);
- 	if (!clks)
- 		return -ENOMEM;
--- 
-2.34.1
-
+Can you add that to the description and resend?
