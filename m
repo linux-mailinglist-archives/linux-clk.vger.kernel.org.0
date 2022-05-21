@@ -2,55 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C82E52F80C
-	for <lists+linux-clk@lfdr.de>; Sat, 21 May 2022 05:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA72852F81B
+	for <lists+linux-clk@lfdr.de>; Sat, 21 May 2022 05:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239623AbiEUD3x (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 20 May 2022 23:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53298 "EHLO
+        id S1349729AbiEUDka (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 20 May 2022 23:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbiEUD3w (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 20 May 2022 23:29:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10370185C9F;
-        Fri, 20 May 2022 20:29:52 -0700 (PDT)
+        with ESMTP id S229992AbiEUDk3 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 20 May 2022 23:40:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1802E719C3;
+        Fri, 20 May 2022 20:40:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F49461EF8;
-        Sat, 21 May 2022 03:29:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC305C385A9;
-        Sat, 21 May 2022 03:29:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA1BCB82F29;
+        Sat, 21 May 2022 03:40:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5909FC385A9;
+        Sat, 21 May 2022 03:40:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653103791;
-        bh=ktEWLw7fX0VJQgaR8sZo/sm5OJ8hGBxTsDsZpHgOnyA=;
+        s=k20201202; t=1653104425;
+        bh=ISVhewo33uJMRv2Ky/67ulMoXXlMw7gDmiWI46L9w/0=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=q2eBIHoX2s/YvWBv8HDaGrffHl6F7iXLUG1iE++YIOpKUqP4Rs84CtL3Uj6ptrXjd
-         xLOrdP5+hIF1cZwRcVzm57kHrYt4+4/sZ+oMe1snQ6NJ93yBqUqFvEeDLRZ3uiuLCV
-         9czgUD2nZq/u4D+Jo2NBDFQD1WIwOzaUAPMmB5a/b4ptunCCUs4j0tXfY3nZI89OES
-         OAnRkAqRfvanq7fQ5jDSEbZEY9TmrDdSEG/BLqNKC/zXItwLFIpw2Yf8GOCB8I4wfB
-         Rw/RH6cS2YcZ2T+qtSrjvNDAVjXfSfVGK6iwVuAmTccvgpjxixa+pIoCLfCxOk//rR
-         W3P6fmrTIx9zg==
+        b=eYd1fyDxv+zyZg4eUMEEdXBJQxbxiRJdZZ44FBpu2E1xD5TRheZu9ayuX6hayGdSh
+         u8yMUiXSmPAQA9RNfjsYq7NFbWwCDG7AVU4dQzl3goJIXqt4ozetbbzMhmfe5ehj6J
+         446vDEYIJRW36ZN/oOZUzEI6mCKTcSF4nub4EYuXvi71KglTufVnTyTbjq7gd5wVmK
+         SGA7VXgy0Ety3W2Mbfpk2hgU2g/hwmAkshVgL3M0UTFKu5Y/TZ0aYEN5wPkvOPTmNJ
+         3m1QE+aFVLkNY0L7YgNteZkN9roICK2LWr2M1NfG3BEXCatnFl0EM6T22qXugGIxHZ
+         Sn/jDZ4kCrM0Q==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220520030625.145324-1-chanho61.park@samsung.com>
-References: <CGME20220520030551epcas2p1a67b9f026ce2ec56b0a167026ef96baf@epcas2p1.samsung.com> <20220520030625.145324-1-chanho61.park@samsung.com>
-Subject: Re: [PATCH] dt-bindings: clock: exynosautov9: correct count of NR_CLK
+In-Reply-To: <20210904131714.2312-1-len.baker@gmx.com>
+References: <20210904131714.2312-1-len.baker@gmx.com>
+Subject: Re: [PATCH] clk: ti: composite: Prefer kcalloc over open coded arithmetic
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, Chanho Park <chanho61.park@samsung.com>
-To:     Chanho Park <chanho61.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+Cc:     Len Baker <len.baker@gmx.com>, Kees Cook <keescook@chromium.org>,
+        linux-omap@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Len Baker <len.baker@gmx.com>,
         Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>
-Date:   Fri, 20 May 2022 20:29:48 -0700
+        Tero Kristo <kristo@kernel.org>
+Date:   Fri, 20 May 2022 20:40:23 -0700
 User-Agent: alot/0.10
-Message-Id: <20220521032950.EC305C385A9@smtp.kernel.org>
+Message-Id: <20220521034025.5909FC385A9@smtp.kernel.org>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,14 +57,22 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Chanho Park (2022-05-19 20:06:25)
-> _NR_CLKS which can be used to register clocks via nr_clk_ids. The clock
-> IDs are started from 1. So, _NR_CLKS should be defined to "the last
-> clock id + 1"
+Quoting Len Baker (2021-09-04 06:17:14)
+> As noted in the "Deprecated Interfaces, Language Features, Attributes,
+> and Conventions" documentation [1], size calculations (especially
+> multiplication) should not be performed in memory allocator (or similar)
+> function arguments due to the risk of them overflowing. This could lead
+> to values wrapping around and a smaller allocation being made than the
+> caller was expecting. Using those allocations could lead to linear
+> overflows of heap memory and other misbehaviors.
 >=20
-> Fixes: 680e1c8370a2 ("dt-bindings: clock: add clock binding definitions f=
-or Exynos Auto v9")
-> Signed-off-by: Chanho Park <chanho61.park@samsung.com>
+> So, use the purpose specific kcalloc() function instead of the argument
+> size * count in the kzalloc() function.
+>=20
+> [1] https://www.kernel.org/doc/html/v5.14/process/deprecated.html#open-co=
+ded-arithmetic-in-allocator-arguments
+>=20
+> Signed-off-by: Len Baker <len.baker@gmx.com>
 > ---
 
 Applied to clk-next
