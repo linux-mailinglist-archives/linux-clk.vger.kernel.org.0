@@ -2,64 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA1A2531D9F
-	for <lists+linux-clk@lfdr.de>; Mon, 23 May 2022 23:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B6A531E2C
+	for <lists+linux-clk@lfdr.de>; Mon, 23 May 2022 23:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiEWVXA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 23 May 2022 17:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41920 "EHLO
+        id S229473AbiEWVtA (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 23 May 2022 17:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiEWVW7 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 23 May 2022 17:22:59 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11DE9969C
-        for <linux-clk@vger.kernel.org>; Mon, 23 May 2022 14:22:58 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id j137so8378073oih.6
-        for <linux-clk@vger.kernel.org>; Mon, 23 May 2022 14:22:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s84ouXHmk7fiVJEq5GR+aYMEWGBN/ptWHt1c7KVnWA4=;
-        b=jDLz5fHRUI8LRqP2vuulFPmR72iYqNW8ZDA0FrKv6CzjUEBOZcmU4KiV8XaQQRxx6+
-         h64sQB46EoIUjfiu/PDLrc5Khe5xZ3PGjMkyRSZitVoUgYfvwUm6B1lMtms+3hDTZuED
-         ZqpSTa5mXD533floXMcRASAEsdsqu6zpt681mJuWdT2yM59N1oBE2tILA4ZN+SjNj001
-         aZ86yWpsBoWXL/hRF7l/W+BV7C65GwlctH2GtdzK/no40xTGSCk46JyMHHBYU6y4ELob
-         agkjkxObl4jqCkkhyNUd7el+XAdYqHYSdMYar+2F/LWVw5+FhQlLE/CxqLXLiwyl4BJq
-         0nKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s84ouXHmk7fiVJEq5GR+aYMEWGBN/ptWHt1c7KVnWA4=;
-        b=VtYBAx8qPtksoz3v8jyHheY1ndXp6IwOOuvNtkdjNOchqfZhvg5yAnkSwBPrNI2VBI
-         VP68EhAj7IXYt9bG5G+2XcMN9PITAwfmmuqImARyNunaAwpnMbFFPrdaDe0FsVeTbGhI
-         IJeGelPZAstrdym58Tjua2sVV2VlER7HHOatMQmdDeEZzPpYYlXTmfUP+1HvgVa2aznl
-         naG1YQBdd0s1QwaFQxbN8SHGIkwpwwqo3FYKCaEFtRfrhjWmd9v7w5GJy363hBRm3BZX
-         S+kgc83ZxOmfDLA+pH2eWledibDg70oAuEnIDIE4oyfz0dnbYErYgEOBig5656hsDq/L
-         2fKQ==
-X-Gm-Message-State: AOAM531VSd1V6j2t08SBSEBWUWoJSgBdwDVlwvzan7Dxspwi+6OXNWI6
-        rOJvjHp82BbIo1SmD17yKUhuf7kUWpqqHQ==
-X-Google-Smtp-Source: ABdhPJzdRptAS73TmdRt1Jt94isZQ0KxtaDBKrlx/b/vrDf7aagBdRjoVStRW0IaZZU3v+OXaIMDsA==
-X-Received: by 2002:aca:de84:0:b0:2f9:c97c:421c with SMTP id v126-20020acade84000000b002f9c97c421cmr581104oig.46.1653340977669;
-        Mon, 23 May 2022 14:22:57 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id t16-20020acaaa10000000b00325cf57766bsm4465412oie.1.2022.05.23.14.22.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 14:22:56 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org,
+        with ESMTP id S230230AbiEWVs5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 23 May 2022 17:48:57 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [IPv6:2001:4b7a:2000:18::163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80543AFAC7
+        for <linux-clk@vger.kernel.org>; Mon, 23 May 2022 14:48:55 -0700 (PDT)
+Received: from Marijn-Arch-PC.localdomain (94-209-165-62.cable.dynamic.v4.ziggo.nl [94.209.165.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id F35032051B;
+        Mon, 23 May 2022 23:38:46 +0200 (CEST)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [GIT PULL] Qualcomm clock fixes for v5.19
-Date:   Mon, 23 May 2022 16:22:55 -0500
-Message-Id: <20220523212255.64355-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.32.0
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rajeev Nandan <quic_rajeevny@quicinc.com>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Marek <jonathan@marek.ca>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
+Subject: [PATCH 0/9] drm/msm/dsi_phy: Replace parent names with clk_hw pointers
+Date:   Mon, 23 May 2022 23:38:28 +0200
+Message-Id: <20220523213837.1016542-1-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,42 +56,72 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Stephen, I sent this as a follow up rather than creating a new tag. Let me know
-if you prefer it in a different way.
+As stated in [1] I promised to tackle and send this series.
 
-Regards,
-Bjorn
+parent_hw pointers are easier to manage and cheaper to use than
+repeatedly formatting the parent name and subsequently leaving the clk
+framework to perform lookups based on that name.
 
-The following changes since commit 703db1f5da1e3a62b84356a29c150efa24a2377d:
+This series starts out by adding extra constructors for divider, mux and
+fixed-factor clocks that have parent_hw(s) pointer argument(s) instead
+of some DT index or name.  Followed by individual patches performing the
+conversion, one DSI PHY at a time.
 
-  clk: qcom: rcg2: Cache CFG register updates for parked RCGs (2022-05-19 16:42:30 -0500)
+dsi_phy_28nm_8960 includes an extra fixup to replace "eternal"
+devm_kzalloc allocations (for the lifetime of the device) with
+stack-local char arrays, like all the other DSI PHY drivers.
 
-are available in the Git repository at:
+I couldn't help but notice that clock names are wildly varying:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/qcom-clk-for-5.19-2
+- Some use underscores in the _clk suffix where others have nothing;
+- Some have an _ after the %d, others have not;
+- Some use a _pll suffix after dsi%d or even _phy_pll suffix.
 
-for you to fetch changes up to 03e053b4f717c0d893881fe8e4ca8d9ae2f035f2:
+Are there any thoughts or feelings towards unifying these?
+Theoretically no clock names are used anywhere in the kernel, and
+everything is based on a phandle + index in DT (I have yet to validate
+this).  Obviously no .name/.fw_name will be updated to not break DT.
 
-  Revert "clk: qcom: regmap-mux: add pipe clk implementation" (2022-05-23 12:26:13 -0500)
+Which, by the way, is there a particular reason for:
 
-----------------------------------------------------------------
-Qualcomm clock fixes for v5.19
+  #define DSI_BYTE_PLL_CLK		0
+  #define DSI_PIXEL_PLL_CLK		1
 
-After concerns were raised about the new PCIe pipe_clk mux
-implementation an updated implementation has evolved, but has not yet
-been accepted.
+To not be in the dt-bindings and used in the DT?
 
-This reverts the merged changes to avoid these concerns in the current
-release.
+And with enough future improvements out of the way, let's round out this
+patch-series by stating that it has been successfully tested on:
 
-----------------------------------------------------------------
-Dmitry Baryshkov (3):
-      Revert "clk: qcom: gcc-sm8450: use new clk_regmap_mux_safe_ops for PCIe pipe clocks"
-      Revert "clk: qcom: gcc-sc7280: use new clk_regmap_mux_safe_ops for PCIe pipe clocks"
-      Revert "clk: qcom: regmap-mux: add pipe clk implementation"
+- Sony Nile Discovery (Xperia XA2 Ultra): 14nm;
+- Sony Seine PDX201 (Xperia 10II): 14nm;
+- Sony Loire Suzu (Xperia X): 28nm.
 
- drivers/clk/qcom/clk-regmap-mux.c | 78 ---------------------------------------
- drivers/clk/qcom/clk-regmap-mux.h |  3 --
- drivers/clk/qcom/gcc-sc7280.c     |  6 +--
- drivers/clk/qcom/gcc-sm8450.c     |  6 +--
- 4 files changed, 4 insertions(+), 89 deletions(-)
+And no diff is observed in debugfs's clk_summary.
+
+Unfortunately all other devices in my collection with a 7/10nm DSI PHY
+have a DSC panel which we have yet to get working.
+
+[1]: https://lore.kernel.org/linux-arm-msm/20220502214235.s5plebunh4ttjhge@SoMainline.org/
+
+Marijn Suijten (9):
+  clk: divider: Introduce devm_clk_hw_register_divider_parent_hw()
+  clk: mux: Introduce devm_clk_hw_register_mux_parent_hws()
+  clk: fixed-factor: Introduce *clk_hw_register_fixed_factor_parent_hw()
+  drm/msm/dsi_phy_28nm: Replace parent names with clk_hw pointers
+  drm/msm/dsi_phy_28nm_8960: Replace parent names with clk_hw pointers
+  drm/msm/dsi_phy_28nm_8960: Use stack memory for temporary clock names
+  drm/msm/dsi_phy_14nm: Replace parent names with clk_hw pointers
+  drm/msm/dsi_phy_10nm: Replace parent names with clk_hw pointers
+  drm/msm/dsi_phy_7nm: Replace parent names with clk_hw pointers
+
+ drivers/clk/clk-fixed-factor.c                | 57 ++++++++++--
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_10nm.c    | 92 ++++++++-----------
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c    | 36 ++++----
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c    | 52 +++++------
+ .../gpu/drm/msm/dsi/phy/dsi_phy_28nm_8960.c   | 26 ++----
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c     | 92 +++++++++----------
+ include/linux/clk-provider.h                  | 34 +++++++
+ 7 files changed, 209 insertions(+), 180 deletions(-)
+
+--
+2.36.1
