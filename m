@@ -2,127 +2,66 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DDC530AE7
-	for <lists+linux-clk@lfdr.de>; Mon, 23 May 2022 10:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03041530B47
+	for <lists+linux-clk@lfdr.de>; Mon, 23 May 2022 11:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231400AbiEWH44 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 23 May 2022 03:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
+        id S232301AbiEWI6k (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 23 May 2022 04:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231360AbiEWH4z (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 23 May 2022 03:56:55 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3719D63D6;
-        Mon, 23 May 2022 00:56:50 -0700 (PDT)
-Received: from mail-yw1-f179.google.com ([209.85.128.179]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MNwXA-1oCt6f109o-00OF7f; Mon, 23 May 2022 09:56:49 +0200
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2ff90e0937aso63921027b3.4;
-        Mon, 23 May 2022 00:56:48 -0700 (PDT)
-X-Gm-Message-State: AOAM533Y62GrmqaiDndOYhBi01Hclk8LmXDmzwBvebKeknX+mb0RprIn
-        PSahQrxOqjnW8SaOMfg/W7UGMF7rRbKxLI5eQHU=
-X-Google-Smtp-Source: ABdhPJw2LHiHqq0/Y/VzFvweK5WuNCUQUczMcSAr5ygjJFwwWwAtTaZ+A1Uu9aWWOiGiwQN+ltRnCtbf6WnrGsZfDuY=
-X-Received: by 2002:a0d:e64b:0:b0:2ff:8745:8a75 with SMTP id
- p72-20020a0de64b000000b002ff87458a75mr14867694ywe.495.1653292607699; Mon, 23
- May 2022 00:56:47 -0700 (PDT)
+        with ESMTP id S232291AbiEWI6j (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 23 May 2022 04:58:39 -0400
+X-Greylist: delayed 1563 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 May 2022 01:58:38 PDT
+Received: from mail.tireplot.pl (mail.tireplot.pl [46.183.184.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99C73E5D9
+        for <linux-clk@vger.kernel.org>; Mon, 23 May 2022 01:58:38 -0700 (PDT)
+Received: by mail.tireplot.pl (Postfix, from userid 1001)
+        id 8BBA0454B8; Mon, 23 May 2022 10:10:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tireplot.pl; s=mail;
+        t=1653293440; bh=Rfzvu4C+yJ1wyuJ4V+t/udh6cgYEQVnY6S5ltO4wdNg=;
+        h=Date:From:To:Subject:From;
+        b=QS6TxokWacr9nYHHsnDecE25A0cAAr2BLTzfTfZ/fhjRDdTvyq7axXHDaYrUioC3d
+         SH7UZV/ed7NlTnSHVOpA6pKnJ6yctTRZjylmkKQsIvGeheNfQhoK0eR7vUsHEEIgmB
+         EjCjin4UXfNrXehQjwjx1RVQzrhCTnA/MZEPl85qyfQScXGqctK5ZEPCKLE8MJ5hV3
+         dvslcdNhaeH044/U5Rag2LbOrbZZyeLHZgJiNwBGkUALMEw4k/T5w7Vqp0ZSaw28ZI
+         LUom2p65RsVrpy8KgehOpFKa9gWuuPoOLMDFp/Qet13iolHpR+naEG1QSifqsn6eUJ
+         vWO7HYTJKNF/w==
+Received: by mail.tireplot.pl for <linux-clk@vger.kernel.org>; Mon, 23 May 2022 08:10:24 GMT
+Message-ID: <20220523084501-0.1.2k.fz3y.0.5o2ijnn5ji@tireplot.pl>
+Date:   Mon, 23 May 2022 08:10:24 GMT
+From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
+        <arkadiusz.sokolowski@tireplot.pl>
+To:     <linux-clk@vger.kernel.org>
+Subject: Koszty instalacji fotowoltaicznej
+X-Mailer: mail.tireplot.pl
 MIME-Version: 1.0
-References: <20220517032710.451537-1-Mr.Bossman075@gmail.com>
-In-Reply-To: <20220517032710.451537-1-Mr.Bossman075@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 23 May 2022 09:56:31 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0OKQYq-LPxjtRCNoD+coEcEcJD0eL_SV3aQ01BpyQVKA@mail.gmail.com>
-Message-ID: <CAK8P3a0OKQYq-LPxjtRCNoD+coEcEcJD0eL_SV3aQ01BpyQVKA@mail.gmail.com>
-Subject: Re: [PATCH v3 00/15] Add support for the i.MXRT1170-evk
-To:     Jesse Taube <mr.bossman075@gmail.com>
-Cc:     NXP Linux Team <linux-imx@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        SoC Team <soc@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Abel Vesa <abel.vesa@nxp.com>, dev@lynxeye.de,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Leo Li <leoyang.li@nxp.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        clin@suse.com,
-        Giulio Benetti <giulio.benetti@benettiengineering.com>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:/3lm2tyMCrqyIBUbjN1ELnaTuqSU2rlf93Z2B9sKQ8qXUNHw14I
- 9mlt94OMk/N8pmuvdnAr0xCnSfd/HQm8HWbczKlRG+wur8EAc5nO3cPCuZcE4vxo2u8DU7t
- 1Vmc1HIXEqmN7X14/bwWm5Z+IG5q5b2ycww7kBvXpuXiKIDI22I4qD3V1rrx7Z2NM3sDkY1
- mk8pI6cWCn0F7PA5VLMFw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:TgmQeTMQ71s=:5meSiiP1er72SQ+7NxR7Hb
- 9PyBQspNrPit0h334iUaGgdkp7c0Nbzlytyd+wKITSWopE07r5MjbyZvgfxTsjl4OgFlYJqM/
- fVYIBLRSicVJefdRkbN7Wr0HyxE7mQens/xGTp181L4T8GDBcg+wMxMXBbnW6DyNbxI0gPuV4
- dxHdGeCS1+lSIv5x56IpBsmQCAwY5/6ehv45CR269GQkUY81beYsP3ugPRyeR8DH7Bi2+YH+E
- uxUg1rDCwalAGVva9SffAP0D8yJvHwsJcLnOxMlyGjdV5Rh/sw0jxzNO2n+9zTByXGDPRReTw
- TJhl5HwAEGr5zwTzJGmMpA8CNoImNKVd0CwyiUryYCPlNSY+QSGFhP1xGpaL3fMQ67Gz28wwy
- mL77ufHDF3K59TRy/B8N/mU6wHhBw4tbGCedWZEl8fKxaPmyjBDQ5lt8b9j13r30PF7UE8P5K
- k83IS6e3xUzNenPadPYDaxrAoSuu8702aNbO0cMCCE5Ph2L4kEzDlIUuDtc23vB6ohlgKZCEU
- 0rynYZctG0ffU28cn4HDLtPAuhrfWhYzSw5glBHc9VI6yI7lKk05mDIXcBrVhGm/MWbNVDBxt
- i4N9b62WqM3jKx5aU2kfFhtAXZ9lEk96V/4ypxg389GlMKXmt4XQIz/G7dOWdG+hvHLujOvXS
- C5UYdarOVHNnt72pUHJYpbs3rAqhNTK9zCUWVKi38nnEd6TLYemsVA2P6ZovbJxSbL4OCe+gC
- rOChFYox60U/6t7uV3C9t+DF1ur8i0Tw4ZNaAYei2NA9OucM9B1UvFU5JfbOBRhPT3pjO203R
- GxunHtowWJ9XB/LWaHszkiWQW2zJPG15oltnVxbLCMUhHhsVHgyLzbJvRXzBy1Rxf9EG2au/i
- +HG0PcLLU1lfdEpt/mAg==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue, May 17, 2022 at 5:26 AM Jesse Taube <mr.bossman075@gmail.com> wrote:
->
-> This patch continues support for the imxrt series now with the imxrt1170
->
-> This patch contains:
-> - Update to imxrt_defconfig
-> - Devicetree
-> - Clock driver
-> - Pinctrl driver
-> - New pll
->
-> This patch also updates some documentation for both imxrt1170 an 1050.
->
-> The i.MXRT1170 has a vast array of features including two cores. 2 Ethernet, 2 USB phy, and a 2d gpu.
->
-> It also is featured in a new google coral board
-> https://coral.ai/products/dev-board-micro
-> Not affiliated unfortunately.
+Dzie=C5=84 dobry,
 
-Hi Jesse,
+stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
+ obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99. =20
 
-As you have added soc@kernel.org to Cc in this series, it made it into our
-patchwork instance at https://patchwork.kernel.org/project/linux-soc/list/
-and I'll at least reply.
+Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
+acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
+ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
 
-I expect the i.MX maintainers to pick up the patches into the individual
-branches in the future, and not keep them as a single branch for your
-platform, with the pinctrl and clock patches going through the respective
-subsystem trees.
+Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
+=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
+=2E
 
-I have marked the patches as "Not applicable" in patchwork because
-I don't plan to apply them, but they otherwise seem fine. Please drop
-the Cc:soc@kernel.org in the future.
+Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
+temacie?
 
-      Arnd
+Pozdrawiam
+Arkadiusz Soko=C5=82owski
