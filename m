@@ -2,95 +2,59 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57E9530F23
-	for <lists+linux-clk@lfdr.de>; Mon, 23 May 2022 15:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E11530CD7
+	for <lists+linux-clk@lfdr.de>; Mon, 23 May 2022 12:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235078AbiEWLng (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 23 May 2022 07:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
+        id S233776AbiEWKEn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 23 May 2022 06:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235074AbiEWLnf (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 23 May 2022 07:43:35 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F31506DA;
-        Mon, 23 May 2022 04:43:33 -0700 (PDT)
-Received: from mail-ot1-f42.google.com ([209.85.210.42]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1M8yPu-1ny2QH3nh0-0066ng; Mon, 23 May 2022 13:43:32 +0200
-Received: by mail-ot1-f42.google.com with SMTP id e11-20020a9d6e0b000000b0060afcbafa80so4418465otr.3;
-        Mon, 23 May 2022 04:43:31 -0700 (PDT)
-X-Gm-Message-State: AOAM530VEDwel10v6P42dzQ6EV0W/ImJ2lYBPfS2Ob6jT5cD6s9b3rRk
-        rep+Z18t15/VrxXwa2LB9oh6NBm7p3HONc7O7mM=
-X-Google-Smtp-Source: ABdhPJxpUCa94Kh6HQKuK56biKlb3vDJKuICvFZFBgpVEpCuri5EfGLbRA6cBhu22Na5oqGEdTcIEn9+H34udGZY6o0=
-X-Received: by 2002:a25:75c5:0:b0:648:dccd:e1c with SMTP id
- q188-20020a2575c5000000b00648dccd0e1cmr21094709ybc.452.1653299785602; Mon, 23
- May 2022 02:56:25 -0700 (PDT)
+        with ESMTP id S233679AbiEWKEn (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 23 May 2022 06:04:43 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22E4DE2;
+        Mon, 23 May 2022 03:04:41 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 695421F41C08
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653300280;
+        bh=nikwer9gVP1aMdWQqAPZU00MWdHcjPiQkcZmJpOI/6c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=P7YTLX+Ym2FYe6eT9rDUdd8ETIPiIiYCbk00+vqVPBQtImH8hKHshZE/5KaFgW7Dq
+         GloerK1d+zp5JuMNh3T+Z12lQNImk3xXtm4tSHjd1o5swfkAUyhztOu1cPGkMQQ2cK
+         jecf4h2mzW29htMQYH1G42J4czNU3mvWlo49snE4tzvbOFqrQgKG//CkknAS7mr1mK
+         DEDCkQTFIR7jPt8owr4oRvRmIeEv2Xt02dLr57SKdE7zz+kd2Cd+wmDOQE9+KUvU69
+         TagWWRwuK470WQHtltpIUsHTLcJ2YpC9hDcJ5OfYZdZuxg3M8oSGKlxOlr9/7vGbUb
+         kLl+OL6aZcglw==
+Message-ID: <f6cd735b-2ba4-7456-684d-b20f0b46effe@collabora.com>
+Date:   Mon, 23 May 2022 12:04:37 +0200
 MIME-Version: 1.0
-References: <20220522155046.260146-1-tmaimon77@gmail.com> <20220522155046.260146-5-tmaimon77@gmail.com>
-In-Reply-To: <20220522155046.260146-5-tmaimon77@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 23 May 2022 11:56:09 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0Nh4m7O_WPe1DTWqwWU32C5khOPH0ir7r_=s106mLv5A@mail.gmail.com>
-Message-ID: <CAK8P3a0Nh4m7O_WPe1DTWqwWU32C5khOPH0ir7r_=s106mLv5A@mail.gmail.com>
-Subject: Re: [PATCH v1 04/19] tty: serial: 8250: Add NPCM845 UART support
-To:     Tomer Maimon <tmaimon77@gmail.com>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2 3/4] clk: mediatek: mux: add clk notifier functions
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        robert.hancock@calian.com,
-        "nathan=20Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>,
-        Lubomir Rintel <lkundrak@v3.sk>, SoC Team <soc@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Eh/qW2KznBfSE/OEBWqMPrKe6wGQVBqS5SXsFUcXmZEqSSuDHwT
- 72VMZAhZPMIqmh+H6lMwP5qwnaEjve33ZMwxkio1HwuhLe3vPgbpqAog7NGZVs3/TT2oIMr
- eLUmXk8B4w648y9F7Bu1gvCHI+0N3M/eyZ0k53KwRmUDovnzg2msAvsumZTmJi6s5Ya1U3b
- XfeBYBqjpRFHOFSgvC5YQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MX/kDM8qFJQ=:CvgCpZv4G2zKoUj2z9ehBD
- q317uwNL18N9Picka94IqPCTYd3CmtXvDVrZ9rwdHuwNOfOByunvQOyYEl5G8UQfzgImVWQBY
- D2Yk6dIUB06pWAOExUyI9NYclahQzC4GJDaRKjYHAZu+iYEzlL52xKUvBX6ZZGlmZHTPGN8YX
- Y/5RUBanuZtJvJ3iqaVWmUtMVIHC1WfhHtvERDNttfphhBU/c3itCrYebF2hY4d41zw4KBDkT
- VwFMXAaE1xna2GBc+ty/P+JeIl+zwKF3spkzznm8v3zF0gKEkK96NRflU70ymEbIXkMlosfa4
- /L7WeQkkTK3JvD6BDaeGnZMFBbTCwZHTtAefhAKghRvOBIPwyn+k5Xf+ohYGEMt6HOWRLJoLV
- sMYIWGyABqjBjoF2fu8Bhd4Z/GzoffvZlG5hEUyOiOaXt+LbNNxrFHXrn2ac34cWnfFoQKO7b
- G/j4oZ1S89kseAeIDBc3zq2pjCdnmeh2aT5VBDIO9EqV7QQNBsGLqHCq6Br+bSWTqOgNqFRiI
- GYuJRIitstsn3UA3Mg3fSmvVvA5S8zK34xsP4Ig9SNK1InEcSdsHPntJvV0R5CDVYUFHVzpLW
- 5TL6tb0Qt79u4jxBCx/txPyQ4vCoPHVuj6/UyE13epLYHMwsTW/lbdmg6GxFOoVpPNtKTs2Dt
- rCVhULYuwi2udYEMOPaNzoEEUAAzZp2AgFWVYAXgWuddQ5uBtMvy3DbQEtX8YYqNOwskHC9Tu
- ZESP5no+BZ2x6s/vpQD5d2oZmYZ4wWiTMydWlWTqt8UDE1ugbhNkqcKztxF/zTHf/0BIFZrRp
- 6kpLar02NBXVZfofCQH0YywcWqyCSP+dynb/W3vwBXGDi7cXGOCLkfF8ak/RImCcA+meyBaWP
- epvJo17x6SJ9CA+eTjtQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220523085923.1430470-1-wenst@chromium.org>
+ <20220523085923.1430470-4-wenst@chromium.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220523085923.1430470-4-wenst@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,18 +62,152 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sun, May 22, 2022 at 5:50 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> +++ b/drivers/tty/serial/8250/8250_of.c
-> @@ -333,6 +333,7 @@ static const struct of_device_id of_platform_serial_table[] = {
->         { .compatible = "ti,da830-uart", .data = (void *)PORT_DA830, },
->         { .compatible = "nuvoton,wpcm450-uart", .data = (void *)PORT_NPCM, },
->         { .compatible = "nuvoton,npcm750-uart", .data = (void *)PORT_NPCM, },
-> +       { .compatible = "nuvoton,npcm845-uart", .data = (void *)PORT_NPCM, },
->         { /* end of list */ },
+Il 23/05/22 10:59, Chen-Yu Tsai ha scritto:
+> With device frequency scaling, the mux clock that (indirectly) feeds the
+> device selects between a dedicated PLL, and some other stable clocks.
+> 
+> When a clk rate change is requested, the (normally) upstream PLL is
+> reconfigured. It's possible for the clock output of the PLL to become
+> unstable during this process.
+> 
+> To avoid causing the device to glitch, the mux should temporarily be
+> switched over to another "stable" clock during the PLL rate change.
+> This is done with clk notifiers.
+> 
+> This patch adds common functions for notifiers to temporarily and
+> transparently reparent mux clocks.
+> 
+> This was loosely based on commit 8adfb08605a9 ("clk: sunxi-ng: mux: Add
+> clk notifier functions").
+> 
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> ---
+>   drivers/clk/mediatek/clk-mux.c | 42 ++++++++++++++++++++++++++++++++++
+>   drivers/clk/mediatek/clk-mux.h | 15 ++++++++++++
+>   2 files changed, 57 insertions(+)
+> 
+> diff --git a/drivers/clk/mediatek/clk-mux.c b/drivers/clk/mediatek/clk-mux.c
+> index cd5f9fd8cb98..f84a5a753c09 100644
+> --- a/drivers/clk/mediatek/clk-mux.c
+> +++ b/drivers/clk/mediatek/clk-mux.c
+> @@ -4,6 +4,7 @@
+>    * Author: Owen Chen <owen.chen@mediatek.com>
+>    */
+>   
+> +#include <linux/clk.h>
+>   #include <linux/clk-provider.h>
+>   #include <linux/compiler_types.h>
+>   #include <linux/container_of.h>
+> @@ -259,4 +260,45 @@ void mtk_clk_unregister_muxes(const struct mtk_mux *muxes, int num,
+>   }
+>   EXPORT_SYMBOL_GPL(mtk_clk_unregister_muxes);
+>   
+> +/*
+> + * This clock notifier is called when the frequency of the of the parent
+> + * PLL clock is to be changed. The idea is to switch the parent to a
+> + * stable clock, such as the main oscillator, while the PLL frequency
+> + * stabilizes.
+> + */
+> +static int mtk_clk_mux_notifier_cb(struct notifier_block *nb,
+> +				   unsigned long event, void *_data)
+> +{
+> +	struct clk_notifier_data *data = _data;
+> +	struct mtk_mux_nb *mux_nb = to_mtk_mux_nb(nb);
+> +	const struct mtk_mux *mux = mux_nb->mux;
+> +	struct clk_hw *hw;
+> +	int ret = 0;
+> +
+> +	hw = __clk_get_hw(data->clk);
+> +
+> +	switch (event) {
+> +	case PRE_RATE_CHANGE:
+> +		mux_nb->original_index = mux->ops->get_parent(hw);
+> +		ret = mux->ops->set_parent(hw, mux_nb->bypass_index);
+> +		break;
+> +
+> +	case POST_RATE_CHANGE:
+> +	case ABORT_RATE_CHANGE:
 
-If these are compatible devices, it's usually easier to claim
-compatibility with both the specific chip and the older model
-as a fallback, to avoid driver changes. This seems to apply to
-the timer and watchdog devices as well.
+I agree with this change, entirely - but there's an issue here.
+If we enter ABORT_RATE_CHANGE, this means that "something has failed": now,
+what if the failure point was the PLL being unable to lock?
 
-       Arnd
+In that case, we would switch the parent back to a PLL that's not outputting
+any clock, crashing the GPU, or a bogus rate, potentially undervolting the GPU.
+
+I think that the best idea here would be to do something like..
+
+	switch (event) {
+	case PRE_RATE_CHANGE:
+		mux_nb->old_parent_idx = mux->ops->get_parent(hw);
+		ret = mux->ops->set_parent(hw, mux_nb->safe_parent_idx);
+		break;
+	case POST_RATE_CHANGE:
+		ret = mux->ops->set_parent(hw, mux_nb->old_parent_idx);
+		break;
+	case ABORT_RATE_CHANGE:
+		ret = -EINVAL; /* or -ECANCELED, whatever... */
+		break;
+	}
+
+> +		ret = mux->ops->set_parent(hw, mux_nb->original_index);
+> +		break;
+> +	}
+> +
+> +	return notifier_from_errno(ret);
+> +}
+> +
+> +int devm_mtk_clk_mux_notifier_register(struct device *dev, struct clk *clk,
+> +				       struct mtk_mux_nb *mux_nb)
+> +{
+> +	mux_nb->nb.notifier_call = mtk_clk_mux_notifier_cb;
+> +
+> +	return devm_clk_notifier_register(dev, clk, &mux_nb->nb);
+> +}
+> +EXPORT_SYMBOL_GPL(devm_mtk_clk_mux_notifier_register);
+> +
+>   MODULE_LICENSE("GPL");
+> diff --git a/drivers/clk/mediatek/clk-mux.h b/drivers/clk/mediatek/clk-mux.h
+> index 6539c58f5d7d..506e91125a3d 100644
+> --- a/drivers/clk/mediatek/clk-mux.h
+> +++ b/drivers/clk/mediatek/clk-mux.h
+> @@ -7,12 +7,14 @@
+>   #ifndef __DRV_CLK_MTK_MUX_H
+>   #define __DRV_CLK_MTK_MUX_H
+>   
+> +#include <linux/notifier.h>
+>   #include <linux/spinlock.h>
+>   #include <linux/types.h>
+>   
+>   struct clk;
+>   struct clk_hw_onecell_data;
+>   struct clk_ops;
+> +struct device;
+>   struct device_node;
+>   
+>   struct mtk_mux {
+> @@ -89,4 +91,17 @@ int mtk_clk_register_muxes(const struct mtk_mux *muxes,
+>   void mtk_clk_unregister_muxes(const struct mtk_mux *muxes, int num,
+>   			      struct clk_hw_onecell_data *clk_data);
+>   
+> +struct mtk_mux_nb {
+> +	struct notifier_block	nb;
+> +	const struct mtk_mux	*mux;
+> +
+> +	u8	bypass_index;	/* Which parent to temporarily use */
+> +	u8	original_index;	/* Set by notifier callback */
+
+I think that the following names are more explanatory:
+
+	u8	safe_parent_idx;
+	u8	old_parent_idx;
+
+...because I see this as a mechanism to switch the mux to a "safe" clock output
+and then back to the PLL (like it's done on some qcom clocks as well).
+
+You're free to ignore this comment, as this is, of course, just a personal opinion.
+
+Cheers,
+Angelo
+
+
