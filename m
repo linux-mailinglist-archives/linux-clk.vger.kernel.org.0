@@ -2,215 +2,135 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA34A53257E
-	for <lists+linux-clk@lfdr.de>; Tue, 24 May 2022 10:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CBC532655
+	for <lists+linux-clk@lfdr.de>; Tue, 24 May 2022 11:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233003AbiEXIjL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 24 May 2022 04:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57970 "EHLO
+        id S235487AbiEXJZv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 24 May 2022 05:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232694AbiEXIjH (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 24 May 2022 04:39:07 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F89D7E1EC;
-        Tue, 24 May 2022 01:39:05 -0700 (PDT)
-X-UUID: 9b84f7546cce400c941c44eba8325d34-20220524
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:3d125782-7db4-49e7-bf49-3ef5ea42086d,OB:40,L
-        OB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:90
-X-CID-INFO: VERSION:1.1.5,REQID:3d125782-7db4-49e7-bf49-3ef5ea42086d,OB:40,LOB
-        :0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,A
-        CTION:quarantine,TS:90
-X-CID-META: VersionHash:2a19b09,CLOUDID:75885ee3-edbf-4bd4-8a34-dfc5f7bb086d,C
-        OID:7827458409bf,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:0,BEC:nil
-X-UUID: 9b84f7546cce400c941c44eba8325d34-20220524
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1891446248; Tue, 24 May 2022 16:39:00 +0800
-Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 24 May 2022 16:38:59 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 24 May 2022 16:38:59 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Tue, 24 May 2022 16:38:59 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 7/7] clk: mediatek: mt8192: add mtk_clk_simple_remove
-Date:   Tue, 24 May 2022 16:38:40 +0800
-Message-ID: <20220524083843.9994-8-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220524083843.9994-1-miles.chen@mediatek.com>
-References: <20220524083843.9994-1-miles.chen@mediatek.com>
+        with ESMTP id S233917AbiEXJZs (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 24 May 2022 05:25:48 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AE074DC6;
+        Tue, 24 May 2022 02:25:47 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id e28so24198313wra.10;
+        Tue, 24 May 2022 02:25:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=YziY1Q+V5DNxZb3YLwFQ1UrWpeAm6I+532vLrlfJyNg=;
+        b=B7PTtOyrL3ttaTsYZy+ZKqBMvDmHCirI35RhvErFXx4vGNveqkojVtUZU43kAkjPjc
+         uz2lN8afY+iKBHejc5PA00kdVp3L0CEG9i20Y7foFzD36Kyy3La3GRScHTKYsvH/g9kb
+         hyhqGvvonSYF2/hMpr9+xCZ+vn6pUOWIN8MoXy0GhCKJIoPE+EYf/fNa8ymj/cfFQwB5
+         0Sy8aeboscwYUa46tVHLKut6mZkk314SxiH2L1nrVUJafHXRbdHFAeN7HNfvitL0+7ql
+         arn2RdZCibwaTSAbffw56ZzU4KEigK1Anb4QGW40rxxLARZ26tO7HehO7+5Iv+VL9soY
+         Irdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YziY1Q+V5DNxZb3YLwFQ1UrWpeAm6I+532vLrlfJyNg=;
+        b=fjRPBD1al8N3vhB7Xckbz75wL7v2V1sl/s5gAIfs958yfikiyvmk2OfllskpZAX2aL
+         RAvJlqvZ4QSrRMBKqUWLfkPcqJdfz90eZRrEb3qZunRBIdslcAlwmd+eb2XGdV+tbhsN
+         9uDlatI68rqcAyDhhR0qIeoQzHk9fVLRFo0xkxwncNn/W6cTqW1jNp5EgqQ54Bqg+6hE
+         OkXTvUhRdBn105veuCWSdc7tT/ccsrR1UmuOcFWo3LCS0ycNZlbKnLKXAhp2a8EZsaQg
+         tzXe6Z3TwB8LRKhnYnfdy4RjU8C6m7Sl8//uL83eA89SFE3sUlVP4Ido3yIvnVGLt3ej
+         ZSFw==
+X-Gm-Message-State: AOAM532whWYhNTb3RzRg4EDkD66P8ZjPiMTznPJu7xyDqrmRW9k46dou
+        RlGqz4tZaTWghQ1+QGsRz6toZ/qTfI36/S17Wn8=
+X-Google-Smtp-Source: ABdhPJzHiYjluBD4AYDA+/LfIUOKdEveBjfeVVTC5dm4Prdt71cD1NbaaJrtZsTM3h2G5RvUSdjJCHE9G4rh1XYR/Dg=
+X-Received: by 2002:a05:6000:362:b0:20f:f8f5:ef7d with SMTP id
+ f2-20020a056000036200b0020ff8f5ef7dmr607263wrf.468.1653384345616; Tue, 24 May
+ 2022 02:25:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220505101433.1575096-1-gengcixi@gmail.com>
+In-Reply-To: <20220505101433.1575096-1-gengcixi@gmail.com>
+From:   Cixi Geng <gengcixi@gmail.com>
+Date:   Tue, 24 May 2022 17:25:09 +0800
+Message-ID: <CAF12kFvQsz-EKD-VdVkJVCUwNj1FL=4=uVarwnTyYTb_dRNZbQ@mail.gmail.com>
+Subject: Re: [PATCH v5 0/4] Add ums512 clocks and relative bindings file
+To:     Michael Turquette <mturquette@baylibre.com>, sboyd@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Orson Zhai <orsonzhai@gmail.com>,
+        "baolin.wang7@gmail.com" <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>
+Cc:     linux-clk@vger.kernel.org,
+        Devicetree List <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-mt8192 is already using mtk_clk_simple_probe,
-but not mtk_clk_simple_remove.
+Cixi Geng <gengcixi@gmail.com> =E4=BA=8E2022=E5=B9=B45=E6=9C=885=E6=97=A5=
+=E5=91=A8=E5=9B=9B 18:14=E5=86=99=E9=81=93=EF=BC=9A
+>
+> From: Cixi Geng <cixi.geng1@unisoc.com>
+>
+> This patchset is add the UMS512 clocks support
+>
+> v2 changes:
+>   adjust description and add the "sprd,ums512-glbregs,syscon,simple-mfd"
+>   compatibles to fix match failed logs in the dt_binding_check.
+>   add the property license and copyright notice.
+>
+> v3 changes:
+>   fix wrong indentation and hint: "maxItems" is not needed with an "items=
+"
+>   list when use the latest dtschema.
+>
+> v4 changes:
+>   move the syscon bindins from clk to glbreg yaml file by pickup
+>   chunyan's patch for global registers bindings
+>   fix the comments from Krzysztof in v3 patchset
+>   add the Acked-by: Krzysztof in patch v4 3/4
+>   fix the  warning Prefer "GPL" over "GPL v2"
+>
+> v5 changes:
+>   Add review tags.
+>   fix the comments in ums512-glbreg.yaml.
+Dear maintainers:
+I have not received any new comments so far
+Is this patch ready to be merged?
+I'd appreciate any information of your reviews.
+Thanks
 
-Let's add mtk_clk_simple_remove for mt8192.
-
-Signed-off-by: Miles Chen <miles.chen@mediatek.com>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
----
- drivers/clk/mediatek/clk-mt8192-cam.c          | 1 +
- drivers/clk/mediatek/clk-mt8192-img.c          | 1 +
- drivers/clk/mediatek/clk-mt8192-imp_iic_wrap.c | 1 +
- drivers/clk/mediatek/clk-mt8192-ipe.c          | 1 +
- drivers/clk/mediatek/clk-mt8192-mdp.c          | 1 +
- drivers/clk/mediatek/clk-mt8192-mfg.c          | 1 +
- drivers/clk/mediatek/clk-mt8192-msdc.c         | 1 +
- drivers/clk/mediatek/clk-mt8192-scp_adsp.c     | 1 +
- drivers/clk/mediatek/clk-mt8192-vdec.c         | 1 +
- drivers/clk/mediatek/clk-mt8192-venc.c         | 1 +
- 10 files changed, 10 insertions(+)
-
-diff --git a/drivers/clk/mediatek/clk-mt8192-cam.c b/drivers/clk/mediatek/clk-mt8192-cam.c
-index fc74cd80b4b0..90b57d46eef7 100644
---- a/drivers/clk/mediatek/clk-mt8192-cam.c
-+++ b/drivers/clk/mediatek/clk-mt8192-cam.c
-@@ -98,6 +98,7 @@ static const struct of_device_id of_match_clk_mt8192_cam[] = {
- 
- static struct platform_driver clk_mt8192_cam_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-cam",
- 		.of_match_table = of_match_clk_mt8192_cam,
-diff --git a/drivers/clk/mediatek/clk-mt8192-img.c b/drivers/clk/mediatek/clk-mt8192-img.c
-index 7ce3abe42577..da82d65a7650 100644
---- a/drivers/clk/mediatek/clk-mt8192-img.c
-+++ b/drivers/clk/mediatek/clk-mt8192-img.c
-@@ -61,6 +61,7 @@ static const struct of_device_id of_match_clk_mt8192_img[] = {
- 
- static struct platform_driver clk_mt8192_img_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-img",
- 		.of_match_table = of_match_clk_mt8192_img,
-diff --git a/drivers/clk/mediatek/clk-mt8192-imp_iic_wrap.c b/drivers/clk/mediatek/clk-mt8192-imp_iic_wrap.c
-index 700356ac6a58..ff8e20bb44bb 100644
---- a/drivers/clk/mediatek/clk-mt8192-imp_iic_wrap.c
-+++ b/drivers/clk/mediatek/clk-mt8192-imp_iic_wrap.c
-@@ -110,6 +110,7 @@ static const struct of_device_id of_match_clk_mt8192_imp_iic_wrap[] = {
- 
- static struct platform_driver clk_mt8192_imp_iic_wrap_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-imp_iic_wrap",
- 		.of_match_table = of_match_clk_mt8192_imp_iic_wrap,
-diff --git a/drivers/clk/mediatek/clk-mt8192-ipe.c b/drivers/clk/mediatek/clk-mt8192-ipe.c
-index 730d91b64b3f..0225abe4170a 100644
---- a/drivers/clk/mediatek/clk-mt8192-ipe.c
-+++ b/drivers/clk/mediatek/clk-mt8192-ipe.c
-@@ -48,6 +48,7 @@ static const struct of_device_id of_match_clk_mt8192_ipe[] = {
- 
- static struct platform_driver clk_mt8192_ipe_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-ipe",
- 		.of_match_table = of_match_clk_mt8192_ipe,
-diff --git a/drivers/clk/mediatek/clk-mt8192-mdp.c b/drivers/clk/mediatek/clk-mt8192-mdp.c
-index 93c87ae2f332..4675788d7816 100644
---- a/drivers/clk/mediatek/clk-mt8192-mdp.c
-+++ b/drivers/clk/mediatek/clk-mt8192-mdp.c
-@@ -73,6 +73,7 @@ static const struct of_device_id of_match_clk_mt8192_mdp[] = {
- 
- static struct platform_driver clk_mt8192_mdp_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-mdp",
- 		.of_match_table = of_match_clk_mt8192_mdp,
-diff --git a/drivers/clk/mediatek/clk-mt8192-mfg.c b/drivers/clk/mediatek/clk-mt8192-mfg.c
-index 3bbc7469f0e4..24108229793d 100644
---- a/drivers/clk/mediatek/clk-mt8192-mfg.c
-+++ b/drivers/clk/mediatek/clk-mt8192-mfg.c
-@@ -41,6 +41,7 @@ static const struct of_device_id of_match_clk_mt8192_mfg[] = {
- 
- static struct platform_driver clk_mt8192_mfg_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-mfg",
- 		.of_match_table = of_match_clk_mt8192_mfg,
-diff --git a/drivers/clk/mediatek/clk-mt8192-msdc.c b/drivers/clk/mediatek/clk-mt8192-msdc.c
-index 87c3b79b79cf..24c9c73ce5ed 100644
---- a/drivers/clk/mediatek/clk-mt8192-msdc.c
-+++ b/drivers/clk/mediatek/clk-mt8192-msdc.c
-@@ -76,6 +76,7 @@ static const struct of_device_id of_match_clk_mt8192_msdc[] = {
- 
- static struct platform_driver clk_mt8192_msdc_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-msdc",
- 		.of_match_table = of_match_clk_mt8192_msdc,
-diff --git a/drivers/clk/mediatek/clk-mt8192-scp_adsp.c b/drivers/clk/mediatek/clk-mt8192-scp_adsp.c
-index 58725d79dd13..18a8679108b8 100644
---- a/drivers/clk/mediatek/clk-mt8192-scp_adsp.c
-+++ b/drivers/clk/mediatek/clk-mt8192-scp_adsp.c
-@@ -41,6 +41,7 @@ static const struct of_device_id of_match_clk_mt8192_scp_adsp[] = {
- 
- static struct platform_driver clk_mt8192_scp_adsp_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-scp_adsp",
- 		.of_match_table = of_match_clk_mt8192_scp_adsp,
-diff --git a/drivers/clk/mediatek/clk-mt8192-vdec.c b/drivers/clk/mediatek/clk-mt8192-vdec.c
-index b1d95cfbf22a..e149962dbbf9 100644
---- a/drivers/clk/mediatek/clk-mt8192-vdec.c
-+++ b/drivers/clk/mediatek/clk-mt8192-vdec.c
-@@ -85,6 +85,7 @@ static const struct of_device_id of_match_clk_mt8192_vdec[] = {
- 
- static struct platform_driver clk_mt8192_vdec_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-vdec",
- 		.of_match_table = of_match_clk_mt8192_vdec,
-diff --git a/drivers/clk/mediatek/clk-mt8192-venc.c b/drivers/clk/mediatek/clk-mt8192-venc.c
-index c0d867bff09e..80b8bb170996 100644
---- a/drivers/clk/mediatek/clk-mt8192-venc.c
-+++ b/drivers/clk/mediatek/clk-mt8192-venc.c
-@@ -44,6 +44,7 @@ static const struct of_device_id of_match_clk_mt8192_venc[] = {
- 
- static struct platform_driver clk_mt8192_venc_drv = {
- 	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
- 	.driver = {
- 		.name = "clk-mt8192-venc",
- 		.of_match_table = of_match_clk_mt8192_venc,
--- 
-2.18.0
-
+Best regards
+Cixi
+>
+> Chunyan Zhang (1):
+>   dt-bindings: mfd: sprd: Add bindings for ums512 global registers
+>
+> Cixi Geng (3):
+>   dt-bindings: clk: sprd: Add bindings for ums512 clock controller
+>   clk: sprd: Add dt-bindings include file for UMS512
+>   clk: sprd: Add clocks support for UMS512
+>
+>  .../bindings/clock/sprd,ums512-clk.yaml       |   71 +
+>  .../bindings/mfd/sprd,ums512-glbreg.yaml      |   68 +
+>  drivers/clk/sprd/Kconfig                      |    6 +
+>  drivers/clk/sprd/Makefile                     |    1 +
+>  drivers/clk/sprd/ums512-clk.c                 | 2199 +++++++++++++++++
+>  include/dt-bindings/clock/sprd,ums512-clk.h   |  397 +++
+>  6 files changed, 2742 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/sprd,ums512-c=
+lk.yaml
+>  create mode 100644 Documentation/devicetree/bindings/mfd/sprd,ums512-glb=
+reg.yaml
+>  create mode 100644 drivers/clk/sprd/ums512-clk.c
+>  create mode 100644 include/dt-bindings/clock/sprd,ums512-clk.h
+>
+> --
+> 2.25.1
+>
