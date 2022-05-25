@@ -2,64 +2,89 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1FCB5334E3
-	for <lists+linux-clk@lfdr.de>; Wed, 25 May 2022 03:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 677A753371F
+	for <lists+linux-clk@lfdr.de>; Wed, 25 May 2022 09:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233737AbiEYBp6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 24 May 2022 21:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
+        id S244323AbiEYHL4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 25 May 2022 03:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbiEYBp5 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 24 May 2022 21:45:57 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB26F57121;
-        Tue, 24 May 2022 18:45:55 -0700 (PDT)
-X-UUID: 6e0202bcfdb0488caeadcff564587789-20220525
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:a803b031-3b7c-4e37-974f-71e58a4947d6,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.5,REQID:a803b031-3b7c-4e37-974f-71e58a4947d6,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:2a19b09,CLOUDID:7f2e5747-4fb1-496b-8f1d-39e733fed1ea,C
-        OID:22b6bf49322e,Recheck:0,SF:28|17|19|48,TC:nil,Content:-5,EDM:-3,IP:nil,
-        URL:1,File:nil,QS:0,BEC:nil
-X-UUID: 6e0202bcfdb0488caeadcff564587789-20220525
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1558149621; Wed, 25 May 2022 09:45:49 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 25 May 2022 09:45:48 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 25 May 2022 09:45:47 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Wed, 25 May 2022 09:45:48 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <lkp@intel.com>
-CC:     <angelogioacchino.delregno@collabora.com>,
-        <chun-jie.chen@mediatek.com>, <kbuild-all@lists.01.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <llvm@lists.linux.dev>,
-        <matthias.bgg@gmail.com>, <miles.chen@mediatek.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>, <wenst@chromium.org>
-Subject: Re: [PATCH v2 4/7] clk: mediatek: mt6779: use mtk_clk_simple_probe to simplify driver
-Date:   Wed, 25 May 2022 09:45:48 +0800
-Message-ID: <20220525014548.19749-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <202205242129.DezL7Tp0-lkp@intel.com>
-References: <202205242129.DezL7Tp0-lkp@intel.com>
+        with ESMTP id S244340AbiEYHLo (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 25 May 2022 03:11:44 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D6762F9
+        for <linux-clk@vger.kernel.org>; Wed, 25 May 2022 00:05:55 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id ds11so18928133pjb.0
+        for <linux-clk@vger.kernel.org>; Wed, 25 May 2022 00:05:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GQOgQwVQ/waUJffCDtcivwSbqH5M+zW3KVOXOzVg+3I=;
+        b=hfxeN4TuHwZ+F26aVi1nDnyqqj9hzVXzKQLyUTyyseJ1iA2d76wNddPr+Rs8dRaw8U
+         6g2vsfECGDI/zklJP00Pvjz5teG9nmAJS5uNj3rHFuswYrxKgIoBmlWZoWXCgNjj86Nw
+         Vkffw8Z9LaoNwuAhLW48PfDj+fbdlnQyCDUcNUnhZPqLLqxucNyPXCbFCdNp7qMzjthM
+         mymx77ceQo5I2XfTuxYjsKmFpGcIReYXyG8UMB03cIeWtS+6g/6It1c3bKwQKOmb7bt/
+         dSvKqMiBn0YuUFNtMVFi8MhtNg134bEF2gpV9ILEW7JMJzgsd+aafYU9xoXS2GUdN3qU
+         /ARQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GQOgQwVQ/waUJffCDtcivwSbqH5M+zW3KVOXOzVg+3I=;
+        b=P5/RPZdebwyZ2HZx3pSiOXDrmAdP0MNCO6LBScWLwENup9D3O/k++EpOpq62ibAyz+
+         gLSEU+R1ZBpLsenZOL4kTpPPgouVUSrV9YYqreyGytw8SJSgnArhxB+hloZTbxn+Yyh5
+         A3Ncqvp/FEkPMpMP69+lN/nfXzuxofNYZEkAfrCTJXoqhiEI22PcE+X4bQ48B+TygtR7
+         F1w+sJLSVgQlwpAKQfMdOzs6kKHhbqBUCBhDhirMLq0YgylOofhQ4+ECb/QE0gE0CKgg
+         twcBz1YCu/xIBzFN/SwZ0L7+BiVo7JQBm3PVLJ7u3uwBURUkz03O82pLhnuwNEVMU6UV
+         sJGw==
+X-Gm-Message-State: AOAM5305rZJTOzu8RZ33TIXtPqNSMfQ1xbI1xXFgcBnuF/ZElGKoL5dB
+        orghUF0NM2+h2stVZJJDY91bUw==
+X-Google-Smtp-Source: ABdhPJxXwWFCbgZ5LyQsmogKN6LaNXPGnyZsOSm+FR1qUQynXNNGcC3+iJkueuoaM9Wz9sT5XQO9IQ==
+X-Received: by 2002:a17:902:cf05:b0:156:9d:ca01 with SMTP id i5-20020a170902cf0500b00156009dca01mr30978527plg.111.1653462354436;
+        Wed, 25 May 2022 00:05:54 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id b14-20020a170902650e00b001624f2b71b4sm2310001plk.152.2022.05.25.00.05.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 00:05:53 -0700 (PDT)
+Date:   Wed, 25 May 2022 12:35:51 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
+Message-ID: <20220525070551.guv3csxi5kkqfr4f@vireshk-i7>
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+ <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
+ <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
+ <dea39b1f-0091-2690-7f07-108d07ef9f3c@linaro.org>
+ <20220510044053.ykn6ygnbeokhzrsa@vireshk-i7>
+ <1e533194-7047-8342-b426-f607fddbfaa3@linaro.org>
+ <20220511050643.hd5tcrojb3wkbg7t@vireshk-i7>
+ <20220518235708.1A04CC385A9@smtp.kernel.org>
+ <65a4c28d-6702-3a9f-f837-1ea69a428777@linaro.org>
+ <20220520005934.8AB1DC385AA@smtp.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220520005934.8AB1DC385AA@smtp.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,41 +92,42 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+On 19-05-22, 17:59, Stephen Boyd wrote:
+> This is a general problem with OPP. It is single clk frequency centric,
+> which works well for CPU/GPU devices that work with cpufreq/devfreq.
+> When it comes to other devices though we have to fit OPP into what those
+> devices want, which is something like gears for UFS, or "4k@60" (a
+> resolution) for display hardware.
 > 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
+> Would adding string labels and/or using an index based API work better
+> for these devices? I think we'd want to extend OPP for display devices
+> to have whatever set of use-cases the device driver wants to handle with
+> string labels. That naturally follows how some SoC manufacturers setup
+> their OPP tables anyway. They may want to bump only the bus bandwidth
+> for different display resolutions while maxing out the clk frequency.
+> Then we could let drivers either construct a string at probe time to get
+> a handle to those OPP entries or index directly. The frequency APIs
+> would stick around for OPP tables that have frequencies and for drivers
+> that want to do cpufreq/devfreq stuff.
 > 
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
-> 
-> ERROR: modpost: missing MODULE_LICENSE() in drivers/clk/imx/clk-imxrt1050.o
-> ERROR: modpost: "vmf_insert_pfn" [drivers/gpu/drm/drm_shmem_helper.ko] undefined!
-> >> ERROR: modpost: "mtk_clk_simple_remove" [drivers/clk/mediatek/clk-mt6779-aud.ko] undefined!
-> >> ERROR: modpost: "mtk_clk_simple_probe" [drivers/clk/mediatek/clk-mt6779-aud.ko] undefined!
-> >> ERROR: modpost: "mtk_clk_simple_remove" [drivers/clk/mediatek/clk-mt6779-vdec.ko] undefined!
-> >> ERROR: modpost: "mtk_clk_simple_probe" [drivers/clk/mediatek/clk-mt6779-vdec.ko] undefined!
-> >> ERROR: modpost: "mtk_clk_simple_remove" [drivers/clk/mediatek/clk-mt6779-cam.ko] undefined!
-> >> ERROR: modpost: "mtk_clk_simple_probe" [drivers/clk/mediatek/clk-mt6779-cam.ko] undefined!
-> >> ERROR: modpost: "mtk_clk_simple_remove" [drivers/clk/mediatek/clk-mt6779-ipe.ko] undefined!
-> >> ERROR: modpost: "mtk_clk_simple_probe" [drivers/clk/mediatek/clk-mt6779-ipe.ko] undefined!
-> ERROR: modpost: "imx_clk_hw_pfd" [drivers/clk/imx/clk-imxrt1050.ko] undefined!
-> WARNING: modpost: suppressed 1 unresolved symbol warnings because there were too many)
+> UFS may want to use an index based API that matches the gears per the
+> spec. I think it could do that with dev_pm_opp_find_level_exact(),
+> right?
 
-Thanks for the testing.
-This patch depends on another patch [1], so I will just ignore this report.
+I think we can use "level" for all these use cases to find the OPP, if
+it aligns well with the requirements of all these frameworks.
 
-thanks,
-Miles
+FWIW, we already have three ways to find the OPP currently, via
+frequency, level and bandwidth.
 
-[1] https://patchwork.kernel.org/project/linux-mediatek/patch/20220518111652.223727-7-angelogioacchino.delregno@collabora.com/
+> Then the primary problem is the subject of this patch,
+> controlling multiple clks per OPP table. Could that be done by linking
+> one OPP table (for the gears) to an OPP table for each clk? Maybe
+> through 'required-opps'?
 
-> 
-> Kconfig warnings: (for reference only)
->    WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
->    Depends on HAS_IOMEM && DRM && MMU
->    Selected by
->    - DRM_SSD130X && HAS_IOMEM && DRM
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+Even in that case we will have an OPP table which will have multiple
+clocks. So it may not matter much which OPP table contains all the
+clocks.
 
+-- 
+viresh
