@@ -2,97 +2,106 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B657A533418
-	for <lists+linux-clk@lfdr.de>; Wed, 25 May 2022 01:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1FCB5334E3
+	for <lists+linux-clk@lfdr.de>; Wed, 25 May 2022 03:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241512AbiEXXtt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 24 May 2022 19:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
+        id S233737AbiEYBp6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 24 May 2022 21:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232315AbiEXXtr (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 24 May 2022 19:49:47 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C0C62129
-        for <linux-clk@vger.kernel.org>; Tue, 24 May 2022 16:49:47 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id y12so19905673ior.7
-        for <linux-clk@vger.kernel.org>; Tue, 24 May 2022 16:49:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=WK6OLngTEGMQZnXAmgyK8gksEaTtYBKX+MRhgq0dtFw=;
-        b=T/c8O2EWeG3CEtDKLYgYxmiBCxgkdgj92v9IOvcwlz11iDEwDxXDl1gqWk0Y5NpCnt
-         BIHP7m01f+kmYW8CAQddcGLDLoIgzd53Kzfwger/5uP9kTN5guwN2fQuhD68joSLxNwX
-         72fcjhvgRxy66gckw62jFBTLI3Ot7uHo78OARAIBUwWn6FOG0A75n37mZJUaUqOc87lp
-         RQhYKrrpdUsv5NkTAlGFSiDLM3zU+HndDxuqN6RkB788Lnuw3HyXoPDN2TvwEUdKqvwy
-         eIJZNRBIIZllVurWPnGlYTXc10tFBJgBo+laorio5BV9n8ASzxwrA9qJFZNLn6ZcoEuQ
-         vKfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=WK6OLngTEGMQZnXAmgyK8gksEaTtYBKX+MRhgq0dtFw=;
-        b=Bdxbl4q4P0wRVYNF3osGsZRMlIPh7DWupYsuzHhCiQ/VdOBn9+nhqgmxCXCN40yK/4
-         P0m2DAzt/Pi5X1JoHTlSmUDNQafmGOtqcUl/p52+VdnJmvJ0O8cs+VM4T+Str9TiX5t0
-         ha6Uj1xrsfOCEZUyknyMF1ZpLJz+/IWODucXj8QlOVkCG+bKTLsdCTK0jPM/q2KRQCLC
-         vxXY9myxXzniy8sFpiOFYWJu6e7vcwJzIrT4hwUFzuQq0jdcg6o7c7BSbnc5fvX8Y4Ad
-         btktrAr4qOvdJtpwhIheqUdwu3ao1Pt6Qcj/yor8TYClL8enJ+YUHRdeMfOljRA80745
-         SdKw==
-X-Gm-Message-State: AOAM531bCjLKYqiWOzuGa9XMMo4k+dBMPSqPjwN7Dj7tn0dmTv9vR5tG
-        CRZ929/5usoWaSYGsStrPiKpSplBU5pNEogqogU=
-X-Google-Smtp-Source: ABdhPJzk5VV9KUpTXFynKJfvx0OF1Y4tvJSfY34BatwSbd7XEwCysukdv4/WbEc3cE0PUae87pBxM3g9hqfcgnA2Cwg=
-X-Received: by 2002:a6b:7302:0:b0:660:cbd4:b5de with SMTP id
- e2-20020a6b7302000000b00660cbd4b5demr8928127ioh.24.1653436186617; Tue, 24 May
- 2022 16:49:46 -0700 (PDT)
+        with ESMTP id S230494AbiEYBp5 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 24 May 2022 21:45:57 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB26F57121;
+        Tue, 24 May 2022 18:45:55 -0700 (PDT)
+X-UUID: 6e0202bcfdb0488caeadcff564587789-20220525
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:a803b031-3b7c-4e37-974f-71e58a4947d6,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.5,REQID:a803b031-3b7c-4e37-974f-71e58a4947d6,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:2a19b09,CLOUDID:7f2e5747-4fb1-496b-8f1d-39e733fed1ea,C
+        OID:22b6bf49322e,Recheck:0,SF:28|17|19|48,TC:nil,Content:-5,EDM:-3,IP:nil,
+        URL:1,File:nil,QS:0,BEC:nil
+X-UUID: 6e0202bcfdb0488caeadcff564587789-20220525
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1558149621; Wed, 25 May 2022 09:45:49 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 25 May 2022 09:45:48 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 25 May 2022 09:45:47 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Wed, 25 May 2022 09:45:48 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <lkp@intel.com>
+CC:     <angelogioacchino.delregno@collabora.com>,
+        <chun-jie.chen@mediatek.com>, <kbuild-all@lists.01.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <llvm@lists.linux.dev>,
+        <matthias.bgg@gmail.com>, <miles.chen@mediatek.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <wenst@chromium.org>
+Subject: Re: [PATCH v2 4/7] clk: mediatek: mt6779: use mtk_clk_simple_probe to simplify driver
+Date:   Wed, 25 May 2022 09:45:48 +0800
+Message-ID: <20220525014548.19749-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <202205242129.DezL7Tp0-lkp@intel.com>
+References: <202205242129.DezL7Tp0-lkp@intel.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6602:2d0a:0:0:0:0 with HTTP; Tue, 24 May 2022 16:49:46
- -0700 (PDT)
-Reply-To: sgtkaylam28@gmail.com
-From:   SgtKayla Manthey <kenechukwu202@gmail.com>
-Date:   Tue, 24 May 2022 17:49:46 -0600
-Message-ID: <CANkpFmqL7wbCisZeN0ZYE+rizxuG_+sip-dRWA6yE==1xj1SOg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:d2e listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5048]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [sgtkaylam28[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [kenechukwu202[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [kenechukwu202[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
--- 
-Greetings,
-Please did you receive my previous message? Write me back
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
+> 
+> ERROR: modpost: missing MODULE_LICENSE() in drivers/clk/imx/clk-imxrt1050.o
+> ERROR: modpost: "vmf_insert_pfn" [drivers/gpu/drm/drm_shmem_helper.ko] undefined!
+> >> ERROR: modpost: "mtk_clk_simple_remove" [drivers/clk/mediatek/clk-mt6779-aud.ko] undefined!
+> >> ERROR: modpost: "mtk_clk_simple_probe" [drivers/clk/mediatek/clk-mt6779-aud.ko] undefined!
+> >> ERROR: modpost: "mtk_clk_simple_remove" [drivers/clk/mediatek/clk-mt6779-vdec.ko] undefined!
+> >> ERROR: modpost: "mtk_clk_simple_probe" [drivers/clk/mediatek/clk-mt6779-vdec.ko] undefined!
+> >> ERROR: modpost: "mtk_clk_simple_remove" [drivers/clk/mediatek/clk-mt6779-cam.ko] undefined!
+> >> ERROR: modpost: "mtk_clk_simple_probe" [drivers/clk/mediatek/clk-mt6779-cam.ko] undefined!
+> >> ERROR: modpost: "mtk_clk_simple_remove" [drivers/clk/mediatek/clk-mt6779-ipe.ko] undefined!
+> >> ERROR: modpost: "mtk_clk_simple_probe" [drivers/clk/mediatek/clk-mt6779-ipe.ko] undefined!
+> ERROR: modpost: "imx_clk_hw_pfd" [drivers/clk/imx/clk-imxrt1050.ko] undefined!
+> WARNING: modpost: suppressed 1 unresolved symbol warnings because there were too many)
+
+Thanks for the testing.
+This patch depends on another patch [1], so I will just ignore this report.
+
+thanks,
+Miles
+
+[1] https://patchwork.kernel.org/project/linux-mediatek/patch/20220518111652.223727-7-angelogioacchino.delregno@collabora.com/
+
+> 
+> Kconfig warnings: (for reference only)
+>    WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
+>    Depends on HAS_IOMEM && DRM && MMU
+>    Selected by
+>    - DRM_SSD130X && HAS_IOMEM && DRM
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+
