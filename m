@@ -2,132 +2,92 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 677A753371F
-	for <lists+linux-clk@lfdr.de>; Wed, 25 May 2022 09:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E0953370C
+	for <lists+linux-clk@lfdr.de>; Wed, 25 May 2022 09:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244323AbiEYHL4 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 25 May 2022 03:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
+        id S244169AbiEYHKv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 25 May 2022 03:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244340AbiEYHLo (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 25 May 2022 03:11:44 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D6762F9
-        for <linux-clk@vger.kernel.org>; Wed, 25 May 2022 00:05:55 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id ds11so18928133pjb.0
-        for <linux-clk@vger.kernel.org>; Wed, 25 May 2022 00:05:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GQOgQwVQ/waUJffCDtcivwSbqH5M+zW3KVOXOzVg+3I=;
-        b=hfxeN4TuHwZ+F26aVi1nDnyqqj9hzVXzKQLyUTyyseJ1iA2d76wNddPr+Rs8dRaw8U
-         6g2vsfECGDI/zklJP00Pvjz5teG9nmAJS5uNj3rHFuswYrxKgIoBmlWZoWXCgNjj86Nw
-         Vkffw8Z9LaoNwuAhLW48PfDj+fbdlnQyCDUcNUnhZPqLLqxucNyPXCbFCdNp7qMzjthM
-         mymx77ceQo5I2XfTuxYjsKmFpGcIReYXyG8UMB03cIeWtS+6g/6It1c3bKwQKOmb7bt/
-         dSvKqMiBn0YuUFNtMVFi8MhtNg134bEF2gpV9ILEW7JMJzgsd+aafYU9xoXS2GUdN3qU
-         /ARQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GQOgQwVQ/waUJffCDtcivwSbqH5M+zW3KVOXOzVg+3I=;
-        b=P5/RPZdebwyZ2HZx3pSiOXDrmAdP0MNCO6LBScWLwENup9D3O/k++EpOpq62ibAyz+
-         gLSEU+R1ZBpLsenZOL4kTpPPgouVUSrV9YYqreyGytw8SJSgnArhxB+hloZTbxn+Yyh5
-         A3Ncqvp/FEkPMpMP69+lN/nfXzuxofNYZEkAfrCTJXoqhiEI22PcE+X4bQ48B+TygtR7
-         F1w+sJLSVgQlwpAKQfMdOzs6kKHhbqBUCBhDhirMLq0YgylOofhQ4+ECb/QE0gE0CKgg
-         twcBz1YCu/xIBzFN/SwZ0L7+BiVo7JQBm3PVLJ7u3uwBURUkz03O82pLhnuwNEVMU6UV
-         sJGw==
-X-Gm-Message-State: AOAM5305rZJTOzu8RZ33TIXtPqNSMfQ1xbI1xXFgcBnuF/ZElGKoL5dB
-        orghUF0NM2+h2stVZJJDY91bUw==
-X-Google-Smtp-Source: ABdhPJxXwWFCbgZ5LyQsmogKN6LaNXPGnyZsOSm+FR1qUQynXNNGcC3+iJkueuoaM9Wz9sT5XQO9IQ==
-X-Received: by 2002:a17:902:cf05:b0:156:9d:ca01 with SMTP id i5-20020a170902cf0500b00156009dca01mr30978527plg.111.1653462354436;
-        Wed, 25 May 2022 00:05:54 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id b14-20020a170902650e00b001624f2b71b4sm2310001plk.152.2022.05.25.00.05.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 00:05:53 -0700 (PDT)
-Date:   Wed, 25 May 2022 12:35:51 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
+        with ESMTP id S243985AbiEYHKs (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 25 May 2022 03:10:48 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A294E9;
+        Wed, 25 May 2022 00:10:46 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id 34E00100004;
+        Wed, 25 May 2022 07:10:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1653462644;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=QaLA+/fmAKnmAH5cylenwfL37+xRZpiIvhjB9RDhW1A=;
+        b=oOXemAV0wkCHsRuDmqhLSoWnLjpKDaGFYjgsUgfAlEwN52eNVKz+yH1MQwFc1NIpvzciCS
+        Dk7cyXr6ys6CQ4kt6P8K07C6J6MKPYE3MIFPxIkQ7XsVou6hGtsl0H+bJHn/BkKGbvMd16
+        Bc8px1G3XZl0OBWvSMCOqG3ka63p3vHc1H6qjS3gIjiQxAAPcVJgklFatOZ5qivfrz6E8e
+        C9M3WzzXX4irTaihy2odB2tpTVwc8hFTFigeD8LydNBTxsRIAodY13N+qpVVOLrAPj4afd
+        zp98WVmRi/JKG/64b6wuA6nIet9PUiLswPteG/SRrAVRPf53Gs+0ma8gvzH3dQ==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
-Message-ID: <20220525070551.guv3csxi5kkqfr4f@vireshk-i7>
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
- <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
- <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
- <dea39b1f-0091-2690-7f07-108d07ef9f3c@linaro.org>
- <20220510044053.ykn6ygnbeokhzrsa@vireshk-i7>
- <1e533194-7047-8342-b426-f607fddbfaa3@linaro.org>
- <20220511050643.hd5tcrojb3wkbg7t@vireshk-i7>
- <20220518235708.1A04CC385A9@smtp.kernel.org>
- <65a4c28d-6702-3a9f-f837-1ea69a428777@linaro.org>
- <20220520005934.8AB1DC385AA@smtp.kernel.org>
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>
+Subject: [PATCH v3 0/3] Microchip LAN966x USB device support
+Date:   Wed, 25 May 2022 09:10:33 +0200
+Message-Id: <20220525071036.223396-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220520005934.8AB1DC385AA@smtp.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 19-05-22, 17:59, Stephen Boyd wrote:
-> This is a general problem with OPP. It is single clk frequency centric,
-> which works well for CPU/GPU devices that work with cpufreq/devfreq.
-> When it comes to other devices though we have to fit OPP into what those
-> devices want, which is something like gears for UFS, or "4k@60" (a
-> resolution) for display hardware.
-> 
-> Would adding string labels and/or using an index based API work better
-> for these devices? I think we'd want to extend OPP for display devices
-> to have whatever set of use-cases the device driver wants to handle with
-> string labels. That naturally follows how some SoC manufacturers setup
-> their OPP tables anyway. They may want to bump only the bus bandwidth
-> for different display resolutions while maxing out the clk frequency.
-> Then we could let drivers either construct a string at probe time to get
-> a handle to those OPP entries or index directly. The frequency APIs
-> would stick around for OPP tables that have frequencies and for drivers
-> that want to do cpufreq/devfreq stuff.
-> 
-> UFS may want to use an index based API that matches the gears per the
-> spec. I think it could do that with dev_pm_opp_find_level_exact(),
-> right?
+Hi,
 
-I think we can use "level" for all these use cases to find the OPP, if
-it aligns well with the requirements of all these frameworks.
+This series add support for the USB device controller available on
+the Microchip LAN966x SOCs (LAN9662 and LAN9668).
 
-FWIW, we already have three ways to find the OPP currently, via
-frequency, level and bandwidth.
+Both SOCs have the same controller and this controller is also the
+same as the one present on the SAMAD3 SOC.
 
-> Then the primary problem is the subject of this patch,
-> controlling multiple clks per OPP table. Could that be done by linking
-> one OPP table (for the gears) to an OPP table for each clk? Maybe
-> through 'required-opps'?
+Regards,
+Herve
 
-Even in that case we will have an OPP table which will have multiple
-clocks. So it may not matter much which OPP table contains all the
-clocks.
+Changes v2:
+- Avoid wildcards in the DT compatible string
+- Rename the DT node
+
+Changes v3:
+- Add Krzysztof's 'Acked-by' on patch 2/3
+- Change node insertion point (sort nodes by base addresses) on patch 3/3
+
+Herve Codina (3):
+  clk: lan966x: Fix the lan966x clock gate register address
+  dt-bindings: usb: atmel: Add Microchip LAN9662 compatible string
+  ARM: dts: lan966x: Add UDPHS support
+
+ Documentation/devicetree/bindings/usb/atmel-usb.txt |  3 +++
+ arch/arm/boot/dts/lan966x.dtsi                      | 11 +++++++++++
+ drivers/clk/clk-lan966x.c                           |  2 +-
+ 3 files changed, 15 insertions(+), 1 deletion(-)
 
 -- 
-viresh
+2.35.3
+
