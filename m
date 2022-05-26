@@ -2,107 +2,94 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39DC3534525
-	for <lists+linux-clk@lfdr.de>; Wed, 25 May 2022 22:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DFC5349DC
+	for <lists+linux-clk@lfdr.de>; Thu, 26 May 2022 06:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbiEYUl7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 25 May 2022 16:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
+        id S234364AbiEZE0b (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 26 May 2022 00:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235132AbiEYUl6 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 25 May 2022 16:41:58 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32F5666B9
-        for <linux-clk@vger.kernel.org>; Wed, 25 May 2022 13:41:57 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id x137so9834852ybg.5
-        for <linux-clk@vger.kernel.org>; Wed, 25 May 2022 13:41:57 -0700 (PDT)
+        with ESMTP id S244256AbiEZE03 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 26 May 2022 00:26:29 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767F9E0FD;
+        Wed, 25 May 2022 21:26:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=LDBqQh/PztHeiDiV9Pr0v62BTTaDnPQyU98FGi1REkw=;
-        b=CcrKKY8eLF55skKph2wn8fV4QqjrCqlWatlcJ0xsoHAtpnB7ttOBGuBaw3z8MV023J
-         6UrGjLfyyb3f1wcZoKmAQO+ru7nwT7MgCEwzUUAUZEnTSfTNSi6ZI5iNnh2UnbiSy0fz
-         RZPjDQr7Fz6TJiIDZWQFyqABu4DtsBm79dVkGZ2ev7a73wdegb6tVSDFI/HVMyuDy8OX
-         LYpGfxH6tjctf0ORqLeuVxdKrF4ptl7UhacTd1ows9Fj8u8SPxLVSLb+2EkF3rhtlNWe
-         f0OspiGL0+I5S8JaGl8NCySleetT2iPLOj6tkBo8A7gtC2819nx18kXYL0Q0SA+uTK+w
-         D5PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=LDBqQh/PztHeiDiV9Pr0v62BTTaDnPQyU98FGi1REkw=;
-        b=zfhZMG5Ly5UAXjrixXf1iV1ZzBh5X07Sk9+JOW0mdPPU9jQVmTOCKwMUTnFN5DsP5j
-         gJ1XlsaEUH3f+DMq+n4uGflOWgfCkOIXWLUf7KufAMuN+NpuU7Ry2MNy4qQHP5b4IS/J
-         YiTqryNBQ0hvGz40FWHz6E4K+OD6eIRnR8AnLN/pRHZho9i9k3LDDU6bxy004rHIce9I
-         eObEaMQrrXzoWnWQASbS4+2ZVCozfZ1wIv883cboRr1LZJ9IqQ6T/yYeeti2ENcrKoQ8
-         N6lM9T1KO17Og4k/BYR8pcnTVSdXZvertGdGQIHGApIAqhocaQhGcOwNPxY6/ZbPJbMI
-         ibPw==
-X-Gm-Message-State: AOAM530/DR/je/t7e+Qo4H+1/S5fcwMah6eyQKcLMF+Z2IxDGiRijuF/
-        IxsK68DLobNy8c8hxKCSg/8Sl1NxeNUqRWr7wjc=
-X-Google-Smtp-Source: ABdhPJxMSyhV0yvUOFZs06S3QCjmoMr96886q175FQ4AqIWs1J8LlEyZJ3+4uXzYgu2GoOi4+9Mm92kk99QoE7qZ9Is=
-X-Received: by 2002:a05:6902:52f:b0:655:371e:b088 with SMTP id
- y15-20020a056902052f00b00655371eb088mr8206254ybs.60.1653511316907; Wed, 25
- May 2022 13:41:56 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653539186; x=1685075186;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=CjsrzBZBOst/LRnCBDG8tISmJlZxebSI7DvbXBiWbEM=;
+  b=xI3uSkzb0PJpvu1miqIe7SYnF8dgYrLwr+2+n/Bo5ZJXa7BCM24Ijp80
+   lxlx2Szxbz9Lz2SDd+OvRaKjBjKH0iCQLB6ixwEWeicJIHOCJm5GghFS6
+   DfHI+j1JLkpMZlTvlnlcFqTIqxk4oekOtoaHh8J4NdObVykWbQ/W+g49S
+   Q=;
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 25 May 2022 21:26:24 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 21:26:24 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 25 May 2022 21:26:22 -0700
+Received: from hu-tdas-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 25 May 2022 21:26:18 -0700
+From:   Taniya Das <quic_tdas@quicinc.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?q?Michael=20Turquette=20=C2=A0?= <mturquette@baylibre.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-soc@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <robh@kernel.org>,
+        <robh+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>
+Subject: [PATCH v3 0/3] Add support for audio clock gating resets for SC7280
+Date:   Thu, 26 May 2022 09:55:58 +0530
+Message-ID: <20220526042601.32064-1-quic_tdas@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Received: by 2002:a5b:506:0:0:0:0:0 with HTTP; Wed, 25 May 2022 13:41:56 -0700 (PDT)
-From:   Deterin Falcao <falcaodeterin@gmail.com>
-Date:   Wed, 25 May 2022 22:41:56 +0200
-Message-ID: <CABCO4Z3ZsuRMCEx9iE7ytT04j86oQ7ecWWGwGsApVAtJTbGrsg@mail.gmail.com>
-Subject: Bitte kontaktaufnahme Erforderlich !!! Please Contact Required !!!
-To:     contact@firstdiamondbk.com
-Cc:     info@firstdiamondbk.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Guten Tag,
+Add support for clock gating resets for lpass audio clock controller and
+also add support for external MCLKs for I2S.
 
-Ich habe mich nur gefragt, ob Sie meine vorherige E-Mail bekommen
+[v3]
+  * Remove the maxItems from reg property.
 
-haben ?
+[v2]
+  * Update/fix the YAML for reg property against each compatible.
 
-Ich habe versucht, Sie per E-Mail zu erreichen.
-
-Kommen Sie bitte schnell zu mir zur=C3=BCck, es ist sehr wichtig.
-
-Danke
-
-Falcao Deterin
-
-falcaodeterin@gmail.com
+[v1]
+  * Add support for clock gating resets for lpass audio clock
+    controller & MCLKs.
 
 
+Taniya Das (3):
+  dt-bindings: clock: Add resets for LPASS audio clock controller for
+    SC7280
+  dt-bindings: clock: Add support for external MCLKs for LPASS on SC7280
+  clk: qcom: lpass: Add support for resets & external mclk for SC7280
 
+ .../clock/qcom,sc7280-lpasscorecc.yaml        | 19 +++++++++--
+ drivers/clk/qcom/lpassaudiocc-sc7280.c        | 17 +++++++++-
+ drivers/clk/qcom/lpasscorecc-sc7280.c         | 33 +++++++++++++++++++
+ .../clock/qcom,lpassaudiocc-sc7280.h          |  5 +++
+ .../clock/qcom,lpasscorecc-sc7280.h           |  2 ++
+ 5 files changed, 72 insertions(+), 4 deletions(-)
 
+--
+2.17.1
 
-
-
-
-----------------------------------
-
-
-
-
-Good Afternoon,
-
-I was just wondering if you got my Previous E-mail
-have ?
-
-I tried to reach you by E-mail.
-
-Please come back to me quickly, it is very Important.
-
-Thanks
-
-Falcao Deterin
-
-falcaodeterin@gmail.com
