@@ -2,69 +2,102 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A698153AE20
-	for <lists+linux-clk@lfdr.de>; Wed,  1 Jun 2022 22:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 851FB53ADEB
+	for <lists+linux-clk@lfdr.de>; Wed,  1 Jun 2022 22:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbiFAUmt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 1 Jun 2022 16:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39222 "EHLO
+        id S229827AbiFAUpN (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 1 Jun 2022 16:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiFAUmk (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 1 Jun 2022 16:42:40 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E961C8A2D
-        for <linux-clk@vger.kernel.org>; Wed,  1 Jun 2022 13:24:11 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id l84so4091342oif.10
-        for <linux-clk@vger.kernel.org>; Wed, 01 Jun 2022 13:24:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:to;
-        bh=Gk4nfCem3ECRa7Gml0J0mN/3RZoOAdfGaQAqyHPKtiI=;
-        b=RGd9c1aErSn0Z6Ze8KLoF3EWbTH/9kTlwI+HC+SAx7dzvBrwHHsKOlh0JbRb09xcBP
-         iM2OCHeO/Jrl9Xle2mDSw6T0q2WeDDZSG5qe5a4Dg+cUelC504vEzjOQufYXWP9aJXgI
-         V/LFJCahzAFFpJlr1tiv2Vp4M01X+B3LdrfN7rOxB8bGQcOq43FjV1KDwVfyhOisNkOG
-         FD6f0xHzXypVyOoc2S2G61yyKZweooFWr6HTnKbFSpcoQrcxWgeekfUkx9WrMRo9A/lx
-         1hTIaXz5Rg+fQ0IRlejP5CxzHN8QjtW4TV9t29PD5AzmW/wzytk4/unH4gfxTM3MusEo
-         OocQ==
+        with ESMTP id S229988AbiFAUnw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 1 Jun 2022 16:43:52 -0400
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D26C1CF912;
+        Wed,  1 Jun 2022 13:28:33 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id t144so4110895oie.7;
+        Wed, 01 Jun 2022 13:28:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:to;
-        bh=Gk4nfCem3ECRa7Gml0J0mN/3RZoOAdfGaQAqyHPKtiI=;
-        b=ZB+dJxzV341aokI1fHVTqXhxRVaEAqGKQ5yiGihyTzE3Xa8YHWn2sz1PkPOPBXBaOx
-         9f2clqj1A2JLg62WuBgU4Xiz59q55Z3U8L1vm2nz2Yzii+2d2Sec/jqAS62t2o+7Utit
-         rjdEFF1hbqjR8XUM7RU3Cddhi+h0t3lrdBHBPo+H4519ETYkU68pOuZZ3a4siiGG6vOd
-         QpRKLNByPnXpsTKsl4eZ24PJh/M6vLI8nUKz/7Nr0wWvhfCYvbqte/0ophxJQZXXdaeU
-         sATUUGPJXQxbj3sHcS/J1e5JFYotYUxRsyrNmJ5STib+WsLjda/uMqxdnF8QO5sESuR5
-         EPEQ==
-X-Gm-Message-State: AOAM533GenLFN8H9jWCrDCgJGeiFEJ0KgWBxQw1YdMQUexkGJym5ZY2U
-        QXXRn7MmJv1JApPBVBwn2fvcNbtqU7qO5FaNhHH6aSmGydw=
-X-Google-Smtp-Source: ABdhPJw3lgUh0oxmgmjzAwlNNZ94ksw/9I0mOwLnUtgereG7iWZKY4s1I5RZI0o0mPKS7RYxDWrvjq+R1cXj2tliMpE=
-X-Received: by 2002:a05:6870:4619:b0:f1:e78d:fd54 with SMTP id
- z25-20020a056870461900b000f1e78dfd54mr18171419oao.195.1654111014269; Wed, 01
- Jun 2022 12:16:54 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=X2ooahDs8/MVRzFKap0q/0WAIoyQkWLgd3PeK7IUOjw=;
+        b=DymliDtKGmRB9JpcjK+BnIOPVi4LqX0rUWwRKYlowjYm9s3vNu6T4I5l/mZuGpjh73
+         Q+/OmZ+/j32eLuYp1t77fZeT48/f9Q2liNqFZ3skoXQjnremg2HZSduB4fa41HJNLNhT
+         XahRWFCbtzjYdaBqSYrGr7pNKYYMyXnM2LHVPWsceOMsLc/tl/1pJ32Dim5DzcFsjzgH
+         Ru3CiJP8AHCVytUzr0d9FTPgvSr+4evwkGlg0AMhM+d1HDoSX8rD+9GoBY6jHq7nvFTR
+         Yt2iKOWdffA0oqEw80viowR0tYuSm3ktgsuG4rhQ61Pd/bfsF6A1BRopGHZndHUkWtzZ
+         /Lkg==
+X-Gm-Message-State: AOAM531j7bd7SgbzlYrWKxiMAL3Frdbjan9VE/Za7BpzvEWBndWa22YT
+        yGI84quXDhZeyfRs6eGOWaTM4ZywbA==
+X-Google-Smtp-Source: ABdhPJz5a5iAslhZOqDv+VH/4OubZYx7aKW4jPUsIFCTCawCJJKxuEBmtxj3CPj2vN54oLaXy3qf9A==
+X-Received: by 2002:a05:6870:350:b0:e2:6f65:b91f with SMTP id n16-20020a056870035000b000e26f65b91fmr18126545oaf.192.1654113540656;
+        Wed, 01 Jun 2022 12:59:00 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h14-20020a4ad74e000000b00419b69c667dsm1312487oot.32.2022.06.01.12.59.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 12:59:00 -0700 (PDT)
+Received: (nullmailer pid 334128 invoked by uid 1000);
+        Wed, 01 Jun 2022 19:58:59 -0000
+Date:   Wed, 1 Jun 2022 14:58:59 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Marek Vasut <marex@denx.de>
+Cc:     linux-clk@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: clk: Introduce 'critical-clocks'
+ property
+Message-ID: <20220601195859.GA328329-robh@kernel.org>
+References: <20220517235919.200375-1-marex@denx.de>
 MIME-Version: 1.0
-Received: by 2002:a05:6358:3601:b0:a3:2139:251d with HTTP; Wed, 1 Jun 2022
- 12:16:53 -0700 (PDT)
-Reply-To: johnwinery@online.ee
-In-Reply-To: <CAFqHCSRskayxkisB-+u26DtbT6KFL5dAQ+X5s5W-kcBz_DGgTw@mail.gmail.com>
-References: <CAFqHCSRskayxkisB-+u26DtbT6KFL5dAQ+X5s5W-kcBz_DGgTw@mail.gmail.com>
-From:   johnwinery <alicejohnson8974@gmail.com>
-Date:   Wed, 1 Jun 2022 12:16:53 -0700
-Message-ID: <CAFqHCSSwNksOc4c+jJ+6tiF2b2hWGn9JARB6iPpgQJTeHU_7AA@mail.gmail.com>
-Subject: Re: good day
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220517235919.200375-1-marex@denx.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Greeting ,I had written an earlier mail to you but without response
+On Wed, May 18, 2022 at 01:59:18AM +0200, Marek Vasut wrote:
+> Some platforms require select clock to be always running, e.g. because
+> those clock supply vital devices which are not otherwise attached to
+> the system and thus do not have a matching DT node and clock consumer.
+> 
+> An example is a system where the SoC serves as a crystal oscillator
+> replacement for a programmable logic device. The "critical-clocks"
+> property of a clock controller allows listing clock which must never
+> be turned off.
+> 
+> Clock listed in the "critical-clocks" property may have other consumers
+> in DT, listing the clock in "critical-clocks" only assures those clock
+> are never turned off, and none of these optional additional consumers
+> can turn the clock off either.
+> 
+> The implementation is modeled after "protected-clocks".
+> 
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> To: linux-clk@vger.kernel.org
+> ---
+> V2: Update the commit message to clarify the behavior
+> V3: s@Some platforms require clock@Some platforms require some clocks@
+> ---
+>  .../devicetree/bindings/clock/clock-bindings.txt | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+
+This file is removed upstream as it is replaced by the schema in 
+dtschema. 
+
+But I'd wait to see what Stephen says. I'm fine with the addition.
+
+Rob
