@@ -2,67 +2,39 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 730C953F17D
-	for <lists+linux-clk@lfdr.de>; Mon,  6 Jun 2022 23:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8D653F3D1
+	for <lists+linux-clk@lfdr.de>; Tue,  7 Jun 2022 04:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbiFFVSw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 6 Jun 2022 17:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
+        id S232782AbiFGCGb (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 6 Jun 2022 22:06:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbiFFVSu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 6 Jun 2022 17:18:50 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49228BA99C
-        for <linux-clk@vger.kernel.org>; Mon,  6 Jun 2022 14:18:47 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id q184so4472056oia.1
-        for <linux-clk@vger.kernel.org>; Mon, 06 Jun 2022 14:18:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YCcSuhuQ1vWwVJ0SW2RVYIVh/aSNB0orFLVM+U8ftCM=;
-        b=aX4csWQi3E97IZVp7kfPFWT4t/uQQ91msNCIDdET7namQno4hrb4pgmbFaFuMwHnuv
-         cXGC0QOHEtB0M57d4JOcViNU0H7E26JpSpsGUfaWgPOOG4ZdEzVhVrkzb7keqvhywz07
-         sNcXZ7jGIGSgw0YBGR5yF33qWulsfzMkje4N/Dzc3GthV6QgHzW6dTLj1UvCKURBEuN1
-         Ftl8yWjme7AaNT+w8CvIIna4/la7QBc1oZbqdgXn8RsUzfBTOtUSvlvBEAyQXL5kWxFL
-         e6VCROspeDsXUiIYU56QKDUcYYE6x9kLNhFe/qybielxQS/UxXZIA+twBUSCirrNoiYh
-         mMVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YCcSuhuQ1vWwVJ0SW2RVYIVh/aSNB0orFLVM+U8ftCM=;
-        b=kJk9dYbpWOhmTVrCr8JnmptPH8C6JsXqAKcuFsbDU6Cd1S8XDQAL1ZpmxezEmzhDBL
-         j0nHUuzHQ/pbVvYOcGMHm5KmRSMislkwWKd9uYzopUiZI9+RaFm6H3A0EtILzjvTCLLG
-         3N4ERQ5Ka9ZBSHp+v54CQQa4VnptZGUAYzOVMLQlPdp/g7q1t/nalxNGE48qs1Cyu0lG
-         gu3t1Bmv4fEa3xR8HJ11fImsvu0X225XJH6vQsG58X2Tu5TR+xBKBPK+yjkXjwYX0yBK
-         QNgGq/91xbg/NCIzhQ+7tHHhfia/ywKH5icOyh0FiXP566BcWfSBN9K3L10hfposRTYW
-         1S8A==
-X-Gm-Message-State: AOAM530BkaL7PA8TOECD4tXge2Qlr6Kqgjbhg9Fx6DY0zWGCeoHgW4Ls
-        sD7E6krRsy6IKeAVnXKduo/c8Q==
-X-Google-Smtp-Source: ABdhPJzO7TM8BK3G8gYvkXfPhVHXVafWnK1DvN0BUm2+eoHuppcoSnE9n+Wv7V4l1pdwHAEcaSAg9w==
-X-Received: by 2002:aca:304f:0:b0:32e:8381:fa69 with SMTP id w76-20020aca304f000000b0032e8381fa69mr5698715oiw.289.1654550326658;
-        Mon, 06 Jun 2022 14:18:46 -0700 (PDT)
-Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id e28-20020a544f1c000000b0032c18f04800sm9126744oiy.1.2022.06.06.14.18.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 14:18:46 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: qcom: gdsc: Bump parent usage count when GDSC is found enabled
-Date:   Mon,  6 Jun 2022 14:21:12 -0700
-Message-Id: <20220606212112.3617731-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S236009AbiFGCFy (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 6 Jun 2022 22:05:54 -0400
+Received: from mx1.cqplus1.com (unknown [113.204.237.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF728BA9A8
+        for <linux-clk@vger.kernel.org>; Mon,  6 Jun 2022 19:05:23 -0700 (PDT)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 172.28.114.216
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(2334:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Tue, 07 Jun 2022 09:58:33 +0800 (CST)
+From:   Qin Jian <qinjian@cqplus1.com>
+To:     sboyd@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        mturquette@baylibre.com, linux@armlinux.org.uk, arnd@arndb.de,
+        olof@lixom.net, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Qin Jian <qinjian@cqplus1.com>
+Subject: [PATCH v17 00/10] Add Sunplus SP7021 SoC Support
+Date:   Tue,  7 Jun 2022 09:58:00 +0800
+Message-Id: <cover.1654565776.git.qinjian@cqplus1.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,31 +42,174 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-When a GDSC is found to be enabled at boot the pm_runtime state will
-be unbalanced as the GDSC is later turned off. Fix this by increasing
-the usage counter on the power-domain, in line with how we handled the
-regulator state.
+This patch series add Sunplus SP7021 SoC support.
 
-Fixes: 1b771839de05 ("clk: qcom: gdsc: enable optional power domain support")
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- drivers/clk/qcom/gdsc.c | 3 +++
- 1 file changed, 3 insertions(+)
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates many
+peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and etc.) into a
+single chip. It is designed for industrial control.
 
-diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-index 44520efc6c72..a1fa7c4cff60 100644
---- a/drivers/clk/qcom/gdsc.c
-+++ b/drivers/clk/qcom/gdsc.c
-@@ -420,6 +420,9 @@ static int gdsc_init(struct gdsc *sc)
- 				return ret;
- 		}
- 
-+		/* ...and the power-domain */
-+		gdsc_pm_runtime_get(sc);
-+
- 		/*
- 		 * Votable GDSCs can be ON due to Vote from other masters.
- 		 * If a Votable GDSC is ON, make sure we have a Vote.
+SP7021 consists of two chips (dies) in a package. One is called C-chip
+(computing chip). It is a 4-core ARM Cortex A7 CPU. It adopts high-level
+process (22 nm) for high performance computing. The other is called P-
+chip (peripheral chip). It has many peripherals and an ARM A926 added
+especially for real-time control. P-chip is made for customers. It adopts
+low-level process (ex: 0.11 um) to reduce cost.
+
+Refer to (for documentations):
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+
+Refer to (applications):
+https://tibbo.com/store/plus1.html
+
+Refer to (applications):
+http://www.sinovoip.com.cn/ecp_view.asp?id=586
+
+Changes in v17:
+- Based on 5.18.1 & resend
+
+Changes in v16:
+- clk-sp7021.c: Fix the comments from Stephen Boyd
+- board dts: Fix the comments from Krzysztof
+
+Changes in v15:
+- Add Sunplus SP7021-demo-v3 board dts
+- Refine yaml title
+- Rename dt-binding header filename to match compatible string
+
+Changes in v14:
+- clock/sp-sp7021.h: Fix the comments from Krzysztof
+- sunplus,sp7021-clkc.yaml: Fix the comments from Rob
+
+Changes in v13:
+- reset/sp-sp7021.h: Move HW mapping from dt-binding header to driver
+- reset-sunplus.c: Move HW mapping from dt-binding header to driver
+- clock/sp-sp7021.h: Move HW mapping from dt-binding header to driver
+- clk-sp7021.c: Fix the comments from Arnd
+- irq-sp7021-intc.c: Remove empty set_affinity callback function
+- sp7021_defconfig: Fix the comments from Arnd
+
+Changes in v12:
+- sunplus,sp7021-clkc.yaml: Move 'reg' after 'compatible'
+- sunplus,sp7021-intc.yaml: Move 'reg' after 'compatible'
+- sunplus,reset.yaml: Move 'reg' after 'compatible'
+- Remove wrong reviewed-tags
+
+Changes in v11:
+- clk-sp7021.c: Remove the dead code
+
+Changes in v10:
+- arm/sunplus,sp7021.yaml: Add SoC compatible: "sunplus,sp7021"
+- clock/sunplus,sp7021-clkc.yaml: Remove the internal clock parent from DTS
+- clk-sp7021.c: Refine the macro DBG_CLK
+- clk-sp7021.c: Refine the clock_parent_data
+
+Changes in v9:
+- clk/Kconfig: fix the comments form Stephen Boyd
+- clk-sp7021.c: fix the comments form Stephen Boyd
+
+Changes in v8:
+- clk-sp7021.c: fix the comments form Stephen Boyd
+
+Changes in v7:
+- sunplus,sp7021-clkc.yaml: Add clocks & clock-names
+- clk-sp7021.c: fix the comments form Stephen Boyd
+- irq-sp7021-intc.c: fix the comments from Marc
+
+Changes in v6:
+- reset-sunplus.c: fix the comments from Philipp
+- irq-sp7021-intc.c: fix the comments from Marc
+- mach-sunplus: fix the comments from Arnd
+
+Changes in v5:
+- reset-sunplus.c: fix strict checks
+- clk/Kconfig: fix spell
+- clk-sp7021.c: using bitfield ops, fix strict checks
+- irqchip/Kconfig: fix spell
+- irq-sp7021-intc.c: cleanup error path in probe, fix strict checks
+- arm/Kconfig: fix spell & typo, remove CONFIG_SERIAL_SUNPLUS
+- mach-sunplus/Kconfig: fix typo
+- sp7021_defconfig: add CONFIG_SERIAL_SUNPLUS
+
+Changes in v4:
+- mach-sunplus: add initial support for SP7021
+- sp7021_defconfig: add generic SP7021 defconfig
+- reset-sunplus: remove Q645 support
+- reset-sunplus.c: refine code based on Philipp's review
+- clk-sp7021: clock defines add prefix, more clean up
+
+Changes in v3:
+- sp7021-intc: remove primary controller mode due to P-chip running Linux
+  not supported any more.
+- sp7021-intc.h: removed, not set ext through the DT but sp_intc_set_ext()
+- sunplus,sp7021-intc.yaml: update descriptions for above changes
+- irq-sp7021-intc.c: more cleanup based on Marc's review
+- all driver's Kconfig removed default, it's selected by platform config
+
+Changes in v2:
+- sunplus,sp7021-intc.yaml: add descrption for "#interrupt-cells", interrupts
+- sunplus,sp7021-intc.yaml: drop "ext0-mask"/"ext1-mask" from DT
+- sunplus,sp7021-intc.yaml: fix example.dt too long error
+- irq-sp7021-intc.c: major rewrite
+- all files with dual license
+
+Qin Jian (10):
+  dt-bindings: arm: sunplus: Add bindings for Sunplus SP7021 SoC boards
+  dt-bindings: reset: Add bindings for SP7021 reset driver
+  reset: Add Sunplus SP7021 reset driver
+  dt-bindings: clock: Add bindings for SP7021 clock driver
+  clk: Add Sunplus SP7021 clock driver
+  dt-bindings: interrupt-controller: Add bindings for SP7021 interrupt
+    controller
+  irqchip: Add Sunplus SP7021 interrupt controller driver
+  ARM: sunplus: Add initial support for Sunplus SP7021 SoC
+  ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
+  ARM: dts: Add Sunplus SP7021-Demo-V3 board device tree
+
+ .../bindings/arm/sunplus,sp7021.yaml          |  29 +
+ .../bindings/clock/sunplus,sp7021-clkc.yaml   |  52 ++
+ .../sunplus,sp7021-intc.yaml                  |  62 ++
+ .../bindings/reset/sunplus,reset.yaml         |  38 +
+ MAINTAINERS                                   |  18 +
+ arch/arm/Kconfig                              |   2 +
+ arch/arm/Makefile                             |   1 +
+ arch/arm/boot/dts/Makefile                    |   2 +
+ arch/arm/boot/dts/sunplus-sp7021-achip.dtsi   |  84 ++
+ arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts  |  26 +
+ arch/arm/boot/dts/sunplus-sp7021.dtsi         | 318 ++++++++
+ arch/arm/configs/multi_v7_defconfig           |   1 +
+ arch/arm/configs/sp7021_defconfig             |  59 ++
+ arch/arm/mach-sunplus/Kconfig                 |  27 +
+ arch/arm/mach-sunplus/Makefile                |   8 +
+ arch/arm/mach-sunplus/sp7021.c                |  16 +
+ drivers/clk/Kconfig                           |  10 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-sp7021.c                      | 727 ++++++++++++++++++
+ drivers/irqchip/Kconfig                       |   9 +
+ drivers/irqchip/Makefile                      |   1 +
+ drivers/irqchip/irq-sp7021-intc.c             | 278 +++++++
+ drivers/reset/Kconfig                         |   9 +
+ drivers/reset/Makefile                        |   1 +
+ drivers/reset/reset-sunplus.c                 | 212 +++++
+ .../dt-bindings/clock/sunplus,sp7021-clkc.h   |  88 +++
+ .../dt-bindings/reset/sunplus,sp7021-reset.h  |  87 +++
+ 27 files changed, 2166 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/sunplus,reset.yaml
+ create mode 100644 arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
+ create mode 100644 arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts
+ create mode 100644 arch/arm/boot/dts/sunplus-sp7021.dtsi
+ create mode 100644 arch/arm/configs/sp7021_defconfig
+ create mode 100644 arch/arm/mach-sunplus/Kconfig
+ create mode 100644 arch/arm/mach-sunplus/Makefile
+ create mode 100644 arch/arm/mach-sunplus/sp7021.c
+ create mode 100644 drivers/clk/clk-sp7021.c
+ create mode 100644 drivers/irqchip/irq-sp7021-intc.c
+ create mode 100644 drivers/reset/reset-sunplus.c
+ create mode 100644 include/dt-bindings/clock/sunplus,sp7021-clkc.h
+ create mode 100644 include/dt-bindings/reset/sunplus,sp7021-reset.h
+
 -- 
-2.35.1
+2.33.1
 
