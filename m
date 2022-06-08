@@ -2,96 +2,42 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07A0B543198
-	for <lists+linux-clk@lfdr.de>; Wed,  8 Jun 2022 15:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9BC75431AE
+	for <lists+linux-clk@lfdr.de>; Wed,  8 Jun 2022 15:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240513AbiFHNlC (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 8 Jun 2022 09:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
+        id S240367AbiFHNlg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 8 Jun 2022 09:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240463AbiFHNk7 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 8 Jun 2022 09:40:59 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6ED1DA091;
-        Wed,  8 Jun 2022 06:40:53 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id b7so10252490ljr.6;
-        Wed, 08 Jun 2022 06:40:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NLRKDXz6zzjLAXhhR5Ifc+M4GbQQ1QD0rqcPZbvw9Lg=;
-        b=KUMMzEbWouoo5v1rnAw4ROesaaZ+ihQIjVRHapqwGv1U/mRgsb4bSx8YPFiSdGfnjb
-         gJVaOXOmbBBSk9VpwqB0gZ9qitVJP8PiUJw3rBvWsklM808py+k7J2BFcr1ATsofOwth
-         Zb2XhtDiW/MlgwEbzuTnXamBhEEWiSoSKHeyGq7tbTJPBteBAJjWKr/XxtAQf1Hc3ph+
-         foP2AmYGydN0Kiz8fW+cHhsRMcoaMUJNJJQ0ZZGn45AbtigbxMt6N9E6vBft+qHlr20t
-         vRrYwAW71h8h7EwyprxpLLaFRe2yZhcDZSajpDvVJPhAGdegARHe/Sf8XLhYpTDlc86/
-         CSdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NLRKDXz6zzjLAXhhR5Ifc+M4GbQQ1QD0rqcPZbvw9Lg=;
-        b=J/Q8KNvddD/mu2ePrX61tICStRbpdtK3HgQiDEWR0JctAh3Rzd+d5b07lUc0F1BuOU
-         X+6pgtpR6y16ff1cg2hgWo7/KlbNT9/GXTdjy3vv/g5ebVLTTW5ubckYIuhVHUImZOxB
-         GCgegXIep3JBKHvX0pNYg9C5ZAVD14zVQlqGzZmFtEGQNS2Ad8iEf2JkLUXErlHkim+Q
-         nDJEJ7JXxTAg55DcWnuXeDeyaWEaNFqcAhrafaF+nCQIBOKkv4tQ3x7k5qN8zGBkoTOp
-         ssLW00EfcjBvV+t882Zp6hh9YocL+Y3EmiGBjTX9dxGyTgUgJqch7uD0zrrvqS4Cnryo
-         JVGg==
-X-Gm-Message-State: AOAM533f25fH3tmjmWglBTdf1pWGH8ub+AL7JEfCo1vpcPUtPuuFChhe
-        r/mYrzU8N/XQ/aZxz825ROx82LMtFKSEzZv0t20=
-X-Google-Smtp-Source: ABdhPJwY1wyBrMPjLKOD5RHB0u0JbXxcpqguVu5NkKhRMtLnvkKbCkxsvPZdyQLyuzU+FGHvCR8t/ArR3jt2flq+iTk=
-X-Received: by 2002:a2e:81ca:0:b0:255:78c0:cb21 with SMTP id
- s10-20020a2e81ca000000b0025578c0cb21mr16542734ljg.240.1654695651152; Wed, 08
- Jun 2022 06:40:51 -0700 (PDT)
+        with ESMTP id S240485AbiFHNlZ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 8 Jun 2022 09:41:25 -0400
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AA11DF11C
+        for <linux-clk@vger.kernel.org>; Wed,  8 Jun 2022 06:41:19 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:243a:e14b:d107:1f56])
+        by albert.telenet-ops.be with bizsmtp
+        id gdhH2700M1qF9lr06dhHzv; Wed, 08 Jun 2022 15:41:17 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nyvvx-003D7c-2J; Wed, 08 Jun 2022 15:41:17 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1nyvvw-008Knz-9d; Wed, 08 Jun 2022 15:41:16 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 0/6] clk: renesas: CPG structure cleanups
+Date:   Wed,  8 Jun 2022 15:41:09 +0200
+Message-Id: <cover.1654694831.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220608095623.22327-1-tmaimon77@gmail.com> <20220608095623.22327-4-tmaimon77@gmail.com>
- <CAK8P3a1fDDk2kWMoxFjxoZT6dD5vfNzmNO+sMhV-GrZkpGkPow@mail.gmail.com>
-In-Reply-To: <CAK8P3a1fDDk2kWMoxFjxoZT6dD5vfNzmNO+sMhV-GrZkpGkPow@mail.gmail.com>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Wed, 8 Jun 2022 16:40:39 +0300
-Message-ID: <CAP6Zq1hxjDvzkwt3Jf7DVM_iB4EeYBdb3RzjjAjyr5mhD9==Lw@mail.gmail.com>
-Subject: Re: [PATCH v2 03/20] tty: serial: 8250: Add NPCM845 UART support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Avi Fishman <avifishman70@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Olof Johansson <olof@lixom.net>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Robert Hancock <robert.hancock@calian.com>,
-        "nathan=20Neusch=C3=A4fer?=" <j.neuschaefer@gmx.net>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,34 +45,53 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Arnd,
+	Hi Mike, Stephen,
 
-Sorry but Just to clarify, This patch should not be applied and the
-NPCM8XX UART should use nuvoton,npcm750-uart compatible in the device
-tree?
+Recently, a set of (wrong) cleanup patches for Renesas clock drivers
+pointed my attention to the fact that various older drivers contain
+unused members in their CPG structures.
 
-Because I thought that in your comment a few weeks ago
-https://www.spinics.net/lists/linux-serial/msg48179.html
+As these are mostly drivers for older SoCs, it is very unlikely they are
+ever extended to make use of these members.  If anyone ever wants to
+improve these drivers, I thinks these SoCs should be moved over to
+renesas-cpg-mssr instead, so we can start using the module reset feature
+that is available on SH/R-Mobile SoCs, just like on R-Car Gen2 and later.
 
-We need only to modify the compatible string in the device tree as we
-did in V2 patchset
-https://www.spinics.net/lists/arm-kernel/msg986480.html
+Hence this series cleans up these drivers, and removes the unused
+members from the CPG structures.
 
-On Wed, 8 Jun 2022 at 15:01, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Jun 8, 2022 at 11:56 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> >
-> > Add Nuvoton BMC NPCM845 UART support.
-> > The NPCM845 uses the same UART as the NPCM750.
-> >
-> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
->
->
-> This one should no longer be needed if the timers are compatible with the
-> old ones and correctly described in the DT.
->
->       Arnd
+This series has been tested on the ape6evm, armadillo, kzm9g, bock-w,
+lager, and rsk+rza1 development boards, and I plan to queue it in
+renesas-clk for v5.20.
 
-Thanks,
+Thanks for your comments!
 
-Tomer
+Geert Uytterhoeven (6):
+  clk: renesas: r8a73a4: Remove r8a73a4_cpg.reg
+  clk: renesas: r8a7740: Remove r8a7740_cpg.reg
+  clk: renesas: sh73a0: Remove sh73a0_cpg.reg
+  clk: renesas: r8a7778: Remove struct r8a7778_cpg
+  clk: renesas: r8a7779: Remove struct r8a7779_cpg
+  clk: renesas: rza1: Remove struct rz_cpg
+
+ drivers/clk/renesas/clk-r8a73a4.c | 22 ++++++++++-----------
+ drivers/clk/renesas/clk-r8a7740.c | 20 +++++++++----------
+ drivers/clk/renesas/clk-r8a7778.c | 31 +++++++++--------------------
+ drivers/clk/renesas/clk-r8a7779.c | 27 +++++++++----------------
+ drivers/clk/renesas/clk-rz.c      | 33 ++++++++++++++-----------------
+ drivers/clk/renesas/clk-sh73a0.c  | 26 ++++++++++++------------
+ 6 files changed, 67 insertions(+), 92 deletions(-)
+
+-- 
+2.25.1
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
