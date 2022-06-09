@@ -2,165 +2,121 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABCC545349
-	for <lists+linux-clk@lfdr.de>; Thu,  9 Jun 2022 19:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A7F54536F
+	for <lists+linux-clk@lfdr.de>; Thu,  9 Jun 2022 19:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345074AbiFIRpr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 9 Jun 2022 13:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40396 "EHLO
+        id S1345175AbiFIRvs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 9 Jun 2022 13:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345073AbiFIRpm (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 9 Jun 2022 13:45:42 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CC52A1D65;
-        Thu,  9 Jun 2022 10:45:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1654796682;
-        bh=aAGWS5nsEjumC36D8Oj4xKJFjI8cDGKi0mv38ijyKvU=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=iglfxQwW7H2DsRtidTWRvPFWgQlqhaWIYH9JVcg4gFlV+XkI4j8PLqDe+uFhmyIyY
-         EKCS0Jgd553PG8W8DZfmU8/QU93j6q1OvbQreIlh7MapLt/UmddRKb1PmDiHYAwXAd
-         OWnxDsMfQhsyusJEXGHD7w2NsIGCtBq3LTQdnVfk=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([5.146.195.3]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N3se8-1nZ8A54288-00zqaM; Thu, 09
- Jun 2022 19:44:42 +0200
-Date:   Thu, 9 Jun 2022 19:44:37 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Tomer Maimon <tmaimon77@gmail.com>, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, daniel.lezcano@linaro.org,
-        tglx@linutronix.de, wim@linux-watchdog.org, linux@roeck-us.net,
-        catalin.marinas@arm.com, will@kernel.org, arnd@arndb.de,
-        olof@lixom.net, jirislaby@kernel.org, shawnguo@kernel.org,
-        bjorn.andersson@linaro.org, geert+renesas@glider.be,
-        marcel.ziswiler@toradex.com, vkoul@kernel.org,
-        biju.das.jz@bp.renesas.com, nobuhiro1.iwamatsu@toshiba.co.jp,
-        robert.hancock@calian.com, j.neuschaefer@gmx.net, lkundrak@v3.sk,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 06/20] dt-binding: clk: npcm845: Add binding for
- Nuvoton NPCM8XX Clock
-Message-ID: <YqIxhWeUbEAo3Jam@latitude>
-References: <20220608095623.22327-1-tmaimon77@gmail.com>
- <20220608095623.22327-7-tmaimon77@gmail.com>
- <f4899b6d-fec3-5940-709a-f5fbc7ae6233@linaro.org>
+        with ESMTP id S1345165AbiFIRvp (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 9 Jun 2022 13:51:45 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E14631D9D0
+        for <linux-clk@vger.kernel.org>; Thu,  9 Jun 2022 10:51:41 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id p8so17683002qtx.9
+        for <linux-clk@vger.kernel.org>; Thu, 09 Jun 2022 10:51:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=uETXtarVwZqoq55uxf85U5YgwPdkdqdQ5+5+F1r3C0I=;
+        b=UDGOOky72jyL07Hua5xhTBDqYbAuu1peFfWmRCYXOir+bIonsZfuAJtYNmGWBPdSdp
+         9+moDEFvyipsVEnQMhyLR2GDQcNQLhutuUbMQ+yly/LVK9rgX4enzJxrZCHQPhsyl8b8
+         XtPkLKWrpl2Go8b1xlVRwAcC48jh4xOfXnOqs/cYw0nI/083+8R0YsS4GQRu83zteIIu
+         0xeNCfssicXWd5d6jGS+LPBUYtS14lZLEiqsGgeanGl4xNNu59N1HDpfavzVxG2UMy00
+         ebFyWbpMkyERyTQb2gk3xIsE9mFMTY5QK/EoQbVUUKOsGUZlOx/1yB6zAYhfk4xQD+xl
+         biWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=uETXtarVwZqoq55uxf85U5YgwPdkdqdQ5+5+F1r3C0I=;
+        b=pbOCka/R9/XwYNPq4GFCjpPVQSC22fylE5UyvqPVBv2oxMlWiPqSQkJt7TOdZgnzIa
+         bBW2A/kzLU/0LkO82B8wcf7ILDDo/5A2uLWiBjFEP2sbZqgc+gQeStOOsIqbe1nZOmzW
+         CbSGZhh7OkYp8C6leVHqInlJKeHO2wy5xU6QQA+63LHntvGb4dqTCiKyyROfPBBRPB20
+         URvvEpgXmWS23uvYlnxeTXaNtcolFZlAltWtCTGeSVCUEOazYPIFVEibSuQxX66JGnhG
+         2xotCPiXhUcCzVq3VnD3j7Go85m+UaLwHBnWP7KgMVvdfY0BxemKZNvcCvuvCO1UbJVa
+         fkOA==
+X-Gm-Message-State: AOAM531WrgCEGFT6L+JmZIwlEjg4ymRGJycEfAvERn9wWPl6Nl8G0ZUm
+        lg1U9X2qP400sgrPeEYNelawVaipU//gNhBl6Jw=
+X-Google-Smtp-Source: ABdhPJz9uDgn6plhYXX3UPAtsN2aRkEpgFG9wF17ebQAnW1rSRxwm+q4VUzDvYF7wNzUfJzDfqMT80Dv5ctUn8MKmkM=
+X-Received: by 2002:ac8:5e4b:0:b0:304:f179:4e9a with SMTP id
+ i11-20020ac85e4b000000b00304f1794e9amr15839558qtx.490.1654797100197; Thu, 09
+ Jun 2022 10:51:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="32Ze5EV+vj+4NHJh"
-Content-Disposition: inline
-In-Reply-To: <f4899b6d-fec3-5940-709a-f5fbc7ae6233@linaro.org>
-X-Provags-ID: V03:K1:jzzTW8LVcmmU+9aQiJW2YIJKQAtbyON9+tJYiHXjrPQeLMigfIM
- 6Z40D5jT0qAvqfZZWiSelFOZwlcmtKRJAbAIzd4yNVVJ87qwrLiUr7zCoG9bi9LI5DEkChj
- M6R/8AlnrbtbrhVB3r/5UAtTOEkAR9TFpi1jXVbbZBeJJ/A7oMYRyWVb9CwlhiegbIxF+LT
- DzFzENR5xVvura4eu0iew==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3dUJcptKLkA=:IbJCdExBzHM+v+boTuHr85
- BShd2H0KfY7rw9/BR1QVjRpCffF84AUGG9XgGajnpXxfFBQVxs0aRHhYRFSGziJqrXJ+hGDlr
- yWM+w5ZPnlR3Te1mMLW33eCQIR11kK9/t0xB0uABoQUsR+bRjiZmPNC26NJcp5WlQhnvuJmR3
- ywN6iueU7pGt9jMpDTKO9pvQKQ4xxL6xd1u7FYVihI3ee77JrFn45QQujsA88iaeTBzvOw+Yt
- mXavbUEs1rjR/JZUukIp4Fi/mWsYo7iFIbnEKAFuMHa7JSWv2XB4Y6hxzl8j4uvnQcAvIS5af
- NhnTWutnnxdiATBFoJGLqlmePx8Xy8ysQDaImMp+/REDBlH6wFTwYC1v9IA0gsZMbSQ/gBDZq
- Wrz1/e5lhi/WtgqSWALIJNLVA61D1Vo76S0Jr7m2k5fPemguTW+GRe91zNXwm4n282LbucxLw
- vNxT26OsoTGlNjhguMIiNSsPSJmCIDdabs/S8Sr0V0gtZmdcxIT+TJTbR/+VbB/dHU/dD3FbW
- rpVgmCRMRnBorK1F0GCv3LxaxiI29AjON7yo78RF3vfxRGhf8sIT8KJmvTWvrBdLUZEgiY9MJ
- 9jaWw0OBwl81G49BNxsAsUnPr9PM6Fyfa8Qa+cHQN32RXMmnzdyokFm2fsnyTTmQrIyVlImwg
- fIhjYlZsXPbR6U47PtcS3wjfcE6V76RKxizu8PaS29UVVg00OYhZyk6QgBzgdUM5rDL33s6qu
- acYIfZX1e/zMRZ4evGbwZdF0QUqEdCTo9IeqnzWYbZyD8q7GDpRM8+2QQYeLEEg8e5Kfyih5s
- 6ndecLwf/kRWkxn9wKnuaukmKrP6KmqzMlPXjQNI2FfYid8enDFPiDeRckBdk5XmLh9R9Rw3F
- KotEMyJ0xZ4QlgU+QqqzicJC27JznOO/10tZZxB21qxDWii5KP+4evEvVksEijFshL9jCt5U3
- J7/icxxq2HS1X0Rs1tfhUq4NuHHaIKXUDfxJYRQ3432fsND5ra90dX6Sax+m8WDUrJWtysnwZ
- befrBiVXRduCh4iudct1R0Xz9mKcSTdVwxpFkZoLr/ihh2m9wh3FCxJIWEkZxJZseBGSfIJUu
- KjJSGnqwWs+ZrUY6r4UUJmcNrWLd2RwMb6h2q1CO/xT5z86e2NliQx3Qg==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: mihirpat56@gmail.com
+Sender: charlesjuntikka2204@gmail.com
+Received: by 2002:a05:6214:234a:0:0:0:0 with HTTP; Thu, 9 Jun 2022 10:51:39
+ -0700 (PDT)
+From:   "Mr. Mihir Patel" <ij261347@gmail.com>
+Date:   Thu, 9 Jun 2022 10:51:39 -0700
+X-Google-Sender-Auth: vXF71wuuneRQ7eGFZd9OCrfhhkA
+Message-ID: <CAEOqroo9Yhh-4Sw+QQt-ZjL50JQ8nX3Mbji_QpO3Udz_NHdDjA@mail.gmail.com>
+Subject: Greetings to you
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.4 required=5.0 tests=ADVANCE_FEE_5_NEW,BAYES_50,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,HK_SCAM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:836 listed in]
+        [list.dnswl.org]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [charlesjuntikka2204[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [charlesjuntikka2204[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mihirpat56[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 HK_SCAM No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.4 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
+        *      419)
+        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-
---32Ze5EV+vj+4NHJh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello Tomer and Krzysztof,
-
-On Wed, Jun 08, 2022 at 12:03:00PM +0200, Krzysztof Kozlowski wrote:
-> On 08/06/2022 11:56, Tomer Maimon wrote:
-> > Add binding for the Arbel BMC NPCM8XX Clock controller.
-> >=20
-> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> > ---
-[...]
-> > +  clocks:
-> > +    items:
-> > +      - description: 25M reference clock
-> > +      - description: CPU reference clock
-> > +      - description: MC reference clock
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: refclk
-> > +      - const: sysbypck
-> > +      - const: mcbypck
-> > +
->=20
-> I asked what is the suffix about and you replied "ck"... ok, so let's
-> make clear. This should be:
->=20
->     items:
->       - const: ref
->       - const: sysbyp
->       - const: mcbyp
->=20
-> or something similar, without the same suffix all over.
-
-A bit of a side note on these names:
-
-To make the binding as easy to understand as possible, I think it would
-help to have every part of the clock-names reflected in corresponding
-clock description:
-
-- sysbypck:  presumably means system bypass clock
-- mcbypck:   presumably means memory controller bypass clock
+Greetings,
 
 
-As it currently is in the patch, the "byp" part stays unexplained and
-unmentioned in the descriptions.
+I am contacting you for us to work together on a profitable business
+because you bear the same last name with a late client of our bank. I
+want to present you as his true next of kin to inherit his fund in our
+bank. As his account officer I have some necessary documents in my
+disposal to achieve this.
 
 
+I therefore reckoned that you could receive this fund as you are
+qualified by your last name. All the legal papers will be processed in
+your name as the deceased's true next of kin.
 
-Thanks,
-Jonathan
+Please revert back to me for further details if you can handle this with me.
 
---32Ze5EV+vj+4NHJh
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmKiMWIACgkQCDBEmo7z
-X9vEyw//UyXHHGnZqNSCU2vjJVfqb3xYR+6PkcHcT0S8zAQhF+r49qZjx2NHgU7M
-UK49lMtTgrU3NtU+6zjY49TDUtBqImQtjshiTi1Ny8pk1EeILBOAtfs37Woh0RT0
-/L0z/8MSiYSEiEFwMMQju9y0op3cBs+/7FraPBx/LlZiWvxmKi3U9+dYjKQnlzE6
-i33Um6sHshnWKc3GUHRmhZcipbc06kgST4+iTJPGqip9l5p/HusyWfTB3HBHwV48
-5oc4+0yPM3RksA2jkfwyPHSv5jaQ+Vli88tZC7NRQYGzVpMhrgjJ6tMszip//wsA
-tIaIbAr2KBNOWsirnLya9y2lV/OHkaauS/wqn+WH+oliAu9NA0u4Wly8espADuVu
-VeIa3jy1Lm1pYI+UmGJljRKDOWE07KMtwIsQ0XqloLXdYCAlCRLM3sQO6vztUPKl
-eaLBbX2Oh2F5WLh9bkKzTg1vDusL/7YkAopmy9nejnayevRhpD1yApfQFAuOJTCO
-1qvWxfbgzAMa2Ask0kaW7AIJ3L0KPJhRDVDVBqsGlQ4+gww7qoEeh6tOTGayfpXE
-5QpbQzZNrHIpATf4nH+s+fyK9BgXftuoFQQBzi0FyxaIedlegtLymSFCxrhwY74E
-5a7VDITbr+qiBNCkuH94zj0onqdpx8/4uWaraM3vvh3xf/z1C3I=
-=CY1G
------END PGP SIGNATURE-----
-
---32Ze5EV+vj+4NHJh--
+Mr. Mihir Patel
+Customer relation officer
