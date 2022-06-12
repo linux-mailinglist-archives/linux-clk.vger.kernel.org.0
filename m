@@ -2,48 +2,48 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860A2547BC6
-	for <lists+linux-clk@lfdr.de>; Sun, 12 Jun 2022 21:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E788B547BC3
+	for <lists+linux-clk@lfdr.de>; Sun, 12 Jun 2022 21:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234292AbiFLTbR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        id S234244AbiFLTbR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
         Sun, 12 Jun 2022 15:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40478 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234859AbiFLTaL (ORCPT
+        with ESMTP id S234885AbiFLTaL (ORCPT
         <rfc822;linux-clk@vger.kernel.org>); Sun, 12 Jun 2022 15:30:11 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5710441FBA
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7CF41FBF
         for <linux-clk@vger.kernel.org>; Sun, 12 Jun 2022 12:30:10 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 31so2169250pgv.11
+Received: by mail-pf1-x42a.google.com with SMTP id i64so4017770pfc.8
         for <linux-clk@vger.kernel.org>; Sun, 12 Jun 2022 12:30:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=schmorgal.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6f5v9QT7TO75MGEEWVmKFZOsmIXiC+OF2A6uAgjGVTM=;
-        b=LmGKF9potBjMBdwlWKMmQHLpRX6NX7+tD1NROe86Rmz0ksnW5uI95Uuo7KOuU6HCpn
-         rsC6OkFelUaJHbjxo45jrqtRi9r/ciz+LmSRM0qYIutrFqpMz0JcZQmJWDfw50JsDATk
-         lShlhzBSws2h1/nX8Pbv4WzgthOPVXHMFfFEk=
+        bh=9BD6fOCQDuXGNvvC7Eq1XdWqHijpUDxeMXf7cXPhn/U=;
+        b=ekaOO6grv5yZSjOghiSIAjlDOGcAb0wyh+MxZ0id8V3LmNUBEPzMMpQ12bPnVe6yVS
+         TvbYZdXPOqT5xIhZ/68CB6UlAw4w+G18Gt2DMh5RdiF2jyeAJHDQUHm2h+gTAVbzolCB
+         ysrR9VidY0hW9ZOuS2R+J8Jjr5AKLayp0Q078=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6f5v9QT7TO75MGEEWVmKFZOsmIXiC+OF2A6uAgjGVTM=;
-        b=bNE34uWusniiqX5v9lmykoUA0vGrKQMla7PzGUbTlQUbRbFQXmtf2CycUREchJqTDO
-         XGl0ZMX1iCjVzme22zDp9J3AxMVktFyuZk1VuBMVgh5SPm/UQkxNQ6UWz7SNeMIOPTKy
-         VK6YR8Q+QcbZdPbNb60wJwEwuIiFyXS6XuRNEscmWQIXM0xY6a6wi9wFM2PP2EGEwDxE
-         /pFUIhW7/GLGYd6VuOBeM6zzKXydljxmNV7brxbmGmgbOLZGGdM3pAb0Ma7SZuL3dEHG
-         U8k6qGk5RIPBdh5KfAIT2bdCA7brRZDuAnhRVI6c7dd9eeFn0zbMij4mRRPsfGa5f0or
-         gNww==
-X-Gm-Message-State: AOAM532GX7I/GUOiqy6zl7dK5O8XEzkqECO01ztTI0qbr1obyBJW+FbB
-        M/+3LR1aR+q7qiXCTpKY2Dbl8A==
-X-Google-Smtp-Source: ABdhPJzydZYIARFwuUW8aZTq/RGOYPOqzwza5QZkNaYquUm6nEMcF3DWMK55ZeWxj2sC4c/I8wKxLA==
-X-Received: by 2002:a63:89c1:0:b0:3fc:5fd2:54e4 with SMTP id v184-20020a6389c1000000b003fc5fd254e4mr50006574pgd.344.1655062209676;
-        Sun, 12 Jun 2022 12:30:09 -0700 (PDT)
+        bh=9BD6fOCQDuXGNvvC7Eq1XdWqHijpUDxeMXf7cXPhn/U=;
+        b=T09mE5sHJJ4YV0fz1hLnRhtGzZWn3hsFKLwIeZzjApQTI+9TqaPRN+U2SQCCCpZm5C
+         LQqJfBvbP4ryx/SR5rQC+sCjBFQ8hSSr2Qi5bvDYVgmwsPCKNXljnf1qHGYWaCnoane4
+         4i+VdhHDaPF/QQS6tOp6FMEDZsyJy57YqBc5XR0roB2wFmvi/R5/eGplAbj90zv8oizb
+         4QI6W2AsxP4Lr0dT+gthuChWHEdw0TqqCzXNqS3mLxakCwkeuyIvcTJNMWDOtgxlFuHP
+         hiRSyrC2BKZ/SRSc+AVv02yWGf1NcUNLsZHxmEOAU+FZ13HSHwQQgLcMoQeLPxso9wO2
+         P/ZQ==
+X-Gm-Message-State: AOAM530p9jeiZ0WO5D1JOS5GqZpBBXAykV4kghGK5PryBGQ2tT5wqENQ
+        F8HFeuoRuE5SkDzEndzUVd4nnA==
+X-Google-Smtp-Source: ABdhPJwQfhdGxJV30Cbdr17NLWpeB0QvwXwA+v81ZoNaXLnOReUnmy/Zue4tDZXVeFwkx3v/d7TLng==
+X-Received: by 2002:a63:2a16:0:b0:3fe:192a:2d3 with SMTP id q22-20020a632a16000000b003fe192a02d3mr23720346pgq.39.1655062210302;
+        Sun, 12 Jun 2022 12:30:10 -0700 (PDT)
 Received: from localhost.localdomain ([50.45.132.243])
         by smtp.gmail.com with ESMTPSA id i62-20020a628741000000b0050dc76281bdsm3603607pfe.151.2022.06.12.12.30.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 12:30:09 -0700 (PDT)
+        Sun, 12 Jun 2022 12:30:10 -0700 (PDT)
 From:   Doug Brown <doug@schmorgal.com>
 To:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -51,9 +51,9 @@ To:     Michael Turquette <mturquette@baylibre.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         Doug Brown <doug@schmorgal.com>
-Subject: [PATCH 01/12] clk: mmp: pxa168: add additional register defines
-Date:   Sun, 12 Jun 2022 12:29:26 -0700
-Message-Id: <20220612192937.162952-2-doug@schmorgal.com>
+Subject: [PATCH 02/12] clk: mmp: pxa168: fix incorrect dividers
+Date:   Sun, 12 Jun 2022 12:29:27 -0700
+Message-Id: <20220612192937.162952-3-doug@schmorgal.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220612192937.162952-1-doug@schmorgal.com>
 References: <20220612192937.162952-1-doug@schmorgal.com>
@@ -61,7 +61,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,75 +69,30 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-In preparation for adding additional peripherals over time, this commit
-adds a bunch of extra APBC_* defines based on information from the
-datasheet. It also reorganizes the list of defines to be ordered
-sequentially by address (grouped by type).
+These two clocks had multipliers and dividers that didn't match their
+names. A subsequent commit goes through all of the existing peripherals
+and ensure the correct clocks are being used everywhere.
 
 Signed-off-by: Doug Brown <doug@schmorgal.com>
 ---
- drivers/clk/mmp/clk-of-pxa168.c | 31 ++++++++++++++++++++++++-------
- 1 file changed, 24 insertions(+), 7 deletions(-)
+ drivers/clk/mmp/clk-of-pxa168.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/clk/mmp/clk-of-pxa168.c b/drivers/clk/mmp/clk-of-pxa168.c
-index f110c02e83cb..c975a45f9bb6 100644
+index c975a45f9bb6..42569cf3f42f 100644
 --- a/drivers/clk/mmp/clk-of-pxa168.c
 +++ b/drivers/clk/mmp/clk-of-pxa168.c
-@@ -22,9 +22,6 @@
- #include "clk.h"
- #include "reset.h"
+@@ -91,8 +91,8 @@ static struct mmp_param_fixed_factor_clk fixed_factor_clks[] = {
+ 	{PXA168_CLK_PLL1_96, "pll1_96", "pll1_48", 1, 2, 0},
+ 	{PXA168_CLK_PLL1_192, "pll1_192", "pll1_96", 1, 2, 0},
+ 	{PXA168_CLK_PLL1_13, "pll1_13", "pll1", 1, 13, 0},
+-	{PXA168_CLK_PLL1_13_1_5, "pll1_13_1_5", "pll1_13", 2, 3, 0},
+-	{PXA168_CLK_PLL1_2_1_5, "pll1_2_1_5", "pll1_2", 2, 3, 0},
++	{PXA168_CLK_PLL1_13_1_5, "pll1_13_1_5", "pll1_13", 1, 5, 0},
++	{PXA168_CLK_PLL1_2_1_5, "pll1_2_1_5", "pll1_2", 1, 5, 0},
+ 	{PXA168_CLK_PLL1_3_16, "pll1_3_16", "pll1", 3, 16, 0},
+ };
  
--#define APBC_RTC	0x28
--#define APBC_TWSI0	0x2c
--#define APBC_KPC	0x30
- #define APBC_UART0	0x0
- #define APBC_UART1	0x4
- #define APBC_GPIO	0x8
-@@ -32,20 +29,40 @@
- #define APBC_PWM1	0x10
- #define APBC_PWM2	0x14
- #define APBC_PWM3	0x18
-+#define APBC_RTC	0x28
-+#define APBC_TWSI0	0x2c
-+#define APBC_KPC	0x30
- #define APBC_TIMER	0x34
-+#define APBC_AIB	0x3c
-+#define APBC_SW_JTAG	0x40
-+#define APBC_ONEWIRE	0x48
-+#define APBC_TWSI1	0x6c
-+#define APBC_UART2	0x70
-+#define APBC_AC97	0x84
- #define APBC_SSP0	0x81c
- #define APBC_SSP1	0x820
- #define APBC_SSP2	0x84c
- #define APBC_SSP3	0x858
- #define APBC_SSP4	0x85c
--#define APBC_TWSI1	0x6c
--#define APBC_UART2	0x70
-+#define APMU_DISP0	0x4c
-+#define APMU_CCIC0	0x50
- #define APMU_SDH0	0x54
- #define APMU_SDH1	0x58
- #define APMU_USB	0x5c
--#define APMU_DISP0	0x4c
--#define APMU_CCIC0	0x50
- #define APMU_DFC	0x60
-+#define APMU_DMA	0x64
-+#define APMU_BUS	0x6c
-+#define APMU_GC		0xcc
-+#define APMU_SMC	0xd4
-+#define APMU_XD		0xdc
-+#define APMU_SDH2	0xe0
-+#define APMU_SDH3	0xe4
-+#define APMU_CF		0xf0
-+#define APMU_MSP	0xf4
-+#define APMU_CMU	0xf8
-+#define APMU_FE		0xfc
-+#define APMU_PCIE	0x100
-+#define APMU_EPD	0x104
- #define MPMU_UART_PLL	0x14
- 
- struct pxa168_clk_unit {
 -- 
 2.25.1
 
