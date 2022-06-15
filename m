@@ -2,109 +2,341 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4329F54D05F
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Jun 2022 19:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2448C54D181
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Jun 2022 21:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357992AbiFORuU (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Jun 2022 13:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34770 "EHLO
+        id S235247AbiFOTXf (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Jun 2022 15:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349807AbiFORuU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Jun 2022 13:50:20 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E303D5403C
-        for <linux-clk@vger.kernel.org>; Wed, 15 Jun 2022 10:50:18 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id g186so12056594pgc.1
-        for <linux-clk@vger.kernel.org>; Wed, 15 Jun 2022 10:50:18 -0700 (PDT)
+        with ESMTP id S1346636AbiFOTXd (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Jun 2022 15:23:33 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE39340CF;
+        Wed, 15 Jun 2022 12:23:32 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso2965820pjk.0;
+        Wed, 15 Jun 2022 12:23:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1jMu+lGlLUwxIWSFxtxOqoxXa/O8y+ZJH6Jya8QmVS4=;
-        b=i9YjTi5IhhH6B1eVTcD7vZp7dzPi7c05gv6//PZkCoCOEIvpGuYvj3dEghm9izJvC2
-         8OUWFh2YvuBTdcjTU372xEWxRV1lUYPQRcXz7SxgYhN+Ab1txjF7N3MRHK3Lh45OjTSL
-         Ase4zsKsalkoKI4I9LHqh9NuddjJSdL/HSR1GdOBTcmILZPrSYoqf45z2INpMZ5ZIdwh
-         zr8ZK/Nz1w06bwVKiH7sR9I2YBfmO/BCf6mJ7fpFJC12BwKVkRGmpUBYwWac/qSjd+lo
-         WNCfJFIN339BbeVXAngEtr2RGmA5EM0UIYG+lR0iO8WMBILzOElXhZBOd23GfmSBvHDG
-         M4hw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=jnmsYqY8r/8n+6BI3/ARV7uucGEqi263lyl2VeQ797o=;
+        b=EiKUCoeidcB1eZpVF9cI1BmtH9ZCjRfQssRQT+12o8f0e5fO6OgscrnrVCSEkpj4n5
+         6/pylGxk2uSgxaiXnvJdSx8hvA9CdEQrKnxompTLQ/smxB8BQSTR8/sDi9AGLmlYUtJi
+         J5ntdR7Mc9cI9FRPNDxit1UYi525JQ0sR+Q3nYm5vZBfkbBwTELaAVJ8mXmCw/8yeN6L
+         bYV7Tl8fyHeEsDUaBq1l6TKmDxN9gAbIFHPHYyRFYHh/lB654o7IK3KRNApNfX5jVpTR
+         cJYRSdyBLa8ik3RsvDp3S5kDCGzOvwyXg4CLKavHzo5VdEEuE9mQ2QAJKBuQmpWJ3E1b
+         Gx6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1jMu+lGlLUwxIWSFxtxOqoxXa/O8y+ZJH6Jya8QmVS4=;
-        b=ugty0QlkTAJyeeXSzpgrCS84RXlyOXCGSKlFzVW/35gHZWQto9DJvFwyT+pKI1J4Yh
-         pCcpJhdU9TTArf12c2GO2gNTqJrzmXZqcEBmqqMJezSq85wQdjIuHBexEirp3hTMb9Yu
-         l29XgI+GuZCLqOxDTlwxKgq6E27nswrjUizUDRlD856P6a9hJY4opNNQKYkQtThiv+5f
-         lymnTxdbjnHHbm/obrmePvAvj3eh++9inKNdXeh5yr0kSbL1Onnwj/TlCYdbxliu2Zjg
-         viZgkjServKPsLtf45ovSGccCo3TRTlE1Jj3o1A20HPs7yWNQsWrXevCpF5qwdqpI4hc
-         FNcA==
-X-Gm-Message-State: AJIora/wGLkM+JBkOA4H28C8toeeDTpSf0KK0WpfZRsuoc8kgga56/Sl
-        qo2zvF1+VgNscY++tAjlKwWhIg==
-X-Google-Smtp-Source: AGRyM1tgx5wd//aRy3L6R0T8NZ35VS+4Jjjtdj74hI5yzt3PaMKVofPzTq+GGVbzPuXw0Vby1azuDw==
-X-Received: by 2002:a65:6b8a:0:b0:3db:7dc5:fec2 with SMTP id d10-20020a656b8a000000b003db7dc5fec2mr788601pgw.223.1655315418377;
-        Wed, 15 Jun 2022 10:50:18 -0700 (PDT)
-Received: from [172.22.33.138] ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id br8-20020a056a00440800b00518a473265csm10034338pfb.217.2022.06.15.10.50.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 10:50:17 -0700 (PDT)
-Message-ID: <717ad899-31ad-5e70-b299-ffb8ca287071@linaro.org>
-Date:   Wed, 15 Jun 2022 10:50:17 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=jnmsYqY8r/8n+6BI3/ARV7uucGEqi263lyl2VeQ797o=;
+        b=yQCuwkmGlYy1zOaiaHv2PdEm6S/kiZDpUWeJYJSWC7ftx/DN/DAwdH54tl6qXBIcRU
+         E9veoWi3pDPxpCLUOAt00P5jk9XeyAuas99D6Mtyv+iWbrgsF5VvnZqO/gKMiBrtrj8O
+         3z70GNSn9VZuphZNFWLzp4GQ352wMLU1nG95DHkGarUtGGYcfEgRWiTL7hKw9+AfAtvR
+         dcCrvSkI7f38JDFsB+nUCLay//5btcQugK3kdu94RkkrrIh2gk8bs0X4aH3Wdbbudwmb
+         NEHdO6TO1e969dXnrtCmW1dy0Niu1JUgyqoNHtRsF+G0zw9IR5gI4fZBlmC3KzCxigt4
+         KBzw==
+X-Gm-Message-State: AJIora9n/h2KMSbSNEMwI5jQgYhYcQ/rD4ufTIYAX2MgC4edhsRLj9yT
+        kWv+NI1auZmoq4fybNIAtGzTmOOIigOLhAlc
+X-Google-Smtp-Source: AGRyM1v1B4TWmb3BFQ6203lyo+4zZbJ3kSZJwZQK8XeK6m+ABxgN/YA1beyUff65nGv6kVOaqa0pJg==
+X-Received: by 2002:a17:90b:2248:b0:1ea:8403:d81c with SMTP id hk8-20020a17090b224800b001ea8403d81cmr11951251pjb.97.1655321011873;
+        Wed, 15 Jun 2022 12:23:31 -0700 (PDT)
+Received: from Mahakal ([2401:4900:1f28:3cf0:518a:5c2b:4000:9bcf])
+        by smtp.gmail.com with ESMTPSA id l13-20020a637c4d000000b003fc5fd21752sm10379401pgn.50.2022.06.15.12.23.29
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 Jun 2022 12:23:31 -0700 (PDT)
+Date:   Thu, 16 Jun 2022 00:53:27 +0530
+From:   "<Vishal Badole>" <badolevishal1116@gmail.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mturquette@baylibre.com, mintu patel <mintupatel89@gmail.com>,
+        chinmoy ghosh <chinmoyghosh2001@gmail.com>
+Subject: Re: [PATCH 5.4] Common =?utf-8?Q?clock=3A_?=
+ =?utf-8?B?4oCL4oCLVG8=?= list active consumers of clocks
+Message-ID: <20220615192325.GA21290@Mahakal>
+References: <CAEXpiVQihEadxsNodarz2-wxSAipfpzEaA8zKpnozszC+weYTQ@mail.gmail.com>
+ <20220610194013.DD39DC34114@smtp.kernel.org>
+ <CAOUcgRfB-r3aERYeLumExgpTVzsDsBuyOWT+nCJ_OfOv1g0L9g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 1/3] dt-bindings: clock: add pcm reset for ipq806x lcc
-Content-Language: en-US
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20220615163408.30154-1-ansuelsmth@gmail.com>
- <a92fe431-a995-4c7f-b90b-8e80298bc71a@linaro.org>
- <62aa1b41.1c69fb81.95632.5b71@mx.google.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <62aa1b41.1c69fb81.95632.5b71@mx.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOUcgRfB-r3aERYeLumExgpTVzsDsBuyOWT+nCJ_OfOv1g0L9g@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_MISSP_FREEMAIL,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 15/06/2022 09:53, Ansuel Smith wrote:
-> On Wed, Jun 15, 2022 at 10:43:10AM -0700, Krzysztof Kozlowski wrote:
->> On 15/06/2022 09:34, Christian 'Ansuel' Marangi wrote:
->>> Add pcm reset define for ipq806x lcc.
->>>
->>> Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
->> To prevent any confusion about identities (we have strict rules about
->> these), I need to ask - who uses this email address?
->>
->> https://lore.kernel.org/all/?q=ansuelsmth%40gmail.com
->>
->> Best regards,
->> Krzysztof
+Hi Stephen,
+Thanks for reviewing and giving your valueable review points for this
+patch. Shortly I will attach a revised patch based on your review
+points.
+
+Thanks,
+Vishal
+On Tue, Jun 14, 2022 at 11:25:01PM +0530, chinmoy ghosh wrote:
+> Agreed here .
+> I feel , if  dev_id <https://elixir.bootlin.com/linux/latest/C/ident/dev_id>
+> is not from dts property then dont think we can easily find out consumers
+> from clk_hw_create_clk.Depends on how the legacy driver maintained the BSP
+> code.
+> Check the next .
 > 
-> Same person. Started using extended name, wanted to do this change from
-> a long time but all the patch were already pushed so I couldn't change
-> it since they were already proposed and on the various mailing list.
-
-Previously "Ansuel Smith" was used entirely, without any parts of this
-name. Here 'Ansuel' appears in quotes, which usually is used for nicknames.
-
-Is "Ansuel Smith" your real name or a nickname? What do you mean by
-"extended name"?
-
-
-Best regards,
-Krzysztof
+> Thanks
+> Chinmoy
+> 
+> On Sat, Jun 11, 2022 at 1:10 AM Stephen Boyd <sboyd@kernel.org> wrote:
+> 
+> > Why "5.4" in the subject?
+> >
+> > Quoting Vishal Badole (2022-05-31 11:28:35)
+> > > This feature lists the name of clocks and their consumer devices. This
+> > > debug feature can be used to check the active clocks and the devices who
+> > > have enabled them.
+> > >
+> > > for example:
+> > > debian@beaglebone:~$ cat /sys/kernel/debug/clk/clk_devices_name
+> > >             clock_name                                  devices_name
+> > >       ----------------
+> > > -------------------------------------------------------------------------
+> > >              l4-wkup-clkctrl:0008:0              44e07000.target-module
+> > >                     l4ls-clkctrl:0074:0
+> >  4804c000.target-module
+> > >                     l4ls-clkctrl:0058:0
+> >  48311fe0.target-module
+> > >                  l4-rtc-clkctrl:0000:0
+> >  44e3e074.target-module
+> > >                           clk_32768_ck
+> > > 44e3e000.rtc
+> > >                    l4ls-clkctrl:00d8:0
+> >  480c8000.target-module
+> > >    cpsw-125mhz-clkctrl:0014:0              4a101200.target-module
+> > >
+> > > Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
+> > > Signed-off-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
+> > > Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
+> > > Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
+> >
+> > Where are the Co-developed-by tags? Also, your SoB should be last.
+> >
+> > > ---
+> > >  drivers/clk/Kconfig |   8 ++++
+> > >  drivers/clk/clk.c   | 120
+> > +++++++++++++++++++++++++++++++++++++++++++++++++++-
+> > >  2 files changed, 127 insertions(+), 1 deletion(-)
+> >
+> > The patch is malformed. Not sure what's happening with your MUA.
+> >
+> > >
+> > > diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> > > index c44247d..549cdda 100644
+> > > --- a/drivers/clk/Kconfig
+> > > +++ b/drivers/clk/Kconfig
+> > > @@ -23,6 +23,14 @@ config COMMON_CLK
+> > >  menu "Common Clock Framework"
+> > >   depends on COMMON_CLK
+> > >
+> > > +config DEBUG_CLK_CONSUMER
+> > > + bool "Debug feature to list clocks and their active consumers"
+> >
+> > Don't think we need a new config for this. Just add it to the existing
+> > CONFIG_DEBUGFS area.
+> >
+> > > + depends on DEBUG_FS && COMMON_CLK
+> > > + help
+> > > +  Clock consumer debug feature supports for clock debugging. Chose y
+> > > +  to get debug entry in file system to list clocks and their active
+> > > +  consumer devices.
+> > > +
+> > >  config COMMON_CLK_WM831X
+> > >   tristate "Clock driver for WM831x/2x PMICs"
+> > >   depends on MFD_WM831X
+> > > diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> > > index 13332f8..dccbd35 100644
+> > > --- a/drivers/clk/clk.c
+> > > +++ b/drivers/clk/clk.c
+> > > @@ -105,6 +105,84 @@ struct clk {
+> > >   struct hlist_node clks_node;
+> > >  };
+> > >
+> > > +#ifdef CONFIG_DEBUG_CLK_CONSUMER
+> > > +/*Linked List Node*/
+> > > +struct clk_dev_list {
+> > > + struct list_head list;
+> > > + const char *clk_name;
+> > > + const char *dev_name;
+> > > +};
+> > > +
+> > > +/*Declare and init the head node of the linked list*/
+> > > +LIST_HEAD(head_node);
+> > > +
+> > > +static void clk_dev_entry(struct clk *clk_ptr)
+> > > +{
+> > > + struct clk_dev_list *new_node_ptr = NULL;
+> > > + struct clk_dev_list *temp_node_ptr = NULL;
+> > > + int repeat_count = 0;
+> > > + static bool is_first_node;
+> > > + const char *clk_name_ptr = NULL;
+> > > + const char *dev_name_ptr = NULL;
+> > > +
+> > > + if (clk_ptr->dev) {
+> > > + dev_name_ptr = dev_name(clk_ptr->dev);
+> > > +
+> > > + clk_name_ptr = clk_ptr->core->name;
+> > > +
+> > > + if (is_first_node) {
+> > > + /* Iterate the list to check duplicate entry */
+> > > + list_for_each_entry(temp_node_ptr, &head_node, list) {
+> > > + if (temp_node_ptr->clk_name == clk_name_ptr &&
+> > > +    temp_node_ptr->dev_name == dev_name_ptr) {
+> > > + repeat_count++;
+> > > + break;
+> > > + }
+> > > + }
+> > > + }
+> > > +
+> > > + is_first_node = 1;
+> > > +
+> > > + if (!repeat_count && clk_ptr->core->enable_count) {
+> > > + /*Creating Node*/
+> > > + new_node_ptr = kmalloc(sizeof(*new_node_ptr),
+> > > +       GFP_KERNEL);
+> > > + if (!new_node_ptr)
+> > > + return;
+> > > +
+> > > + /*Assgin the data that is received*/
+> >
+> > Typo in Assign.
+> >
+> > > + new_node_ptr->clk_name = clk_name_ptr;
+> > > + new_node_ptr->dev_name = dev_name_ptr;
+> > > +
+> > > + /*Init the list within the struct*/
+> > > + INIT_LIST_HEAD(&new_node_ptr->list);
+> > > +
+> > > + /*Add Node to Linked List*/
+> > > + list_add_tail(&new_node_ptr->list, &head_node);
+> > > + }
+> > > + }
+> > > +}
+> > > +
+> > > +/* Function to remove the clk and device entry */
+> > > +static void clk_dev_dentry(struct clk *clk)
+> > > +{
+> > > + struct clk_dev_list *temp_node_ptr = NULL;
+> > > + struct clk_dev_list *cur_node_ptr = NULL;
+> > > +
+> > > + if (clk->dev) {
+> > > + /* Go through the list and free the memory */
+> > > + list_for_each_entry_safe(cur_node_ptr, temp_node_ptr,
+> > > + &head_node, list) {
+> > > + if (cur_node_ptr->clk_name == clk->core->name &&
+> > > +    cur_node_ptr->dev_name == dev_name(clk->dev)) {
+> > > + list_del(&cur_node_ptr->list);
+> > > + kfree(cur_node_ptr);
+> > > + }
+> > > + }
+> > > + }
+> > > +}
+> > > +#endif
+> > > +
+> > >  /***           runtime pm          ***/
+> > >  static int clk_pm_runtime_get(struct clk_core *core)
+> > >  {
+> > > @@ -1020,6 +1098,9 @@ void clk_disable(struct clk *clk)
+> > >   return;
+> > >
+> > >   clk_core_disable_lock(clk->core);
+> > > +#ifdef CONFIG_DEBUG_CLK_CONSUMER
+> > > + clk_dev_dentry(clk);
+> > > +#endif
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(clk_disable);
+> > >
+> > > @@ -1181,10 +1262,21 @@ EXPORT_SYMBOL_GPL(clk_restore_context);
+> > >   */
+> > >  int clk_enable(struct clk *clk)
+> > >  {
+> > > +#ifdef CONFIG_DEBUG_CLK_CONSUMER
+> > > + int ret = 0;
+> > > +#endif
+> > >   if (!clk)
+> > >   return 0;
+> > >
+> > > +#ifndef CONFIG_DEBUG_CLK_CONSUMER
+> > >   return clk_core_enable_lock(clk->core);
+> > > +#else
+> > > + ret = clk_core_enable_lock(clk->core);
+> > > + if (!ret)
+> > > + clk_dev_entry(clk);
+> > > +
+> > > + return ret;
+> > > +#endif
+> >
+> > Not sure what this is doing.
+> >
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(clk_enable);
+> > >
+> > > @@ -2986,6 +3078,29 @@ static void clk_dump_one(struct seq_file *s,
+> > struct
+> > > clk_core *c, int level)
+> > >     clk_core_get_scaled_duty_cycle(c, 100000));
+> > >  }
+> > >
+> > > +#ifdef CONFIG_DEBUG_CLK_CONSUMER
+> > > +static int clk_devices_show(struct seq_file *s, void *data)
+> > > +{
+> > > + struct clk_dev_list *clk_dev_node;
+> > > +
+> > > + seq_puts(s, "            clock_name
+> > >  devices_name\n");
+> > > + seq_puts(s,
+> > >
+> > "-------------------------------------------------------------------------\n");
+> > > +
+> > > + clk_prepare_lock();
+> > > +
+> > > + /*Traversing Linked List and Print its Members*/
+> > > + list_for_each_entry(clk_dev_node, &head_node, list) {
+> >
+> > It's hard to read but we already have a list of all clk consumers for a
+> > clk_hw pointer, see clk_core_link_consumer(). And we stash the device
+> > consuming it with clk_hw_create_clk(). That should be sufficient.
+> >
+> >
+> > > + seq_printf(s, "%35s %35s\n", clk_dev_node->clk_name,
+> > > +   clk_dev_node->dev_name);
+> > > + }
+> > > +
+> > > + clk_prepare_unlock();
+> > > +
+> > > + return 0;
+> > > +}
+> > > +DEFINE_SHOW_ATTRIBUTE(clk_devices);
+> > > +#endif
+> > > +
+> > >  static void clk_dump_subtree(struct seq_file *s, struct clk_core *c, int
+> > > level)
+> > >  {
+> > >   struct clk_core *child;
+> > > @@ -3256,7 +3371,10 @@ static int __init clk_debug_init(void)
+> > >      &clk_summary_fops);
+> > >   debugfs_create_file("clk_orphan_dump", 0444, rootdir, &orphan_list,
+> > >      &clk_dump_fops);
+> > > -
+> > > +#ifdef CONFIG_DEBUG_CLK_CONSUMER
+> > > + debugfs_create_file("clk_devices_name", 0444, rootdir, NULL,
+> >
+> > Call it 'clk_consumers' please.
+> >
+> > > +    &clk_devices_fops);
+> >
