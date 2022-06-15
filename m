@@ -2,97 +2,144 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0745654D051
-	for <lists+linux-clk@lfdr.de>; Wed, 15 Jun 2022 19:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 130D154CF52
+	for <lists+linux-clk@lfdr.de>; Wed, 15 Jun 2022 19:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348173AbiFORrt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Jun 2022 13:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
+        id S1349368AbiFORDw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Jun 2022 13:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349899AbiFORrs (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Jun 2022 13:47:48 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C442F1147F;
-        Wed, 15 Jun 2022 10:47:47 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id m24so16323263wrb.10;
-        Wed, 15 Jun 2022 10:47:47 -0700 (PDT)
+        with ESMTP id S237198AbiFORDv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Jun 2022 13:03:51 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827F24B86C
+        for <linux-clk@vger.kernel.org>; Wed, 15 Jun 2022 10:03:49 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id h192so11933654pgc.4
+        for <linux-clk@vger.kernel.org>; Wed, 15 Jun 2022 10:03:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UEplRBRe8Not6/N/87KHMRBTXuTr13tJIbM6hc9f8sQ=;
-        b=Px0sxprY8EaTIf37otn4bHLOMuOiouEYqETuqdXAoedA3jFIrkkKeHZvQZcfi6IDQd
-         +gPo6UtC+5oE4EUy+jA8XQ7k3lqlL722vCj/oANcJfB4eG3pUwsqRPv0uGe/HecIqW06
-         cSNnPJbGMJNoz1TcKBBRCF+5+Gy+Cravzkx4VbGZqli8BcwNbigqDx4TMiTrEehL3wXu
-         /D+jaAoPIZIEEgXk+EJBQxt2H4K1b7kI15klNggExGmPBJhVD7tPrtpUq9FphpwM1H+2
-         rWMXGX3cud6Dblde43mQIlZpBjDyX+LwEaufSxZUdSU0FK7uOYBP2vVcdz9tV4MoyFOx
-         aIxA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=jm8MXeLlqii/5FydlD1v6Lz5nQdsR6MGCoUfpwdjuNk=;
+        b=nJ7IBklLOjSLfSLdY4vTZXUDIYuZj/tb2ZQ6grZIWomT9q+Y0cfAHg8MuwR1zW66Di
+         9sWtqG8qOKOpNHtF5fFCqEgdehoqdQYcjEkuoMRk28hhxdGcVk5NTSTlTpiPwsubMzE3
+         xJuHLjAtQXc+MP/UEBzdS+0u18cszg5Q2NIrTUxm+2JSckbgTGvyCxGgW55/s+NObRcf
+         +gg2jvj8mdR1Kjm+kitaTa2wqMrstENtJ3xcAR8eBEe4/TwfI57AtUzWFKtQDRATq3KS
+         PGfLU9F8i/ygnIIluwOQjLi88kopb048g6yzFYgSMrqw8tl/lsfUu/CV8jp3Jrj7vjH9
+         p7xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UEplRBRe8Not6/N/87KHMRBTXuTr13tJIbM6hc9f8sQ=;
-        b=XmkHLc8sQbZFr9+YfpUvC5ZH2Hs730EVQDCJXfaC4BlUx8++x44X979WJ4s0TAJEcf
-         czsDR6qCe9wnUxjxiDdhLWrNGMjlqo679z46Oa7fM9UHwFa3gTww8JQVgm1G6Itwr+M/
-         mdTBlLpMXq8xiCb5BwGgki6EZD1qqzSJhM7JK8V3HrWmZE9H2YLM2bvW/sORDZoc0oig
-         lzq1RJLQB3x87/qwijIk/z2JDOltq8t/LJNm2v6yj9rhMpd4wy4efYQAmjhUJgZ20oxo
-         pQctcnY0ZKJHdJHqVxWy6nI7KqBOCPVe7ddVTtomtBiFWsRmRgbnQ/aP+IO1APnnsscC
-         zddA==
-X-Gm-Message-State: AJIora9mYJz6gINCGfT/pH7z/3rHTopUqOAVwAyowjn4IwH/4UHSDIr8
-        V/LicxDMldimP+JMyy4OCeFowHQaquU=
-X-Google-Smtp-Source: AGRyM1sdCdaiNcC0qqAatgAXTIR/dGxEV0s1FBUtTraV7r7iycMccsJTIVFL8TKmFtDbKNmYjUCrwg==
-X-Received: by 2002:a05:6000:1548:b0:217:6480:e65 with SMTP id 8-20020a056000154800b0021764800e65mr934830wry.381.1655315266192;
-        Wed, 15 Jun 2022 10:47:46 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id l125-20020a1c2583000000b0039c4d9737f3sm3158157wml.34.2022.06.15.10.47.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 10:47:45 -0700 (PDT)
-Message-ID: <62aa1b41.1c69fb81.95632.5b71@mx.google.com>
-X-Google-Original-Message-ID: <YqoOmlGklknRj8Yf@Ansuel-xps.>
-Date:   Wed, 15 Jun 2022 18:53:46 +0200
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jm8MXeLlqii/5FydlD1v6Lz5nQdsR6MGCoUfpwdjuNk=;
+        b=3K5rjQFjVLvw70JrTeGJF0q90H5YboGxM3HPGjFCiUhQPSC0QE5Dv0TQuhoXgpvi0j
+         tFcCSNgy9Fq2jbxowuIaRfmQ13QB1uhASj3Te0u5BIB7ZKZURQP8xvr2Kk0kSAX/99hS
+         Tf43fXxJnic06JVuS7E6j1vzwLMxIv3f9WkirCvOHbsp5ceEkrVDDSsObVG6b0TF7kGW
+         vekZUqsLKjtiiAXy1RriMFRF/AlWG+n9dnY1OkRY9JeWJGWnHuK0v/n9DoJ35QguUCZI
+         vsG3sbIhveSSEWc8CLG3ibQ4GDcib9YkXxHmCL1YVnR1EPNjbrPAYPukDGSqf0WKqje+
+         DA+g==
+X-Gm-Message-State: AJIora+jaJe7Z6VNtvfPZsnQHEWZB+UVjmkJ6Ju/71RPSllZbKtWXVQ6
+        /yTyQA0tdsC87dbzfas8QTE46A==
+X-Google-Smtp-Source: AGRyM1seg5navj/ZgOXJ4HUS+Haip8l+eCz7SNp77yxaZukUbdDEw7wI4SvjvZRO87I5ID1vQOtNQA==
+X-Received: by 2002:a05:6a00:1344:b0:51b:e3b5:54e2 with SMTP id k4-20020a056a00134400b0051be3b554e2mr588044pfu.6.1655312628981;
+        Wed, 15 Jun 2022 10:03:48 -0700 (PDT)
+Received: from [172.22.33.138] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id v8-20020a17090a778800b001eab0a27d92sm2002742pjk.51.2022.06.15.10.03.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 10:03:48 -0700 (PDT)
+Message-ID: <e6e478a5-9080-fb2f-9ccd-2490cdfab4c7@linaro.org>
+Date:   Wed, 15 Jun 2022 10:03:46 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 12/20] dt-bindings: reset: npcm: Add support for
+ NPCM8XX
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: clock: add pcm reset for ipq806x lcc
-References: <20220615163408.30154-1-ansuelsmth@gmail.com>
- <a92fe431-a995-4c7f-b90b-8e80298bc71a@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a92fe431-a995-4c7f-b90b-8e80298bc71a@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20220608095623.22327-1-tmaimon77@gmail.com>
+ <20220608095623.22327-13-tmaimon77@gmail.com>
+ <add025b6-c622-b204-d39e-67b31878d37f@linaro.org>
+ <CAP6Zq1iDbB+X5QPE4Nsqk4nV41bZiVzQZExS1pQTuKEBz-iYew@mail.gmail.com>
+ <381ff739-e898-8812-d549-df7101f0eaa2@linaro.org>
+ <CAP6Zq1j=x3OcOPSOjJJmOcze7ziM=oWcKdbYzoHhGnvZipu_UQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAP6Zq1j=x3OcOPSOjJJmOcze7ziM=oWcKdbYzoHhGnvZipu_UQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 10:43:10AM -0700, Krzysztof Kozlowski wrote:
-> On 15/06/2022 09:34, Christian 'Ansuel' Marangi wrote:
-> > Add pcm reset define for ipq806x lcc.
-> > 
-> > Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
-> To prevent any confusion about identities (we have strict rules about
-> these), I need to ask - who uses this email address?
+On 13/06/2022 02:25, Tomer Maimon wrote:
+> Hi Krzysztof,
 > 
-> https://lore.kernel.org/all/?q=ansuelsmth%40gmail.com
+> Thanks for your clarification.
 > 
-> Best regards,
-> Krzysztof
+> We can remove the dt-binding file and use numbers in the DTS,
+> appreciate if you can answer few additional questions:
+> 1. Do you suggest adding all NPCM reset values to the NPCM reset
+> document or the reset values should describe in the module
+> documentation that uses it?
 
-Same person. Started using extended name, wanted to do this change from
-a long time but all the patch were already pushed so I couldn't change
-it since they were already proposed and on the various mailing list.
+What is "NPCM reset document"? Are these reset values anyhow different
+than interrupts or pins?
 
--- 
-	Ansuel
+> 2. Some of the NPCM7XX document modules describe the reset value they
+> use from the dt-binding for example:
+> https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/iio/adc/nuvoton%2Cnpcm750-adc.yaml#L61
+
+This is NPCM750
+
+> If we remove the NPCM8XX dt-binding file should we describe the
+> NPCM8XX values in the NPCM-ADC document file?
+
+What is NPCM-ADC document file? What do you want to describe there?
+Again - how is it different than interrupts?
+
+
+
+Best regards,
+Krzysztof
