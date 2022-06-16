@@ -2,51 +2,50 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2616554D5E5
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Jun 2022 02:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1FB54D5FE
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Jun 2022 02:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344075AbiFPAQT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Jun 2022 20:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53046 "EHLO
+        id S1348303AbiFPATZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Jun 2022 20:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345372AbiFPAQJ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Jun 2022 20:16:09 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6140A37BFC
-        for <linux-clk@vger.kernel.org>; Wed, 15 Jun 2022 17:16:08 -0700 (PDT)
+        with ESMTP id S1349246AbiFPATS (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Jun 2022 20:19:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B87C5641C;
+        Wed, 15 Jun 2022 17:19:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C2579CE2372
-        for <linux-clk@vger.kernel.org>; Thu, 16 Jun 2022 00:16:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4C3CC3411A;
-        Thu, 16 Jun 2022 00:16:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1742461AC7;
+        Thu, 16 Jun 2022 00:19:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F726C3411B;
+        Thu, 16 Jun 2022 00:19:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655338564;
-        bh=7xw4zYqYFvfxhUoOifisZKHl++dFmLd4PcqfRUqa/sk=;
+        s=k20201202; t=1655338748;
+        bh=UtEwv1cvA9jVYc99dH2c2BoSn4oeWV5L7afw2w1hvyc=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=FoYRptaTA4eILvxfUD3hRuHBvbNhqr/MjNMvLsPcMNzOFbb11dWCEcobjG8HIpTd0
-         8uhLzswKmmV1eito7KTLwV/nLRpmbzfhuuGGgm2cJbRui1/kIWc3WWzTfwacWd26lJ
-         dDee8mteVqxKepphBQEQanqpqmSRoei/kEznMJvi3LEeeATghorLq3nrDCZ/w8ZgUT
-         jGjZZuo7NWAjZCmuq2de/KkOOD8rl5pFzpE2SrcU7Szf/6S3EvSNCa29suP2rlwUZh
-         i6YqOTttypszIv9tC6Eo034NPNhE/8I0DZO0Y+gC9fs5Rxab8+prMCEL6A9niq8ppf
-         xiqxU844EAyFw==
+        b=W82xxpQTO0aDgAUM+Oz/HYqVu85BHy4aCF1bFj5xBC9SQyOUTJVBmKWr/KUMXDPJs
+         8nkLDkvddQbaBWBJHbSP78z8ZUB0uc4GqWT7yxG+ENk90Ou2GtoxMZOaLhkJEPmq1h
+         UQYYUKha6FPI/vOCGAa342hoFEFQaKN2pOwlsorjoXFui+5O4tcV2qVeaBqae3IYZO
+         hVdlSioBDF9Obpop3DOX/Ic2YcPXieb9Y+oS+Lvw9te1OVMghrhJY8qIZxgBPjEcWd
+         XWApCRmTeu2/AJ+SaoNTamNkqJQ8cEUgZcmVuC3l8UT59NbOOiQZVwqvPWwsNnH/3c
+         56+V3/xn98HbA==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <YqpRjwTVZU12H4Gb@ryzen>
-References: <20220609132902.3504651-1-peng.fan@oss.nxp.com> <20220609132902.3504651-4-peng.fan@oss.nxp.com> <YqpRjwTVZU12H4Gb@ryzen>
-Subject: Re: [PATCH 3/7] clk: imx93: Correct the edma1's parent clock
+In-Reply-To: <20220613085100.402-1-lukas.bulwahn@gmail.com>
+References: <20220613085100.402-1-lukas.bulwahn@gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: add include/dt-bindings/clock to COMMON CLK FRAMEWORK
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     abel.vesa@nxp.com, mturquette@baylibre.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Jacky Bai <ping.bai@nxp.com>, Peng Fan <peng.fan@nxp.com>
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        Peng Fan (OSS) <peng.fan@oss.nxp.com>
-Date:   Wed, 15 Jun 2022 17:16:02 -0700
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org
+Date:   Wed, 15 Jun 2022 17:19:06 -0700
 User-Agent: alot/0.10
-Message-Id: <20220616001604.D4C3CC3411A@smtp.kernel.org>
+Message-Id: <20220616001908.6F726C3411B@smtp.kernel.org>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -57,20 +56,15 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Abel Vesa (2022-06-15 14:39:27)
-> On 22-06-09 21:28:58, Peng Fan (OSS) wrote:
-> > From: Jacky Bai <ping.bai@nxp.com>
-> >
-> > For EDMA1 in AONMIX, its parent clock should be from cm33_root,
-> > so Correct it.
-> >
-> > Fixes: 24defbe194b65("clk: imx: add i.MX93 clk")
-> > Reviewed-by: Peng Fan <peng.fan@nxp.com>
+Quoting Lukas Bulwahn (2022-06-13 01:51:00)
+> Maintainers of the directory Documentation/devicetree/bindings/clock
+> are also the maintainers of the corresponding directory in
+> include/dt-bindings/clock.
 >=20
-> The reviews done internally do no count in upstream.
-> I think that's the rule. So drop the R-b tags from all patches.
-> Keep only the S-o-b tags.
+> Add the file entry for include/dt-bindings/clock to the appropriate
+> section in MAINTAINERS.
+>=20
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
 
-Is it any different code from what is sent upstream here? If not any
-different then I don't think anything is stopping the review tags from
-being kept.
+Applied to clk-fixes
