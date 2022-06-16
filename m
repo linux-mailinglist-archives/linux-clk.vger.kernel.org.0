@@ -2,70 +2,92 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D9B54D8A2
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Jun 2022 04:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1717854D905
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Jun 2022 05:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350511AbiFPCw6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 15 Jun 2022 22:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
+        id S1358435AbiFPDzR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 15 Jun 2022 23:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbiFPCw4 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Jun 2022 22:52:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAD8647E
-        for <linux-clk@vger.kernel.org>; Wed, 15 Jun 2022 19:52:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1291B82205
-        for <linux-clk@vger.kernel.org>; Thu, 16 Jun 2022 02:52:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36F7CC3411E;
-        Thu, 16 Jun 2022 02:52:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655347972;
-        bh=ZcfZSR/OWB5EpBDmMVDLjacTpdQ6DpYl8i9edWsPk5w=;
-        h=In-Reply-To:References:Subject:From:To:Date:From;
-        b=Gq2ePgJrF/CVv9OFy5/EYiPlcbdZdm2kRNdmV8Bz/SwShkfZQ9JWBEGPr+P3PN5gH
-         EQC/c6c/jKfYMBPuWDkduQDC3V5mQ2VRHijXlF9uKOzqN4IFyJTuqdaQZlC3/+NxwE
-         pc0bupueHHxGfS8Q5nF1xqCBLI5x+eqUhucUI3YJtNqk9k+mnlz9tsy8TxLKcluu7e
-         mGNYOF3sau6nKBqmtjVWYV8iPUH5jifQ0+j/Quv1E19R7eUnTGXoi3oEpPmbCFEnMd
-         TEhF3oGExyyHfTrqlCWh4Pl/yjqklxhP0p5SFwVXZ8Cv1xhpuGv+Xk0vceDYtbR0Fd
-         VFKPtOkf55Adw==
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1347812AbiFPDzQ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 15 Jun 2022 23:55:16 -0400
+Received: from mail-m964.mail.126.com (mail-m964.mail.126.com [123.126.96.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C582F3A5F0
+        for <linux-clk@vger.kernel.org>; Wed, 15 Jun 2022 20:55:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=mkfgB
+        VBFBgrdtGMDaUnf029gNd3JieIaFgdH3qOE0Pg=; b=B/vp724jl7RCqMtXoVPA5
+        OVySZPHKLhdjrTSV2ZVG21Gu7XOIDE3MbIm6v7jDwwFdNx5w73HN4F1Z0jMAVEMp
+        SG0mkgiC4kPNaPHKR7MbKLdbqZaI7fxblUWr4wP1MMGJKfDHoDALLlM1rpO1o50r
+        9rgxI2wsK7Jcs/80199H88=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp9 (Coremail) with SMTP id NeRpCgDn8baBoqpiZehnEw--.25236S2;
+        Thu, 16 Jun 2022 11:24:50 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     linus.walleij@linaro.org, mturquette@baylibre.com, sboyd@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, windhl@126.com
+Subject: [PATCH v2] drivers: clk: (clk-nomadik) Add missing of_node_put()
+Date:   Thu, 16 Jun 2022 11:24:48 +0800
+Message-Id: <20220616032448.3974916-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <3677796.MHq7AAxBmi@steina-w>
-References: <3677796.MHq7AAxBmi@steina-w>
-Subject: Re: clock consumer for output clocks?
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        linux-clk@vger.kernel.org
-Date:   Wed, 15 Jun 2022 19:52:50 -0700
-User-Agent: alot/0.10
-Message-Id: <20220616025252.36F7CC3411E@smtp.kernel.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NeRpCgDn8baBoqpiZehnEw--.25236S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtF1kKw4UJryDKFW5CrWDtwb_yoWkGFb_XF
+        4rWrnrCFW2kF47ur4jvF13K3ya9Fn5ur4xZ3Wxt3W3Ja42vF47Ca12vFsIgw1UWrW2gFy2
+        vrsrGr4ayr4UujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xREKsj7UUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi7QIiF1pEANS6OQAAsT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Alexander Stein (2022-06-01 07:15:54)
-> Hi,
->=20
-> I want to use an output clock, which provides some internal clock on an p=
-utput=20
-> pad, such as IMX8MP_CLK_CLKOUT1 or IMX6QDL_CLK_CKO.
-> To prepare and enable a clock I need a consumer, but in my case there is =
-no=20
-> (local) consumer. Is there some way, DT node or some kind of driver/uapi,=
-=20
-> which I can use to enable the clock?
+In nomadik_src_init, of_find_matching_node() return a node pointer
+with refcount incremented. We should use of_node_put() in fail path
+or when it is not used anymore.
 
-I think you want to use an "always-on-clocks" property in DT for your
-device. See the proposal[1].
+Signed-off-by: Liang He <windhl@126.com>
+---
+ changelog: 
 
-[1] https://lore.kernel.org/linux-clk/20220517235919.200375-1-marex@denx.de
+ v2: (1) use real name for Sob (2) use goto-label patch style
+     (3) use proper subject title
+ v1: use two of_node_put() in fail path and normal-return
+
+ drivers/clk/clk-nomadik.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/clk/clk-nomadik.c b/drivers/clk/clk-nomadik.c
+index bad2677e11ae..48d5772b36a5 100644
+--- a/drivers/clk/clk-nomadik.c
++++ b/drivers/clk/clk-nomadik.c
+@@ -99,7 +99,7 @@ static void __init nomadik_src_init(void)
+ 	if (!src_base) {
+ 		pr_err("%s: must have src parent node with REGS (%pOFn)\n",
+ 		       __func__, np);
+-		return;
++		goto out_put;
+ 	}
+ 
+ 	/* Set all timers to use the 2.4 MHz TIMCLK */
+@@ -132,6 +132,9 @@ static void __init nomadik_src_init(void)
+ 	}
+ 	writel(val, src_base + SRC_XTALCR);
+ 	register_reboot_notifier(&nomadik_clk_reboot_notifier);
++	
++output:
++    of_node_put(np);	
+ }
+ 
+ /**
+-- 
+2.25.1
+
