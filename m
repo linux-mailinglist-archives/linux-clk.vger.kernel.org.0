@@ -2,57 +2,39 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8E454DA5C
-	for <lists+linux-clk@lfdr.de>; Thu, 16 Jun 2022 08:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C25254DB18
+	for <lists+linux-clk@lfdr.de>; Thu, 16 Jun 2022 08:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358711AbiFPGOS (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 16 Jun 2022 02:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35950 "EHLO
+        id S229582AbiFPGyt (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 16 Jun 2022 02:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358633AbiFPGOS (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Jun 2022 02:14:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C07A3466B
-        for <linux-clk@vger.kernel.org>; Wed, 15 Jun 2022 23:14:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F64E619BD
-        for <linux-clk@vger.kernel.org>; Thu, 16 Jun 2022 06:14:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C598EC34114;
-        Thu, 16 Jun 2022 06:14:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655360054;
-        bh=76mIRuZFi1DEVdNILuYIz/ujXi8cTAhOKruiTFJ/Y1A=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=BkzpdvjU8DUhpJsmia/w+AVpb/52LBqhqNT8NAlzifLS3Gim1C8PRziwMMzDfrqy3
-         jxCK3bUT0Rq/tHEpFVfQGZOLiFogXvoFxbecpcC72/+5TvD1slAEm9NIrnaiJpC2bM
-         FhzSjrSvvSwmQZQqBFgGTVV4uZDkE03M5qRorW6oRh0ITb9KeAmPupVQhkh2GqHZpz
-         oUtDUh7kXVcA08REPoxyKY/llmi8su5O5cq2PUmT5OfUBL8EWMoYmjXju+S5lquQjv
-         Xcf5hB1PKBqfHHvCp+p/kgQrZLxfQbrh/5lP1X8vvseEGGdcCd3EzdasVWALP8vcfz
-         OkEq7jqeB7z1A==
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1359340AbiFPGyW (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 16 Jun 2022 02:54:22 -0400
+Received: from mx1.cqplus1.com (unknown [113.204.237.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D25705BE74
+        for <linux-clk@vger.kernel.org>; Wed, 15 Jun 2022 23:53:52 -0700 (PDT)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 172.28.114.216
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(23338:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Thu, 16 Jun 2022 14:42:34 +0800 (CST)
+From:   Qin Jian <qinjian@cqplus1.com>
+To:     sboyd@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        mturquette@baylibre.com, linux@armlinux.org.uk, arnd@arndb.de,
+        olof@lixom.net, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Qin Jian <qinjian@cqplus1.com>
+Subject: [PATCH v19 00/11] Add Sunplus SP7021 SoC Support
+Date:   Thu, 16 Jun 2022 14:42:16 +0800
+Message-Id: <cover.1655360818.git.qinjian@cqplus1.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220614180239.778334-1-marex@denx.de>
-References: <20220614180239.778334-1-marex@denx.de>
-Subject: Re: [PATCH v2 1/4] clk: imx: imx8mp: Add audiomix block control
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Marek Vasut <marex@denx.de>, Abel Vesa <abel.vesa@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com
-To:     Marek Vasut <marex@denx.de>, linux-clk@vger.kernel.org
-Date:   Wed, 15 Jun 2022 23:14:12 -0700
-User-Agent: alot/0.10
-Message-Id: <20220616061414.C598EC34114@smtp.kernel.org>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,290 +42,185 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Quoting Marek Vasut (2022-06-14 11:02:36)
-> diff --git a/drivers/clk/imx/clk-imx8mp-audiomix.c b/drivers/clk/imx/clk-=
-imx8mp-audiomix.c
-> new file mode 100644
-> index 0000000000000..bfa6080f274ff
-> --- /dev/null
-> +++ b/drivers/clk/imx/clk-imx8mp-audiomix.c
-> @@ -0,0 +1,262 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Driver for i.MX8M Plus Audio BLK_CTRL
-> + *
-> + * Copyright (C) 2022 Marek Vasut <marex@denx.de>
-> + */
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/device.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +
-> +#include <dt-bindings/clock/imx8mp-clock.h>
-> +
-> +#include "clk.h"
-> +
-> +#define CLKEN0                 0x000
-> +#define CLKEN1                 0x004
-> +#define SAI_MCLK_SEL(n)                (300 + 4 * (n)) /* n in 0..5 */
-> +#define PDM_SEL                        0x318
-> +#define SAI_PLL_GNRL_CTL       0x400
-> +
-> +#define SAIn_MCLK1_PARENT(n)                                           \
-> +static const char *clk_imx8mp_audiomix_sai##n##_mclk1_parents[] =3D {   =
- \
-> +       "sai"__stringify(n), "sai"__stringify(n)"_mclk"                 \
-> +}
-> +
-> +SAIn_MCLK1_PARENT(1);
-> +SAIn_MCLK1_PARENT(2);
-> +SAIn_MCLK1_PARENT(3);
-> +SAIn_MCLK1_PARENT(5);
-> +SAIn_MCLK1_PARENT(6);
-> +SAIn_MCLK1_PARENT(7);
-> +
-> +static const char *clk_imx8mp_audiomix_sai_mclk2_parents[] =3D {
-> +       "sai1", "sai2", "sai3", "dummy",
-> +       "sai5", "sai6", "sai7",
-> +       "sai1_mclk", "sai2_mclk", "sai3_mclk", "dummy",
-> +       "sai5_mclk", "sai6_mclk", "sai7_mclk",
-> +       "spdif_extclk", "dummy"
-> +};
-> +
-> +static const char *clk_imx8mp_audiomix_pdm_parents[] =3D {
-> +       "ccm_pdm", "sai_pll_out_div2", "sai1_mclk", "dummy"
-> +};
+This patch series add Sunplus SP7021 SoC support.
 
-Can this driver use clk_parent_data instead of string names everywhere?
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates many
+peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and etc.) into a
+single chip. It is designed for industrial control.
 
-> +
-> +
-> +static const char * const clk_imx8mp_audiomix_pll_parents[] =3D {
-> +       "osc_24m", "dummy", "dummy", "dummy"
-> +};
-> +
-> +static const char * const clk_imx8mp_audiomix_pll_bypass_sels[] =3D {
-> +       "sai_pll", "sai_pll_ref_sel"
-> +};
-> +
-> +#define CLK_GATE(name, cname)                                          \
-> +       {                                                               \
-> +               name"_cg",                                              \
-> +               IMX8MP_CLK_AUDIOMIX_##cname,                            \
-> +               "audio_ahb", NULL, 1,                                   \
-> +               CLKEN0 + 4 * !!(IMX8MP_CLK_AUDIOMIX_##cname / 32),      \
-> +               1, IMX8MP_CLK_AUDIOMIX_##cname % 32                     \
-> +       }
-> +
-> +#define CLK_SAIn(n)                                                    \
-> +       {                                                               \
-> +               "sai"__stringify(n)"_mclk1_sel",                        \
-> +               IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK1_SEL,                 \
-> +               NULL,                                                   \
-> +               clk_imx8mp_audiomix_sai##n##_mclk1_parents,             \
-> +               ARRAY_SIZE(clk_imx8mp_audiomix_sai##n##_mclk1_parents), \
-> +               SAI_MCLK_SEL(n), 1, 0                                   \
-> +       }, {                                                            \
-> +               "sai"__stringify(n)"_mclk2_sel",                        \
-> +               IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK2_SEL,                 \
-> +               NULL,                                                   \
-> +               clk_imx8mp_audiomix_sai_mclk2_parents,          \
-> +               ARRAY_SIZE(clk_imx8mp_audiomix_sai_mclk2_parents),      \
-> +               SAI_MCLK_SEL(n), 4, 1                                   \
-> +       }, {                                                            \
-> +               "sai"__stringify(n)"_ipg_cg",                           \
-> +               IMX8MP_CLK_AUDIOMIX_SAI##n##_IPG,                       \
-> +               "audio_ahb", NULL, 1,                                   \
-> +               CLKEN0, 1, IMX8MP_CLK_AUDIOMIX_SAI##n##_IPG             \
-> +       }, {                                                            \
-> +               "sai"__stringify(n)"_mclk1_cg",                         \
-> +               IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK1,                     \
-> +               "sai"__stringify(n)"_mclk1_sel", NULL, 1,               \
-> +               CLKEN0, 1, IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK1           \
-> +       }, {                                                            \
-> +               "sai"__stringify(n)"_mclk2_cg",                         \
-> +               IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK2,                     \
-> +               "sai"__stringify(n)"_mclk2_sel", NULL, 1,               \
-> +               CLKEN0, 1, IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK2           \
-> +       }, {                                                            \
-> +               "sai"__stringify(n)"_mclk3_cg",                         \
-> +               IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK3,                     \
-> +               "sai_pll_out_div2", NULL, 1,                            \
-> +               CLKEN0, 1, IMX8MP_CLK_AUDIOMIX_SAI##n##_MCLK3           \
-> +       }
-> +
-> +#define CLK_PDM                                                         =
-       \
-> +       {                                                               \
-> +               "pdm_sel", IMX8MP_CLK_AUDIOMIX_PDM_SEL, NULL,           \
-> +               clk_imx8mp_audiomix_pdm_parents,                        \
-> +               ARRAY_SIZE(clk_imx8mp_audiomix_pdm_parents),            \
-> +               PDM_SEL, 2, 0                                           \
-> +       }
-> +
-> +struct clk_imx8mp_audiomix_sel {
-> +       const char      *name;
-> +       int             clkid;
-> +       const char      *parent;        /* For gate */
-> +       const char      **parents;      /* For mux */
-> +       int             num_parents;
-> +       u16             reg;
-> +       u8              width;
-> +       u8              shift;
-> +};
-> +
-> +static struct clk_imx8mp_audiomix_sel sels[] =3D {
-> +       CLK_GATE("asrc", ASRC_IPG),
-> +       CLK_GATE("pdm", PDM_IPG),
-> +       CLK_GATE("earc", EARC_IPG),
-> +       CLK_GATE("ocrama", OCRAMA_IPG),
-> +       CLK_GATE("aud2htx", AUD2HTX_IPG),
-> +       CLK_GATE("earc_phy", EARC_PHY),
-> +       CLK_GATE("sdma2", SDMA2_ROOT),
-> +       CLK_GATE("sdma3", SDMA3_ROOT),
-> +       CLK_GATE("spba2", SPBA2_ROOT),
-> +       CLK_GATE("dsp", DSP_ROOT),
-> +       CLK_GATE("dspdbg", DSPDBG_ROOT),
-> +       CLK_GATE("edma", EDMA_ROOT),
-> +       CLK_GATE("audpll", AUDPLL_ROOT),
-> +       CLK_GATE("mu2", MU2_ROOT),
-> +       CLK_GATE("mu3", MU3_ROOT),
-> +       CLK_PDM,
-> +       CLK_SAIn(1),
-> +       CLK_SAIn(2),
-> +       CLK_SAIn(3),
-> +       CLK_SAIn(5),
-> +       CLK_SAIn(6),
-> +       CLK_SAIn(7)
-> +};
-> +
-> +struct clk_imx8mp_audiomix_priv {
-> +       struct clk_hw           *clk[IMX8MP_CLK_AUDIOMIX_END];
+SP7021 consists of two chips (dies) in a package. One is called C-chip
+(computing chip). It is a 4-core ARM Cortex A7 CPU. It adopts high-level
+process (22 nm) for high performance computing. The other is called P-
+chip (peripheral chip). It has many peripherals and an ARM A926 added
+especially for real-time control. P-chip is made for customers. It adopts
+low-level process (ex: 0.11 um) to reduce cost.
 
-What is this tabbed to align to?
+Refer to (for documentations):
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
 
-> +};
-> +
-> +static struct clk_hw *
-> +clk_imx8mp_audiomix_of_clk_get(struct of_phandle_args *clkspec, void *da=
-ta)
-> +{
-> +       struct clk_imx8mp_audiomix_priv *priv =3D data;
-> +       unsigned int idx =3D clkspec->args[0];
-> +
-> +       return priv->clk[idx];
+Refer to (applications):
+https://tibbo.com/store/plus1.html
 
-This could simply be clk_hw_onecell_data and then it has range safety?
+Refer to (applications):
+http://www.sinovoip.com.cn/ecp_view.asp?id=586
 
-> +}
-> +
-> +static int clk_imx8mp_audiomix_probe(struct platform_device *pdev)
-> +{
-> +       struct clk_imx8mp_audiomix_priv *priv;
-> +       struct device *dev =3D &pdev->dev;
-> +       struct resource *res;
-> +       void __iomem *base;
-> +       struct clk_hw *hw;
-> +       int i;
-> +
-> +       priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +       if (!priv)
-> +               return -ENOMEM;
-> +
-> +       res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +       base =3D devm_ioremap_resource(dev, res);
+Changes in v19:
+- clk-provider.h: Add devm_clk_hw_register_gate_parent_data()
+- clk-sp7021.c: Addressed Stephen's comments
+- board dts: Addressed Arnd's comments
 
-Use devm_platform_ioremap_resource() please.
+Changes in v18:
+- Fixed the tags
+- board dts: Fix the comments from Krzysztof
 
-> +       if (IS_ERR(base))
-> +               return PTR_ERR(base);
-> +
-> +       for (i =3D 0; i < ARRAY_SIZE(sels); i++) {
-> +               if (sels[i].num_parents =3D=3D 1) {
-> +                       hw =3D devm_clk_hw_register_gate(dev,
-> +                                                      sels[i].name,
-> +                                                      sels[i].parent,
-> +                                                      0,
-> +                                                      base + sels[i].reg,
-> +                                                      sels[i].shift,
-> +                                                      0, NULL);
-> +               } else {
-> +                       hw =3D devm_clk_hw_register_mux(dev, sels[i].name,
-> +                                                     sels[i].parents,
-> +                                                     sels[i].num_parents,
-> +                                                     0,
-> +                                                     base + sels[i].reg,
-> +                                                     sels[i].shift,
-> +                                                     sels[i].width,
-> +                                                     0, NULL);
-> +               }
-> +
-> +               if (IS_ERR(hw))
-> +                       return PTR_ERR(hw);
-> +
-> +               priv->clk[sels[i].clkid] =3D hw;
-> +       }
-> +
-> +       /* SAI PLL */
-> +       hw =3D devm_clk_hw_register_mux(dev, "sai_pll_ref_sel",
-> +                                     clk_imx8mp_audiomix_pll_parents,
-> +                                     ARRAY_SIZE(clk_imx8mp_audiomix_pll_=
-parents),
-> +                                     CLK_SET_RATE_NO_REPARENT,
-> +                                     base + SAI_PLL_GNRL_CTL, 0, 2, 0, N=
-ULL);
-> +       priv->clk[IMX8MP_CLK_AUDIOMIX_SAI_PLL_REF_SEL] =3D hw;
-> +
-> +       hw =3D imx_dev_clk_hw_pll14xx(dev, "sai_pll", "sai_pll_ref_sel",
-> +                                   base + 0x400, &imx_1443x_pll);
-> +       if (IS_ERR(hw))
-> +               return PTR_ERR(hw);
-> +       priv->clk[IMX8MP_CLK_AUDIOMIX_SAI_PLL] =3D hw;
-> +
-> +       hw =3D devm_clk_hw_register_mux(dev, "sai_pll_bypass",
-> +                                     clk_imx8mp_audiomix_pll_bypass_sels,
-> +                                     ARRAY_SIZE(clk_imx8mp_audiomix_pll_=
-bypass_sels),
-> +                                     CLK_SET_RATE_NO_REPARENT | CLK_SET_=
-RATE_PARENT,
-> +                                     base + SAI_PLL_GNRL_CTL, 16, 1, 0, =
-NULL);
-> +       if (IS_ERR(hw))
-> +               return PTR_ERR(hw);
-> +       priv->clk[IMX8MP_CLK_AUDIOMIX_SAI_PLL_BYPASS] =3D hw;
-> +
-> +       hw =3D devm_clk_hw_register_gate(dev, "sai_pll_out", "sai_pll_byp=
-ass",
-> +                                      0, base + SAI_PLL_GNRL_CTL, 13,
-> +                                      0, NULL);
-> +       if (IS_ERR(hw))
-> +               return PTR_ERR(hw);
-> +       priv->clk[IMX8MP_CLK_AUDIOMIX_SAI_PLL_OUT] =3D hw;
-> +
-> +       hw =3D devm_clk_hw_register_fixed_factor(dev, "sai_pll_out_div2",
-> +                                              "sai_pll_out", 0, 1, 2);
-> +       if (IS_ERR(hw))
-> +               return PTR_ERR(hw);
-> +
-> +       return devm_of_clk_add_hw_provider(&pdev->dev,
-> +                                          clk_imx8mp_audiomix_of_clk_get,
-> +                                          priv);
-> +}
-> +
-> +static const struct of_device_id clk_imx8mp_audiomix_of_match[] =3D {
+Changes in v17:
+- Based on 5.18.1 & resend
 
-Include mod_device_table.h for of_device_id struct
+Changes in v16:
+- clk-sp7021.c: Fix the comments from Stephen Boyd
+- board dts: Fix the comments from Krzysztof
 
-> +       { .compatible =3D "fsl,imx8mp-audio-blk-ctrl" },
-> +       { /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, clk_imx8mp_audiomix_of_match);
-> +
-> +static struct platform_driver clk_imx8mp_audiomix_driver =3D {
-> +       .probe  =3D clk_imx8mp_audiomix_probe,
-> +       .driver =3D {
-> +               .name =3D "imx8mp-audio-blk-ctrl",
-> +               .of_match_table =3D clk_imx8mp_audiomix_of_match,
-> +       },
+Changes in v15:
+- Add Sunplus SP7021-demo-v3 board dts
+- Refine yaml title
+- Rename dt-binding header filename to match compatible string
+
+Changes in v14:
+- clock/sp-sp7021.h: Fix the comments from Krzysztof
+- sunplus,sp7021-clkc.yaml: Fix the comments from Rob
+
+Changes in v13:
+- reset/sp-sp7021.h: Move HW mapping from dt-binding header to driver
+- reset-sunplus.c: Move HW mapping from dt-binding header to driver
+- clock/sp-sp7021.h: Move HW mapping from dt-binding header to driver
+- clk-sp7021.c: Fix the comments from Arnd
+- irq-sp7021-intc.c: Remove empty set_affinity callback function
+- sp7021_defconfig: Fix the comments from Arnd
+
+Changes in v12:
+- sunplus,sp7021-clkc.yaml: Move 'reg' after 'compatible'
+- sunplus,sp7021-intc.yaml: Move 'reg' after 'compatible'
+- sunplus,reset.yaml: Move 'reg' after 'compatible'
+- Remove wrong reviewed-tags
+
+Changes in v11:
+- clk-sp7021.c: Remove the dead code
+
+Changes in v10:
+- arm/sunplus,sp7021.yaml: Add SoC compatible: "sunplus,sp7021"
+- clock/sunplus,sp7021-clkc.yaml: Remove the internal clock parent from DTS
+- clk-sp7021.c: Refine the macro DBG_CLK
+- clk-sp7021.c: Refine the clock_parent_data
+
+Changes in v9:
+- clk/Kconfig: fix the comments form Stephen Boyd
+- clk-sp7021.c: fix the comments form Stephen Boyd
+
+Changes in v8:
+- clk-sp7021.c: fix the comments form Stephen Boyd
+
+Changes in v7:
+- sunplus,sp7021-clkc.yaml: Add clocks & clock-names
+- clk-sp7021.c: fix the comments form Stephen Boyd
+- irq-sp7021-intc.c: fix the comments from Marc
+
+Changes in v6:
+- reset-sunplus.c: fix the comments from Philipp
+- irq-sp7021-intc.c: fix the comments from Marc
+- mach-sunplus: fix the comments from Arnd
+
+Changes in v5:
+- reset-sunplus.c: fix strict checks
+- clk/Kconfig: fix spell
+- clk-sp7021.c: using bitfield ops, fix strict checks
+- irqchip/Kconfig: fix spell
+- irq-sp7021-intc.c: cleanup error path in probe, fix strict checks
+- arm/Kconfig: fix spell & typo, remove CONFIG_SERIAL_SUNPLUS
+- mach-sunplus/Kconfig: fix typo
+- sp7021_defconfig: add CONFIG_SERIAL_SUNPLUS
+
+Changes in v4:
+- mach-sunplus: add initial support for SP7021
+- sp7021_defconfig: add generic SP7021 defconfig
+- reset-sunplus: remove Q645 support
+- reset-sunplus.c: refine code based on Philipp's review
+- clk-sp7021: clock defines add prefix, more clean up
+
+Changes in v3:
+- sp7021-intc: remove primary controller mode due to P-chip running Linux
+  not supported any more.
+- sp7021-intc.h: removed, not set ext through the DT but sp_intc_set_ext()
+- sunplus,sp7021-intc.yaml: update descriptions for above changes
+- irq-sp7021-intc.c: more cleanup based on Marc's review
+- all driver's Kconfig removed default, it's selected by platform config
+
+Changes in v2:
+- sunplus,sp7021-intc.yaml: add descrption for "#interrupt-cells", interrupts
+- sunplus,sp7021-intc.yaml: drop "ext0-mask"/"ext1-mask" from DT
+- sunplus,sp7021-intc.yaml: fix example.dt too long error
+- irq-sp7021-intc.c: major rewrite
+- all files with dual license
+
+Qin Jian (11):
+  dt-bindings: arm: sunplus: Add bindings for Sunplus SP7021 SoC boards
+  dt-bindings: reset: Add bindings for SP7021 reset driver
+  reset: Add Sunplus SP7021 reset driver
+  dt-bindings: clock: Add bindings for SP7021 clock driver
+  clk: gate: Add devm_clk_hw_register_gate_parent_data()
+  clk: Add Sunplus SP7021 clock driver
+  dt-bindings: interrupt-controller: Add bindings for SP7021 interrupt
+    controller
+  irqchip: Add Sunplus SP7021 interrupt controller driver
+  ARM: sunplus: Add initial support for Sunplus SP7021 SoC
+  ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
+  ARM: dts: Add Sunplus SP7021-Demo-V3 board device tree
+
+ .../bindings/arm/sunplus,sp7021.yaml          |  29 +
+ .../bindings/clock/sunplus,sp7021-clkc.yaml   |  52 ++
+ .../sunplus,sp7021-intc.yaml                  |  62 ++
+ .../bindings/reset/sunplus,reset.yaml         |  38 +
+ MAINTAINERS                                   |  18 +
+ arch/arm/Kconfig                              |   2 +
+ arch/arm/Makefile                             |   1 +
+ arch/arm/boot/dts/Makefile                    |   2 +
+ arch/arm/boot/dts/sunplus-sp7021-achip.dtsi   |  84 +++
+ arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts  |  30 +
+ arch/arm/boot/dts/sunplus-sp7021.dtsi         | 310 ++++++++
+ arch/arm/configs/multi_v7_defconfig           |   1 +
+ arch/arm/configs/sp7021_defconfig             |  59 ++
+ arch/arm/mach-sunplus/Kconfig                 |  27 +
+ arch/arm/mach-sunplus/Makefile                |   8 +
+ arch/arm/mach-sunplus/sp7021.c                |  16 +
+ drivers/clk/Kconfig                           |  10 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-sp7021.c                      | 713 ++++++++++++++++++
+ drivers/irqchip/Kconfig                       |   9 +
+ drivers/irqchip/Makefile                      |   1 +
+ drivers/irqchip/irq-sp7021-intc.c             | 278 +++++++
+ drivers/reset/Kconfig                         |   9 +
+ drivers/reset/Makefile                        |   1 +
+ drivers/reset/reset-sunplus.c                 | 212 ++++++
+ .../dt-bindings/clock/sunplus,sp7021-clkc.h   |  88 +++
+ .../dt-bindings/reset/sunplus,sp7021-reset.h  |  87 +++
+ include/linux/clk-provider.h                  |  17 +
+ 28 files changed, 2165 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/sunplus,reset.yaml
+ create mode 100644 arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
+ create mode 100644 arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts
+ create mode 100644 arch/arm/boot/dts/sunplus-sp7021.dtsi
+ create mode 100644 arch/arm/configs/sp7021_defconfig
+ create mode 100644 arch/arm/mach-sunplus/Kconfig
+ create mode 100644 arch/arm/mach-sunplus/Makefile
+ create mode 100644 arch/arm/mach-sunplus/sp7021.c
+ create mode 100644 drivers/clk/clk-sp7021.c
+ create mode 100644 drivers/irqchip/irq-sp7021-intc.c
+ create mode 100644 drivers/reset/reset-sunplus.c
+ create mode 100644 include/dt-bindings/clock/sunplus,sp7021-clkc.h
+ create mode 100644 include/dt-bindings/reset/sunplus,sp7021-reset.h
+
+-- 
+2.33.1
+
