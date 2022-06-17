@@ -2,139 +2,93 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7585E54F767
-	for <lists+linux-clk@lfdr.de>; Fri, 17 Jun 2022 14:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C8854F788
+	for <lists+linux-clk@lfdr.de>; Fri, 17 Jun 2022 14:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381669AbiFQMWQ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 17 Jun 2022 08:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46380 "EHLO
+        id S236539AbiFQM30 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 17 Jun 2022 08:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245358AbiFQMWP (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 17 Jun 2022 08:22:15 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9164F9E9;
-        Fri, 17 Jun 2022 05:22:14 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id y19so8445398ejq.6;
-        Fri, 17 Jun 2022 05:22:14 -0700 (PDT)
+        with ESMTP id S236185AbiFQM3Z (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 17 Jun 2022 08:29:25 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D8827B08
+        for <linux-clk@vger.kernel.org>; Fri, 17 Jun 2022 05:29:24 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id i29so6724974lfp.3
+        for <linux-clk@vger.kernel.org>; Fri, 17 Jun 2022 05:29:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=RydpU3/Y4IwrqethePzwVBMR4EHpFdhl0iBO2HaWGOo=;
-        b=RlcBBBRIzlH6kQoXVTZt5AiXbi9BDK/e/F0d36mdhebJwwjZAUpnRYzfg2d+ZNXBHC
-         oNFKCMtx04SJZS5T8XsSoEL3Zn4+KTfFsuUCcR3N2Qjr2GaGbFfrfLEM1pr1YMdNWUyQ
-         CnGoeZsMjqupvjIl75gM3qMvkeBbJOCTWEHjOra4noAF9uIP9QSGOtz6/lcUSBjL9nji
-         5mP0bnAAWQj801+DnkFij89kDkRW3ZzmT1QfiZ2pC6jU9jHRirEh7Y+k2k0qb7BaImJf
-         LhO0KMIJUDY6WC0TFn7cK7sLD7NgtLVL+QqOfyzkLsvI8BpUyST9neG+JcLxnfA264TI
-         CX+g==
+        bh=wgwVSFZNWDzW3s9VD9D+iOdjRuPlzLI/orUO6Ryi4Vs=;
+        b=FJz2G1u3NM5p81ysLd+xbROqiM8O0kzpGgLO8QH6zR2ARcPtrZQ0ljcHQJ1HVOvF7M
+         29KEmPNSB7WZkrl8+U/hpyfd1VninxkZY2fD0qpHPZZdLKwwrOt16TkOdSq+i7EEZvVJ
+         W1+nglwi43kPNkvlDfrmoh015LS+T4DUkOQGw4SNnrDHu1xKf0ek6yYv5Fc0PdCGxNKs
+         /7gA/Ok02LIRl7thX8TmvcBWv6uqT+GyMGMXAIrXff73L3qjKhXlMlZtMB84PKuKxQJa
+         yeiEDrJrjZ0AW0MX0ASObXPUJg02dAtTOTi37iOr1JQ1Iq6oL+02i0L1tVgZVb/6GuNz
+         c0Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=RydpU3/Y4IwrqethePzwVBMR4EHpFdhl0iBO2HaWGOo=;
-        b=jFPoXvxey0nyaAEnxLaVVGNM2I00yhFAQnBsHoZnv8yXcHmdPKB4J0R9nUcfVmyo9f
-         RslHQurATZiqYQyHCVHEoyLraE0tipaBZ0xlllEHL7ss2+cYRHnpgguEl8oaUcipSJmC
-         nMtxkZMn0BET+HStylHo8YSDuM2GJQVI5wBzZ7UnOQnWPR9Rn0A4yElZj5Wuhjofp8VH
-         t7EDuKTHxjEtYl50JjytkdeJBQVi4sM9+g5bJZcF5UFXhuUJ+Vm2HFypld7NgQUn4OV1
-         gNKNxW54FM6gm3Yow6yNNFQR55MEc0lcEIJqUzWIgdOEXBVAfWeeKvKz+U0HOFLtGOyz
-         1ghw==
-X-Gm-Message-State: AJIora/YPLV/XyLHZFK5D5YuFyp3u4tMQOYxbp4HGU2MjNoXNhuYLqvE
-        kBNuMzeZJzM/+DF6TGVUrMs=
-X-Google-Smtp-Source: AGRyM1tn/JU0YI5iK2BvBsGqmsGR8kMLwx+2/o/xkiZVgQArHzh3tWIGKimuBdMAKwTOh9EGrrbxnA==
-X-Received: by 2002:a17:907:97c4:b0:711:ea9a:103b with SMTP id js4-20020a17090797c400b00711ea9a103bmr9512333ejc.155.1655468532770;
-        Fri, 17 Jun 2022 05:22:12 -0700 (PDT)
-Received: from localhost (92.40.168.188.threembb.co.uk. [92.40.168.188])
-        by smtp.gmail.com with ESMTPSA id fm18-20020a1709072ad200b006f3ef214e63sm2059914ejc.201.2022.06.17.05.22.11
+        bh=wgwVSFZNWDzW3s9VD9D+iOdjRuPlzLI/orUO6Ryi4Vs=;
+        b=lLXzBUdDEwJmXMvHLMorOX3y1pkOQi842dMsMNCLxdAhBo0g3wMGCAmqjPE0b16ID8
+         eF60krJvM72LsCmAIZw0OnR12zlaP77u7NYnnHzYDmj8WrqgdrhlPPByy/HVHcNhUBXJ
+         So41ILmvAziM2rtBNO6BpCugLpoLL1NpdqddQN2cpK9kEttHWhm8vZ1lNHzw5gcmenMM
+         jlk7jEibXp7uJ79ugbCvg8Gfj8L5CVRtW/AGnGUzaLcOAQvJhNEXoZ1Q8jlLnh0ikydt
+         5nNNsUH5SQ3aJ1SeJi7aaldh0U/52qeNzDHY1uwVzZsMyBj0vrttKgI6sUQ3wtZPZ2Q1
+         5+jQ==
+X-Gm-Message-State: AJIora8N6IDx5qjZs/LmkYGFmVu3KCrXxxvQqfwcnPeiRhxQbid+fD4i
+        pEvRQgf1/Xogyg5GrDUCjAEYow==
+X-Google-Smtp-Source: AGRyM1vPt9ctflrXzlwW8dBe0aNeU5tT+MIhZKQvbJpFYBs2Nx0or7NZnhAzDEl2S7a8on8htyZHFg==
+X-Received: by 2002:a05:6512:3c9f:b0:479:3077:e34a with SMTP id h31-20020a0565123c9f00b004793077e34amr5359076lfv.395.1655468963303;
+        Fri, 17 Jun 2022 05:29:23 -0700 (PDT)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id b8-20020a2e8948000000b0025568a2a018sm539471ljk.129.2022.06.17.05.29.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jun 2022 05:22:12 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     sboyd@kernel.org, mturquette@baylibre.com
-Cc:     paul@crapouillou.net, paulburton@kernel.org,
-        linux-mips@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] clk: ingenic-tcu: Properly enable registers before accessing timers
-Date:   Fri, 17 Jun 2022 13:22:54 +0100
-Message-Id: <20220617122254.738900-1-aidanmacdonald.0x0@gmail.com>
+        Fri, 17 Jun 2022 05:29:22 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <quic_tdas@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Subject: [PATCH 0/6] clk: qcom: mmcc-msm8996: modernize the driver
+Date:   Fri, 17 Jun 2022 15:29:16 +0300
+Message-Id: <20220617122922.769562-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Access to registers is guarded by ingenic_tcu_{enable,disable}_regs()
-so the stop bit can be cleared before accessing a timer channel, but
-those functions did not clear the stop bit on SoCs with a global TCU
-clock gate.
+Update mmcc-msm8996 driver and bindings to use DT-specified clocks
+rather than fetching the clocks from the global clocks list.
 
-Testing on the X1000 has revealed that the stop bits must be cleared
-_and_ the global TCU clock must be ungated to access timer registers.
-This appears to be the norm on Ingenic SoCs, and is specified in the
-documentation for the X1000 and numerous JZ47xx SoCs.
+Dmitry Baryshkov (6):
+  dt-bindings: clock: qcom,mmcc: fix clocks/clock-names definitions
+  dt-bindings: clocks: qcom,mmcc: define clocks/clock-names for MSM8996
+  clk: qcom: mmcc-msm8996: use ARRAY_SIZE instead of specifying
+    num_parents
+  clk: qcom: mmcc-msm8996: move clock parent tables down
+  clk: qcom: mmcc-msm8996: use parent_hws/_data instead of parent_names
+  arm64: dts: qcom: msm8996: add clocks to the MMCC device node
 
-If the stop bit isn't cleared, register writes don't take effect and
-the system can be left in a broken state, eg. the watchdog timer may
-not run.
+ .../devicetree/bindings/clock/qcom,mmcc.yaml  |  162 ++-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |   16 +
+ drivers/clk/qcom/mmcc-msm8996.c               | 1052 ++++++++++-------
+ 3 files changed, 808 insertions(+), 422 deletions(-)
 
-The bug probably went unnoticed because stop bits are zeroed when
-the SoC is reset, and the kernel does not set them unless a timer
-gets disabled at runtime. However, it is possible that a bootloader
-or a previous kernel (if using kexec) leaves the stop bits set and
-we should not rely on them being cleared.
-
-Fixing this is easy: have ingenic_tcu_{enable,disable}_regs() always
-clear the stop bit, regardless of the presence of a global TCU gate.
-
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-Tested-by: Paul Cercueil <paul@crapouillou.net>
-Fixes: 4f89e4b8f121 ("clk: ingenic: Add driver for the TCU clocks")
-Cc: stable@vger.kernel.org
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
-v2: Update commit description
-
- drivers/clk/ingenic/tcu.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
-index 201bf6e6b6e0..d5544cbc5c48 100644
---- a/drivers/clk/ingenic/tcu.c
-+++ b/drivers/clk/ingenic/tcu.c
-@@ -101,15 +101,11 @@ static bool ingenic_tcu_enable_regs(struct clk_hw *hw)
- 	bool enabled = false;
- 
- 	/*
--	 * If the SoC has no global TCU clock, we must ungate the channel's
--	 * clock to be able to access its registers.
--	 * If we have a TCU clock, it will be enabled automatically as it has
--	 * been attached to the regmap.
-+	 * According to the programming manual, a timer channel's registers can
-+	 * only be accessed when the channel's stop bit is clear.
- 	 */
--	if (!tcu->clk) {
--		enabled = !!ingenic_tcu_is_enabled(hw);
--		regmap_write(tcu->map, TCU_REG_TSCR, BIT(info->gate_bit));
--	}
-+	enabled = !!ingenic_tcu_is_enabled(hw);
-+	regmap_write(tcu->map, TCU_REG_TSCR, BIT(info->gate_bit));
- 
- 	return enabled;
- }
-@@ -120,8 +116,7 @@ static void ingenic_tcu_disable_regs(struct clk_hw *hw)
- 	const struct ingenic_tcu_clk_info *info = tcu_clk->info;
- 	struct ingenic_tcu *tcu = tcu_clk->tcu;
- 
--	if (!tcu->clk)
--		regmap_write(tcu->map, TCU_REG_TSSR, BIT(info->gate_bit));
-+	regmap_write(tcu->map, TCU_REG_TSSR, BIT(info->gate_bit));
- }
- 
- static u8 ingenic_tcu_get_parent(struct clk_hw *hw)
 -- 
 2.35.1
 
