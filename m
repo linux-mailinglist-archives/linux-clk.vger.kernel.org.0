@@ -2,63 +2,69 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3388E550BA6
-	for <lists+linux-clk@lfdr.de>; Sun, 19 Jun 2022 17:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB28F550C29
+	for <lists+linux-clk@lfdr.de>; Sun, 19 Jun 2022 18:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233818AbiFSPNi (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sun, 19 Jun 2022 11:13:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
+        id S235178AbiFSQuW (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sun, 19 Jun 2022 12:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236527AbiFSPMy (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sun, 19 Jun 2022 11:12:54 -0400
-Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1164BAE5C;
-        Sun, 19 Jun 2022 08:12:53 -0700 (PDT)
-Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
-        by maillog.nuvoton.com (Postfix) with ESMTP id 44FCD1C8123D;
-        Sun, 19 Jun 2022 23:12:30 +0800 (CST)
-Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS01.nuvoton.com
- (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.7; Sun, 19 Jun
- 2022 23:12:30 +0800
-Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS04.nuvoton.com
- (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Sun, 19 Jun 2022 23:12:29 +0800
-Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-        id E9D3063A54; Sun, 19 Jun 2022 18:12:27 +0300 (IDT)
-From:   Tomer Maimon <tmaimon77@gmail.com>
-To:     <avifishman70@gmail.com>, <tali.perry1@gmail.com>,
-        <joel@jms.id.au>, <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
-        <gregkh@linuxfoundation.org>, <daniel.lezcano@linaro.org>,
-        <tglx@linutronix.de>, <wim@linux-watchdog.org>,
-        <linux@roeck-us.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
-        <arnd@arndb.de>, <olof@lixom.net>, <jirislaby@kernel.org>,
-        <shawnguo@kernel.org>, <bjorn.andersson@linaro.org>,
-        <geert+renesas@glider.be>, <marcel.ziswiler@toradex.com>,
-        <vkoul@kernel.org>, <biju.das.jz@bp.renesas.com>,
-        <nobuhiro1.iwamatsu@toshiba.co.jp>, <robert.hancock@calian.com>,
-        <j.neuschaefer@gmx.net>, <lkundrak@v3.sk>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        <linux-watchdog@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v3 18/18] arm64: defconfig: Add Nuvoton NPCM family support
-Date:   Sun, 19 Jun 2022 18:12:25 +0300
-Message-ID: <20220619151225.209029-19-tmaimon77@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220619151225.209029-1-tmaimon77@gmail.com>
-References: <20220619151225.209029-1-tmaimon77@gmail.com>
+        with ESMTP id S229490AbiFSQuV (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sun, 19 Jun 2022 12:50:21 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEF663A3
+        for <linux-clk@vger.kernel.org>; Sun, 19 Jun 2022 09:50:19 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id i10so7920972wrc.0
+        for <linux-clk@vger.kernel.org>; Sun, 19 Jun 2022 09:50:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LfFFeUv/WOce2TVGlWA/kbyXZ4oXiFmd6tJQ16JvKOc=;
+        b=Uz9FKkEA5Qr77ZFCFWzjOSb+r9y8SktCw5Gefi5LohJ8q3EIA9mHNPCDsbAjBz3YQ3
+         kq2ZeCv0MW5r9x8STrEw/TJKjCbO8bDvUTmCZvsFN3LrdkUq3ufyEvOHUlaYavbH3ZS2
+         WHo7o85cecPwqivfiD2RC7NhiITjW+DPqPbLIxsK9ULBrsM3dWp2pc4E+GBLXEX3CLzq
+         7mf+MVYpcogO6fislqudPWDSNQq7Vnk6C/p9C1n1vZT5+xV+HiIf89qQqNtoHIdRmjN1
+         K2VSixaUbTZSE4/suL+4JbDPEfmn5C5vsPGg1qR6LDkvCJlu62Ur5+MdPmK8YbwvfCz6
+         fSVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LfFFeUv/WOce2TVGlWA/kbyXZ4oXiFmd6tJQ16JvKOc=;
+        b=dDL0laJeNMTBJKv6dAj692HVH9V7x65p07a0w8pdHv/KhPF3WvUV6eAFNRLfzCrKkN
+         Hhy7HgY/Hz/2UedPXVKgP1IRYI/GOPpMn4O3njCdGMDwFTxAUlIhv0Fsjyt+jX3JuMbP
+         PEDfv+9WF7UuSIAbxMqEXpPsKIIsUNN549+VfO9IelwgyeY5HWJumWIAabLMGC+5HLe4
+         ZA0d6Jricj8r4DxY4rowllZRKAeL//TW+NUbvV3qVT4BuEftey1RxyUGbPNUllCTv1En
+         I6Hxs+HaZdWqOgbO63KXwIFAVQy6TJl7jvyxZPKdWmzjlndHIATRTrRALrvFyr7ZiVab
+         ZKgw==
+X-Gm-Message-State: AJIora+S0ATbpRMHEK1xVMJhQG7cS2QqvjTqI0oKl0Npw2Z7MesoFr5e
+        s9ZrKU1+z/BdkXquiUTJmdbIf/UelcDm/S2doBw=
+X-Google-Smtp-Source: AGRyM1sDuy+CA51mNE6xs55jBFG/nO7Fc39xXP3E7f6VF9xKHCNHuIdXNqCXWX9sql9FizqHmv6sxg==
+X-Received: by 2002:a5d:6a0e:0:b0:213:1f7f:e1cc with SMTP id m14-20020a5d6a0e000000b002131f7fe1ccmr19029817wru.31.1655657417385;
+        Sun, 19 Jun 2022 09:50:17 -0700 (PDT)
+Received: from henark71.. ([51.37.234.167])
+        by smtp.gmail.com with ESMTPSA id m14-20020adfdc4e000000b0021a3c960214sm9189510wrj.6.2022.06.19.09.50.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jun 2022 09:50:16 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [RFC 0/6] PolarFire SoC Reset controller
+Date:   Sun, 19 Jun 2022 17:49:30 +0100
+Message-Id: <20220619164935.1492823-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,42 +72,51 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Enable basic drivers for NPCM8XX booting up support: Architecture, Clock,
-and WD.
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
----
- arch/arm64/configs/defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+Hi Stephen (& Philipp),
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 7d1105343bc2..c4a237a84efa 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -49,6 +49,7 @@ CONFIG_ARCH_MEDIATEK=y
- CONFIG_ARCH_MESON=y
- CONFIG_ARCH_MVEBU=y
- CONFIG_ARCH_MXC=y
-+CONFIG_ARCH_NPCM=y
- CONFIG_ARCH_QCOM=y
- CONFIG_ARCH_RENESAS=y
- CONFIG_ARCH_ROCKCHIP=y
-@@ -627,6 +628,7 @@ CONFIG_RENESAS_RZG2LWDT=y
- CONFIG_UNIPHIER_WATCHDOG=y
- CONFIG_PM8916_WATCHDOG=m
- CONFIG_BCM2835_WDT=y
-+CONFIG_NPCM7XX_WATCHDOG=y
- CONFIG_MFD_ALTERA_SYSMGR=y
- CONFIG_MFD_BD9571MWV=y
- CONFIG_MFD_AXP20X_I2C=y
-@@ -1021,6 +1023,7 @@ CONFIG_COMMON_CLK_FSL_SAI=y
- CONFIG_COMMON_CLK_S2MPS11=y
- CONFIG_COMMON_CLK_PWM=y
- CONFIG_COMMON_CLK_VC5=y
-+CONFIG_COMMON_CLK_NPCM8XX=y
- CONFIG_COMMON_CLK_BD718XX=m
- CONFIG_CLK_RASPBERRYPI=m
- CONFIG_CLK_IMX8MM=y
+I gave the aux bus approach to the clock->reset driver combo a go.
+Could you take a quick look and lmk if it meets your expectations
+for that approach? There weren't too many aux bus drivers to "take
+inspiration from" so I implemented this based on drivers/peci/cpu.c
+If it all looks sane at first glance, I'll tidy things up a little
+and submit.
+
+@Geert the prior "RFC" you said you saw issues with the ethernet?
+I implemented the reset stuff for the macs and it looks to be to
+be working fine - but I did not do any meaninful testing with
+CONFIG_PM=y.
+
+Thanks,
+Conor.
+
+(Since it's just the clk -> reset aux bus interface I care about
+here, I left the net/dt maintainers off the CC.)*
+
+Conor Dooley (6):
+  dt-bindings: clk: microchip: mpfs: add reset controller support
+  dt-bindings: net: cdns,macb: document polarfire soc's macb
+  clk: microchip: mpfs: add reset controller
+  reset: add polarfire soc reset support
+  net: macb: add polarfire soc reset support
+  riscv: dts: microchip: add mpfs specific macb reset support
+
+ .../bindings/clock/microchip,mpfs.yaml        |  17 +-
+ .../devicetree/bindings/net/cdns,macb.yaml    |   1 +
+ arch/riscv/boot/dts/microchip/mpfs.dtsi       |   7 +-
+ drivers/clk/microchip/Kconfig                 |   1 +
+ drivers/clk/microchip/clk-mpfs.c              | 118 +++++++++++--
+ drivers/net/ethernet/cadence/macb_main.c      |  25 ++-
+ drivers/reset/Kconfig                         |   9 +
+ drivers/reset/Makefile                        |   2 +-
+ drivers/reset/reset-mpfs.c                    | 155 ++++++++++++++++++
+ include/soc/microchip/mpfs.h                  |   8 +
+ 10 files changed, 320 insertions(+), 23 deletions(-)
+ create mode 100644 drivers/reset/reset-mpfs.c
+
+
+base-commit: b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
 -- 
-2.33.0
+2.36.1
 
