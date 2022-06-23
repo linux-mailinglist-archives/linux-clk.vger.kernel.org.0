@@ -2,100 +2,98 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6240E557EB5
-	for <lists+linux-clk@lfdr.de>; Thu, 23 Jun 2022 17:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE457557F4A
+	for <lists+linux-clk@lfdr.de>; Thu, 23 Jun 2022 18:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231594AbiFWPh1 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 23 Jun 2022 11:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
+        id S231923AbiFWQEm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 23 Jun 2022 12:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbiFWPh1 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Jun 2022 11:37:27 -0400
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F040F2FFE3;
-        Thu, 23 Jun 2022 08:37:25 -0700 (PDT)
-Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
-  by mx.socionext.com with ESMTP; 24 Jun 2022 00:37:25 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id 6BD59205845A;
-        Fri, 24 Jun 2022 00:37:25 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Fri, 24 Jun 2022 00:37:25 +0900
-Received: from [10.212.180.217] (unknown [10.212.180.217])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 0A3C1B62E2;
-        Fri, 24 Jun 2022 00:37:23 +0900 (JST)
-Subject: Re: [PATCH] clk: Fix referring to wrong pointer in devm_clk_release()
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
+        with ESMTP id S232119AbiFWQEX (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Jun 2022 12:04:23 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED92944A17;
+        Thu, 23 Jun 2022 09:04:21 -0700 (PDT)
+Received: from jupiter.universe (unknown [95.33.159.255])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4852766017DF;
+        Thu, 23 Jun 2022 17:04:20 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1656000260;
+        bh=zjDrFX45JCbBeibf/cBhGS7s1nuAsOUhgqAPOq3rbRg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TsVNhEoI98MAUIQkJPaWhfmD0sdrYQpC9cvsXv9JHQ2bszl61qUYPSFzqLaCIzbKl
+         DnKHf1MNcqrXJxPp6tNjpiTpYWloHzYVKMppk77y7yvlzugkg+EXFmQXs2K8cKvyaE
+         h6JyEzZ0qpeNhAhlGSphPZD9S3QL2o//zwnMhUChwjZhVAH7+SKty8lPjM/SrZL+gS
+         mh2A9vLHm6fhZ0cESUWBLOUNOarnznhZF4Ek71lKIMGVhyWj3jWKFaXtUyYaCoWp7w
+         By6hvtCCzmlYAupqHtZtiqUYHO7j8rYvKvJ6/iXDcflnBqg68C0fbHaw6GTC/lIQ0F
+         D68Sy+350fvng==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id C0904480122; Thu, 23 Jun 2022 18:04:17 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1655946142-1346-1-git-send-email-hayashi.kunihiko@socionext.com>
- <20220623070620.ndhnxeiw4wtjgpjm@pengutronix.de>
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Message-ID: <3896b73a-d8fe-6b92-168a-f30d0a60bbbe@socionext.com>
-Date:   Fri, 24 Jun 2022 00:37:23 +0900
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCH 0/5] RK3588 Clock and Reset Support
+Date:   Thu, 23 Jun 2022 18:03:24 +0200
+Message-Id: <20220623160329.239501-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-In-Reply-To: <20220623070620.ndhnxeiw4wtjgpjm@pengutronix.de>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Uwe,
+RK3588 Clock and Reset Support
 
-Thank you for pointing out.
+This has been part of a bigger patchset adding basic rk3588 support.
+Since that gets more and more out of hand, I'm now sending patches
+for each subsystem as individual patchset. Previou patchet:
 
-On 2022/06/23 16:06, Uwe Kleine-König wrote:
-> Hello,
-> 
-> On Thu, Jun 23, 2022 at 10:02:22AM +0900, Kunihiko Hayashi wrote:
->> At bind phase, __devm_clk_get() calls devres_alloc() to allocate devres,
->> and dr->data is treated as a variable "state".
->>
->> At unbind phase, release_nodes() calls devm_clk_release() specified by
->> devres_alloc().
->>
->> The argument "res" of devm_clk_release() is dr->data, and this entity is
->> "state", however in devm_clk_release(), "*res" is treated as "state",
->> resulting in pointer inconsistency.
->>
->> Unbinding a driver caused a panic.
->>
->>      Unable to handle kernel execute from non-executable memory
->>      at virtual address ffff000100236810
->>      ...
->>      pc : 0xffff000100236810
->>      lr : devm_clk_release+0x6c/0x9c
->>      ...
->>      Call trace:
->>       0xffff000100236810
->>       release_nodes+0xb0/0x150
->>       devres_release_all+0x94/0xf8
->>       device_unbind_cleanup+0x20/0x70
->>       device_release_driver_internal+0x114/0x1a0
->>       device_driver_detach+0x20/0x30
->>
->> Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
->> Fixes: abae8e57e49a ("clk: generalize devm_clk_get() a bit")
->> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> 
-> This is already fixed in clk-next:
-> 
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/commit/?h=clk-next&id=8b3d743fc9e2542822826890b482afabf0e7522a
+https://lore.kernel.org/all/20220504213251.264819-1-sebastian.reichel@collabora.com/
 
-Sorry for not finding the fix patch and duplicating it.
-I'm waiting for it to be merged.
+Changes:
+ * Sync'd against latest downstream changes
+ * Update bindings according to Rob's comments, except for license
+   (no feedback from Rockchip)
 
-Thank you,
+-- Sebastian
 
----
-Best Regards
-Kunihiko Hayashi
+Elaine Zhang (5):
+  dt-binding: clock: Document rockchip,rk3588-cru bindings
+  clk: rockchip: add register offset of the cores select parent
+  clk: rockchip: add pll type for RK3588
+  clk: rockchip: clk-cpu: add mux setting for cpu change frequency
+  clk: rockchip: Add clock controller for the RK3588
+
+ .../bindings/clock/rockchip,rk3588-cru.yaml   |   59 +
+ drivers/clk/rockchip/Kconfig                  |    8 +
+ drivers/clk/rockchip/Makefile                 |    1 +
+ drivers/clk/rockchip/clk-cpu.c                |   69 +-
+ drivers/clk/rockchip/clk-pll.c                |  218 +-
+ drivers/clk/rockchip/clk-rk3588.c             | 2530 +++++++++++++++++
+ drivers/clk/rockchip/clk.h                    |   65 +
+ include/dt-bindings/clock/rk3588-cru.h        | 1516 ++++++++++
+ 8 files changed, 4457 insertions(+), 9 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3588-cru.yaml
+ create mode 100644 drivers/clk/rockchip/clk-rk3588.c
+ create mode 100644 include/dt-bindings/clock/rk3588-cru.h
+
+-- 
+2.35.1
+
