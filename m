@@ -2,139 +2,134 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B43FC5578FE
-	for <lists+linux-clk@lfdr.de>; Thu, 23 Jun 2022 13:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994D3557946
+	for <lists+linux-clk@lfdr.de>; Thu, 23 Jun 2022 13:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbiFWLrp (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 23 Jun 2022 07:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
+        id S229734AbiFWL53 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 23 Jun 2022 07:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbiFWLro (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Jun 2022 07:47:44 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4EA44CD64
-        for <linux-clk@vger.kernel.org>; Thu, 23 Jun 2022 04:47:42 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id b7so22996477ljr.6
-        for <linux-clk@vger.kernel.org>; Thu, 23 Jun 2022 04:47:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SSyFlktoMly7Jg0ytEXb/jyKP3wx8JQVn60KuiJv8EE=;
-        b=Up6slqYurRrYu8oM2ZeUYWJzvUDXx6GyJKgd92nApQj4+j9eAiQwpAmupo5HbnOfAZ
-         IYrXhLz+gNld1IRJd8Azz4LEBj8mh1RaiOfpDCEf96/zY6yPhHaF7Bf4NtWmlSqsJbEk
-         J13OmHJkCZ5c9aMq8oApCreFvF6+l5oTs+PqcX09Fxozi95DQiXTK1Zbr8aaCrx7hSYk
-         axzt97w6u+zup9s0d4zKufjP7QeEjOvTS36JzwG2UzxcKklCG38rPQ/Jwu5wCNFhAkDx
-         9N/dT3ivVDsf1ia3/S/3J0TWax/7PJWSqEgV4oArC//0No3uLlUknotcwKzN53xKpvZx
-         4vcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SSyFlktoMly7Jg0ytEXb/jyKP3wx8JQVn60KuiJv8EE=;
-        b=uJywzR/IXuff7kJarwsYSFD7chvKGuYUzkdu5wYfqZcZFCvzY9AJJJBxiuI4WVDb4m
-         7AH882U1Y2tr61gwqdaIZhivputA63hxD2OXIzxfwVzUqvzsEhTTDzylJnS2WVCXhEW9
-         nAzWrw3DruuCYw+8lJIXQhOz24i6mfhc7TL7bLcRnm3IpMiaaKzm7KEZPW+Eb7vok7Fr
-         DsW30y5WkzpUYKUhFq5HsaWbaibUQmLXEU3oYpag2A/GVULQjXs504wMZ2aNiIBr+iMl
-         lP+O2kZIPTmgMywM+PUafNCRYJ/g3h2f+Dh9N7989ZW8Ap2q3576Tio4GRh31rextHhx
-         iiww==
-X-Gm-Message-State: AJIora+tkBHldtLVVY/xErlgHecau9ht9F19U0RAWyhh7wxCHzzP0+/8
-        itzYSmY5grV4qQvOv03RGV7NDg==
-X-Google-Smtp-Source: AGRyM1v0O0BZ/afpQeBcvJSUFyjFI/GQAvD0oLozXC0MCAijH1ls4BuQu9pJ8HzxG2h4QKbqNGaNSw==
-X-Received: by 2002:a05:651c:54b:b0:25a:6336:eb6c with SMTP id q11-20020a05651c054b00b0025a6336eb6cmr4661134ljp.315.1655984861205;
-        Thu, 23 Jun 2022 04:47:41 -0700 (PDT)
-Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id x5-20020a056512078500b0047f77729723sm1369968lfr.43.2022.06.23.04.47.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jun 2022 04:47:40 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v1 4/4] arm64: dts: qcom: sm8450: add display clock controller
-Date:   Thu, 23 Jun 2022 14:47:37 +0300
-Message-Id: <20220623114737.247703-5-dmitry.baryshkov@linaro.org>
+        with ESMTP id S231470AbiFWL51 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Jun 2022 07:57:27 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23FF4D608;
+        Thu, 23 Jun 2022 04:57:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655985443; x=1687521443;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rFzp9FJ0Hi0BvdZQ2nyFZrp7Abz1SQG22Ug72RhOvrw=;
+  b=Wb3HMytS9EwKCkpsukehAgyPHfmNGFYlPS15fDHAemhUJxmxuGLLxslQ
+   WfRP1C1SuArc08PcZ4QXw+2ucFb/w4pCxA1JuhKW3tZk6risfJCqcuV7n
+   2ztMJQeiSu4J93c/Fajm0Gyx+nwYQLzUK0p075KtSZDLnBr8k01l7h4Mc
+   vozDBeJSTvtZ6wOQVnkoLhkvwHx2cK7SZlwBhsAEJxJCJWJNwduOhKGub
+   VqGbyUssS/z0xvm+ftL/CxcALEYqVfgXVDB49XsPtqyAzPJzj6Yv4JVUq
+   nTqRVI8HImQ6OFREjvQZXlvSe0H8OyKA/p6vKFPNTyDNOWDf3jYskWlU/
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10386"; a="280745085"
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="280745085"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2022 04:57:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.92,215,1650956400"; 
+   d="scan'208";a="586128577"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 23 Jun 2022 04:57:20 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 218AC136; Thu, 23 Jun 2022 14:57:26 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Russell King <linux@armlinux.org.uk>
+Subject: [PATCH v1 1/3] clk: Remove never used devm_of_clk_del_provider()
+Date:   Thu, 23 Jun 2022 14:57:17 +0300
+Message-Id: <20220623115719.52683-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220623114737.247703-1-dmitry.baryshkov@linaro.org>
-References: <20220623114737.247703-1-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Add device node for display clock controller on Qualcomm SM8450 platform
+For the entire history of the devm_of_clk_del_provider) existence
+(since 2017) it was never used. Remove it for good.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 35 ++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ drivers/clk/clk.c            | 26 --------------------------
+ include/linux/clk-provider.h |  4 ++--
+ 2 files changed, 2 insertions(+), 28 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 7d08fad76371..4fb60aef77f4 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -4,6 +4,7 @@
-  */
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 5cbf21acb1a8..1a9dd980f74a 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -4751,32 +4751,6 @@ void of_clk_del_provider(struct device_node *np)
+ }
+ EXPORT_SYMBOL_GPL(of_clk_del_provider);
  
- #include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/clock/qcom,dispcc-sm8450.h>
- #include <dt-bindings/clock/qcom,gcc-sm8450.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
- #include <dt-bindings/dma/qcom-gpi.h>
-@@ -2288,6 +2289,40 @@ IPCC_MPROC_SIGNAL_GLINK_QMP
- 			};
- 		};
- 
-+		dispcc: clock-controller@af00000 {
-+			compatible = "qcom,sm8450-dispcc";
-+			reg = <0 0x0af00000 0 0x20000>;
-+			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK_A>,
-+				 <0>, <0>,
-+				 <0>, <0>,
-+				 <0>, <0>,
-+				 <0>, <0>,
-+				 <0>, <0>,
-+				 <0>, <0>,
-+				 <&sleep_clk>;
-+			clock-names = "bi_tcxo",
-+				      "bi_tcxo_ao",
-+				      "dsi0_phy_pll_out_byteclk",
-+				      "dsi0_phy_pll_out_dsiclk",
-+				      "dsi1_phy_pll_out_byteclk",
-+				      "dsi1_phy_pll_out_dsiclk",
-+				      "dp0_phy_pll_link_clk",
-+				      "dp0_phy_pll_vco_div_clk",
-+				      "dp1_phy_pll_link_clk",
-+				      "dp1_phy_pll_vco_div_clk",
-+				      "dp2_phy_pll_link_clk",
-+				      "dp2_phy_pll_vco_div_clk",
-+				      "dp3_phy_pll_link_clk",
-+				      "dp3_phy_pll_vco_div_clk",
-+				      "sleep_clk";
-+			power-domains = <&rpmhpd SM8450_MMCX>;
-+			required-opps = <&rpmhpd_opp_low_svs>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
+-static int devm_clk_provider_match(struct device *dev, void *res, void *data)
+-{
+-	struct device_node **np = res;
+-
+-	if (WARN_ON(!np || !*np))
+-		return 0;
+-
+-	return *np == data;
+-}
+-
+-/**
+- * devm_of_clk_del_provider() - Remove clock provider registered using devm
+- * @dev: Device to whose lifetime the clock provider was bound
+- */
+-void devm_of_clk_del_provider(struct device *dev)
+-{
+-	int ret;
+-	struct device_node *np = get_clk_provider_node(dev);
+-
+-	ret = devres_release(dev, devm_of_clk_release_provider,
+-			     devm_clk_provider_match, np);
+-
+-	WARN_ON(ret);
+-}
+-EXPORT_SYMBOL(devm_of_clk_del_provider);
+-
+ /**
+  * of_parse_clkspec() - Parse a DT clock specifier for a given device node
+  * @np: device node to parse clock specifier from
+diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+index 72d937c03a3e..8ad92a4a748f 100644
+--- a/include/linux/clk-provider.h
++++ b/include/linux/clk-provider.h
+@@ -1420,7 +1420,7 @@ int devm_of_clk_add_hw_provider(struct device *dev,
+ 						 void *data),
+ 			   void *data);
+ void of_clk_del_provider(struct device_node *np);
+-void devm_of_clk_del_provider(struct device *dev);
 +
- 		pdc: interrupt-controller@b220000 {
- 			compatible = "qcom,sm8450-pdc", "qcom,pdc";
- 			reg = <0 0x0b220000 0 0x30000>, <0 0x174000f0 0 0x64>;
+ struct clk *of_clk_src_simple_get(struct of_phandle_args *clkspec,
+ 				  void *data);
+ struct clk_hw *of_clk_hw_simple_get(struct of_phandle_args *clkspec,
+@@ -1457,7 +1457,7 @@ static inline int devm_of_clk_add_hw_provider(struct device *dev,
+ 	return 0;
+ }
+ static inline void of_clk_del_provider(struct device_node *np) {}
+-static inline void devm_of_clk_del_provider(struct device *dev) {}
++
+ static inline struct clk *of_clk_src_simple_get(
+ 	struct of_phandle_args *clkspec, void *data)
+ {
 -- 
 2.35.1
 
