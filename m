@@ -2,182 +2,90 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E516557F49
-	for <lists+linux-clk@lfdr.de>; Thu, 23 Jun 2022 18:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726EB558505
+	for <lists+linux-clk@lfdr.de>; Thu, 23 Jun 2022 19:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbiFWQEn (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 23 Jun 2022 12:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
+        id S233823AbiFWRx7 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 23 Jun 2022 13:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232129AbiFWQEX (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Jun 2022 12:04:23 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8004477E;
-        Thu, 23 Jun 2022 09:04:21 -0700 (PDT)
-Received: from jupiter.universe (unknown [95.33.159.255])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 63D8466017E4;
-        Thu, 23 Jun 2022 17:04:20 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1656000260;
-        bh=JyODDbAkozctO2YF4+4+8QrF0xaiP+MYadCgEeOgwr0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LGglfLaFni5u8gXAQ2JFlRVE1lfhiFRI+lJp2LSBZDn1JEAzJfBs3Q90TkocJaeIa
-         7hghODJXm5+mrtYT0qLq6djDtK2DNq2AbqQSE0HtBHXhDVrSIv8CedmSpsEnBH1PfS
-         yYEEaaTSWIUOOxbHncdqwQXiWYJ2c+n0sXd98dZ6NwtBzWDfpNuL6XxxHjV5NoNl8Q
-         w5iJyEOblil+/hjQehSoaoWD3nwctT+rMYEl4lDOqEc6GGOrDSNrINNm1597tm6qpP
-         OmSKb+PeV8BgVNWEdWdT0E35YrH4t6kbLmtaCfHoGy19JwdDp45l3dFdvzE6dxAoEk
-         G+jcyKwV6PVIA==
-Received: by jupiter.universe (Postfix, from userid 1000)
-        id CAB7A48059B; Thu, 23 Jun 2022 18:04:17 +0200 (CEST)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Elaine Zhang <zhangqing@rock-chips.com>, kernel@collabora.com,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCH 4/5] clk: rockchip: clk-cpu: add mux setting for cpu change frequency
-Date:   Thu, 23 Jun 2022 18:03:28 +0200
-Message-Id: <20220623160329.239501-5-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220623160329.239501-1-sebastian.reichel@collabora.com>
-References: <20220623160329.239501-1-sebastian.reichel@collabora.com>
+        with ESMTP id S235485AbiFWRwq (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 23 Jun 2022 13:52:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44E6B5675B
+        for <linux-clk@vger.kernel.org>; Thu, 23 Jun 2022 10:13:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656004412;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XN7oDkYMlVq4zYDVCkrX4IsfCj98UeViNtsSEBKFwUI=;
+        b=hVSbk61M/VkFzA/O+JHjCifcYFXRko2b+fSz1gIWGmRgkK8zWmAxq7aFOJ2Bvjn6SreEzW
+        lhAusgH7LQnZNJYWs0SIwel2u6357gsJqE2snI2NyzBJVLXSFWw+lqBYbzUo5HvRqHgJ5d
+        exUWlh/PKiMrUQNQYO6jqdEZ6UtwVSw=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-608-fhaSkHmSPUiHn1dCzc4Yxw-1; Thu, 23 Jun 2022 13:13:26 -0400
+X-MC-Unique: fhaSkHmSPUiHn1dCzc4Yxw-1
+Received: by mail-qk1-f199.google.com with SMTP id i16-20020a05620a249000b006aedb25493cso6299853qkn.15
+        for <linux-clk@vger.kernel.org>; Thu, 23 Jun 2022 10:13:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XN7oDkYMlVq4zYDVCkrX4IsfCj98UeViNtsSEBKFwUI=;
+        b=kGMEbbJbkfEynwjIYMCpnX+srdOK8bKhRLyQyWzfINkB3UFW31UiarECG0TZZi/fHS
+         ySpHJb5l19QZn8MU/bZSQanX/liRgDK4ERnv1Hs7UhYVMTr1pKM7Gk1ShUvYbgsHeQxh
+         guQqI41l0LUUBkvzq46XwzNcy0R53K76nlB707uqPl/vrd8gcyHhLaA1BOkBeeUEeDuz
+         kr4eJvHEHYGAgBe8Xq2CIZ0XFxqg0SKcHdz07pAbrHz8FBRCI3ib4tEIOYdgdk4JdjJW
+         IwnKwEDkQOo3jhrXcCzUSKHxUSICeatFqqwTxE+ZELZ8bq0SE93fFe2+68EF3QHeEvgv
+         tNwg==
+X-Gm-Message-State: AJIora/89fgWVZtuxiYp1wLEnta6Okgec0C4o6qT0uYeKI8OBkojPNwk
+        aA9UJzmybcO4YtI/z0dA/ag0E6p1I6x7DDRhab22gs3PDujWExr8J190Vfky53OaRtZRjV79gwH
+        cXXdS9DWGNO+swVRnDKeF
+X-Received: by 2002:a05:620a:2781:b0:6a6:db99:ea07 with SMTP id g1-20020a05620a278100b006a6db99ea07mr6962563qkp.452.1656004405728;
+        Thu, 23 Jun 2022 10:13:25 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1te0myCUpLObJzyG3prW0evhfkUvySWYmtXu5OCZvGyWtCRXW5eKybjfnd4TWe3HrXncH8TRw==
+X-Received: by 2002:a05:620a:2781:b0:6a6:db99:ea07 with SMTP id g1-20020a05620a278100b006a6db99ea07mr6962537qkp.452.1656004405426;
+        Thu, 23 Jun 2022 10:13:25 -0700 (PDT)
+Received: from xps13 (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
+        by smtp.gmail.com with ESMTPSA id t12-20020a05620a450c00b006a746826feesm40495qkp.120.2022.06.23.10.13.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jun 2022 10:13:25 -0700 (PDT)
+Date:   Thu, 23 Jun 2022 13:13:24 -0400
+From:   Brian Masney <bmasney@redhat.com>
+To:     Andrew Halaney <ahalaney@redhat.com>
+Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        agross@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        echanude@redhat.com
+Subject: Re: [PATCH] clk: qcom: sc8280xp: add parent to gcc_ufs_phy_axi_clk
+ for sa8540p
+Message-ID: <YrSfNDToEZ0RhSAD@xps13>
+References: <20220623142837.3140680-1-bmasney@redhat.com>
+ <20220623153226.drrbx2jolrxxe7as@halaneylaptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220623153226.drrbx2jolrxxe7as@halaneylaptop>
+User-Agent: Mutt/2.2.1 (2022-02-19)
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-From: Elaine Zhang <zhangqing@rock-chips.com>
+On Thu, Jun 23, 2022 at 10:32:26AM -0500, Andrew Halaney wrote:
+> I'm not knowledgable enough on the clock subsystem or have access to
+> documentation to comment on correctness outside of the 5.4 MSM kernel
+> you mentioned, but I think this probably deserves a Fixes: tag?
 
-In order to improve the main frequency of CPU, the clock path of CPU is
-simplified as follows:
-                         |--\
-                         |   \            |--\
- --apll--|\              |    \           |   \
-         | |--apll_core--|     \          |    \
- --24M---|/              |mux1 |--[gate]--|mux2|---clk_core
-                         |     /          |    /
- --gpll--|\              |    /    |------|   /
-         | |--gpll_core--|   /     |      |--/
- --24M---|/              |--/      |
-                                   |
- -------apll_directly--------------|
+Good call!
 
-When the CPU requests high frequency, we want to use MUX2 select the
-"apll_directly".
-At low frequencies use MUX1 to select “apll_core" and then MUX2 to
-select "apll_core_gate".
-
-However, in this way, the CPU frequency conversion needs to be
-in the following order:
-1. MUX2 select to "apll_core_gate", MUX1 select "gpll_core"
-2. Apll sets slow_mode, sets APLL parameters, locks APLL, and then APLL
-sets normal_mode
-3. MUX1 select "apll_core", MUX2 select "apll_directly"
-
-So add pre_muxs and post_muxs to cover this special requirements.
-
-Signed-off-by: Elaine Zhang <zhangqing@rock-chips.com>
-[rebase]
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
- drivers/clk/rockchip/clk-cpu.c | 41 ++++++++++++++++++++++++++++++++++
- drivers/clk/rockchip/clk.h     |  2 ++
- 2 files changed, 43 insertions(+)
-
-diff --git a/drivers/clk/rockchip/clk-cpu.c b/drivers/clk/rockchip/clk-cpu.c
-index 11aa2259b532..6ea7fba9f9e5 100644
---- a/drivers/clk/rockchip/clk-cpu.c
-+++ b/drivers/clk/rockchip/clk-cpu.c
-@@ -113,6 +113,42 @@ static void rockchip_cpuclk_set_dividers(struct rockchip_cpuclk *cpuclk,
- 	}
- }
- 
-+static void rockchip_cpuclk_set_pre_muxs(struct rockchip_cpuclk *cpuclk,
-+					 const struct rockchip_cpuclk_rate_table *rate)
-+{
-+	int i;
-+
-+	/* alternate parent is active now. set the pre_muxs */
-+	for (i = 0; i < ARRAY_SIZE(rate->pre_muxs); i++) {
-+		const struct rockchip_cpuclk_clksel *clksel = &rate->pre_muxs[i];
-+
-+		if (!clksel->reg)
-+			break;
-+
-+		pr_debug("%s: setting reg 0x%x to 0x%x\n",
-+			 __func__, clksel->reg, clksel->val);
-+		writel(clksel->val, cpuclk->reg_base + clksel->reg);
-+	}
-+}
-+
-+static void rockchip_cpuclk_set_post_muxs(struct rockchip_cpuclk *cpuclk,
-+					  const struct rockchip_cpuclk_rate_table *rate)
-+{
-+	int i;
-+
-+	/* alternate parent is active now. set the muxs */
-+	for (i = 0; i < ARRAY_SIZE(rate->post_muxs); i++) {
-+		const struct rockchip_cpuclk_clksel *clksel = &rate->post_muxs[i];
-+
-+		if (!clksel->reg)
-+			break;
-+
-+		pr_debug("%s: setting reg 0x%x to 0x%x\n",
-+			 __func__, clksel->reg, clksel->val);
-+		writel(clksel->val, cpuclk->reg_base + clksel->reg);
-+	}
-+}
-+
- static int rockchip_cpuclk_pre_rate_change(struct rockchip_cpuclk *cpuclk,
- 					   struct clk_notifier_data *ndata)
- {
-@@ -165,6 +201,9 @@ static int rockchip_cpuclk_pre_rate_change(struct rockchip_cpuclk *cpuclk,
- 			       cpuclk->reg_base + reg_data->core_reg[i]);
- 		}
- 	}
-+
-+	rockchip_cpuclk_set_pre_muxs(cpuclk, rate);
-+
- 	/* select alternate parent */
- 	if (reg_data->mux_core_reg)
- 		writel(HIWORD_UPDATE(reg_data->mux_core_alt,
-@@ -219,6 +258,8 @@ static int rockchip_cpuclk_post_rate_change(struct rockchip_cpuclk *cpuclk,
- 				     reg_data->mux_core_shift),
- 		       cpuclk->reg_base + reg_data->core_reg[0]);
- 
-+	rockchip_cpuclk_set_post_muxs(cpuclk, rate);
-+
- 	/* remove dividers */
- 	for (i = 0; i < reg_data->num_cores; i++) {
- 		writel(HIWORD_UPDATE(0, reg_data->div_core_mask[i],
-diff --git a/drivers/clk/rockchip/clk.h b/drivers/clk/rockchip/clk.h
-index bf7c8d082fde..2bd1863a7418 100644
---- a/drivers/clk/rockchip/clk.h
-+++ b/drivers/clk/rockchip/clk.h
-@@ -380,6 +380,8 @@ struct rockchip_cpuclk_clksel {
- struct rockchip_cpuclk_rate_table {
- 	unsigned long prate;
- 	struct rockchip_cpuclk_clksel divs[ROCKCHIP_CPUCLK_NUM_DIVIDERS];
-+	struct rockchip_cpuclk_clksel pre_muxs[ROCKCHIP_CPUCLK_NUM_DIVIDERS];
-+	struct rockchip_cpuclk_clksel post_muxs[ROCKCHIP_CPUCLK_NUM_DIVIDERS];
- };
- 
- /**
--- 
-2.35.1
+Fixes: d65d005f9a6c ("clk: qcom: add sc8280xp GCC driver")
 
