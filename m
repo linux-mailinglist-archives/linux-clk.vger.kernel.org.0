@@ -2,175 +2,99 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2B2559771
-	for <lists+linux-clk@lfdr.de>; Fri, 24 Jun 2022 12:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB8D559778
+	for <lists+linux-clk@lfdr.de>; Fri, 24 Jun 2022 12:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbiFXKOK (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 24 Jun 2022 06:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
+        id S231365AbiFXKQP (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 24 Jun 2022 06:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231285AbiFXKOI (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 24 Jun 2022 06:14:08 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCFC766A5
-        for <linux-clk@vger.kernel.org>; Fri, 24 Jun 2022 03:14:06 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z11so2741274edp.9
-        for <linux-clk@vger.kernel.org>; Fri, 24 Jun 2022 03:14:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AcY+HP4cwp4akXGFwkLr6M8Z1HqAMnPM3PSHpw8twr8=;
-        b=Cbo/Btoy1nUj2APYAmNR1tjl4VadDRYvTl6d5eSXkjY97RqyFvAeS/n+/rjJfRqV44
-         my+kHT5GieN2nuIdqANvs9Rk0+F5bMSByB59RCNq9lzkgPbaHLl5c+gnz3aaHdwW9GBn
-         dnFHCt0Qpa1lJa7o42zUAcgXFSzurVtPCjjmYCcap3Vag3qAMiHRqoYGOsFcN4bAihii
-         ydqnFULFZcFxhFJ3igfYfhFQTpNubnRFzxC9yvwhdjjlEnQxlM+A9d7QF+BUkVzOwOLx
-         EoIUJdrHuPRaiWdsQh/fKtp7kGvXsUGJhpjo0Gy15S1cOi7Qz4ZhpwXhwDriuT6hfD0l
-         PG5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AcY+HP4cwp4akXGFwkLr6M8Z1HqAMnPM3PSHpw8twr8=;
-        b=yCn2KXAA+NIAmL7oEKVmSe/B2mBQ2u222dvjv/kT4ar4lZGnfsmBYXwYDmiQ/x5Om4
-         JHzPocU6s700IqN4RKQ/a5sbLrE8aYnMm6XVGJHNZZ9HILOWCtDN20b/J2AtRcVc7mVB
-         Nk6mlnq6/A2AxqGj+tZNFxx2Z3qp3iL98znKCIi5fTQH09Vh/YHm3MI78ibAzFN2OcbQ
-         96WyzQHV1eyAHoUNxVM6phtaQSV5cPTWld8hcTio/jW9x/PqNMa2PXiiztBEMLeMZNhr
-         ougH8ZSrJ6gx+l4a4ZCl832l2KBfpx59wxE11xTcqxkkQ9eCWr9/yGhQk3W3KbbVc2AW
-         4eTg==
-X-Gm-Message-State: AJIora8bYa1euRiR4weTxIa6pl0jA/mnmtQW34J04KPuGM3Z/jVvOMN0
-        tQppr0/mJDB0oXOn3cmeLhlKXA==
-X-Google-Smtp-Source: AGRyM1trgaQXVxx26CYWrQyfWcG0a6ixDYGE2bgWurlUNVetfe28U9HzJOz6s2Q5led/4U9xLht63Q==
-X-Received: by 2002:a05:6402:3594:b0:431:4cb8:c7b6 with SMTP id y20-20020a056402359400b004314cb8c7b6mr16603969edc.334.1656065644733;
-        Fri, 24 Jun 2022 03:14:04 -0700 (PDT)
-Received: from [192.168.0.234] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id y1-20020aa7c241000000b004355dc75066sm1602589edo.86.2022.06.24.03.14.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 03:14:04 -0700 (PDT)
-Message-ID: <d4aa419b-201b-46dc-65f2-40333c5b9ac5@linaro.org>
-Date:   Fri, 24 Jun 2022 12:14:02 +0200
+        with ESMTP id S231361AbiFXKQP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 24 Jun 2022 06:16:15 -0400
+Received: from mail-m965.mail.126.com (mail-m965.mail.126.com [123.126.96.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A7127B343
+        for <linux-clk@vger.kernel.org>; Fri, 24 Jun 2022 03:16:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=k7iQq
+        MdTRg1dwycEVbJfqHglc2NqqnxJVA5VXCqItf4=; b=SqgmMjp+6ON42yp6gwEyk
+        TJ9rdLxExyR9AkRRXhh7yNhvdnDNknvRvZpRwURvk1+AroBrOikGsJwykW9L0enU
+        Vgk9kfpfgr8qJDX8uK1Ck/kGmVUVHKARM7Fs9dFmi2pgVH2YebF75k39IHUAkayP
+        s/Z5EkLtZvlwXYYv5PMxis=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp10 (Coremail) with SMTP id NuRpCgCH1WndjrVixyYOFQ--.60394S2;
+        Fri, 24 Jun 2022 18:15:59 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org,
+        linux-clk@vger.kernel.org, windhl@126.com
+Subject: [PATCH] clk/qoriq: Hold reference returned by of_get_parent()
+Date:   Fri, 24 Jun 2022 18:15:56 +0800
+Message-Id: <20220624101556.4164258-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 04/14] dt-bindings: input: Add fsl,scu-key yaml file
-Content-Language: en-US
-To:     Viorel Suman <viorel.suman@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Oliver Graute <oliver.graute@kococonnector.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
-        Ming Qian <ming.qian@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Abel Vesa <abel.vesa@nxp.com>
-References: <20220616164303.790379-1-viorel.suman@nxp.com>
- <20220616164303.790379-5-viorel.suman@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220616164303.790379-5-viorel.suman@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NuRpCgCH1WndjrVixyYOFQ--.60394S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Ary5uryDZry8ZrWxtr48tFb_yoW8Xr4Dpr
+        WDGrW5AFWUJr4DWr1IyryxZr9xWa4vkFWIqF93WayfZ3ZxJa42q3WUG345ur9xAFWruayF
+        qry8ta4vkF4UZa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi4SotUUUUU=
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi2h8qF1uwMRqT3gAAs1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 16/06/2022 18:42, Viorel Suman wrote:
-> From: Abel Vesa <abel.vesa@nxp.com>
-> 
-> In order to replace the fsl,scu txt file from bindings/arm/freescale,
-> we need to split it between the right subsystems. This patch documents
-> separately the 'keys' child node of the SCU main node.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
-> ---
->  .../bindings/input/fsl,scu-key.yaml           | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/input/fsl,scu-key.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/input/fsl,scu-key.yaml b/Documentation/devicetree/bindings/input/fsl,scu-key.yaml
-> new file mode 100644
-> index 000000000000..b0f4c5b553ce
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/input/fsl,scu-key.yaml
-> @@ -0,0 +1,39 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/input/fsl,scu-key.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: i.MX SCU Client Device Node - SCU key bindings based on SCU Message Protocol
-> +
-> +maintainers:
-> +  - Dong Aisheng <aisheng.dong@nxp.com>
-> +
-> +description: i.MX SCU Client Device Node
-> +  Client nodes are maintained as children of the relevant IMX-SCU device node.
-> +
-> +allOf:
-> +  - $ref: /schemas/input/input.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: fsl,imx8qxp-sc-key
-> +      - const: fsl,imx-sc-key
-> +
-> +  linux,keycodes: true
+In legacy_init_clockgen(), we need to hold the reference returned
+by of_get_parent() and use it to call of_node_put() for refcount
+balance.
 
-need maxItems
+Beside, in create_sysclk(), we need to call of_node_put() on 'sysclk'
+also for refcount balance.
 
-> +
-> +required:
-> +  - compatible
-> +  - linux,keycodes
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/input/input.h>
-> +
-> +    keys {
-> +             compatible = "fsl,imx8qxp-sc-key", "fsl,imx-sc-key";
-
-Wrong indentation.
-
-> +             linux,keycodes = <KEY_POWER>;
-> +    };
+Fixes: 0dfc86b3173f ("clk: qoriq: Move chip-specific knowledge into driver")
+Signed-off-by: Liang He <windhl@126.com>
+---
+ these bugs are found in 5.19rc2
+ these bugs are confirmed not fixed by lore.kernel.org
+ these bugs are compiled tested in 5.19rc2 with at91_dt_defconfig
 
 
-Best regards,
-Krzysztof
+ drivers/clk/clk-qoriq.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clk/clk-qoriq.c b/drivers/clk/clk-qoriq.c
+index 88898b97a443..416991231915 100644
+--- a/drivers/clk/clk-qoriq.c
++++ b/drivers/clk/clk-qoriq.c
+@@ -1063,8 +1063,13 @@ static void __init _clockgen_init(struct device_node *np, bool legacy);
+  */
+ static void __init legacy_init_clockgen(struct device_node *np)
+ {
+-	if (!clockgen.node)
+-		_clockgen_init(of_get_parent(np), true);
++	if (!clockgen.node) {
++		struct device_node *tp;
++
++		tp = of_get_parent(np);
++		_clockgen_init(tp, true);
++		of_node_put(tp);
++	}
+ }
+ 
+ /* Legacy node */
+@@ -1159,6 +1164,7 @@ static struct clk * __init create_sysclk(const char *name)
+ 	sysclk = of_get_child_by_name(clockgen.node, "sysclk");
+ 	if (sysclk) {
+ 		clk = sysclk_from_fixed(sysclk, name);
++		of_node_put(sysclk);
+ 		if (!IS_ERR(clk))
+ 			return clk;
+ 	}
+-- 
+2.25.1
+
