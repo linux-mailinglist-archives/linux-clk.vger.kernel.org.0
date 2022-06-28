@@ -2,75 +2,53 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D562B55D588
-	for <lists+linux-clk@lfdr.de>; Tue, 28 Jun 2022 15:15:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5979F55E310
+	for <lists+linux-clk@lfdr.de>; Tue, 28 Jun 2022 15:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241501AbiF1Hol (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 28 Jun 2022 03:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
+        id S245728AbiF1I6g (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 28 Jun 2022 04:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241746AbiF1Hok (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 28 Jun 2022 03:44:40 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB13CEC
-        for <linux-clk@vger.kernel.org>; Tue, 28 Jun 2022 00:44:39 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id u12so23903319eja.8
-        for <linux-clk@vger.kernel.org>; Tue, 28 Jun 2022 00:44:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zq/zoDCA8jkbMwKNAy9bJTFRAP6pi+CqTQmV/4VW5cc=;
-        b=J6+R+ZJxZ5WMZYC1Xz+JD8N6ys6rItHjA2OxOgR0MWp6JEf4xmtZzktEXeYeJZRCja
-         SGtyOHZow2Q+8RuefZrs+GcbyX/63XIWJvpQ3Ox1bqrK/ia/CQTRTr9XSLCvvHBAKmQ/
-         SjKV3a/PnxrUtFxz6mtBZ6ePo1iiMIvKHdYDRWN19JxSW317zlhFIJpytoA9e7Goh2Ql
-         gaWuLz422fP7uYIpTH0waHhaC6vLTUGRQlmJVAdmf5cfkVi9O155ullX+GBfUzTBnMdt
-         YSFw358TrDEOglU1lwxOH7Ygl4lQWD6lTK9Q90v+o8NDK9VTXu/V/HgF8J6y0B/8zO31
-         k1Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zq/zoDCA8jkbMwKNAy9bJTFRAP6pi+CqTQmV/4VW5cc=;
-        b=eZ0JUNL268m0ErYQb8BAQo1d5TQAFcvVtka+l1f9m7kkZmqmdPH2QHEbu2po65ZRQN
-         R+5q/Xp/oLynRY/jZklglS+sD2cdwMjMoKZtyuoB5h45/Eebood7Ai+VpzdMAGxabUIz
-         1zG7zB1h+gMMyRKwAKX79XxMWRt6o0oTfYjqgPZA/iUYo4+BbHO+3QqNbZsTkJkEvNna
-         1PtC9NmF+eW4l0LXeaiQay23KX1x/bTphDNT/dCN8yCThrkysDNKuMYwIW/ZVpAlEte/
-         3v0FbphggtIX61h4wqdqxd81kUvTzAoNAD9C3s/2MeQRbXMghfZHew73KgmFmBBU1zLL
-         vHrQ==
-X-Gm-Message-State: AJIora/Vdw8fwlzE7kkoAdYVZ9Y3HI9ZdiOdhzKUzuE+Mp46aJmrh3Aj
-        8CRH2rsHMnqw7FOtbx2VxMfwNA==
-X-Google-Smtp-Source: AGRyM1sUvGNp42m0EoMOT8UjF+RNhH6apZ5uKxebl0YaN1Sz3iljjkB484+h/YCeAv09qo8cHorM7w==
-X-Received: by 2002:a17:907:6294:b0:6e1:ea4:74a3 with SMTP id nd20-20020a170907629400b006e10ea474a3mr16885978ejc.168.1656402278305;
-        Tue, 28 Jun 2022 00:44:38 -0700 (PDT)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id d20-20020aa7ce14000000b00435d4179bbdsm9161123edv.4.2022.06.28.00.44.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 00:44:37 -0700 (PDT)
-Date:   Tue, 28 Jun 2022 10:44:36 +0300
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Marek Vasut <marex@denx.de>
-Cc:     Lucas Stach <l.stach@pengutronix.de>, linux-clk@vger.kernel.org,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        with ESMTP id S242244AbiF1I6d (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 28 Jun 2022 04:58:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742B4B4B;
+        Tue, 28 Jun 2022 01:58:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1B1D61548;
+        Tue, 28 Jun 2022 08:58:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4475EC3411D;
+        Tue, 28 Jun 2022 08:58:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1656406711;
+        bh=5S9xPKZrc7nmOZmYexyOwDlb74dnXm3mkY7WwiGdm34=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WpXPbMzf1KsgHn5mb3ndtqAD+Fvn6oLjzotcwyKdV/vq2FuGmc+Abnshd3Vl/6Ast
+         YlmP3fvwCeEO3vbMtyU+0CSCIxqxuuyxGBfvYBJviLXkLBfM6inzPc527Due+CivO3
+         0q+KYNZp3RLZr7xFAyG6UYJzeTCXAlnMdtDVIdpXhzsvXafB69D8tgDLRXXKPOuvDF
+         7zodsPotdl/4BiOqWoVkGOMYNmK5CL7FW2+eZe+kpgC5S/m9Y9LTrSaqVqJFNJg1ak
+         SsfL9TsaTtHQrx0lLu1rREfzE3jZdCBNr+jobK/k0rnsoED5Aw5H5eIcgXOmDdLHSs
+         33nYHYEOXer4A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1o673C-0004EL-OM; Tue, 28 Jun 2022 10:58:27 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com
-Subject: Re: [PATCH v3 3/6] clk: imx: imx8mp: Add audiomix block control
-Message-ID: <YrqxZFvKen7QybA9@linaro.org>
-References: <20220625013235.710346-1-marex@denx.de>
- <20220625013235.710346-3-marex@denx.de>
- <YrnOTaLS2r7QBMNx@linaro.org>
- <66f689d9-a691-8bf6-62a2-48fac6eb3938@denx.de>
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH] clk: qcom: gcc-sc8280xp: use phy-mux clock for PCIe
+Date:   Tue, 28 Jun 2022 10:57:07 +0200
+Message-Id: <20220628085707.16214-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <66f689d9-a691-8bf6-62a2-48fac6eb3938@denx.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,24 +57,209 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 22-06-27 18:23:33, Marek Vasut wrote:
-> On 6/27/22 17:35, Abel Vesa wrote:
-> > On 22-06-25 03:32:32, Marek Vasut wrote:
-> > > Unlike the other block control IPs in i.MX8M, the audiomix is mostly a
-> > > series of clock gates and muxes. Model it as a large static table of
-> > > gates and muxes with one exception, which is the PLL14xx . The PLL14xx
-> > > SAI PLL has to be registered separately.
-> > >
-> >
-> > Again, there is a chance that the blk-ctrl driver might disable the PD
-> > from under this.
->
-> Can you elaborate a bit more on this ? How/why do you think so ?
+Use the new phy-mux clock implementation for the PCIe pipe clock muxes
+so that the pipe clock source is set to the QMP PHY PLL when the
+downstream pipe clock is enabled and restored to the always-on XO when
+it is again disabled.
 
-At some point, the PDs from the Audiomix IP block will be added to the
-drivers/soc/imx/imx8mp-blk-ctrl.c. Then, you'll have 2 drivers with the
-same address range and the imx8mp-blk-ctrl also has runtime PM enabled.
+This is needed to prevent the corresponding GDSC from hanging when
+enabling or disabling the PCIe power domain, something which requires a
+ticking source.
 
-My worry here is the possibility of imx8mp-blk-ctrl audiomix (when that
-will be added) will mess with the PD leaving your clock provider driver
-hanging.
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ drivers/clk/qcom/gcc-sc8280xp.c | 121 ++++++++------------------------
+ 1 file changed, 31 insertions(+), 90 deletions(-)
+
+diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
+index f186ddf6954e..a2f3ffcc5849 100644
+--- a/drivers/clk/qcom/gcc-sc8280xp.c
++++ b/drivers/clk/qcom/gcc-sc8280xp.c
+@@ -20,6 +20,7 @@
+ #include "clk-regmap.h"
+ #include "clk-regmap-divider.h"
+ #include "clk-regmap-mux.h"
++#include "clk-regmap-phy-mux.h"
+ #include "common.h"
+ #include "gdsc.h"
+ #include "reset.h"
+@@ -82,11 +83,6 @@ enum {
+ 	P_GCC_USB4_PHY_PCIE_PIPEGMUX_CLK_SRC,
+ 	P_GCC_USB4_PHY_PIPEGMUX_CLK_SRC,
+ 	P_GCC_USB4_PHY_SYS_PIPEGMUX_CLK_SRC,
+-	P_PCIE_2A_PIPE_CLK,
+-	P_PCIE_2B_PIPE_CLK,
+-	P_PCIE_3A_PIPE_CLK,
+-	P_PCIE_3B_PIPE_CLK,
+-	P_PCIE_4_PIPE_CLK,
+ 	P_QUSB4PHY_1_GCC_USB4_RX0_CLK,
+ 	P_QUSB4PHY_1_GCC_USB4_RX1_CLK,
+ 	P_QUSB4PHY_GCC_USB4_RX0_CLK,
+@@ -351,56 +347,6 @@ static const struct clk_parent_data gcc_parent_data_9[] = {
+ 	{ .hw = &gcc_gpll0_out_even.clkr.hw },
+ };
+ 
+-static const struct parent_map gcc_parent_map_10[] = {
+-	{ P_PCIE_2A_PIPE_CLK, 0 },
+-	{ P_BI_TCXO, 2 },
+-};
+-
+-static const struct clk_parent_data gcc_parent_data_10[] = {
+-	{ .index = DT_PCIE_2A_PIPE_CLK },
+-	{ .index = DT_BI_TCXO },
+-};
+-
+-static const struct parent_map gcc_parent_map_11[] = {
+-	{ P_PCIE_2B_PIPE_CLK, 0 },
+-	{ P_BI_TCXO, 2 },
+-};
+-
+-static const struct clk_parent_data gcc_parent_data_11[] = {
+-	{ .index = DT_PCIE_2B_PIPE_CLK },
+-	{ .index = DT_BI_TCXO },
+-};
+-
+-static const struct parent_map gcc_parent_map_12[] = {
+-	{ P_PCIE_3A_PIPE_CLK, 0 },
+-	{ P_BI_TCXO, 2 },
+-};
+-
+-static const struct clk_parent_data gcc_parent_data_12[] = {
+-	{ .index = DT_PCIE_3A_PIPE_CLK },
+-	{ .index = DT_BI_TCXO },
+-};
+-
+-static const struct parent_map gcc_parent_map_13[] = {
+-	{ P_PCIE_3B_PIPE_CLK, 0 },
+-	{ P_BI_TCXO, 2 },
+-};
+-
+-static const struct clk_parent_data gcc_parent_data_13[] = {
+-	{ .index = DT_PCIE_3B_PIPE_CLK },
+-	{ .index = DT_BI_TCXO },
+-};
+-
+-static const struct parent_map gcc_parent_map_14[] = {
+-	{ P_PCIE_4_PIPE_CLK, 0 },
+-	{ P_BI_TCXO, 2 },
+-};
+-
+-static const struct clk_parent_data gcc_parent_data_14[] = {
+-	{ .index = DT_PCIE_4_PIPE_CLK },
+-	{ .index = DT_BI_TCXO },
+-};
+-
+ static const struct parent_map gcc_parent_map_15[] = {
+ 	{ P_BI_TCXO, 0 },
+ 	{ P_GCC_GPLL0_OUT_MAIN, 1 },
+@@ -741,77 +687,72 @@ static const struct clk_parent_data gcc_parent_data_41[] = {
+ 	{ .index = DT_USB4_PHY_GCC_USB4_PCIE_PIPE_CLK },
+ };
+ 
+-static struct clk_regmap_mux gcc_pcie_2a_pipe_clk_src = {
++static struct clk_regmap_phy_mux gcc_pcie_2a_pipe_clk_src = {
+ 	.reg = 0x9d05c,
+-	.shift = 0,
+-	.width = 2,
+-	.parent_map = gcc_parent_map_10,
+ 	.clkr = {
+ 		.hw.init = &(const struct clk_init_data) {
+ 			.name = "gcc_pcie_2a_pipe_clk_src",
+-			.parent_data = gcc_parent_data_10,
+-			.num_parents = ARRAY_SIZE(gcc_parent_data_10),
+-			.ops = &clk_regmap_mux_closest_ops,
++			.parent_data = &(const struct clk_parent_data){
++				.index = DT_PCIE_2A_PIPE_CLK,
++			},
++			.num_parents = 1,
++			.ops = &clk_regmap_phy_mux_ops,
+ 		},
+ 	},
+ };
+ 
+-static struct clk_regmap_mux gcc_pcie_2b_pipe_clk_src = {
++static struct clk_regmap_phy_mux gcc_pcie_2b_pipe_clk_src = {
+ 	.reg = 0x9e05c,
+-	.shift = 0,
+-	.width = 2,
+-	.parent_map = gcc_parent_map_11,
+ 	.clkr = {
+ 		.hw.init = &(const struct clk_init_data) {
+ 			.name = "gcc_pcie_2b_pipe_clk_src",
+-			.parent_data = gcc_parent_data_11,
+-			.num_parents = ARRAY_SIZE(gcc_parent_data_11),
+-			.ops = &clk_regmap_mux_closest_ops,
++			.parent_data = &(const struct clk_parent_data){
++				.index = DT_PCIE_2B_PIPE_CLK,
++			},
++			.num_parents = 1,
++			.ops = &clk_regmap_phy_mux_ops,
+ 		},
+ 	},
+ };
+ 
+-static struct clk_regmap_mux gcc_pcie_3a_pipe_clk_src = {
++static struct clk_regmap_phy_mux gcc_pcie_3a_pipe_clk_src = {
+ 	.reg = 0xa005c,
+-	.shift = 0,
+-	.width = 2,
+-	.parent_map = gcc_parent_map_12,
+ 	.clkr = {
+ 		.hw.init = &(const struct clk_init_data) {
+ 			.name = "gcc_pcie_3a_pipe_clk_src",
+-			.parent_data = gcc_parent_data_12,
+-			.num_parents = ARRAY_SIZE(gcc_parent_data_12),
+-			.ops = &clk_regmap_mux_closest_ops,
++			.parent_data = &(const struct clk_parent_data){
++				.index = DT_PCIE_3A_PIPE_CLK,
++			},
++			.num_parents = 1,
++			.ops = &clk_regmap_phy_mux_ops,
+ 		},
+ 	},
+ };
+ 
+-static struct clk_regmap_mux gcc_pcie_3b_pipe_clk_src = {
++static struct clk_regmap_phy_mux gcc_pcie_3b_pipe_clk_src = {
+ 	.reg = 0xa205c,
+-	.shift = 0,
+-	.width = 2,
+-	.parent_map = gcc_parent_map_13,
+ 	.clkr = {
+ 		.hw.init = &(const struct clk_init_data) {
+ 			.name = "gcc_pcie_3b_pipe_clk_src",
+-			.parent_data = gcc_parent_data_13,
+-			.num_parents = ARRAY_SIZE(gcc_parent_data_13),
+-			.ops = &clk_regmap_mux_closest_ops,
++			.parent_data = &(const struct clk_parent_data){
++				.index = DT_PCIE_3B_PIPE_CLK,
++			},
++			.num_parents = 1,
++			.ops = &clk_regmap_phy_mux_ops,
+ 		},
+ 	},
+ };
+ 
+-static struct clk_regmap_mux gcc_pcie_4_pipe_clk_src = {
++static struct clk_regmap_phy_mux gcc_pcie_4_pipe_clk_src = {
+ 	.reg = 0x6b05c,
+-	.shift = 0,
+-	.width = 2,
+-	.parent_map = gcc_parent_map_14,
+ 	.clkr = {
+ 		.hw.init = &(const struct clk_init_data) {
+ 			.name = "gcc_pcie_4_pipe_clk_src",
+-			.parent_data = gcc_parent_data_14,
+-			.num_parents = ARRAY_SIZE(gcc_parent_data_14),
+-			.ops = &clk_regmap_mux_closest_ops,
++			.parent_data = &(const struct clk_parent_data){
++				.index = DT_PCIE_4_PIPE_CLK,
++			},
++			.num_parents = 1,
++			.ops = &clk_regmap_phy_mux_ops,
+ 		},
+ 	},
+ };
+-- 
+2.35.1
+
