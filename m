@@ -2,85 +2,94 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C2455EF47
-	for <lists+linux-clk@lfdr.de>; Tue, 28 Jun 2022 22:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D063255F1F7
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Jun 2022 01:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234013AbiF1UXR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 28 Jun 2022 16:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
+        id S229461AbiF1Xkg (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 28 Jun 2022 19:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiF1UVk (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 28 Jun 2022 16:21:40 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EC964FB
-        for <linux-clk@vger.kernel.org>; Tue, 28 Jun 2022 13:19:36 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id t26-20020a9d775a000000b006168f7563daso10562168otl.2
-        for <linux-clk@vger.kernel.org>; Tue, 28 Jun 2022 13:19:36 -0700 (PDT)
+        with ESMTP id S229460AbiF1Xkf (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 28 Jun 2022 19:40:35 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C3A13F29
+        for <linux-clk@vger.kernel.org>; Tue, 28 Jun 2022 16:40:34 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id g4so13359009ybg.9
+        for <linux-clk@vger.kernel.org>; Tue, 28 Jun 2022 16:40:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VHrN/Oxxf35D3M+A4ASVVo4AXIbjxEuhMehr+bJZKZk=;
-        b=B/v3D5svjuBFLzOL8VzgQJkhF0VdwlREaHaC4TsKMch8wGlPNksdnqPS0DXLYT7GPZ
-         8QYEFiaMQJE8BRJUTVVWoGKj8dQlviSVvxuNMKVvRKy4TrcIep4tN3euFg3jSNSITPiT
-         RyKmXeu6XnWu1jQa7W5q52rRU5kwe3yuVoA6hQhS9pHusdiXxFGWSsOhgIX7tm9OmpLB
-         XhOMGIUIEn4v8rFRblfGuFAcZia1V0juR6yOQOiSdbgeKQQaH2d2H1AsvwWJL7qnxK9y
-         IAh03PJOF+bhULSqVIn4zRNp/i0VGAK5WVjlLLCV4zebhPYBaSV69KLRzApSJUfkMbQL
-         tqiA==
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=ecd1Q2yPx0A7W7K7jCuZP1F8wCmAYdVKX1aCc8pJ7gM=;
+        b=QvNsVHWcwxDC0Ljn7LCNxtCUWV5DAzQ3PPXpGoHxkrgW+/voKwr44JOYQDkUJ3SbEm
+         kAF+V6jDHT6StaDm0Y3fTy3Qe2XnBk0fE8RIX6LHeYJPkGVHqtxu0Tago+3gCnmqpgnG
+         j4gphlk4w1fbsPd+xvESwhagVgTOJNjRUCSYskbwMZea+N+VtW0n1eexD8qCuZmW2uUk
+         v9JbWWYcGjVkYXtNrHLF2zPt2k/MGoDMH/JO3ZUEQR/5eUrdFyiHwAPNXXG4/Jo14YZw
+         qkI+ihHPqAGtT33pQTORhi0phBiJWQ8xitb3isY3OBcyYCeQDQsTkD926YHe2ZY5jwk0
+         0jyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VHrN/Oxxf35D3M+A4ASVVo4AXIbjxEuhMehr+bJZKZk=;
-        b=D83BIXzXQX48QBL2Qcf3cIJzIP9EGp0HJIvO/UNeojzQCP54N7/IGyeDSJ0AVa6LfX
-         DISovreJoo4SDJsxRY8I2RwKx1tkpTMrZj5+Rx3oCxHmfpye0sOKPZXaQd+6dqNNiSeK
-         gRHqzqODKuxSMTUu1d6YRpHXP99Vu9yDG2mQWr7cjPMQNuBfB1Zcpbjv55B1SeoP/KY7
-         8st37eu+WwGMb/tyFoC1cJ552NPUHUPhFPWhUQdtvrk829/3NvJ9eYBhEvtbTcP2YtyZ
-         5y8jPT7hcTdAr8Z5tQUyeIn0x6UNnCjXbjinpbK9BAluiGTrj7R4+mWmqXSJRId+b1SA
-         8wNg==
-X-Gm-Message-State: AJIora8bFqBl1AQQC5cv0vcIHoHuUUfIxyM6cUtjxMFf+kR9PXploUwP
-        d1mE1HC9m6b35txn8icWhuxvvw==
-X-Google-Smtp-Source: AGRyM1sPJhvyMknN/nwu+IU7uPEKW5OwqDp2rh4N54sd0eJEeitwSz/E7S8HBXOZoX3bnieDIZ6S+Q==
-X-Received: by 2002:a05:6830:2801:b0:60c:76b1:d23c with SMTP id w1-20020a056830280100b0060c76b1d23cmr9459452otu.154.1656447575670;
-        Tue, 28 Jun 2022 13:19:35 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id a12-20020a056870d60c00b000f30837129esm9536923oaq.55.2022.06.28.13.19.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jun 2022 13:19:34 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     mturquette@baylibre.com, sboyd@kernel.org, agross@kernel.org,
-        Li kunyu <kunyu@nfschina.com>
-Cc:     linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH] drivers: the return value statement of the gcc_sm6350_probe function has an extra semicolon
-Date:   Tue, 28 Jun 2022 15:19:05 -0500
-Message-Id: <165644753306.10525.6775278248022275480.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220627020500.135125-1-kunyu@nfschina.com>
-References: <20220627020500.135125-1-kunyu@nfschina.com>
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=ecd1Q2yPx0A7W7K7jCuZP1F8wCmAYdVKX1aCc8pJ7gM=;
+        b=zrejySvhJLeBgfaFAUJJtrj6w0n+zpe6e8wxD7poYOJTS5D3JRmIebN/gty7WQtu+6
+         hnMfZsTBxJ0dUqGsm155lKgdADmLjJ9JThkY0pzb8WGXr59p4v53aMI/WBWARqo1j1jx
+         4r9FmAt8M1+uelUVsZCNMh7nF1pqpFdiml2aUxA3KCIBhsiAny/o+yrxw7Tm7n5xOoC7
+         SSZKqI16FlZrHL0ucefwHbpn0wBnFgibp/G7+2E3IIh4038E5p/DrXw8jD38iR3Rjn6U
+         vtGC9ODhSw7hL6puusYiaFRiw1OgmGi8JYTbyzajlH3IA1Wup+GGR1SVKCkIxCN9HrUR
+         JNUw==
+X-Gm-Message-State: AJIora99Bn1bqoPwcz3V3+mc81Aku72TKNR05iURyfMEs8la0+mEV8xd
+        iZ6BnEMVoVvO1UZdjDyEabYjPd8rtis3CZhtD0I=
+X-Google-Smtp-Source: AGRyM1v8apNRY5qwfmEpxRjfh1Vv5DBYKpZs7VbnMm1KODl7Kg3sudOvj5Oxs0ws6KBdhaBJlgMjj/9IGy1wXk30Z7A=
+X-Received: by 2002:a25:6f86:0:b0:669:22f7:b94f with SMTP id
+ k128-20020a256f86000000b0066922f7b94fmr356806ybc.327.1656459633643; Tue, 28
+ Jun 2022 16:40:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Sender: d7372548645@gmail.com
+Received: by 2002:a05:7010:1e11:b0:2e1:eb33:312c with HTTP; Tue, 28 Jun 2022
+ 16:40:33 -0700 (PDT)
+From:   "Mr. Jimmy Moore" <jimmymoore265@gmail.com>
+Date:   Wed, 29 Jun 2022 02:40:33 +0300
+X-Google-Sender-Auth: B1Rq75kaNfm281ew3BKOuYfuR6Y
+Message-ID: <CAGcADL_ANBLQJYw9RdrTNA7Qp6_Or4LmBOcmgzWskWzitGPNRw@mail.gmail.com>
+Subject: UNITED NATIONS COVID-19 COMPENSATION FUNDS.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,LOTS_OF_MONEY,MILLION_USD,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Mon, 27 Jun 2022 10:05:00 +0800, Li kunyu wrote:
-> I think this semicolon could be deleted.
-> 
-> 
+UNITED NATIONS COVID-19 OVERDUE COMPENSATION UNIT.
+REFERENCE PAYMENT CODE: 8525595
+BAILOUT AMOUNT:$3.5 MILLION USD
+ADDRESS: NEW YORK, NY 10017, UNITED STATES
 
-Applied, thanks!
+Dear award recipient, Covid-19 Compensation funds.
 
-[1/1] drivers: the return value statement of the gcc_sm6350_probe function has an extra semicolon
-      commit: 255a47e745674dbbda9250ae0ad1f78a49179988
+You are receiving this correspondence because we have finally reached
+a consensus with the UN, IRS, and IMF that your total fund worth $3.5
+Million Dollars of Covid-19 Compensation payment shall be delivered to
+your nominated mode of receipt, and you are expected to pay the sum of
+$12,000 for levies owed to authorities after receiving your funds.
 
-Best regards,
--- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+You have a grace period of 2 weeks to pay the $12,000 levy after you
+have received your Covid-19 Compensation total sum of $3.5 Million. We
+shall proceed with the payment of your bailout grant only if you agree
+to the terms and conditions stated.
+
+Contact Dr. Mustafa Ali for more information by email at: (
+mustafaliali180@gmail.com ) Your consent in this regard would be
+highly appreciated.
+
+Regards,
+Mr. Jimmy Moore.
+Undersecretary-General United Nations
+Office of Internal Oversight-UNIOS.
