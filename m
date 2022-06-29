@@ -2,90 +2,72 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B12561376
-	for <lists+linux-clk@lfdr.de>; Thu, 30 Jun 2022 09:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BC6560174
+	for <lists+linux-clk@lfdr.de>; Wed, 29 Jun 2022 15:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233108AbiF3HpB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 30 Jun 2022 03:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
+        id S233621AbiF2Nfw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 29 Jun 2022 09:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232259AbiF3HpA (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 30 Jun 2022 03:45:00 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E611A36B54
-        for <linux-clk@vger.kernel.org>; Thu, 30 Jun 2022 00:44:59 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 5EBF13200910;
-        Thu, 30 Jun 2022 03:44:58 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 30 Jun 2022 03:44:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1656575097; x=1656661497; bh=A+U71uKJdO
-        d2smRluuKdX1mOFQDd+vmvxx2MN/bO4sI=; b=A6Wr9ZNCXusjBLUBmhI96qpec9
-        VTCoqtjFM1RJcfDZsrWvkVx2rxQodIsFknfqft4GspjaQpyHijEMx/NOJpEdbkUF
-        YIOiLKflRxvfjk3DPw1noPGINRpkSxbvrvdQFMm3wYgzAK4v36vViTq5eOtXuufL
-        OyPo6hP8xHIYAgoDfJVZTrO+SD9nkSpahLcgrumHYSf7pev5AecC8SNx4tTnEF/s
-        KcCIuBfbIArquos812N7NcZj5R7HxMmYin53oakS4xWM3zO/Y7GdSLlfL/ea5BoK
-        LtXB62gKPn69Hi1uqx9F2XVHnua+Ir33xc3XMywQmLkwj23HnH7hE0tqaCeQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1656575097; x=1656661497; bh=A+U71uKJdOd2smRluuKdX1mOFQDd
-        +vmvxx2MN/bO4sI=; b=NP4tw73V2KIp+uS0HZNTctuElDD8su0Y5mNTxyVNtNCQ
-        rEDXu96W+zSja4nU7/vpP5BpuJEVK1dzgWeOqdWzDOR0MvSECRZ3NegePYYh+Qsb
-        jXZ1Per0uA+Zs3C46kK5uH395ixheh/YIyzlJr/iwb5rRWDNGtXS+PALb9cqk8EX
-        ZDNuF932BrLmDyGMuE5D8OHSqfVYK+Qld6PoNII/ak/ILdaAR+L/hSs+wUw7pfx/
-        gR4XNY4c//YpUf668bCr8pD/wmLi13jDLeXIGk3hkC0E9P0syM4GEdcRDPXtBhlz
-        ZyWaGVCRyaZSnrwWvjC+r+VI3aNrpwh+PuuICqiphg==
-X-ME-Sender: <xms:eVS9YkoOxZcQ6FGzmB2u2kvCnluprEmwdWiDH0qwMdvnPxjtBMXo0Q>
-    <xme:eVS9Yqqt60nTfUnxzRo7yYtBEDSl36lR6WtoO0Y0dvFFZ7WhhSUWZxIi_UTZF4rQe
-    L0d54gUdI5sR9DvYwI>
-X-ME-Received: <xmr:eVS9YpMFeLMjPqBmqCT52Xe5ZMooz-IHuFa3P_6fbgA7Xfsvj0uNXV7CaxHRpm3Ji_EsNJ3KA3bI_fNgYutbC7EE9ZUGJ08bfAsxdhc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudehtddguddvgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffvfevuffkhfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepgeehtdejvdeiieejkeegfffgleejffdvjeefhedtheehvdetlefhfffg
-    jeetkeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:eVS9Yr7dgyF_rAlKHV1YgskSjQkepG0-emMTTVZSyV7w286bD-M9tA>
-    <xmx:eVS9Yj7iySnfERUvEiN_gMPOZwDDhjHcVGP9B4pybpmsd29xlbnMvw>
-    <xmx:eVS9YrikRwLNPQt0Y2BCn-oD5Btle67yWW5jCXewuSQbnhil7usPtg>
-    <xmx:eVS9YgHqY2HpM3tM69pTTTY1LA9P-_X4PK3bFxSQa5-kFILsx8ENwg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 30 Jun 2022 03:44:56 -0400 (EDT)
-Date:   Wed, 29 Jun 2022 15:12:56 +0200
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Mike Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-Subject: Re: [PATCH v5 14/28] clk: Fix clk_get_parent() documentation
-Message-ID: <20220629131256.vqk5t42r4paainsq@houat>
-From:   Maxime Ripard <maxime@cerno.tech>
-References: <20220516132527.328190-1-maxime@cerno.tech>
- <20220516132527.328190-15-maxime@cerno.tech>
- <20220629090545.52719C34114@smtp.kernel.org>
+        with ESMTP id S232733AbiF2Nfv (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 29 Jun 2022 09:35:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FC72B257
+        for <linux-clk@vger.kernel.org>; Wed, 29 Jun 2022 06:35:50 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o6Xqa-0006SP-06; Wed, 29 Jun 2022 15:35:12 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o6XqQ-003PNQ-Vz; Wed, 29 Jun 2022 15:35:06 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1o6XqT-001txR-NY; Wed, 29 Jun 2022 15:35:05 +0200
+Date:   Wed, 29 Jun 2022 15:35:04 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc:     Wolfram Sang <wsa@kernel.org>, dri-devel@lists.freedesktop.org,
+        linux-omap@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-leds@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-crypto@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-clk@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-watchdog@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-usb@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, netdev@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-input@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-hwmon@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        patches@opensource.cirrus.com, UNGLinuxDriver@microchip.com,
+        linux-pwm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-staging@lists.linux.dev
+Subject: Re: [PATCH 6/6] i2c: Make remove callback return void
+Message-ID: <20220629133504.syc6x4ptia3mnof5@pengutronix.de>
+References: <20220628140313.74984-1-u.kleine-koenig@pengutronix.de>
+ <20220628140313.74984-7-u.kleine-koenig@pengutronix.de>
+ <CAPAsAGwP4Mw_CJfsi7oapABdTBwO1HfiQux6X4UahspU74VjtQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vnwsaaoohljytiwq"
+        protocol="application/pgp-signature"; boundary="5z6hgi6euioj5d47"
 Content-Disposition: inline
-In-Reply-To: <20220629090545.52719C34114@smtp.kernel.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAPAsAGwP4Mw_CJfsi7oapABdTBwO1HfiQux6X4UahspU74VjtQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-clk@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,50 +76,75 @@ List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
 
---vnwsaaoohljytiwq
-Content-Type: text/plain; charset=us-ascii
+--5z6hgi6euioj5d47
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+[Dropped most people from Cc, keeping only lists]
 
-On Wed, Jun 29, 2022 at 02:05:43AM -0700, Stephen Boyd wrote:
-> > diff --git a/include/linux/clk.h b/include/linux/clk.h
-> > index 1507d5147898..39710b8453fa 100644
-> > --- a/include/linux/clk.h
-> > +++ b/include/linux/clk.h
-> > @@ -755,8 +755,9 @@ int clk_set_parent(struct clk *clk, struct clk *par=
-ent);
-> >   * clk_get_parent - get the parent clock source for this clock
-> >   * @clk: clock source
-> >   *
-> > - * Returns struct clk corresponding to parent clock source, or
-> > - * valid IS_ERR() condition containing errno.
-> > + * Returns struct clk corresponding to parent clock source, a NULL
-> > + * pointer if it doesn't have a parent, or a valid IS_ERR() condition
-> > + * containing errno.
+On Wed, Jun 29, 2022 at 04:11:26PM +0300, Andrey Ryabinin wrote:
+> On 6/28/22 17:03, Uwe Kleine-K=F6nig wrote:
+> > From: Uwe Kleine-K=F6nig <uwe@kleine-koenig.org>
+> >
+> > The value returned by an i2c driver's remove function is mostly ignored.
+> > (Only an error message is printed if the value is non-zero that the
+> > error is ignored.)
+> >
+> > So change the prototype of the remove function to return no value. This
+> > way driver authors are not tempted to assume that passing an error to
+> > the upper layer is a good idea. All drivers are adapted accordingly.
+> > There is no intended change of behaviour, all callbacks were prepared to
+> > return 0 before.
+> >
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > ---
+>                                     | 2 +-
+> >  lib/Kconfig.kasan                                         | 1 +
 >=20
-> I'd rather not update this. A return value of NULL is a 'struct clk
-> corresponding to parent clock source' already, and we don't want to
-> document CCF implementation details in clk.h because there are other
-> implementations of the API.
+> > diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
+> > index f0973da583e0..366e61639cb2 100644
+> > --- a/lib/Kconfig.kasan
+> > +++ b/lib/Kconfig.kasan
+> > @@ -149,6 +149,7 @@ config KASAN_STACK
+> >       depends on KASAN_GENERIC || KASAN_SW_TAGS
+> >       depends on !ARCH_DISABLE_KASAN_INLINE
+> >       default y if CC_IS_GCC
+> > +     depends on !ARM
+> >       help
+> >         Disables stack instrumentation and thus KASAN's ability to dete=
+ct
+> >         out-of-bounds bugs in stack variables.
+>=20
+>=20
+> What is this doing here?
 
-I find it slightly misleading still since using IS_ERR still doesn't get
-you a safe pointer you can use.
+Huh, that is wrong. I needed that for build testing, but it shouldn't
+have been added to the patch. I'm dropping that for the final
+submission.
 
-I'll drop it though if you feel like it's too troublesome
+Thanks for spotting.
 
-Maxime
+Best regards
+Uwe
 
---vnwsaaoohljytiwq
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--5z6hgi6euioj5d47
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYrxP2AAKCRDj7w1vZxhR
-xaz2AP4tY+13t6REay+/Cy/avofxV/ew/321dejMmTnib/rgOQEA7foiHxTvxAmI
-S+IRI5hwXu26Wbu0Wznj2XBFgwg7kAM=
-=BYjp
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmK8VQUACgkQwfwUeK3K
+7AkL0wf/Ra+JtsXozoGjhV4ADtJcJAo/mOIZQ6qOdPZGqHYkMvBmkEJ9zbvY4Edk
+SwYoapiHgVT4tDX56ekEGnm/x3udNUt5wugpsqDm4oAgYtbBCMEVtHbp3t/AqMp2
+sZcn0JsvUs6FVWSTomD396Pt10x0r+JrPTJVY2pwj1nUUV63/25oIT/4I77IughK
+LvQBMIesHK9damtObmRGqI5Ljz1L6SP7WgiLSEq1R/LjSeEwbURT3ijca95YO2Jv
+YyxoC7TiNJj2uJiisjl/r1T/LdGF6RpMN197XQjcvaZ0sbTZRF2vXlqp3cSyXrCG
+BbT2nohQYXjznouz9TIuBFtA0iX7SA==
+=YEZr
 -----END PGP SIGNATURE-----
 
---vnwsaaoohljytiwq--
+--5z6hgi6euioj5d47--
