@@ -2,76 +2,71 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39DF5612B1
-	for <lists+linux-clk@lfdr.de>; Thu, 30 Jun 2022 08:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9624356145C
+	for <lists+linux-clk@lfdr.de>; Thu, 30 Jun 2022 10:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbiF3GpT (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 30 Jun 2022 02:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47836 "EHLO
+        id S233633AbiF3IHr (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 30 Jun 2022 04:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232833AbiF3GpR (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 30 Jun 2022 02:45:17 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360EB2FFDB
-        for <linux-clk@vger.kernel.org>; Wed, 29 Jun 2022 23:45:15 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id u14so8433985ljh.2
-        for <linux-clk@vger.kernel.org>; Wed, 29 Jun 2022 23:45:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:subject:user-agent:in-reply-to:references:message-id
-         :mime-version:content-transfer-encoding;
-        bh=fTV3UZJ8iWa2cSqb4oJMbGSxrzXh4aLO9yzSsaSbNW8=;
-        b=sQ9mpyLEUMu6hJYiXdFDncQJ0BJCa0ot78zi4pUlPT7BFc1v8Yh/MQgyo0E1wiOljb
-         Tl+6R0AfPc8ImR3AKsWMP7G4PYLa7h9v/XJXineSAeEC7LsEAFB6eVp+2rYOYsI0xjyT
-         XN3rDDxv+lrxceIdHxjWz8g19DPvLUBPkzsk74lvrlyodedG8fFbBi/EuzJl6r8VD4O7
-         yr2ko687WHJ/ZkL786xe9BD+SEjfimE+KQ6a8rcT8yZRs0/bG8HQzAgiaNmyjf8Og9uy
-         NgLzAeooWsIXOgd2H0VjXBhgLabIex/hIXQTmUAEGltppttpn5fD2ZcSt1gOFezRQ5tE
-         DYzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:user-agent:in-reply-to
-         :references:message-id:mime-version:content-transfer-encoding;
-        bh=fTV3UZJ8iWa2cSqb4oJMbGSxrzXh4aLO9yzSsaSbNW8=;
-        b=eUYDMlLEtCxFt7VYE6hTNHWTOLEX8fDJCbihUVcdy0x/Dzzf1YgCNqqKv9fhI3v7da
-         7d33iF+neup5fTFnlm9B4cJRkN9+o2kEIQYnpmK3jNRZxCRkBIVeFAFK6z1R2Y4bC9/T
-         T/KJkF2FnKjLrAg35PRJ6BYgV2ici85LEt9SWWt9j71dEJXbta7f5iERki0gVI/IfcL7
-         KMUPF0t60VAOUX5MaQBPh0T5+kMmpO0AR8Q3lAMSB+z7Gx8OwsPCtKN8tG/Yty7sxy67
-         2AzMASq08vhePNiax/yRL4271ObN9nooJsilHG2fmP4sF0WGfallqRsrza8WcIX/uO+V
-         ILCA==
-X-Gm-Message-State: AJIora+eqZgP2IrN4BfcXJ7wWaXDgp0EUcgltuduX9uVb7R02RKT5Zqs
-        su2iwo09AcgN6Kzm276E8pViSQ==
-X-Google-Smtp-Source: AGRyM1sg5NrMfFA43dw9hkBCjjzWbbjZlTBQWU2W1F81EEQzjiWxr05HUwdPiFvHyKlySpuzKLH/Pw==
-X-Received: by 2002:a05:651c:158c:b0:250:a23d:2701 with SMTP id h12-20020a05651c158c00b00250a23d2701mr4209164ljq.475.1656571513552;
-        Wed, 29 Jun 2022 23:45:13 -0700 (PDT)
-Received: from [127.0.0.1] ([94.25.229.210])
-        by smtp.gmail.com with ESMTPSA id 20-20020ac25f54000000b0047fa0251460sm2942546lfz.174.2022.06.29.23.45.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 Jun 2022 23:45:12 -0700 (PDT)
-Date:   Thu, 30 Jun 2022 09:43:05 +0300
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>,
+        with ESMTP id S233713AbiF3IH3 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 30 Jun 2022 04:07:29 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A483D41335;
+        Thu, 30 Jun 2022 01:07:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1656576447; x=1688112447;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xg8LrUK4CK/f+slaxiW8w/2cvQ2plwdDazQvdSmW29g=;
+  b=Fk1YPlw/KnT0KFHj7kUotH+Qh1EHPZxHAuN7EVZzYJoYueFZc2VaJubp
+   U8xyH2PcFRQ4GWX5UhTYwtOtXaPq4r9CphS97+xukNyL+OcEWV7kGT+Df
+   fmon09Vf9gpFKgXIlvSOm0rjIaH0IzDUp1Wj2XUDp3zDCmwLxeFWhk7VO
+   DtlTZEMOhk0Qa8eiD1N7aQermixF9RcpbvcXjR8bgMfur08e5GiAlBKH/
+   /wlc4mmkSOXL87r79nPSfn0DH4uy49SMvhmPRyZlD0RloNJFdNYsMCN4m
+   IMAM6fPJvH/Ncqn6MQP+oIZ7mOqVBVltEPZKxxIGQkWwDStwhqET8UKsv
+   A==;
+X-IronPort-AV: E=Sophos;i="5.92,233,1650956400"; 
+   d="scan'208";a="102426504"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Jun 2022 01:07:25 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 30 Jun 2022 01:07:25 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 30 Jun 2022 01:07:21 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v4_3/5=5D_dt-bindings=3A_arm=3A_msm=3A_R?= =?US-ASCII?Q?ework_kpss-gcc_driver_Documentation_to_yaml?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20220629121441.6552-4-ansuelsmth@gmail.com>
-References: <20220629121441.6552-1-ansuelsmth@gmail.com> <20220629121441.6552-4-ansuelsmth@gmail.com>
-Message-ID: <D90DE67E-DA29-4A0D-BBC1-C8209FDF69D3@linaro.org>
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "Nicolas Ferre" <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Daire McNamara" <daire.mcnamara@microchip.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: [PATCH v1 00/14] PolarFire SoC reset controller & clock cleanups
+Date:   Thu, 30 Jun 2022 09:05:19 +0100
+Message-ID: <20220630080532.323731-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,190 +74,64 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+Hey all,
+I know I have not sat on the RFC I sent about the aux. bus parts
+for too long, but figured I'd just send the whole thing anyway to all
+lists etc.
+
+Kinda two things happening in this series, but I sent it together to
+ensure the second part would apply correctly.
+
+The first is the reset controller that I promised after discovering the
+issue triggered by CONFIG_PM & the phy not coming up correctly. I have
+now removed all the messing with resets from clock enable/disable
+functions & now use the aux bus to set up a reset controller driver.
+Since I needed something to test it, I hooked up the reset for the
+Cadence MACB on PolarFire SoC.
+
+The second part adds rate control for the MSS PLL clock, followed by
+some simplifications to the driver & conversions of some custom structs
+to the corresponding structs in the framework.
+
+Thanks,
+Conor.
+
+FYI, there'll be maintainers conflicts with an obvious resolution in
+-next, but I cannot rebase on then b/c unrelated changes have broken
+boot there at the moment.
+
+Conor Dooley (14):
+  dt-bindings: clk: microchip: mpfs: add reset controller support
+  dt-bindings: net: cdns,macb: document polarfire soc's macb
+  clk: microchip: mpfs: add reset controller
+  reset: add polarfire soc reset support
+  MAINTAINERS: add polarfire soc reset controller
+  net: macb: add polarfire soc reset support
+  riscv: dts: microchip: add mpfs specific macb reset support
+  clk: microchip: mpfs: add module_authors entries
+  clk: microchip: mpfs: add MSS pll's set & round rate
+  clk: microchip: mpfs: move id & offset out of clock structs
+  clk: microchip: mpfs: simplify control reg access
+  clk: microchip: mpfs: delete 2 line mpfs_clk_register_foo()
+  clk: microchip: mpfs: convert cfg_clk to clk_divider
+  clk: microchip: mpfs: convert periph_clk to clk_gate
+
+ .../bindings/clock/microchip,mpfs.yaml        |  17 +-
+ .../devicetree/bindings/net/cdns,macb.yaml    |   1 +
+ MAINTAINERS                                   |   1 +
+ arch/riscv/boot/dts/microchip/mpfs.dtsi       |   7 +-
+ drivers/clk/microchip/Kconfig                 |   1 +
+ drivers/clk/microchip/clk-mpfs.c              | 377 +++++++++---------
+ drivers/net/ethernet/cadence/macb_main.c      |  25 +-
+ drivers/reset/Kconfig                         |   9 +
+ drivers/reset/Makefile                        |   2 +-
+ drivers/reset/reset-mpfs.c                    | 145 +++++++
+ include/soc/microchip/mpfs.h                  |   8 +
+ 11 files changed, 393 insertions(+), 200 deletions(-)
+ create mode 100644 drivers/reset/reset-mpfs.c
 
 
-On 29 June 2022 15:14:39 GMT+03:00, Christian Marangi <ansuelsmth@gmail=2E=
-com> wrote:
->Rework kpss-gcc driver Documentation to yaml Documentation=2E
->The current kpss-gcc Documentation have major problems and can't be
->converted directly=2E Introduce various changes to the original
->Documentation=2E
->
->Add #clock-cells additional binding as this clock outputs a static clk
->named acpu_l2_aux with supported compatible=2E
->Only some compatible require and outputs a clock, for the others, set
->only the reg as a required binding to correctly export the kpss-gcc
->registers=2E As the reg is shared also add the required syscon compatible=
-=2E
->
->Signed-off-by: Christian Marangi <ansuelsmth@gmail=2Ecom>
->---
-> =2E=2E=2E/bindings/arm/msm/qcom,kpss-gcc=2Etxt        | 44 ---------
-> =2E=2E=2E/bindings/arm/msm/qcom,kpss-gcc=2Eyaml       | 90 +++++++++++++=
-++++++
-> 2 files changed, 90 insertions(+), 44 deletions(-)
-> delete mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-g=
-cc=2Etxt
-> create mode 100644 Documentation/devicetree/bindings/arm/msm/qcom,kpss-g=
-cc=2Eyaml
->
->diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc=2Etx=
-t b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc=2Etxt
->deleted file mode 100644
->index e628758950e1=2E=2E000000000000
->--- a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc=2Etxt
->+++ /dev/null
->@@ -1,44 +0,0 @@
->-Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
->-
->-PROPERTIES
->-
->-- compatible:
->-	Usage: required
->-	Value type: <string>
->-	Definition: should be one of the following=2E The generic compatible
->-			"qcom,kpss-gcc" should also be included=2E
->-			"qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc"
->-			"qcom,kpss-gcc-apq8064", "qcom,kpss-gcc"
->-			"qcom,kpss-gcc-msm8974", "qcom,kpss-gcc"
->-			"qcom,kpss-gcc-msm8960", "qcom,kpss-gcc"
->-
->-- reg:
->-	Usage: required
->-	Value type: <prop-encoded-array>
->-	Definition: base address and size of the register region
->-
->-- clocks:
->-	Usage: required
->-	Value type: <prop-encoded-array>
->-	Definition: reference to the pll parents=2E
->-
->-- clock-names:
->-	Usage: required
->-	Value type: <stringlist>
->-	Definition: must be "pll8_vote", "pxo"=2E
->-
->-- clock-output-names:
->-	Usage: required
->-	Value type: <string>
->-	Definition: Name of the output clock=2E Typically acpu_l2_aux indicatin=
-g
->-		    an L2 cache auxiliary clock=2E
->-
->-Example:
->-
->-	l2cc: clock-controller@2011000 {
->-		compatible =3D "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc";
->-		reg =3D <0x2011000 0x1000>;
->-		clocks =3D <&gcc PLL8_VOTE>, <&gcc PXO_SRC>;
->-		clock-names =3D "pll8_vote", "pxo";
->-		clock-output-names =3D "acpu_l2_aux";
->-	};
->diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc=2Eya=
-ml b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc=2Eyaml
->new file mode 100644
->index 000000000000=2E=2E27f7df7e3ec4
->--- /dev/null
->+++ b/Documentation/devicetree/bindings/arm/msm/qcom,kpss-gcc=2Eyaml
->@@ -0,0 +1,90 @@
->+# SPDX-License-Identifier: GPL-2=2E0-only OR BSD-2-Clause
->+%YAML 1=2E2
->+---
->+$id: http://devicetree=2Eorg/schemas/arm/msm/qcom,kpss-gcc=2Eyaml#
->+$schema: http://devicetree=2Eorg/meta-schemas/core=2Eyaml#
->+
->+title: Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)
->+
->+maintainers:
->+  - Christian Marangi <ansuelsmth@gmail=2Ecom>
->+
->+description: |
->+  Krait Processor Sub-system (KPSS) Global Clock Controller (GCC)=2E Use=
-d
->+  to control L2 mux (in the current implementation) and provide access
->+  to the kpss-gcc registers=2E
->+
->+properties:
->+  compatible:
->+    items:
->+      - enum:
->+          - qcom,kpss-gcc-ipq8064
->+          - qcom,kpss-gcc-apq8064
->+          - qcom,kpss-gcc-msm8974
->+          - qcom,kpss-gcc-msm8960
->+          - qcom,kpss-gcc-msm8660
->+          - qcom,kpss-gcc-mdm9615
->+      - const: qcom,kpss-gcc
->+      - const: syscon
->+
->+  reg:
->+    maxItems: 1
->+
->+  clocks:
->+    items:
->+      - description: phandle to pll8_vote
->+      - description: phandle to pxo_board
->+
->+  clock-names:
->+    items:
->+      - const: pll8_vote
->+      - const: pxo
->+
->+  '#clock-cells':
->+    const: 0
->+
->+required:
->+  - compatible
->+  - reg
->+
->+if:
->+  properties:
->+    compatible:
->+      contains:
->+        enum:
->+          - qcom,kpss-gcc-ipq8064
->+          - qcom,kpss-gcc-apq8064
->+          - qcom,kpss-gcc-msm8974
->+          - qcom,kpss-gcc-msm8960
->+then:
->+  required:
->+    - clocks
->+    - clock-names
->+    - '#clock-cells'
->+else:
->+  properties:
->+    clock: false
->+    clock-names: false
->+    '#clock-cells': false
+base-commit: b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
+-- 
+2.36.1
 
-I suppose this chunk is not so correct=2E We can not describe these proper=
-ties as required since current DTs do not have them=2E Also if somebody dec=
-ides to fix the mdm9615 or msm8660 platforms, he works have to change this =
-(again)=2E Thus I'd just leave this whole chunk out=2E
-
->+
->+additionalProperties: false
->+
->+examples:
->+  - |
->+    #include <dt-bindings/clock/qcom,gcc-ipq806x=2Eh>
->+
->+    clock-controller@2011000 {
->+      compatible =3D "qcom,kpss-gcc-ipq8064", "qcom,kpss-gcc", "syscon";
->+      reg =3D <0x2011000 0x1000>;
->+      clocks =3D <&gcc PLL8_VOTE>, <&pxo_board>;
->+      clock-names =3D "pll8_vote", "pxo";
->+      #clock-cells =3D <0>;
->+    };
->+
->+  - |
->+    clock-controller@2011000 {
->+      compatible =3D "qcom,kpss-gcc-mdm9615", "qcom,kpss-gcc", "syscon";
->+      reg =3D <0x02011000 0x1000>;
->+    };
->+=2E=2E=2E
->+
-
---=20
-With best wishes
-Dmitry
