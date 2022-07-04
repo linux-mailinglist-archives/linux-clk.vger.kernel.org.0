@@ -2,35 +2,61 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A44A156576A
-	for <lists+linux-clk@lfdr.de>; Mon,  4 Jul 2022 15:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4896565839
+	for <lists+linux-clk@lfdr.de>; Mon,  4 Jul 2022 16:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234921AbiGDNdD (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 4 Jul 2022 09:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
+        id S232549AbiGDOEx (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 4 Jul 2022 10:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234918AbiGDNcZ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 4 Jul 2022 09:32:25 -0400
-Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43D112AC2;
-        Mon,  4 Jul 2022 06:30:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kernkonzept.com; s=mx1; h=Content-Transfer-Encoding:MIME-Version:References
-        :In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=JAH+8uIyGXaoyytv44HR9oezm9e5Wx1rOVY/LK5cjIk=; b=LkXgyh05OjnzRAO38Lde+9E5IH
-        ajV21EtMP3XVOuq5qyYmklRSaaKpDTBAZgQuESNI0ujkz7KE+QHzOgP9AvnTSAVPbpsMSmcXqo7gL
-        PMS+HxFTI58eoXO68eOlaoAN11AXsEj1F+Uh0CjHU1eS0BYIVfDhW87lg0rSwnMUTq9VdLo1qk7ue
-        LQYgZ1pCL48kLTg5OXtAOrnWmA8CkLKgovabNsadiFd5X4kLnobpcrj23pd9+Y+5hWoOfbElZRGif
-        4FpntrYqIS8QFGxkvK+uaf4zYmfvBAjkaS8sDHCbJYcjHIEi35yudooTrWR+kueSw3l64dfIvGES5
-        hcot6S/w==;
-Received: from [10.22.3.24] (helo=kernkonzept.com)
-        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
-        id 1o8M9m-0074oF-Nv; Mon, 04 Jul 2022 15:30:30 +0200
-From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+        with ESMTP id S232934AbiGDOEw (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 4 Jul 2022 10:04:52 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3DA25F1
+        for <linux-clk@vger.kernel.org>; Mon,  4 Jul 2022 07:04:50 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id e12so15971108lfr.6
+        for <linux-clk@vger.kernel.org>; Mon, 04 Jul 2022 07:04:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=rsGLGImmqJHiDHb1+WwnYqEd/8jZefskys3h5JlVneg=;
+        b=iOEUfAkbgMlvzJV8wTbsTIYSWia2cd8h4wEbug5cjfJD+nWhZS9fr5o0n/WApn+7c/
+         jvvdlGxLrHBJejs8CGh0pJpPUpLABBgInxaNbHT8n/FjwdOcjFGRb9eqhNnEnfO0Wvca
+         Qk8kIqJKGuX6tEuo/1zkg3jwaoJDh/H5smM+TuP0cmMolyhxcwU9t8NYzyiq8DZfyjOL
+         fXA8sxWN/tSF5oKNq86Fz9w8C+nZ2ccYdbTZfQP1mWCnMimj5uM6YWZvRv81Pr2g6RxG
+         ksL4HO37Djdd7YeE9oF3a+EmPCAO0odkJEuWGgQg8HFvySVKVW52owvLd2AQjivOCwvC
+         qfiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rsGLGImmqJHiDHb1+WwnYqEd/8jZefskys3h5JlVneg=;
+        b=zFjJSzZTXJyoX96KuTmPThVhEgnX9ewseA6a/nYYDZZ9lzLxYtLtw/PYDpOs7iMOjg
+         NjevGedSRkBDsDtjPMUQcr4q7451Npa1NJ9Jc6H2LyuHjDrFp+ifqn2u8/46ascx/ORU
+         JuWLl3X3Lc/oWzaTLG/W5zYEg9VPX1247KWjvoTwvEehHOq9sZTzirPVSIwQ23vOFS/4
+         1/F3BMfcK6ZednrOccdzAra99Rrfat1GfC2yWAa7+sJ4EeOvzJpyYpG3SOXObnAGM63G
+         01sqGmgNV3+tdo5oJOOnL/vCd5n7Vcz5Q+m4g4gU4yJbYji85Ee+34ZL02Ja0nE0vlY/
+         GpgA==
+X-Gm-Message-State: AJIora+i/PbpO8exQpvg6p+i84JiclV3pCz4ahwvRaomJnrs1etoiGLu
+        YgnO1Tb9jwmCt+IKStCoxOuwLw==
+X-Google-Smtp-Source: AGRyM1v3grJoQs3DlcVNMtWXaPEn/5IF0uq3/rPHkUTzMzI1BGZwUeje6eJY93REVviH42628+Gjyw==
+X-Received: by 2002:a05:6512:398d:b0:482:d1b6:d7c2 with SMTP id j13-20020a056512398d00b00482d1b6d7c2mr531969lfu.628.1656943488771;
+        Mon, 04 Jul 2022 07:04:48 -0700 (PDT)
+Received: from [192.168.1.52] ([84.20.121.239])
+        by smtp.gmail.com with ESMTPSA id m10-20020a056512358a00b0047255d21129sm5163689lfr.88.2022.07.04.07.04.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Jul 2022 07:04:48 -0700 (PDT)
+Message-ID: <52af0501-d921-9ab3-6de8-c074a2d03885@linaro.org>
+Date:   Mon, 4 Jul 2022 16:04:47 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/6] dt-bindings: clock: Add schema for MSM8909 GCC
+Content-Language: en-US
+To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc:     Andy Gross <agross@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -41,102 +67,91 @@ Cc:     Andy Gross <agross@kernel.org>,
         Stephan Gerhold <stephan@gerhold.net>,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org,
-        Dominik Kobinski <dominikkobinski314@gmail.com>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Subject: [PATCH 6/6] clk: qcom: smd-rpm: Add clocks for MSM8909
-Date:   Mon,  4 Jul 2022 15:30:00 +0200
-Message-Id: <20220704133000.2768380-7-stephan.gerhold@kernkonzept.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220704133000.2768380-1-stephan.gerhold@kernkonzept.com>
+        Dominik Kobinski <dominikkobinski314@gmail.com>
 References: <20220704133000.2768380-1-stephan.gerhold@kernkonzept.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+ <20220704133000.2768380-2-stephan.gerhold@kernkonzept.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220704133000.2768380-2-stephan.gerhold@kernkonzept.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-MSM8909 has mostly the same as clocks in RPM as MSM8916,
-but additionally the QPIC clock for the NAND flash controller.
+On 04/07/2022 15:29, Stephan Gerhold wrote:
+> The Global Clock Controller (GCC) in the MSM8909 SoC provides clocks,
+> resets and power domains for the various hardware blocks in the SoC.
+> Add a DT schema to describe it, similar to other Qualcomm SoCs.
+> 
+> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+> ---
+>  .../bindings/clock/qcom,gcc-msm8909.yaml      |  56 +++++
+>  include/dt-bindings/clock/qcom,gcc-msm8909.h  | 218 ++++++++++++++++++
+>  2 files changed, 274 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-msm8909.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,gcc-msm8909.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8909.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8909.yaml
+> new file mode 100644
+> index 000000000000..79b50405864b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8909.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/qcom,gcc-msm8909.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Global Clock & Reset Controller Binding for MSM8909
+> +
+> +maintainers:
+> +  - Stephan Gerhold <stephan@gerhold.net>
+> +
+> +description: |
+> +  Qualcomm global clock control module which supports the clocks, resets and
+> +  power domains on MSM8909.
+> +
+> +  See also:
+> +  - dt-bindings/clock/qcom,gcc-msm8909.h
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,gcc-msm8909
+> +
+> +  clocks:
+> +    items:
+> +      - description: XO source
+> +      - description: Sleep clock source
+> +      - description: DSI phy instance 0 dsi clock
+> +      - description: DSI phy instance 0 byte clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: xo
+> +      - const: sleep_clk
+> +      - const: dsi0pll
+> +      - const: dsi0pllbyte
+> +
+> +required:
+> +  - compatible
 
-Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
----
- drivers/clk/qcom/clk-smd-rpm.c | 37 +++++++++++++++++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
+Aren't clocks also required? I would assume at least XO is necessary as
+input.
 
-diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-index 10b4e6d8d10f..56096123081c 100644
---- a/drivers/clk/qcom/clk-smd-rpm.c
-+++ b/drivers/clk/qcom/clk-smd-rpm.c
-@@ -417,6 +417,7 @@ DEFINE_CLK_SMD_RPM_BRANCH(sdm660, bi_tcxo, bi_tcxo_a, QCOM_SMD_RPM_MISC_CLK, 0,
- DEFINE_CLK_SMD_RPM(msm8916, pcnoc_clk, pcnoc_a_clk, QCOM_SMD_RPM_BUS_CLK, 0);
- DEFINE_CLK_SMD_RPM(msm8916, snoc_clk, snoc_a_clk, QCOM_SMD_RPM_BUS_CLK, 1);
- DEFINE_CLK_SMD_RPM(msm8916, bimc_clk, bimc_a_clk, QCOM_SMD_RPM_MEM_CLK, 0);
-+DEFINE_CLK_SMD_RPM(qcs404, qpic_clk, qpic_a_clk, QCOM_SMD_RPM_QPIC_CLK, 0);
- DEFINE_CLK_SMD_RPM_QDSS(msm8916, qdss_clk, qdss_a_clk, QCOM_SMD_RPM_MISC_CLK, 1);
- DEFINE_CLK_SMD_RPM_XO_BUFFER(msm8916, bb_clk1, bb_clk1_a, 1, 19200000);
- DEFINE_CLK_SMD_RPM_XO_BUFFER(msm8916, bb_clk2, bb_clk2_a, 2, 19200000);
-@@ -427,6 +428,40 @@ DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(msm8916, bb_clk2_pin, bb_clk2_a_pin, 2, 192
- DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(msm8916, rf_clk1_pin, rf_clk1_a_pin, 4, 19200000);
- DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(msm8916, rf_clk2_pin, rf_clk2_a_pin, 5, 19200000);
- 
-+static struct clk_smd_rpm *msm8909_clks[] = {
-+	[RPM_SMD_PCNOC_CLK]		= &msm8916_pcnoc_clk,
-+	[RPM_SMD_PCNOC_A_CLK]		= &msm8916_pcnoc_a_clk,
-+	[RPM_SMD_SNOC_CLK]		= &msm8916_snoc_clk,
-+	[RPM_SMD_SNOC_A_CLK]		= &msm8916_snoc_a_clk,
-+	[RPM_SMD_BIMC_CLK]		= &msm8916_bimc_clk,
-+	[RPM_SMD_BIMC_A_CLK]		= &msm8916_bimc_a_clk,
-+	[RPM_SMD_QPIC_CLK]		= &qcs404_qpic_clk,
-+	[RPM_SMD_QPIC_CLK_A]		= &qcs404_qpic_a_clk,
-+	[RPM_SMD_QDSS_CLK]		= &msm8916_qdss_clk,
-+	[RPM_SMD_QDSS_A_CLK]		= &msm8916_qdss_a_clk,
-+	[RPM_SMD_BB_CLK1]		= &msm8916_bb_clk1,
-+	[RPM_SMD_BB_CLK1_A]		= &msm8916_bb_clk1_a,
-+	[RPM_SMD_BB_CLK2]		= &msm8916_bb_clk2,
-+	[RPM_SMD_BB_CLK2_A]		= &msm8916_bb_clk2_a,
-+	[RPM_SMD_RF_CLK1]		= &msm8916_rf_clk1,
-+	[RPM_SMD_RF_CLK1_A]		= &msm8916_rf_clk1_a,
-+	[RPM_SMD_RF_CLK2]		= &msm8916_rf_clk2,
-+	[RPM_SMD_RF_CLK2_A]		= &msm8916_rf_clk2_a,
-+	[RPM_SMD_BB_CLK1_PIN]		= &msm8916_bb_clk1_pin,
-+	[RPM_SMD_BB_CLK1_A_PIN]		= &msm8916_bb_clk1_a_pin,
-+	[RPM_SMD_BB_CLK2_PIN]		= &msm8916_bb_clk2_pin,
-+	[RPM_SMD_BB_CLK2_A_PIN]		= &msm8916_bb_clk2_a_pin,
-+	[RPM_SMD_RF_CLK1_PIN]		= &msm8916_rf_clk1_pin,
-+	[RPM_SMD_RF_CLK1_A_PIN]		= &msm8916_rf_clk1_a_pin,
-+	[RPM_SMD_RF_CLK2_PIN]		= &msm8916_rf_clk2_pin,
-+	[RPM_SMD_RF_CLK2_A_PIN]		= &msm8916_rf_clk2_a_pin,
-+};
-+
-+static const struct rpm_smd_clk_desc rpm_clk_msm8909 = {
-+	.clks = msm8909_clks,
-+	.num_clks = ARRAY_SIZE(msm8909_clks),
-+};
-+
- static struct clk_smd_rpm *msm8916_clks[] = {
- 	[RPM_SMD_PCNOC_CLK]		= &msm8916_pcnoc_clk,
- 	[RPM_SMD_PCNOC_A_CLK]		= &msm8916_pcnoc_a_clk,
-@@ -787,7 +822,6 @@ static const struct rpm_smd_clk_desc rpm_clk_msm8996 = {
- };
- 
- DEFINE_CLK_SMD_RPM(qcs404, bimc_gpu_clk, bimc_gpu_a_clk, QCOM_SMD_RPM_MEM_CLK, 2);
--DEFINE_CLK_SMD_RPM(qcs404, qpic_clk, qpic_a_clk, QCOM_SMD_RPM_QPIC_CLK, 0);
- DEFINE_CLK_SMD_RPM_XO_BUFFER_PINCTRL(qcs404, ln_bb_clk_pin, ln_bb_clk_a_pin, 8, 19200000);
- 
- static struct clk_smd_rpm *qcs404_clks[] = {
-@@ -1146,6 +1180,7 @@ static const struct rpm_smd_clk_desc rpm_clk_qcm2290 = {
- static const struct of_device_id rpm_smd_clk_match_table[] = {
- 	{ .compatible = "qcom,rpmcc-mdm9607", .data = &rpm_clk_mdm9607 },
- 	{ .compatible = "qcom,rpmcc-msm8226", .data = &rpm_clk_msm8974 },
-+	{ .compatible = "qcom,rpmcc-msm8909", .data = &rpm_clk_msm8909 },
- 	{ .compatible = "qcom,rpmcc-msm8916", .data = &rpm_clk_msm8916 },
- 	{ .compatible = "qcom,rpmcc-msm8936", .data = &rpm_clk_msm8936 },
- 	{ .compatible = "qcom,rpmcc-msm8953", .data = &rpm_clk_msm8953 },
--- 
-2.30.2
+> +
+> +allOf:
+> +  - $ref: qcom,gcc.yaml#
+> +
+> +unevaluatedProperties: false
 
+
+
+Best regards,
+Krzysztof
