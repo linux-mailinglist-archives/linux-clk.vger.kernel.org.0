@@ -2,238 +2,214 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66FE25658C4
-	for <lists+linux-clk@lfdr.de>; Mon,  4 Jul 2022 16:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066C9565AD2
+	for <lists+linux-clk@lfdr.de>; Mon,  4 Jul 2022 18:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232921AbiGDOg6 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 4 Jul 2022 10:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37078 "EHLO
+        id S234661AbiGDQQ0 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 4 Jul 2022 12:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232665AbiGDOg5 (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 4 Jul 2022 10:36:57 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F15AE5A;
-        Mon,  4 Jul 2022 07:36:56 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d5so8691947plo.12;
-        Mon, 04 Jul 2022 07:36:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=7KxmduLl9TT6f15/J/PDQ9/IN0k99jvPKZFbcZ7+1fU=;
-        b=KLRsdZHt1knmZDc/bHaPXEiex77NSjVfbWeYUQf3UTphb7Jve1HuNQu74Xnve3/BcM
-         ZxKWJHewXRMjFXi7f0MWETUH775lz4vyxfzyOLSxQL4P3UjuEF0//zGvK744l1IH47lP
-         Wlb8CG6vOf5CCKxVTLvsu+ZKSaGKH+QJ/M/FMcCR8sCdut9SM9zDyuZvyHFJT6ZWR9kW
-         0daHmkW+gN72rUza4vQ0nrr4wmQvEjltNR49hJsOyTg/B6l2jO6RtW/P5NSO2voCI4Ia
-         ma+MyVSDy83OkshgX47I5L9yFb4sBujNqayhg7AK0n7JEfPRSZWffR3loyOdYlm6tJuu
-         xa0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=7KxmduLl9TT6f15/J/PDQ9/IN0k99jvPKZFbcZ7+1fU=;
-        b=LGtiEUGivm6EucXyWbnunqyd04szH2fVdXEAqSQe6HZgaI5tO6uOz31AzvOaV2eWit
-         PQmTiaBeDp+ArIrfFTEc8Q6CkPRYe8LfcdDceCI8ed9FxZvX8dpCo1HN+jPRjiHXlQLN
-         xczphGULxky5hMSTBgB7HSX35A7Ge37+RASxDeWa/RmE0GhoX9bBxa++/YTd8gptkV4b
-         GwAfphzEhrk9loQhwn1drLMgnuMF+2BIsgAz6U/bHaeqJNFC6gD4bU6lUdpjjdf2z22t
-         lS1G+SNoSXpR9jfledhntm+OWPq1knp8w0MkdAd+EAeoLRneBoV6OQouTum1oVRCmLjO
-         zdCg==
-X-Gm-Message-State: AJIora8XaFlcCdfnOusBWVfLOusgChuM4XhqhCJoFsnrckUlh+7smmOw
-        Ovnhsr8kzhe6XjpLZy3tp1+JLDEudm8dP1DsqbsPMAOwUc3gDg==
-X-Google-Smtp-Source: AGRyM1tIvSdxnQTi76OrcTZvhnnQa07r3JgF+bcbssPpDTAEh0s89KbU3QwmU+FsoFEptjztsRLLsDzVhZ2w1Uiepw4=
-X-Received: by 2002:a17:90a:e384:b0:1ec:9ef5:8704 with SMTP id
- b4-20020a17090ae38400b001ec9ef58704mr36049001pjz.125.1656945416162; Mon, 04
- Jul 2022 07:36:56 -0700 (PDT)
+        with ESMTP id S234521AbiGDQQZ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 4 Jul 2022 12:16:25 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60077.outbound.protection.outlook.com [40.107.6.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4603610C2;
+        Mon,  4 Jul 2022 09:16:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y7MgjZZD77Me/bP1tUhkd9pFpaq8r/sS1h8gaghTNv5RE9QeAsGHyUc94XwuTdX/t7QazKu3ik0y4vIrXv8zRZKJoAJeWjZJcaq+VOsbeK0CrzrJlZwy+xdTsj4ko9T7g+hOgdSqznMu+2IKBdGJlXvl8EE2OMUpAQNNqvhXefTV3XA7RtnaoUlgxiyL8ulqa5qF3Ox9zTO3ZwtpnFfhezy8gVhCtMwAg19BPTE+u9l5qCdO1zCscEt4N2nPe5UP6IglcM53RqFfCVNPzUObWXbWHYNo4Y8pvkE5htSmARYFw67WOMLYxf+jCVzzp5O3ROog84wKHjP/KQIOiCL9BQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OGgj83yGzD6M1rPElUntrc2VoIA6exgXaV1BpStiUxA=;
+ b=fF8ffyXK6C75PoGrSMD0IouwUH1YLoMTpBmkqargzysuOSih/sIvmSUfchNqxbwKwPCwlULJMZZMasTfnO+1kHt/e26SEM5/l0sC+lL6TyXvpRFjekeD+g8gNeiGDH/eAlsd7JCvesT1FCPFHsI8idKmrDmWNmQfUIsVd/5W/xtZ9G3w3BN1w2F2c4MZVUO0GcOckx7gA+QUx8hv18hn+O30pqCtK1UWpsr145/g48tQJVSzoPwRPoXOX+E8A6rRXBu+tSThWIwG2kTfXTgvLH4kxNZje+B4lTm/dAwJ7hUbEq67xcBoy77ZTJOYUwd8+sSP4/r4wHUCTe5LllIQDg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OGgj83yGzD6M1rPElUntrc2VoIA6exgXaV1BpStiUxA=;
+ b=mscgz5J1LXe9iWVttNAito1AFtFSAdIh0F8EBlcHdoua0dUiPChb/6mUNT5tgs/W9DOfXx0hlnFeRltJjJ5/KdrpC2yTSfEkN8ZM13ioNWDzm6Pyt0jvvBkceh/GuL9OnBM4SU+geF1PLRL87aZkThtIpNaYQLM+aVOLD2yZwbc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
+ by AS8PR04MB8213.eurprd04.prod.outlook.com (2603:10a6:20b:3f3::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.20; Mon, 4 Jul
+ 2022 16:16:20 +0000
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::6546:3ee1:5e6c:278f]) by VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::6546:3ee1:5e6c:278f%5]) with mapi id 15.20.5395.020; Mon, 4 Jul 2022
+ 16:16:19 +0000
+From:   "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Ming Qian <ming.qian@nxp.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Viorel Suman <viorel.suman@oss.nxp.com>
+Subject: [PATCH v7 00/15] dt-bindings: arm: freescale: Switch fsl,scu from txt to yaml
+Date:   Mon,  4 Jul 2022 19:15:26 +0300
+Message-Id: <20220704161541.943696-1-viorel.suman@oss.nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM0PR07CA0008.eurprd07.prod.outlook.com
+ (2603:10a6:208:ac::21) To VI1PR04MB5005.eurprd04.prod.outlook.com
+ (2603:10a6:803:57::30)
 MIME-Version: 1.0
-From:   Alex Natalsson <harmoniesworlds@gmail.com>
-Date:   Mon, 4 Jul 2022 17:36:44 +0300
-Message-ID: <CADs9LoN7mvP0MV1NheXsBVoXYDNc5S-qNK6CLNUiOqRasuNVJQ@mail.gmail.com>
-Subject: System is very slow after resume on Amlogic A311D
-To:     linux-acpi@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: multipart/mixed; boundary="000000000000f1940e05e2fbaa50"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b14d0db1-9d1a-44d1-b8bb-08da5dd8873f
+X-MS-TrafficTypeDiagnostic: AS8PR04MB8213:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QbsX3ZuMjPc1KIF7EaG9hTfKYNyJCZKAL6UgzOfdjmgNqzKBmhW26TL2DG2N6PAiBsG4NCUOmQxTSthQ0Cb/88h4FQPdEOfyWzBUDqytxql+6mTDWSpsBV7NX0/MFtXjtEv5dNmem12/OK4jtzFYFqnK+0D4XicUrxmRNrNd74QuIDMM8fEKjhQmMT9jJbC70VjWGqztrNJUN5HyRhKHDJ9BvOnmu+krsHQNsHzHRqxUge8lpGxJg4LCnD+JWPjZaSf0eaGSb/Qj4kQ8VxOnbHSXiymLGmHO7yDdGdZR2TF5TM7g08b8su8BhzaHDTe0cwbJZ8yom/29UW7BLU4jFUrbaPjuhE7xzUY959lVOwnDmc7Vwm4aS3obijUN4+rDXf2izgYy5RJ6blN65d+oRPi8Rl4pCdUaEvzOZ7W0ZcPMEzJ3f3JCze8MIbyM+Wfwfka93fdfXr9r94hV1QCcenCFg0rF6vARwgVCu60vqh+rEEbUCboqmlSRVjkKJAloUCaWNBCYEKZO/8e5ZO6ooY8TL56RgbVJ+ca2TMfdpsaTvGZOxRfp/+pc8CbMft6qNZ1fVIeVszNzpi1rloyRvXjmS8Y010uLlHgguUilEY9784VaQtzoYeSGU55teYYEdJ479RoEepZ3CQEwHCMhH8ydw+53O9kwU94IK08TH8BQNkjAY99SAMoEl4yzy+8OwVie8Uf5TQmPKcIX0ubDEChro337VwV3U8gUujP/CGMipBY7XgK32DEEA9D0kTwRiOW6SiNOEqwr5/SCrds9FCMOI5WRZFwBXYeFeqoK+l/48O08IJimwv6cBdM2+g2GHquhMP6wRc309c3NXaMiuZComAz+OThbloCvD8cGRuJpQosjlBx1STFdo5sRkLLRIUeHSAyvWI70q3oXdt/Gbw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(136003)(39860400002)(346002)(376002)(186003)(26005)(52116002)(2906002)(6506007)(6666004)(6512007)(1076003)(2616005)(41300700001)(86362001)(38350700002)(83380400001)(38100700002)(921005)(5660300002)(4326008)(316002)(8676002)(110136005)(66556008)(7416002)(7406005)(66946007)(8936002)(66476007)(6486002)(478600001)(966005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?TOFE5Ke2wvx5m+CtcX1cubHvOdaGc0y0CxnNdfmCaXfAgfuNuVftSyy5VK?=
+ =?iso-8859-1?Q?sIzLDJIsBM7yHtbLT0WK0miDwYsI7jak6uNONm7LNAO+0gQrE8J6brZbZ4?=
+ =?iso-8859-1?Q?ULOAY91WhC1rbP2cJ2NaVJJF9eFlyw2XjO8U6d9dNmVU1tCh6Ss3R1SoTu?=
+ =?iso-8859-1?Q?9S0EDDelREvM6IWncAV5omGM9nil6B0PZwjN2fz9CgytaiW9XVNxaD2axG?=
+ =?iso-8859-1?Q?kKlgg3l0FgUrlSlnP8Wo7Y6twYjIqWbbCyYOmgOptMpebxJrXnPRnEr8+y?=
+ =?iso-8859-1?Q?+Tr8o+uSM2HC0OBArvKcUihs7RLNNSfWw29N8dtnKrEIY7f8AIqXuai/Ai?=
+ =?iso-8859-1?Q?CyPblYGCKdCnyh6FBaurgcMxwTg3h/kJUmF+NrgxsUEd1eyn4MussDLtqP?=
+ =?iso-8859-1?Q?VONNIeynww85BGZqH7fMNiERxQ/vMqcqzjQ0XY/VZdzajA15SqqZrIODVJ?=
+ =?iso-8859-1?Q?ptI0NTe8TUx/Ybz/cfrq2/oa60Z8MDotvCi2h9rtqQBnZ9YU6d7UT2TeUL?=
+ =?iso-8859-1?Q?XX9UnhpOWX+furSXO4mJFXCrCln4lTChtEDwQMWInkfaKH6apcnr/8RSbx?=
+ =?iso-8859-1?Q?x+mzh7qaN7GfPW0PDxxsYcGRKPdOtQJ5dG+bDp6b7pojnbgQoqbdXRIYMu?=
+ =?iso-8859-1?Q?To5LZsChg4d4JTEIfxnzJXm6kNMolvsnf5Jq5P1qS+jWgHWZQQtoynd1cL?=
+ =?iso-8859-1?Q?bXp0Htdg1dVhuIqrYNO1AAl1Z+Jobg2M7B051SVnsAbKjHkl7FoDdmfP7H?=
+ =?iso-8859-1?Q?5/Lg62M9r4phWgECcn+Ro42kKrNMENrxHHegkAQilFptNWl2Cech1Ia/jx?=
+ =?iso-8859-1?Q?JBah65MroV5f92zI7WhefnHANPBQhzHCU0PGXy0HoC6NAZ6XDf04l+RRPQ?=
+ =?iso-8859-1?Q?Qsr02v0doLiJ4M1PPeuL96ng7jMRIR/758llGJ2y0LFVB59+n71yUV4K/F?=
+ =?iso-8859-1?Q?wsWBpPStT07Msm+RgJTUE/zfez2zjUgB+W8EpuTdQBpugE2pnrCyaJblIq?=
+ =?iso-8859-1?Q?AQokhjAIA/q16xxzsDAiehizKjHYFcAbKL/EbXnlQD5uhhlHZJjsQOi1ex?=
+ =?iso-8859-1?Q?S8reXoanFIdD42ZpcC4qV2iI2TMMr7VEqJqplYohNGsRpnbTPEfm0i0Z2j?=
+ =?iso-8859-1?Q?fiBS9JSOw3Xlikf9Pon7xsD1rgQPCQW3lexp1WZpjQN2DHTId2LuMyd5j7?=
+ =?iso-8859-1?Q?Y52/XU67rOGkfEJO6fj53umuY5abxM8byjjbH7mJWk3yHwK/FoYvUfFSCD?=
+ =?iso-8859-1?Q?1BMtglweD8nlwmek1qR/WbxAPfi6/R/IgqJssoIcxwcZ4y2ERNhaOAkJKi?=
+ =?iso-8859-1?Q?msQtdbKMnhvclMFPkwJY6ac7GTQIjUmcutsZD6WbvXgwmM2tNHyogn6PVW?=
+ =?iso-8859-1?Q?RzIa0LqfcTCAvcOfLhHYrwgj8kynOg7Imarmf4elEaSwda2VH0ktpmHBfl?=
+ =?iso-8859-1?Q?ITcJrs0bfCX8D9GHwGFEYV920INeBERmWCKSLM+LvDjqv8rcVDdN+Y/gBt?=
+ =?iso-8859-1?Q?5mGlsNCnQNBGU2+1yV49s07Kn2Z5vQCVkKkRskccxCZephELRZNBitNodd?=
+ =?iso-8859-1?Q?uN6LBngRPS7HKnosHbk9y//UQ7ZzUb2RAVFYs02mkCB1OP2psZNak7xQh6?=
+ =?iso-8859-1?Q?nkQKg72EGhhdMjyuXme9oiO0ZnKtRwtyve?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b14d0db1-9d1a-44d1-b8bb-08da5dd8873f
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2022 16:16:19.3828
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: O/i/Vp97mAqXjZkkmIfCQJLw4YtwYUwTdGguAxzWauFghp8lEkwaMNDUmBOJZlFwF8SAK4GWK8DR3hn3bg6dmA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8213
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
---000000000000f1940e05e2fbaa50
-Content-Type: text/plain; charset="UTF-8"
+From: Viorel Suman <viorel.suman@nxp.com>
 
-Hello friends!
-I using the Khadas VIM3 SBC with Amlogic A311D device.
-When I resuming after "echo mem > /sys/power/state" my system is very
-and very slow, more than 5 times slowing.
-CPU frequensies throght sysfs are similars for before suspend and after resume
-VIM3 ~ # cat /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_cur_freq
-1800000
-VIM3 ~ # cat /sys/devices/system/cpu/cpufreq/policy2/cpuinfo_cur_freq
-2208000
-VIM3 ~ # echo mem > /sys/power/state
-VIM3 ~ # cat /sys/devices/system/cpu/cpufreq/policy0/cpuinfo_cur_freq
-1800000
-VIM3 ~ # cat /sys/devices/system/cpu/cpufreq/policy2/cpuinfo_cur_freq
-2208000
-VIM3 ~ #
+Changes since v6: https://lore.kernel.org/lkml/20220629164414.301813-1-viorel.suman@oss.nxp.com/
+  * The series updated so that each patch making the conversion removes
+    the piece being converted, then finally the patch adding fsl,scu.yaml
+    removes the last pieces, as suggested by Krzysztof Kozlowski.
+  * Updated ocotp and system-controller node names in the existing DTS
+    files
 
-However in uart console log I recieve such message:
+Changes since v5: https://lore.kernel.org/lkml/20220616164303.790379-1-viorel.suman@nxp.com/
+  * Updated according to Krzysztof Kozlowski comments
 
-bl30 get wakeup sources!
-process command 00000006
-bl30 enter suspend!
-Little core clk suspend rate 1800000000
-Big core clk suspend rate 24000000
-store restore gp0 pll
-suspend_counter: 1
-Enter ddr suspend
-DMC_DRAM_STAT11: 0x544
-ddr suspend time: 2177us
-alarm=0S
-process command 00000001
-cec ver:2018/04/29
-CEC cfg:0x0000
-use vddee new table!
-use vddee new table!
-exit_reason:0x06
-Enter ddr resume
-DMC_DRAM_STAT3: 0x544
-ddr resume time: 3187us
-store restore gp0 pll
-cfg15 3b00000
-cfg15 63b00000
-Little core clk resume rate 1800000000
-Big core clk resume rate 50000000
-login: timed out after 60 seconds
-Arch Linux 5.19.0-rc2-ARCH+ (ttyAML0)
-VIM3 login:
+Changes since v4: https://lore.kernel.org/lkml/20220615105834.743045-1-viorel.suman@nxp.com/
+  * Missing SoB added
 
-I'm not sure, but I think what the  "Big core clk resume rate too
-small  for Amlogic A311D and therefore my system is very slow.
-Is there any way to fix this?
+Changes since v3: https://lore.kernel.org/lkml/20220609143423.2839186-1-abel.vesa@nxp.com/
+  * Examples included
+  * Included Abel's patches fixing thermal zone, keys and power controller names.
 
---000000000000f1940e05e2fbaa50
-Content-Type: application/octet-stream; name=sysbench_before_suspend
-Content-Disposition: attachment; filename=sysbench_before_suspend
-Content-Transfer-Encoding: base64
-Content-ID: <f_l56ui5qo1>
-X-Attachment-Id: f_l56ui5qo1
+Abel Vesa (12):
+  dt-bindings: clk: imx: Add fsl,scu-clk yaml file
+  dt-bindings: pinctrl: imx: Add fsl,scu-iomux yaml file
+  dt-bindings: input: Add fsl,scu-key yaml file
+  dt-bindings: nvmem: Add fsl,scu-ocotp yaml file
+  dt-bindings: power: Add fsl,scu-pd yaml file
+  dt-bindings: rtc: Add fsl,scu-rtc yaml file
+  dt-bindings: thermal: Add fsl,scu-thermal yaml file
+  dt-bindings: watchdog: Add fsl,scu-wdt yaml file
+  dt-bindings: firmware: Add fsl,scu yaml file
+  arm64: dts: freescale: imx8: Fix power controller name
+  arm64: dts: freescale: imx8qxp: Add fallback compatible for clock
+    controller
+  arm64: dts: freescale: imx8qxp: Fix the keys node name
 
-bGVoYUBWSU0zIH4vQXJjaGxpbnV4VklNL2xpbnV4LWdpdC1zdXNwZW5kICQgc3lzYmVuY2ggY3B1
-IC0tdGhyZWFkcz0xMCBydW4Kc3lzYmVuY2ggMS4wLjIwICh1c2luZyBzeXN0ZW0gTHVhSklUIDIu
-MS4wLWJldGEzKQoKUnVubmluZyB0aGUgdGVzdCB3aXRoIGZvbGxvd2luZyBvcHRpb25zOgpOdW1i
-ZXIgb2YgdGhyZWFkczogMTAKSW5pdGlhbGl6aW5nIHJhbmRvbSBudW1iZXIgZ2VuZXJhdG9yIGZy
-b20gY3VycmVudCB0aW1lCgoKUHJpbWUgbnVtYmVycyBsaW1pdDogMTAwMDAKCkluaXRpYWxpemlu
-ZyB3b3JrZXIgdGhyZWFkcy4uLgoKVGhyZWFkcyBzdGFydGVkIQoKQ1BVIHNwZWVkOgogICAgZXZl
-bnRzIHBlciBzZWNvbmQ6IDEwMTY2LjYxCgpHZW5lcmFsIHN0YXRpc3RpY3M6CiAgICB0b3RhbCB0
-aW1lOiAgICAgICAgICAgICAgICAgICAgICAgICAgMTAuMDAwOHMKICAgIHRvdGFsIG51bWJlciBv
-ZiBldmVudHM6ICAgICAgICAgICAgICAxMDE3MTQKCkxhdGVuY3kgKG1zKToKICAgICAgICAgbWlu
-OiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuNDcKICAgICAgICAgYXZnOiAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDAuOTgKICAgICAgICAgbWF4OiAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgMzQuMzYKICAgICAgICAgOTV0aCBwZXJjZW50
-aWxlOiAgICAgICAgICAgICAgICAgICAgICAgIDEuMTIKICAgICAgICAgc3VtOiAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgOTk4MTIuODIKClRocmVhZHMgZmFpcm5lc3M6CiAgICBldmVu
-dHMgKGF2Zy9zdGRkZXYpOiAgICAgICAgICAgMTAxNzEuNDAwMC82NTYuNDUKICAgIGV4ZWN1dGlv
-biB0aW1lIChhdmcvc3RkZGV2KTogICA5Ljk4MTMvMC4wMQoK
---000000000000f1940e05e2fbaa50
-Content-Type: text/x-log; charset="US-ASCII"; name="dmesg.log"
-Content-Disposition: attachment; filename="dmesg.log"
-Content-Transfer-Encoding: base64
-Content-ID: <f_l56ui5ld0>
-X-Attachment-Id: f_l56ui5ld0
+Viorel Suman (3):
+  arm64: dts: freescale: imx8qxp: Remove unnecessary clock related
+    entries
+  arm64: dts: freescale: imx8qxp: Fix the ocotp node name
+  arm64: dts: freescale: imx8: Fix the system-controller node name
 
-WzE3NTA3Ny44NTQxNjFdIFBNOiBzdXNwZW5kIGVudHJ5IChkZWVwKQpbMTc1MDc4LjMwNzcxOV0g
-RmlsZXN5c3RlbXMgc3luYzogMC40NTMgc2Vjb25kcwpbMTc1MDc4LjMzOTY2M10gRnJlZXppbmcg
-dXNlciBzcGFjZSBwcm9jZXNzZXMgLi4uIChlbGFwc2VkIDAuMDU2IHNlY29uZHMpIGRvbmUuClsx
-NzUwNzguMzk2MTM0XSBPT00ga2lsbGVyIGRpc2FibGVkLgpbMTc1MDc4LjM5NjEzNl0gRnJlZXpp
-bmcgcmVtYWluaW5nIGZyZWV6YWJsZSB0YXNrcyAuLi4gKGVsYXBzZWQgMC4wMDEgc2Vjb25kcykg
-ZG9uZS4KWzE3NTA3OC4zOTczNjFdIHByaW50azogU3VzcGVuZGluZyBjb25zb2xlKHMpICh1c2Ug
-bm9fY29uc29sZV9zdXNwZW5kIHRvIGRlYnVnKQpbMTc1MDc4LjUwMzkyNl0gd2xhbjA6IGRlYXV0
-aGVudGljYXRpbmcgZnJvbSAwYzozNzpkYzpkMTpmMjpiOCBieSBsb2NhbCBjaG9pY2UgKFJlYXNv
-bjogMz1ERUFVVEhfTEVBVklORykKWzE3NTA3OC41MjY1ODRdIHNkIDA6MDowOjA6IFtzZGFdIFN5
-bmNocm9uaXppbmcgU0NTSSBjYWNoZQpbMTc1MDc4LjU5MDAzOF0gUE06IHN1c3BlbmQgZGV2aWNl
-cyB0b29rIDAuMDg2IHNlY29uZHMKWzE3NTA3OC41OTA4NDBdIERpc2FibGluZyBub24tYm9vdCBD
-UFVzIC4uLgpbMTc1MDc4LjU5MjQ4M10gcHNjaTogQ1BVMSBraWxsZWQgKHBvbGxlZCAxIG1zKQpb
-MTc1MDc4LjU5MzU2Nl0gcHNjaTogQ1BVMiBraWxsZWQgKHBvbGxlZCAxIG1zKQpbMTc1MDc4LjU5
-NTIwMF0gcHNjaTogQ1BVMyBraWxsZWQgKHBvbGxlZCAxIG1zKQpbMTc1MDc4LjU5NzA1NF0gcHNj
-aTogQ1BVNCBraWxsZWQgKHBvbGxlZCAxIG1zKQpbMTc1MDc4LjU5ODYzOV0gcHNjaTogQ1BVNSBr
-aWxsZWQgKHBvbGxlZCAxIG1zKQpbMTc1MDc4LjU5OTYwMl0gRW5hYmxpbmcgbm9uLWJvb3QgQ1BV
-cyAuLi4KWzE3NTA3OC42MDAwMDFdIERldGVjdGVkIFZJUFQgSS1jYWNoZSBvbiBDUFUxClsxNzUw
-NzguNjAwMDU1XSBDUFUxOiBCb290ZWQgc2Vjb25kYXJ5IHByb2Nlc3NvciAweDAwMDAwMDAwMDEg
-WzB4NDEwZmQwMzRdClsxNzUwNzguNjAwNDY3XSBDUFUxIGlzIHVwClsxNzUwNzguNjAxMzE5XSBE
-ZXRlY3RlZCBWSVBUIEktY2FjaGUgb24gQ1BVMgpbMTc1MDc4LjYwMTM3MF0gYXJjaF90aW1lcjog
-Q1BVMjogVHJhcHBpbmcgQ05UVkNUIGFjY2VzcwpbMTc1MDc4LjYwMTM4NF0gQ1BVMjogQm9vdGVk
-IHNlY29uZGFyeSBwcm9jZXNzb3IgMHgwMDAwMDAwMTAwIFsweDQxMGZkMDkyXQpbMTc1MDc4LjYw
-MTkzMl0gQ1BVMiBpcyB1cApbMTc1MDc4LjYwMjU4M10gRGV0ZWN0ZWQgVklQVCBJLWNhY2hlIG9u
-IENQVTMKWzE3NTA3OC42MDI1OTZdIGFyY2hfdGltZXI6IENQVTM6IFRyYXBwaW5nIENOVFZDVCBh
-Y2Nlc3MKWzE3NTA3OC42MDI2MDBdIENQVTM6IEJvb3RlZCBzZWNvbmRhcnkgcHJvY2Vzc29yIDB4
-MDAwMDAwMDEwMSBbMHg0MTBmZDA5Ml0KWzE3NTA3OC42MDI3NzddIENQVTMgaXMgdXAKWzE3NTA3
-OC42MDMwMzFdIERldGVjdGVkIFZJUFQgSS1jYWNoZSBvbiBDUFU0ClsxNzUwNzguNjAzMDQ1XSBh
-cmNoX3RpbWVyOiBDUFU0OiBUcmFwcGluZyBDTlRWQ1QgYWNjZXNzClsxNzUwNzguNjAzMDQ5XSBD
-UFU0OiBCb290ZWQgc2Vjb25kYXJ5IHByb2Nlc3NvciAweDAwMDAwMDAxMDIgWzB4NDEwZmQwOTJd
-ClsxNzUwNzguNjAzMjQwXSBDUFU0IGlzIHVwClsxNzUwNzguNjAzNDkxXSBEZXRlY3RlZCBWSVBU
-IEktY2FjaGUgb24gQ1BVNQpbMTc1MDc4LjYwMzUwNV0gYXJjaF90aW1lcjogQ1BVNTogVHJhcHBp
-bmcgQ05UVkNUIGFjY2VzcwpbMTc1MDc4LjYwMzUwOV0gQ1BVNTogQm9vdGVkIHNlY29uZGFyeSBw
-cm9jZXNzb3IgMHgwMDAwMDAwMTAzIFsweDQxMGZkMDkyXQpbMTc1MDc4LjYwMzcwM10gQ1BVNSBp
-cyB1cApbMTc1MDc4LjYwNTc5OF0gbWVzb244Yi1kd21hYyBmZjNmMDAwMC5ldGhlcm5ldCBldGgw
-OiBjb25maWd1cmluZyBmb3IgcGh5L3JnbWlpIGxpbmsgbW9kZQpbMTc1MDc4LjYzODQ4N10gbWVz
-b244Yi1kd21hYyBmZjNmMDAwMC5ldGhlcm5ldCBldGgwOiBObyBTYWZldHkgRmVhdHVyZXMgc3Vw
-cG9ydCBmb3VuZApbMTc1MDc4LjYzODU2M10gbWVzb244Yi1kd21hYyBmZjNmMDAwMC5ldGhlcm5l
-dCBldGgwOiBQVFAgbm90IHN1cHBvcnRlZCBieSBIVwpbMTc1MDc4LjY4MTA0N10geGhjaS1oY2Qg
-eGhjaS1oY2QuMi5hdXRvOiB4SEMgZXJyb3IgaW4gcmVzdW1lLCBVU0JTVFMgMHg0MTEsIFJlaW5p
-dApbMTc1MDc4LjY4MTIxNV0gdXNiIHVzYjE6IHJvb3QgaHViIGxvc3QgcG93ZXIgb3Igd2FzIHJl
-c2V0ClsxNzUwNzguNjgxMjkyXSB1c2IgdXNiMjogcm9vdCBodWIgbG9zdCBwb3dlciBvciB3YXMg
-cmVzZXQKWzE3NTA3OC45NzcwMzZdIHVzYiAxLTE6IHJlc2V0IGhpZ2gtc3BlZWQgVVNCIGRldmlj
-ZSBudW1iZXIgMiB1c2luZyB4aGNpLWhjZApbMTc1MDc5LjIzOTg5NF0gdXNiIDItMTogcmVzZXQg
-U3VwZXJTcGVlZCBVU0IgZGV2aWNlIG51bWJlciAyIHVzaW5nIHhoY2ktaGNkClsxNzUwNzkuNDQy
-OTc4XSB1c2IgMS0xLjI6IHJlc2V0IGhpZ2gtc3BlZWQgVVNCIGRldmljZSBudW1iZXIgMyB1c2lu
-ZyB4aGNpLWhjZApbMTc1MDgwLjAzODAzM10gdXNiIDEtMS4yLjI6IHJlc2V0IGxvdy1zcGVlZCBV
-U0IgZGV2aWNlIG51bWJlciA0IHVzaW5nIHhoY2ktaGNkClsxNzUwODAuMzc4MzQyXSB1c2IgMS0x
-LjIuMzogcmVzZXQgaGlnaC1zcGVlZCBVU0IgZGV2aWNlIG51bWJlciA1IHVzaW5nIHhoY2ktaGNk
-ClsxNzUwODAuNDY4Nzk0XSBtdDc2MDF1IDEtMS4yLjM6MS4wOiBGaXJtd2FyZSBWZXJzaW9uOiAw
-LjEuMDAgQnVpbGQ6IDc2NDAgQnVpbGQgdGltZTogMjAxMzAyMDUyMTQ2X19fXwpbMTc1MDgwLjUy
-MTQ1Nl0gdXNiIDEtMS4yLjQ6IHJlc2V0IGZ1bGwtc3BlZWQgVVNCIGRldmljZSBudW1iZXIgMTUg
-dXNpbmcgeGhjaS1oY2QKWzE3NTA4MC44MjE0OThdIG10NzYwMXUgMS0xLjIuMzoxLjA6IEVycm9y
-OiBNQ1UgcmVzcG9uc2UgcHJlLWNvbXBsZXRlZCEKWzE3NTA4MC44ODM5ODddIG10NzYwMXUgMS0x
-LjIuMzoxLjA6IEVFUFJPTSB2ZXI6MGMgZmFlOjAwClsxNzUwODEuMjM3OTA2XSBQTTogcmVzdW1l
-IGRldmljZXMgdG9vayAyLjYzMiBzZWNvbmRzClsxNzUwODEuMzQzMTIxXSBPT00ga2lsbGVyIGVu
-YWJsZWQuClsxNzUwODEuMzQzMTQzXSBSZXN0YXJ0aW5nIHRhc2tzIC4uLiBkb25lLgpbMTc1MDgx
-LjM2MjM5M10gcmFuZG9tOiBjcm5nIHJlc2VlZGVkIG9uIHN5c3RlbSByZXN1bXB0aW9uClsxNzUw
-ODEuMzg1Mzc1XSBQTTogc3VzcGVuZCBleGl0ClsxNzUwODYuMTYxNzI2XSB3bGFuMDogYXV0aGVu
-dGljYXRlIHdpdGggMGM6Mzc6ZGM6ZDE6ZjI6YjgKWzE3NTA4Ni4xNjI0NjldIHdsYW4wOiBiYWQg
-VkhUIGNhcGFiaWxpdGllcywgZGlzYWJsaW5nIFZIVApbMTc1MDg2LjE4Nzc1MF0gd2xhbjA6IHNl
-bmQgYXV0aCB0byAwYzozNzpkYzpkMTpmMjpiOCAodHJ5IDEvMykKWzE3NTA4Ni4yMDA0OTldIHds
-YW4wOiBhdXRoZW50aWNhdGVkClsxNzUwODYuMjA1Njc1XSB3bGFuMDogYXNzb2NpYXRlIHdpdGgg
-MGM6Mzc6ZGM6ZDE6ZjI6YjggKHRyeSAxLzMpClsxNzUwODYuMjExNzgzXSB3bGFuMDogUlggQXNz
-b2NSZXNwIGZyb20gMGM6Mzc6ZGM6ZDE6ZjI6YjggKGNhcGFiPTB4NDExIHN0YXR1cz0wIGFpZD0x
-KQpbMTc1MDg2LjI3Mzc4MV0gd2xhbjA6IGFzc29jaWF0ZWQKWzE3NTE3OC40OTI2NjVdIGlucHV0
-OiBCVDUuMiBNb3VzZSBhcyAvZGV2aWNlcy92aXJ0dWFsL21pc2MvdWhpZC8wMDA1OjEyMzU6QUEy
-Mi4wMDFCL2lucHV0L2lucHV0MzAKWzE3NTE3OC41MzcyMzldIGhpZC1nZW5lcmljIDAwMDU6MTIz
-NTpBQTIyLjAwMUI6IGlucHV0LGhpZHJhdzM6IEJMVUVUT09USCBISUQgdjAuMDEgTW91c2UgW0JU
-NS4yIE1vdXNlXSBvbiBkNDo5YzpkZDpkOTpjNTo4NQo=
---000000000000f1940e05e2fbaa50
-Content-Type: application/octet-stream; name=sysbench_after_resume
-Content-Disposition: attachment; filename=sysbench_after_resume
-Content-Transfer-Encoding: base64
-Content-ID: <f_l56ui5r72>
-X-Attachment-Id: f_l56ui5r72
+ .../bindings/arm/freescale/fsl,scu.txt        | 271 ------------------
+ .../bindings/clock/fsl,scu-clk.yaml           |  43 +++
+ .../devicetree/bindings/firmware/fsl,scu.yaml | 160 +++++++++++
+ .../bindings/input/fsl,scu-key.yaml           |  40 +++
+ .../bindings/nvmem/fsl,scu-ocotp.yaml         |  56 ++++
+ .../bindings/pinctrl/fsl,scu-pinctrl.yaml     |  74 +++++
+ .../devicetree/bindings/power/fsl,scu-pd.yaml |  41 +++
+ .../devicetree/bindings/rtc/fsl,scu-rtc.yaml  |  31 ++
+ .../bindings/thermal/fsl,scu-thermal.yaml     |  38 +++
+ .../bindings/watchdog/fsl,scu-wdt.yaml        |  34 +++
+ arch/arm64/boot/dts/freescale/imx8qm.dtsi     |   4 +-
+ arch/arm64/boot/dts/freescale/imx8qxp.dtsi    |  12 +-
+ 12 files changed, 524 insertions(+), 280 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml
+ create mode 100644 Documentation/devicetree/bindings/firmware/fsl,scu.yaml
+ create mode 100644 Documentation/devicetree/bindings/input/fsl,scu-key.yaml
+ create mode 100644 Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/fsl,scu-pd.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml
+ create mode 100644 Documentation/devicetree/bindings/thermal/fsl,scu-thermal.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/fsl,scu-wdt.yaml
 
-bGVoYUBWSU0zIH4vQXJjaGxpbnV4VklNL2xpbnV4LWdpdC1zdXNwZW5kICQgc3lzYmVuY2ggY3B1
-IC0tdGhyZWFkcz0xMCBydW4gCnN5c2JlbmNoIDEuMC4yMCAodXNpbmcgc3lzdGVtIEx1YUpJVCAy
-LjEuMC1iZXRhMykKClJ1bm5pbmcgdGhlIHRlc3Qgd2l0aCBmb2xsb3dpbmcgb3B0aW9uczoKTnVt
-YmVyIG9mIHRocmVhZHM6IDEwCkluaXRpYWxpemluZyByYW5kb20gbnVtYmVyIGdlbmVyYXRvciBm
-cm9tIGN1cnJlbnQgdGltZQoKClByaW1lIG51bWJlcnMgbGltaXQ6IDEwMDAwCgpJbml0aWFsaXpp
-bmcgd29ya2VyIHRocmVhZHMuLi4KClRocmVhZHMgc3RhcnRlZCEKCkNQVSBzcGVlZDoKICAgIGV2
-ZW50cyBwZXIgc2Vjb25kOiAgMTg4OS42OAoKR2VuZXJhbCBzdGF0aXN0aWNzOgogICAgdG90YWwg
-dGltZTogICAgICAgICAgICAgICAgICAgICAgICAgIDEwLjAyNzZzCiAgICB0b3RhbCBudW1iZXIg
-b2YgZXZlbnRzOiAgICAgICAgICAgICAgMTkwMzYKCkxhdGVuY3kgKG1zKToKICAgICAgICAgbWlu
-OiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDEuMTEKICAgICAgICAgYXZnOiAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDUuMjQKICAgICAgICAgbWF4OiAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAxMzYuMTUKICAgICAgICAgOTV0aCBwZXJjZW50
-aWxlOiAgICAgICAgICAgICAgICAgICAgICAgNDIuNjEKICAgICAgICAgc3VtOiAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgOTk3NjQuNjIKClRocmVhZHMgZmFpcm5lc3M6CiAgICBldmVu
-dHMgKGF2Zy9zdGRkZXYpOiAgICAgICAgICAgMTkwMy42MDAwLzI0NjguMjUKICAgIGV4ZWN1dGlv
-biB0aW1lIChhdmcvc3RkZGV2KTogICA5Ljk3NjUvMC4wMQoKbGVoYUBWSU0zIH4vQXJjaGxpbnV4
-VklNL2xpbnV4LWdpdC1zdXNwZW5kICQgCgo=
---000000000000f1940e05e2fbaa50--
+-- 
+2.25.1
+
