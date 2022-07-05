@@ -2,51 +2,51 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CBC256691A
-	for <lists+linux-clk@lfdr.de>; Tue,  5 Jul 2022 13:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEAC3566920
+	for <lists+linux-clk@lfdr.de>; Tue,  5 Jul 2022 13:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiGEL1j (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 5 Jul 2022 07:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
+        id S229941AbiGEL1l (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 5 Jul 2022 07:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiGEL1j (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 5 Jul 2022 07:27:39 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8D915FEC
-        for <linux-clk@vger.kernel.org>; Tue,  5 Jul 2022 04:27:37 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id bx13so14128124ljb.1
-        for <linux-clk@vger.kernel.org>; Tue, 05 Jul 2022 04:27:37 -0700 (PDT)
+        with ESMTP id S230254AbiGEL1k (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 5 Jul 2022 07:27:40 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDE0165A0
+        for <linux-clk@vger.kernel.org>; Tue,  5 Jul 2022 04:27:38 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id l7so13364966ljj.4
+        for <linux-clk@vger.kernel.org>; Tue, 05 Jul 2022 04:27:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=B+D+YTDarzK7BrEYLxeiU5uQ8xZ8B5qdXL7zv9BsOTY=;
-        b=LOfuMXhYFNPV/ywD9MsSd553vHxEJl2PBELwo5mB5LhCschnWAI2ezvCvitQ8bkGzx
-         5vsWaK0RQBo8lnGITxt24nyx/05yn63MmSKzXwC+/eowWFFi5I2iez7EEfzZmUqBYuIa
-         eQXapcmC/Aqo/NOihcdeTVfXC5Z5CH/FNCm4fKHRARLVPkP6tFSo8jUKAuMeGs0fxoDt
-         frNbMJqOaHb3aDBdFyKEc34XzYGvm3TRA+tcWR9HPeN6VNIA5+vClV2IROTuO1baRlTA
-         Zl2N2AIYPlonBaJhroWIdFTpsLN+HkjAdf0TgCQELMOeWvge8iQZ/yWSaNjwqUuBoR3e
-         q1Xg==
+        bh=DDOZfRd1HTqUfm1HeVAgnUymdGTbLswrOs88vTN4QwU=;
+        b=KnittvwjoD6wTylEJR+FVKmbiJWKBGYF0KtsQR67sEUF6MI5n/As97A1unfRFQVnUy
+         lAzBz2OUD5MtUMhyveONvrNjnhdR453DHLrLRVYbWSdzeGLljfIrkKQRWhvIU8hequFQ
+         hL7Hhf1I0l/WyUn3Tw8e+CLI14yGt13azsEDC7L18cPdh26v4k4y5Z1Z/U3uzq8NfooZ
+         OxiUeIHnKX7mUT3JBmbq15bkFySHG64GALQAj/LBHHqt0YZ7zr2p6MlqcHKW57fNpaUZ
+         iMTekVOSj/ynir2E4UD4bMwCSm4TyTK6a9QvABu7enL9EgwQgyIawdomXiDUACeh43rx
+         hBgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=B+D+YTDarzK7BrEYLxeiU5uQ8xZ8B5qdXL7zv9BsOTY=;
-        b=3cbryHP+ewqDofC5SPLoWGyG07nwoPnOHxGB1p/r0qIKZ1pHqyf5dCoM/Up5xnwQlj
-         /lbsxLSRO6OJnkOXIUCJFWOKxlBVUt0cO4ouZVMXOaKyhVDzHXTkCXeM0UacU5jJKk7t
-         z+0+Sm6hpJLBKC5DjKR216+zq6FQ/uU+lReWXGrdA47pTO1t5v2VzLo4OQmoxAe3h29P
-         rzYtoM5217cVSEKWQaKLkXRDSuPvYkcPfOyJBzpGMU5l/Y3prTBOrdbmhpfTT+vXsXpF
-         umqFhziBnfZN7uhWokQ5F4zHvbb1zUVr5e4IuMQMBgyPfWW3nwetkkoj8qzqc0rmim/Q
-         gw0g==
-X-Gm-Message-State: AJIora9G718aQxNg7gQt7Okxv4Za9SZZxSA+iqiyKIEcC8PXHkTQNPl1
-        mCd5h8idNcj+JFiJZ0ek+SA0Dw==
-X-Google-Smtp-Source: AGRyM1vu8Vw2EJjVeBT8F0+v7efZg+czGWWIjooMsxgutHakiWFeo89UUTf9Su3s3ADYG6PyMZf6dA==
-X-Received: by 2002:a05:651c:19ac:b0:25b:db26:55c3 with SMTP id bx44-20020a05651c19ac00b0025bdb2655c3mr20204329ljb.457.1657020456187;
-        Tue, 05 Jul 2022 04:27:36 -0700 (PDT)
+        bh=DDOZfRd1HTqUfm1HeVAgnUymdGTbLswrOs88vTN4QwU=;
+        b=CEGLXFchOBmnAbKNgdrLWHL4NU3B3XnVG1xxj3XhVdRkC8TZf/zfmUr1aUT6PFp883
+         FV3Y+dSfRwyNQPLTbZHzfUpeWrydL4gY7M1lD3KqJpU1hPK7woOFBeMAfrpuONWl7UL7
+         yJZJyjprY77LxikUu/yVyyT1yv/lUVQiu5nTYTkBw8uirkFgsbN0BxVvwYoD8bmmIXh4
+         VWDB3JsynRUd5dNHh0Jj3uY3KLqx06ug4uTniOllUffT8+9Hs06D8Nry+OLgVbXV7E3i
+         KY6mXYesu6A9je28TFZgeEW21p0ViVaZR1/1Vf1ldGE9xU7GiPT/+JgmHPAewLStePm7
+         j5IQ==
+X-Gm-Message-State: AJIora9T7fBO5LDMVi937sxBhTJbdh+gUDVNv9eZ+qqujOhQmJup3JsU
+        rE+3fgyKEQBlco5ZheE4dwo7cg==
+X-Google-Smtp-Source: AGRyM1sFuaESAD0zDBaKLRbw6D6wO86fb2NUssGM2f0sC3fhxnRE/GmFYDp1v2FyhaUkJhT4Y9JzIQ==
+X-Received: by 2002:a2e:8888:0:b0:25b:f2f6:ea60 with SMTP id k8-20020a2e8888000000b0025bf2f6ea60mr17799095lji.298.1657020457101;
+        Tue, 05 Jul 2022 04:27:37 -0700 (PDT)
 Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id k26-20020a05651c10ba00b0025a736f5a41sm5525449ljn.9.2022.07.05.04.27.35
+        by smtp.gmail.com with ESMTPSA id k26-20020a05651c10ba00b0025a736f5a41sm5525449ljn.9.2022.07.05.04.27.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 04:27:35 -0700 (PDT)
+        Tue, 05 Jul 2022 04:27:36 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -57,10 +57,11 @@ To:     Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Taniya Das <quic_tdas@quicinc.com>
 Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v2 1/2] dt-bindings: clock: qcom,mmcc: fix clocks/clock-names definitions
-Date:   Tue,  5 Jul 2022 14:27:33 +0300
-Message-Id: <20220705112734.1323355-2-dmitry.baryshkov@linaro.org>
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 2/2] dt-bindings: clock: qcom,mmcc: define clocks/clock-names for MSM8996
+Date:   Tue,  5 Jul 2022 14:27:34 +0300
+Message-Id: <20220705112734.1323355-3-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220705112734.1323355-1-dmitry.baryshkov@linaro.org>
 References: <20220705112734.1323355-1-dmitry.baryshkov@linaro.org>
@@ -68,7 +69,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,90 +77,42 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Rather than defining (incorrect) global clocks and clock-names lists,
-define them per platform using conditionals. Also, while we are at it,
-mark these properties as required for all platforms for which DT files
-contained clocks/clock-names for the MMCC nodes from the beginning (in
-addition to existing MSM8998 this adds MSM8994, SDM630 and SDM660).
+Define clock/clock-names properties of the MMCC device node to be used
+on MSM8996 platform.
 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- .../devicetree/bindings/clock/qcom,mmcc.yaml  | 149 ++++++++++++++----
- 1 file changed, 117 insertions(+), 32 deletions(-)
+ .../devicetree/bindings/clock/qcom,mmcc.yaml  | 33 +++++++++++++++++--
+ 1 file changed, 31 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/clock/qcom,mmcc.yaml b/Documentation/devicetree/bindings/clock/qcom,mmcc.yaml
-index 32e87014bb55..6b831730a914 100644
+index 6b831730a914..ef6736198451 100644
 --- a/Documentation/devicetree/bindings/clock/qcom,mmcc.yaml
 +++ b/Documentation/devicetree/bindings/clock/qcom,mmcc.yaml
-@@ -31,30 +31,12 @@ properties:
+@@ -31,11 +31,11 @@ properties:
        - qcom,mmcc-sdm660
  
    clocks:
--    items:
--      - description: Board XO source
--      - description: Board sleep source
--      - description: Global PLL 0 clock
--      - description: DSI phy instance 0 dsi clock
--      - description: DSI phy instance 0 byte clock
--      - description: DSI phy instance 1 dsi clock
--      - description: DSI phy instance 1 byte clock
--      - description: HDMI phy PLL clock
--      - description: DisplayPort phy PLL vco clock
--      - description: DisplayPort phy PLL link clock
-+    minItems: 9
-+    maxItems: 10
+-    minItems: 9
++    minItems: 8
+     maxItems: 10
  
    clock-names:
--    items:
--      - const: xo
--      - const: sleep
--      - const: gpll0
--      - const: dsi0dsi
--      - const: dsi0byte
--      - const: dsi1dsi
--      - const: dsi1byte
--      - const: hdmipll
--      - const: dpvco
--      - const: dplink
-+    minItems: 9
-+    maxItems: 10
+-    minItems: 9
++    minItems: 8
+     maxItems: 10
  
    '#clock-cells':
-     const: 1
-@@ -85,16 +67,119 @@ required:
+@@ -113,6 +113,35 @@ allOf:
+             - const: dsi1pllbyte
+             - const: hdmipll
  
- additionalProperties: false
- 
--if:
--  properties:
--    compatible:
--      contains:
--        const: qcom,mmcc-msm8998
--
--then:
--  required:
--    - clocks
--    - clock-names
-+allOf:
 +  - if:
 +      properties:
 +        compatible:
 +          contains:
-+            enum:
-+              - qcom,mmcc-msm8994
-+              - qcom,mmcc-msm8998
-+              - qcom,mmcc-sdm630
-+              - qcom,mmcc-sdm660
-+    then:
-+      required:
-+        - clocks
-+        - clock-names
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: qcom,mmcc-msm8994
++            const: qcom,mmcc-msm8996
 +    then:
 +      properties:
 +        clocks:
@@ -167,7 +120,6 @@ index 32e87014bb55..6b831730a914 100644
 +            - description: Board XO source
 +            - description: Global PLL 0 clock
 +            - description: MMSS NoC AHB clock
-+            - description: GFX3D clock
 +            - description: DSI phy instance 0 dsi clock
 +            - description: DSI phy instance 0 byte clock
 +            - description: DSI phy instance 1 dsi clock
@@ -178,84 +130,16 @@ index 32e87014bb55..6b831730a914 100644
 +          items:
 +            - const: xo
 +            - const: gpll0
-+            - const: mmssnoc_ahb
-+            - const: oxili_gfx3d_clk_src
++            - const: gcc_mmss_noc_cfg_ahb_clk
 +            - const: dsi0pll
 +            - const: dsi0pllbyte
 +            - const: dsi1pll
 +            - const: dsi1pllbyte
 +            - const: hdmipll
 +
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: qcom,mmcc-msm8998
-+    then:
-+      properties:
-+        clocks:
-+          items:
-+            - description: Board XO source
-+            - description: Global PLL 0 clock
-+            - description: DSI phy instance 0 dsi clock
-+            - description: DSI phy instance 0 byte clock
-+            - description: DSI phy instance 1 dsi clock
-+            - description: DSI phy instance 1 byte clock
-+            - description: HDMI phy PLL clock
-+            - description: DisplayPort phy PLL link clock
-+            - description: DisplayPort phy PLL vco clock
-+            - description: Test clock
-+
-+        clock-names:
-+          items:
-+            - const: xo
-+            - const: gpll0
-+            - const: dsi0dsi
-+            - const: dsi0byte
-+            - const: dsi1dsi
-+            - const: dsi1byte
-+            - const: hdmipll
-+            - const: dplink
-+            - const: dpvco
-+            - const: core_bi_pll_test_se
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,mmcc-sdm630
-+              - qcom,mmcc-sdm660
-+    then:
-+      properties:
-+        clocks:
-+          items:
-+            - description: Board XO source
-+            - description: Board sleep source
-+            - description: Global PLL 0 clock
-+            - description: Global PLL 0 DIV clock
-+            - description: DSI phy instance 0 dsi clock
-+            - description: DSI phy instance 0 byte clock
-+            - description: DSI phy instance 1 dsi clock
-+            - description: DSI phy instance 1 byte clock
-+            - description: DisplayPort phy PLL link clock
-+            - description: DisplayPort phy PLL vco clock
-+
-+        clock-names:
-+          items:
-+            - const: xo
-+            - const: sleep_clk
-+            - const: gpll0
-+            - const: gpll0_div
-+            - const: dsi0pll
-+            - const: dsi0pllbyte
-+            - const: dsi1pll
-+            - const: dsi1pllbyte
-+            - const: dp_link_2x_clk_divsel_five
-+            - const: dp_vco_divided_clk_src_mux
- 
- examples:
-   # Example for MMCC for MSM8960:
+   - if:
+       properties:
+         compatible:
 -- 
 2.35.1
 
