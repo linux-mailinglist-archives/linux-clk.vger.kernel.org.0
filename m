@@ -2,129 +2,100 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA330568977
-	for <lists+linux-clk@lfdr.de>; Wed,  6 Jul 2022 15:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1285689CB
+	for <lists+linux-clk@lfdr.de>; Wed,  6 Jul 2022 15:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232977AbiGFN3M (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 6 Jul 2022 09:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
+        id S233200AbiGFNmm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 6 Jul 2022 09:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233496AbiGFN3K (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 6 Jul 2022 09:29:10 -0400
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD1A22BE2;
-        Wed,  6 Jul 2022 06:29:07 -0700 (PDT)
-Received: by mail-il1-f173.google.com with SMTP id h5so9170019ili.3;
-        Wed, 06 Jul 2022 06:29:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=bL71fy7BLG4i0HSqgZRBo3aR1jRlA0eAtGzp+APcptI=;
-        b=y9bkXaWy1jzrEnjmY+jHTnni2nrJNudGT8uQYkoApzxv0E2DtmfVAbn3I2Qm6nhgFk
-         Z8MsymzKR3pIg+sU7ojRT74lak0Khs9ZSWrm85E0yZMZYVR+5xHRAl/UGcZgqPJn9Ria
-         893Xrhf4fxxsDK/GWrL8fQX5UW/hJsFqsgp6/ZK9XJHYnfK1NmKi3EYcc3NxEmPiRKz1
-         yS+gBC/Ym3JSwHp9sV0mJF/2GI2bxcs59z0cXrpk351/M8Ev/utSF0r1FBMWD38WvZxM
-         V0eif+dFFi2bqAqDmrVMVEi2ghXuJnbtd8ZdJO9F+zhkmv9FQfdpmRu1bCVoPtlmwToW
-         ABxA==
-X-Gm-Message-State: AJIora/Gp7P6wdttzoyf6ktO6UicaBs99DZnvBNvIkl65D/r0twMG/Vg
-        4Ed0eZQ7BPKK2zXnGTIBnA==
-X-Google-Smtp-Source: AGRyM1tJGJIVlx7VpB8IkYCckD9b2GDYj12b9uIMBx8AyD4cJrWgClMUDYkNKE6zsrsxzt8Q5IB69w==
-X-Received: by 2002:a05:6e02:1848:b0:2da:af35:e7c3 with SMTP id b8-20020a056e02184800b002daaf35e7c3mr23641658ilv.265.1657114146897;
-        Wed, 06 Jul 2022 06:29:06 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id z10-20020a92650a000000b002dc100ab6fdsm3675172ilb.35.2022.07.06.06.29.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 06:29:06 -0700 (PDT)
-Received: (nullmailer pid 4099934 invoked by uid 1000);
-        Wed, 06 Jul 2022 13:29:04 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     john@metanate.com, heiko@sntech.de, p.zabel@pengutronix.de,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, didi.debian@cknow.org,
-        herbert@gondor.apana.org.au, sboyd@kernel.org,
-        mturquette@baylibre.com, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220706090412.806101-26-clabbe@baylibre.com>
-References: <20220706090412.806101-1-clabbe@baylibre.com> <20220706090412.806101-26-clabbe@baylibre.com>
-Subject: Re: [PATCH v8 25/33] dt-bindings: crypto: rockchip: convert to new driver bindings
-Date:   Wed, 06 Jul 2022 07:29:04 -0600
-Message-Id: <1657114144.957232.4099933.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S233364AbiGFNmM (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 6 Jul 2022 09:42:12 -0400
+Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E70424F3C;
+        Wed,  6 Jul 2022 06:42:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kernkonzept.com; s=mx1; h=Content-Transfer-Encoding:MIME-Version:Message-Id
+        :Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=pRB9ZxssVkEPMCaLQoK1ttK9PaFD+rsL8YmmMSc58UA=; b=LMQuGDgYeUKs+8nUJBuAxNNd98
+        Q35OYNJNuygpQ9/OtQzSKvk64oqGQ1izm62F2bT0DlgugfsA/Ngc2B0LyIqF7gxNMbcDuV11+1Ejr
+        bAAZHUoQpGm62fYDyXN+Pd+hL0GpVvaekZh+oqLN3r5+vhKFne8eK9nk74kVWx/tP9XSC3NOgXA0f
+        NlPnzzLFFsNHeTxgAmSLHHQK2LkM6HfiqaGhMEO6ahrGdv8FQIEBA4CQEO2Cc/VEnExUmlvHPC5i/
+        ElWlsWJYSnEtIhbNUzHIYigd6qcmo1QfclGdVVwuVleGmDJuKQGKSSuS1gpi3zvlRsnnBptmnJ0kt
+        SBGp7X9w==;
+Received: from [10.22.3.24] (helo=kernkonzept.com)
+        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
+        id 1o95Hy-007M5K-Qn; Wed, 06 Jul 2022 15:41:58 +0200
+From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Dominik Kobinski <dominikkobinski314@gmail.com>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Subject: [PATCH v2 0/6] clk: qcom: Add clocks for MSM8909
+Date:   Wed,  6 Jul 2022 15:41:26 +0200
+Message-Id: <20220706134132.3623415-1-stephan.gerhold@kernkonzept.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Wed, 06 Jul 2022 09:04:04 +0000, Corentin Labbe wrote:
-> The latest addition to the rockchip crypto driver need to update the
-> driver bindings.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
->  .../crypto/rockchip,rk3288-crypto.yaml        | 85 +++++++++++++++++--
->  1 file changed, 77 insertions(+), 8 deletions(-)
-> 
+Add a driver for the Global Clock Controller (GCC) that provides clocks,
+resets and power domains for the various hardware blocks in the MSM8909
+SoC. Make it possible to have longer delay between assertion/deassertion
+of particular reset signals (this is needed for the USB PHY on MSM8909).
+Finally, add the necessary definitions for the clocks controlled by the
+RPM firmware on MSM8909.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+The patch set is fairly large but most of it is just boring clock
+definitions in the GCC driver. And compared to newer SoCs like SC8280XP
+with 7k+ lines in the GCC driver this is still fairly small. :-)
 
-yamllint warnings/errors:
+---
+Changes in v2:
+  - Make "clocks" and "clock-names" required in DT schema
+  - Add review tags from Konrad and Krzysztof
 
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml: allOf:0:then:properties:clock-names: 'oneOf' conditional failed, one must be fixed:
-	[{'const': 'aclk'}, {'const': 'hclk'}, {'const': 'sclk'}, {'const': 'apb_pclk'}] is too long
-	[{'const': 'aclk'}, {'const': 'hclk'}, {'const': 'sclk'}, {'const': 'apb_pclk'}] is too short
-	False schema does not allow 4
-	1 was expected
-	4 is greater than the maximum of 2
-	4 is greater than the maximum of 3
-	hint: "minItems" is only needed if less than the "items" list length
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml: allOf:0:then:properties:reset-names: {'items': [{'const': 'crypto-rst'}], 'maxItems': 1} should not be valid under {'required': ['maxItems']}
-	hint: "maxItems" is not needed with an "items" list
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml: allOf:1:then:properties:clock-names: {'items': [{'const': 'hclk_master'}, {'const': 'hclk_slave'}, {'const': 'sclk'}], 'maxItems': 3} should not be valid under {'required': ['maxItems']}
-	hint: "maxItems" is not needed with an "items" list
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml: allOf:1:then:properties:reset-names: {'items': [{'const': 'crypto-rst'}], 'maxItems': 1} should not be valid under {'required': ['maxItems']}
-	hint: "maxItems" is not needed with an "items" list
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml: allOf:2:then:properties:clock-names: {'items': [{'const': 'hclk_master'}, {'const': 'hclk_slave'}, {'const': 'sclk'}], 'maxItems': 3} should not be valid under {'required': ['maxItems']}
-	hint: "maxItems" is not needed with an "items" list
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml: allOf:2:then:properties:reset-names: 'oneOf' conditional failed, one must be fixed:
-	[{'const': 'rst_master'}, {'const': 'rst_slave'}, {'const': 'crypto-rst'}] is too long
-	[{'const': 'rst_master'}, {'const': 'rst_slave'}, {'const': 'crypto-rst'}] is too short
-	False schema does not allow 3
-	1 was expected
-	3 is greater than the maximum of 2
-	hint: "minItems" is only needed if less than the "items" list length
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.yaml: ignoring, error in schema: allOf: 0: then: properties: reset-names
-Documentation/devicetree/bindings/crypto/rockchip,rk3288-crypto.example.dtb:0:0: /example-0/crypto@ff8a0000: failed to match any schema with compatible: ['rockchip,rk3288-crypto']
+Stephan Gerhold (6):
+  dt-bindings: clock: Add schema for MSM8909 GCC
+  clk: qcom: Add driver for MSM8909 GCC
+  clk: qcom: reset: Allow specifying custom reset delay
+  clk: qcom: gcc-msm8909: Increase delay for USB PHY reset
+  dt-bindings: clock: qcom,rpmcc: Add MSM8909
+  clk: qcom: smd-rpm: Add clocks for MSM8909
 
-doc reference errors (make refcheckdocs):
+ .../bindings/clock/qcom,gcc-msm8909.yaml      |   58 +
+ .../devicetree/bindings/clock/qcom,rpmcc.yaml |    1 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/clk-smd-rpm.c                |   37 +-
+ drivers/clk/qcom/gcc-msm8909.c                | 2731 +++++++++++++++++
+ drivers/clk/qcom/reset.c                      |    4 +-
+ drivers/clk/qcom/reset.h                      |    1 +
+ include/dt-bindings/clock/qcom,gcc-msm8909.h  |  218 ++
+ 9 files changed, 3057 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-msm8909.yaml
+ create mode 100644 drivers/clk/qcom/gcc-msm8909.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-msm8909.h
 
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+-- 
+2.30.2
 
