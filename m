@@ -2,107 +2,116 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD729569583
-	for <lists+linux-clk@lfdr.de>; Thu,  7 Jul 2022 00:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 182295696AE
+	for <lists+linux-clk@lfdr.de>; Thu,  7 Jul 2022 02:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234075AbiGFWyc (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 6 Jul 2022 18:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
+        id S234644AbiGGAC2 (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 6 Jul 2022 20:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233881AbiGFWya (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 6 Jul 2022 18:54:30 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB922A26C;
-        Wed,  6 Jul 2022 15:54:29 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id f23so5228057ejc.4;
-        Wed, 06 Jul 2022 15:54:29 -0700 (PDT)
+        with ESMTP id S234632AbiGGAC2 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 6 Jul 2022 20:02:28 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36D72D1E0
+        for <linux-clk@vger.kernel.org>; Wed,  6 Jul 2022 17:02:27 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id n66so12549311oia.11
+        for <linux-clk@vger.kernel.org>; Wed, 06 Jul 2022 17:02:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kUlxRQ1of3eu4XW5c6JjZr01Kt72atQDrgao/HtGT8o=;
-        b=Co0ZfwzJmPPNkFd2X0BmEcNP//YqWh2YVZ82PyFVNjtMPNYgg9gFetMF4Eg472r+dp
-         JNAOiVvs2eRLbDSHhHp2ZUeREgSFQqR6nP51zMN5HBng7oH/H//HWfzvN0Fo1HiiWkeb
-         oHEFGfKrYv12/Ovf4uujxQp9ugT8t/t8G5hsqb/KZhquEp3eT2UPptV1F+JV70SUMHIB
-         3vwWflMGn2v4EiWOFoOH8xULKpt06+TCBpFrOc7kVHLE4B7s022Ek2NrjbRWu6vWiZiL
-         4SGBkSJ9Em4sgryn3VLqWBlY6/P5C1UUpI08Eir4w4Q3R91CnWPdr0g5AjLZC7SOg1WD
-         /DjQ==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=PnPr/1wV1VsDM5AHnYfjPAu3D3lvVU7n3T6uqgg9/R0=;
+        b=cy5YW5oK8azkNdczvWFJwyh++jfARujG2dfBKCYuhU29WcT/XmK1mxCRYPxCTDuzHD
+         S930YX/X6BdzGqHueKcrrFx+425I4eqBGTp0flDBv9boMS5HM7KjVEznIn2TJd0cJpBS
+         pKupIMlhavC4356aVBEbh/9Lt/TaZMJ3fl0C4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kUlxRQ1of3eu4XW5c6JjZr01Kt72atQDrgao/HtGT8o=;
-        b=oXkkQ6H8LaqVbwD1mTTYiV4uPpv/NFiwfoBD/DqXHW3YSnDUUXP8cUwYFbumwHSaeT
-         OMw6wB60NXaqYZAQpgQtuSVLJshA3Cms+FhCzug7VcOfdrHMmY85oUcOqwC1igatI/h6
-         XIAvnjJyKJnGZ/U9rRcC89pKdCZeQ4+h7gwoO+jN7wl2MpTcQpzPDpX4zJ4j90gGdaF6
-         KzsnCLkDRvI1eFFLcdw9Flv3j7BcTrIzuR+pjLDdwjpn2EiLjTqLeeL/N2VgRuMpsThK
-         yMzuKdlqC2U5m5bhvzAtNLyytD+MbI3CEtBoyVgEdBpRiKUpH95040HZhg0V2UTryXI1
-         7A6g==
-X-Gm-Message-State: AJIora82LrhmUKUWtQ8mEZ9sj00TwJnrqTXahPAmFhPn4+YE8ipXYDYX
-        egETQFxc8JkrpIvykvXgcEU=
-X-Google-Smtp-Source: AGRyM1sl3zn7M5HpfENfgEsJmy2imKNBcKqIyJc0owvAEo+ADQh0QqN5BKbz8QTeOfyfAhgLSgEeDA==
-X-Received: by 2002:a17:907:1608:b0:726:a7b7:cd7a with SMTP id hb8-20020a170907160800b00726a7b7cd7amr40018657ejc.682.1657148068906;
-        Wed, 06 Jul 2022 15:54:28 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id d7-20020a170906304700b006fe921fcb2dsm1767637ejd.49.2022.07.06.15.54.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Jul 2022 15:54:28 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH v2 4/4] clk: qcom: gcc-ipq806x: remove cc_register_board for pxo and cxo
-Date:   Thu,  7 Jul 2022 00:53:21 +0200
-Message-Id: <20220706225321.26215-5-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220706225321.26215-1-ansuelsmth@gmail.com>
-References: <20220706225321.26215-1-ansuelsmth@gmail.com>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=PnPr/1wV1VsDM5AHnYfjPAu3D3lvVU7n3T6uqgg9/R0=;
+        b=DeicHjl+L0284S4XaLRskUgz9QbcVuaS7o9lAGb2W4/yPHuQJUE+Tq7R3ExWGHmXal
+         BLoyhZnXlB1fvNWzQFFmPhKPtgJIoCalMFvUf4Mx0e9mfVhSLBii6OizvD0p9o2BH/Cy
+         ITsHR8bGyorzQbLPkSQkjvC80B7i/+qIWuPV5ZrS40COZSN3muotjOTXTNcfbTTCYnmP
+         qiW7Hq0seVgnsAE2HOOoWXLUzjDMBbCKAFGejCORiyTKEpvpQ9uPtFkzpTSfRhyBALUL
+         KUYOgYnrPps7SsR/ywZBwB8N6V5TUa9YMrwpLC2sLmkCVxj2b1J1dl+hYr53PPOISrTF
+         oBLw==
+X-Gm-Message-State: AJIora/hxpyQdAJCMlmDBK491EOSzQV7ihh5Zkr64gPoqwGdv/lz9A/G
+        m/2CUvELT2YRxYYWTpsgRxoZy8RzFj8sJBgEtl/0TA==
+X-Google-Smtp-Source: AGRyM1vW63Yppk8g9ETKCFgydRa/5t3+pkplkfQ29ri3PaE1IB+DZLPNqhEt4I43L+jR0L5u6CSyYIFc3FbBzB2Bd/k=
+X-Received: by 2002:a05:6808:171c:b0:334:9342:63ef with SMTP id
+ bc28-20020a056808171c00b00334934263efmr808946oib.63.1657152147038; Wed, 06
+ Jul 2022 17:02:27 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 6 Jul 2022 20:02:26 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yr5xS/HCrBuNrn9N@builder.lan>
+References: <20220628201340.3981860-1-swboyd@chromium.org> <Yr5xS/HCrBuNrn9N@builder.lan>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 6 Jul 2022 20:02:26 -0400
+Message-ID: <CAE-0n51Ex7T+B0PwwYmH-o9VAy5PYgzGFb=bOTu8ae4t0sGZKw@mail.gmail.com>
+Subject: Re: [PATCH/RFC] clk: qcom: rpmh: Block system suspend if XO is enabled
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, patches@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>,
+        Mike Tipton <quic_mdtipton@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Now that these clock are defined as fixed clk in dts, we can drop the
-register_board_clk for cxo_board and pxo_board in gcc_ipq806x_probe.
+Quoting Bjorn Andersson (2022-06-30 21:00:11)
+> On Tue 28 Jun 15:13 CDT 2022, Stephen Boyd wrote:
+>
+> > Tracking down what RPMh resource is blocking XO shutdown in suspend is
+> > hard. Largely because we need external debug tools to dump the RPMh
+> > internal state to figure out what resource is enabled. Instead of doing
+> > that, let's just block system wide suspend in the kernel if the RPMh XO
+> > resource is enabled by something in the kernel. This will help us narrow
+> > down XO shutdown failures to the XO clk, and not something else like an
+> > interconnect or regulator RPMh resource.
+> >
+> > I'm sending this as an RFC because it breaks suspend for me on Trogdor
+> > boards. I found out that the XO resource is always enabled on these
+> > devices because the audio driver leaves an audio clk always on. This
+> > means that the XO resource must not be used to determine if XO shutdown
+> > is achievable, or we're leaving power savings on the table.
+> >
+> > Cc: Taniya Das <quic_tdas@quicinc.com>
+> > Cc: Mike Tipton <quic_mdtipton@quicinc.com>
+> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>
+> > ---
+> >
+> > Please don't apply. It will break suspend on Trogdor boards.
+> >
+>
+> This seems like a useful debug feature for people outside of Qualcomm,
+> so I assume you're saying that we shouldn't merge it until someone has
+> fixed the audio driver? Or did you post it just as a debug tool?
+>
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- drivers/clk/qcom/gcc-ipq806x.c | 8 --------
- 1 file changed, 8 deletions(-)
+I mainly posted it to get a response from Qualcomm on what's going on. I
+haven't tried to fix the audio driver so far, but I can certainly look
+into it. The audio clk driver keeping XO on doesn't seem to matter for
+power because we're hitting the deepest of sleeps on Trogdor boards.
 
-diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
-index 718de17a1e60..883629de2751 100644
---- a/drivers/clk/qcom/gcc-ipq806x.c
-+++ b/drivers/clk/qcom/gcc-ipq806x.c
-@@ -3384,14 +3384,6 @@ static int gcc_ipq806x_probe(struct platform_device *pdev)
- 	struct regmap *regmap;
- 	int ret;
- 
--	ret = qcom_cc_register_board_clk(dev, "cxo_board", "cxo", 25000000);
--	if (ret)
--		return ret;
--
--	ret = qcom_cc_register_board_clk(dev, "pxo_board", "pxo", 25000000);
--	if (ret)
--		return ret;
--
- 	if (of_machine_is_compatible("qcom,ipq8065")) {
- 		ubi32_core1_src_clk.freq_tbl = clk_tbl_nss_ipq8065;
- 		ubi32_core2_src_clk.freq_tbl = clk_tbl_nss_ipq8065;
--- 
-2.36.1
+I also realized that due to clk adoption logic we can't be certain that
+this driver's suspend function will be called after other clk providers
+that consume XO run their suspend functions. We can probably assume clk
+consumers that aren't providers will probe after clk-rpmh, so this check
+is generally safe because we don't have clk providers disabling clks
+during their suspend functions. It's just not totally safe.
 
+Maybe this is a good reason to add some sort of suspend op to clk_ops
+and then call that during system wide suspend.
