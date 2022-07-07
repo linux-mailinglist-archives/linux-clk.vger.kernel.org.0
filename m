@@ -2,63 +2,58 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA7556A53F
-	for <lists+linux-clk@lfdr.de>; Thu,  7 Jul 2022 16:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCC356A721
+	for <lists+linux-clk@lfdr.de>; Thu,  7 Jul 2022 17:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235397AbiGGOVR (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 7 Jul 2022 10:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
+        id S235548AbiGGPkZ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 7 Jul 2022 11:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235447AbiGGOVQ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Jul 2022 10:21:16 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065FA1C136;
-        Thu,  7 Jul 2022 07:21:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1657203677; x=1688739677;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DCbTRZ++Y/Yub3ddPboAcWilvsoYNUAQmzlXvdxWcqw=;
-  b=Yo4BqNE9hQr6MK/EAkb9rebAhDVMZMmIHcwIplTsHzWmbxXwm/P3ud8L
-   UG4tMsRTF66+2gGEii2wQpWW8mC3XlOKUnlsd6F7ftKhho596MGNSU6uD
-   Vp94rnEmup1BBIheyP3DHLB53ox40JTqfd2LnLXTCn4mh3lgzYCc5EFEk
-   /eXcq2xmWZwwyFsZxmbpnzgZxLRQrzINxLqhutVFu2wKBLMg46UtFbfzW
-   hhrQRAaYpMR96IKU9IrB5gC27LgHYTegNdlU9GE4Xej4JBsa6bgaEv90e
-   jOWyITmnCPAUtdSISNtneTgNj1Vj2H5jCWgP8t8TJVuegim9cCKdIe++A
-   A==;
-X-IronPort-AV: E=Sophos;i="5.92,253,1650956400"; 
-   d="scan'208";a="163767505"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Jul 2022 07:21:15 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 7 Jul 2022 07:21:08 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Thu, 7 Jul 2022 07:21:05 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <soc@kernel.org>
-CC:     <conor.dooley@microchip.com>, <Cyril.Jean@microchip.com>,
-        <Daire.McNamara@microchip.com>, <Lewis.Hanly@microchip.com>,
-        <aou@eecs.berkeley.edu>, <arnd@arndb.de>, <bhelgaas@google.com>,
-        <herbert@gondor.apana.org.au>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <lorenzo.pieralisi@arm.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <palmer@dabbelt.com>, <palmer@rivosinc.com>,
-        <paul.walmsley@sifive.com>
-Subject: [RESEND#2 PATCH v4] MAINTAINERS: add polarfire rng, pci and clock drivers
-Date:   Thu, 7 Jul 2022 15:20:42 +0100
-Message-ID: <20220707142041.4096246-1-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.36.1
+        with ESMTP id S235470AbiGGPkZ (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 7 Jul 2022 11:40:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAE2E9A;
+        Thu,  7 Jul 2022 08:40:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A01246239B;
+        Thu,  7 Jul 2022 15:40:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E04C341C0;
+        Thu,  7 Jul 2022 15:40:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657208423;
+        bh=KRAqPIGa6RCSu0JjXWHDhbJsoglo3H9ioTvcj879if8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=KdWsEJtcBSgVVTjX4nc+e2dLbvMXdGLo1F2jebQFfn7uCzpkkCWQQn9LgWzXNA4T3
+         BMmpZFK/l6J5K4Jwywl7yvaw52+wBcjIxNWktAa29stJviqq/lfbeB5TLb04WuZojh
+         VRh/BuevVjqR3Cvly3e3T0cZBs3c5BdcP4ZGbQUlvXeopOUq/Lc9VgnxPW9O9l96yK
+         hg5dRpgymPwt/ynq36iUpx1ADXe9qL2hmXBHpAxKhMe7/xpuZhaGYudhq2Hq4warQI
+         aVQFtCaMGYxfOBzaM/rb2J29pK0P47IlgaK+6giJ3U/6+TXaujgs3zRa9MI5wiJH5U
+         Ru44Fx1OmOj6A==
+Date:   Thu, 7 Jul 2022 10:40:20 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pci@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH v11 0/5] PCI: qcom: Rework pipe_clk/pipe_clk_src handling
+Message-ID: <20220707154020.GA305104@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e00b1317-9c2e-0b11-8c0b-1fa4a17e4761@linaro.org>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,42 +61,53 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hardware random, PCI and clock drivers for the PolarFire SoC have been
-upstreamed but are not covered by the MAINTAINERS entry, so add them.
-Daire is the author of the clock & PCI drivers, so add him as a
-maintainer in place of Lewis.
+On Thu, Jul 07, 2022 at 05:03:48PM +0300, Dmitry Baryshkov wrote:
+> On 16/06/2022 21:21, Bjorn Helgaas wrote:
+> > On Wed, Jun 08, 2022 at 01:52:33PM +0300, Dmitry Baryshkov wrote:
+> > > PCIe pipe clk (and some other clocks) must be parked to the "safe"
+> > > source (bi_tcxo) when corresponding GDSC is turned off and on again.
+> > > Currently this is handcoded in the PCIe driver by reparenting the
+> > > gcc_pipe_N_clk_src clock.
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-Acked-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
-Resending with +CC soc@kernel.org
-It's a v4 because the other patches were applied/dropped.
+> > > Dmitry Baryshkov (5):
+> > >    clk: qcom: regmap: add PHY clock source implementation
+> > >    clk: qcom: gcc-sm8450: use new clk_regmap_phy_mux_ops for PCIe pipe
+> > >      clocks
+> > >    clk: qcom: gcc-sc7280: use new clk_regmap_phy_mux_ops for PCIe pipe
+> > >      clocks
+> > >    PCI: qcom: Remove unnecessary pipe_clk handling
+> > >    PCI: qcom: Drop manual pipe_clk_src handling
+> > > 
+> > > 
+> > > Dmitry Baryshkov (5):
+> > >    clk: qcom: regmap: add PHY clock source implementation
+> > >    clk: qcom: gcc-sm8450: use new clk_regmap_phy_mux_ops for PCIe pipe
+> > >      clocks
+> > >    clk: qcom: gcc-sc7280: use new clk_regmap_phy_mux_ops for PCIe pipe
+> > >      clocks
+> > >    PCI: qcom: Remove unnecessary pipe_clk handling
+> > >    PCI: qcom: Drop manual pipe_clk_src handling
+> > > 
+> > >   drivers/clk/qcom/Makefile              |  1 +
+> > >   drivers/clk/qcom/clk-regmap-phy-mux.c  | 62 ++++++++++++++++++++
+> > >   drivers/clk/qcom/clk-regmap-phy-mux.h  | 33 +++++++++++
+> > >   drivers/clk/qcom/gcc-sc7280.c          | 49 +++++-----------
+> > >   drivers/clk/qcom/gcc-sm8450.c          | 49 +++++-----------
+> > >   drivers/pci/controller/dwc/pcie-qcom.c | 81 +-------------------------
+> > >   6 files changed, 127 insertions(+), 148 deletions(-)
+> > >   create mode 100644 drivers/clk/qcom/clk-regmap-phy-mux.c
+> > >   create mode 100644 drivers/clk/qcom/clk-regmap-phy-mux.h
+> > 
+> > I applied this to pci/ctrl/qcom for v5.20, thanks!
+> > 
+> > Clock folks (Bjorn A, Andy, Michael, Stephen), I assume you're OK with
+> > these being merged via the PCI tree.  Let me know if you prefer
+> > anything different.
+> 
+> I noticed that this patchset is not a part of linux-next. Is it still
+> pending to be merged in 5.20?
 
- MAINTAINERS | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+It's still pending.  I currently have three separate qcom-related
+branches that need to be reconciled before I put them in -next.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a6d3bd9d2a8d..01a7bfa49bdc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17136,12 +17136,15 @@ N:	riscv
- K:	riscv
- 
- RISC-V/MICROCHIP POLARFIRE SOC SUPPORT
--M:	Lewis Hanly <lewis.hanly@microchip.com>
- M:	Conor Dooley <conor.dooley@microchip.com>
-+M:	Daire McNamara <daire.mcnamara@microchip.com>
- L:	linux-riscv@lists.infradead.org
- S:	Supported
- F:	arch/riscv/boot/dts/microchip/
-+F:	drivers/char/hw_random/mpfs-rng.c
-+F:	drivers/clk/microchip/clk-mpfs.c
- F:	drivers/mailbox/mailbox-mpfs.c
-+F:	drivers/pci/controller/pcie-microchip-host.c
- F:	drivers/soc/microchip/
- F:	include/soc/microchip/mpfs.h
- 
--- 
-2.36.1
-
+Bjorn
