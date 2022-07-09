@@ -2,80 +2,117 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F31FF56CB3B
-	for <lists+linux-clk@lfdr.de>; Sat,  9 Jul 2022 21:14:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF2556CBEF
+	for <lists+linux-clk@lfdr.de>; Sun, 10 Jul 2022 01:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiGITOs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Sat, 9 Jul 2022 15:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
+        id S229544AbiGIXPz (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Sat, 9 Jul 2022 19:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiGITOs (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Sat, 9 Jul 2022 15:14:48 -0400
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA2D1C91F
-        for <linux-clk@vger.kernel.org>; Sat,  9 Jul 2022 12:14:47 -0700 (PDT)
-Received: by mail-qt1-x843.google.com with SMTP id cf13so654498qtb.13
-        for <linux-clk@vger.kernel.org>; Sat, 09 Jul 2022 12:14:47 -0700 (PDT)
+        with ESMTP id S229523AbiGIXPz (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Sat, 9 Jul 2022 19:15:55 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81675201AC
+        for <linux-clk@vger.kernel.org>; Sat,  9 Jul 2022 16:15:53 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id e69so3310281ybh.2
+        for <linux-clk@vger.kernel.org>; Sat, 09 Jul 2022 16:15:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=yFjPBwfof55JxbmPqLU/8pTY0KXsIbs+GUr373EysuM=;
-        b=aPW2jAvVmuhNLR+c5htyB+zDi4OnTDULd1fxcN3eSTbHwJNEOOJgmj3fTYWk7vHHCh
-         l1fvjuAxY3beLoJuryNCjix4noRjXUJ96flcnt0Ag3b/W7KNFAm6awKYiAo5K47q8kWt
-         MeFmGc9M8gY62wmfmmi0RFya1KWEiH8+8MA4GFRapC/d8t8rVojKnISibCYnqA3uIC9n
-         OPokFty2m5Y+Xj/czcYf58YtbU8T9JXUP4t4rrmkkaMmP4OIbOeI4cVOaGhhAia+7wfo
-         rXUbuw846m1yySMZtfQrB/2vW8Mtx5yT0sCSD4sS3Ihg0txQGl/NxBD/U+Hb53LHRXY1
-         dNlA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mP2wLhwavewGA8FVEJebKzO+AyUl27McMXohUrjH32M=;
+        b=lofU9L5Tz9Yj7xkCPTUYbQb7wUBPYtbVCeSlBrpxJ5w75Xs9r8Vn/0QY2Xx3K6HcNx
+         rM5CSUUaLZEQnVc9zTjuDhaqd4yPqihiguwlOaDvsgGkB5gHgemi0DSm92+LyPUN2yWS
+         U570rUJJr5rrCQ6JtpQA5qRpYDR9WlorM1dCYCDGugTUdgfE4B+G2sNtDVEFkyNOh/B9
+         mmx+1Xbs3pPQzd4XzurQKQ0Jy0l6icPmWeFOC4Z9c98obW1c+PlLUNasrOFsjv4CSTPz
+         s321Z29KouSaMVEAwnq66OqpgMwk97Bb31ALluDtP2v9Q383Frxq+DTCYhDF+4h26hDA
+         9eUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=yFjPBwfof55JxbmPqLU/8pTY0KXsIbs+GUr373EysuM=;
-        b=oA1cLfTt+XDO8IPr4b+RxXu450fdhWRZbN0g0ElvBROREhT2PDbl7Rk4W7Bd2iw36g
-         o6SdJkH0RsbWpmAh9Dl6RONAT4H8xLW72nlhUiKVpRNJayn+o9Pug2hRnLNSVFy5wkwC
-         Ur4un50zbNf6+dUkIOIbITfzoZY7h8jFDV6BC+D6L++nyCUOCpAf38kKJPCFQW0SO9+B
-         TKFVBorKBPyRqu6eC7TEI+w1EVgKHjHXA/3hT1vcIvRjvuqq9qzXAz2J09TQS658ugWX
-         TCKYM4D9+SHAh/xQQXlmKEv2NwEvuIpdVFTqFX343BezoHWVkTDd68FrrGJvZzVh6i7P
-         k0sg==
-X-Gm-Message-State: AJIora8tVaFZGoU81E5ZQd5mVobnSRrA9sBuuINenWrS9fn5emgmP2TP
-        edmJnm7CAeQ023nygrte8/JB1MTTgmRZxLR4TA8=
-X-Google-Smtp-Source: AGRyM1s8Uc00XbGXmfBqcFMckxxCmi4IWvyOr3ucunfbRWdYVZlLl2PNQoJuWPow7udoUHd+a9F0Wn05n+xiL+FYTck=
-X-Received: by 2002:a05:622a:490:b0:31d:2a47:c221 with SMTP id
- p16-20020a05622a049000b0031d2a47c221mr8350459qtx.212.1657394086000; Sat, 09
- Jul 2022 12:14:46 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mP2wLhwavewGA8FVEJebKzO+AyUl27McMXohUrjH32M=;
+        b=EIxRhHexTMgApLEa5vcIJ+XoL5CXufb3wqbC/gnisKzX1ALMakq25TGf07rciFv89N
+         2Hrw9A0UtsHlKgJ2/cQ8RKFkohO+OB8E0q+8fUB7pxVQUVwvuDHXpm5DIuT6c4wFZmiu
+         u8MGYi0j5IDa+x3Jcl904P+IUjwepSKce68oonrjY+U24C6CulU+NnqJNiIHJ6Avo5PY
+         IdMmBWggRexCBJl9WP6PWjYLL/to6GeCC/NDdu/gkYsBsgi4wiytmEra5nTyeUaMqPqO
+         Zm+LRjIOE3B6uqmnHr//E4dnzipSur8dKIOXMwRhozVYkc7pESUHdY95Uh2a8JP5611t
+         oFQA==
+X-Gm-Message-State: AJIora+zsiMqejB7P6Nd9/cLZnkwtWhG+hdyvwdNN8ulEWxHY0Bmo75u
+        pz8PEKNWZUazqRk9zeLUIjI41ZroMMFHhUB8a3D44A==
+X-Google-Smtp-Source: AGRyM1snPIFzzPQrblAAlshjOA0mEK4qfSBKO2mQPb+MmznS2glNgzneCmOnOy4qyulsIyO5WJaID6sPej9uHMFeaSs=
+X-Received: by 2002:a25:4046:0:b0:66e:ddca:2ff5 with SMTP id
+ n67-20020a254046000000b0066eddca2ff5mr8784868yba.492.1657408552750; Sat, 09
+ Jul 2022 16:15:52 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6214:1d2f:0:0:0:0 with HTTP; Sat, 9 Jul 2022 12:14:45
- -0700 (PDT)
-Reply-To: stanleydenford100@gmail.com
-From:   Stanley Denford <sanjosarees@gmail.com>
-Date:   Sat, 9 Jul 2022 12:14:45 -0700
-Message-ID: <CAMXaW2gae6RAtp72J5LXGYzLEfkMuOjz02J257wSZbQ6xT4MmQ@mail.gmail.com>
-Subject: Good day
-To:     undisclosed-recipients:;
+References: <20220707125022.1156498-1-viorel.suman@oss.nxp.com> <20220707125022.1156498-3-viorel.suman@oss.nxp.com>
+In-Reply-To: <20220707125022.1156498-3-viorel.suman@oss.nxp.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sun, 10 Jul 2022 01:15:41 +0200
+Message-ID: <CACRpkdaBXqgxv_2-=Z6Lst7g6kGGL=eti_YaBSqvSQ7LeDgLaA@mail.gmail.com>
+Subject: Re: [PATCH v8 02/15] dt-bindings: pinctrl: imx: Add fsl,scu-iomux
+ yaml file
+To:     "Viorel Suman (OSS)" <viorel.suman@oss.nxp.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Peng Fan <peng.fan@nxp.com>, Liu Ying <victor.liu@nxp.com>,
+        Shijie Qin <shijie.qin@nxp.com>, Ming Qian <ming.qian@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
--- 
-Good day, How are you doing today
+On Thu, Jul 7, 2022 at 2:51 PM Viorel Suman (OSS)
+<viorel.suman@oss.nxp.com> wrote:
 
-I am Stanley Denford, a Client Relations officer. I got your name and
-contact information in my quest for her existing extended family, I am
-writing to you on highly confidential grounds with mutual benefit in
-respect to the estate of Frances...
+> From: Abel Vesa <abel.vesa@nxp.com>
+>
+> In order to replace the fsl,scu txt file from bindings/arm/freescale,
+> we need to split it between the right subsystems. This patch documents
+> separately the 'iomux/pinctrl' child node of the SCU main node.
+>
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+> Signed-off-by: Viorel Suman <viorel.suman@nxp.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-The estate is worth millions of Dollars.I'd appreciate it if you get back
-to me by confirming to me if this medium is safe and confidential enough to
-enable me divulge to you details on why I contacted you.
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
-Regards,
-Stanley Denford
+Tell me if you want me to apply this to the pinctrl tree.
+(I guess Shawn is handling it?)
+
+Yours,
+Linus Walleij
