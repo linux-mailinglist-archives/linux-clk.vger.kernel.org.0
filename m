@@ -2,88 +2,52 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD1757070C
-	for <lists+linux-clk@lfdr.de>; Mon, 11 Jul 2022 17:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7077570754
+	for <lists+linux-clk@lfdr.de>; Mon, 11 Jul 2022 17:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbiGKPZV (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 11 Jul 2022 11:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
+        id S231168AbiGKPoy (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 11 Jul 2022 11:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbiGKPZU (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Jul 2022 11:25:20 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103982D1F8
-        for <linux-clk@vger.kernel.org>; Mon, 11 Jul 2022 08:25:20 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6AC375C01A1;
-        Mon, 11 Jul 2022 11:25:19 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 11 Jul 2022 11:25:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1657553119; x=1657639519; bh=h2
-        Fl3vSMcRu20SwFKzmHS9Q6gvuP02p9iCYZ1kTPdtQ=; b=Qzbj76lFVXfGknEi/M
-        cz2NQ7HmGI3zRSTtzP3unOToWppG3n/Bq5sYDTRzB/05yAckTl00/P3eJ9zFPa6X
-        bgtQeninP0o1WLZp0ceJ+4YXLUwfn1pWCpp9BqRKIfjJKurdbQyvEoeSrhHATfzp
-        7xrH6nbPCKT4yeygyXP4Bl8OZbO+A+bgMo8Mbb0DKS+eEBTAmReSklKbooNgjcU8
-        8EqCCVH1GsJlZ7xTRrU1j7a2zYg2zzOrcu9FzRfMEIY3yQFys2FUYjLkIcBY9mNW
-        WBSQreoQw5BotTSdXjz9RVtslIAuFll0MfZkOvPA7CbNFNHmnuIb0ySmTmo4tNhm
-        ZJ1A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1657553119; x=1657639519; bh=h2Fl3vSMcRu20
-        SwFKzmHS9Q6gvuP02p9iCYZ1kTPdtQ=; b=E/uB0PBgNNMut79uosQoah054yjkX
-        1rdTvzBUejH3NAfQurZxDWjVcXES3Avp4bCBIZrO2UGBueqagd5I8V7PgHaA//8m
-        zaVlRf33ivJLlIoFn/+0L6uh0hulL7MGpoAvcaKr9pZq79AteheKp5EZ7oVc/O8U
-        5h/hzH4+JsAR+5dWUyJalHbIpYAw6wTgBlfuuH1jmnDnZFr4dCx/NAiN0vMEPvOn
-        umJ0nWMGxh+SBoj8Cy9uHej5di2ll9VSTC/vnkmOoNahdFefOfmbtghJAzU50QfH
-        NfucyhSAc2eskeOfPJ5P/MFHwHzWn8THRuUew40J7pFAmVggLk7zLTN1Q==
-X-ME-Sender: <xms:30DMYmYsRf-JMlVfWNhcEvqHRrXii5aUtksjl1dG9fZh4houI07vBw>
-    <xme:30DMYpanVYAl3QhQVuca6DtyviSgXSdtMukGRxr-MeHhZ3i6vTHD3k2Rqk2MfVEpK
-    sdY8cE4-8_IjjPyyL4>
-X-ME-Received: <xmr:30DMYg93sSJUoWazTZ99vomFF0qAXodwcGFXf02GXsLu0v8RdcReZVrUeaZLlzVJCgr8i8u2PJYtnISEvUc5QBFHlJFIo392UfSH2gE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrudejfedgkeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeelkeefteduhfekjeeihfetudfguedvveekkeetteekhfekhfdtlefgfedu
-    vdejhfenucevlhhushhtvghrufhiiigvpeehnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:30DMYoqXPj9C5bJxHIg5HRYsg2933gBA4wMTiBLeN3SFIC_LK_SwFw>
-    <xmx:30DMYhpGSMWis2FgOpnEb29xhDlbOrvrNPtKNzJ_P1NVcBLg9xJk6w>
-    <xmx:30DMYmTRn5uWpR5gYhd06K6y2Dwj_jzh48Quh4yYZpBgpnLpCxqBzw>
-    <xmx:30DMYuiSFLwW1zflhqRpCRV70a4Vbo8Q_6RNIx7h9i84IZ83z_7Spg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 11 Jul 2022 11:25:18 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v6 28/28] clk: tests: Add missing test case for ranges
-Date:   Mon, 11 Jul 2022 17:24:24 +0200
-Message-Id: <20220711152424.701311-29-maxime@cerno.tech>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220711152424.701311-1-maxime@cerno.tech>
-References: <20220711152424.701311-1-maxime@cerno.tech>
+        with ESMTP id S230511AbiGKPox (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 11 Jul 2022 11:44:53 -0400
+Received: from mail.baikalelectronics.com (mail.baikalelectronics.com [87.245.175.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0306927B30;
+        Mon, 11 Jul 2022 08:44:47 -0700 (PDT)
+Received: from mail (mail.baikal.int [192.168.51.25])
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 831F016A4;
+        Mon, 11 Jul 2022 18:46:37 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 831F016A4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baikalelectronics.ru; s=mail; t=1657554397;
+        bh=BkeEs6BdCkU9ABOFSg2oG0mZd7pcIkjI6iLqkIwV09A=;
+        h=From:To:CC:Subject:Date:From;
+        b=HRNm31egJmUrkE4TVylKhnmeUfbj301LaVavZpiYjJYcvcHHWe4VXma2DU0aPJeq2
+         35SHYZYk68ZlZ3MyU6++vixMELDHszGqDWMuLh/hOw9noZ9x4Kc3hbYN1edPMFQaYS
+         8yH4BK2MTqglHbiM8zcqR6DHzqQMwyjIgPqGQnyY=
+Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 11 Jul 2022 18:44:44 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Michael Turquette <mturquette@baylibre.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        <linux-clk@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v7 0/7] clk/resets: baikal-t1: Add DDR/PCIe resets and xGMAC/SATA fixes
+Date:   Mon, 11 Jul 2022 18:44:26 +0300
+Message-ID: <20220711154433.15415-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,82 +55,103 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Let's add a test on the rate range after a reparenting. This fails for
-now, but it's worth having it to document the corner cases we don't
-support yet.
+Folks! It has been over four months since the first series submission for
+review. Please merge it in.
 
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/clk/clk_test.c | 53 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+Short summary regarding this patchset. The series starts from fixing of
+the clocks glitching cause by the Renesas 5P49V6901 chip in some
+circumstances. Afterwards a few more modifications are introduced to
+finally finish the Baikal-T1 CCU unit support up and prepare the code
+before adding the Baikal-T1 PCIe/xGMAC support. First of all it turned out
+I specified wrong DW xGMAC PTP reference clock divider in my initial
+patches. It must be 8, not 10. Secondly I was wrong to add a joint xGMAC
+Ref and PTP clock instead of having them separately defined.  The SoC
+manual describes these clocks as separate fixed clock wrappers. Finally
+in order to close the SoC clock/reset support up we need to add the DDR
+and PCIe interfaces reset controls support. It's done in two steps. First
+I've moved the reset-controls-related code into a dedicated module. Then
+the DDR/PCIe reset-control functionality is added. As the series
+finalization we've decided to convert the Baikal-T1 clock/reset source
+drivers to mainly being the platform device driver and pre-initialize the
+basic clocks only at the early kernel boot stages.
 
-diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
-index 5a5b7a8baba2..8e0c76ab1a6d 100644
---- a/drivers/clk/clk_test.c
-+++ b/drivers/clk/clk_test.c
-@@ -514,9 +514,62 @@ clk_test_multiple_parents_mux_has_parent(struct kunit *test)
- 	clk_put(clk);
- }
- 
-+/*
-+ * Test that for a clock with a multiple parents, if we set a range on
-+ * that clock and the parent is changed, its rate after the reparenting
-+ * is still within the range we asked for.
-+ *
-+ * FIXME: clk_set_parent() only does the reparenting but doesn't
-+ * reevaluate whether the new clock rate is within its boundaries or
-+ * not.
-+ */
-+static void
-+clk_test_multiple_parents_mux_set_range_set_parent_get_rate(struct kunit *test)
-+{
-+	struct clk_multiple_parent_ctx *ctx = test->priv;
-+	struct clk_hw *hw = &ctx->hw;
-+	struct clk *clk = clk_hw_get_clk(hw, NULL);
-+	struct clk *parent1, *parent2;
-+	unsigned long rate;
-+	int ret;
-+
-+	kunit_skip(test, "This needs to be fixed in the core.");
-+
-+	parent1 = clk_hw_get_clk(&ctx->parents_ctx[0].hw, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent1);
-+	KUNIT_ASSERT_TRUE(test, clk_is_match(clk_get_parent(clk), parent1));
-+
-+	parent2 = clk_hw_get_clk(&ctx->parents_ctx[1].hw, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent2);
-+
-+	ret = clk_set_rate(parent1, DUMMY_CLOCK_RATE_1);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = clk_set_rate(parent2, DUMMY_CLOCK_RATE_2);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = clk_set_rate_range(clk,
-+				 DUMMY_CLOCK_RATE_1 - 1000,
-+				 DUMMY_CLOCK_RATE_1 + 1000);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = clk_set_parent(clk, parent2);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	rate = clk_get_rate(clk);
-+	KUNIT_ASSERT_GT(test, rate, 0);
-+	KUNIT_EXPECT_GE(test, rate, DUMMY_CLOCK_RATE_1 - 1000);
-+	KUNIT_EXPECT_LE(test, rate, DUMMY_CLOCK_RATE_1 + 1000);
-+
-+	clk_put(parent2);
-+	clk_put(parent1);
-+	clk_put(clk);
-+}
-+
- static struct kunit_case clk_multiple_parents_mux_test_cases[] = {
- 	KUNIT_CASE(clk_test_multiple_parents_mux_get_parent),
- 	KUNIT_CASE(clk_test_multiple_parents_mux_has_parent),
-+	KUNIT_CASE(clk_test_multiple_parents_mux_set_range_set_parent_get_rate),
- 	{}
- };
- 
+Link: https://lore.kernel.org/linux-pci/20220324010905.15589-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Resubmit the series with adding @Philipp to the list of the recipients.
+
+Link: https://lore.kernel.org/linux-pci/20220330144320.27039-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v3:
+- No comments. Just resend the series.
+- Rebased from v5.17 onto v5.18-rc3.
+
+Link: https://lore.kernel.org/linux-clk/20220503205722.24755-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v4:
+- Completely split the CCU Dividers and Resets functionality up. (@Stephen)
+- Add a new fixes patch: "clk: baikal-t1: Actually enable SATA internal
+  ref clock".
+- Add a new fixes patch: "reset: Fix devm bulk optional exclusive control
+  getter".
+- Add a new fixes patch: "clk: vc5: Fix 5P49V6901 outputs disabling when
+  enabling FOD".
+- Add a new feagure patch: "clk: baikal-t1: Convert to platform device
+  driver".
+- Change the internal clock ID to the XGMAC-referred name.
+- Rebase onto the kernel v5.18.
+
+Link: https://lore.kernel.org/lkml/20220610072124.8714-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v5:
+- Just resend.
+- Rebase onto the kernel v5.19-rcX.
+
+Link: https://lore.kernel.org/linux-clk/20220624141853.7417-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v6:
+- Drop the patch
+  [PATCH RESEND v5 1/8] reset: Fix devm bulk optional exclusive control getter
+  since it has already been accepted by @Philipp.
+- Refactor the reset-control code to support the linear reset IDs only.
+  (@Philipp)
+- Combine the reset-related code into a single file. (@Philipp)
+- Drop CCU_DIV_RST_MAP() macro. It's no longer used.
+
+Link: https://lore.kernel.org/linux-clk/20220708192725.9501-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v7:
+- Fix "Alignment should match open parenthesis" warning for the
+  pr_err() method invocations. (@Philipp)
+- Drop empty line from the sys_rst_info structure initialization block.
+  (@Philipp)
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (7):
+  clk: vc5: Fix 5P49V6901 outputs disabling when enabling FOD
+  clk: baikal-t1: Fix invalid xGMAC PTP clock divider
+  clk: baikal-t1: Add shared xGMAC ref/ptp clocks internal parent
+  clk: baikal-t1: Add SATA internal ref clock buffer
+  clk: baikal-t1: Move reset-controls code into a dedicated module
+  clk: baikal-t1: Add DDR/PCIe directly controlled resets support
+  clk: baikal-t1: Convert to platform device driver
+
+ drivers/clk/baikal-t1/Kconfig       |  12 +-
+ drivers/clk/baikal-t1/Makefile      |   1 +
+ drivers/clk/baikal-t1/ccu-div.c     |  84 +++++++--
+ drivers/clk/baikal-t1/ccu-div.h     |  17 +-
+ drivers/clk/baikal-t1/ccu-pll.h     |   8 +
+ drivers/clk/baikal-t1/ccu-rst.c     | 217 +++++++++++++++++++++++
+ drivers/clk/baikal-t1/ccu-rst.h     |  67 +++++++
+ drivers/clk/baikal-t1/clk-ccu-div.c | 263 ++++++++++++++++------------
+ drivers/clk/baikal-t1/clk-ccu-pll.c | 128 +++++++++++---
+ drivers/clk/clk-versaclock5.c       |   2 +-
+ include/dt-bindings/reset/bt1-ccu.h |   9 +
+ 11 files changed, 647 insertions(+), 161 deletions(-)
+ create mode 100644 drivers/clk/baikal-t1/ccu-rst.c
+ create mode 100644 drivers/clk/baikal-t1/ccu-rst.h
+
 -- 
-2.36.1
+2.35.1
 
