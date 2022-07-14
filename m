@@ -2,114 +2,92 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30161573F09
-	for <lists+linux-clk@lfdr.de>; Wed, 13 Jul 2022 23:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3485740E5
+	for <lists+linux-clk@lfdr.de>; Thu, 14 Jul 2022 03:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237396AbiGMVcw (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Wed, 13 Jul 2022 17:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53410 "EHLO
+        id S230028AbiGNBPL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Wed, 13 Jul 2022 21:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237557AbiGMVcr (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Wed, 13 Jul 2022 17:32:47 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FB5252AA
-        for <linux-clk@vger.kernel.org>; Wed, 13 Jul 2022 14:32:46 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id a14-20020a0568300b8e00b0061c4e3eb52aso6854583otv.3
-        for <linux-clk@vger.kernel.org>; Wed, 13 Jul 2022 14:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KMcZaOI1pkMPzYIua3VuB4fL4UqUR3gQmB+xGyPu7QM=;
-        b=EgJHs96mxk4tNDPUW3eCN/fvFCRBhPOzRXy6DAY0v+0GdsJseQ8CgMTxM7fCZYt73w
-         BOI38G2Dn+JUoNK8C+UshRHgMS09ajx3F+gCN1kLJCot8clpn+7B/D9mKFFHeWj6gVyf
-         vkJRPIcEZUfVDWBuZzRIHyd0neo6xM5XFYBXPn7slT7yXMyZJp1RaslAeoY+/Hp1/5JO
-         Z5nI9TSKNxnzpo4+3oxuSUFfQsJZYgly2IUp9sPm1a6tDJZqG8oGp4KzOVrdDbIx09TQ
-         TeiSBJ4ZsB10pY41WmA+t0accVkpA3iPhTZ4vSka+f2Q6MppAyjc1JQffSUY9TEW/ty5
-         AVeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KMcZaOI1pkMPzYIua3VuB4fL4UqUR3gQmB+xGyPu7QM=;
-        b=Lg4bH6m0WnwTeME2o1h2Gr1u+S0EKaJosnR7hEbhHOrDLavAIbcvB0hlAjFuq3GGha
-         p/GkbbJwTH3+eP9N0jVTtMcsqywoaIyze1qgEd8qjIP0UwvsL+g08D6dzPo7hFuFqJPj
-         hRa+68QlTLAqB5aHcsczWu2P1501APzjS95F4//7RlzLbtPSPL2CugESK9+auIAsBxJR
-         /7LN9KL+6OqdqtjnZOCOsGsUgW9GnFK94kSTOX+DU89Y0HFHjjAiBukXjWIsRRjat7Fs
-         1VkbWM7YIMBCfMFPS9VR7kUOcljq0JQsQ6UUtMSvdJrsEhtWhuf3BebOJaC0zZgnBtQi
-         OthA==
-X-Gm-Message-State: AJIora8h94LW7yQBINXZ/+Tib3/t+GI8VuGQSDI0ZNpZk5ficT8QSdfE
-        UUPTdbzy5sU4Y+wWwJPNGObQITny0RkU9w==
-X-Google-Smtp-Source: AGRyM1tdI/BVkfAWRhAGpOWIOiePCL5uX9PVHFsgBKsefi693i/n4CRhg9lEq6x/dmREF/ZscHgi1w==
-X-Received: by 2002:a9d:19c9:0:b0:618:ce28:bcf7 with SMTP id k67-20020a9d19c9000000b00618ce28bcf7mr2108300otk.285.1657747965648;
-        Wed, 13 Jul 2022 14:32:45 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id v37-20020a05687070a500b000f342119f41sm6559223oae.42.2022.07.13.14.32.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jul 2022 14:32:45 -0700 (PDT)
-Date:   Wed, 13 Jul 2022 16:32:43 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/6] clk: qcom: msm8996-cpu: Cleanup and migrate to
- parent_data
-Message-ID: <Ys85+7rYjQOSPvD/@builder.lan>
-References: <20220621160621.24415-1-y.oudjana@protonmail.com>
+        with ESMTP id S231214AbiGNBPK (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Wed, 13 Jul 2022 21:15:10 -0400
+X-Greylist: delayed 469 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Jul 2022 18:15:09 PDT
+Received: from extserv.mm-sol.com (ns.mm-sol.com [37.157.136.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D45A20F64
+        for <linux-clk@vger.kernel.org>; Wed, 13 Jul 2022 18:15:09 -0700 (PDT)
+Received: from [192.168.1.11] (unknown [195.24.90.54])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: svarbanov@mm-sol.com)
+        by extserv.mm-sol.com (Postfix) with ESMTPSA id 018DFD2F3;
+        Thu, 14 Jul 2022 04:07:17 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mm-sol.com; s=201706;
+        t=1657760838; bh=mAG87b/Rz00R7S5lWkO464tvyYZ6zSSv0akbCiqbGt4=;
+        h=Date:Subject:To:Cc:From:From;
+        b=ejyy8UYRFHznhUOI96LxcPz90zQQgKq1RoJ1HsEB6rOl6PzEvYeoKob4ZLBQ+57QJ
+         W+qvDl2GAG6Wf2Rgyb8TbZi+IYh8RtHIsiAcwWvIaP20c3A9h7y3p07BTV1+yr6mtZ
+         yeaXaJtiF7cUw+cr/NsYQL3mPSPkKtxtsiirtZhPCLv/mdwYLSkR+iSFLPA6HK4yh4
+         2fiAkH2oOj+fTeT8dPKJAE1Dyfq0ahrWt3hjpJISinS2+D5JrDVLzvDgfduD67yfhm
+         skTbQ21qaBk572vbc+tQ1qHtzS0z7yemnd4cXJ/sfa/fRoCUYheIiiyx0TPTP/tBu1
+         P3mi5siR4U4VQ==
+Message-ID: <8044c29c-ca00-c901-1b5b-073329b37618@mm-sol.com>
+Date:   Thu, 14 Jul 2022 04:07:10 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220621160621.24415-1-y.oudjana@protonmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v11 4/5] PCI: qcom: Remove unnecessary pipe_clk handling
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pci@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+References: <20220608105238.2973600-1-dmitry.baryshkov@linaro.org>
+ <20220608105238.2973600-5-dmitry.baryshkov@linaro.org>
+From:   Stanimir Varbanov <svarbanov@mm-sol.com>
+In-Reply-To: <20220608105238.2973600-5-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Tue 21 Jun 11:06 CDT 2022, Yassine Oudjana wrote:
+Hi Dmitry,
 
-> This series includes some cleanup of the MSM8996 CPU clock driver, as well as
-> migration from parent_names to parent_data for all of its clocks. The DT schema
-> is also fixed in this series to show the actual clocks consumed by the clock
-> controller and pass checks.
+On 6/8/22 13:52, Dmitry Baryshkov wrote:
+> PCIe PHY drivers (both QMP and PCIe2) already do clk_prepare_enable() /
+> clk_prepare_disable() pipe_clk. Remove extra calls to enable/disable
+> this clock from the PCIe driver, so that the PHY driver can manage the
+> clock on its own.
+> 
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+> Tested-by: Johan Hovold <johan+linaro@kernel.org>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom.c | 44 ++------------------------
+>  1 file changed, 3 insertions(+), 41 deletions(-)
+> 
 
-This series looks almost ready to be merged, could you (or Dmitry?)
-update the two outstanding items?
+I'm very happy to see that is gone.
 
-Thanks,
-Bjorn
+Acked-by: Stanimir Varbanov <svarbanov@mm-sol.com>
 
-> 
-> Yassine Oudjana (6):
->   clk: qcom: msm8996-cpu: Rename DIV_2_INDEX to SMUX_INDEX
->   clk: qcom: msm8996-cpu: Statically define PLL dividers
->   clk: qcom: msm8996-cpu: Unify cluster order
->   clk: qcom: msm8996-cpu: Convert secondary muxes to clk_regmap_mux
->   dt-bindings: clock: qcom,msm8996-apcc: Fix clocks
->   clk: qcom: msm8996-cpu: Use parent_data for all clocks
-> 
->  .../bindings/clock/qcom,msm8996-apcc.yaml     |  15 +-
->  drivers/clk/qcom/clk-cpu-8996.c               | 235 ++++++++++--------
->  2 files changed, 140 insertions(+), 110 deletions(-)
-> 
-> -- 
-> 2.36.1
-> 
+-- 
+regards,
+Stan
