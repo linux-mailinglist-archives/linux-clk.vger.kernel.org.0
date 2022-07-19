@@ -2,160 +2,81 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E843557975D
-	for <lists+linux-clk@lfdr.de>; Tue, 19 Jul 2022 12:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C3757972A
+	for <lists+linux-clk@lfdr.de>; Tue, 19 Jul 2022 12:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbiGSKMv (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 19 Jul 2022 06:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
+        id S237562AbiGSKCl (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 19 Jul 2022 06:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiGSKMu (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 19 Jul 2022 06:12:50 -0400
-Received: from www381.your-server.de (www381.your-server.de [78.46.137.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD45EDF17
-        for <linux-clk@vger.kernel.org>; Tue, 19 Jul 2022 03:12:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=metafoo.de;
-         s=default2002; h=Content-Transfer-Encoding:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=T3nSt2JFrrXefy+RgJNclWrx5CCUCPmVjlqT25Wrvrs=; b=ZobxGW+pErcdfphoJkluvTat6O
-        mtzMIqjKoOyB8g76pH8Zedk1TV/F4JEMS1PPFFFGT9Yv3txYMAamKIOFDvg/OHKgOLBocTQOVC0O0
-        VKt7hXJf5aiolWNRAiir5sdGqrUe2jAD3JYckWkZVNnNde6c8lsWLwW4ShVZfharcM9KIz6yQkPQw
-        sBAGml4GgaoEmkzXQYuPJ2HZ7n9yz41avg3RyEYGrZXN7EJaFraBNCeGOZVB3MJL7ys+Loi0e70x4
-        t+34uZHo4pezPanDsaTknoZsxYn++jZS51/1bviCG80s+f4nFgcamTSLNzkonzS7m7N96jhbOhXSd
-        c0KzJRfQ==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www381.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <lars@metafoo.de>)
-        id 1oDjoc-00017S-JF; Tue, 19 Jul 2022 11:46:54 +0200
-Received: from [2001:a61:2a04:b01:9e5c:8eff:fe01:8578] (helo=lars-desktop.fritz.box)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lars@metafoo.de>)
-        id 1oDjoc-000Dq4-DY; Tue, 19 Jul 2022 11:46:54 +0200
-From:   Lars-Peter Clausen <lars@metafoo.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     linux-clk@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>
-Subject: [PATCH 2/2] clk: vc5: Use regmap_{set,clear}_bits() where appropriate
-Date:   Tue, 19 Jul 2022 11:46:37 +0200
-Message-Id: <20220719094637.844946-2-lars@metafoo.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220719094637.844946-1-lars@metafoo.de>
-References: <20220719094637.844946-1-lars@metafoo.de>
+        with ESMTP id S237571AbiGSKCP (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 19 Jul 2022 06:02:15 -0400
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83CD3DF1F
+        for <linux-clk@vger.kernel.org>; Tue, 19 Jul 2022 03:01:57 -0700 (PDT)
+Received: from [192.168.1.101] (abxj77.neoplus.adsl.tpnet.pl [83.9.3.77])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 6DA4F1F4F6;
+        Tue, 19 Jul 2022 12:01:54 +0200 (CEST)
+Message-ID: <7f5e602c-a02c-2a4d-2b00-7cd934a8867e@somainline.org>
+Date:   Tue, 19 Jul 2022 12:01:53 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: lars@metafoo.de
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26606/Tue Jul 19 09:57:30 2022)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/3] dt-bindings: clock: qcom: rpmcc: Add BIMC_FREQ_LOG
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220716192714.454031-1-konrad.dybcio@somainline.org>
+ <20220716192714.454031-2-konrad.dybcio@somainline.org>
+ <20220719071324.55706C341C6@smtp.kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20220719071324.55706C341C6@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-regmap_set_bits() and regmap_clear_bits() are variations of
-regmap_update_bits() that can be used if all bits of the mask have to be
-set to either 1 or 0 respectively.
 
-Update the versaclk driver to use regmap_set_bits() and regmap_clear_bits()
-where appropriate. This results in slightly more compact code and also
-makes the intention of the code clearer which can help with review.
 
-Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
----
- drivers/clk/clk-versaclock5.c | 35 +++++++++++++++--------------------
- 1 file changed, 15 insertions(+), 20 deletions(-)
+On 19.07.2022 09:13, Stephen Boyd wrote:
+> Quoting Konrad Dybcio (2022-07-16 12:27:13)
+>> Add the missing definition for the aforementioned clock.
+>>
+> 
+> What does the bimc freq log do?
+It does not seem used by any driver downstream, not from a quick glance at
+least. It is however exposed on the downstream kernel and here's what
+debugfs has to say about it on mainline:
 
-diff --git a/drivers/clk/clk-versaclock5.c b/drivers/clk/clk-versaclock5.c
-index e83148eb2c24..681006884097 100644
---- a/drivers/clk/clk-versaclock5.c
-+++ b/drivers/clk/clk-versaclock5.c
-@@ -392,9 +392,8 @@ static int vc5_pfd_set_rate(struct clk_hw *hw, unsigned long rate,
- 
- 	/* CLKIN within range of PLL input, feed directly to PLL. */
- 	if (parent_rate <= 50000000) {
--		ret = regmap_update_bits(vc5->regmap, VC5_VCO_CTRL_AND_PREDIV,
--					 VC5_VCO_CTRL_AND_PREDIV_BYPASS_PREDIV,
--					 VC5_VCO_CTRL_AND_PREDIV_BYPASS_PREDIV);
-+		ret = regmap_set_bits(vc5->regmap, VC5_VCO_CTRL_AND_PREDIV,
-+				      VC5_VCO_CTRL_AND_PREDIV_BYPASS_PREDIV);
- 		if (ret)
- 			return ret;
- 
-@@ -413,8 +412,8 @@ static int vc5_pfd_set_rate(struct clk_hw *hw, unsigned long rate,
- 	if (ret)
- 		return ret;
- 
--	return regmap_update_bits(vc5->regmap, VC5_VCO_CTRL_AND_PREDIV,
--				  VC5_VCO_CTRL_AND_PREDIV_BYPASS_PREDIV, 0);
-+	return regmap_clear_bits(vc5->regmap, VC5_VCO_CTRL_AND_PREDIV,
-+				 VC5_VCO_CTRL_AND_PREDIV_BYPASS_PREDIV);
- }
- 
- static const struct clk_ops vc5_pfd_ops = {
-@@ -579,14 +578,13 @@ static int vc5_fod_set_rate(struct clk_hw *hw, unsigned long rate,
- 	 * datasheet somewhat implies this is needed, but the register
- 	 * and the bit is not documented.
- 	 */
--	ret = regmap_update_bits(vc5->regmap, VC5_GLOBAL_REGISTER,
--				 VC5_GLOBAL_REGISTER_GLOBAL_RESET, 0);
-+	ret = regmap_clear_bits(vc5->regmap, VC5_GLOBAL_REGISTER,
-+				VC5_GLOBAL_REGISTER_GLOBAL_RESET);
- 	if (ret)
- 		return ret;
- 
--	return regmap_update_bits(vc5->regmap, VC5_GLOBAL_REGISTER,
--				  VC5_GLOBAL_REGISTER_GLOBAL_RESET,
--				  VC5_GLOBAL_REGISTER_GLOBAL_RESET);
-+	return regmap_set_bits(vc5->regmap, VC5_GLOBAL_REGISTER,
-+			       VC5_GLOBAL_REGISTER_GLOBAL_RESET);
- }
- 
- static const struct clk_ops vc5_fod_ops = {
-@@ -614,10 +612,9 @@ static int vc5_clk_out_prepare(struct clk_hw *hw)
- 	 * registers.
- 	 */
- 	if (vc5->chip_info->flags & VC5_HAS_BYPASS_SYNC_BIT) {
--		ret = regmap_update_bits(vc5->regmap,
--					 VC5_RESERVED_X0(hwdata->num),
--					 VC5_RESERVED_X0_BYPASS_SYNC,
--					 VC5_RESERVED_X0_BYPASS_SYNC);
-+		ret = regmap_set_bits(vc5->regmap,
-+				      VC5_RESERVED_X0(hwdata->num),
-+				      VC5_RESERVED_X0_BYPASS_SYNC);
- 		if (ret)
- 			return ret;
- 	}
-@@ -640,10 +637,8 @@ static int vc5_clk_out_prepare(struct clk_hw *hw)
- 	}
- 
- 	/* Enable the clock buffer */
--	ret = regmap_update_bits(vc5->regmap,
--				 VC5_CLK_OUTPUT_CFG(hwdata->num, 1),
--				 VC5_CLK_OUTPUT_CFG1_EN_CLKBUF,
--				 VC5_CLK_OUTPUT_CFG1_EN_CLKBUF);
-+	ret = regmap_set_bits(vc5->regmap, VC5_CLK_OUTPUT_CFG(hwdata->num, 1),
-+			      VC5_CLK_OUTPUT_CFG1_EN_CLKBUF);
- 	if (ret)
- 		return ret;
- 
-@@ -669,8 +664,8 @@ static void vc5_clk_out_unprepare(struct clk_hw *hw)
- 	struct vc5_driver_data *vc5 = hwdata->vc5;
- 
- 	/* Disable the clock buffer */
--	regmap_update_bits(vc5->regmap, VC5_CLK_OUTPUT_CFG(hwdata->num, 1),
--			   VC5_CLK_OUTPUT_CFG1_EN_CLKBUF, 0);
-+	regmap_clear_bits(vc5->regmap, VC5_CLK_OUTPUT_CFG(hwdata->num, 1),
-+			  VC5_CLK_OUTPUT_CFG1_EN_CLKBUF);
- }
- 
- static unsigned char vc5_clk_out_get_parent(struct clk_hw *hw)
--- 
-2.30.2
+clk_accuracy:0
+clk_duty_cycle:1/2
+clk_enable_count:0
+clk_max_rate:18446744073709551615
+clk_min_rate:0
+clk_notifier_count:0
+clk_parent:xo_board
+clk_phase:0
+clk_prepare_count:0
+clk_protect_count:0
+clk_rate:1
 
+Konrad 
