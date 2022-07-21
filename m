@@ -2,97 +2,118 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D422357C8DA
-	for <lists+linux-clk@lfdr.de>; Thu, 21 Jul 2022 12:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9CAE57D1A9
+	for <lists+linux-clk@lfdr.de>; Thu, 21 Jul 2022 18:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbiGUKWE (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 21 Jul 2022 06:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50586 "EHLO
+        id S229471AbiGUQis (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 21 Jul 2022 12:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232310AbiGUKWD (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 21 Jul 2022 06:22:03 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD8C31DF4
-        for <linux-clk@vger.kernel.org>; Thu, 21 Jul 2022 03:22:00 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id m13so1560443edc.5
-        for <linux-clk@vger.kernel.org>; Thu, 21 Jul 2022 03:22:00 -0700 (PDT)
+        with ESMTP id S229777AbiGUQir (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 21 Jul 2022 12:38:47 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232427B793
+        for <linux-clk@vger.kernel.org>; Thu, 21 Jul 2022 09:38:45 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id o12so2487296ljc.3
+        for <linux-clk@vger.kernel.org>; Thu, 21 Jul 2022 09:38:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=coS9yaiFpBby2OfoSNqf9gzdn43j/VET3bvDzCGocjQ=;
-        b=Mp9N6VNKLnN8XmfgQiRv9rTuCj42SfzQ2c8sm+Q4zjul0ZnDivBU+18O0OtxC6Jt0s
-         zU0N0zdwI9gFuTa7L4UV9kRcXRKowCkUWZ6OzqrXaAe/FgcCWB66v9ffLDXcqOsIZKw6
-         1WdIEqYiVhPj/+p8ZlrXwPQbZj80TJWfEGEz/GePz5xPimw1eF2KFR9TkIYfct9BDr3T
-         6OImENbCB2AIdSzEdDCXRiiMVJHX+LeFsr2TQSf1EJ8jCKiwW8luqh02FoSC5lPNYOlb
-         b9jnQn8aO7jvemtkeBJAYTcQGiPdHo5/5yVhiGN9auedKnRBIY943a0C/yteO+MmdnsG
-         uHAA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YGG2EmCH3bS3wBtE1nLRsaoqlR5mpBzOgXAIcspF1i4=;
+        b=VrqwtoLDp0th6beh70O/VpIJb44Tn48oNwIpyGGfXQ82zAA51Bxkl2wSrzc54xQE/D
+         /eJ2dHRsI8MZGQ4pjQvVF1t8TKVtXGTYATm7677RjYbG48zJ3bxXTxpMV2cV9TW7w6Hh
+         cP7/w/VN3A/+5KoeQlod+kp0COrm9v0d6WlE/5Qy00TnKDFxsWNmx6ODhZyxJ6dhRhAM
+         Y5yy18e0BH/qdPfyxUgjkkcmyHyJTUF8q3LLiXQhN0w5N8cujj/SpkvrmEsQn7FUBMAi
+         fbHef/necwPLVOccw2clWPTxl9GZAT0WTerLlXjHRvP87YULrMVYQXyW2YtROS9ppB9u
+         0KsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=coS9yaiFpBby2OfoSNqf9gzdn43j/VET3bvDzCGocjQ=;
-        b=wZ8s9MWDzxx/G8EW+rfnuKLzsVaaG8N3s0ZbB5MHWIKLslHDFqpkHiWHG7/Fv/lTBA
-         I68ul7GgDUNgp93tl0GumEZGF10qDkBxS0egsWLbQpc99gGCBRXeK9SybJ4LT4/IXTSW
-         xW3HCab19LTI8FxXeJ7ptIPDpGvV0On3oEvPjUaEdRVJwbqgcwne1fcZ8RKUfLxBRFJj
-         R02X8JpIk9sU2IwDJWiAuIiVSsEA7KufAbI3krL5iEC3KzuGAM+2dJA3KhgZXmIOB6Tj
-         Kd0/p9svavhMcYJelnOZ5uS9OfRoZoyhhnBUYEA2aUcoZQdmh9fbMgk9Ckdg4B0/SnZl
-         4fug==
-X-Gm-Message-State: AJIora82HU6Kz6oBJD0qyqBQ68RgAP3MG45bT0Ss5wNHZdDe54HM5fQZ
-        6WSqZo96KMZFp/6OEt8Q60LRkAcIS6bW/8o127s=
-X-Google-Smtp-Source: AGRyM1sEvIoGaleZ0I52UXafLlxTEwTkuYih/lWd0T125/PHxr4qeJe72V+MS07UNoptZgxQhg1wvWeO0sdco/fifnU=
-X-Received: by 2002:a05:6402:5415:b0:43b:a888:fefe with SMTP id
- ev21-20020a056402541500b0043ba888fefemr11736690edb.302.1658398919275; Thu, 21
- Jul 2022 03:21:59 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YGG2EmCH3bS3wBtE1nLRsaoqlR5mpBzOgXAIcspF1i4=;
+        b=y88Ty6U9ZfhdVLrs0EZn+bD7g+XaZTFl0wGaDSivQp+79rxdsyhOwukcVQOpbvixRS
+         jf+4T9SFD8AzaH6yw+Uzn7hjtLN+3so3IxFEqGWJocU8fYeyk+Ae64ICP9c0MrGIPnfQ
+         6QCthNpk5lQC039gyuCxI45nRa1xUHPE037Gwe7hF98w3ZyyrAWs2VaWsBiM3bjFvKUS
+         8QwSM0w++6VsQB+VfheIQ0N+qZOTFikEK/MQWQcXmSO+xZL4tGEaiXmpEF5IZ4Z3Oj/N
+         l/r1+a8GdG6ewbBXfRcchqnuze2fvVshzUiYdEBerEzKKaF4nZqV3X6/qncjLzwuEUrh
+         a/BA==
+X-Gm-Message-State: AJIora84uFszhHlyt/9yBR7NR/N8fZfmwSXUFMWr+9Ah8jpNhM2f1zm3
+        Ci4PuS19qgNIp0tIoRxj53uqVA==
+X-Google-Smtp-Source: AGRyM1sjYIxbnzkQfm9NykntHg4tQ/OMvY4AkQJhXhbKqdP/B68eLxAg+9nBCXyPn7z1aachpSTFmA==
+X-Received: by 2002:a2e:8745:0:b0:25d:eba0:9e2e with SMTP id q5-20020a2e8745000000b0025deba09e2emr247240ljj.384.1658421523172;
+        Thu, 21 Jul 2022 09:38:43 -0700 (PDT)
+Received: from [192.168.115.193] (89-162-31-138.fiber.signal.no. [89.162.31.138])
+        by smtp.gmail.com with ESMTPSA id o6-20020a056512230600b00478fc420ea6sm400437lfu.244.2022.07.21.09.38.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Jul 2022 09:38:42 -0700 (PDT)
+Message-ID: <3c781dd6-865f-e59b-17dd-c583e79ef152@linaro.org>
+Date:   Thu, 21 Jul 2022 18:38:40 +0200
 MIME-Version: 1.0
-Received: by 2002:a17:906:f1d4:b0:72b:2fd6:a7db with HTTP; Thu, 21 Jul 2022
- 03:21:58 -0700 (PDT)
-Reply-To: cynthiawilliams777@hotmail.com
-From:   Cynthia William <cw14445@gmail.com>
-Date:   Thu, 21 Jul 2022 12:21:58 +0200
-Message-ID: <CAD=7fZjM115kfhU30L18TFJGie4n5oeUyiqKiv7+ZDUWph+SfQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:52d listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [cw14445[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [cw14445[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [cynthiawilliams777[at]hotmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 0/7] MediaTek Helio X10 MT6795 - Clock drivers
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, robh+dt@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        y.oudjana@protonmail.com, jason-jh.lin@mediatek.com,
+        ck.hu@mediatek.com, fparent@baylibre.com, rex-bc.chen@mediatek.com,
+        tinghan.shen@mediatek.com, chun-jie.chen@mediatek.com,
+        weiyi.lu@mediatek.com, ikjn@chromium.org, miles.chen@mediatek.com,
+        sam.shih@mediatek.com, wenst@chromium.org,
+        bgolaszewski@baylibre.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, paul.bouchara@somainline.org,
+        kernel@collabora.com
+References: <20220629110254.184213-1-angelogioacchino.delregno@collabora.com>
+ <45ff2e82-caeb-9575-ce73-1bd43c37c0c5@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <45ff2e82-caeb-9575-ce73-1bd43c37c0c5@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hello, please I need to communicate with you,
-Can I share words with you?
+On 21/07/2022 10:53, AngeloGioacchino Del Regno wrote:
+> Il 29/06/22 13:02, AngeloGioacchino Del Regno ha scritto:
+>> In an effort to give some love to the apparently forgotten MT6795 SoC,
+>> I am upstreaming more components that are necessary to support platforms
+>> powered by this one apart from a simple boot to serial console.
+>>
+>> This (very big) series introduces system clock, multimedia clock drivers
+>> (including resets) for this SoC.
+>>
+>> Tested on a MT6795 Sony Xperia M5 (codename "Holly") smartphone.
+>>
+>> This series depends on, and can be merged on top of:
+>> [1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=640122
+>> [2]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=637849
+>>
+> 
+> Gentle ping for this series...
+> ...I've got a lot of commits to send that depend on this one...
+> 
+> P.S.: The dependencies in [1] and [2] are already upstream.
+> 
 
-Cynthia
+You sent this message to Rob (not to others) and you did not mention
+whom are you pinging. Rob provided all necessary tags for you.
+
+If you want to ping someone, put proper names in "To" but best - mention
+by name.
+
+Best regards,
+Krzysztof
