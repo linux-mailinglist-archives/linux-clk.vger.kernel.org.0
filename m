@@ -2,34 +2,64 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51307583AC6
-	for <lists+linux-clk@lfdr.de>; Thu, 28 Jul 2022 10:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84259583AE1
+	for <lists+linux-clk@lfdr.de>; Thu, 28 Jul 2022 11:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235068AbiG1Izs (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 28 Jul 2022 04:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
+        id S235363AbiG1JCj (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 28 Jul 2022 05:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235296AbiG1Izq (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 Jul 2022 04:55:46 -0400
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DEF655A5;
-        Thu, 28 Jul 2022 01:55:43 -0700 (PDT)
-Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Thu, 28 Jul
- 2022 16:55:41 +0800
-Message-ID: <965f83cf-4695-f89c-5ede-2f6b2524f392@amlogic.com>
-Date:   Thu, 28 Jul 2022 16:55:41 +0800
+        with ESMTP id S235350AbiG1JCg (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 Jul 2022 05:02:36 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9C665657
+        for <linux-clk@vger.kernel.org>; Thu, 28 Jul 2022 02:02:31 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id b21so1263615ljk.8
+        for <linux-clk@vger.kernel.org>; Thu, 28 Jul 2022 02:02:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=yfi+fc1Zb5qV2V2Wb3g8x7DGlXgAZj2Jvy0KQfSodWs=;
+        b=BwyXq3EaFf0Zk/XqgsIyi1kp3V1mOAX5f18FjumLF+gccBiXx1HjsbONcMZ5QNMedw
+         qBdvcDNoFoRD5ftiEAV8xn5QAfa+MrQPfJ5dU3yN5m22KH2s+nvoD0ht9nT6F7gXxPbc
+         rPV85IBQZgWDggbXBX1wYRVVyjuT8+CafQDIc8dEt8L+vjvSOmAMfHsHgghhh0HDUQBL
+         ZXOH0VMgtp6O4V0MCvEmE/QMXM7vxwkqlnz8I0mxwDBn0Te5PJBIKmBbUrGW9NT0PztB
+         0M/i+IHtl1GHGK/WLthwFQOgXtpIUX+BsN37ymtq6SByXSx+DmeQmgvatDFKdxCfxSoT
+         Cadw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yfi+fc1Zb5qV2V2Wb3g8x7DGlXgAZj2Jvy0KQfSodWs=;
+        b=75Cgv/RSSzybEmtuWB44R70KK9KPssodgEvNC9j4LNwLUcqD1HSD9MA9hAGwWAQ73d
+         iNzaWn+sGZC8nK5YHR6WFqOxq+v6S9G0cvefICxq0Fw3HqN+wXa5a6zMECGqRE0mBq+8
+         5mtbzHuNFNArcFH3Uq+fQvRywORLTy/rRrNkfz8u0nY0KerNqS2Ekdip7U8VLbqRVfPA
+         EnT47pZG41Lx3bfVvZhjmng/Bdy/jtQaUtatKgIKmCQys2pdM5hEn5Y0LS+yRNZOILo/
+         EgvJn8g2ESjhPNTTjUL6M/nMQKexKeLFyBWbihfdg2k5uJXbJrnI2Rmn+I6RUr6m+8pC
+         kRow==
+X-Gm-Message-State: AJIora/Ssdp/AdUcarqtVmy6UxK4Zv+eJmR+Pkriu0drPJ95GguHgeLm
+        t4UqbQ16ixt1lyERNd9pl1QyLg==
+X-Google-Smtp-Source: AGRyM1uhBJjljnPuyZUlcYQa2GgWlNAIASCeOULAJ0BJ+SvIe68yj6eKdiqLW80f0YKUzSiOuu+4OQ==
+X-Received: by 2002:a2e:910d:0:b0:25d:f7e7:8cce with SMTP id m13-20020a2e910d000000b0025df7e78ccemr8115318ljg.252.1658998949558;
+        Thu, 28 Jul 2022 02:02:29 -0700 (PDT)
+Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
+        by smtp.gmail.com with ESMTPSA id l13-20020a19c20d000000b00489c6c76385sm97465lfc.268.2022.07.28.02.02.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Jul 2022 02:02:29 -0700 (PDT)
+Message-ID: <367cf98b-ef06-8f44-76c8-9099a1ec13dc@linaro.org>
+Date:   Thu, 28 Jul 2022 11:02:27 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V2 0/3] Add S4 SoC clock controller driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH V2 1/3] dt-bindings: clk: meson: add S4 SoC clock
+ controller bindings
 Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Jerome Brunet <jbrunet@baylibre.com>, Yu Tu <yu.tu@amlogic.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Neil Armstrong <narmstrong@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -37,113 +67,97 @@ To:     Jerome Brunet <jbrunet@baylibre.com>, <linux-clk@vger.kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 References: <20220728054202.6981-1-yu.tu@amlogic.com>
- <1j8rodhfn9.fsf@starbuckisacylon.baylibre.com>
- <032b3c3f-f899-bf53-ecbb-35191d39392b@amlogic.com>
- <1j4jz1hbr5.fsf@starbuckisacylon.baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <1j4jz1hbr5.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.29.47]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <20220728054202.6981-2-yu.tu@amlogic.com>
+ <82e3fd36-df96-a555-4cea-47fabd26502b@linaro.org>
+ <1jv8rhfw8h.fsf@starbuckisacylon.baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1jv8rhfw8h.fsf@starbuckisacylon.baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Hi Jerome,
-	Thanks for your reply and explanation.
-
-On 2022/7/28 16:27, Jerome Brunet wrote:
-> [ EXTERNAL EMAIL ]
+On 28/07/2022 10:50, Jerome Brunet wrote:
 > 
+> On Thu 28 Jul 2022 at 10:41, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 > 
-> On Thu 28 Jul 2022 at 16:06, Yu Tu <yu.tu@amlogic.com> wrote:
-> 
->> Hi JB，
->>
->> On 2022/7/28 15:08, Jerome Brunet wrote:
->>> [ EXTERNAL EMAIL ]
+>> On 28/07/2022 07:42, Yu Tu wrote:
+>>> Add new clock controller compatible and dt-bindings header for the
+>>> Everything-Else domain of the S4 SoC.
 >>>
->>> On Thu 28 Jul 2022 at 13:41, Yu Tu <yu.tu@amlogic.com> wrote:
->>>
->>>> 1. Add clock controller driver for S4 SOC.
->>>>
->>>> Yu Tu (3):
->>>>     dt-bindings: clk: meson: add S4 SoC clock controller bindings
->>>>     arm64: dts: meson: add S4 Soc clock controller in DT
->>>>     clk: meson: s4: add s4 SoC clock controller driver
->>>>
->>>> V1 -> V2: Change format as discussed in the email.
->>>>
->>>> Link:https://lore.kernel.org/linux-amlogic/20220708062757.3662-1-yu.tu@amlogic.com/
->>>>
->>>>    .../bindings/clock/amlogic,gxbb-clkc.txt      |    1 +
->>>>    MAINTAINERS                                   |    1 +
->>>>    arch/arm64/boot/dts/amlogic/meson-s4.dtsi     |   11 +
->>>>    drivers/clk/meson/Kconfig                     |   15 +
->>>>    drivers/clk/meson/Makefile                    |    1 +
->>>>    drivers/clk/meson/s4.c                        | 4732 +++++++++++++++++
->>>>    drivers/clk/meson/s4.h                        |  296 ++
->>>>    include/dt-bindings/clock/s4-clkc.h           |  146 +
->>>>    8 files changed, 5203 insertions(+)
->>>>    create mode 100644 drivers/clk/meson/s4.c
->>>>    create mode 100644 drivers/clk/meson/s4.h
->>>>    create mode 100644 include/dt-bindings/clock/s4-clkc.h
->>>>
->>>>
->>>> base-commit: b293bc9286ee21824e93f0fcfed3b78fdfee01e6
->>> Please don't post until you have addressed *ALL* the comments from the
->>> previous version.
->> The last email asked you to adopt A1 method, but you did not reply?
+>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
 >>
->>> At first glance, I can see that this is still a single driver for
->>> what is obviously 2 controllers with 2 register spaces. Simple comments
->>> like the "<< 2" in the register declaration have not been addressed either.
->> I understand that this should be a controller, just two address
->> descriptions. One is the various PLL registers and one is the clock for
->> the peripherals. And PLL is to provide a clock source for various
->> peripheral clocks. So a clock controller is reasonable. I think you got
->> it wrong.
+>>
+>>
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index c1abc53f9e91..f872d0c0c253 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -1775,6 +1775,7 @@ F:	Documentation/devicetree/bindings/clock/amlogic*
+>>>  F:	drivers/clk/meson/
+>>>  F:	include/dt-bindings/clock/gxbb*
+>>>  F:	include/dt-bindings/clock/meson*
+>>> +F:	include/dt-bindings/clock/s4-clkc.h
+>>>  
+>>>  ARM/Amlogic Meson SoC Crypto Drivers
+>>>  M:	Corentin Labbe <clabbe@baylibre.com>
+>>> diff --git a/include/dt-bindings/clock/s4-clkc.h b/include/dt-bindings/clock/s4-clkc.h
+>>> new file mode 100644
+>>> index 000000000000..b686c8877419
+>>> --- /dev/null
+>>> +++ b/include/dt-bindings/clock/s4-clkc.h
+>>
+>> Filename with vendor prefix, so:
+>> amlogic,s4-clkc.h
+>>
+>>> @@ -0,0 +1,146 @@
+>>> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+>>> +/*
+>>> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
+>>> + * Author: Yu Tu <yu.tu@amlogic.com>
+>>> + */
+>>> +
+>>> +#ifndef _DT_BINDINGS_CLOCK_S4_CLKC_H
+>>> +#define _DT_BINDINGS_CLOCK_S4_CLKC_H
+>>> +
+>>> +/*
+>>> + * CLKID index values
+>>> + */
+>>> +
+>>> +#define CLKID_FIXED_PLL			1
+>>> +#define CLKID_FCLK_DIV2			3
+>>> +#define CLKID_FCLK_DIV3			5
+>>> +#define CLKID_FCLK_DIV4			7
+>>> +#define CLKID_FCLK_DIV5			9
+>>> +#define CLKID_FCLK_DIV7			11
+>>
+>> Why these aren't continuous? IDs are expected to be incremented by 1.
+>>
 > 
-> I don't think I do. This looks exactly like the A1.
-> The post of that controller are still in the  archive and I am sure your
-> colleagues can give you the history.
-> 
-> You clearly have register regions providing clock, separated by
-> 0x8000. Claiming that as one big region is bad design.
-> 
-> There has been several remarks about using a big syscon on V1,
-> unaddressed too.
-> 
-> CCF has everything necessary in place to handle each register region
-> separately, properly and pass clock around.
-> 
-> You can handle it as a single controller, claiming the two regions
-> individually but:
-> # 1 - handling 2 different regmaps in the controller is going to be
->        bigger mess than you think
-> # 2 - I am far from convinced there is any reason to do so
-> 
-It makes sense, as you say, to separate the two controllers. But I think 
-the only thing that was forced apart was that the digital designers 
-didn't put these registers together when they were designing the chips.
+> All clocks have IDs, it is one big table in the driver, but we are not exposing them all.
+> For example, with composite 'mux / div / gate' assembly, we usually need
+> only the leaf.
 
-I'm going to separate the two controllers like you said.
+I understand you do not expose them all, but that is not the reason to
+increment ID by 2 or 3... Otherwise these are not IDs and you are not
+expected to put register offsets into the bindings (you do not bindings
+in such case).
 
+
+> Same has been done for the other AML controllers:
+> For ex:
 > 
->>
->> Ok, if you insist on using two clock controllers,, please provide your the
->> reason and example code?
->>
->>> Seeing that, I have not reviewed this version further.
->>> I won't until all the comments from v1 are either addressed or answer
->>> Regards
->>> Jerome
->>> .
-> 
-> .
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/dt-bindings/clock/gxbb-clkc.h
+
+This cannot be fixed now, but it is very poor argument. Like saying "we
+had a bug in other driver, so we implemented the bug here as well".
+
+Best regards,
+Krzysztof
