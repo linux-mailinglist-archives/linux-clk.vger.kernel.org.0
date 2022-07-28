@@ -2,141 +2,152 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5B4583A7C
-	for <lists+linux-clk@lfdr.de>; Thu, 28 Jul 2022 10:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB8B583AD6
+	for <lists+linux-clk@lfdr.de>; Thu, 28 Jul 2022 11:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235216AbiG1IlJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 28 Jul 2022 04:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
+        id S235308AbiG1JAF (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 28 Jul 2022 05:00:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235159AbiG1IlJ (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 Jul 2022 04:41:09 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12EC4D818
-        for <linux-clk@vger.kernel.org>; Thu, 28 Jul 2022 01:41:07 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id z13so1211499ljj.6
-        for <linux-clk@vger.kernel.org>; Thu, 28 Jul 2022 01:41:07 -0700 (PDT)
+        with ESMTP id S233460AbiG1JAE (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 Jul 2022 05:00:04 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9A665640
+        for <linux-clk@vger.kernel.org>; Thu, 28 Jul 2022 02:00:02 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id l22so1326736wrz.7
+        for <linux-clk@vger.kernel.org>; Thu, 28 Jul 2022 02:00:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=qNuYEjp7WeXIJ9ePRdLMLsHm6eHVbqcc9mreMlXusBM=;
-        b=T6rixmhUatWGToZ2WePBF7ExJxbbNLXwrPSTZsIotzvYO5UME86v74npwnrBqHJPms
-         fOQczzq5bJ4diI6T0lTWdkv8wfVEJerbNqKV/tO18z/j50ofdkcaeWzdwHj+ncxFJSQT
-         AUby0P0gqCd6YU0W8j3j5Vd4eJ/a+hYdxtUqTAXS3bdL4EKu024EsMfCL7jGTD+Am1gJ
-         td47eKhbYeglYbBBbNVwOLje5bVN6OCWtimYrifFPvKZgHZPXTS7jgAzkzfBItrupe6t
-         57FGTYN1Z6g0diW+wmfqdn/cXW/eiOGxpI3ZxCKbhFRbMVIvhujaaXus1U8uCDzN0qy8
-         tGwQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:subject:date:in-reply-to:message-id
+         :mime-version;
+        bh=r0KkVkVfudOsZa8bt775hkQQT4bXWpl6svhyGVd6ieQ=;
+        b=KA2+5rXbBP1kJXeW6hiBXH2pt90gqNXRRgOvI9OI4R4XpmjEaLf1UIiUGZyGlOxFHC
+         ykYgfhTnrP+POspD23CY/8v9+X5DsIrqFYaRgocVqdCuB5PMK30TxTNWlnsBNrR8Fank
+         ragjMrJgixERVOzTdYl1vzqJHh/eAYZtDZScJ/nKWzR1FObowBVnVPGrXruSlc/bjvqk
+         BdHd48UjYmjvkbYL4wG52xrLfmK0zE+IupWNAU/TK4zqXTdUcv2OSQKwTjP8kCljGM11
+         /FXwhX5sr/1imuYz7tqOErnW+wJY4f6z3OpQRPzEFDa229eSksGSQ2K87rJflO6gQNJi
+         V56Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qNuYEjp7WeXIJ9ePRdLMLsHm6eHVbqcc9mreMlXusBM=;
-        b=1DNoG9qVDLE2gzRtW0ulVSv9rlDJO/OBFso6kYHoy4+T4TrML3t9v8NGTEHHQKvHRo
-         t503Jq0F2oE3Km3e514S5Tg42fN6P6kYOWNpfsu1c2SWjf8CNAT2hvGVD0QpyvPmCORe
-         XMwEwhNwbVMH2EsF8K1Z2HS44fpjjln7anPxiQFOFnxKCSXcsgZeP2e3fqixsFEVDUgt
-         6tIa4c/fgeiRAMWj4W60OvZQp8/LGTAt50Lzs0mW6OFSQy4d+GItgFvsA0ehZE+73DGM
-         h6sGZvN/d1QsK9dJ2EODjTd0tvH3PmuCUFu3zosH32RAZpkw2KwUYzkEg4qWS0hQAnAa
-         zTJQ==
-X-Gm-Message-State: AJIora8GUavgBNFY5ydsrH31Yboo9JWK3PLxrPmWtm4ewl6D0SYBqXn7
-        SEFKvBNBshVOvcMH/xWHBPefkfohZlLMuQ==
-X-Google-Smtp-Source: AGRyM1sDoEXB5/FNKjHlS/zvqoBlUUeT2luECMbU/cwhNDKKkdOvFAaAuNscnU+XY5m7mUFR1n8DRg==
-X-Received: by 2002:a2e:a58d:0:b0:25e:d96:3281 with SMTP id m13-20020a2ea58d000000b0025e0d963281mr5597695ljp.379.1658997665641;
-        Thu, 28 Jul 2022 01:41:05 -0700 (PDT)
-Received: from [192.168.3.197] (78-26-46-173.network.trollfjord.no. [78.26.46.173])
-        by smtp.gmail.com with ESMTPSA id t20-20020a2e8e74000000b0025a724f2935sm10541ljk.137.2022.07.28.01.41.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Jul 2022 01:41:05 -0700 (PDT)
-Message-ID: <82e3fd36-df96-a555-4cea-47fabd26502b@linaro.org>
-Date:   Thu, 28 Jul 2022 10:41:03 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH V2 1/3] dt-bindings: clk: meson: add S4 SoC clock
- controller bindings
-Content-Language: en-US
-To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
+        h=x-gm-message-state:references:user-agent:from:to:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=r0KkVkVfudOsZa8bt775hkQQT4bXWpl6svhyGVd6ieQ=;
+        b=HerWKJ+TeFgYxy9hXbfn+7HYDy9yb9vR4lPlZLWsbW3rooLnbr+IY6ithtoBiSY7AT
+         rb8bdn4iMYbr01Rylt/Zv6Dmqx9NyeGtq8gMKJGiTSGt6CrvjXlLzDg41UtsQFLs4os2
+         Ftb2DxppeNKMW+cKot2q06rdVJmZXlQNagINHB/eCB4VLl1T2692ia19/I+RGn8vWwSp
+         we1OhJgwPsQi4xqH8DlGBsgqjAP2Scb+u6sc2NlXIe+O/Q9mUpOpgZRN+tc45V1F71q6
+         FFYUOxeaGTnPiYv+kiNBtifLz8+sUPhmL6RFvA9Zpbg2dkpvcVW/rPMLFhYg0eXMnAg2
+         4gOw==
+X-Gm-Message-State: AJIora8CpCFXjLmSO2YOm7YjWqiE5JHCPP87Z4Va25Hgd4VxIrWnx3EJ
+        j7D2NN7ueC+ezQP7AE1wQSVZNw==
+X-Google-Smtp-Source: AGRyM1vJ9qug6pEGy6DgN4WD7c36nLypVRFi2FQDF34WxBfiQss+w86zHbsxaCj2bnKZVMdA3qxhgw==
+X-Received: by 2002:adf:ecc5:0:b0:21e:b73f:e33d with SMTP id s5-20020adfecc5000000b0021eb73fe33dmr6349761wro.223.1658998800870;
+        Thu, 28 Jul 2022 02:00:00 -0700 (PDT)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id y14-20020adffa4e000000b0021eb309c97dsm398706wrr.25.2022.07.28.02.00.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Jul 2022 02:00:00 -0700 (PDT)
+References: <20220728054202.6981-1-yu.tu@amlogic.com>
+ <20220728054202.6981-2-yu.tu@amlogic.com>
+ <82e3fd36-df96-a555-4cea-47fabd26502b@linaro.org>
+User-agent: mu4e 1.8.6; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220728054202.6981-1-yu.tu@amlogic.com>
- <20220728054202.6981-2-yu.tu@amlogic.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220728054202.6981-2-yu.tu@amlogic.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH V2 1/3] dt-bindings: clk: meson: add S4 SoC clock
+ controller bindings
+Date:   Thu, 28 Jul 2022 10:50:50 +0200
+In-reply-to: <82e3fd36-df96-a555-4cea-47fabd26502b@linaro.org>
+Message-ID: <1jv8rhfw8h.fsf@starbuckisacylon.baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 28/07/2022 07:42, Yu Tu wrote:
-> Add new clock controller compatible and dt-bindings header for the
-> Everything-Else domain of the S4 SoC.
-> 
-> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
 
+On Thu 28 Jul 2022 at 10:41, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
+> On 28/07/2022 07:42, Yu Tu wrote:
+>> Add new clock controller compatible and dt-bindings header for the
+>> Everything-Else domain of the S4 SoC.
+>> 
+>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>
+>
+>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index c1abc53f9e91..f872d0c0c253 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -1775,6 +1775,7 @@ F:	Documentation/devicetree/bindings/clock/amlogic*
+>>  F:	drivers/clk/meson/
+>>  F:	include/dt-bindings/clock/gxbb*
+>>  F:	include/dt-bindings/clock/meson*
+>> +F:	include/dt-bindings/clock/s4-clkc.h
+>>  
+>>  ARM/Amlogic Meson SoC Crypto Drivers
+>>  M:	Corentin Labbe <clabbe@baylibre.com>
+>> diff --git a/include/dt-bindings/clock/s4-clkc.h b/include/dt-bindings/clock/s4-clkc.h
+>> new file mode 100644
+>> index 000000000000..b686c8877419
+>> --- /dev/null
+>> +++ b/include/dt-bindings/clock/s4-clkc.h
+>
+> Filename with vendor prefix, so:
+> amlogic,s4-clkc.h
+>
+>> @@ -0,0 +1,146 @@
+>> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+>> +/*
+>> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
+>> + * Author: Yu Tu <yu.tu@amlogic.com>
+>> + */
+>> +
+>> +#ifndef _DT_BINDINGS_CLOCK_S4_CLKC_H
+>> +#define _DT_BINDINGS_CLOCK_S4_CLKC_H
+>> +
+>> +/*
+>> + * CLKID index values
+>> + */
+>> +
+>> +#define CLKID_FIXED_PLL			1
+>> +#define CLKID_FCLK_DIV2			3
+>> +#define CLKID_FCLK_DIV3			5
+>> +#define CLKID_FCLK_DIV4			7
+>> +#define CLKID_FCLK_DIV5			9
+>> +#define CLKID_FCLK_DIV7			11
+>
+> Why these aren't continuous? IDs are expected to be incremented by 1.
+>
 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c1abc53f9e91..f872d0c0c253 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1775,6 +1775,7 @@ F:	Documentation/devicetree/bindings/clock/amlogic*
->  F:	drivers/clk/meson/
->  F:	include/dt-bindings/clock/gxbb*
->  F:	include/dt-bindings/clock/meson*
-> +F:	include/dt-bindings/clock/s4-clkc.h
->  
->  ARM/Amlogic Meson SoC Crypto Drivers
->  M:	Corentin Labbe <clabbe@baylibre.com>
-> diff --git a/include/dt-bindings/clock/s4-clkc.h b/include/dt-bindings/clock/s4-clkc.h
-> new file mode 100644
-> index 000000000000..b686c8877419
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/s4-clkc.h
+All clocks have IDs, it is one big table in the driver, but we are not exposing them all.
+For example, with composite 'mux / div / gate' assembly, we usually need
+only the leaf.
 
-Filename with vendor prefix, so:
-amlogic,s4-clkc.h
+Same has been done for the other AML controllers:
+For ex:
 
-> @@ -0,0 +1,146 @@
-> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
-> +/*
-> + * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
-> + * Author: Yu Tu <yu.tu@amlogic.com>
-> + */
-> +
-> +#ifndef _DT_BINDINGS_CLOCK_S4_CLKC_H
-> +#define _DT_BINDINGS_CLOCK_S4_CLKC_H
-> +
-> +/*
-> + * CLKID index values
-> + */
-> +
-> +#define CLKID_FIXED_PLL			1
-> +#define CLKID_FCLK_DIV2			3
-> +#define CLKID_FCLK_DIV3			5
-> +#define CLKID_FCLK_DIV4			7
-> +#define CLKID_FCLK_DIV5			9
-> +#define CLKID_FCLK_DIV7			11
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/dt-bindings/clock/gxbb-clkc.h
 
-Why these aren't continuous? IDs are expected to be incremented by 1.
+>> +
+>> +#endif /* _DT_BINDINGS_CLOCK_S4_CLKC_H */
+>
+>
+> Best regards,
+> Krzysztof
 
-> +
-> +#endif /* _DT_BINDINGS_CLOCK_S4_CLKC_H */
-
-
-Best regards,
-Krzysztof
