@@ -2,114 +2,168 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68C3A583BE9
-	for <lists+linux-clk@lfdr.de>; Thu, 28 Jul 2022 12:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1948583CA4
+	for <lists+linux-clk@lfdr.de>; Thu, 28 Jul 2022 12:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235790AbiG1KUB (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Thu, 28 Jul 2022 06:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
+        id S235111AbiG1K6E (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Thu, 28 Jul 2022 06:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234747AbiG1KUB (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 Jul 2022 06:20:01 -0400
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4344558C9;
-        Thu, 28 Jul 2022 03:19:59 -0700 (PDT)
-Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Thu, 28 Jul
- 2022 18:19:57 +0800
-Message-ID: <ff582551-9661-4404-c00e-853bc60907cc@amlogic.com>
-Date:   Thu, 28 Jul 2022 18:19:57 +0800
+        with ESMTP id S236634AbiG1K55 (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Thu, 28 Jul 2022 06:57:57 -0400
+Received: from mail.baikalelectronics.com (unknown [87.245.175.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0AD6A61B0D;
+        Thu, 28 Jul 2022 03:57:49 -0700 (PDT)
+Received: from mail (mail.baikal.int [192.168.51.25])
+        by mail.baikalelectronics.com (Postfix) with ESMTP id 74C1E16CB;
+        Thu, 28 Jul 2022 14:00:10 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.baikalelectronics.com 74C1E16CB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baikalelectronics.ru; s=mail; t=1659006010;
+        bh=JHMHt2qpKhob8kZ7cQLsQ2KwSOX6LYlaQszSvkgfFhc=;
+        h=From:To:CC:Subject:Date:From;
+        b=WNALO59Dl43FslNE+aPgfpPwc4BGmHLZYMbwhCw1fx69WeR02uMeJax50r/1uKE3C
+         xO1VrrGZ5WROU7Vx3TDLzuPngSqpa+4c2U0O2FGtojqCIBVJ2/s1K5yvSAck2X7Sns
+         QSBW565nXR31OHMqNsWBMAYKjEDNMliVdjKPzhUo=
+Received: from localhost (192.168.53.207) by mail (192.168.51.25) with
+ Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 28 Jul 2022 13:57:45 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        <linux-clk@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v9 0/7] clk/resets: baikal-t1: Add DDR/PCIe resets and xGMAC/SATA fixes
+Date:   Thu, 28 Jul 2022 13:57:28 +0300
+Message-ID: <20220728105736.8266-1-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH V2 1/3] dt-bindings: clk: meson: add S4 SoC clock
- controller bindings
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220728054202.6981-1-yu.tu@amlogic.com>
- <20220728054202.6981-2-yu.tu@amlogic.com>
- <82e3fd36-df96-a555-4cea-47fabd26502b@linaro.org>
- <74cd833a-4773-eeb0-80aa-75ea1cdc093e@amlogic.com>
- <39395257-703b-a5e9-17c3-80f79f67fdc7@linaro.org>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <39395257-703b-a5e9-17c3-80f79f67fdc7@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.29.47]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,T_SPF_PERMERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
+@Stephen, @Michael
 
+It has been over five months since the first series submission for
+review. Moreover the reset-part has already got @Philipp's ab tag.
+Please merge it in.
 
-On 2022/7/28 18:09, Krzysztof Kozlowski wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> On 28/07/2022 12:05, Yu Tu wrote:
->> Hi Krzysztof,
->> 	Thanks for your reply.
->>
->> On 2022/7/28 16:41, Krzysztof Kozlowski wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>> On 28/07/2022 07:42, Yu Tu wrote:
->>>> Add new clock controller compatible and dt-bindings header for the
->>>> Everything-Else domain of the S4 SoC.
->>>>
->>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>>
->>>
->>>
->>>> diff --git a/MAINTAINERS b/MAINTAINERS
->>>> index c1abc53f9e91..f872d0c0c253 100644
->>>> --- a/MAINTAINERS
->>>> +++ b/MAINTAINERS
->>>> @@ -1775,6 +1775,7 @@ F:	Documentation/devicetree/bindings/clock/amlogic*
->>>>    F:	drivers/clk/meson/
->>>>    F:	include/dt-bindings/clock/gxbb*
->>>>    F:	include/dt-bindings/clock/meson*
->>>> +F:	include/dt-bindings/clock/s4-clkc.h
->>>>    
->>>>    ARM/Amlogic Meson SoC Crypto Drivers
->>>>    M:	Corentin Labbe <clabbe@baylibre.com>
->>>> diff --git a/include/dt-bindings/clock/s4-clkc.h b/include/dt-bindings/clock/s4-clkc.h
->>>> new file mode 100644
->>>> index 000000000000..b686c8877419
->>>> --- /dev/null
->>>> +++ b/include/dt-bindings/clock/s4-clkc.h
->>>
->>> Filename with vendor prefix, so:
->>> amlogic,s4-clkc.h
->> It's fine with me. It's mainly Jerome's opinion.
-> 
-> To clarify: I understand such naming might bring inconsistency, but we
-> want to bring some order in the bindings directories. They keep growing
-> and at some point the model names might start conflicting.
-If Jerome agrees, I will change it according to your opinion and make 
-another edition.
+Short summary regarding this patchset. The series starts from fixing of
+the clocks glitching cause by the Renesas 5P49V6901 chip in some
+circumstances. Afterwards a few more modifications are introduced to
+finally finish the Baikal-T1 CCU unit support up and prepare the code
+before adding the Baikal-T1 PCIe/xGMAC support. First of all it turned out
+I specified wrong DW xGMAC PTP reference clock divider in my initial
+patches. It must be 8, not 10. Secondly I was wrong to add a joint xGMAC
+Ref and PTP clock instead of having them separately defined.  The SoC
+manual describes these clocks as separate fixed clock wrappers. Finally
+in order to close the SoC clock/reset support up we need to add the DDR
+and PCIe interfaces reset controls support. It's done in two steps. First
+I've moved the reset-controls-related code into a dedicated module. Then
+the DDR/PCIe reset-control functionality is added. As the series
+finalization we've decided to convert the Baikal-T1 clock/reset source
+drivers to mainly being the platform device driver and pre-initialize the
+basic clocks only at the early kernel boot stages.
 
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
-> .
+Link: https://lore.kernel.org/linux-pci/20220324010905.15589-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Resubmit the series with adding @Philipp to the list of the recipients.
+
+Link: https://lore.kernel.org/linux-pci/20220330144320.27039-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v3:
+- No comments. Just resend the series.
+- Rebased from v5.17 onto v5.18-rc3.
+
+Link: https://lore.kernel.org/linux-clk/20220503205722.24755-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v4:
+- Completely split the CCU Dividers and Resets functionality up. (@Stephen)
+- Add a new fixes patch: "clk: baikal-t1: Actually enable SATA internal
+  ref clock".
+- Add a new fixes patch: "reset: Fix devm bulk optional exclusive control
+  getter".
+- Add a new fixes patch: "clk: vc5: Fix 5P49V6901 outputs disabling when
+  enabling FOD".
+- Add a new feagure patch: "clk: baikal-t1: Convert to platform device
+  driver".
+- Change the internal clock ID to the XGMAC-referred name.
+- Rebase onto the kernel v5.18.
+
+Link: https://lore.kernel.org/lkml/20220610072124.8714-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v5:
+- Just resend.
+- Rebase onto the kernel v5.19-rcX.
+
+Link: https://lore.kernel.org/linux-clk/20220624141853.7417-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v6:
+- Drop the patch
+  [PATCH RESEND v5 1/8] reset: Fix devm bulk optional exclusive control getter
+  since it has already been accepted by @Philipp.
+- Refactor the reset-control code to support the linear reset IDs only.
+  (@Philipp)
+- Combine the reset-related code into a single file. (@Philipp)
+- Drop CCU_DIV_RST_MAP() macro. It's no longer used.
+
+Link: https://lore.kernel.org/linux-clk/20220708192725.9501-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v7:
+- Fix "Alignment should match open parenthesis" warning for the
+  pr_err() method invocations. (@Philipp)
+- Drop empty line from the sys_rst_info structure initialization block.
+  (@Philipp)
+
+Link: https://lore.kernel.org/linux-clk/20220711154433.15415-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v8:
+- Fix "sef-deasserted" spelling in the CLK_BT1_CCU_RST config help
+  text. (@Randy)
+
+Link: https://lore.kernel.org/linux-clk/20220712121505.5671-1-Sergey.Semin@baikalelectronics.ru
+Changelog v9:
+- Just resend.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (7):
+  clk: vc5: Fix 5P49V6901 outputs disabling when enabling FOD
+  clk: baikal-t1: Fix invalid xGMAC PTP clock divider
+  clk: baikal-t1: Add shared xGMAC ref/ptp clocks internal parent
+  clk: baikal-t1: Add SATA internal ref clock buffer
+  clk: baikal-t1: Move reset-controls code into a dedicated module
+  clk: baikal-t1: Add DDR/PCIe directly controlled resets support
+  clk: baikal-t1: Convert to platform device driver
+
+ drivers/clk/baikal-t1/Kconfig       |  12 +-
+ drivers/clk/baikal-t1/Makefile      |   1 +
+ drivers/clk/baikal-t1/ccu-div.c     |  84 +++++++--
+ drivers/clk/baikal-t1/ccu-div.h     |  17 +-
+ drivers/clk/baikal-t1/ccu-pll.h     |   8 +
+ drivers/clk/baikal-t1/ccu-rst.c     | 217 +++++++++++++++++++++++
+ drivers/clk/baikal-t1/ccu-rst.h     |  67 +++++++
+ drivers/clk/baikal-t1/clk-ccu-div.c | 263 ++++++++++++++++------------
+ drivers/clk/baikal-t1/clk-ccu-pll.c | 128 +++++++++++---
+ drivers/clk/clk-versaclock5.c       |   2 +-
+ include/dt-bindings/reset/bt1-ccu.h |   9 +
+ 11 files changed, 647 insertions(+), 161 deletions(-)
+ create mode 100644 drivers/clk/baikal-t1/ccu-rst.c
+ create mode 100644 drivers/clk/baikal-t1/ccu-rst.h
+
+-- 
+2.35.1
+
