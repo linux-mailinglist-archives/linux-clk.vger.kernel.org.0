@@ -2,128 +2,106 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F12F58E17D
-	for <lists+linux-clk@lfdr.de>; Tue,  9 Aug 2022 23:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3AAD58E2CF
+	for <lists+linux-clk@lfdr.de>; Wed, 10 Aug 2022 00:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229506AbiHIVGJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Tue, 9 Aug 2022 17:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
+        id S229740AbiHIWPJ (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Tue, 9 Aug 2022 18:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiHIVFz (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Tue, 9 Aug 2022 17:05:55 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8514599C
-        for <linux-clk@vger.kernel.org>; Tue,  9 Aug 2022 14:05:49 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-10edfa2d57dso15550495fac.0
-        for <linux-clk@vger.kernel.org>; Tue, 09 Aug 2022 14:05:49 -0700 (PDT)
+        with ESMTP id S229530AbiHIWPI (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Tue, 9 Aug 2022 18:15:08 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8DC1DA7B
+        for <linux-clk@vger.kernel.org>; Tue,  9 Aug 2022 15:15:04 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id 130so11991788pfv.13
+        for <linux-clk@vger.kernel.org>; Tue, 09 Aug 2022 15:15:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=46DbGyQMRqNHGkxsacJCotXRTrnXUBQPUgKwQCTQR8k=;
-        b=hKJ9CRNm64FZ36uHItRlkf0idiXTuCMHIGEr6dAZWogMfifrszy0oFCa8H7K6Cah9D
-         55TjcK/iPn+BvOBQtb3mTI/51rUKzCQKkeAftF7q4oAP41j2EtShrtivvHKSpR5bfZer
-         kKomkfpi78zEBQWdUTGBQsWZoO1hLcqLrubVg3hbnYziSqG7Np8t99DOzJt15uvfu4DH
-         lIl3P/v4VaAuXaU2DVxn1GSS9n3BdSp8H0AaoYSW06MbcdfjeAjzYF6jJv0KLF0567nM
-         IvcbioXxyho8pz1HTFTb4zgU+MfEOO3JI1a95UB3T4VXsLIsG9LxbQS1K6baKYW1BMBZ
-         sV8g==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=GI1h58u9NHz7rI/vIwOU5DkUcoHPmL+b4tk5i/xxv5Y=;
+        b=QTP95oQi+RYhXbI8sz4RyTZp0RSE4jP48cyyUmWbTiK1ItvOHbADVtjkGHK/8zFbqv
+         EIzUG3d4HgG5eAQxnVHuBpH33ycuIiNpMEXk8S0LHARhhQGb6AufQVVn/40aQfLvP77W
+         778oK7qnpGZXO0Q2aGCYT4Mad4FGDHlh1br3s7D4D+9Vr7gPQrhXDR8bwR1fyz6kQ1n2
+         /mI7/+oIm6xqfpBjeRephfywWnzvzUcqvvdKwYuFsxmTm/GRVEQb9jKfBsLPvHEPeyBR
+         SLk52BQ10Zm7GZ4Mv5gugSKJZhGFXVOipaGDVsAOq6ABLyMrmGMv+5RYTjL3cqduwO+M
+         O1Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=46DbGyQMRqNHGkxsacJCotXRTrnXUBQPUgKwQCTQR8k=;
-        b=asZ+jgU+htG6KA55R8vUc1L9kuiP6lVMrIKmZhgAstUDyhHcMDGmWUGo1P3nGcxaXr
-         tvWrE/pBlQFBaF/PwoEDHXv1wPc2s3LqWlhQoAnM2G0o5IivAATBXB7vp5JflWovstjd
-         10/okL6rkNo/7391ihSJ76BrmEakwnh+L2fwSQpMwNdNNcqu86B6FUTjYlRwI8ZyYd86
-         H5oIIO9jch5EBfbszNbiAPDTugYDptDskp6qbZT4SycNQFNwr1AtCIXXrS+5RTi3gwe9
-         o/DRqLoJw3l0bfoeaWtn/Ufd//Hn3FsrajAXZwcrxx1fEW2tEsIwLW20QbyRVwtynkPH
-         f7YQ==
-X-Gm-Message-State: ACgBeo3Y56Z7vc37YoLqKtoCjGV3YlrVAJE/bpR6BUOEVy8VaqyxuY7F
-        fiF7Spf6DfuxvEfkdY68Jon2fA==
-X-Google-Smtp-Source: AA6agR7/jfhQKdcyS9t/lnwAnJxheoLryGMKECjJwkUJ1IJiQ9e3xVupz1MV7wbT5OutnB3H7N+IWA==
-X-Received: by 2002:a05:6870:5818:b0:116:a478:7f6a with SMTP id r24-20020a056870581800b00116a4787f6amr170549oap.204.1660079148210;
-        Tue, 09 Aug 2022 14:05:48 -0700 (PDT)
-Received: from baldur ([2600:380:785a:7aa8:200:ff:fe00:0])
-        by smtp.gmail.com with ESMTPSA id s70-20020acaa949000000b0032e3cca8561sm214842oie.21.2022.08.09.14.05.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 14:05:47 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 16:05:43 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/5] clk/qcom: Support gdsc collapse polling using
- 'reset' inteface
-Message-ID: <YvLMJ2yQRhBFp2y9@baldur>
-References: <1659172664-10345-1-git-send-email-quic_akhilpo@quicinc.com>
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=GI1h58u9NHz7rI/vIwOU5DkUcoHPmL+b4tk5i/xxv5Y=;
+        b=WQjadR+266tXSPkCLspuBO1zMU6NtjWW9uGv9O6iiIxR22lPbkGN5rkahE5M6iE+WA
+         mHZavzsm8oLppLQxAm+iJpkynnHvytIE9DkoAWZxuyyfJVIWf1wBuFR3P5MMyCcoFAdQ
+         SHxoG6ZxYxVfm2l+b7Jhe2pQLhMHt1uejnl0b6X2Xjtf/WBe9iGIjz1AQs1LE8TP+bjm
+         +2bSgxdlP5pOieN65pt60dvFRca/1zkbU1PX86b80amkBOEyYREXElUJFWTkAiHZ1Ifd
+         PC0LmY3878Xz2ye/VszaWspTe6Z9MKiC4ZKWqSqbhyTILLqs6bURy+Oqpc15r9mBALZ5
+         cS3A==
+X-Gm-Message-State: ACgBeo1quyLzncRC5zI0jdo0iN+VUZ5TN8idVMeaVF41BIqQoiaHXCck
+        99L1wPhPkWlDNLAMxD1OlnkEKJHwwZrsEHHLVyg=
+X-Google-Smtp-Source: AA6agR7pJ6r7fhR2kV9XLe+oV3h+/ej1weqLnpTQS1YP5ule1vsDwGSNCnOW6LlEIY2xTapZFY+hu5KXPqSjTYpoaJM=
+X-Received: by 2002:a63:4642:0:b0:41b:d353:c5c7 with SMTP id
+ v2-20020a634642000000b0041bd353c5c7mr20359415pgk.568.1660083303718; Tue, 09
+ Aug 2022 15:15:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1659172664-10345-1-git-send-email-quic_akhilpo@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a10:e8a6:b0:2d4:fb1c:cc5e with HTTP; Tue, 9 Aug 2022
+ 15:15:03 -0700 (PDT)
+Reply-To: wijh555@gmail.com
+From:   "Dr. Ali Moses" <alimoses07@gmail.com>
+Date:   Tue, 9 Aug 2022 15:15:03 -0700
+Message-ID: <CADWzZe65tcOX2+bMZfMLLauGpHEQ9Cdv814nLU=uQvKzDFrEVg@mail.gmail.com>
+Subject: Good Day,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:42f listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [alimoses07[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [wijh555[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [alimoses07[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On Sat 30 Jul 04:17 CDT 2022, Akhil P Oommen wrote:
+-- 
+Hello,
+We the Board Directors believe you are in good health, doing great and
+with the hope that this mail will meet you in good condition, We are
+privileged and delighted to reach you via email" And we are urgently
+waiting to hear from you. and again your number is not connecting.
 
-> 
-> Some clients like adreno gpu driver would like to ensure that its gdsc
-> is collapsed at hardware during a gpu reset sequence. This is because it
-> has a votable gdsc which could be ON due to a vote from another subsystem
-> like tz, hyp etc or due to an internal hardware signal. To allow
-> this, gpucc driver can expose an interface to the client driver using
-> reset framework. Using this the client driver can trigger a polling within
-> the gdsc driver.
-> 
-> This series is rebased on top of linus's master branch.
-> 
-> Related discussion: https://patchwork.freedesktop.org/patch/493144/
-> 
+My regards,
+Dr. Ali Moses..
 
-Forgive me if I'm assuming too much, but isn't this an extension of:
-
-85a3d920d30a ("clk: qcom: Add a dummy enable function for GX gdsc")
-
-With the additional requirement that disable should really ensure that
-the GDSC is turned off?
-
-Regards,
-Bjorn
-
-> 
-> Akhil P Oommen (5):
->   dt-bindings: clk: qcom: Support gpu cx gdsc reset
->   clk: qcom: Allow custom reset ops
->   clk: qcom: gpucc-sc7280: Add cx collapse reset support
->   clk: qcom: gdsc: Add a reset op to poll gdsc collapse
->   arm64: dts: qcom: sc7280: Add Reset support for gpu
-> 
->  arch/arm64/boot/dts/qcom/sc7280.dtsi          |  3 +++
->  drivers/clk/qcom/gdsc.c                       | 23 +++++++++++++++++++----
->  drivers/clk/qcom/gdsc.h                       |  7 +++++++
->  drivers/clk/qcom/gpucc-sc7280.c               |  6 ++++++
->  drivers/clk/qcom/reset.c                      |  6 ++++++
->  drivers/clk/qcom/reset.h                      |  2 ++
->  include/dt-bindings/clock/qcom,gpucc-sc7280.h |  3 +++
->  7 files changed, 46 insertions(+), 4 deletions(-)
-> 
-> -- 
-> 2.7.4
-> 
+Sincerely,
+Prof. Chin Guang
