@@ -2,114 +2,124 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA7B590DAF
-	for <lists+linux-clk@lfdr.de>; Fri, 12 Aug 2022 10:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 797B9590E25
+	for <lists+linux-clk@lfdr.de>; Fri, 12 Aug 2022 11:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237622AbiHLIsO (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Fri, 12 Aug 2022 04:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33180 "EHLO
+        id S232433AbiHLJct (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Fri, 12 Aug 2022 05:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237623AbiHLIsM (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Fri, 12 Aug 2022 04:48:12 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB94A8CF7
-        for <linux-clk@vger.kernel.org>; Fri, 12 Aug 2022 01:48:10 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id y23so284171ljh.12
-        for <linux-clk@vger.kernel.org>; Fri, 12 Aug 2022 01:48:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=CLzs8Hfa3KztE9SRqcc09r7QXqKpqOZdSYJ4jIsJilg=;
-        b=xCFevfLM2/cMx2cP9QD81k3j/lVrK7HfRCBNvCrxz7RRLT4UB6TiIMGQh6ieXvEEUb
-         8kbrWE3m44cFQhMqAglVryI/tOU2C9y4att8xgsDFCS2u5IO5Uj58XmwWA9qFhONt0nu
-         0QguXU9K8MxTlPxkOq7fOgd9ugsbD6YH9ehPPQDOuMF/QbkPrfYyTdXp2cbayMDagKki
-         GN3GkD+TGMU/dqxSuBAduniGOCZ0D3pQXBIQGdHzm8NpeMq2D9veDrm7PjVEG7B1kJqB
-         nDh0Zi8oDixzPWF1y46OdSvBe/kbsxpS181gs4RuCf1IqoZFXuntHWDYFP7whCXpr1UD
-         N9Ww==
+        with ESMTP id S232153AbiHLJct (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Fri, 12 Aug 2022 05:32:49 -0400
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3177211825;
+        Fri, 12 Aug 2022 02:32:48 -0700 (PDT)
+Received: by mail-qv1-f48.google.com with SMTP id u8so221212qvv.1;
+        Fri, 12 Aug 2022 02:32:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=CLzs8Hfa3KztE9SRqcc09r7QXqKpqOZdSYJ4jIsJilg=;
-        b=B2rc/sXXtTfp5kXcaGxY7skzdGcmmqJOgONzG34Co25NxvHOFKH0JrYnUvw4d6xH37
-         7p/ABwXVG2oGGfKwJbX7o2dDVBXb4GDsDPsIRTmCrib8Dw0QvyUnRFH0rT0djGOs9UOH
-         gSbijcSp+ZsIwXaXrGxot/upnVEOVMgJTDJJrNMH2N2GgJRTvCgT919RoAJeAEaNjleY
-         jd1J6j6ZU+GpKQ439bl2PUMqi1lcFc6fThGL/YL94PKFO2ndAbVKleJka4+YdOH2wl6I
-         zm8lIr1B23JDTFEsD6Y8W7ZqyPE30PpHTTZvMGV9PU0kJu5IXfP7B5NoJoza+k/ZgDaB
-         A2iA==
-X-Gm-Message-State: ACgBeo320ZfKnFQHiocjsYdfXgLldmA/CbFcMT4bsaP+IlLot45GIq6w
-        98XcVK9WDvfF5XnUdtgP/O1QKw==
-X-Google-Smtp-Source: AA6agR4xHcNtBpe7saYoDXeMcEiTyaLBTd5Lxd8rdt6uwe2LTrvjTgNcL/mjitGy12LaGZQJryPJXA==
-X-Received: by 2002:a2e:918d:0:b0:25e:c884:6a96 with SMTP id f13-20020a2e918d000000b0025ec8846a96mr904692ljg.157.1660294089278;
-        Fri, 12 Aug 2022 01:48:09 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id t2-20020a056512208200b0047f72bf3c32sm140709lfr.77.2022.08.12.01.48.05
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=+hBgnelb9rhjkbt7mU640/9Id4DX3C6HryE5K4mmUKE=;
+        b=wRUaG5PoSKkv/k13qPcX3yEDfeBWNOHumFmaHewAJXOxeRxJBDPX/sLtEmFSHWqYA/
+         N9TeQZPEpU57fIQ4AoVGEbSPjUry3yIFILRtwOsPXcVuNdKRYobdFU81hQ6WjOtIr9mq
+         eMWXEe948rA+0QiUTFFoDyKMdk8lxJocRnNCAs+B53sttAuuP8j3Rnw7lFv5X/CLYuvU
+         WCNesqI7zjyq0GNqF1mdJoUIXc2Z0R1ai0d602Nx1Mf1N8Qi46aeMkGQOy2wnm1Dp0sO
+         OLm6BBO+lDzFcHcYvSFP0kwP4pGCVdAj2NFu944E5hs+QDu5TD6gYf0GBXBU0mkAdDp6
+         kXcg==
+X-Gm-Message-State: ACgBeo2HWDO3zSS5+Za3fJqxPRxd7vFQHxx1CzHy0sicVP7t/QlBypPO
+        yBOHcOVkd+dtancRUvy5edo12/e9FJBJNg==
+X-Google-Smtp-Source: AA6agR6XbJYGPJlnFIXO3BaqnHa+oeJ5fGopTMcsrri7p8cq5g0E0f0Nto8MmBORk9hHfVMu3cqyIg==
+X-Received: by 2002:ad4:5c8b:0:b0:474:97fb:c4e6 with SMTP id o11-20020ad45c8b000000b0047497fbc4e6mr2561499qvh.68.1660296767152;
+        Fri, 12 Aug 2022 02:32:47 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id u13-20020a37ab0d000000b006b9629dc10asm1313428qke.103.2022.08.12.02.32.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 01:48:08 -0700 (PDT)
-Message-ID: <e49dd22b-ebd8-609f-f181-8feae65e631c@linaro.org>
-Date:   Fri, 12 Aug 2022 11:48:04 +0300
+        Fri, 12 Aug 2022 02:32:46 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-324ec5a9e97so4639487b3.7;
+        Fri, 12 Aug 2022 02:32:46 -0700 (PDT)
+X-Received: by 2002:a81:b049:0:b0:324:7408:94b with SMTP id
+ x9-20020a81b049000000b003247408094bmr2973449ywk.283.1660296765944; Fri, 12
+ Aug 2022 02:32:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 5/9] clk: samsung: exynos850: Implement CMU_AUD domain
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+References: <20220726174525.620-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220727153738.GA2696116-robh@kernel.org> <CA+V-a8t2LJ1qSsJWK4S-434cLfp0AuqkSKLjk7VgtwrMrNr2SA@mail.gmail.com>
+In-Reply-To: <CA+V-a8t2LJ1qSsJWK4S-434cLfp0AuqkSKLjk7VgtwrMrNr2SA@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 12 Aug 2022 11:32:34 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWxSGn7Hohn2oU1i2eiO+LOSHm7gXCX5OByvSgXm+00SA@mail.gmail.com>
+Message-ID: <CAMuHMdWxSGn7Hohn2oU1i2eiO+LOSHm7gXCX5OByvSgXm+00SA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: clock: renesas,rzg2l: Document RZ/Five SoC
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20220809113323.29965-1-semen.protsenko@linaro.org>
- <20220809113323.29965-6-semen.protsenko@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220809113323.29965-6-semen.protsenko@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-On 09/08/2022 14:33, Sam Protsenko wrote:
-> CMU_AUD clock domain provides clocks for ABOX IP-core (audio subsystem).
-> According to Exynos850 TRM, CMU_AUD generates Cortex-A32 clock, bus
-> clock and audio clocks for BLK_AUD.
-> 
-> This patch adds next clocks:
->   - bus clocks in CMU_TOP needed for CMU_AUD
->   - all internal CMU_AUD clocks
->   - leaf clocks for Cortex-A32, Speedy FM, UAIF0..UAIF6 (Unified Audio
->     Interface), CNT (counter), ABOX IP-core, ASB (Asynchronous Bridge),
->     DAP (Debug Access Port), I2S Codec MCLK, D_TZPC (TrustZone
->     Protection Controller), GPIO, PPMU (Platform Performance Monitoring
->     Unit), SysMMU, SysReg and WDT
-> 
-> ABOX clock was marked as CLK_IGNORE_UNUSED, as system hangs on boot
-> otherwise. Once ABOX driver is implemented, maybe it can be handled
-> there instead.
-> 
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+Hi Rob,
 
+On Fri, Aug 12, 2022 at 10:48 AM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+> On Wed, Jul 27, 2022 at 4:37 PM Rob Herring <robh@kernel.org> wrote:
+> > On Tue, Jul 26, 2022 at 06:45:25PM +0100, Lad Prabhakar wrote:
+> > > The CPG block on the RZ/Five SoC is almost identical to one found on the
+> > > RZ/G2UL SoC. "renesas,r9a07g043-cpg" compatible string will be used on
+> > > the RZ/Five SoC so to make this clear, update the comment to include
+> > > RZ/Five SoC.
+> >
+> > It's either the same part or it isn't. 'almost identical' doesn't sound
+> > like the former. Unless it's the former, it's a nak for me.
+> >
+> It's the latter.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To me, it looks like both blocks are identical, and the differences
+are in the integration into the SoC:
+  1. Some clocks do not exist (are not documented?) on RZ/Five,
+     because the consumer blocks do not exist (are not documented?).
+  2. Some interrupt controller clocks and resets have different names,
+     but use the exact same registers and bits.
 
+For 1, probably we could have kept those clocks anyway (they would
+be disabled by CCF due to being unused). But I'm not 100% sure it is
+safe to write to the corresponding registers (probably the hardware
+engineers would recommend not to access the registers, regardless if
+it is safe or not ;-), so we do not instantiate these clocks on RISC-V.
 
-Best regards,
-Krzysztof
+For 2, we decided to play it safe, too, and follow the naming in the
+documentation, in both bindings and driver.
+
+> > Litering the drivers with #ifdef CONFIG_ARM64/CONFIG_RISCV is not great
+> > either. That's not great for compile coverage and they have nothing to
+> > do with the architecture.
+
+I agree #ifdef's do have disadvantages.  But they seemed to be the
+best pragmatic solution, to avoid two separate drivers.
+
+And the architecture does specify SoC integration.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
