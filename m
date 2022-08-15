@@ -2,50 +2,50 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA293593235
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Aug 2022 17:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C6E593237
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Aug 2022 17:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbiHOPnG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        id S231183AbiHOPnG (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
         Mon, 15 Aug 2022 11:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59474 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231183AbiHOPmf (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Aug 2022 11:42:35 -0400
+        with ESMTP id S231425AbiHOPmj (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Aug 2022 11:42:39 -0400
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132166563
-        for <linux-clk@vger.kernel.org>; Mon, 15 Aug 2022 08:42:34 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 8B8B53200805;
-        Mon, 15 Aug 2022 11:42:32 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F91F64E6
+        for <linux-clk@vger.kernel.org>; Mon, 15 Aug 2022 08:42:38 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id C7122320085B;
+        Mon, 15 Aug 2022 11:42:36 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 15 Aug 2022 11:42:33 -0400
+  by compute1.internal (MEProxy); Mon, 15 Aug 2022 11:42:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1660578152; x=1660664552; bh=jg
-        tvztLQB/83oEqOPLglVohaIv+RzmjL0nBbyAOq+nA=; b=mtHMiy73DqJGkbFY5X
-        IxY0XCRETL39wkLZFmK9qbGRP2+kyC36Eq7fJJmTIkWxzDD26HRr8B2/xv3wXiBH
-        rq5ofmERHBSVDWH7fhpHYmo4tJmCFrjyMsQu53K+65IZEuY8qZ+q4wCyltNeyGvM
-        RqJkE41+9x4wAY3CUgayyUnShqDQjahMfVtpEiTO7+6dK++IsE94nxYfFbVbRnvB
-        V4NaqxPa3MbMGN2cPtwUWU2M3Z1UbUzHHF3YukAuHyknRSqDNcKQ07bEvzvcWWpY
-        GYRipeoML6WN+E+rZiPZWSQ+W3qthbr88ZZmqPGZFLyQS6mVUf1C11IGL4k1BNpD
-        NHlQ==
+        :subject:subject:to:to; s=fm3; t=1660578156; x=1660664556; bh=aI
+        FEmTlt/OZHkRxIBntXZoBmDd6aKA3+9acaKfKYgBI=; b=bk7zl80LII5fWHnitv
+        AQ2pKLri/5h8/Nbvmbu23M3ukm1q1l+dlGLSnF7Vq5w80mLOyDJMs7ovglz04aV9
+        G6obJJqW2yiMIOh1QNByVMA0jj1JkEmeEiiHfz+/KjAADx4WJJ8EFaq6tM/mmdrn
+        HgV1+Y9bLeAyK3gXxGfhLOSwtXpTxJieIJi7lcfDPyO7GmO/IoIXZ5xLN6o2LMyO
+        BkEc46Rd2R7+YMr7mho+g90qW2CWEFtiOr1xCAf12t/GaEaOCgvPw3sZ7YMYYcH0
+        AI2+xNr7uLANmeoCUjjigVkXqLzuKHH88wFS67FMPR8du1FXDM+6fv5ypbhsC1OM
+        oSCw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660578152; x=1660664552; bh=jgtvztLQB/83o
-        EqOPLglVohaIv+RzmjL0nBbyAOq+nA=; b=U3NqO95uSBjYjbveYk3vlYcKLTBVE
-        Lr3uKJVwwT2Z4RrUUN3dLJoNuexOmt6vbKV9KIMz8c965TzLuLFKtUOr8KanIYwF
-        9qGe6R5vP/Q2bWS+gfZsXTOAGP3wXjyWtyK2fXRQkqgnajwdpPp3l9djAwkSVRSU
-        Bc3OB+LHqVEKpaioYo8B03MY44KdZLA8J4Rlrvwrnv5TqHTDPVdWpTb/goKqmb8R
-        FHGi+66PcQ/tDHqAzpX04kib0j5tnn8IGfVQo4XAFFCmRnI1pWMzJyYhMIw+AFS7
-        qEa8EAdOqIEClHPzAroJLQ5mIgJqQQsbvP7cuOqKU+S6MuXb5gVKEafNg==
-X-ME-Sender: <xms:Z2n6YnjXuakFygwfhAAN3wZ-_REMywaJq8RNQF1zowO8ly0xEYv3eQ>
-    <xme:Z2n6YkCqTDZ6ejIjbt48U1FES-v2BCIj5yAXHJvs3C-E5DbOnY2DFk_Bfr96rHfZR
-    mmRo_tXB0GXGEu6uuw>
-X-ME-Received: <xmr:Z2n6YnFV-mkpwqVpqlDUATcHcuZuBZdwSjYQxvgyH1zvapphwfW_S7N6nyZ5>
+        :x-sasl-enc; s=fm1; t=1660578156; x=1660664556; bh=aIFEmTlt/OZHk
+        RxIBntXZoBmDd6aKA3+9acaKfKYgBI=; b=PYAE1DmZb1ZdRM7TY5oz4wIZrpmON
+        i/F7XuL4Tdugid0Eq8MZs3lwdULewU0282p9qKzrZeq6TDY0Y0xMLIPpp6kvf1Ih
+        T4gQh4HmA/JN5jnpCx/oDxGig5xZkGJqlGAz3WuabEg/m7ulHzFwF3bf6OYAQ9aS
+        RaRFSVhJxXwbT9FnvMcXcvKWwFYCY/BZwKDxW/dVUV1wp538IS9pcsptuk/3pYhp
+        LvpY8tO9/v2OxfhWhIXPMl0szZMqL5f8LxC0LTq0voxT5AT3GFUK5hK1NwjPSbgb
+        heIvfQBhA4LvpGNBZFIeplbvAqhwkMWFGdUHtUF2RQBGybqw72kDln5Hg==
+X-ME-Sender: <xms:bGn6Ytvj27GCsKkIrREmeipZ1ICMVUWTJ4nb8k7zMQPxmlUe99JDaA>
+    <xme:bGn6YmfiMIl-L5ceaZ4LehVJHzzMQ0lN_2_CybPds54X9I52i-Kbxsm_aKnXbKKsi
+    FUqnJeOikMpZXelB_I>
+X-ME-Received: <xmr:bGn6YgxIjVUf4KLmKbKxn8M1rtFID2OHp8dNHzuWp9Y0yqt6xeWIpyjj_rZf>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehvddgleefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
@@ -54,13 +54,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehvddgleefucetufdoteggod
     htthgvrhhnpeelkeefteduhfekjeeihfetudfguedvveekkeetteekhfekhfdtlefgfedu
     vdejhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
     hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:Z2n6YkRTaQ-ZLwSfsxYzg0hua6ndUZaB5YYkQpMnr8BIQfvHB1L_rw>
-    <xmx:Z2n6YkxQmycEK4aAP_gflkhMATxyhiOQFA5N2hJeexxe_hMUv46ryQ>
-    <xmx:Z2n6Yq4UPNaVPzNVkEbx8QThmWjfi7SCBKIE2jBYE1fEwc_h1DAivw>
-    <xmx:aGn6YpqN5rdJxdvOG2ARbBOACK_v06SSlluNVG86i1yhAr9sIRW4SQ>
+X-ME-Proxy: <xmx:bGn6YkPh1XNIH_vx2KEfZxw0qTuev9k4NN3zCy7FOtaO11aJCVL8Rw>
+    <xmx:bGn6Yt_fenpQaz0TL55e4QTgLqMWoJ8ctq69EqoIP9lLmgwSXifxNg>
+    <xmx:bGn6YkVI7s91Kho-IlC0gd8FGaJGp9hVuFPvGnGD64PCZIxVvUQCGA>
+    <xmx:bGn6Yu0nZbB4-hkhPF3IuhgCUmJwKPhCffXLhENXw-Rrty_GGQvhJQ>
 Feedback-ID: i8771445c:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Aug 2022 11:42:31 -0400 (EDT)
+ 15 Aug 2022 11:42:35 -0400 (EDT)
 From:   Maxime Ripard <maxime@cerno.tech>
 To:     linux-clk@vger.kernel.org,
         Mike Turquette <mturquette@baylibre.com>,
@@ -74,9 +74,9 @@ Cc:     Tony Lindgren <tony@atomide.com>,
         Naresh Kamboju <naresh.kamboju@linaro.org>,
         Alexander Stein <alexander.stein@ew.tq-group.com>,
         Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v8 09/25] clk: tests: Add tests for single parent mux
-Date:   Mon, 15 Aug 2022 17:41:31 +0200
-Message-Id: <20220815154147.1631441-10-maxime@cerno.tech>
+Subject: [PATCH v8 10/25] clk: tests: Add tests for mux with multiple parents
+Date:   Mon, 15 Aug 2022 17:41:32 +0200
+Message-Id: <20220815154147.1631441-11-maxime@cerno.tech>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220815154147.1631441-1-maxime@cerno.tech>
 References: <20220815154147.1631441-1-maxime@cerno.tech>
@@ -92,30 +92,73 @@ Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-We have a few tests for a mux with a single parent, testing the case
-where it used to be orphan.
+We'll need to test a few corner cases that occur when we have a mux
+clock whose default parent is missing.
 
-Let's leverage most of the code but register the clock properly to test
-a few trivial things.
+For now, let's create the context structure and the trivial ops, along
+with a test suite that just tests trivial things for now, without
+considering the orphan case.
 
 Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com> # imx8mp
 Tested-by: Marek Szyprowski <m.szyprowski@samsung.com> # exynos4210, meson g12b
 Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
- drivers/clk/clk_test.c | 194 +++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 185 insertions(+), 9 deletions(-)
+ drivers/clk/clk_test.c | 121 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 121 insertions(+)
 
 diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
-index b269420dafcc..06c9220873bb 100644
+index 06c9220873bb..1ccafd4fabff 100644
 --- a/drivers/clk/clk_test.c
 +++ b/drivers/clk/clk_test.c
-@@ -365,6 +365,189 @@ struct clk_single_parent_ctx {
- 	struct clk_hw hw;
+@@ -108,6 +108,39 @@ static const struct clk_ops clk_dummy_single_parent_ops = {
+ 	.get_parent = clk_dummy_single_get_parent,
  };
  
-+static int clk_single_parent_mux_test_init(struct kunit *test)
++struct clk_multiple_parent_ctx {
++	struct clk_dummy_context parents_ctx[2];
++	struct clk_hw hw;
++	u8 current_parent;
++};
++
++static int clk_multiple_parents_mux_set_parent(struct clk_hw *hw, u8 index)
 +{
-+	struct clk_single_parent_ctx *ctx;
++	struct clk_multiple_parent_ctx *ctx =
++		container_of(hw, struct clk_multiple_parent_ctx, hw);
++
++	if (index >= clk_hw_get_num_parents(hw))
++		return -EINVAL;
++
++	ctx->current_parent = index;
++
++	return 0;
++}
++
++static u8 clk_multiple_parents_mux_get_parent(struct clk_hw *hw)
++{
++	struct clk_multiple_parent_ctx *ctx =
++		container_of(hw, struct clk_multiple_parent_ctx, hw);
++
++	return ctx->current_parent;
++}
++
++static const struct clk_ops clk_multiple_parents_mux_ops = {
++	.get_parent = clk_multiple_parents_mux_get_parent,
++	.set_parent = clk_multiple_parents_mux_set_parent,
++	.determine_rate = __clk_mux_determine_rate_closest,
++};
++
+ static int clk_test_init_with_ops(struct kunit *test, const struct clk_ops *ops)
+ {
+ 	struct clk_dummy_context *ctx;
+@@ -360,6 +393,93 @@ static struct kunit_suite clk_uncached_test_suite = {
+ 	.test_cases = clk_uncached_test_cases,
+ };
+ 
++static int
++clk_multiple_parents_mux_test_init(struct kunit *test)
++{
++	struct clk_multiple_parent_ctx *ctx;
++	const char *parents[2] = { "parent-0", "parent-1"};
 +	int ret;
 +
 +	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
@@ -123,20 +166,26 @@ index b269420dafcc..06c9220873bb 100644
 +		return -ENOMEM;
 +	test->priv = ctx;
 +
-+	ctx->parent_ctx.rate = DUMMY_CLOCK_INIT_RATE;
-+	ctx->parent_ctx.hw.init =
-+		CLK_HW_INIT_NO_PARENT("parent-clk",
-+				      &clk_dummy_rate_ops,
-+				      0);
-+
-+	ret = clk_hw_register(NULL, &ctx->parent_ctx.hw);
++	ctx->parents_ctx[0].hw.init = CLK_HW_INIT_NO_PARENT("parent-0",
++							    &clk_dummy_rate_ops,
++							    0);
++	ctx->parents_ctx[0].rate = DUMMY_CLOCK_RATE_1;
++	ret = clk_hw_register(NULL, &ctx->parents_ctx[0].hw);
 +	if (ret)
 +		return ret;
 +
-+	ctx->hw.init = CLK_HW_INIT("test-clk", "parent-clk",
-+				   &clk_dummy_single_parent_ops,
-+				   CLK_SET_RATE_PARENT);
++	ctx->parents_ctx[1].hw.init = CLK_HW_INIT_NO_PARENT("parent-1",
++							    &clk_dummy_rate_ops,
++							    0);
++	ctx->parents_ctx[1].rate = DUMMY_CLOCK_RATE_2;
++	ret = clk_hw_register(NULL, &ctx->parents_ctx[1].hw);
++	if (ret)
++		return ret;
 +
++	ctx->current_parent = 0;
++	ctx->hw.init = CLK_HW_INIT_PARENTS("test-mux", parents,
++					   &clk_multiple_parents_mux_ops,
++					   CLK_SET_RATE_PARENT);
 +	ret = clk_hw_register(NULL, &ctx->hw);
 +	if (ret)
 +		return ret;
@@ -145,25 +194,26 @@ index b269420dafcc..06c9220873bb 100644
 +}
 +
 +static void
-+clk_single_parent_mux_test_exit(struct kunit *test)
++clk_multiple_parents_mux_test_exit(struct kunit *test)
 +{
-+	struct clk_single_parent_ctx *ctx = test->priv;
++	struct clk_multiple_parent_ctx *ctx = test->priv;
 +
 +	clk_hw_unregister(&ctx->hw);
-+	clk_hw_unregister(&ctx->parent_ctx.hw);
++	clk_hw_unregister(&ctx->parents_ctx[0].hw);
++	clk_hw_unregister(&ctx->parents_ctx[1].hw);
 +}
 +
 +/*
-+ * Test that for a clock with a single parent, clk_get_parent() actually
-+ * returns the parent.
++ * Test that for a clock with multiple parents, clk_get_parent()
++ * actually returns the current one.
 + */
 +static void
-+clk_test_single_parent_mux_get_parent(struct kunit *test)
++clk_test_multiple_parents_mux_get_parent(struct kunit *test)
 +{
-+	struct clk_single_parent_ctx *ctx = test->priv;
++	struct clk_multiple_parent_ctx *ctx = test->priv;
 +	struct clk_hw *hw = &ctx->hw;
 +	struct clk *clk = clk_hw_get_clk(hw, NULL);
-+	struct clk *parent = clk_hw_get_clk(&ctx->parent_ctx.hw, NULL);
++	struct clk *parent = clk_hw_get_clk(&ctx->parents_ctx[0].hw, NULL);
 +
 +	KUNIT_EXPECT_TRUE(test, clk_is_match(clk_get_parent(clk), parent));
 +
@@ -171,166 +221,37 @@ index b269420dafcc..06c9220873bb 100644
 +	clk_put(clk);
 +}
 +
-+/*
-+ * Test that for a clock that can't modify its rate and with a single
-+ * parent, if we set disjoints range on the parent and then the child,
-+ * the second will return an error.
-+ *
-+ * FIXME: clk_set_rate_range() only considers the current clock when
-+ * evaluating whether ranges are disjoints and not the upstream clocks
-+ * ranges.
-+ */
-+static void
-+clk_test_single_parent_mux_set_range_disjoint_child_last(struct kunit *test)
-+{
-+	struct clk_single_parent_ctx *ctx = test->priv;
-+	struct clk_hw *hw = &ctx->hw;
-+	struct clk *clk = clk_hw_get_clk(hw, NULL);
-+	struct clk *parent;
-+	int ret;
-+
-+	kunit_skip(test, "This needs to be fixed in the core.");
-+
-+	parent = clk_get_parent(clk);
-+	KUNIT_ASSERT_PTR_NE(test, parent, NULL);
-+
-+	ret = clk_set_rate_range(parent, 1000, 2000);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = clk_set_rate_range(clk, 3000, 4000);
-+	KUNIT_EXPECT_LT(test, ret, 0);
-+
-+	clk_put(clk);
-+}
-+
-+/*
-+ * Test that for a clock that can't modify its rate and with a single
-+ * parent, if we set disjoints range on the child and then the parent,
-+ * the second will return an error.
-+ *
-+ * FIXME: clk_set_rate_range() only considers the current clock when
-+ * evaluating whether ranges are disjoints and not the downstream clocks
-+ * ranges.
-+ */
-+static void
-+clk_test_single_parent_mux_set_range_disjoint_parent_last(struct kunit *test)
-+{
-+	struct clk_single_parent_ctx *ctx = test->priv;
-+	struct clk_hw *hw = &ctx->hw;
-+	struct clk *clk = clk_hw_get_clk(hw, NULL);
-+	struct clk *parent;
-+	int ret;
-+
-+	kunit_skip(test, "This needs to be fixed in the core.");
-+
-+	parent = clk_get_parent(clk);
-+	KUNIT_ASSERT_PTR_NE(test, parent, NULL);
-+
-+	ret = clk_set_rate_range(clk, 1000, 2000);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = clk_set_rate_range(parent, 3000, 4000);
-+	KUNIT_EXPECT_LT(test, ret, 0);
-+
-+	clk_put(clk);
-+}
-+
-+/*
-+ * Test that for a clock that can't modify its rate and with a single
-+ * parent, if we set a range on the parent and a more restrictive one on
-+ * the child, and then call clk_round_rate(), the boundaries of the
-+ * two clocks are taken into account.
-+ */
-+static void
-+clk_test_single_parent_mux_set_range_round_rate_child_smaller(struct kunit *test)
-+{
-+	struct clk_single_parent_ctx *ctx = test->priv;
-+	struct clk_hw *hw = &ctx->hw;
-+	struct clk *clk = clk_hw_get_clk(hw, NULL);
-+	struct clk *parent;
-+	unsigned long rate;
-+	int ret;
-+
-+	parent = clk_get_parent(clk);
-+	KUNIT_ASSERT_PTR_NE(test, parent, NULL);
-+
-+	ret = clk_set_rate_range(parent, DUMMY_CLOCK_RATE_1, DUMMY_CLOCK_RATE_2);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = clk_set_rate_range(clk, DUMMY_CLOCK_RATE_1 + 1000, DUMMY_CLOCK_RATE_2 - 1000);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	rate = clk_round_rate(clk, DUMMY_CLOCK_RATE_1 - 1000);
-+	KUNIT_ASSERT_GT(test, rate, 0);
-+	KUNIT_EXPECT_GE(test, rate, DUMMY_CLOCK_RATE_1 + 1000);
-+	KUNIT_EXPECT_LE(test, rate, DUMMY_CLOCK_RATE_2 - 1000);
-+
-+	rate = clk_round_rate(clk, DUMMY_CLOCK_RATE_2 + 1000);
-+	KUNIT_ASSERT_GT(test, rate, 0);
-+	KUNIT_EXPECT_GE(test, rate, DUMMY_CLOCK_RATE_1 + 1000);
-+	KUNIT_EXPECT_LE(test, rate, DUMMY_CLOCK_RATE_2 - 1000);
-+
-+	clk_put(clk);
-+}
-+
-+static struct kunit_case clk_single_parent_mux_test_cases[] = {
-+	KUNIT_CASE(clk_test_single_parent_mux_get_parent),
-+	KUNIT_CASE(clk_test_single_parent_mux_set_range_disjoint_child_last),
-+	KUNIT_CASE(clk_test_single_parent_mux_set_range_disjoint_parent_last),
-+	KUNIT_CASE(clk_test_single_parent_mux_set_range_round_rate_child_smaller),
++static struct kunit_case clk_multiple_parents_mux_test_cases[] = {
++	KUNIT_CASE(clk_test_multiple_parents_mux_get_parent),
 +	{}
 +};
 +
 +/*
-+ * Test suite for a basic mux clock with one parent, with
++ * Test suite for a basic mux clock with two parents, with
 + * CLK_SET_RATE_PARENT on the child.
 + *
 + * These tests exercise the consumer API and check that the state of the
-+ * child and parent are sane and consistent.
++ * child and parents are sane and consistent.
 + */
 +static struct kunit_suite
-+clk_single_parent_mux_test_suite = {
-+	.name = "clk-single-parent-mux-test",
-+	.init = clk_single_parent_mux_test_init,
-+	.exit = clk_single_parent_mux_test_exit,
-+	.test_cases = clk_single_parent_mux_test_cases,
++clk_multiple_parents_mux_test_suite = {
++	.name = "clk-multiple-parents-mux-test",
++	.init = clk_multiple_parents_mux_test_init,
++	.exit = clk_multiple_parents_mux_test_exit,
++	.test_cases = clk_multiple_parents_mux_test_cases,
 +};
 +
- static int clk_orphan_transparent_single_parent_mux_test_init(struct kunit *test)
- {
- 	struct clk_single_parent_ctx *ctx;
-@@ -401,14 +584,6 @@ static int clk_orphan_transparent_single_parent_mux_test_init(struct kunit *test
- 	return 0;
- }
+ struct clk_single_parent_ctx {
+ 	struct clk_dummy_context parent_ctx;
+ 	struct clk_hw hw;
+@@ -1339,6 +1459,7 @@ static struct kunit_suite clk_range_minimize_test_suite = {
  
--static void clk_orphan_transparent_single_parent_mux_test_exit(struct kunit *test)
--{
--	struct clk_single_parent_ctx *ctx = test->priv;
--
--	clk_hw_unregister(&ctx->hw);
--	clk_hw_unregister(&ctx->parent_ctx.hw);
--}
--
- /*
-  * Test that a mux-only clock, with an initial rate within a range,
-  * will still have the same rate after the range has been enforced.
-@@ -455,7 +630,7 @@ static struct kunit_case clk_orphan_transparent_single_parent_mux_test_cases[] =
- static struct kunit_suite clk_orphan_transparent_single_parent_test_suite = {
- 	.name = "clk-orphan-transparent-single-parent-test",
- 	.init = clk_orphan_transparent_single_parent_mux_test_init,
--	.exit = clk_orphan_transparent_single_parent_mux_test_exit,
-+	.exit = clk_single_parent_mux_test_exit,
- 	.test_cases = clk_orphan_transparent_single_parent_mux_test_cases,
- };
- 
-@@ -1168,6 +1343,7 @@ kunit_test_suites(
+ kunit_test_suites(
+ 	&clk_test_suite,
++	&clk_multiple_parents_mux_test_suite,
+ 	&clk_orphan_transparent_single_parent_test_suite,
  	&clk_range_test_suite,
  	&clk_range_maximize_test_suite,
- 	&clk_range_minimize_test_suite,
-+	&clk_single_parent_mux_test_suite,
- 	&clk_uncached_test_suite
- );
- MODULE_LICENSE("GPL v2");
 -- 
 2.37.1
 
