@@ -2,126 +2,128 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E3C592CBC
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Aug 2022 12:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB939592B9C
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Aug 2022 12:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240850AbiHOIHm (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 15 Aug 2022 04:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
+        id S229589AbiHOIRe (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 15 Aug 2022 04:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbiHOIHm (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Aug 2022 04:07:42 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3581E3CA
-        for <linux-clk@vger.kernel.org>; Mon, 15 Aug 2022 01:07:41 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id c3so6489559vsc.6
-        for <linux-clk@vger.kernel.org>; Mon, 15 Aug 2022 01:07:41 -0700 (PDT)
+        with ESMTP id S231558AbiHOIQG (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Aug 2022 04:16:06 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6817BBCA7
+        for <linux-clk@vger.kernel.org>; Mon, 15 Aug 2022 01:16:04 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id ay39-20020a05600c1e2700b003a5503a80cfso3568994wmb.2
+        for <linux-clk@vger.kernel.org>; Mon, 15 Aug 2022 01:16:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=0j2fNWlhqHDdR8vDkqVbAvzs/vaD31QYk8D65F418vw=;
-        b=IH+bjnKLoIGwxrzbWto9f8hMWC2ogzh12LDwldBu4Zp/a4b3uwVAzjthn596wXA/Uv
-         h9kL9pr24vKRPoGoEnQ9YWqZ+fccbrtH06UK084c9O+ISOZAxKP618fJnkYJmO9MY4EA
-         2HVVVBArpKyo2zz3hpYNLQrbu5JYvsFS+bNj6UapYQqkwqAPK2PgeSqWDgasZ1TI40qR
-         Tzta/54t5Bjjl2qAvm9jjJjmS0MEArUjT7xK8hPRHQtuKDp7UYfeRdzM9DqGCrC6IcGe
-         pVBNLsLrku4gN6JE6bfMxHsY/NG6MdeCgAO+Tw7ZD8aBkpowdN3ce0nOai9iDksp19lC
-         G70w==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=2EXJc+W0WiUMq6IfoG1+NtWZXhyvP3kHwdxs6Qb3+pI=;
+        b=lesTjrSSeDPkH8yf41Y3AxvP2AQWHSlFR2nZLz0HLlk0Iy/HCk1CAwtRsXGnaysNLb
+         tAPLT55tzSp6Q00NGkh8fjsx3iauwjBUM8O3v0CAlAT+6AldoCZ/EbIXAkMg+QM0X3Gp
+         vIpw0FhvUXYktjK+CfSyatCMeNnGJfZlQUqKFVLrfaDV+zvmcYJRE1R4wylzSrDMmy93
+         8pDQD3zsL0CVnv00HRDyQz/AYIazyi2KrBYDq5LPJJOZS4eGqjMO2ATAGtrdSCEXhFVW
+         610Xz9+r+sXk+hpO/EICxAbe/080Sdr6GvdrOFlhu/aJCAxusPgrTy20zVQQCuiegM24
+         eV8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=0j2fNWlhqHDdR8vDkqVbAvzs/vaD31QYk8D65F418vw=;
-        b=jNtgjwEarAmkzf8rfZ2UHdyhQGQ8npQkOi53eoQy8JqH1VlFOW+V3+yOlBb8dHWRYL
-         nvUG6MpLgc2OFxeVC6M+L+SotnGIjU3KB1ZSyC9EjBQp0a4toJmeZZtSEGFNcWaL3q1x
-         okckjGCilHWto746SctpM8jy8iuzCMP94rds3/dbBLnrgUEkIWW7wEGf73IkLfnkaJ9h
-         dYpH3bNvezjkiqo0fM9bliVSXaRatRDpi7DIyhcaRQw7CfgJy6xVJaLd1bqiJwugnoDW
-         TJS9VzsI7wQs0KlXQetCtfwg9Sc5gM5dGBgXRipgsIkXdFx/lIBMgzF5gXSFe2Q40uid
-         5a/A==
-X-Gm-Message-State: ACgBeo2VBF94BZavQP0DLQ1cVlvbTE+UJQkDxT8pzm9g/iQp7qZORAO3
-        ZG0Gffv4slpqD5VWfKGhJ+jyuZRRyXxR9N9SPBM=
-X-Google-Smtp-Source: AA6agR7uhYPKSpurcf9CPZPx3Jdzobb9lV5A8QBl4IeDgD75oZ04VR0Igm75Tb53g0rO3i+Oe8tVGfK9AWE+sINiYRA=
-X-Received: by 2002:a67:e9c2:0:b0:385:8f3:23c1 with SMTP id
- q2-20020a67e9c2000000b0038508f323c1mr5890535vso.63.1660550860100; Mon, 15 Aug
- 2022 01:07:40 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=2EXJc+W0WiUMq6IfoG1+NtWZXhyvP3kHwdxs6Qb3+pI=;
+        b=S+o+DGIbKFm+ekYI9cexvKRYE8NxsFrMoBbrAgLT+wb+AyXN3UmZe9+q2IRx4Y5pYg
+         EyzGbJZ9SY7Xh+cyVPJEFrHknSD9abhtWfbXLcXyzPhq5v8B0pmZIOZ76t+5PlEQOvzr
+         oLtT+SO+sHQb5EMMF1n3VeBENASEef30iotcYX13nEFzk36EYhsQKOsQBAni6GGj7m9U
+         oKuuvf0R1pgvkeE6b9YWSKubm797brw64qTmqRbp55F8Nv4yqKdC4CFnM6q44MOp1Uvl
+         7QHtAcrDBy+euUbSSUyhEK9CBa8OByGiHuiw0ykiPndlH/b7RbonOMrnpT1coV5XZIor
+         ruNA==
+X-Gm-Message-State: ACgBeo1i7AYItw2n1inQQxnpiiVU6dtAE/5enFmC9YfLlYwmUObI7azx
+        vqe0hB2YL0yoK1H/jtgm1EAiWg==
+X-Google-Smtp-Source: AA6agR7lE2pSrkUcP1I5mNHTVfwLSlcuX0/RK/cHwHELEIlPhh1ah5PsBhdugYuvVyleRs9OniBZng==
+X-Received: by 2002:a05:600c:3492:b0:3a5:e1a0:24c9 with SMTP id a18-20020a05600c349200b003a5e1a024c9mr5265215wmq.177.1660551362921;
+        Mon, 15 Aug 2022 01:16:02 -0700 (PDT)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id i5-20020adff305000000b0021ef34124ebsm6602680wro.11.2022.08.15.01.16.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 01:16:02 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 11:16:00 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, abelvesa@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH V2 2/8] clk: imx93: guard imx93_clk_of_match with
+ CONFIG_OF
+Message-ID: <YvoAwL9qhmE03kgi@linaro.org>
+References: <20220815013039.474970-1-peng.fan@oss.nxp.com>
+ <20220815013039.474970-3-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Received: by 2002:a59:5c51:0:b0:2da:55bb:dbeb with HTTP; Mon, 15 Aug 2022
- 01:07:39 -0700 (PDT)
-Reply-To: ausmann@inbox.lt
-From:   Abu Usman <shehuahmedutono05@gmail.com>
-Date:   Mon, 15 Aug 2022 09:07:39 +0100
-Message-ID: <CALChzRb6bp3nBSiMEFEuCbei2C=7iv0HRCH1-cJ49cGHDmJnuw@mail.gmail.com>
-Subject: Hello Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.4 required=5.0 tests=ADVANCE_FEE_4_NEW,BAYES_50,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e42 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [shehuahmedutono05[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [shehuahmedutono05[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.6 URG_BIZ Contains urgent matter
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
-        *      information
-        *  2.2 ADVANCE_FEE_4_NEW Appears to be advance fee fraud (Nigerian
-        *      419)
-        *  1.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220815013039.474970-3-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Greeting,
+On 22-08-15 09:30:33, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> There is build warning when CONFIG_OF is not selected.
+> >> drivers/clk/imx/clk-imx93.c:324:34: warning: 'imx93_clk_of_match'
+> >> defined but not used [-Wunused-const-variable=]
+>      324 | static const struct of_device_id imx93_clk_of_match[] = {
+>          |                                  ^~~~~~~~~~~~~~~~~~
+> 
+> Use CONFIG_OF to guard imx93_clk_of_match to avoid build warning.
+> 
+> Fixes: 24defbe194b6 ("clk: imx: add i.MX93 clk")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/clk/imx/clk-imx93.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/clk/imx/clk-imx93.c b/drivers/clk/imx/clk-imx93.c
+> index f5c9fa40491c..5099048b7916 100644
+> --- a/drivers/clk/imx/clk-imx93.c
+> +++ b/drivers/clk/imx/clk-imx93.c
+> @@ -321,11 +321,13 @@ static int imx93_clocks_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> +#ifdef CONFIG_OF
 
-I am indeed glad to be in contact with you even though this medium of
-communication (internet) has been grossly abused by criminal minded
-people making it difficult for people with genuine intention to
-correspond and exchange views without skepticism.
+Hmm, I'm not sure if we should do this or rather should we make this driver
+depend somehow on CONFIG_OF in Kconfig.
 
-This is a private effort to introduce a partnership intention and
-proposal to you, I decided to write to you. I have decided that I seek
-your assistance in a matter that requires your urgent attention
+Looking at the other i.MX clock drivers, it would seem we need this for
+all them too.
 
-I'm Abu Usman from Afghanistan, and I am contacting you due to the
-ongoing takeover by the Taliban in my country.
+I fairly OK with this, but maybe Stephen suggests something different.
 
-I need your urgent response to help me receive some funds for me.If
-this is something you can do, I will appreciate your early response,
-so that I can provide more and appropriate details of the entire
-proposal, given the fact that this is only a skeletal introduction.
+Reviewed-by: Abel Vesa <abel.vesa@nxp.com>
 
-I will appreciate if you could let me have the following information
-
-1. Your Name
-2. Address
-3. Your cell Phone Number.
-4. Occupation
-
-Your positive response will be highly appreciated. As soon as I
-receive your response I will get back to you Asap.
-
-Sincerely,
-
-Abu Usman
+>  static const struct of_device_id imx93_clk_of_match[] = {
+>  	{ .compatible = "fsl,imx93-ccm" },
+>  	{ /* Sentinel */ },
+>  };
+>  MODULE_DEVICE_TABLE(of, imx93_clk_of_match);
+> +#endif
+>  
+>  static struct platform_driver imx93_clk_driver = {
+>  	.probe = imx93_clocks_probe,
+> -- 
+> 2.37.1
+> 
