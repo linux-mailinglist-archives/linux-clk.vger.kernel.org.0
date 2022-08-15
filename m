@@ -2,172 +2,140 @@ Return-Path: <linux-clk-owner@vger.kernel.org>
 X-Original-To: lists+linux-clk@lfdr.de
 Delivered-To: lists+linux-clk@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A4D593246
-	for <lists+linux-clk@lfdr.de>; Mon, 15 Aug 2022 17:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D27593295
+	for <lists+linux-clk@lfdr.de>; Mon, 15 Aug 2022 17:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbiHOPoL (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
-        Mon, 15 Aug 2022 11:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60098 "EHLO
+        id S232283AbiHOPzH (ORCPT <rfc822;lists+linux-clk@lfdr.de>);
+        Mon, 15 Aug 2022 11:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232390AbiHOPnp (ORCPT
-        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Aug 2022 11:43:45 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C39B1DC
-        for <linux-clk@vger.kernel.org>; Mon, 15 Aug 2022 08:43:44 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id F06B6320095B;
-        Mon, 15 Aug 2022 11:43:42 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 15 Aug 2022 11:43:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1660578222; x=1660664622; bh=At
-        3V6ZkUa2LFlTQMXRTxt/5U1TKMVvb4QVZVWFkJh9E=; b=RHfu+T9zebNV2jOm3r
-        UpMwO5NbQS+XxQ0lo/F3sG6f6FqogpZEbM4DWPOVDwcE42lo9o1ylD+/KAtiawBS
-        ymnCioFUTudoxnjwpt7j5Ms9n8mw+flyK31uSJHouG+nnv5qkcipv8SMHP0lSfX9
-        PsLaet56R1LGBt0ezFoSACCUlJkt9xFOcLIYXJ+35W1CpbLEpE8hbkvj5hGwAurO
-        h2Y+9Bwu/wrnrJ0hOew5r06jLY/Zf6YY1yLLldIa21Gh+NaNnR2ea+MpXXbG/bEP
-        s0LGGYcWJibYykGPIcfr6mUUR34txvWGnoGHVUjjo2l8qDrniBGUApWVQQLIeqdO
-        abUA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660578222; x=1660664622; bh=At3V6ZkUa2LFl
-        TQMXRTxt/5U1TKMVvb4QVZVWFkJh9E=; b=lPf4OsAS4Mjb56irdn+OkJ+IeHaps
-        fMe8fuRUKt8DrXta2+8vE1/DRbFvCGz1bsvBzio0XteIvUrcZKZhsR9G2NE3oJ/4
-        k/yn0J/DGkVFPCozNjPUGGrHU2Utgqtn6UiiuwWi5mTIPRWMiRrfqD8pU1opQqW/
-        Bjs6RRSjpvVEfq/r1hM3Q8I9D1B7aq5UfWIRw10RgcvdNWLjP2q51R1h1lTMc18D
-        1w7vLhLDAXYIyL3vn01mvfu3j5IXre5bYnYPmzpvIDZCfUnSfRykDLmfZRKxTIpU
-        iVyMynjXd3a5h5ymL/t2QQZkirIbfHQtLLJ8NDamfF26ZbWg/wgrlDFKg==
-X-ME-Sender: <xms:rmn6Yjmlj-WA0-6591SGkvAH2i56oIue6m8iwp44ViqD3RkOfwwzJw>
-    <xme:rmn6Ym2rHNPxEbkMihYvWbEFIARa7m5ZXeNP6u_5dgPYZaC61yV2T66LnkZknAkfb
-    GecFkTFEB8NOz-RXx4>
-X-ME-Received: <xmr:rmn6YppDFSvAsUHXtUgalfYN5N6oQxSurvpXWxBO7kp8zeMqAOl1stbS2zG_>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehvddgleefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeelkeefteduhfekjeeihfetudfguedvveekkeetteekhfekhfdtlefgfedu
-    vdejhfenucevlhhushhtvghrufhiiigvpeefnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:rmn6YrmQpZWJ6mIz9L0u6WIQPMwA8eHe9-_rSICLZNtfZClDRm7l1g>
-    <xmx:rmn6Yh2ZVIz4KdpgF90Sc3NnScXiTgxkSfUL_Qswf-8tff8dUHxmDg>
-    <xmx:rmn6YqvbN4_Ydx2WvYqLKsRTESK1HmoMe_zpUw_laigksj3y2tLbqg>
-    <xmx:rmn6YqusNxzOHr6Fz4Tp_gh0mczyIckk2bfG8pSB5WhUfy_7CUctIw>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Aug 2022 11:43:41 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     linux-clk@vger.kernel.org,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
+        with ESMTP id S232201AbiHOPzF (ORCPT
+        <rfc822;linux-clk@vger.kernel.org>); Mon, 15 Aug 2022 11:55:05 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5191A05A;
+        Mon, 15 Aug 2022 08:55:02 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 26F5656D;
+        Mon, 15 Aug 2022 17:54:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1660578899;
+        bh=S8j7GbNbq17SRBvgGdMvUVVVDhDYQu28yqUMRIme4pw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KkMqLgeA3Hlou6eQxDNwuj/cAMOGRuZWf6psOJwAoE+lkqdgWTBYLUFWFiFmirC11
+         MV/sX2S9rJ9pHMvTFjbnnwFQbUhcqWxVXtYbPHGpZY4nQn8qmWU8YDavgsBevmlt5n
+         2eecXKodkdAhl5/HdCyGSGest6FWKhs5flNo+vq8=
+Date:   Mon, 15 Aug 2022 18:54:45 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        dri-devel@lists.freedesktop.org,
+        Johan Hovold <johan+linaro@kernel.org>,
         Neil Armstrong <narmstrong@baylibre.com>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v8 25/25] clk: tests: Add missing test case for ranges
-Date:   Mon, 15 Aug 2022 17:41:47 +0200
-Message-Id: <20220815154147.1631441-26-maxime@cerno.tech>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220815154147.1631441-1-maxime@cerno.tech>
-References: <20220815154147.1631441-1-maxime@cerno.tech>
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        linux-amlogic@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-doc@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        linux-hwmon@vger.kernel.org, linux-clk@vger.kernel.org,
+        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        David Airlie <airlied@linux.ie>, linux-iio@vger.kernel.org
+Subject: Re: (subset) [PATCH v2 0/7] Devm helpers for regulator get and enable
+Message-ID: <YvpsRbguMXn74GhR@pendragon.ideasonboard.com>
+References: <cover.1660292316.git.mazziesaccount@gmail.com>
+ <166057828406.697572.228317501909350108.b4-ty@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <166057828406.697572.228317501909350108.b4-ty@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-clk.vger.kernel.org>
 X-Mailing-List: linux-clk@vger.kernel.org
 
-Let's add a test on the rate range after a reparenting. This fails for
-now, but it's worth having it to document the corner cases we don't
-support yet.
+On Mon, Aug 15, 2022 at 04:44:44PM +0100, Mark Brown wrote:
+> On Fri, 12 Aug 2022 13:08:17 +0300, Matti Vaittinen wrote:
+> > Devm helpers for regulator get and enable
+> > 
+> > First patch in the series is actually just a simple documentation fix
+> > which could be taken in as it is now.
+> > 
+> > A few* drivers seem to use pattern demonstrated by pseudocode:
+> > 
+> > [...]
+> 
+> Applied to
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+> 
+> Thanks!
+> 
+> [1/7] docs: devres: regulator: Add missing devm_* functions to devres.rst
+>       commit: 9b6744f60b6b47bc0757a1955adb4d2c3ab22e13
+> [2/7] regulator: Add devm helpers for get and enable
+>       (no commit info)
 
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/clk/clk_test.c | 53 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+I didn't have time to reply to the series yet, but I think this isn't a
+great idea. There are two issues:
 
-diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
-index 5a5b7a8baba2..8e0c76ab1a6d 100644
---- a/drivers/clk/clk_test.c
-+++ b/drivers/clk/clk_test.c
-@@ -514,9 +514,62 @@ clk_test_multiple_parents_mux_has_parent(struct kunit *test)
- 	clk_put(clk);
- }
- 
-+/*
-+ * Test that for a clock with a multiple parents, if we set a range on
-+ * that clock and the parent is changed, its rate after the reparenting
-+ * is still within the range we asked for.
-+ *
-+ * FIXME: clk_set_parent() only does the reparenting but doesn't
-+ * reevaluate whether the new clock rate is within its boundaries or
-+ * not.
-+ */
-+static void
-+clk_test_multiple_parents_mux_set_range_set_parent_get_rate(struct kunit *test)
-+{
-+	struct clk_multiple_parent_ctx *ctx = test->priv;
-+	struct clk_hw *hw = &ctx->hw;
-+	struct clk *clk = clk_hw_get_clk(hw, NULL);
-+	struct clk *parent1, *parent2;
-+	unsigned long rate;
-+	int ret;
-+
-+	kunit_skip(test, "This needs to be fixed in the core.");
-+
-+	parent1 = clk_hw_get_clk(&ctx->parents_ctx[0].hw, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent1);
-+	KUNIT_ASSERT_TRUE(test, clk_is_match(clk_get_parent(clk), parent1));
-+
-+	parent2 = clk_hw_get_clk(&ctx->parents_ctx[1].hw, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, parent2);
-+
-+	ret = clk_set_rate(parent1, DUMMY_CLOCK_RATE_1);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = clk_set_rate(parent2, DUMMY_CLOCK_RATE_2);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = clk_set_rate_range(clk,
-+				 DUMMY_CLOCK_RATE_1 - 1000,
-+				 DUMMY_CLOCK_RATE_1 + 1000);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	ret = clk_set_parent(clk, parent2);
-+	KUNIT_ASSERT_EQ(test, ret, 0);
-+
-+	rate = clk_get_rate(clk);
-+	KUNIT_ASSERT_GT(test, rate, 0);
-+	KUNIT_EXPECT_GE(test, rate, DUMMY_CLOCK_RATE_1 - 1000);
-+	KUNIT_EXPECT_LE(test, rate, DUMMY_CLOCK_RATE_1 + 1000);
-+
-+	clk_put(parent2);
-+	clk_put(parent1);
-+	clk_put(clk);
-+}
-+
- static struct kunit_case clk_multiple_parents_mux_test_cases[] = {
- 	KUNIT_CASE(clk_test_multiple_parents_mux_get_parent),
- 	KUNIT_CASE(clk_test_multiple_parents_mux_has_parent),
-+	KUNIT_CASE(clk_test_multiple_parents_mux_set_range_set_parent_get_rate),
- 	{}
- };
- 
+- With devres, you don't have full control over the order in which
+  resources will be released, which means that you can't control the
+  power off sequence, in particular if it needs to be sequenced with
+  GPIOs and clocks. That's not a concern for all drivers, but this API
+  will creep in in places where it shouldn't be used, driver authours
+  should really pay attention to power management and not live with the
+  false impression that everything will be handled automatically for
+  them. In the worst cases, an incorrect power off sequence could lead
+  to hardware damage.
+
+- Powering regulators on at probe time and leaving them on is a very bad
+  practice from a power management point of view, and should really be
+  discouraged. Adding convenience helpers to make this easy is the wrong
+  message, we should instead push driver authors to implement proper
+  runtime PM.
+
+> All being well this means that it will be integrated into the linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+> 
+> You may get further e-mails resulting from automated or manual testing
+> and review of the tree, please engage with people reporting problems and
+> send followup patches addressing any issues that are reported if needed.
+> 
+> If any updates are required or you are submitting further changes they
+> should be sent as incremental updates against current git, existing
+> patches will not be replaced.
+> 
+> Please add any relevant lists and maintainers to the CCs when replying
+> to this mail.
+
 -- 
-2.37.1
+Regards,
 
+Laurent Pinchart
